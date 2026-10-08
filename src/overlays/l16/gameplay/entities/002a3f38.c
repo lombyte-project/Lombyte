@@ -509,7 +509,7 @@ void FUN_L16_002a3f38(unsigned char *m) {
                     break;
                 qcopy(position, result->position);
                 m[0x20] = impact_state;
-            } else if (FUN_001f9770(d + 4) || FUN_001f9b80_c(position, &player->pos) > 60.0f) {
+            } else if (FUN_001f9770(d + 4) || FUN_001f9b80_c(position, &player->motion.pos) > 60.0f) {
             remove:
                 mark_moby_for_removal_a3f38(m);
             }
@@ -572,9 +572,9 @@ void FUN_L16_002c3d38(unsigned char *moby) {
         break;
     case 1: {
         struct Hero *g = &hero;
-        if (g->control_mode != 15)
+        if (g->state.control_mode != 15)
             break;
-        if (is_point_inside_clip_volume(&g->unkD0, *(int *)data)) {
+        if (is_point_inside_clip_volume(&g->motion.unkD0, *(int *)data)) {
             moby[0x20] = 2;
             *(short *)(data + 0x16) = 0;
         }

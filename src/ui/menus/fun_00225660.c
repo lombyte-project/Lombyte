@@ -1,11 +1,6 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_screen.h"
-struct MusicStreamState {
-    u8 pad_0[0x5A];
-    u16 unk5A;
-};
-
-extern struct MusicStreamState D_001516D0;
+#include "rnc/audio/music/music_stream_state.h"
 extern s32 delete_moby() __asm__("FUN_00225530");
 extern s32 complete_stream_buffer_transfer() __asm__("func_00225CD8");
 s32 FUN_00225660(struct MenuScreen *menu) {
@@ -20,8 +15,8 @@ s32 FUN_00225660(struct MenuScreen *menu) {
         slot += 1;
     } while (remaining >= 0);
     menu->data.raw.unk3C = complete_stream_buffer_transfer(menu->data.raw.unk3C);
-    if ((u32)(D_001516D0.unk5A - 6) >= 2U) {
-        D_001516D0.unk5A = 5U;
+    if ((u32)((u16)music_stream_state.secondary.state - 6) >= 2U) {
+        music_stream_state.secondary.state = 5;
     }
     return 0;
 }

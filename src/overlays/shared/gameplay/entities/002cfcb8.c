@@ -659,7 +659,7 @@ void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
         r = FUN_001f9e90_2d5988(path->a[idx + 1].f[0] - o->v[0], path->a[idx + 1].f[1] - o->v[1]);
         o->f48 = FUN_L00_00258110_2d5988(&st->v6C, o->f48, r, 0.01f, 0.3f, 0.1f);
     } else {
-        r = FUN_001f9e90_2d5988(hero.pos.f[0] - o->v[0], hero.pos.f[1] - o->v[1]);
+        r = FUN_001f9e90_2d5988(hero.motion.pos.f[0] - o->v[0], hero.motion.pos.f[1] - o->v[1]);
         o->f48 = FUN_L00_00258110_2d5988(&st->v6C, o->f48, r, 0.01f, 0.3f, 0.1f);
     }
     FUN_001f9a28_2d5988(&v, &w, &o->v[0]);

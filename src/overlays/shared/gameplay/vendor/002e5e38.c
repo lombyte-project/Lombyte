@@ -218,7 +218,7 @@ int FUN_L00_002e7138(unsigned char *m, void *b, int c, int d) {
         *(short *)(B + 0x34) = FUN_001f96f8_2e7138(0x884);
     }
     k = D_L00_00161CC8_2e7138;
-    if (!c && hero.control_mode != 2 && len < dist) {
+    if (!c && hero.state.control_mode != 2 && len < dist) {
         FUN_001f9a68_2e7138(A, A, len / dist);
         *(float *)(B + 0x30) = *(float *)(A + 0x2C) - len;
         return d;

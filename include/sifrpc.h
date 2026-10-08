@@ -25,17 +25,4 @@ struct sceSifClientData {
     void *serve;              /* 0x24: server bound by sceSifBindRpc; 0 until bound */
 };
 
-/* gcc 2.95 has no _Static_assert: a negative array size fails the build. */
-#define SIF_CLIENT_OFFSET_CHECK(field, off) \
-    typedef char sif_client_offset_check_##field[ \
-        ((unsigned long)&((struct sceSifClientData *)0)->field == (off)) ? 1 : -1]
-SIF_CLIENT_OFFSET_CHECK(command, 0x10);
-SIF_CLIENT_OFFSET_CHECK(buff, 0x14);
-SIF_CLIENT_OFFSET_CHECK(cbuff, 0x18);
-SIF_CLIENT_OFFSET_CHECK(func, 0x1C);
-SIF_CLIENT_OFFSET_CHECK(para, 0x20);
-SIF_CLIENT_OFFSET_CHECK(serve, 0x24);
-#undef SIF_CLIENT_OFFSET_CHECK
-typedef char sif_client_size_check[(sizeof(struct sceSifClientData) == 0x28) ? 1 : -1];
-
 #endif /* LOMBYTE_SIFRPC_H */

@@ -129,8 +129,8 @@ s32 load_hand_gadget(HandGadgetState *hand) {
         if (class_pose_manipulator.active) {
             detach_manipulator(hand->source_moby_address, &class_pose_manipulator);
         }
-        if ((hero.equipped_gadget != 0) &&
-            (selected_gadget != hero.equipped_gadget)) {
+        if ((hero.items[0].item_id != 0) &&
+            (selected_gadget != hero.items[0].item_id)) {
             func_001E9470(0, 0);
         }
         resource_request_state = menu_system.resource_table_toggle == 0;

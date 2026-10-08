@@ -15,10 +15,10 @@ void refresh_camera_control_flags(void) {
 
     tracking = &D_001870D0;
     D_0015EF9C = 0x14;
-    if ((u32)(hero.control_mode - 0x11) < 2U || hero.state == 0x73) {
+    if ((u32)(hero.state.control_mode - 0x11) < 2U || hero.state.current == 0x73) {
         D_0015EF9C = 0x34;
     }
-    if (hero.control_mode != 0x11 && hero.height_threshold < D_00187080.z) {
+    if (hero.state.control_mode != 0x11 && hero.height_threshold < D_00187080.z) {
         D_0015EF9C = 0x14;
     }
     D_0015EFA0 = D_0015EF9C;

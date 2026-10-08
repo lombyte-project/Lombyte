@@ -106,7 +106,7 @@ check_moby:
     if ((VoiceMoby *)hero.moby == moby) {
         goto use_extended_pool;
     }
-    if ((VoiceMoby *)hero.secondary_moby == moby) {
+    if ((VoiceMoby *)hero.items[0].moby == moby) {
         goto use_extended_pool;
     }
     if (moby->class_id != 0x472) {

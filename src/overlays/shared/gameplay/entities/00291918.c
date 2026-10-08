@@ -325,9 +325,9 @@ extern void FUN_0020c828(void *);
 
 void FUN_L03_002dc310(char *m) {
     float v[12]; /* unused; sets the frame size */
-    FUN_001f9b48(m + 0x10, hero.pos.f);
-    rotdiff_2dc310(atan_2dc310(hero.pos.f[0] - *(float *)(m + 0x10),
-                               hero.pos.f[1] - *(float *)(m + 0x14)),
+    FUN_001f9b48(m + 0x10, hero.motion.pos.f);
+    rotdiff_2dc310(atan_2dc310(hero.motion.pos.f[0] - *(float *)(m + 0x10),
+                               hero.motion.pos.f[1] - *(float *)(m + 0x14)),
                    *(float *)(m + 0x48));
     FUN_0020c828(m);
 }

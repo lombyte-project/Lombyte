@@ -16,15 +16,13 @@ s32 FUN_002220f0(struct MenuScreen *menu) {
     s32 temp_17_85;
     s32 temp_20_22;
     s32 temp_20_48;
-    s32 temp_5_18;
     u32 temp_16_50;
     u32 width;
     u32 temp_17_75;
     struct MenuScreen *temp_3_16;
 
     temp_3_16 = menu_system.current->focus;
-    temp_5_18 = temp_3_16->data.raw.unk34;
-    temp_20_22 = *(s32 *)((u8 *)((temp_3_16->data.raw.unk40 * 0xC) + temp_5_18) + 0x4);
+    temp_20_22 = temp_3_16->data.list.items[temp_3_16->data.list.selected].param.value;
     setup_gif_paging(0);
     if (temp_20_22 == -1) {
         goto block_2;

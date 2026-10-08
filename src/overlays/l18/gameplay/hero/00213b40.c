@@ -190,13 +190,13 @@ s32 FUN_L18_00218a90(s32 arg) {
     f32 a, b, e;
     V_210ce8 v;
 
-    if (hero.control_mode == 0x14) {
+    if (hero.state.control_mode == 0x14) {
         return 0;
     }
-    if (hero.control_mode == 7) {
+    if (hero.state.control_mode == 7) {
         return 0;
     }
-    if (hero.state == 0x32) {
+    if (hero.state.current == 0x32) {
         return 0;
     }
     if (hero.unk1C0 != 0) {
@@ -224,7 +224,7 @@ s32 FUN_L18_00218a90(s32 arg) {
     D_0013DF88_210ce8[D_0015ED84_210ce8]++;
     hero.unk2280 = (struct Moby *)tbl->p20;
     D_0015EEA8_210ce8++;
-    if (hero.control_mode == 0xF) {
+    if (hero.state.control_mode == 0xF) {
         hero.unk5BE = 1;
         return 0;
     }
@@ -247,8 +247,8 @@ s32 FUN_L18_00218a90(s32 arg) {
     } else if (tbl->p20 != 0) {
         FUN_001f9a28_210ce8(&v, D_0013F3D0_210ce8, tbl->p20 + 0x10);
     } else {
-        v.f[0] = FUN_001f9dc8_210ce8(FUN_001fa580_210ce8(hero.rot.f[2], 3.1415927f));
-        v.f[1] = FUN_001f9de0_210ce8(FUN_001fa580_210ce8(hero.rot.f[2], 3.1415927f));
+        v.f[0] = FUN_001f9dc8_210ce8(FUN_001fa580_210ce8(hero.motion.rot.f[2], 3.1415927f));
+        v.f[1] = FUN_001f9de0_210ce8(FUN_001fa580_210ce8(hero.motion.rot.f[2], 3.1415927f));
         v.i[2] = 0;
     }
     switch (hero.unk20A4) {
@@ -260,19 +260,19 @@ s32 FUN_L18_00218a90(s32 arg) {
             hero_set_state(id, 1);
             return 1;
         }
-        if (hero.control_mode == 0x16) {
+        if (hero.state.control_mode == 0x16) {
             hero_set_state(0x6D, 1);
-            hero.unk120.f[2] = D_0015ED6C_210ce8 * 7.0f;
+            hero.motion.unk120.f[2] = D_0015ED6C_210ce8 * 7.0f;
             return 1;
         }
-        if (hero.control_mode == 0x12) {
+        if (hero.state.control_mode == 0x12) {
             mob = ((u8 *)hero.unk2280);
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
             hero_set_state(0x75, 1);
-        } else if (hero.control_mode == 0x11) {
+        } else if (hero.state.control_mode == 0x11) {
             mob = ((u8 *)hero.unk2280);
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
@@ -286,7 +286,7 @@ s32 FUN_L18_00218a90(s32 arg) {
                 }
             }
             hero_set_state(0x76, 1);
-        } else if (hero.control_mode == 3) {
+        } else if (hero.state.control_mode == 3) {
             mob = ((u8 *)hero.unk2280);
             if (mob != 0) {
                 id = 0x82;

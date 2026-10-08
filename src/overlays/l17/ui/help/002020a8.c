@@ -33,7 +33,7 @@ int FUN_L17_002020a8(int a) {
     }
     {
         struct Hero *g2 = &hero;
-        if (g2->health == 1) {
+        if (g2->health.hp == 1) {
             return 0x54;
         }
         if (g2->unk12E2 != 0) {
@@ -91,13 +91,13 @@ s32 FUN_L17_0020dbe8(s32 arg) {
     f32 a, b, e;
     V_8 v;
 
-    if (G.control_mode == 0x14) {
+    if (G.state.control_mode == 0x14) {
         return 0;
     }
-    if (G.control_mode == 7) {
+    if (G.state.control_mode == 7) {
         return 0;
     }
-    if (G.state == 0x32) {
+    if (G.state.current == 0x32) {
         return 0;
     }
     if (G.unk1C0 != 0) {
@@ -121,7 +121,7 @@ s32 FUN_L17_0020dbe8(s32 arg) {
     D_0013DF88_8[current_level_index]++;
     G.unk2280 = (struct Moby *)tbl->p20;
     D_0015EEA8_8++;
-    if (G.control_mode == 0xF) {
+    if (G.state.control_mode == 0xF) {
         G.unk5BE = 1;
         return 0;
     }
@@ -138,8 +138,8 @@ s32 FUN_L17_0020dbe8(s32 arg) {
     } else if (tbl->p20 != 0) {
         FUN_001f9a28_8(&v, (u8 *)&G + 0x80, tbl->p20 + 0x10);
     } else {
-        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.rot.f[2], 3.1415927f));
-        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.rot.f[2], 3.1415927f));
+        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
+        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
         v.i[2] = 0;
     }
     switch (G.unk20A4) {
@@ -151,19 +151,19 @@ s32 FUN_L17_0020dbe8(s32 arg) {
             hero_set_state(id, 1);
             return 1;
         }
-        if (G.control_mode == 0x16) {
+        if (G.state.control_mode == 0x16) {
             hero_set_state(0x6D, 1);
-            G.unk120.f[2] = D_0015ED6C_8 * 7.0f;
+            G.motion.unk120.f[2] = D_0015ED6C_8 * 7.0f;
             return 1;
         }
-        if (G.control_mode == 0x12) {
+        if (G.state.control_mode == 0x12) {
             mob = (u8 *)G.unk2280;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
             hero_set_state(0x75, 1);
-        } else if (G.control_mode == 0x11) {
+        } else if (G.state.control_mode == 0x11) {
             mob = (u8 *)G.unk2280;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
@@ -177,7 +177,7 @@ s32 FUN_L17_0020dbe8(s32 arg) {
                 }
             }
             hero_set_state(0x76, 1);
-        } else if (G.control_mode == 3) {
+        } else if (G.state.control_mode == 3) {
             mob = (u8 *)G.unk2280;
             if (mob != 0) {
                 id = 0x82;
@@ -244,24 +244,24 @@ void FUN_L17_0020e1c0(void) {
         hero.unk230 = 0.45f;
         break;
     }
-    if (hero.control_mode == 4) {
+    if (hero.state.control_mode == 4) {
         if (hero.state_timer > hero.state_timer_mark && hero.velocity_stopped == 0)
             hero.unk22C = hero.unk434;
-    } else if (hero.state == 6) {
+    } else if (hero.state.current == 6) {
         hero.unk22C = 0.5f;
-    } else if (hero.state == 4) {
+    } else if (hero.state.current == 4) {
         hero.unk228 = 0.35000002f;
-    } else if ((u32)(hero.control_mode - 0x11) < 2) {
+    } else if ((u32)(hero.state.control_mode - 0x11) < 2) {
         hero.unk228 = 0.0f;
         hero.unk22C = 0.0f;
     } else if (hero.unk12E2 && hero.unk300) {
         hero.unk228 = 0.8f;
         hero.unk22C = 0.9f;
-    } else if (hero.state == 0x7F) {
+    } else if (hero.state.current == 0x7F) {
         hero.unk230 = 0.8f;
     }
-    if (!hero.unk257 || hero.prev_control_mode == 0x12 || hero.control_mode == 0x11 || hero.base_condition ||
-        FUN_001f9b80_211380(hero.unk210.f, hero.pos.f) > hero.unk234 * 0.5f) {
+    if (!hero.unk257 || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
+        FUN_001f9b80_211380(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
         f32 *q = D_0013F570_211380;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
         approach_value_211380(b->unk228, D_0015ED60_211380 * 0.02f, q);

@@ -106,10 +106,10 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             menu_system.next = (struct MenuPage *)D_001CF678;
         }
         if ((D_0013C940.pressed & 0x20) && D_001A00F0.level != 0) {
-            menu_system.return_page = (struct MenuPage *)D_001CF418;
-            menu_system.action_mode = 0xB;
+            menu_system.action.return_page = (struct MenuPage *)D_001CF418;
+            menu_system.action.mode = 0xB;
             menu_system.close_request = 3;
-            menu_system.action_value = D_001A00F0.level;
+            menu_system.action.value = D_001A00F0.level;
             allocate_voice_for_target_entry(0, 0x11, screen->moby);
             return 0;
         }
@@ -157,7 +157,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             base = (u8 *)D_001A00F0.hdr;
             a = base + hdr->unk0 + 8;
             if (D_001A00F0.level == current_level_index) {
-                compose_bitmap_from_mask(pal, pix, pal, D_001A00F0.unkC);
+                compose_bitmap_from_mask(pal, pix, pal, D_001A00F0.mask);
             } else {
                 if (D_0013DD58[D_001A00F0.level] != 0) {
                     load_map_chunk(buf, D_00141EC0 + (D_001A00F0.level << 11), base + hdr->unk4);
@@ -173,13 +173,13 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             b = tbase + hdr->unk14 + 0x420;
             c = tbase + hdr->unk18 + 0x420;
             D_001A00F0.tex0 =
-                func_00204E30(7, 7, tex + 0x20, tex + 0x420, D_001A00F0.unk244, D_001A00F0.unk248);
+                func_00204E30(7, 7, tex + 0x20, tex + 0x420, D_001A00F0.tex_clut_vram, D_001A00F0.tex0_vram);
             D_001A00F0.tex1 =
-                func_00204E30(7, 7, tex + 0x20, b, D_001A00F0.unk244, D_001A00F0.unk24C);
+                func_00204E30(7, 7, tex + 0x20, b, D_001A00F0.tex_clut_vram, D_001A00F0.tex1_vram);
             D_001A00F0.tex2 =
-                func_00204E30(7, 7, tex + 0x20, c, D_001A00F0.unk244, D_001A00F0.unk250);
+                func_00204E30(7, 7, tex + 0x20, c, D_001A00F0.tex_clut_vram, D_001A00F0.tex2_vram);
             if (buf != 0) {
-                func_00204E30(9, 9, pal, pal, 0x3FF000, D_001A00F0.unk240);
+                func_00204E30(9, 9, pal, pal, 0x3FF000, D_001A00F0.map_image_vram);
             }
             FUN_0020b4a8();
         }

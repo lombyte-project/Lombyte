@@ -21,7 +21,7 @@ s32 music_transition(s32 target_track, s32 transition_track, s32 flags, s32 volu
     u8 *track_table;
     s32 track_table_offset;
 
-    if (music_stream_state.transition_handle != 0) {
+    if (music_stream_state.transition.handle != 0) {
         return 0;
     }
     track_table = (u8 *)&disc_table;
@@ -31,16 +31,16 @@ s32 music_transition(s32 target_track, s32 transition_track, s32 flags, s32 volu
     if (*location_entry == 0) {
         return 0;
     }
-    *(u32 *)&music_stream_state.transition_handle = 0xFFFFFFFF;
-    music_stream_state.transition_remaining_time = 48000;
-    music_stream_state.transition_poll_interval = 10;
-    music_stream_state.transition_track = target_track;
-    music_stream_state.transition_state = 1;
-    music_stream_state.transition_volume = volume;
-    music_stream_state.transition_crossfade_enabled = 1;
-    music_stream_state.transition_flags = flags;
+    *(u32 *)&music_stream_state.transition.handle = 0xFFFFFFFF;
+    music_stream_state.transition.remaining_time = 48000;
+    music_stream_state.transition.poll_interval = 10;
+    music_stream_state.transition.track = target_track;
+    music_stream_state.transition.state = 1;
+    music_stream_state.transition.volume = volume;
+    music_stream_state.transition.crossfade_enabled = 1;
+    music_stream_state.transition.flags = flags;
     stream_location = *location_entry;
-    callback_context = (u32)&music_stream_state.transition_handle;
+    callback_context = (u32)&music_stream_state.transition.handle;
     callback = music_transition_start_callback;
     snd_play_vag_stream_by_loc_ex_cb(stream_location, 0, 0, 0, volume, 0, 1, 0, 0x20, callback,
                                      callback_context);

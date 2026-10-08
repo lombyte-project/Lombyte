@@ -118,39 +118,39 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             /* This action passes the low halfword; the other indexed actions pass the full word. */
             message_index = menu->data.list.items[menu->data.list.selected].param.half.hi;
             if (message_index != 0) {
-                menu_system.action_message = menu_action_messages[message_index];
+                menu_system.action.message = menu_action_messages[message_index];
             }
             menu_system.close_request = 5;
-            menu_system.return_page = menu_system.current;
-            menu_system.action_mode = 0;
-            menu_system.action_value =
+            menu_system.action.return_page = menu_system.current;
+            menu_system.action.mode = 0;
+            menu_system.action.value =
                 menu->data.list.items[menu->data.list.selected].param.half.lo;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
         case 7:
-            menu_system.action_mode = 2;
-            menu_system.return_page = menu_system.current;
+            menu_system.action.mode = 2;
+            menu_system.action.return_page = menu_system.current;
             menu_system.close_request = 3;
-            menu_system.action_value = menu->data.list.items[menu->data.list.selected].param.value;
+            menu_system.action.value = menu->data.list.items[menu->data.list.selected].param.value;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
         case 8:
-            menu_system.action_mode = 2;
-            menu_system.return_page = menu_system.current;
+            menu_system.action.mode = 2;
+            menu_system.action.return_page = menu_system.current;
             menu_system.close_request = 4;
-            menu_system.action_value = menu->data.list.items[menu->data.list.selected].param.value;
+            menu_system.action.value = menu->data.list.items[menu->data.list.selected].param.value;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
         case 10:
-            menu_system.action_mode = 2;
-            menu_system.return_page = menu_system.current;
+            menu_system.action.mode = 2;
+            menu_system.action.return_page = menu_system.current;
             menu_system.close_request = 6;
-            menu_system.action_value = menu->data.list.items[menu->data.list.selected].param.value;
+            menu_system.action.value = menu->data.list.items[menu->data.list.selected].param.value;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
         case 11:
-            menu_system.return_page = menu_system.current;
-            menu_system.action_mode = 2;
+            menu_system.action.return_page = menu_system.current;
+            menu_system.action.mode = 2;
             menu_system.close_request = 7;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;

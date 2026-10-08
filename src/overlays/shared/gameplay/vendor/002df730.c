@@ -105,7 +105,7 @@ void FUN_L00_002e0340(char *a) {
         *(int *)&D_L00_0015F3FC = 0;
         FUN_L00_002eac18(3);
     }
-    if (hero.control_mode == 0x13) {
+    if (hero.state.control_mode == 0x13) {
         hero_set_state(0, 1);
     }
 }

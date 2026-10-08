@@ -5,7 +5,7 @@ s32 FUN_002073b8(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) {
     s32 var_4_15;
 
     var_4_15 = 0;
-    if (((u32)(hero.control_mode - 0x11) < 2U) || (hero.base_condition == 1)) {
+    if (((u32)(hero.state.control_mode - 0x11) < 2U) || (hero.base_condition == 1)) {
         var_4_15 = 1;
     }
     if (var_4_15 != 0) {

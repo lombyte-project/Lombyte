@@ -292,7 +292,7 @@ void FUN_L00_002b3c50(X *x) {
     l0.f[2] = -random_float_between(0.01f, 0.03f);
     FUN_001f9cf8(&l0, &l0, &x->vC0);
     qcopy(&a, &x->v10);
-    if (hero.state == 0x81) {
+    if (hero.state.current == 0x81) {
         if (D_L00_0015F5CC % 3 == 0) {
             FUN_L00_0026cbb0(&a, &l0, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
         }
@@ -323,12 +323,12 @@ void FUN_L00_002b3c50(X *x) {
     l0.f[1] = 0.0f;
     FUN_001f9cf8(&l0, &l0, &x->vC0);
     l0.f[2] = 0.025f;
-    if (hero.state == 8) {
+    if (hero.state.current == 8) {
         col = 0xA0A0A0;
         q = 1.0165f;
         l0.f[2] -= D_0015ED6C_c * 5.0f;
     }
-    if (hero.state == 0x81) {
+    if (hero.state.current == 0x81) {
         col = 0xA0A0A0;
         q = 1.037f;
         l0.f[2] -= D_0015ED6C_c * 3.0f;
@@ -339,7 +339,7 @@ void FUN_L00_002b3c50(X *x) {
     if (g->f0C) {
         s = FUN_001f9b48(&g->v10, &a) * 0.16667f;
         FUN_001f9a28_c(&d, &g->v10, &a);
-        m = hero.state;
+        m = hero.state.current;
         n = 4;
         if (m == 8)
             n = 2;
@@ -1456,27 +1456,27 @@ void FUN_L00_002b4198(void *p) {
     s32 st;
     s32 lim;
 
-    if (hero.unk11A8 == 3) {
+    if (hero.items[3].item_id == 3) {
         if (o->state == 1 || o->state == 3) {
-            st = hero.state;
+            st = hero.state.current;
             if ((u32)(st - 0xB) < 4 ||
                 (st == 0x1C && ((u8 *)((void *)hero.moby))[0x52] == ((u8 *)((void *)hero.moby))[0x53] &&
                  hero.unkAA8 >= 6.0f && hero.unkAA8 <= 16.0f)) {
                 if (!hero.velocity_stopped)
                     flag = 1;
             }
-            if (hero.state == 0x10) {
+            if (hero.state.current == 0x10) {
                 if (hero.state_timer < FUN_001f96f8_4198(0x2C)) {
                     flag = 1;
                 }
             }
-            if (hero.state == 0x22) {
+            if (hero.state.current == 0x22) {
                 if (hero.state_timer < FUN_001f96f8_4198(0xF) ||
                     (FUN_001f96f8_4198(0x21) < hero.state_timer && hero.unk30E != 0)) {
                     flag = 1;
                 }
             }
-            if (hero.state == 8 || hero.state == 0x81) {
+            if (hero.state.current == 8 || hero.state.current == 0x81) {
                 flag = 1;
             }
         }
@@ -1509,7 +1509,7 @@ void FUN_L00_002b4198(void *p) {
         v->f24 += v->f34;
         v->f28 += v->f38;
         v->f2C += v->f3C;
-        v->i8 = ((s32)hero.unk1180);
+        v->i8 = ((s32)hero.items[3].moby);
         FUN_001f4600_4198(FUN_L00_002b3628_4198, o);
         if (FUN_001f9740_4198(v) != 0) {
             o->state = 3;
@@ -1521,7 +1521,7 @@ void FUN_L00_002b4198(void *p) {
         }
         break;
     case 3:
-        v->i8 = ((s32)hero.unk1180);
+        v->i8 = ((s32)hero.items[3].moby);
         FUN_001f4600_4198(FUN_L00_002b3628_4198, o);
         if (flag == 0) {
             o->state = 4;
@@ -1543,7 +1543,7 @@ void FUN_L00_002b4198(void *p) {
             v->f24 -= v->f34;
             v->f28 -= v->f38;
             v->f2C -= v->f3C;
-            v->i8 = ((s32)hero.unk1180);
+            v->i8 = ((s32)hero.items[3].moby);
             FUN_001f4600_4198(FUN_L00_002b3628_4198, o);
         }
         break;

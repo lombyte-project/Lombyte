@@ -35,7 +35,7 @@ void FUN_L05_00237488(float *out, float *p, float step) {
 #include "sda.h"
 int FUN_L05_0023b378(int id, float *out) {
     *out = 0.0f;
-    if (hero.control_mode == 0x16 && hero.unk8CE
+    if (hero.state.control_mode == 0x16 && hero.unk8CE
         && (unsigned)(*(unsigned char *)(((char *)hero.moby) + 0x53) - 0x69) < 4)
         return 1;
     switch (id) {

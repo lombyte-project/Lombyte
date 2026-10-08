@@ -219,17 +219,17 @@ void memcard_update_state(void) {
             break;
         case 3:
             MC.size = 8;
-            if (sceMcRead(MC.fd, &CARD.unkB0, 8) == 0) {
+            if (sceMcRead(MC.fd, &CARD.main_size, 8) == 0) {
                 MC.sub = 4;
             }
             break;
         case 4:
             if (MC.result == MC.size) {
                 CARD.errors = 0;
-                if (CARD.unkB0 != GetDmaPacketSpanBytes(D_001A04C0)) {
+                if (CARD.main_size != GetDmaPacketSpanBytes(D_001A04C0)) {
                     CARD.errors++;
                 }
-                if (CARD.unkB4 != GetDmaPacketSpanBytes(D_001A07C0)) {
+                if (CARD.record_size != GetDmaPacketSpanBytes(D_001A07C0)) {
                     CARD.errors++;
                 }
                 MC.busy = 0;
@@ -533,13 +533,13 @@ void memcard_update_state(void) {
 
     case 21:
         MC.state = 22;
-        CARD.unk18 = -1;
-        MC.unkC8 = 0;
+        CARD.scan_save_index = -1;
+        MC.record_index = 0;
         break;
 
     case 22:
-        CARD.unk18++;
-        if (CARD.unk18 < 5) {
+        CARD.scan_save_index++;
+        if (CARD.scan_save_index < 5) {
             MC.sub = 0;
             MC.state = 23;
         } else {
@@ -556,7 +556,7 @@ void memcard_update_state(void) {
             MC.err = 0x13;
             break;
         }
-        MC.unkC8 = 0;
+        MC.record_index = 0;
         MC.sub = 0;
         MC.state = 14;
     case 14:
@@ -564,7 +564,7 @@ void memcard_update_state(void) {
         switch (MC.sub) {
         case 0:
             if (MC.state == 23) {
-                sprintf(name, D_0013D270, CARD.unk18);
+                sprintf(name, D_0013D270, CARD.scan_save_index);
             } else {
                 sprintf(name, D_0013D270, CARD.save_index);
             }
@@ -598,7 +598,7 @@ void memcard_update_state(void) {
             break;
         case 2:
             MC.size = 8;
-            if (sceMcRead(MC.fd, &CARD.unkB0, 8) == 0) {
+            if (sceMcRead(MC.fd, &CARD.main_size, 8) == 0) {
                 MC.sub = 3;
             }
             break;
@@ -634,7 +634,7 @@ void memcard_update_state(void) {
             MC.busy = 0;
             break;
         case 4:
-            MC.size = CARD.unkB0;
+            MC.size = CARD.main_size;
             if (MC.size > 0x1800) {
                 RaiseKernelTrap();
             }
@@ -645,7 +645,7 @@ void memcard_update_state(void) {
         case 5:
             if (MC.result == MC.size) {
                 if (MC.state == 23) {
-                    memcard_restore_info(D_0014EED0, MC.cur, CARD.unk18);
+                    memcard_restore_info(D_0014EED0, MC.cur, CARD.scan_save_index);
                     MC.sub = 8;
                 } else {
                     CARD.errors = memcard_restore_data(D_0014EED0, 0, D_001A04C0);
@@ -680,7 +680,7 @@ void memcard_update_state(void) {
             MC.busy = 0;
             break;
         case 6:
-            MC.size = CARD.unkB4;
+            MC.size = CARD.record_size;
             if (MC.size > 0x1000) {
                 RaiseKernelTrap();
             }
@@ -690,8 +690,8 @@ void memcard_update_state(void) {
             break;
         case 7:
             if (MC.result == MC.size) {
-                CARD.errors += memcard_restore_data(D_001506D0, MC.unkC8, D_001A07C0);
-                if (++MC.unkC8 < 20) {
+                CARD.errors += memcard_restore_data(D_001506D0, MC.record_index, D_001A07C0);
+                if (++MC.record_index < 20) {
                     MC.sub = 6;
                 } else {
                     MC.sub = 8;
@@ -837,11 +837,11 @@ void memcard_update_state(void) {
             MC.busy = 0;
             break;
         case 6:
-            if (MC.unkC8 == 0) {
+            if (MC.record_index == 0) {
                 MC.sub = 8;
                 break;
             }
-            if (sceMcSeek(MC.fd, MC.unkC8 * GetDmaPacketSpanBytes(D_001A07C0), 1) == 0) {
+            if (sceMcSeek(MC.fd, MC.record_index * GetDmaPacketSpanBytes(D_001A07C0), 1) == 0) {
                 MC.sub = 7;
             }
             break;
@@ -936,7 +936,7 @@ void memcard_update_state(void) {
             MC.err = 0x27;
             break;
         }
-        MC.unkC8 = 0;
+        MC.record_index = 0;
         MC.sub = 0;
         MC.state = 20;
     case 20:

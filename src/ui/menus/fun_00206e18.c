@@ -6,7 +6,7 @@ extern s32 func_00208818();
 
 s32 FUN_00206e18(s32 px, s32 py, f32 unused1, f32 unused2, f32 arg3) {
     struct Hero *s = &hero;
-    s32 a = s->control_mode == 17 || s->control_mode == 18 || s->base_condition == 1;
+    s32 a = s->state.control_mode == 17 || s->state.control_mode == 18 || s->base_condition == 1;
 
     if (func_00208818(px, py, 0x93, 0x168, 0x182, 0x168) != 0 && py >= 0x135 &&
         D_001A03A8[0] != 0 && arg3 >= 47.7f) {

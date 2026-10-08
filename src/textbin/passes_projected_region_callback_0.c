@@ -49,7 +49,7 @@ s32 passes_projected_region_callback_0(s32 projected_x, s32 projected_y, f32 x, 
         return 0;
     } else {
         special_state = 0;
-        if ((u32)(hero.control_mode - 0x11) < 2 || hero.base_condition == 1) {
+        if ((u32)(hero.state.control_mode - 0x11) < 2 || hero.base_condition == 1) {
             special_state = 1;
         }
         if (special_state && func_00208818(projected_x, projected_y, 0x12B, 0xB8, 0x13A, 0xF2) &&

@@ -2206,14 +2206,14 @@ void FUN_L01_002f8268(HoverMoby *m) {
                        D_L01_00161BF4, 3.0f);
         spring_axis_to(&m->pos.v.y, v->home_y, &v->vel_y, D_L01_00161BF0 * D_0015ED70,
                        D_L01_00161BF4, 3.0f);
-        if (FUN_001f9b80(&m->pos, &hero.pos) < D_L01_00161BF8) {
-            if (FUN_001f99c0(m->pos.v.z - hero.pos.f[2]) < 0.7f) {
-                ang = FUN_001f9e90(m->pos.v.x - hero.pos.f[0],
-                                   m->pos.v.y - hero.pos.f[1]);
+        if (FUN_001f9b80(&m->pos, &hero.motion.pos) < D_L01_00161BF8) {
+            if (FUN_001f99c0(m->pos.v.z - hero.motion.pos.f[2]) < 0.7f) {
+                ang = FUN_001f9e90(m->pos.v.x - hero.motion.pos.f[0],
+                                   m->pos.v.y - hero.motion.pos.f[1]);
                 m->pos.v.x = FUN_001f9dc8(ang) * D_L01_00161BF8;
                 m->pos.v.y = FUN_001f9de0(ang) * D_L01_00161BF8;
-                m->pos.v.x += hero.pos.f[0];
-                m->pos.v.y += hero.pos.f[1];
+                m->pos.v.x += hero.motion.pos.f[0];
+                m->pos.v.y += hero.motion.pos.f[1];
             }
         }
         FUN_L00_00258490(m, &tgt, &m->pos, 3, 0.1f, D_L01_00161C00, 600.0f, 1.5707964f);
@@ -2486,9 +2486,9 @@ void FUN_L01_002f9080(CapMoby *m) {
     case 1:
         if (v->cam != -1) {
             e = (u8 *)(v->cam * 128 + (s32)D_L01_001600EC_u);
-            if (hero.pos.f[2] >= *(f32 *)(e + 0x38) &&
-                FUN_001f9b80(&hero.pos, e + 0x30) < 10.0f &&
-                ((u32)hero.control_mode < 2 || hero.control_mode == 9)) {
+            if (hero.motion.pos.f[2] >= *(f32 *)(e + 0x38) &&
+                FUN_001f9b80(&hero.motion.pos, e + 0x30) < 10.0f &&
+                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
                 v->wait = FUN_L00_00257b90(FUN_001f96f8(300), FUN_001f96f8(600));
                 v->rise = FUN_001f96f8(v->rise_len);
                 m->state = 2;

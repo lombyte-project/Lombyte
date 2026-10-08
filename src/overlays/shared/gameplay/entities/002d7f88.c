@@ -388,7 +388,7 @@ int FUN_L00_002d8980(char *a) {
 /* False in modes 0, 1, 5, 12, and in modes 2 and 4 unless the state is 0x3C. */
 int FUN_L00_002d9f78(void) {
     int r = 1;
-    switch (hero.control_mode) {
+    switch (hero.state.control_mode) {
     case 0:
     case 1:
     case 5:
@@ -397,7 +397,7 @@ int FUN_L00_002d9f78(void) {
         break;
     case 2:
     case 4:
-        if (hero.state != 0x3C)
+        if (hero.state.current != 0x3C)
             r = 0;
         break;
     }

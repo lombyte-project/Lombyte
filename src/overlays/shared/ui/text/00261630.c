@@ -47,13 +47,13 @@ void FUN_L00_00261630(u8 *o, u8 *s, f32 a, f32 b) {
         *(s16 *)(s + 0x2A) = FUN_L00_00257b90_261630(t, FUN_001f96f8_261630(0x5A));
         *(s16 *)(s + 0x28) = 1;
     } else {
-        d = FUN_001f9b80_261630(pos, &hero.pos.f[0]);
+        d = FUN_001f9b80_261630(pos, &hero.motion.pos.f[0]);
         if (d < *(f32 *)(s + 0x20)) {
             d = d / *(f32 *)(s + 0x20);
             *(f32 *)(s + 0x24) = FUN_L00_0025b750_261630(
                 *(f32 *)(s + 0x24),
-                FUN_001f9e90_261630(*(f32 *)(o + 0x10) - hero.pos.f[0],
-                                    *(f32 *)(o + 0x14) - hero.pos.f[1]),
+                FUN_001f9e90_261630(*(f32 *)(o + 0x10) - hero.motion.pos.f[0],
+                                    *(f32 *)(o + 0x14) - hero.motion.pos.f[1]),
                 d);
         }
     }

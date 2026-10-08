@@ -7,7 +7,7 @@ extern unsigned char D_0013D3E2 NOT_SDA;
    other arm is func_00208160's second test with D_0013D3E2. */
 int FUN_00207880(int arg0, float unused1, float unused2, float arg1) {
     struct Hero *s = &hero;
-    int a = s->control_mode == 17 || s->control_mode == 18 || s->base_condition == 1;
+    int a = s->state.control_mode == 17 || s->state.control_mode == 18 || s->base_condition == 1;
 
     if (arg0 < 0x15F) {
         return (arg1 >= 200.0f) ? a : 0;

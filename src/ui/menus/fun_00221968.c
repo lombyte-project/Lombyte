@@ -20,10 +20,10 @@ s32 FUN_00221968(struct MenuScreen *arg0) {
         allocate_voice_for_target_entry(0, 0x11, arg0->moby);
         return 1;
     } else if (D_0013CB04[0] & 0x20) {
-        menu_system.action_value = D_001A0314[0];
-        menu_system.return_page = menu_system.current;
+        menu_system.action.value = D_001A0314[0];
+        menu_system.action.return_page = menu_system.current;
         menu_system.close_request = 3;
-        menu_system.action_mode = 0xF;
+        menu_system.action.mode = 0xF;
         allocate_voice_for_target_entry(0, 0x11, arg0->moby);
     }
     return 0;

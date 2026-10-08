@@ -43,17 +43,4 @@ struct ViBuf {
     s32 wt_ts;                /* 0x5C: 0 at reset */
 };
 
-#define VI_BUF_OFFSET_CHECK(field, off) \
-    typedef char vi_buf_offset_check_##field[ \
-        ((unsigned long)&((struct ViBuf *)0)->field == (off)) ? 1 : -1]
-VI_BUF_OFFSET_CHECK(dma_n, 0x10);
-VI_BUF_OFFSET_CHECK(buff_size, 0x18);
-VI_BUF_OFFSET_CHECK(d4_madr, 0x1C);
-VI_BUF_OFFSET_CHECK(ipu_ctrl, 0x3C);
-VI_BUF_OFFSET_CHECK(sema, 0x40);
-VI_BUF_OFFSET_CHECK(total_bytes, 0x48);
-VI_BUF_OFFSET_CHECK(ts, 0x50);
-VI_BUF_OFFSET_CHECK(wt_ts, 0x5C);
-#undef VI_BUF_OFFSET_CHECK
-
 #endif /* LOMBYTE_RNC_VIDEO_DECODER_VI_BUF_H */

@@ -25,7 +25,7 @@ int FUN_L15_001fe778(int a) {
     }
     {
         struct Hero *g2 = &hero;
-        if (g2->health == 1) {
+        if (g2->health.hp == 1) {
             return 0x54;
         }
         if (a == 0) {

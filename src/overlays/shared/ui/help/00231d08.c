@@ -551,12 +551,12 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
     switch (hero.unk20B3) {
     case 0:
         if (c < 0.0f) {
-            FUN_001f9a68_32b90(t, &hero.velocity, a);
+            FUN_001f9a68_32b90(t, &hero.motion.velocity, a);
             t[2] -= ((a * a + a) * 0.5f) * b;
-            FUN_001f9a10_32b90(t, t, &hero.pos);
-            v.q = hero.pos.q;
+            FUN_001f9a10_32b90(t, t, &hero.motion.pos);
+            v.q = hero.motion.pos.q;
             FUN_L00_0025d238_32b90(&v, t);
-            qcopy(&v, &hero.pos);
+            qcopy(&v, &hero.motion.pos);
             if (FUN_001efa68_32b90(&v, t, 0x24, 0, 0) != 0) {
                 if (FUN_L00_00233d30_32b90((f32 *)D_L00_00173E80_32b90) <= 0.87266463f) {
                     c = *(f32 *)(D_L00_00173E80_32b90 - 0x18);
@@ -564,8 +564,8 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
             }
         }
         if (c > 0.0f) {
-            if (FUN_L00_002595a0_32b90(&o[0], &o[1], b * -0.5f, hero.velocity.f[2] - b * -0.5f,
-                                       hero.pos.f[2] - c) > 0 &&
+            if (FUN_L00_002595a0_32b90(&o[0], &o[1], b * -0.5f, hero.motion.velocity.f[2] - b * -0.5f,
+                                       hero.motion.pos.f[2] - c) > 0 &&
                 o[0] > 0.0f) {
                 return o[0];
             }
@@ -575,17 +575,17 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
         qcopy(&v, &hero.unk270);
         FUN_001f9bf8_32b90(&v, &v, b);
         FUN_001f9a68_32b90(&v, &v, -1.0f);
-        FUN_001f9a68_32b90(t, &hero.velocity, a);
+        FUN_001f9a68_32b90(t, &hero.motion.velocity, a);
         FUN_001f9a68_32b90(&t1, &v, ((a * a + a) * 0.5f) * b);
         FUN_001f9a10_32b90(t, &t1, t);
-        FUN_001f9a10_32b90(t, &hero.pos, t);
-        v2.q = hero.pos.q;
+        FUN_001f9a10_32b90(t, &hero.motion.pos, t);
+        v2.q = hero.motion.pos.q;
         FUN_L00_0025d238_32b90(&v2, t);
-        if (FUN_001efa68_32b90(&hero.pos, t, 0x24, 0, 0) != 0) {
+        if (FUN_001efa68_32b90(&hero.motion.pos, t, 0x24, 0, 0) != 0) {
             f32 nb;
             nb = b * -0.5f;
-            z = FUN_L00_00233a78_32b90(&hero.velocity) - nb;
-            x = FUN_L00_00233a78_32b90(&hero.pos);
+            z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
+            x = FUN_L00_00233a78_32b90(&hero.motion.pos);
             y = FUN_L00_00233a78_32b90(&D_L00_00173E60_32b90);
             if (FUN_L00_002595a0_32b90(&o[2], &o[3], nb, z, x - y) > 0 && o[2] > 0.0f) {
                 return o[2];
@@ -596,20 +596,20 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
         t1.f[2] = 100.0f;
         t1.f[1] = 100.0f;
         t1.f[0] = 100.0f;
-        FUN_001f9a28_32b90(&v, &hero.pos, &t1);
+        FUN_001f9a28_32b90(&v, &hero.motion.pos, &t1);
         FUN_001f9bf8_32b90(&v, &v, b);
         FUN_001f9a68_32b90(&v, &v, -1.0f);
-        FUN_001f9a68_32b90(t, &hero.velocity, a);
+        FUN_001f9a68_32b90(t, &hero.motion.velocity, a);
         FUN_001f9a68_32b90(&t1, &v, ((a * a + a) * 0.5f) * b);
         FUN_001f9a10_32b90(t, &t1, t);
-        FUN_001f9a10_32b90(t, &hero.pos, t);
-        v2.q = hero.pos.q;
+        FUN_001f9a10_32b90(t, &hero.motion.pos, t);
+        v2.q = hero.motion.pos.q;
         FUN_L00_0025d238_32b90(&v2, t);
-        if (FUN_001efa68_32b90(&hero.pos, t, 0x24, 0, 0) != 0) {
+        if (FUN_001efa68_32b90(&hero.motion.pos, t, 0x24, 0, 0) != 0) {
             f32 nb;
             nb = b * -0.5f;
-            z = FUN_L00_00233a78_32b90(&hero.velocity) - nb;
-            x = FUN_L00_00233a78_32b90(&hero.pos);
+            z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
+            x = FUN_L00_00233a78_32b90(&hero.motion.pos);
             y = FUN_L00_00233a78_32b90(&D_L00_00173E60_32b90);
             if (FUN_L00_002595a0_32b90(&o[4], &o[5], nb, z, x - y) > 0 && o[4] > 0.0f) {
                 return o[4];

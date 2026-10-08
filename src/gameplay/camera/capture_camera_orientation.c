@@ -26,7 +26,7 @@ void capture_camera_orientation(void) {
     qcopy(r + 0x90, local0);
     qcopy(r + 0xA0, local2);
 
-    compute_camera_angles((float *)(r + 0x70), r + 0xC0, (char *)&g->pos, local0, local1, local2);
+    compute_camera_angles((float *)(r + 0x70), r + 0xC0, (char *)&g->motion.pos, local0, local1, local2);
 
     qcopy(r + 0xB0, r + 0xD0);
 }

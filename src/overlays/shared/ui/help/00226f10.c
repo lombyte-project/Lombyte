@@ -382,13 +382,13 @@ s32 FUN_L01_00231580(s32 arg) {
     f32 a, b, e;
     V_8 v;
 
-    if (G.control_mode == 0x14) {
+    if (G.state.control_mode == 0x14) {
         return 0;
     }
-    if (G.control_mode == 7) {
+    if (G.state.control_mode == 7) {
         return 0;
     }
-    if (G.state == 0x32) {
+    if (G.state.current == 0x32) {
         return 0;
     }
     if (G.unk1C0 != 0) {
@@ -425,8 +425,8 @@ s32 FUN_L01_00231580(s32 arg) {
     } else if (tbl->p20 != 0) {
         FUN_001f9a28_8(&v, (u8 *)&G + 0x80, tbl->p20 + 0x10);
     } else {
-        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.rot.f[2], 3.1415927f));
-        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.rot.f[2], 3.1415927f));
+        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
+        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
         v.i[2] = 0;
     }
     switch (G.unk20A4) {
@@ -438,19 +438,19 @@ s32 FUN_L01_00231580(s32 arg) {
             hero_set_state(id, 1);
             return 1;
         }
-        if (G.control_mode == 0x16) {
+        if (G.state.control_mode == 0x16) {
             hero_set_state(0x6D, 1);
-            G.unk120.f[2] = D_0015ED6C_8 * 7.0f;
+            G.motion.unk120.f[2] = D_0015ED6C_8 * 7.0f;
             return 1;
         }
-        if (G.control_mode == 0x12) {
+        if (G.state.control_mode == 0x12) {
             mob = (u8 *)G.unk2280;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
             hero_set_state(0x75, 1);
-        } else if (G.control_mode == 0x11) {
+        } else if (G.state.control_mode == 0x11) {
             mob = (u8 *)G.unk2280;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
@@ -464,7 +464,7 @@ s32 FUN_L01_00231580(s32 arg) {
                 }
             }
             hero_set_state(0x76, 1);
-        } else if (G.control_mode == 3) {
+        } else if (G.state.control_mode == 3) {
             mob = (u8 *)G.unk2280;
             if (mob != 0) {
                 id = 0x82;
@@ -520,21 +520,21 @@ void FUN_L01_00231ae0(void) {
         hero.unk230 = 0.45f;
         break;
     }
-    if (hero.control_mode == 4) {
+    if (hero.state.control_mode == 4) {
         if (hero.state_timer > hero.state_timer_mark && hero.velocity_stopped == 0)
             hero.unk22C = hero.unk434;
-    } else if (hero.state == 6) {
+    } else if (hero.state.current == 6) {
         hero.unk22C = 0.5f;
-    } else if (hero.state == 4) {
+    } else if (hero.state.current == 4) {
         hero.unk228 = 0.35000002f;
-    } else if ((u32)(hero.control_mode - 0x11) < 2) {
+    } else if ((u32)(hero.state.control_mode - 0x11) < 2) {
         hero.unk228 = 0.0f;
         hero.unk22C = 0.0f;
-    } else if (hero.state == 0x7F) {
+    } else if (hero.state.current == 0x7F) {
         hero.unk230 = 0.8f;
     }
-    if (!hero.unk257 || hero.prev_control_mode == 0x12 || hero.control_mode == 0x11 || hero.base_condition ||
-        FUN_001f9b80_231ae0(hero.unk210.f, hero.pos.f) > hero.unk234 * 0.5f) {
+    if (!hero.unk257 || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
+        FUN_001f9b80_231ae0(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
         f32 *q = D_0013F570_231ae0;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
         approach_value_231ae0(b->unk228, D_0015ED60_231ae0 * 0.02f, q);
@@ -978,13 +978,13 @@ s32 FUN_L01_00233940(s32 mode) {
     if (hero.unk1CC != 0) {
         return 1;
     }
-    qcopy(&old, &hero.pos.q);
+    qcopy(&old, &hero.motion.pos.q);
     vzero_233940(&v);
     if (hero.unk22DA != 0) {
         f2347c0_233940();
         hero.unk22DA = 0;
     }
-    if (hero.control_mode != 0x11) {
+    if (hero.state.control_mode != 0x11) {
         if (hero.unk20B3 != 0 || hero.unk1F8 != 0) {
             if (hero.unk20B3 == 1 || hero.unk1F8 != 0) {
                 f233810_233940(&v, &v, 0.6f);
@@ -995,17 +995,17 @@ s32 FUN_L01_00233940(s32 mode) {
             v.f[2] = hero.unk224;
         }
     }
-    vadd_233940(&hero.pos.q, &hero.pos.q, &v);
+    vadd_233940(&hero.motion.pos.q, &hero.motion.pos.q, &v);
     mask = 0x24;
-    if (hero.state == 0x7F) {
+    if (hero.state.current == 0x7F) {
         mask = 0xD24;
     }
     for (i = 0; i < 8; i++) {
         if (hero.unk20B3 != 0) {
-            if (!coll1_233940(&hero.pos.q, mask, ((s32)hero.moby), D_0015ED60 * 0.4f))
+            if (!coll1_233940(&hero.motion.pos.q, mask, ((s32)hero.moby), D_0015ED60 * 0.4f))
                 break;
-        } else if (hero.control_mode == 0x11) {
-            if (!coll1_233940(&hero.pos.q, mask, ((s32)hero.moby), 0.6f))
+        } else if (hero.state.control_mode == 0x11) {
+            if (!coll1_233940(&hero.motion.pos.q, mask, ((s32)hero.moby), 0.6f))
                 break;
         } else {
             s32 a;
@@ -1013,19 +1013,19 @@ s32 FUN_L01_00233940(s32 mode) {
             if (h < 0.05f) {
                 h = 0.05f;
             }
-            a = coll2_233940(&hero.pos.q, mask, hero.unk234, ((s32)hero.moby), h);
-            if (!(a | coll3_233940(&hero.pos.q, hero.unk234)))
+            a = coll2_233940(&hero.motion.pos.q, mask, hero.unk234, ((s32)hero.moby), h);
+            if (!(a | coll3_233940(&hero.motion.pos.q, hero.unk234)))
                 break;
         }
         c = coll_233940;
-        qcopy(&hero.pos.q, c);
+        qcopy(&hero.motion.pos.q, c);
         qcopy(&hero.unk200.q, c + 1);
         qcopy(&hero.unk210.q, c - 1);
         hero.unk257 = 1;
         hero.coll_hit_moby = ((u8 **)c)[-6];
     }
-    vsub_233940(&hero.pos.q, &hero.pos.q, &v);
-    vsub_233940(&w, &hero.pos.q, &old);
+    vsub_233940(&hero.motion.pos.q, &hero.motion.pos.q, &v);
+    vsub_233940(&w, &hero.motion.pos.q, &old);
     h = vlen_233940(&w);
     if (hero.unk234 * 1.5f < h) {
         if (mode == 0xF) {
@@ -1042,7 +1042,7 @@ s32 FUN_L01_00233940(s32 mode) {
             else if (w.f[2] < -512.0f)
                 w.f[2] = -512.0f;
             vscl_233940(&w, &w, hero.unk234);
-            vadd_233940(&hero.pos.q, &old, &w);
+            vadd_233940(&hero.motion.pos.q, &old, &w);
         }
         return -1;
     }

@@ -79,7 +79,7 @@ int FUN_L00_00205000(int a) {
     }
     {
         struct Hero *g2 = &hero;
-        if (g2->health == 1) {
+        if (g2->health.hp == 1) {
             return 0x54;
         }
         if (g2->unk12E2 != 0) {

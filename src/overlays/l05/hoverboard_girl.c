@@ -275,20 +275,20 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
     look_enabled = 0;
     if (moby->animation == 0 || moby->animation == 2) {
         look_enabled = 1;
-        if (vector_distance(&moby->position, &hero.pos) < 8.0f &&
+        if (vector_distance(&moby->position, &hero.motion.pos) < 8.0f &&
             absolute_angle_difference(
                 moby->yaw,
-                angle_from_xy(hero.unkD0.component[0] - moby->position.component[0],
-                              hero.unkD0.component[1] -
+                angle_from_xy(hero.motion.unkD0.component[0] - moby->position.component[0],
+                              hero.motion.unkD0.component[1] -
                                   moby->position.component[1])) < 1.5707964f) {
-            if (vector_length(&hero.unk100) > 0.01f) {
+            if (vector_length(&hero.motion.unk100) > 0.01f) {
                 state->player_look_timer = scale_frame_count(120);
             } else {
                 advance_timer(&state->player_look_timer);
             }
         } else if (state->player_look_timer != 0) {
             state->player_look_timer = 0;
-            qcopy(&state->look_target, &hero.unkD0);
+            qcopy(&state->look_target, &hero.motion.unkD0);
         }
         if (advance_timer(&state->random_look_timer)) {
             state->random_look_timer = truncate_time(scale_time(random_float(180.0f, 300.0f)));
@@ -298,7 +298,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
             add_vector(&state->look_target, &state->look_target, &moby->position);
         }
         if (state->player_look_timer != 0) {
-            qcopy(&target_position, &hero.unkD0);
+            qcopy(&target_position, &hero.motion.unkD0);
             rotation_step = 0.03f;
             rotation_limit = 0.3f;
         } else {
@@ -327,13 +327,13 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
 
     /* The easter egg only counts flips within 15 units and a 70-degree
      * facing cone. Retail increments at action 11, frame 15; no debounce. */
-    if (vector_distance(&moby->position, &hero.pos) < 15.0f &&
+    if (vector_distance(&moby->position, &hero.motion.pos) < 15.0f &&
         absolute_angle_difference(
             moby->yaw,
-            angle_from_xy(hero.pos.component[0] - moby->position.component[0],
-                          hero.pos.component[1] - moby->position.component[1])) <
+            angle_from_xy(hero.motion.pos.component[0] - moby->position.component[0],
+                          hero.motion.pos.component[1] - moby->position.component[1])) <
             1.2217305f) {
-        if (hero.state == 11 && hero.state_timer == 15) {
+        if (hero.state.current == 11 && hero.state_timer == 15) {
             state->breast_growth_count++;
             if (state->breast_growth_count > 20)
                 state->breast_growth_count = 20;
@@ -341,7 +341,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
         }
         /* Action 4 eventually reduces the effect, one step
          * every tenth game frame. Keep the scaled-frame threshold. */
-        if (hero.state == 4 && scale_frame_count(20) < hero.state_timer &&
+        if (hero.state.current == 4 && scale_frame_count(20) < hero.state_timer &&
             frame_number % 10 == 0) {
             state->breast_growth_count--;
             if (state->breast_growth_count < 0)

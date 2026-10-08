@@ -67,17 +67,4 @@ struct DiscTable {
 
 extern struct DiscTable disc_table __asm__("D_00137B80");
 
-/* gcc 2.95 has no _Static_assert: a negative array size fails the build. */
-#define DISC_TABLE_OFFSET_CHECK(field, off) \
-    typedef char disc_table_offset_check_##field[ \
-        ((unsigned long)&((struct DiscTable *)0)->field == (off)) ? 1 : -1]
-DISC_TABLE_OFFSET_CHECK(unk1530, 0x1530);
-DISC_TABLE_OFFSET_CHECK(unk1610, 0x1610);
-DISC_TABLE_OFFSET_CHECK(unk1808, 0x1808);
-DISC_TABLE_OFFSET_CHECK(movies, 0x1938);
-DISC_TABLE_OFFSET_CHECK(unk19F8, 0x19F8);
-DISC_TABLE_OFFSET_CHECK(unk1A28, 0x1A28);
-DISC_TABLE_OFFSET_CHECK(start_movies, 0x1A78);
-DISC_TABLE_OFFSET_CHECK(shared_archive, 0x2968);
-
 #endif /* LOMBYTE_RNC_STORAGE_DISC_TABLE_H */

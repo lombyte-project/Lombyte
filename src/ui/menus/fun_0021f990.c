@@ -3,14 +3,7 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/ui/map/map_state.h"
 
-typedef struct {
-    u8 pad0[0x8];
-    s32 unk8;
-    s32 unkC;
-    u8 pad10[0x10];
-    u8 data20[0x400];
-    u8 data420[1];
-} Buf;
+#include "rnc/rendering/texture_upload.h"
 
 #include "rnc/storage/memory_card/memory_card_state.h"
 extern s16 D_001516D8[];
@@ -32,7 +25,7 @@ s32 FUN_0021f990(struct MenuScreen *stream) {
     s32 x;
     s32 y;
     u8 *p;
-    Buf *b;
+    struct ClutImage *b;
     u8 *p20;
     u8 *p420;
 
@@ -117,12 +110,12 @@ s32 FUN_0021f990(struct MenuScreen *stream) {
                          stream->data.stream.buffer[0]);
             stream->data.stream.read_offset = 0;
         }
-        b = (Buf *)stream->data.stream.buffer[0];
-        p20 = b->data20;
-        p420 = b->data420;
-        x = FUN_001f97a0(b->unk8);
-        y = FUN_001f97a0(b->unkC);
-        D_001A00F0.tex0 = FUN_00204e30(x, y, p20, p420, D_001A00F0.unk244, D_001A00F0.unk248);
+        b = (struct ClutImage *)stream->data.stream.buffer[0];
+        p20 = b->clut;
+        p420 = b->pixels;
+        x = FUN_001f97a0(b->width);
+        y = FUN_001f97a0(b->height);
+        D_001A00F0.tex0 = FUN_00204e30(x, y, p20, p420, D_001A00F0.tex_clut_vram, D_001A00F0.tex0_vram);
         FUN_0020b4a8();
         stream->data.stream.state = 2;
         break;

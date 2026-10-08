@@ -428,7 +428,7 @@ void FUN_L00_002bb558(char *m) {
         D_L00_001616D0 = scale_game_frames(*(int *)&D_L00_001616AC);
         break;
     case 2:
-        if (g->state == 0x20) {
+        if (g->state.current == 0x20) {
             float f = compute_interpolated_record_value(m);
             if (6.0f <= f) {
                 flag = 1;

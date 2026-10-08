@@ -73,11 +73,11 @@ void FUN_L02_00223450(void) {
     f32 arg;
     s32 state;
 
-    state = hero.state;
+    state = hero.state.current;
     if (state == 10) {
         FUN_L00_002132b8_223450(0.7f, ED6C * 0.0f);
-        qcopy(&hero.state_velocity, &hero.unk920);
-        hero.unk194 = hero.unk164;
+        qcopy(&hero.motion.state_velocity, &hero.unk920);
+        hero.unk194 = hero.motion.unk164;
     } else if (state == 16) {
         if (FUN_001f96f8_223450(0x36) < hero.state_timer) {
             approach_value_223450(ED70 * 25.0f, ED70 * 7.0f, &hero.unk4A0);
@@ -88,8 +88,8 @@ void FUN_L02_00223450(void) {
             hero.unk190 = ED6C * 3.5f;
         }
         FUN_L00_00212088_223450(ED70 * 44.0f, ED70 * 45.0f);
-        FUN_L00_00233ba0_223450(&hero.velocity, &hero.velocity, 0.0f);
-        FUN_L00_00233708_223450(&hero.velocity, &hero.velocity, hero.unk194);
+        FUN_L00_00233ba0_223450(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
+        FUN_L00_00233708_223450(&hero.motion.velocity, &hero.motion.velocity, hero.unk194);
     } else if (state == 0x1C) {
         if (FUN_001f96f8_223450(0x28) < hero.state_timer) {
             FUN_L00_00211e30_223450(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 15.009831f);
@@ -102,66 +102,66 @@ void FUN_L02_00223450(void) {
                 approach_value_223450(ED6C * 2.0f, ED70 * 8.0f, &hero.unk45C);
             }
         }
-        hero.velocity.f[0] = FUN_001f9dc8_223450(hero.rot.f[2]) * hero.unk45C;
-        hero.velocity.f[1] = FUN_001f9de0_223450(hero.rot.f[2]) * hero.unk45C;
+        hero.motion.velocity.f[0] = FUN_001f9dc8_223450(hero.motion.rot.f[2]) * hero.unk45C;
+        hero.motion.velocity.f[1] = FUN_001f9de0_223450(hero.motion.rot.f[2]) * hero.unk45C;
     } else if (state == 11 || state == 12) {
-        hero.target_yaw = hero.unk43C;
+        hero.motion.target_yaw = hero.unk43C;
         FUN_L00_00211e30_223450(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 6.981317f);
         if (hero.unk450 != 3) {
             hero.unk194 = hero.unk454;
         } else {
             hero.unk194 = 0.0f;
         }
-        if (hero.state == 11) {
+        if (hero.state.current == 11) {
             if (hero.velocity_stopped != 0 && hero.unk44C < FUN_001f96f8_223450(0xC)) {
                 approach_value_223450(0.0f, ED70 * 8.0f, &hero.unk458);
             } else {
                 approach_value_223450(ED6C * 4.2f, ED70 * 8.0f, &hero.unk458);
             }
         }
-        hero.velocity.f[0] = FUN_001f9dc8_223450(hero.unk438) * hero.unk458;
-        hero.velocity.f[1] = FUN_001f9de0_223450(hero.unk438) * hero.unk458;
+        hero.motion.velocity.f[0] = FUN_001f9dc8_223450(hero.unk438) * hero.unk458;
+        hero.motion.velocity.f[1] = FUN_001f9de0_223450(hero.unk438) * hero.unk458;
         a = hero.unk454 * FUN_001f9de0_223450(FUN_001fa688_223450(hero.unk43C, hero.unk438));
-        hero.velocity.f[0] += FUN_001f9dc8_223450(hero.unk43C) * a;
-        hero.velocity.f[1] += FUN_001f9de0_223450(hero.unk43C) * a;
+        hero.motion.velocity.f[0] += FUN_001f9dc8_223450(hero.unk43C) * a;
+        hero.motion.velocity.f[1] += FUN_001f9de0_223450(hero.unk43C) * a;
         FUN_L00_002132b8_223450(0.7f, ED6C * 0.0f);
-        qcopy(&hero.state_velocity, &hero.unk920);
+        qcopy(&hero.motion.state_velocity, &hero.unk920);
     } else if (state == 0x11) {
-        hero.target_yaw = hero.unk470.f[3];
-        qcopy(&hero.unk170, &hero.unk470);
+        hero.motion.target_yaw = hero.unk470.f[3];
+        qcopy(&hero.motion.unk170, &hero.unk470);
         if (FUN_001f96f8_223450(9) < hero.state_timer) {
             FUN_L00_00211e30_223450(-1, ED64 * 0.042f, ED64 * 0.2f, ED6C * 11.868238f);
         }
         if (FUN_001f96f8_223450(9) <= hero.state_timer) {
             if (hero.unk308 == 0) {
-                hero.velocity.f[0] = FUN_001f9dc8_223450(hero.target_yaw) * (ED6C * 4.9f);
-                hero.velocity.f[1] = FUN_001f9de0_223450(hero.target_yaw) * (ED6C * 4.9f);
+                hero.motion.velocity.f[0] = FUN_001f9dc8_223450(hero.motion.target_yaw) * (ED6C * 4.9f);
+                hero.motion.velocity.f[1] = FUN_001f9de0_223450(hero.motion.target_yaw) * (ED6C * 4.9f);
             } else {
-                FUN_L00_00233ba0_223450(&hero.velocity, &hero.velocity, 0.0f);
-                FUN_001f9bf8_223450(&tmp, &hero.unk170, ED6C * 4.9f);
-                FUN_001f9a10_223450(&hero.velocity, &hero.velocity, &tmp);
+                FUN_L00_00233ba0_223450(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
+                FUN_001f9bf8_223450(&tmp, &hero.motion.unk170, ED6C * 4.9f);
+                FUN_001f9a10_223450(&hero.motion.velocity, &hero.motion.velocity, &tmp);
             }
         }
-        hero.unk194 = hero.unk164;
+        hero.unk194 = hero.motion.unk164;
     } else {
         if (state == 0x2D) {
-            x = hero.rot.f[2];
-            hero.unk188 = FUN_L00_0025bc98_223450(&x, &hero.unk184, 0, hero.target_yaw, ED64 * 0.018f, ED64 * 0.2f,
+            x = hero.motion.rot.f[2];
+            hero.motion.unk188 = FUN_L00_0025bc98_223450(&x, &hero.motion.unk184, 0, hero.motion.target_yaw, ED64 * 0.018f, ED64 * 0.2f,
                                              ED6C * 7.330383f);
-            a = FUN_001fa5c8_223450(x, hero.rot.f[2]);
+            a = FUN_001fa5c8_223450(x, hero.motion.rot.f[2]);
             FUN_L00_002091d8_223450(0.0f, 0.0f, a);
         } else {
             FUN_L00_00211e30_223450(0, ED64 * 0.04f, ED64 * 0.2f, hero.unk414);
         }
         FUN_L00_002132b8_223450(0.7f, ED6C * 0.0f);
-        qcopy(&hero.state_velocity, &hero.unk920);
+        qcopy(&hero.motion.state_velocity, &hero.unk920);
         arg = ED70 * 20.0f;
         if (hero.unk190 < D_L02_0017C3D0_223450[0] * ED6C * 0.2f) {
-            if (hero.control_mode == 2) {
+            if (hero.state.control_mode == 2) {
                 d = hero.unk944;
-                speed = FUN_001f9b20_223450(&hero.velocity);
+                speed = FUN_001f9b20_223450(&hero.motion.velocity);
                 approach_value_223450(0.0f, d, &speed);
-                FUN_001f9c48_223450(hero.velocity.f, hero.velocity.f, speed);
+                FUN_001f9c48_223450(hero.motion.velocity.f, hero.motion.velocity.f, speed);
                 return;
             }
             if (hero.unk30A != 0) {

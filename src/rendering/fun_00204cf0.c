@@ -1,19 +1,11 @@
 /* Ported from rac1-decomp (src/game/map.c, func_00205520). */
 #include "sda.h"
+#include "rnc/rendering/texture_upload.h"
 
 extern int FUN_001f97a0(int);
 extern int D_0015EE74 MACRO_ADDR;
 extern int D_0015F458 MACRO_ADDR;
-typedef struct {
-    int addr;         /* +0 */
-    short unk4;       /* +4 */
-    short cbp;        /* +6 */
-    int unk8;         /* +8 */
-    unsigned char tw; /* +C */
-    unsigned char th; /* +D */
-    short tbp;        /* +E */
-} TexSlot;
-extern TexSlot D_0018D040[];
+extern struct TextureUpload D_0018D040[];
 typedef struct {
     char *clut; /* 0x00 */
     char *pix;  /* 0x04 */
@@ -61,11 +53,11 @@ long FUN_00204cf0(char *p) {
     pt = &tex0;
     tex0 = *pt | ((long)t.th << 30) | ((long)1 << 34) | ((long)cbp << 37);
     reg = *pt | ((long)4 << 61);
-    if (D_0015F458 < 0x40) {
-        D_0018D040[D_0015F458].addr = (int)t.clut;
+    if (D_0015F458 < TEXTURE_UPLOAD_MAX) {
+        D_0018D040[D_0015F458].clut_data = (int)t.clut;
         D_0018D040[D_0015F458].cbp = cbp;
         D_0018D040[D_0015F458].unk4 = 0;
-        D_0018D040[D_0015F458].unk8 = (int)t.pix;
+        D_0018D040[D_0015F458].image_data = (int)t.pix;
         D_0018D040[D_0015F458].tw = t.tw;
         D_0018D040[D_0015F458].th = t.th;
         D_0018D040[D_0015F458].tbp = tbp;

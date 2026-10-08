@@ -503,12 +503,12 @@ void FUN_L06_002f0040(GbMoby *moby) {
 
     flags = 0;
     c = &d->ctl;
-    dist = FUN_001f9b80(moby->pos, hero.pos.f);
+    dist = FUN_001f9b80(moby->pos, hero.motion.pos.f);
     dz = AbsoluteFloat(moby->pos[2] - hero.unk2A0.f[2]);
     *(Quad *)save1 = *(Quad *)save0 = *(Quad *)moby->pos;
     if (moby->state != 1) {
         FUN_L06_002f3640_u(moby);
-        if (dist < 16.0f && AbsoluteFloat(moby->pos[2] - hero.pos.f[2]) < 1.5f) {
+        if (dist < 16.0f && AbsoluteFloat(moby->pos[2] - hero.motion.pos.f[2]) < 1.5f) {
             int ok = 0;
             if (moby->state == 2 || moby->state == 5 || moby->state == 3 || moby->state == 6 ||
                 moby->state == 7 || moby->state == 4) {
@@ -663,7 +663,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                     if (d->paths.id[i] >= 0) {
                         int *p = D_L06_001B0C30[d->paths.id[i]];
 
-                        if (FUN_L00_00259740(hero.pos.f, p + 4, *p) != 0) {
+                        if (FUN_L00_00259740(hero.motion.pos.f, p + 4, *p) != 0) {
                             int *q = D_L06_001B0C30[d->paths.id[i]];
 
                             if (FUN_L00_00259740(moby->pos, q + 4, *q) != 0) {
@@ -717,8 +717,8 @@ void FUN_L06_002f0040(GbMoby *moby) {
                     int *p;
 
                     if (FUN_L01_00276fe8(&d->paths.id[d->f27C], 1, d->paths.node[d->f27C],
-                                         moby->pos, hero.pos.f, v50, 0.1f) == 0) {
-                        qcopy(v50, hero.pos.f);
+                                         moby->pos, hero.motion.pos.f, v50, 0.1f) == 0) {
+                        qcopy(v50, hero.motion.pos.f);
                     }
                     *(Quad *)v70 = *(Quad *)moby->pos;
                     FUN_L00_00261d78(0.17f, d->paths.id[d->f27C], moby->pos, v70);
@@ -727,7 +727,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                         *(Quad *)moby->pos = *(Quad *)v70;
                     }
                 } else {
-                    qcopy(v50, hero.pos.f);
+                    qcopy(v50, hero.motion.pos.f);
                 }
                 FUN_L00_00258278(
                     (char *)moby,
@@ -745,7 +745,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                     d->ctl.f24 = D_0015ED6C * 3.0f * 1.35f;
                 }
                 if (dist > 0.8f) {
-                    flags = FUN_L00_00258b50(moby, &d->ctl, hero.pos.f, out, 1.0f);
+                    flags = FUN_L00_00258b50(moby, &d->ctl, hero.motion.pos.f, out, 1.0f);
                 }
                 {
                     int ph = ((int)moby >> 8) % 8;
@@ -755,7 +755,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                                          0);
                     }
                 }
-                dist = FUN_001f9b80(moby->pos, hero.pos.f);
+                dist = FUN_001f9b80(moby->pos, hero.motion.pos.f);
                 dz = AbsoluteFloat(moby->pos[2] - hero.unk2A0.f[2]);
                 probe_ground_height(moby->pos, 0, 0.5f);
                 if (D_L06_001745D8 != 0 && D_L06_001745D8->cls_id == 0x3B1) {
@@ -766,7 +766,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                     if (d->f184 % 14 == 0) {
                         if (FUN_001f9b80(d->fF0, moby->pos) < d->ctl.f10) {
                             hit = 1;
-                            d->f188 = FUN_001f9b80(hero.pos.f, moby->pos);
+                            d->f188 = FUN_001f9b80(hero.motion.pos.f, moby->pos);
                         }
                         qcopy(d->fF0, moby->pos);
                     }
@@ -782,7 +782,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                 break;
             }
             case 2: {
-                float hd = FUN_001f9b80(d->f0, hero.pos.f);
+                float hd = FUN_001f9b80(d->f0, hero.motion.pos.f);
 
                 if ((d->f190 == 0 && hd > 1.8f) || (d->f190 != 0 && hd > d->f188 + 0.5f)) {
                     if (dz < 1.75f) {
@@ -793,8 +793,8 @@ void FUN_L06_002f0040(GbMoby *moby) {
                     blend_moby_animation(moby, 0, 0, scale_game_frames(7));
                 }
                 FUN_L00_00258278((char *)moby,
-                                 FUN_001f9e90(hero.pos.f[0] - moby->pos[0],
-                                              hero.pos.f[1] - moby->pos[1]),
+                                 FUN_001f9e90(hero.motion.pos.f[0] - moby->pos[0],
+                                              hero.motion.pos.f[1] - moby->pos[1]),
                                  &d->ctl.f14, D_0015ED64 * 0.05f, D_0015ED64 * 0.3f,
                                  D_0015ED6C * 3.4906585f);
                 break;
@@ -810,7 +810,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
         }
         FUN_L00_00258278(
             (char *)moby,
-            FUN_001f9e90(hero.pos.f[0] - moby->pos[0], hero.pos.f[1] - moby->pos[1]),
+            FUN_001f9e90(hero.motion.pos.f[0] - moby->pos[0], hero.motion.pos.f[1] - moby->pos[1]),
             &d->ctl.f14, D_0015ED64 * 0.05f, D_0015ED64 * 0.3f, D_0015ED6C * 3.4906585f);
         break;
     case 5:
@@ -822,7 +822,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                 if (d->paths.id[i] >= 0) {
                     int *p = D_L06_001B0C30[d->paths.id[i]];
 
-                    if (FUN_L00_00259740(hero.pos.f, p + 4, *p) != 0) {
+                    if (FUN_L00_00259740(hero.motion.pos.f, p + 4, *p) != 0) {
                         int *q = D_L06_001B0C30[d->paths.id[i]];
 
                         if (FUN_L00_00259740(moby->pos, q + 4, *q) != 0) {

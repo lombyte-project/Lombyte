@@ -79,9 +79,9 @@ void update_map_icons(s32 level, s32 flag) {
         D_001A00F0.icons = 0;
     }
 
-    if (hero.pos.f[2] != 0.0f && level == current_level_index && flag) {
-        world_to_map_coords(&map_x, &map_y, D_0015FD60 ? level + 100 : level, hero.pos.f[0],
-                            hero.pos.f[1]);
+    if (hero.motion.pos.f[2] != 0.0f && level == current_level_index && flag) {
+        world_to_map_coords(&map_x, &map_y, D_0015FD60 ? level + 100 : level, hero.motion.pos.f[0],
+                            hero.motion.pos.f[1]);
         D_001A00F0.pan_x[level] = (s32)(map_x * 4096.0f) << 16;
         D_001A00F0.pan_y[level] = (s32)(map_y * 4096.0f) << 16;
     } else {

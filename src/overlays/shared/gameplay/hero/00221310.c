@@ -411,7 +411,7 @@ extern char D_0013F350[];
 extern char D_00141848[];
 extern char D_0013F430[];
 
-/* Sets hero.state to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
+/* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 int hero_set_state(int a, int b) {
     int old2088;

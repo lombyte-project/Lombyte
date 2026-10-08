@@ -17,7 +17,7 @@ int update_map_zoom_and_pan(void) {
     if (*(int *)(pad + 0x1A4) & 0x500) {
         return 1;
     }
-    if (D_001A00F0.unk24 == 0) {
+    if (D_001A00F0.enabled == 0) {
         return 0;
     }
     if (D_001A00F0.loaded < 0) {

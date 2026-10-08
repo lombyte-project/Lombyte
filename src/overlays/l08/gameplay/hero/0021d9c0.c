@@ -37,7 +37,7 @@ void FUN_L08_0021d9c0(void) {
         if (p->unk30C == 0 || p->unk2DC < 0.3f) {
             p->unk12E7 = 1;
             if (p->unk20A4 == 0) {
-                char *o = ((char *)p->unk10E0);
+                char *o = ((char *)p->items[1].moby);
                 if (o != 0 && *(short *)(o + 0xA6) == 0xAD)
                     p->unk308 = 1;
             }
@@ -61,8 +61,8 @@ void FUN_L08_0021d9c0(void) {
     }
     if (D_0015ED84 == 0xD) {
         struct Hero *q = &hero;
-        if (q->state != 0x7B) {
-            if (FUN_L00_001f0d60(q->unk234 + 0.03f, &q->unkD0, 2, 0)) {
+        if (q->state.current != 0x7B) {
+            if (FUN_L00_001f0d60(q->unk234 + 0.03f, &q->motion.unkD0, 2, 0)) {
                 if (FUN_001f0b58() == 0xB) {
                     hero_set_state(0x7B, 1);
                     return;
@@ -101,7 +101,7 @@ void FUN_L08_0021d9c0(void) {
     {
         struct Hero *q = &hero;
         if (q->unk12E3 != 0 && q->unk300 != 0) {
-            x = q->control_mode;
+            x = q->state.control_mode;
             if (x != 0x10 && x != 0x14 && x != 7) {
                 hero_set_state(0x31, 1);
                 return;
@@ -110,11 +110,11 @@ void FUN_L08_0021d9c0(void) {
         {
             struct Hero *r = &hero;
             if (r->selector_13 != 0) {
-                if (r->state == 0x7F)
+                if (r->state.current == 0x7F)
                     return;
-                if (AbsoluteFloat(r->height_threshold - (r->pos.f[2] + 0.25f)) < 1.0f) {
-                    if (r->height_threshold - r->pos.f[2] > 0.0f) {
-                        if (r->unk100.f[2] < 0.0f) {
+                if (AbsoluteFloat(r->height_threshold - (r->motion.pos.f[2] + 0.25f)) < 1.0f) {
+                    if (r->height_threshold - r->motion.pos.f[2] > 0.0f) {
+                        if (r->motion.unk100.f[2] < 0.0f) {
                             FUN_L00_0020b930();
                             hero_set_state(0x7F, 1);
                         }

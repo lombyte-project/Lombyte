@@ -37,7 +37,7 @@ void FUN_L14_0021dd30(void) {
         if (g->unk30C == 0 || g->unk2DC < 0.3f) {
             g->unk12E7 = 1;
             if (g->unk20A4 == 0) {
-                char *p = ((char *)g->unk10E0);
+                char *p = ((char *)g->items[1].moby);
                 if (p != 0 && *(short *)(p + 0xA6) == 0xAD) {
                     g->unk308 = 1;
                 }
@@ -46,8 +46,8 @@ void FUN_L14_0021dd30(void) {
     }
     if (D_0015ED84 == 0xD) {
         struct Hero *q = &hero;
-        if (q->state != 0x7B) {
-            if (FUN_L00_001f0d60(q->unk234 + 0.03f, &q->unkD0, 2, 0)) {
+        if (q->state.current != 0x7B) {
+            if (FUN_L00_001f0d60(q->unk234 + 0.03f, &q->motion.unkD0, 2, 0)) {
                 if (FUN_001f0b58() == 0xB) {
                     hero_set_state(0x7B, 1);
                     return;
@@ -85,11 +85,11 @@ void FUN_L14_0021dd30(void) {
     }
     h = &hero;
     if (h->selector_13 != 0) {
-        if (h->state == 0x7F)
+        if (h->state.current == 0x7F)
             return;
-        if (AbsoluteFloat(h->height_threshold - (h->pos.f[2] + 0.25f)) < 1.0f) {
-            if (h->height_threshold - h->pos.f[2] > 0.0f) {
-                if (h->unk100.f[2] < 0.0f) {
+        if (AbsoluteFloat(h->height_threshold - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
+            if (h->height_threshold - h->motion.pos.f[2] > 0.0f) {
+                if (h->motion.unk100.f[2] < 0.0f) {
                     FUN_L00_0020b930();
                     hero_set_state(0x7F, 1);
                 }
@@ -132,13 +132,13 @@ s32 FUN_L14_00222aa8(s32 arg) {
     f32 a, b, e;
     V_8 v;
 
-    if (G.control_mode == 0x14) {
+    if (G.state.control_mode == 0x14) {
         return 0;
     }
-    if (G.control_mode == 7) {
+    if (G.state.control_mode == 7) {
         return 0;
     }
-    if (G.state == 0x32) {
+    if (G.state.current == 0x32) {
         return 0;
     }
     if (G.unk1C0 != 0) {
@@ -162,7 +162,7 @@ s32 FUN_L14_00222aa8(s32 arg) {
     D_0013DF88_8[D_0015ED84_8]++;
     G.unk2280 = (struct Moby *)tbl->p20;
     D_0015EEA8_8++;
-    if (G.control_mode == 0xF) {
+    if (G.state.control_mode == 0xF) {
         G.unk5BE = 1;
         return 0;
     }
@@ -179,8 +179,8 @@ s32 FUN_L14_00222aa8(s32 arg) {
     } else if (tbl->p20 != 0) {
         FUN_001f9a28_8(&v, (u8 *)&G + 0x80, tbl->p20 + 0x10);
     } else {
-        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.rot.f[2], 3.1415927f));
-        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.rot.f[2], 3.1415927f));
+        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
+        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
         v.i[2] = 0;
     }
     switch (G.unk20A4) {
@@ -192,9 +192,9 @@ s32 FUN_L14_00222aa8(s32 arg) {
             hero_set_state(id, 1);
             return 1;
         }
-        if (G.control_mode == 0x16) {
+        if (G.state.control_mode == 0x16) {
             hero_set_state(0x6D, 1);
-            G.unk120.f[2] = D_0015ED6C_8 * 7.0f;
+            G.motion.unk120.f[2] = D_0015ED6C_8 * 7.0f;
             return 1;
         }
         hero_set_state(0x16, 1);
@@ -242,21 +242,21 @@ void FUN_L14_00222f38(void) {
         hero.unk230 = 0.45f;
         break;
     }
-    if (hero.control_mode == 4) {
+    if (hero.state.control_mode == 4) {
         if (hero.state_timer > hero.state_timer_mark && hero.velocity_stopped == 0)
             hero.unk22C = hero.unk434;
-    } else if (hero.state == 6) {
+    } else if (hero.state.current == 6) {
         hero.unk22C = 0.5f;
-    } else if (hero.state == 4) {
+    } else if (hero.state.current == 4) {
         hero.unk228 = 0.35000002f;
     } else if (hero.unk12E2 && hero.unk300) {
         hero.unk228 = 0.8f;
         hero.unk22C = 0.9f;
-    } else if (hero.state == 0x7F) {
+    } else if (hero.state.current == 0x7F) {
         hero.unk230 = 0.8f;
     }
-    if (!hero.unk257 || hero.prev_control_mode == 0x12 || hero.control_mode == 0x11 || hero.base_condition ||
-        FUN_001f9b80_231ae0(hero.unk210.f, hero.pos.f) > hero.unk234 * 0.5f) {
+    if (!hero.unk257 || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
+        FUN_001f9b80_231ae0(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
         f32 *q = D_0013F570_231ae0;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
         approach_value_231ae0(b->unk228, D_0015ED60_231ae0 * 0.02f, q);

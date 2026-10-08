@@ -6,7 +6,7 @@ s32 FUN_00207300(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) {
     s32 hit;
 
     hit = 0;
-    if ((u32)(hero.control_mode - 0x11) < 2U) {
+    if ((u32)(hero.state.control_mode - 0x11) < 2U) {
         goto block_2;
     }
     if (hero.base_condition != 1) {

@@ -5,8 +5,8 @@
    `arg1 >= 0xC8` is retail's second test of $a1. */
 int FUN_002069d0(void *arg0, int arg1, float unused1, float unused2, float arg3) {
     struct Hero *s = &hero;
-    int b = s->control_mode == 16;
-    int a = s->control_mode == 17 || s->control_mode == 18 || s->base_condition == 1;
+    int b = s->state.control_mode == 16;
+    int a = s->state.control_mode == 17 || s->state.control_mode == 18 || s->base_condition == 1;
 
     if (arg1 < 0xC8 && arg3 >= 39.5f && arg3 <= 42.5f && !a) {
         return 1;

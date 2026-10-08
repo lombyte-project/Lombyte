@@ -366,8 +366,8 @@ void FUN_L00_002e9f38(u8 *o) {
     st->a = r = FUN_001ebd78(st->a, t, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->va);
     if (r != 0.0f)
         build_look_at_matrix(o, o, &up, k * r);
-    if (hero.unk140.f[3] != 0.0f && hero.unk308 == 0)
-        build_look_at_matrix(o, o, &up, hero.unk140.f[3]);
+    if (hero.motion.unk140.f[3] != 0.0f && hero.unk308 == 0)
+        build_look_at_matrix(o, o, &up, hero.motion.unk140.f[3]);
     t = -D_0013C940.f10C;
     if (t == 0.0f)
         t = -D_0013C940.f104;
@@ -375,7 +375,7 @@ void FUN_L00_002e9f38(u8 *o) {
         t = FUN_001fa6c0((D_0013C940.i1A0 >> 12) & 1);
     if (t == 0.0f)
         t = -FUN_001fa6c0((D_0013C940.i1A0 >> 14) & 1);
-    if (D_L00_00166C80_c.s270 != 0 && hero.prev_state == 2)
+    if (D_L00_00166C80_c.s270 != 0 && hero.state.prev == 2)
         t = 0.0f;
     if (D_0015EDDC == 0)
         t = -t;

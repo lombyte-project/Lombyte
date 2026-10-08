@@ -18,13 +18,13 @@ s32 FUN_00221d68(struct MenuScreen *menu) {
             return -1;
         }
     }
-    prev = menu->data.raw.unk40;
+    prev = menu->data.list.selected;
     if (D_0013C940.unk1A4 & 0x40) {
-        menu->data.raw.unk40 = (prev + 1) % 30;
+        menu->data.list.selected = (prev + 1) % 30;
     } else if (D_0013C940.unk1A4 & 0x20) {
-        menu->data.raw.unk40 = (prev + 29) % 30;
+        menu->data.list.selected = (prev + 29) % 30;
     }
-    if (menu->data.raw.unk40 != prev) {
+    if (menu->data.list.selected != prev) {
         allocate_voice_for_target_entry(1, 0x11, menu->moby);
     }
     return 0;

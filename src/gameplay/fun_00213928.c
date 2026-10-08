@@ -87,8 +87,8 @@ s32 FUN_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
         kind = p->kind;
         p->u.s.f1C = 5627.9248f;
         if (kind == 0x47) {
-            v.f[0] = func_001F9DC8(func_001F9E90(obj->x - hero.pos.f[0], obj->y - hero.pos.f[1]));
-            v.f[1] = func_001F9DE0(func_001F9E90(obj->x - hero.pos.f[0], obj->y - hero.pos.f[1]));
+            v.f[0] = func_001F9DC8(func_001F9E90(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
+            v.f[1] = func_001F9DE0(func_001F9E90(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
             v.f[2] = 1.0f;
             FUN_001f9bf8(&v, &v, FUN_001f9af0(pv) * 0.7f);
             FUN_001f9a68(pv, pv, 0.3f);
