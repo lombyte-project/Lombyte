@@ -16,7 +16,7 @@ struct Moby {
     u8 pad21[3];
     struct MobyClass *pclass;
     struct Moby *next;
-    s32 unk2C;
+    f32 scale;                        /* draw scale (FUN_L01_002fa068 halves it, FUN_L00_00215ef8 divides by it) */
     u8 pad30[4];
     u16 flags;
     u8 pad36[2];
