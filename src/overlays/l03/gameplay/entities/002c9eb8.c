@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/math/vector.h"
 
 #define NOT_SDA
 
@@ -250,7 +251,68 @@ void FUN_L03_002db020(char *m) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db198.s", FUN_L03_002db198);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db280.s", FUN_L03_002db280);
+struct RailPath {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 pts[1];      /* 0x10: xyz point, w length of the segment to the next */
+};
+
+struct RailSpawnerVars {
+    s32 path;         /* index into D_L03_001B05B0, -1 for none */
+    s32 timer;
+    s32 voice;
+};
+
+struct RailSpawnerMoby {
+    u8 pad0[0x20];
+    u8 state;
+    u8 pad21[0xF];
+    u8 unk30;
+    u8 pad31[0x47];
+    struct RailSpawnerVars *vars;  /* 0x78 */
+    u8 pad7C[0x2C];
+    u16 uid;                    /* 0xA8 */
+};
+
+extern struct RailPath *D_L03_001B05B0[];
+extern char D_L03_001E35F0[];
+extern void FUN_001e93b0(char *, int);
+extern float FUN_001f9b48(void *, void *);
+extern void FUN_L03_002db198(struct RailPath *, float);
+extern int FUN_001f9740(s32 *);
+extern int FUN_L00_0028d8c0(struct RailSpawnerMoby *, int);
+extern int FUN_L00_0028dc90(int, int, struct RailSpawnerMoby *, int);
+
+void FUN_L03_002db280(struct RailSpawnerMoby *moby) {
+    struct RailSpawnerVars *vars = moby->vars;
+    struct RailPath *path;
+    float d;
+    int i;
+
+    if (moby->state == 0) {
+        if (vars->path == -1) {
+            FUN_001e93b0(D_L03_001E35F0, moby->uid);
+            kill_2db020((char *)moby);
+            return;
+        }
+        path = D_L03_001B05B0[vars->path];
+        D_L03_00161BC0_2db020 = D_0015ED6C * 3.0f;
+        for (i = 0; i < path->count - 2; i++)
+            path->pts[i].f[3] = FUN_001f9b48(&path->pts[i], &path->pts[i + 1]);
+        vars->timer = 0;
+        moby->state = 1;
+        vars->voice = -1;
+        for (d = 2.9f; d < path->count * path->pts[0].f[3]; d += 2.9f)
+            FUN_L03_002db198(path, d);
+        moby->unk30 = 0x60;
+    }
+    if (FUN_001f9740(&vars->timer)) {
+        vars->timer = ftoi_2db020(2.9f / D_L03_00161BC0_2db020);
+        FUN_L03_002db198(D_L03_001B05B0[vars->path], 0.0f);
+    }
+    if (!FUN_L00_0028d8c0(moby, vars->voice))
+        vars->voice = FUN_L00_0028dc90(0, 4, moby, 0x382);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db558.s", FUN_L03_002db558);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dbd90.s", FUN_L03_002dbd90);
 int FUN_L03_002dcb30(unsigned char *moby) {
