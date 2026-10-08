@@ -1823,7 +1823,7 @@ segments:
           - [0x121da4, textbin, text_gap_00220e24_before_fun_00220e28]
           - [0x121da8, c, ui/menus/fun_00220e28]
           - [0x121fac, textbin, text_gap_0022102c_before_fun_00221030]
-          - [0x121fb0, c, assembly/textbin/ui/menus/draw_cheats_menu]
+          - [0x121fb0, c, textbin/ui/menus/draw_cheats_menu]
           - [0x122234, textbin, text_gap_002212b4_before_fun_002212b8]
           - [0x122238, c, ui/menus/fun_002212b8]
           - [0x1223e0, c, ui/menus/fun_00221460]
