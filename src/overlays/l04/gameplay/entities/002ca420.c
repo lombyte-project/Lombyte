@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/gameplay/entities/moby.h"
 
 #define NOT_SDA
 
@@ -959,7 +960,83 @@ float FUN_L04_002e1768(char *moby) {
     return -2.05f;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e17d8.s", FUN_L04_002e17d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e1a10.s", FUN_L04_002e1a10);
+/* Warp portal: spins, opens once the hero is near, then warps to the exit moby. */
+struct PortalVars {
+    s32 unk0;
+    s32 exitMoby;   /* 0x04: moby index to warp to, -1 for none */
+};
+
+struct PortalMobyView {
+    u8 pad0[0xB2];
+    s16 uid;        /* 0xB2 */
+};
+
+extern s32 D_L04_0015F5C4;
+extern s32 D_L04_0015F640;
+extern u8 D_0013D4F1[];
+extern u8 D_0013D4C9[];
+extern char D_L04_001DC760[];
+extern struct Moby *portal_mobys_2e1a10 __asm__("D_L04_0015FFD8");
+extern void FUN_L00_002d6bf0(struct Moby *);
+extern void remove_moby_2e1a10(struct Moby *) __asm__("FUN_0020c828");
+extern void FUN_L04_002e1d00_m(struct Moby *) __asm__("FUN_L04_002e1d00");
+extern void FUN_L00_00298840(int);
+extern void FUN_L00_00263d40(int, int);
+extern void FUN_L00_00260860(int, int);
+extern void FUN_L00_00284e50(void *, void *);
+extern void FUN_001e93b0(char *, int);
+extern void FUN_0020b178(int, int);
+
+void FUN_L04_002e1a10(struct Moby *moby) {
+    struct PortalVars *vars = (struct PortalVars *)moby->pvars;
+    struct Moby *exit;
+
+    moby->rot.z = fast_add_rotations(moby->rot.z, D_0015ED6C * 1.5707964f);
+    if (D_L04_0015F5C4 == 2)
+        moby->flags |= 0x41;
+    else if (moby->flags & 1)
+        moby->flags &= ~0x41;
+    switch (moby->state) {
+    case 0:
+        FUN_L00_002d6bf0(moby);
+        if (D_0013D4F1[0]) {
+            remove_moby_2e1a10(moby);
+            break;
+        }
+        moby->state = 1;
+        moby->pos.z += 1.0f;
+        break;
+    case 1:
+        FUN_L04_002e1d00_m(moby);
+        if (FUN_001f9b80(&moby->pos, D_0013F3D0) < 3.0f) {
+            moby->flags |= 0x41;
+            FUN_L00_00298840(2);
+            moby->state = 2;
+        }
+        break;
+    case 2:
+        if (D_L04_0015F5C4 == 2)
+            break;
+        if (!D_0013D4C9[0])
+            FUN_L00_00263d40(0xFA7, -1);
+        else
+            FUN_L00_00263d40(0x53DF, -1);
+        D_L04_0015F640 = 0xB4;
+        FUN_L00_00260860(9, 1);
+        if (vars->exitMoby != -1) {
+            exit = &portal_mobys_2e1a10[vars->exitMoby];
+            FUN_L00_00284e50(&exit->pos, &exit->rot);
+        } else {
+            FUN_001e93b0(D_L04_001DC760, ((struct PortalMobyView *)moby)->uid);
+        }
+        moby->state = 3;
+        FUN_0020b178(0, -1);
+        break;
+    case 3:
+        remove_moby_2e1a10(moby);
+        break;
+    }
+}
 /* Same source as the exact FUN_L10_00298940, with a 0.25 lift and the draw skipped in mode 2. */
 typedef struct {
     float pad0[4];
