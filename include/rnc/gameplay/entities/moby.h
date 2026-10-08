@@ -45,7 +45,7 @@ struct Moby {
     u8 unk7C;
     u8 pad7D;
     u8 unk7E;
-    u8 unk7F;
+    u8 unk7F;                         /* set to 0x17 by FUN_L09_002c5990 near D_L09_00166F40 */
     u8 pad80[0x10];
     s32 unk90;
     u32 unk94;                        /* set from the class header's word 0x10 */
