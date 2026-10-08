@@ -436,7 +436,78 @@ char *FUN_L09_002ee380(char *owner, void *position, float angle) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ef430.s", FUN_L09_002ef430);
+#include "rnc/globals.h"
+#include "qcopy.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/overlay/quad.h"
+
+extern char D_L09_00166F40_2ef430[] __asm__("D_L09_00166F40");
+extern char D_L09_00174000_2ef430[] __asm__("D_L09_00174000");
+extern float D_0015ED6C_2ef430 __asm__("D_0015ED6C");
+extern float D_0015ED70_2ef430 __asm__("D_0015ED70");
+extern f32 random_float_2ef430(f32, f32) __asm__("FUN_002132a8");
+extern f32 vector_length_2ef430(void *) __asm__("FUN_001f9af0");
+extern f32 distance_2ef430(void *, void *) __asm__("FUN_001f9b80");
+extern f32 fast_add_rotations_2ef430(f32, f32) __asm__("FUN_001fa580");
+extern int tick_countdown_2ef430(int *) __asm__("FUN_001f9740");
+extern s32 scale_game_frames_2ef430(s32) __asm__("FUN_001f96f8");
+extern int collide_line_2ef430(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern int random_between_2ef430(int, int) __asm__("FUN_L00_00257b90");
+extern void *spawn_spark_2ef430(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
+extern void reflect_2ef430(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void add_vector_2ef430(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_2ef430(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void normalize_vector_2ef430(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void clear_vector_2ef430(void *) __asm__("FUN_001f99f8");
+extern void mark_moby_for_removal_2ef430(void *) __asm__("FUN_0020c828");
+
+/* Per-frame update of a tumbling debris moby: moves and spins it under gravity, bounces it off what it hits, and
+   bursts it into two sparks and removes it when its timer runs out or it leaves the area. */
+void FUN_L09_002ef430(struct Moby *moby) {
+    float old[4];
+    float q[4];
+    float r[4];
+    float *vel = (float *)moby->pvars;
+    float *pos = (float *)&moby->pos;
+    int i;
+
+    qcopy(old, pos);
+    add_vector_2ef430(pos, pos, vel);
+    if (moby->pos.x < 0.0f || moby->pos.y < 0.0f || moby->pos.z < 0.0f ||
+        distance_2ef430(pos, D_L09_00166F40_2ef430) > 64.0f) {
+        mark_moby_for_removal_2ef430(moby);
+        return;
+    }
+    moby->rot.z = fast_add_rotations_2ef430(moby->rot.z, vel[4]);
+    moby->rot.y = fast_add_rotations_2ef430(moby->rot.y, vel[5]);
+    vel[2] -= D_0015ED70_2ef430 * 9.8f;
+    if (tick_countdown_2ef430((int *)(vel + 7))) {
+        for (i = 0; i < 2; i++) {
+            *(OvlQuad *)r = 0;
+            r[0] = random_float_2ef430(-1.0f, 1.0f);
+            r[1] = random_float_2ef430(-1.0f, 1.0f);
+            r[2] = random_float_2ef430(-1.0f, 1.0f);
+            *(OvlQuad *)q = *(OvlQuad *)r;
+            normalize_vector_2ef430(q, q, vector_length_2ef430(r) * 0.5f);
+            add_vector_2ef430(q, r, q);
+            normalize_vector_2ef430(q, q, random_float_2ef430(D_0015ED6C_2ef430 * 3.0f, D_0015ED6C_2ef430 * 6.0f));
+            spawn_spark_2ef430(&moby->pos, q, 0x7F2F4F6F,
+                               random_between_2ef430(scale_game_frames_2ef430(10), scale_game_frames_2ef430(15)),
+                               30000.0f);
+        }
+        mark_moby_for_removal_2ef430(moby);
+        return;
+    }
+    if (collide_line_2ef430(old, pos, 2, moby, 0)) {
+        reflect_2ef430(vel, vel, D_L09_00174000_2ef430);
+        scale_vector_2ef430(vel, vel, random_float_2ef430(0.45f, 0.75f));
+        if (vector_length_2ef430(vel) < D_0015ED70_2ef430 * 10.0f) {
+            clear_vector_2ef430(vel);
+        }
+        normalize_vector_2ef430(D_L09_00174000_2ef430, D_L09_00174000_2ef430, 0.05f);
+        add_vector_2ef430(pos, D_L09_00174000_2ef430 - 0x20, D_L09_00174000_2ef430);
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002F0AA0), where it is exact; names translated to the US level program. */
 
 extern char D_L09_001F3080[];
