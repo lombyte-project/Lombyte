@@ -4,7 +4,7 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023db30.s", FUN_L00_0023db30);
 #include "qcopy.h"
-typedef int ti_23e008 __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 extern float D_0015ED60_23e008 __asm__("D_0015ED60");
 extern void getpos_23e008(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern float rndf_23e008(float, float) __asm__("FUN_002132a8");
@@ -18,8 +18,8 @@ extern unsigned char *emit_23e008(float *, int, float, float, float, int, int, i
 extern int rf_23e008(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_0023e008(void *p) {
-    ti_23e008 dir[1];
-    ti_23e008 old[1];
+    OvlQuad dir[1];
+    OvlQuad old[1];
     float pos[4] __attribute__((aligned(16)));
     int i;
     unsigned char *r;

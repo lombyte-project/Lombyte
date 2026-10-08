@@ -8,13 +8,13 @@ extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 s32 FUN_00221d68(struct MenuScreen *menu) {
     s32 prev;
 
-    if ((D_0013C940.pressed_unmasked & 0xD00) && menu_system.unk124 == 0) {
+    if ((D_0013C940.pressed_unmasked & 0xD00) && menu_system.close_locked == 0) {
         return 1;
     }
     if (D_0013C940.pressed_unmasked & 0x10) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
-        } else if (menu_system.unk124 == 0) {
+        } else if (menu_system.close_locked == 0) {
             return -1;
         }
     }

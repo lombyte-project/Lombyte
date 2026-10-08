@@ -79,7 +79,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
         }
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
-        } else if (menu_system.unk124 == 0) {
+        } else if (menu_system.close_locked == 0) {
             return -1;
         }
     }

@@ -475,6 +475,7 @@ int FUN_L13_002e4300(char *m, char *arg, float *t) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e4448.s", FUN_L13_002e4448);
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
 
 #define NOT_SDA
@@ -560,7 +561,6 @@ int FUN_L13_002e86f8(void *unused, unsigned char *p, int base, int n) {
     return 0;
 }
 /* Throws sparks from each of the moby's six vent bones that are open. */
-typedef int u128_v __attribute__((mode(TI)));
 extern int D_L13_001D3478_v[] __asm__("D_L13_001D3478");
 extern int D_L13_001D3508_v[] __asm__("D_L13_001D3508");
 extern int D_L13_001D3520_v[] __asm__("D_L13_001D3520");
@@ -579,7 +579,7 @@ typedef struct {
 } Vd_v;
 
 void FUN_L13_002e8920(unsigned char *m, char *d) {
-    u128_v zv;
+    OvlQuad zv;
     float a[4];
     int i;
     for (i = 0; i < 6; i++) {
@@ -605,7 +605,6 @@ void FUN_L13_002e8920(unsigned char *m, char *d) {
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9F90), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern int D_L13_0015F5CC;
 extern int D_L13_001D3538[];
@@ -618,13 +617,13 @@ extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L13_002e8b58(char *moby) {
-    u128 zv;
+    OvlQuad zv;
     float a[4];
     int i;
     for (i = 0; D_L13_001D3538[i] != -1; i++) {
         float s;
         int r, k;
-        u128 *z = &zv;
+        OvlQuad *z = &zv;
         zv = 0;
         s = *(float *)(moby + 0x2C) / (*(float *)(*(char **)(moby + 0x24) + 0x24) * 4.0f);
         s = s * random_float_between_alt(0.8f, 1.1f);
@@ -672,9 +671,9 @@ void FUN_L13_002e8d28(char *m, char *d) {
             if (*(float *)(c + 0x18) > 1001.0f)
                 *(float *)(c + 0x18) = 1001.0f;
             qcopy(c + 0x40, m + 0x40);
-            *(u128 *)(c + 0xC0) = *(u128 *)(m + 0xC0);
-            *(u128 *)(c + 0xD0) = *(u128 *)(m + 0xD0);
-            *(u128 *)(c + 0xE0) = *(u128 *)(m + 0xE0);
+            *(OvlQuad *)(c + 0xC0) = *(OvlQuad *)(m + 0xC0);
+            *(OvlQuad *)(c + 0xD0) = *(OvlQuad *)(m + 0xD0);
+            *(OvlQuad *)(c + 0xE0) = *(OvlQuad *)(m + 0xE0);
         }
     }
     n = D_L13_001D34A8[*(unsigned char *)(m + 0xBC)];
@@ -700,9 +699,9 @@ void FUN_L13_002e8d28(char *m, char *d) {
             if (*(float *)(c + 0x18) > 1001.0f)
                 *(float *)(c + 0x18) = 1001.0f;
             qcopy(c + 0x40, m + 0x40);
-            *(u128 *)(c + 0xC0) = *(u128 *)(m + 0xC0);
-            *(u128 *)(c + 0xD0) = *(u128 *)(m + 0xD0);
-            *(u128 *)(c + 0xE0) = *(u128 *)(m + 0xE0);
+            *(OvlQuad *)(c + 0xC0) = *(OvlQuad *)(m + 0xC0);
+            *(OvlQuad *)(c + 0xD0) = *(OvlQuad *)(m + 0xD0);
+            *(OvlQuad *)(c + 0xE0) = *(OvlQuad *)(m + 0xE0);
         }
     } else {
         if (*(char **)(d + 0xF0) != 0 && *(unsigned char *)(*(char **)(d + 0xF0) + 0x20) != 0xFE &&
@@ -715,9 +714,9 @@ void FUN_L13_002e8d28(char *m, char *d) {
     if (p != 0) {
         qcopy(p + 0x10, m + 0x10);
         qcopy(p + 0x40, m + 0x40);
-        *(u128 *)(p + 0xC0) = *(u128 *)(m + 0xC0);
-        *(u128 *)(p + 0xD0) = *(u128 *)(m + 0xD0);
-        *(u128 *)(p + 0xE0) = *(u128 *)(m + 0xE0);
+        *(OvlQuad *)(p + 0xC0) = *(OvlQuad *)(m + 0xC0);
+        *(OvlQuad *)(p + 0xD0) = *(OvlQuad *)(m + 0xD0);
+        *(OvlQuad *)(p + 0xE0) = *(OvlQuad *)(m + 0xE0);
     }
 }
 /* springs a moby's pitch and yaw toward targets and clamps the pitch */

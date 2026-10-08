@@ -170,6 +170,7 @@ int FUN_L00_002a4dc8(int a) {
 }
 #include "eetypes.h"
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_00250df8(unsigned char *);
 /* Creates a class 0x3EF moby at v and runs FUN_L00_00250df8 on it. */
@@ -183,7 +184,6 @@ unsigned char *FUN_L00_002a4de0(u128 *v) {
     }
     return m;
 }
-typedef int ti_2a4e48 __attribute__((mode(TI)));
 typedef struct {
     char p0[0x98];
     float f98;
@@ -212,8 +212,8 @@ extern float fa688_2a4e48(float, float) __asm__("FUN_001fa688");
 extern void f9a10_2a4e48(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void FUN_L00_002a4e48(char *o) {
-    ti_2a4e48 d[1];
-    ti_2a4e48 e[1];
+    OvlQuad d[1];
+    OvlQuad e[1];
     C_2a4e48 *C = &D_166C80_2a4e48;
     char *s;
     char *pos;
@@ -691,7 +691,6 @@ int FUN_L00_002a7de0(void) {
         return 1;
     return 0;
 }
-typedef int ti_2a7e20 __attribute__((mode(TI)));
 extern float rndf_2a7e20(float, float) __asm__("FUN_002132a8");
 extern int rndi_2a7e20(int) __asm__("FUN_00213260");
 extern float rnda_2a7e20(void) __asm__("FUN_00213308");
@@ -702,8 +701,8 @@ extern void emit_2a7e20(float *, int, int, int, int, void *, float, float,
                         float) __asm__("FUN_L00_00272060");
 
 void FUN_L00_002a7e20(float *pos, int n) {
-    ti_2a7e20 dir[1];
-    ti_2a7e20 old[1];
+    OvlQuad dir[1];
+    OvlQuad old[1];
     int i;
     for (i = 0; i < n; i++) {
         float s = rndf_2a7e20(0.1f, 2.0f);
@@ -862,7 +861,6 @@ void *FUN_L00_002a99b0(int unused, void *pos, int c, float scale, float a, float
     }
     return m;
 }
-typedef int u128_q __attribute__((mode(TI)));
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAD40), where it is exact; names translated to the US level program. */
 
@@ -886,7 +884,7 @@ void *FUN_L00_002a9aa0(int unused, float *pos) {
         *(short *)(m + 0x32) = 0xFF;
         m[0x31] = 1;
         d = *(char **)(m + 0x78);
-        *(u128_q *)(m + 0x10) = *(u128_q *)pos;
+        *(OvlQuad *)(m + 0x10) = *(OvlQuad *)pos;
         D_L00_0015F324_q = 0xFF;
         D_L00_0015F334_q = 0xFFFFFF;
         D_L00_0015F338_q = 0x1F00000042L;
@@ -899,11 +897,10 @@ void *FUN_L00_002a9aa0(int unused, float *pos) {
     }
     return m;
 }
-typedef int q128_2a9b80 __attribute__((mode(TI)));
 extern u8 *D_L00_001613C8 __attribute__((sda));
-void FUN_L00_002a9aa0_u(void *, q128_2a9b80 *) __asm__("FUN_L00_002a9aa0");
-void FUN_L00_002a9b80(void *a, q128_2a9b80 *v) {
-    q128_2a9b80 t = *v;
+void FUN_L00_002a9aa0_u(void *, OvlQuad *) __asm__("FUN_L00_002a9aa0");
+void FUN_L00_002a9b80(void *a, OvlQuad *v) {
+    OvlQuad t = *v;
     u8 *p;
     u8 *q;
     u8 *g;
@@ -917,7 +914,7 @@ void FUN_L00_002a9b80(void *a, q128_2a9b80 *v) {
     p = D_L00_001613C8;
     q = *(u8 **)(p + 0x78);
     if (*(s16 *)(p + 0xA6) == 0x5F3) {
-        *(q128_2a9b80 *)(p + 0x10) = t;
+        *(OvlQuad *)(p + 0x10) = t;
         *(s16 *)(q + 0x2E) = 1;
     }
 }
@@ -1059,14 +1056,13 @@ void FUN_L00_002a9c50(M_2a9c50 *m) {
         draw_2a9c50(&quad, mat, 1);
     }
 }
-typedef int q128_2a9ed0 __attribute__((mode(TI)));
 extern float D_0015ED6C_2a9ed0 __asm__("D_0015ED6C");
 extern int D_L00_0015F5CC_2a9ed0 __asm__("D_L00_0015F5CC");
 unsigned char *FUN_0020c4f8_2a9ed0(int) __asm__("FUN_0020c4f8");
 void FUN_001f99f8_2a9ed0(void *) __asm__("FUN_001f99f8");
 float FUN_002132a8_2a9ed0(float, float) __asm__("FUN_002132a8");
 void FUN_L00_00250df8_2a9ed0(void *) __asm__("FUN_L00_00250df8");
-unsigned char *FUN_L00_002a9ed0(int owner, q128_2a9ed0 *pos) {
+unsigned char *FUN_L00_002a9ed0(int owner, OvlQuad *pos) {
     unsigned char *m = FUN_0020c4f8_2a9ed0(0x4A);
     if (m) {
         unsigned char *v = *(unsigned char **)(m + 0x78);

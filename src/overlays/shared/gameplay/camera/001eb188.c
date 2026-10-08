@@ -309,17 +309,17 @@ int FUN_L00_001ed630(float *a) {
     return 0;
 }
 #include "qcopy.h"
-typedef int ti_1ed6a8 __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 typedef struct {
     char pad[0x140];
-    ti_1ed6a8 q;
+    OvlQuad q;
     char pad2[0x30];
     char *o;
 } C_1ed6a8;
 extern C_1ed6a8 D_166C80_1ed6a8 __asm__("D_L00_00166C80") __attribute__((section(".data")));
 extern int D_16C06C_1ed6a8 __asm__("D_L00_0016C06C") __attribute__((section(".data")));
-extern ti_1ed6a8 D_173E70_1ed6a8 __asm__("D_L00_00173E70") __attribute__((section(".data")));
-extern ti_1ed6a8 D_166DC0_1ed6a8 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern OvlQuad D_173E70_1ed6a8 __asm__("D_L00_00173E70") __attribute__((section(".data")));
+extern OvlQuad D_166DC0_1ed6a8 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern int D_16C058_1ed6a8[] __asm__("D_L00_0016C058") __attribute__((section(".data")));
 extern int D_15EF5C_1ed6a8 __asm__("D_L00_0015EF5C") __attribute__((sda));
 extern void f9a28_1ed6a8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -330,8 +330,8 @@ extern void ff378_1ed6a8(void *, void *, float) __asm__("FUN_L00_001ff378");
 extern void f9a10_1ed6a8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int f0d60_1ed6a8(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 
-void FUN_L00_001ed6a8(ti_1ed6a8 *pos, float r) {
-    ti_1ed6a8 d[1];
+void FUN_L00_001ed6a8(OvlQuad *pos, float r) {
+    OvlQuad d[1];
     float v[4] __attribute__((aligned(16)));
     char *o = D_166C80_1ed6a8.o;
     float *src = (float *)(o + 0x64);

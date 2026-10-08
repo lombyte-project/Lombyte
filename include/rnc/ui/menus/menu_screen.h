@@ -24,29 +24,29 @@ struct MenuScreenWords {
 
 /* Option list screen (FUN_00220e28). */
 struct MenuOption {
-    void *name;               /* 0x0: 0 ends the list */
+    void *unk0;               /* 0x0: 0 ends the list */
     u8 *flag;                 /* 0x4: toggled by confirm (pad 0x40) */
     u8 pad_8[0x8];
-    u32 type;                 /* 0x10: bit 0 = fade out and toggle D_0016034C instead */
+    u32 flags;                /* 0x10: bit 0 = fade out and toggle D_0016034C instead */
 }; /* size 0x14 */
 
 struct MenuOptionListData {
     u8 pad_30[0x4];
-    struct MenuOption *list;  /* 0x34: ended by a null name */
+    struct MenuOption *list;  /* 0x34: ended by a null unk0 */
     s32 selection;            /* 0x38: pad 0x1000 up, 0x4000 down */
     s32 fade_timer;           /* 0x3C: counts down after fade_to_black, drives D_0015F43C */
 };
 
 /* Choice list screen (FUN_002212b8). */
 struct MenuChoice {
-    s32 name;                 /* 0x0: 0 ends the list */
+    s32 unk0;                 /* 0x0: 0 ends the list */
     u8 *value;                /* 0x4: chosen option; confirm advances it */
     s32 option[4];            /* 0x8: 0 ends them early */
 }; /* size 0x18 */
 
 struct MenuChoiceListData {
     u8 pad_30[0x4];
-    struct MenuChoice *list;  /* 0x34: ended by a zero name */
+    struct MenuChoice *list;  /* 0x34: ended by a zero unk0 */
     s32 selection;            /* 0x38: pad 0x1000 up, 0x4000 down */
 };
 
@@ -205,12 +205,12 @@ struct MenuItemPreviewData {
    grid cell, 0x1000 help entry of the focus list item. */
 struct MenuLabelData {
     s32 flags;                /* 0x30: see above */
-    s32 text_id;              /* 0x34: find_help_entry result */
-    u32 text_stride;          /* 0x38 */
-    s32 scroll_offset;        /* 0x3C */
+    s32 text_id;              /* 0x34: help text id, or table of text ids per value */
+    u32 text_stride;          /* 0x38: byte stride of the text_id table */
+    s32 scroll_offset;        /* 0x3C: text scroll, 1/16 px */
     u8 pad_40[0x4];
     s32 fade_timer;           /* 0x44: reset to scale_game_frames(menu_fade_duration) */
-    s32 cached_value;         /* 0x48 */
+    s32 cached_value;         /* 0x48: value shown while fading */
     s32 value_variant;        /* 0x4C */
 };
 

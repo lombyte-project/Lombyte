@@ -178,14 +178,14 @@ float FUN_L15_002cf110(void *m_, void *out, float r) {
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Update function of the ultramech (moby class 491): waits for the player, follows its path, turns, fires and strafes, with jet particles while it moves. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002D0798), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 typedef union {
-    u128 q;
+    OvlQuad q;
     float f[4];
 } UVec;
 

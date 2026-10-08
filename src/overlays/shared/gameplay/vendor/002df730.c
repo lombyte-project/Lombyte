@@ -3,6 +3,7 @@
 #include "rnc/math_consts.h"
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
+#include "rnc/overlay/quad.h"
 
 extern float D_L00_00161BB0 __attribute__((sda));
 extern float D_0015ED6C;
@@ -240,7 +241,6 @@ void FUN_L00_002e03a0(M_2e03a0_2e03a0 *m) {
         break;
     }
 }
-typedef int u128_2e0788 __attribute__((mode(TI)));
 extern char D_L00_00166DC0[] __attribute__((section(".data")));
 extern void vsub_2e0788(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vadd_2e0788(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -251,7 +251,7 @@ extern float i2f_2e0788(int) __asm__("FUN_001fa6c0");
 extern float f99c0_2e0788(float) __asm__("FUN_001f99c0");
 extern int lerpc_2e0788(int, int, float) __asm__("FUN_001fa6e0");
 extern int f2i_2e0788(float) __asm__("FUN_001fa6d0");
-extern unsigned char *spr_2e0788(u128_2e0788 *, int, unsigned char, int, int, int, int,
+extern unsigned char *spr_2e0788(OvlQuad *, int, unsigned char, int, int, int, int,
                                  float) __asm__("FUN_L00_00272f68");
 typedef struct {
     char pad[0x10];
@@ -261,7 +261,7 @@ typedef struct {
     float c[4];
 } M_2e0788;
 void FUN_L00_002e0788(unsigned char *p) {
-    u128_2e0788 v[2];
+    OvlQuad v[2];
     M_2e0788 *m = *(M_2e0788 **)(p + 0x78);
     float *a;
     int *t;
@@ -678,14 +678,12 @@ int FUN_L00_002e4180(u128 *p, float r) {
 fail:
     return 0;
 }
-typedef int q128 __attribute__((mode(TI)));
-int FUN_L00_001ee1b0(q128 *, float);
+int FUN_L00_001ee1b0(OvlQuad *, float);
 /* True when FUN_L00_001ee1b0 returns non-zero for a copy of v and 0. */
-int FUN_L00_002e4290(q128 *v) {
-    q128 t = *v;
+int FUN_L00_002e4290(OvlQuad *v) {
+    OvlQuad t = *v;
     return FUN_L00_001ee1b0(&t, 0.0f) != 0;
 }
-typedef int q128_002e42c0 __attribute__((mode(TI)));
 typedef struct {
     u8 p0[0x2DC];
     f32 f2DC;
@@ -696,16 +694,16 @@ typedef struct {
 } G_002e42c0;
 extern G_002e42c0 D_0013F350_002e42c0 __asm__("D_0013F350") __attribute__((section(".data")));
 extern u8 D_L00_00166E10_002e42c0[] __asm__("D_L00_00166E10") __attribute__((section(".data")));
-extern q128_002e42c0 D_L00_00173E60_002e42c0 __asm__("D_L00_00173E60")
+extern OvlQuad D_L00_00173E60_002e42c0 __asm__("D_L00_00173E60")
     __attribute__((section(".data")));
-void FUN_L00_002e4168_002e42c0(s32, q128_002e42c0 *) __asm__("FUN_L00_002e4168");
-void FUN_001f9a68_002e42c0(q128_002e42c0 *, void *, f32) __asm__("FUN_001f9a68");
-void FUN_001f9a10_002e42c0(q128_002e42c0 *, q128_002e42c0 *,
-                           q128_002e42c0 *) __asm__("FUN_001f9a10");
-s32 FUN_001efa68_002e42c0(q128_002e42c0 *, q128_002e42c0 *, s32, void *,
+void FUN_L00_002e4168_002e42c0(s32, OvlQuad *) __asm__("FUN_L00_002e4168");
+void FUN_001f9a68_002e42c0(OvlQuad *, void *, f32) __asm__("FUN_001f9a68");
+void FUN_001f9a10_002e42c0(OvlQuad *, OvlQuad *,
+                           OvlQuad *) __asm__("FUN_001f9a10");
+s32 FUN_001efa68_002e42c0(OvlQuad *, OvlQuad *, s32, void *,
                           s32) __asm__("FUN_001efa68");
-s32 FUN_L00_002e42c0(q128_002e42c0 *out, s32 flag) {
-    q128_002e42c0 v[4];
+s32 FUN_L00_002e42c0(OvlQuad *out, s32 flag) {
+    OvlQuad v[4];
     G_002e42c0 *g = &D_0013F350_002e42c0;
     u8 *q = D_L00_00166E10_002e42c0;
     f32 f;

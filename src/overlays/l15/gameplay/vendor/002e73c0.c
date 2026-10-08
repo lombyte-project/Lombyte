@@ -368,6 +368,7 @@ void FUN_L15_002eb108(char *moby) {
 }
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 /* Cutscene trigger moby: waits for the hero in its clip volume, then steps through the scene stages and saves at the end. */
 extern int D_L15_0015F5C4_v __asm__("D_L15_0015F5C4");
 extern int D_L15_00161AC0_v __asm__("D_L15_00161AC0");
@@ -538,7 +539,6 @@ void FUN_L15_002eb928(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECDD0), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern char *func_0020D348_m(int);
 extern int FUN_L00_0025d1b8();
@@ -550,8 +550,8 @@ char *FUN_L15_002eb9e0(char *pos, char *vec) {
     char tmp[32] __attribute__((aligned(16)));
     char *p = tmp;
     char *m;
-    *(u128 *)tmp = *(u128 *)pos;
-    *(u128 *)(tmp + 0x10) = *(u128 *)vec;
+    *(OvlQuad *)tmp = *(OvlQuad *)pos;
+    *(OvlQuad *)(tmp + 0x10) = *(OvlQuad *)vec;
     m = func_0020D348_c(0x594);
     if (m != 0) {
         func_L00_0025E210_u(m);
@@ -559,7 +559,7 @@ char *FUN_L15_002eb9e0(char *pos, char *vec) {
         *(short *)(m + 0x32) = 0xFF;
         m[0x31] = 1;
         qcopy(m + 0x10, p);
-        *(u128 *)(m + 0x40) = *(u128 *)(tmp + 0x10);
+        *(OvlQuad *)(m + 0x40) = *(OvlQuad *)(tmp + 0x10);
         func_L00_00251E30_u(m);
     }
     return m;

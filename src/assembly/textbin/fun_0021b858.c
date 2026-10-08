@@ -56,14 +56,14 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
     if (menu_system.current->focus != grid) {
         return 0;
     }
-    if ((controller_state.pressed_buttons & 0xD00) && menu_system.unk124 == 0) {
+    if ((controller_state.pressed_buttons & 0xD00) && menu_system.close_locked == 0) {
         return 1;
     }
     if (controller_state.pressed_buttons & 0x10) {
         back_page = menu_system.current->back;
         if (back_page != 0) {
             menu_system.next = back_page;
-        } else if (menu_system.unk124 == 0) {
+        } else if (menu_system.close_locked == 0) {
             return -1;
         }
     }

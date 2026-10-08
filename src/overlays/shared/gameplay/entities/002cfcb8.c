@@ -423,6 +423,7 @@ void FUN_L00_002d37d0(char *a) {
     }
 }
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 void *FUN_0020c4f8_2d3838(int) __asm__("FUN_0020c4f8");
 void FUN_L00_00250df8_2d3838(void *) __asm__("FUN_L00_00250df8");
 void FUN_L00_0025d1b8_2d3838(void *) __asm__("FUN_L00_0025d1b8");
@@ -715,7 +716,6 @@ void FUN_L00_002d6bf0(O002d6bf0 *o) {
     m->x4c = 2.5f;
     m->x48 = 3.0f;
 }
-typedef int ti_2d6cd0 __attribute__((mode(TI)));
 typedef struct {
     char p0[0x10];
     float a[4];
@@ -739,7 +739,7 @@ extern void spr_2d6cd0(void *, int, int, int, int, int, int, float) __asm__("FUN
 void FUN_L00_002d6cd0(char *o) {
     P_2d6cd0 *p = *(P_2d6cd0 **)(o + 0x78);
     union {
-        ti_2d6cd0 q;
+        OvlQuad q;
         float f[4];
     } v;
     float d[4] __attribute__((aligned(16)));
@@ -750,7 +750,7 @@ void FUN_L00_002d6cd0(char *o) {
     if (*(unsigned short *)(o + 0x34) & 1) {
         return;
     }
-    v.q = *(ti_2d6cd0 *)(o + 0x10);
+    v.q = *(OvlQuad *)(o + 0x10);
     v.f[2] += 0.333000004f;
     sub_2d6cd0(d, D_166DC0_2d6cd0, o + 0x10);
     ff500_2d6cd0(d, d, -0.3f);

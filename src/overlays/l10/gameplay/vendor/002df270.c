@@ -68,11 +68,11 @@ void FUN_L10_002e1cb0(unsigned char *moby) {
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Update for the toxic crab (moby class 1202): line-of-sight test, then a 13-state walk/chase/attack/death machine. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E30F8), where it is exact; names translated to the US level program. */
 
-typedef int u128_2E30F8 __attribute__((mode(TI)));
 
 typedef struct {
     float v[4];
@@ -272,9 +272,9 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
     t = d->tgt;
     m->f2C = *(float *)(m->p24 + 0x24) * *(float *)&D_L10_00161E24;
     FUN_L00_00263ac8(2.5f, (int)m, 2, d->q2B0);
-    *(u128_2E30F8 *)from = *(u128_2E30F8 *)m->pos;
+    *(OvlQuad *)from = *(OvlQuad *)m->pos;
     from[2] += 1.0f;
-    *(u128_2E30F8 *)to = *(u128_2E30F8 *)(t + 0x10);
+    *(OvlQuad *)to = *(OvlQuad *)(t + 0x10);
     to[2] += 1.0f;
     if (FUN_001f9b48(from, to) < 15.0f &&
         !(from[0] < 2.0f || 1021.0f < from[0] || from[1] < 2.0f || 1021.0f < from[1] ||
@@ -438,7 +438,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             } else {
                 approach_value(&d->fF4, d->f1A4 * D_0015ED6C * 0.3f, D_0015ED70 * 20.0f);
             }
-            *(u128_2E30F8 *)old = *(u128_2E30F8 *)m->pos;
+            *(OvlQuad *)old = *(OvlQuad *)m->pos;
             if (see &&
                 AbsoluteFloat(dist - (*(short *)(t + 0xA6) == 0x359 ? 2.0f : 3.57f)) < 0.35f) {
                 approach_value(&d->fF4, 0.0f, D_0015ED70 * 30.0f);
@@ -472,9 +472,9 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
                 {
                     float from2[4];
                     float to2[4];
-                    *(u128_2E30F8 *)from2 = *(u128_2E30F8 *)m->pos;
+                    *(OvlQuad *)from2 = *(OvlQuad *)m->pos;
                     from2[2] += 1.0f;
-                    *(u128_2E30F8 *)to2 = *(u128_2E30F8 *)(t + 0x10);
+                    *(OvlQuad *)to2 = *(OvlQuad *)(t + 0x10);
                     to2[2] += 1.0f;
                     if (FUN_001efa68(from2, to2, 2, m, 0)) {
                         char *h = D_L10_001742C0;
@@ -567,9 +567,9 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             float from2[4];
             float to2[4];
             int ok = 1;
-            *(u128_2E30F8 *)from2 = *(u128_2E30F8 *)m->pos;
+            *(OvlQuad *)from2 = *(OvlQuad *)m->pos;
             from2[2] += 1.0f;
-            *(u128_2E30F8 *)to2 = *(u128_2E30F8 *)(t + 0x10);
+            *(OvlQuad *)to2 = *(OvlQuad *)(t + 0x10);
             to2[2] += 1.0f;
             if (FUN_001efa68(from2, to2, 2, m, 0)) {
                 char *h = D_L10_001742C0;
@@ -618,7 +618,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             Hit2E30F8 hit;
             float v[4];
             float pos[4];
-            *(u128_2E30F8 *)pos = *(u128_2E30F8 *)m->pos;
+            *(OvlQuad *)pos = *(OvlQuad *)m->pos;
             pos[2] += 0.25f;
             hit.m = (char *)m;
             hit.flags = 0x10001;

@@ -120,9 +120,9 @@ struct MenuSystem {
     s32 unk11C;                   /* 0x11C: an oclass, -1 none */
     s32 unk120;                   /* 0x120: an oclass, -1 none */
 
-    s32 unk124;               /* 0x124: back closes the menu only while zero */
-    s32 save_pending;         /* 0x128: save started, waiting for the memory card */
-    s32 message_id;           /* 0x12C: help message text id (0x4FB5 while saving) */
+    s32 close_locked;         /* 0x124: nonzero blocks start/back closing the menu */
+    s32 card_op_pending;      /* 0x128: card save/load started, waiting for the card */
+    s32 card_op_text;         /* 0x12C: text shown while pending (0x4FB5 save, 0x4FB6 load) */
     u8 pad_130[0x4];
     s32 unk134;               /* 0x134: hides pages / items with flags 8 */
     s32 unk138;               /* 0x138: hides pages / items with flags 4 */

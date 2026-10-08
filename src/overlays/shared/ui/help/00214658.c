@@ -308,6 +308,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00215ef8.s", FUN_L00_00215ef8);
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/vector.h"
+#include "rnc/overlay/quad.h"
 extern char *D_001413D0 __attribute__((section(".data")));
 void FUN_001fa050(void *, void *);
 void FUN_001fa2d8(void *, void *);
@@ -332,9 +333,8 @@ typedef struct {
 typedef struct {
     V_216130 r[4];
 } M_216130;
-typedef int Q_216130 __attribute__((mode(TI)));
 typedef struct {
-    Q_216130 q[4];
+    OvlQuad q[4];
 } QM_216130;
 extern M_216130 D_0013F350_216130 __asm__("D_0013F350");
 extern char D_0013F3F4_216130[] __asm__("D_0013F3F4");
@@ -409,9 +409,8 @@ void FUN_L00_00216130(V_216130 *v, M_216130 *m, void *p, float a, float b, float
     else
         set_216130(m, D_0013F3E0_216130);
 }
-typedef int u128_2163f0 __attribute__((mode(TI)));
 typedef union {
-    u128_2163f0 q;
+    OvlQuad q;
     float f[4];
 } V_2163f0;
 typedef struct {
@@ -537,9 +536,8 @@ void FUN_L00_00216710(float x) {
     } else
         clear_u64_value(g);
 }
-typedef int ti_167d0 __attribute__((mode(TI)));
 typedef union {
-    ti_167d0 q;
+    OvlQuad q;
     f32 f[4];
 } V4 __attribute__((aligned(16)));
 
@@ -881,7 +879,6 @@ void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag
         FUN_L00_001ed280_00216f90();
     FUN_L00_002500b8_00216f90(D_001413D0_00216f90);
 }
-typedef int q_217118 __attribute__((mode(TI)));
 extern unsigned char D_0013F430_217118[] __asm__("D_0013F430");
 extern unsigned char D_0013F350_217118[] __asm__("D_0013F350");
 extern unsigned char D_0013F3D0_217118[] __asm__("D_0013F3D0");
@@ -899,8 +896,8 @@ float FUN_L00_00233d30_217118(void *) __asm__("FUN_L00_00233d30");
 void FUN_L00_00213de8_217118(float) __asm__("FUN_L00_00213de8");
 
 void FUN_L00_00217118(float a, float b) {
-    q_217118 t[1];
-    q_217118 u[1];
+    OvlQuad t[1];
+    OvlQuad u[1];
     unsigned char *P = D_0013F430_217118;
     unsigned char *G;
     unsigned char *Q;

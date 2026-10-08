@@ -48,10 +48,10 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
     s32 scaled_volume_80;
     s32 scaled_volume_70;
     previous_save_slot = menu->selected_save_slot;
-    if (menu_system.save_pending != 0) {
+    if (menu_system.card_op_pending != 0) {
         if ((memory_card_state.state < 3) &&
             (memory_card_state.pending_state < 0)) {
-            menu_system.save_pending = 0;
+            menu_system.card_op_pending = 0;
             if (memory_card_state.err != 0) {
                 mode_freeze_flags |= 0x100;
                 mode_freeze_init(3, menu_system.current);
@@ -74,7 +74,7 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
         }
     }
     if (controller_state.pressed_buttons & 0xD00) {
-        if (menu_system.unk124 == 0) {
+        if (menu_system.close_locked == 0) {
             return 1;
         }
     }
@@ -82,7 +82,7 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
         back_page = menu_system.current->back;
         if (back_page != 0) {
             menu_system.next = back_page;
-        } else if (menu_system.unk124 == 0) {
+        } else if (menu_system.close_locked == 0) {
             return -1;
         }
     }
@@ -117,8 +117,8 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
                 memory_card_state.pending_card = 0;
                 memory_card_state.pending_state = 0xD;
             }
-            menu_system.save_pending = 1;
-            menu_system.message_id = 0x4FB6;
+            menu_system.card_op_pending = 1;
+            menu_system.card_op_text = 0x4FB6;
         }
         if (menu->selected_save_slot != previous_save_slot) {
             allocate_voice_for_target_entry(1, 0x11, menu->sound_owner);

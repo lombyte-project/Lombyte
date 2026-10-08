@@ -3,7 +3,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
-typedef int q_2712b8 __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 extern unsigned char *D_L00_001B2130_2712b8 __asm__("D_L00_001B2130")
     __attribute__((section(".data")));
 extern float D_0015ED60_2712b8 __asm__("D_0015ED60");
@@ -11,7 +11,7 @@ extern unsigned char *FUN_L00_002678b8_2712b8(int) __asm__("FUN_L00_002678b8");
 extern int FUN_001fa6d0_2712b8(float) __asm__("FUN_001fa6d0");
 extern int FUN_00213260_2712b8(int) __asm__("FUN_00213260");
 
-unsigned char *FUN_L00_002712b8(q_2712b8 *pos, float *vec, int s, int a, int col, int n, float x,
+unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int s, int a, int col, int n, float x,
                                 float y, float z, float w, float pw) {
     unsigned char *m = FUN_L00_002678b8_2712b8(0x2C);
     if (m) {
@@ -46,7 +46,6 @@ unsigned char *FUN_L00_002712b8(q_2712b8 *pos, float *vec, int s, int a, int col
     }
     return m;
 }
-typedef int T271450_q __attribute__((mode(TI)));
 extern char D_0013F490_271450[] __asm__("D_0013F490");
 extern int FUN_001f9770_271450(void *) __asm__("FUN_001f9770");
 extern void FUN_L00_00267a08_271450(void *) __asm__("FUN_L00_00267a08");
@@ -59,8 +58,8 @@ extern void FUN_001f9a68_271450(void *, void *, float) __asm__("FUN_001f9a68");
 
 void FUN_L00_00271450(unsigned char *p) {
     float v[4];
-    T271450_q t[1];
-    T271450_q m[1];
+    OvlQuad t[1];
+    OvlQuad m[1];
     unsigned char *q;
     unsigned char *r;
     float a;
@@ -83,7 +82,7 @@ void FUN_L00_00271450(unsigned char *p) {
         v[2] = *(float *)(q + 8);
         *(int *)&v[3] = 0;
         FUN_001f9a10_271450(r, r, v);
-        t[0] = *(T271450_q *)D_0013F490_271450;
+        t[0] = *(OvlQuad *)D_0013F490_271450;
         FUN_L00_001ff318_271450(m, t, *(float *)(p + 0x1C));
         FUN_L00_001ff290_271450(m, r, t);
         FUN_001f9a68_271450(m, D_0013F490_271450 + 0x150, *(float *)(q + 0xC));
@@ -804,7 +803,6 @@ void FUN_L00_00273088(u8 *a) {
     if (FUN_001f9770(a + 0xA))
         FUN_L00_00267a08(a);
 }
-typedef int T2730e0_q __attribute__((mode(TI)));
 typedef struct {
     u8 p0[0x80];
     f32 x, y, z;
@@ -814,7 +812,7 @@ extern unsigned char *D_L00_001B2154_2730e0 __asm__("D_L00_001B2154")
     __attribute__((section(".data")));
 unsigned char *FUN_L00_002678b8_2730e0(int) __asm__("FUN_L00_002678b8");
 int FUN_001fa6d0_2730e0(float) __asm__("FUN_001fa6d0");
-unsigned char *FUN_L00_002730e0(float *pos, T2730e0_q *vel, int color, u8 life, u8 b, int mode,
+unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *vel, int color, u8 life, u8 b, int mode,
                                 float scale) {
     unsigned char *m;
     float *v;
@@ -1380,7 +1378,6 @@ unsigned char *FUN_L00_00274948(u128 *a, u128 *b, int c, int d) {
     }
     return m;
 }
-typedef int q_274a70 __attribute__((mode(TI)));
 f32 FUN_001fa6c0_274a70(s32) __asm__("FUN_001fa6c0");
 s32 FUN_001fa6d0_274a70(f32) __asm__("FUN_001fa6d0");
 s32 FUN_001f9770_274a70(void *) __asm__("FUN_001f9770");
@@ -1624,9 +1621,8 @@ void FUN_L00_002752e0(char *a) {
         FUN_L00_00267a08(a);
     }
 }
-typedef int u128_275320 __attribute__((mode(TI)));
 typedef union {
-    u128_275320 q;
+    OvlQuad q;
     float f[4];
 } V_275320;
 typedef struct {
@@ -1823,7 +1819,6 @@ void FUN_L00_00275860(O00275860 *o) {
     if (FUN_001f9770(&o->h))
         FUN_L00_00267a08(o);
 }
-typedef int q_275910 __attribute__((mode(TI)));
 extern unsigned char *D_L00_001B21B8_275910 __asm__("D_L00_001B21B8")
     __attribute__((section(".data")));
 extern unsigned char *FUN_L00_002678b8_275910(int) __asm__("FUN_L00_002678b8");
@@ -1831,7 +1826,7 @@ extern int FUN_001fa6d0_275910(float) __asm__("FUN_001fa6d0");
 extern int FUN_00213260_275910(int) __asm__("FUN_00213260");
 extern unsigned char *FUN_002141f8_275910(int) __asm__("FUN_002141f8");
 
-unsigned char *FUN_L00_00275910(q_275910 *pos, int s, int col, int mode, int b, float *vec, int h,
+unsigned char *FUN_L00_00275910(OvlQuad *pos, int s, int col, int mode, int b, float *vec, int h,
                                 float x, float y) {
     unsigned char *m = FUN_L00_002678b8_275910(0x4E);
     if (m) {

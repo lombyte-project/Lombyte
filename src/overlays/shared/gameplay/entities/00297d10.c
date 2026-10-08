@@ -252,14 +252,14 @@ s32 FUN_L06_002ea7c8(unsigned char *p) {
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Update function of the gadgebot (moby class 857): waits by its dispenser, then follows, attacks and returns to the hero along the level's paths. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F1470), where it is exact; names translated to the US level program. */
 
-typedef int Quad __attribute__((mode(TI)));
 
 typedef union {
-    Quad q;
+    OvlQuad q;
     float f[4];
 } GbVec;
 
@@ -505,7 +505,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
     c = &d->ctl;
     dist = FUN_001f9b80(moby->pos, hero.motion.pos.f);
     dz = AbsoluteFloat(moby->pos[2] - hero.unk2A0.f[2]);
-    *(Quad *)save1 = *(Quad *)save0 = *(Quad *)moby->pos;
+    *(OvlQuad *)save1 = *(OvlQuad *)save0 = *(OvlQuad *)moby->pos;
     if (moby->state != 1) {
         FUN_L06_002f3640_u(moby);
         if (dist < 16.0f && AbsoluteFloat(moby->pos[2] - hero.motion.pos.f[2]) < 1.5f) {
@@ -562,7 +562,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
         d->f308 = 1.0f;
         moby->pos[2] = probe_ground_height(moby->pos, 0, 0.5f);
         FUN_L06_002d8b98((char *)moby);
-        d->f2F0.q = d->f2E0.q = *(Quad *)moby->pos;
+        d->f2F0.q = d->f2E0.q = *(OvlQuad *)moby->pos;
         if (D_0014C050[moby->fB0 + D_0015ED84 * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
@@ -694,7 +694,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                 is_point_inside_clip_volume(((GbMoby *)hero.moby)->pos, *tb) != 0 &&
                 is_point_inside_clip_volume(moby->pos, *tb) == 0) {
                 moby->state = 4;
-                *(Quad *)moby->pos = *(Quad *)v40;
+                *(OvlQuad *)moby->pos = *(OvlQuad *)v40;
                 break;
             }
         }
@@ -712,7 +712,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                 if (moby->anim != 1) {
                     blend_moby_animation(moby, 1, 0, scale_game_frames(7));
                 }
-                *(Quad *)v60 = *(Quad *)moby->pos;
+                *(OvlQuad *)v60 = *(OvlQuad *)moby->pos;
                 if (d->f27C >= 0) {
                     int *p;
 
@@ -720,11 +720,11 @@ void FUN_L06_002f0040(GbMoby *moby) {
                                          moby->pos, hero.motion.pos.f, v50, 0.1f) == 0) {
                         qcopy(v50, hero.motion.pos.f);
                     }
-                    *(Quad *)v70 = *(Quad *)moby->pos;
+                    *(OvlQuad *)v70 = *(OvlQuad *)moby->pos;
                     FUN_L00_00261d78(0.17f, d->paths.id[d->f27C], moby->pos, v70);
                     p = D_L06_001B0C30[d->paths.id[d->f27C]];
                     if (FUN_L00_00259740(v70, p + 4, *p) != 0) {
-                        *(Quad *)moby->pos = *(Quad *)v70;
+                        *(OvlQuad *)moby->pos = *(OvlQuad *)v70;
                     }
                 } else {
                     qcopy(v50, hero.motion.pos.f);
@@ -759,7 +759,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                 dz = AbsoluteFloat(moby->pos[2] - hero.unk2A0.f[2]);
                 probe_ground_height(moby->pos, 0, 0.5f);
                 if (D_L06_001745D8 != 0 && D_L06_001745D8->cls_id == 0x3B1) {
-                    *(Quad *)moby->pos = *(Quad *)v60;
+                    *(OvlQuad *)moby->pos = *(OvlQuad *)v60;
                 }
                 hit = 0;
                 if (flags & 1) {
@@ -773,7 +773,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                 }
                 if (flags & 0x20) {
                     moby->state = 4;
-                    *(Quad *)moby->pos = *(Quad *)v60;
+                    *(OvlQuad *)moby->pos = *(OvlQuad *)v60;
                 }
                 if (dist < 0.8f || hit != 0 || dz > 1.75f) {
                     qcopy(d->f0, moby->pos);
@@ -858,11 +858,11 @@ void FUN_L06_002f0040(GbMoby *moby) {
                                          moby->pos, d->f174->pos, v40, 0.1f) == 0) {
                         qcopy(v40, d->f174->pos);
                     }
-                    *(Quad *)v60 = *(Quad *)moby->pos;
+                    *(OvlQuad *)v60 = *(OvlQuad *)moby->pos;
                     FUN_L00_00261d78(0.17f, d->paths.id[d->f27C], moby->pos, v60);
                     p = D_L06_001B0C30[d->paths.id[d->f27C]];
                     if (FUN_L00_00259740(v60, p + 4, *p) != 0) {
-                        *(Quad *)moby->pos = *(Quad *)v60;
+                        *(OvlQuad *)moby->pos = *(OvlQuad *)v60;
                     }
                 } else {
                     qcopy(v40, d->f174->pos);
@@ -881,7 +881,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                 d->ctl.f24 = D_0015ED6C * 4.5f;
                 if (FUN_L00_00258b50(moby, &d->ctl, d->f174->pos, out, 1.0f) & 0x20) {
                     moby->state = 4;
-                    *(Quad *)moby->pos = *(Quad *)save0;
+                    *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
                 }
                 if (FUN_001f9b80(moby->pos, d->f174->pos) < 1.5f) {
                     qcopy(v70, moby->pos);
@@ -970,14 +970,14 @@ void FUN_L06_002f0040(GbMoby *moby) {
                 if (d->f174->cls_id != 0x515 && d->f174->cls_id != 0x15F) {
                     add_vector_xyz(v40, d->f174->pos, d->f174->fC0);
                 } else {
-                    *(Quad *)v40 = *(Quad *)d->f174->pos;
+                    *(OvlQuad *)v40 = *(OvlQuad *)d->f174->pos;
                 }
                 FUN_L00_00258278(
                     (char *)moby, FUN_001f9e90(v40[0] - moby->pos[0], v40[1] - moby->pos[1]),
                     &d->ctl.f14, D_0015ED64 * 0.07f, D_0015ED64 * 0.3f, D_0015ED6C * 5.2359877f);
                 if (FUN_L00_00258b50(moby, &d->ctl, v40, out, 1.0f) & 0x20) {
                     moby->state = 4;
-                    *(Quad *)moby->pos = *(Quad *)save0;
+                    *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
                 }
             } else if (d->f19A != 0) {
                 moby->sub = 0;
@@ -1130,7 +1130,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                 moby->pos[2] = z;
                 if (AbsoluteFloat(save1[2] - probe_ground_height(moby->pos, 0, 0.5f)) >=
                     d->ctl.f0C) {
-                    *(Quad *)moby->pos = *(Quad *)save1;
+                    *(OvlQuad *)moby->pos = *(OvlQuad *)save1;
                     d->f284 = 0.0f;
                 }
             }
@@ -1165,17 +1165,17 @@ void FUN_L06_002f0040(GbMoby *moby) {
     } else {
         d->f19C = 0;
     }
-    *(Quad *)v40 = *(Quad *)moby->pos;
+    *(OvlQuad *)v40 = *(OvlQuad *)moby->pos;
     v40[2] -= 2.0f;
     if (v40[2] < 0.5f) {
         v40[2] = 0.5f;
     }
-    *(Quad *)v50 = *(Quad *)moby->pos;
+    *(OvlQuad *)v50 = *(OvlQuad *)moby->pos;
     v50[2] += 1.0f;
     if (FUN_001efa68(v50, v40, 0, (int)moby, 0) != 0 && D_L06_001745C0.f18 != 0 &&
         (D_L06_001745C0.f18->cls_id == 0x409 || D_L06_001745C0.f18->cls_id == 0x359 ||
          FUN_L00_0025e3b8(D_L06_001745C0.f18) != 0)) {
-        *(Quad *)moby->pos = *(Quad *)save0;
+        *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
     }
     if (moby->f31 != 0) {
         if (FUN_001f9b48(moby->pos, D_L06_00167540) < 17.0f) {
@@ -1187,7 +1187,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
         }
     }
     d->f2F0.q = d->f2E0.q;
-    d->f2E0.q = *(Quad *)moby->pos;
+    d->f2E0.q = *(OvlQuad *)moby->pos;
 }
 /* scores a target moby by distance, heading differences and flags */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F3578), where it is exact; names translated to the US level program. */
@@ -1532,7 +1532,7 @@ extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
-unsigned char *FUN_L00_00272f68(Quad *a, int c, unsigned char b, int idx, int flag, int n, int mode, float f);
+unsigned char *FUN_L00_00272f68(OvlQuad *a, int c, unsigned char b, int idx, int flag, int n, int mode, float f);
 extern int func_001FA898_g(float) __asm__("FUN_001fa6d0");
 extern unsigned char *func_L00_00273E08_g(void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 extern void func_L00_00273F80_g(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");

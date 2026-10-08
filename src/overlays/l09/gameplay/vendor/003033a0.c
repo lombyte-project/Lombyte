@@ -4,6 +4,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 #define F(p, o) (*(float *)((p) + (o)))
 
 /* Moves a moby along a path between its ends once its collectable flag is set, easing between nodes. */
@@ -297,7 +298,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00303fc8.s", FUN_L09_00303fc8);
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00305580), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern char *D_L09_0015FFE4;
 extern float FUN_001f9b48(void *, void *);
@@ -310,7 +310,7 @@ char *FUN_L09_003041d0(char *self, char *pos, int bone) {
     char vec[16];
     char *m;
     char *tp = tmp;
-    *(u128 *)tmp = *(u128 *)pos;
+    *(OvlQuad *)tmp = *(OvlQuad *)pos;
     for (m = D_L09_0015FFE4; m != 0; m = *(char **)(m + 0x28)) {
         if (m == self)
             continue;

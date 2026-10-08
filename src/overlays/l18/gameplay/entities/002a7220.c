@@ -303,13 +303,13 @@ void FUN_L18_002ea168(unsigned char *arg, void *src, void *position, int active,
 }
 
 #include "sda.h"
+#include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002A8400), where it is exact; names translated to the US level program. */
 
 typedef struct {
     float v[4];
 } __attribute__((aligned(16))) QVa840;
-typedef int TIa7220 __attribute__((mode(TI)));
 
 typedef struct {
     char pad0[0x10];
@@ -411,7 +411,7 @@ void FUN_L18_002a7220(char *moby) {
             r[2] = *D_L18_001B2DDC_c;
             r[3] = 0x44;
         }
-        *(TIa7220 *)f = 0;
+        *(OvlQuad *)f = 0;
         f[2] = 0.02f;
         transform_vector_by_basis(f, f, moby + 0xC0);
         FUN_L00_0026cbb0(e, f, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(10), 1, 20000.0f);
@@ -620,7 +620,6 @@ void FUN_L18_002d5488(void *mobyp, void *vec) {
 typedef struct {
     float v[4];
 } __attribute__((aligned(16))) QVec;
-typedef int TId5610 __attribute__((mode(TI)));
 
 extern unsigned char D_001413F4_d5610[] __asm__("D_001413F4");
 extern short D_L18_0016196C __attribute__((sda));
@@ -631,7 +630,7 @@ void FUN_L18_002d5610(void *m, void *src) {
     float *qp = q;
     int flags;
     float a, b, c, d, e;
-    *(TId5610 *)qp = *(TId5610 *)src;
+    *(OvlQuad *)qp = *(OvlQuad *)src;
     flags = *(int *)(*(char **)(moby + 0x78) + 0x38);
     c = (flags & 1) ? 2.0f : 0.75f;
     a = (flags & 1) ? 4.0f : 2.0f;

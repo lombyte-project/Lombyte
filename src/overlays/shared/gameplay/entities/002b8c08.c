@@ -426,8 +426,8 @@ void *FUN_L01_002e32a8(void *moby, void *from, void *ang, float yawMax, float pi
 }
 #include "qcopy.h"
 #include "qzero.h"
+#include "rnc/overlay/quad.h"
 
-typedef int u128_w22c __attribute__((mode(TI)));
 
 extern int FUN_001f9770(void *);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -445,7 +445,7 @@ extern int D_L01_00161900 __attribute__((sda));
 extern int D_L01_0015F5C4;
 
 typedef union {
-    u128_w22c q;
+    OvlQuad q;
     float f[4];
 } V4_w22c;
 extern V4_w22c D_0013F3D0;
@@ -796,7 +796,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f2eb8.s", FUN_L01_002f2eb8);
 /* Builds two scaled offset vectors from the moby's matrix and adds them to out. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DA60), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern void FUN_001f9d20_q(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_001fa050_q(float *, float *) __asm__("FUN_001fa050");
@@ -812,13 +811,13 @@ void FUN_L01_002f5040(char *moby, float *out) {
     float b[4];
     float m[16];
     char *data;
-    *(u128 *)v = 0;
+    *(OvlQuad *)v = 0;
     v[0] = 1.0f;
     data = *(char **)(moby + 0x78);
     if (*(float *)(data + 0x130) != 0.0f || *(float *)(data + 0x134) != 0.0f) {
         FUN_001fa050_q(m, (float *)(moby + 0x40));
         FUN_001f9d20_q(a, v, m);
-        *(u128 *)b = *(u128 *)a;
+        *(OvlQuad *)b = *(OvlQuad *)a;
         b[2] = b[2] - 1.0f;
         cross_vectors_xyz_q(c, a, b);
         cross_vectors_xyz_q(d, a, c);

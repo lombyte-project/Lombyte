@@ -9,8 +9,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sequenceheader/func_001
             func_0012C4C8);
 #else
 
-#include "rnc/sdk/library/sequenceheader.h"
-#include "types.h"
+#include "rnc/sdk/libmpeg.h"
 
 extern u8 D_00132FC0[];
 extern u8 D_00133000[];

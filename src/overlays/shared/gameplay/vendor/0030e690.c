@@ -70,10 +70,10 @@ void FUN_L11_00311210(void *pt, int *outx, int *outy, int yoff) {
     *outy = func_001FA898_r((p[1] - (float)g[5]) * 0.0625f) + yoff;
 }
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312780), where it is exact; names translated to the US level program. */
 
-typedef int u128_312780 __attribute__((mode(TI)));
 
 extern float D_0015ED6C;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
@@ -97,7 +97,7 @@ void FUN_L11_003112b8(void *m, char *t) {
         float c[4];
         float scale;
 
-        *(u128_312780 *)vel = 0;
+        *(OvlQuad *)vel = 0;
         scale = *(float *)(t + 0x64) / *(float *)&D_L11_00161FF4_d;
         if (scale > 1.0f) {
             scale = 1.0f;
@@ -155,7 +155,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003192c8.s", FUN_L11_003192c8);
 /* Advances a trail ring buffer and records two offset points each fourth frame. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031AAE0), where it is exact; names translated to the US level program. */
 
-typedef int u128_31AAE0 __attribute__((mode(TI)));
 
 extern int D_L11_0015F5CC;
 extern int FUN_L11_003192c8();
@@ -180,14 +179,14 @@ void FUN_L11_00319670(char *moby) {
             *(int *)(d + 0x2C0) = cnt + 1;
         }
     }
-    *(u128_31AAE0 *)v = 0;
+    *(OvlQuad *)v = 0;
     v[1] = 0.7f;
     v[0] = -1.2f;
     v[2] = 0.3f;
     FUN_001f9cf8(v, v, moby + 0xC0);
     add_vector_xyz(d + ((*(int *)(d + 0x2C4) << 4) + 0xC0), v, moby + 0x10);
     *(float *)(d + (*(int *)(d + 0x2C4) << 4) + 0xCC) = 1.0f;
-    *(u128_31AAE0 *)w = 0;
+    *(OvlQuad *)w = 0;
     w[0] = -1.2f;
     w[1] = -0.7f;
     w[2] = 0.3f;

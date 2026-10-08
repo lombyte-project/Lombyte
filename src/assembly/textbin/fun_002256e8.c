@@ -72,9 +72,9 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         if (cd_read_active[0] != 0) {
             break;
         }
-        table_index = 0x4F000 - (disc_table.unk1610.size << 11);
-        if (start_audio_stream_read(stream->buffer + table_index, disc_table.unk1610.sector,
-                                    disc_table.unk1610.size) != 0) {
+        table_index = 0x4F000 - (disc_table.animation_table.size << 11);
+        if (start_audio_stream_read(stream->buffer + table_index, disc_table.animation_table.sector,
+                                    disc_table.animation_table.size) != 0) {
             stream->read_offset = table_index;
             stream->state = 1;
             animation_asset_read_active[0] = 1;

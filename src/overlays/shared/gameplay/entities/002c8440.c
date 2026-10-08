@@ -330,6 +330,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002caf70.s", FUN_L00_002caf70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cb418.s", FUN_L00_002cb418);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cbcc0.s", FUN_L00_002cbcc0);
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 extern float D_0015ED6C_2cbf68 __asm__("D_0015ED6C");
 extern int D_L00_001618A4_2cbf68 __asm__("D_L00_001618A4") __attribute__((sda));
 extern float D_L00_001618A0_2cbf68 __asm__("D_L00_001618A0") __attribute__((sda));
@@ -521,9 +522,8 @@ M_2cc360 *FUN_L00_002cc360(float *pos, float *rot, M_2cc360 **excl, float maxYaw
     return best;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cc608.s", FUN_L00_002cc608);
-typedef int u128_2ccee0 __attribute__((mode(TI)));
 typedef union {
-    u128_2ccee0 q;
+    OvlQuad q;
     float f[4];
 } V_2ccee0;
 extern float D_0015ED60_2ccee0 __asm__("D_0015ED60");

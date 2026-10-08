@@ -1,5 +1,11 @@
 #include "types.h"
-#include "rnc/sdk/input/sce_pad2_read.h"
+
+struct Pad2Data {
+    u8 pad_0[0x2];
+    u8 unk2;
+    u8 pad_3[0x1];
+    s32 unk4;
+};
 
 extern u8 D_0015B540[];
 extern u8 D_0015B550[];

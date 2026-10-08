@@ -96,10 +96,10 @@ void FUN_L00_00262528(O00262528 *o, s32 a, s32 b) {
     o->x138++;
 }
 #include "qcopy.h"
-typedef int q_262608 __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 typedef struct {
-    q_262608 a[8];
-    q_262608 b[8];
+    OvlQuad a[8];
+    OvlQuad b[8];
     unsigned char pad[0x10];
     int w[8];
     short head;

@@ -7,6 +7,7 @@
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
@@ -150,7 +151,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00307cf0.s", FUN_L08_00307cf0);
 /* While the player is within range, scatters spawned particles around the moby on a random disc. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00309AB0), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern char D_L08_001675C0[];
 extern f32 dot_vectors_xyz(void *a, void *b) __asm__("FUN_001f9ab0");
@@ -174,12 +174,12 @@ void FUN_L08_003085f0(char *moby) {
         float a, b, r;
         i = 0;
         r = *(float *)(d + 0x24) * D_0015ED6C;
-        *(u128 *)pos = *(u128 *)(moby + 0x10);
+        *(OvlQuad *)pos = *(OvlQuad *)(moby + 0x10);
         a = (*(float *)(d + 0x28) - 180.0f) / 180.0f * 3.1415927f;
         b = (*(float *)(d + 0x2C) - 180.0f) / 180.0f * 3.1415927f;
         for (; i < *(int *)(d + 0x14); i++) {
             float ang, rad;
-            *(u128 *)v = *(u128 *)pos;
+            *(OvlQuad *)v = *(OvlQuad *)pos;
             ang = random_float_between_alt(a, b);
             rad = random_float_between_alt(*(float *)(d + 0xC), *(float *)(d + 8));
             v[0] = v[0] + fast_cos(ang) * rad;

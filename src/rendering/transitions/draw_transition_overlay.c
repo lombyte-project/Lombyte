@@ -1,5 +1,19 @@
-#include "rnc/rendering/transitions/draw_transition_overlay.h"
 #include "types.h"
+
+struct Globals_00151780 {
+    u8 pad_0[0x160];
+    s16 unk160;
+    s16 unk162;
+    u8 pad_164[0x2];
+};
+
+struct TransitionState {
+    u8 pad_0[0x38];
+    s32 unk38;
+    s32 unk3C;
+    u8 pad_40[0x4];
+    s32 unk44;
+};
 #include "rnc/ui/map/map_state.h"
 
 extern struct Globals_00151780 D_00151780;

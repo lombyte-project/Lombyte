@@ -1,5 +1,9 @@
-#include "rnc/video/decoder/read_cd_stream_sectors.h"
 #include "types.h"
+
+struct CdStream {
+    u8 pad_0[0x4];
+    s32 unk4;
+};
 
 extern s32 sceCdRead(s32, s32, s32, u8 *);
 extern s32 sceCdSync(s32);

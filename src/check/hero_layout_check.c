@@ -14,6 +14,8 @@
     CHECK((unsigned long)&((struct HeroItemSlot *)0)->field == (off))
 
 CHECK(sizeof(struct MobyTrail) == 0x140);
+CHECK((unsigned long)&((struct MobyTrail *)0)->copy_fade == 0x100);
+CHECK((unsigned long)&((struct MobyTrail *)0)->active == 0x13C);
 CHECK(sizeof(struct HeroItemSlot) == 0x50);
 CHECK(sizeof(struct Hero) == 0x2300);
 SLOT_OFFSET_CHECK(moby, 0x00);
@@ -89,9 +91,15 @@ HERO_OFFSET_CHECK(unk257, 0x257);
 HERO_OFFSET_CHECK(unk270, 0x270);
 HERO_OFFSET_CHECK(unk290, 0x290);
 HERO_OFFSET_CHECK(unk2A0, 0x2A0);
+HERO_OFFSET_CHECK(unk2C0, 0x2C0);
+HERO_OFFSET_CHECK(unk2C8, 0x2C8);
+HERO_OFFSET_CHECK(unk2D0, 0x2D0);
 HERO_OFFSET_CHECK(unk2D8, 0x2D8);
 HERO_OFFSET_CHECK(unk2DC, 0x2DC);
 HERO_OFFSET_CHECK(unk2E0, 0x2E0);
+HERO_OFFSET_CHECK(unk2E4, 0x2E4);
+HERO_OFFSET_CHECK(unk2E8, 0x2E8);
+HERO_OFFSET_CHECK(unkA80, 0xA80);
 HERO_OFFSET_CHECK(unk2EC, 0x2EC);
 HERO_OFFSET_CHECK(height_threshold, 0x2F0);
 HERO_OFFSET_CHECK(unk2F4, 0x2F4);

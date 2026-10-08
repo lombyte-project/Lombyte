@@ -57,6 +57,7 @@ void FUN_L10_002d8c00(char *moby) {
     }
 }
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
 
 #define NOT_SDA
@@ -90,7 +91,6 @@ char *FUN_L10_002dd848(char *owner) {
 #ifndef MACRO_ADDR
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
-typedef int u128_95a38 __attribute__((mode(TI)));
 extern int func_001E9730_95a38() __asm__("FUN_001e93b0");
 extern void func_0020D678_95a38(void *) __asm__("FUN_0020c828");
 extern float func_001F9878_95a38(float) __asm__("FUN_001f96b0");
@@ -111,7 +111,7 @@ void FUN_L10_00295a38(char *m) {
         *(short *)(d + 0x3E) = 5;
         *(int *)(d + 0x20) = 0;
         *(short *)(d + 0x24) = 0;
-        *(u128_95a38 *)(d + 0xA0) = *(u128_95a38 *)(m + 0x10);
+        *(OvlQuad *)(d + 0xA0) = *(OvlQuad *)(m + 0x10);
         m[0x20] = 1;
         break;
     case 1: {
@@ -155,7 +155,6 @@ void FUN_L10_00295a38(char *m) {
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_00296DC0), where it is exact; names translated to the US level program. */
 
-typedef int Q_296dc0 __attribute__((mode(TI)));
 
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern float D_0015ED70;
@@ -174,7 +173,7 @@ void FUN_L10_00295c20(char *moby) {
     char *d = *(char **)(moby + 0x78);
     float prev[4];
     float v[4];
-    *(Q_296dc0 *)prev = *(Q_296dc0 *)(moby + 0x10);
+    *(OvlQuad *)prev = *(OvlQuad *)(moby + 0x10);
     if (FUN_L01_00277fb8(moby)) moby[0x20] = 2;
     tick_countdown_32_alt((int *)(d + 0xBC));
     switch (((unsigned char *)moby)[0x20]) {
@@ -302,7 +301,6 @@ void FUN_L10_00298668(unsigned char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298b68.s", FUN_L10_00298b68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002be858.s", FUN_L10_002be858);
 /* Collectible drop: waits until it is taken, then sinks below its rest height and records the pickup. */
-typedef int bf_q __attribute__((mode(TI)));
 typedef struct {
     char pad0[0x454];
     unsigned char collected[1];
@@ -321,7 +319,7 @@ void FUN_L10_002befe8(unsigned char *m) {
     unsigned short id;
     switch (m[0x20]) {
     case 0:
-        *(bf_q *)d = *(bf_q *)(m + 0x10);
+        *(OvlQuad *)d = *(OvlQuad *)(m + 0x10);
         id = *(unsigned short *)(m + 0xB2);
         if (D_L10_001BB6B0_bf.collected[(short)id] != 0 ||
             (*(int *)(D_0014C190_bf + (((short)id >> 5) * 4 + (D_0015ED84_bf << 8))) >> (id & 0x1F)) & 1) {
@@ -464,7 +462,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d85c8.s", FUN_L10_002d85c8);
 /* Electric spark: runs along its wire path with a light and a buzzing sound, then rests for a random time. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA0F0), where it is exact; names translated to the US level program. */
 
-typedef int Q_2da0f0 __attribute__((mode(TI)));
 
 extern char D_0013E533[];
 extern char D_L10_00180740[];
@@ -544,10 +541,10 @@ void FUN_L10_002d8d30(char *m) {
             int r = func_L00_0028EF68_v(0, 0xC, m, 0x442);
             *(int *)(d + 0x10) = r;
             if (r != -1) {
-                *(Q_2da0f0 *)(((char *)&D_0013E5E0) + r * 0x70) = *(Q_2da0f0 *)pos;
+                *(OvlQuad *)(((char *)&D_0013E5E0) + r * 0x70) = *(OvlQuad *)pos;
             }
         } else {
-            *(Q_2da0f0 *)(((char *)&D_0013E5E0) + *(int *)(d + 0x10) * 0x70) = *(Q_2da0f0 *)pos;
+            *(OvlQuad *)(((char *)&D_0013E5E0) + *(int *)(d + 0x10) * 0x70) = *(OvlQuad *)pos;
         }
         if (seg == *path - 1) {
             m[0x20] = 0;
@@ -559,7 +556,6 @@ void FUN_L10_002d8d30(char *m) {
 /* Test whether a point lies within a box around a moby, in the moby's local frame. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA3C0), where it is exact; names translated to the US level program. */
 
-typedef int u128_2DA3C0 __attribute__((mode(TI)));
 
 extern short D_L10_00161C0C_d __asm__("D_L10_00161C0C") __attribute__((sda));
 extern short D_L10_00161C10_d __asm__("D_L10_00161C10") __attribute__((sda));
@@ -573,10 +569,10 @@ int FUN_L10_002d9000(char *m, float *p) {
     float t10[16] __attribute__((aligned(16)));
     float t50[4] __attribute__((aligned(16)));
     float t60[4] __attribute__((aligned(16)));
-    *(u128_2DA3C0 *)a = *(u128_2DA3C0 *)p;
+    *(OvlQuad *)a = *(OvlQuad *)p;
     FUN_001fa2d8(t10, m + 0xC0);
     subtract_vector_xyz(t60, a, m + 0x10);
-    *(u128_2DA3C0 *)t50 = *(u128_2DA3C0 *)t60;
+    *(OvlQuad *)t50 = *(OvlQuad *)t60;
     FUN_001f9d20(t50, t50, t10);
     if (AbsoluteFloat(t50[0]) < *(float *)&D_L10_00161C10_d) {
         return AbsoluteFloat(t50[1]) < *(float *)&D_L10_00161C0C_d;
@@ -586,7 +582,6 @@ int FUN_L10_002d9000(char *m, float *p) {
 /* update for a moby that glides between two heights and sets a flag */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA468), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern char D_0013D388[];
 extern char D_L10_001DD160[];
@@ -595,13 +590,13 @@ extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 extern int FUN_L10_002d9000_c() __asm__("FUN_L10_002d9000");
-extern u128 D_0013F3D0;
-extern u128 D_L10_00167240;
+extern OvlQuad D_0013F3D0;
+extern OvlQuad D_L10_00167240;
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L10_002d90a8(unsigned char *m) {
     int *d = *(int **)(m + 0x78);
-    u128 v[2];
+    OvlQuad v[2];
     int it;
     int flag;
     int hit;
@@ -612,7 +607,7 @@ void FUN_L10_002d90a8(unsigned char *m) {
     }
     switch (m[0x20]) {
     case 0:
-        *(u128 *)d = *(u128 *)(m + 0x10);
+        *(OvlQuad *)d = *(OvlQuad *)(m + 0x10);
         m[0x20] = 2;
         break;
     case 1:
@@ -628,7 +623,7 @@ void FUN_L10_002d90a8(unsigned char *m) {
         if (d[4] != -1) {
             if (FUN_L00_002591d0(&it, d[4], 0, 0)) {
                 do {
-                    v[0] = *(u128 *)(it + 0x10);
+                    v[0] = *(OvlQuad *)(it + 0x10);
                     if (FUN_L10_002d9000_c(m, &v[0])) {
                         flag = 1;
                         break;
@@ -675,7 +670,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d9eb8.s", FUN_L10_002d9eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da2c8.s", FUN_L10_002da2c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da690.s", FUN_L10_002da690);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dcc58.s", FUN_L10_002dcc58);
-typedef int dd_q __attribute__((mode(TI)));
 
 /* Spawns a moby at a spot, fills its data block and starts its fade and sound. */
 extern float D_0015ED6C_dd __asm__("D_0015ED6C");
@@ -696,7 +690,7 @@ unsigned char *FUN_L10_002dd270(int a, void *pos, int b, float x, float y, float
         o[0x23] = 0x40;
         o[0x20] = 0;
         d = *(int **)(o + 0x78);
-        *(dd_q *)(o + 0x10) = *(dd_q *)pos;
+        *(OvlQuad *)(o + 0x10) = *(OvlQuad *)pos;
         FUN_L00_002502f0_dd(o, 0x7F, 0x40, 0);
         f = 10.0f / (D_0015ED6C_dd * 5.0f);
         d[0] = b;
@@ -713,7 +707,6 @@ unsigned char *FUN_L10_002dd270(int a, void *pos, int b, float x, float y, float
 /* Advances an effect, scales its size over its lifetime and emits hits. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DE798), where it is exact; names translated to the US level program. */
 
-typedef int Effect128 __attribute__((mode(TI)));
 
 typedef struct { int owner; float phase,speed,size; int source,timer; float growth; } EffectData;
 
@@ -730,7 +723,7 @@ extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 void FUN_L10_002dd3d8(char *moby) {
  float old[4],pos[4],a,b;
  char *d=*(char **)(moby+0x78);
- *(Effect128 *)old=*(Effect128 *)(moby+0x10);
+ *(OvlQuad *)old=*(OvlQuad *)(moby+0x10);
  ((EffectData *)d)->phase+=((EffectData *)d)->speed;
  ((EffectData *)d)->speed*=(((EffectData *)d)->growth-1.0f)*D_0015ED60+1.0f;
  FUN_L00_00262360_c(((EffectData *)d)->owner,&a,&b,moby+0x10,((EffectData *)d)->phase,((EffectData *)d)->size);
@@ -747,7 +740,7 @@ void FUN_L10_002dd3d8(char *moby) {
  }
  if(*(float *)(*(char **)(moby+0x24)+0x24)*0.25f<*(float *)(moby+0x2C)) {
   int count=FUN_L00_001f2868(0.15f,moby+0x10,16,*(void **)(d+0x10),0);
-  *(Effect128 *)pos=*(Effect128 *)(moby+0x10);
+  *(OvlQuad *)pos=*(OvlQuad *)(moby+0x10);
   FUN_L00_0025a9f8(*(void **)(d+0x10),pos,D_L10_00178380,count,0,0x810001,2,1,2.0f,1.0f,1.0f);
  }
 }

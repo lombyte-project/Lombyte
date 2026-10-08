@@ -1,5 +1,6 @@
 #include "types.h"
-#include "rnc/audio/streaming/update_audio_stream_until_idle.h"
+
+#include "rnc/audio/music/music_stream_state.h"
 
 extern void ReadGlobalTableEntry(void);
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");

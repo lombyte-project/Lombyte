@@ -158,8 +158,8 @@ char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len,
     return m;
 }
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030A468), where it is exact; names translated to the US level program. */
-typedef int u128 __attribute__((mode(TI)));
 extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern char D_L11_00174880[];
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
@@ -210,11 +210,11 @@ void FUN_L11_00309098(char *moby) {
     if (FUN_001efa68(old, pos, 0, *(void **)(data + 0x1C), hit)) {
         int i;
         for (i = 0; i < 5; i++) {
-            *(u128 *)r = 0;
+            *(OvlQuad *)r = 0;
             r[0] = random_float_between(-1.0f, 1.0f);
             r[1] = random_float_between(-1.0f, 1.0f);
             r[2] = random_float_between(-1.0f, 1.0f);
-            *(u128 *)q = *(u128 *)r;
+            *(OvlQuad *)q = *(OvlQuad *)r;
             FUN_L00_001ff660(r, data, D_L11_00174880);
             normalize_vector_xyz(q, q, vector_length_xyz(r) * 0.5f);
             add_vector_xyz(q, r, q);

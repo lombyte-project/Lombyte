@@ -15,9 +15,9 @@ void load_and_initialize_level_chunk(void) {
     struct Chunk *chunk;
     s32 size;
 
-    calculate_ring_buffer_bounds(disc_table.unk10.size << 11, &chunk, &size);
+    calculate_ring_buffer_bounds(disc_table.memcard_data.size << 11, &chunk, &size);
     update_audio_stream_until_idle(1);
-    load(chunk, disc_table.unk10.sector, disc_table.unk10.size);
+    load(chunk, disc_table.memcard_data.sector, disc_table.memcard_data.size);
     memcard_restore_game((u8 *)chunk + chunk->offset);
     current_level_index = 0;
 }

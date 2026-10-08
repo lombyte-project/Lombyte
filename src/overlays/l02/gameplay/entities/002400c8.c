@@ -179,8 +179,8 @@ void FUN_L02_002d5728(char *arg) {
 }
 
 #include "sda.h"
+#include "rnc/overlay/quad.h"
 
-typedef int u128_d57f8 __attribute__((mode(TI)));
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern float fast_cos_d57f8(float) __asm__("FUN_001f9dc8");
@@ -220,7 +220,7 @@ void FUN_L02_002d57f8(void *pos, int n) {
     int i;
     int a, b, c;
     p = v;
-    *(u128_d57f8 *)p = *(u128_d57f8 *)pos;
+    *(OvlQuad *)p = *(OvlQuad *)pos;
     if (D_L02_00160178 > 0x5DC) {
         n = n / 4;
     } else if (D_L02_00160178 > 0x400) {
@@ -728,10 +728,9 @@ extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__(
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 
-typedef int u128_dbd38 __attribute__((mode(TI)));
 
 typedef union {
-    u128_dbd38 q;
+    OvlQuad q;
     float v[4];
 } L16PlatformVector;
 
@@ -1065,7 +1064,6 @@ void FUN_L02_002dca10(unsigned char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dcb38.s", FUN_L02_002dcb38);
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DE418), where it is exact; names translated to the US level program. */
 
-typedef int Q_2de418 __attribute__((mode(TI)));
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
@@ -1111,7 +1109,7 @@ void FUN_L02_002dcfe0(char *m) {
                 *(float *)(d + 0x88) = a;
                 *(float *)(d + 0x8C) = b;
             }
-            *(Q_2de418 *)v = *(Q_2de418 *)(h + 0x10);
+            *(OvlQuad *)v = *(OvlQuad *)(h + 0x10);
             FUN_L00_0025ab48(v, &k1, d + 0x88, d + 0x8C);
             FUN_L00_0025c558(k1, m, d + 0x70, 3, 1, 0);
             if (1.0f <= dmg) {
@@ -1131,7 +1129,7 @@ void FUN_L02_002dcfe0(char *m) {
                 *(float *)(d + 0x8C) = a;
                 *(float *)(d + 0x88) = b;
             }
-            *(Q_2de418 *)v = *(Q_2de418 *)(h + 0x10);
+            *(OvlQuad *)v = *(OvlQuad *)(h + 0x10);
             FUN_L00_0025ab48(v, &k2, d + 0x88, d + 0x8C);
             FUN_L00_0025c558(k2, m, d + 0x70, 3, 1, 0);
             *(float *)(d + 0xC0) = 9.0f;

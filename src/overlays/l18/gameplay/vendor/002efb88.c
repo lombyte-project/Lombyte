@@ -1044,6 +1044,7 @@ void FUN_L18_002f2b18(char *moby) {
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Update of the final boss robot (class 1422): one step of its state machine, then its bob, aim and tint. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F4050), where it is exact; names translated to the US level program. */
@@ -1055,7 +1056,6 @@ typedef struct {
     char *mobs[1];
 } MobyList;
 
-typedef int BossU128 __attribute__((mode(TI)));
 
 typedef struct {
     float v[4];
@@ -2304,8 +2304,8 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
                 }
             }
         } else if (d->f34C == 8) {
-            *(BossU128 *)v0 = 0;
-            *(BossU128 *)v1 = 0;
+            *(OvlQuad *)v0 = 0;
+            *(OvlQuad *)v1 = 0;
             v0[0] = 660.6f;
             v0[1] = 481.4f;
             v0[2] = 112.6f;

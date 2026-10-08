@@ -296,9 +296,9 @@ void FUN_L06_00228b40(void) {
     }
 }
 #include "qcopy.h"
-typedef int Q __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 typedef union {
-    Q q;
+    OvlQuad q;
     f32 f[4];
 } V;
 extern u8 D_0013F350_c2[] __asm__("D_0013F350") __attribute__((section(".data")));

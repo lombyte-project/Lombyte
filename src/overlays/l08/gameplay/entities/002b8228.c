@@ -159,6 +159,7 @@ void FUN_L08_002dc0c8(char *moby) {
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD4F8), where it is exact; names translated to the US level program. */
 
@@ -336,7 +337,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de3e0.s", FUN_L08_002de3e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de528.s", FUN_L08_002de528);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de848.s", FUN_L08_002de848);
 /* Spawns a burst of particles at an offset from the moby, with random sizes and colours from level tuning values. */
-typedef int u128 __attribute__((mode(TI)));
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern float D_0015ED6C;
@@ -374,7 +374,7 @@ void FUN_L08_002dec90(char *m, char *pos) {
     int a, b, c, d, e;
     char *r;
     subtract_vector_xyz(v30, m + 0x10, pos);
-    *(u128 *)v60 = 0;
+    *(OvlQuad *)v60 = 0;
     v60[0] = -2.3f;
     v60[2] = 0.3f;
     transform_vector_by_basis(v50, v60, m + 0xC0);

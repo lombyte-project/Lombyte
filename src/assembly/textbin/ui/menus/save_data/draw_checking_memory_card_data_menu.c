@@ -57,7 +57,7 @@ s32 draw_checking_memory_card_data_menu(struct MenuScreen *menu) {
             return 2;
         }
         setup_gif_paging(0);
-        text = get_help_message_text(menu_system.save_pending ? menu_system.message_id : 0x4FB9);
+        text = get_help_message_text(menu_system.card_op_pending ? menu_system.card_op_text : 0x4FB9);
         memset(window_fields, 0, sizeof(window_fields));
         window_fields[1] = menu->height + 1;
         window_fields[0] = 1;

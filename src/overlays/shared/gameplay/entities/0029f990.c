@@ -92,7 +92,7 @@ void FUN_L00_0029f990(char *m) {
     }
 }
 #include "qcopy.h"
-typedef int q_29fcd0 __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 typedef struct {
     int a, b, c;
 } I3_29fcd0;
@@ -115,15 +115,15 @@ void FUN_001f5450_29fcd0(int, int, int, int, int, int, int, int, long,
                          long) __asm__("FUN_001f5450");
 
 void FUN_L00_0029fcd0(void *m) {
-    q_29fcd0 d1[1];
-    q_29fcd0 d2[1];
-    q_29fcd0 base[1];
-    q_29fcd0 out[3];
+    OvlQuad d1[1];
+    OvlQuad d2[1];
+    OvlQuad base[1];
+    OvlQuad out[3];
     I3_29fcd0 ids;
-    q_29fcd0 tmp[1];
-    q_29fcd0 c[4];
-    q_29fcd0 pad[5];
-    q_29fcd0 a, b;
+    OvlQuad tmp[1];
+    OvlQuad c[4];
+    OvlQuad pad[5];
+    OvlQuad a, b;
     int x, y, w, h;
     float len;
     ids = D_L00_00161178_29fcd0;

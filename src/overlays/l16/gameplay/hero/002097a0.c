@@ -138,6 +138,7 @@ void FUN_L16_002097a0(void) {
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_0020FEC8), where it is exact; names translated to the US level program. */
 
@@ -157,9 +158,8 @@ void FUN_L16_0020f8b0(void) {
     qcopy(p - 0x690, p);
     FUN_L00_0025f730(p - 0x690, *(float *)(q + 0x85C) + *(float *)(q + 0x868));
 }
-typedef int Q __attribute__((mode(TI)));
 typedef union {
-    Q q;
+    OvlQuad q;
     f32 f[4];
 } V_u;
 extern u8 D_0013F350_c2[] __asm__("D_0013F350") __attribute__((section(".data")));
@@ -568,9 +568,8 @@ s32 FUN_L16_00210b60(s32 mode) {
 /* Integrate player motion, resolve contacts, and measure the resulting movement. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_002116B0), where it is exact; names translated to the US level program. */
 
-typedef int Qc __attribute__((mode(TI)));
 
-typedef union { Qc q; f32 f[4]; } V;
+typedef union { OvlQuad q; f32 f[4]; } V;
 
 typedef struct {
     char pad00[0x80];
@@ -777,7 +776,7 @@ void FUN_L16_00211098(void) {
     motion_player = (L16MovementPlayer *)((char *)delta - 0x110);
     motion_player->speed = vector_length_xyz(delta);
     motion_player->horizontal_speed = vector_length_xy(delta);
-    work.q = *(Qc *)delta;
+    work.q = *(OvlQuad *)delta;
     motion_player->vertical_speed = FUN_L00_00213350(work.f);
     if (motion_player->vertical_speed < 0.0f) motion_player->vertical_speed = 0.0f;
     qcopy(work.f, new_position);

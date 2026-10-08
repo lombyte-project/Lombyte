@@ -548,7 +548,7 @@ void FUN_L00_00298b18(void) {
     f265880_298b18(f1f96f8_298b18(0x1E));
 }
 #include "qcopy.h"
-typedef int u128_298de8 __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 typedef struct {
     char pad[0x38];
     int i38;
@@ -573,7 +573,7 @@ extern void vscl_298de8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void vsub_298de8(void *, void *, void *) __asm__("FUN_001f9a28");
 int FUN_L00_00298de8(void) {
     float m[16] __attribute__((aligned(16)));
-    u128_298de8 t[1];
+    OvlQuad t[1];
     char *e = D_L00_0016C860_298de8.p54 + D_L00_0016C860_298de8.i38 * 32;
     float *v = (float *)(e + 0x10);
     int r = *(unsigned char *)(e + 0xC);

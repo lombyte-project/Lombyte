@@ -113,6 +113,7 @@ void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, f
 }
 #include "eetypes.h"
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 typedef union {
     u128 q;
     f32 f[4];
@@ -140,9 +141,8 @@ s32 FUN_L00_002583f0(void *pos, s32 a, s32 flag, f32 up, f32 down) {
         r = 0;
     return r;
 }
-typedef int u128_258490 __attribute__((mode(TI)));
 typedef union {
-    u128_258490 q;
+    OvlQuad q;
     float f[4];
 } V_258490;
 extern unsigned char D_L00_00173E40_258490[] __asm__("D_L00_00173E40")
@@ -264,10 +264,9 @@ typedef struct {
     float a[4];
 } Vs __attribute__((aligned(16)));
 
-typedef int u128_94C8 __attribute__((mode(TI)));
 
 typedef union {
-    u128_94C8 q;
+    OvlQuad q;
     float f[4];
 } V_94C8;
 

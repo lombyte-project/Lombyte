@@ -214,6 +214,7 @@ void FUN_L00_00259f50(void *a, float *v) {
     FUN_001fa3c0(a, a, &t0);
 }
 #include "eetypes.h"
+#include "rnc/overlay/quad.h"
 typedef struct {
     union {
         u128 a_00259fe8;
@@ -359,7 +360,6 @@ extern void FUN_001f9c48(void *, void *, f32);
 
 /* FUN_L00_0025a478 is the executable function of the same bytes (src/gameplay). */
 
-typedef int q128_0025a9f8 __attribute__((mode(TI)));
 typedef struct {
     f32 x, y, z, w;
     u8 *self;
@@ -374,10 +374,10 @@ f32 FUN_001f9e90_0025a9f8(f32, f32) __asm__("FUN_001f9e90");
 f32 FUN_001f9dc8_0025a9f8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_0025a9f8(f32) __asm__("FUN_001f9de0");
 void FUN_L00_00259a88_0025a9f8(u8 *, M_0025a9f8 *) __asm__("FUN_L00_00259a88");
-void FUN_L00_0025a9f8(u8 *self, q128_0025a9f8 *pos, u8 **list, s32 n, u8 *skip, s32 k, s32 c0,
+void FUN_L00_0025a9f8(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, s32 c0,
                       s32 c1, f32 f, f32 spd, f32 z) {
     struct {
-        q128_0025a9f8 p;
+        OvlQuad p;
         M_0025a9f8 m;
     } l;
     f32 *pp = (f32 *)&l.p;
@@ -403,14 +403,13 @@ void FUN_L00_0025a9f8(u8 *self, q128_0025a9f8 *pos, u8 **list, s32 n, u8 *skip, 
         FUN_L00_00259a88_0025a9f8(list[i], &l.m);
     }
 }
-typedef int q128 __attribute__((mode(TI)));
 typedef union {
-    q128 q;
+    OvlQuad q;
     float f[4];
 } U25ab48;
 float FUN_001f9e90(float, float);
 float FUN_001f9b20(void *);
-void FUN_L00_0025ab48(q128 *v, float *ang, float *s1, float *s2) {
+void FUN_L00_0025ab48(OvlQuad *v, float *ang, float *s1, float *s2) {
     U25ab48 t;
     t.q = *v;
     if (t.f[3] != 5627.9248046875f) {

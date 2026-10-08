@@ -192,7 +192,7 @@ void FUN_L03_0021c668(void) {
             if (D_0013C940.pressed & 0x10) {
                 hero.unk22D4 = scale_game_frames(0x14);
             }
-            if ((hero.unk22D4 != 0 || hero.unk22D6 != 0) && (D_0013C940.unk1B8 & 0x10)) {
+            if ((hero.unk22D4 != 0 || hero.unk22D6 != 0) && (D_0013C940.raw_released & 0x10)) {
                 if (hero.unk22D6 == 0) {
                     hero.unk22D6 = scale_game_frames(0x14);
                 } else {

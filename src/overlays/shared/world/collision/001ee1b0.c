@@ -2,10 +2,10 @@
 /* Mixed file: point-in-volume tests over a 64x64 grid; the asm functions after them use the hit record D_L00_00173E40. */
 #include "types.h"
 #include "asm.h"
+#include "rnc/overlay/quad.h"
 
-typedef int q128 __attribute__((mode(TI)));
 typedef union {
-    q128 q;
+    OvlQuad q;
     f32 f[4];
     s32 i[4];
 } V;
@@ -18,7 +18,7 @@ extern void FUN_001e93b0(char *);
 extern char D_L00_001E78B0[];
 extern s32 FUN_L00_001ee318_c(V *, s32 *, f32) __asm__("FUN_L00_001ee318");
 
-s32 *FUN_L00_001ee1b0(q128 *v, f32 rad) {
+s32 *FUN_L00_001ee1b0(OvlQuad *v, f32 rad) {
     V t;
     V d;
     V *tp;
@@ -53,9 +53,8 @@ s32 *FUN_L00_001ee1b0(q128 *v, f32 rad) {
     }
     return 0;
 }
-typedef int u128_1ee318 __attribute__((mode(TI)));
 typedef union {
-    u128_1ee318 q;
+    OvlQuad q;
     float f[4];
     int i[4];
 } V_1ee318;

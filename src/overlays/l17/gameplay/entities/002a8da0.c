@@ -57,11 +57,11 @@ void FUN_L17_002cbc10(char *m) {
 }
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Updates moby 99: a beam swinging between two waypoints that sprays particles while the hero is in its zone. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002AA068), where it is exact; names translated to the US level program. */
 
-typedef int v128 __attribute__((mode(TI)));
 
 extern char *D_L17_0015FFD8;
 extern char *D_L17_0015FFD8_e[] __asm__("D_L17_0015FFD0") __attribute__((section(".sdata")));
@@ -138,16 +138,16 @@ void FUN_L17_002a8da0(char *m) {
         }
         *(int *)(d + 0x60) = 0;
         *(float *)(d + 0x4C) = 0.1f;
-        *(v128 *)a = 0;
+        *(OvlQuad *)a = 0;
         a[0] = 13.0f;
         transform_vector_by_basis(a, a, m + 0xC0);
         add_vector_xyz(b, m + 0x10, a);
-        *(v128 *)c = *(v128 *)b;
+        *(OvlQuad *)c = *(OvlQuad *)b;
         if (FUN_001efa68(m + 0x10, c, 2, 0, 0)) {
-            *(v128 *)c = *(v128 *)D_L17_00174760;
+            *(OvlQuad *)c = *(OvlQuad *)D_L17_00174760;
         }
         subtract_vector_xyz(b, c, m + 0x10);
-        *(v128 *)(d + 0x30) = *(v128 *)b;
+        *(OvlQuad *)(d + 0x30) = *(OvlQuad *)b;
         break;
     case 1:
         if (*(int *)(d + 0x40) == -1 ||
@@ -173,35 +173,35 @@ void FUN_L17_002a8da0(char *m) {
         }
         if (*(int *)(d + 0x40) == -1 ||
             is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x40))) {
-            *(v128 *)a = 0;
+            *(OvlQuad *)a = 0;
             a[0] = 13.0f;
             transform_vector_by_basis(a, a, m + 0xC0);
             add_vector_xyz(b, m + 0x10, a);
-            *(v128 *)c = *(v128 *)b;
+            *(OvlQuad *)c = *(OvlQuad *)b;
             if (FUN_001efa68(m + 0x10, c, 2, 0, 0)) {
-                *(v128 *)c = *(v128 *)D_L17_00174760;
+                *(OvlQuad *)c = *(OvlQuad *)D_L17_00174760;
             }
             flag = 1;
             subtract_vector_xyz(b, c, m + 0x10);
-            *(v128 *)(d + 0x30) = *(v128 *)b;
+            *(OvlQuad *)(d + 0x30) = *(OvlQuad *)b;
         }
         break;
     }
-    *(v128 *)a = 0;
+    *(OvlQuad *)a = 0;
     a[0] = 12.0f;
     transform_vector_by_basis(a, a, m + 0xC0);
     add_vector_xyz(b, m + 0x10, d + 0x30);
-    *(v128 *)c = *(v128 *)b;
+    *(OvlQuad *)c = *(OvlQuad *)b;
     if (*(int *)(d + 0x60) != 0) {
         normalize_vector_xyz(d + 0x20, a, -(*(float *)&D_L17_00161498 - 0.2f));
         normalize_vector_xyz(*(char **)(d + 0x60) + 0x10, a, -*(float *)&D_L17_00161498);
         add_vector_xyz(b, d + 0x20, c);
         e = *(char **)(d + 0x60);
-        *(v128 *)(d + 0x20) = *(v128 *)b;
+        *(OvlQuad *)(d + 0x20) = *(OvlQuad *)b;
         add_vector_xyz(b, e + 0x10, c);
-        *(v128 *)(e + 0x10) = *(v128 *)b;
+        *(OvlQuad *)(e + 0x10) = *(OvlQuad *)b;
     } else {
-        *(v128 *)(d + 0x20) = *(v128 *)c;
+        *(OvlQuad *)(d + 0x20) = *(OvlQuad *)c;
     }
     if (flag) {
         *(float *)(d + 0x4C) =
@@ -212,7 +212,7 @@ void FUN_L17_002a8da0(char *m) {
             0.09f;
         normalize_vector_xyz(d + 0x10, a, 0.2f);
         subtract_vector_xyz(e50, m + 0x10, d + 0x10);
-        *(v128 *)(d + 0x10) = *(v128 *)e50;
+        *(OvlQuad *)(d + 0x10) = *(OvlQuad *)e50;
         len = vector_length_xyz(d + 0x30);
         FUN_001f9a40(b, d + 0x10, d + 0x20, 0.5f);
         b[3] = len * 0.5f;
@@ -223,7 +223,7 @@ void FUN_L17_002a8da0(char *m) {
             func_L00_0025A8C0_alt((char *)v60, (int)m, 0x10001, 1.0f, v30);
             FUN_001efa68(m + 0x10, d + 0x20, 9, m, v60);
             len = vector_length_xyz(d + 0x30);
-            *(v128 *)e50 = *(v128 *)(d + 0x10);
+            *(OvlQuad *)e50 = *(OvlQuad *)(d + 0x10);
             for (i = 0; i < 7; i++) {
                 scale_vector_xyz(c, d + 0x30, random_float_between(0.0f, 0.9f));
                 FUN_L00_001ff290(v60, c, e50);
@@ -232,11 +232,11 @@ void FUN_L17_002a8da0(char *m) {
                 FUN_L17_0026fb60(m, c, a);
             }
             len = -len;
-            *(v128 *)e50 = *(v128 *)(d + 0x20);
+            *(OvlQuad *)e50 = *(OvlQuad *)(d + 0x20);
             for (i = 0; i < 8; i++) {
                 scale_vector_xyz(c, d + 0x30, random_float_between(0.0f, 0.9f));
                 subtract_vector_xyz(v60, e50, c);
-                *(v128 *)c = *(v128 *)v60;
+                *(OvlQuad *)c = *(OvlQuad *)v60;
                 normalize_vector_xyz(a, d + 0x30,
                                      random_float_between(D_0015ED6C * 10.0f, len / 20.0f));
                 FUN_L17_0026fb60(m, c, a);
@@ -256,7 +256,6 @@ void FUN_L17_002a8da0(char *m) {
 #ifndef MACRO_ADDR
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
-typedef int u128_a95b8 __attribute__((mode(TI)));
 typedef struct {
     char pad[0x40];
     unsigned int w[4];
@@ -306,13 +305,13 @@ void FUN_L17_002a95b8(char *moby) {
         s.f[i].b = D_L17_001E6620_a95b8[i].b;
     }
     func_001F9BF0_a95b8(m0, d + 0x10, m1);
-    *(u128_a95b8 *)(s.pad + 0) = *(u128_a95b8 *)m0;
+    *(OvlQuad *)(s.pad + 0) = *(OvlQuad *)m0;
     func_001F9BD8_a95b8(m0, d + 0x10, m1);
-    *(u128_a95b8 *)(s.pad + 0x10) = *(u128_a95b8 *)m0;
+    *(OvlQuad *)(s.pad + 0x10) = *(OvlQuad *)m0;
     func_001F9BF0_a95b8(m0, d + 0x20, m2);
-    *(u128_a95b8 *)(s.pad + 0x20) = *(u128_a95b8 *)m0;
+    *(OvlQuad *)(s.pad + 0x20) = *(OvlQuad *)m0;
     func_001F9BD8_a95b8(m0, d + 0x20, m2);
-    *(u128_a95b8 *)(s.pad + 0x30) = *(u128_a95b8 *)m0;
+    *(OvlQuad *)(s.pad + 0x30) = *(OvlQuad *)m0;
     func_L00_001FD1D8_a95b8(&s, 0, 0);
 }
 
@@ -564,7 +563,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002cbd38.s", FUN_L17_002cbd38);
 /* Fleet moby 669 update: spins up, then sprays particles from points on a rotating ring. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002D8CC8), where it is exact; names translated to the US level program. */
 
-typedef int u128_2D8CC8 __attribute__((mode(TI)));
 
 struct Blk {
     int a0;
@@ -622,16 +620,16 @@ extern void vu_euler_rotation_basis(void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L17_002d77f0(char *m) {
-    u128_2D8CC8 sp0[1];
-    u128_2D8CC8 sp10[1];
+    OvlQuad sp0[1];
+    OvlQuad sp10[1];
     struct Blk blk;
-    u128_2D8CC8 mat1[3];
-    u128_2D8CC8 mat2[4];
-    u128_2D8CC8 spC0[1];
-    u128_2D8CC8 spD0[1];
-    u128_2D8CC8 spE0[1];
-    u128_2D8CC8 spF0[1];
-    u128_2D8CC8 sp100[1];
+    OvlQuad mat1[3];
+    OvlQuad mat2[4];
+    OvlQuad spC0[1];
+    OvlQuad spD0[1];
+    OvlQuad spE0[1];
+    OvlQuad spF0[1];
+    OvlQuad sp100[1];
     int j;
     int k;
     float *d;
@@ -694,7 +692,7 @@ void FUN_L17_002d77f0(char *m) {
                     if (FUN_001f9b48((m + 0x10), D_0013F3D0) < 30.0f) {
                         FUN_001efa68((m + 0x10), spC0, 9, m, &blk);
                     }
-                    spD0[0] = *(u128_2D8CC8 *)(m + 0x10);
+                    spD0[0] = *(OvlQuad *)(m + 0x10);
                     *(float *)((char *)spD0 + 0xC) = *(float *)&D_L17_00161B84;
                     if (FUN_001fa728((char *)spD0, 20.0f) != -1 && (j == 0 || j == 4)) {
                         spF0[0] = 0;
@@ -716,7 +714,7 @@ void FUN_L17_002d77f0(char *m) {
                                 if (f20 < 0.0f)
                                     spE0[0] = spC0[0];
                                 else
-                                    spE0[0] = *(u128_2D8CC8 *)(m + 0x10);
+                                    spE0[0] = *(OvlQuad *)(m + 0x10);
                                 scale_vector_xyz(spF0, spF0, random_float_between(0.0f, 0.9f));
                                 w = (char *)sp100;
                                 FUN_L00_001ff290(w, spE0, spF0);
@@ -743,7 +741,6 @@ void FUN_L17_002d77f0(char *m) {
 /* Draw callback of fleet moby 669: two passes of three textured quads fanned around the moby, with scrolling texture coordinates. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002D91C8), where it is exact; names translated to the US level program. */
 
-typedef int u128_d7cf0 __attribute__((mode(TI)));
 
 typedef struct {
     float v[2];
@@ -798,7 +795,7 @@ void FUN_L17_002d7cf0(char *moby) {
     scroll = ConvertIntegerToFloat(D_L17_0015F5CC) * (D_L17_00161BBC * D_0015ED6C);
     scroll = FUN_L00_00200260(scroll, 1.0f);
     FUN_001fa050(mat, (float *)(moby + 0x40));
-    *(u128_d7cf0 *)&mat[12] = *(u128_d7cf0 *)(moby + 0x10);
+    *(OvlQuad *)&mat[12] = *(OvlQuad *)(moby + 0x10);
     mat[15] = 1.0f;
     q.tex = get_effect_texture(0x28);
     q.q80 = 0xFF9000000260L;
@@ -846,7 +843,6 @@ void FUN_L17_002d7cf0(char *moby) {
 /* Updates moby 835: a timed effect that spawns a spray of particles and deletes itself. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002DD8D0), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern char *D_L17_00174758;
 extern char *FUN_L00_0026f080(char *vec, float *pos, float sc, float vy);
@@ -917,11 +913,11 @@ void FUN_L17_002dc3f8(char *m) {
                 *(float *)(m + 0x18) = *(float *)(m + 0x18) - 1.0f;
                 i = 0x95;
                 do {
-                    *(u128 *)t = 0;
+                    *(OvlQuad *)t = 0;
                     t[0] = random_float_between_alt(-1.0f, 1.0f);
                     t[1] = random_float_between_alt(-1.0f, 1.0f);
                     t[2] = random_float_between_alt(-0.5f, 2.0f);
-                    *(u128 *)d = *(u128 *)t;
+                    *(OvlQuad *)d = *(OvlQuad *)t;
                     normalize_vector_xyz(
                         d, d, random_float_between_alt(D_0015ED6C * 4.0f, D_0015ED6C * 8.0f));
                     FUN_L00_0026f080(m + 0x10, d, random_float_between_alt(0.05f, 0.1f) * 210000.0f,

@@ -667,9 +667,8 @@ void FUN_L01_00232978(int flag) {
         }
     }
 }
-typedef int Q __attribute__((mode(TI)));
 typedef union {
-    Q q;
+    OvlQuad q;
     f32 f[4];
 } V;
 extern u8 D_0013F350_c2[] __asm__("D_0013F350") __attribute__((section(".data")));

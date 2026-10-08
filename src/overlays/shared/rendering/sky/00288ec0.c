@@ -360,9 +360,9 @@ void FUN_L00_00289a90(void) {
     }
 }
 #include "qzero.h"
-typedef int q128 __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 typedef union {
-    q128 q;
+    OvlQuad q;
     float f[4];
 } U289bd8;
 extern int D_L00_0015F5CC;
@@ -600,7 +600,7 @@ void FUN_L00_0028a208(void) {
     FUN_0022b690(2);
 }
 typedef union {
-    q128 q;
+    OvlQuad q;
     f32 f[4];
 } V0028a2f0;
 extern u8 D_L00_001BD7E0_c[] __asm__("D_L00_001BD7E0");
@@ -640,7 +640,6 @@ void FUN_L00_0028a3a8(void) {
     FUN_001f9fc8(D_L00_001BD7E0);
     FUN_0022b690(4);
 }
-typedef int T28a480_q __attribute__((mode(TI)));
 extern int D_L00_0015F5CC_28a480g __asm__("D_L00_0015F5CC");
 extern int D_L00_0015F5CC_28a480d __asm__("D_L00_0015F5CC");
 extern char *D_L00_0016051C_28a480 __asm__("D_L00_0016051C");
@@ -650,7 +649,7 @@ extern void FUN_001f9fc8_28a480(void *) __asm__("FUN_001f9fc8");
 extern void FUN_0022b690_28a480(int) __asm__("FUN_0022b690");
 
 void FUN_L00_0028a480(void) {
-    T28a480_q v[1];
+    OvlQuad v[1];
     int i;
 
     qzero(v);
@@ -927,7 +926,6 @@ void FUN_L00_0028b080(void) {
     FUN_0022b690(6);
 }
 #include "qcopy.h"
-typedef int q_28b1a0 __attribute__((mode(TI)));
 typedef struct {
     short h0, h2, h4, h6;
     unsigned char pad[0x18];
@@ -937,7 +935,7 @@ extern S_28b1a0 *D_L00_0016051C_28b1a0 __asm__("D_L00_0016051C");
 extern unsigned char D_L00_001BD7E0_28b1a0[] __asm__("D_L00_001BD7E0")
     __attribute__((section(".data")));
 extern float D_L00_001604C0_28b1a0 __asm__("D_L00_001604C0") __attribute__((sda));
-extern q_28b1a0 D_L00_00160520_28b1a0 __asm__("D_L00_00160520") __attribute__((section(".sdata")));
+extern OvlQuad D_L00_00160520_28b1a0 __asm__("D_L00_00160520") __attribute__((section(".sdata")));
 void FUN_001f9fc8_28b1a0(void *) __asm__("FUN_001f9fc8");
 void FUN_001f99f8_28b1a0(void *) __asm__("FUN_001f99f8");
 void FUN_001fa070_28b1a0(void *, void *) __asm__("FUN_001fa070");

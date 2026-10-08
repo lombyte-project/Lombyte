@@ -1146,10 +1146,10 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002bac78.s", FUN_L14_002bac78);
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002BC560), where it is exact; names translated to the US level program. */
 
-typedef int u128_2BC560 __attribute__((mode(TI)));
 
 extern char D_0013F5E0[];
 extern float D_0015ED60;
@@ -1171,7 +1171,7 @@ unsigned char *FUN_L14_002bb310(char *owner, float angle, char *posp) {
     char *g;
     float *v0 = vec;
     float *v1;
-    *(u128_2BC560 *)v0 = *(u128_2BC560 *)posp;
+    *(OvlQuad *)v0 = *(OvlQuad *)posp;
     m = (unsigned char *)func_0020D348_m(0x51);
     if (m != 0) {
         d = *(char **)(m + 0x78);

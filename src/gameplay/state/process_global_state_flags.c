@@ -1,7 +1,12 @@
 #include "types.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/ui/menus/menu_system.h"
-#include "rnc/gameplay/state/process_global_state_flags.h"
+
+struct Globals_0013D408 {
+    u8 pad_0[0x1D];
+    u8 unk1D;
+    u8 pad_1E[0x3];
+};
 #include "rnc/globals.h"
 
 extern u32 D_0013CAE4[];

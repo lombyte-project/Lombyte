@@ -170,6 +170,7 @@ tail:
     o->u34 |= 4;
 }
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 typedef struct {
     int w0;
     int w4;
@@ -380,9 +381,8 @@ char *FUN_L00_002b4138(int a) {
     }
     return m;
 }
-typedef int u128_2b46a8 __attribute__((mode(TI)));
 typedef union {
-    u128_2b46a8 q;
+    OvlQuad q;
     float f[4];
 } V_2b46a8;
 extern unsigned char *D_L00_0015FFE4_2b46a8 __asm__("D_L00_0015FFE4");
@@ -580,9 +580,8 @@ void FUN_L00_002b57f0(int m_, int flag) {
     d = D_L00_0016CA40;
     FUN_001fb280(*(int *)(d + 0x23C), *(int *)(d + 0x240), *(int *)(d + 0x244));
 }
-typedef int q_2b58d8 __attribute__((mode(TI)));
 typedef union {
-    q_2b58d8 q;
+    OvlQuad q;
     float f[4];
 } V_2b58d8;
 typedef struct {
@@ -594,7 +593,7 @@ extern int D_L00_0017E508_2b58d8 __asm__("D_L00_0017E508") __attribute__((sectio
 extern int D_L00_0015F608_2b58d8 __asm__("D_L00_0015F608");
 extern float D_L00_0016149C_2b58d8 __asm__("D_L00_0016149C") __attribute__((sda));
 extern float D_0015ED6C_2b58d8 __asm__("D_0015ED6C");
-extern q_2b58d8 D_L00_00173E60_2b58d8 __asm__("D_L00_00173E60") __attribute__((section(".data")));
+extern OvlQuad D_L00_00173E60_2b58d8 __asm__("D_L00_00173E60") __attribute__((section(".data")));
 unsigned char *FUN_0020c4f8_2b58d8(int) __asm__("FUN_0020c4f8");
 int FUN_L00_002603d0_2b58d8(void *) __asm__("FUN_L00_002603d0");
 float FUN_001f9af0_2b58d8(void *) __asm__("FUN_001f9af0");
@@ -656,7 +655,7 @@ unsigned char *FUN_L00_002b58d8(unsigned char *a, V_2b58d8 *pos, float fa, float
         }
         FUN_L00_0025d1b8_2b58d8(m);
         *(int *)(v + 0x2C) = FUN_0022da68_2b58d8(0, 4, m);
-        t.q = *(q_2b58d8 *)(a + 0x10);
+        t.q = *(OvlQuad *)(a + 0x10);
         t.f[2] = pos->f[2];
         if (FUN_001efa68_2b58d8(&t, pos, 0, ({
                 G_2b58d8 *g2 = &D_0013F350_2b58d8;
@@ -1067,9 +1066,8 @@ void FUN_L00_002b7398(void *arg) {
     FUN_L00_0024f7c8(arg, 0, D_L00_001614E0);
     enqueue_callback_list_1(FUN_L00_002b7568_c, arg);
 }
-typedef int U_2b7568 __attribute__((mode(TI)));
 typedef union {
-    U_2b7568 q;
+    OvlQuad q;
     f32 f[4];
 } V_2b7568;
 typedef struct {

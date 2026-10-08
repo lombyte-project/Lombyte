@@ -262,6 +262,7 @@ void FUN_L17_002f26d0(char *moby) {
     }
 }
 #include "sda.h"
+#include "rnc/overlay/quad.h"
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F49B8), where it is exact; names translated to the US level program. */
 extern int D_L17_002f2e78_state __asm__("D_L17_0015F5C4");
 extern struct {
@@ -296,10 +297,9 @@ void FUN_L17_002f2e78(unsigned char *m) {
 /* Draws the Drek's Fleet reflection/backdrop quads around a moby. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4E30), where it is exact; names translated to the US level program. */
 
-typedef int u128_2F4E30 __attribute__((mode(TI)));
 
 typedef struct {
-    u128_2F4E30 m[4];
+    OvlQuad m[4];
     int col[4];
     float uv[8];
     int q[8];
@@ -333,13 +333,13 @@ void vu1_add_g_sregister_c(s32 register_id, s64 value) __asm__("FUN_00233980");
 
 void FUN_L17_002f32f0(char *moby) {
     Pkt pkt;
-    u128_2F4E30 vv[4];
+    OvlQuad vv[4];
     char *data = *(char **)(moby + 0x78);
     char *pos;
     int i;
     int k;
     int j;
-    u128_2F4E30 *vb;
+    OvlQuad *vb;
     float *pu;
     float *pv;
     vu1_add_g_sregister_c(0x47, 0x513F1);
@@ -434,7 +434,6 @@ void FUN_L17_002f32f0(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5388), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern char D_0013E633[] __asm__("D_0013F3D0");
 extern float D_L17_001DE2B0[] __asm__("D_L17_001DDFE0");
@@ -479,9 +478,9 @@ done:
         build_spherical_offset(t1, *(float *)&D_L17_00162450 / *(float *)&D_L17_00162458,
                                *(float *)(d + 0x44), 0.0f);
         add_vector_xyz(t2, t0, t1);
-        *(u128 *)t0 = *(u128 *)t2;
+        *(OvlQuad *)t0 = *(OvlQuad *)t2;
         add_vector_xyz(t2, d, t0);
-        *(u128 *)(d + 0x10) = *(u128 *)t2;
+        *(OvlQuad *)(d + 0x10) = *(OvlQuad *)t2;
         moby[0x30] = 0xFF;
         *(float *)(d + 0x10) -= 300.0f;
     } else {

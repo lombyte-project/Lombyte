@@ -1173,11 +1173,11 @@ void FUN_L16_002e5e08(char *m) {
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Start the knock-back when the moby is hit, then steer it along its path and note when it strays. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E7670), where it is exact; names translated to the US level program. */
 
-typedef int u128_c __attribute__((mode(TI)));
 
 typedef struct {
     char pad0[0x110];
@@ -1268,7 +1268,7 @@ void FUN_L16_002e6208(void *arg) {
         d->pending = 0;
         d->timer = D_0015ED6C * 2.0f;
         m->flags &= ~0x1000;
-        *(u128_c *)scratch = *(u128_c *)(hit + 0x10);
+        *(OvlQuad *)scratch = *(OvlQuad *)(hit + 0x10);
         FUN_L00_0025ab48(scratch, scratch + 4, &d->jump_speed, &d->turn_speed);
         FUN_L00_0025c558(m, d->knock, 5, 1, 0, scratch[4]);
         d->f170 = 8.0f;
@@ -1880,7 +1880,6 @@ void FUN_L16_002e76b8(unsigned char *m) {
 /* Emits a particle near an active moby when the target is close. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8EA8), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int D_L16_0015F5CC;
@@ -1891,7 +1890,7 @@ extern short D_L16_00161EA4_d __asm__("D_L16_00161EA4") __attribute__((sda));
 extern short D_L16_00161EA8_d __asm__("D_L16_00161EA8") __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
-void FUN_L00_0026ced0(u128 *p, u128 *q, int c, int d, int n, float s);
+void FUN_L00_0026ced0(OvlQuad *p, OvlQuad *q, int c, int d, int n, float s);
 void build_spherical_offset_u(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern void func_L00_0026DD70_emit(void *, void *, int, int, float,
                                    int) __asm__("FUN_L00_0026ced0");
@@ -1902,7 +1901,7 @@ void FUN_L16_002e7a30(unsigned char *m, void *v) {
     float out[4];
     float velocity[4];
     float a, b, size, r, final_size;
-    *(u128 *)input = *(u128 *)v;
+    *(OvlQuad *)input = *(OvlQuad *)v;
     if ((unsigned char)m[0x31] == 0)
         return;
     if ((D_L16_0015F5CC & 1) != (((int)m >> 8) & 1))
@@ -2073,7 +2072,7 @@ void FUN_L16_002e7e00(char *moby) {
 
 
 typedef union {
-    u128 q;
+    OvlQuad q;
     float v[4];
 } L16PlatformVector;
 

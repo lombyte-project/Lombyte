@@ -6,9 +6,9 @@
 #include "qcopy.h"
 #include "qzero.h"
 #include "sda.h"
+#include "rnc/overlay/quad.h"
 /* Builds two scaled offset vectors from the moby's matrix and adds them to out. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern void FUN_001f9d20_q(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_001fa050_q(float *, float *) __asm__("FUN_001fa050");
@@ -24,13 +24,13 @@ void FUN_L03_0029c8a8(char *moby, float *out) {
     float b[4];
     float m[16];
     char *data;
-    *(u128 *)v = 0;
+    *(OvlQuad *)v = 0;
     v[0] = 1.0f;
     data = *(char **)(moby + 0x78);
     if (*(float *)(data + 0x140) != 0.0f || *(float *)(data + 0x144) != 0.0f) {
         FUN_001fa050_q(m, (float *)(moby + 0x40));
         FUN_001f9d20_q(a, v, m);
-        *(u128 *)b = *(u128 *)a;
+        *(OvlQuad *)b = *(OvlQuad *)a;
         b[2] = b[2] - 1.0f;
         cross_vectors_xyz_q(c, a, b);
         cross_vectors_xyz_q(d, a, c);

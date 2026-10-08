@@ -31,7 +31,7 @@ s32 FUN_0021c4c0(struct MenuScreen *m) {
             return 0;
         }
     }
-    if ((D_0013C940.pressed_unmasked & 0xD00) && menu_system.unk124 == 0) {
+    if ((D_0013C940.pressed_unmasked & 0xD00) && menu_system.close_locked == 0) {
         return 1;
     }
     if (D_0013C940.pressed_unmasked & 8) {
@@ -77,7 +77,7 @@ s32 FUN_0021c4c0(struct MenuScreen *m) {
     if (D_0013C940.pressed_unmasked & 0x10) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
-        } else if (menu_system.unk124 == 0) {
+        } else if (menu_system.close_locked == 0) {
             return -1;
         }
     }

@@ -8,7 +8,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020cd08.s", FUN_L00_0020cd08);
 #include "rnc/overlay/hero.h"
 #include "rnc/overlay/collision.h"
 #include "rnc/gameplay/hero.h"
-typedef int Q_cf58 __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 typedef struct {
     f32 x, y, z, w;
 } __attribute__((aligned(16))) V_cf58;
@@ -23,7 +23,7 @@ typedef struct {
     u8 p2[0x41E - 0x1CC];
     s16 h41E;
     u8 p3[0x500 - 0x420];
-    Q_cf58 q500;
+    OvlQuad q500;
     u8 p4[0x560 - 0x510];
     s32 w560;
     s32 w564;
@@ -40,7 +40,7 @@ typedef struct {
     s32 w208C;
 } GS_cf58;
 extern GS_cf58 D_0013F350_cf58 __asm__("D_0013F350") __attribute__((section(".data")));
-extern Q_cf58 D_0013F3D0_cf58 __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern OvlQuad D_0013F3D0_cf58 __asm__("D_0013F3D0") __attribute__((section(".data")));
 f32 FUN_001f9b48_c(void *, V_cf58 *) __asm__("FUN_001f9b48");
 #include "rnc/overlay/path.h"
 void FUN_L00_0020cf58(void) {
@@ -56,12 +56,12 @@ void FUN_L00_0020cf58(void) {
     if (D_0013F350_cf58.h1C8 != 0)
         return;
     if (D_0015ED84 == 16) {
-        *(Q_cf58 *)&v0 = 0;
+        *(OvlQuad *)&v0 = 0;
         v0.x = 115.0f;
         v0.y = 264.0f;
         v0.z = 133.0f;
         if (12.0f < FUN_001f9b48_c(&D_0013F350_cf58.pos, &v0)) {
-            *(Q_cf58 *)&v1 = 0;
+            *(OvlQuad *)&v1 = 0;
             v1.x = 257.0f;
             v1.y = 301.0f;
             v1.z = 128.0f;
@@ -69,17 +69,17 @@ void FUN_L00_0020cf58(void) {
                 return;
         }
     } else if (D_0015ED84 == 14) {
-        *(Q_cf58 *)&v0 = 0;
+        *(OvlQuad *)&v0 = 0;
         v0.x = 157.0f;
         v0.y = 265.0f;
         v0.z = 51.0f;
         if (12.0f < FUN_001f9b48_c(&D_0013F350_cf58.pos, &v0)) {
-            *(Q_cf58 *)&v1 = 0;
+            *(OvlQuad *)&v1 = 0;
             v1.x = 162.0f;
             v1.y = 341.0f;
             v1.z = 48.0f;
             if (12.0f < FUN_001f9b48_c(&D_0013F350_cf58.pos, &v1)) {
-                *(Q_cf58 *)&v2 = 0;
+                *(OvlQuad *)&v2 = 0;
                 v2.x = 308.0f;
                 v2.y = 104.0f;
                 v2.z = 69.0f;
@@ -88,7 +88,7 @@ void FUN_L00_0020cf58(void) {
             }
         }
     } else if (D_0015ED84 == 6) {
-        *(Q_cf58 *)&v0 = 0;
+        *(OvlQuad *)&v0 = 0;
         v0.x = 177.0f;
         v0.y = 304.0f;
         v0.z = 143.0f;
@@ -106,8 +106,8 @@ void FUN_L00_0020cf58(void) {
                 return;
         }
     }
-    *(Q_cf58 *)&v1 = *(Q_cf58 *)&D_0013F350_cf58.pos;
-    if (!FUN_L00_0020cd08((Q_cf58 *)&v1, &a, &v0, &b, &c, &e, 0, 0))
+    *(OvlQuad *)&v1 = *(OvlQuad *)&D_0013F350_cf58.pos;
+    if (!FUN_L00_0020cd08((OvlQuad *)&v1, &a, &v0, &b, &c, &e, 0, 0))
         return;
     if (D_0013F350_cf58.w2084 == 41 && D_0013F350_cf58.w5C4 != 0 && a == D_0013F350_cf58.w560)
         return;
@@ -1364,11 +1364,10 @@ void FUN_L00_00210c80(float *v, int each, float s, float z) {
         v[2] = z;
     }
 }
-typedef int Q_210ce8 __attribute__((mode(TI)));
 
 typedef struct {
     u8 pad0[0x10];
-    Q_210ce8 v10;
+    OvlQuad v10;
     u8 *p20;
     s32 i24;
     u8 b28;
@@ -1380,7 +1379,7 @@ typedef struct {
 } T_210ce8;
 
 typedef union {
-    Q_210ce8 q;
+    OvlQuad q;
     f32 f[4];
     s32 i[4];
 } V_210ce8;
@@ -1707,9 +1706,8 @@ void FUN_L00_002118b0(void) {
     p[0x190 / 4] = 0;
     p[0x194 / 4] = 0;
 }
-typedef int u128_2118c8 __attribute__((mode(TI)));
 typedef union {
-    u128_2118c8 q;
+    OvlQuad q;
     float f[4];
 } V_2118c8;
 typedef struct {
@@ -2171,9 +2169,8 @@ void FUN_L00_002126b8(Vec4_002126b8 *a, Vec4_002126b8 *b, int mode, float fa, fl
         a->z += fa;
     }
 }
-typedef int Q __attribute__((mode(TI)));
 typedef union {
-    Q q;
+    OvlQuad q;
     f32 f[4];
 } V;
 extern u8 D_0013F350_c2[] __asm__("D_0013F350") __attribute__((section(".data")));
