@@ -1,12 +1,6 @@
 #include "types.h"
 #include "sda.h"
 
-typedef struct {
-    u8 pad_0[0xD4];
-    s32 stage;
-    s32 pad_D8;
-    s32 selection;
-} SaveInfo;
 
 typedef struct {
     u8 pad_0[0xC];
@@ -14,7 +8,7 @@ typedef struct {
 } ScreenOfs;
 
 extern u8 D_0013CDD0[];
-extern SaveInfo D_0013D290;
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern ScreenOfs D_0013E500;
 extern s32 D_0015ED84 __attribute__((sda));
 extern s16 D_0015EE48 MACRO_ADDR;
@@ -71,7 +65,7 @@ void play_level_loading_slides(s32 language_index, s32 first_slide, s32 second_s
     }
     sceGsSyncV(0);
     vu1_init_chain();
-    for (frame = 0; frame < duration_ticks && D_0013D290.stage < 3 && D_0013D290.selection < 0;
+    for (frame = 0; frame < duration_ticks && memory_card_state.state < 3 && memory_card_state.pending_state < 0;
          frame++) {
         alpha = 0x80;
         reset_gs_registers();

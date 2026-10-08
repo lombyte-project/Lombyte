@@ -22,27 +22,20 @@ struct Menu {
     s32 timer;
 };
 
-struct MenuCur {
+struct ModeEntry {
     u8 pad0[0x38];
     s32 unk38;
     u8 pad3C[4];
     struct Menu *owner;
 };
 
-struct MenuSys {
-    u8 pad0[4];
-    struct MenuCur *cur;
-    s32 unk8;
-    u8 padC[0x118];
-    s32 unk124;
-};
 
 extern struct PadState D_0013C940;
-extern struct MenuSys D_001D5BF0;
+#include "rnc/ui/menus/menu_system.h"
 extern f32 D_0015F43C;
 extern u8 D_0016034C;
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
-extern void mode_freeze_init(s32, struct MenuCur *) __asm__("func_001FBAB8");
+extern void mode_freeze_init(s32, struct ModeEntry *) __asm__("func_001FBAB8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
@@ -52,7 +45,7 @@ s32 FUN_00220e28(struct Menu *m) {
     s32 t;
     s32 v;
 
-    active = D_001D5BF0.cur->owner == m;
+    active = menu_system.unk4->owner == m;
     if (m->timer != 0) {
         t = m->timer - 1;
         v = t < 5 ? t : 4;
@@ -63,13 +56,13 @@ s32 FUN_00220e28(struct Menu *m) {
     if (!active) {
         return 0;
     }
-    if ((D_0013C940.pressed & 0xD00) && D_001D5BF0.unk124 == 0) {
+    if ((D_0013C940.pressed & 0xD00) && menu_system.unk124 == 0) {
         return 1;
     }
     if (D_0013C940.pressed & 0x10) {
-        if (D_001D5BF0.cur->unk38 != 0) {
-            D_001D5BF0.unk8 = D_001D5BF0.cur->unk38;
-        } else if (D_001D5BF0.unk124 == 0) {
+        if (menu_system.unk4->unk38 != 0) {
+            menu_system.unk8 = menu_system.unk4->unk38;
+        } else if (menu_system.unk124 == 0) {
             return -1;
         }
     }
@@ -84,7 +77,7 @@ s32 FUN_00220e28(struct Menu *m) {
         allocate_voice_for_target_entry(0, 0x11, m->unk14);
         if (m->opts[m->sel].type & 1) {
             if (D_0016034C != 0) {
-                mode_freeze_init(6, D_001D5BF0.cur);
+                mode_freeze_init(6, menu_system.unk4);
             } else {
                 fade_to_black(4);
                 m->timer = scale_game_frames(0x10);

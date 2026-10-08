@@ -1,19 +1,4 @@
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
-typedef unsigned long long u64;
-struct SaveSlotTable {
-    u8 pad_0[0x8];
-    s32 unk8;
-    u8 pad_C[0xC8];
-    s32 unkD4;
-    u8 pad_D8[0x4];
-    s32 unkDC;
-};
+#include "types.h"
 struct ModeRef {
     u8 pad_0[0x40];
     struct MenuObject *unk40;
@@ -27,7 +12,7 @@ struct MenuScreen {
     s32 unk20;
     s32 unk24;
 };
-extern struct SaveSlotTable D_0013D290;
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern struct ModeRef *D_001D5BF4[];
 extern u8 D_001DDD40[];
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
@@ -45,11 +30,11 @@ s32 FUN_00222d98(struct MenuScreen *menu) {
     u32 temp_16_56;
     u32 temp_16_74;
     u32 width;
-    struct SaveSlotTable *base;
-    base = &D_0013D290;
+    struct MemoryCardState *base;
+    base = &memory_card_state;
     temp_17_21 = *((s32 *)((((u8 *)base) - (-(D_001D5BF4[0]->unk40->unk40 * 0x1C))) + 0x20));
     setup_gif_paging(0);
-    if (((base->unkD4 < 3) && (base->unkDC < 0)) && (base->unk8 == 2)) {
+    if (((base->state < 3) && (base->pending_state < 0)) && (base->card[0].type == 2)) {
         if (temp_17_21 == (-1)) {
             height = menu->unk24;
             width = menu->unk20;

@@ -3,7 +3,7 @@
 #include "rnc/globals.h"
 #include "rnc/audio/music/music_stream_state.h"
 
-extern struct SaveSlotTable D_0013D290;
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern struct Globals_0013DD40 D_0013DD40;
 extern u8 D_0013DD58[];
 extern struct Globals_0013E030 D_0013E030;
@@ -99,7 +99,7 @@ void do_space_transition(void) {
     D_0018CD00.unk22C = 128.0f;
     PackDmaTag(0, 0, 0);
     if (D_0015F600 < 0) {
-        while (D_0013D290.unkD4 >= 3 || D_0013D290.unkDC >= 0) {
+        while (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0) {
             memcard_update_state();
             run_state_handler();
         }
@@ -202,7 +202,7 @@ void do_space_transition(void) {
                 FUN_00226e08();
             } while (service_level_archive_load() == 0);
         }
-        while (D_0013D290.unkD4 != 2 || D_0013D290.unkDC >= 0) {
+        while (memory_card_state.state != 2 || memory_card_state.pending_state >= 0) {
             FlushCache(0);
             sceGsSyncV(0);
             memcard_update_state();

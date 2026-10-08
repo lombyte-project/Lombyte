@@ -10,20 +10,6 @@ typedef struct {
     s32 pressed;
 } PadState;
 
-typedef struct {
-    u8 pad0[0x8];
-    s32 mode;
-    u8 padC[0x8];
-    s32 slot;
-    u8 pad18[0xBC];
-    s32 unkD4;
-    u8 padD8[0x4];
-    s32 unkDC;
-    u8 padE0[0x4];
-    s32 unkE4;
-    u8 padE8[0xC];
-    s32 unkF4;
-} SaveState;
 
 typedef struct {
     u8 pad0[0x84];
@@ -67,7 +53,7 @@ typedef struct __attribute__((packed)) {
 } Unaligned64;
 
 extern PadState D_0013C940;
-extern SaveState D_0013D290;
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern volatile u16 D_0013E05A[];
 extern s32 D_0015ED98;
 extern s32 D_0015EE20;
@@ -117,20 +103,20 @@ s32 saving_data_menu2(Widget *w) {
     w->stage = 2;
 
     if (D_001D5BF0.saving != 0) {
-        if (D_0013D290.unkD4 >= 3 || D_0013D290.unkDC >= 0) {
+        if (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0) {
             return 0;
         }
         D_001D5BF0.saving = 0;
-        if (D_0013D290.unkE4 != 0) {
+        if (memory_card_state.err != 0) {
             mode_freeze_flags |= 0x80;
             mode_freeze_init(3, D_001D5BF0.page);
             return 0;
         }
-        *(s32 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x24) = D_0015ED98;
-        *(s32 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x20) = current_level_index;
-        *(s32 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x2C) = D_0015EE24;
-        *(Unaligned64 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x30) = D_0015EE98[0];
-        *(s32 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x28) = D_0015EE20;
+        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x24) = D_0015ED98;
+        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x20) = current_level_index;
+        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x2C) = D_0015EE24;
+        *(Unaligned64 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x30) = D_0015EE98[0];
+        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x28) = D_0015EE20;
         InitializeGlobalStateEntry(0);
         D_0013E05A[0] = 1;
     }
@@ -150,7 +136,7 @@ s32 saving_data_menu2(Widget *w) {
         D_001D5BF0.next = D_001D5BF0.page->back;
         return 0;
     }
-    if (D_0013D290.unkD4 >= 3 || D_0013D290.unkDC >= 0 || D_0013D290.mode != 2) {
+    if (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0 || memory_card_state.card[0].type != 2) {
         return 0;
     }
 
@@ -171,8 +157,8 @@ s32 saving_data_menu2(Widget *w) {
     }
     cursor = w->cursor;
     D_0015EE34 = cursor;
-    if ((pad & 0x40) && D_0013D290.mode == 2) {
-        if (*(s32 *)((u8 *)&D_0013D290 + cursor * 0x1C + 0x20) != -1) {
+    if ((pad & 0x40) && memory_card_state.card[0].type == 2) {
+        if (*(s32 *)((u8 *)&memory_card_state + cursor * 0x1C + 0x20) != -1) {
             D_001D5BF0.next = (w->flags & 0x2000) ? D_001D4F98 : D_001D4E38;
             D_001D5BF0.unkD4 = (w->flags & 0x2000) ? 2 : 1;
             D_001D2640[0] = w->cursor;
@@ -180,7 +166,7 @@ s32 saving_data_menu2(Widget *w) {
             w->stage = 1;
         }
     } else if (pad & 0x20) {
-        D_0013D290.unkF4 = 0;
+        memory_card_state.unkF4 = 0;
         fl = mode_freeze_flags & ~2;
         mode_freeze_flags = fl & ~4;
         load_and_initialize_level_chunk();

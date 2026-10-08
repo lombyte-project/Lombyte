@@ -10,22 +10,6 @@ struct LoadMenuControllerState {
     u8 pad_1B8[0xC];
     s32 pressed_buttons;
 };
-struct LoadMenuMemoryCardState {
-    u8 pad_0[0x8];
-    s32 phase;
-    u8 pad_C[0x8];
-    s32 selected_save_slot;
-    u8 pad_18[0xA8];
-    s32 load_state;
-    u8 pad_C4[0x10];
-    s32 card_operation_state;
-    u8 pad_D8[0x4];
-    s32 pending_card_operation;
-    s32 card_operation_progress;
-    s32 load_failed;
-    u8 pad_E8[0xC];
-    s32 loaded_save_ready;
-};
 struct LoadMenuMixerState {
     u8 pad_0[0x48];
     s32 group_0_volume;
@@ -57,7 +41,7 @@ struct LoadMenuDescriptor {
     s32 selected_save_slot;
 };
 extern struct LoadMenuControllerState controller_state __asm__("D_0013C940");
-extern struct LoadMenuMemoryCardState memory_card_state __asm__("D_0013D290");
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern s16 D_0013E05A[];
 extern struct LoadMenuMixerState mixer_state __asm__("D_0013E550");
 extern s32 music_volume __asm__("D_0015EDEC");
@@ -78,15 +62,15 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
     s32 scaled_volume_70;
     previous_save_slot = menu->selected_save_slot;
     if (menu_state.load_pending != 0) {
-        if ((memory_card_state.card_operation_state < 3) &&
-            (memory_card_state.pending_card_operation < 0)) {
+        if ((memory_card_state.state < 3) &&
+            (memory_card_state.pending_state < 0)) {
             menu_state.load_pending = 0;
-            if (memory_card_state.load_failed != 0) {
+            if (memory_card_state.err != 0) {
                 mode_freeze_flags |= 0x100;
                 mode_freeze_init(3, menu_state.page);
                 return 0;
             }
-            memory_card_state.loaded_save_ready = 1;
+            memory_card_state.unkF4 = 1;
             mixer_state.group_0_volume = ((s32)(sound_volume * 8)) / 10;
             mixer_state.group_1_volume = music_volume;
             scaled_volume_70 = ((s32)(sound_volume * 7)) / 10;
@@ -119,9 +103,9 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
         menu_state.next_page = menu_state.page->back_page;
         return 0;
     }
-    if (((memory_card_state.card_operation_state < 3) &&
-         (memory_card_state.pending_card_operation < 0)) &&
-        (memory_card_state.phase == 2)) {
+    if (((memory_card_state.state < 3) &&
+         (memory_card_state.pending_state < 0)) &&
+        (memory_card_state.card[0].type == 2)) {
         if (menu->flags & 1) {
             buttons = controller_state.held_buttons;
         } else {
@@ -137,14 +121,14 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
             next_save_slot = ((volatile struct LoadMenuDescriptor *)menu)->selected_save_slot;
         }
         selected_save_slot = next_save_slot;
-        if (((buttons & 0x40) && (memory_card_state.phase == 2)) &&
-            ((*((s32 *)((((u8 *)(&memory_card_state)) + (next_save_slot * 0x1C)) + 0x20))) >= 0)) {
+        if (((buttons & 0x40) && (memory_card_state.card[0].type == 2)) &&
+            ((*((s32 *)((((u8 *)&memory_card_state) + (next_save_slot * 0x1C)) + 0x20))) >= 0)) {
             allocate_voice_for_target_entry(0, 0x11, menu->sound_owner);
-            memory_card_state.load_state = 0;
-            memory_card_state.selected_save_slot = (s32)menu->selected_save_slot;
-            if (memory_card_state.pending_card_operation < 0) {
-                memory_card_state.card_operation_progress = 0;
-                memory_card_state.pending_card_operation = 0xD;
+            memory_card_state.active_card = 0;
+            memory_card_state.card[0].save_index = (s32)menu->selected_save_slot;
+            if (memory_card_state.pending_state < 0) {
+                memory_card_state.pending_card = 0;
+                memory_card_state.pending_state = 0xD;
             }
             menu_state.load_pending = 1;
             menu_state.status_text_id = 0x4FB6;

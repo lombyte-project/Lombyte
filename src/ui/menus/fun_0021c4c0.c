@@ -9,20 +9,13 @@ struct PadState {
 
 struct Menu;
 
-struct MenuCur {
+struct ModeEntry {
     u8 pad0[0x38];
     s32 unk38;
     u8 pad3C[4];
     struct Menu *owner;
 };
 
-struct MenuSys {
-    u8 pad0[4];
-    struct MenuCur *cur;
-    s32 unk8;
-    u8 padC[0x118];
-    s32 unk124;
-};
 
 struct Menu {
     u8 pad0[0x14];
@@ -38,7 +31,7 @@ struct GameProgress {
 };
 
 extern struct PadState D_0013C940;
-extern struct MenuSys D_001D5BF0;
+#include "rnc/ui/menus/menu_system.h"
 extern struct GameProgress D_001A00F0;
 extern u8 D_0013DD40[];
 extern u32 D_001CF874[];
@@ -56,7 +49,7 @@ s32 FUN_0021c4c0(struct Menu *m) {
     s32 *ch;
 
     {
-        struct Menu *owner = D_001D5BF0.cur->owner;
+        struct Menu *owner = menu_system.unk4->owner;
         old = D_001A00F0.level;
         if (owner != m) {
             if (old < 20) {
@@ -65,7 +58,7 @@ s32 FUN_0021c4c0(struct Menu *m) {
             return 0;
         }
     }
-    if ((D_0013C940.pressed & 0xD00) && D_001D5BF0.unk124 == 0) {
+    if ((D_0013C940.pressed & 0xD00) && menu_system.unk124 == 0) {
         return 1;
     }
     if (D_0013C940.pressed & 8) {
@@ -109,9 +102,9 @@ s32 FUN_0021c4c0(struct Menu *m) {
         }
     }
     if (D_0013C940.pressed & 0x10) {
-        if (D_001D5BF0.cur->unk38 != 0) {
-            D_001D5BF0.unk8 = D_001D5BF0.cur->unk38;
-        } else if (D_001D5BF0.unk124 == 0) {
+        if (menu_system.unk4->unk38 != 0) {
+            menu_system.unk8 = menu_system.unk4->unk38;
+        } else if (menu_system.unk124 == 0) {
             return -1;
         }
     }

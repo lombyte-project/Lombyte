@@ -1,12 +1,12 @@
 #include "sda.h"
-extern char D_0013D290[];
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern int mode_freeze_flags __asm__("D_0015EEB4") MACRO_ADDR;
 extern int mode_freeze_state __asm__("D_0015EEB0") MACRO_ADDR;
 
 void save_card_state_new_card(void) __asm__("FUN_00208dd8");
 
 void save_card_state_new_card(void) {
-    char *s;
+    struct MemoryCardState *s;
     int f = mode_freeze_flags;
     int t = f & ~4;
     int g = t & ~2;
@@ -21,12 +21,12 @@ void save_card_state_new_card(void) {
         mode_freeze_flags = (g ^ 0x100) | 0x40;
         return;
     }
-    s = D_0013D290;
-    if (*(int *)(s + 0x1C) != 0) {
+    s = &memory_card_state;
+    if (s->card[0].sync_result != 0) {
         mode_freeze_state = 3;
         return;
     }
-    if (*(int *)(s + 0xF4) != 0)
+    if (s->unkF4 != 0)
         mode_freeze_state = 1;
 }
 

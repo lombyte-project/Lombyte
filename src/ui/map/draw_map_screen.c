@@ -7,24 +7,11 @@ struct Pad {
     u32 pressed;
 };
 
-struct MenuCur {
+struct ModeEntry {
     u8 pad0[0x38];
     s32 unk38;
 };
 
-struct MenuSys {
-    u8 pad0[0x4];
-    struct MenuCur *cur;
-    s32 unk8;
-    s32 unkC;
-    u8 pad10[0xD4];
-    s32 unkE4;
-    u8 padE8[0x8];
-    u8 *unkF0;
-    s32 unkF4;
-    u8 padF8[0x2C];
-    s32 unk124;
-};
 
 struct MapHdr {
     s32 unk0;
@@ -54,7 +41,7 @@ struct Hdr16 {
 };
 
 extern struct Pad D_0013C940;
-extern struct MenuSys D_001D5BF0;
+#include "rnc/ui/menus/menu_system.h"
 extern struct Hdr16 D_001516D0;
 extern s32 D_001D5D14[];
 extern u8 *D_001D5BF8[];
@@ -122,9 +109,9 @@ s32 draw_map_screen(struct Screen *screen) {
             }
         }
         if (D_0013C940.pressed & 0x10) {
-            if (D_001D5BF0.cur->unk38 != 0) {
-                D_001D5BF0.unk8 = D_001D5BF0.cur->unk38;
-            } else if (D_001D5BF0.unk124 == 0) {
+            if (menu_system.unk4->unk38 != 0) {
+                menu_system.unk8 = menu_system.unk4->unk38;
+            } else if (menu_system.unk124 == 0) {
                 return -1;
             }
         }
@@ -132,10 +119,10 @@ s32 draw_map_screen(struct Screen *screen) {
             D_001D5BF8[0] = D_001CF678;
         }
         if ((D_0013C940.pressed & 0x20) && D_001A00F0.cur != 0) {
-            D_001D5BF0.unkF0 = D_001CF418;
-            D_001D5BF0.unkF4 = 0xB;
-            D_001D5BF0.unkC = 3;
-            D_001D5BF0.unkE4 = D_001A00F0.cur;
+            menu_system.unkF0 = (s32)D_001CF418;
+            menu_system.unkF4 = 0xB;
+            menu_system.unkC = 3;
+            menu_system.unkE4 = D_001A00F0.cur;
             allocate_voice_for_target_entry(0, 0x11, screen->unk14);
             return 0;
         }

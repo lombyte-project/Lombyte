@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/game/menu.c, func_00209188). */
 #include "sda.h"
-extern char D_0013D290[];
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern int mode_freeze_state __asm__("D_0015EEB0") MACRO_ADDR;
 extern int mode_freeze_flags __asm__("D_0015EEB4") MACRO_ADDR;
 /* Clears the 4 and 2 flag bits of mode_freeze_flags, then picks the next
@@ -12,13 +12,13 @@ void save_card_state_good_save(void) __asm__("FUN_002088d0");
 
 void save_card_state_good_save(void) {
     int flags = mode_freeze_flags;
-    char *b;
+    struct MemoryCardState *b;
     int nf;
     mode_freeze_flags = flags & ~4;
-    b = D_0013D290;
+    b = &memory_card_state;
     nf = mode_freeze_flags & ~2;
     mode_freeze_flags = nf;
-    if (*(int *)(b + 0xF4) == 0) {
+    if (b->unkF4 == 0) {
         mode_freeze_state = 3;
         return;
     }
@@ -32,8 +32,8 @@ void save_card_state_good_save(void) {
         mode_freeze_flags = (nf ^ 0x100) | 0x40;
         return;
     }
-    if (*(int *)(b + 0x1C) != 0) {
-        *(int *)(b + 0xF4) = 0;
+    if (b->card[0].sync_result != 0) {
+        b->unkF4 = 0;
         mode_freeze_flags = nf | 1;
         mode_freeze_state = 2;
         return;

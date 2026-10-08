@@ -11,14 +11,6 @@ typedef struct {
 } LanguageResourceOffsets;
 extern LanguageResourceOffsets menu_language_resource_offsets __asm__("D_001E87D0");
 
-struct SavePreviewState {
-    u8 pad_0[0x8];
-    s32 menu_mode;
-    u8 pad_C[0xC8];
-    s32 card_operation_state;
-    u8 pad_D8[0x4];
-    s32 pending_card_operation;
-};
 
 struct MenuPreviewContext {
     u8 pad_0[0x40];
@@ -56,7 +48,7 @@ struct MenuResourceEntry {
     s32 sector_count;
 };
 
-extern struct SavePreviewState save_preview_state __asm__("D_0013D290");
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern u8 skill_point_completed[] __asm__("D_0013D408");
 extern s16 cd_read_active[] __asm__("D_001516D8");
 extern s32 dialogue_language_column __asm__("D_0015ED88");
@@ -127,17 +119,17 @@ s32 update_menu_resource_stream(struct MenuResourceStream *stream) {
             if (resource_index >= 5) {
                 resource_index = 4;
             }
-            if (save_preview_state.card_operation_state < 3) {
-                if (save_preview_state.pending_card_operation < 0) {
+            if (memory_card_state.state < 3) {
+                if (memory_card_state.pending_state < 0) {
                     if (stream->state == -1) {
                         stream->state = 0;
                     }
                     resource_index =
-                        *(s32 *)((u8 *)&save_preview_state + resource_index * 0x1C + 0x20);
+                        *(s32 *)((u8 *)&memory_card_state + resource_index * 0x1C + 0x20);
                     if (resource_index == -1) {
                         stream->state = resource_index;
                     }
-                    if (save_preview_state.menu_mode != 2) {
+                    if (memory_card_state.card[0].type != 2) {
                         stream->state = -1;
                     }
                 } else {

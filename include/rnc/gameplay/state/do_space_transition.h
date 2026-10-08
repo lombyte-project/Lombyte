@@ -3,12 +3,6 @@
 
 #include "types.h"
 
-struct SaveSlotTable {
-    u8 pad_0[0xD4];
-    s32 unkD4;
-    u8 pad_D8[0x4];
-    s32 unkDC;
-};
 
 struct Globals_0013DD40 {
     u8 pad_0[0x8];

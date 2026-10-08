@@ -7,7 +7,7 @@
 #include "rnc/ui/menus/save_data/save_card_state.h"
 #include "rnc/globals.h"
 
-extern struct SaveSlotTable D_0013D290;
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern void mode_freeze_init() __asm__("func_001FBAB8");
 
 void save_card_state_saving(void) __asm__("FUN_00208f28");
@@ -15,8 +15,8 @@ void save_card_state_saving(void) __asm__("FUN_00208f28");
 void save_card_state_saving(void) {
     s32 flags;
 
-    if ((D_0013D290.unkD4 < 3) && (D_0013D290.unkDC < 0)) {
-        if (D_0013D290.unkE4 != 0) {
+    if ((memory_card_state.state < 3) && (memory_card_state.pending_state < 0)) {
+        if (memory_card_state.err != 0) {
             mode_freeze_init(3, 0);
             mode_freeze_state = 0x15;
             flags = mode_freeze_flags | 0x40;

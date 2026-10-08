@@ -22,7 +22,8 @@ struct MenuSystem {
     u8 pad_CC[0x4];
     struct ModeTarget *unkD0;
     s32 unkD4;
-    u8 pad_D8[0x8];
+    u8 pad_D8[0x4];
+    s32 unkDC;
     s32 unkE0;
     s32 unkE4;
     u8 pad_E8[0x8];

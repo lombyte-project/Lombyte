@@ -43,14 +43,6 @@ struct MemoryCardDataMenu {
     s32 entry_indices[2];
 };
 
-struct MemoryCardState {
-    u8 pad0[8];
-    s32 phase;
-    u8 padC[0xC8];
-    s32 card_operation_state;
-    u8 padD8[4];
-    s32 pending_card_operation;
-};
 
 struct MemoryCardMenuGame {
     u8 pad0[0x128];
@@ -64,7 +56,7 @@ struct ScreenDimensions {
     s16 height;
 };
 
-extern struct MemoryCardState memory_card_state __asm__("D_0013D290");
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern struct MemoryCardMenuGame menu_state __asm__("D_001D5BF0");
 extern struct MemoryCardMenuPlanet *active_menu_page __asm__("D_001D5BF4");
 extern u8 item_available[] __asm__("D_0013D4C0");
@@ -93,11 +85,11 @@ s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
         if (!(menu->flags & 0x100)) {
             return 1;
         }
-        if (memory_card_state.phase != 2) {
+        if (memory_card_state.card[0].type != 2) {
             return 2;
         }
-        if (memory_card_state.card_operation_state < 3 &&
-            memory_card_state.pending_card_operation < 0) {
+        if (memory_card_state.state < 3 &&
+            memory_card_state.pending_state < 0) {
             return 2;
         }
         setup_gif_paging(0);

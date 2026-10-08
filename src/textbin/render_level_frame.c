@@ -4,12 +4,6 @@
 #include "types.h"
 #include "rnc/globals.h"
 
-struct LevelOverlayState {
-    u8 pad_0[0xD4];
-    s32 stage;
-    u8 pad_D8[0x4];
-    s32 selection;
-};
 struct LevelRenderState {
     u8 pad_0[0x58];
     s32 mode;
@@ -22,7 +16,7 @@ struct LevelProjectionState {
     u8 pad_0[0xB0];
     f32 projection_scale;
 };
-extern struct LevelOverlayState D_0013D290;
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern u8 D_0013DD43[];
 extern struct LevelRenderState level_render_state __asm__("D_0013E030");
 extern struct LevelDisplayState screen_offsets __asm__("D_0013E500");
@@ -104,7 +98,7 @@ void render_level_frame(void) {
     if ((current_level_index != 0) && ((current_level_index != 1) || (D_0013DD43[0] != 0))) {
         render_environment_mapped_object(D_0018CC98[0]);
     }
-    if ((D_0013D290.stage >= 3) || (D_0013D290.selection >= 0)) {
+    if ((memory_card_state.state >= 3) || (memory_card_state.pending_state >= 0)) {
         vu1_add_g_sregister(0x47, 0x3004B);
         quad_extent = 272.0f;
         texture = get_effect_texture(2);

@@ -6,7 +6,7 @@ extern int D_0015EED8 MACRO_ADDR;
 extern int D_0015F604 MACRO_ADDR;
 extern int D_0015EE88 MACRO_ADDR;
 extern char D_0013E550[];
-extern char D_0013D290[];
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern char D_001940C0[];
 extern void FlushCache(int);
 extern void sound_stop_all_sounds(void) __asm__("func_0022DCD0");
@@ -55,8 +55,8 @@ void start_level(int level) {
     music_stop();
     snd_stream_safe_cd_sync(0);
     for (;;) {
-        char *ld = D_0013D290;
-        if (*(int *)(ld + 0xD4) < 3 && *(int *)(ld + 0xDC) < 0) {
+        struct MemoryCardState *ld = &memory_card_state;
+        if (ld->state < 3 && ld->pending_state < 0) {
             break;
         }
         memcard_update_state();
