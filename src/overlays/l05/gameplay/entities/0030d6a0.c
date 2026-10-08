@@ -244,7 +244,83 @@ void FUN_L05_0030e1f8(char *moby) {
         D_L05_00161203 = c >> 24;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e508.s", FUN_L05_0030e508);
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_001f9a68(void *, void *, float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float vector_length_xyz(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern float advance_accelerated_scalar(float, float, float, float, float *,
+                                        float *) __asm__("FUN_00213f38");
+
+/* Slides the moby out along its pose-table entry's direction: 0 places it,
+   1 waits for the trigger byte 0xBC of its D_L05_0015FFD8 record, 2 eases
+   it toward the end point, 3 lowers it to 5.9 below the entry's height. */
+void FUN_L05_0030e508(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float v[4];
+    float pos;
+    float speed;
+    char *e;
+    float len;
+    float reach;
+
+    switch (*(u8 *)(moby + 0x20)) {
+    case 0: {
+        char *e0;
+
+        e0 = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
+        qcopy(moby + 0x10, e0 + 0x30);
+        *(float *)(moby + 0x48) = *(float *)(e0 + 0x78);
+        FUN_001f9bf8(v, e0 + 0x10, *(float *)(data + 0x18));
+        if (*(int *)(data + 0x1C) != 0) {
+            FUN_001f9a68(v, v, -1.0f);
+            *(u16 *)(moby + 0x34) |= 0x8000;
+        }
+        add_vector_xyz(moby + 0x10, moby + 0x10, v);
+        *(u8 *)(moby + 0x20) = 1;
+        break;
+    }
+    case 1:
+        if ((*(unsigned char **)&D_L05_0015FFD8_d)[*(int *)(data + 0x14) * 256 + 0xBC] != 0) {
+            allocate_voice_for_target_entry(0, 0, moby);
+            *(u8 *)(moby + 0x20) = 2;
+            clear_u64_value(data);
+        }
+        break;
+    case 2:
+        e = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
+        reach = *(float *)(data + 0x18) * 3.0f;
+        pos = 0.0f;
+        FUN_001f9bf8(v, e + 0x10, reach);
+        if (*(int *)(data + 0x1C) != 0) {
+            FUN_001f9a68(v, v, -1.0f);
+        }
+        add_vector_xyz(v, e + 0x30, v);
+        subtract_vector_xyz(v, v, moby + 0x10);
+        len = vector_length_xyz(v);
+        speed = vector_length_xyz(data);
+        advance_accelerated_scalar(len, D_0015ED70 * 20.0f, D_0015ED70 * 30.0f,
+                                   D_0015ED6C * 10.0f, &pos, &speed);
+        FUN_001f9bf8(data, v, speed);
+        add_vector_xyz(moby + 0x10, moby + 0x10, data);
+        if (vector_length_xyz(v) < 0.01f) {
+            *(u8 *)(moby + 0x20) = 3;
+        }
+        break;
+    case 3:
+        e = (char *)D_L05_001600EC;
+        e += *(int *)(data + 0x10) << 7;
+        advance_accelerated_scalar(*(float *)(e + 0x38) - 5.9f, D_0015ED70 * 20.0f,
+                                   D_0015ED70 * 40.0f, D_0015ED6C * 10.0f,
+                                   (float *)(moby + 0x18), (float *)(data + 8));
+        if (*(float *)(moby + 0x18) < *(float *)(e + 0x38) - 5.9f) {
+            *(u8 *)(moby + 0x20) = 4;
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e7f8.s", FUN_L05_0030e7f8);
 /* Scatters points along a range, placing each one with a heading and radius. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003106E0), where it is exact; names translated to the US level program. */
