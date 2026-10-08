@@ -49,7 +49,7 @@ s32 FUN_0021c4c0(struct Menu *m) {
     s32 *ch;
 
     {
-        struct Menu *owner = menu_system.unk4->owner;
+        struct Menu *owner = menu_system.current->owner;
         old = D_001A00F0.level;
         if (owner != m) {
             if (old < 20) {
@@ -102,8 +102,8 @@ s32 FUN_0021c4c0(struct Menu *m) {
         }
     }
     if (D_0013C940.pressed & 0x10) {
-        if (menu_system.unk4->unk38 != 0) {
-            menu_system.unk8 = menu_system.unk4->unk38;
+        if (menu_system.current->unk38 != 0) {
+            menu_system.next = menu_system.current->unk38;
         } else if (menu_system.unk124 == 0) {
             return -1;
         }

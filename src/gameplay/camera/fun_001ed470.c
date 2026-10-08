@@ -90,7 +90,7 @@ void FUN_001ed470(void) {
     for (i = 0; i < 4; i++) {
         cam->hist[i] = cam->hist[i + 1];
     }
-    cam->hist[i] = hero.unk98;
+    cam->hist[i] = hero.unk90.f[2];
 
     m = hero.unk2FC;
     if (m != NULL && m->oclass != 0x4BA && m->oclass != 0x336) {

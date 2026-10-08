@@ -109,8 +109,8 @@ s32 draw_map_screen(struct Screen *screen) {
             }
         }
         if (D_0013C940.pressed & 0x10) {
-            if (menu_system.unk4->unk38 != 0) {
-                menu_system.unk8 = menu_system.unk4->unk38;
+            if (menu_system.current->unk38 != 0) {
+                menu_system.next = menu_system.current->unk38;
             } else if (menu_system.unk124 == 0) {
                 return -1;
             }
@@ -121,7 +121,7 @@ s32 draw_map_screen(struct Screen *screen) {
         if ((D_0013C940.pressed & 0x20) && D_001A00F0.cur != 0) {
             menu_system.unkF0 = (s32)D_001CF418;
             menu_system.unkF4 = 0xB;
-            menu_system.unkC = 3;
+            menu_system.close_request = 3;
             menu_system.unkE4 = D_001A00F0.cur;
             allocate_voice_for_target_entry(0, 0x11, screen->unk14);
             return 0;

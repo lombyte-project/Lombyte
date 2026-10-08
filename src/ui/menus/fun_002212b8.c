@@ -37,15 +37,15 @@ s32 FUN_002212b8(Menu *menu) {
     s32 cur;
     s32 n;
 
-    if (menu_system.unk4->unk40 != menu) {
+    if (menu_system.current->unk40 != menu) {
         return 0;
     }
     if ((D_0013C940.unk1C4 & 0xD00) && menu_system.unk124 == 0) {
         return 1;
     }
     if (D_0013C940.unk1C4 & 0x10) {
-        if (menu_system.unk4->unk38 != 0) {
-            menu_system.unk8 = menu_system.unk4->unk38;
+        if (menu_system.current->unk38 != 0) {
+            menu_system.next = menu_system.current->unk38;
         } else if (menu_system.unk124 == 0) {
             return -1;
         }

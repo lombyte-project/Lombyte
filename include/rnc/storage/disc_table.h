@@ -28,7 +28,7 @@ struct DiscTable {
     struct DiscFile unk2C8[6];             /* 0x2C8, one per language */
     struct DiscFile unk2F8[6];             /* 0x2F8, one per language */
     u8 pad_328[0x1D0];
-    struct DiscFile unk4F8;                /* 0x4F8, level chunk read by load_level_chunk_from_disc */
+    struct DiscFile level_chunk;           /* 0x4F8, read by load_level_chunk_from_disc */
     u8 pad_500[0xA00];
     s32 music_50000[40][6];                /* 0xF00, tracks 50000.., one location per language */
     struct DiscFile unk12C0;               /* 0x12C0 */
@@ -36,12 +36,12 @@ struct DiscTable {
     struct DiscFile loading_slides[6];     /* 0x1388, one per language */
     struct DiscFile unk13B8;               /* 0x13B8 */
     struct DiscFile music_40000[36];       /* 0x13C0, music tracks 40000.. */
-    s32 unk14E0;                           /* 0x14E0, sound bank location */
+    s32 sound_bank;                        /* 0x14E0, passed to load_audio_bank_by_location */
     s32 pad_14E4;
     struct DiscFile unk14E8;               /* 0x14E8 */
     u8 pad_14F0[0x8];
     struct DiscFile wad_chunks[6];         /* 0x14F8, level wad chunks */
-    struct DiscFile unk1528;               /* 0x1528 */
+    struct DiscFile help_text;             /* 0x1528, per-language archive read by update_menu_help_text_load */
     struct DiscFile unk1530[14];           /* 0x1530, overlays: x of an x/y pair picked by D_0015ED80 */
     struct DiscFile unk15A0[14];           /* 0x15A0, the y half of the 0x1530 pair */
     struct DiscFile unk1610;               /* 0x1610, animation table */

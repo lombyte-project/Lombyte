@@ -57,25 +57,25 @@ s32 saving_data_menu(struct MenuScreen *menu) {
     s32 slot;
     s32 selected_slot;
     s32 pad_buttons;
-    if (menu_system.unk4->unk40 == menu) {
-        if (((menu->unk4C == 0) && (menu_system.unkD0 == D_001D2578)) &&
-            (menu_system.unkD0->unk84 != 0)) {
+    if (menu_system.current->unk40 == menu) {
+        if (((menu->unk4C == 0) && (menu_system.previous == D_001D2578)) &&
+            (menu_system.previous->unk84 != 0)) {
             menu->unk4C = 1;
         }
         save_state = menu->unk4C;
         if (save_state == 1) {
             prepare_save_game(menu->unk48, menu->unk40);
-            menu_system.unk128 = save_state;
-            menu_system.unk12C = 0x4FB5;
+            menu_system.save_pending = save_state;
+            menu_system.message_id = 0x4FB5;
         }
         menu->unk4C = 2;
         prev_slot = menu->unk40;
-        if (menu_system.unk128 != 0) {
+        if (menu_system.save_pending != 0) {
             if ((memory_card_state.state < 3) && (memory_card_state.pending_state < 0)) {
-                menu_system.unk128 = 0;
+                menu_system.save_pending = 0;
                 if (memory_card_state.err != 0) {
                     mode_freeze_flags |= 0x80;
-                    mode_freeze_init(3, menu_system.unk4);
+                    mode_freeze_init(3, menu_system.current);
                     goto block_46;
                 }
                 *((s32 *)((((u8 *)&memory_card_state) + (memory_card_state.card[0].save_index * 0x1C)) + 0x24)) =
@@ -102,9 +102,9 @@ s32 saving_data_menu(struct MenuScreen *menu) {
 
     block_17:
         if (D_0013C940.unk1C4 & 0x10) {
-            temp_2_126 = menu_system.unk4->unk38;
+            temp_2_126 = menu_system.current->unk38;
             if (temp_2_126 != 0) {
-                menu_system.unk8 = temp_2_126;
+                menu_system.next = temp_2_126;
                 goto block_23;
             }
             if (menu_system.unk124 == 0) {
@@ -116,7 +116,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
     block_23:
     block_24:
         if ((mode_freeze_state != 0x10) && (mode_freeze_state != 1)) {
-            menu_system.unk8 = (void *)menu_system.unk4->unk38;
+            menu_system.next = (void *)menu_system.current->unk38;
             return 0;
         }
 
@@ -142,7 +142,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
                 new_var = (((u8 *)&memory_card_state) + (selected_slot * 0x1C)) + 0x20;
                 if ((*((s32 *)new_var)) != (-1)) {
                     menu_system.unkD4 = 0;
-                    menu_system.unk8 = (new_var = D_001D2578);
+                    menu_system.next = (new_var = D_001D2578);
                     D_001D2640[0] = menu->unk40;
                 } else {
                     menu->unk4C = 1;

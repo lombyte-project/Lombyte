@@ -139,8 +139,8 @@ s32 FUN_L17_0020dbe8(s32 arg) {
     } else if (tbl->p20 != 0) {
         FUN_001f9a28_8(&v, (u8 *)&G + 0x80, tbl->p20 + 0x10);
     } else {
-        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.unk98, 3.1415927f));
-        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.unk98, 3.1415927f));
+        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.unk90.f[2], 3.1415927f));
+        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.unk90.f[2], 3.1415927f));
         v.i[2] = 0;
     }
     switch (G.unk20A4) {
@@ -154,7 +154,7 @@ s32 FUN_L17_0020dbe8(s32 arg) {
         }
         if (G.control_mode == 0x16) {
             FUN_L08_00230b38_8(0x6D, 1);
-            G.unk128 = D_0015ED6C_8 * 7.0f;
+            G.unk120.f[2] = D_0015ED6C_8 * 7.0f;
             return 1;
         }
         if (G.control_mode == 0x12) {

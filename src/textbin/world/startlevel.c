@@ -181,7 +181,7 @@ void startlevel(void) {
     sceGsSyncV(0);
     D_0015F438++;
     DebugPrint(D_001E76C0);
-    bank = load_audio_bank_by_location(disc_table.unk14E0);
+    bank = load_audio_bank_by_location(disc_table.sound_bank);
     snd_resolve_bank_xrefs();
     /* Publish the slot tables and metadata in retail order. */
     D_001861E0[4].bank = bank;

@@ -2160,12 +2160,8 @@ typedef struct {
     HoverVars *pvars;
 } HoverMoby;
 
-typedef struct {
-    u8 pad0[0x80];
-    HoverVec pos;
-} HoverPlayer;
+#include "rnc/gameplay/hero.h"
 
-extern HoverPlayer D_0013F350_u __asm__("D_0013F350");
 extern f32 D_L01_00161BF0 __attribute__((sda));
 extern f32 D_L01_00161BF4 __attribute__((sda));
 extern f32 D_L01_00161BF8 __attribute__((sda));
@@ -2184,7 +2180,7 @@ extern f32 resolve_camera_surface_height(void *, s32) __asm__("FUN_002135f0");
 
 void FUN_L01_002f8268(HoverMoby *m) {
     HoverVars *v;
-    HoverPlayer *pl;
+    struct Hero *pl;
     HoverVec old;
     HoverVec tgt;
     HoverVec step;
@@ -2209,14 +2205,14 @@ void FUN_L01_002f8268(HoverMoby *m) {
                        D_L01_00161BF4, 3.0f);
         spring_axis_to(&m->pos.v.y, v->home_y, &v->vel_y, D_L01_00161BF0 * D_0015ED70,
                        D_L01_00161BF4, 3.0f);
-        if (FUN_001f9b80(&m->pos, &D_0013F350_u.pos) < D_L01_00161BF8) {
-            if (FUN_001f99c0(m->pos.v.z - D_0013F350_u.pos.v.z) < 0.7f) {
-                ang = FUN_001f9e90(m->pos.v.x - D_0013F350_u.pos.v.x,
-                                   m->pos.v.y - D_0013F350_u.pos.v.y);
+        if (FUN_001f9b80(&m->pos, &hero.pos) < D_L01_00161BF8) {
+            if (FUN_001f99c0(m->pos.v.z - hero.pos.f[2]) < 0.7f) {
+                ang = FUN_001f9e90(m->pos.v.x - hero.pos.f[0],
+                                   m->pos.v.y - hero.pos.f[1]);
                 m->pos.v.x = FUN_001f9dc8(ang) * D_L01_00161BF8;
                 m->pos.v.y = FUN_001f9de0(ang) * D_L01_00161BF8;
-                m->pos.v.x += D_0013F350_u.pos.v.x;
-                m->pos.v.y += D_0013F350_u.pos.v.y;
+                m->pos.v.x += hero.pos.f[0];
+                m->pos.v.y += hero.pos.f[1];
             }
         }
         FUN_L00_00258490(m, &tgt, &m->pos, 3, 0.1f, D_L01_00161C00, 600.0f, 1.5707964f);

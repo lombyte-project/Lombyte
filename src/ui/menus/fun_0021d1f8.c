@@ -29,7 +29,7 @@ s32 FUN_0021d1f8(struct MenuScreen *menu) {
     }
     menu->unk50 = 0;
     if (music_stream_state.read_state == 0) {
-        if (start_audio_stream_read(D_001D5CF8[0], disc_table.unk1528.sector, disc_table.unk1528.size) != 0) {
+        if (start_audio_stream_read(D_001D5CF8[0], disc_table.help_text.sector, disc_table.help_text.size) != 0) {
             menu->unk50 = 1;
         } else {
             menu->unk50 = 3;

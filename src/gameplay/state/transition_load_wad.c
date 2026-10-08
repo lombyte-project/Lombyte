@@ -319,9 +319,9 @@ void transition_load_wad(void)
   }
   parse_space_scene_chunk(0);
   D_0015EF60 = D_001940C0.x1C;
-  load(D_001940C0.x1C, disc_table.unk1528.sector, disc_table.unk1528.size);
+  load(D_001940C0.x1C, disc_table.help_text.sector, disc_table.help_text.size);
   D_0015EF64 = D_0015EF60;
-  D_001940C0.x1C = D_0015EF60 + (disc_table.unk1528.size << 11);
+  D_001940C0.x1C = D_0015EF60 + (disc_table.help_text.size << 11);
   for (k = 0; k < 8; k++)
   {
     QueueDmaTransfer(k);

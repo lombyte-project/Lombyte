@@ -40,8 +40,8 @@ s32 FUN_002223f0(struct Menu *menu) {
             return 1;
         }
         if (D_0013C940.pressed & 0x10) {
-            if (menu_system.unk4->unk38 != 0) {
-                menu_system.unk8 = menu_system.unk4->unk38;
+            if (menu_system.current->unk38 != 0) {
+                menu_system.next = menu_system.current->unk38;
             } else if (menu_system.unk124 == 0) {
                 return -1;
             }

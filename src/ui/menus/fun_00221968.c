@@ -15,8 +15,8 @@ extern s32 D_001A0314[];
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 s32 FUN_00221968(struct MenuScreen *arg0) {
     if (D_0013CB04[0] & 0x10) {
-        if (menu_system.unk4->unk38 != 0) {
-            menu_system.unk8 = menu_system.unk4->unk38;
+        if (menu_system.current->unk38 != 0) {
+            menu_system.next = menu_system.current->unk38;
         } else if (menu_system.unk124 == 0) {
             return -1;
         }
@@ -28,8 +28,8 @@ s32 FUN_00221968(struct MenuScreen *arg0) {
         return 1;
     } else if (D_0013CB04[0] & 0x20) {
         menu_system.unkE4 = D_001A0314[0];
-        menu_system.unkF0 = (s32)menu_system.unk4;
-        menu_system.unkC = 3;
+        menu_system.unkF0 = (s32)menu_system.current;
+        menu_system.close_request = 3;
         menu_system.unkF4 = 0xF;
         allocate_voice_for_target_entry(0, 0x11, arg0->unk14);
     }

@@ -6,9 +6,9 @@ extern u32 D_0015F604;
  * The size metadata (12 = non-small under -G8; exact extent unknown) lets
  * GAS expand the compiler's symbolic store via lui $at, matching target. */
 void InitializeTransferCommand(void) {
-    menu_system.unkC = 0;
+    menu_system.close_request = 0;
     menu_system.unk10 = 0;
     D_0015F604 = 3;
-    menu_system.unk0 = 0x2D;
-    menu_system.unk110 = 0;
+    menu_system.state = 0x2D;
+    menu_system.update_count = 0;
 }

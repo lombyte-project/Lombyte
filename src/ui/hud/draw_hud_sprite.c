@@ -1,20 +1,7 @@
 #include "types.h"
+#include "rnc/ui/hud/hud_state.h"
 
 #include "rnc/rendering/dma_tag.h"
-
-struct TexInfo {
-    u8 pad0[6];
-    u8 wlog;
-    u8 hlog;
-};
-
-struct TexBank {
-    u8 pad0[0xC];
-    s32 z;
-    u8 pad10[0x10];
-    s16 *map;
-    struct TexInfo *tex;
-};
 
 struct ScreenOfs {
     u8 pad0[0x10];
@@ -22,22 +9,21 @@ struct ScreenOfs {
     s32 y;
 };
 
-extern struct TexBank D_0019A3E8;
 extern struct ScreenOfs D_0013E500;
 extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 
 void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffc30");
 
 void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
-    struct TexInfo *t;
+    struct HudTexPage *t;
     struct DmaTag *tag;
     u64 *q;
     s32 tw;
     s32 th;
 
-    t = &D_0019A3E8.tex[D_0019A3E8.map[id * 2 + 1]];
-    tw = 1 << t->wlog;
-    th = 1 << t->hlog;
+    t = &hud_state.image_pages[hud_state.frame_refs[id].image_index];
+    tw = 1 << t->width_log2;
+    th = 1 << t->height_log2;
     render_packet_cursor.p->tag = 0x10000005;
     render_packet_cursor.p->addr = 0;
     render_packet_cursor.p->vif0 = 0;
@@ -52,10 +38,10 @@ void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
     q[4] = ((u64)alpha << 24) | 0x7F7F7F;
     q[5] = 0;
     q[6] = (((x << 4) + D_0013E500.x) - 8) | ((u64)(((y << 4) + D_0013E500.y) - 8) << 16) |
-           ((u64)D_0019A3E8.z << 32);
+           ((u64)hud_state.z << 32);
     q[7] = (th << 20) + (tw << 4);
     q[8] = ((((x + w) << 4) + D_0013E500.x) - 8) |
-           ((u64)((((y + h) << 4) + D_0013E500.y) - 8) << 16) | ((u64)D_0019A3E8.z << 32);
+           ((u64)((((y + h) << 4) + D_0013E500.y) - 8) << 16) | ((u64)hud_state.z << 32);
     q[9] = 0;
     render_packet_cursor.p = (struct DmaTag *)((u8 *)render_packet_cursor.p + 0x50);
 }

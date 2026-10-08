@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/hud/hud_state.h"
 #include "rnc/globals.h"
 struct Anim {
     s32 unk0;
@@ -21,12 +22,6 @@ struct Anim {
     u8 pad80[0x10];
 };
 extern struct Anim D_00199B60[];
-struct AnimTable {
-    s32 serial;
-    u8 pad4[0x18];
-    void *defs;
-};
-extern struct AnimTable D_0019A3E8;
 extern void apply_pending_animation(struct Anim *) __asm__("func_001FF418");
 s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
                            s32 b) __asm__("FUN_001ff308");
@@ -42,7 +37,7 @@ s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b)
     if (anim->next_c != c || anim->next_b != b || anim->next_id != id || anim->next_mode != mode ||
         anim->next_fn != fn || anim->next_d != d || anim->next_e != e) {
         anim->next_c = c;
-        anim->serial = D_0019A3E8.serial++;
+        anim->serial = hud_state.serial++;
         anim->next_b = b;
         anim->next_id = id;
         anim->next_fn = fn;

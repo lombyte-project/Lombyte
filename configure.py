@@ -238,10 +238,10 @@ OVERLAY_SN_UNITS = {
     "l03/gameplay/hero/00216648.c",
     "l03/gameplay/hero/0021c668.c",
     "l03/runtime/startup/0022c728.c",
+    "l04/gameplay/entities/001f3038.c",
     "l04/gameplay/entities/0024c4f0.c",
     "l04/gameplay/entities/0029eb20.c",
     "l04/gameplay/entities/002ca420.c",
-    "l04/unclassified_001f3038.c",
     "l05/gameplay/entities/002d1688.c",
     "l05/gameplay/entities/0030d6a0.c",
     "l05/gameplay/hero/00239fc0.c",
@@ -324,6 +324,7 @@ OVERLAY_SN_UNITS = {
     "shared/gameplay/entities/002a09a0.c",
     "shared/gameplay/entities/002a4038.c",
     "shared/gameplay/entities/002aa670.c",
+    "shared/gameplay/entities/002aee30.c",
     "shared/gameplay/entities/002b17d8.c",
     "shared/gameplay/entities/002b2100.c",
     "shared/gameplay/entities/002b3840.c",
@@ -332,6 +333,7 @@ OVERLAY_SN_UNITS = {
     "shared/gameplay/entities/002c8440.c",
     "shared/gameplay/entities/002c8830.c",
     "shared/gameplay/entities/002cfcb8.c",
+    "shared/gameplay/entities/002d6810.c",
     "shared/gameplay/entities/002d7f88.c",
     "shared/gameplay/entities/002f6328.c",
     "shared/gameplay/hero/00221310.c",
@@ -361,8 +363,6 @@ OVERLAY_SN_UNITS = {
     "shared/ui/menus/002497f8.c",
     "shared/ui/menus/0027f448.c",
     "shared/ui/text/001fb470.c",
-    "shared/unclassified_002aee30.c",
-    "shared/unclassified_002d6810.c",
 }
 
 # —— Retail link layout ——

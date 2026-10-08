@@ -45,7 +45,7 @@ s32 FUN_00220e28(struct Menu *m) {
     s32 t;
     s32 v;
 
-    active = menu_system.unk4->owner == m;
+    active = menu_system.current->owner == m;
     if (m->timer != 0) {
         t = m->timer - 1;
         v = t < 5 ? t : 4;
@@ -60,8 +60,8 @@ s32 FUN_00220e28(struct Menu *m) {
         return 1;
     }
     if (D_0013C940.pressed & 0x10) {
-        if (menu_system.unk4->unk38 != 0) {
-            menu_system.unk8 = menu_system.unk4->unk38;
+        if (menu_system.current->unk38 != 0) {
+            menu_system.next = menu_system.current->unk38;
         } else if (menu_system.unk124 == 0) {
             return -1;
         }
@@ -77,7 +77,7 @@ s32 FUN_00220e28(struct Menu *m) {
         allocate_voice_for_target_entry(0, 0x11, m->unk14);
         if (m->opts[m->sel].type & 1) {
             if (D_0016034C != 0) {
-                mode_freeze_init(6, menu_system.unk4);
+                mode_freeze_init(6, menu_system.current);
             } else {
                 fade_to_black(4);
                 m->timer = scale_game_frames(0x10);

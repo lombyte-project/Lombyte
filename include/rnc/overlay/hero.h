@@ -65,8 +65,8 @@ typedef struct {
     char p1A8[0x10];
     int f1B8;
     char p1BC[0x4];
-    int f1C0;
-    int f1C4;
+    int held_buttons;    /* 0x1C0: named so in sound_options_menu.c's view */
+    int pressed_buttons; /* 0x1C4: same; that menu tests 0xD00 and 0x10 on it */
     char p1C8[0xC];
     int f1D4;
     char p1D8[0x4];

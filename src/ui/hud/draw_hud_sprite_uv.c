@@ -1,43 +1,27 @@
 #include "types.h"
+#include "rnc/ui/hud/hud_state.h"
 #include "rnc/rendering/dma_tag.h"
 struct Screen {
     u8 pad[0x10];
     s32 offx;
     s32 offy;
 };
-struct HudIndex {
-    s16 unk0;
-    s16 slot;
-};
-struct HudTex {
-    u8 pad[6];
-    u8 wlog;
-    u8 hlog;
-};
-struct HudState {
-    u8 pad[0xC];
-    s32 z;
-    u8 pad10[0x10];
-    struct HudIndex *index;
-    struct HudTex *tex;
-};
 extern struct Screen D_0013E500;
-extern struct HudState D_0019A3E8;
 extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 
 void draw_hud_sprite_uv(s32 id, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v,
                         s32 alpha) __asm__("FUN_00200258");
 
 void draw_hud_sprite_uv(s32 id, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 alpha) {
-    struct HudState *hud = &D_0019A3E8;
-    struct HudTex *t;
+    struct HudState *hud = &hud_state;
+    struct HudTexPage *t;
     s32 tw;
     s32 th;
     u64 *q;
 
-    t = &hud->tex[hud->index[id].slot];
-    tw = 1 << (t->wlog + 4);
-    th = 1 << (t->hlog + 4);
+    t = &hud->image_pages[hud->frame_refs[id].image_index];
+    tw = 1 << (t->width_log2 + 4);
+    th = 1 << (t->height_log2 + 4);
     render_packet_cursor.p->tag = 0x10000005;
     render_packet_cursor.p->addr = 0;
     render_packet_cursor.p->vif0 = 0;

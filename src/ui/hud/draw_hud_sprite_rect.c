@@ -1,16 +1,12 @@
 #include "types.h"
+#include "rnc/ui/hud/hud_state.h"
 #include "rnc/rendering/dma_tag.h"
 struct Screen {
     u8 pad[0x10];
     s32 offx;
     s32 offy;
 };
-struct HudState {
-    u8 pad[0xC];
-    s32 z;
-};
 extern struct Screen D_0013E500;
-extern struct HudState D_0019A3E8;
 extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 
 void draw_hud_sprite_rect(s32 tex, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 u1, s32 v1,
@@ -32,10 +28,10 @@ void draw_hud_sprite_rect(s32 tex, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v
     q[4] = (u64)alpha << 24 | 0x7F7F7F;
     q[5] = u0 | ((u64)v0 << 16);
     q[6] = (x0 + D_0013E500.offx - 8) | ((u64)(y0 + D_0013E500.offy - 8) << 16) |
-           ((u64)D_0019A3E8.z << 32);
+           ((u64)hud_state.z << 32);
     q[7] = u1 | ((u64)v1 << 16);
     q[8] = (x1 + D_0013E500.offx - 8) | ((u64)(y1 + D_0013E500.offy - 8) << 16) |
-           ((u64)D_0019A3E8.z << 32);
+           ((u64)hud_state.z << 32);
     q[9] = 0;
     render_packet_cursor.p += 5;
 }
