@@ -1,7 +1,7 @@
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 #include "rnc/audio/streaming/complete_stream_buffer_transfer.h"
 
-extern struct Globals_001D5BF0 D_001D5BF0;
 extern u8 D_001D60B8[];
 extern void request_audio_stream_break(s32) __asm__("FUN_002166e8");
 
@@ -20,9 +20,9 @@ s32 complete_stream_buffer_transfer(s32 stream_id) {
             if ((p->unk0 & 2) != 0) {
                 if ((p->unk0 & 4) != 0) {
                     p->unk0 ^= 4;
-                    if (D_001D5BF0.unkCB != 0) {
+                    if (menu_system.unkCB != 0) {
                         request_audio_stream_break(stream_id);
-                        D_001D5BF0.unkCB = 0;
+                        menu_system.unkCB = 0;
                     }
                 }
                 p->unk0 &= -3;

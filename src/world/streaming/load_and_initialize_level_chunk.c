@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 struct Chunk {
     u8 pad0[0x10];
     s32 offset;
@@ -9,7 +10,6 @@ struct Loader {
     s32 sector;
 };
 extern struct Loader D_00137B80;
-extern s32 D_0015ED84;
 extern void calculate_ring_buffer_bounds(s32, struct Chunk **, s32 *) __asm__("func_001FD6E0");
 extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 extern s32 load(struct Chunk *, s32, s32) __asm__("func_00216828");
@@ -24,7 +24,7 @@ void load_and_initialize_level_chunk(void) {
     update_audio_stream_until_idle(1);
     load(chunk, D_00137B80.dest, D_00137B80.sector);
     memcard_restore_game((u8 *)chunk + chunk->offset);
-    D_0015ED84 = 0;
+    current_level_index = 0;
 }
 
 extern __typeof__(load_and_initialize_level_chunk) func_00209370

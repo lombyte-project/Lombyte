@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/rendering/draw_tfrag.h"
+#include "rnc/globals.h"
 
 struct Locals {
     u8 pad0[0x30];
@@ -8,8 +9,6 @@ struct Locals {
     f32 v3C;
 };
 
-extern s32 D_0015EE74;
-extern s32 D_0015EE78;
 extern u8 D_00160E70[];
 extern u8 D_00160E80[];
 extern s32 D_00160EBC;
@@ -44,7 +43,7 @@ void draw_tfrag(void) {
 
     packet = D_00160F00;
     D_00160EBC = packet;
-    D_0015EE74 = D_0015EE78;
+    gs_texture_allocation_cursor = gs_texture_allocation_start;
     packet += 0x10;
     D_00160F00 = packet;
     func_001F21B8(D_00160E70, 1);

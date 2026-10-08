@@ -1,11 +1,11 @@
 #include "types.h"
+#include "rnc/globals.h"
 struct ViewParams {
     f32 ox;
     f32 sx;
     f32 oy;
     f32 sy;
 };
-extern s32 D_0015ED84;
 extern struct ViewParams D_0019E970[];
 void world_to_map_coords(f32 *outx, f32 *outy, s32 view, f32 x, f32 y) __asm__("FUN_00208408");
 
@@ -18,7 +18,7 @@ void world_to_map_coords(f32 *outx, f32 *outy, s32 view, f32 x, f32 y) {
         alt = 1;
     }
     if (view == -1) {
-        view = D_0015ED84;
+        view = current_level_index;
     }
     if (view < 0) {
         view = 0;

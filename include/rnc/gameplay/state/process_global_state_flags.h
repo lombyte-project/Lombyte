@@ -15,9 +15,4 @@ struct GameState {
     u8 pad_20B2[0x3];
 };
 
-struct Globals_001D5BF0 {
-    u8 pad_0[0xE0];
-    s32 unkE0;
-};
-
 #endif /* LOMBYTE_RNC_GAMEPLAY_STATE_PROCESS_GLOBAL_STATE_FLAGS_H */

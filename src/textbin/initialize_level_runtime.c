@@ -1,5 +1,6 @@
 #include "types.h"
 #include "asm.h"
+#include "rnc/globals.h"
 
 void initialize_level_runtime(void) __asm__("FUN_00230f60");
 
@@ -92,8 +93,6 @@ extern s32 D_00160F0C;
 extern s32 D_0015F618;
 extern s32 D_0015F440;
 extern s32 D_0015EE8C;
-extern s32 D_0015EE78;
-extern s32 D_0015EE74;
 extern u8 D_00194180[];
 extern u8 D_001B3AC0[];
 extern u8 D_001B6880[];
@@ -106,8 +105,6 @@ extern s32 D_001B5980[];
 extern u8 D_001CAAC0[];
 extern s32 D_0015FF00;
 extern s32 D_0015F460;
-extern s32 D_0015ED84;
-extern s32 D_0015ED88;
 extern s64 D_00160580;
 extern s64 D_00160588;
 extern u8 D_0019C1C0[];
@@ -195,8 +192,8 @@ void initialize_level_runtime(void) {
     D_0015F618 = 0;
     D_0015F440 = 0;
     init_mem_slots();
-    D_0015EE74 = D_0015EE8C;
-    D_0015EE78 = D_0015EE8C;
+    gs_texture_allocation_cursor = D_0015EE8C;
+    gs_texture_allocation_start = D_0015EE8C;
     FillTransferWords(D_00194180, 0x87654321, 0x10);
     FillTransferWords(D_001B3AC0, -1, 0x800);
     FillTransferWords(D_001B6880, -1, 0xE00);
@@ -246,20 +243,20 @@ void initialize_level_runtime(void) {
                                 header->partCount);
     }
     texture_offsets = (s32 *)(data_base + header->unk4C);
-    language_index = D_0015ED88 - 1;
+    language_index = game_language - 1;
     if (language_index < 0) {
         language_index = 0;
     }
-    upload_mip_texture((s32)texture_offsets + texture_offsets[D_0015ED84 + 1], texture_packet);
+    upload_mip_texture((s32)texture_offsets + texture_offsets[current_level_index + 1], texture_packet);
     D_00160580 = texture_packet[0];
     upload_mip_texture((s32)texture_offsets +
-                           texture_offsets[language_index * 19 + D_0015ED84 + 0x14],
+                           texture_offsets[language_index * 19 + current_level_index + 0x14],
                        texture_packet);
-    texture_cursor = D_0015EE74 + 0x2000;
+    texture_cursor = gs_texture_allocation_cursor + 0x2000;
     allocation_cursor = D_001940C0.buffer + archive_size;
-    D_0015EE74 = texture_cursor;
+    gs_texture_allocation_cursor = texture_cursor;
     D_001940C0.unk18 = (s32)allocation_cursor;
-    D_0015EE78 = texture_cursor;
+    gs_texture_allocation_start = texture_cursor;
     D_00160588 = texture_packet[0];
     clear_blocks_16(D_0019C1C0, 0x100);
     clear_blocks_16(D_0019C3C0, 0x180);
@@ -287,7 +284,7 @@ void initialize_level_runtime(void) {
     D_0013E030.unk50 = 0;
     D_0013E030.unk54 = 0;
     qcopy(&D_001604F0, &D_001604E0);
-    if (D_0015ED84 == 0 || (D_0015ED84 == 1 && D_0013DD43[0] == 0)) {
+    if (current_level_index == 0 || (current_level_index == 1 && D_0013DD43[0] == 0)) {
         D_0013E030.unk58 = 4;
         D_0013E030.unk5C = 2;
     }

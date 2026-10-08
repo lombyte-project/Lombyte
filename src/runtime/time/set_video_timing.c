@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 extern f32 D_0015ED60;
 extern f32 D_0015ED64;
@@ -8,13 +9,12 @@ extern f32 D_0015ED70;
 extern f32 D_0015ED74;
 extern s32 D_0015ED78;
 extern f32 D_0015ED7C;
-extern s32 D_0015ED80;
 
 void set_video_timing(s32 arg0) __asm__("FUN_00214970");
 
 void set_video_timing(s32 arg0) {
     if (arg0 == 0) {
-        D_0015ED80 = 0;
+        pal_mode = 0;
         D_0015ED60 = 1.0f;
         D_0015ED64 = 1.0f;
         D_0015ED68 = 1.0f;
@@ -25,7 +25,7 @@ void set_video_timing(s32 arg0) {
         D_0015ED7C = 0.016666668f;
         return;
     }
-    D_0015ED80 = 1;
+    pal_mode = 1;
     D_0015ED60 = 1.2f;
     D_0015ED64 = 1.44f;
     D_0015ED68 = 0.8333333f;

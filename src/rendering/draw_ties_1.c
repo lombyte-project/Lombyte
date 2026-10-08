@@ -1,7 +1,6 @@
 #include "types.h"
+#include "rnc/globals.h"
 
-extern s32 D_0015EE74;
-extern s32 D_0015EE78;
 extern s32 D_00160F00;
 extern u8 D_00160F30[];
 extern u8 D_00160F40[];
@@ -26,7 +25,7 @@ void draw_ties_1(void) {
     D_00160F68 = current;
     callbackData = D_00160F30;
     current += 0x10;
-    D_0015EE74 = D_0015EE78;
+    gs_texture_allocation_cursor = gs_texture_allocation_start;
     D_00160F00 = current;
     callbackArg = 1;
     func_001F21B8(callbackData, callbackArg);

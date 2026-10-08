@@ -1,5 +1,6 @@
 #include "types.h"
 #include "sda.h"
+#include "rnc/globals.h"
 
 typedef struct {
     s32 unk0;
@@ -41,7 +42,6 @@ extern s32 D_001993C0[];
 extern Suffixes D_001E8680;
 extern char D_00160088[];
 extern char D_00160090[];
-extern s32 D_0015ED88;
 extern Weapon D_001DFFB0[];
 extern s32 D_0015ED98;
 extern u8 D_0013D4C0[];
@@ -114,7 +114,7 @@ void FUN_00216c48(void *arg0, Menu *menu, s32 arg2) {
             p[1] = 's';
         }
         t = D_001DFFB0[e->unkA].unk14;
-        sprintf(num, D_00160090, t / 1000, sfx.s[D_0015ED88 % 6], t % 1000);
+        sprintf(num, D_00160090, t / 1000, sfx.s[game_language % 6], t % 1000);
         sprintf(buf, SCRATCH, num);
     } else {
         sprintf(buf, get_help_message_text(e->unk0));

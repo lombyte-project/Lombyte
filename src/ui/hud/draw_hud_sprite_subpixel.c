@@ -21,7 +21,6 @@ struct HudState {
     struct HudIndex *index;
     struct HudTex *tex;
 };
-extern struct TagPtr D_00160F00;
 extern struct Screen D_0013E500;
 extern struct HudState D_0019A3E8;
 extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
@@ -39,11 +38,11 @@ void draw_hud_sprite_subpixel(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
     t = &hud->tex[hud->index[id].slot];
     tw = 1 << t->wlog;
     th = 1 << t->hlog;
-    D_00160F00.p->tag = 0x10000005;
-    D_00160F00.p->addr = 0;
-    D_00160F00.p->vif0 = 0;
-    D_00160F00.p->vif1 = 0x50000005;
-    q = (u64 *)++D_00160F00.p;
+    render_packet_cursor.p->tag = 0x10000005;
+    render_packet_cursor.p->addr = 0;
+    render_packet_cursor.p->vif0 = 0;
+    render_packet_cursor.p->vif1 = 0x50000005;
+    q = (u64 *)++render_packet_cursor.p;
     q[0] = (u64)0xE800 << 47 | 0x8001;
     q[1] = 0x5353106;
     q[2] = get_frame_texture(id);
@@ -55,7 +54,7 @@ void draw_hud_sprite_subpixel(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
     q[8] = (x + w + D_0013E500.offx - 8) | ((u64)(y + h + D_0013E500.offy - 8) << 16) |
            ((u64)hud->z << 32);
     q[9] = 0;
-    D_00160F00.p += 5;
+    render_packet_cursor.p += 5;
 }
 
 extern __typeof__(draw_hud_sprite_subpixel) func_00200080 __attribute__((alias("FUN_00200080")));

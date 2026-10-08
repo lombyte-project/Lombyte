@@ -1,5 +1,6 @@
 #include "types.h"
 #include "sda.h"
+#include "rnc/globals.h"
 
 typedef struct {
     s32 off;
@@ -30,7 +31,6 @@ extern s32 D_0015EF5C MACRO_ADDR;
 extern s32 D_0015EED8 MACRO_ADDR;
 extern s32 D_0015ED80 MACRO_ADDR;
 extern s32 D_0015ED84 MACRO_ADDR;
-extern s32 D_0015ED88;
 extern u8 D_24135F[];
 typedef struct {
     u8 pad[0x1A4];
@@ -128,7 +128,7 @@ void startlevel(void) {
                 tbl = hdr->loading;
             }
             FlushCache(0);
-            func_0020B618(tbl[D_0015ED88].off + (s32)hdr, hdr->code + (s32)hdr);
+            func_0020B618(tbl[game_language].off + (s32)hdr, hdr->code + (s32)hdr);
             FlushCache(0);
             vu1_init_chain();
             PackDmaTag(0, 0, 0);

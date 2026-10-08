@@ -1,6 +1,6 @@
 #include "sda.h"
+#include "rnc/globals.h"
 extern char D_0013D290[];
-extern int D_0015EEB4;
 extern int D_0015EEB0 MACRO_ADDR;
 
 void save_card_state_wait_for_card(void) __asm__("FUN_002089d0");
@@ -8,7 +8,7 @@ void save_card_state_wait_for_card(void) __asm__("FUN_002089d0");
 void save_card_state_wait_for_card(void) {
     char *s = D_0013D290;
     int v;
-    D_0015EEB4 &= ~0x20;
+    mode_freeze_flags &= ~0x20;
     v = *(int *)(s + 0x1C);
     if (v == 0) {
         D_0015EEB0 = 9;

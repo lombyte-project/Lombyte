@@ -1,6 +1,7 @@
 #include "types.h"
 #include "sda.h"
 #include "qcopy.h"
+#include "rnc/globals.h"
 
 typedef unsigned int u128 __attribute__((mode(TI)));
 
@@ -166,13 +167,10 @@ extern DialoguePlaybackState D_001516D0;
 extern f32 D_0015ED60;
 extern f32 D_0015ED6C;
 extern f32 D_0015ED70 __attribute__((sda));
-extern s32 D_0015ED80;
-extern s32 current_level_index __asm__("D_0015ED84");
 extern u8 D_0015EDB4;
 extern f32 sequence_fade __asm__("D_0015F43C");
 extern f32 D_0015F440;
 extern s32 D_0015F5B0;
-extern s32 game_stage __asm__("D_0015F604");
 extern s32 D_0015F618[1];
 extern ResidentRenderObject *D_0015FF1C;
 extern CameraBlendNode *D_00160034;
@@ -294,7 +292,7 @@ void update_resident_gameplay_state(void) {
         if (sequence_fade < 0.0f) {
             sequence_fade = 0.0f;
         }
-        ticks_per_bank = D_0015ED80 ? 0x50 : 0x60;
+        ticks_per_bank = pal_mode ? 0x50 : 0x60;
         skip = level_render_state.skip;
         if ((D_0013CAE4[0] & 0x50) && scale_ticks(30) < render_sequence.time &&
             sequence_fade == 0.0f) {
@@ -359,7 +357,7 @@ void update_resident_gameplay_state(void) {
                 D_0015F618[0] = 1;
                 return;
             }
-            game_stage = 0;
+            game_mode = 0;
             music_unpause();
             D_0015F618[0] = 1;
             D_001413F5[0] = 0;
@@ -371,7 +369,7 @@ void update_resident_gameplay_state(void) {
             func_001E9440(&level_render_state.unk60, &level_render_state.unk70, 0, 1);
             return;
         }
-        bank_tick_limit = D_0015ED80 ? 0x50 : 0x60;
+        bank_tick_limit = pal_mode ? 0x50 : 0x60;
         if (render_sequence.frame >= bank_tick_limit) {
             parse_space_scene_chunk(++render_sequence.sequence_frame);
         }

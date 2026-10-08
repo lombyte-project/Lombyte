@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 struct MovieStreamDescriptor {
     s32 stream_start;
     s32 stream_size;
@@ -12,8 +13,6 @@ struct SoundEnvironmentFlags {
     u8 pad0[0x6B];
     u8 flags;
 };
-extern s32 D_0015ED80;
-extern s32 D_0015ED88;
 extern s32 D_001940D4[];
 extern struct MovieStreamTables D_00137B80;
 extern struct SoundEnvironmentFlags D_0013E550;
@@ -30,7 +29,7 @@ void play_level_transition_movie(s32 movie_index) {
     s32 stream_start;
     s32 archive_base;
 
-    if (D_0015ED80 != 0) {
+    if (pal_mode != 0) {
         stream_start = D_00137B80.pal[movie_index].stream_start;
         stream_size = D_00137B80.pal[movie_index].stream_size;
     } else {
@@ -40,7 +39,7 @@ void play_level_transition_movie(s32 movie_index) {
     archive_base = D_001940D4[0];
     D_0013E550.flags |= 8;
     play_mpeg_stream(stream_start, stream_size, (archive_base + 0x3F) & ~0x3F,
-                     (archive_base + 0x30003F) & ~0x3F, D_0015ED88);
+                     (archive_base + 0x30003F) & ~0x3F, game_language);
     sceGsSyncV(0);
     wait_for_graphics_pipeline_idle(0, 0);
     sceGsSyncVCallback(count_vsync);

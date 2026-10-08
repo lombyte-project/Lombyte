@@ -3,12 +3,6 @@
 
 #include "types.h"
 
-struct Globals_001D5BF0 {
-    u8 pad_0[0xCB];
-    u8 unkCB;
-    u8 pad_CC[0x3];
-};
-
 struct WordCell {
     s32 unk0;
 };

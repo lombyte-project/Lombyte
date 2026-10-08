@@ -11,7 +11,6 @@ struct ScreenOfs {
     s32 y;
 };
 
-extern struct TagPtr render_packet_cursor __asm__("D_00160F00");
 extern struct ScreenOfs screen_offsets __asm__("D_0013E500");
 extern char textured_quad_header[] __asm__("D_00160840");
 extern s32 convert_float_to_integer(f32) __asm__("func_001FA6D0");

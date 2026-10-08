@@ -1,10 +1,10 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 extern s16 D_001516D8[];
 extern s32 D_00137B80[];
 extern s32 D_001D5CF8[];
 extern u8 D_001D5BF0[];
-extern s32 D_0015ED88;
 extern u8 D_001996D0[];
 
 extern s32 D_0015F6A0;
@@ -35,7 +35,7 @@ int update_menu_help_text_load(char *menu) {
         if (D_001516D8[0] == 0) {
             char *g = D_001D5BF0;
             int *archive = *(int **)(g + 0x108);
-            int *language_entries = (int *)((char *)archive + archive[D_0015ED88]);
+            int *language_entries = (int *)((char *)archive + archive[game_language]);
             int entry_count = *language_entries++;
             int entry_bytes = *language_entries++;
             char *b;

@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 struct MenuFlashingPanel {
     u8 pad0[0x48];
@@ -15,7 +16,6 @@ struct MenuPanelOwner {
     struct MenuFlashingPanel *flash;
 };
 
-extern s32 D_0015ED80;
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
@@ -53,7 +53,7 @@ void draw_menu_flashing_panel(struct MenuPanelOwner *owner) {
     if (x >= 0x200 || x + width < 0) {
         return;
     }
-    if (!(D_0015ED80 != 0 ? y < 0x1C1 : y < 0x1A1) || y + height < 0) {
+    if (!(pal_mode != 0 ? y < 0x1C1 : y < 0x1A1) || y + height < 0) {
         return;
     }
     vu1_add_g_sregister(8, 0);

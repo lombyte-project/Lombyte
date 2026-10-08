@@ -26,7 +26,6 @@ typedef struct {
 
 #include "rnc/rendering/dma_tag.h"
 
-extern struct TagPtr render_packet_cursor __asm__("D_00160F00");
 extern char billboard_quad_header[] __asm__("D_001608E0");
 extern u8 camera_position[] __asm__("D_00187080");
 extern BillboardViewContext view_context __asm__("D_0018CD00");

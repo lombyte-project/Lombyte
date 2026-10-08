@@ -1,5 +1,6 @@
 #include "rnc/ui/map/map_state.h"
 #include "types.h"
+#include "rnc/globals.h"
 
 struct Pad {
     u8 pad0[0x1C4];
@@ -60,7 +61,6 @@ extern u8 *D_001D5BF8[];
 extern u8 D_001CF678[];
 extern u8 D_001CF418[];
 extern s32 *D_001601E0 __attribute__((sda));
-extern s32 D_0015ED84;
 extern u8 D_0013D4E1[];
 extern u8 D_0013DD58[];
 extern u8 D_00141EC0[];
@@ -182,7 +182,7 @@ s32 draw_map_screen(struct Screen *screen) {
         if (buf != 0) {
             base = (u8 *)D_001A00F0.hdr;
             a = base + hdr->unk0 + 8;
-            if (D_001A00F0.cur == D_0015ED84) {
+            if (D_001A00F0.cur == current_level_index) {
                 compose_bitmap_from_mask(pal, pix, pal, D_001A00F0.unkC);
             } else {
                 if (D_0013DD58[D_001A00F0.cur] != 0) {
@@ -230,7 +230,7 @@ s32 draw_map_screen(struct Screen *screen) {
         if (pick != -1) {
             next = pick_next_map();
             if (next != -1) {
-                k = (D_0015ED84 + D_001A00F0.unk230 == 0) ? 0 : 0x100;
+                k = (current_level_index + D_001A00F0.unk230 == 0) ? 0 : 0x100;
                 if (k == next) {
                     stash_receive_data(D_001A00F0.slot[pick], D_001A00F0.unk22C, 0,
                                        D_001A00F0.unk234, 0);

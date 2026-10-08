@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 typedef struct {
     s32 port;
@@ -60,7 +61,6 @@ extern char D_0013D270[];
 extern u8 D_0014EED0[];
 extern u8 D_001506D0[];
 extern s16 D_001516D8[];
-extern s32 D_0015ED84;
 extern s32 D_0015EE90;
 extern char D_0015FE98[];
 extern char D_0015FEA0[];
@@ -416,7 +416,7 @@ void memcard_update_state(void) {
                     } else {
                         MC.size = 0x3C04;
                     }
-                    MC.buf = &D_0015ED84;
+                    MC.buf = &current_level_index;
                     break;
                 case 14: {
                     s32 n = GetDmaPacketSpanBytes(D_001A04C0);

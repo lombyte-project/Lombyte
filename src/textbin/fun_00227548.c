@@ -12,7 +12,7 @@ struct GraphicsSetupRecord {
     f32 first_depth;
     u128 direction;
 };
-extern u8 *render_packet_cursor __asm__("D_00160F00");
+extern u8 *render_packet_bytes __asm__("D_00160F00");
 struct VideoModeState {
     s32 v;
 };
@@ -39,14 +39,14 @@ void submit_graphics_setup_command_stream(u8 *command_stream) {
 
     append_fullscreen_setup_strips();
     record = (struct GraphicsSetupRecord *)command_stream;
-    *(u32 *)(render_packet_cursor + 0) = 0x30000007;
-    *(u32 *)(render_packet_cursor + 4) =
+    *(u32 *)(render_packet_bytes + 0) = 0x30000007;
+    *(u32 *)(render_packet_bytes + 4) =
         (u32)(pal_mode.v != 0 ? pal_graphics_setup_packet : ntsc_graphics_setup_packet);
-    *(u32 *)(render_packet_cursor + 8) = 0x13000000;
-    *(u32 *)(render_packet_cursor + 12) = 0x50000007;
+    *(u32 *)(render_packet_bytes + 8) = 0x13000000;
+    *(u32 *)(render_packet_bytes + 12) = 0x50000007;
     /* Remaining vector components are filled from each setup record. */
     second_vector[1] = first_vector[1] = second_vector[0] = first_vector[0] = 0.0f;
-    render_packet_cursor += 16;
+    render_packet_bytes += 16;
     while (record->command_count != 0) {
         command_stream += 0x20;
         *(u128 *)direction = record->direction;

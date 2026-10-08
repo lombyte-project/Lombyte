@@ -5,7 +5,6 @@ struct Screen {
     s32 offx;
     s32 offy;
 };
-extern struct TagPtr D_00160F00;
 extern struct Screen D_0013E500;
 
 void draw_hud_rect(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) __asm__("FUN_00200c80");
@@ -13,11 +12,11 @@ void draw_hud_rect(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) __asm__
 void draw_hud_rect(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) {
     u64 *q;
 
-    D_00160F00.p->tag = 0x10000003;
-    D_00160F00.p->addr = 0;
-    D_00160F00.p->vif0 = 0;
-    D_00160F00.p->vif1 = 0x50000003;
-    q = (u64 *)D_00160F00.p++;
+    render_packet_cursor.p->tag = 0x10000003;
+    render_packet_cursor.p->addr = 0;
+    render_packet_cursor.p->vif0 = 0;
+    render_packet_cursor.p->vif1 = 0x50000003;
+    q = (u64 *)render_packet_cursor.p++;
     q[2] = (u64)0x8800 << 47 | 1;
     q[3] = 0x4410;
     q[4] = 0x41;
@@ -33,7 +32,7 @@ void draw_hud_rect(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) {
         q[7] = ((x1 << 4) + D_0013E500.offx - 0x10) |
                ((u64)((y1 << 4) + D_0013E500.offy - 0x10) << 16) | (u64)0xFFFFF000 << 24;
     }
-    D_00160F00.p += 3;
+    render_packet_cursor.p += 3;
 }
 
 extern __typeof__(draw_hud_rect) func_00200C80 __attribute__((alias("FUN_00200c80")));

@@ -2,6 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/globals.h"
 
 struct LevelOverlayState {
     u8 pad_0[0xD4];
@@ -25,7 +26,6 @@ extern struct LevelOverlayState D_0013D290;
 extern u8 D_0013DD43[];
 extern struct LevelRenderState level_render_state __asm__("D_0013E030");
 extern struct LevelDisplayState screen_offsets __asm__("D_0013E500");
-extern s32 current_level_index __asm__("D_0015ED84");
 extern s32 game_frame_counter __asm__("D_0015F438");
 extern f32 sequence_fade __asm__("D_0015F43C");
 extern s32 D_0015F620;

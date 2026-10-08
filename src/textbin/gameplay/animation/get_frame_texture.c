@@ -2,6 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/globals.h"
 
 struct FrameTextureRef {
     s16 palette_index;
@@ -30,7 +31,6 @@ struct GifTexturePacket {
     u16 image_base;
 };
 
-extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74");
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern s32 pending_texture_upload_count __asm__("D_0015F458");
 extern struct GifTexturePacket pending_texture_uploads[] __asm__("D_0018D040");

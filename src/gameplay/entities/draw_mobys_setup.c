@@ -1,10 +1,9 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 extern u8 D_00100080[];
 extern u8 D_0010FAA0[];
 extern u16 D_0010FA90[];
-extern s32 D_0015EE74;
-extern s32 D_0015EE78;
 extern s32 D_0015F620;
 extern s32 D_0015F638;
 extern s32 D_0015F63C;
@@ -32,7 +31,7 @@ void draw_mobys_setup(void) {
     D_0015FF0C = current;
     callbackArg = 1;
     current += 0x10;
-    D_0015EE74 = D_0015EE78;
+    gs_texture_allocation_cursor = gs_texture_allocation_start;
     D_00160F00 = current;
     func_001F21B8(D_0015FED0, callbackArg);
     D_0015FF40 = 0;

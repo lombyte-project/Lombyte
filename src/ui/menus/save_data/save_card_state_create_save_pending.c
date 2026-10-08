@@ -1,6 +1,6 @@
 #include "sda.h"
+#include "rnc/globals.h"
 extern char D_0013D290[];
-extern int D_0015EEB0;
 
 void save_card_state_create_save_pending(void) __asm__("FUN_00208d20");
 
@@ -9,7 +9,7 @@ void save_card_state_create_save_pending(void) {
     if (*(int *)(s + 0xD4) == 2 && *(int *)(s + 0xDC) < 0) {
         *(int *)(s + 0xDC) = 9;
         *(int *)(s + 0xE0) = 0;
-        D_0015EEB0 = 0xF;
+        mode_freeze_state = 0xF;
     }
 }
 

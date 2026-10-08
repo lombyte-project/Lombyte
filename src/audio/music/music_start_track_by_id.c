@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
+#include "rnc/globals.h"
 
 extern u8 D_0013A664[];
-extern s32 D_0015ED88;
 // D_002169C0 is a code address retail passes as a pointer, not a data symbol;
 // config/us/undefined_syms.txt binds its absolute value so this extern links.
 extern u8 D_002169C0[];
@@ -33,7 +33,7 @@ void music_start_track_by_id(s32 track, s32 track_flags, s32 volume) {
     } else if (track >= 0x2710) {
         music_start_track_10000(track, track_flags, volume);
     } else {
-        handle = *((s32 *)((u8 *)D_0013A664 + track * 0x250) + D_0015ED88);
+        handle = *((s32 *)((u8 *)D_0013A664 + track * 0x250) + game_language);
         if (handle != 0) {
             if (D_001516D0.secondary_handle == 0) {
                 *(u32 *)&D_001516D0.secondary_handle = 0xFFFFFFFF;

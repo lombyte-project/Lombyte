@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 struct NO;
 struct Own;
@@ -63,11 +64,9 @@ struct Ent {
 };
 
 extern struct GameState D_001D5BF0;
-extern s32 D_0015EEB4;
 extern s16 D_001516D8[];
 extern s32 D_0015F5B8;
 extern s32 D_0015F618;
-extern s32 D_0015F604;
 extern struct Ent *D_001D5D90[];
 
 extern void func_00218D10(void);
@@ -109,13 +108,13 @@ void FUN_002192a8(void) {
         D_001D5BF0.unk10C = 0;
         D_001D5BF0.unk104 = 0;
         D_001D5BF0.unk10 = 0;
-        D_0015F604 = 0;
+        game_mode = 0;
         return;
     }
     if (D_001D5BF0.state == 0 || D_001D5BF0.state == 0x2D) {
         func_00218F98();
     }
-    if (D_0015EEB4 & 1) {
+    if (mode_freeze_flags & 1) {
         mode_freeze_init(3, D_001D5BF0.owner);
         return;
     }

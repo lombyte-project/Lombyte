@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 struct Globals_00137B80 {
     u8 pad_0[0x12C0];
     s32 unk12C0;
@@ -8,8 +9,6 @@ struct Globals_00137B80 {
 extern u8 D_0010E4C0[];
 extern void count_vsync() __asm__("FUN_0012f1c8");
 extern struct Globals_00137B80 D_00137B80;
-extern s32 D_0015ED80;
-extern s32 D_0015ED88;
 extern s32 D_0015EE90;
 extern u8 D_0015FA88[];
 extern s32 D_00160F0C;
@@ -92,10 +91,10 @@ void init_once(void) {
     wad_get_sectors(0x121, 1, buf);
     FlushCache(0);
     flag = buf[0x33] != 0x4E;
-    D_0015ED80 = flag;
+    pal_mode = flag;
     D_0015EE90 = flag;
     memcard_get_name(buf);
-    sceGsResetGraph(0, 1, D_0015ED80 ? 3 : 2, 0);
+    sceGsResetGraph(0, 1, pal_mode ? 3 : 2, 0);
     init_dma();
     set_pal_mode();
     vu0_load_micro_program(D_0010E4C0);
@@ -143,22 +142,22 @@ void init_once(void) {
     lang = sceScfGetLanguage();
     switch (lang) {
     case 2:
-        D_0015ED88 = 2;
+        game_language = 2;
         return;
     case 4:
-        D_0015ED88 = 3;
+        game_language = 3;
         return;
     case 3:
-        D_0015ED88 = 4;
+        game_language = 4;
         return;
     case 5:
-        D_0015ED88 = 5;
+        game_language = 5;
         return;
     default:
         DebugPrint(D_001E7B10, lang);
         /* fallthrough */
     case 1:
-        D_0015ED88 = 0;
+        game_language = 0;
         return;
     }
 }

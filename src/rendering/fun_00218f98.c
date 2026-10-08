@@ -2,6 +2,7 @@
 #include "sda.h"
 #include "qcopy.h"
 #include "qzero.h"
+#include "rnc/globals.h"
 
 struct M {
     s32 f0;
@@ -51,7 +52,6 @@ extern u8 D_0019C160[];
 extern s32 D_001940C0[];
 extern s32 D_0015F438;
 extern s32 D_00160F0C;
-extern s32 D_0015EE78;
 extern void FUN_0023a2c0();
 extern struct S D_00186F40;
 extern struct O2 *D_001D5D90[];
@@ -93,7 +93,7 @@ void FUN_00218f98(void) {
     D_001D5BF0.f10C = d;
     func_00225AC0__void(1);
     vu1_init_chain();
-    D_001D5BF0.f18 = D_0015EE78;
+    D_001D5BF0.f18 = gs_texture_allocation_start;
     if (D_001D5BF0.f4 != 0) {
         for (i = 0; i < 14; i++) {
             struct O2 *o = (struct O2 *)create_menu_preview_moby(0x472);

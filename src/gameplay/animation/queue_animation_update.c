@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 struct Anim {
     s32 unk0;
     s32 flags;
@@ -19,7 +20,6 @@ struct Anim {
     s32 unk7C;
     u8 pad80[0x10];
 };
-extern s32 D_0015F604;
 extern struct Anim D_00199B60[];
 struct AnimTable {
     s32 serial;
@@ -36,7 +36,7 @@ s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b)
     s32 mode = chan & 0xFFF0;
     struct Anim *anim = &D_00199B60[slot];
 
-    if (D_0015F604 == 5 && slot != 2 && slot != 0) {
+    if (game_mode == 5 && slot != 2 && slot != 0) {
         return 0;
     }
     if (anim->next_c != c || anim->next_b != b || anim->next_id != id || anim->next_mode != mode ||

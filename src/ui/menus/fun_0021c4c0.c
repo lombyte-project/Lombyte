@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 struct PadState {
     u8 pad0[0x1C0];
@@ -40,7 +41,6 @@ extern struct PadState D_0013C940;
 extern struct MenuSys D_001D5BF0;
 extern struct GameProgress D_001A00F0;
 extern u8 D_0013DD40[];
-extern s32 D_0015ED84;
 extern u32 D_001CF874[];
 extern u32 D_001CF758[];
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
@@ -70,7 +70,7 @@ s32 FUN_0021c4c0(struct Menu *m) {
     }
     if (D_0013C940.pressed & 8) {
         for (i = D_001A00F0.level + 1; i < 20; i++) {
-            if (D_0013DD40[i] != 0 || D_0015ED84 == i) {
+            if (D_0013DD40[i] != 0 || current_level_index == i) {
                 D_001A00F0.level = i;
                 break;
             }
@@ -78,7 +78,7 @@ s32 FUN_0021c4c0(struct Menu *m) {
     }
     if (D_0013C940.pressed & 4) {
         for (i = D_001A00F0.level - 1; i >= 0; i--) {
-            if (D_0013DD40[i] != 0 || D_0015ED84 == i) {
+            if (D_0013DD40[i] != 0 || current_level_index == i) {
                 D_001A00F0.level = i;
                 break;
             }

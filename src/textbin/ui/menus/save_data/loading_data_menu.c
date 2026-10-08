@@ -2,6 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/globals.h"
 
 struct LoadMenuControllerState {
     u8 pad_0[0x1B4];
@@ -59,12 +60,9 @@ extern struct LoadMenuControllerState controller_state __asm__("D_0013C940");
 extern struct LoadMenuMemoryCardState memory_card_state __asm__("D_0013D290");
 extern s16 D_0013E05A[];
 extern struct LoadMenuMixerState mixer_state __asm__("D_0013E550");
-extern s32 current_level_index __asm__("D_0015ED84");
 extern s32 music_volume __asm__("D_0015EDEC");
 extern s32 sound_volume __asm__("D_0015EDF0");
 extern s32 selected_save_slot __asm__("D_0015EE34");
-extern s32 mode_freeze_state __asm__("D_0015EEB0");
-extern s32 mode_freeze_flags __asm__("D_0015EEB4");
 extern struct LoadMenuState menu_state __asm__("D_001D5BF0");
 extern void InitializeGlobalStateEntry(s32);
 extern s32 mode_freeze_init() __asm__("func_001FBAB8");

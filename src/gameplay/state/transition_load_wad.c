@@ -161,24 +161,24 @@ extern void FlushCache(s32);
 extern void QueueDmaTransfer(s32);
 extern void FUN_00120558(s32, s32);
 extern s32 FUN_001e9b10(u8 *);
-extern void FUN_001f2c60(void);
+extern void init_view_context(void) __asm__("FUN_001f2c60");
 extern void FUN_001f2d98(void);
 extern volatile char func_001F97A0(s32);
-extern void FUN_002015d8(void);
-extern void FUN_002026c8(u8 *, u8 *, u8 *, s32);
-extern void FUN_00202800(u8 *, s32);
-extern void FUN_002028e0(u8 *);
-extern void FUN_00203120(u8 *, s32, u8 *);
-extern void FUN_00203640(u8 *, u8 *, u8 *, s32);
+extern void init_mem_slots(void) __asm__("FUN_002015d8");
+extern void parse_particle_textures(u8 *, u8 *, u8 *, s32) __asm__("FUN_002026c8");
+extern void unpack_point_records(u8 *, s32) __asm__("FUN_00202800");
+extern void relocate_sky_definition(u8 *) __asm__("FUN_002028e0");
+extern void upload_texture_images(u8 *, s32, u8 *) __asm__("FUN_00203120");
+extern void register_moby_class(u8 *, u8 *, u8 *, s32) __asm__("FUN_00203640");
 extern void func_00203730(u8 *, u8 *, u8 *, s32);
 extern void func_00203B08(u8 *, u8 *, u8 *, u8 *, s32);
 extern void func_002040E0(u8 *, u8 *);
-extern void FUN_002049f0(s32);
+extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
 extern s32 FUN_0020b618(u8 *, u8 *);
-extern void FUN_00216788(u8 *, s32, s32);
-extern volatile unsigned int func_00216828(s32, s32, s32);
-extern void FUN_002168a8(s32);
-extern void FUN_002335d0(void);
+extern void start_audio_stream_read(u8 *, s32, s32) __asm__("FUN_00216788");
+extern volatile unsigned int load(s32, s32, s32) __asm__("func_00216828");
+extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
+extern void vu1_init_chain(void) __asm__("FUN_002335d0");
 extern s32 sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(void *, u8 *);
 
@@ -216,7 +216,7 @@ void transition_load_wad(void)
   D_0015EF58 = 0;
   i = 0;
   CalculateDmaTransferAddress();
-  FUN_002015d8();
+  init_mem_slots();
   D_00160F0C = 0x100000;
   D_0015EE8C = 0x2C0000;
   D_0015EE78 = 0x2C0000;
@@ -225,16 +225,16 @@ void transition_load_wad(void)
   FillTransferWords(D_001B3AC0, -1, k_800);
   FillTransferWords(D_001B6880, -1, 0xE00);
   FillTransferWords(D_001B6180, 0, 0xE0);
-  FUN_001f2c60();
+  init_view_context();
   FUN_001f2d98();
-  FUN_002335d0();
-  FUN_00216788(D_001940C0.hdr + 0x1000000, D_00137B80.x14E8, D_00137B80.x14EC);
-  FUN_002168a8(1);
+  vu1_init_chain();
+  start_audio_stream_read(D_001940C0.hdr + 0x1000000, D_00137B80.x14E8, D_00137B80.x14EC);
+  update_audio_stream_until_idle(1);
   FlushCache(0);
   size = FUN_0020b618(D_001940C0.hdr + 0x1000000, D_001940C0.hdr);
   FlushCache(0);
   hdr = (WadHeader *) D_001940C0.hdr;
-  FUN_00203120(((u8 *) hdr) + hdr->x0, hdr->x8, ((u8 *) hdr) + hdr->xC);
+  upload_texture_images(((u8 *) hdr) + hdr->x0, hdr->x8, ((u8 *) hdr) + hdr->xC);
   t = ((s64) ((D_0015EE8C + hdr->x70) >> 8)) | 0x1D308000;
   u = (((s64) ((D_0015EE8C + hdr->x74) >> 8)) << 37) | (((s64) 0xB800) << 19);
   data = ((u8 *) hdr) + hdr->data;
@@ -286,14 +286,14 @@ void transition_load_wad(void)
     while (k < D_001603EC);
   }
   func_002040E0(data + hdr->x10, ((u8 *) hdr) + hdr->x34);
-  FUN_002028e0(data + hdr->x14);
+  relocate_sky_definition(data + hdr->x14);
   c20 = (WadClass20 *) (((u8 *) hdr) + hdr->x1C);
   D_0015FF00 = 0;
   D_00160F4C = 0;
   D_001603CC = 0;
   for (k = 0; k < hdr->n18; k++)
   {
-    FUN_00203640((c20->offset != 0) ? (data + c20->offset) : (0), ((u8 *) hdr) + hdr->x3C, c20->x10, c20->x4);
+    register_moby_class((c20->offset != 0) ? (data + c20->offset) : (0), ((u8 *) hdr) + hdr->x3C, c20->x10, c20->x4);
     c20++;
   }
 
@@ -312,10 +312,10 @@ void transition_load_wad(void)
   }
 
   D_0015F460 = (s32) (data + hdr->x68);
-  FUN_00202800(((u8 *) hdr) + hdr->x5C, hdr->x58);
+  unpack_point_records(((u8 *) hdr) + hdr->x5C, hdr->x58);
   new_var3 = data + hdr->x64;
   new_var4 = hdr->x54;
-  FUN_002026c8(((u8 *) hdr) + (new_var = hdr->x6C), new_var3, ((u8 *) hdr) + new_var4, hdr->x50);
+  parse_particle_textures(((u8 *) hdr) + (new_var = hdr->x6C), new_var3, ((u8 *) hdr) + new_var4, hdr->x50);
   sceGsSetDefLoadImage(li, (D_0015EE74 << 8) >> 16, 4, 0, 0, 0, 0x100, 0x80);
   FlushCache(0);
   sceGsExecLoadImage(li, data + hdr->x84);
@@ -345,9 +345,9 @@ void transition_load_wad(void)
     }
     while ((cnt < 0x46) && (snd->size != 0));
   }
-  FUN_002049f0(0);
+  parse_space_scene_chunk(0);
   D_0015EF60 = D_001940C0.x1C;
-  func_00216828(D_001940C0.x1C, D_00137B80.x1528, D_00137B80.x152C);
+  load(D_001940C0.x1C, D_00137B80.x1528, D_00137B80.x152C);
   D_0015EF64 = D_0015EF60;
   D_001940C0.x1C = D_0015EF60 + (D_00137B80.x152C << 11);
   for (k = 0; k < 8; k++)

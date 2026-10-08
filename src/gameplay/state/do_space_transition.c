@@ -1,5 +1,6 @@
 #include "rnc/gameplay/state/do_space_transition.h"
 #include "sda.h"
+#include "rnc/globals.h"
 
 extern struct SaveSlotTable D_0013D290;
 extern struct Globals_0013DD40 D_0013DD40;
@@ -8,12 +9,10 @@ extern struct Globals_0013E030 D_0013E030;
 extern struct MusicStreamState D_001516D0;
 extern s32 D_0015ED5C MACRO_ADDR;
 extern s32 D_0015ED84 MACRO_ADDR;
-extern s32 D_0015ED88;
 extern s16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A MACRO_ADDR;
 extern s32 D_0015F438 MACRO_ADDR;
 extern s32 D_0015F600 MACRO_ADDR;
-extern s32 D_0015F604;
 extern s32 D_0015F618 MACRO_ADDR;
 extern struct Globals_0015F634 *D_0015F634;
 extern struct Globals_0018CD00 D_0018CD00;
@@ -63,12 +62,12 @@ void do_space_transition(void) {
     s32 ok;
     s32 done;
 
-    lvl = D_0015ED88 - 1;
+    lvl = game_language - 1;
     if (lvl < 0) {
         lvl = 0;
     }
     D_00194100.unk10 |= 0x80000000;
-    D_0015F604 = 6;
+    game_mode = 6;
     D_0013E030.unk26 = 0;
     if (D_0013DD40.unk8 != 0 || D_0015F600 >= 8) {
         D_0013E030.unk26 = 1;

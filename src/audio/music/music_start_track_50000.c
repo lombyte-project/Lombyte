@@ -1,12 +1,12 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
+#include "rnc/globals.h"
 
 struct Tracks {
     u8 pad[0xF00];
     s32 h[1][6];
 };
 extern struct Tracks D_00137B80;
-extern s32 D_0015ED88;
 extern struct MusicStreamState D_001516D0;
 extern u8 D_002169C0[];
 extern s32 snd_play_vag_stream_by_loc_ex_cb() __asm__("func_0012EC08");
@@ -16,7 +16,7 @@ void music_start_track_50000(s32 track, s32 flags, s32 volume) __asm__("FUN_0021
 void music_start_track_50000(s32 track, s32 flags, s32 volume) {
     s32 handle;
 
-    handle = D_00137B80.h[track - 50000][D_0015ED88];
+    handle = D_00137B80.h[track - 50000][game_language];
     if (handle != 0) {
         if (D_001516D0.secondary_handle == 0) {
             *(u32 *)&D_001516D0.secondary_handle = 0xFFFFFFFF;

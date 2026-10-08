@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 /* Draws a vertical text menu: picks the font size from the flags, sizes
    the rows, then prints each item (and its optional subtitle) with the
@@ -36,7 +37,6 @@ typedef struct {
 
 extern MenuState *D_001D5BF4[];
 extern u8 D_0013D408[];
-extern s32 D_0015ED88;
 extern u8 D_001DF050[];
 extern u8 D_001DF3F0[];
 extern u8 D_001DF790[];
@@ -139,7 +139,7 @@ s32 draw_menu_text_list(Menu *menu) {
                 draw_menu_selection_marker(0xF, box.s[5] + 9, D_0013D408[i] != 0);
             }
             if (menu->flags & 0x800) {
-                draw_menu_selection_marker(0xF, box.s[5] + 9, D_0015ED88 == menu->items[i].id);
+                draw_menu_selection_marker(0xF, box.s[5] + 9, game_language == menu->items[i].id);
             }
             box.s[5] += box.s[7];
             if (menu->items[i].subtext != 0) {

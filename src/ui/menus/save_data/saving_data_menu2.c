@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 typedef struct {
     u8 pad0[0x1A4];
@@ -68,14 +69,11 @@ typedef struct __attribute__((packed)) {
 extern PadState D_0013C940;
 extern SaveState D_0013D290;
 extern volatile u16 D_0013E05A[];
-extern s32 D_0015ED84;
 extern s32 D_0015ED98;
 extern s32 D_0015EE20;
 extern s32 D_0015EE24;
 extern s32 D_0015EE34;
 extern Unaligned64 D_0015EE98[1];
-extern s32 D_0015EEB0;
-extern s32 D_0015EEB4;
 extern s32 D_001D2640[];
 extern SubMenu D_001D4E38[];
 extern SubMenu D_001D4F98[];
@@ -124,12 +122,12 @@ s32 saving_data_menu2(Widget *w) {
         }
         D_001D5BF0.saving = 0;
         if (D_0013D290.unkE4 != 0) {
-            D_0015EEB4 |= 0x80;
+            mode_freeze_flags |= 0x80;
             mode_freeze_init(3, D_001D5BF0.page);
             return 0;
         }
         *(s32 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x24) = D_0015ED98;
-        *(s32 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x20) = D_0015ED84;
+        *(s32 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x20) = current_level_index;
         *(s32 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x2C) = D_0015EE24;
         *(Unaligned64 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x30) = D_0015EE98[0];
         *(s32 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x28) = D_0015EE20;
@@ -148,7 +146,7 @@ s32 saving_data_menu2(Widget *w) {
             return -1;
         }
     }
-    if (D_0015EEB0 != 0x10 && D_0015EEB0 != 1) {
+    if (mode_freeze_state != 0x10 && mode_freeze_state != 1) {
         D_001D5BF0.next = D_001D5BF0.page->back;
         return 0;
     }
@@ -183,8 +181,8 @@ s32 saving_data_menu2(Widget *w) {
         }
     } else if (pad & 0x20) {
         D_0013D290.unkF4 = 0;
-        fl = D_0015EEB4 & ~2;
-        D_0015EEB4 = fl & ~4;
+        fl = mode_freeze_flags & ~2;
+        mode_freeze_flags = fl & ~4;
         load_and_initialize_level_chunk();
         InitializeGlobalStateEntry(0);
         D_0013E05A[0] = 1;

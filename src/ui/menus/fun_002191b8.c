@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 struct Obj {
     u8 pad0[0xC];
     void (*release)(struct Obj *, s32);
@@ -17,7 +18,6 @@ struct GameState {
     s32 progress;
 };
 extern struct GameState D_001D5BF0;
-extern s32 D_0015EE78;
 extern s32 D_001D5D90[];
 extern s32 delete_moby(s32) __asm__("FUN_00225530");
 void FUN_002191b8(void) {
@@ -37,7 +37,7 @@ void FUN_002191b8(void) {
         }
         D_001D5BF0.owner = 0;
     }
-    D_0015EE78 = D_001D5BF0.unk18;
+    gs_texture_allocation_start = D_001D5BF0.unk18;
     for (j = 0; j < 14; j++) {
         D_001D5D90[j] = delete_moby(D_001D5D90[j]);
     }

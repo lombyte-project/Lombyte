@@ -1,6 +1,7 @@
 #include "types.h"
 
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/globals.h"
 struct SkyVisibilityEntry {
     u64 flags;
     u8 pad8[8];
@@ -15,8 +16,6 @@ extern struct DmaTag *D_00160F00;
 extern struct DmaTag *D_00160470;
 extern u8 D_00160450[];
 extern struct SkyVisibilityList *D_0016045C;
-extern s32 D_0015EE74;
-extern s32 D_0015EE78;
 extern s32 D_0015F458;
 extern void func_001F21B8(void *, s32);
 
@@ -33,7 +32,7 @@ void setup_sky_gif_paging(void) {
     D_00160F00 = tag;
     func_001F21B8(D_00160450, 1);
     visibility_list = D_0016045C;
-    D_0015EE74 = D_0015EE78;
+    gs_texture_allocation_cursor = gs_texture_allocation_start;
     D_0015F458 = 0;
     for (entry_index = 0; entry_index < visibility_list->count; entry_index++) {
         visibility_list->points[entry_index].flags = 0;

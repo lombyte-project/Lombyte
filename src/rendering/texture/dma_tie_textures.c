@@ -1,14 +1,13 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/globals.h"
 struct TexState {
     u8 pad0[0x14];
     s32 count;
     s32 enabled;
 };
-extern struct TagPtr D_00160F00;
 extern struct TagPtr D_00160F68;
 extern struct TexState D_0018A2B0;
-extern s32 D_0015EE74;
 extern s32 D_00160F74;
 extern char D_001E8A50[];
 extern s32 FUN_002370c0(s32);
@@ -20,14 +19,14 @@ void dma_tie_textures(void) {
     struct DmaTag *tag;
     s32 size;
 
-    tag = D_00160F00.p;
-    D_00160F00.p = tag + 1;
+    tag = render_packet_cursor.p;
+    render_packet_cursor.p = tag + 1;
     D_00160F68.p->tag = 0x20000000;
-    D_00160F68.p->addr = (u32)D_00160F00.p;
+    D_00160F68.p->addr = (u32)render_packet_cursor.p;
     D_00160F68.p->vif0 = 0;
     D_00160F68.p->vif1 = 0;
     if (D_0018A2B0.enabled != 0 && D_0018A2B0.count != 0) {
-        size = FUN_002370c0(D_0015EE74);
+        size = FUN_002370c0(gs_texture_allocation_cursor);
         vu1_tex_flush();
         if (size > 0x400000) {
             DebugPrint(D_001E8A50);
@@ -36,13 +35,13 @@ void dma_tie_textures(void) {
             D_00160F74 = size;
         }
     }
-    D_00160F00.p->tag = 0x20000000;
-    D_00160F00.p->addr = (u32)(D_00160F68.p + 1);
-    D_00160F00.p->vif0 = 0;
-    D_00160F00.p->vif1 = 0;
-    D_00160F00.p++;
+    render_packet_cursor.p->tag = 0x20000000;
+    render_packet_cursor.p->addr = (u32)(D_00160F68.p + 1);
+    render_packet_cursor.p->vif0 = 0;
+    render_packet_cursor.p->vif1 = 0;
+    render_packet_cursor.p++;
     tag->tag = 0x20000000;
-    tag->addr = (u32)D_00160F00.p;
+    tag->addr = (u32)render_packet_cursor.p;
     tag->vif0 = 0;
     tag->vif1 = 0;
 }

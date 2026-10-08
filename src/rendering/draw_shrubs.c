@@ -1,7 +1,7 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 extern volatile s32 D_0015EE74;
-extern s32 D_0015EE78;
 extern u8 D_001603B0[];
 extern u8 D_001603C0[];
 extern s32 D_001603F0;
@@ -26,7 +26,7 @@ void draw_shrubs(void) {
 
     packet = D_00160F00;
     D_001603F0 = packet;
-    D_0015EE74 = D_0015EE78;
+    D_0015EE74 = gs_texture_allocation_start;
     packet += 0x10;
     D_00160F00 = packet;
     func_001F21B8(D_001603B0, 1);

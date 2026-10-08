@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 struct UiGlobals {
     u8 pad_0[0xC];
     s32 unkC;
@@ -9,7 +10,6 @@ struct UiGlobals {
 };
 
 extern s32 D_0013D560[];
-extern s32 D_0015ED84;
 extern struct UiGlobals D_001A00F0;
 extern void FillTransferWords();
 extern s32 func_001FA860();
@@ -28,8 +28,8 @@ void FUN_00207b08(s32 buffer) {
     if (n == -1) {
         func_00208030(buffer);
     }
-    if (D_0013D560[D_0015ED84] < n) {
-        D_0013D560[D_0015ED84] = n;
+    if (D_0013D560[current_level_index] < n) {
+        D_0013D560[current_level_index] = n;
     }
 }
 

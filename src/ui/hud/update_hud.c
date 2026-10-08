@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 struct HudState {
     u8 pad_0[0xC];
@@ -11,7 +12,6 @@ struct HudSlot {
     s32 unk18;
 };
 extern s32 D_0015F444;
-extern s32 D_0015F604;
 extern s32 D_0015F680;
 extern s32 D_0015F684;
 extern s32 D_0015F688;
@@ -69,7 +69,7 @@ block_8:
         goto block_27;
     }
 block_11:
-    if (D_0015F604 != 0) {
+    if (game_mode != 0) {
         goto block_28;
     }
 

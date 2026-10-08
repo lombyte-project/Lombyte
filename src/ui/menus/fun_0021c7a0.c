@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 struct PadState {
     u8 pad_0[0x1C4];
@@ -31,7 +32,6 @@ struct MenuScreen {
 extern struct PadState D_0013C940;
 extern u8 D_0013D4C0[];
 extern struct Globals_00141848 D_00141848;
-extern s32 D_0015ED84;
 extern s32 D_0015EEA4;
 extern struct ModeRef *D_001D5BF4[];
 extern s32 scale_game_frames() __asm__("FUN_001f96f8");
@@ -73,7 +73,7 @@ s32 FUN_0021c7a0(struct MenuScreen *menu) {
                 D_00141848.unkAA = (u16)(scale_game_frames(D_0015EEA4) / 600);
             }
             slots = menu->unk30;
-            D_00141848.unkAC = (s32)((D_00141848.unkAC | (1 << D_0015ED84)) | 0x80000000);
+            D_00141848.unkAC = (s32)((D_00141848.unkAC | (1 << current_level_index)) | 0x80000000);
             i = 0;
             if (menu->unk30[0] != id) {
                 scan = slots;

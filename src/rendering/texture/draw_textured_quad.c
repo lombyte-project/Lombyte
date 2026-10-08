@@ -8,7 +8,6 @@ struct ScreenOfs {
     s32 y;
 };
 
-extern struct TagPtr D_00160F00;
 extern struct ScreenOfs D_0013E500;
 extern char D_00160840[];
 
@@ -38,15 +37,15 @@ void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh
     u1 = (u + uw) << 4;
     u0 = u << 4;
     v1 = v + vh;
-    D_00160F00.p->tag = 0x10000007;
-    D_00160F00.p->addr = 0;
-    D_00160F00.p->vif0 = 0;
-    D_00160F00.p->vif1 = 0x50000007;
-    tag = D_00160F00.p;
-    D_00160F00.p = tag + 1;
+    render_packet_cursor.p->tag = 0x10000007;
+    render_packet_cursor.p->addr = 0;
+    render_packet_cursor.p->vif0 = 0;
+    render_packet_cursor.p->vif1 = 0x50000007;
+    tag = render_packet_cursor.p;
+    render_packet_cursor.p = tag + 1;
     qcopy(tag + 1, D_00160840);
     q = (u64 *)(tag + 2);
-    D_00160F00.p = tag + 2;
+    render_packet_cursor.p = tag + 2;
     q[0] = extra;
     q[1] = 0x154;
     q[2] = color;
@@ -59,7 +58,7 @@ void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh
     q[9] = (v1 << 20) + u1;
     q[10] = x1 | ((u64)y1 << 16) | 0xFFFFF000000000;
     q[11] = 0;
-    D_00160F00.p = (struct DmaTag *)((u8 *)D_00160F00.p + 0x60);
+    render_packet_cursor.p = (struct DmaTag *)((u8 *)render_packet_cursor.p + 0x60);
 }
 
 extern __typeof__(draw_textured_quad) func_001F5450 __attribute__((alias("FUN_001f5450")));

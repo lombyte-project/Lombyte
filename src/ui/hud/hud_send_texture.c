@@ -4,7 +4,6 @@
 typedef struct {
     u128 data[6];
 } sceGsLoadImage;
-extern struct TagPtr D_00160F00;
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
 extern void FlushCache(s32);
 extern s32 sceGsExecLoadImage(sceGsLoadImage *, u128 *);
@@ -24,23 +23,23 @@ void hud_send_texture(u32 data, s32 dbp, s32 psm, s32 wlog, s32 hlog, s32 immedi
         dbw = 1;
     }
     if (immediate == 0) {
-        D_00160F00.p->tag = 0x10000006;
-        D_00160F00.p->addr = 0;
-        D_00160F00.p->vif0 = 0;
-        D_00160F00.p->vif1 = 0x50000006;
-        tag = D_00160F00.p;
+        render_packet_cursor.p->tag = 0x10000006;
+        render_packet_cursor.p->addr = 0;
+        render_packet_cursor.p->vif0 = 0;
+        render_packet_cursor.p->vif1 = 0x50000006;
+        tag = render_packet_cursor.p;
         li = (sceGsLoadImage *)(tag + 1);
-        D_00160F00.p = tag + 7;
+        render_packet_cursor.p = tag + 7;
     } else {
         li = &local;
     }
     sceGsSetDefLoadImage(li, dbp, dbw, psm, 0, 0, 1 << wlog, 1 << hlog);
     if (immediate == 0) {
-        D_00160F00.p->tag = qwc | 0x30000000;
-        D_00160F00.p->addr = data;
-        D_00160F00.p->vif0 = 0;
-        D_00160F00.p->vif1 = qwc | 0x50000000;
-        D_00160F00.p++;
+        render_packet_cursor.p->tag = qwc | 0x30000000;
+        render_packet_cursor.p->addr = data;
+        render_packet_cursor.p->vif0 = 0;
+        render_packet_cursor.p->vif1 = qwc | 0x50000000;
+        render_packet_cursor.p++;
     } else {
         FlushCache(0);
         sceGsExecLoadImage(li, (u128 *)data);

@@ -17,4 +17,7 @@ struct TagPtr {
     struct DmaTag *p;
 };
 
+/* The cursor of the packet the frame is building. */
+extern struct TagPtr render_packet_cursor __asm__("D_00160F00");
+
 #endif /* LOMBYTE_RNC_RENDERING_DMA_TAG_H */

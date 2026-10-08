@@ -22,7 +22,6 @@ struct ScreenOfs {
     s32 y;
 };
 
-extern struct TagPtr D_00160F00;
 extern struct TexBank D_0019A3E8;
 extern struct ScreenOfs D_0013E500;
 extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
@@ -39,13 +38,13 @@ void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
     t = &D_0019A3E8.tex[D_0019A3E8.map[id * 2 + 1]];
     tw = 1 << t->wlog;
     th = 1 << t->hlog;
-    D_00160F00.p->tag = 0x10000007;
-    D_00160F00.p->addr = 0;
-    D_00160F00.p->vif0 = 0;
-    D_00160F00.p->vif1 = 0x50000007;
-    tag = D_00160F00.p;
+    render_packet_cursor.p->tag = 0x10000007;
+    render_packet_cursor.p->addr = 0;
+    render_packet_cursor.p->vif0 = 0;
+    render_packet_cursor.p->vif1 = 0x50000007;
+    tag = render_packet_cursor.p;
     q = (u64 *)(tag + 1);
-    D_00160F00.p = tag + 1;
+    render_packet_cursor.p = tag + 1;
     q[0] = 0xB400000000008001;
     q[1] = 0x53535353106;
     q[2] = get_frame_texture(id);
@@ -64,5 +63,5 @@ void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
     q[12] = ((((x + w) << 4) + D_0013E500.x) - 8) | ((u64)(((y << 4) + D_0013E500.y) - 8) << 16) |
             ((u64)D_0019A3E8.z << 32);
     q[13] = 0;
-    D_00160F00.p = (struct DmaTag *)((u8 *)D_00160F00.p + 0x70);
+    render_packet_cursor.p = (struct DmaTag *)((u8 *)render_packet_cursor.p + 0x70);
 }

@@ -11,11 +11,6 @@ struct Globals_00137B80 {
 
 #include "rnc/audio/music/music_stream_state.h"
 
-struct Globals_001D5BF0 {
-    u8 pad_0[0x10C];
-    s32 unk10C;
-};
-
 struct MenuScreen {
     u8 pad_0[0x10];
     s32 unk10;

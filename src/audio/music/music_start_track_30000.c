@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
-extern s32 D_0015ED88;
+#include "rnc/globals.h"
 extern s32 D_0011C178[];
 extern u8 D_0015EE1C;
 extern struct MusicStreamState D_001516D0;
@@ -13,7 +13,7 @@ void music_start_track_30000(s32 track, s32 flags, s32 volume) __asm__("FUN_0021
 void music_start_track_30000(s32 track, s32 flags, s32 volume) {
     s32 *entry;
 
-    entry = (s32 *)((u8 *)D_0011C178 + (track * 4 + D_0015ED88 * 600));
+    entry = (s32 *)((u8 *)D_0011C178 + (track * 4 + game_language * 600));
     if (*entry != 0 && D_001516D0.secondary_handle == 0) {
         *(u32 *)&D_001516D0.secondary_handle = 0xFFFFFFFF;
         D_001516D0.secondary_state = 1;
