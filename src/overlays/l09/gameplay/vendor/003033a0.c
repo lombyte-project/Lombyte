@@ -228,6 +228,7 @@ typedef struct {
 
 extern struct Moby *moby_list __asm__("D_L09_0015FFD8");
 extern char D_L09_00208F90[];
+extern char D_L09_00208FF0[];
 extern VendorHitSource *FUN_L00_0025a420(struct Moby *, s32, s32);
 extern s32 FUN_00120478(f32);
 extern void FUN_001e93b0(char *, s32, s32);
@@ -370,7 +371,70 @@ void FUN_L09_00303d10(char *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00303fc8.s", FUN_L09_00303fc8);
+typedef struct {
+    u8 pad0[0x26];
+    s16 hurt_timer;
+    u8 pad28[0x38];
+    s32 link;
+    s32 link2;
+} VendorVars2;
+
+void FUN_L09_00303fc8(struct Moby *moby, VendorVars2 *vars, f32 *health) {
+    VendorHitSource *src;
+    struct Moby *link;
+    s32 hit;
+
+    if (moby->state != 3) {
+        src = FUN_L00_0025a420(moby, 0x330000, 0);
+        if (src != 0) {
+            FUN_001e93b0(D_L09_00208FF0, moby->oclass, FUN_00120478(src->damage));
+        }
+        switch (FUN_00213928(moby, src, health, 0, &hit, 0, 0, 4)) {
+        case 1:
+        case 2:
+            *health = 0.0f;
+            break;
+        case 0:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+            break;
+        }
+        if (hit >= 2) {
+            if (*health <= src->damage) {
+                *health = 0.0f;
+                moby->flags &= ~0x1000;
+                if (vars->link != -1) {
+                    link = &moby_list[vars->link];
+                    if (link != 0 && link->state != 0xFE && link->state != 0xFD
+                        && (link->oclass == 0x494 || link->oclass == 0x49D || link->oclass == 0x4A0)) {
+                        link->unkBC = 1;
+                    }
+                }
+                /* Retail checks the 0x64 link but indexes with the 0x60 one. */
+                if (vars->link2 != -1) {
+                    link = &moby_list[vars->link];
+                    if (link != 0 && link->state != 0xFE && link->state != 0xFD
+                        && (link->oclass == 0x494 || link->oclass == 0x49D || link->oclass == 0x4A0)) {
+                        link->unkBC = 1;
+                    }
+                }
+                FUN_L00_00257470(moby, 0, -1);
+                moby->state = 3;
+            } else {
+                *health -= src->damage;
+                vars->hurt_timer = FUN_001f96f8(60);
+            }
+        }
+        moby->unkA4 = 0xFF;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
