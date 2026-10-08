@@ -121,8 +121,7 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h, i
     if (fieldpred) {
         cy = ((cdy >> 1) * 2 + (by >> 1)) + ((yofs >> 1) + sfield);
     } else {
-        cy = (cdy >> 1) + (by >> 1);
-        cy += (yofs >> 1) + sfield;
+        cy = ((cdy >> 1) + (yofs >> 1)) + ((by >> 1) + sfield);
     }
     cxm = cx >> 3;
     cym = cy >> 3;
