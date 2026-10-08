@@ -103,7 +103,7 @@ extern s32 D_0015EED8;
 extern s32 D_0015EEB4;
 extern s32 D_L00_0015F5AC;
 extern s32 D_L00_0015F578 __attribute__((sda));
-extern s32 D_L00_0015F5C4 __attribute__((sda));
+extern s32 D_L00_0015F5C4;
 extern s32 D_L00_0015F5C8 __attribute__((sda));
 extern s32 D_L00_0015F5D8;
 extern s32 D_L00_0016000C __attribute__((sda));

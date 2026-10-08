@@ -210,7 +210,7 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L10_0015F5CC;
-extern int D_L10_0015FFD8 __attribute__((sda));
+extern int D_L10_0015FFD8;
 extern char *D_L10_0015FFD0_w[] __asm__("D_L10_0015FFD0") __attribute__((section(".sdata")));
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern int FUN_001f0b58(void);

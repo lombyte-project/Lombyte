@@ -1853,7 +1853,7 @@ typedef struct Moby {
     u8 padA8[0x58];
 } Moby;
 
-extern Moby *D_L01_0015FFD8 __attribute__((sda));
+extern Moby *D_L01_0015FFD8;
 f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 f32 fast_normalize_angle(f32 a) __asm__("FUN_001fa610");
 
@@ -1893,7 +1893,7 @@ extern char D_L01_00167240[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern unsigned char D_0013D408 __attribute__((section(".data")));
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern short D_L01_0015FFD8_c __asm__("D_L01_0015FFD8") __attribute__((sda));
+extern short D_L01_0015FFD8_c __asm__("D_L01_0015FFD8");
 extern short D_L01_00161AF4 __attribute__((sda));
 extern short D_L01_00161AF8 __attribute__((sda));
 extern short D_L01_00161AFC __attribute__((sda));

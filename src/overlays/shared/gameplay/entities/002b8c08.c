@@ -441,7 +441,7 @@ extern float D_L01_0016190C __attribute__((sda));
 extern float D_L01_00161910 __attribute__((sda));
 extern float D_L01_00161914 __attribute__((sda));
 extern int D_L01_00161900 __attribute__((sda));
-extern int D_L01_0015F5C4 __attribute__((sda));
+extern int D_L01_0015F5C4;
 
 typedef union {
     u128_w22c q;

@@ -4,7 +4,7 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9b70.s", FUN_L08_002e9b70);
 extern float D_0015ED6C;
-extern char *D_L08_0015FFD8_g __asm__("D_L08_0015FFD8") __attribute__((sda));
+extern char *D_L08_0015FFD8_g __asm__("D_L08_0015FFD8");
 extern u8 D_0013D3BD_c __asm__("D_0013D3BD") __attribute__((section(".data")));
 extern int FUN_0022da68_c(int, int, char *) __asm__("FUN_0022da68");
 extern void FUN_00213ed8_c(char *, float, float) __asm__("FUN_00213ed8");

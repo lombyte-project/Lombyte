@@ -61,7 +61,7 @@ void FUN_L17_002cbc10(char *m) {
 
 typedef int v128 __attribute__((mode(TI)));
 
-extern char *D_L17_0015FFD8 __attribute__((sda));
+extern char *D_L17_0015FFD8;
 extern char *D_L17_0015FFD8_e[] __asm__("D_L17_0015FFD0") __attribute__((section(".sdata")));
 extern char *D_L17_001600EC;
 extern char D_L17_00174760[];

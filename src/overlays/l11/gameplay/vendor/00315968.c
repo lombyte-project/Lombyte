@@ -6,7 +6,7 @@ extern float D_0015ED6C_n[] __asm__("D_0015ED68") __attribute__((section(".sdata
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00315968.s", FUN_L11_00315968);
 extern float D_6C_e[] __asm__("D_0015ED68") __attribute__((section(".sdata")));
 extern float D_0015ED70;
-extern float D_0015ED6C_g __asm__("D_0015ED6C") __attribute__((sda));
+extern float D_0015ED6C_g __asm__("D_0015ED6C");
 extern float D_L11_001622FC_g __asm__("D_L11_001622FC") __attribute__((sda));
 extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
@@ -1116,7 +1116,7 @@ extern float D_L11_001624F0;
 extern float D_L11_001624F4;
 extern char D_L11_00167680[];
 extern int D_L11_0016252C __attribute__((sda));
-extern unsigned char D_L11_00162590_c __asm__("D_L11_00162590") __attribute__((sda));
+extern unsigned char D_L11_00162590_c __asm__("D_L11_00162590");
 extern unsigned char D_L11_0016258C_e[] __asm__("D_L11_0016258C")
     __attribute__((section(".sdata")));
 extern float vector_length_xyz(void *);

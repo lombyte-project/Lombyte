@@ -362,6 +362,7 @@ OVERLAY_SN_UNITS = {
     "shared/ui_text_001fb470.c",
     "shared/unclassified_00288ec0.c",
     "shared/unclassified_002aee30.c",
+    "shared/unclassified_002d6810.c",
 }
 
 # —— Retail link layout ——

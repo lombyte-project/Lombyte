@@ -17,7 +17,7 @@ typedef union {
 } __attribute__((aligned(16))) L16TransportVector;
 
 char *FUN_L16_002a0dc0_5(char *owner, char *vec, void *pos, void *vel, int c) __asm__("FUN_L16_002a0dc0");
-extern char *D_L16_0015FFD8 __attribute__((sda));
+extern char *D_L16_0015FFD8;
 extern char *D_L16_001B0930[];
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -244,7 +244,7 @@ void FUN_L16_002e22d8(char *m) {
 #include "qcopy.h"
 
 extern float D_L16_00161D78_sda __asm__("D_L16_00161D78") __attribute__((sda));
-extern char *D_L16_0015FFD8_sda __asm__("D_L16_0015FFD8") __attribute__((sda));
+extern char *D_L16_0015FFD8_sda __asm__("D_L16_0015FFD8");
 extern u8 D_001413F4[];
 extern s32 D_001413DC[];
 extern char *D_L16_001B0930[];

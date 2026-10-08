@@ -530,8 +530,108 @@ char *FUN_L13_002e8438(char *owner) {
     return moby;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e84d8.s", FUN_L13_002e84d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e86f8.s", FUN_L13_002e86f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e8920.s", FUN_L13_002e8920);
+/* Picks a line to play from a group, starting at a random entry and skipping ones already used; returns 1 when one was queued. */
+extern unsigned char D_L13_001D3558_q[] __asm__("D_L13_001D3558");
+extern struct {
+    char pad0[0x1C];
+    int line;
+    char pad20[0x30];
+    int busy;
+} D_001516D0_q __asm__("D_001516D0");
+extern int rand_q(void) __asm__("FUN_001160d8");
+extern int below_q(int) __asm__("FUN_00213260");
+
+int FUN_L13_002e86f8(void *unused, unsigned char *p, int base, int n) {
+    int j = rand_q() % n;
+    int id = D_L13_001D3558_q[base + j];
+    int i;
+    int lt;
+    if (base < 0x1D) {
+        if (base < 0xC) {
+            if (p[0x148] != 0)
+                return 0;
+            if (*(short *)(p + 0x144) > 0)
+                return 0;
+        } else {
+            if (*(short *)(p + 0x146) > 0)
+                return 0;
+            if (p[0x148] != 0 && base >= 0x17 && base < 0x1B)
+                return 0;
+        }
+    }
+    lt = base < 0x1D;
+    if (D_001516D0_q.busy != 0 || D_001516D0_q.line != -1) {
+        if (lt)
+            return 0;
+    }
+    if (base < 0x1D) {
+        for (i = 0; i < n; i++) {
+            if ((*(int *)(p + 0x13C) >> id) & 1) {
+                if (base < 0xC && below_q(4) == 0)
+                    *(int *)(p + 0x13C) &= ~(1 << id);
+                j++;
+                j %= n;
+                id = D_L13_001D3558_q[base + j];
+            } else {
+                D_001516D0_q.line = id + 50000;
+                p[0x13A] = 1;
+                *(int *)(p + 0x13C) |= 1 << id;
+                return 1;
+            }
+        }
+        if (base < 0xC)
+            *(int *)(p + 0x13C) &= ~(1 << id);
+    } else {
+        D_001516D0_q.line = id + 50000;
+        p[0x13A] = 1;
+        return 1;
+    }
+    return 0;
+}
+/* Throws sparks from each of the moby's six vent bones that are open. */
+typedef int u128_v __attribute__((mode(TI)));
+extern int D_L13_001D3478_v[] __asm__("D_L13_001D3478");
+extern int D_L13_001D3508_v[] __asm__("D_L13_001D3508");
+extern int D_L13_001D3520_v[] __asm__("D_L13_001D3520");
+extern int D_L13_0015F5CC_v __asm__("D_L13_0015F5CC");
+extern int rnd_v(int, int) __asm__("FUN_L00_00257b90");
+extern int below_v(int) __asm__("FUN_00213260");
+extern int frames_v(int) __asm__("FUN_001f96f8");
+extern int ftoi_v(float) __asm__("FUN_001fa6d0");
+extern float rndf_v(float, float) __asm__("FUN_002132a8");
+extern void bone_v(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void spark_v(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
+
+typedef struct {
+    char pad[0xC4];
+    int on[1];
+} Vd_v;
+
+void FUN_L13_002e8920(unsigned char *m, char *d) {
+    u128_v zv;
+    float a[4];
+    int i;
+    for (i = 0; i < 6; i++) {
+        if (((Vd_v *)d)->on[D_L13_001D3508_v[i]] != 0) {
+            float s;
+            int r, k;
+            zv = 0;
+            s = *(float *)(m + 0x2C) / (*(float *)(*(char **)(m + 0x24) + 0x24) * 4.0f);
+            bone_v(m, D_L13_001D3520_v[i], a);
+            if (D_L13_0015F5CC_v & 1) {
+                r = frames_v(rnd_v(0xF, 0x14));
+                spark_v(a, &zv, 0xCF0000FF, 0xCF, r, ftoi_v(s * 350.0f), -100, 1);
+            } else if (m[0xBC] == 0 || D_L13_001D3478_v[m[0xBC] - 1] != D_L13_001D3508_v[i] ||
+                       below_v(9) == 0) {
+                r = frames_v(rnd_v(0xF, 0x16));
+                spark_v(a, &zv, 0x6000FFFF, 0x80, r, ftoi_v(s * 600.0f), -100, 1);
+            }
+            k = ftoi_v(rndf_v(100.0f, 250.0f) * s);
+            r = frames_v(rnd_v(8, 0xC));
+            spark_v(a, &zv, 0xEFFF7F4F, 0xFF0000, r, k, -k, 1);
+        }
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9F90), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));

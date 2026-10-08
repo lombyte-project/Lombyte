@@ -387,7 +387,7 @@ typedef struct {
     u8 trigger;
 } PendulumMoby;
 
-extern s32 D_0015ED84 __attribute__((sda));
+extern s32 D_0015ED84;
 extern u8 D_0014C050[];
 extern u8 D_0013E550[];
 extern int FUN_L00_0028d8c0(void *, int);

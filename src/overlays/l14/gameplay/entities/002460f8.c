@@ -38,7 +38,7 @@ void FUN_L14_002460f8(void) {
 }
 
 extern u16 *D_L14_001ABF40_u[] __asm__("D_L14_001ABF40");
-extern u8 *D_L14_0015FFD8 __attribute__((sda));
+extern u8 *D_L14_0015FFD8;
 extern void FUN_L00_0023e838(s32);
 extern void FUN_0020c828(void *);
 
@@ -176,7 +176,79 @@ void FUN_L14_002ad8b8(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ada18.s", FUN_L14_002ada18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002add48.s", FUN_L14_002add48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ae0a8.s", FUN_L14_002ae0a8);
+/* Draws the moby's glow quad, turned to face the camera. */
+typedef struct {
+    float m[4][4];
+    u32 col[4];
+    float uv[8];
+    unsigned long a, b, c, d;
+} Pk_2ae0a8;
+
+extern float D_L14_00161474_e __asm__("D_L14_00161474") __attribute__((sda));
+extern float D_L14_00161478_e __asm__("D_L14_00161478") __attribute__((sda));
+extern char D_L14_001674C0_e[] __asm__("D_L14_001674C0");
+extern float D_L14_001D8600_e[4][4] __asm__("D_L14_001D8600");
+extern void scale_e(void *, void *, float) __asm__("FUN_001f9a68");
+extern void add_e(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void sub_e(void *, void *, void *) __asm__("FUN_001f9a28");
+extern unsigned long tex_e(s32) __asm__("FUN_001f44b8");
+extern void sreg_e(s32, s64) __asm__("FUN_00233980");
+extern float atan2_e(float, float) __asm__("FUN_001f9e90");
+extern float lenxy_e(void *) __asm__("FUN_001f9b20");
+extern void rotmat_e(void *, void *) __asm__("FUN_001fa030");
+extern void xform_e(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void draw_e(void *, int, int) __asm__("FUN_001f7d30");
+
+void FUN_L14_002ae0a8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float mat[4][4];
+    float t[4];
+    Pk_2ae0a8 pk;
+    float v[4];
+    float rot[4];
+    u32 col;
+    int i;
+    qcopy(mat[3], d + 0xD0);
+    mat[3][3] = 1.0f;
+    scale_e(t, d + 0xA0, D_L14_00161478_e);
+    add_e(mat[3], mat[3], t);
+    pk.b = tex_e(0xB);
+    pk.c = 0x0000FF9000000260ULL;
+    pk.d = 0x8000000048ULL;
+    pk.a = 0;
+    sreg_e(0x47, 0x51001);
+    sub_e(v, D_L14_001674C0_e, mat[3]);
+    rot[2] = atan2_e(v[0], v[1]);
+    rot[1] = -atan2_e(lenxy_e(v), v[2]);
+    rot[0] = 0.0f;
+    rotmat_e(mat, rot);
+    pk.uv[0] = 1.0f;
+    pk.uv[1] = 1.0f;
+    pk.uv[2] = 0.0f;
+    pk.uv[3] = 1.0f;
+    pk.uv[4] = 1.0f;
+    pk.uv[5] = 0.0f;
+    pk.uv[6] = 0.0f;
+    pk.uv[7] = 0.0f;
+    if (*(short *)(d + 0x202) != 0) {
+        col = 0x7F40407F;
+        pk.col[3] = col;
+        pk.col[2] = col;
+        pk.col[1] = col;
+        pk.col[0] = col;
+    } else {
+        col = 0x7F7F7F7F;
+        pk.col[3] = col;
+        pk.col[2] = col;
+        pk.col[1] = col;
+        pk.col[0] = col;
+    }
+    for (i = 0; i < 4; i++) {
+        scale_e(pk.m[i], D_L14_001D8600_e[i], D_L14_00161474_e);
+        xform_e(pk.m[i], pk.m[i], mat);
+    }
+    draw_e(&pk, 0, 0);
+}
 /* Draws the moby's glow quad, pulled toward the camera so it is not hidden by the moby. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AF4A0), where it is exact; names translated to the US level program. */
 
@@ -673,7 +745,7 @@ void FUN_L14_002b4340(unsigned char *m) {
 }
 /* Returns 0 unless every object on the list is ready, then wakes the waiting ones and sets their timers. */
 extern short *D_L14_001ABF40_b45[] __asm__("D_L14_001ABF40");
-extern unsigned char *D_L14_0015FFD8_b45 __asm__("D_L14_0015FFD8") __attribute__((sda));
+extern unsigned char *D_L14_0015FFD8_b45 __asm__("D_L14_0015FFD8");
 extern unsigned char *D_L14_0015FFD0_m45[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
 extern int D_L14_0016150C_b45 __asm__("D_L14_0016150C") __attribute__((sda));
 extern float D_L14_00161510_b45 __asm__("D_L14_00161510") __attribute__((sda));
@@ -1021,7 +1093,76 @@ void FUN_L14_002b5d18(char *moby) {
     *(int *)(d + 0xE4) = 0;
     FUN_001f99f8(d + 0xF0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5dd8.s", FUN_L14_002b5dd8);
+/* Exhaust puffs: two red sparks and three white puffs of shrinking size behind the moby. */
+typedef struct {
+    unsigned char pad0[4];
+    int w4;
+    unsigned char pad8[2];
+    unsigned char bA;
+    unsigned char bB;
+} T_5dd8;
+typedef struct {
+    unsigned char pad0[8];
+    unsigned char b8;
+    unsigned char b9;
+    short hA;
+    unsigned char padC[0x14];
+    T_5dd8 tail;
+} P_5dd8;
+extern int below_x(int) __asm__("FUN_00213260");
+extern int frames_x(int) __asm__("FUN_001f96f8");
+extern void scale_x(void *, void *, float) __asm__("FUN_001f9a68");
+extern void add_x(void *, void *, void *) __asm__("FUN_001f9a10");
+extern P_5dd8 *puff_x(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
+extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
+
+void FUN_L14_002b5dd8(unsigned char *m) {
+    float off[4];
+    float pos[4];
+    int i;
+    int j;
+    int n;
+    int life;
+    float size;
+    if (m[0x20] < 2 || m[0x20] == 9)
+        return;
+    scale_x(off, m + 0xC0, -1.25f);
+    add_x(pos, m + 0x10, off);
+    for (i = 0; i < 2; i++) {
+        P_5dd8 *part;
+        T_5dd8 *tail;
+        n = below_x(0x10);
+        part = puff_x(pos, 0.2f, 1.0f, 0.75f, below_x(2) == 0 ? n : -n, D_L14_0015F580_x, 160000.0f, 0x7F3030FF);
+        if (part) {
+            tail = &part->tail;
+            part->hA = frames_x(6);
+            tail->w4 = 2;
+            tail->bA = 0x7F;
+            tail->bB = part->hA;
+        }
+    }
+    scale_x(off, m + 0xC0, -1.0f);
+    add_x(pos, m + 0x10, off);
+    n = 0x10;
+    life = frames_x(2);
+    size = 100000.0f;
+    for (j = 0; j < 3; j++) {
+        P_5dd8 *part;
+        T_5dd8 *tail;
+        part = puff_x(pos, 0.05f, 1.0f, 1.0f, n, D_L14_0015F580_x, size, 0x7FFFFFFF);
+        if (part) {
+            tail = &part->tail;
+            part->hA = life;
+            part->b8 = below_x(0xFF);
+            tail->w4 = 2;
+            tail->bA = 0x7F;
+            tail->bB = part->hA;
+        }
+        n = -n;
+        life *= 2;
+        size -= 20000.0f;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002bac78.s", FUN_L14_002bac78);
 
 #define NOT_SDA

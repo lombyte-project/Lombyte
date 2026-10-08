@@ -366,7 +366,81 @@ void FUN_L15_002eb108(char *moby) {
 }
 
 #include "qcopy.h"
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb4c0.s", FUN_L15_002eb4c0);
+/* Cutscene trigger moby: waits for the hero in its clip volume, then steps through the scene stages and saves at the end. */
+extern int D_L15_0015F5C4_v __asm__("D_L15_0015F5C4");
+extern int D_L15_00161AC0_v __asm__("D_L15_00161AC0");
+extern unsigned char *D_L15_0015FFD8_v __asm__("D_L15_0015FFD8");
+extern char *D_L15_001600EC_v __asm__("D_L15_001600EC");
+extern int D_0015ED84_v __asm__("D_0015ED84");
+extern unsigned char D_0014C050_v[] __asm__("D_0014C050");
+extern unsigned char D_0013F3D0_v[] __asm__("D_0013F3D0");
+extern int in_clip_v(void *, int) __asm__("FUN_00214720");
+extern void start_scene_v(int) __asm__("FUN_L00_00298840");
+extern void FUN_L00_002502a0_v(int) __asm__("FUN_L00_002502a0");
+extern void FUN_L00_00232fe8_v(void) __asm__("FUN_L00_00232fe8");
+extern void FUN_L00_00299460_v(int) __asm__("FUN_L00_00299460");
+extern void FUN_L00_002330d0_v(void) __asm__("FUN_L00_002330d0");
+extern void FUN_L00_00216f90_v(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void FUN_L00_002607d0_v(int) __asm__("FUN_L00_002607d0");
+extern void FUN_L00_00284e50_v(void *, void *) __asm__("FUN_L00_00284e50");
+extern void FUN_L00_00262d38_v(int) __asm__("FUN_L00_00262d38");
+extern int save_v(int, int) __asm__("FUN_0020b178");
+extern void enqueue_v(void (*)(void), void *) __asm__("FUN_001f4600");
+void FUN_L15_002eb6b8(void);
+
+void FUN_L15_002eb4c0(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    m[0x30] = 0x80;
+    switch (m[0x20]) {
+    case 0:
+        if (D_0014C050_v[m[0xB0] + D_0015ED84_v * 16] == 0xFF)
+            break;
+        if (D_L15_00161AC0_v != 0)
+            break;
+        if (in_clip_v(D_0013F3D0_v, *(int *)d) == 0)
+            break;
+        if (D_L15_0015FFD8_v[(*(int *)(d + 8) << 8) + 0x20] != 3)
+            break;
+        start_scene_v(3);
+        m[0x20] = 2;
+        FUN_L00_002502a0_v(m[0xB0]);
+        FUN_L00_00232fe8_v();
+        break;
+    case 2:
+        if (D_L15_0015F5C4_v != 2) {
+            FUN_L00_00299460_v(0x11);
+            m[0x20] = 1;
+        }
+        break;
+    case 1:
+        if (D_L15_0015F5C4_v != 2) {
+            start_scene_v(4);
+            m[0x20] = 3;
+            FUN_L00_002330d0_v();
+            if (*(int *)(d + 4) != -1) {
+                char *o = D_L15_001600EC_v + (*(int *)(d + 4) << 7);
+                FUN_L00_00216f90_v(o + 0x30, o + 0x70, 0, 1);
+            }
+        }
+        break;
+    case 3:
+        if (D_L15_0015F5C4_v != 2) {
+            FUN_L00_002607d0_v(0x11);
+            if (*(int *)(d + 4) != -1) {
+                char *o = D_L15_001600EC_v + (*(int *)(d + 4) << 7);
+                FUN_L00_00284e50_v(o + 0x30, o + 0x70);
+            }
+            FUN_L00_00262d38_v(0x11);
+            save_v(0, -1);
+            m[0x20] = 4;
+        }
+        break;
+    case 4:
+        break;
+    }
+    if (D_L15_0015F5C4_v == 2)
+        enqueue_v(FUN_L15_002eb6b8, m);
+}
 #define NOT_SDA __attribute__((section(".data")))
 
 #define MACRO_ADDR __attribute__((section(".sdata")))
@@ -541,7 +615,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edfc0.s", FUN_L15_002edfc0);
 /* Tells whether the vendor menu lets this slot's item be bought (1) or not (0). */
 
 extern char *D_L15_00167400 __attribute__((section(".data")));
-extern char *D_L15_0015EF50 __attribute__((sda));
+extern char *D_L15_0015EF50;
 extern float D_L15_0015F3FC;
 
 int FUN_L15_002f78e0(int slot) {

@@ -1877,7 +1877,7 @@ extern int D_L02_0015F678_t __asm__("D_L02_0015F678") __attribute__((sda));
 extern int D_L02_0015F6DC_d __asm__("D_L02_0015F6DC");
 extern int D_0015ED84;
 extern int D_0015EEA4;
-extern int D_0015ED8C __attribute__((sda));
+extern int D_0015ED8C;
 extern int D_0015ED98;
 extern int D_L02_0015F594 __attribute__((sda));
 extern int D_L02_0015F6DC __attribute__((section(".data")));

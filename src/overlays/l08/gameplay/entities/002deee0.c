@@ -150,7 +150,7 @@ void FUN_L08_002e8788(char *moby) {
 /* Re-aims the twelve child mobys of a parent, adjusts the parent's spin, then runs the children's follow-up. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9F78), where it is exact; names translated to the US level program. */
 
-extern float D_0015ED6C_d __asm__("D_0015ED6C") __attribute__((sda));
+extern float D_0015ED6C_d __asm__("D_0015ED6C");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern short D_L08_00161D28_d __asm__("D_L08_00161D28") __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);

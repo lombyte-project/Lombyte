@@ -17,7 +17,7 @@ extern f32 D_L00_001618CC_2d0538 __asm__("D_L00_001618CC") __attribute__((sda));
 extern f32 D_L00_001618D0_2d0538 __asm__("D_L00_001618D0") __attribute__((sda));
 extern volatile f32 D_0015ED6C_a[1] __asm__("D_0015ED6C");
 #define D_0015ED6C_2d0538 D_0015ED6C_a[0]
-extern f32 D_0015ED70_2d0538 __asm__("D_0015ED70") __attribute__((sda));
+extern f32 D_0015ED70_2d0538 __asm__("D_0015ED70");
 extern u8 *D_L00_001B04B0_2d0538[] __asm__("D_L00_001B04B0") __attribute__((section(".data")));
 void FUN_001f99f8_2d0538(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00260400_2d0538(u8 *, s32, void *, void *, void *, void *) __asm__("FUN_L00_00260400");

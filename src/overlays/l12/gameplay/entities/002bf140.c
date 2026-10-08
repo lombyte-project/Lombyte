@@ -233,7 +233,58 @@ void FUN_L12_002e19a8(void *pos) {
     } while (--i >= 0);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e1be0.s", FUN_L12_002e1be0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e2eb8.s", FUN_L12_002e2eb8);
+/* Moves the moby along its path at the given speed and keeps it on the path; returns the move result, or 2 when it has been stuck too long. */
+#include "qcopy.h"
+extern char *D_L12_001B0930_w[] __asm__("D_L12_001B0930");
+extern float D_0015ED6C_w __asm__("D_0015ED6C");
+extern void FUN_L12_002e1878_w(char *) __asm__("FUN_L12_002e1878");
+extern void approach_w(char *, float *, float, float, float, float) __asm__("FUN_L00_00258278");
+extern float cos_w(float) __asm__("FUN_001f9dc8");
+extern float sin_w(float) __asm__("FUN_001f9de0");
+extern int move_w(void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
+extern void sub_w(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void norm_w(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void add_w(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int path_w(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
+extern int inside_w(void *, void *, int) __asm__("FUN_L00_00259740");
+extern float dist_w(void *, void *) __asm__("FUN_001f9b48");
+extern int frames_w(int) __asm__("FUN_001f96f8");
+
+int FUN_L12_002e2eb8(char *m, float speed) {
+    char *d = *(char **)(m + 0x78);
+    float old[4] __attribute__((aligned(16)));
+    float dir[4];
+    float hit[4];
+    float res[4] __attribute__((aligned(16)));
+    float t[4];
+    float u[4];
+    int r;
+    *(u128 *)old = *(u128 *)(m + 0x10);
+    FUN_L12_002e1878_w(m);
+    approach_w(m, (float *)(d + 0x2A0), speed, 0.05f, 0.3f, 0.2f);
+    dir[0] = cos_w(*(float *)(m + 0x48)) * 2.0f;
+    dir[1] = sin_w(*(float *)(m + 0x48)) * 2.0f;
+    dir[2] = 0.0f;
+    r = move_w(m, d + 0x180, dir, hit, 1.0f);
+    if (*(int *)(d + 0x2D0) != -1) {
+        sub_w(u, old, m + 0x10);
+        norm_w(u, u, 0.05f);
+        add_w(t, old, u);
+        if (path_w(*(int *)(d + 0x2D0), m + 0x10, t, res) != 0) {
+            char *p = D_L12_001B0930_w[*(int *)(d + 0x2D0)];
+            if (inside_w(m + 0x10, p + 0x10, *(int *)p) == 0)
+                *(u128 *)(m + 0x10) = *(u128 *)res;
+            if (dist_w(m + 0x10, old) < D_0015ED6C_w * 0.5f) {
+                *(int *)(d + 0x2D4) += 1;
+                if (frames_w(10) < *(int *)(d + 0x2D4))
+                    r = 2;
+            } else {
+                *(int *)(d + 0x2D4) = 0;
+            }
+        }
+    }
+    return r;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3098.s", FUN_L12_002e3098);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3528.s", FUN_L12_002e3528);
 /* Hoven engine exhaust: emits a flame and a smoke puff from each of the moby's two nozzles (the second one
@@ -278,7 +329,50 @@ void FUN_L12_002e3948(char *moby) {
     FUN_L00_0026cbb0(p2, a, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);
     func_L00_0026DEA0_x(p2, 0.05f, 1.01f, 1.03f, 6, b, 30000.0f, 0x404040);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3c08.s", FUN_L12_002e3c08);
+/* Steers the moby toward a target point, speeding up or braking, and turns it toward the given angles. */
+extern float D_0015ED6C_k __asm__("D_0015ED6C");
+extern float D_0015ED70_k __asm__("D_0015ED70");
+extern float D_0015ED64_k __asm__("D_0015ED64");
+extern float D_L12_00161918_k __asm__("D_L12_00161918") __attribute__((sda));
+extern void sub_k(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float len_k(void *) __asm__("FUN_001f9af0");
+extern void norm_k(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float diff_k(float, float) __asm__("FUN_001fa688");
+extern void appr_k(void *, float, float) __asm__("FUN_00213ed8");
+extern float turn_k(float *, float, float *, int, float, float, float) __asm__("FUN_L00_0025bc98");
+extern void add_k(void *, void *, void *) __asm__("FUN_001f9a10");
+
+void FUN_L12_002e3c08(char *m, float *ang, void *target, int unused, int brake) {
+    char *d = *(char **)(m + 0x78);
+    float v[4];
+    float dist;
+    float speed;
+    float acc;
+    float lim = 1.9198622f;
+    sub_k(v, target, m + 0x10);
+    dist = len_k(v);
+    speed = len_k(d + 0x40);
+    if (brake) {
+        if (speed == 0.0f)
+            speed = D_0015ED6C_k * 0.01f;
+        acc = *(float *)(d + 0xD4) * D_0015ED70_k;
+        if (acc < speed * speed / (dist + dist))
+            speed -= acc;
+        else if (speed < *(float *)(d + 0xD0) * D_0015ED6C_k)
+            speed += acc;
+    } else {
+        if (speed < *(float *)(d + 0xD0) * D_0015ED6C_k)
+            speed += *(float *)(d + 0xD4) * D_0015ED70_k;
+        else if (*(float *)(d + 0xD0) * D_0015ED6C_k < speed)
+            speed -= *(float *)(d + 0xD4) * D_0015ED70_k;
+    }
+    norm_k(d + 0x40, v, speed);
+    appr_k(m + 0x40, ang[0], diff_k(ang[0], *(float *)(m + 0x40)) / D_L12_00161918_k);
+    appr_k(m + 0x44, ang[1], diff_k(ang[1], *(float *)(m + 0x44)) / D_L12_00161918_k);
+    turn_k((float *)(m + 0x48), ang[2], (float *)(d + 0xF8), 0, D_0015ED64_k * 0.005f, D_0015ED64_k * 0.3f,
+           D_0015ED6C_k * lim);
+    add_k(m + 0x10, m + 0x10, d + 0x40);
+}
 /* Projects a moby's offset from a reference point into a 2D pair, or zeroes it. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E5138), where it is exact; names translated to the US level program. */
 
@@ -398,8 +492,8 @@ extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
 extern void FUN_L01_002783a8_c(void *, float) __asm__("FUN_L01_002783a8");
 extern unsigned char D_0013D388_c[] __asm__("D_0013D388");
-extern int D_L12_0015F5C4_c __asm__("D_L12_0015F5C4") __attribute__((sda));
-extern char *D_L12_001600EC_c __asm__("D_L12_001600EC") __attribute__((sda));
+extern int D_L12_0015F5C4_c __asm__("D_L12_0015F5C4");
+extern char *D_L12_001600EC_c __asm__("D_L12_001600EC");
 extern void FUN_0020c828_c(void *) __asm__("FUN_0020c828");
 extern void FUN_L02_0025c758(void *);
 extern char *func_0020D348_m_x(int) __asm__("FUN_0020c4f8");

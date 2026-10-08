@@ -506,7 +506,7 @@ extern void FUN_001fa030(void *, void *);
 extern void FUN_001fa2d8(void *, void *);
 void FUN_L18_002d5488(void *mobyp, void *vec);
 extern void FUN_L18_002d5610_u(void *, void *) __asm__("FUN_L18_002d5610");
-extern void FUN_L18_002d5768(void);
+void FUN_L18_002d5768(char *m);
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L18_002d5050(char *moby) {
@@ -679,7 +679,51 @@ void FUN_L18_002d5610(void *m, void *src) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5768.s", FUN_L18_002d5768);
+/* Draws the moby's pulsing glow quad: four corners around its position with a fading colour. */
+typedef struct {
+    float m[4][4];
+    unsigned int col[4];
+    float uv[4][2];
+    unsigned long long a, b, c, d;
+} Pk_d5768;
+extern int D_L18_00161970_d5 __asm__("D_L18_00161970") __attribute__((sda));
+extern int D_L18_00161974_d5 __asm__("D_L18_00161974") __attribute__((sda));
+extern int D_L18_00161978_d5 __asm__("D_L18_00161978") __attribute__((sda));
+extern int D_L18_0016197C_d5 __asm__("D_L18_0016197C") __attribute__((sda));
+extern int D_L18_00161980_d5 __asm__("D_L18_00161980") __attribute__((sda));
+extern int D_L18_00161984_d5 __asm__("D_L18_00161984") __attribute__((sda));
+extern float D_L18_001D3630_d5[4][4] __asm__("D_L18_001D3630");
+extern float D_L18_001D3670_d5[8] __asm__("D_L18_001D3670");
+extern float FUN_001fa610_d5(float) __asm__("FUN_001fa610");
+extern float FUN_001f9de0_d5(float) __asm__("FUN_001f9de0");
+extern unsigned int FUN_001fa6e0_d5(float, int, int) __asm__("FUN_001fa6e0");
+extern unsigned long long FUN_001f44b8_d5(int) __asm__("FUN_001f44b8");
+extern void FUN_001f9a10_d5(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f7d30_d5(void *, int, int) __asm__("FUN_001f7d30");
+
+void FUN_L18_002d5768(char *m) {
+    Pk_d5768 pk;
+    char *d = *(char **)(m + 0x78);
+    unsigned int col;
+    int i;
+    col = FUN_001fa6e0_d5((FUN_001f9de0_d5(FUN_001fa610_d5((*(int *)(d + 0x2C) & 0xF) * 0.0625f * 6.28318f)) + 1.0f) * 0.5f,
+                          D_L18_00161980_d5, D_L18_00161984_d5);
+    pk.b = FUN_001f44b8_d5(0xD);
+    pk.d = (unsigned long long)D_L18_00161970_d5 | ((unsigned long long)D_L18_00161974_d5 << 2) |
+           ((unsigned long long)D_L18_00161978_d5 << 4) | ((unsigned long long)D_L18_0016197C_d5 << 6) |
+           0x8000000000ULL;
+    pk.c = 0x0000FF9000000260ULL;
+    pk.a = 0;
+    for (i = 0; i < 4; i++) {
+        float *p = pk.m[i];
+        FUN_001f9a10_d5(p, D_L18_001D3630_d5[i], d + 0x10);
+        p[3] = 1.0f;
+        pk.col[i] = col;
+        pk.uv[i][0] = D_L18_001D3670_d5[i * 2];
+        pk.uv[i][1] = D_L18_001D3670_d5[i * 2 + 1];
+    }
+    FUN_001f7d30_d5(&pk, 0, 0);
+}
 /* Moby update: hovers, drifts toward the player and plays its animations by state. */
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED70;
@@ -695,7 +739,7 @@ extern short D_L18_00161988 __attribute__((sda));
 extern float D_L18_00161994 __attribute__((sda));
 extern void FUN_001f9c48(void *, void *, float);
 extern void FUN_L00_00258830(int, int, float, float, float, int);
-extern void FUN_L18_002d5f20(void *);
+void FUN_L18_002d5f20(unsigned char *m);
 extern void blend_moby_animation_alt(void *, int, int, int) __asm__("FUN_00212f90");
 extern short D_L18_00161A6C __asm__("D_0015ED6C");
 extern float D_L18_6C_m __asm__("D_0015ED6C");
@@ -898,7 +942,48 @@ char *FUN_L18_002d5cf8(float f, int a0, int idx, float *p6, float *p7, int a8) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5f20.s", FUN_L18_002d5f20);
+/* Blows the moby up when it is hit, shot by the player or close to the target, then hides it. */
+extern char D_0013F350_h[] __asm__("D_0013F350");
+extern char D_L18_0015F580_h[8] __asm__("D_L18_0015F580");
+extern int FUN_L00_0025a420_h(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int tick_h(int *) __asm__("FUN_001f9740");
+extern float dist_h(void *, void *) __asm__("FUN_001f9b80");
+extern void explode_h(void *, void *, void *, float, float, int, int, int, float, float, float, float, int,
+                      float, int, int, int, int) __asm__("FUN_L00_0025e450");
+
+void FUN_L18_002d5f20(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    char *g;
+    int hit;
+    if (m[0x20] == 5 || m[0x20] == 0 || m[0x20] == 4)
+        return;
+    g = D_0013F350_h;
+    if (*(int *)(g + 0x2084) == 0x72) {
+        m[0x20] = 5;
+        *(short *)(m + 0x34) = (*(short *)(m + 0x34) | 0x41) & ~0x1000;
+        *(int *)(m + 0x94) = 0;
+        return;
+    }
+    hit = FUN_L00_0025a420_h(m, 0x330000, 0);
+    m[0xA4] = 0xFF;
+    if (*(unsigned char **)(g + 0x23C) == m || *(unsigned char **)(g + 0x240) == m || *(int *)(d + 0x19C) != 0) {
+        explode_h(m, D_L18_0015F580_h, 0, 1.5f, 1.0f, 0x14, 6, 0x20, 3.0f, 1.5f, 9.0f, 1.5f, 1, 0.0f, 1, 0, -1, 0);
+        m[0x20] = 5;
+        *(short *)(m + 0x34) = (*(short *)(m + 0x34) | 0x41) & ~0x1000;
+        *(int *)(m + 0x94) = 0;
+        return;
+    }
+    if (tick_h((int *)(d + 0x194)) == 0 && hit == 0) {
+        if (m[0x20] != 1)
+            return;
+        if (!(dist_h(m + 0x10, g + 0x80) < 2.0f))
+            return;
+    }
+    explode_h(m, D_L18_0015F580_h, 0, 0.0f, 0.0f, 5, 2, 8, 1.0f, 0.5f, 9.0f, 0.5f, 1, 0.0f, 0, 0, -1, 0);
+    m[0x20] = 5;
+    *(short *)(m + 0x34) = (*(short *)(m + 0x34) | 0x41) & ~0x1000;
+    *(int *)(m + 0x94) = 0;
+}
 /* Pauses the moby in state 4 while the check holds, restoring its old state after. */
 
 extern int FUN_L00_002db8f8(void *);
@@ -1762,7 +1847,7 @@ extern short D_L18_00161EE0_d __asm__("D_L18_00161EE0") __attribute__((sda));
 extern void FUN_L15_002d8710(char *);
 extern void FUN_L18_002ea1f8(void);
 extern void FUN_L18_002ea800(void *);
-extern void FUN_L18_002eacd8(void *);
+void FUN_L18_002eacd8(char *m);
 extern void FUN_L18_002eaea0(void *);
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -1887,7 +1972,72 @@ void FUN_L18_002ea598(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea800.s", FUN_L18_002ea800);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002eacd8.s", FUN_L18_002eacd8);
+/* Starts the moby's trail when requested: resets the trail points and the counters. */
+extern int D_L18_00161FEC_q __asm__("D_L18_00161FEC") __attribute__((sda));
+extern float D_L18_00161FF0_q __asm__("D_L18_00161FF0") __attribute__((sda));
+extern int D_L18_00162008_q __asm__("D_L18_00162008") __attribute__((sda));
+extern int D_L18_00162010_q __asm__("D_L18_00162010") __attribute__((sda));
+extern int D_L18_00162024_q __asm__("D_L18_00162024") __attribute__((sda));
+extern int D_L18_00162054_q __asm__("D_L18_00162054");
+extern int D_L18_00162080_q __asm__("D_L18_00162080") __attribute__((sda));
+extern short D_L18_001620BE_q[] __asm__("D_L18_001620BE");
+extern short D_L18_001620C8_q __asm__("D_L18_001620C8");
+extern short D_L18_001620CA_q __asm__("D_L18_001620CA");
+extern short D_L18_001620CC_q __asm__("D_L18_001620CC");
+extern short D_L18_001620CE_q __asm__("D_L18_001620CE");
+extern short D_L18_001620D0_q __asm__("D_L18_001620D0");
+extern short D_L18_001620D2_q __asm__("D_L18_001620D2");
+extern short D_L18_001620D4_q __asm__("D_L18_001620D4");
+extern short D_L18_001620D6_q __asm__("D_L18_001620D6");
+extern short D_L18_001620B8_b[4] __asm__("D_L18_001620B8");
+extern int D_L18_001620D8_q __asm__("D_L18_001620D8");
+extern int D_L18_001620DC_q __asm__("D_L18_001620DC");
+extern float D_L18_001D9CF0_q[][4] __asm__("D_L18_001D9CF0");
+extern float D_L18_001D9D00_q[][4] __asm__("D_L18_001D9D00");
+extern int D_L18_001D9F80_q[] __asm__("D_L18_001D9F80");
+extern float D_L18_001D9FD0_q[][4] __asm__("D_L18_001D9FD0");
+extern int D_L18_001DA110_q[] __asm__("D_L18_001DA110");
+extern int scale_frames_q(int) __asm__("FUN_001f96f8");
+extern void sub_q(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void norm_q(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void add_q(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void zero_q(void *) __asm__("FUN_001f99f8");
+
+void FUN_L18_002eacd8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float v[4];
+    float step[4];
+    int i;
+    int j;
+    if (D_L18_00161FEC_q != 0) {
+        D_L18_00161FEC_q = 0;
+        D_L18_001620DC_q = 0;
+        D_L18_001620D8_q = scale_frames_q(D_L18_00162080_q);
+        D_L18_00162054_q = 0x7F2020;
+        sub_q(v, d + 0x10, m + 0x10);
+        norm_q(step, v, D_L18_00161FF0_q / 20.0f);
+        qcopy(D_L18_001D9D00_q, m + 0x10);
+        for (i = 1; i < 20; i++) {
+            add_q(D_L18_001D9D00_q[i], D_L18_001D9CF0_q[i], step);
+            D_L18_001D9F80_q[i] = 0;
+            zero_q(D_L18_001D9FD0_q[i]);
+            D_L18_001DA110_q[i] = 0;
+        }
+        for (j = 0; j < 4; j++)
+            D_L18_001620B8_b[j] = -1;
+        D_L18_001620C8_q = 8;
+        D_L18_001620D0_q = 4;
+        D_L18_001620CA_q = 4;
+        D_L18_001620D2_q = 2;
+        D_L18_001620D4_q = 4;
+        D_L18_001620CC_q = 8;
+        D_L18_001620CE_q = 4;
+        D_L18_001620D6_q = 2;
+        D_L18_00162008_q = 0;
+        D_L18_00162010_q = 0;
+        D_L18_00162024_q = 0;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002eaea0.s", FUN_L18_002eaea0);
 typedef struct {
     float f[4];

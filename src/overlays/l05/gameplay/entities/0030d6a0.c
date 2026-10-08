@@ -63,7 +63,7 @@ extern char D_L05_001671C0[];
 extern float FUN_001f9b48(void *, void *);
 extern int D_L05_0015F5CC_e[] __asm__("D_L05_0015F5C4") __attribute__((section(".sdata")));
 extern int allocate_voice_for_target_entry() __asm__("FUN_0022da68");
-extern short D_L05_0015FFD8_d __asm__("D_L05_0015FFD8") __attribute__((sda));
+extern short D_L05_0015FFD8_d __asm__("D_L05_0015FFD8");
 extern short D_L05_00161D38_d __asm__("D_L05_00161D38") __attribute__((sda));
 extern void FUN_L05_0030de90(void);
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
@@ -373,7 +373,7 @@ void FUN_L05_00316070(char *moby) {
 extern char D_0013E533[];
 extern char D_L05_00211B28[];
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern int D_L05_0015F5CC_c __asm__("D_L05_0015F5CC") __attribute__((sda));
+extern int D_L05_0015F5CC_c __asm__("D_L05_0015F5CC");
 extern void FUN_L02_002a40d0(void *, float);
 void FUN_L05_00316070_c(char *moby) __asm__("FUN_L05_00316070");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
@@ -891,7 +891,7 @@ void FUN_L05_003180a0(WM *m) {
 }
 
 extern char D_0013F3D0_318a68[] __asm__("D_0013F3D0");
-extern int D_L05_001612DC_318a68 __asm__("D_L05_001612DC") __attribute__((sda));
+extern int D_L05_001612DC_318a68 __asm__("D_L05_001612DC");
 extern int D_L05_001612D8_318a68[] __asm__("D_L05_001612D8") MACRO_ADDR;
 extern char D_L05_001612E0_318a68[16] __asm__("D_L05_001612E0") MACRO_ADDR __attribute__((sda));
 extern float D_L05_001612E8_318a68 __asm__("D_L05_001612E8");

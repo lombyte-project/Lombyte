@@ -487,7 +487,7 @@ extern int tick_countdown_32(int *);
 extern float D_L06_00161CE0 __attribute__((sda));
 extern unsigned char D_001413F4[];
 extern unsigned char D_0014C050[];
-extern float D_0015ED60 __attribute__((sda));
+extern float D_0015ED60;
 #define GB_FLAG (*(unsigned char *)0x15EDB3)
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);

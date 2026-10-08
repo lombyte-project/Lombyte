@@ -707,7 +707,7 @@ extern int D_L00_0016104C;
 extern int D_L00_00161050;
 extern int D_L00_00161058;
 extern int sceCdSync_alt(int) __asm__("FUN_00120c30");
-extern short D_L00_00161054_d __asm__("D_L00_00161054") __attribute__((sda));
+extern short D_L00_00161054_d __asm__("D_L00_00161054");
 extern void play_mpeg_movie(int, int, int, int, int) __asm__("FUN_0023a3b8");
 extern void FUN_L00_002997c8(void);
 extern void FlushCache(s32);
@@ -784,7 +784,7 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) Vec4_29ab70;
 extern int D_L00_0015F5D8_29ab70 __asm__("D_L00_0015F5D8");
-extern int D_L00_0015F5C4_29ab70 __asm__("D_L00_0015F5C4") __attribute__((sda));
+extern int D_L00_0015F5C4_29ab70 __asm__("D_L00_0015F5C4");
 extern unsigned char D_001413F5_29ab70[] __asm__("D_001413F5");
 extern char D_L00_001CA4C0_29ab70[] __asm__("D_L00_001CA4C0");
 extern int D_L00_00161070_29ab70 __asm__("D_L00_00161070") __attribute__((sda));
@@ -852,7 +852,7 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) Vec4;
 extern int D_L00_0015F5D8;
-extern int D_L00_0015F5C4 __attribute__((sda));
+extern int D_L00_0015F5C4;
 extern unsigned char D_001413F5[];
 extern char D_L00_001CA4C0_u[] __asm__("D_L00_001CA4C0");
 extern int D_L00_00161100 __attribute__((sda));

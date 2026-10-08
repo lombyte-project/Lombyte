@@ -3,7 +3,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
-extern int *D_L02_001611C0_s __asm__("D_L02_001611C0") __attribute__((sda));
+extern int *D_L02_001611C0_s __asm__("D_L02_001611C0");
 extern int *D_L02_001611C0_p[] __asm__("D_L02_001611B8") __attribute__((section(".sdata")));
 extern char D_L02_001609A0_i[] __asm__("D_L02_001609A0");
 

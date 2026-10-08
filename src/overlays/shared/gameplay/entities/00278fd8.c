@@ -1218,7 +1218,59 @@ void FUN_L15_0029aba8(char *m) {
         p += 0x10;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029ac30.s", FUN_L15_0029ac30);
+/* Flies the moby along its velocity, spinning; it dies with a sound when it hits something or times out. */
+#include "qcopy.h"
+extern char D_L15_001673C0_y[] __asm__("D_L15_001673C0");
+extern int D_L15_00174458_y[] __asm__("D_L15_00174458");
+extern unsigned char D_001413F4_y[] __asm__("D_001413F4");
+extern float D_0015ED6C_y __asm__("D_0015ED6C");
+extern float dist_y(void *, void *) __asm__("FUN_001f9b48");
+extern int sound_y(int, int, void *, int) __asm__("FUN_L00_0028dc90");
+extern float addrot_y(float, float) __asm__("FUN_001fa580");
+extern void add_y(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_y(void *, void *, float) __asm__("FUN_001f9a68");
+extern int randbelow_y(int) __asm__("FUN_00213260");
+extern void setupcol_y(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
+extern int collide_y(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern int tick_y(void *) __asm__("FUN_001f9740");
+extern void remove_y(void *) __asm__("FUN_0020c828");
+void FUN_L15_0029ae18(char *moby);
+void FUN_L15_0029af88(char *moby);
+
+void FUN_L15_0029ac30(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    float next[4];
+    float back[4];
+    char col[0x30];
+    float s;
+    if (*(int *)(d + 0x10) == 0) {
+        if (dist_y(m + 0x10, D_L15_001673C0_y) < 15.0f) {
+            sound_y(9, 0, m, 0x27E);
+            *(int *)(d + 0x10) = 1;
+        }
+    }
+    if (m[0x20] != 0)
+        return;
+    s = 1.0f;
+    *(float *)(m + 0x40) = addrot_y(*(float *)(m + 0x40), D_0015ED6C_y * 6.2831855f);
+    add_y(next, m + 0x10, d);
+    scale_y(back, d, -2.0f);
+    add_y(back, back, m + 0x10);
+    if (D_001413F4_y[0] == 2 && randbelow_y(5) != 0)
+        s = 0.0f;
+    setupcol_y(col, m, 0x10003, s, d);
+    *(short *)(col + 0x1A) = *(short *)(m + 0xA6);
+    if (collide_y(back, next, 0x10, m, col) != 0 || tick_y(d + 0x14) != 0) {
+        if (D_L15_00174458_y[0] != *(int *)(d + 0x18)) {
+            sound_y(8, 0, m, 0x27E);
+            FUN_L15_0029af88((char *)m);
+            remove_y(m);
+            return;
+        }
+    }
+    qcopy(m + 0x10, next);
+    FUN_L15_0029ae18((char *)m);
+}
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029BFF8), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
@@ -1510,8 +1562,8 @@ extern float D_0015ED6C;
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L15_002cbac0_u() __asm__("FUN_L15_002cbac0");
-extern short D_0015ED84_d __asm__("D_0015ED84") __attribute__((sda));
-extern short D_L15_00161AB8_d __asm__("D_L15_00161AB8") __attribute__((sda));
+extern short D_0015ED84_d __asm__("D_0015ED84");
+extern short D_L15_00161AB8_d __asm__("D_L15_00161AB8");
 extern short D_L15_00161ABC_d __asm__("D_L15_00161ABC") __attribute__((sda));
 extern short D_L15_00161AC0_d __asm__("D_L15_00161AC0") __attribute__((sda));
 extern short D_L15_00161AC4_d __asm__("D_L15_00161AC4") __attribute__((sda));

@@ -1041,7 +1041,7 @@ void FUN_L00_002df3d8(u8 *p) {
         FUN_L00_002592b8(it, it[0], 0, 0);
     }
 }
-extern s32 D_L00_0015F5CC __attribute__((sda));
+extern s32 D_L00_0015F5CC;
 typedef struct {
     char pad[8];
     s32 **p;

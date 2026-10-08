@@ -254,7 +254,7 @@ typedef struct {
 } G;
 
 extern G D_0013F350_c __asm__("D_0013F350");
-extern s32 D_L00_0015F5CC __attribute__((sda));
+extern s32 D_L00_0015F5CC;
 extern f32 D_0015ED6C_c __asm__("D_0015ED6C");
 
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
@@ -488,7 +488,7 @@ extern unsigned char D_L00_0015F444_e[] __asm__("D_L00_0015F444")
 extern float D_L00_0015F448;
 extern float D_L00_0015F44C;
 extern float D_L00_0015F450;
-extern float D_L00_0015F454 __attribute__((sda));
+extern float D_L00_0015F454;
 extern float D_L00_0015F448_e[] __asm__("D_L00_0015F448") __attribute__((section(".sdata")));
 extern int D_L00_0015FFF0;
 extern float D_L00_001604A4;
@@ -537,7 +537,7 @@ extern char D_L00_0016CA40[] __attribute__((section(".data")));
 extern int D_L00_0015F30C;
 extern unsigned char D_L00_0015F444;
 extern unsigned char D_L00_0015F445;
-extern unsigned char D_L00_0015F446 __attribute__((sda));
+extern unsigned char D_L00_0015F446;
 extern float D_L00_0015F448;
 extern float D_L00_0015F44C;
 extern float D_L00_0015F450;
@@ -875,7 +875,7 @@ extern s32 D_L00_001614CC;
 extern s32 D_L00_001614D4;
 extern s32 D_0015ED84;
 extern s32 D_0015EEA4;
-extern s32 D_L00_0015F5CC __attribute__((sda));
+extern s32 D_L00_0015F5CC;
 
 #define G_W(o) D_0013F350.w##o
 #define G_B(o) D_0013F350.b##o
@@ -1011,7 +1011,7 @@ extern int D_L00_001614B0 __attribute__((sda));
 extern float D_L00_001614B4 __attribute__((sda));
 extern float D_L00_001614B8 __attribute__((sda));
 extern unsigned short D_L00_001614BC __attribute__((sda));
-extern int D_L00_001614D8 __attribute__((sda));
+extern int D_L00_001614D8;
 extern int D_L00_001614D0_e[] __asm__("D_L00_001614D0") __attribute__((section(".sdata")));
 extern float ConvertIntegerToFloat(int);
 extern int FUN_001f9770(void *);

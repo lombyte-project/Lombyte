@@ -98,9 +98,134 @@ void FUN_L14_002dfc58(u8 *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002e7bd8.s", FUN_L14_002e7bd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eaf88.s", FUN_L14_002eaf88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eb388.s", FUN_L14_002eb388);
+/* Starts one spark: places it at a random spot around the emitter, picks its speed and its life. */
+#include "qcopy.h"
+extern struct { char pad[0x30]; float v[4]; char rest[0x40]; } *D_L14_001600EC_k __asm__("D_L14_001600EC");
+extern int D_L14_00161C30_k __asm__("D_L14_00161C30") __attribute__((sda));
+extern int D_L14_00161C34_k __asm__("D_L14_00161C34") __attribute__((sda));
+extern float D_L14_00161C38_k __asm__("D_L14_00161C38") __attribute__((sda));
+extern float D_L14_00161C3C_k __asm__("D_L14_00161C3C") __attribute__((sda));
+extern float D_0015ED6C_k __asm__("D_0015ED6C");
+extern void cross_k(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern float spread_k(float, float) __asm__("FUN_L00_00257c48");
+extern void scale_k(void *, void *, float) __asm__("FUN_001f9a68");
+extern void add_k(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float rand_k(float, float) __asm__("FUN_002132a8");
+extern int ftoi_k(float) __asm__("FUN_001fa6d0");
+extern int frames_k(int) __asm__("FUN_001f96f8");
+
+typedef struct {
+    char pad0[0x14];
+    float f14, f18, f1C;
+    float pos[48][4];
+    short n320[48];
+    short n380[48];
+    short n3E0[48];
+    float f440[48];
+    int pad500;
+    int i504;
+} Spk_k;
+
+void FUN_L14_002eb388(char *m, int i, void *dir) {
+    Spk_k *d = *(Spk_k **)(m + 0x78);
+    float fwd[4];
+    float side[4];
+    float up[4];
+    float t[4];
+    float x, y, z;
+    char *p;
+    int n;
+    qcopy(fwd, dir);
+    up[0] = 0.0f;
+    up[2] = 1.0f;
+    up[1] = 0.0f;
+    up[3] = 0.0f;
+    cross_k(side, fwd, up);
+    qcopy(d->pos[i], D_L14_001600EC_k[d->i504].v);
+    x = -d->f14;
+    y = spread_k(0.0f, d->f18);
+    z = spread_k(0.0f, d->f1C);
+    scale_k(t, fwd, x);
+    p = (char *)d->pos[i];
+    add_k(p, p, t);
+    scale_k(t, side, y);
+    add_k(p, p, t);
+    scale_k(t, up, z);
+    add_k(p, p, t);
+    d->pos[i][3] = rand_k(D_L14_00161C38_k, D_L14_00161C3C_k);
+    d->f440[i] = rand_k(D_L14_00161C30_k, D_L14_00161C34_k) * D_0015ED6C_k;
+    n = frames_k(ftoi_k(d->f14 * 2.0f / d->f440[i]));
+    d->n320[i] = n;
+    d->n380[i] = n;
+    d->n3E0[i] = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eb568.s", FUN_L14_002eb568);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eb810.s", FUN_L14_002eb810);
+/* Draws every live spark as a quad that faces the camera, faded by its age. */
+typedef unsigned int u128_m __attribute__((mode(TI)));
+typedef struct {
+    float m[4][4];
+    u32 col[4];
+    float uv[8];
+    unsigned long a, b, c, d;
+} Pk_m;
+extern int D_L14_00161C0C_m __asm__("D_L14_00161C0C") __attribute__((sda));
+extern char D_L14_001674C0_m[] __asm__("D_L14_001674C0");
+extern float D_L14_001DFD40_m[4][4] __asm__("D_L14_001DFD40");
+extern unsigned long tex_m(s32) __asm__("FUN_001f44b8");
+extern void sreg_m(s32, s64) __asm__("FUN_00233980");
+extern void sub_m(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void norm_m(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void cross_m(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void scale_m(void *, void *, float) __asm__("FUN_001f9a68");
+extern void xform_m(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void draw_m(void *, int, int) __asm__("FUN_001f7d30");
+
+void FUN_L14_002eb810(char *m) {
+    Spk_k *d = *(Spk_k **)(m + 0x78);
+    Pk_m pk;
+    float mat[4][4];
+    float up[4];
+    u32 col;
+    int i;
+    int k;
+    pk.b = tex_m(0x30);
+    pk.c = 0x0000FF9000000260ULL;
+    pk.d = 0x8000000048ULL;
+    pk.a = 0;
+    sreg_m(0x4A, 0);
+    sreg_m(0x47, 0x51001);
+    pk.uv[0] = 1.0f;
+    pk.uv[1] = 1.0f;
+    pk.uv[2] = 0.0f;
+    pk.uv[3] = 1.0f;
+    pk.uv[4] = 1.0f;
+    pk.uv[5] = 0.0f;
+    pk.uv[6] = 0.0f;
+    pk.uv[7] = 0.0f;
+    for (i = 0; i < 48; i++) {
+        if (d->n320[i] != 0) {
+            col = D_L14_00161C0C_m | (d->n3E0[i] << 24);
+            pk.col[3] = col;
+            pk.col[2] = col;
+            pk.col[1] = col;
+            pk.col[0] = col;
+            qcopy(mat[3], d->pos[i]);
+            *(u128_m *)up = 0;
+            up[2] = 1.0f;
+            up[3] = 1.0f;
+            sub_m(mat[0], d->pos[i], D_L14_001674C0_m);
+            norm_m(mat[0], mat[0], 1.0f);
+            cross_m(mat[1], mat[0], up);
+            norm_m(mat[1], mat[1], 1.0f);
+            cross_m(mat[2], mat[1], mat[0]);
+            for (k = 0; k < 4; k++) {
+                scale_m(pk.m[k], D_L14_001DFD40_m[k], ((Spk_k *)((char *)d + (i << 4)))->pos[0][3]);
+                xform_m(pk.m[k], pk.m[k], mat);
+            }
+            draw_m(&pk, 0, 0);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ec810.s", FUN_L14_002ec810);
 #include "qcopy.h"
 

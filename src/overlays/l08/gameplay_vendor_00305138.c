@@ -667,8 +667,8 @@ void FUN_L08_00308f68(int x) {
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */
 
 extern int D_L08_001623F0_e[] __asm__("D_L08_001623F0") __attribute__((section(".sdata")));
-extern Pair D_L08_001623F8[] __attribute__((sda));
-extern Pair D_L08_00162408_c[] __asm__("D_L08_00162408") __attribute__((sda));
+extern Pair D_L08_001623F8[];
+extern Pair D_L08_00162408_c[] __asm__("D_L08_00162408");
 extern Pair D_L08_001F8548[];
 extern char D_L08_001675C0[];
 extern char D_L08_001F01C8[];

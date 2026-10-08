@@ -25,7 +25,7 @@ extern unsigned char D_0013D408[];
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern unsigned char D_0013D4DF __attribute__((section(".data")));
 extern unsigned char D_0014161B[];
-extern int D_0015ED84 __attribute__((sda));
+extern int D_0015ED84;
 extern int D_0015ED80_e[] __asm__("D_0015ED80") __attribute__((section(".sdata")));
 extern char D_0013F3D0[];
 extern void DebugPrint();

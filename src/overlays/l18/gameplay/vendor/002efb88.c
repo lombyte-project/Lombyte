@@ -416,7 +416,7 @@ typedef struct {
 extern char *D_L18_001600EC;
 extern char D_0013E533[];
 extern float D_0015ED6C;
-extern float D_0015ED70_g __asm__("D_0015ED70") __attribute__((sda));
+extern float D_0015ED70_g __asm__("D_0015ED70");
 extern float D_L18_001622C0 __attribute__((sda));
 extern float D_L18_001677D8 __attribute__((section(".data")));
 extern float advance_accelerated_scalar(float, float, float, float, float *,
@@ -1187,7 +1187,7 @@ extern short D_L18_00162360 __attribute__((sda));
 extern short D_L18_00162390 __attribute__((sda));
 extern short D_L18_00162394 __attribute__((sda));
 extern short D_L18_00162398 __attribute__((sda));
-extern short D_L18_001623A0_c __asm__("D_L18_001623A0") __attribute__((sda));
+extern short D_L18_001623A0_c __asm__("D_L18_001623A0");
 extern short D_L18_001623A4 __attribute__((sda));
 extern short D_L18_0016239C __attribute__((sda));
 extern unsigned char *D_L18_0015FFD8;

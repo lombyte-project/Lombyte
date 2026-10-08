@@ -297,7 +297,7 @@ extern void FUN_L02_002e0cd8(void *);
 extern void FUN_L11_002d1030(void *);
 extern void FUN_L11_002d1340(void *);
 extern void FUN_L11_002d14b0(void *);
-extern void FUN_L11_002d27b0(void *);
+void FUN_L11_002d27b0(WM11 *m);
 
 void FUN_L11_002d0fa8(unsigned char *moby) {
     FUN_L02_002e0cd8(moby);
@@ -445,7 +445,72 @@ int FUN_L11_002d25e8(char *m, float *out) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d27b0.s", FUN_L11_002d27b0);
+typedef struct {
+    char pad000[0x160];
+    char body[0x64];
+    float pitch;
+    float yaw;
+    char pad1CC[4];
+    float height;
+    char pad1D4[0xC];
+    char head[0x68];
+    float head_yaw;
+} WD11b;
+
+extern char D_0013F3D0_b[] __asm__("D_0013F3D0");
+
+/* Guard head update: in its watching states it turns its body and head toward the hero. */
+void FUN_L11_002d27b0(WM11 *m) {
+    WS11 scratch;
+    WD11b *d = (WD11b *)m->data;
+    float rate;
+    float head_rate;
+    int tracking;
+    rate = 0.02f;
+    head_rate = 0.3f;
+    switch (m->state) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 11:
+    case 12:
+    case 14:
+    case 16:
+        tracking = 1;
+        qcopy(scratch.target, D_0013F3D0_b);
+        break;
+    default:
+        tracking = 0;
+        break;
+    }
+    if (tracking) {
+        float yaw;
+        float pitch;
+        qcopy(scratch.eye, m->position);
+        scratch.eye[2] += 1.0f;
+        FUN_001f9a28(scratch.delta, scratch.target, scratch.eye);
+        yaw = FUN_001fa5c8(FUN_001f9e90(scratch.delta[0], scratch.delta[1]), m->yaw);
+        pitch = -FUN_001f9e90(FUN_001f9b20(scratch.delta), scratch.delta[2]);
+        if (yaw > 1.2217305f)
+            yaw = 1.2217305f;
+        else if (yaw < -1.2217305f)
+            yaw = -1.2217305f;
+        if (pitch > 0.2617994f)
+            pitch = 0.2617994f;
+        else if (pitch < -0.5235988f)
+            pitch = -0.5235988f;
+        d->pitch = pitch;
+        d->yaw = yaw * 0.7f;
+        d->head_yaw = yaw * 0.3f;
+    }
+    if (D_0015EDB0)
+        d->height = 2.75f;
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->body, 0);
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->head, 1);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f0e40.s", FUN_L11_002f0e40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f2518.s", FUN_L11_002f2518);
 #define NOT_SDA

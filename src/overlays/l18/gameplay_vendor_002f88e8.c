@@ -329,7 +329,7 @@ extern int scale_game_frames(int);
 extern float D_L18_00162600 __attribute__((sda));
 extern void FUN_L00_002599e8(void *, float, float, float, int, int, int, int, int);
 extern void FUN_L18_002fc100(void *);
-extern void FUN_L18_002fc860(void);
+void FUN_L18_002fc860(char *m);
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
@@ -549,7 +549,77 @@ short FUN_L18_002fc7e0(int idx) {
     }
     return n;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc860.s", FUN_L18_002fc860);
+/* Draws the moby's glow as a camera-facing quad sized by its charge, coloured between two tints. */
+#include "qcopy.h"
+typedef struct {
+    float m[4][4];
+    int col[4];
+    float uv[4][2];
+    unsigned long a, b, c, d;
+} Pk_c860;
+extern int D_L18_0016262C_g __asm__("D_L18_0016262C") __attribute__((sda));
+extern int D_L18_00162630_g __asm__("D_L18_00162630") __attribute__((sda));
+extern int D_L18_00162634_g __asm__("D_L18_00162634") __attribute__((sda));
+extern int D_L18_00162638_g __asm__("D_L18_00162638") __attribute__((sda));
+extern int D_L18_0016263C_g __asm__("D_L18_0016263C") __attribute__((sda));
+extern int D_L18_00162640_g __asm__("D_L18_00162640") __attribute__((sda));
+extern int D_L18_00162644_g __asm__("D_L18_00162644") __attribute__((sda));
+extern float D_L18_00162648_g __asm__("D_L18_00162648") __attribute__((sda));
+extern float D_L18_0016264C_g __asm__("D_L18_0016264C") __attribute__((sda));
+extern float D_L18_00162650_g __asm__("D_L18_00162650") __attribute__((sda));
+extern char D_L18_001677C0_g[] __asm__("D_L18_001677C0");
+extern float D_L18_001EFCD0_g[4][2] __asm__("D_L18_001EFCD0");
+extern void clear_g(void *) __asm__("FUN_001f99f8");
+extern void sub_g(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void cross_g(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void norm_g(void *, void *, float) __asm__("FUN_001f9bf8");
+extern unsigned long tex_g(int) __asm__("FUN_001f44b8");
+extern void draw_g(void *, void *, int) __asm__("FUN_001f7d30");
+
+void FUN_L18_002fc860(char *m) {
+    char *d = *(char **)(m + 0x78);
+    Pk_c860 pk;
+    float mat[4][4];
+    float w;
+    float h;
+    int c;
+    int i;
+    float *p;
+    h = *(float *)(d + 0x1F4) + 1.0f + D_L18_0016264C_g;
+    w = 1.0f - *(float *)(d + 0x1F4) + D_L18_00162650_g;
+    qcopy(mat[3], m + 0x10);
+    mat[3][2] -= D_L18_00162648_g;
+    clear_g(mat[2]);
+    mat[2][2] = h;
+    sub_g(mat[0], D_L18_001677C0_g, m + 0x10);
+    cross_g(mat[1], mat[0], mat[2]);
+    cross_g(mat[0], mat[1], mat[2]);
+    norm_g(mat[0], mat[0], w);
+    norm_g(mat[1], mat[1], w);
+    pk.b = tex_g(D_L18_00162644_g);
+    pk.c = 0x0000FF9000000260ULL;
+    pk.a = 0;
+    pk.d = (unsigned long)D_L18_0016262C_g | ((unsigned long)D_L18_00162630_g << 2) | ((unsigned long)D_L18_00162634_g << 4) |
+           ((unsigned long)D_L18_00162638_g << 6) | 0x8000000000ULL;
+    c = FUN_001fa6e0(D_L18_0016263C_g, D_L18_00162640_g, *(float *)(d + 0x1F4));
+    for (i = 0; i < 4; i++) {
+        pk.uv[i][0] = D_L18_001EFCD0_g[i][0];
+        pk.uv[i][1] = D_L18_001EFCD0_g[i][1];
+        p = pk.m[i];
+        clear_g(p);
+        if (i & 1)
+            p[2] = 1.0f;
+        else
+            p[2] = 0.0f;
+        if (i < 2)
+            p[1] = 1.0f;
+        else
+            p[1] = -1.0f;
+        p[3] = 1.0f;
+        pk.col[i] = c;
+    }
+    draw_g(&pk, mat, 0);
+}
 #include "sda.h"
 
 /* For each listed moby of matching type, spawns effects at five points. */

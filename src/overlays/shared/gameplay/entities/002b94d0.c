@@ -369,14 +369,14 @@ typedef struct {
 extern char D_0013E533[];
 extern char D_L00_001DBBA0[];
 extern float ConvertIntegerToFloat(int);
-extern float D_L00_001616D4 __attribute__((sda));
+extern float D_L00_001616D4;
 extern float D_L00_00166DC0[];
 extern float D_L00_0017AEBC __attribute__((section(".data")));
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int D_L00_001616CC __attribute__((sda));
-extern int D_L00_001616D0 __attribute__((sda));
+extern int D_L00_001616CC;
+extern int D_L00_001616D0;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32();
 extern float D_L00_001616A4 __attribute__((sda));

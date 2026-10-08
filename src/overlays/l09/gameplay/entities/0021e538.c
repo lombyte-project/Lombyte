@@ -17,7 +17,7 @@ typedef struct {
 } Strip;
 
 extern char D_L09_0016EAA0[];
-extern int *D_L09_001611C0 __attribute__((sda));
+extern int *D_L09_001611C0;
 extern int *D_L09_001611C0_x[] __asm__("D_L09_001611B8") __attribute__((section(".sdata")));
 extern int D_L09_0015F5CC;
 extern int FUN_001fa728(char *, float);

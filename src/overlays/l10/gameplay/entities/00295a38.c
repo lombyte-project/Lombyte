@@ -236,7 +236,68 @@ void FUN_L10_00295c20(char *moby) {
     subtract_vector_xyz(v, moby + 0x10, prev);
     FUN_L00_00260738(d + 0x60, v, moby + 0x40, moby + 0x40);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298668.s", FUN_L10_00298668);
+/* Spinning pickup: waits until the hero is close and level with it, then plays the scene, saves and goes away. */
+extern float D_0015ED6C_p __asm__("D_0015ED6C");
+extern unsigned char D_0013D504_p[] __asm__("D_0013D504");
+extern char D_0013F350_p[] __asm__("D_0013F350");
+extern int D_L10_0015F5C4_p __asm__("D_L10_0015F5C4");
+extern int D_L10_0015F640_p __asm__("D_L10_0015F640");
+extern char *D_L10_0015FFD8_p __asm__("D_L10_0015FFD8");
+extern float addrot_p(float, float) __asm__("FUN_001fa580");
+extern void FUN_L00_002d6bf0_p(void *) __asm__("FUN_L00_002d6bf0");
+extern void FUN_L10_00298940_p(void *) __asm__("FUN_L10_00298940");
+extern float dist_p(void *, void *) __asm__("FUN_001f9b80");
+extern float fabs_p(float) __asm__("FUN_001f99c0");
+extern void start_scene_p(int) __asm__("FUN_L00_00298840");
+extern void FUN_L00_00263d40_p(int, int) __asm__("FUN_L00_00263d40");
+extern void FUN_L00_00260860_p(int, int) __asm__("FUN_L00_00260860");
+extern void FUN_L00_00284e50_p(void *, void *) __asm__("FUN_L00_00284e50");
+extern int save_p(int, int) __asm__("FUN_0020b178");
+extern void remove_p(void *) __asm__("FUN_0020c828");
+
+void FUN_L10_00298668(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    *(float *)(m + 0x48) = addrot_p(*(float *)(m + 0x48), D_0015ED6C_p * 1.5707964f);
+    switch (m[0x20]) {
+    case 0:
+        FUN_L00_002d6bf0_p(m);
+        if (D_0013D504_p[0] != 0) {
+            remove_p(m);
+            return;
+        }
+        m[0x20] = 1;
+        *(float *)(m + 0x18) = *(float *)(m + 0x18) + 0.5f;
+        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * 0.667f;
+        break;
+    case 1:
+        FUN_L10_00298940_p(m);
+        if (dist_p(m + 0x10, D_0013F350_p + 0x80) < 3.0f) {
+            char *h = D_0013F350_p;
+            if (fabs_p(*(float *)(m + 0x18) - *(float *)(h + 0x88)) < 2.0f && *(int *)(h + 0x22A8) != 0) {
+                *(unsigned short *)(m + 0x34) |= 0x41;
+                start_scene_p(2);
+                m[0x20] = 2;
+            }
+        }
+        break;
+    case 2:
+        if (D_L10_0015F5C4_p != 2) {
+            FUN_L00_00263d40_p(0x271B, -1);
+            D_L10_0015F640_p = 0xB4;
+            FUN_L00_00260860_p(0x1C, 1);
+            if (*(int *)(d + 4) != -1) {
+                char *o = D_L10_0015FFD8_p + (*(int *)(d + 4) << 8);
+                FUN_L00_00284e50_p(o + 0x10, o + 0x40);
+            }
+            save_p(0, -1);
+            m[0x20] = 3;
+        }
+        break;
+    case 3:
+        remove_p(m);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298b68.s", FUN_L10_00298b68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002be858.s", FUN_L10_002be858);
 /* Collectible drop: waits until it is taken, then sinks below its rest height and records the pickup. */

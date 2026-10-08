@@ -414,7 +414,7 @@ int FUN_L14_002b3920(int a0) {
 }
 /* Returns 0 if any listed moby of class 0x1C is in state 2, else 1. */
 
-extern char *D_L14_0015FFD8 __attribute__((sda));
+extern char *D_L14_0015FFD8;
 extern short *D_L14_001ABF40[];
 
 int FUN_L14_002b39a0(unsigned char *m) {
@@ -667,5 +667,82 @@ unsigned char *FUN_L14_002dea98(char *owner, char *pos) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002dfd10.s", FUN_L14_002dfd10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002e0170.s", FUN_L14_002e0170);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002e03b8.s", FUN_L14_002e03b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002feca8.s", FUN_L14_002feca8);
+/* Exhaust puffs from the moby's nozzle: two coloured sparks and three white puffs of shrinking size. */
+typedef struct {
+    unsigned char pad0[4];
+    int w4;
+    unsigned char pad8[2];
+    unsigned char bA;
+    unsigned char bB;
+} T_eca8;
+typedef struct {
+    unsigned char pad0[8];
+    unsigned char b8;
+    unsigned char b9;
+    short hA;
+    unsigned char padC[0x14];
+    T_eca8 tail;
+} P_eca8;
+extern int below_y(int) __asm__("FUN_00213260");
+extern int frames_y(int) __asm__("FUN_001f96f8");
+extern void scale_y(void *, void *, float) __asm__("FUN_001f9a68");
+extern void add_y(void *, void *, void *) __asm__("FUN_001f9a10");
+extern P_eca8 *puff_y(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
+extern float D_L14_0015F580_y[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
+
+extern float D_L14_00161FCC_y __asm__("D_L14_00161FCC") __attribute__((sda));
+extern float D_L14_00161FD0_y __asm__("D_L14_00161FD0") __attribute__((sda));
+extern float D_L14_00161FD4_y __asm__("D_L14_00161FD4") __attribute__((sda));
+extern float D_L14_00161FD8_y __asm__("D_L14_00161FD8") __attribute__((sda));
+extern int D_L14_00161FE4_y __asm__("D_L14_00161FE4") __attribute__((sda));
+
+void FUN_L14_002feca8(unsigned char *m) {
+    float off[4];
+    float pos[4];
+    int i;
+    int j;
+    int n;
+    int life;
+    float size;
+    scale_y(off, m + 0xC0, D_L14_00161FCC_y);
+    add_y(pos, m + 0x10, off);
+    scale_y(off, m + 0xE0, D_L14_00161FD0_y);
+    add_y(pos, pos, off);
+    for (i = 0; i < 2; i++) {
+        P_eca8 *part;
+        T_eca8 *tail;
+        n = below_y(0x10);
+        part = puff_y(pos, 0.2f, 1.0f, 0.9f, below_y(2) == 0 ? n : -n, D_L14_0015F580_y, 100000.0f, D_L14_00161FE4_y);
+        if (part) {
+            tail = &part->tail;
+            part->hA = frames_y(0xC);
+            tail->w4 = 2;
+            tail->bA = 0x7F;
+            tail->bB = part->hA;
+        }
+    }
+    scale_y(off, m + 0xC0, D_L14_00161FD4_y);
+    add_y(pos, m + 0x10, off);
+    scale_y(off, m + 0xE0, D_L14_00161FD8_y);
+    add_y(pos, pos, off);
+    n = 0x10;
+    life = frames_y(2);
+    size = 80000.0f;
+    for (j = 0; j < 3; j++) {
+        P_eca8 *part;
+        T_eca8 *tail;
+        part = puff_y(pos, 0.05f, 1.0f, 1.0f, n, D_L14_0015F580_y, size, 0x7FFFFFFF);
+        if (part) {
+            tail = &part->tail;
+            part->hA = life;
+            part->b8 = below_y(0xFF);
+            tail->w4 = 2;
+            tail->bA = 0x7F;
+            tail->bB = part->hA;
+        }
+        n = -n;
+        size -= 20000.0f;
+        life *= 2;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ff640.s", FUN_L14_002ff640);

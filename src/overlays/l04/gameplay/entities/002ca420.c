@@ -45,7 +45,7 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float D_0015ED64; /* no foreign declaration */
 extern float D_0015ED6C; /* no foreign declaration */
-extern int D_L04_0015FFD8 __attribute__((sda)); /* no foreign declaration */
+extern int D_L04_0015FFD8; /* no foreign declaration */
 extern short D_L04_0016195C __attribute__((sda));
 extern void FUN_L00_00260738(char *, void *, void *, void *);
 extern void FUN_L00_002628d8(char *, char *, int, float, float);

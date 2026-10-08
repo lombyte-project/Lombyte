@@ -11,7 +11,7 @@
 
 extern float D_0015ED6C;
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8") __attribute__((sda));
+extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8");
 extern short D_L15_00161EC0_d __asm__("D_L15_00161EC0") __attribute__((sda));
 
 void FUN_L15_002e46b0(char *moby) {

@@ -102,7 +102,72 @@ void FUN_L15_002d77c0(char *moby) {
     buf[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
     FontPrintCenterLarge_001f6c20(W(D_L15_00161BD4), W(D_L15_00161BD8), col, (int)buf, 8);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d79e8.s", FUN_L15_002d79e8);
+/* Starts the moby's trail when requested: resets the trail points and the counters. */
+extern int D_L15_00161BF8_r __asm__("D_L15_00161BF8") __attribute__((sda));
+extern float D_L15_00161BFC_r __asm__("D_L15_00161BFC") __attribute__((sda));
+extern int D_L15_00161C14_r __asm__("D_L15_00161C14") __attribute__((sda));
+extern int D_L15_00161C1C_r __asm__("D_L15_00161C1C") __attribute__((sda));
+extern int D_L15_00161C30_r __asm__("D_L15_00161C30") __attribute__((sda));
+extern int D_L15_00161C60_r __asm__("D_L15_00161C60");
+extern int D_L15_00161C8C_r __asm__("D_L15_00161C8C") __attribute__((sda));
+extern short D_L15_00161CC6_r[] __asm__("D_L15_00161CC6");
+extern short D_L15_00161CD0_r __asm__("D_L15_00161CD0");
+extern short D_L15_00161CD2_r __asm__("D_L15_00161CD2");
+extern short D_L15_00161CD4_r __asm__("D_L15_00161CD4");
+extern short D_L15_00161CD6_r __asm__("D_L15_00161CD6");
+extern short D_L15_00161CD8_r __asm__("D_L15_00161CD8");
+extern short D_L15_00161CDA_r __asm__("D_L15_00161CDA");
+extern short D_L15_00161CDC_r __asm__("D_L15_00161CDC");
+extern short D_L15_00161CDE_r __asm__("D_L15_00161CDE");
+extern short D_L15_00161CC0_a[4] __asm__("D_L15_00161CC0");
+extern int D_L15_00161CE0_r __asm__("D_L15_00161CE0");
+extern int D_L15_00161CE4_r __asm__("D_L15_00161CE4");
+extern float D_L15_001D3740_r[][4] __asm__("D_L15_001D3740");
+extern float D_L15_001D3750_r[][4] __asm__("D_L15_001D3750");
+extern int D_L15_001D39D0_r[] __asm__("D_L15_001D39D0");
+extern float D_L15_001D3A20_r[][4] __asm__("D_L15_001D3A20");
+extern int D_L15_001D3B60_r[] __asm__("D_L15_001D3B60");
+extern int scale_frames_r(int) __asm__("FUN_001f96f8");
+extern void sub_r(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void norm_r(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void add_r(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void zero_r(void *) __asm__("FUN_001f99f8");
+
+void FUN_L15_002d79e8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float v[4];
+    float step[4];
+    int i;
+    int j;
+    if (D_L15_00161BF8_r != 0) {
+        D_L15_00161BF8_r = 0;
+        D_L15_00161CE4_r = 0;
+        D_L15_00161CE0_r = scale_frames_r(D_L15_00161C8C_r);
+        D_L15_00161C60_r = 0x7F2020;
+        sub_r(v, d + 0x100, d + 0xF0);
+        norm_r(step, v, D_L15_00161BFC_r / 20.0f);
+        qcopy(D_L15_001D3750_r, d + 0xF0);
+        for (i = 1; i < 20; i++) {
+            add_r(D_L15_001D3750_r[i], D_L15_001D3740_r[i], step);
+            D_L15_001D39D0_r[i] = 0;
+            zero_r(D_L15_001D3A20_r[i]);
+            D_L15_001D3B60_r[i] = 0;
+        }
+        for (j = 0; j < 4; j++)
+            D_L15_00161CC0_a[j] = -1;
+        D_L15_00161CD0_r = 8;
+        D_L15_00161CD8_r = 4;
+        D_L15_00161CD2_r = 4;
+        D_L15_00161CDA_r = 2;
+        D_L15_00161CDC_r = 4;
+        D_L15_00161CD4_r = 8;
+        D_L15_00161CD6_r = 4;
+        D_L15_00161CDE_r = 2;
+        D_L15_00161C14_r = 0;
+        D_L15_00161C1C_r = 0;
+        D_L15_00161C30_r = 0;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d7bb0.s", FUN_L15_002d7bb0);
 extern float D_0015ED60_8710 __asm__("D_0015ED60");
 extern char D_L15_001D3750_8710[] __asm__("D_L15_001D3750");
@@ -231,4 +296,50 @@ void FUN_L15_002d8e48(void *mv) {
     }
     draw_2d8e48(&quad, 0, 0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e4380.s", FUN_L15_002e4380);
+/* Spinning shot: flies along its velocity and blows up when it hits something, nears the hero or times out. */
+#include "qcopy.h"
+extern int D_L15_00174458_s[] __asm__("D_L15_00174458");
+extern int D_L15_0015F5CC_s __asm__("D_L15_0015F5CC");
+extern float D_0015ED6C_s __asm__("D_0015ED6C");
+extern float addrot_s(float, float) __asm__("FUN_001fa580");
+extern void add_s(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void setupcol_s(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
+extern int collide_s(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern int near_s(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
+extern int tick_s(void *) __asm__("FUN_001f9740");
+extern void spark_s(void *, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
+extern void blast_s(void *, void *, float, float, int) __asm__("FUN_L00_0025f090");
+extern void FUN_0022da68_s(int, int, void *) __asm__("FUN_0022da68");
+extern void remove_s(void *) __asm__("FUN_0020c828");
+extern void trail_s(void *, float, int, float) __asm__("FUN_L07_0029b8d8");
+
+void FUN_L15_002e4380(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    float next[4];
+    char col[0x30];
+    char *hit;
+    if (d == 0) {
+        remove_s(m);
+        return;
+    }
+    if (m[0x20] != 0)
+        return;
+    *(float *)(m + 0x40) = addrot_s(*(float *)(m + 0x40), D_0015ED6C_s * 6.2831855f);
+    add_s(next, m + 0x10, d);
+    setupcol_s(col, m, 1, 2.0f, d);
+    *(short *)(col + 0x1A) = *(short *)(m + 0xA6);
+    if (collide_s(m + 0x10, next, 0, m, col) != 0 || near_s(m + 0x10, 0, m, 0.3f) != 0 || tick_s(d + 0x38) != 0) {
+        hit = (char *)D_L15_00174458_s[0];
+        if (hit != 0 && (int)hit != *(int *)(d + 0x3C)) {
+            if (*(short *)(hit + 0xA6) != 0x4E)
+                spark_s(m, 0.5f, m + 0x10, 1, 2.0f, 0.0f, 0, 1, 0);
+            blast_s(m, m + 0x10, 0.5f, 13.0f, -1);
+            FUN_0022da68_s(0, 0, m);
+            remove_s(m);
+            return;
+        }
+    }
+    qcopy(m + 0x10, next);
+    if (D_L15_0015F5CC_s % 3 == 0)
+        trail_s(m, 30000.0f, 0, 0.1f);
+}
