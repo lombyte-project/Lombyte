@@ -211,7 +211,69 @@ void FUN_L06_003003f0(void) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300720.s", FUN_L06_00300720);
+/* Draws the 96 quads of the second backdrop mesh, skipping those that face away from D_L06_00167540. */
+typedef float FVec4_l06[4] __attribute__((aligned(16)));
+
+typedef struct {
+    FVec4_l06 v;
+} FRow_l06;
+
+extern FRow_l06 D_L06_001FAFF0[] __attribute__((section(".data")));
+extern FRow_l06 D_L06_001FA2F0[] __attribute__((section(".data")));
+extern FRow_l06 D_L06_001F77B0[] __attribute__((section(".data")));
+extern float D_L06_001F84B0[][2] __attribute__((section(".data")));
+extern short D_L06_001F7EB0[][4][2] __attribute__((section(".data")));
+extern float D_L06_00167540[];
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern float FUN_001f9ab0(void *, void *);
+
+void FUN_L06_00300720(void) {
+    FRow_l06 m[4];
+    int colors[4];
+    float uv[4][2];
+    unsigned long pkt[4];
+    float mat[4][4];
+    FVec4_l06 dir;
+    FVec4_l06 center;
+    float *mp;
+    int i;
+    int j;
+
+    pkt[1] = tex_3003f0(D_L06_00162064);
+    mp = mat[0];
+    pkt[2] = 0xFF9000000260;
+    pkt[3] = D_L06_00162054 | (long)D_L06_00162058 << 2;
+    pkt[3] |= (long)D_L06_0016205C << 4;
+    pkt[3] |= (long)D_L06_00162060 << 6;
+    pkt[3] |= (long)D_L06_00162068 << 32;
+    pkt[0] = 0;
+    init_3003f0(mp);
+    mat[3][2] = D_L06_0016204C_3003f0;
+    colors[3] = D_L06_0016206C;
+    colors[2] = D_L06_0016206C;
+    colors[1] = D_L06_0016206C;
+    colors[0] = D_L06_0016206C;
+    for (i = 0; i < 96; i++) {
+        vmul_3003f0(center, &D_L06_001FAFF0[i], D_L06_00162074);
+        FUN_001f9d20(center, center, mat);
+        FUN_001f9a28(dir, center, D_L06_00167540);
+        FUN_001f9bf8(dir, dir, 1.0f);
+        FUN_001f9cf8(center, &D_L06_001FA2F0[i], mp);
+        if (FUN_001f9ab0(dir, center) > 0.0f)
+            continue;
+        for (j = 0; j < 4; j++) {
+            int a = D_L06_001F7EB0[i][j][0];
+            int b = D_L06_001F7EB0[i][j][1];
+            vmul_3003f0(&m[j], &D_L06_001F77B0[a], D_L06_00162074);
+            uv[j][0] = D_L06_001F84B0[b][0];
+            uv[j][1] = D_L06_001F84B0[b][1];
+        }
+        draw_3003f0(m, mat, 0);
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
