@@ -92,12 +92,12 @@ int FUN_L03_002c6ca0(unsigned char *moby) {
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Places a train: puts the engine at `at` facing ang (offset back by its length), then lays each linked
  * car behind the previous one along ang, updating their motion deltas, and enables the coupling moby. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_00293720), where it is exact; names translated to the US level program. */
 
-typedef int Q_293720 __attribute__((mode(TI)));
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -123,12 +123,12 @@ void FUN_L03_00292578(char *moby, float *pos, float heading) {
     char *data;
     char *coupling;
     int next_id;
-    *(Q_293720 *)start = *(Q_293720 *)pos;
+    *(OvlQuad *)start = *(OvlQuad *)pos;
     data = *(char **)(moby + 0x78);
     coupling = D_L03_0015FFD8 + (*(int *)(data + 0xC4) << 8);
     next_id = *(int *)(data + 0xA0);
-    *(Q_293720 *)old_pos = *(Q_293720 *)(moby + 0x10);
-    *(Q_293720 *)old_rot = *(Q_293720 *)(moby + 0x40);
+    *(OvlQuad *)old_pos = *(OvlQuad *)(moby + 0x10);
+    *(OvlQuad *)old_rot = *(OvlQuad *)(moby + 0x40);
     qcopy(coupling + 0x10, start);
     offset[0] = fast_cos(heading) * -*(float *)(data + 0xDC);
     offset[1] = fast_sin(heading) * -*(float *)(data + 0xDC);
@@ -346,7 +346,6 @@ void FUN_L03_0029cff0(char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029d2e0.s", FUN_L03_0029d2e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029dba8.s", FUN_L03_0029dba8);
 
-typedef int q128_2bad40 __attribute__((mode(TI)));
 char *f20c4f8_2bad40(int) __asm__("FUN_0020c4f8");
 float f213308_2bad40(void) __asm__("FUN_00213308");
 void f2502f0_2bad40(char *, int, int, int) __asm__("FUN_L00_002502f0");
@@ -363,7 +362,7 @@ char *FUN_L03_002bad40(char *parent, int unused, int color, int a3, int a4, floa
         *(float *)(m + 0x2C) *= scale;
         *(char **)d = parent;
         qcopy(m + 0x10, *(char **)(parent + 0x78) + 0xF0);
-        *(q128_2bad40 *)(m + 0x40) = *(q128_2bad40 *)(parent + 0x40);
+        *(OvlQuad *)(m + 0x40) = *(OvlQuad *)(parent + 0x40);
         *(float *)(m + 0x40) = f213308_2bad40();
         *(short *)(d + 0xC) = a4;
         b = (color >> 16) & 0xFF;
@@ -383,7 +382,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c5bb8.s", FUN_L03_002c5bb8);
 /* Applies damage reaction, knockback parameters and animation state. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C7DE8), where it is exact; names translated to the US level program. */
 
-typedef int L03Quad __attribute__((mode(TI)));
 
 extern char *D_L03_0015FFD8_c __asm__("D_L03_0015FFD8");
 extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
@@ -425,7 +423,7 @@ void FUN_L03_002c6a20(unsigned char *moby) {
   FUN_L03_00250a78((float *)(data+0x120),4.5f,2.0f);
   *(float *)(data+0x170)=5.0f;
   *(float *)(data+0x174)=12.0f;
-  *(L03Quad *)vector=*(L03Quad *)(hit+0x10);
+  *(OvlQuad *)vector=*(OvlQuad *)(hit+0x10);
   FUN_L00_0025ab48(vector,&angle,data+0x138,data+0x13C);
   FUN_L00_0025c558(angle,moby,data+0x120,4,1,0);
   moby[0x20]=21;
@@ -510,7 +508,6 @@ int FUN_L03_002c6e18(float ang, unsigned char *moby, char *target) {
 /* Update for moby class 574 on Kerwan: a path-walking enemy that turns to, chases and attacks its target, jumps, falls under gravity and is replaced by debris when it dies. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8398), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 typedef struct {
     float pos[4];
@@ -854,7 +851,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         if (d->i290 != -1) {
             char *np = D_L03_001B05B0[d->i290];
-            *(u128 *)m->pos = *(u128 *)(np + 0x10);
+            *(OvlQuad *)m->pos = *(OvlQuad *)(np + 0x10);
             m->rot[2] = FUN_L00_002628d8_cf(*(float *)(np + 0x20) - *(float *)(np + 0x10),
                                             *(float *)(np + 0x24) - *(float *)(np + 0x14));
             if (is_point_inside_clip_volume_cf(m->b21) || AbsoluteFloat_cf(&tgt, d->i29C) ||
@@ -1274,7 +1271,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                     FUN_L03_002c95a8_cf(m);
                     return;
                 }
-                *(u128 *)m->pos = *(u128 *)(d->pf.path + 0x10);
+                *(OvlQuad *)m->pos = *(OvlQuad *)(d->pf.path + 0x10);
                 FUN_001f9b48_cf(d->v40);
                 d->mv.f18 = 0.0f;
                 m->state = 0xE;
@@ -1339,7 +1336,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                         FUN_L03_002c95a8_cf(m);
                         return;
                     }
-                    *(u128 *)m->pos = *(u128 *)(d->pf.path + 0x10);
+                    *(OvlQuad *)m->pos = *(OvlQuad *)(d->pf.path + 0x10);
                     FUN_001f9b48_cf(d->v40);
                     d->mv.f18 = 0.0f;
                     m->state = 0xE;
@@ -1428,7 +1425,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                     FUN_L03_002c95a8_cf(m);
                     return;
                 }
-                *(u128 *)m->pos = *(u128 *)(d->pf.path + 0x10);
+                *(OvlQuad *)m->pos = *(OvlQuad *)(d->pf.path + 0x10);
                 FUN_001f9b48_cf(d->v40);
                 d->mv.f18 = 0.0f;
                 m->state = 0xE;
@@ -1443,7 +1440,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                 FUN_L03_002c95a8_cf(m);
                 return;
             }
-            *(u128 *)m->pos = *(u128 *)(d->pf.path + 0x10);
+            *(OvlQuad *)m->pos = *(OvlQuad *)(d->pf.path + 0x10);
             FUN_001f9b48_cf(d->v40);
             d->mv.f18 = 0.0f;
             m->state = 0xE;
@@ -1459,7 +1456,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
         }
         m->flags &= 0xEFFF;
-        *(u128 *)m->pos = *(u128 *)(pf->path + 0x10);
+        *(OvlQuad *)m->pos = *(OvlQuad *)(pf->path + 0x10);
         m->flags |= 0x41;
         m->i94 = 0;
         break;
@@ -1496,14 +1493,14 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             Moby2C8398 *other;
             PathF2C8398 *pf;
             int i;
-            *(u128 *)out = 0;
+            *(OvlQuad *)out = 0;
             base = D_L03_0015FFD8_m;
             other = &base[d->i280];
             pf = &d->pf;
             if ((short)other->cls == 0x335 || (short)other->cls == 0x4BA) {
                 for (i = 0; i < *(int *)pf->path; i++) {
                     float tmp[4];
-                    *(u128 *)tmp = 0;
+                    *(OvlQuad *)tmp = 0;
                     probe_ground_height_cf((int)m, (char *)other, pf->path + 0x10 + i * 0x10, tmp,
                                            pf->path + 0x10 + i * 0x10, tmp);
                 }
@@ -1538,8 +1535,8 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             if (d->i280 != -1) {
                 float a[4];
                 float b[4];
-                *(u128 *)a = *(u128 *)D_L03_00173F80;
-                *(u128 *)b = *(u128 *)m->rot;
+                *(OvlQuad *)a = *(OvlQuad *)D_L03_00173F80;
+                *(OvlQuad *)b = *(OvlQuad *)m->rot;
                 mark_moby_for_removal_cf(a, b, m->rot[2]);
             }
         } else if (g + 5.0f < m->pos[2]) {
@@ -1574,7 +1571,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                     FUN_L03_002c95a8_cf(m);
                     return;
                 }
-                *(u128 *)m->pos = *(u128 *)(pf->path + 0x10);
+                *(OvlQuad *)m->pos = *(OvlQuad *)(pf->path + 0x10);
                 FUN_001f9b48_cf(d->v40);
                 d->mv.f18 = 0.0f;
                 m->state = 0xE;

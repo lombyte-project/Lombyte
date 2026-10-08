@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "sda.h"
+#include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CD118), where it is exact; names translated to the US level program. */
 
@@ -33,7 +34,6 @@ void FUN_L15_002cbd88(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002D7B60), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern char D_0013F350[];
 extern int FUN_001f0b58(void);
@@ -48,7 +48,7 @@ int FUN_L15_002d6770(void) {
         return 1;
     p = D_0013F350;
     if ((unsigned)(*(int *)(p + 0x2084) - 0x18) < 2) {
-        *(u128 *)vec = *(u128 *)(p + 0x80);
+        *(OvlQuad *)vec = *(OvlQuad *)(p + 0x80);
         vec[2] = vec[2] + 2.0f;
         h = probe_ground_height(vec, 0, 0.5f);
         if (FUN_001f0b58() != 0)

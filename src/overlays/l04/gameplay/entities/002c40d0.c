@@ -5,6 +5,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/overlay/quad.h"
 
 
 extern char *FUN_L00_002db890(char *);
@@ -42,7 +43,6 @@ s32 FUN_L04_002c41b0(T6 *p) {
     return 0;
 }
 
-typedef int u128_2d34d8 __attribute__((mode(TI)));
 
 extern void FUN_L00_00250df8(void *);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
@@ -52,7 +52,7 @@ void *FUN_L04_002d34d8(char *src, char *pos) {
     char tmp[16];
     char *p = tmp;
     char *m;
-    *(u128_2d34d8 *)tmp = *(u128_2d34d8 *)pos;
+    *(OvlQuad *)tmp = *(OvlQuad *)pos;
     m = (char *)func_0020D348_m(0x23a);
     if (m != 0) {
         *(unsigned char *)(m + 0x30) = 0xFF;

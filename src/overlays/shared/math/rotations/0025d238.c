@@ -159,15 +159,15 @@ void FUN_L00_0025da70(u128_0025da70 *a, u128_0025da70 *b, float lim) {
     }
 }
 #include "qcopy.h"
-typedef int T25db00_q __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 void FUN_001f9a28_25db00(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_001f9c48_25db00(void *, void *, float) __asm__("FUN_001f9c48");
 float FUN_001f9ab0_25db00(void *, void *) __asm__("FUN_001f9ab0");
 float FUN_001f9b80_25db00(void *, void *) __asm__("FUN_001f9b80");
-float FUN_L00_0025db00(float *out, float *p, T25db00_q *a, T25db00_q *b) {
+float FUN_L00_0025db00(float *out, float *p, OvlQuad *a, OvlQuad *b) {
     float d[4];
     float n[4];
-    T25db00_q c[1];
+    OvlQuad c[1];
     float k;
     int i;
     float *o, *pa, *pb;
@@ -201,7 +201,6 @@ float FUN_L00_0025db00(float *out, float *p, T25db00_q *a, T25db00_q *b) {
     }
     return FUN_001f9b80_25db00(p, out);
 }
-typedef int u128_25dcd8 __attribute__((mode(TI)));
 extern float fabs_25dcd8(float) __asm__("FUN_001f99c0");
 extern float db00_25dcd8(void *, void *, void *, void *) __asm__("FUN_L00_0025db00");
 extern float dist_25dcd8(void *, void *) __asm__("FUN_001f9b80");
@@ -213,11 +212,11 @@ extern void vscl_25dcd8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void vmul_25dcd8(void *, void *, float) __asm__("FUN_001f9a68");
 extern float dot_25dcd8(void *, void *) __asm__("FUN_001f9ab0");
 extern float da70_25dcd8(void *, void *, float) __asm__("FUN_L00_0025da70");
-float FUN_L00_0025dcd8(u128_25dcd8 *out, u128_25dcd8 *p, u128_25dcd8 *a, u128_25dcd8 *b, float r) {
-    u128_25dcd8 d[2];
-    u128_25dcd8 c[1];
-    u128_25dcd8 e[1];
-    u128_25dcd8 g[1];
+float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r) {
+    OvlQuad d[2];
+    OvlQuad c[1];
+    OvlQuad e[1];
+    OvlQuad g[1];
     float *o, *fa, *fb;
     float res, t, u;
     int i;

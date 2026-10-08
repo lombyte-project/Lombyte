@@ -4,21 +4,21 @@
 #include "asm.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Mine (moby class 74) update: falls and bounces, sticks to what it hits, homes on a nearby target and explodes. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002AB910.c: func_L00_002AB910), where it is exact; names translated to the US level program. */
 
-typedef int Q910 __attribute__((mode(TI)));
 
 typedef float V910[4] __attribute__((aligned(16)));
 
 typedef union {
-    Q910 q;
+    OvlQuad q;
     float f[4];
 } U910;
 
 typedef struct {
-    Q910 q[5];
+    OvlQuad q[5];
 } B910;
 
 typedef struct M910 M910;
@@ -428,7 +428,7 @@ void FUN_L00_002aa670(M910 *m) {
                                 qcopy(&m->pos, &D_H910.pos);
                                 normalize_vector_xyz(t, &D_H910.nrm, D_0015ED70 * 9.7f);
                                 add_vector_xyz(&m->pos, &m->pos, t);
-                                *(Q910 *)ov = v->vel.q;
+                                *(OvlQuad *)ov = v->vel.q;
                                 FUN_L00_001ff660(v, v, &D_H910.nrm);
                                 scale_vector_xyz(v, v, 0.6f);
                                 v->vel.f[2] *= 0.5f;
@@ -567,7 +567,7 @@ void FUN_L00_002aa670(M910 *m) {
                         float lim;
                         int mode;
 
-                        *(Q910 *)n = m->pos.q;
+                        *(OvlQuad *)n = m->pos.q;
                         if ((m->b70 & 2) && m->b52 == 1 && m->anim != 2) {
                             blend_moby_animation(m, 2, 0, 10);
                         }
@@ -622,7 +622,7 @@ void FUN_L00_002aa670(M910 *m) {
                     V910 t;
                     {
                         subtract_vector_xyz(t, &m->pos, &old);
-                        v->vel.q = *(Q910 *)t;
+                        v->vel.q = *(OvlQuad *)t;
                     }
                 }
             }
@@ -650,10 +650,10 @@ void FUN_L00_002aa670(M910 *m) {
                     V910 r;
                     {
                         subtract_vector_xyz(r, &m->pos, &D_G910.cam->pos);
-                        *(Q910 *)t = *(Q910 *)r;
+                        *(OvlQuad *)t = *(OvlQuad *)r;
                         normalize_vector_xyz(t, t, 0.75f);
                         add_vector_xyz(r, &D_G910.cam->pos, t);
-                        *(Q910 *)n = *(Q910 *)r;
+                        *(OvlQuad *)n = *(OvlQuad *)r;
                         FUN_L00_00258490(m, &m->pos, n, 0.4f, 0.25f, 0.25f, 0.5235988f, 0);
                     }
                 } else {
@@ -755,7 +755,7 @@ void FUN_L00_002aa670(M910 *m) {
                         float s = ConvertIntegerToFloat(D_E910.b11) * 0.5f + 1.0f;
                         int hit = FUN_L00_001f2868(&m->pos, 0x10, m, 0, s + s);
 
-                        *(Q910 *)t = m->pos.q;
+                        *(OvlQuad *)t = m->pos.q;
                         FUN_L00_0025a9f8(m, t, D_L00_00177F00, hit, 0, 0x810000, 4, 1, 3.0f, 0.25f,
                                          1.5f);
                     }
@@ -774,15 +774,15 @@ void FUN_L00_002aa670(M910 *m) {
                         int cg;
                         int cr;
 
-                        *(Q910 *)t = m->pos.q;
+                        *(OvlQuad *)t = m->pos.q;
                         t[2] += 3.5f;
                         wz = probe_ground_height(t, 0, 0.5f);
                         for (i = 0; i < 150; i++) {
-                            *(Q910 *)r = 0;
+                            *(OvlQuad *)r = 0;
                             r[0] = random_float_between(-1.0f, 1.0f);
                             r[1] = random_float_between(-1.0f, 1.0f);
                             r[2] = random_float_between(-0.5f, -2.0f);
-                            *(Q910 *)n = *(Q910 *)r;
+                            *(OvlQuad *)n = *(OvlQuad *)r;
                             normalize_vector_xyz(
                                 n, n, random_float_between(D_0015ED6C * 4.0f, D_0015ED6C * 8.0f));
                             FUN_L00_0026f080(&m->pos, n,
@@ -795,11 +795,11 @@ void FUN_L00_002aa670(M910 *m) {
                             float rr;
                             float ang;
 
-                            *(Q910 *)r = 0;
+                            *(OvlQuad *)r = 0;
                             r[0] = random_float_between(D_0015ED6C * -0.75f, D_0015ED6C * 0.75f);
                             r[1] = random_float_between(D_0015ED6C * -0.75f, D_0015ED6C * 0.75f);
                             r[2] = random_float_between(D_0015ED6C * 4.0f, D_0015ED6C * 16.0f);
-                            *(Q910 *)n = *(Q910 *)r;
+                            *(OvlQuad *)n = *(OvlQuad *)r;
                             rr = random_float_between(0.0f, 0.35f);
                             ang = random_angle_radians();
                             r[0] = fast_cos(ang) * rr;
@@ -829,7 +829,7 @@ void FUN_L00_002aa670(M910 *m) {
                             normalize_vector_xyz(r, r,
                                                  random_float_between(1.5f, 3.0f) * D_0015ED6C);
                             r[2] = random_float_between(3.0f, 6.0f) * D_0015ED6C;
-                            *(Q910 *)n = m->pos.q;
+                            *(OvlQuad *)n = m->pos.q;
                             n[2] = wz;
                             c1 = FUN_L00_0025c0e8(c1, D_E910.b11);
                             c2 = FUN_L00_0025c0e8(c2, D_E910.b11);
@@ -861,11 +861,11 @@ void FUN_L00_002aa670(M910 *m) {
                             float rr;
                             float ang;
 
-                            *(Q910 *)r = 0;
+                            *(OvlQuad *)r = 0;
                             r[0] = random_float_between(D_0015ED6C * -0.5f, D_0015ED6C * 0.5f) * sc;
                             r[1] = random_float_between(D_0015ED6C * -0.5f, D_0015ED6C * 0.5f) * sc;
                             r[2] = random_float_between(D_0015ED6C * 4.0f, tbl[kind]) * sc;
-                            *(Q910 *)n = *(Q910 *)r;
+                            *(OvlQuad *)n = *(OvlQuad *)r;
                             rr = random_float_between(0.0f, kind == 1 ? 0.5f : 0.25f) * sc;
                             ang = random_angle_radians();
                             r[0] = fast_cos(ang) * rr;
@@ -1238,7 +1238,6 @@ unsigned char *FUN_L00_002af450(void *pos, void *vel, int n, int flag, int g) {
 typedef struct {
     float f[4];
 } __attribute__((aligned(16))) V_2af5b8;
-typedef int Q_2af5b8 __attribute__((mode(TI)));
 typedef struct {
     int c[4];
 } C_2af5b8;
@@ -1272,11 +1271,11 @@ void FUN_L00_002af5b8(unsigned char *m) {
     if (m[0xBC] & 1) {
         for (i = 0; i < 1; i++) {
             c = D_L00_00161438_2af5b8;
-            *(Q_2af5b8 *)&t = 0;
+            *(OvlQuad *)&t = 0;
             t.f[0] = rndf_2af5b8(-1.0f, 1.0f);
             t.f[1] = rndf_2af5b8(-1.0f, 1.0f);
             t.f[2] = rndf_2af5b8(-1.0f, 1.0f);
-            *(Q_2af5b8 *)&v = *(Q_2af5b8 *)&t;
+            *(OvlQuad *)&v = *(OvlQuad *)&t;
             scale_2af5b8(&v, &v, D_0015ED6C_2af5b8);
             if (m[0xBC] & 0xFE) {
                 int a = col_2af5b8(c.c[rndi_2af5b8(4)], m[0xBC] >> 1);
@@ -1431,9 +1430,8 @@ void FUN_L00_002afa48(M_2afa48 *m) {
         break;
     }
 }
-typedef int u128_2afc70 __attribute__((mode(TI)));
 typedef union {
-    u128_2afc70 q;
+    OvlQuad q;
     float f[4];
 } V_2afc70;
 extern float D_0015ED6C_2afc70 __asm__("D_0015ED6C");
@@ -1701,7 +1699,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b03a0.s", FUN_L00_002b03a0);
 typedef struct {
     float f[4];
 } __attribute__((aligned(16))) V_2b1af0;
-typedef int Q_2b1af0 __attribute__((mode(TI)));
 typedef struct {
     V_2b1af0 a;
     char pad[0x30];
@@ -1730,8 +1727,8 @@ void FUN_L00_002b1af0(unsigned char *o) {
     int t;
     if (o[0xBC] == 0)
         return;
-    *(Q_2b1af0 *)&a = 0;
-    *(Q_2b1af0 *)&b = 0;
+    *(OvlQuad *)&a = 0;
+    *(OvlQuad *)&b = 0;
     a.f[0] = 0.23f;
     a.f[1] = 0.18f;
     b.f[1] = 1.0f;

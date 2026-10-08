@@ -114,10 +114,10 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3e58.s", FUN_L03_002d3e58);
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D5650), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern char D_L03_00173F60[];
 extern float FUN_001f9e90(float, float);
@@ -145,11 +145,11 @@ char *FUN_L03_002d4288(char *a, char *pos, char *parent, int n, float f0, float 
         *(float *)(d + 0x24) = f1;
         *(char **)(d + 0x10) = parent;
         *(int *)(d + 0x28) = 0;
-        *(u128 *)v = *(u128 *)(parent + 0x10);
+        *(OvlQuad *)v = *(OvlQuad *)(parent + 0x10);
         v[2] = *(float *)(pos + 8);
         if (FUN_001efa68(v, pos, 2, parent, 0) != 0) {
             *(int *)(d + 0x14) = 0;
-            *(u128 *)(m + 0x10) = *(u128 *)D_L03_00173F60;
+            *(OvlQuad *)(m + 0x10) = *(OvlQuad *)D_L03_00173F60;
             *(int *)(d + 0x24) = 0;
         }
         FUN_L00_00250df8(m);
@@ -227,7 +227,7 @@ void FUN_L03_002db020(char *m) {
     int i;
     float t;
 
-    *(u128 *)old = *(u128 *)(m + 0x10);
+    *(OvlQuad *)old = *(OvlQuad *)(m + 0x10);
     v = *(char **)(m + 0x78);
     *(float *)(v + 0x64) += D_L03_00161BC0_2db020;
     a[0] = cos_2db020(*(float *)(m + 0x48)) * *(float *)(v + 0x64);

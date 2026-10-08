@@ -134,11 +134,11 @@ void FUN_L04_002ba448(char *arg, float f) {
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Update of the big axebot: hit reaction, state machine (idle, alert, path, chase, return home, swing, stagger, turn, death), knockback, gravity, and its axe moby. */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB7B0), where it is exact; names translated to the US level program. */
 
-typedef int u128_B7B0 __attribute__((mode(TI)));
 
 typedef float V4_B7B0[4] __attribute__((aligned(16)));
 
@@ -497,7 +497,7 @@ void FUN_L04_002ba520(M_B7B0 *moby) {
                     data->fE8 = 1.0f;
                     data->fE0 = 0x400;
                     FUN_L03_00250a78(data->fC0, 5.7f, 4.0f);
-                    *(u128_B7B0 *)v = *(u128_B7B0 *)hit->pos;
+                    *(OvlQuad *)v = *(OvlQuad *)hit->pos;
                     FUN_L00_0025ab48(v, &ang2, &data->fD8, &data->fDC);
                     FUN_L00_0025c558(ang2, moby, data->fC0, 7, 1, 0);
                     data->f110 = 12.0f;
@@ -1023,7 +1023,6 @@ float FUN_L04_002c1fb8(void *moby, void *out, float speed) {
 /* Update of the circular saw enemy: hit reaction, state machine (idle, chase, patrol, attack), movement and gravity. */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C35F0), where it is exact; names translated to the US level program. */
 
-typedef int u128_35F0 __attribute__((mode(TI)));
 
 typedef float V4_35F0[4] __attribute__((aligned(16)));
 
@@ -1807,11 +1806,11 @@ void FUN_L04_002c2270(M_35F0 *moby) {
         V4_35F0 a;
         int alt;
         {
-            *(u128_35F0 *)a = 0;
+            *(OvlQuad *)a = 0;
             a[0] = random_float_between(1.0f, -1.0f) * (D_0015ED6C * 0.1f);
             a[1] = random_float_between(1.0f, -1.0f) * (D_0015ED6C * 0.1f);
             a[2] = random_float_between(0.8f, 1.2f) * (D_0015ED6C * -2.5f);
-            *(u128_35F0 *)b = *(u128_35F0 *)a;
+            *(OvlQuad *)b = *(OvlQuad *)a;
             alt = random_integer_below(100) & 1;
             FUN_L00_0024f7c8(moby, 0, a);
             transform_vector_by_basis(b, b, moby->fC0);
@@ -1829,7 +1828,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c41e0.s", FUN_L04_002c41e0);
 /* Blarg trooper update: takes hits, walks its path toward the target, fires, and keeps its gun moby attached. */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C5BD0), where it is exact; names translated to the US level program. */
 
-typedef int u128_5BD0 __attribute__((mode(TI)));
 
 struct Path5BD0 {
     int count;
@@ -2054,7 +2052,7 @@ void FUN_L04_002c4850(char *moby) {
                 *(float *)(data + 0x84) = c;
                 *(float *)(data + 0x8C) = d;
             }
-            *(u128_5BD0 *)st.w.p.v70 = *(u128_5BD0 *)(hit + 0x10);
+            *(OvlQuad *)st.w.p.v70 = *(OvlQuad *)(hit + 0x10);
             FUN_L00_0025ab48(st.w.p.v70, &ang, data + 0x88, data + 0x8C);
             FUN_L00_0025c558(ang, moby, data + 0x70, 0xD, 1, 0);
             *(float *)(data + 0xC0) = 12.0f;
@@ -2074,7 +2072,7 @@ void FUN_L04_002c4850(char *moby) {
             } else {
                 *(float *)(data + 0xF4) = 2.0f / FUN_001f96b0(15.0f);
             }
-            *(u128_5BD0 *)st.w.p.v70 = *(u128_5BD0 *)(hit + 0x10);
+            *(OvlQuad *)st.w.p.v70 = *(OvlQuad *)(hit + 0x10);
             FUN_L00_0025ab48(st.w.p.v70, &ang2, data + 0xF4, &one);
             *(float *)(moby + 0x48) = fast_add_rotations(3.1415927f, ang2);
             break;
@@ -2085,7 +2083,7 @@ void FUN_L04_002c4850(char *moby) {
             blend_moby_animation_p(moby, (void *)0xC, 0, (void *)scale_game_frames(5));
             *(unsigned char *)(moby + 0x20) = 0xA;
             *(float *)(data + 0xF4) = 2.0f / FUN_001f96b0(15.0f);
-            *(u128_5BD0 *)st.w.p.v70 = *(u128_5BD0 *)(hit + 0x10);
+            *(OvlQuad *)st.w.p.v70 = *(OvlQuad *)(hit + 0x10);
             FUN_L00_0025ab48(st.w.p.v70, &ang2, data + 0xF4, &one);
             *(float *)(moby + 0x48) = fast_add_rotations(3.1415927f, ang2);
             break;
@@ -2166,7 +2164,7 @@ void FUN_L04_002c4850(char *moby) {
         if (dist < 14.0f && dist >= 2.5f &&
             AbsoluteFloat(*(float *)(moby + 0x18) - st.tgt[2]) < 8.0f) {
             if (*(short *)(data + 0xF2) == 0) {
-                *(u128_5BD0 *)st.w.p.v90 = 0;
+                *(OvlQuad *)st.w.p.v90 = 0;
                 st.w.p.v90[2] = 0.5f;
                 add_vector_xyz(st.w.p.v70, pos, st.w.p.v90);
                 add_vector_xyz(st.w.p.v80, st.v50, st.w.p.v90);

@@ -357,14 +357,14 @@ void FUN_L16_002e0de0(unsigned char *moby) {
 }
 
 #include "sda.h"
+#include "rnc/overlay/quad.h"
 
 /* Advance a homing spark, emit its trail, and test its collision or impact state. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002A50F0), where it is exact; names translated to the US level program. */
 
-typedef int L16SparkQuad __attribute__((mode(TI)));
 
 typedef union {
-    L16SparkQuad quad;
+    OvlQuad quad;
     float f[4];
 } L16SparkVector;
 
@@ -625,7 +625,6 @@ void FUN_L16_002c3d38(unsigned char *moby) {
         break;
     }
 }
-typedef int u128_q __attribute__((mode(TI)));
 
 /* Spawns effects around a moby when a nearby position is valid. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002C57E8), where it is exact; names translated to the US level program. */
@@ -657,7 +656,7 @@ void FUN_L16_002c44f0(unsigned char *m, void *p) {
     float a, b, radius, speed;
     int i;
     char *d;
-    *(u128_q *)origin = *(u128_q *)p;
+    *(OvlQuad *)origin = *(OvlQuad *)p;
     {
         float *start = origin;
         qcopy(m + 0x10, start);
@@ -1610,7 +1609,6 @@ void FUN_L16_002ce9f0(void *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D00E8), where it is exact; names translated to the US level program. */
 
-typedef int L16MoveQuad __attribute__((mode(TI)));
 
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
@@ -1627,7 +1625,7 @@ int FUN_L16_002ced20(char *moby, void *vec, float angle) {
     float speed;
     float dist;
     char *data = *(char **)(moby + 0x78);
-    *(L16MoveQuad *)a = *(L16MoveQuad *)vec;
+    *(OvlQuad *)a = *(OvlQuad *)vec;
     FUN_L00_0025be00((float *)(moby + 0x48), (float *)(data + 0x100), angle,
                      D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 25.132742f);
     speed = 0.0f;

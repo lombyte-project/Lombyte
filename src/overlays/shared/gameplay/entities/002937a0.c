@@ -58,6 +58,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d3878.s", FUN_L08_002d3878);
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Steers a moby along its path state and lifts it clear of the ground. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5080), where it is exact; names translated to the US level program. */
@@ -140,7 +141,6 @@ void *FUN_L08_002d4050(char *arg) {
     *(short *)(obj + 0xC8) = 0;
     return result;
 }
-typedef int ti_002d4108 __attribute__((mode(TI)));
 typedef struct {
     float m[4][4];
     u32 col[4];
@@ -168,10 +168,10 @@ void FUN_L08_002d4108(char *arg) {
     float M[4][4];
     float t[4];
     s32 i;
-    ti_002d4108 z = 0;
+    OvlQuad z = 0;
     u32 col;
 
-    *(ti_002d4108 *)up = z;
+    *(OvlQuad *)up = z;
     up[2] = 1.0f;
     up[3] = 1.0f;
     pk.b = FUN_001f44b8_002d4108(0xB);

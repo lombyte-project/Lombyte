@@ -290,9 +290,8 @@ void FUN_L02_002203e8(void) {
     }
 }
 #include "qcopy.h"
-typedef int Q __attribute__((mode(TI)));
 typedef union {
-    Q q;
+    OvlQuad q;
     f32 f[4];
 } V;
 extern u8 D_0013F350_c2[] __asm__("D_0013F350") __attribute__((section(".data")));
@@ -718,7 +717,6 @@ s32 FUN_L02_00222270(s32 mode) {
 /* Hero state machine: per-frame movement and physics for the current hero state (level 02 build). */
 /* Ported from rac1-decomp (src/overlays/l02_aridia/help_0021BC90.c: func_L02_00226338), where it is exact; names translated to the US level program. */
 
-typedef int u128c __attribute__((mode(TI)));
 typedef struct Moby {
     char p0[0x10];
     float f10[4];
@@ -931,7 +929,7 @@ void FUN_L02_00225c20(void) {
         if (hero.state.current == 1 || hero.state.current == 0x1E) {
             if (hero.unk20A5 != 0) {
 
-                *(u128c *)vec[0] = 0;
+                *(OvlQuad *)vec[0] = 0;
                 vec[0][0] = 1.0f;
                 transform_vector_by_basis(hero.motion.unk170.f, vec[0], D_L02_00167280.f350);
                 hero.motion.unk180 = D_L02_00167280.f158;
@@ -1348,7 +1346,7 @@ void FUN_L02_00225c20(void) {
             if (hero.unk9BC != 0) {
                 up = hero.unk9BC == 1;
             } else {
-                *(u128c *)vec[3] = *(u128c *)hero.motion.unk100.f;
+                *(OvlQuad *)vec[3] = *(OvlQuad *)hero.motion.unk100.f;
                 up = FUN_L00_00213350(vec[3]) > 0.0f;
             }
             if (up) {
@@ -1833,7 +1831,7 @@ void FUN_L02_00225c20(void) {
         if (hero.unk930 > 0.0f) {
 
             FUN_L00_002132b8(0.7f, 0.0f);
-            *(u128c *)vec[0] = *(u128c *)hero.unk920.f;
+            *(OvlQuad *)vec[0] = *(OvlQuad *)hero.unk920.f;
             hero.unk190 = hero.unk190 + FUN_L00_00213350(vec[0]);
             if (hero.unk190 < D_0015ED6C * 0.7f) {
                 hero.unk190 = D_0015ED6C * 0.7f;

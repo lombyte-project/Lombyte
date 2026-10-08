@@ -158,6 +158,7 @@ char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int c, floa
 }
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Update the floating enemy's patrol, attack and death states. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D40B8), where it is exact; names translated to the US level program. */
@@ -503,10 +504,9 @@ typedef struct {
     int reward_hits;
 } L16DamageData;
 
-typedef int q16_2d38b0 __attribute__((mode(TI)));
 
 typedef struct {
-    q16_2d38b0 vector;
+    OvlQuad vector;
     int status;
     float amount;
     float angle;
@@ -602,7 +602,7 @@ void FUN_L16_002d38b0(char *m) {
             {
                 float heading = FUN_001f9e90(*(float *)(m + 0x10) - *(float *)(source + 0x10),
                                              *(float *)(m + 0x14) - *(float *)(source + 0x14));
-                scratch.vector = *(q16_2d38b0 *)(hit + 0x10);
+                scratch.vector = *(OvlQuad *)(hit + 0x10);
                 scratch.angle = heading;
             }
             FUN_L00_0025ab48(&scratch.vector, &scratch.angle, &d->forward_impulse,
@@ -644,7 +644,7 @@ void FUN_L16_002d38b0(char *m) {
             {
                 float heading = FUN_001f9e90(*(float *)(m + 0x10) - *(float *)(source + 0x10),
                                              *(float *)(m + 0x14) - *(float *)(source + 0x14));
-                scratch.vector = *(q16_2d38b0 *)(hit + 0x10);
+                scratch.vector = *(OvlQuad *)(hit + 0x10);
                 scratch.fatal_angle = heading;
             }
             FUN_L00_0025ab48(&scratch.vector, &scratch.fatal_angle, &d->forward_impulse,

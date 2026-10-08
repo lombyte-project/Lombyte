@@ -112,6 +112,7 @@ int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out) {
     return 1;
 }
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 typedef float V4_2604f0[4] __attribute__((aligned(16)));
 u8 *FUN_L00_002603d0_002604f0(void *) __asm__("FUN_L00_002603d0");
 void FUN_001f9cf8_002604f0(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -178,13 +179,12 @@ int FUN_L00_00260668(int x, char *o, float *a, float *c, float *b, float *d) {
     return 1;
 }
 typedef float M4[16] __attribute__((aligned(16)));
-typedef int q128 __attribute__((mode(TI)));
 void FUN_001fa050(void *, void *);
 void FUN_001fa2d8(void *, void *);
 void FUN_001fa378(void *, void *, void *);
 void FUN_00214598(void *, void *);
 #include "qcopy.h"
-void FUN_L00_00260738(char *out, q128 *pos, void *m1, void *m2) {
+void FUN_L00_00260738(char *out, OvlQuad *pos, void *m1, void *m2) {
     M4 a, b, c;
     FUN_001fa050(a, m1);
     FUN_001fa2d8(a, a);

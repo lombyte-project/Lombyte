@@ -2,11 +2,11 @@
 /* Mixed file: 00272cb8 fills a particle from FUN_L00_002678b8; 00258090 is a VU0 vector helper. */
 #include "types.h"
 #include "asm.h"
+#include "rnc/overlay/quad.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00258090.s", FUN_L08_00258090);
 /* Ported from rac1-decomp (src/overlays/shared/partproc_00273A80.c: func_L08_00273A80), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -27,7 +27,7 @@ void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
     float s;
     float f20;
     int k;
-    *(u128 *)v = *(u128 *)vec;
+    *(OvlQuad *)v = *(OvlQuad *)vec;
     p = FUN_L00_002678b8(0);
     if (p != 0) {
         c = 0;
@@ -52,7 +52,7 @@ void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
             s = random_float_between_alt(20.0f, 30.0f);
             break;
         }
-        *(u128 *)w = *(u128 *)vp;
+        *(OvlQuad *)w = *(OvlQuad *)vp;
         normalize_vector_xyz(w, w, s);
         *(short *)(p + 0xA) = k2;
         *(int *)(p + 4) = ((c >> 2) << 24) | 0x606060;
@@ -61,12 +61,12 @@ void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
         p[3] = 0x44;
         p[1] = 3;
         p[2] = D_L08_001B2880_d[k];
-        *(u128 *)(p + 0x10) = *(u128 *)pos;
+        *(OvlQuad *)(p + 0x10) = *(OvlQuad *)pos;
         add_vector_xyz(u, pos, w);
-        *(u128 *)(p + 0x20) = *(u128 *)u;
+        *(OvlQuad *)(p + 0x20) = *(OvlQuad *)u;
         *(float *)(p + 0x1C) = f20;
         *(float *)(p + 0x2C) = 1.0f;
-        *(u128 *)(p + 0x30) = *(u128 *)vp;
+        *(OvlQuad *)(p + 0x30) = *(OvlQuad *)vp;
         *(float *)(p + 0x3C) = scale;
     }
 }

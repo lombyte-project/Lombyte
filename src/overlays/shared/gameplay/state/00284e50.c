@@ -4,7 +4,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
-typedef int ti_00284e50 __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 typedef struct {
     unsigned char h[0x404];
     unsigned char f[0x7FF];
@@ -20,7 +20,7 @@ extern char D_001516D0[];
 extern char D_0013E550[];
 extern void FUN_001f9838(int, void *, unsigned short);
 
-void FUN_L00_00284e50(ti_00284e50 *a, ti_00284e50 *b) {
+void FUN_L00_00284e50(OvlQuad *a, OvlQuad *b) {
     unsigned char *src;
     int i;
     char *s;

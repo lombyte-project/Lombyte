@@ -40,6 +40,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307d30.s", FUN_L06_00307d30);
 #include "rnc/overlay/entities.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Stage machine for a three-state effect moby: wait, activate, burst and delete. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320980), where it is exact; names translated to the US level program. */
@@ -137,13 +138,12 @@ void FUN_L06_0030be60(char *m) {
 extern char *mk_b(int) __asm__("FUN_0020c4f8");
 extern float FUN_001fa6c0(int);
 
-typedef int uq_b __attribute__((mode(TI)));
 
 void FUN_L06_0030bef8(char *src, int a1, int a2, int a3) {
-    uq_b v;
+    OvlQuad v;
     char *vp = (char *)&v;
     unsigned char *m;
-    v = *(uq_b *)src;
+    v = *(OvlQuad *)src;
     m = (unsigned char *)mk_b(0x76A);
     if (m) {
         char *e = *(char **)(m + 0x78);

@@ -104,11 +104,11 @@ int FUN_L00_00221df8(void) {
     return r;
 }
 #include "qcopy.h"
-typedef int q_221ee0 __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 typedef struct {
     u8 p0[0x80];
     union {
-        q_221ee0 q;
+        OvlQuad q;
         f32 f[4];
     } q80;
     f32 f90;
@@ -131,7 +131,7 @@ typedef struct {
 } Q_221ee0;
 typedef struct M_221ee0 {
     u8 p0[0x10];
-    q_221ee0 q10;
+    OvlQuad q10;
     u8 p1[0x28 - 0x20];
     struct M_221ee0 *next;
     u8 p2[0x31 - 0x2C];
@@ -152,7 +152,7 @@ s32 FUN_001efa68_221ee0(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 #define G D_0013F350_221ee0
 void FUN_L00_00221ee0(void) {
     union {
-        q_221ee0 q;
+        OvlQuad q;
         f32 f[4];
     } v, w;
     s32 out;

@@ -10,10 +10,10 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002eb098.s", FUN_L13_002eb098);
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002EE148), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern char *func_0020D348_m(int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -38,9 +38,9 @@ char *FUN_L13_002ecd10(char *src, int arg, int id) {
         *(char **)(data + 0x3C) = src;
         FUN_L00_00250df8(moby);
         qcopy(moby + 0x40, src + 0x40);
-        *(u128 *)(moby + 0xC0) = *(u128 *)(src + 0xC0);
-        *(u128 *)(moby + 0xD0) = *(u128 *)(src + 0xD0);
-        *(u128 *)(moby + 0xE0) = *(u128 *)(src + 0xE0);
+        *(OvlQuad *)(moby + 0xC0) = *(OvlQuad *)(src + 0xC0);
+        *(OvlQuad *)(moby + 0xD0) = *(OvlQuad *)(src + 0xD0);
+        *(OvlQuad *)(moby + 0xE0) = *(OvlQuad *)(src + 0xE0);
         *(int *)(data + 0x40) = scale_game_frames(0x258);
         FUN_L00_00250df8(moby);
     }

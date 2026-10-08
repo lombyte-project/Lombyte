@@ -5,10 +5,10 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/quad.h"
 
 /* Spawns a Gemlik moby that copies its look and transform from a source moby. */
 
-typedef int Q_3058a8 __attribute__((mode(TI)));
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -30,9 +30,9 @@ char *FUN_L13_003058a8(char *src, short cls) {
         pos = m + 0x10;
         FUN_L00_0024f7c8(src, cls, pos);
         qcopy(m + 0x40, src + 0x40);
-        *(Q_3058a8 *)(m + 0xC0) = *(Q_3058a8 *)(src + 0xC0);
-        *(Q_3058a8 *)(m + 0xD0) = *(Q_3058a8 *)(src + 0xD0);
-        *(Q_3058a8 *)(m + 0xE0) = *(Q_3058a8 *)(src + 0xE0);
+        *(OvlQuad *)(m + 0xC0) = *(OvlQuad *)(src + 0xC0);
+        *(OvlQuad *)(m + 0xD0) = *(OvlQuad *)(src + 0xD0);
+        *(OvlQuad *)(m + 0xE0) = *(OvlQuad *)(src + 0xE0);
         qcopy(d + 0x10, pos);
         *(int *)(m + 0x94) = 0;
         FUN_L00_00250df8(m);
@@ -48,7 +48,6 @@ char *FUN_L13_003058a8(char *src, short cls) {
 /* Initializes a Gemlik moby from its data block, copying transforms and resetting state. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00306E20), where it is exact; names translated to the US level program. */
 
-typedef int u128_306E20 __attribute__((mode(TI)));
 
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00250df8(void *);
@@ -60,9 +59,9 @@ void FUN_L13_00305988(char *moby, char *pos, int arg2, float arg3) {
     *(float *)(d + 0x28) = arg3;
     qcopy(moby + 0x40, s + 0x40);
     mp = moby + 0x10;
-    *(u128_306E20 *)(moby + 0xC0) = *(u128_306E20 *)(s + 0xC0);
-    *(u128_306E20 *)(moby + 0xD0) = *(u128_306E20 *)(s + 0xD0);
-    *(u128_306E20 *)(moby + 0xE0) = *(u128_306E20 *)(s + 0xE0);
+    *(OvlQuad *)(moby + 0xC0) = *(OvlQuad *)(s + 0xC0);
+    *(OvlQuad *)(moby + 0xD0) = *(OvlQuad *)(s + 0xD0);
+    *(OvlQuad *)(moby + 0xE0) = *(OvlQuad *)(s + 0xE0);
     FUN_L00_0024f7c8(*(void **)(d + 0x20), *(short *)(d + 0x26), mp);
     qcopy(d + 0x10, mp);
     qcopy(d, pos);

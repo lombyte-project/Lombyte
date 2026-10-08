@@ -311,6 +311,7 @@ void FUN_L00_00269c70(char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269d20.s", FUN_L00_00269d20);
 #include "eetypes.h"
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 extern unsigned char *D_L00_001B20A0_0026a4c8 __asm__("D_L00_001B20A0")
     __attribute__((section(".data")));
 unsigned char *FUN_L00_002678b8_0026a4c8(int) __asm__("FUN_L00_002678b8");
@@ -415,9 +416,8 @@ void FUN_L00_0026a880(unsigned char *p) {
     FUN_001f9a68_0026a880(e, e, D_0015ED60_0026a880 * -0.100000024f + 1.0f);
     p[8]--;
 }
-typedef int u128_26a9f0 __attribute__((mode(TI)));
 typedef union {
-    u128_26a9f0 q;
+    OvlQuad q;
     float f[4];
 } V_26a9f0;
 extern float D_L00_0015F5D0_26a9f0 __asm__("D_L00_0015F5D0");
@@ -1006,9 +1006,8 @@ void FUN_L00_0026c7f0(char *a) {
 typedef struct {
     f32 x, y, z, w;
 } __attribute__((aligned(16))) V_26c860;
-typedef int q_26c860 __attribute__((mode(TI)));
 typedef struct {
-    q_26c860 q[4];
+    OvlQuad q[4];
 } M3_26c860;
 typedef struct {
     M3_26c860 *p0;
@@ -1432,7 +1431,6 @@ void FUN_L00_0026d598(void *a, void *b, int flag) {
 typedef struct {
     float f[4];
 } __attribute__((aligned(16))) V_26d700;
-typedef int Q_26d700 __attribute__((mode(TI)));
 typedef struct {
     float x0, x4, x8, xc, r, g, b, a;
 } S_26d700;
@@ -1443,13 +1441,13 @@ typedef struct {
     char pad9;
     short xa;
     float xc;
-    Q_26d700 pos;
+    OvlQuad pos;
     S_26d700 s;
 } P_26d700;
 extern float D_0015ED60_26d700 __asm__("D_0015ED60");
 extern float D_0015ED64_26d700 __asm__("D_0015ED64");
 extern int D_001413D0_26d700 __asm__("D_001413D0") __attribute__((section(".data")));
-extern Q_26d700 D_L00_00173E60_26d700 __asm__("D_L00_00173E60") __attribute__((section(".data")));
+extern OvlQuad D_L00_00173E60_26d700 __asm__("D_L00_00173E60") __attribute__((section(".data")));
 void add_26d700(void *, void *, void *) __asm__("FUN_001f9a10");
 int coll_26d700(void *, void *, int, int, int) __asm__("FUN_001efa68");
 void clr_26d700(void *) __asm__("FUN_001f99f8");
@@ -1483,7 +1481,7 @@ void FUN_L00_0026d700(P_26d700 *p) {
             clr_26d700(s);
             p->xc += p->xc;
         } else {
-            p->pos = *(Q_26d700 *)&t;
+            p->pos = *(OvlQuad *)&t;
             if (s->xc != 0.0f)
                 s->x8 += s->xc;
             else
@@ -1681,7 +1679,6 @@ typedef struct {
     V_26de90 v10;
     Q_26de90 q;
 } M_26de90;
-typedef int q_26de90 __attribute__((mode(TI)));
 typedef struct {
     f32 f[16];
 } __attribute__((aligned(16))) X_26de90;
@@ -1891,9 +1888,8 @@ void FUN_L00_0026e3a8(P_26e3a8 *p) {
         vadd_26e3a8(p->pos, a, v);
     }
 }
-typedef int Q_26e670 __attribute__((mode(TI)));
 typedef union {
-    Q_26e670 q_26e670;
+    OvlQuad q_26e670;
     f32 f[4];
 } V_26e670_26e670;
 typedef struct O_26e670_26e670 O_26e670_26e670;
@@ -2025,7 +2021,6 @@ void FUN_L00_0026e670(O_26e670_26e670 *o) {
         }
     }
 }
-typedef int V_26eb88 __attribute__((mode(TI)));
 extern float D_0015ED60_26eb88 __asm__("D_0015ED60");
 extern float D_L00_001601F4_26eb88 __asm__("D_L00_001601F4") __attribute__((sda));
 extern float D_L00_001601F8_26eb88 __asm__("D_L00_001601F8") __attribute__((sda));
@@ -2036,8 +2031,8 @@ extern void vscl_26eb88(void *, void *, float) __asm__("FUN_001f9a68");
 extern void vadd_26eb88(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float dist_26eb88(void *, void *) __asm__("FUN_001f9b48");
 void FUN_L00_0026eb88(unsigned char *p) {
-    V_26eb88 a;
-    V_26eb88 b[1];
+    OvlQuad a;
+    OvlQuad b[1];
     unsigned char *m = *(unsigned char **)(p + 0x30);
     if (m == 0 || m[0x20] == 0xFE || m[0x20] == 0xFD || tick_26eb88(p + 0xA)) {
         kill_26eb88(p);
@@ -2047,12 +2042,12 @@ void FUN_L00_0026eb88(unsigned char *p) {
     b[0] = a;
     vscl_26eb88(b, b, (D_L00_001601F4_26eb88 - 1.0f) * D_0015ED60_26eb88 + 1.0f);
     vadd_26eb88(&a, b, *(unsigned char **)(p + 0x30) + 0x10);
-    *(V_26eb88 *)(p + 0x10) = a;
+    *(OvlQuad *)(p + 0x10) = a;
     vsub_26eb88(&a, *(unsigned char **)(p + 0x30) + 0x10, p + 0x20);
     b[0] = a;
     vscl_26eb88(b, b, (D_L00_001601F8_26eb88 - 1.0f) * D_0015ED60_26eb88 + 1.0f);
     vadd_26eb88(&a, b, *(unsigned char **)(p + 0x30) + 0x10);
-    *(V_26eb88 *)(p + 0x20) = a;
+    *(OvlQuad *)(p + 0x20) = a;
     if (dist_26eb88(p + 0x10, p + 0x20) < 0.1f ||
         dist_26eb88(p + 0x10, *(unsigned char **)(p + 0x30) + 0x10) < 1.0f) {
         kill_26eb88(p);

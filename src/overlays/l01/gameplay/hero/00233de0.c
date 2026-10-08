@@ -142,6 +142,7 @@ void FUN_L01_00234b40(void) {
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Hero state machine: per-frame movement and physics for the current hero state (level 01 build). */
 /* Ported from rac1-decomp (src/overlays/l01_novalis/help_002343F8.c: func_L01_002377A8), where it is exact; names translated to the US level program. */
@@ -156,7 +157,6 @@ typedef struct {
     short f1A;
     char p1C[0x14];
 } HitC __attribute__((aligned(16)));
-typedef int u128c __attribute__((mode(TI)));
 typedef struct Moby {
     char p0[0x10];
     float f10[4];
@@ -388,7 +388,7 @@ void FUN_L01_002370b8(void) {
         if (hero.state.current == 1 || hero.state.current == 0x1E) {
             if (hero.unk20A5 != 0) {
 
-                *(u128c *)vec[0] = 0;
+                *(OvlQuad *)vec[0] = 0;
                 vec[0][0] = 1.0f;
                 transform_vector_by_basis(hero.motion.unk170.f, vec[0], D_L01_00167100.f350);
                 hero.motion.unk180 = D_L01_00167100.f158;
@@ -741,7 +741,7 @@ void FUN_L01_002370b8(void) {
         }
         if (tick_countdown_32(&hero.unk8F0)) {
             add_vector_xyz_cf(((Moby *)hero.moby), 4, vec[0]);
-            *(u128c *)vec[2] = 0;
+            *(OvlQuad *)vec[2] = 0;
             vec[2][0] = 0.4f;
             transform_vector_by_basis(vec[2], vec[2], ((Moby *)hero.moby)->fC0);
             normalize_vector_xyz_cf(vec[0], vec[0], vec[2]);
@@ -768,7 +768,7 @@ void FUN_L01_002370b8(void) {
 
                     for (i = 0; i < 4; i++) {
                         add_vector_xyz_cf(m, i % 2, vec[0]);
-                        *(u128c *)vec[2] = 0;
+                        *(OvlQuad *)vec[2] = 0;
                         vec[2][0] = -0.15f;
                         transform_vector_by_basis(vec[2], vec[2], ((Moby *)hero.moby)->fC0);
                         normalize_vector_xyz_cf(vec[0], vec[0], vec[2]);
@@ -889,7 +889,7 @@ void FUN_L01_002370b8(void) {
         qcopy(hero.motion.velocity.f, hero.motion.unk150.f);
         if (tick_countdown_32(&hero.unk8F0) == 2) {
             add_vector_xyz_cf(((Moby *)hero.moby), 4, vec[0]);
-            *(u128c *)vec[2] = 0;
+            *(OvlQuad *)vec[2] = 0;
             vec[2][0] = 0.4f;
             transform_vector_by_basis(vec[2], vec[2], ((Moby *)hero.moby)->fC0);
             normalize_vector_xyz_cf(vec[0], vec[0], vec[2]);
@@ -1429,7 +1429,7 @@ void FUN_L01_002370b8(void) {
         if (hero.unk930 > 0.0f) {
 
             FUN_L00_002132b8(0.7f, 0.0f);
-            *(u128c *)vec[0] = *(u128c *)hero.unk920.f;
+            *(OvlQuad *)vec[0] = *(OvlQuad *)hero.unk920.f;
             hero.unk190 = hero.unk190 + FUN_L00_00213350(vec[0]);
             if (hero.unk190 < D_0015ED6C * 0.7f) {
                 hero.unk190 = D_0015ED6C * 0.7f;

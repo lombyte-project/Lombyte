@@ -164,9 +164,9 @@ void FUN_L05_00239fc0(void) {
 }
 #undef P
 #include "qcopy.h"
-typedef int Q __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 typedef union {
-    Q q;
+    OvlQuad q;
     f32 f[4];
 } V;
 extern u8 D_0013F350_c2[] __asm__("D_0013F350") __attribute__((section(".data")));
@@ -583,9 +583,8 @@ extern char D_0013F350[];
 
 s32 FUN_001efa68(void *, void *, s32, s32, s32);
 
-typedef int Qc __attribute__((mode(TI)));
 
-typedef union { Qc q; f32 f[4]; } V_c413e0;
+typedef union { OvlQuad q; f32 f[4]; } V_c413e0;
 
 typedef struct {
     char pad00[0x80];
@@ -770,7 +769,7 @@ void FUN_L05_002413e0(void) {
     motion_player = (L16MovementPlayer *)((char *)delta - 0x110);
     motion_player->speed = vector_length_xyz(delta);
     motion_player->horizontal_speed = vector_length_xy(delta);
-    work.q = *(Qc *)delta;
+    work.q = *(OvlQuad *)delta;
     motion_player->vertical_speed = FUN_L00_00213350(work.f);
     if (motion_player->vertical_speed < 0.0f) motion_player->vertical_speed = 0.0f;
     qcopy(work.f, new_position);

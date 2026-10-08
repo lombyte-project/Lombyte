@@ -368,6 +368,7 @@ void FUN_L00_002061f0(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002062b0.s", FUN_L00_002062b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00206c08.s", FUN_L00_00206c08);
 #include "sda.h"
+#include "rnc/overlay/quad.h"
 typedef struct {
     u8 p[8];
     s32 x8;
@@ -552,7 +553,6 @@ void FUN_L00_00207330(void *a, char *m) {
     f[0xC2] = s * 0.0f;
     f[0xC3] = -0.3f;
 }
-typedef int ti_207430 __attribute__((mode(TI)));
 extern int D_15F5CC_207430 __asm__("D_L00_0015F5CC");
 extern unsigned char D_0015EDB3_207430 __asm__("D_0015EDB3") __attribute__((section(".data")));
 extern float D_0015EE18_207430g __asm__("D_0015EE18_gp") __attribute__((sda));
@@ -571,7 +571,7 @@ extern void fcb10_207430(void *, int, void *) __asm__("FUN_0020cb10");
 
 void FUN_L00_00207430(char *o) {
     union {
-        ti_207430 q;
+        OvlQuad q;
         float f[4];
     } v;
     int k, r, g;
@@ -687,7 +687,6 @@ void FUN_L00_002079e8(void) {
                          D_0015ED6C * 1.5707963705062866f, D_0015ED6C * 2.094395160675049f);
     }
 }
-typedef int q_207a58 __attribute__((mode(TI)));
 extern unsigned char D_0013F350_207a58[] __asm__("D_0013F350");
 extern unsigned char D_0013F420_207a58[] __asm__("D_0013F420");
 extern float D_L00_001797D8_207a58[] __asm__("D_L00_001797D8") __attribute__((section(".data")));
@@ -698,7 +697,7 @@ void FUN_L00_00233b20_207a58(void *, void *, float) __asm__("FUN_L00_00233b20");
 
 void FUN_L00_00207a58(void) {
     unsigned char *G = D_0013F350_207a58;
-    q_207a58 t[1];
+    OvlQuad t[1];
     float s, f;
     int i, j;
     unsigned char *o, *e, *H;
@@ -887,11 +886,10 @@ void FUN_L00_00208038(u128 *v, int b, float x, float y) {
     g->n++;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002080b0.s", FUN_L00_002080b0);
-typedef int ti_208820 __attribute__((mode(TI)));
 typedef struct {
     char p0[0x80];
-    ti_208820 a;
-    ti_208820 b;
+    OvlQuad a;
+    OvlQuad b;
     char p1[0x1CC - 0xA0];
     int k;
     char p2[0x220 - 0x1D0];
@@ -918,7 +916,7 @@ extern void f4eed8_208820(void *, int, void *, float, float) __asm__("FUN_L00_00
 extern int fd568_208820(void) __asm__("FUN_L00_0020d568");
 
 void FUN_L00_00208820(void) {
-    ti_208820 v[1];
+    OvlQuad v[1];
     float m, f, d;
     unsigned char *o;
 
@@ -1016,9 +1014,8 @@ void FUN_L00_00208a10(void) {
                                   D_0013F350_00208a10.f220 - f);
     }
 }
-typedef s32 Q_208b60 __attribute__((mode(TI)));
 typedef union {
-    Q_208b60 q;
+    OvlQuad q;
     f32 f[4];
 } V_208b60;
 typedef struct {
@@ -1450,9 +1447,8 @@ void FUN_L00_00209848(int n, int lim) {
         }
     }
 }
-typedef int u128_209a40 __attribute__((mode(TI)));
 typedef union {
-    u128_209a40 q;
+    OvlQuad q;
     float f[4];
 } V_209a40;
 typedef struct {
@@ -1513,7 +1509,6 @@ void FUN_L00_00209a40(int n, int mode) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00209ca8.s", FUN_L00_00209ca8);
-typedef int u128_209ec8 __attribute__((mode(TI)));
 extern char D_0013F7EE_209ec8[] __asm__("D_0013F7EE") __attribute__((section(".data")));
 extern char D_0013F350_209ec8[] __asm__("D_0013F350") __attribute__((section(".data")));
 extern float D_0015ED6C_209ec8 __asm__("D_0015ED6C");
@@ -1533,13 +1528,13 @@ void FUN_00214db0_209ec8(void *, float, float, float) __asm__("FUN_00214db0");
 void FUN_L00_00269958_209ec8(void *, void *, int, int, int, int, int,
                              int) __asm__("FUN_L00_00269958");
 void FUN_L00_00209ec8(void) {
-    u128_209ec8 v[1];
-    u128_209ec8 w[1];
+    OvlQuad v[1];
+    OvlQuad w[1];
     char *g;
     char *base;
     float a, r, r0, f, a1, a2;
     int t, c, col, life, n1, n2, k;
-    u128_209ec8 *pt;
+    OvlQuad *pt;
     g = D_0013F7EE_209ec8;
     if (FUN_001f9770_209ec8(g)) {
         qcopy(v, g - 0x41E);

@@ -60,7 +60,7 @@ void FUN_L00_002634f8(Vec4_2634f8 *v) {
     }
 }
 #include "qcopy.h"
-typedef int ti_00263618 __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 typedef struct {
     float m[4][4];
     u32 col[4];
@@ -84,8 +84,8 @@ void FUN_L00_00263618(float *pos, u32 col, float s, float r) {
     float M[4][4];
     float t[4];
     s32 i;
-    ti_00263618 z = 0;
-    *(ti_00263618 *)up = z;
+    OvlQuad z = 0;
+    *(OvlQuad *)up = z;
     up[2] = 1.0f;
     up[3] = 1.0f;
     pk.b = FUN_001f44b8_00263618(0xB);

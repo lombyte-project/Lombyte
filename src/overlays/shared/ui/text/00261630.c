@@ -4,7 +4,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
-typedef int q_261630 __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 f32 FUN_L00_00257c48_261630(f32, f32) __asm__("FUN_L00_00257c48");
 s32 FUN_L00_00257b90_261630(s32, s32) __asm__("FUN_L00_00257b90");
 void FUN_L00_0025bc00_261630(void *, s32, f32, f32) __asm__("FUN_L00_0025bc00");
@@ -19,7 +19,7 @@ f32 FUN_001f9e90_261630(f32, f32) __asm__("FUN_001f9e90");
 s32 FUN_001f96f8_261630(s32) __asm__("FUN_001f96f8");
 f32 FUN_L00_0025b750_261630(f32, f32, f32) __asm__("FUN_L00_0025b750");
 void FUN_L00_00261630(u8 *o, u8 *s, f32 a, f32 b) {
-    q_261630 v[1];
+    OvlQuad v[1];
     u8 *pos;
     s32 n, t;
     f32 d;

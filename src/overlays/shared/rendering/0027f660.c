@@ -151,6 +151,7 @@ unsigned char *FUN_L01_00287158(void *a, int b, int c, int d, float f, float g) 
     return r;
 }
 #include "qzero.h"
+#include "rnc/overlay/quad.h"
 
 /* spawns a type-74 particle with transformed offset and velocity */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028B570), where it is exact; names translated to the US level program. */
@@ -339,7 +340,6 @@ int FUN_L01_0028b878(char *p) {
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C690), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern void *FUN_L01_0028b7b0(void *, int);
@@ -381,7 +381,7 @@ void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
     if (m < len) {
         normalize_vector_xyz(out, v3, m);
     } else {
-        *(u128 *)out = *(u128 *)v3;
+        *(OvlQuad *)out = *(OvlQuad *)v3;
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */

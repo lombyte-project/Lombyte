@@ -1269,6 +1269,7 @@ void FUN_L15_0029aba8(char *m) {
 }
 /* Flies the moby along its velocity, spinning; it dies with a sound when it hits something or times out. */
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 extern char D_L15_001673C0_y[] __asm__("D_L15_001673C0");
 extern int D_L15_00174458_y[] __asm__("D_L15_00174458");
 extern unsigned char D_001413F4_y[] __asm__("D_001413F4");
@@ -1460,7 +1461,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a6e68.s", FUN_L15_002a6e68);
 /* Builds a screen-space quad from the moby's offset and draws it. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A8850), where it is exact; names translated to the US level program. */
 
-typedef int u128_2A8850 __attribute__((mode(TI)));
 
 typedef struct {
     float v[4][4];
@@ -1489,9 +1489,9 @@ void FUN_L15_002a7628(char *moby) {
     char *d = *(char **)(moby + 0x78);
     int i;
     subtract_vector_xyz(A, d + 0x10, moby + 0x10);
-    *(u128_2A8850 *)B = *(u128_2A8850 *)A;
+    *(OvlQuad *)B = *(OvlQuad *)A;
     normalize_vector_xyz(B, B, 0.5f);
-    *(u128_2A8850 *)C = *(u128_2A8850 *)(moby + 0x10);
+    *(OvlQuad *)C = *(OvlQuad *)(moby + 0x10);
     FUN_L00_001ff290(D, C, B);
     subtract_vector_xyz(E, C, d + 0x10);
     subtract_vector_xyz(A, C, D_L15_001673C0);
@@ -1513,13 +1513,13 @@ void FUN_L15_002a7628(char *moby) {
         q.uv[i][1] = D_L15_001E27F0[i * 2 + 1];
     }
     subtract_vector_xyz(D, C, A);
-    *(u128_2A8850 *)q.v[0] = *(u128_2A8850 *)D;
+    *(OvlQuad *)q.v[0] = *(OvlQuad *)D;
     add_vector_xyz(D, C, A);
-    *(u128_2A8850 *)q.v[1] = *(u128_2A8850 *)D;
+    *(OvlQuad *)q.v[1] = *(OvlQuad *)D;
     subtract_vector_xyz(D, d + 0x10, F);
-    *(u128_2A8850 *)q.v[2] = *(u128_2A8850 *)D;
+    *(OvlQuad *)q.v[2] = *(OvlQuad *)D;
     add_vector_xyz(D, d + 0x10, F);
-    *(u128_2A8850 *)q.v[3] = *(u128_2A8850 *)D;
+    *(OvlQuad *)q.v[3] = *(OvlQuad *)D;
     draw_geometry_quad(&q, 0, 0);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002bddb0.s", FUN_L15_002bddb0);

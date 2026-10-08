@@ -49,6 +49,7 @@ int FUN_L15_001fe778(int a) {
 }
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 #define GI(o) (*(s32 *)(D_0013F350_c2 + (o)))
 #define GF(o) (*(f32 *)(D_0013F350_c2 + (o)))
 #define GH(o) (*(s16 *)(D_0013F350_c2 + (o)))
@@ -56,9 +57,8 @@ int FUN_L15_001fe778(int a) {
 #define GB(o) (D_0013F350_c2[o])
 #define HI(o) (*(s32 *)(D_L15_00174440 + (o)))
 #define HF(o) (*(f32 *)(D_L15_00174440 + (o)))
-typedef int Q __attribute__((mode(TI)));
 typedef union {
-    Q q;
+    OvlQuad q;
     f32 f[4];
 } V;
 extern u8 D_0013F350_c2[] __asm__("D_0013F350") __attribute__((section(".data")));

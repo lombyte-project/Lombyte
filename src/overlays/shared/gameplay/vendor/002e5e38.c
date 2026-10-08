@@ -5,6 +5,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/overlay/quad.h"
 extern char D_0013F350[];
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 
@@ -379,7 +380,6 @@ int FUN_L00_002e79c8(void *arg0, int arg1, float *arg2) {
     }
     return 0;
 }
-typedef int u128_2e7a30 __attribute__((mode(TI)));
 typedef float V_2e7a30[4] __attribute__((aligned(16)));
 extern float D_L00_00161CD8_2e7a30 __asm__("D_L00_00161CD8") __attribute__((sda));
 extern float D_L00_00161CB8_2e7a30 __asm__("D_L00_00161CB8") __attribute__((sda));
@@ -404,7 +404,7 @@ extern int FUN_001f96f8_2e7a30(int) __asm__("FUN_001f96f8");
 extern int FUN_001fa6d0_2e7a30(float) __asm__("FUN_001fa6d0");
 
 int FUN_L00_002e7a30(unsigned char *a) {
-    u128_2e7a30 dir[1];
+    OvlQuad dir[1];
     V_2e7a30 pos;
     V_2e7a30 ndir;
     V_2e7a30 step;

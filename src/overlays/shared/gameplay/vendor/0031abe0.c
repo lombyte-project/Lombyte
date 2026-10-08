@@ -6,6 +6,7 @@
 #include "sda.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
 
@@ -47,7 +48,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031c8e0.s", FUN_L05_0031c8e0);
 /* Draws the moby's camera-facing glow sprite, flickering its alpha at random. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031E468), where it is exact; names translated to the US level program. */
 
-typedef int ti_31e468 __attribute__((mode(TI)));
 
 typedef struct {
     float m[4][4];
@@ -79,7 +79,7 @@ void FUN_L05_0031cf58(char *m) {
     float w[4];
     u32 col;
     int j;
-    *(ti_31e468 *)up = 0;
+    *(OvlQuad *)up = 0;
     up[2] = 1.0f;
     up[3] = 1.0f;
     pk.b = get_effect_texture_alt(0xB);
@@ -138,7 +138,6 @@ char *FUN_L05_0031d160(unsigned char *a0) {
 /* Sets up a moby's vector from the level table and clamps its height for the current state. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern char D_0013F350[];
 extern char D_0013F5E0[];
@@ -151,14 +150,14 @@ void FUN_L05_00329358(char *moby) {
     float v[4];
     char *d = *(char **)(moby + 0x70);
     float *p = (float *)(d + 0x80);
-    *(u128 *)v = 0;
+    *(OvlQuad *)v = 0;
     v[2] = 0.7f;
     FUN_001f9d20(v, v, D_0013F350);
     add_vector_xyz(p, D_0013F350 + 0x80, v);
     qcopy(d + 0x1D0, p);
     if (current_level_index == 5) {
         float w[4];
-        *(u128 *)w = 0;
+        *(OvlQuad *)w = 0;
         w[0] = 286.16f;
         w[1] = 447.82f;
         w[2] = 63.37f;

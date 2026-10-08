@@ -136,11 +136,11 @@ void FUN_L15_002044c8(void) {
     }
 }
 #include "qcopy.h"
-typedef int Q_210ce8 __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 
 typedef struct {
     u8 pad0[0x10];
-    Q_210ce8 v10;
+    OvlQuad v10;
     u8 *p20;
     s32 i24;
     u8 b28;
@@ -152,7 +152,7 @@ typedef struct {
 } T_210ce8;
 
 typedef union {
-    Q_210ce8 q;
+    OvlQuad q;
     f32 f[4];
     s32 i[4];
 } V_210ce8;

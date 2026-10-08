@@ -225,6 +225,7 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa1b0.s", FUN_L01_002fa1b0);
 #include "rnc/math/vector.h"
+#include "rnc/overlay/quad.h"
 
 typedef struct {
     u128 vel;
@@ -615,7 +616,6 @@ void FUN_L01_002fed68(HoverMoby *m) {
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002FABE8.c: func_L01_00300C38), where it is exact; names translated to the US level program. */
 
-typedef int u128b __attribute__((mode(TI)));
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char *FUN_L01_002ffa90_c(char *owner) __asm__("FUN_L01_002ffa90");
@@ -649,7 +649,7 @@ void FUN_L01_002ff860(char *m) {
         allocate_voice_for_target_entry(0, 0, (int)m);
         for (k = 0x95; k >= 0;) {
             float a, b;
-            *(u128b *)v = 0;
+            *(OvlQuad *)v = 0;
             v[0] = -0.2f;
             v[2] = 1.2f;
             k--;

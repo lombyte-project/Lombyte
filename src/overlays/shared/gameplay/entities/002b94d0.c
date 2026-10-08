@@ -51,6 +51,7 @@ void FUN_L00_002ba970(u8 *o) {
 }
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 typedef float RW_2baae0[4] __attribute__((aligned(16)));
 
@@ -275,7 +276,6 @@ void FUN_L00_002bb0b0(void *mv) {
     }
     draw_2bb0b0(&quad, 0, 0);
 }
-typedef int q128 __attribute__((mode(TI)));
 u8 *FUN_0020c4f8(s32);
 void clear_u64_value() __asm__("FUN_001f99f8");
 void FUN_0020e098();
@@ -292,9 +292,9 @@ u8 *FUN_L00_002bb360(u8 *src) {
         m[0x20] = 0;
         *(u8 **)(v + 8) = src;
         clear_u64_value(m + 0x40);
-        *(q128 *)(m + 0xC0) = *(q128 *)(src + 0xC0);
-        *(q128 *)(m + 0xD0) = *(q128 *)(src + 0xD0);
-        *(q128 *)(m + 0xE0) = *(q128 *)(src + 0xE0);
+        *(OvlQuad *)(m + 0xC0) = *(OvlQuad *)(src + 0xC0);
+        *(OvlQuad *)(m + 0xD0) = *(OvlQuad *)(src + 0xD0);
+        *(OvlQuad *)(m + 0xE0) = *(OvlQuad *)(src + 0xE0);
         FUN_0020e098(m);
         FUN_L00_00250df8(m);
     }

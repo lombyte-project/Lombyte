@@ -10,19 +10,19 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030bfa8.s", FUN_L01_0030bfa8);
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030DC70), where it is exact; names translated to the US level program. */
 
-typedef int uq __attribute__((mode(TI)));
 
 extern char *func_0020D348_m(int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
 char *FUN_L01_0030c898(char *owner, char *pos, float a, float b, float c, float d) {
-    uq p;
+    OvlQuad p;
     char *cp = (char *)&p;
     char *m;
-    p = *(uq *)pos;
+    p = *(OvlQuad *)pos;
     m = func_0020D348_m(0x661);
     if (m) {
         char *e = *(char **)(m + 0x78);
@@ -74,7 +74,6 @@ void FUN_L01_0030d260(void *unused, float *p) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d308.s", FUN_L01_0030d308);
 #include "sda.h"
 
-typedef int u128_w22c __attribute__((mode(TI)));
 
 extern int FUN_001f9770(void *);
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -99,7 +98,7 @@ extern int D_L01_00162080_i __asm__("D_L01_00162080") __attribute__((sda));
 extern int D_L01_0015F5C4 __attribute__((sda));
 
 typedef union {
-    u128_w22c q;
+    OvlQuad q;
     float f[4];
 } V4_w22c;
 extern V4_w22c D_0013F3D0_u __asm__("D_0013F3D0");
@@ -157,7 +156,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d880.s", FUN_L01_0030d880);
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F178), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern char D_L01_001620E0 __attribute__((sda));
 extern char D_L01_001620F0 __attribute__((sda));
@@ -172,9 +170,9 @@ void FUN_L01_0030dda0(char *m) {
         float buf[4];
         float v[4];
         float z[4];
-        *(u128 *)z = 0;
+        *(OvlQuad *)z = 0;
         z[2] = -(random_float_between_alt(1.0f, 2.0f) * D_0015ED6C);
-        *(u128 *)v = *(u128 *)z;
+        *(OvlQuad *)v = *(OvlQuad *)z;
         FUN_L00_0024f7c8(m, 0, buf);
         FUN_L01_0028a7a8(m, buf, v, &D_L01_001620E0, 1);
         FUN_L01_0028a7a8(m, buf, v, &D_L01_001620F0, 1);

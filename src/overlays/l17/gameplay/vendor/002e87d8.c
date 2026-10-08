@@ -5,11 +5,11 @@
 
 #include "sda.h"
 #include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/quad.h"
 
 /* Moves a level-17 platform moby between its stops along its heading, with a looping sound. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA2C8), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern char *D_L17_00160058 __asm__("D_L17_0015FFD8");
 extern char D_L17_00167740[] __asm__("D_L17_001676C0");
@@ -50,7 +50,7 @@ void FUN_L17_002e87d8(char *m) {
             (*(short *)(m + 0xA6)) == 0x55D) {
             m[0xBC] = 1;
         }
-        *(u128 *)d = *(u128 *)(m + 0x10);
+        *(OvlQuad *)d = *(OvlQuad *)(m + 0x10);
         m[0x20] = 1;
         break;
     case 2:
@@ -75,7 +75,7 @@ void FUN_L17_002e87d8(char *m) {
             v[2] = 0.0f;
         }
         add_vector_xyz(tmp, d, v);
-        *(u128 *)(m + 0x10) = *(u128 *)tmp;
+        *(OvlQuad *)(m + 0x10) = *(OvlQuad *)tmp;
         if (AbsoluteFloat_c((*(float *)(d + ((0x14))))) > 2.0f) {
             idx = (*(int *)(d + ((0x20))));
             if (idx != -1) {
@@ -183,7 +183,7 @@ void FUN_L17_002e87d8(char *m) {
             v[2] = 0.0f;
         }
         add_vector_xyz(tmp, d, v);
-        *(u128 *)(m + 0x10) = *(u128 *)tmp;
+        *(OvlQuad *)(m + 0x10) = *(OvlQuad *)tmp;
         if ((*(float *)(d + ((0x14)))) == 0.0f) {
             idx = (*(int *)(d + ((0x20))));
             if (idx != -1) {
@@ -199,7 +199,6 @@ void FUN_L17_002e87d8(char *m) {
         break;
     }
 }
-typedef int u128_q __attribute__((mode(TI)));
 
 #define NOT_SDA
 
@@ -265,7 +264,7 @@ void FUN_L17_002e8e08(char *moby) {
         *(short *)(moby + 0x32) = 0;
         moby[0x31] = 0;
         t = d + 0x10;
-        *(u128_q *)e = *(u128_q *)(D_0013F420_x_q);
+        *(OvlQuad *)e = *(OvlQuad *)(D_0013F420_x_q);
         e[2] = e[2] - 0.5f;
         if (FUN_001f9b80_q(e, t) < 8.0f) {
             FUN_001f9a40_q(t, e, t, 0.99f);
@@ -1829,7 +1828,6 @@ void FUN_L17_002eea70(char *moby) {
 /* UpdateMoby for class 1382: hides or shows the moby by its clip volumes, then runs its state machine. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F0678), where it is exact; names translated to the US level program. */
 
-typedef int u128_2F0678 __attribute__((mode(TI)));
 
 typedef struct {
     char pad0[0x20];
@@ -1862,7 +1860,7 @@ typedef struct {
     char pad1E6[2];
     int i1E8;
     float f1EC;
-    u128_2F0678 home;
+    OvlQuad home;
     char pad200[0x230 - 0x200];
     char a230[0x2B0 - 0x230];
     int c2B0;
@@ -2262,7 +2260,6 @@ void FUN_L17_002eeb68(unsigned char *m) {
 /* Fleet turret/enemy state update: refreshes the hit reaction, fires the aim query and sets the lock flags. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1558), where it is exact; names translated to the US level program. */
 
-typedef int q128_2F1558 __attribute__((mode(TI)));
 
 typedef struct {
     char pad0[0x20];
@@ -2372,7 +2369,7 @@ void FUN_L17_002efa48(void *moby_v, int arg) {
         d->f138 = D_0015ED6C * 19.0f;
         d->f170 = -1.0f;
         d->f174 = -1.0f;
-        *(q128_2F1558 *)tmp = *(q128_2F1558 *)q->pos;
+        *(OvlQuad *)tmp = *(OvlQuad *)q->pos;
         FUN_L00_0025ab48(tmp, &ang, &d->f138, &d->f13C);
         if (q != 0 && q->moby != 0 && q->moby->hA6 == 0x63) {
             ang = FUN_001f9e90(d->f1F0 - moby->pos[0], d->f1F4 - moby->pos[1]);
@@ -2919,7 +2916,6 @@ typedef struct {
     unsigned char collected[1];
 } LevelState;
 
-typedef int u128_2F3450 __attribute__((mode(TI)));
 
 typedef struct {
     char pad0[0x20];
@@ -3019,8 +3015,8 @@ void FUN_L17_002f1940(unsigned char *m) {
             v->sel = 1;
             v->side = 1;
             v->dir = 1;
-            *(u128_2F3450 *)(m + 0x10) = *(u128_2F3450 *)((v->cam[1] << 7) + base + 0x30);
-            *(u128_2F3450 *)(m + 0x40) = *(u128_2F3450 *)((v->cam[1] << 7) + base + 0x70);
+            *(OvlQuad *)(m + 0x10) = *(OvlQuad *)((v->cam[1] << 7) + base + 0x30);
+            *(OvlQuad *)(m + 0x40) = *(OvlQuad *)((v->cam[1] << 7) + base + 0x70);
         }
         break;
     case 1:

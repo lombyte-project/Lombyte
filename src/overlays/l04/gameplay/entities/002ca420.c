@@ -134,10 +134,10 @@ void FUN_L04_002d1608(void *m) {
 }
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D2A98), where it is exact; names translated to the US level program. */
 
-typedef int w128 __attribute__((mode(TI)));
 
 typedef struct {
     int v[6];
@@ -393,7 +393,7 @@ void FUN_L04_002d16b8(WBMoby *m) {
                 d->fD4 = D_0015ED70 * 17.0f;
                 d->fD8 = D_0015ED6C * 7.0f;
                 d->fDC = D_0015ED6C * 13.0f;
-                *(w128 *)v = *(w128 *)(p + 0x10);
+                *(OvlQuad *)v = *(OvlQuad *)(p + 0x10);
                 FUN_L00_0025ab48(v, &angle, &d->fD8, &d->fDC);
                 FUN_L00_0025c558(angle, m, d->fC0, 8, 1, 0);
                 d->f110 = 14.0f;
@@ -420,7 +420,7 @@ void FUN_L04_002d16b8(WBMoby *m) {
                     } else {
                         d->f3E4 = 2.0f / FUN_001f96b0(15.0f);
                     }
-                    *(w128 *)v = *(w128 *)(p + 0x10);
+                    *(OvlQuad *)v = *(OvlQuad *)(p + 0x10);
                     FUN_L00_0025ab48(v, &angle, &d->f3E4, &one);
                     d->fB7 = 0x78;
                     FUN_L00_0025d458(m, d->fB0);
@@ -434,7 +434,7 @@ void FUN_L04_002d16b8(WBMoby *m) {
                 FUN_L00_002a1538(d->f160);
                 m->state = 1;
                 d->f3E4 = 2.0f / FUN_001f96b0(15.0f);
-                *(w128 *)v = *(w128 *)(p + 0x10);
+                *(OvlQuad *)v = *(OvlQuad *)(p + 0x10);
                 FUN_L00_0025ab48(v, &angle, &d->f3E4, &one);
                 m->rot[2] = fast_add_rotations(3.1415927f, angle);
                 d->fB7 = 0x78;
@@ -579,11 +579,11 @@ void FUN_L04_002d16b8(WBMoby *m) {
                 float rot[4];
                 float mtx[16];
 
-                *(w128 *)rot = 0;
+                *(OvlQuad *)rot = 0;
                 rot[0] = random_float_between(-1.0f, 1.0f);
                 rot[1] = random_float_between(-1.0f, 1.0f);
                 rot[2] = random_float_between(-1.0f, 1.0f);
-                *(w128 *)off = *(w128 *)rot;
+                *(OvlQuad *)off = *(OvlQuad *)rot;
                 FUN_L00_0024f7c8(m, 0, p);
                 vel[0] = fast_cos(m->rot[2]) * -(random_float_between(5.0f, 10.0f) * D_0015ED6C);
                 vel[1] = fast_sin(m->rot[2]) * -(random_float_between(5.0f, 10.0f) * D_0015ED6C);

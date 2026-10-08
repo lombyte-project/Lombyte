@@ -5,12 +5,12 @@
 #include "asm.h"
 
 #include "qcopy.h"
-typedef int q128_002d7f88 __attribute__((mode(TI)));
+#include "rnc/overlay/quad.h"
 typedef struct {
     u8 pad[0x20];
     u8 b20;
     u8 pad2[0x40 - 0x21];
-    q128_002d7f88 q40;
+    OvlQuad q40;
     u8 pad3[0x78 - 0x50];
     void *p78;
     u8 pad4[0xA6 - 0x7C];
@@ -31,7 +31,7 @@ typedef struct {
     u8 pad3[0x2C - 0x24];
     f32 f2C;
     u8 pad4[0x40 - 0x30];
-    q128_002d7f88 q40;
+    OvlQuad q40;
     u8 pad5[0x78 - 0x50];
     D_002d7f88 *p78;
 } S_002d7f88;
@@ -73,10 +73,9 @@ void FUN_L00_002d7f88(S_002d7f88 *self) {
 int FUN_L00_002d8128(unsigned char *p) {
     return p[0x20] == 1;
 }
-typedef int q128 __attribute__((mode(TI)));
 typedef struct {
     char pad[0x10];
-    q128 q;
+    OvlQuad q;
     signed char b20;
 } P2d8138;
 typedef struct {
@@ -85,7 +84,7 @@ typedef struct {
 } T2d8138;
 typedef struct {
     char pad[0x10];
-    q128 q;
+    OvlQuad q;
     char b20;
     char pad2[0xF];
     char b30;
@@ -724,8 +723,7 @@ void FUN_0022da68_002dbb20(s32, s32, void *) __asm__("FUN_0022da68");
 void FUN_L00_00257470_002dbb20(void *, s32, s32) __asm__("FUN_L00_00257470");
 s32 FUN_001f96f8_002dbb20(s32) __asm__("FUN_001f96f8");
 void FUN_00212f90_002dbb20(void *, s32, s32, s32) __asm__("FUN_00212f90");
-typedef int q128_002dbb20 __attribute__((mode(TI)));
-s32 FUN_L00_002dbb20(u8 *m, q128_002dbb20 *v) {
+s32 FUN_L00_002dbb20(u8 *m, OvlQuad *v) {
     u8 *o = FUN_L00_002db890_002dbb20(m);
     u8 *g;
     if (o == 0)

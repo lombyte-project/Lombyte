@@ -77,10 +77,10 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c1978.s", FUN_L09_002c1978);
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002C3690), where it is exact; names translated to the US level program. */
 
-typedef int uq __attribute__((mode(TI)));
 
 extern char *func_0020D348_m(int);
 extern void FUN_001f9cf8(void *, void *, void *);
@@ -92,8 +92,8 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 char *FUN_L09_002c2500(char *src, char *pos, int cls) {
     char *m = func_0020D348_m(cls);
     if (m) {
-        uq v0;
-        uq v1;
+        OvlQuad v0;
+        OvlQuad v1;
         char *p = m + 0x10;
         char *d;
         ((unsigned char *)m)[0x30] = 0xFF;
@@ -110,9 +110,9 @@ char *FUN_L09_002c2500(char *src, char *pos, int cls) {
         FUN_001f9cf8(&v1, &v1, src + 0xC0);
         add_vector_xyz(p, pos, &v1);
         qcopy(m + 0x40, src + 0x40);
-        *(uq *)(m + 0xC0) = *(uq *)(src + 0xC0);
-        *(uq *)(m + 0xD0) = *(uq *)(src + 0xD0);
-        *(uq *)(m + 0xE0) = *(uq *)(src + 0xE0);
+        *(OvlQuad *)(m + 0xC0) = *(OvlQuad *)(src + 0xC0);
+        *(OvlQuad *)(m + 0xD0) = *(OvlQuad *)(src + 0xD0);
+        *(OvlQuad *)(m + 0xE0) = *(OvlQuad *)(src + 0xE0);
         FUN_L00_00250df8(m);
     }
     return m;
@@ -340,7 +340,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002edc30.s", FUN_L09_002edc30);
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EF460), where it is exact; names translated to the US level program. */
 
-typedef int xu128 __attribute__((mode(TI)));
 
 typedef struct {
     float x, y, z, w;
@@ -380,14 +379,14 @@ void FUN_L09_002ee110(char *m) {
             v.z = 0.0f;
             for (i = 24; i >= 0; i--) {
                 union {
-                    xu128 q;
+                    OvlQuad q;
                     Vx v;
                 } t;
                 t.q = 0;
                 t.v.x = random_float_between(-1.0f, 1.0f);
                 t.v.y = random_float_between(-1.0f, 1.0f);
                 t.v.z = random_float_between(-1.0f, 1.0f);
-                *(xu128 *)&b = t.q;
+                *(OvlQuad *)&b = t.q;
                 normalize_vector_xyz(&b, &b,
                                      vector_length_xyz(&v) * (D_0015ED60 * -0.35000002f + 1.0f));
                 add_vector_xyz(&b, &v, &b);
@@ -397,7 +396,7 @@ void FUN_L09_002ee110(char *m) {
                 FUN_L00_0026dd20(pos, (char *)&b, 0x5F7F4F2F, (int)d,
                                  random_float_between(20000.0f, 50000.0f));
             }
-            *(xu128 *)&b = *(xu128 *)(m + 0x10);
+            *(OvlQuad *)&b = *(OvlQuad *)(m + 0x10);
             FUN_L09_002ee380(m, &b, *(float *)(m + 0x48));
             mark_moby_for_removal(m);
             return;

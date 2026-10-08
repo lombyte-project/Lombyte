@@ -161,11 +161,11 @@ void FUN_L12_002e18e8(unsigned char *moby) {
     }
 }
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Scatters 27 particles around a point with random offsets and velocities. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E2CB8), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern float D_0015ED6C;
@@ -202,7 +202,7 @@ void FUN_L12_002e19a8(void *pos) {
     float r;
     int i;
     int a, b, c;
-    *(u128 *)v = *(u128 *)pos;
+    *(OvlQuad *)v = *(OvlQuad *)pos;
     i = 0x1A;
     do {
         r = random_angle_radians();
@@ -261,7 +261,7 @@ int FUN_L12_002e2eb8(char *m, float speed) {
     float t[4];
     float u[4];
     int r;
-    *(u128 *)old = *(u128 *)(m + 0x10);
+    *(OvlQuad *)old = *(OvlQuad *)(m + 0x10);
     FUN_L12_002e1878_w(m);
     approach_w(m, (float *)(d + 0x2A0), speed, 0.05f, 0.3f, 0.2f);
     dir[0] = cos_w(*(float *)(m + 0x48)) * 2.0f;
@@ -275,7 +275,7 @@ int FUN_L12_002e2eb8(char *m, float speed) {
         if (path_w(*(int *)(d + 0x2D0), m + 0x10, t, res) != 0) {
             char *p = D_L12_001B0930_w[*(int *)(d + 0x2D0)];
             if (inside_w(m + 0x10, p + 0x10, *(int *)p) == 0)
-                *(u128 *)(m + 0x10) = *(u128 *)res;
+                *(OvlQuad *)(m + 0x10) = *(OvlQuad *)res;
             if (dist_w(m + 0x10, old) < D_0015ED6C_w * 0.5f) {
                 *(int *)(d + 0x2D4) += 1;
                 if (frames_w(10) < *(int *)(d + 0x2D4))

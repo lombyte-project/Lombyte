@@ -500,10 +500,10 @@ void FUN_L13_002b4ff0(char *m, char *d) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b50d8.s", FUN_L13_002b50d8);
 #include "qcopy.h"
+#include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B9800), where it is exact; names translated to the US level program. */
 
-typedef int u128 __attribute__((mode(TI)));
 
 extern short D_L13_001613D8_d __asm__("D_L13_001613D8") __attribute__((sda));
 extern short D_L13_001613E8_d __asm__("D_L13_001613E8") __attribute__((sda));
@@ -523,7 +523,7 @@ void FUN_L13_002b8590(void *moby, char *obj) {
     int i;
 
     for (i = 1; i < 3; i++) {
-        *(u128 *)vel = 0;
+        *(OvlQuad *)vel = 0;
         s = *(float *)(obj + 0x64) / (D_0015ED6C * 24.0f);
         if (s > 1.0f)
             s = 1.0f;
