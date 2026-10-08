@@ -10,7 +10,7 @@ s32 FUN_00221968(struct MenuScreen *arg0) {
     if (D_0013CB04[0] & 0x10) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
-        } else if (menu_system.close_blocked == 0) {
+        } else if (menu_system.unk124 == 0) {
             return -1;
         }
     } else if (D_0013CB04[0] & 0x800) {
@@ -20,10 +20,10 @@ s32 FUN_00221968(struct MenuScreen *arg0) {
         allocate_voice_for_target_entry(0, 0x11, arg0->moby);
         return 1;
     } else if (D_0013CB04[0] & 0x20) {
-        menu_system.action.value = D_001A0314[0];
-        menu_system.action.return_page = menu_system.current;
+        menu_system.unkE4 = D_001A0314[0];
+        menu_system.unkF0 = menu_system.current;
         menu_system.close_request = 3;
-        menu_system.action.mode = 0xF;
+        menu_system.unkF4 = 0xF;
         allocate_voice_for_target_entry(0, 0x11, arg0->moby);
     }
     return 0;

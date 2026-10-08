@@ -102,7 +102,7 @@ void FUN_L06_00222fb8(void) {
 
 /* Same source as the exact FUN_L08_00222800, with only the 0x16 animation in mode 0 and a mode 1 case. */
 extern s32 D_L08_0015F5C4_8 __asm__("D_L06_0015F5C4");
-extern MobyLink D_L08_00178900_8[] __asm__("D_L06_00178880");
+extern OvlMobyEntry40 D_L08_00178900_8[] __asm__("D_L06_00178880");
 extern s32 D_0015ED84_8 __asm__("D_0015ED84");
 extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
@@ -125,7 +125,7 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 s32 FUN_L06_00227e78(s32 arg) {
     u8 *m;
-    MobyLink *tbl;
+    OvlMobyEntry40 *tbl;
     u8 *mob;
     s32 flag;
     s32 id;
@@ -156,7 +156,7 @@ s32 FUN_L06_00227e78(s32 arg) {
     if (tbl->owner != m) {
         return 0;
     }
-    if ((tbl->active ^ 1) & 1) {
+    if ((tbl->unk24 ^ 1) & 1) {
         return 0;
     }
     D_0013DF88_8[D_0015ED84_8]++;
@@ -251,7 +251,7 @@ void FUN_L06_00228360(void) {
         break;
     }
     if (hero.state.control_mode == 4) {
-        if (hero.state_timer > hero.state_timer_mark && hero.velocity_stopped == 0)
+        if (hero.state_timer > hero.unk420 && hero.unk41E == 0)
             hero.unk22C = hero.unk434;
     } else if (hero.state.current == 6) {
         hero.unk22C = 0.5f;
@@ -630,7 +630,7 @@ void FUN_L06_0022b438(void) {
     state = hero.state.current;
     if (state == 10) {
         FUN_L00_002132b8_2b438(0.7f, ED6C * 0.0f);
-        qcopy(&hero.motion.state_velocity, &hero.unk920);
+        qcopy(&hero.motion.unk150, &hero.unk920);
         hero.unk194 = hero.motion.unk164;
     } else if (state == 16) {
         if (FUN_001f96f8_2b438(0x36) < hero.state_timer) {
@@ -669,7 +669,7 @@ void FUN_L06_0022b438(void) {
         hero.motion.velocity.f[0] = FUN_001f9dc8_2b438(hero.motion.rot.f[2]) * hero.unk45C;
         hero.motion.velocity.f[1] = FUN_001f9de0_2b438(hero.motion.rot.f[2]) * hero.unk45C;
     } else if (state == 11 || state == 12) {
-        hero.motion.target_yaw = hero.unk43C;
+        hero.motion.unk180 = hero.unk43C;
         FUN_L00_00211e30_2b438(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 6.981317f);
         if (hero.unk450 != 3) {
             hero.unk194 = hero.unk454;
@@ -677,7 +677,7 @@ void FUN_L06_0022b438(void) {
             hero.unk194 = 0.0f;
         }
         if (hero.state.current == 11) {
-            if (hero.velocity_stopped != 0 && hero.unk44C < FUN_001f96f8_2b438(0xC)) {
+            if (hero.unk41E != 0 && hero.unk44C < FUN_001f96f8_2b438(0xC)) {
                 approach_value_2b438(0.0f, ED70 * 8.0f, &hero.unk458);
             } else {
                 approach_value_2b438(ED6C * 4.2f, ED70 * 8.0f, &hero.unk458);
@@ -689,17 +689,17 @@ void FUN_L06_0022b438(void) {
         hero.motion.velocity.f[0] += FUN_001f9dc8_2b438(hero.unk43C) * a;
         hero.motion.velocity.f[1] += FUN_001f9de0_2b438(hero.unk43C) * a;
         FUN_L00_002132b8_2b438(0.7f, ED6C * 0.0f);
-        qcopy(&hero.motion.state_velocity, &hero.unk920);
+        qcopy(&hero.motion.unk150, &hero.unk920);
     } else if (state == 0x11) {
-        hero.motion.target_yaw = hero.unk470.f[3];
+        hero.motion.unk180 = hero.unk470.f[3];
         qcopy(&hero.motion.unk170, &hero.unk470);
         if (FUN_001f96f8_2b438(9) < hero.state_timer) {
             FUN_L00_00211e30_2b438(-1, ED64 * 0.042f, ED64 * 0.2f, ED6C * 11.868238f);
         }
         if (FUN_001f96f8_2b438(9) <= hero.state_timer) {
             if (hero.unk308 == 0) {
-                hero.motion.velocity.f[0] = FUN_001f9dc8_2b438(hero.motion.target_yaw) * (ED6C * 4.9f);
-                hero.motion.velocity.f[1] = FUN_001f9de0_2b438(hero.motion.target_yaw) * (ED6C * 4.9f);
+                hero.motion.velocity.f[0] = FUN_001f9dc8_2b438(hero.motion.unk180) * (ED6C * 4.9f);
+                hero.motion.velocity.f[1] = FUN_001f9de0_2b438(hero.motion.unk180) * (ED6C * 4.9f);
             } else {
                 FUN_L00_00233ba0_2b438(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
                 FUN_001f9bf8_2b438(&tmp, &hero.motion.unk170, ED6C * 4.9f);
@@ -710,7 +710,7 @@ void FUN_L06_0022b438(void) {
     } else {
         if (state == 0x2D) {
             x = hero.motion.rot.f[2];
-            hero.motion.unk188 = FUN_L00_0025bc98_2b438(&x, &hero.motion.unk184, 0, hero.motion.target_yaw, ED64 * 0.018f, ED64 * 0.2f,
+            hero.motion.unk188 = FUN_L00_0025bc98_2b438(&x, &hero.motion.unk184, 0, hero.motion.unk180, ED64 * 0.018f, ED64 * 0.2f,
                                             ED6C * 7.330383f);
             a = FUN_001fa5c8_2b438(x, hero.motion.rot.f[2]);
             FUN_L00_002091d8_2b438(0.0f, 0.0f, a);
@@ -718,7 +718,7 @@ void FUN_L06_0022b438(void) {
             FUN_L00_00211e30_2b438(0, ED64 * 0.04f, ED64 * 0.2f, hero.unk414);
         }
         FUN_L00_002132b8_2b438(0.7f, ED6C * 0.0f);
-        qcopy(&hero.motion.state_velocity, &hero.unk920);
+        qcopy(&hero.motion.unk150, &hero.unk920);
         arg = ED70 * 20.0f;
         if (hero.unk190 < D_L06_0017C550_2b438[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
@@ -1319,7 +1319,7 @@ extern f32 FUN_001f9988(f32);
 extern f32 FUN_L00_00233a78(void *);
 extern f32 FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
 extern f32 FUN_L00_00213350(void *);
-extern struct HeroThresholdRow D_L06_0017C3A8[];
+extern struct HeroTableRow2C D_L06_0017C3A8[];
 extern struct LevelTable_QS D_L06_00167400;
 #define Q D_L06_00167400
 extern s32 D_0013CAE0[];
@@ -1370,7 +1370,7 @@ extern void FUN_L00_0020d2f8(void *);
 extern f32 FUN_L00_00257c48(f32, f32);
 extern void FUN_L00_0026d598(void *, void *, s32);
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
-extern s32 advance_along_path(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_0025d808");
+extern s32 FUN_L00_0025d808(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_0025d808");
 extern s32 FUN_L00_0025d7a0(void *, s32, s32, s32);
 extern f32 FUN_001f96b0(f32);
 extern void FUN_L00_00214108(void);
@@ -1438,8 +1438,8 @@ void FUN_L06_0022e020(void) {
                         S.stat[18].count++;
                     }
                     t = scale_game_frames(D_0015EEA4) / 600;
-                    if (S.stat[18].last_time < t) {
-                        S.stat[18].last_time = scale_game_frames(D_0015EEA4) / 600;
+                    if (S.stat[18].unk2 < t) {
+                        S.stat[18].unk2 = scale_game_frames(D_0015EEA4) / 600;
                     }
                     D_L06_0015F688 = -1;
                     S.stat[18].level_mask = S.stat[18].level_mask | (1 << D_0015ED84) | 0x80000000;
@@ -2017,7 +2017,7 @@ void FUN_L06_0022e020(void) {
         break;
     }
     case 0x13: {
-        struct HeroThresholdRow *tb;
+        struct HeroTableRow2C *tb;
         if (0) {
             FUN_L00_002167d0();
             break;
@@ -2380,9 +2380,9 @@ void FUN_L06_0022e020(void) {
         if (P.i2084 == 0x42) {
             r = P.f5CC * (f32)P.i578;
         }
-        advance_along_path(P.p560, &v0, &P.i564, &P.f568, r, P.i584);
+        FUN_L00_0025d808(P.p560, &v0, &P.i564, &P.f568, r, P.i584);
         if (P.i590 != 0) {
-            advance_along_path(P.p594, &v10, &P.i598, &P.f59C, r, P.i5A0);
+            FUN_L00_0025d808(P.p594, &v10, &P.i598, &P.f59C, r, P.i5A0);
         }
         if (scale_game_frames(90) < P.i19C) {
             s32 h;
@@ -2392,11 +2392,11 @@ void FUN_L06_0022e020(void) {
             qcopy(&v20, &P.u80.v80);
             si = P.i564;
             sf = P.f568;
-            h = advance_along_path(P.p560, &v20, &si, &sf, q, P.i584);
+            h = FUN_L00_0025d808(P.p560, &v20, &si, &sf, q, P.i584);
             qcopy(&v30, &P.u80.v80);
             si = P.i564;
             sf = P.f568;
-            if ((h | advance_along_path(P.p560, &v30, &si, &sf, q + 0.1f, P.i584)) == 0 ||
+            if ((h | FUN_L00_0025d808(P.p560, &v30, &si, &sf, q + 0.1f, P.i584)) == 0 ||
                 P.i584 != 0) {
                 f32 a = fast_subtract_rotations(
                             P.f57C, FUN_001f9e90(v30.f[0] - v20.f[0], v30.f[1] - v20.f[1])) *
@@ -2546,7 +2546,7 @@ void FUN_L06_0022e020(void) {
             si = P.i564;
             sf = P.f568;
             qcopy(&v20, &P.u80.v80);
-            advance_along_path(P.p560, &v20, &si, &sf, 0.3f, P.i584);
+            FUN_L00_0025d808(P.p560, &v20, &si, &sf, 0.3f, P.i584);
             e = FUN_001f9e90(FUN_001f9b80(&P.u500.v500, &v20), v20.f[2] - P.u500.f508.v);
             if (e > 0.0f) {
                 sp = e * 1.9098593f * (D_0015ED6C_c * -2.5f);
@@ -3056,7 +3056,7 @@ void FUN_L06_0022e020(void) {
         }
         break;
     case 0x51: {
-        struct HeroThresholdRow *tb;
+        struct HeroTableRow2C *tb;
         s32 ok;
         tb = &D_L06_0017C3A8[P.iA60];
         P.f190 = 0.0f;

@@ -595,7 +595,7 @@ extern f32 FUN_001f9988(f32);
 extern f32 FUN_L00_00233a78(void *);
 extern f32 FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
 extern f32 FUN_L00_00213350(void *);
-extern struct HeroThresholdRow D_L00_0017BC28[];
+extern struct HeroTableRow2C D_L00_0017BC28[];
 extern struct LevelTable_QS D_L00_00166C80;
 #define Q D_L00_00166C80
 extern s32 D_0013CAE0[];
@@ -646,7 +646,7 @@ extern void FUN_L00_0020d2f8(void *);
 extern f32 FUN_L00_00257c48(f32, f32);
 extern void FUN_L00_0026d598(void *, void *, s32);
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
-extern s32 advance_along_path(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_0025d808");
+extern s32 FUN_L00_0025d808(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_0025d808");
 extern s32 FUN_L00_0025d7a0(void *, s32, s32, s32);
 extern f32 FUN_001f96b0(f32);
 extern void FUN_L00_00214108(void);
@@ -717,8 +717,8 @@ void FUN_L00_00217970(void) {
                         S.stat[18].count++;
                     }
                     t = scale_game_frames(D_0015EEA4) / 600;
-                    if (S.stat[18].last_time < t) {
-                        S.stat[18].last_time = scale_game_frames(D_0015EEA4) / 600;
+                    if (S.stat[18].unk2 < t) {
+                        S.stat[18].unk2 = scale_game_frames(D_0015EEA4) / 600;
                     }
                     D_L00_0015F688 = -1;
                     S.stat[18].level_mask = S.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
@@ -967,8 +967,8 @@ void FUN_L00_00217970(void) {
                         S.stat[11].count++;
                     }
                     t2 = scale_game_frames(D_0015EEA4) / 600;
-                    if (S.stat[11].last_time < t2) {
-                        S.stat[11].last_time = scale_game_frames(D_0015EEA4) / 600;
+                    if (S.stat[11].unk2 < t2) {
+                        S.stat[11].unk2 = scale_game_frames(D_0015EEA4) / 600;
                     }
                     S.stat[11].level_mask = S.stat[11].level_mask | (1 << current_level_index) | 0x80000000;
                 } else {
@@ -1676,7 +1676,7 @@ void FUN_L00_00217970(void) {
         break;
     }
     case 0x13: {
-        struct HeroThresholdRow *tb;
+        struct HeroTableRow2C *tb;
         if (P.b12E2 != 0) {
             FUN_L00_002167d0();
             break;
@@ -2187,9 +2187,9 @@ void FUN_L00_00217970(void) {
         if (P.i2084 == 0x42) {
             r = P.f5CC * (f32)P.i578;
         }
-        advance_along_path(P.p560, &v0, &P.i564, &P.f568, r, P.i584);
+        FUN_L00_0025d808(P.p560, &v0, &P.i564, &P.f568, r, P.i584);
         if (P.i590 != 0) {
-            advance_along_path(P.p594, &v10, &P.i598, &P.f59C, r, P.i5A0);
+            FUN_L00_0025d808(P.p594, &v10, &P.i598, &P.f59C, r, P.i5A0);
         }
         if (scale_game_frames(90) < P.i19C) {
             s32 h;
@@ -2199,11 +2199,11 @@ void FUN_L00_00217970(void) {
             qcopy(&v20, &P.u80.v80);
             si = P.i564;
             sf = P.f568;
-            h = advance_along_path(P.p560, &v20, &si, &sf, q, P.i584);
+            h = FUN_L00_0025d808(P.p560, &v20, &si, &sf, q, P.i584);
             qcopy(&v30, &P.u80.v80);
             si = P.i564;
             sf = P.f568;
-            if ((h | advance_along_path(P.p560, &v30, &si, &sf, q + 0.1f, P.i584)) == 0 ||
+            if ((h | FUN_L00_0025d808(P.p560, &v30, &si, &sf, q + 0.1f, P.i584)) == 0 ||
                 P.i584 != 0) {
                 f32 a = fast_subtract_rotations(
                             P.f57C, FUN_001f9e90(v30.f[0] - v20.f[0], v30.f[1] - v20.f[1])) *
@@ -2353,7 +2353,7 @@ void FUN_L00_00217970(void) {
             si = P.i564;
             sf = P.f568;
             qcopy(&v20, &P.u80.v80);
-            advance_along_path(P.p560, &v20, &si, &sf, 0.3f, P.i584);
+            FUN_L00_0025d808(P.p560, &v20, &si, &sf, 0.3f, P.i584);
             e = FUN_001f9e90(FUN_001f9b80(&P.u500.v500, &v20), v20.f[2] - P.u500.f508.v);
             if (e > 0.0f) {
                 sp = e * 1.9098593f * (D_0015ED6C * -2.5f);
@@ -2446,7 +2446,7 @@ void FUN_L00_00217970(void) {
             P.uE0.fE8.v = P.uE0.fE8.v - D_0015ED70 * 24.0f;
             break;
         }
-        advance_along_path(P.p5F0, &v10, &P.i5F4, &P.f5F8, P.f604, P.i60C);
+        FUN_L00_0025d808(P.p5F0, &v10, &P.i5F4, &P.f5F8, P.f604, P.i60C);
         idx = FUN_L00_0025d7a0(P.p5F0, P.i5F4, 1, P.i60C);
         FUN_001f9a28(&v20, (Vec4 *)P.p5F0 + (idx + 1), &v10);
         if (FUN_001f9af0(&v20) < 0.001f) {
@@ -2968,7 +2968,7 @@ void FUN_L00_00217970(void) {
         }
         break;
     case 0x51: {
-        struct HeroThresholdRow *tb;
+        struct HeroTableRow2C *tb;
         s32 ok;
         tb = &D_L00_0017BC28[P.iA60];
         P.f190 = 0.0f;

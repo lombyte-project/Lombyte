@@ -1,3 +1,4 @@
+/* Ported from rac1-decomp (src/game/stream.c, func_00217A60). */
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
 

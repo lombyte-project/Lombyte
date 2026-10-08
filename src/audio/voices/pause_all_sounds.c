@@ -46,18 +46,18 @@ void pause_all_sounds(s32 mode) {
     }
     {
         struct MenuSystem *g = &menu_system;
-        g->special_slot_enabled = D_0015EEA0 != 0 || D_0015EE20 != 0 || g->unkF8 != 0;
+        g->unkD8 = D_0015EEA0 != 0 || D_0015EE20 != 0 || g->unkF8 != 0;
     }
     {
         struct MenuSystem *g = &menu_system;
         char *a = D_001CE5B8;
         g->unkDC = mode == 0x23;
-        *(char **)(a + 0x38) = g->special_slot_enabled ? D_001CE798 : D_001CE748;
+        *(char **)(a + 0x38) = g->unkD8 ? D_001CE798 : D_001CE748;
     }
     {
         struct MenuSystem *g = &menu_system;
         char *b = D_001CE748;
-        *(char **)(b + 0x3C) = g->special_slot_enabled ? D_001CE798 : D_001CE5B8;
+        *(char **)(b + 0x3C) = g->unkD8 ? D_001CE798 : D_001CE5B8;
     }
     {
         struct MenuSystem *g = &menu_system;
@@ -81,7 +81,7 @@ void pause_all_sounds(s32 mode) {
     {
         struct MenuSystem *g = &menu_system;
         g->unk13C = 1;
-        g->last_requested_resource_class = 0;
+        g->unk140 = 0;
     }
 }
 

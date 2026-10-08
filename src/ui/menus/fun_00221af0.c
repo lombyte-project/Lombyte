@@ -8,7 +8,7 @@ int FUN_00221af0(void) {
     int f = *(int *)(D_0013A4E0 + 0x2604);
     if (f & 0x20) {
         struct MenuPage *page;
-        menu_system.confirm_kind = 0;
+        menu_system.unkD4 = 0;
         page = menu_system.current;
         menu_system.next = page->back;
         page->confirmed = 1;

@@ -28,13 +28,13 @@ s32 FUN_00220e28(struct MenuScreen *m) {
     if (!active) {
         return 0;
     }
-    if ((D_0013C940.pressed_unmasked & 0xD00) && menu_system.close_blocked == 0) {
+    if ((D_0013C940.pressed_unmasked & 0xD00) && menu_system.unk124 == 0) {
         return 1;
     }
     if (D_0013C940.pressed_unmasked & 0x10) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
-        } else if (menu_system.close_blocked == 0) {
+        } else if (menu_system.unk124 == 0) {
             return -1;
         }
     }

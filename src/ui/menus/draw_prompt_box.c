@@ -10,7 +10,7 @@ typedef struct {
 } TextBox;
 extern char D_001602E8[];
 extern void font_print_window_small(TextBox *, long, char *, int) __asm__("func_001F75F0");
-/* Draws the two-line prompt box (text 0x4FB3 for menu_system.confirm_kind in 0..2,
+/* Draws the two-line prompt box (text 0x4FB3 for menu_system.unkD4 in 0..2,
    0x4FB5 for 3, else D_001602E8) sized from arg0's +0x20/+0x24. The box
    is an aggregate initializer: this compiler clears it with a memset
    libcall, fills a temporary and copies that into the local with
@@ -25,7 +25,7 @@ int draw_prompt_box(char *arg0) {
     vu1_add_g_sregister(0x47, 0x2004B);
     setup_gif_paging(0);
     text = D_001602E8;
-    v = menu_system.confirm_kind;
+    v = menu_system.unkD4;
     switch (v) {
     case 0:
     case 1:

@@ -9,7 +9,7 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/gameplay/hero.h"
 extern s32 D_L08_0015F5C4_8 __asm__("D_L08_0015F5C4");
-extern MobyLink D_L08_00178900_8[] __asm__("D_L08_00178900");
+extern OvlMobyEntry40 D_L08_00178900_8[] __asm__("D_L08_00178900");
 extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
 extern u8 D_0013F3D0_8[] __asm__("D_0013F3D0");
@@ -31,7 +31,7 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 s32 FUN_L08_00222800(s32 arg) {
     u8 *m;
-    MobyLink *tbl;
+    OvlMobyEntry40 *tbl;
     u8 *mob;
     s32 flag;
     s32 id;
@@ -62,7 +62,7 @@ s32 FUN_L08_00222800(s32 arg) {
     if (tbl->owner != m) {
         return 0;
     }
-    if ((tbl->active ^ 1) & 1) {
+    if ((tbl->unk24 ^ 1) & 1) {
         return 0;
     }
     D_0013DF88_8[current_level_index]++;

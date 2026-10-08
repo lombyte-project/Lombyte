@@ -91,14 +91,14 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     if (!(screen->data.raw.unk34 & 0x40)) {
         prev = D_001A00F0.level;
         if (D_0013C940.pressed & 0xD00) {
-            if (menu_system.close_blocked == 0) {
+            if (menu_system.unk124 == 0) {
                 return 1;
             }
         }
         if (D_0013C940.pressed & 0x10) {
             if (menu_system.current->back != 0) {
                 menu_system.next = menu_system.current->back;
-            } else if (menu_system.close_blocked == 0) {
+            } else if (menu_system.unk124 == 0) {
                 return -1;
             }
         }
@@ -106,10 +106,10 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             menu_system.next = (struct MenuPage *)D_001CF678;
         }
         if ((D_0013C940.pressed & 0x20) && D_001A00F0.level != 0) {
-            menu_system.action.return_page = (struct MenuPage *)D_001CF418;
-            menu_system.action.mode = 0xB;
+            menu_system.unkF0 = (struct MenuPage *)D_001CF418;
+            menu_system.unkF4 = 0xB;
             menu_system.close_request = 3;
-            menu_system.action.value = D_001A00F0.level;
+            menu_system.unkE4 = D_001A00F0.level;
             allocate_voice_for_target_entry(0, 0x11, screen->moby);
             return 0;
         }

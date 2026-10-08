@@ -137,7 +137,7 @@ void FUN_L15_00209450(void) {
         break;
     }
     if (hero.state.control_mode == 4) {
-        if (hero.state_timer > hero.state_timer_mark && hero.velocity_stopped == 0)
+        if (hero.state_timer > hero.unk420 && hero.unk41E == 0)
             hero.unk22C = hero.unk434;
     } else if (hero.state.current == 6) {
         hero.unk22C = 0.5f;

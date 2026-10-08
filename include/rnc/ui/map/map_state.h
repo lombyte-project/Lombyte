@@ -14,7 +14,7 @@ struct MapHdr;
  *
  * - level: fun_0021c4c0 steps it to the next/previous level with missions;
  *   update_mission_list reads D_001A2B70[level]; draw_map_screen shows that
- *   map and passes it as menu_system.action.value.
+ *   map and passes it as menu_system.unkE4.
  * - zoom/pan_x/pan_y are indexed by `loaded`; slot[] caches five decoded
  *   maps (find_map_entry_slot).
  * - mask: compose_bitmap_from_mask input when the shown level is the
@@ -27,25 +27,23 @@ struct MapHdr;
  *   values of the 128x128 images at hdr +0x10/+0x14/+0x18 (CLUT +0x20,
  *   pixels +0x420), all drawn with tex0's CLUT; tex0 is also drawn by
  *   fun_00220850 and draw_transition_overlay.
- * - marks_enabled, show_markers, sprite_z and marks[] come from the
- *   draw_map_overlay draft.
  */
 struct MapState {
     u8 pad0[0x8];
-    s32 marks_enabled;         /* 0x008: marks[] drawn when this and show_markers are set */
+    s32 unk8;                  /* 0x008: draw_map_overlay draft tests it with unk2C */
     u8 *mask;                  /* 0x00C: 512x512 1-bit explored mask of the current level */
     u8 pad10[0x4];
     s32 unk14;                 /* 0x014: passed with mask to func_001FA860 */
-    s32 sprite_z;              /* 0x018: Z of the map's GS sprites */
+    s32 unk18;                 /* 0x018 */
     struct MapMarker *markers; /* 0x01C: drawn by draw_map_markers, may be null */
     struct MapIcon *icons;     /* 0x020: icon list of the shown level */
-    s32 enabled;               /* 0x024: zero: map input and overlay are off */
+    s32 unk24;                 /* 0x024: zero: update_map_zoom_and_pan and draw_map_overlay return early */
     s32 unk28;                 /* 0x028: zero: the save page is cleared, not packed */
-    s32 show_markers;          /* 0x02C: see marks_enabled */
+    s32 unk2C;                 /* 0x02C: see unk8 */
     struct {
-        s32 cell;              /* 16x16 grid cell, <0 unused */
+        s32 unk0;              /* draw_map_overlay draft: <0 skipped */
         u8 pad4[0xC];
-    } marks[8];                /* 0x030 */
+    } unk30[8];                /* 0x030 */
     s32 marker_count;          /* 0x0B0: entries in markers */
     f32 zoom[20];              /* 0x0B4: per-map zoom, 0.65..4 */
     s32 pan_x[20];             /* 0x104 */

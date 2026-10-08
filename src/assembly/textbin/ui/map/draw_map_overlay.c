@@ -180,7 +180,7 @@ void draw_map_overlay(void) {
     s32 texture_id;
     s32 tile_limit;
 
-    if (D_001A00F0.enabled == 0) {
+    if (D_001A00F0.unk24 == 0) {
         u8 *font = D_001E8068;
 
         setup_gif_paging(0);
@@ -269,11 +269,11 @@ void draw_map_overlay(void) {
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x50);
     vu1_add_g_sregister(0x47, 0x360B);
 
-    if (D_001A00F0.show_markers != 0 && D_001A00F0.marks_enabled != 0) {
+    if (D_001A00F0.unk2C != 0 && D_001A00F0.unk8 != 0) {
         dx = rx1 - rx0;
         dy = ry1 - ry0;
         for (i = 0; i < 8; i++) {
-            cell = D_001A00F0.marks[i].cell;
+            cell = D_001A00F0.unk30[i].unk0;
             if (cell >= 0) {
                 cell_x = cell % 16;
                 cell_y = cell / 16;

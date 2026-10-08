@@ -123,7 +123,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     previous_selected_class = (moby != 0) ? (moby->oclass) : (-1);
     selected_gadget = menu_system.equipped[0];
     selected_class = gadget_definitions[selected_gadget].oclass;
-    selected_class_ready = selected_class == menu_system.requested_resource_class;
+    selected_class_ready = selected_class == menu_system.unk120;
     if ((previous_selected_class != selected_class) && selected_class_ready) {
         delete_moby(moby);
         if (class_pose_manipulator.active) {
@@ -135,9 +135,9 @@ s32 load_hand_gadget(HandGadgetState *hand) {
         }
         resource_request_state = menu_system.resource_table_toggle == 0;
         select_world_object_resource_tables(selected_class, -1);
-        menu_system.active_resource_class = selected_class;
+        menu_system.unk11C = selected_class;
         menu_system.resource_table_toggle = resource_request_state;
-        menu_system.last_requested_resource_class = selected_class;
+        menu_system.unk140 = selected_class;
         menu_system.last_resource_table_toggle = resource_request_state;
         moby_class_resources[moby_class_slots[selected_class]][0xD] = 0;
         moby = create_menu_preview_moby(selected_class);

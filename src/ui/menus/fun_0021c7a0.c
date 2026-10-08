@@ -44,8 +44,8 @@ s32 FUN_0021c7a0(struct MenuScreen *menu) {
                 D_00141848.stat[21].count = (u16)(D_00141848.stat[21].count + 1);
             }
             tmp = scale_game_frames(D_0015EEA4) / 600;
-            if ((s32)D_00141848.stat[21].last_time < tmp) {
-                D_00141848.stat[21].last_time = (u16)(scale_game_frames(D_0015EEA4) / 600);
+            if ((s32)D_00141848.stat[21].unk2 < tmp) {
+                D_00141848.stat[21].unk2 = (u16)(scale_game_frames(D_0015EEA4) / 600);
             }
             slots = menu->data.slots.items;
             D_00141848.stat[21].level_mask = (s32)((D_00141848.stat[21].level_mask | (1 << current_level_index)) | 0x80000000);

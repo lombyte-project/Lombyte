@@ -146,7 +146,7 @@ struct MenuTextItem {
     union {
         s32 value;            /* page, close value, level or language */
         struct {
-            u16 lo;           /* action 6: menu_system.action.value */
+            u16 lo;           /* action 6: menu_system.unkE4 */
             s16 hi;           /* action 6: menu_action_messages index, 0 = none */
         } half;
     } param;                  /* 0x4 */

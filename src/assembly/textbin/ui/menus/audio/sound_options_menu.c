@@ -65,7 +65,7 @@ s32 sound_options_menu(struct SoundMenu *menu) {
 
         if (back_page != 0) {
             menu_system.next = back_page;
-        } else if (menu_system.close_blocked == 0) {
+        } else if (menu_system.unk124 == 0) {
             return -1;
         }
     }

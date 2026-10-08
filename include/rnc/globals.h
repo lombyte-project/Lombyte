@@ -18,7 +18,6 @@ extern s32 current_level_index __asm__("D_0015ED84");
 /* Language picked from the console settings at boot (0 English, 2-5 others). */
 extern s32 game_language __asm__("D_0015ED88");
 
-/* Nonzero when the game runs in PAL video timing. */
 extern s32 pal_mode __asm__("D_0015ED80");
 
 /* Top-level game mode (recovered symbol GameMode). */

@@ -536,13 +536,13 @@ extern float AbsoluteFloat(float);
 extern float D_0015ED6C, D_0015EE70;
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
-extern int advance_along_path() __asm__("FUN_L00_0025d808");
+extern int FUN_L00_0025d808() __asm__("FUN_L00_0025d808");
 extern float D_L16_00161D90 __attribute__((sda));
 extern float D_L16_00161D94_u __asm__("D_L16_00161D94") __attribute__((sda));
 extern float D_L16_00161D98_u __asm__("D_L16_00161D98") __attribute__((sda));
 extern void subtract_vector_xyz(void *, void *, void *);
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
-extern int advance_along_path_path54(char *, float *, float *, float *, int,
+extern int FUN_L00_0025d808_path54(char *, float *, float *, float *, int,
                                     float) __asm__("FUN_L00_0025d808");
 extern void func_L00_002592B0_path54(char *, float, float *, float, float,
                                      float) __asm__("FUN_L00_00258278");
@@ -559,7 +559,7 @@ int FUN_L16_002e3fa0(char *moby) {
         path = D_L16_001B0C30_path54[*(int *)(data + 0xDC)];
     else
         path = D_L16_001B0C30_path54[*(int *)(data + 0xD8)];
-    r = advance_along_path_path54(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, t);
+    r = FUN_L00_0025d808_path54(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, t);
     FUN_L00_0025b8c0((float *)(moby + 0x10), (float *)(data + 0xE4), pos[0], D_L16_00161D94_u,
                      D_L16_00161D98_u, 0.0f);
     FUN_L00_0025b8c0((float *)(moby + 0x14), (float *)(data + 0xE8), pos[1], D_L16_00161D94_u,

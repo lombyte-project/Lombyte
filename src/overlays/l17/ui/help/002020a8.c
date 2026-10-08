@@ -64,7 +64,7 @@ int FUN_L17_002020a8(int a) {
 
 /* Same source as the exact FUN_L08_00222800, with a mode 1 case (animation 0x46). */
 extern s32 D_L08_0015F5C4_8 __asm__("D_L17_0015F5C4");
-extern MobyLink D_L08_00178900_8[] __asm__("D_L17_00178A00");
+extern OvlMobyEntry40 D_L08_00178900_8[] __asm__("D_L17_00178A00");
 extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
 extern u8 D_0013F3D0_8[] __asm__("D_0013F3D0");
@@ -86,7 +86,7 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 s32 FUN_L17_0020dbe8(s32 arg) {
     u8 *m;
-    MobyLink *tbl;
+    OvlMobyEntry40 *tbl;
     u8 *mob;
     s32 flag;
     s32 id;
@@ -117,7 +117,7 @@ s32 FUN_L17_0020dbe8(s32 arg) {
     if (tbl->owner != m) {
         return 0;
     }
-    if ((tbl->active ^ 1) & 1) {
+    if ((tbl->unk24 ^ 1) & 1) {
         return 0;
     }
     D_0013DF88_8[current_level_index]++;
@@ -247,7 +247,7 @@ void FUN_L17_0020e1c0(void) {
         break;
     }
     if (hero.state.control_mode == 4) {
-        if (hero.state_timer > hero.state_timer_mark && hero.velocity_stopped == 0)
+        if (hero.state_timer > hero.unk420 && hero.unk41E == 0)
             hero.unk22C = hero.unk434;
     } else if (hero.state.current == 6) {
         hero.unk22C = 0.5f;

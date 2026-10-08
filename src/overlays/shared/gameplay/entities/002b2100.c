@@ -1462,7 +1462,7 @@ void FUN_L00_002b4198(void *p) {
             if ((u32)(st - 0xB) < 4 ||
                 (st == 0x1C && ((u8 *)((void *)hero.moby))[0x52] == ((u8 *)((void *)hero.moby))[0x53] &&
                  hero.unkAA8 >= 6.0f && hero.unkAA8 <= 16.0f)) {
-                if (!hero.velocity_stopped)
+                if (!hero.unk41E)
                     flag = 1;
             }
             if (hero.state.current == 0x10) {

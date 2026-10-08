@@ -107,7 +107,7 @@ void FUN_L00_0020cf58(void) {
         }
     }
     *(Q_cf58 *)&v1 = *(Q_cf58 *)&D_0013F350_cf58.pos;
-    if (!find_path_near_point((Q_cf58 *)&v1, &a, &v0, &b, &c, &e, 0, 0))
+    if (!FUN_L00_0020cd08((Q_cf58 *)&v1, &a, &v0, &b, &c, &e, 0, 0))
         return;
     if (D_0013F350_cf58.w2084 == 41 && D_0013F350_cf58.w5C4 != 0 && a == D_0013F350_cf58.w560)
         return;
@@ -174,7 +174,7 @@ void FUN_L00_0020d330(void) {
     FUN_L00_0020d2f8_0020d330(&a);
     if ((P->w208C == 4 && P->h41E == 0) || P->w208C == 2) {
         pb = &b;
-        if (find_path_near_point(&a, &i20, pb, &i24, &f28, &i2C, 0, 0)) {
+        if (FUN_L00_0020cd08(&a, &i20, pb, &i24, &f28, &i2C, 0, 0)) {
             float bz, az;
             int fl;
             az = a.f[2];
@@ -1635,7 +1635,7 @@ void FUN_L00_00211380(void) {
         break;
     }
     if (hero.state.control_mode == 4) {
-        if (hero.state_timer > hero.state_timer_mark && hero.velocity_stopped == 0)
+        if (hero.state_timer > hero.unk420 && hero.unk41E == 0)
             hero.unk22C = hero.unk434;
     } else if (hero.state.current == 6) {
         hero.unk22C = 0.5f;

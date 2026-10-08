@@ -74,7 +74,7 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
         }
     }
     if (controller_state.pressed_buttons & 0xD00) {
-        if (menu_system.close_blocked == 0) {
+        if (menu_system.unk124 == 0) {
             return 1;
         }
     }
@@ -82,7 +82,7 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
         back_page = menu_system.current->back;
         if (back_page != 0) {
             menu_system.next = back_page;
-        } else if (menu_system.close_blocked == 0) {
+        } else if (menu_system.unk124 == 0) {
             return -1;
         }
     }

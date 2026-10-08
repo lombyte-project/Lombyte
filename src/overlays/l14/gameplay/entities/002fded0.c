@@ -295,7 +295,7 @@ extern float D_0015ED6C;
 extern int D_0015ED84;
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
-extern int advance_along_path(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");
+extern int FUN_L00_0025d808(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");
 extern float D_L14_00161FB8 __attribute__((sda));
 extern float D_L14_00161FBC __attribute__((sda));
 extern float D_L14_00161FC0 __attribute__((sda));
@@ -318,7 +318,7 @@ int FUN_L14_002fea80(char *moby) {
         path = D_L14_001B0BB0[*(int *)(data + 0xDC)];
     else
         path = D_L14_001B0BB0[*(int *)(data + 0xD8)];
-    r = advance_along_path(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, t);
+    r = FUN_L00_0025d808(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, t);
     FUN_L00_0025b8c0((float *)(moby + 0x10), (float *)(data + 0xE4), pos[0], D_L14_00161FBC,
                      D_L14_00161FC0, 0.0f);
     FUN_L00_0025b8c0((float *)(moby + 0x14), (float *)(data + 0xE8), pos[1], D_L14_00161FBC,

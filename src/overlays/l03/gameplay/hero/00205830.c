@@ -596,7 +596,7 @@ extern f32 FUN_001f9988(f32);
 extern f32 FUN_L00_00233a78(void *);
 extern f32 FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
 extern f32 FUN_L00_00213350(void *);
-extern struct HeroThresholdRow D_L03_0017BD28[];
+extern struct HeroTableRow2C D_L03_0017BD28[];
 extern struct LevelTable_QS D_L03_00166D80;
 #define Q D_L03_00166D80
 extern s32 D_0013CAE0[];
@@ -647,7 +647,7 @@ extern void FUN_L00_0020d2f8(void *);
 extern f32 FUN_L00_00257c48(f32, f32);
 extern void FUN_L00_0026d598(void *, void *, s32);
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
-extern s32 advance_along_path(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_0025d808");
+extern s32 FUN_L00_0025d808(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_0025d808");
 extern s32 FUN_L00_0025d7a0(void *, s32, s32, s32);
 extern f32 FUN_001f96b0(f32);
 extern void FUN_L00_00214108(void);
@@ -718,8 +718,8 @@ void FUN_L03_0020ef60(void) {
                         S.stat[18].count++;
                     }
                     t = scale_game_frames(D_0015EEA4) / 600;
-                    if (S.stat[18].last_time < t) {
-                        S.stat[18].last_time = scale_game_frames(D_0015EEA4) / 600;
+                    if (S.stat[18].unk2 < t) {
+                        S.stat[18].unk2 = scale_game_frames(D_0015EEA4) / 600;
                     }
                     D_L03_0015F688 = -1;
                     S.stat[18].level_mask = S.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
@@ -965,8 +965,8 @@ void FUN_L03_0020ef60(void) {
                         S.stat[11].count++;
                     }
                     t2 = scale_game_frames(D_0015EEA4) / 600;
-                    if (S.stat[11].last_time < t2) {
-                        S.stat[11].last_time = scale_game_frames(D_0015EEA4) / 600;
+                    if (S.stat[11].unk2 < t2) {
+                        S.stat[11].unk2 = scale_game_frames(D_0015EEA4) / 600;
                     }
                     S.stat[11].level_mask = S.stat[11].level_mask | (1 << current_level_index) | 0x80000000;
                 } else {
@@ -1654,7 +1654,7 @@ void FUN_L03_0020ef60(void) {
         break;
     }
     case 0x13: {
-        struct HeroThresholdRow *tb;
+        struct HeroTableRow2C *tb;
         if (0) {
             FUN_L00_002167d0();
             break;
@@ -2036,7 +2036,7 @@ void FUN_L03_0020ef60(void) {
             P.uE0.fE8.v = P.uE0.fE8.v - D_0015ED70 * 24.0f;
             break;
         }
-        advance_along_path(P.p5F0, &v10, &P.i5F4, &P.f5F8, P.f604, P.i60C);
+        FUN_L00_0025d808(P.p5F0, &v10, &P.i5F4, &P.f5F8, P.f604, P.i60C);
         idx = FUN_L00_0025d7a0(P.p5F0, P.i5F4, 1, P.i60C);
         FUN_001f9a28(&v20, (Vec4 *)P.p5F0 + (idx + 1), &v10);
         if (FUN_001f9af0(&v20) < 0.001f) {

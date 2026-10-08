@@ -355,7 +355,7 @@ void FUN_L01_00231450(void) {
     hero_set_state(0, 1);
 }
 extern s32 D_L01_0015F5C4_8 __asm__("D_L01_0015F5C4");
-extern MobyLink D_L01_00178580_8[] __asm__("D_L01_00178580");
+extern OvlMobyEntry40 D_L01_00178580_8[] __asm__("D_L01_00178580");
 extern s32 D_0015ED84_8 __asm__("D_0015ED84");
 extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
@@ -378,7 +378,7 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 s32 FUN_L01_00231580(s32 arg) {
     u8 *m;
-    MobyLink *tbl;
+    OvlMobyEntry40 *tbl;
     u8 *mob;
     s32 flag;
     s32 id;
@@ -409,7 +409,7 @@ s32 FUN_L01_00231580(s32 arg) {
     if (tbl->owner != m) {
         return 0;
     }
-    if ((tbl->active ^ 1) & 1) {
+    if ((tbl->unk24 ^ 1) & 1) {
         return 0;
     }
     D_0013DF88_8[D_0015ED84_8]++;
@@ -524,7 +524,7 @@ void FUN_L01_00231ae0(void) {
         break;
     }
     if (hero.state.control_mode == 4) {
-        if (hero.state_timer > hero.state_timer_mark && hero.velocity_stopped == 0)
+        if (hero.state_timer > hero.unk420 && hero.unk41E == 0)
             hero.unk22C = hero.unk434;
     } else if (hero.state.current == 6) {
         hero.unk22C = 0.5f;

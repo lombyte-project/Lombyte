@@ -66,13 +66,13 @@ struct HeroMotion {
     Vec4 unk120;                   /* 0x120 */
     u8 pad_130[0x10];
     Vec4 unk140;                   /* 0x140 */
-    Vec4 state_velocity;           /* 0x150: velocity seeded on state entry */
+    Vec4 unk150;                   /* 0x150: copied from unk110/unk100 on hero_set_state */
     f32 unk160;                    /* 0x160 */
     f32 unk164;                    /* 0x164 */
     f32 unk168;                    /* 0x168 */
     f32 unk16C;                    /* 0x16C */
     Vec4 unk170;                   /* 0x170 */
-    f32 target_yaw;                /* 0x180: yaw to turn toward */
+    f32 unk180;                    /* 0x180: angle, compared with rot.z */
     f32 unk184;                    /* 0x184 */
     f32 unk188;                    /* 0x188 */
     u8 pad_18C[0x4];
@@ -100,8 +100,8 @@ struct HeroState {
 /* Hit points (hero + 0x22A8) */
 struct HeroHealth {
     s32 hp;                        /* 0x22A8: hit points; 0 = dead */
-    s32 alt_hp;                    /* 0x22AC: hit points used while unk20A4 is 1 */
-    s16 saved_hp;                  /* 0x22B0: hp kept while alt_hp is in use */
+    s32 unk22AC;                   /* 0x22AC: swapped with health.hp */
+    s16 unk22B0;                   /* 0x22B0: s16 copy of health.hp */
     s16 unk22B2;                   /* 0x22B2 */
 };
 
@@ -219,10 +219,10 @@ struct Hero {
     Vec4 unk400;                   /* 0x400 */
     f32 unk410;                    /* 0x410 */
     f32 unk414;                    /* 0x414 */
-    s32 snap_timer;                /* 0x418: frames since the hero snapped onto the floor */
+    s32 unk418;                    /* 0x418: set when velocity.z clamps to unk500.z, counts up */
     s16 unk41C;                    /* 0x41C */
-    s16 velocity_stopped;          /* 0x41E: 1 once velocity fell near 0 */
-    s32 state_timer_mark;          /* 0x420: state_timer value state code waits for */
+    s16 unk41E;                    /* 0x41E: set to 1 when FUN_L00_00233a78(velocity) < 0.001 */
+    s32 unk420;                    /* 0x420: per-state scale_game_frames(N), compared with state_timer */
     f32 unk424;                    /* 0x424 */
     f32 unk428;                    /* 0x428 */
     f32 unk42C;                    /* 0x42C */
@@ -546,8 +546,8 @@ struct Hero {
     s16 unk22CE;                   /* 0x22CE */
     u8 pad_22D0[0x2];
     s16 unk22D2;                   /* 0x22D2 */
-    s16 swap_tap_timer;            /* 0x22D4: double-tap window of pad bit 0x10 */
-    s16 swap_tap2_timer;           /* 0x22D6: second-tap window of pad bit 0x10 */
+    s16 unk22D4;                   /* 0x22D4: countdown set on pad bit 0x10 press */
+    s16 unk22D6;                   /* 0x22D6: countdown; nonzero with unk22D4 switches pending_item[0] */
     s16 unk22D8;                   /* 0x22D8 */
     s16 unk22DA;                   /* 0x22DA */
     s16 unk22DC;                   /* 0x22DC */

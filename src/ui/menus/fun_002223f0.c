@@ -32,13 +32,13 @@ s32 FUN_002223f0(struct Menu *menu) {
 
     flag = (D_0013C940.unk1A0 & 0xF) == 0xF;
     if ((menu_system.unkDC == 0) || (flag && (((s32)D_0013C940.unk1A0) & 0x10))) {
-        if ((D_0013C940.pressed & 0xD00) && (menu_system.close_blocked == 0)) {
+        if ((D_0013C940.pressed & 0xD00) && (menu_system.unk124 == 0)) {
             return 1;
         }
         if (D_0013C940.pressed & 0x10) {
             if (menu_system.current->back != 0) {
                 menu_system.next = menu_system.current->back;
-            } else if (menu_system.close_blocked == 0) {
+            } else if (menu_system.unk124 == 0) {
                 return -1;
             }
         }

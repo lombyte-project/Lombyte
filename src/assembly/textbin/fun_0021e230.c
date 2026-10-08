@@ -160,11 +160,11 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
                 oclass != active_preview_resource_class[0]) {
                 func_001E9470(0, 0);
             }
-            if (oclass != menu_system.active_resource_class) {
+            if (oclass != menu_system.unk11C) {
                 select_world_object_resource_tables(oclass, menu_system.resource_table_toggle == 0);
                 menu_system.last_resource_table_toggle = resource_request_state;
-                menu_system.last_requested_resource_class = oclass;
-                menu_system.requested_resource_class = oclass;
+                menu_system.unk140 = oclass;
+                menu_system.unk120 = oclass;
                 moby_class_resources[moby_class_slots[oclass]]->state_0d = 0;
             }
         }
