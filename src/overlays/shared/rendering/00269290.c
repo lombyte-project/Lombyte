@@ -992,6 +992,7 @@ void FUN_L00_0026c6e8(void *pos, void *vel) {
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_L00_00267a08(void *);
 
+/* Moves both points by the vector at 0x30; lowers the top byte at a+4 by 6, 00267a08 below 0. */
 void FUN_L00_0026c7f0(char *a) {
     int t;
     FUN_001f9a10(a + 0x10, a + 0x10, a + 0x30);
@@ -2167,6 +2168,7 @@ void FUN_L00_0026ee48(unsigned char *p) {
 extern int FUN_001f9770(void *);
 extern void FUN_L00_00267a08(void *);
 
+/* Calls FUN_L00_00267a08 on a once FUN_001f9770(a + 10) returns non-zero. */
 void FUN_L00_0026f048(char *a) {
     if (FUN_001f9770(a + 10) != 0) {
         FUN_L00_00267a08(a);
@@ -2844,6 +2846,7 @@ void FUN_L00_0026ff10(Moby_26ff10 *p) {
 extern int FUN_001f9770(void *);
 extern void FUN_L00_00267a08(void *);
 
+/* Calls FUN_L00_00267a08 on a once FUN_001f9770(a + 0xA) returns non-zero; skips id -1. */
 void FUN_L00_00270710(char *a) {
     if (*(short *)(a + 0xA) != -1) {
         if (FUN_001f9770(a + 0xA) != 0) {

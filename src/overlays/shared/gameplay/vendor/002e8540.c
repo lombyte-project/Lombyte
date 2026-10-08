@@ -6,6 +6,7 @@
 #include "qcopy.h"
 #include "sda.h"
 extern char *D_L00_00166E00_002e8490 __asm__("D_L00_00166E00");
+/* Stores f at +0x1CC of D_L00_00166E00+0x70 while the short at 0x86 is 0. */
 void FUN_L00_002e8540(float f) {
     char *p = D_L00_00166E00_002e8490;
     if (*(short *)(p + 0x86) == 0) {

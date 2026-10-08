@@ -17,6 +17,7 @@ extern void FUN_001fa050(void *, void *);
 extern void FUN_001fa378(void *, void *, void *);
 extern void FUN_00214598(void *, void *);
 
+/* Multiplies the 001fa050 matrices of (x, y, z) and of a+0x40, stored back by FUN_00214598. */
 void FUN_L00_00262480(char *a, float x, float y, float z) {
     float in[3];
     float t[16], u[16];
@@ -34,6 +35,7 @@ void FUN_L00_00262480(char *a, float x, float y, float z) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263578), where it is exact; names translated to the US level program. */
 
+/* Unless the flag at b+0x13C is set: sets it, stores a at 0x134, clears 0x130..0x138. */
 void FUN_L00_00262500(int a, char *b) {
     if (*(int *)(b + 0x13C) == 0) {
         *(int *)(b + 0x134) = a;
@@ -234,6 +236,7 @@ void FUN_L00_002628d8(void *m, unsigned char *p, int c, float fa, float fb) {
 extern float FUN_001f9de0(float);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
+/* Advances angle *p by y and swaps the old x*sin offset in a+0x18 for the new one. */
 void FUN_L00_00262b00(float x, float y, char *a, float *p, float *q) {
     float t;
     *p = fast_add_rotations(*p, y);

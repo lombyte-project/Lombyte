@@ -13,6 +13,7 @@ extern char D_L00_00179410[];
 extern int FUN_001f96f8(int);
 extern void dismiss_help(void) __asm__("FUN_001fdc08");
 
+/* Once (flag 0x38): starts a 0x3C-frame timer, dismisses help, sets the first word to 8 if 0. */
 void FUN_L00_00203b18(void) {
     char *g = D_L00_00179410;
     if (*(short *)(g + 0x38) == 0) {
@@ -24,6 +25,7 @@ void FUN_L00_00203b18(void) {
     }
 }
 extern char D_L00_00179448[];
+/* Clears the short at D_L00_00179448. */
 void FUN_L00_00203b78(void) {
     *(short *)D_L00_00179448 = 0;
 }
@@ -101,11 +103,13 @@ int FUN_L00_00205000(int a) {
         return D_L00_00179AC0[i].v;
     }
 }
+/* Returns its argument unchanged. */
 s32 FUN_L00_002050b8(s32 a) {
     return a;
 }
 extern char D_0013F350_c2[] __asm__("D_0013F350");
 void FUN_L00_00234e00(void);
+/* Lowers the counter at D_0013F350+0x22A8 by one (not below 0) and calls 00234e00. */
 void FUN_L00_002050c0(s32 n) {
     if (n) {
         char *g = D_0013F350_c2;
@@ -123,6 +127,7 @@ extern s32 D_001413D0[];
 extern s32 D_001404D4[];
 extern s32 D_001403E0[];
 
+/* Returns D_001413D0[0] for a = 0, 2, 3, 4, D_001404D4[0] for 1, D_001403E0[0] for 5, else 0. */
 int FUN_L00_00205110(int a) {
     if (a == 0 || a == 2 || a == 3 || a == 4) {
         return D_001413D0[0];
@@ -141,6 +146,7 @@ typedef struct {
 } E002054e8;
 extern E002054e8 D_L00_0017A680_002054e8[] __asm__("D_L00_0017A680");
 void FUN_L00_00205168_002054e8(E002054e8 *) __asm__("FUN_L00_00205168");
+/* Runs FUN_L00_00205168 on each entry of D_L00_0017A680 (0x1550 bytes). */
 void FUN_L00_002054e8(void) {
     E002054e8 *p = D_L00_0017A680_002054e8;
     E002054e8 *end = (E002054e8 *)((u8 *)p + 0x1550);
@@ -765,6 +771,7 @@ extern unsigned char D_0013F350[];
 extern void FUN_L00_00207d40_u(void) __asm__("FUN_L00_00207d40");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
+/* Once (flag at D_0013F350+0x1EB2) queues FUN_L00_00207d40 with the object at +0x2080. */
 void FUN_L00_00207d00(void) {
     char *g = D_0013F350;
     if (*(short *)(g + 0x1EB2) == 0) {
@@ -872,6 +879,7 @@ typedef struct {
 } G_00208038;
 extern G_00208038 D_0013F350_00208038 __asm__("D_0013F350");
 void FUN_L00_00207d00_00208038(void) __asm__("FUN_L00_00207d00");
+/* Appends v, b, x and y to the list in D_0013F350 and calls FUN_L00_00207d00. */
 void FUN_L00_00208038(u128 *v, int b, float x, float y) {
     G_00208038 *g = &D_0013F350_00208038;
     short n = g->n;
@@ -1277,6 +1285,7 @@ typedef float V[4] __attribute__((aligned(16)));
 extern void clear_u64_value(float *) __asm__("FUN_001f99f8");
 extern void FUN_L00_002090d0(float *, float, float, float);
 
+/* Calls FUN_L00_002090d0 with a vector (0, 0, 0.6) and x, y, z. */
 void FUN_L00_002091d8(float x, float y, float z) {
     V buf;
 
@@ -1584,6 +1593,7 @@ typedef struct {
     float b;
 } S0020a1e0;
 extern S0020a1e0 D_L00_0017A680;
+/* Stores the two floats in D_L00_0017A680. */
 void FUN_L00_0020a1e0(float a, float b) {
     S0020a1e0 *p = &D_L00_0017A680;
     p->a = a;
@@ -1678,6 +1688,7 @@ void FUN_L00_0020a318(void) {
     *(short *)(g2 + 0x22C8) = 1;
 }
 extern char D_0013F350_0020a500[] __asm__("D_0013F350");
+/* Clears the words at 0x1004/0x1008 of D_0013F350 and four 0x10-byte slots from 0x1024. */
 void FUN_L00_0020a500(void) {
     char *p = D_0013F350_0020a500;
     char *q;
@@ -2186,6 +2197,7 @@ void FUN_L00_0020b5b8(void) {
 extern unsigned char D_0013F350[];
 extern void FUN_L00_00210b30(void);
 
+/* Calls FUN_L00_00210b30 when the byte at 0x20A4 of D_0013F350 is 3. */
 void FUN_L00_0020b930(void) {
     if (*(unsigned char *)(D_0013F350 + 0x20A4) == 3) {
         FUN_L00_00210b30();

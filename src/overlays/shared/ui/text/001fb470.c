@@ -7,6 +7,7 @@ extern char D_L00_001C3890[] NOT_SDA;
 extern int tex_1fb470(int) __asm__("FUN_001f44b8");
 extern void font_print(int, int, int, int, int, int, void *) __asm__("FUN_001f62b0");
 
+/* font_print with effect texture 3 and D_L00_001C3890. */
 void FUN_L00_001fb470(int a, int b, int c, int d, int e) {
     font_print(a, b, c, d, e, tex_1fb470(3), D_L00_001C3890);
 }

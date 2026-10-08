@@ -5,6 +5,7 @@
 #include "qcopy.h"
 #include "sda.h"
 
+/* Sets the moby state byte to 1. */
 void FUN_L14_002ffc08(unsigned char *moby) {
     moby[0x20] = 0x1;
 }

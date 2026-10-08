@@ -3,7 +3,7 @@
 #include "asm.h"
 
 #include "sda.h"
-/* Initialises a moby's data block: four random floats, fixed constants, four random ints. */
+/* Fills a moby data block: four random values, fixed constants, four frame-scaled counts. */
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
@@ -32,6 +32,7 @@ void FUN_L06_002f7548(char *moby) {
 #include "qcopy.h"
 #include "sda.h"
 
+/* Sets the moby state byte to 2. */
 void FUN_L06_00303150(unsigned char *moby) {
     moby[0x20] = 0x2;
 }

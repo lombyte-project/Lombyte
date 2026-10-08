@@ -172,6 +172,7 @@ int FUN_L00_002a4dc8(int a) {
 #include "qcopy.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_00250df8(unsigned char *);
+/* Creates a class 0x3EF moby at v and runs FUN_L00_00250df8 on it. */
 unsigned char *FUN_L00_002a4de0(u128 *v) {
     unsigned char *m = create_moby(0x3ef);
     if (m) {
@@ -671,6 +672,7 @@ void FUN_L00_002a7c70(O_002a7c70 *m) {
 extern char *FUN_002141f8_002a7d90(void *) __asm__("FUN_002141f8");
 extern void *D_L00_00173E58_002a7d90 __asm__("D_L00_00173E58") __attribute__((section(".data")));
 
+/* True when the record for D_L00_00173E58 (FUN_002141f8) has byte 9 equal to 1. */
 int FUN_L00_002a7d90(void) {
     int r = 0;
     char *x = 0;
@@ -682,6 +684,7 @@ int FUN_L00_002a7d90(void) {
 }
 extern int D_L00_00173E58 __attribute__((section(".data")));
 char *FUN_L00_0025c338(int);
+/* True when FUN_L00_0025c338(D_L00_00173E58) is set and has flag 2 at 0x1E. */
 int FUN_L00_002a7de0(void) {
     char *p = FUN_L00_0025c338(D_L00_00173E58);
     if (p && (*(unsigned short *)(p + 0x1e) & 2))

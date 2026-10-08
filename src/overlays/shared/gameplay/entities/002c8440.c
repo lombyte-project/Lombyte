@@ -10,6 +10,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c89e8.s", FUN_L00_002c89e8);
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // resets the fields of a record (if non-null) to their defaults
+/* Fills the block from 0x78 with fixed defaults and -1 ids. */
 void FUN_L00_002c92d8(char *a) {
     if (a != 0) {
         *(int *)(a + 0x78) = 0;
@@ -265,6 +266,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c97e0.s", FUN_L00_002c97e0);
 
 extern int FUN_L00_002db8f8(void *);
 
+/* Moby state 5 while FUN_L00_002db8f8 reports a hit, back to 1 when it stops. */
 int FUN_L00_002cadc0(char *a) {
     int r = FUN_L00_002db8f8(a);
     if (r == 0) {
@@ -306,11 +308,13 @@ int FUN_L00_002cae60(char *m, int a, int b, float f) {
 
 extern int FUN_L00_002dbe20(void *);
 
+/* Runs FUN_L00_002dbe20 on the moby and sets its state to 5. */
 int FUN_L00_002caf10(char *a) {
     int r = FUN_L00_002dbe20(a);
     a[0x20] = 5;
     return r;
 }
+/* Returns the word at +0x14 of the moby data, or 0 when either pointer is null. */
 s32 FUN_L00_002caf40(s32 arg0) {
     s32 ptr;
     if (arg0 != 0) {

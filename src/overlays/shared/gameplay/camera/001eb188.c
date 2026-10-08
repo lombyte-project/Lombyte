@@ -8,6 +8,7 @@ typedef struct {
     char pad09b[0x18];
 } Ent09;
 extern Ent09 D_L00_00167150_u[] __asm__("D_L00_00167150");
+/* Finds the 0xA0-byte entry in D_L00_00167150 whose short at 0x86 equals id; 0 when none. */
 s32 FUN_L00_001eb1f8(s32 id) {
     s32 p;
     s32 e;
@@ -294,6 +295,7 @@ extern float FUN_001f9e90(float, float);
 extern void FUN_001f9a28(float *);
 extern void fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
+/* Fills a from a FastVecSub result: two FUN_001f9e90 angles and its length. */
 int FUN_L00_001ed630(float *a) {
     W v;
     float t;

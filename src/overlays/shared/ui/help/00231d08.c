@@ -202,6 +202,7 @@ int FUN_L00_00231ff8(int a, int *b, int *c) {
 extern char D_0013F350[];
 extern int FUN_L00_00231ff8(int, int *, int *);
 
+/* Copies D_0013F350+0xA90 to +0x58 of the objects at 0x1180/0x1184 when the lookup succeeds. */
 void FUN_L00_00232128(void) {
     char *base = D_0013F350;
     int buf[2];
@@ -224,6 +225,7 @@ void FUN_L00_00232128(void) {
     }
 }
 extern s16 *D_001415CC[];
+/* Looks a0 up in the -1-terminated pair list at D_001415CC[0]; stores the pair value in *a1. */
 s32 FUN_L00_002321c0(s32 a0, s32 *a1) {
     s16 *q = D_001415CC[0];
     s16 *p;
@@ -277,6 +279,7 @@ void FUN_L00_00232220(int a0, int a1, float a2) {
 extern char D_0013F350[];
 extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
 
+/* Copies D_0013F350+0xA90 to +0x58 of the object at +0x2278 when FUN_L00_002321c0 succeeds. */
 void FUN_L00_002322c8(void) {
     char *base = D_0013F350;
     int buf[4];
@@ -459,6 +462,7 @@ void FUN_L00_002323b8(int a0, int a1, float t) {
 }
 extern char *D_001413D0_2325a0[] __asm__("D_001413D0");
 extern void FUN_0020c880_2325a0(void *) __asm__("FUN_0020c880");
+/* Fills bytes 0x50..0x53 of D_001413D0[0] from a and b, clears 0x54, calls FUN_0020c880. */
 void FUN_L00_002325a0(int a, int b) {
     char *p = D_001413D0_2325a0[0];
     p[0x50] = b;
@@ -474,6 +478,7 @@ void FUN_L00_002325a0(int a, int b) {
    there. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232E60), where it is exact; names translated to the US level program. */
 
+/* Stores bank and seq at D_0013F350+0xAB0 when seq is below the current bank count. */
 void FUN_L00_002325e0(int bank, int seq) {
     if (bank >= 0) {
         char *base = D_0013F350;
@@ -486,6 +491,7 @@ void FUN_L00_002325e0(int bank, int seq) {
     }
 }
 extern int D_0013F350_00232628[] __asm__("D_0013F350");
+/* Sets the word at 0xAB0 of D_0013F350 to -1 and clears the one at 0xAB8. */
 void FUN_L00_00232628(void) {
     int *p = D_0013F350_00232628;
     p[0xab0 / 4] = -1;
@@ -938,6 +944,7 @@ void FUN_L00_00233660(float *out, float x, float y, float z) {
     FUN_001f9a10(out, out, base + 0x80);
 }
 void FUN_L00_002334d0_002336e8(float) __asm__("FUN_L00_002334d0");
+/* Calls FUN_L00_002334d0 with -x. */
 void FUN_L00_002336e8(float x) {
     FUN_L00_002334d0_002336e8(-x);
 }
@@ -1103,6 +1110,7 @@ float FUN_L00_00233a78(float *v) {
 }
 extern u8 D_0013F350_00233b20[] __asm__("D_0013F350");
 void FUN_001f9d20_00233b20(void *, void *, void *) __asm__("FUN_001f9d20");
+/* Copies in to out with z, transformed by the two D_0013F350 matrices in modes 1 and 2. */
 void FUN_L00_00233b20(f32 *out, f32 *in, f32 z) {
     u8 *b = D_0013F350_00233b20;
     switch (b[0x20B3]) {
@@ -1244,6 +1252,7 @@ s32 FUN_L00_00233db8(s32 idx, s32 amount) {
 }
 extern int D_0013D428_233e40[] __asm__("D_0013D428");
 extern char D_L00_001C40B0_233e40[] __asm__("D_L00_001C40B0");
+/* Adds b to counter a, capping it at the entry's limit; returns the overflow or 0. */
 int FUN_L00_00233e40(int a, int b) {
     int *p = &D_0013D428_233e40[a];
     unsigned short *q = (unsigned short *)(D_L00_001C40B0_233e40 + a * 0x18);
@@ -1263,6 +1272,7 @@ int FUN_L00_00233e40(int a, int b) {
 extern s32 D_00140408_c __asm__("D_00140408") __attribute__((section(".data")));
 extern u8 D_L00_001C40B0_c[] __asm__("D_L00_001C40B0");
 
+/* 1 if entry idx of D_L00_001C40B0 has no limit at 0xE, else D_0013D428[idx]; -1: D_00140408. */
 s32 FUN_L00_00233e98(s32 idx) {
     u8 *p;
     if (idx == -1)
@@ -1282,6 +1292,7 @@ struct G_00233ee8 {
 };
 extern struct G_00233ee8 D_0013F350_00233ee8 __asm__("D_0013F350");
 void FUN_L00_002223f8_00233ee8(int, int) __asm__("FUN_L00_002223f8");
+/* Stores v, f and n in D_0013F350; calls 002223f8(0x65, 1) unless state is 0x65..0x67. */
 void FUN_L00_00233ee8(void *v, float f, int n) {
     qcopy(D_0013F350_00233ee8.pos, v);
     D_0013F350_00233ee8.f = f;
@@ -1292,6 +1303,7 @@ void FUN_L00_00233ee8(void *v, float f, int n) {
 }
 extern s32 D_001413D4[];
 
+/* Maps D_001413D4[0]: 0x65/0x66 to 1, 0x67 to 2, others to 0. */
 s32 FUN_L00_00233f38(void) {
     s32 v = D_001413D4[0];
     switch (v) {
@@ -1314,6 +1326,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233f80.s", FUN_L00_00233f80);
 extern char D_0013F350[];
 extern int FUN_L00_00262030(int, void *, void *, float);
 
+/* Sets the short at D_0013F350+0x1F6 to 4 when FUN_L00_00262030 succeeds. */
 void FUN_L00_002347c0(void) {
     char *base = D_0013F350;
 
@@ -1540,6 +1553,7 @@ void FUN_L00_00239630();
 void FUN_L00_00239810();
 extern u8 D_001415F8[];
 void queue_animation_update() __asm__("FUN_001ff308");
+/* Queues animation update 0x7535 with three FUN_L00_ callbacks and D_001415F8. */
 void FUN_L00_00234e00(void) {
     queue_animation_update(1, 0x7535, FUN_L00_002395b0, FUN_L00_00239630, FUN_L00_00239810,
                            D_001415F8, 8);

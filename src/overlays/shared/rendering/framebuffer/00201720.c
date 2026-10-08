@@ -4,6 +4,7 @@
 
 #include "sda.h"
 extern s32 D_L00_00173054 NOT_SDA;
+/* Returns D_L00_00173054. */
 s32 FUN_L00_00201720(void) {
     return D_L00_00173054;
 }

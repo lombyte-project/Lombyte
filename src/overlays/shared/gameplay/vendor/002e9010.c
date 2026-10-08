@@ -199,6 +199,7 @@ extern void FUN_L00_002e9010(int);
 extern void FUN_L00_002e9720_u(int) __asm__("FUN_L00_002e9720");
 extern void FUN_L00_002e9aa0(int);
 
+/* Runs eight FUN_L00_002e* steps on object a in order. */
 void FUN_L00_002e9bb0(int a) {
     float v[2];
     FUN_L00_002e9aa0(a);
@@ -293,6 +294,7 @@ void FUN_L00_002e9dd0(char *m) {
     qcopy(m + 0x40, m);
 }
 void FUN_L00_002e9dd0();
+/* Clears seven words of the object at p+0x70, calls FUN_L00_002e9dd0, clears 0x7E. */
 void FUN_L00_002e9ef0(char *p) {
     int *q = *(int **)(p + 0x70);
     q[0] = 0;
@@ -592,6 +594,7 @@ extern S D_L00_00166C80;
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_002e9ef0_v(void) __asm__("FUN_L00_002e9ef0");
 
+/* Sets s to 1 (2 if set), resets D_L00_00166C80, calls 002e9ef0, allocates a voice for its p. */
 void FUN_L00_002ea7a0(void) {
     S *g = &D_L00_00166C80;
     S *h;
@@ -688,6 +691,7 @@ void FUN_L00_002ea810(A_2ea810 *arg) {
 extern char *D_L00_00166E00 __attribute__((section(".data")));
 extern char *FUN_L00_001eb1f8(int);
 
+/* Copies src to +0x80 of the object of entry 5 (from FUN_L00_001eb1f8 if needed). */
 void FUN_L00_002ea9d8(char *src) {
     char *g = D_L00_00166E00;
     char *p;
@@ -909,6 +913,7 @@ void FUN_L00_002eae20(void *arg) {
 extern void FUN_L00_001ed6a8(void *, float);
 extern void FUN_L00_002eae20_u(void *) __asm__("FUN_L00_002eae20");
 
+/* Runs FUN_L00_002eae20; if word +0x120 of its object is set, clears 0x89 and calls 001ed6a8. */
 void FUN_L00_002eb218(char *a) {
     char *p = *(char **)(a + 0x70) + 0xE0;
     FUN_L00_002eae20_u(a);
@@ -1309,6 +1314,7 @@ done:
 
 extern char D_0013F350[];
 
+/* Resets moby bytes 0x7D/0x7E unless its id at 0x86 is D_0013F350+0x2284 or 0x2084 is 6. */
 void FUN_L00_002ec7b0(char *a) {
     char *g = D_0013F350;
     if (*(int *)(g + 0x2284) != *(short *)(a + 0x86) && *(int *)(g + 0x2084) != 6) {

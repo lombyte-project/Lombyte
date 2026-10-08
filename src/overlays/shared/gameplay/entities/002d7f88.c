@@ -68,6 +68,7 @@ void FUN_L00_002d7f88(S_002d7f88 *self) {
     t = d->fC;
     self->f2C = t * 0.1f + t * d->f4 / D_L00_001616DC;
 }
+/* True when the moby state byte is 1. */
 int FUN_L00_002d8128(unsigned char *p) {
     return p[0x20] == 1;
 }
@@ -96,6 +97,7 @@ typedef struct {
 } O2d8138;
 O2d8138 *create_moby(int) __asm__("FUN_0020c4f8");
 #include "qcopy.h"
+/* Creates a class 0x326 moby linked to p at p's position; 0 when p's state is negative. */
 O2d8138 *FUN_L00_002d8138(P2d8138 *p) {
     O2d8138 *o;
     if (p->b20 < 0)
@@ -359,6 +361,7 @@ extern f32 D_L00_001619F0 __attribute__((sda));
 extern f32 D_L00_00161A14 __attribute__((sda));
 void build_look_at_matrix(V4 *, V4 *, V4 *, f32) __asm__("FUN_00214890");
 void FUN_001f9bf8(V4 *, V4 *, f32);
+/* Rebuilds the eight D_L00_001E3CA0 entries with build_look_at_matrix and normalizes them. */
 void FUN_L00_002d8908(void) {
     s32 i;
     for (i = 0; i < 8; i++) {
@@ -372,6 +375,7 @@ extern char *D_001413D0 __attribute__((section(".data")));
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d89f0.s", FUN_L00_002d89f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d9810.s", FUN_L00_002d9810);
 int FUN_001efa68(Vec4 *, Vec4 *, int, int, int);
+/* True when FUN_001efa68 returns 0 for the moby and D_001413D0 positions, both raised by 0.5. */
 int FUN_L00_002d8980(char *a) {
     Vec4 p, t;
     qcopy(&p, a + 0x10);
@@ -387,6 +391,7 @@ struct G_002d9f78 {
     int mode;
 };
 extern struct G_002d9f78 D_0013F350_002d9f78 __asm__("D_0013F350");
+/* False in modes 0, 1, 5, 12, and in modes 2 and 4 unless the state is 0x3C. */
 int FUN_L00_002d9f78(void) {
     int r = 1;
     switch (D_0013F350_002d9f78.mode) {
@@ -494,6 +499,7 @@ int FUN_L00_002da058(u8 *p, void *q, void *m_, void *r_, void *buf) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DB690), where it is exact; names translated to the US level program. */
 
+/* Calls the optional function reached through the moby pointer at +0x24 (slot 0xC); 1 if null. */
 int FUN_L00_002da1e0(char *a) {
     int (*fn)(char *) = *(int (**)(char *))(*(char **)(*(char **)(a + 0x24) + 0x2C) + 0xC);
     if (fn != 0) {
@@ -701,6 +707,7 @@ typedef struct Obj_db890 {
     char pad2[0x50];
     s32 f78;
 } Obj_db890;
+/* Calls the class function at +0x10 for a moby not in state 0xFE/0xFD with data; else 0. */
 s32 FUN_L00_002db890(Obj_db890 *o) {
     Fn_db890 f;
     if (o == 0 || o->f20 == 0xFE)
@@ -882,6 +889,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002dd8e8.s", FUN_L00_002dd8e8);
 extern int D_L00_00161B44_002ddca0 __asm__("D_L00_00161B44") __attribute__((sda));
 extern int D_L00_00161B40_002ddca0 __asm__("D_L00_00161B40") __attribute__((sda));
 extern short D_L00_001E6008_002ddca0 __asm__("D_L00_001E6008") __attribute__((section(".data")));
+/* Sets D_L00_00161B40 and D_L00_00161B44 to 1 and clears D_L00_001E6008. */
 void FUN_L00_002ddca0(void) {
     D_L00_00161B40_002ddca0 = 1;
     D_L00_00161B44_002ddca0 = 1;
@@ -899,6 +907,7 @@ extern short D_L00_001E6008[];
 extern void FUN_L00_002dd8e8(void);
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
+/* When D_L00_001E6008[0] > 0: caps the ten counters at 0x40, lowers each by 4, queues 002dd8e8. */
 void FUN_L00_002defe0(int arg0) {
     int i;
     if (D_L00_001E6008[0] > 0) {

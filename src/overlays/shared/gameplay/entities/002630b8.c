@@ -122,6 +122,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002637f8.s", FUN_L00_002637f8);
 extern unsigned char D_0015EDB7;
 void attach_manipulator() __asm__("FUN_0020cb10");
 void detach_manipulator() __asm__("FUN_0020cb88");
+/* While D_0015EDB7 is set attaches the manipulator, sets floats 0x20..0x28 to x; else detaches. */
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p) {
     if (D_0015EDB7) {
         if (p[1] == 0)
@@ -196,6 +197,7 @@ extern char D_L00_00179118_00263d40[] __asm__("D_L00_00179118");
 int FUN_001f96f8_00263d40(int) __asm__("FUN_001f96f8");
 int FUN_001fdd10_00263d40(int) __asm__("FUN_001fdd10");
 void FUN_001165b8_00263d40(char *, int) __asm__("FUN_001165b8");
+/* Calls FUN_001165b8 with D_L00_00179118 and FUN_001fdd10(a); stores b (default 0xB4 frames). */
 void FUN_L00_00263d40(int a, int b) {
     if (b == -1)
         b = FUN_001f96f8_00263d40(0xB4);
@@ -207,6 +209,7 @@ extern s32 D_L00_0015F640;
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 get_help_message_text() __asm__("FUN_001fdd10");
 void FUN_00116248();
+/* Calls FUN_00116248 on D_L00_00179118 with help message a and b; c frames (default 0xB4). */
 void FUN_L00_00263db0(s32 a, s32 b, s32 c) {
     if (c == -1)
         c = scale_game_frames(0xB4);

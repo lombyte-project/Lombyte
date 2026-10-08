@@ -12,6 +12,7 @@ extern unsigned char D_0013A4E0[];
 extern unsigned char D_0013E533[];
 extern void FUN_L00_002c1778_u(void *) __asm__("FUN_L00_002c1778");
 
+/* Runs FUN_L00_002c1778 when the moby data word 4 is set, else sets byte 0xBC from a mask test. */
 void FUN_L00_002c1718(char *m) {
     if (*(int *)(*(char **)(m + 0x78) + 4) != 0) {
         FUN_L00_002c1778_u(m);
@@ -169,6 +170,7 @@ void FUN_L00_002c40a0(S_2c40a0 *self) {
 }
 s32 FUN_001f0b58();
 void FUN_L00_002c3440();
+/* Calls FUN_L00_002c3440 on m for FUN_001f0b58 results 0, 1, 3, 8, 11, 12 and 13. */
 void FUN_L00_002c4328(void *m) {
     switch (FUN_001f0b58()) {
     case 0:

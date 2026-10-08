@@ -796,6 +796,7 @@ extern u8 D_0013F3D0[];
 void FUN_001f9a10(void *, void *, void *);
 s32 FUN_001f9770(void *);
 void FUN_L00_00267a08(void *);
+/* Adds the vector at D_0013F3D0 in mode 1, then calls 00267a08 once the timer at +0xA ends. */
 void FUN_L00_00273088(u8 *a) {
     u8 *q = a + 0x20;
     if (*(s32 *)(q + 0x10) == 1)
@@ -1457,6 +1458,7 @@ unsigned char *FUN_L00_00274cf8(void *a, int idx, float ang) {
 
 extern void FUN_L00_00267a08(void *);
 
+/* Every second tick lowers the top byte at a+4 by 1; calls 00267a08 once it reaches 0. */
 void FUN_L00_00274de0(char *a) {
     int t = *(unsigned short *)(a + 0xA) - 1;
     *(short *)(a + 0xA) = t;
@@ -1614,6 +1616,7 @@ unsigned char *FUN_L00_00275158(void *a, void *b, int n, float f) {
 
 extern void FUN_L00_00267a08(void *);
 
+/* Adds byte 0x38 to byte 8; calls FUN_L00_00267a08 once the float at 0xC is <= 0. */
 void FUN_L00_002752e0(char *a) {
     *(unsigned char *)(a + 8) = *(unsigned char *)(a + 8) + *(unsigned char *)(a + 0x38);
     if (*(float *)(a + 0xC) <= 0.0f) {
@@ -1783,6 +1786,7 @@ extern int D_L00_00160240 __attribute__((sda));
 void FUN_L00_00259430();
 int FUN_001f9770(void *);
 void FUN_L00_00267a08();
+/* Lowers the top byte at p+4 by D_L00_00160240; calls 00267a08 once FUN_001f9770(p+0xA) is set. */
 void FUN_L00_00275810(char *p) {
     FUN_L00_00259430(p + 4, D_L00_00160240);
     if (FUN_001f9770(p + 0xA))

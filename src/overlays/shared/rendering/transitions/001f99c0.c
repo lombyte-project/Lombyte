@@ -16,6 +16,7 @@ extern void FUN_L00_002a09d8(int);
 extern void FUN_L00_002a0f18(void *, int, int);
 void vu1_init_chain(void) __asm__("FUN_002335d0");
 
+/* Calls 002a09d8(1), waits for vsync, counts a frame, starts the VU1 chain, calls 002a0f18. */
 void FUN_L00_001f99c0(void *a) {
     FUN_L00_002a09d8(1);
     sceGsSyncV(0);

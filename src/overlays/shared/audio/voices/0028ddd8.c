@@ -79,6 +79,7 @@ typedef struct {
 
 extern TE D_L00_001EA980[];
 
+/* Looks a[0] up in the -1-terminated D_L00_001EA980 table; stores the index and its value in a. */
 void FUN_L00_0028df58(short *a) {
     int i;
     for (i = 0; D_L00_001EA980[i].k != -1 && D_L00_001EA980[i].k != a[0]; i++) {

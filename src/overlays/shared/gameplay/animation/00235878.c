@@ -45,6 +45,7 @@ void FUN_L00_00235878(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236400), where it is exact; names translated to the US level program. */
 
+/* Offsets x/y for the element's anchor flags (centre or right/bottom alignment). */
 int FUN_L00_00235a70(HudElem *rec, int *x, int *y) {
     int w = rec->w;
     int h = rec->h;
@@ -153,6 +154,7 @@ void FUN_L00_00235c80(HudElem *e) {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00235c80(HudElem *);
 
+/* Sets unk7C to scale_game_frames(0xB4) + 0x1E, clears 0x48/0x4A, calls FUN_L00_00235c80. */
 void FUN_L00_00235d80(HudElem *e) {
     e->unk7C = scale_game_frames(0xB4) + 0x1E;
     e->unk48 = 0;
@@ -162,6 +164,7 @@ void FUN_L00_00235d80(HudElem *e) {
 /* func_L00_00236710 for a 32 x 32 element. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236750), where it is exact; names translated to the US level program. */
 
+/* Sets unk7C to scale_game_frames(0xB4) + 0x1E, clears 0x48/0x4A, w/h 0x20, calls 00235c80. */
 void FUN_L00_00235dc0(HudElem *e) {
     e->unk7C = scale_game_frames(0xB4) + 0x1E;
     e->unk48 = 0;
@@ -368,6 +371,7 @@ void FUN_L00_00236458(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002365a8.s", FUN_L00_002365a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236e50.s", FUN_L00_00236e50);
 void FUN_L00_00235ea0();
+/* Calls FUN_L00_00235ea0. */
 void FUN_L00_002371e0(void) {
     FUN_L00_00235ea0();
 }

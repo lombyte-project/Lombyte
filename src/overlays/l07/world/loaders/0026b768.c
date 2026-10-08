@@ -2,4 +2,5 @@
 #include "types.h"
 #include "asm.h"
 
+/* Level load: relocates sky, uploads textures, loads HUD banks, flushes cache; many DebugPrints. */
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0026b768.s", FUN_L07_0026b768);

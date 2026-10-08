@@ -1527,6 +1527,7 @@ unsigned char *FUN_L00_002afc70(unsigned char *a, V_2afc70 *pos, unsigned char *
 }
 extern float D_0015ED6C;
 extern float D_0015ED64;
+/* Sums n steps of a value easing toward 20 * D_0015ED6C by a tenth (times D_0015ED64) per step. */
 float FUN_L00_002aff50(int n) {
     float sum = 0.0f, v = sum;
     if (n > 0) {

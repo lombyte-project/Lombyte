@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/storage/disc_table.h"
 
 #define NOT_SDA
 
@@ -18,6 +19,7 @@ extern int D_L00_0015F430;
 extern int D_L00_0015F434;
 extern int D_L00_0017E504[];
 
+/* Clears D_L00_0015F424..0015F434, D_L00_0017E504[0] and D_L00_0015F2F0/2F4. */
 void FUN_L00_00297e30(void) {
     D_L00_0015F424 = 0;
     D_L00_0017E504[0] = 0;
@@ -658,6 +660,7 @@ typedef struct {
 } Tab_002994f8;
 extern Tab_002994f8 D_00137B80_002994f8 __asm__("D_00137B80");
 void FUN_L00_002995d0(s32, s32, s32);
+/* Passes disc table entry i at 0x1A28 (0x1A50 while D_0015ED80 is set) to FUN_L00_002995d0. */
 void FUN_L00_002994f8(s32 i) {
     s32 a, b;
     if (i < 0)
@@ -671,26 +674,18 @@ void FUN_L00_002994f8(s32 i) {
     }
     FUN_L00_002995d0(a, b, 0);
 }
-typedef struct {
-    s32 a, b;
-} P2_00299560;
-typedef struct {
-    u8 pad[0x1938];
-    P2_00299560 x[12];
-    P2_00299560 y[12];
-} Tab_00299560;
-extern Tab_00299560 D_00137B80_00299560 __asm__("D_00137B80");
 void FUN_L00_002995d0(s32, s32, s32);
+/* Passes movie i (the alt table while D_0015ED80 is set) and the language to FUN_L00_002995d0. */
 void FUN_L00_00299560(s32 i) {
     s32 a, b;
     if (i < 0)
         return;
     if (D_0015ED80) {
-        a = D_00137B80_00299560.y[i].a;
-        b = D_00137B80_00299560.y[i].b;
+        a = disc_table.movies_alt[i].sector;
+        b = disc_table.movies_alt[i].size;
     } else {
-        a = D_00137B80_00299560.x[i].a;
-        b = D_00137B80_00299560.x[i].b;
+        a = disc_table.movies[i].sector;
+        b = disc_table.movies[i].size;
     }
     FUN_L00_002995d0(a, b, game_language);
 }
@@ -738,6 +733,7 @@ void FUN_L00_002a09d8(s32);
 void fade_to_black(s32) __asm__("FUN_001f4a58");
 void request_audio_stream_break(void) __asm__("FUN_002166e8");
 void FUN_002335a0(void);
+/* Calls 002a09d8(1), fades to black, breaks the audio stream, clears globals, calls 002335a0. */
 void FUN_L00_00299c00(void) {
     FUN_L00_002a09d8(1);
     fade_to_black(0xC);

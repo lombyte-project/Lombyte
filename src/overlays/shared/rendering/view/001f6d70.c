@@ -3,6 +3,7 @@
 #include "asm.h"
 
 extern s32 D_L00_00169C80[];
+/* Moves the word at 0x364 of D_L00_00169C80 to 0x368 and clears 0x364 and 0x1B0. */
 void FUN_L00_001f6d70(void) {
     s32 *p = D_L00_00169C80;
     s32 v = p[0x364 / 4];

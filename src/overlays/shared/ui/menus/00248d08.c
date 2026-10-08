@@ -9,6 +9,7 @@
 
 extern s32 D_L00_001C44B8[];
 extern s32 D_L00_001791B8[];
+/* Stores v in D_L00_001791B8 at i plus this level's base from D_L00_001C44B8. */
 void FUN_L00_0024a798(s32 v, s32 i) {
     if (current_level_index < 0x13) {
         i += D_L00_001C44B8[current_level_index];

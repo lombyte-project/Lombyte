@@ -10,6 +10,7 @@
 
 extern char D_001516D0[];
 
+/* Stores v in the three entries of D_001516D0 whose flag 0x8000 is set. */
 void FUN_L00_00265880(int v) {
     char *b = D_001516D0;
     if (*(short *)(b + 0x40) & 0x8000)

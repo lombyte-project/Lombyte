@@ -247,6 +247,7 @@ typedef struct {
 extern Q2395b0 D_L00_0015FAB0;
 int FUN_001f96f8(int);
 void FUN_L00_00235c80();
+/* Sets 0x7C, 0x58/0x5C = 64, 0x48 = 32, calls 00235c80 and links D_L00_0015FAB0. */
 void FUN_L00_002395b0(char *p) {
     int r = FUN_001f96f8(0xB4);
     *(int *)(p + 0x7C) = r + 30;
@@ -495,6 +496,7 @@ out:
 extern HudCounter D_L00_0015FAB8;
 extern void FUN_L00_0023a760(HudElem *);
 
+/* Runs FUN_L00_0023a760 on e, points its unk80 at D_L00_0015FAB8 and clears that entry. */
 void FUN_L00_00239cc8(HudElem *e) {
     FUN_L00_0023a760(e);
     e->unk80 = &D_L00_0015FAB8;
@@ -600,6 +602,7 @@ int FUN_L00_0023a640(char *rec) {
 extern int FUN_001f96f8(int);
 extern void FUN_L00_00235c80(HudElem *);
 
+/* Sets unk7C to scale_game_frames(0x78) + 0x1E and w/h to 0x20, calls FUN_L00_00235c80. */
 void FUN_L00_0023a760(HudElem *e) {
     e->unk7C = FUN_001f96f8(0x78) + 0x1E;
     e->w = 0x20;

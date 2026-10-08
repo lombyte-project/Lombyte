@@ -127,6 +127,7 @@ unsigned int FUN_L00_0025bfe0(float r, float g, float b, float a) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D0E0), where it is exact; names translated to the US level program. */
 
+/* Swaps a/b, b/c and c/a as bits 1, 2 and 4 of mask select. */
 void FUN_L00_0025c088(int *a, int *b, int *c, int mask) {
     int x, y;
     if (mask & 1) {

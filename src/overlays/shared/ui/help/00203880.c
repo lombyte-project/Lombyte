@@ -23,6 +23,7 @@ typedef struct {
 extern G00203908 D_001516D0_00203908 __asm__("D_001516D0");
 extern P00203908 D_00141968_00203908[] __asm__("D_00141968");
 void FUN_001fed30_00203908(s32) __asm__("FUN_001fed30");
+/* Starts help entry b with message a when no help is showing; pushes a to the help history. */
 s32 FUN_L00_00203908(s32 a, s32 b) {
     S00203908 *s = &D_L00_00179410_00203908;
     if (s->state == 0 && s->cur == -1 && D_001516D0_00203908.x50 == 0 &&
@@ -65,6 +66,7 @@ typedef struct {
     u32 b;
 } P;
 extern P D_00141968[];
+/* Clears the top bit of each of the 0x94 help records. */
 void FUN_L00_00203a28(void) {
     s32 i;
     for (i = 0; i < 0x94; i++)

@@ -12,6 +12,7 @@ extern float FUN_001f9dc8(float);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
+/* Cosine-eased rotation from x toward y at z. */
 float FUN_L00_00257ef0(float x, float y, float z) {
     float t = fast_subtract_rotations(y, x);
     float c = FUN_001f9dc8(z * 3.1415927f);
@@ -347,6 +348,7 @@ int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) {
 }
 float FUN_001fa6c0(int);
 void FUN_L00_00258830(int, int, float, float, float, int);
+/* Calls FUN_L00_00258830 with c converted to float and divided by 1024. */
 void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d) {
     FUN_L00_00258830(a, b, x, FUN_001fa6c0(c) * (1.0f / 1024.0f), y, d);
 }
@@ -632,6 +634,7 @@ int FUN_L00_002592b8(char **out, char *target, int a, int b) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A468), where it is exact; names translated to the US level program. */
 
+/* Lowers the top byte of *p by b (not below 0); true once it reaches 0. */
 int FUN_L00_00259430(int *p, int b) {
     int w = *p;
     int v = (w >> 24) - b;

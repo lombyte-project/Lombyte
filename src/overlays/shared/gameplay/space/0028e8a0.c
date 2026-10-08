@@ -188,6 +188,7 @@ void FUN_00216050(int);
 void sound_update(void) __asm__("FUN_0022ca50");
 void FUN_L00_002039a0(void);
 void FUN_L00_0028e9c8(int);
+/* Sets D_L00_0015F5D8, keeps +0x22A8 >= 1, calls 00216050, sound_update, 002039a0, 0028e9c8. */
 void FUN_L00_0028ecd8(void) {
     char *g = D_0013F350;
     char *h;

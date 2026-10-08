@@ -3,6 +3,7 @@
 #include "asm.h"
 
 void probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
+/* Calls probe_ground_height(a, 0x20, 0.5f). */
 void FUN_L00_00259710(void *a) {
     probe_ground_height(a, 0x20, 0.5f);
 }
@@ -31,6 +32,7 @@ int FUN_L00_00259740(float *p, float *v, int n) {
     }
     return r;
 }
+/* True when the pointer at a+0x94 is set and its word at +8 is non-zero. */
 int FUN_L00_00259830(char *a) {
     char *p = *(char **)(a + 0x94);
     if (p && *(int *)(p + 8))
@@ -45,6 +47,7 @@ int FUN_L00_00259830(char *a) {
 
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
+/* Fills a record with b, c, d and flag 0, and clears the 64-bit value at its start. */
 void FUN_L00_00259858(char *a, int b, int c, float d) {
     *(int *)(a + 0x10) = b;
     *(int *)(a + 0x14) = c;
@@ -53,6 +56,7 @@ void FUN_L00_00259858(char *a, int b, int c, float d) {
     clear_u64_value(a);
 }
 #include "qcopy.h"
+/* Fills a record with b, c, d and flag 1, and copies the vector q into its start. */
 void FUN_L00_00259888(char *a, int b, int c, float d, void *q) {
     *(int *)(a + 0x10) = b;
     *(int *)(a + 0x14) = c;
@@ -277,6 +281,7 @@ extern struct Ent_z D_L00_00178100_c[] __asm__("D_L00_00178100") __attribute__((
 static inline u8 load_u8_0025a420(u8 *p) {
     return *p;
 }
+/* Returns the D_L00_00178100 entry linked from p+0xA4 when it matches mask; may unlink it. */
 struct Ent_z *FUN_L00_0025a420(u8 *p, s32 mask, s32 flag) {
     struct Ent_z *e;
     u8 *a = p + 0xA4;
@@ -536,6 +541,7 @@ int FUN_L00_0025b440(O_25b440 *o, S_25b440 *s) {
     }
     return s->state;
 }
+/* Linear interpolation: a + (b - a) * t. */
 f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t) {
     return a + (b - a) * t;
 }

@@ -72,6 +72,7 @@ void FUN_L00_00221b68(void) {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_00221df8(void);
 
+/* scale_game_frames(12), or 0 when FUN_L00_00221df8 returns 2. */
 int FUN_L00_00221d98(void) {
     int r = scale_game_frames(12);
     int t = FUN_L00_00221df8();
@@ -2994,6 +2995,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00228c18.s", FUN_L00_00228c18);
 extern char D_0013F350[];
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
+/* Removes the moby at D_0013F350+0x1614 and clears flags 0x41 on those at 0x1180/0x1184. */
 void FUN_L00_00228fa8(void) {
     char *g = D_0013F350;
     void *m;

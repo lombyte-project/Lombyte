@@ -9,6 +9,7 @@
 
 extern int FUN_L00_002dbb20(void *);
 
+/* Moby state 0xE while FUN_L00_002dbb20 reports a hit, back to 1 when it stops. */
 int FUN_L01_002efaf8(char *a) {
     int r = FUN_L00_002dbb20(a);
     if (r == 0) {
@@ -22,6 +23,7 @@ int FUN_L01_002efaf8(char *a) {
 
 extern int FUN_L00_002dbe20(void *);
 
+/* Runs FUN_L00_002dbe20 on the moby and sets its state to 0xE. */
 int FUN_L01_002efb98(char *a) {
     int r = FUN_L00_002dbe20(a);
     a[0x20] = 0xe;
@@ -31,6 +33,7 @@ typedef struct {
     char pad[0x78];
     s32 f;
 } T6;
+/* Returns the moby data pointer plus 0xC0, or 0 when either is null. */
 s32 FUN_L01_002efbc8(T6 *p) {
     s32 v;
     if (p != 0) {
@@ -45,6 +48,7 @@ s32 FUN_L01_002efbc8(T6 *p) {
 
 extern int FUN_L00_002db8f8(void *);
 
+/* Moby state 7 while FUN_L00_002db8f8 reports a hit, back to 1 when it stops. */
 int FUN_L01_002f1c78(char *a) {
     int r = FUN_L00_002db8f8(a);
     if (r == 0) {
@@ -56,11 +60,13 @@ int FUN_L01_002f1c78(char *a) {
     return r;
 }
 
+/* Runs FUN_L00_002dbe20 on the moby and sets its state to 7. */
 int FUN_L01_002f1dc8(char *a) {
     int r = FUN_L00_002dbe20(a);
     a[0x20] = 0x7;
     return r;
 }
+/* Returns the moby data pointer plus 0x60, or 0 when either is null. */
 s32 FUN_L01_002f1df8(T6 *p) {
     s32 v;
     if (p != 0) {
@@ -85,6 +91,7 @@ typedef struct {
 } O_FUN_L01_00308470;
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+/* Fills a moby data block: four random values, fixed constants, four frame-scaled counts. */
 void FUN_L01_00308470(O_FUN_L01_00308470 *o) {
     M_FUN_L01_00308470 *m = o->m;
     s32 i;

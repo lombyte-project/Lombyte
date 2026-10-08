@@ -810,6 +810,7 @@ void FUN_L00_002167d0(void) {
 extern char D_0013E533[];
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
+/* In mode 3 allocates a voice for the object at D_0013F350+0xA88, else for the one at +0x2080. */
 int FUN_L00_00216de8(int a, int b) {
     char *p = D_0013E533 + 0xE1D;
     int c;
@@ -839,6 +840,7 @@ typedef struct {
 extern G D_0013F350;
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
+/* Allocates a voice (b, 4, a) for slot idx when it has none; records a in slot idx. */
 void FUN_L00_00216e48(int idx, int a, int b) {
     G *g = &D_0013F350;
     if (g->a[idx] == -1) {
@@ -877,6 +879,7 @@ extern int FUN_001f9770(void *);
 extern int FUN_L00_00216de8();
 extern unsigned char D_001413F5[];
 
+/* For each of eight timers that FastDecTimer reports as 2, clears a field and calls 00216de8. */
 void FUN_L00_00216f10(void) {
     char *p = (char *)D_001413F5 + 0x137;
     short *q = (short *)(D_001413F5 + 0x139);

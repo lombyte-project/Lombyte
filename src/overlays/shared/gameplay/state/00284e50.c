@@ -73,6 +73,7 @@ void FUN_L00_00284e50(ti_00284e50 *a, ti_00284e50 *b) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00285008.s", FUN_L00_00285008);
 extern u8 *D_L00_0015FFD8;
 extern u8 *D_L00_0015FFDC;
+/* Finds the moby (0x100 bytes each) whose short at 0xB2 equals id; 0 when none. */
 u8 *FUN_L00_002851c0(s32 a, s32 id) {
     u8 *p;
     for (p = D_L00_0015FFD8; p != D_L00_0015FFDC; p += 0x100) {

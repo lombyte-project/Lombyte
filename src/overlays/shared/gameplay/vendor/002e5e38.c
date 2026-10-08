@@ -365,6 +365,7 @@ extern V D_L00_00173E60;
 extern float FUN_001f9ab0(void *, void *);
 extern void FUN_001f9a28(float *, float *, float *);
 
+/* For arg1 1: true when (D_L00_00173E60 - arg2) points against the object's +0x130 vector. */
 int FUN_L00_002e79c8(void *arg0, int arg1, float *arg2) {
     V diff;
     char *ptr2;

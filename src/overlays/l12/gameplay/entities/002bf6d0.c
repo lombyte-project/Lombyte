@@ -35,6 +35,7 @@ void FUN_L12_002bf748(void) {
 
 extern int FUN_L00_002dbb20(void *);
 
+/* Moby state 8 while FUN_L00_002dbb20 reports a hit, back to 1 when it stops. */
 int FUN_L12_002e1758(char *a) {
     int r = FUN_L00_002dbb20(a);
     if (r == 0) {

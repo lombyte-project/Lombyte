@@ -197,6 +197,7 @@ typedef struct {
     char pad[0x50];
 } E_20d460;
 extern E_20d460 D_13F350_20d460[] __asm__("D_0013F350");
+/* Returns word 0x1090 of record i in D_0013F350 when its kind at 0x10B4 is 2, else 0. */
 s32 FUN_L00_0020d460(s32 i) {
     char *p = (char *)&D_13F350_20d460[i];
     if (*(s32 *)(p + 0x10B4) == 2) {
@@ -205,6 +206,7 @@ s32 FUN_L00_0020d460(s32 i) {
     return 0;
 }
 extern char D_0013F350[];
+/* Returns word 0x10B8 of record i (0x50 bytes) in D_0013F350 when its kind is 2, else -1. */
 int FUN_L00_0020d498(int i) {
     char *p = D_0013F350 + i * 0x50;
     switch (*(int *)(p + 0x10B4)) {
@@ -222,6 +224,7 @@ int FUN_L00_0020d498(int i) {
 
 extern int FUN_L00_0020d498_u(int) __asm__("FUN_L00_0020d498");
 
+/* True when FUN_L00_0020d498(arg) is 0x11, 10, 0x14 or 0x19. */
 int FUN_L00_0020d4d0(int arg) {
     int v = FUN_L00_0020d498_u(arg);
 
@@ -230,14 +233,17 @@ int FUN_L00_0020d4d0(int arg) {
     }
     return 0;
 }
+/* True when FUN_L00_0020d498(a) is 5, 6 or 7. */
 s32 FUN_L00_0020d518(int a) {
     return (u32)(FUN_L00_0020d498_u(a) - 5) < 3;
 }
 int FUN_L00_0020d498_0020d540() __asm__("FUN_L00_0020d498");
+/* True when FUN_L00_0020d498 returns 0x1C or 0x1D. */
 int FUN_L00_0020d540(void) {
     return (unsigned)(FUN_L00_0020d498_0020d540() - 0x1c) < 2;
 }
 extern u32 D_0013F350_c[1] __asm__("D_0013F350");
+/* True when D_0013F350+0x208C is 0x11/0x12 or +0x2084 is 0x6A, 0x75, 0x76 or 0x82. */
 s32 FUN_L00_0020d568(void) {
     u32 *p = D_0013F350_c;
     u32 a = *(u32 *)((u8 *)p + 0x208C);
@@ -263,6 +269,7 @@ one:
 zero:
     return 0;
 }
+/* Returns a, or the byte at p+0xA5 when a is 0xFF. */
 s32 FUN_L00_0020d5b8(u8 *p, s32 a) {
     if (a == 0xFF)
         a = p[0xA5];
@@ -335,6 +342,7 @@ typedef struct {
 
 extern char D_0013F350[];
 
+/* Returns the value from back steps ago in a 32-entry ring in D_0013F350. */
 float FUN_L00_0020d658(int back) {
     RingBlock *b = (RingBlock *)D_0013F350;
     int n = back < 32 ? back : 31;
@@ -426,6 +434,7 @@ char *FUN_L00_0020d8f8(float a, float b, float c, float d) {
     }
     return best;
 }
+/* Maps 1, 2, 3 to 0x79, 0x77, 0x75; others to 0. */
 s32 FUN_L00_0020da10(s32 a0) {
     switch (a0) {
     case 1:
@@ -790,6 +799,7 @@ void FUN_L00_0020fca8(int i, int v) {
 extern char D_0013F350[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
+/* For the listed ids sets D_0013F350+0x22CE to 3 and +0x1DC to scale_game_frames(0x46). */
 void FUN_L00_0020fd80(int id) {
     char *base;
 
@@ -816,6 +826,7 @@ void FUN_L00_0020fd80(int id) {
 extern char D_0013F350[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
+/* Sets the short at D_0013F350+0x1DA to scale_game_frames(0x46) for the listed ids. */
 void FUN_L00_0020fde0(int id) {
     switch (id) {
     case 9:
@@ -836,6 +847,7 @@ void FUN_L00_0020fde0(int id) {
 s32 FUN_L00_00233f38_0020fe30(void) __asm__("FUN_L00_00233f38");
 extern s32 D_L00_0015F5C4_0020fe30 __asm__("D_L00_0015F5C4");
 extern u8 D_0013F350_0020fe30[] __asm__("D_0013F350");
+/* True when 00233f38, D_L00_0015F5C4 and byte 0x20A4 are 0, state <3 or 4, and 0x12E4 is 0. */
 s32 FUN_L00_0020fe30(void) {
     u8 *b;
     u32 s;
@@ -1369,6 +1381,7 @@ void FUN_L00_00210b30(void) {
 
 extern void FUN_001f9c48(float *, float *, float);
 
+/* Scales x/y by s and sets or scales z, per component or through FUN_001f9c48. */
 void FUN_L00_00210c80(float *v, int each, float s, float z) {
     if (each) {
         v[0] *= s;
@@ -1645,6 +1658,7 @@ typedef struct {
     u8 pad[0xA6];
     s16 f;
 } K2;
+/* True when p is non-null and its field f is 0x47. */
 s32 FUN_L00_00211360(K2 *p) {
     if (p == 0) {
         return 0;
@@ -1760,6 +1774,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211670.s", FUN_L00_00211670);
 extern char D_0013F350[];
 extern float FUN_001f9b20(void *);
 
+/* Length from FUN_001f9b20 on D_0013F350+0x1D20, capped at 1. */
 float FUN_L00_00211830(void) {
     float len = FUN_001f9b20(D_0013F350 + 0x1D20);
 
@@ -1778,6 +1793,7 @@ float FUN_L00_00211830(void) {
 
 extern char D_0013F350[];
 
+/* True when t is before the time at D_0013F350+0xAA8 by at most the span at +0xAAC. */
 int FUN_L00_00211870(float t) {
     char *base = D_0013F350;
     float end = *(float *)(base + 0xAA8);
@@ -1790,6 +1806,7 @@ int FUN_L00_00211870(float t) {
     return 0;
 }
 extern int D_0013F350_002118b0[] __asm__("D_0013F350");
+/* Clears the words at 0x190 and 0x194 of D_0013F350. */
 void FUN_L00_002118b0(void) {
     int *p = D_0013F350_002118b0;
     p[0x190 / 4] = 0;
@@ -1906,6 +1923,7 @@ extern void FUN_001fa050(void *, void *);
 extern void FUN_001fa378(void *, void *, void *);
 extern void FUN_00214598(void *, void *);
 
+/* Multiplies the 001fa050 matrices of (x, y, z) and of D_0013F350+0x40, stored back by 00214598. */
 void FUN_L00_00211cf8(float x, float y, float z) {
     float in[3];
     float t[16], u[16];
@@ -1945,6 +1963,7 @@ extern char D_0013F350[];
 extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
 extern void FUN_L00_00211d78(int, float, float, float);
 
+/* Calls 00211d78 when D_0013F350+0x20B3 is set, else updates +0x188 via 0025bc98. */
 void FUN_L00_00211e30(int a, float x, float y, float z) {
     char *g = D_0013F350;
     if (*(unsigned char *)(g + 0x20B3) != 0) {
@@ -2015,6 +2034,7 @@ typedef struct {
 } S00212088;
 extern S00212088 D_0013F350_00212088 __asm__("D_0013F350");
 void FUN_00213ed8_00212088(f32 *, f32, f32) __asm__("FUN_00213ed8");
+/* Approaches field b toward a, at rate x while below it and y otherwise. */
 void FUN_L00_00212088(f32 x, f32 y) {
     S00212088 *p = &D_0013F350_00212088;
     if (p->b < p->a)
@@ -2659,6 +2679,7 @@ typedef struct {
 float FUN_001f9dc8(float);
 float FUN_001f9de0(float);
 void FUN_001f9ab0(void *, Vec4 *);
+/* FastVecDot of v with (cos, sin, 0) of the angle at D_0013F350+0x98. */
 void FUN_L00_00213350(u128 *v) {
     u128 a[2];
     char *g = D_0013F350;
@@ -2831,6 +2852,7 @@ void FUN_L00_002137a8(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213880.s", FUN_L00_00213880);
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002144A0), where it is exact; names translated to the US level program. */
 
+/* Scales four vectors and one float of D_0013F350 by s. */
 void FUN_L00_00213de8(float s) {
     char *p = D_0013E533 + 0xF1D;
     float *f;

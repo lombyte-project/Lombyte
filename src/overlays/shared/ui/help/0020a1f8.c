@@ -7,6 +7,7 @@ typedef struct {
     f32 a, b;
 } S0020a1f8;
 extern S0020a1f8 D_L00_0017A680_0020a1f8 __asm__("D_L00_0017A680");
+/* Stores the two floats in D_L00_0017A680. */
 void FUN_L00_0020a1f8(float a, float b) {
     S0020a1f8 *p = &D_L00_0017A680_0020a1f8;
     p->a = a;
@@ -17,6 +18,7 @@ typedef struct {
     f32 a, b;
 } S0020a210;
 extern S0020a210 D_L00_0017A680_0020a210 __asm__("D_L00_0017A680");
+/* Stores the two floats in D_L00_0017A680. */
 void FUN_L00_0020a210(float a, float b) {
     S0020a210 *p = &D_L00_0017A680_0020a210;
     p->a = a;
@@ -27,6 +29,7 @@ typedef struct {
     f32 a, b;
 } S0020a228;
 extern S0020a228 D_L00_0017A680_0020a228 __asm__("D_L00_0017A680");
+/* Stores the two floats in D_L00_0017A680. */
 void FUN_L00_0020a228(float a, float b) {
     S0020a228 *p = &D_L00_0017A680_0020a228;
     p->a = a;

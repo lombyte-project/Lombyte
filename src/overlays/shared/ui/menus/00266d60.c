@@ -34,6 +34,7 @@ u32 FUN_L00_00266d60(u32 mask, s32 n, s32 *out) {
 extern int FUN_L00_00266d60_u(int, int, int *) __asm__("FUN_L00_00266d60");
 extern s32 SubtractIntegerWithClamp(s32);
 
+/* True when both lookups succeed and the clamped difference of their values is below d. */
 int FUN_L00_00266e00(int a, int b, int c, int d) {
     int v[2];
     int r = 0;

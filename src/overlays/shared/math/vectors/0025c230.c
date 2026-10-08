@@ -12,6 +12,7 @@ extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa2d8(void *, void *);
 
+/* Returns component d of c - a transformed by the matrix FUN_001fa2d8 builds from b. */
 float FUN_L00_0025c230(void *a, void *b, void *c, int d) {
     float v0[4], v1[4], v2[16];
     float *w = v1;

@@ -413,6 +413,7 @@ extern char D_0013E533[];
 extern int FUN_001f96f8(int);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
+/* Blends the moby to animation 6 when D_0013F350+0x2084 is 8. */
 void FUN_L00_002d37d0(char *a) {
     if (*(int *)(D_0013E533 + 0x2EA1) == 8) {
         if (*(unsigned char *)(a + 0x53) != 6) {
@@ -1031,6 +1032,7 @@ unsigned char *FUN_L00_002d7e90(u128 *v, float s) {
     return m;
 }
 void mark_moby_for_removal() __asm__("FUN_0020c828");
+/* Grows the float at 0x2C by 2.5% and lowers byte 0x23 by 3; removes the moby below 4. */
 void FUN_L00_002d7f38(u8 *m) {
     *(f32 *)(m + 0x2C) *= 1.025f;
     if ((u8)(m[0x23] -= 3) < 4)

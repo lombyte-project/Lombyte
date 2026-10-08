@@ -898,6 +898,7 @@ int FUN_L00_002beab0(char *a, int b, Vx *c) {
 
 extern char D_0013F350[];
 
+/* Saves the moby's position, word 0x4C and float 0x5C into D_0013F350 at 0x1ED0. */
 void FUN_L00_002beb90(char *a) {
     char *g = D_0013F350;
     *(float *)(g + 0x1ED0) = *(float *)(a + 0x40);
@@ -914,6 +915,7 @@ void FUN_L00_002beb90(char *a) {
 
 extern char D_0013F350[];
 
+/* Restores the moby's position, word 0x4C and float 0x5C from D_0013F350 at 0x1ED0. */
 void FUN_L00_002bebc8(char *a) {
     char *g = D_0013F350;
     *(float *)(a + 0x40) = *(float *)(g + 0x1ED0);
@@ -926,6 +928,7 @@ void FUN_L00_002bebc8(char *a) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF08), where it is exact; names translated to the US level program. */
 
+/* Saves moby fields 0x44..0x68 and its vector into D_0013F350 at 0x1F10..0x1F40. */
 void FUN_L00_002bec00(char *a) {
     char *g = D_0013F350;
     *(float *)(g + 0x1F20) = *(float *)(a + 0x50);
@@ -943,6 +946,7 @@ void FUN_L00_002bec00(char *a) {
 
 extern char D_0013F350[];
 
+/* Copies fields from D_0013F350 at 0x1F20..0x1F40 into the moby. */
 void FUN_L00_002bec48(char *a) {
     char *g = D_0013F350;
     *(float *)(a + 0x50) = *(float *)(g + 0x1F20);

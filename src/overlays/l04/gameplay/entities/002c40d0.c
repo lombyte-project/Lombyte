@@ -11,6 +11,7 @@ extern char *FUN_L00_002db890(char *);
 extern int FUN_L00_002dbc30(char *, int, int, float);
 extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 
+/* Moby state 9 while FUN_L00_002dbc30 reports a hit; allocates a voice when the short at 0x68 of FUN_L00_002db890(moby) is 6. */
 int FUN_L04_002c40d0(char *m, int a, int b, float f) {
     char *h = FUN_L00_002db890(m);
     int r = FUN_L00_002dbc30(m, a, b, f);
@@ -28,6 +29,7 @@ typedef struct {
     char pad[0x78];
     s32 f;
 } T6;
+/* Returns the moby data pointer plus 0x180, or 0 when either is null. */
 s32 FUN_L04_002c41b0(T6 *p) {
     s32 v;
     if (p != 0) {
@@ -45,6 +47,7 @@ typedef int u128_2d34d8 __attribute__((mode(TI)));
 extern void FUN_L00_00250df8(void *);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
+/* Creates a class 0x23A moby at pos, copying a few fields from src. */
 void *FUN_L04_002d34d8(char *src, char *pos) {
     char tmp[16];
     char *p = tmp;

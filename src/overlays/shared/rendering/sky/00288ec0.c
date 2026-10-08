@@ -127,6 +127,7 @@ extern char D_L00_001BD7E0[];
 extern char *D_L00_0016051C;
 void FUN_001f9fc8();
 void FUN_0022b690();
+/* Runs FUN_001f9fc8 on D_L00_001BD7E0 and draws each sky shell. */
 void FUN_L00_002892d0(void) {
     int i;
     FUN_001f9fc8(D_L00_001BD7E0);
