@@ -403,6 +403,8 @@ OVERLAY_SN_UNITS = {
     "shared/rendering/commands/0020bc88.c",
     "shared/ui/help/0021d0a0.c",
     "shared/ui/help/00231d08.c",
+    "shared/ui/help/00237488.c",
+    "shared/ui/menus/0027f448.c",
     "shared/ui_help_001fe778.c",
     "shared/ui_menus_002497f8.c",
     "shared/ui_text_001fb470.c",
