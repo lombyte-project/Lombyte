@@ -8,7 +8,109 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fdbd0.s", FUN_L06_002fdbd0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002feb40.s", FUN_L06_002feb40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff100.s", FUN_L06_002ff100);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff2c8.s", FUN_L06_002ff2c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff680.s", FUN_L06_002ff680);
+#include "sda.h"
+#include "qcopy.h"
+
+/* GS quad packet for draw_quad_packet: four corners, their colours and
+   texture coordinates, then the giftag and register words. */
+typedef struct {
+    f32 pos[4][4];
+    u32 col[4];
+    f32 uv[4][2];
+    u64 tag[4];
+} QuadPacket_f680;
+
+extern s32 D_L06_00161FDC __attribute__((sda));
+extern s32 D_L06_00161FE0 __attribute__((sda));
+extern s32 D_L06_00161FE4 __attribute__((sda));
+extern s32 D_L06_00161FE8 __attribute__((sda));
+extern s32 D_L06_00161FEC __attribute__((sda));
+extern s32 D_L06_00161FF0 __attribute__((sda));
+extern s32 D_L06_00161FF4 __attribute__((sda));
+extern s32 D_L06_00161FF8 __attribute__((sda));
+extern s32 D_L06_00161FFC __attribute__((sda));
+extern s32 D_L06_00162000 __attribute__((sda));
+/* Scrolling texture coordinates of the four corners. */
+extern f32 D_L06_001F2E90[4][2];
+
+extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
+extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
+extern void FUN_001f9fc8(void *);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern void vector_subtract(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
+extern void draw_quad_packet(void *, void *, s32) __asm__("FUN_001f7d30");
+
+/* Draws the beam as 15 textured quads between consecutive points of the
+   moby's point list (data + 0x230), each twice: once with the odd corners
+   pulled toward the centre (data + 0x210) and once raised by 0.25. */
+void FUN_L06_002ff680(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    QuadPacket_f680 pk[2];
+    f32 mat[4][4];
+    f32 tmp[4];
+    s32 i;
+    s32 j;
+    s32 off;
+    f32 *v;
+    u64 regs;
+
+    vu1_add_g_sregister(0x47, 0x5380B);
+    i = 0;
+    pk[0].tag[1] = get_effect_texture(D_L06_00161FF0);
+    pk[1].tag[1] = get_effect_texture(D_L06_00161FF0);
+    regs = D_L06_00161FDC;
+    regs |= (u64)D_L06_00161FE0 << 2;
+    regs |= (u64)D_L06_00161FE4 << 4;
+    regs |= (u64)D_L06_00161FE8 << 6;
+    regs |= (u64)D_L06_00161FEC << 32;
+    /* Store order is load-bearing: it sets which register keeps regs. */
+    pk[1].tag[2] = 0x0000FF9000000260ULL;
+    pk[0].tag[2] = 0x0000FF9000000260ULL;
+    pk[1].tag[0] = 0;
+    pk[0].tag[0] = 0;
+    pk[1].tag[3] = regs;
+    pk[0].tag[3] = regs;
+    FUN_001f9fc8(mat);
+    do {
+        D_L06_001F2E90[1][1] = D_L06_001F2E90[3][1];
+        D_L06_001F2E90[3][1] = random_float_between_alt(0.0f, 0.2f);
+        for (j = 0; j < 4; j++) {
+            v = pk[0].pos[j];
+            off = (i + j / 2) * 16;
+            /* &data[...] (not data + off + ...) keeps retail's off + data add. */
+            qcopy(v, &data[off + 0x230]);
+            /* The colour call in both arms: retail merges the two calls and
+               leaves the address add in each arm. */
+            if (j & 1) {
+                vector_subtract(tmp, v, data + 0x210);
+                normalize_vector_xyz(tmp, tmp, 0.5f);
+                vector_subtract(v, v, tmp);
+                v[2] -= 0.125f;
+                pk[0].col[j] = fast_tween_color(*(f32 *)(data + off + 0x23C), D_L06_00161FFC,
+                                                D_L06_00162000);
+            } else {
+                pk[0].col[j] = fast_tween_color(*(f32 *)(data + off + 0x23C), D_L06_00161FF4,
+                                                D_L06_00161FF8);
+            }
+            pk[0].uv[j][0] = D_L06_001F2E90[j][0];
+            pk[0].uv[j][1] = D_L06_001F2E90[j][1];
+            pk[1].uv[j][0] = D_L06_001F2E90[j][0];
+            pk[1].uv[j][1] = D_L06_001F2E90[j][1];
+        }
+        draw_quad_packet(pk, mat, 0);
+        for (j = 0; j < 4; j++) {
+            v = pk[0].pos[j];
+            if (j & 1) {
+                v[2] += 0.25f;
+            }
+        }
+        i++;
+        draw_quad_packet(pk, mat, 0);
+    } while (i < 15);
+    vu1_add_g_sregister(0x47, 0x5360B);
+}
 #include "sda.h"
 
 /* Spawns a burst of effects for each pair of ready entries in the moby's table. */
