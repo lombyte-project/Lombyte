@@ -127,8 +127,8 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h, i
     cym = cy >> 3;
     cxr = cx - cxm * 8;
     cyr = cy - cym * 8;
-    ce->addr = work + 0x200 + (dfield + (yofs >> 1)) * 16;
     ce->x = cxr;
+    ce->addr = work + (dfield + (yofs >> 1)) * 16 + 0x200;
     ch = h >> 1;
     if ((cdy & 1)) {
         if (cyr + (ch << fieldpred) >= 8) {
