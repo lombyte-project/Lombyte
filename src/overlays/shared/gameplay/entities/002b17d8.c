@@ -213,7 +213,116 @@ unsigned char *FUN_L14_002ffaf8(unsigned char *owner, char *pos) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b17d8.s", FUN_L14_002b17d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2600.s", FUN_L14_002b2600);
+#include "rnc/math/vector.h"
+#include "rnc/gameplay/entities/moby.h"
+
+typedef struct {
+    u8 pad0[0x1E0];
+    Vec4 exhaust;    /* 0x1E0 */
+    Vec4 nozzle;     /* 0x1F0 */
+    Vec4 joint6;     /* 0x200 */
+    Vec4 beam_start; /* 0x210 */
+    Vec4 beam_end;   /* 0x220 */
+} ShipVars;
+
+typedef struct {
+    u8 pad0[0x10];
+    f32 scale;       /* 0x10 */
+    u8 pad14[2];
+    s16 mode;        /* 0x16 */
+    s32 color;       /* 0x18 */
+} ParticleFade;
+
+typedef struct {
+    u8 pad0[0xA];
+    s16 frames;      /* 0x0A */
+    f32 life;        /* 0x0C */
+    u8 pad10[0x10];
+    ParticleFade fade; /* 0x20 */
+} Particle;
+
+extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
+extern u8 D_L14_0015F580[] __attribute__((section(".sdata")));
+extern f32 D_L14_001614A8 __attribute__((sda));
+extern f32 D_L14_001614B0 __attribute__((sda));
+extern f32 D_L14_001614B4 __attribute__((sda));
+extern f32 D_L14_001614B8 __attribute__((sda));
+
+extern void FUN_L14_002b3a20_c(struct Moby *) __asm__("FUN_L14_002b3a20");
+extern void FUN_L14_002b2928(struct Moby *);
+extern void FUN_001f4600(void (*)(struct Moby *), struct Moby *);
+extern void FUN_L00_0024f7c8(struct Moby *, s32, void *);
+extern void FUN_0020cca8(struct Moby *, s32, void *);
+extern void FUN_00213358(void *, f32, f32);
+extern Particle *FUN_L00_00274948(void *, void *, s32, struct Moby *);
+extern f32 FUN_002132a8(f32, f32);
+extern s32 FUN_00213260(s32);
+extern s32 FUN_001f96f8(s32);
+extern f32 FUN_001fa6c0(s32);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, f32);
+extern void FUN_001f9bf8(void *, void *, f32);
+
+/* Ship engine effects: puffs exhaust particles from joint 1 and places the nozzle and beam points from joints 7 and 2. */
+void FUN_L14_002b2600(struct Moby *m)
+{
+    Vec4 pos;
+    Vec4 dir;
+    Vec4 vel;
+    Vec4 mat[4];
+    Vec4 dx;
+    Vec4 dy;
+    Vec4 dz;
+    ShipVars *pv;
+    Particle *p;
+    ParticleFade *fade;
+    s32 i;
+    f32 f;
+
+    pv = (ShipVars *)m->pvars;
+    FUN_001f4600(FUN_L14_002b3a20_c, m);
+    FUN_L00_0024f7c8(m, 1, &pos);
+    FUN_001f9a28(&dir, &pos, &D_L14_001674C0);
+    FUN_001f9bf8(&dir, &dir, -0.5f);
+    FUN_001f9a10(&pv->exhaust, &pos, &dir);
+    FUN_00213358(&vel, 0.005f, 0.03f);
+    p = FUN_L00_00274948(&pos, &vel, 0x7F, m);
+    if (p != NULL) {
+        p->life = FUN_002132a8(6000.0f, 32000.0f);
+    }
+    for (i = 0; i < 3; i++) {
+        p = FUN_L00_00274948(&pos, D_L14_0015F580, 0x7F, m);
+        if (p == NULL) {
+            continue;
+        }
+        fade = &p->fade;
+        if (i == 2 && FUN_00213260(8) == 0) {
+            p->life = 180000.0f;
+        } else {
+            p->life = FUN_002132a8(80000.0f, 120000.0f);
+        }
+        p->frames = FUN_001f96f8(2);
+        f = 1.0f / FUN_001fa6c0(p->frames);
+        fade->mode = 3;
+        fade->color = 0x7F7F7F;
+        fade->scale = f;
+    }
+    FUN_L00_0024f7c8(m, 6, &pv->joint6);
+    FUN_0020cca8(m, 7, mat);
+    FUN_001f9a68(&dx, &mat[0], D_L14_001614A8);
+    FUN_001f9a10(&pv->nozzle, &mat[3], &dx);
+    FUN_0020cca8(m, 2, mat);
+    FUN_001f9a68(&dx, &mat[0], D_L14_001614B0);
+    FUN_001f9a68(&dy, &mat[1], D_L14_001614B4);
+    FUN_001f9a68(&dz, &mat[2], D_L14_001614B8);
+    FUN_001f9a10(&pv->beam_start, &mat[3], &dx);
+    FUN_001f9a10(&pv->beam_start, &pv->beam_start, &dy);
+    FUN_001f9a10(&pv->beam_start, &pv->beam_start, &dz);
+    FUN_001f9a68(&dy, &dy, -2.0f);
+    FUN_001f9a10(&pv->beam_end, &pv->beam_start, &dy);
+    FUN_001f4600(FUN_L14_002b2928, m);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2928.s", FUN_L14_002b2928);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2ed8.s", FUN_L14_002b2ed8);
 
