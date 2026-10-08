@@ -1,13 +1,5 @@
 /* Derived from newlib (1999 vfprintf.c); see licenses/COPYING.NEWLIB.txt. */
 #include "types.h"
-#include "asm.h"
-#include "rnc/sdk/library/stdio.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/runtime/newlib/vfprintf_r/FUN_00116e20.s",
-            FUN_00116e20);
-#else
-#include "types.h"
 #include "rnc/sdk/library/stdio.h"
 
 typedef char *va_list;
@@ -56,14 +48,14 @@ extern u32 strlen(const char *);
 #define va_ptr(ap, type) ((type)(*(void **)((ap += 8) - 8)))
 
 #define PADSIZE 16
+/* Retail kept these short literals with the rest of the unit's .rodata, in source order. */
+#define RODATA __attribute__((section(".rodata")))
 	static _CONST char blanks[PADSIZE] =
 	 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '};
 	static _CONST char zeroes[PADSIZE] =
 	 {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
 
-s32 FUN_00116e20(RncReent *data, RncFile *fp, const char *fmt0, va_list ap);
-extern __typeof__(FUN_00116e20) _vfprintf_r __attribute__((alias("FUN_00116e20")));
-s32 FUN_00116e20(RncReent *data, RncFile *fp, const char *fmt0, va_list ap)
+s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap)
 {
 	register char *fmt;	/* format string */
 	register int ch;	/* character from fmt */
@@ -84,9 +76,6 @@ s32 FUN_00116e20(RncReent *data, RncFile *fp, const char *fmt0, va_list ap)
 	int ndig;		/* actual number of digits returned by cvt */
 	char expstr[7];		/* buffer for exponent string */
 
-
-
-
 	u64 _uquad;	/* integer arguments %[diouxX] */
 	enum { OCT, DEC, HEX } base;/* base for [diouxX] conversion */
 	int dprec;		/* a copy of prec if [diouxX], 0 otherwise */
@@ -105,7 +94,6 @@ s32 FUN_00116e20(RncReent *data, RncFile *fp, const char *fmt0, va_list ap)
 	 * fields occur frequently, increase PADSIZE and make the initialisers
 	 * below longer.
 	 */
-
 
 	/*
 	 * BEWARE, these `goto error' on error, and PAD uses `n'.
@@ -309,12 +297,20 @@ reswitch:	switch (ch) {
 			if (isinf(_double)) {
 				if (_double < 0)
 					sign = '-';
-				cp = "Inf";
+				{
+					static _CONST char inf[] RODATA = "Inf";
+
+					cp = (char *)inf;
+				}
 				size = 3;
 				break;
 			}
 			if (isnan(_double)) {
-				cp = "NaN";
+				{
+					static _CONST char nan[] RODATA = "NaN";
+
+					cp = (char *)nan;
+				}
 				size = 3;
 				break;
 			}
@@ -384,7 +380,11 @@ reswitch:	switch (ch) {
 			goto nosign;
 		case 's':
 			if ((cp = va_ptr(ap, char *)) == NULL)
-				cp = "(null)";
+				{
+					static _CONST char null_string[] RODATA = "(null)";
+
+					cp = (char *)null_string;
+				}
 			if (prec >= 0) {
 				/*
 				 * can't use strlen; can only look for the
@@ -534,16 +534,19 @@ number:			if ((dprec = prec) >= 0)
 		if ((flags & FPT) == 0) {
 			PRINT(cp, size);
 		} else {	/* glue together f_p fragments */
+			static _CONST char zero[] RODATA = "0";
+			static _CONST char point[] RODATA = ".";
+
 			if (ch >= 'f') {	/* 'f' or 'g' */
 				if (_double == 0) {
 					/* kludge for __dtoa irregularity */
-					PRINT("0", 1);
+					PRINT(zero, 1);
 					if (expt < ndig || (flags & ALT) != 0) {
 						PRINT(decimal_point, 1);
 						PAD(ndig - 1, zeroes);
 					}
 				} else if (expt <= 0) {
-					PRINT("0", 1);
+					PRINT(zero, 1);
 					PRINT(decimal_point, 1);
 					PAD(-expt, zeroes);
 					PRINT(cp, ndig);
@@ -551,11 +554,11 @@ number:			if ((dprec = prec) >= 0)
 					PRINT(cp, ndig);
 					PAD(expt - ndig, zeroes);
 					if (flags & ALT)
-						PRINT(".", 1);
+						PRINT(point, 1);
 				} else {
 					PRINT(cp, expt);
 					cp += expt;
-					PRINT(".", 1);
+					PRINT(point, 1);
 					PRINT(cp, ndig-expt);
 				}
 			} else {	/* 'e' or 'E' */
@@ -588,4 +591,3 @@ error:
 	return (__sferror(fp) ? EOF : ret);
 	/* NOTREACHED */
 }
-#endif /* NON_MATCHING */

@@ -145,7 +145,7 @@ segments:
           - [0x17c70, c, sdk/debug/sbprintf]
           - [0x17d24, textbin, text_gap_00116da4_before_fun_00116da8]
           - [0x17d28, c, runtime/newlib/vfprintf]
-          - [0x17da0, c, assembly/runtime/newlib/vfprintf_r]
+          - [0x17da0, c, runtime/newlib/vfprintf_r]
           - [0x192b8, c, sdk/library/cvt]
           - [0x19468, c, sdk/library/exponent]
           - [0x19548, textbin, text_gap_001185c8_before_fun_001185d0]
