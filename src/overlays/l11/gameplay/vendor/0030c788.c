@@ -611,7 +611,228 @@ void FUN_L11_00311c80(void *self, char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311d50.s", FUN_L11_00311d50);
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/rendering/screen.h"
+#include "rnc/globals.h"
+
+/* pvars of the space-level ship: lock-on, reticle and HUD state. */
+typedef struct {
+    u8 pad0[0x88];
+    struct Moby *target;    /* 0x88: lock-on candidate picked by FUN_L11_00311c80 */
+    s32 lock_timer;         /* 0x8C: counts down from D_L11_00162160 + D_L11_00162164 once targeted */
+    u8 pad90[0x50];
+    s32 reticle_x;          /* 0xE0: screen position of the aim reticle (FUN_L11_003125a8) */
+    s32 reticle_y;          /* 0xE4 */
+    u8 padE8[4];
+    struct Moby *locked;    /* 0xEC: target once the lock completed */
+    f32 shown_hp;           /* 0xF0: health bar value, eased towards hero.ship_hp */
+    s32 hp_bar_fill;        /* 0xF4: palette entries currently lit in the health bar */
+    u8 padF8[0x10];
+    s16 target_class;       /* 0x108: index into the lock-on lists D_L11_001AC240 */
+    u8 pad10A[0x12];
+    s32 low_hp_frames;      /* 0x11C: frames spent on low health since the last hint */
+    s32 ammo_hint_timer;    /* 0x120: delay before the out-of-ammo hint repeats */
+    u8 pad124[4];
+    s32 hint_frames;        /* 0x128: frames until help 0x56 shows */
+} ShipVars;
+
+/* Help message records, laid out like the usage counters: FUN_L00_00203908
+   shows message a for record b while b's count is below 0xFFFF. The ship
+   uses 0x56 (message 0x2AFD), 0x57 (0x2AFE, low ammo) and 0x58 (0x2AFF, low
+   health). */
+extern struct UsageStat help_stats[] __asm__("D_00141968");
+extern s32 D_0015EEA4;
+extern short D_L11_001F0CF8[];  /* outline of an ammo pip */
+/* The health bar's palette: FUN_L11_00313290 points clut at it in texture
+   memory and, the first time (saved), copies it to D_L11_001F1088. */
+typedef struct {
+    s32 *clut;
+    s32 saved;
+} HpBarPalette;
+extern HpBarPalette hp_bar_palette __asm__("D_L11_0016216C") __attribute__((sda));
+extern s32 D_L11_001F1088[]; /* the health bar palette as loaded */
+
+extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
+extern void append_rotated_sprite_quad(f32, f32, f32, f32, f32, s32, s32, s64, s32, s32, s32, s32, f32,
+                                       f32) __asm__("FUN_001f5ab0");
+extern void FUN_L11_00310ad0(short *pts, int n, f32 x, f32 y, u32 col, u64 prim, f32 scale);
+extern void FUN_L11_00311048(f32 x, f32 y, f32 scale, f32 angle, u8 r, u8 g, u8 b, u8 a);
+extern f32 FUN_L00_0025e310(f32);
+extern s32 FUN_L00_00203908(s32 message, s32 help);
+extern char *get_help_message_text(s32) __asm__("func_001FDD10");
+extern void FontPrintCenterLarge(s32 x, s32 y, u64 color, char *text, s32 scale) __asm__("FUN_001f6c20");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+
+/* Ship HUD: radar, ammo pips, reticle, lock-on marker, help hints and the health bar. */
+void FUN_L11_00311d50(struct Moby *moby) {
+    ShipVars *vars = (ShipVars *)moby->pvars;
+    short *list;
+    void *found[12];
+    s32 sx;
+    s32 sy;
+    s32 i;
+    s32 x;
+    s32 y;
+    u8 pips;
+    s32 rx;
+    s32 ry;
+    s64 tex;
+    f32 t;
+    f32 grow;
+    f32 fade;
+    u8 alpha;
+    s32 blink;
+    f32 step;
+    f32 size;
+    s32 fill;
+    s32 lo;
+    s32 hi;
+    s32 entry;
+    s32 j;
+
+    vu1_add_g_sregister(0x42, 0x8000000044);
+    draw_textured_quad(0x170, D_0013E500.height - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080,
+                       get_effect_texture(0x3C));
+    draw_textured_quad(0x170, D_0013E500.height - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080,
+                       get_effect_texture(0x3D));
+    vu1_add_g_sregister(0x42, 0x8000000048);
+    get_effect_texture(0x3E); /* fetched, but nothing below draws with it */
+
+    list = D_L11_001AC240[vars->target_class];
+    if (list != NULL) {
+        do {
+            /* D_L11_0015FFD8 holds the address of the level's moby array */
+            struct Moby *m = (struct Moby *)(((*list & 0x7FFF) << 8) + D_L11_0015FFD8);
+
+            if (m->state < 0x80) {
+                s32 count = FUN_L11_00318050((char *)m, found);
+
+                for (i = 0; i < count; i++) {
+                    FUN_L11_00311710((char *)D_L11_001677D0, (char *)(D_L11_001677D0 - 4), found[i], 0,
+                                     0x75808080);
+                }
+            }
+        } while (*list++ >= 0);
+    }
+
+    y = 0x40;
+    x = 0x18;
+    for (i = 0; i < hero.ship_ammo_max; i++) {
+        if (i < hero.ship_ammo) {
+            FUN_L11_00310ad0(D_L11_001F0CF8, 0x19, x, y, 0xFFFFF3, 0x50008F00, 0.5f);
+        } else {
+            FUN_L11_00310ad0(D_L11_001F0CF8, 0x19, x, y, 0xFFFFF3, 0x20004F00, 0.5f);
+        }
+        pips = hero.ship_ammo_max;
+        if (i == pips >> 1) {
+            y = 0x2E;
+            x += 0x1E;
+        }
+        y += 0x12;
+    }
+
+    rx = vars->reticle_x;
+    ry = vars->reticle_y;
+    tex = get_effect_texture(0x11);
+    append_rotated_sprite_quad(rx, ry, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, tex, 0xFFFFF3,
+                               0xFF20FF20, 0, 0, 0.5f, 0.5f);
+    tex = get_effect_texture(0x12);
+    append_rotated_sprite_quad(rx, ry, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, tex, 0xFFFFF3,
+                               0xFF20FF20, 0, 0, 0.5f, 0.5f);
+    tex = get_effect_texture(8);
+    append_rotated_sprite_quad(rx, ry, 10.0f, 10.0f, 0.0f, 0x1F, 0x1F, tex, 0xFFFFF3,
+                               0xFF20FF20, 0, 0, 0.5f, 0.5f);
+
+    FUN_L11_00311c80(moby, (char *)vars);
+    if (vars->target != NULL) {
+        FUN_L11_00311210(&vars->target->pos, &sx, &sy, 0);
+        if (vars->lock_timer > D_L11_00162160) {
+            t = ConvertIntegerToFloat(vars->lock_timer - D_L11_00162160) / ConvertIntegerToFloat(D_L11_00162164);
+            fade = 2.0f * (1.0f - t);
+            grow = t * 5.0f + 1.0f;
+            if (fade > 1.0f) {
+                fade = 1.0f;
+            }
+            alpha = truncate_float_to_s32(fade * 96.0f);
+            FUN_L11_00311048(ConvertIntegerToFloat(sx), ConvertIntegerToFloat(sy), grow,
+                             FUN_L00_0025e310(ConvertIntegerToFloat(D_L11_0015F5CC_t) / 30.0f), 0, 0xFF, 0, alpha);
+            vars->locked = NULL;
+        } else {
+            blink = 0xFF;
+            if ((vars->lock_timer / scale_game_frames(0x14)) & 1) {
+                blink = 0;
+            }
+            FUN_L11_00311048(ConvertIntegerToFloat(sx), ConvertIntegerToFloat(sy), 1.0f, 0.0f, 0xFF, blink, 0,
+                             0x60);
+            vars->locked = vars->target;
+        }
+    }
+
+    if (hero.ship_hp < hero.ship_hp_max * 0.25f) {
+        s32 shown = help_stats[0x58].count;
+
+        if (shown == 0) {
+            FUN_L00_00203908(0x2AFF, 0x58);
+        } else if (shown < 2) {
+            vars->low_hp_frames++;
+            if (vars->low_hp_frames > scale_game_frames(1800)) {
+                FUN_L00_00203908(0x2AFF, 0x58);
+            }
+        }
+    } else if (vars->low_hp_frames != 0) {
+        if (help_stats[0x58].count < 0xFFFF) {
+            help_stats[0x58].count++;
+        }
+        if (scale_game_frames(D_0015EEA4) / 600 > help_stats[0x58].unk2) {
+            help_stats[0x58].unk2 = scale_game_frames(D_0015EEA4) / 600;
+        }
+        help_stats[0x58].level_mask = help_stats[0x58].level_mask | (1 << current_level_index) | 0x80000000;
+        vars->low_hp_frames = 0;
+    }
+
+    FUN_001f9740_c(&vars->ammo_hint_timer);
+    if ((hero.ship_ammo < 5 && help_stats[0x57].count == 0) ||
+        (hero.ship_ammo == 0 && help_stats[0x57].count < 2 && vars->ammo_hint_timer == 0)) {
+        FUN_L00_00203908(0x2AFE, 0x57);
+        vars->ammo_hint_timer = scale_game_frames(1200);
+    }
+    if (help_stats[0x56].count == 0 && vars->hint_frames++ > scale_game_frames(3600)) {
+        FUN_L00_00203908(0x2AFD, 0x56);
+    }
+
+    if (moby->state == 8) {
+        FontPrintCenterLarge(0x100, 0xC8, 0x80005080, get_help_message_text(0x523E), 0x11);
+    }
+
+    step = hero.ship_hp - vars->shown_hp;
+    step *= 0.2f;
+    size = AbsoluteFloat(step);
+    if (size > 1.0f) {
+        step /= size;
+    }
+    vars->shown_hp += step;
+    fill = truncate_float_to_s32(vars->shown_hp * 251.0f / hero.ship_hp_max) + 2;
+    if (fill > 0xFD) {
+        fill = 0xFD;
+    }
+    if (fill < 2) {
+        fill = 2;
+    }
+    lo = vars->hp_bar_fill <= fill ? vars->hp_bar_fill : fill;
+    hi = vars->hp_bar_fill < fill ? fill : vars->hp_bar_fill;
+    for (j = lo; j <= hi; j++) {
+        /* CSM1 palette order: bits 3 and 4 of the entry swap */
+        entry = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
+        if (j < fill) {
+            hp_bar_palette.clut[entry] = D_L11_001F1088[entry];
+        } else {
+            hp_bar_palette.clut[entry] = 0x80000000;
+        }
+    }
+    vars->hp_bar_fill = fill;
+}
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L11_00308848(void *, void *, void *, float, float);

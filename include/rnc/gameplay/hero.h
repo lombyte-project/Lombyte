@@ -519,7 +519,13 @@ struct Hero {
     u8 selector_13;                /* 0x12EC */
     u8 unk12ED;                    /* 0x12ED */
     u8 unk12EE;                    /* 0x12EE */
-    u8 pad_12EF[0x325];
+    u8 pad_12EF[0x307];
+    u8 ship_ammo;                  /* 0x15F6: shots left in the space levels; firing needs one and takes it (FUN_L11_003126f8) */
+    u8 ship_ammo_max;              /* 0x15F7: ammo pips the ship HUD draws, lit while below ship_ammo */
+    u8 pad_15F8[0x4];
+    f32 ship_hp;                   /* 0x15FC: ship health; l17 subtracts collision damage and explodes the ship below 0 */
+    f32 ship_hp_max;               /* 0x1600: full ship_hp; the HUD bar shows ship_hp over it */
+    u8 pad_1604[0x10];
     s32 unk1614;                   /* 0x1614 */
     u8 pad_1618[0x8];
     void *unk1620;                 /* 0x1620 */
