@@ -140,7 +140,76 @@ void FUN_L06_00300278(char *m) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003003f0.s", FUN_L06_003003f0);
+typedef struct {
+    float f[4];
+} __attribute__((aligned(16))) V3003f0;
+typedef struct {
+    float u, v;
+} UV3003f0;
+typedef struct {
+    V3003f0 corner[4];
+    unsigned int color[4];
+    UV3003f0 uv[4];
+    long unk70, tex, unk80, unk88;
+} Q3003f0;
+typedef struct {
+    char pad[0x38];
+    float f38;
+    int pad3c;
+} B3003f0;
+typedef struct {
+    short v, uv;
+} I3003f0;
+extern int D_L06_00162054 __attribute__((sda));
+extern int D_L06_00162058 __attribute__((sda));
+extern int D_L06_0016205C __attribute__((sda));
+extern int D_L06_00162060 __attribute__((sda));
+extern int D_L06_00162064 __attribute__((sda));
+extern int D_L06_00162068 __attribute__((sda));
+extern unsigned int D_L06_0016206C __attribute__((sda));
+extern float D_L06_0016204C_3003f0 __asm__("D_L06_0016204C") __attribute__((sda));
+extern float D_L06_00162074 __attribute__((sda));
+extern V3003f0 D_L06_001F2EB0[];
+extern I3003f0 D_L06_001F34B0[];
+extern UV3003f0 D_L06_001F38B0[];
+extern long tex_3003f0(int) __asm__("FUN_001f44b8");
+extern void init_3003f0(void *) __asm__("FUN_001f9fc8");
+extern void vmul_3003f0(void *, void *, float) __asm__("FUN_001f9a68");
+extern void draw_3003f0(void *, void *, int) __asm__("FUN_001f7d30");
+
+/* Draws the 64 quads of the backdrop mesh, each corner scaled from the shared vertex table. */
+void FUN_L06_003003f0(void) {
+    Q3003f0 quad;
+    B3003f0 buf;
+    unsigned int c;
+    int i, j, k;
+    I3003f0 *e;
+
+    quad.tex = tex_3003f0(D_L06_00162064);
+    quad.unk88 = (long)D_L06_00162054 | ((long)D_L06_00162058 << 2) | ((long)D_L06_0016205C << 4) |
+                 ((long)D_L06_00162060 << 6) | ((long)D_L06_00162068 << 32);
+    quad.unk80 = 0xFF9000000260L;
+    quad.unk70 = 0;
+    init_3003f0(&buf);
+    c = D_L06_0016206C;
+    buf.f38 = D_L06_0016204C_3003f0;
+    quad.color[3] = c;
+    quad.color[2] = c;
+    quad.color[1] = c;
+    quad.color[0] = c;
+    for (i = 0; i < 64; i++) {
+        e = &D_L06_001F34B0[i * 4];
+        for (j = 0; j < 4; j++) {
+            k = e->uv;
+            vmul_3003f0(&quad.corner[j], &D_L06_001F2EB0[e->v], D_L06_00162074);
+            e++;
+            quad.uv[j].u = D_L06_001F38B0[k].u;
+            quad.uv[j].v = D_L06_001F38B0[k].v;
+        }
+        draw_3003f0(&quad, &buf, 0);
+    }
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300720.s", FUN_L06_00300720);
 #define NOT_SDA
 

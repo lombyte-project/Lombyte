@@ -441,7 +441,7 @@ void FUN_L00_0025f8e0(f32 *v, f32 r) {
     v[1] += random_float_between(-r, r);
     v[2] += random_float_between(-r, r);
 }
-extern u8 *D_L00_0015FFD8_c __asm__("D_L00_0015FFD8") __attribute__((sda));
+extern u8 *D_L00_0015FFD8_c __asm__("D_L00_0015FFD8");
 extern u8 *D_L00_0015FFE0 __attribute__((sda));
 s32 FUN_L00_0025e3b8(u8 *m) {
     u32 v;

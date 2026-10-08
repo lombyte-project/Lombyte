@@ -1385,7 +1385,7 @@ typedef struct {
 } S_002ed230;
 extern char *D_L00_0015EF50_002ed230 __asm__("D_L00_0015EF50");
 extern unsigned char D_001413F4_002ed230 __asm__("D_001413F4") __attribute__((section(".data")));
-extern int D_0015ED84_002ed230 __asm__("D_0015ED84") __attribute__((sda));
+extern int D_0015ED84_002ed230 __asm__("D_0015ED84");
 extern int D_001413DC_002ed230 __asm__("D_001413DC") __attribute__((section(".data")));
 extern char D_0013F350_002ed230[] __asm__("D_0013F350");
 void FUN_L00_002ec988_002ed230(unsigned char *) __asm__("FUN_L00_002ec988");

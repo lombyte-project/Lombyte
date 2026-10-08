@@ -141,7 +141,7 @@ extern char D_0013F3D0_2e03a0[] __asm__("D_0013F3D0");
 extern s32 D_L00_0015F5C4_2e03a0 __asm__("D_L00_0015F5C4");
 extern s32 D_L00_0015F640_2e03a0 __asm__("D_L00_0015F640");
 extern u16 D_00141B08_2e03a0[] __asm__("D_00141B08");
-extern E_2e03a0_2e03a0 *D_L00_0015FFD8_2e03a0 __asm__("D_L00_0015FFD8") __attribute__((sda));
+extern E_2e03a0_2e03a0 *D_L00_0015FFD8_2e03a0 __asm__("D_L00_0015FFD8");
 typedef struct {
     u8 pad[0x454];
     u8 arr[1];

@@ -94,13 +94,13 @@ typedef struct {
     f32 frame_scale;
     f32 movement_sampling_scale;
 } FrameTiming;
-extern FrameTiming frame_timing __asm__("D_0015ED64") __attribute__((sda));
+extern FrameTiming frame_timing __asm__("D_0015ED64");
 extern FrameTiming frame_timing_absolute __asm__("D_0015ED64");
 extern u8 big_head_cheat_enabled __asm__("D_0015EDB0");
 extern s32 breast_growth_count __asm__("D_L05_00161ED0") __attribute__((sda));
-extern s32 game_mode __asm__("D_L05_0015F5C4") __attribute__((sda));
+extern s32 game_mode __asm__("D_L05_0015F5C4");
 extern s32 game_mode_absolute __asm__("D_L05_0015F5C4");
-extern s32 frame_number __asm__("D_L05_0015F5CC") __attribute__((sda));
+extern s32 frame_number __asm__("D_L05_0015F5CC");
 extern s32 frame_number_absolute __asm__("D_L05_0015F5CC");
 extern u8 race_completed __asm__("D_0013D388") NOT_SDA;
 extern HoverboardRaceGates race_gates __asm__("D_0013D5B0");

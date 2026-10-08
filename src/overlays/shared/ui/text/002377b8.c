@@ -132,7 +132,7 @@ typedef struct {
 } G_t;
 extern G_t D_0013C940;
 extern int D_L00_0017E504 __attribute__((section(".data")));
-extern int D_L00_0015FA90_c __asm__("D_L00_0015FA90") __attribute__((sda));
+extern int D_L00_0015FA90_c __asm__("D_L00_0015FA90");
 extern int D_L00_0015F780 __attribute__((sda));
 extern int D_L00_0015FA9C __attribute__((sda));
 extern Ent **D_L00_0015FAC0_c __asm__("D_L00_0015FAC0");
@@ -393,7 +393,7 @@ extern s32 FUN_001ff960_c(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
 extern void FUN_001ffc30_c(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern void FUN_L00_0023b120_c(Hud *, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023b120");
-extern s32 D_0015ED80_c __asm__("D_0015ED80") __attribute__((sda));
+extern s32 D_0015ED80_c __asm__("D_0015ED80");
 extern s32 D_0015EDA0;
 extern s32 D_L00_0015F808 __attribute__((sda));
 extern s32 D_L00_0015F7F0 __attribute__((sda));

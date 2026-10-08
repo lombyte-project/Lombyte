@@ -181,7 +181,7 @@ void FUN_L00_0028e9c8(int a) {
 }
 extern char D_0013F350[];
 extern char D_001516D0[];
-extern int D_L00_0015F5D8 __attribute__((sda));
+extern int D_L00_0015F5D8;
 extern short D_0013E05C __attribute__((section(".data")));
 void FUN_00216050(int);
 void sound_update(void) __asm__("FUN_0022ca50");

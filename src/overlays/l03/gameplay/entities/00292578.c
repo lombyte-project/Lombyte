@@ -84,7 +84,6 @@ int FUN_L03_002c6ca0(unsigned char *moby) {
     return 0;
 }
 
-
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -172,7 +171,58 @@ void FUN_L03_00292578(char *moby, float *pos, float heading) {
     *(unsigned short *)(coupling + 0x34) |= 6;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292890.s", FUN_L03_00292890);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292d10.s", FUN_L03_00292d10);
+
+extern char *D_L03_0015FFD8_292d10 __asm__("D_L03_0015FFD8");
+extern char D_L03_001E2410[];
+extern void FUN_001e93b0(void *, int);
+extern void FUN_0020c828(void *);
+
+/* Drags each linked car to follow the train after it moved, then flags the coupling moby; with no cars it reports and deletes the train. */
+void FUN_L03_00292d10(char *moby) {
+    float old_pos[4];
+    float old_rot[4];
+    float delta[4];
+    char *data;
+    char *car;
+    char *car_data;
+    char *p;
+    char *q;
+    int next_id;
+    int id;
+    float *dp;
+    char *motion;
+
+    data = *(char **)(moby + 0x78);
+    moby[0x72] = 0x40;
+    p = moby + 0x10;
+    qcopy(old_pos, p);
+    q = moby + 0x40;
+    qcopy(old_rot, q);
+    next_id = *(int *)(data + 0xA0);
+    if (next_id != -1) {
+        id = next_id;
+        dp = delta;
+        motion = data + 0x60;
+        do {
+            car = D_L03_0015FFD8_292d10 + (id << 8);
+            car_data = *(char **)(car + 0x78);
+            car[0x72] = 0x40;
+            subtract_vector_xyz(delta, car + 0x10, car_data + 0xA0);
+            FUN_L00_00260738(car_data + 0x20, delta, car_data + 0xB0, car + 0x40);
+            qcopy(car_data + 0xA0, car + 0x10);
+            qcopy(car_data + 0xB0, car + 0x40);
+            id = *(int *)(car_data + 0xC0);
+        } while (id != -1);
+        subtract_vector_xyz(dp, moby + 0x10, old_pos);
+        FUN_L00_00260738(motion, dp, old_rot, moby + 0x40);
+    } else {
+        FUN_001e93b0(D_L03_001E2410, *(int *)(data + 0xB8));
+        FUN_0020c828(moby);
+        return;
+    }
+    *(unsigned short *)(D_L03_0015FFD8_292d10 + (*(int *)(data + 0xC4) << 8) + 0x34) |= 6;
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292e98.s", FUN_L03_00292e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00294c08.s", FUN_L03_00294c08);
 #include "qcopy.h"
