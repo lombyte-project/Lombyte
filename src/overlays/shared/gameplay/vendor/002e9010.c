@@ -1138,9 +1138,6 @@ pos:
 one:
     return 1;
 }
-static __inline__ void qcopy_002eb930(void *dst, void *src) {
-    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
-}
 extern short D_L00_00166EF0_002eb930[] __asm__("D_L00_00166EF0");
 extern char D_L00_001E77C0_002eb930[] __asm__("D_L00_001E77C0");
 extern char D_L00_001E77D8_002eb930[] __asm__("D_L00_001E77D8");
@@ -1158,7 +1155,7 @@ char *FUN_L00_002eb930(void *arg) {
     FUN_001ebf10_002eb930(o);
     FUN_L00_002eb648_002eb930(o, arg);
     m = *(char **)(o + 0x70);
-    qcopy_002eb930(m + 0xB0, m + 0x80);
+    qcopy(m + 0xB0, m + 0x80);
     FUN_L00_001eb0c8_002eb930(m + 0x14, D_L00_001E77C0_002eb930, 0.0f);
     FUN_L00_001eb0c8_002eb930(o + 0x50, m + 0x14, 0.0f);
     FUN_L00_002eb3b0_002eb930(o);

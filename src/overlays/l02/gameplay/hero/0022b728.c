@@ -33,7 +33,9 @@ extern char D_00141848[];
 extern float D_0015ED64;
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern float D_0015ED60;
+extern float D_0015ED60 __attribute__((sda));
+/* D_0015ED60 reached through the word below it: retail loads it with lui here, not $gp. */
+extern float D_0015ED5C_lui[2] __asm__("D_0015ED5C");
 extern float D_L02_0017C3F0[][25];
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9e90(float, float);
@@ -1024,7 +1026,7 @@ int FUN_L02_0022b728(int a, int b) {
                     FUN_L00_002323b8(0x11, 0, (float)scale_game_frames(5));
                 } else if (s == 0xE) {
                     FUN_L00_002323b8(0x16, 3, (float)scale_game_frames(7));
-                    *(float *)(q + 0xA90) = D_0015ED60 * 0.8f;
+                    *(float *)(q + 0xA90) = D_0015ED5C_lui[1] * 0.8f;
                 } else if (s == 0xF) {
                     FUN_L00_002323b8(0x15, 0, (float)scale_game_frames(5));
                 } else if (s == 0xB) {
@@ -1852,7 +1854,6 @@ extern S17AD00 D_L02_0017AC80;
 extern S17C438 D_L02_0017C3B8;
 extern T2C_22BE40_u D_L02_0017C228_u[] __asm__("D_L02_0017C228");
 extern float AbsoluteFloat(float);
-__asm__(".extern D_0015ED60,4");
 extern float D_0015ED64;
 extern float D_0015ED6C;
 extern float D_0015ED70;

@@ -847,7 +847,7 @@ s32 FUN_L00_002dbe20(u8 *m) {
     return 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002dbf28.s", FUN_L00_002dbf28);
-#define qzero_002dc938(p) __asm__ __volatile__("sq $0,0x0(%0)" : : "r"(p))
+#include "qzero.h"
 typedef struct {
     int v[16];
 } __attribute__((aligned(16))) Mtx_002dc938;
@@ -862,7 +862,7 @@ void FUN_L00_002dc938(char *p, char *q, int flag) {
     if (flag)
         FUN_L00_002dbf28_002dc938(p, q);
     *(int *)(p + 0x98) = *(int *)(q + 0x84);
-    qzero_002dc938(p + 0x40);
+    qzero(p + 0x40);
     FUN_001fa050_002dc938(&m, p + 0x40);
     FUN_001fa2b8_002dc938(p + 0xC0, &m);
     FUN_0020e098_002dc938(p);

@@ -1295,9 +1295,6 @@ s32 FUN_L00_00233e98(s32 idx) {
         return 1;
     return D_0013D428[idx];
 }
-static __inline__ void qcopy_00233ee8(void *dst, void *src) {
-    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
-}
 struct G_00233ee8 {
     char pad[0x1640];
     float pos[3];
@@ -1309,7 +1306,7 @@ struct G_00233ee8 {
 extern struct G_00233ee8 D_0013F350_00233ee8 __asm__("D_0013F350");
 void FUN_L00_002223f8_00233ee8(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_00233ee8(void *v, float f, int n) {
-    qcopy_00233ee8(D_0013F350_00233ee8.pos, v);
+    qcopy(D_0013F350_00233ee8.pos, v);
     D_0013F350_00233ee8.f = f;
     D_0013F350_00233ee8.n = n;
     if ((unsigned)(D_0013F350_00233ee8.state - 0x65) >= 3) {
@@ -1531,9 +1528,6 @@ void FUN_L00_00234c78(void *a, char *p) {
     *(int *)(p + 0x54) = 0;
     *(char **)(p + 0x6c) = D_L00_0017C680;
 }
-static __inline__ void qcopy_00234d40(void *dst, void *src) {
-    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
-}
 typedef unsigned int u128_00234d40 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     float x, y, z, w_00234d40;
@@ -1563,7 +1557,7 @@ void FUN_L00_00234d40(void) {
     if (FUN_001f99c0_00234d40(g->pos.z - v.z) > 0.3f)
         return;
     FUN_L00_00233ee8_00234d40(pos, g->f98, 1);
-    qcopy_00234d40(pos, &v);
+    qcopy(pos, &v);
 }
 void FUN_L00_002395b0();
 void FUN_L00_00239630();

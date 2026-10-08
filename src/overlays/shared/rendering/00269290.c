@@ -1616,9 +1616,6 @@ void FUN_L00_0026dbe0(unsigned char *p) {
     FUN_001f9bf8_0026dbe0(&b, &b, 0.4f);
     FUN_001f9a10_0026dbe0(p + 0x10, &a, &b);
 }
-static __inline__ void qcopy_0026dd20(void *dst, void *src) {
-    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
-}
 extern unsigned char *D_L00_001B20EC_0026dd20[] __asm__("D_L00_001B20EC");
 char *FUN_L00_002678b8_0026dd20(int) __asm__("FUN_L00_002678b8");
 int FUN_001160d8_0026dd20(void) __asm__("FUN_001160d8");
@@ -1627,7 +1624,7 @@ char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f) {
     char *o = FUN_L00_002678b8_0026dd20(0x1B);
     if (o) {
         char *q = o + 0x20;
-        qcopy_0026dd20(o + 0x10, pos);
+        qcopy(o + 0x10, pos);
         o[8] = FUN_001160d8_0026dd20();
         *(int *)(o + 4) = a;
         o[9] = FUN_001fa6d0_0026dd20(4.0f) + 0x40;
@@ -1636,7 +1633,7 @@ char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f) {
         o[1] = 0;
         o[2] = D_L00_001B20EC_0026dd20[0][0];
         *(int *)(q + 0x18) = o[7];
-        qcopy_0026dd20(q, dir);
+        qcopy(q, dir);
         *(int *)(q + 0x10) = b;
         *(int *)(q + 0x14) = b;
     }

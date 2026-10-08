@@ -2228,9 +2228,6 @@ void FUN_L00_00212318(int force) {
         }
     }
 }
-static __inline__ void qcopy_002126b8(void *dst, void *src) {
-    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
-}
 typedef unsigned int u128_002126b8 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     float x, y, z, w_002126b8;
@@ -2252,12 +2249,12 @@ void FUN_L00_002126b8(Vec4_002126b8 *a, Vec4_002126b8 *b, int mode, float fa, fl
         *(u128_002126b8 *)&t[1] = *(u128_002126b8 *)a;
         FUN_L00_0025d238_002126b8(&t[1], b);
     } else {
-        qcopy_002126b8(&t[0], &D_0013F3D0_002126b8);
-        qcopy_002126b8(b, &t[0]);
+        qcopy(&t[0], &D_0013F3D0_002126b8);
+        qcopy(b, &t[0]);
         b->z += fb;
         if (b->z < 0.0f)
             b->z = 0.0f;
-        qcopy_002126b8(a, &t[0]);
+        qcopy(a, &t[0]);
         a->z += fa;
     }
 }
