@@ -6,6 +6,8 @@
 #include "rnc/overlay/collision.h"
 #include "rnc/overlay/entities.h"
 #include "rnc/gameplay/hero.h"
+#include "qcopy.h"
+#include "rnc/math/circle_offset.h"
 
 #define NOT_SDA
 
@@ -309,7 +311,125 @@ void FUN_L01_0022cd48(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d090.s", FUN_L01_0022d090);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d838.s", FUN_L01_0022d838);
+extern CollisionHit coll_hit __asm__("D_L01_001742C0") __attribute__((section(".data")));
+/* line query from -> to; fills the collision hit record, nonzero on a hit */
+extern int collision_line(void *from, void *to, int mask, void *ignore, int) __asm__("FUN_001efa68");
+extern int collision_hit_material(void) __asm__("FUN_001f0b58");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
+
+/*
+ * Ledge probe, FUN_L00_0020c758 without its hero.unk20A4 == 1 variant:
+ * steps forward from `pos` along the hero's yaw looking for a flat top
+ * (normal within 20 degrees of up, not material 9 or 12) at least 1.8 above
+ * the floor and not above pos + up, then for the wall under it. Returns 1 when the hero (facing `*dir`) faces that wall within
+ * 65 degrees and the ledge edge is found within 2.4 units along it.
+ * Constants live in locals because retail loads each one once.
+ */
+int FUN_L01_0022d838(Vec4 *pos, f32 *dir)
+{
+    Vec4 probe, top, low, wall, edge;
+    f32 drop, fwd, up, reach;
+    f32 ang, wall_yaw, d, step, top_margin, max_slope, one, five, half, inc, limit;
+    int found, hit, i, j, material;
+
+    if (hero.unk308 == 2)
+        return 0;
+
+    drop = -0.7f;
+    fwd = 0.3f;
+    up = 1.5f;
+    reach = 1.15f;
+    wall_yaw = 0.0f;
+    found = 0;
+    qcopy(&probe, pos);
+    step = 0.25f;
+    i = 0;
+    top_margin = 0.15f;
+    max_slope = 0.34906584f;       /* 20 degrees */
+    probe.f[0] += fast_cos(hero.motion.rot.f[2]) * hero.unk234;
+    probe.f[1] += fast_sin(hero.motion.rot.f[2]) * hero.unk234;
+    do {
+        probe.f[0] += fast_cos(hero.motion.rot.f[2]) * fwd * step;
+        probe.f[1] += fast_sin(hero.motion.rot.f[2]) * fwd * step;
+        qcopy(&top, &probe);
+        top.f[2] += up + top_margin;
+        qcopy(&low, &probe);
+        low.f[2] += reach;
+        if (collision_line(&top, &low, 4, hero.moby, 0)) {
+            material = collision_hit_material();
+            if (material != 9 && material != 12) {
+                if (atan2_f(coll_hit.normal_z, vector_length_xy(&coll_hit.normal_x)) < max_slope)
+                    found = 1;
+            }
+        }
+        i++;
+        if (found)
+            break;
+    } while (i < 4);
+    if (!found)
+        return 0;
+    if (pos->f[2] + up < coll_hit.point.f[2])
+        return 0;
+
+    qcopy(&top, &coll_hit.point);
+    ang = atan2_f(top.f[0] - pos->f[0], top.f[1] - pos->f[1]);
+    if (top.f[2] - hero.unk2D8.f < 1.8f)
+        return 0;
+
+    /* the wall below the top, tested at five heights */
+    five = 5.0f;
+    one = 1.0f;
+    hit = 0;
+    for (j = 0; j < 5; j++) {
+        qcopy(&low, pos);
+        qcopy(&wall, &top);
+        circle_offset(&wall, ang, hero.unk234);
+        wall.f[2] += drop * (one - j / five);
+        low.f[2] = wall.f[2];
+        if (collision_line(&low, &wall, 2, 0, 0)) {
+            hit = 1;
+            wall_yaw = atan2_f(coll_hit.normal_x, coll_hit.normal_y);
+            break;
+        }
+    }
+    if (!hit)
+        return 0;
+
+    if (fast_difference_between_rotations(*dir, fast_add_rotations(wall_yaw, 3.14159274f)) < 1.13446403f) {
+        /* walk along the wall normal until the top ends */
+        limit = 2.4f;
+        inc = 0.07f;
+        d = 0.0f;
+        half = 0.5f;
+        do {
+            qcopy(&wall, &top);
+            wall.f[2] = top.f[2];
+            wall.f[0] += fast_cos(wall_yaw) * d;
+            wall.f[1] += fast_sin(wall_yaw) * d;
+            qcopy(&low, &wall);
+            wall.f[2] += half;
+            low.f[2] -= half;
+            if (collision_line(&wall, &low, 4, hero.moby, 0)) {
+                d += inc;
+                continue;
+            }
+            /* edge found: its point is computed but unused, as in retail */
+            qcopy(&edge, &wall);
+            d = inc * half;
+            d = -d;
+            edge.f[2] = top.f[2];
+            edge.f[0] += fast_cos(wall_yaw) * d;
+            edge.f[1] += fast_sin(wall_yaw) * d;
+            if (0.52359879f < fast_difference_between_rotations(fast_add_rotations(wall_yaw, 3.14159274f), *dir))
+                return 0;
+            return 1;
+        } while (d < limit);
+    }
+    return 0;
+}
 /* Starts a level scene: resets the player state, takes the new moby and sets up its flags. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00231960), where it is exact; names translated to the US level program. */
 
