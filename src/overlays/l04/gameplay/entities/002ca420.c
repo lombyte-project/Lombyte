@@ -950,8 +950,11 @@ void FUN_L04_002d6f68(char *moby) {
     qcopy(dst + 0x10, moby + 0x10);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d7e90.s", FUN_L04_002d7e90);
-float FUN_L04_002e1768(char *moby) {
-    switch (*(short *)(moby + 0xA6)) {
+/* Rise speed of a riser by its class. */
+float riser_rise_speed(struct Moby *moby) __asm__("FUN_L04_002e1768");
+
+float riser_rise_speed(struct Moby *moby) {
+    switch (moby->oclass) {
     case 0x44D:
     case 0x5FC:
         return 1.3f;
@@ -979,7 +982,6 @@ extern s32 D_L04_001BA650[];
 extern LevelCollected D_L04_001BB3B0;
 extern int FUN_L00_0028dc90(int, int, struct Moby *, int);
 extern int FUN_001f96f8(int);
-extern float riser_rate_2e17d8(struct Moby *) __asm__("FUN_L04_002e1768");
 extern int FUN_001f9740(s32 *);
 extern int FUN_0022da68(int, int, struct Moby *);
 
@@ -1010,7 +1012,7 @@ void FUN_L04_002e17d8(struct Moby *m) {
         d->timer = FUN_001f96f8(60);
         break;
     case 2:
-        m->pos.z += riser_rate_2e17d8(m) * D_0015ED6C;
+        m->pos.z += riser_rise_speed(m) * D_0015ED6C;
         if (FUN_001f9740(&d->timer)) {
             D_0014C190[D_0015ED84][(s16)m->unkB2 >> 5] |= 1 << (m->unkB2 & 0x1F);
             D_L04_001BA650[(s16)m->unkB2 >> 5] |= 1 << (m->unkB2 & 0x1F);
