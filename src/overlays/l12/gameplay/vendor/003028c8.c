@@ -73,7 +73,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003069d0.s", FUN_L12_003069d0);
 extern char *D_L12_0015FFD8_p __asm__("D_L12_0015FFD8");
 extern float D_0015ED6C;
 extern void FUN_L00_00250df8(unsigned char *);
-extern float FUN_002132a8(float, float);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0026de90(char *, int, float);
 extern short *FUN_002141f8(unsigned char *);
 
@@ -103,7 +103,7 @@ void FUN_L12_003076e0(char *m) {
     FUN_L00_00250df8(o);
     *(char **)(o + 0xB8) = m;
     for (i = 0; i < 14; i++) {
-        FUN_L00_0026de90(m + 0x10, 0, FUN_002132a8(D_0015ED6C * 3.0f, D_0015ED6C * 5.0f));
+        FUN_L00_0026de90(m + 0x10, 0, random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 5.0f));
     }
     r = FUN_002141f8(o);
     if (r != 0) {
@@ -353,7 +353,7 @@ extern float D_0015ED7C __attribute__((section(".sdata")));
 extern int *D_L12_00208AE0[];
 extern int D_L12_00205A80[];
 extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
-extern void FUN_001f4600(void *, void *);
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 
 typedef struct {
     char p[0x20];
@@ -412,7 +412,7 @@ void FUN_L12_0030bff0(M_bff0 *m) {
         if (D_L12_00162108[1] < -1.0f) {
             D_L12_00162108[1] += 1.0f;
         }
-        FUN_001f4600(FUN_L12_0030be68, m);
+        enqueue_callback_list_1(FUN_L12_0030be68, m);
         break;
     }
 }

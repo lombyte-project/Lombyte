@@ -499,6 +499,7 @@ typedef struct {
 
 extern void FUN_L00_00267a08(void *);
 
+/* Passes the stored value to FUN_L00_00267a08 once, then clears it. */
 void FUN_L13_002b4fb8(Level13VendorMoby *moby) {
     if (moby->value != 0) {
         FUN_L00_00267a08(moby->value);

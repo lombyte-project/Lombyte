@@ -179,7 +179,7 @@ extern float FUN_001f9af0(void *);
 extern float FUN_001f9b20(void *);
 extern int FUN_001f96f8(int);
 extern int FUN_001f9740(int *);
-extern float FUN_002132a8(float, float);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float FUN_001f96b0(float);
 extern int FUN_001fa6d0(float);
 extern void FUN_00214db0(void *, float, float, float);
@@ -249,9 +249,9 @@ void FUN_L11_002d0710(WM11 *m) {
         }
         if (FUN_001f9740(&d->target_timer)) {
             float heading;
-            d->target_timer = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8(180.0f, 300.0f)));
-            heading = FUN_001fa580(m->yaw, FUN_002132a8(-90.0f, 90.0f) * 0.017453292f);
-            FUN_00214db0(d->target, 6.0f, heading, FUN_002132a8(0.0f, 30.0f) * 0.017453292f);
+            d->target_timer = FUN_001fa6d0(FUN_001f96b0(random_float_between(180.0f, 300.0f)));
+            heading = FUN_001fa580(m->yaw, random_float_between(-90.0f, 90.0f) * 0.017453292f);
+            FUN_00214db0(d->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * 0.017453292f);
             FUN_001f9a10(d->target, d->target, m->position);
         }
         if (d->moving_timer) {

@@ -35,6 +35,7 @@ typedef struct {
 extern void FUN_L01_00309bf8(void);
 void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
 
+/* Sets both flag fields to 0xFF and queues FUN_L01_00309bf8 for the moby. */
 void FUN_L01_00309c98(FlagMoby *m) {
     int v = 0xFF;
     m->h32 = v;

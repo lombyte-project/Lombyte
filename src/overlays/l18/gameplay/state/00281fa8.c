@@ -17,6 +17,7 @@ typedef struct {
 extern Level18PauseState D_L18_001BA6F0;
 void memcard_make_whole_save(u8 *arg0) __asm__("FUN_0020abb0");
 
+/* Starts a whole memory card save of save_data unless one is already pending. */
 void FUN_L18_00281fa8(char *save_data) {
     if (D_L18_001BA6F0.save_data == 0) {
         D_L18_001BA6F0.save_data = save_data;

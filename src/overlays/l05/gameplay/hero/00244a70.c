@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 #include "eetypes.h"
 #include "qcopy.h"
 
@@ -552,7 +553,6 @@ extern f32 D_0015ED6C;
 extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
 extern f32 D_0015ED70;
 extern f32 D_0015ED70_a __asm__("D_0015ED70");
-extern s32 D_0015ED84;
 extern s32 D_0015EEA4;
 extern u8 D_0013D4DC[];
 extern struct Globals_00141848 D_00141848;
@@ -810,7 +810,7 @@ void FUN_L05_00244a70(void) {
                         S.uh92 = scale_game_frames(D_0015EEA4) / 600;
                     }
                     D_L05_0015F688 = -1;
-                    S.i94 = S.i94 | (1 << D_0015ED84) | 0x80000000;
+                    S.i94 = S.i94 | (1 << current_level_index) | 0x80000000;
                     D_L05_0015F68C++;
                 }
             }
@@ -1059,7 +1059,7 @@ void FUN_L05_00244a70(void) {
                     if (S.uh5A < t2) {
                         S.uh5A = scale_game_frames(D_0015EEA4) / 600;
                     }
-                    S.i5C = S.i5C | (1 << D_0015ED84) | 0x80000000;
+                    S.i5C = S.i5C | (1 << current_level_index) | 0x80000000;
                 } else {
                     P.h90C = 0;
                 }
@@ -2326,12 +2326,12 @@ void FUN_L05_00244a70(void) {
         f32 f;
         f32 old;
         f32 d;
-        if (D_0015ED84 == 0xF) {
+        if (current_level_index == 0xF) {
             FUN_L00_00216e48(2, P.pm2080, 0x1D);
         } else {
             FUN_L00_00216e48(2, P.pm2080, 6);
         }
-        if (D_0015ED84 != 0xF) {
+        if (current_level_index != 0xF) {
             FUN_L00_00209a40(4, 2);
             v0.f[0] = P.u80.f80 + random_float_between(-0.25f, 0.25f);
             v0.f[1] = P.u80.f84.v + random_float_between(-0.25f, 0.25f);

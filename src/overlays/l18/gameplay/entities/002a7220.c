@@ -111,6 +111,7 @@ typedef struct {
     Level18VendorActionData *data;
 } Level18VendorActionMoby;
 
+/* Switches the data to mode 5 at scale 1.5. */
 void FUN_L18_002d6dc0(Level18VendorActionMoby *moby) {
     Level18VendorActionData *data = moby->data;
     data->mode = 5;

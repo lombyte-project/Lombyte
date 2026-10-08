@@ -8,12 +8,12 @@
 
 typedef int Q_3058a8 __attribute__((mode(TI)));
 
-extern char *FUN_0020c4f8(int);
+extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L13_003058a8(char *src, short cls) {
-    char *m = FUN_0020c4f8(0x4D1);
+    char *m = create_moby(0x4D1);
     char *d;
     char *pos;
     if (m != 0) {
@@ -273,7 +273,7 @@ extern void FUN_L01_002b7fe0(void *, int);
 extern void FUN_L01_002b8288(float, float, float, float, void *, int);
 extern void FUN_L00_002a3ec8(float, float, float, float, void *, int, int);
 extern int FUN_L01_00275690(float, void *);
-extern void FUN_001f4600(void *, void *);
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L13_0030a460(void);
 extern void FUN_L13_0030a488(int);
 
@@ -381,7 +381,7 @@ void FUN_L13_00309e88(char *moby) {
             Tiles_9e88[b->idx].c1E = D_L13_001F1E20[b->idx];
         if (b->idx == 0) {
             FUN_L01_002b7fe0(Tiles_9e88, 22);
-            FUN_001f4600(FUN_L13_0030a460, moby);
+            enqueue_callback_list_1(FUN_L13_0030a460, moby);
         }
         if (b->idx == D_L13_00161EF0) {
             Tiles_9e88[b->idx].c1E = D_L13_00161EF4;

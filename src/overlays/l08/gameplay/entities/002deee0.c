@@ -42,6 +42,7 @@ int FUN_L08_002e0228(char *m) {
 
 extern void FUN_L08_00230b38(int, int);
 
+/* Sets the moby's byte 0xBC and calls FUN_L08_00230b38(0x32, 1). */
 void FUN_L08_002e1698(char *arg) {
     arg[0xBC] = 1;
     FUN_L08_00230b38(0x32, 1);

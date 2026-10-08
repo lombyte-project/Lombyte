@@ -6,6 +6,7 @@ typedef struct {
     s32 w[0x1C];
 } E002a1968;
 extern E002a1968 D_0013E550[];
+/* Sets word 0x20 of voice entry i to v; returns 1. */
 s32 FUN_L01_002a1968(s32 i, s32 v) {
     E002a1968 *p = &D_0013E550[i];
     p->w[0x20] = v;

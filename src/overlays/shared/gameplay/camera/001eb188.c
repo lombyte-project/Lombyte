@@ -53,6 +53,7 @@ typedef struct {
     T001eb448 *p;
 } S001eb448;
 extern S001eb448 D_L00_00166C80_u __asm__("D_L00_00166C80");
+/* Sets h and clears b in the block D_L00_00166C80 points to. */
 void FUN_L00_001eb448(void) {
     D_L00_00166C80_u.p->h = 1;
     D_L00_00166C80_u.p->b = 0;
@@ -62,6 +63,7 @@ typedef struct {
     s32 pad[4];
 } E5;
 extern E5 D_L00_001EA880[];
+/* Index of id in the table that ends with -1 (the end index when it is missing). */
 s32 FUN_L00_001ed230(s32 id) {
     s32 n = 0;
     while (D_L00_001EA880[n].id != -1 && D_L00_001EA880[n].id != id)

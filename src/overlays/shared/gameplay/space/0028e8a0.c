@@ -42,6 +42,7 @@ void FUN_L00_0028e8a0(char *m) {
 }
 #include "sda.h"
 extern u8 *D_0013E030 NOT_SDA;
+/* Flags the moby in D_0013E030 (bits 0 and 1) and clears its field 0x94. */
 void FUN_L00_0028e990(void) {
     if (D_0013E030 != 0) {
         *(u16 *)(D_0013E030 + 0x34) |= 3;

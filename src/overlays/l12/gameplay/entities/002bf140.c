@@ -748,6 +748,7 @@ extern void approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED70;
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 
+/* Eases the moby's height toward the ground below it. */
 void FUN_L12_002e87b0(char *moby) {
     float value = probe_ground_height(moby + 0x10, 0, 0.5f);
     approach_value(moby + 0x18, value, 27.0f * D_0015ED70);

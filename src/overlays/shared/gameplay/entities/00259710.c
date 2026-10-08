@@ -549,6 +549,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025b6b8.s", FUN_L00_0025b6b8);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
+/* Turns from angle a toward angle b by fraction c of the difference. */
 float FUN_L00_0025b750(float a, float b, float c) {
     float r = fast_subtract_rotations(b, a);
     return fast_add_rotations(a, r * c);

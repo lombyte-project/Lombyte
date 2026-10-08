@@ -947,6 +947,7 @@ int FUN_L15_00299880(unsigned char *moby, char *d, int a, int b, float angle) {
 extern float FUN_001f9e90(float, float);
 extern void FUN_L15_00299880_u(void *, void *, void *, void *, float) __asm__("FUN_L15_00299880");
 
+/* Aims at point (heading from the moby) and passes it on to FUN_L15_00299880. */
 void FUN_L15_00299a68(char *moby, void *a, float *point, void *b, void *c) {
     float angle =
         FUN_001f9e90(point[0] - *(float *)(moby + 0x10), point[1] - *(float *)(moby + 0x14));

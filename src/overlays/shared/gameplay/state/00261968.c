@@ -246,6 +246,7 @@ void FUN_L00_00262b00(float x, float y, char *a, float *p, float *q) {
 
 extern float FUN_001f9dc8(float);
 
+/* Sets o[16] and o[17] from r and the sines/cosines of the two angles, then advances the angles by l1 and l2. */
 void FUN_L00_00262b80(float *o, float *a, float *b, float r, float l1, float l2) {
     o[0x10] = r * FUN_001f9de0(*a) * FUN_001f9de0(*b);
     o[0x11] = r * FUN_001f9de0(*a) * FUN_001f9dc8(*b);

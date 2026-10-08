@@ -11,6 +11,7 @@
 
 extern void FUN_L00_002591d0(int *);
 
+/* Returns whether the current id equals id. */
 int FUN_L07_00281ef8(int id) {
     int current;
     FUN_L00_002591d0(&current);

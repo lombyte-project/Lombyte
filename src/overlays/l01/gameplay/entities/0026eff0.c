@@ -8,6 +8,7 @@ typedef struct {
     f32 hi;
 } Range;
 
+/* Sets the range to x plus or minus 0.2. */
 void FUN_L01_0026eff8(Range *r, f32 x) {
     r->lo = x - 0.2f;
     r->hi = x + 0.2f;
