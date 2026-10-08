@@ -331,7 +331,61 @@ void FUN_L00_00236128(HudElem *e) {
     FUN_L00_0023aaa8((char *)e + 0x40);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236268.s", FUN_L00_00236268);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236458.s", FUN_L00_00236458);
+
+typedef struct {
+    float x, y, vx, vy;
+} Star_236458;
+
+extern int D_L00_0015F3F8;
+extern Star_236458 D_L00_0017E660[];
+extern float D_L00_0015F750 __attribute__((sda));
+extern float D_L00_0015F754 __attribute__((sda));
+extern float D_L00_0015F758 __attribute__((sda));
+void FUN_L00_00235ea0();
+
+/* Moves every other star by its velocity and bounces it off a box whose size
+ * depends on the star index. */
+void FUN_L00_00236458(void) {
+    Star_236458 *p;
+    int i;
+    float lim, hx, hy, nhx, nhy;
+
+    FUN_L00_00235ea0();
+    p = &D_L00_0017E660[D_L00_0015F3F8 % 2];
+    i = D_L00_0015F3F8 % 2;
+    for (; i < 100; i += 2, p += 2) {
+        if (i < 10) {
+            lim = D_L00_0015F750;
+        } else if (i < 30) {
+            lim = D_L00_0015F754;
+        } else {
+            lim = D_L00_0015F758;
+        }
+        hx = lim - 17.0f;
+        hy = lim - 116.0f;
+        nhx = -hx;
+        nhy = -hy;
+        p->x += p->vx;
+        p->y += p->vy;
+        if (p->x < hx) {
+            p->x = hx;
+            p->vx = -p->vx;
+        }
+        if (nhx < p->x) {
+            p->x = nhx;
+            p->vx = -p->vx;
+        }
+        if (p->y < hy) {
+            p->y = hy;
+            p->vy = -p->vy;
+        }
+        if (nhy < p->y) {
+            p->y = nhy;
+            p->vy = -p->vy;
+        }
+    }
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002365a8.s", FUN_L00_002365a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236e50.s", FUN_L00_00236e50);
 void FUN_L00_00235ea0();

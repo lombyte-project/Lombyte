@@ -269,7 +269,46 @@ void FUN_L05_002d1fd8(int unused, char *p) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7020.s", FUN_L05_002d7020);
+
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern float rot_2d7020(float, float) __asm__("FUN_001fa580");
+extern float sin_2d7020(float) __asm__("FUN_001f9de0");
+extern int lerp_2d7020(float, int, int) __asm__("FUN_001fa6e0");
+extern int D_L05_0015F5CC_2d7020 __asm__("D_L05_0015F5CC");
+extern void queue_2d7020(void *, void *) __asm__("FUN_001f4600");
+void FUN_L05_002d6f48(unsigned char *moby);
+
+/* Per-frame glow: updates three parts, pulses the colour, and queues a redraw
+ * once per frame. */
+void FUN_L05_002d7020(char *m) {
+    char *v;
+    int i;
+    int c;
+    int f;
+    int k;
+    int *p;
+
+    if (*(unsigned char *)(m + 0x21) != 0xFF && *(unsigned char *)(m + 0x31) != 0) {
+        v = *(char **)(m + 0x78);
+        for (i = 0; i < 3; i++) {
+            FUN_L00_0024f7c8(m, i, v + 0x330 + i * 16);
+        }
+        *(float *)(v + 0x368) = rot_2d7020(*(float *)(v + 0x368), D_0015ED6C * 1.9198622f);
+        c = lerp_2d7020(sin_2d7020(*(float *)(v + 0x368)) * 0.5f + 0.5f, 0x1E1EB4, 0x1EB41E);
+        f = D_L05_0015F5CC_2d7020;
+        *(int *)(m + 0x90) = c;
+        k = (c & 0xFF0000) | 0x30000000;
+        *(int *)(v + 0x360) = k | (c & 0xFF00) | (c & 0xFF);
+        if (f != 0) {
+            p = *(int **)(v + 0x364);
+            if (f != *p) {
+                *p = f;
+                queue_2d7020(FUN_L05_002d6f48, m);
+            }
+        }
+    }
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7140.s", FUN_L05_002d7140);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7920.s", FUN_L05_002d7920);
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DBF10), where it is exact; names translated to the US level program. */

@@ -112,7 +112,52 @@ char *FUN_L03_002d4288(char *a, char *pos, char *parent, int n, float f0, float 
     return m;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d43c8.s", FUN_L03_002d43c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002da710.s", FUN_L03_002da710);
+
+typedef struct {
+    char pad0[0x30];
+    int mode;
+    int t;
+    char pad38[0xC];
+    short n;
+    char pad46[0x132];
+    char *list[1];
+} G_2da710;
+
+extern int D_L03_0015F5C4;
+extern unsigned char D_0015EDB0;
+extern float D_L03_0015F5A0;
+extern G_2da710 D_L03_0016C960;
+extern char D_L03_0017C540[];
+extern float D_L03_00161BB4 __attribute__((sda));
+extern void attach_2da710(void *, int, void *) __asm__("FUN_0020cb10");
+
+/* During the cutscene, nudges a camera value at two time windows and attaches
+ * the shared manipulator to every listed moby of the same class as m. */
+void FUN_L03_002da710(char *m) {
+    char *s;
+    int i;
+
+    if (D_L03_0015F5C4 == 2 && D_0015EDB0 != 0) {
+        if (D_L03_0016C960.mode == 2 && D_L03_0016C960.t >= 0x1EA && D_L03_0016C960.t < 0x266) {
+            D_L03_0015F5A0 = -0.2f;
+        }
+        if (D_L03_0016C960.mode == 2 && D_L03_0016C960.t >= 0x2EE && D_L03_0016C960.t < 0x321) {
+            D_L03_0015F5A0 = 0.2f;
+        }
+        for (i = 0; i < D_L03_0016C960.n; i++) {
+            if (*(short *)(D_L03_0016C960.list[i] + 0xA6) == *(short *)(m + 0xA6)) {
+                s = D_L03_0017C540;
+                if (((unsigned char *)s)[1] == 0) {
+                    attach_2da710(D_L03_0016C960.list[i], 0, s);
+                    *(float *)(s + 0x20) = D_L03_00161BB4;
+                    *(float *)(s + 0x24) = D_L03_00161BB4;
+                    *(float *)(s + 0x28) = D_L03_00161BB4;
+                }
+            }
+        }
+    }
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002da870.s", FUN_L03_002da870);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db020.s", FUN_L03_002db020);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db198.s", FUN_L03_002db198);
