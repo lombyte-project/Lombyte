@@ -17,7 +17,9 @@ struct Moby {
     struct MobyClass *pclass;
     struct Moby *next;
     f32 scale;                        /* draw scale (FUN_L01_002fa068 halves it, FUN_L00_00215ef8 divides by it) */
-    u8 pad30[4];
+    u8 unk30;                         /* set to 0xFF (0x7F for beams) by spawners */
+    u8 unk31;                         /* set to 1 by spawners */
+    s16 unk32;                        /* set to 0xFF (0x7F for beams) by spawners */
     u16 flags;
     u8 pad36[2];
     u64 spawn_frame;                  /* frame count at which it may respawn */
