@@ -621,7 +621,59 @@ float FUN_L18_002fc4e0(char *self, float *src) {
     FUN_L00_00261d78(h, *(void **)(o + 0x1E0), self + 0x10, self + 0x10);
     return dist;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc668.s", FUN_L18_002fc668);
+#include "qcopy.h"
+#include "rnc/gameplay/entities/moby.h"
+extern int D_L18_001AC240[];
+extern struct Moby *moby_table __asm__("D_L18_0015FFD8");
+
+/* Pvars fields set when a group moby is launched. */
+typedef struct {
+    u8 pad0[0x1D0];
+    f32 velocity[4];   /* 0x1D0: launch direction scaled to speed; [2] replaced by the arc speed */
+    u8 pad1E0[0xC];
+    f32 spin;          /* 0x1EC: random 15..45 degrees, in radians */
+    u8 pad1F0[4];
+    f32 unk1F4;        /* 0x1F4: set to 1.0 on launch */
+} LaunchedMobyVars;
+extern float D_0015ED70;
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9bf8(void *, void *, float);
+extern float FUN_L00_0025abf0(void *, void *, float, float, int);
+extern float FUN_L00_00257c48(float, float);
+
+/* Launches the first idle (state 8) class-0x772 moby of group `group` from `from` towards `to` at `speed`.
+   Returns 1 when one was launched. */
+int FUN_L18_002fc668(int group, void *from, void *to, float speed) {
+    unsigned short *p = (unsigned short *)D_L18_001AC240[group];
+    struct Moby *table;
+    struct Moby *moby;
+
+    if (p == 0)
+        return 0;
+    table = moby_table;
+    for (;;) {
+        moby = &table[*p & 0x7FFF];
+        if (moby->oclass == 0x772) {
+            if (moby->state == 8) {
+                LaunchedMobyVars *v = (LaunchedMobyVars *)moby->pvars;
+                moby->flags &= ~0x41;
+                moby->unk94 = *(u32 *)((char *)moby->pclass + 0x10);
+                moby->flags |= 0x1000;
+                qcopy(&moby->pos, from);
+                moby->state = 1;
+                v->unk1F4 = 1.0f;
+                FUN_001f9a28(v->velocity, to, from);
+                v->velocity[2] = 0.0f;
+                FUN_001f9bf8(v->velocity, v->velocity, speed);
+                v->velocity[2] = FUN_L00_0025abf0(from, to, speed, -(D_0015ED70 * 10.0f), 0);
+                v->spin = FUN_L00_00257c48(15.0f, 45.0f) * 0.017453292f;
+                return 1;
+            }
+        }
+        if ((short)*p++ < 0)
+            return 0;
+    }
+}
 /* Counts the listed mobys of class 0x772 that are not in state 8. */
 
 extern int D_L18_001AC240[];
