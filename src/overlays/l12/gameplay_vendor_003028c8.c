@@ -306,7 +306,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003094a0.s", FUN_L12_003094a0);
 /* Draws the moby's 10-piece overlay when its trigger is visible, with its own GS state. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030D248), where it is exact; names translated to the US level program. */
 
-extern char D_L12_00162108[] __attribute__((section(".sdata")));
+extern float D_L12_00162108[2] __attribute__((section(".sdata")));
 extern char D_L12_00167240[];
 extern char D_L12_00208B00[];
 extern int D_L12_001620D4;
@@ -344,4 +344,75 @@ void FUN_L12_0030be68(char *m) {
     vu1_add_g_sregister(6, get_effect_texture(0x30));
     FUN_L08_002f0c18(1);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0030bff0.s", FUN_L12_0030bff0);
+/* Builds the colour tables once, then scrolls two pairs of wrapped phases each frame. */
+extern int D_L12_001620F0 __attribute__((sda));
+/* The ready flag is followed, 8 bytes on, by two pairs of phases. */
+extern float D_L12_001620E0[1] __attribute__((sda));
+extern float D_L12_001620D8[2] __attribute__((sda));
+extern float D_0015ED7C __attribute__((section(".sdata")));
+extern int *D_L12_00208AE0[];
+extern int D_L12_00205A80[];
+extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
+extern void FUN_001f4600(void *, void *);
+
+typedef struct {
+    char p[0x20];
+    unsigned char state;
+    char q[0xF];
+    unsigned char b30;
+    char r;
+    short h32;
+} M_bff0;
+
+void FUN_L12_0030bff0(M_bff0 *m) {
+    int i;
+    switch (m->state) {
+    case 0:
+        if (D_L12_001620F0 == 0) {
+            FUN_L08_002f0f68(D_L12_00208AE0, 5, D_L12_00205A80, 0.1f, 0.5f, 0.4f, 0.5f, 1);
+            FUN_L08_002f0f68(D_L12_00205A58, 10, D_L12_001FBD10, 0.1f, 0.6f, 0.4f, 0.5f, 1);
+            D_L12_001620F0 = 1;
+        }
+        m->state = 1;
+        m->b30 = 0xFF;
+        m->h32 = 0xFF;
+        for (i = 0; i < 2; i++) {
+            ((float *)&D_L12_001620F0)[i * 2 + 2] = 0.0f;
+            ((float *)&D_L12_001620F0)[i * 2 + 3] = 0.0f;
+        }
+        break;
+    case 1:
+        for (i = 0; i < 2; i++) {
+            ((float *)&D_L12_001620F0)[i * 2 + 2] += D_L12_001620E0[i * 2] * D_0015ED7C;
+            if (((float *)&D_L12_001620F0)[i * 2 + 2] > 1.0f) {
+                ((float *)&D_L12_001620F0)[i * 2 + 2] -= 1.0f;
+            }
+            if (((float *)&D_L12_001620F0)[i * 2 + 2] < -1.0f) {
+                ((float *)&D_L12_001620F0)[i * 2 + 2] += 1.0f;
+            }
+            ((float *)&D_L12_001620F0)[i * 2 + 3] += D_L12_001620E0[i * 2 + 1] * D_0015ED7C;
+            if (((float *)&D_L12_001620F0)[i * 2 + 3] > 1.0f) {
+                ((float *)&D_L12_001620F0)[i * 2 + 3] -= 1.0f;
+            }
+            if (((float *)&D_L12_001620F0)[i * 2 + 3] < -1.0f) {
+                ((float *)&D_L12_001620F0)[i * 2 + 3] += 1.0f;
+            }
+        }
+        D_L12_00162108[0] += D_L12_001620D8[0] * D_0015ED7C;
+        if (D_L12_00162108[0] > 1.0f) {
+            D_L12_00162108[0] -= 1.0f;
+        }
+        if (D_L12_00162108[0] < -1.0f) {
+            D_L12_00162108[0] += 1.0f;
+        }
+        D_L12_00162108[1] += D_L12_001620D8[1] * D_0015ED7C;
+        if (D_L12_00162108[1] > 1.0f) {
+            D_L12_00162108[1] -= 1.0f;
+        }
+        if (D_L12_00162108[1] < -1.0f) {
+            D_L12_00162108[1] += 1.0f;
+        }
+        FUN_001f4600(FUN_L12_0030be68, m);
+        break;
+    }
+}

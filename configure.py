@@ -642,6 +642,21 @@ def normalize_aliases(text):
     return text
 
 
+def pin_labels_before_align(text):
+    """Keep a local label that precedes a loop alignment at its own address.
+
+    cc1 can emit `$La:` `.p2align 3` `$Lb:` when a branch target ends up just
+    before an aligned loop head.  GNU as (and retail) leave `$La` before the
+    alignment nops; Ps2EeAs moves it past them.  `$La = .` defines the label
+    in place without that move.  Only a local label that is followed, after
+    the alignment, by another label is rewritten.
+    """
+    skip = r"(?:[ \t]*(?:\.set[ \t]+\w+|\.loc[^\n]*|#[^\n]*)?\r?\n)*"
+    pattern = re.compile(r"^(\$L\w+):[ \t]*(\r?\n" + skip + r"[ \t]*\.p2align[ \t]+\d[^\n]*\r?\n"
+                         + skip + r"\$L\w+:)", re.M)
+    return pattern.sub(lambda m: m.group(1) + " = ." + m.group(2), text)
+
+
 def unpad(data):
     if data[:7] != b"\x7fELF\x01\x01\x01" or struct.unpack_from("<H", data, 16)[0] != 1:
         raise ValueError("expected a little-endian ELF32 relocatable object")
@@ -885,7 +900,7 @@ def main(argv):
     policy = argv[4] if len(argv) == 5 else "none"
     data = open(source, "rb").read()
     if mode == "normalize":
-        assembly = normalize_aliases(data.decode())
+        assembly = pin_labels_before_align(normalize_aliases(data.decode()))
         if policy == "la-gprel":
             assembly = apply_la_gprel_policy(assembly)
         elif policy != "none":

@@ -440,7 +440,7 @@ void FUN_L16_002e3050(char *moby) {
 extern float D_0015ED6C;
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_L00_0028d8c0(void *, int);
-extern int FUN_L16_002e5cd0(int);
+int FUN_L16_002e5cd0(int idx);
 extern short D_L16_00161E00_d __asm__("D_L16_00161E00") __attribute__((sda));
 extern short D_L16_00161E04_d __asm__("D_L16_00161E04") __attribute__((sda));
 extern short D_L16_00161E08_d __asm__("D_L16_00161E08") __attribute__((sda));
@@ -492,7 +492,26 @@ void FUN_L16_002e5708(unsigned char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e58d8.s", FUN_L16_002e58d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5cd0.s", FUN_L16_002e5cd0);
+/* Returns 1 when every moby in the list is active, 0 if any is not or the list is empty. */
+extern short *D_L16_001ABCC0_5cd0[] __asm__("D_L16_001ABCC0");
+typedef struct {
+    char pad[0xBC];
+    unsigned char act;
+    char pad2[0x43];
+} M_5cd0;
+
+int FUN_L16_002e5cd0(int idx) {
+    unsigned short *p = (unsigned short *)D_L16_001ABCC0_5cd0[idx];
+    if (p == 0) {
+        return 0;
+    }
+    do {
+        if (((M_5cd0 *)D_L16_0015FFD8_sda)[*p & 0x7FFF].act == 0) {
+            return 0;
+        }
+    } while ((short)*p++ >= 0);
+    return 1;
+}
 /* picks the nearest moby in a list (skipping class 0x5A3) and acts on it */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E7198), where it is exact; names translated to the US level program. */
 

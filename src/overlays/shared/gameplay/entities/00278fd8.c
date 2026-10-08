@@ -70,7 +70,7 @@ extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L15_00299a68(char *moby, void *a, float *point, void *b, void *c);
-extern void FUN_L15_0029a0d0(void *);
+void FUN_L15_0029a0d0(void *mp);
 extern void FUN_L15_0029a2a8_u(void *) __asm__("FUN_L15_0029a2a8");
 extern void FUN_L15_0029a570(void *, int);
 extern void FUN_L15_0029aba8(char *m);
@@ -1112,7 +1112,53 @@ int FUN_L15_00299ff8(void *arg) {
     } while ((short)*p++ >= 0);
     return 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a0d0.s", FUN_L15_0029a0d0);
+/* Wakes every linked switch that can see this moby, or rearms the timer when there is no list. */
+extern int D_001413D4_a0[] __asm__("D_001413D4");
+extern short *D_L15_001ABE40_a0[] __asm__("D_L15_001ABE40");
+extern int D_L15_0015FFD8_a0 __asm__("D_L15_0015FFD8");
+extern int FUN_001f96f8_a0(int) __asm__("FUN_001f96f8");
+extern int FUN_001efa68_a0(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern void FUN_L15_0029a248(char *, char *);
+
+typedef struct { char p[0x156]; short h156; } D_a0d0;
+
+void FUN_L15_0029a0d0(void *mp) {
+    unsigned char *m = mp;
+    char *d = *(char **)(m + 0x78);
+    float v[4];
+    float w[4];
+    short *p;
+    int off;
+    char *o;
+    if (D_001413D4_a0[0] == 0x65) {
+        *(short *)(d + 0x156) = 0;
+        return;
+    }
+    if (m[0x21] == 0xFF) {
+        *(short *)(d + 0x156) = FUN_001f96f8_a0(0xB4);
+        return;
+    }
+    p = D_L15_001ABE40_a0[m[0x21]];
+    if (p == 0) {
+        return;
+    }
+    qcopy(v, m + 0x10);
+    v[2] += 1.0f;
+    do {
+        off = (*(unsigned short *)p & 0x7FFF) << 8;
+        o = (char *)(off + D_L15_0015FFD8_a0);
+        if (o[0x20] >= 0 && *(short *)(o + 0xA6) == 0x2C) {
+            qcopy(w, o + 0x10);
+            w[2] += 1.0f;
+            if (FUN_001efa68_a0(w, v, 2, 0, 0) == 0) {
+                d = *(char **)((char *)(off + D_L15_0015FFD8_a0) + 0x78);
+                ((D_a0d0 *)d)->h156 = FUN_001f96f8_a0(300);
+                d[0x15B] = 0;
+                FUN_L15_0029a248((char *)m, (char *)(D_L15_0015FFD8_a0 + off));
+            }
+        }
+    } while (*p++ >= 0);
+}
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029B428), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);

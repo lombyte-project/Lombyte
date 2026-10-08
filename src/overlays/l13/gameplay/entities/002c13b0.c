@@ -674,7 +674,81 @@ void FUN_L13_002e8b58(char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e8d28.s", FUN_L13_002e8d28);
+/* Places the attached pieces on their bones, keeping each position inside a box, and copies the moby's pose to them. */
+extern int D_L13_001D34A8[];
+extern char *FUN_L13_002ecd10(char *, int, int);
+extern void FUN_0020c828(char *);
+
+void FUN_L13_002e8d28(char *m, char *d) {
+    int i;
+    int n;
+    char *c;
+    char *p;
+    for (i = 0; i < 10; i++) {
+        c = ((char **)(d + 0xC4))[i];
+        if (c != 0) {
+            FUN_L00_0024f7c8(m, i, c + 0x10);
+            if (*(float *)(c + 0x10) < 22.0f)
+                *(float *)(c + 0x10) = 22.0f;
+            if (*(float *)(c + 0x10) > 1001.0f)
+                *(float *)(c + 0x10) = 1001.0f;
+            if (*(float *)(c + 0x14) < 22.0f)
+                *(float *)(c + 0x14) = 22.0f;
+            if (*(float *)(c + 0x14) > 1001.0f)
+                *(float *)(c + 0x14) = 1001.0f;
+            if (*(float *)(c + 0x18) < 22.0f)
+                *(float *)(c + 0x18) = 22.0f;
+            if (*(float *)(c + 0x18) > 1001.0f)
+                *(float *)(c + 0x18) = 1001.0f;
+            qcopy(c + 0x40, m + 0x40);
+            *(u128 *)(c + 0xC0) = *(u128 *)(m + 0xC0);
+            *(u128 *)(c + 0xD0) = *(u128 *)(m + 0xD0);
+            *(u128 *)(c + 0xE0) = *(u128 *)(m + 0xE0);
+        }
+    }
+    n = D_L13_001D34A8[*(unsigned char *)(m + 0xBC)];
+    if (*(unsigned char *)(m + 0x20) == 5)
+        n = -1;
+    if (n != -1) {
+        if (*(char **)(d + 0xF0) == 0 || *(unsigned char *)(*(char **)(d + 0xF0) + 0x20) == 0xFE ||
+            *(unsigned char *)(*(char **)(d + 0xF0) + 0x20) == 0xFD)
+            *(char **)(d + 0xF0) = FUN_L13_002ecd10(m, n, 0x191);
+        c = *(char **)(d + 0xF0);
+        if (c != 0 && *(unsigned char *)(c + 0x20) != 0xFE && *(unsigned char *)(c + 0x20) != 0xFD) {
+            FUN_L00_0024f7c8(m, n, c + 0x10);
+            if (*(float *)(c + 0x10) < 22.0f)
+                *(float *)(c + 0x10) = 22.0f;
+            if (*(float *)(c + 0x10) > 1001.0f)
+                *(float *)(c + 0x10) = 1001.0f;
+            if (*(float *)(c + 0x14) < 22.0f)
+                *(float *)(c + 0x14) = 22.0f;
+            if (*(float *)(c + 0x14) > 1001.0f)
+                *(float *)(c + 0x14) = 1001.0f;
+            if (*(float *)(c + 0x18) < 22.0f)
+                *(float *)(c + 0x18) = 22.0f;
+            if (*(float *)(c + 0x18) > 1001.0f)
+                *(float *)(c + 0x18) = 1001.0f;
+            qcopy(c + 0x40, m + 0x40);
+            *(u128 *)(c + 0xC0) = *(u128 *)(m + 0xC0);
+            *(u128 *)(c + 0xD0) = *(u128 *)(m + 0xD0);
+            *(u128 *)(c + 0xE0) = *(u128 *)(m + 0xE0);
+        }
+    } else {
+        if (*(char **)(d + 0xF0) != 0 && *(unsigned char *)(*(char **)(d + 0xF0) + 0x20) != 0xFE &&
+            *(unsigned char *)(*(char **)(d + 0xF0) + 0x20) != 0xFD) {
+            FUN_0020c828(*(char **)(d + 0xF0));
+            *(char **)(d + 0xF0) = 0;
+        }
+    }
+    p = *(char **)(d + 0x110);
+    if (p != 0) {
+        qcopy(p + 0x10, m + 0x10);
+        qcopy(p + 0x40, m + 0x40);
+        *(u128 *)(p + 0xC0) = *(u128 *)(m + 0xC0);
+        *(u128 *)(p + 0xD0) = *(u128 *)(m + 0xD0);
+        *(u128 *)(p + 0xE0) = *(u128 *)(m + 0xE0);
+    }
+}
 /* springs a moby's pitch and yaw toward targets and clamps the pitch */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EA450), where it is exact; names translated to the US level program. */
 
