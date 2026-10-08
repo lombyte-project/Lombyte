@@ -1760,7 +1760,7 @@ segments:
           - [0x11da5c, textbin, text_gap_0021cadc_after_fun_0021cac8]
           - [0x11da60, c, ui/menus/fun_0021cae0]
           - [0x11da80, c, ui/menus/fun_0021cb00]
-          - [0x11dab0, c, assembly/textbin/ui/menus/audio/sound_options_menu]
+          - [0x11dab0, c, textbin/ui/menus/audio/sound_options_menu]
           - [0x11dd80, c, textbin/ui/menus/audio/draw_sound_menu]
           - [0x11e0e8, textbin, text_gap_0021d168_before_fun_0021d1f8]
           - [0x11e170, c, ui/menus/fun_0021d1f0]

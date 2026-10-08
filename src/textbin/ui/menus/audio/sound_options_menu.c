@@ -1,12 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM(
-    "config/us/expected/asm/assembly/textbin/ui/menus/audio/sound_options_menu/FUN_0021cb30.s",
-    FUN_0021cb30);
-#else
-#include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "sda.h"
 
@@ -38,9 +30,9 @@ struct SoundMenu {
 extern struct SoundMenuInput D_0013C940;
 extern struct SoundMenuMixer D_0013E550;
 extern s32 D_001D5D14 NOT_SDA;
-extern s32 D_0015EDEC MACRO_ADDR;
-extern s32 D_0015EDF0 MACRO_ADDR;
-extern s32 D_0015EDE8 MACRO_ADDR;
+extern s32 music_volume __asm__("D_0015EDEC") MACRO_ADDR;
+extern s32 sound_volume __asm__("D_0015EDF0") MACRO_ADDR;
+extern s32 playback_mode __asm__("D_0015EDE8") MACRO_ADDR;
 extern s32 D_001A0314 NOT_SDA;
 extern s32 *D_001601E0 __attribute__((sda));
 extern s32 allocate_voice_for_target_entry(s32 flags, s32 sound_index,
@@ -51,11 +43,10 @@ s32 sound_options_menu(struct SoundMenu *menu) __asm__("FUN_0021cb30");
 
 s32 sound_options_menu(struct SoundMenu *menu) {
     s32 previous_selection;
-    s32 *first_volume;
-    s32 previous_playback_mode;
-    s32 previous_first_volume;
-    s32 previous_second_volume;
-    s32 scaled_second_volume;
+    s32 *sound_volume_ptr;
+    s32 previous_music_volume;
+    s32 previous_sound_volume;
+    s32 scaled_sound_volume;
 
     if ((D_0013C940.pressed_buttons & 0xD00) && (D_001D5D14 == 0)) {
         return 1;
@@ -82,40 +73,39 @@ s32 sound_options_menu(struct SoundMenu *menu) {
             D_001A0314 = D_001601E0[menu->selected_option];
         }
     }
-    previous_first_volume = D_0015EDF0;
-    previous_second_volume = D_0015EDEC;
-    first_volume = &D_0015EDF0;
+    previous_music_volume = music_volume;
+    previous_sound_volume = sound_volume;
+    sound_volume_ptr = &sound_volume;
     if (D_0013C940.held_buttons & 0x2000) {
         if (menu->selected_option == 0) {
-            D_0015EDF0 = (previous_second_volume + 3 < 0x401) ? previous_second_volume + 3 : 0x400;
+            sound_volume = (previous_sound_volume + 3 < 0x401) ? previous_sound_volume + 3 : 0x400;
         }
         if (menu->selected_option == 1) {
-            D_0015EDEC = (previous_first_volume + 3 < 0x401) ? previous_first_volume + 3 : 0x400;
+            music_volume = (previous_music_volume + 3 < 0x401) ? previous_music_volume + 3 : 0x400;
         }
     }
     if (D_0013C940.held_buttons & 0x8000) {
         if (menu->selected_option == 0) {
-            D_0015EDF0 = (D_0015EDF0 - 3 <= 0) ? 0 : D_0015EDF0 - 3;
+            sound_volume = (sound_volume - 3 <= 0) ? 0 : sound_volume - 3;
         }
         if (menu->selected_option == 1) {
-            D_0015EDEC = (D_0015EDEC - 3 <= 0) ? 0 : D_0015EDEC - 3;
+            music_volume = (music_volume - 3 <= 0) ? 0 : music_volume - 3;
         }
     }
-    if ((previous_first_volume != *first_volume) || (previous_second_volume != D_0015EDEC)) {
-        D_0013E550.group_0_volume = D_0015EDEC * 8 / 10;
-        D_0013E550.group_2_volume = D_0013E550.group_1_volume = *first_volume;
-        D_0013E550.group_3_volume = D_0015EDEC * 7 / 10;
-        scaled_second_volume = D_0015EDEC * 7 / 10;
-        D_0013E550.group_4_volume = scaled_second_volume;
-        D_0013E550.group_5_volume = D_0015EDEC;
+    if ((previous_music_volume != music_volume) || (previous_sound_volume != *sound_volume_ptr)) {
+        D_0013E550.group_0_volume = *sound_volume_ptr * 8 / 10;
+        D_0013E550.group_2_volume = D_0013E550.group_1_volume = music_volume;
+        D_0013E550.group_3_volume = *sound_volume_ptr * 7 / 10;
+        scaled_sound_volume = *sound_volume_ptr * 7 / 10;
+        D_0013E550.group_4_volume = scaled_sound_volume;
+        D_0013E550.group_5_volume = *sound_volume_ptr;
     }
     if (D_0013C940.pressed_buttons & 0x40) {
         if (menu->selected_option == 2) {
-            D_0015EDE8 = !D_0015EDE8;
+            playback_mode = !playback_mode;
         }
-        snd_set_playback_mode(!D_0015EDE8);
+        snd_set_playback_mode(!playback_mode);
         allocate_voice_for_target_entry(0, 0x11, menu->sound_owner);
     }
     return 0;
 }
-#endif /* NON_MATCHING */
