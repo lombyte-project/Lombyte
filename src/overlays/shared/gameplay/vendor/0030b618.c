@@ -218,7 +218,59 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030df40.s", FUN_L01_0030df40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00314e98.s", FUN_L01_00314e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315358.s", FUN_L01_00315358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315de0.s", FUN_L01_00315de0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00316030.s", FUN_L01_00316030);
+#include "sda.h"
+#include "rnc/gameplay/hero.h"
+
+/* Camera data reached through D_L01_0015EF50 */
+typedef struct {
+    u8 pad00[0x24];
+    s32 target;    /* 0x24: index into D_L01_0015F70C, -1 none */
+    u8 pad28[8];
+    s32 kind;      /* 0x30 */
+} CamData_316030;
+
+/* One 32-byte entry of D_L01_0015EF50 */
+typedef struct {
+    u8 pad00[0x1C];
+    CamData_316030 *data; /* 0x1C */
+} CamSlot_316030;
+
+/* One 32-byte entry of D_L01_0015F70C */
+typedef struct {
+    u8 pad00[0x10];
+    s32 unk10;     /* 0x10: compared with hero.unk560 */
+    u8 pad14[0xC];
+} CamTarget_316030;
+
+/* The object FUN_L01_00316030 updates */
+typedef struct {
+    u8 pad00[0x7E];
+    s16 mode;      /* 0x7E: set to 3 or 5 */
+    u8 pad80[4];
+    s16 slot;      /* 0x84: index into D_L01_0015EF50 */
+    s16 unk86;     /* 0x86: compared with hero.unk2284 */
+} CamUser_316030;
+
+extern CamSlot_316030 *D_L01_0015EF50_316030 __asm__("D_L01_0015EF50");
+extern CamTarget_316030 *D_L01_0015F70C_316030 __asm__("D_L01_0015F70C") __attribute__((sda));
+
+void FUN_L01_00316030(CamUser_316030 *o) {
+    CamData_316030 *d = D_L01_0015EF50_316030[o->slot].data;
+
+    if (hero.unk2284 == o->unk86) {
+        if (d->target < 0) {
+            return;
+        }
+        if (hero.unk560 == D_L01_0015F70C_316030[d->target].unk10 && hero.unk570 == 0) {
+            return;
+        }
+    }
+    if (d->kind == 3) {
+        o->mode = 5;
+    } else {
+        o->mode = 3;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00318260), where it is exact; names translated to the US level program. */
 
 extern char *D_L01_00167280_d __asm__("D_L01_00167280") __attribute__((section(".data")));
