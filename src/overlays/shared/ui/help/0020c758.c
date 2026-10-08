@@ -1789,7 +1789,33 @@ void FUN_L00_002118c8(float scale, int mode) {
     FUN_001f9cf8_2118c8(D_0013F4C0_2118c8, &v, D_L00_00166FD0_2118c8);
     *(float *)(D_0013F4C0_2118c8 + 0x20) = scale * FUN_001f9b20_2118c8(&v);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211be8.s", FUN_L00_00211be8);
+extern float D_0015ED6C;
+extern float D_L00_0017BDB8[];
+
+/* Hero speed clamp after a move update (twin of FUN_L01_00232290): in state 0x3F it scales unk190 by 3.5 frame steps with a floor; otherwise it picks a table speed, and in state 0x73 it slows by 0.8 down to a floor. */
+void FUN_L00_00211be8(void) {
+    FUN_L00_002118c8(1.0f, 0);
+    if (hero.state.current == 0x3F) {
+        float min = D_0015ED6C + D_0015ED6C;
+        hero.unk190 = D_0015ED6C * 3.5f * hero.unk190;
+        if (hero.unk190 < min)
+            hero.unk190 = min;
+        return;
+    }
+    if (0.0f < hero.unk190) {
+        if (hero.unk190 < D_L00_0017BDB8[3])
+            hero.unk190 = D_L00_0017BDB8[2] * D_0015ED6C;
+        else
+            hero.unk190 = D_L00_0017BDB8[6] * D_0015ED6C;
+    }
+    if (hero.state.current == 0x73) {
+        float v = hero.unk190 * 0.8f;
+        float m = D_0015ED6C * 2.5f;
+        hero.unk190 = v;
+        if (v < m)
+            hero.unk190 = m;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
