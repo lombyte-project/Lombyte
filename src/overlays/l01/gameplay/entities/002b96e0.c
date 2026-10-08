@@ -1842,7 +1842,8 @@ typedef struct {
 } RotVars;
 
 typedef struct Moby {
-    u8 pad0[0x20];
+    Vec4f bsphere;                 /* 0x00 */
+    Vec4f pos;                     /* 0x10 */
     u8 state;
     u8 pad21[0xF];
     u8 alpha;
@@ -1968,7 +1969,104 @@ void FUN_L01_002f4428(char *moby) {
         ((unsigned char *)moby)[0x23] = 0x80;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4710.s", FUN_L01_002f4710);
+
+/*
+ * A moby that slides between two points following another moby's progress:
+ * the target (class 0x118) keeps a 0..1 progress in its first pvar. While the
+ * progress changes, a looping sound plays; at either end the loop stops and a
+ * one-shot sound plays.
+ */
+struct SliderVars {
+    s32 target;                    /* moby index of the driver, -1 none */
+    f32 start_x;                   /* position at spawn */
+    f32 start_y;
+    f32 end_x;                     /* 0 = not set up */
+    f32 end_y;
+    s32 sound;                     /* loop voice handle, -1 none */
+    f32 last_progress;
+};
+
+/* One voice of the sound system's pool (0x70 bytes, after a 0x70-byte header). */
+struct Voice {
+    u32 handle;
+    u8 state;                      /* 0 free */
+    u8 pad_05[0x13];
+    Moby *owner;                   /* 0x18 */
+    u8 pad_1C[0x54];
+};
+
+/* Retail addresses voice i as pool base + i * 0x70 plus the header and field
+   offset (not as &voices[i]), so the pool is viewed through this window. */
+struct VoicePoolWindow {
+    u8 header[0x70];
+    struct Voice voice;
+};
+
+extern u8 voice_pool[] __asm__("D_0013E550");
+/* nonzero while voice `handle` plays (state 1 or 2) for `moby` */
+extern int voice_is_playing_for(void *moby, int handle) __asm__("FUN_L00_0028d8c0");
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
+extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
+
+void FUN_L01_002f4710(Moby *self)
+{
+    struct SliderVars *v;
+    Moby *driver;
+    f32 *progress;
+    s32 handle;
+    struct VoicePoolWindow *window;
+
+    v = (struct SliderVars *)self->vars;
+    switch (self->state) {
+    case 0:
+        v->start_x = self->pos.x;
+        v->start_y = self->pos.y;
+        v->sound = -1;
+        v->last_progress = 0.0f;
+        self->state = 1;
+        break;
+    case 1:
+        if (v->target == -1 || v->end_x == 0.0f || v->end_y == 0.0f)
+            break;
+        driver = &D_L01_0015FFD8[v->target];
+        if (driver->oclass != 0x118)
+            break;
+
+        progress = (f32 *)driver->vars;
+        self->pos.x = v->start_x + (v->end_x - v->start_x) * progress[0];
+        self->pos.y = v->start_y + (v->end_y - v->start_y) * progress[0];
+        if (progress[0] != v->last_progress) {
+            if (progress[0] == 1.0f || progress[0] == 0.0f) {
+                /* reached an end: stop the loop, play the stop sound */
+                if (voice_is_playing_for(self, v->sound)) {
+                    handle = v->sound;
+                    if (handle != -1) {
+                        window = (struct VoicePoolWindow *)(voice_pool + handle * sizeof(struct Voice));
+                        if (window->voice.owner == self && window->voice.state != 0)
+                            release_voice_slot(handle);
+                    }
+                    v->sound = -1;
+                }
+                allocate_voice_for_target_entry(1, 0, self);
+            } else if (!voice_is_playing_for(self, v->sound)) {
+                v->sound = allocate_voice_for_target_entry(0, 4, self);
+            }
+        } else {
+            /* not moving: stop the loop */
+            if (voice_is_playing_for(self, v->sound)) {
+                handle = v->sound;
+                if (handle != -1) {
+                    window = (struct VoicePoolWindow *)(voice_pool + handle * sizeof(struct Voice));
+                    if (window->voice.owner == self && window->voice.state != 0)
+                        release_voice_slot(handle);
+                }
+                v->sound = -1;
+            }
+        }
+        v->last_progress = progress[0];
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4960.s", FUN_L01_002f4960);
 extern u8 D_L01_001E2FC0[];
 void FUN_L00_002371e0(void);
