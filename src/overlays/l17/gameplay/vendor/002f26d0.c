@@ -36,7 +36,7 @@ extern void FUN_L00_00263d40(int arg0, int arg1);
 extern void FUN_L00_002e8680(void);
 extern void FUN_L00_002e8970(int a, float x, float y);
 extern void FUN_L06_00239528(void);
-extern void FUN_L17_0021e530(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 extern char D_001413D4[];
 extern char D_001413DC[];
 extern char D_0013F350[];
@@ -221,7 +221,7 @@ void FUN_L17_002f26d0(char *moby) {
                 *(int *)(d + 0x50) = 0;
                 *(unsigned char *)(moby + 0x20) = 2;
                 *(int *)(d + 0x5C) = scale_game_frames(0xB4);
-                FUN_L17_0021e530(0x72, 0);
+                hero_set_state(0x72, 0);
             }
         }
         break;

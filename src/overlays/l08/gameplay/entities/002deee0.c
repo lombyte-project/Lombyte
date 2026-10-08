@@ -41,12 +41,12 @@ int FUN_L08_002e0228(char *m) {
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E2A10), where it is exact; names translated to the US level program. */
 
-extern void FUN_L08_00230b38(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L08_00230b38");
 
-/* Sets the moby's byte 0xBC and calls FUN_L08_00230b38(0x32, 1). */
+/* Sets the moby's byte 0xBC and calls hero_set_state(0x32, 1). */
 void FUN_L08_002e1698(char *arg) {
     arg[0xBC] = 1;
-    FUN_L08_00230b38(0x32, 1);
+    hero_set_state(0x32, 1);
 }
 #include "qcopy.h"
 

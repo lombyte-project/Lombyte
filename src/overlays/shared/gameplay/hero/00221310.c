@@ -411,7 +411,9 @@ extern char D_0013F350[];
 extern char D_00141848[];
 extern char D_0013F430[];
 
-int FUN_L00_002223f8(int a, int b) {
+/* Sets hero.state to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
+int hero_set_state(int a, int b) {
     int old2088;
     char *moby;
     int old20A7;
@@ -483,13 +485,13 @@ int FUN_L00_002223f8(int a, int b) {
         qcopy(p + 0x150, p + 0x110);
         if (*(unsigned char *)(p + 0x12E2) != 0 &&
             vector_length_xy(p + 0x150) > D_0015ED6C * 0.5f) {
-            FUN_L00_002223f8(0x2F, 1);
+            hero_set_state(0x2F, 1);
             return 0;
         }
         {
             char *r = (char *)((char *)&D_0013F350);
             if (*(unsigned char *)(r + 0x12EA) != 0 && *(short *)(r + 0x30C) == 0) {
-                FUN_L00_002223f8(0x79, 1);
+                hero_set_state(0x79, 1);
                 return 0;
             }
         }
@@ -882,7 +884,7 @@ int FUN_L00_002223f8(int a, int b) {
             char *s = (char *)((char *)&D_0013F350);
             *(int *)(s + 0xFF8) = 0x68;
             if (*(unsigned char *)(s + 0x12EA) != 0 && *(short *)(s + 0x30C) == 0) {
-                FUN_L00_002223f8(0x79, 1);
+                hero_set_state(0x79, 1);
                 return 0;
             }
         }
@@ -979,17 +981,17 @@ int FUN_L00_002223f8(int a, int b) {
         *(int *)(p + 0x2284) = 0;
         qcopy(p + 0x150, p + 0x110);
         if (*(unsigned char *)(p + 0x12E2) != 0) {
-            FUN_L00_002223f8(0x2F, 1);
+            hero_set_state(0x2F, 1);
             return 0;
         }
         if (*(unsigned char *)(p + 0x12EA) != 0 && *(short *)(p + 0x30C) == 0) {
-            FUN_L00_002223f8(0x79, 1);
+            hero_set_state(0x79, 1);
             return 0;
         }
         if (FUN_L00_00229a98())
             return 0;
         if (FUN_L00_00205000(0) == 0x54) {
-            if (FUN_L00_002223f8(0, 0)) {
+            if (hero_set_state(0, 0)) {
                 FUN_L00_002323b8(FUN_L00_00205000(0), 0, (float)scale_game_frames(0x12));
             }
             return 0;
@@ -1028,7 +1030,7 @@ int FUN_L00_002223f8(int a, int b) {
         if (D_0015ED6C * 7.0f < *(float *)(p + 0x194))
             *(float *)(p + 0x194) = D_0015ED6C * 7.0f;
         if (*(unsigned char *)(p + 0x12EA) != 0 && *(short *)(p + 0x30C) == 0) {
-            FUN_L00_002223f8(0x79, 1);
+            hero_set_state(0x79, 1);
             return 0;
         }
         {
@@ -1518,7 +1520,7 @@ int FUN_L00_002223f8(int a, int b) {
                 *(short *)(u + 0x49A) = scale_game_frames(0x78);
                 FUN_L00_002050c0(1);
                 if (current_level_index == 0xA) {
-                    FUN_L00_002223f8(0x7C, 1);
+                    hero_set_state(0x7C, 1);
                     return 0;
                 }
                 if (current_level_index != 6) {
@@ -1527,7 +1529,7 @@ int FUN_L00_002223f8(int a, int b) {
                         char *w = (char *)((char *)&D_0013F350);
                         *(int *)(w + 0x1660) = *(int *)(w + 0x1660) + 1;
                         if (*(int *)(w + 0x1660) >= 2 || *(int *)(w + 0x22A8) == 0) {
-                            FUN_L00_002223f8(0x7C, 1);
+                            hero_set_state(0x7C, 1);
                             return 0;
                         }
                     } else {
@@ -2245,7 +2247,7 @@ int FUN_L00_002223f8(int a, int b) {
             int c0;
             int c1;
             int c2;
-            FUN_L00_002223f8(0x3D, 1);
+            hero_set_state(0x3D, 1);
             {
                 char *q = (char *)((char *)&D_0013F350);
                 *(int *)(q + 0x22F4) = 1;
@@ -2287,7 +2289,7 @@ int FUN_L00_002223f8(int a, int b) {
         *(int *)(p + 0x208C) = 0;
         *(int *)(p + 0x2284) = 0;
         if (*(unsigned char *)(p + 0x12EA) != 0 && *(short *)(p + 0x30C) == 0) {
-            FUN_L00_002223f8(0x52, 1);
+            hero_set_state(0x52, 1);
             return 0;
         }
         if (b)
@@ -2345,7 +2347,7 @@ int FUN_L00_002223f8(int a, int b) {
     case 0x44: {
         char *p = (char *)((char *)&D_0013F350);
         if (*(unsigned char *)(p + 0x12EA) != 0 && *(short *)(p + 0x30C) == 0) {
-            FUN_L00_002223f8(0x52, 1);
+            hero_set_state(0x52, 1);
             return 0;
         }
         {
@@ -2748,16 +2750,16 @@ extern unsigned char D_0013E533[];
 void FUN_L00_00227638(void) {
     switch (D_0013E533[0x2EC1]) {
     case 0:
-        FUN_L00_002223f8(0, 1);
+        hero_set_state(0, 1);
         break;
     case 1:
-        FUN_L00_002223f8(0x43, 1);
+        hero_set_state(0x43, 1);
         break;
     case 2:
-        FUN_L00_002223f8(0x5A, 1);
+        hero_set_state(0x5A, 1);
         break;
     case 3:
-        FUN_L00_002223f8(0x53, 1);
+        hero_set_state(0x53, 1);
         break;
     }
 }
@@ -2781,7 +2783,7 @@ int FUN_L00_002276c0(void) {
                     if (*(unsigned char *)(p + 0x20AB) == 0) {
                         FUN_L00_0020e698();
                         *(int *)(p + 0xD14) = 2;
-                        FUN_L00_002223f8(0x23, 1);
+                        hero_set_state(0x23, 1);
                         return 1;
                     }
                 }
@@ -2874,14 +2876,14 @@ int FUN_L00_002279b0(void) {
             if ((short)s == 0) {
                 v1[2] = D_L00_00173E68 - 0.01f;
                 if (func_L00_001EFFF0(v1, v2, 2, *(int *)(u + 0x2080), 0) == 0) {
-                    FUN_L00_002223f8(0x34, 1);
+                    hero_set_state(0x34, 1);
                     return 1;
                 }
             }
         }
     }
     if (r != 0) {
-        FUN_L00_002223f8(0x37, 1);
+        hero_set_state(0x37, 1);
         FUN_L00_00216de8(3, 0);
     }
     return r;
@@ -2971,7 +2973,7 @@ int FUN_L00_00228b78(void *a0, int a1) {
 
     if ((*(int *)((char *)D_0013A4E0 + 0x2600) & 0xA) != 0) {
         if (len > 0 && FUN_L00_00266e00(0x40, (void *)0x1F000, (char *)a0 + len, len)) {
-            FUN_L00_002223f8(0xB, 1);
+            hero_set_state(0xB, 1);
             return 1;
         }
     }
@@ -2979,7 +2981,7 @@ int FUN_L00_00228b78(void *a0, int a1) {
     if (a1 != 0)
         return 0;
 
-    FUN_L00_002223f8(0x7, 1);
+    hero_set_state(0x7, 1);
     return 1;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00228c18.s", FUN_L00_00228c18);

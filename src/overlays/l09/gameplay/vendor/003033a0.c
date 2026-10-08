@@ -28,7 +28,7 @@ extern int FUN_L01_00277fb8(void *);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_L00_002223f8(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_00227638(void);
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -101,7 +101,7 @@ void FUN_L09_003033a0(unsigned char *moby) {
                 (far = FUN_001f9b48(D_0013F3D0, path + *(int *)path * 16),
                  FUN_001f9b48(D_0013F3D0, path + 0x10) < far)) {
                 if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
-                    FUN_L00_002223f8(0x72, 1);
+                    hero_set_state(0x72, 1);
                 }
                 moby[0xBC] = 2;
                 F(data, 0xAC) = -1.0f / FUN_001f96b0(F(data, 0xB0) * 60.0f);
@@ -116,7 +116,7 @@ void FUN_L09_003033a0(unsigned char *moby) {
                 (near = FUN_001f9b48(D_0013F3D0, path + 0x10),
                  FUN_001f9b48(D_0013F3D0, path + *(int *)path * 16) < near)) {
                 if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
-                    FUN_L00_002223f8(0x72, 1);
+                    hero_set_state(0x72, 1);
                 }
                 allocate_voice_for_target_entry(1, 0, moby);
                 moby[0xBC] = 2;
@@ -159,7 +159,7 @@ void FUN_L09_003033a0(unsigned char *moby) {
             if (0.5f < AbsoluteFloat(F(data, 0xA4) - 0.5f)) {
                 int r;
                 if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
-                    FUN_L00_002223f8(0, 1);
+                    hero_set_state(0, 1);
                 }
                 if (0.0f < F(data, 0xAC)) {
                     moby[0xBC] = 0;

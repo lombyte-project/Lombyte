@@ -9,7 +9,7 @@
 extern char D_0013F350_c[] __asm__("D_0013F350");
 extern void FUN_001f9810(void *, int);
 extern void FUN_L00_0020b930(void);
-extern void FUN_L06_002356a0(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
 void FUN_L06_00222fb8(void) {
@@ -60,7 +60,7 @@ void FUN_L06_00222fb8(void) {
     if (*(unsigned char *)(g1 + 0x12E5) != 0) {
         if (*(int *)(g1 + 0x300) != 0 && *(unsigned char *)(g1 + 0x20A4) == 1 &&
             *(int *)(g1 + 0x2084) != 0x7D) {
-            FUN_L06_002356a0(0x7D, 1);
+            hero_set_state(0x7D, 1);
             return;
         }
         g2 = (D_0013F350_c);
@@ -69,9 +69,9 @@ void FUN_L06_00222fb8(void) {
                 if (*(int *)(g2 + 0x2084) != 0x3C || *(short *)(g2 + 0x41E) != 0) {
                     FUN_L00_0020b930();
                     if (*(int *)(g2 + 0x22A8) != 0) {
-                        FUN_L06_002356a0(0x3C, 1);
+                        hero_set_state(0x3C, 1);
                     } else {
-                        FUN_L06_002356a0(0x7C, 1);
+                        hero_set_state(0x7C, 1);
                     }
                     return;
                 }
@@ -90,7 +90,7 @@ void FUN_L06_00222fb8(void) {
     if (!(*(float *)(g3 + 0x108) < 0.0f))
         return;
     FUN_L00_0020b930();
-    FUN_L06_002356a0(0x7F, 1);
+    hero_set_state(0x7F, 1);
 }
 #include "qcopy.h"
 #define G hero
@@ -112,7 +112,7 @@ f32 FUN_001fa580_8(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8_8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_8(f32) __asm__("FUN_001f9de0");
 void FUN_001f9a10_8(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L08_00230b38_8(s32, s32) __asm__("FUN_L06_002356a0");
+extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 void FUN_L00_00216de8_8(s32, s32) __asm__("FUN_L00_00216de8");
 void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
@@ -184,15 +184,15 @@ s32 FUN_L06_00227e78(s32 arg) {
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
         call_ret:
-            FUN_L08_00230b38_8(id, 1);
+            hero_set_state(id, 1);
             return 1;
         }
         if (G.control_mode == 0x16) {
-            FUN_L08_00230b38_8(0x6D, 1);
+            hero_set_state(0x6D, 1);
             G.unk120.f[2] = D_0015ED6C_8 * 7.0f;
             return 1;
         }
-        FUN_L08_00230b38_8(0x16, 1);
+        hero_set_state(0x16, 1);
         e = D_0015ED6C_8;
         a = e * 5.7f;
         b = e * 2.4f;
@@ -206,11 +206,11 @@ s32 FUN_L06_00227e78(s32 arg) {
         }
         break;
     case 1:
-        FUN_L08_00230b38_8(0x46, 1);
+        hero_set_state(0x46, 1);
         FUN_L00_00210c80_8(&v, flag, D_0015ED6C_8 * 5.0f, D_0015ED6C_8 * 3.0f);
         break;
     case 3:
-        FUN_L08_00230b38_8(0x56, 1);
+        hero_set_state(0x56, 1);
         FUN_L00_00210c80_8(&v, flag, D_0015ED6C_8 * 5.0f, D_0015ED6C_8 * 2.4f);
         break;
     }
@@ -219,7 +219,6 @@ s32 FUN_L06_00227e78(s32 arg) {
     return 1;
 }
 #include "qcopy.h"
-#define P hero
 /* Same source as the exact FUN_L15_00209450, with mode 1 in place of mode 2 and no 0x11/0x12 branch. */
 extern f32 D_0013F570_209450[] __asm__("D_0013F570");
 extern f32 D_0015ED60_209450 __asm__("D_0015ED60");
@@ -228,37 +227,36 @@ extern f32 D_0015ED6C_209450 __asm__("D_0015ED6C");
 f32 FUN_001f9b80_209450(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_209450(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_209450(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-#define P hero
 void FUN_L06_00228360(void) {
-    switch (P.unk20A4) {
+    switch (hero.unk20A4) {
     case 0:
-        P.unk228 = 0.8f;
-        P.unk22C = 0.7f;
-        P.unk230 = 0.45f;
+        hero.unk228 = 0.8f;
+        hero.unk22C = 0.7f;
+        hero.unk230 = 0.45f;
         break;
     case 1:
-        P.unk228 = 0.59999996f;
-        P.unk22C = 0.45000002f;
-        P.unk230 = 0.3f;
+        hero.unk228 = 0.59999996f;
+        hero.unk22C = 0.45000002f;
+        hero.unk230 = 0.3f;
         break;
     case 3:
-        P.unk228 = 0.8f;
-        P.unk22C = 0.6f;
-        P.unk230 = 0.45f;
+        hero.unk228 = 0.8f;
+        hero.unk22C = 0.6f;
+        hero.unk230 = 0.45f;
         break;
     }
-    if (P.control_mode == 4) {
-        if (P.state_timer > P.unk420 && P.unk41E == 0)
-            P.unk22C = P.unk434;
-    } else if (P.state == 6) {
-        P.unk22C = 0.5f;
-    } else if (P.state == 4) {
-        P.unk228 = 0.35000002f;
-    } else if (P.state == 0x7F) {
-        P.unk230 = 0.8f;
+    if (hero.control_mode == 4) {
+        if (hero.state_timer > hero.state_timer_mark && hero.unk41E == 0)
+            hero.unk22C = hero.unk434;
+    } else if (hero.state == 6) {
+        hero.unk22C = 0.5f;
+    } else if (hero.state == 4) {
+        hero.unk228 = 0.35000002f;
+    } else if (hero.state == 0x7F) {
+        hero.unk230 = 0.8f;
     }
-    if (!P.unk257 || P.prev_control_mode == 0x12 || P.control_mode == 0x11 || P.base_condition ||
-        FUN_001f9b80_209450(P.unk210.f, P.pos.f) > P.unk234 * 0.5f) {
+    if (!hero.unk257 || hero.prev_control_mode == 0x12 || hero.control_mode == 0x11 || hero.base_condition ||
+        FUN_001f9b80_209450(hero.unk210.f, hero.pos.f) > hero.unk234 * 0.5f) {
         f32 *q = D_0013F570_209450;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
         approach_value_209450(b->unk228, D_0015ED60_209450 * 0.02f, q);

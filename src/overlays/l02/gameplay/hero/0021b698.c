@@ -12,7 +12,7 @@ extern int FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern void FUN_001f9810(void *, int);
 extern void FUN_L00_0020b930(void);
-extern void FUN_L02_0022b728(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
 void FUN_L02_0021b698(void) {
@@ -48,7 +48,7 @@ void FUN_L02_0021b698(void) {
         if (*(int *)(q + 0x2084) != 0x7B) {
             if (FUN_L00_001f0d60(*(float *)(q + 0x234) + 0.03f, q + 0xD0, 2, 0)) {
                 if (FUN_001f0b58_c() == 0xB) {
-                    FUN_L02_0022b728(0x7B, 1);
+                    hero_set_state(0x7B, 1);
                     return;
                 }
             }
@@ -86,7 +86,7 @@ void FUN_L02_0021b698(void) {
                 if (*(float *)(q + 0x2F0) - *(float *)(q + 0x88) > 0.0f) {
                     if (*(float *)(q + 0x108) < 0.0f) {
                         FUN_L00_0020b930();
-                        FUN_L02_0022b728(0x7F, 1);
+                        hero_set_state(0x7F, 1);
                         return;
                     }
                 }
@@ -101,9 +101,9 @@ void FUN_L02_0021b698(void) {
                         if (*(float *)(h + 0x108) < 0.0f) {
                             FUN_L00_0020b930();
                             if (*(int *)(h + 0x22A8) == 0)
-                                FUN_L02_0022b728(0x7B, 1);
+                                hero_set_state(0x7B, 1);
                             else
-                                FUN_L02_0022b728(0x68, 1);
+                                hero_set_state(0x68, 1);
                             return;
                         }
                     }
@@ -116,7 +116,7 @@ void FUN_L02_0021b698(void) {
                 if (*(float *)(h + 0x2F4) - *(float *)(h + 0x88) > 0.0f) {
                     if (*(float *)(h + 0x108) < 0.0f) {
                         FUN_L00_0020b930();
-                        FUN_L02_0022b728(0x7B, 1);
+                        hero_set_state(0x7B, 1);
                     }
                 }
             }
@@ -143,7 +143,7 @@ f32 FUN_001fa580_8(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8_8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_8(f32) __asm__("FUN_001f9de0");
 void FUN_001f9a10_8(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L08_00230b38_8(s32, s32) __asm__("FUN_L02_0022b728");
+extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 void FUN_L00_00216de8_8(s32, s32) __asm__("FUN_L00_00216de8");
 void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
@@ -211,15 +211,15 @@ s32 FUN_L02_0021ff70(s32 arg) {
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
         call_ret:
-            FUN_L08_00230b38_8(id, 1);
+            hero_set_state(id, 1);
             return 1;
         }
         if (G.control_mode == 0x16) {
-            FUN_L08_00230b38_8(0x6D, 1);
+            hero_set_state(0x6D, 1);
             G.unk120.f[2] = D_0015ED6C_8 * 7.0f;
             return 1;
         }
-        FUN_L08_00230b38_8(0x16, 1);
+        hero_set_state(0x16, 1);
         e = D_0015ED6C_8;
         a = e * 5.7f;
         b = e * 2.4f;
@@ -233,7 +233,7 @@ s32 FUN_L02_0021ff70(s32 arg) {
         }
         break;
     case 3:
-        FUN_L08_00230b38_8(0x56, 1);
+        hero_set_state(0x56, 1);
         FUN_L00_00210c80_8(&v, flag, D_0015ED6C_8 * 5.0f, D_0015ED6C_8 * 2.4f);
         break;
     }
@@ -242,7 +242,6 @@ s32 FUN_L02_0021ff70(s32 arg) {
     return 1;
 }
 #include "qcopy.h"
-#define P hero
 /* Same source as the exact FUN_L01_00231ae0, without its 0x11/0x12 mode branch. */
 
 extern f32 D_0013F570_231ae0[] __asm__("D_0013F570");
@@ -252,32 +251,31 @@ extern f32 D_0015ED6C_231ae0 __asm__("D_0015ED6C");
 f32 FUN_001f9b80_231ae0(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_231ae0(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_231ae0(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-#define P hero
 void FUN_L02_002203e8(void) {
-    switch (P.unk20A4) {
+    switch (hero.unk20A4) {
     case 0:
-        P.unk228 = 0.8f;
-        P.unk22C = 0.7f;
-        P.unk230 = 0.45f;
+        hero.unk228 = 0.8f;
+        hero.unk22C = 0.7f;
+        hero.unk230 = 0.45f;
         break;
     case 3:
-        P.unk228 = 0.8f;
-        P.unk22C = 0.6f;
-        P.unk230 = 0.45f;
+        hero.unk228 = 0.8f;
+        hero.unk22C = 0.6f;
+        hero.unk230 = 0.45f;
         break;
     }
-    if (P.control_mode == 4) {
-        if (P.state_timer > P.unk420 && P.unk41E == 0)
-            P.unk22C = P.unk434;
-    } else if (P.state == 6) {
-        P.unk22C = 0.5f;
-    } else if (P.state == 4) {
-        P.unk228 = 0.35000002f;
-    } else if (P.state == 0x7F) {
-        P.unk230 = 0.8f;
+    if (hero.control_mode == 4) {
+        if (hero.state_timer > hero.state_timer_mark && hero.unk41E == 0)
+            hero.unk22C = hero.unk434;
+    } else if (hero.state == 6) {
+        hero.unk22C = 0.5f;
+    } else if (hero.state == 4) {
+        hero.unk228 = 0.35000002f;
+    } else if (hero.state == 0x7F) {
+        hero.unk230 = 0.8f;
     }
-    if (!P.unk257 || P.prev_control_mode == 0x12 || P.control_mode == 0x11 || P.base_condition ||
-        FUN_001f9b80_231ae0(P.unk210.f, P.pos.f) > P.unk234 * 0.5f) {
+    if (!hero.unk257 || hero.prev_control_mode == 0x12 || hero.control_mode == 0x11 || hero.base_condition ||
+        FUN_001f9b80_231ae0(hero.unk210.f, hero.pos.f) > hero.unk234 * 0.5f) {
         f32 *q = D_0013F570_231ae0;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
         approach_value_231ae0(b->unk228, D_0015ED60_231ae0 * 0.02f, q);
@@ -931,7 +929,7 @@ void FUN_L02_00225c20(void) {
                 *(u128c *)vec[0] = 0;
                 vec[0][0] = 1.0f;
                 transform_vector_by_basis(hero.unk170.f, vec[0], D_L02_00167280.f350);
-                hero.unk180 = D_L02_00167280.f158;
+                hero.target_yaw = D_L02_00167280.f158;
                 FUN_L00_00211e30(0, D_0015ED64, D_0015ED64 * 0.0f, D_0015ED6C * 174.53293f);
                 if (*(int *)&D_L02_0015F688 > 0) {
                     if (tick_countdown_32((int *)&D_L02_0015F688)) {
@@ -1132,7 +1130,7 @@ void FUN_L02_00225c20(void) {
             FUN_L00_002334d0(hero.velocity.f, hero.velocity.f, D_0015ED70 * 54.0f);
         }
         if (((Moby *)hero.unk964) != 0) {
-            hero.unk180 = FUN_001f9e90(((Moby *)hero.unk964)->f10[0] - moby->f10[0],
+            hero.target_yaw = FUN_001f9e90(((Moby *)hero.unk964)->f10[0] - moby->f10[0],
                                            ((Moby *)hero.unk964)->f10[1] - moby->f10[1]);
             FUN_L00_00211e30(0, D_0015ED64 * 0.02f, D_0015ED64 * 0.15f, D_0015ED6C * 6.2831855f);
         }
@@ -1149,7 +1147,7 @@ void FUN_L02_00225c20(void) {
         }
         if (hero.state_step == 0) {
             approach_value(&hero.unk960, D_0015ED6C * 27.0f, D_0015ED70 * 80.0f);
-            hero.unk180 = FUN_001f9e90(((Moby *)hero.unk964)->f10[0] - moby->f10[0],
+            hero.target_yaw = FUN_001f9e90(((Moby *)hero.unk964)->f10[0] - moby->f10[0],
                                            ((Moby *)hero.unk964)->f10[1] - moby->f10[1]);
             FUN_L00_00211e30(0, D_0015ED64 * 0.03f, D_0015ED64 * 0.15f, D_0015ED6C * 7.330383f);
         } else if (hero.state_step == 1) {
@@ -1221,7 +1219,7 @@ void FUN_L02_00225c20(void) {
             FUN_L00_0025bc98(&hero.unk9AC, a, &hero.unk9B8, 0, D_0015ED64 * 0.02f,
                              D_0015ED64 * 0.3f, 0.0f);
         }
-        hero.unk180 = hero.unk9AC;
+        hero.target_yaw = hero.unk9AC;
         FUN_L00_00211e30(0, D_0015ED64 * 0.02f, D_0015ED64 * 0.3f, D_0015ED6C * 4.712389f);
         subtract_vector_xyz(vec[0], ((Moby *)hero.unk994)->f10, hero.pos.f);
         normalize_vector_xyz(vec[0], vec[0], 1.0f);
@@ -1253,8 +1251,8 @@ void FUN_L02_00225c20(void) {
                 if (s > D_0015ED6C * 5.0f) {
                     s = D_0015ED6C * 5.0f;
                 }
-                vec[3][0] = fast_cos(hero.unk180) * s;
-                vec[3][1] = fast_sin(hero.unk180) * s;
+                vec[3][0] = fast_cos(hero.target_yaw) * s;
+                vec[3][1] = fast_sin(hero.target_yaw) * s;
                 vec[3][2] = 0.0f;
                 add_vector_xyz(hero.velocity.f, hero.velocity.f, vec[3]);
             }
@@ -1439,7 +1437,7 @@ void FUN_L02_00225c20(void) {
             FUN_L00_00233ba0(hero.velocity.f, hero.velocity.f, hero.unk194);
         }
         if (hero.unkA58 != 0 || ((Moby *)hero.unkA54) != 0) {
-            hero.unk180 = hero.unkA5C;
+            hero.target_yaw = hero.unkA5C;
             FUN_L00_00211e30(0, D_0015ED64 * 0.05f, D_0015ED64 * 0.2f, D_0015ED6C * 15.009831f);
         } else if (hero.unkAA8 < 25.0f) {
             FUN_L00_00214ed8(8.0f, 1.0471976f, 1.0471976f);
@@ -1516,7 +1514,7 @@ void FUN_L02_00225c20(void) {
                 } else {
                     near = 0;
                 }
-                hero.unk180 = hero.unkA5C;
+                hero.target_yaw = hero.unkA5C;
                 if (near) {
                     FUN_L00_00211e30(1, D_0015ED64 * 0.05f, D_0015ED64 * 0.2f,
                                      D_0015ED6C * 15.009831f);
@@ -1624,7 +1622,7 @@ void FUN_L02_00225c20(void) {
                     1.0f /
                     (fast_difference_between_rotations(hero.unkA5C, hero.rot.f[2]) + 1.0f);
             }
-            hero.unk180 = hero.unkA5C;
+            hero.target_yaw = hero.unkA5C;
             FUN_L00_00211e30(0, D_0015ED64 * 0.05f, D_0015ED64 * 0.2f, D_0015ED6C * 15.009831f);
         } else {
             int ok;
@@ -1660,7 +1658,7 @@ void FUN_L02_00225c20(void) {
         } else {
             hero.velocity.f[2] = 0.0f;
         }
-        hero.unk180 = FUN_001f9b80_cf(hero.unkA68, 3.1415927f);
+        hero.target_yaw = FUN_001f9b80_cf(hero.unkA68, 3.1415927f);
         FUN_L00_00211e30(0, D_0015ED64 * 0.05f, D_0015ED64 * 0.2f, D_0015ED6C * 15.009831f);
         break;
     case 0x20: {
@@ -1669,7 +1667,7 @@ void FUN_L02_00225c20(void) {
         int n;
 
         if (hero.unkA58 != 0 || ((Moby *)hero.unkA54) != 0) {
-            hero.unk180 = hero.unkA5C;
+            hero.target_yaw = hero.unkA5C;
             FUN_L00_00211e30(0, D_0015ED64 * 0.05f, D_0015ED64 * 0.2f, D_0015ED6C * 15.009831f);
         } else if (hero.state_timer < scale_game_frames(4)) {
             FUN_L00_00214ed8(11.0f, 0.87266463f, -1.0f);
@@ -1681,16 +1679,16 @@ void FUN_L02_00225c20(void) {
             hero.unk190 = D_0015ED6C * 18.0f;
         }
         if (hero.state_timer == scale_game_frames(8)) {
-            FUN_L00_00262500((int)((Moby *)hero.moby), hero.unk1670.f);
-            FUN_L00_00262528(hero.unk1670.f, 0x30, 2);
-            FUN_L00_00262528(hero.unk1670.f, 0x17, 4);
-            FUN_L00_00262528(hero.unk1670.f, 0xC, 6);
+            FUN_L00_00262500((int)((Moby *)hero.moby), &hero.moby_trail);
+            FUN_L00_00262528(&hero.moby_trail, 0x30, 2);
+            FUN_L00_00262528(&hero.moby_trail, 0x17, 4);
+            FUN_L00_00262528(&hero.moby_trail, 0xC, 6);
         }
         n = 5;
         if (!(hero.state_timer > t1)) {
             n = 0;
         }
-        FUN_L00_00262608(hero.unk1670.f, n);
+        FUN_L00_00262608(&hero.moby_trail, n);
         if (hero.state_timer > t0) {
             FUN_L00_00212088(D_0015ED70 * 190.0f, D_0015ED70 * 90.0f);
         }
@@ -1751,7 +1749,7 @@ void FUN_L02_00225c20(void) {
     case 0x23:
         hero.unk190 = 0.0f;
         if (hero.unkA58 != 0) {
-            hero.unk180 = hero.unkA5C;
+            hero.target_yaw = hero.unkA5C;
             FUN_L00_00211e30(0, D_0015ED64 * 0.04f, D_0015ED64 * 0.2f, D_0015ED6C * 15.009831f);
         } else {
             FUN_L00_00214ed8(11.0f, 0.87266463f, -1.0f);
@@ -1885,7 +1883,7 @@ void FUN_L02_00225c20(void) {
         }
         FUN_L00_00212088(up, down);
         if (hero.unk3B8 != 0 && hero.unk308 == 0) {
-            FUN_L00_002120d8(hero.unk180);
+            FUN_L00_002120d8(hero.target_yaw);
         } else {
             FUN_L00_002120d8(99999.0f);
         }
@@ -1902,7 +1900,7 @@ void FUN_L02_00225c20(void) {
     } break;
     case 0x18:
     case 0x19:
-        hero.unk180 = FUN_001f9b80_cf(hero.unk4E4, 3.1415927f);
+        hero.target_yaw = FUN_001f9b80_cf(hero.unk4E4, 3.1415927f);
         FUN_L00_00211e30(0, D_0015ED64 * 0.04f, D_0015ED64 * 0.2f, D_0015ED6C * 6.2831855f);
         FUN_L00_0025bc00(&hero.rot.f[1], 0, 0.0f, D_0015ED6C * 4.712389f);
         subtract_vector_xyz(hero.velocity.f, hero.unk4D0.f, hero.pos.f);
@@ -1945,7 +1943,7 @@ void FUN_L02_00225c20(void) {
                     mid = FUN_001f9b80_cf(fast_subtract_rotations(a0, a1) * 0.5f, a0);
                     add_vector_xyz(vec[5], vec[0], vec[1]);
                     scale_vector_xyz(vec[5], vec[5], 0.5f);
-                    hero.unk180 = mid;
+                    hero.target_yaw = mid;
                     FUN_L00_00211e30(0, D_0015ED64 * 0.04f, D_0015ED64 * 0.2f,
                                      D_0015ED6C * 6.2831855f);
                     spd = hero.unk164;
@@ -1958,7 +1956,7 @@ void FUN_L02_00225c20(void) {
         }
     } break;
     case 0x79:
-        hero.unk180 = hero.unk2EC;
+        hero.target_yaw = hero.unk2EC;
         hero.unk190 = D_0015ED6C * 5.5f;
         FUN_L01_00234358(D_0015ED70 * 25.0f);
         FUN_L00_002334d0(hero.velocity.f, hero.unk120.f, D_0015ED70 * 18.0f);
@@ -2033,10 +2031,10 @@ void FUN_L02_00225c20(void) {
         if (D_0013C940.f1A0 & 3) {
             float keep;
 
-            keep = hero.unk180;
-            hero.unk180 = D_L02_001673D8;
+            keep = hero.target_yaw;
+            hero.target_yaw = D_L02_001673D8;
             FUN_L00_00211e30(0, D_0015ED64 * 0.017f, D_0015ED64 * 0.3f, D_0015ED6C * 4.712389f);
-            hero.unk180 = keep;
+            hero.target_yaw = keep;
         }
         v = D_0015ED70 * 7.0f;
         if (hero.unk229C < 0.2f) {
@@ -2129,7 +2127,7 @@ void FUN_L02_00225c20(void) {
             int lim;
 
             t = hero.state_timer;
-            lim = hero.unk420;
+            lim = hero.state_timer_mark;
             if (t == lim) {
                 qcopy(hero.unk400.f, hero.pos.f);
             }
@@ -2165,7 +2163,7 @@ void FUN_L02_00225c20(void) {
                 }
                 FUN_L00_002132b8(0.5f, D_0015ED6C * 2.0f);
                 if (hero.state == 9 &&
-                    hero.state_timer < hero.unk420 + scale_game_frames(4)) {
+                    hero.state_timer < hero.state_timer_mark + scale_game_frames(4)) {
                     FUN_L00_00233810_cf(hero.velocity.f, hero.velocity.f,
                                         D_0015ED70 * 16.0f * hero.state_timer);
                 }
@@ -2199,7 +2197,7 @@ void FUN_L02_00225c20(void) {
         if (hero.pos.f[2] < hero.unk410) {
             hero.unk410 = hero.pos.f[2];
         }
-        if (hero.state_timer > hero.unk420 && FUN_L00_00233a78(hero.velocity.f) < 0.001f &&
+        if (hero.state_timer > hero.state_timer_mark && FUN_L00_00233a78(hero.velocity.f) < 0.001f &&
             (hero.unk41C == 0 || hero.state_timer > hero.unk3D4)) {
             hero.unk41E = 1;
             if (hero.unk3F8 != 0.0f) {
@@ -2213,7 +2211,7 @@ void FUN_L02_00225c20(void) {
             int late;
 
             late = hero.state_timer > scale_game_frames(0xC);
-            FUN_L00_00262608(hero.unk1670.f, late * 2);
+            FUN_L00_00262608(&hero.moby_trail, late * 2);
         }
         if (hero.state == 0x10 && hero.state_timer > scale_game_frames(8)) {
             if (hero.unkAA8 < 28.0f) {
@@ -2261,11 +2259,11 @@ void FUN_L02_00225c20(void) {
         float k;
 
         subtract_vector_xyz(vec[0], hero.unk1640.f, hero.pos.f);
-        hero.unk180 = FUN_001f9e90(vec[0][0], vec[0][1]);
+        hero.target_yaw = FUN_001f9e90(vec[0][0], vec[0][1]);
         len = FUN_L00_001ff600_cf(vec[0]);
         if (len > 0.2f) {
             hero.unk229C = 1.0f;
-            hero.unk180 = FUN_001f9e90(vec[0][0], vec[0][1]);
+            hero.target_yaw = FUN_001f9e90(vec[0][0], vec[0][1]);
             hero.unk190 = len;
             if (len < D_L02_0017C3B8.fC) {
                 hero.unk190 = D_L02_0017C3B8.f8 * D_0015ED6C;
@@ -2279,7 +2277,7 @@ void FUN_L02_00225c20(void) {
             }
         } else {
             hero.unk229C = 0.5f;
-            hero.unk180 = hero.unk1640.f[3];
+            hero.target_yaw = hero.unk1640.f[3];
             hero.unk190 = 0.0f;
         }
         k = 1.0f;
@@ -2358,7 +2356,7 @@ void FUN_L02_00225c20(void) {
         }
         break;
     case 0x58:
-        hero.unk180 = hero.unk2EC;
+        hero.target_yaw = hero.unk2EC;
         hero.unk190 = D_0015ED6C * 5.5f;
         FUN_L01_00234358(D_0015ED70 * 25.0f);
         FUN_L00_002334d0(hero.velocity.f, hero.unk120.f, D_0015ED70 * 18.0f);
@@ -2378,7 +2376,7 @@ void FUN_L02_00225c20(void) {
         float k;
         float t;
 
-        d = fast_difference_between_rotations(hero.rot.f[2], hero.unk180);
+        d = fast_difference_between_rotations(hero.rot.f[2], hero.target_yaw);
         FUN_L00_002118c8(D_0015ED6C * 1.5f, 0);
         if (hero.unk190 < D_0015ED6C * 1.5f * 0.55f) {
             hero.unk190 = D_0015ED6C * 1.5f * 0.55f;
@@ -2392,7 +2390,7 @@ void FUN_L02_00225c20(void) {
         FUN_L00_00211e30(0, D_0015ED64 * 0.035f * t, D_0015ED64 * 0.1f, D_0015ED6C * 2.268928f * t);
         FUN_L00_00212088(D_0015ED70 * 7.5f * k, D_0015ED70 * 8.5f);
         if (hero.unk3B8 != 0 && hero.unk308 == 0) {
-            FUN_L00_002120d8(hero.unk180);
+            FUN_L00_002120d8(hero.target_yaw);
         } else {
             FUN_L00_002120d8(99999.0f);
         }

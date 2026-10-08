@@ -602,7 +602,7 @@ int FUN_001f96f8_2b58d8(int) __asm__("FUN_001f96f8");
 void FUN_L00_002b56d0_2b58d8(void *) __asm__("FUN_L00_002b56d0");
 void FUN_L00_00250df8_2b58d8(void *) __asm__("FUN_L00_00250df8");
 int FUN_L00_002eb930_2b58d8(void *) __asm__("FUN_L00_002eb930");
-int FUN_L00_002223f8_2b58d8(int, int) __asm__("FUN_L00_002223f8");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_001f97e8_2b58d8(void *, int, int) __asm__("FUN_001f97e8");
 void FUN_0020cb10_2b58d8(void *, int, void *) __asm__("FUN_0020cb10");
 int FUN_L00_002bb360_2b58d8(void *) __asm__("FUN_L00_002bb360");
@@ -643,7 +643,7 @@ unsigned char *FUN_L00_002b58d8(unsigned char *a, V_2b58d8 *pos, float fa, float
         FUN_L00_002b56d0_2b58d8(m);
         FUN_L00_00250df8_2b58d8(m);
         *(int *)(v + 0x14) = FUN_L00_002eb930_2b58d8(m);
-        FUN_L00_002223f8_2b58d8(0x1D, 1);
+        hero_set_state(0x1D, 1);
         FUN_001f97e8_2b58d8(*(void **)(v + 0x24), 0, 0x40);
         FUN_001f97e8_2b58d8(*(void **)(v + 0x28), 0, 0x40);
         FUN_0020cb10_2b58d8(m, 0, *(void **)(v + 0x24));
@@ -674,7 +674,7 @@ unsigned char *FUN_L00_002b58d8(unsigned char *a, V_2b58d8 *pos, float fa, float
 extern int D_00141330[];
 extern int D_L00_00167014[];
 void FUN_L00_002eba18();
-void FUN_L00_002223f8();
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_002b57f0_u() __asm__("FUN_L00_002b57f0");
 void FUN_L00_00203b78();
 void mark_moby_for_removal() __asm__("FUN_0020c828");
@@ -686,7 +686,7 @@ void FUN_L00_002b5b20(void *a, char **b) {
     D_00141330[0] = 0;
     FUN_L00_002eba18(*(int *)((char *)b + 0x14));
     *(int *)((char *)b + 0x14) = 0;
-    FUN_L00_002223f8(0, 1);
+    hero_set_state(0, 1);
     FUN_L00_002b57f0_u(a, 1);
     FUN_L00_00203b78();
     mark_moby_for_removal(a);

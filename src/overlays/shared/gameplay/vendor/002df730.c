@@ -95,7 +95,7 @@ s32 FUN_L00_002e02e0(void) {
 extern char D_0013F350[];
 extern int D_L00_0015F404;
 extern short D_L00_0015F3FC;
-extern void FUN_L00_002223f8(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_002eac18(int);
 
 /* Moby state 4: clears two globals, calls 002eac18(3); control mode 0x13: calls 002223f8(0, 1). */
@@ -106,7 +106,7 @@ void FUN_L00_002e0340(char *a) {
         FUN_L00_002eac18(3);
     }
     if (hero.control_mode == 0x13) {
-        FUN_L00_002223f8(0, 1);
+        hero_set_state(0, 1);
     }
 }
 typedef struct {

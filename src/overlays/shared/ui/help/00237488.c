@@ -445,7 +445,7 @@ extern int FUN_L00_00216de8_c(int a, int b) __asm__("FUN_L00_00216de8");
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern unsigned char D_0013F350_c[] __asm__("D_0013F350");
 extern void FUN_L00_002126b8(void *, void *, int, float, float);
-extern void FUN_L05_0024cee8(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
 
 #define F(o) (*(float *)(p + (o)))
@@ -523,14 +523,14 @@ int FUN_L05_002515d0(void) {
             if ((short)s == 0) {
                 v1[2] = D_L05_00174268 - 0.01f;
                 if (func_L00_001EFFF0(v1, v2, 2, *(int *)(u + 0x2080), 0) == 0) {
-                    FUN_L05_0024cee8(0x34, 1);
+                    hero_set_state(0x34, 1);
                     return 1;
                 }
             }
         }
     }
     if (r != 0) {
-        FUN_L05_0024cee8(0x37, 1);
+        hero_set_state(0x37, 1);
         FUN_L00_00216de8_c(3, 0);
     }
     return r;

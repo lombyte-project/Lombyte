@@ -364,7 +364,7 @@ void f216050_298840(int) __asm__("FUN_00216050");
 void f2168a8_298840(int) __asm__("FUN_002168a8");
 void memset_298840(void *, int, int) __asm__("FUN_001f97e8");
 void f2039a0_298840(void) __asm__("FUN_L00_002039a0");
-int f2223f8_298840(int, int) __asm__("FUN_L00_002223f8");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void f232fe8_298840(void) __asm__("FUN_L00_00232fe8");
 int f2451b8_298840(int) __asm__("FUN_L00_002451b8");
 int f1f96f8_298840(int) __asm__("FUN_001f96f8");
@@ -404,7 +404,7 @@ void FUN_L00_00298840(int a) {
     D_L00_0015F3FC_298840 = 1.0f;
     D_L00_0015F5C0_m[1] = 2;
     D_L00_0015F400_298840 = 0;
-    f2223f8_298840(100, 2);
+    hero_set_state(100, 2);
     D_0013F350_298840.x20a5 = 1;
     f232fe8_298840();
     if (D_L00_00179108_298840)
@@ -492,7 +492,7 @@ void f2335a0_298b18(void) __asm__("FUN_002335a0");
 void f1f4a58_298b18(int) __asm__("FUN_001f4a58");
 void f1f2d98_298b18(void) __asm__("FUN_001f2d98");
 void f20c828_298b18(M_298b18 *) __asm__("FUN_0020c828");
-int f2223f8_298b18(int, int) __asm__("FUN_L00_002223f8");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 float f213508_298b18(void *, int, float) __asm__("FUN_00213508");
 float fabs_298b18(float) __asm__("FUN_001f99c0");
 void f2330d0_298b18(void) __asm__("FUN_L00_002330d0");
@@ -525,7 +525,7 @@ void FUN_L00_00298b18(void) {
         if (!(o->st & 0x80) && (o->type == 0x4A || o->type == 0xCB))
             o->flags &= ~0x80;
     }
-    f2223f8_298b18(0, 1);
+    hero_set_state(0, 1);
     g = f213508_298b18(D_0013F350_298b18.v, 0, 0.5f);
     if (2.0f < g && fabs_298b18(D_0013F350_298b18.x88 - g) < 4.5f)
         D_0013F350_298b18.x88 = g;
@@ -788,7 +788,7 @@ struct S16_29ab70 {
 };
 extern struct S16_29ab70 D_001516D0_29ab70 __asm__("D_001516D0");
 extern void rel_29ab70(int, int) __asm__("FUN_001ff570");
-extern int f2223f8_29ab70(int, int) __asm__("FUN_L00_002223f8");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void f2330d0_29ab70(void) __asm__("FUN_L00_002330d0");
 extern void f1f9cf8_29ab70(Vec4_29ab70 *, void *, void *) __asm__("FUN_001f9cf8");
 extern void f1f9a10_29ab70(Vec4_29ab70 *, Vec4_29ab70 *, void *) __asm__("FUN_001f9a10");
@@ -813,7 +813,7 @@ void FUN_L00_0029ab70(int a) {
     f1ff768_29ab70();
     D_L00_0015F5D8_29ab70 = 1;
     D_L00_0015F5C4_29ab70 = 0;
-    f2223f8_29ab70(0, 1);
+    hero_set_state(0, 1);
     D_001413F5_29ab70[0] = 0;
     f2330d0_29ab70();
     if (*(int *)(g + 0x40) == 0) {
@@ -855,7 +855,7 @@ struct S16 {
     unsigned short mode;
 };
 extern struct S16 D_001516D0;
-int FUN_L00_002223f8(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_002330d0(void);
 void FUN_001f9cf8(Vec4 *, void *, void *);
 void FUN_001f9a10(Vec4 *, Vec4 *, void *);
@@ -871,7 +871,7 @@ void FUN_L00_0029af80(void) {
     char *g;
     D_L00_0015F5D8 = 1;
     D_L00_0015F5C4 = 0;
-    FUN_L00_002223f8(0, 1);
+    hero_set_state(0, 1);
     D_001413F5[0] = 0;
     FUN_L00_002330d0();
     g = D_L00_001CA4C0_u;

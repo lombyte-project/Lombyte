@@ -1590,7 +1590,7 @@ extern char D_0013E533[];
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_00211250(void);
-extern void FUN_L06_002356a0(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 extern char D_0013F350[];
 extern char D_0013F3D0[];
@@ -1629,7 +1629,7 @@ void FUN_L06_002f7930(char *m) {
                 fade_to_black(scale_game_frames(10));
                 FUN_L00_00211250();
             } else if (*(int *)(h + 0x2084) != 0x77) {
-                FUN_L06_002356a0(0x77, 1);
+                hero_set_state(0x77, 1);
             }
         }
     }

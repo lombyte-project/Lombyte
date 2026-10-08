@@ -906,7 +906,7 @@ void FUN_001f99f8_00216f90(void *) __asm__("FUN_001f99f8");
 void FUN_00217020_00216f90(void) __asm__("FUN_00217020");
 void FUN_L00_0020e698_00216f90(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_00205538_00216f90(void) __asm__("FUN_L00_00205538");
-void FUN_L00_002223f8_00216f90(int, int) __asm__("FUN_L00_002223f8");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_002325a0_00216f90(int, int) __asm__("FUN_L00_002325a0");
 void FUN_L00_002127b8_00216f90(void) __asm__("FUN_L00_002127b8");
 void FUN_L00_001ed280_00216f90(void) __asm__("FUN_L00_001ed280");
@@ -941,7 +941,7 @@ void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag
     FUN_L00_0020e698_00216f90();
     FUN_L00_00205538_00216f90();
     if (mode != -1)
-        FUN_L00_002223f8_00216f90(mode, 1);
+        hero_set_state(mode, 1);
     FUN_L00_002325a0_00216f90(*(unsigned char *)(*(char **)(g + 0x2080) + 0x53),
                               *(unsigned char *)(*(char **)(g + 0x2080) + 0x51));
     if (*(int *)(g + 0x208C) == 0x11)

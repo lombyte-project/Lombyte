@@ -16,6 +16,26 @@ struct Moby;
  * 0x1180, 0x1184 and 0x2080 as raw bytes (struct Moby * here) and one view
  * reads 0x560 as an int * (s32 here).
  */
+/*
+ * A trail of moby copies that follow a source moby (shared/gameplay/state/00261968.c):
+ * FUN_L00_00262500 sets the source and marks it active, FUN_L00_00262528 adds a
+ * copy (create_moby of the source's class), FUN_L00_00262608 records the
+ * source's last 8 positions and places each copy `delay` frames behind it,
+ * FUN_L00_00262840 removes the copies.
+ */
+struct MobyTrail {
+    Vec4 pos[8];                   /* 0x00: ring of the source's moby+0x10 */
+    Vec4 rot[8];                   /* 0x80: ring of the source's moby+0x40 */
+    s32 copy_arg[4];               /* 0x100: second argument of FUN_L00_00262528, stored at copy+0x23 */
+    s32 delay[4];                  /* 0x110: frames each copy lags behind */
+    struct Moby *copies[4];        /* 0x120 */
+    s16 head;                      /* 0x130: next ring slot */
+    s16 count;                     /* 0x132: ring entries filled, up to 8 */
+    struct Moby *source;           /* 0x134 */
+    s32 copy_count;                /* 0x138: up to 4 */
+    s32 active;                    /* 0x13C */
+};
+
 struct Hero {
     u8 pad_0[0x40];
     f32 unk40[16];                 /* 0x40 */
@@ -24,7 +44,7 @@ struct Hero {
     Vec4 unkA0;                    /* 0xA0 */
     u8 pad_B0[0x10];
     Vec4 unkC0;                    /* 0xC0 */
-    u8 pad_D0[0x10];
+    Vec4 unkD0;                    /* 0xD0 */
     Vec4 velocity;                 /* 0xE0: f[2] clamped at -9*D_0015ED6C, length tested against 7*D_0015ED6C, cleared on stop */
     Vec4 unkF0;                    /* 0xF0 */
     Vec4 unk100;                   /* 0x100 */
@@ -38,14 +58,14 @@ struct Hero {
     f32 unk168;                    /* 0x168 */
     f32 unk16C;                    /* 0x16C */
     Vec4 unk170;                   /* 0x170 */
-    f32 unk180;                    /* 0x180 */
+    f32 target_yaw;                /* 0x180: atan2 toward the moby at 0x964 on state entry; compared with rot.f[2] via fast_difference_between_rotations */
     f32 unk184;                    /* 0x184 */
     f32 unk188;                    /* 0x188 */
     u8 pad_18C[0x4];
     f32 unk190;                    /* 0x190 */
     f32 unk194;                    /* 0x194 */
-    s32 state_timer;               /* 0x198: zeroed by the set-state function; compared with scale_game_frames(n) */
-    u8 pad_19C[0x4];
+    s32 state_timer;               /* 0x198: zeroed by hero_set_state; compared with scale_game_frames(n) */
+    s32 unk19C;                    /* 0x19C */
     s32 unk1A0;                    /* 0x1A0 */
     s32 unk1A4;                    /* 0x1A4 */
     u8 pad_1A8[0x4];
@@ -58,18 +78,22 @@ struct Hero {
     s32 unk1C0;                    /* 0x1C0 */
     s32 unk1C4;                    /* 0x1C4 */
     s16 unk1C8;                    /* 0x1C8 */
-    u8 pad_1CA[0x6];
+    u8 pad_1CA[0x2];
+    s32 unk1CC;                    /* 0x1CC */
     s32 unk1D0;                    /* 0x1D0 */
     s32 unk1D4;                    /* 0x1D4 */
     s16 unk1D8;                    /* 0x1D8 */
-    u8 pad_1DA[0x4];
+    u8 pad_1DA[0x2];
+    s16 unk1DC;                    /* 0x1DC */
     s16 unk1DE;                    /* 0x1DE */
     s16 unk1E0;                    /* 0x1E0 */
     s16 unk1E2;                    /* 0x1E2 */
     s16 unk1E4;                    /* 0x1E4 */
-    u8 pad_1E6[0x2];
+    s16 unk1E6;                    /* 0x1E6 */
     s16 unk1E8;                    /* 0x1E8 */
-    u8 pad_1EA[0x8];
+    u8 pad_1EA[0x4];
+    s16 unk1EE;                    /* 0x1EE */
+    u8 pad_1F0[0x2];
     s16 unk1F2;                    /* 0x1F2 */
     s16 unk1F4;                    /* 0x1F4 */
     u8 pad_1F6[0x2];
@@ -88,7 +112,9 @@ struct Hero {
     f32 unk248;                    /* 0x248 */
     u8 pad_24C[0xB];
     u8 unk257;                     /* 0x257 */
-    u8 pad_258[0x38];
+    u8 pad_258[0x18];
+    Vec4 unk270;                   /* 0x270 */
+    u8 pad_280[0x10];
     Vec4 unk290;                   /* 0x290 */
     Vec4 unk2A0;                   /* 0x2A0 */
     u8 pad_2B0[0x28];
@@ -109,7 +135,7 @@ struct Hero {
     s16 unk30E;                    /* 0x30E */
     u8 pad_310[0xA0];
     f32 unk3B0;                    /* 0x3B0 */
-    u8 pad_3B4[0x4];
+    s32 unk3B4;                    /* 0x3B4 */
     s16 unk3B8;                    /* 0x3B8 */
     u8 pad_3BA[0x2];
     s16 unk3BC;                    /* 0x3BC */
@@ -118,43 +144,54 @@ struct Hero {
     s32 unk3D0;                    /* 0x3D0 */
     s32 unk3D4;                    /* 0x3D4 */
     f32 unk3D8;                    /* 0x3D8 */
-    u8 pad_3DC[0x4];
+    f32 unk3DC;                    /* 0x3DC */
     s32 unk3E0;                    /* 0x3E0 */
-    u8 pad_3E4[0x14];
+    u8 *unk3E4;                    /* 0x3E4 */
+    s32 unk3E8;                    /* 0x3E8 */
+    u8 pad_3EC[0x8];
+    f32 unk3F4;                    /* 0x3F4 */
     f32 unk3F8;                    /* 0x3F8 */
     u8 pad_3FC[0x4];
     Vec4 unk400;                   /* 0x400 */
     f32 unk410;                    /* 0x410 */
-    u8 pad_414[0x4];
+    f32 unk414;                    /* 0x414 */
     s32 unk418;                    /* 0x418 */
     s16 unk41C;                    /* 0x41C */
     s16 unk41E;                    /* 0x41E */
-    s32 unk420;                    /* 0x420 */
+    s32 state_timer_mark;          /* 0x420: set to scale_game_frames(n) on state entry; state code compares state_timer against it */
     f32 unk424;                    /* 0x424 */
-    u8 pad_428[0x8];
+    f32 unk428;                    /* 0x428 */
+    f32 unk42C;                    /* 0x42C */
     f32 unk430;                    /* 0x430 */
     f32 unk434;                    /* 0x434 */
-    u8 pad_438[0x8];
+    f32 unk438;                    /* 0x438 */
+    f32 unk43C;                    /* 0x43C */
     f32 unk440;                    /* 0x440 */
     f32 unk444;                    /* 0x444 */
     f32 unk448;                    /* 0x448 */
     s32 unk44C;                    /* 0x44C */
-    u8 pad_450[0x30];
+    s32 unk450;                    /* 0x450 */
+    f32 unk454;                    /* 0x454 */
+    s32 unk458;                    /* 0x458 */
+    s32 unk45C;                    /* 0x45C */
+    Vec4 unk460;                   /* 0x460 */
+    Vec4 unk470;                   /* 0x470 */
     f32 unk480;                    /* 0x480 */
     f32 unk484;                    /* 0x484 */
     f32 unk488;                    /* 0x488 */
     f32 unk48C;                    /* 0x48C */
     f32 unk490;                    /* 0x490 */
     f32 unk494;                    /* 0x494 */
-    u8 pad_498[0x2];
+    s16 unk498;                    /* 0x498 */
     s16 unk49A;                    /* 0x49A */
-    u8 pad_49C[0x4];
+    s16 unk49C;                    /* 0x49C */
+    s16 unk49E;                    /* 0x49E */
     f32 unk4A0;                    /* 0x4A0 */
     s16 unk4A4;                    /* 0x4A4 */
     s16 unk4A6;                    /* 0x4A6 */
     s16 unk4A8;                    /* 0x4A8 */
     s16 unk4AA;                    /* 0x4AA */
-    u8 pad_4AC[0x2];
+    s16 unk4AC;                    /* 0x4AC */
     u8 unk4AE;                     /* 0x4AE */
     u8 unk4AF;                     /* 0x4AF */
     f32 unk4B0;                    /* 0x4B0 */
@@ -168,7 +205,7 @@ struct Hero {
     u8 pad_4E0[0x4];
     f32 unk4E4;                    /* 0x4E4 */
     s32 unk4E8;                    /* 0x4E8 */
-    u8 pad_4EC[0x4];
+    f32 unk4EC;                    /* 0x4EC */
     f32 unk4F0;                    /* 0x4F0 */
     u8 pad_4F4[0xC];
     Vec4 unk500;                   /* 0x500 */
@@ -181,11 +218,11 @@ struct Hero {
     s32 unk56C;                    /* 0x56C */
     s32 unk570;                    /* 0x570 */
     f32 unk574;                    /* 0x574 */
-    u8 pad_578[0x4];
+    s32 unk578;                    /* 0x578 */
     f32 unk57C;                    /* 0x57C */
     u8 pad_580[0x4];
     s32 unk584;                    /* 0x584 */
-    u8 pad_588[0x4];
+    f32 unk588;                    /* 0x588 */
     s32 unk58C;                    /* 0x58C */
     s32 unk590;                    /* 0x590 */
     s32 unk594;                    /* 0x594 */
@@ -194,49 +231,79 @@ struct Hero {
     s32 unk5A0;                    /* 0x5A0 */
     s32 unk5A4;                    /* 0x5A4 */
     s32 unk5A8;                    /* 0x5A8 */
-    u8 pad_5AC[0xC];
+    s32 unk5AC;                    /* 0x5AC */
+    f32 unk5B0;                    /* 0x5B0 */
+    s32 unk5B4;                    /* 0x5B4 */
     s32 unk5B8;                    /* 0x5B8 */
     s16 unk5BC;                    /* 0x5BC */
     s16 unk5BE;                    /* 0x5BE */
     s32 unk5C0;                    /* 0x5C0 */
     s32 unk5C4;                    /* 0x5C4 */
     f32 unk5C8;                    /* 0x5C8 */
-    u8 pad_5CC[0xC];
+    f32 unk5CC;                    /* 0x5CC */
+    u8 pad_5D0[0x8];
     struct Moby *unk5D8;           /* 0x5D8 */
     u8 pad_5DC[0x4];
     Vec4 unk5E0;                   /* 0x5E0 */
-    u8 pad_5F0[0xC];
+    s32 *unk5F0;                   /* 0x5F0 */
+    s32 unk5F4;                    /* 0x5F4 */
+    f32 unk5F8;                    /* 0x5F8 */
     s32 unk5FC;                    /* 0x5FC */
     s32 unk600;                    /* 0x600 */
-    u8 pad_604[0x94];
+    f32 unk604;                    /* 0x604 */
+    u8 pad_608[0x4];
+    s32 unk60C;                    /* 0x60C */
+    u8 pad_610[0x8];
+    s32 unk618;                    /* 0x618 */
+    u8 pad_61C[0x74];
+    f32 unk690;                    /* 0x690 */
+    f32 unk694;                    /* 0x694 */
     s32 unk698;                    /* 0x698 */
-    u8 pad_69C[0x8];
+    f32 unk69C;                    /* 0x69C */
+    s32 unk6A0;                    /* 0x6A0 */
     struct Moby *unk6A4;           /* 0x6A4 */
     u8 pad_6A8[0x18];
     u8 unk6C0[0x60];               /* 0x6C0 */
-    u8 pad_720[0xB0];
+    u8 pad_720[0x50];
+    Vec4 unk770;                   /* 0x770 */
+    u8 pad_780[0x50];
     f32 unk7D0[0x20];              /* 0x7D0 */
-    u8 pad_850[0x10];
+    u8 pad_850[0x4];
+    f32 unk854;                    /* 0x854 */
+    u8 pad_858[0x8];
     f32 unk860;                    /* 0x860 */
-    u8 pad_864[0x8];
+    u8 unk864[0x8];                /* 0x864 */
     u8 *unk86C;                    /* 0x86C */
-    u8 pad_870[0x4];
+    s32 unk870;                    /* 0x870 */
     f32 unk874;                    /* 0x874 */
-    u8 pad_878[0x10];
+    u8 pad_878[0x4];
+    f32 unk87C;                    /* 0x87C */
+    s32 unk880;                    /* 0x880 */
+    u8 pad_884[0x4];
     s16 unk888;                    /* 0x888 */
-    u8 pad_88A[0x12];
+    u8 pad_88A[0x6];
+    u8 *unk890;                    /* 0x890 */
+    u8 pad_894[0x4];
+    s16 unk898;                    /* 0x898 */
+    u8 pad_89A[0x2];
     s16 unk89C;                    /* 0x89C */
     s16 unk89E;                    /* 0x89E */
     f32 unk8A0;                    /* 0x8A0 */
     u8 pad_8A4[0x8];
     s16 unk8AC;                    /* 0x8AC */
-    u8 pad_8AE[0x2];
+    u8 pad_8AE[0x1];
+    u8 unk8AF;                     /* 0x8AF */
     s16 unk8B0;                    /* 0x8B0 */
     s16 unk8B2;                    /* 0x8B2 */
-    u8 pad_8B4[0x8];
+    void *unk8B4;                  /* 0x8B4 */
+    s32 unk8B8;                    /* 0x8B8 */
     s16 unk8BC;                    /* 0x8BC */
     s16 unk8BE;                    /* 0x8BE */
-    u8 pad_8C0[0x20];
+    u8 pad_8C0[0x4];
+    s32 unk8C4;                    /* 0x8C4 */
+    u8 pad_8C8[0x6];
+    u8 unk8CE;                     /* 0x8CE */
+    u8 pad_8CF[0x11];
     s32 unk8E0;                    /* 0x8E0 */
     f32 unk8E4;                    /* 0x8E4 */
     f32 unk8E8;                    /* 0x8E8 */
@@ -276,7 +343,8 @@ struct Hero {
     f32 unk980;                    /* 0x980 */
     u8 pad_984[0x4];
     s32 unk988;                    /* 0x988 */
-    u8 pad_98C[0x8];
+    u8 pad_98C[0x4];
+    struct Moby *unk990;           /* 0x990 */
     struct Moby *unk994;           /* 0x994 */
     u8 pad_998[0x4];
     s16 unk99C;                    /* 0x99C */
@@ -299,21 +367,27 @@ struct Hero {
     u8 pad_9D8[0xC];
     f32 unk9E4;                    /* 0x9E4 */
     f32 unk9E8;                    /* 0x9E8 */
-    u8 pad_9EC[0x68];
+    u8 pad_9EC[0x64];
+    u8 *unkA50;                    /* 0xA50 */
     struct Moby *unkA54;           /* 0xA54 */
     s32 unkA58;                    /* 0xA58 */
     f32 unkA5C;                    /* 0xA5C */
     s32 unkA60;                    /* 0xA60 */
-    u8 pad_A64[0x4];
+    s32 unkA64;                    /* 0xA64 */
     f32 unkA68;                    /* 0xA68 */
     f32 unkA6C;                    /* 0xA6C */
     f32 unkA70;                    /* 0xA70 */
-    u8 pad_A74[0x1C];
+    u8 pad_A74[0x8];
+    s32 unkA7C;                    /* 0xA7C */
+    u8 pad_A80[0x8];
+    u8 *unkA88;                    /* 0xA88 */
+    u8 pad_A8C[0x4];
     f32 unkA90;                    /* 0xA90 */
     u8 pad_A94[0x4];
     s32 unkA98;                    /* 0xA98 */
     s32 unkA9C;                    /* 0xA9C */
-    u8 pad_AA0[0x8];
+    s32 unkAA0;                    /* 0xAA0 */
+    s32 unkAA4;                    /* 0xAA4 */
     f32 unkAA8;                    /* 0xAA8 */
     u8 pad_AAC[0x8];
     s32 unkAB4;                    /* 0xAB4 */
@@ -321,7 +395,11 @@ struct Hero {
     s32 unkD08;                    /* 0xD08 */
     u8 pad_D0C[0x8];
     s32 unkD14;                    /* 0xD14 */
-    u8 pad_D18[0x378];
+    u8 pad_D18[0x2E0];
+    s32 unkFF8;                    /* 0xFF8 */
+    u8 pad_FFC[0x14];
+    s32 unk1010;                   /* 0x1010 */
+    u8 pad_1014[0x7C];
     struct Moby *secondary_moby;   /* 0x1090 */
     u8 pad_1094[0xC];
     s32 unk10A0;                   /* 0x10A0 */
@@ -331,13 +409,18 @@ struct Hero {
     u8 unk10AC;                    /* 0x10AC */
     u8 pad_10AD[0xB];
     s32 equipped_gadget;           /* 0x10B8 */
-    u8 pad_10BC[0xC4];
+    u8 pad_10BC[0x24];
+    u8 *unk10E0;                   /* 0x10E0 */
+    u8 pad_10E4[0x24];
+    s32 unk1108;                   /* 0x1108 */
+    u8 pad_110C[0x74];
     struct Moby *unk1180;          /* 0x1180 */
     struct Moby *unk1184;          /* 0x1184 */
     u8 pad_1188[0x1C];
     s32 unk11A4;                   /* 0x11A4 */
     s32 unk11A8;                   /* 0x11A8 */
-    u8 pad_11AC[0x136];
+    u8 pad_11AC[0x134];
+    s16 unk12E0;                   /* 0x12E0 */
     u8 unk12E2;                    /* 0x12E2 */
     u8 unk12E3;                    /* 0x12E3 */
     u8 base_condition;             /* 0x12E4 */
@@ -363,20 +446,24 @@ struct Hero {
     u8 pad_1654[0xC];
     s32 unk1660;                   /* 0x1660 */
     u8 pad_1664[0xC];
-    Vec4 unk1670;                  /* 0x1670 */
-    u8 pad_1680[0x976];
+    struct MobyTrail moby_trail;   /* 0x1670: FUN_L00_00262500 makes hero.moby its source; cleared by hero_set_state */
+    u8 pad_17B0[0x846];
     u8 ammo_used;                  /* 0x1FF6 */
     u8 ammo_capacity;              /* 0x1FF7 */
-    u8 pad_1FF8[0x88];
+    u8 pad_1FF8[0x48];
+    s32 unk2040;                   /* 0x2040 */
+    f32 unk2044;                   /* 0x2044 */
+    s32 unk2048;                   /* 0x2048 */
+    u8 pad_204C[0x34];
     struct Moby *moby;             /* 0x2080 */
-    s32 state;                     /* 0x2084: state id; the state machines switch on it, FUN_L14_0022ff58 sets it */
+    s32 state;                     /* 0x2084: state id; the state machines switch on it, hero_set_state sets it */
     s32 state_step;                /* 0x2088: 0 on every state change; state code sets 1 and tests ==0/==1 */
     s32 control_mode;              /* 0x208C */
     s32 prev_state;                /* 0x2090: gets state on every state change */
     s32 prev_control_mode;         /* 0x2094: gets control_mode on every state change */
     s32 prev_state_timer;          /* 0x2098: gets state_timer on state change; copied back when the change is undone */
     s32 prev2_state;               /* 0x209C: gets prev_state on every state change */
-    u8 pad_20A0[0x4];
+    s32 prev2_control_mode;        /* 0x20A0: gets prev_control_mode on every state change */
     u8 unk20A4;                    /* 0x20A4 */
     u8 unk20A5;                    /* 0x20A5 */
     u8 pad_20A6[0x1];
@@ -386,15 +473,24 @@ struct Hero {
     u8 unk20AA;                    /* 0x20AA */
     u8 pad_20AB[0x1];
     u8 unk20AC;                    /* 0x20AC */
-    u8 pad_20AD[0x4];
+    u8 unk20AD;                    /* 0x20AD */
+    u8 pad_20AE[0x1];
+    u8 unk20AF;                    /* 0x20AF */
+    u8 pad_20B0[0x1];
     u8 unk20B1;                    /* 0x20B1 */
-    u8 pad_20B2[0x1];
+    u8 unk20B2;                    /* 0x20B2 */
     u8 unk20B3;                    /* 0x20B3 */
     u8 pad_20B4[0x4];
-    s32 unk20B8;                   /* 0x20B8 */
+    s32 pending_gadget;            /* 0x20B8: gets the gadget id picked by the double tap of pad bit 0x10 (D_0015ED8C, or D_00141660 when equipped_gadget is 8) */
     u8 pad_20BC[0x8];
     s32 unk20C4;                   /* 0x20C4 */
-    u8 pad_20C8[0x158];
+    u8 pad_20C8[0x28];
+    s32 unk20F0;                   /* 0x20F0 */
+    s32 unk20F4;                   /* 0x20F4 */
+    u8 pad_20F8[0x14];
+    s32 unk210C;                   /* 0x210C */
+    s32 unk2110;                   /* 0x2110 */
+    u8 pad_2114[0x10C];
     s32 unk2220;                   /* 0x2220 */
     s32 unk2224;                   /* 0x2224 */
     s32 unk2228;                   /* 0x2228 */
@@ -414,19 +510,27 @@ struct Hero {
     s32 unk22A0;                   /* 0x22A0 */
     f32 unk22A4;                   /* 0x22A4 */
     s32 unk22A8;                   /* 0x22A8 */
-    u8 pad_22AC[0x18];
+    u8 pad_22AC[0x6];
+    s16 unk22B2;                   /* 0x22B2 */
+    s32 unk22B4;                   /* 0x22B4 */
+    u8 pad_22B8[0xC];
     s32 unk22C4;                   /* 0x22C4 */
     s16 unk22C8;                   /* 0x22C8 */
     u8 unk22CA;                    /* 0x22CA */
-    u8 pad_22CB[0x7];
+    u8 pad_22CB[0x3];
+    s16 unk22CE;                   /* 0x22CE */
+    u8 pad_22D0[0x2];
     s16 unk22D2;                   /* 0x22D2 */
-    s16 unk22D4;                   /* 0x22D4 */
-    s16 unk22D6;                   /* 0x22D6 */
+    s16 swap_tap_timer;            /* 0x22D4: set to scale_game_frames(0x14) when pad bit 0x10 goes down, counted down each frame */
+    s16 swap_tap2_timer;           /* 0x22D6: armed by a second bit-0x10 press inside swap_tap_timer; a press while it runs writes pending_gadget */
     s16 unk22D8;                   /* 0x22D8 */
     u8 pad_22DA[0x2];
     s16 unk22DC;                   /* 0x22DC */
     s16 unk22DE;                   /* 0x22DE */
-    u8 pad_22E0[0x1C];
+    s16 unk22E0;                   /* 0x22E0 */
+    u8 pad_22E2[0x12];
+    s32 unk22F4;                   /* 0x22F4 */
+    s32 unk22F8;                   /* 0x22F8 */
     s16 unk22FC;                   /* 0x22FC */
 };
 
@@ -439,6 +543,7 @@ HERO_OFFSET_CHECK(pos, 0x80);
 HERO_OFFSET_CHECK(rot, 0x90);
 HERO_OFFSET_CHECK(unkA0, 0xA0);
 HERO_OFFSET_CHECK(unkC0, 0xC0);
+HERO_OFFSET_CHECK(unkD0, 0xD0);
 HERO_OFFSET_CHECK(velocity, 0xE0);
 HERO_OFFSET_CHECK(unkF0, 0xF0);
 HERO_OFFSET_CHECK(unk100, 0x100);
@@ -451,12 +556,13 @@ HERO_OFFSET_CHECK(unk164, 0x164);
 HERO_OFFSET_CHECK(unk168, 0x168);
 HERO_OFFSET_CHECK(unk16C, 0x16C);
 HERO_OFFSET_CHECK(unk170, 0x170);
-HERO_OFFSET_CHECK(unk180, 0x180);
+HERO_OFFSET_CHECK(target_yaw, 0x180);
 HERO_OFFSET_CHECK(unk184, 0x184);
 HERO_OFFSET_CHECK(unk188, 0x188);
 HERO_OFFSET_CHECK(unk190, 0x190);
 HERO_OFFSET_CHECK(unk194, 0x194);
 HERO_OFFSET_CHECK(state_timer, 0x198);
+HERO_OFFSET_CHECK(unk19C, 0x19C);
 HERO_OFFSET_CHECK(unk1A0, 0x1A0);
 HERO_OFFSET_CHECK(unk1A4, 0x1A4);
 HERO_OFFSET_CHECK(unk1AC, 0x1AC);
@@ -467,14 +573,18 @@ HERO_OFFSET_CHECK(unk1B8, 0x1B8);
 HERO_OFFSET_CHECK(unk1C0, 0x1C0);
 HERO_OFFSET_CHECK(unk1C4, 0x1C4);
 HERO_OFFSET_CHECK(unk1C8, 0x1C8);
+HERO_OFFSET_CHECK(unk1CC, 0x1CC);
 HERO_OFFSET_CHECK(unk1D0, 0x1D0);
 HERO_OFFSET_CHECK(unk1D4, 0x1D4);
 HERO_OFFSET_CHECK(unk1D8, 0x1D8);
+HERO_OFFSET_CHECK(unk1DC, 0x1DC);
 HERO_OFFSET_CHECK(unk1DE, 0x1DE);
 HERO_OFFSET_CHECK(unk1E0, 0x1E0);
 HERO_OFFSET_CHECK(unk1E2, 0x1E2);
 HERO_OFFSET_CHECK(unk1E4, 0x1E4);
+HERO_OFFSET_CHECK(unk1E6, 0x1E6);
 HERO_OFFSET_CHECK(unk1E8, 0x1E8);
+HERO_OFFSET_CHECK(unk1EE, 0x1EE);
 HERO_OFFSET_CHECK(unk1F2, 0x1F2);
 HERO_OFFSET_CHECK(unk1F4, 0x1F4);
 HERO_OFFSET_CHECK(unk1F8, 0x1F8);
@@ -489,6 +599,7 @@ HERO_OFFSET_CHECK(unk238, 0x238);
 HERO_OFFSET_CHECK(unk23C, 0x23C);
 HERO_OFFSET_CHECK(unk248, 0x248);
 HERO_OFFSET_CHECK(unk257, 0x257);
+HERO_OFFSET_CHECK(unk270, 0x270);
 HERO_OFFSET_CHECK(unk290, 0x290);
 HERO_OFFSET_CHECK(unk2A0, 0x2A0);
 HERO_OFFSET_CHECK(unk2D8, 0x2D8);
@@ -506,39 +617,59 @@ HERO_OFFSET_CHECK(unk30A, 0x30A);
 HERO_OFFSET_CHECK(unk30C, 0x30C);
 HERO_OFFSET_CHECK(unk30E, 0x30E);
 HERO_OFFSET_CHECK(unk3B0, 0x3B0);
+HERO_OFFSET_CHECK(unk3B4, 0x3B4);
 HERO_OFFSET_CHECK(unk3B8, 0x3B8);
 HERO_OFFSET_CHECK(unk3BC, 0x3BC);
 HERO_OFFSET_CHECK(unk3BE, 0x3BE);
 HERO_OFFSET_CHECK(unk3D0, 0x3D0);
 HERO_OFFSET_CHECK(unk3D4, 0x3D4);
 HERO_OFFSET_CHECK(unk3D8, 0x3D8);
+HERO_OFFSET_CHECK(unk3DC, 0x3DC);
 HERO_OFFSET_CHECK(unk3E0, 0x3E0);
+HERO_OFFSET_CHECK(unk3E4, 0x3E4);
+HERO_OFFSET_CHECK(unk3E8, 0x3E8);
+HERO_OFFSET_CHECK(unk3F4, 0x3F4);
 HERO_OFFSET_CHECK(unk3F8, 0x3F8);
 HERO_OFFSET_CHECK(unk400, 0x400);
 HERO_OFFSET_CHECK(unk410, 0x410);
+HERO_OFFSET_CHECK(unk414, 0x414);
 HERO_OFFSET_CHECK(unk418, 0x418);
 HERO_OFFSET_CHECK(unk41C, 0x41C);
 HERO_OFFSET_CHECK(unk41E, 0x41E);
-HERO_OFFSET_CHECK(unk420, 0x420);
+HERO_OFFSET_CHECK(state_timer_mark, 0x420);
 HERO_OFFSET_CHECK(unk424, 0x424);
+HERO_OFFSET_CHECK(unk428, 0x428);
+HERO_OFFSET_CHECK(unk42C, 0x42C);
 HERO_OFFSET_CHECK(unk430, 0x430);
 HERO_OFFSET_CHECK(unk434, 0x434);
+HERO_OFFSET_CHECK(unk438, 0x438);
+HERO_OFFSET_CHECK(unk43C, 0x43C);
 HERO_OFFSET_CHECK(unk440, 0x440);
 HERO_OFFSET_CHECK(unk444, 0x444);
 HERO_OFFSET_CHECK(unk448, 0x448);
 HERO_OFFSET_CHECK(unk44C, 0x44C);
+HERO_OFFSET_CHECK(unk450, 0x450);
+HERO_OFFSET_CHECK(unk454, 0x454);
+HERO_OFFSET_CHECK(unk458, 0x458);
+HERO_OFFSET_CHECK(unk45C, 0x45C);
+HERO_OFFSET_CHECK(unk460, 0x460);
+HERO_OFFSET_CHECK(unk470, 0x470);
 HERO_OFFSET_CHECK(unk480, 0x480);
 HERO_OFFSET_CHECK(unk484, 0x484);
 HERO_OFFSET_CHECK(unk488, 0x488);
 HERO_OFFSET_CHECK(unk48C, 0x48C);
 HERO_OFFSET_CHECK(unk490, 0x490);
 HERO_OFFSET_CHECK(unk494, 0x494);
+HERO_OFFSET_CHECK(unk498, 0x498);
 HERO_OFFSET_CHECK(unk49A, 0x49A);
+HERO_OFFSET_CHECK(unk49C, 0x49C);
+HERO_OFFSET_CHECK(unk49E, 0x49E);
 HERO_OFFSET_CHECK(unk4A0, 0x4A0);
 HERO_OFFSET_CHECK(unk4A4, 0x4A4);
 HERO_OFFSET_CHECK(unk4A6, 0x4A6);
 HERO_OFFSET_CHECK(unk4A8, 0x4A8);
 HERO_OFFSET_CHECK(unk4AA, 0x4AA);
+HERO_OFFSET_CHECK(unk4AC, 0x4AC);
 HERO_OFFSET_CHECK(unk4AE, 0x4AE);
 HERO_OFFSET_CHECK(unk4AF, 0x4AF);
 HERO_OFFSET_CHECK(unk4B0, 0x4B0);
@@ -549,6 +680,7 @@ HERO_OFFSET_CHECK(unk4C4, 0x4C4);
 HERO_OFFSET_CHECK(unk4D0, 0x4D0);
 HERO_OFFSET_CHECK(unk4E4, 0x4E4);
 HERO_OFFSET_CHECK(unk4E8, 0x4E8);
+HERO_OFFSET_CHECK(unk4EC, 0x4EC);
 HERO_OFFSET_CHECK(unk4F0, 0x4F0);
 HERO_OFFSET_CHECK(unk500, 0x500);
 HERO_OFFSET_CHECK(unk540, 0x540);
@@ -559,8 +691,10 @@ HERO_OFFSET_CHECK(unk568, 0x568);
 HERO_OFFSET_CHECK(unk56C, 0x56C);
 HERO_OFFSET_CHECK(unk570, 0x570);
 HERO_OFFSET_CHECK(unk574, 0x574);
+HERO_OFFSET_CHECK(unk578, 0x578);
 HERO_OFFSET_CHECK(unk57C, 0x57C);
 HERO_OFFSET_CHECK(unk584, 0x584);
+HERO_OFFSET_CHECK(unk588, 0x588);
 HERO_OFFSET_CHECK(unk58C, 0x58C);
 HERO_OFFSET_CHECK(unk590, 0x590);
 HERO_OFFSET_CHECK(unk594, 0x594);
@@ -569,32 +703,59 @@ HERO_OFFSET_CHECK(unk59C, 0x59C);
 HERO_OFFSET_CHECK(unk5A0, 0x5A0);
 HERO_OFFSET_CHECK(unk5A4, 0x5A4);
 HERO_OFFSET_CHECK(unk5A8, 0x5A8);
+HERO_OFFSET_CHECK(unk5AC, 0x5AC);
+HERO_OFFSET_CHECK(unk5B0, 0x5B0);
+HERO_OFFSET_CHECK(unk5B4, 0x5B4);
 HERO_OFFSET_CHECK(unk5B8, 0x5B8);
 HERO_OFFSET_CHECK(unk5BC, 0x5BC);
 HERO_OFFSET_CHECK(unk5BE, 0x5BE);
 HERO_OFFSET_CHECK(unk5C0, 0x5C0);
 HERO_OFFSET_CHECK(unk5C4, 0x5C4);
 HERO_OFFSET_CHECK(unk5C8, 0x5C8);
+HERO_OFFSET_CHECK(unk5CC, 0x5CC);
 HERO_OFFSET_CHECK(unk5D8, 0x5D8);
 HERO_OFFSET_CHECK(unk5E0, 0x5E0);
+HERO_OFFSET_CHECK(unk5F0, 0x5F0);
+HERO_OFFSET_CHECK(unk5F4, 0x5F4);
+HERO_OFFSET_CHECK(unk5F8, 0x5F8);
 HERO_OFFSET_CHECK(unk5FC, 0x5FC);
 HERO_OFFSET_CHECK(unk600, 0x600);
+HERO_OFFSET_CHECK(unk604, 0x604);
+HERO_OFFSET_CHECK(unk60C, 0x60C);
+HERO_OFFSET_CHECK(unk618, 0x618);
+HERO_OFFSET_CHECK(unk690, 0x690);
+HERO_OFFSET_CHECK(unk694, 0x694);
 HERO_OFFSET_CHECK(unk698, 0x698);
+HERO_OFFSET_CHECK(unk69C, 0x69C);
+HERO_OFFSET_CHECK(unk6A0, 0x6A0);
 HERO_OFFSET_CHECK(unk6A4, 0x6A4);
 HERO_OFFSET_CHECK(unk6C0, 0x6C0);
+HERO_OFFSET_CHECK(unk770, 0x770);
 HERO_OFFSET_CHECK(unk7D0, 0x7D0);
+HERO_OFFSET_CHECK(unk854, 0x854);
 HERO_OFFSET_CHECK(unk860, 0x860);
+HERO_OFFSET_CHECK(unk864, 0x864);
 HERO_OFFSET_CHECK(unk86C, 0x86C);
+HERO_OFFSET_CHECK(unk870, 0x870);
 HERO_OFFSET_CHECK(unk874, 0x874);
+HERO_OFFSET_CHECK(unk87C, 0x87C);
+HERO_OFFSET_CHECK(unk880, 0x880);
 HERO_OFFSET_CHECK(unk888, 0x888);
+HERO_OFFSET_CHECK(unk890, 0x890);
+HERO_OFFSET_CHECK(unk898, 0x898);
 HERO_OFFSET_CHECK(unk89C, 0x89C);
 HERO_OFFSET_CHECK(unk89E, 0x89E);
 HERO_OFFSET_CHECK(unk8A0, 0x8A0);
 HERO_OFFSET_CHECK(unk8AC, 0x8AC);
+HERO_OFFSET_CHECK(unk8AF, 0x8AF);
 HERO_OFFSET_CHECK(unk8B0, 0x8B0);
 HERO_OFFSET_CHECK(unk8B2, 0x8B2);
+HERO_OFFSET_CHECK(unk8B4, 0x8B4);
+HERO_OFFSET_CHECK(unk8B8, 0x8B8);
 HERO_OFFSET_CHECK(unk8BC, 0x8BC);
 HERO_OFFSET_CHECK(unk8BE, 0x8BE);
+HERO_OFFSET_CHECK(unk8C4, 0x8C4);
+HERO_OFFSET_CHECK(unk8CE, 0x8CE);
 HERO_OFFSET_CHECK(unk8E0, 0x8E0);
 HERO_OFFSET_CHECK(unk8E4, 0x8E4);
 HERO_OFFSET_CHECK(unk8E8, 0x8E8);
@@ -626,6 +787,7 @@ HERO_OFFSET_CHECK(unk974, 0x974);
 HERO_OFFSET_CHECK(unk97C, 0x97C);
 HERO_OFFSET_CHECK(unk980, 0x980);
 HERO_OFFSET_CHECK(unk988, 0x988);
+HERO_OFFSET_CHECK(unk990, 0x990);
 HERO_OFFSET_CHECK(unk994, 0x994);
 HERO_OFFSET_CHECK(unk99C, 0x99C);
 HERO_OFFSET_CHECK(unk9A0, 0x9A0);
@@ -643,29 +805,40 @@ HERO_OFFSET_CHECK(unk9CC, 0x9CC);
 HERO_OFFSET_CHECK(unk9D4, 0x9D4);
 HERO_OFFSET_CHECK(unk9E4, 0x9E4);
 HERO_OFFSET_CHECK(unk9E8, 0x9E8);
+HERO_OFFSET_CHECK(unkA50, 0xA50);
 HERO_OFFSET_CHECK(unkA54, 0xA54);
 HERO_OFFSET_CHECK(unkA58, 0xA58);
 HERO_OFFSET_CHECK(unkA5C, 0xA5C);
 HERO_OFFSET_CHECK(unkA60, 0xA60);
+HERO_OFFSET_CHECK(unkA64, 0xA64);
 HERO_OFFSET_CHECK(unkA68, 0xA68);
 HERO_OFFSET_CHECK(unkA6C, 0xA6C);
 HERO_OFFSET_CHECK(unkA70, 0xA70);
+HERO_OFFSET_CHECK(unkA7C, 0xA7C);
+HERO_OFFSET_CHECK(unkA88, 0xA88);
 HERO_OFFSET_CHECK(unkA90, 0xA90);
 HERO_OFFSET_CHECK(unkA98, 0xA98);
 HERO_OFFSET_CHECK(unkA9C, 0xA9C);
+HERO_OFFSET_CHECK(unkAA0, 0xAA0);
+HERO_OFFSET_CHECK(unkAA4, 0xAA4);
 HERO_OFFSET_CHECK(unkAA8, 0xAA8);
 HERO_OFFSET_CHECK(unkAB4, 0xAB4);
 HERO_OFFSET_CHECK(unkD08, 0xD08);
 HERO_OFFSET_CHECK(unkD14, 0xD14);
+HERO_OFFSET_CHECK(unkFF8, 0xFF8);
+HERO_OFFSET_CHECK(unk1010, 0x1010);
 HERO_OFFSET_CHECK(secondary_moby, 0x1090);
 HERO_OFFSET_CHECK(unk10A0, 0x10A0);
 HERO_OFFSET_CHECK(unk10A8, 0x10A8);
 HERO_OFFSET_CHECK(unk10AC, 0x10AC);
 HERO_OFFSET_CHECK(equipped_gadget, 0x10B8);
+HERO_OFFSET_CHECK(unk10E0, 0x10E0);
+HERO_OFFSET_CHECK(unk1108, 0x1108);
 HERO_OFFSET_CHECK(unk1180, 0x1180);
 HERO_OFFSET_CHECK(unk1184, 0x1184);
 HERO_OFFSET_CHECK(unk11A4, 0x11A4);
 HERO_OFFSET_CHECK(unk11A8, 0x11A8);
+HERO_OFFSET_CHECK(unk12E0, 0x12E0);
 HERO_OFFSET_CHECK(unk12E2, 0x12E2);
 HERO_OFFSET_CHECK(unk12E3, 0x12E3);
 HERO_OFFSET_CHECK(base_condition, 0x12E4);
@@ -684,9 +857,12 @@ HERO_OFFSET_CHECK(unk1636, 0x1636);
 HERO_OFFSET_CHECK(unk1640, 0x1640);
 HERO_OFFSET_CHECK(unk1650, 0x1650);
 HERO_OFFSET_CHECK(unk1660, 0x1660);
-HERO_OFFSET_CHECK(unk1670, 0x1670);
+HERO_OFFSET_CHECK(moby_trail, 0x1670);
 HERO_OFFSET_CHECK(ammo_used, 0x1FF6);
 HERO_OFFSET_CHECK(ammo_capacity, 0x1FF7);
+HERO_OFFSET_CHECK(unk2040, 0x2040);
+HERO_OFFSET_CHECK(unk2044, 0x2044);
+HERO_OFFSET_CHECK(unk2048, 0x2048);
 HERO_OFFSET_CHECK(moby, 0x2080);
 HERO_OFFSET_CHECK(state, 0x2084);
 HERO_OFFSET_CHECK(state_step, 0x2088);
@@ -695,6 +871,7 @@ HERO_OFFSET_CHECK(prev_state, 0x2090);
 HERO_OFFSET_CHECK(prev_control_mode, 0x2094);
 HERO_OFFSET_CHECK(prev_state_timer, 0x2098);
 HERO_OFFSET_CHECK(prev2_state, 0x209C);
+HERO_OFFSET_CHECK(prev2_control_mode, 0x20A0);
 HERO_OFFSET_CHECK(unk20A4, 0x20A4);
 HERO_OFFSET_CHECK(unk20A5, 0x20A5);
 HERO_OFFSET_CHECK(unk20A7, 0x20A7);
@@ -702,10 +879,17 @@ HERO_OFFSET_CHECK(unk20A8, 0x20A8);
 HERO_OFFSET_CHECK(unk20A9, 0x20A9);
 HERO_OFFSET_CHECK(unk20AA, 0x20AA);
 HERO_OFFSET_CHECK(unk20AC, 0x20AC);
+HERO_OFFSET_CHECK(unk20AD, 0x20AD);
+HERO_OFFSET_CHECK(unk20AF, 0x20AF);
 HERO_OFFSET_CHECK(unk20B1, 0x20B1);
+HERO_OFFSET_CHECK(unk20B2, 0x20B2);
 HERO_OFFSET_CHECK(unk20B3, 0x20B3);
-HERO_OFFSET_CHECK(unk20B8, 0x20B8);
+HERO_OFFSET_CHECK(pending_gadget, 0x20B8);
 HERO_OFFSET_CHECK(unk20C4, 0x20C4);
+HERO_OFFSET_CHECK(unk20F0, 0x20F0);
+HERO_OFFSET_CHECK(unk20F4, 0x20F4);
+HERO_OFFSET_CHECK(unk210C, 0x210C);
+HERO_OFFSET_CHECK(unk2110, 0x2110);
 HERO_OFFSET_CHECK(unk2220, 0x2220);
 HERO_OFFSET_CHECK(unk2224, 0x2224);
 HERO_OFFSET_CHECK(unk2228, 0x2228);
@@ -722,15 +906,21 @@ HERO_OFFSET_CHECK(unk229C, 0x229C);
 HERO_OFFSET_CHECK(unk22A0, 0x22A0);
 HERO_OFFSET_CHECK(unk22A4, 0x22A4);
 HERO_OFFSET_CHECK(unk22A8, 0x22A8);
+HERO_OFFSET_CHECK(unk22B2, 0x22B2);
+HERO_OFFSET_CHECK(unk22B4, 0x22B4);
 HERO_OFFSET_CHECK(unk22C4, 0x22C4);
 HERO_OFFSET_CHECK(unk22C8, 0x22C8);
 HERO_OFFSET_CHECK(unk22CA, 0x22CA);
+HERO_OFFSET_CHECK(unk22CE, 0x22CE);
 HERO_OFFSET_CHECK(unk22D2, 0x22D2);
-HERO_OFFSET_CHECK(unk22D4, 0x22D4);
-HERO_OFFSET_CHECK(unk22D6, 0x22D6);
+HERO_OFFSET_CHECK(swap_tap_timer, 0x22D4);
+HERO_OFFSET_CHECK(swap_tap2_timer, 0x22D6);
 HERO_OFFSET_CHECK(unk22D8, 0x22D8);
 HERO_OFFSET_CHECK(unk22DC, 0x22DC);
 HERO_OFFSET_CHECK(unk22DE, 0x22DE);
+HERO_OFFSET_CHECK(unk22E0, 0x22E0);
+HERO_OFFSET_CHECK(unk22F4, 0x22F4);
+HERO_OFFSET_CHECK(unk22F8, 0x22F8);
 HERO_OFFSET_CHECK(unk22FC, 0x22FC);
 #undef HERO_OFFSET_CHECK
 

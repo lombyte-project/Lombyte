@@ -95,7 +95,7 @@ extern int FUN_L00_00266e00(int, int, int, int);
 extern int FUN_L01_00226f10(int a);
 extern int FUN_L01_0022d838(float *, float *);
 extern int FUN_L01_00231580(int);
-extern int FUN_L03_00216648(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L03_00216648");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -160,7 +160,7 @@ void FUN_L03_0021c668(void) {
     if (FUN_L01_00231580(1) == 0) {
         if (hero.unk22A8 <= 0 && hero.control_mode != 0x14 &&
             (hero.state == 0 || hero.state == 2)) {
-            FUN_L03_00216648(0x3D, 1);
+            hero_set_state(0x3D, 1);
         } else if (FUN_L00_00227fa0() == 0 && FUN_L00_002279b0() == 0 && FUN_L00_00227778() == 0 &&
                    FUN_L00_002276c0() == 0) {
             if ((D_0013C940.f1A4 & 0x10) || (D_0013C940.pressed_buttons & 0x10)) {
@@ -170,7 +170,7 @@ void FUN_L03_0021c668(void) {
                     (hero.unk20A4 == 0 || hero.unk20A4 == 3)) {
                     int id;
 
-                    if (hero.unk22D6 != 0) {
+                    if (hero.swap_tap2_timer != 0) {
                         hero.unk22D2 = scale_game_frames(0x1B);
                     } else {
                         hero.unk22D2 = scale_game_frames(0xF);
@@ -185,14 +185,14 @@ void FUN_L03_0021c668(void) {
                     FUN_L00_00235e18(id, scale_game_frames(0xB4));
                 }
             }
-            FUN_001f9770(&hero.unk22D4);
-            FUN_001f9770(&hero.unk22D6);
+            FUN_001f9770(&hero.swap_tap_timer);
+            FUN_001f9770(&hero.swap_tap2_timer);
             if (D_0013C940.f1A4 & 0x10) {
-                hero.unk22D4 = scale_game_frames(0x14);
+                hero.swap_tap_timer = scale_game_frames(0x14);
             }
-            if ((hero.unk22D4 != 0 || hero.unk22D6 != 0) && (D_0013C940.f1B8 & 0x10)) {
-                if (hero.unk22D6 == 0) {
-                    hero.unk22D6 = scale_game_frames(0x14);
+            if ((hero.swap_tap_timer != 0 || hero.swap_tap2_timer != 0) && (D_0013C940.f1B8 & 0x10)) {
+                if (hero.swap_tap2_timer == 0) {
+                    hero.swap_tap2_timer = scale_game_frames(0x14);
                 } else {
                     int base = D_0015ED8C;
                     int next = base;
@@ -208,26 +208,26 @@ void FUN_L03_0021c668(void) {
                             D_00141848.fFA = scale_game_frames(D_0015EEA4) / 600;
                         }
                         D_00141848.fFC = D_00141848.fFC | (1 << current_level_index) | 0x80000000;
-                        hero.unk20B8 = next;
-                        hero.unk22D4 = 0;
-                        hero.unk22D6 = 0;
+                        hero.pending_gadget = next;
+                        hero.swap_tap_timer = 0;
+                        hero.swap_tap2_timer = 0;
                     }
                 }
             }
             if (D_L03_0015F638 > hero.pos.f[2] && hero.unk2DC > 2.0f &&
                 hero.unk20A4 != 2 && hero.state != 0x77) {
-                FUN_L03_00216648(0x77, 1);
+                hero_set_state(0x77, 1);
             } else {
                 switch (hero.state) {
                 case 0:
                     if (D_0013C940.f1A0 & 5) {
-                        FUN_L03_00216648(1, 1);
+                        hero_set_state(1, 1);
                         break;
                     }
                     FUN_L00_00232628();
                     if (hero.unk22CA != 0) {
                         if (hero.unk308 == 0 || D_0013D4C0[0x1C] == 0) {
-                            FUN_L03_00216648(0x81, 1);
+                            hero_set_state(0x81, 1);
                             break;
                         }
                     }
@@ -274,7 +274,7 @@ void FUN_L03_0021c668(void) {
                                 hero.unk1E8 = scale_game_frames(0x78);
                                 rec->f60 = FUN_001f96b0(rec->f5C) * 60.0f;
                                 if (rec->f44 != 0) {
-                                    FUN_L03_00216648(0x40, 1);
+                                    hero_set_state(0x40, 1);
                                 } else {
                                     FUN_L00_002323b8(rec->f48, 0, scale_game_frames(0xC));
                                 }
@@ -328,19 +328,19 @@ void FUN_L03_0021c668(void) {
                     }
                     FUN_L00_002118c8(0, 1.0f);
                     if (hero.unk12EA != 0 && hero.unk30C == 0) {
-                        FUN_L03_00216648(0x79, 1);
+                        hero_set_state(0x79, 1);
                         break;
                     }
                     if (hero.unk30E > scale_game_frames(4)) {
                         if (hero.unk2DC > 0.4f) {
                             if (hero.prev_state != 8) {
-                                FUN_L03_00216648(6, 1);
+                                hero_set_state(6, 1);
                                 break;
                             }
                             if (scale_game_frames(0xF) > hero.state_timer) {
                                 break;
                             }
-                            FUN_L03_00216648(6, 1);
+                            hero_set_state(6, 1);
                             break;
                         }
                     }
@@ -368,13 +368,13 @@ void FUN_L03_0021c668(void) {
                     }
                     if (hero.unk308 == 1) {
                         if (FUN_L00_00266d60(0x40, scale_game_frames(7), 0)) {
-                            FUN_L03_00216648(0x71, 1);
+                            hero_set_state(0x71, 1);
                             break;
                         }
                     }
                     if ((D_0013C940.f1A0 & 0xA) && hero.unk300 != 0) {
                         if (((unsigned char *)hero.moby)[0x53] != 0x1A || !(hero.unkAA8 < 108.0f)) {
-                            FUN_L03_00216648(4, 1);
+                            hero_set_state(4, 1);
                             break;
                         }
                     }
@@ -384,7 +384,7 @@ void FUN_L03_0021c668(void) {
                             if (scale_game_frames(0x18) > hero.state_timer && hero.unk308 == 0) {
                                 FUN_L00_002118c8(0, 1.0f);
                                 if (fast_difference_between_rotations(
-                                        hero.unk180, D_L03_00166ED8) > 1.2217305f) {
+                                        hero.target_yaw, D_L03_00166ED8) > 1.2217305f) {
                                     ok = 0;
                                 }
                             }
@@ -395,57 +395,57 @@ void FUN_L03_0021c668(void) {
                                 FUN_L01_00227e48(slot, 0, 0);
                                 FUN_L01_00227e48(slot, 1, 0);
                             }
-                            FUN_L03_00216648(2, 1);
+                            hero_set_state(2, 1);
                         }
                     }
                     break;
                 case 0x40:
                     if (D_0013C940.f1A0 & 5) {
-                        FUN_L03_00216648(1, 1);
+                        hero_set_state(1, 1);
                         break;
                     }
                     if (hero.unk30E != 0) {
-                        FUN_L03_00216648(0x41, 1);
+                        hero_set_state(0x41, 1);
                         break;
                     }
                     if (D_0013C940.f1A0 & 0x40) {
-                        FUN_L03_00216648(0x41, 1);
+                        hero_set_state(0x41, 1);
                         break;
                     }
                     if (D_0013C940.f1A0 & 0xA) {
-                        FUN_L03_00216648(0x41, 1);
+                        hero_set_state(0x41, 1);
                         break;
                     }
                     FUN_L01_00232290();
                     if (hero.unk190 > 0.0f) {
-                        FUN_L03_00216648(0x41, 1);
+                        hero_set_state(0x41, 1);
                         break;
                     }
                     if (hero.unkA98 & 2) {
                         FUN_L00_00228fa8();
-                        FUN_L03_00216648(0, 1);
+                        hero_set_state(0, 1);
                     }
                     break;
                 case 0x41:
                     if (scale_game_frames(8) < hero.state_timer) {
                         FUN_L00_00228fa8();
                         if (hero.unk30E != 0) {
-                            FUN_L03_00216648(6, 1);
+                            hero_set_state(6, 1);
                             break;
                         }
                         if (FUN_L00_00228b78(scale_game_frames(7), 0)) {
                             break;
                         }
                         if (D_0013C940.f1A0 & 0xA) {
-                            FUN_L03_00216648(4, 1);
+                            hero_set_state(4, 1);
                             break;
                         }
                         FUN_L01_00232290();
                         if (hero.unk190 > 0.0f) {
-                            FUN_L03_00216648(2, 1);
+                            hero_set_state(2, 1);
                             break;
                         }
-                        FUN_L03_00216648(0, 1);
+                        hero_set_state(0, 1);
                     }
                     break;
                 case 61:
@@ -482,23 +482,23 @@ void FUN_L03_0021c668(void) {
                         if (!(D_0013C940.f1A0 & 0xC0) && hero.unkAA8 > 9.0f &&
                             hero.unkAA8 < 19.0f && hero.state_step != 1 &&
                             hero.unk229C < 0.1f && hero.unk194 < lim) {
-                            FUN_L03_00216648(0x34, 1);
+                            hero_set_state(0x34, 1);
                             break;
                         }
                     }
                     if (D_0013D4C0[4] != 0 && (D_0013C940.f1A0 & 0xA)) {
                         if (hero.state == 0x33 && scale_game_frames(0x14) < hero.state_timer) {
-                            FUN_L03_00216648(0x35, 1);
+                            hero_set_state(0x35, 1);
                             break;
                         }
                     } else if (hero.state == 0x35 && hero.unk229C > 0.5f) {
-                        FUN_L03_00216648(0x33, 1);
+                        hero_set_state(0x33, 1);
                         break;
                     }
                     if (hero.state == 0x35 && !(D_0013C940.f1A0 & 0xC0) &&
                         hero.state_step != 1 && hero.unk229C < 0.7f &&
                         !(D_0013C940.f1A0 & 0xA)) {
-                        FUN_L03_00216648(0x34, 1);
+                        hero_set_state(0x34, 1);
                     }
                     break;
                 case 52:
@@ -510,17 +510,17 @@ void FUN_L03_0021c668(void) {
                     if (0.2f < hero.unk229C || (D_0013C940.f1A0 & 0xC0) ||
                         (D_0013D4C0[4] != 0 && (D_0013C940.f1A0 & 0xA))) {
                         if (D_0013D4C0[4] != 0 && (D_0013C940.f1A0 & 0xA)) {
-                            FUN_L03_00216648(0x35, 1);
+                            hero_set_state(0x35, 1);
                             break;
                         }
-                        FUN_L03_00216648(0x33, 1);
+                        hero_set_state(0x33, 1);
                     }
                     break;
                 case 55:
                     if (hero.unk1D8 == 0) {
                         if (FUN_L00_00266d60(0x40, scale_game_frames(8), 0)) {
                             if (scale_game_frames(0xA) < hero.state_timer) {
-                                FUN_L03_00216648(0x12, 1);
+                                hero_set_state(0x12, 1);
                                 break;
                             }
                         }
@@ -531,78 +531,78 @@ void FUN_L03_0021c668(void) {
                             (D_0013D4C0[4] != 0 &&
                              FUN_L00_00266d60(0xA, scale_game_frames(7), 0))) {
                             if (D_0013D4C0[4] != 0 && (D_0013C940.f1A0 & 0xA)) {
-                                FUN_L03_00216648(0x35, 1);
+                                hero_set_state(0x35, 1);
                                 break;
                             }
-                            FUN_L03_00216648(0x33, 1);
+                            hero_set_state(0x33, 1);
                             break;
                         }
                     }
                     if (hero.unk20A9 != 0 && hero.unk22A4 < 0.4f) {
-                        if (FUN_L03_00216648(0, 0)) {
+                        if (hero_set_state(0, 0)) {
                             FUN_L00_002323b8(FUN_L01_00226f10(0), 0, scale_game_frames(0x12));
                         }
                     }
                     if (0.2f < hero.unk229C) {
                         if (scale_game_frames(0xA) < hero.state_timer) {
-                            FUN_L03_00216648(0x36, 1);
+                            hero_set_state(0x36, 1);
                         }
                     }
                     break;
                 case 54:
                     if (hero.unk1D8 == 0) {
                         if (FUN_L00_00266d60(0x40, scale_game_frames(8), 0)) {
-                            FUN_L03_00216648(0x12, 1);
+                            hero_set_state(0x12, 1);
                             break;
                         }
                     }
                     if (hero.unk1DE == 0) {
                         if (FUN_L00_00266d60(0x80, scale_game_frames(7), 0)) {
                             if (D_0013D4C0[4] != 0 && (D_0013C940.f1A0 & 0xA)) {
-                                FUN_L03_00216648(0x35, 1);
+                                hero_set_state(0x35, 1);
                                 break;
                             }
-                            FUN_L03_00216648(0x33, 1);
+                            hero_set_state(0x33, 1);
                             break;
                         }
                     }
                     if (hero.unk20A9 != 0 && hero.unk22A4 < 0.7f) {
-                        FUN_L03_00216648(0x73, 0);
+                        hero_set_state(0x73, 0);
                         FUN_L00_002323b8(0x60, 0, scale_game_frames(0x11));
                         hero.velocity.f[2] = 0.0f;
                         hero.unk100.f[2] = 0.0f;
                     }
                     if (0.1f > hero.unk229C && hero.unk194 == 0.0f &&
                         hero.unk698 == 0) {
-                        FUN_L03_00216648(0x37, 1);
+                        hero_set_state(0x37, 1);
                     }
                     break;
                 case 118:
                     if (hero.unk22A8 <= 0) {
                         if (current_level_index == 0xF || current_level_index == 0x11) {
-                            FUN_L03_00216648(0x82, 1);
+                            hero_set_state(0x82, 1);
                             break;
                         }
-                        FUN_L03_00216648(0x6A, 1);
+                        hero_set_state(0x6A, 1);
                         FUN_L00_002323b8(0x5F, 0x28, scale_game_frames(0x12));
                         break;
                     }
                     if (hero.unkA98 & 2) {
-                        FUN_L03_00216648(0x34, 1);
+                        hero_set_state(0x34, 1);
                         break;
                     }
                     if (scale_game_frames(0x32) < hero.state_timer) {
-                        FUN_L03_00216648(0x34, 0);
+                        hero_set_state(0x34, 0);
                     }
                     break;
                 case 117:
                     if (hero.unk22A8 <= 0) {
-                        FUN_L03_00216648(0x6A, 1);
+                        hero_set_state(0x6A, 1);
                         FUN_L00_002323b8(0x5F, 0x25, scale_game_frames(0x12));
                         break;
                     }
                     if (scale_game_frames(0x32) < hero.state_timer) {
-                        FUN_L03_00216648(0x37, 0);
+                        hero_set_state(0x37, 0);
                     }
                     break;
                 case 1:
@@ -638,10 +638,10 @@ void FUN_L03_0021c668(void) {
                         break;
                     }
                     if (D_0013C940.f1A0 & 0xA) {
-                        FUN_L03_00216648(4, 1);
+                        hero_set_state(4, 1);
                         break;
                     }
-                    FUN_L03_00216648(0, 0);
+                    hero_set_state(0, 0);
                     {
                         int a = FUN_L01_00226f10(1);
                         if (((unsigned char *)hero.moby)[0x53] != a) {
@@ -656,7 +656,7 @@ void FUN_L03_0021c668(void) {
                     if (hero.unk1D0 != 0) {
                         break;
                     }
-                    FUN_L03_00216648(0, 1);
+                    hero_set_state(0, 1);
                     break;
                 case 48:
                     if (D_0013C940.f1A0 & hero.unk10A0) {
@@ -666,19 +666,19 @@ void FUN_L03_0021c668(void) {
                         break;
                     }
                     if (((unsigned char *)hero.moby)[0x53] == 0x36) {
-                        FUN_L03_00216648(0, 0);
+                        hero_set_state(0, 0);
                         break;
                     }
-                    FUN_L03_00216648(0, 1);
+                    hero_set_state(0, 1);
                     break;
                 case 46: {
                     int mask = hero.unk10A0;
                     if (((unsigned char *)hero.moby)[0x52] == 0x2E && hero.unkAA8 > 28.0f) {
                         if (D_0013C940.f1A0 & mask) {
-                            FUN_L03_00216648(0x17, 1);
+                            hero_set_state(0x17, 1);
                             break;
                         }
-                        FUN_L03_00216648(0, 1);
+                        hero_set_state(0, 1);
                     }
                 } break;
                 case 19:
@@ -713,19 +713,19 @@ void FUN_L03_0021c668(void) {
                                         break;
                                     }
                                 } else if (hero.unk1F2 == 0) {
-                                    FUN_L03_00216648(7, 1);
+                                    hero_set_state(7, 1);
                                     break;
                                 }
                             }
                         }
                         if (hero.unkA9C == 0 && (float)rec->f18 < hero.unkAA8) {
-                            FUN_L03_00216648(0, 0);
+                            hero_set_state(0, 0);
                             break;
                         }
                     }
                     if (hero.state == 0x15) {
                         if (hero.equipped_gadget != 8) {
-                            FUN_L03_00216648(0, 1);
+                            hero_set_state(0, 1);
                             break;
                         }
                         if (scale_game_frames(0x64) < hero.state_timer && hero.unkAB4 < 0x1A) {
@@ -737,7 +737,7 @@ void FUN_L03_0021c668(void) {
                 case 33:
                 case 122:
                     if (hero.unkA98 & 2) {
-                        FUN_L03_00216648(0, 1);
+                        hero_set_state(0, 1);
                     }
                     break;
                 case 2:
@@ -749,14 +749,14 @@ void FUN_L03_0021c668(void) {
                         hero.unk3BC = 0;
                     }
                     if (hero.unk12EA != 0 && hero.unk30C == 0) {
-                        FUN_L03_00216648(0x79, 1);
+                        hero_set_state(0x79, 1);
                         break;
                     }
                     if (!(hero.unk30E < scale_game_frames(5)) &&
                         !(hero.prev_control_mode == 0x12 && hero.unk20A9 != 0) &&
                         hero.unk2DC > 1.35f) {
                         if (FUN_L00_00229910() == 0) {
-                            FUN_L03_00216648(6, 1);
+                            hero_set_state(6, 1);
                             break;
                         }
                     }
@@ -772,17 +772,17 @@ void FUN_L03_0021c668(void) {
                                     break;
                                 }
                                 if (hero.state_step <= 0) {
-                                    FUN_L03_00216648(7, 1);
+                                    hero_set_state(7, 1);
                                     break;
                                 }
                                 if (hero.unk190 > D_L03_0017BEB8.fC &&
                                     fast_difference_between_rotations(
-                                        hero.unk180, hero.rot.f[2]) < 1.0471976f &&
+                                        hero.target_yaw, hero.rot.f[2]) < 1.0471976f &&
                                     D_L03_0017BEB8.f18 * D_0015ED6C * 0.85f < hero.unk164) {
-                                    FUN_L03_00216648(9, 1);
+                                    hero_set_state(9, 1);
                                     break;
                                 }
-                                FUN_L03_00216648(7, 1);
+                                hero_set_state(7, 1);
                                 break;
                             }
                         }
@@ -793,21 +793,21 @@ void FUN_L03_0021c668(void) {
                     if (hero.unk12E2 == 0 ||
                         (D_0015ED6C * 2.0f > hero.unk164 && hero.unk2E0 < 0.08726646f)) {
                         if (D_0013C940.f1A0 & 5) {
-                            FUN_L03_00216648(1, 1);
+                            hero_set_state(1, 1);
                             break;
                         }
                     }
                     if (D_0013C940.f1A0 & 0xA) {
-                        FUN_L03_00216648(4, 1);
+                        hero_set_state(4, 1);
                         break;
                     }
                     if (hero.state == 2) {
                         if (hero.unk20A9 != 0) {
-                            FUN_L03_00216648(0x73, 1);
+                            hero_set_state(0x73, 1);
                         }
                     } else if (hero.state == 0x73) {
                         if (hero.unk20A9 == 0) {
-                            FUN_L03_00216648(2, 1);
+                            hero_set_state(2, 1);
                         }
                     }
                     if (hero.state_timer > scale_game_frames(0xF) ||
@@ -821,7 +821,7 @@ void FUN_L03_0021c668(void) {
                             if (D_0015ED6C * 2.7f < hero.unk160 && hero.unk20AA == 0) {
                                 if (hero.unk160 < D_0015ED6C * 4.4f ||
                                     FUN_L00_00266e80(4) < 0.8f) {
-                                    if (FUN_L03_00216648(3, 0) == 0) {
+                                    if (hero_set_state(3, 0) == 0) {
                                         break;
                                     }
                                     if (FUN_L01_00226f10(0) == 0x54) {
@@ -832,7 +832,7 @@ void FUN_L03_0021c668(void) {
                                     }
                                     break;
                                 }
-                                FUN_L03_00216648(3, 1);
+                                hero_set_state(3, 1);
                                 break;
                             }
                             if (!(hero.state_timer > scale_game_frames(0x19))) {
@@ -841,7 +841,7 @@ void FUN_L03_0021c668(void) {
                             if (FUN_L00_00229a98()) {
                                 break;
                             }
-                            if (FUN_L03_00216648(0, 0) == 0) {
+                            if (hero_set_state(0, 0) == 0) {
                                 break;
                             }
                             if (FUN_L01_00226f10(0) == 0x54) {
@@ -856,7 +856,7 @@ void FUN_L03_0021c668(void) {
                     } else if (hero.state == 0x73) {
                         if (D_0013C940.f1D4 != 0) {
                             if (vector_length_xy(hero.velocity.f) < D_0015ED6C * 3.2f) {
-                                if (FUN_L03_00216648(0, 0)) {
+                                if (hero_set_state(0, 0)) {
                                     FUN_L00_002323b8(FUN_L01_00226f10(0), 0,
                                                      scale_game_frames(0x11));
                                 }
@@ -876,12 +876,12 @@ void FUN_L03_0021c668(void) {
                         if (D_0015ED6C * 2.7f > hero.unk160) {
                             if (fast_difference_between_rotations(
                                     hero.rot.f[2], hero.unk1640.f[3]) < 0.034906585f) {
-                                FUN_L03_00216648(0x67, 1);
+                                hero_set_state(0x67, 1);
                                 break;
                             }
                         }
                         if (hero.unk20A4 != 0 && D_0015ED6C * 2.7f <= hero.unk160) {
-                            FUN_L03_00216648(0x66, 1);
+                            hero_set_state(0x66, 1);
                         }
                         break;
                     }
@@ -889,15 +889,15 @@ void FUN_L03_0021c668(void) {
                     break;
                 case 102:
                     if (hero.unkA98 & 2) {
-                        FUN_L03_00216648(0x65, 1);
+                        hero_set_state(0x65, 1);
                     }
                     break;
                 case 103:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
-                        FUN_L03_00216648(0, 1);
+                        hero_set_state(0, 1);
                     }
                     if (0.2f < FUN_001f9b80(hero.pos.f, hero.unk1640.f)) {
-                        FUN_L03_00216648(0x65, 1);
+                        hero_set_state(0x65, 1);
                     }
                     break;
                 case 49:
@@ -914,7 +914,7 @@ void FUN_L03_0021c668(void) {
                         }
                     }
                     hero.unk2220 = -1;
-                    if (FUN_L03_00216648(0, 0) == 0) {
+                    if (hero_set_state(0, 0) == 0) {
                         break;
                     }
                     FUN_L00_002323b8(FUN_L01_00226f10(0), 0, scale_game_frames(0x11));
@@ -922,25 +922,25 @@ void FUN_L03_0021c668(void) {
                     break;
                 case 3:
                     if (D_0013C940.f1A0 & 5) {
-                        FUN_L03_00216648(1, 1);
+                        hero_set_state(1, 1);
                         break;
                     }
                     if (hero.unk1C4 == 0) {
                         if (D_0013C940.f1A4 & 0x40) {
-                            FUN_L03_00216648(7, 1);
+                            hero_set_state(7, 1);
                             break;
                         }
                         if (D_0013C940.f1A0 & 0xA) {
-                            FUN_L03_00216648(4, 1);
+                            hero_set_state(4, 1);
                             break;
                         }
                     }
                     if (hero.unk30E > scale_game_frames(8) && hero.unk2DC > 0.3f) {
-                        FUN_L03_00216648(6, 1);
+                        hero_set_state(6, 1);
                         break;
                     }
                     if (hero.unkA98 & 2) {
-                        FUN_L03_00216648(0, 1);
+                        hero_set_state(0, 1);
                         break;
                     }
                     if (!(hero.unk229C > 0.2f)) {
@@ -948,35 +948,35 @@ void FUN_L03_0021c668(void) {
                     }
                     if (FUN_L01_00226f10(0) != 0x54) {
                         if (hero.unk194 == 0.0f) {
-                            FUN_L03_00216648(0, 0);
+                            hero_set_state(0, 0);
                             break;
                         }
                     } else if (hero.unkAA8 > 10.0f) {
-                        if (FUN_L03_00216648(0, 0)) {
+                        if (hero_set_state(0, 0)) {
                             FUN_L00_002323b8(FUN_L01_00226f10(0), 0, scale_game_frames(0x11));
                         }
                     }
                     if (0.5f < hero.unk229C) {
-                        FUN_L03_00216648(2, 1);
+                        hero_set_state(2, 1);
                     }
                     break;
                 case 4:
                     if (D_0013C940.f1A0 & 5) {
-                        FUN_L03_00216648(1, 1);
+                        hero_set_state(1, 1);
                         break;
                     }
                     if (hero.state_timer > scale_game_frames(0xB) && !(D_0013C940.f1A0 & 0xA)) {
-                        FUN_L03_00216648(0, 0);
+                        hero_set_state(0, 0);
                         FUN_L00_002323b8(FUN_L01_00226f10(0), 0, -2.0f);
                         break;
                     }
                     if (hero.unk12EA != 0 && hero.unk30C == 0) {
-                        FUN_L03_00216648(0x79, 1);
+                        hero_set_state(0x79, 1);
                         break;
                     }
                     if (hero.unk308 == 1) {
                         if (FUN_L00_00266d60(0x40, scale_game_frames(7), 0)) {
-                            FUN_L03_00216648(0x71, 1);
+                            hero_set_state(0x71, 1);
                             break;
                         }
                     } else if (FUN_L00_00229660()) {
@@ -984,23 +984,23 @@ void FUN_L03_0021c668(void) {
                     }
                     if (FUN_L00_00266d60(0x80, scale_game_frames(0xF), 0)) {
                         if (hero.equipped_gadget == 8) {
-                            FUN_L03_00216648(0x15, 1);
+                            hero_set_state(0x15, 1);
                         }
                     }
                     if (hero.unk30E > scale_game_frames(8)) {
                         if (hero.prev_state != 8) {
-                            FUN_L03_00216648(6, 1);
+                            hero_set_state(6, 1);
                             break;
                         }
                         if (scale_game_frames(0xF) > hero.state_timer) {
                             break;
                         }
-                        FUN_L03_00216648(6, 1);
+                        hero_set_state(6, 1);
                     }
                     break;
                 case 36:
                     if (hero.equipped_gadget != 0xC) {
-                        FUN_L03_00216648(0, 1);
+                        hero_set_state(0, 1);
                     }
                     break;
                 case 37:
@@ -1029,14 +1029,14 @@ void FUN_L03_0021c668(void) {
                         hero.unk194 = D_0015ED6C * 7.0f;
                     }
                     if (hero.unk2DC < 0.3f) {
-                        FUN_L03_00216648(0, 0);
+                        hero_set_state(0, 0);
                         FUN_L00_002323b8(FUN_L01_00226f10(0), 0, scale_game_frames(0x1E));
                         break;
                     }
                     if (((unsigned char *)hero.moby)[0x53] == 0xA) {
-                        FUN_L03_00216648(6, 0);
+                        hero_set_state(6, 0);
                     } else {
-                        FUN_L03_00216648(6, 0);
+                        hero_set_state(6, 0);
                         FUN_L00_002323b8(0xA, 0, scale_game_frames(0x11));
                     }
                     hero.unk2284 = 0;
@@ -1052,10 +1052,10 @@ void FUN_L03_0021c668(void) {
                         hero.unk194 = D_0015ED6C * 7.0f;
                     }
                     if (hero.unk2DC < 0.4f) {
-                        FUN_L03_00216648(0, 1);
+                        hero_set_state(0, 1);
                         break;
                     }
-                    FUN_L03_00216648(6, 1);
+                    hero_set_state(6, 1);
                     hero.unk2284 = 0;
                     break;
                 case 44:
@@ -1066,7 +1066,7 @@ void FUN_L03_0021c668(void) {
                         if (scale_game_frames(0x28) > hero.state_timer) {
                             hero.unk988 = 1;
                         }
-                        FUN_L03_00216648(0x2D, 1);
+                        hero_set_state(0x2D, 1);
                         hero.unk944 = D_0015ED70 * 7.0f;
                         hero.unk940 = D_0015ED70 * 27.0f;
                     }
@@ -1078,7 +1078,7 @@ void FUN_L03_0021c668(void) {
                         hero.prev_state != 0xF && hero.prev_state != 0xA &&
                         hero.prev_state != 0x10 && hero.prev_state != 0x12 &&
                         hero.prev_state != 0x3C && (D_0013C940.f1A4 & 0x40)) {
-                        FUN_L03_00216648(0x10, 1);
+                        hero_set_state(0x10, 1);
                     }
                     {
                         int r =
@@ -1094,7 +1094,7 @@ void FUN_L03_0021c668(void) {
                         }
                     }
                     if (hero.unkA98 & 2) {
-                        FUN_L03_00216648(0, 1);
+                        hero_set_state(0, 1);
                     }
                     break;
                 case 116:
@@ -1108,13 +1108,13 @@ void FUN_L03_0021c668(void) {
                         }
                     }
                     if (scale_game_frames(5) < hero.unk600) {
-                        FUN_L03_00216648(6, 1);
+                        hero_set_state(6, 1);
                         hero.unk1E4 = scale_game_frames(8);
                     }
                     break;
                 case 24:
                     if (13.5f < hero.unkAA8) {
-                        FUN_L03_00216648(0x19, 0);
+                        hero_set_state(0x19, 0);
                     }
                     break;
                 case 25:
@@ -1125,39 +1125,39 @@ void FUN_L03_0021c668(void) {
                     qcopy(v0, hero.pos.f);
                     sp24 = hero.rot.f[2];
                     if (FUN_L01_0022d838(v0, &sp24) == 0) {
-                        FUN_L03_00216648(6, 1);
+                        hero_set_state(6, 1);
                         hero.unk1B0 = scale_game_frames(0xA);
                         break;
                     }
                     if ((hero.unk229C > 0.5f &&
                          FUN_L00_00266d60(0x40, scale_game_frames(9), 0) &&
-                         2.3561945f < fast_difference_between_rotations(hero.unk180,
+                         2.3561945f < fast_difference_between_rotations(hero.target_yaw,
                                                                         hero.rot.f[2])) ||
                         (D_0013C940.f1A4 & 0xA)) {
-                        FUN_L03_00216648(6, 1);
+                        hero_set_state(6, 1);
                         hero.unk1B0 = scale_game_frames(0xA);
                         break;
                     }
                     if (FUN_L00_00266d60(0x40, scale_game_frames(0x11), 0)) {
-                        FUN_L03_00216648(0x1C, 1);
+                        hero_set_state(0x1C, 1);
                         break;
                     }
                     if (0.5f < hero.unk229C &&
                         fast_difference_between_rotations(
-                            hero.unk180, fast_add_rotations(hero.rot.f[2], 1.5707964f)) <
+                            hero.target_yaw, fast_add_rotations(hero.rot.f[2], 1.5707964f)) <
                             0.7853982f) {
                         qcopy(v1, hero.pos.f);
                         v1[0] += fast_cos(fast_add_rotations(hero.rot.f[2], 1.5707964f)) * 0.3f;
                         v1[1] += fast_sin(fast_add_rotations(hero.rot.f[2], 1.5707964f)) * 0.3f;
                         sp28 = hero.rot.f[2];
                         if (FUN_L01_0022d838(v1, &sp28)) {
-                            FUN_L03_00216648(0x1A, 1);
+                            hero_set_state(0x1A, 1);
                         }
                         break;
                     }
                     if (0.5f < hero.unk229C &&
                         fast_difference_between_rotations(
-                            hero.unk180, fast_add_rotations(hero.rot.f[2], -1.5707964f)) <
+                            hero.target_yaw, fast_add_rotations(hero.rot.f[2], -1.5707964f)) <
                             0.7853982f) {
                         qcopy(v1, hero.pos.f);
                         v1[0] +=
@@ -1166,7 +1166,7 @@ void FUN_L03_0021c668(void) {
                             fast_sin(fast_add_rotations(hero.rot.f[2], -1.5707964f)) * 0.3f;
                         sp2C = hero.rot.f[2];
                         if (FUN_L01_0022d838(v1, &sp2C)) {
-                            FUN_L03_00216648(0x1B, 1);
+                            hero_set_state(0x1B, 1);
                         }
                     }
                     break;
@@ -1186,10 +1186,10 @@ void FUN_L03_0021c668(void) {
                     if (hero.unk229C < 0.5f ||
                         0.7853982f <
                             fast_difference_between_rotations(
-                                hero.unk180, fast_add_rotations(hero.rot.f[2], ang)) ||
+                                hero.target_yaw, fast_add_rotations(hero.rot.f[2], ang)) ||
                         FUN_L01_0022d838(v0, &sp30) == 0) {
                         if (hero.unkA98 & 2) {
-                            FUN_L03_00216648(0x19, 1);
+                            hero_set_state(0x19, 1);
                             break;
                         }
                     }
@@ -1197,13 +1197,13 @@ void FUN_L03_0021c668(void) {
                     if (0.5f < hero.unk229C &&
                         FUN_L00_00266d60(0x40, scale_game_frames(9), 0) &&
                         2.3561945f <
-                            fast_difference_between_rotations(hero.unk180, hero.rot.f[2])) {
-                        FUN_L03_00216648(6, 1);
+                            fast_difference_between_rotations(hero.target_yaw, hero.rot.f[2])) {
+                        hero_set_state(6, 1);
                         hero.unk1B0 = scale_game_frames(0x28);
                         break;
                     }
                     if (FUN_L00_00266d60(0x40, scale_game_frames(9), 0)) {
-                        FUN_L03_00216648(0x1C, 1);
+                        hero_set_state(0x1C, 1);
                     }
                     break;
                 case 121:
@@ -1214,10 +1214,10 @@ void FUN_L03_0021c668(void) {
                         break;
                     }
                     if (hero.unk30E != 0) {
-                        FUN_L03_00216648(6, 1);
+                        hero_set_state(6, 1);
                         break;
                     }
-                    FUN_L03_00216648(0, 1);
+                    hero_set_state(0, 1);
                     break;
                 case 6:
                 case 45:
@@ -1246,13 +1246,13 @@ void FUN_L03_0021c668(void) {
                             hero.velocity.f[2] = D_0015ED6C * -9.0f;
                         }
                         if (hero.unk22A8 <= 0) {
-                            FUN_L03_00216648(0x3D, 1);
+                            hero_set_state(0x3D, 1);
                             break;
                         }
                         first = hero.unk2FC == 0;
                         one = 1;
                         if (!(scale_game_frames(0x5A) > hero.state_timer)) {
-                            if (FUN_L03_00216648(0, 0)) {
+                            if (hero_set_state(0, 0)) {
                                 FUN_L00_002323b8(0xC, 4, scale_game_frames(6));
                             }
                             if (first) {
@@ -1262,7 +1262,7 @@ void FUN_L03_0021c668(void) {
                             break;
                         }
                         if (hero.state_step == one) {
-                            if (FUN_L03_00216648(0, 0)) {
+                            if (hero_set_state(0, 0)) {
                                 FUN_L00_002323b8(0xC, 9, -1.0f);
                             }
                             FUN_L00_00233b20(hero.unk150.f, hero.unk150.f, 0.0f);
@@ -1280,19 +1280,19 @@ void FUN_L03_0021c668(void) {
                             break;
                         }
                         if (hero.unk229C > 0.5f && hero.unk1C4 == 0) {
-                            FUN_L03_00216648(2, 1);
+                            hero_set_state(2, 1);
                             FUN_L00_00233288(0.016f, 0.002f, 7, 2, 0, 1);
                             break;
                         }
                         if (D_0015ED6C * 3.0f < hero.unk164) {
-                            if (FUN_L03_00216648(3, 0) == 0) {
+                            if (hero_set_state(3, 0) == 0) {
                                 break;
                             }
                             FUN_L00_002323b8(6, 0, scale_game_frames(0xC));
                             FUN_L00_0025f730(hero.unk150.f, D_0015ED6C * 7.7f);
                             break;
                         }
-                        FUN_L03_00216648(0, 1);
+                        hero_set_state(0, 1);
                         FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
                     }
@@ -1302,7 +1302,7 @@ void FUN_L03_0021c668(void) {
                     if ((D_0013C940.f1A0 & 0x40) && D_0013D4C0[2] != 0 &&
                         FUN_L00_0020d498(3) != 4 && hero.unk22D8 == 0 && hero.unk1C4 == 0 &&
                         hero.unk2DC > 0.6f) {
-                        FUN_L03_00216648(8, 1);
+                        hero_set_state(8, 1);
                         break;
                     }
                     if (hero.unk1E2 > scale_game_frames(0x14)) {
@@ -1319,18 +1319,18 @@ void FUN_L03_0021c668(void) {
                                              scale_game_frames(8))) {
                             if ((D_0013C940.f1A0 & 0xA) && (D_0013C940.f1A4 & 0x40)) {
                                 if (hero.unk41E == 0 || hero.unk2DC > 1.5f) {
-                                    FUN_L03_00216648(0x10, 1);
+                                    hero_set_state(0x10, 1);
                                     break;
                                 }
                             }
                         }
                     }
                     if (hero.unk4E8 != 0) {
-                        FUN_L03_00216648(0x18, 1);
+                        hero_set_state(0x18, 1);
                         break;
                     }
                     if (hero.unk5FC != 0) {
-                        FUN_L03_00216648(0x74, 1);
+                        hero_set_state(0x74, 1);
                     }
                     break;
                 case 119:
@@ -1346,7 +1346,7 @@ void FUN_L03_0021c668(void) {
                     break;
                 case 129:
                     if (hero.unk12EA != 0 && hero.unk2DC < 0.5f) {
-                        FUN_L03_00216648(0x79, 1);
+                        hero_set_state(0x79, 1);
                         break;
                     }
                     {
@@ -1372,14 +1372,14 @@ void FUN_L03_0021c668(void) {
                     hero.unk22CA = 0;
                     hero.unk1C4 = scale_game_frames(0x19);
                     if (hero.unk30E != 0) {
-                        if (FUN_L03_00216648(0, 0) == 0) {
+                        if (hero_set_state(0, 0) == 0) {
                             break;
                         }
                         FUN_L00_002323b8(7, 0x17, scale_game_frames(9));
                         FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
                     }
-                    if (FUN_L03_00216648(0, 0) == 0) {
+                    if (hero_set_state(0, 0) == 0) {
                         break;
                     }
                     FUN_L00_002323b8(FUN_L01_00226f10(0), 0, -2.0f);
@@ -1394,18 +1394,18 @@ void FUN_L03_0021c668(void) {
                                 hit = 1;
                             }
                             if (hit) {
-                                FUN_L03_00216648(0x11, 1);
+                                hero_set_state(0x11, 1);
                             }
                             break;
                         }
                     }
                     if (hero.state_timer > scale_game_frames(0x1E) && !(D_0013C940.f1A0 & 0x40) &&
                         !(D_0013C940.held_buttons & 0x40)) {
-                        FUN_L03_00216648(6, 1);
+                        hero_set_state(6, 1);
                         break;
                     }
                     if (hero.unk4E8 != 0) {
-                        FUN_L03_00216648(0x18, 1);
+                        hero_set_state(0x18, 1);
                         break;
                     }
                     if (hero.unk30E != 0 && !(hero.pos.f[2] - hero.unk2D8 < 0.4f)) {
@@ -1416,7 +1416,7 @@ void FUN_L03_0021c668(void) {
                     }
                     FUN_L00_002118c8(0, 1.0f);
                     if (hero.prev_state == 0x10 && scale_game_frames(4) > hero.state_timer) {
-                        if (FUN_L03_00216648(3, 0) == 0) {
+                        if (hero_set_state(3, 0) == 0) {
                             break;
                         }
                         FUN_L00_002323b8(5, 0, -1.0f);
@@ -1424,18 +1424,18 @@ void FUN_L03_0021c668(void) {
                         break;
                     }
                     if (D_0013C940.f1A0 & 0xA) {
-                        FUN_L03_00216648(4, 1);
+                        hero_set_state(4, 1);
                         FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
                     }
                     if (hero.unk190 > D_L03_0017BEB8.fC &&
-                        fast_difference_between_rotations(hero.unk180, hero.rot.f[2]) <
+                        fast_difference_between_rotations(hero.target_yaw, hero.rot.f[2]) <
                             1.5707964f) {
                         if (hero.unk12E2 != 0 || hero.unk20A9 != 0) {
-                            FUN_L03_00216648(2, 1);
+                            hero_set_state(2, 1);
                             break;
                         }
-                        FUN_L03_00216648(2, 0);
+                        hero_set_state(2, 0);
                         if (hero.state == 2) {
                             hero.state_step = 1;
                             FUN_L00_002323b8(4, 2, scale_game_frames(8));
@@ -1446,10 +1446,10 @@ void FUN_L03_0021c668(void) {
                     }
                     if (D_L03_0017BEB8.fC < hero.unk190) {
                         if (hero.unk12E2 != 0 || hero.unk20A9 != 0) {
-                            FUN_L03_00216648(2, 1);
+                            hero_set_state(2, 1);
                             break;
                         }
-                        FUN_L03_00216648(2, 0);
+                        hero_set_state(2, 0);
                         if (hero.state == 2) {
                             hero.state_step = 1;
                             FUN_L00_002323b8(4, D_L03_0015F6DC_d, scale_game_frames(0xC));
@@ -1458,14 +1458,14 @@ void FUN_L03_0021c668(void) {
                         break;
                     }
                     if (hero.unk30E == 0) {
-                        if (FUN_L03_00216648(0, 0) == 0) {
+                        if (hero_set_state(0, 0) == 0) {
                             break;
                         }
                         FUN_L00_002323b8(FUN_L01_00226f10(0), 0, -2.0f);
                         FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
                     }
-                    if (FUN_L03_00216648(0, 0) == 0) {
+                    if (hero_set_state(0, 0) == 0) {
                         break;
                     }
                     FUN_L00_002323b8(7, 0x17, scale_game_frames(9));
@@ -1505,7 +1505,7 @@ void FUN_L03_0021c668(void) {
                                 if (ok) {
                                     if (FUN_L00_00266d60(0x1F000, scale_game_frames(5), 0)) {
                                         if (D_0013C940.f1A0 & 0xA) {
-                                            FUN_L03_00216648(0xB, 1);
+                                            hero_set_state(0xB, 1);
                                             break;
                                         }
                                     }
@@ -1521,7 +1521,7 @@ void FUN_L03_0021c668(void) {
                         (hero.state == 0xE || scale_game_frames(9) < hero.state_timer) &&
                         (D_0013C940.f1A0 & 0xA)) {
                         if (FUN_L00_00266d60(0x40, scale_game_frames(8), 0)) {
-                            FUN_L03_00216648(0x10, 1);
+                            hero_set_state(0x10, 1);
                             break;
                         }
                     }
@@ -1532,13 +1532,13 @@ void FUN_L03_0021c668(void) {
                         hero.state != 0x69) {
                         if (FUN_L00_0020d498(3) == 2 && D_0013D4C0[2] != 0 &&
                             hero.unk22D8 == 0 && D_0015ED6C * 0.9f < hero.unk168) {
-                            FUN_L03_00216648(0xA, 1);
+                            hero_set_state(0xA, 1);
                         } else if (FUN_L00_0020d498(3) == 3 && hero.unk22D8 == 0 &&
                                    D_0015ED6C * 0.9f < hero.unk168 && hero.unk1B8 == 0) {
-                            FUN_L03_00216648(0x10, 1);
+                            hero_set_state(0x10, 1);
                         }
                     }
-                    if (hero.unk420 + scale_game_frames(8) < hero.state_timer &&
+                    if (hero.state_timer_mark + scale_game_frames(8) < hero.state_timer &&
                         (hero.unk41E == 0 || scale_game_frames(0xA) < hero.unk44C) &&
                         hero.unk229C < 0.3f &&
                         (hero.state == 7 || hero.state == 9 ||
@@ -1551,17 +1551,17 @@ void FUN_L03_0021c668(void) {
                             if (hero.unk22D8 != 0) {
                                 break;
                             }
-                            FUN_L03_00216648(0x22, 1);
+                            hero_set_state(0x22, 1);
                             break;
                         }
                     }
                     if (hero.unk5FC != 0) {
-                        FUN_L03_00216648(0x74, 1);
+                        hero_set_state(0x74, 1);
                         break;
                     }
                     if (hero.unk49A < hero.state_timer) {
                         if (hero.unk418 == 0) {
-                            FUN_L03_00216648(6, 1);
+                            hero_set_state(6, 1);
                             break;
                         }
                     } else if (hero.unk418 == 0 &&
@@ -1571,7 +1571,7 @@ void FUN_L03_0021c668(void) {
                             float len = vector_length_xyz(hero.unk100.f);
                             if (len < vector_length_xyz(hero.velocity.f) * 0.5f &&
                                 hero.unk4E8 == 0 && hero.unk2DC < 2.0f) {
-                                FUN_L03_00216648(0x7A, 1);
+                                hero_set_state(0x7A, 1);
                                 break;
                             }
                         }
@@ -1583,10 +1583,10 @@ void FUN_L03_0021c668(void) {
                         if (hero.state == 0xE && hero.unkAA8 < 35.0f) {
                             isNear = 1;
                         }
-                        if (!(hero.state_timer > hero.unk420)) {
+                        if (!(hero.state_timer > hero.state_timer_mark)) {
                             break;
                         }
-                        if (hero.state_timer == hero.unk420 + 1) {
+                        if (hero.state_timer == hero.state_timer_mark + 1) {
                             if (hero.unk41C != 0) {
                                 float d = hero.unk3D0 - hero.state_timer;
                                 if (0.0f < d) {
@@ -1679,7 +1679,7 @@ void FUN_L03_0021c668(void) {
                     }
                     if (hero.unk418 != 0) {
                         if (hero.state == 0xA) {
-                            if (FUN_L03_00216648(3, 0) == 0) {
+                            if (hero_set_state(3, 0) == 0) {
                                 break;
                             }
                             FUN_L00_002323b8(5, 0, -2.0f);
@@ -1691,12 +1691,12 @@ void FUN_L03_0021c668(void) {
                                 if (hero.unk30E < scale_game_frames(4)) {
                                     if (hero.unk190 > D_L03_0017BEB8.fC &&
                                         fast_difference_between_rotations(
-                                            hero.unk180, hero.rot.f[2]) < 1.0471976f &&
+                                            hero.target_yaw, hero.rot.f[2]) < 1.0471976f &&
                                         D_L03_0017BEB8.f18 * D_0015ED6C * 0.85f < hero.unk164) {
-                                        FUN_L03_00216648(9, 1);
+                                        hero_set_state(9, 1);
                                         break;
                                     }
-                                    FUN_L03_00216648(7, 1);
+                                    hero_set_state(7, 1);
                                     break;
                                 }
                             }
@@ -1706,11 +1706,11 @@ void FUN_L03_0021c668(void) {
                         FUN_L01_00242198();
                     } else if (hero.unk41E != 0 && !(hero.unk4AA > hero.state_timer) &&
                                hero.unk2DC > hero.unk490) {
-                        FUN_L03_00216648(6, 1);
+                        hero_set_state(6, 1);
                     }
                     if (hero.state == 0x10 && scale_game_frames(0x3C) < hero.state_timer &&
                         hero.unk2DC > 1.5f) {
-                        FUN_L03_00216648(6, 1);
+                        hero_set_state(6, 1);
                         break;
                     }
                     {
@@ -1728,7 +1728,7 @@ void FUN_L03_0021c668(void) {
                                 }
                                 if (FUN_L00_00266d60(0x40, a, &sp38)) {
                                     if (sp38 < hero.state_timer) {
-                                        FUN_L03_00216648(0x11, 1);
+                                        hero_set_state(0x11, 1);
                                         break;
                                     }
                                 }
@@ -1776,7 +1776,7 @@ void FUN_L03_0021c668(void) {
                                      (hero.unk2DC > 0.7f &&
                                       AbsoluteFloat(FUN_L00_00233a78(hero.velocity.f)) <
                                           D_0015ED6C * 5.8f))) {
-                                    FUN_L03_00216648(0xE, 1);
+                                    hero_set_state(0xE, 1);
                                 } else if (D_0013D4C0[2] != 0 && FUN_L00_0020d498(3) != 4 &&
                                            hero.unk22D8 == 0 && (D_0013C940.f1A0 & 0x40) &&
                                            delay < hero.state_timer &&
@@ -1789,31 +1789,31 @@ void FUN_L03_0021c668(void) {
                                         lim = 1.5f;
                                     }
                                     if (lim < hero.unk2DC) {
-                                        FUN_L03_00216648(8, 1);
+                                        hero_set_state(8, 1);
                                     }
                                 }
                             }
                         }
                     }
                     if (hero.unk4E8 != 0 && hero.state != 0xB) {
-                        FUN_L03_00216648(0x18, 1);
+                        hero_set_state(0x18, 1);
                     }
                     break;
                 case 22:
                     if (12.5f < hero.unkAA8 && hero.unk30E != 0 && hero.unk2DC > 1.0f) {
-                        FUN_L03_00216648(6, 1);
+                        hero_set_state(6, 1);
                         break;
                     }
                     if (hero.state_timer > scale_game_frames(0x1B)) {
                         if (hero.unk22A8 <= 0) {
-                            FUN_L03_00216648(0x3D, 1);
+                            hero_set_state(0x3D, 1);
                             break;
                         }
                         if (hero.prev_state == 0x81) {
-                            FUN_L03_00216648(0x81, 1);
+                            hero_set_state(0x81, 1);
                             break;
                         }
-                        FUN_L03_00216648(0, 0);
+                        hero_set_state(0, 0);
                     }
                     break;
                 case 83:
@@ -1825,15 +1825,15 @@ void FUN_L03_0021c668(void) {
                         }
                     }
                     if (D_0013C940.f1A0 & 5) {
-                        FUN_L03_00216648(1, 1);
+                        hero_set_state(1, 1);
                         break;
                     }
                     if (hero.unk30E != 0) {
-                        FUN_L03_00216648(0x55, 1);
+                        hero_set_state(0x55, 1);
                         break;
                     }
                     if (D_0013C940.f1A4 & 0x20) {
-                        FUN_L03_00216648(0x59, 1);
+                        hero_set_state(0x59, 1);
                         break;
                     }
                     if (FUN_L00_00266d60(0x80, scale_game_frames(7), 0)) {
@@ -1847,7 +1847,7 @@ void FUN_L03_0021c668(void) {
                     }
                     FUN_L00_002118c8(0, 1.0f);
                     if (hero.unk229C > 0.22f && hero.unk190 > 0.0f) {
-                        FUN_L03_00216648(0x54, 1);
+                        hero_set_state(0x54, 1);
                     }
                     break;
                 case 88:
@@ -1858,14 +1858,14 @@ void FUN_L03_0021c668(void) {
                         break;
                     }
                     if (hero.unk30E != 0) {
-                        FUN_L03_00216648(0x55, 1);
+                        hero_set_state(0x55, 1);
                         break;
                     }
-                    FUN_L03_00216648(0x53, 1);
+                    hero_set_state(0x53, 1);
                     break;
                 case 89:
                     if (hero.state_timer > scale_game_frames(0x2D) && !(D_0013C940.f1A0 & 0x20)) {
-                        FUN_L03_00216648(0x53, 0);
+                        hero_set_state(0x53, 0);
                         FUN_L00_002323b8(0, 0, scale_game_frames(0x14));
                     }
                     break;
@@ -1880,15 +1880,15 @@ void FUN_L03_0021c668(void) {
                         hero.velocity.f[2] = D_0015ED6C * -9.0f;
                     }
                     if (hero.unk22A8 <= 0) {
-                        FUN_L03_00216648(0x57, 1);
+                        hero_set_state(0x57, 1);
                         break;
                     }
                     if (hero.unk229C > 0.5f && scale_game_frames(0x28) > hero.state_timer &&
                         hero.unk1C4 == 0) {
-                        FUN_L03_00216648(0x54, 1);
+                        hero_set_state(0x54, 1);
                         break;
                     }
-                    FUN_L03_00216648(0x53, 0);
+                    hero_set_state(0x53, 0);
                     FUN_L00_002323b8(7, 0, -1.0f);
                     hero.unkA90 = 0.35f;
                     hero.unk1C4 = scale_game_frames(0x14);
@@ -1897,7 +1897,7 @@ void FUN_L03_0021c668(void) {
                     hero.unkA90 = hero.unk160 * 54.0f;
                     if (!(hero.unk30E < scale_game_frames(5))) {
                         if (hero.unk2DC > 0.8f || hero.unk2E0 > 0.87266463f) {
-                            FUN_L03_00216648(0x55, 1);
+                            hero_set_state(0x55, 1);
                             break;
                         }
                     }
@@ -1911,29 +1911,29 @@ void FUN_L03_0021c668(void) {
                         break;
                     }
                     if (D_0013C940.f1A4 & 0x20) {
-                        FUN_L03_00216648(0x59, 1);
+                        hero_set_state(0x59, 1);
                         break;
                     }
                     if (hero.unk30E == 0 && hero.unk229C < 0.17f) {
-                        FUN_L03_00216648(0x53, 1);
+                        hero_set_state(0x53, 1);
                     }
                     break;
                 case 86:
                     if (!(hero.state_timer < scale_game_frames(0x20)) && hero.unk30E != 0 &&
                         hero.unk2DC > 1.0f) {
-                        FUN_L03_00216648(0x55, 1);
+                        hero_set_state(0x55, 1);
                         break;
                     }
                     if (hero.unkA98 & 2) {
-                        FUN_L03_00216648(0x53, 1);
+                        hero_set_state(0x53, 1);
                         break;
                     }
                     if (scale_game_frames(0x2D) < hero.state_timer) {
                         if (hero.unk22A8 <= 0) {
-                            FUN_L03_00216648(0x57, 1);
+                            hero_set_state(0x57, 1);
                             break;
                         }
-                        FUN_L03_00216648(0x53, 0);
+                        hero_set_state(0x53, 0);
                     }
                     break;
                 case 30:
@@ -1957,7 +1957,7 @@ void FUN_L03_0021c668(void) {
                     if (hero.state == 0x1E) {
                         int a;
 
-                        FUN_L03_00216648(0, 0);
+                        hero_set_state(0, 0);
                         a = FUN_L01_00226f10(1);
                         if (((unsigned char *)hero.moby)[0x53] != a) {
                             FUN_L00_002323b8(a, 0, scale_game_frames(8));
@@ -1967,7 +1967,7 @@ void FUN_L03_0021c668(void) {
                     break;
                 case 32:
                     if (((unsigned char *)hero.secondary_moby) != 0 && hero.unkA9C == 0 && hero.unkAA8 > 20.0f) {
-                        FUN_L03_00216648(0, 0);
+                        hero_set_state(0, 0);
                     }
                     break;
                 case 35:
@@ -1977,11 +1977,11 @@ void FUN_L03_0021c668(void) {
                             FUN_L00_00229660();
                             break;
                         }
-                        FUN_L03_00216648(7, 1);
+                        hero_set_state(7, 1);
                         break;
                     }
                     if (21.0f <= hero.unkAA8) {
-                        FUN_L03_00216648(0, 0);
+                        hero_set_state(0, 0);
                     }
                     break;
                 }

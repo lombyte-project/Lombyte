@@ -62,7 +62,7 @@ int FUN_L00_001f0d60_239fc0(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
 int FUN_001f0b58_239fc0(void) __asm__("FUN_001f0b58");
 f32 FUN_001f99c0_239fc0(f32) __asm__("FUN_001f99c0");
 void FUN_L00_0020b930_239fc0(void) __asm__("FUN_L00_0020b930");
-void FUN_L05_0024cee8_239fc0(int, int) __asm__("FUN_L05_0024cee8");
+extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 #define P D_0013F350_239fc0
 void FUN_L05_00239fc0(void) {
     u8 save = P.b12ED;
@@ -148,7 +148,7 @@ void FUN_L05_00239fc0(void) {
     s7B:
         s = 0x7B;
     call:
-        FUN_L05_0024cee8_239fc0(s, 1);
+        hero_set_state(s, 1);
         return;
     call3c:
         s = 0x3C;
@@ -157,7 +157,7 @@ void FUN_L05_00239fc0(void) {
     if (P.b12EB && P.i2084 != 0x7B && FUN_001f99c0_239fc0(P.f2F4 - (P.f88 + 0.25f)) < 1.0f &&
         0.0f < P.f2F4 - P.f88 && P.f108 < 0.0f) {
         FUN_L00_0020b930_239fc0();
-        FUN_L05_0024cee8_239fc0(0x7B, 1);
+        hero_set_state(0x7B, 1);
     }
 }
 #undef P

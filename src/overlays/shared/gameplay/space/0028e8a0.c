@@ -102,7 +102,7 @@ extern struct {
 } D_001516D0_28e9c8 __asm__("D_001516D0");
 void memset_28e9c8(void *, int, int) __asm__("FUN_001f97e8");
 void f2335a0_28e9c8(void) __asm__("FUN_002335a0");
-int f2223f8_28e9c8(int, int) __asm__("FUN_L00_002223f8");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void f232fe8_28e9c8(void) __asm__("FUN_L00_00232fe8");
 int fr_28e9c8(int) __asm__("FUN_001f96f8");
 void f245610_28e9c8(int, int) __asm__("FUN_L00_00245610");
@@ -128,7 +128,7 @@ void FUN_L00_0028e9c8(int a) {
     D_L00_0015F5C4_28e9c8 = 6;
     D_L00_001611CC_28e9c8 = u;
     D_L00_0015F400_28e9c8 = 0;
-    f2223f8_28e9c8(100, 2);
+    hero_set_state(100, 2);
     D_001413F5_28e9c8 = 1;
     f232fe8_28e9c8();
     D_0013E030_28e9c8.x0->flags |= 1;

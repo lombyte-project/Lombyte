@@ -1583,7 +1583,7 @@ extern int FUN_001fa6e0(int, int, float);
 extern s32 allocate_voice_for_target_entry_u(s32, s32, void *) __asm__("func_0022DA68");
 extern void FUN_L00_00260738(char *, void *, void *, void *);
 extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L17_0021e530(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 extern void FUN_L17_002ee9c0_c(char *, char *, char *) __asm__("FUN_L17_002ee9c0");
 extern void FUN_L17_002eea70_c(char *) __asm__("FUN_L17_002eea70");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
@@ -1685,7 +1685,7 @@ void FUN_L17_002ee2b0(char *moby) {
                 B(moby, 0x20) = 9;
             }
             if (B(moby, 0xBC) != 0) {
-                FUN_L17_0021e530(0, 0);
+                hero_set_state(0, 0);
             }
             if (FUN_L00_0028d8c0(moby, W(state, 0x6C))) {
                 release_voice_slot(W(state, 0x6C));

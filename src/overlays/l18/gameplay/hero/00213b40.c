@@ -10,7 +10,7 @@ extern int FUN_001f0b58(void);
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern void FUN_001f9810(void *, int);
 extern void FUN_L00_0020b930(void);
-extern void FUN_L18_00227dd0(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
 void FUN_L18_00213b40(void) {
@@ -65,7 +65,7 @@ void FUN_L18_00213b40(void) {
         if (*(int *)(q + 0x2084) != 0x7B) {
             if (FUN_L00_001f0d60(*(float *)(q + 0x234) + 0.03f, q + 0xD0, 2, 0)) {
                 if (FUN_001f0b58() == 0xB) {
-                    FUN_L18_00227dd0(0x7B, 1);
+                    hero_set_state(0x7B, 1);
                     return;
                 }
             }
@@ -101,7 +101,7 @@ void FUN_L18_00213b40(void) {
         if (*(unsigned char *)(q + 0x12E3) != 0 && *(int *)(q + 0x300) != 0) {
             int k = *(int *)(q + 0x208C);
             if (k != 0x10 && k != 0x14 && k != 7) {
-                FUN_L18_00227dd0(0x31, 1);
+                hero_set_state(0x31, 1);
                 return;
             }
         }
@@ -114,9 +114,9 @@ void FUN_L18_00213b40(void) {
                         if (*(float *)(h + 0x108) < 0.0f) {
                             FUN_L00_0020b930();
                             if (*(int *)(h + 0x22A8) == 0)
-                                FUN_L18_00227dd0(0x7B, 1);
+                                hero_set_state(0x7B, 1);
                             else
-                                FUN_L18_00227dd0(0x68, 1);
+                                hero_set_state(0x68, 1);
                             return;
                         }
                     }
@@ -129,7 +129,7 @@ void FUN_L18_00213b40(void) {
                 if (*(float *)(h + 0x2F4) - *(float *)(h + 0x88) > 0.0f) {
                     if (*(float *)(h + 0x108) < 0.0f) {
                         FUN_L00_0020b930();
-                        FUN_L18_00227dd0(0x7B, 1);
+                        hero_set_state(0x7B, 1);
                     }
                 }
             }
@@ -201,7 +201,7 @@ f32 FUN_001fa580_210ce8(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8_210ce8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_210ce8(f32) __asm__("FUN_001f9de0");
 void FUN_001f9a10_210ce8(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L18_00227dd0_210ce8(s32, s32) __asm__("FUN_L18_00227dd0");
+extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
 void FUN_L00_00216de8_210ce8(s32, s32) __asm__("FUN_L00_00216de8");
 void FUN_L00_002a9be0_210ce8(void) __asm__("FUN_L00_002a9be0");
 void FUN_001f99f8_210ce8(void *) __asm__("FUN_001f99f8");
@@ -285,11 +285,11 @@ s32 FUN_L18_00218a90(s32 arg) {
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
         call_ret:
-            FUN_L18_00227dd0_210ce8(id, 1);
+            hero_set_state(id, 1);
             return 1;
         }
         if (G.i208C == 0x16) {
-            FUN_L18_00227dd0_210ce8(0x6D, 1);
+            hero_set_state(0x6D, 1);
             G.f128 = D_0015ED6C_210ce8 * 7.0f;
             return 1;
         }
@@ -299,7 +299,7 @@ s32 FUN_L18_00218a90(s32 arg) {
                 id = 0x82;
                 goto call_ret;
             }
-            FUN_L18_00227dd0_210ce8(0x75, 1);
+            hero_set_state(0x75, 1);
         } else if (G.i208C == 0x11) {
             mob = G.p2280;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
@@ -313,7 +313,7 @@ s32 FUN_L18_00218a90(s32 arg) {
                     FUN_L00_00216de8_210ce8(0x1C, 0);
                 }
             }
-            FUN_L18_00227dd0_210ce8(0x76, 1);
+            hero_set_state(0x76, 1);
         } else if (G.i208C == 3) {
             mob = G.p2280;
             if (mob != 0) {
@@ -322,9 +322,9 @@ s32 FUN_L18_00218a90(s32 arg) {
                     goto call_ret;
                 }
             }
-            FUN_L18_00227dd0_210ce8(0x16, 1);
+            hero_set_state(0x16, 1);
         } else {
-            FUN_L18_00227dd0_210ce8(0x16, 1);
+            hero_set_state(0x16, 1);
         }
         e = D_0015ED6C_210ce8;
         a = e * 5.7f;
@@ -340,7 +340,7 @@ s32 FUN_L18_00218a90(s32 arg) {
         break;
     case 2:
         if ((tbl->i24 & 4) || G.i1630 <= 0) {
-            FUN_L18_00227dd0_210ce8(0x5D, 1);
+            hero_set_state(0x5D, 1);
             FUN_L00_002a9be0_210ce8();
             if (G.h30E == 0) {
                 FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 7.0f,
@@ -351,7 +351,7 @@ s32 FUN_L18_00218a90(s32 arg) {
         FUN_001f99f8_210ce8(&v);
         break;
     case 3:
-        FUN_L18_00227dd0_210ce8(0x56, 1);
+        hero_set_state(0x56, 1);
         FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 5.0f, D_0015ED6C_210ce8 * 2.4f);
         break;
     }

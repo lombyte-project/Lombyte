@@ -21,7 +21,7 @@ f32 FUN_001fa580_8(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8_8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_8(f32) __asm__("FUN_001f9de0");
 void FUN_001f9a10_8(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L08_00230b38_8(s32, s32) __asm__("FUN_L08_00230b38");
+extern int hero_set_state(int, int) __asm__("FUN_L08_00230b38");
 void FUN_L00_00216de8_8(s32, s32) __asm__("FUN_L00_00216de8");
 void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
@@ -93,11 +93,11 @@ s32 FUN_L08_00222800(s32 arg) {
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
         call_ret:
-            FUN_L08_00230b38_8(id, 1);
+            hero_set_state(id, 1);
             return 1;
         }
         if (G.control_mode == 0x16) {
-            FUN_L08_00230b38_8(0x6D, 1);
+            hero_set_state(0x6D, 1);
             G.unk120.f[2] = D_0015ED6C_8 * 7.0f;
             return 1;
         }
@@ -107,7 +107,7 @@ s32 FUN_L08_00222800(s32 arg) {
                 id = 0x82;
                 goto call_ret;
             }
-            FUN_L08_00230b38_8(0x75, 1);
+            hero_set_state(0x75, 1);
         } else if (G.control_mode == 0x11) {
             mob = (u8 *)G.unk2280;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
@@ -121,7 +121,7 @@ s32 FUN_L08_00222800(s32 arg) {
                     FUN_L00_00216de8_8(0x1C, 0);
                 }
             }
-            FUN_L08_00230b38_8(0x76, 1);
+            hero_set_state(0x76, 1);
         } else if (G.control_mode == 3) {
             mob = (u8 *)G.unk2280;
             if (mob != 0) {
@@ -130,9 +130,9 @@ s32 FUN_L08_00222800(s32 arg) {
                     goto call_ret;
                 }
             }
-            FUN_L08_00230b38_8(0x16, 1);
+            hero_set_state(0x16, 1);
         } else {
-            FUN_L08_00230b38_8(0x16, 1);
+            hero_set_state(0x16, 1);
         }
         e = D_0015ED6C_8;
         a = e * 5.7f;
@@ -147,7 +147,7 @@ s32 FUN_L08_00222800(s32 arg) {
         }
         break;
     case 3:
-        FUN_L08_00230b38_8(0x56, 1);
+        hero_set_state(0x56, 1);
         FUN_L00_00210c80_8(&v, flag, D_0015ED6C_8 * 5.0f, D_0015ED6C_8 * 2.4f);
         break;
     }

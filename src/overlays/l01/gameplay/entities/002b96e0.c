@@ -399,7 +399,7 @@ extern int FUN_001f9770(void *);
 extern int FUN_L00_0025a478_u(void *, void *, void *, int, int *, float *, int,
                               int) __asm__("FUN_L00_0025a478");
 extern int FUN_L00_0025c698(void *, void *);
-extern int FUN_L01_0023cf98(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern int FUN_L01_002e6790(void *, int *);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
@@ -686,7 +686,7 @@ void FUN_L01_002e6bf0(PeMoby *m) {
         }
         if (v->w1C8 == 0 && v->w1C4 != -1) {
             FUN_L00_002eac18(0);
-            FUN_L01_0023cf98(0, 1);
+            hero_set_state(0, 1);
             D_L01_0015F404 = 0;
             v->w1C4 = -1;
         }
@@ -698,7 +698,7 @@ void FUN_L01_002e6bf0(PeMoby *m) {
             if (v->w1C4 != -1) {
                 char *p;
 
-                FUN_L01_0023cf98(0x1F, 0);
+                hero_set_state(0x1F, 0);
                 p = D_L01_001600EC + (v->w1C4 << 7);
                 FUN_L00_002eaaa0(p + 0x30, p + 0x70, 0, 0, 0);
                 D_L01_0015F404 = 1;
@@ -2447,7 +2447,7 @@ extern s32 D_L01_0015F404;
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_L01_002f9000(Obj *obj);
 extern void FUN_L00_002eac18(s32);
-extern void FUN_L01_0023cf98_u(s32, s32) __asm__("FUN_L01_0023cf98");
+extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
 void FUN_L01_002f9080(CapMoby *m) {
     CapVars *v;
@@ -2538,7 +2538,7 @@ void FUN_L01_002f9080(CapMoby *m) {
     case 4:
         if (v->wait == 0 && v->music != -1) {
             FUN_L00_002eac18(0);
-            FUN_L01_0023cf98_u(0, 1);
+            hero_set_state(0, 1);
             D_L01_0015F404 = 0;
             v->music = -1;
         }

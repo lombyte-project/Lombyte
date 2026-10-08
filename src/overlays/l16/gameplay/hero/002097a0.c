@@ -16,7 +16,7 @@ extern int FUN_001f0b58(void);
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern void FUN_001f9810(void *, int);
 extern void FUN_L00_0020b930(void);
-extern void FUN_L16_0021e398(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L16_0021e398");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
 void FUN_L16_002097a0(void) {
@@ -66,7 +66,7 @@ void FUN_L16_002097a0(void) {
         if (*(int *)(q + 0x2084) != 0x7B) {
             if (FUN_L00_001f0d60(*(float *)(q + 0x234) + 0.03f, q + 0xD0, 2, 0)) {
                 if (FUN_001f0b58() == 0xB) {
-                    FUN_L16_0021e398(0x7B, 1);
+                    hero_set_state(0x7B, 1);
                     return;
                 }
             }
@@ -114,7 +114,7 @@ void FUN_L16_002097a0(void) {
         if (*(unsigned char *)(q + 0x12E3) != 0 && *(int *)(q + 0x300) != 0) {
             int k = *(int *)(q + 0x208C);
             if (k != 0x10 && k != 0x14 && k != 7) {
-                FUN_L16_0021e398(0x31, 1);
+                hero_set_state(0x31, 1);
                 return;
             }
         }
@@ -124,7 +124,7 @@ void FUN_L16_002097a0(void) {
                 if (*(float *)(h + 0x2F0) - *(float *)(h + 0x88) > 0.0f) {
                     if (*(float *)(h + 0x108) < 0.0f) {
                         FUN_L00_0020b930();
-                        FUN_L16_0021e398(0x7F, 1);
+                        hero_set_state(0x7F, 1);
                     }
                 }
             }

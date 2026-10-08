@@ -198,7 +198,7 @@ typedef struct {
     char pad[0x50];
 } E_20d460;
 extern E_20d460 D_13F350_20d460[] __asm__("D_0013F350");
-/* Returns word 0x1090 of record i in D_0013F350 when its kind at 0x10B4 is 2, else 0. */
+/* Returns word 0x1090 of record i in ((char *)&hero) when its kind at 0x10B4 is 2, else 0. */
 s32 FUN_L00_0020d460(s32 i) {
     char *p = (char *)&D_13F350_20d460[i];
     if (*(s32 *)(p + 0x10B4) == 2) {
@@ -206,10 +206,9 @@ s32 FUN_L00_0020d460(s32 i) {
     }
     return 0;
 }
-extern char D_0013F350[];
-/* Returns word 0x10B8 of record i (0x50 bytes) in D_0013F350 when its kind is 2, else -1. */
+/* Returns word 0x10B8 of record i (0x50 bytes) in ((char *)&hero) when its kind is 2, else -1. */
 int FUN_L00_0020d498(int i) {
-    char *p = D_0013F350 + i * 0x50;
+    char *p = ((char *)&hero) + i * 0x50;
     switch (*(int *)(p + 0x10B4)) {
     case 2:
         return *(int *)(p + 0x10B8);
@@ -244,7 +243,7 @@ int FUN_L00_0020d540(void) {
     return (unsigned)(FUN_L00_0020d498_0020d540() - 0x1c) < 2;
 }
 extern u32 D_0013F350_c[1] __asm__("D_0013F350");
-/* True when D_0013F350+0x208C is 0x11/0x12 or +0x2084 is 0x6A, 0x75, 0x76 or 0x82. */
+/* True when ((char *)&hero)+0x208C is 0x11/0x12 or +0x2084 is 0x6A, 0x75, 0x76 or 0x82. */
 s32 FUN_L00_0020d568(void) {
     u32 *p = D_0013F350_c;
     u32 a = *(u32 *)((u8 *)p + 0x208C);
@@ -341,11 +340,10 @@ typedef struct {
     int count;
 } RingBlock;
 
-extern char D_0013F350[];
 
-/* Returns the value from back steps ago in a 32-entry ring in D_0013F350. */
+/* Returns the value from back steps ago in a 32-entry ring in ((char *)&hero). */
 float FUN_L00_0020d658(int back) {
-    RingBlock *b = (RingBlock *)D_0013F350;
+    RingBlock *b = (RingBlock *)((char *)&hero);
     int n = back < 32 ? back : 31;
 
     if (b->count < n) {
@@ -713,10 +711,11 @@ void FUN_L00_0020e4c8(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020ED30), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern int FUN_L00_00205000(int);
 extern void FUN_L00_002323b8(int, int, float);
 
+/* The byte array spelling keeps retail's separate stores to 0x20A8/0x20AA. */
+extern char D_0013F350[];
 void FUN_L00_0020e698(void) {
     unsigned char *g = (unsigned char *)D_0013F350;
     if (g[0x20A8] != 0) {
@@ -767,7 +766,7 @@ void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void FUN_L00_0020fca8(int i, int v) {
     char *e;
     {
-        char *f = D_0013F350 + i * 0x50;
+        char *f = ((char *)&hero) + i * 0x50;
         O *o;
         *(int *)(f + 0x10a4) = v;
         if (*(int *)(f + 0x10b4) != 3) {
@@ -777,7 +776,7 @@ void FUN_L00_0020fca8(int i, int v) {
                 o->fn();
         }
     }
-    e = D_0013F350 + i * 0x50;
+    e = ((char *)&hero) + i * 0x50;
     *(int *)(e + 0x10b4) = 0;
     *(int *)(e + 0x10b8) = 0;
     if (*(void **)(e + 0x1090)) {
@@ -797,12 +796,11 @@ void FUN_L00_0020fca8(int i, int v) {
    0x22CE to 3 and +0x1DC to func_001F9850(70). */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210418), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
-/* For the listed ids sets D_0013F350+0x22CE to 3 and +0x1DC to scale_game_frames(0x46). */
+/* For the listed ids sets ((char *)&hero)+0x22CE to 3 and +0x1DC to scale_game_frames(0x46). */
 void FUN_L00_0020fd80(int id) {
-    char *base;
+    struct Hero *base;
 
     switch (id) {
     case 9:
@@ -810,9 +808,9 @@ void FUN_L00_0020fd80(int id) {
     case 13:
     case 16:
     case 23:
-        base = D_0013F350;
-        *(short *)(base + 0x22CE) = 3;
-        *(short *)(base + 0x1DC) = scale_game_frames(0x46);
+        base = &hero;
+        base->unk22CE = 3;
+        base->unk1DC = scale_game_frames(0x46);
         break;
     }
 }
@@ -824,10 +822,9 @@ void FUN_L00_0020fd80(int id) {
    D_0013F450 + 0x1DA to func_001F9850(70). */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210478), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
-/* Sets the short at D_0013F350+0x1DA to scale_game_frames(0x46) for the listed ids. */
+/* Sets the short at ((char *)&hero)+0x1DA to scale_game_frames(0x46) for the listed ids. */
 void FUN_L00_0020fde0(int id) {
     switch (id) {
     case 9:
@@ -841,7 +838,7 @@ void FUN_L00_0020fde0(int id) {
     case 22:
     case 23:
     case 26:
-        *(short *)(D_0013F350 + 0x1DA) = scale_game_frames(0x46);
+        *(short *)(((char *)&hero) + 0x1DA) = scale_game_frames(0x46);
         break;
     }
 }
@@ -926,20 +923,20 @@ void FUN_L00_0020fea0(int i) {
 
     if (i == 0) {
         int v;
-        char *g = D_0013F350;
+        char *g = ((char *)&hero);
         v = *(int *)(g + 0x10B8);
         if (v != 8 && v != 0x17 && v != 9 && *(unsigned char *)(g + 0x10AC) == 2) {
             *(unsigned char *)(g + 0x10AC) = 0;
         }
     }
     if (i == 0) {
-        Sel *g = (Sel *)(D_0013F350);
+        Sel *g = (Sel *)(((char *)&hero));
         if (g->f20A7 != 0 && *(int *)((char *)g + 0x10B8) != 8) {
             g->f20A6 = 1;
         }
     }
     if (i == 0) {
-        Sel *g = (Sel *)(D_0013F350);
+        Sel *g = (Sel *)(((char *)&hero));
         if (g->f20A7 != 0 && *(int *)((char *)g + 0x10B8) == 8) {
             if (g->a[0] == 0x1F) {
                 g->a[0] = 0;
@@ -950,7 +947,7 @@ void FUN_L00_0020fea0(int i) {
         }
     }
     {
-        Sel *g = (Sel *)(D_0013F350);
+        Sel *g = (Sel *)(((char *)&hero));
         if (g->f20AC != 0 && i == 0) {
             if (g->f20A6 == 0 || *(int *)((char *)g + 0x10B8) == 8) {
                 g->f20A6 = 0;
@@ -961,16 +958,16 @@ void FUN_L00_0020fea0(int i) {
     changed = 0;
     {
         char *pad = D_0013C940;
-        if ((*(int *)(pad + 0x1A4) & 0x80) || ((Sel *)(D_0013F350))->f20A6 != 0) {
+        if ((*(int *)(pad + 0x1A4) & 0x80) || ((Sel *)(((char *)&hero)))->f20A6 != 0) {
             if (i == 0) {
                 int v;
-                Sel *g = (Sel *)(D_0013F350);
+                Sel *g = (Sel *)(((char *)&hero));
                 v = *(int *)((char *)g + 0x10B8);
                 if (v != 8) {
                     if (g->f20A6 != 0 && v != 0 && v != 0x1F) {
                         g->c[0] = v;
                     }
-                    ((Sel *)(D_0013F350))->b[i] = 8;
+                    ((Sel *)(((char *)&hero)))->b[i] = 8;
                     changed = 1;
                 }
             }
@@ -979,7 +976,7 @@ void FUN_L00_0020fea0(int i) {
     if (i == 0) {
         char *pad = D_0013C940;
         if (*(int *)(pad + 0x1A4) & 0x20) {
-            Sel *g = (Sel *)(D_0013F350);
+            Sel *g = (Sel *)(((char *)&hero));
             if (g->f20A7 == 0) {
                 if (g->f10B8 != *(int *)(D_00141660) && *(int *)(D_00141660) != 0) {
                     g->b[0] = *(int *)(D_00141660);
@@ -990,16 +987,16 @@ void FUN_L00_0020fea0(int i) {
     }
     if (i == 1) {
         Sel *g;
-        if (FUN_L00_0020d568_c() || ((Sel *)(D_0013F350))->f2084 == 0x12) {
+        if (FUN_L00_0020d568_c() || ((Sel *)(((char *)&hero)))->f2084 == 0x12) {
             int v;
-            g = (Sel *)(D_0013F350);
+            g = (Sel *)(((char *)&hero));
             v = *(int *)((char *)g + 0x1108);
             if (v != 0) {
                 g->c[1] = v;
                 g->a[1] = 0x26;
             }
         }
-        g = (Sel *)(D_0013F350);
+        g = (Sel *)(((char *)&hero));
         if (g->f208C == 0xF && D_0013D4C0[0x1D] != 0) {
             if (*(int *)(D_00141660 + 4) != 0x1D || *(int *)((char *)g + i * 0x50 + 0x10B8) == 0) {
                 int v;
@@ -1012,7 +1009,7 @@ void FUN_L00_0020fea0(int i) {
                 }
             }
         }
-        g = (Sel *)(D_0013F350);
+        g = (Sel *)(((char *)&hero));
         if (*(unsigned char *)((char *)g + 0x12E7) != 0 && D_0013D4C0[0x1C] != 0) {
             if (*(int *)(D_00141660 + 4) != 0x1C || *(int *)((char *)g + i * 0x50 + 0x10B8) == 0) {
                 int v;
@@ -1028,14 +1025,14 @@ void FUN_L00_0020fea0(int i) {
     }
     flag6 = 0;
     if (i == 2) {
-        Sel *g = (Sel *)(D_0013F350);
+        Sel *g = (Sel *)(((char *)&hero));
         Sel *h;
         Sel *h2;
         if (g->f208C == 0x11 || g->f2084 == 0x76 || g->f2084 == 0x6A || g->f2084 == 0x82 ||
             *(unsigned char *)((char *)g + 0x22CB) != 0) {
             if (((int *)(D_00141660))[i] != 6 ||
-                (h2 = (Sel *)(D_0013F350), *(int *)((char *)h2 + i * 0x50 + 0x10B8) == 0)) {
-                h = (Sel *)(D_0013F350);
+                (h2 = (Sel *)(((char *)&hero)), *(int *)((char *)h2 + i * 0x50 + 0x10B8) == 0)) {
+                h = (Sel *)(((char *)&hero));
                 if (*(int *)((char *)h + i * 0x50 + 0x10B8) != 6 && h->b[i] != 6 &&
                     D_0013D4C0[6] != 0) {
                     int v;
@@ -1056,10 +1053,10 @@ void FUN_L00_0020fea0(int i) {
     flag4 = 0;
     if (i == 3) {
         Sel *g;
-        if (FUN_L00_0020d568_c() || ((Sel *)(D_0013F350))->f2084 == 0x12) {
+        if (FUN_L00_0020d568_c() || ((Sel *)(((char *)&hero)))->f2084 == 0x12) {
             if (*(int *)(D_00141660 + 0xC) != 4) {
                 int v;
-                g = (Sel *)(D_0013F350);
+                g = (Sel *)(((char *)&hero));
                 v = *(int *)((char *)g + 0x11A8);
                 if (v != 4 && D_0013D4C0[4] != 0) {
                     g->c[3] = v;
@@ -1067,15 +1064,15 @@ void FUN_L00_0020fea0(int i) {
                     g->a[3] = 4;
                 }
             }
-        } else if (((Sel *)(D_0013F350))->f11A8 == 4 && ((Sel *)(D_0013F350))->c[3] != 0) {
-            ((Sel *)(D_0013F350))->d[3] = 1;
+        } else if (((Sel *)(((char *)&hero)))->f11A8 == 4 && ((Sel *)(((char *)&hero)))->c[3] != 0) {
+            ((Sel *)(((char *)&hero)))->d[3] = 1;
         }
-        if (((Sel *)(D_0013F350))->f2084 == 8 && ((int *)(D_00141660))[i] == 4) {
-            ((Sel *)(D_0013F350))->a[i] = 2;
+        if (((Sel *)(((char *)&hero)))->f2084 == 8 && ((int *)(D_00141660))[i] == 4) {
+            ((Sel *)(((char *)&hero)))->a[i] = 2;
         }
     }
     {
-        Sel *g = (Sel *)(D_0013F350);
+        Sel *g = (Sel *)(((char *)&hero));
         int *qb = g->d;
         int *q = qb + i;
         if (*q != 0) {
@@ -1101,7 +1098,7 @@ void FUN_L00_0020fea0(int i) {
         }
     }
     {
-        Sel *g = (Sel *)(D_0013F350);
+        Sel *g = (Sel *)(((char *)&hero));
         int *s;
         int *sb;
         if (*(unsigned char *)((char *)g + 0x1FF5) != 0) {
@@ -1124,12 +1121,12 @@ void FUN_L00_0020fea0(int i) {
                 ((int *)(D_00141660))[i] = *s;
                 D_0015ED8C = v;
             }
-            ((Sel *)(D_0013F350))->a[i] = 0;
+            ((Sel *)(((char *)&hero)))->a[i] = 0;
         }
     }
     {
         int v;
-        Sel *g = (Sel *)(D_0013F350);
+        Sel *g = (Sel *)(((char *)&hero));
         int *ab = g->a;
         int *a = ab + i;
         v = *a;
@@ -1146,14 +1143,14 @@ void FUN_L00_0020fea0(int i) {
                     if (i == 0 && g->a[0] != 0x24 && *(int *)((char *)g + 0x10B8) != 8) {
                         D_0015ED8C = *(int *)(D_00141660);
                     }
-                    h = (Sel *)(D_0013F350);
+                    h = (Sel *)(((char *)&hero));
                     u = h->a[i];
                     h->b[i] = u;
                     if (u != 0x24 && (flag6 == 0 || u != 6) && (flag4 == 0 || u != 4)) {
                         ((int *)(D_00141660))[i] = u;
                     }
                     if (i == 0) {
-                        Sel *k = (Sel *)(D_0013F350);
+                        Sel *k = (Sel *)(((char *)&hero));
                         D_L00_00179AC0[k->b[0]].f20 = 0x20;
                     }
                 }
@@ -1164,7 +1161,7 @@ void FUN_L00_0020fea0(int i) {
         }
     }
     {
-        char *s = D_0013F350 + i * 0x50;
+        char *s = ((char *)&hero) + i * 0x50;
         st = *(unsigned char *)(s + 0x10AC);
         if (st == 2) {
             changed = 0;
@@ -1173,36 +1170,36 @@ void FUN_L00_0020fea0(int i) {
             *(short *)(s + 0x10A8) = *(unsigned char *)(s + 0x10AD);
         }
     }
-    if (FUN_001f9770(D_0013F350 + 0x10A8 + i * 0x50) == 0) {
+    if (FUN_001f9770(((char *)&hero) + 0x10A8 + i * 0x50) == 0) {
         changed = 0;
     }
     if (changed) {
-        Sel *g = (Sel *)(D_0013F350);
+        Sel *g = (Sel *)(((char *)&hero));
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
         FUN_L00_0020a500();
         *(int *)((char *)g + 0x1010) =
             FUN_L00_00257b90(scale_game_frames(0x32), scale_game_frames(0x5A));
-        FUN_L00_0020fde0_c(*((int *)(D_0013F350 + 0x20D4) + i));
-        FUN_L00_0020fd80_c(*((int *)(D_0013F350 + 0x20D4) + i));
+        FUN_L00_0020fde0_c(*((int *)(((char *)&hero) + 0x20D4) + i));
+        FUN_L00_0020fd80_c(*((int *)(((char *)&hero) + 0x20D4) + i));
         if (g->f20A8 != 0) {
             FUN_L00_0020e698_c();
         }
         if (i == 0) {
-            if (*(int *)(D_0013F350 + 0x20D4) == 8) {
+            if (*(int *)(((char *)&hero) + 0x20D4) == 8) {
                 D_0015ED90 = 1;
             } else {
                 D_0015ED90 = 0;
             }
         }
         if (i == 3) {
-            if (((Sel *)(D_0013F350))->f11A8 == 3) {
+            if (((Sel *)(((char *)&hero)))->f11A8 == 3) {
                 D_0015ED94 = 1;
             } else {
                 D_0015ED94 = 0;
             }
         }
         {
-            Sel *k = (Sel *)(D_0013F350);
+            Sel *k = (Sel *)(((char *)&hero));
             char *s = (char *)k + i * 0x50;
             *(unsigned char *)(s + 0x10AA) = 0;
             k->a[i] = 0;
@@ -1221,7 +1218,7 @@ void FUN_L00_0020fea0(int i) {
             }
         }
         {
-            char *e = D_0013F350;
+            char *e = ((char *)&hero);
             *(int *)(e + i * 0x50 + 0x10B4) = 3;
         }
     }
@@ -1278,7 +1275,7 @@ void FUN_L00_00211380_210a08(void) __asm__("FUN_L00_00211380");
 void FUN_L00_00232628_210a08(void) __asm__("FUN_L00_00232628");
 void FUN_L00_00257024_210a08(char *) __asm__("FUN_L00_00257024");
 void FUN_L00_00207a58_210a08(void) __asm__("FUN_L00_00207a58");
-void FUN_L00_002223f8_210a08(int, int) __asm__("FUN_L00_002223f8");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_00210a08(int mode, int b, char *m) {
     char *g;
     FUN_L00_0020e698_210a08();
@@ -1313,7 +1310,7 @@ void FUN_L00_00210a08(int mode, int b, char *m) {
         *(int *)(g + 0x1630) = 200;
         break;
     }
-    FUN_L00_002223f8_210a08(b, 1);
+    hero_set_state(b, 1);
 }
 extern unsigned char D_0013F350_210b30[] __asm__("D_0013F350");
 extern s32 D_L00_0015F5C4_210b30 __asm__("D_L00_0015F5C4");
@@ -1322,7 +1319,7 @@ extern void FUN_001ff570_210b30(int, int) __asm__("FUN_001ff570");
 extern void FUN_L00_00205538_210b30(void) __asm__("FUN_L00_00205538");
 extern void FUN_L00_00206c08_210b30(void) __asm__("FUN_L00_00206c08");
 extern void FUN_L00_00232628_210b30(void) __asm__("FUN_L00_00232628");
-extern void FUN_L00_002223f8_210b30(int, int) __asm__("FUN_L00_002223f8");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 
 void FUN_L00_00210b30(void) {
     unsigned char *g = D_0013F350_210b30;
@@ -1370,7 +1367,7 @@ void FUN_L00_00210b30(void) {
         FUN_L00_00232628_210b30();
         if (*(int *)(g3 + 0x2084) != 100 ||
             (D_L00_0015F5C4_210b30 != 2 && D_L00_0015F5C4_210b30 != 6)) {
-            FUN_L00_002223f8_210b30(0, 1);
+            hero_set_state(0, 1);
         }
     }
 }
@@ -1457,7 +1454,7 @@ f32 FUN_001fa580_210ce8(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8_210ce8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_210ce8(f32) __asm__("FUN_001f9de0");
 void FUN_001f9a10_210ce8(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_002223f8_210ce8(s32, s32) __asm__("FUN_L00_002223f8");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_00216de8_210ce8(s32, s32) __asm__("FUN_L00_00216de8");
 void FUN_L00_002a9be0_210ce8(void) __asm__("FUN_L00_002a9be0");
 void FUN_001f99f8_210ce8(void *) __asm__("FUN_001f99f8");
@@ -1541,11 +1538,11 @@ s32 FUN_L00_00210ce8(s32 arg) {
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
         call_ret:
-            FUN_L00_002223f8_210ce8(id, 1);
+            hero_set_state(id, 1);
             return 1;
         }
         if (G.i208C == 0x16) {
-            FUN_L00_002223f8_210ce8(0x6D, 1);
+            hero_set_state(0x6D, 1);
             G.f128 = D_0015ED6C_210ce8 * 7.0f;
             return 1;
         }
@@ -1555,7 +1552,7 @@ s32 FUN_L00_00210ce8(s32 arg) {
                 id = 0x82;
                 goto call_ret;
             }
-            FUN_L00_002223f8_210ce8(0x75, 1);
+            hero_set_state(0x75, 1);
         } else if (G.i208C == 0x11) {
             mob = G.p2280;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
@@ -1569,7 +1566,7 @@ s32 FUN_L00_00210ce8(s32 arg) {
                     FUN_L00_00216de8_210ce8(0x1C, 0);
                 }
             }
-            FUN_L00_002223f8_210ce8(0x76, 1);
+            hero_set_state(0x76, 1);
         } else if (G.i208C == 3) {
             mob = G.p2280;
             if (mob != 0) {
@@ -1578,9 +1575,9 @@ s32 FUN_L00_00210ce8(s32 arg) {
                     goto call_ret;
                 }
             }
-            FUN_L00_002223f8_210ce8(0x16, 1);
+            hero_set_state(0x16, 1);
         } else {
-            FUN_L00_002223f8_210ce8(0x16, 1);
+            hero_set_state(0x16, 1);
         }
         e = D_0015ED6C_210ce8;
         a = e * 5.7f;
@@ -1595,12 +1592,12 @@ s32 FUN_L00_00210ce8(s32 arg) {
         }
         break;
     case 1:
-        FUN_L00_002223f8_210ce8(0x46, 1);
+        hero_set_state(0x46, 1);
         FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 5.0f, D_0015ED6C_210ce8 * 3.0f);
         break;
     case 2:
         if ((tbl->i24 & 4) || G.i1630 <= 0) {
-            FUN_L00_002223f8_210ce8(0x5D, 1);
+            hero_set_state(0x5D, 1);
             FUN_L00_002a9be0_210ce8();
             if (G.h30E == 0) {
                 FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 7.0f,
@@ -1611,7 +1608,7 @@ s32 FUN_L00_00210ce8(s32 arg) {
         FUN_001f99f8_210ce8(&v);
         break;
     case 3:
-        FUN_L00_002223f8_210ce8(0x56, 1);
+        hero_set_state(0x56, 1);
         FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 5.0f, D_0015ED6C_210ce8 * 2.4f);
         break;
     }
@@ -1676,48 +1673,47 @@ extern f32 D_0015ED6C_211380 __asm__("D_0015ED6C");
 f32 FUN_001f9b80_211380(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_211380(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_211380(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-#define P hero
 void FUN_L00_00211380(void) {
-    switch (P.unk20A4) {
+    switch (hero.unk20A4) {
     case 0:
-        P.unk228 = 0.8f;
-        P.unk22C = 0.7f;
-        P.unk230 = 0.45f;
+        hero.unk228 = 0.8f;
+        hero.unk22C = 0.7f;
+        hero.unk230 = 0.45f;
         break;
     case 1:
-        P.unk228 = 0.59999996f;
-        P.unk22C = 0.45000002f;
-        P.unk230 = 0.3f;
+        hero.unk228 = 0.59999996f;
+        hero.unk22C = 0.45000002f;
+        hero.unk230 = 0.3f;
         break;
     case 2:
-        P.unk228 = 5.25f;
-        P.unk22C = 4.45f;
-        P.unk230 = 3.75f;
+        hero.unk228 = 5.25f;
+        hero.unk22C = 4.45f;
+        hero.unk230 = 3.75f;
         break;
     case 3:
-        P.unk228 = 0.8f;
-        P.unk22C = 0.6f;
-        P.unk230 = 0.45f;
+        hero.unk228 = 0.8f;
+        hero.unk22C = 0.6f;
+        hero.unk230 = 0.45f;
         break;
     }
-    if (P.control_mode == 4) {
-        if (P.state_timer > P.unk420 && P.unk41E == 0)
-            P.unk22C = P.unk434;
-    } else if (P.state == 6) {
-        P.unk22C = 0.5f;
-    } else if (P.state == 4) {
-        P.unk228 = 0.35000002f;
-    } else if ((u32)(P.control_mode - 0x11) < 2) {
-        P.unk228 = 0.0f;
-        P.unk22C = 0.0f;
-    } else if (P.unk12E2 && P.unk300) {
-        P.unk228 = 0.8f;
-        P.unk22C = 0.9f;
-    } else if (P.state == 0x7F) {
-        P.unk230 = 0.8f;
+    if (hero.control_mode == 4) {
+        if (hero.state_timer > hero.state_timer_mark && hero.unk41E == 0)
+            hero.unk22C = hero.unk434;
+    } else if (hero.state == 6) {
+        hero.unk22C = 0.5f;
+    } else if (hero.state == 4) {
+        hero.unk228 = 0.35000002f;
+    } else if ((u32)(hero.control_mode - 0x11) < 2) {
+        hero.unk228 = 0.0f;
+        hero.unk22C = 0.0f;
+    } else if (hero.unk12E2 && hero.unk300) {
+        hero.unk228 = 0.8f;
+        hero.unk22C = 0.9f;
+    } else if (hero.state == 0x7F) {
+        hero.unk230 = 0.8f;
     }
-    if (!P.unk257 || P.prev_control_mode == 0x12 || P.control_mode == 0x11 || P.base_condition ||
-        FUN_001f9b80_211380(P.unk210.f, P.pos.f) > P.unk234 * 0.5f) {
+    if (!hero.unk257 || hero.prev_control_mode == 0x12 || hero.control_mode == 0x11 || hero.base_condition ||
+        FUN_001f9b80_211380(hero.unk210.f, hero.pos.f) > hero.unk234 * 0.5f) {
         f32 *q = D_0013F570_211380;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
         approach_value_211380(b->unk228, D_0015ED60_211380 * 0.02f, q);
@@ -1726,7 +1722,6 @@ void FUN_L00_00211380(void) {
                                 D_0015ED64_211380 * 0.3f, D_0015ED6C_211380 * 4.0f);
     }
 }
-#undef P
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211670.s", FUN_L00_00211670);
 #define NOT_SDA
 
@@ -1735,12 +1730,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211670.s", FUN_L00_00211670);
 /* The xy length of the vector at D_0013F450 + 0x1D20, capped at 1. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211EE8), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern float FUN_001f9b20(void *);
 
-/* Length from FUN_001f9b20 on D_0013F350+0x1D20, capped at 1. */
+/* Length from FUN_001f9b20 on ((char *)&hero)+0x1D20, capped at 1. */
 float FUN_L00_00211830(void) {
-    float len = FUN_001f9b20(D_0013F350 + 0x1D20);
+    float len = FUN_001f9b20(((char *)&hero) + 0x1D20);
 
     if (1.0f < len) {
         len = 1.0f;
@@ -1755,11 +1749,10 @@ float FUN_L00_00211830(void) {
    +0xAAC long (T before the end, within that length of it). */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211F28), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 
-/* True when t is before the time at D_0013F350+0xAA8 by at most the span at +0xAAC. */
+/* True when t is before the time at ((char *)&hero)+0xAA8 by at most the span at +0xAAC. */
 int FUN_L00_00211870(float t) {
-    char *base = D_0013F350;
+    char *base = ((char *)&hero);
     float end = *(float *)(base + 0xAA8);
 
     if (t < end) {
@@ -1770,7 +1763,7 @@ int FUN_L00_00211870(float t) {
     return 0;
 }
 extern int D_0013F350_002118b0[] __asm__("D_0013F350");
-/* Clears the words at 0x190 and 0x194 of D_0013F350. */
+/* Clears the words at 0x190 and 0x194 of ((char *)&hero). */
 void FUN_L00_002118b0(void) {
     int *p = D_0013F350_002118b0;
     p[0x190 / 4] = 0;
@@ -1887,7 +1880,7 @@ extern void FUN_001fa050(void *, void *);
 extern void FUN_001fa378(void *, void *, void *);
 extern void FUN_00214598(void *, void *);
 
-/* Multiplies the 001fa050 matrices of (x, y, z) and of D_0013F350+0x40, stored back by 00214598. */
+/* Multiplies the 001fa050 matrices of (x, y, z) and of ((char *)&hero)+0x40, stored back by 00214598. */
 void FUN_L00_00211cf8(float x, float y, float z) {
     float in[3];
     float t[16], u[16];
@@ -1923,13 +1916,12 @@ void FUN_L00_00211d78(int a, float x, float y, float z) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002124E8), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
 extern void FUN_L00_00211d78(int, float, float, float);
 
-/* Calls 00211d78 when D_0013F350+0x20B3 is set, else updates +0x188 via 0025bc98. */
+/* Calls 00211d78 when ((char *)&hero)+0x20B3 is set, else updates +0x188 via 0025bc98. */
 void FUN_L00_00211e30(int a, float x, float y, float z) {
-    char *g = D_0013F350;
+    char *g = ((char *)&hero);
     if (*(unsigned char *)(g + 0x20B3) != 0) {
         FUN_L00_00211d78(a, x, y, z);
     } else {
@@ -2008,8 +2000,8 @@ void FUN_L00_00212088(f32 x, f32 y) {
 }
 extern float FastCos(float) __asm__("FUN_001f9dc8");
 
-/* Builds a direction vector into D_0013F350+0xE0: either func_00215C00's
-   spherical formula from D_0013F350's +0x194 radius, the clamped angle
+/* Builds a direction vector into ((char *)&hero)+0xE0: either func_00215C00's
+   spherical formula from ((char *)&hero)'s +0x194 radius, the clamped angle
    arg0 (falling back to +0x98 above pi) and +0x2E4, or, when +0x20B3 is
    set, a flat vector (r,0,0) rotated by the matrix func_001FA218 builds
    from the +0x2080 table's +0x40 axis. */
@@ -2021,7 +2013,7 @@ extern void func_001FA218(void *, void *) __asm__("FUN_001fa050");
 extern void func_00215C00(void *, float, float, float) __asm__("FUN_00214db0");
 
 void FUN_L00_002120d8(float radians) {
-    char *g = D_0013F350;
+    char *g = ((char *)&hero);
     float y;
     float r;
     float out[4];
@@ -2048,7 +2040,7 @@ void FUN_L00_002120d8(float radians) {
         func_00215C00(out, r, y, *(float *)(g + 0x2E4));
     }
 
-    qcopy(D_0013F350 + 0xE0, out);
+    qcopy(((char *)&hero) + 0xE0, out);
 }
 typedef unsigned int u128_2121c0_002121c0 __attribute__((mode(TI), aligned(16)));
 typedef union {
@@ -2554,7 +2546,7 @@ extern char D_0013F3D0[];
 extern float func_L00_0025C918_2136A8(float *p, float t, float *v, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 
 void FUN_L00_00212ff0(void) {
-    char *globals = ((char *)&D_0013F350);
+    char *globals = (char *)&hero;
     float v[4];
     if (*(unsigned char *)(globals + 0x20B3) != 0) {
         float f2 = dot_vectors_xyz(globals + 0xE0, globals + 0x270);
@@ -2605,8 +2597,8 @@ void FUN_L00_00212ff0(void) {
                 func_L00_0025C918_2136A8((float *)q, *(float *)(q + 0x250), (float *)(q + 0x27C), D_0015ED64 * 0.057f, D_0015ED64 * 0.3f, D_0015ED6C_c + D_0015ED6C_c);
             }
         } else {
-            char *h = ((char *)&D_0013F350);
-            *(int *)(h + 0x304) = 0;
+            struct Hero *h = &hero;
+            *(int *)&h->unk304 = 0;
         }
     }
 }
@@ -2643,10 +2635,10 @@ typedef struct {
 float FUN_001f9dc8(float);
 float FUN_001f9de0(float);
 void FUN_001f9ab0(void *, Vec4_213350 *);
-/* FastVecDot of v with (cos, sin, 0) of the angle at D_0013F350+0x98. */
+/* FastVecDot of v with (cos, sin, 0) of the angle at ((char *)&hero)+0x98. */
 void FUN_L00_00213350(u128_213350 *v) {
     u128_213350 a[2];
-    char *g = D_0013F350;
+    char *g = ((char *)&hero);
     a[0] = *v;
     ((Vec4_213350 *)&a[1])->x = FUN_001f9dc8(*(float *)(g + 0x98));
     ((Vec4_213350 *)&a[1])->y = FUN_001f9de0(*(float *)(g + 0x98));
@@ -2816,7 +2808,7 @@ void FUN_L00_002137a8(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213880.s", FUN_L00_00213880);
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002144A0), where it is exact; names translated to the US level program. */
 
-/* Scales four vectors and one float of D_0013F350 by s. */
+/* Scales four vectors and one float of ((char *)&hero) by s. */
 void FUN_L00_00213de8(float s) {
     char *p = D_0013E533 + 0xF1D;
     float *f;

@@ -404,7 +404,7 @@ extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L01_00277fb8(void *);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_L00_002223f8(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_00227638(void);
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -468,7 +468,7 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
             if (FUN_L01_00277fb8(moby)) {
                 if (*(int *)(data + 0xC8) == 0) {
                     if (FUN_L01_00277fb8(moby)) {
-                        FUN_L00_002223f8(0x72, 1);
+                        hero_set_state(0x72, 1);
                     }
                 }
                 moby[0xBC] = 2;
@@ -567,7 +567,7 @@ extern int FUN_L01_00277fb8(void *);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_L07_0015FC88[] __attribute__((section(".sdata")));
-extern void FUN_L00_002223f8(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_00227638(void);
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -636,7 +636,7 @@ void FUN_L07_002cdb28(unsigned char *moby) {
             if (FUN_L01_00277fb8(moby)) {
                 if (*(int *)(data + 0xC8) == 0) {
                     if (FUN_L01_00277fb8(moby)) {
-                        FUN_L00_002223f8(0x72, 1);
+                        hero_set_state(0x72, 1);
                     }
                 }
                 moby[0xBC] = 2;

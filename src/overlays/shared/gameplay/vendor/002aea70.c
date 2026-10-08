@@ -36,7 +36,7 @@ extern void FUN_L00_0020fca8(int, int);
 extern void FUN_L00_00232fe8(void);
 extern void FUN_L00_0023aef8(void);
 extern void FUN_L00_002454c8(int);
-extern void FUN_L01_0023cf98(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void FillTransferWords_alt() __asm__("FUN_001f97e8");
 extern void music_pause(s32);
 extern void add_vector_xyz(void *, void *, void *);
@@ -72,7 +72,7 @@ void FUN_L01_002aea70(char *m, int lvl) {
     sc = s + 0xC0;
     FUN_L00_0023aef8();
     FUN_L00_002039a0();
-    FUN_L01_0023cf98(100, 1);
+    hero_set_state(100, 1);
     g[0x20AC] = 1;
     g[0x20A5] = 1;
     FUN_L00_00232fe8();

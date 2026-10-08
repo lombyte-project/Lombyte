@@ -346,11 +346,11 @@ int FUN_L06_002fb2a8(char *moby) {
 
 extern int *D_L06_001B0C30[];
 extern void FUN_L00_002eac18(int);
-extern void FUN_L06_002356a0(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 
 void FUN_L06_002fb4b0(char *arg) {
     char *data = *(char **)(arg + 0x78);
-    FUN_L06_002356a0(0, 0);
+    hero_set_state(0, 0);
     *D_L06_001B0C30[*(int *)(data + 0xEC)] = *(int *)(data + 0x114);
     FUN_L00_002eac18(2);
 }

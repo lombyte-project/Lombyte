@@ -70,7 +70,7 @@ extern int D_L15_0015F5C4;
 extern void FUN_L00_00205538(void);
 extern void FUN_L00_00206c08(void);
 extern void FUN_L00_00232628(void);
-extern void FUN_L15_00216c38(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
 
@@ -108,7 +108,7 @@ void FUN_L15_00208ca8(void) {
     *(float *)(b + 0xA94) = 1.0f;
     FUN_L00_00232628();
     if (*(int *)(b + 0x2084) != 100 || (D_L15_0015F5C4 != 2 && D_L15_0015F5C4 != 6)) {
-        FUN_L15_00216c38(0, 1);
+        hero_set_state(0, 1);
     }
 }
 extern f32 D_0013F570_209450[] __asm__("D_0013F570");
@@ -118,40 +118,39 @@ extern f32 D_0015ED6C_209450 __asm__("D_0015ED6C");
 f32 FUN_001f9b80_209450(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_209450(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_209450(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-#define P hero
 void FUN_L15_00209450(void) {
-    switch (P.unk20A4) {
+    switch (hero.unk20A4) {
     case 0:
-        P.unk228 = 0.8f;
-        P.unk22C = 0.7f;
-        P.unk230 = 0.45f;
+        hero.unk228 = 0.8f;
+        hero.unk22C = 0.7f;
+        hero.unk230 = 0.45f;
         break;
     case 2:
-        P.unk228 = 5.25f;
-        P.unk22C = 4.45f;
-        P.unk230 = 3.75f;
+        hero.unk228 = 5.25f;
+        hero.unk22C = 4.45f;
+        hero.unk230 = 3.75f;
         break;
     case 3:
-        P.unk228 = 0.8f;
-        P.unk22C = 0.6f;
-        P.unk230 = 0.45f;
+        hero.unk228 = 0.8f;
+        hero.unk22C = 0.6f;
+        hero.unk230 = 0.45f;
         break;
     }
-    if (P.control_mode == 4) {
-        if (P.state_timer > P.unk420 && P.unk41E == 0)
-            P.unk22C = P.unk434;
-    } else if (P.state == 6) {
-        P.unk22C = 0.5f;
-    } else if (P.state == 4) {
-        P.unk228 = 0.35000002f;
-    } else if ((u32)(P.control_mode - 0x11) < 2) {
-        P.unk228 = 0.0f;
-        P.unk22C = 0.0f;
-    } else if (P.state == 0x7F) {
-        P.unk230 = 0.8f;
+    if (hero.control_mode == 4) {
+        if (hero.state_timer > hero.state_timer_mark && hero.unk41E == 0)
+            hero.unk22C = hero.unk434;
+    } else if (hero.state == 6) {
+        hero.unk22C = 0.5f;
+    } else if (hero.state == 4) {
+        hero.unk228 = 0.35000002f;
+    } else if ((u32)(hero.control_mode - 0x11) < 2) {
+        hero.unk228 = 0.0f;
+        hero.unk22C = 0.0f;
+    } else if (hero.state == 0x7F) {
+        hero.unk230 = 0.8f;
     }
-    if (!P.unk257 || P.prev_control_mode == 0x12 || P.control_mode == 0x11 || P.base_condition ||
-        FUN_001f9b80_209450(P.unk210.f, P.pos.f) > P.unk234 * 0.5f) {
+    if (!hero.unk257 || hero.prev_control_mode == 0x12 || hero.control_mode == 0x11 || hero.base_condition ||
+        FUN_001f9b80_209450(hero.unk210.f, hero.pos.f) > hero.unk234 * 0.5f) {
         f32 *q = D_0013F570_209450;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
         approach_value_209450(b->unk228, D_0015ED60_209450 * 0.02f, q);
@@ -160,7 +159,6 @@ void FUN_L15_00209450(void) {
                                 D_0015ED64_209450 * 0.3f, D_0015ED6C_209450 * 4.0f);
     }
 }
-#undef P
 typedef struct {
     f32 f[4];
 } V_20a328;
@@ -269,18 +267,18 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00215e58.s", FUN_L15_00215e58);
 /* Select the message associated with the current help mode. */
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_0021B2C8), where it is exact; names translated to the US level program. */
 
-extern void FUN_L15_00216c38(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 
 void FUN_L15_0021ab60(void) {
     switch (D_0013E533[0x2EC1]) {
     case 0:
-        FUN_L15_00216c38(0, 1);
+        hero_set_state(0, 1);
         break;
     case 2:
-        FUN_L15_00216c38(0x5A, 1);
+        hero_set_state(0x5A, 1);
         break;
     case 3:
-        FUN_L15_00216c38(0x53, 1);
+        hero_set_state(0x53, 1);
         break;
     }
 }
