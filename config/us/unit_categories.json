@@ -133,6 +133,7 @@
     "assembly/textbin/scis_and_render",
     "assembly/textbin/fun_001f89a4",
     "assembly/textbin/fun_001f8ff0",
+    "assembly/textbin/fun_001f96f8",
     "assembly/textbin/fast_dec_timer_s16",
     "assembly/textbin/log2dim",
     "assembly/textbin/fast_mem_zero16",
