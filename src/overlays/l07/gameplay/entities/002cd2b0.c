@@ -1016,9 +1016,101 @@ void FUN_L07_0030eb38(char *data) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030ed30.s", FUN_L07_0030ed30);
+
+extern char *D_L07_0015FFD8_30ed30 __asm__("D_L07_0015FFD8");
+extern char *D_L07_001600EC_30ed30 __asm__("D_L07_001600EC");
+extern char D_L07_00211720[];
+extern char D_L07_00211758[];
+extern char D_L07_00211790[];
+extern char D_L07_002117C0[];
+extern void report_30ed30(char *, int) __asm__("FUN_001e93b0");
+extern int rand_30ed30(void) __asm__("FUN_001160d8");
+
+/* Sets up the walker from its path, target and spot ids; reports a missing id and returns 1, else returns 0. */
+int FUN_L07_0030ed30(char *moby, char *data) {
+    if (*(int *)(data + 0x110) == -1) {
+        report_30ed30(D_L07_00211720, (moby - D_L07_0015FFD8_30ed30) >> 8);
+        return 1;
+    }
+    FUN_L07_0030eb38(*(char **)(data + 0x128) = D_L07_001B0530[*(int *)(data + 0x110)]);
+    if (*(int *)(data + 0x144) == -1) {
+        report_30ed30(D_L07_00211758, (moby - D_L07_0015FFD8_30ed30) >> 8);
+        return 1;
+    }
+    FUN_L07_0030eb38(*(char **)(data + 0x148) = D_L07_001B0530[*(int *)(data + 0x144)]);
+    if (*(int *)(data + 0x118) == -1) {
+        report_30ed30(D_L07_00211790, (moby - D_L07_0015FFD8_30ed30) >> 8);
+        return 1;
+    }
+    *(char **)(data + 0x12C) = D_L07_0015FFD8_30ed30 + (*(int *)(data + 0x118) << 8) + 0x18;
+    moby[0xBC] = FUN_L07_0030ebc8(moby, data);
+    if (*(int *)(data + 0x114) == -1) {
+        report_30ed30(D_L07_002117C0, (moby - D_L07_0015FFD8_30ed30) >> 8);
+        return 1;
+    }
+    qcopy(data + 0xF0, &D_L07_001600EC_30ed30[*(int *)(data + 0x114) * 0x80 + 0x30]);
+    qcopy(data + 0xE0, moby + 0x10);
+    ((void (*)(char *, char *))FUN_L07_0030ec58)(moby, data);
+    *(int *)(data + 0x134) = rand_30ed30() % 0x78;
+    if (rand_30ed30() & 1) {
+        *(float *)(data + 0x140) = 0.34906584f;
+    } else {
+        *(float *)(data + 0x140) = -0.34906584f;
+    }
+    *(int *)(data + 0x14C) = 0;
+    data[0x29] = 1;
+    return 0;
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030eee8.s", FUN_L07_0030eee8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f308.s", FUN_L07_0030f308);
+
+extern float D_0015ED60;
+extern float dist_30f308(void *) __asm__("FUN_0020c9e0");
+extern int sweep_30f308(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
+
+/* In the given state and animation, when the walker is within range, pushes it along its
+ * velocity; a hit on the target bounces it back up and switches to the next state. */
+void FUN_L07_0030f308(char *moby, char *obj, int state, int anim, int seq, int frame, int next, int id,
+                      float lo, float hi, float len, float scale, float radius) {
+    float v[4];
+    float m[12];
+    float p[4];
+    float d;
+    char *vel;
+
+    d = dist_30f308(moby);
+    if (((unsigned char *)moby)[0x20] != state) {
+        return;
+    }
+    if (((unsigned char *)moby)[0x52] != anim) {
+        return;
+    }
+    if (!(lo < d)) {
+        return;
+    }
+    if (!(d < hi)) {
+        return;
+    }
+    vel = obj + 0xD0;
+    FUN_001f9bf8(v, vel, len);
+    v[2] = 1.0f;
+    FUN_L00_00259888((char *)m, (int)moby, 1, v, scale);
+    FUN_L00_0024f7c8(moby, 0, p);
+    if (sweep_30f308(p, radius, 0x21, moby, m) == 0) {
+        return;
+    }
+    if (D_L07_00173ED8 != id) {
+        return;
+    }
+    FUN_001f9a68(vel, vel, -1.0f);
+    /* *&obj gives obj the register retail uses */
+    *(float *)(*&obj + 0xD8) = -(D_0015ED60 * 0.05f);
+    if (((unsigned char *)moby)[0x53] != seq) {
+        blend_moby_animation(moby, seq, frame, 5);
+    }
+    moby[0x20] = next;
+}
+
 /* Finds another moby whose state lies within the inclusive range. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00310920), where it is exact; names translated to the US level program. */
 
