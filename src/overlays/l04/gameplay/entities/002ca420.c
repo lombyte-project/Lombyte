@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
 
 #define NOT_SDA
@@ -959,7 +960,67 @@ float FUN_L04_002e1768(char *moby) {
     }
     return -2.05f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e17d8.s", FUN_L04_002e17d8);
+/* Riser: once its id is collected or its trigger moby reaches the open state, rises for a
+ * second, then records its id in the level bitsets. */
+typedef struct {
+    u8 pad[0x454];
+    u8 collected[1];
+} LevelCollected;
+
+struct RiserVars {
+    s32 trigger;   /* moby index whose state opens it, -1 for none */
+    f32 baseZ;
+    s32 timer;
+};
+
+extern s32 D_0015ED84;
+extern s32 D_0014C190[][64];
+extern s32 D_L04_001BA650[];
+extern LevelCollected D_L04_001BB3B0;
+extern int FUN_L00_0028dc90(int, int, struct Moby *, int);
+extern int FUN_001f96f8(int);
+extern float riser_rate_2e17d8(struct Moby *) __asm__("FUN_L04_002e1768");
+extern int FUN_001f9740(s32 *);
+extern int FUN_0022da68(int, int, struct Moby *);
+
+void FUN_L04_002e17d8(struct Moby *m) {
+    struct RiserVars *d = (struct RiserVars *)m->pvars;
+    struct Moby *t;
+    s16 idx;
+    u16 id;
+
+    switch (m->state) {
+    case 0:
+        d->baseZ = m->pos.z;
+        m->state = 1;
+        break;
+    case 1:
+        id = m->unkB2;
+        idx = id;
+        if (D_L04_001BB3B0.collected[idx] == 0 && !((D_0014C190[D_0015ED84][idx >> 5] >> (id & 0x1F)) & 1)) {
+            if (d->trigger == -1)
+                break;
+            t = (struct Moby *)((d->trigger << 8) + D_L04_0015FFD8);
+            if (!((t->oclass == 0x267 && t->state == 4) || (t->oclass == 0x4A6 && t->state == 2)))
+                return;
+        }
+        if (m->oclass == 0x44D || m->oclass == 0x5FC)
+            FUN_L00_0028dc90(0, 0, m, 0x44D);
+        m->state = 2;
+        d->timer = FUN_001f96f8(60);
+        break;
+    case 2:
+        m->pos.z += riser_rate_2e17d8(m) * D_0015ED6C;
+        if (FUN_001f9740(&d->timer)) {
+            D_0014C190[D_0015ED84][(s16)m->unkB2 >> 5] |= 1 << (m->unkB2 & 0x1F);
+            D_L04_001BA650[(s16)m->unkB2 >> 5] |= 1 << (m->unkB2 & 0x1F);
+            if (m->oclass == 0x44D)
+                FUN_0022da68(1, 0, m);
+            m->state = 3;
+        }
+        break;
+    }
+}
 /* Warp portal: spins, opens once the hero is near, then warps to the exit moby. */
 struct PortalVars {
     s32 unk0;
