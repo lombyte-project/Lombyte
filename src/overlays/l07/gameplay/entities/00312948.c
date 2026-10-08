@@ -425,10 +425,14 @@ typedef struct {
     s32 found; /* 0x40 */
 } SwooperSight;
 
+/* Hit record returned by the hit lookup FUN_L00_0025a420. */
 typedef struct {
-    u8 pad0[0x20];
-    struct Moby *moby; /* 0x20 */
-} SwooperHit;
+    u8 pad0[0x10];
+    Vec4f pos;          /* 0x10 */
+    struct Moby *moby;  /* 0x20: moby that dealt the hit */
+    u8 pad24[8];
+    f32 kind;           /* 0x2C */
+} MobyHit;
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_0031AA68), where it is exact; names translated to the US level program. */
 
@@ -453,8 +457,8 @@ extern f32 FUN_001f9b48(void *, void *);
 extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f99c0(f32);
 extern void FUN_L00_0025a120(struct Moby *);
-extern SwooperHit *FUN_L00_0025a420(struct Moby *, s32, s32);
-extern s32 FUN_00213928(struct Moby *, SwooperHit *, void *, s32, s32 *, s32, s32, s32);
+extern MobyHit *FUN_L00_0025a420(struct Moby *, s32, s32);
+extern s32 FUN_00213928(struct Moby *, MobyHit *, void *, s32, s32 *, s32, s32, s32);
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int);
 extern void FUN_L00_00257470(void *, int, int);
@@ -472,7 +476,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
     SwooperVars *vars;
     SwooperSpawnerVars *spawner_vars;
     SwooperSight sight;
-    SwooperHit *hit;
+    MobyHit *hit;
     u8 *collision;
     Vec4 dir;
     u8 contact[0x30];
@@ -602,5 +606,55 @@ void FUN_L07_003196e0(struct Moby *moby) {
     }
     FUN_L00_00259fe8(moby, 0.7f);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00319f48.s", FUN_L07_00319f48);
+
+/* Pvars of a breakable crate-like prop. */
+typedef struct {
+    s32 shards;           /* 0x00: number of pieces to spawn */
+    Vec3 size;            /* 0x04: local extent of the prop */
+} BreakableVars;
+
+extern float D_0015ED6C __attribute__((section(".sdata")));
+extern void break_rotate(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void break_rand_vec(void *, f32, f32) __asm__("FUN_L00_00257d78");
+extern struct Moby *break_spawn_shard(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
+
+/* Breakable prop: when hit by moby 0x415 in state 8 or 0x452 in state 9 with hit kind 1.000123, scatters its shard count of pieces over its rotated extent, spawns debris and removes itself. */
+void FUN_L07_00319f48(struct Moby *m) {
+    BreakableVars *v = (BreakableVars *)m->pvars;
+    MobyHit *h;
+    Vec4f ext, p, vel;
+    f32 scale;
+    s32 cls;
+    s32 i;
+
+    h = FUN_L00_0025a420(m, 0x30000, 0);
+    if (h != NULL && h->moby != NULL
+        && ((h->moby->oclass == 0x415 && h->moby->state == 8)
+            || (h->moby->oclass == 0x452 && h->moby->state == 9))
+        && h->kind == 1.000123f) {
+        ext.x = v->size.x;
+        ext.y = v->size.y;
+        ext.z = v->size.z;
+        break_rotate(&ext, &ext, &m->unkC0);
+        for (i = 0; i < v->shards; i++) {
+            p.x = random_float_between(-ext.x, ext.x) * 0.5f;
+            p.y = random_float_between(-ext.y, ext.y) * 0.5f;
+            p.z = random_float_between(1.5f, ext.z);
+            vadd_317cb0(&p, &p, &m->pos);
+            break_rand_vec(&vel, D_0015ED6C * 5.0f, D_0015ED6C * 10.0f);
+            if (vel.z < 0.0f)
+                vel.z = -vel.z;
+            if (vel.z < D_0015ED6C + D_0015ED6C)
+                vel.z = vel.z + (D_0015ED6C + D_0015ED6C);
+            cls = i % 3 + 0x2B8;
+            scale = random_float_between(0.41f, 0.5f);
+            break_spawn_shard(&p, &vel, cls, scale, FUN_L00_00257b90(0x32, 0x50), 1.0f, 1.0f,
+                              0.75f, 0);
+        }
+        FUN_L00_0025e450(m, &h->pos, h, 3.0f, 1.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
+        DeleteMoby(m);
+        return;
+    }
+    m->unkA4 = 0xFF;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031a250.s", FUN_L07_0031a250);
