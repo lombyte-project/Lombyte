@@ -910,6 +910,81 @@ void FUN_L06_002fb148(char *moby) {
     FUN_L00_002eaa30(m);
     *D_L06_001B0FB0[*(int *)(data + 0xEC)] = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fbc88.s", FUN_L06_002fbc88);
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
+
+/* Pvars of a moby that circles a centre point, keeping to the side away from the hero. */
+typedef struct {
+    u8 pad0[0xB0];
+    struct Moby *focus;   /* 0xB0: moby it keeps facing */
+    u8 padB4[0x1C];
+    Vec3 center;          /* 0xD0 */
+    f32 radius;           /* 0xDC */
+    f32 yaw_vel;          /* 0xE0 */
+    u8 padE4[4];
+    f32 speed;            /* 0xE8 */
+    s32 ground;           /* 0xEC */
+} CirclerVars;
+
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern f32 D_L06_00161EF8 __attribute__((sda));
+extern f32 D_L06_00161EFC __attribute__((sda));
+extern f32 circler_atan2(f32, f32) __asm__("FUN_001f9e90");
+extern f32 circler_angle_add(f32, f32) __asm__("FUN_001fa580");
+extern f32 circler_angle_sub(f32, f32) __asm__("FUN_001fa5c8");
+extern f32 circler_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 circler_sin(f32) __asm__("FUN_001f9de0");
+extern void circler_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void circler_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void circler_vec_set_len(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 circler_dist(void *, void *) __asm__("FUN_001f9b48");
+extern f32 circler_dist_xyz(void *, void *) __asm__("FUN_001f9b80");
+extern f32 circler_approach_angle(f32 *angle, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025be00");
+extern f32 circler_approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern s32 circler_scale_frames(s32) __asm__("FUN_001f96f8");
+extern void circler_blend_anim(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void FUN_L00_00261d78(f32, s32, void *, void *);
+
+/* Circles its centre point on the side away from the hero (at most 45 degrees per step), faces its focus moby, moves while the hero is within 16 units and snaps to the ground. */
+void FUN_L06_002fbc88(struct Moby *m) {
+    CirclerVars *v = (CirclerVars *)m->pvars;
+    struct Moby *focus = v->focus;
+    Vec4f goal, step;
+    f32 hero_ang;
+    f32 self_ang;
+    f32 d;
+
+    hero_ang = circler_atan2(hero.motion.pos.f[0] - v->center.x, hero.motion.pos.f[1] - v->center.y);
+    self_ang = circler_atan2(m->pos.x - v->center.x, m->pos.y - v->center.y);
+    d = circler_angle_sub(circler_angle_add(hero_ang, 3.14159f), self_ang);
+    if (d > 0.7853982f)
+        d = 0.7853982f;
+    else if (d < -0.7853982f)
+        d = -0.7853982f;
+    d = circler_angle_add(d, self_ang);
+    goal.x = circler_cos(d) * v->radius;
+    goal.y = circler_sin(d) * v->radius;
+    goal.z = 0.0f;
+    circler_vec_add(&goal, &goal, &v->center);
+    circler_approach_angle(&m->rot.z, circler_atan2(focus->pos.x - m->pos.x, focus->pos.y - m->pos.y),
+                           &v->yaw_vel, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+                           D_0015ED6C * 3.1415927f);
+    if (circler_dist(&m->pos, &goal) > 1.0f && circler_dist_xyz(&m->pos, &hero.motion.pos) < 16.0f)
+        circler_approach_value(&v->speed, D_L06_00161EF8 * D_0015ED6C, D_L06_00161EFC * D_0015ED70);
+    else
+        circler_approach_value(&v->speed, 0.0f, D_L06_00161EFC * D_0015ED70);
+    if (v->speed == 0.0f) {
+        if (m->prev_seq != 1)
+            circler_blend_anim(m, 1, 0, circler_scale_frames(20));
+    } else if (m->prev_seq != 0) {
+        circler_blend_anim(m, 0, 0, circler_scale_frames(20));
+    }
+    circler_vec_sub(&step, &goal, &m->pos);
+    step.z = 0.0f;
+    circler_vec_set_len(&step, &step, v->speed);
+    circler_vec_add(&m->pos, &m->pos, &step);
+    FUN_L00_00261d78(1.0f, v->ground, &m->pos, &m->pos);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fbfb0.s", FUN_L06_002fbfb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fc640.s", FUN_L06_002fc640);
