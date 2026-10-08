@@ -180,6 +180,7 @@ ReadStateField = 0x00214228;
 music_pause = 0x00216050;
 music_unpause = 0x00216088;
 InitializeTransferCommand = 0x00218F68;
+handle_menu_screen_buttons = 0x00219D80;
 PackImageDescriptor = 0x00226778;
 InitializeGlobalStateEntry = 0x0022E188;
 LookupResourceEntry = 0x00233038;
