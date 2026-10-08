@@ -32,9 +32,9 @@ s32 FUN_00120558(s32 arg0, s32 arg1) {
         if (!(vif1_dma & 0x100)) busy = 0;
         if (gif_dma & 0x100) busy |= 2;
         if (vif1_status & 3) busy |= 4;
-        vpu_status = ee_read_vpu_stat();
+        vpu_status = ee_read_vpu_stat() & 0x100;
+        if (vpu_status) busy |= 8;
         gif_status = *(vu32 *)0x10003020;
-        if (vpu_status & 0x100) busy |= 8;
         if (gif_status & 0xc00) busy |= 16;
     } while (busy != 0);
     return 0;
