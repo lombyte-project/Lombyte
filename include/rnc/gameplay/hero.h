@@ -473,11 +473,11 @@ struct Hero {
     u8 pad_A74[0x8];
     s32 unkA7C;                    /* 0xA7C */
     s32 unkA80;                    /* 0xA80 */
-    u8 pad_A84[0x4];
+    u8 *unkA84;                    /* 0xA84 */
     u8 *unkA88;                    /* 0xA88 */
     u8 pad_A8C[0x4];
     f32 unkA90;                    /* 0xA90 */
-    u8 pad_A94[0x4];
+    f32 unkA94;                    /* 0xA94 */
     s32 unkA98;                    /* 0xA98 */
     s32 unkA9C;                    /* 0xA9C */
     s32 unkAA0;                    /* 0xAA0 */
@@ -595,7 +595,7 @@ struct Hero {
     s16 unk22C8;                   /* 0x22C8 */
     u8 unk22CA;                    /* 0x22CA */
     u8 unk22CB;                    /* 0x22CB */
-    u8 pad_22CC[0x2];
+    s16 unk22CC;                   /* 0x22CC */
     s16 unk22CE;                   /* 0x22CE */
     u8 pad_22D0[0x2];
     s16 unk22D2;                   /* 0x22D2 */
