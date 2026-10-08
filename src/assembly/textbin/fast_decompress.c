@@ -79,8 +79,8 @@ s32 fast_decompress(u8 *source, u8 *destination)
     goto read_command;
 
 read_literal:
-    if (input >= input_end) goto done;
     command = *input++;
+    if (input - 1 >= input_end) goto done;
     if (command >= 0x10) goto decode_command;
     count = command;
     if (count == 0) count = *input++ + 0xf;
@@ -94,8 +94,8 @@ read_literal:
     } while (--count != 0);
 
 read_command:
-    if (input >= input_end) goto done;
     command = *input++;
+    if (input - 1 >= input_end) goto done;
 decode_command:
     if (command >= 0x40) {
         distance = 1 + ((command >> 2) & 7) + ((u32)*input++ << 3);
