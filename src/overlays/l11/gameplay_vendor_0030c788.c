@@ -501,7 +501,42 @@ void FUN_L11_00311be8(void *moby, void *a1, void *a2) {
         }
     } while (*p++ >= 0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311c80.s", FUN_L11_00311c80);
+/* Keeps the moby's current target, picking a new one when it is lost and restarting the timer. */
+
+extern unsigned char D_00140946[];
+extern int D_L11_00162160 __attribute__((sda));
+extern int D_L11_00162164 __attribute__((sda));
+extern float D_L11_001677D0[];
+extern void *FUN_L11_00311948_c(void *, char *, float *, float *, float, float, float, void *, int) __asm__("FUN_L11_00311948");
+extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
+
+void FUN_L11_00311c80(void *self, char *moby) {
+    float v[4] __attribute__((aligned(16)));
+    float *src;
+    unsigned char *t;
+    void *r;
+    if (D_00140946[0] == 0) {
+        *(void **)(moby + 0x88) = 0;
+    } else {
+        t = *(unsigned char **)(moby + 0x88);
+        if (t != 0) {
+            if (t[0x20] == 0xFE)
+                *(void **)(moby + 0x88) = 0;
+            else if (t[0x20] == 0xFD)
+                *(void **)(moby + 0x88) = 0;
+        }
+        src = D_L11_001677D0;
+        qcopy(v, src);
+        r = FUN_L11_00311948_c(self, moby, src - 4, v, 0.19634955f, 0.19634955f, 255.0f, *(void **)(moby + 0x88), 0);
+        if (r != *(void **)(moby + 0x88)) {
+            int n = D_L11_00162160 + D_L11_00162164;
+            *(void **)(moby + 0x88) = r;
+            *(int *)(moby + 0x8C) = n;
+        } else if (r != 0) {
+            FUN_001f9740_c(moby + 0x8C);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311d50.s", FUN_L11_00311d50);
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
