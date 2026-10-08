@@ -84,7 +84,44 @@ void FUN_L02_002e1fb8(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e2228.s", FUN_L02_002e2228);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea048.s", FUN_L02_002ea048);
+
+extern int D_L02_0015F608;
+extern char D_L02_001673C0[];
+extern char D_L02_001F3C00[];
+extern char D_L02_001F3C60[];
+extern char D_L02_001F3CD0[];
+extern char D_L02_001F3D30[];
+extern char D_L02_001F3D90[];
+extern char D_L02_001F3DD0[];
+extern char D_L02_001F3E10[];
+extern char D_L02_001F3E80[];
+extern void begin_2ea048(float, float, float, float, int, int, int, int, int, int, void *) __asm__("FUN_L02_002a4818");
+extern void end_2ea048(void) __asm__("FUN_L02_002a47f8");
+extern int in_clip_2ea048(void *, int) __asm__("FUN_00214720");
+extern void draw_2ea048(void *) __asm__("FUN_00201f58");
+
+/* Draws the parts whose clip volumes contain the camera (all of them when
+ * the override flag is set). */
+void FUN_L02_002ea048(char *m) {
+    int *d = *(int **)(m + 0x78);
+
+    begin_2ea048(0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, D_L02_001F3E80);
+    if (D_L02_0015F608 != 0 || (d[0] != -1 && in_clip_2ea048(D_L02_001673C0, d[0]))) {
+        draw_2ea048(D_L02_001F3C00);
+    }
+    if (D_L02_0015F608 != 0 || (d[1] != -1 && in_clip_2ea048(D_L02_001673C0, d[1]))) {
+        draw_2ea048(D_L02_001F3CD0);
+        draw_2ea048(D_L02_001F3D30);
+        draw_2ea048(D_L02_001F3D90);
+        draw_2ea048(D_L02_001F3DD0);
+        draw_2ea048(D_L02_001F3E10);
+    }
+    if (D_L02_0015F608 != 0 || (d[2] != -1 && in_clip_2ea048(D_L02_001673C0, d[2]))) {
+        draw_2ea048(D_L02_001F3C60);
+    }
+    end_2ea048();
+}
+
 extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 
 #define NOT_SDA
@@ -94,7 +131,7 @@ extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002E21F8.c: func_L02_002EB5D0), where it is exact; names translated to the US level program. */
 
 extern void FUN_L02_002a47f8(float);
-extern void FUN_L02_002ea048(void);
+extern void FUN_L02_002ea048_cb(void) __asm__("FUN_L02_002ea048");
 
 void FUN_L02_002ea198(unsigned char *moby) {
     switch (moby[0x20]) {
@@ -104,7 +141,7 @@ void FUN_L02_002ea198(unsigned char *moby) {
         moby[0x30] = 0xFF;
         break;
     case 1:
-        AddDrawCallback(FUN_L02_002ea048, moby);
+        AddDrawCallback(FUN_L02_002ea048_cb, moby);
         break;
     }
 }

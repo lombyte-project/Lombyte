@@ -542,7 +542,56 @@ int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out) {
     return r;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002591d0.s", FUN_L00_002591d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002592b8.s", FUN_L00_002592b8);
+
+extern unsigned short *D_L00_0016010C;
+extern short D_L00_00160110;
+extern char *D_L00_00160114;
+extern int D_L00_0015FFF4;
+extern char *D_L00_0015FFD8;
+extern unsigned short *D_L00_001AB840[];
+
+/* Iterator over the mobies of target's group: finds the next one whose
+ * visibility matches the two flags; 0 when found, -1 at the end. */
+int FUN_L00_002592b8(char **out, char *target, int a, int b) {
+    int s;
+
+    *out = 0;
+    if (target != D_L00_00160114) {
+        if (D_L00_0015FFF4 < *(unsigned char *)(target + 0x21)) {
+            goto fail;
+        }
+        D_L00_00160114 = 0;
+        D_L00_0016010C = D_L00_001AB840[*(unsigned char *)(target + 0x21)];
+        if (D_L00_0016010C == 0) {
+        fail:
+            return -1;
+        }
+        D_L00_0016010C--;
+        do {
+            D_L00_0016010C++;
+            D_L00_00160110 = *D_L00_0016010C & 0x7FFF;
+            D_L00_00160114 = D_L00_0015FFD8 + (D_L00_00160110 << 8);
+            if ((short)*D_L00_0016010C < 0) {
+                return -1;
+            }
+        } while (target != D_L00_00160114);
+    } else if ((short)*D_L00_0016010C < 0) {
+        goto fail;
+    }
+    do {
+        D_L00_0016010C++;
+        D_L00_00160110 = *D_L00_0016010C & 0x7FFF;
+        D_L00_00160114 = D_L00_0015FFD8 + (D_L00_00160110 << 8);
+        *out = D_L00_00160114;
+        s = *(signed char *)(D_L00_00160114 + 0x20) < 0;
+        if ((a == 0 && b == 0 && s == 0) || (a != 0 && (b == 0 || s != 0))) {
+            return 0;
+        }
+    } while ((short)*D_L00_0016010C >= 0);
+    *out = 0;
+    return -1;
+}
+
 #define NOT_SDA
 
 #define MACRO_ADDR
