@@ -8,43 +8,10 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/save_data/"
 #else
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/ui/menus/menu_screen.h"
 #include "rnc/ui/text/text_region.h"
 
 typedef struct TextRegion FontWindow;
-
-struct MemoryCardMenuEntry {
-    u8 pad0[4];
-    s16 type;
-    s16 id;
-    u8 pad8[2];
-};
-
-struct MemoryCardMenuLevel {
-    u8 pad0[0x48];
-    struct MemoryCardMenuEntry *entries;
-};
-
-struct MemoryCardMenuPlanet {
-    u8 pad0[0x40];
-    struct MemoryCardMenuLevel *level;
-};
-
-struct MemoryCardDataMenu {
-    u8 pad0[0x20];
-    s32 width;
-    s32 height;
-    u8 pad28[0xC];
-    s32 flags;
-    s32 texture_width;
-    s32 texture_height;
-    u8 pad40[4];
-    s32 state;
-    s32 first_texture;
-    s32 second_texture;
-    s32 entry_indices[2];
-};
-
-
 
 struct ScreenDimensions {
     u8 pad0[0x160];
@@ -53,7 +20,10 @@ struct ScreenDimensions {
 };
 
 #include "rnc/storage/memory_card/memory_card_state.h"
-extern struct MemoryCardMenuPlanet *active_menu_page __asm__("D_001D5BF4");
+/* menu_system.current under its own label: retail loads it with a separate
+   %hi/%lo pair instead of reusing the menu_system base (the unit loses
+   exactness when it is spelled menu_system.current). */
+extern struct MenuPage *active_menu_page __asm__("D_001D5BF4");
 extern u8 item_available[] __asm__("D_0013D4C0");
 extern u8 alternate_item_available[] __asm__("D_0013D388");
 extern struct ScreenDimensions screen_dimensions __asm__("D_00151780");
@@ -66,25 +36,24 @@ extern u64 func_00204CF0(s32);
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64,
                                u64) __asm__("func_001F5450");
 
-s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) __asm__("FUN_00220348");
+s32 draw_checking_memory_card_data_menu(struct MenuScreen *menu) __asm__("FUN_00220348");
 
-s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
+s32 draw_checking_memory_card_data_menu(struct MenuScreen *menu) {
     FontWindow text_window;
     s16 window_fields[12];
-    struct MemoryCardMenuEntry *entry;
+    struct MenuGridCell *entry;
     char *text;
-    s32 state = menu->state;
+    s32 state = menu->data.stream.state;
     s32 entry_offset;
 
     if (state < 2) {
-        if (!(menu->flags & 0x100)) {
+        if (!(menu->data.stream.flags & 0x100)) {
             return 1;
         }
         if (memory_card_state.card[0].type != 2) {
             return 2;
         }
-        if (memory_card_state.state < 3 &&
-            memory_card_state.pending_state < 0) {
+        if (memory_card_state.state < 3 && memory_card_state.pending_state < 0) {
             return 2;
         }
         setup_gif_paging(0);
@@ -113,21 +82,23 @@ s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
         do_gif_paging();
         return 2;
     }
-    if (menu->flags & 4) {
-        entry_offset = state < 4 ? 0 : sizeof(menu->entry_indices[0]);
-        entry =
-            &active_menu_page->level->entries[*(s32 *)((u8 *)menu->entry_indices + entry_offset)];
-        if (entry->type == 0 && item_available[entry->id] == 0) {
+    if (menu->data.stream.flags & 4) {
+        entry_offset = state < 4 ? 0 : sizeof(menu->data.stream.loaded_entry[0]);
+        entry = &active_menu_page->focus->data.grid
+                     .cells[*(s32 *)((u8 *)menu->data.stream.loaded_entry + entry_offset)];
+        if (entry->kind == 0 && item_available[entry->id] == 0) {
             return 1;
         }
-        if (entry->type == 1 && alternate_item_available[entry->id] == 0) {
+        if (entry->kind == 1 && alternate_item_available[entry->id] == 0) {
             return 1;
         }
     }
     setup_gif_paging(0);
     draw_textured_quad(0, 0, screen_dimensions.width, screen_dimensions.height, 0, 0,
-                       menu->texture_width, menu->texture_height, 0x80808080,
-                       func_00204CF0(menu->state < 4 ? menu->first_texture : menu->second_texture));
+                       menu->data.stream.texture_width, menu->data.stream.texture_height,
+                       0x80808080,
+                       func_00204CF0(menu->data.stream.state < 4 ? menu->data.stream.buffer[0]
+                                                                 : menu->data.stream.buffer[1]));
     do_gif_paging();
     return 0x10;
 }

@@ -6,6 +6,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021e230/FUN_0021e230.s
 #else
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/ui/menus/menu_screen.h"
 #include "qcopy.h"
 
 struct PreviewMobyResource {
@@ -63,12 +64,6 @@ struct ItemPreviewPlacement {
     f32 rotation_y;
     u8 pad18[8];
 };
-struct PreviewItemSelection {
-    u8 pad0[0x3C];
-    s32 index;
-    u8 pad40[8];
-    u8 *table;
-};
 struct PreviewCamera {
     u8 pad0[0x140];
     f32 x;
@@ -101,7 +96,7 @@ extern struct ItemPreviewMoby *delete_moby(struct ItemPreviewMoby *) __asm__("fu
 s32 update_item_preview_binding(struct ItemPreviewBinding *preview) __asm__("FUN_0021e230");
 
 s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
-    struct PreviewItemSelection *selection;
+    struct MenuScreen *grid;
     struct ItemPreviewMoby *moby;
     struct ItemPreviewMoby *secondary_moby;
     struct PreviewItemDefinition *definition;
@@ -122,8 +117,8 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
     f32 camera_x;
     volatile f32 *camera_position;
 
-    selection = (struct PreviewItemSelection *)menu_system.current->focus;
-    item_index = *(s16 *)(selection->table + selection->index * 10 + 6);
+    grid = menu_system.current->focus;
+    item_index = grid->data.grid.cells[grid->data.grid.selected_cell].id;
     if (preview->primary_moby != 0) {
         previous_class = preview->primary_moby->oclass;
     } else {
@@ -193,7 +188,8 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             } else {
                 moby->x = camera_x + preview_placements[item_index].normal_x;
             }
-            moby->y = ((volatile struct PreviewCamera *)&preview_camera)->y + preview_placements[item_index].y;
+            moby->y = ((volatile struct PreviewCamera *)&preview_camera)->y +
+                      preview_placements[item_index].y;
             moby->z = camera_position[2] + preview_placements[item_index].z;
             moby->rotation_x = preview_placements[item_index].rotation_x;
             moby->rotation_y = preview_placements[item_index].rotation_y;
