@@ -888,7 +888,37 @@ void FUN_L14_002b5c98(u8 *moby) {
     }
     *(s32 *)(data + 0x108) = -1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5d18.s", FUN_L14_002b5d18);
+/* Resets the moby's path follow state and faces it along its current path. */
+
+extern int *D_L14_001B0BB0[];
+extern float D_L14_00161540 __attribute__((sda));
+extern void FUN_001f9a28(void *, void *, void *);
+extern float FUN_001f9e90(float, float);
+extern void FUN_001f99f8(void *);
+
+void FUN_L14_002b5d18(char *moby) {
+    float f = D_L14_00161540 * 1.5f;
+    char *d = *(char **)(moby + 0x78);
+    char *p;
+    float v[4] __attribute__((aligned(16)));
+    *(int *)(d + 0xE8) = 0;
+    *(float *)(d + 0x160) = f;
+    *(int *)(d + 0xEC) = 0;
+    *(int *)(d + 0x164) = 0;
+    *(int *)(d + 0x168) = 0;
+    *(int *)(d + 0x16C) = 0;
+    *(int *)(d + 0xC0) = 0;
+    *(int *)(d + 0xC4) = 0;
+    if (*(int *)(d + 0x10C) == 0)
+        p = (char *)D_L14_001B0BB0[*(int *)(d + 0xD0)];
+    else
+        p = (char *)D_L14_001B0BB0[*(int *)(d + 0x150)];
+    qcopy(moby + 0x10, p + 0x10);
+    FUN_001f9a28(v, p + 0x20, moby + 0x10);
+    *(float *)(moby + 0x48) = FUN_001f9e90(v[0], v[1]);
+    *(int *)(d + 0xE4) = 0;
+    FUN_001f99f8(d + 0xF0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5dd8.s", FUN_L14_002b5dd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002bac78.s", FUN_L14_002bac78);
 
