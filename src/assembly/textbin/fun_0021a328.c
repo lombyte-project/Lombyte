@@ -223,10 +223,12 @@ int render_configured_text_label(struct MenuScreen *label) {
     setup_gif_paging(0);
     texture_tex0 = get_effect_texture(font_texture_index);
     {
+        TextBox *window;
         TextBox c = {{text_vertical_inset, label->height - text_vertical_inset, 1, label->width - 4,
                       x, y - (label->data.label.scroll_offset >> 4), [8] = text_line_spacing,
                       text_style, [11] = -(label->data.label.scroll_offset & 0xF)}};
 
+        window = &c;
         if (label->data.label.flags & 0x10000) {
             c.s[1] = label->height - 1;
         }
@@ -234,7 +236,7 @@ int render_configured_text_label(struct MenuScreen *label) {
                               func_001FA6E0(menu_text_color, 0x80FFA888, 0.5f), 0x80FFA888);
         c.s[9] |= 4;
         font_print_window(&c, color, text, -1, texture_tex0, font);
-        c.s[9] ^= 4;
+        window->s[9] ^= 4;
         flags = label->data.label.flags;
         text_extent = c.s[7] + 4;
         visible_height = c.s[1] - c.s[0];
