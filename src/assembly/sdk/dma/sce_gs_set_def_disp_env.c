@@ -54,8 +54,9 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
                      ((u64)((width + 63) & 0xfc0) << 3);
 
     if (mode == 2) {
-        if (interlace == 1) {
-            scale = (width + 0x9ff) / width;
+        if (state->nSInterlace == 1) {
+            scale = width + 0x9ff;
+            scale /= width;
             value = ((u64)((s64)(width * scale) - 1) << 32) |
                     ((u64)(s64)(scale - 1) << 23) |
                     ((u64)(((s64)(horizontal_offset * scale) + ((s64)kernel_horizontal + 0x27c)) & 0xfff)) |
@@ -66,7 +67,8 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
                 value |= (u64)(s64)(height * 2 - 1) << 44;
             }
         } else {
-            scale = (width + 0x9ff) / width;
+            scale = width + 0x9ff;
+            scale /= width;
             value = ((u64)(s64)(height - 1) << 44) |
                     ((u64)((s64)(width * scale) - 1) << 32) |
                     ((u64)(s64)(scale - 1) << 23) |
@@ -75,8 +77,9 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
         }
         output->display = value;
     } else if (mode == 3) {
-        if (interlace == 1) {
-            scale = (width + 0x9ff) / width;
+        if (state->nSInterlace == 1) {
+            scale = width + 0x9ff;
+            scale /= width;
             value = ((u64)((s64)(width * scale) - 1) << 32) |
                     ((u64)(s64)(scale - 1) << 23) |
                     ((u64)(((s64)(horizontal_offset * scale) + ((s64)kernel_horizontal + 0x290)) & 0xfff)) |
@@ -87,7 +90,8 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
                 value |= (u64)(s64)(height * 2 - 1) << 44;
             }
         } else {
-            scale = (width + 0x9ff) / width;
+            scale = width + 0x9ff;
+            scale /= width;
             value = ((u64)(s64)(height - 1) << 44) |
                     ((u64)((s64)(width * scale) - 1) << 32) |
                     ((u64)(s64)(scale - 1) << 23) |
