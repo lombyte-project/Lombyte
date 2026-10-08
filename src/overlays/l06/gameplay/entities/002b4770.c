@@ -583,7 +583,29 @@ int FUN_L06_002e9d10(void *m_, void *pos) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9ea0.s", FUN_L06_002e9ea0);
+/* Returns 0 while any listed class-0x33B moby is in a state other than 0xFE, 0xFD or 0x10; else 1. */
+int FUN_L06_002e9ea0(int index) {
+    unsigned short *p = (unsigned short *)D_L06_001ABFC0[index];
+    char *base;
+    char *moby;
+    if (p == 0)
+        return 1;
+    base = (char *)D_L06_0015FFD8_d;
+    for (;;) {
+        moby = base + ((*p & 0x7FFF) << 8);
+        if (moby != 0 && *(short *)(moby + 0xA6) == 0x33B) {
+            unsigned char s = moby[0x20];
+            if (s != 0xFE) {
+                if (s != 0xFD) {
+                    if (s != 0x10)
+                        return 0;
+                }
+            }
+        }
+        if ((short)*p++ < 0)
+            return 1;
+    }
+}
 /* Swinging/spinning hazard: waits, swings with a looping sound, then rests for a random time. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F4F08), where it is exact; names translated to the US level program. */
 
