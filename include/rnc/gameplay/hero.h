@@ -181,11 +181,15 @@ struct Hero {
     u8 pad_280[0x10];
     Vec4 unk290;                   /* 0x290 */
     Vec4 unk2A0;                   /* 0x2A0 */
-    u8 pad_2B0[0x28];
+    u8 pad_2B0[0x10];
+    union { f32 f[2]; s32 i[2]; } unk2C0; /* 0x2C0: written as floats and zeroed as ints */
+    union { f32 f[2]; s32 i[2]; } unk2C8; /* 0x2C8: written as floats and zeroed as ints */
+    union { f32 f[2]; s32 i[2]; } unk2D0; /* 0x2D0: written as floats and zeroed as ints */
     f32 unk2D8;                    /* 0x2D8 */
     f32 unk2DC;                    /* 0x2DC */
     f32 unk2E0;                    /* 0x2E0 */
-    u8 pad_2E4[0x8];
+    union { f32 f; s32 i; } unk2E4; /* 0x2E4: written as a float and zeroed as an int */
+    union { f32 f; s32 i; } unk2E8; /* 0x2E8: written as a float and zeroed as an int */
     f32 unk2EC;                    /* 0x2EC */
     f32 height_threshold;          /* 0x2F0 */
     f32 unk2F4;                    /* 0x2F4 */
@@ -434,7 +438,8 @@ struct Hero {
     f32 unkA70;                    /* 0xA70 */
     u8 pad_A74[0x8];
     s32 unkA7C;                    /* 0xA7C */
-    u8 pad_A80[0x8];
+    s32 unkA80;                    /* 0xA80 */
+    u8 pad_A84[0x4];
     u8 *unkA88;                    /* 0xA88 */
     u8 pad_A8C[0x4];
     f32 unkA90;                    /* 0xA90 */
