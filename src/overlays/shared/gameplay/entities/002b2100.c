@@ -1330,7 +1330,80 @@ void FUN_L00_002b8798(ListSlots8 *list, s32 val) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b87e0.s", FUN_L00_002b87e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b9310.s", FUN_L00_002b9310);
+
+typedef struct {
+    float f[4];
+} __attribute__((aligned(16))) V2b9310;
+extern int D_L00_00161590_2b9310 __asm__("D_L00_00161590") __attribute__((sda));
+extern int D_L00_0016167C_2b9310 __asm__("D_L00_0016167C") __attribute__((sda));
+extern int D_L00_00161624_2b9310 __asm__("D_L00_00161624") __attribute__((sda));
+extern int D_L00_00161678_2b9310 __asm__("D_L00_00161678");
+extern int D_L00_001615F8_2b9310 __asm__("D_L00_001615F8") __attribute__((sda));
+extern float D_L00_00161594_2b9310 __asm__("D_L00_00161594") __attribute__((sda));
+extern int D_L00_001615AC_2b9310 __asm__("D_L00_001615AC") __attribute__((sda));
+extern int D_L00_001615B4_2b9310 __asm__("D_L00_001615B4") __attribute__((sda));
+extern int D_L00_001615C8_2b9310 __asm__("D_L00_001615C8") __attribute__((sda));
+extern short D_L00_00161658_2b9310[] __asm__("D_L00_00161658") __attribute__((section(".sdata")));
+extern short D_L00_00161668_2b9310 __asm__("D_L00_00161668");
+extern short D_L00_0016166A_2b9310 __asm__("D_L00_0016166A");
+extern short D_L00_0016166C_2b9310 __asm__("D_L00_0016166C");
+extern short D_L00_0016166E_2b9310 __asm__("D_L00_0016166E");
+extern short D_L00_00161670_2b9310 __asm__("D_L00_00161670");
+extern short D_L00_00161672_2b9310 __asm__("D_L00_00161672");
+extern short D_L00_00161674_2b9310 __asm__("D_L00_00161674");
+extern short D_L00_00161676_2b9310 __asm__("D_L00_00161676");
+extern V2b9310 D_L00_001DB5B0_2b9310[] __asm__("D_L00_001DB5B0");
+extern V2b9310 D_L00_001DB5C0_2b9310[] __asm__("D_L00_001DB5C0");
+extern int D_L00_001DB840_2b9310[] __asm__("D_L00_001DB840");
+extern V2b9310 D_L00_001DB890_2b9310[] __asm__("D_L00_001DB890");
+extern int D_L00_001DB9D0_2b9310[] __asm__("D_L00_001DB9D0");
+extern int frames_2b9310(int) __asm__("FUN_001f96f8");
+extern void vsub_2b9310(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void vscale_2b9310(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void vadd_2b9310(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vzero_2b9310(void *) __asm__("FUN_001f99f8");
+
+/* Starts the beam when one is pending: lays 19 points from the moby toward its target and resets the segment state. */
+void FUN_L00_002b9310(char *moby) {
+    V2b9310 d;
+    V2b9310 step;
+    char *data;
+    int i;
+    int j;
+
+    data = *(char **)(moby + 0x78);
+    if (D_L00_00161590_2b9310 == 0) {
+        return;
+    }
+    D_L00_00161590_2b9310 = 0;
+    D_L00_0016167C_2b9310 = 0;
+    D_L00_00161678_2b9310 = frames_2b9310(D_L00_00161624_2b9310);
+    D_L00_001615F8_2b9310 = 0x7F2020;
+    vsub_2b9310(&d, data + 0x10, data);
+    vscale_2b9310(&step, &d, D_L00_00161594_2b9310 / 20.0f);
+    qcopy(D_L00_001DB5C0_2b9310, data);
+    for (i = 1; i < 20; i++) {
+        vadd_2b9310(&D_L00_001DB5C0_2b9310[i], &D_L00_001DB5B0_2b9310[i], &step);
+        D_L00_001DB840_2b9310[i] = 0;
+        vzero_2b9310(&D_L00_001DB890_2b9310[i]);
+        D_L00_001DB9D0_2b9310[i] = 0;
+    }
+    for (j = 0; j < 4; j++) {
+        D_L00_00161658_2b9310[j] = -1;
+    }
+    D_L00_00161668_2b9310 = 8;
+    D_L00_0016166C_2b9310 = 8;
+    D_L00_00161670_2b9310 = 4;
+    D_L00_0016166A_2b9310 = 4;
+    D_L00_00161672_2b9310 = 2;
+    D_L00_00161674_2b9310 = 4;
+    D_L00_0016166E_2b9310 = 4;
+    D_L00_00161676_2b9310 = 2;
+    D_L00_001615AC_2b9310 = 0;
+    D_L00_001615B4_2b9310 = 0;
+    D_L00_001615C8_2b9310 = 0;
+}
+
 /* D_0013F350, the shared Level-00 state block; only the offsets the listing
    names are declared. */
 typedef struct {

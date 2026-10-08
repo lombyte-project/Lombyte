@@ -219,7 +219,82 @@ void FUN_L07_00314058(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00314150.s", FUN_L07_00314150);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00317910.s", FUN_L07_00317910);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00317cb0.s", FUN_L07_00317cb0);
+
+typedef float V317cb0[4] __attribute__((aligned(16)));
+typedef union {
+    unsigned int q __attribute__((mode(TI)));
+    float f[4];
+} U317cb0;
+extern int D_L07_00161B6C_c __asm__("D_L07_00161B6C") __attribute__((sda));
+extern int D_L07_00161B70_c __asm__("D_L07_00161B70") __attribute__((sda));
+extern float D_L07_00161B7C_c __asm__("D_L07_00161B7C") __attribute__((sda));
+extern int D_L07_00161B80 __attribute__((sda));
+extern int D_L07_00161B84;
+extern float D_L07_00161BB0;
+extern char D_L07_00161B90[] __attribute__((section(".sdata")));
+extern char D_L07_00161BA0[] __attribute__((section(".sdata")));
+extern V317cb0 D_L07_0020DAF0_c[] __asm__("D_L07_0020DAF0");
+extern V317cb0 D_L07_0020DB00_c[] __asm__("D_L07_0020DB00");
+extern short D_L07_0020DBC8[];
+typedef struct {
+    int pad[5];
+    char *moby;
+} E317cb0;
+extern E317cb0 D_L07_0020C840_c[] __asm__("D_L07_0020C840");
+extern void vscale_317cb0(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void vadd_317cb0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vzero_317cb0(void *) __asm__("FUN_001f99f8");
+extern float f213308_317cb0(void) __asm__("FUN_00213308");
+extern void f214890_317cb0(void *, void *, void *, float) __asm__("FUN_00214890");
+
+/* Starts the rope when one is pending: lays nine points out from the anchor along the moby's
+ * axis, then resets the swing state and, once, clears every entry's link. */
+void FUN_L07_00317cb0(char *moby, void *anchor) {
+    V317cb0 step;
+    V317cb0 up;
+    U317cb0 c;
+    U317cb0 d;
+    float r;
+    int i;
+    int j;
+    U317cb0 *pc;
+    U317cb0 *pd;
+
+    if (D_L07_00161B6C_c == 0) {
+        return;
+    }
+    D_L07_00161B6C_c = 0;
+    vscale_317cb0(step, moby + 0xC0, 2.8f);
+    vscale_317cb0(up, moby + 0xE0, 1.0f);
+    qcopy(D_L07_0020DB00_c, anchor);
+    pc = &c;
+    pd = &d;
+    D_L07_0020DBC8[0] = 0;
+    for (i = 1; i < 10; i++) {
+        vadd_317cb0(D_L07_0020DB00_c[i], D_L07_0020DAF0_c[i], step);
+        D_L07_0020DBC8[i] = 0;
+    }
+    vzero_317cb0(D_L07_00161B90);
+    c.q = 0;
+    d.q = 0;
+    c.f[2] = 0.1f;
+    c.f[3] = 1.0f;
+    d.f[0] = 1.0f;
+    d.f[3] = 1.0f;
+    r = f213308_317cb0();
+    f214890_317cb0(D_L07_00161BA0, pc, pd, r);
+    D_L07_00161BB0 = r;
+    D_L07_00161B7C_c = 0.006f;
+    D_L07_00161B80 = 0;
+    D_L07_00161B84 = 0;
+    if (D_L07_00161B70_c != 0) {
+        D_L07_00161B70_c = 0;
+        for (j = 199; j >= 0; j--) {
+            D_L07_0020C840_c[j].moby = 0;
+        }
+    }
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00317e60.s", FUN_L07_00317e60);
 
 #define NOT_SDA
