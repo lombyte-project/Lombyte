@@ -380,6 +380,10 @@ RODATA_OVERLAYS = {
     # as the splat symbol jtbl_00153AA0, so the compiled .rodata must land at
     # the same VMA/file offset for the relocations to resolve content-equal.
     "_getpic": (0x153AA0, 0x54A20),
+    "sdk/debug/printfloat": (0x152798, 0x53718),  # its three f64 literals (0.1, 0.1, 1e6)
+    # vfprintf_r: blanks/zeroes, the xdigs strings, the short literals (kept in
+    # .rodata via section attributes, in source order) and its switch table.
+    "runtime/newlib/vfprintf_r": (0x1524E0, 0x53460),
     "dispatch_game_state_update": (0x1E8960, 0xE98E0),  # retail switch table
     "gameplay/missions/check_mission_condition": (0x1E8390, 0xE9310),  # unlock-condition switch table
     "draw_menu_preview_objects": (0x1E87A0, 0xE9720),  # item-handle release switch table

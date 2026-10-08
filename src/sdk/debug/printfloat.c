@@ -1,11 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-/* Exact SDK/library unit printfloat; symbolic expected assembly retained pending source recovery. */
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/debug/printfloat/printfloat.s", printfloat);
-#else
-#include "types.h"
 
 extern char D_00152780[];
 extern char D_00152788[];
@@ -50,4 +43,3 @@ void printfloat(f64 x) {
         kprintf(D_00152790, exponent);
     }
 }
-#endif /* NON_MATCHING */
