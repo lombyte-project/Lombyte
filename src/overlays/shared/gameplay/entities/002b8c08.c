@@ -318,7 +318,86 @@ void FUN_L01_002e0bd8(char *moby)
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e0c68.s", FUN_L01_002e0c68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e1ac0.s", FUN_L01_002e1ac0);
+#include "sda.h"
+#include "rnc/gameplay/entities/moby.h"
+
+/* Bought-item price entry (0x18 bytes). */
+typedef struct {
+    u8 pad_00[0x14];
+    u16 bolts; /* 0x14 */
+    u8 pad_16[2];
+} ItemPrice_2e1ac0;
+
+/* pvars of the moby run by FUN_L01_002e1ac0: a scene trigger
+   (FUN_L00_00266448) followed by the item it sells. */
+typedef struct {
+    u8 pad_00[4];
+    s16 result;   /* 0x04: 2 once the scene finished with a sale */
+    u8 pad_06[6];
+    f32 radius;   /* 0x0C */
+    u8 pad_10[0x30];
+    s32 slot;     /* 0x40: -1 none, else index into D_L01_001DEB10 */
+} SaleVars_2e1ac0;
+
+extern s32 D_0015EE20_2e1ac0 __asm__("D_0015EE20") __attribute__((sda));
+extern s32 D_L01_0015F5C4_2e1ac0 __asm__("D_L01_0015F5C4");
+extern s32 D_0015ED98_2e1ac0 __asm__("D_0015ED98");
+extern s32 D_L01_001DEB10_2e1ac0[] __asm__("D_L01_001DEB10");
+extern u8 D_0013E520_2e1ac0[] __asm__("D_0013E520");
+extern ItemPrice_2e1ac0 D_L01_001C4530_2e1ac0[] __asm__("D_L01_001C4530");
+extern void FUN_0020c828_2e1ac0(struct Moby *) __asm__("FUN_0020c828");
+extern s32 FUN_L00_002668a0_2e1ac0(struct Moby *, SaleVars_2e1ac0 *) __asm__("FUN_L00_002668a0");
+extern s32 FUN_L00_00266448_2e1ac0(struct Moby *, SaleVars_2e1ac0 *) __asm__("FUN_L00_00266448");
+extern void FUN_L01_002aea70_2e1ac0(struct Moby *, s32, ItemPrice_2e1ac0 *) __asm__("FUN_L01_002aea70");
+extern s32 FUN_0020b178_2e1ac0(s32, s32) __asm__("FUN_0020b178");
+
+void FUN_L01_002e1ac0(struct Moby *m) {
+    SaleVars_2e1ac0 *v = (SaleVars_2e1ac0 *)m->pvars;
+    s32 item;
+    ItemPrice_2e1ac0 *price;
+
+    if (v != 0 && v->slot != -1 && ((v->slot ^ 1) & 1) && D_0015EE20_2e1ac0 == 0) {
+        FUN_0020c828_2e1ac0(m);
+        return;
+    }
+    switch (m->state) {
+    case 0:
+        if (m->oclass != 0x130) {
+            m->state = 2;
+        } else if (D_0013E520_2e1ac0[D_L01_001DEB10_2e1ac0[v->slot]] != 0 ||
+                   FUN_L00_002668a0_2e1ac0(m, v) == -1) {
+            m->state = 3;
+        } else {
+            m->state = 1;
+        }
+        break;
+    case 1:
+        v->radius = 1.9f;
+        FUN_L00_00266448_2e1ac0(m, v);
+        if (v->result == 2) {
+            D_0013E520_2e1ac0[D_L01_001DEB10_2e1ac0[v->slot]] = 1;
+            m->state = 4;
+            item = D_L01_001DEB10_2e1ac0[v->slot];
+            price = &D_L01_001C4530_2e1ac0[item];
+            D_0015ED98_2e1ac0 -= price->bolts;
+            FUN_L01_002aea70_2e1ac0(m, item, price);
+        }
+        break;
+    case 3: /* sold out or done: idle */
+        break;
+    case 4:
+        if (D_L01_0015F5C4_2e1ac0 == 0) {
+            FUN_0020b178_2e1ac0(0, -1);
+            m->state = 3;
+        }
+        break;
+    case 2:
+        if (D_0013E520_2e1ac0[D_L01_001DEB10_2e1ac0[v->slot]] != 0) {
+            FUN_0020c828_2e1ac0(m);
+        }
+        break;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002E4430), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
