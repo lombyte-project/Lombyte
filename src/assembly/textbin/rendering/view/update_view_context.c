@@ -163,13 +163,13 @@ void update_view_context(void) {
     D_001DE740.mul = mul_bits;
     D_001DE740.far_int = far_bits;
     D_001DE740.near_int = near_bits;
-    D_001DEA00.max = 0x437EFFFF;
     D_001DEA00.mul = mul_bits;
     D_001DEA00.near_int = near_bits;
     D_001DE9B0.mul = mul_bits;
     D_001DE9B0.near_int = near_bits;
     D_001DEA00.far_int = far_bits;
     D_001DE9B0.far_int = far_bits;
+    D_001DEA00.max = 0x437EFFFF;
     D_001DE9B0.max = 0x437EFFFF;
     set_tfrag_dists();
 
