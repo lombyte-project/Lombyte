@@ -61,7 +61,70 @@ unsigned char *FUN_L13_002e1c50(char *position, int moby_class) {
     return moby;
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b7d50.s", FUN_L13_002b7d50);
+/* Queues a GIF packet that draws a line strip through the points, rotated, scaled and offset to the screen. */
+typedef unsigned int u128_7d50 __attribute__((mode(TI)));
+extern int D_L13_001611C0_7d50 __asm__("D_L13_001611C0");
+extern u128_7d50 D_L13_001608E0_7d50 __asm__("D_L13_001608E0");
+extern u128_7d50 D_L13_001608F0_7d50 __asm__("D_L13_001608F0");
+extern int D_0013E500_7d50[] __asm__("D_0013E500");
+extern float itof_7d50(int) __asm__("FUN_001fa6c0");
+extern int ftoi_7d50(float) __asm__("FUN_001fa6d0");
+extern void rotmat_7d50(void *, void *) __asm__("FUN_001fa050");
+extern void xform_7d50(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void scale_7d50(void *, void *, float) __asm__("FUN_001f9a68");
+
+void FUN_L13_002b7d50(short *pts, int n, float x0, float y0, unsigned int col, unsigned long long prim, float scale, float ang) {
+    float mat[4][4];
+    float rot[4];
+    float w[4];
+    float v[4];
+    int q = (n + 1) / 2 + 3;
+    char *t;
+    unsigned long long *o;
+    int x, y;
+    int i;
+    *(int *)(D_L13_001611C0_7d50 + 0) = q | 0x10000000;
+    *(int *)(D_L13_001611C0_7d50 + 4) = 0;
+    *(int *)(D_L13_001611C0_7d50 + 8) = 0;
+    *(int *)(D_L13_001611C0_7d50 + 12) = q | 0x50000000;
+    {
+        char *t1 = (char *)D_L13_001611C0_7d50;
+        D_L13_001611C0_7d50 = (int)(t1 + 0x10);
+        qcopy((void *)D_L13_001611C0_7d50, &D_L13_001608E0_7d50);
+        *(short *)(t1 + 0x10) = -0x7FFF;
+    }
+    {
+        unsigned long long *t2 = (unsigned long long *)((char *)D_L13_001611C0_7d50 + 0x10);
+        D_L13_001611C0_7d50 = (int)t2;
+        t2[0] = 0x144;
+        t2[1] = prim;
+    }
+    {
+        char *t3 = (char *)D_L13_001611C0_7d50;
+        D_L13_001611C0_7d50 = (int)(t3 + 0x10);
+        qcopy((void *)D_L13_001611C0_7d50, &D_L13_001608F0_7d50);
+        *(short *)(t3 + 0x10) = n - 0x8000;
+    }
+    *(u128_7d50 *)rot = 0;
+    rot[2] = ang;
+    D_L13_001611C0_7d50 += 0x10;
+    o = (unsigned long long *)D_L13_001611C0_7d50;
+    rotmat_7d50(mat, rot);
+    for (i = 0; i < n; i++) {
+        *(u128_7d50 *)v = 0;
+        v[0] = itof_7d50(pts[i * 2]);
+        v[1] = itof_7d50(pts[i * 2 + 1]);
+        *(u128_7d50 *)w = *(u128_7d50 *)v;
+        xform_7d50(w, w, mat);
+        scale_7d50(w, w, scale);
+        w[0] += x0;
+        w[1] += y0;
+        x = ftoi_7d50(w[0] * 16.0f);
+        y = ftoi_7d50(w[1] * 16.0f);
+        o[i] = (unsigned long long)(x + D_0013E500_7d50[4] - 8) | ((unsigned long long)(y + D_0013E500_7d50[5] - 8) << 16) | ((unsigned long long)col << 32);
+    }
+    D_L13_001611C0_7d50 += ((n + 1) / 2) * 16;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e1cc8.s", FUN_L13_002e1cc8);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002E7E90), where it is exact; names translated to the US level program. */
 

@@ -902,7 +902,89 @@ float FUN_L10_002e4840(char *self) {
         fast_add_rotations(lo, fast_difference_between_rotations(hi, lo) * 0.5f), ang);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e4a88.s", FUN_L10_002e4a88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e5968.s", FUN_L10_002e5968);
+/* Hit handling and path following for a level 10 vendor moby. */
+extern char *info_5968(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int hit_5968(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern void sound_5968(void *, void *) __asm__("FUN_L00_0025d458");
+extern void blend_5968(void *, int, int, int) __asm__("FUN_00212f90");
+extern int frames_5968(int) __asm__("FUN_001f96f8");
+extern void update_5968(void *, void *) __asm__("FUN_L00_0025d538");
+extern void seek_5968(float, void *, void *) __asm__("FUN_L06_002f34d8");
+extern int near_5968(void *, void *, int) __asm__("FUN_L00_00259740");
+extern int follow_5968(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern char *D_L10_001B0930_5968[] __asm__("D_L10_001B0930");
+typedef struct {
+    char p0[0x2080];
+    int f2080;
+    char p1[0x20A4 - 0x2084];
+    unsigned char f20A4;
+} G_5968;
+extern G_5968 D_0013F350_5968 __asm__("D_0013F350");
+
+void FUN_L10_002e5968(unsigned char *m) {
+    unsigned char *d = *(unsigned char **)(m + 0x78);
+    char *info = info_5968(m, 0x370000, 0);
+    int out;
+    float dmg;
+    int r;
+    dmg = 0.0f;
+    r = hit_5968(m, info, d + 0x20, 5, &out, &dmg, 0, 4);
+    if (info != 0 && out != 1 && m[0x20] != 8) {
+        if ((*(float *)(d + 0x20) -= dmg) <= 0.0f) {
+            r = 1;
+        }
+        if (*(int *)(info + 0x24) & 0x40000) {
+            r = 1;
+        }
+        switch (r) {
+        case 9:
+        case 10:
+        case 12:
+            d[0xC7] = 0xFA;
+            sound_5968(m, d + 0xC0);
+            break;
+        case 1:
+            d[0xC7] = 0xFA;
+            sound_5968(m, d + 0xC0);
+            m[0x20] = 8;
+            break;
+        case 13:
+            break;
+        default:
+            d[0xC7] = 0xFA;
+            *(short *)(d + 0x26) = frames_5968(0x3C);
+            sound_5968(m, d + 0xC0);
+            blend_5968(m, 4, 0, frames_5968(6));
+            m[0xBC] = m[0x20];
+            m[0x20] = 7;
+            break;
+        }
+    }
+    m[0xA4] = 0xFF;
+    update_5968(m, d + 0xC0);
+    if (D_0013F350_5968.f20A4 == 1) {
+        seek_5968(101.0f, m, d + 0x110);
+        if (*(char **)(d + 0x110) == 0) {
+            *(int *)(d + 0x114) = 2;
+        } else {
+            char *path = D_L10_001B0930_5968[*(int *)(d + 0x190)];
+            if (near_5968(*(char **)(d + 0x110) + 0x10, path + 0x10, *(int *)path) == 0) {
+                *(int *)(d + 0x110) = 0;
+                *(int *)(d + 0x114) = 2;
+            } else {
+                *(int *)(d + 0x114) = 0;
+            }
+        }
+    } else {
+        char *path = D_L10_001B0930_5968[*(int *)(d + 0x190)];
+        if (follow_5968(101.0f, m, d + 0xD0, 0, 0, path + 0x10, *(int *)path) != 2 && m[0x31] == 0) {
+            *(int *)(d + 0x114) = 2;
+        }
+    }
+    if (*(int *)(d + 0x110) == 0) {
+        *(int *)(d + 0x110) = D_0013F350_5968.f2080;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e5be0.s", FUN_L10_002e5be0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e8358.s", FUN_L10_002e8358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e85b8.s", FUN_L10_002e85b8);

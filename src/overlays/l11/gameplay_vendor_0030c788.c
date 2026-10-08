@@ -287,7 +287,65 @@ char *FUN_L11_0030fd98(char *owner) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030fe50.s", FUN_L11_0030fe50);
+/* Runs the moby's hit timer: on a hit it either finishes the stun or counts it down and plays the hurt animation. */
+extern char *info_fe50(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int ftoi_fe50(float) __asm__("FUN_00120478");
+extern void print_fe50(char *, int, int) __asm__("FUN_001e93b0");
+extern int hit_fe50(void *, void *, float *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern void sound_fe50(void *, void *) __asm__("FUN_L00_0025d458");
+extern void blend_fe50(void *, int, int, int) __asm__("FUN_00212f90");
+extern int frames_fe50(int) __asm__("FUN_001f96f8");
+extern void update_fe50(void *, void *) __asm__("FUN_L00_0025d538");
+extern char D_L11_0021B530[];
+
+void FUN_L11_0030fe50(unsigned char *m, unsigned char *d, float *t) {
+    int out;
+    char *info;
+    if (m[0x20] != 4) {
+        info = info_fe50(m, 0x330000, 0);
+        if (info != 0) {
+            print_fe50(D_L11_0021B530, *(short *)(m + 0xA6), ftoi_fe50(*(float *)(info + 0x2C)));
+        }
+        switch (hit_fe50(m, info, t, 0, &out, 0, 0, 4)) {
+        case 1:
+        case 2:
+            *t = 0.0f;
+            break;
+        case 0:
+        case 3:
+        case 4:
+        case 11:
+            break;
+        }
+        if (out >= 2) {
+            if (*t <= *(float *)(info + 0x2C)) {
+                unsigned char *s;
+                *t = 0.0f;
+                *(unsigned short *)(m + 0x34) &= 0xEFFF;
+                d[0x67] = 0x78;
+                sound_fe50(m, d + 0x60);
+                if (m[0x53] != 2) {
+                    blend_fe50(m, 2, 0, 3);
+                }
+                s = *(unsigned char **)(d + 0x70);
+                if (s != 0 && s[0x20] != 0xFE && s[0x20] != 0xFD) {
+                    s[0x20] = 3;
+                }
+                m[0x20] = 3;
+            } else {
+                *t -= *(float *)(info + 0x2C);
+                d[0x67] = 0xFA;
+                *(short *)(d + 0x26) = frames_fe50(0x3C);
+                sound_fe50(m, d + 0x60);
+                if (m[0x53] != 4) {
+                    blend_fe50(m, 4, 0, 3);
+                }
+            }
+        }
+        m[0xA4] = 0xFF;
+    }
+    update_fe50(m, d + 0x60);
+}
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_003114F0), where it is exact; names translated to the US level program. */
 
 typedef struct {
@@ -316,7 +374,7 @@ typedef struct {
     unsigned char unk70; /* 0x70 */
 } MobyAnim;
 
-extern void FUN_L11_0030fe50(void *, void *, void *);
+void FUN_L11_0030fe50(unsigned char *m, unsigned char *d, float *t);
 f32 compute_interpolated_record_value(struct InterpolatedStateEntry *arg0) __asm__("FUN_0020c9e0");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");

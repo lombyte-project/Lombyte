@@ -282,5 +282,49 @@ void FUN_L11_0031a1c0(char *m) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310ad0.s", FUN_L11_00310ad0);
+/* Queues a GIF packet that draws a line strip through the given points, scaled and offset to the screen. */
+typedef unsigned int u128_ad0 __attribute__((mode(TI)));
+extern int D_L11_001611C0_g __asm__("D_L11_001611C0");
+extern u128_ad0 D_L11_001608E0_g __asm__("D_L11_001608E0");
+extern u128_ad0 D_L11_001608F0_g __asm__("D_L11_001608F0");
+extern int D_0013E500_g[] __asm__("D_0013E500");
+extern float itof_g(int) __asm__("FUN_001fa6c0");
+extern int ftoi_g(float) __asm__("FUN_001fa6d0");
+
+void FUN_L11_00310ad0(short *pts, int n, float x0, float y0, unsigned int col, unsigned long long prim, float scale) {
+    int q = (n + 1) / 2 + 3;
+    unsigned long long *o;
+    int x, y;
+    int i;
+    *(int *)(D_L11_001611C0_g + 0) = q | 0x10000000;
+    *(int *)(D_L11_001611C0_g + 4) = 0;
+    *(int *)(D_L11_001611C0_g + 8) = 0;
+    *(int *)(D_L11_001611C0_g + 12) = q | 0x50000000;
+    {
+        char *t1 = (char *)D_L11_001611C0_g;
+        D_L11_001611C0_g = (int)(t1 + 0x10);
+        qcopy((void *)D_L11_001611C0_g, &D_L11_001608E0_g);
+        *(short *)(t1 + 0x10) = -0x7FFF;
+    }
+    {
+        unsigned long long *t2 = (unsigned long long *)((char *)D_L11_001611C0_g + 0x10);
+        D_L11_001611C0_g = (int)t2;
+        t2[0] = 0x144;
+        t2[1] = prim;
+    }
+    {
+        char *t3 = (char *)D_L11_001611C0_g;
+        D_L11_001611C0_g = (int)(t3 + 0x10);
+        qcopy((void *)D_L11_001611C0_g, &D_L11_001608F0_g);
+        *(short *)(t3 + 0x10) = n - 0x8000;
+    }
+    D_L11_001611C0_g += 0x10;
+    o = (unsigned long long *)D_L11_001611C0_g;
+    for (i = 0; i < n; i++) {
+        x = ftoi_g((itof_g(pts[i * 2]) * scale + x0) * 16.0f);
+        y = ftoi_g((itof_g(pts[i * 2 + 1]) * scale + y0) * 16.0f);
+        o[i] = (unsigned long long)(x + D_0013E500_g[4] - 8) | ((unsigned long long)(y + D_0013E500_g[5] - 8) << 16) | ((unsigned long long)col << 32);
+    }
+    D_L11_001611C0_g += ((n + 1) / 2) * 16;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031a438.s", FUN_L11_0031a438);

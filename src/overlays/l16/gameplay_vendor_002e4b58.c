@@ -30,7 +30,33 @@ void FUN_L16_002e4b58(void *moby_v) {
     }
     *(short *)(data + 0xac) = *(unsigned short *)(data + 0xae);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4be0.s", FUN_L16_002e4be0);
+/* Finds the listed moby whose data id at 0xAC matches, or returns null. */
+extern unsigned short *D_L16_001ABCC0_4be0[] __asm__("D_L16_001ABCC0");
+extern char *D_L16_0015FFD8_4be0 __asm__("D_L16_0015FFD8") __attribute__((sda));
+
+typedef struct {
+    char pad[0x78];
+    char *data;
+    char pad2[0x84];
+} M_4be0;
+
+char *FUN_L16_002e4be0(unsigned char *arg, int id) {
+    unsigned short *p = D_L16_001ABCC0_4be0[arg[0x21]];
+    char *pool;
+    int idx;
+    if (p != 0) {
+        pool = D_L16_0015FFD8_4be0;
+        do {
+            idx = *p & 0x7FFF;
+            if (*(short *)(((M_4be0 *)pool)[idx].data + 0xAC) == id) {
+                goto found;
+            }
+        } while ((short)*p++ >= 0);
+    }
+    return 0;
+found:
+    return (char *)&((M_4be0 *)D_L16_0015FFD8_4be0)[idx];
+}
 /* Advances a moby's path: steps the path position and returns whether it has reached the end. */
 
 extern float advance_accelerated_scalar(float, float, float, float, float *,

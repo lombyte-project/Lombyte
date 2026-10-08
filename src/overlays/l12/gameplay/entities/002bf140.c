@@ -780,7 +780,56 @@ void FUN_L12_002eae00(char *moby) {
     *(float *)(moby + 0x40) =
         FUN_L00_00258110((float *)(data + 0x98), *(float *)(moby + 0x40), b, k1, d1, m1);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002eaf68.s", FUN_L12_002eaf68);
+extern char *D_L12_001B0930_f[] __asm__("D_L12_001B0930");
+extern float D_0015ED6C_f __asm__("D_0015ED6C");
+extern float D_0015ED70_f __asm__("D_0015ED70");
+extern void ahead_f(char *, float *, float) __asm__("FUN_L01_00274b78");
+extern float atan_f(float, float) __asm__("FUN_001f9e90");
+extern float turn_f(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
+extern void appr_f(void *, float, float) __asm__("FUN_00213ed8");
+extern void sub_f(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void norm_f(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void add_f(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float dist_f(void *, void *) __asm__("FUN_001f9b48");
+extern void FUN_L12_002eae00(char *);
+typedef struct { char pad[0x48]; float rz; } M_af68;
+typedef struct { float x, y, z, w; } N_af68;
+
+/* Follows a path: steers toward the current node, slows to a stop near the end, returns 1 once stopped. */
+int FUN_L12_002eaf68(char *m, int idx) {
+    char *path = D_L12_001B0930_f[idx];
+    char *d = *(char **)(m + 0x78);
+    float sum = 0.0f;
+    float v[20]; /* target record from the finder; also the step vector */
+    int i;
+    float a;
+    for (i = *(int *)(d + 0xB4); i < *(int *)path - 1; i++)
+        sum += *(float *)(path + i * 16 + 0x1C);
+    if (sum > 5.0f) {
+        a = atan_f(*(float *)((*(int *)(d + 0xB4) << 4) + path + 0x10) - *(float *)(m + 0x10),
+                   *(float *)((*(int *)(d + 0xB4) << 4) + path + 0x14) - *(float *)(m + 0x14));
+        ((M_af68 *)m)->rz = turn_f((float *)(d + 0x88), ((M_af68 *)m)->rz, a, 0.004f, 0.3f, D_0015ED6C_f * 0.7853982f);
+        appr_f(d + 0x94, D_0015ED6C_f * 10.0f, D_0015ED70_f * 7.0f);
+    } else {
+        ahead_f(m, v, 48.0f);
+        a = atan_f(v[0] - *(float *)(m + 0x10), v[1] - *(float *)(m + 0x14));
+        ((M_af68 *)m)->rz = turn_f((float *)(d + 0x88), ((M_af68 *)m)->rz, a, 0.004f, 0.3f, D_0015ED6C_f * 0.7853982f);
+        appr_f(d + 0x94, 0.0f, D_0015ED70_f * 9.0f);
+        sum = *(float *)(d + 0x94);
+        if (sum == 0.0f)
+            return 1;
+    }
+    sub_f(v, &((N_af68 *)path)[*(int *)(d + 0xB4) + 1], m + 0x10);
+    norm_f(d + 0x70, v, *(float *)(d + 0x94));
+    add_f(m + 0x10, m + 0x10, d + 0x70);
+    if (dist_f(m + 0x10, &((N_af68 *)path)[*(int *)(d + 0xB4) + 1]) < 2.0f) {
+        (*(int *)(d + 0xB4))++;
+        if (*(int *)path - 1 < *(int *)(d + 0xB4))
+            *(int *)(d + 0xB4) = *(int *)path - 1;
+    }
+    FUN_L12_002eae00(m);
+    return 0;
+}
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002EC5A0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);

@@ -1296,7 +1296,85 @@ int FUN_L14_002d64d0(char *m) {
                  t * *(float *)(d + 0x70));
     return ok;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d6570.s", FUN_L14_002d6570);
+/* Lines up the three listed racers on the hero's track at the start point and resets their race state. */
+extern unsigned short *D_L14_001ABF40_6570[] __asm__("D_L14_001ABF40");
+extern char *D_L14_0015FFD8_6570 __asm__("D_L14_0015FFD8");
+extern char *D_L14_0015F70C_6570 __asm__("D_L14_0015F70C");
+extern char *D_L14_001B0BB0_6570[] __asm__("D_L14_001B0BB0");
+extern float D_L14_00161A38_6570 __asm__("D_L14_00161A38") __attribute__((sda));
+typedef struct { char p[0x48]; float f48; } M_6570;
+typedef struct {
+    char p0[0x80];
+    float f80;
+    float f84;
+    char p1[0x560 - 0x88];
+    char *f560;
+    int f564;
+    float f568;
+} G_6570;
+extern G_6570 D_0013F350_6570 __asm__("D_0013F350");
+extern int near_6570(void *, void *, void *, int *, float *, int, float, float, float) __asm__("FUN_L00_0025df68");
+extern void sub_6570(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float atan2_6570(float, float) __asm__("FUN_001f9e90");
+extern float addrot_6570(float, float) __asm__("FUN_001fa580");
+extern void place_6570(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void follow_6570(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
+extern void clear_6570(void *) __asm__("FUN_001f99f8");
+extern void stop_6570(int) __asm__("FUN_L00_0023e838");
+
+void FUN_L14_002d6570(unsigned char *m) {
+    char *list[4];
+    float near[4];
+    float v[4];
+    float rot[4];
+    int idx;
+    float t;
+    unsigned short *p = D_L14_001ABF40_6570[m[0x21]];
+    char **out;
+    int i;
+    float s;
+    if (p == 0) {
+        return;
+    }
+    out = list;
+    do {
+        char *o = D_L14_0015FFD8_6570 + ((*p & 0x7FFF) << 8);
+        char *od = *(char **)(o + 0x78);
+        char *path = D_0013F350_6570.f560;
+        if (path == *(char **)(D_L14_0015F70C_6570 + *(int *)(od + 0x60) * 32 + 0x10)) {
+            char *tp = D_L14_001B0BB0_6570[*(int *)(od + 0x88)];
+            t = 0.0f;
+            near_6570(path, tp + 0x10, near, &idx, &t, 0, 20.0f, 5.0f, 0.0f);
+            sub_6570(v, path + (idx * 16 + 0x40), path + (idx * 16 + 0x10));
+            rot[0] = 0.0f;
+            rot[1] = 0.0f;
+            rot[2] = addrot_6570(atan2_6570(v[0], v[1]), -1.5707964f);
+            rot[3] = 0.0f;
+            D_0013F350_6570.f564 = idx;
+            D_0013F350_6570.f568 = 0.0f;
+            place_6570(path + (idx * 16 + 0x10), rot, 0x28, 0);
+        }
+        *out++ = o;
+    } while ((short)*p++ >= 0);
+    for (i = 0; i < 3; i++) {
+        char *o = list[i];
+        char *od = *(char **)(o + 0x78);
+        char *path = *(char **)(D_L14_0015F70C_6570 + *(int *)(od + 0x60) * 32 + 0x10);
+        o[0x20] = 6;
+        ((M_6570 *)o)->f48 = atan2_6570(D_0013F350_6570.f80 - *(float *)(m + 0x10), D_0013F350_6570.f84 - *(float *)(m + 0x14));
+        s = -D_L14_00161A38_6570;
+        *(int *)(od + 0x64) = D_0013F350_6570.f564;
+        *(float *)(od + 0x68) = D_0013F350_6570.f568;
+        follow_6570(path, o + 0x10, od + 0x64, od + 0x68, 0, s);
+        clear_6570(od + 0x90);
+        *(int *)(od + 0xF8) = i * 2;
+        *(int *)(od + 0xFC) = i * 2 + 1;
+        if (*(int *)(od + 0xF0) != -1) {
+            stop_6570(*(int *)(od + 0xF0));
+            *(int *)(od + 0xF0) = -1;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d67e8.s", FUN_L14_002d67e8);
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D84A8), where it is exact; names translated to the US level program. */
 

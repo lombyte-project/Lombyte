@@ -734,13 +734,86 @@ int FUN_L15_002f8698(char *moby, float a, float b) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f88e8.s", FUN_L15_002f88e8);
+extern char *D_L15_00167400_s __asm__("D_L15_00167400") __attribute__((section(".data")));
+typedef struct { char pad[0x100]; float x; float y; } G_88e8;
+extern G_88e8 D_0013C940_s __asm__("D_0013C940") __attribute__((section(".data")));
+extern int ready_s(char *) __asm__("FUN_L00_002e83c0");
+extern void release_s(char *) __asm__("FUN_L00_002e8388");
+extern int frames_s(int) __asm__("FUN_001f96f8");
+extern void cam_s(float, float, float) __asm__("FUN_L02_002f6598");
+extern float itof_s(int) __asm__("FUN_001fa6c0");
+extern void spin_s(void *, float, float) __asm__("FUN_L00_002e8970");
+extern void pitch_s(int, float, float) __asm__("FUN_L00_002e8450");
+extern void pitch2_s(void) __asm__("FUN_L00_002e8620");
+extern void yaw_s(float, float) __asm__("FUN_L00_002e84b8");
+extern void zoom_s(int, float, float) __asm__("FUN_L00_002e84f0");
+
+/* Runs the aim timer while the player holds the target in view; spins the target once aimed. */
+void FUN_L15_002f88e8(char *m) {
+    char *s = *(char **)(D_L15_0015EF50 + *(short *)(m + 0x84) * 32 + 0x1C);
+    char *o = D_L15_001600EC + (*(int *)(s + 0x48) << 7);
+    int done;
+    int t1;
+    int t2;
+    int t3;
+    int t4;
+    float r;
+    float a;
+    if (ready_s(m) <= 0) {
+        *(short *)(s + 0x20) = 0;
+        return;
+    }
+    if (FUN_L15_002f85a8(m) == 0) {
+        *(short *)(s + 0x20) = 0;
+        release_s(m);
+        return;
+    }
+    *(int *)(*(char **)(D_L15_00167400_s + 0x70) + 0x230) = 2;
+    done = 1;
+    (*(short *)(s + 0x20))++;
+    t1 = frames_s(300);
+    t2 = frames_s(400);
+    t3 = frames_s(560);
+    t4 = frames_s(200);
+    cam_s(1.0f, 12.0f, 0.11f);
+    if (D_0013C940_s.x != 0.0f)
+        *(short *)(s + 0x20) = t1;
+    else if (D_0013C940_s.y != 0.0f)
+        *(short *)(s + 0x20) = t1;
+    if (*(short *)(s + 0x20) >= t1) {
+        if (++*(int *)(s + 0x3C) >= t2 && FUN_L15_002f8698(m, 30.0f, 0.0f))
+            *(short *)(s + 0x20) = t3;
+        else
+            done = 0;
+    }
+    if (*(short *)(s + 0x20) >= t3) {
+        done = 1;
+        *(int *)(s + 0x3C) = 0;
+        *(short *)(s + 0x20) = 1;
+    }
+    if (t4 < *(short *)(s + 0x20) && *(short *)(s + 0x20) < t1) {
+        *(int *)(s + 0x3C) = t1;
+        *(short *)(s + 0x20) = t4;
+    }
+    r = itof_s(*(short *)(s + 0x20)) / itof_s(t4);
+    a = *(float *)s * 0.017453292f * r;
+    if (done)
+        spin_s(o + 0x30, a, 0.0f);
+    if (*(float *)(s + 0x34) != 0.0f) {
+        pitch_s(0, *(float *)(s + 0x34), 0.003f);
+        pitch2_s();
+    }
+    if (*(float *)(s + 0x38) != 0.0f)
+        yaw_s(*(float *)(s + 0x38), 0.003f);
+    if (*(float *)(s + 0x44) != 0.0f)
+        zoom_s(0, *(float *)(s + 0x44), 0.005f);
+}
 /* Hands a vendor moby to the shop handler when the menu is idle and its slot is live. */
 
 extern char *D_L15_00167400 __attribute__((section(".data")));
 extern char *D_L15_ef48_e[] __asm__("D_L15_0015EF48") __attribute__((section(".sdata")));
 extern unsigned char D_001413F4 __attribute__((section(".data")));
-extern void FUN_L15_002f88e8(char *);
+void FUN_L15_002f88e8(char *m);
 
 int FUN_L15_002f8ba8(char *moby) {
     char *e = *(char **)(D_L15_ef48_e[2] + *(short *)(moby + 0x84) * 32 + 0x1C);

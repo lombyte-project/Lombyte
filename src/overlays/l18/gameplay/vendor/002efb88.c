@@ -716,7 +716,92 @@ void FUN_L18_002f1e68(unsigned char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f1fd8.s", FUN_L18_002f1fd8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f2310.s", FUN_L18_002f2310);
+/* Runs the lift's state machine, then queues the draw callback for its current look. */
+typedef struct { char p0[0x34]; unsigned short h34; } M_2310;
+extern int D_L18_001622FC_2310 __asm__("D_L18_001622FC") __attribute__((sda));
+extern int D_L18_001622F8_2310 __asm__("D_L18_001622F8") __attribute__((sda));
+extern float D_L18_00162308_2310 __asm__("D_L18_00162308") __attribute__((sda));
+extern float D_L18_0016230C_2310 __asm__("D_L18_0016230C") __attribute__((sda));
+extern unsigned char D_00141400_2310 __asm__("D_00141400") __attribute__((section(".data")));
+extern unsigned char D_0013D406_2310 __asm__("D_0013D406") __attribute__((section(".data")));
+extern float D_0015ED6C_2310 __asm__("D_0015ED6C");
+extern float D_0015ED70_2310 __asm__("D_0015ED70");
+extern float approach_2310(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern void enqueue_2310(void *, void *) __asm__("FUN_001f4600");
+extern void FUN_L18_002f2598(void *a);
+extern void FUN_L18_002f2620(char *moby);
+extern void FUN_L18_002f27c8(char *moby);
+extern void FUN_L18_002f2970(char *moby);
+
+void FUN_L18_002f2310(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    int v;
+    switch (m[0x20]) {
+    case 0:
+        if (D_L18_001622FC_2310 != 0) {
+            D_00141400_2310 = *(unsigned char *)&D_L18_001622FC_2310;
+        }
+        *(int *)(d + 0x1C) = D_L18_001622F8_2310++;
+        m[0x30] = 0xFF;
+        m[0x20] = 1;
+        ((M_2310 *)m)->h34 |= 1;
+        *(short *)(m + 0x32) = 0;
+        *(int *)(m + 0x94) = 0;
+        break;
+    case 1:
+        if (D_0013D406_2310 != 0) {
+            *(int *)(d + 8) = (*(int *)(d + 8) + 1) & 1;
+        }
+        v = *(int *)(d + 8);
+        D_L18_001622F8_2310 = 0;
+        if (v != 0 && D_00141400_2310 == 0) {
+            m[0x20] = 2;
+            *(float *)(m + 0x18) = *(float *)(d + 0);
+        } else {
+            m[0x20] = 3;
+            *(float *)(m + 0x18) = *(float *)(d + 4);
+        }
+        break;
+    case 3:
+        if (m[0xBC] & 4) {
+            D_L18_001622FC_2310 = 0;
+            m[0x20] = 2;
+            if (*(int *)(d + 8) == 0) {
+                D_0013D406_2310 = 1;
+            }
+        }
+        approach_2310((float *)(m + 0x18), (float *)(d + 0x18), *(float *)(d + 4), D_0015ED70_2310 * 4.0f,
+                      D_0015ED70_2310 * 4.0f, D_0015ED6C_2310 * 4.0f);
+        FUN_L18_002f2598(m);
+        m[0xBC] = 1;
+        break;
+    case 2:
+        if (m[0xBC] & 8) {
+            m[0x20] = 3;
+            D_L18_001622FC_2310 = 1;
+        }
+        m[0xBC] = 2;
+        FUN_L18_002f2598(m);
+        approach_2310((float *)(m + 0x18), (float *)(d + 0x18), *(float *)(d + 0), D_0015ED70_2310 * 4.0f,
+                      D_0015ED70_2310 * 4.0f, D_0015ED6C_2310 * 4.0f);
+        break;
+    }
+    switch (*(int *)(d + 0x14)) {
+    case 1:
+        D_L18_00162308_2310 = D_L18_00162308_2310 + D_L18_0016230C_2310 * D_0015ED6C_2310;
+        if (1.0f < D_L18_00162308_2310) {
+            D_L18_00162308_2310 -= 1.0f;
+        }
+        enqueue_2310(FUN_L18_002f2620, m);
+        break;
+    case 2:
+        enqueue_2310(FUN_L18_002f27c8, m);
+        break;
+    case 0:
+        enqueue_2310(FUN_L18_002f2970, m);
+        break;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F39F8), where it is exact; names translated to the US level program. */
 
 typedef struct {

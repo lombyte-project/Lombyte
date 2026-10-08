@@ -765,7 +765,72 @@ int FUN_L13_002e9160(char *m, char *d, int idx, int aim) {
         FUN_L13_002e9018_c(m, d, yaw, pitch);
     return wrapped;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e9408.s", FUN_L13_002e9408);
+/* Picks the racer's direction along its path from where the hero is, eases its speed, then steps it; bit 1 of the result is set past a marked node. */
+extern char *D_L13_001B07B0_9408[] __asm__("D_L13_001B07B0");
+extern char D_0013F3D0_9408[] __asm__("D_0013F3D0");
+extern float D_0015ED60_9408 __asm__("D_0015ED60");
+extern float dist_9408(void *, void *) __asm__("FUN_001f9b48");
+extern int step_9408(char *, char *, int, int) __asm__("FUN_L13_002e9160");
+
+int FUN_L13_002e9408(char *m, char *d, int idx, int aim) {
+    char *path = D_L13_001B07B0_9408[*(int *)(&d[idx << 2] + 0xB0)];
+    int r = 0;
+    float ahead[4];
+    float behind[4];
+    float a, b;
+    int n;
+    int k;
+    int dir;
+    if (path != 0) {
+        n = *(short *)(d + 0x9C) + 1;
+        if (n >= *(int *)path) {
+            n = 0;
+        }
+        qcopy(ahead, path + n * 16 + 0x10);
+        a = dist_9408(ahead, D_0013F3D0_9408);
+        k = *(short *)(d + 0x9C) - 1;
+        if (k < 0) {
+            k = *(int *)path - 1;
+        }
+        qcopy(behind, path + k * 16 + 0x10);
+        b = dist_9408(behind, D_0013F3D0_9408);
+        if (a < b) {
+            dir = -1;
+        } else if (b < a) {
+            dir = 1;
+        } else {
+            dir = d[0x10C] == 1 ? 1 : -1;
+        }
+        if (dir != (signed char)d[0x10C]) {
+            float k = D_0015ED60_9408;
+            *(float *)(d + 0xAC) *= k * -0.100000024f + 1.0f;
+            if (*(float *)(d + 0xAC) < k * 0.15f) {
+                short cur = *(short *)(d + 0x9C);
+                d[0x10C] = dir;
+                *(short *)(d + 0x9C) = *(unsigned short *)(d + 0x9E);
+                *(short *)(d + 0x9E) = cur;
+            }
+        } else {
+            float dist = dist_9408(m + 0x10, D_0013F3D0_9408);
+            float s = 1.0f;
+            float sp;
+            if (((unsigned char *)m)[0xBC] == 4) {
+                s = 3.0f;
+            }
+            sp = *(float *)(d + 0xAC);
+            sp += (s * 30.0f / dist - sp) * (D_0015ED60_9408 * 0.12f);
+            *(float *)(d + 0xAC) = sp;
+            if (sp < 0.0f) {
+                *(float *)(d + 0xAC) = 0.0f;
+            }
+        }
+        r = step_9408(m, d, idx, aim);
+    }
+    if (0.0f < *(float *)(path + (*(short *)(d + 0x9C) << 4) + 0x1C)) {
+        r |= 2;
+    }
+    return r;
+}
 /* Launches the child moby held in slot idx of p: spins it off with random-ish velocities and clears the slot. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EAAB8), where it is exact; names translated to the US level program. */
 

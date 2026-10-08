@@ -48,7 +48,101 @@ void FUN_L18_002f9a98(void *moby) {
     subtract_vector_xyz(a, d, e);
     FUN_L00_00263618(a, h, D_L18_001624E0_b, D_L18_001624E4_b);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9c20.s", FUN_L18_002f9c20);
+/* Draws the moby's two glow quads facing the camera, in the inner and outer tints. */
+typedef unsigned int u128_9c20 __attribute__((mode(TI)));
+typedef struct {
+    float m[4][4];
+    int col[4];
+    float uv[8];
+    unsigned long a, b, c, d;
+} Pk_9c20;
+typedef struct {
+    char pad[0x34];
+    int n;
+} ML_9c20;
+extern ML_9c20 D_L18_0016D260_9c20 __asm__("D_L18_0016D260");
+extern int D_L18_001624BC_9c20 __asm__("D_L18_001624BC") __attribute__((sda));
+extern int D_L18_00162560_9c20 __asm__("D_L18_00162560");
+extern int D_L18_00162564_9c20 __asm__("D_L18_00162564");
+extern float D_L18_00162568_9c20 __asm__("D_L18_00162568");
+extern float D_L18_0016256C_9c20 __asm__("D_L18_0016256C");
+extern int D_L18_00162524_9c20 __asm__("D_L18_00162524");
+extern int D_L18_00162504_9c20 __asm__("D_L18_00162504") __attribute__((sda));
+extern float D_L18_00162508_9c20 __asm__("D_L18_00162508") __attribute__((sda));
+extern float D_L18_0016250C_9c20 __asm__("D_L18_0016250C") __attribute__((sda));
+extern int D_L18_00162510_9c20 __asm__("D_L18_00162510") __attribute__((sda));
+extern float D_L18_001DFB90_9c20[4][4] __asm__("D_L18_001DFB90");
+extern char D_L18_001677C0_9c20[] __asm__("D_L18_001677C0");
+extern int frames_9c20(int) __asm__("FUN_001f96f8");
+extern unsigned long tex_9c20(int) __asm__("FUN_001f44b8");
+extern void gs_9c20(int, long) __asm__("FUN_00233980");
+extern void rot_9c20(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void add_9c20(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void sub_9c20(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void norm_9c20(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void cross_9c20(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void scale_9c20(void *, void *, float) __asm__("FUN_001f9a68");
+extern void xform_9c20(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void draw_9c20(void *, void *, int) __asm__("FUN_001f7d30");
+
+void FUN_L18_002f9c20(char *m) {
+    Pk_9c20 pk;
+    float mat[4][4];
+    float up[4];
+    int c;
+    int c2;
+    int i;
+    if (D_L18_0016D260_9c20.n == frames_9c20(D_L18_001624BC_9c20 + 1)) {
+        D_L18_00162568_9c20 = -45.0f;
+        D_L18_0016256C_9c20 = 1.0f;
+        D_L18_00162560_9c20 = 0;
+        D_L18_00162564_9c20 = 0;
+    }
+    pk.b = tex_9c20(0xB);
+    pk.c = 0x0000FF9000000260ULL;
+    pk.d = 0x8000000048ULL;
+    pk.a = 0;
+    gs_9c20(0x4A, 0);
+    gs_9c20(0x47, 0x51001);
+    rot_9c20(mat[3], &D_L18_00162560_9c20, m + 0xC0);
+    add_9c20(mat[3], mat[3], m + 0x10);
+    sub_9c20(mat[0], mat[3], D_L18_001677C0_9c20);
+    norm_9c20(mat[0], mat[0], 1.0f);
+    *(u128_9c20 *)up = 0;
+    up[2] = 1.0f;
+    up[3] = 1.0f;
+    cross_9c20(mat[1], mat[0], up);
+    norm_9c20(mat[1], mat[1], 1.0f);
+    cross_9c20(mat[2], mat[1], mat[0]);
+    c = D_L18_00162504_9c20 | (D_L18_00162524_9c20 << 24);
+    pk.uv[0] = 1.0f;
+    pk.uv[1] = 1.0f;
+    pk.uv[2] = 0.0f;
+    pk.uv[3] = 1.0f;
+    pk.uv[4] = 1.0f;
+    pk.uv[5] = 0.0f;
+    pk.uv[6] = 0.0f;
+    pk.uv[7] = 0.0f;
+    pk.col[3] = c;
+    pk.col[2] = c;
+    pk.col[1] = c;
+    pk.col[0] = c;
+    for (i = 0; i < 4; i++) {
+        scale_9c20(pk.m[i], D_L18_001DFB90_9c20[i], D_L18_00162508_9c20);
+        xform_9c20(pk.m[i], pk.m[i], mat);
+    }
+    draw_9c20(&pk, 0, 0);
+    c2 = D_L18_00162510_9c20 | (D_L18_00162524_9c20 << 24);
+    pk.col[3] = c2;
+    pk.col[2] = c2;
+    pk.col[1] = c2;
+    pk.col[0] = c2;
+    for (i = 0; i < 4; i++) {
+        scale_9c20(pk.m[i], D_L18_001DFB90_9c20[i], D_L18_0016250C_9c20);
+        xform_9c20(pk.m[i], pk.m[i], mat);
+    }
+    draw_9c20(&pk, 0, 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9eb8.s", FUN_L18_002f9eb8);
 #define NOT_SDA
 

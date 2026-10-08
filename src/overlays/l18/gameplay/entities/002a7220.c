@@ -1302,9 +1302,30 @@ void FUN_L18_002d7fd0(unsigned char *arg) {
         data[0x70 / 4] = -1;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8050.s", FUN_L18_002d8050);
+/* Checks the moby's phase: 1 (and rearms it) when done, -1 when waiting with no timer, else 0. */
+int FUN_L18_002d8050(unsigned char *arg) {
+    int *data = *(int **)(arg + 0x78);
+    if (arg[0x20] == 3) {
+        arg[0x20] = 1;
+        return 1;
+    }
+    if (arg[0x20] == 2 && data[0x6C / 4] == 0) {
+        return -1;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d82c0.s", FUN_L18_002d82c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8888.s", FUN_L18_002d8888);
+/* Starts the moby's next phase with the given pair if it is waiting. */
+int FUN_L18_002d8888(unsigned char *arg, int a, int b) {
+    int *data = *(int **)(arg + 0x78);
+    if (arg[0x20] == 1) {
+        arg[0x20] = 3;
+        data[0x7C / 4] = a;
+        data[0x78 / 4] = b;
+        return 1;
+    }
+    return 0;
+}
 /* Spawns a random ring of particles around the moby. */
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
