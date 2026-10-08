@@ -1,14 +1,8 @@
 #include "types.h"
+#include "rnc/storage/disc_table.h"
 #include "rnc/globals.h"
-struct Globals_00137B80 {
-    u8 pad_0[0x12C0];
-    s32 unk12C0;
-    s32 unk12C4;
-};
-
 extern u8 D_0010E4C0[];
 extern void count_vsync() __asm__("FUN_0012f1c8");
-extern struct Globals_00137B80 D_00137B80;
 extern s32 D_0015EE90;
 extern u8 D_0015FA88[];
 extern s32 D_00160F0C;
@@ -101,8 +95,8 @@ void init_once(void) {
     load_disc_sectors_into_global_buffer();
     b = (u32)D_24135F & 0xFFFFC000;
     base = b + 0x2C0000;
-    dst = (s32 *)(D_1FF8000 - (D_00137B80.unk12C4 << 0xB));
-    wad_get_sectors(D_00137B80.unk12C0, D_00137B80.unk12C4, dst);
+    dst = (s32 *)(D_1FF8000 - (disc_table.unk12C0.size << 0xB));
+    wad_get_sectors(disc_table.unk12C0.sector, disc_table.unk12C0.size, dst);
     FlushCache(0);
     FUN_0020b618(dst, base);
     FlushCache(0);

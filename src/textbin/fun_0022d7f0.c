@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/gameplay/hero.h"
 #include "asm.h"
 
 #include "types.h"
@@ -55,20 +56,12 @@ typedef struct {
     VoiceSlot voice;
 } VoicePoolWindow;
 typedef struct {
-    u8 pad0[0x1090];
-    VoiceMoby *secondary_moby;
-    u8 pad1094[0xFEC];
-    VoiceMoby *primary_moby;
-} VoicePlayerState;
-
-typedef struct {
     VoiceVector value;
     u8 pad10[0x60];
 } VoicePositionRecord;
 extern VoicePositionRecord voice_positions[] __asm__("D_0013E5E0");
 extern u8 voice_volume_records[] __asm__("D_0013E5C0");
 extern VoicePool voice_pool __asm__("D_0013E550");
-extern VoicePlayerState player_state __asm__("D_0013F350");
 extern void clear_voice_position(VoiceVector *) __asm__("func_001F99F8");
 extern s32 game_random_remainder(s32) __asm__("func_00213260");
 extern s32 calculate_voice_volume(VoiceSlot *, VoiceVector *) __asm__("FUN_0022c7e8");
@@ -110,10 +103,10 @@ check_moby:
     if (moby == NULL) {
         goto find_free_slot;
     }
-    if (player_state.primary_moby == moby) {
+    if ((VoiceMoby *)hero.moby == moby) {
         goto use_extended_pool;
     }
-    if (player_state.secondary_moby == moby) {
+    if ((VoiceMoby *)hero.secondary_moby == moby) {
         goto use_extended_pool;
     }
     if (moby->class_id != 0x472) {

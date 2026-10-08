@@ -39,14 +39,7 @@ Boston, MA 02111-1307, USA.  */
  * data object at 0x1596F0 (config name D_001596F0). */
 
 #include "types.h"
-
-typedef struct FpNumber {
-    s32 class;
-    u32 sign;
-    s32 normal_exp;
-    s32 alignment_padding;
-    u64 fraction;
-} FpNumber;
+#include "rnc/sdk/library/fp_number.h"
 
 extern FpNumber D_001596F0;
 

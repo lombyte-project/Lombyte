@@ -38,14 +38,7 @@ Boston, MA 02111-1307, USA.  */
 /* dpdiv: fp-bit divide (bitfield-era variant) with _fpdiv_parts inlined. */
 
 #include "types.h"
-
-typedef struct FpNumber {
-    s32 class;
-    u32 sign;
-    s32 normal_exp;
-    s32 alignment_padding;
-    u64 fraction;
-} FpNumber;
+#include "rnc/sdk/library/fp_number.h"
 
 typedef union {
     f64 value;

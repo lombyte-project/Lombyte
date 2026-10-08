@@ -3,6 +3,7 @@
    with `addiu a1,a1,-8`, matching retail's register reuse and store order. */
 
 #include "types.h"
+#include "rnc/sdk/library/malloc_chunk.h"
 
 struct _reent;
 extern void func_001154C0(struct _reent *);
@@ -10,12 +11,6 @@ extern void func_001154C8(struct _reent *);
 extern void malloc_extend_top(struct _reent *ptr, u32 nb);
 extern u32 D_0012F788[];
 struct malloc_chunk;
-struct malloc_chunk {
-    u32 prev_size;
-    u32 size;
-    struct malloc_chunk *fd;
-    struct malloc_chunk *bk;
-};
 extern struct malloc_chunk D_0012F790;
 typedef struct malloc_chunk *mchunkptr;
 typedef struct malloc_chunk *mbinptr;

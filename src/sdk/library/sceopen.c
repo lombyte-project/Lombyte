@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/library/sif_file_slot.h"
 
 typedef char *va_list;
 
@@ -19,13 +20,6 @@ struct SemaParam {
     s32 wait_threads;
     s32 attr;
     s32 option;
-};
-
-struct SifFileSlot {
-    s32 fd;
-    s32 flags;
-    s32 reserved8;
-    s32 reservedC;
 };
 
 extern s32 D_0012FC94[];

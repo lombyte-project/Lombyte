@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/gameplay/hero.h"
 #include "asm.h"
 
 #include "types.h"
@@ -84,14 +85,6 @@ typedef struct HandGadgetAnimation {
 } HandGadgetAnimation;
 extern u8 gadget_available[] __asm__("D_0013D4C0");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
-typedef struct HandGadgetPlayerState {
-    u8 pad0[0x10B8];
-    s32 equipped_gadget;
-    u8 pad10BC[0xF3A];
-    u8 ammo_used;
-    u8 ammo_capacity;
-} HandGadgetPlayerState;
-extern HandGadgetPlayerState player_state __asm__("D_0013F350");
 extern s32 resource_request_state __asm__("D_0015FF50");
 extern HandGadgetDefinition gadget_definitions[] __asm__("D_001863D0");
 extern u8 *moby_class_resources[] __asm__("D_001B3200");
@@ -154,8 +147,8 @@ s32 load_hand_gadget(HandGadgetState *hand) {
         if (class_pose_manipulator.active) {
             detach_manipulator(hand->source_moby_address, &class_pose_manipulator);
         }
-        if ((player_state.equipped_gadget != 0) &&
-            (selected_gadget != player_state.equipped_gadget)) {
+        if ((hero.equipped_gadget != 0) &&
+            (selected_gadget != hero.equipped_gadget)) {
             func_001E9470(0, 0);
         }
         resource_request_state = gadget_selection.resource_request_state == 0;
@@ -311,13 +304,13 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     do {
         moby = *ammo_moby_slot;
         previous_class = (moby != 0) ? (moby->oclass) : (-1);
-        requested_class = (slot_index < player_state.ammo_capacity) ? (0x1DF) : (-1);
+        requested_class = (slot_index < hero.ammo_capacity) ? (0x1DF) : (-1);
         if (previous_class != requested_class) {
             moby = delete_moby(moby);
             if (requested_class != (-1)) {
                 moby = create_menu_preview_moby(requested_class);
                 velocity_offset = slot_index * 4;
-                *ammo_offset = (slot_index < player_state.ammo_used) ? (0.0f) : (3.0f);
+                *ammo_offset = (slot_index < hero.ammo_used) ? (0.0f) : (3.0f);
                 *(s32 *)((u8 *)ammo_preview_velocities + velocity_offset) = 0;
                 if (moby != 0) {
                     *moby->vars = hand;

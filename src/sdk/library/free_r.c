@@ -9,6 +9,7 @@
 /* _free_r f1: newlib mallocr.c free with the game's arena/globals. */
 
 #include "types.h"
+#include "rnc/sdk/library/malloc_chunk.h"
 
 struct _reent;
 
@@ -19,13 +20,6 @@ extern s32 _malloc_trim_r(struct _reent *ptr, u32 pad);
 extern u32 D_0012F788[]; /* __malloc_av_ bins */
 extern u64 D_0012FB90[]; /* trim_threshold */
 extern u64 D_0012FB98[]; /* top_pad */
-
-struct malloc_chunk {
-    u32 prev_size;
-    u32 size;
-    struct malloc_chunk *fd;
-    struct malloc_chunk *bk;
-};
 
 #define SIZE_SZ               4
 #define MINSIZE               16

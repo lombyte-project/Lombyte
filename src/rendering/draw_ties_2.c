@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp (src/game/tiefunc.c, func_00236CA8). */
 #include "sda.h"
+#include "rnc/rendering/draw_config.h"
 extern void FUN_001f98d0(void *, void *, int);
-extern int D_0018A2B0[];
 extern void FlushCache(int);
 extern char *D_001E1700[];
 extern char D_001E3000[];
@@ -23,10 +23,6 @@ extern void FUN_00235be8(void);
 extern void WriteDmaChannel(void *, int, int);
 extern void dma_tie_textures(void) __asm__("func_00235640"); /* DmaTieTextures */
 extern int D_00160F4C MACRO_ADDR;
-typedef struct {
-    int unk00[6];
-    int unk18;
-} DrawCfg_236CA8;
 /* DrawTies_2: DrawTies_1's two passes, the first with the odd ties' 0x8
    flag set (and the saved tie data swapped in around it), the second with
    the even ones'. Each flag loop reads the tie count into its own local
@@ -51,8 +47,8 @@ void draw_ties_2(void) {
     }
     func_001F21B8(D_00160F30, 1);
     {
-        DrawCfg_236CA8 *d = (DrawCfg_236CA8 *)D_0018A2B0;
-        if (d->unk18 != 0) {
+        struct DrawConfig *d = &draw_config;
+        if (d->tie.enabled != 0) {
             FlushCache(0);
             FUN_00235be8();
             WriteDmaChannel(D_001E4400, 0x3600, 0x40);
@@ -76,13 +72,13 @@ void draw_ties_2(void) {
         }
     }
     {
-        DrawCfg_236CA8 *d = (DrawCfg_236CA8 *)D_0018A2B0;
+        struct DrawConfig *d = &draw_config;
         int p = D_00160F00;
         D_00160F68 = p;
         D_0015EE74 = D_0015EE78;
         p += 0x10;
         D_00160F00 = p;
-        if (d->unk18 != 0) {
+        if (d->tie.enabled != 0) {
             FlushCache(0);
             FUN_00235be8();
             WriteDmaChannel(D_001E3200, 0x3600, 0x40);

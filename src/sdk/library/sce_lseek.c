@@ -1,11 +1,5 @@
 #include "types.h"
-
-struct SifFileSlot {
-    s32 fd;
-    s32 flags;
-    s32 reserved8;
-    s32 reservedC;
-};
+#include "rnc/sdk/library/sif_file_slot.h"
 
 struct FsSeekRequest {
     s32 completion_semaphore;

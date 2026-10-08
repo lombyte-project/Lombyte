@@ -162,7 +162,7 @@ extern void QueueDmaTransfer(s32);
 extern void FUN_00120558(s32, s32);
 extern s32 FUN_001e9b10(u8 *);
 extern void init_view_context(void) __asm__("FUN_001f2c60");
-extern void FUN_001f2d98(void);
+extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern volatile char func_001F97A0(s32);
 extern void init_mem_slots(void) __asm__("FUN_002015d8");
 extern void parse_particle_textures(u8 *, u8 *, u8 *, s32) __asm__("FUN_002026c8");
@@ -170,9 +170,9 @@ extern void unpack_point_records(u8 *, s32) __asm__("FUN_00202800");
 extern void relocate_sky_definition(u8 *) __asm__("FUN_002028e0");
 extern void upload_texture_images(u8 *, s32, u8 *) __asm__("FUN_00203120");
 extern void register_moby_class(u8 *, u8 *, u8 *, s32) __asm__("FUN_00203640");
-extern void func_00203730(u8 *, u8 *, u8 *, s32);
-extern void func_00203B08(u8 *, u8 *, u8 *, u8 *, s32);
-extern void func_002040E0(u8 *, u8 *);
+extern void register_object_render_class(u8 *, u8 *, u8 *, s32) __asm__("func_00203730");
+extern void register_shrub_render_class(u8 *, u8 *, u8 *, u8 *, s32) __asm__("func_00203B08");
+extern void initialize_tfrag_render_data(u8 *, u8 *) __asm__("func_002040E0");
 extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
 extern s32 FUN_0020b618(u8 *, u8 *);
 extern void start_audio_stream_read(u8 *, s32, s32) __asm__("FUN_00216788");
@@ -226,7 +226,7 @@ void transition_load_wad(void)
   FillTransferWords(D_001B6880, -1, 0xE00);
   FillTransferWords(D_001B6180, 0, 0xE0);
   init_view_context();
-  FUN_001f2d98();
+  update_view_context();
   vu1_init_chain();
   start_audio_stream_read(D_001940C0.hdr + 0x1000000, D_00137B80.x14E8, D_00137B80.x14EC);
   update_audio_stream_until_idle(1);
@@ -285,7 +285,7 @@ void transition_load_wad(void)
     }
     while (k < D_001603EC);
   }
-  func_002040E0(data + hdr->x10, ((u8 *) hdr) + hdr->x34);
+  initialize_tfrag_render_data(data + hdr->x10, ((u8 *) hdr) + hdr->x34);
   relocate_sky_definition(data + hdr->x14);
   c20 = (WadClass20 *) (((u8 *) hdr) + hdr->x1C);
   D_0015FF00 = 0;
@@ -300,14 +300,14 @@ void transition_load_wad(void)
   c20 = (WadClass20 *) (((u8 *) hdr) + hdr->x24);
   for (k = 0; k < hdr->n20; k++)
   {
-    func_00203730(data + c20->offset, ((u8 *) hdr) + hdr->x44, c20->x10, c20->x4);
+    register_object_render_class(data + c20->offset, ((u8 *) hdr) + hdr->x44, c20->x10, c20->x4);
     c20++;
   }
 
   c30 = (WadClass30 *) (((u8 *) hdr) + hdr->x2C);
   for (k = 0; k < hdr->n28; k++)
   {
-    func_00203B08(data + c30->offset, ((u8 *) hdr) + hdr->x4C, c30->x10, c30->x20, c30->x4);
+    register_shrub_render_class(data + c30->offset, ((u8 *) hdr) + hdr->x4C, c30->x10, c30->x20, c30->x4);
     c30++;
   }
 

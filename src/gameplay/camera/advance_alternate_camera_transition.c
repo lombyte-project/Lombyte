@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/gameplay/hero.h"
 #include "qcopy.h"
 
 typedef struct {
@@ -6,7 +7,6 @@ typedef struct {
 } __attribute__((aligned(16))) CameraVector;
 
 extern u8 D_001871B0[];
-extern char D_0013F350[];
 extern char D_0013F3D0[];
 extern char D_0013F5E0[];
 extern char D_00187080[];
@@ -59,7 +59,7 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
     f32 roll_sign;
     f32 tilt_sign;
     f32 projection;
-    char *hero;
+    struct Hero *h;
 
     if (*(s32 *)(transition_state + 3) <= 0) {
         return 1;
@@ -75,9 +75,9 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
                                        &forward_axis, &horizontal_axis, &vertical_axis);
     } else {
         qcopy(&focus_position, target_camera + 0x30);
-        hero = D_0013F350;
-        normalize_vector_xyz(&forward_axis, *(char **)(hero + 0x2080) + 0xC0, 1.0f);
-        normalize_vector_xyz(&vertical_axis, *(char **)(hero + 0x2080) + 0xE0, 1.0f);
+        h = &hero;
+        normalize_vector_xyz(&forward_axis, (char *)h->moby + 0xC0, 1.0f);
+        normalize_vector_xyz(&vertical_axis, (char *)h->moby + 0xE0, 1.0f);
         orbit_angles.v[2] = 0.0f;
         orbit_angles.v[1] = 0.0f;
         orbit_angles.v[0] = 3.1415927f;

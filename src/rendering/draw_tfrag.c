@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/rendering/draw_config.h"
 #include "rnc/rendering/draw_tfrag.h"
 #include "rnc/globals.h"
 
@@ -14,7 +15,6 @@ extern u8 D_00160E80[];
 extern s32 D_00160EBC;
 extern s32 D_00160F00;
 extern u8 D_00187080[];
-extern struct Globals_0018A2B0 D_0018A2B0;
 extern u8 D_001E1300[];
 extern void FlushCache(s32);
 extern void WriteDmaChannel(u32, u32, u32);
@@ -54,13 +54,13 @@ void draw_tfrag(void) {
     FUN_001fa378(&L, p - 0x100, &L);
     write_vif_unpack_packet(5, &L, 4);
     write_vif_unpack_packet(0x14D, &L, 4);
-    if (D_0018A2B0.unk10 != 0) {
+    if (draw_config.tfrag.enabled != 0) {
         FlushCache(0);
         func_00233FB0();
     }
     func_001F21B8(D_00160E80, 2);
     dma_tfrag_textures();
-    if (D_0018A2B0.unk10 != 0) {
+    if (draw_config.tfrag.enabled != 0) {
         WriteDmaChannel(D_001E1300, 0x3000, 0x40);
     }
     func_001F21B0(D_00160E80, 2);

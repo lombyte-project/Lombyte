@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/gameplay/hero.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/gameplay/state/process_global_state_flags.h"
 #include "rnc/globals.h"
@@ -6,7 +7,6 @@
 extern u32 D_0013CAE4[];
 extern struct Globals_0013D408 D_0013D408;
 extern u8 D_0013E05A[];
-extern struct GameState D_0013F350;
 extern u8 D_0014BF08[];
 extern s32 D_0015EEA0;
 extern u8 D_001D4EC0[];
@@ -50,7 +50,7 @@ s32 process_global_state_flags(void) {
         clear_scene_state_buffers();
         result = scale_game_frames(0x10);
         fade_to_black(result);
-        D_0013F350.unk20B1 = 1;
+        hero.unk20B1 = 1;
         return -1;
     }
     return 0;

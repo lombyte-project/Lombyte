@@ -1,16 +1,11 @@
 #include "types.h"
+#include "rnc/storage/stash.h"
 
 struct SifDmaData {
     u32 data;
     u32 addr;
     u32 size;
     u32 mode;
-};
-struct StashEntry {
-    s32 addr;
-    s32 count;
-    s32 tag;
-    s32 pad;
 };
 struct Stash {
     s32 base;

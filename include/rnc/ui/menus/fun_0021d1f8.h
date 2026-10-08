@@ -3,12 +3,6 @@
 
 #include "types.h"
 
-struct Globals_00137B80 {
-    u8 pad_0[0x1528];
-    s32 unk1528;
-    s32 unk152C;
-};
-
 #include "rnc/audio/music/music_stream_state.h"
 
 struct MenuScreen {

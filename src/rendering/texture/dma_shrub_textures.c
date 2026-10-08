@@ -1,13 +1,8 @@
 #include "types.h"
+#include "rnc/rendering/draw_config.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/globals.h"
-struct TexState {
-    u8 pad0[0x1C];
-    s32 count;
-    s32 enabled;
-};
 extern struct TagPtr D_001603F0;
-extern struct TexState D_0018A2B0;
 extern s32 D_001603F8;
 extern char D_001E88D0[];
 extern s32 FUN_0022a330(s32);
@@ -25,7 +20,7 @@ void dma_shrub_textures(void) {
     D_001603F0.p->addr = (u32)render_packet_cursor.p;
     D_001603F0.p->vif0 = 0;
     D_001603F0.p->vif1 = 0;
-    if (D_0018A2B0.enabled != 0 && D_0018A2B0.count != 0) {
+    if (draw_config.shrub.enabled != 0 && draw_config.shrub.count != 0) {
         size = FUN_0022a330(gs_texture_allocation_cursor);
         vu1_tex_flush();
         if (size > 0x400000) {

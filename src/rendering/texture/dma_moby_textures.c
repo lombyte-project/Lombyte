@@ -1,13 +1,8 @@
 #include "types.h"
+#include "rnc/rendering/draw_config.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/globals.h"
-struct TexState {
-    u8 pad0[0x24];
-    s32 count;
-    s32 enabled;
-};
 extern struct TagPtr D_0015FF0C;
-extern struct TexState D_0018A2B0;
 extern void FUN_00211408(s32);
 extern void vu1_tex_flush(void) __asm__("func_00233B68");
 void dma_moby_textures(void) __asm__("FUN_0020cdf0");
@@ -21,7 +16,7 @@ void dma_moby_textures(void) {
     D_0015FF0C.p->addr = (u32)render_packet_cursor.p;
     D_0015FF0C.p->vif0 = 0;
     D_0015FF0C.p->vif1 = 0;
-    if (D_0018A2B0.enabled != 0 && D_0018A2B0.count != 0) {
+    if (draw_config.moby.enabled != 0 && draw_config.moby.count != 0) {
         FUN_00211408(gs_texture_allocation_cursor);
         vu1_tex_flush();
     }

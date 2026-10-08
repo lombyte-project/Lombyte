@@ -15,7 +15,7 @@ typedef struct {
 
 extern L00Entry D_00165480[8];
 extern f32 func_001FA6C0(s32);
-extern s32 FUN_001fa6d0(f32);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern f32 func_001F9DC8(f32);
 
 s32 FUN_001e8d08(s32 *p1)
@@ -96,7 +96,7 @@ s32 FUN_001e8d08(s32 *p1)
             }
             f = func_001F9DC8(f);
             g = func_001FA6C0(e->f0e);
-            res = FUN_001fa6d0((f * g + g) * 0.5f) + e->f0f;
+            res = truncate_float_to_s32((f * g + g) * 0.5f) + e->f0f;
             if (res >= 256) {
                 res = 255;
             }
