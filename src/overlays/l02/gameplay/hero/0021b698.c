@@ -10,7 +10,6 @@
 #include "rnc/gameplay/state/usage_stats.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L18_00213b40, without states 0, 4 and 0xE). */
-extern char D_0013F350_u[] __asm__("D_0013F350");
 extern int D_0015ED84_c __asm__("D_0015ED84");
 extern int D_0015ED84_d __asm__("D_0015ED84");
 extern int FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
@@ -21,37 +20,37 @@ extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
 void FUN_L02_0021b698(void) {
-    char *g = D_0013F350_u;
-    int keep = *(unsigned char *)(g + 0x12ED);
-    int st = *(short *)(g + 0x12E0);
+    struct Hero *g = &hero;
+    int keep = g->unk12ED;
+    int st = g->unk12E0;
     int v;
-    FUN_001f9810(g + 0x12E0, 0x10);
-    *(unsigned char *)(g + 0x12ED) = keep;
-    *(short *)(g + 0x12E0) = -1;
-    *(unsigned char *)(g + 0x20A9) = 0;
-    *(short *)(g + 0x308) = 0;
+    FUN_001f9810(&g->unk12E0, 0x10);
+    g->unk12ED = keep;
+    g->unk12E0 = -1;
+    g->unk20A9 = 0;
+    g->unk308 = 0;
     if (st == -1)
         return;
     if (st == 2) {
-        if (*(short *)(g + 0x30C) == 0 || *(float *)(g + 0x2DC) < 0.3f) {
-            *(unsigned char *)(g + 0x12E7) = 1;
-            if (*(unsigned char *)(g + 0x20A4) == 0) {
-                char *p = *(char **)(g + 0x10E0);
+        if (g->unk30C == 0 || g->unk2DC < 0.3f) {
+            g->unk12E7 = 1;
+            if (g->unk20A4 == 0) {
+                char *p = (char *)g->items[1].moby;
                 if (p != 0 && *(short *)(p + 0xA6) == 0xAD)
-                    *(short *)(g + 0x308) = 1;
+                    g->unk308 = 1;
             }
         }
     }
     v = D_0015ED84_c;
     if (st == 3) {
-        char *q = D_0013F350_u;
-        q[0x12E6] = 1;
+        struct Hero *q = &hero;
+        q->selector_3 = 1;
         v = D_0015ED84_d;
     }
     if (v == 0xD) {
-        char *q = D_0013F350_u;
-        if (*(int *)(q + 0x2084) != 0x7B) {
-            if (FUN_L00_001f0d60(*(float *)(q + 0x234) + 0.03f, q + 0xD0, 2, 0)) {
+        struct Hero *q = &hero;
+        if (q->state.current != 0x7B) {
+            if (FUN_L00_001f0d60(q->unk234 + 0.03f, &q->motion.unkD0, 2, 0)) {
                 if (FUN_001f0b58_c() == 0xB) {
                     hero_set_state(0x7B, 1);
                     return;
@@ -60,36 +59,36 @@ void FUN_L02_0021b698(void) {
         }
     }
     if (st == 0xB) {
-        char *q = D_0013F350_u;
-        q[0x12EB] = 1;
+        struct Hero *q = &hero;
+        q->selector_11 = 1;
     }
     if (st == 0x2) {
-        char *q = D_0013F350_u;
-        q[0x12E7] = 1;
+        struct Hero *q = &hero;
+        q->unk12E7 = 1;
     }
     if (st == 0xD) {
-        char *q = D_0013F350_u;
-        q[0x12EC] = 1;
+        struct Hero *q = &hero;
+        q->selector_13 = 1;
     }
     if (st == 0x8) {
-        char *q = D_0013F350_u;
-        q[0x12EA] = 1;
+        struct Hero *q = &hero;
+        q->unk12EA = 1;
     }
     if (st == 0x9) {
-        char *q = D_0013F350_u;
-        q[0x12EE] = 1;
+        struct Hero *q = &hero;
+        q->unk12EE = 1;
     }
     if (st == 0xC) {
-        char *q = D_0013F350_u;
-        q[0x12EA] = 1;
+        struct Hero *q = &hero;
+        q->unk12EA = 1;
     }
     {
-        char *q = D_0013F350_u;
-        char *h;
-        if (*(unsigned char *)(q + 0x12EC) != 0 && *(int *)(q + 0x2084) != 0x7F) {
-            if (AbsoluteFloat(*(float *)(q + 0x2F0) - (*(float *)(q + 0x88) + 0.25f)) < 1.0f) {
-                if (*(float *)(q + 0x2F0) - *(float *)(q + 0x88) > 0.0f) {
-                    if (*(float *)(q + 0x108) < 0.0f) {
+        struct Hero *q = &hero;
+        struct Hero *h;
+        if (q->selector_13 != 0 && q->state.current != 0x7F) {
+            if (AbsoluteFloat(q->height_threshold - (q->motion.pos.f[2] + 0.25f)) < 1.0f) {
+                if (q->height_threshold - q->motion.pos.f[2] > 0.0f) {
+                    if (q->motion.unk100.f[2] < 0.0f) {
                         FUN_L00_0020b930();
                         hero_set_state(0x7F, 1);
                         return;
@@ -97,15 +96,15 @@ void FUN_L02_0021b698(void) {
                 }
             }
         }
-        h = D_0013F350_u;
-        if (*(unsigned char *)(h + 0x12E6) != 0 && *(int *)(h + 0x2084) != 0x68 &&
-            *(int *)(h + 0x2084) != 0x7B) {
-            if (AbsoluteFloat(*(float *)(h + 0x2F4) - (*(float *)(h + 0x88) + 0.25f)) < 1.0f) {
-                if (*(float *)(h + 0x2F4) - *(float *)(h + 0x88) > 0.0f) {
-                    if (*(int *)(h + 0x2084) != 0x69 || *(short *)(h + 0x41E) != 0) {
-                        if (*(float *)(h + 0x108) < 0.0f) {
+        h = &hero;
+        if (h->selector_3 != 0 && h->state.current != 0x68 &&
+            h->state.current != 0x7B) {
+            if (AbsoluteFloat(h->unk2F4 - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
+                if (h->unk2F4 - h->motion.pos.f[2] > 0.0f) {
+                    if (h->state.current != 0x69 || h->unk41E != 0) {
+                        if (h->motion.unk100.f[2] < 0.0f) {
                             FUN_L00_0020b930();
-                            if (*(int *)(h + 0x22A8) == 0)
+                            if (h->health.hp == 0)
                                 hero_set_state(0x7B, 1);
                             else
                                 hero_set_state(0x68, 1);
@@ -115,11 +114,11 @@ void FUN_L02_0021b698(void) {
                 }
             }
         }
-        h = D_0013F350_u;
-        if (*(unsigned char *)(h + 0x12EB) != 0 && *(int *)(h + 0x2084) != 0x7B) {
-            if (AbsoluteFloat(*(float *)(h + 0x2F4) - (*(float *)(h + 0x88) + 0.25f)) < 1.0f) {
-                if (*(float *)(h + 0x2F4) - *(float *)(h + 0x88) > 0.0f) {
-                    if (*(float *)(h + 0x108) < 0.0f) {
+        h = &hero;
+        if (h->selector_11 != 0 && h->state.current != 0x7B) {
+            if (AbsoluteFloat(h->unk2F4 - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
+                if (h->unk2F4 - h->motion.pos.f[2] > 0.0f) {
+                    if (h->motion.unk100.f[2] < 0.0f) {
                         FUN_L00_0020b930();
                         hero_set_state(0x7B, 1);
                     }
@@ -138,7 +137,6 @@ extern s32 D_0015ED84_8 __asm__("D_0015ED84");
 extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
 extern u8 D_0013F3D0_8[] __asm__("D_0013F3D0");
-extern u8 D_0013F350_b8[] __asm__("D_0013F350");
 extern f32 D_0015ED6C_8 __asm__("D_0015ED6C");
 extern u8 D_0013F430_8[] __asm__("D_0013F430");
 

@@ -476,7 +476,7 @@ struct Hero {
     u8 selector_3;                 /* 0x12E6 */
     u8 unk12E7;                    /* 0x12E7 */
     u8 unk12E8;                    /* 0x12E8 */
-    u8 pad_12E9[0x1];
+    u8 unk12E9;                    /* 0x12E9 */
     u8 unk12EA;                    /* 0x12EA */
     u8 selector_11;                /* 0x12EB */
     u8 selector_13;                /* 0x12EC */

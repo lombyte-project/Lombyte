@@ -164,51 +164,50 @@ extern int func_L00_001F3958_2cd48(void) __asm__("FUN_001f0b58");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern float func_001F9B88_2cd48(float) __asm__("FUN_001f99c0");
 extern void func_L00_0020BFA8_2cd48(void) __asm__("FUN_L00_0020b930");
-extern unsigned char D_0013E633_2cd48[] __asm__("D_0013F350");
 extern int D_0015EE84_m_2cd48 __asm__("D_0015ED84");
 void FUN_L01_0022cd48(void) {
-    char *p = (char *)D_0013E633_2cd48;
+    struct Hero *p = &hero;
     int v;
     int x;
-    unsigned char saved = *(unsigned char *)(p + 0x12ED);
-    v = *(short *)(p + 0x12E0);
-    func_001F99D8_2cd48(p + 0x12E0, 0x10);
-    *(unsigned char *)(p + 0x12ED) = saved;
-    *(short *)(p + 0x12E0) = -1;
-    *(unsigned char *)(p + 0x20A9) = 0;
-    *(short *)(p + 0x308) = 0;
+    unsigned char saved = p->unk12ED;
+    v = p->unk12E0;
+    func_001F99D8_2cd48(&p->unk12E0, 0x10);
+    p->unk12ED = saved;
+    p->unk12E0 = -1;
+    p->unk20A9 = 0;
+    p->unk308 = 0;
     if (v == -1)
         return;
     if (v == 2) {
-        if (*(short *)(p + 0x30C) == 0 || *(float *)(p + 0x2DC) < 0.3f) {
-            *(unsigned char *)(p + 0x12E7) = 1;
-            if (*(unsigned char *)(p + 0x20A4) == 0) {
-                char *o = *(char **)(p + 0x10E0);
+        if (p->unk30C == 0 || p->unk2DC < 0.3f) {
+            p->unk12E7 = 1;
+            if (p->unk20A4 == 0) {
+                char *o = (char *)p->items[1].moby;
                 if (o != 0 && *(short *)(o + 0xA6) == 0xAD)
-                    *(short *)(p + 0x308) = 1;
+                    p->unk308 = 1;
             }
         }
     }
     if (v == 0xE) {
-        char *q = (char *)D_0013E633_2cd48;
-        *(unsigned char *)(q + 0x12E4) = 1;
-        *(float *)(q + 0x22A4) = 0.2f;
-        *(float *)(q + 0x2F0) = *(float *)(q + 0x2D8) + 0.2f;
+        struct Hero *q = &hero;
+        q->base_condition = 1;
+        q->unk22A4 = 0.2f;
+        q->height_threshold = q->unk2D8 + 0.2f;
     }
     if (v == 0) {
-        char *q = (char *)D_0013E633_2cd48;
-        *(float *)(q + 0x22A4) = *(float *)(q + 0x2F0) - *(float *)(q + 0x2D8);
-        if (*(float *)(q + 0x22A4) < 0.85f) {
-            if (*(float *)(q + 0x22A4) > 0.25f)
-                *(unsigned char *)(q + 0x20A9) = 1;
+        struct Hero *q = &hero;
+        q->unk22A4 = q->height_threshold - q->unk2D8;
+        if (q->unk22A4 < 0.85f) {
+            if (q->unk22A4 > 0.25f)
+                q->unk20A9 = 1;
         }
-        q = (char *)D_0013E633_2cd48;
-        *(unsigned char *)(q + 0x12E4) = 1;
+        q = &hero;
+        q->base_condition = 1;
     }
     if (D_0015EE84_m_2cd48 == 0xD) {
-        char *q = (char *)D_0013E633_2cd48;
-        if (*(int *)(q + 0x2084) != 0x7B) {
-            if (func_L00_001F10E0_2cd48(*(float *)(q + 0x234) + 0.03f, q + 0xD0, 2, 0)) {
+        struct Hero *q = &hero;
+        if (q->state.current != 0x7B) {
+            if (func_L00_001F10E0_2cd48(q->unk234 + 0.03f, &q->motion.unkD0, 2, 0)) {
                 if (func_L00_001F3958_2cd48() == 0xB) {
                     hero_set_state(0x7B, 1);
                     return;
@@ -217,47 +216,47 @@ void FUN_L01_0022cd48(void) {
         }
     }
     if (v == 0xB) {
-        char *q = (char *)D_0013E633_2cd48;
-        q[0x12EB] = 1;
+        struct Hero *q = &hero;
+        q->selector_11 = 1;
     }
     if (v == 4) {
-        char *q = (char *)D_0013E633_2cd48;
-        q[0x12E3] = 1;
+        struct Hero *q = &hero;
+        q->unk12E3 = 1;
     }
     if (v == 0xD) {
-        char *q = (char *)D_0013E633_2cd48;
-        q[0x12EC] = 1;
+        struct Hero *q = &hero;
+        q->selector_13 = 1;
     }
     if (v == 8) {
-        char *q = (char *)D_0013E633_2cd48;
-        q[0x12EA] = 1;
+        struct Hero *q = &hero;
+        q->unk12EA = 1;
     }
     if (v == 9) {
-        char *q = (char *)D_0013E633_2cd48;
-        q[0x12EE] = 1;
+        struct Hero *q = &hero;
+        q->unk12EE = 1;
     }
     if (v == 0xC) {
-        char *q = (char *)D_0013E633_2cd48;
-        q[0x12EA] = 1;
+        struct Hero *q = &hero;
+        q->unk12EA = 1;
     }
     {
-        char *q = (char *)D_0013E633_2cd48;
-        if (*(unsigned char *)(q + 0x12E3) != 0 && *(int *)(q + 0x300) != 0) {
-            x = *(int *)(q + 0x208C);
+        struct Hero *q = &hero;
+        if (q->unk12E3 != 0 && q->unk300 != 0) {
+            x = q->state.control_mode;
             if (x != 0x10 && x != 0x14 && x != 7) {
                 hero_set_state(0x31, 1);
                 return;
             }
         }
         {
-            char *r = (char *)D_0013E633_2cd48;
-            if (*(unsigned char *)(r + 0x12EC) != 0) {
-                if (*(int *)(r + 0x2084) == 0x7F)
+            struct Hero *r = &hero;
+            if (r->selector_13 != 0) {
+                if (r->state.current == 0x7F)
                     return;
-                if (func_001F9B88_2cd48(*(float *)(r + 0x2F0) - (*(float *)(r + 0x88) + 0.25f)) <
+                if (func_001F9B88_2cd48(r->height_threshold - (r->motion.pos.f[2] + 0.25f)) <
                     1.0f) {
-                    if (*(float *)(r + 0x2F0) - *(float *)(r + 0x88) > 0.0f) {
-                        if (*(float *)(r + 0x108) < 0.0f) {
+                    if (r->height_threshold - r->motion.pos.f[2] > 0.0f) {
+                        if (r->motion.unk100.f[2] < 0.0f) {
                             func_L00_0020BFA8_2cd48();
                             hero_set_state(0x7F, 1);
                         }
@@ -360,7 +359,6 @@ extern s32 D_0015ED84_8 __asm__("D_0015ED84");
 extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
 extern u8 D_0013F3D0_8[] __asm__("D_0013F3D0");
-extern u8 D_0013F350_b8[] __asm__("D_0013F350");
 extern f32 D_0015ED6C_8 __asm__("D_0015ED6C");
 extern u8 D_0013F430_8[] __asm__("D_0013F430");
 
@@ -1064,7 +1062,6 @@ void FUN_L01_002405a0(void) {
         break;
     }
 }
-extern u8 D_0013F350_242198[] __asm__("D_0013F350");
 extern u8 D_0013F4A0_242198[] __asm__("D_0013F4A0");
 extern f32 D_0015ED6C_242198 __asm__("D_0015ED6C");
 extern s32 D_0013CAE0_242198 __asm__("D_0013CAE0") __attribute__((section(".data")));
@@ -1077,10 +1074,10 @@ void FUN_L00_002325e0_242198(s32, s32) __asm__("FUN_L00_002325e0");
 void FUN_L00_0025f730_242198(void *, f32) __asm__("FUN_L00_0025f730");
 s32 FUN_L01_00226f10_242198(s32) __asm__("FUN_L01_00226f10");
 void FUN_L01_00242198(void) {
-    u8 *b, *c, *d;
+    struct Hero *b, *c, *d;
     s32 n;
-    b = D_0013F350_242198;
-    *(s32 *)(b + 0x2284) = 0;
+    b = &hero;
+    b->unk2284 = 0;
     FUN_L00_002118c8_242198(0, 1.0f);
     if (D_0013CAE0_242198 & 0xA) {
         hero_set_state(4, 0);
@@ -1088,38 +1085,38 @@ void FUN_L01_00242198(void) {
         FUN_L00_002325e0_242198(3, 0x12);
         return;
     }
-    c = D_0013F350_242198;
-    if (0.3f < *(f32 *)(c + 0x229C) && *(s32 *)(c + 0x1C4) == 0) {
-        if (c[0x12E2] != 0 || c[0x20A9] != 0) {
+    c = &hero;
+    if (0.3f < c->unk229C && c->unk1C4 == 0) {
+        if (c->unk12E2 != 0 || c->unk20A9 != 0) {
             hero_set_state(2, 1);
             return;
         }
         if (hero_set_state(2, 0)) {
-            *(s32 *)(c + 0x2088) = 1;
+            c->state.step = 1;
             n = FUN_001f96f8_242198(8);
-            if (FUN_001f96f8_242198(5) < *(s32 *)(c + 0x418))
+            if (FUN_001f96f8_242198(5) < c->unk418)
                 n = FUN_001f96f8_242198(14);
             FUN_L00_002323b8_242198(4, D_L01_0015F6DC_242198, (f32)n);
-            *(s16 *)(c + 0x3BC) = 1;
+            c->unk3BC = 1;
         }
         return;
     }
-    d = D_0013F350_242198;
-    if ((D_0015ED6C_242198 * 3.0f < *(f32 *)(d + 0x168) &&
-         FUN_001f96f8_242198(3) < *(s32 *)(d + 0x418)) ||
-        *(s32 *)(d + 0x2084) == 0x10) {
+    d = &hero;
+    if ((D_0015ED6C_242198 * 3.0f < d->motion.unk168 &&
+         FUN_001f96f8_242198(3) < d->unk418) ||
+        d->state.current == 0x10) {
         if (hero_set_state(3, 0)) {
             FUN_L00_002323b8_242198(5, 0, -1.0f);
             FUN_L00_0025f730_242198(D_0013F4A0_242198, D_0015ED6C_242198 * 5.0f);
         }
         return;
     }
-    if (FUN_001f96f8_242198(12) < *(s32 *)(d + 0x418) || (*(s32 *)(d + 0xA98) & 2)) {
+    if (FUN_001f96f8_242198(12) < d->unk418 || (d->unkA98 & 2)) {
         if (hero_set_state(0, 0)) {
             if (FUN_L01_00226f10_242198(0) == 0x54) {
                 n = FUN_L01_00226f10_242198(0);
                 FUN_L00_002323b8_242198(n, 0, (f32)FUN_001f96f8_242198(15));
-            } else if (*(s32 *)(d + 0xA98) & 2) {
+            } else if (d->unkA98 & 2) {
                 FUN_L00_002323b8_242198(FUN_L01_00226f10_242198(0), 0, -2.0f);
             }
         }
