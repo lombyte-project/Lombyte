@@ -19,6 +19,7 @@ void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int d
     struct MpegMcFetch *ce;
     int n;
     u8 *buf;
+    u8 *work;
     int x, y, xm, ym, xr, yr;
     int cx, cy, cxm, cym, cxr, cyr;
     int cdx, cdy;
@@ -26,7 +27,6 @@ void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int d
     int k;
     int mb;
     int ch;
-    u8 *work;
     int yidx;
 
     work = d->mc_work;
