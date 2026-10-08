@@ -104,7 +104,7 @@ extern void vadd_300278(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vnorm_300278(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float D_0015ED6C_300278 __asm__("D_0015ED6C");
 extern float D_L06_0016204C_300278 __asm__("D_L06_0016204C") __attribute__((sda));
-extern void FUN_L06_00300c60(char *, float *, float *);
+extern unsigned char *FUN_L06_00300c60(char *, float *, float *);
 
 /* Breaks the moby apart: spawns a copy (class 0x43C) and throws 50
  * fragments out in random directions. */

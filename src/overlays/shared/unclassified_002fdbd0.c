@@ -115,7 +115,47 @@ void FUN_L06_00300b90(char *moby) {
         mark_moby_for_removal(moby);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300c60.s", FUN_L06_00300c60);
+
+#include "eetypes.h"
+#include "qcopy.h"
+extern unsigned char *create_moby_300c60(int) __asm__("FUN_0020c4f8");
+extern void moby_init_300c60(unsigned char *) __asm__("FUN_L00_00250df8");
+extern float rand_range_300c60(float, float) __asm__("FUN_002132a8");
+extern float D_0015ED6C_300c60 __asm__("D_0015ED6C");
+extern float D_L06_00162080_300c60 __asm__("D_L06_00162080") __attribute__((sda));
+extern int ftoi_300c60(float) __asm__("FUN_001fa6d0");
+extern float f96b0_300c60(float) __asm__("FUN_001f96b0");
+
+/* Spawns one fragment of the break-apart at pos, flying along vel with a
+ * random spin. */
+unsigned char *FUN_L06_00300c60(char *m, float *pos, float *vel) {
+    u128 p, v;
+    u128 *pp = &p;
+    u128 *pv = &v;
+    unsigned char *n;
+    char *d;
+
+    *pp = *(u128 *)pos;
+    *pv = *(u128 *)vel;
+    n = create_moby_300c60(ftoi_300c60(rand_range_300c60(1085.0f, 1089.0f)));
+
+    if (n != 0) {
+        d = *(char **)(n + 0x78);
+        *(float *)(n + 0x2C) = *(float *)(*(char **)(n + 0x24) + 0x24) * D_L06_00162080_300c60;
+        n[0x30] = 0xFF;
+        *(short *)(n + 0x32) = 0x7E;
+        n[0x31] = 1;
+        qcopy(n + 0x10, pp);
+        qcopy(d, pv);
+        *(float *)(d + 0x10) = rand_range_300c60(-360.0f, 360.0f) * 0.017453292f * D_0015ED6C_300c60;
+        *(float *)(d + 0x14) = rand_range_300c60(-360.0f, 360.0f) * 0.017453292f * D_0015ED6C_300c60;
+        *(float *)(d + 0x18) = rand_range_300c60(-360.0f, 360.0f) * 0.017453292f * D_0015ED6C_300c60;
+        n[0xBC] = ftoi_300c60(f96b0_300c60(rand_range_300c60(60.0f, 120.0f)));
+        moby_init_300c60(n);
+    }
+    return n;
+}
+
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00303630), where it is exact; names translated to the US level program. */
 
 extern int D_L06_0015F5CC;
