@@ -2577,7 +2577,189 @@ void FUN_L00_002137a8(void) {
         qcopy(dst, &table[base->unk21B0]);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213880.s", FUN_L00_00213880);
+#include "rnc/globals.h"
+#include "rnc/gameplay/state/usage_stats.h"
+#include "eetypes.h"
+#include "qcopy.h"
+/*
+ * Hero movement step (FUN_L01_00233de0 twin; control mode 0xF caps the horizontal speed, 0xD and 0xE skip the cap): clamps the velocity, moves the hero by it (plus the
+ * one-frame impulse at unk920 and the push at unkF0), runs collision, then
+ * derives this frame's movement vectors and speeds:
+ *   motion.unk100  position change this frame
+ *   motion.unk110  movement direction scaled by the velocity along it
+ *   motion.unk120  same, without the gravity-up component
+ *   motion.unk130  same, gravity-up part only
+ *   motion.unk140  displacement caused by the push
+ *   motion.unk160  speed, unk164 horizontal speed, unk168 forward speed
+ *   motion.unk16C  slope: vertical / horizontal change, clamped to +-0.5
+ */
+
+extern f32 D_0015ED6C;             /* frame-rate scale (speeds are multiplied by it) */
+
+/* The FUN_L00_00233xxx helpers work in the hero's gravity frame (hero byte
+   0x20B3: 0 = world z up, otherwise the frame of the hero's moby). */
+extern void FUN_L00_00233f80(s32, void *, void *);
+extern f32 gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
+extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
+extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
+extern void gravity_flatten(void *, void *) __asm__("FUN_L00_002338d0");
+extern void FUN_L00_00233ba0(float *, float *, float);
+extern f32 forward_component(void *) __asm__("FUN_L00_00213350");  /* dot with (cos, sin) of the hero yaw */
+
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern f32 dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void normalize_vector_xy(void *, void *, f32) __asm__("FUN_001f9c48");
+
+extern void FUN_L00_002137a8(void);
+extern void FUN_L00_002127b8(void);
+extern void FUN_L00_00212ff0(void);
+
+void FUN_L00_00213880(void)
+{
+    Vec4 old_pos;
+    Vec4 tmp;
+    Vec4 tmp2;
+    f32 limit;
+    f32 d;
+    f32 w;
+
+    qcopy(&old_pos, &hero.motion.pos);
+    FUN_L00_00233f80(hero.unk4F8, &hero.motion.unkF0, &hero.motion.rot);
+
+    /* cap the speed; states 0x22 and 0x14 cap the horizontal part and the fall speed */
+    if (hero.state.current == 0x22 || hero.state.current == 0x14) {
+        if (hero.unk1CC == 0) {
+            d = gravity_length_xy(&hero.motion.velocity);
+            limit = hero.unk234 - 0.02f;
+            if (limit < d) {
+                normalize_vector_xyz(&hero.motion.velocity, &hero.motion.velocity, limit);
+            }
+        }
+        d = gravity_z(&hero.motion.velocity);
+        limit = -hero.unk2DC;
+        if (d < limit) {
+            if (0.0f < limit) {
+                limit = 0.0f;
+            }
+            gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, limit);
+        }
+    } else if (hero.state.control_mode == 0xF) {
+        if (hero.unk1CC == 0) {
+            d = vector_length_xy(&hero.motion.velocity);
+            limit = hero.unk234 - 0.02f;
+            if (limit < d) {
+                normalize_vector_xy(&hero.motion.velocity, &hero.motion.velocity, limit);
+            }
+        }
+    } else if (hero.state.control_mode != 0xD) {
+        if (hero.state.control_mode != 0xE && hero.unk1CC == 0) {
+            d = vector_length_xyz(&hero.motion.velocity);
+            limit = hero.unk234 - 0.02f;
+            if (limit < d) {
+                normalize_vector_xyz(&hero.motion.velocity, &hero.motion.velocity, limit);
+            }
+        }
+    }
+
+    add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.motion.velocity);
+    add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.unk920);
+    clear_vector(&hero.unk920);
+    hero.unk257 = 0;
+    hero.coll_hit_moby = 0;
+
+    if (vector_length_xyz(&hero.motion.unkF0) <= 0.0001f) {
+        FUN_L00_002137a8();
+        FUN_L00_002127b8();
+        subtract_vector_xyz(&hero.motion.unk100, &hero.motion.pos, &old_pos);
+        FUN_L00_00212ff0();
+    } else {
+        FUN_L00_002127b8();
+    }
+
+    /* movement direction, scaled by the velocity along it (never negative) */
+    subtract_vector_xyz(&hero.motion.unk110, &hero.motion.pos, &old_pos);
+    qcopy(&hero.motion.unk130, &hero.motion.unk110);
+    qcopy(&hero.motion.unk120, &hero.motion.unk110);
+    normalize_vector_xyz(&hero.motion.unk110, &hero.motion.unk110, 1.0f);
+    d = dot_vectors_xyz(&hero.motion.unk110, &hero.motion.velocity);
+    if (d < 0.0f) {
+        d = 0.0f;
+    }
+    normalize_vector_xyz(&hero.motion.unk110, &hero.motion.velocity, d);
+
+    qcopy(&tmp, &hero.motion.velocity);
+    gravity_flatten(&tmp, &tmp);
+    gravity_flatten(&hero.motion.unk130, &hero.motion.unk130);
+    normalize_vector_xyz(&hero.motion.unk130, &hero.motion.unk130, 1.0f);
+    d = dot_vectors_xyz(&hero.motion.unk130, &tmp);
+    if (d < 0.0f) {
+        d = 0.0f;
+    }
+    normalize_vector_xyz(&hero.motion.unk130, &tmp, d);
+
+    qcopy(&tmp2, &hero.motion.velocity);
+    FUN_L00_00233ba0((float *)&tmp2, (float *)&tmp2, 0.0f);
+    FUN_L00_00233ba0((float *)&hero.motion.unk120, (float *)&hero.motion.unk120, 0.0f);
+    normalize_vector_xyz(&hero.motion.unk120, &hero.motion.unk120, 1.0f);
+    d = dot_vectors_xyz(&hero.motion.unk120, &tmp2);
+    if (d < 0.0f) {
+        d = 0.0f;
+    }
+    normalize_vector_xyz(&hero.motion.unk120, &tmp2, d);
+
+    hero.motion.unk160 = vector_length_xyz(&hero.motion.unk110);
+    hero.motion.unk164 = vector_length_xy(&hero.motion.unk110);
+    /* read through the address, as retail reloads the base register here */
+    tmp.q = (&hero.motion.unk110)->q;
+    hero.motion.unk168 = forward_component(&tmp);
+    if (hero.motion.unk168 < 0.0f) {
+        hero.motion.unk168 = 0.0f;
+    }
+
+    /* apply the push, keeping its w */
+    qcopy(&tmp, &hero.motion.pos);
+    if (vector_length_xyz(&hero.motion.unkF0) > 0.0001f) {
+        add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.motion.unkF0);
+        w = hero.motion.unkF0.f[3];
+        clear_vector(&hero.motion.unkF0);
+        hero.motion.unkF0.f[3] = w;
+        FUN_L00_002137a8();
+        FUN_L00_002127b8();
+        subtract_vector_xyz(&hero.motion.unk100, &hero.motion.pos, &old_pos);
+        FUN_L00_00212ff0();
+    }
+    subtract_vector_xyz(&hero.motion.unk140, &hero.motion.pos, &tmp);
+    {
+        /* push w moves to unk140.w; a block-local keeps retail's order */
+        f32 push_w = hero.motion.unkF0.f[3];
+
+        hero.motion.unkF0.f[3] = 0.0f;
+        hero.motion.unk140.f[3] = push_w;
+    }
+
+    subtract_vector_xyz(&hero.motion.unk100, &hero.motion.pos, &old_pos);
+    hero.motion.unk16C = 0.0f;
+    if (hero.motion.unk164 > 0.004f) {
+        hero.motion.unk16C = hero.motion.unk100.f[2] / hero.motion.unk164;
+        if (hero.motion.unk16C > 0.5f) {
+            hero.motion.unk16C = 0.5f;
+        } else if (hero.motion.unk16C < -0.5f) {
+            hero.motion.unk16C = -0.5f;
+        }
+    }
+
+    /* cap the step at 52 units per frame-rate unit */
+    if (hero.motion.unk160 > D_0015ED6C * 52.0f) {
+        scale_vector_xyz(&hero.motion.unk100, &hero.motion.unk100, D_0015ED6C * 52.0f / hero.motion.unk160);
+        hero.motion.unk160 = D_0015ED6C * 52.0f;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002144A0), where it is exact; names translated to the US level program. */
 
 /* Scales four vectors and one float of ((char *)&hero) by s. */
