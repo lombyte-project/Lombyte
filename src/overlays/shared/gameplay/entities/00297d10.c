@@ -1304,7 +1304,40 @@ void FUN_L06_002f33e8(char *a, char *b, char *c, int *out, float *best, float th
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f34d8.s", FUN_L06_002f34d8);
+typedef struct {
+    char *moby;
+    f32 score;
+} Best_2f34d8;
+extern s32 D_L06_00161CE8_2f34d8 __asm__("D_L06_00161CE8") __attribute__((sda));
+extern s32 D_L06_00161CE4_2f34d8 __asm__("D_L06_00161CE4") __attribute__((sda));
+extern char *D_L06_001DAE60_2f34d8[] __asm__("D_L06_001DAE60");
+extern char *D_L06_001AC180_2f34d8[] __asm__("D_L06_001AC180");
+
+/* Picks the best target for moby among this frame's live class-0x359 mobys and the hero
+ * (current is the target it has now), and stores it in *current. */
+void FUN_L06_002f34d8(char *moby, char **current, f32 range) {
+    Best_2f34d8 best;
+    char *m;
+    s32 i;
+    if (D_L06_00161CE8_2f34d8 != D_L06_0015F5CC_c) {
+        D_L06_00161CE8_2f34d8 = D_L06_0015F5CC_c;
+        D_L06_00161CE4_2f34d8 = 0;
+        for (i = 0; (m = D_L06_001AC180_2f34d8[i]) != 0; i++) {
+            if (*(s16 *)(m + 0xA6) == 0x359 && (u8)m[0x20] >= 2 && (u8)m[0x20] != 9) {
+                s32 n = D_L06_00161CE4_2f34d8;
+                D_L06_00161CE4_2f34d8 = n + 1;
+                D_L06_001DAE60_2f34d8[n] = m;
+            }
+        }
+    }
+    best.score = 999999.0f;
+    best.moby = 0;
+    for (i = 0; i < D_L06_00161CE4_2f34d8; i++) {
+        FUN_L06_002f33e8(moby, *current, D_L06_001DAE60_2f34d8[i], (int *)&best.moby, &best.score, range);
+    }
+    FUN_L06_002f33e8(moby, *current, (char *)hero.moby, (int *)&best.moby, &best.score, range);
+    *current = best.moby;
+}
 typedef unsigned int Q __attribute__((mode(TI), aligned(16)));
 extern char *D_001413D0 __attribute__((section(".data")));
 extern void FUN_L03_00250a78(void *, float, float);
