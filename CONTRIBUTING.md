@@ -87,6 +87,10 @@ next to the C and the surrounding units.
 - Declare variables at the start of blocks and use the project typedefs
   (`u32`, `s32`, `f32`, …) — this is GCC 2.9 era, not modern C.
 - Keep it descriptive C: no inline assembly or copied disassembly in the body.
+- Before writing a local struct, search `include/` and `src/` for the same
+  global or layout. Reuse or extend an existing header (a slice of a bigger
+  type uses that type); a layout that two files need goes in `include/`.
+  Only a layout used by this one file stays in the `.c`.
 
 ### 5. Check your work
 

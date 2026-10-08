@@ -9,11 +9,8 @@ INCLUDE_ASM(
     sceGsSetDefLoadImage);
 #else
 #include "types.h"
+#include "rnc/sdk/libgraph.h"
 #include "eetypes.h"
-typedef struct {
-    u64 q[12];
-} sceGsLoadImage __attribute__((aligned(16)));
-
 extern void scePrintf(const char *message, ...);
 extern void __sync_synchronize(void);
 
@@ -56,9 +53,12 @@ s32 sceGsSetDefLoadImage(sceGsLoadImage *image, s16 destination_base,
 
     *(u128 *)&image->q[10] = 0;
     *(u128 *)&image->q[0] = 0;
-    image->q[10] = (u64)(size & 0x7fff) | 0x0800000000008000ULL;
-    image->q[0] = 0x1000000000000004ULL;
-    image->q[1] = 0xe;
+    ((struct GifTag *)&image->q[0])->NLOOP = 4;
+    ((struct GifTag *)&image->q[0])->NREG = 1;
+    image->q[1] = (image->q[1] & ~0xfULL) | 0xe;
+    ((struct GifTag *)&image->q[10])->NLOOP = size;
+    ((struct GifTag *)&image->q[10])->EOP = 1;
+    ((struct GifTag *)&image->q[10])->FLG = 2;
     image->q[2] = ((u64)(s64)destination_base << 0x20) |
                   ((u64)(s64)destination_width << 0x30) |
                   ((u64)(s64)pixel_format << 0x38);

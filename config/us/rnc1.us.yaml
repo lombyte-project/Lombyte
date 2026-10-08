@@ -1667,7 +1667,7 @@ segments:
           - [0x117008, c, audio/music/music_unpause]
           - [0x117024, textbin, text_gap_002160a4_before_fun_002160a8]
           - [0x117028, c, audio/music/music_update_stream]
-          - [0x117210, c, assembly/textbin/audio/music/music_update]
+          - [0x117210, c, textbin/audio/music/music_update]
           - [0x117664, textbin, text_gap_002166e4_before_fun_002166e8]
           - [0x117668, c, audio/streaming/request_audio_stream_break]
           - [0x1176a8, c, audio/streaming/submit_audio_stream_io_request]

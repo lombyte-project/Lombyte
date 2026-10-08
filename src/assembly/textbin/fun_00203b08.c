@@ -6,17 +6,9 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00203b08/FUN_00203b08.s
 #else
 
 #include "eetypes.h"
+#include "rnc/rendering/resident_class.h"
 #include "qcopy.h"
 
-typedef struct {
-    u8 pad0[4];
-    u16 width;
-    s16 height;
-    s16 draw_control_count;
-    s16 texture_block_offset;
-    s16 mip_block_offset_0;
-    s16 mip_block_offset_1;
-} ResidentRenderTextureDefinition;
 typedef struct {
     s16 width;
     s16 height;
@@ -79,10 +71,6 @@ typedef struct {
     u8 pad30[0x10];
     ShrubRenderGroupReference groups[1];
 } ShrubRenderClass;
-typedef union {
-    u128 q;
-    u8 b[16];
-} MaterialMap;
 extern s32 registered_shrub_render_class_count __asm__("D_001603CC");
 extern u8 shrub_render_class_slot_by_id[] __asm__("D_001D80B0");
 extern s16 shrub_render_class_ids[] __asm__("D_001D8030");
@@ -229,7 +217,7 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
                 texture_word =
                     ((((u64)width_units_64 << 14) | (((u64)width_log2 << 26) | 0x1300000)) |
                      ((u64)height_log2 << 30)) |
-                    ((((u64)(texture->texture_block_offset + gs_block_base)) << 37) |
+                    ((((u64)(texture->clut_block_offset + gs_block_base)) << 37) |
                      (((u64)1) << 34));
                 texture_word |= ((u64)1) << 63;
                 *((u64 *)(&packet->draw_high)) = draw_word;
@@ -239,8 +227,8 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
             } else {
                 draw_word = (((u64)draw_high) << 32) | (((u64)draw_shift) << 6) | 0x20 |
                             (resident_material_templates[(material_index * 3) + 1] & 0x1C);
-                material_word = (packet_material_base | (((u64)material_shift) << 2)) |
-                                (((u64)material_index) << 24);
+                material_word = (((u64)material_index) << 24) |
+                                (packet_material_base | (((u64)material_shift) << 2));
                 *((u64 *)(((u8 *)packet) + 0x30)) = resident_material_templates[material_index * 3];
                 *((u64 *)(&packet->material_base)) = material_word;
                 *((u64 *)(&packet->draw_high)) = draw_word;

@@ -6,56 +6,17 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/_getRef0/_getRef0.s", _getRef0);
 #else
 #include "types.h"
+#include "rnc/sdk/libmpeg.h"
 
 /* libmpeg motion compensation: queues the forward/backward reference
    fetch of one macroblock (luma and chroma) for the IPU/DMA stage. */
-typedef void (*MCFunc)(void);
+extern MpegMcFunc D_00132E30[];
+extern MpegMcFunc D_00132E50[];
 
-typedef struct {
-    u8 *addr;
-    int x;
-    int n0;
-    int n1;
-    int step;
-    u8 *p0;
-    u8 *p1;
-} RefEnt;
-
-typedef struct {
-    u8 *buf;
-    int pad4;
-    u8 *yref[4];
-    u8 *cref[4];
-    MCFunc yfunc[4];
-    MCFunc cfunc[4];
-    RefEnt y[4];
-    RefEnt c[4];
-    int pad128;
-    int n;
-    char pad130[0x10];
-} MCQueue;
-
-typedef struct {
-    char pad0[0x590];
-    MCQueue mc[2];
-    int cur;
-    char pad814[8];
-    u8 *work;
-} Decoder;
-
-typedef struct {
-    u8 *base;
-    char pad4[0xC];
-    int width;
-} Frame;
-
-extern MCFunc D_00132E30[];
-extern MCFunc D_00132E50[];
-
-void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h, int bx, int by,
-              int dx, int dy, int fieldpred, int avg) {
-    RefEnt *ye;
-    RefEnt *ce;
+void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int dfield, int yofs,
+              int h, int bx, int by, int dx, int dy, int fieldpred, int avg) {
+    struct MpegMcFetch *ye;
+    struct MpegMcFetch *ce;
     int n;
     u8 *buf;
     int x, y, xm, ym, xr, yr;
@@ -68,11 +29,11 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h, i
     u8 *work;
     int yidx;
 
-    work = d->work;
+    work = d->mc_work;
     x = bx + (dx >> 1);
-    n = d->mc[d->cur].n;
-    ye = &d->mc[d->cur].y[n];
-    ce = &d->mc[d->cur].c[n];
+    n = d->mb_buf[d->mb_buf_index].fetch_count;
+    ye = &d->mb_buf[d->mb_buf_index].luma[n];
+    ce = &d->mb_buf[d->mb_buf_index].chroma[n];
     if (fieldpred) {
         y = (((dy >> 1) * 2) + by) + (sfield + yofs);
     } else {
@@ -80,7 +41,7 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h, i
         y += sfield + yofs;
     }
     xm = x >> 4;
-    mb = xm * ref->width;
+    mb = xm * ref->unk10;
     ym = y >> 4;
     mb += ym;
     xr = x - xm * 16;
@@ -108,7 +69,7 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h, i
             ye->n1 = 0;
         }
     }
-    buf = d->mc[d->cur].buf + n * 0x600;
+    buf = (u8 *)d->mb_buf[d->mb_buf_index].spr_base + n * 0x600;
     ye->p0 = buf + yr * 16;
     ye->p1 = buf + yr * 16 + 0x300;
     ye->step = 16 << fieldpred;
@@ -117,21 +78,19 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h, i
 
     cdy = dy / 2;
     cdx = dx / 2;
-    ch = h >> 1;
     cx = (cdx >> 1) + (bx >> 1);
     if (fieldpred) {
-        cy = (cdy >> 1) * 2 + (by >> 1);
-        cy += (yofs >> 1) + sfield;
+        cy = ((cdy >> 1) * 2 + (by >> 1) + (yofs >> 1)) + sfield;
     } else {
-        cy = (cdy >> 1) + (by >> 1);
-        cy += (yofs >> 1) + sfield;
+        cy = ((cdy >> 1) + (yofs >> 1)) + ((by >> 1) + sfield);
     }
     cxm = cx >> 3;
     cym = cy >> 3;
     cxr = cx - cxm * 8;
     cyr = cy - cym * 8;
     ce->x = cxr;
-    ce->addr = work + 0x200 + (dfield + (yofs >> 1)) * 16;
+    ce->addr = work + (dfield + (yofs >> 1)) * 16 + 0x200;
+    ch = h >> 1;
     if ((cdy & 1)) {
         if (cyr + (ch << fieldpred) >= 8) {
             k = (8 >> fieldpred) - (cyr >> fieldpred) - 1;
@@ -156,10 +115,10 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h, i
     ce->p0 = buf + cyr * 8 + 0x100;
     ce->p1 = buf + cyr * 8 + 0x400;
 
-    d->mc[d->cur].yfunc[n] = D_00132E30[yidx];
-    d->mc[d->cur].cfunc[n] = D_00132E50[avg | (cdx & 1) << 1 | (cdy & 1)];
-    d->mc[d->cur].yref[n] = ref->base + mb * 0x180;
-    d->mc[d->cur].cref[n] = ref->base + (mb + ref->width) * 0x180;
-    d->mc[d->cur].n++;
+    d->mb_buf[d->mb_buf_index].luma_func[n] = D_00132E30[yidx];
+    d->mb_buf[d->mb_buf_index].chroma_func[n] = D_00132E50[avg | (cdx & 1) << 1 | (cdy & 1)];
+    d->mb_buf[d->mb_buf_index].luma_ref[n] = ref->data + mb * 0x180;
+    d->mb_buf[d->mb_buf_index].chroma_ref[n] = ref->data + (mb + ref->unk10) * 0x180;
+    d->mb_buf[d->mb_buf_index].fetch_count++;
 }
 #endif /* NON_MATCHING */

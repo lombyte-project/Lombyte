@@ -1,10 +1,5 @@
 #include "types.h"
-typedef struct {
-    u8 trycount;
-    u8 spindlctrl;
-    u8 datapattern;
-    u8 pad;
-} sceCdRMode;
+#include "rnc/sdk/libcdvd.h"
 struct FileEntry {
     u32 lsn;
     u32 size;

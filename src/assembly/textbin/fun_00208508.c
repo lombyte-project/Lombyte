@@ -8,18 +8,12 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00208508/FUN_00208508.s
 
 #include "sda.h"
 
+#include "rnc/ui/hud/hud_state.h"
 #include "rnc/ui/map/map_state.h"
 #include "rnc/ui/map/map_icon.h"
 
-struct MapTextureTables {
-    u8 pad0[0x20];
-    s16 *references;
-    u8 *textures;
-};
 extern struct MapState map_marker_state __asm__("D_001A00F0");
-extern struct MapState selected_map_state __asm__("D_001A00F0")
-    __attribute__((section(".data")));
-extern struct MapTextureTables map_texture_tables __asm__("D_0019A3E8") NOT_SDA;
+extern struct MapState selected_map_state __asm__("D_001A00F0") __attribute__((section(".data")));
 extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
 extern s32 marker_half_size __asm__("D_0015FDB0") MACRO_ADDR;
 extern f32 marker_scale_by_level[] __asm__("D_001A01A4");
@@ -67,8 +61,8 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
 
                 texture_index = resolve_indexed_texture_variant(marker->texture_group,
                                                                 marker->texture_variant_or_color);
-                references = map_texture_tables.references;
-                texture = map_texture_tables.textures + references[texture_index * 2 + 1] * 8;
+                references = (s16 *)hud_state.frame_refs;
+                texture = (u8 *)hud_state.image_pages + references[texture_index * 2 + 1] * 8;
                 width_log2 = texture[6];
                 height_log2 = texture[7];
                 scale = (2.0f * marker_scale_by_level[selected_map_state.level] + 5.0f) /

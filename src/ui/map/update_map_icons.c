@@ -1,30 +1,12 @@
 #include "types.h"
+#include "rnc/ui/text/text_region.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/ui/map/map_icon.h"
 #include "rnc/ui/map/map_state.h"
 #include "rnc/globals.h"
 
 /* Map screen icon refresh: places the fixed icons (-1..-9), projects the
    others through world_to_map_coords, then sizes each label box. */
-
-typedef struct {
-    short s[12];
-} TextBox;
-
-typedef struct MapIcon {
-    s16 id;
-    s16 link;
-    u16 flags;
-    u8 pad6[4];
-    s16 label_enabled;
-    u8 padC[2];
-    u16 label_width;
-    u16 label_height;
-    u8 pad12[6];
-    f32 x;
-    f32 y;
-    f32 z;
-    s32 active;
-} MapIcon;
 
 typedef struct {
     u8 pad0[0x24];
@@ -48,7 +30,7 @@ typedef struct {
 } MapWorldObject;
 
 extern u8 D_0013DD58[];
-extern MapIcon *D_001A2BC0[];
+extern struct MapIcon *D_001A2BC0[];
 extern s32 D_001A01F4[];
 extern s32 D_0015FD60 __attribute__((sda));
 extern MapWorldObject *D_00199478[];
@@ -62,7 +44,8 @@ extern struct {
 extern void world_to_map_coords(f32 *outx, f32 *outy, s32 view, f32 x,
                                 f32 y) __asm__("func_00208408");
 extern void format_menu_item_text(s32 idx, char *dst) __asm__("func_00208280");
-extern void font_print_window_small(TextBox *, long, char *, int) __asm__("func_001F75F0");
+extern void font_print_window_small(struct TextRegion *, long, char *,
+                                    int) __asm__("func_001F75F0");
 
 void update_map_icons(s32 level, s32 flag) __asm__("FUN_0020bf90");
 
@@ -70,7 +53,7 @@ void update_map_icons(s32 level, s32 flag) {
     char label_text[128];
     f32 map_x;
     f32 map_y;
-    MapIcon *icon;
+    struct MapIcon *icon;
     s32 icon_index;
 
     if (level < 19 && D_0013DD58[level] != 0) {
@@ -131,12 +114,12 @@ void update_map_icons(s32 level, s32 flag) {
                     if (D_00199478[icon->id] != 0) {
                         world_to_map_coords(&icon->x, &icon->y, level, D_00199478[icon->id]->x,
                                             D_00199478[icon->id]->y);
-                        D_001A00F0.icons[icon_index].z = D_00199478[icon->id]->z;
+                        D_001A00F0.icons[icon_index].angle = D_00199478[icon->id]->z;
                     }
                 } else {
                     world_to_map_coords(&icon->x, &icon->y, level, D_0013D5B0[icon->id].x,
                                         D_0013D5B0[icon->id].y);
-                    D_001A00F0.icons[icon_index].z = D_0013D5B0[icon->id].z;
+                    D_001A00F0.icons[icon_index].angle = D_0013D5B0[icon->id].z;
                 }
             }
             icon_index++;
@@ -155,26 +138,26 @@ void update_map_icons(s32 level, s32 flag) {
         if ((icon->flags & 0x1000) && (D_0013D5BC[icon->id * 4] ^ 1) & 1) {
             icon->active = 0;
         }
-        if (D_001A00F0.icons[icon_index].label_enabled != 0) {
+        if (D_001A00F0.icons[icon_index].label_text_id != 0) {
             s32 label_height_changed = 0;
             s16 previous_label_height;
 
             D_001A00F0.icons[icon_index].flags |= 0x10;
             format_menu_item_text(icon_index, label_text);
             {
-                TextBox text_window = {
-                    {0, icon->label_height, 0, icon->label_width, 4, 4, 0, 0, 0xF, 4}};
+                struct TextRegion text_window = {
+                    0, icon->label_height, 0, icon->label_width, 4, 4, 0, 0, 0xF, 4};
                 font_print_window_small(&text_window, 0x80FFA888L, label_text, -1);
-                previous_label_height = text_window.s[7];
-                icon->label_height = text_window.s[7] + 8;
+                previous_label_height = text_window.rendered_height;
+                icon->label_height = text_window.rendered_height + 8;
                 do {
-                    text_window.s[3] -= 4;
+                    text_window.right -= 4;
                     font_print_window_small(&text_window, 0x80FFA888L, label_text, -1);
-                    if (text_window.s[7] != previous_label_height) {
+                    if (text_window.rendered_height != previous_label_height) {
                         label_height_changed = 1;
                     }
                 } while (!label_height_changed);
-                icon->label_width = text_window.s[3] + 4;
+                icon->label_width = text_window.right + 4;
             }
         }
     }

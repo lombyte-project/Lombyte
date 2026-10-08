@@ -14,18 +14,17 @@ INCLUDE_ASM(
  * word-aligned destinations and normally use sizes divisible by four. */
 void FillTransferWords(void *dst, s32 value, s32 size) {
     volatile u32 *words = (volatile u32 *)dst;
-    u32 remaining = (u32)size;
     do {
         *words = (u32)value;
-        remaining -= 4;
+        size -= 4;
         words++;
-        if ((s32)remaining > 0) {
+        if (size > 0) {
             *words = (u32)value;
-            remaining -= 4;
+            size -= 4;
             words++;
         } else {
             return;
         }
-    } while ((s32)remaining > 0);
+    } while (size > 0);
 }
 #endif /* NON_MATCHING */

@@ -12,43 +12,7 @@ INCLUDE_ASM(
 #include "qzero.h"
 
 #include "rnc/math/vector.h"
-
-struct View {
-    s32 fog_color;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    Vec4 regs[5];
-    Vec4 gif[4];
-    f32 near_clip;
-    f32 far_clip;
-    f32 aspect_x;
-    f32 aspect_y;
-    Vec4 fov;
-    f32 proj[16];
-    f32 proj2[16];
-    f32 proj3[16];
-    Vec4 inverse_screen_scale;
-    Vec4 screen_scale;
-    Vec4 screen_bias;
-    Vec4 inverse_projection_scale;
-    Vec4 viewport_aspect;
-    Vec4 aspect_scale;
-    Vec4 clip_scale;
-    Vec4 clip_distances;
-    f32 width;
-    f32 height;
-    f32 scr_x;
-    f32 scr_y;
-    f32 fog_mul;
-    f32 fog_add;
-    f32 fog_near_dist;
-    f32 fog_far_dist;
-    f32 fog_slope;
-    f32 fog_base;
-    f32 fog_near_int;
-    f32 fog_far_int;
-};
+#include "rnc/rendering/view.h"
 
 struct FogRegs2 {
     u8 pad0[0x28];
@@ -62,7 +26,6 @@ struct Clip {
 };
 
 extern s32 D_0015ED80;
-extern struct View view_context __asm__("D_0018CD00");
 extern Vec4 D_0018CFC0[4];
 extern f32 D_00160720[4];
 extern f32 D_00160B30;
@@ -109,8 +72,8 @@ void update_view_context(void) {
     f32 vertical_fov;
     f32 viewport_width;
     f32 viewport_height;
-    s32 far_bits;
     s32 near_bits;
+    s32 far_bits;
     s32 mul_bits;
 
     depth_scale = -8388080.0f;
@@ -120,8 +83,8 @@ void update_view_context(void) {
         view_context.fov.f[1] = view_context.fov.f[0] * 0.775f;
     }
     view = &view_context;
-    view->aspect_x = view->scr_x / view->width;
-    view->aspect_y = view->scr_y / view->height;
+    view->aspect_x = view->scr_x / view->half_width;
+    view->aspect_y = view->scr_y / view->half_height;
     view->fov.f[2] = 1.0f / fast_cos(func_001F9E90(1.0f, view->fov.f[0]));
     view->fov.f[3] = 1.0f / fast_cos(func_001F9E90(1.0f, view->fov.f[1]));
     horizontal_clip_scale = 1.0f / fast_cos(func_001F9E90(1.0f, view->fov.f[0] * view->aspect_x));
@@ -144,8 +107,8 @@ void update_view_context(void) {
     qcopy(&D_0018CFC0[3], &view->clip_distances);
 
     /* Retail lw instructions carry the fog endpoint float bits into packet fields. */
-    near_bits = *(s32 *)&view->fog_near_int;
     far_bits = *(s32 *)&view->fog_far_int;
+    near_bits = *(s32 *)&view->fog_near_int;
     fog_distance_range = view->fog_far_dist - view->fog_near_dist;
     fog_intensity_range = view->fog_far_int - view->fog_near_int;
     fog_multiplier = fog_intensity_range * near_clip / fog_distance_range;
@@ -163,13 +126,13 @@ void update_view_context(void) {
     D_001DE740.mul = mul_bits;
     D_001DE740.far_int = far_bits;
     D_001DE740.near_int = near_bits;
-    D_001DEA00.max = 0x437EFFFF;
     D_001DEA00.mul = mul_bits;
-    D_001DEA00.near_int = near_bits;
     D_001DE9B0.mul = mul_bits;
-    D_001DE9B0.near_int = near_bits;
     D_001DEA00.far_int = far_bits;
+    D_001DEA00.near_int = near_bits;
     D_001DE9B0.far_int = far_bits;
+    D_001DE9B0.near_int = near_bits;
+    D_001DEA00.max = 0x437EFFFF;
     D_001DE9B0.max = 0x437EFFFF;
     set_tfrag_dists();
 
@@ -177,8 +140,8 @@ void update_view_context(void) {
     far_clip = view->far_clip;
     horizontal_fov = view->fov.f[0];
     vertical_fov = view->fov.f[1];
-    viewport_width = view->width;
-    viewport_height = view->height;
+    viewport_width = view->half_width;
+    viewport_height = view->half_height;
     projection_fog_multiplier = view->fog_mul;
     D_00160720[0] = 0.5f / 210000.0f;
     D_00160720[1] = -0.5f / 210000.0f;
@@ -209,24 +172,24 @@ void update_view_context(void) {
     view->proj3[5] /= view->scr_y;
     view->proj3[10] /= depth_scale;
     view->inverse_screen_scale.f[0] = 1.0f / view->scr_x;
-    view->inverse_screen_scale.f[1] = 1.0f / view->scr_y;
     view->proj3[14] /= depth_scale;
-    view->inverse_screen_scale.f[2] = 1.0f / depth_scale;
     view->inverse_screen_scale.f[3] = 1.0f / view->fog_mul;
+    view->inverse_screen_scale.f[1] = 1.0f / view->scr_y;
+    view->inverse_screen_scale.f[2] = 1.0f / depth_scale;
     view->screen_scale.f[0] = view->scr_x;
     view->screen_scale.f[1] = view->scr_y;
     view->screen_scale.f[2] = depth_scale;
     view->screen_scale.f[3] = view->fog_mul;
-    view->screen_bias.f[0] = 2048.0f;
-    view->screen_bias.f[1] = 2048.0f;
-    view->screen_bias.f[2] = 8388112.0f;
     view->inverse_projection_scale.f[0] = view->scr_x / view->proj[0];
-    view->screen_bias.f[3] = view->fog_add;
     view->inverse_projection_scale.f[1] = view->scr_y / view->proj[5];
     view->inverse_projection_scale.f[2] = depth_scale / view->proj[10];
     view->inverse_projection_scale.f[3] = view->fog_mul;
-    view->viewport_aspect.f[0] = view->scr_x / view->width;
-    view->viewport_aspect.f[1] = view->scr_y / view->height;
+    view->screen_bias.f[0] = 2048.0f;
+    view->screen_bias.f[1] = 2048.0f;
+    view->screen_bias.f[3] = view->fog_add;
+    view->screen_bias.f[2] = 8388112.0f;
+    view->viewport_aspect.f[0] = view->scr_x / view->half_width;
+    view->viewport_aspect.f[1] = view->scr_y / view->half_height;
     view->viewport_aspect.f[2] = 1.0f;
     view->viewport_aspect.f[3] = 1.0f;
     view->fog_color = *(s32 *)&view->fog_far_int;

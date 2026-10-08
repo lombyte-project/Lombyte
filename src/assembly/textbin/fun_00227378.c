@@ -5,12 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00227378/FUN_00227378.s", FUN_00227378);
 #else
 #include "types.h"
-
-struct FullScreenAntiAliasingDimensions {
-    u8 pad_0[0x150];
-    s16 display_width;
-    s16 display_height;
-};
+#include "rnc/rendering/fs_aa_buffer.h"
 
 struct ClearStripPacket {
     s32 dma_control;
@@ -29,12 +24,6 @@ struct ClearStripPacket {
     s64 vertex_registers;
 };
 
-struct StripVertices {
-    s64 first;
-    s64 second;
-};
-
-extern struct FullScreenAntiAliasingDimensions fs_aa_buffer __asm__("D_00151780");
 extern struct ClearStripPacket *render_packet_cursor[1] __asm__("D_00160F00");
 
 void append_fullscreen_clear_strips(s64 color) __asm__("FUN_00227378");
@@ -43,8 +32,8 @@ void append_fullscreen_clear_strips(s64 color) {
     struct ClearStripPacket *base;
     struct ClearStripPacket *packet_cursor;
     s64 *commands;
-    struct StripVertices *vertices;
-    struct FullScreenAntiAliasingDimensions *dimensions;
+    volatile s64 *vertices;
+    struct FsAaBuf *dimensions;
     s32 strip_count;
     s32 display_height;
     s32 display_width;
@@ -67,7 +56,7 @@ void append_fullscreen_clear_strips(s64 color) {
     dividend = (display_width > -1) ? display_width : (display_width + 0x1F);
     strip_count = dividend >> 5;
     render_packet_cursor[0]->dma_control = (strip_count + 5) | 0x10000000;
-    ((s32 *)render_packet_cursor[0])[1] = 0;
+    render_packet_cursor[0]->address = 0;
     render_packet_cursor[0]->vif_command = 0;
     render_packet_cursor[0]->gif_control = (strip_count + 5) | 0x50000000;
     base = render_packet_cursor[0];
@@ -92,19 +81,20 @@ void append_fullscreen_clear_strips(s64 color) {
         left_x = negative_half_width + 0x8000;
         right_x = negative_half_width + 0x8200;
         packed_bottom_y = (s64)bottom_y << 16;
-        vertices = (struct StripVertices *)((u8 *)base + 0x60);
+        vertices = (volatile s64 *)((u8 *)base + 0x60);
         strip_index = 0;
         do {
             first_vertex = (s64)left_x | packed_top_y;
             second_vertex = (s64)right_x | packed_bottom_y;
-            vertices->first = first_vertex;
+            *vertices++ = first_vertex;
             strip_index += 1;
             right_x += 0x200;
-            (++vertices)[-1].second = second_vertex;
+            *vertices++ = second_vertex;
             left_x += 0x200;
         } while (strip_index < strip_count);
     }
-    packet_cursor = (struct ClearStripPacket *)((u8 *)base + strip_count * 0x10 + 0x60);
+    packet_cursor = render_packet_cursor[0];
+    packet_cursor = (struct ClearStripPacket *)((u8 *)packet_cursor + (strip_count * 0x10 + 0x50));
     render_packet_cursor[0] = packet_cursor;
     packet_cursor->dma_control = 0x10000000;
     render_packet_cursor[0]->address = 0;

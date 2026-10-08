@@ -6,6 +6,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sceCdRead/sceCdRead.s", sceCdRead);
 #else
 #include "types.h"
+#include "rnc/sdk/libcdvd.h"
 struct CdDriveState {
     s32 unk0;
     s32 unk4;
@@ -16,12 +17,6 @@ struct CdDriveState {
     u8 pad_F[0x1];
     s32 unk10;
     s32 unk14;
-};
-
-struct sceCdRMode {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
 };
 
 extern u8 D_00120788[];
@@ -41,7 +36,7 @@ extern s32 cd_check_ncmd() __asm__("func_00120A28");
 extern s32 sceCdNcmdDiskReady();
 extern s32 scePrintf();
 extern s32 sceSifCallRpc();
-extern s32 sceSifWriteBackDCache();
+extern void sceSifWriteBackDCache(void *ptr, s32 size);
 s32 sceCdRead(u32 dwSector, u32 dwSectorCount, s32 *pDestination, struct sceCdRMode *pMode) {
     s32 byteCount;
     s32 dataPattern;
@@ -60,12 +55,12 @@ block_2:
     st->unk0 = dwSector;
     st->unk4 = dwSectorCount;
     st->unk8 = pDestination;
-    st->unkC = (u8)pMode->unk0;
-    st->unkD = (u8)pMode->unk1;
-    st->unkE = (u8)pMode->unk2;
+    st->unkC = (u8)pMode->trycount;
+    st->unkD = (u8)pMode->spindlctrl;
+    st->unkE = (u8)pMode->datapattern;
     st->unk10 = D_001323C0;
     st->unk14 = D_00132480;
-    dataPattern = pMode->unk2;
+    dataPattern = pMode->datapattern;
     if (dataPattern == 1) {
         goto block_7;
     }

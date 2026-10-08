@@ -20,6 +20,8 @@ s32 music_transition(s32 target_track, s32 transition_track, s32 flags, s32 volu
     void (*callback)();
     u8 *track_table;
     s32 track_table_offset;
+    s32 poll_interval;
+    s32 sample_rate;
 
     if (music_stream_state.transition.handle != 0) {
         return 0;
@@ -32,8 +34,10 @@ s32 music_transition(s32 target_track, s32 transition_track, s32 flags, s32 volu
         return 0;
     }
     *(u32 *)&music_stream_state.transition.handle = 0xFFFFFFFF;
-    music_stream_state.transition.remaining_time = 48000;
-    music_stream_state.transition.poll_interval = 10;
+    sample_rate = 48000;
+    poll_interval = 10;
+    music_stream_state.transition.poll_interval = poll_interval;
+    music_stream_state.transition.remaining_time = sample_rate;
     music_stream_state.transition.track = target_track;
     music_stream_state.transition.state = 1;
     music_stream_state.transition.volume = volume;

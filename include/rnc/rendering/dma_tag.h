@@ -17,7 +17,7 @@ struct TagPtr {
     struct DmaTag *p;
 };
 
-struct GifTag;
+struct GifTag; /* rnc/sdk/libgraph.h */
 
 /* Write cursor of the packet the frame is building, seen as whatever the
    writer emits next: DMA tags, GIF tags, 32-bit words or raw bytes, or as a

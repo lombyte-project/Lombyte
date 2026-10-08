@@ -42,8 +42,8 @@ typedef struct {
     char *decode_buffers;
 } LevelResourceBuffers;
 extern LevelResourceBuffers level_resource_buffers __asm__("D_001940C0");
+extern ClassResourceHeader *resident_class_resources[] __asm__("D_001B3200") NOT_SDA;
 extern u8 resident_class_slot_by_id[] __asm__("D_001B3AC0") NOT_SDA;
-extern char *resident_class_resources[] __asm__("D_001B3200") NOT_SDA;
 /* Per-slot copy of the resource +0x2C word; its narrower meaning is unresolved. */
 extern s32 D_001B6180[];
 extern GadgetRec vendor_item_definitions[] __asm__("D_001863D0");
@@ -63,7 +63,7 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     u8 class_slot;
     s32 resource_tag;
     s32 vendor_item_index;
-    char **resource_table;
+    ClassResourceHeader **resource_table;
 
     if (active_class_resource_index >= 0 &&
         class_resource_ids[active_class_resource_index] == class_id) {
@@ -87,7 +87,7 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     /* The byte-sized class slot selects both the published pointer and the saved +0x2C word. */
     resource_table = resident_class_resources;
     class_slot = resident_class_slot_by_id[class_id];
-    resource_table[class_slot] = resource_data;
+    resource_table[class_slot] = (ClassResourceHeader *)resource_data;
     D_001B6180[class_slot] = ((ClassResourceHeader *)resource_data)->original_field_2c;
     prepare_resident_class_render_data(resource_data, resident_indexed_textures,
                                        class_material_maps[active_class_resource_index], class_id);
@@ -97,9 +97,9 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     for (runtime_index = 0; runtime_index < 16; runtime_index++) {
         s16 runtime_entry_index = class_runtime_indices[resource_table_index][runtime_index];
         if (runtime_entry_index >= 0) {
-            *(s16 *)(((ClassResourceHeader *)resident_class_resources[class_slot])->runtime_table +
+            *(s16 *)(resource_table[class_slot]->runtime_table +
                      runtime_index * 0x20 + 0x1A) = runtime_entry_index;
-            *(s32 *)(((ClassResourceHeader *)resident_class_resources[class_slot])->runtime_table +
+            *(s32 *)(resource_table[class_slot]->runtime_table +
                      runtime_index * 0x20 + 0x1C) = resource_tag;
         }
     }
@@ -112,7 +112,7 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
             if (gold_weapon_purchased[vendor_item_index] == 0) {
                 return;
             }
-            resource_header = (ClassResourceHeader *)resident_class_resources[class_slot];
+            resource_header = resident_class_resources[class_slot];
             if (resource_header->third_render_group_count == 0) {
                 return;
             }

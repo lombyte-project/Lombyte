@@ -7,10 +7,8 @@ INCLUDE_ASM(
     FUN_0021eb20);
 #else
 #include "types.h"
-
-typedef struct {
-    s16 s[12];
-} FontWindow;
+#include "rnc/rendering/screen.h"
+#include "rnc/ui/text/text_region.h"
 
 #include "types.h"
 
@@ -21,11 +19,6 @@ typedef struct {
     u8 pad26[0x1E];
     s32 help_tip;
 } ItemsMenu;
-struct ScreenDimensions {
-    s32 pad[1];
-    s32 height;
-};
-extern struct ScreenDimensions D_0013E500[];
 
 extern s32 D_0015ED88[] __attribute__((section(".sdata")));
 
@@ -39,7 +32,8 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void font_print_right(s32, s32, u64, char *, s32) __asm__("FUN_001f6940");
 
 extern void font_print_left(s32, s32, u64, char *, s32) __asm__("FUN_001f6a60");
-extern void font_print_window_regular(FontWindow *, u64, char *, s32) __asm__("func_001F7580");
+extern void font_print_window_regular(struct TextRegion *, u64, char *,
+                                      s32) __asm__("func_001F7580");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern void draw_moby_list(s32, s32) __asm__("func_0020D330");
@@ -84,10 +78,13 @@ s32 draw_items_menu(ItemsMenu *menu) {
     {
         /* Retail initializes the 24-byte text window with the menu height,
        signed width / 3, and the 0x10 and 5 fields before drawing the title. */
-        FontWindow text_window = {{0, menu->height, window_left,
-                                   divide_coordinate(menu->width, column_divisor), 0, 0, 0, 0, 0x10,
-                                   5}};
-        text_window.s[4] = add_offset(text_window.s[2], text_window.s[3]) >> 1;
+        struct TextRegion text_window = {
+            0,           menu->height,
+            window_left, divide_coordinate(menu->width, column_divisor),
+            0,           0,
+            0,           0,
+            0x10,        5};
+        text_window.anchor_x = add_offset(text_window.left, text_window.right) >> 1;
         strcpy(text_buffer, get_help_message_text(0x4F4E));
         if (D_0015ED88[0] == column_divisor) {
             hyphen = strchr(text_buffer, 0x2D);
@@ -107,8 +104,8 @@ s32 draw_items_menu(ItemsMenu *menu) {
             }
         }
         font_print_window_regular(&text_window, 0x8000C0C0L, text_buffer, -1);
-        text_window.s[9] ^= 4;
-        text_window.s[5] = (D_0013E500[0].height - text_window.s[7]) >> 1;
+        text_window.flags ^= 4;
+        text_window.anchor_y = (D_0013E500.height - text_window.rendered_height) >> 1;
         font_print_window_regular(&text_window, 0x8000C0C0L, text_buffer, -1);
     }
     x = add_offset(D_001601B8, 0xC8);

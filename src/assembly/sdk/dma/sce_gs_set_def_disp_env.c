@@ -7,16 +7,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/dma/sce_gs_set_def_disp_env/sce
             sceGsSetDefDispEnv);
 #else
 #include "types.h"
-/* The caller's display environment occupies 0x30 bytes, including the final pad. */
-struct sceGsDispEnv {
-    u64 pmode;
-    u64 smode2;
-    u64 dispfb;
-    u64 display;
-    u64 bgcolor;
-    u64 pad28;
-};
-
+#include "rnc/sdk/libgraph.h"
 typedef struct {
     s16 nSInterlace;
     u16 wMode;
@@ -60,7 +51,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
     }
     output->smode2 = value;
     output->dispfb = ((u64)(pixel_storage_format & 15) << 15) |
-                     ((u64)(((width + 63) >> 6) & 63) << 9);
+                     ((u64)((width + 63) & 0xfc0) << 3);
 
     if (mode == 2) {
         if (interlace == 1) {

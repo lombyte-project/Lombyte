@@ -40,8 +40,8 @@ void _doMC(struct MpegDecoder *mpeg, s32 arg1) {
         base2 = (u8 *)mpeg + 0x5C8;
         idx = i * 4 + sp0 * 0x140;
         jdx = i * 0x1C;
-        p = (u8 *)arg0 + (sp0 * 0x140 + 0x590);
-        ((void (*)(u8 *)) * (s32 *)((u8 *)arg0 + idx + 0x5B8))(p + (jdx + 0x48));
+        p = (u8 *)mpeg + (sp0 * 0x140 + 0x590);
+        ((void (*)(u8 *)) * (s32 *)((u8 *)mpeg + idx + 0x5B8))(p + (jdx + 0x48));
         ((void (*)(u8 *)) * (s32 *)(base2 + idx))(p + (jdx + 0xB8));
         if (i + 1 >= *(s32 *)(sp4 + sp0 * 0x140)) {
             break;
@@ -73,10 +73,10 @@ block_13:
     if (*(s32 *)((u8 *)mpeg + sp0 * 0x140 + 0x6CC) == 0) {
         goto block_16;
     }
-    func_001271D8(*(s32 *)(var30 + sp0 * 0x140), mpeg->unk81C);
+    func_001271D8(*(s32 *)(var30 + sp0 * 0x140), mpeg->mc_work);
     return;
 block_16:
-    func_00127178(*(s32 *)(var30 + sp0 * 0x140), mpeg->unk81C,
+    func_00127178(*(s32 *)(var30 + sp0 * 0x140), mpeg->mc_work,
                   *(s32 *)((u8 *)mpeg + sp0 * 0x140 + 0x594));
     return;
 }

@@ -5,12 +5,9 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021a328/FUN_0021a328.s", FUN_0021a328);
 #else
 #include "types.h"
+#include "rnc/ui/text/text_region.h"
 
 #include "sda.h"
-
-typedef struct {
-    short s[12];
-} TextBox;
 
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
@@ -42,7 +39,8 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 extern long get_effect_texture(int) __asm__("func_001F44B8");
 extern void EnableGlobalStateFlag(void) __asm__("func_001F61E8");
 extern void DisableGlobalStateFlag(void) __asm__("func_001F61F8");
-extern void font_print_window(TextBox *, long, char *, int, long, u8 *) __asm__("func_001F7090");
+extern void font_print_window(struct TextRegion *, long, char *, int, long,
+                              u8 *) __asm__("func_001F7090");
 extern int scale_game_frames(int) __asm__("func_001F96F8");
 extern long func_001FA6E0(int, int, float);
 extern char *get_help_message_text(int) __asm__("func_001FDD10");
@@ -62,6 +60,9 @@ int render_configured_text_label(struct MenuScreen *label) {
     int value_variant;
     int value_index;
     int flags;
+    int selector_flags;
+    int render_flags;
+    int text_flags;
     int draw_flags;
     int x;
     int y;
@@ -90,27 +91,27 @@ int render_configured_text_label(struct MenuScreen *label) {
     }
     vu1_add_g_sregister(0x42, 0x44);
     vu1_add_g_sregister(0x47, 0x2004B);
-    flags = label->data.label.flags;
-    if (flags & 0x20) {
+    selector_flags = label->data.label.flags;
+    if (selector_flags & 0x20) {
         value_index = current_level_index - 1;
         if ((unsigned int)value_index >= 0x12) {
             value_index = -1;
         }
-    } else if (flags & 0x40) {
+    } else if (selector_flags & 0x40) {
         value_index = selected_level_index[0] - 1;
-    } else if (flags & 4) {
+    } else if (selector_flags & 4) {
         if (label->data.label.fade_timer < scale_game_frames(menu_fade_duration)) {
             label->data.label.fade_timer = scale_game_frames(menu_fade_duration);
         }
         value_index = 0;
         label->data.label.cached_value = 0;
         label->data.label.value_variant = 0;
-    } else if (flags & 0x80) {
+    } else if (selector_flags & 0x80) {
         value_index = menu_system.current->focus->data.list.selected;
-        if (flags & 0x8000) {
+        if (selector_flags & 0x8000) {
             value_variant = pal_mode != 0;
         }
-    } else if (flags & 0x100) {
+    } else if (selector_flags & 0x100) {
         page = menu_system.current->focus;
         value_index = page->data.grid.selected_cell;
         entry = &page->data.grid.cells[value_index];
@@ -121,7 +122,7 @@ int render_configured_text_label(struct MenuScreen *label) {
         } else {
             value_index = -1;
         }
-    } else if (flags & 0x1000) {
+    } else if (selector_flags & 0x1000) {
         page = menu_system.current->focus;
         value_index = page->data.list.selected;
         {
@@ -163,18 +164,18 @@ int render_configured_text_label(struct MenuScreen *label) {
         label->data.label.fade_timer += 3;
     }
 
-    flags = label->data.label.flags;
-    if (flags & 4) {
+    text_flags = label->data.label.flags;
+    if (text_flags & 4) {
         if (label->data.label.text_id == 0) {
             return 1;
         }
         text = get_help_message_text(label->data.label.text_id);
-    } else if (flags & 0x1000) {
+    } else if (text_flags & 0x1000) {
         if (label->data.label.text_id == 0xFFFF) {
             return 1;
         }
         text = get_help_message_text(label->data.label.text_id);
-    } else if ((flags & 0x100) && value_index == -1) {
+    } else if ((text_flags & 0x100) && value_index == -1) {
         text = unavailable_label_text;
     } else if (label->data.label.text_id != 0) {
         text = get_help_message_text(
@@ -193,15 +194,15 @@ int render_configured_text_label(struct MenuScreen *label) {
         }
     }
 
-    flags = label->data.label.flags;
-    draw_flags = flags;
+    render_flags = label->data.label.flags;
+    draw_flags = render_flags;
     x = 4;
     y = 4;
     if ((draw_flags & 0x4004) == 0x4004 && label->data.label.text_id == 0x523E) {
         draw_flags |= 1;
         y = 12;
     }
-    if ((flags & 0x800) && item_unlocked[value_index] == 0) {
+    if ((render_flags & 0x800) && item_unlocked[value_index] == 0) {
         draw_flags |= 3;
         text = get_help_message_text(0x4F54);
     }
@@ -220,21 +221,29 @@ int render_configured_text_label(struct MenuScreen *label) {
     setup_gif_paging(0);
     texture_tex0 = get_effect_texture(font_texture_index);
     {
-        TextBox c = {{text_vertical_inset, label->height - text_vertical_inset, 1, label->width - 4,
-                      x, y - (label->data.label.scroll_offset >> 4), [8] = text_line_spacing,
-                      text_style, [11] = -(label->data.label.scroll_offset & 0xF)}};
+        struct TextRegion *window;
+        struct TextRegion c = {text_vertical_inset,
+                               label->height - text_vertical_inset,
+                               1,
+                               label->width - 4,
+                               x,
+                               y - (label->data.label.scroll_offset >> 4),
+                               .line_advance = text_line_spacing,
+                               text_style,
+                               .subpixel_y_sixteenths = -(label->data.label.scroll_offset & 0xF)};
 
+        window = &c;
         if (label->data.label.flags & 0x10000) {
-            c.s[1] = label->height - 1;
+            c.bottom = label->height - 1;
         }
         color = func_0021B6D8(label->data.label.fade_timer,
                               func_001FA6E0(menu_text_color, 0x80FFA888, 0.5f), 0x80FFA888);
-        c.s[9] |= 4;
+        c.flags |= 4;
         font_print_window(&c, color, text, -1, texture_tex0, font);
-        c.s[9] ^= 4;
+        window->flags ^= 4;
         flags = label->data.label.flags;
-        text_extent = c.s[7] + 4;
-        visible_height = c.s[1] - c.s[0];
+        text_extent = c.rendered_height + 4;
+        visible_height = c.bottom - c.top;
         if (!(flags & 0x2000) && text_extent >= visible_height) {
             if (!(flags & 0x400)) {
                 label->data.label.flags = flags | 0x400;
@@ -244,44 +253,44 @@ int render_configured_text_label(struct MenuScreen *label) {
             label->data.label.scroll_offset = 0;
             label->data.label.flags ^= 0x400;
         }
-        c.s[5] = y - (label->data.label.scroll_offset >> 4);
-        c.s[0] += text_shadow_y;
-        c.s[1] += text_shadow_y;
-        c.s[2] += text_shadow_x;
-        c.s[3] += text_shadow_x;
-        c.s[4] += text_shadow_x;
-        c.s[5] += text_shadow_y;
+        c.anchor_y = y - (label->data.label.scroll_offset >> 4);
+        c.top += text_shadow_y;
+        c.bottom += text_shadow_y;
+        c.left += text_shadow_x;
+        c.right += text_shadow_x;
+        c.anchor_x += text_shadow_x;
+        c.anchor_y += text_shadow_y;
         DisableGlobalStateFlag();
         font_print_window(&c, 0x80000000L, text, -1, texture_tex0, font);
         EnableGlobalStateFlag();
-        c.s[0] -= text_shadow_y;
-        c.s[1] -= text_shadow_y;
-        c.s[2] -= text_shadow_x;
-        c.s[3] -= text_shadow_x;
-        c.s[4] -= text_shadow_x;
-        c.s[5] -= text_shadow_y;
+        c.top -= text_shadow_y;
+        c.bottom -= text_shadow_y;
+        c.left -= text_shadow_x;
+        c.right -= text_shadow_x;
+        c.anchor_x -= text_shadow_x;
+        c.anchor_y -= text_shadow_y;
         font_print_window(&c, color, text, -1, texture_tex0, font);
         if (label->data.label.flags & 0x400) {
-            c.s[5] += c.s[7] + text_line_spacing * 3;
-            c.s[0] += text_shadow_y;
-            c.s[1] += text_shadow_y;
-            c.s[2] += text_shadow_x;
-            c.s[3] += text_shadow_x;
-            c.s[4] += text_shadow_x;
-            c.s[5] += text_shadow_y;
+            c.anchor_y += c.rendered_height + text_line_spacing * 3;
+            c.top += text_shadow_y;
+            c.bottom += text_shadow_y;
+            c.left += text_shadow_x;
+            c.right += text_shadow_x;
+            c.anchor_x += text_shadow_x;
+            c.anchor_y += text_shadow_y;
             DisableGlobalStateFlag();
             font_print_window(&c, 0x80000000L, text, -1, texture_tex0, font);
             EnableGlobalStateFlag();
-            c.s[0] -= text_shadow_y;
-            c.s[1] -= text_shadow_y;
-            c.s[2] -= text_shadow_x;
-            c.s[3] -= text_shadow_x;
-            c.s[4] -= text_shadow_x;
-            c.s[5] -= text_shadow_y;
+            c.top -= text_shadow_y;
+            c.bottom -= text_shadow_y;
+            c.left -= text_shadow_x;
+            c.right -= text_shadow_x;
+            c.anchor_x -= text_shadow_x;
+            c.anchor_y -= text_shadow_y;
             font_print_window(&c, color, text, -1, texture_tex0, font);
             if (label->data.label.flags & 0x400) {
                 label->data.label.scroll_offset += (menu_input_repeat_state[0] & 1) ? 10 : 3;
-                label->data.label.scroll_offset %= (c.s[7] + text_line_spacing * 3) * 16;
+                label->data.label.scroll_offset %= (c.rendered_height + text_line_spacing * 3) * 16;
             }
         }
     }
