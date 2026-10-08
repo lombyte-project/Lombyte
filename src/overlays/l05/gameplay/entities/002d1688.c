@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/moby_anim.h"
 
 #define NOT_SDA
@@ -703,7 +704,95 @@ void FUN_L05_00306e10(char *obj) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307570.s", FUN_L05_00307570);
+/* Same routine as FUN_L16_002d0058 without the pitch step: times the leap animation to the
+ * remaining jump, then copies the animation speed to the rider. */
+struct LeapVars {
+    u8 pad0[0x208];
+    f32 height;           /* 0x208 */
+    u8 pad20C[0xC];
+    f32 targetHeight;     /* 0x218 */
+    u8 pad21C[0x30];
+    f32 verticalSpeed;    /* 0x24C */
+    u8 pad250[0x18];
+    struct Moby *rider;   /* 0x268 */
+    s32 timer;            /* 0x26C */
+    u8 pad270[2];
+    s16 sequence;         /* 0x272 */
+};
+
+extern float D_0015ED70;
+extern int FUN_001f96f8(int);
+extern int FUN_001fa6d0(float);
+extern int FUN_L00_00257b90(int, int);
+extern int FUN_L00_002595a0(float *, float *, float, float, float);
+extern float FUN_0020c9e0(struct Moby *);
+extern void leap_anim_307570(struct Moby *, int, int, int) __asm__("FUN_L05_00307480");
+
+void FUN_L05_00307570(struct Moby *m) {
+    float root0, root1;
+    struct LeapVars *d = (struct LeapVars *)m->pvars;
+
+    if (d->timer != 0) {
+        float duration;
+        float acceleration;
+        if (m->prev_seq != 5 && FUN_001f96f8(3) >= d->timer) {
+            leap_anim_307570(m, 5, 1, FUN_001f96f8(5));
+            d->sequence = -1;
+        }
+        acceleration = D_0015ED70 * 21.0f * -0.5f;
+        duration = 30.0f;
+        if (FUN_L00_002595a0(&root0, &root1, acceleration, d->verticalSpeed - acceleration,
+                             d->height - d->targetHeight) > 0 &&
+            root0 > 0.0f) {
+            duration = FUN_001fa6d0(root0);
+        }
+        if (FUN_001f96f8(7) < d->timer && FUN_001f96f8(11) > d->timer && m->prev_seq == 5 &&
+            (float)FUN_001f96f8(27) < duration) {
+            short sequence;
+            int chosen;
+            chosen = FUN_L00_00257b90(0, 3) + 1;
+            d->sequence = chosen;
+            sequence = chosen;
+            leap_anim_307570(m, sequence, 1, FUN_001f96f8(7));
+        }
+        if (d->sequence != -1) {
+            if (m->seq == m->prev_seq) {
+                float frame = FUN_0020c9e0(m);
+                if (frame > 7.0f && frame < 20.0f && duration != 0.0f) {
+                    float speed = 30.0f / duration;
+                    if (speed > 1.7f)
+                        speed = 1.7f;
+                    if (speed < 0.3f)
+                        speed = 0.3f;
+                    m->unk58 = speed;
+                }
+            }
+            if (d->sequence != -1) {
+                if (duration < (float)FUN_001f96f8(9)) {
+                    leap_anim_307570(m, 5, 3, FUN_001f96f8(7));
+                    d->sequence = -1;
+                } else if (m->unk70 & 2) {
+                    leap_anim_307570(m, 5, 2, FUN_001f96f8(7));
+                    d->sequence = -1;
+                }
+            }
+        }
+        if (m->seq == m->prev_seq && m->seq == 5 && duration != 0.0f) {
+            float remaining;
+            remaining = 25.0f;
+            remaining -= FUN_0020c9e0(m);
+            remaining /= duration * 0.5f;
+            m->unk58 = remaining;
+        }
+    } else {
+        m->unk58 = 1.0f;
+        if ((m->unk70 & 2) && m->prev_seq != 0) {
+            leap_anim_307570(m, 0, 0, FUN_001f96f8(8));
+        }
+    }
+    if (d->rider != 0)
+        d->rider->unk58 = m->unk58;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307910.s", FUN_L05_00307910);
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_0030D230), where it is exact; names translated to the US level program. */
 
