@@ -3,6 +3,7 @@
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/math/vector.h"
 #include "rnc/overlay/moby_anim.h"
 
 #define NOT_SDA
@@ -247,7 +248,57 @@ void FUN_L02_002d57f8(void *pos, int n) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d5a68.s", FUN_L02_002d5a68);
+/* Spawns one particle above pos unless D_L02_00160178 is already high. */
+extern float D_L02_00161964 __attribute__((sda));
+extern float D_L02_00161968 __attribute__((sda));
+extern float D_L02_0016196C __attribute__((sda));
+extern float D_L02_00161970 __attribute__((sda));
+extern float D_L02_00161974 __attribute__((sda));
+extern float D_L02_00161978 __attribute__((sda));
+extern float D_L02_0016197C __attribute__((sda));
+extern float D_L02_00161980 __attribute__((sda));
+extern s32 D_L02_00161984 __attribute__((sda));
+extern s32 D_L02_00161988 __attribute__((sda));
+extern s32 D_L02_0016198C __attribute__((sda));
+extern s32 D_L02_00161990 __attribute__((sda));
+extern s32 D_L02_00161994 __attribute__((sda));
+extern s32 D_L02_00161998 __attribute__((sda));
+extern s32 D_L02_0016199C __attribute__((sda));
+extern s32 D_L02_001619A0 __attribute__((sda));
+extern s32 D_L02_001619A4 __attribute__((sda));
+
+void FUN_L02_002d5a68(Vec4 *from) {
+    Vec4 pos;
+    Vec4 at;
+    Vec4 accel;
+    Vec4 vel;
+    Vec4 *p = &pos;
+    Vec4 *w;
+    float r;
+    int a, b, c;
+
+    pos.q = from->q;
+    if (D_L02_00160178 >= 0x6A5)
+        return;
+    r = rand_angle_d57f8();
+    w = &at;
+    qcopy(w, p);
+    at.f[2] = at.f[2] + rand_between_d57f8(0.125f, 0.0f);
+    at.f[0] = at.f[0] + rand_between_d57f8(-0.125f, 0.125f);
+    at.f[1] = at.f[1] + rand_between_d57f8(-0.125f, 0.125f);
+    clear_vec_d57f8(&accel);
+    vel.f[0] = fast_cos_d57f8(r) * (rand_between_d57f8(D_L02_00161974, D_L02_00161978) * D_0015ED6C);
+    vel.f[1] = fast_sin_d57f8(r) * (rand_between_d57f8(D_L02_00161974, D_L02_00161978) * D_0015ED6C);
+    vel.f[2] = 0.0f;
+    accel.f[2] = rand_between_d57f8(D_L02_00161964, D_L02_00161968) * D_0015ED6C;
+    vel.f[2] = rand_between_d57f8(D_L02_0016196C, D_L02_00161970) * D_0015ED6C;
+    accel.f[3] = D_L02_0016197C;
+    vel.f[3] = D_L02_00161980;
+    a = trunc_d57f8(rand_between_d57f8((float)D_L02_00161984, (float)D_L02_00161988));
+    b = trunc_d57f8(rand_between_d57f8((float)D_L02_0016198C, (float)D_L02_00161990));
+    c = trunc_d57f8(rand_between_d57f8((float)D_L02_00161994, (float)D_L02_00161998));
+    FUN_00218888(&at, &accel, &vel, D_L02_0016199C, D_L02_001619A0, a, b, c, D_L02_001619A4);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d5c88.s", FUN_L02_002d5c88);
 #include "qcopy.h"
 
