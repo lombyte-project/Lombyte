@@ -12,6 +12,7 @@
 OFFSET_CHECK(hit_moby, CollisionHit, moby, 0x18);
 OFFSET_CHECK(hit_point, CollisionHit, point, 0x20);
 OFFSET_CHECK(hit_normal_x, CollisionHit, normal_x, 0x40);
+OFFSET_CHECK(hit_normal_z, CollisionHit, normal_z, 0x48);
 OFFSET_CHECK(link_pos, OvlMobyEntry40, pos, 0x10);
 OFFSET_CHECK(link_target, OvlMobyEntry40, target, 0x20);
 OFFSET_CHECK(link_unk24, OvlMobyEntry40, unk24, 0x24);

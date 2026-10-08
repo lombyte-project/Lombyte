@@ -22,6 +22,7 @@ typedef struct {
     u8 pad30[0x10];                /* 0x30: position after push-out (copied into hero.motion.pos) */
     f32 normal_x;                  /* 0x40: start of the surface normal; its angle is tested against 50 degrees (0.87266463) */
     f32 normal_y;                  /* 0x44: FUN_001f9e90 (atan2) of normal_x, normal_y is stored in the hero */
+    f32 normal_z;                  /* 0x48: ledge probes compare atan2(normal_z, xy length) with 20 degrees */
 } CollisionHit;
 
 #endif /* LOMBYTE_RNC_OVERLAY_COLLISION_H */
