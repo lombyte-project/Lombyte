@@ -324,7 +324,39 @@ void FUN_L14_002b2600(struct Moby *m)
     FUN_001f4600(FUN_L14_002b2928, m);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2928.s", FUN_L14_002b2928);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2ed8.s", FUN_L14_002b2ed8);
+#include "sda.h"
+#include "rnc/gameplay/entities/moby.h"
+
+/* pvars of the moby FUN_L14_002b2ed8 updates */
+typedef struct {
+    u8 pad00[0x38];
+    s32 restart;   /* 0x38: nonzero picks a new random delay */
+    u8 pad3C[0x1F8];
+    f32 unk234;    /* 0x234 */
+    s32 delay;     /* 0x238: frames, counted down */
+} DelayVars_2b2ed8;
+
+extern f32 D_L14_001614C4_2b2ed8 __asm__("D_L14_001614C4") __attribute__((sda));
+extern f32 random_float_between_2b2ed8(f32, f32) __asm__("FUN_002132a8");
+extern f32 FUN_001f96b0_2b2ed8(f32) __asm__("FUN_001f96b0");
+extern s32 truncate_float_to_s32_2b2ed8(f32) __asm__("FUN_001fa6d0");
+extern s32 tick_countdown_2b2ed8(s32 *) __asm__("FUN_001f9740");
+
+void FUN_L14_002b2ed8(struct Moby *m) {
+    DelayVars_2b2ed8 *pv = (DelayVars_2b2ed8 *)m->pvars;
+
+    if (pv->restart != 0) {
+        pv->delay = truncate_float_to_s32_2b2ed8(
+            FUN_001f96b0_2b2ed8(random_float_between_2b2ed8(180.0f, 240.0f)));
+        pv->restart = 0;
+    }
+    tick_countdown_2b2ed8(&pv->delay);
+    if (pv->delay != 0) {
+        pv->unk234 = D_L14_001614C4_2b2ed8 + 6.0f;
+    } else {
+        pv->unk234 = D_L14_001614C4_2b2ed8;
+    }
+}
 
 
 
