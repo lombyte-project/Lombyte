@@ -2,6 +2,7 @@
 #include "rnc/rendering/draw_config.h"
 #include "rnc/rendering/draw_tfrag.h"
 #include "rnc/globals.h"
+#include "rnc/rendering/dma_tag.h"
 
 struct Locals {
     u8 pad0[0x30];
@@ -13,7 +14,6 @@ struct Locals {
 extern u8 D_00160E70[];
 extern u8 D_00160E80[];
 extern s32 D_00160EBC;
-extern s32 D_00160F00;
 extern u8 D_00187080[];
 extern u8 D_001E1300[];
 extern void FlushCache(s32);
@@ -41,11 +41,11 @@ void draw_tfrag(void) {
     s32 packet;
     u8 *p;
 
-    packet = D_00160F00;
+    packet = render_packet_cursor.addr;
     D_00160EBC = packet;
     gs_texture_allocation_cursor = gs_texture_allocation_start;
     packet += 0x10;
-    D_00160F00 = packet;
+    render_packet_cursor.addr = packet;
     func_001F21B8(D_00160E70, 1);
     FUN_001f9fc8(&L);
     p = D_00187080;

@@ -1,12 +1,12 @@
 #include "types.h"
 #include "sda.h"
+#include "rnc/rendering/dma_tag.h"
 
 extern s32 D_0015ED80[] MACRO_ADDR;
 extern s32 D_0015EE78[] MACRO_ADDR;
 extern s32 D_0015EE78_gp;
 extern s32 D_0015F618[] MACRO_ADDR;
 extern volatile s32 D_00160EE0[] MACRO_ADDR;
-extern s32 D_00160F00;
 extern s32 func_001204B8();
 extern s32 set_pal_mode() __asm__("func_001F34E8");
 extern s32 init_dma() __asm__("func_0020B418");
@@ -34,7 +34,7 @@ void reset_graphics(void) {
         vu1_init_chain();
         temp_16_31 = D_0015EE78[0];
     } while (0);
-    D_00160F00 = 0;
+    render_packet_cursor.addr = 0;
     set_pal_mode();
     D_0015EE78_gp = temp_16_31;
     vu1_init_chain();

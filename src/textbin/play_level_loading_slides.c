@@ -9,16 +9,12 @@ typedef struct {
 
 extern u8 D_0013CDD0[];
 #include "rnc/storage/memory_card/memory_card_state.h"
+#define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
+#include "rnc/rendering/dma_tag.h"
 extern ScreenOfs D_0013E500;
 extern s32 D_0015ED84 __attribute__((sda));
 extern s16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A MACRO_ADDR;
-struct PacketCursor {
-    s32 *p;
-};
-extern struct PacketCursor D_00160F00_s __asm__("D_00160F00") MACRO_ADDR;
-#define D_00160F00 (D_00160F00_s.p)
-
 extern void read_file_entry_with_retry(s32) __asm__("func_0012F368");
 extern void reset_gs_registers(void) __asm__("func_001F3868");
 extern void reset_gs_registers_pr(void) __asm__("func_001F3958");
@@ -72,15 +68,15 @@ void play_level_loading_slides(s32 language_index, s32 first_slide, s32 second_s
         put_draw_buffer_small();
         vu1_add_g_sregister(1, (u64)0x8000 << 16);
         vu1_add_g_sregister(8, 0);
-        D_00160F00[0] = 0x30000014;
+        render_packet_cursor.words[0] = 0x30000014;
         fade_in_alpha = frame * 4;
         if (frame <= 0x1F) {
             alpha = fade_in_alpha;
         }
-        D_00160F00[1] = (s32)D_0013CDD0;
-        D_00160F00[2] = 0;
-        D_00160F00[3] = 0x50000014;
-        D_00160F00 += 4;
+        render_packet_cursor.words[1] = (s32)D_0013CDD0;
+        render_packet_cursor.words[2] = 0;
+        render_packet_cursor.words[3] = 0x50000014;
+        render_packet_cursor.words += 4;
         if (duration_ticks - 0x10 < frame) {
             alpha = (duration_ticks - frame) * 8;
         }

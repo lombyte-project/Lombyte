@@ -24,13 +24,13 @@ void FUN_001fb740(s32 w, s32 h) {
 
     n = w / 32;
     vu1_add_g_sregister(0x42, 0x800000004AULL);
-    render_packet_cursor.p->tag = (n + 5) | 0x10000000;
-    render_packet_cursor.p->addr = 0;
-    render_packet_cursor.p->vif0 = 0;
-    render_packet_cursor.p->vif1 = (n + 5) | 0x50000000;
-    tag = render_packet_cursor.p;
+    render_packet_cursor.tag->tag = (n + 5) | 0x10000000;
+    render_packet_cursor.tag->addr = 0;
+    render_packet_cursor.tag->vif0 = 0;
+    render_packet_cursor.tag->vif1 = (n + 5) | 0x50000000;
+    tag = render_packet_cursor.tag;
     q = (u64 *)(tag + 1);
-    render_packet_cursor.p = tag + 1;
+    render_packet_cursor.tag = tag + 1;
     zero = 0;
     q[zero] = 0x1000000000000001;
     q[1] = 0xE;
@@ -58,7 +58,7 @@ void FUN_001fb740(s32 w, s32 h) {
             i++;
         } while (i < n);
     }
-    render_packet_cursor.p = render_packet_cursor.p + (n + 5);
+    render_packet_cursor.tag = render_packet_cursor.tag + (n + 5);
 }
 
 extern __typeof__(FUN_001fb740) func_001FB740 __attribute__((alias("FUN_001fb740")));

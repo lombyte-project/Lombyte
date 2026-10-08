@@ -33,7 +33,7 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
     int motion_flag;
     int var_2_172;
     int var_2_213;
-    *((int *)0x10002010) = ((*((int *)0x10002010)) & 0xF8FFFFFF) | (decoder->unk150 << 0x18);
+    *((int *)0x10002010) = ((*((int *)0x10002010)) & 0xF8FFFFFF) | (decoder->picture_coding_type << 0x18);
     sp20 = dct_type_out;
     sp24 = arg5;
     temp_2_32 = _ipuVdec(decoder, 1);
@@ -74,7 +74,7 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
     }
     *sp20 = var_2_103;
     if ((*mb_type) & 0x10) {
-        decoder->unk1B4 = _nextBit(decoder, 5);
+        decoder->quantiser_scale_code = _nextBit(decoder, 5);
     }
     if (((*mb_type) & 8) || (((*mb_type) & 1) && (decoder->concealment_motion_vectors != 0))) {
         if (decoder->unk848 != 0) {
@@ -108,22 +108,22 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
             }
             if (((*mb_type) & 3) != 0) {
                 receiveDataFromIPU(
-                    *((int *)(((u8 *)(((u8 *)decoder) + (decoder->unk810 * 0x140))) + 0x594)), 0x300);
+                    decoder->mb_buf[decoder->mb_buf_index].ipu_out, 0x300);
                 _waitIpuIdle(decoder);
-                g1 = (((*mb_type) & 1) << 0x1B) | (decoder->unk1B4 << 0x10);
-                g2 = ((decoder->unk1B0) << 0x1A) | 0x20000000;
+                g1 = (((*mb_type) & 1) << 0x1B) | (decoder->quantiser_scale_code << 0x10);
+                g2 = ((decoder->dc_reset) << 0x1A) | 0x20000000;
                 _sendIpuCommand(decoder, (g1 | g2) | ((*sp20) << 0x19));
             } else {
-                *((int *)(((u8 *)(((u8 *)decoder) + (decoder->unk810 * 0x140))) + 0x6CC)) = 1;
+                decoder->mb_buf[decoder->mb_buf_index].unk13C = 1;
             }
-            decoder->unk1B0 = 0;
+            decoder->dc_reset = 0;
             if (decoder->unk11C != 0) {
                 if (decoder->picture_structure) {
                     return 0;
                 }
                 return 0;
             }
-            if ((((*mb_type) & 1) || ((decoder->unk1B0 = 1, ((*mb_type) & 1) != 0))) &&
+            if ((((*mb_type) & 1) || ((decoder->dc_reset = 1, ((*mb_type) & 1) != 0))) &&
                 (decoder->concealment_motion_vectors == 0)) {
                 arg4->unk14 = 0;
                 arg4->unk10 = 0;
@@ -134,7 +134,7 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
                 arg4->unkC = 0;
                 arg4->unk8 = 0;
             }
-            temp_4_287 = decoder->unk150;
+            temp_4_287 = decoder->picture_coding_type;
             var_2_172 = 1;
             if (temp_4_287 == 2) {
                 var_2_172 = 1;

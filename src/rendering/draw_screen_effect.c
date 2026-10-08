@@ -1,9 +1,11 @@
 #include "types.h"
 
-struct View {
+/* Display size; init_view_context copies +0x150 into the screen width and
+   +0x152 into its height. */
+struct Display {
     u8 pad0[0x150];
-    s16 height;
     s16 width;
+    s16 height;
 };
 
 struct Metrics {
@@ -18,7 +20,7 @@ struct Metrics {
     u64 unk28;
 };
 
-extern struct View D_00151780;
+extern struct Display D_00151780;
 extern struct Metrics *D_0015F350 __attribute__((sda));
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void draw_rect_overlay(s32, s32, s32, s32, u64) __asm__("func_001F52A0");
@@ -27,7 +29,7 @@ void draw_screen_effect(void) __asm__("FUN_001f4fb8");
 
 void draw_screen_effect(void) {
     s32 i;
-    s16 w;
+    s16 height;
     u64 mask;
     s32 c;
     u64 e;
@@ -37,16 +39,16 @@ void draw_screen_effect(void) {
     u64 e28;
 
     i = 0;
-    w = D_00151780.width;
+    height = D_00151780.height;
     e = D_0015F350->enable;
     if (e != 0) {
         vu1_add_g_sregister(0x42, e & 0xFF000000FFULL);
     }
     c = D_0015F350->color;
     if (c & 0xFF000000) {
-        draw_rect_overlay(0, w, 0, D_00151780.height, (u64)((s64)c << 0x20) >> 0x20);
+        draw_rect_overlay(0, height, 0, D_00151780.width, (u64)((s64)c << 0x20) >> 0x20);
     }
-    if (w > 0) {
+    if (height > 0) {
         mask = 0xFF000000FFULL;
         do {
             e18 = D_0015F350->unk18;
@@ -56,8 +58,8 @@ void draw_screen_effect(void) {
             v14 = D_0015F350->unk14;
             if (v14 & 0xFF000000) {
                 draw_rect_overlay(i,
-                                  (i + D_0015F350->unk10 < w - 1) ? i + D_0015F350->unk10 : w - 1,
-                                  0, D_00151780.height, (u64)((s64)v14 << 0x20) >> 0x20);
+                                  (i + D_0015F350->unk10 < height - 1) ? i + D_0015F350->unk10 : height - 1,
+                                  0, D_00151780.width, (u64)((s64)v14 << 0x20) >> 0x20);
             }
             i = i + D_0015F350->unk10;
             e28 = D_0015F350->unk28;
@@ -67,11 +69,11 @@ void draw_screen_effect(void) {
             v24 = D_0015F350->unk24;
             if (v24 & 0xFF000000) {
                 draw_rect_overlay(i,
-                                  (i + D_0015F350->unk20 < w - 1) ? i + D_0015F350->unk20 : w - 1,
-                                  0, D_00151780.height, (u64)((s64)v24 << 0x20) >> 0x20);
+                                  (i + D_0015F350->unk20 < height - 1) ? i + D_0015F350->unk20 : height - 1,
+                                  0, D_00151780.width, (u64)((s64)v24 << 0x20) >> 0x20);
             }
             i = i + D_0015F350->unk20;
-        } while (i < w);
+        } while (i < height);
     }
 }
 

@@ -15,10 +15,10 @@ void dma_tfrag_textures(void) {
     struct DmaTag *tag;
     s32 size;
 
-    tag = render_packet_cursor.p;
-    render_packet_cursor.p = tag + 1;
+    tag = render_packet_cursor.tag;
+    render_packet_cursor.tag = tag + 1;
     D_00160EBC.p->tag = 0x20000000;
-    D_00160EBC.p->addr = (u32)render_packet_cursor.p;
+    D_00160EBC.p->addr = (u32)render_packet_cursor.tag;
     D_00160EBC.p->vif0 = 0;
     D_00160EBC.p->vif1 = 0;
     if (draw_config.tfrag.enabled != 0 && draw_config.tfrag.count != 0) {
@@ -32,13 +32,13 @@ void dma_tfrag_textures(void) {
             D_00160EC4 = size;
         }
     }
-    render_packet_cursor.p->tag = 0x20000000;
-    render_packet_cursor.p->addr = (u32)(D_00160EBC.p + 1);
-    render_packet_cursor.p->vif0 = 0;
-    render_packet_cursor.p->vif1 = 0;
-    render_packet_cursor.p++;
+    render_packet_cursor.tag->tag = 0x20000000;
+    render_packet_cursor.tag->addr = (u32)(D_00160EBC.p + 1);
+    render_packet_cursor.tag->vif0 = 0;
+    render_packet_cursor.tag->vif1 = 0;
+    render_packet_cursor.tag++;
     tag->tag = 0x20000000;
-    tag->addr = (u32)render_packet_cursor.p;
+    tag->addr = (u32)render_packet_cursor.tag;
     tag->vif0 = 0;
     tag->vif1 = 0;
 }

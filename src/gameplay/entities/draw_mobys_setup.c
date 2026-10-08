@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/globals.h"
+#include "rnc/rendering/dma_tag.h"
 
 extern u8 D_00100080[];
 extern u8 D_0010FAA0[];
@@ -11,7 +12,6 @@ extern u8 D_0015FED0[];
 extern s32 D_0015FF0C;
 extern s32 D_0015FF14;
 extern s32 D_0015FF40;
-extern s32 D_00160F00;
 extern s32 D_00160F08;
 extern void func_001F21B8();
 extern void vu0_load_micro_program() __asm__("func_002334D8");
@@ -27,12 +27,12 @@ void draw_mobys_setup(void) {
     D_0015F620 = 6;
     vu0_load_micro_program(D_00100080);
     vu1_add_g_sregister(0x47, 0x5360B);
-    current = D_00160F00;
+    current = render_packet_cursor.addr;
     D_0015FF0C = current;
     callbackArg = 1;
     current += 0x10;
     gs_texture_allocation_cursor = gs_texture_allocation_start;
-    D_00160F00 = current;
+    render_packet_cursor.addr = current;
     func_001F21B8(D_0015FED0, callbackArg);
     D_0015FF40 = 0;
     D_00160F08 = D_0015F63C + 0xFFFF0000;

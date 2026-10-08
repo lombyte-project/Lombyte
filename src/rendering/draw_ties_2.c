@@ -1,6 +1,8 @@
 /* Ported from rac1-decomp (src/game/tiefunc.c, func_00236CA8). */
 #include "sda.h"
 #include "rnc/rendering/draw_config.h"
+#define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
+#include "rnc/rendering/dma_tag.h"
 extern void FUN_001f98d0(void *, void *, int);
 extern void FlushCache(int);
 extern char *D_001E1700[];
@@ -10,7 +12,6 @@ extern char D_001E2A00[];
 extern char D_001E3E00[];
 extern char D_001E3200[];
 extern char D_001E4400[];
-extern int D_00160F00 MACRO_ADDR;
 extern int D_0015EE78 MACRO_ADDR;
 extern int D_0015EE74 MACRO_ADDR;
 extern int D_00160F68 MACRO_ADDR;
@@ -39,11 +40,11 @@ void draw_ties_2(void) {
         }
     }
     {
-        int p = D_00160F00;
+        int p = render_packet_cursor.addr;
         D_00160F68 = p;
         D_0015EE74 = D_0015EE78;
         p += 0x10;
-        D_00160F00 = p;
+        render_packet_cursor.addr = p;
     }
     func_001F21B8(D_00160F30, 1);
     {
@@ -73,11 +74,11 @@ void draw_ties_2(void) {
     }
     {
         struct DrawConfig *d = &draw_config;
-        int p = D_00160F00;
+        int p = render_packet_cursor.addr;
         D_00160F68 = p;
         D_0015EE74 = D_0015EE78;
         p += 0x10;
-        D_00160F00 = p;
+        render_packet_cursor.addr = p;
         if (d->tie.enabled != 0) {
             FlushCache(0);
             FUN_00235be8();
@@ -93,7 +94,7 @@ void draw_ties_2(void) {
             *(short *)(D_001E1700[i] + 0x24) &= ~8;
         }
     }
-    FUN_001f98d0((void *)D_00160F00, D_001DF030, 0x20);
+    FUN_001f98d0((void *)render_packet_cursor.addr, D_001DF030, 0x20);
     func_001F21B0(D_00160F40, 5);
 }
 

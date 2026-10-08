@@ -8,7 +8,7 @@ void UpdateTempTrackData(struct MpegDecoder *arg0, s32 delta) {
     s32 var_7_4;
     var_7_4 = 0;
     var_4_8 = 0;
-    if ((arg0->unk150 != 3) && (delta != 0)) {
+    if ((arg0->picture_coding_type != 3) && (delta != 0)) {
         if (delta < 0) {
             var_7_4 = arg0->unk854 == 0;
         }

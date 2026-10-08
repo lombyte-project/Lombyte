@@ -219,14 +219,14 @@ void draw_map_overlay(void) {
 
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x47, 0);
-    render_packet_cursor.p->tag = 0x10000005;
-    render_packet_cursor.p->addr = 0;
-    render_packet_cursor.p->vif0 = 0;
-    render_packet_cursor.p->vif1 = 0x50000005;
-    render_packet_cursor.p++;
+    render_packet_cursor.tag->tag = 0x10000005;
+    render_packet_cursor.tag->addr = 0;
+    render_packet_cursor.tag->vif0 = 0;
+    render_packet_cursor.tag->vif1 = 0x50000005;
+    render_packet_cursor.tag++;
     background_tex0 =
         get_frame_texture(get_icon_frame(0xE999, D_001A00F0.selected_map));
-    packet_words = (u64 *)render_packet_cursor.p;
+    packet_words = (u64 *)render_packet_cursor.tag;
     packet_words[0] = 0x7400000000008001;
     packet_words[1] = 0x5353106;
     packet_words[2] = background_tex0;
@@ -239,20 +239,20 @@ void draw_map_overlay(void) {
     packet_words[8] = ((x1 + D_0013E500.x) - 8) | ((u64)((y1 + D_0013E500.y) - 8) << 16) |
                       ((u64)D_001A00F0.z << 32);
     packet_words[9] = 0;
-    render_packet_cursor.p = (struct DmaTag *)((u8 *)render_packet_cursor.p + 0x50);
+    render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x50);
     vu1_add_g_sregister(8, 5);
     vu1_add_g_sregister(0x47, 0x60B);
 
     palette_block = (background_tex0 >> 37) & 0x3FFF;
-    render_packet_cursor.p->tag = 0x10000005;
-    render_packet_cursor.p->addr = 0;
-    render_packet_cursor.p->vif0 = 0;
-    render_packet_cursor.p->vif1 = 0x50000005;
+    render_packet_cursor.tag->tag = 0x10000005;
+    render_packet_cursor.tag->addr = 0;
+    render_packet_cursor.tag->vif0 = 0;
+    render_packet_cursor.tag->vif1 = 0x50000005;
     map_tex0 = (u64)((D_001A00F0.texture_address >> 8) | (8 << 14) | (0x13 << 20) | (9 << 26)) |
                ((u64)9 << 30) | ((u64)1 << 34) | ((u64)palette_block << 37) |
                ((long)0x8000000000000000ULL);
-    tag = render_packet_cursor.p;
-    render_packet_cursor.p = tag + 1;
+    tag = render_packet_cursor.tag;
+    render_packet_cursor.tag = tag + 1;
     packet_words = (u64 *)(tag + 1);
     packet_words[0] = 0x7400000000008001;
     packet_words[1] = 0x5353106;
@@ -266,7 +266,7 @@ void draw_map_overlay(void) {
     packet_words[8] = ((rx1 + D_0013E500.x) - 8) | ((u64)((ry1 + D_0013E500.y) - 8) << 16) |
                       ((u64)D_001A00F0.z << 32);
     packet_words[9] = 0;
-    render_packet_cursor.p = (struct DmaTag *)((u8 *)render_packet_cursor.p + 0x50);
+    render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x50);
     vu1_add_g_sregister(0x47, 0x360B);
 
     if (D_001A00F0.show_markers != 0 && D_001A00F0.marks_enabled != 0) {

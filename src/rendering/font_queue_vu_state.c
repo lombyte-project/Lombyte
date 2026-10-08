@@ -39,11 +39,11 @@ void font_queue_vu_state(void) {
         vu1_add_data_ref(D_0010E810, D_0010E800[0]);
         D_0015F620 = 7;
     }
-    render_packet_cursor.p->tag = 0x10000000;
-    render_packet_cursor.p->addr = 0;
-    render_packet_cursor.p->vif0 = 0x11000000;
-    render_packet_cursor.p->vif1 = 0x1000404;
-    base = render_packet_cursor.p;
+    render_packet_cursor.tag->tag = 0x10000000;
+    render_packet_cursor.tag->addr = 0;
+    render_packet_cursor.tag->vif0 = 0x11000000;
+    render_packet_cursor.tag->vif1 = 0x1000404;
+    base = render_packet_cursor.tag;
     base[1].tag = 0;
     base[1].addr = 0;
     base[1].vif0 = 0;
@@ -71,8 +71,8 @@ void font_queue_vu_state(void) {
     base[14].vif0 = 0x15000000;
     base[14].vif1 = 0;
     p = (u8 *)(base + 15);
-    render_packet_cursor.p->tag |= (((u8 *)p - (u8 *)render_packet_cursor.p) >> 4) - 1;
-    render_packet_cursor.p = (struct DmaTag *)p;
+    render_packet_cursor.tag->tag |= (((u8 *)p - (u8 *)render_packet_cursor.tag) >> 4) - 1;
+    render_packet_cursor.tag = (struct DmaTag *)p;
     vu1_gs_regs_font();
 }
 

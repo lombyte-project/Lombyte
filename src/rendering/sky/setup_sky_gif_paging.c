@@ -12,7 +12,6 @@ struct SkyVisibilityList {
     u8 padE[2];
     struct SkyVisibilityEntry *points;
 };
-extern struct DmaTag *D_00160F00;
 extern struct DmaTag *D_00160470;
 extern u8 D_00160450[];
 extern struct SkyVisibilityList *D_0016045C;
@@ -26,10 +25,10 @@ void setup_sky_gif_paging(void) {
     struct SkyVisibilityList *visibility_list;
     s32 entry_index;
 
-    tag = D_00160F00;
+    tag = render_packet_cursor.tag;
     D_00160470 = tag;
     tag = tag + 1;
-    D_00160F00 = tag;
+    render_packet_cursor.tag = tag;
     func_001F21B8(D_00160450, 1);
     visibility_list = D_0016045C;
     gs_texture_allocation_cursor = gs_texture_allocation_start;

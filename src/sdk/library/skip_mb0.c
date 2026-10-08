@@ -22,10 +22,10 @@ s32 _skipMB0(struct MpegDecoder *arg0, struct MpegSkipState *arg1, s32 *arg2, st
     s32 var_9_6;
 
     var_9_6 = 1;
-    temp_10_11 = arg0->unk810 * 0x140;
+    temp_10_11 = arg0->mb_buf_index * 0x140;
     *(s32 *)((u8 *)(((u8 *)arg0 + (temp_10_11))) + 0x6CC) = 1;
-    arg0->unk1B0 = 1;
-    if (arg0->unk150 == 2) {
+    arg0->dc_reset = 1;
+    if (arg0->picture_coding_type == 2) {
         arg1->unk14 = 0;
         arg1->unk10 = 0;
         arg1->unk4 = 0;
@@ -39,7 +39,7 @@ s32 _skipMB0(struct MpegDecoder *arg0, struct MpegSkipState *arg1, s32 *arg2, st
         arg3->unk4 = temp_2_32;
         arg3->unk0 = temp_2_32;
     }
-    if (arg0->unk150 == 1) {
+    if (arg0->picture_coding_type == 1) {
         _Error(arg0, D_00153868);
         var_9_6 = 0;
     }

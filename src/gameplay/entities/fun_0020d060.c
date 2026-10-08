@@ -17,20 +17,20 @@ void FUN_0020d060(void) {
         D_0015FF40.p->vif1 = 0;
         return;
     }
-    tag = render_packet_cursor.p++;
+    tag = render_packet_cursor.tag++;
     D_0015FF40.p->tag = 0x20000000;
-    D_0015FF40.p->addr = (u32)render_packet_cursor.p;
+    D_0015FF40.p->addr = (u32)render_packet_cursor.tag;
     D_0015FF40.p->vif0 = 0;
     D_0015FF40.p->vif1 = 0;
     FUN_00227740();
     submit_graphics_setup_command_stream(D_001C8680);
-    render_packet_cursor.p->tag = 0x20000000;
-    render_packet_cursor.p->addr = (u32)(D_0015FF40.p + 1);
-    render_packet_cursor.p->vif0 = 0;
-    render_packet_cursor.p->vif1 = 0;
-    render_packet_cursor.p++;
+    render_packet_cursor.tag->tag = 0x20000000;
+    render_packet_cursor.tag->addr = (u32)(D_0015FF40.p + 1);
+    render_packet_cursor.tag->vif0 = 0;
+    render_packet_cursor.tag->vif1 = 0;
+    render_packet_cursor.tag++;
     tag->tag = 0x20000000;
-    tag->addr = (u32)render_packet_cursor.p;
+    tag->addr = (u32)render_packet_cursor.tag;
     tag->vif0 = 0;
     tag->vif1 = 0;
     func_001F21B0(D_0015FEC0, 8);

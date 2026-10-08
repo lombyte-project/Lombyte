@@ -1,9 +1,9 @@
 #include "types.h"
+#include "rnc/rendering/dma_tag.h"
 extern s32 D_0015F5B8;
 extern s32 D_0015F638;
 extern s32 D_0015F63C;
 extern s32 D_00160EF8[];
-extern s32 D_00160F00;
 extern s32 D_00160F04;
 extern s32 D_00160F0C;
 extern s32 D_00160F10;
@@ -16,10 +16,10 @@ void swap_render_buffer_chain(void) {
 
     next_index = 1 - D_00160F10;
     next_buffer = D_00160EF8[next_index];
-    D_00160F04 = D_00160F00;
+    D_00160F04 = render_packet_cursor.addr;
     D_00160F10 = next_index;
     buffer_limit = (next_buffer + D_00160F0C) - D_0015F5B8;
-    D_00160F00 = next_buffer;
+    render_packet_cursor.addr = next_buffer;
     D_0015F638 = buffer_limit;
     D_0015F63C = buffer_limit - 0x2000;
 }

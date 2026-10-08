@@ -8,11 +8,11 @@ extern s32 D_00160360[2] __attribute__((sda));
 extern void FUN_00228598(s32, s32);
 
 void FUN_00227140(s32 arg0, s32 slot, s32 mat) {
-    render_packet_cursor.p->tag = 0x30000003;
-    render_packet_cursor.p->addr = (u32)&D_001D7D90[mat];
-    render_packet_cursor.p->vif0 = 0x13000000;
-    render_packet_cursor.p->vif1 = 0x50000003;
-    render_packet_cursor.p++;
+    render_packet_cursor.tag->tag = 0x30000003;
+    render_packet_cursor.tag->addr = (u32)&D_001D7D90[mat];
+    render_packet_cursor.tag->vif0 = 0x13000000;
+    render_packet_cursor.tag->vif1 = 0x50000003;
+    render_packet_cursor.tag++;
     FUN_00228598(arg0, D_00160360[slot]);
 }
 

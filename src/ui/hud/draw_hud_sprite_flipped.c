@@ -18,13 +18,13 @@ void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
     t = &hud_state.image_pages[hud_state.frame_refs[id].image_index];
     tw = 1 << t->width_log2;
     th = 1 << t->height_log2;
-    render_packet_cursor.p->tag = 0x10000007;
-    render_packet_cursor.p->addr = 0;
-    render_packet_cursor.p->vif0 = 0;
-    render_packet_cursor.p->vif1 = 0x50000007;
-    tag = render_packet_cursor.p;
+    render_packet_cursor.tag->tag = 0x10000007;
+    render_packet_cursor.tag->addr = 0;
+    render_packet_cursor.tag->vif0 = 0;
+    render_packet_cursor.tag->vif1 = 0x50000007;
+    tag = render_packet_cursor.tag;
     q = (u64 *)(tag + 1);
-    render_packet_cursor.p = tag + 1;
+    render_packet_cursor.tag = tag + 1;
     q[0] = 0xB400000000008001;
     q[1] = 0x53535353106;
     q[2] = get_frame_texture(id);
@@ -43,5 +43,5 @@ void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
     q[12] = ((((x + w) << 4) + D_0013E500.left) - 8) | ((u64)(((y << 4) + D_0013E500.top) - 8) << 16) |
             ((u64)hud_state.z << 32);
     q[13] = 0;
-    render_packet_cursor.p = (struct DmaTag *)((u8 *)render_packet_cursor.p + 0x70);
+    render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x70);
 }

@@ -23,23 +23,23 @@ void hud_send_texture(u32 data, s32 dbp, s32 psm, s32 wlog, s32 hlog, s32 immedi
         dbw = 1;
     }
     if (immediate == 0) {
-        render_packet_cursor.p->tag = 0x10000006;
-        render_packet_cursor.p->addr = 0;
-        render_packet_cursor.p->vif0 = 0;
-        render_packet_cursor.p->vif1 = 0x50000006;
-        tag = render_packet_cursor.p;
+        render_packet_cursor.tag->tag = 0x10000006;
+        render_packet_cursor.tag->addr = 0;
+        render_packet_cursor.tag->vif0 = 0;
+        render_packet_cursor.tag->vif1 = 0x50000006;
+        tag = render_packet_cursor.tag;
         li = (sceGsLoadImage *)(tag + 1);
-        render_packet_cursor.p = tag + 7;
+        render_packet_cursor.tag = tag + 7;
     } else {
         li = &local;
     }
     sceGsSetDefLoadImage(li, dbp, dbw, psm, 0, 0, 1 << wlog, 1 << hlog);
     if (immediate == 0) {
-        render_packet_cursor.p->tag = qwc | 0x30000000;
-        render_packet_cursor.p->addr = data;
-        render_packet_cursor.p->vif0 = 0;
-        render_packet_cursor.p->vif1 = qwc | 0x50000000;
-        render_packet_cursor.p++;
+        render_packet_cursor.tag->tag = qwc | 0x30000000;
+        render_packet_cursor.tag->addr = data;
+        render_packet_cursor.tag->vif0 = 0;
+        render_packet_cursor.tag->vif1 = qwc | 0x50000000;
+        render_packet_cursor.tag++;
     } else {
         FlushCache(0);
         sceGsExecLoadImage(li, (u128 *)data);

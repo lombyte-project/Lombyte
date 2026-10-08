@@ -2,12 +2,9 @@
 
 #include "sda.h"
 #include "qcopy.h"
+#define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
+#include "rnc/rendering/dma_tag.h"
 
-struct PacketCursor {
-    int *p;
-};
-extern struct PacketCursor D_00160F00_s __asm__("D_00160F00") MACRO_ADDR;
-#define D_00160F00 (D_00160F00_s.p)
 extern int D_0013E500[];
 extern int D_0015F444 MACRO_ADDR;
 extern int D_0015F448 MACRO_ADDR;
@@ -40,35 +37,35 @@ void draw_letterbox_bars(void) {
         return;
     }
     h <<= 4;
-    D_00160F00[0] = 0x10000007;
-    D_00160F00[1] = 0;
-    D_00160F00[2] = 0;
-    D_00160F00[3] = 0x50000007;
+    render_packet_cursor.words[0] = 0x10000007;
+    render_packet_cursor.words[1] = 0;
+    render_packet_cursor.words[2] = 0;
+    render_packet_cursor.words[3] = 0x50000007;
     {
-        int *base = D_00160F00;
-        D_00160F00 = base + 4;
-        qcopy(D_00160F00, D_00160820);
+        int *base = render_packet_cursor.words;
+        render_packet_cursor.words = base + 4;
+        qcopy(render_packet_cursor.words, D_00160820);
         *(short *)(base + 4) = 0x8001;
     }
     {
-        int *base = D_00160F00;
+        int *base = render_packet_cursor.words;
         long *p;
-        D_00160F00 = base + 4;
-        p = (long *)D_00160F00;
+        render_packet_cursor.words = base + 4;
+        p = (long *)render_packet_cursor.words;
         p[0] = 0x104;
         p[1] = 0x80000000;
     }
     {
-        int *base = D_00160F00;
-        D_00160F00 = base + 4;
-        qcopy(D_00160F00, D_00160830);
+        int *base = render_packet_cursor.words;
+        render_packet_cursor.words = base + 4;
+        qcopy(render_packet_cursor.words, D_00160830);
         *(short *)(base + 4) = 0x8008;
     }
     {
-        int *base = D_00160F00;
+        int *base = render_packet_cursor.words;
         long *p;
-        D_00160F00 = base + 4;
-        p = (long *)D_00160F00;
+        render_packet_cursor.words = base + 4;
+        p = (long *)render_packet_cursor.words;
         p[0] = D_0013E500[4] | ((long)D_0013E500[5] << 16) | ((long)0xFFFFF3 << 32);
         p[1] = D_0013E500[4] | ((long)(D_0013E500[5] + h) << 16) | ((long)0xFFFFF3 << 32);
         p[2] = D_0013E500[6] | ((long)D_0013E500[5] << 16) | ((long)0xFFFFF3 << 32);
@@ -78,7 +75,7 @@ void draw_letterbox_bars(void) {
         p[6] = D_0013E500[4] | ((long)D_0013E500[7] << 16) | ((long)0xFFFFF3 << 32);
         p[7] = D_0013E500[4] | ((long)(D_0013E500[7] - h) << 16) | ((long)0xFFFFF3 << 32);
     }
-    D_00160F00 = (int *)((char *)D_00160F00 + 0x40);
+    render_packet_cursor.words = (int *)((char *)render_packet_cursor.words + 0x40);
 }
 
 extern __typeof__(draw_letterbox_bars) func_001F4D98 __attribute__((alias("FUN_001f4d98")));

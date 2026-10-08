@@ -11,11 +11,11 @@ void draw_hud_sprite_rect(s32 tex, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v
                           s32 alpha) {
     u64 *q;
 
-    render_packet_cursor.p->tag = 0x10000005;
-    render_packet_cursor.p->addr = 0;
-    render_packet_cursor.p->vif0 = 0;
-    render_packet_cursor.p->vif1 = 0x50000005;
-    q = (u64 *)++render_packet_cursor.p;
+    render_packet_cursor.tag->tag = 0x10000005;
+    render_packet_cursor.tag->addr = 0;
+    render_packet_cursor.tag->vif0 = 0;
+    render_packet_cursor.tag->vif1 = 0x50000005;
+    q = (u64 *)++render_packet_cursor.tag;
     q[0] = (u64)0xE800 << 47 | 0x8001;
     q[1] = 0x5353106;
     q[2] = get_frame_texture(tex);
@@ -28,7 +28,7 @@ void draw_hud_sprite_rect(s32 tex, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v
     q[8] = (x1 + D_0013E500.left - 8) | ((u64)(y1 + D_0013E500.top - 8) << 16) |
            ((u64)hud_state.z << 32);
     q[9] = 0;
-    render_packet_cursor.p += 5;
+    render_packet_cursor.tag += 5;
 }
 
 extern __typeof__(draw_hud_sprite_rect) func_00200958 __attribute__((alias("FUN_00200958")));

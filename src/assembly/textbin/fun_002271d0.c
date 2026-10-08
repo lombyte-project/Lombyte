@@ -35,13 +35,13 @@ void append_fullscreen_setup_strips(void) {
     /* Retail divides the signed display width, truncating toward zero. */
     strip_count = display_width / 32;
     vu1_add_g_sregister(0x42, 0x64);
-    render_packet_cursor.p->tag = (strip_count + 5) | 0x10000000;
-    render_packet_cursor.p->addr = 0;
-    render_packet_cursor.p->vif0 = 0;
-    render_packet_cursor.p->vif1 = (strip_count + 5) | 0x50000000;
-    tag = render_packet_cursor.p;
+    render_packet_cursor.tag->tag = (strip_count + 5) | 0x10000000;
+    render_packet_cursor.tag->addr = 0;
+    render_packet_cursor.tag->vif0 = 0;
+    render_packet_cursor.tag->vif1 = (strip_count + 5) | 0x50000000;
+    tag = render_packet_cursor.tag;
     packet_words = (u64 *)(tag + 1);
-    render_packet_cursor.p = tag + 1;
+    render_packet_cursor.tag = tag + 1;
     packet_words[0] = 0x1000000000000001;
     packet_words[1] = 0xE;
     packet_words[2] = 0x31001;
@@ -73,8 +73,8 @@ void append_fullscreen_setup_strips(void) {
     }
     /* The cursor is already past the DMA tag at this point. */
     do {
-        render_packet_cursor.p =
-            (struct DmaTag *)((u8 *)render_packet_cursor.p + 0x50 + strip_count * 0x10);
+        render_packet_cursor.tag =
+            (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x50 + strip_count * 0x10);
     } while (0);
 }
 

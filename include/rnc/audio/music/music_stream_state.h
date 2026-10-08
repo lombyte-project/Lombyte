@@ -47,7 +47,7 @@ struct MusicStreamState {
     s32 read_sector_count;             /* 0x10 */
     s32 read_dst;                      /* 0x14 */
     u8 pad_18[0x4];
-    s32 queued_secondary_track;        /* 0x1C: -1 = none */
+    s32 queued_secondary_track;        /* 0x1C: -1 = none; overlays queue track + 40000 (l13 lines: + 50000) and wait for secondary.state == 3 */
     s16 crossfade_state;               /* 0x20: 1 -> 2 in music_remaining_time_callback */
     s8 requested_track;                /* 0x22: -1 = none */
     s8 requested_transition_track;     /* 0x23 */
