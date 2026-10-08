@@ -515,7 +515,184 @@ void FUN_L11_002d27b0(WM11 *m) {
     FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->head, 1);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f0e40.s", FUN_L11_002f0e40);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f2518.s", FUN_L11_002f2518);
+#include "qcopy.h"
+
+extern char D_0013F350_2518[] __asm__("D_0013F350");
+extern float D_0013F3D8_2518 __asm__("D_0013F3D8") __attribute__((section(".data")));          /* hero z */
+extern int D_0015ED84_2518 __asm__("D_0015ED84");
+extern unsigned char D_0014C050_2518[] __asm__("D_0014C050");
+extern int D_0013CAE4_2518 __asm__("D_0013CAE4") __attribute__((section(".data")));
+extern int D_L11_0015F594_2518 __asm__("D_L11_0015F594");
+extern char *D_L11_0015FFD8_2518 __asm__("D_L11_0015FFD8");
+extern unsigned char D_001413F5_2518 __asm__("D_001413F5") __attribute__((section(".data")));
+extern unsigned char D_0013D3DD_2518 __asm__("D_0013D3DD") __attribute__((section(".data")));
+extern float D_0015ED6C_2518 __asm__("D_0015ED6C");
+extern float D_0015ED70_2518 __asm__("D_0015ED70");
+extern float D_L11_00161910_2518 __asm__("D_L11_00161910") __attribute__((sda));
+extern float D_L11_00161914_2518 __asm__("D_L11_00161914") __attribute__((sda));
+extern float D_L11_00161918_2518 __asm__("D_L11_00161918") __attribute__((sda));
+extern char *create_moby_2518(int) __asm__("FUN_0020c4f8");
+extern float fast_add_rotations_2518(float, float) __asm__("FUN_001fa580");
+extern void FUN_L11_002f3040_2518(char *) __asm__("FUN_L11_002f3040");
+extern void FUN_L11_002f2cd0_2518(char *) __asm__("FUN_L11_002f2cd0");
+extern void FUN_L11_002f2d58_2518(char *) __asm__("FUN_L11_002f2d58");
+extern void FUN_L01_003092d0_2518(char *) __asm__("FUN_L01_003092d0");
+extern int allocate_voice_2518(int, int, void *) __asm__("FUN_0022da68");
+extern void FUN_L00_00233ee8_2518(float *, int, float) __asm__("FUN_L00_00233ee8");
+extern void FUN_L00_002598b0_2518(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
+extern int FUN_L00_00233f38_2518(void) __asm__("FUN_L00_00233f38");
+extern void advance_accelerated_scalar_2518(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern void approach_value_2518(float *, float, float) __asm__("FUN_00213ed8");
+extern void FUN_L00_00216f90_2518(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void FUN_L01_0027a248_2518(int, int) __asm__("FUN_L01_0027a248");
+extern int enqueue_callback_2518(void (*)(char *), char *) __asm__("FUN_001f4600");
+
+/* L11 twin of FUN_L01_00308bd8: a three-part switch moby that, once the hero
+ * stands on it in mission state 0xB and presses the button, swings its parts
+ * open and moves the linked moby (or its fallback) along. */
+void FUN_L11_002f2518(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0: {
+        char **slots = (char **)(data + 0x14);
+        int i;
+        int j;
+        *(unsigned char *)(moby + 0x20) = 1;
+        for (i = 0; i < 3; i++) {
+            char *g = D_0013F350_2518;
+            char *c;
+            slots[i] = create_moby_2518(0x13B);
+            *(short *)(slots[i] + 0x32) = 0x40;
+            slots[i][0x31] = 1;
+            *(long *)(slots[i] + 0x38) = *(long *)(*(char **)(g + 0x2080) + 0x38);
+            *(unsigned short *)(slots[i] + 0x34) = *(unsigned short *)(moby + 0x34);
+            c = slots[i];
+            qcopy(c + 0x10, moby + 0x10);
+            qcopy(c + 0x40, moby + 0x40);
+            *(float *)(slots[i] + 0x48) =
+                fast_add_rotations_2518(*(float *)(c + 0x48), (float)i * 2.0943952f);
+        }
+        if (*(int *)(data + 8) >= 0 && D_0014C050_2518[*(int *)(data + 8) + D_0015ED84_2518 * 16] != 0xFF) {
+            moby[0x31] = 0;
+            *(unsigned short *)(moby + 0x34) |= 1;
+            *(int *)(moby + 0x94) = 0;
+            for (j = 0; j < 3; j++) {
+                *(unsigned short *)(slots[j] + 0x34) |= 1;
+                slots[j][0x31] = 0;
+                *(int *)(slots[j] + 0x94) = 0;
+            }
+        }
+        FUN_L01_003092d0_2518(moby);
+        break;
+    }
+    case 1: {
+        char *g;
+        if (*(int *)data == -1)
+            break;
+        if ((*(unsigned short *)(moby + 0x34) & 1) && *(int *)(data + 8) >= 0 &&
+            D_0014C050_2518[*(int *)(data + 8) + D_0015ED84_2518 * 16] == 0xFF)
+            FUN_L11_002f3040_2518(moby);
+        g = D_0013F350_2518;
+        if (*(char **)(g + 0x2FC) != moby)
+            break;
+        if (*(short *)(g + 0x30E) != 0)
+            break;
+        FUN_L11_002f2cd0_2518(moby);
+        if (!(D_0013CAE4_2518 & 0x10))
+            break;
+        if (D_L11_0015F594_2518 != 0xB)
+            break;
+        allocate_voice_2518(0, 0, (void *)moby);
+        *(unsigned char *)(moby + 0x20) = 2;
+        *(int *)(data + 0x28) = 0;
+        *(int *)(data + 0x2C) = 0;
+        FUN_L00_00233ee8_2518((float *)(moby + 0x10), 0, *(float *)(moby + 0x48));
+        FUN_L00_002598b0_2518((int)moby, 1.5f, moby + 0x10, 0x10000, 20.0f, 1.0f, 0, 1, 0);
+        break;
+    }
+    case 2: {
+        int r = FUN_L00_00233f38_2518();
+        if (*(float *)(data + 0x20) < 1.0f) {
+            advance_accelerated_scalar_2518((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
+                                            D_L11_00161910_2518 * D_0015ED70_2518,
+                                            D_L11_00161914_2518 * D_0015ED70_2518,
+                                            D_L11_00161918_2518 * D_0015ED6C_2518);
+        } else if (*(float *)(data + 0x24) < 1.0f) {
+            advance_accelerated_scalar_2518((float *)(data + 0x24), (float *)(data + 0x2C), 1.0f,
+                                            D_L11_00161910_2518 * D_0015ED70_2518,
+                                            D_L11_00161914_2518 * D_0015ED70_2518,
+                                            D_L11_00161918_2518 * D_0015ED6C_2518);
+        } else if (D_L11_0015F594_2518 != 0xB || !(*(float *)(data + 0x20) > 0.25f)) {
+            if (r == 2) {
+                *(float *)(data + 0x3C) = 1.95f;
+                *(unsigned char *)(moby + 0x20) = 3;
+            } else if (r == 0) {
+                *(unsigned char *)(moby + 0x20) = 4;
+            }
+        }
+        FUN_L01_003092d0_2518(moby);
+        break;
+    }
+    case 3:
+        if (*(float *)(data + 0x3C) != 0.0f) {
+            enqueue_callback_2518(FUN_L11_002f2d58_2518, moby);
+            approach_value_2518((float *)(data + 0x3C), 0.0f, D_0015ED6C_2518 * 4.0f);
+        } else {
+            char *t = D_L11_0015FFD8_2518 + (*(int *)data << 8);
+            char *td;
+            float v[4];
+            if (*(int *)(data + 4) != -1 &&
+                D_0014C050_2518[*(int *)(data + 0xC) + D_0015ED84_2518 * 16] == 0xFF)
+                t = D_L11_0015FFD8_2518 + (*(int *)(data + 4) << 8);
+            td = *(char **)(t + 0x78);
+            qcopy(v, t + 0x10);
+            v[2] += 0.2f;
+            FUN_L00_00216f90_2518(v, t + 0x40, 0, 1);
+            D_001413F5_2518 = 1;
+            if (*(int *)(data + 0x30) != -1 && *(int *)(data + 0x34) != -1) {
+                FUN_L01_0027a248_2518(*(int *)(data + 0x30), *(int *)(data + 0x34));
+            }
+            FUN_L11_002f3040_2518(t);
+            *(unsigned char *)(t + 0x20) = 4;
+            *(float *)(td + 0x3C) = 0.0f;
+            *(float *)(td + 0x28) = 0.0f;
+            *(float *)(td + 0x2C) = 0.0f;
+            *(float *)(td + 0x20) = 1.0f;
+            *(float *)(td + 0x24) = 1.0f;
+            allocate_voice_2518(1, 0, (void *)t);
+            *(unsigned char *)(moby + 0x20) = 1;
+            *(float *)(data + 0x20) = 0.0f;
+            *(float *)(data + 0x24) = 0.0f;
+            *(float *)(data + 0x28) = 0.0f;
+            *(float *)(data + 0x2C) = 0.0f;
+            *(float *)(data + 0x3C) = 1.95f;
+            FUN_L01_003092d0_2518(moby);
+        }
+        break;
+    case 4:
+        if (D_0013F3D8_2518 < 138.0f)
+            D_0013D3DD_2518 = 1;
+        if (*(float *)(data + 0x3C) < 1.95f) {
+            enqueue_callback_2518(FUN_L11_002f2d58_2518, moby);
+            approach_value_2518((float *)(data + 0x3C), 1.95f, D_0015ED6C_2518 * 4.0f);
+        } else if (0.0f < *(float *)(data + 0x24)) {
+            advance_accelerated_scalar_2518((float *)(data + 0x24), (float *)(data + 0x28), 0.0f,
+                                            D_L11_00161910_2518 * D_0015ED70_2518,
+                                            D_L11_00161914_2518 * D_0015ED70_2518,
+                                            D_L11_00161918_2518 * D_0015ED6C_2518);
+        } else if (0.0f < *(float *)(data + 0x20)) {
+            advance_accelerated_scalar_2518((float *)(data + 0x20), (float *)(data + 0x2C), 0.0f,
+                                            D_L11_00161910_2518 * D_0015ED70_2518,
+                                            D_L11_00161914_2518 * D_0015ED70_2518,
+                                            D_L11_00161918_2518 * D_0015ED6C_2518);
+        } else {
+            *(unsigned char *)(moby + 0x20) = 1;
+        }
+        FUN_L01_003092d0_2518(moby);
+        break;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
