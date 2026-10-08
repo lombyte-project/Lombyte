@@ -327,7 +327,25 @@ s32 FUN_L03_002d3918(struct Moby *m, s32 path, s32 *snd) {
     }
     return done;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3e58.s", FUN_L03_002d3e58);
+/* Spinner: turns about z at a fixed rate (27.5 degrees times D_0015ED6C) and carries its collision record along. */
+struct SpinnerVars {
+    u8 pad0[0x20];
+    u8 coll[0x10];   /* 0x20: collision record moved with the rotation */
+};
+extern float FUN_001fa580(float, float);
+extern void FUN_L00_00260738(void *, void *, void *, void *);
+void FUN_L03_002d3e58(struct Moby *m) {
+    Vec4 move;
+    Vec4 oldRot;
+    struct SpinnerVars *v;
+    move.q = 0;
+    oldRot.q = *(u128 *)&m->rot;
+    v = (struct SpinnerVars *)m->pvars;
+    m->unk32 = 0xFF;
+    m->unk30 = 0xFF;
+    m->rot.z = FUN_001fa580(m->rot.z, D_0015ED6C * 0.47996554f);
+    FUN_L00_00260738(v->coll, &move, &oldRot, &m->rot);
+}
 
 #define NOT_SDA
 
