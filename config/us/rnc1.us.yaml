@@ -1923,7 +1923,7 @@ segments:
           - [0x1277c8, c, ui/menus/fun_00226848]
           - [0x127940, c, ui/menus/prepare_save_game]
           - [0x1279f0, c, ui/menus/fun_00226a70]
-          - [0x127a88, c, assembly/textbin/fun_00226b08]
+          - [0x127a88, c, textbin/fun_00226b08]
           - [0x127d84, textbin, text_gap_00226e04_before_fun_00226e08]
           - [0x127d88, c, ui/menus/fun_00226e08]
           - [0x127dd8, c, ui/menus/fun_00226e58]
