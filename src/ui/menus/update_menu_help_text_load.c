@@ -1,10 +1,9 @@
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 #include "rnc/globals.h"
 #include "rnc/storage/disc_table.h"
 
 extern s16 D_001516D8[];
-extern s32 D_001D5CF8[];
-extern u8 D_001D5BF0[];
 extern u8 D_001996D0[];
 
 extern s32 D_0015F6A0;
@@ -23,7 +22,7 @@ int update_menu_help_text_load(char *menu) {
     switch (*(int *)(menu + 0x50)) {
     case 0:
         if (D_001516D8[0] == 0) {
-            if (start_audio_stream_read(D_001D5CF8[0], disc_table.help_text.sector,
+            if (start_audio_stream_read(menu_system.help_text_buffer, disc_table.help_text.sector,
                                         disc_table.help_text.size) != 0) {
                 *(int *)(menu + 0x50) = 1;
             } else {
@@ -33,8 +32,8 @@ int update_menu_help_text_load(char *menu) {
         break;
     case 1:
         if (D_001516D8[0] == 0) {
-            char *g = D_001D5BF0;
-            int *archive = *(int **)(g + 0x108);
+            struct MenuSystem *g = &menu_system;
+            int *archive = (int *)g->help_text_buffer;
             int *language_entries = (int *)((char *)archive + archive[game_language]);
             int entry_count = *language_entries++;
             int entry_bytes = *language_entries++;
@@ -47,7 +46,7 @@ int update_menu_help_text_load(char *menu) {
             *(int *)(menu + 0x54) = D_0015F6A0;
             *(int *)(menu + 0x38) = *(int *)(b + 0x2C);
             *(int *)(b + 0x2C) = entry_count;
-            text_entries = *(int **)(g + 0x108);
+            text_entries = (int *)g->help_text_buffer;
             D_0015F6A0 = (int)text_entries;
             for (i = 0; i < pauseSlotCount(); i++) {
                 int text_base = (int)text_entries - 8;

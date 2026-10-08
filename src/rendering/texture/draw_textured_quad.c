@@ -1,14 +1,8 @@
 #include "types.h"
+#include "rnc/rendering/screen.h"
 #include "qcopy.h"
 
 #include "rnc/rendering/dma_tag.h"
-struct ScreenOfs {
-    u8 pad0[0x10];
-    s32 x;
-    s32 y;
-};
-
-extern struct ScreenOfs D_0013E500;
 extern char D_00160840[];
 
 void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh, s64 color,
@@ -28,8 +22,8 @@ void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh
     s32 u0;
     s32 v1;
 
-    sx = D_0013E500.x;
-    sy = D_0013E500.y;
+    sx = D_0013E500.left;
+    sy = D_0013E500.top;
     x0 = (x << 4) + sx - 8;
     x1 = ((x + w) << 4) + sx - 8;
     y0 = (y << 4) + sy - 8;

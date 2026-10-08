@@ -1,41 +1,19 @@
 #include "types.h"
+#include "rnc/video/decoder/vi_buf.h"
 #include "eetypes.h"
 #define DPUT(a, v)  (*(volatile u32 *)(a) = (v))
 #define DMA_ADDR(p) ((u32)(p) & 0x0FFFFFFF)
-typedef struct {
-    s64 pts;
-    s64 dts;
-    s32 pos;
-    s32 len;
-} TimeStamp;
-typedef struct {
-    u128 *data;
-    u128 *tag;
-    s32 n;
-    s32 dmaStart;
-    s32 dmaN;
-    s32 readBytes;
-    s32 buffSize;
-    u8 pad1C[0x24];
-    s32 sema;
-    s32 isActive;
-    s64 totalBytes;
-    TimeStamp *ts;
-    s32 n_ts;
-    s32 count_ts;
-    s32 wt_ts;
-} ViBuf;
 extern void func_0023BC20(u128 *, u32, s32, s32);
 extern void set_d4_chcr(s32) __asm__("FUN_0023bbb0");
-s32 vi_buf_reset(ViBuf *f) __asm__("FUN_0023bcc0");
+s32 vi_buf_reset(struct ViBuf *f) __asm__("FUN_0023bcc0");
 
-s32 vi_buf_reset(ViBuf *f) {
+s32 vi_buf_reset(struct ViBuf *f) {
     s32 i;
 
-    f->isActive = 1;
-    f->dmaStart = 0;
-    f->dmaN = 0;
-    f->readBytes = 0;
+    f->is_active = 1;
+    f->dma_start = 0;
+    f->dma_n = 0;
+    f->read_bytes = 0;
     f->count_ts = 0;
     f->wt_ts = 0;
     for (i = 0; i < f->n_ts; i++) {

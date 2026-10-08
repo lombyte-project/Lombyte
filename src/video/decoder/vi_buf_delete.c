@@ -1,9 +1,5 @@
 #include "types.h"
-
-struct ViBuf {
-    u8 pad_0[0x40];
-    s32 unk40;
-};
+#include "rnc/video/decoder/vi_buf.h"
 
 extern s32 set_d4_chcr(s32 buf) __asm__("FUN_0023bbb0");
 extern s32 DeleteSema(s32 buf);
@@ -21,7 +17,7 @@ s32 vi_buf_delete(struct ViBuf *buf) {
     *p1 = 0;
     *p2 = 0;
     *p3 = 0;
-    DeleteSema(buf->unk40);
+    DeleteSema(buf->sema);
     return 1;
 }
 

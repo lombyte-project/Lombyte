@@ -2,16 +2,10 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/rendering/screen.h"
 #include "qcopy.h"
 
 #include "rnc/rendering/dma_tag.h"
-struct ScreenOfs {
-    u8 pad0[0x10];
-    s32 x;
-    s32 y;
-};
-
-extern struct ScreenOfs screen_offsets __asm__("D_0013E500");
 extern char textured_quad_header[] __asm__("D_00160840");
 extern s32 convert_float_to_integer(f32) __asm__("func_001FA6D0");
 
@@ -35,12 +29,12 @@ void append_subpixel_textured_screen_quad(f32 screen_x, f32 screen_y, f32 screen
     s32 texture_bottom;
     f32 screen_scale = 16.0f;
 
-    left = convert_float_to_integer(screen_x * screen_scale) + screen_offsets.x - 8;
+    left = convert_float_to_integer(screen_x * screen_scale) + D_0013E500.left - 8;
     right =
-        convert_float_to_integer((screen_x + screen_width) * screen_scale) + screen_offsets.x - 8;
-    top = convert_float_to_integer(screen_y * screen_scale) + screen_offsets.y - 8;
+        convert_float_to_integer((screen_x + screen_width) * screen_scale) + D_0013E500.left - 8;
+    top = convert_float_to_integer(screen_y * screen_scale) + D_0013E500.top - 8;
     bottom =
-        convert_float_to_integer((screen_y + screen_height) * screen_scale) + screen_offsets.y - 8;
+        convert_float_to_integer((screen_y + screen_height) * screen_scale) + D_0013E500.top - 8;
     texture_right = (texture_u + texture_width) << 4;
     texture_left = texture_u << 4;
     texture_bottom = texture_v + texture_height;

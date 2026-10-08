@@ -5,6 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021abf8/FUN_0021abf8.s", FUN_0021abf8);
 #else
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 
 #include "sda.h"
 
@@ -43,21 +44,6 @@ typedef struct {
 } MenuPage;
 
 typedef struct {
-    s32 state;
-    MenuPage *screen;
-    s32 next;
-    s32 mode;
-    u8 pad10[0xD4];
-    s32 action_value;
-    u8 padE8[4];
-    s32 action_message;
-    MenuPage *return_page;
-    s32 action_mode;
-    u8 padF8[0x2C];
-    s32 busy;
-} MenuState;
-
-typedef struct {
     u8 pad0[0x1B4];
     s32 held;
     u8 pad1B8[0xC];
@@ -73,7 +59,6 @@ extern s32 menu_fade_duration __asm__("D_001601B4") __attribute__((sda));
 extern s32 *menu_level_indices __asm__("D_001601E0") __attribute__((sda));
 extern s32 menu_action_messages[] __asm__("D_00199478");
 extern s32 selected_level_index[] __asm__("D_001A0314");
-extern MenuState menu_state __asm__("D_001D5BF0");
 
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void mode_freeze_init(s32, s32) __asm__("func_001FBAB8");
@@ -94,7 +79,7 @@ s32 update_menu_entry_actions(MenuDescriptor *menu) {
     MenuItem *entry;
     s32 selected_entry;
 
-    focused = menu_state.screen->focus == menu;
+    focused = ((MenuPage *)menu_system.current)->focus == menu;
     for (entry_index = 0; menu->items[entry_index].type != 0; entry_index++) {
         if (focused && menu->selected_entry == entry_index) {
             menu->items[entry_index].timer = menu->items[entry_index].timer + 1;
@@ -120,9 +105,9 @@ s32 update_menu_entry_actions(MenuDescriptor *menu) {
         if (menu->flags & 0x20) {
             selected_level_index[0] = current_level_index;
         }
-        if (menu_state.screen->back != 0) {
-            menu_state.next = menu_state.screen->back;
-        } else if (menu_state.busy == 0) {
+        if (menu_system.current->back != 0) {
+            menu_system.next = menu_system.current->back;
+        } else if (menu_system.close_blocked == 0) {
             return -1;
         }
     }
@@ -134,12 +119,12 @@ s32 update_menu_entry_actions(MenuDescriptor *menu) {
             break;
         case 1:
         case 3:
-            menu_state.next = menu->items[menu->selected_entry].param.entry_index;
+            menu_system.next = (struct MenuPage *)menu->items[menu->selected_entry].param.entry_index;
             break;
         case 4:
             allocate_voice_for_target_entry(0, 0x11, menu->sound);
             if (mode_freeze_state == 1 || mode_freeze_state == 0x10) {
-                menu_state.next = menu->items[menu->selected_entry].param.entry_index;
+                menu_system.next = (struct MenuPage *)menu->items[menu->selected_entry].param.entry_index;
             } else {
                 mode_freeze_flags |= 2;
                 mode_freeze_init(3, menu->items[menu->selected_entry].param.entry_index);
@@ -148,7 +133,7 @@ s32 update_menu_entry_actions(MenuDescriptor *menu) {
         case 5:
             allocate_voice_for_target_entry(0, 0x11, menu->sound);
             if (mode_freeze_state == 1 || mode_freeze_state == 0x10) {
-                menu_state.next = menu->items[menu->selected_entry].param.entry_index;
+                menu_system.next = (struct MenuPage *)menu->items[menu->selected_entry].param.entry_index;
             } else {
                 mode_freeze_flags |= 4;
                 mode_freeze_init(3, menu->items[menu->selected_entry].param.entry_index);
@@ -158,39 +143,39 @@ s32 update_menu_entry_actions(MenuDescriptor *menu) {
             /* This action passes the low halfword; the other indexed actions pass the full word. */
             message_index = menu->items[menu->selected_entry].param.h.hi;
             if (message_index != 0) {
-                menu_state.action_message = menu_action_messages[message_index];
+                menu_system.action_message = menu_action_messages[message_index];
             }
-            menu_state.mode = 5;
-            menu_state.return_page = menu_state.screen;
-            menu_state.action_mode = 0;
-            menu_state.action_value = menu->items[menu->selected_entry].param.h.lo;
+            menu_system.close_request = 5;
+            menu_system.return_page = menu_system.current;
+            menu_system.action_mode = 0;
+            menu_system.action_value = menu->items[menu->selected_entry].param.h.lo;
             allocate_voice_for_target_entry(0, 0x11, menu->sound);
             return 0;
         case 7:
-            menu_state.action_mode = 2;
-            menu_state.return_page = menu_state.screen;
-            menu_state.mode = 3;
-            menu_state.action_value = menu->items[menu->selected_entry].param.entry_index;
+            menu_system.action_mode = 2;
+            menu_system.return_page = menu_system.current;
+            menu_system.close_request = 3;
+            menu_system.action_value = menu->items[menu->selected_entry].param.entry_index;
             allocate_voice_for_target_entry(0, 0x11, menu->sound);
             return 0;
         case 8:
-            menu_state.action_mode = 2;
-            menu_state.return_page = menu_state.screen;
-            menu_state.mode = 4;
-            menu_state.action_value = menu->items[menu->selected_entry].param.entry_index;
+            menu_system.action_mode = 2;
+            menu_system.return_page = menu_system.current;
+            menu_system.close_request = 4;
+            menu_system.action_value = menu->items[menu->selected_entry].param.entry_index;
             allocate_voice_for_target_entry(0, 0x11, menu->sound);
             return 0;
         case 10:
-            menu_state.action_mode = 2;
-            menu_state.return_page = menu_state.screen;
-            menu_state.mode = 6;
-            menu_state.action_value = menu->items[menu->selected_entry].param.entry_index;
+            menu_system.action_mode = 2;
+            menu_system.return_page = menu_system.current;
+            menu_system.close_request = 6;
+            menu_system.action_value = menu->items[menu->selected_entry].param.entry_index;
             allocate_voice_for_target_entry(0, 0x11, menu->sound);
             return 0;
         case 11:
-            menu_state.return_page = menu_state.screen;
-            menu_state.action_mode = 2;
-            menu_state.mode = 7;
+            menu_system.return_page = menu_system.current;
+            menu_system.action_mode = 2;
+            menu_system.close_request = 7;
             allocate_voice_for_target_entry(0, 0x11, menu->sound);
             return 0;
         case 9:
@@ -221,7 +206,7 @@ s32 update_menu_entry_actions(MenuDescriptor *menu) {
         } else if (flags & 0x1000) {
             menu->selected_entry = entry_count - 1;
         } else {
-            menu_state.screen->link = menu->prev;
+            ((MenuPage *)menu_system.current)->link = menu->prev;
         }
     }
     if ((buttons & 0x4000) || ((menu->flags & 0x100) && (buttons & 8))) {
@@ -231,10 +216,10 @@ s32 update_menu_entry_actions(MenuDescriptor *menu) {
         } else if (menu->flags & 0x1000) {
             menu->selected_entry = 0;
         } else {
-            menu_state.screen->link = menu->next;
+            ((MenuPage *)menu_system.current)->link = menu->next;
         }
     }
-    if (menu->selected_entry != previous_selection || menu_state.screen->link != 0) {
+    if (menu->selected_entry != previous_selection || ((MenuPage *)menu_system.current)->link != 0) {
         allocate_voice_for_target_entry(1, 0x11, menu->sound);
         if (menu->flags & 0x20) {
             selected_level_index[0] = menu_level_indices[menu->selected_entry];

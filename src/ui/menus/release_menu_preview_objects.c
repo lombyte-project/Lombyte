@@ -1,15 +1,5 @@
 #include "types.h"
-struct MenuPreviewResources {
-    u8 pad_0[0xA0];
-    s32 unkA0;
-    s32 unkA4;
-    u8 pad_A8[0x20];
-    u8 unkC8;
-    u8 unkC9;
-    u8 unkCA;
-};
-
-extern struct MenuPreviewResources D_001D5BF0;
+#include "rnc/ui/menus/menu_system.h"
 extern s32 delete_moby() __asm__("FUN_00225530");
 extern s32 complete_stream_buffer_transfer() __asm__("func_00225CD8");
 extern void clear_preview_resource_bindings(void) __asm__("FUN_002267b8");
@@ -21,7 +11,7 @@ s32 release_menu_preview_objects(s32 preview_address) {
     s32 *resource_slot;
     s32 objects_remaining;
     s32 resources_remaining;
-    struct MenuPreviewResources *resources;
+    struct MenuSystem *resources;
 
     objects_remaining = 0x17;
     object_slot = preview_address + 0x44;
@@ -31,12 +21,12 @@ s32 release_menu_preview_objects(s32 preview_address) {
         object_slot += 1;
     } while (objects_remaining >= 0);
     resources_remaining = 2;
-    resources = &D_001D5BF0;
-    resources->unkA0 = complete_stream_buffer_transfer(resources->unkA0);
-    resources->unkA4 = complete_stream_buffer_transfer(resources->unkA4);
-    resources->unkC8 = 0xFF;
-    resources->unkC9 = 0xFF;
-    resources->unkCA = 0;
+    resources = &menu_system;
+    resources->stream_buffer[0] = complete_stream_buffer_transfer(resources->stream_buffer[0]);
+    resources->stream_buffer[1] = complete_stream_buffer_transfer(resources->stream_buffer[1]);
+    resources->loaded_animation[0] = 0xFF;
+    resources->loaded_animation[1] = 0xFF;
+    resources->read_buffer_index = 0;
     clear_preview_resource_bindings();
     resource_slot = ((u8 *)resources + 0xB0);
     do {

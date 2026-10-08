@@ -17,14 +17,14 @@ s32 pick_map_slot_to_evict(s32 arg0, s32 arg1) {
 
     max = 0;
     best = -1;
-    if (D_001A00F0.cur == 0) {
+    if (D_001A00F0.level == 0) {
         for (j = 4; j >= 0; j--) {
             if (D_001A00F0.slot[j] != 0 && j != D_001A00F0.sel && D_001A00F0.slot_id[j] == -1) {
                 return j;
             }
         }
     }
-    base = find_id_in_terminated_table(D_001A00F0.cur);
+    base = find_id_in_terminated_table(D_001A00F0.level);
     if (base == -1) {
         return 1;
     }

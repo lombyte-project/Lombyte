@@ -1,4 +1,6 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00222B98). */
+#include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void *get_help_message_text(int) __asm__("func_001FDD10");
@@ -7,9 +9,8 @@ typedef struct {
     short s[12];
 } TextBox;
 extern char D_001602E8[];
-extern int D_001D5CC4[];
 extern void font_print_window_small(TextBox *, long, char *, int) __asm__("func_001F75F0");
-/* Draws the two-line prompt box (text 0x4FB3 for D_001D5CC4[0] in 0..2,
+/* Draws the two-line prompt box (text 0x4FB3 for menu_system.confirm_kind in 0..2,
    0x4FB5 for 3, else D_001602E8) sized from arg0's +0x20/+0x24. The box
    is an aggregate initializer: this compiler clears it with a memset
    libcall, fills a temporary and copies that into the local with
@@ -24,7 +25,7 @@ int draw_prompt_box(char *arg0) {
     vu1_add_g_sregister(0x47, 0x2004B);
     setup_gif_paging(0);
     text = D_001602E8;
-    v = D_001D5CC4[0];
+    v = menu_system.confirm_kind;
     switch (v) {
     case 0:
     case 1:

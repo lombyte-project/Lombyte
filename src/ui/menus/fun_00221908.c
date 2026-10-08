@@ -1,11 +1,12 @@
 #include "sda.h"
+#include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 extern int D_0013CB04 NOT_SDA;
 extern int D_001D22F8[];
-extern int *D_001D5BF8 NOT_SDA;
 
 int FUN_00221908(void) {
     if (D_0013CB04 & 0x40) {
-        D_001D5BF8 = D_001D22F8;
+        menu_system.next = (struct MenuPage *)D_001D22F8;
     }
     return 0;
 }

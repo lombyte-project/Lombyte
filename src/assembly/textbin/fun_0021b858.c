@@ -5,6 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021b858/FUN_0021b858.s", FUN_0021b858);
 #else
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 
 typedef struct MenuGrid MenuGrid;
 
@@ -40,18 +41,6 @@ typedef struct {
 } MenuPage;
 
 typedef struct {
-    s32 state;
-    MenuPage *page;
-    s32 result;
-    u8 padC[0x24];
-    s32 equipped_items[0x3D];
-    s32 busy;
-    u8 pad128[0xC];
-    s32 hide_small_grid;
-    s32 hide_large_grid;
-} MenuState;
-
-typedef struct {
     u8 pad0[0x1C4];
     s32 pressed_buttons;
 } MenuControllerState;
@@ -73,7 +62,6 @@ extern MenuControllerState controller_state __asm__("D_0013C940");
 extern u8 item_available[] __asm__("D_0013D4C0");
 extern MenuPlayerState player_state __asm__("D_0013F350");
 extern MenuItemInfo menu_item_info[] __asm__("D_001863D0");
-extern MenuState menu_state __asm__("D_001D5BF0");
 extern s32 func_001E9468();
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
@@ -96,17 +84,17 @@ s32 update_menu_grid_selection(MenuGrid *grid) {
     MenuGridEntry *entry;
     s32 slot;
 
-    if (menu_state.page->focus != grid) {
+    if (((MenuPage *)menu_system.current)->focus != grid) {
         return 0;
     }
-    if ((controller_state.pressed_buttons & 0xD00) && menu_state.busy == 0) {
+    if ((controller_state.pressed_buttons & 0xD00) && menu_system.close_blocked == 0) {
         return 1;
     }
     if (controller_state.pressed_buttons & 0x10) {
-        back_page = menu_state.page->back_page;
+        back_page = ((MenuPage *)menu_system.current)->back_page;
         if (back_page != 0) {
-            menu_state.result = back_page;
-        } else if (menu_state.busy == 0) {
+            menu_system.next = (struct MenuPage *)back_page;
+        } else if (menu_system.close_blocked == 0) {
             return -1;
         }
     }
@@ -131,14 +119,14 @@ s32 update_menu_grid_selection(MenuGrid *grid) {
                 next_rows = next->rows;
                 next_columns = next->columns;
                 hidden = 0;
-                if (menu_state.hide_small_grid != 0 && (next->flags & 8)) {
+                if (menu_system.unk134 != 0 && (next->flags & 8)) {
                     hidden = 1;
                 }
-                if (menu_state.hide_large_grid != 0 && (next->flags & 4)) {
+                if (menu_system.unk138 != 0 && (next->flags & 4)) {
                     hidden = 1;
                 }
             } while (hidden);
-            menu_state.page->next = next;
+            ((MenuPage *)menu_system.current)->next = next;
             if (next_columns == 5 && grid->columns == 3) {
                 column++;
             }
@@ -166,14 +154,14 @@ s32 update_menu_grid_selection(MenuGrid *grid) {
                 next = next->down;
                 next_column_count = next->columns;
                 hidden = 0;
-                if (menu_state.hide_small_grid != 0 && (next->flags & 8)) {
+                if (menu_system.unk134 != 0 && (next->flags & 8)) {
                     hidden = 1;
                 }
-                if (menu_state.hide_large_grid != 0 && (next->flags & 4)) {
+                if (menu_system.unk138 != 0 && (next->flags & 4)) {
                     hidden = 1;
                 }
             } while (hidden);
-            menu_state.page->next = next;
+            ((MenuPage *)menu_system.current)->next = next;
             if (next_column_count == 5 && grid->columns == 3) {
                 column++;
             }
@@ -195,7 +183,7 @@ s32 update_menu_grid_selection(MenuGrid *grid) {
         if (column != 0) {
             grid->cursor = grid->cursor - 1;
         } else if (grid->left != NULL) {
-            menu_state.page->next = grid->left;
+            ((MenuPage *)menu_system.current)->next = grid->left;
         } else if (!(grid->flags & 0x8000)) {
             grid->cursor += grid->columns - 1;
         }
@@ -205,13 +193,13 @@ s32 update_menu_grid_selection(MenuGrid *grid) {
         if (column + 1 < column_count) {
             grid->cursor = grid->cursor + 1;
         } else if (grid->right != NULL) {
-            menu_state.page->next = grid->right;
+            ((MenuPage *)menu_system.current)->next = grid->right;
         } else if (!(grid->flags & 0x8000)) {
             grid->cursor -= grid->columns - 1;
         }
     }
 
-    if (grid->cursor != cursor || menu_state.page->next != NULL) {
+    if (grid->cursor != cursor || ((MenuPage *)menu_system.current)->next != NULL) {
         allocate_voice_for_target_entry(1, 0x11, grid->sound_owner);
     }
 
@@ -220,10 +208,10 @@ s32 update_menu_grid_selection(MenuGrid *grid) {
         if (entry->item != 0 && item_available[entry->item] != 0) {
             slot = menu_item_info[entry->item].slot;
             allocate_voice_for_target_entry(0, 0x11, grid->sound_owner);
-            if (menu_state.equipped_items[slot] == entry->item && slot != 0 && slot != 3) {
-                menu_state.equipped_items[slot] = 0;
+            if (menu_system.equipped[slot] == entry->item && slot != 0 && slot != 3) {
+                menu_system.equipped[slot] = 0;
             } else if (entry->item == 0x18) {
-                if (func_001E9468(0x18) != 0 && menu_state.state == 3) {
+                if (func_001E9468(0x18) != 0 && menu_system.state == 3) {
                     next_columns = func_001E9468(0x18);
                     player_state.gadget_enabled = 1;
                     total = player_state.gadget_count + next_columns;
@@ -233,7 +221,7 @@ s32 update_menu_grid_selection(MenuGrid *grid) {
                     player_state.gadget_count = total;
                 }
             } else {
-                menu_state.equipped_items[slot] = entry->item;
+                menu_system.equipped[slot] = entry->item;
             }
         } else {
             allocate_voice_for_target_entry(2, 0x11, grid->sound_owner);

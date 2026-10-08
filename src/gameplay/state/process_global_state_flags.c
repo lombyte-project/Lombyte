@@ -10,7 +10,6 @@ extern u8 D_0013E05A[];
 extern u8 D_0014BF08[];
 extern s32 D_0015EEA0;
 extern u8 D_001D4EC0[];
-extern s32 D_001D5BF8[];
 extern void InitializeGlobalStateEntry(s32);
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -29,7 +28,7 @@ s32 process_global_state_flags(void) {
 
     if ((D_0013CAE4[0] & 0x20) != 0) {
         if (mode_freeze_state == 1 || mode_freeze_state == 0x10) {
-            D_001D5BF8[0] = (s32)D_001D4EC0;
+            menu_system.next = (struct MenuPage *)D_001D4EC0;
         } else {
             func_00226B08(-1);
             InitializeGlobalStateEntry(0);

@@ -1,16 +1,11 @@
 #include "types.h"
+#include "rnc/ui/map/map_state.h"
 #include "rnc/globals.h"
-
-struct GameProgress {
-    u8 pad0[0x224];
-    s32 level;
-};
 
 extern struct PadState D_0013C940;
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/input/pad_state.h"
-extern struct GameProgress D_001A00F0;
 extern u8 D_0013DD40[];
 extern u32 D_001CF874[];
 extern u32 D_001CF758[];

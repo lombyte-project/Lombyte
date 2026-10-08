@@ -33,14 +33,12 @@ extern struct Pad D_0013C940;
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 extern struct Hdr16 D_001516D0;
-extern u8 *D_001D5BF8[];
 extern u8 D_001CF678[];
 extern u8 D_001CF418[];
 extern s32 *D_001601E0 __attribute__((sda));
 extern u8 D_0013D4E1[];
 extern u8 D_0013DD58[];
 extern u8 D_00141EC0[];
-extern u8 D_001D5CBB[];
 extern struct MapEntry D_001383A0[];
 extern struct MapEntry D_00138438[];
 
@@ -91,7 +89,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
 
     update_map_zoom_and_pan();
     if (!(screen->data.raw.unk34 & 0x40)) {
-        prev = D_001A00F0.cur;
+        prev = D_001A00F0.level;
         if (D_0013C940.pressed & 0xD00) {
             if (menu_system.close_blocked == 0) {
                 return 1;
@@ -105,44 +103,44 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             }
         }
         if (D_0013C940.pressed & 0x40) {
-            D_001D5BF8[0] = D_001CF678;
+            menu_system.next = (struct MenuPage *)D_001CF678;
         }
-        if ((D_0013C940.pressed & 0x20) && D_001A00F0.cur != 0) {
-            menu_system.unkF0 = (s32)D_001CF418;
-            menu_system.unkF4 = 0xB;
+        if ((D_0013C940.pressed & 0x20) && D_001A00F0.level != 0) {
+            menu_system.return_page = (struct MenuPage *)D_001CF418;
+            menu_system.action_mode = 0xB;
             menu_system.close_request = 3;
-            menu_system.unkE4 = D_001A00F0.cur;
+            menu_system.action_value = D_001A00F0.level;
             allocate_voice_for_target_entry(0, 0x11, screen->moby);
             return 0;
         }
-        idx = find_id_in_terminated_table(D_001A00F0.cur);
+        idx = find_id_in_terminated_table(D_001A00F0.level);
         if (idx >= 0) {
             if (D_0013C940.pressed & 8) {
                 if (idx < 0x13) {
                     t = D_001601E0[idx + 1];
                     if (t != 0) {
-                        D_001A00F0.cur = t;
+                        D_001A00F0.level = t;
                     }
                 }
             }
             if ((D_0013C940.pressed & 4) && idx != 0) {
                 if (D_001601E0[idx - 1] != 0) {
-                    D_001A00F0.cur = D_001601E0[idx - 1];
+                    D_001A00F0.level = D_001601E0[idx - 1];
                 }
             }
         }
-        if (D_001A00F0.cur != prev) {
+        if (D_001A00F0.level != prev) {
             allocate_voice_for_target_entry(1, 0x11, screen->moby);
             update_mission_list();
         }
     }
 
-    id = D_001A00F0.cur;
+    id = D_001A00F0.level;
     if (D_0013D4E1[0] != 0) {
         id += 0x100;
     }
     slot = find_map_entry_slot(id);
-    if (D_001A00F0.cur != D_001A00F0.loaded && slot != -1) {
+    if (D_001A00F0.level != D_001A00F0.loaded && slot != -1) {
         n = pick_map_slot_to_evict();
         if (D_001A00F0.slot[0] != 0 && n > 0) {
             move_map_entry_slot(n, 0);
@@ -158,11 +156,11 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         if (buf != 0) {
             base = (u8 *)D_001A00F0.hdr;
             a = base + hdr->unk0 + 8;
-            if (D_001A00F0.cur == current_level_index) {
+            if (D_001A00F0.level == current_level_index) {
                 compose_bitmap_from_mask(pal, pix, pal, D_001A00F0.unkC);
             } else {
-                if (D_0013DD58[D_001A00F0.cur] != 0) {
-                    load_map_chunk(buf, D_00141EC0 + (D_001A00F0.cur << 11), base + hdr->unk4);
+                if (D_0013DD58[D_001A00F0.level] != 0) {
+                    load_map_chunk(buf, D_00141EC0 + (D_001A00F0.level << 11), base + hdr->unk4);
                 } else {
                     decode_map_mask(buf, a, a, base);
                 }
@@ -174,11 +172,11 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             tex = tbase + hdr->unk10;
             b = tbase + hdr->unk14 + 0x420;
             c = tbase + hdr->unk18 + 0x420;
-            D_001A00F0.unk258 =
+            D_001A00F0.tex0 =
                 func_00204E30(7, 7, tex + 0x20, tex + 0x420, D_001A00F0.unk244, D_001A00F0.unk248);
-            D_001A00F0.unk260 =
+            D_001A00F0.tex1 =
                 func_00204E30(7, 7, tex + 0x20, b, D_001A00F0.unk244, D_001A00F0.unk24C);
-            D_001A00F0.unk268 =
+            D_001A00F0.tex2 =
                 func_00204E30(7, 7, tex + 0x20, c, D_001A00F0.unk244, D_001A00F0.unk250);
             if (buf != 0) {
                 func_00204E30(9, 9, pal, pal, 0x3FF000, D_001A00F0.unk240);
@@ -189,13 +187,13 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             complete_stream_buffer_transfer(buf);
         }
         D_001A00F0.slot[0] = (s32)pix;
-        D_001A00F0.loaded = D_001A00F0.cur;
-        update_map_icons(D_001A00F0.cur, 0);
+        D_001A00F0.loaded = D_001A00F0.level;
+        update_map_icons(D_001A00F0.level, 0);
     }
 
     if (D_001516D0.unk8 == 0) {
         if (D_001A00F0.sel != -1) {
-            D_001D5CBB[0] = 0;
+            menu_system.pending_buffer = 0;
             D_001A00F0.slot_id[D_001A00F0.sel] ^= 0x1000;
             D_001A00F0.sel = -1;
         }
@@ -218,7 +216,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
                         e = &D_001383A0[next];
                     }
                     start_audio_stream_read(D_001A00F0.slot[pick], e->a, e->b);
-                    D_001D5CBB[0] = 1;
+                    menu_system.pending_buffer = 1;
                     D_001A00F0.slot_size[pick] = (e->b << 11) >> 4;
                 }
                 D_001A00F0.slot_id[pick] = next | 0x1000;
@@ -227,7 +225,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         }
     }
     slot = find_map_entry_slot(id);
-    if (D_001A00F0.cur != D_001A00F0.loaded) {
+    if (D_001A00F0.level != D_001A00F0.loaded) {
         if (D_001516D0.unk8 == 0 && slot == -1 && pick == slot) {
             pick_map_slot_to_evict(D_001A00F0.loaded);
         }

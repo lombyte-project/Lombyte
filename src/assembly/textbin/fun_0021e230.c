@@ -5,6 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021e230/FUN_0021e230.s", FUN_0021e230);
 #else
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 #include "qcopy.h"
 
 struct PreviewMobyResource {
@@ -68,21 +69,6 @@ struct PreviewItemSelection {
     u8 pad40[8];
     u8 *table;
 };
-struct PreviewMenuGame {
-    u8 pad0[0x40];
-    struct PreviewItemSelection *selection;
-};
-struct ItemPreviewMenuState {
-    u8 pad0[4];
-    struct PreviewMenuGame *game;
-    u8 pad8[0x110];
-    s32 class_state;
-    s32 active_class;
-    s32 requested_class;
-    u8 pad124[0x1C];
-    s32 last_requested_class;
-    s32 last_resource_request_state;
-};
 struct PreviewCamera {
     u8 pad0[0x140];
     f32 x;
@@ -94,7 +80,6 @@ struct PreviewClassResource {
     u8 state_0d;
 };
 
-extern struct ItemPreviewMenuState preview_menu_state __asm__("D_001D5BF0");
 extern struct PreviewItemDefinition preview_item_definitions[] __asm__("D_001863D0");
 extern struct PreviewCamera preview_camera __asm__("D_00186F40");
 extern struct ItemPreviewPlacement preview_placements[] __asm__("D_001E0408");
@@ -137,7 +122,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
     f32 camera_x;
     volatile f32 *camera_position;
 
-    selection = preview_menu_state.game->selection;
+    selection = (struct PreviewItemSelection *)menu_system.current->focus;
     item_index = *(s16 *)(selection->table + selection->index * 10 + 6);
     if (preview->primary_moby != 0) {
         previous_class = preview->primary_moby->oclass;
@@ -180,11 +165,11 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
                 oclass != active_preview_resource_class[0]) {
                 func_001E9470(0, 0);
             }
-            if (oclass != preview_menu_state.active_class) {
-                select_world_object_resource_tables(oclass, preview_menu_state.class_state == 0);
-                preview_menu_state.last_resource_request_state = resource_request_state;
-                preview_menu_state.last_requested_class = oclass;
-                preview_menu_state.requested_class = oclass;
+            if (oclass != menu_system.active_resource_class) {
+                select_world_object_resource_tables(oclass, menu_system.resource_table_toggle == 0);
+                menu_system.last_resource_table_toggle = resource_request_state;
+                menu_system.last_requested_resource_class = oclass;
+                menu_system.requested_resource_class = oclass;
                 moby_class_resources[moby_class_slots[oclass]]->state_0d = 0;
             }
         }

@@ -7,6 +7,7 @@ INCLUDE_ASM(
     FUN_0021cb30);
 #else
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 #include "sda.h"
 
 struct SoundMenuInput {
@@ -25,19 +26,6 @@ struct SoundMenuMixer {
     s32 group_5_volume;
 };
 
-struct SoundMenuNavigation {
-    u8 pad_0[0x4];
-    struct SoundMenuNavigationEntry *page;
-    s32 next_page;
-    u8 pad_C[0x118];
-    s32 busy;
-};
-
-struct SoundMenuNavigationEntry {
-    u8 pad_0[0x38];
-    s32 back_page;
-};
-
 struct SoundMenu {
     u8 pad_0[0x14];
     s32 sound_owner;
@@ -49,9 +37,7 @@ struct SoundMenu {
 
 extern struct SoundMenuInput D_0013C940;
 extern struct SoundMenuMixer D_0013E550;
-extern struct SoundMenuNavigation D_001D5BF0;
 extern s32 D_001D5D14 NOT_SDA;
-extern s32 *D_001D5BF4 NOT_SDA;
 extern s32 D_0015EDEC MACRO_ADDR;
 extern s32 D_0015EDF0 MACRO_ADDR;
 extern s32 D_0015EDE8 MACRO_ADDR;
@@ -75,11 +61,11 @@ s32 sound_options_menu(struct SoundMenu *menu) {
         return 1;
     }
     if (D_0013C940.pressed_buttons & 0x10) {
-        s32 navigation_value = D_001D5BF0.page->back_page;
+        struct MenuPage *back_page = menu_system.current->back;
 
-        if (navigation_value != 0) {
-            D_001D5BF0.next_page = navigation_value;
-        } else if (D_001D5BF0.busy == 0) {
+        if (back_page != 0) {
+            menu_system.next = back_page;
+        } else if (menu_system.close_blocked == 0) {
             return -1;
         }
     }
@@ -90,7 +76,7 @@ s32 sound_options_menu(struct SoundMenu *menu) {
     if (D_0013C940.pressed_buttons & 0x4000) {
         menu->selected_option = (menu->selected_option + 1) % 3;
     }
-    if ((menu->selected_option != previous_selection) || (D_001D5BF4[0x20] != 0)) {
+    if ((menu->selected_option != previous_selection) || (menu_system.current->pending_focus != 0)) {
         allocate_voice_for_target_entry(1, 0x11, menu->sound_owner);
         if (menu->flags & 0x20) {
             D_001A0314 = D_001601E0[menu->selected_option];

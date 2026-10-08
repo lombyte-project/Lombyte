@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 #include "asm.h"
 
 #include "types.h"
@@ -19,19 +20,6 @@ struct LoadMenuMixerState {
     s32 group_4_volume;
     s32 group_5_volume;
 };
-struct LoadMenuState {
-    u8 pad_0[0x4];
-    struct LoadMenuPage *page;
-    s32 next_page;
-    u8 pad_C[0x118];
-    s32 busy;
-    s32 load_pending;
-    s32 status_text_id;
-};
-struct LoadMenuPage {
-    u8 pad_0[0x38];
-    s32 back_page;
-};
 struct LoadMenuDescriptor {
     u8 pad_0[0x14];
     s32 sound_owner;
@@ -47,7 +35,6 @@ extern struct LoadMenuMixerState mixer_state __asm__("D_0013E550");
 extern s32 music_volume __asm__("D_0015EDEC");
 extern s32 sound_volume __asm__("D_0015EDF0");
 extern s32 selected_save_slot __asm__("D_0015EE34");
-extern struct LoadMenuState menu_state __asm__("D_001D5BF0");
 extern void InitializeGlobalStateEntry(s32);
 extern s32 mode_freeze_init() __asm__("func_001FBAB8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
@@ -55,19 +42,19 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) __asm__("FUN_002232d8");
 
 s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
     s32 previous_save_slot;
-    s32 back_page;
+    struct MenuPage *back_page;
     s32 next_save_slot;
     s32 buttons;
     s32 scaled_volume_80;
     s32 scaled_volume_70;
     previous_save_slot = menu->selected_save_slot;
-    if (menu_state.load_pending != 0) {
+    if (menu_system.save_pending != 0) {
         if ((memory_card_state.state < 3) &&
             (memory_card_state.pending_state < 0)) {
-            menu_state.load_pending = 0;
+            menu_system.save_pending = 0;
             if (memory_card_state.err != 0) {
                 mode_freeze_flags |= 0x100;
-                mode_freeze_init(3, menu_state.page);
+                mode_freeze_init(3, menu_system.current);
                 return 0;
             }
             memory_card_state.unkF4 = 1;
@@ -87,20 +74,20 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
         }
     }
     if (controller_state.pressed_buttons & 0xD00) {
-        if (menu_state.busy == 0) {
+        if (menu_system.close_blocked == 0) {
             return 1;
         }
     }
     if (controller_state.pressed_buttons & 0x10) {
-        back_page = menu_state.page->back_page;
+        back_page = menu_system.current->back;
         if (back_page != 0) {
-            menu_state.next_page = back_page;
-        } else if (menu_state.busy == 0) {
+            menu_system.next = back_page;
+        } else if (menu_system.close_blocked == 0) {
             return -1;
         }
     }
     if ((mode_freeze_state != 0x10) && (mode_freeze_state != 1)) {
-        menu_state.next_page = menu_state.page->back_page;
+        menu_system.next = menu_system.current->back;
         return 0;
     }
     if (((memory_card_state.state < 3) &&
@@ -130,8 +117,8 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
                 memory_card_state.pending_card = 0;
                 memory_card_state.pending_state = 0xD;
             }
-            menu_state.load_pending = 1;
-            menu_state.status_text_id = 0x4FB6;
+            menu_system.save_pending = 1;
+            menu_system.message_id = 0x4FB6;
         }
         if (menu->selected_save_slot != previous_save_slot) {
             allocate_voice_for_target_entry(1, 0x11, menu->sound_owner);

@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/globals.h"
@@ -173,7 +174,6 @@ extern ResidentCameraState D_00186F40;
 extern ResidentPlaybackState render_sequence __asm__("D_0018CB20");
 extern f32 D_0018CDB0[4];
 extern ScriptedPath *D_001CC3B0[];
-extern s32 D_001D5BF0 NOT_SDA;
 extern PositionPair D_001D99B0[];
 extern Vector4 D_001D9C80[];
 extern Vector4 D_001D9CB0[];
@@ -347,7 +347,7 @@ void update_resident_gameplay_state(void) {
             }
             if (level_render_state.state == 0) {
                 pause_all_sounds(0);
-                D_001D5BF0 = 0xE;
+                menu_system.state = 0xE;
                 D_0015F618[0] = 1;
                 return;
             }

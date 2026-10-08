@@ -7,6 +7,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/save_data/"
             FUN_00220348);
 #else
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/text/text_region.h"
 
 typedef struct TextRegion FontWindow;
@@ -44,11 +45,6 @@ struct MemoryCardDataMenu {
 };
 
 
-struct MemoryCardMenuGame {
-    u8 pad0[0x128];
-    s32 has_text;
-    s32 text_id;
-};
 
 struct ScreenDimensions {
     u8 pad0[0x160];
@@ -57,7 +53,6 @@ struct ScreenDimensions {
 };
 
 #include "rnc/storage/memory_card/memory_card_state.h"
-extern struct MemoryCardMenuGame menu_state __asm__("D_001D5BF0");
 extern struct MemoryCardMenuPlanet *active_menu_page __asm__("D_001D5BF4");
 extern u8 item_available[] __asm__("D_0013D4C0");
 extern u8 alternate_item_available[] __asm__("D_0013D388");
@@ -93,7 +88,7 @@ s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
             return 2;
         }
         setup_gif_paging(0);
-        text = get_help_message_text(menu_state.has_text ? menu_state.text_id : 0x4FB9);
+        text = get_help_message_text(menu_system.save_pending ? menu_system.message_id : 0x4FB9);
         memset(window_fields, 0, sizeof(window_fields));
         window_fields[1] = menu->height + 1;
         window_fields[0] = 1;

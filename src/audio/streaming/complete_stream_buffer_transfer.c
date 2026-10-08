@@ -20,9 +20,9 @@ s32 complete_stream_buffer_transfer(s32 stream_id) {
             if ((p->unk0 & 2) != 0) {
                 if ((p->unk0 & 4) != 0) {
                     p->unk0 ^= 4;
-                    if (menu_system.unkCB != 0) {
+                    if (menu_system.pending_buffer != 0) {
                         request_audio_stream_break(stream_id);
-                        menu_system.unkCB = 0;
+                        menu_system.pending_buffer = 0;
                     }
                 }
                 p->unk0 &= -3;
