@@ -237,7 +237,60 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002deee0.s", FUN_L08_002deee0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e0328.s", FUN_L08_002e0328);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e16c0.s", FUN_L08_002e16c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e1d70.s", FUN_L08_002e1d70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2078.s", FUN_L08_002e2078);
+#include "rnc/gameplay/hero.h"
+extern float D_L08_00161C3C __attribute__((sda));
+extern f32 FUN_001f9e90(f32, f32);
+
+typedef struct {
+    struct Moby *part;      /* moved along with the anchor's joint */
+    struct Moby *anchor;
+    int part_joint;
+    int anchor_joint;
+} PartLink;
+
+typedef struct {
+    u8 pad0[0x60];
+    PartLink links[34];     /* 0x60: entry 0 is unused */
+} LinkedPartsVars;
+
+/* Keeps the 33 linked parts glued to their anchors' joints and facing the moby, spins three of them (the middle
+   one backwards), turns link 3 towards the hero, then updates every part. */
+void FUN_L08_002e2078(struct Moby *m) {
+    LinkedPartsVars *v = (LinkedPartsVars *)m->pvars;
+    PartLink *links = v->links;
+    float a[4];
+    float b[4];
+    float d[4];
+    int i;
+
+    for (i = 1; i < 34; i++) {
+        struct Moby *part = v->links[i].part;
+        if (part != 0) {
+            part->rot.z = m->rot.z;
+            FUN_L00_0024f7c8(part, v->links[i].part_joint, a);
+            FUN_L00_0024f7c8(v->links[i].anchor, v->links[i].anchor_joint, b);
+            FUN_001f9a28(d, b, a);
+            FUN_001f9a10(&part->pos, &part->pos, d);
+        }
+    }
+    if (v->links[7].part != 0) {
+        v->links[7].part->rot.x = fast_add_rotations(v->links[7].part->rot.x, D_L08_00161C3C * DEG_TO_RAD * D_0015ED6C_d);
+    }
+    if (v->links[8].part != 0) {
+        v->links[8].part->rot.x = fast_add_rotations(v->links[8].part->rot.x, -(D_L08_00161C3C * DEG_TO_RAD * D_0015ED6C_d));
+    }
+    if (v->links[9].part != 0) {
+        v->links[9].part->rot.x = fast_add_rotations(v->links[9].part->rot.x, D_L08_00161C3C * DEG_TO_RAD * D_0015ED6C_d);
+    }
+    if (v->links[3].part != 0) {
+        v->links[3].part->rot.z = FUN_001f9e90(hero.motion.pos.f[0] - v->links[3].part->pos.x, hero.motion.pos.f[1] - v->links[3].part->pos.y);
+    }
+    for (i = 1; i < 34; i++) {
+        if (links[i].part != 0) {
+            FUN_L00_00250df8(links[i].part);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2250.s", FUN_L08_002e2250);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e24e8.s", FUN_L08_002e24e8);
 #include "sda.h"
@@ -423,7 +476,6 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 FUN_001f96b0(f32);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern f32 FUN_001f9e90(f32, f32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern s32 FUN_001f9770(s16 *);
