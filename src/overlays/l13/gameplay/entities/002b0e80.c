@@ -179,7 +179,191 @@ void FUN_L13_002b0e80(char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b39e0.s", FUN_L13_002b39e0);
+#include "qcopy.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/entities/moby.h"
+
+/* Variables of the class-1380 lift (moby->pvars). */
+typedef struct {
+    u8 pad0[0x20];
+    u8 path[0x40];       /* 0x20: passed to FUN_L00_00260738 with the moved delta */
+    f32 top;             /* 0x60 */
+    f32 bottom;          /* 0x64 */
+    f32 speed;           /* 0x68 */
+    s32 voice;           /* 0x6C */
+    f32 blend;           /* 0x70: camera blend, 0 to 1 */
+    f32 blend_speed;     /* 0x74 */
+    f32 pulse;           /* 0x78: colour pulse angle */
+    u8 armed;            /* 0x7C: the hero stepped off since the lift stopped */
+} LiftVars;
+
+extern char D_L13_001670C0_2b39e0[] __asm__("D_L13_001670C0");
+extern char D_0013F3D0_2b39e0[] __asm__("D_0013F3D0");
+extern float D_0015ED6C;
+extern float D_0015ED70_2b39e0 __asm__("D_0015ED70");
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
+extern int float_to_int(float) __asm__("FUN_001fa6d0");
+extern float AbsoluteFloat(float) __asm__("FUN_001f99c0");
+extern float FUN_001f9b80(void *, void *);
+extern s32 allocate_voice_2b39e0(s32, s32, void *) __asm__("FUN_0022da68");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern int FUN_L00_0028d8c0(void *, int);
+extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaa30(void *);
+extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
+extern void FUN_L00_002eac18(int);
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
+extern void lift_view_2b39e0(struct Moby *, float *, float *) __asm__("FUN_L13_002b4060");
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+
+/* Updates the lift: rides between its two heights, blends the camera while the hero rides it and pulses its colour while it waits. */
+void FUN_L13_002b39e0(struct Moby *moby) {
+    LiftVars *vars = (LiftVars *)moby->pvars;
+    float delta[4];
+    float rot[4];
+    float a[4];
+    float b[4];
+    float c[4];
+
+    scale_vector_xyz(delta, &moby->pos, -1.0f);
+    qcopy(rot, &moby->rot);
+    switch (moby->state) {
+    case 0:
+        vars->pulse = random_angle_radians();
+        vars->voice = -1;
+        moby->state = 3;
+        break;
+    case 1: {
+        float old = vars->blend;
+        advance_accelerated_scalar(&vars->blend, &vars->blend_speed, 1.0f, D_0015ED70_2b39e0 * 4.0f,
+                                   D_0015ED70_2b39e0 * 4.0f, D_0015ED6C * 4.0f);
+        if (vars->blend < 1.0f) {
+            float t = (1.0f - vars->blend) / (1.0f - old);
+            char *base;
+            lift_view_2b39e0(moby, b, c);
+            subtract_vector_xyz(a, D_L13_001670C0_2b39e0, b);
+            base = D_L13_001670C0_2b39e0 - 0x140;
+            scale_vector_xyz(a, a, t);
+            add_vector_xyz(b, b, a);
+            c[1] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x154), c[1]) * t, c[1]);
+            c[2] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x158), c[2]) * t, c[2]);
+            FUN_L00_002ea9d8(b);
+            FUN_L00_002eaa30(c);
+        } else {
+            u8 s = moby->unkBC;
+            moby->unkBC = 1;
+            moby->state = s;
+        }
+        break;
+    }
+    case 2:
+    case 3: {
+        float target;
+        if (!FUN_L00_0028d8c0(moby, vars->voice)) {
+            vars->voice = allocate_voice_2b39e0(0, 4, moby);
+        }
+        if (moby->unkBC != 0) {
+            lift_view_2b39e0(moby, a, b);
+            FUN_L00_002ea9d8(a);
+            FUN_L00_002eaa30(b);
+        }
+        if (moby->state == 2) {
+            target = vars->top;
+        } else {
+            target = vars->bottom;
+        }
+        advance_accelerated_scalar(&moby->pos.z, &vars->speed, target, D_0015ED70_2b39e0 * 8.0f,
+                                   D_0015ED70_2b39e0 * 8.0f, D_0015ED6C * 40.0f);
+        if (AbsoluteFloat(moby->pos.z - target) == 0.0f) {
+            if (moby->state == 2) {
+                moby->state = 6;
+            } else {
+                moby->state = 7;
+            }
+            if (moby->unkBC != 0) {
+                hero_set_state(0, 0);
+                FUN_L00_002eac18(1);
+            }
+        }
+        break;
+    }
+    case 6:
+    case 7:
+        if (FUN_L00_0028d8c0(moby, vars->voice)) {
+            release_voice_slot(vars->voice);
+            vars->voice = -1;
+        }
+        if (hero.unk2FC != moby || hero.unk30E.s != 0 ||
+            FUN_001f9b80(&hero.motion.pos, &moby->pos) > 0.5f) {
+            u8 s = moby->state;
+            vars->armed = 0;
+            if (s == 7) {
+                moby->state = 5;
+            } else {
+                moby->state = 4;
+            }
+        }
+        break;
+    case 4:
+    case 5: {
+        int i;
+        vars->pulse = fast_add_rotations(vars->pulse, D_0015ED6C * 6.2831855f);
+        i = float_to_int((fast_sin(vars->pulse) * 4.0f - 3.0f) * 128.0f);
+        if (i > 0x80) {
+            i = 0x80;
+        } else if (i < 0x20) {
+            i = 0x20;
+        }
+        {
+            int t = (i << 8) | 0x80000000;
+            moby->unk90 = (i << 16) | t | i;
+        }
+        if (hero.unk2FC != moby || hero.unk30E.s != 0 ||
+            FUN_001f9b80(&hero.motion.pos, &moby->pos) > 1.1f) {
+            vars->armed = 1;
+        }
+        if (vars->armed != 0 && hero.unk2FC == moby && hero.unk30E.s == 0 &&
+            FUN_001f9b80(&hero.motion.pos, &moby->pos) < 0.5f) {
+            moby->unk90 = 0x80208020;
+            if (moby->state == 5) {
+                moby->unkBC = 2;
+            } else {
+                moby->unkBC = 3;
+            }
+            moby->state = 1;
+            hero_set_state(0x72, 1);
+            FUN_L00_002eaaa0(D_L13_001670C0_2b39e0, D_L13_001670C0_2b39e0 + 0x10, 1, 0, 0);
+            vars->blend = 0.0f;
+        } else if (moby->state == 4) {
+            char *p = D_0013F3D0_2b39e0;
+            float d = FUN_001f9b80(&moby->pos, p);
+            if (AbsoluteFloat(*(float *)(p + 0x258) - vars->bottom) < 2.0f && d < 32.0f && d > 5.0f) {
+                moby->unkBC = 0;
+                moby->state = 3;
+                vars->speed = -(D_0015ED6C * 5.0f);
+            }
+        } else if (moby->state == 5) {
+            char *p = D_0013F3D0_2b39e0;
+            float d = FUN_001f9b80(&moby->pos, p);
+            if (AbsoluteFloat(*(float *)(p + 0x258) - vars->top) < 2.0f && d < 32.0f && d > 5.0f) {
+                moby->unkBC = 0;
+                moby->state = 2;
+                vars->speed = D_0015ED6C * 5.0f;
+            }
+        }
+        break;
+    }
+    }
+    add_vector_xyz(delta, delta, &moby->pos);
+    FUN_L00_00260738(vars->path, delta, rot, &moby->rot);
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
