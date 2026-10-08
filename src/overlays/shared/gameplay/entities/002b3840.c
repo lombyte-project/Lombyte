@@ -427,7 +427,24 @@ void FUN_L05_00319510(void *moby_v) {
     }
     *(short *)(data + 0xB4) = *(unsigned short *)(data + 0xB6);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319598.s", FUN_L05_00319598);
+/* Finds the pool moby in this moby's class list whose data id at 0xB4 matches. */
+extern unsigned short *D_L05_001ABCC0_9598[] __asm__("D_L05_001ABCC0");
+extern char *D_L05_0015FFD8_9598 __asm__("D_L05_0015FFD8") __attribute__((sda));
+typedef struct { char pad[0x78]; char *data; char pad2[0x84]; } M_9598;
+char *FUN_L05_00319598(unsigned char *arg, int id) {
+    unsigned short *p = D_L05_001ABCC0_9598[arg[0x21]];
+    char *pool; int idx;
+    if (p != 0) {
+        pool = D_L05_0015FFD8_9598;
+        do {
+            idx = *p & 0x7FFF;
+            if (*(short *)(((M_9598 *)pool)[idx].data + 0xB4) == id) goto found;
+        } while ((short)*p++ >= 0);
+    }
+    return 0;
+found:
+    return (char *)&((M_9598 *)D_L05_0015FFD8_9598)[idx];
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
