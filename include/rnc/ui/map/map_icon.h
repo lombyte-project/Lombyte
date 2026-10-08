@@ -5,8 +5,7 @@
 
 /* One entry of a level's map icon list (MapState.icons, D_001A2BC0[level]).
    The list ends at the first entry with flags bit 0x4 set. Layout from
-   update_map_icons, format_menu_item_text and the draw_map_overlay draft.
-   update_map_icons and draw_map_overlay still carry local copies. */
+   update_map_icons, format_menu_item_text and the draw_map_overlay draft. */
 struct MapIcon {
     s16 id;            /* 0x00: moby index into D_00199478 (current level) or D_0013D5B0; -1..-9 are fixed positions */
     s16 link;          /* 0x02: -1 always active, else D_001A2C10.links[link].active decides */
