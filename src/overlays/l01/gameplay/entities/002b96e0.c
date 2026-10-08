@@ -5,7 +5,101 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b96e0.s", FUN_L01_002b96e0);
+#include "rnc/rendering/dma_tag.h"
+
+/* One scrolling two-texture overlay layer (0x60 bytes). */
+typedef struct {
+    u8 pad0[8];
+    void *bounds;         /* 0x08: sphere tested against the view */
+    s32 shape;            /* 0x0C: what FUN_L01_0021fa98 draws */
+    f32 rate0;            /* 0x10 */
+    f32 rate1;            /* 0x14 */
+    u8 pad18[4];
+    s32 frame_step;       /* 0x1C */
+    f32 du0;              /* 0x20 */
+    f32 dv0;              /* 0x24 */
+    f32 du1;              /* 0x28 */
+    f32 dv1;              /* 0x2C */
+    u8 pad30[4];
+    s32 tex0;             /* 0x34 */
+    s32 tex1;             /* 0x38 */
+    u8 alpha0;            /* 0x3C */
+    u8 alpha1;            /* 0x3D */
+    u8 pad3E[2];
+    f32 u0;               /* 0x40 */
+    f32 v0;               /* 0x44 */
+    f32 u1;               /* 0x48 */
+    f32 v1;               /* 0x4C */
+    s32 frame;            /* 0x50 */
+    u8 pad54[0xC];
+} ScrollLayer;
+
+extern union PacketCursor l01_packet __asm__("D_L01_001611C0") __attribute__((section(".sdata")));
+extern u8 D_L01_001CAC80[];
+extern s32 sphere_visible(void *, f32) __asm__("FUN_001fa728");
+extern u64 texture_tex0(s32) __asm__("FUN_001f44b8");
+extern void FUN_L01_00262618(ScrollLayer *);
+extern void FUN_L01_0021fa98(s32, s32, s32, s32, s32, s32);
+
+/* Scrolls the UV offsets of count overlay layers (wrapping into [-1, 1]) and, for each one in view, queues its two-texture GS setup and draws it. */
+void FUN_L01_002b96e0(s32 count, ScrollLayer *l) {
+    struct DmaTag *tag;
+    u64 *q;
+    s32 vis;
+    s32 i;
+
+    for (i = 0; i < count; i++, l++) {
+        l->u0 += l->du0 * l->rate0;
+        l->v0 += l->dv0 * l->rate0;
+        if (l->u0 > 1.0f)
+            l->u0 -= 1.0f;
+        else if (l->u0 < -1.0f)
+            l->u0 += 1.0f;
+        if (l->v0 > 1.0f)
+            l->v0 -= 1.0f;
+        else if (l->v0 < -1.0f)
+            l->v0 += 1.0f;
+        l->u1 += l->du1 * l->rate1;
+        l->v1 += l->dv1 * l->rate1;
+        if (l->u1 > 1.0f)
+            l->u1 -= 1.0f;
+        else if (l->u1 < -1.0f)
+            l->u1 += 1.0f;
+        if (l->v1 > 1.0f)
+            l->v1 -= 1.0f;
+        else if (l->v1 < -1.0f)
+            l->v1 += 1.0f;
+        l->frame = (l->frame + l->frame_step) & 0xFFFFFF;
+        vis = sphere_visible(l->bounds, 400.0f);
+        if (vis == -1)
+            continue;
+        l01_packet.tag->tag = 0x30000007;
+        l01_packet.tag->addr = (u32)D_L01_001CAC80;
+        l01_packet.tag->vif0 = 0;
+        l01_packet.tag->vif1 = 0x50000007;
+        l01_packet.tag++;
+        l01_packet.tag->tag = 0x10000005;
+        l01_packet.tag->addr = 0;
+        l01_packet.tag->vif0 = 0;
+        l01_packet.tag->vif1 = 0x50000005;
+        tag = l01_packet.tag;
+        q = (u64 *)(tag + 1);
+        l01_packet.tag = tag + 1;
+        q[0] = 0x4000000000008001;
+        q[1] = 0xEEEE;
+        q[2] = ((u64)l->alpha0 << 32) | 100;
+        q[3] = 0x42;
+        q[4] = ((u64)l->alpha1 << 32) | 100;
+        q[5] = 0x43;
+        q[6] = texture_tex0(l->tex0);
+        q[7] = 6;
+        q[8] = texture_tex0(l->tex1);
+        q[9] = 7;
+        l01_packet.tag = tag + 6;
+        FUN_L01_00262618(l);
+        FUN_L01_0021fa98(l->shape, 0x70000000, 0x70003000, 0x70001000, 0x70002000, 1 - vis);
+    }
+}
 #include "eetypes.h"
 
 typedef union {
@@ -2193,9 +2287,9 @@ void FUN_L01_002f4710(Moby *self)
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4960.s", FUN_L01_002f4960);
-extern u8 D_L01_001E2FC0[];
+extern ScrollLayer D_L01_001E2FC0[];
 void FUN_L00_002371e0(void);
-void FUN_L01_002b96e0(s32, void *);
+void FUN_L01_002b96e0(s32, ScrollLayer *);
 
 void FUN_L01_002f60f8(void) {
     FUN_L00_002371e0();
