@@ -379,14 +379,15 @@ struct Hero {
     u8 unk88D;                     /* 0x88D */
     u8 unk88E;                     /* 0x88E */
     u8 unk88F;                     /* 0x88F */
-    u8 pad_890[0x8];
+    u8 pad_890[0x4];
+    s32 unk894;                    /* 0x894: frame counter shown as m:ss.hh on the HUD (FUN_L05_00266710) */
     s16 unk898;                    /* 0x898 */
-    u8 pad_89A[0x2];
+    s16 unk89A;                    /* 0x89A: shown + 1 (capped at 3) on the HUD (FUN_L05_00266320) */
     s16 unk89C;                    /* 0x89C */
     s16 unk89E;                    /* 0x89E */
     f32 unk8A0;                    /* 0x8A0 */
     f32 unk8A4;                    /* 0x8A4 */
-    u8 pad_8A8[0x4];
+    s32 unk8A8;                    /* 0x8A8: count shown on the HUD (FUN_L05_00266710) */
     s16 unk8AC;                    /* 0x8AC */
     u8 pad_8AE[0x1];
     u8 unk8AF;                     /* 0x8AF */
@@ -396,7 +397,7 @@ struct Hero {
     union { f32 f; s32 i; } unk8B8; /* 0x8B8: read as a float, zeroed as an int */
     s16 unk8BC;                    /* 0x8BC */
     s16 unk8BE;                    /* 0x8BE */
-    u8 pad_8C0[0x4];
+    s32 unk8C0;                    /* 0x8C0: 1..3 picks the HUD rank string (FUN_L05_00266320) */
     s32 unk8C4;                    /* 0x8C4 */
     u8 pad_8C8[0x4];
     s16 unk8CC;                    /* 0x8CC */

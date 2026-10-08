@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/hud.h"
+#include "rnc/gameplay/hero.h"
 
 #define NOT_SDA
 
@@ -32,4 +33,77 @@ void FUN_L05_002661e8(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00266320.s", FUN_L05_00266320);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00266710.s", FUN_L05_00266710);
+extern int D_0013E500[];
+extern int D_0015ED80;
+extern u8 D_0013D388[];
+extern int D_L05_0015FA14 __attribute__((sda));
+extern int D_L05_0015FA18 __attribute__((sda));
+extern int D_L05_0015FA1C __attribute__((sda));
+extern int D_L05_0015FA20 __attribute__((sda));
+extern int D_L05_0015FA24 __attribute__((sda));
+extern int D_L05_0015FA28 __attribute__((sda));
+extern int D_L05_0015FA2C __attribute__((sda));
+extern int D_L05_0015FA30 __attribute__((sda));
+extern int D_L05_0015FA34 __attribute__((sda));
+extern int D_L05_0015FA44 __attribute__((sda));
+extern char D_L05_0015F788[];
+extern char D_L05_0015F9D8[];
+extern char D_L05_0015FA50[];
+extern char D_L05_0015FA58[];
+extern char D_L05_0015FA68[];
+extern char D_L05_0015FA70[];
+
+extern void FUN_00201128(int, int, int, int, int);
+extern char *FUN_001fdd10(int);
+extern int FUN_00116248(char *, const char *, ...);
+extern int FUN_001f6250(char *, int);
+extern void FUN_L00_001fb470(int x, int y, u64 color, char *text, int len);
+
+int FUN_L05_00266710(HudElem *e) {
+    char buf[64];
+    int y0, y1, y2;
+    int frames, per_min, per_sec;
+    int min, sec, hund;
+    int x;
+
+    if (e->unk6C <= 0) {
+        return 0;
+    }
+    /* written as -(row) + height: the plain `height - row` form folds the +10/+18 into the subtraction */
+    y0 = -(D_0015ED80 ? D_L05_0015FA18 + 10 : D_L05_0015FA18 + 18) + D_0013E500[1];
+    y1 = -(D_0015ED80 ? D_L05_0015FA34 + 10 : D_L05_0015FA34 + 18) + D_0013E500[1];
+    y2 = -(D_0015ED80 ? D_L05_0015FA44 + 10 : D_L05_0015FA44 + 18) + D_0013E500[1];
+    per_min = D_0015ED80 ? 3000 : 3600;
+    per_sec = per_min / 60;
+    frames = hero.unk894;
+    min = frames / per_min;
+    frames -= min * per_min;
+    sec = frames / per_sec;
+    frames -= sec * per_sec;
+    hund = frames * 100 / per_sec;
+
+    if (D_0013D388[0]) {
+        FUN_00201128(D_L05_0015FA14, y0, D_L05_0015FA1C, D_L05_0015FA20, D_L05_0015FA24);
+        x = D_L05_0015FA30;
+        FUN_00116248(buf, D_L05_0015F788, FUN_001fdd10(0x50A6), hero.unk8A8);
+        x -= FUN_001f6250(buf, -1) >> 1;
+        FUN_00116248(buf, D_L05_0015F9D8, FUN_001fdd10(0x50A6));
+        FUN_L00_001fb470(x + 1, y1 + 1, 0x80000000, buf, -1);
+        FUN_L00_001fb470(x, y1, D_L05_0015FA28, buf, -1);
+        x += FUN_001f6250(buf, -1);
+        FUN_00116248(buf, D_L05_0015FA50, hero.unk8A8);
+        FUN_L00_001fb470(x + 1, y1 + 1, 0x80000000, buf, -1);
+        FUN_L00_001fb470(x, y1, D_L05_0015FA2C, buf, -1);
+    }
+    x = D_L05_0015FA30;
+    FUN_00116248(buf, D_L05_0015FA58, FUN_001fdd10(0x5241));
+    x -= FUN_001f6250(buf, -1) >> 1;
+    FUN_00116248(buf, D_L05_0015FA68, FUN_001fdd10(0x5241));
+    FUN_L00_001fb470(x + 1, y2 + 1, 0x80000000, buf, -1);
+    FUN_L00_001fb470(x, y2, D_L05_0015FA28, buf, -1);
+    x += FUN_001f6250(buf, -1);
+    FUN_00116248(buf, D_L05_0015FA70, min, sec, hund);
+    FUN_L00_001fb470(x + 1, y2 + 1, 0x80000000, buf, -1);
+    FUN_L00_001fb470(x, y2, D_L05_0015FA2C, buf, -1);
+    return e->w;
+}
