@@ -91,14 +91,14 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     if (!(screen->data.raw.unk34 & 0x40)) {
         prev = D_001A00F0.level;
         if (D_0013C940.pressed & 0xD00) {
-            if (menu_system.unk124 == 0) {
+            if (menu_system.close_locked == 0) {
                 return 1;
             }
         }
         if (D_0013C940.pressed & 0x10) {
             if (menu_system.current->back != 0) {
                 menu_system.next = menu_system.current->back;
-            } else if (menu_system.unk124 == 0) {
+            } else if (menu_system.close_locked == 0) {
                 return -1;
             }
         }

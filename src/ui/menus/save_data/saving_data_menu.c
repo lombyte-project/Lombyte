@@ -38,14 +38,14 @@ s32 saving_data_menu(struct MenuScreen *menu) {
         save_state = menu->data.save.step;
         if (save_state == 1) {
             prepare_save_game(menu->data.save.save_data, menu->data.save.slot);
-            menu_system.save_pending = save_state;
-            menu_system.message_id = 0x4FB5;
+            menu_system.card_op_pending = save_state;
+            menu_system.card_op_text = 0x4FB5;
         }
         menu->data.save.step = 2;
         prev_slot = menu->data.save.slot;
-        if (menu_system.save_pending != 0) {
+        if (menu_system.card_op_pending != 0) {
             if ((memory_card_state.state < 3) && (memory_card_state.pending_state < 0)) {
-                menu_system.save_pending = 0;
+                menu_system.card_op_pending = 0;
                 if (memory_card_state.err != 0) {
                     mode_freeze_flags |= 0x80;
                     mode_freeze_init(3, menu_system.current);
@@ -67,7 +67,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
         }
     block_13:
         if (0xD00 & D_0013C940.pressed_unmasked) {
-            if (menu_system.unk124 == 0) {
+            if (menu_system.close_locked == 0) {
                 return 1;
             }
             goto block_17;
@@ -80,7 +80,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
                 menu_system.next = temp_2_126;
                 goto block_23;
             }
-            if (menu_system.unk124 == 0) {
+            if (menu_system.close_locked == 0) {
                 return -1;
             }
             goto block_24;

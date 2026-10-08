@@ -55,7 +55,7 @@ void FUN_00218f98(void) {
     menu_system.state = 2;
     menu_system.current = &D_001D45C8;
     menu_system.next = &D_001D45C8;
-    menu_system.unk124 = 0;
+    menu_system.close_locked = 0;
     FUN_001f9a68((s32)D_0019C150, (s32)&D_001601C0, 1.0f);
     qcopy(D_0019C150 - 0x10, &D_001601D0);
     qzero(D_0019C150 + 0x20);

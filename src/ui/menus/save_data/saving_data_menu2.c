@@ -52,16 +52,16 @@ s32 saving_data_menu2(struct MenuScreen *w) {
         } else {
             FUN_00226a70(w->data.save.save_data, w->data.save.slot);
         }
-        menu_system.save_pending = 1;
-        menu_system.message_id = 0x4FB5;
+        menu_system.card_op_pending = 1;
+        menu_system.card_op_text = 0x4FB5;
     }
     w->data.save.step = 2;
 
-    if (menu_system.save_pending != 0) {
+    if (menu_system.card_op_pending != 0) {
         if (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0) {
             return 0;
         }
-        menu_system.save_pending = 0;
+        menu_system.card_op_pending = 0;
         if (memory_card_state.err != 0) {
             mode_freeze_flags |= 0x80;
             mode_freeze_init(3, menu_system.current);
@@ -76,14 +76,14 @@ s32 saving_data_menu2(struct MenuScreen *w) {
         D_0013E05A[0] = 1;
     }
 
-    if ((D_0013C940.pressed_unmasked & 0xD00) && menu_system.unk124 == 0) {
+    if ((D_0013C940.pressed_unmasked & 0xD00) && menu_system.close_locked == 0) {
         return 1;
     }
     if (D_0013C940.pressed_unmasked & 0x10) {
         back = menu_system.current->back;
         if (back != NULL) {
             menu_system.next = back;
-        } else if (menu_system.unk124 == 0) {
+        } else if (menu_system.close_locked == 0) {
             return -1;
         }
     }

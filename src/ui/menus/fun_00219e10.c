@@ -18,7 +18,7 @@ int FUN_00219e10(char *menu) {
     {
         char *pad = D_0013C940;
         if (*(int *)(pad + 0x1C4) & 0xD00) {
-            if (menu_system.unk124 == 0) {
+            if (menu_system.close_locked == 0) {
                 return 1;
             }
         }
@@ -30,7 +30,7 @@ int FUN_00219e10(char *menu) {
             struct MenuPage *t = g->current->back;
             if (t != 0) {
                 g->next = t;
-            } else if (g->unk124 == 0) {
+            } else if (g->close_locked == 0) {
                 return -1;
             }
         }
