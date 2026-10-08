@@ -802,7 +802,163 @@ void FUN_L12_002e7290(void *a, void *b) {
     FUN_L00_0025f3e8(a, b, -1, 1.0f, 10.0f);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e72c0.s", FUN_L12_002e72c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e81e0.s", FUN_L12_002e81e0);
+/* Variables of the l12 ogre moby (moby->pvars): FUN_L00_002e1678's TrollVars
+   layout, with the alert and call-for-help state at 0x230.. */
+typedef struct {
+    u8 pad0[0x20];
+    f32 health;          /* 0x20 */
+    u8 pad24[2];
+    s16 stun_timer;      /* 0x26 */
+    u8 pad28[0x10];
+    s32 reset_alert;     /* 0x38 */
+    u8 pad3C[0x24];
+    u8 anim[7];          /* 0x60: animation blend state */
+    u8 unk67;            /* 0x67 */
+    u8 pad68[8];
+    u8 fall[0x10];       /* 0x70 */
+    f32 unk80;           /* 0x80 */
+    u8 pad84[4];
+    f32 unk88;           /* 0x88 */
+    f32 unk8C;           /* 0x8C */
+    u8 pad90[4];
+    s32 unk94;           /* 0x94 */
+    u8 pad98[8];
+    f32 unkA0;           /* 0xA0 */
+    f32 unkA4;           /* 0xA4 */
+    f32 unkA8;           /* 0xA8 */
+    u8 padAC;
+    u8 unkAD;            /* 0xAD */
+    u8 padAE[0x12];
+    f32 unkC0;           /* 0xC0 */
+    f32 unkC4;           /* 0xC4 */
+    u8 padC8[0x168];
+    f32 speed;           /* 0x230 */
+    u8 pad234[0xC];
+    s16 alert_timer;     /* 0x240 */
+    u8 pad242[0x32];
+    s32 call_enabled;    /* 0x274 */
+    s32 groups[4];       /* 0x278: group ids counted before calling for help (-1: none) */
+    s32 call_timer;      /* 0x288 */
+    f32 alert_speed;     /* 0x28C */
+    s32 volume;          /* 0x290: clip volume that hands the ogre to FUN_L12_002e86d0 (-1: none) */
+} OgreVars_e81e0;
+
+typedef struct {
+    u8 pad0[0x10];
+    Vec4 pos;
+    struct Moby *moby;   /* 0x20 */
+} OgreHit_e81e0;
+
+extern s32 D_001413D0_e81e0 __asm__("D_001413D0") __attribute__((section(".data")));
+extern f32 D_0015ED6C_e81e0 __asm__("D_0015ED6C");
+extern f32 D_0015ED70_e81e0 __asm__("D_0015ED70");
+extern char D_0013F3D0_e81e0[] __asm__("D_0013F3D0");
+extern s32 scale_game_frames_e81e0(s32) __asm__("FUN_001f96f8");
+extern s32 tick_countdown_16_e81e0(s16 *) __asm__("FUN_001f9770");
+extern s32 random_integer_below_e81e0(s32) __asm__("FUN_00213260");
+extern f32 fast_add_rotations_e81e0(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_cos_e81e0(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin_e81e0(f32) __asm__("FUN_001f9de0");
+extern s32 count_group_e81e0(s32, s32) __asm__("FUN_L01_0026e008");
+extern void alert_group_e81e0(s32, s32) __asm__("FUN_L01_0026e090");
+extern void call_for_help_e81e0(struct Moby *, s32, s32, Vec4f *, f32 *, f32) __asm__("FUN_L00_00259bc8");
+extern s32 is_point_inside_clip_volume_e81e0(void *, s32) __asm__("FUN_00214720");
+extern OgreHit_e81e0 *find_hit_e81e0(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
+extern void take_damage_e81e0(struct Moby *, OgreHit_e81e0 *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
+extern void knockback_e81e0(void *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
+extern void start_fall_e81e0(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
+extern void anim_reset_e81e0(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void anim_update_e81e0(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void ogre_leave_e81e0(struct Moby *) __asm__("FUN_L12_002e86d0");
+
+/* Damage and alert step of the l12 ogre (cf. FUN_L12_002e3528): refreshes its
+   speed while alerted, calls for help behind itself once its groups have 9 or
+   more members, hands off inside its clip volume, and takes hits from other
+   classes (dying, or staggering back). */
+void FUN_L12_002e81e0(struct Moby *moby) {
+    OgreVars_e81e0 *vars = (OgreVars_e81e0 *)moby->pvars;
+    Vec4 v;
+    s32 hit;
+    f32 dmg;
+    f32 angle;
+    f32 unused;
+    OgreHit_e81e0 *coll;
+
+    if (vars->reset_alert != 0) {
+        vars->reset_alert = 0;
+        vars->alert_timer = scale_game_frames_e81e0(0xF0);
+    }
+    if (moby->state != 0) {
+        vars->speed = tick_countdown_16_e81e0(&vars->alert_timer) ? vars->alert_speed : 20.0f;
+    }
+    if (vars->call_enabled != 0 && moby->state != 2) {
+        vars->call_timer++;
+        if (scale_game_frames_e81e0(0x3C) * 17 < vars->call_timer) {
+            s32 count = 0;
+            if (vars->groups[0] != -1)
+                count += count_group_e81e0(vars->groups[0], 2);
+            if (vars->groups[1] != -1)
+                count += count_group_e81e0(vars->groups[1], 2);
+            if (vars->groups[2] != -1)
+                count += count_group_e81e0(vars->groups[2], 2);
+            if (vars->groups[3] != -1)
+                count += count_group_e81e0(vars->groups[3], 2);
+            if (count >= 9 && random_integer_below_e81e0(0x27) == 0) {
+                v.f[0] = fast_cos_e81e0(fast_add_rotations_e81e0(moby->rot.z, 3.1415927f));
+                v.f[1] = fast_sin_e81e0(fast_add_rotations_e81e0(moby->rot.z, 3.1415927f));
+                v.f[2] = 0.0f;
+                call_for_help_e81e0(moby, D_001413D0_e81e0, 0x10000, &moby->pos, v.f, 1.0f);
+            }
+        }
+    }
+    if (vars->volume != -1 && is_point_inside_clip_volume_e81e0(D_0013F3D0_e81e0, vars->volume)) {
+        ogre_leave_e81e0(moby);
+        return;
+    }
+    coll = find_hit_e81e0(moby, 0x330000, 0);
+    dmg = 0.0f;
+    take_damage_e81e0(moby, coll, &vars->health, 0, &hit, &dmg, 0, 4);
+    if (coll != 0 && coll->moby->oclass != moby->oclass && coll->moby->oclass != 0xB8 &&
+        moby->state != 9 && dmg != 0.0f) {
+        if (moby->unk21 != 0xFF) {
+            alert_group_e81e0(moby->unk21, 1);
+        }
+        vars->health -= dmg;
+        vars->unk80 = D_0015ED70_e81e0 * 30.0f;
+        vars->unkAD = 0;
+        vars->unk94 = 9;
+        vars->unkA0 = 1.0f;
+        vars->unkA4 = 1.0f;
+        vars->unkA8 = 1.0f;
+        if (vars->health <= 0.0f) {
+            moby->flags &= ~0x1000;
+            vars->unk88 = D_0015ED6C_e81e0 * 12.0f;
+            vars->unk8C = D_0015ED6C_e81e0 * 9.0f;
+            v.q = coll->pos.q;
+            knockback_e81e0(&v, &angle, &vars->unk88, &vars->unk8C);
+            start_fall_e81e0(moby, vars->fall, 9, 1, 0, angle);
+            vars->unkC0 = 10.0f;
+            vars->unkC4 = 19.0f;
+            moby->state = 9;
+            vars->unk67 = 0x78;
+            anim_reset_e81e0(moby, vars->anim);
+        } else {
+            vars->unk88 = D_0015ED6C_e81e0 * 4.7f;
+            vars->unk8C = D_0015ED6C_e81e0 * 7.7f;
+            v.q = coll->pos.q;
+            knockback_e81e0(&v, &unused, &vars->unk88, &vars->unk8C);
+            start_fall_e81e0(moby, vars->fall, 6, 1, 0, unused);
+            vars->unkC0 = 4.0f;
+            vars->unkC4 = 8.0f;
+            moby->state = 4;
+            vars->unk67 = 0xFA;
+            vars->stun_timer = scale_game_frames_e81e0(0x3C);
+            anim_reset_e81e0(moby, vars->anim);
+        }
+    }
+    moby->unkA4 = 0xFF;
+    anim_update_e81e0(moby, vars->anim);
+}
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9988), where it is exact; names translated to the US level program. */
 
 extern float FUN_001fa5c8(float, float);
