@@ -403,7 +403,7 @@ extern int FUN_L11_00318050(char *moby, void **out);
 extern short *D_L11_001AC240[];
 void FUN_L11_00311be8(void *moby, void *a1, void *a2);
 
-void *FUN_L11_00311948(void *moby, char *a1, int a2, int a3, void *a4) {
+void *FUN_L11_00311948(void *moby, char *a1, float *a2, float *a3, float f0, float f1, float f2, void *a4, int a5) {
     void *best = 0;
     float bestd = 1000.0f;
     short *p;
@@ -507,7 +507,6 @@ extern unsigned char D_00140946[];
 extern int D_L11_00162160 __attribute__((sda));
 extern int D_L11_00162164 __attribute__((sda));
 extern float D_L11_001677D0[];
-extern void *FUN_L11_00311948_c(void *, char *, float *, float *, float, float, float, void *, int) __asm__("FUN_L11_00311948");
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 
 void FUN_L11_00311c80(void *self, char *moby) {
@@ -527,7 +526,7 @@ void FUN_L11_00311c80(void *self, char *moby) {
         }
         src = D_L11_001677D0;
         qcopy(v, src);
-        r = FUN_L11_00311948_c(self, moby, src - 4, v, 0.19634955f, 0.19634955f, 255.0f, *(void **)(moby + 0x88), 0);
+        r = FUN_L11_00311948(self, moby, src - 4, v, 0.19634955f, 0.19634955f, 255.0f, *(void **)(moby + 0x88), 0);
         if (r != *(void **)(moby + 0x88)) {
             int n = D_L11_00162160 + D_L11_00162164;
             *(void **)(moby + 0x88) = r;

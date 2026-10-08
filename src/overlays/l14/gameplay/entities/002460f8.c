@@ -74,7 +74,23 @@ void FUN_L14_002bb4d8(u8 *self) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aba80.s", FUN_L14_002aba80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ac2b8.s", FUN_L14_002ac2b8);
+/* Eases the moby toward the first or last point of its path. */
+
+extern int *D_L14_001B0BB0[];
+extern void FUN_L00_0025b8c0(float *, float *, float, float, float, float);
+
+void FUN_L14_002ac2b8(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    float t[4] __attribute__((aligned(16)));
+    int *p = D_L14_001B0BB0[*(int *)(d + 0xB4)];
+    if (*(float *)(d + 0xA4) > 0.5f)
+        qcopy(t, (char *)p + p[0] * 16);
+    else
+        qcopy(t, (char *)p + 0x10);
+    FUN_L00_0025b8c0((float *)(moby + 0x10), (float *)(d + 0xD0), t[0], 0.005f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0((float *)(moby + 0x14), (float *)(d + 0xD4), t[1], 0.005f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0((float *)(moby + 0x18), (float *)(d + 0xD8), t[2], 0.005f, 0.2f, 0.0f);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ac618.s", FUN_L14_002ac618);
 /* per-frame update: runs the hit query, decays a timer, then dispatches on the hit result */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AEAF8), where it is exact; names translated to the US level program. */
