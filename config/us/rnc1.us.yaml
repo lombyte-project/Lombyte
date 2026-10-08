@@ -1935,7 +1935,7 @@ segments:
           - [0x1280bc, textbin, text_gap_0022713c_after_fun_002270e8]
           - [0x1280c0, c, ui/menus/fun_00227140]
           - [0x128150, c, assembly/textbin/fun_002271d0]
-          - [0x1282f8, c, assembly/textbin/fun_00227378]
+          - [0x1282f8, c, textbin/fun_00227378]
           - [0x1284c4, textbin, text_gap_00227544_after_fun_00227378]
           - [0x1284c8, c, textbin/fun_00227548]
           - [0x1286bc, textbin, text_gap_0022773c_after_fun_00227548]
