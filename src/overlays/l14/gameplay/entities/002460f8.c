@@ -527,7 +527,39 @@ void FUN_L14_002aed50(u8 *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aee28.s", FUN_L14_002aee28);
+/* Resets the id table, then fills it with the ids of this moby's parts and starts each part by its flags. */
+extern int D_L14_001D8680[];
+/* Same table under a second name, so its address is loaded again. */
+extern int D_L14_001D8680_b[] __asm__("D_L14_001D8680");
+char *FUN_L14_002aef28(int index, int *ids);
+extern void FUN_L14_002add48(char *);
+extern void FUN_L14_002ada18(char *);
+void FUN_L14_002aee28(unsigned char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    int i;
+    int *out;
+    {
+        int v = -1;
+        for (i = 19; i >= 0; i--)
+            D_L14_001D8680[i] = v;
+    }
+    i = 0;
+    if (*(short *)(d + 0x20A) > 0) {
+        int *ids = D_L14_001D8680_b;
+        out = ids;
+        do {
+            char *m = FUN_L14_002aef28(moby[0x21], ids);
+            char *md;
+            *out++ = *(short *)(m + 0xB2);
+            md = *(char **)(m + 0x78);
+            if (*(int *)(md + 0x20C) & 8)
+                FUN_L14_002add48(m);
+            if (*(int *)(md + 0x20C) & 2)
+                FUN_L14_002ada18(m);
+            i++;
+        } while (i < *(short *)(d + 0x20A));
+    }
+}
 
 #define NOT_SDA
 
@@ -543,7 +575,7 @@ extern unsigned char *D_L14_0015FFD0_e[] __asm__("D_L14_0015FFD0")
 extern int D_L14_001D8680[];
 extern short *D_L14_001AC2C0_2B0168[] __asm__("D_L14_001ABF40");
 
-char *FUN_L14_002aef28(int index) {
+char *FUN_L14_002aef28(int index, int *ids) {
     short *p = D_L14_001AC2C0_2B0168[index];
     char *best = 0;
     float bestd = 0.0f;

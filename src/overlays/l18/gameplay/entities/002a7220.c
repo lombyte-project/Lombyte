@@ -574,7 +574,37 @@ void FUN_L18_002d5050(char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5348.s", FUN_L18_002d5348);
+/* Spawns a moby that travels along a path, with its heading set from the direction vector. */
+extern float D_L18_00161960 __attribute__((sda));
+extern void FUN_L00_002502f0(void *, int, int, int);
+extern void FUN_0022da68_q(int, int, int) __asm__("FUN_0022da68");
+
+char *FUN_L18_002d5348(float *pos, float *dir, float *target, float a, float b, int frames, int kind) {
+    char *moby = CreateMoby(0x234);
+    if (moby != 0) {
+        char *data;
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        moby[0x20] = 0;
+        FUN_L00_002502f0(moby, 0xC0, 0xC0, 0xC0);
+        *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * D_L18_00161960;
+        qcopy(moby + 0x10, pos);
+        data = *(char **)(moby + 0x78);
+        qcopy(data, dir);
+        qcopy(data + 0x10, target);
+        *(float *)(data + 0x24) = a;
+        *(float *)(data + 0x28) = b;
+        *(int *)(data + 0x2C) = 0;
+        *(int *)(data + 0x34) = frames;
+        *(int *)(data + 0x30) = frames >> 1;
+        *(int *)(data + 0x38) = kind;
+        *(float *)(moby + 0x48) = FUN_001f9e90(dir[0], dir[1]);
+        *(float *)(moby + 0x44) = -FUN_001f9e90(FUN_001f9b20(dir), dir[2]);
+        FUN_0022da68_q(0, 0, (int)moby);
+    }
+    return moby;
+}
 
 #define NOT_SDA
 
@@ -869,7 +899,33 @@ char *FUN_L18_002d5cf8(float f, int a0, int idx, float *p6, float *p7, int a8) {
     return moby;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5f20.s", FUN_L18_002d5f20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6108.s", FUN_L18_002d6108);
+/* Pauses the moby in state 4 while the check holds, restoring its old state after. */
+
+extern int FUN_L00_002db8f8(void *);
+
+int FUN_L18_002d6108(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    int r = FUN_L00_002db8f8(m);
+    if (r != 0) {
+        unsigned char s = m[0x20];
+        if ((unsigned)(s - 3) < 2) {
+            r = 2;
+            if (s != 4) {
+                m[0xBC] = s;
+                m[0x20] = 4;
+            }
+        } else {
+            *(short *)(d + 0xC8) = 0;
+            r = 0;
+        }
+    } else {
+        long t = m[0x20];
+        if (t == 4) {
+            m[0x20] = m[0xBC];
+        }
+    }
+    return r;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d62e8.s", FUN_L18_002d62e8);
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D79F0), where it is exact; names translated to the US level program. */
 

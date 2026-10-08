@@ -646,7 +646,48 @@ void FUN_L13_0030bdf0(unsigned char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030be60.s", FUN_L13_0030be60);
+/* Records the classes of the tracked mobys, then removes this moby once too few of them are left. */
+void FUN_L13_0030be60(unsigned char *m) {
+    int *d = *(int **)(m + 0x78);
+    if (m[0x20] == 0) {
+        int *ids = d + 4;
+        int *cls = d + 12;
+        char *base;
+        int i;
+        m[0x20] = 1;
+        base = (char *)D_L13_0015FFD8_m;
+        for (i = 0; i < 8; i++) {
+            unsigned char *o = (unsigned char *)(base + (ids[i] << 8));
+            if (o != 0 && o[0x20] != 0xFE && o[0x20] != 0xFD)
+                cls[i] = *(short *)(o + 0xA6);
+            else
+                cls[i] = -1;
+        }
+        if (d[0] == 0)
+            m[0x20] = 2;
+    } else if (m[0x20] == 1) {
+        int *ids = d + 4;
+        int *cls = d + 12;
+        char *base = (char *)D_L13_0015FFD8_m;
+        int n = 0;
+        int i;
+        for (i = 0; i < 8; i++) {
+            int id = ids[i];
+            int c;
+            unsigned char *o;
+            if (id != -1 && (c = cls[i]) != -1) {
+                o = (unsigned char *)(base + (id << 8));
+                if (o != 0 && *(short *)(o + 0xA6) == c && o[0x20] != 0xFE && o[0x20] != 0xFD) {
+                    n++;
+                    continue;
+                }
+            }
+            cls[i] = -1;
+        }
+        if (n < d[0])
+            mark_moby_for_removal(m);
+    }
+}
 
 #define NOT_SDA
 
