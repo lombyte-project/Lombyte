@@ -5,14 +5,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/cmd_sem_init/cmd_sem_in
             cmd_sem_init);
 #else
 #include "types.h"
-struct SemaParam {
-    s32 count;
-    s32 max_count;
-    s32 init_count;
-    s32 wait_threads;
-    s32 attr;
-    s32 option;
-};
+#include "kernel.h"
 extern volatile s32 D_001312E0[];
 extern volatile s32 D_001312E8[];
 extern s32 D_001312EC[];
@@ -25,11 +18,11 @@ void cmd_sem_init(void) {
         return;
     }
     sema.option = 0;
-    sema.init_count = 1;
-    sema.max_count = 1;
+    sema.initCount = 1;
+    sema.maxCount = 1;
     D_001312E8[0] = CreateSema(&sema);
     D_001312EC[0] = CreateSema(&sema);
-    sema.init_count = 0;
+    sema.initCount = 0;
     D_001312E0[0] = CreateSema(&sema);
     D_001312F0[0] = 0;
 }

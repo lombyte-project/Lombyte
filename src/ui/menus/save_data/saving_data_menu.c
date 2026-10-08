@@ -31,18 +31,18 @@ s32 saving_data_menu(struct MenuScreen *menu) {
     s32 selected_slot;
     s32 pad_buttons;
     if (menu_system.current->focus == menu) {
-        if (((menu->unk4C == 0) && (menu_system.previous == D_001D2578)) &&
-            (menu_system.previous->unk84 != 0)) {
-            menu->unk4C = 1;
+        if (((menu->data.save.step == 0) && (menu_system.previous == D_001D2578)) &&
+            (menu_system.previous->confirmed != 0)) {
+            menu->data.save.step = 1;
         }
-        save_state = menu->unk4C;
+        save_state = menu->data.save.step;
         if (save_state == 1) {
-            prepare_save_game(menu->unk48, menu->unk40);
+            prepare_save_game(menu->data.save.save_data, menu->data.save.slot);
             menu_system.save_pending = save_state;
             menu_system.message_id = 0x4FB5;
         }
-        menu->unk4C = 2;
-        prev_slot = menu->unk40;
+        menu->data.save.step = 2;
+        prev_slot = menu->data.save.slot;
         if (menu_system.save_pending != 0) {
             if ((memory_card_state.state < 3) && (memory_card_state.pending_state < 0)) {
                 menu_system.save_pending = 0;
@@ -67,7 +67,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
         }
     block_13:
         if (0xD00 & D_0013C940.pressed) {
-            if (menu_system.unk124 == 0) {
+            if (menu_system.close_blocked == 0) {
                 return 1;
             }
             goto block_17;
@@ -80,7 +80,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
                 menu_system.next = temp_2_126;
                 goto block_23;
             }
-            if (menu_system.unk124 == 0) {
+            if (menu_system.close_blocked == 0) {
                 return -1;
             }
             goto block_24;
@@ -94,34 +94,34 @@ s32 saving_data_menu(struct MenuScreen *menu) {
         }
 
         if (((memory_card_state.state < 3) && (memory_card_state.pending_state < 0)) && (memory_card_state.card[0].type == 2)) {
-            if (menu->unk30 & 1) {
+            if (menu->data.save.flags & 1) {
                 pad_buttons = D_0013C940.unk1B4;
             } else {
                 pad_buttons = D_0013C940.unk1A4;
             }
-            menu->unk40 = (s32)D_0015EE34;
+            menu->data.save.slot = (s32)D_0015EE34;
             if ((pad_buttons & 0x1000) && (D_0015EE34 != 0)) {
-                menu->unk40 = (s32)(D_0015EE34 - 1);
+                menu->data.save.slot = (s32)(D_0015EE34 - 1);
             }
             if (pad_buttons & 0x4000) {
-                slot = menu->unk40;
+                slot = menu->data.save.slot;
                 if (slot < 4) {
-                    menu->unk40 = (s32)(slot + 1);
+                    menu->data.save.slot = (s32)(slot + 1);
                 }
             }
-            selected_slot = menu->unk40;
+            selected_slot = menu->data.save.slot;
             D_0015EE34 = selected_slot;
             if ((pad_buttons & 0x40) && (memory_card_state.card[0].type == 2)) {
                 new_var = (((u8 *)&memory_card_state) + (selected_slot * 0x1C)) + 0x20;
                 if ((*((s32 *)new_var)) != (-1)) {
-                    menu_system.unkD4 = 0;
+                    menu_system.confirm_kind = 0;
                     menu_system.next = (new_var = D_001D2578);
-                    D_001D2640[0] = menu->unk40;
+                    D_001D2640[0] = menu->data.save.slot;
                 } else {
-                    menu->unk4C = 1;
+                    menu->data.save.step = 1;
                 }
             }
-            if (menu->unk40 != prev_slot) {
+            if (menu->data.save.slot != prev_slot) {
                 allocate_voice_for_target_entry(1, 0x11, menu->moby);
             }
         block_46:;

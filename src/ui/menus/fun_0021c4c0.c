@@ -1,18 +1,6 @@
 #include "types.h"
 #include "rnc/globals.h"
 
-struct Menu;
-
-
-
-struct Menu {
-    u8 pad0[0x14];
-    s32 unk14;
-    u8 pad18[0x18];
-    s32 choice[19];
-    s32 count;
-};
-
 struct GameProgress {
     u8 pad0[0x224];
     s32 level;
@@ -30,7 +18,7 @@ extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA6
 extern void update_mission_list(void) __asm__("func_0020B950");
 extern s32 collect_mission_ids(void *, s32, void *, s32) __asm__("func_0020BC00");
 
-s32 FUN_0021c4c0(struct Menu *m) {
+s32 FUN_0021c4c0(struct MenuScreen *m) {
     s32 old;
     s32 i;
     s32 prev;
@@ -39,16 +27,16 @@ s32 FUN_0021c4c0(struct Menu *m) {
     s32 *ch;
 
     {
-        struct Menu *owner = (struct Menu *)menu_system.current->focus;
+        struct MenuScreen *owner = menu_system.current->focus;
         old = D_001A00F0.level;
         if (owner != m) {
             if (old < 20) {
-                m->choice[old] = -1;
+                m->data.missions.choice[old] = -1;
             }
             return 0;
         }
     }
-    if ((D_0013C940.pressed & 0xD00) && menu_system.unk124 == 0) {
+    if ((D_0013C940.pressed & 0xD00) && menu_system.close_blocked == 0) {
         return 1;
     }
     if (D_0013C940.pressed & 8) {
@@ -68,24 +56,24 @@ s32 FUN_0021c4c0(struct Menu *m) {
         }
     }
     if (D_001A00F0.level != old) {
-        allocate_voice_for_target_entry(1, 0x11, m->unk14);
+        allocate_voice_for_target_entry(1, 0x11, m->moby);
         update_mission_list();
     }
-    if (m->count != 0) {
+    if (m->data.missions.count != 0) {
         pad = D_0013C940.pressed;
-        ch = m->choice;
-        prev = m->choice[D_001A00F0.level];
+        ch = m->data.missions.choice;
+        prev = m->data.missions.choice[D_001A00F0.level];
         if (pad & 0x1000) {
-            m->choice[D_001A00F0.level] = (prev + m->count - 1) % m->count;
+            m->data.missions.choice[D_001A00F0.level] = (prev + m->data.missions.count - 1) % m->data.missions.count;
         }
         if (pad & 0x4000) {
-            m->choice[D_001A00F0.level] = (m->choice[D_001A00F0.level] + 1) % m->count;
+            m->data.missions.choice[D_001A00F0.level] = (m->data.missions.choice[D_001A00F0.level] + 1) % m->data.missions.count;
         }
-        if (m->choice[D_001A00F0.level] != prev) {
-            allocate_voice_for_target_entry(1, 0x11, m->unk14);
+        if (m->data.missions.choice[D_001A00F0.level] != prev) {
+            allocate_voice_for_target_entry(1, 0x11, m->moby);
         }
         if ((pad & 0x5000) || D_001A00F0.level != old) {
-            m->count = collect_mission_ids((void *)0x70000000, 0, (void *)0x70000100, 1);
+            m->data.missions.count = collect_mission_ids((void *)0x70000000, 0, (void *)0x70000100, 1);
             p = &ch[D_001A00F0.level];
             D_001CF874[0] = ((u32 *)0x70000000)[*p];
             D_001CF758[0] = ((u32 *)0x70000100)[*p];
@@ -94,7 +82,7 @@ s32 FUN_0021c4c0(struct Menu *m) {
     if (D_0013C940.pressed & 0x10) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
-        } else if (menu_system.unk124 == 0) {
+        } else if (menu_system.close_blocked == 0) {
             return -1;
         }
     }

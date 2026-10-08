@@ -1,13 +1,8 @@
 /* InitThread i4: create the kernel patch sema and top-level thread. */
 
 #include "types.h"
+#include "kernel.h"
 
-struct SemaParam {
-    u8 pad0[4];
-    s32 unk4;
-    s32 unk8;
-    u8 padC[0x14];
-};
 
 struct ThreadParam {
     u8 pad0[4];
@@ -40,8 +35,8 @@ s32 InitThread(void) {
     if (D_0012FBF8[0] > 0)
         return -1;
 
-    se.unk8 = 0;
-    se.unk4 = 0xFF;
+    se.initCount = 0;
+    se.maxCount = 0xFF;
     D_00154500[0] = CreateSema(&se);
     if (D_00154500[0] < 0)
         return -1;

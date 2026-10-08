@@ -3,25 +3,11 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/input/pad_state.h"
 
-typedef struct MenuItem {
-    s32 unk0;
-    u8 *value;
-    s32 option[4];
-} MenuItem;
-
-typedef struct Menu {
-    u8 pad_0[0x14];
-    s32 unk14;
-    u8 pad_18[0x1C];
-    MenuItem *items;
-    s32 cursor;
-} Menu;
-
 extern struct PadState D_0013C940;
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
-s32 FUN_002212b8(Menu *menu) {
-    MenuItem *item;
+s32 FUN_002212b8(struct MenuScreen *menu) {
+    struct MenuChoice *item;
     s32 *first;
     s32 *opt;
     s32 prev;
@@ -31,30 +17,30 @@ s32 FUN_002212b8(Menu *menu) {
     if (menu_system.current->focus != menu) {
         return 0;
     }
-    if ((D_0013C940.pressed & 0xD00) && menu_system.unk124 == 0) {
+    if ((D_0013C940.pressed & 0xD00) && menu_system.close_blocked == 0) {
         return 1;
     }
     if (D_0013C940.pressed & 0x10) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
-        } else if (menu_system.unk124 == 0) {
+        } else if (menu_system.close_blocked == 0) {
             return -1;
         }
     }
-    prev = menu->cursor;
+    prev = menu->data.choices.selection;
     if ((D_0013C940.pressed & 0x1000) && prev != 0) {
-        menu->cursor = prev - 1;
+        menu->data.choices.selection = prev - 1;
     }
     if (D_0013C940.pressed & 0x4000) {
-        cur = menu->cursor;
-        if (menu->items[cur + 1].unk0 != 0) {
-            menu->cursor = cur + 1;
+        cur = menu->data.choices.selection;
+        if (menu->data.choices.list[cur + 1].name != 0) {
+            menu->data.choices.selection = cur + 1;
         }
     }
-    if (prev != menu->cursor) {
-        allocate_voice_for_target_entry(1, 0x11, menu->unk14);
+    if (prev != menu->data.choices.selection) {
+        allocate_voice_for_target_entry(1, 0x11, menu->moby);
     }
-    item = &menu->items[menu->cursor];
+    item = &menu->data.choices.list[menu->data.choices.selection];
     first = item->option;
     n = 0;
     if (first[0] != 0) {
@@ -70,7 +56,7 @@ s32 FUN_002212b8(Menu *menu) {
     if (D_0013C940.pressed & 0x40) {
         if (item->value != NULL) {
             *item->value = (*item->value + 1) % n;
-            allocate_voice_for_target_entry(0, 0x11, menu->unk14);
+            allocate_voice_for_target_entry(0, 0x11, menu->moby);
         }
     }
     return 0;

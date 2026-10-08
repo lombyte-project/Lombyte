@@ -10,7 +10,7 @@ s32 FUN_00221968(struct MenuScreen *arg0) {
     if (D_0013CB04[0] & 0x10) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
-        } else if (menu_system.unk124 == 0) {
+        } else if (menu_system.close_blocked == 0) {
             return -1;
         }
     } else if (D_0013CB04[0] & 0x800) {

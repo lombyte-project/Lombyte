@@ -19,20 +19,20 @@ s32 FUN_0021d1f8(struct MenuScreen *menu) {
     struct MenuSystem *g;
 
     initialize_graphics_buffer_descriptors(1);
-    menu->unk54 = 0;
-    menu->unk38 = 0;
+    menu->data.raw.unk54 = 0;
+    menu->data.raw.unk38 = 0;
     g = &menu_system;
     for (i = 0; i < 5; i++) {
         if (D_001D60B8[i].key != 0 && D_001D60B8[i].key < (u32)g->unk10C) {
             D_001D60B8[i].flags |= 2;
         }
     }
-    menu->unk50 = 0;
+    menu->data.raw.unk50 = 0;
     if (music_stream_state.read_state == 0) {
         if (start_audio_stream_read(D_001D5CF8[0], disc_table.help_text.sector, disc_table.help_text.size) != 0) {
-            menu->unk50 = 1;
+            menu->data.raw.unk50 = 1;
         } else {
-            menu->unk50 = 3;
+            menu->data.raw.unk50 = 3;
         }
     }
     menu->unk10 |= 4;

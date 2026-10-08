@@ -1,15 +1,7 @@
 #include "types.h"
-struct ModeRef {
-    u8 pad_0[0x40];
-    struct MenuObject *unk40;
-};
-struct MenuObject {
-    u8 pad_0[0x40];
-    s32 unk40;
-};
+#include "rnc/ui/menus/menu_system.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/ui/menus/menu_screen.h"
-extern struct ModeRef *D_001D5BF4[];
 extern u8 D_001DDD40[];
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern s32 do_gif_paging() __asm__("func_001F4398");
@@ -28,7 +20,7 @@ s32 FUN_00222d98(struct MenuScreen *menu) {
     u32 width;
     struct MemoryCardState *base;
     base = &memory_card_state;
-    temp_17_21 = *((s32 *)((((u8 *)base) - (-(D_001D5BF4[0]->unk40->unk40 * 0x1C))) + 0x20));
+    temp_17_21 = *((s32 *)((((u8 *)base) - (-(menu_system.current->focus->data.save.slot * 0x1C))) + 0x20));
     setup_gif_paging(0);
     if (((base->state < 3) && (base->pending_state < 0)) && (base->card[0].type == 2)) {
         if (temp_17_21 == (-1)) {

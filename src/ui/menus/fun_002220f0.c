@@ -1,18 +1,6 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_screen.h"
-struct ModeRef {
-    u8 pad_0[0x40];
-    struct MenuListInfo *unk40;
-};
-
-struct MenuListInfo {
-    u8 pad_0[0x34];
-    s32 unk34;
-    u8 pad_38[0x8];
-    s32 unk40;
-};
-
-extern u8 D_001D5BF4[16];
+#include "rnc/ui/menus/menu_system.h"
 extern u8 D_001DDD40[];
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern s32 do_gif_paging() __asm__("func_001F4398");
@@ -32,11 +20,11 @@ s32 FUN_002220f0(struct MenuScreen *menu) {
     u32 temp_16_50;
     u32 width;
     u32 temp_17_75;
-    struct MenuListInfo *temp_3_16;
+    struct MenuScreen *temp_3_16;
 
-    temp_3_16 = (*(struct ModeRef **)(void *)D_001D5BF4)->unk40;
-    temp_5_18 = temp_3_16->unk34;
-    temp_20_22 = *(s32 *)((u8 *)((temp_3_16->unk40 * 0xC) + temp_5_18) + 0x4);
+    temp_3_16 = menu_system.current->focus;
+    temp_5_18 = temp_3_16->data.raw.unk34;
+    temp_20_22 = *(s32 *)((u8 *)((temp_3_16->data.raw.unk40 * 0xC) + temp_5_18) + 0x4);
     setup_gif_paging(0);
     if (temp_20_22 == -1) {
         goto block_2;

@@ -1,23 +1,5 @@
 #include "types.h"
 
-struct MenuOpt {
-    void *name;
-    u8 *flag;
-    u8 pad8[8];
-    u32 type;
-};
-
-struct Menu {
-    u8 pad0[0x14];
-    s32 unk14;
-    u8 pad18[0x1C];
-    struct MenuOpt *opts;
-    s32 sel;
-    s32 timer;
-};
-
-
-
 extern struct PadState D_0013C940;
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
@@ -29,56 +11,56 @@ extern void mode_freeze_init(s32, struct MenuPage *) __asm__("func_001FBAB8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
-s32 FUN_00220e28(struct Menu *m) {
+s32 FUN_00220e28(struct MenuScreen *m) {
     s32 active;
     s32 old;
     s32 t;
     s32 v;
 
-    active = (struct Menu *)menu_system.current->focus == m;
-    if (m->timer != 0) {
-        t = m->timer - 1;
+    active = menu_system.current->focus == m;
+    if (m->data.options.fade_timer != 0) {
+        t = m->data.options.fade_timer - 1;
         v = t < 5 ? t : 4;
-        m->timer = t;
+        m->data.options.fade_timer = t;
         D_0015F43C = (f32)v * 0.25f;
         return 0;
     }
     if (!active) {
         return 0;
     }
-    if ((D_0013C940.pressed & 0xD00) && menu_system.unk124 == 0) {
+    if ((D_0013C940.pressed & 0xD00) && menu_system.close_blocked == 0) {
         return 1;
     }
     if (D_0013C940.pressed & 0x10) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
-        } else if (menu_system.unk124 == 0) {
+        } else if (menu_system.close_blocked == 0) {
             return -1;
         }
     }
-    old = m->sel;
+    old = m->data.options.selection;
     if ((D_0013C940.pressed & 0x1000) && old != 0) {
-        m->sel = old - 1;
+        m->data.options.selection = old - 1;
     }
-    if ((D_0013C940.pressed & 0x4000) && m->opts[m->sel + 1].name != 0) {
-        m->sel = m->sel + 1;
+    if ((D_0013C940.pressed & 0x4000) && m->data.options.list[m->data.options.selection + 1].name != 0) {
+        m->data.options.selection = m->data.options.selection + 1;
     }
     if (D_0013C940.pressed & 0x40) {
-        allocate_voice_for_target_entry(0, 0x11, m->unk14);
-        if (m->opts[m->sel].type & 1) {
+        allocate_voice_for_target_entry(0, 0x11, m->moby);
+        if (m->data.options.list[m->data.options.selection].type & 1) {
             if (D_0016034C != 0) {
                 mode_freeze_init(6, menu_system.current);
             } else {
                 fade_to_black(4);
-                m->timer = scale_game_frames(0x10);
+                m->data.options.fade_timer = scale_game_frames(0x10);
                 D_0016034C = D_0016034C == 0;
             }
-        } else if (m->opts[m->sel].flag != 0) {
-            *m->opts[m->sel].flag = *m->opts[m->sel].flag == 0;
+        } else if (m->data.options.list[m->data.options.selection].flag != 0) {
+            *m->data.options.list[m->data.options.selection].flag = *m->data.options.list[m->data.options.selection].flag == 0;
         }
     }
-    if (m->sel != old) {
-        allocate_voice_for_target_entry(1, 0x11, m->unk14);
+    if (m->data.options.selection != old) {
+        allocate_voice_for_target_entry(1, 0x11, m->moby);
     }
     return 0;
 }

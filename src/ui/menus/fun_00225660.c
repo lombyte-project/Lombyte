@@ -19,7 +19,7 @@ s32 FUN_00225660(struct MenuScreen *menu) {
         *slot = delete_moby(*slot);
         slot += 1;
     } while (remaining >= 0);
-    menu->unk3C = complete_stream_buffer_transfer(menu->unk3C);
+    menu->data.raw.unk3C = complete_stream_buffer_transfer(menu->data.raw.unk3C);
     if ((u32)(D_001516D0.unk5A - 6) >= 2U) {
         D_001516D0.unk5A = 5U;
     }

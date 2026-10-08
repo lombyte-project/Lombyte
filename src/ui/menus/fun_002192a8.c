@@ -61,7 +61,7 @@ void FUN_002192a8(void) {
         CalculateDmaTransferAddress();
         update_fog();
         D_0015F618 = 1;
-        menu_system.unk108 = 0;
+        menu_system.help_text_buffer = 0;
         menu_system.unk10C = 0;
         menu_system.unk104 = 0;
         menu_system.unk10 = 0;
