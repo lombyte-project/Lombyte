@@ -6,6 +6,7 @@
 #include "sda.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/gameplay/hero.h"
 
 /* Moves a level-17 platform moby between its stops along its heading, with a looping sound. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA2C8), where it is exact; names translated to the US level program. */
@@ -841,7 +842,6 @@ extern short D_L17_00162170 __attribute__((sda));
 extern short D_L17_00162174 __attribute__((sda));
 extern short D_L17_00162180 __attribute__((sda));
 extern unsigned char D_0013E500[];
-extern unsigned char D_0013F350[];
 extern void append_rotated_sprite_quad(float, float, float, float, float, int, int, long, int, int,
                                        int, int, float, float) __asm__("FUN_001f5ab0");
 extern void FUN_L11_00310ad0(float, float, float, void *, int, int, long);
@@ -865,10 +865,6 @@ extern int func_001F6F40_c_001f6b88(int, int, long, void *, int) __asm__("FUN_00
 void FUN_L17_002eb9a8(char *moby) {
     char *d = *(char **)(moby + 0x78);
     char *s;
-    unsigned char *base;
-    unsigned char *g;
-    unsigned char *h;
-    unsigned char *b;
     int sp10;
     int sp14;
     long tex;
@@ -925,16 +921,13 @@ void FUN_L17_002eb9a8(char *moby) {
     }
     y = 0x40;
     x = 0x18;
-    base = D_0013F350;
-    n = base[0x15F7];
-    for (i = 0; i < n; i++) {
-        g = D_0013F350;
-        if (i < g[0x15F6]) {
+    for (i = 0; i < hero.ship_ammo_max; i++) {
+        if (i < hero.ship_ammo) {
             FUN_L11_00310ad0(x, y, 0.5f, D_L17_001D99E0, 0x19, 0xFFFFF3, 0x50008F00);
         } else {
             FUN_L11_00310ad0(x, y, 0.5f, D_L17_001D99E0, 0x19, 0xFFFFF3, 0x20004F00);
         }
-        n = g[0x15F7];
+        n = hero.ship_ammo_max;
         if (i == n >> 1) {
             y = 0x2E;
             x += 0x1E;
@@ -950,21 +943,19 @@ void FUN_L17_002eb9a8(char *moby) {
                                0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
     append_rotated_sprite_quad(ex, ey, 10.0f, 10.0f, 0.0f, 0x1F, 0x1F, func_001F4868_l(8), 0xFFFFF3,
                                0xFF20FF20, 0, 0, 0.5f, 0.5f);
-    b = D_0013F350;
-    if (*(float *)(b + 0x15FC) < *(float *)(b + 0x1600) / 10.0f && (D_L17_0015F5CC / 90) & 1) {
+    if (hero.ship_hp < hero.ship_hp_max / 10.0f && (D_L17_0015F5CC / 90) & 1) {
         func_001F6F40_c_001f6b88(0x100, 0x186, 0x80000080L, func_001FE540_id(0x5269), 0x64);
     }
     if (*(unsigned char *)(moby + 0x20) == 8) {
         func_001F6F40_c_001f6b88(0x100, 0xC8, 0x80005080L, func_001FE540_id(0x523E), 0x64);
     }
-    h = D_0013F350;
-    f = *(float *)(h + 0x15FC) - *(float *)(d + 0xF0);
+    f = hero.ship_hp - *(float *)(d + 0xF0);
     f *= 0.2f;
     q = AbsoluteFloat(f);
     if (q > 1.0f)
         f /= q;
     *(float *)(d + 0xF0) += f;
-    v = func_001FA898_r(*(float *)(d + 0xF0) * 251.0f / *(float *)(h + 0x1600)) + 2;
+    v = func_001FA898_r(*(float *)(d + 0xF0) * 251.0f / hero.ship_hp_max) + 2;
     if (v > 0xFD)
         v = 0xFD;
     if (v < 2)
@@ -1033,8 +1024,7 @@ void FUN_L17_002ec150(char *moby, char *obj) {
     char a[16];
     char b[16];
     if (FUN_001f9740(obj + 0x84) && (*(int *)(D_0013A4E0_u + 0x2610) & 0x28)) {
-        char *g = (char *)D_0013E533_u + 0xE1D;
-        if (*(unsigned char *)(g + 0x15F6) != 0) {
+        if (hero.ship_ammo != 0) {
             char *pos = moby + 0x40;
             float s;
             int n;
@@ -1047,7 +1037,7 @@ void FUN_L17_002ec150(char *moby, char *obj) {
             n = FUN_001f96f8(300);
             if (FUN_L13_002e6a58(moby, a, *(int *)(obj + 0xEC), pos, s, n)) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
-                *(unsigned char *)(g + 0x15F6) -= 1;
+                hero.ship_ammo -= 1;
                 *(int *)(obj + 0x84) = *(int *)&D_L17_00162078_d;
             }
         }
@@ -1460,9 +1450,8 @@ void FUN_L17_002ec360(Moby *m, Obj *o) {
             o->speed = k;
             if (*(char **)(p + 0x18) != 0 && *(short *)(*(char **)(p + 0x18) + 0xA6) != 0x15B) {
                 if (o->iDC == 0) {
-                    g = (char *)((char *)&D_0013F350_c4);
-                    *(float *)(g + 0x15FC) = *(float *)(g + 0x15FC) - D_L17_00162060;
-                    if (*(float *)(g + 0x15FC) < 0.0f) {
+                    hero.ship_hp = hero.ship_hp - D_L17_00162060;
+                    if (hero.ship_hp < 0.0f) {
                         subtract_vector_xyz(side, p + 0x50, p + 0x60);
                         normalize_vector_xyz(side, side, 1.0f);
                         FUN_L00_001ff660(vel, dir.v, p + 0x40);
@@ -1497,7 +1486,6 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern char (*D_L17_001600EC_t)[128] __asm__("D_L17_001600EC") __attribute__((section(".sdata")));
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern unsigned char D_0013F350_c[] __asm__("D_0013F350");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
@@ -1505,7 +1493,6 @@ void FUN_L17_002edf10(char *moby, float *a, float *b) {
     char *d = *(char **)(moby + 0x78);
     float v[4];
     float zz, dist, tmp, hi, lo, f, t, k, r, s;
-    unsigned char *base;
     scale_vector_xyz(v, d + 0x10, *(float *)(d + 0x64) * (float)scale_game_frames(0x3C));
     add_vector_xyz(v, v, moby + 0x10);
     zz = v[2];
@@ -1529,8 +1516,7 @@ void FUN_L17_002edf10(char *moby, float *a, float *b) {
         } else {
             *a = (1.0f - *a) * r + *a;
         }
-        base = D_0013F350_c;
-        base[0x160F] |= 2;
+        hero.ship_flags |= 2;
     }
     if (t - 10.0f < zz) {
         float q, w;
@@ -1546,10 +1532,7 @@ void FUN_L17_002edf10(char *moby, float *a, float *b) {
             w = 0.0f;
         q = q * w;
         *b = (-1.0f - *b) * q + *b;
-        {
-            unsigned char *p = D_0013F350_c;
-            p[0x160F] |= 2;
-        }
+        hero.ship_flags |= 2;
     } else if (zz < k + 10.0f) {
         float q, w;
         q = (k - zz + 10.0f) / 10.0f;
@@ -1564,10 +1547,7 @@ void FUN_L17_002edf10(char *moby, float *a, float *b) {
             w = 0.0f;
         q = q * w;
         *b = (1.0f - *b) * q + *b;
-        {
-            unsigned char *p = D_0013F350_c;
-            p[0x160F] |= 2;
-        }
+        hero.ship_flags |= 2;
     }
 }
 /* Updates the class-1380 lift: rises/lowers between two heights, blends the camera and pulses its colour by state. */

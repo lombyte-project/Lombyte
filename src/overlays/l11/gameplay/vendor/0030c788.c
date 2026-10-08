@@ -871,7 +871,6 @@ void FUN_L11_003125a8(char *moby, char *obj, float p2, float p3) {
 /* on a pad press, fires the aimed shot and resets the cooldown */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00313BC0), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533[];
 extern int FUN_001f96f8(int);
 extern int FUN_L11_00309378(void *, void *, int, void *, float, int);
 extern short D_L11_00162064_d __asm__("D_L11_00162064") __attribute__((sda));
@@ -888,8 +887,7 @@ extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
 void FUN_L11_003126f8(char *moby, char *d) {
     if (func_001F9908_i(d + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
-        char *g = D_0013E533 + 0xE1D;
-        if (*(unsigned char *)(g + 0x15F6) != 0) {
+        if (hero.ship_ammo != 0) {
             char a[16];
             char b[16];
             int t = 0;
@@ -904,7 +902,7 @@ void FUN_L11_003126f8(char *moby, char *d) {
                                  *(float *)&D_L11_00162064_d * *(float *)&D_L11_00162090_d,
                                  FUN_001f96f8(300))) {
                 func_0022ED80_i(2, 0, (int)moby);
-                *(unsigned char *)(g + 0x15F6) -= 1;
+                hero.ship_ammo -= 1;
                 *(int *)(d + 0x84) = *(int *)&D_L11_00162068_d;
             }
         }
@@ -922,14 +920,12 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern char (*D_L17_001600EC_t)[128] __asm__("D_L11_001600EC") __attribute__((section(".sdata")));
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern unsigned char D_0013F350_c[] __asm__("D_0013F350");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 void FUN_L11_00313f60(char *moby, float *a, float *b) {
     char *d = *(char **)(moby + 0x78);
     float v[4];
     float zz, dist, tmp, hi, lo, f, t, k, r, s;
-    unsigned char *base;
     scale_vector_xyz(v, d + 0x10, *(float *)(d + 0x64) * (float)scale_game_frames(0x3C));
     add_vector_xyz(v, v, moby + 0x10);
     zz = v[2];
@@ -952,8 +948,7 @@ void FUN_L11_00313f60(char *moby, float *a, float *b) {
         } else {
             *a = (1.0f - *a) * r + *a;
         }
-        base = D_0013F350_c;
-        base[0x160F] |= 2;
+        hero.ship_flags |= 2;
     }
     if (t - 10.0f < zz) {
         float q, w;
@@ -969,10 +964,7 @@ void FUN_L11_00313f60(char *moby, float *a, float *b) {
             w = 0.0f;
         q = q * w;
         *b = (-1.0f - *b) * q + *b;
-        {
-            unsigned char *p = D_0013F350_c;
-            p[0x160F] |= 2;
-        }
+        hero.ship_flags |= 2;
     } else if (zz < 260.0f) {
         float q, w;
         q = (250.0f - zz + 10.0f) / 10.0f;
@@ -987,10 +979,7 @@ void FUN_L11_00313f60(char *moby, float *a, float *b) {
             w = 0.0f;
         q = q * w;
         *b = (1.0f - *b) * q + *b;
-        {
-            unsigned char *p = D_0013F350_c;
-            p[0x160F] |= 2;
-        }
+        hero.ship_flags |= 2;
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00314318.s", FUN_L11_00314318);

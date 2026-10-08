@@ -525,7 +525,9 @@ struct Hero {
     u8 pad_15F8[0x4];
     f32 ship_hp;                   /* 0x15FC: ship health; l17 subtracts collision damage and explodes the ship below 0 */
     f32 ship_hp_max;               /* 0x1600: full ship_hp; the HUD bar shows ship_hp over it */
-    u8 pad_1604[0x10];
+    u8 pad_1604[0xB];
+    u8 ship_flags;                 /* 0x160F: 2 = being steered back from the edge or height limit of the space arena (FUN_L11_00313f60) */
+    u8 pad_1610[0x4];
     s32 unk1614;                   /* 0x1614 */
     u8 pad_1618[0x8];
     void *unk1620;                 /* 0x1620 */
