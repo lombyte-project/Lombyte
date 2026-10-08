@@ -7,7 +7,74 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6328.s", FUN_L01_002f6328);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6a30.s", FUN_L01_002f6a30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f8530.s", FUN_L01_002f8530);
+#include "qcopy.h"
+
+/* pvars of the debris moby FUN_L01_002f8530 spawns */
+typedef struct {
+    Vec4f vel;      /* 0x00 */
+    s32 unk10;      /* 0x10 */
+    f32 scale;      /* 0x14 */
+    f32 spin;       /* 0x18: random spin, random sign */
+    s32 life;       /* 0x1C: frames */
+    s32 unk20;      /* 0x20 */
+    f32 gravity;    /* 0x24 */
+    s32 unk28;      /* 0x28 */
+} DebrisVars_2f8530;
+
+extern f32 D_0015ED6C_2f8530 __asm__("D_0015ED6C");
+extern f32 D_0015ED70_2f8530 __asm__("D_0015ED70");
+extern struct Moby *create_moby_2f8530(s32) __asm__("FUN_0020c4f8");
+extern void FUN_L00_0025d1b8_2f8530(struct Moby *) __asm__("FUN_L00_0025d1b8");
+extern f32 random_float_between_2f8530(f32, f32) __asm__("FUN_002132a8");
+extern s32 rand_2f8530(void) __asm__("FUN_001160d8");
+extern f32 FUN_001f96b0_2f8530(f32) __asm__("FUN_001f96b0");
+extern s32 truncate_float_to_s32_2f8530(f32) __asm__("FUN_001fa6d0");
+extern void FUN_L00_00250df8_2f8530(struct Moby *) __asm__("FUN_L00_00250df8");
+
+struct Moby *FUN_L01_002f8530(Vec4f *pos, Vec4f *vel, s32 oclass, s32 a3, s32 a4,
+                              f32 scale, f32 gravity, f32 spin, f32 seconds) {
+    u128 p;
+    u128 v;
+    u128 *pp = &p;
+    u128 *vp = &v;
+    struct Moby *m;
+    DebrisVars_2f8530 *pv;
+    f32 r;
+    f32 s;
+
+    p = *(u128 *)pos;
+    v = *(u128 *)vel;
+    m = create_moby_2f8530(oclass);
+    if (m != 0) {
+        pv = (DebrisVars_2f8530 *)m->pvars;
+        FUN_L00_0025d1b8_2f8530(m);
+        m->scale *= scale;
+        m->unk30 = 0xFF;
+        m->unk32 = 0xFF;
+        m->unk31 = 1;
+        m->rot.x = random_float_between_2f8530(-3.1415927f, 3.1415927f);
+        m->rot.y = random_float_between_2f8530(-3.1415927f, 3.1415927f);
+        m->rot.z = random_float_between_2f8530(-3.1415927f, 3.1415927f);
+        qcopy(&m->pos, pp);
+        qcopy(&pv->vel, vp);
+        r = random_float_between_2f8530(D_0015ED6C_2f8530 * 1.5707964f,
+                                        D_0015ED6C_2f8530 * 6.2831855f);
+        if (rand_2f8530() & 1) {
+            s = -r * spin;
+        } else {
+            s = r * spin;
+        }
+        pv->unk10 = a3;
+        pv->unk28 = a3;
+        pv->scale = scale;
+        pv->spin = s;
+        pv->life = truncate_float_to_s32_2f8530(FUN_001f96b0_2f8530(seconds * 60.0f));
+        pv->unk20 = a4;
+        pv->gravity = gravity * 9.8f * D_0015ED70_2f8530;
+        FUN_L00_00250df8_2f8530(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f8718.s", FUN_L01_002f8718);
 typedef struct {
     u8 pad0[0xA6];
