@@ -6,20 +6,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/display/set_pal_mode/
             FUN_001f34e8);
 #else
 #include "types.h"
+#include "rnc/rendering/fs_aa_buffer.h"
 #include "rnc/rendering/screen.h"
-
-typedef struct {
-    long q[12];
-} sceGsLoadImage __attribute__((aligned(16)));
-
-typedef struct {
-    u8 pad0[0x150];
-    s16 width;
-    s16 height;
-    u8 pad154[4];
-    s16 storage_width;
-    s16 storage_height;
-} FullScreenAntiAliasingDimensions;
 
 typedef struct {
     u64 pad0[2];
@@ -40,7 +28,6 @@ typedef struct {
     u64 scissor2;
 } GraphicsDrawEnvironment;
 
-extern FullScreenAntiAliasingDimensions fs_aa_buffer __asm__("D_00151780");
 extern GraphicsDrawEnvironment draw_environment __asm__("D_0013CF10");
 extern u64 depth_buffer_register __asm__("D_0013D100");
 extern u64 masked_depth_buffer_register __asm__("D_0013D170");
@@ -88,12 +75,12 @@ void set_pal_mode(void) {
         setup_fs_aa_buffer(0x200, 0x1A0, 0x200, 0x1C0, 0, 0);
     }
     /* Retail sign-extends the 16-bit dimensions before halving them. */
-    display_width = fs_aa_buffer.width;
+    display_width = fs_aa_buffer.display_width;
     D_0013E500.width = display_width;
     D_0013E500.half_width = display_width >> 1;
-    D_0013E500.half_height = fs_aa_buffer.height >> 1;
+    D_0013E500.half_height = fs_aa_buffer.display_height >> 1;
     D_0013E500.bottom = (D_0013E500.half_height + 0x800) << 4;
-    D_0013E500.height = fs_aa_buffer.height;
+    D_0013E500.height = fs_aa_buffer.display_height;
     D_0013E500.left = (0x800 - D_0013E500.half_width) << 4;
     D_0013E500.right = (D_0013E500.half_width + 0x800) << 4;
     D_0013E500.top = (0x800 - D_0013E500.half_height) << 4;

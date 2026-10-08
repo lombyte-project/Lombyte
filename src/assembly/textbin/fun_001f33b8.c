@@ -6,27 +6,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001f33b8/FUN_001f33b8.s
 #else
 #include "types.h"
 #include "rnc/rendering/screen.h"
+#include "rnc/rendering/view.h"
 
-struct ProjectionConfiguration {
-    u8 pad_0[0xA0];
-    f32 near_clip;
-    f32 far_clip;
-    u8 pad_A8[0x8];
-    f32 horizontal_fov;
-    u8 pad_B4[0x14C];
-    f32 projection_half_width;
-    f32 projection_half_height;
-    f32 screen_scale_x;
-    f32 screen_scale_y;
-    u8 pad_210[0x8];
-    f32 fog_near_distance;
-    f32 fog_far_distance;
-    u8 pad_220[0x8];
-    f32 fog_near_intensity;
-    f32 fog_far_intensity;
-};
-
-extern struct ProjectionConfiguration view_context __asm__("D_0018CD00");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void update_view_context(void) __asm__("func_001F2D98");
 void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 horizontal_fov,
@@ -38,7 +19,7 @@ void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 
                                    f32 fog_near_intensity, f32 fog_far_intensity) {
     s32 half_width;
     s32 half_height;
-    struct ProjectionConfiguration *context = &view_context;
+    struct View *context = &view_context;
     f32 projection_half_height;
     s32 *bottom_extent = &D_0013E500.bottom;
 
@@ -50,20 +31,20 @@ void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 
     *bottom_extent = (s32)((u32)(half_height + 0x800) << 4);
     D_0013E500.top = (s32)((u32)(0x800 - half_height) << 4);
     D_0013E500.right = (s32)((u32)(half_width + 0x800) << 4);
-    context->horizontal_fov = horizontal_fov;
+    context->fov.f[0] = horizontal_fov;
     context->far_clip = 524288.0f;
     context->near_clip = 32.0f;
     D_0013E500.height = viewport_height;
     D_0013E500.width = viewport_width;
-    context->projection_half_width = convert_integer_to_float(viewport_width) * 0.5f;
+    context->half_width = convert_integer_to_float(viewport_width) * 0.5f;
     projection_half_height = convert_integer_to_float(viewport_height) * 0.5f;
-    context->projection_half_height = projection_half_height;
-    context->screen_scale_x = context->projection_half_width * 4.0f;
-    context->screen_scale_y = projection_half_height * 4.0f;
-    context->fog_far_intensity = fog_far_intensity;
-    context->fog_near_intensity = fog_near_intensity;
-    context->fog_near_distance = fog_near_distance;
-    context->fog_far_distance = fog_far_distance;
+    context->half_height = projection_half_height;
+    context->scr_x = context->half_width * 4.0f;
+    context->scr_y = projection_half_height * 4.0f;
+    context->fog_far_int = fog_far_intensity;
+    context->fog_near_int = fog_near_intensity;
+    context->fog_near_dist = fog_near_distance;
+    context->fog_far_dist = fog_far_distance;
     update_view_context();
 }
 

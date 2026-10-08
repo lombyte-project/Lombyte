@@ -9,108 +9,9 @@ INCLUDE_ASM(
 #include "types.h"
 
 #include "eetypes.h"
+#include "rnc/rendering/fs_aa_buffer.h"
 
-typedef struct {
-    u64 FBP : 9;
-    u64 FBW : 6;
-    u64 PSM : 5;
-    u64 p0 : 12;
-    u64 DBX : 11;
-    u64 DBY : 11;
-    u64 p1 : 10;
-} GsDispfb;
-
-typedef struct {
-    u64 FBP : 9;
-    u64 p0 : 7;
-    u64 FBW : 6;
-    u64 p1 : 2;
-    u64 PSM : 6;
-    u64 p2 : 2;
-    u64 FBMSK : 32;
-} GsFrame;
-
-typedef struct {
-    u64 NLOOP : 15;
-    u64 EOP : 1;
-    u64 pad16 : 16;
-    u64 id : 14;
-    u64 PRE : 1;
-    u64 PRIM : 11;
-    u64 FLG : 2;
-    u64 NREG : 4;
-    u64 REGS0 : 4;
-    u64 REGS1 : 4;
-    u64 REGS2 : 4;
-    u64 REGS3 : 4;
-    u64 REGS4 : 4;
-    u64 REGS5 : 4;
-    u64 REGS6 : 4;
-    u64 REGS7 : 4;
-    u64 REGS8 : 4;
-    u64 REGS9 : 4;
-    u64 REGS10 : 4;
-    u64 REGS11 : 4;
-    u64 REGS12 : 4;
-    u64 REGS13 : 4;
-    u64 REGS14 : 4;
-    u64 REGS15 : 4;
-} GifTag;
-
-typedef struct {
-    GsFrame frame1;
-    u64 frame1addr;
-    u64 zbuf1;
-    u64 zbuf1addr;
-    u64 xyoffset1;
-    u64 xyoffset1addr;
-    u64 scissor1;
-    u64 scissor1addr;
-    u64 prmodecont;
-    u64 prmodecontaddr;
-    u64 colclamp;
-    u64 colclampaddr;
-    u64 dthe;
-    u64 dtheaddr;
-    u64 test1;
-    u64 test1addr;
-} GsDrawEnv1;
-
-typedef struct {
-    u64 pmode;
-    u64 smode2;
-    GsDispfb dispfb;
-    u64 display;
-    u64 bgcolor;
-    u64 pad28;
-} GsDispEnv;
-
-typedef struct {
-    GsDispEnv disp;     /* 0x000 */
-    GifTag giftag0;     /* 0x030 */
-    GsDrawEnv1 draw0;   /* 0x040 */
-    GifTag giftag1;     /* 0x0C0 */
-    GsDrawEnv1 draw1;   /* 0x0D0 */
-    s16 display_width;  /* 0x150 */
-    s16 display_height; /* 0x152 */
-    s16 psm;            /* 0x154 */
-    s16 fbp0;           /* 0x156 */
-    s16 storage_width;  /* 0x158 */
-    s16 storage_height; /* 0x15A */
-    s16 storage_psm;    /* 0x15C */
-    s16 fbp1;           /* 0x15E */
-    s16 pad160[2];
-    s16 reserved164; /* 0x164 */
-    s16 pad166;
-    s16 display_offset_x; /* 0x168 */
-    s16 display_offset_y; /* 0x16A */
-    s16 zpsm;             /* 0x16C */
-    s16 zbp;              /* 0x16E */
-    s32 reserved170;      /* 0x170 */
-} FsAaBuf;
-
-extern FsAaBuf fs_aa_buffer __asm__("D_00151780");
-extern FsAaBuf *active_fs_aa_buffer __asm__("D_0015EEB8");
+extern struct FsAaBuf *active_fs_aa_buffer __asm__("D_0015EEB8");
 extern s32 display_buffer_address __asm__("D_0015EE80");
 extern s32 draw_buffer_address __asm__("D_0015EE84");
 extern s32 depth_buffer_address __asm__("D_0015EE88");
@@ -128,7 +29,7 @@ extern u8 second_clear_packet[] __asm__("D_0013CDD0");
 #define second_clear_words   ((u64 *)second_clear_packet)
 
 extern void sceGsSetDefDispEnv(void *, s16, s16, s16, s16, s16);
-extern s32 sceGsSetDefDrawEnv(GsDrawEnv1 *, s16, s16, s16, s16, s16);
+extern s32 sceGsSetDefDrawEnv(struct sceGsDrawEnv1 *, s16, s16, s16, s16, s16);
 
 void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width,
                         s32 storage_height, s32 display_offset_x,
@@ -157,7 +58,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     fs_aa_buffer.zbp = depth_buffer_address >> 13;
     sceGsSetDefDispEnv(&fs_aa_buffer, 0, storage_width, storage_height, display_offset_x,
                        display_offset_y);
-    active_fs_aa_buffer->disp.dispfb.FBP = fs_aa_buffer.fbp1;
+    ((struct GsDispfb *)&active_fs_aa_buffer->disp.dispfb)->FBP = fs_aa_buffer.fbp1;
     sceGsSetDefDrawEnv(&active_fs_aa_buffer->draw0, fs_aa_buffer.psm, fs_aa_buffer.display_width,
                        fs_aa_buffer.display_height, 3, fs_aa_buffer.zpsm);
     active_fs_aa_buffer->draw0.frame1.FBP = fs_aa_buffer.fbp0;

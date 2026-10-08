@@ -1,9 +1,7 @@
 #include "types.h"
+#include "rnc/sdk/libgraph.h"
 #include "eetypes.h"
 #include "rnc/rendering/dma_tag.h"
-typedef struct {
-    u128 data[6];
-} sceGsLoadImage;
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
 extern void FlushCache(s32);
 extern s32 sceGsExecLoadImage(sceGsLoadImage *, u128 *);

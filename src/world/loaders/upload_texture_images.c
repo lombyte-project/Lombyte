@@ -1,10 +1,7 @@
 #include "types.h"
+#include "rnc/sdk/libgraph.h"
 #include "eetypes.h"
 #include "rnc/globals.h"
-
-typedef struct {
-    u128 data[6];
-} sceGsLoadImage;
 
 struct Ent {
     s32 unk0;

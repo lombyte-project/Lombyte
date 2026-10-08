@@ -12,43 +12,7 @@ INCLUDE_ASM(
 #include "qzero.h"
 
 #include "rnc/math/vector.h"
-
-struct View {
-    s32 fog_color;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    Vec4 regs[5];
-    Vec4 gif[4];
-    f32 near_clip;
-    f32 far_clip;
-    f32 aspect_x;
-    f32 aspect_y;
-    Vec4 fov;
-    f32 proj[16];
-    f32 proj2[16];
-    f32 proj3[16];
-    Vec4 inverse_screen_scale;
-    Vec4 screen_scale;
-    Vec4 screen_bias;
-    Vec4 inverse_projection_scale;
-    Vec4 viewport_aspect;
-    Vec4 aspect_scale;
-    Vec4 clip_scale;
-    Vec4 clip_distances;
-    f32 width;
-    f32 height;
-    f32 scr_x;
-    f32 scr_y;
-    f32 fog_mul;
-    f32 fog_add;
-    f32 fog_near_dist;
-    f32 fog_far_dist;
-    f32 fog_slope;
-    f32 fog_base;
-    f32 fog_near_int;
-    f32 fog_far_int;
-};
+#include "rnc/rendering/view.h"
 
 struct FogRegs2 {
     u8 pad0[0x28];
@@ -62,7 +26,6 @@ struct Clip {
 };
 
 extern s32 D_0015ED80;
-extern struct View view_context __asm__("D_0018CD00");
 extern Vec4 D_0018CFC0[4];
 extern f32 D_00160720[4];
 extern f32 D_00160B30;
@@ -120,8 +83,8 @@ void update_view_context(void) {
         view_context.fov.f[1] = view_context.fov.f[0] * 0.775f;
     }
     view = &view_context;
-    view->aspect_x = view->scr_x / view->width;
-    view->aspect_y = view->scr_y / view->height;
+    view->aspect_x = view->scr_x / view->half_width;
+    view->aspect_y = view->scr_y / view->half_height;
     view->fov.f[2] = 1.0f / fast_cos(func_001F9E90(1.0f, view->fov.f[0]));
     view->fov.f[3] = 1.0f / fast_cos(func_001F9E90(1.0f, view->fov.f[1]));
     horizontal_clip_scale = 1.0f / fast_cos(func_001F9E90(1.0f, view->fov.f[0] * view->aspect_x));
@@ -177,8 +140,8 @@ void update_view_context(void) {
     far_clip = view->far_clip;
     horizontal_fov = view->fov.f[0];
     vertical_fov = view->fov.f[1];
-    viewport_width = view->width;
-    viewport_height = view->height;
+    viewport_width = view->half_width;
+    viewport_height = view->half_height;
     projection_fog_multiplier = view->fog_mul;
     D_00160720[0] = 0.5f / 210000.0f;
     D_00160720[1] = -0.5f / 210000.0f;
@@ -225,8 +188,8 @@ void update_view_context(void) {
     view->screen_bias.f[1] = 2048.0f;
     view->screen_bias.f[3] = view->fog_add;
     view->screen_bias.f[2] = 8388112.0f;
-    view->viewport_aspect.f[0] = view->scr_x / view->width;
-    view->viewport_aspect.f[1] = view->scr_y / view->height;
+    view->viewport_aspect.f[0] = view->scr_x / view->half_width;
+    view->viewport_aspect.f[1] = view->scr_y / view->half_height;
     view->viewport_aspect.f[2] = 1.0f;
     view->viewport_aspect.f[3] = 1.0f;
     view->fog_color = *(s32 *)&view->fog_far_int;
