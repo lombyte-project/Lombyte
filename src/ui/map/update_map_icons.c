@@ -8,7 +8,6 @@
 /* Map screen icon refresh: places the fixed icons (-1..-9), projects the
    others through world_to_map_coords, then sizes each label box. */
 
-
 typedef struct {
     u8 pad0[0x24];
     s16 active;
@@ -45,7 +44,8 @@ extern struct {
 extern void world_to_map_coords(f32 *outx, f32 *outy, s32 view, f32 x,
                                 f32 y) __asm__("func_00208408");
 extern void format_menu_item_text(s32 idx, char *dst) __asm__("func_00208280");
-extern void font_print_window_small(struct TextRegion *, long, char *, int) __asm__("func_001F75F0");
+extern void font_print_window_small(struct TextRegion *, long, char *,
+                                    int) __asm__("func_001F75F0");
 
 void update_map_icons(s32 level, s32 flag) __asm__("FUN_0020bf90");
 

@@ -32,7 +32,8 @@ struct MpegRefImage {
     s32 width;
     s32 height;
     s32 unkC;
-    s32 unk10;                          /* non-zero: sized check in _isOutSizeOK; _getRef0 macroblock index x * unk10 + y */
+    s32 unk10;                          /* non-zero: sized check in _isOutSizeOK;
+                                           _getRef0 macroblock index x * unk10 + y */
     u8 pad_14[0x14];
     s32 status;                         /* 1: output by _dispRefImage; ClearMpegReferenceBuffer zeroes it */
     u8 pad_2C[0x18];
@@ -64,7 +65,7 @@ struct MpegMcFetch {
  * _getRef0 queues up to four luma/chroma reference fetches per macroblock
  * (count in fetch_count) for _doMC. */
 struct MpegMbBuffer {
-    u32 spr_base;                       /* SPR 0x70000000 or 0x70001B00; _getRef0 queues fetch n at + n * 0x600 */
+    u32 spr_base;                       /* SPR 0x70000000 or 0x70001B00; fetch n at + n * 0x600 */
     u32 ipu_out;                        /* spr_base + 0x1800; 0x300 bytes received from the IPU (_decMB0) */
     u8 *luma_ref[4];                    /* reference picture luma source per fetch */
     u8 *chroma_ref[4];                  /* reference picture chroma source per fetch */
@@ -121,7 +122,8 @@ struct MpegDecoder {
     u8 pad_108[0x10];
     s32 frame_count;                    /* +1 per decoded frame (_decodeOrSkipFrame) */
     s32 unk11C;
-    s32 second_field;                   /* toggled per field picture (_decodeOrSkipFrame); non-zero at _lastFrame: "the second field is missing" */
+    s32 second_field;                   /* toggled per field picture (_decodeOrSkipFrame); set at
+                                           _lastFrame: "the second field is missing" */
 
     /* sequence_header (_sequenceHeader) */
     u32 horizontal_size;                /* 12 bits */

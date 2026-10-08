@@ -9,7 +9,6 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021a328/FUN_0021a328.s
 
 #include "sda.h"
 
-
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 
@@ -40,7 +39,8 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 extern long get_effect_texture(int) __asm__("func_001F44B8");
 extern void EnableGlobalStateFlag(void) __asm__("func_001F61E8");
 extern void DisableGlobalStateFlag(void) __asm__("func_001F61F8");
-extern void font_print_window(struct TextRegion *, long, char *, int, long, u8 *) __asm__("func_001F7090");
+extern void font_print_window(struct TextRegion *, long, char *, int, long,
+                              u8 *) __asm__("func_001F7090");
 extern int scale_game_frames(int) __asm__("func_001F96F8");
 extern long func_001FA6E0(int, int, float);
 extern char *get_help_message_text(int) __asm__("func_001FDD10");
@@ -222,9 +222,15 @@ int render_configured_text_label(struct MenuScreen *label) {
     texture_tex0 = get_effect_texture(font_texture_index);
     {
         struct TextRegion *window;
-        struct TextRegion c = {text_vertical_inset, label->height - text_vertical_inset, 1, label->width - 4,
-                      x, y - (label->data.label.scroll_offset >> 4), .line_advance = text_line_spacing,
-                      text_style, .subpixel_y_sixteenths = -(label->data.label.scroll_offset & 0xF)};
+        struct TextRegion c = {text_vertical_inset,
+                               label->height - text_vertical_inset,
+                               1,
+                               label->width - 4,
+                               x,
+                               y - (label->data.label.scroll_offset >> 4),
+                               .line_advance = text_line_spacing,
+                               text_style,
+                               .subpixel_y_sixteenths = -(label->data.label.scroll_offset & 0xF)};
 
         window = &c;
         if (label->data.label.flags & 0x10000) {

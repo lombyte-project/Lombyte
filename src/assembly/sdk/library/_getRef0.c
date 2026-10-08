@@ -13,8 +13,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/_getRef0/_getRef0.s", _
 extern MpegMcFunc D_00132E30[];
 extern MpegMcFunc D_00132E50[];
 
-void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int dfield, int yofs, int h, int bx, int by,
-              int dx, int dy, int fieldpred, int avg) {
+void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int dfield, int yofs,
+              int h, int bx, int by, int dx, int dy, int fieldpred, int avg) {
     struct MpegMcFetch *ye;
     struct MpegMcFetch *ce;
     int n;

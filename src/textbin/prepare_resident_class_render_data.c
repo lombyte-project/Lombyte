@@ -58,7 +58,6 @@ typedef struct {
     s32 nested_tables[1];
 } ResidentClassRenderHeader;
 
-
 extern u8 resident_class_slot_by_id[] __asm__("D_001B3AC0");
 extern MaterialMap resident_class_material_maps[] __asm__("D_001B6880");
 

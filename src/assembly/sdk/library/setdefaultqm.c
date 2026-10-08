@@ -18,8 +18,7 @@ extern void _waitIpuIdle(struct MpegDecoder *);
 void LoadDefaultMpegQuantizerMatrix(struct MpegDecoder *state, s32 command,
                                     u32 source_address) __asm__("_setDefaultQM");
 
-void LoadDefaultMpegQuantizerMatrix(struct MpegDecoder *state, s32 command,
-                                    u32 source_address) {
+void LoadDefaultMpegQuantizerMatrix(struct MpegDecoder *state, s32 command, u32 source_address) {
     s32 interrupts_enabled;
     struct sceMpegCbData callback;
 

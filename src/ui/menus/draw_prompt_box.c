@@ -7,7 +7,8 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void *get_help_message_text(int) __asm__("func_001FDD10");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern char D_001602E8[];
-extern void font_print_window_small(struct TextRegion *, long, char *, int) __asm__("func_001F75F0");
+extern void font_print_window_small(struct TextRegion *, long, char *,
+                                    int) __asm__("func_001F75F0");
 /* Draws the two-line prompt box (text 0x4FB3 for menu_system.unkD4 in 0..2,
    0x4FB5 for 3, else D_001602E8) sized from arg0's +0x20/+0x24. The box
    is an aggregate initializer: this compiler clears it with a memset
@@ -35,8 +36,16 @@ int draw_prompt_box(char *arg0) {
         break;
     }
     {
-        struct TextRegion c = {1, *(int *)(arg0 + 0x24) + 1, 1, *(int *)(arg0 + 0x20) + 1,
-                      *(int *)(arg0 + 0x20) >> 1, 5, 0, 0, 0x10, 5};
+        struct TextRegion c = {1,
+                               *(int *)(arg0 + 0x24) + 1,
+                               1,
+                               *(int *)(arg0 + 0x20) + 1,
+                               *(int *)(arg0 + 0x20) >> 1,
+                               5,
+                               0,
+                               0,
+                               0x10,
+                               5};
 
         font_print_window_small(&c, 0x80000000L, text, -1);
         c.anchor_y = (*(int *)(arg0 + 0x24) - c.rendered_height) >> 1;

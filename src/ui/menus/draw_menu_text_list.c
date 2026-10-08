@@ -9,7 +9,6 @@
    focused row highlighted, scrolling the box to keep it visible.
    Returns 1 once after flag 0x8000 is consumed, else 2. */
 
-
 extern u8 D_0013D408[];
 extern u8 D_001DF050[];
 extern u8 D_001DF3F0[];
@@ -21,7 +20,8 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void EnableGlobalStateFlag(void) __asm__("func_001F61E8");
 extern void DisableGlobalStateFlag(void) __asm__("func_001F61F8");
-extern void font_print_window(struct TextRegion *, long, char *, s32, s32, u8 *) __asm__("FUN_001f7090");
+extern void font_print_window(struct TextRegion *, long, char *, s32, s32,
+                              u8 *) __asm__("FUN_001f7090");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void draw_menu_selection_marker(s32, s32, s32) __asm__("func_0021F8E8");
 extern void *memset(void *, int, unsigned int);
@@ -76,8 +76,9 @@ s32 draw_menu_text_list(struct MenuScreen *menu) {
     }
     y = row_height - font_size / 2;
     {
-        struct TextRegion box = {4, menu->height - 4, 0, menu->width - 2, 0, y - menu->data.list.scroll, 0,
-                        0, font_size + 2};
+        struct TextRegion box = {
+            4, menu->height - 4, 0, menu->width - 2, 0, y - menu->data.list.scroll, 0,
+            0, font_size + 2};
 
         glyph_texture = get_effect_texture(font_kind);
         for (i = 0; menu->data.list.items[i].text != 0; i++) {

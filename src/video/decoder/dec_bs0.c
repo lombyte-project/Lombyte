@@ -26,9 +26,9 @@ typedef struct {
 typedef struct {
     char v[0xD0000];
 } VoData;
-extern int func_0012BA48(struct sceMpeg *);                             /* sceMpegIsEnd */
-extern int sceMpegGetPicture(struct sceMpeg *, void *, int);            /* sceMpegGetPicture_pal */
-extern void sceMpegReset(struct sceMpeg *);                             /* sceMpegReset_pal */
+extern int func_0012BA48(struct sceMpeg *);                      /* sceMpegIsEnd */
+extern int sceMpegGetPicture(struct sceMpeg *, void *, int);     /* sceMpegGetPicture_pal */
+extern void sceMpegReset(struct sceMpeg *);                      /* sceMpegReset_pal */
 extern VoData *vo_buf_get_data(VoBuf *) __asm__("FUN_0023d288"); /* voBufGetData */
 extern void vo_buf_inc_count(VoBuf *) __asm__("func_0023D210");  /* voBufIncCount */
 extern void set_image_tag(void *, int, int,

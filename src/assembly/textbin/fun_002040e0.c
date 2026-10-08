@@ -22,7 +22,6 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002040e0/FUN_002040e0.s
     ((u64)(tbp1) | ((u64)(tbw1) << 14) | ((u64)(tbp2) << 20) | ((u64)(width_units_128) << 34) |    \
      ((u64)(tbp3) << 40) | ((u64)(tbw3) << 54))
 
-
 typedef struct {
     u64 data;
     u64 address;
@@ -142,8 +141,9 @@ void initialize_tfrag_render_data(TfragRenderHeader *header,
             height_log2 = highest_set_bit_index(texture->height);
             gs_block_base = gs_texture_allocation_base >> 8;
             tex0_word = ((width_units_64 << 14) | (((s64)width_log2 << 26) | ((s64)0x13 << 20))) |
-                        ((s64)height_log2 << 30) | ((s64)(texture->clut_block_offset + gs_block_base) << 37) |
-                        ((s64)1 << 34) | (1ULL << 63);
+                        ((s64)height_log2 << 30) |
+                        ((s64)(texture->clut_block_offset + gs_block_base) << 37) | ((s64)1 << 34) |
+                        (1ULL << 63);
             clamp_word =
                 (s64)material_base | ((s64)material_shift << 2) | ((s64)texture_index << 24);
             tex1_word =

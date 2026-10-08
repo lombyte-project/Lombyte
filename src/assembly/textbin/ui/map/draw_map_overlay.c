@@ -21,7 +21,6 @@ typedef struct {
     s32 pad[3];
 } MapHighlightedCell;
 
-
 typedef struct {
     s32 x0;
     s32 y0;
@@ -151,8 +150,7 @@ void draw_map_overlay(void) {
     render_packet_cursor.tag->vif0 = 0;
     render_packet_cursor.tag->vif1 = 0x50000005;
     render_packet_cursor.tag++;
-    background_tex0 =
-        get_frame_texture(get_icon_frame(0xE999, D_001A00F0.loaded));
+    background_tex0 = get_frame_texture(get_icon_frame(0xE999, D_001A00F0.loaded));
     packet_words = (u64 *)render_packet_cursor.tag;
     packet_words[0] = 0x7400000000008001;
     packet_words[1] = 0x5353106;
@@ -283,7 +281,8 @@ void draw_map_overlay(void) {
                     }
                     j = i + 1;
                     inner_offset = j * inner_stride;
-                    for (; !(((struct MapIcon *)((u8 *)D_001A00F0.icons + inner_offset))->flags & 4);
+                    for (;
+                         !(((struct MapIcon *)((u8 *)D_001A00F0.icons + inner_offset))->flags & 4);
                          j++, inner_offset += inner_stride) {
                         pan_x = icon_bounds[j].x1 - icon_bounds[i].x0;
                         if (pan_x <= 0)

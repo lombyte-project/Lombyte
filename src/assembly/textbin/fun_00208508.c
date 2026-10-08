@@ -13,8 +13,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00208508/FUN_00208508.s
 #include "rnc/ui/map/map_icon.h"
 
 extern struct MapState map_marker_state __asm__("D_001A00F0");
-extern struct MapState selected_map_state __asm__("D_001A00F0")
-    __attribute__((section(".data")));
+extern struct MapState selected_map_state __asm__("D_001A00F0") __attribute__((section(".data")));
 extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
 extern s32 marker_half_size __asm__("D_0015FDB0") MACRO_ADDR;
 extern f32 marker_scale_by_level[] __asm__("D_001A01A4");

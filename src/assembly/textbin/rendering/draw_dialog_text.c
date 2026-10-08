@@ -87,8 +87,10 @@ extern u64 get_effect_texture(int) __asm__("func_001F44B8");
 extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
 extern void draw_outlined_rect(int, int, int, int, int) __asm__("func_001F6060");
 extern void font_print_center(int, int, long, char *, int) __asm__("func_001F6AF0");
-extern void font_print_window(struct TextRegion *, u64, char *, int, s64, void *) __asm__("func_001F7090");
-extern void font_print_window_regular(struct TextRegion *, long, char *, int) __asm__("func_001F7580");
+extern void font_print_window(struct TextRegion *, u64, char *, int, s64,
+                              void *) __asm__("func_001F7090");
+extern void font_print_window_regular(struct TextRegion *, long, char *,
+                                      int) __asm__("func_001F7580");
 extern int scale_game_frames(int) __asm__("func_001F96F8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float func_001FA6C0(int);
@@ -300,7 +302,8 @@ void draw_dialog_text(void) {
             text = text_buffer;
             break;
         }
-        text_window = (struct TextRegion){0, D_0013E500.height, 0x60, 0x1A0, 0x100, 0x68, 0, 0, 0x10, 5};
+        text_window =
+            (struct TextRegion){0, D_0013E500.height, 0x60, 0x1A0, 0x100, 0x68, 0, 0, 0x10, 5};
         font_print_window_regular(&text_window, 0, text, -1);
         y = text_window.rendered_height + 0x28;
         middle_y = (D_0013E500.height - y) >> 1;

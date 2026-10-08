@@ -15,8 +15,7 @@ s32 video_dec_set_stream(struct VideoDec *video_dec, s32 stream_type,
 s32 video_dec_set_stream(struct VideoDec *video_dec, s32 stream_type,
                          s32 channel, MpegStreamCallback callback,
                          void *callback_context) {
-    sceMpegAddStrCallback(&video_dec->mpeg, stream_type, channel,
-                          callback, callback_context);
+    sceMpegAddStrCallback(&video_dec->mpeg, stream_type, channel, callback, callback_context);
     return 1;
 }
 
