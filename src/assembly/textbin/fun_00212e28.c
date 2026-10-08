@@ -43,7 +43,7 @@ void update_visible_resident_objects(void) {
                     callback = moby->update_callback;
                 }
                 if (callback != 0) {
-                    moby->update_callback(moby);
+                    callback(moby);
                 }
                 if (!(moby->flags & 0x4)) {
                     refresh_resident_object_spatial_bounds(moby);
