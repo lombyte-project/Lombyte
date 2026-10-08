@@ -425,9 +425,9 @@ extern char *D_L14_001B0BB0_c3[] __asm__("D_L14_001B0BB0");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern float FUN_L00_0025b750(float, float, float);
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
-extern int FUN_L00_0025d808();
+extern int advance_along_path() __asm__("FUN_L00_0025d808");
 extern short D_L14_00161D14_d __asm__("D_L14_00161D14") __attribute__((sda));
-extern int func_L00_0025E860_2F05D8(void *, void *, void *, void *, int,
+extern int advance_along_path_2f05d8(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
 int FUN_L14_002ef150(char *m) {
@@ -450,7 +450,7 @@ int FUN_L14_002ef150(char *m) {
         qcopy(rot, d + 0xF0);
     }
     step = *(float *)&D_L14_00161D14_d * D_0015ED6C_c;
-    r = func_L00_0025E860_2F05D8(e, pos, d + 0xA4, d + 0xA8, 0, step * *(float *)(d + 0xAC));
+    r = advance_along_path_2f05d8(e, pos, d + 0xA4, d + 0xA8, 0, step * *(float *)(d + 0xAC));
     FUN_L00_0025b8c0((float *)(m + 0x10), (float *)(d + 0xC0), pos[0], 0.003f, 0.2f, 0.0f);
     FUN_L00_0025b8c0((float *)(m + 0x14), (float *)(d + 0xC4), pos[1], 0.003f, 0.2f, 0.0f);
     FUN_L00_0025b8c0((float *)(m + 0x18), (float *)(d + 0xC8), pos[2], 0.003f, 0.2f, 0.0f);
@@ -976,7 +976,7 @@ extern short D_L14_00161F50_d __asm__("D_L14_00161F50") __attribute__((sda));
 extern short D_L14_00161F54_d __asm__("D_L14_00161F54") __attribute__((sda));
 extern short D_L14_00161F58_d __asm__("D_L14_00161F58") __attribute__((sda));
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
-extern void FUN_L00_0025d808_c(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
+extern void advance_along_path_c(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
@@ -985,7 +985,7 @@ void FUN_L14_002fc9a0(char *moby) {
     float v[3];
     float t[3];
     float a, b, c;
-    FUN_L00_0025d808_c((int)D_L14_001B0BB0_c5[*(int *)(d + 0x68)], (char *)v, d + 0x60, d + 0x64, 1, (*(float *)&D_L14_00161F48_d) * D_0015ED6C_c2);
+    advance_along_path_c((int)D_L14_001B0BB0_c5[*(int *)(d + 0x68)], (char *)v, d + 0x60, d + 0x64, 1, (*(float *)&D_L14_00161F48_d) * D_0015ED6C_c2);
     FUN_L00_0025b8c0((float *)(moby + 0x10), (float *)(d + 0x70), v[0], (*(float *)&D_L14_00161F4C_d), (*(float *)&D_L14_00161F50_d), 0.0f);
     FUN_L00_0025b8c0((float *)(moby + 0x14), (float *)(d + 0x74), v[1], (*(float *)&D_L14_00161F4C_d), (*(float *)&D_L14_00161F50_d), 0.0f);
     FUN_L00_0025b8c0((float *)(moby + 0x18), (float *)(d + 0x78), v[2], (*(float *)&D_L14_00161F4C_d), (*(float *)&D_L14_00161F50_d), 0.0f);
@@ -1020,7 +1020,7 @@ extern float D_0015ED6C_f2 __asm__("D_0015ED6C");
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern float vector_length_xy(void *);
-extern int FUN_L00_0025d808();
+extern int advance_along_path() __asm__("FUN_L00_0025d808");
 extern float D_L14_00161F7C __attribute__((sda));
 extern float D_L14_00161F80 __attribute__((sda));
 extern float D_L14_00161F84 __attribute__((sda));
@@ -1032,7 +1032,7 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
-extern int func_L00_0025E860_2F05D8(void *, void *, void *, void *, int,
+extern int advance_along_path_2f05d8(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 extern int *D_L14_001B0BB0[];
 
@@ -1043,7 +1043,7 @@ int FUN_L14_002fd918(char *m) {
     float yaw;
     float t;
     int r;
-    r = func_L00_0025E860_2F05D8(D_L14_001B0BB0[*(int *)(d + 0x68)], v, d + 0x60, d + 0x64,
+    r = advance_along_path_2f05d8(D_L14_001B0BB0[*(int *)(d + 0x68)], v, d + 0x60, d + 0x64,
                                  (unsigned int)*(int *)(d + 0x8C) >> 31,
                                  D_L14_00161F78 * D_0015ED6C_f2);
     if (*(int *)(d + 0x8C) != 0 && (r != 0 || *(short *)(D_L14_00167500 + 0x86) != 0x13)) {

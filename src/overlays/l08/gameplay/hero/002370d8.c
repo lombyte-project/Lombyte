@@ -340,7 +340,7 @@ extern int D_L08_0016CF80 __attribute__((section(".data")));
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_001f9770(void *);
 extern int FUN_L00_002050b8(int);
-extern int FUN_L00_0020cd08(void *, void *, void *, void *, void *, void *, int, int);
+#include "rnc/overlay/path.h"
 extern int FUN_L00_0020d498(int);
 extern int FUN_L00_00211360(void *);
 extern int FUN_L00_00221d98(void);
@@ -353,7 +353,7 @@ extern int FUN_L00_00229660(void);
 extern int FUN_L00_00229910(void);
 extern int FUN_L00_00229a98(void);
 extern int FUN_L00_00257b90(int, int);
-extern int FUN_L00_0025d808(int *tab, float *out, int *a, float *b, int c, float d);
+extern int advance_along_path(int *tab, float *out, int *a, float *b, int c, float d) __asm__("FUN_L00_0025d808");
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern int FUN_L00_00266d60(int, int, int *);
 extern int FUN_L00_00266e00(int, int, int, int);
@@ -1627,7 +1627,7 @@ void FUN_L08_002370d8(void) {
                                     path_seg = D_0013F350.f564;
                                     path_t = D_0013F350.f568;
                                     /* Step a copy of the hero position along its current path. */
-                                    if (FUN_L00_0025d808((int *)D_0013F350.f560, v0, &path_seg,
+                                    if (advance_along_path((int *)D_0013F350.f560, v0, &path_seg,
                                                          &path_t, D_0013F350.f584, d)) {
                                         scale_vector_xyz(v1, D_0013F350.f100,
                                                          scale_game_frames(0x30));
@@ -1636,7 +1636,7 @@ void FUN_L08_002370d8(void) {
                                     v0[0] += fast_cos(ang) * f;
                                     v0[1] += fast_sin(ang) * f;
                                     /* Look for another path (not this one) near the probe. */
-                                    if (FUN_L00_0020cd08(v0, &new_path, v1, &new_seg, &new_t,
+                                    if (find_path_near_point(v0, &new_path, v1, &new_seg, &new_t,
                                                          &new_loop, D_0013F350.f560, 0)) {
                                         D_0013F350.f594 = D_0013F350.f560;
                                         D_0013F350.f598 = D_0013F350.f564;

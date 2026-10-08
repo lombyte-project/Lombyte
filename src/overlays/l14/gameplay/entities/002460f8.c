@@ -311,8 +311,8 @@ void FUN_L14_002ae260(char *m) {
 
 extern float FUN_001f9b48(void *, void *);
 extern int *D_L14_001B0BB0[];
-extern void FUN_L00_0025d808(int a, char *pos, char *b, char *c, int d, float f);
-extern int func_L00_0025E860_2AF688(void *, void *, void *, void *, int,
+extern void advance_along_path(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
+extern int advance_along_path_2af688(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
 void FUN_L14_002ae448(char *m) {
@@ -347,11 +347,11 @@ void FUN_L14_002ae448(char *m) {
         int *q = D_L14_001B0BB0[*(int *)(d + 0x78)];
         *(int *)(d + 0x84) = 0;
         *(float *)(d + 0x1CC) = 0.0f;
-        func_L00_0025E860_2AF688(q, m + 0x10, d + 0x84, d + 0x1CC, *(short *)(d + 0x8A),
+        advance_along_path_2af688(q, m + 0x10, d + 0x84, d + 0x1CC, *(short *)(d + 0x8A),
                                  *(float *)(d + 0x210) * *(float *)(d + 0x16C));
         *(float *)(d + 0x8C) = 0.0f;
         *(int *)(d + 0x80) = 0;
-        func_L00_0025E860_2AF688(q, m + 0x10, d + 0x80, d + 0x8C, *(short *)(d + 0x8A),
+        advance_along_path_2af688(q, m + 0x10, d + 0x80, d + 0x8C, *(short *)(d + 0x8A),
                                  *(float *)(d + 0x210) * *(float *)(d + 0x190));
     } else {
         *(int *)(d + 0x80) = 0;
@@ -367,8 +367,8 @@ extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2,
 extern int *D_L14_001B0BB0[];
 extern short D_L14_001613A0_d __asm__("D_L14_001613A0") __attribute__((sda));
 extern short D_L14_001613A4_d __asm__("D_L14_001613A4") __attribute__((sda));
-extern void FUN_L00_0025d808(int a, char *pos, char *b, char *c, int d, float f);
-extern int func_L00_0025E860_2AF918(int *tab, float *out, int *a, float *b, int c,
+extern void advance_along_path(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
+extern int advance_along_path_2af918(int *tab, float *out, int *a, float *b, int c,
                                     float d) __asm__("FUN_L00_0025d808");
 
 void FUN_L14_002ae6d8(char *moby) {
@@ -376,7 +376,7 @@ void FUN_L14_002ae6d8(char *moby) {
     float v[4];
     float save = *(float *)(data + 0x1CC);
     int save2 = *(int *)(data + 0x84);
-    int r = func_L00_0025E860_2AF918(D_L14_001B0BB0[*(int *)(data + 0x78)], v, (int *)(data + 0x84),
+    int r = advance_along_path_2af918(D_L14_001B0BB0[*(int *)(data + 0x78)], v, (int *)(data + 0x84),
                                      (float *)(data + 0x1CC), *(short *)(data + 0x8A),
                                      *(float *)(data + 0x168));
     FUN_L00_0025b8c0_c((float *)(data + 0x170), (float *)(data + 0x180), v[0],
@@ -401,7 +401,7 @@ extern float D_0015ED6C;
 extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2,
                                 float eps) __asm__("FUN_L00_0025b8c0");
 extern short D_L14_001613FC_d __asm__("D_L14_001613FC") __attribute__((sda));
-extern int func_L00_0025E860_2AFB40(void *, void *, void *, void *, int,
+extern int advance_along_path_2afb40(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
 void FUN_L14_002ae900(char *moby, float a, float b, float c) {
@@ -411,7 +411,7 @@ void FUN_L14_002ae900(char *moby, float a, float b, float c) {
     if (*(short *)(data + 0x208) != 0) {
         qcopy(tmp, (char *)list + list[0] * 16);
     } else {
-        if (func_L00_0025E860_2AFB40(list, tmp, data + 0x80, data + 0x8C, 0, b * D_0015ED6C * c) !=
+        if (advance_along_path_2afb40(list, tmp, data + 0x80, data + 0x8C, 0, b * D_0015ED6C * c) !=
             0) {
             *(short *)(data + 0x208) = 1;
         }
@@ -953,11 +953,11 @@ extern float FUN_L00_0025b8c0_5730(float *p, float *v, float t, float u1, float 
 extern void steer_5730(char *moby, float *vel, float target, float k, float d,
                        float max) __asm__("FUN_L00_00258278");
 
-extern int FUN_L00_0025d808_5730() __asm__("FUN_L00_0025d808");
+extern int advance_along_path_5730() __asm__("FUN_L00_0025d808");
 int FUN_L14_002b5730(char *moby, char *a1, int a2, int a3, float *v, float *vel, float f12,
                      float f13, float f14, float f15, float f16, float f17, float f18) {
     float tmp[3];
-    int r = FUN_L00_0025d808_5730(a1, tmp, a2, a3, 0);
+    int r = advance_along_path_5730(a1, tmp, a2, a3, 0);
     FUN_L00_0025b8c0_5730((float *)(moby + 0x10), v, tmp[0], f13, f14, f15);
     FUN_L00_0025b8c0_5730((float *)(moby + 0x14), v + 1, tmp[1], f13, f14, f15);
     FUN_L00_0025b8c0_5730((float *)(moby + 0x18), v + 2, tmp[2], f13, f14, f15);
@@ -1294,7 +1294,7 @@ extern void sub_6570(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float atan2_6570(float, float) __asm__("FUN_001f9e90");
 extern float addrot_6570(float, float) __asm__("FUN_001fa580");
 extern void place_6570(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void follow_6570(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
+extern void advance_along_path_6570(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern void clear_6570(void *) __asm__("FUN_001f99f8");
 extern void stop_6570(int) __asm__("FUN_L00_0023e838");
 
@@ -1341,7 +1341,7 @@ void FUN_L14_002d6570(unsigned char *m) {
         s = -D_L14_00161A38_6570;
         *(int *)(od + 0x64) = D_0013F350_6570.f564;
         *(float *)(od + 0x68) = D_0013F350_6570.f568;
-        follow_6570(path, o + 0x10, od + 0x64, od + 0x68, 0, s);
+        advance_along_path_6570(path, o + 0x10, od + 0x64, od + 0x68, 0, s);
         clear_6570(od + 0x90);
         *(int *)(od + 0xF8) = i * 2;
         *(int *)(od + 0xFC) = i * 2 + 1;
@@ -1357,12 +1357,12 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d67e8.s", FUN_L14_002d67e8);
 extern float D_0015ED6C;
 extern int D_L14_0015F70C;
 extern short D_L14_00161A30_d __asm__("D_L14_00161A30") __attribute__((sda));
-extern void FUN_L00_0025d808(int a, char *pos, char *b, char *c, int d, float f);
+extern void advance_along_path(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
 
 void FUN_L14_002d7198(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int idx = *(int *)(data + 0x60);
-    FUN_L00_0025d808(*(int *)((idx << 5) + D_L14_0015F70C + 0x10), moby + 0x10, data + 0x64,
+    advance_along_path(*(int *)((idx << 5) + D_L14_0015F70C + 0x10), moby + 0x10, data + 0x64,
                      data + 0x68, 0, *(float *)&D_L14_00161A30_d * D_0015ED6C);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d71f0.s", FUN_L14_002d71f0);

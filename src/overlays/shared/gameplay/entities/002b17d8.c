@@ -322,7 +322,7 @@ void FUN_L14_002b2f60(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4668), where it is exact; names translated to the US level program. */
 
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
-extern int FUN_L00_0025d808(void *, void *, void *, void *, int, float);
+extern int advance_along_path(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern short D_L14_001614D8_d __asm__("D_L14_001614D8") __attribute__((sda));
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float func_L00_0025CE58_2B4668(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
@@ -332,7 +332,7 @@ int FUN_L14_002b3418(char *moby) {
     float b[4];
     float c[4];
     char *data = *(char **)(moby + 0x78);
-    int reached = FUN_L00_0025d808(D_L14_001B0BB0[*(int *)(data + 0x240)], a, data + 0x24C, data + 0x250, 0,
+    int reached = advance_along_path(D_L14_001B0BB0[*(int *)(data + 0x240)], a, data + 0x24C, data + 0x250, 0,
                               *(float *)&D_L14_001614D8_d * D_0015ED6C * *(float *)(data + 0x27C));
     float ang;
     float k;

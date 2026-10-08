@@ -40,7 +40,7 @@ typedef struct {
 extern GS_cf58 D_0013F350_cf58 __asm__("D_0013F350") __attribute__((section(".data")));
 extern Q_cf58 D_0013F3D0_cf58 __asm__("D_0013F3D0") __attribute__((section(".data")));
 f32 FUN_001f9b48_c(void *, V_cf58 *) __asm__("FUN_001f9b48");
-s32 FUN_L00_0020cd08(Q_cf58 *, s32 *, V_cf58 *, s32 *, f32 *, s32 *, s32, s32);
+#include "rnc/overlay/path.h"
 void FUN_L00_0020cf58(void) {
     V_cf58 v0, v1, v2;
 
@@ -105,7 +105,7 @@ void FUN_L00_0020cf58(void) {
         }
     }
     *(Q_cf58 *)&v1 = *(Q_cf58 *)&D_0013F350_cf58.pos;
-    if (!FUN_L00_0020cd08((Q_cf58 *)&v1, &a, &v0, &b, &c, &e, 0, 0))
+    if (!find_path_near_point((Q_cf58 *)&v1, &a, &v0, &b, &c, &e, 0, 0))
         return;
     if (D_0013F350_cf58.w2084 == 41 && D_0013F350_cf58.w5C4 != 0 && a == D_0013F350_cf58.w560)
         return;
@@ -159,8 +159,6 @@ typedef struct {
 extern S13F350_20d330 D_0013F350_0020d330 __asm__("D_0013F350");
 extern int D_0013CAE4_0020d330[] __asm__("D_0013CAE4");
 void FUN_L00_0020d2f8_0020d330(Vec4_20d330 *) __asm__("FUN_L00_0020d2f8");
-int FUN_L00_0020cd08_0020d330(Vec4_20d330 *, int *, Vec4_20d330 *, int *, float *, int *, int,
-                              int) __asm__("FUN_L00_0020cd08");
 void FUN_L00_0020d330(void) {
     S13F350_20d330 *P = &D_0013F350_0020d330;
     Vec4_20d330 a, b;
@@ -174,7 +172,7 @@ void FUN_L00_0020d330(void) {
     FUN_L00_0020d2f8_0020d330(&a);
     if ((P->w208C == 4 && P->h41E == 0) || P->w208C == 2) {
         pb = &b;
-        if (FUN_L00_0020cd08_0020d330(&a, &i20, pb, &i24, &f28, &i2C, 0, 0)) {
+        if (find_path_near_point(&a, &i20, pb, &i24, &f28, &i2C, 0, 0)) {
             float bz, az;
             int fl;
             az = a.f[2];

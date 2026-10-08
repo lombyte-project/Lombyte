@@ -663,7 +663,7 @@ extern void FUN_L00_0020d2f8(void *);
 extern f32 FUN_L00_00257c48(f32, f32);
 extern void FUN_L00_0026d598(void *, void *, s32);
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
-extern s32 FUN_L00_0025d808(void *, void *, s32 *, f32 *, f32, s32);
+extern s32 advance_along_path(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_0025d808");
 extern s32 FUN_L00_0025d7a0(void *, s32, s32, s32);
 extern f32 FUN_001f96b0(f32);
 extern void FUN_L00_00214108(void);
@@ -2209,9 +2209,9 @@ void FUN_L00_00217970(void) {
         if (P.i2084 == 0x42) {
             r = P.f5CC * (f32)P.i578;
         }
-        FUN_L00_0025d808(P.p560, &v0, &P.i564, &P.f568, r, P.i584);
+        advance_along_path(P.p560, &v0, &P.i564, &P.f568, r, P.i584);
         if (P.i590 != 0) {
-            FUN_L00_0025d808(P.p594, &v10, &P.i598, &P.f59C, r, P.i5A0);
+            advance_along_path(P.p594, &v10, &P.i598, &P.f59C, r, P.i5A0);
         }
         if (scale_game_frames(90) < P.i19C) {
             s32 h;
@@ -2221,11 +2221,11 @@ void FUN_L00_00217970(void) {
             qcopy(&v20, &P.u80.v80);
             si = P.i564;
             sf = P.f568;
-            h = FUN_L00_0025d808(P.p560, &v20, &si, &sf, q, P.i584);
+            h = advance_along_path(P.p560, &v20, &si, &sf, q, P.i584);
             qcopy(&v30, &P.u80.v80);
             si = P.i564;
             sf = P.f568;
-            if ((h | FUN_L00_0025d808(P.p560, &v30, &si, &sf, q + 0.1f, P.i584)) == 0 ||
+            if ((h | advance_along_path(P.p560, &v30, &si, &sf, q + 0.1f, P.i584)) == 0 ||
                 P.i584 != 0) {
                 f32 a = fast_subtract_rotations(
                             P.f57C, FUN_001f9e90(v30.f[0] - v20.f[0], v30.f[1] - v20.f[1])) *
@@ -2375,7 +2375,7 @@ void FUN_L00_00217970(void) {
             si = P.i564;
             sf = P.f568;
             qcopy(&v20, &P.u80.v80);
-            FUN_L00_0025d808(P.p560, &v20, &si, &sf, 0.3f, P.i584);
+            advance_along_path(P.p560, &v20, &si, &sf, 0.3f, P.i584);
             e = FUN_001f9e90(FUN_001f9b80(&P.u500.v500, &v20), v20.f[2] - P.u500.f508.v);
             if (e > 0.0f) {
                 sp = e * 1.9098593f * (D_0015ED6C * -2.5f);
@@ -2468,7 +2468,7 @@ void FUN_L00_00217970(void) {
             P.uE0.fE8.v = P.uE0.fE8.v - D_0015ED70 * 24.0f;
             break;
         }
-        FUN_L00_0025d808(P.p5F0, &v10, &P.i5F4, &P.f5F8, P.f604, P.i60C);
+        advance_along_path(P.p5F0, &v10, &P.i5F4, &P.f5F8, P.f604, P.i60C);
         idx = FUN_L00_0025d7a0(P.p5F0, P.i5F4, 1, P.i60C);
         FUN_001f9a28(&v20, (Vec4 *)P.p5F0 + (idx + 1), &v10);
         if (FUN_001f9af0(&v20) < 0.001f) {

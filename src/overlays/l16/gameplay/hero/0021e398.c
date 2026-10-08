@@ -65,7 +65,7 @@ extern int FUN_L00_00216de8(int, int);
 extern int FUN_L00_00221df8(void);
 extern int FUN_L00_00229a98(void);
 extern int FUN_L00_00257b90(int, int);
-extern int FUN_L00_0025d808(int *tab, float *out, int *a, float *b, int c, float d);
+extern int advance_along_path(int *tab, float *out, int *a, float *b, int c, float d) __asm__("FUN_L00_0025d808");
 extern int FUN_L01_00226f10(int a);
 extern int FUN_L01_0028b510(void *, void *, float);
 extern int FUN_L05_002551b8(void);
@@ -1025,7 +1025,7 @@ int FUN_L16_0021e398(int a, int b) {
         *(int *)(p + 0x5C0) = 0;
         seg = *(int *)(p + 0x564);
         t = *(float *)(p + 0x568);
-        FUN_L00_0025d808(*(int **)(p + 0x560), pos, &seg, &t, *(int *)(p + 0x584), 1.0f);
+        advance_along_path(*(int **)(p + 0x560), pos, &seg, &t, *(int *)(p + 0x584), 1.0f);
         subtract_vector_xyz(vec, pos, p + 0x80);
         if (0.001f < vector_length_xyz(vec)) {
             normalize_vector_xyz(vec, vec, 1.0f);

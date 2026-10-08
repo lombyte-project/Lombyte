@@ -664,7 +664,7 @@ extern void FUN_L00_0020d2f8(void *);
 extern f32 FUN_L00_00257c48(f32, f32);
 extern void FUN_L00_0026d598(void *, void *, s32);
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
-extern s32 FUN_L00_0025d808(void *, void *, s32 *, f32 *, f32, s32);
+extern s32 advance_along_path(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_0025d808");
 extern s32 FUN_L00_0025d7a0(void *, s32, s32, s32);
 extern f32 FUN_001f96b0(f32);
 extern void FUN_L00_00214108(void);
@@ -2058,7 +2058,7 @@ void FUN_L03_0020ef60(void) {
             P.uE0.fE8.v = P.uE0.fE8.v - D_0015ED70 * 24.0f;
             break;
         }
-        FUN_L00_0025d808(P.p5F0, &v10, &P.i5F4, &P.f5F8, P.f604, P.i60C);
+        advance_along_path(P.p5F0, &v10, &P.i5F4, &P.f5F8, P.f604, P.i60C);
         idx = FUN_L00_0025d7a0(P.p5F0, P.i5F4, 1, P.i60C);
         FUN_001f9a28(&v20, (Vec4 *)P.p5F0 + (idx + 1), &v10);
         if (FUN_001f9af0(&v20) < 0.001f) {

@@ -395,7 +395,7 @@ extern void FUN_L00_002323b8(int, int, float);
 extern void FUN_L00_002325e0(int bank, int seq);
 extern void FUN_L00_00233b20(float *dst, float *src, float z);
 extern void FUN_L00_00250320(void *, void *, void *, void *);
-extern void FUN_L00_0025d808(int a, char *pos, char *b, char *c, int d, float f);
+extern void advance_along_path(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void FUN_L00_00262500(int a, char *b);
 extern void FUN_L00_00262528(char *o, int a, int b);
@@ -1205,7 +1205,7 @@ int FUN_L00_002223f8(int a, int b) {
         *(int *)(p + 0x5B8) = 0;
         *(short *)(p + 0x5BC) = 0;
         *(int *)(p + 0x5C0) = 0;
-        FUN_L00_0025d808(*(int *)(p + 0x560), (char *)&out, (char *)&i, (char *)&f,
+        advance_along_path(*(int *)(p + 0x560), (char *)&out, (char *)&i, (char *)&f,
                          *(int *)(p + 0x584), 1.0f);
         subtract_vector_xyz(&d.v, &out, p + 0x80);
         if (0.001f < vector_length_xyz(&d.v)) {
@@ -1248,7 +1248,7 @@ int FUN_L00_002223f8(int a, int b) {
         t = *(float *)(p + 0x5F8);
         i = *(int *)(p + 0x5F4);
         f = t;
-        FUN_L00_0025d808(*(int *)(p + 0x5F0), (char *)&out, (char *)&i, (char *)&f,
+        advance_along_path(*(int *)(p + 0x5F0), (char *)&out, (char *)&i, (char *)&f,
                          *(int *)(p + 0x60C), 1.0f);
         subtract_vector_xyz(&d.v, &out, p + 0x80);
         if (0.001f < vector_length_xyz(&d.v)) {
