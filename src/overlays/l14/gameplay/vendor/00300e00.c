@@ -361,4 +361,20 @@ int FUN_L14_00315920(char *a, char *b) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003159d8.s", FUN_L14_003159d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315d48.s", FUN_L14_00315d48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00316748.s", FUN_L14_00316748);
+/* Tells whether the vendor slot still blocks the menu (1) or lets it through (0). */
+
+extern char *D_L14_0015EF50;
+extern u8 *D_L14_00167500 __attribute__((section(".data")));
+
+int FUN_L14_00316748(char *moby, char *other) {
+    char *e = *(char **)(D_L14_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    if (*(int *)(e + 0x20) == 0 && *(short *)(D_L14_00167500 + 0x86) == 0x14) {
+        *(int *)(e + 0x20) = 1;
+    } else if (*(int *)(e + 0x20) == 1) {
+        if (*(short *)(D_L14_00167500 + 0x86) != 0x14)
+            return 1;
+        if (other == 0 || *(short *)(other + 0x7E) != 0)
+            return 1;
+    }
+    return 0;
+}

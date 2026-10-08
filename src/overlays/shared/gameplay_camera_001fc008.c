@@ -2,4 +2,20 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_001fc008.s", FUN_L02_001fc008);
+#include "sda.h"
+extern int D_L02_0015EF4C MACRO_ADDR;
+extern int D_L02_001695F0[] NOT_SDA;
+
+void FUN_L02_001fc008(int x) {
+    int i;
+
+    if (D_L02_0015EF4C < 16) {
+        for (i = 0; i < D_L02_0015EF4C; i++) {
+            if (x == D_L02_001695F0[i]) {
+                return;
+            }
+        }
+        D_L02_001695F0[D_L02_0015EF4C++] = x;
+    }
+}
+

@@ -133,8 +133,6 @@ void FUN_L02_002d92f0(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d93e8.s", FUN_L02_002d93e8);
 
-
-
 /* Draws an elliptical arc from start_angle to end_angle (radii radius_x, radius_y, around the screen centre) as five sprite
  * segments in the given colour. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002DB810), where it is exact; names translated to the US level program. */
@@ -409,7 +407,34 @@ void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
 
     FUN_L02_0020bc88_u(m, p4, a4, tex, 0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dae88.s", FUN_L02_002dae88);
+
+typedef struct { long a, b, c, d; } Q_2dae88;
+extern Q_2dae88 D_L02_001D3310_2dae88[] __asm__("D_L02_001D3310") NOT_SDA;
+extern int D_L02_00161B94_2dae88 __asm__("D_L02_00161B94") __attribute__((sda));
+extern int D_L02_00161AAC_2dae88 __asm__("D_L02_00161AAC") __attribute__((sda));
+extern int D_L02_00161AB0_2dae88 __asm__("D_L02_00161AB0") __attribute__((sda));
+extern int D_L02_00161AB4_2dae88 __asm__("D_L02_00161AB4") __attribute__((sda));
+extern int D_L02_00161AB8_2dae88 __asm__("D_L02_00161AB8") __attribute__((sda));
+extern int D_L02_00161B1C_2dae88 __asm__("D_L02_00161B1C") __attribute__((sda));
+int tex_2dae88(int) __asm__("FUN_001f44b8");
+void f20bc88_2dae88(Q_2dae88 *, int *, int *, int, int) __asm__("FUN_L02_0020bc88");
+void FUN_L02_002dae88(void) {
+    Q_2dae88 q;
+    int c[4];
+    int b[4];
+    Q_2dae88 *p = D_L02_001D3310_2dae88;
+    int i;
+    for (i = 3; i >= 0; i--) {
+        b[0] = D_L02_00161AAC_2dae88;
+        b[1] = D_L02_00161AB0_2dae88;
+        b[2] = D_L02_00161AB4_2dae88;
+        b[3] = D_L02_00161AB8_2dae88;
+        c[0] = c[1] = c[2] = c[3] = D_L02_00161B94_2dae88;
+        q = *p++;
+        f20bc88_2dae88(&q, b, c, tex_2dae88(D_L02_00161B1C_2dae88 + 0x28), 1);
+    }
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dc6b0.s", FUN_L02_002dc6b0);
 
 #define NOT_SDA

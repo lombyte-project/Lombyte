@@ -83,7 +83,41 @@ char *FUN_L01_00280970(int a, char *b) {
     }
     return p;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00285768.s", FUN_L01_00285768);
+
+extern char *D_L01_001B25A4[];
+extern char *alloc_285768(int) __asm__("FUN_L00_002678b8");
+extern int trunc_285768(float) __asm__("FUN_001fa6d0");
+
+/* Allocates a type 0x29 particle and fills it from the arguments; kind 0xFF
+ * derives the frame from flags and picks one of two blend modes. */
+char *FUN_L01_00285768(float scale, void *pos, int a, int idx, int b, unsigned char flags, short h, unsigned char kind) {
+    char *r = alloc_285768(0x29);
+    if (r != 0) {
+        int *tail = (int *)(r + 0x20);
+        qcopy(r + 0x10, pos);
+        *(int *)(r + 4) = b;
+        if (kind == 0xFF) {
+            r[9] = (flags >> 5) * 16 + trunc_285768(4.0f);
+            if (flags & 1) {
+                r[3] = 0x48;
+            } else {
+                r[3] = 0x44;
+            }
+        } else {
+            r[9] = flags;
+            r[3] = kind;
+        }
+        r[1] = 0;
+        r[2] = D_L01_001B25A4[0][idx];
+        *(float *)(r + 0xC) = scale * 210000.0f;
+        *(short *)(r + 0xA) = h;
+        ((unsigned char *)r)[8] = 0xA0;
+        /* taking the address changes register allocation to match */
+        *tail = *&a;
+    }
+    return r;
+}
+
 #ifndef NOT_SDA
 #endif
 #ifndef MACRO_ADDR

@@ -445,7 +445,18 @@ void FUN_L14_002ef578(Level14VendorMoby *moby) {
     moby->state = data->value < 0.0f ? 2 : 1;
     data->field124 = 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef5a8.s", FUN_L14_002ef5a8);
+/* Clears the vendor moby's flags and marks its id as collected in both bit tables. */
+
+extern s32 D_0014C190[][64];
+extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_L14_001BABD0[];
+
+void FUN_L14_002ef5a8(Level14VendorMoby *m) {
+    m->state = 0;
+    m->data->field124 = 0;
+    D_0014C190[D_0015ED84_m][(short)*(unsigned short *)((char *)m + 0xB2) >> 5] |= 1 << (*(unsigned short *)((char *)m + 0xB2) & 0x1F);
+    D_L14_001BABD0[(short)*(unsigned short *)((char *)m + 0xB2) >> 5] |= 1 << (*(unsigned short *)((char *)m + 0xB2) & 0x1F);
+}
 extern u8 D_L14_001E03B0[];
 extern u8 *D_L14_001B0BB0_u[] __asm__("D_L14_001B0BB0");
 extern u8 D_0013F350_u[] __asm__("D_0013F350");
@@ -691,7 +702,7 @@ extern void FUN_L01_002783a8(void *, float);
 extern void FUN_L00_002502a0(int);
 extern void FUN_L00_00284e50(void *, void *);
 extern void FUN_L14_002ef578_c(void *) __asm__("FUN_L14_002ef578");
-extern void FUN_L14_002ef5a8(void *);
+void FUN_L14_002ef5a8(Level14VendorMoby *m);
 extern void FUN_L00_00263d40(int, int);
 extern void FUN_L00_00260860(int, int);
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");

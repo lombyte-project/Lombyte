@@ -19,7 +19,272 @@ void FUN_L14_002fe238(char *moby) {
     if (moby[0x20] >= 0)
         mark_moby_for_removal(moby);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fe2a0.s", FUN_L14_002fe2a0);
+
+#include "qcopy.h"
+
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern int scale_game_frames(int);
+
+typedef struct {
+    char pad00[0x60];
+    char effect[7];             /* 0x60: record func_L00_0025E590 updates */
+    unsigned char ticks;        /* 0x67 */
+    char pad68[8];
+    float knock[4];             /* 0x70: record func_L00_0025D5B0 fills (velocity first) */
+    float knock_drag;           /* 0x80 */
+    float knock_gravity;        /* 0x84 */
+    float knock_speed;          /* 0x88 */
+    float knock_rise;           /* 0x8C */
+    int unknown90;
+    int knock_flags;            /* 0x94 */
+    char pad98[0x15];
+    unsigned char knock_bAD;    /* 0xAD */
+    char padAE[0x22];
+    int counter;                /* 0xD0 */
+    float timer;                /* 0xD4 */
+    int path;                   /* 0xD8: index into D_L14_001B0BB0 */
+    int other_path;             /* 0xDC */
+    int trigger;                /* 0xE0 */
+    float vx;                   /* 0xE4 */
+    float vy;                   /* 0xE8 */
+    float vz;                   /* 0xEC */
+    float turn;                 /* 0xF0 */
+    char *child;                /* 0xF4 */
+    int unknownF8;
+    int mode;                   /* 0xFC */
+} L16CrateData;
+
+typedef struct {
+    char pad00[0x10];
+    int bounds;
+} L16CrateModel;
+
+typedef struct {
+    char pad00[0x10];
+    float position[4];          /* 0x10 */
+    unsigned char state;        /* 0x20 */
+    char pad21[3];
+    L16CrateModel *model;       /* 0x24 */
+    char pad28[8];
+    unsigned char collision;    /* 0x30 */
+    char pad31[3];
+    unsigned short flags;       /* 0x34 */
+    char pad36[10];
+    float rotation[4];          /* 0x40 */
+    char pad50[2];
+    unsigned char frame;        /* 0x52 */
+    unsigned char animation;    /* 0x53 */
+    char pad54[0x1C];
+    unsigned char status;       /* 0x70 */
+    char pad71[7];
+    L16CrateData *data;         /* 0x78 */
+    char pad7C[0x18];
+    int bounds;                 /* 0x94 */
+    char pad98[0xC];
+    unsigned char opacity;      /* 0xA4 */
+    char padA5[0xD];
+    short id;                   /* 0xB2 */
+} L16CrateMoby;
+
+typedef struct {
+    char pad00[0x80];
+    float position[4];          /* 0x80 */
+    char pad90[0x1AC];
+    void *standing;             /* 0x23C: the moby the hero stands on */
+} L16CratePlayer;
+
+extern char *D_L14_001B0BB0[];
+extern char *FUN_L00_0025a420(void *, int, int);
+extern char *FUN_L14_002ffaf8(void *, void *);
+extern char D_L14_001FCF20[], D_L14_001FCF58[], D_L14_001FCFA0[], D_L14_001FCFD8[], D_L14_001FD020[];
+extern float D_0015ED6C;
+extern float FUN_001f9e90(float,float);
+extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
+extern int DebugPrint_alt() __asm__("FUN_001e93b0");
+extern int FUN_L00_0025c698(void *,void *);
+extern int FUN_L14_002fea80(char *moby);
+extern short D_L14_00161FBC_f __asm__("D_L14_00161FBC");
+extern short D_L14_00161FC0_f __asm__("D_L14_00161FC0") __attribute__((sda));
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_L00_0025c558(void *, void *, int, int, int, float);
+extern void FUN_L00_0025d538(void *, void *);
+extern void FUN_L00_0025f090(void *, void *, int, float, float);
+extern void FUN_L14_002ffc08(void *);
+extern void FUN_L14_002fe900(void *);
+extern void FUN_L14_002fec28(void *);
+extern void FUN_L14_002feca8(void *);
+extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
+extern void set_moby_animation_alt(void *, int, int) __asm__("FUN_00212ed8");
+extern char D_0013F350_c[] __asm__("D_0013F350");
+extern char D_0013F3D0[];
+extern void func_L00_002592B0_path54(char*,float,float*,float,float,float) __asm__("FUN_L00_00258278");
+
+/* Same routine as FUN_L16_002e37a0, without the child hit test. */
+void FUN_L14_002fe2a0(L16CrateMoby *moby) {
+    L16CrateData *d = moby->data;
+    char *hit;
+
+    if ((moby->status & 2) && moby->frame == moby->animation && moby->frame == 1)
+        blend_moby_animation(moby, 4, 0, scale_game_frames(5));
+    if (((L16CratePlayer *)(((char *)&D_0013F350_c)))->standing == moby && moby->animation != 1 && moby->frame != 1)
+        blend_moby_animation(moby, 1, 0, scale_game_frames(5));
+    hit = FUN_L00_0025a420(moby, 0x210000, 0);
+    if (hit && moby->state != 6) {
+        L16CratePlayer *hero = (L16CratePlayer *)(((char *)&D_0013F350_c));
+
+        d->knock_drag = 0.008f;
+        d->knock_gravity = 0.0005f;
+        d->knock_speed = D_0015ED6C * 24.0f;
+        d->knock_rise = D_0015ED6C * 12.0f;
+        d->knock_flags = 1;
+        d->knock_bAD = 0;
+        FUN_L00_0025c558(moby, d->knock, 1, 1, 0,
+                          FUN_001f9e90(moby->position[0] - hero->position[0], moby->position[1] - hero->position[1]));
+        d->ticks = 0x78;
+        FUN_L00_00257470(moby, 0, -1);
+        moby->state = 6;
+    }
+    moby->opacity = 0xFF;
+    switch (moby->state) {
+    case 0:
+        if (d->mode == 2) {
+            moby->state = 1;
+            d->turn = 0.0f;
+            set_moby_animation_alt(moby, 4, 0);
+        } else {
+            if (d->path == -1) {
+                DebugPrint_alt(D_L14_001FCF20, moby->id);
+                mark_moby_for_removal(moby);
+                return;
+            }
+            if (*(int *)D_L14_001B0BB0[d->path] == 0) {
+                DebugPrint_alt(D_L14_001FCF58, moby->id);
+                mark_moby_for_removal(moby);
+                return;
+            }
+            if (d->mode != 1) {
+                if (d->other_path == -1) {
+                    DebugPrint_alt(D_L14_001FCFA0, moby->id);
+                    mark_moby_for_removal(moby);
+                    return;
+                }
+                if (*(int *)D_L14_001B0BB0[d->other_path] == 0) {
+                    DebugPrint_alt(D_L14_001FCFD8, moby->id);
+                    mark_moby_for_removal(moby);
+                    return;
+                }
+            }
+            if (d->trigger == -1) {
+                DebugPrint_alt(D_L14_001FD020, moby->id);
+                mark_moby_for_removal(moby);
+                return;
+            }
+            FUN_L14_002fe900(moby);
+            moby->state = 2;
+            moby->collision = 0x80;
+            moby->flags |= 0x41;
+            moby->bounds = 0;
+        }
+        d->child = 0;
+        break;
+    case 1: {
+        L16CratePlayer *hero = (L16CratePlayer *)(((char *)&D_0013F350_c));
+
+        func_L00_002592B0_path54((char *)moby,
+                                 FUN_001f9e90(hero->position[0] - moby->position[0], hero->position[1] - moby->position[1]),
+                                 &d->turn, 0.005f, 0.2f, 0.0f);
+        FUN_L14_002feca8(moby);
+        break;
+    }
+    case 2:
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), d->trigger)) {
+            if (d->mode == 1) {
+                set_moby_animation_alt(moby, 0, 0);
+            } else {
+                d->child = FUN_L14_002ffaf8(moby, moby->position);
+                FUN_L14_002fec28(moby);
+                set_moby_animation_alt(moby, 2, 0);
+            }
+            moby->flags &= 0xFFBE;
+            moby->bounds = moby->model->bounds;
+            moby->state = 4;
+        }
+        break;
+    case 4:
+        if (d->mode == 0)
+            FUN_L14_002fec28(moby);
+        if (FUN_L14_002fea80((char *)moby)) {
+            moby->state = 3;
+            blend_moby_animation(moby, 3, 0, 5);
+        }
+        FUN_L14_002feca8(moby);
+        break;
+    case 3: {
+        L16CrateData *a = moby->data;
+        char *path = D_L14_001B0BB0[a->path];
+        float target[4];
+        float zero;
+
+        if (a->mode == 0)
+            FUN_L14_002fec28(moby);
+        qcopy(target, path + *(int *)path * 16);
+        zero = 0.0f;
+        FUN_L00_0025b8c0(moby->position, &a->vx, target[0], *(float *)&D_L14_00161FBC_f, *(float *)&D_L14_00161FC0_f, zero);
+        FUN_L00_0025b8c0(moby->position + 1, &a->vy, target[1], *(float *)&D_L14_00161FBC_f, *(float *)&D_L14_00161FC0_f, zero);
+        FUN_L00_0025b8c0(moby->position + 2, &a->vz, target[2], *(float *)&D_L14_00161FBC_f, *(float *)&D_L14_00161FC0_f, zero);
+        if ((moby->status & 2) && moby->frame == moby->animation) {
+            if (a->mode == 1) {
+                moby->state = 1;
+                a->turn = zero;
+                set_moby_animation_alt(moby, 4, 0);
+            } else {
+                if (a->child) {
+                    FUN_L14_002ffc08(a->child);
+                    a->child = 0;
+                }
+                moby->state = 5;
+                blend_moby_animation(moby, 0, 0, 20);
+                a->timer = zero;
+                a->counter = 0;
+            }
+        }
+        FUN_L14_002feca8(moby);
+        break;
+    }
+    case 5:
+        if (FUN_L14_002fea80((char *)moby)) {
+            char *path;
+
+            moby->state = 2;
+            moby->bounds = 0;
+            moby->flags |= 0x41;
+            d->timer = 0.0f;
+            d->counter = 0;
+            d->turn = d->vx = d->vy = d->vz = d->timer;
+            path = D_L14_001B0BB0[d->path];
+            qcopy(moby->position, path + 0x10);
+            moby->rotation[2] = FUN_001f9e90(*(float *)(path + 0x20) - *(float *)(path + 0x10),
+                                               *(float *)(path + 0x24) - *(float *)(path + 0x14));
+        } else {
+            FUN_L14_002feca8(moby);
+        }
+        break;
+    case 6:
+        if (FUN_L00_0025c698(moby, d->knock) & 3) {
+            FUN_L00_0025f090(moby, moby->position, -1, 1.0f, 13.0f);
+            mark_moby_for_removal(moby);
+            return;
+        }
+        if (moby->position[2] < 5.0f) {
+            mark_moby_for_removal(moby);
+            return;
+        }
+        break;
+    }
+    FUN_L00_0025d538(moby, d->effect);
+}
+
 /* Level overlay code after unclassified; generated by `decomp overlays stubs`, stubs replaced by C as functions are matched. */
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5408), where it is exact; names translated to the US level program. */

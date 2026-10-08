@@ -74,7 +74,23 @@ void FUN_L14_002bb4d8(u8 *self) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aba80.s", FUN_L14_002aba80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ac2b8.s", FUN_L14_002ac2b8);
+/* Eases the moby toward the first or last point of its path. */
+
+extern int *D_L14_001B0BB0[];
+extern void FUN_L00_0025b8c0(float *, float *, float, float, float, float);
+
+void FUN_L14_002ac2b8(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    float t[4] __attribute__((aligned(16)));
+    int *p = D_L14_001B0BB0[*(int *)(d + 0xB4)];
+    if (*(float *)(d + 0xA4) > 0.5f)
+        qcopy(t, (char *)p + p[0] * 16);
+    else
+        qcopy(t, (char *)p + 0x10);
+    FUN_L00_0025b8c0((float *)(moby + 0x10), (float *)(d + 0xD0), t[0], 0.005f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0((float *)(moby + 0x14), (float *)(d + 0xD4), t[1], 0.005f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0((float *)(moby + 0x18), (float *)(d + 0xD8), t[2], 0.005f, 0.2f, 0.0f);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ac618.s", FUN_L14_002ac618);
 /* per-frame update: runs the hit query, decays a timer, then dispatches on the hit result */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AEAF8), where it is exact; names translated to the US level program. */
@@ -511,7 +527,39 @@ void FUN_L14_002aed50(u8 *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aee28.s", FUN_L14_002aee28);
+/* Resets the id table, then fills it with the ids of this moby's parts and starts each part by its flags. */
+extern int D_L14_001D8680[];
+/* Same table under a second name, so its address is loaded again. */
+extern int D_L14_001D8680_b[] __asm__("D_L14_001D8680");
+char *FUN_L14_002aef28(int index, int *ids);
+extern void FUN_L14_002add48(char *);
+extern void FUN_L14_002ada18(char *);
+void FUN_L14_002aee28(unsigned char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    int i;
+    int *out;
+    {
+        int v = -1;
+        for (i = 19; i >= 0; i--)
+            D_L14_001D8680[i] = v;
+    }
+    i = 0;
+    if (*(short *)(d + 0x20A) > 0) {
+        int *ids = D_L14_001D8680_b;
+        out = ids;
+        do {
+            char *m = FUN_L14_002aef28(moby[0x21], ids);
+            char *md;
+            *out++ = *(short *)(m + 0xB2);
+            md = *(char **)(m + 0x78);
+            if (*(int *)(md + 0x20C) & 8)
+                FUN_L14_002add48(m);
+            if (*(int *)(md + 0x20C) & 2)
+                FUN_L14_002ada18(m);
+            i++;
+        } while (i < *(short *)(d + 0x20A));
+    }
+}
 
 #define NOT_SDA
 
@@ -527,7 +575,7 @@ extern unsigned char *D_L14_0015FFD0_e[] __asm__("D_L14_0015FFD0")
 extern int D_L14_001D8680[];
 extern short *D_L14_001AC2C0_2B0168[] __asm__("D_L14_001ABF40");
 
-char *FUN_L14_002aef28(int index) {
+char *FUN_L14_002aef28(int index, int *ids) {
     short *p = D_L14_001AC2C0_2B0168[index];
     char *best = 0;
     float bestd = 0.0f;
@@ -623,7 +671,61 @@ void FUN_L14_002b4340(unsigned char *m) {
     m[0xA4] = 0xFF;
     FUN_L00_0025d538(m, d + 0x60);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b4500.s", FUN_L14_002b4500);
+/* Returns 0 unless every object on the list is ready, then wakes the waiting ones and sets their timers. */
+extern short *D_L14_001ABF40_b45[] __asm__("D_L14_001ABF40");
+extern unsigned char *D_L14_0015FFD8_b45 __asm__("D_L14_0015FFD8") __attribute__((sda));
+extern unsigned char *D_L14_0015FFD0_m45[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
+extern int D_L14_0016150C_b45 __asm__("D_L14_0016150C") __attribute__((sda));
+extern float D_L14_00161510_b45 __asm__("D_L14_00161510") __attribute__((sda));
+extern void FUN_00212ed8_b45(unsigned char *, int, int) __asm__("FUN_00212ed8");
+extern int FUN_001f96f8_b45(int) __asm__("FUN_001f96f8");
+extern float FUN_001fa6c0_b45(short) __asm__("FUN_001fa6c0");
+
+int FUN_L14_002b4500(int index) {
+    short *p = D_L14_001ABF40_b45[index];
+    unsigned char *base;
+    unsigned char *q;
+    unsigned char *o;
+    unsigned char *d;
+    int st;
+    int t;
+    float f;
+    float g;
+    if (p == 0) {
+        return 0;
+    }
+    base = D_L14_0015FFD8_b45;
+    do {
+        st = *(unsigned short *)p & 0x7FFF;
+        q = base + (st << 8);
+        if ((*(unsigned char **)(q + 0x78))[0x8B] == 0) {
+            st = q[0x20];
+            if (st != 5 && st != 1) {
+                return 0;
+            }
+        }
+    } while (*p++ >= 0);
+    p = D_L14_001ABF40_b45[index];
+    do {
+        t = *(unsigned short *)p & 0x7FFF;
+        o = D_L14_0015FFD0_m45[2] + (t << 8);
+        if (o[0x20] == 3) {
+            d = *(unsigned char **)(o + 0x78);
+            FUN_00212ed8_b45(o, 4, 0);
+            o[0x20] = 5;
+            t = FUN_001f96f8_b45(D_L14_0016150C_b45);
+            *(short *)(d + 0x74) = t;
+            f = 1.0f / FUN_001fa6c0_b45(t);
+            g = 1.0f / (*(short *)(d + 0x74) * D_L14_00161510_b45);
+            *(float *)(d + 0x78) = f;
+            *(float *)(o + 0x58) = g;
+            *(float *)(d + 0x8C) = *(float *)(o + 0x48);
+            *(short *)(d + 0x88) = 0;
+            d[0x8B] = 0;
+        }
+    } while (*p++ >= 0);
+    return 1;
+}
 
 #define NOT_SDA
 
@@ -833,7 +935,39 @@ void FUN_L14_002b5850(char *moby, float *target, float a, float b, float c, floa
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5968.s", FUN_L14_002b5968);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5c30.s", FUN_L14_002b5c30);
+/* Points the mover at the second-to-last node of its active path and clears its offset. */
+
+typedef struct {
+    char pad00[0xD0];
+    int pathA;
+    char padD4[0xE4 - 0xD4];
+    int t;
+    int node;
+    float w;
+    float off[4];
+    char pad100[0x10C - 0x100];
+    int alt;
+    char pad110[0x150 - 0x110];
+    int pathB;
+} Mover_5c30;
+
+extern int *D_L14_001B0BB0[];
+extern void FUN_001f99f8(void *);
+
+void FUN_L14_002b5c30(char *moby) {
+    Mover_5c30 *d = *(Mover_5c30 **)(moby + 0x78);
+    int *p;
+    int n;
+    if (d->alt == 0)
+        p = D_L14_001B0BB0[d->pathA];
+    else
+        p = D_L14_001B0BB0[d->pathB];
+    n = *p - 2;
+    d->node = n;
+    d->w = *(float *)((n << 4) + (char *)p + 0x1C);
+    d->t = 0;
+    FUN_001f99f8(d->off);
+}
 extern u8 D_0013E550[];
 extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
 
@@ -856,7 +990,37 @@ void FUN_L14_002b5c98(u8 *moby) {
     }
     *(s32 *)(data + 0x108) = -1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5d18.s", FUN_L14_002b5d18);
+/* Resets the moby's path follow state and faces it along its current path. */
+
+extern int *D_L14_001B0BB0[];
+extern float D_L14_00161540 __attribute__((sda));
+extern void FUN_001f9a28(void *, void *, void *);
+extern float FUN_001f9e90(float, float);
+extern void FUN_001f99f8(void *);
+
+void FUN_L14_002b5d18(char *moby) {
+    float f = D_L14_00161540 * 1.5f;
+    char *d = *(char **)(moby + 0x78);
+    char *p;
+    float v[4] __attribute__((aligned(16)));
+    *(int *)(d + 0xE8) = 0;
+    *(float *)(d + 0x160) = f;
+    *(int *)(d + 0xEC) = 0;
+    *(int *)(d + 0x164) = 0;
+    *(int *)(d + 0x168) = 0;
+    *(int *)(d + 0x16C) = 0;
+    *(int *)(d + 0xC0) = 0;
+    *(int *)(d + 0xC4) = 0;
+    if (*(int *)(d + 0x10C) == 0)
+        p = (char *)D_L14_001B0BB0[*(int *)(d + 0xD0)];
+    else
+        p = (char *)D_L14_001B0BB0[*(int *)(d + 0x150)];
+    qcopy(moby + 0x10, p + 0x10);
+    FUN_001f9a28(v, p + 0x20, moby + 0x10);
+    *(float *)(moby + 0x48) = FUN_001f9e90(v[0], v[1]);
+    *(int *)(d + 0xE4) = 0;
+    FUN_001f99f8(d + 0xF0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5dd8.s", FUN_L14_002b5dd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002bac78.s", FUN_L14_002bac78);
 

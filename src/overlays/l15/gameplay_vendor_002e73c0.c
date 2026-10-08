@@ -489,19 +489,74 @@ char *FUN_L15_002eb9e0(char *pos, char *vec) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebf28.s", FUN_L15_002ebf28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebfb0.s", FUN_L15_002ebfb0);
+/* Shows or hides every listed moby. */
+
+extern int D_L15_001ABE40[];
+extern int D_L15_0015FFD8;
+
+void FUN_L15_002ebf28(int idx, int show) {
+    short *p = (short *)D_L15_001ABE40[idx];
+    if (p == 0)
+        return;
+    while (1) {
+        unsigned char *moby = (unsigned char *)(D_L15_0015FFD8 + ((*p & 0x7FFF) << 8));
+        if (show) {
+            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            moby[0x31] = 1;
+            *(unsigned short *)(moby + 0x34) &= 0xFFFC;
+        } else {
+            *(int *)(moby + 0x94) = 0;
+            moby[0x31] = 0;
+            *(unsigned short *)(moby + 0x34) |= 3;
+        }
+        if (*p++ < 0)
+            return;
+    }
+}
+/* Counts the listed mobys that are missing or dying. */
+
+extern int D_L15_001ABE40[];
+extern int D_L15_0015FFD8;
+
+int FUN_L15_002ebfb0(int idx) {
+    unsigned short *p = (unsigned short *)D_L15_001ABE40[idx];
+    int n = 0;
+    int base;
+    if (p == 0)
+        return 0;
+    base = D_L15_0015FFD8;
+    do {
+        unsigned char *moby = (unsigned char *)(base + ((p[0] & 0x7FFF) << 8));
+        if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD)
+            n++;
+    } while ((short)*p++ >= 0);
+    return n;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ec030.s", FUN_L15_002ec030);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ec760.s", FUN_L15_002ec760);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ed398.s", FUN_L15_002ed398);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edb20.s", FUN_L15_002edb20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edbe0.s", FUN_L15_002edbe0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edfc0.s", FUN_L15_002edfc0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f78e0.s", FUN_L15_002f78e0);
+/* Tells whether the vendor menu lets this slot's item be bought (1) or not (0). */
+
+extern char *D_L15_00167400 __attribute__((section(".data")));
+extern char *D_L15_0015EF50 __attribute__((sda));
+extern float D_L15_0015F3FC;
+
+int FUN_L15_002f78e0(int slot) {
+    char *o;
+    if (*(short *)(D_L15_00167400 + 0x86) != 0x13)
+        return 1;
+    o = *(char **)(*(char **)(*(char **)(D_L15_0015EF50 + slot * 32 + 0x1C) + 4) + 0x70) + 0x40;
+    if (*(short *)(o + 0x14) == 1 && D_L15_0015F3FC != 0.0f)
+        return 1;
+    return *(short *)(o + 0x14) == 3;
+}
 /* tests several indexed conditions of a moby's entry in the table */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F99F8), where it is exact; names translated to the US level program. */
 
-extern char *D_L15_0015EF50;
+extern char *D_L15_ef48_e[] __asm__("D_L15_0015EF48") __attribute__((section(".sdata")));
 extern char D_0013E533[];
 extern int *D_L15_001B0AB0[];
 extern int FUN_L00_00259740(float *p, float *v, int n);
@@ -510,7 +565,7 @@ extern int FUN_L00_0025faf0(float *p, int idx);
 extern int is_point_inside_clip_volume_alt(void *arg0, int arg1) __asm__("FUN_00214720");
 
 int FUN_L15_002f85a8(char *moby) {
-    int *e = *(int **)(D_L15_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    int *e = *(int **)(D_L15_ef48_e[2] + *(short *)(moby + 0x84) * 32 + 0x1C);
     int r;
     int i;
     if (e[10] >= 0 && FUN_L00_0025fa38(D_0013E533 + 0xE9D, e[10])) {
@@ -566,7 +621,7 @@ int FUN_L15_002f8698(char *moby, float a, float b) {
     float lenr;
     float dot3;
     float den;
-    char *tbl = D_L15_0015EF50;
+    char *tbl = D_L15_ef48_e[2];
     char *src;
 
     data = *(char **)(tbl + *(short *)(moby + 0x84) * 32 + 0x1C);
@@ -606,4 +661,17 @@ int FUN_L15_002f8698(char *moby, float a, float b) {
     return 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f88e8.s", FUN_L15_002f88e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f8ba8.s", FUN_L15_002f8ba8);
+/* Hands a vendor moby to the shop handler when the menu is idle and its slot is live. */
+
+extern char *D_L15_00167400 __attribute__((section(".data")));
+extern char *D_L15_ef48_e[] __asm__("D_L15_0015EF48") __attribute__((section(".sdata")));
+extern unsigned char D_001413F4 __attribute__((section(".data")));
+extern void FUN_L15_002f88e8(char *);
+
+int FUN_L15_002f8ba8(char *moby) {
+    char *e = *(char **)(D_L15_ef48_e[2] + *(short *)(moby + 0x84) * 32 + 0x1C);
+    if (*(short *)(D_L15_00167400 + 0x86) == 0 && *(short *)(e + 0x20) >= 0 &&
+        D_001413F4 == 2)
+        FUN_L15_002f88e8(moby);
+    return -1;
+}

@@ -2,4 +2,86 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cfc00.s", FUN_L16_002cfc00);
+#include "sda.h"
+#include "qcopy.h"
+
+extern char D_0013F350[];
+
+extern float AbsoluteFloat(float);
+extern float vector_length_xyz(void *);
+extern int FUN_L00_002591d0(int *, int, int, int);
+extern int FUN_L00_002592b8(int *, int, int, int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern int tick_countdown_32(int *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001f9fc8(void *);
+extern void FUN_001fa2d8(void *, void *);
+extern void subtract_vector_xyz(void *, void *, void *);
+
+/* Same routine as FUN_L05_00307010, with this level's data offsets. */
+void FUN_L16_002cfc00(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *g = D_0013F350;
+    float v[4];
+    char *l1;
+    char *l2;
+    char *other;
+    char *od;
+
+    if (*(int *)(g + 0x894) < scale_game_frames(0xB4)) {
+        return;
+    }
+    if (!tick_countdown_32((int *)(data + 0x2DC))) {
+        return;
+    }
+    other = *(char **)(g + 0x86C);
+    if (!other) {
+        return;
+    }
+    od = *(char **)(other + 0x78);
+    if (*(int *)(od + 0x44) != -1) {
+        FUN_L00_002591d0((int *)&l1, *(int *)(od + 0x44), 0, 0);
+        while (l1) {
+            if (*(short *)(l1 + 0xA6) == 0x473) {
+                float a[4];
+                float m[16];
+                char *pos = l1;
+                qcopy(a, data + 0x260);
+                a[2] += 0.8f;
+                subtract_vector_xyz(v, pos + 0x10, a);
+                if (!(8.0f < vector_length_xyz(v))) {
+                    FUN_001f9fc8(m);
+                    FUN_001fa2d8(m, l1 + 0xC0);
+                    FUN_001f9d20(v, v, m);
+                    if (AbsoluteFloat(v[0]) < 0.5f && AbsoluteFloat(v[1]) < 2.5f &&
+                        AbsoluteFloat(v[2]) < 2.5f) {
+                        *(unsigned short *)(data + 0x2F6) += scale_game_frames(0x78);
+                        *(int *)(data + 0x2DC) = scale_game_frames(0x3C);
+                    }
+                }
+            }
+            FUN_L00_002592b8((int *)&l1, (int)l1, 0, 0);
+        }
+    }
+    if (*(int *)(od + 0x48) != -1) {
+        FUN_L00_002591d0((int *)&l2, *(int *)(od + 0x48), 0, 0);
+        while (l2) {
+            if (*(short *)(l2 + 0xA6) == 0x474) {
+                float m[16];
+                subtract_vector_xyz(v, l2 + 0x10, data + 0x260);
+                if (!(8.0f < vector_length_xyz(v))) {
+                    FUN_001f9fc8(m);
+                    FUN_001fa2d8(m, l2 + 0xC0);
+                    FUN_001f9d20(v, v, m);
+                    if (AbsoluteFloat(v[0]) < 2.8f && AbsoluteFloat(v[1]) < 1.4f &&
+                        AbsoluteFloat(v[2]) < 0.5f) {
+                        *(unsigned short *)(data + 0x2F6) += scale_game_frames(0x78);
+                        *(int *)(data + 0x2DC) = scale_game_frames(0x3C);
+                    }
+                }
+            }
+            FUN_L00_002592b8((int *)&l2, (int)l2, 0, 0);
+        }
+    }
+}
+

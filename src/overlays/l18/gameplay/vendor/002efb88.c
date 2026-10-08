@@ -142,7 +142,42 @@ void FUN_L18_002efb88(char *moby) {
     }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0030.s", FUN_L18_002f0030);
+#include "qcopy.h"
+
+/* Wakes every waiting moby of class 0x54B in a group: moves it to pos and records the caller. */
+
+extern short *D_L18_001AC240[];
+extern unsigned char *D_L18_0015FFD8;
+
+int FUN_L18_002f0030(char *moby, int group, float *pos) {
+    short *p = D_L18_001AC240[group];
+    int idle;
+    int i;
+    if (p == 0)
+        return 1;
+    idle = 1;
+    while (1) {
+        unsigned char *m = (unsigned char *)(((*p & 0x7FFF) << 8) + (int)D_L18_0015FFD8);
+        if (*(short *)(m + 0xA6) == 0x54B && m[0x20] == 1) {
+            unsigned char *d = *(unsigned char **)(m + 0x78);
+            idle = 0;
+            qcopy(m + 0x10, pos);
+            i = 0;
+            do {
+                qcopy(d + 0x10 + i * 16, m + 0x10);
+                i++;
+            } while ((float)i < 4.0f);
+            *(char **)(d + 0x16C) = moby;
+            m[0x31] = 1;
+            *(unsigned short *)(m + 0x34) &= 0xFFFE;
+            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+            m[0x20] = 2;
+        }
+        if (*p++ < 0)
+            return idle;
+    }
+    return idle;
+}
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F1510), where it is exact; names translated to the US level program. */
 
@@ -230,7 +265,60 @@ void FUN_L18_002f02e8(char *moby, void *out) {
     *(int *)(data + 0x160) = FUN_001f96f8(180);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0390.s", FUN_L18_002f0390);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f06c0.s", FUN_L18_002f06c0);
+/* Per-frame callback: swings every class 0x54B moby in the group around its base point by its state. */
+extern int D_L18_00162238_c7 __asm__("D_L18_00162238") __attribute__((sda));
+extern float D_L18_00162258_c7 __asm__("D_L18_00162258") __attribute__((sda));
+extern float D_L18_0016225C_c7 __asm__("D_L18_0016225C") __attribute__((sda));
+extern int D_L18_00162260_c7 __asm__("D_L18_00162260") __attribute__((sda));
+extern int D_L18_00162264_c7 __asm__("D_L18_00162264") __attribute__((sda));
+extern float D_L18_00162268_c7 __asm__("D_L18_00162268") __attribute__((sda));
+extern float D_L18_0016226C_c7 __asm__("D_L18_0016226C") __attribute__((sda));
+extern float D_0015ED6C_c7 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern short *D_L18_001AC240_c7[] __asm__("D_L18_001AC240");
+extern unsigned char *D_L18_0015FFD8_c7 __asm__("D_L18_0015FFD8") __attribute__((section(".sdata")));
+extern float FUN_001f9de0_c7(float) __asm__("FUN_001f9de0");
+extern int FUN_001fa6e0_c7(float, int, int) __asm__("FUN_001fa6e0");
+extern void FUN_001f9bf8_c7(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void FUN_001f9a10_c7(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_L00_00263618_c7(void *, int, float, float) __asm__("FUN_L00_00263618");
+extern float FUN_001fa580_c7(float, float) __asm__("FUN_001fa580");
+
+void FUN_L18_002f06c0(unsigned char *m) {
+    float v[4];
+    short *p;
+    unsigned char *o;
+    char *d;
+    float a;
+    float b;
+    int c;
+    if (D_L18_00162238_c7 != 0) {
+        return;
+    }
+    p = D_L18_001AC240_c7[m[0x21]];
+    a = D_L18_00162258_c7 * 0.017453292f * D_0015ED6C_c7;
+    b = D_L18_0016225C_c7 * 0.017453292f * D_0015ED6C_c7;
+    do {
+        o = D_L18_0015FFD8_c7 + ((*p & 0x7FFF) << 8);
+        if (*(short *)(o + 0xA6) == 0x54B) {
+            d = *(char **)(o + 0x78);
+            c = FUN_001fa6e0_c7(FUN_001f9de0_c7(*(float *)(d + 0x168)) * 0.5f + 0.5f,
+                                D_L18_00162260_c7, D_L18_00162264_c7);
+            FUN_001f9bf8_c7(v, o + 0xC0, D_L18_0016226C_c7);
+            FUN_001f9a10_c7(v, v, o + 0x10);
+            switch (o[0x20]) {
+            case 2:
+            case 3:
+                FUN_L00_00263618_c7(v, c, D_L18_00162268_c7, 0.0f);
+                *(float *)(d + 0x168) = FUN_001fa580_c7(*(float *)(d + 0x168), a);
+                break;
+            case 4:
+                FUN_L00_00263618_c7(v, c, D_L18_00162268_c7, 0.0f);
+                *(float *)(d + 0x168) = FUN_001fa580_c7(*(float *)(d + 0x168), b);
+                break;
+            }
+        }
+    } while (*p++ >= 0);
+}
 #include "qcopy.h"
 
 /* Advance a ring of recorded positions, store the moby's position, and register draw callbacks once per frame. */
@@ -239,7 +327,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f06c0.s", FUN_L18_002f06c0);
 extern int D_L18_0015F5CC;
 extern short D_L18_00162230_d __asm__("D_L18_00162230") __attribute__((sda));
 extern void FUN_L18_002f0390(void);
-extern void FUN_L18_002f06c0(void);
+void FUN_L18_002f06c0(unsigned char *m);
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
 void FUN_L18_002f0848(char *moby) {

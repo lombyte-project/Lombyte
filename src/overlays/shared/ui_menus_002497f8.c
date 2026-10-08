@@ -2,5 +2,11 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002497f8.s", FUN_L00_002497f8);
+int FUN_L00_002497f8(int a, float x, float y, float z) {
+    if (a < 0xE0) {
+        return z >= 42.0f && z <= 43.0f;
+    }
+    return z >= 39.0f;
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024a618.s", FUN_L00_0024a618);

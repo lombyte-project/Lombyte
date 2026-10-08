@@ -22,7 +22,36 @@ void FUN_L01_0026d930(char *p) {
     *(float *)(p + 0x28) = 1.57f;
     *(float *)(p + 0x2C) = 0.1f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0026e008.s", FUN_L01_0026e008);
+
+#include "sda.h"
+
+typedef struct {
+    char pad0[0x20];
+    signed char state;
+    char pad21[0xDF];
+} O_26e008;
+
+extern unsigned short *D_L01_001ABCC0_26e008[] __asm__("D_L01_001ABCC0") NOT_SDA;
+extern O_26e008 *D_L01_0015FFD8_26e008 __asm__("D_L01_0015FFD8") MACRO_ADDR;
+
+int FUN_L01_0026e008(int i, int st) {
+    unsigned short *p;
+    int n = 0;
+    O_26e008 *o;
+
+    if (D_L01_001ABCC0_26e008[i] == 0) {
+        return 0;
+    }
+    p = D_L01_001ABCC0_26e008[i];
+    do {
+        o = (O_26e008 *)(((*p & 0x7FFF) << 8) + (int)D_L01_0015FFD8_26e008);
+        if (o->state >= 0 && (st == -1 || (unsigned char)o->state != st)) {
+            n++;
+        }
+    } while ((short)*p++ >= 0);
+    return n;
+}
+
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026F040), where it is exact; names translated to the US level program. */
 
 extern char *D_L01_0015FFD8;

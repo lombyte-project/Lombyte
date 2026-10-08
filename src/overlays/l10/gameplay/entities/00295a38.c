@@ -373,7 +373,7 @@ extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_0023e838(int);
-extern void FUN_L10_002dd270(char *, float *, int *, float, float, float);
+unsigned char *FUN_L10_002dd270(int a, void *pos, int b, float x, float y, float z);
 void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 extern char D_0013E5E0[];
 extern int func_001E9730_2da0f0(void *, int) __asm__("FUN_001e93b0");
@@ -569,7 +569,41 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d9eb8.s", FUN_L10_002d9eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da2c8.s", FUN_L10_002da2c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da690.s", FUN_L10_002da690);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dcc58.s", FUN_L10_002dcc58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd270.s", FUN_L10_002dd270);
+typedef int dd_q __attribute__((mode(TI)));
+
+/* Spawns a moby at a spot, fills its data block and starts its fade and sound. */
+extern float D_0015ED6C_dd __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern unsigned char *FUN_0020c4f8_dd(int) __asm__("FUN_0020c4f8");
+extern void FUN_L00_002502f0_dd(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
+extern int FUN_001fa6d0_dd(float) __asm__("FUN_001fa6d0");
+extern float FUN_002132a8_dd(float, float) __asm__("FUN_002132a8");
+extern void FUN_L00_0026daa0_dd(unsigned char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
+
+unsigned char *FUN_L10_002dd270(int a, void *pos, int b, float x, float y, float z) {
+    unsigned char *o = FUN_0020c4f8_dd(0x442);
+    int *d;
+    float f;
+    if (o != 0) {
+        o[0x30] = 0xFF;
+        *(short *)(o + 0x32) = 0xFF;
+        o[0x31] = 1;
+        o[0x23] = 0x40;
+        o[0x20] = 0;
+        d = *(int **)(o + 0x78);
+        *(dd_q *)(o + 0x10) = *(dd_q *)pos;
+        FUN_L00_002502f0_dd(o, 0x7F, 0x40, 0);
+        f = 10.0f / (D_0015ED6C_dd * 5.0f);
+        d[0] = b;
+        ((float *)d)[1] = x;
+        ((float *)d)[2] = y;
+        ((float *)d)[3] = z;
+        d[4] = a;
+        d[5] = FUN_001fa6d0_dd(f);
+        ((float *)d)[6] = FUN_002132a8_dd(0.999f, 0.97f);
+        FUN_L00_0026daa0_dd(o, 0x1F4F7F7F, FUN_001fa6d0_dd(10.0f / (D_0015ED6C_dd * 5.0f)), -1, 126000.008f);
+    }
+    return o;
+}
 /* Advances an effect, scales its size over its lifetime and emits hits. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DE798), where it is exact; names translated to the US level program. */
 
