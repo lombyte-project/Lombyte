@@ -6,10 +6,10 @@ rebuilding those units from the retail oracle instead of their C; install the
 profile to compile and verify their C.
 
 The patch lives in
-[`patches/ee-gcc-2.9-991111-01/`](../patches/ee-gcc-2.9-991111-01/): 203
-inserted and 15 deleted lines over 9 files, adding opt-in `-mastra-*` flags
-(inert by default), R5900 `sq`/`lq` saves, classic `mult`/`mflo` code
-generation, and the in-place `cvt.w.s` conversion (`-mastra-inplace-cvt`),
+[`patches/ee-gcc-2.9-991111-01/`](../patches/ee-gcc-2.9-991111-01/): 98
+inserted and 12 deleted lines over 5 files, adding `sd`/`ld` GPR saves in
+16-byte slots, classic `mult`/`mflo` code generation and volatile absolute
+stores in call delay slots through `$at`. It adds no command-line options,
 against the public snapshot
 [`SSXModding/ps2-ee-toolchain`](https://github.com/SSXModding/ps2-ee-toolchain)
 at `b595ded`.

@@ -29,7 +29,7 @@ SOURCE_REVISION = "b595ded"
 PATCH_PATH = (
     ROOT / "patches" / "ee-gcc-2.9-991111-01" / "patched-ee-gcc.patch"
 )
-PATCH_SHA256 = "2726db653714629a1239773af36ef02e67dccd0b4e7f7aabe78feed51b93f99e"
+PATCH_SHA256 = "0faa74c638ad4ce2fa3ebf7e9b1a99afc295bb2b61958d177bf883d4fa3eef4e"
 BISON_URL = "https://ftp.gnu.org/gnu/bison/bison-1.28.tar.gz"
 BISON_SHA256 = "c5d3e4858e17cb440cee9de7837f07277bcfb03507e9d2f0c506cab5efe36c3a"
 HOST_CFLAGS = "-O2 -fcommon -std=gnu89 -D_GNU_SOURCE"
@@ -39,13 +39,13 @@ HOST_OBJECTS_CFLAGS_MK = (
     "version.o real.o getpwd.o mbchar.o dyn-string.o splay-tree.o "
     "obstack.o gcc.o mkstemp.o: override CFLAGS = -g\n"
 )
-# Reference hashes of the maintainer's build. Rebuilds on other hosts embed
-# their own build paths and differ; they are reported, not enforced unless
+# Reference hashes of a Linux cloud host build. Rebuilds embed their own
+# build paths and differ; they are reported, not enforced unless
 # --verify-hashes is passed.
 REFERENCE_HASHES = {
-    "cc1": "a1f7ac64514a5cdf772b349904f8caf100696c6aca8b736786dfff12b3bf4e3d",
-    "cpp": "1f3b11af4a696d01180c3bf6a9dcd0ab3992ac4d57d2eb1be36d6743cdf3b5b9",
-    "xgcc": "56bb73b37a91882c3038c61ccea5c3dd31b9562d5a8634dcbd7c7dbbc32ca6b1",
+    "cc1": "c2aaf9dcbd5d72eafcc63b4ae98472d3f8b9f7202bab3a10dfe7b535f10b9213",
+    "cpp": "1509d06d85068c86c6e2529108597c0e4d3d9ecafcd3e43b6d14607c9bc3b1b7",
+    "xgcc": "28872669c68b760b3220077ac313f908c479f3b1282e29308988318e2c76b252",
 }
 
 
@@ -241,7 +241,7 @@ def build(
     build_dir.mkdir(parents=True, exist_ok=True)
     # GCC's generated Makefiles do not track tm.h (mips.h) dependencies, so a
     # reused build directory silently keeps stale option tables after a recipe
-    # change (e.g. a new -mastra-* switch).  Stamp the objects with the recipe
+    # change (e.g. a changed mips.h).  Stamp the objects with the recipe
     # they were built from and start over when it moves.
     recipe_stamp = build_dir / ".recipe-sha256"
     recipe_now = sha256(PATCH_PATH)

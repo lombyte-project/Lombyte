@@ -152,40 +152,18 @@ ROUTE_EXCEPTIONS = {
     # fun_00232d00: bind the stash RPC server, read its IOP buffer and reset the
     # stash slots
     "storage/cd/fun_00232d00": "cc_sn_padless",
-    # Game code still built by the patched 991111 compiler (plus the SN assembler).
-    # Promoted by the decomp workbench: exact only under the patched
-    # 991111 profile (fresh SN/EE-GCC 2.9 measurements are lower).
-    "ui/menus/fun_00226848": "cc_ee_gcc_patched",
-    # Promoted by the decomp workbench: exact only under the patched
-    # 991111 profile (fresh SN/EE-GCC 2.9 measurements are lower).
-    "audio/sound/calculate_voice_distance_volume": "cc_ee_gcc_patched",
     # SDK code still built by the patched 991111 compiler (plus the SN assembler).
     # Retail uses classic mult/mflo; the frozen trees emit the R5900 rd-form.
     # 100/100/100 + patha linked-byte equal (0x12D3A0), 2026-09-12.
     "sdk/time/bcd_to_time": "cc_ee_gcc_patched",
-    # _pictureCodingExtension: absolute IPU_CTRL volatile stores must fill the
-    # _nextBit call delay slots; the patched profile splits the AT macro and the
-    # at-store policy brackets it with .set noat. 100/100/100, gate 2026-09-13.
+    # _pictureCodingExtension: the absolute IPU_CTRL volatile stores fill the
+    # _nextBit call delay slots through $at (lui $1 before the call, sw in
+    # the slot), which the patched profile does for every unit.
     "sdk/library/picturecodingextension": "cc_ee_gcc_patched",
-    # _lastFrame: retail keeps two independent count-1 computations in the
-    # _dispRefImage argument setup.  The v3 patched profile blocks the CSE and
-    # reload-CSE folds and reverses load_register_parameters; 100/100/100 and
-    # full-ELF gate 2026-09-13.
-    "sdk/library/_lastFrame": "cc_ee_gcc_patched",
-}
-
-# Per-unit extra flags for the patched 991111 profile.  Every -mastra-* option
-# is opt-in and absent by default; flag-absent output is byte-identical.
-EE_GCC_PATCHED_FLAG_UNITS = {
-    "sdk/library/picturecodingextension": "-mastra-volatile-delay -mastra-sd-saves",
-    "ui/menus/fun_00226848": "-mastra-no-lo-sum-tie",
-    "sdk/library/_lastFrame": "-mastra-sd-saves -mastra-cse-argdup -mastra-call-args-reverse",
 }
 
 # Per-unit assembler policies applied by the generated padless-asm.py helper.
-PADLESS_POLICY_UNITS = {
-    "sdk/library/picturecodingextension": "at-store",
-}
+PADLESS_POLICY_UNITS = {}
 
 # Per-unit extra compiler flags for the native EE-GCC 2.9 units whose
 # exact codegen requires a different scheduling model.  Keyed by the configured
@@ -229,37 +207,6 @@ SDK_COMPILER_FLAG_UNITS = {
 
 # Per-unit extra flags for GAME_COMPILER_UNITS (exact owner path, as SN_FLAG_UNITS).
 GAME_COMPILER_FLAG_UNITS = {
-    # fun_0012eb20: retail's D_0015EC8C accesses are gp-relative in the body
-    # (the .extern-ordering class); its call loop needs patch
-    # 0046-r5900-pad-unfilled-loops (cc1 eb7a3497...).  100/100/100 and
-    # full-ELF PASS on 2026-09-22.
-    "audio/streaming/snd_init_vag_streaming_ex": "-mastra-r5900-extern-buffer",
-    "ui/menus/fun_00219fa0": "-mastra-r5900-extern-buffer",
-    # fun_00221968: 100/100/100 on the game compiler only with
-    # -fno-expensive-optimizations (the bank flag; without it 90.45).  Its
-    # 2026-09-22 demotion measured cc_game without the flag (62.65).
-    "ui/menus/fun_00221968": "-fno-expensive-optimizations",
-    # FUN_0021b6d8 keeps its retail pseudo values in a0-a3 via fixed-register
-    # constraints; the same four pins reproduce the object on the game compiler.
-    "ui/menus/fun_0021b6d8": "-ffixed-4 -ffixed-5 -ffixed-6 -ffixed-7",
-    "audio/streaming/snd_stream_safe_cd_break": "-mastra-r5900-extern-buffer",
-    "audio/streaming/snd_stream_safe_cd_callback": "-mastra-r5900-extern-buffer",
-    "audio/streaming/snd_stream_safe_cd_get_error": "-mastra-r5900-extern-buffer",
-    "audio/streaming/snd_stream_safe_cd_read": "-mastra-r5900-extern-buffer",
-    # vu1_add_g_sregister needs only the address form: the game compiler already
-    # builds without strict aliasing, so -fno-strict-aliasing changes nothing
-    # here while -mno-split-addresses is required.
-    "rendering/vu1_add_g_sregister": "-mno-split-addresses",
-    "audio/streaming/snd_stream_safe_cd_sync": "-mastra-r5900-extern-buffer",
-    "rendering/state/reset_graphics": "-mno-split-addresses",
-    "ui/menus/draw_menu_selection_marker": "-mastra-r5900-extern-buffer",
-    "audio/rpc/snd_reset_state_and_flush_commands": "-mastra-r5900-extern-buffer",
-    "ui/menus/create_menu_preview_moby": "-fno-schedule-insns",
-    "audio/sound/calculate_voice_volume": "-fno-schedule-insns",
-    # FUN_002075e8: retail materializes the zero return before `jr $ra` and
-    # leaves the delay slot empty; the default pass moves that assignment into
-    # the slot.  100/100/100 with this option (2026-10-03).
-    "ui/menus/fun_002075e8": "-fno-delayed-branch",
 }
 
 SN_FLAG_UNITS = {
@@ -831,28 +778,6 @@ def add_empty_sections(data):
     return bytes(result)
 
 
-def apply_at_store_policy(assembly):
-    import re
-    if re.search(r"\.set[ \t]+noat", assembly):
-        return assembly
-    output = []
-    pending = False
-    for line in assembly.splitlines(keepends=True):
-        if re.match(r"^[ \t]*li[ \t]+\$1[ \t]*,[ \t]*\S+[ \t]*(?:#.*)?$", line):
-            output.append("\t.set\tnoat\n")
-            pending = True
-            output.append(line)
-        elif pending and re.match(r"^[ \t]*sw[ \t]+\$?\w+[ \t]*,[^#\n]*\(\$1\)", line):
-            output.append(line)
-            output.append("\t.set\tat\n")
-            pending = False
-        else:
-            output.append(line)
-    if pending:
-        raise SystemExit("at-store policy: li $1 without a following store through $1")
-    return "".join(output)
-
-
 def apply_la_gprel_policy(assembly):
     """Hoist `.extern` size directives for `la`-only small-data symbols.
 
@@ -940,9 +865,7 @@ def main(argv):
     data = open(source, "rb").read()
     if mode == "normalize":
         assembly = normalize_aliases(data.decode())
-        if policy == "at-store":
-            assembly = apply_at_store_policy(assembly)
-        elif policy == "la-gprel":
+        if policy == "la-gprel":
             assembly = apply_la_gprel_policy(assembly)
         elif policy != "none":
             raise SystemExit("unknown assembler policy: " + policy)
@@ -1206,7 +1129,7 @@ def build_stuff(
                 command=(
                     f"mkdir -p $pat_work && cp $in $pat_work/cand.c && "
                     f"'{patched_driver}' -S -B'{patched_root}/' -I'{patched_include}' "
-                    f"-DBUILD_US_VERSION -DMATCHING_DECOMP -O2 -g2 $extra "
+                    f"-DBUILD_US_VERSION -DMATCHING_DECOMP -O2 -g2 "
                     f"$pat_work/cand.c -o $pat_work/cand.s && "
                     f"{sys.executable} padless-asm.py normalize $pat_work/cand.s $pat_work/cand-final.s $policy && "
                     f"{ee_assembler} -o '$pat_work_win/cand-padded.o' '$pat_work_win/cand-final.s' && "
@@ -1290,11 +1213,9 @@ def build_stuff(
                 )
             elif rule == "cc_ee_gcc_patched":
                 pat_work = str(ROOT / "build/patched-work/units" / unit)
-                flags = EE_GCC_PATCHED_FLAG_UNITS.get(unit, "")
                 variables = {
                     "pat_work": pat_work,
                     "pat_work_win": _win_path(pat_work),
-                    "extra": f"{flags} " if flags else "",
                     "policy": PADLESS_POLICY_UNITS.get(unit, "none"),
                 }
                 build(entry.object_path, entry.src_paths, rule, variables=variables)

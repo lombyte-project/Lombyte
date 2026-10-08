@@ -36,47 +36,25 @@ index 9aac2569..2971f90c 100644
  	  enumlist maybecomma_warn '}' maybe_attribute
  		{ $$= finish_enum ($<ttype>3, nreverse ($4), chainon ($1, $7));
  		  resume_momentary ($<itype>2); }
-diff --git a/ee/gcc/calls.c b/ee/gcc/calls.c
-index c4e29c77..d014a099 100644
---- a/ee/gcc/calls.c
-+++ b/ee/gcc/calls.c
-@@ -1504,7 +1504,9 @@ load_register_parameters (args, num_actuals, call_fusage)
- #ifdef LOAD_ARGS_REVERSED
-   for (i = num_actuals - 1; i >= 0; i--)
- #else
--  for (i = 0; i < num_actuals; i++)
-+  for (i = mips_astra_call_args_reverse ? num_actuals - 1 : 0;
-+       mips_astra_call_args_reverse ? i >= 0 : i < num_actuals;
-+       i += mips_astra_call_args_reverse ? -1 : 1)
- #endif
-     {
-       rtx reg = args[i].reg;
 diff --git a/ee/gcc/config/mips/mips.c b/ee/gcc/config/mips/mips.c
-index ead57073..4ed67273 100644
+index ead57073..13b64586 100644
 --- a/ee/gcc/config/mips/mips.c
 +++ b/ee/gcc/config/mips/mips.c
-@@ -206,6 +206,14 @@ int mips_abi;
+@@ -206,6 +206,7 @@ int mips_abi;
  #endif
  
  /* Strings to hold which cpu and instruction set architecture to use.  */
-+char *mips_astra_cse_argdup;
-+char *mips_astra_no_narrow_andi;
-+char *mips_astra_alloc_order;
-+char *mips_astra_annul_fill;
-+char *mips_astra_sd_saves;
-+char *mips_astra_volatile_delay;
 +int mips_astra_volatile_split_active;
-+char *mips_astra_call_args_reverse;
  char *mips_cpu_string;		/* for -mcpu=<xxx> */
  char *mips_isa_string;		/* for -mips{1,2,3,4} */
  char *mips_abi_string;		/* for -mabi={32,n32,64,eabi} */
-@@ -4668,9 +4676,11 @@ override_options ()
+@@ -4668,9 +4669,11 @@ override_options ()
      }
  
    /* Saves/restores of general purpose registers on the r5900 use
 -     a mode wider than word_mode.  */
-+     a mode wider than word_mode.  ASTRA P1: widen every GPR so the
-+     prologue/epilogue emit sq/lq like the retail/SN R5900 code.  */
++     a mode wider than word_mode.  ASTRA P1: widen every GPR so each
++     callee save gets a 16-byte slot, as in retail.  */
    if (TARGET_MIPS5900)
 -    mips_reg_mode[0] = TImode;
 +    for (regno = GP_REG_FIRST; regno <= GP_REG_LAST; regno++)
@@ -84,15 +62,14 @@ index ead57073..4ed67273 100644
  
    /* CYGNUS LOCAL law */
    {
-@@ -6183,9 +6193,14 @@ save_restore_insns (store_p, large_reg, large_offset, file)
+@@ -6183,9 +6186,13 @@ save_restore_insns (store_p, large_reg, large_offset, file)
  	    if (file == 0)
  	      {
  		rtx reg_rtx;
-+		/* ASTRA: retail SDK-class saves use sd/ld for GPRs while keeping
-+		   16-byte slots/frames (TImode sizing). Access DImode only. */
++		/* Retail SDK code saves GPRs with sd/ld but keeps the
++		   16-byte slots of TImode.  */
 +		enum machine_mode astra_access
-+		  = mips_astra_sd_saves && mips_reg_mode[regno] == TImode
-+		    ? DImode : mips_reg_mode[regno];
++		  = mips_reg_mode[regno] == TImode ? DImode : mips_reg_mode[regno];
  		rtx mem_rtx
  		  = gen_rtx (MEM,
 -			     mips_reg_mode[regno],
@@ -100,7 +77,7 @@ index ead57073..4ed67273 100644
  			     gen_rtx (PLUS, Pmode, base_reg_rtx,
  				      GEN_INT (gp_offset - base_offset)));
  
-@@ -6213,7 +6228,7 @@ save_restore_insns (store_p, large_reg, large_offset, file)
+@@ -6213,7 +6220,7 @@ save_restore_insns (store_p, large_reg, large_offset, file)
  		  }
  		else
  		      reg_rtx = gen_rtx (REG,
@@ -110,40 +87,21 @@ index ead57073..4ed67273 100644
  		if (store_p)
  		  {
 diff --git a/ee/gcc/config/mips/mips.h b/ee/gcc/config/mips/mips.h
-index 1324d53a..e5ecd487 100644
+index 1324d53a..68206eef 100644
 --- a/ee/gcc/config/mips/mips.h
 +++ b/ee/gcc/config/mips/mips.h
-@@ -595,9 +595,28 @@ extern void		mips_select_section ();
+@@ -595,6 +595,9 @@ extern void		mips_select_section ();
  	extern char *m88k_short_data;
  	#define TARGET_OPTIONS { { "short-data-", &m88k_short_data } }  */
  
-+/* ASTRA experimental policy switches: inert unless explicitly selected. */
-+extern char *mips_astra_cse_argdup;
-+extern char *mips_astra_no_narrow_andi;
-+extern char *mips_astra_alloc_order;
-+extern char *mips_astra_annul_fill;
-+extern char *mips_astra_sd_saves;
-+
-+extern char *mips_astra_volatile_delay;
++/* Set while reorg splits a volatile store for a call delay slot.  */
 +extern int mips_astra_volatile_split_active;
-+
-+extern char *mips_astra_call_args_reverse;
 +
  #define TARGET_OPTIONS							\
  {									\
    SUBTARGET_TARGET_OPTIONS						\
-+  { "astra-cse-argdup", &mips_astra_cse_argdup }, \
-+  { "astra-no-narrow-andi", &mips_astra_no_narrow_andi }, \
-+  { "astra-alloc-order=", &mips_astra_alloc_order }, \
-+  { "astra-annul-fill", &mips_astra_annul_fill }, \
-+  { "astra-sd-saves", &mips_astra_sd_saves }, \
-+  { "astra-volatile-delay", &mips_astra_volatile_delay }, \
-+  { "astra-call-args-reverse", &mips_astra_call_args_reverse }, \
-   { "cpu=",	&mips_cpu_string	},				\
-   { "ips",	&mips_isa_string	},				\
-   { "entry",	&mips_entry_string	},				\
 diff --git a/ee/gcc/config/mips/mips.md b/ee/gcc/config/mips/mips.md
-index e9eda13b..83f27f9e 100644
+index e9eda13b..6005ed51 100644
 --- a/ee/gcc/config/mips/mips.md
 +++ b/ee/gcc/config/mips/mips.md
 @@ -1810,7 +1810,10 @@
@@ -158,10 +116,13 @@ index e9eda13b..83f27f9e 100644
      {
        emit_insn (gen_mulsi3_mult3_r5900 (operands[0], operands[1], operands[2],
  				         gen_reg_rtx (SImode),
-@@ -6115,6 +6118,26 @@ move\\t%0,%z4\\n\\
+@@ -6115,6 +6118,49 @@ move\\t%0,%z4\\n\\
     (set_attr "length"	"1,2,1,2,1,2,1,2,1,1,1,1,2,1,2,1,1,1,1")])
  
  ;; CYGNUS LOCAL law
++;; ASTRA: a volatile store to an absolute address that reorg puts in a call
++;; delay slot is split into lui $1 before the call and sw through $1 in the
++;; slot, the retail form.
 +(define_split
 +  [(set (match_operand:SI 0 "memory_operand" "")
 +        (match_operand:SI 1 "register_operand" ""))]
@@ -170,73 +131,43 @@ index e9eda13b..83f27f9e 100644
 +   && GET_CODE (XEXP (operands[0], 0)) == CONST_INT
 +   && !SMALL_INT (XEXP (operands[0], 0))
 +   && REGNO (operands[1]) != 1"
-+  [(set (match_dup 2) (match_dup 3))
-+   (set (match_dup 4) (match_dup 1))]
++  [(set (reg:SI 1) (unspec:SI [(match_dup 3)] 40))
++   (set (match_dup 4) (unspec:SI [(match_dup 1)] 41))]
 +  "{
 +    HOST_WIDE_INT address = INTVAL (XEXP (operands[0], 0));
 +    HOST_WIDE_INT low = (address & 0xffff) ^ 0x8000;
 +    low -= 0x8000;
-+    operands[2] = gen_rtx_REG (SImode, 1);
 +    operands[3] = GEN_INT (address - low);
 +    operands[4] = copy_rtx (operands[0]);
-+    XEXP (operands[4], 0) = gen_rtx_PLUS (Pmode, operands[2], GEN_INT (low));
++    XEXP (operands[4], 0) = gen_rtx_PLUS (Pmode, gen_rtx_REG (SImode, 1),
++					  GEN_INT (low));
 +  }")
++
++;; The two halves of that split.  They use $at, so the pair is bracketed
++;; with .set noat / .set at.
++(define_insn "astra_at_high"
++  [(set (reg:SI 1)
++	(unspec:SI [(match_operand:SI 0 "const_int_operand" "")] 40))]
++  "!TARGET_MIPS16"
++  "%[li\\t$1,%0"
++  [(set_attr "type"	"arith")
++   (set_attr "mode"	"SI")
++   (set_attr "length"	"1")])
++
++(define_insn "astra_at_store"
++  [(set (match_operand:SI 0 "memory_operand" "=m")
++	(unspec:SI [(match_operand:SI 1 "register_operand" "d")] 41))]
++  "!TARGET_MIPS16"
++  "sw\\t%1,%0%]"
++  [(set_attr "type"	"store")
++   (set_attr "mode"	"SI")
++   (set_attr "length"	"1")])
 +
  (define_insn "movsi_internal2"
    [(set (match_operand:SI 0 "nonimmediate_operand" "=d,d,d,d,d,d,R,m,*d,*z,*x*w,*d,*x*w,*d")
  	(match_operand:SI 1 "move_operand" "d,S,IKL,Mnis,R,m,dJ,dJ,*z,*d,J,*x*w,*d,*a*q"))]
-diff --git a/ee/gcc/cse.c b/ee/gcc/cse.c
-index 59311f8c..039e4adf 100644
---- a/ee/gcc/cse.c
-+++ b/ee/gcc/cse.c
-@@ -6607,6 +6607,15 @@ cse_insn (insn, libcall_insn)
-       sets[i].src_in_memory = hash_arg_in_memory;
-       sets[i].src_in_struct = hash_arg_in_struct;
- 
-+      /* ASTRA: keep independent register-plus-immediate expressions out of
-+         CSE's equivalence table. Retail SDK call setup recomputes arguments
-+         rather than coalescing their independent pseudos into one copy. */
-+      if (mips_astra_cse_argdup && GET_CODE (src) == PLUS
-+          && GET_MODE (src) == SImode
-+          && GET_CODE (XEXP (src, 0)) == REG
-+          && GET_CODE (XEXP (src, 1)) == CONST_INT)
-+        sets[i].src_volatile = 1;
-+
-       /* If SRC is a MEM, there is a REG_EQUIV note for SRC, and DEST is
- 	 a pseudo that is set more than once, do not record SRC.  Using
- 	 SRC as a replacement for anything else will be incorrect in that
-diff --git a/ee/gcc/reload1.c b/ee/gcc/reload1.c
-index 6a8342b2..709354ab 100644
---- a/ee/gcc/reload1.c
-+++ b/ee/gcc/reload1.c
-@@ -39,6 +39,9 @@ Boston, MA 02111-1307, USA.  */
- #include "real.h"
- #include "toplev.h"
- 
-+/* ASTRA opt-in flag (defined in config/mips/mips.c). */
-+extern char *mips_astra_cse_argdup;
-+
- /* This file contains the reload pass of the compiler, which is
-    run after register allocation has been done.  It checks that
-    each insn is valid (operands required to be in registers really
-@@ -9023,6 +9026,15 @@ reload_cse_simplify_set (set, insn)
-   if (side_effects_p (src) || true_regnum (src) >= 0)
-     return 0;
- 
-+  /* ASTRA opt-in: retail keeps register-plus-immediate recomputations in
-+     call setup instead of folding them into an existing register copy.
-+     reload_cse_simplify_set is the last pass that performs that fold. */
-+  if (mips_astra_cse_argdup
-+      && GET_CODE (src) == PLUS && GET_MODE (src) == SImode
-+      && GET_CODE (XEXP (src, 0)) == REG
-+      && GET_CODE (XEXP (src, 1)) == CONST_INT)
-+    return 0;
-+
-   dclass = REGNO_REG_CLASS (dreg);
- 
-   /* If memory loads are cheaper than register copies, don't change them.  */
 diff --git a/ee/gcc/reorg.c b/ee/gcc/reorg.c
-index f9b2cc2c..c3aa0cdd 100644
+index f9b2cc2c..5855052f 100644
 --- a/ee/gcc/reorg.c
 +++ b/ee/gcc/reorg.c
 @@ -2004,6 +2004,32 @@ update_reg_unused_notes (insn, redundant_insn)
@@ -272,13 +203,12 @@ index f9b2cc2c..c3aa0cdd 100644
  static void
  fill_simple_delay_slots (non_jumps_p)
       int non_jumps_p;
-@@ -2138,9 +2164,11 @@ fill_simple_delay_slots (non_jumps_p)
+@@ -2138,9 +2164,10 @@ fill_simple_delay_slots (non_jumps_p)
  
  	      /* Check for resource conflict first, to avoid unnecessary 
  		 splitting.  */
 -	      if (! insn_references_resource_p (trial, &set, 1)
-+	      if ((mips_astra_volatile_delay
-+                   && astra_adjacent_volatile_store_p (trial, insn, &set, &needed))
++	      if (astra_adjacent_volatile_store_p (trial, insn, &set, &needed)
 +                  || (! insn_references_resource_p (trial, &set, 1)
  		  && ! insn_sets_resource_p (trial, &set, 1)
 -		  && ! insn_sets_resource_p (trial, &needed, 1)
@@ -286,201 +216,15 @@ index f9b2cc2c..c3aa0cdd 100644
  #ifdef HAVE_cc0
  		  /* Can't separate set of cc0 from its use.  */
  		  && ! (reg_mentioned_p (cc0_rtx, pat)
-@@ -2148,7 +2176,10 @@ fill_simple_delay_slots (non_jumps_p)
+@@ -2148,7 +2175,10 @@ fill_simple_delay_slots (non_jumps_p)
  #endif
  		  )
  		{
 -		  trial = try_split (pat, trial, 1);
-+		  mips_astra_volatile_split_active = mips_astra_volatile_delay
-+                    && astra_adjacent_volatile_store_p (trial, insn, &set, &needed);
++		  mips_astra_volatile_split_active
++		    = astra_adjacent_volatile_store_p (trial, insn, &set, &needed);
 +                  trial = try_split (pat, trial, 1);
 +                  mips_astra_volatile_split_active = 0;
  		  next_trial = prev_nonnote_insn (trial);
  		  if (eligible_for_delay (insn, slots_filled, trial, flags))
  		    {
-diff --git a/ee/gcc/config/mips/mips.c b/ee/gcc/config/mips/mips.c
-index 4ed67273..05642532 100644
---- a/ee/gcc/config/mips/mips.c
-+++ b/ee/gcc/config/mips/mips.c
-@@ -211,6 +211,7 @@ char *mips_astra_no_narrow_andi;
- char *mips_astra_alloc_order;
- char *mips_astra_annul_fill;
- char *mips_astra_sd_saves;
-+char *mips_astra_inplace_cvt;
- char *mips_astra_volatile_delay;
- int mips_astra_volatile_split_active;
- char *mips_astra_call_args_reverse;
-diff --git a/ee/gcc/config/mips/mips.h b/ee/gcc/config/mips/mips.h
-index e5ecd487..2fbac709 100644
---- a/ee/gcc/config/mips/mips.h
-+++ b/ee/gcc/config/mips/mips.h
-@@ -601,6 +601,7 @@ extern char *mips_astra_no_narrow_andi;
- extern char *mips_astra_alloc_order;
- extern char *mips_astra_annul_fill;
- extern char *mips_astra_sd_saves;
-+extern char *mips_astra_inplace_cvt;
- 
- extern char *mips_astra_volatile_delay;
- extern int mips_astra_volatile_split_active;
-@@ -610,6 +611,7 @@ extern char *mips_astra_call_args_reverse;
- #define TARGET_OPTIONS							\
- {									\
-   SUBTARGET_TARGET_OPTIONS						\
-+  { "astra-inplace-cvt", &mips_astra_inplace_cvt }, \
-   { "astra-cse-argdup", &mips_astra_cse_argdup }, \
-   { "astra-no-narrow-andi", &mips_astra_no_narrow_andi }, \
-   { "astra-alloc-order=", &mips_astra_alloc_order }, \
-diff --git a/ee/gcc/config/mips/mips.md b/ee/gcc/config/mips/mips.md
-index 83f27f9e..618d3275 100644
---- a/ee/gcc/config/mips/mips.md
-+++ b/ee/gcc/config/mips/mips.md
-@@ -4713,12 +4713,49 @@ move\\t%0,%z4\\n\\
-    (set_attr "length"	"11,9,10,11")])
- 
- 
--(define_insn "fix_truncsfsi2"
-+(define_expand "fix_truncsfsi2"
-+  [(set (match_operand:SI 0 "general_operand" "")
-+	(fix:SI (match_operand:SF 1 "register_operand" "")))]
-+  "TARGET_HARD_FLOAT"
-+  "
-+{
-+  if (TARGET_MIPS5900 && mips_astra_inplace_cvt)
-+    emit_insn (gen_fix_truncsfsi2_inplace (operands[0], operands[1]));
-+  else
-+    emit_insn (gen_fix_truncsfsi2_legacy (operands[0], operands[1]));
-+  DONE;
-+}")
-+
-+;;; ASTRA: in-place conversion.  Retail emits cvt.w.s into the source float
-+;;; register when that value is dead (e.g. the first float argument converted
-+;;; and immediately moved to an integer result).  Opt-in per unit.  Defined
-+;;; before the scratch alternative so recog prefers it for the plain
-+;;; conversion RTL (match_scratch clobbers are optional in matching).
-+(define_insn "fix_truncsfsi2_inplace"
-+  [(set (match_operand:SI 0 "general_operand" "=d")
-+	(fix:SI (match_operand:SF 1 "register_operand" "+f")))]
-+  "TARGET_HARD_FLOAT && TARGET_MIPS5900 && mips_astra_inplace_cvt"
-+  "*
-+{
-+  rtx xoperands[10];
-+
-+  output_asm_insn (\"cvt.w.s %1,%1\", operands);
-+
-+  xoperands[0] = operands[0];
-+  xoperands[1] = operands[1];
-+  output_asm_insn (mips_move_1word (xoperands, insn, FALSE), xoperands);
-+  return \"\";
-+}"
-+  [(set_attr "type"	"fcvt")
-+   (set_attr "mode"	"SF")
-+   (set_attr "length"	"11")])
-+
-+(define_insn "fix_truncsfsi2_legacy"
-   [(set (match_operand:SI 0 "general_operand" "=d,*f,R,To")
- 	(fix:SI (match_operand:SF 1 "register_operand" "f,*f,f,f")))
-    (clobber (match_scratch:SI 2 "=d,*d,&d,&d"))
-    (clobber (match_scratch:SF 3 "=f,?*X,f,f"))]
--  "TARGET_HARD_FLOAT"
-+  "TARGET_HARD_FLOAT && !(TARGET_MIPS5900 && mips_astra_inplace_cvt)"
-   "*
- {
-   rtx xoperands[10];
-diff --git a/ee/gcc/config/mips/mips.c b/ee/gcc/config/mips/mips.c
-index 05642532..5a0a8bf5 100644
---- a/ee/gcc/config/mips/mips.c
-+++ b/ee/gcc/config/mips/mips.c
-@@ -215,6 +215,7 @@ char *mips_astra_inplace_cvt;
- char *mips_astra_volatile_delay;
- int mips_astra_volatile_split_active;
- char *mips_astra_call_args_reverse;
-+char *mips_astra_no_lo_sum_tie;
- char *mips_cpu_string;		/* for -mcpu=<xxx> */
- char *mips_isa_string;		/* for -mips{1,2,3,4} */
- char *mips_abi_string;		/* for -mabi={32,n32,64,eabi} */
-diff --git a/ee/gcc/config/mips/mips.h b/ee/gcc/config/mips/mips.h
-index 2fbac709..fe6f345e 100644
---- a/ee/gcc/config/mips/mips.h
-+++ b/ee/gcc/config/mips/mips.h
-@@ -607,6 +607,7 @@ extern char *mips_astra_volatile_delay;
- extern int mips_astra_volatile_split_active;
- 
- extern char *mips_astra_call_args_reverse;
-+extern char *mips_astra_no_lo_sum_tie;
- 
- #define TARGET_OPTIONS							\
- {									\
-@@ -619,6 +620,7 @@ extern char *mips_astra_call_args_reverse;
-   { "astra-sd-saves", &mips_astra_sd_saves }, \
-   { "astra-volatile-delay", &mips_astra_volatile_delay }, \
-   { "astra-call-args-reverse", &mips_astra_call_args_reverse }, \
-+  { "astra-no-lo-sum-tie", &mips_astra_no_lo_sum_tie }, \
-   { "cpu=",	&mips_cpu_string	},				\
-   { "ips",	&mips_isa_string	},				\
-   { "entry",	&mips_entry_string	},				\
-diff --git a/ee/gcc/local-alloc.c b/ee/gcc/local-alloc.c
-index 10be2338..500740e0 100644
---- a/ee/gcc/local-alloc.c
-+++ b/ee/gcc/local-alloc.c
-@@ -100,6 +100,7 @@ static HARD_REG_SET *qty_phys_copy_sugg;
-    arithmetic insns.  */
- 
- static HARD_REG_SET *qty_phys_sugg;
-+static char *astra_split_base;
- 
- /* Element Q is the number of suggested registers in qty_phys_copy_sugg.  */
- 
-@@ -322,6 +323,8 @@ local_alloc ()
-     = (HARD_REG_SET *) alloca (max_qty * sizeof (HARD_REG_SET));
-   qty_phys_num_copy_sugg = (short *) alloca (max_qty * sizeof (short));
-   qty_phys_sugg = (HARD_REG_SET *) alloca (max_qty * sizeof (HARD_REG_SET));
-+  astra_split_base = (char *) alloca (max_regno);
-+  bzero (astra_split_base, max_regno);
-   qty_phys_num_sugg = (short *) alloca (max_qty * sizeof (short));
-   qty_birth = (int *) alloca (max_qty * sizeof (int));
-   qty_death = (int *) alloca (max_qty * sizeof (int));
-@@ -1594,6 +1597,18 @@ combine_regs (usedreg, setreg, may_save_copy, insn_number, insn, already_dead)
-      rtx insn;
-      int already_dead;
- {
-+  /* ASTRA split-base policy: a lo_sum base with more than one reference
-+     is not tied to the %hi result; retail splits it and allocates the
-+     base to a3 (fun_00226848).  Flag-absent behavior is unchanged. */
-+  if (mips_astra_no_lo_sum_tie
-+      && insn != 0 && GET_CODE (PATTERN (insn)) == SET
-+      && GET_CODE (SET_SRC (PATTERN (insn))) == LO_SUM
-+      && GET_CODE (setreg) == REG && REGNO (setreg) >= FIRST_PSEUDO_REGISTER
-+      && REG_N_REFS (REGNO (setreg)) > 2)
-+    {
-+      astra_split_base[REGNO (setreg)] = 1;
-+      return 0;
-+    }
-   register int ureg, sreg;
-   register int offset = 0;
-   int usize, ssize;
-@@ -2013,6 +2028,25 @@ find_free_reg (class, mode, qty, accept_call_clobbered, just_try_suggested,
-   /* If all registers are excluded, we can't do anything.  */
-   GO_IF_HARD_REG_SUBSET (reg_class_contents[(int) ALL_REGS], first_used, fail);
- 
-+  /* ASTRA: split lo_sum bases are allocated to a3 (retail). */
-+  if (astra_split_base != 0 && qty_first_reg[qty] >= 0
-+      && astra_split_base[qty_first_reg[qty]])
-+    {
-+      register int regno = 7;
-+      if (! TEST_HARD_REG_BIT (first_used, regno)
-+	  && HARD_REGNO_MODE_OK (regno, mode))
-+	{
-+	  register int size1 = HARD_REGNO_NREGS (regno, mode);
-+	  register int j;
-+	  for (j = 1; j < size1 && ! TEST_HARD_REG_BIT (used, regno + j); j++);
-+	  if (j == size1)
-+	    {
-+	      post_mark_life (regno, mode, 1, born_index, dead_index);
-+	      return regno;
-+	    }
-+	}
-+    }
-+
-   /* If at least one would be suitable, test each hard reg.  */
- 
-   for (i = 0; i < FIRST_PSEUDO_REGISTER; i++)

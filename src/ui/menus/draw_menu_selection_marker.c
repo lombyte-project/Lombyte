@@ -1,5 +1,5 @@
 #include "types.h"
-extern s32 D_001601B0;
+extern s32 D_001601B0 __attribute__((sda));
 extern s32 get_icon_frame() __asm__("func_001FF960");
 extern s32 draw_hud_sprite() __asm__("func_001FFC30");
 extern s32 append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
