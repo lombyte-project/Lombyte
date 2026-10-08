@@ -239,7 +239,51 @@ void FUN_L10_00295c20(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298668.s", FUN_L10_00298668);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298b68.s", FUN_L10_00298b68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002be858.s", FUN_L10_002be858);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002befe8.s", FUN_L10_002befe8);
+/* Collectible drop: waits until it is taken, then sinks below its rest height and records the pickup. */
+typedef int bf_q __attribute__((mode(TI)));
+typedef struct {
+    char pad0[0x454];
+    unsigned char collected[1];
+} BfState;
+extern BfState D_L10_001BB6B0_bf __asm__("D_L10_001BB6B0");
+extern BfState D_L10_001BAA50_bf __asm__("D_L10_001BAA50");
+extern int D_0015ED84_bf __asm__("D_0015ED84");
+extern float D_0015ED6C_bf __asm__("D_0015ED6C");
+extern unsigned char D_0014C190_bf[] __asm__("D_0014C190");
+extern unsigned char D_0014C050_bf[] __asm__("D_0014C050");
+extern unsigned char D_L10_0015FC88_bf[8] __asm__("D_L10_0015FC88");
+extern unsigned char D_0013D3D8_bf[] __asm__("D_0013D3D8");
+
+void FUN_L10_002befe8(unsigned char *m) {
+    float *d = *(float **)(m + 0x78);
+    unsigned short id;
+    switch (m[0x20]) {
+    case 0:
+        *(bf_q *)d = *(bf_q *)(m + 0x10);
+        id = *(unsigned short *)(m + 0xB2);
+        if (D_L10_001BB6B0_bf.collected[(short)id] != 0 ||
+            (*(int *)(D_0014C190_bf + (((short)id >> 5) * 4 + (D_0015ED84_bf << 8))) >> (id & 0x1F)) & 1) {
+            m[0x20] = 1;
+        }
+        break;
+    case 1:
+        *(float *)(m + 0x14) += D_0015ED6C_bf * -1.0f;
+        if (*(float *)(m + 0x14) <= d[1] + -3.75f) {
+            D_L10_001BAA50_bf.collected[*(short *)(m + 0xB2)] = m[0xB0] + 2;
+            if (m[0xB0] == 0xFF || (D_L10_0015FC88_bf[m[0xB0]] != 0xFF && D_0014C050_bf[m[0xB0] + (D_0015ED84_bf << 4)] == 0xFF)) {
+                D_L10_001BB6B0_bf.collected[*(short *)(m + 0xB2)] = m[0xB0] + 2;
+            }
+            m[0x20] = 2;
+            if (D_0015ED84_bf == 10) {
+                D_0013D3D8_bf[0] = 1;
+            }
+        }
+        break;
+    case 2:
+        *(float *)(m + 0x14) = d[1] + -3.75f;
+        break;
+    }
+}
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002C8DE0), where it is exact; names translated to the US level program. */
