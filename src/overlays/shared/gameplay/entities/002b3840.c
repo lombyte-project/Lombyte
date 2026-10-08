@@ -49,7 +49,77 @@ void FUN_L05_002f5190(int a, int b, int i, int c) {
         } while (*(short *)p++ >= 0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f5200.s", FUN_L05_002f5200);
+#include "qcopy.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
+
+/* pvars of the trigger moby run by FUN_L05_002f5200 */
+typedef struct {
+    s32 path;          /* -1, or an index into D_L05_001B0930 */
+    f32 radius;        /* > 0: trigger when the target is this close */
+    s32 volumes[6];    /* -1, or a clip volume FUN_00214720 tests */
+    s32 on_lists[12];  /* -1, or a list run by FUN_L05_002f5190 */
+    s32 on_mobys[11];  /* -1, or a moby passed to FUN_L05_002f4f60 */
+    u8 pad7C[2];
+    s8 use_alt_target; /* nonzero: test D_L05_001671C0 instead of the hero */
+} TriggerVars_2f5200;
+
+extern Vec4 D_L05_001671C0_2f5200 __asm__("D_L05_001671C0");
+extern s32 *D_L05_001B0930_2f5200[] __asm__("D_L05_001B0930");
+extern f32 FUN_001f9b48_2f5200(void *, void *) __asm__("FUN_001f9b48");
+extern s32 FUN_L00_00259740_2f5200(void *, void *, s32) __asm__("FUN_L00_00259740");
+extern s32 FUN_00214720_2f5200(void *, s32) __asm__("FUN_00214720");
+extern void FUN_L05_002f5190_2f5200(struct Moby *, TriggerVars_2f5200 *, s32, s32) __asm__("FUN_L05_002f5190");
+extern void FUN_L05_002f4f60_2f5200(s32, TriggerVars_2f5200 *, s32) __asm__("FUN_L05_002f4f60");
+
+void FUN_L05_002f5200(struct Moby *m) {
+    TriggerVars_2f5200 *v = (TriggerVars_2f5200 *)m->pvars;
+    Vec4 target;
+    s32 inside;
+    s32 i;
+    s32 *path;
+
+    m->unk30 = 0xFF;
+    inside = 0;
+    if (v->use_alt_target != 0) {
+        qcopy(&target, &D_L05_001671C0_2f5200);
+    } else {
+        qcopy(&target, &hero.motion.pos);
+    }
+    if (0.0f < v->radius && FUN_001f9b48_2f5200(&m->pos, &target) < v->radius) {
+        inside = 1;
+    }
+    if (!inside && v->path != -1) {
+        path = D_L05_001B0930_2f5200[v->path];
+        inside = FUN_L00_00259740_2f5200(&target, path + 4, path[0]) != 0;
+    }
+    if (!inside) {
+        for (i = 0; i < 6; i++) {
+            if (v->volumes[i] != -1 && FUN_00214720_2f5200(&target, v->volumes[i])) {
+                inside = 1;
+                break;
+            }
+        }
+    }
+    if ((inside && m->unkBC == 0) || (!inside && m->unkBC != 0) || m->state == 0) {
+        if (inside) {
+            m->unkBC = 1;
+        } else {
+            m->unkBC = 0;
+        }
+        m->state = m->unkBC + 1;
+        for (i = 0; i < 12; i++) {
+            if (v->on_lists[i] != -1) {
+                FUN_L05_002f5190_2f5200(m, v, v->on_lists[i], inside);
+            }
+        }
+        for (i = 0; i < 11; i++) {
+            if (v->on_mobys[i] != -1) {
+                FUN_L05_002f4f60_2f5200(v->on_mobys[i], v, inside);
+            }
+        }
+    }
+}
 /* Moby update: plays an animation when its state and a flag allow, then calls the next stage. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F9478), where it is exact; names translated to the US level program. */
 
