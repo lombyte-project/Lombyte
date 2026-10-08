@@ -1424,7 +1424,113 @@ void FUN_L02_002df1a8(unsigned char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df3d8.s", FUN_L02_002df3d8);
+#include "rnc/gameplay/entities/moby.h"
+
+/* Pvars of the l02 swivel turret: turns to a random heading, then fires one shot. */
+typedef struct {
+    f32 yaw_vel;          /* 0x00 */
+    f32 target_yaw;       /* 0x04 */
+    s16 wait_timer;       /* 0x08 */
+    u8 padA[2];
+    s16 voice;            /* 0x0C: turning loop sound, -1 for none */
+    u8 padE[2];
+    f32 recoil;           /* 0x10 */
+} SwivelTurretVars;
+
+typedef struct {
+    u8 pad0[0x74];
+    u8 active;
+    u8 pad75[0x13];
+    struct Moby *owner;
+} TurretVoiceSlot;
+
+extern float D_0015ED6C __attribute__((section(".sdata")));
+extern float D_0015ED70 __attribute__((section(".sdata")));
+extern f32 D_L02_00161C6C __attribute__((sda));
+extern f32 D_L02_00161C70 __attribute__((sda));
+extern f32 D_L02_00161C74 __attribute__((sda));
+extern s32 D_L02_00161C78 __attribute__((sda));
+extern s32 D_L02_00161C7C __attribute__((sda));
+extern f32 D_L02_00161C84 __attribute__((sda));
+extern void FUN_L02_002df730(char *moby);
+extern char *FUN_L02_002ec228(char *src, void *pos, float *dir);
+extern s32 turret_count_down(s16 *) __asm__("FUN_001f9770");
+extern f32 turret_rand_range(f32, f32) __asm__("FUN_002132a8");
+extern f32 turret_scale_time(f32) __asm__("FUN_001f96b0");
+extern s32 turret_float_to_int(f32) __asm__("FUN_001fa6d0");
+extern s32 turret_play_sound(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern s32 turret_sound_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
+extern void turret_release_voice(s32) __asm__("FUN_0022d798");
+extern f32 turret_approach_angle(f32 *angle, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025be00");
+extern f32 turret_angle_diff(f32, f32) __asm__("FUN_001fa688");
+extern void turret_blend_anim(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void turret_joint_pos(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
+extern void turret_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void turret_vec_set_len(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void turret_spawn_debris(struct Moby *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32,
+                                f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
+extern f32 turret_anim_progress(struct Moby *) __asm__("FUN_0020c9e0");
+extern s32 turret_lerp_colour(f32, s32, s32) __asm__("FUN_001fa6e0");
+
+/* Swivel turret update: waits a random time, turns to a random heading with a loop sound, then fires one shot with debris and fades its colour while the recoil animation plays. */
+void FUN_L02_002df3d8(struct Moby *m) {
+    SwivelTurretVars *v = (SwivelTurretVars *)m->pvars;
+    Vec4f dir, muzzle;
+    f32 t;
+
+    FUN_L02_002df730((char *)m);
+    switch (m->state) {
+    case 0:
+        if (turret_count_down(&v->wait_timer)) {
+            v->target_yaw = turret_rand_range(0.0f, 3.14159f);
+            m->state = 1;
+            turret_play_sound(4, 0, m);
+        }
+        break;
+    case 1:
+        turret_approach_angle(&m->rot.z, v->target_yaw, &v->yaw_vel,
+                              D_L02_00161C70 * DEG_TO_RAD * D_0015ED70,
+                              D_L02_00161C70 * DEG_TO_RAD * D_0015ED70,
+                              D_L02_00161C74 * DEG_TO_RAD * D_0015ED6C);
+        if (!turret_sound_playing(m, v->voice))
+            v->voice = turret_play_sound(2, 4, m);
+        if (turret_angle_diff(m->rot.z, v->target_yaw) < DEG_TO_RAD && v->yaw_vel == 0.0f) {
+            s32 h = v->voice;
+            if (h != -1) {
+                TurretVoiceSlot *e = (TurretVoiceSlot *)(D_0013E550 + h * 0x70);
+                if (e->owner == m && e->active)
+                    turret_release_voice(h);
+            }
+            v->voice = -1;
+            turret_play_sound(3, 0, m);
+            v->recoil = D_L02_00161C84;
+            m->state = 2;
+            if (m->prev_seq != 1)
+                turret_blend_anim(m, 1, 0, 1);
+            turret_joint_pos(m, 1, &muzzle);
+            turret_joint_pos(m, 0, &dir);
+            turret_vec_sub(&dir, &muzzle, &dir);
+            turret_vec_set_len(&dir, &dir, D_L02_00161C6C * D_0015ED6C);
+            turret_spawn_debris(m, &dir, &muzzle, 0.0f, 0.0f, 0, 6, 0x20, 7.0f, 4.0f, 1.0f, 3.0f, -1, 30.0f,
+                                0, 1, -1, 0);
+            FUN_L02_002ec228((char *)m, &muzzle, (float *)&dir);
+        }
+        break;
+    case 2:
+        m->flags |= 0x10;
+        t = turret_anim_progress(m) / 10.0f;
+        if (t > 1.0f)
+            t = 1.0f;
+        m->unk90 = turret_lerp_colour(t, D_L02_00161C78, D_L02_00161C7C);
+        if (m->unk70 & 2) {
+            if (m->prev_seq != 0)
+                turret_blend_anim(m, 0, 0, 1);
+            m->state = 0;
+            v->wait_timer = turret_float_to_int(turret_scale_time(turret_rand_range(60.0f, 180.0f)));
+        }
+        break;
+    }
+}
 
 #define NOT_SDA
 
