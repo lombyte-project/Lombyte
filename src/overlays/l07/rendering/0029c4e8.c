@@ -39,4 +39,76 @@ void FUN_L07_0029c4e8(void *pos, void *pos2) {
         qcopy(f, pos2);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0029e6d8.s", FUN_L07_0029e6d8);
+#include "rnc/math/vector.h"
+
+extern void seg_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void seg_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void seg_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern f32 seg_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern f32 seg_len(void *) __asm__("FUN_001f9af0");
+extern f32 seg_dist(void *, void *) __asm__("FUN_001f9b48");
+extern f32 seg_sqrt(f32) __asm__("FUN_001f9988");
+extern f32 seg_fabs(f32) __asm__("FUN_001f99c0");
+
+/* Finds the point of segment a-b nearest to the surface of the sphere (center, radius), preferring
+   the one closer to ref when both hits are equally good. Writes it to out and returns its distance
+   from the surface (0 when within 1% of the radius). */
+f32 FUN_L07_0029e6d8(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *a, Vec4f *b, f32 radius) {
+    Vec4f w, dir, p, p1, p2;
+    f32 t, t0, t1, h, dd, dist, e1, e2, eps;
+    Vec4f *q;
+
+    seg_vec_sub(&w, a, center);
+    seg_vec_sub(&dir, b, a);
+    dd = seg_dot(&dir, &dir);
+    t = -seg_dot(&w, &dir) / dd;
+    seg_vec_scale(&p, &dir, t);
+    seg_vec_add(&p, &p, a);
+    dist = seg_dist(&p, center);
+    if (dist < radius) {
+        h = seg_sqrt(radius * radius - dist * dist);
+        h /= seg_len(&dir);
+        t0 = t - h;
+        if (t0 < 0.0f)
+            t0 = 0.0f;
+        else if (1.0f < t0)
+            t0 = 1.0f;
+        t1 = t + h;
+        if (t1 < 0.0f)
+            t1 = 0.0f;
+        else if (1.0f < t1)
+            t1 = 1.0f;
+        seg_vec_scale(&p1, &dir, t0);
+        seg_vec_add(&p1, &p1, a);
+        e1 = seg_fabs(seg_dist(&p1, center) - radius);
+        eps = radius * 0.01f;
+        if (e1 < eps)
+            e1 = 0.0f;
+        q = &p2;
+        seg_vec_scale(q, &dir, t1);
+        seg_vec_add(q, q, a);
+        e2 = seg_fabs(seg_dist(q, center) - radius);
+        if (e2 < eps)
+            e2 = 0.0f;
+        if (e1 < e2 || (e1 == e2 && seg_dist(&p1, ref) < seg_dist(q, ref))) {
+            qcopy(out, &p1);
+            dist = e1;
+        } else {
+            qcopy(out, q);
+            dist = e2;
+        }
+    } else {
+    if (t < 0.0f) {
+        qcopy(out, a);
+        dist = seg_fabs(seg_dist(out, center) - radius);
+    } else if (1.0f < t) {
+        qcopy(out, b);
+        dist = seg_fabs(seg_dist(out, center) - radius);
+    } else {
+        qcopy(out, &p);
+    }
+    if (dist < radius * 0.01f)
+        dist = 0.0f;
+    }
+    return dist;
+}
