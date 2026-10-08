@@ -2,14 +2,8 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/hud.h"
+#include "rnc/gameplay/hero.h"
 
-struct G {
-    char pad[0x10B8];
-    int mode;
-    char pad2[0x20A4 - 0x10BC];
-    unsigned char flag;
-};
-extern struct G D_0013F350;
 extern unsigned char D_0013E529[];
 void FUN_L00_00235ea0(char *);
 int FUN_001f96f8(int);
@@ -20,7 +14,7 @@ void FUN_L00_002377b8(char *p) {
         *(int *)(p + 8) = 10;
     else
         *(int *)(p + 8) = 5;
-    if (D_0013F350.mode == 9 && D_0013F350.flag == 0) {
+    if (hero.items[0].item_id == 9 && hero.unk20A4 == 0) {
         *(int *)(p + 0x7C) = FUN_001f96f8(0x78) + 30;
     } else if (*(int *)(p + 0x7C) > 30) {
         *(int *)(p + 0x7C) = 30;
@@ -358,15 +352,6 @@ typedef struct {
     u8 pad7c[4];
     s16 *p;
 } Hud;
-typedef struct {
-    u8 p0[0x2084];
-    s32 w2084;
-    u8 p2088[0x20A4 - 0x2088];
-    u8 b20A4;
-    u8 p20A5[0x22AC - 0x20A5];
-    s32 w22AC;
-} GS;
-extern GS D_0013F350_c __asm__("D_0013F350");
 
 extern f32 FUN_001fa6c0(s32);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -409,9 +394,9 @@ s32 FUN_L00_00239810(Hud *m) {
     Pt *e;
     u8 *q;
 
-    if (D_0013F350_c.b20A4 == 2)
+    if (hero.unk20A4 == 2)
         goto out;
-    if (D_0013F350_c.w2084 == 0x32)
+    if (hero.state.current == 0x32)
         goto out;
     x = m->x;
     if (D_0015ED80_c != 0)
@@ -439,8 +424,8 @@ s32 FUN_L00_00239810(Hud *m) {
     mode = D_0015EDA0;
     if (cnt == 0)
         sel = 0x1E;
-    if (D_0013F350_c.b20A4 == 1)
-        mode = D_0013F350_c.w22AC;
+    if (hero.unk20A4 == 1)
+        mode = hero.health.unk22AC;
     if (mode == 8) {
         tab = D_L00_0017E478;
         a = truncate_float_to_s32(f21 * 48.0f);

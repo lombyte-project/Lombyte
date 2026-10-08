@@ -56,7 +56,7 @@ struct HeroMotion {
     Vec4 pos;                      /* 0x80: world position */
     Vec4 rot;                      /* 0x90: rotation; z is the yaw */
     Vec4 unkA0;                    /* 0xA0 */
-    u8 pad_B0[0x10];
+    Vec4 unkB0;                    /* 0xB0 */
     Vec4 unkC0;                    /* 0xC0 */
     Vec4 unkD0;                    /* 0xD0 */
     Vec4 velocity;                 /* 0xE0: per-frame velocity */
@@ -64,7 +64,7 @@ struct HeroMotion {
     Vec4 unk100;                   /* 0x100 */
     Vec4 unk110;                   /* 0x110 */
     Vec4 unk120;                   /* 0x120 */
-    u8 pad_130[0x10];
+    Vec4 unk130;                   /* 0x130 */
     Vec4 unk140;                   /* 0x140 */
     Vec4 unk150;                   /* 0x150: copied from unk110/unk100 on hero_set_state */
     f32 unk160;                    /* 0x160 */
@@ -141,7 +141,7 @@ struct Hero {
     s32 unk1C0;                    /* 0x1C0 */
     s32 unk1C4;                    /* 0x1C4 */
     s16 unk1C8;                    /* 0x1C8 */
-    u8 pad_1CA[0x2];
+    s16 unk1CA;                    /* 0x1CA */
     s32 unk1CC;                    /* 0x1CC */
     s32 unk1D0;                    /* 0x1D0 */
     s32 unk1D4;                    /* 0x1D4 */
@@ -172,22 +172,23 @@ struct Hero {
     f32 unk234;                    /* 0x234 */
     u8 pad_238[0x4];
     u8 *coll_hit_moby;             /* 0x23C: moby of the last push-out collision hit */
-    u8 pad_240[0x8];
+    s32 unk240;                    /* 0x240 */
+    u8 pad_244[0x4];
     f32 unk248;                    /* 0x248 */
     u8 pad_24C[0xB];
     u8 unk257;                     /* 0x257 */
     u8 pad_258[0x18];
     Vec4 unk270;                   /* 0x270 */
-    u8 pad_280[0x10];
+    Vec4 unk280;                   /* 0x280 */
     Vec4 unk290;                   /* 0x290 */
     Vec4 unk2A0;                   /* 0x2A0 */
-    u8 pad_2B0[0x10];
+    Vec4 unk2B0;                   /* 0x2B0 */
     union { f32 f[2]; s32 i[2]; } unk2C0; /* 0x2C0: written as floats and zeroed as ints */
     union { f32 f[2]; s32 i[2]; } unk2C8; /* 0x2C8: written as floats and zeroed as ints */
     union { f32 f[2]; s32 i[2]; } unk2D0; /* 0x2D0: written as floats and zeroed as ints */
-    f32 unk2D8;                    /* 0x2D8 */
+    union { f32 f; s32 i; } unk2D8; /* 0x2D8: written as a float and zeroed as an int */
     f32 unk2DC;                    /* 0x2DC */
-    f32 unk2E0;                    /* 0x2E0 */
+    union { f32 f; s32 i; } unk2E0; /* 0x2E0: written as a float and zeroed as an int */
     union { f32 f; s32 i; } unk2E4; /* 0x2E4: written as a float and zeroed as an int */
     union { f32 f; s32 i; } unk2E8; /* 0x2E8: written as a float and zeroed as an int */
     f32 unk2EC;                    /* 0x2EC */
@@ -199,8 +200,8 @@ struct Hero {
     f32 unk304;                    /* 0x304 */
     s16 unk308;                    /* 0x308 */
     s16 unk30A;                    /* 0x30A */
-    s16 unk30C;                    /* 0x30C */
-    s16 unk30E;                    /* 0x30E */
+    union { s16 s; u16 u; } unk30C; /* 0x30C: read signed, incremented unsigned */
+    union { s16 s; u16 u; } unk30E; /* 0x30E: read signed, incremented unsigned */
     u8 pad_310[0xA0];
     f32 unk3B0;                    /* 0x3B0 */
     s32 unk3B4;                    /* 0x3B4 */
@@ -277,7 +278,9 @@ struct Hero {
     f32 unk4F0;                    /* 0x4F0 */
     u8 pad_4F4[0xC];
     Vec4 unk500;                   /* 0x500 */
-    u8 pad_510[0x30];
+    Vec4 unk510;                   /* 0x510 */
+    Vec4 unk520;                   /* 0x520 */
+    Vec4 unk530;                   /* 0x530 */
     Vec4 unk540;                   /* 0x540 */
     Vec4 unk550;                   /* 0x550 */
     s32 unk560;                    /* 0x560 */
@@ -288,7 +291,7 @@ struct Hero {
     f32 unk574;                    /* 0x574 */
     s32 unk578;                    /* 0x578 */
     f32 unk57C;                    /* 0x57C */
-    u8 pad_580[0x4];
+    f32 unk580;                    /* 0x580 */
     s32 unk584;                    /* 0x584 */
     f32 unk588;                    /* 0x588 */
     s32 unk58C;                    /* 0x58C */
@@ -299,7 +302,7 @@ struct Hero {
     s32 unk5A0;                    /* 0x5A0 */
     s32 unk5A4;                    /* 0x5A4 */
     s32 unk5A8;                    /* 0x5A8 */
-    s32 unk5AC;                    /* 0x5AC */
+    union { f32 f; s32 i; } unk5AC; /* 0x5AC: float approached toward a speed, zeroed as an int */
     f32 unk5B0;                    /* 0x5B0 */
     s32 unk5B4;                    /* 0x5B4 */
     s32 unk5B8;                    /* 0x5B8 */
@@ -309,9 +312,10 @@ struct Hero {
     s32 unk5C4;                    /* 0x5C4 */
     f32 unk5C8;                    /* 0x5C8 */
     f32 unk5CC;                    /* 0x5CC */
-    u8 pad_5D0[0x8];
+    f32 unk5D0;                    /* 0x5D0 */
+    f32 unk5D4;                    /* 0x5D4 */
     struct Moby *unk5D8;           /* 0x5D8 */
-    u8 pad_5DC[0x4];
+    f32 unk5DC;                    /* 0x5DC */
     Vec4 unk5E0;                   /* 0x5E0 */
     s32 *unk5F0;                   /* 0x5F0 */
     s32 unk5F4;                    /* 0x5F4 */
@@ -321,9 +325,12 @@ struct Hero {
     f32 unk604;                    /* 0x604 */
     u8 pad_608[0x4];
     s32 unk60C;                    /* 0x60C */
-    u8 pad_610[0x8];
-    s32 unk618;                    /* 0x618 */
-    u8 pad_61C[0x74];
+    f32 unk610;                    /* 0x610 */
+    f32 unk614;                    /* 0x614 */
+    union { f32 f; s32 i; } unk618; /* 0x618: float distance clamp, zeroed as an int */
+    u8 pad_61C[0x6C];
+    f32 unk688;                    /* 0x688 */
+    u8 pad_68C[0x4];
     f32 unk690;                    /* 0x690 */
     f32 unk694;                    /* 0x694 */
     s32 unk698;                    /* 0x698 */
@@ -331,38 +338,65 @@ struct Hero {
     s32 unk6A0;                    /* 0x6A0 */
     struct Moby *unk6A4;           /* 0x6A4 */
     u8 pad_6A8[0x18];
-    u8 unk6C0[0x60];               /* 0x6C0 */
-    u8 pad_720[0xB0];
+    Vec4 unk6C0;                   /* 0x6C0: 0x60 bytes cleared by FillTransferWords */
+    f32 unk6D0;                    /* 0x6D0 */
+    f32 unk6D4;                    /* 0x6D4 */
+    u8 pad_6D8[0x48];
+    Vec4 unk720;                   /* 0x720 */
+    u8 pad_730[0x10];
+    Vec4 unk740;                   /* 0x740 */
+    Vec4 unk750;                   /* 0x750 */
+    Vec4 unk760;                   /* 0x760 */
+    Vec4 unk770;                   /* 0x770 */
+    Vec4 unk780;                   /* 0x780 */
+    Vec4 unk790;                   /* 0x790 */
+    u8 pad_7A0[0x30];
     f32 unk7D0[0x20];              /* 0x7D0 */
-    u8 pad_850[0x10];
+    u8 pad_850[0x4];
+    f32 unk854;                    /* 0x854 */
+    f32 unk858;                    /* 0x858 */
+    f32 unk85C;                    /* 0x85C */
     f32 unk860;                    /* 0x860 */
-    u8 pad_864[0x8];
+    s32 unk864;                    /* 0x864 */
+    f32 unk868;                    /* 0x868 */
     u8 *unk86C;                    /* 0x86C */
     s32 unk870;                    /* 0x870 */
     f32 unk874;                    /* 0x874 */
-    u8 pad_878[0x10];
+    f32 unk878;                    /* 0x878 */
+    f32 unk87C;                    /* 0x87C */
+    u8 pad_880[0x4];
+    s16 unk884;                    /* 0x884 */
+    s16 unk886;                    /* 0x886 */
     s16 unk888;                    /* 0x888 */
-    u8 pad_88A[0xE];
+    s16 unk88A;                    /* 0x88A */
+    u8 unk88C;                     /* 0x88C */
+    u8 unk88D;                     /* 0x88D */
+    u8 unk88E;                     /* 0x88E */
+    u8 unk88F;                     /* 0x88F */
+    u8 pad_890[0x8];
     s16 unk898;                    /* 0x898 */
     u8 pad_89A[0x2];
     s16 unk89C;                    /* 0x89C */
     s16 unk89E;                    /* 0x89E */
     f32 unk8A0;                    /* 0x8A0 */
-    u8 pad_8A4[0x8];
+    f32 unk8A4;                    /* 0x8A4 */
+    u8 pad_8A8[0x4];
     s16 unk8AC;                    /* 0x8AC */
     u8 pad_8AE[0x1];
     u8 unk8AF;                     /* 0x8AF */
     s16 unk8B0;                    /* 0x8B0 */
     s16 unk8B2;                    /* 0x8B2 */
     void *unk8B4;                  /* 0x8B4 */
-    s32 unk8B8;                    /* 0x8B8 */
+    union { f32 f; s32 i; } unk8B8; /* 0x8B8: read as a float, zeroed as an int */
     s16 unk8BC;                    /* 0x8BC */
     s16 unk8BE;                    /* 0x8BE */
     u8 pad_8C0[0x4];
     s32 unk8C4;                    /* 0x8C4 */
-    u8 pad_8C8[0x6];
+    u8 pad_8C8[0x4];
+    s16 unk8CC;                    /* 0x8CC */
     u8 unk8CE;                     /* 0x8CE */
-    u8 pad_8CF[0x11];
+    u8 pad_8CF[0x1];
+    Vec4 unk8D0;                   /* 0x8D0 */
     s32 unk8E0;                    /* 0x8E0 */
     f32 unk8E4;                    /* 0x8E4 */
     f32 unk8E8;                    /* 0x8E8 */
@@ -439,11 +473,11 @@ struct Hero {
     u8 pad_A74[0x8];
     s32 unkA7C;                    /* 0xA7C */
     s32 unkA80;                    /* 0xA80 */
-    u8 pad_A84[0x4];
+    u8 *unkA84;                    /* 0xA84 */
     u8 *unkA88;                    /* 0xA88 */
-    u8 pad_A8C[0x4];
+    void *unkA8C;                  /* 0xA8C */
     f32 unkA90;                    /* 0xA90 */
-    u8 pad_A94[0x4];
+    f32 unkA94;                    /* 0xA94 */
     s32 unkA98;                    /* 0xA98 */
     s32 unkA9C;                    /* 0xA9C */
     s32 unkAA0;                    /* 0xAA0 */
@@ -454,8 +488,8 @@ struct Hero {
     u8 pad_AB8[0x248];
     u8*unkD00;                     /* 0xD00 */
     u8*unkD04;                     /* 0xD04 */
-    s32 unkD08;                    /* 0xD08 */
-    u8 pad_D0C[0x8];
+    u8 *unkD08[2];                 /* 0xD08: per item slot 0/1: moby from FUN_L00_0024f028 */
+    u8 *unkD10;                    /* 0xD10 */
     s32 unkD14;                    /* 0xD14 */
     u8 pad_D18[0x2D8];
     struct HeroRandTimer rand_timer;/* 0xFF0 */
@@ -472,7 +506,7 @@ struct Hero {
     u8 selector_3;                 /* 0x12E6 */
     u8 unk12E7;                    /* 0x12E7 */
     u8 unk12E8;                    /* 0x12E8 */
-    u8 pad_12E9[0x1];
+    u8 unk12E9;                    /* 0x12E9 */
     u8 unk12EA;                    /* 0x12EA */
     u8 selector_11;                /* 0x12EB */
     u8 selector_13;                /* 0x12EC */
@@ -480,9 +514,12 @@ struct Hero {
     u8 unk12EE;                    /* 0x12EE */
     u8 pad_12EF[0x325];
     s32 unk1614;                   /* 0x1614 */
-    u8 pad_1618[0x18];
+    u8 pad_1618[0x8];
+    void *unk1620;                 /* 0x1620 */
+    void *unk1624;                 /* 0x1624 */
+    u8 pad_1628[0x8];
     s32 unk1630;                   /* 0x1630 */
-    u8 pad_1634[0x2];
+    s16 unk1634;                   /* 0x1634 */
     s16 unk1636;                   /* 0x1636 */
     u8 pad_1638[0x8];
     Vec4 unk1640;                  /* 0x1640 */
@@ -491,7 +528,16 @@ struct Hero {
     s32 unk1660;                   /* 0x1660 */
     u8 pad_1664[0xC];
     struct MobyTrail trail;        /* 0x1670: trail of moby copies following hero.moby */
-    u8 pad_17B0[0x845];
+    u8 pad_17B0[0x350];
+    Vec4 unk1B00[32];              /* 0x1B00: ring of 32 quads indexed by unk21B0 */
+    u8 pad_1D00[0x20];
+    f32 unk1D20;                   /* 0x1D20 */
+    f32 unk1D24;                   /* 0x1D24 */
+    u8 pad_1D28[0x238];
+    u8 unk1F60[0x40];              /* 0x1F60: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
+    u8 unk1FA0[0x40];              /* 0x1FA0: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
+    u8 *unk1FE0;                   /* 0x1FE0: moby set by FUN_L00_002b58d8 */
+    u8 pad_1FE4[0x11];
     u8 unk1FF5;                    /* 0x1FF5 */
     u8 ammo_used;                  /* 0x1FF6 */
     u8 ammo_capacity;              /* 0x1FF7 */
@@ -509,28 +555,37 @@ struct Hero {
     u8 unk20A8;                    /* 0x20A8 */
     u8 unk20A9;                    /* 0x20A9 */
     u8 unk20AA;                    /* 0x20AA */
-    u8 pad_20AB[0x1];
+    u8 unk20AB;                    /* 0x20AB */
     u8 unk20AC;                    /* 0x20AC */
     u8 unk20AD;                    /* 0x20AD */
-    u8 pad_20AE[0x1];
+    u8 unk20AE;                    /* 0x20AE */
     u8 unk20AF;                    /* 0x20AF */
     u8 pad_20B0[0x1];
     u8 unk20B1;                    /* 0x20B1 */
     u8 unk20B2;                    /* 0x20B2 */
     u8 unk20B3;                    /* 0x20B3 */
-    u8 pad_20B4[0x4];
+    u8 unk20B4;                    /* 0x20B4 */
+    u8 pad_20B5[0x3];
     s32 pending_item[7];           /* 0x20B8: per slot: item to switch to */
     s32 selected_item[7];          /* 0x20D4: per slot: item after a switch */
     s32 saved_item[7];             /* 0x20F0: per slot: item kept while another is forced in */
     s32 restore_item[7];           /* 0x210C: per slot: 1 puts saved_item back */
-    u8 pad_2128[0xF8];
+    u8 pad_2128[0x88];
+    s32 unk21B0;                   /* 0x21B0: unk1B00 ring index */
+    s32 unk21B4;                   /* 0x21B4: unk1B00 ring count */
+    u8 pad_21B8[0x60];
+    s32 unk2218;                   /* 0x2218 */
+    u8 pad_221C[0x4];
     s32 unk2220;                   /* 0x2220 */
     s32 unk2224;                   /* 0x2224 */
     s32 unk2228;                   /* 0x2228 */
     s32 unk222C;                   /* 0x222C */
-    u8 pad_2230[0x40];
+    s32 unk2230;                   /* 0x2230 */
+    s32 unk2234;                   /* 0x2234 */
+    u8 pad_2238[0x38];
     s32 unk2270;                   /* 0x2270 */
-    u8 pad_2274[0xC];
+    s32 unk2274;                   /* 0x2274 */
+    u8 pad_2278[0x8];
     struct Moby *unk2280;          /* 0x2280 */
     s32 unk2284;                   /* 0x2284 */
     u8 pad_2288[0x8];
@@ -547,7 +602,7 @@ struct Hero {
     s16 unk22C8;                   /* 0x22C8 */
     u8 unk22CA;                    /* 0x22CA */
     u8 unk22CB;                    /* 0x22CB */
-    u8 pad_22CC[0x2];
+    s16 unk22CC;                   /* 0x22CC */
     s16 unk22CE;                   /* 0x22CE */
     u8 pad_22D0[0x2];
     s16 unk22D2;                   /* 0x22D2 */

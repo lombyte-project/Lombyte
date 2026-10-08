@@ -1682,7 +1682,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
             add_vector_xyz(d->f3C0, d->f3C0, v0);
             break;
         }
-        if (FUN_001f9b80(moby->f10, hero.motion.pos.f) < 50.0f && hero.unk30E == 0 &&
+        if (FUN_001f9b80(moby->f10, hero.motion.pos.f) < 50.0f && hero.unk30E.s == 0 &&
             (((BossMoby *)hero.unk2FC) == 0 || ((BossMoby *)hero.unk2FC)->fA6 != 0x24B)) {
             int *p = d->f340;
 
@@ -1702,7 +1702,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
         }
         break;
     case 4:
-        if (hero.unk30E == 0 && (((BossMoby *)hero.unk2FC) == 0 || ((BossMoby *)hero.unk2FC)->fA6 != 0x24B)) {
+        if (hero.unk30E.s == 0 && (((BossMoby *)hero.unk2FC) == 0 || ((BossMoby *)hero.unk2FC)->fA6 != 0x24B)) {
             int i;
 
             *(int *)&D_L18_00162360 = 1;
@@ -2285,7 +2285,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
             moby->f20 = 7;
             d->f39C = 0x1B;
         } else if (d->f34C == 7) {
-            if (((BossMoby *)hero.unk2FC) != 0 && hero.unk30E == 0 &&
+            if (((BossMoby *)hero.unk2FC) != 0 && hero.unk30E.s == 0 &&
                 ((BossMoby *)hero.unk2FC)->fA6 == 0x247 && hero.state.current == 0x22) {
                 if (d->f3AC == 0) {
                     d->f3AC = 1;

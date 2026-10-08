@@ -179,7 +179,7 @@ int hero_set_state(int a, int b) {
             return 1;
         }
         qcopy(&p->motion.unk150, &p->motion.unk110);
-        if (p->unk12EA != 0 && p->unk30C == 0) {
+        if (p->unk12EA != 0 && p->unk30C.s == 0) {
             hero_set_state(0x79, 1);
             return 0;
         }
@@ -502,7 +502,7 @@ int hero_set_state(int a, int b) {
                 s->unk8BC = 0;
                 s->unk89C = 0;
                 s->unk8C4 = 0;
-                s->unk8B8 = 0;
+                s->unk8B8.i = 0;
                 s->unk8CE = 0;
                 s->unk8AF = 0;
             }
@@ -719,7 +719,7 @@ int hero_set_state(int a, int b) {
         {
             struct Hero *s = &hero;
             s->rand_timer.range = 0x68;
-            if (s->unk12EA != 0 && s->unk30C == 0) {
+            if (s->unk12EA != 0 && s->unk30C.s == 0) {
                 hero_set_state(0x79, 1);
                 return 0;
             }
@@ -792,7 +792,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 1;
         p->unk2284 = 0;
         qcopy(&p->motion.unk150, &p->motion.unk110);
-        if (p->unk12EA != 0 && p->unk30C == 0) {
+        if (p->unk12EA != 0 && p->unk30C.s == 0) {
             hero_set_state(0x79, 1);
             return 0;
         }
@@ -837,7 +837,7 @@ int hero_set_state(int a, int b) {
         p->unk194 = vector_length_xy(&p->motion.unk110);
         if (D_0015ED6C * 7.0f < p->unk194)
             p->unk194 = D_0015ED6C * 7.0f;
-        if (p->unk12EA != 0 && p->unk30C == 0) {
+        if (p->unk12EA != 0 && p->unk30C.s == 0) {
             hero_set_state(0x79, 1);
             return 0;
         }
@@ -1813,7 +1813,7 @@ int hero_set_state(int a, int b) {
             p->unk2284 = 0;
             p->health.hp = 0;
             p->unk1CC = 0x2710;
-            p->unk2F4 = p->unk2D8;
+            p->unk2F4 = p->unk2D8.f;
             FUN_L00_00216de8(9, 0);
             if (b)
                 FUN_L00_002323b8(0x71, 0, (float)scale_game_frames(8));
@@ -1911,7 +1911,7 @@ int hero_set_state(int a, int b) {
         p->unk5CC = D_0015ED6C * 2.5f;
         if (D_0015ED6C * 2.5f < p->unk5B0)
             p->unk5B0 = D_0015ED6C * 2.5f;
-        p->unk5AC = 0;
+        p->unk5AC.i = 0;
         clear_vector(&p->motion.velocity);
         clear_vector(&p->motion.unk100);
         p->motion.velocity.f[2] = D_0015ED6C * 10.0f;
