@@ -222,7 +222,27 @@ int FUN_L07_00313af0(struct Moby *m, struct ChaserVars *d, Vec4 *goal, int mode,
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313d30.s", FUN_L07_00313d30);
+extern f32 D_0015ED60;
+/* eases the chaser speed up with the gap to its target */
+struct ChaserSpeed { u8 pad0[0x80]; f32 base; u8 pad84[0x10]; f32 rate; u8 pad98[0x124]; f32 rate2; };
+struct ChaserAnim { u8 pad0[0x58]; f32 speed; };
+float FUN_L07_00313d30(struct ChaserAnim *a, struct ChaserSpeed *s, float x, float y, float k)
+{
+    float r = D_0015ED60 * 0.06f;
+    if (y < x) {
+        r = x - y;
+        if (50.0f < r) r = 50.0f;
+        if (r < 0.0f) r = 0.0f;
+        r = r / 50.0f;
+        r = r * r;
+        r = r * (D_0015ED60 * 0.1f - D_0015ED60 * 0.06f);
+        r = r + D_0015ED60 * 0.06f;
+    }
+    s->rate2 = r;
+    s->rate = r;
+    a->speed = s->base / (D_0015ED60 * 0.06f) * k;
+    return r;
+}
 /* latches onto a target when it is turned toward enough, then picks a turn animation */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_003151C0), where it is exact; names translated to the US level program. */
 
