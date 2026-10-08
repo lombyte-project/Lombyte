@@ -40,7 +40,7 @@ extern void vscale_3131b0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void vadd_3131b0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vsub_3131b0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L07_00312e70(char *, float, int, float, int);
-extern void ray_3131b0(void *, char *, int, void *, float) __asm__("FUN_L00_00259888");
+extern void ray_3131b0(void *, char *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int hit_3131b0(void *, void *, int, char *, void *) __asm__("FUN_001efa68");
 extern void probe_3131b0(float, void *, int, char *, void *) __asm__("FUN_L00_001f2868");
 
@@ -64,7 +64,7 @@ void FUN_L07_003131b0(char *moby) {
     FUN_L07_00312e70(moby, 0.4f, 20, 3.0f, 0x30B0FFFF);
     vsub_3131b0(d, data + 0x120, data + 0x110);
     vscale_3131b0(d, d, one);
-    ray_3131b0(blk, moby, 0x30000, d, 1.00012302f);
+    ray_3131b0(blk, moby, 0x30000, 1.00012302f, d);
     if (hit_3131b0(data + 0x110, data + 0x120, 0, moby, blk) == 0) {
         probe_3131b0(0.5f, data + 0x120, 0, moby, blk);
     }
