@@ -107,7 +107,107 @@ s32 FUN_L03_002d30d8(u8 *object) {
     return (u32)(object[0x20] - 2) < 5;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3198.s", FUN_L03_002d3198);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3918.s", FUN_L03_002d3918);
+#include "rnc/gameplay/entities/moby.h"
+
+struct RailPath {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 pts[1];      /* 0x10: xyz point, w length of the segment to the next */
+};
+
+/* Pvars of a moby flying along a rail path. */
+typedef struct {
+    u8 pad0[0x60];
+    f32 speed;        /* 0x60 */
+    s32 idx;          /* 0x64: next path point */
+    f32 yaw_vel;      /* 0x68 */
+    f32 pitch_vel;    /* 0x6C */
+    f32 roll_vel;     /* 0x70 */
+} RailFlyerVars;
+
+/* One entry of the sound voice table, 0x70 bytes apart. */
+typedef struct {
+    u8 pad0[0x74];
+    u8 active;
+    u8 pad75[0x13];
+    struct Moby *owner;
+} VoiceSlot;
+
+extern struct RailPath *D_L03_001B05B0[];
+extern u8 D_0013E550[];
+extern float D_0015ED70;
+extern f32 D_L03_00161B08 __attribute__((sda));
+extern f32 D_L03_00161B0C __attribute__((sda));
+extern f32 D_L03_00161B10 __attribute__((sda));
+extern f32 D_L03_00161B14 __attribute__((sda));
+extern f32 D_L03_00161B18 __attribute__((sda));
+extern f32 D_L03_00161B1C __attribute__((sda));
+extern void vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern f32 vec_len(void *) __asm__("FUN_001f9af0");
+extern f32 vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern f32 vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern void vec_set_len(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 angle_atan2(f32, f32) __asm__("FUN_001f9e90");
+extern f32 approach_speed(f32 *, f32, f32, f32, f32, f32 *) __asm__("FUN_00213f38");
+extern f32 approach_angle(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_0025be00");
+extern s32 sound_is_playing(void *, s32) __asm__("FUN_L00_0028d8c0");
+extern s32 play_moby_sound(s32, s32, void *, s32) __asm__("FUN_L00_0028dc90");
+extern void release_voice(s32) __asm__("FUN_0022d798");
+
+/* Moves m along rail path `path`, easing speed toward the end and banking into turns;
+   keeps the travel sound playing and releases it on arrival. Returns 1 at the last point. */
+s32 FUN_L03_002d3918(struct Moby *m, s32 path, s32 *snd) {
+    RailFlyerVars *v = (RailFlyerVars *)m->pvars;
+    struct RailPath **pp = &D_L03_001B05B0[path];
+    Vec4f tgt, d;
+    f32 acc;
+    f32 ang;
+    f32 dist;
+    s32 done;
+    s32 h;
+
+    done = 0;
+    acc = 0.0f;
+    qcopy(&tgt, &(*pp)->pts[v->idx]);
+    vec_sub(&d, &tgt, &m->pos);
+    if (vec_len(&d) < D_L03_00161B08 * D_0015ED6C * 2.0f) {
+        v->idx++;
+        done = v->idx == (*pp)->count;
+    }
+    dist = vec_dist(&m->pos, &(*pp)->pts[(*pp)->count - 1]);
+    approach_speed(&acc, dist,
+                   D_L03_00161B0C * D_0015ED70, D_L03_00161B0C * D_0015ED70,
+                   D_L03_00161B08 * D_0015ED6C, &v->speed);
+    vec_set_len(&d, &d, v->speed);
+    vec_add(&m->pos, &d, &m->pos);
+    ang = -angle_atan2(vec_len_xy(&d), d.z);
+    if (ang > 0.2617994f)
+        ang = 0.2617994f;
+    else if (ang < -0.2617994f)
+        ang = -0.2617994f;
+    approach_angle(&m->rot.y, ang, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * D_0015ED70,
+                   D_L03_00161B10 * DEG_TO_RAD * D_0015ED70, D_0015ED6C * 12.566371f);
+    approach_angle(&m->rot.z, angle_atan2(tgt.x - m->pos.x, tgt.y - m->pos.y), &v->yaw_vel,
+                   D_L03_00161B14 * DEG_TO_RAD * D_0015ED70,
+                   D_L03_00161B14 * DEG_TO_RAD * D_0015ED70, D_0015ED6C * 12.566371f);
+    approach_angle(&m->rot.x, v->yaw_vel * v->speed * D_L03_00161B1C, &v->roll_vel,
+                   D_L03_00161B18 * DEG_TO_RAD * D_0015ED70,
+                   D_L03_00161B18 * DEG_TO_RAD * D_0015ED70, D_0015ED6C * 12.566371f);
+    h = *snd;
+    if (!done) {
+        if (sound_is_playing(m, h) == 0)
+            *snd = play_moby_sound(0, 4, m, 0x330);
+    } else {
+        if (h != -1) {
+            VoiceSlot *e = (VoiceSlot *)(D_0013E550 + h * 0x70);
+            if (e->owner == m && e->active)
+                release_voice(h);
+        }
+        *snd = -1;
+    }
+    return done;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3e58.s", FUN_L03_002d3e58);
 
 #define NOT_SDA
@@ -251,12 +351,6 @@ void FUN_L03_002db020(char *m) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db198.s", FUN_L03_002db198);
-struct RailPath {
-    s32 count;
-    u8 pad4[0xC];
-    Vec4 pts[1];      /* 0x10: xyz point, w length of the segment to the next */
-};
-
 struct RailSpawnerVars {
     s32 path;         /* index into D_L03_001B05B0, -1 for none */
     s32 timer;
@@ -274,7 +368,6 @@ struct RailSpawnerMoby {
     u16 uid;                    /* 0xA8 */
 };
 
-extern struct RailPath *D_L03_001B05B0[];
 extern char D_L03_001E35F0[];
 extern void FUN_001e93b0(char *, int);
 extern float FUN_001f9b48(void *, void *);
