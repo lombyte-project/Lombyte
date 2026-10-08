@@ -107,7 +107,186 @@ void FUN_L11_002cb990(char *moby) {
             child[0x20] = 2;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d0710.s", FUN_L11_002d0710);
+
+typedef struct {
+    char pad00[0x10];
+    float position[4];
+    unsigned char state;
+    char pad21[0x27];
+    float yaw;
+    char pad4C[7];
+    unsigned char animation;
+    char pad54[0x24];
+    char *data;
+} WM11;
+
+typedef struct {
+    char pad00[0x80];
+    float position[4];
+    char pad90[0x40];
+    float aim[4];
+} WP11;
+
+typedef struct {
+    float target[4];
+    float eye[4];
+    float delta[4];
+} WS11;
+
+typedef struct {
+    char pad00[4];
+    short h04;
+    char pad06[6];
+    float f0C;
+    char pad10[0x30];
+    int region;
+    char pad44[0x2C];
+    char body[0x64];
+    float pitch;
+    float yaw;
+    char padDC[4];
+    float height;
+    char padE4[0xC];
+    char head[0x68];
+    float head_yaw;
+    char pad15C[0x14];
+    float target[4];
+    char pad180[4];
+    int moving_timer;
+    int target_timer;
+} WD11;
+
+extern void FUN_L05_00317398(void *);
+extern int FUN_00214720(void *, int);
+extern int FUN_L00_00266448(void *, void *);
+extern int FUN_L00_002668a0(void *, void *);
+extern void FUN_L01_002783a8(void *, float);
+extern void FUN_L00_00260860(int, int);
+extern void FUN_L00_00284e50(void *, void *);
+extern void memcard_save_data_d0710(int, int) __asm__("FUN_0020b178");
+extern void FUN_L00_002039a0(void);
+extern int FUN_L00_00203908(int, int);
+extern unsigned char D_0013D4C3 __attribute__((section(".data")));
+extern int D_L11_0015F5C4;
+extern WP11 D_0013F350_d0710 __asm__("D_0013F350");
+extern char D_0013E533[];
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern float FUN_001fa688(float, float);
+extern float FUN_001fa5c8(float, float);
+extern float FUN_001fa580(float, float);
+extern float FUN_001f9af0(void *);
+extern float FUN_001f9b20(void *);
+extern int FUN_001f96f8(int);
+extern int FUN_001f9740(int *);
+extern float FUN_002132a8(float, float);
+extern float FUN_001f96b0(float);
+extern int FUN_001fa6d0(float);
+extern void FUN_00214db0(void *, float, float, float);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern unsigned char D_0015EDB0;
+extern float D_0015ED64;
+extern void FUN_L00_002628d8(float, float, void *, void *, int);
+
+/* Watcher update, same routine as FUN_L08_00302ce8 with this level's states and data layout. */
+void FUN_L11_002d0710(WM11 *m) {
+    WS11 scratch;
+    WD11 *d = (WD11 *)m->data;
+    float rate;
+    float head_rate;
+    int tracking;
+    FUN_L05_00317398(m);
+    switch (m->state) {
+    case 0:
+        if (D_0013D4C3) {
+            m->state = 3;
+        } else {
+            m->state = 1;
+        }
+        FUN_L00_002668a0(m, d);
+        d->f0C = 3.7f;
+        break;
+    case 1:
+        if (FUN_00214720(D_0013F350_d0710.position, d->region)) {
+            if (FUN_L00_00266448(m, d)) {
+                FUN_L01_002783a8(m, 2.7f);
+                m->state = 2;
+            }
+        }
+        break;
+    case 2:
+        if (D_L11_0015F5C4 != 2) {
+            m->state = 1;
+            if (d->h04 == 2) {
+                FUN_L00_00260860(3, 1);
+                FUN_L00_00284e50(D_0013F350_d0710.position, D_0013F350_d0710.position + 4);
+                memcard_save_data_d0710(0, -1);
+                FUN_L00_002039a0();
+                FUN_L00_00203908(0x2AFB, 0x3D);
+            }
+        }
+        break;
+    }
+    rate = 0.02f;
+    head_rate = 0.3f;
+    tracking = 0;
+    if (m->animation == 0) {
+        char *player = D_0013E533 + 0xE9D;
+        tracking = 1;
+        if (FUN_001f9b80(m->position, player) < 8.0f &&
+            FUN_001fa688(m->yaw,
+                         FUN_001f9e90(((WP11 *)(D_0013E533 + 0xE1D))->aim[0] - m->position[0],
+                                      ((WP11 *)(D_0013E533 + 0xE1D))->aim[1] - m->position[1])) <
+                1.5707964f) {
+            if (FUN_001f9af0(player + 0x80) > 0.01f)
+                d->moving_timer = FUN_001f96f8(120);
+            else
+                FUN_001f9740(&d->moving_timer);
+        } else if (d->moving_timer) {
+            d->moving_timer = 0;
+            qcopy(d->target, D_0013F350_d0710.aim);
+        }
+        if (FUN_001f9740(&d->target_timer)) {
+            float heading;
+            d->target_timer = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8(180.0f, 300.0f)));
+            heading = FUN_001fa580(m->yaw, FUN_002132a8(-90.0f, 90.0f) * 0.017453292f);
+            FUN_00214db0(d->target, 6.0f, heading, FUN_002132a8(0.0f, 30.0f) * 0.017453292f);
+            FUN_001f9a10(d->target, d->target, m->position);
+        }
+        if (d->moving_timer) {
+            qcopy(scratch.target, D_0013F350_d0710.aim);
+            rate = 0.04f;
+            head_rate = 0.3f;
+        } else {
+            qcopy(scratch.target, d->target);
+        }
+    }
+    if (tracking) {
+        float yaw;
+        float pitch;
+        qcopy(scratch.eye, m->position);
+        scratch.eye[2] += 1.0f;
+        FUN_001f9a28(scratch.delta, scratch.target, scratch.eye);
+        yaw = FUN_001fa5c8(FUN_001f9e90(scratch.delta[0], scratch.delta[1]), m->yaw);
+        pitch = -FUN_001f9e90(FUN_001f9b20(scratch.delta), scratch.delta[2]);
+        if (yaw > 1.5707964f)
+            yaw = 1.5707964f;
+        else if (yaw < -1.5707964f)
+            yaw = -1.5707964f;
+        if (pitch > 0.5235988f)
+            pitch = 0.5235988f;
+        else if (pitch < -0.5235988f)
+            pitch = -0.5235988f;
+        d->pitch = pitch;
+        d->head_yaw = d->yaw = yaw * 0.5f;
+    }
+    if (D_0015EDB0)
+        d->height = 2.75f;
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->body, 0);
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->head, 1);
+}
+
 extern float FastVecDist(void *, void *) __asm__("FUN_001f9b48");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2168), where it is exact; names translated to the US level program. */

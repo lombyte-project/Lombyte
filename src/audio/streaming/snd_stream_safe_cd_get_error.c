@@ -1,6 +1,6 @@
 #include "types.h"
 extern u8 D_00137B00[];
-extern s32 D_0015EC8C;
+extern s32 D_0015EC8C __attribute__((sda));
 extern s32 sceCdGetError();
 s32 snd_stream_safe_cd_get_error(s32 arg0) __asm__("FUN_0012eef0");
 

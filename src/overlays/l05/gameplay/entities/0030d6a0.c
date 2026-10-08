@@ -133,8 +133,6 @@ void FUN_L05_0030dc68(char *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030de90.s", FUN_L05_0030de90);
 
-
-
 /* Fog zone: switches the level fog between its two settings when the hero enters either trigger volume, and
  * tints a colour by the hero's side of a gate while inside the third. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030F6C0), where it is exact; names translated to the US level program. */
@@ -891,7 +889,46 @@ void FUN_L05_003180a0(WM *m) {
     FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->body, 0);
     FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->head, 1);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00318a68.s", FUN_L05_00318a68);
+
+extern char D_0013F3D0_318a68[] __asm__("D_0013F3D0");
+extern int D_L05_001612DC_318a68 __asm__("D_L05_001612DC") __attribute__((sda));
+extern int D_L05_001612D8_318a68[] __asm__("D_L05_001612D8") MACRO_ADDR;
+extern char D_L05_001612E0_318a68[16] __asm__("D_L05_001612E0") MACRO_ADDR __attribute__((sda));
+extern float D_L05_001612E8_318a68 __asm__("D_L05_001612E8") MACRO_ADDR;
+extern float D_L05_001612EC_318a68 __asm__("D_L05_001612EC") MACRO_ADDR;
+extern int D_L05_0015F5C4_318a68[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
+extern int find_318a68(void *, int) __asm__("FUN_00214720");
+extern float sin_318a68(float) __asm__("FUN_001f9de0");
+
+/* Two-state marker: arms the moby, then once its target is found copies the
+ * target position and sets the bob height from the frame counter. */
+void FUN_L05_00318a68(char *m) {
+    int state = *(unsigned char *)(m + 0x20);
+    int *v = *(int **)(m + 0x78);
+    char *t;
+
+    switch (state) {
+    case 0:
+        *(unsigned char *)(m + 0x20) = 1;
+        *(unsigned short *)(m + 0x34) |= 1;
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(int *)(m + 0x94) = 0;
+        break;
+    case 1:
+        t = D_0013F3D0_318a68;
+        if (find_318a68(t, *v) != 0) {
+            D_L05_001612D8_318a68[1] = state;
+            qcopy(D_L05_001612E0_318a68, t);
+            *(short *)(t + 0x15E) = 5;
+            D_L05_001612EC_318a68 = 48.0f;
+            *(volatile float *)&D_L05_001612E8_318a68 = sin_318a68((float)(D_L05_0015F5C4_318a68[2] % 360) * 0.017444444f - 3.14f) * 0.25f + 59.5f;
+        } else {
+            D_L05_001612DC_318a68 = 0;
+        }
+        break;
+    }
+}
+
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031A0A8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;

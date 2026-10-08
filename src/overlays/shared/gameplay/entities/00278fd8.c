@@ -1086,7 +1086,32 @@ int FUN_L15_00299dd8(char *m) {
     }
     return best;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ff8.s", FUN_L15_00299ff8);
+/* Returns 0 if a live listed moby of class 0x2C has a lower rank than this one, else 1. */
+
+extern int D_L15_0015FFD8;
+extern int D_L15_001ABE40[];
+
+int FUN_L15_00299ff8(void *arg) {
+    unsigned char *m = arg;
+    unsigned short *p;
+    char *d;
+    if (m[0x21] == 0xFF)
+        return 1;
+    p = (unsigned short *)D_L15_001ABE40[m[0x21]];
+    d = *(char **)(m + 0x78);
+    if (p == 0)
+        return 1;
+    do {
+        unsigned char *o = (unsigned char *)(((*p & 0x7FFF) << 8) + D_L15_0015FFD8);
+        if (*(short *)(o + 0xA6) == 0x2C && o != 0 && o[0x20] != 0xFE && o[0x20] != 0xFD && o[0xBC] == 0) {
+            char *od = *(char **)(o + 0x78);
+            if (*(int *)(od + 0x144) == 0 && *(int *)(od + 0x124) != -1 &&
+                *(int *)(od + 0x13C) >= *(int *)(d + 0x13C))
+                return 0;
+        }
+    } while ((short)*p++ >= 0);
+    return 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a0d0.s", FUN_L15_0029a0d0);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029B428), where it is exact; names translated to the US level program. */
 

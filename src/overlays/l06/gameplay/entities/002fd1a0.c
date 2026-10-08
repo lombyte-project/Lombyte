@@ -92,7 +92,54 @@ void FUN_L06_002ffc38(int idx) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ffcb0.s", FUN_L06_002ffcb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300278.s", FUN_L06_00300278);
+
+#include "qcopy.h"
+extern char *create_moby_300278(int) __asm__("FUN_0020c4f8");
+extern void moby_init_300278(char *) __asm__("FUN_L00_00250df8");
+extern float rand_range_300278(float, float) __asm__("FUN_002132a8");
+extern float rand_angle_300278(void) __asm__("FUN_00213308");
+extern float cos_300278(float) __asm__("FUN_001f9dc8");
+extern float sin_300278(float) __asm__("FUN_001f9de0");
+extern void vadd_300278(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vnorm_300278(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float D_0015ED6C_300278 __asm__("D_0015ED6C");
+extern float D_L06_0016204C_300278 __asm__("D_L06_0016204C") __attribute__((sda));
+extern void FUN_L06_00300c60(char *, float *, float *);
+
+/* Breaks the moby apart: spawns a copy (class 0x43C) and throws 50
+ * fragments out in random directions. */
+void FUN_L06_00300278(char *m) {
+    float p[4];
+    float d[4];
+    char *n;
+    float s;
+    float a;
+    int i;
+
+    *(int *)(*(char **)(m + 0x78) + 4) = 0;
+    n = create_moby_300278(0x43C);
+    *(short *)(n + 0x32) = 0x40;
+    n[0x31] = 1;
+    *(long long *)(n + 0x38) = *(long long *)(m + 0x38);
+    *(unsigned short *)(n + 0x34) = *(unsigned short *)(m + 0x34);
+    qcopy(n + 0x10, m + 0x10);
+    qcopy(n + 0x40, m + 0x40);
+    *(float *)(n + 0x2C) = *(float *)(m + 0x2C);
+    moby_init_300278(n);
+    *(unsigned short *)(m + 0x34) |= 1;
+    for (i = 0; i < 50; i++) {
+        s = rand_range_300278(1.0f, 6.0f) * D_0015ED6C_300278;
+        a = rand_angle_300278();
+        d[0] = cos_300278(a) * 2.0f;
+        d[1] = sin_300278(a) * 2.0f;
+        d[2] = 0.0f;
+        vadd_300278(p, m + 0x10, d);
+        p[2] += rand_range_300278(D_L06_0016204C_300278 + 0.5f, D_L06_0016204C_300278 + 4.5f);
+        vnorm_300278(d, d, s);
+        FUN_L06_00300c60(m, p, d);
+    }
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003003f0.s", FUN_L06_003003f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300720.s", FUN_L06_00300720);
 #define NOT_SDA

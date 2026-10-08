@@ -6,6 +6,35 @@ extern int D_0013CB04[];
 extern char D_L00_001B63F8[];
 extern char D_L00_001B9CF8[];
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0027f448.s", FUN_L00_0027f448);
+#include "sda.h"
+typedef struct { unsigned short a; unsigned short b; int c; unsigned short d; } E_27f448;
+typedef struct { unsigned short a; unsigned short pad; unsigned short b; unsigned short pad2[3]; } T_27f448;
+extern int D_0013D510_27f448[] __asm__("D_0013D510") NOT_SDA;
+extern E_27f448 D_L00_001BA3B8_27f448[] __asm__("D_L00_001BA3B8") NOT_SDA;
+extern T_27f448 D_L00_001C1E40_27f448[] __asm__("D_L00_001C1E40") NOT_SDA;
+extern int *D_L00_001602A0_27f448 __asm__("D_L00_001602A0") __attribute__((sda));
+typedef struct { char pad[0x224]; int x224; } S_27f448;
+extern S_27f448 D_L00_001841F0_27f448 __asm__("D_L00_001841F0") NOT_SDA;
+typedef struct { char pad0[0x30]; int x30; char pad34[0xC]; int x40; } P_27f448;
+int FUN_L00_0027f448(P_27f448 *p) {
+    int i;
+    for (i = 0; i < 20 && D_0013D510_27f448[i]; i++) {
+        D_L00_001BA3B8_27f448[i].b = 1;
+        D_L00_001BA3B8_27f448[i].c = 0;
+        D_L00_001BA3B8_27f448[i].a = D_L00_001C1E40_27f448[D_0013D510_27f448[i]].a;
+        D_L00_001BA3B8_27f448[i].d = D_L00_001C1E40_27f448[D_0013D510_27f448[i]].b;
+    }
+    D_L00_001BA3B8_27f448[i].a = 0;
+    p->x40 = 0;
+    p->x30 |= 0x8000;
+    for (i = 0; D_L00_001602A0_27f448[i]; i++) {
+        if (D_L00_001841F0_27f448.x224 == D_L00_001602A0_27f448[i]) {
+            p->x40 = i;
+            break;
+        }
+    }
+    return 0;
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0027f700.s", FUN_L00_0027f700);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00284d90.s", FUN_L00_00284d90);

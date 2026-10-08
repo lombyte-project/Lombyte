@@ -206,4 +206,267 @@ float FUN_L08_002f5d98(float x, char *arg) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f5e58.s", FUN_L08_002f5e58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f70a0.s", FUN_L08_002f70a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00302ce8.s", FUN_L08_00302ce8);
+
+extern int D_L08_0015F5C4;
+
+#include "qcopy.h"
+extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+#include "sda.h"
+typedef struct {
+    char pad00[4];
+    unsigned short sub;
+    char pad06[0x1A];
+    void *ptr20;
+    char pad24[0x1C];
+    char body[0x64];
+    float pitch;
+    float yaw;
+    char padAC[4];
+    float height;
+    char padB4[0xC];
+    char head[0x68];
+    float head_yaw;
+    char pad12C[0x14];
+    float target[4];
+    char pad150[4];
+    int idle_timer;
+    int moving_timer;
+    int target_timer;
+} WD;
+typedef struct {
+    char pad00[0x10];
+    float position[4];
+    unsigned char state;
+    char pad21[0x10];
+    unsigned char opacity;
+    char pad32[0x16];
+    float yaw;
+    char pad4C[7];
+    unsigned char animation;
+    char pad54[0x1C];
+    unsigned char flags70;
+    char pad71[7];
+    WD *data;
+    char pad7C[3];
+    unsigned char b7F;
+} WM;
+typedef struct {
+    char pad00[0x80];
+    float position[4];
+    char pad90[0x40];
+    float aim[4];
+    char padE0[0x22E];
+    short disabled;
+    char pad310[0x1D7C];
+    int mode;
+} L16WatchPlayer;
+typedef struct {
+    float target[4];
+    float eye[4];
+    float delta[4];
+} L16WatchScratch;
+extern void FUN_L01_002783a8(void *, float);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
+extern int FUN_001f96f8(int);
+extern float D_0015ED64;
+extern float FUN_001f96b0(float);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa688");
+extern float FUN_001fa688_cf(float, float) __asm__("FUN_001f9e90");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+extern float truncate_float_to_s32_cf(float, float) __asm__("FUN_002132a8");
+extern float vector_length_xy(void *);
+extern float vector_length_xyz_c(void *) __asm__("vector_length_xyz");
+extern int FUN_L00_00266448(void *, void *);
+extern int FUN_L00_002668a0(void *, void *);
+extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
+extern int tick_countdown_32(int *);
+extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
+extern void FUN_L00_002628d8(float, float, void *, void *, int);
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("subtract_vector_xyz");
+extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
+typedef struct {
+    char pad00[0x24];
+    short h24;
+    char pad26[2];
+    unsigned char b28;
+    char pad29[3];
+    float f2C;
+    char pad30[0x10];
+    void *p40;
+    char pad44[0x1C];
+    char body[0x64];
+    float pitch;
+    float yaw;
+    char padCC[4];
+    float height;
+    char padD4[0xC];
+    char head[0x68];
+    float head_yaw;
+    char pad14C[0x14];
+    float target[4];
+    char pad170[0x10];
+    int joint;
+    char pad184[4];
+    int moving_timer;
+    int target_timer;
+} WD8;
+extern unsigned char D_0013DD4A_w __asm__("D_0013DD4A") __attribute__((section(".data")));
+extern unsigned char D_0013D3B4 __attribute__((section(".data")));
+extern char D_L08_001621E0[];
+extern int D_L08_001621D8 __attribute__((sda));
+extern char *D_L08_001600EC;
+extern void FUN_L00_00262d38(int);
+extern void FUN_L00_00284e50(void *, void *);
+extern unsigned char D_0014C050[];
+extern int D_0015ED84;
+extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
+extern void FUN_L08_00305138_c(void *) __asm__("FUN_L02_002e0cd8");
+extern void FUN_L00_0025a120(void *);
+extern float FUN_001f9b48(void *, void *);
+extern void FUN_L00_002502a0(int);
+extern void FUN_L00_002607d0(int);
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
+
+/* Watcher update, same routine as FUN_L08_00305270 with two more states and the joint pose copy. */
+void FUN_L08_00302ce8(WM *m) {
+    L16WatchScratch scratch;
+    WD8 *d = (WD8 *)m->data;
+    float rate;
+    float head_rate;
+    int tracking;
+    FUN_L08_00305138_c(m);
+    if (m->opacity) {
+        if (FUN_001f9b48(m->position, D_L08_001675C0_c) < (float)D_L08_001621D8) {
+            FUN_L00_0025a120(m);
+            m->b7F = (D_L08_001621D8 * 13) >> 4;
+        }
+    }
+    switch (m->state) {
+    case 0:
+        ((unsigned char *)m)[0x30] = 0xFF;
+        if (m->animation != 1)
+            blend_moby_animation(m, 1, 0, FUN_001f96f8(10));
+        if (D_0013DD4A_w && D_0014C050[((unsigned char *)m)[0xB0] + D_0015ED84 * 16] == 0xFF) {
+            mark_moby_for_removal(m);
+            return;
+        }
+        d->f2C = 3.0f;
+        d->p40 = D_L08_001621E0;
+        if (!D_0013D3B4) {
+            m->state = 1;
+        } else {
+            char *b = D_L08_001600EC;
+            int j = d->joint;
+            qcopy(m->position, b + j * 0x80 + 0x30);
+            qcopy((char *)m + 0x40, b + j * 0x80 + 0x70);
+            m->state = 2;
+        }
+        FUN_L00_002668a0(m, (char *)d + 0x20);
+        break;
+    case 1:
+        if (FUN_L00_00266448(m, (char *)d + 0x20)) {
+            char *b = D_L08_001600EC;
+            int j = d->joint;
+            qcopy(m->position, b + j * 0x80 + 0x30);
+            qcopy((char *)m + 0x40, b + j * 0x80 + 0x70);
+            m->state = 2;
+            D_0013D3B4 = 1;
+        }
+        break;
+    case 2:
+        if (m->flags70 & 2) {
+            if (m->animation != random_integer_below(2) + 1)
+                blend_moby_animation(m, random_integer_below(2) + 1, 0, FUN_001f96f8(20));
+        }
+        if (FUN_L00_00266448(m, (char *)d + 0x20)) {
+            m->state = 3;
+            FUN_L01_002783a8(m, 2.2f);
+        }
+        break;
+    case 3:
+        if (D_L08_0015F5C4 != 2) {
+            d->b28 = 1;
+            if (d->h24 == 3) {
+                FUN_L00_002607d0(10);
+                FUN_L00_00262d38(10);
+                FUN_L00_002502a0(((unsigned char *)m)[0xB0]);
+                FUN_L00_00284e50((char *)&D_0013E633_watch + 0xE9D, (char *)&D_0013E633_watch + 0xEAD);
+                memcard_save_data(0, -1);
+                mark_moby_for_removal(m);
+                return;
+            }
+            m->state = 2;
+        }
+        break;
+    }
+    rate = 0.02f;
+    head_rate = 0.3f;
+    tracking = 0;
+    if (m->animation == 1) {
+        char *player = (char *)&D_0013E633_watch + 0xE9D;
+        tracking = 1;
+        if (FUN_001f9b80(m->position, player) < 8.0f &&
+            FUN_001f9e90_cf(
+                m->yaw,
+                FUN_001fa688_cf(((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[0] -
+                                    m->position[0],
+                                ((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[1] -
+                                    m->position[1])) < 1.5707964f) {
+            if (vector_length_xyz_c(player + 0x80) > 0.01f)
+                d->moving_timer = scale_game_frames_c(120);
+            else
+                tick_countdown_32(&d->moving_timer);
+        } else if (d->moving_timer) {
+            d->moving_timer = 0;
+            qcopy(d->target, (char *)&D_0013E633_watch + 0xEED);
+        }
+        if (tick_countdown_32(&d->target_timer)) {
+            float heading;
+            d->target_timer =
+                random_float_between_cf(FUN_001f96b0(truncate_float_to_s32_cf(180.0f, 300.0f)));
+            heading =
+                fast_add_rotations(m->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * 0.017453292f);
+            build_spherical_offset(d->target, 6.0f, heading,
+                                   truncate_float_to_s32_cf(0.0f, 30.0f) * 0.017453292f);
+            add_vector_xyz(d->target, d->target, m->position);
+        }
+        if (d->moving_timer) {
+            qcopy(scratch.target, (char *)&D_0013E633_watch + 0xEED);
+            rate = 0.04f;
+            head_rate = 0.3f;
+        } else {
+            qcopy(scratch.target, d->target);
+        }
+    }
+    if (tracking) {
+        float yaw;
+        float pitch;
+        qcopy(scratch.eye, m->position);
+        scratch.eye[2] += 1.0f;
+        subtract_vector_xyz_c(scratch.delta, scratch.target, scratch.eye);
+        yaw = fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), m->yaw);
+        pitch = -FUN_001fa688_cf(vector_length_xy(scratch.delta), scratch.delta[2]);
+        if (yaw > 1.5707964f)
+            yaw = 1.5707964f;
+        else if (yaw < -1.5707964f)
+            yaw = -1.5707964f;
+        if (pitch > 0.5235988f)
+            pitch = 0.5235988f;
+        else if (pitch < -0.5235988f)
+            pitch = -0.5235988f;
+        d->pitch = pitch;
+        d->yaw = yaw * 0.6f;
+        d->head_yaw = yaw * 0.4f;
+    }
+    if (D_0015EDB0_b)
+        d->height = 2.75f;
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->body, 0);
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->head, 1);
+}
+

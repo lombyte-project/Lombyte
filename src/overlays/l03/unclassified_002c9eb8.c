@@ -52,7 +52,51 @@ void FUN_L03_002d3c40(char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c9eb8.s", FUN_L03_002c9eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ca808.s", FUN_L03_002ca808);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cbea8.s", FUN_L03_002cbea8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cc888.s", FUN_L03_002cc888);
+
+#include "qcopy.h"
+extern char *create_moby_2cc888(int) __asm__("FUN_0020c4f8");
+extern float D_0015ED64_2cc888 __asm__("D_0015ED64");
+extern float vlen_2cc888(void *) __asm__("FUN_001f9b20");
+extern float atan2_2cc888(float, float) __asm__("FUN_001f9e90");
+extern void set_path_2cc888(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
+
+/* Spawns a projectile moby (class 0x273) at pos, heading along dir,
+ * owned by parent p. */
+char *FUN_L03_002cc888(char *p, void *pos, float *dir) {
+    char *m = create_moby_2cc888(0x273);
+    char *v;
+    float s;
+
+    if (m == 0) {
+        return 0;
+    }
+    *(unsigned short *)(m + 0x32) = *(unsigned short *)(p + 0x32);
+    m[0x30] = p[0x32];
+    m[0x31] = 1;
+    *(long long *)(m + 0x38) = *(long long *)(p + 0x38);
+    qcopy(m + 0x10, pos);
+    v = *(char **)(m + 0x78);
+    s = D_0015ED64_2cc888;
+    *(float *)(v + 0x10) = s * 0.008f;
+    *(float *)(v + 0x14) = s * 0.0005f;
+    *(float *)(v + 0x18) = vlen_2cc888(dir);
+    *(float *)(v + 0x1C) = dir[2];
+    *(int *)(v + 0x20) = 0x400;
+    *(float *)(v + 0x28) = 1.0f;
+    *(float *)(v + 0x30) = 0.75f;
+    *(float *)(v + 0x34) = 0.5f;
+    *(float *)(v + 0x38) = 0.65f;
+    *(float *)(v + 0x48) = 0.2f;
+    *(float *)(v + 0x4C) = 0.01f;
+    v[0x3D] = 0;
+    *(int *)(v + 0x24) = 1;
+    set_path_2cc888(m, v, 0, 1, 0, atan2_2cc888(dir[0], dir[1]));
+    *(char **)(v + 0x68) = p;
+    *(int *)(v + 0x6C) = 0;
+    m[0x20] = 1;
+    return m;
+}
+
 /* Test the observed halfword and byte range without inferring object identity. */
 s32 FUN_L03_002d30d8(u8 *object) {
     if (*(s16 *)(object + 0xa6) != 0x330) {
@@ -112,9 +156,98 @@ char *FUN_L03_002d4288(char *a, char *pos, char *parent, int n, float f0, float 
     return m;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d43c8.s", FUN_L03_002d43c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002da710.s", FUN_L03_002da710);
+
+typedef struct {
+    char pad0[0x30];
+    int mode;
+    int t;
+    char pad38[0xC];
+    short n;
+    char pad46[0x132];
+    char *list[1];
+} G_2da710;
+
+extern int D_L03_0015F5C4;
+extern unsigned char D_0015EDB0;
+extern float D_L03_0015F5A0;
+extern G_2da710 D_L03_0016C960;
+extern char D_L03_0017C540[];
+extern float D_L03_00161BB4 __attribute__((sda));
+extern void attach_2da710(void *, int, void *) __asm__("FUN_0020cb10");
+
+/* During the cutscene, nudges a camera value at two time windows and attaches
+ * the shared manipulator to every listed moby of the same class as m. */
+void FUN_L03_002da710(char *m) {
+    char *s;
+    int i;
+
+    if (D_L03_0015F5C4 == 2 && D_0015EDB0 != 0) {
+        if (D_L03_0016C960.mode == 2 && D_L03_0016C960.t >= 0x1EA && D_L03_0016C960.t < 0x266) {
+            D_L03_0015F5A0 = -0.2f;
+        }
+        if (D_L03_0016C960.mode == 2 && D_L03_0016C960.t >= 0x2EE && D_L03_0016C960.t < 0x321) {
+            D_L03_0015F5A0 = 0.2f;
+        }
+        for (i = 0; i < D_L03_0016C960.n; i++) {
+            if (*(short *)(D_L03_0016C960.list[i] + 0xA6) == *(short *)(m + 0xA6)) {
+                s = D_L03_0017C540;
+                if (((unsigned char *)s)[1] == 0) {
+                    attach_2da710(D_L03_0016C960.list[i], 0, s);
+                    *(float *)(s + 0x20) = D_L03_00161BB4;
+                    *(float *)(s + 0x24) = D_L03_00161BB4;
+                    *(float *)(s + 0x28) = D_L03_00161BB4;
+                }
+            }
+        }
+    }
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002da870.s", FUN_L03_002da870);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db020.s", FUN_L03_002db020);
+
+extern float D_L03_00161BC0_2db020 __asm__("D_L03_00161BC0");
+extern float cos_2db020(float) __asm__("FUN_001f9dc8");
+extern float sin_2db020(float) __asm__("FUN_001f9de0");
+extern void vadd_2db020(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vsub_2db020(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void vscale_2db020(void *, void *, float) __asm__("FUN_001f9a68");
+extern int ftoi_2db020(float) __asm__("FUN_001fa6d0");
+extern float itof_2db020(int) __asm__("FUN_001fa6c0");
+extern void kill_2db020(char *) __asm__("FUN_0020c828");
+extern void FUN_L00_00260738(void *, void *, void *, void *);
+
+/* Moves the moby along its path: advances the distance, places it on the
+ * current segment, and dies at the end of the path. */
+void FUN_L03_002db020(char *m) {
+    float old[4];
+    float a[4];
+    float b[4];
+    char *v;
+    char *p;
+    int i;
+    float t;
+
+    *(u128 *)old = *(u128 *)(m + 0x10);
+    v = *(char **)(m + 0x78);
+    *(float *)(v + 0x64) += D_L03_00161BC0_2db020;
+    a[0] = cos_2db020(*(float *)(m + 0x48)) * *(float *)(v + 0x64);
+    a[1] = sin_2db020(*(float *)(m + 0x48)) * *(float *)(v + 0x64);
+    *(int *)&a[2] = 0;
+    vadd_2db020(a, a, *(char **)(v + 0x60) + 0x10);
+    i = ftoi_2db020(*(float *)(v + 0x64) / *(float *)(*(char **)(v + 0x60) + 0x1C));
+    t = itof_2db020(i);
+    p = *(char **)(v + 0x60);
+    t = (*(float *)(v + 0x64) - t * *(float *)(p + 0x1C)) / *(float *)(p + 0x1C);
+    if (i >= *(int *)p - 2) {
+        kill_2db020(m);
+        return;
+    }
+    vsub_2db020(b, ((float (*)[4])p)[i + 2], ((float (*)[4])p)[i + 1]);
+    vscale_2db020(b, b, t);
+    vadd_2db020(m + 0x10, b, (*(float (**)[4])(v + 0x60))[i + 1]);
+    vsub_2db020(a, m + 0x10, old);
+    FUN_L00_00260738(v + 0x20, a, m + 0x40, m + 0x40);
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db198.s", FUN_L03_002db198);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db280.s", FUN_L03_002db280);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db558.s", FUN_L03_002db558);

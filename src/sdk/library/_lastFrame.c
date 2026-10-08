@@ -1,8 +1,3 @@
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/_lastFrame/_lastFrame.s", _lastFrame);
-#else
 typedef signed char s8;
 typedef unsigned char u8;
 typedef signed short s16;
@@ -48,4 +43,3 @@ void _lastFrame(struct MpegDecoder *arg0) {
     }
     arg0->unk120 = 0;
 }
-#endif /* NON_MATCHING */

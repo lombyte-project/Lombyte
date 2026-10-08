@@ -87,4 +87,167 @@ char *FUN_L10_002cc1b8(float scale, void *vel, void *pos, int a, int b, int c) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002cc2e8.s", FUN_L10_002cc2e8);
+/* Homing shot: steers toward the hero along an intercept course, trails sparks, then bursts. */
+
+#include "qcopy.h"
+
+typedef int Q_cc2e8 __attribute__((mode(TI), aligned(16)));
+
+typedef struct {
+    float vel[4];
+    int owner;
+    char *target;
+    int timer;
+    int pad1C[3];
+    float yawSpeed;
+    float pitchSpeed;
+    int passed;
+    int warned;
+    float dist;
+} Shot_cc2e8;
+
+typedef struct {
+    char pad00[0x40];
+    float rx;
+    float ry;
+    float rz;
+} Rot_cc2e8;
+
+extern unsigned char D_0013F350_cc2e8[] __asm__("D_0013F350");
+extern char D_0013F3D0_cc2e8[] __asm__("D_0013F3D0");
+extern char D_L10_001742C0_cc2e8[] __asm__("D_L10_001742C0");
+extern float D_0015ED70;
+extern float D_0015ED6C;
+extern int D_0015ED84;
+extern float vlen_cc2e8(void *) __asm__("FUN_001f9af0");
+extern float vlenxy_cc2e8(void *) __asm__("FUN_001f9b20");
+extern float vdist_cc2e8(void *, void *) __asm__("FUN_001f9b48");
+extern float lensq_cc2e8(void *) __asm__("FUN_L00_001ff430");
+extern float sqrt_cc2e8(float) __asm__("FUN_001f9988");
+extern float atan2_cc2e8(float, float) __asm__("FUN_001f9e90");
+extern float addrot_cc2e8(float, float) __asm__("FUN_001fa580");
+extern float ground_cc2e8(void *, int, float) __asm__("FUN_00213508");
+extern void vsub_cc2e8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void vadd_cc2e8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vscale_cc2e8(void *, void *, float) __asm__("FUN_001f9a68");
+extern void vdir_cc2e8(void *, void *, float) __asm__("FUN_001f9c48");
+extern void vclear_cc2e8(void *) __asm__("FUN_001f99f8");
+extern int frames_cc2e8(int) __asm__("FUN_001f96f8");
+extern int expired_cc2e8(int *) __asm__("FUN_001f9740");
+extern float turn_cc2e8(float, float, float, float, float, float *) __asm__("FUN_L00_00258110");
+extern void setvel_cc2e8(float, float, float, void *) __asm__("FUN_00214db0");
+extern int randint_cc2e8(int, int) __asm__("FUN_L00_00257b90");
+extern void spark_cc2e8(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
+extern int sound_cc2e8(int, int, void *) __asm__("FUN_0022da68");
+extern int hit_cc2e8(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern void damage_cc2e8(float, int, void *, int, void *, void *) __asm__("FUN_L00_00259bc8");
+extern void burst_cc2e8(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
+extern void sfx_cc2e8(int, int, void *, int) __asm__("FUN_L00_0028dc90");
+extern void kill_cc2e8(void *) __asm__("FUN_0020c828");
+
+void FUN_L10_002cc2e8(char *m) {
+    Shot_cc2e8 *d = *(Shot_cc2e8 **)(m + 0x78);
+    float pos0[4] __attribute__((aligned(16)));
+    float c[4] __attribute__((aligned(16)));
+    float diff[4] __attribute__((aligned(16)));
+    float hv[4] __attribute__((aligned(16)));
+    float tp[4] __attribute__((aligned(16)));
+    float aim[4] __attribute__((aligned(16)));
+    float speed, a, b, s, r1, r2, t, yaw, pitch, dist;
+    char *p;
+    unsigned char *g;
+    char *tg;
+    float h;
+    char *tb;
+
+    switch ((unsigned char)m[0x20]) {
+    case 1:
+        qcopy(pos0, m + 0x10);
+        if (d->target == 0 || (unsigned char)d->target[0x20] == 0xFE ||
+            (unsigned char)d->target[0x20] == 0xFD)
+            m[0x20] = 2;
+        p = m + 0x10;
+        g = D_0013F350_cc2e8;
+        if ((unsigned char)(g[0x20A4] - 1) < 2 && (tg = d->target) == *(char **)(g + 0x2080)) {
+            speed = vlen_cc2e8(d);
+            qcopy(tp, tg + 0x10);
+            h = ground_cc2e8(tp, 0, 0.5f) + 0.2f;
+            *(Q_cc2e8 *)hv = *(Q_cc2e8 *)(g + 0x100);
+            hv[2] = 0.0f;
+            tp[2] = h;
+            if (g[0x20A4] == 2)
+                tp[2] = h + 2.0f;
+            vsub_cc2e8(diff, tp, p);
+            a = speed * speed - lensq_cc2e8(hv);
+            b = (hv[0] * diff[0] + hv[1] * diff[1] + hv[2] * diff[2]) * -2.0f;
+            s = sqrt_cc2e8(b * b - a * 4.0f * -lensq_cc2e8(diff));
+            r1 = (-b + s) / (a + a);
+            r2 = (-b - s) / (a + a);
+            if (r1 > 0.0f && r2 > 0.0f) {
+                if (r1 > r2)
+                    t = r1;
+                else
+                    t = r2;
+            } else if (r1 > 0.0f) {
+                t = r1;
+            } else {
+                t = -1.0f;
+                if (r2 > 0.0f)
+                    t = r2;
+            }
+            if (t > 0.0f) {
+                vscale_cc2e8(aim, hv, t);
+                vadd_cc2e8(aim, aim, diff);
+                yaw = atan2_cc2e8(aim[0], aim[1]);
+                pitch = -atan2_cc2e8(vlenxy_cc2e8(aim), aim[2]);
+            } else {
+                yaw = atan2_cc2e8(diff[0], diff[1]);
+                pitch = -atan2_cc2e8(vlenxy_cc2e8(diff), diff[2]);
+            }
+            ((Rot_cc2e8 *)m)->rz = turn_cc2e8(((Rot_cc2e8 *)m)->rz, yaw, D_0015ED70 * 6.2831855f,
+                                              D_0015ED70 * 3.1415927f, D_0015ED6C * 6.2831855f,
+                                              &d->yawSpeed);
+            ((Rot_cc2e8 *)m)->ry = turn_cc2e8(((Rot_cc2e8 *)m)->ry, pitch, D_0015ED70 * 6.2831855f,
+                                              D_0015ED70 * 3.1415927f, D_0015ED6C * 6.2831855f,
+                                              &d->pitchSpeed);
+            ((Rot_cc2e8 *)m)->rx = addrot_cc2e8(((Rot_cc2e8 *)m)->rx, D_0015ED6C * 6.2831855f);
+            setvel_cc2e8(speed, ((Rot_cc2e8 *)m)->rz, -((Rot_cc2e8 *)m)->ry, d);
+        }
+        vclear_cc2e8(c);
+        spark_cc2e8(p, c, 0x6F00AFFF, 0xFF, frames_cc2e8(randint_cc2e8(15, 22)), 0x28,
+                    randint_cc2e8(20, 35), 1);
+        spark_cc2e8(p, c, 0x1FFFFFFF, 0x4F4F4F, frames_cc2e8(randint_cc2e8(30, 60)), 0x28,
+                    randint_cc2e8(50, 75), 0);
+        dist = vdist_cc2e8(p, D_0013F3D0_cc2e8);
+        vadd_cc2e8(p, p, d);
+        if (d->warned == 0 && d->passed != 0 && d->dist < dist && dist < 5.0f) {
+            sound_cc2e8(0, 0, m);
+            d->warned = 1;
+        }
+        if (dist < d->dist)
+            d->passed = 1;
+        d->dist = dist;
+        if (hit_cc2e8(p, pos0, 0x10, d->owner, 0)) {
+            tb = D_L10_001742C0_cc2e8;
+            if (*(int *)(tb + 0x18) != d->owner) {
+                if (*(int *)(tb + 0x18) != 0) {
+                    vdir_cc2e8(diff, d, 1.0f);
+                    d->vel[2] = 1.0f;
+                    damage_cc2e8(1.0f, *(int *)(tb + 0x18), m, 0x10003, tb + 0x20, diff);
+                }
+                m[0x20] = 2;
+            }
+        }
+        if (expired_cc2e8(&d->timer))
+            m[0x20] = 2;
+        break;
+    case 2:
+        if (D_0015ED84 != 10)
+            burst_cc2e8(m, m + 0x10, -1, 0.25f, 13.0f);
+        else
+            burst_cc2e8(m, m + 0x10, -1, 0.25f, 0.0f);
+        sfx_cc2e8(0, 0, m, 0x99);
+        kill_cc2e8(m);
+        break;
+    }
+}

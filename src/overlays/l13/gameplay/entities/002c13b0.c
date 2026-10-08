@@ -754,7 +754,49 @@ float FUN_L13_002ea400(float *pos, float *pitch, float *yaw, float lead) {
         *pitch = p;
     return y;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ea540.s", FUN_L13_002ea540);
+/* Fires a shot from one of two mount points, alternating, toward the hero. */
+extern char D_0013F350_e5[] __asm__("D_0013F350");
+extern float D_0015ED6C_e5 __asm__("D_0015ED6C");
+extern int FUN_001160d8_e5(void) __asm__("FUN_001160d8");
+extern void FUN_L00_0024f7c8_e5(char *, int, float *) __asm__("FUN_L00_0024f7c8");
+extern unsigned char *FUN_L13_002c13b0_e5(char *, char *, char *, char *, float, int, float) __asm__("FUN_L13_002c13b0");
+extern void FUN_L13_002ea400_c(float *, float *, float *, float) __asm__("FUN_L13_002ea400");
+extern int FUN_001f96f8_e5(int) __asm__("FUN_001f96f8");
+extern void FUN_0022da68_e5(int, int, char *) __asm__("FUN_0022da68");
+
+unsigned char *FUN_L13_002ea540(char *m, unsigned char *d) {
+    float v[4];
+    struct {
+        int a;
+        float b;
+        float c;
+    } s;
+    int n;
+    float f;
+    unsigned char *r;
+    char *g;
+    n = (d[0xFC] & 1) ? 0x12 : 0x10;
+    if (((unsigned char *)m)[0xBC] != 6 || (FUN_001160d8_e5() & 1)) {
+        d[0xFC] ^= 1;
+    }
+    FUN_L00_0024f7c8_e5(m, n, v);
+    s.a = 0;
+    if (((unsigned char *)m)[0x20] != 5) {
+        FUN_L13_002ea400_c(v, &s.b, &s.c, D_0015ED6C_e5 * 17.0f);
+    } else {
+        FUN_L13_002ea400_c(v, &s.b, &s.c, -1.0f);
+    }
+    g = D_0013F350_e5;
+    f = D_0015ED6C_e5 * 18.0f + *(float *)(d + 0xAC);
+    s.c = *(float *)(m + 0x48);
+    s.b = 0.43633232f;
+    r = FUN_L13_002c13b0_e5(m, (char *)v, *(char **)(g + 0x15F0), (char *)&s,
+                         f, FUN_001f96f8_e5(300), D_0015ED6C_e5 * 18.0f);
+    if (r != 0) {
+        FUN_0022da68_e5(2, 0, m);
+    }
+    return r;
+}
 /* computes a velocity vector for a moby from the camera/player and spawns a projectile */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EBAF0), where it is exact; names translated to the US level program. */
 

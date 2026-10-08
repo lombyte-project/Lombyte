@@ -16,7 +16,7 @@ struct MenuIcon {
     s16 unk2;
 };
 extern s32 D_0015F438;
-extern s32 D_001601B0;
+extern s32 D_001601B0 __attribute__((sda));
 extern s32 SubtractIntegerWithClamp();
 extern void setup_gif_paging() __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");

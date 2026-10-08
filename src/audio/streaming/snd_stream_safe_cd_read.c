@@ -1,7 +1,7 @@
 #include "types.h"
-extern s32 D_0015EC8C;
-extern s32 D_0015EC94;
-extern s32 D_0015EC98;
+extern s32 D_0015EC8C __attribute__((sda));
+extern s32 D_0015EC94 __attribute__((sda));
+extern s32 D_0015EC98 __attribute__((sda));
 extern volatile s32 D_00137B00[];
 extern s32 sceCdRead();
 extern s32 snd_stream_safe_cd_sync() __asm__("func_0012EE08");

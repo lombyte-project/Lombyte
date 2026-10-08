@@ -972,7 +972,39 @@ void FUN_L00_002d6f28(P *p) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d73e8.s", FUN_L00_002d73e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d7bf0.s", FUN_L00_002d7bf0);
+
+extern float D_L00_001D02E0_2d7bf0[] __asm__("D_L00_001D02E0");
+extern float D_L00_001D15A0_2d7bf0[] __asm__("D_L00_001D15A0");
+extern float D_L00_001D31C0_2d7bf0[] __asm__("D_L00_001D31C0");
+extern float D_L00_001D4480_2d7bf0[] __asm__("D_L00_001D4480");
+extern s16 D_L00_001D60A0[];
+extern u8 D_L00_001D2D10_2d7bf0[] __asm__("D_L00_001D2D10");
+extern s16 D_L00_001D6A00[];
+extern u16 D_L00_00161380_2d7bf0 __asm__("D_L00_00161380");
+extern int D_L00_0016137C_2d7bf0 __asm__("D_L00_0016137C");
+
+/* Resets particle i of the emitter: random direction, random speeds from
+ * the emitter's ranges, and a start delay staggered by index. */
+void FUN_L00_002d7bf0(P *m, int i) {
+    char *v = (char *)m->q;
+    V *p;
+    int t;
+    float f = FUN_L00_00257c48(0.0f, 1.0f);
+    p = &D_L00_001CB7E0[i];
+    p->x = f;
+    p->y = FUN_L00_00257c48(0.0f, 1.0f);
+    p->z = FUN_L00_00257c48(0.0f, 1.0f);
+    D_L00_001D02E0_2d7bf0[i] = random_float_between(*(float *)(v + 0x10), *(float *)(v + 0x14));
+    D_L00_001D15A0_2d7bf0[i] = random_float_between(*(float *)(v + 0x18), *(float *)(v + 0x1C));
+    D_L00_001D31C0_2d7bf0[i] = 0.0f;
+    D_L00_001D4480_2d7bf0[i] = random_float_between(*(float *)(v + 0x8), *(float *)(v + 0xC));
+    D_L00_001D5740[i] = D_L00_00161380_2d7bf0;
+    D_L00_001D60A0[i] = 0;
+    t = i - *(s16 *)v;
+    D_L00_001D6A00[i] = (t + 1) * D_L00_0016137C_2d7bf0;
+    D_L00_001D2D10_2d7bf0[i] = 0;
+}
+
 typedef struct {
     float x, y, z, w;
 } V_2d7d58;

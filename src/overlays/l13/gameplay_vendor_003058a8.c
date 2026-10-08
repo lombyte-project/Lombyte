@@ -2,7 +2,41 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003058a8.s", FUN_L13_003058a8);
+#include "qcopy.h"
+
+/* Spawns a Gemlik moby that copies its look and transform from a source moby. */
+
+typedef int Q_3058a8 __attribute__((mode(TI)));
+
+extern char *FUN_0020c4f8(int);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00250df8(void *);
+
+char *FUN_L13_003058a8(char *src, short cls) {
+    char *m = FUN_0020c4f8(0x4D1);
+    char *d;
+    char *pos;
+    if (m != 0) {
+        d = *(char **)(m + 0x78);
+        m[0x31] = 1;
+        ((unsigned char *)m)[0x30] = 0xFF;
+        *(short *)(m + 0x32) = 0x7F;
+        m[0x20] = 1;
+        *(char **)(d + 0x20) = src;
+        *(short *)(d + 0x26) = cls;
+        *(short *)(d + 0x24) = 1;
+        pos = m + 0x10;
+        FUN_L00_0024f7c8(src, cls, pos);
+        qcopy(m + 0x40, src + 0x40);
+        *(Q_3058a8 *)(m + 0xC0) = *(Q_3058a8 *)(src + 0xC0);
+        *(Q_3058a8 *)(m + 0xD0) = *(Q_3058a8 *)(src + 0xD0);
+        *(Q_3058a8 *)(m + 0xE0) = *(Q_3058a8 *)(src + 0xE0);
+        qcopy(d + 0x10, pos);
+        *(int *)(m + 0x94) = 0;
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -182,7 +216,179 @@ void FUN_L13_00309370(char *m) {
     *(float *)(d + 0x1FC) = scale_game_frames(*(int *)&D_L13_00161E84);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003094f8.s", FUN_L13_003094f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00309e88.s", FUN_L13_00309e88);
+/* Drives the grid of 22 tiles: sets them up on the first frame, then moves the bobbing platform. */
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+    char pad0C[0x10];
+    unsigned char c1C;
+    unsigned char c1D;
+    unsigned short c1E;
+    char rest[0x1170];
+} Tile_9e88;
+
+typedef struct {
+    float top;
+    float bottom;
+    float angle;
+    float speed;
+    int idx;
+} Bob_9e88;
+
+typedef struct {
+    float f00, f04, f08, f0C, f10, f14, f18, f1C, f20, f24;
+    int i28, i2C;
+    float f30, f34, f38;
+    unsigned char c3C, c3D;
+} Light_9e88;
+
+extern char D_0013F350[];
+extern Tile_9e88 Tiles_9e88[] __asm__("D_L13_001D9BC0");
+extern Light_9e88 D_L13_001CAB80;
+extern float D_L13_001801C0[];
+extern unsigned short D_L13_001F1E20[];
+extern char D_L13_001F1E80[];
+extern int D_L13_00161208;
+extern float D_L13_0016120C;
+extern float D_L13_00161210;
+extern float D_L13_00161214;
+extern void *D_L13_001612D0;
+extern void *D_L13_001612D4;
+extern int D_L13_001612D8;
+extern int D_L13_00161EF0 __attribute__((sda));
+extern unsigned short D_L13_00161EF4 __attribute__((sda));
+extern float D_0015ED6C;
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_001f9e90(float, float);
+extern float FUN_001fa580(float, float);
+extern float rand_range_9e88(float, float) __asm__("FUN_002132a8");
+extern int random_below_9e88(int) __asm__("FUN_00213260");
+extern void FUN_L01_002b7a48(void *, int);
+extern void FUN_L01_002b7c68(void *, void *);
+extern void FUN_L01_002b7ef0(float);
+extern void FUN_L01_002b7fe0(void *, int);
+extern void FUN_L01_002b8288(float, float, float, float, void *, int);
+extern void FUN_L00_002a3ec8(float, float, float, float, void *, int, int);
+extern int FUN_L01_00275690(float, void *);
+extern void FUN_001f4600(void *, void *);
+extern void FUN_L13_0030a460(void);
+extern void FUN_L13_0030a488(int);
+
+void FUN_L13_00309e88(char *moby) {
+    Bob_9e88 *b;
+    float f;
+    int i, j, k, n;
+    int cr, cg;
+
+    char *g = D_0013F350;
+    char *p = *(char **)(g + 0x15F0);
+    if (p != 0 && *(short *)(p + 0xA6) == 0x45 && (unsigned char)p[0x20] != 0xFE &&
+        (unsigned char)p[0x20] != 0xFD && *(int *)(g + 0x2084) == 0x32)
+        return;
+    b = *(Bob_9e88 **)(moby + 0x78);
+    if (b == 0)
+        return;
+    switch ((unsigned char)moby[0x20]) {
+    case 0: {
+        float rate = D_0015ED6C;
+        *(unsigned short *)(moby + 0x34) |= 1;
+        b->angle = b->angle * 0.017453292f;
+        b->speed = b->speed * 0.017453292f * rate;
+        if (b->idx == 0) {
+            Light_9e88 *l;
+            char *tb;
+            float a;
+            FUN_L01_002b7a48(Tiles_9e88, 22);
+            FUN_L01_002b7ef0(1.0f);
+            ((unsigned char *)moby)[0x30] = 0xFF;
+            l = &D_L13_001CAB80;
+            l->f00 = 16.0f;
+            l->f04 = 16.0f;
+            l->f08 = -8.0f;
+            l->f0C = -8.0f;
+            l->f10 = 1.0f;
+            l->f14 = 1.0f;
+            l->f18 = 0.9f;
+            l->f20 = 0.1f;
+            a = FUN_001f9e90(D_L13_001801C0[4], D_L13_001801C0[5]);
+            l->f30 = FUN_001f9dc8(a) * 0.57735f;
+            l->f34 = FUN_001f9de0(a) * 0.57735f;
+            l->f38 = -0.57735f;
+            l->i28 = 0x2D;
+            l->i2C = 0x2E;
+            l->c3C = 0x60;
+            l->c3D = 0x40;
+            tb = D_L13_001F1E80;
+            D_L13_001612D8 = 22;
+            D_L13_0016120C = 32768.0f;
+            D_L13_00161210 = 255.0f;
+            D_L13_00161214 = 48.0f;
+            D_L13_001612D0 = Tiles_9e88;
+            D_L13_001612D4 = tb;
+            D_L13_00161208 = 0;
+            for (i = 0; i < 22; i++) {
+                FUN_L01_002b7c68(&Tiles_9e88[i], tb + i * 16);
+                Tiles_9e88[b->idx].c1E = D_L13_001F1E20[b->idx];
+            }
+            for (k = 0; k < 22; k++) {
+                for (j = 0; j < 2; j++) {
+                    Tile_9e88 *t = &Tiles_9e88[k];
+                    float x = t->x + rand_range_9e88(-6.0f, 6.0f);
+                    float y = t->y + rand_range_9e88(-6.0f, 6.0f);
+                    FUN_L01_002b8288(x, y, 2.0f, 0.2f, Tiles_9e88, 22);
+                }
+            }
+            for (n = 0; n < 22; n++)
+                FUN_L13_0030a488(n);
+        }
+        *(short *)(moby + 0x32) = 0;
+        moby[0x20] = 1;
+        break;
+    }
+    case 1: {
+        char *h;
+        f = b->top;
+        f -= b->bottom;
+        f *= 0.5f;
+        *(float *)(moby + 0x18) = b->bottom + (FUN_001f9dc8(b->angle) * f + f);
+        h = D_0013F350;
+        if (*(int *)(h + 0x208C) != 0x14 && *(int *)(h + 0x208C) != 0x19 &&
+            *(int *)(h + 0x2084) != 0x3D && *(int *)(h + 0x2084) != 0x7B &&
+            *(int *)(h + 0x2084) != 0x7C)
+            b->angle = FUN_001fa580(b->angle, b->speed);
+        Tiles_9e88[b->idx].c1C = D_L13_001CAB80.c3C;
+        Tiles_9e88[b->idx].c1D = D_L13_001CAB80.c3D;
+        if (random_below_9e88(200) == 0) {
+            float x = Tiles_9e88[b->idx].x + rand_range_9e88(-4.0f, 4.0f);
+            float y = rand_range_9e88(-4.0f, 4.0f);
+            Tile_9e88 *t = &Tiles_9e88[b->idx];
+            FUN_L00_002a3ec8(x, t->y + y, 1.0f, -0.05f, t, 1, 1);
+        }
+        break;
+    }
+    }
+    if (b->idx >= 0) {
+        f = 0.0f;
+        (Tiles_9e88 + b->idx)->z = *(float *)(moby + 0x18);
+        if (FUN_L01_00275690(48.0f, moby) != -1)
+            f = 1.0f;
+        if (f == 0.0f)
+            Tiles_9e88[b->idx].c1E = 0;
+        else
+            Tiles_9e88[b->idx].c1E = D_L13_001F1E20[b->idx];
+        if (b->idx == 0) {
+            FUN_L01_002b7fe0(Tiles_9e88, 22);
+            FUN_001f4600(FUN_L13_0030a460, moby);
+        }
+        if (b->idx == D_L13_00161EF0) {
+            Tiles_9e88[b->idx].c1E = D_L13_00161EF4;
+            D_L13_001F1E20[b->idx] = D_L13_00161EF4;
+        }
+    }
+}
 /* Level overlay code after unclassified; generated by `decomp overlays stubs`, stubs replaced by C as functions are matched. */
 
 /* records, for entry arg, which of the 48 entries sit one grid step away */
@@ -440,7 +646,48 @@ void FUN_L13_0030bdf0(unsigned char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030be60.s", FUN_L13_0030be60);
+/* Records the classes of the tracked mobys, then removes this moby once too few of them are left. */
+void FUN_L13_0030be60(unsigned char *m) {
+    int *d = *(int **)(m + 0x78);
+    if (m[0x20] == 0) {
+        int *ids = d + 4;
+        int *cls = d + 12;
+        char *base;
+        int i;
+        m[0x20] = 1;
+        base = (char *)D_L13_0015FFD8_m;
+        for (i = 0; i < 8; i++) {
+            unsigned char *o = (unsigned char *)(base + (ids[i] << 8));
+            if (o != 0 && o[0x20] != 0xFE && o[0x20] != 0xFD)
+                cls[i] = *(short *)(o + 0xA6);
+            else
+                cls[i] = -1;
+        }
+        if (d[0] == 0)
+            m[0x20] = 2;
+    } else if (m[0x20] == 1) {
+        int *ids = d + 4;
+        int *cls = d + 12;
+        char *base = (char *)D_L13_0015FFD8_m;
+        int n = 0;
+        int i;
+        for (i = 0; i < 8; i++) {
+            int id = ids[i];
+            int c;
+            unsigned char *o;
+            if (id != -1 && (c = cls[i]) != -1) {
+                o = (unsigned char *)(base + (id << 8));
+                if (o != 0 && *(short *)(o + 0xA6) == c && o[0x20] != 0xFE && o[0x20] != 0xFD) {
+                    n++;
+                    continue;
+                }
+            }
+            cls[i] = -1;
+        }
+        if (n < d[0])
+            mark_moby_for_removal(m);
+    }
+}
 
 #define NOT_SDA
 

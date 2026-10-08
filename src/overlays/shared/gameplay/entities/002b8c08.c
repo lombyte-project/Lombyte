@@ -580,7 +580,49 @@ void FUN_L01_002eda00(char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002edca0.s", FUN_L01_002edca0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002eec68.s", FUN_L01_002eec68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef350.s", FUN_L01_002ef350);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef478.s", FUN_L01_002ef478);
+
+typedef struct {
+    char p0[0x10];
+    char pos[0x10];
+    unsigned char state;
+    char p21[0x13];
+    unsigned short flags;
+    char p36[0x70];
+    short type;
+    char pA8[0x58];
+} Ent_2ef478;
+
+extern float dist_2ef478(void *, void *) __asm__("FUN_001f9b48");
+extern short *lists_2ef478[] __asm__("D_L01_001ABCC0");
+extern Ent_2ef478 *ents_m_2ef478 __asm__("D_L01_0015FFD8") MACRO_ADDR;
+extern char *ents_2ef478 __asm__("D_L01_0015FFD8");
+
+/* Nearest live entity of type 0x26F in list idx within 120 units of self, or 0. */
+char *FUN_L01_002ef478(char *self, int idx) {
+    short *list = lists_2ef478[idx];
+    float best = 120.0f;
+    char *res = 0;
+    if (list == 0) {
+        return 0;
+    }
+    while (1) {
+        int i = *(unsigned short *)list & 0x7FFF;
+        if (ents_m_2ef478[i].flags & 0x1000) {
+            if (ents_m_2ef478[i].type == 0x26F) {
+                if (ents_m_2ef478[i].state < 0x7F) {
+                    float d = dist_2ef478(ents_m_2ef478[i].pos, self + 0x10);
+                    if (d < best) {
+                        best = d;
+                        res = ents_2ef478 + (i << 8);
+                    }
+                }
+            }
+        }
+        if (*list++ < 0) {
+            return res;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef560.s", FUN_L01_002ef560);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef770.s", FUN_L01_002ef770);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002F0E60), where it is exact; names translated to the US level program. */

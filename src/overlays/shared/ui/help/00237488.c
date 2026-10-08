@@ -30,7 +30,31 @@ void FUN_L05_00237488(float *out, float *p, float step) {
         p[1] = -1.0f;
     out[1] = p[1];
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0023b378.s", FUN_L05_0023b378);
+
+#include "sda.h"
+typedef struct {
+    char pad0[0x8CE]; unsigned char b8CE; char pad8CF[0x1D9];
+    float fAA8; char padAAC[0x15D4]; char *p2080; char pad2084[8]; int i208C;
+} G_23b378;
+extern G_23b378 D_0013F350_23b378 __asm__("D_0013F350") NOT_SDA;
+int FUN_L05_0023b378(int id, float *out) {
+    *out = 0.0f;
+    if (D_0013F350_23b378.i208C == 0x16 && D_0013F350_23b378.b8CE
+        && (unsigned)(*(unsigned char *)(D_0013F350_23b378.p2080 + 0x53) - 0x69) < 4)
+        return 1;
+    switch (id) {
+    case 0x37:
+        *out = -0.95993108f; /* -55 degrees */
+        return 1;
+    case 0x1C: case 0x1D: case 0x1F:
+        if (25.0f < D_0013F350_23b378.fAA8) *out = -1.30899692f; /* -75 degrees */
+        return 1;
+    case 0x31: case 0x32: case 0x4A: case 0x4B: case 0x50: case 0x60: case 0x6D: case 0x6E:
+        return 1;
+    }
+    return 0;
+}
+
 /* Applies the wrench/item selection for slot i: resolves pending, queued and requested items and refreshes the slot when it changes. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210558), where it is exact; names translated to the US level program. */
 

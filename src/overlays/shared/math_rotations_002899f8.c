@@ -2,4 +2,39 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002899f8.s", FUN_L05_002899f8);
+typedef struct {
+    char pad[0x2C];
+    float f;
+} O_2899f8;
+
+O_2899f8 *FUN_L05_002899f8(O_2899f8 *a, O_2899f8 *b, O_2899f8 *c, O_2899f8 *d) {
+    O_2899f8 *r = a;
+
+    if (r == 0) {
+        goto none;
+    }
+    if (b != 0 && !(r->f > b->f)) {
+        r = b;
+    }
+check_c:
+    if (c != 0 && !(r->f > c->f)) {
+        r = c;
+    }
+check_d:
+    if (d != 0 && !(r->f > d->f)) {
+        r = d;
+    }
+    return r;
+
+none:
+    if (b != 0) {
+        r = b;
+        goto check_c;
+    }
+    if (c != 0) {
+        r = c;
+        goto check_d;
+    }
+    return d;
+}
+

@@ -389,7 +389,34 @@ int FUN_L16_002e2e88(char *m, char *path) {
     }
     return 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e2fa0.s", FUN_L16_002e2fa0);
+/* Sets each path point's heading toward the next point; the last copies the one before. */
+
+typedef struct {
+    float x, y, z, heading;
+} PathPoint2fa0;
+
+typedef struct {
+    int count;
+    int pad[3];
+    PathPoint2fa0 pts[1];
+} Path2fa0;
+
+void FUN_L16_002e2fa0(void *arg) {
+    Path2fa0 *path = arg;
+    int i;
+    int n;
+    for (i = 0; i < path->count - 1; i++) {
+        PathPoint2fa0 *p = path->pts;
+        path->pts[i].heading = FUN_001f9e90(path->pts[i + 1].x - path->pts[i].x, p[i + 1].y - path->pts[i].y);
+    }
+    n = path->count;
+    if (n >= 2)
+    {
+        Path2fa0 *a = (Path2fa0 *)((char *)path + (n - 2) * 16);
+        Path2fa0 *b = (Path2fa0 *)((char *)path + (n - 1) * 16);
+        b->pts[0].heading = a->pts[0].heading;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

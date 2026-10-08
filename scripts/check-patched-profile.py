@@ -8,8 +8,7 @@ Usage:
 ``scripts/build-patched-toolchain.py`` records the patch it came from in
 ``provenance.json``; when that hash no longer matches
 ``patches/ee-gcc-2.9-991111-01/patched-ee-gcc.patch``, patched-profile units
-would compile with an old compiler (for example without ``-mastra-inplace-cvt``)
-and the full-ELF gate would fail for a non-obvious reason.
+would compile with an old compiler and the full-ELF gate would fail for a non-obvious reason.
 
 Exit codes: 0 match, 1 stale, 2 unverifiable (no provenance or patch file).
 """
