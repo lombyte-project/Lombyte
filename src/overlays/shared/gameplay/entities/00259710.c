@@ -65,7 +65,17 @@ void FUN_L00_00259888(char *a, int b, int c, float d, void *q) {
     qcopy(a, q);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002598b0.s", FUN_L00_002598b0);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002599e8.s", FUN_L00_002599e8);
+#else
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_002598b0(void *, void *, int, float, float, float, int, int, int);
+void FUN_L00_002599e8(void *a, int b, int c, float d, float e, float f, int g, int h, int i) {
+    float position[4] __attribute__((aligned(16)));
+    FUN_L00_0024f7c8(a, b, position);
+    FUN_L00_002598b0(a, position, c, d, (float)c, f, g, h, i);
+}
+#endif
 typedef unsigned int u128_259a88 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     u128_259a88 v;
