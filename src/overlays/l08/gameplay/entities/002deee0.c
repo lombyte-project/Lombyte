@@ -376,7 +376,100 @@ void FUN_L08_002e2078(struct Moby *m) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2250.s", FUN_L08_002e2250);
+#else
+extern int FUN_L00_0025a420(struct Moby *, int, int);
+extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern float D_0015ED6C;
+
+void FUN_L08_002e2250(struct Moby *moby) {
+    TargetBoardVars *vars = (TargetBoardVars *)moby->pvars;
+    TargetSlot *slot = vars->slots;
+    TargetSlot *slots = slot;
+    int i = 0;
+    int hits = 0;
+    int selected = 0;
+    int sound = -1;
+    int total;
+    u8 mark = 0xff;
+
+    do {
+        if (slot->moby != 0) {
+            if (FUN_L00_0025a420(slot->moby, 0x10000, 0) != 0) {
+                if (i < 7) {
+                    if (hits < 1) {
+                        hits = 1;
+                        sound = 1;
+                        goto mark_hit;
+                    }
+                } else if (i < 10) {
+                    if (hits < 2) {
+                        hits = 2;
+                        sound = 1;
+                        goto mark_hit;
+                    }
+                } else if (hits < 4) {
+                    hits += 4;
+                    selected = i;
+                    sound = 2;
+                    goto mark_hit;
+                }
+mark_hit:
+                slot->moby->unkA4 = mark;
+            }
+        }
+        i++;
+        slot++;
+    } while (i < 34);
+    total = (u16)vars->points + hits;
+    vars->points = total;
+    total = (s16)total;
+    if (total >= 8) {
+        vars->points = total - (total / 8) * 8;
+        sound = 0;
+        if (selected != 0) {
+            u8 *vector;
+            slot = &slots[selected];
+            vector = slot->moby->pvars;
+            FUN_L00_0025f090(moby, &slot->moby->pos, -1, 2.0f, 13.0f);
+            FUN_001f9a28(vector, &slot->moby->pos, &slot->anchor->pos);
+            normalize_vector_xyz(vector, vector, D_0015ED6C * 10.0f);
+            slot->moby->state = 1;
+            slot->moby = 0;
+            return;
+        }
+        {
+            int start = truncate_float_to_s32(random_float_between(0.0f, 23.0f));
+            i = 0;
+            do {
+                int index = (start + i) % 24 + 10;
+                slot = &slots[index];
+                i++;
+                if (slot->moby != 0) {
+                    struct Moby *part = slot->moby;
+                    u8 *vector = part->pvars;
+                    FUN_L00_0025f090(moby, &part->pos, -1, 2.0f, 13.0f);
+                    FUN_001f9a28(vector, &part->pos, &slot->anchor->pos);
+                    normalize_vector_xyz(vector, vector, D_0015ED6C * 10.0f);
+                    slot->moby->state = 1;
+                    slot->moby = 0;
+                    return;
+                }
+            } while (i < 24);
+            moby->state = 99;
+        }
+    }
+play_sound:
+    if (sound >= 0)
+        allocate_voice_for_target_entry(sound, 0, moby);
+}
+#endif /* NON_MATCHING */
 /* A looping waypoint path: count points, 16 bytes apart. */
 typedef struct {
     s32 count;
