@@ -6,6 +6,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022abc0/FUN_0022abc0.s
 #else
 #include "types.h"
 #include "eetypes.h"
+#include "qcopy.h"
 
 struct SkyShell {
     u8 pad_0[8];
@@ -22,7 +23,7 @@ struct SkyShellSet {
 
 extern f32 D_00160404 __attribute__((sda));
 extern struct SkyShellSet *D_0016045C;
-extern u128 D_00160460;
+extern u8 D_00160460;
 extern u8 D_001D96E0[];
 extern void FUN_001f9fc8(void *);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -88,7 +89,7 @@ void FUN_0022abc0(void) {
                 FUN_001f9a80(transform_row + 0x10, transform_row + 0x10, shell_scale);
                 FUN_001f9a80(transform_row + 0x20, transform_row + 0x20, shell_scale);
                 transform_row += 0x30;
-                *(u128 *)transform_row = D_00160460;
+                qcopy(transform_row, &D_00160460);
             }
             sky_draw_shell(shell_index);
             shell_index++;
