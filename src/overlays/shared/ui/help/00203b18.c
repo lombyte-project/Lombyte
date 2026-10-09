@@ -2075,7 +2075,6 @@ typedef struct {
     f32 x, y;
 } S2_20b5b8;
 
-extern u8 D_0013F350_20b5b8[] __asm__("D_0013F350");
 extern f32 D_0015ED6C_20b5b8 __asm__("D_0015ED6C");
 extern V4_20b5b8 D_L00_00173E80_20b5b8[] __asm__("D_L00_00173E80");
 extern S2_20b5b8 D_L00_00173E40_20b5b8[] __asm__("D_L00_00173E40");
@@ -2095,9 +2094,9 @@ extern f32 FUN_001f9b80_20b5b8(void *, void *) __asm__("FUN_001f9b80");
 
 void FUN_L00_0020b5b8(void) {
     V4_20b5b8 v, w, z;
-    u8 *g;
-    u8 *h;
-    u8 *k2;
+    struct Hero *g;
+    struct Hero *h;
+    struct Hero *k2;
     u8 *pz;
     s32 t;
     s32 n;
@@ -2106,46 +2105,46 @@ void FUN_L00_0020b5b8(void) {
     f32 s;
     f32 a, b, c, d;
 
-    g = D_0013F350_20b5b8;
-    if (*(f32 *)(g + 0x2DC) < 0.4f) {
+    g = &hero;
+    if (g->ground_distance < 0.4f) {
         return;
     }
-    if (FUN_L00_00233a78_20b5b8(g + 0xE0) < D_0015ED6C_20b5b8 * -20.0f) {
+    if (FUN_L00_00233a78_20b5b8(&g->motion.velocity) < D_0015ED6C_20b5b8 * -20.0f) {
         return;
     }
-    if (*(s32 *)(g + 0x4E8) != 0) {
-        *(s32 *)(g + 0x1B4) = 0;
+    if (g->unk4E8 != 0) {
+        g->unk1B4 = 0;
         return;
     }
-    qcopy(&v, g + 0x80);
+    qcopy(&v, &g->motion.pos);
     t = FUN_001f96f8_20b5b8(0x14);
     {
         f32 st = (f32)t;
-        a = *(f32 *)(g + 0x4A0) * st;
-        b = *(f32 *)(g + 0xE8) * st;
-        c = *(f32 *)(g + 0x100) * st;
-        d = *(f32 *)(g + 0x104) * st;
+        a = g->unk4A0 * st;
+        b = g->motion.velocity.f[2] * st;
+        c = g->motion.unk100.f[0] * st;
+        d = g->motion.unk100.f[1] * st;
         v.f[2] = v.f[2] + b - a * st * 0.5f;
     }
     v.f[0] = v.f[0] + c;
     v.f[1] = v.f[1] + d;
-    if (FUN_L00_0020c758_20b5b8(&v, g + 0x98) != 0) {
-        *(s32 *)(g + 0x1B4) = 0;
-        *(s16 *)(g + 0x1F0) = t + 2;
+    if (FUN_L00_0020c758_20b5b8(&v, &g->motion.rot.f[2]) != 0) {
+        g->unk1B4 = 0;
+        g->unk1F0 = t + 2;
         return;
     }
     if (FUN_L00_0020a240_20b5b8(0, 0.3f, 1.0f) == 0) {
         return;
     }
     r = 1.7f;
-    if (*(s32 *)(g + 0x2084) != 0x11) {
-        if (g[0x255] == 0 || g[0x254] != 0) {
+    if (g->state.current != 0x11) {
+        if (g->unk255 == 0 || g->unk254 != 0) {
             r = 3.0f;
         }
     }
-    k2 = D_0013F350_20b5b8;
+    k2 = &hero;
     FUN_L00_002335c8_20b5b8(&v, 0.0f, 0.0f, r);
-    FUN_L00_002335c8_20b5b8(&w, *(f32 *)(k2 + 0x234) + 1.4f, 0.0f, r);
+    FUN_L00_002335c8_20b5b8(&w, k2->unk234 + 1.4f, 0.0f, r);
     if (FUN_001efa68_20b5b8(&v, &w, 2, 0, 0) == 0) {
         return;
     }
@@ -2160,13 +2159,13 @@ void FUN_L00_0020b5b8(void) {
     if (FUN_L00_00233d30_20b5b8(pz) < 1.3089969f) {
         return;
     }
-    FUN_001f9d20_20b5b8(&z, pz, k2 + 0x40);
+    FUN_001f9d20_20b5b8(&z, pz, k2->unk40);
     f = FUN_001f9e90_20b5b8(z.f[0], z.f[1]);
     f = FUN_001fa688_20b5b8(f, 3.1415927f);
     if (0.87266463f < f) {
         return;
     }
-    if (*(s32 *)(k2 + 0x2084) == 0x11) {
+    if (k2->state.current == 0x11) {
         s = 0.95f;
     } else {
         s = 0.72f;
@@ -2177,25 +2176,25 @@ void FUN_L00_0020b5b8(void) {
     }
     {
         S2_20b5b8 *q2;
-        *(u128_20b5b8 *)(k2 + 0x460) = *(u128_20b5b8 *)pz;
+        k2->unk460.q = *(u128_20b5b8 *)pz;
         q2 = (S2_20b5b8 *)(pz - 0x40);
         f = FUN_001f9e90_20b5b8(q2->x, q2->y);
     }
-    *(f32 *)(k2 + 0x46C) = f;
-    if (*(s32 *)(k2 + 0x208C) != 4 && *(s32 *)(k2 + 0x2094) != 4 && *(s32 *)(k2 + 0x20A0) != 4) {
+    k2->unk460.f[3] = f;
+    if (k2->state.control_mode != 4 && k2->state.prev_control_mode != 4 && k2->state.prev2_control_mode != 4) {
         return;
     }
-    h = D_0013F350_20b5b8;
-    if (*(s32 *)(h + 0x22B4) != 0) {
-        f = FUN_001fa688_20b5b8(*(f32 *)(h + 0x47C), *(f32 *)(h + 0x46C));
+    h = &hero;
+    if (h->unk22B4 != 0) {
+        f = FUN_001fa688_20b5b8(h->unk470.f[3], h->unk460.f[3]);
         if (f < 2.9670596f) {
             return;
         }
     }
-    if (*(s32 *)(h + 0x2084) == 0x11) {
-        *(s32 *)(h + 0x1B4) = FUN_001f96f8_20b5b8(7);
+    if (h->state.current == 0x11) {
+        h->unk1B4 = FUN_001f96f8_20b5b8(7);
     } else {
-        *(s32 *)(h + 0x1B4) = FUN_001f96f8_20b5b8(6);
+        h->unk1B4 = FUN_001f96f8_20b5b8(6);
     }
 }
 #define NOT_SDA
