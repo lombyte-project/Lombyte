@@ -74,7 +74,36 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d4ca0.s", FUN_L08_002d4ca0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d55c8.s", FUN_L08_002d55c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5950.s", FUN_L08_002d5950);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5d08.s", FUN_L08_002d5d08);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d6450.s", FUN_L08_002d6450);
+#else
+extern char *D_L08_0015FFD8;
+extern short *D_L08_001AC040[];
+extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
+
+/* Remove active mobys of the selected classes from this moby's linked group. */
+void FUN_L08_002d6450(struct Moby *moby) {
+    short *list = D_L08_001AC040[*(u8 *)(D_L08_0015FFD8 + (*(s32 *)(moby->pvars + 0x144) << 8) + 0x21)];
+    struct Moby *other;
+    if (list != 0) {
+        other = (struct Moby *)(D_L08_0015FFD8 + ((*list & 0x7fff) << 8));
+        for (;;) {
+            if (other->state < 0x7f && other != moby) {
+                u16 class_id = (u16)other->oclass;
+                if ((u32)(class_id - 0x24c) < 0xb) {
+                    mark_moby_for_removal(other);
+                } else if ((s16)class_id == 0x1d8) {
+                    mark_moby_for_removal(other);
+                }
+            }
+            if (*list < -1)
+                break;
+            list++;
+            other = (struct Moby *)(D_L08_0015FFD8 + ((*list & 0x7fff) << 8));
+        }
+    }
+}
+#endif
 
 /* Splashes the hero into the water: once inits the water plane, queues the
  * surface draw, and when the hero breaks the surface spawns spray and ripples. */
