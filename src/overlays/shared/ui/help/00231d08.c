@@ -687,54 +687,54 @@ void FUN_L00_00232fe8(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233950), where it is exact; names translated to the US level program. */
 
 void FUN_L00_002330d0(void) {
-    char *base = D_0013F350;
-    char *blk2;
-    char *blk3;
-    char *blk4;
+    struct Hero *base = &hero;
+    struct Hero *blk2;
+    struct Hero *blk3;
+    struct Hero *blk4;
     char *obj;
     int i;
 
-    *(unsigned short *)(*(char **)(base + 0xA88) + 0x34) &= ~1;
+    *(unsigned short *)(*(char * *)&base->unkA88 + 0x34) &= ~1;
     for (i = 0; i < 7; i++) {
-        if (((ObjPair *)(base + 0x1090))[i].a != 0) {
-            *(unsigned short *)(((ObjPair *)(base + 0x1090))[i].a + 0x34) &= ~1;
+        if (*(char **)&base->items[i].moby != 0) {
+            *(unsigned short *)(*(char **)&base->items[i].moby + 0x34) &= ~1;
         }
-        if (((ObjPair *)(base + 0x1090))[i].b != 0) {
-            *(unsigned short *)(((ObjPair *)(base + 0x1090))[i].b + 0x34) &= ~1;
+        if (*(char **)&base->items[i].moby2 != 0) {
+            *(unsigned short *)(*(char **)&base->items[i].moby2 + 0x34) &= ~1;
         }
     }
-    blk2 = D_0013F350;
-    obj = *(char **)(blk2 + 0x118C);
+    blk2 = &hero;
+    obj = *(char * *)&blk2->items[3].unk0C;
     if (obj != 0) {
         *(unsigned short *)(obj + 0x34) &= ~1;
     }
-    if (*(unsigned char *)(blk2 + 0x20A4) == 1) {
-        obj = *(char **)(blk2 + 0x1624);
+    if (blk2->unk20A4 == 1) {
+        obj = *(char * *)&blk2->unk1624;
         if (obj != 0) {
             *(unsigned short *)(obj + 0x34) &= ~1;
         }
     }
-    blk3 = D_0013F350;
-    if (*(short *)(blk3 + 0x22D8) != 0) {
-        obj = *(char **)(blk3 + 0x1180);
+    blk3 = &hero;
+    if (blk3->unk22D8 != 0) {
+        obj = *(char * *)&blk3->items[3].moby;
         if (obj != 0) {
             *(unsigned short *)(obj + 0x34) |= 0x41;
         }
-        obj = *(char **)(blk3 + 0x1184);
+        obj = *(char * *)&blk3->items[3].moby2;
         if (obj != 0) {
             *(unsigned short *)(obj + 0x34) |= 0x41;
         }
-        obj = *(char **)(blk3 + 0x118C);
+        obj = *(char * *)&blk3->items[3].unk0C;
         if (obj != 0) {
             *(unsigned short *)(obj + 0x34) |= 0x41;
         }
     }
-    blk4 = D_0013F350;
-    if ((*(unsigned char *)(blk4 + 0x20AE) != 0 && *(int *)(blk4 + 0x10B8) == 8) ||
-        *(unsigned char *)(blk4 + 0x20AF) != 0) {
-        char *blk5 = D_0013F350;
+    blk4 = &hero;
+    if ((blk4->unk20AE != 0 && blk4->items[0].item_id == 8) ||
+        blk4->unk20AF != 0) {
+        struct Hero *blk5 = &hero;
 
-        obj = ((ObjPair *)(blk5 + 0x1090))[0].a;
+        obj = *(char **)&blk5->items[0].moby;
         if (obj != 0) {
             *(unsigned short *)(obj + 0x34) |= 0x41;
         }
