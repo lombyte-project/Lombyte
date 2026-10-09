@@ -23,6 +23,7 @@ Usage:
   python3 scripts/data-refs.py --owner runtime/      # only units under a path
   python3 scripts/data-refs.py --labels             # also check src/ D_ labels
   python3 scripts/data-refs.py --elf PATH           # another executable
+  python3 scripts/data-refs.py --catalog            # write config/us/data.yaml
   python3 scripts/data-refs.py --level 0 --overlays DIR
                                                     # one level image, DIR is
                                                     # extracted/overlays/ from Tools
@@ -35,6 +36,8 @@ import bisect
 import json
 import re
 import sys
+
+import yaml
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Iterable, Iterator, Union
@@ -52,6 +55,9 @@ CONFIG_PATH = ROOT / "config" / "us" / "rnc1.us.yaml"
 OUT_DIR = ROOT / "build" / "data-refs"
 FUNCTIONS_PATH = ROOT / "config" / "overlays" / "us" / "functions.tsv"
 DEFAULT_GP = 0x166C00
+DEFAULT_CATALOG = ROOT / "config" / "us" / "data.yaml"
+LEVEL_CATALOGS = ROOT / "config" / "overlays" / "us" / "data"
+LEVEL_DATA_START = 0x15EF00  # D_LNN_ labels begin here; below it a level keeps the executable's names
 
 SHF_ALLOC = 0x2
 SHF_EXECINSTR = 0x4
@@ -66,7 +72,37 @@ GPRS = ["zero", "at", "v0", "v1", "a0", "a1", "a2", "a3",
         "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7",
         "t8", "t9", "k0", "k1", "gp", "sp", "fp", "ra"]
 GP_VALUE_RE = re.compile(r"gp_value:\s*(0x[0-9a-fA-F]+)")
+OVERLAY_FUNC_RE = re.compile(r"\bFUN_L\d\d_[0-9a-fA-F]{8}\b")
 LABEL_RE = re.compile(r'__asm__\("D_([0-9A-Fa-f]{8})"\)')
+# `extern struct HudState hud_state __asm__("D_0019A3E8");` -> type, name, array dims, address
+DECL_RE = re.compile(
+    r'^[ \t]*(?:extern[ \t]+)?([^;=\n]*?[ \t*])([A-Za-z_]\w*)[ \t]*((?:\[[^\]]*\])*)[ \t]*'
+    r'__asm__\("D_([0-9A-Fa-f]{8})"\)', re.M)
+CATALOG_HEADER = """\
+# Data {what} code touches, found by scripts/data-refs.py --catalog
+# from the retail code. Grouped by section, then by where the data comes from:
+# {origins}
+#
+# One entry per line: [addr, name, type, width, loads, stores, address_taken, used_by, note]
+#
+#   name           the C name where src/ declares it, else its D_<addr> label
+#   type           the C type where src/ declares it, else guessed from the access width
+#   width          widest single access seen, in bytes (not the size of the object)
+#   loads, stores  how many instructions read and write it
+#   address_taken  how many times only its address is formed (a table, struct or string)
+#   used_by        units whose code touches it
+#   note           optional, yours
+#
+# Float constants in the literal pools (only loaded, through the FPU) are left out:
+# the compiler makes them from the float literals in the C.
+#
+# Edit name, type and note by hand: a rerun keeps them and refreshes the rest.
+{extra}"""
+BOOT_ORIGINS = "the subsystem whose code uses it (`shared` = used from several)."
+LEVEL_ORIGINS = ("the kind of code that uses it (`exe`: the executable's own code, `shared`: code\n"
+                 "# in several levels, `level`: this level only) and its subsystem (`mixed` = several).")
+CATALOG_COLUMNS = ("addr", "name", "type", "width", "loads", "stores", "address_taken", "used_by")
+USERS_SHOWN = 110  # characters of used_by before the rest is summarised
 
 WIDTH = {
     "lb": 1, "lbu": 1, "sb": 1, "lh": 2, "lhu": 2, "sh": 2,
@@ -79,6 +115,7 @@ STORES = {"sb", "sh", "sw", "sd", "swl", "swr", "sdl", "sdr", "swc1", "sdc1", "s
 # Instructions that write no general register, so they change no constant.
 NO_DEST = {"sb", "sh", "sw", "sd", "swl", "swr", "sdl", "sdr", "swc1", "sdc1",
            "mult", "multu", "dmult", "dmultu", "div", "divu", "ddiv", "ddivu"}
+FP_MNEMS = {"lwc1", "swc1", "ldc1", "sdc1"}
 # Prefetch and cache hints touch no data.
 HINTS = {"pref", "cache"}
 # capstone gives no group tag for jal, so calls and branches are told apart by name.
@@ -104,6 +141,7 @@ class Access:
     target: int        # address of the data it touches
     width: int         # bytes (0 for an address that is only formed)
     kind: str          # "load", "store" or "addr"
+    fp: bool = False   # read or written through the FPU
 
 
 @dataclass(frozen=True)
@@ -178,6 +216,32 @@ def level_image(overlays: Path, level: int) -> tuple[list, list]:
         else:
             data.append((record["name"], record["address"], record["bytes"]))
     return code, data
+
+
+def level_origin_of() -> Callable[[str], str]:
+    """Where a level function comes from: exe/<subsystem>, shared/<subsystem> or level/<subsystem>."""
+    kinds: dict[str, tuple[str, str]] = {}
+    for line in FUNCTIONS_PATH.read_text().splitlines():
+        fields = line.split("\t")
+        if not line.startswith("#") and len(fields) >= 7:
+            kinds[fields[0]] = (fields[1], fields[6])
+    homes: dict[str, tuple[str, ...]] = {}
+    base = ROOT / "src" / "overlays"
+    for path in base.rglob("*.c"):
+        parts = path.relative_to(base).parts
+        for name in set(OVERLAY_FUNC_RE.findall(path.read_text(errors="replace"))):
+            homes[name] = parts
+
+    def origin(function: str) -> str:
+        kind, exe_unit = kinds.get(function, ("?", ""))
+        if kind == "exe":
+            return f"exe/{subsystem_of(exe_unit)}"
+        home = homes.get(function)
+        if home and len(home) > 2:
+            return f"{'shared' if home[0] == 'shared' else 'level'}/{home[1]}"
+        return f"{kind if kind in ('shared', 'level') else 'other'}/other"
+
+    return origin
 
 
 def level_owner_of(level: int) -> Callable[[int], str]:
@@ -280,7 +344,8 @@ def scan(items: list, gp: int, in_data: Callable[[int], bool]) -> Iterator[Acces
             if value is None:
                 continue
             kind = "store" if mnem in STORES else "load"
-            yield Access(insn.address, (value + op.mem.disp) & MASK32, WIDTH.get(mnem, 0), kind)
+            yield Access(insn.address, (value + op.mem.disp) & MASK32, WIDTH.get(mnem, 0), kind,
+                         mnem in FP_MNEMS)
 
         if mnem in CALLS:
             known = {r: v for r, v in known.items() if r not in CALLER_SAVED}
@@ -343,6 +408,117 @@ def c_labels(level: int | None = None) -> set[int]:
     return labels
 
 
+def c_declarations() -> dict[int, tuple[str, str]]:
+    """address -> (name, C type) of the named ``D_`` declarations outside overlays."""
+    files = sorted((ROOT / "include").rglob("*.h")) + sorted(
+        p for p in (ROOT / "src").rglob("*.[ch]") if "overlays" not in p.parts)
+    found: dict[int, tuple[str, str]] = {}
+    for path in files:
+        for prefix, name, dims, addr in DECL_RE.findall(path.read_text(errors="replace")):
+            entry = (name, " ".join((prefix + dims).split()))
+            old = found.get(int(addr, 16))
+            if old is None or (old[0].startswith("D_") and not name.startswith("D_")):
+                found[int(addr, 16)] = entry
+    return found
+
+
+def unit_of(owner: str) -> str:
+    """``runtime/state/foo [C]`` -> ``runtime/state/foo``."""
+    return re.sub(r" \[\w+\]$", "", owner)
+
+
+def subsystem_of(unit: str) -> str:
+    parts = [part for part in unit.split("/") if part not in ("assembly", "textbin")]
+    return parts[0] if len(parts) > 1 else "other"
+
+
+def guess_type(row: dict) -> str:
+    if not row["widths"]:
+        return "unknown"  # only its address is formed: a table, struct or string
+    width = max(row["widths"])
+    if row["fp"]:
+        return {4: "f32", 8: "f64"}.get(width, "unknown")
+    return {1: "u8", 2: "s16", 4: "s32", 8: "s64", 16: "u128"}.get(width, "unknown")
+
+
+def is_float_literal(row: dict) -> bool:
+    """A constant in a literal pool: only loaded through the FPU, so the C float literal makes it."""
+    return row["section"].endswith("lit") and row["fp"] and not row["store"] and not row["addr"]
+
+
+def catalog_sections(rows: dict[int, dict], data: list, declared: dict,
+                     origin_of: Callable[[str], str] = subsystem_of,
+                     label_of: Callable[[int], str] = lambda addr: f"D_{addr:08X}",
+                     several: str = "shared") -> dict:
+    """{section: {origin: [entry, ...]}} in section order, entries by address."""
+    out: dict[str, dict[str, list]] = {}
+    for target in sorted(rows):
+        row = rows[target]
+        if is_float_literal(row):
+            continue
+        users = sorted({unit_of(owner) for owner in row["owners"]})
+        origins = {origin_of(unit) for unit in users}
+        origin = origins.pop() if len(origins) == 1 else several
+        name, ctype = declared.get(target, (label_of(target), None))
+        entry = {"addr": target, "name": name, "type": ctype or guess_type(row),
+                 "width": max(row["widths"], default=0),
+                 "loads": row["load"], "stores": row["store"],
+                 "address_taken": row["addr"], "used_by": users}
+        out.setdefault(row["section"], {}).setdefault(origin, []).append(entry)
+    order = [name for name, _, _ in data]
+    return {sec: dict(sorted(out[sec].items(), key=lambda kv: (kv[0] == several, kv[0])))
+            for sec in order if sec in out}
+
+
+def load_catalog(path: Path) -> dict[int, dict]:
+    """The hand-edited fields of an existing catalogue, by address."""
+    if not path.exists():
+        return {}
+    edits = {}
+    for origins in (yaml.safe_load(path.read_text()) or {}).values():
+        for entries in origins.values():
+            for addr, name, ctype, *_rest, note in (e + [None] * (9 - len(e)) for e in entries):
+                edits[addr] = {"name": name, "type": ctype, **({"note": note} if note else {})}
+    return edits
+
+
+def scalar(text: str) -> str:
+    """A YAML flow scalar: plain when it is simple, quoted when a type has brackets or stars."""
+    return text if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_ ]*", text) else json.dumps(text)
+
+
+def users_text(users: list[str]) -> str:
+    shown, size = [], 0
+    for user in users:
+        if shown and size + len(user) > USERS_SHOWN:
+            break
+        shown.append(user)
+        size += len(user) + 2
+    rest = len(users) - len(shown)
+    return ", ".join(shown) + (f', "+{rest} more"' if rest else "")
+
+
+def write_catalog(path: Path, sections: dict, edits: dict[int, dict],
+                  what: str = "the boot executable's", origins: str = BOOT_ORIGINS,
+                  extra: str = "") -> None:
+    lines = [CATALOG_HEADER.format(what=what, origins=origins, extra=extra)]
+    for section, origins in sections.items():
+        lines.append(f"{section}:")
+        for origin, entries in origins.items():
+            lines.append(f"  {origin}:")
+            for entry in entries:
+                entry = {**entry, **edits.get(entry["addr"], {})}
+                fields = [f"0x{entry['addr']:08X}", scalar(entry["name"]), scalar(entry["type"]),
+                          entry["width"], entry["loads"], entry["stores"],
+                          entry["address_taken"], f"[{users_text(entry['used_by'])}]"]
+                if "note" in entry:
+                    fields.append(json.dumps(entry["note"]))
+                lines.append(f"    - [{', '.join(str(f) for f in fields)}]")
+            lines.append("")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines).rstrip("\n") + "\n")
+
+
 def build(accesses: Iterable[Access], data: list, owner_for: Callable[[int], str],
           owner_filter: str | None):
     rows: dict[int, dict] = {}
@@ -357,9 +533,10 @@ def build(accesses: Iterable[Access], data: list, owner_for: Callable[[int], str
             continue
         row = rows.setdefault(access.target, {
             "section": name, "widths": set(), "load": 0, "store": 0, "addr": 0,
-            "owners": set(), "first_insn": access.insn})
+            "owners": set(), "first_insn": access.insn, "fp": False})
         if access.width:
             row["widths"].add(access.width)
+        row["fp"] = row["fp"] or access.fp
         row[access.kind] += 1
         row["owners"].add(owner)
     return rows, outside
@@ -400,6 +577,10 @@ def main(argv=None) -> int:
                         help="scan level N's program instead of the boot executable")
     parser.add_argument("--overlays", type=Path, metavar="DIR",
                         help="extracted/overlays/ of the Tools checkout (with --level)")
+    parser.add_argument("--catalog", nargs="?", type=Path, const=Path("-"), metavar="PATH",
+                        help=f"write the grouped catalogue (default: {shown(DEFAULT_CATALOG)}, or "
+                             f"{shown(LEVEL_CATALOGS)}/level-NN.yaml with --level); "
+                             "name, type and note already in it are kept")
     parser.add_argument("--out", type=Path, default=None, help="output directory")
     args = parser.parse_args(argv)
 
@@ -438,6 +619,24 @@ def main(argv=None) -> int:
         summary.append(f"C D_ labels reached by the code\t{len(labels & reached)}\t"
                        f"of {len(labels)}\t-")
         summary.append(f"C D_ labels not reached\t{len(labels - reached)}\t-\t-")
+    if args.catalog:
+        if args.level is None:
+            target = DEFAULT_CATALOG if str(args.catalog) == "-" else args.catalog
+            sections = catalog_sections(rows, data, c_declarations())
+            write_catalog(target, sections, load_catalog(target))
+        else:
+            target = LEVEL_CATALOGS / f"level-{args.level:02d}.yaml" \
+                if str(args.catalog) == "-" else args.catalog
+            own = {addr: row for addr, row in rows.items() if not row["section"].startswith("core.")}
+            sections = catalog_sections(
+                own, data, {}, level_origin_of(),
+                lambda addr: f"D_{addr:08X}" if addr < LEVEL_DATA_START
+                else f"D_L{args.level:02d}_{addr:08X}", "mixed")
+            write_catalog(target, sections, load_catalog(target),
+                          what=f"level {args.level:02d}'s", origins=LEVEL_ORIGINS,
+                          extra="# The executable's core.* data is in config/us/data.yaml.\n")
+        summary.append(f"catalogue: {sum(len(e) for o in sections.values() for e in o.values())} "
+                       f"entries in {shown(target)}")
     (out / "summary.txt").write_text("\n".join(summary) + "\n")
     print("\n".join(summary))
     print(f"wrote {shown(out / 'refs.tsv')}")

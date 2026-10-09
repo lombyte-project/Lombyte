@@ -1810,6 +1810,41 @@ class DataRefsTests(unittest.TestCase):
     def test_shown_keeps_paths_outside_the_checkout(self):
         self.assertEqual(self.refs.shown(Path("/nonexistent/out")), "/nonexistent/out")
 
+    def _row(self, section, **kw):
+        row = {"section": section, "widths": {4}, "load": 1, "store": 0, "addr": 0,
+               "owners": {"audio/a [C]"}, "first_insn": 0, "fp": False}
+        return {**row, **kw}
+
+    def test_catalog_drops_float_literals_and_groups_by_origin(self):
+        rows = {0x10: self._row("core.lit", fp=True),
+                0x20: self._row("core.data"),
+                0x30: self._row("core.data", owners={"audio/a [C]", "gameplay/b [C]"})}
+        out = self.refs.catalog_sections(
+            rows, [("core.lit", 0, 0x40), ("core.data", 0x20, 0x40)], {},
+            origin_of=lambda unit: unit.split("/")[0])
+        self.assertEqual(list(out), ["core.data"])
+        self.assertEqual({o: [e["addr"] for e in v] for o, v in out["core.data"].items()},
+                         {"audio": [0x20], "shared": [0x30]})
+
+    def test_catalog_rerun_keeps_hand_edited_names(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "data.yaml"
+            sections = {"core.data": {"audio": [
+                {"addr": 0x20, "name": "D_00000020", "type": "u8 *[2]", "width": 4, "loads": 1,
+                 "stores": 0, "address_taken": 0, "used_by": ["a"]}]}}
+            self.refs.write_catalog(path, sections, {})
+            text = path.read_text().replace("D_00000020", "sound_table")
+            path.write_text(text)
+            edits = self.refs.load_catalog(path)
+            self.refs.write_catalog(path, sections, edits)
+            self.assertEqual(edits[0x20]["name"], "sound_table")
+            self.assertEqual(edits[0x20]["type"], "u8 *[2]")
+            self.assertIn("sound_table", path.read_text())
+
+    def test_scalar_quotes_types_with_brackets(self):
+        self.assertEqual(self.refs.scalar("struct Foo"), "struct Foo")
+        self.assertEqual(self.refs.scalar("u8 *[2]"), '"u8 *[2]"')
+
 
 if __name__ == "__main__":
     unittest.main()
