@@ -41,7 +41,6 @@ struct CameraTransitionState {
 extern struct CameraTransitionState camera_transition_state __asm__("D_00186F40");
 extern CameraDescriptor *camera_descriptors __asm__("D_0015EF90");
 extern u8 previous_camera_record_storage[] __asm__("D_00189650");
-extern s32 camera_position_publication_suppressed[] __asm__("D_0018C32C");
 
 extern void backup_current_cam(void) __asm__("FUN_001ebc90");
 extern void camera_run_setup_to_new_cam(struct UpdateCam *next_camera) __asm__("func_001EBEC8");

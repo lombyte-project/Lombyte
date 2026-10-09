@@ -53,7 +53,7 @@ extern ObjectRenderClass *object_render_classes[] __asm__("D_001E1700");
 extern s32 object_render_class_fixed_thresholds[] __asm__("D_001E2E00");
 extern MaterialMap object_render_class_material_maps[] __asm__("D_001E3600");
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
-extern u64 resident_material_templates[] __asm__("D_0019E540");
+#include "rnc/rendering/material_templates.h"
 extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
 extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
 void register_object_render_class(ObjectRenderClass *render_class,

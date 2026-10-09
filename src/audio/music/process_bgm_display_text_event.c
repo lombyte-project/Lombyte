@@ -9,7 +9,7 @@ struct Glyph {
 
 extern s32 D_0015F4A0;
 extern s32 D_0015F49C;
-extern s32 D_0018CAF8[];
+#include "rnc/ui/text/font_palette.h"
 extern f32 func_001FA6C0(s32);
 extern void FUN_001f5808(f32, f32, f32, f32, s32, s32, s32, s32, u64, s32);
 
@@ -29,7 +29,7 @@ void process_bgm_display_text_event(u64 color, u8 *str, s32 n, s32 tex, struct G
     s32 mk;
 
     if (D_0015F4A0 == 0) {
-        D_0018CAF8[0] = color;
+        font_palette_colors[0] = color;
     }
     size = scale * 16.0f;
     i = 0;
@@ -41,7 +41,7 @@ void process_bgm_display_text_event(u64 color, u8 *str, s32 n, s32 tex, struct G
         if ((u8)(*s - 8) < 8) {
             if (D_0015F49C != 0) {
                 color &= 0xFF000000;
-                color |= D_0018CAF8[*s - 8] & 0xFFFFFF;
+                color |= font_palette_colors[*s - 8] & 0xFFFFFF;
             }
         } else if (g[*s].adv != 0) {
             top = func_001FA6C0(g[*s].top) * scale;

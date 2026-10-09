@@ -94,7 +94,7 @@ extern u8 D_001B3AC0[];
 extern u8 D_001B6880[];
 extern u8 D_001B6180[];
 extern MemInfo D_001940C0;
-extern s64 D_0019E6C0[];
+#include "rnc/rendering/material_templates.h"
 extern s32 D_0015FF08;
 extern s32 D_001B5980[];
 extern u8 D_001CAAC0[];
@@ -208,10 +208,10 @@ void initialize_level_runtime(void) {
                           (s32)header + header->texInfo);
     data_base = (s32)header + header->data_offset;
     class_data_base = data_base + header->unk30;
-    D_0019E6C0[0] = (s32)((D_0015EE8C + header->unk40) >> 8) | 0x1D308000 | ((s64)0xB800 << 19) |
+    special_material_template[0] = (s32)((D_0015EE8C + header->unk40) >> 8) | 0x1D308000 | ((s64)0xB800 << 19) |
                     ((s64)((D_0015EE8C + header->unk44) >> 8) << 37) | 0x8000000000000000LL;
-    D_0019E6C0[1] = 0x0000FFA0000000E0LL;
-    D_0019E6C0[2] = 0x0040000400004000LL;
+    special_material_template[1] = 0x0000FFA0000000E0LL;
+    special_material_template[2] = 0x0040000400004000LL;
     class_entries = (ClassEntry *)((s32)header + header->classes);
     D_0015FF08 = header->classCount;
     for (i = 0; i < D_0015FF08; i++) {

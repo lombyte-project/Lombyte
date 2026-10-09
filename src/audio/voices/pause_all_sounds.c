@@ -3,7 +3,7 @@
 #include "rnc/ui/menus/menu_system.h"
 
 extern s32 D_0015ED84 MACRO_ADDR;
-extern s32 D_0018C32C[];
+#include "rnc/gameplay/camera/update_cam.h"
 extern s32 D_0015F674 MACRO_ADDR;
 extern s32 D_00141660[];
 extern u8 D_0014161B NOT_SDA;
@@ -29,7 +29,7 @@ void pause_all_sounds(s32 mode) {
     snd_pause_all_sounds_in_group(0x1D);
     music_pause(0);
     snd_flush_sound_commands();
-    if (D_0018C32C[0] != 0) {
+    if (camera_position_publication_suppressed[0] != 0) {
         D_0015F674 = 1;
         return;
     }

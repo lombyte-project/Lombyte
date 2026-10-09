@@ -11,7 +11,7 @@ extern char D_0013F3D0[];
 extern char D_0013F5E0[];
 extern char D_00187080[];
 extern char D_00187290[];
-extern s32 D_0018C32C[];
+#include "rnc/gameplay/camera/update_cam.h"
 
 extern f32 cosine_interpolate(f32, f32, f32) __asm__("FUN_002133d0");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -93,7 +93,7 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
     normalize_vector_xyz(&horizontal_axis, &horizontal_axis, 1.0f);
     build_look_at_matrix(&camera_offset, &camera_offset, &horizontal_axis, transition_state[1]);
     add_vector_xyz(transition_state + 20, &focus_position, &camera_offset);
-    if (D_0018C32C[0] == 0) {
+    if (camera_position_publication_suppressed[0] == 0) {
         qcopy(D_00187080, transition_state + 20);
     }
     quaternion_rotation_basis(transition_state + 16, rotation_matrix);

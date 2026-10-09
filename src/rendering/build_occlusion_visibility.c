@@ -14,7 +14,7 @@ extern f32 *D_0015F644;
 extern s32 D_0015F648;
 extern s32 D_0015F64C;
 extern u8 *D_0015F650;
-extern s32 D_0018C32C[];
+#include "rnc/gameplay/camera/update_cam.h"
 
 extern u8 *parse_occlusion_grid(s32, s32, s32) __asm__("FUN_001f2690");
 extern u8 *get_occlusion_grid_from_pair(s32, s32, s32, s32, s32, s32, f32) __asm__("FUN_001f2768");
@@ -71,7 +71,7 @@ void build_occlusion_visibility(void) {
         if (vis == 0) {
             switch (D_0015F648) {
             case 0:
-                if (D_0018C32C[0] == 0 && D_0015F650 != 0) {
+                if (camera_position_publication_suppressed[0] == 0 && D_0015F650 != 0) {
                     FUN_001f98d0(D_00193FC0, D_0015F650, 0x80);
                 } else {
                     FillTransferWords(D_00193FC0, -1, 0x80);
@@ -88,7 +88,7 @@ void build_occlusion_visibility(void) {
                     bz = 0.0f < D_00186F40.z - p[2];
                     FUN_001f98d0(D_00193FC0, (u8 *)p + ((bz + by * 2 + bx * 4) * 0x80 + 0x10),
                                  0x80);
-                } else if (D_0018C32C[0] == 0 && D_0015F650 != 0) {
+                } else if (camera_position_publication_suppressed[0] == 0 && D_0015F650 != 0) {
                     FUN_001f98d0(D_00193FC0, D_0015F650, 0x80);
                 } else {
                     FillTransferWords(D_00193FC0, -1, 0x80);

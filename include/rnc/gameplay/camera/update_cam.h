@@ -2,6 +2,7 @@
 #define LOMBYTE_RNC_GAMEPLAY_CAMERA_UPDATE_CAM_H
 
 #include "types.h"
+#include "sda.h"
 #include "eetypes.h"
 #include "rnc/math/vector.h"
 
@@ -40,5 +41,9 @@ struct CameraType {
     void (*update)(struct UpdateCam *cam);
     void (*exit)(struct UpdateCam *cam);
 };
+
+/* Nonzero stops the camera code from publishing the camera position
+   (update_camera_blend then skips its vector copy). */
+extern s32 camera_position_publication_suppressed[1] __asm__("D_0018C32C") NOT_SDA;
 
 #endif /* LOMBYTE_RNC_GAMEPLAY_CAMERA_UPDATE_CAM_H */

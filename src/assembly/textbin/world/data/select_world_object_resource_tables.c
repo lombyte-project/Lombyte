@@ -48,7 +48,7 @@ extern u8 resident_class_slot_by_id[] __asm__("D_001B3AC0") NOT_SDA;
 extern s32 D_001B6180[];
 extern GadgetRec vendor_item_definitions[] __asm__("D_001863D0");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
-extern u64 gold_weapon_texture_state[] __asm__("D_0019E6F0");
+#include "rnc/rendering/material_templates.h"
 extern void FlushCache(s32);
 extern void decompress_wad(s32, void *) __asm__("func_0020B618");
 extern void prepare_resident_class_render_data(void *, void *, void *,

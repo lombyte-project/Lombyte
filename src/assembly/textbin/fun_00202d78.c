@@ -8,8 +8,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00202d78/FUN_00202d78.s
 #include "rnc/rendering/resident_class.h"
 
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
-extern u64 special_material_template[] __asm__("D_0019E6C0");
-extern u64 alternate_special_material_template[] __asm__("D_0019E6D8");
+#include "rnc/rendering/material_templates.h"
 extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
 
 void build_indexed_resident_render_packet(u64 *packet,

@@ -565,6 +565,8 @@ def c_value(kind: str, raw: bytes, symbols: dict[int, str]) -> str:
     value = struct.unpack(fmt, raw[:struct.calcsize(fmt)])[0]
     if fmt in ("<f", "<d"):
         return repr(value) + ("f" if fmt == "<f" else "")
+    if value < -0xFFFF and fmt in ("<i", "<q"):
+        return hex(value & (1 << 8 * struct.calcsize(fmt)) - 1)  # bit pattern, e.g. a packed color
     return str(value) if value < 0 or value < 10 else hex(value)
 
 
@@ -614,20 +616,33 @@ def emit_data(addr: int, elf: Path, sections: list) -> Path:
                 header, name, ctype = path, found, " ".join((prefix + dims).split())
     if header is None:
         raise SystemExit(f"0x{addr:08X} has no declaration in include/: declare its type there first")
-    record = re.sub(r"^(struct|union)\s+", "", ctype.replace("extern", "").strip())
+    elem = " ".join(ctype.replace("extern", "").split()).rpartition("[")[0] if "[" in ctype else ctype
+    elem = re.sub(r"\s*\[.*$", "", ctype.replace("extern", "")).strip()
+    counts = [int(n, 0) for n in re.findall(r"\[(0x[0-9A-Fa-f]+|\d+)\]", ctype)]
+    if ctype.count("[") != len(counts):
+        raise SystemExit(f"{ctype!r} has no complete size")
+    record = re.sub(r"^(struct|union)\s+", "", elem)
     include = header.relative_to(ROOT / "include").as_posix()
-    with tempfile.TemporaryDirectory() as tmp:
-        probe = Path(tmp) / "probe.c"
-        probe.write_text(f'#include "types.h"\n#include "{include}"\n'
-                         f"void *keep = (void *)&{name};\nint size = sizeof({name});\n")
-        run = subprocess.run([clang, "--target=mipsel-linux-gnu", "-c", "-o", "/dev/null",
-                              f"-I{ROOT / 'include'}", "-w", "-Xclang", "-fdump-record-layouts", str(probe)],
-                             capture_output=True, text=True, check=False)
-    members = layout_tree(run.stdout, record)
-    size = re.search(r"\| \[sizeof=(\d+)", run.stdout[run.stdout.find(f" {record}\n"):])
-    if members is None or size is None:
-        raise SystemExit(f"no layout for {ctype!r}")
-    size = int(size.group(1))
+    dump, members = "", None
+    if elem.endswith("*") or elem in SCALARS:
+        step = 4 if elem.endswith("*") else struct.calcsize(SCALARS[elem])
+    else:
+        with tempfile.TemporaryDirectory() as tmp:
+            probe = Path(tmp) / "probe.c"
+            probe.write_text(f'#include "types.h"\n#include "{include}"\n'
+                             f"void *keep = (void *)&{name};\nint size = sizeof({name});\n")
+            run = subprocess.run([clang, "--target=mipsel-linux-gnu", "-c", "-o", "/dev/null",
+                                  f"-I{ROOT / 'include'}", "-w", "-Xclang", "-fdump-record-layouts", str(probe)],
+                                 capture_output=True, text=True, check=False)
+        dump = run.stdout
+        members = layout_tree(dump, record)
+        size = re.search(r"\| \[sizeof=(\d+)", dump[dump.find(f" {record}\n"):])
+        if members is None or size is None:
+            raise SystemExit(f"no layout for {ctype!r}")
+        step = int(size.group(1))
+    size = step
+    for n in counts:
+        size *= n
     with elf.open("rb") as fh:
         image = ELFFile(fh)
         for seg in image.iter_segments():
@@ -638,12 +653,24 @@ def emit_data(addr: int, elf: Path, sections: list) -> Path:
         else:
             raise SystemExit(f"0x{addr:08X} has no file bytes")
     symbols = {a: n for a, (n, _t) in c_declarations().items()}
-    body = "{0}" if not any(raw) else c_initializer(members, size, raw, symbols,
-                                                    lambda rec: layout_tree(run.stdout, rec))
+
+    def one(chunk: bytes) -> str:
+        if members is None:
+            return c_value(elem, chunk, symbols)
+        return c_initializer(members, step, chunk, symbols, lambda rec: layout_tree(dump, rec))
+
+    def nest(chunk: bytes, dims: list) -> str:
+        if not dims:
+            return one(chunk)
+        width = len(chunk) // dims[0]
+        return "{" + ", ".join(nest(chunk[i * width:(i + 1) * width], dims[1:]) for i in range(dims[0])) + "}"
+
+    body = "{0}" if not any(raw) else nest(raw, counts)
     out = ROOT / "src" / "data" / DATA_DIRS[section] / f"{addr:08X}_{name}.c"
     out.parent.mkdir(parents=True, exist_ok=True)
+    dims = "".join(f"[{n}]" for n in counts)
     out.write_text(f'#include "types.h"\n#include "{include}"\n\n'
-                   f'{ctype.replace("extern ", "")} {name} __attribute__((section(".data"))) = {body};\n')
+                   f'{elem} {name}{dims} __attribute__((section(".data"))) = {body};\n')
     return out
 
 

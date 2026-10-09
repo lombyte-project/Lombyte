@@ -24,7 +24,6 @@ struct FrameImagePage {
 
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern s32 pending_texture_upload_count __asm__("D_0015F458");
-extern struct TextureUpload pending_texture_uploads[] __asm__("D_0018D040");
 struct FrameTextureTables {
     u8 pad00[0x20];
     s32 frame_references_address;

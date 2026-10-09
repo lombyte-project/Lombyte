@@ -19,7 +19,7 @@ struct Glyph {
 
 extern s32 font_window_active __asm__("D_0015F4A0");
 extern s32 font_color_codes_enabled __asm__("D_0015F49C");
-extern s32 font_palette_colors[] __asm__("D_0018CAF8");
+#include "rnc/ui/text/font_palette.h"
 extern s32 D_0013E500[];
 extern void vu1_set_scissor(s32, s32, s32, s32) __asm__("func_00233A40");
 extern s32 measure_text_width(u8 *, s32, struct Glyph *) __asm__("func_001F6200");

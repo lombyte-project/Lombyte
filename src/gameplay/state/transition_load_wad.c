@@ -118,7 +118,7 @@ extern SoundBanks D_0018CB20;
 extern LoadState D_001940C0;
 extern u8 D_00194180[];
 extern HelpState D_001996D0;
-extern u64 D_0019E6C0[];
+#include "rnc/rendering/material_templates.h"
 extern MobyClass *D_001B3200[];
 extern u8 D_001B3AC0[];
 extern s32 D_001B5980[];
@@ -211,9 +211,9 @@ void transition_load_wad(void)
   u = (((s64) ((D_0015EE8C + hdr->x74) >> 8)) << 37) | (((s64) 0xB800) << 19);
   data = ((u8 *) hdr) + hdr->data;
   base = data + hdr->x60;
-  D_0019E6C0[0] = (t | u) | (((s64) (-1)) << 63);
-  D_0019E6C0[1] = 0xFFA0000000E0;
-  D_0019E6C0[2] = 0x0040000400004000;
+  special_material_template[0] = (t | u) | (((s64) (-1)) << 63);
+  special_material_template[1] = 0xFFA0000000E0;
+  special_material_template[2] = 0x0040000400004000;
   tex = (WadTex *) (((u8 *) hdr) + hdr->x34);
   if ((D_00160E94 = hdr->n30) > 0)
   {

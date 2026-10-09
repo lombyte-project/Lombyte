@@ -8,6 +8,7 @@ INCLUDE_ASM(
 #else
 
 #include "types.h"
+#include "rnc/rendering/texture_upload.h"
 
 struct EffectTextureDefinition {
     u64 tex0;
@@ -17,27 +18,16 @@ struct EffectTextureDefinition {
     s16 height_log2;
 };
 
-struct TextureUploadPacket {
-    s32 palette_address;
-    s16 reserved_zero;
-    s16 palette_block_offset;
-    s32 texel_address;
-    u8 width_log2;
-    u8 height_log2;
-    s16 texel_block_offset;
-};
-
 extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74");
 extern s32 pending_texture_upload_count __asm__("D_0015F458");
 extern s32 level_texture_payload_address __asm__("D_0015F460");
-extern struct TextureUploadPacket pending_texture_uploads[] __asm__("D_0018D040");
 extern struct EffectTextureDefinition effect_texture_definitions[] __asm__("D_0018D440");
 
 u64 get_effect_texture(s32 index) __asm__("FUN_001f44b8");
 
 u64 get_effect_texture(s32 index) {
     struct EffectTextureDefinition *texture;
-    struct TextureUploadPacket *upload;
+    struct TextureUpload *upload;
     s32 width_log2;
     s32 buffer_width_shift;
     s32 palette_block_offset;
@@ -72,15 +62,15 @@ u64 get_effect_texture(s32 index) {
         texture->tex0 = tex0_word;
         if (pending_texture_upload_count_snapshot < 0x40) {
             upload = &pending_texture_uploads[pending_texture_upload_count_snapshot];
-            upload->palette_address =
+            upload->clut_data =
                 level_texture_payload_address + texture->palette_offset_quadwords * 0x10;
-            upload->palette_block_offset = palette_block_offset;
-            upload->reserved_zero = 0;
+            upload->cbp = palette_block_offset;
+            upload->unk4 = 0;
             *(s32 *)((u8 *)pending_texture_uploads + pending_texture_upload_count_snapshot * 0x10 +
                      8) = level_texture_payload_address + texture->texel_offset_quadwords * 0x10;
-            upload->width_log2 = (u8)texture->width_log2;
-            upload->height_log2 = (u8)texture->height_log2;
-            upload->texel_block_offset = texel_block_offset;
+            upload->tw = (u8)texture->width_log2;
+            upload->th = (u8)texture->height_log2;
+            upload->tbp = texel_block_offset;
             pending_texture_upload_count = pending_texture_upload_count_snapshot + 1;
         }
     }
