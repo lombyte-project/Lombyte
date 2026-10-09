@@ -76,11 +76,266 @@ void FUN_L14_002bb4d8(u8 *self) {
     FUN_0020c828(self);
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aba80.s", FUN_L14_002aba80);
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/audio/voice_pool.h"
+
+/* Path mover gated by an activation trigger and its collectable flag: slides between the two ends of its path,
+   eases towards the path point and carries what stands on it. */
+typedef struct {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 points[1];
+} MoverPath;
+
+typedef struct {
+    u8 pad0[0x20];
+    s32 unk20;
+    s16 unk24;
+    u8 pad26[2];
+    u8 unk28;
+    u8 pad29[0x15];
+    s16 unk3E;
+    u8 pad40[0x20];
+    u8 carry[0x40];      /* 0x60: carried-object state for FUN_L00_00260738 */
+    u8 start_end;        /* 0xA0: 0 starts at the far end */
+    u8 padA1[3];
+    f32 t;               /* 0xA4: position along the path, 0 to 1 */
+    f32 speed;           /* 0xA8 */
+    f32 target_speed;    /* 0xAC: +-1 / travel frames */
+    f32 travel_time;     /* 0xB0: seconds per trip */
+    s32 path;            /* 0xB4: index into D_L14_001B0BB0, -1 for none */
+    s16 retrigger;       /* 0xB8: set when the hero steps off while stopped */
+    s16 wait;            /* 0xBA: frames before it may move again */
+    f32 rise;            /* 0xBC: height gained this frame */
+    s32 trigger;         /* 0xC0: clip volume that activates it, -1 once active */
+    s32 voice;           /* 0xC4 */
+    s32 silent;          /* 0xC8 */
+    s32 show_volume;     /* 0xCC: clip volume that makes it visible, -1 once shown */
+    f32 ease[3];         /* 0xD0: per-axis easing state for FUN_L00_0025b8c0 */
+} PathMoverVars;
+
+typedef struct {
+    u8 pad0[0x454];
+    u8 collected[1];
+} L14LevelState;
+
+extern int *D_L14_001B0BB0[];
+extern L14LevelState D_L14_001BB930;
+extern s32 D_0014C190[][64];
+extern s32 D_L14_001BABD0[];
+extern float D_0015ED6C;
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern s32 truncate_float_to_s32(f32 f) __asm__("FUN_001fa6d0");
+extern float FUN_001f96b0(float);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9b48(void *, void *);
+extern s32 FUN_001f9770(s16 *);
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L01_00277fb8(void *);
+extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern f32 FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
+extern void FUN_L14_002ac2b8(char *);
+extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
+
+void FUN_L14_002aba80(struct Moby *moby) {
+    PathMoverVars *vars = (PathMoverVars *)moby->pvars;
+    MoverPath *path;
+    Vec4 orig;
+    Vec4 delta;
+    Vec4 step;
+    Vec4 goal;
+    s32 on = 0;
+
+    if (vars->path == -1) {
+        return;
+    }
+    path = (MoverPath *)D_L14_001B0BB0[vars->path];
+    if (vars->show_volume != -1) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, vars->show_volume) == 0) {
+            moby->unk30 = 0xFF;
+            moby->unk94 = 0;
+            moby->flags |= 0x41;
+            return;
+        }
+        if (vars->show_volume != -1 && is_point_inside_clip_volume(&hero.motion.pos, vars->show_volume)) {
+            moby->flags &= 0xFFBE;
+            moby->unk94 = moby->pclass->unk10;
+            vars->show_volume = -1;
+        }
+    }
+    {
+        u16 id;
+
+        if (vars->trigger == -1 || is_point_inside_clip_volume(&hero.motion.pos, vars->trigger) ||
+            D_L14_001BB930.collected[(s16)(id = moby->unkB2)] != 0 ||
+            (D_0014C190[current_level_index][(s16)id >> 5] >> (id & 0x1F)) & 1) {
+            if (vars->trigger != -1) {
+                D_0014C190[current_level_index][(s16)moby->unkB2 >> 5] |= 1 << (moby->unkB2 & 0x1F);
+                D_L14_001BABD0[(s16)moby->unkB2 >> 5] |= 1 << (moby->unkB2 & 0x1F);
+                vars->trigger = -1;
+            }
+            on = 1;
+        }
+    }
+    qcopy(&orig, &moby->pos);
+    FUN_001f9770(&vars->wait);
+    if (moby->state == 0) {
+        f32 t;
+        Vec4 *points;
+
+        vars->unk28 = 4;
+        vars->unk3E = 5;
+        vars->unk20 = 0;
+        vars->unk24 = 0;
+        t = 0.0f;
+        if ((moby->unkBC = vars->start_end) == 0) {
+            t = 1.0f;
+        }
+        vars->t = t;
+        points = path->points;
+        /* the unsigned index keeps retail's (count - 1) << 4; a signed one folds the -1 into the pointer */
+        qcopy(&moby->pos, truncate_float_to_s32(t) ? &points[(u32)(path->count - 1)] : points);
+        vars->wait = 0;
+        vars->speed = 0.0f;
+        vars->rise = 0.0f;
+        moby->state = 1;
+        moby->unk30 = 0xFF;
+        moby->unk32 = 0xFF;
+        vars->voice = -1;
+    }
+    switch (moby->unkBC) {
+    case 0:
+        if (on) {
+            f32 far;
+
+            if ((vars->retrigger != 0 && FUN_L01_00277fb8(moby)) ||
+                (far = FUN_001f9b48(&hero.motion.pos, &path->points[path->count - 1]),
+                 FUN_001f9b48(&hero.motion.pos, &path->points[0]) < far)) {
+                moby->unkBC = 2;
+                vars->target_speed = -1.0f / FUN_001f96b0(vars->travel_time * 60.0f);
+                vars->retrigger = 0;
+            }
+        }
+        break;
+    case 1:
+        if (on) {
+            f32 near;
+
+            if ((vars->retrigger != 0 && FUN_L01_00277fb8(moby)) ||
+                (near = FUN_001f9b48(&hero.motion.pos, &path->points[0]),
+                 FUN_001f9b48(&hero.motion.pos, &path->points[path->count - 1]) < near)) {
+                moby->unkBC = 2;
+                vars->target_speed = 1.0f / FUN_001f96b0(vars->travel_time * 60.0f);
+                vars->retrigger = 0;
+            }
+        }
+        break;
+    case 2:
+        if (vars->silent == 0 && FUN_L01_00277fb8(moby)) {
+            hero.unk1F2 = 4;
+            hero.unk1F4 = 4;
+        }
+        if (vars->wait != 0 ||
+            (vars->rise < 0.0f && FUN_001f9b80(&moby->pos, &hero.motion.pos) < 2.0f &&
+             AbsoluteFloat(hero.motion.pos.f[2] - moby->pos.z) < 4.0f &&
+             moby->pos.z - hero.motion.pos.f[2] > 1.0f)) {
+            s32 voice;
+
+            if (vars->wait == 0) {
+                vars->wait = scale_game_frames(30);
+            }
+            voice = vars->voice;
+            vars->speed = 0.0f;
+            if (voice != -1) {
+                VoicePoolWindow *slot = (VoicePoolWindow *)((u8 *)&voice_pool + voice * 0x70);
+
+                if ((struct Moby *)slot->voice.owner == moby && slot->voice.state != 0) {
+                    release_voice_slot(voice);
+                }
+            }
+            vars->voice = -1;
+        } else {
+            s32 i;
+            f32 frac;
+            f32 fi;
+            Vec4 *from;
+
+            if (!FUN_L00_0028d8c0(moby, vars->voice)) {
+                vars->voice = allocate_voice_for_target_entry(0, 4, moby);
+            }
+            vars->speed += vars->target_speed * D_0015ED6C;
+            if (AbsoluteFloat(vars->speed) > AbsoluteFloat(vars->target_speed)) {
+                vars->speed = vars->target_speed;
+            }
+            vars->t = vars->t + vars->speed;
+            if (0.5f < AbsoluteFloat(vars->t - 0.5f)) {
+                s32 voice;
+
+                if (0.0f < vars->target_speed) {
+                    moby->unkBC = 0;
+                    vars->t = 1.0f;
+                } else {
+                    moby->unkBC = 1;
+                    vars->t = 0.0f;
+                }
+                vars->speed = 0.0f;
+                vars->wait = scale_game_frames(15);
+                voice = vars->voice;
+                if (voice != -1) {
+                    VoicePoolWindow *slot = (VoicePoolWindow *)((u8 *)&voice_pool + voice * 0x70);
+
+                    if ((struct Moby *)slot->voice.owner == moby && slot->voice.state != 0) {
+                        release_voice_slot(voice);
+                    }
+                }
+                vars->voice = -1;
+            }
+            frac = ConvertIntegerToFloat(path->count - 1);
+            i = truncate_float_to_s32(frac * vars->t);
+            frac = ConvertIntegerToFloat(path->count - 1);
+            fi = ConvertIntegerToFloat(i);
+            frac *= vars->t;
+            frac -= fi;
+            if (i == path->count - 1) {
+                qcopy(&goal, &path->points[i]);
+            } else {
+                from = &path->points[i];
+                subtract_vector_xyz(&step, &path->points[i + 1], from);
+                scale_vector_xyz(&step, &step, frac);
+                add_vector_xyz(&goal, &step, from);
+            }
+            FUN_L00_0025b8c0(&moby->pos.x, &vars->ease[0], goal.f[0], 0.005f, 0.2f, 0.0f);
+            FUN_L00_0025b8c0(&moby->pos.y, &vars->ease[1], goal.f[1], 0.005f, 0.2f, 0.0f);
+            FUN_L00_0025b8c0(&moby->pos.z, &vars->ease[2], goal.f[2], 0.005f, 0.2f, 0.0f);
+            vars->rise = moby->pos.z - orig.f[2];
+        }
+        break;
+    }
+    if (moby->unkBC != 2) {
+        FUN_L14_002ac2b8((char *)moby);
+    }
+    subtract_vector_xyz(&delta, &moby->pos, &orig);
+    FUN_L00_00260738(vars->carry, &delta, &moby->rot, &moby->rot);
+    if (!FUN_L01_00277fb8(moby)) {
+        if (2.0f < FUN_001f9b80(&moby->pos, &hero.motion.pos)) {
+            if (vars->wait == 0) {
+                vars->retrigger = 1;
+            }
+        }
+    }
+}
 /* Eases the moby toward the first or last point of its path. */
 
 extern int *D_L14_001B0BB0[];
-extern void FUN_L00_0025b8c0(float *, float *, float, float, float, float);
+extern f32 FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
 
 void FUN_L14_002ac2b8(char *moby) {
     char *d = *(char **)(moby + 0x78);
@@ -469,7 +724,7 @@ extern void FUN_L00_00262b80(u8 *, u8 *, u8 *, f32, f32, f32);
 extern s32 FUN_001f9770(s16 *);
 extern s32 FUN_001f96f8(s32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern void FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
+extern f32 FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
 
 /* 0x002AEA08, 208 bytes.  Per-frame update of a moby's aim and turn state from
  * level tuning constants.  The ten constants are small data ($gp-relative),
