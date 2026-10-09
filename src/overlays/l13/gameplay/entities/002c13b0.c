@@ -292,7 +292,101 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c3fc0.s", FUN_L13_002c3fc0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c4428.s", FUN_L13_002c4428);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c7f38.s", FUN_L13_002c7f38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ce688.s", FUN_L13_002ce688);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002cecb8.s", FUN_L13_002cecb8);
+#include "rnc/overlay/quad.h"
+extern void FUN_001e93b0(char *, int, ...);
+extern int FUN_00120478(float);
+extern int FUN_00213928(struct Moby *, void *, float *, int, int *, int, int, int);
+extern void FUN_L00_00257470(struct Moby *, int, int);
+extern void FUN_00212f90(struct Moby *, int, int, int);
+extern int FUN_001f96f8(int);
+extern void FUN_0022d798(int);
+extern void emit_effect_l13(void *, void *, void *, float, float, int, int, int,
+                            float, float, float, float, int, float, int, int,
+                            int, int) __asm__("FUN_L00_0025e450");
+extern float D_0015ED6C;
+extern char D_L13_001f4980[];
+extern char D_L13_001f49a8[];
+extern unsigned char D_0013E550[];
+
+void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
+    char *src;
+    int hit;
+    float position[4];
+    float velocity[4];
+    int link;
+    unsigned char *record;
+
+    if (moby->state != 2) {
+        src = FUN_L00_0025a420(moby, 0x330000, 0);
+        if (src != 0) {
+            FUN_001e93b0(D_L13_001f4980, moby->oclass,
+                          FUN_00120478(*(float *)(src + 0x2c)));
+            FUN_001e93b0(D_L13_001f49a8, *(int *)(src + 0x38),
+                          FUN_00120478(*(float *)(src + 0)),
+                          FUN_00120478(*(float *)(src + 4)),
+                          FUN_00120478(*(float *)(src + 8)));
+        }
+        switch (FUN_00213928(moby, src, health, 0, &hit, 0, 0, 4)) {
+        case 1:
+        case 2:
+            *health = 0.0f;
+            break;
+        case 0:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+            break;
+        }
+        if (hit >= 2) {
+            if (src == 0) {
+                goto mark;
+            }
+            if (*(char **)(src + 0x20) != 0 &&
+                moby->pos.z + 8.7f < *(float *)(*(char **)(src + 0x20) + 0x18)) {
+                if (*health <= *(float *)(src + 0x2c)) {
+                    *(OvlQuad *)velocity = 0;
+                    velocity[2] = D_0015ED6C * 8.0f;
+                    *health = 0.0f;
+                    moby->flags &= 0xefff;
+                    *(OvlQuad *)position = *(OvlQuad *)velocity;
+                    FUN_L00_00257470(moby, 0, -1);
+                    d[0x67] = 0x78;
+                    FUN_L00_0025d458(moby, (short *)(d + 0x60));
+                    FUN_L00_0024f7c8(moby, 0, velocity);
+                    emit_effect_l13(moby, position, velocity, 0.0f, 0.0f,
+                                    10, 3, 16, 4.0f, 2.0f, 0.0f, 1.0f,
+                                    1, 20.0f, 1, 1, -1, 0);
+                    if (moby->prev_seq != 1) {
+                        FUN_00212f90(moby, 1, 0, 0);
+                    }
+                    link = *(int *)(d + 0x70);
+                    if (link != -1) {
+                        record = D_0013E550 + link * 0x70;
+                        if (*(struct Moby **)(record + 0x88) == moby && record[0x74] != 0) {
+                            FUN_0022d798(link);
+                        }
+                    }
+                    *(int *)(d + 0x70) = -1;
+                    moby->state = 2;
+                } else {
+                    *health -= *(float *)(src + 0x2c);
+                    d[0x67] = 0xfa;
+                    *(short *)(d + 0x26) = FUN_001f96f8(0x3c);
+                    FUN_L00_0025d458(moby, (short *)(d + 0x60));
+                }
+            }
+        }
+mark:
+        moby->unkA4 = 0xff;
+    }
+    FUN_L00_0025d538(moby, d + 0x60);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002cefc0.s", FUN_L13_002cefc0);
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E2488), where it is exact; names translated to the US level program. */
 
@@ -973,7 +1067,80 @@ void FUN_L13_002e9680(void *unused, char *p, int idx) {
         *slot = 0;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e97e0.s", FUN_L13_002e97e0);
+#else
+extern void FUN_L00_00257470(struct Moby *, int, int);
+extern void FUN_001f9bf8(void *, void *, float);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern void FUN_L10_002f5a50(int);
+extern int FUN_001f96f8(int);
+extern void FUN_001ff570(int, int);
+extern char *D_L13_001B07B0[];
+extern float D_0015ED6C;
+
+void FUN_L13_002e97e0(struct Moby *m, char *d, int *result) {
+    char *path;
+    char *node;
+    char *other;
+    char *destination;
+    char *child;
+    char *path_slots = d + 0xB0;
+    int idx;
+    float dx;
+    float dy;
+    float dz;
+    float horizontal;
+    float velocity_scale;
+    char *velocity;
+    *result = 0;
+    m->flags &= 0xEFFF;
+    FUN_L00_00257470(m, 0, -1);
+    d[0x67] = 0x78;
+    FUN_L00_0025d458(m, (short *)(d + 0x60));
+    d[0x13B] = 4;
+    velocity_scale = D_0015ED6C * 10.0f;
+    velocity = *(char **)0x001600EC + (*(int *)(d + 0x130) << 7);
+    *(volatile short *)(d + 0x9C) = 0;
+    FUN_001f9bf8(d + 0x70, velocity, velocity_scale);
+    idx = *(short *)(d + 0x9C);
+    path = D_L13_001B07B0[*(int *)(path_slots + (unsigned char)d[0x13B] * 4)];
+    node = path + idx * 16;
+    destination = (char *)m + 0x10;
+    qcopy(destination, node + 0x10);
+    other = path + (idx + 1) * 16;
+    dx = *(float *)(other + 0x10) - *(float *)(node + 0x10);
+    dy = *(float *)(other + 0x14) - *(float *)(node + 0x14);
+    m->rot.z = FUN_001f9e90(dx, dy);
+    idx = *(short *)(d + 0x9C);
+    path = D_L13_001B07B0[*(int *)(path_slots + (unsigned char)d[0x13B] * 4)];
+    node = path + idx * 16 + 0x10;
+    horizontal = FUN_001f9b80(node, node + 0x10);
+    idx = *(short *)(d + 0x9C);
+    path = D_L13_001B07B0[*(int *)(path_slots + (unsigned char)d[0x13B] * 4)];
+    node = path + idx * 16 + 0x10;
+    dz = *(float *)(node + 0x18) - *(float *)(node + 8);
+    m->rot.y = -FUN_001f9e90(horizontal, dz);
+    d[0x10C] = 1;
+    child = *(char **)0x0015FFD8 + (*(int *)(d + 0x134) << 8);
+    *(volatile unsigned short *)(child + 0x34) |= 2;
+    *(volatile unsigned short *)(child + 0x34) |= 1;
+    child[0x31] = 0;
+    FUN_L10_002f5a50(*(int *)(d + 0x12C));
+    m->state = 7;
+    *(float *)(d + 0xAC) = D_0015ED6C * 80.0f;
+    *(int *)(d + 0xF8) = FUN_001f96f8(600);
+    FUN_L13_002e86f8(m, (unsigned char *)d, 0x22, 1);
+    *(short *)(d + 0x138) = 0;
+    d[0x148] = 0;
+    if (*(int *)(d + 0x104) != -1) {
+        FUN_001ff570(*(int *)(d + 0x104), 0);
+        *(int *)(d + 0x104) = -1;
+    }
+    *(int *)(d + 0x13C) = -1;
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e9a48.s", FUN_L13_002e9a48);
 /* Steers a moby toward the hero: scales by distance and orients it with the hero's angles. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EB768), where it is exact; names translated to the US level program. */

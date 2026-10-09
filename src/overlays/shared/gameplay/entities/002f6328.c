@@ -868,7 +868,55 @@ void FUN_L01_00300220(struct Moby *moby) {
         moby->state = 1;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302438.s", FUN_L01_00302438);
+extern s32 D_0013E500[];
+extern f32 convert_integer_to_float_302438(s32) __asm__("FUN_001fa6c0");
+extern s32 truncate_float_to_s32_302438(f32) __asm__("FUN_001fa6d0");
+extern u64 get_effect_texture_302438(s32) __asm__("FUN_001f44b8");
+extern s32 random_integer_below_302438(s32) __asm__("FUN_00213260");
+extern void draw_textured_quad_302438(s32, s32, s32, s32, s32, s32, s32, s32,
+                                      u64, u64) __asm__("FUN_001f5450");
+
+void FUN_L01_00302438(struct Moby *moby) {
+    s32 *vars = (s32 *)moby->pvars;
+    s32 row_count;
+    s32 column_count;
+    s32 row;
+    s32 column;
+    f32 screen_center[2];
+    volatile f32 coordinate[2];
+    f32 opacity;
+    s32 color;
+    s32 texture_x;
+    s32 texture_y;
+    s32 draw_x;
+    s32 draw_y;
+    s32 tile_size = 32;
+    s32 tile_half;
+    u64 texture;
+
+    screen_center[0] = convert_integer_to_float_302438(D_0013E500[2]);
+    screen_center[1] = convert_integer_to_float_302438(D_0013E500[3]);
+    texture = get_effect_texture_302438(30);
+    row_count = D_0013E500[0] / 32 + 1;
+    column_count = D_0013E500[1] / 32 + 1;
+    for (row = 0; row < row_count; row++) {
+        s32 base_color = 0xff7f7f;
+        for (column = 0; column < column_count; column++) {
+            coordinate[0] = (f32)(row * 32);
+            coordinate[1] = (f32)(column * 32);
+            tile_half = tile_size >> 1;
+            opacity = convert_integer_to_float_302438(vars[0x50]) * 127.5f /
+                      convert_integer_to_float_302438(FUN_001f96f8(90));
+            color = (truncate_float_to_s32_302438(opacity) << 24) + base_color;
+            texture_x = random_integer_below_302438(32);
+            texture_y = random_integer_below_302438(32);
+            draw_x = truncate_float_to_s32_302438(coordinate[0] - (f32)tile_half);
+            draw_y = truncate_float_to_s32_302438(coordinate[1] - (f32)tile_half);
+            draw_textured_quad_302438(draw_x, draw_y, 32, 32, texture_x, texture_y,
+                                      32, 32, color, texture);
+        }
+    }
+}
 /* pvars of the moby run by FUN_L01_00302648: 20 trigger zones and a hold counter */
 typedef struct {
     s32 path;   /* -1, or an index into D_L01_001B0930 */
@@ -1647,7 +1695,64 @@ void FUN_L01_00309430(char *moby) {
         break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003094f0.s", FUN_L01_003094f0);
+#else
+extern void FUN_001fa298(void *, void *);
+extern u64 get_effect_texture_3094f0(s32) __asm__("FUN_001f44b8");
+extern void FUN_001f7d30(float *, void *, int);
+extern float D_L01_00201630[];
+extern int D_L01_00161F80_3094f0 __asm__("D_L01_00161F80") __attribute__((sda));
+extern int D_L01_00161F88_3094f0 __asm__("D_L01_00161F88") __attribute__((sda));
+extern int D_L01_00161F8C_3094f0 __asm__("D_L01_00161F8C") __attribute__((sda));
+extern int D_L01_00161F90_3094f0 __asm__("D_L01_00161F90") __attribute__((sda));
+extern float D_L01_00161F98_3094f0 __asm__("D_L01_00161F98") __attribute__((sda));
+
+void FUN_L01_003094f0(char *moby) {
+    Vec4 verts[4];
+    int setup[36];
+    char *data = *(char **)(moby + 0x78);
+    float radius;
+    float thickness = 0.1f;
+    float angle;
+    int i, j, k;
+
+    FUN_001fa298((char *)setup + 0x50, moby + 0xc0);
+    *(u128 *)&setup[32] = *(u128 *)(moby + 0x10);
+    *(u64 *)&setup[12] = 0;
+    *(u64 *)&setup[14] = get_effect_texture_3094f0(D_L01_00161F90_3094f0);
+    *(u64 *)&setup[16] = 0xff9000000260LL;
+    *(u64 *)&setup[18] = (u64)D_L01_00161F80_3094f0 |
+                            ((u64)*(&D_L01_00161F80_3094f0 + 1) << 2) |
+                            ((u64)D_L01_00161F88_3094f0 << 4) |
+                            ((u64)D_L01_00161F8C_3094f0 << 6) | 0x8000000000LL;
+    for (i = 3; i >= 0; i--) {
+        k = 3 - i;
+        setup[k] = *(&D_L01_00161F90_3094f0 + 1);
+        ((float *)setup)[4 + k * 2] = D_L01_00201630[k * 2];
+        ((float *)setup)[5 + k * 2] = D_L01_00201630[k * 2 + 1];
+    }
+    radius = *(float *)(data + 0x34);
+    if (radius < 1.15f) {
+        thickness = (1.15f - radius) + (1.15f - radius);
+        if (thickness > 1.0f) thickness = 1.0f;
+        else if (thickness < 0.0f) thickness = 0.0f;
+        thickness += 0.1f;
+        if ((unsigned)((unsigned char)moby[0x20] - 7) > 1)
+            D_001413F5[0] = radius < 0.65f;
+    }
+    for (i = 0; i < 32; i++) {
+        for (j = 0; j < 4; j++) {
+            angle = (float)(i + j / 2) * 6.28318f * 0.03125f - 3.14159f;
+            verts[j].f[0] = FUN_001f9dc8(angle) * *(float *)(data + 0x34);
+            verts[j].f[1] = FUN_001f9de0(angle) * *(float *)(data + 0x34);
+            verts[j].f[2] = D_L01_00161F98_3094f0 + ((j & 1) ? thickness : -thickness) + 0.0f;
+            verts[j].f[3] = 1.0f;
+        }
+        FUN_001f7d30((float *)verts, (char *)setup + 0x50, 0);
+    }
+}
+#endif
 /* Mark the parent and its three attached objects active. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030ABC0), where it is exact; names translated to the US level program. */
 

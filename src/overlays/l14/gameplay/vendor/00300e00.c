@@ -207,7 +207,97 @@ void FUN_L14_00305680(struct Moby *moby) {
         *(float *)(o + 0x18) = lo + (a - lo) * t;
     } while (*p++ >= 0);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305758.s", FUN_L14_00305758);
+#else
+extern u8 D_0014C050[];
+extern f32 D_0013F3D0[];
+extern u8 D_0013D4D5 __attribute__((section(".data")));
+extern f32 D_L14_00174568;
+extern s32 D_L14_0015F5CC;
+extern s32 D_L14_0015F5C4;
+extern f32 AbsoluteFloat(f32) __asm__("FUN_001f99c0");
+extern void FUN_L14_00305b18(struct Moby *);
+extern f32 D_L14_001621E8 __attribute__((sda));
+extern f32 D_L14_001621EC __attribute__((sda));
+extern f32 D_L14_001621F0 __attribute__((sda));
+extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern f32 FUN_001f9b80(void *, void *);
+extern void FUN_L00_00260860(s32, s32);
+extern void FUN_L00_00298840(s32);
+extern void FUN_L00_002502a0(s32);
+extern int memcard_save_data(s32, s32) __asm__("FUN_0020b178");
+extern void FUN_L00_00263d40(s32, s32);
+extern void FUN_L00_00203908(s32, s32);
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+
+void FUN_L14_00305758(struct Moby *moby) {
+    u8 *o = (u8 *)moby;
+    u8 *d = (u8 *)moby->pvars;
+    f32 v[4];
+    u8 state = moby->state;
+
+    switch (state) {
+    case 0:
+        if (D_0014C050[moby->unkB0 + current_level_index * 16] == 0xFF) {
+            FUN_0020c828(moby);
+            return;
+        }
+        FUN_L14_00305a38((void *)moby);
+        probe_ground_height(o + 0x10, 0, 0.5f);
+        *(s32 *)(o + 0x40) = 0;
+        *(f32 *)(o + 0x44) = -1.5707964f;
+        *(f32 *)(o + 0x18) = D_L14_00174568 + D_L14_001621E8;
+        qcopy(d, o + 0x10);
+        moby->state = 1;
+        break;
+    case 1:
+        *(f32 *)(o + 0x48) = fast_add_rotations(*(f32 *)(o + 0x48), D_L14_001621EC);
+        qcopy(o + 0x10, d);
+        scale_vector_xyz(v, o + 0xd0, D_L14_001621F0);
+        add_vector_xyz(o + 0x10, o + 0x10, v);
+        FUN_L14_00305b18(moby);
+        if (D_L14_0015F5CC % 10 != 0)
+            return;
+        if (!(FUN_001f9b80(o + 0x10, D_0013F3D0) < 1.0f))
+            return;
+        if (!(AbsoluteFloat(*(f32 *)(o + 0x18) - D_0013F3D0[2]) < 2.0f))
+            return;
+        if (D_0013D4D5 != 0)
+            *(s32 *)(d + 0x18) = state;
+        else
+            *(s32 *)(d + 0x18) = 0;
+        FUN_L00_00260860(0x15, 1);
+        FUN_L00_00298840(6);
+        moby->state = 2;
+        break;
+    case 2:
+        if (D_L14_0015F5C4 != state) {
+            if (D_0014C050[moby->unkB0 + current_level_index * 16] != 0xFF) {
+                FUN_L00_002502a0(moby->unkB0);
+                memcard_save_data(0, -1);
+            }
+            if (*(s32 *)(d + 0x18) != 0)
+                FUN_L00_00263d40(0x53e0, -1);
+            else
+                FUN_L00_00263d40(0x36b2, -1);
+            FUN_L00_00203908(0x36b0, 0x7a);
+            FUN_0020c828(moby);
+            return;
+        }
+        *(u16 *)(o + 0x34) |= 0x41;
+        break;
+    case 3:
+        approach_value((f32 *)(o + 0x2c), 0.0f, *(f32 *)(*(u8 **)(o + 0x24) + 0x24) * 0.02f);
+        if (*(f32 *)(o + 0x2c) == 0.0f)
+            FUN_0020c828(moby);
+        break;
+    }
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

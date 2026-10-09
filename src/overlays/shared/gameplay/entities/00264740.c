@@ -2,4 +2,57 @@
 #include "types.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00264740.s", FUN_L00_00264740);
+#else
+#include "rnc/gameplay/entities/moby.h"
+extern struct Moby *D_L00_0015FFD8;
+extern struct Moby *D_L00_0015FFE4;
+extern void *D_L00_001ABA00[];
+extern void FUN_L00_00250480(struct Moby *moby);
+extern void FUN_L00_00250df8(struct Moby *moby);
+
+void FUN_L00_00264740(void)
+{
+    struct Moby *moby;
+    struct Moby *last;
+    struct Moby *current;
+    void (*update)(struct Moby *);
+
+    D_L00_001ABA00[0] = 0;
+    D_L00_0015FFE4 = 0;
+    moby = D_L00_0015FFD8;
+    last = 0;
+    while (moby->state != 0xFF) {
+        if (!(moby->state & 0x80) && !(moby->flags & 2)) {
+            if (last != 0) {
+                last->next = moby;
+            } else {
+                D_L00_0015FFE4 = moby;
+            }
+            last = moby;
+        }
+        moby++;
+    }
+    if (last != 0) {
+        last->next = 0;
+    }
+
+    current = D_L00_0015FFE4;
+    while (current != 0) {
+        if ((s8)current->state >= 0) {
+            if (!(current->flags & 0x40)) {
+                FUN_L00_00250480(current);
+            }
+            update = current->update;
+            if (update != 0) {
+                update(current);
+            }
+            if (!(((volatile struct Moby *)current)->flags & 4)) {
+                FUN_L00_00250df8(current);
+            }
+        }
+        current = current->next;
+    }
+}
+#endif

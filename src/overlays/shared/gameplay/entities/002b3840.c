@@ -32,7 +32,61 @@ char *FUN_L05_002d4168(int owner, char *pos, int arg, float f0, float f1) {
     }
     return moby;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f4f60.s", FUN_L05_002f4f60);
+#else
+extern short D_L05_0015FFD8;
+
+void FUN_L05_002f4f60(int index, int trigger_arg, int inside) {
+    int moby = *(int *)0x15ffd8 + index * 0x100;
+    char *trigger = (char *)trigger_arg;
+    short kind;
+    unsigned int flags;
+
+    if (moby == 0) {
+        return;
+    }
+    if (inside) {
+        if (trigger[0x7c] > 0) {
+            *(unsigned short *)(moby + 0x34) &= 0xfffd;
+        } else if (trigger[0x7c] < 0) {
+            *(unsigned short *)(moby + 0x34) |= 2;
+        }
+            if (trigger[0x7d] > 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
+            *(char *)(moby + 0x31) = 1;
+            *(unsigned short *)(moby + 0x34) &= 0xfffe;
+        } else if (trigger[0x7d] < 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
+            *(char *)(moby + 0x31) = 0;
+            flags = *(unsigned short *)(moby + 0x34) | 1;
+            *(unsigned short *)(moby + 0x34) = flags;
+        }
+            if (trigger[0x7f] > 0 && *(int *)(moby + 0x24) != 0) {
+            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+        } else if (trigger[0x7f] < 0 && *(int *)(moby + 0x24) != 0) {
+            *(int *)(moby + 0x94) = 0;
+        }
+    } else {
+        if (trigger[0x7c] > 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef) {
+            *(unsigned short *)(moby + 0x34) |= 2;
+        } else if (trigger[0x7c] < 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef) {
+            *(unsigned short *)(moby + 0x34) &= 0xfffd;
+        }
+            if (trigger[0x7d] > 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
+            *(char *)(moby + 0x31) = 0;
+            flags = *(unsigned short *)(moby + 0x34) | 1;
+            *(unsigned short *)(moby + 0x34) = flags;
+        } else if (trigger[0x7d] < 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
+            *(char *)(moby + 0x31) = 1;
+            *(unsigned short *)(moby + 0x34) &= 0xfffe;
+        }
+            if (trigger[0x7f] > 0) {
+            *(int *)(moby + 0x94) = 0;
+        } else if (trigger[0x7f] < 0) {
+            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+        }
+    }
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

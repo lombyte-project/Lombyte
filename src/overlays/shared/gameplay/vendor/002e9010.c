@@ -1192,7 +1192,85 @@ void FUN_L00_002ebb00(O002ebb00 *o) {
     FUN_L00_001eb0c8(o->x50, m2 + 0x14, 0.0f);
     FUN_L00_002eb3b0_u(o);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ebbd8.s", FUN_L00_002ebbd8);
+#else
+extern int FUN_001fef20_2ebbd8(int) __asm__("FUN_001f96f8");
+extern void FUN_001ff260_2ebbd8(void *) __asm__("FUN_001f99f8");
+extern float FUN_001ff7e8_2ebbd8(float) __asm__("FUN_001f9dc8");
+extern float FUN_001ff800_2ebbd8(float) __asm__("FUN_001f9de0");
+extern void FUN_001ff2a8_2ebbd8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001ff500_2ebbd8(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float FUN_001ff8b0_2ebbd8(float, float) __asm__("FUN_001f9e90");
+
+void FUN_L00_002ebbd8(void *arg) {
+    O002ebb00 *o = (O002ebb00 *)arg;
+    char *m = (char *)o->m;
+    char *p = m + 0x40;
+    char *g = D_0013F350;
+    char *cam = D_00166C80_c;
+    char *source;
+    int state;
+    int frames;
+
+    *(int *)(p + 0x40) = 0;
+    if (current_level_index != 14)
+        goto normal_scale;
+    state = *(int *)(g + 0x2084);
+    if ((unsigned)(state - 0x2c) >= 2)
+        goto normal_scale;
+    *(float *)(p + 0x4c) = 2.0f;
+    goto scale_done;
+normal_scale:
+    *(float *)(p + 0x4c) = 1.5f;
+scale_done:
+    *(volatile float *)(p + 0x48) = 0.20943952f;
+    *(volatile float *)(p + 0x58) = 0.0017453292f;
+    *(volatile float *)(p + 0x5c) = -0.004363323f;
+    *(int *)(p + 0x44) = *(int *)(g + 0x2080);
+    *(volatile float *)(m + 0xa0) = 4.64f;
+    *(volatile float *)(m + 0xb4) = 0.05f;
+    *(volatile float *)(m + 0xa4) = 0.5f;
+    *(volatile float *)(m + 0xb0) = 2.0f;
+    *(volatile int *)(m + 0x18) = 0;
+    *(volatile float *)(m + 0x10) = 0.01f;
+    *(volatile float *)(m + 0x14) = 0.3f;
+    frames = FUN_001fef20_2ebbd8(0x78);
+    *(short *)(m + 0x1c) = 0;
+    *(short *)(m + 0x1e) = frames;
+    FUN_001ff260_2ebbd8(m);
+    *(float *)(m + 0x34) = 0.02f;
+    *(float *)(m + 0x38) = 0.2f;
+    *(int *)(m + 0x3c) = 0;
+    *(int *)(m + 0x30) = 0;
+    *(int *)(m + 0xbc) = 0;
+    source = *(char **)(cam + 0x184);
+    qcopy((char *)o + 0x30, source + 0x30);
+    qcopy(o, source);
+    qcopy((char *)o + 0x10, source + 0x10);
+    qcopy((char *)o + 0x20, source + 0x20);
+    qcopy((char *)o + 0x40, o);
+    *(short *)((char *)o + 0x7e) = 0;
+    if ((unsigned)(*(int *)(g + 0x2084) - 0x2c) < 2) {
+        *(float *)(p + 0x30) = FUN_001ff7e8_2ebbd8(*(float *)(g + 0x9ac));
+        *(float *)(p + 0x34) = FUN_001ff800_2ebbd8(*(float *)(g + 0x9ac));
+        *(int *)(p + 0x38) = 0;
+        *(float *)(m + 0xb8) = *(float *)(g + 0x9ac);
+        *(int *)(m + 0xc0) = *(int *)(g + 0x994);
+    } else {
+        FUN_001ff2a8_2ebbd8(p + 0x30, *(char **)(g + 0x964) + 0x10, (char *)o + 0x30);
+        *(int *)(p + 0x38) = 0;
+        *(int *)(p + 0x3c) = 0;
+        FUN_001ff500_2ebbd8(p + 0x30, p + 0x30, 1.0f);
+        *(float *)(m + 0xb8) =
+            FUN_001ff8b0_2ebbd8(*(float *)(p + 0x30), *(float *)(p + 0x34));
+        *(int *)(m + 0xc0) = *(int *)(g + 0x964);
+    }
+    *(short *)(cam + 0x270) = 1;
+    *(char *)(cam + 0x273) = 2;
+    *(int *)(cam + 0x2f4) = FUN_001fef20_2ebbd8(0x3c);
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ebe70.s", FUN_L00_002ebe70);
 typedef union {
     OvlQuad q;

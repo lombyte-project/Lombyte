@@ -44,9 +44,10 @@ extern s32 D_L00_00169980[];
 extern s32 D_L00_00169B00[];
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 
-void draw_debug_text(s32 x, s32 y, u64 color, const u8 *text) __asm__("FUN_L00_001f3770");
 
-void draw_debug_text(s32 x, s32 y, u64 color, const u8 *text) {
+
+void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_arg) {
+    const u8 *text = (const u8 *)text_arg;
     u32 glyph_count = 0;
     u32 quadwords;
     u32 glyph;
@@ -61,7 +62,7 @@ void draw_debug_text(s32 x, s32 y, u64 color, const u8 *text) {
     packet = D_L00_001611C0;
     D_L00_001611C0 = packet + 2;
     packet[2] = 0x10AB400000000001ULL;
-    tags = D_L00_001611C0;
+    tags = packet + 2;
     tags[1] = 0xE;
     tags[2] = 1;
     tags[3] = 0x14;
@@ -91,7 +92,7 @@ void draw_debug_text(s32 x, s32 y, u64 color, const u8 *text) {
             cursor[3] = (s64)(((x + 10) * 16) + D_0013E500.left - 8) |
                         ((u64)(s64)(((y + 12) * 16) + D_0013E500.top - 8) << 16) |
                         0xFFFFF300000000ULL;
-            D_L00_001611C0 += 4;
+            D_L00_001611C0 = cursor + 4;
         }
         x += D_L00_00169B00[glyph];
     }

@@ -470,7 +470,55 @@ void FUN_L02_002fa7c8(char *m) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb648.s", FUN_L02_002fb648);
+#else
+extern char *D_L02_0015EF50;
+extern char *D_L02_001674DC;
+extern char *D_0013F64C;
+extern int *D_L02_001B0AB0[];
+extern float FUN_001f9b48(void *, void *);
+extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
+extern int FUN_L00_0025fa38(void *, int);
+extern int FUN_L00_0025faf0(void *, int);
+extern int FUN_L00_00259740(void *, void *, int);
+
+int FUN_L02_002fb648(char *moby) {
+    char *special = D_L02_001674DC;
+    char *data = *(char **)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1c);
+    char *target = *(char **)(data + 0x48);
+    int *entry;
+    int result;
+
+    if (special == target && special != 0) {
+        return 1;
+    }
+    if (*(short *)(data + 0x3c) == 6) {
+        return D_0013F64C == target;
+    }
+    if (*(unsigned char *)(data + 0x22) == 1) {
+        return FUN_001f9b48(D_0013F3D0, target + 0x10) < *(float *)(data + 0x24);
+    }
+    if (*(int *)(data + 0xc) < 0) {
+        if (*(int *)(data + 0x10) < 0) {
+            if (*(int *)(data + 8) < 0) {
+                if (*(int *)(data + 0x14) < 0) {
+                    return 0;
+                }
+                entry = D_L02_001B0AB0[*(int *)(data + 0x14)];
+                result = FUN_L00_00259740(D_0013F3D0, entry + 4, *entry);
+            } else {
+                result = FUN_L00_0025faf0(D_0013F3D0, *(int *)(data + 8));
+            }
+        } else {
+            result = FUN_L00_0025fa38(D_0013F3D0, *(int *)(data + 0x10));
+        }
+    } else {
+        result = is_point_inside_clip_volume_alt(D_0013F3D0, *(int *)(data + 0xc));
+    }
+    return result != 0;
+}
+#endif
 /* Checks whether the target's direction is within a and b degrees of the reference axis. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FCBC0), where it is exact; names translated to the US level program. */
 

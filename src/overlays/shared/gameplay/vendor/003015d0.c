@@ -130,7 +130,64 @@ void FUN_L14_003015d0(unsigned char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003017f8.s", FUN_L14_003017f8);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00301de8.s", FUN_L14_00301de8);
+#else
+extern int D_L14_001620C4 __attribute__((sda));
+extern int D_L14_001620F0 __attribute__((sda));
+extern int D_L14_001620F4 __attribute__((sda));
+extern int D_L14_001620F8 __attribute__((sda));
+extern float FUN_001fa6c0(int) __asm__("FUN_001fa6c0");
+extern int FUN_001fa6e0(int, int, float) __asm__("FUN_001fa6e0");
+extern void vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+void FUN_L14_00301de8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    char *dst, *src, *indices;
+    int i, j, k, offset;
+    float t;
+
+    if (*(s16 *)(d + 0x12) != 0) {
+        *(s16 *)(d + 0x12) = *(u16 *)(d + 0x12) - 1;
+        indices = d + 0x18;
+        src = d + 0x260;
+        dst = d + 0x60;
+        for (j = 22; j >= 0; j--) {
+            vec_add(dst, dst, src);
+            dst += 0x10;
+            src += 0x10;
+        }
+        i = 0;
+        offset = 0;
+        do {
+            i++;
+            dst = d + offset + 0x460;
+            src = d + offset + 0x560;
+            for (k = 2; k >= 0; k--) {
+                vec_add(dst, dst, src);
+                dst += 0x40;
+                src += 0x40;
+            }
+            offset = i * 0x10;
+        } while ((float)i < 4.0f);
+        i = 0;
+        do {
+            *(u128 *)(d + 0x420 + (i << 4)) = *(u128 *)(d + 0x20 + ((u8)indices[i] << 4));
+            i++;
+        } while (i < 4);
+    }
+    if (*(s16 *)(d + 0x12) > D_L14_001620C4) {
+        t = FUN_001fa6c0(*(s16 *)(d + 0x12) - D_L14_001620C4) /
+            FUN_001fa6c0(*(int *)(d + 0x620) - D_L14_001620C4);
+        *(int *)(d + 0x14) = FUN_001fa6e0(D_L14_001620F4, D_L14_001620F0, t);
+    } else if (*(s16 *)(d + 0x12) > D_L14_001620C8) {
+        t = FUN_001fa6c0(*(s16 *)(d + 0x12) - D_L14_001620C8) /
+            FUN_001fa6c0(D_L14_001620C4 - D_L14_001620C8);
+        *(int *)(d + 0x14) = FUN_001fa6e0(D_L14_001620F8, D_L14_001620F4, t);
+    } else {
+        *(int *)(d + 0x14) = 0;
+    }
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00301fa8.s", FUN_L14_00301fa8);
 /* Damage request passed to the collision line test (FUN_001efa68). */
 typedef struct {
@@ -229,4 +286,63 @@ void FUN_L14_00302538(char *self) {
     vec_sub(&to, &end_b, &off);
     FUN_001efa68(&from, &to, 1, m, &req);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003039e0.s", FUN_L14_003039e0);
+#else
+extern s32 D_L14_00162148[] __attribute__((sda));
+extern s32 D_L14_001621D8[] __attribute__((sda));
+extern void FUN_L00_002e20f8(s32) __asm__("FUN_L00_002e20f8");
+extern void FUN_L00_002e2250(void *, s32) __asm__("FUN_L00_002e2250");
+extern void FUN_L00_002e2af0(char *) __asm__("FUN_L00_002e2af0");
+
+void FUN_L14_003039e0(struct Moby *m) {
+    s32 i;
+    s32 started;
+    s32 *objects;
+    s32 *states;
+    switch (m->state) {
+    case 0: {
+        s32 *states = D_L14_00162148;
+        s32 i = 2;
+        s32 *objects = D_L14_001621D8;
+        do {
+            *states = 0;
+            i--;
+            *objects = 0;
+            states++;
+            objects++;
+        } while (i >= 0);
+        m->state = 1;
+        m->unk30 = 0xff;
+        break;
+    }
+    case 1: {
+        started = 0;
+        i = 0;
+        states = D_L14_00162148;
+        objects = D_L14_001621D8;
+        do {
+            if (*states == 1) {
+                if ((s8)((struct Moby *)*objects)->state < 0) {
+                    *states = 0;
+                    *objects = 0;
+                }
+            } else if (*states == 4) {
+                FUN_L00_002e20f8(i);
+            } else if (*states != 0) {
+                started++;
+                FUN_L00_002e2250((void *)*objects, i);
+                *states = 4;
+            }
+            i++;
+            objects++;
+            states++;
+        } while (i < 3);
+        if (started != 0) {
+            enqueue_callback_list_1((void (*)(void))FUN_L00_002e2af0, m);
+        }
+        break;
+    }
+    }
+}
+#endif /* NON_MATCHING */

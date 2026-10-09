@@ -1534,5 +1534,72 @@ void FUN_L07_00311bc8(char *m) {
     subtract_vector_xyz_c(v, m + 0x10, prev);
     FUN_L00_00260738(d + 0x60, v, m + 0x40, m + 0x40);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00311eb8.s", FUN_L07_00311eb8);
+#else
+#include "eetypes.h"
+
+extern short FUN_L00_0023e5e0_l07(float, float, void *, int) __asm__("FUN_L00_0023e5e0");
+extern float FUN_001fa6c0_l07(int) __asm__("FUN_001fa6c0");
+
+void FUN_L07_00311eb8(float size, void *moby, void *state, int sequence, void *position,
+                       short duration, unsigned int color, int next_color) {
+    char *s = state;
+    char *effect;
+    u128 spawn_position;
+    short handle;
+    short old_duration;
+    int faded_duration;
+
+    sequence = (short)sequence;
+
+    if (position == 0)
+        qcopy(&spawn_position, (char *)moby + 0x10);
+    else
+        qcopy(&spawn_position, position);
+    handle = *(short *)(s + 0x280);
+    if (handle == -1) {
+        if (duration <= 0)
+            return;
+        if (size == -1.0f)
+            size = 15.0f;
+        if (color == -1U)
+            color = 0x80004080;
+        if (next_color == -1)
+            next_color = 0;
+        handle = FUN_L00_0023e5e0_l07(size, 0.0f, &spawn_position, color);
+        *(short *)(s + 0x280) = handle;
+        *(short *)(s + 0x284) = 0;
+        if (handle == -1)
+            return;
+    }
+
+    effect = D_L07_00180340 + (short)handle * 32;
+    if (*(short *)(s + 0x282) == sequence && sequence != -1 &&
+        (old_duration = *(short *)(s + 0x284)) != 0) {
+        if (duration != -1) {
+            faded_duration = (*(short *)(s + 0x286) * 7) / 8;
+            if (old_duration <= faded_duration)
+                *(short *)(s + 0x284) = faded_duration;
+        }
+    } else if (duration != -1) {
+        *(short *)(s + 0x286) = duration;
+        *(short *)(s + 0x284) = duration;
+    }
+    if (size != -1.0f)
+        *(float *)(effect + 0x1c) = size;
+    if (color != -1U) {
+        *(int *)(s + 0x288) = color;
+        *(float *)(effect + 0) = FUN_001fa6c0_l07(color & 0xff) * 0.0078125f;
+        *(float *)(effect + 4) = FUN_001fa6c0_l07(((int)color >> 8) & 0xff) * 0.0078125f;
+        *(float *)(effect + 8) = FUN_001fa6c0_l07(((int)color >> 16) & 0xff) * 0.0078125f;
+    }
+    if (next_color != -1)
+        *(int *)(s + 0x28c) = next_color;
+    if (position)
+        qcopy(effect + 0x10, position);
+    if (sequence != -1)
+        *(short *)(s + 0x282) = sequence;
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312420.s", FUN_L07_00312420);
