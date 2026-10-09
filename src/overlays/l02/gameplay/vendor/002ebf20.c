@@ -151,9 +151,9 @@ extern char D_00141968[];
 extern char D_0013F350[];
 extern char D_0014EE90[];
 
-void FUN_L02_002ee890(unsigned char *moby) {
-    int *data = *(int **)(moby + 0x78);
-    moby[0x30] = 0xFF;
+void FUN_L02_002ee890(struct Moby *moby) {
+    int *data = (int *)moby->pvars;
+    moby->unk30 = 0xFF;
 
     if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data[0x17]) != 0 &&
         *(unsigned int *)(((char *)&D_0013F3D0) + 0x200C) < 2) {
