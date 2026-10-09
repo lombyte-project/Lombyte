@@ -733,7 +733,58 @@ void FUN_L07_002cdb28(unsigned char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002f5ba0.s", FUN_L07_002f5ba0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030af40.s", FUN_L07_0030af40);
+#include "rnc/gameplay/entities/moby.h"
+
+struct SpawnClassView {
+    u8 pad0[0x10];
+    u32 unk10;     /* 0x10 */
+    u8 pad14[0x10];
+    f32 scale;     /* 0x24 */
+    u8 pad28[0x1C];
+    u16 flags;     /* 0x44 */
+};
+
+struct SpawnMobyView {
+    u8 pad0[0x36];
+    s16 unk36;     /* 0x36 */
+    u8 pad38[0x39];
+    u8 unk71;      /* 0x71 */
+};
+
+struct AnimTimer {
+    f32 frames;
+    s16 length;
+};
+
+extern void FUN_0020dc20(struct Moby *, u32);
+extern void FUN_L00_0025d1b8(struct Moby *);
+extern struct AnimTimer *FUN_002141f8(struct Moby *);
+
+/* resets a spawned moby from its class defaults and restarts its animation */
+void FUN_L07_0030af40(struct Moby *m) {
+    struct SpawnClassView *cls;
+    struct AnimTimer *t;
+
+    m->state = 0;
+    cls = (struct SpawnClassView *)m->pclass;
+    m->unkBC = 0;
+    m->flags = cls->flags;
+    m->scale = cls->scale;
+    m->unk30 = 0xFF;
+    m->unk32 = 0xFF;
+    m->unk31 = 1;
+    FUN_0020dc20(m, 0x80807F7F);
+    ((struct SpawnMobyView *)m)->unk36 = 0x7F80;
+    m->unk72 = 0xFF;
+    m->unkA4 = 0xFF;
+    ((struct SpawnMobyView *)m)->unk71 = 0xFF;
+    m->unk94 = ((struct SpawnClassView *)m->pclass)->unk10;
+    FUN_L00_0025d1b8(m);
+    FUN_L00_00250df8(m);
+    t = FUN_002141f8(m);
+    if (t != 0)
+        t->frames = t->length;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b000.s", FUN_L07_0030b000);
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
