@@ -1508,7 +1508,56 @@ void FUN_L00_00209a40(int n, int mode) {
         FUN_L00_0026f080_209a40(pos, &v, FUN_002132a8_209a40(4200.0f, 7350.0f), -1.0f);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00209ca8.s", FUN_L00_00209ca8);
+#include "rnc/math/circle_offset.h"
+
+extern f32 D_0015ED6C_c __asm__("D_0015ED6C");
+extern f32 random_float_between_c(f32 a, f32 b) __asm__("FUN_002132a8");
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
+extern s32 random_integer_below_c(s32 n) __asm__("FUN_00213260");
+extern s32 FUN_L00_00257b90(s32, s32);
+extern void FUN_L00_002d7e90(Vec4 *, f32);
+extern void FUN_L00_002715e8(Vec4 *, f32 *, s32, f32, f32);
+extern void FUN_L00_0026f548(Vec4 *, Vec4 *, s32, s32);
+
+/* Kicks up dust at the hero's feet (hero.height_threshold): with flash set,
+   first a flash at the hero; then `puffs` puffs within 0.3 of the hero and
+   `debris` bits thrown out in random directions. The debris start point adds
+   the x velocity to both x and y, as in the original. */
+void FUN_L00_00209ca8(s32 puffs, s32 debris, s32 flash) {
+    Vec4 v;
+    Vec4 start;
+    f32 ang;
+    f32 speed;
+    s32 color;
+    s32 life;
+    s32 i;
+    s32 j;
+
+    if (flash) {
+        qcopy(&v, &hero.motion.pos);
+        v.f[2] = hero.height_threshold;
+        FUN_L00_002d7e90(&v, 2.25f);
+    }
+    for (j = 0; j < puffs; j++) {
+        v.f[0] = hero.motion.pos.f[0] + random_float_between_c(-0.3f, 0.3f);
+        v.f[1] = hero.motion.pos.f[1] + random_float_between_c(-0.3f, 0.3f);
+        v.f[2] = hero.height_threshold;
+        FUN_L00_002715e8(&v, &hero.height_threshold, -1, random_float_between_c(0.3f, 0.6f), 5250.0f);
+    }
+    for (i = 0; i < debris; i++) {
+        ang = random_angle_radians();
+        speed = random_float_between_c(D_0015ED6C_c * 0.0f, D_0015ED6C_c * 3.0f);
+        v.f[0] = fast_cos(ang) * speed;
+        v.f[1] = fast_sin(ang) * speed;
+        v.f[2] = random_float_between_c(D_0015ED6C_c * 3.0f, D_0015ED6C_c * 8.0f);
+        start.f[0] = hero.motion.pos.f[0] + v.f[0] * 8.0f;
+        start.f[1] = hero.motion.pos.f[1] + v.f[0] * 8.0f;
+        start.f[2] = hero.height_threshold - random_float_between_c(0.0f, 0.2f);
+        color = random_integer_below_c(2);
+        life = FUN_L00_00257b90(0x5A, 0x78);
+        FUN_L00_0026f548(&start, &v, color, life);
+    }
+}
 extern char D_0013F7EE_209ec8[] __asm__("D_0013F7EE") __attribute__((section(".data")));
 extern char D_0013F350_209ec8[] __asm__("D_0013F350") __attribute__((section(".data")));
 extern float D_0015ED6C_209ec8 __asm__("D_0015ED6C");

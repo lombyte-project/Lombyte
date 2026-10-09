@@ -2,7 +2,99 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002630c8.s", FUN_L00_002630c8);
+#include "qcopy.h"
+#include "rnc/math/vector.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/entities/moby.h"
+
+/* Record FUN_002141f8 returns for a moby: collision size and aim height. */
+typedef struct MobyBound {
+    u8 pad0[0xA];
+    u8 size;                      /* 0x0A: radius in eighths */
+    u8 padb[5];
+    f32 height;                   /* 0x10: aim height above the moby position */
+} MobyBound;
+
+extern struct Moby *D_L00_0015FFE4;
+extern u8 D_L00_00166DC0[];
+float FUN_001f9e90(float, float);
+float FUN_001f9b20(void *);
+float FUN_001f9b80(void *, void *);
+float FUN_001f9b48(void *, void *);
+float FUN_001fa688(float, float);
+float FUN_001f99c0(float);
+float FUN_001f9df8(float);
+float FUN_001fa6c0(s32);
+void FUN_001f9a10(void *, void *, void *);
+void FUN_00214db0(Vec4 *, float, float, float);
+MobyBound *FUN_002141f8(struct Moby *);
+int FUN_001efa68(void *, Vec4 *, int, void *, int);
+
+/* Picks the best auto-aim target moby (kind 5) for a shot from pos along dir:
+   writes yaw/pitch toward it and its aim height, returns the moby or 0. */
+struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw, f32 *pitch,
+                              f32 *height, f32 max_angle) {
+    Vec4 pos, dir, target, probe;
+    Vec4 *pp = &pos, *dp = &dir;
+    struct Moby *best = 0;
+    f32 best_dist = 10000.0f;
+    struct Moby *m;
+
+    pos.q = pos_in->q;
+    dir.q = dir_in->q;
+    *yaw = FUN_001f9e90(dp->f[0], dp->f[1]);
+    *pitch = -FUN_001f9e90(FUN_001f9b20(dp), dp->f[2]);
+
+    for (m = D_L00_0015FFE4; m != 0; m = m->next) {
+        MobyBound *b;
+        f32 t_yaw, t_pitch, dist, ang;
+        if ((s8)m->state < 0)
+            continue;
+        qcopy(&target, &m->pos);
+        b = FUN_002141f8(m);
+        if (b)
+            target.f[2] += b->height;
+        else
+            target.f[2] += 0.5f;
+        if (!(m->flags & 0x1000) || !m || !m->pclass || m->pclass->unk46 != 5)
+            continue;
+        t_yaw = FUN_001f9e90(target.f[0] - pp->f[0], target.f[1] - pp->f[1]);
+        t_pitch = FUN_001f9e90(FUN_001f9b80(pp, &target), target.f[2] - pp->f[2]);
+        dist = FUN_001f9b48(pp, &target);
+        if (dist < 7.5f &&
+            FUN_001fa688(hero.moby->rot.z,
+                         FUN_001f9e90(m->pos.x - hero.motion.pos.f[0],
+                                      m->pos.y - hero.motion.pos.f[1])) < 1.0471976f &&
+            FUN_001f99c0(t_pitch) < 1.0471976f) {
+            *pitch = -t_pitch;
+            *yaw = t_yaw;
+            return m;
+        }
+        if (best_dist < dist)
+            continue;
+        FUN_00214db0(&probe, dist, *yaw, *pitch + hero.unk2E4.f * 0.5f);
+        FUN_001f9a10(&probe, &probe, pp);
+        ang = FUN_001f9df8(FUN_001f9b48(&probe, &target) / (dist + dist));
+        ang = ang + ang;
+        if (max_angle < ang && b) {
+            f32 radius = FUN_001fa6c0(b->size << 3) * 0.125f;
+            f32 shrink = FUN_001f9df8(radius / dist);
+            if (radius < dist)
+                ang -= shrink;
+        }
+        if (ang < max_angle && !FUN_001efa68(D_L00_00166DC0, &target, 6, ignore, 0)) {
+            best = m;
+            best_dist = dist;
+            *pitch = -t_pitch;
+            *yaw = t_yaw;
+            if (b)
+                *height = b->height;
+            else
+                *height = 0.5f;
+        }
+    }
+    return best;
+}
 #include "eetypes.h"
 #include "rnc/math/vector.h"
 extern int D_L00_0015FC98;
