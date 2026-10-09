@@ -79,6 +79,7 @@ extern f32 D_0013F640[];
 extern s32 D_0015F5E8;
 extern s32 D_0015F604;
 extern s32 D_0015F60C;
+extern f32 frame_time __asm__("D_0015ED6C");
 extern VoiceVector D_00187080;
 extern u8 D_00187290[];
 extern s32 D_001872D4;
