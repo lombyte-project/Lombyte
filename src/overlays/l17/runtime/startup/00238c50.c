@@ -4,7 +4,6 @@
 #include "asm.h"
 
 
-extern int D_0015EE88;
 extern void FUN_L00_002892d0(void);
 extern void FUN_L00_0028ac88(void);
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
@@ -20,5 +19,5 @@ void FUN_L17_00238c50(void) {
     }
     do_sky_gif_paging();
     vu1_add_g_sregister(0x47, 0x5360B);
-    vu1_add_g_sregister(0x4E, 0x1000000 | (D_0015EE88 >> 13));
+    vu1_add_g_sregister(0x4E, 0x1000000 | (depth_buffer_address >> 13));
 }

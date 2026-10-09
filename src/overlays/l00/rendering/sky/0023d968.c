@@ -4,7 +4,6 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-extern s32 D_0015EE88;
 void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
@@ -99,7 +98,7 @@ void FUN_L00_0023d968(void) {
     }
     do_sky_gif_paging();
     vu1_add_g_sregister(0x47, 0x5360B);
-    vu1_add_g_sregister(0x4E, 0x1000000 | (D_0015EE88 >> 13));
+    vu1_add_g_sregister(0x4E, 0x1000000 | (depth_buffer_address >> 13));
 }
 #include "eetypes.h"
 

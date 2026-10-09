@@ -2,6 +2,7 @@
 #include "asm.h"
 #include "sda.h"
 #include "rnc/rendering/draw_environment.h"
+#include "rnc/globals.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/display/set_pal_mode/FUN_001f34e8.s",
@@ -18,7 +19,6 @@ extern s32 first_image_buffer_address __asm__("D_0015EE74");
 extern s32 second_image_buffer_address __asm__("D_0015EE78");
 extern s32 display_buffer_address __asm__("D_0015EE80");
 extern s32 draw_buffer_address __asm__("D_0015EE84");
-extern s32 depth_buffer_address __asm__("D_0015EE88");
 extern s32 image_buffer_address __asm__("D_0015EE8C");
 extern void FillTransferWords(u8 *, s32, s32);
 extern void FlushCache(s32);
