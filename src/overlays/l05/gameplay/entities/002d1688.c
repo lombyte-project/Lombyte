@@ -348,15 +348,15 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char *D_L05_001B0CB0_x[] __asm__("D_L05_001B0930");
 extern int func_001F9908_v(void *) __asm__("FUN_001f9740");
 
-void FUN_L05_002dac80(unsigned char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L05_002dac80(struct Moby *m) {
+    char *d = (char *)m->pvars;
     float dir[4];
     FUN_L05_002daf58_c(m);
-    switch (m[0x20]) {
+    switch (m->state) {
     case 0:
-        m[0x20] = 1;
-        m[0x30] = 0x40;
-        if (m[0x53] != 0)
+        m->state = 1;
+        m->unk30 = 0x40;
+        if (m->prev_seq != 0)
             blend_moby_animation_c(m, 0, 0, 0);
         if (*(int *)(d + 0xB0) == -1 || *(int *)D_L05_001B0CB0_x[*(int *)(d + 0xB0)] == 0) {
             mark_moby_for_removal(m);
@@ -374,16 +374,16 @@ void FUN_L05_002dac80(unsigned char *m) {
         break;
     case 1: {
         char *p = D_L05_001B0CB0_x[*(int *)(d + 0xB0)] + *(int *)(d + 0xB4) * 16;
-        float yaw = FUN_001f9e90(*(float *)(p + 0x10) - *(float *)(m + 0x10),
-                                 *(float *)(p + 0x14) - *(float *)(m + 0x14));
-        FUN_L00_0025be00((float *)(m + 0x48), (float *)(d + 0xBC), yaw, D_0015ED70 * 1.0471976f,
+        float yaw = FUN_001f9e90(*(float *)(p + 0x10) - m->pos.x,
+                                 *(float *)(p + 0x14) - m->pos.y);
+        FUN_L00_0025be00(&m->rot.z, (float *)(d + 0xBC), yaw, D_0015ED70 * 1.0471976f,
                          D_0015ED70 * 1.0471976f, D_0015ED6C * 3.1415927f);
-        dir[0] = fast_cos_c(*(float *)(m + 0x48));
-        dir[1] = fast_sin_c(*(float *)(m + 0x48));
+        dir[0] = fast_cos_c(m->rot.z);
+        dir[1] = fast_sin_c(m->rot.z);
         dir[2] = 0.0f;
         FUN_L00_00258b50(m, d + 0x60, dir, d + 0x40, 1.0f);
         if (func_001F9908_v(d + 0xB8) != 0 ||
-            FUN_001f9b80(m + 0x10, D_L05_001B0CB0_x[*(int *)(d + 0xB0)] +
+            FUN_001f9b80(&m->pos, D_L05_001B0CB0_x[*(int *)(d + 0xB0)] +
                                        (*(int *)(d + 0xB4) * 16 + 0x10)) < 1.0f) {
             int r = random_integer_below_c(*(int *)D_L05_001B0CB0_x[*(int *)(d + 0xB0)]);
             *(int *)(d + 0xB4) =
@@ -394,11 +394,11 @@ void FUN_L05_002dac80(unsigned char *m) {
         break;
     }
     case 2:
-        if (48.0f < FUN_001f9b80(m + 0x10, D_0013F3D0)) {
-            m[0x20] = 1;
-            m[0x31] = 1;
-            *(unsigned short *)(m + 0x34) &= 0xFFFE;
-            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+        if (48.0f < FUN_001f9b80(&m->pos, D_0013F3D0)) {
+            m->state = 1;
+            m->unk31 = 1;
+            m->flags &= 0xFFFE;
+            m->unk94 = m->pclass->unk10;
         }
         break;
     }
