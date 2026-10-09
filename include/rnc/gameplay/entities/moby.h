@@ -11,7 +11,9 @@ struct AnimSeq;
 /* A moby class header, pointed to by Moby.pclass. Size unknown;
    only fields some matched function reads are named. */
 struct MobyClass {
-    u8 pad_0[0x10];
+    u8 pad_0[0xC];
+    u8 seq_count;                     /* number of entries in seqs[] (menu previews clamp the sequence to it) */
+    u8 pad_D[3];
     u32 unk10;                        /* copied into Moby.unk94 when a moby is (re)classed */
     u8 pad_14[0x8];
     void *unk1C;                      /* word table, indexed id * 4 + 4 (0024eec0) */
