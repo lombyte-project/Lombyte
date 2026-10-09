@@ -5,17 +5,8 @@
 #include "sda.h"
 #include "rnc/ui/menus/configured_labels.h"
 
-struct ConfiguredLabelEntry {
-    s32 text;
-    u8 *flag;
-    s32 first_message;
-    s32 second_message;
-    s32 value;
-};
-
 extern u8 selector_available[] __asm__("D_0015EDC0") MACRO_ADDR;
 extern u8 selector_values[] __asm__("D_0015EDB0") MACRO_ADDR;
-extern struct ConfiguredLabelEntry configured_label_entries[] __asm__("D_001D3B10");
 
 s32 rebuild_configured_text_label_list(void) __asm__("FUN_0021a1e0");
 

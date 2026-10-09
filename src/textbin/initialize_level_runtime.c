@@ -1,3 +1,4 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "asm.h"
 #include "rnc/globals.h"
@@ -90,7 +91,6 @@ extern s32 D_0015F618;
 extern s32 D_0015F440;
 extern s32 D_0015EE8C;
 extern u8 D_00194180[];
-extern u8 D_001B3AC0[];
 #include "rnc/rendering/resident_class.h"
 extern u8 D_001B6180[];
 extern MemInfo D_001940C0;
@@ -189,7 +189,7 @@ void initialize_level_runtime(void) {
     gs_texture_allocation_cursor = D_0015EE8C;
     gs_texture_allocation_start = D_0015EE8C;
     FillTransferWords(D_00194180, 0x87654321, 0x10);
-    FillTransferWords(D_001B3AC0, -1, 0x800);
+    FillTransferWords(resident_class_slot_by_id, -1, 0x800);
     FillTransferWords(resident_class_material_maps, -1, 0xE00);
     FillTransferWords(D_001B6180, 0, 0xE0);
     init_view_context();

@@ -1,3 +1,4 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "rnc/rendering/tex_remap.h"
 struct GifEntry {
@@ -9,7 +10,6 @@ struct MobyClass {
     struct GifEntry *gifs;
 };
 extern s32 D_001B6500[];
-extern struct MobyClass *D_001B3200[];
 extern struct TexRemap D_001B5D80[];
 void patch_moby_gifs(void) __asm__("FUN_0020cef8");
 
@@ -21,7 +21,7 @@ void patch_moby_gifs(void) {
     struct TexRemap *r;
 
     for (id = D_001B6500; *id >= 0; id++) {
-        e = D_001B3200[*id]->gifs;
+        e = ((struct MobyClass *)moby_class_resources[*id])->gifs;
         for (;; e++) {
             gif = (u32 *)(e->gif & 0x7FFFFFFF);
             tex = e->tex;

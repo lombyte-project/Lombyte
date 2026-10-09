@@ -1,8 +1,7 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/item_preview/preview_animation.h"
 
-extern u8 moby_class_resources[] __asm__("D_001B3200");
-extern u8 class_resource_slots[] __asm__("D_001B3AC0");
 extern u8 preview_resource_bindings[] __asm__("D_001D59D8");
 extern u8 preview_resource_ids[] __asm__("D_001D5D38");
 extern s32 LookupResourceEntry();
@@ -42,7 +41,7 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
         binding = ((PreviewResourceBinding *)preview_resource_bindings) + first_resource;
         do {
             buffer_skip = 0;
-            class_slot = class_resource_slots[binding->class_id];
+            class_slot = resident_class_slot_by_id[binding->class_id];
             animation_index = binding->animation_index;
             /* Two bindings use resource buffers 0 and 2. The do-while
                weights the index use one loop deeper, so the index is
@@ -70,7 +69,7 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
             decompress_wad(read_address, buffer_address);
             {
                 s32 animation_offset = animation_index * 4;
-                class_resource_slot = (s32 *)((class_slot * 4) + moby_class_resources);
+                class_resource_slot = (s32 *)((class_slot * 4) + (u8 *)moby_class_resources);
                 *((s32 *)(((u8 *)((*class_resource_slot) + animation_offset)) + 0x48)) =
                     buffer_address;
             }

@@ -1,8 +1,8 @@
 #include "types.h"
+#include "rnc/ui/menus/panel_slots.h"
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
-extern s32 D_001D5D90[];
 extern s32 delete_moby(s32) __asm__("FUN_00225530");
 void FUN_002191b8(void) {
     s32 i;
@@ -23,7 +23,7 @@ void FUN_002191b8(void) {
     }
     gs_texture_allocation_start = menu_system.saved_texture_start;
     for (j = 0; j < 14; j++) {
-        D_001D5D90[j] = delete_moby(D_001D5D90[j]);
+        panel_slots[j] = (void *)delete_moby((s32)panel_slots[j]);
     }
     menu_system.state = 20;
     menu_system.timer = 2;

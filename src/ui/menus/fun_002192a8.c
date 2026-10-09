@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/menus/panel_slots.h"
 #include "rnc/globals.h"
 
 #include "rnc/ui/menus/menu_system.h"
@@ -24,7 +25,6 @@ struct Ent {
 extern s16 D_001516D8[];
 extern s32 D_0015F5B8;
 extern s32 D_0015F618;
-extern struct Ent *D_001D5D90[];
 
 extern void func_00218D10(void);
 extern void func_00218F98(void) __asm__("FUN_00218f98");
@@ -91,9 +91,9 @@ void FUN_002192a8(void) {
         }
     } else if (menu_system.next != 0) {
         if (menu_system.current == menu_system.next) {
-            allocate_voice_for_target_entry(3, 0x11, D_001D5D90[0]);
+            allocate_voice_for_target_entry(3, 0x11, panel_slots[0]);
         } else {
-            allocate_voice_for_target_entry(4, 0x11, D_001D5D90[0]);
+            allocate_voice_for_target_entry(4, 0x11, panel_slots[0]);
         }
         for (i = 0; i < 14; i++) {
             obj = menu_system.current->screens[i];
@@ -107,15 +107,15 @@ void FUN_002192a8(void) {
         }
         for (j = 0; j < 14; j++) {
             if (menu_system.next->screens[j] != 0) {
-                menu_system.next->screens[j]->moby = (s32)D_001D5D90[j];
+                menu_system.next->screens[j]->moby = (s32)panel_slots[j];
             }
             if (flag) {
                 s32 n = menu_system.current->moby_anims[j];
-                set_moby_animation(D_001D5D90[j], n, D_001D5D90[j]->unk24->unk48[n]->unk10 - 1);
-                D_001D5D90[j]->unk58 = -1.0f;
+                set_moby_animation(panel_slots[j], n, ((struct Ent *)panel_slots[j])->unk24->unk48[n]->unk10 - 1);
+                ((struct Ent *)panel_slots[j])->unk58 = -1.0f;
             } else {
-                set_moby_animation(D_001D5D90[j], menu_system.next->moby_anims[j], 0);
-                D_001D5D90[j]->unk58 = 1.0f;
+                set_moby_animation(panel_slots[j], menu_system.next->moby_anims[j], 0);
+                ((struct Ent *)panel_slots[j])->unk58 = 1.0f;
             }
         }
         menu_system.state = 1;

@@ -181,7 +181,7 @@ extern u8 D_001B76E0[];
 extern u8 D_001C76E0[];
 extern u8 D_001CD780[];
 extern TieClass *D_001D7F30[];
-extern u8 D_001D80B0[];
+#include "rnc/rendering/shrub_render_class.h"
 extern ShrubClass *D_001E1700[];
 extern u8 D_001E1A00[];
 extern char D_001E76D8[];
@@ -418,7 +418,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     D_001603D8 = &D_001603D4[D_001603D0];
     for (i = 0; i < D_001603D0; i++) {
         tie = &D_001603D4[i];
-        cls = D_001D80B0[*(s32 *)tc];
+        cls = shrub_render_class_slot_by_id[*(s32 *)tc];
         td = &D_001603DC[i];
         tie->cls = cls;
         if (cls != lastTie) {

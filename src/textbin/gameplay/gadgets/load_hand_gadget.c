@@ -1,3 +1,4 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "rnc/ui/menus/item_preview/preview_animation.h"
 #include "rnc/ui/menus/menu_system.h"
@@ -50,8 +51,6 @@ extern u8 gadget_available[] __asm__("D_0013D4C0");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
 extern s32 resource_request_state __asm__("D_0015FF50");
 extern HandGadgetDefinition gadget_definitions[] __asm__("D_001863D0");
-extern u8 *moby_class_resources[] __asm__("D_001B3200");
-extern u8 moby_class_slots[] __asm__("D_001B3AC0");
 extern void func_001E9470(s32, s32);
 extern void func_001E9478(Moby *, s32);
 extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
@@ -113,7 +112,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
         menu_system.resource_table_toggle = resource_request_state;
         menu_system.unk140 = selected_class;
         menu_system.last_resource_table_toggle = resource_request_state;
-        moby_class_resources[moby_class_slots[selected_class]][0xD] = 0;
+        ((u8 *)moby_class_resources[resident_class_slot_by_id[selected_class]])[0xD] = 0;
         moby = create_menu_preview_moby(selected_class);
         if (moby != 0) {
             loaded_gadget = selected_gadget;

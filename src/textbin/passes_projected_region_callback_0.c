@@ -6,7 +6,7 @@
 
 #include "eetypes.h"
 
-extern s32 region_enabled[] __asm__("D_001A03B0");
+#include "rnc/ui/menus/region_enabled.h"
 
 union RegionVector {
     u128 region_center;
@@ -43,7 +43,7 @@ s32 passes_projected_region_callback_0(s32 projected_x, s32 projected_y, f32 x, 
             return 1;
         }
         if (func_00208818(projected_x, projected_y, 0x142, 0x12A, 0x173, 0xFC) &&
-            region_enabled[0]) {
+            region_enabled) {
             return 1;
         }
         return 0;

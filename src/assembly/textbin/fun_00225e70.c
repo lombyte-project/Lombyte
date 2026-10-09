@@ -1,3 +1,4 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "asm.h"
 
@@ -43,7 +44,6 @@ typedef struct {
     s32 animation_tables[1];
 } PreviewAnimationClassResource;
 
-extern u8 *moby_class_resources[] __asm__("D_001B3200");
 typedef struct {
     u8 pad0[8];
     s32 item_type;

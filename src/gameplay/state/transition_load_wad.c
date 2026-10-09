@@ -1,3 +1,4 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "rnc/storage/disc_table.h"
 typedef struct 
@@ -119,8 +120,6 @@ extern LoadState D_001940C0;
 extern u8 D_00194180[];
 extern HelpState D_001996D0;
 #include "rnc/rendering/material_templates.h"
-extern MobyClass *D_001B3200[];
-extern u8 D_001B3AC0[];
 extern s32 D_001B5980[];
 extern s32 D_001B6180[];
 #include "rnc/rendering/resident_class.h"
@@ -194,7 +193,7 @@ void transition_load_wad(void)
   D_0015EE78 = 0x2C0000;
   D_0015EE74 = 0x2C0000;
   FillTransferWords(D_00194180, 0x87654321, 0x10);
-  FillTransferWords(D_001B3AC0, -1, k_800);
+  FillTransferWords(resident_class_slot_by_id, -1, k_800);
   FillTransferWords(resident_class_material_maps, -1, 0xE00);
   FillTransferWords(D_001B6180, 0, 0xE0);
   init_view_context();
@@ -342,11 +341,11 @@ void transition_load_wad(void)
   }
 
   QueueDmaTransfer(0);
-  cnt = (new_var = D_001B3AC0[0x472]);
+  cnt = (new_var = resident_class_slot_by_id[0x472]);
   if (cnt >= 0)
   {
-    D_001B3200[cnt]->x28 = D_001861E0;
-    D_001B3200[cnt]->xD = 5;
+    ((MobyClass *)moby_class_resources[cnt])->x28 = D_001861E0;
+    ((MobyClass *)moby_class_resources[cnt])->xD = 5;
   }
 }
 

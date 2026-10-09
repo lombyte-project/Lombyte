@@ -1,3 +1,4 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
@@ -44,8 +45,6 @@ extern struct PreviewCamera preview_camera __asm__("D_00186F40");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
 extern s32 active_preview_resource_class[] __asm__("D_00140408");
 extern s32 resource_request_state __asm__("D_0015FF50");
-extern u8 moby_class_slots[] __asm__("D_001B3AC0");
-extern struct PreviewClassResource *moby_class_resources[] __asm__("D_001B3200");
 extern void update_item_preview_transform() __asm__("FUN_0021e698");
 
 extern void func_001E9470(s32, s32);
@@ -129,7 +128,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
                 menu_system.last_resource_table_toggle = resource_request_state;
                 menu_system.unk140 = oclass;
                 menu_system.unk120 = oclass;
-                moby_class_resources[moby_class_slots[oclass]]->state_0d = 0;
+                ((struct PreviewClassResource *)moby_class_resources[resident_class_slot_by_id[oclass]])->state_0d = 0;
             }
         }
         moby = create_menu_preview_moby(oclass);

@@ -1,3 +1,4 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 struct PreviewMobyResource {
     u8 pad0[6];
@@ -15,7 +16,6 @@ struct PreviewMoby {
     u8 pad34[0x3F];
     u8 state_73;
 };
-extern u8 moby_class_slots[] __asm__("D_001B3AC0");
 extern struct PreviewMoby *create_moby(s32) __asm__("func_0020C4F8");
 extern void refresh_moby_spatial_bounds(struct PreviewMoby *) __asm__("func_0020DEF8");
 extern void PackRenderCommandFields(struct PreviewMoby *, s32, s32, s32, s32);
@@ -26,7 +26,7 @@ struct PreviewMoby *create_menu_preview_moby(s32 oclass) {
     struct PreviewMoby *moby;
     struct PreviewMoby *result;
     u8 unset = 0xFF;
-    if (moby_class_slots[oclass] == unset)
+    if (resident_class_slot_by_id[oclass] == unset)
         return 0;
     {
         moby = create_moby(oclass);

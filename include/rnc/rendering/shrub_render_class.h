@@ -69,6 +69,9 @@ typedef struct {
 
 extern ShrubRenderClass *shrub_render_classes[64] __asm__("D_001D7F30");
 extern s16 shrub_render_class_ids[64] __asm__("D_001D8030");
+/* Class id -> slot in shrub_render_classes. Two more tables of the same size follow
+   (D_001D84B0, D_001D88B0), so this one spans exactly the 0x400 bytes up to D_001D84B0. */
+extern u8 shrub_render_class_slot_by_id[0x400] __asm__("D_001D80B0");
 extern s32 shrub_render_class_fixed_thresholds[64] __asm__("D_001D8CB0");
 extern MaterialMap shrub_render_class_material_maps[64] __asm__("D_001D92B0");
 

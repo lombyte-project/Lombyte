@@ -1,3 +1,4 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "asm.h"
 
@@ -43,8 +44,6 @@ extern s32 queued_dialogue_id[] __asm__("D_001516EC");
 extern s16 dialogue_playback_phase[] __asm__("D_0015172A");
 extern s32 dialogue_language __asm__("D_0015ED88");
 extern s32 alternate_animation_sequence __asm__("D_0015EE20");
-extern StreamedClassResource *moby_class_resources[] __asm__("D_001B3200");
-extern u8 streamed_moby_class_slot[] __asm__("D_001B4265");
 extern u8 animation_asset_read_active[] __asm__("D_001D5CBB");
 
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -90,8 +89,8 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         }
         animation_asset_read_active[0] = 0;
         decompress_wad(stream->buffer + stream->read_offset, stream->buffer);
-        class_slot = streamed_moby_class_slot[0];
-        class_resource = &moby_class_resources[class_slot];
+        class_slot = resident_class_slot_by_id[0x7A5];
+        class_resource = (StreamedClassResource **)&moby_class_resources[class_slot];
         header = (AnimationTableHeader *)stream->buffer;
         table_index = 0;
     next:
