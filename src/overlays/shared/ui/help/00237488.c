@@ -69,7 +69,6 @@ typedef struct {
 } ItemDef;
 
 extern char D_0013C940[];
-extern char D_0013F350[];
 extern char D_00141660[];
 extern unsigned char D_0013D4C0[];
 extern int D_0015ED8C;
@@ -610,9 +609,9 @@ int FUN_L05_002551b8(void) {
     return r;
 }
 int FUN_L05_002551d0(void) {
-    char *p = D_0013F350;
-    int f = *(unsigned char *)(p + 0x8CE);
-    if (*(short *)(p + 0x884) == 0) {
+    struct Hero *p = &hero;
+    int f = p->unk8CE;
+    if (p->unk884 == 0) {
         int r = 0x7D;
         if (f == 0)
             r = 0x52;
