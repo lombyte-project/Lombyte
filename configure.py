@@ -220,6 +220,7 @@ OVERLAY_SN_UNITS = {
     "l04/gameplay/entities/0024c4f0.c",
     "l04/gameplay/entities/0029eb20.c",
     "l04/gameplay/entities/002ca420.c",
+    "l04/runtime/dma/002922d0.c",
     "l05/gameplay/entities/002d1688.c",
     "l05/gameplay/entities/0030d6a0.c",
     "l05/gameplay/hero/00239fc0.c",

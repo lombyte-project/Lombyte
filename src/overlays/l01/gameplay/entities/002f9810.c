@@ -7,7 +7,105 @@
 #include "qzero.h"
 #include "rnc/gameplay/entities/moby.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f9810.s", FUN_L01_002f9810);
+typedef union {
+    u128 q;
+    f32 f[4];
+} DebrisVec;
+
+typedef struct {
+    u32 c[3];
+} DebrisColors;
+
+typedef struct {
+    u8 pad0[0x2C];
+    f32 force;
+} DebrisHit;
+
+extern DebrisColors D_L01_00161C50;
+extern f32 D_0015ED6C;
+extern void *FUN_L00_0025a420_u(void *, s32, s32) __asm__("FUN_L00_0025a420");
+extern s32 FUN_0022da68(s32, s32, void *);
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern void FUN_001f9bf8(void *, void *, f32);
+extern void FUN_001f9a10(void *, void *, void *);
+extern int FUN_L00_00257b90(int lo, int hi);
+extern s32 FUN_001f96f8(s32);
+extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
+extern struct Moby *spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
+extern void FUN_L00_00257470(void *, s32, s32);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+
+/* Once hit hard enough: bursts into 200 smoke puffs and 40 debris chunks, then removes itself. */
+void FUN_L01_002f9810(struct Moby *m) {
+    DebrisHit *hit;
+    s32 i;
+    s32 j;
+    f32 s;
+
+    hit = FUN_L00_0025a420_u(m, 0x10000, 0);
+    m->unkA4 = 0xFF;
+    if (hit != NULL && hit->force > 0.0f) {
+        FUN_0022da68(0, 0x10, m);
+        for (i = 0; i < 200; i++) {
+            /* A block of its own: retail reuses these stack slots in the next loop. */
+            {
+                DebrisVec vel;
+                DebrisVec pos;
+                DebrisVec off;
+
+                pos.q = 0;
+                pos.f[0] = random_float_between(-1.0f, 1.0f);
+                pos.f[1] = random_float_between(-1.0f, 1.0f);
+                pos.f[2] = random_float_between(-1.0f, 1.0f);
+                off.q = 0;
+                vel.q = pos.q;
+                s = random_float_between(-1.0f, 1.0f);
+                s *= FUN_001f9dc8(m->rot.z);
+                off.f[0] = s;
+                s = random_float_between(-0.3f, 0.3f);
+                s *= FUN_001f9de0(m->rot.z);
+                off.f[1] = s;
+                off.f[2] = random_float_between(0.0f, 2.0f);
+                pos.q = off.q;
+                FUN_001f9a10(&pos, &pos, &m->pos);
+                FUN_001f9bf8(&vel, &vel, random_float_between(0.5f, 1.5f) * D_0015ED6C);
+                s = random_float_between(0.5f, 1.0f) * 210000.0f;
+                FUN_L00_0026ced0(&pos, &vel, 0x5F787878, 0x181818, s, FUN_001f96f8(FUN_L00_00257b90(30, 90)));
+            }
+        }
+        for (j = 0; j < 40; j++) {
+            DebrisColors colors;
+            DebrisVec vel;
+            DebrisVec pos;
+            DebrisVec off;
+
+            colors = D_L01_00161C50;
+            pos.q = 0;
+            pos.f[0] = random_float_between(-1.0f, 1.0f);
+            pos.f[1] = random_float_between(-1.0f, 1.0f);
+            pos.f[2] = random_float_between(-1.0f, 1.0f);
+            off.q = 0;
+            vel.q = pos.q;
+            s = random_float_between(-1.2f, 1.2f);
+            s *= FUN_001f9dc8(m->rot.z);
+            off.f[0] = s;
+            s = random_float_between(-0.4f, 0.4f);
+            s *= FUN_001f9de0(m->rot.z);
+            off.f[1] = s;
+            off.f[2] = random_float_between(0.5f, 2.0f);
+            pos.q = off.q;
+            FUN_001f9a10(&pos, &pos, &m->pos);
+            FUN_001f9bf8(&vel, &vel, random_float_between(1.0f, 5.0f) * D_0015ED6C);
+            spawn_debris_chunk(&pos, &vel, colors.c[random_integer_below(3)], random_float_between(0.04f, 0.09f),
+                               FUN_L00_00257b90(60, 180), 1.0f, 1.0f, 0.75f, 0);
+        }
+        FUN_L00_00257470(m, 0, -1);
+        mark_moby_for_removal(m);
+    }
+}
 typedef struct {
     f32 sway;
     f32 dir;
@@ -404,7 +502,81 @@ void FUN_L01_002fa4c0(DropMoby *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa800.s", FUN_L01_002fa800);
+extern DebrisColors D_L01_00161C70;
+extern u8 D_0013D388[];
+
+/* Removed once collected; when hit, bursts into 500 smoke puffs and 100 chunks, marks itself collected and sets D_0013D388[0xE] (an item-availability flag). */
+void FUN_L01_002fa800(struct Moby *m) {
+    s32 i;
+    s32 j;
+    f32 s;
+
+    if (D_L01_001BB6B0.collected[(s16)m->save_id] != 0 ||
+        (D_0014C190[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) & 1) {
+        mark_moby_for_removal(m);
+        return;
+    }
+    if (FUN_L00_0025a420_u(m, 0x800000, 0) != NULL) {
+        FUN_0022da68(0, 0, m);
+        for (i = 0; i < 500; i++) {
+            /* A block of its own: retail reuses these stack slots in the next loop. */
+            {
+                DebrisVec vel;
+                DebrisVec pos;
+                DebrisVec off;
+
+                pos.q = 0;
+                pos.f[0] = random_float_between(-1.0f, 1.0f);
+                pos.f[1] = random_float_between(-1.0f, 1.0f);
+                pos.f[2] = random_float_between(-1.0f, 1.0f);
+                off.q = 0;
+                vel.q = pos.q;
+                s = random_float_between(-4.0f, 4.0f);
+                s *= FUN_001f9dc8(m->rot.z);
+                off.f[0] = s;
+                s = random_float_between(-1.0f, 1.0f);
+                s *= FUN_001f9de0(m->rot.z);
+                off.f[1] = s;
+                off.f[2] = random_float_between(0.0f, 8.0f);
+                pos.q = off.q;
+                FUN_001f9a10(&pos, &pos, &m->pos);
+                FUN_001f9bf8(&vel, &vel, random_float_between(1.5f, 3.5f) * D_0015ED6C);
+                s = random_float_between(1.5f, 3.5f) * 210000.0f;
+                FUN_L00_0026ced0(&pos, &vel, 0x5F787878, 0x181818, s, FUN_001f96f8(FUN_L00_00257b90(120, 240)));
+            }
+        }
+        for (j = 0; j < 100; j++) {
+            DebrisColors colors;
+            DebrisVec vel;
+            DebrisVec pos;
+            DebrisVec off;
+
+            colors = D_L01_00161C70;
+            pos.q = 0;
+            pos.f[0] = random_float_between(-1.0f, 1.0f);
+            pos.f[1] = random_float_between(-1.0f, 1.0f);
+            pos.f[2] = random_float_between(-1.0f, 1.0f);
+            off.q = 0;
+            vel.q = pos.q;
+            s = random_float_between(-4.0f, 4.0f);
+            s *= FUN_001f9dc8(m->rot.z);
+            off.f[0] = s;
+            s = random_float_between(-1.0f, 1.0f);
+            s *= FUN_001f9de0(m->rot.z);
+            off.f[1] = s;
+            off.f[2] = random_float_between(1.0f, 8.0f);
+            pos.q = off.q;
+            FUN_001f9a10(&pos, &pos, &m->pos);
+            FUN_001f9bf8(&vel, &vel, random_float_between(1.0f, 5.0f) * D_0015ED6C);
+            spawn_debris_chunk(&pos, &vel, colors.c[random_integer_below(3)], random_float_between(0.05f, 0.15f),
+                               FUN_L00_00257b90(60, 180), 1.0f, 1.0f, 0.75f, 0);
+        }
+        D_0014C190[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+        D_L01_001BA950[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+        D_0013D388[0xE] = 1;
+        mark_moby_for_removal(m);
+    }
+}
 typedef struct {
     u8 pad0[0xA6];
     s16 type;
@@ -611,7 +783,72 @@ void FUN_L01_002fd9a0(SparkMoby *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002feb58.s", FUN_L01_002feb58);
+/* The four scrolling layers FUN_L01_002feb28 draws (0x60 bytes each, the ScrollLayer layout of 002b96e0.c). */
+typedef struct {
+    Vec4 *verts;
+    u8 pad4[8];
+    s32 count;
+    u8 pad10[0x4C];
+    f32 glow;
+} WaterLayer;
+
+extern WaterLayer D_L01_001FBC80[];
+extern s32 D_L01_00161CE0 __attribute__((sda));
+extern s32 D_L01_0015F5CC;
+extern f32 FUN_001fa6c0(s32);
+extern f32 FUN_001f9de0(f32);
+extern void FUN_L01_002feb28(void);
+extern int enqueue_callback_2518(void (*)(void), void *) __asm__("FUN_001f4600");
+
+/* On first use, lowers and ripples the layers' vertices; every frame, pulses their glow and queues FUN_L01_002feb28. */
+void FUN_L01_002feb58(void *arg) {
+    s32 i;
+    s32 g;
+    s32 j;
+    s32 k;
+    s32 n;
+    s32 m;
+    Vec4 *v;
+    Vec4 *w;
+    f32 s;
+
+    if (D_L01_00161CE0 == 0) {
+        D_L01_00161CE0 = 1;
+        for (i = 0; i < 4; i++) {
+            v = (D_L01_001FBC80 + i)->verts;
+            for (j = 0; j < (D_L01_001FBC80 + i)->count; j++) {
+                v->f[3] = v->f[2] = v->f[2] - 0.45f;
+                v++;
+            }
+        }
+        k = 1;
+        for (n = 0; n < 4; n++) {
+            k--;
+            w = (D_L01_001FBC80 + n)->verts;
+            for (m = 0; m < (D_L01_001FBC80 + n)->count; m += 2) {
+                if (k & 1) {
+                    w[0].f[2] += 0.05f;
+                    w[0].f[3] -= 0.05f;
+                    w[1].f[2] -= 0.05f;
+                    w[1].f[3] += 0.05f;
+                } else {
+                    w[0].f[2] -= 0.05f;
+                    w[0].f[3] += 0.05f;
+                    w[1].f[2] += 0.05f;
+                    w[1].f[3] -= 0.05f;
+                }
+                w += 2;
+                k++;
+            }
+        }
+    }
+    s = FUN_001f9de0((FUN_001fa6c0(D_L01_0015F5CC & 0x3F) - 32.0f) * 0.09817477f);
+    s = s * 0.5f + 0.5f;
+    for (g = 3; g >= 0; g--) {
+        D_L01_001FBC80[g].glow = s;
+    }
+    enqueue_callback_2518(FUN_L01_002feb28, arg);
+}
 typedef struct {
     Vec4 home;
     f32 t;

@@ -348,7 +348,229 @@ void FUN_L02_002ee890(struct Moby *moby) {
     }
     qcopy(data + 8, ((char *)&D_0013F3D0));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ef020.s", FUN_L02_002ef020);
+extern void build_rotation_matrix(void *out, void *rot) __asm__("FUN_001fa030");
+extern s32 sphere_in_view(void *sphere, f32 dist) __asm__("FUN_001fa728");
+extern s32 tick_timer32(s32 *) __asm__("FUN_001f9740");
+extern s32 random_remainder(s32) __asm__("FUN_00213260");
+extern f32 random_float(f32, f32) __asm__("FUN_002132a8");
+extern f32 scale_time(f32) __asm__("FUN_001f96b0");
+extern s32 truncate_time(f32) __asm__("FUN_001fa6d0");
+extern s32 lerp_color(s32, s32, f32) __asm__("FUN_001fa6e0");
+/* FUN_001f9bf8 (out = in scaled to length s), with the float declared first (same registers): the scale is then
+ * evaluated before the vector addresses, as in retail. */
+extern void scale_vector_by(f32 s, void *out, void *in) __asm__("FUN_001f9bf8");
+extern void add_vector(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void random_vector_jitter(void *out, f32 a, f32 b) __asm__("FUN_L00_00257d78");
+extern char *spawn_smoke_particle(void *pos, void *vel, void *acc, s32, s32, s32, s32, s32, s32) __asm__("FUN_00218888");
+extern f32 D_0015ED6C;
+extern f32 D_L02_00162048 __attribute__((sda));
+extern f32 D_L02_0016204C __attribute__((sda));
+extern f32 D_L02_00162050 __attribute__((sda));
+extern f32 D_L02_00162054 __attribute__((sda));
+extern s32 D_L02_0016205C __attribute__((sda));
+extern s32 D_L02_00162060 __attribute__((sda));
+extern f32 D_L02_00162064 __attribute__((sda));
+extern f32 D_L02_00162068 __attribute__((sda));
+extern f32 D_L02_0016206C __attribute__((sda));
+extern f32 D_L02_00162070 __attribute__((sda));
+extern f32 D_L02_00162074 __attribute__((sda));
+extern s32 D_L02_00162078 __attribute__((sda));
+extern s32 D_L02_0016207C __attribute__((sda));
+extern s32 D_L02_00162080 __attribute__((sda));
+extern s32 D_L02_00162084 __attribute__((sda));
+extern f32 D_L02_00162088 __attribute__((sda));
+extern f32 D_L02_0016208C __attribute__((sda));
+extern f32 D_L02_00162090 __attribute__((sda));
+extern f32 D_L02_00162094 __attribute__((sda));
+extern s32 D_L02_00162098 __attribute__((sda));
+extern s32 D_L02_0016209C __attribute__((sda));
+extern s32 D_L02_001620A0 __attribute__((sda));
+extern f32 D_L02_001620A4 __attribute__((sda));
+extern f32 D_L02_001620A8 __attribute__((sda));
+extern f32 D_L02_001620AC __attribute__((sda));
+extern f32 D_L02_001620B0 __attribute__((sda));
+extern f32 D_L02_001620B4 __attribute__((sda));
+extern s32 D_L02_001620B8 __attribute__((sda));
+extern s32 D_L02_001620BC __attribute__((sda));
+extern s32 D_L02_001620C0 __attribute__((sda));
+extern s32 D_L02_001620C4 __attribute__((sda));
+extern f32 D_L02_001620C8 __attribute__((sda));
+extern f32 D_L02_001620CC __attribute__((sda));
+extern f32 D_L02_001620D0 __attribute__((sda));
+extern f32 D_L02_001620D4 __attribute__((sda));
+extern f32 D_L02_001620D8 __attribute__((sda));
+extern s32 D_L02_001620DC __attribute__((sda));
+extern s32 D_L02_001620E0 __attribute__((sda));
+extern s32 D_L02_001620E4 __attribute__((sda));
+extern f32 D_L02_001620E8 __attribute__((sda));
+extern f32 D_L02_001620EC __attribute__((sda));
+extern f32 D_L02_001620F0 __attribute__((sda));
+extern f32 D_L02_001620F4 __attribute__((sda));
+extern f32 D_L02_001620F8 __attribute__((sda));
+extern s32 D_L02_001620FC __attribute__((sda));
+extern s32 D_L02_00162100 __attribute__((sda));
+extern s32 D_L02_00162104 __attribute__((sda));
+extern s32 D_L02_00162108 __attribute__((sda));
+extern s32 D_L02_0016210C __attribute__((sda));
+extern s32 D_L02_00162110 __attribute__((sda));
+extern s32 D_L02_00162114 __attribute__((sda));
+extern f32 D_L02_00162118 __attribute__((sda));
+extern f32 D_L02_0016211C __attribute__((sda));
+extern f32 D_L02_00162120 __attribute__((sda));
+extern f32 D_L02_00162124 __attribute__((sda));
+extern f32 D_L02_00162128 __attribute__((sda));
+extern s32 D_L02_0016212C __attribute__((sda));
+extern s32 D_L02_00162130 __attribute__((sda));
+extern s32 D_L02_00162134 __attribute__((sda));
+extern f32 D_L02_00162138 __attribute__((sda));
+extern f32 D_L02_0016213C __attribute__((sda));
+extern f32 D_L02_00162140 __attribute__((sda));
+extern f32 D_L02_00162144 __attribute__((sda));
+extern f32 D_L02_00162148 __attribute__((sda));
+extern s32 D_L02_0016214C __attribute__((sda));
+extern s32 D_L02_00162150 __attribute__((sda));
+extern s32 D_L02_00162154 __attribute__((sda));
+extern s32 D_L02_00162158 __attribute__((sda));
+extern s32 D_L02_0016215C __attribute__((sda));
+extern s32 D_L02_00162160 __attribute__((sda));
+extern s32 D_L02_00162164 __attribute__((sda));
+
+/* Smoke vent: once visible within 120 units it puffs bursts (D_L02_001620C8 / D_L02_00162118 parameter blocks)
+ * on a timer plus occasional single puffs (D_L02_00162088 / D_L02_00162048); state 2 alternates its puff life.
+ * Each burst and puff block has its own locals: shared ones become long-lived pseudos and shift the allocation. */
+void FUN_L02_002ef020(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    Vec4 p;
+    Vec4 vel;
+    Vec4 acc;
+    Vec4 tmp;
+    s32 count1;
+    s32 k1;
+    s32 time_a1_burst;
+    s32 time_b1_burst;
+    s32 color_a1_burst;
+    s32 color_b1_burst;
+    s32 count2;
+    s32 k2;
+    s32 time_a2_burst;
+    s32 time_b2_burst;
+    s32 color_a2_burst;
+    s32 color_b2_burst;
+    s32 time_a1_puff;
+    s32 time_b1_puff;
+    s32 color_a1_puff;
+    s32 color_b1_puff;
+    f32 rise1_puff;
+    s32 time_a2_puff;
+    s32 time_b2_puff;
+    s32 color_a2_puff;
+    s32 color_b2_puff;
+    f32 rise2_puff;
+
+    switch (moby->state) {
+    case 0:
+        moby->state = data[0] + 1;
+        build_rotation_matrix(&moby->unkC0, &moby->rot);
+        break;
+    case 1:
+        qcopy(&p, &moby->pos);
+        p.f[3] = 6.0f;
+        if (sphere_in_view(&p, 120.0f) == -1) {
+            break;
+        }
+        if (tick_timer32((s32 *)(data + 0xC0)) != 0) {
+            *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)D_L02_0016210C, (f32)D_L02_00162110)));
+            count1 = random_remainder(7) != 0 ? 1 : random_remainder(5) + 5;
+            for (k1 = 0; k1 < count1; k1++) {
+                random_vector_jitter(&tmp, 0.0f, D_L02_001620D8 * D_0015ED6C);
+                scale_vector_by(D_L02_001620C8 * (random_float(-D_L02_001620D4, D_L02_001620D4) + 1.0f) * D_0015ED6C, &vel, &moby->unkC0);
+                add_vector(&vel, &vel, &tmp);
+                scale_vector_by(D_L02_001620CC * (random_float(-D_L02_001620D4, D_L02_001620D4) + 1.0f) * D_0015ED6C, &acc, &vel);
+                acc.f[2] -= D_L02_001620D0 * D_0015ED6C;
+                vel.f[3] = random_float(D_L02_001620EC, D_L02_001620F0);
+                acc.f[3] = random_float(D_L02_001620F4, D_L02_001620F8);
+                color_a1_burst = lerp_color(D_L02_001620FC, D_L02_00162100, random_float(0.0f, 1.0f));
+                color_b1_burst = lerp_color(D_L02_00162104, D_L02_00162108, random_float(0.0f, 1.0f));
+                time_a1_burst = truncate_time(scale_time((f32)D_L02_001620DC * random_float(0.0f, 1.0f) + 1.0f));
+                time_b1_burst = truncate_time(scale_time((f32)D_L02_001620E0 * (random_float(-D_L02_001620E8, D_L02_001620E8) + 1.0f)));
+                spawn_smoke_particle(&moby->pos, &vel, &acc, color_a1_burst, color_b1_burst, time_a1_burst, time_b1_burst,
+                               truncate_time(scale_time((f32)D_L02_001620E4 * (random_float(-D_L02_001620E8, D_L02_001620E8) + 1.0f))),
+                               D_L02_00162114);
+            }
+        }
+        if (random_remainder(4) != 0) {
+            break;
+        }
+        scale_vector_by(D_L02_00162088 * (random_float(-D_L02_00162094, D_L02_00162094) + 1.0f) * D_0015ED6C, &vel, &moby->unkC0);
+        rise1_puff = D_L02_0016208C * (random_float(-D_L02_00162094, D_L02_00162094) + 1.0f) * D_0015ED6C;
+        clear_vector(&acc);
+        acc.f[2] = rise1_puff;
+        scale_vector_by(random_float(-D_L02_00162090, D_L02_00162090) * D_0015ED6C, &tmp, &moby->unkD0);
+        add_vector(&acc, &acc, &tmp);
+        vel.f[3] = random_float(D_L02_001620A8, D_L02_001620AC);
+        acc.f[3] = random_float(D_L02_001620B0, D_L02_001620B4);
+        color_a1_puff = lerp_color(D_L02_001620B8, D_L02_001620BC, random_float(0.0f, 1.0f));
+        color_b1_puff = lerp_color(D_L02_001620C0, D_L02_001620C4, random_float(0.0f, 1.0f));
+        time_a1_puff = truncate_time(scale_time((f32)D_L02_00162098 * random_float(0.0f, 1.0f) + 1.0f));
+        time_b1_puff = truncate_time(scale_time((f32)D_L02_0016209C * (random_float(-D_L02_001620A4, D_L02_001620A4) + 1.0f)));
+        spawn_smoke_particle(&moby->pos, &vel, &acc, color_a1_puff, color_b1_puff, time_a1_puff, time_b1_puff,
+                       truncate_time(scale_time((f32)D_L02_001620A0 * (random_float(-D_L02_001620A4, D_L02_001620A4) + 1.0f))), -1);
+        break;
+    case 2:
+        if (tick_timer32((s32 *)(data + 0xC4)) != 0) {
+            if (*(s32 *)(data + 0xC8) < 21) {
+                *(s32 *)(data + 0xC8) = 30;
+            } else {
+                *(s32 *)(data + 0xC8) = 10;
+            }
+            *(s32 *)(data + 0xC4) = truncate_time(scale_time(random_float(120.0f, 180.0f)));
+        }
+        qcopy(&p, &moby->pos);
+        p.f[3] = 6.0f;
+        if (sphere_in_view(&p, 120.0f) == -1 && random_remainder(4) != 0) {
+            break;
+        }
+        if (tick_timer32((s32 *)(data + 0xC0)) != 0) {
+            *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)D_L02_0016215C, (f32)D_L02_00162160)));
+            count2 = random_remainder(7) != 0 ? 1 : random_remainder(5) + 5;
+            for (k2 = 0; k2 < count2; k2++) {
+                random_vector_jitter(&tmp, 0.0f, D_L02_00162128 * D_0015ED6C);
+                scale_vector_by(D_L02_00162118 * (random_float(-D_L02_00162124, D_L02_00162124) + 1.0f) * D_0015ED6C, &vel, &moby->unkC0);
+                add_vector(&vel, &vel, &tmp);
+                scale_vector_by(D_L02_0016211C * (random_float(-D_L02_00162124, D_L02_00162124) + 1.0f) * D_0015ED6C, &acc, &vel);
+                acc.f[2] -= D_L02_00162120 * D_0015ED6C;
+                vel.f[3] = random_float(D_L02_0016213C, D_L02_00162140);
+                acc.f[3] = random_float(D_L02_00162144, D_L02_00162148);
+                color_a2_burst = lerp_color(D_L02_0016214C, D_L02_00162150, random_float(0.0f, 1.0f));
+                color_b2_burst = lerp_color(D_L02_00162154, D_L02_00162158, random_float(0.0f, 1.0f));
+                time_a2_burst = truncate_time(scale_time((f32)D_L02_0016212C * random_float(0.0f, 1.0f) + 1.0f));
+                time_b2_burst = truncate_time(scale_time((f32)D_L02_00162130 * (random_float(-D_L02_00162138, D_L02_00162138) + 1.0f)));
+                spawn_smoke_particle(&moby->pos, &vel, &acc, color_a2_burst, color_b2_burst, time_a2_burst, time_b2_burst,
+                               truncate_time(scale_time((f32)D_L02_00162134 * (random_float(-D_L02_00162138, D_L02_00162138) + 1.0f))),
+                               D_L02_00162164);
+            }
+        }
+        scale_vector_by(D_L02_00162048 * (random_float(-D_L02_00162054, D_L02_00162054) + 1.0f) * D_0015ED6C, &vel, &moby->unkC0);
+        rise2_puff = D_L02_0016204C * (random_float(-D_L02_00162054, D_L02_00162054) + 1.0f) * D_0015ED6C;
+        clear_vector(&acc);
+        acc.f[2] = rise2_puff;
+        scale_vector_by(random_float(-D_L02_00162050, D_L02_00162050) * D_0015ED6C, &tmp, &moby->unkD0);
+        add_vector(&acc, &acc, &tmp);
+        vel.f[3] = random_float(D_L02_00162068, D_L02_0016206C);
+        acc.f[3] = random_float(D_L02_00162070, D_L02_00162074);
+        color_a2_puff = lerp_color(D_L02_00162078, D_L02_0016207C, random_float(0.0f, 1.0f));
+        color_b2_puff = lerp_color(D_L02_00162080, D_L02_00162084, random_float(0.0f, 1.0f));
+        time_a2_puff = truncate_time(scale_time((f32)*(s32 *)(data + 0xC8) * random_float(0.0f, 1.0f) + 1.0f));
+        time_b2_puff = truncate_time(scale_time((f32)D_L02_0016205C * (random_float(-D_L02_00162064, D_L02_00162064) + 1.0f)));
+        spawn_smoke_particle(&moby->pos, &vel, &acc, color_a2_puff, color_b2_puff, time_a2_puff, time_b2_puff,
+                       truncate_time(scale_time((f32)D_L02_00162060 * (random_float(-D_L02_00162064, D_L02_00162064) + 1.0f))), -1);
+        break;
+    case 3:
+        mark_moby_for_removal(moby);
+        break;
+    }
+}
 extern void FUN_L00_001ed630(void *, void *, void *);
 extern char D_L02_00167280[];
 
