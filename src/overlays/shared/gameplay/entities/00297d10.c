@@ -180,7 +180,48 @@ void FUN_L06_002e9aa8(char *moby) {
     FUN_001f9a10(a, a, c);
     FUN_001efa68(b, a, 2, 0, 0);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9b60.s", FUN_L06_002e9b60);
+#else
+extern f32 FUN_001f9af0(void *) __asm__("FUN_001f9af0");
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern void FUN_L00_00261d78(float, int, void *, void *);
+extern f32 D_0015ED6C;
+extern u128 D_L06_001745E0 __attribute__((section(".data")));
+extern u128 D_L06_001745F0 __attribute__((section(".data")));
+
+void FUN_L06_002e9b60(float scale, float threshold, char *moby, float *out, int follow_path) {
+    float start[4];
+    float end[4];
+    float forward[4];
+    float backward[4];
+    int i;
+
+    FUN_001f9bf8(forward, moby + 0xE0, scale);
+    FUN_001f9bf8(backward, forward, -D_0015ED6C);
+    FUN_001f9a10(out, out, backward);
+    qcopy(start, moby + 0x10);
+    FUN_001f9a10(start, start, forward);
+    FUN_001f9a10(moby + 0x10, moby + 0x10, out);
+    FUN_001f9a10(end, moby + 0x10, forward);
+
+    if (threshold < FUN_001f9af0(out) && FUN_001efa68(start, end, 0, moby, 0) != 0) {
+        qcopy(end, &D_L06_001745E0);
+        FUN_001f9a28(moby + 0x10, end, forward);
+    }
+    i = 0;
+retry:
+    if (i < 6 && FUN_L00_001f0d60(threshold, end, 4, moby) != 0) {
+        qcopy(end, &D_L06_001745F0);
+        FUN_001f9a28(moby + 0x10, end, forward);
+        i++;
+        goto retry;
+    }
+    if (follow_path != 0) {
+        FUN_L00_00261d78(0.5f, *(int *)(*(char **)(moby + 0x78) + 0x1EC), moby + 0x10, moby + 0x10);
+    }
+}
+#endif
 #include "rnc/gameplay/entities/moby.h"
 
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
