@@ -292,7 +292,101 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c3fc0.s", FUN_L13_002c3fc0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c4428.s", FUN_L13_002c4428);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c7f38.s", FUN_L13_002c7f38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ce688.s", FUN_L13_002ce688);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002cecb8.s", FUN_L13_002cecb8);
+#include "rnc/overlay/quad.h"
+extern void FUN_001e93b0(char *, int, ...);
+extern int FUN_00120478(float);
+extern int FUN_00213928(struct Moby *, void *, float *, int, int *, int, int, int);
+extern void FUN_L00_00257470(struct Moby *, int, int);
+extern void FUN_00212f90(struct Moby *, int, int, int);
+extern int FUN_001f96f8(int);
+extern void FUN_0022d798(int);
+extern void emit_effect_l13(void *, void *, void *, float, float, int, int, int,
+                            float, float, float, float, int, float, int, int,
+                            int, int) __asm__("FUN_L00_0025e450");
+extern float D_0015ED6C;
+extern char D_L13_001f4980[];
+extern char D_L13_001f49a8[];
+extern unsigned char D_0013E550[];
+
+void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
+    char *src;
+    int hit;
+    float position[4];
+    float velocity[4];
+    int link;
+    unsigned char *record;
+
+    if (moby->state != 2) {
+        src = FUN_L00_0025a420(moby, 0x330000, 0);
+        if (src != 0) {
+            FUN_001e93b0(D_L13_001f4980, moby->oclass,
+                          FUN_00120478(*(float *)(src + 0x2c)));
+            FUN_001e93b0(D_L13_001f49a8, *(int *)(src + 0x38),
+                          FUN_00120478(*(float *)(src + 0)),
+                          FUN_00120478(*(float *)(src + 4)),
+                          FUN_00120478(*(float *)(src + 8)));
+        }
+        switch (FUN_00213928(moby, src, health, 0, &hit, 0, 0, 4)) {
+        case 1:
+        case 2:
+            *health = 0.0f;
+            break;
+        case 0:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+            break;
+        }
+        if (hit >= 2) {
+            if (src == 0) {
+                goto mark;
+            }
+            if (*(char **)(src + 0x20) != 0 &&
+                moby->pos.z + 8.7f < *(float *)(*(char **)(src + 0x20) + 0x18)) {
+                if (*health <= *(float *)(src + 0x2c)) {
+                    *(OvlQuad *)velocity = 0;
+                    velocity[2] = D_0015ED6C * 8.0f;
+                    *health = 0.0f;
+                    moby->flags &= 0xefff;
+                    *(OvlQuad *)position = *(OvlQuad *)velocity;
+                    FUN_L00_00257470(moby, 0, -1);
+                    d[0x67] = 0x78;
+                    FUN_L00_0025d458(moby, (short *)(d + 0x60));
+                    FUN_L00_0024f7c8(moby, 0, velocity);
+                    emit_effect_l13(moby, position, velocity, 0.0f, 0.0f,
+                                    10, 3, 16, 4.0f, 2.0f, 0.0f, 1.0f,
+                                    1, 20.0f, 1, 1, -1, 0);
+                    if (moby->prev_seq != 1) {
+                        FUN_00212f90(moby, 1, 0, 0);
+                    }
+                    link = *(int *)(d + 0x70);
+                    if (link != -1) {
+                        record = D_0013E550 + link * 0x70;
+                        if (*(struct Moby **)(record + 0x88) == moby && record[0x74] != 0) {
+                            FUN_0022d798(link);
+                        }
+                    }
+                    *(int *)(d + 0x70) = -1;
+                    moby->state = 2;
+                } else {
+                    *health -= *(float *)(src + 0x2c);
+                    d[0x67] = 0xfa;
+                    *(short *)(d + 0x26) = FUN_001f96f8(0x3c);
+                    FUN_L00_0025d458(moby, (short *)(d + 0x60));
+                }
+            }
+        }
+mark:
+        moby->unkA4 = 0xff;
+    }
+    FUN_L00_0025d538(moby, d + 0x60);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002cefc0.s", FUN_L13_002cefc0);
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E2488), where it is exact; names translated to the US level program. */
 
