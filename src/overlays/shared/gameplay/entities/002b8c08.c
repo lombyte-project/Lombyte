@@ -672,7 +672,56 @@ void FUN_L01_002eda00(char *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002edca0.s", FUN_L01_002edca0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002eec68.s", FUN_L01_002eec68);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef350.s", FUN_L01_002ef350);
+#else
+extern short *lists_2ef478[] __asm__("D_L01_001ABCC0");
+extern char *ents_2ef478 __asm__("D_L01_0015FFD8");
+extern void FUN_L00_00250df8(void *);
+
+char *FUN_L01_002ef350(char *self) {
+    short *list;
+    char *entities;
+    unsigned short entry;
+    int type = -1;
+    if (*(short *)(self + 0xA6) == 0x23C) {
+        type = 0x361;
+    } else if (*(short *)(self + 0xA6) == 0x361) {
+        type = 0x362;
+    }
+    list = lists_2ef478[(unsigned char)self[0x21]];
+    entities = ents_2ef478;
+    if (list == 0) return 0;
+    goto scan;
+advance:
+    if ((short)entry < 0) return 0;
+    list++;
+scan:
+    {
+        char *other;
+        entry = *(unsigned short *)list;
+        other = entities + ((entry & 0x7FFF) << 8);
+        if ((unsigned char)other[0x20] != 12 || *(short *)(other + 0xA6) != type) goto advance;
+        {
+            char *other_data = *(char **)(other + 0x78);
+            char *self_data = *(char **)(self + 0x78);
+            other[0x31] = 1;
+            other[0x30] = self[0x30];
+            *(unsigned short *)(other + 0x32) = *(unsigned short *)(self + 0x32);
+            *(unsigned long long *)(other + 0x38) = *(unsigned long long *)(self + 0x38);
+            *(int *)(other + 0x94) = *(int *)(*(char **)(other + 0x24) + 0x10);
+            *(unsigned short *)(other + 0x34) = *(unsigned short *)(self + 0x34);
+            qcopy(other + 0x10, self + 0x10);
+            qcopy(other + 0x40, self + 0x40);
+            *(float *)(other_data + 0x20) = *(float *)(self_data + 0x20);
+            *(float *)(other_data + 0x224) = *(float *)(self_data + 0x224);
+            FUN_L00_00250df8(other);
+            return other;
+        }
+    }
+    return 0;
+}
+#endif /* NON_MATCHING */
 
 typedef struct {
     char p0[0x10];
