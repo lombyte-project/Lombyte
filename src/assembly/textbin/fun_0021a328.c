@@ -235,7 +235,7 @@ int render_configured_text_label(struct MenuScreen *label) {
                               func_001FA6E0(menu_text_color, 0x80FFA888, 0.5f), 0x80FFA888);
         c.flags |= 4;
         font_print_window(&c, color, text, -1, texture_tex0, font);
-        window->flags ^= 4;
+        window->flags = c.flags ^ 4;
         flags = label->data.label.flags;
         text_extent = c.rendered_height + 4;
         visible_height = c.bottom - c.top;
