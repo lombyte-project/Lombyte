@@ -549,7 +549,75 @@ void FUN_L01_002ff118(L01WatchMoby *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00300220.s", FUN_L01_00300220);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302438.s", FUN_L01_00302438);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302648.s", FUN_L01_00302648);
+/* pvars of the moby run by FUN_L01_00302648: 20 trigger zones and a hold counter */
+typedef struct {
+    s32 path;   /* -1, or an index into D_L01_001B0930 */
+    f32 zmin;
+    f32 zmax;
+    s32 volume; /* clip volume FUN_00214720 tests */
+} Zone_302648;
+typedef struct {
+    Zone_302648 zones[20];
+    s32 count;
+} ZoneVars_302648;
+
+extern s32 D_001413D4_302648[] __asm__("D_001413D4");
+extern struct Moby *D_L01_0015FFE4_302648 __asm__("D_L01_0015FFE4");
+extern s32 D_L01_0015F30C_302648 __asm__("D_L01_0015F30C") __attribute__((sda));
+extern s32 *D_L01_001B0930_302648[] __asm__("D_L01_001B0930");
+extern s32 FUN_L00_00259740_302648(void *, void *, s32) __asm__("FUN_L00_00259740");
+extern s32 FUN_00214720_302648(void *, s32) __asm__("FUN_00214720");
+extern void FUN_001f4600_302648(void (*)(char *), void *) __asm__("FUN_001f4600");
+extern void FUN_L01_00302438_302648(char *) __asm__("FUN_L01_00302438");
+extern void FUN_L00_002b5b20_302648(struct Moby *, void *) __asm__("FUN_L00_002b5b20");
+
+/* While the camera is in mode 0x1D, counts the frames the class 0xAC moby spends outside every zone.
+ * Entering a zone resets the count; past a random threshold FUN_L00_002b5b20 runs on that moby. */
+void FUN_L01_00302648(struct Moby *m) {
+    ZoneVars_302648 *v = (ZoneVars_302648 *)m->pvars;
+    struct Moby *t = 0;
+    struct Moby *p;
+    s32 i;
+    s32 *path;
+
+    m->unk30 = 0xFF;
+    if (D_001413D4_302648[0] != 0x1D) {
+        v->count = 0;
+        return;
+    }
+    for (p = D_L01_0015FFE4_302648; p != 0; p = p->next) {
+        if (p->oclass == 0xAC) {
+            t = p;
+            break;
+        }
+    }
+    if (t == 0 || t->oclass != 0xAC) {
+        v->count = 0;
+        return;
+    }
+    v->count++;
+    for (i = 0; i < 20; i++) {
+        if (v->zones[i].path != -1 && t->pos.z > v->zones[i].zmin && t->pos.z < v->zones[i].zmax) {
+            path = D_L01_001B0930_302648[v->zones[i].path];
+            if (FUN_L00_00259740_302648(&t->pos, path + 4, path[0])) {
+                v->count = 0;
+                break;
+            }
+        }
+        if (FUN_00214720_302648(&t->pos, v->zones[i].volume)) {
+            v->count = 0;
+            break;
+        }
+    }
+    if (v->count > 0) {
+        if (D_L01_0015F30C_302648) {
+            FUN_001f4600_302648(FUN_L01_00302438_302648, m);
+        }
+        if (FUN_001f96f8(90) < v->count) {
+            FUN_L00_002b5b20_302648(t, t->pvars);
+        }
+    }
+}
 
 typedef struct {
     s32 id;                        /* collected flag index (D_0014BEC0 + level * 4), -1 none */
