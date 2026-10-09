@@ -230,7 +230,6 @@ extern unsigned char *FUN_L00_002730e0_q(float *pos, char *vel, int color, unsig
                                          float scale) __asm__("FUN_L00_002730e0");
 extern unsigned char *FUN_L17_0026fdd0_q(char *pos, int mode, int step) __asm__("FUN_L17_0026fdd0");
 extern unsigned char D_0013F420_x_q[] __asm__("D_0013F420");
-extern unsigned char D_0013F350_x_q[] __asm__("D_0013F350");
 extern unsigned char D_00141968_x_q[] __asm__("D_00141968");
 extern void FUN_001f9a40_q(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int,
@@ -255,8 +254,8 @@ void FUN_L17_002e8e08(struct Moby *moby) {
     float w[12];
     char *d = (char *)moby->pvars;
     char *t;
-    char *g;
-    char *g2;
+    struct Hero *g;
+    struct Hero *g2;
     char *r;
     int step;
     int hit;
@@ -303,8 +302,8 @@ void FUN_L17_002e8e08(struct Moby *moby) {
             hit = *(int *)(r + 0x18);
             if (hit != 0) {
                 if (hit != *(int *)(d + 0x3C)) {
-                    g = (char *)D_0013F350_x_q;
-                    if (*(short *)(g + 0x308) != 0 && hit == *(int *)(g + 0x2080)) {
+                    g = &hero;
+                    if (g->unk308 != 0 && hit == ((int)g->moby)) {
                         unsigned char *rec = D_00141968_x_q;
                         if (*(unsigned short *)(rec + 0x458) == 0) {
                             (*(unsigned short *)(rec + 0x458))++;
@@ -319,9 +318,9 @@ void FUN_L17_002e8e08(struct Moby *moby) {
                     }
                     qcopy(&moby->pos, D_L17_00174760_q);
                     FUN_L00_002598b0_q((int)moby, 0.75f, &moby->pos, 1, 6.0f, 0.0f, 0, 1, 0);
-                    g2 = (char *)D_0013F350_x_q;
-                    if (*(short *)(g2 + 0x308) != 0 &&
-                        *(int *)(D_L17_00174760_q - 8) == *(int *)(g2 + 0x2080)) {
+                    g2 = &hero;
+                    if (g2->unk308 != 0 &&
+                        *(int *)(D_L17_00174760_q - 8) == ((int)g2->moby)) {
                         unsigned char *rec = D_00141968_x_q;
                         if (*(unsigned short *)(rec + 0x458) == 0) {
                             (*(unsigned short *)(rec + 0x458))++;
