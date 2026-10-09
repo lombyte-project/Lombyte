@@ -69,7 +69,7 @@ extern void *CreateMoby() __asm__("FUN_0020c4f8");
 
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L10_002dd848(char *owner) {
+char *FUN_L10_002dd848(struct Moby *owner) {
     char *moby = CreateMoby(0x462);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;
@@ -77,9 +77,9 @@ char *FUN_L10_002dd848(char *owner) {
         moby[0x31] = 1;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
-        *(float *)(moby + 0x48) = *(float *)(owner + 0x48);
-        *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
-        qcopy(moby + 0x10, owner + 0x10);
+        *(float *)(moby + 0x48) = owner->rot.z;
+        *(long *)(moby + 0x38) = owner->spawn_frame;
+        qcopy(moby + 0x10, &owner->pos);
         *(float *)(moby + 0x18) = 59.0f;
         FUN_L00_00250df8(moby);
     }
@@ -842,33 +842,33 @@ extern int D_L10_001BA950[];
 extern unsigned char D_0014C190[] NOT_SDA;
 void mark_moby_for_removal_d650(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L10_002dd650(char *m) {
+void FUN_L10_002dd650(struct Moby *m) {
     int i;
     char *e;
     float w[16];
     float v[4];
-    unsigned short id = *(unsigned short *)(m + 0xB2);
+    unsigned short id = m->unkB2;
     if (D_L10_001BB6B0.collected[(short)id] != 0 ||
         (*(int *)(D_0014C190 + (((short)id >> 5) * 4 + (D_0015ED84_m << 8))) >> (id & 0x1F)) & 1) {
         mark_moby_for_removal_d650(m);
         return;
     }
-    *(short *)(m + 0x32) = 0x80;
+    m->unk32 = 0x80;
     e = D_L10_00178580;
     for (i = 0; i < 0x40; i++, e += 0x40) {
         if (*(char **)(e + 0x34) == m) {
             if (*(int *)(e + 0x24) & 0x20000) {
                 char *o = *(char **)(e + 0x20);
                 if (*(short *)(o + 0xA6) == 0xAC || *(short *)(o + 0xA6) == 0x99) {
-                    subtract_vector_xyz(v, m + 0x10, o + 0x10);
-                    FUN_001fa2d8(w, m + 0xC0);
+                    subtract_vector_xyz(v, &m->pos, o + 0x10);
+                    FUN_001fa2d8(w, &m->unkC0);
                     FUN_001f9d20(v, v, w);
                     if (v[0] > 0.25f) {
-                        *(int *)(D_0014C190 + (((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 +
+                        *(int *)(D_0014C190 + (((short)m->unkB2 >> 5) * 4 +
                                                (D_0015ED84_m << 8))) |=
-                            1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
-                        D_L10_001BA950[(short)*(unsigned short *)(m + 0xB2) >> 5] |=
-                            1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
+                            1 << (m->unkB2 & 0x1F);
+                        D_L10_001BA950[(short)m->unkB2 >> 5] |=
+                            1 << (m->unkB2 & 0x1F);
                         mark_moby_for_removal_d650(m);
                         return;
                     }
