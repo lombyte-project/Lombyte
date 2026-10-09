@@ -4,8 +4,8 @@
 #include "rnc/globals.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/state/usage_stats.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0dc0.s", FUN_L02_002e0dc0);
 #include "rnc/math_consts.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
@@ -96,6 +96,261 @@ extern f32 angle_sub(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 angle_diff(f32, f32) __asm__("FUN_001fa688");
 extern void spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void drive_joint(f32, f32, struct Moby *, void *, s32) __asm__("FUN_L00_002628d8");
+
+extern WatcherReward talk_camera __asm__("D_L02_0016CE60") __attribute__((section(".data"))); /* dialogue camera spot */
+extern char D_L02_00161CF0[];
+extern char *D_L02_001600EC;
+extern f32 D_L02_0015F3FC;
+extern s32 D_0015EEA4;
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+extern f32 D_L02_00161CE0[2] __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
+extern struct UsageStat D_00141968[] __attribute__((section(".data"))); /* usage records 36 on (D_00141848 + 0x120) */
+extern u8 items_owned[] __asm__("D_0013D4C0") __attribute__((section(".data"))); /* by item id */
+extern s32 level_game_mode __asm__("D_L02_0015F5C4");
+extern f32 frame_delta __asm__("D_0015ED64");
+extern u8 big_head_cheat_enabled __asm__("D_0015EDB0");
+extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
+extern void initialize_npc_dialogue(struct Moby *, char *) __asm__("FUN_L00_002668a0");
+extern s32 update_npc_dialogue(struct Moby *, char *) __asm__("FUN_L00_00266448");
+extern void FUN_L02_00298c68(int);
+extern void approach_two_stage(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
+extern f32 approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8");
+extern void lerp_vector(void *out, void *a, void *b, f32 t) __asm__("FUN_001f9a40");
+extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaa30(void *);
+extern void FUN_L00_002eac18(int);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_0020cca8(void *, int, void *);
+extern void copy_matrix(void *, void *) __asm__("FUN_001fa2b8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void FUN_L00_00250df8(void *);
+
+/* Aridia NPC with a carried prop moby (data+0x178): dialogue state machine (the hint in state 1 is usage
+ * record 50), a path-camera ride (3/4) that fades D_L02_0015F3FC in and out, then the shared head-tracking tail. */
+void FUN_L02_002e0dc0(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    s32 t;
+    f32 fade;
+    struct Moby *prop;
+
+    FUN_L02_002e0cd8(moby);
+    switch (moby->state) {
+    case 0:
+        if (items_owned[0x2D] != 0) {
+            goto kill;
+        }
+        *(char **)(data + 0x20) = D_L02_00161CF0;
+        moby->state = 1;
+        initialize_npc_dialogue(moby, data);
+        FUN_L02_0025c758(moby);
+        prop = create_moby(0x38);
+        *(struct Moby **)(data + 0x178) = prop;
+        prop->unk32 = 0x40;
+        (*(struct Moby **)(data + 0x178))->unk31 = 1;
+        (*(struct Moby **)(data + 0x178))->spawn_frame = moby->spawn_frame;
+        (*(struct Moby **)(data + 0x178))->flags |= 0x100;
+        break;
+    case 1:
+        if (*(u8 *)(data + 8) == 1 && point_in_clip_volume(&hero.motion.pos, *(s32 *)(data + 0x154)) != 0) {
+            *(f32 *)(data + 0xC) = 255.0f;
+        } else {
+            *(f32 *)(data + 0xC) = 3.7f;
+        }
+        if (update_npc_dialogue(moby, data) != 0) {
+            watcher_face(moby, 2.2f);
+            moby->state = 2;
+        } else if (items_owned[0x5] == 0 && vec_dist(&moby->pos, &hero.motion.pos) < 3.0f) {
+            if (D_00141968[14].count != 0) {
+                t = scale_frames(D_0015EEA4) - D_00141968[14].unk2 * 600;
+                if ((int)(scale_frames(0x12) * 60.0f) < t || D_00141968[14].unk2 * 600 == 0) {
+                    give_reward(0x7D4, 0xE);
+                } else {
+                    t = scale_frames(D_0015EEA4) / 600;
+                    if (D_00141968[14].unk2 < t) {
+                        D_00141968[14].unk2 = scale_frames(D_0015EEA4) / 600;
+                    }
+                }
+            } else {
+                D_00141968[14].count++;
+                t = scale_frames(D_0015EEA4) / 600;
+                if (D_00141968[14].unk2 < t) {
+                    D_00141968[14].unk2 = scale_frames(D_0015EEA4) / 600;
+                }
+                D_00141968[14].level_mask = D_00141968[14].level_mask | (1 << current_level_index) | 0x80000000;
+            }
+        }
+        if (moby->prev_seq == 0 && count_down_16((s16 *)(data + 0x172)) != 0) {
+            *(s16 *)(data + 0x172) = float_to_int(scale_time(rand_range(1200.0f, 2400.0f)));
+            if (moby->prev_seq != 1) {
+                blend_anim(moby, 1, 0, scale_frames(10));
+            }
+        } else if (moby->prev_seq == 1 && (moby->unk70 & 2)) {
+            blend_anim(moby, 0, 0, scale_frames(10));
+        }
+        break;
+    case 2:
+        if (level_game_mode != 2) {
+            moby->state = 1;
+            if (*(s16 *)(data + 4) == 0) {
+                FUN_L00_002502a0(moby->unkB0);
+                if (*(s32 *)(data + 0x150) != -1) {
+                    char *p = D_L02_001600EC + (*(s32 *)(data + 0x150) << 7);
+                    FUN_L00_00284e50(p + 0x30, p + 0x70);
+                }
+            } else if (*(s16 *)(data + 4) == 2) {
+                moby->unk31 = 0;
+                moby->unk94 = 0;
+                moby->flags |= 1;
+                if (*(struct Moby **)(data + 0x178) != 0) {
+                    (*(struct Moby **)(data + 0x178))->flags |= 1;
+                    (*(struct Moby **)(data + 0x178))->unk31 = 0;
+                }
+                FUN_L02_00298c68(2);
+                moby->state = 5;
+            }
+        } else if (talk_camera.placed == 0) {
+            vec_set_len(&talk_camera.pos, &moby->unkC0, 2.5f);
+            vec_add(&talk_camera.pos, &talk_camera.pos, &moby->pos);
+            talk_camera.pos.z = ground_height(&talk_camera.pos, 0, 0.5f);
+            vec_clear(&talk_camera.vel);
+            talk_camera.vel.z = angle_add(moby->rot.z, 3.14159f);
+            talk_camera.placed = 1;
+        }
+        break;
+    case 5:
+        FUN_L00_00260860(5, 1);
+        end_conversation(0, -1);
+        goto kill;
+    case 3: {
+        Vec4 pos;
+        Vec4 rot;
+        Vec4 from;
+        Vec4 to;
+        approach_two_stage((f32 *)(data + 0x180), (f32 *)(data + 0x184), 1.0f, D_0015ED70 * 0.1f,
+                           D_0015ED70 * 0.25f, D_0015ED6C * 0.5f);
+        lerp_vector(&pos, D_L02_001600EC + (*(s32 *)(data + 0x158) << 7) + 0x30,
+                    D_L02_001600EC + (*(s32 *)(data + 0x15C) << 7) + 0x30, *(f32 *)(data + 0x180));
+        qcopy_nc(&from, (char *)((*(s32 *)(data + 0x158) << 7) + (s32)D_L02_001600EC) + 0x70);
+        qcopy_nc(&to, (char *)((*(s32 *)(data + 0x15C) << 7) + (s32)D_L02_001600EC) + 0x70);
+        rot.f[2] = angle_add(angle_sub(to.f[2], from.f[2]) * *(f32 *)(data + 0x180), from.f[2]);
+        rot.f[1] = angle_add(angle_sub(to.f[1], from.f[1]) * *(f32 *)(data + 0x180), from.f[1]);
+        rot.f[0] = angle_add(angle_sub(to.f[0], from.f[0]) * *(f32 *)(data + 0x180), from.f[0]);
+        FUN_L00_002ea9d8(&pos);
+        FUN_L00_002eaa30(&rot);
+        if (*(f32 *)(data + 0x180) < 1.0f) {
+            approach_value((f32 *)(data + 0x17C), 0.0f, 0.1f);
+        } else {
+            approach_value((f32 *)(data + 0x17C), 1.0f, 0.1f);
+            if (*(f32 *)(data + 0x17C) == 1.0f) {
+                moby->state = 4;
+                FUN_L00_002eac18(0);
+            }
+        }
+        D_L02_0015F3FC = *(f32 *)(data + 0x17C);
+        break;
+    }
+    case 4: {
+        approach_value((f32 *)(data + 0x17C), 0.0f, 0.1f);
+        fade = *(f32 *)(data + 0x17C);
+        D_L02_0015F3FC = fade;
+        if (fade == 0.0f) {
+            if (*(struct Moby **)(data + 0x178) != 0) {
+                delete_moby(*(struct Moby **)(data + 0x178));
+            }
+        kill:
+            delete_moby(moby);
+            return;
+        }
+        break;
+    }
+    }
+
+    /* A statement expression: retail reuses this scope's stack for the head-tracking block below. */
+    ({
+        float mtx[16];
+        Vec4 offset;
+        if (*(struct Moby **)(data + 0x178) != 0) {
+            FUN_L00_0024f7c8(moby, 2, &(*(struct Moby **)(data + 0x178))->pos);
+            FUN_0020cca8(moby, 2, mtx);
+            copy_matrix(&(*(struct Moby **)(data + 0x178))->unkC0, mtx);
+            transform_vector_by_basis(&offset, D_L02_00161CE0, &(*(struct Moby **)(data + 0x178))->unkC0);
+            vec_add(&(*(struct Moby **)(data + 0x178))->pos, &(*(struct Moby **)(data + 0x178))->pos, &offset);
+            FUN_L00_00250df8(*(struct Moby **)(data + 0x178));
+        }
+    });
+
+    {
+        Vec4 target;
+        Vec4 head;
+        Vec4 dir;
+        s32 look_enabled;
+        f32 rotation_step;
+        f32 rotation_limit;
+        f32 heading;
+        f32 yaw;
+        f32 pitch;
+        f32 delta;
+
+        rotation_step = 0.02f;
+        rotation_limit = 0.3f;
+        look_enabled = 0;
+        if (moby->prev_seq == 0) {
+            look_enabled = 1;
+            if (vec_dist(&moby->pos, &hero.motion.pos) < 8.0f &&
+                angle_diff(moby->rot.z, angle_atan2(hero.motion.unkD0.f[0] - moby->pos.x,
+                                                                     hero.motion.unkD0.f[1] - moby->pos.y)) <
+                    1.5707964f) {
+                if (vec_len(&hero.motion.unk100) > 0.01f) {
+                    *(s16 *)(data + 0x174) = scale_frames(120);
+                } else {
+                    count_down_16((s16 *)(data + 0x174));
+                }
+            } else if (*(s16 *)(data + 0x174) != 0) {
+                *(s16 *)(data + 0x174) = 0;
+                qcopy(data + 0x160, &hero.motion.unkD0);
+            }
+            if (count_down_16((s16 *)(data + 0x176))) {
+                *(s16 *)(data + 0x176) = float_to_int(scale_time(rand_range(180.0f, 300.0f)));
+                heading = angle_add(moby->rot.z, rand_range(-90.0f, 90.0f) * 0.017453292f);
+                pitch = rand_range(0.0f, 30.0f) * 0.017453292f;
+                spherical_offset(data + 0x160, 6.0f, heading, pitch);
+                vec_add(data + 0x160, data + 0x160, &moby->pos);
+            }
+            if (*(s16 *)(data + 0x174) != 0) {
+                qcopy(&target, &hero.motion.unkD0);
+                rotation_step = 0.04f;
+                rotation_limit = 0.3f;
+            } else {
+                qcopy(&target, data + 0x160);
+            }
+        }
+        if (look_enabled) {
+            qcopy(&head, &moby->pos);
+            head.f[2] += 1.0f;
+            vec_sub(&dir, &target, &head);
+            yaw = angle_sub(angle_atan2(dir.f[0], dir.f[1]), moby->rot.z);
+            pitch = -angle_atan2(vec_len_xy(&dir), dir.f[2]);
+            if (yaw > 1.5707964f)
+                yaw = 1.5707964f;
+            else if (yaw < -1.5707964f)
+                yaw = -1.5707964f;
+            if (pitch > 0.5235988f)
+                pitch = 0.5235988f;
+            else if (pitch < -0.5235988f)
+                pitch = -0.5235988f;
+            *(f32 *)(data + 0xA4) = pitch;
+            *(f32 *)(data + 0xA8) = yaw * 0.7f;
+            *(f32 *)(data + 0x128) = yaw * 0.3f;
+        }
+        if (big_head_cheat_enabled != 0) {
+            *(f32 *)(data + 0xB0) = 2.75f;
+        }
+        delta = frame_delta;
+        drive_joint(rotation_step * delta, rotation_limit * delta, moby, data + 0x40, 0);
+        drive_joint(rotation_step * frame_delta, rotation_limit * frame_delta, moby, data + 0xC0, 1);
+    }
+}
 
 /* Watcher NPC update (twin of FUN_L05_00317470): idles with random animations, talks to the hero and drops its reward, and turns its head toward the hero or a random look target. */
 void FUN_L02_002e1950(struct Moby *m) {
