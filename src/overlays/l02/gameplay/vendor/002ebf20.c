@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/gameplay/hero.h"
 
 #include "rnc/gameplay/entities/moby.h"
 #include "qcopy.h"
@@ -348,4 +349,24 @@ void FUN_L02_002ee890(struct Moby *moby) {
     qcopy(data + 8, ((char *)&D_0013F3D0));
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ef020.s", FUN_L02_002ef020);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002f8a18.s", FUN_L02_002f8a18);
+extern void FUN_L00_001ed630(void *, void *, void *);
+extern char D_L02_00167280[];
+
+/* Sets the vendor camera mode; mode 3 also aims it from the hero's position. */
+void FUN_L02_002f8a18(int mode, int arg) {
+    char *g = D_L02_00167280;
+    char *cam = *(char **)(g + 0x180);
+    char *d = *(char **)(cam + 0x70);
+    char *e = d + 0xE0;
+
+    cam[0x88] = mode;
+    switch (mode) {
+    case 3:
+        qcopy(d + 0x110, &hero.motion.pos);
+        FUN_L00_001ed630(d + 0xFC, g + 0x140, &hero.motion.pos);
+    case 2:
+        *(int *)(e + 4) = arg;
+        *(int *)(d + 0xE0) = arg;
+        break;
+    }
+}
