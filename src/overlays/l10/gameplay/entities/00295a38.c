@@ -407,7 +407,89 @@ void FUN_L10_002c7a20(struct Moby *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9958.s", FUN_L10_002c9958);
+#include "qzero.h"
+/* Box a moby sweeps through: hits other mobys inside it (FUN_L10_002c9958) */
+typedef struct {
+    f32 width;        /* 0x00: extent along the moby's x */
+    f32 depth;        /* 0x04: extent along the moby's z */
+    u32 flags;        /* 0x08: 0x100 disables the box */
+    u8 pad0C[0x3C];
+    f32 margin_x;     /* 0x48 */
+    f32 margin_z;     /* 0x4C */
+    f32 strength;     /* 0x50: passed to the hit */
+} HitBox;
+
+extern struct Moby *D_L10_00178380[];
+extern void FUN_001fa030(void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_001fa2d8(void *, void *);
+extern int FUN_L00_001f2868(void *, float, int, void *, void *);
+extern void *memcpy(void *, const void *, u32);
+extern void FUN_L10_0024c7f0(unsigned char *m, int x, int y, void *p, float f);
+
+void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
+    OvlVec4 mat[3];
+    OvlVec4 center;
+    OvlVec4 delta;
+    OvlVec4 local;
+    OvlVec4 inv[4];
+    OvlVec4 point;
+    f32 radius;
+    s32 count;
+    s32 i;
+    s32 j;
+    s32 n;
+
+    if (box->flags & 0x100) {
+        return;
+    }
+    FUN_001fa030(mat, &moby->rot);
+    if (box->width > box->depth) {
+        radius = box->width * 0.5f;
+    } else {
+        radius = box->depth * 0.5f;
+    }
+    qzero(&center);
+    center.f[2] = radius;
+    FUN_001f9cf8(&center, &center, mat);
+    FUN_001f9a10(&center, &center, &moby->pos);
+    count = FUN_L00_001f2868(&center, radius, 0x10, moby, 0);
+    if (count != 0) {
+        struct Moby *found[count];
+
+        memcpy(found, D_L10_00178380, count * 4);
+        for (i = 0; i < count; i++) {
+            struct Moby *other = found[i];
+
+            if (other == 0 || other->state == 0xFE || other->state == 0xFD) {
+                continue;
+            }
+            subtract_vector_xyz(&delta, &other->pos, &moby->pos);
+            FUN_001fa2d8(inv, mat);
+            FUN_001f9d20(&local, &delta, inv);
+            qcopy(&point, &local);
+            if (point.f[0] < -(box->width * 0.5f + box->margin_x)) {
+                point.f[0] = -box->width * 0.5f;
+            } else if (box->width * 0.5f + box->margin_x < point.f[0]) {
+                point.f[0] = box->width * 0.5f;
+            }
+            if (point.f[2] < -(box->depth * 0.5f + box->margin_z)) {
+                point.f[2] = -box->depth * 0.5f;
+            } else if (box->depth * 0.5f + box->margin_z < point.f[2]) {
+                point.f[2] = box->depth * 0.5f;
+            }
+            point.f[1] = 0.0f;
+            FUN_001f9cf8(&point, &point, mat);
+            FUN_001f9a10(&point, &point, &moby->pos);
+            n = FUN_L00_001f2868(&point, box->margin_x, 0x10, moby, 0);
+            for (j = 0; j < n; j++) {
+                if (D_L10_00178380[j] == other) {
+                    FUN_L10_0024c7f0((unsigned char *)other, (int)moby, 0x10001, &point, box->strength);
+                }
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9c70.s", FUN_L10_002c9c70);
 void FUN_L10_002d7b18(struct Moby *a, float t) {
     float c = a->pos.z;
@@ -711,11 +793,9 @@ unsigned char *FUN_L10_002dd270(int a, void *pos, int b, float x, float y, float
 
 typedef struct { int owner; float phase,speed,size; int source,timer; float growth; } EffectData;
 
-extern char D_L10_00178380[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern float D_0015ED60;
-extern int FUN_L00_001f2868(float,void *,int,void *,void *);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_0025a9f8(void *,void *,void *,int,int,int,int,int,float,float,float);
 extern void FUN_L00_00262360_c(int,float *,float *,void *,float,float) __asm__("FUN_L00_00262360");
@@ -740,7 +820,7 @@ void FUN_L10_002dd3d8(char *moby) {
   *(float *)(moby+0x2C)=*(float *)(*(char **)(moby+0x24)+0x24)*numerator/ConvertIntegerToFloat(truncate_float_to_s32(10.0f/(D_0015ED6C*5.0f))/4)*0.5f;
  }
  if(*(float *)(*(char **)(moby+0x24)+0x24)*0.25f<*(float *)(moby+0x2C)) {
-  int count=FUN_L00_001f2868(0.15f,moby+0x10,16,*(void **)(d+0x10),0);
+  int count=FUN_L00_001f2868(moby+0x10,0.15f,16,*(void **)(d+0x10),0);
   *(OvlQuad *)pos=*(OvlQuad *)(moby+0x10);
   FUN_L00_0025a9f8(*(void **)(d+0x10),pos,D_L10_00178380,count,0,0x810001,2,1,2.0f,1.0f,1.0f);
  }
