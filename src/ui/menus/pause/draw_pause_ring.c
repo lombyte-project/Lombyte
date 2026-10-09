@@ -5,7 +5,7 @@
    width/height (used for the ring's center and radius), unk50 the
    selected slot (drawn with a pulsing highlight box), and slots[i]
    indexes an icon-info table (D_001863D0, 0x4C bytes/entry) and a byte
-   flags table (D_0013E520) when nonzero. */
+   flags table (item_text_variant) when nonzero. */
 
 struct IconEnt {
     u8 pad[0x38];
@@ -24,7 +24,7 @@ struct PauseState {
 
 extern s32 D_0015F438;
 extern s32 D_001601B0 __attribute__((sda));
-extern u8 D_0013E520[];
+#include "rnc/gameplay/state/item_state.h"
 extern u8 D_001602D8[];
 extern u8 D_001602E0[];
 extern u8 D_001863D0[];
@@ -84,7 +84,7 @@ s32 draw_pause_ring(struct PauseState *arg0) {
                                       0x40404040L, 0);
         } else {
             s32 idx = arg0->slots[i];
-            s32 id = get_icon_frame(iconTab[idx].id, D_0013E520[idx] ? 4 : 0);
+            s32 id = get_icon_frame(iconTab[idx].id, item_text_variant[idx] ? 4 : 0);
 
             draw_hud_sprite(id, (s32)x - 0x11, (s32)y - 0x11, 0x20, 0x20, 0x80);
         }

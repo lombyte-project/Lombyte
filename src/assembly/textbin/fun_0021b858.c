@@ -28,7 +28,7 @@ typedef struct {
 } MenuPlayerState;
 
 extern MenuControllerState controller_state __asm__("D_0013C940");
-extern u8 item_available[] __asm__("D_0013D4C0");
+#include "rnc/gameplay/state/item_state.h"
 extern MenuPlayerState player_state __asm__("D_0013F350");
 extern MenuItemInfo menu_item_info[] __asm__("D_001863D0");
 extern s32 func_001E9468();

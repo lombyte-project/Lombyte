@@ -4,7 +4,6 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/ui/menus/menu_system.h"
 
-extern struct PadState D_0013C940;
 /* gp-relative here, so not the plain rnc/globals.h spellings. */
 extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
 extern s32 game_language __asm__("D_0015ED88") __attribute__((sda));
@@ -56,13 +55,13 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
     if (!focused) {
         return 0;
     }
-    if (D_0013C940.pressed_unmasked & 0xD00) {
+    if (controller_state.pressed_unmasked & 0xD00) {
         if (menu->data.list.flags & 0x20) {
             selected_level_index[0] = current_level_index;
         }
         return -1;
     }
-    if (D_0013C940.pressed_unmasked & 0x10) {
+    if (controller_state.pressed_unmasked & 0x10) {
         if (menu->data.list.flags & 0x20) {
             selected_level_index[0] = current_level_index;
         }
@@ -72,7 +71,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             return -1;
         }
     }
-    if (D_0013C940.pressed_unmasked & 0x40) {
+    if (controller_state.pressed_unmasked & 0x40) {
         /* Index through menu-> directly: locals for items/selected change
            which register keeps the copy of selected that actions 6 and 9 reuse. */
         switch (menu->data.list.items[menu->data.list.selected].action) {
@@ -158,9 +157,9 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
     previous_selection = menu->data.list.selected;
     flags = menu->data.list.flags;
     if (flags & 1) {
-        buttons = D_0013C940.raw_pressed;
+        buttons = controller_state.raw_pressed;
     } else {
-        buttons = D_0013C940.pressed_unmasked;
+        buttons = controller_state.pressed_unmasked;
     }
     if ((buttons & 0x1000) || ((flags & 0x100) && (buttons & 4))) {
         if (menu->data.list.selected != 0) {

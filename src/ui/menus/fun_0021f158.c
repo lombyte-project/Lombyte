@@ -2,8 +2,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 
-extern s32 D_0013D428[];
-extern u8 D_0013D4C0[];
+#include "rnc/gameplay/state/item_state.h"
 extern u8 D_001602A0[];
 extern u8 D_001602B8[];
 extern u8 D_001602C0[];
@@ -37,10 +36,10 @@ s32 FUN_0021f158(s32 arg0) {
     grid = menu_system.current->focus;
     temp_4_20 = grid->data.grid.cells[grid->data.grid.selected_cell].id;
     idx = temp_4_20;
-    if (*(idx + D_0013D4C0) == 0) {
+    if (*(idx + item_available) == 0) {
         return 0;
     }
-    temp_17_38 = D_0013D428[idx];
+    temp_17_38 = weapon_ammo_counts[idx];
     entry = &D_001DFFB0[idx];
     temp_18_40 = (s32)entry->unkE;
     vu1_add_g_sregister(0x42, 0x44);

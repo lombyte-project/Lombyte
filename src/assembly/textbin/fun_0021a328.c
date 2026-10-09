@@ -14,10 +14,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021a328/FUN_0021a328.s
 #include "rnc/ui/text/font_metrics.h"
 
 extern int menu_input_repeat_state[] __asm__("D_0013CAE0");
-extern u8 alternate_item_available[] __asm__("D_0013D388");
-extern u8 item_unlocked[] __asm__("D_0013D408");
-extern u8 item_available[] __asm__("D_0013D4C0");
-extern u8 item_text_variant[] __asm__("D_0013E520");
+#include "rnc/gameplay/state/item_state.h"
 extern int pal_mode __asm__("D_0015ED80") __attribute__((sda));
 extern int current_level_index __asm__("D_0015ED84") __attribute__((sda));
 extern int menu_text_color __asm__("D_001601B0") __attribute__((sda));

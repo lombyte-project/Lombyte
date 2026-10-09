@@ -4,7 +4,6 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 
-extern struct PadState controller_state __asm__("D_0013C940");
 extern s32 allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 
 s32 update_menu_cycle_selection(struct MenuScreen *menu) __asm__("FUN_00221e50");

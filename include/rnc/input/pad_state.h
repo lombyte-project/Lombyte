@@ -41,6 +41,8 @@ struct PadState {
     s32 unk1DC;                         /* 0x1DC: 0x79 if the button profile is all ones, else 0; l01 picks pressure input on 0x79 */
 };
 
+extern struct PadState controller_state __asm__("D_0013C940");
+
 /*
  * The same pad state as some functions read it: the stick axes, and the held/pressed button words,
  * which are also tested together as one doubleword (FUN_L00_00298f90, the debug camera's

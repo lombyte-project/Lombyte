@@ -1,0 +1,4 @@
+#include "types.h"
+#include "rnc/rendering/draw_environment.h"
+
+GraphicsDrawEnvironment draw_environment __attribute__((section(".data"))) = {{0xa000000000008001, 0xeeeeeeeeee}, 0x80070, 0x4c, 0x80070, 0x4d, 0x10000d8, 0x4e, 0x10000d8, 0x4f, 0x730000007000, 0x18, 0x730000007000, 0x19, 0x19f000001ff0000, 0x40, 0x19f000001ff0000};

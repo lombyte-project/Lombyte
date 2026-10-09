@@ -44,10 +44,8 @@ extern char D_00160088[];
 extern char D_00160090[];
 extern Weapon D_001DFFB0[];
 extern s32 D_0015ED98;
-extern u8 D_0013D4C0[];
 extern u8 D_0013D4E8[];
-extern u8 D_0013D388[];
-
+#include "rnc/gameplay/state/item_state.h"
 extern void func_001E9458(s32);
 extern s32 remove_hud_item(s32) __asm__("FUN_001ff480");
 extern void func_001E9460(s32);
@@ -134,16 +132,16 @@ void FUN_00216c48(void *arg0, Menu *menu, s32 arg2) {
         ok = !(D_0015ED98 < D_001DFFB0[e->unkA].unk0);
         break;
     case 2:
-        ok = D_0013D4C0[e->unkA] != 0;
+        ok = item_available[e->unkA] != 0;
         break;
     case 3:
         ok = 0;
-        if (D_0013D4C0[e->unkA] != 0) {
+        if (item_available[e->unkA] != 0) {
             ok = D_0013D4E8[e->unkA] == 0;
         }
         break;
     case 4:
-        ok = D_0013D388[e->unkA] != 0;
+        ok = alternate_item_available[e->unkA] != 0;
         break;
     case 5:
         ok = !(compute_clamped_count_difference() < e->unkA);

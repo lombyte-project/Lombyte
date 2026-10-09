@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00222640). */
 #include "sda.h"
 extern int D_0013D4C0 NOT_SDA;
-extern unsigned char D_0013E520[];
+#include "rnc/gameplay/state/item_state.h"
 typedef struct {
     unsigned short a; /* +0 */
     short b;          /* +2 */
@@ -29,7 +29,7 @@ int build_pause_item_list(void) {
         if (((unsigned char *)&D_0013D4C0)[id] != 0) {
             Item0A *out = &D_001D60E0[n];
             char *rec = D_001863D0 + id * 0x4C;
-            unsigned char b = D_0013E520[id];
+            unsigned char b = item_text_variant[id];
             int f = b != 0;
             out->a = *(unsigned short *)(rec + 0x38);
             out->b = f << 2;

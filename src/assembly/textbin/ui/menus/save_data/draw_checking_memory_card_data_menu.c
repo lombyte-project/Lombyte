@@ -24,8 +24,7 @@ struct ScreenDimensions {
    %hi/%lo pair instead of reusing the menu_system base (the unit loses
    exactness when it is spelled menu_system.current). */
 extern struct MenuPage *active_menu_page __asm__("D_001D5BF4");
-extern u8 item_available[] __asm__("D_0013D4C0");
-extern u8 alternate_item_available[] __asm__("D_0013D388");
+#include "rnc/gameplay/state/item_state.h"
 extern struct ScreenDimensions screen_dimensions __asm__("D_00151780");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");

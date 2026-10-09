@@ -2,7 +2,6 @@
 #include "rnc/ui/map/map_state.h"
 #include "rnc/globals.h"
 
-extern struct PadState D_0013C940;
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/input/pad_state.h"
@@ -31,10 +30,10 @@ s32 FUN_0021c4c0(struct MenuScreen *m) {
             return 0;
         }
     }
-    if ((D_0013C940.pressed_unmasked & 0xD00) && menu_system.close_locked == 0) {
+    if ((controller_state.pressed_unmasked & 0xD00) && menu_system.close_locked == 0) {
         return 1;
     }
-    if (D_0013C940.pressed_unmasked & 8) {
+    if (controller_state.pressed_unmasked & 8) {
         for (i = level_map_selection.level + 1; i < 20; i++) {
             if (D_0013DD40[i] != 0 || current_level_index == i) {
                 level_map_selection.level = i;
@@ -42,7 +41,7 @@ s32 FUN_0021c4c0(struct MenuScreen *m) {
             }
         }
     }
-    if (D_0013C940.pressed_unmasked & 4) {
+    if (controller_state.pressed_unmasked & 4) {
         for (i = level_map_selection.level - 1; i >= 0; i--) {
             if (D_0013DD40[i] != 0 || current_level_index == i) {
                 level_map_selection.level = i;
@@ -55,7 +54,7 @@ s32 FUN_0021c4c0(struct MenuScreen *m) {
         update_mission_list();
     }
     if (m->data.missions.count != 0) {
-        pad = D_0013C940.pressed_unmasked;
+        pad = controller_state.pressed_unmasked;
         ch = m->data.missions.choice;
         prev = m->data.missions.choice[level_map_selection.level];
         if (pad & 0x1000) {
@@ -74,7 +73,7 @@ s32 FUN_0021c4c0(struct MenuScreen *m) {
             D_001CF758[0] = ((u32 *)0x70000100)[*p];
         }
     }
-    if (D_0013C940.pressed_unmasked & 0x10) {
+    if (controller_state.pressed_unmasked & 0x10) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
         } else if (menu_system.close_locked == 0) {

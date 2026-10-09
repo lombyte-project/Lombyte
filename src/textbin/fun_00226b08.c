@@ -3,7 +3,7 @@
 #include "sda.h"
 
 /* Preserves selected state across func_00209370 using scratchpad copies.
-   Only listed bytes of D_0013D4C0 are restored; each D_00141EA0 entry is
+   Only listed bytes of item_available are restored; each D_00141EA0 entry is
    cleared when its referenced byte is zero. The two saved flags are then
    restored, the counter is advanced, the clock is refreshed, and a
    nonnegative slot updates the checkpoint state. The save menu supplies
@@ -27,11 +27,7 @@ typedef struct {
 } Checkpoints;
 
 extern Checkpoints D_0013D290;
-extern u8 D_0013D388[];
-extern u8 D_0013D408[];
-extern s32 D_0013D428[];
-extern u8 D_0013D4C0[];
-extern u8 D_0013E520[];
+#include "rnc/gameplay/state/item_state.h"
 extern u8 D_0014BEC0[];
 extern s32 D_00141EA0[];
 extern u8 D_0015EDD0[] MACRO_ADDR;
@@ -59,38 +55,38 @@ void FUN_00226b08(s32 slot) {
     s32 i;
     s32 j;
 
-    func_001F9838((void *)0x70000000, D_0013E520, 0x28);
-    func_001F9838((void *)0x70000030, D_0013D4C0, 0x25);
-    func_001F9838((void *)0x70000060, D_0013D428, 0x94);
+    func_001F9838((void *)0x70000000, item_text_variant, 0x28);
+    func_001F9838((void *)0x70000030, item_available, 0x25);
+    func_001F9838((void *)0x70000060, weapon_ammo_counts, 0x94);
     func_001F9838((void *)0x70000100, D_0014BEC0, 0x50);
     func_001F9838((void *)0x70000150, D_00141EA0, 0x20);
     func_001F9838((void *)0x70000170, D_0015EDD0, 0xC);
-    func_001F9838((void *)0x70000180, D_0013D408, 0x20);
+    func_001F9838((void *)0x70000180, item_unlocked, 0x20);
     saved = D_0015ED98;
     count = D_0015EE20;
-    flag4 = D_0013D388[4] != 0;
-    flag5 = D_0013D388[5] != 0;
+    flag4 = alternate_item_available[4] != 0;
+    flag5 = alternate_item_available[5] != 0;
     bytes = (u8 *)0x70000030;
     load_and_initialize_level_chunk();
-    func_001F9838(D_0013E520, (void *)0x70000000, 0x28);
+    func_001F9838(item_text_variant, (void *)0x70000000, 0x28);
     for (j = 0; D_001D5BA0[j] != -1; j++) {
-        D_0013D4C0[D_001D5BA0[j]] = bytes[D_001D5BA0[j]];
+        item_available[D_001D5BA0[j]] = bytes[D_001D5BA0[j]];
     }
-    func_001F9838(D_0013D428, (void *)0x70000060, 0x94);
+    func_001F9838(weapon_ammo_counts, (void *)0x70000060, 0x94);
     func_001F9838(D_0014BEC0, (void *)0x70000100, 0x50);
     for (i = 0; i < 8; i++) {
         s32 item = items[i];
-        D_00141EA0[i] = D_0013D4C0[item] ? item : 0;
+        D_00141EA0[i] = item_available[item] ? item : 0;
     }
     func_001F9838(D_0015EDD0, (void *)0x70000170, 0xC);
-    func_001F9838(D_0013D408, (void *)0x70000180, 0x20);
+    func_001F9838(item_unlocked, (void *)0x70000180, 0x20);
     D_0015ED98 = saved;
     if (flag4) {
-        D_0013D388[4] = 1;
+        alternate_item_available[4] = 1;
         D_0015EDA0 = 5;
     }
     if (flag5) {
-        D_0013D388[5] = 1;
+        alternate_item_available[5] = 1;
         D_0015EDA0 = 8;
     }
     D_0015EE20 = count + 1;

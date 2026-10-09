@@ -8,7 +8,6 @@ typedef struct __attribute__((packed)) {
 #include "rnc/input/pad_state.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
-extern struct PadState D_0013C940;
 #include "rnc/storage/memory_card/memory_card_state.h"
 extern volatile u16 D_0013E05A[];
 extern s32 D_0015ED98;
@@ -76,10 +75,10 @@ s32 saving_data_menu2(struct MenuScreen *w) {
         D_0013E05A[0] = 1;
     }
 
-    if ((D_0013C940.pressed_unmasked & 0xD00) && menu_system.close_locked == 0) {
+    if ((controller_state.pressed_unmasked & 0xD00) && menu_system.close_locked == 0) {
         return 1;
     }
-    if (D_0013C940.pressed_unmasked & 0x10) {
+    if (controller_state.pressed_unmasked & 0x10) {
         back = menu_system.current->back;
         if (back != NULL) {
             menu_system.next = back;
@@ -96,9 +95,9 @@ s32 saving_data_menu2(struct MenuScreen *w) {
     }
 
     if (w->data.save.flags & 1) {
-        pad = D_0013C940.raw_pressed;
+        pad = controller_state.raw_pressed;
     } else {
-        pad = D_0013C940.pressed;
+        pad = controller_state.pressed;
     }
     w->data.save.slot = D_0015EE34;
     if ((pad & 0x1000) && D_0015EE34 != 0) {

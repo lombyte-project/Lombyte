@@ -1,9 +1,9 @@
 /* Ported from rac1-decomp (src/game/missionfunc.c, func_0020CBA8). */
 #include "sda.h"
 extern int D_0013D8AC NOT_SDA;
-extern unsigned char D_0013D388[];
+#include "rnc/gameplay/state/item_state.h"
 int FUN_0020bd58(void) {
-    if (D_0013D8AC != 0 && D_0013D388[0x20] != 0 && D_0013D388[0x21] != 0)
+    if (D_0013D8AC != 0 && alternate_item_available[0x20] != 0 && alternate_item_available[0x21] != 0)
         return 1;
     return 0;
 }

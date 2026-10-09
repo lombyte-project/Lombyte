@@ -155,7 +155,7 @@ typedef struct {
 } PositionPair;
 
 extern s32 D_0013CAE4[];
-extern u8 D_0013D4C0[];
+#include "rnc/gameplay/state/item_state.h"
 extern ResidentCinematicState level_render_state __asm__("D_0013E030");
 extern u8 D_001413F5[];
 extern DialoguePlaybackState D_001516D0;
@@ -419,7 +419,7 @@ void update_resident_gameplay_state(void) {
             refresh_resident_object_spatial_bounds(object);
             if (object->class_id == 0) {
                 if (level_render_state.state == 0) {
-                    if (current_level_index == 10 && D_0013D4C0[6] == 0) {
+                    if (current_level_index == 10 && item_available[6] == 0) {
                         object->unk7F = 0;
                     } else if (render_sequence.time <= scale_ticks(0x3E)) {
                         object->unk7F = 0x18;
@@ -427,7 +427,7 @@ void update_resident_gameplay_state(void) {
                         object->unk7F = 0;
                     }
                 } else if (scale_ticks(360) < render_sequence.time) {
-                    if (current_level_index == 10 && D_0013D4C0[6] == 0) {
+                    if (current_level_index == 10 && item_available[6] == 0) {
                         object->unk7F = 0;
                     } else {
                         object->unk7F = 0x18;
@@ -456,7 +456,7 @@ void update_resident_gameplay_state(void) {
             }
             if (object->class_id == 0) {
                 func_001E9410(object);
-                if ((current_level_index == 10 && D_0013D4C0[6] != 0) ||
+                if ((current_level_index == 10 && item_available[6] != 0) ||
                     current_level_index == 13) {
                     if (level_render_state.attachment == 0) {
                         level_render_state.attachment = create_moby(0x509);

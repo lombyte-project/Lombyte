@@ -8,29 +8,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/display/set_pal_mode/
 #include "types.h"
 #include "rnc/rendering/fs_aa_buffer.h"
 #include "rnc/rendering/screen.h"
+#include "rnc/rendering/draw_environment.h"
 
-typedef struct {
-    u64 pad0[2];
-    u64 frame1;
-    u64 pad18;
-    u64 frame2;
-    u64 pad28;
-    u64 zbuf1;
-    u64 pad38;
-    u64 zbuf2;
-    u64 pad48;
-    u64 xyoffset1;
-    u64 pad58;
-    u64 xyoffset2;
-    u64 pad68;
-    u64 scissor1;
-    u64 pad78;
-    u64 scissor2;
-} GraphicsDrawEnvironment;
-
-extern GraphicsDrawEnvironment draw_environment __asm__("D_0013CF10");
-extern u64 depth_buffer_register __asm__("D_0013D100");
-extern u64 masked_depth_buffer_register __asm__("D_0013D170");
 extern s32 pal_mode __asm__("D_0015ED80");
 extern s32 first_image_buffer_address __asm__("D_0015EE74");
 extern s32 second_image_buffer_address __asm__("D_0015EE78");

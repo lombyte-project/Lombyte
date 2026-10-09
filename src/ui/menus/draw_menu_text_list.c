@@ -9,7 +9,7 @@
    focused row highlighted, scrolling the box to keep it visible.
    Returns 1 once after flag 0x8000 is consumed, else 2. */
 
-extern u8 D_0013D408[];
+#include "rnc/gameplay/state/item_state.h"
 extern u8 D_001DF050[];
 extern u8 D_001DF3F0[];
 extern u8 D_001DF790[];
@@ -111,7 +111,7 @@ s32 draw_menu_text_list(struct MenuScreen *menu) {
                 EnableGlobalStateFlag();
             }
             if (menu->data.list.flags & 0x200) {
-                draw_menu_selection_marker(0xF, box.anchor_y + 9, D_0013D408[i] != 0);
+                draw_menu_selection_marker(0xF, box.anchor_y + 9, item_unlocked[i] != 0);
             }
             if (menu->data.list.flags & 0x800) {
                 draw_menu_selection_marker(0xF, box.anchor_y + 9,

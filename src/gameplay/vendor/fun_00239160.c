@@ -28,8 +28,7 @@ struct Shop {
 
 extern struct Shop D_001E63C0;
 extern struct Goal D_001DFFB0[];
-extern s32 D_0013D428[];
-extern u8 D_0013D4E3[];
+#include "rnc/gameplay/state/item_state.h"
 extern s32 D_0015ED98;
 extern void draw_framebuffer_rect(s32, s32, s32, s32, s32, s32, u32) __asm__("func_001FB8F0");
 extern s32 get_help_message_text(s32) __asm__("func_001FDD10");
@@ -44,7 +43,7 @@ void FUN_00239160(void) {
     s = &D_001E63C0;
     if (s->open != 0) {
         if (s->slots[s->cur].kind == 1) {
-            if (D_0013D428[s->slots[s->cur].id] >= D_001DFFB0[s->slots[s->cur].id].need) {
+            if (weapon_ammo_counts[s->slots[s->cur].id] >= D_001DFFB0[s->slots[s->cur].id].need) {
                 return;
             }
         }
@@ -59,7 +58,7 @@ void FUN_00239160(void) {
             }
             id = 0x4EE0;
         } else {
-            if (D_0013D4E3[0] != 0) {
+            if (discount_purchase_pricing[0] != 0) {
                 cost = D_001DFFB0[s->slots[s->cur].id].boltsHard;
             } else {
                 cost = D_001DFFB0[s->slots[s->cur].id].bolts;

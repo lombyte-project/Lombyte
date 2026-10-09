@@ -30,7 +30,7 @@ extern struct Slot D_001CEC20[];
 extern struct Slot D_001CEC60[];
 extern struct Slot D_001CEC80[];
 extern struct Slot D_001CECA0[];
-extern u8 D_0013D4C0[];
+#include "rnc/gameplay/state/item_state.h"
 extern struct Info D_001863D0[];
 extern struct Item D_001D61B8[];
 extern s32 D_001D6248[];
@@ -54,7 +54,7 @@ s32 FUN_002216c0(void) {
         } else {
             id = D_001CECA0[i - 12].id;
         }
-        if (D_0013D4C0[id] != 0) {
+        if (item_available[id] != 0) {
             e = &D_001863D0[id];
             D_001D61B8[n].icon = e->icon;
             D_001D61B8[n].unk2 = 0;
