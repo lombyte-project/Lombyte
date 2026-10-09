@@ -11,6 +11,8 @@ ninja==1.13.0
 ninja_syntax==1.7.2
 spimdisasm==1.35.0
 pyelftools==0.33
+# Disassembles the boot code for scripts/data-refs.py.
+capstone==5.0.7
 n64img
 pygfxd
 crunch64

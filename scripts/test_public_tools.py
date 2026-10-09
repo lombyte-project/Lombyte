@@ -1720,5 +1720,84 @@ class OverlayStageTests(unittest.TestCase):
         self.assertIsNone(self.unit.stage("FUN_L00_00000010", text)[0])
 
 
+class DataRefsTests(unittest.TestCase):
+    """data-refs.py must find the address each load, store and constant forms."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.refs = load_module("rnc_data_refs", ROOT / "scripts" / "data-refs.py")
+        cls.in_data = staticmethod(lambda value: 0x160000 <= value < 0x161000)
+
+    def _scan(self, words):
+        code = b"".join(w.to_bytes(4, "little") for w in words)
+        insns = list(self.refs.disassemble(code, 0x100000))
+        return [(a.insn, a.target, a.width, a.kind)
+                for a in self.refs.scan(insns, 0x166C00, self.in_data)]
+
+    def test_lui_with_load_store_and_address(self):
+        found = self._scan([
+            0x3C020016,  # lui   $v0, 0x16
+            0x8C430010,  # lw    $v1, 0x10($v0)
+            0x24440004,  # addiu $a0, $v0, 4
+            0xAC440008,  # sw    $a0, 8($v0)
+        ])
+        self.assertEqual(found, [
+            (0x100004, 0x160010, 4, "load"),
+            (0x100008, 0x160004, 0, "addr"),
+            (0x10000C, 0x160008, 4, "store"),
+        ])
+
+    def test_call_forgets_caller_saved_constants(self):
+        found = self._scan([
+            0x3C020016,  # lui   $v0, 0x16
+            0x0C040040,  # jal   0x100100
+            0x00000000,  # nop
+            0x8C430010,  # lw    $v1, 0x10($v0): $v0 may have changed
+        ])
+        self.assertEqual(found, [])
+
+    def test_gp_relative_access(self):
+        found = self._scan([
+            0x8F831234,  # lw    $v1, 0x1234($gp)
+        ])
+        self.assertEqual(found, [(0x100000, (0x166C00 + 0x1234) & 0xFFFFFFFF, 4, "load")])
+
+    def test_ee_quad_load_is_seen_and_forgets_its_target(self):
+        found = self._scan([
+            0x3C050016,  # lui   $a1, 0x16
+            0x78A20020,  # lq    $v0, 0x20($a1)
+            0x8C430010,  # lw    $v1, 0x10($v0): $v0 now comes from memory
+        ])
+        self.assertEqual(found, [(0x100004, 0x160020, 16, "load")])
+
+    def test_mmi_word_forgets_every_constant(self):
+        found = self._scan([
+            0x3C020016,  # lui   $v0, 0x16
+            0x70000000,  # an MMI word: its register effects are unknown here
+            0x8C430010,  # lw    $v1, 0x10($v0)
+        ])
+        self.assertEqual(found, [])
+
+    def test_constants_end_at_an_unconditional_jump(self):
+        found = self._scan([
+            0x3C020016,  # lui   $v0, 0x16
+            0x03E00008,  # jr    $ra
+            0x00000000,  # nop (delay slot)
+            0x8C430010,  # lw    $v1, 0x10($v0): only a jump target can reach this
+        ])
+        self.assertEqual(found, [])
+
+    def test_store_conditional_is_a_store_and_pref_is_ignored(self):
+        found = self._scan([
+            0x3C020016,  # lui   $v0, 0x16
+            0xCC400000,  # pref  0, 0($v0)
+            0xE0430008,  # sc    $v1, 8($v0)
+        ])
+        self.assertEqual(found, [(0x100008, 0x160008, 4, "store")])
+
+    def test_shown_keeps_paths_outside_the_checkout(self):
+        self.assertEqual(self.refs.shown(Path("/nonexistent/out")), "/nonexistent/out")
+
+
 if __name__ == "__main__":
     unittest.main()
