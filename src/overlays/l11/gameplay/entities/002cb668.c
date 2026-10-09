@@ -391,7 +391,55 @@ int FUN_L11_002d2340(struct Moby *moby, char *other) {
     }
     return FUN_L01_00276fe8(buf, n, d->b[d->idx], &moby->pos, other, d->e, 0.2f) != 0;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d2460.s", FUN_L11_002d2460);
+#else
+extern int D_L11_0015FFD8;
+extern int FUN_L11_00316128(char *);
+extern short *D_L11_001AC240[];
+extern short D_L11_0015FFF4;
+extern float FUN_001f9b48(void *, void *);
+
+int FUN_L11_002d2460(struct Moby *moby) {
+    int i = 0;
+    int found = 0;
+    char *data = (char *)moby->pvars;
+    char *groups = data + 0x90;
+    int group = *(short *)(groups + *(int *)(data + 0x158) * 0x10);
+    short *p;
+
+    if (group < 0)
+        return found;
+    if (group > *(int *)&D_L11_0015FFF4)
+        return found;
+    do {
+        p = D_L11_001AC240[group];
+        if (p != 0) {
+            do {
+                int offset = (*p & 0x7fff) << 8;
+                char *other = (char *)(D_L11_0015FFD8 + offset);
+                if (other[0x20] >= 0) {
+                    if (*(short *)(other + 0xa6) != 0x4de ||
+                        FUN_L11_00316128(other) == 0) {
+                        found = 1;
+                        if (FUN_001f9b48(&moby->pos, (char *)(D_L11_0015FFD8 + offset) + 0x10) < 10.0f)
+                            return 2;
+                    }
+                }
+            } while (*p++ >= 0);
+        }
+        i++;
+        if (i >= 4)
+            break;
+        group = *(short *)(groups + *(int *)(data + 0x158) * 0x10 + i * 4);
+        if (group < 0)
+            return found;
+        if (group > *(int *)&D_L11_0015FFF4)
+            return found;
+    } while (1);
+    return found;
+}
+#endif
 /* Tests whether a moby can drop onto the ground, writing the landing point. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D37A8), where it is exact; names translated to the US level program. */
 
