@@ -450,7 +450,162 @@ void FUN_L05_00314eb0(struct Moby *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003150f0.s", FUN_L05_003150f0);
+/* pvars of the 0x357 emitter: once woken it sprays particles along its facing (unkC0) that fall to the
+   floor height of its D_L05_001612D0 row and splash there, and keeps the shared voice at the emitter nearest D_L05_001671C0. */
+struct EmitterVars {
+    s32 unk0;
+    s32 floor;   /* row of D_L05_001612D0 */
+    s32 trigger; /* D_L05_0015FFD8 index of the moby whose byte 0xBC wakes it, -1: none */
+    s32 *voice;  /* voice slot shared by the emitters, -1: none */
+    s32 age;     /* frames since it started spraying */
+};
+
+/* D_0013E550 seen from slot n (0x70 bytes per slot) */
+struct VoiceSlot {
+    u8 pad0[0x88];
+    struct Moby *owner;
+    u8 pad8C[4];
+    Vec4f pos;
+};
+
+/* 0x1190-byte rows; word 8 is the floor height the emitter particles land on */
+struct FloorRow {
+    u8 pad0[8];
+    f32 z;
+    u8 padC[0x1190 - 0xC];
+};
+
+extern float FUN_001f9988(float);
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+extern void FUN_L01_0026e0e0(int, int);
+extern void FUN_L05_0029be70(float, float, float, void *, void *, int, int);
+extern void FUN_L00_002718d0(float, float, void *, void *, void *);
+extern unsigned char D_0014C050[][16];
+extern int D_0015ED84;
+extern struct Moby *D_L05_0015FFD8;
+extern struct FloorRow *D_L05_001612D0;
+extern char D_L05_0015F580[] __attribute__((section(".sdata")));
+extern int D_L05_00161E98 __attribute__((sda));
+extern int D_L05_00161E9C __attribute__((sda));
+extern float D_L05_00161EA0 __attribute__((sda));
+extern float D_L05_00161EA4 __attribute__((sda));
+extern float D_L05_00161EA8 __attribute__((sda));
+extern float D_L05_00161EAC __attribute__((sda));
+extern float D_L05_00161EB0 __attribute__((sda));
+extern float D_L05_00161EB4 __attribute__((sda));
+extern float D_L05_00161EB8 __attribute__((sda));
+extern float D_L05_00161EBC __attribute__((sda));
+
+void FUN_L05_003150f0(struct Moby *m) {
+    float v[4];
+    float w[4];
+    float u[4];
+    struct EmitterVars *d = (struct EmitterVars *)m->pvars;
+    float floor;
+    float lim;
+    float a, b, c;
+    float scale;
+    int kind;
+    int big;
+    int i;
+    unsigned char state;
+
+    if (d == 0) {
+        return;
+    }
+    switch (state = m->state) {
+    case 0:
+        if (D_0014C050[D_0015ED84][m->unkB0] != 0xFF) {
+            m->state = 1;
+        } else {
+            m->state = 3;
+        }
+        break;
+    case 1:
+        if (d->trigger >= 0 && D_L05_0015FFD8[d->trigger].unkBC != 0) {
+            FUN_L01_0026e0e0(m->unk21, 2);
+        }
+        break;
+    case 2:
+        d->age++;
+        if (FUN_001f9b48(&m->pos, D_L05_001671C0) < 64.0f) {
+            struct Moby *o;
+            if (*d->voice >= 0 && (o = ((struct VoiceSlot *)(D_0013E550 + *d->voice * 0x70))->owner) != 0 &&
+                o->oclass == 0x357) {
+                if (o != m && (o->state != state || FUN_001f9b48(&m->pos, D_L05_001671C0) <
+                                                         FUN_001f9b48(&o->pos, D_L05_001671C0))) {
+                    FUN_001f9bf8(v, &m->unkC0, 2.5f);
+                    add_vector_xyz(&((struct VoiceSlot *)(D_0013E550 + *d->voice * 0x70))->pos, v, &m->pos);
+                    ((struct VoiceSlot *)(D_0013E550 + *d->voice * 0x70))->owner = m;
+                }
+            } else {
+                *d->voice = allocate_voice_for_target_entry(0, 0xD, m);
+                if (*d->voice >= 0) {
+                    FUN_001f9bf8(v, &m->unkC0, 2.5f);
+                    add_vector_xyz(&((struct VoiceSlot *)(D_0013E550 + *d->voice * 0x70))->pos, v, &m->pos);
+                }
+            }
+        }
+        floor = D_L05_001612D0[d->floor].z;
+        if (m->pos.z < floor) {
+            m->state = 3;
+        }
+        for (i = 0; (float)i < D_L05_00161EB8; i++) {
+            big = 1;
+            if (D_L05_00161EBC < random_float_between(0.0f, 100.0f)) {
+                big = 0;
+            }
+            lim = D_L05_00161EAC;
+            if (!big) {
+                lim = D_L05_00161EB0;
+            }
+            qcopy(v, &m->pos);
+            FUN_001f9bf8(u, &m->unkD0, random_float_between(-D_L05_00161EB4, D_L05_00161EB4));
+            add_vector_xyz(v, v, u);
+            a = random_float_between(lim, D_L05_00161EA8);
+            b = random_float_between(lim, D_L05_00161EA8);
+            c = random_float_between(lim, D_L05_00161EA8);
+            if (a < b) {
+                a = b;
+            }
+            if (a < c) {
+                a = c;
+            }
+            FUN_001f9bf8(w, &m->unkC0, a * D_0015ED6C);
+            if (big) {
+                scale = D_L05_00161EA0;
+                kind = D_L05_00161E98;
+                v[2] += D_L05_00161EB4 - scale + random_float_between(-0.4f, 0.4f);
+            } else {
+                scale = D_L05_00161EA4;
+                kind = D_L05_00161E9C;
+                v[2] += D_L05_00161EB4 - scale + 0.4f;
+            }
+            FUN_L05_0029be70(scale * random_float_between(0.8f, 1.2f), floor, D_0015ED70 * 10.0f, v, w, kind,
+                             big);
+            if (random_integer_below(2)) {
+                /* fall time from the emitter to the floor */
+                float t = FUN_001f9988(2.0f * (m->pos.z - floor) / (D_0015ED70 * 10.0f));
+                if (t < (float)d->age) {
+                    float s = t * (D_0015ED6C * 4.0f);
+                    float ang = random_angle_radians();
+                    float r = random_float_between(0.0f, 1.25f);
+                    FUN_001f9a68(v, &m->unkC0, s);
+                    add_vector_xyz(v, v, &m->pos);
+                    v[0] += FUN_001f9dc8(ang) * r;
+                    v[1] += FUN_001f9de0(ang) * r;
+                    v[2] = floor + 0.05f;
+                    FUN_L00_002718d0(random_float_between(1.0f, 1.5f), random_integer_below(2) ? 2.0f : -2.0f, v,
+                                     D_L05_0015F580, &D_L05_001612D0[d->floor].z);
+                }
+            }
+        }
+        break;
+    }
+}
 /* pvars of the lift: it rides between two heights with the hero standing on it. */
 typedef struct {
     u8 pad0[0x20];
@@ -510,7 +665,6 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 FUN_001f99c0(f32);
-extern f32 FUN_001f9de0(f32);
 extern f32 FUN_001f9b80(void *, void *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -714,8 +868,6 @@ void FUN_L05_00315ee0(char *a, char *b, char *c) {
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317438), where it is exact; names translated to the US level program. */
 
 extern char *D_L05_001B0930[];
-extern float FUN_001f9dc8(float);
-extern float FUN_001f9de0(float);
 extern float FUN_001fa580(float, float);
 
 void FUN_L05_00315f70(char *moby) {
@@ -937,7 +1089,6 @@ extern char D_L05_00161EF0[];
 extern void FUN_L05_00317398(void *);
 extern void FUN_L02_0025c758(void *);
 extern void FUN_L00_002607d0(int);
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
 /* Watcher moby update (variant of FUN_L05_003180a0): turns its head toward the hero or a random target. */
@@ -1351,8 +1502,6 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float D_0015ED70_c2 __asm__("D_0015ED70");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L05_003195f8(char *);
-extern int D_0015ED84;
-extern unsigned char D_0014C050[][16];
 extern void FUN_001f9a40(void *, void *, void *, float);
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa2d8(void *, void *);
