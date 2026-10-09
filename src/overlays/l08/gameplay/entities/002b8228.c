@@ -317,7 +317,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 extern void FUN_L08_002dc4a0(struct Moby *);
 void FUN_L08_002dc0c8(char *moby);
-void FUN_L08_002dc180(char *moby);
+void FUN_L08_002dc180(struct Moby *moby);
 int FUN_L08_002dc648(char *m);
 void FUN_L08_002dc7f0(char *moby);
 
@@ -441,8 +441,8 @@ extern int D_0015ED84; /* no foreign declaration */
 extern int D_L08_0015F5CC; /* no foreign declaration */
 extern Route_2dd4f8 *D_L08_001B0FB0_r[] __asm__("D_L08_001B0CB0");
 
-void FUN_L08_002dc180(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void FUN_L08_002dc180(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
     char *pl = D_0013F3D0;
     Route_2dd4f8 *a = D_L08_001B0FB0_r[*(int *)(data + 0x88)];
     Route_2dd4f8 *b = D_L08_001B0FB0_r[*(int *)(data + 0x80)];
@@ -461,10 +461,10 @@ void FUN_L08_002dc180(char *moby) {
     *(int *)(data + 0x100) = sel;
     *(int *)(data + 0xE4) = 0;
     *(float *)(data + 0x104) = 1.0f;
-    moby[0x31] = 1;
-    *(unsigned short *)(moby + 0x34) &= 0xFFFE;
+    moby->unk31 = 1;
+    moby->flags &= 0xFFFE;
     *(int *)(data + 0x124) = 1;
-    *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+    moby->unk94 = moby->pclass->unk10;
     switch (sel) {
     case 0: {
         int n = a->count;
@@ -485,11 +485,11 @@ void FUN_L08_002dc180(char *moby) {
             *(Route_2dd4f8 **)(data + 0x120) = c;
         } else if (f94) {
             *(Route_2dd4f8 **)(data + 0x120) = b;
-        } else if (32.0f < FUN_001f9b80(moby + 0x10, pl) || D_L08_0015F5CC < 5) {
-            moby[0x31] = 0;
-            *(unsigned short *)(moby + 0x34) |= 1;
+        } else if (32.0f < FUN_001f9b80(&moby->pos, pl) || D_L08_0015F5CC < 5) {
+            moby->unk31 = 0;
+            moby->flags |= 1;
             *(int *)(data + 0x124) = 0;
-            *(int *)(moby + 0x94) = 0;
+            moby->unk94 = 0;
         }
         return;
     }
