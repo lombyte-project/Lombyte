@@ -36,13 +36,18 @@ typedef union {
     float f[4];
 } U3131b0;
 typedef float V3131b0[4] __attribute__((aligned(16)));
-extern void vscale_3131b0(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void vadd_3131b0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void vsub_3131b0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void normalize_vector_xyz(void *, void *, float);
+extern void add_vector_xyz(void *, void *, void *);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern void scale_vector_xyz(void *, void *, float);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
+extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern s32 probe_world_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
+extern void FUN_L00_00259888(void *, void *, s32, f32, void *);
+extern void FUN_L00_00258278(struct Moby *, f32, void *, f32, f32, f32);
 extern void FUN_L07_00312e70(char *, float, int, float, int);
-extern void ray_3131b0(void *, char *, int, float, void *) __asm__("FUN_L00_00259888");
-extern int hit_3131b0(void *, void *, int, char *, void *) __asm__("FUN_001efa68");
-extern void probe_3131b0(float, void *, int, char *, void *) __asm__("FUN_L00_001f2868");
 
 /* Rope draw: moves the two end points along the rope direction, draws three strands, then casts a ray between the ends. */
 void FUN_L07_003131b0(char *moby) {
@@ -55,18 +60,18 @@ void FUN_L07_003131b0(char *moby) {
     data = *(char **)(moby + 0x78);
     qzero(&v);
     one = 1.0f;
-    vscale_3131b0(&v, data + 0x130, *(float *)(data + 0x16C) * 0.8f);
-    vadd_3131b0(data + 0x140, &v, data + 0x110);
-    vscale_3131b0(&v, &v, *(float *)(data + 0x16C));
-    vadd_3131b0(data + 0x120, &v, data + 0x110);
+    normalize_vector_xyz(&v, data + 0x130, *(float *)(data + 0x16C) * 0.8f);
+    add_vector_xyz(data + 0x140, &v, data + 0x110);
+    normalize_vector_xyz(&v, &v, *(float *)(data + 0x16C));
+    add_vector_xyz(data + 0x120, &v, data + 0x110);
     FUN_L07_00312e70(moby, one, 0, one, 0x20000080);
     FUN_L07_00312e70(moby, 0.7f, 10, 2.0f, 0x28008080);
     FUN_L07_00312e70(moby, 0.4f, 20, 3.0f, 0x30B0FFFF);
-    vsub_3131b0(d, data + 0x120, data + 0x110);
-    vscale_3131b0(d, d, one);
-    ray_3131b0(blk, moby, 0x30000, 1.00012302f, d);
-    if (hit_3131b0(data + 0x110, data + 0x120, 0, moby, blk) == 0) {
-        probe_3131b0(0.5f, data + 0x120, 0, moby, blk);
+    subtract_vector_xyz(d, data + 0x120, data + 0x110);
+    normalize_vector_xyz(d, d, one);
+    FUN_L00_00259888(blk, moby, 0x30000, 1.00012302f, d);
+    if (collision_line(data + 0x110, data + 0x120, 0, moby, blk) == 0) {
+        probe_world_sphere(0.5f, data + 0x120, 0, moby, blk);
     }
 }
 
@@ -179,12 +184,8 @@ extern float D_0015ED6C;
 extern struct ChaserTarget D_L07_00173EC0;
 extern float FUN_001f9b80(void *, void *);
 extern int FUN_L00_00259028(struct Moby *, void *, int, void *);
-extern void vsub_313af0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void vadd_313af0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void vscale_313af0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9c90(void *, void *, float);
 extern float FUN_001f9e90(float, float);
-extern void turn_toward_313af0(struct Moby *, float, void *, float, float, float) __asm__("FUN_L00_00258278");
 extern int FUN_L00_002583f0(void *, struct Moby *, int, float, float);
 
 int FUN_L07_00313af0(struct Moby *m, struct ChaserVars *d, Vec4 *goal, int mode, float range) {
@@ -200,22 +201,22 @@ int FUN_L07_00313af0(struct Moby *m, struct ChaserVars *d, Vec4 *goal, int mode,
     if (range < dist) {
         r = FUN_L00_00259028(m, d->nav, mode, d->navOut);
         if (r == 2) {
-            vsub_313af0(v, path + (FUN_L01_0028b510(&m->pos, path, 0.0f) * 16 + 0x10), &m->pos);
+            subtract_vector_xyz(v, path + (FUN_L01_0028b510(&m->pos, path, 0.0f) * 16 + 0x10), &m->pos);
             FUN_001f9c90(v, v, d->pullSpeed);
-            vadd_313af0(&m->pos, &m->pos, v);
+            add_vector_xyz(&m->pos, &m->pos, v);
         }
     } else {
-        turn_toward_313af0(m, FUN_001f9e90(D_0013F350_313af0.x - m->pos.x, D_0013F350_313af0.y - m->pos.y),
+        FUN_L00_00258278(m, FUN_001f9e90(D_0013F350_313af0.x - m->pos.x, D_0013F350_313af0.y - m->pos.y),
                            d->turn, D_0015ED70 * 2.0943952f, D_0015ED70 * 0.69813168f, D_0015ED6C * 2.0943952f);
     }
     if ((D_L07_0015F5CC & 3) == 3 && FUN_L00_002583f0(&m->pos, m, 0, 0.1f, 1.0f)) {
         o = D_L07_00173EC0.moby;
         if (o != 0 && D_L07_00173EC0.count > 0 && o->oclass == 0x42D && o->unkBC == 0) {
             if (((struct ChaserTargetVars *)o->pvars)->sticky) {
-                vsub_313af0(v, &o->pos, &m->pos);
+                subtract_vector_xyz(v, &o->pos, &m->pos);
                 *(s32 *)&v[2] = 0;
-                vscale_313af0(v, v, 0.5f);
-                vadd_313af0(&m->pos, &m->pos, v);
+                scale_vector_xyz(v, v, 0.5f);
+                add_vector_xyz(&m->pos, &m->pos, v);
             }
             D_L07_00173EC0.moby->unkBC = 1;
         }
@@ -357,11 +358,6 @@ typedef struct {
     char *moby;
 } E317cb0;
 extern E317cb0 D_L07_0020C840_c[] __asm__("D_L07_0020C840");
-extern void vscale_317cb0(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void vadd_317cb0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void vzero_317cb0(void *) __asm__("FUN_001f99f8");
-extern float f213308_317cb0(void) __asm__("FUN_00213308");
-extern void f214890_317cb0(void *, void *, void *, float) __asm__("FUN_00214890");
 
 /* Starts the rope when one is pending: lays nine points out from the anchor along the moby's
  * axis, then resets the swing state and, once, clears every entry's link. */
@@ -380,25 +376,25 @@ void FUN_L07_00317cb0(char *moby, void *anchor) {
         return;
     }
     D_L07_00161B6C_c = 0;
-    vscale_317cb0(step, moby + 0xC0, 2.8f);
-    vscale_317cb0(up, moby + 0xE0, 1.0f);
+    normalize_vector_xyz(step, moby + 0xC0, 2.8f);
+    normalize_vector_xyz(up, moby + 0xE0, 1.0f);
     qcopy(D_L07_0020DB00_c, anchor);
     pc = &c;
     pd = &d;
     D_L07_0020DBC8[0] = 0;
     for (i = 1; i < 10; i++) {
-        vadd_317cb0(D_L07_0020DB00_c[i], D_L07_0020DAF0_c[i], step);
+        add_vector_xyz(D_L07_0020DB00_c[i], D_L07_0020DAF0_c[i], step);
         D_L07_0020DBC8[i] = 0;
     }
-    vzero_317cb0(D_L07_00161B90);
+    clear_u64_value(D_L07_00161B90);
     c.q = 0;
     d.q = 0;
     c.f[2] = 0.1f;
     c.f[3] = 1.0f;
     d.f[0] = 1.0f;
     d.f[3] = 1.0f;
-    r = f213308_317cb0();
-    f214890_317cb0(D_L07_00161BA0, pc, pd, r);
+    r = random_angle_radians();
+    build_look_at_matrix(D_L07_00161BA0, pc, pd, r);
     D_L07_00161BB0 = r;
     D_L07_00161B7C_c = 0.006f;
     D_L07_00161B80 = 0;
@@ -437,10 +433,6 @@ extern int D_L07_00161B6C __attribute__((sda));
 extern int D_L07_00161B70 __attribute__((sda));
 extern float D_L07_00161B7C __attribute__((sda));
 extern void FUN_L00_002defe0(int arg0);
-extern void add_vector_xyz(void *, void *, void *);
-extern void normalize_vector_xyz(void *, void *, float);
-extern void scale_vector_xyz(void *, void *, float);
-extern void subtract_vector_xyz(void *, void *, void *);
 extern char D_L07_0020DDC0_v[] __asm__("D_L07_0020DAF0");
 
 void FUN_L07_00318e98(int target_entry) {
@@ -563,11 +555,8 @@ extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int
                              float, float, int, float, int, int, int, int);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_001f9c90(void *, void *, f32);
-extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern f32 FUN_L00_00258110(f32 *, f32, f32, f32, f32, f32);
 extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
-extern void FUN_L00_00259888(void *, struct Moby *, s32, f32, void *);
-extern s32 FUN_L00_001f2868(f32, void *, s32, struct Moby *, void *);
 extern s32 FUN_L00_001f0d60(f32, void *, s32, struct Moby *);
 extern void FUN_L00_00259fe8(struct Moby *, f32);
 
@@ -613,7 +602,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
             break;
         }
         moby->flags |= 0x1000;
-        vzero_317cb0(&vars->velocity);
+        clear_u64_value(&vars->velocity);
         qcopy(&vars->home, &moby->pos);
         moby->rot.y = 0.0f;
         moby->rot.z = FUN_001f9e90(vars->goal.f[0] - moby->pos.x, vars->goal.f[1] - moby->pos.y);
@@ -680,7 +669,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
         FUN_L00_00259888(contact, moby, 0x10001, 1.0f, &vars->velocity);
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.75f;
-        if (FUN_L00_001f2868(0.75f, &probe, 0x10, moby, contact) && D_L07_00173ED8 != NULL &&
+        if (probe_world_sphere(0.75f, &probe, 0x10, moby, contact) && D_L07_00173ED8 != NULL &&
             D_L07_00173ED8->oclass != 0x363 && D_L07_00173ED8->oclass != 0x456 &&
             D_L07_00173ED8->oclass != 0x458 && D_L07_00173ED8->oclass != 0x365 &&
             D_L07_00173ED8->oclass != 0x367) {
@@ -740,7 +729,7 @@ void FUN_L07_00319f48(struct Moby *m) {
             p.x = random_float_between(-ext.x, ext.x) * 0.5f;
             p.y = random_float_between(-ext.y, ext.y) * 0.5f;
             p.z = random_float_between(1.5f, ext.z);
-            vadd_317cb0(&p, &p, &m->pos);
+            add_vector_xyz(&p, &p, &m->pos);
             break_rand_vec(&vel, D_0015ED6C * 5.0f, D_0015ED6C * 10.0f);
             if (vel.z < 0.0f)
                 vel.z = -vel.z;
