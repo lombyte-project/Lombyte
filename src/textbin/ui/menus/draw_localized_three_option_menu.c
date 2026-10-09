@@ -1,12 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/draw_localized_three_option_menu/"
-            "FUN_00222a98.s",
-            FUN_00222a98);
-#else
-#include "types.h"
 
 struct ThreeOptionMenu {
     u8 pad0[0x20];
@@ -23,7 +15,7 @@ extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern s32 count_nonzero_entries_up_to_40(void) __asm__("func_00215290");
 extern s32 count_nonzero_entries_up_to_10(void) __asm__("func_00215300");
 extern s32 count_nonzero_entries_up_to_30(void) __asm__("func_00215348");
-extern s32 sprintf(char *, const char *, ...) __asm__("func_00116248");
+extern s32 sprintf(char *, const char *, ...);
 extern s32 measure_text_width_regular(char *, s32) __asm__("func_001F6250");
 extern void func_001F61F8(void);
 extern void func_001F61E8(void);
@@ -46,6 +38,7 @@ s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) {
     font_texture_index = 1;
     setup_gif_paging(0);
     line_spacing = menu->height / 5;
+    draw_y = menu->height / 5 - 8;
     maximum_text_width = 0;
     sprintf(text_buffer, get_help_message_text(0x522F), count_nonzero_entries_up_to_40(), 0x28);
     measured_width = measure_text_width_regular(text_buffer, -1);
@@ -63,7 +56,6 @@ s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) {
         maximum_text_width = measured_width;
     }
     glyphs = D_001DF050;
-    draw_y = line_spacing - 8;
     if (menu->menu_width < maximum_text_width + 0x18) {
         font_texture_index = 2;
         glyphs = D_001DF3F0;
@@ -91,4 +83,3 @@ s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) {
 }
 extern __typeof__(draw_localized_three_option_menu) func_00222A98
     __attribute__((alias("FUN_00222a98")));
-#endif /* NON_MATCHING */
