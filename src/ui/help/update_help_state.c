@@ -200,9 +200,6 @@ void update_help_state(void) {
         if ((D_001996D0.timer >= scale_game_frames(0x1A4) &&
              ((id = D_0015F6A0[D_001996D0.msg].id) == -1 || id != music_stream_state.secondary.track - 0x7530 ||
               (music_stream_state.secondary.handle == 0 && music_stream_state.queued_secondary_track == -1))) ||
-            (D_0013CAE4 & 0x10)) {
-             ((id = D_0015F6A0[D_001996D0.msg].id) == -1 || id != D_001516D0.unk54 - 0x7530 ||
-              (D_001516D0.unk50 == 0 && D_001516D0.unk1C == -1))) ||
             (controller_state.pressed & 0x10)) {
             RECORD_COUNT();
             RECORD_BEST();
