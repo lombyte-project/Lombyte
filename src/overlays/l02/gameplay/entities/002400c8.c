@@ -1900,7 +1900,7 @@ void FUN_L02_002dbd38(L16PlatformMoby *moby) {
                     break;
                 }
             }
-            if (hero.ground_moby == moby && hero.air_frames.s == 0) {
+            if (hero.ground_moby == (struct Moby *)moby && hero.air_frames.s == 0) {
                 clear_u64_value(motion.v);
                 if (moby->reverse) {
                     motion.v[2] = -1.0f;
@@ -1915,7 +1915,7 @@ void FUN_L02_002dbd38(L16PlatformMoby *moby) {
             }
             break;
         case 1:
-            if ((hero.ground_moby == moby && hero.air_frames.s == 0) || D_0013D4DA) {
+            if ((hero.ground_moby == (struct Moby *)moby && hero.air_frames.s == 0) || D_0013D4DA) {
                 clear_u64_value(motion.v);
                 if (moby->reverse) {
                     motion.v[2] = -1.0f;
@@ -1954,7 +1954,7 @@ void FUN_L02_002dbd38(L16PlatformMoby *moby) {
                 release_voice_slot(d->particle);
                 d->particle = -1;
             }
-            if (moby->position[2] == d->goal && (hero.ground_moby != moby || hero.air_frames.s != 0)) {
+            if (moby->position[2] == d->goal && (hero.ground_moby != (struct Moby *)moby || hero.air_frames.s != 0)) {
                 clear_u64_value(d->basis[1]);
                 moby->state = 2;
                 break;
@@ -2654,7 +2654,7 @@ void FUN_L02_002ddc88(unsigned char *moby) {
             moby[0xBC] = 0;
             moby[0x20] = 3;
             FUN_0022da68_dc88(1, 0, moby);
-        } else if ((unsigned char *)hero.ground_moby == moby && hero.air_frames.s == 0 && hero.unk20A4 == 0) {
+        } else if ((unsigned char *)hero.ground_moby == (struct Moby *)moby && hero.air_frames.s == 0 && hero.unk20A4 == 0) {
             qcopy(&b, moby + 0x10);
             b.f[2] += 2.0f;
             if (moby[0xBC] == 0) {
@@ -2788,7 +2788,7 @@ void FUN_L02_002ddc88(unsigned char *moby) {
         }
         break;
     case 13:
-        if ((unsigned char *)hero.ground_moby != moby) {
+        if ((unsigned char *)hero.ground_moby != (struct Moby *)moby) {
             moby[0x20] = 5;
         }
         break;
