@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/menus/panel_slots.h"
 #include "sda.h"
 #include "qcopy.h"
 #include "qzero.h"
@@ -37,7 +38,6 @@ extern s32 D_0015F438;
 extern s32 D_00160F0C;
 extern void FUN_0023a2c0();
 extern struct S D_00186F40;
-extern struct O2 *D_001D5D90[];
 extern u8 D_001601C0 __attribute__((sda));
 extern u8 D_001601D0 __attribute__((sda));
 extern s32 FUN_001f9a68(s32, s32, f32);
@@ -80,19 +80,19 @@ void FUN_00218f98(void) {
     if (menu_system.current != 0) {
         for (i = 0; i < 14; i++) {
             struct O2 *o = (struct O2 *)create_menu_preview_moby(0x472);
-            D_001D5D90[i] = o;
+            panel_slots[i] = o;
             if (o != 0) {
                 s32 k;
                 o->f34 &= 0xFFFD;
-                D_001D5D90[i]->f74 = FUN_0023a2c0;
-                D_001D5D90[i]->f10 = D_00186F40.f140;
-                D_001D5D90[i]->f14 = D_00186F40.f144;
-                D_001D5D90[i]->f18 = D_00186F40.f148;
-                D_001D5D90[i]->f40 = 0;
-                D_001D5D90[i]->f44 = 0;
-                D_001D5D90[i]->f48 = 0;
+                ((struct O2 *)panel_slots[i])->f74 = FUN_0023a2c0;
+                ((struct O2 *)panel_slots[i])->f10 = D_00186F40.f140;
+                ((struct O2 *)panel_slots[i])->f14 = D_00186F40.f144;
+                ((struct O2 *)panel_slots[i])->f18 = D_00186F40.f148;
+                ((struct O2 *)panel_slots[i])->f40 = 0;
+                ((struct O2 *)panel_slots[i])->f44 = 0;
+                ((struct O2 *)panel_slots[i])->f48 = 0;
                 k = menu_system.current->moby_anims[i];
-                set_moby_animation(D_001D5D90[i], k, D_001D5D90[i]->f24->tbl[k]->f10 - 1);
+                set_moby_animation(panel_slots[i], k, ((struct O2 *)panel_slots[i])->f24->tbl[k]->f10 - 1);
             }
         }
     }

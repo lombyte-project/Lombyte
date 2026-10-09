@@ -1,5 +1,8 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
+#include "sda.h"
 #include "types.h"
 #include "asm.h"
+#include "rnc/ui/menus/item_preview/preview_animation.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00225e70/FUN_00225e70.s", FUN_00225e70);
@@ -38,14 +41,11 @@ typedef struct {
 extern s32 preview_request_count __asm__("D_00160350");
 extern s32 preview_request_count_address __asm__("D_00160350") MACRO_ADDR;
 extern CdReadState cd_read_state __asm__("D_001516D0");
-extern PreviewAnimationRequest preview_animation_requests[] __asm__("D_001D5EC0");
-extern PreviewAnimationRequest active_preview_animation __asm__("D_001D6080");
 typedef struct {
     u8 pad0[0x48];
     s32 animation_tables[1];
 } PreviewAnimationClassResource;
 
-extern u8 *moby_class_resources[] __asm__("D_001B3200");
 typedef struct {
     u8 pad0[8];
     s32 item_type;
@@ -254,3 +254,5 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
     return 0;
 }
 #endif /* NON_MATCHING */
+
+PreviewAnimationRequest active_preview_animation = {0};

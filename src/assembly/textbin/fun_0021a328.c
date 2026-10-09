@@ -11,12 +11,10 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021a328/FUN_0021a328.s
 
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
+#include "rnc/ui/text/font_metrics.h"
 
-extern int menu_input_repeat_state[] __asm__("D_0013CAE0");
-extern u8 alternate_item_available[] __asm__("D_0013D388");
-extern u8 item_unlocked[] __asm__("D_0013D408");
-extern u8 item_available[] __asm__("D_0013D4C0");
-extern u8 item_text_variant[] __asm__("D_0013E520");
+#include "rnc/input/pad_state.h"
+#include "rnc/gameplay/state/item_state.h"
 extern int pal_mode __asm__("D_0015ED80") __attribute__((sda));
 extern int current_level_index __asm__("D_0015ED84") __attribute__((sda));
 extern int menu_text_color __asm__("D_001601B0") __attribute__((sda));
@@ -30,9 +28,6 @@ extern char unavailable_label_text[] __asm__("D_00160278");
 extern char label_format[] __asm__("D_00160280");
 extern char fallback_label_text[] __asm__("D_00160288");
 extern int selected_level_index[] __asm__("D_001A0314");
-extern u8 normal_font_metrics[] __asm__("D_001DF050");
-extern u8 small_font_metrics[] __asm__("D_001DF3F0");
-extern u8 large_font_metrics[] __asm__("D_001DF790");
 
 extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
@@ -289,7 +284,7 @@ int render_configured_text_label(struct MenuScreen *label) {
             c.anchor_y -= text_shadow_y;
             font_print_window(&c, color, text, -1, texture_tex0, font);
             if (label->data.label.flags & 0x400) {
-                label->data.label.scroll_offset += (menu_input_repeat_state[0] & 1) ? 10 : 3;
+                label->data.label.scroll_offset += (controller_state.held & 1) ? 10 : 3;
                 label->data.label.scroll_offset %= (c.rendered_height + text_line_spacing * 3) * 16;
             }
         }

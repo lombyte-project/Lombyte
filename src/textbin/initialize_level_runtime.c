@@ -1,3 +1,5 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
+#include "rnc/rendering/level_render_state.h"
 #include "types.h"
 #include "asm.h"
 #include "rnc/globals.h"
@@ -55,17 +57,6 @@ typedef struct {
 } Chunk;
 
 typedef struct {
-    u8 pad0[0x20];
-    s32 unk20;
-    s16 unk24;
-    u8 pad26[0x2A];
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-} GameState;
-
-typedef struct {
     u8 pad0[4];
     s32 unk4;
     s32 unk8;
@@ -81,8 +72,6 @@ typedef struct {
     s32 chunks[70];
 } SceneInfo;
 
-
-extern GameState D_0013E030;
 extern f32 D_0015F43C;
 extern s32 D_001413D0[];
 extern s32 D_00160F0C;
@@ -90,14 +79,12 @@ extern s32 D_0015F618;
 extern s32 D_0015F440;
 extern s32 D_0015EE8C;
 extern u8 D_00194180[];
-extern u8 D_001B3AC0[];
-extern u8 D_001B6880[];
+#include "rnc/rendering/resident_class.h"
 extern u8 D_001B6180[];
 extern MemInfo D_001940C0;
-extern s64 D_0019E6C0[];
+#include "rnc/rendering/material_templates.h"
 extern s32 D_0015FF08;
 extern s32 D_001B5980[];
-extern u8 D_001CAAC0[];
 extern s32 D_0015FF00;
 extern s32 D_0015F460;
 extern s64 D_00160580;
@@ -119,7 +106,7 @@ extern s32 D_0015FF30;
 extern s32 D_001600BC;
 extern s64 D_001604E0 __attribute__((sda));
 extern s64 D_001604F0 __attribute__((sda));
-extern u8 D_0013DD43[];
+#include "rnc/gameplay/state/level_state.h"
 extern SceneInfo D_0018CB20;
 extern u8 D_00186310[];
 extern u8 D_00186350[];
@@ -179,8 +166,8 @@ void initialize_level_runtime(void) {
     s32 scene_variant;
     s32 workspace_offset;
 
-    D_0013E030.unk20 = 4;
-    D_0013E030.unk24 = -1;
+    level_render_state.state = 4;
+    level_render_state.timer = -1;
     D_0015F43C = 1.0f;
     D_001413D0[0] = 0;
     D_00160F0C = 0x100000;
@@ -190,8 +177,8 @@ void initialize_level_runtime(void) {
     gs_texture_allocation_cursor = D_0015EE8C;
     gs_texture_allocation_start = D_0015EE8C;
     FillTransferWords(D_00194180, 0x87654321, 0x10);
-    FillTransferWords(D_001B3AC0, -1, 0x800);
-    FillTransferWords(D_001B6880, -1, 0xE00);
+    FillTransferWords(resident_class_slot_by_id, -1, 0x800);
+    FillTransferWords(resident_class_material_maps, -1, 0xE00);
     FillTransferWords(D_001B6180, 0, 0xE0);
     init_view_context();
     update_view_context();
@@ -208,17 +195,17 @@ void initialize_level_runtime(void) {
                           (s32)header + header->texInfo);
     data_base = (s32)header + header->data_offset;
     class_data_base = data_base + header->unk30;
-    D_0019E6C0[0] = (s32)((D_0015EE8C + header->unk40) >> 8) | 0x1D308000 | ((s64)0xB800 << 19) |
+    special_material_template[0] = (s32)((D_0015EE8C + header->unk40) >> 8) | 0x1D308000 | ((s64)0xB800 << 19) |
                     ((s64)((D_0015EE8C + header->unk44) >> 8) << 37) | 0x8000000000000000LL;
-    D_0019E6C0[1] = 0x0000FFA0000000E0LL;
-    D_0019E6C0[2] = 0x0040000400004000LL;
+    special_material_template[1] = 0x0000FFA0000000E0LL;
+    special_material_template[2] = 0x0040000400004000LL;
     class_entries = (ClassEntry *)((s32)header + header->classes);
     D_0015FF08 = header->classCount;
     for (i = 0; i < D_0015FF08; i++) {
         D_001B5980[i] = class_data_base + class_entries[i].offset +
                         (highest_set_bit_index(class_entries[i].id) << 28);
     }
-    copy_blocks_16_forward(D_001CAAC0, class_entries, D_0015FF08 * 16);
+    copy_blocks_16_forward(resident_indexed_textures, class_entries, D_0015FF08 * 16);
     relocate_sky_definition(data_base + header->sky);
     moby_entry = (MobyEntry *)((s32)header + header->mobys);
     D_0015FF00 = 0;
@@ -274,25 +261,25 @@ void initialize_level_runtime(void) {
     D_0015FF30 = 0x1F4;
     D_001600BC = 0x1F4000;
     scene_variant = (rand() >> 16) & 3;
-    D_0013E030.unk5C = 0;
-    D_0013E030.unk58 = scene_variant;
-    D_0013E030.unk50 = 0;
-    D_0013E030.unk54 = 0;
+    level_render_state.scene_state = 0;
+    level_render_state.scene_mode = scene_variant;
+    level_render_state.history_index = 0;
+    level_render_state.history_count = 0;
     qcopy(&D_001604F0, &D_001604E0);
-    if (current_level_index == 0 || (current_level_index == 1 && D_0013DD43[0] == 0)) {
-        D_0013E030.unk58 = 4;
-        D_0013E030.unk5C = 2;
+    if (current_level_index == 0 || (current_level_index == 1 && level_available[3] == 0)) {
+        level_render_state.scene_mode = 4;
+        level_render_state.scene_state = 2;
     }
     FillTransferWords(&D_0018CB20, 0, 0x1C0);
     FillTransferWords(D_00186310, 0, 0x40);
     FillTransferWords(D_00186350, 0, 0x40);
     scene_offsets = header->scenes;
     workspace_offset = D_00160F0C - 0x60000;
-    scene_offset = &scene_offsets[D_0013E030.unk58];
+    scene_offset = &scene_offsets[level_render_state.scene_mode];
     D_0018CB20.unk58 = D_001940C0.unk4 + workspace_offset;
     D_0018CB20.unk5C = D_001940C0.unk8 + workspace_offset;
     D_00160F0C = workspace_offset;
-    scene_chunk = (Chunk *)(data_base + scene_offsets[D_0013E030.unk58]);
+    scene_chunk = (Chunk *)(data_base + scene_offsets[level_render_state.scene_mode]);
     /* The archive list is terminated by a zero size and the resident table holds 70 entries. */
     for (k = 0; k < 70 && scene_chunk->size != 0; k++) {
         {
@@ -314,3 +301,5 @@ void initialize_level_runtime(void) {
 }
 
 extern __typeof__(initialize_level_runtime) func_00230F60 __attribute__((alias("FUN_00230f60")));
+
+char resident_indexed_textures[4096] = {0};

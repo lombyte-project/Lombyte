@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/rendering/graphics_buffer.h"
 #include "rnc/storage/disc_table.h"
 #include "rnc/ui/menus/menu_system.h"
 
@@ -9,13 +10,8 @@ struct WordCell {
     s32 unk0;
 };
 
-typedef struct {
-    u32 key;
-    s32 flags;
-} PadBind;
 
 extern s32 D_001D5CF8[];
-extern PadBind D_001D60B8[];
 extern void initialize_graphics_buffer_descriptors(s32) __asm__("func_00225AC0");
 extern s32 start_audio_stream_read(s32, s32, s32) __asm__("FUN_00216788");
 
@@ -28,8 +24,8 @@ s32 FUN_0021d1f8(struct MenuScreen *menu) {
     menu->data.raw.unk38 = 0;
     g = &menu_system;
     for (i = 0; i < 5; i++) {
-        if (D_001D60B8[i].key != 0 && D_001D60B8[i].key < (u32)g->unk10C) {
-            D_001D60B8[i].flags |= 2;
+        if (graphics_buffer_descriptors[i].address != 0 && (u32)graphics_buffer_descriptors[i].address < (u32)g->unk10C) {
+            graphics_buffer_descriptors[i].flags |= 2;
         }
     }
     menu->data.raw.unk50 = 0;

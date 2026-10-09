@@ -7,7 +7,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/decoder/read_mpeg/FUN
 #else
 #include "rnc/video/decoder/read_mpeg.h"
 
-extern struct PadState D_0013C940;
+#include "rnc/input/pad_state.h"
 extern struct Globals_0013E550 D_0013E550;
 extern s32 D_0015ED84;
 extern s32 D_0015EE20;
@@ -111,7 +111,7 @@ feed_movie:
         goto check_skip_policy;
     }
     skip_requested = 1;
-    if (D_0013C940.pressed != 0) {
+    if (controller_state.pressed != 0) {
         goto apply_skip;
     }
 check_skip_policy:
@@ -129,11 +129,11 @@ check_skip_policy:
     }
 check_start_button:
     skip_requested = 1;
-    if (D_0013C940.pressed & 0x800) {
+    if (controller_state.pressed & 0x800) {
         goto apply_skip;
     }
 check_pad_chord:
-    mask_state = &D_0013C940;
+    mask_state = &controller_state;
     pad_mask = 0x8000000000FULL;
     skip_requested = 1;
     if ((*(u64 *)&mask_state->held & pad_mask) != pad_mask) {

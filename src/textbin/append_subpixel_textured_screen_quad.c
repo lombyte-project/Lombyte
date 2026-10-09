@@ -29,12 +29,12 @@ void append_subpixel_textured_screen_quad(f32 screen_x, f32 screen_y, f32 screen
     s32 texture_bottom;
     f32 screen_scale = 16.0f;
 
-    left = convert_float_to_integer(screen_x * screen_scale) + D_0013E500.left - 8;
+    left = convert_float_to_integer(screen_x * screen_scale) + screen_extent.left - 8;
     right =
-        convert_float_to_integer((screen_x + screen_width) * screen_scale) + D_0013E500.left - 8;
-    top = convert_float_to_integer(screen_y * screen_scale) + D_0013E500.top - 8;
+        convert_float_to_integer((screen_x + screen_width) * screen_scale) + screen_extent.left - 8;
+    top = convert_float_to_integer(screen_y * screen_scale) + screen_extent.top - 8;
     bottom =
-        convert_float_to_integer((screen_y + screen_height) * screen_scale) + D_0013E500.top - 8;
+        convert_float_to_integer((screen_y + screen_height) * screen_scale) + screen_extent.top - 8;
     texture_right = (texture_u + texture_width) << 4;
     texture_left = texture_u << 4;
     texture_bottom = texture_v + texture_height;

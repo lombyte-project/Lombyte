@@ -2,6 +2,7 @@
 #define LOMBYTE_RNC_GAMEPLAY_CAMERA_UPDATE_CAM_H
 
 #include "types.h"
+#include "sda.h"
 #include "eetypes.h"
 #include "rnc/math/vector.h"
 
@@ -40,5 +41,18 @@ struct CameraType {
     void (*update)(struct UpdateCam *cam);
     void (*exit)(struct UpdateCam *cam);
 };
+
+/* The saved state of a camera record: 0x280 bytes. Three of them sit back to back
+   from D_001893D0: switch_active_camera_record keeps the previous camera's state
+   in [1] and the next one's in [0]; backup_current_cam copies [0] into [2]. */
+struct CameraSavedState {
+    u8 bytes[0x280];
+};
+
+extern struct CameraSavedState camera_saved_states[3] __asm__("D_001893D0");
+
+/* Nonzero stops the camera code from publishing the camera position
+   (update_camera_blend then skips its vector copy). */
+extern s32 camera_position_publication_suppressed[1] __asm__("D_0018C32C") NOT_SDA;
 
 #endif /* LOMBYTE_RNC_GAMEPLAY_CAMERA_UPDATE_CAM_H */

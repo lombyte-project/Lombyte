@@ -1,7 +1,8 @@
 #include "types.h"
+#include "sda.h"
 #include "rnc/gameplay/entities/moby.h"
 extern u32 D_0015F60C;
-extern s32 D_0015FEFC;
+extern s32 D_0015FEFC MACRO_ADDR;
 extern struct Moby *D_0015FF1C;
 extern struct Moby *D_0015FF20;
 extern u8 *D_0015FF28;
@@ -33,3 +34,6 @@ struct Moby *create_moby(s32 oclass) {
 }
 
 extern __typeof__(create_moby) func_0020C4F8 __attribute__((alias("FUN_0020c4f8")));
+
+/* Defined below their only users, so retail reaches them with lui. */
+s32 D_0015FEFC MACRO_ADDR = 0;

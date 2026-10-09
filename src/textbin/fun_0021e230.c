@@ -1,8 +1,10 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/ui/menus/item_preview/item_preview_placement.h"
 
 struct ItemPreviewVars {
     void *owner;
@@ -27,15 +29,6 @@ struct PreviewItemDefinition {
     s32 oclass;
     u8 pad14[0x38];
 };
-struct ItemPreviewPlacement {
-    f32 alternate_x;
-    f32 normal_x;
-    f32 y;
-    f32 z;
-    f32 rotation_x;
-    f32 rotation_y;
-    u8 pad18[8];
-};
 struct PreviewCamera {
     u8 pad0[0x140];
     f32 x;
@@ -49,12 +42,9 @@ struct PreviewClassResource {
 
 extern struct PreviewItemDefinition preview_item_definitions[] __asm__("D_001863D0");
 extern struct PreviewCamera preview_camera __asm__("D_00186F40");
-extern struct ItemPreviewPlacement preview_placements[] __asm__("D_001E0408");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
-extern s32 active_preview_resource_class[] __asm__("D_00140408");
+#include "rnc/gameplay/hero.h"
 extern s32 resource_request_state __asm__("D_0015FF50");
-extern u8 moby_class_slots[] __asm__("D_001B3AC0");
-extern struct PreviewClassResource *moby_class_resources[] __asm__("D_001B3200");
 extern void update_item_preview_transform() __asm__("FUN_0021e698");
 
 extern void func_001E9470(s32, s32);
@@ -129,8 +119,8 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             break;
         }
         if (load_class) {
-            if (active_preview_resource_class[0] != 0 &&
-                oclass != active_preview_resource_class[0]) {
+            if (hero.items[0].item_id != 0 &&
+                oclass != hero.items[0].item_id) {
                 func_001E9470(0, 0);
             }
             if (oclass != menu_system.unk11C) {
@@ -138,7 +128,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
                 menu_system.last_resource_table_toggle = resource_request_state;
                 menu_system.unk140 = oclass;
                 menu_system.unk120 = oclass;
-                moby_class_resources[moby_class_slots[oclass]]->state_0d = 0;
+                ((struct PreviewClassResource *)moby_class_resources[resident_class_slot_by_id[oclass]])->state_0d = 0;
             }
         }
         moby = create_menu_preview_moby(oclass);

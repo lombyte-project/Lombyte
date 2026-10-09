@@ -1,11 +1,12 @@
 /* Return the fixed core-data table address used by parser helpers. */
 
-typedef unsigned char u8;
-
-extern u8 CoreDataTable[1] __asm__("D_00132D40") __attribute__((section(".data")));
+#include "types.h"
+#include "rnc/sdk/sce_gs_gparam.h"
 
 void *GetCoreDataTable(void) __asm__("GetCoreDataTable");
 
 void *GetCoreDataTable(void) {
-    return CoreDataTable;
+    return &CoreDataTable;
 }
+
+sceGsGParam CoreDataTable = {1, 2, 1, 3, 0, 0};

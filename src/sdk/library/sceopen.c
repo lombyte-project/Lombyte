@@ -1,6 +1,7 @@
 #include "types.h"
 #include "kernel.h"
 #include "rnc/sdk/library/sif_file_slot.h"
+#include "rnc/sdk/library/sdk_state.h"
 
 typedef char *va_list;
 
@@ -15,7 +16,6 @@ struct FsOpenRequest {
 };
 
 
-extern s32 D_0012FC94[];
 extern s32 D_0012FCA0[];
 extern struct FsOpenRequest D_00156880;
 extern u8 D_001574C0[];
@@ -49,7 +49,7 @@ s32 sceOpen(const u8 *path, s32 flags, ...) {
     /* The six remaining EE argument registers occupy eight bytes each. */
     arguments = __builtin_next_arg(flags) - 0x30;
     _sceFsWaitS(0);
-    if (D_0012FC94[0] == 0) {
+    if (FsResetState == 0) {
         sceFsInit();
     }
     if (func_0011BBB8() != 0) {

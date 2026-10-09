@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/ipu_command_table.h"
 typedef struct {
     u8 pad0[0x11C];
     s32 unk11C;
@@ -11,7 +12,6 @@ typedef struct {
     void *cbData;
 } MpegDec;
 
-extern s32 D_00132E70[];
 extern void _dispatchMpegCbNodata(void *cb);
 
 #define IPU_CMD  ((volatile u64 *)0x10002000)
@@ -37,7 +37,7 @@ s32 _ipuVdec(MpegDec *d, s32 tbl) {
     }
     cmd = (tbl << 26) | 0x30000000;
     *(volatile u32 *)IPU_CMD = cmd;
-    d->unk818 = D_00132E70[(s32)cmd >> 28];
+    d->unk818 = IpuCommandTable[(s32)cmd >> 28];
     r = *IPU_CMD;
     while (r < 0) {
         if (i++ > 5000) {

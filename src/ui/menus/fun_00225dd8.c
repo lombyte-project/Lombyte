@@ -1,23 +1,19 @@
 #include "types.h"
+#include "rnc/rendering/graphics_buffer.h"
 
-struct WordCell {
-    s32 unk0;
-};
-
-extern u8 D_001D60B8[];
 s32 FUN_00225dd8(s32 arg0) {
     s32 count = 0;
-    u8 *base = D_001D60B8;
-    u8 *entry = base + 4;
+    u8 *base = (u8 *)graphics_buffer_descriptors;
+    s32 *entry = (s32 *)(base + 4);
 loop:
     count += 1;
-    if (*(s32 *)(entry - 4) != arg0) {
-        entry += 8;
+    if (entry[-1] != arg0) {
+        entry += 2;
         if (count >= 5) {
             return 1;
         }
         goto loop;
     }
-    *(s32 *)entry |= 4;
+    *entry |= 4;
     return 0;
 }

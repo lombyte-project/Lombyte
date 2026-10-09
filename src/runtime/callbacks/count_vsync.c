@@ -12,3 +12,9 @@ int count_vsync(void) {
 }
 
 extern __typeof__(count_vsync) func_0012F1C8 __attribute__((alias("FUN_0012f1c8")));
+
+/* Defined below their only user: Ps2EeAs does not know their size at the use,
+   so retail reaches them with lui + %lo. */
+long D_0015ED40 MACRO_ADDR = 0;
+long D_0015ED48 MACRO_ADDR = 0;
+long D_0015ED50 MACRO_ADDR = 0;

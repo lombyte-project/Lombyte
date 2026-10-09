@@ -9,7 +9,7 @@ s32 find_map_entry_slot(s32 arg0) {
     register s32 *id;
     register s32 count = 0;
 
-    map = &D_001A00F0;
+    map = &level_map_selection;
     id = map->slot_id;
     do {
         if (id[-5] != 0 && *id == arg0) { /* slot[count], slot_id[count] */

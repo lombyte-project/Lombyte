@@ -3,7 +3,7 @@
 
 extern s32 *D_00160F00[4] MACRO_ADDR; /* packet cursor, reloaded per store */
 extern s32 *D_00160F00_store;
-extern s32 D_0013E500[]; /* screen width, height */
+#include "rnc/rendering/screen.h"
 
 #define BASE D_00160F00[0]
 
@@ -15,9 +15,9 @@ void vu1_set_scissor(s32 x0, s32 x1, s32 y0, s32 y1) __asm__("FUN_00233a40");
    it keeps fold from rebalancing the OR chain, as retail has it. */
 void vu1_set_scissor(s32 x0, s32 x1, s32 y0, s32 y1) {
     x0 = x0 < 0 ? 0 : x0;
-    x1 = x1 > D_0013E500[0] - 1 ? D_0013E500[0] - 1 : x1;
+    x1 = x1 > screen_extent.width - 1 ? screen_extent.width - 1 : x1;
     y0 = y0 < 0 ? 0 : y0;
-    y1 = y1 > D_0013E500[1] - 1 ? D_0013E500[1] - 1 : y1;
+    y1 = y1 > screen_extent.height - 1 ? screen_extent.height - 1 : y1;
     BASE[0] = 0x10000002;
     BASE[1] = 0;
     BASE[2] = 0;

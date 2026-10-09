@@ -7,7 +7,7 @@ struct Descriptor {
     s16 h;
     u8 pad14[0xC];
 };
-extern u8 D_0013D4C0[];
+#include "rnc/gameplay/state/item_state.h"
 extern void PackImageDescriptor(struct Descriptor *, struct MenuScreen *);
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
@@ -19,7 +19,7 @@ s32 FUN_0021e110(struct MenuScreen *item) {
     struct MenuScreen *grid;
 
     grid = menu_system.current->focus;
-    if (D_0013D4C0[grid->data.grid.cells[grid->data.grid.selected_cell].id] == 0) {
+    if (item_available[grid->data.grid.cells[grid->data.grid.selected_cell].id] == 0) {
         return 0;
     }
     if (item->data.preview.moby != 0) {

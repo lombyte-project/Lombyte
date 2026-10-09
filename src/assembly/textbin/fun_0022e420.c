@@ -1,5 +1,8 @@
 #include "types.h"
+#include "sda.h"
 #include "asm.h"
+
+extern f32 warp_texture_coordinates[4][2] __asm__("D_001D9A10");
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022e420/FUN_0022e420.s", FUN_0022e420);
@@ -49,7 +52,6 @@ extern Vector4 D_0013E0F0[];
 extern Vector4 D_0013E2F0[];
 extern s32 game_stage __asm__("D_0015F604");
 extern f32 D_001604D0 __attribute__((sda));
-extern f32 warp_texture_coordinates[4][2] __asm__("D_001D9A10");
 extern u32 D_001D9A30[];
 extern u32 D_001D9A34[];
 
@@ -162,3 +164,5 @@ extern __typeof__(build_resident_indexed_texture_warp_meshes) func_0022E420
     __attribute__((alias("FUN_0022e420")));
 
 #endif /* NON_MATCHING */
+
+f32 warp_texture_coordinates[4][2] = {{0, 0.5f}, {1.0f, 0.5f}, {0, 0.5f}, {1.0f, 0.5f}};

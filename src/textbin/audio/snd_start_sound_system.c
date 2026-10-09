@@ -3,16 +3,11 @@
 
 #include "types.h"
 #include "sda.h"
+#include "rnc/audio/sound_read_work.h"
 
 struct SifClientDataStartSound {
     u8 pad_0[0x24];
     void *volatile server;
-};
-
-struct StartSoundWork {
-    volatile s32 read_active;
-    u8 pad_4[0xC];
-    volatile s32 read_error;
 };
 
 extern u8 D_00133280[];
@@ -25,7 +20,6 @@ extern u8 D_00153C50[];
 extern u8 D_00153C78[];
 extern struct SifClientDataStartSound sound_command_client __asm__("D_0015EBC0");
 extern struct SifClientDataStartSound sound_stream_client __asm__("D_0015EBE8");
-extern struct StartSoundWork sound_read_work __asm__("D_00137B00");
 extern u8 *D_0015ECA0[2] __attribute__((sda));
 extern s32 D_0015ECA8 __attribute__((sda));
 extern s32 D_0015ECAC MACRO_ADDR;

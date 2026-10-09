@@ -4,18 +4,21 @@
 #include "types.h"
 #include "qcopy.h"
 
-typedef struct {
-    f32 x, y, z, w;
-} Vec4;
-
-typedef struct {
-    Vec4 position;
+/* One glow billboard; append_billboard_batch draws the active ones. */
+typedef struct BillboardRecord {
+    f32 position[4]; /* x, y, z, w */
     s16 active_count;
     s16 alpha;
     u8 pad14[4];
     f32 angle;
     f32 radius_scale;
-} BillboardRecord;
+} BillboardRecord; /* size 0x20 */
+
+extern BillboardRecord billboard_records[16] __asm__("D_0018ED00");
+
+typedef struct {
+    f32 x, y, z, w;
+} Vec4;
 
 typedef struct {
     u8 pad0[0x1A8];
@@ -30,7 +33,6 @@ extern char billboard_quad_header[] __asm__("D_001608E0");
 extern u8 camera_position[] __asm__("D_00187080");
 extern BillboardViewContext view_context __asm__("D_0018CD00");
 extern s32 clip_transform __asm__("D_0018CE80");
-extern BillboardRecord billboard_records[] __asm__("D_0018ED00");
 extern void FillTransferWords(void *, s32, s32);
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern s32 is_vector_outside_clip(Vec4 *) __asm__("func_001F9958");
@@ -131,3 +133,5 @@ void append_billboard_batch(void) {
 }
 
 extern __typeof__(append_billboard_batch) func_001F92B0 __attribute__((alias("FUN_001f92b0")));
+
+BillboardRecord billboard_records[16] = {0};

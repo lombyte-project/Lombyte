@@ -3,8 +3,7 @@
 
 #include "types.h"
 
-extern s32 vendor_flash_timers[] __asm__("D_001E6620");
-extern s32 vendor_scroll_timers[] __asm__("D_001E6640");
+#include "rnc/ui/vendor/vendor_capture.h"
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 SubtractIntegerWithClamp(s32);
@@ -93,3 +92,7 @@ void render_vendor_capture_texture_overlays_pass(s32 pass_index, f32 capture_wid
 }
 extern __typeof__(render_vendor_capture_texture_overlays_pass) func_00239328
     __attribute__((alias("FUN_00239328")));
+
+s32 vendor_flash_timers[8] = {0};
+
+s32 vendor_scroll_timers[8] = {0};

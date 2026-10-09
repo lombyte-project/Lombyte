@@ -1,6 +1,9 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
+#include "rnc/ui/menus/item_preview/preview_animation.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/gadgets/hand_gadget.h"
 #include "asm.h"
 
 #include "types.h"
@@ -44,40 +47,10 @@ typedef struct HandGadgetDefinition {
     s32 oclass;
     u8 pad14[0x38];
 } HandGadgetDefinition;
-typedef struct HandGadgetManipulator {
-    u8 pad0;
-    u8 active;
-    u8 pad2[0x1E];
-    float rotation_x;
-    float rotation_y;
-    float rotation_z;
-} HandGadgetManipulator;
-typedef struct HandGadgetAnimation {
-    s32 resource_first;
-    s32 resource_count;
-    s32 primary_animation;
-    s32 delay_frames;
-    s32 item_animation;
-    s32 secondary_animation;
-    s32 attachment0_class;
-    s32 attachment0_animation;
-    s32 attachment1_class;
-    s32 attachment1_animation;
-    s32 attachment2_class;
-    s32 attachment2_animation;
-} HandGadgetAnimation;
 extern u8 gadget_available[] __asm__("D_0013D4C0");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
 extern s32 resource_request_state __asm__("D_0015FF50");
 extern HandGadgetDefinition gadget_definitions[] __asm__("D_001863D0");
-extern u8 *moby_class_resources[] __asm__("D_001B3200");
-extern u8 moby_class_slots[] __asm__("D_001B3AC0");
-extern HandGadgetAnimation gadget_animations[] __asm__("D_001D52E8");
-extern HandGadgetManipulator class_pose_manipulator __asm__("D_001D5DD0");
-extern HandGadgetManipulator first_attachment_manipulator __asm__("D_001D5E10");
-extern HandGadgetManipulator second_attachment_manipulator __asm__("D_001D5E50");
-extern float ammo_preview_offsets[] __asm__("D_001D5E90");
-extern s32 ammo_preview_velocities[] __asm__("D_001D5EA8");
 extern void func_001E9470(s32, s32);
 extern void func_001E9478(Moby *, s32);
 extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
@@ -139,7 +112,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
         menu_system.resource_table_toggle = resource_request_state;
         menu_system.unk140 = selected_class;
         menu_system.last_resource_table_toggle = resource_request_state;
-        moby_class_resources[moby_class_slots[selected_class]][0xD] = 0;
+        ((u8 *)moby_class_resources[resident_class_slot_by_id[selected_class]])[0xD] = 0;
         moby = create_menu_preview_moby(selected_class);
         if (moby != 0) {
             loaded_gadget = selected_gadget;
@@ -340,3 +313,43 @@ s32 load_hand_gadget(HandGadgetState *hand) {
                                              &hand->x68);
     return 0;
 }
+
+HandGadgetAnimation gadget_animations[37] = {
+    {0, 0, 7, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 7, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 7, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 7, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 7, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 0x19, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 0x1a, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 0x15, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 7, 1, 1, 7, -1, 0, 0, 0, 0, 0},
+    {0, 0, 0x16, 1, 1, 6, -1, 0, -1, 0, -1, 0},
+    {1, 1, 4, 1, 1, 7, 0x291, 1, -1, 0, -1, 0},
+    {0, 0, 0, 1, 1, 6, -1, 0, -1, 0, -1, 0},
+    {0, 0, 8, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {0xe, 1, 0xf, 1, 4, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 0xe, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {0, 1, 3, 1, 5, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 0xa, 1, 1, 6, -1, 0, -1, 0, -1, 0},
+    {2, 1, 5, 0, 1, 7, 0x4a, 3, -1, 0, -1, 0},
+    {0, 0, 2, 0, 1, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 1, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {7, 3, 0xd, 1, 1, 7, 0xba, 8, 0xba, 9, 0xba, 0xa},
+    {0x10, 1, 0x17, 1, 1, 7, 0x10e, 4, -1, 0, -1, 0},
+    {0, 0, 0x12, 1, 1, 6, -1, 0, -1, 0, -1, 0},
+    {0, 0, 9, 1, 1, 6, -1, 0, -1, 0, -1, 0},
+    {0, 0, 0x11, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {6, 1, 0x10, 1, 1, 7, 0xcb, 3, -1, 0, -1, 0},
+    {0xc, 1, 0x18, 1, 3, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 0x1b, 1, 1, 6, -1, 0, -1, 0, -1, 0},
+    {0, 0, 0xb, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 0xc, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 6, 1, 1, 6, -1, 0, 0, 0, 0, 0},
+    {0xa, 2, 0x13, 1, 3, 7, 0x27a, 8, -1, 0, -1, 0},
+    {0xf, 1, 0x14, 1, 1, 7, -1, 0, -1, 0, -1, 0},
+    {0, 0, 6, 1, 1, 6, -1, 0, -1, 0, -1, 0},
+    {0, 0, 6, 1, 1, 6, -1, 0, -1, 0, -1, 0},
+    {0, 0, 6, 1, 1, 6, -1, 0, -1, 0, -1, 0},
+    {0, 0, 6, 1, 1, 6, -1, 0, -1, 0, -1, 0},
+};

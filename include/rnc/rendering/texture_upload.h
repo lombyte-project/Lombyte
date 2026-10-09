@@ -18,6 +18,8 @@ struct TextureUpload {
 
 #define TEXTURE_UPLOAD_MAX 0x40
 
+extern struct TextureUpload pending_texture_uploads[0x40] __asm__("D_0018D040");
+
 /* 8-bit image file as streamed or embedded (fun_00204cf0 reads it; the
    save screen preview in fun_0021f990 and the map textures in
    draw_map_screen use the same CLUT +0x20 / pixels +0x420 split). */

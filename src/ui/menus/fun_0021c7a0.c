@@ -5,8 +5,7 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/gameplay/state/usage_stats.h"
 
-extern struct PadState D_0013C940;
-extern u8 D_0013D4C0[];
+#include "rnc/gameplay/state/item_state.h"
 extern struct UsageStats D_00141848;
 extern s32 D_0015EEA4;
 extern s32 scale_game_frames() __asm__("FUN_001f96f8");
@@ -27,10 +26,10 @@ s32 FUN_0021c7a0(struct MenuScreen *menu) {
     index = grid->data.grid.selected_cell;
     id = grid->data.grid.cells[index].id;
     start_index = menu->data.slots.cursor;
-    if (D_0013C940.pressed_unmasked & 8) {
+    if (controller_state.pressed_unmasked & 8) {
         menu->data.slots.cursor = (start_index + 1) % 8;
     }
-    if (D_0013C940.pressed_unmasked & 4) {
+    if (controller_state.pressed_unmasked & 4) {
         tmp = menu->data.slots.cursor;
         menu->data.slots.cursor = (tmp + 7) % 8;
     }
@@ -39,7 +38,7 @@ s32 FUN_0021c7a0(struct MenuScreen *menu) {
         allocate_voice_for_target_entry(1, 0x11, menu->moby);
     }
     if (id != 0) {
-        if (D_0013D4C0[id] != 0 && (D_0013C940.pressed_unmasked & 0x40)) {
+        if (item_available[id] != 0 && (controller_state.pressed_unmasked & 0x40)) {
             if ((u16)D_00141848.stat[21].count <= 0xFFFEU) {
                 D_00141848.stat[21].count = (u16)(D_00141848.stat[21].count + 1);
             }

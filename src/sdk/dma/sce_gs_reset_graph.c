@@ -1,12 +1,5 @@
 #include "types.h"
-typedef struct {
-    s16 sceGsInterMode;
-    s16 sceGsOutMode;
-    s16 sceGsFFMode;
-    s16 sceGsVersion;
-    volatile s32 (*sceGsVSCfunc)(s32);
-    s32 sceGsVSCid;
-} sceGsGParam;
+#include "rnc/sdk/sce_gs_gparam.h"
 
 extern sceGsGParam *GetCoreDataTable(void);
 extern s32 GsPutIMR();

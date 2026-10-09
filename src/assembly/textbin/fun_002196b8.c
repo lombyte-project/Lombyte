@@ -1,5 +1,8 @@
 #include "types.h"
+#include "rnc/ui/menus/panel_slots.h"
 #include "asm.h"
+#include "sda.h"
+#include "rnc/ui/menus/menu_system.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002196b8/FUN_002196b8.s", FUN_002196b8);
@@ -40,8 +43,6 @@ struct RenderPanel {
 extern s64 capture_texture_tex0 __asm__("D_0015EED0");
 extern void *resident_object_pool __asm__("D_0015FF18");
 extern s32 panel_clear_color __asm__("D_001601B0") __attribute__((sda));
-extern s32 panel_slot_enabled[] __asm__("D_001CE2C0");
-extern PanelRenderSlot *panel_slots[] __asm__("D_001D5D90");
 
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern void draw_mobys_setup(void) __asm__("func_0020D278");
@@ -154,7 +155,7 @@ void render_level_effects_and_screen_sprites(void) {
 
     for (pass = 0; pass < 2; pass++) {
         for (draw_slot_index = 0; draw_slot_index < 14; draw_slot_index++) {
-            slots = panel_slots;
+            slots = (PanelRenderSlot **)panel_slots;
             slot = slots[draw_slot_index];
             if (slot == 0 || panels == 0) {
                 continue;
@@ -272,3 +273,5 @@ extern __typeof__(render_level_effects_and_screen_sprites) func_002196B8
     __attribute__((alias("FUN_002196b8")));
 
 #endif /* NON_MATCHING */
+
+s32 panel_slot_enabled[14] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};

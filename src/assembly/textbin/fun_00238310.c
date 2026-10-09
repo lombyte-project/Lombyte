@@ -1,14 +1,14 @@
 #include "types.h"
 #include "asm.h"
+#include "rnc/ui/vendor/vendor_capture.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00238310/FUN_00238310.s", FUN_00238310);
 #else
 #include "types.h"
+#include "rnc/ui/vendor/vendor_capture.h"
 
 extern s32 game_frame_counter __asm__("D_0015F438");
-extern volatile s32 capture_glyph_coordinates[] __asm__("D_001E6018");
-extern s32 capture_glyph_advances[] __asm__("D_001E6118");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -111,3 +111,25 @@ extern __typeof__(render_capture_scrolling_text) func_00238310
     __attribute__((alias("FUN_00238310")));
 
 #endif /* NON_MATCHING */
+
+volatile s32 capture_glyph_coordinates[64] = {
+    -1, 0x2400120, -1, -1, -1, -1, -1, 0x2d00000,
+    -1, -1, -1, -1, 0x24001b0, 0x24002d0, 0x2400240, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, 0, 0x90, 0x120, 0x1b0, 0x240, 0x2d0, 0x900000,
+    0x900090, 0x900120, 0x9001b0, 0x900240, 0x9002d0, 0x1200000, 0x1200090, 0x1200120,
+    0x12001b0, 0x1200240, 0x12002d0, 0x1b00000, 0x1b00090, 0x1b00120, 0x1b001b0, 0x1b00240,
+    0x1b002d0, 0x2400000, 0x2400090, -1, -1, -1, -1, -1,
+};
+
+s32 capture_glyph_advances[64] = {
+    9, 5, 0xa, 0xa, 0xa, 0xa, 0xa, 5,
+    0xa, 0xa, 0xa, 0xa, 5, 9, 5, 0xa,
+    0xa, 0xa, 0xa, 0xa, 0xa, 0xa, 0xa, 0xa,
+    0xa, 0xa, 0xa, 0xa, 0xa, 0xa, 0xa, 0xa,
+    0xa, 0xa, 0xa, 0xb, 0xa, 9, 9, 0xb,
+    0xa, 4, 0xa, 0xa, 9, 0xb, 0xa, 0xa,
+    0xa, 0xa, 0xa, 0xa, 0xa, 0xa, 0xa, 0xa,
+    0xa, 0xa, 0xa, 0xa, 0xa, 0xa, 0xa, 0xa,
+};

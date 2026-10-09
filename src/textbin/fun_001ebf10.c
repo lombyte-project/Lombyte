@@ -40,8 +40,6 @@ struct CameraTransitionState {
 
 extern struct CameraTransitionState camera_transition_state __asm__("D_00186F40");
 extern CameraDescriptor *camera_descriptors __asm__("D_0015EF90");
-extern u8 previous_camera_record_storage[] __asm__("D_00189650");
-extern s32 camera_position_publication_suppressed[] __asm__("D_0018C32C");
 
 extern void backup_current_cam(void) __asm__("FUN_001ebc90");
 extern void camera_run_setup_to_new_cam(struct UpdateCam *next_camera) __asm__("func_001EBEC8");
@@ -132,11 +130,10 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     previous_camera->handoff_state = 0;
     previous_camera->activation_blocked = 0;
     camera_transition_state.previous = previous_camera;
-    copy_blocks_16_forward(previous_camera_record_storage, previous_camera_record_storage - 0x280,
-                           0x280);
-    camera_transition_state.previous->saved_state = previous_camera_record_storage;
+    copy_blocks_16_forward(&camera_saved_states[1], &camera_saved_states[0], 0x280);
+    camera_transition_state.previous->saved_state = &camera_saved_states[1];
     camera_transition_state.current = next_camera;
-    next_camera->saved_state = previous_camera_record_storage - 0x280;
+    next_camera->saved_state = &camera_saved_states[0];
     camera_transition_state.snapshot_pending = 0;
     camera_run_setup_to_new_cam(next_camera);
     backup_current_cam();

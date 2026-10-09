@@ -21,21 +21,8 @@
 
 #include "types.h"
 
-typedef struct sceDmaChan {
-    s32 chcr;
-    u8 pad_04[0xC];
-    s32 madr;
-    u8 pad_14[0x1C];
-    s32 tadr;
-    u8 pad_34[0xC];
-    s32 asr0;
-    u8 pad_44[0xC];
-    s32 asr1;
-    u8 pad_54[0x2C];
-    s32 sadr;
-} sceDmaChan;
+#include "rnc/sdk/sce_dma_chan.h"
 
-extern sceDmaChan *DmaChannels[] __asm__("D_00132D70");
 extern s32 DmaChannelsUsed[] __asm__("D_001533F8");
 extern s32 Memclr();
 extern s32 sceDmaPutEnv();

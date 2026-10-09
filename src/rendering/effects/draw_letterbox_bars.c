@@ -5,7 +5,7 @@
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
 
-extern int D_0013E500[];
+#include "rnc/rendering/screen.h"
 extern int D_0015F444 MACRO_ADDR;
 extern int D_0015F448 MACRO_ADDR;
 extern char D_00160820[];
@@ -66,14 +66,14 @@ void draw_letterbox_bars(void) {
         long *p;
         render_packet_cursor.words = base + 4;
         p = (long *)render_packet_cursor.words;
-        p[0] = D_0013E500[4] | ((long)D_0013E500[5] << 16) | ((long)0xFFFFF3 << 32);
-        p[1] = D_0013E500[4] | ((long)(D_0013E500[5] + h) << 16) | ((long)0xFFFFF3 << 32);
-        p[2] = D_0013E500[6] | ((long)D_0013E500[5] << 16) | ((long)0xFFFFF3 << 32);
-        p[3] = D_0013E500[6] | ((long)(D_0013E500[5] + h) << 16) | ((long)0xFFFFF3 << 32);
-        p[4] = D_0013E500[6] | ((long)D_0013E500[7] << 16) | ((long)0xFFFFF3 << 32);
-        p[5] = D_0013E500[6] | ((long)(D_0013E500[7] - h) << 16) | ((long)0xFFFFF3 << 32);
-        p[6] = D_0013E500[4] | ((long)D_0013E500[7] << 16) | ((long)0xFFFFF3 << 32);
-        p[7] = D_0013E500[4] | ((long)(D_0013E500[7] - h) << 16) | ((long)0xFFFFF3 << 32);
+        p[0] = screen_extent.left | ((long)screen_extent.top << 16) | ((long)0xFFFFF3 << 32);
+        p[1] = screen_extent.left | ((long)(screen_extent.top + h) << 16) | ((long)0xFFFFF3 << 32);
+        p[2] = screen_extent.right | ((long)screen_extent.top << 16) | ((long)0xFFFFF3 << 32);
+        p[3] = screen_extent.right | ((long)(screen_extent.top + h) << 16) | ((long)0xFFFFF3 << 32);
+        p[4] = screen_extent.right | ((long)screen_extent.bottom << 16) | ((long)0xFFFFF3 << 32);
+        p[5] = screen_extent.right | ((long)(screen_extent.bottom - h) << 16) | ((long)0xFFFFF3 << 32);
+        p[6] = screen_extent.left | ((long)screen_extent.bottom << 16) | ((long)0xFFFFF3 << 32);
+        p[7] = screen_extent.left | ((long)(screen_extent.bottom - h) << 16) | ((long)0xFFFFF3 << 32);
     }
     render_packet_cursor.words = (int *)((char *)render_packet_cursor.words + 0x40);
 }

@@ -1,7 +1,6 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00222640). */
 #include "sda.h"
-extern int D_0013D4C0 NOT_SDA;
-extern unsigned char D_0013E520[];
+#include "rnc/gameplay/state/item_state.h"
 typedef struct {
     unsigned short a; /* +0 */
     short b;          /* +2 */
@@ -15,7 +14,7 @@ extern int D_001D6178[];
 extern char D_001863D0[];
 extern char D_001D0D00[];
 /* Builds the pause-menu item list from the 15 entries of D_001CF120
-   that D_0013D4C0 enables. The flag needs its own `f = b != 0`:
+   that item_available enables. The flag needs its own `f = b != 0`:
    `(b != 0) << 2` folds into a branch. */
 int build_pause_item_list(void) __asm__("FUN_002215f8");
 
@@ -26,10 +25,10 @@ int build_pause_item_list(void) {
 
     for (i = 0; i < 15; i++) {
         int id = D_001CF120[i].id;
-        if (((unsigned char *)&D_0013D4C0)[id] != 0) {
+        if (item_available[id] != 0) {
             Item0A *out = &D_001D60E0[n];
             char *rec = D_001863D0 + id * 0x4C;
-            unsigned char b = D_0013E520[id];
+            unsigned char b = item_text_variant[id];
             int f = b != 0;
             out->a = *(unsigned short *)(rec + 0x38);
             out->b = f << 2;

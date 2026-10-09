@@ -3,7 +3,7 @@
 #include "qcopy.h"
 #include "rnc/rendering/dma_tag.h"
 
-extern int D_0013E500[];
+#include "rnc/rendering/screen.h"
 extern char D_00160850[];
 
 typedef union {
@@ -21,10 +21,10 @@ void FUN_002316e8(int x, int y, int w, int h, unsigned long rgba, unsigned long 
 
 void FUN_002316e8(int x, int y, int w, int h, unsigned long rgba, unsigned long tex, float u0,
                   float u1, float v0, float v1) {
-    int x0 = x * 16 + D_0013E500[4] - 8;
-    int x1 = (x + w) * 16 + D_0013E500[4] - 8;
-    int y0 = y * 16 + D_0013E500[5] - 8;
-    int y1 = (y + h) * 16 + D_0013E500[5] - 8;
+    int x0 = x * 16 + screen_extent.left - 8;
+    int x1 = (x + w) * 16 + screen_extent.left - 8;
+    int y0 = y * 16 + screen_extent.top - 8;
+    int y1 = (y + h) * 16 + screen_extent.top - 8;
     SpaceUvPair uv[4];
     long *p;
     int *base;

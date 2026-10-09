@@ -57,16 +57,16 @@ void draw_rotated_sprite(s32 w, s32 h, s64 buf, f32 x, f32 y, f32 cx, f32 cy, f3
     q[3] = 0x154;
     q[4] = 0x807F7F7F;
     q[5] = w << 4;
-    q[6] = (((s32)p0.x + D_0013E500.left) - 8) | ((u64)(((s32)p0.y + D_0013E500.top) - 8) << 16) |
+    q[6] = (((s32)p0.x + screen_extent.left) - 8) | ((u64)(((s32)p0.y + screen_extent.top) - 8) << 16) |
            ((u64)hud_state.z << 32);
     q[7] = (h << 20) + (w << 4);
-    q[8] = (((s32)p1.x + D_0013E500.left) - 8) | ((u64)(((s32)p1.y + D_0013E500.top) - 8) << 16) |
+    q[8] = (((s32)p1.x + screen_extent.left) - 8) | ((u64)(((s32)p1.y + screen_extent.top) - 8) << 16) |
            ((u64)hud_state.z << 32);
     q[9] = 0;
-    q[10] = (((s32)p2.x + D_0013E500.left) - 8) | ((u64)(((s32)p2.y + D_0013E500.top) - 8) << 16) |
+    q[10] = (((s32)p2.x + screen_extent.left) - 8) | ((u64)(((s32)p2.y + screen_extent.top) - 8) << 16) |
             ((u64)hud_state.z << 32);
     q[11] = h << 20;
-    q[12] = (((s32)p3.x + D_0013E500.left) - 8) | ((u64)(((s32)p3.y + D_0013E500.top) - 8) << 16) |
+    q[12] = (((s32)p3.x + screen_extent.left) - 8) | ((u64)(((s32)p3.y + screen_extent.top) - 8) << 16) |
             ((u64)hud_state.z << 32);
     q[13] = 0;
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x70);

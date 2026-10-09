@@ -5,6 +5,10 @@
 
 #include "eetypes.h"
 #include "rnc/rendering/dma_tag.h"
+
+/* GIF packets that program the GS for the NTSC and PAL video modes. */
+extern u8 ntsc_graphics_setup_packet[0x70] __asm__("D_001D7E50");
+extern u8 pal_graphics_setup_packet[0x70] __asm__("D_001D7EC0");
 struct GraphicsSetupRecord {
     s32 command_count;
     s32 command_flags;
@@ -17,8 +21,6 @@ struct VideoModeState {
     s32 v;
 };
 extern struct VideoModeState pal_mode __asm__("D_0015ED80");
-extern u8 pal_graphics_setup_packet[] __asm__("D_001D7EC0");
-extern u8 ntsc_graphics_setup_packet[] __asm__("D_001D7E50");
 extern s32 graphics_setup_word __asm__("D_001603A0");
 extern void append_fullscreen_setup_strips(void) __asm__("func_002271D0");
 extern void func_00226FB8(f32 *, f32);

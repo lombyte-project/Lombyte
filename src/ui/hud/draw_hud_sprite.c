@@ -31,11 +31,11 @@ void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
     q[3] = 0x156;
     q[4] = ((u64)alpha << 24) | 0x7F7F7F;
     q[5] = 0;
-    q[6] = (((x << 4) + D_0013E500.left) - 8) | ((u64)(((y << 4) + D_0013E500.top) - 8) << 16) |
+    q[6] = (((x << 4) + screen_extent.left) - 8) | ((u64)(((y << 4) + screen_extent.top) - 8) << 16) |
            ((u64)hud_state.z << 32);
     q[7] = (th << 20) + (tw << 4);
-    q[8] = ((((x + w) << 4) + D_0013E500.left) - 8) |
-           ((u64)((((y + h) << 4) + D_0013E500.top) - 8) << 16) | ((u64)hud_state.z << 32);
+    q[8] = ((((x + w) << 4) + screen_extent.left) - 8) |
+           ((u64)((((y + h) << 4) + screen_extent.top) - 8) << 16) | ((u64)hud_state.z << 32);
     q[9] = 0;
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x50);
 }

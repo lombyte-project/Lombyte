@@ -18,15 +18,15 @@ void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pix
     q[4] = 0x46;
     q[5] = prim;
     if (pixels != 0) {
-        q[6] = (x0 + D_0013E500.left - 8) | ((u64)(y0 + D_0013E500.top - 8) << 16) |
+        q[6] = (x0 + screen_extent.left - 8) | ((u64)(y0 + screen_extent.top - 8) << 16) |
                (u64)0xFFFFF000 << 24;
-        q[7] = (x1 + D_0013E500.left - 8) | ((u64)(y1 + D_0013E500.top - 8) << 16) |
+        q[7] = (x1 + screen_extent.left - 8) | ((u64)(y1 + screen_extent.top - 8) << 16) |
                (u64)0xFFFFF000 << 24;
     } else {
-        q[6] = ((x0 << 4) + D_0013E500.left - 0x10) |
-               ((u64)((y0 << 4) + D_0013E500.top - 0x10) << 16) | (u64)0xFFFFF000 << 24;
-        q[7] = ((x1 << 4) + D_0013E500.left - 0x10) |
-               ((u64)((y1 << 4) + D_0013E500.top - 0x10) << 16) | (u64)0xFFFFF000 << 24;
+        q[6] = ((x0 << 4) + screen_extent.left - 0x10) |
+               ((u64)((y0 << 4) + screen_extent.top - 0x10) << 16) | (u64)0xFFFFF000 << 24;
+        q[7] = ((x1 << 4) + screen_extent.left - 0x10) |
+               ((u64)((y1 << 4) + screen_extent.top - 0x10) << 16) | (u64)0xFFFFF000 << 24;
     }
     render_packet_cursor.tag += 3;
 }

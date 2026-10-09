@@ -11,7 +11,7 @@ extern u8 D_00100AE0[];
 extern u16 D_0010FA90[];
 extern u8 D_0010FAA0[];
 extern s32 D_0015ED80 MACRO_ADDR;
-extern u8 D_0015EE40;
+extern u8 D_0015EE40 MACRO_ADDR;
 extern s32 D_0015F34C __attribute__((sda));
 extern s32 D_0015F350 __attribute__((sda));
 extern s32 D_0015F370[2] __attribute__((sda));
@@ -310,3 +310,6 @@ void draw_debug_profiler(void) {
 }
 
 extern __typeof__(draw_debug_profiler) func_001F39D0 __attribute__((alias("FUN_001f39d0")));
+
+/* Defined below its only user, so retail reaches it with lui. */
+u8 D_0015EE40 MACRO_ADDR = 0;

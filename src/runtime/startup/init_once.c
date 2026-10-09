@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/rendering/image_clear_buffer.h"
 #include "rnc/storage/disc_table.h"
 #include "rnc/globals.h"
 extern u8 D_0010E4C0[];
@@ -6,7 +7,6 @@ extern void count_vsync() __asm__("FUN_0012f1c8");
 extern s32 D_0015EE90;
 extern u8 D_0015FA88[];
 extern s32 D_00160F0C;
-extern u8 D_001941C0[];
 extern u8 D_001E7AE0[];
 extern u8 D_001E7AF8[];
 extern u8 D_001E7B10[];
@@ -123,10 +123,10 @@ void init_once(void) {
     vu1_init_chain();
     FUN_00121190(0);
     initialize_gameplay_sound_system();
-    FillTransferWords(D_001941C0, 0x80808080, 0x100);
+    FillTransferWords(image_clear_buffer, 0x80808080, 0x100);
     sceGsSetDefLoadImage(buf, 0x3FFB, 1, 0, 0, 0, 8, 8);
     FlushCache(0);
-    sceGsExecLoadImage(buf, D_001941C0);
+    sceGsExecLoadImage(buf, image_clear_buffer);
     FUN_00120558(0, 0);
     load_debug_font();
     *(volatile s32 *)0x10000810 = 0x82;

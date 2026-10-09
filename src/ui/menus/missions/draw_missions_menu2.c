@@ -65,7 +65,7 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
         p = (u32 *)0x70000000;
         do {
             y = off + 0xA;
-            flag = menu->sel[D_001A00F0.level] == i;
+            flag = menu->sel[level_map_selection.level] == i;
             col = flag ? 0x8020FFFF : 0x80FFA888;
             if (flag) {
                 func_001F61F8();

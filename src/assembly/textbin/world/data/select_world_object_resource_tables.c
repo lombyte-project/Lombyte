@@ -1,5 +1,9 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
+#include "sda.h"
 #include "types.h"
 #include "asm.h"
+#include "rnc/rendering/material_templates.h"
+#include "rnc/rendering/resident_class.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/world/data/"
@@ -32,23 +36,17 @@ extern s32 runtime_resource_tag __asm__("D_0015FF44") MACRO_ADDR;
 extern s32 class_resource_count __asm__("D_0015FF48") MACRO_ADDR;
 extern s32 active_class_resource_index __asm__("D_0015FF4C") MACRO_ADDR;
 extern s32 active_decode_buffer __asm__("D_0015FF50") MACRO_ADDR;
-extern s32 class_resource_ids[] __asm__("D_001CBAC0");
-extern s32 compressed_class_resources[] __asm__("D_001CBB20");
-extern char class_material_maps[][0x10] __asm__("D_001CBBE0");
-extern s16 class_runtime_indices[][0x10] __asm__("D_001CBD60");
-extern char resident_indexed_textures[] __asm__("D_001CAAC0");
+#include "rnc/rendering/resident_class.h"
 typedef struct {
     u8 pad0[0x10];
     char *decode_buffers;
 } LevelResourceBuffers;
 extern LevelResourceBuffers level_resource_buffers __asm__("D_001940C0");
-extern ClassResourceHeader *resident_class_resources[] __asm__("D_001B3200") NOT_SDA;
-extern u8 resident_class_slot_by_id[] __asm__("D_001B3AC0") NOT_SDA;
 /* Per-slot copy of the resource +0x2C word; its narrower meaning is unresolved. */
 extern s32 D_001B6180[];
 extern GadgetRec vendor_item_definitions[] __asm__("D_001863D0");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
-extern u64 gold_weapon_texture_state[] __asm__("D_0019E6F0");
+#include "rnc/rendering/material_templates.h"
 extern void FlushCache(s32);
 extern void decompress_wad(s32, void *) __asm__("func_0020B618");
 extern void prepare_resident_class_render_data(void *, void *, void *,
@@ -85,7 +83,7 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     decompress_wad(compressed_class_resources[active_class_resource_index], resource_data);
     FlushCache(0);
     /* The byte-sized class slot selects both the published pointer and the saved +0x2C word. */
-    resource_table = resident_class_resources;
+    resource_table = (ClassResourceHeader **)moby_class_resources;
     class_slot = resident_class_slot_by_id[class_id];
     resource_table[class_slot] = (ClassResourceHeader *)resource_data;
     D_001B6180[class_slot] = ((ClassResourceHeader *)resource_data)->original_field_2c;
@@ -112,7 +110,7 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
             if (gold_weapon_purchased[vendor_item_index] == 0) {
                 return;
             }
-            resource_header = resident_class_resources[class_slot];
+            resource_header = (ClassResourceHeader *)moby_class_resources[class_slot];
             if (resource_header->third_render_group_count == 0) {
                 return;
             }
@@ -129,3 +127,7 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
 extern void func_00204A40(s32 class_id, s32 buffer_index) __attribute__((alias("FUN_00204a40")));
 
 #endif /* NON_MATCHING */
+
+char class_material_maps[24][16] = {0};
+
+s16 class_runtime_indices[24][16] = {0};

@@ -6,7 +6,6 @@ extern s32 *D_0015ECA0[2] __attribute__((sda));
 extern u8 D_00133140[];
 extern s32 D_00133100[4];
 extern u8 D_0015EBC0[];
-extern char D_00153D20[];
 extern s32 printf(const char *, ...);
 extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern s32 snd_got_returns(void) __asm__("func_0012DE70");
@@ -32,7 +31,7 @@ s32 snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *data) {
     } while (D_0015EC80 != 0);
     StoreObjectIndex(D_00133100, 1);
     while (SceSifCheckStatRpc(D_0015EBC0) != 0) {
-        printf(D_00153D20);
+        printf("989snd.c: RPC collision!\n");
         snd_flush_sound_commands();
         FlushCache(0);
     }

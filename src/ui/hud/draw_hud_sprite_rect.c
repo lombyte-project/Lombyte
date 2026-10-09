@@ -22,10 +22,10 @@ void draw_hud_sprite_rect(s32 tex, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v
     q[3] = 0x156;
     q[4] = (u64)alpha << 24 | 0x7F7F7F;
     q[5] = u0 | ((u64)v0 << 16);
-    q[6] = (x0 + D_0013E500.left - 8) | ((u64)(y0 + D_0013E500.top - 8) << 16) |
+    q[6] = (x0 + screen_extent.left - 8) | ((u64)(y0 + screen_extent.top - 8) << 16) |
            ((u64)hud_state.z << 32);
     q[7] = u1 | ((u64)v1 << 16);
-    q[8] = (x1 + D_0013E500.left - 8) | ((u64)(y1 + D_0013E500.top - 8) << 16) |
+    q[8] = (x1 + screen_extent.left - 8) | ((u64)(y1 + screen_extent.top - 8) << 16) |
            ((u64)hud_state.z << 32);
     q[9] = 0;
     render_packet_cursor.tag += 5;

@@ -19,7 +19,9 @@ struct PadState {
     f32 analog_prev[16];                /* 0x140: copy of analog */
     u8 pad_180[0x9];
     u8 unk189;                          /* 0x189: copied by FUN_L00_002d2ee8 on spawn */
-    u8 pad_18A[0xA];
+    u8 pad_18A[0x4];
+    s16 unk18E;                         /* 0x18E: cleared with unk190 by ResetGlobalStateFields */
+    s32 unk190;                         /* 0x190 */
     s32 socket;                         /* 0x194: scePad2CreateSocket(&param, &D_0013C940) result, init_pads */
     s32 profile_state;                  /* 0x198: 0 query profile, 1 read pad, 2 profile too long */
     s32 device_state;                   /* 0x19C: scePad2GetState result */
@@ -40,6 +42,8 @@ struct PadState {
     s32 stick_moved;                    /* 0x1D8: analog[2] or analog[3] nonzero */
     s32 unk1DC;                         /* 0x1DC: 0x79 if the button profile is all ones, else 0; l01 picks pressure input on 0x79 */
 };
+
+extern struct PadState controller_state __asm__("D_0013C940");
 
 /*
  * The same pad state as some functions read it: the stick axes, and the held/pressed button words,

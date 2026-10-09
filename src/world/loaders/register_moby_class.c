@@ -1,3 +1,4 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 
 /* Class data block of a moby class in the level file (not a Moby instance). */
@@ -6,9 +7,7 @@ typedef struct MobyClassData {
     s32 unk2C;
 } MobyClassData;
 extern s32 D_0015FF00;
-extern u8 D_001B3AC0[];
 extern s16 D_001B3900[];
-extern MobyClassData *D_001B3200[];
 extern s32 D_001B6180[];
 extern void assign_moby_class_data(s32) __asm__("FUN_00212d68");
 extern void prepare_resident_class_render_data(MobyClassData *, s32, s32,
@@ -19,9 +18,9 @@ void register_moby_class(MobyClassData *moby, s32 arg1, s32 arg2, s32 oclass) {
     s32 n;
 
     n = D_0015FF00;
-    D_001B3AC0[oclass] = D_0015FF00;
+    resident_class_slot_by_id[oclass] = D_0015FF00;
     D_001B3900[n] = oclass;
-    D_001B3200[n] = moby;
+    moby_class_resources[n] = moby;
     if (moby == 0) {
         assign_moby_class_data(oclass);
         D_0015FF00++;

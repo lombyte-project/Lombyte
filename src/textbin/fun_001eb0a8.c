@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "asm.h"
 
 #include "types.h"
@@ -46,7 +47,6 @@ extern f32 sequence_fade __asm__("D_0015F43C");
 extern s32 intro_overlay_alpha __asm__("D_0015EF50");
 extern s32 language_intro_overlay_alpha __asm__("D_0015EF54");
 extern s32 intro_overlay_timer __asm__("D_0015EF58");
-extern s32 D_0013CAE4[];
 extern void InitializeTransferCommand(void);
 extern void func_001E9410(RenderSequenceActor *);
 extern void func_001E9428(void);
@@ -132,7 +132,7 @@ void update_gameplay_frame(void) {
                       32.0f) +
                 0x60;
         }
-        if (D_0013CAE4[0] & 0x840) {
+        if (controller_state.pressed & 0x840) {
             InitializeTransferCommand();
         }
         sound_update();

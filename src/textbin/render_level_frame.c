@@ -1,25 +1,17 @@
 #include "types.h"
+#include "rnc/rendering/level_render_state.h"
 #include "asm.h"
 
 #include "types.h"
 #include "rnc/globals.h"
 
-struct LevelRenderState {
-    u8 pad_0[0x58];
-    s32 mode;
-};
-struct LevelDisplayState {
-    u8 pad_0[0x4];
-    s32 screen_height;
-};
 struct LevelProjectionState {
     u8 pad_0[0xB0];
     f32 projection_scale;
 };
 #include "rnc/storage/memory_card/memory_card_state.h"
-extern u8 D_0013DD43[];
-extern struct LevelRenderState level_render_state __asm__("D_0013E030");
-extern struct LevelDisplayState screen_offsets __asm__("D_0013E500");
+#include "rnc/gameplay/state/level_state.h"
+#include "rnc/rendering/screen.h"
 extern s32 game_frame_counter __asm__("D_0015F438");
 extern f32 sequence_fade __asm__("D_0015F43C");
 extern s32 D_0015F620;
@@ -50,8 +42,6 @@ extern void render_environment_mapped_object(s32) __asm__("func_002327A0");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
 
-extern struct LevelDisplayState D_0013E500_far __asm__("D_0013E500")
-    __attribute__((section(".data")));
 void render_level_frame(void) __asm__("FUN_0022f288");
 
 void render_level_frame(void) {
@@ -60,7 +50,7 @@ void render_level_frame(void) {
     f32 quad_extent;
     s32 overlay_alpha;
     f32 saved_projection_scale;
-    struct LevelDisplayState *display_state;
+    struct Screen *display_state;
     s64 texture;
     append_gif_transfer_packet();
     func_001F2260();
@@ -77,7 +67,7 @@ void render_level_frame(void) {
     view_context.projection_scale = saved_projection_scale;
     update_view_context();
     func_001F2260();
-    if (level_render_state.mode == 4) {
+    if (level_render_state.scene_mode == 4) {
         setup_gif_paging(1);
         draw_resident_textured_quad();
         do_gif_paging();
@@ -85,27 +75,27 @@ void render_level_frame(void) {
     draw_mobys();
     AppendDmaTag(0x02080000);
     setup_gif_paging(1);
-    if ((current_level_index != 0) && ((current_level_index != 1) || (D_0013DD43[0] != 0))) {
+    if ((current_level_index != 0) && ((current_level_index != 1) || (level_available[3] != 0))) {
         build_resident_indexed_texture_warp_meshes(D_0018CC98[0]);
     }
-    if ((level_render_state.mode == 4) && (D_0018CB54[0] >= 0x3D)) {
+    if ((level_render_state.scene_mode == 4) && (D_0018CB54[0] >= 0x3D)) {
         overlay_alpha = (D_0018CB54[0] - 0x3C) * 2;
         if (overlay_alpha >= 0x81) {
             overlay_alpha = 0x80;
         }
         draw_resident_textured_banner(overlay_alpha);
     }
-    if ((current_level_index != 0) && ((current_level_index != 1) || (D_0013DD43[0] != 0))) {
+    if ((current_level_index != 0) && ((current_level_index != 1) || (level_available[3] != 0))) {
         render_environment_mapped_object(D_0018CC98[0]);
     }
     if ((memory_card_state.state >= 3) || (memory_card_state.pending_state >= 0)) {
         vu1_add_g_sregister(0x47, 0x3004B);
         quad_extent = 272.0f;
         texture = get_effect_texture(2);
-        display_state = &D_0013E500_far;
-        draw_textured_quad(0x2C, display_state->screen_height - 0x60, 0x40, 0x40, 0, 0, 0x40, 0x40,
+        display_state = &screen_extent;
+        draw_textured_quad(0x2C, display_state->height - 0x60, 0x40, 0x40, 0, 0, 0x40, 0x40,
                            0x80808080, texture);
-        screen_y = (f32)((display_state->screen_height - 0x40) * 16);
+        screen_y = (f32)((display_state->height - 0x40) * 16);
         rotation_angle = ((game_frame_counter % 55) * (-6.2831855f)) / 55.0f;
         /* The frame counter contributes only the sprite angle modulo 55. */
         /* Retail passes the full texture value in a2 and the five floats in f12-f16. */

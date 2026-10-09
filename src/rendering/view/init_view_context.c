@@ -15,14 +15,14 @@ void init_view_context(void) {
 
     hw = d->display_width >> 1;
     hh = d->display_height >> 1;
-    D_0013E500.width = d->display_width;
-    D_0013E500.height = d->display_height;
-    D_0013E500.half_width = hw;
-    D_0013E500.half_height = hh;
-    D_0013E500.left = (0x800 - hw) << 4;
-    D_0013E500.top = (0x800 - hh) << 4;
-    D_0013E500.right = (hw + 0x800) << 4;
-    D_0013E500.bottom = (hh + 0x800) << 4;
+    screen_extent.width = d->display_width;
+    screen_extent.height = d->display_height;
+    screen_extent.half_width = hw;
+    screen_extent.half_height = hh;
+    screen_extent.left = (0x800 - hw) << 4;
+    screen_extent.top = (0x800 - hh) << 4;
+    screen_extent.right = (hw + 0x800) << 4;
+    screen_extent.bottom = (hh + 0x800) << 4;
     v->near_clip = 32.0f;
     v->far_clip = 745472.0f;
     v->fov.f[0] = 0.63f;

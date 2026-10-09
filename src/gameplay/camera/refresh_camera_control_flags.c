@@ -1,4 +1,5 @@
 #include "types.h"
+#include "sda.h"
 
 struct CameraPosition {
     u8 pad_0[0x8];
@@ -10,9 +11,9 @@ struct CameraTrackingControl {
     s32 control_selector;
 };
 #include "rnc/gameplay/hero.h"
-extern s32 D_0015EF98;
-extern s32 D_0015EF9C;
-extern s32 D_0015EFA0;
+extern s32 D_0015EF98 MACRO_ADDR;
+extern s32 D_0015EF9C MACRO_ADDR;
+extern s32 D_0015EFA0 MACRO_ADDR;
 extern struct CameraPosition D_00187080;
 extern struct CameraTrackingControl D_001870D0;
 /* retail small-data globals, declared to GAS before the body */
@@ -55,3 +56,8 @@ void refresh_camera_control_flags(void) {
 
 extern __typeof__(refresh_camera_control_flags) func_001ED940
     __attribute__((alias("FUN_001ed940")));
+
+/* Defined below their only users, so retail reaches them with lui. */
+s32 D_0015EF98 MACRO_ADDR = 0;
+s32 D_0015EF9C MACRO_ADDR = 0;
+s32 D_0015EFA0 MACRO_ADDR = 0;

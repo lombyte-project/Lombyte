@@ -1,16 +1,12 @@
 #include "types.h"
+#include "rnc/rendering/level_render_state.h"
 #include "sda.h"
 #include "eetypes.h"
 #include "qcopy.h"
 
 #include "rnc/math/vector.h"
 
-typedef struct {
-    u8 pad0[0x26];
-    s16 level;
-} GameState;
 
-extern GameState D_0013E030;
 extern f32 D_0015ED6C MACRO_ADDR;
 extern u128 D_001D9B60[][6];
 
@@ -39,7 +35,7 @@ void FUN_0022f5b0(u8 *m, f32 z) {
         vel.f[3] = 0.4f;
         qcopy(&vel2, &vel);
         vel2.f[3] = 0.6f;
-        qcopy(&pos, &D_001D9B60[D_0013E030.level][i]);
+        qcopy(&pos, &D_001D9B60[level_render_state.content_variant][i]);
         FUN_001f9cf8(&pos, &pos, m + 0xC0);
         FUN_001f9a10(&pos, &pos, m + 0x10);
         a = scale_game_frames(4);

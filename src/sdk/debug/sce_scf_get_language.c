@@ -1,8 +1,9 @@
-typedef unsigned char u8;
+#include "rnc/sdk/library/sdk_state.h"
+#include "sda.h"
+#include "types.h"
 
 extern void GetOsdConfigParam(int *config);
 extern int IsT10K(void);
-extern u8 ScfLanguage[1] __asm__("D_001330D4") __attribute__((section(".data")));
 
 int sceScfGetLanguage(void) {
     int config;
@@ -10,7 +11,7 @@ int sceScfGetLanguage(void) {
 
     GetOsdConfigParam(&config);
     if (IsT10K() != 0) {
-        language = ScfLanguage[0];
+        language = ScfLanguage;
     } else {
         GetOsdConfigParam(&config);
         if ((((unsigned int)config >> 13) & 7) == 0) {
@@ -21,3 +22,5 @@ int sceScfGetLanguage(void) {
     }
     return language;
 }
+
+u8 ScfLanguage NOT_SDA = {0};

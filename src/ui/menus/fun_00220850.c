@@ -1,20 +1,14 @@
 #include "types.h"
 #include "rnc/ui/map/map_state.h"
+#include "rnc/rendering/fs_aa_buffer.h"
 
-struct Screen {
-    u8 pad0[0x160];
-    s16 x;
-    s16 y;
-};
-
-extern struct Screen D_00151780;
 extern volatile s32 D_0015F438;
 extern s32 D_001DDF68[];
 extern void FUN_00200468(u64, s32, s32, s32, s32, s32, s32, s32, s32, s32);
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 s32 FUN_00220850(void) {
-    s32 st = D_001A00F0.loaded;
+    s32 st = level_map_selection.loaded;
     s32 size;
     s32 off;
     s32 t;
@@ -26,14 +20,14 @@ s32 FUN_00220850(void) {
     if (st == 6 || st == 13 || st == 17) {
         vu1_add_g_sregister(0x47, 0);
         vu1_add_g_sregister(8, 5);
-        FUN_00200468(D_001A00F0.tex0, 0, 0, 7, 7, D_00151780.x << 4, D_00151780.y << 4, 0, 0, 0x80);
+        FUN_00200468(level_map_selection.tex0, 0, 0, 7, 7, fs_aa_buffer.target_width << 4, fs_aa_buffer.target_height << 4, 0, 0, 0x80);
         vu1_add_g_sregister(0x47, 0x360B);
         if (D_0015F438 % 60 < 40) {
-            FUN_00200468(D_001A00F0.tex1, 0, 0, 7, 7, D_00151780.x << 4, D_00151780.y << 4, 0, 0,
+            FUN_00200468(level_map_selection.tex1, 0, 0, 7, 7, fs_aa_buffer.target_width << 4, fs_aa_buffer.target_height << 4, 0, 0,
                          0x80);
         }
         if (D_0015F438 % 150 < 90) {
-            FUN_00200468(D_001A00F0.tex2, 0, 0, 7, 7, D_00151780.x << 4, D_00151780.y << 4, 0, 0,
+            FUN_00200468(level_map_selection.tex2, 0, 0, 7, 7, fs_aa_buffer.target_width << 4, fs_aa_buffer.target_height << 4, 0, 0,
                          0x80);
         }
     } else {
@@ -43,14 +37,14 @@ s32 FUN_00220850(void) {
         ph = t % 0x800;
         vu1_add_g_sregister(0x47, 0);
         vu1_add_g_sregister(8, 0);
-        FUN_00200468(D_001A00F0.tex0, size, size, 7, 7, (D_00151780.x << 4) - off,
-                     (D_00151780.y << 4) - off, ph, 0, 0x80);
+        FUN_00200468(level_map_selection.tex0, size, size, 7, 7, (fs_aa_buffer.target_width << 4) - off,
+                     (fs_aa_buffer.target_height << 4) - off, ph, 0, 0x80);
         vu1_add_g_sregister(0x47, 0x360B);
         vu1_add_g_sregister(8, 5);
-        FUN_00200468(D_001A00F0.tex1, size, size, 7, 7, (D_00151780.x << 4) - off,
-                     (D_00151780.y << 4) - off, 0, 0, 0x80);
-        FUN_00200468(D_001A00F0.tex2, size, size, 7, 7, (D_00151780.x << 4) - off,
-                     (D_00151780.y << 4) - off, 0, 0, 0x80);
+        FUN_00200468(level_map_selection.tex1, size, size, 7, 7, (fs_aa_buffer.target_width << 4) - off,
+                     (fs_aa_buffer.target_height << 4) - off, 0, 0, 0x80);
+        FUN_00200468(level_map_selection.tex2, size, size, 7, 7, (fs_aa_buffer.target_width << 4) - off,
+                     (fs_aa_buffer.target_height << 4) - off, 0, 0, 0x80);
     }
     return 4;
 }

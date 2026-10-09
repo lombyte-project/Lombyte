@@ -19,8 +19,8 @@ struct Glyph {
 
 extern s32 font_window_active __asm__("D_0015F4A0");
 extern s32 font_color_codes_enabled __asm__("D_0015F49C");
-extern s32 font_palette_colors[] __asm__("D_0018CAF8");
-extern s32 D_0013E500[];
+#include "rnc/ui/text/font_palette.h"
+#include "rnc/rendering/screen.h"
 extern void vu1_set_scissor(s32, s32, s32, s32) __asm__("func_00233A40");
 extern s32 measure_text_width(u8 *, s32, struct Glyph *) __asm__("func_001F6200");
 extern void font_print(s32, s32, u64, u8 *, s32, s64, struct Glyph *) __asm__("func_001F62B0");
@@ -191,8 +191,8 @@ layout:
         }
     }
     font_window_active = 0;
-    left_width = D_0013E500[0];
-    vu1_set_scissor(0, left_width - 1, 0, D_0013E500[1] - 1);
+    left_width = screen_extent.width;
+    vu1_set_scissor(0, left_width - 1, 0, screen_extent.height - 1);
 }
 
 extern __typeof__(font_print_window) func_001F7090 __attribute__((alias("FUN_001f7090")));

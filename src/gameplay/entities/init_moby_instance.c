@@ -1,3 +1,4 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 
 typedef struct {
@@ -70,9 +71,7 @@ typedef struct {
     char padBE[0x42];
 } MobyI;
 
-extern u8 D_001B3AC0[];
 extern s32 D_001B3580[];
-extern MobyIClass *D_001B3200[];
 extern char *D_0015FF18;
 extern void FillTransferWords();
 extern void update_moby_animation_state(void *) __asm__("func_0020C880");
@@ -96,7 +95,7 @@ void init_moby_instance(void *moby_mem, int oClass) {
     MobyIClass *pClass;
 
     FillTransferWords(m, 0, 0x100);
-    c = D_001B3AC0[oClass];
+    c = resident_class_slot_by_id[oClass];
     m->unk23 = 0x80;
     m->oClass = c;
     m->unkA4 = 0xFF;
@@ -120,7 +119,7 @@ void init_moby_instance(void *moby_mem, int oClass) {
     if (m->unk74 == 0) {
         m->flags |= 2;
     }
-    pClass = D_001B3200[m->oClass];
+    pClass = moby_class_resources[m->oClass];
     if (pClass != 0) {
         MobyIClass *p;
 

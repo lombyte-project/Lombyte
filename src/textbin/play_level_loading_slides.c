@@ -2,16 +2,12 @@
 #include "sda.h"
 
 
-typedef struct {
-    u8 pad_0[0xC];
-    s32 half_height;
-} ScreenOfs;
 
-extern u8 D_0013CDD0[];
+#include "rnc/rendering/fs_aa_packets.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
-extern ScreenOfs D_0013E500;
+#include "rnc/rendering/screen.h"
 extern s32 D_0015ED84 __attribute__((sda));
 extern s16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A MACRO_ADDR;
@@ -73,7 +69,7 @@ void play_level_loading_slides(s32 language_index, s32 first_slide, s32 second_s
         if (frame <= 0x1F) {
             alpha = fade_in_alpha;
         }
-        render_packet_cursor.words[1] = (s32)D_0013CDD0;
+        render_packet_cursor.words[1] = (s32)second_clear_packet;
         render_packet_cursor.words[2] = 0;
         render_packet_cursor.words[3] = 0x50000014;
         render_packet_cursor.words += 4;
@@ -82,27 +78,27 @@ void play_level_loading_slides(s32 language_index, s32 first_slide, s32 second_s
         }
         scroll_phase = convert_integer_to_float(frame % 600) * 0.0016666667f;
         if (first_slide == second_slide) {
-            append_scrolling_textured_quad(0, D_0013E500.half_height - 0x20, 0x200, 0x40,
+            append_scrolling_textured_quad(0, screen_extent.half_height - 0x20, 0x200, 0x40,
                                            (alpha << 24) | 0x808080, shared_texture, 0.0f, 4.0f,
                                            scroll_phase + 0.0f, scroll_phase + 0.4f);
-            draw_textured_quad(0, D_0013E500.half_height - 0x20, 0x200, 0x40, 0, 0, 0x200, 0x40,
+            draw_textured_quad(0, screen_extent.half_height - 0x20, 0x200, 0x40, 0, 0, 0x200, 0x40,
                                0x80808080, first_texture);
         } else {
             scroll_start = scroll_phase + 0.0f;
             scroll_end = scroll_phase + 0.4f;
-            append_scrolling_textured_quad(0, D_0013E500.half_height - 0x2E, 0x200, 0x40,
+            append_scrolling_textured_quad(0, screen_extent.half_height - 0x2E, 0x200, 0x40,
                                            (alpha << 24) | 0x808080, shared_texture, 0.0f, 4.0f,
                                            scroll_start, scroll_end);
-            draw_textured_quad(0, D_0013E500.half_height - 0x2E, 0x200, 0x40, 0, 0, 0x200, 0x40,
+            draw_textured_quad(0, screen_extent.half_height - 0x2E, 0x200, 0x40, 0, 0, 0x200, 0x40,
                                0x80808080, first_texture);
             if (frame > 0x40) {
                 if (frame < 0x60) {
                     alpha = (frame - 0x40) * 4;
                 }
-                append_scrolling_textured_quad(0, D_0013E500.half_height, 0x200, 0x40,
+                append_scrolling_textured_quad(0, screen_extent.half_height, 0x200, 0x40,
                                                (alpha << 24) | 0x808080, shared_texture, 0.0f, 4.0f,
                                                scroll_start, scroll_end);
-                draw_textured_quad(0, D_0013E500.half_height, 0x200, 0x40, 0, 0, 0x200, 0x40,
+                draw_textured_quad(0, screen_extent.half_height, 0x200, 0x40, 0, 0, 0x200, 0x40,
                                    0x80808080, second_texture);
             }
         }

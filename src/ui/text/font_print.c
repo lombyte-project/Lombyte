@@ -9,7 +9,7 @@ struct Glyph {
 
 extern s32 D_0015F4A0;
 extern s32 D_0015F49C;
-extern s32 D_0018CAF8[];
+#include "rnc/ui/text/font_palette.h"
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
 
@@ -26,7 +26,7 @@ void font_print(s32 x, s32 y, u64 color, u8 *text, s32 character_limit, s64 text
     s32 gray_color;
 
     if (D_0015F4A0 == 0) {
-        D_0018CAF8[0] = color;
+        font_palette_colors[0] = color;
     }
     character_count = 0;
     if (character_limit == 0 || *text == 0) {
@@ -38,7 +38,7 @@ void font_print(s32 x, s32 y, u64 color, u8 *text, s32 character_limit, s64 text
         if ((u8)(*cursor - 8) < 8) {
             if (D_0015F49C != 0) {
                 color &= 0xFF000000;
-                color |= D_0018CAF8[*cursor - 8] & 0xFFFFFF;
+                color |= font_palette_colors[*cursor - 8] & 0xFFFFFF;
             }
         } else {
             character = *cursor;

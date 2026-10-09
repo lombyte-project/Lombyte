@@ -30,15 +30,12 @@ typedef struct {
     u8 pad_C[0xC];
 } StatEntry;
 
-typedef struct {
-    u8 pad_0[0x23];
-    u8 unk23;
-} Opts;
-
 extern Menu D_001E63C0;
 extern TextEntry D_001863D0[];
 extern StatEntry D_001DFFB0[];
-extern Opts D_0013D4C0;
+#include "rnc/gameplay/state/item_state.h"
+/* discount_purchase_pricing[0] (D_0013D4E3), read off the item_available base as retail does. */
+#define ITEM_DISCOUNT_FLAG item_available[0x23]
 
 extern void draw_framebuffer_rect(s32, s32, s32, s32, s32, s32, s32) __asm__("func_001FB8F0");
 extern void draw_moby_list(s32, s32) __asm__("func_0020D330");
@@ -84,8 +81,8 @@ void render_vendor_item_details_pass(void) {
             6, 8, 0x80F0F0F0,
             get_help_message_text(D_001863D0[D_001E63C0.items[D_001E63C0.sel].id].text), -1);
         format_scaled_display_value(text, D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].a);
-        font_print_right_small(0x76, 0x65, D_0013D4C0.unk23 ? 0x80808080 : 0x80F0F0F0, text, -1);
-        if (D_0013D4C0.unk23 != 0) {
+        font_print_right_small(0x76, 0x65, ITEM_DISCOUNT_FLAG ? 0x80808080 : 0x80F0F0F0, text, -1);
+        if (ITEM_DISCOUNT_FLAG != 0) {
             text_width = measure_text_width_regular(text, -1);
             append_screen_sprite(0x75 - text_width, 0x6D, 0x7B, 0x70, 0x20959544, 0);
             append_screen_sprite(0x76 - text_width, 0x6D, 0x7A, 0x70, 0x30959544, 0);
@@ -95,7 +92,7 @@ void render_vendor_item_details_pass(void) {
             append_screen_sprite(0x7A - text_width, 0x6D, 0x76, 0x70, 0x70959544, 0);
             append_screen_sprite(0x7B - text_width, 0x6D, 0x75, 0x70, 0x80959544, 0);
             format_scaled_display_value(
-                text, D_0013D4C0.unk23 ? D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].b
+                text, ITEM_DISCOUNT_FLAG ? D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].b
                                        : D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].a);
             font_print_right_small(0x76, 0x55, 0x80F0F0F0, text, -1);
         }

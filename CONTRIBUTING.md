@@ -91,6 +91,13 @@ next to the C and the surrounding units.
   global or layout. Reuse or extend an existing header (a slice of a bigger
   type uses that type); a layout that two files need goes in `include/`.
   Only a layout used by this one file stays in the `.c`.
+- A global has one type, declared once in a header; files never redeclare it
+  with their own local struct.
+- Data that only your unit reads can be defined in its file (after the
+  functions), with its retail address added to `DATA_OVERLAYS` in
+  `configure.py`. `python3 scripts/data-refs.py --emit ADDR --into FILE`
+  writes the definition and prints that line. Shared data and raw bytes stay
+  in assembly; their type goes in a header.
 
 ### 5. Check your work
 

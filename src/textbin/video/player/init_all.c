@@ -3,6 +3,8 @@
 
 #include "types.h"
 
+extern u8 movie_open_error_text[18] __asm__("D_001E8AF0");
+
 struct AudioDecoderState {
     u8 pad0[0xD90F8];
     s32 dmac_handler_id;
@@ -23,7 +25,6 @@ extern s32 decoder_buffer_address __asm__("D_00161208");
 extern struct AudioDecoderState *decoder_state __asm__("D_0016120C");
 extern s32 decoder_thread_id __asm__("D_00161210");
 extern u8 D_00166C00;
-extern u8 movie_open_error_text[] __asm__("D_001E8AF0");
 extern void video_callback() __asm__("func_0023B5F0");
 extern void pcm_callback() __asm__("func_0023B728");
 extern void func_0023B3D8();
@@ -95,3 +96,5 @@ s32 init_all(s32 stream_source, s32 source_mode, s32 callback_context) {
     return opened;
 }
 extern __typeof__(init_all) func_0023A7C0 __attribute__((alias("FUN_0023a7c0")));
+
+u8 movie_open_error_text[18] = "Can't Open movie\n";

@@ -12,7 +12,6 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00208508/FUN_00208508.s
 #include "rnc/ui/map/map_state.h"
 #include "rnc/ui/map/map_icon.h"
 
-extern struct MapState map_marker_state __asm__("D_001A00F0");
 extern struct MapState selected_map_state __asm__("D_001A00F0") __attribute__((section(".data")));
 extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
 extern s32 marker_half_size __asm__("D_0015FDB0") MACRO_ADDR;
@@ -41,8 +40,8 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
     u8 height_log2;
 
     one = 1;
-    remaining = map_marker_state.marker_count - 1;
-    marker = map_marker_state.markers;
+    remaining = level_map_selection.marker_count - 1;
+    marker = level_map_selection.markers;
     for (; remaining != -1; remaining--) {
         world_to_map_coords(&normalized_x, &normalized_y, current_level_index, marker->x,
                             marker->y);

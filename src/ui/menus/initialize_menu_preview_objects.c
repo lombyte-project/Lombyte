@@ -1,11 +1,9 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/gameplay/gadgets/hand_gadget.h"
 
 extern char D_00186310[];
 extern char D_00186F40[];
-extern char D_001D5DD0[];
-extern char D_001D5E10[];
-extern char D_001D5E50[];
 extern int D_0015FF4C;
 extern void FUN_00224b60();
 extern int func_001E9410();
@@ -47,10 +45,10 @@ int initialize_menu_preview_objects(char *preview) {
     {
         struct MenuSystem *g = &menu_system;
 
-        D_001D5DD0[1] = 0;
+        class_pose_manipulator.active = 0;
         g->current_gadget = -1;
-        D_001D5E10[1] = 0;
-        D_001D5E50[1] = 0;
+        first_attachment_manipulator.active = 0;
+        second_attachment_manipulator.active = 0;
     }
     object = create_menu_preview_moby(0);
     held_flag = preview + 0xBB;

@@ -4,6 +4,7 @@
 #include "qcopy.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/rendering/level_render_state.h"
 
 typedef union {
     u128 quadword;
@@ -77,44 +78,6 @@ typedef struct {
     ResidentRenderObject *objects[1]; /* 0x178 */
 } ResidentPlaybackState;
 
-typedef struct {
-    ResidentRenderObject *player; /* 0x00 */
-    u8 pad4[4];
-    ResidentRenderObject *attachment; /* 0x08 */
-    u8 padC[4];
-    ResidentRenderObject *companion_a; /* 0x10 */
-    ResidentRenderObject *companion_b; /* 0x14 */
-    u8 pad18[8];
-    s32 state;           /* 0x20 */
-    s16 timer;           /* 0x24 */
-    s16 content_variant; /* 0x26 */
-    s16 skip;            /* 0x28 */
-    u8 pad2A[2];
-    s16 unk2C; /* 0x2C */
-    u8 pad2E[2];
-    s32 path;                     /* 0x30 */
-    s32 source_camera_index;      /* 0x34 */
-    s32 destination_camera_index; /* 0x38 */
-    f32 path_progress;            /* 0x3C */
-    f32 speed;                    /* 0x40 */
-    f32 path_segment_length;      /* 0x44 */
-    f32 blend;                    /* 0x48 */
-    f32 interpolation_velocity;   /* 0x4C */
-    s32 trail;                    /* 0x50 */
-    s32 history_count;            /* 0x54 */
-    u8 pad58[8];
-    Vector4 unk60;    /* 0x60 */
-    Vector4 unk70;    /* 0x70 */
-    Vector4 startPos; /* 0x80 */
-    Vector4 pathPos;  /* 0x90 */
-    Vector4 startRot; /* 0xA0 */
-    f32 unkB0;
-    f32 rotY; /* 0xB4 */
-    f32 rotZ; /* 0xB8 */
-    f32 unkBC;
-    Vector4 trailA[32]; /* 0xC0 */
-    Vector4 trailB[32]; /* 0x2C0 */
-} ResidentCinematicState;
 
 typedef struct {
     s32 point_count;
@@ -141,12 +104,6 @@ typedef struct {
     Vector4 up;      /* 0x370 */
 } ResidentCameraState;
 
-typedef struct {
-    u8 pad0[0x1C];
-    s32 unk1C;
-    u8 pad20[0x3A];
-    u16 unk5A;
-} DialoguePlaybackState;
 
 
 typedef struct {
@@ -154,11 +111,10 @@ typedef struct {
     Vector4 b;
 } PositionPair;
 
-extern s32 D_0013CAE4[];
-extern u8 D_0013D4C0[];
-extern ResidentCinematicState level_render_state __asm__("D_0013E030");
+#include "rnc/input/pad_state.h"
+#include "rnc/gameplay/state/item_state.h"
+#include "rnc/audio/music/music_stream_state.h"
 extern u8 D_001413F5[];
-extern DialoguePlaybackState D_001516D0;
 extern f32 D_0015ED60;
 extern f32 D_0015ED6C;
 extern f32 D_0015ED70 __attribute__((sda));
@@ -288,7 +244,7 @@ void update_resident_gameplay_state(void) {
         }
         ticks_per_bank = pal_mode ? 0x50 : 0x60;
         skip = level_render_state.skip;
-        if ((D_0013CAE4[0] & 0x50) && scale_ticks(30) < render_sequence.time &&
+        if ((controller_state.pressed & 0x50) && scale_ticks(30) < render_sequence.time &&
             sequence_fade == 0.0f) {
             if (level_render_state.state == 0 &&
                 render_sequence.time <
@@ -301,8 +257,8 @@ void update_resident_gameplay_state(void) {
             }
         }
         if (skip) {
-            if (D_001516D0.unk5A != 6 && D_001516D0.unk5A != 7) {
-                D_001516D0.unk5A = 5;
+            if (music_stream_state.secondary.state != 6 && music_stream_state.secondary.state != 7) {
+                music_stream_state.secondary.state = 5;
             }
             if (level_render_state.state == 0) {
                 render_sequence.time = scale_ticks(D_00160510[level_render_state.content_variant]);
@@ -320,8 +276,8 @@ void update_resident_gameplay_state(void) {
             }
         }
         if (render_sequence.time >= render_sequence.end) {
-            if (D_001516D0.unk5A != 6 && D_001516D0.unk5A != 7) {
-                D_001516D0.unk5A = 5;
+            if (music_stream_state.secondary.state != 6 && music_stream_state.secondary.state != 7) {
+                music_stream_state.secondary.state = 5;
             }
             CalculateDmaTransferAddress();
             D_0018CDB0[0] = 0.63f;
@@ -419,7 +375,7 @@ void update_resident_gameplay_state(void) {
             refresh_resident_object_spatial_bounds(object);
             if (object->class_id == 0) {
                 if (level_render_state.state == 0) {
-                    if (current_level_index == 10 && D_0013D4C0[6] == 0) {
+                    if (current_level_index == 10 && item_available[6] == 0) {
                         object->unk7F = 0;
                     } else if (render_sequence.time <= scale_ticks(0x3E)) {
                         object->unk7F = 0x18;
@@ -427,7 +383,7 @@ void update_resident_gameplay_state(void) {
                         object->unk7F = 0;
                     }
                 } else if (scale_ticks(360) < render_sequence.time) {
-                    if (current_level_index == 10 && D_0013D4C0[6] == 0) {
+                    if (current_level_index == 10 && item_available[6] == 0) {
                         object->unk7F = 0;
                     } else {
                         object->unk7F = 0x18;
@@ -456,7 +412,7 @@ void update_resident_gameplay_state(void) {
             }
             if (object->class_id == 0) {
                 func_001E9410(object);
-                if ((current_level_index == 10 && D_0013D4C0[6] != 0) ||
+                if ((current_level_index == 10 && item_available[6] != 0) ||
                     current_level_index == 13) {
                     if (level_render_state.attachment == 0) {
                         level_render_state.attachment = create_moby(0x509);
@@ -590,9 +546,9 @@ void update_resident_gameplay_state(void) {
         if (level_render_state.timer == 0) {
             music_pause(0);
             update_audio_stream_until_idle(0);
-            D_001516D0.unk1C = level_render_state.content_variant + 0x9C4F;
+            music_stream_state.queued_secondary_track = level_render_state.content_variant + 0x9C4F;
             fade_to_black(scale_ticks(12));
-            while ((s16)D_001516D0.unk5A != 3) {
+            while ((s16)music_stream_state.secondary.state != 3) {
                 sound_update();
                 sceGsSyncV(0);
             }
@@ -658,7 +614,7 @@ void update_resident_gameplay_state(void) {
                 level_render_state.path_segment_length = distance_xyz(&path->p[0], &path->p[1]);
                 level_render_state.path_progress = 0.0f;
                 level_render_state.speed = 0.0f;
-                level_render_state.trail = 0;
+                level_render_state.history_index = 0;
                 level_render_state.history_count = 0;
                 player = level_render_state.player;
                 qcopy(&level_render_state.startPos, &player->position);
@@ -716,14 +672,14 @@ void update_resident_gameplay_state(void) {
                               &level_render_state.pathPos, blend);
                 level_render_state.player->rotation.components[0] = 0.0f;
                 level_render_state.player->rotation.components[1] = fast_add_rotations(
-                    level_render_state.startRot.components[1],
+                    level_render_state.startRot.f[1],
                     fast_subtract_rotations(level_render_state.rotY,
-                                            level_render_state.startRot.components[1]) *
+                                            level_render_state.startRot.f[1]) *
                         blend);
                 level_render_state.player->rotation.components[2] = fast_add_rotations(
-                    level_render_state.startRot.components[2],
+                    level_render_state.startRot.f[2],
                     fast_subtract_rotations(level_render_state.rotZ,
-                                            level_render_state.startRot.components[2]) *
+                                            level_render_state.startRot.f[2]) *
                         blend);
                 if (sequence_fade > 0.0f) {
                     sequence_fade -= 0.125f;
@@ -741,7 +697,7 @@ void update_resident_gameplay_state(void) {
                 if (level_render_state.speed > 100.0f) {
                     level_render_state.speed = 100.0f;
                 }
-                if ((D_0013CAE4[0] & 0x50) && sequence_fade < 0.0625f) {
+                if ((controller_state.pressed & 0x50) && sequence_fade < 0.0625f) {
                     sequence_fade = 0.0625f;
                 }
                 if ((f32)(active_path->point_count - 6) < level_render_state.path_progress &&
@@ -765,24 +721,24 @@ void update_resident_gameplay_state(void) {
                                        level_render_state.path_progress);
                     level_render_state.player->rotation.components[0] =
                         level_render_state.player->rotation.components[3];
-                    level_render_state.trail = (level_render_state.trail + 1) & 0x1F;
+                    level_render_state.history_index = (level_render_state.history_index + 1) & 0x1F;
                     if (level_render_state.history_count < 0x20) {
                         level_render_state.history_count++;
                     }
-                    func_001F9CF8(&level_render_state.trailA[level_render_state.trail],
+                    func_001F9CF8(&level_render_state.primary_history[level_render_state.history_index],
                                   &D_001D99B0[level_render_state.content_variant].a,
                                   level_render_state.player->transform);
-                    add_vectors(&level_render_state.trailA[level_render_state.trail],
-                                &level_render_state.trailA[level_render_state.trail],
+                    add_vectors(&level_render_state.primary_history[level_render_state.history_index],
+                                &level_render_state.primary_history[level_render_state.history_index],
                                 &level_render_state.player->position);
-                    level_render_state.trailA[level_render_state.trail].components[3] = 1.0f;
-                    func_001F9CF8(&level_render_state.trailB[level_render_state.trail],
+                    level_render_state.primary_history[level_render_state.history_index].f[3] = 1.0f;
+                    func_001F9CF8(&level_render_state.secondary_history[level_render_state.history_index],
                                   &D_001D99B0[level_render_state.content_variant].b,
                                   level_render_state.player->transform);
-                    add_vectors(&level_render_state.trailB[level_render_state.trail],
-                                &level_render_state.trailB[level_render_state.trail],
+                    add_vectors(&level_render_state.secondary_history[level_render_state.history_index],
+                                &level_render_state.secondary_history[level_render_state.history_index],
                                 &level_render_state.player->position);
-                    level_render_state.trailB[level_render_state.trail].components[3] = 1.0f;
+                    level_render_state.secondary_history[level_render_state.history_index].f[3] = 1.0f;
                     enqueue_callback_list_1(build_resident_indexed_texture_warp_meshes,
                                             level_render_state.player);
                     if (sequence_fade > 0.0f) {

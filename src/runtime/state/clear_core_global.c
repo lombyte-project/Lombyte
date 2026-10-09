@@ -1,6 +1,6 @@
 /* Clear the core global word. */
 
-extern int CoreGlobalWord __asm__("D_0012FBF0") __attribute__((section(".data")));
+#include "rnc/runtime/core_state.h"
 
 void ClearCoreGlobal(void) __asm__("func_00118BC0");
 

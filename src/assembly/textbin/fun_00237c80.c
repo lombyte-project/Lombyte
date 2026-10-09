@@ -13,15 +13,10 @@ struct ProjectionViewport {
     f32 scale_y;
 };
 
-struct ProjectionScreenOrigin {
-    u8 pad_0[8];
-    s32 x;
-    s32 y;
-};
 
 extern u8 camera_position[] __asm__("D_00187080");
 extern struct ProjectionViewport view_context __asm__("D_0018CD00");
-extern struct ProjectionScreenOrigin screen_offsets __asm__("D_0013E500");
+#include "rnc/rendering/screen.h"
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
@@ -63,8 +58,8 @@ void project_graphics_bounds_float(u128 *first, u128 *opposite, f32 *width, f32 
     first_projected[1] *= scale_y;
     opposite_pointer[0] *= scale_x;
     opposite_pointer[1] *= scale_y;
-    *x = first_projected[0] * 0.25f + (f32)screen_offsets.x;
-    *y = first_projected[1] * 0.25f + (f32)screen_offsets.y;
+    *x = first_projected[0] * 0.25f + (f32)screen_extent.half_width;
+    *y = first_projected[1] * 0.25f + (f32)screen_extent.half_height;
     *(volatile f32 *)width = (opposite_pointer[0] - first_projected[0]) * 0.25f;
     *height = (*(volatile f32 *)&opposite_pointer[1] - first_projected[1]) * 0.25f;
 }

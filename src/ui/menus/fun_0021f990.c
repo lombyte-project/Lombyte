@@ -51,7 +51,7 @@ s32 FUN_0021f990(struct MenuScreen *stream) {
             if (stream->data.stream.state == -1) {
                 stream->data.stream.state = 0;
             }
-            idx = memory_card_state.card[0].entries[idx].unk0;
+            idx = memory_card_state.card[0].entries[idx].id;
         } else {
             stream->data.stream.state = -1;
         }
@@ -115,7 +115,7 @@ s32 FUN_0021f990(struct MenuScreen *stream) {
         p420 = b->pixels;
         x = FUN_001f97a0(b->width);
         y = FUN_001f97a0(b->height);
-        D_001A00F0.tex0 = FUN_00204e30(x, y, p20, p420, D_001A00F0.tex_clut_vram, D_001A00F0.tex0_vram);
+        level_map_selection.tex0 = FUN_00204e30(x, y, p20, p420, level_map_selection.tex_clut_vram, level_map_selection.tex0_vram);
         FUN_0020b4a8();
         stream->data.stream.state = 2;
         break;

@@ -1,23 +1,10 @@
 #include "types.h"
+#include "rnc/rendering/level_render_state.h"
 
-struct Globals_0013DD40 {
-    u8 pad_0[0x8];
-    u8 unk8;
-    u8 pad_9[0x5];
-    u8 unkE;
-    u8 unkF;
-    u8 pad_10[0x3];
-};
 
 struct Globals_0013DD58 {
     u8 unk0;
     u8 unk1;
-};
-
-struct Globals_0013E030 {
-    u8 pad_0[0x26];
-    s16 unk26;
-    u8 pad_28[0x2];
 };
 
 #include "rnc/audio/music/music_stream_state.h"
@@ -27,29 +14,16 @@ struct Globals_0015F634 {
     s32 unk1C;
 };
 
-struct Globals_0018CD00 {
-    u8 pad_0[0x218];
-    s32 unk218;
-    f32 unk21C;
-    u8 pad_220[0x8];
-    f32 unk228;
-    f32 unk22C;
-    s32 unk230;
-    s32 unk234;
-    s32 unk238;
-};
-
 struct Globals_00194100 {
     u8 pad_0[0x10];
     s32 unk10;
 };
 #include "sda.h"
+#include "rnc/rendering/view.h"
 #include "rnc/globals.h"
 
 #include "rnc/storage/memory_card/memory_card_state.h"
-extern struct Globals_0013DD40 D_0013DD40;
-extern u8 D_0013DD58[];
-extern struct Globals_0013E030 D_0013E030;
+#include "rnc/gameplay/state/level_state.h"
 extern s32 D_0015ED5C MACRO_ADDR;
 extern s32 D_0015ED84 MACRO_ADDR;
 extern s16 D_0015EE48 MACRO_ADDR;
@@ -58,7 +32,6 @@ extern s32 D_0015F438 MACRO_ADDR;
 extern s32 D_0015F600 MACRO_ADDR;
 extern s32 D_0015F618 MACRO_ADDR;
 extern struct Globals_0015F634 *D_0015F634;
-extern struct Globals_0018CD00 D_0018CD00;
 extern struct Globals_00194100 D_00194100;
 extern u8 D_001E8988[];
 
@@ -111,12 +84,12 @@ void do_space_transition(void) {
     }
     D_00194100.unk10 |= 0x80000000;
     game_mode = 6;
-    D_0013E030.unk26 = 0;
-    if (D_0013DD40.unk8 != 0 || D_0015F600 >= 8) {
-        D_0013E030.unk26 = 1;
+    level_render_state.content_variant = 0;
+    if (level_available[8] != 0 || D_0015F600 >= 8) {
+        level_render_state.content_variant = 1;
     }
-    if (D_0013DD40.unkE != 0 || D_0015F600 >= 14) {
-        D_0013E030.unk26 = 2;
+    if (level_available[14] != 0 || D_0015F600 >= 14) {
+        level_render_state.content_variant = 2;
     }
     FlushCache(0);
     snd_set_reverb_ex(2, 0, 0, 0, 0);
@@ -133,13 +106,13 @@ void do_space_transition(void) {
     D_0015ED5C = 0;
     snd_stream_safe_cd_callback(0);
     snd_stream_safe_cd_sync(0);
-    D_0018CD00.unk238 = 16;
-    D_0018CD00.unk21C = 524288.0f;
-    D_0018CD00.unk228 = 255.0f;
-    D_0018CD00.unk230 = 0;
-    D_0018CD00.unk234 = 0;
-    D_0018CD00.unk218 = 0;
-    D_0018CD00.unk22C = 128.0f;
+    view_context.fog_b = 16;
+    view_context.fog_far_dist = 524288.0f;
+    view_context.fog_near_int = 255.0f;
+    view_context.fog_r = 0;
+    view_context.fog_g = 0;
+    view_context.fog_near_dist = 0;
+    view_context.fog_far_int = 128.0f;
     PackDmaTag(0, 0, 0);
     if (D_0015F600 < 0) {
         while (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0) {
@@ -154,7 +127,7 @@ void do_space_transition(void) {
         dmac_vif1_disable();
         return;
     }
-    if (D_0015F600 == 0 && D_0013DD58[0] == 0) {
+    if (D_0015F600 == 0 && level_visit_state[0] == 0) {
         fade_to_black(scale_game_frames(6));
         play_level_loading_slides(lvl, 0, 1, scale_game_frames(240), 0);
         play_level_transition_movie(0);
@@ -163,52 +136,52 @@ void do_space_transition(void) {
         D_0015ED84 = D_0015F600;
         play_level_loading_slides(lvl, 3, 4, scale_game_frames(240), 1);
         play_level_transition_movie(2);
-    } else if (D_0015ED84 == 0 && D_0015F600 == 1 && D_0013DD58[1] == 0) {
+    } else if (D_0015ED84 == 0 && D_0015F600 == 1 && level_visit_state[1] == 0) {
         fade_to_black(scale_game_frames(6));
         play_level_loading_slides(lvl, 5, 6, scale_game_frames(240), 0);
         play_level_transition_movie(3);
         play_level_transition_movie(4);
         play_level_loading_slides(lvl, 7, 7, scale_game_frames(180), 0);
         play_level_transition_movie(5);
-        D_0013DD58[D_0015ED84] = 2;
+        level_visit_state[D_0015ED84] = 2;
         D_0015ED84 = D_0015F600;
         play_level_loading_slides(lvl, 8, 8, scale_game_frames(240), 1);
     } else {
-        if (D_0015F600 == 4 && D_0013DD58[4] == 0) {
+        if (D_0015F600 == 4 && level_visit_state[4] == 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 9, 10, scale_game_frames(240), 0);
             play_level_transition_movie(6);
         }
-        if (D_0015ED84 == 7 && D_0013DD58[7] != 2 && D_0013DD40.unk8 != 0) {
+        if (D_0015ED84 == 7 && level_visit_state[7] != 2 && level_available[8] != 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 11, 11, scale_game_frames(240), 0);
             play_level_transition_movie(7);
         }
-        if (D_0015F600 == 13 && D_0013DD58[13] == 0) {
+        if (D_0015F600 == 13 && level_visit_state[13] == 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 12, 13, scale_game_frames(240), 0);
             play_level_transition_movie(8);
         }
-        if (D_0015ED84 == 14 && D_0013DD58[14] != 2 && D_0013DD40.unkF != 0) {
+        if (D_0015ED84 == 14 && level_visit_state[14] != 2 && level_available[15] != 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 14, 14, scale_game_frames(240), 0);
             play_level_transition_movie(9);
         }
-        if (D_0015F600 == 16 && D_0013DD58[16] == 0) {
+        if (D_0015F600 == 16 && level_visit_state[16] == 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 15, 16, scale_game_frames(240), 0);
             play_level_transition_movie(10);
         }
         if ((u32)D_0015ED84 < 19) {
             ok = 1;
-            if (D_0015ED84 == 7 && D_0013DD40.unk8 == 0) {
+            if (D_0015ED84 == 7 && level_available[8] == 0) {
                 ok = 0;
             }
-            if (D_0015ED84 == 14 && D_0013DD40.unkF == 0) {
+            if (D_0015ED84 == 14 && level_available[15] == 0) {
                 ok = 0;
             }
             if (ok) {
-                D_0013DD58[D_0015ED84] = 2;
+                level_visit_state[D_0015ED84] = 2;
             }
         }
         D_0015EE4A = 1;

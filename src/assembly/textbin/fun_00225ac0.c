@@ -6,13 +6,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00225ac0/FUN_00225ac0.s
 #else
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/rendering/graphics_buffer.h"
 
-struct GraphicsBufferDescriptor {
-    s32 address;
-    s32 flags;
-};
-
-extern struct GraphicsBufferDescriptor graphics_buffer_descriptors[5] __asm__("D_001D60B8");
 
 void initialize_graphics_buffer_descriptors(s32 mode) __asm__("FUN_00225ac0");
 

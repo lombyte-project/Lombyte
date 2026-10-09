@@ -6,6 +6,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00238f08/FUN_00238f08.s
 #else
 #include "types.h"
 #include "rnc/ui/text/text_region.h"
+#include "rnc/ui/vendor/vendor_capture.h"
 
 typedef struct TextRegion FontWindow;
 
@@ -25,20 +26,8 @@ struct VendorState {
     struct VendorSelectionEntry entries[1];
 };
 
-struct VendorItemPricing {
-    s32 purchase_price;
-    s32 discounted_purchase_price;
-    u16 ammo_price;
-    u16 discounted_ammo_price;
-    u16 pad0C;
-    u16 ammo_capacity;
-    u8 pad10[8];
-};
-
 extern struct VendorState vendor_state __asm__("D_001E63C0");
-extern struct VendorItemPricing vendor_item_prices[] __asm__("D_001DFFB0");
-extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
-extern u8 discount_purchase_pricing[] __asm__("D_0013D4E3");
+#include "rnc/gameplay/state/item_state.h"
 extern s32 current_bolt_count __asm__("D_0015ED98");
 extern void draw_framebuffer_rect(s32, s32, s32, s32, s32, s32, u32) __asm__("func_001FB8F0");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");

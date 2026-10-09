@@ -9,7 +9,7 @@ struct G {
 };
 extern struct G D_00186F40;
 extern u8 D_00187290[];
-extern s32 D_0018C32C[];
+#include "rnc/gameplay/camera/update_cam.h"
 extern u8 D_0018CD00[];
 extern u8 D_0018CF80[];
 
@@ -30,7 +30,7 @@ void FUN_001f2260(void) {
     f32 b;
     f32 c;
 
-    if (D_0018C32C[0] == 0) {
+    if (camera_position_publication_suppressed[0] == 0) {
         qcopy(&m[0].q, D_00187290);
         qcopy(&m[1].q, D_00187290 + 0x10);
         qcopy(&m[2].q, D_00187290 + 0x20);

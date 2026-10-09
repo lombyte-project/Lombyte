@@ -106,3 +106,6 @@ int camera_activation_check_priority(void *cur, void *other) {
 
 extern __typeof__(camera_activation_check_priority) func_001EC210
     __attribute__((alias("FUN_001ec210")));
+
+/* Defined below their only users, so retail reaches them with lui. */
+CamRec20 *D_0015EF40 MACRO_ADDR = 0;

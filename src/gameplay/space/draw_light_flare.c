@@ -1,5 +1,6 @@
 /* Ported from rac1-decomp (src/game/space.c, func_0022F258). */
 #include "sda.h"
+#include "rnc/rendering/level_render_state.h"
 extern void copy_blocks_16_forward(void *, void *, int) __asm__("FUN_001f98d0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
@@ -18,18 +19,11 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_001f9a80(void *, void *, float);
 extern int FUN_001fa820(void *, int *, float);
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-typedef struct {
-    char pad[0x20];
-    int mode;
-    short elapsed_ticks;
-    short flare_variant;
-} FlareConfiguration;
-extern FlareConfiguration D_0013E030;
 extern float D_001D97D0[][4][4];
 /* Draws a light flare quad at arg0's position (+0x00; the matrix is at
    +0xC0) when FUN_001fa820 finds it on screen, with the alpha it
    returns. In D_0015F604 mode 6 with flare set 3, the flare fades as
-   D_0013E030's level passes FUN_001f96f8(150), and its depth comes from
+   level_render_state's level passes FUN_001f96f8(150), and its depth comes from
    func_00213508. The corners are D_001D97D0[set]. */
 void draw_light_flare(char *object) __asm__("FUN_0022df40");
 
@@ -46,9 +40,9 @@ void draw_light_flare(char *object) {
     if (FUN_001fa820(scaled_position, &alpha, 32.0f) < 0) {
         return;
     }
-    if (D_0015F604 == 6 && D_0013E030.mode == 3 &&
-        D_0013E030.elapsed_ticks > scale_game_frames(150)) {
-        alpha -= (D_0013E030.elapsed_ticks - scale_game_frames(150)) * 4;
+    if (D_0015F604 == 6 && level_render_state.state == 3 &&
+        level_render_state.timer > scale_game_frames(150)) {
+        alpha -= (level_render_state.timer - scale_game_frames(150)) * 4;
         if (alpha <= 0) {
             return;
         }
@@ -68,7 +62,7 @@ void draw_light_flare(char *object) {
 
         quad.colors[corner_index] = ((alpha >> 1) << 24) | 0x808080;
         vertex_position = quad.positions[corner_index];
-        FUN_001f9cf8(vertex_position, D_001D97D0[D_0013E030.flare_variant][corner_index],
+        FUN_001f9cf8(vertex_position, D_001D97D0[level_render_state.content_variant][corner_index],
                      object + 0xC0);
         add_vector_xyz(vertex_position, vertex_position, object + 0x10);
         vertex_position[2] = depth;

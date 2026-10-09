@@ -29,7 +29,7 @@ typedef struct {
     f32 z;
 } MapWorldObject;
 
-extern u8 D_0013DD58[];
+#include "rnc/gameplay/state/level_state.h"
 extern struct MapIcon *D_001A2BC0[];
 extern s32 D_001A01F4[];
 extern s32 D_0015FD60 __attribute__((sda));
@@ -56,19 +56,19 @@ void update_map_icons(s32 level, s32 flag) {
     struct MapIcon *icon;
     s32 icon_index;
 
-    if (level < 19 && D_0013DD58[level] != 0) {
-        D_001A00F0.icons = D_001A2BC0[level];
+    if (level < 19 && level_visit_state[level] != 0) {
+        level_map_selection.icons = D_001A2BC0[level];
     } else {
-        D_001A00F0.icons = 0;
+        level_map_selection.icons = 0;
     }
 
     if (hero.motion.pos.f[2] != 0.0f && level == current_level_index && flag) {
         world_to_map_coords(&map_x, &map_y, D_0015FD60 ? level + 100 : level, hero.motion.pos.f[0],
                             hero.motion.pos.f[1]);
-        D_001A00F0.pan_x[level] = (s32)(map_x * 4096.0f) << 16;
-        D_001A00F0.pan_y[level] = (s32)(map_y * 4096.0f) << 16;
+        level_map_selection.pan_x[level] = (s32)(map_x * 4096.0f) << 16;
+        level_map_selection.pan_y[level] = (s32)(map_y * 4096.0f) << 16;
     } else {
-        /* D_001A01F4 is &D_001A00F0.posx: a null-guarded reset that can
+        /* D_001A01F4 is &level_map_selection.posx: a null-guarded reset that can
            never run, but retail still emits it with p folded to 0. */
         s32 *p = D_001A01F4;
         if (p == 0) {
@@ -77,14 +77,14 @@ void update_map_icons(s32 level, s32 flag) {
         }
     }
 
-    if (D_001A00F0.icons == 0) {
+    if (level_map_selection.icons == 0) {
         return;
     }
 
-    if (!(D_001A00F0.icons->flags & 4)) {
+    if (!(level_map_selection.icons->flags & 4)) {
         icon_index = 0;
         do {
-            icon = &D_001A00F0.icons[icon_index];
+            icon = &level_map_selection.icons[icon_index];
             if (icon->id == -1) {
                 icon->x = 0.234375f;
                 icon->y = 0.30078125f;
@@ -114,20 +114,20 @@ void update_map_icons(s32 level, s32 flag) {
                     if (D_00199478[icon->id] != 0) {
                         world_to_map_coords(&icon->x, &icon->y, level, D_00199478[icon->id]->x,
                                             D_00199478[icon->id]->y);
-                        D_001A00F0.icons[icon_index].angle = D_00199478[icon->id]->z;
+                        level_map_selection.icons[icon_index].angle = D_00199478[icon->id]->z;
                     }
                 } else {
                     world_to_map_coords(&icon->x, &icon->y, level, D_0013D5B0[icon->id].x,
                                         D_0013D5B0[icon->id].y);
-                    D_001A00F0.icons[icon_index].angle = D_0013D5B0[icon->id].z;
+                    level_map_selection.icons[icon_index].angle = D_0013D5B0[icon->id].z;
                 }
             }
             icon_index++;
-        } while (!(D_001A00F0.icons[icon_index].flags & 4));
+        } while (!(level_map_selection.icons[icon_index].flags & 4));
     }
 
-    for (icon_index = 0; !(D_001A00F0.icons[icon_index].flags & 4); icon_index++) {
-        icon = &D_001A00F0.icons[icon_index];
+    for (icon_index = 0; !(level_map_selection.icons[icon_index].flags & 4); icon_index++) {
+        icon = &level_map_selection.icons[icon_index];
         icon->flags &= ~0x10;
         icon->active = 0;
         if (icon->link == -1) {
@@ -138,11 +138,11 @@ void update_map_icons(s32 level, s32 flag) {
         if ((icon->flags & 0x1000) && (D_0013D5BC[icon->id * 4] ^ 1) & 1) {
             icon->active = 0;
         }
-        if (D_001A00F0.icons[icon_index].label_text_id != 0) {
+        if (level_map_selection.icons[icon_index].label_text_id != 0) {
             s32 label_height_changed = 0;
             s16 previous_label_height;
 
-            D_001A00F0.icons[icon_index].flags |= 0x10;
+            level_map_selection.icons[icon_index].flags |= 0x10;
             format_menu_item_text(icon_index, label_text);
             {
                 struct TextRegion text_window = {

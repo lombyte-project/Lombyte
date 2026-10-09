@@ -1720,5 +1720,137 @@ class OverlayStageTests(unittest.TestCase):
         self.assertIsNone(self.unit.stage("FUN_L00_00000010", text)[0])
 
 
+class DataRefsTests(unittest.TestCase):
+    """data-refs.py must find the address each load, store and constant forms."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.refs = load_module("rnc_data_refs", ROOT / "scripts" / "data-refs.py")
+        cls.in_data = staticmethod(lambda value: 0x160000 <= value < 0x161000)
+
+    def _scan(self, words):
+        code = b"".join(w.to_bytes(4, "little") for w in words)
+        insns = list(self.refs.disassemble(code, 0x100000))
+        return [(a.insn, a.target, a.width, a.kind)
+                for a in self.refs.scan(insns, 0x166C00, self.in_data)]
+
+    def test_lui_with_load_store_and_address(self):
+        found = self._scan([
+            0x3C020016,  # lui   $v0, 0x16
+            0x8C430010,  # lw    $v1, 0x10($v0)
+            0x24440004,  # addiu $a0, $v0, 4
+            0xAC440008,  # sw    $a0, 8($v0)
+        ])
+        self.assertEqual(found, [
+            (0x100004, 0x160010, 4, "load"),
+            (0x100008, 0x160004, 0, "addr"),
+            (0x10000C, 0x160008, 4, "store"),
+        ])
+
+    def test_call_forgets_caller_saved_constants(self):
+        found = self._scan([
+            0x3C020016,  # lui   $v0, 0x16
+            0x0C040040,  # jal   0x100100
+            0x00000000,  # nop
+            0x8C430010,  # lw    $v1, 0x10($v0): $v0 may have changed
+        ])
+        self.assertEqual(found, [])
+
+    def test_gp_relative_access(self):
+        found = self._scan([
+            0x8F831234,  # lw    $v1, 0x1234($gp)
+        ])
+        self.assertEqual(found, [(0x100000, (0x166C00 + 0x1234) & 0xFFFFFFFF, 4, "load")])
+
+    def test_ee_quad_load_is_seen_and_forgets_its_target(self):
+        found = self._scan([
+            0x3C050016,  # lui   $a1, 0x16
+            0x78A20020,  # lq    $v0, 0x20($a1)
+            0x8C430010,  # lw    $v1, 0x10($v0): $v0 now comes from memory
+        ])
+        self.assertEqual(found, [(0x100004, 0x160020, 16, "load")])
+
+    def test_mmi_word_forgets_every_constant(self):
+        found = self._scan([
+            0x3C020016,  # lui   $v0, 0x16
+            0x70000000,  # an MMI word: its register effects are unknown here
+            0x8C430010,  # lw    $v1, 0x10($v0)
+        ])
+        self.assertEqual(found, [])
+
+    def test_constants_end_at_an_unconditional_jump(self):
+        found = self._scan([
+            0x3C020016,  # lui   $v0, 0x16
+            0x03E00008,  # jr    $ra
+            0x00000000,  # nop (delay slot)
+            0x8C430010,  # lw    $v1, 0x10($v0): only a jump target can reach this
+        ])
+        self.assertEqual(found, [])
+
+    def test_store_conditional_is_a_store_and_pref_is_ignored(self):
+        found = self._scan([
+            0x3C020016,  # lui   $v0, 0x16
+            0xCC400000,  # pref  0, 0($v0)
+            0xE0430008,  # sc    $v1, 8($v0)
+        ])
+        self.assertEqual(found, [(0x100008, 0x160008, 4, "store")])
+
+    def test_level_image_splits_text_from_data_records(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp) / "level_07"
+            folder.mkdir()
+            (folder / "text.bin").write_bytes(b"\x00" * 8)
+            (folder / "manifest.json").write_text(json.dumps({"records": [
+                {"name": "data", "address": 0x166000, "bytes": 64},
+                {"name": "text", "address": 0x1EAA00, "bytes": 8}]}))
+            code, data = self.refs.level_image(Path(tmp), 7)
+        self.assertEqual(code, [("text", 0x1EAA00, b"\x00" * 8)])
+        self.assertEqual(data, [("data", 0x166000, 64)])
+
+    def test_parse_layouts_lists_leaf_members_with_nested_paths(self):
+        dump = """*** Dumping AST Record Layout
+         0 | struct Outer
+         0 |   s32 a
+         4 |   struct Inner in
+         4 |     u8 x
+         5 |     u8[3] pad
+         8 |   s16 b
+           | [sizeof=12, align=4]
+"""
+        self.assertEqual(self.refs.parse_layouts(dump), {"Outer": [
+            (0, 0, "a", "s32"), (4, 0, "in.x", "u8"), (5, 0, "in.pad", "u8[3]"),
+            (8, 0, "b", "s16")]})
+
+    def test_c_initializer_writes_nested_members_and_arrays(self):
+        members = [(0, "s32", "a", []), (4, "struct In", "in", [(4, "u8[2]", "x", []), (6, "s16", "y", [])]),
+                   (8, "f32", "f", [])]
+        raw = (5).to_bytes(4, "little") + b"\x01\x02" + (-2).to_bytes(2, "little", signed=True) \
+            + bytes.fromhex("0000803f")
+        self.assertEqual(self.refs.c_initializer(members, 12, raw, {}), "{5, {{1, 2}, -2}, 1.0f}")
+
+    def test_shown_keeps_paths_outside_the_checkout(self):
+        self.assertEqual(self.refs.shown(Path("/nonexistent/out")), "/nonexistent/out")
+
+    def _row(self, section, **kw):
+        row = {"section": section, "widths": {4}, "load": 1, "store": 0, "addr": 0,
+               "owners": {"audio/a [C]"}, "first_insn": 0, "fp": False}
+        return {**row, **kw}
+
+    def test_catalog_drops_float_literals_and_groups_by_origin(self):
+        rows = {0x10: self._row("core.lit", fp=True),
+                0x20: self._row("core.data"),
+                0x30: self._row("core.data", owners={"audio/a [C]", "gameplay/b [C]"})}
+        out = self.refs.catalog_sections(
+            rows, [("core.lit", 0, 0x40), ("core.data", 0x20, 0x40)], {},
+            origin_of=lambda unit: unit.split("/")[0])
+        self.assertEqual(list(out), ["core.data"])
+        self.assertEqual({o: [e["addr"] for e in v] for o, v in out["core.data"].items()},
+                         {"audio": [0x20], "shared": [0x30]})
+
+    def test_scalar_quotes_types_with_brackets(self):
+        self.assertEqual(self.refs.scalar("struct Foo"), "struct Foo")
+        self.assertEqual(self.refs.scalar("u8 *[2]"), '"u8 *[2]"')
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -6,12 +6,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00237a78/FUN_00237a78.s
 #else
 #include "types.h"
 #include "eetypes.h"
-struct ProjectionScreenOrigin {
-    u8 pad_0[8];
-    s32 x;
-    s32 y;
-};
-extern struct ProjectionScreenOrigin screen_offsets __asm__("D_0013E500");
+#include "rnc/rendering/screen.h"
 extern volatile f32 view_context[] __asm__("D_0018CD00");
 extern u8 camera_position[] __asm__("D_00187080");
 extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
@@ -50,8 +45,8 @@ void project_graphics_bounds(f32 *first, f32 *opposite, s32 *width, s32 *height,
     first_projected[1] *= scale_y;
     opposite_pointer[0] *= scale_x;
     opposite_pointer[1] *= scale_y;
-    *x = convert_float_to_integer(first_projected[0] * 0.25f + (f32)screen_offsets.x);
-    *y = convert_float_to_integer(first_projected[1] * 0.25f + (f32)screen_offsets.y);
+    *x = convert_float_to_integer(first_projected[0] * 0.25f + (f32)screen_extent.half_width);
+    *y = convert_float_to_integer(first_projected[1] * 0.25f + (f32)screen_extent.half_height);
     *(volatile s32 *)width =
         convert_float_to_integer((opposite_pointer[0] - first_projected[0]) * 0.25f);
     {

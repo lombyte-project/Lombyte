@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/runtime/core_state.h"
 typedef struct {
     s32 pid;
     void *pkt_table;
@@ -12,7 +13,6 @@ typedef struct {
     s32 rdata_table_idx;
 } SifRpcData;
 
-extern s32 D_0012FC08[];
 extern u8 D_00155000[];
 extern u8 D_00155800[];
 extern u8 D_00156000[];
@@ -34,11 +34,11 @@ void sceSifInitRpc(u32 mode) {
     s32 *packet;
 
     DIntr();
-    if (D_0012FC08[0]) {
+    if (RpcCommandState) {
         EnableInterrupts();
         return;
     }
-    D_0012FC08[0] = 1;
+    RpcCommandState = 1;
     EnableInterrupts();
     sceSifInitCmd();
     DIntr();

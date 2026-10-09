@@ -1,11 +1,11 @@
 #include "sda.h"
+#include "rnc/input/pad_state.h"
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
-extern int D_0013CB04 NOT_SDA;
 extern int D_001D22F8[];
 
 int FUN_00221908(void) {
-    if (D_0013CB04 & 0x40) {
+    if (controller_state.pressed_unmasked & 0x40) {
         menu_system.next = (struct MenuPage *)D_001D22F8;
     }
     return 0;

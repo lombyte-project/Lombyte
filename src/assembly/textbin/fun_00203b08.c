@@ -1,84 +1,18 @@
 #include "types.h"
 #include "asm.h"
+#include "rnc/rendering/shrub_render_class.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00203b08/FUN_00203b08.s", FUN_00203b08);
 #else
 
 #include "eetypes.h"
-#include "rnc/rendering/resident_class.h"
+#include "rnc/rendering/shrub_render_class.h"
 #include "qcopy.h"
 
-typedef struct {
-    s16 width;
-    s16 height;
-    s16 draw_control_count;
-    s16 texture_block_offset;
-    s16 palette_block_offset;
-    s16 mip_block_offset_0;
-    s16 mip_block_offset_1;
-    s16 mip_block_offset_2;
-} ShrubMipTextureDefinition;
-typedef struct {
-    s32 draw_high;
-    s32 draw_shift;
-    u8 pad8[8];
-    s32 material_base;
-    s32 material_shift;
-    u8 pad18[8];
-    s32 material_index;
-    u8 pad24[0x1C];
-} ShrubRenderPacket;
-typedef struct {
-    u8 pad0[0x10];
-    union {
-        u64 d;
-        s32 w[2];
-    } tex1;
-    u64 payload18;
-    union {
-        u64 d;
-        s32 w[2];
-    } tex0;
-    u64 payload28;
-    u64 miptbp1;
-    u64 payload38;
-} ShrubMipPacket;
-typedef struct {
-    s32 count;
-    s32 prefix_record_count;
-} ShrubRenderGroupHeader;
-typedef struct {
-    u8 pad0[0x10];
-    ShrubRenderGroupHeader group_header;
-} ShrubRenderGroup;
-typedef struct {
-    ShrubRenderGroup *group;
-    s32 pad4;
-} ShrubRenderGroupReference;
-typedef struct {
-    u8 pad0[0x10];
-    f32 scale;
-    u8 pad14[2];
-    s16 runtime_count;
-    s32 runtime_data;
-    ShrubMipPacket *mip_packet;
-    u8 pad20[6];
-    u16 class_slot;
-    s16 group_count;
-    u8 pad2A[2];
-    s32 packed_geometry;
-    u8 pad30[0x10];
-    ShrubRenderGroupReference groups[1];
-} ShrubRenderClass;
 extern s32 registered_shrub_render_class_count __asm__("D_001603CC");
-extern u8 shrub_render_class_slot_by_id[] __asm__("D_001D80B0");
-extern s16 shrub_render_class_ids[] __asm__("D_001D8030");
-extern ShrubRenderClass *shrub_render_classes[] __asm__("D_001D7F30");
-extern s32 shrub_render_class_fixed_thresholds[] __asm__("D_001D8CB0");
-extern MaterialMap shrub_render_class_material_maps[] __asm__("D_001D92B0");
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
-extern u64 resident_material_templates[] __asm__("D_0019E540");
+#include "rnc/rendering/material_templates.h"
 extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
 extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
 void register_shrub_render_class(ShrubRenderClass *render_class,
@@ -243,3 +177,5 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
 extern __typeof__(register_shrub_render_class) func_00203B08 __attribute__((alias("FUN_00203b08")));
 
 #endif /* NON_MATCHING */
+
+s16 shrub_render_class_ids[64] = {0};

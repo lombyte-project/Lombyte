@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/menus/item_preview/preview_animation.h"
 #include "qcopy.h"
 
 struct AmmoPreviewMoby;
@@ -31,8 +32,6 @@ struct AmmoPreviewMoby {
 extern f32 frame_delta __asm__("D_0015ED6C");
 extern f32 animation_delta __asm__("D_0015ED70");
 extern s32 game_frame __asm__("D_0015F438");
-extern f32 ammo_preview_offsets[] __asm__("D_001D5E90");
-extern f32 ammo_preview_velocities[] __asm__("D_001D5EA8");
 extern void clear_vector(void *) __asm__("func_001F99F8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("func_001F9A10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");

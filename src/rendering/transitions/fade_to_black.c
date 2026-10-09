@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
 
-extern u8 D_0013CDD0[];
+#include "rnc/rendering/fs_aa_packets.h"
 extern s32 D_0015F438;
 extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
@@ -32,7 +32,7 @@ void fade_to_black(s32 n) {
         put_draw_buffer_small();
         vu1_add_g_sregister(1, (u64)(0x80 - (i * 0x80) / (i + 1)) << 24);
         *(u32 *)(VP + 0) = 0x30000014;
-        *(u32 *)(VP + 4) = (u32)D_0013CDD0;
+        *(u32 *)(VP + 4) = (u32)second_clear_packet;
         *(u32 *)(VP + 8) = 0;
         *(u32 *)(VP + 12) = 0x50000014;
         render_packet_cursor.bytes = VP + 0x10;

@@ -2,7 +2,7 @@
 #include "sda.h"
 extern int D_0015EE84 MACRO_ADDR;
 extern void *D_0015EEB8 MACRO_ADDR;
-extern char D_00151DF0[];
+#include "rnc/rendering/fs_aa_packets.h"
 /* setImageTag (SDK ezmpeg sample): builds the DMA/GIF chain that uploads a
    decoded frame to VRAM: a header packet (BITBLTBUF from D_0015EE84), one
    0x60-byte packet per 16x16 block (TRXPOS = block x/y, TRXDIR, an IMAGE
@@ -55,7 +55,7 @@ void set_image_tag(void *p, int texbuf, int image_w, int image_h) {
     *(int *)(out + 0x8) = 0;
     *(int *)(out + 0xC) = 0x50000009;
     *(int *)(out + 0x10) = 0x30000025;
-    *(int *)(out + 0x14) = (int)D_00151DF0;
+    *(int *)(out + 0x14) = (int)fs_aa_resample_packet;
     *(int *)(out + 0x18) = 0;
     *(int *)(out + 0x1C) = 0x50000025;
     out += 0x20;

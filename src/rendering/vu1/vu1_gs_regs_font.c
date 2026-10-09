@@ -2,13 +2,13 @@
 #include "sda.h"
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
-extern u8 D_0013CF10[];
+#include "rnc/rendering/draw_environment.h"
 
 void vu1_gs_regs_font(void) __asm__("FUN_00233c90");
 
 void vu1_gs_regs_font(void) {
     *render_packet_cursor.words = 0x3000000B;
-    *(s32 *)((u32)render_packet_cursor.words + 4) = (s32)D_0013CF10;
+    *(s32 *)((u32)render_packet_cursor.words + 4) = (s32)&draw_environment;
     *(s32 *)((u32)render_packet_cursor.words + 8) = 0;
     *(s32 *)((u32)render_packet_cursor.words + 12) = 0x5000000B;
     render_packet_cursor.words += 4;

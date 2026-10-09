@@ -1,6 +1,6 @@
 /* Pass the shared state object and caller arguments to the resource hook. */
 
-extern int GlobalStateResource __asm__("D_0012F76C") __attribute__((section(".data")));
+#include "rnc/runtime/core_state.h"
 
 extern int StateResourceCall(int resource, int first, int second,
                              int third) __asm__("func_00116A38");

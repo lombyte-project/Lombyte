@@ -1,5 +1,5 @@
 #include "types.h"
-extern u8 D_0013E520[];
+#include "rnc/gameplay/state/item_state.h"
 s32 count_nonzero_entries_up_to_10(void) __asm__("FUN_00215300");
 
 s32 count_nonzero_entries_up_to_10(void) {
@@ -7,7 +7,7 @@ s32 count_nonzero_entries_up_to_10(void) {
     s32 i;
 
     for (i = 0; i < 0x25; i++) {
-        if (D_0013E520[i] != 0) {
+        if (item_text_variant[i] != 0) {
             count++;
         }
     }

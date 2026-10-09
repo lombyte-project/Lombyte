@@ -1,3 +1,4 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "rnc/storage/disc_table.h"
 typedef struct 
@@ -118,12 +119,10 @@ extern SoundBanks D_0018CB20;
 extern LoadState D_001940C0;
 extern u8 D_00194180[];
 extern HelpState D_001996D0;
-extern u64 D_0019E6C0[];
-extern MobyClass *D_001B3200[];
-extern u8 D_001B3AC0[];
+#include "rnc/rendering/material_templates.h"
 extern s32 D_001B5980[];
 extern s32 D_001B6180[];
-extern u8 D_001B6880[];
+#include "rnc/rendering/resident_class.h"
 extern s32 D_001D84B0[];
 extern s32 D_001E0900[];
 extern s32 D_001E2600[];
@@ -194,8 +193,8 @@ void transition_load_wad(void)
   D_0015EE78 = 0x2C0000;
   D_0015EE74 = 0x2C0000;
   FillTransferWords(D_00194180, 0x87654321, 0x10);
-  FillTransferWords(D_001B3AC0, -1, k_800);
-  FillTransferWords(D_001B6880, -1, 0xE00);
+  FillTransferWords(resident_class_slot_by_id, -1, k_800);
+  FillTransferWords(resident_class_material_maps, -1, 0xE00);
   FillTransferWords(D_001B6180, 0, 0xE0);
   init_view_context();
   update_view_context();
@@ -211,9 +210,9 @@ void transition_load_wad(void)
   u = (((s64) ((D_0015EE8C + hdr->x74) >> 8)) << 37) | (((s64) 0xB800) << 19);
   data = ((u8 *) hdr) + hdr->data;
   base = data + hdr->x60;
-  D_0019E6C0[0] = (t | u) | (((s64) (-1)) << 63);
-  D_0019E6C0[1] = 0xFFA0000000E0;
-  D_0019E6C0[2] = 0x0040000400004000;
+  special_material_template[0] = (t | u) | (((s64) (-1)) << 63);
+  special_material_template[1] = 0xFFA0000000E0;
+  special_material_template[2] = 0x0040000400004000;
   tex = (WadTex *) (((u8 *) hdr) + hdr->x34);
   if ((D_00160E94 = hdr->n30) > 0)
   {
@@ -342,11 +341,11 @@ void transition_load_wad(void)
   }
 
   QueueDmaTransfer(0);
-  cnt = (new_var = D_001B3AC0[0x472]);
+  cnt = (new_var = resident_class_slot_by_id[0x472]);
   if (cnt >= 0)
   {
-    D_001B3200[cnt]->x28 = D_001861E0;
-    D_001B3200[cnt]->xD = 5;
+    ((MobyClass *)moby_class_resources[cnt])->x28 = D_001861E0;
+    ((MobyClass *)moby_class_resources[cnt])->xD = 5;
   }
 }
 

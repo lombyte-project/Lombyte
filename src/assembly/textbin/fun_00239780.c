@@ -1,24 +1,19 @@
 #include "types.h"
 #include "asm.h"
+#include "rnc/ui/vendor/vendor_capture.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00239780/FUN_00239780.s", FUN_00239780);
 #else
 #include "types.h"
 #include "eetypes.h"
+#include "rnc/ui/vendor/vendor_capture.h"
 
 typedef union {
     u128 q;
     f32 f[4];
 } CaptureVector;
-struct CaptureBoundsAdjustment {
-    f32 first_origin;
-    f32 second_origin;
-    f32 first_extent;
-    f32 second_extent;
-};
 
-extern struct CaptureBoundsAdjustment capture_bounds_adjustments[] __asm__("D_001E6218");
 struct CaptureTransitionFlag {
     s32 v;
 };
@@ -192,3 +187,5 @@ extern __typeof__(render_vendor_capture_pass_sequence) func_00239780
     __attribute__((alias("FUN_00239780")));
 
 #endif /* NON_MATCHING */
+
+struct CaptureBoundsAdjustment capture_bounds_adjustments[6] = {{0.01f, 0.01f, 0.009f, 0.01f}, {0.01f, 0.03f, 0.03f, 0.03f}, {0.03f, 0.0f, 0.0f, 0.0f}, {0.02f, 0.06f, 0.04f, 0.035f}, {0.07f, 0.05f, 0.03f, 0.03f}, {0.03f, 0.06f, 0.02f, 0.03f}};

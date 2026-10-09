@@ -1,5 +1,7 @@
 #include "types.h"
 #include "asm.h"
+#include "sda.h"
+#include "rnc/rendering/draw_environment.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/display/set_pal_mode/FUN_001f34e8.s",
@@ -7,30 +9,10 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/display/set_pal_mode/
 #else
 #include "types.h"
 #include "rnc/rendering/fs_aa_buffer.h"
+#include "rnc/rendering/image_clear_buffer.h"
 #include "rnc/rendering/screen.h"
+#include "rnc/rendering/draw_environment.h"
 
-typedef struct {
-    u64 pad0[2];
-    u64 frame1;
-    u64 pad18;
-    u64 frame2;
-    u64 pad28;
-    u64 zbuf1;
-    u64 pad38;
-    u64 zbuf2;
-    u64 pad48;
-    u64 xyoffset1;
-    u64 pad58;
-    u64 xyoffset2;
-    u64 pad68;
-    u64 scissor1;
-    u64 pad78;
-    u64 scissor2;
-} GraphicsDrawEnvironment;
-
-extern GraphicsDrawEnvironment draw_environment __asm__("D_0013CF10");
-extern u64 depth_buffer_register __asm__("D_0013D100");
-extern u64 masked_depth_buffer_register __asm__("D_0013D170");
 extern s32 pal_mode __asm__("D_0015ED80");
 extern s32 first_image_buffer_address __asm__("D_0015EE74");
 extern s32 second_image_buffer_address __asm__("D_0015EE78");
@@ -38,7 +20,6 @@ extern s32 display_buffer_address __asm__("D_0015EE80");
 extern s32 draw_buffer_address __asm__("D_0015EE84");
 extern s32 depth_buffer_address __asm__("D_0015EE88");
 extern s32 image_buffer_address __asm__("D_0015EE8C");
-extern u8 image_clear_buffer[] __asm__("D_001941C0");
 extern void FillTransferWords(u8 *, s32, s32);
 extern void FlushCache(s32);
 extern void func_00120558(s32, s32);
@@ -76,19 +57,19 @@ void set_pal_mode(void) {
     }
     /* Retail sign-extends the 16-bit dimensions before halving them. */
     display_width = fs_aa_buffer.display_width;
-    D_0013E500.width = display_width;
-    D_0013E500.half_width = display_width >> 1;
-    D_0013E500.half_height = fs_aa_buffer.display_height >> 1;
-    D_0013E500.bottom = (D_0013E500.half_height + 0x800) << 4;
-    D_0013E500.height = fs_aa_buffer.display_height;
-    D_0013E500.left = (0x800 - D_0013E500.half_width) << 4;
-    D_0013E500.right = (D_0013E500.half_width + 0x800) << 4;
-    D_0013E500.top = (0x800 - D_0013E500.half_height) << 4;
+    screen_extent.width = display_width;
+    screen_extent.half_width = display_width >> 1;
+    screen_extent.half_height = fs_aa_buffer.display_height >> 1;
+    screen_extent.bottom = (screen_extent.half_height + 0x800) << 4;
+    screen_extent.height = fs_aa_buffer.display_height;
+    screen_extent.left = (0x800 - screen_extent.half_width) << 4;
+    screen_extent.right = (screen_extent.half_width + 0x800) << 4;
+    screen_extent.top = (0x800 - screen_extent.half_height) << 4;
     FlushCache(0);
     func_00120558(0, 0);
     zbuf = (depth_buffer_address >> 13) | 0x1000000;
-    frame = (draw_buffer_address >> 13) | ((u64)(D_0013E500.width >> 6) << 16);
-    scissor = ((u64)(D_0013E500.width - 1) << 16) | ((u64)(D_0013E500.height - 1) << 48);
+    frame = (draw_buffer_address >> 13) | ((u64)(screen_extent.width >> 6) << 16);
+    scissor = ((u64)(screen_extent.width - 1) << 16) | ((u64)(screen_extent.height - 1) << 48);
     draw_environment.scissor1 = scissor;
     first_image_buffer_address = image_buffer_address;
     masked_depth_buffer_register = zbuf | ((u64)0x8000 << 17);
@@ -96,8 +77,8 @@ void set_pal_mode(void) {
     draw_environment.zbuf2 = zbuf;
     draw_environment.zbuf1 = zbuf;
     draw_environment.frame2 = draw_environment.frame1 = frame;
-    draw_environment.xyoffset2 = D_0013E500.left | ((u64)D_0013E500.top << 32);
-    draw_environment.xyoffset1 = D_0013E500.left | ((u64)D_0013E500.top << 32);
+    draw_environment.xyoffset2 = screen_extent.left | ((u64)screen_extent.top << 32);
+    draw_environment.xyoffset1 = screen_extent.left | ((u64)screen_extent.top << 32);
     depth_buffer_register = zbuf;
     draw_environment.scissor2 = scissor;
     FlushCache(0);
@@ -119,3 +100,6 @@ void set_pal_mode(void) {
 extern __typeof__(set_pal_mode) func_001F34E8 __attribute__((alias("FUN_001f34e8")));
 
 #endif /* NON_MATCHING */
+
+u64 depth_buffer_register NOT_SDA = 0x31000000;
+

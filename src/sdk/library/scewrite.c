@@ -2,6 +2,7 @@
 #include "kernel.h"
 #include "rnc/sdk/library/sif_file_slot.h"
 #include "sifrpc.h"
+#include "rnc/sdk/library/sdk_state.h"
 
 struct FsWriteRequest {
     s32 completion_semaphore;
@@ -19,7 +20,6 @@ struct FsWriteRequest {
 extern struct FsWriteRequest D_00156880;
 /* Also accessed by the asynchronous completion interrupt handler. */
 extern volatile s32 D_0012FC10[];
-extern s32 D_0012FC94[];
 extern s32 D_0012FCA4[];
 extern u8 D_001574C0[];
 extern struct SifFileSlot D_00157D80[];
@@ -51,7 +51,7 @@ s32 sceWrite(s32 fd, u8 *buffer, s32 length) {
     request = &D_00156880;
     file_slot = get_iob(fd);
     _sceFsWaitS(3);
-    if (D_0012FC94[0] == 0) {
+    if (FsResetState == 0) {
         ReadQueueStatus();
         return -1;
     }

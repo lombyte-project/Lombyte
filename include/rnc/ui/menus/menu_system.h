@@ -133,4 +133,7 @@ struct MenuSystem {
 
 extern struct MenuSystem menu_system __asm__("D_001D5BF0");
 
+/* Per menu screen slot (14): nonzero draws the slot's panel. */
+extern s32 panel_slot_enabled[14] __asm__("D_001CE2C0");
+
 #endif /* LOMBYTE_RNC_UI_MENUS_MENU_SYSTEM_H */

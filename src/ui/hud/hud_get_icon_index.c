@@ -1,16 +1,12 @@
 #include "types.h"
-struct Entry {
-    u16 id;
-    u8 pad2[6];
-};
-extern struct Entry *D_0019A404[];
+#include "rnc/ui/hud/hud_state.h"
 s32 hud_get_icon_index(s32 id) __asm__("FUN_001fee38");
 
 s32 hud_get_icon_index(s32 id) {
     s32 i;
 
-    for (i = 0; D_0019A404[0][i].id != 0xFFFF; i++) {
-        if (D_0019A404[0][i].id == id) {
+    for (i = 0; hud_state.anim_defs[i].id != 0xFFFF; i++) {
+        if (hud_state.anim_defs[i].id == id) {
             break;
         }
     }

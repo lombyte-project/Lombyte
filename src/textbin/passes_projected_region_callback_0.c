@@ -1,12 +1,15 @@
 #include "types.h"
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
+#include "sda.h"
 
 #include "types.h"
 
 #include "eetypes.h"
 
-extern s32 region_enabled[] __asm__("D_001A03B0");
+/* One word: passes_projected_region_callback_0 reads it as a flag. The words around it
+   (D_001A03AC, D_001A03B4 ...) are each a flag of another region callback. */
+extern s32 region_enabled __asm__("D_001A03B0") NOT_SDA;
 
 union RegionVector {
     u128 region_center;
@@ -43,7 +46,7 @@ s32 passes_projected_region_callback_0(s32 projected_x, s32 projected_y, f32 x, 
             return 1;
         }
         if (func_00208818(projected_x, projected_y, 0x142, 0x12A, 0x173, 0xFC) &&
-            region_enabled[0]) {
+            region_enabled) {
             return 1;
         }
         return 0;
@@ -63,3 +66,5 @@ s32 passes_projected_region_callback_0(s32 projected_x, s32 projected_y, f32 x, 
 }
 extern __typeof__(passes_projected_region_callback_0) func_00206BD8
     __attribute__((alias("FUN_00206bd8")));
+
+s32 region_enabled NOT_SDA = {0};

@@ -11,7 +11,7 @@ extern void FUN_00208770(void);
 extern void func_00207B08(void *);
 extern char D_0015EE98[] MACRO_ADDR;
 extern char D_00141EC0[];
-extern unsigned char D_0013DD58[];
+#include "rnc/gameplay/state/level_state.h"
 extern int D_0015ED98 MACRO_ADDR;
 extern int D_0015EE24 MACRO_ADDR;
 extern int D_0015EE20 MACRO_ADDR;
@@ -25,7 +25,7 @@ extern char D_001506D0[];
    pending mask (+0xFC); unless nothing is pending, a save is running
    (+0xDC >= 3) or a result is waiting (+0xE4 >= 0), it stamps +0xD0 with
    D_0015ED84 (temporarily switching D_0015ED84 to `flags` and setting that
-   D_0013DD58 byte), fills entry e[+0x14] (four globals and the 8-byte
+   level_visit_state byte), fills entry e[+0x14] (four globals and the 8-byte
    name), serialises both tables (func_0020AD78), restores the byte and
    D_0015ED84, and sets result 0xF. Returns whether the result is 0xF.
    D_0015EE98 is MACRO_ADDR (retail rebuilds its address at each use), the
@@ -66,9 +66,9 @@ int memcard_save_data(int slot, int flags) {
         saved = 0;
         if (flags >= 0) {
             D_0015ED84 = flags;
-            saved = D_0013DD58[flags];
+            saved = level_visit_state[flags];
             if (saved == 0) {
-                D_0013DD58[flags] = 1;
+                level_visit_state[flags] = 1;
             }
         }
     }
@@ -84,7 +84,7 @@ int memcard_save_data(int slot, int flags) {
         memcard_prepare_data(D_0014EED0, 0, D_001A04C0);
         memcard_prepare_data(D_001506D0, *(int *)(q + 0xC8), D_001A07C0);
         if (flags >= 0) {
-            D_0013DD58[D_0015ED84] = saved;
+            level_visit_state[D_0015ED84] = saved;
             D_0015ED84 = *(int *)(q + 0xC8);
         }
         if (*(int *)(q + 0xDC) < 0) {

@@ -1,16 +1,14 @@
 #include "types.h"
-extern u8 D_00137B00[];
+#include "rnc/audio/sound_read_work.h"
 extern s32 D_0015EC8C __attribute__((sda));
 extern s32 sceCdGetError();
 s32 snd_stream_safe_cd_get_error(s32 arg0) __asm__("FUN_0012eef0");
 
 s32 snd_stream_safe_cd_get_error(s32 arg0) {
-    u8 *p;
     if (D_0015EC8C == 0) {
         return sceCdGetError();
     }
-    p = D_00137B00;
-    return *(volatile s32 *)(p + 0x10);
+    return sound_read_work.read_error;
 }
 
 extern __typeof__(snd_stream_safe_cd_get_error) func_0012EEF0

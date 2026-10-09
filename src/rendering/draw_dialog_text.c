@@ -4,6 +4,7 @@
 #include "rnc/rendering/screen.h"
 #include "rnc/ui/text/text_region.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/ui/text/font_metrics.h"
 
 /* State of the level's message box (D_00193300). */
 typedef struct {
@@ -54,7 +55,6 @@ extern char D_0015F588[];
 extern char D_0015F590[];
 extern char D_0015F5A0[];
 extern s32 D_0015F5E8;
-extern u8 D_001DF050[];
 extern struct TextRegion D_001E78F0;
 extern struct TextRegion D_001E7908;
 extern s32 D_0015EE58[] MACRO_ADDR;
@@ -120,15 +120,15 @@ void draw_dialog_text(void) {
                 *p++ = 0;
             } while (*p == 1);
         }
-        font_print_window(&box, color, SCRATCHPAD, -1, get_effect_texture(1), D_001DF050);
+        font_print_window(&box, color, SCRATCHPAD, -1, get_effect_texture(1), normal_font_metrics);
         pivot = 272.0f;
         box.flags |= 4;
         y = box.anchor_y;
         y += box.rendered_height;
-        font_print_window(&box, color, p, -1, get_effect_texture(1), D_001DF050);
+        font_print_window(&box, color, p, -1, get_effect_texture(1), normal_font_metrics);
         box.flags ^= 4;
         box.anchor_y = 0x136 - box.rendered_height;
-        font_print_window(&box, color, p, -1, get_effect_texture(1), D_001DF050);
+        font_print_window(&box, color, p, -1, get_effect_texture(1), normal_font_metrics);
         tint = func_001FA6E0(0x20FFFF, 0x8020FFFF,
                             1.0f - (f32)D_00193300.unk24 / (f32)scale_game_frames(30));
         font_print_center(0x100, 0x140, tint, get_help_message_text(0x524A), -1);
@@ -250,10 +250,10 @@ void draw_dialog_text(void) {
             text = buf;
             break;
         }
-        box = (struct TextRegion){0, D_0013E500.height, 0x60, 0x1A0, 0x100, 0x68, 0, 0, 0x10, 5};
+        box = (struct TextRegion){0, screen_extent.height, 0x60, 0x1A0, 0x100, 0x68, 0, 0, 0x10, 5};
         font_print_window_regular(&box, 0, text, -1);
         h = box.rendered_height + 0x28;
-        y = (D_0013E500.height - h) >> 1;
+        y = (screen_extent.height - h) >> 1;
         box.bottom = y + h;
         box.anchor_y = y + 4;
         box.top = y;
@@ -306,7 +306,7 @@ void draw_dialog_text(void) {
             break;
         }
         if (id != 0) {
-            font_print_window(&box, text_color, get_help_message_text(id), -1, get_effect_texture(1), D_001DF050);
+            font_print_window(&box, text_color, get_help_message_text(id), -1, get_effect_texture(1), normal_font_metrics);
         }
         break;
     }

@@ -1,33 +1,20 @@
 #include "types.h"
 #include "asm.h"
+#include "sda.h"
+#include "rnc/ui/map/level_map.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001fd748/FUN_001fd748.s", FUN_001fd748);
 #else
 #include "types.h"
 
-typedef struct {
-    s32 x;
-    s32 y;
-    s32 label_offset_x;
-    s32 label_offset_y;
-} LevelMapMarker;
-
-typedef struct {
-    s32 label_text;
-    s32 pad4[2];
-} LevelMapMarkerText;
-
 #include "rnc/ui/map/map_state.h"
+#include "rnc/ui/map/level_map.h"
 
-extern u8 D_0013DD40[];
-extern u8 g_abLevelVisitState[] __asm__("D_0013DD58");
+#include "rnc/gameplay/state/level_state.h"
 extern s32 pal_mode __asm__("D_0015ED80");
 extern s32 game_frame_counter __asm__("D_0015F438");
 extern s32 large_font_height __asm__("D_0015F690") __attribute__((sda));
-extern struct MapState level_map_selection __asm__("D_001A00F0");
-extern LevelMapMarkerText level_map_labels[] __asm__("D_001DDD44");
-extern LevelMapMarker level_map_markers[] __asm__("D_001DDE28");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern s32 measure_text_width_regular(u8 *, s32) __asm__("func_001F6250");
@@ -83,11 +70,11 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
             continue;
         }
         availability = 3;
-        visit_state = g_abLevelVisitState[level_index];
+        visit_state = level_visit_state[level_index];
         if (visit_state == 0) {
             availability = 2;
             /* This separate state table gates markers that have not been visited. */
-            if (D_0013DD40[level_index] == 0) {
+            if (level_available[level_index] == 0) {
                 availability = 0;
             }
         }
@@ -138,3 +125,5 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
     do_gif_paging();
 }
 #endif /* NON_MATCHING */
+
+LevelMapMarker level_map_markers[20] = {{0}, {0x50, 0x5f, 0x14, -20}, {0x55, 0x82, -16, -8}, {0x5a, 0x41, -16, -16}, {0x6c, 0x6e, -16, 0x28}, {0xa0, 0x6e, 0xa, -16}, {0x78, 0x55, 0x10, 0x12}, {0x96, 0x96, -16, 0x10}, {0xb4, 0x82, 0x20, -12}, {0xc8, 0x6e, 0x10, 0x10}, {0xdc, 0x8c, 0x10, 0x10}, {0x118, 0x64, -16, 3}, {0xe6, 0x50, 0x10, -16}, {0xd2, 0x28, -16, -16}, {0xc8, 0x32, -16, -16}, {0xa0, 0x28, -16, -16}, {0x82, 0x32, -16, -16}, {0x2d, 0x5a, 0x20, -60}, {0x23, 0x50, 0x20, -50}, {0}};

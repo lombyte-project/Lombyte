@@ -72,6 +72,6 @@ struct MapState {
     s32 slot_size[5];          /* 0x2A4 */
 }; /* size 0x2B8 */
 
-extern struct MapState D_001A00F0;
+extern struct MapState level_map_selection __asm__("D_001A00F0");
 
 #endif /* LOMBYTE_RNC_UI_MAP_MAP_STATE_H */

@@ -1,8 +1,7 @@
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/item_preview/preview_animation.h"
 
-extern u8 moby_class_resources[] __asm__("D_001B3200");
-extern u8 class_resource_slots[] __asm__("D_001B3AC0");
 extern u8 preview_resource_bindings[] __asm__("D_001D59D8");
 void clear_preview_resource_bindings(void) __asm__("FUN_002267b8");
 void clear_preview_resource_bindings(void) {
@@ -18,8 +17,8 @@ void clear_preview_resource_bindings(void) {
 
     resource_index = menu_system.unkA8;
     if (resource_index < (resource_index + menu_system.unkAC)) {
-        u8 *class_slots = class_resource_slots;
-        u8 *class_resources = moby_class_resources;
+        u8 *class_slots = resident_class_slot_by_id;
+        u8 *class_resources = (u8 *)moby_class_resources;
         u8 *bindings = preview_resource_bindings;
 
         binding_base = bindings;

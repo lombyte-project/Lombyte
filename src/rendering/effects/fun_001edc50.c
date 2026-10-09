@@ -22,16 +22,9 @@ typedef struct {
     f32 scale[16];
 } LensFlare;
 
-typedef struct {
-    u8 pad_0[0x8];
-    s32 cx;
-    s32 cy;
-    s32 ox;
-    s32 oy;
-} ScreenInfo;
 
 extern u8 D_00187080[];
-extern ScreenInfo D_0013E500;
+#include "rnc/rendering/screen.h"
 extern LensFlare D_00187300;
 
 extern f32 FUN_001f9b48(void *, void *);
@@ -70,11 +63,11 @@ void FUN_001edc50(void) {
         return;
     }
     dist = FUN_001f9b48(D_00187080, D_00187300.moby->pos);
-    ctr[0] = ConvertIntegerToFloat(D_0013E500.cx);
-    ctr[1] = ConvertIntegerToFloat(D_0013E500.cy);
+    ctr[0] = ConvertIntegerToFloat(screen_extent.half_width);
+    ctr[1] = ConvertIntegerToFloat(screen_extent.half_height);
     project_to_screen(scr, D_00187300.moby->pos);
-    scr[0] = (scr[0] - ConvertIntegerToFloat(D_0013E500.ox)) * 0.0625f;
-    scr[1] = (scr[1] - ConvertIntegerToFloat(D_0013E500.oy)) * 0.0625f;
+    scr[0] = (scr[0] - ConvertIntegerToFloat(screen_extent.left)) * 0.0625f;
+    scr[1] = (scr[1] - ConvertIntegerToFloat(screen_extent.top)) * 0.0625f;
     d[0] = ctr[0] - scr[0];
     d[1] = ctr[1] - scr[1];
     for (i = 0; i < 16; i++) {

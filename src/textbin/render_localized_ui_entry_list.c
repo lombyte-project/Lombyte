@@ -1,10 +1,8 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
+#include "rnc/ui/text/font_metrics.h"
 
-extern u8 normal_font_metrics[] __asm__("D_001DF050");
-extern u8 small_font_metrics[] __asm__("D_001DF3F0");
-extern u8 large_font_metrics[] __asm__("D_001DF790");
 
 extern s32 text_shadow_x __asm__("D_001601B8") __attribute__((sda));
 

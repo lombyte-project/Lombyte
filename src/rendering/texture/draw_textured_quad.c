@@ -22,8 +22,8 @@ void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh
     s32 u0;
     s32 v1;
 
-    sx = D_0013E500.left;
-    sy = D_0013E500.top;
+    sx = screen_extent.left;
+    sy = screen_extent.top;
     x0 = (x << 4) + sx - 8;
     x1 = ((x + w) << 4) + sx - 8;
     y0 = (y << 4) + sy - 8;
