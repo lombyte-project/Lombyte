@@ -566,7 +566,8 @@ typedef struct {
 
 typedef struct {
     int idx;
-    char p4[0xC];
+    signed char step;
+    char p5[0xB];
     char *path;
     int id;
 } PathF2C8398;
@@ -1583,4 +1584,54 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c95a8.s", FUN_L03_002c95a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c9ca0.s", FUN_L03_002c9ca0);
+extern int FUN_L03_0024e830(char *, char *, float);
+extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
+
+/* Picks the path node to head for next: walks the path ring from the start and keeps the node best aligned
+ * with the target direction, else the one nearest the target (but at least 16 units away). */
+void FUN_L03_002c9ca0(Moby2C8398 *m) {
+    Tgt2C8398 target;
+    float near[4];
+    float pt[4];
+    int seg;
+    float dist;
+    Data2C8398 *d;
+    PathF2C8398 *pf;
+    int best;
+    float best_ang;
+    float best_dist;
+    float ang;
+
+    d = m->data;
+    best = 0;
+    best_ang = 0.0f;
+    pf = &d->pf;
+    best_dist = best_ang;
+    FUN_L03_0024e830((char *)m, (char *)&target, d->f270);
+    seg = pf->idx;
+    FUN_L00_0025df68(pf->path, m->pos, near, &seg, &dist, 0, 999.0f, 5.0f, 0.0f);
+    pf->idx = 0;
+    do {
+        if (pf->idx != seg) {
+            qcopy(pt, pf->path + 0x10 + pf->idx * 0x10);
+            ang = FUN_001f9e90(pt[0] - m->pos[0], pt[1] - m->pos[1]);
+            ang = fast_difference_between_rotations(
+                ang, FUN_001f9e90(target.pos[0] - m->pos[0], target.pos[1] - m->pos[1]));
+            dist = FUN_001f9b48(&target, pt);
+            if (ang < 1.5707964f) {
+                if (best_ang < ang) {
+                    best = pf->idx;
+                    best_dist = dist;
+                    best_ang = ang;
+                }
+            } else if ((dist >= 16.0f && (dist < best_dist || best_dist < 16.0f)) ||
+                       (dist < 16.0f && best_dist < dist)) {
+                best = pf->idx;
+                best_dist = dist;
+                best_ang = ang;
+            }
+        }
+    } while ((pf->idx = (pf->idx + *(int *)pf->path + pf->step) % *(int *)pf->path) != 0);
+    pf->idx = best;
+}
