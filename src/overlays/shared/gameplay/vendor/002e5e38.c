@@ -387,7 +387,7 @@ extern float D_L00_00161CC8_2e7a30 __asm__("D_L00_00161CC8") __attribute__((sda)
 extern float D_0015ED60_2e7a30 __asm__("D_0015ED60");
 extern float D_0013CA40_2e7a30 __asm__("D_0013CA40") __attribute__((section(".data")));
 extern int D_L00_0015EF5C_2e7a30 __asm__("D_L00_0015EF5C");
-extern unsigned char D_0013F350_2e7a30[] __asm__("D_0013F350") __attribute__((section(".data")));
+extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
 extern V_2e7a30 D_L00_00173E60_2e7a30 __asm__("D_L00_00173E60") __attribute__((section(".data")));
 extern V_2e7a30 D_L00_00166E40_2e7a30 __asm__("D_L00_00166E40") __attribute__((section(".data")));
 extern void FUN_001f9bf8_2e7a30(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -413,7 +413,7 @@ int FUN_L00_002e7a30(unsigned char *a) {
     unsigned char *base;
     unsigned char *c;
     unsigned char *e;
-    unsigned char *g;
+    struct Hero *g;
     unsigned char *p;
     int i;
     int found;
@@ -433,14 +433,14 @@ int FUN_L00_002e7a30(unsigned char *a) {
     FUN_001f9bf8_2e7a30(ndir, dir, 1.0f);
     for (i = 0; i < FUN_001fa6d0_2e7a30(*(float *)(e + 0x40) - 1.0f); i++) {
         if (i > 0 && FUN_L00_002e4290_2e7a30(pos) == 0) {
-            g = D_0013F350_2e7a30;
-            if (FUN_L00_001f0d60_2e7a30(pos, D_L00_0015EF5C_2e7a30, *(int *)(g + 0x2080), spd) &&
+            g = &hero_data;
+            if (FUN_L00_001f0d60_2e7a30(pos, D_L00_0015EF5C_2e7a30, ((int)g->moby), spd) &&
                 FUN_L00_002e79c8_2e7a30(a, i, pos, spd) == 0) {
                 qcopy(step, D_L00_00173E60_2e7a30);
                 qcopy(save, pos);
                 if (FUN_L00_002e7618_2e7a30(a, pos, i, dist, spd)) {
                     found = 1;
-                    if (g[0x20A4] != 2 && FUN_001f99c0_2e7a30(D_0013CA40_2e7a30) > 0.05f) {
+                    if (g->unk20A4 != 2 && FUN_001f99c0_2e7a30(D_0013CA40_2e7a30) > 0.05f) {
                         FUN_001f9a28_2e7a30(d, step, save);
                         FUN_001f9bf8_2e7a30(d, d, 1.0f);
                         if (FUN_001f99c0_2e7a30(FUN_001f9ab0_2e7a30(D_L00_00166E40_2e7a30, d)) <

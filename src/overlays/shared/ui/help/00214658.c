@@ -530,7 +530,6 @@ void FUN_L00_002163f0(void) {
         FUN_001f9a10_2163f0(&P.v80, &P.v80, &b);
     }
 }
-extern unsigned char D_0013F350_2165b8[] __asm__("D_0013F350");
 extern float D_0015ED64_2165b8 __asm__("D_0015ED64");
 extern float D_0015ED6C_2165b8 __asm__("D_0015ED6C");
 extern float FUN_L00_0025bc98_2165b8(void *, void *, int, float, float, float,
@@ -538,20 +537,20 @@ extern float FUN_L00_0025bc98_2165b8(void *, void *, int, float, float, float,
 extern void FUN_L00_002163f0_2165b8(void) __asm__("FUN_L00_002163f0");
 
 void FUN_L00_002165b8(void) {
-    unsigned char *g = D_0013F350_2165b8;
+    struct Hero *g = &hero;
     float v[2];
     int m, st, k;
-    m = g[0x20B3];
-    if (*(s16 *)(g + 0x1F8)) {
+    m = g->unk20B3;
+    if (g->unk1F8) {
         m = 1;
     }
     switch (m) {
     case 0:
-        st = *(int *)(g + 0x2084);
+        st = g->state.current;
         if ((u32)(st - 0x25) < 2) {
             return;
         }
-        k = *(int *)(g + 0x208C);
+        k = g->state.control_mode;
         if (k == 0x11 || k == 0x15 || k == 0x16) {
             return;
         }
@@ -560,9 +559,9 @@ void FUN_L00_002165b8(void) {
         }
         v[0] = 0.0f;
         v[1] = 0.0f;
-        FUN_L00_0025bc98_2165b8(g + 0x90, g + 0xA0, 0, -v[0], D_0015ED64_2165b8 * 0.015f,
+        FUN_L00_0025bc98_2165b8(&g->motion.rot, &g->motion.unkA0, 0, -v[0], D_0015ED64_2165b8 * 0.015f,
                                 D_0015ED64_2165b8 * 0.3f, D_0015ED6C_2165b8 * 5.2359877f);
-        FUN_L00_0025bc98_2165b8(g + 0x94, g + 0xA4, 0, -v[1], D_0015ED64_2165b8 * 0.015f,
+        FUN_L00_0025bc98_2165b8(&g->motion.rot.f[1], &g->motion.unkA0.f[1], 0, -v[1], D_0015ED64_2165b8 * 0.015f,
                                 D_0015ED64_2165b8 * 0.3f, D_0015ED6C_2165b8 * 5.2359877f);
         break;
     case 1:
@@ -829,16 +828,15 @@ void FUN_L00_00216e48(int idx, int a, int b) {
 }
 /* D_0013F350 + 0x21D8 is an array of 8 s16 slots of four s16 fields each. */
 
-extern u8 D_0013F350_00216ec0[] __asm__("D_0013F350");
 
 void FUN_L00_00216ec0_00216ec0(s32, s32, s32) __asm__("FUN_L00_00216ec0");
 
 void FUN_L00_00216ec0_00216ec0(s32 a, s32 b, s32 c) {
-    u8 *base;
+    struct Hero *base;
     s16 *p;
     s32 n = 0;
-    base = D_0013F350_00216ec0;
-    p = (s16 *)(base + 0x21D8);
+    base = &hero;
+    p = (s16 *)(&base->unk21D8[0]);
     do {
         n = n + 1;
         if (p[0] == 0) {

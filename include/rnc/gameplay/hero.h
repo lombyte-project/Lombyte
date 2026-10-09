@@ -61,7 +61,8 @@ struct HeroEase {
 struct HeroItemSlot {
     struct Moby *moby;             /* 0x00: item moby */
     struct Moby *moby2;            /* 0x04: second item moby */
-    u8 pad_08[0x8];
+    u8 pad_08[0x4];
+    u8 *unk0C;                     /* 0x0C */
     s32 button_mask;               /* 0x10: pad buttons that hold the gadget states */
     s32 unk14;                     /* 0x14: set on release */
     s16 timer;                     /* 0x18: counts down; a slot change waits for 0 */
@@ -73,7 +74,13 @@ struct HeroItemSlot {
     s32 unk20;                     /* 0x20 */
     s32 state;                     /* 0x24: 0 empty, 2 ready, 3 released */
     s32 item_id;                   /* 0x28: item in the slot */
-    u8 pad_2C[0x24];
+    u8 pad_2C[0x4];
+    f32 unk30;                     /* 0x30 */
+    f32 unk34;                     /* 0x34 */
+    s32 unk38;                     /* 0x38 */
+    s16 unk3C;                     /* 0x3C */
+    u16 unk3E;                     /* 0x3E */
+    u8 pad_40[0x10];
 };
 
 /*
@@ -388,7 +395,9 @@ struct Hero {
     f32 unk69C;                    /* 0x69C */
     s32 unk6A0;                    /* 0x6A0 */
     struct Moby *unk6A4;           /* 0x6A4 */
-    u8 pad_6A8[0x18];
+    f32 unk6A8;                    /* 0x6A8 */
+    f32 unk6AC;                    /* 0x6AC */
+    u8 pad_6B0[0x10];
     Vec4 unk6C0;                   /* 0x6C0: 0x60 bytes cleared by FillTransferWords */
     f32 unk6D0;                    /* 0x6D0 */
     f32 unk6D4;                    /* 0x6D4 */
@@ -538,9 +547,11 @@ struct Hero {
     s32 unkAA0;                    /* 0xAA0 */
     s32 unkAA4;                    /* 0xAA4 */
     f32 unkAA8;                    /* 0xAA8 */
-    u8 pad_AAC[0x8];
+    u8 pad_AAC[0x4];
+    s32 unkAB0;                    /* 0xAB0 */
     s32 unkAB4;                    /* 0xAB4 */
-    u8 pad_AB8[0x248];
+    s32 unkAB8;                    /* 0xAB8 */
+    u8 pad_ABC[0x244];
     u8*unkD00;                     /* 0xD00 */
     u8*unkD04;                     /* 0xD04 */
     u8 *unkD08[2];                 /* 0xD08: per item slot 0/1: moby from FUN_L00_0024f028 */
@@ -548,7 +559,10 @@ struct Hero {
     s32 unkD14;                    /* 0xD14 */
     u8 pad_D18[0x2D8];
     struct HeroRandTimer rand_timer;/* 0xFF0 */
-    u8 pad_FFC[0x14];
+    u8 pad_FFC[0x8];
+    s32 unk1004;                   /* 0x1004 */
+    s32 unk1008;                   /* 0x1008 */
+    u8 pad_100C[0x4];
     s32 unk1010;                   /* 0x1010 */
     u8 pad_1014[0x7C];
     struct HeroItemSlot items[7];  /* 0x1090: item slots; slot 0 is the equipped gadget */
@@ -632,7 +646,7 @@ struct Hero {
     u8 unk20AD;                    /* 0x20AD */
     u8 unk20AE;                    /* 0x20AE */
     u8 unk20AF;                    /* 0x20AF */
-    u8 pad_20B0[0x1];
+    s8 unk20B0;                    /* 0x20B0 */
     u8 unk20B1;                    /* 0x20B1 */
     u8 unk20B2;                    /* 0x20B2 */
     u8 unk20B3;                    /* 0x20B3 */
@@ -647,7 +661,8 @@ struct Hero {
     s32 unk21AC;                   /* 0x21AC: unk2128 ring count */
     s32 unk21B0;                   /* 0x21B0: unk1B00 ring index */
     s32 unk21B4;                   /* 0x21B4: unk1B00 ring count */
-    u8 pad_21B8[0x60];
+    u8 pad_21B8[0x20];
+    s16 unk21D8[8][4];             /* 0x21D8: 8 slots of four s16 */
     s32 unk2218;                   /* 0x2218 */
     u8 pad_221C[0x4];
     s32 unk2220;                   /* 0x2220 */
@@ -660,7 +675,8 @@ struct Hero {
     u8 pad_2258[0x18];
     s32 unk2270;                   /* 0x2270 */
     s32 unk2274;                   /* 0x2274 */
-    u8 pad_2278[0x8];
+    void *unk2278;                 /* 0x2278 */
+    s32 unk227C;                   /* 0x227C */
     struct Moby *unk2280;          /* 0x2280 */
     s32 unk2284;                   /* 0x2284 */
     f32 unk2288;                   /* 0x2288 */

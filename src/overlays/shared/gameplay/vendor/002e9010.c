@@ -233,7 +233,6 @@ void FUN_L00_002e9c28(u8 *m) {
     FUN_001e93e8(m);
     FUN_L00_002e5e38(m);
 }
-extern char D_0013F350_002e9cc0[] __asm__("D_0013F350");
 extern char D_0013F3D0_002e9cc0[] __asm__("D_0013F3D0");
 extern unsigned char D_0015EDB3_002e9cc0 __asm__("D_0015EDB3");
 extern void FUN_001f9bf8_002e9cc0(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -243,10 +242,10 @@ extern void FUN_001f9a10_002e9cc0(void *, void *, void *) __asm__("FUN_001f9a10"
 void FUN_L00_002e9cc0(char *p) {
     char a[16] __attribute__((aligned(16)));
     char b[16] __attribute__((aligned(16)));
-    char *g = D_0013F350_002e9cc0;
+    struct Hero *g = &hero;
     int m;
-    FUN_001f9bf8_002e9cc0(a, *(char **)(g + 0x2080) + 0xE0, 1.0f);
-    m = *(unsigned char *)(g + 0x20A4);
+    FUN_001f9bf8_002e9cc0(a, ((char *)g->moby) + 0xE0, 1.0f);
+    m = g->unk20A4;
     if (m == 2) {
         FUN_001f9a68_002e9cc0(b, a, 9.5f);
     } else if (m == 1) {
@@ -265,7 +264,6 @@ void FUN_L00_002e9cc0(char *p) {
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-extern unsigned char D_0013F350_2e9dd0[] __asm__("D_0013F350");
 extern u128 D_0013F3D0_2e9dd0 __asm__("D_0013F3D0");
 extern void *D_L00_00166E04_2e9dd0 __asm__("D_L00_00166E04") __attribute__((section(".data")));
 extern void FUN_001f9bf8_2e9dd0(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -276,11 +274,11 @@ extern void FUN_001f9ad8_2e9dd0(void *, void *, void *) __asm__("FUN_001f9ad8");
 void FUN_L00_002e9dd0(char *m) {
     u128 a;
     u128 b;
-    unsigned char *g = D_0013F350_2e9dd0;
-    FUN_001f9bf8_2e9dd0(&a, *(char **)(g + 0x2080) + 0xE0, 1.0f);
-    if (g[0x20A4] == 2) {
+    struct Hero *g = &hero;
+    FUN_001f9bf8_2e9dd0(&a, ((char *)g->moby) + 0xE0, 1.0f);
+    if (g->unk20A4 == 2) {
         FUN_001f9a68_2e9dd0(&b, &a, 9.5f);
-    } else if (g[0x20A4] == 1) {
+    } else if (g->unk20A4 == 1) {
         FUN_001f9a68_2e9dd0(&b, &a, 0.9f);
     } else {
         FUN_001f9a68_2e9dd0(&b, &a, 1.6f);
@@ -1042,7 +1040,7 @@ void FUN_L00_002eb480(char *a) {
     FUN_001fa2b8_2eb480(a, m);
 }
 #undef F
-extern char D_0013F350_2eb648[] __asm__("D_0013F350") __attribute__((section(".data")));
+extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
 extern char D_L00_00166C80_2eb648[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
 extern float D_L00_00161DD4_2eb648 __asm__("D_L00_00161DD4") __attribute__((section(".data")));
 void FUN_001f9cf8_2eb648(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -1060,7 +1058,7 @@ int FUN_L00_002eb648(char *a, char *t) {
     float *c;
     char *n;
     u128 *pw;
-    char *g;
+    struct Hero *g;
     char *cam;
     char *pp;
     char *cp;
@@ -1087,18 +1085,18 @@ int FUN_L00_002eb648(char *a, char *t) {
         goto pos;
     *(float *)(m + 0xAC) = FUN_001fa580_2eb648(*(float *)(m + 0xAC), *(float *)(n + 0x18));
     *(float *)(n + 0x18) *= 0.97f;
-    g = D_0013F350_2eb648;
+    g = &hero_data;
     cam = D_L00_00166C80_2eb648;
-    pp = g + 0x80;
+    pp = &g->motion.pos;
     cp = cam + 0x140;
-    ang = FUN_001f9e90_2eb648(*(float *)(cam + 0x140) - *(float *)(g + 0x80),
-                              *(float *)(cam + 0x144) - *(float *)(g + 0x84));
+    ang = FUN_001f9e90_2eb648(*(float *)(cam + 0x140) - g->motion.pos.f[0],
+                              *(float *)(cam + 0x144) - g->motion.pos.f[1]);
     ang = FUN_001fa688_2eb648(ang, *(float *)(cam + 0x158));
     d1 = FUN_001f9b80_2eb648(pp, cp);
-    if (d1 < FUN_001f9b80_2eb648(*(char **)(g + 0x1090) + 0x10, cp)) {
+    if (d1 < FUN_001f9b80_2eb648(((char *)g->items[0].moby) + 0x10, cp)) {
         x = FUN_001f9b80_2eb648(pp, cp);
     } else {
-        x = FUN_001f9b80_2eb648(*(char **)(g + 0x1090) + 0x10, cp);
+        x = FUN_001f9b80_2eb648(((char *)g->items[0].moby) + 0x10, cp);
     }
     if (x < 0.77f) {
         if (ang < 1.5707964f) {
@@ -1154,13 +1152,13 @@ float FUN_001f9e90(float, float);
 float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 float FUN_001f9b48(void *, void *);
 void FUN_L00_002eba18(char *o) {
-    char *g = D_0013F350;
+    struct Hero *g = &hero;
     char *h = D_00166C80_c;
-    char *s = *(char **)(g + 0x2080);
+    char *s = ((char *)g->moby);
     float a = FUN_001f9e90(*(float *)(s + 0x10) - *(float *)(h + 0x140),
                            *(float *)(s + 0x14) - *(float *)(h + 0x144));
     if (fast_difference_between_rotations(*(float *)(h + 0x158), a) < 0.5585053563117981f &&
-        FUN_001f9b48(g + 0x80, h + 0x140) < 8.0f) {
+        FUN_001f9b48(&g->motion.pos, h + 0x140) < 8.0f) {
         *(char *)(h + 0x273) = 0;
         *(short *)(o + 0x7E) = 2;
         *(float *)(h + 0x294) = 0.018f;
@@ -1251,21 +1249,21 @@ void refresh_point_light(s32 arg0) __asm__("FUN_00201f58");
 extern char D_L00_00166D80_c[] __asm__("D_L00_00166C80");
 
 void FUN_L00_002ec6c0(char *m) {
-    char *b = D_0013F350;
+    struct Hero *b = &hero;
     char *p = *(char **)(m + 0x70) + 0xB8;
-    int v = *(int *)(b + 0x2084);
+    int v = b->state.current;
     char *q;
     int x, y;
     if (v == 0x2C) {
         q = m + 0x30;
         x = *(int *)(p + 8);
-        y = *(int *)(b + 0x994);
+        y = ((int)b->unk994);
     } else {
         q = m + 0x30;
         if ((unsigned)(v - 0x24) >= 3)
             goto done;
         x = *(int *)(p + 8);
-        y = *(int *)(b + 0x964);
+        y = ((int)b->unk964);
     }
     if (x != y) {
         char *g = D_L00_00166D80_c;
@@ -1290,10 +1288,10 @@ done:
 
 extern char D_0013F350[];
 
-/* Resets moby bytes 0x7D/0x7E unless its id at 0x86 is D_0013F350+0x2284 or 0x2084 is 6. */
+/* Resets moby bytes 0x7D/0x7E unless its id at 0x86 is &hero.unk2284 or 0x2084 is 6. */
 void FUN_L00_002ec7b0(char *a) {
-    char *g = D_0013F350;
-    if (*(int *)(g + 0x2284) != *(short *)(a + 0x86) && *(int *)(g + 0x2084) != 6) {
+    struct Hero *g = &hero;
+    if (g->unk2284 != *(short *)(a + 0x86) && g->state.current != 6) {
         *(char *)(a + 0x7D) = 0;
         *(short *)(a + 0x7E) = 3;
     }
@@ -1366,7 +1364,6 @@ typedef struct {
 extern char *D_L00_0015EF50_002ed230 __asm__("D_L00_0015EF50");
 extern unsigned char D_001413F4_002ed230 __asm__("D_001413F4") __attribute__((section(".data")));
 extern int D_001413DC_002ed230 __asm__("D_001413DC") __attribute__((section(".data")));
-extern char D_0013F350_002ed230[] __asm__("D_0013F350");
 void FUN_L00_002ec988_002ed230(unsigned char *) __asm__("FUN_L00_002ec988");
 int FUN_L00_002ed230(unsigned char *p) {
     S_002ed230 *s = *(S_002ed230 **)(D_L00_0015EF50_002ed230 + *(short *)(p + 0x84) * 32 + 0x1c);
@@ -1375,11 +1372,11 @@ int FUN_L00_002ed230(unsigned char *p) {
     if (s->v == 11 && D_001413F4_002ed230 != 2)
         return 0;
     if ((s->v == 1 || s->v == 10) && s->w == 0) {
-        char *g = D_0013F350_002ed230;
-        if (*(short *)(g + 0x30c) != 0) {
+        struct Hero *g = &hero;
+        if (g->unk30C.s != 0) {
             if (current_level_index != 14)
                 return 0;
-            if (*(int *)(g + 0x2284) != 13)
+            if (g->unk2284 != 13)
                 return 0;
         }
     }
