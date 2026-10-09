@@ -2278,18 +2278,7 @@ extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F04D0), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    char pad0[0xD0];
-    float x, y;
-    char pad1[0x2FC - 0xD8];
-    void *current;
-    char pad2[8];
-    short active;
-    char pad3[0x22DA - 0x30A];
-    unsigned short index;
-} CameraGlobals;
 
-extern CameraGlobals D_0013F350_u __asm__("D_0013F350");
 extern char D_L17_001676C0[];
 extern float FUN_001f9e90(float, float);
 extern void FUN_001f9c48(void *, void *, float);
@@ -2312,7 +2301,7 @@ extern void FUN_001f9cf8(void *, void *, void *);
 
 void FUN_L17_002eea70(struct Moby *moby) {
     char *state = (char *)moby->pvars;
-    if (D_0013F350_u.active && D_0013F350_u.current == moby) {
+    if (hero.unk308 && hero.ground_moby == moby) {
         char *vec = *(char **)(D_L17_001B0DB0 + *(int *)(state + 0x80) * 4) + 0x10;
         char *point = &moby->unkC0;
         int i;
@@ -2322,7 +2311,7 @@ void FUN_L17_002eea70(struct Moby *moby) {
             *(float *)(vec + 0xC) = 1.0f;
             vec += 0x10;
         }
-        D_0013F350_u.index = *(unsigned short *)(state + 0x80);
+        hero.unk22DA = *(unsigned short *)(state + 0x80);
     }
 }
 /* UpdateMoby for class 1382: hides or shows the moby by its clip volumes, then runs its state machine. */
