@@ -376,7 +376,243 @@ void FUN_L08_002e2078(struct Moby *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2250.s", FUN_L08_002e2250);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e24e8.s", FUN_L08_002e24e8);
+struct MobyClass {
+    u8 pad0[0x24];
+    f32 scale; /* base scale of the class */
+};
+
+/* A looping waypoint path: count points, 16 bytes apart. */
+typedef struct {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 points[1];
+} SwarmPath;
+
+/* Position on a path: the current point, the step direction and the path. */
+typedef struct {
+    s32 point;
+    s8 direction;
+    u8 pad5[0xB];
+    SwarmPath *path;
+    s32 path_id; /* index into D_L08_001B0CB0 */
+    u8 pad18[0x18];
+} SwarmPathFollower;
+
+/* pvars of the target: the projectiles fired at it. */
+typedef struct {
+    u8 pad0[0x60];
+    struct Moby *shots[8];
+} SwarmTargetVars;
+
+/* Gun turret on a gunship: cruises one path firing at its target, or circles a second path firing at random. */
+typedef struct {
+    SwarmPathFollower follow[2]; /* 0x00: [0] cruising (state 1), [1] circling (state 2) */
+    PartLink links[34];          /* 0x60: entry 0 is unused */
+    s32 target_index;            /* 0x280: moby slot of the target */
+    f32 turn_speed;              /* 0x284 */
+    s32 fire_timer;              /* 0x288 */
+    s16 pad28C;
+    s16 sound;                   /* 0x28E */
+} GunshipVars;
+
+extern s32 D_L08_00161C4C __attribute__((sda));
+extern f32 D_L08_00161C38 __attribute__((sda));
+extern f32 D_L08_00161C44 __attribute__((sda));
+extern f32 D_L08_00161C48 __attribute__((sda));
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern s32 current_level_index __asm__("D_0015ED84");
+extern u8 D_0014C050[];
+extern SwarmPath *D_L08_001B0CB0[];
+extern struct Moby *D_L08_0015FFD8_m __asm__("D_L08_0015FFD8");
+
+extern s32 FUN_L00_0028d8c0(struct Moby *, s32);
+extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern f32 FUN_001f96b0(f32);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
+extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
+extern f32 FUN_001f9b48(void *, void *);
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
+extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
+extern struct Moby *FUN_L08_002de3e0(void *, struct Moby *, void *, f32, f32);
+extern void FUN_L08_002e2250(struct Moby *);
+
+void FUN_L08_002e24e8(struct Moby *moby) {
+    GunshipVars *vars = (GunshipVars *)moby->pvars;
+    SwarmPathFollower *follower;
+    struct Moby *target;
+    struct Moby *shot;
+    struct Moby *bolt;
+    SwarmTargetVars *target_vars;
+    Vec4 point;
+    Vec4 step;
+    Vec4 muzzle;
+    Vec4 velocity;
+    s32 waypoint;
+    s32 next;
+    s32 after;
+    s32 i;
+    s32 slot;
+    f32 distance;
+    f32 heading;
+    f32 next_heading;
+    f32 turn;
+    f32 pitch;
+    f32 yaw;
+
+    if (D_L08_00161C4C != 0) {
+        return;
+    }
+    if (!FUN_L00_0028d8c0(moby, vars->sound)) {
+        vars->sound = allocate_voice_for_target_entry(3, 4, moby);
+    }
+    switch (moby->state) {
+    case 0:
+        if (D_0014C050[moby->unkB0 + current_level_index * 16] == 0xFF) {
+            mark_moby_for_removal(moby);
+            return;
+        }
+        vars->follow[0].path = D_L08_001B0CB0[vars->follow[0].path_id];
+        vars->follow[1].path = D_L08_001B0CB0[vars->follow[1].path_id];
+        vars->fire_timer = truncate_float_to_s32(FUN_001f96b0(random_float_between(300.0f, 600.0f)));
+        qcopy(&moby->pos, &vars->follow[1].path->points[0]);
+        FUN_L08_002e1d70(moby);
+        moby->state = 2;
+        moby->rot.z = FUN_001f9e90(vars->follow[1].path->points[1].f[0] - moby->pos.x,
+                                   vars->follow[1].path->points[1].f[1] - moby->pos.y);
+        moby->flags |= 0x4000;
+        break;
+    case 1:
+        waypoint = (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) % vars->follow[0].path->count;
+        target = &D_L08_0015FFD8_m[vars->target_index];
+        FUN_L00_00258278(moby,
+                         FUN_001f9e90(vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
+                                      vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
+                         &vars->turn_speed, 0.004f, 0.3f, 0.02f);
+        FUN_L08_002e2250(moby);
+        FUN_L08_002e2078(moby);
+        qcopy(&point, &vars->follow[0].path->points[waypoint]);
+        if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
+            vars->follow[0].point = waypoint;
+        }
+        subtract_vector_xyz(&step, &point, &moby->pos);
+        if (vector_length_xyz(&step) > D_L08_00161C38 * D_0015ED6C) {
+            normalize_vector_xyz(&step, &step, D_L08_00161C38 * D_0015ED6C);
+        }
+        add_vector_xyz(&moby->pos, &moby->pos, &step);
+        if (moby->unkBC == 0) {
+            break;
+        }
+        moby->unkBC = 0;
+        if (random_integer_below(0xFF) & 1) {
+            FUN_L00_0024f7c8(vars->links[3].part, 1, &muzzle);
+        } else {
+            FUN_L00_0024f7c8(vars->links[4].part, 1, &muzzle);
+        }
+        pitch = random_float_between(0.17453292f, 0.5235988f);
+        yaw = fast_add_rotations(FUN_001f9e90(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
+                                 3.1415927f);
+        yaw = fast_add_rotations(yaw, random_float_between(-0.2617994f, 0.7853982f));
+        if (yaw > 0.0f && yaw < 0.34f) {
+            yaw = 0.34f;
+        } else if (yaw <= 0.0f && yaw > -0.34f) {
+            yaw = -0.34f;
+        }
+        normalize_vector_xyz(&velocity, &step, (D_L08_00161C38 + D_L08_00161C38) * D_0015ED6C);
+        shot = FUN_L08_002de3e0(&muzzle, target, &velocity, pitch, yaw);
+        shot->scale = shot->pclass->scale / 5.0f;
+        target_vars = (SwarmTargetVars *)target->pvars;
+        for (slot = 0; slot < 8; slot++) {
+            if (target_vars->shots[slot] == NULL) {
+                target_vars->shots[slot] = shot;
+                break;
+            }
+        }
+        break;
+    case 2:
+        follower = &vars->follow[1];
+        next = (follower->point + 1) % follower->path->count;
+        after = (follower->point + 2) % follower->path->count;
+        heading = FUN_001f9e90(follower->path->points[next].f[0] - follower->path->points[follower->point].f[0],
+                               follower->path->points[next].f[1] - follower->path->points[follower->point].f[1]);
+        next_heading = FUN_001f9e90(follower->path->points[after].f[0] - follower->path->points[next].f[0],
+                                    follower->path->points[after].f[1] - follower->path->points[next].f[1]);
+        turn = fast_subtract_rotations(heading, next_heading);
+        distance = FUN_001f9b48(&moby->pos, &follower->path->points[next]);
+        distance /= FUN_001f9b48(&follower->path->points[follower->point],
+                                 &follower->path->points[next]);
+        /* the blended heading is computed but unused: the turn below steers towards the next point */
+        fast_add_rotations(turn * distance, next_heading);
+        heading = FUN_001f9e90(follower->path->points[next].f[0] - moby->pos.x,
+                               follower->path->points[next].f[1] - moby->pos.y);
+        FUN_L00_0025be00(&moby->rot.z, &vars->turn_speed, heading,
+                         D_L08_00161C44 * DEG_TO_RAD * D_0015ED70, D_L08_00161C44 * DEG_TO_RAD * D_0015ED70,
+                         D_L08_00161C48 * DEG_TO_RAD * D_0015ED6C);
+        qcopy(&point, &follower->path->points[next]);
+        if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
+            follower->point = next;
+        }
+        subtract_vector_xyz(&step, &point, &moby->pos);
+        if (vector_length_xyz(&step) > D_L08_00161C38 * D_0015ED6C) {
+            normalize_vector_xyz(&step, &step, D_L08_00161C38 * D_0015ED6C);
+        }
+        add_vector_xyz(&moby->pos, &moby->pos, &step);
+        FUN_L08_002e2078(moby);
+        if (!tick_countdown_32_alt(&vars->fire_timer)) {
+            break;
+        }
+        vars->fire_timer = truncate_float_to_s32(FUN_001f96b0(random_float_between(300.0f, 600.0f)));
+        FUN_L00_0024f7c8(vars->links[4].part, 1, &muzzle);
+        pitch = random_float_between(-0.5235988f, -0.2617994f);
+        yaw = random_angle_radians();
+        normalize_vector_xyz(&velocity, &step, (D_L08_00161C38 + D_L08_00161C38) * D_0015ED6C);
+        bolt = FUN_L08_002de3e0(&muzzle, NULL, &velocity, pitch, yaw);
+        if (bolt != NULL) {
+            bolt->rot.z = vars->links[4].part->rot.z;
+            bolt->state = 5;
+            bolt->rot.y = 0.0f;
+        }
+        break;
+    case 3: {
+        SwarmPath *path;
+
+        moby->state = 1;
+        path = vars->follow[0].path;
+        qcopy(&moby->pos, &path->points[0]);
+        moby->rot.z = FUN_001f9e90(path->points[1].f[0] - moby->pos.x, path->points[1].f[1] - moby->pos.y);
+        moby->rot.x = 0.0f;
+        FUN_L08_002e2078(moby);
+        break;
+    }
+    case 0x63:
+        for (i = 1; i < 34; i++) {
+            struct Moby *part = vars->links[i].part;
+            if (part != NULL) {
+                Vec4 *drift = (Vec4 *)part->pvars;
+                FUN_L00_0025f090(moby, &part->pos, -1, 3.0f, 13.0f);
+                subtract_vector_xyz(drift, &part->pos, &moby->pos);
+                normalize_vector_xyz(drift, drift, D_0015ED6C * 5.0f);
+                part->state = 1;
+                vars->links[i].part = NULL;
+            }
+        }
+        FUN_L00_0025f090(moby, &moby->pos, -1, 5.0f, 13.0f);
+        mark_moby_for_removal(moby);
+        break;
+    }
+}
 #include "sda.h"
 
 /* updates matching objects in the selected object range */
@@ -495,28 +731,6 @@ void FUN_L08_002e4e90(char *moby, float *out, float *rot) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e5188.s", FUN_L08_002e5188);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e88d8.s", FUN_L08_002e88d8);
 /* Flying gunship: cruises one path and fires at its target, or circles a second path and fires at random. */
-struct MobyClass {
-    u8 pad0[0x24];
-    f32 scale; /* base scale of the class */
-};
-
-/* A looping waypoint path: count points, 16 bytes apart. */
-typedef struct {
-    s32 count;
-    u8 pad4[0xC];
-    Vec4 points[1];
-} SwarmPath;
-
-/* Position on a path: the current point, the step direction and the path. */
-typedef struct {
-    s32 point;
-    s8 direction;
-    u8 pad5[0xB];
-    SwarmPath *path;
-    s32 path_id; /* index into D_L08_001B0CB0 */
-    u8 pad18[0x18];
-} SwarmPathFollower;
-
 /* Child moby slot, as FUN_L08_002e8788 fills them. */
 typedef struct {
     struct Moby *moby;
@@ -536,12 +750,6 @@ typedef struct {
     s16 pad13C;
     s16 sound;                   /* 0x13E */
 } SwarmVars;
-
-/* pvars of the target: the projectiles fired at it. */
-typedef struct {
-    u8 pad0[0x60];
-    struct Moby *shots[8];
-} SwarmTargetVars;
 
 extern s32 D_L08_00161D30 __attribute__((sda));
 extern f32 D_L08_00161D24 __attribute__((sda));
