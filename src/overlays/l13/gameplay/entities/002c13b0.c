@@ -107,8 +107,8 @@ extern void FUN_L00_0025d538(void *, void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
-void FUN_L13_002c37e0(unsigned char *moby, unsigned char *d, float *fp) {
-    if (*(unsigned char *)(moby + 0x20) != 3) {
+void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
+    if (moby->state != 3) {
         int cnt;
         float vec[4];
         char *t = FUN_L00_0025a420(moby, 0x330000, 0);
@@ -132,23 +132,23 @@ void FUN_L13_002c37e0(unsigned char *moby, unsigned char *d, float *fp) {
         if (cnt >= 2) {
             if (*fp <= *(float *)(t + 0x2C)) {
                 *fp = 0;
-                *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+                moby->flags &= 0xEFFF;
                 d[0x67] = 0x78;
                 FUN_L00_0025d458(moby, (short *)(d + 0x60));
-                moby[0x20] = 3;
+                moby->state = 3;
             } else {
                 *fp = *fp - *(float *)(t + 0x2C);
                 d[0x67] = 0xFA;
                 *(short *)(d + 0x26) = scale_game_frames(0x3C);
                 FUN_L00_0025d458(moby, (short *)(d + 0x60));
                 normalize_vector_xyz(vec, t + 0x10, 0.1f);
-                add_vector_xyz(moby + 0x10, moby + 0x10, vec);
+                add_vector_xyz(&moby->pos, &moby->pos, vec);
                 FUN_L00_00257d78(vec, -0.1f, 0.1f);
-                add_vector_xyz(moby + 0x10, moby + 0x10, vec);
+                add_vector_xyz(&moby->pos, &moby->pos, vec);
             }
-            moby[0xA4] = 0xFF;
+            moby->unkA4 = 0xFF;
         } else {
-            moby[0xA4] = 0xFF;
+            moby->unkA4 = 0xFF;
         }
     }
     FUN_L00_0025d538(moby, d + 0x60);
@@ -163,23 +163,23 @@ extern float FUN_L00_0025e310(float);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
-void FUN_L13_002c3988(char *moby, char *d, float p2, float p3) {
+void FUN_L13_002c3988(struct Moby *moby, char *d, float p2, float p3) {
     float t;
     float v;
     FUN_L00_00258278(moby, (float *)(d + 0x88), p2, D_0015ED70 * 25.132742f,
                      D_0015ED70 * 6.2831855f, D_0015ED6C * 25.132742f);
-    *(float *)(moby + 0x44) =
-        FUN_L00_00258110((float *)(d + 0x84), *(float *)(moby + 0x44), p3, D_0015ED70 * 25.132742f,
+    moby->rot.y =
+        FUN_L00_00258110((float *)(d + 0x84), moby->rot.y, p3, D_0015ED70 * 25.132742f,
                          D_0015ED70 * 6.2831855f, D_0015ED6C * 25.132742f);
-    t = (1.5707964f - AbsoluteFloat(*(float *)(moby + 0x40))) / 1.5707964f;
-    v = *(float *)(moby + 0x40) + -*(float *)(d + 0x88) * t;
-    *(float *)(moby + 0x40) = v;
+    t = (1.5707964f - AbsoluteFloat(moby->rot.x)) / 1.5707964f;
+    v = moby->rot.x + -*(float *)(d + 0x88) * t;
+    moby->rot.x = v;
     if (1.5707964f < v)
-        *(float *)(moby + 0x40) = 1.5707964f;
-    if (*(float *)(moby + 0x40) < -1.5707964f)
-        *(float *)(moby + 0x40) = -1.5707964f;
-    *(float *)(moby + 0x40) = *(float *)(moby + 0x40) * 0.98f;
-    FUN_L00_0025e310(*(float *)(moby + 0x40));
+        moby->rot.x = 1.5707964f;
+    if (moby->rot.x < -1.5707964f)
+        moby->rot.x = -1.5707964f;
+    moby->rot.x = moby->rot.x * 0.98f;
+    FUN_L00_0025e310(moby->rot.x);
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4D50), where it is exact; names translated to the US level program. */
 
@@ -222,12 +222,12 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 void FUN_L13_002c3988_c(char *moby, char *d, float p2, float p3) __asm__("FUN_L13_002c3988");
 
-int FUN_L13_002c3c88(char *m, char *d, int aim) {
+int FUN_L13_002c3c88(struct Moby *m, char *d, int aim) {
     char *path = D_L13_001B07B0[*(int *)(d + 0xA0)];
     float a, seg, diff, t;
     int wrapped = 0;
     float v[4];
-    a = FUN_001f9b48(path + (*(short *)(d + 0xB6) * 16 + 0x10), m + 0x10);
+    a = FUN_001f9b48(path + (*(short *)(d + 0xB6) * 16 + 0x10), &m->pos);
     seg = FUN_001f9b48(path + (*(short *)(d + 0xB6) * 16 + 0x10),
                        path + (*(short *)(d + 0xB4) * 16 + 0x10));
     diff = seg - a;
@@ -251,19 +251,19 @@ int FUN_L13_002c3c88(char *m, char *d, int aim) {
     if (1.0f < t)
         t = 1.0f;
     scale_vector_xyz(d + 0x70, d + 0x70, 1.0f - t);
-    subtract_vector_xyz(v, path + (*(short *)(d + 0xB4) * 16 + 0x10), m + 0x10);
+    subtract_vector_xyz(v, path + (*(short *)(d + 0xB4) * 16 + 0x10), &m->pos);
     normalize_vector_xyz(v, v, *(float *)(d + 0xCC));
     scale_vector_xyz(v, v, t);
     add_vector_xyz(d + 0x70, d + 0x70, v);
     normalize_vector_xyz(d + 0x70, d + 0x70, *(float *)(d + 0xCC));
-    add_vector_xyz(m + 0x10, m + 0x10, d + 0x70);
+    add_vector_xyz(&m->pos, &m->pos, d + 0x70);
     if (aim != 0) {
         char *g = D_0013F350;
-        float yaw = FUN_001f9e90(*(float *)(g + 0x80) - *(float *)(m + 0x10),
-                                 *(float *)(g + 0x84) - *(float *)(m + 0x14));
+        float yaw = FUN_001f9e90(*(float *)(g + 0x80) - m->pos.x,
+                                 *(float *)(g + 0x84) - m->pos.y);
         FUN_L13_002c3988_c(m, d, yaw,
-                           -FUN_001f9e90(FUN_001f9b80(m + 0x10, g + 0x80),
-                                         *(float *)(g + 0x88) - *(float *)(m + 0x18)));
+                           -FUN_001f9e90(FUN_001f9b80(&m->pos, g + 0x80),
+                                         *(float *)(g + 0x88) - m->pos.z));
     }
     return wrapped;
 }
@@ -427,7 +427,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e1638.s", FUN_L13_002e1638);
 /* runs one step of a moby's timed state and reports whether the timer ran out */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E56C8), where it is exact; names translated to the US level program. */
 
-int FUN_L13_002e4300(char *m, char *arg, float *t) {
+int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
     char *r = FUN_L00_0025a420(m, 0x330000, 0);
     int n;
     int result = 0;
@@ -458,8 +458,8 @@ int FUN_L13_002e4300(char *m, char *arg, float *t) {
         unsigned short fl;
         if (*t <= lim) {
             *(int *)t = 0;
-            fl = *(unsigned short *)(m + 0x34);
-            *(unsigned short *)(m + 0x34) = fl & 0xEFFF;
+            fl = m->flags;
+            m->flags = fl & 0xEFFF;
             *(unsigned char *)(arg + 0x67) = 0x78;
             FUN_L00_0025d458(m, (short *)e);
             result = 1;
@@ -470,7 +470,7 @@ int FUN_L13_002e4300(char *m, char *arg, float *t) {
             FUN_L00_0025d458(m, (short *)e);
         }
     }
-    *(unsigned char *)(m + 0xA4) = 0xFF;
+    m->unkA4 = 0xFF;
     FUN_L00_0025d538(m, e);
     return result;
 }
@@ -710,7 +710,7 @@ extern int D_L13_001D34A8[];
 extern char *FUN_L13_002ecd10(char *, int, int);
 extern void FUN_0020c828(char *);
 
-void FUN_L13_002e8d28(char *m, char *d) {
+void FUN_L13_002e8d28(struct Moby *m, char *d) {
     int i;
     int n;
     char *c;
@@ -731,14 +731,14 @@ void FUN_L13_002e8d28(char *m, char *d) {
                 *(float *)(c + 0x18) = 22.0f;
             if (*(float *)(c + 0x18) > 1001.0f)
                 *(float *)(c + 0x18) = 1001.0f;
-            qcopy(c + 0x40, m + 0x40);
-            *(OvlQuad *)(c + 0xC0) = *(OvlQuad *)(m + 0xC0);
-            *(OvlQuad *)(c + 0xD0) = *(OvlQuad *)(m + 0xD0);
-            *(OvlQuad *)(c + 0xE0) = *(OvlQuad *)(m + 0xE0);
+            qcopy(c + 0x40, &m->rot);
+            *(OvlQuad *)(c + 0xC0) = *(OvlQuad *)&m->unkC0;
+            *(OvlQuad *)(c + 0xD0) = *(OvlQuad *)&m->unkD0;
+            *(OvlQuad *)(c + 0xE0) = *(OvlQuad *)&m->unkE0;
         }
     }
-    n = D_L13_001D34A8[*(unsigned char *)(m + 0xBC)];
-    if (*(unsigned char *)(m + 0x20) == 5)
+    n = D_L13_001D34A8[m->unkBC];
+    if (m->state == 5)
         n = -1;
     if (n != -1) {
         if (*(char **)(d + 0xF0) == 0 || *(unsigned char *)(*(char **)(d + 0xF0) + 0x20) == 0xFE ||
@@ -759,10 +759,10 @@ void FUN_L13_002e8d28(char *m, char *d) {
                 *(float *)(c + 0x18) = 22.0f;
             if (*(float *)(c + 0x18) > 1001.0f)
                 *(float *)(c + 0x18) = 1001.0f;
-            qcopy(c + 0x40, m + 0x40);
-            *(OvlQuad *)(c + 0xC0) = *(OvlQuad *)(m + 0xC0);
-            *(OvlQuad *)(c + 0xD0) = *(OvlQuad *)(m + 0xD0);
-            *(OvlQuad *)(c + 0xE0) = *(OvlQuad *)(m + 0xE0);
+            qcopy(c + 0x40, &m->rot);
+            *(OvlQuad *)(c + 0xC0) = *(OvlQuad *)&m->unkC0;
+            *(OvlQuad *)(c + 0xD0) = *(OvlQuad *)&m->unkD0;
+            *(OvlQuad *)(c + 0xE0) = *(OvlQuad *)&m->unkE0;
         }
     } else {
         if (*(char **)(d + 0xF0) != 0 && *(unsigned char *)(*(char **)(d + 0xF0) + 0x20) != 0xFE &&
@@ -773,11 +773,11 @@ void FUN_L13_002e8d28(char *m, char *d) {
     }
     p = *(char **)(d + 0x110);
     if (p != 0) {
-        qcopy(p + 0x10, m + 0x10);
-        qcopy(p + 0x40, m + 0x40);
-        *(OvlQuad *)(p + 0xC0) = *(OvlQuad *)(m + 0xC0);
-        *(OvlQuad *)(p + 0xD0) = *(OvlQuad *)(m + 0xD0);
-        *(OvlQuad *)(p + 0xE0) = *(OvlQuad *)(m + 0xE0);
+        qcopy(p + 0x10, &m->pos);
+        qcopy(p + 0x40, &m->rot);
+        *(OvlQuad *)(p + 0xC0) = *(OvlQuad *)&m->unkC0;
+        *(OvlQuad *)(p + 0xD0) = *(OvlQuad *)&m->unkD0;
+        *(OvlQuad *)(p + 0xE0) = *(OvlQuad *)&m->unkE0;
     }
 }
 /* springs a moby's pitch and yaw toward targets and clamps the pitch */
@@ -785,21 +785,21 @@ void FUN_L13_002e8d28(char *m, char *d) {
 
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
-void FUN_L13_002e9018(char *m, char *p, float a, float b) {
+void FUN_L13_002e9018(struct Moby *m, char *p, float a, float b) {
     float c;
     FUN_L00_00258278(m, (float *)(p + 0xA8), a, D_0015ED70 * 3.1415927f, D_0015ED70 * 6.2831855f,
                      D_0015ED6C * 6.2831855f);
-    *(float *)(m + 0x44) =
-        FUN_L00_00258110((float *)(p + 0xA4), *(float *)(m + 0x44), b, D_0015ED70 * 3.1415927f,
+    m->rot.y =
+        FUN_L00_00258110((float *)(p + 0xA4), m->rot.y, b, D_0015ED70 * 3.1415927f,
                          D_0015ED70 * 6.2831855f, D_0015ED6C * 6.2831855f);
-    c = AbsoluteFloat(*(float *)(m + 0x40));
-    *(float *)(m + 0x40) += -*(float *)(p + 0xA8) * ((1.5707964f - c) / 1.5707964f) * 0.5f;
-    if (*(float *)(m + 0x40) > 1.5707964f)
-        *(float *)(m + 0x40) = 1.5707964f;
-    if (*(float *)(m + 0x40) < -1.5707964f)
-        *(float *)(m + 0x40) = -1.5707964f;
-    *(float *)(m + 0x40) *= 0.985f;
-    FUN_L00_0025e310(*(float *)(m + 0x40));
+    c = AbsoluteFloat(m->rot.x);
+    m->rot.x += -*(float *)(p + 0xA8) * ((1.5707964f - c) / 1.5707964f) * 0.5f;
+    if (m->rot.x > 1.5707964f)
+        m->rot.x = 1.5707964f;
+    if (m->rot.x < -1.5707964f)
+        m->rot.x = -1.5707964f;
+    m->rot.x *= 0.985f;
+    FUN_L00_0025e310(m->rot.x);
 }
 /* Level overlay code after unclassified; generated by `decomp overlays stubs`, stubs replaced by C as functions are matched. */
 
@@ -822,12 +822,12 @@ extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L13_002e9018_c(void *, void *, float, float) __asm__("FUN_L13_002e9018");
 
-int FUN_L13_002e9160(char *m, char *d, int idx, int aim) {
+int FUN_L13_002e9160(struct Moby *m, char *d, int idx, int aim) {
     char *path = D_L13_001B07B0[*(int *)(&d[idx << 2] + 0xB0)];
     float a, seg, diff, t, yaw, pitch;
     int wrapped = 0;
     float v[4];
-    a = FUN_001f9b48(path + (*(short *)(d + 0x9E) * 16 + 0x10), m + 0x10);
+    a = FUN_001f9b48(path + (*(short *)(d + 0x9E) * 16 + 0x10), &m->pos);
     seg = FUN_001f9b48(path + (*(short *)(d + 0x9E) * 16 + 0x10),
                        path + (*(short *)(d + 0x9C) * 16 + 0x10));
     diff = seg - a;
@@ -851,20 +851,20 @@ int FUN_L13_002e9160(char *m, char *d, int idx, int aim) {
     if (1.0f < t)
         t = 1.0f;
     FUN_001f9a68(d + 0x70, d + 0x70, 1.0f - t);
-    FUN_001f9a28(v, path + (*(short *)(d + 0x9C) * 16 + 0x10), m + 0x10);
+    FUN_001f9a28(v, path + (*(short *)(d + 0x9C) * 16 + 0x10), &m->pos);
     FUN_001f9bf8(v, v, *(float *)(d + 0xAC));
     FUN_001f9a68(v, v, t);
     FUN_001f9a10(d + 0x70, d + 0x70, v);
     FUN_001f9bf8(d + 0x70, d + 0x70, *(float *)(d + 0xAC));
-    FUN_001f9a10(m + 0x10, m + 0x10, d + 0x70);
+    FUN_001f9a10(&m->pos, &m->pos, d + 0x70);
     yaw = FUN_001f9e90(v[0], v[1]);
     pitch = -FUN_001f9e90(FUN_001f9b20(v), v[2]);
-    if (*(unsigned char *)(m + 0x20) == 5) {
+    if (m->state == 5) {
         char *g = D_0013F350;
-        yaw = FUN_001f9e90(*(float *)(g + 0x80) - *(float *)(m + 0x10),
-                           *(float *)(g + 0x84) - *(float *)(m + 0x14));
-        pitch = -FUN_001f9e90(FUN_001f9b80(m + 0x10, g + 0x80),
-                              *(float *)(g + 0x88) - *(float *)(m + 0x18));
+        yaw = FUN_001f9e90(*(float *)(g + 0x80) - m->pos.x,
+                           *(float *)(g + 0x84) - m->pos.y);
+        pitch = -FUN_001f9e90(FUN_001f9b80(&m->pos, g + 0x80),
+                              *(float *)(g + 0x88) - m->pos.z);
     }
     if (aim != 0)
         FUN_L13_002e9018_c(m, d, yaw, pitch);
@@ -877,7 +877,7 @@ extern float D_0015ED60_9408 __asm__("D_0015ED60");
 extern float dist_9408(void *, void *) __asm__("FUN_001f9b48");
 extern int step_9408(char *, char *, int, int) __asm__("FUN_L13_002e9160");
 
-int FUN_L13_002e9408(char *m, char *d, int idx, int aim) {
+int FUN_L13_002e9408(struct Moby *m, char *d, int idx, int aim) {
     char *path = D_L13_001B07B0_9408[*(int *)(&d[idx << 2] + 0xB0)];
     int r = 0;
     float ahead[4];
@@ -916,10 +916,10 @@ int FUN_L13_002e9408(char *m, char *d, int idx, int aim) {
                 *(short *)(d + 0x9E) = cur;
             }
         } else {
-            float dist = dist_9408(m + 0x10, D_0013F3D0_9408);
+            float dist = dist_9408(&m->pos, D_0013F3D0_9408);
             float s = 1.0f;
             float sp;
-            if (((unsigned char *)m)[0xBC] == 4) {
+            if (m->unkBC == 4) {
                 s = 3.0f;
             }
             sp = *(float *)(d + 0xAC);
@@ -1034,7 +1034,7 @@ extern void FUN_L13_002ea400_c(float *, float *, float *, float) __asm__("FUN_L1
 extern int FUN_001f96f8_e5(int) __asm__("FUN_001f96f8");
 extern void FUN_0022da68_e5(int, int, char *) __asm__("FUN_0022da68");
 
-unsigned char *FUN_L13_002ea540(char *m, unsigned char *d) {
+unsigned char *FUN_L13_002ea540(struct Moby *m, unsigned char *d) {
     float v[4];
     struct {
         int a;
@@ -1046,19 +1046,19 @@ unsigned char *FUN_L13_002ea540(char *m, unsigned char *d) {
     unsigned char *r;
     char *g;
     n = (d[0xFC] & 1) ? 0x12 : 0x10;
-    if (((unsigned char *)m)[0xBC] != 6 || (FUN_001160d8_e5() & 1)) {
+    if (m->unkBC != 6 || (FUN_001160d8_e5() & 1)) {
         d[0xFC] ^= 1;
     }
     FUN_L00_0024f7c8_e5(m, n, v);
     s.a = 0;
-    if (((unsigned char *)m)[0x20] != 5) {
+    if (m->state != 5) {
         FUN_L13_002ea400_c(v, &s.b, &s.c, D_0015ED6C_e5 * 17.0f);
     } else {
         FUN_L13_002ea400_c(v, &s.b, &s.c, -1.0f);
     }
     g = D_0013F350_e5;
     f = D_0015ED6C_e5 * 18.0f + *(float *)(d + 0xAC);
-    s.c = *(float *)(m + 0x48);
+    s.c = m->rot.z;
     s.b = 0.43633232f;
     r = FUN_L13_002c13b0_e5(m, (char *)v, *(char **)(g + 0x15F0), (char *)&s,
                          f, FUN_001f96f8_e5(300), D_0015ED6C_e5 * 18.0f);
