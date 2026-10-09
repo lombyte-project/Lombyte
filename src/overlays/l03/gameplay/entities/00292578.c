@@ -642,15 +642,19 @@ typedef struct {
     char pC[4];
     float f10;
     float f14;
-    char p18[8];
+    float f18;
+    float f1C;
     int i20;
-    char p24[4];
+    int i24;
     float f28;
-    char p2C[0x12];
+    char p2C[0x11];
+    unsigned char b3D;
     short s3E;
     char p40[0xC];
     float f4C;
-    char p50[0x10];
+    float f50;
+    float f54;
+    char p58[8];
 } Jump2C8398;
 
 typedef struct {
@@ -694,13 +698,17 @@ typedef struct Data2C8398 {
     unsigned char b29;
     char p2A[6];
     float f30;
-    char p34[0xC];
+    char p34[4];
+    int i38;
+    char p3C[4];
     float v40[4];
     char p50[8];
     unsigned char b58;
     char p59;
     unsigned char b5A;
-    char p5B[0x15];
+    char p5B[0xC];
+    unsigned char b67;
+    char p68[8];
     Jump2C8398 q;
     Mover2C8398 mv;
     PathF2C8398 pf;
@@ -708,7 +716,7 @@ typedef struct Data2C8398 {
     Look2C8398 look0;
     Look2C8398 look1;
     short s250;
-    char p252[2];
+    short s252;
     unsigned char b254;
     unsigned char b255;
     short s256;
@@ -717,7 +725,8 @@ typedef struct Data2C8398 {
     unsigned char b262;
     unsigned char b263;
     int i264;
-    char p268[8];
+    char p268[4];
+    float f26C;
     float f270;
     int i274;
     float f278;
@@ -760,7 +769,9 @@ typedef struct Moby2C8398 {
     unsigned char b7F;
     char p80[0x14];
     int i94;
-    char p98[0xE];
+    char p98[0xC];
+    unsigned char bA4;
+    char pA5;
     unsigned short cls;
     char pA8[8];
     unsigned char bB0;
@@ -1690,7 +1701,162 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c95a8.s", FUN_L03_002c95a8);
+#include "rnc/gameplay/hero.h"
+
+extern float D_L03_001618E0 __attribute__((sda));
+extern float D_L03_001618E4 __attribute__((sda));
+extern float D_L03_001618E8 __attribute__((sda));
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f9988(float);
+extern int FUN_001f9770(void *);
+extern int FUN_00213928(void *, void *, void *, int, int *, float *, int, int);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
+extern float add_rotations_c95(float, float) __asm__("FUN_001fa580");
+extern void set_moby_animation_alt(void *, int, int) __asm__("FUN_00212ed8");
+extern void blend_moby_animation_c95(void *, int, int, int) __asm__("FUN_00212f90");
+extern void FUN_L00_0025d538(void *, void *);
+
+/* Launch speed for a jump of height h at gravity g (per-frame units). */
+#define JUMP_SPEED(g, h) FUN_001f9988(2.0f * (g) * (D_0015ED70 * (h)))
+
+/* Hit reaction for class 574 (the path-walking enemy): takes damage from the hit, turns towards the
+ * attacker (the hero when hit by the wrench or by nothing) and starts a knock-back jump whose size depends
+ * on the hit kind; a lethal hit starts the death jump. */
+void FUN_L03_002c95a8(Moby2C8398 *m) {
+    float vec[4];
+    int kind;
+    float damage;
+    float angle;
+    Data2C8398 *d;
+    char *hit;
+    char *other;
+    int result;
+
+    damage = 0.0f;
+    d = m->data;
+    if (d->i38 != 0) {
+        d->i38 = 0;
+        d->s252 = FUN_001f96f8(240);
+    }
+    if (FUN_001f9770(&d->s252)) {
+        d->f270 = d->f26C;
+    } else {
+        d->f270 = d->f26C + 5.0f;
+    }
+    hit = FUN_L00_0025a420(m, 0x330000, 0);
+    result = FUN_00213928(m, hit, &d->f20, 0, &kind, &damage, 0, 4);
+    if (hit != 0 && kind != 1 && m->state != 0xD) {
+        other = *(char **)(hit + 0x20);
+        if (other != 0) {
+            if (other != (char *)hero.items[0].moby) {
+                angle = FUN_001f9e90(m->pos[0] - *(float *)(other + 0x10), m->pos[1] - *(float *)(other + 0x14));
+            } else {
+                angle = FUN_001f9e90(m->pos[0] - hero.motion.pos.f[0], m->pos[1] - hero.motion.pos.f[1]);
+            }
+        } else {
+            angle = FUN_001f9e90(m->pos[0] - hero.motion.pos.f[0], m->pos[1] - hero.motion.pos.f[1]);
+        }
+        d->f20 -= damage;
+        if (d->f20 <= 0.0f) {
+            result = 1;
+        }
+        switch (result) {
+        case 12:
+        case 13:
+            d->b67 = 0x78;
+            break;
+        case 6:
+            d->b67 = 0x78;
+            d->q.f10 = D_0015ED70 * 80.0f;
+            d->q.f18 = (D_L03_001618E4 / (2.0f * FUN_001f9988(2.0f * D_L03_001618E0 * d->q.f10) / (D_0015ED70 * 80.0f)) +
+                        D_L03_001618E8 * D_0015ED70 * 0.5f *
+                            (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (D_0015ED70 * 80.0f))) *
+                       0.5f;
+            d->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
+            d->q.i24 = 9;
+            d->q.b3D = 0;
+            *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
+            FUN_L00_0025ab48(vec, &angle, &d->q.f18, &d->q.f1C);
+            if (fast_difference_between_rotations(m->rot[2], angle) < 1.0471976f) {
+                m->rot[2] = add_rotations_c95(angle, 3.1415927f);
+            }
+            FUN_L00_0025c558(angle, m, (char *)d + 0x70, 5, 5, 0);
+            set_moby_animation_alt(m, 5, 5);
+            d->q.f50 = 14.0f;
+            d->q.f54 = 28.0f;
+            m->state = 10;
+            allocate_voice_for_target_entry(1, 0, (int)m);
+            break;
+        case 3:
+        case 7:
+        case 8:
+            d->b67 = 0x78;
+            d->q.f10 = D_0015ED70 * 80.0f;
+            d->q.f14 = D_L03_001618E8 * D_0015ED70;
+            d->q.f18 = D_L03_001618E4 / (2.0f * FUN_001f9988(2.0f * D_L03_001618E0 * d->q.f10) / (D_0015ED70 * 80.0f)) +
+                       D_L03_001618E8 * D_0015ED70 * 0.5f *
+                           (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (D_0015ED70 * 80.0f));
+            d->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
+            d->q.i24 = 9;
+            d->q.b3D = 0;
+            *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
+            FUN_L00_0025ab48(vec, &angle, &d->q.f18, &d->q.f1C);
+            FUN_L00_0025c558(angle, m, (char *)d + 0x70, 5, 5, 0);
+            d->q.f50 = 6.0f;
+            d->q.f54 = 13.0f;
+            m->state = 10;
+            allocate_voice_for_target_entry(1, 0, (int)m);
+            break;
+        case 4:
+        case 5:
+            d->b67 = 0x78;
+            d->q.f10 = D_0015ED70 * 80.0f;
+            d->q.f14 = D_L03_001618E8 * D_0015ED70;
+            d->q.f18 = D_L03_001618E4 / (2.0f * FUN_001f9988(2.0f * D_L03_001618E0 * d->q.f10) / (D_0015ED70 * 80.0f)) +
+                       D_L03_001618E8 * D_0015ED70 * 0.5f *
+                           (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (D_0015ED70 * 80.0f));
+            d->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
+            d->q.i24 = 9;
+            d->q.b3D = 0;
+            *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
+            FUN_L00_0025ab48(vec, &angle, &d->q.f18, &d->q.f1C);
+            FUN_L00_0025c558(angle, m, (char *)d + 0x70, 6, 5, 2);
+            d->q.f50 = 5.0f;
+            d->q.f54 = 10.0f;
+            m->state = 10;
+            allocate_voice_for_target_entry(1, 0, (int)m);
+            break;
+        case 1:
+            d->q.f10 = D_0015ED70 * 40.0f;
+            d->q.f14 = D_L03_001618E8 * D_0015ED70;
+            d->q.f18 = 3.0f / (2.0f * FUN_001f9988(2.0f * 2.0f * d->q.f10) / (D_0015ED70 * 40.0f)) +
+                       D_L03_001618E8 * D_0015ED70 * 0.5f *
+                           (2.0f * JUMP_SPEED(2.0f, 40.0f) / (D_0015ED70 * 40.0f));
+            d->q.f1C = JUMP_SPEED(2.0f, 40.0f);
+            d->q.i24 = 9;
+            d->q.b3D = 0;
+            *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
+            FUN_L00_0025ab48(vec, &angle, &d->q.f18, &d->q.f1C);
+            FUN_L00_0025c558(angle, m, (char *)d + 0x70, 7, 5, 2);
+            d->q.f50 = 10.0f;
+            d->q.f54 = 20.0f;
+            d->q.f4C = 2.0f * D_0015ED6C;
+            d->b255 = 0;
+            m->flags &= 0xEFFF;
+            d->b67 = 0xFA;
+            m->state = 0xD;
+            allocate_voice_for_target_entry(3, 0, (int)m);
+            if (m->anim != 7) {
+                blend_moby_animation_c95(m, 7, 0, FUN_001f96f8(6));
+            }
+            break;
+        }
+        FUN_L00_0025d458(m, (short *)((char *)d + 0x60));
+    }
+    m->bA4 = 0xFF;
+    FUN_L00_0025d538(m, (char *)d + 0x60);
+}
 extern int FUN_L03_0024e830(char *, char *, float);
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
