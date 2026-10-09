@@ -1854,9 +1854,6 @@ class DataRefsTests(unittest.TestCase):
             self.assertEqual(edits[0x20]["name"], "sound_table")
             self.assertEqual(edits[0x20]["type"], "u8 *[2]")
             self.assertIn("sound_table", path.read_text())
-            path.write_text(path.read_text() + "\n# Data symbols with fixed addresses\nfixed:\n  named: []\n")
-            self.refs.write_catalog(path, sections, self.refs.load_catalog(path))
-            self.assertTrue(path.read_text().endswith("fixed:\n  named: []\n"))
 
     def test_scalar_quotes_types_with_brackets(self):
         self.assertEqual(self.refs.scalar("struct Foo"), "struct Foo")
@@ -1869,9 +1866,8 @@ class SymbolsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             repo, out = Path(tmp) / "repo", Path(tmp) / "out"
             (repo / "config/us").mkdir(parents=True)
-            (repo / "config/us/functions.yaml").write_text("named:\n  - [Foo, 0x100]\n")
-            (repo / "config/us/data.yaml").write_text(
-                "fixed:\n  named:\n    - [D_FFFF, 0xFFFF, ignore]\n  linker:\n    - [D_1, 0x200]\n")
+            (repo / "config/us/pinned.yaml").write_text(
+                "named:\n  - [Foo, 0x100]\n  - [D_FFFF, 0xFFFF, ignore]\nlinker:\n  - [D_1, 0x200]\n")
             rnc_units.write_symbol_files(repo, out)
             self.assertEqual((out / "symbol_addrs.txt").read_text(),
                              "Foo = 0x00000100;\nD_FFFF = 0x0000FFFF; // ignore:true\n")

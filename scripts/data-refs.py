@@ -59,7 +59,6 @@ OUT_DIR = ROOT / "build" / "data-refs"
 FUNCTIONS_PATH = ROOT / "config" / "overlays" / "us" / "functions.tsv"
 DEFAULT_GP = 0x166C00
 DEFAULT_CATALOG = ROOT / "config" / "us" / "data.yaml"
-LEVEL_CATALOGS = ROOT / "config" / "overlays" / "us" / "data"
 LEVEL_DATA_START = 0x15EF00  # D_LNN_ labels begin here; below it a level keeps the executable's names
 
 SHF_ALLOC = 0x2
@@ -569,7 +568,6 @@ def catalog_sections(rows: dict[int, dict], data: list, declared: dict,
 
 
 GUESSED_TYPES = {"unknown", "u8", "s16", "s32", "s64", "u128", "f32", "f64"}  # what guess_type writes
-FIXED_MARK = "\n# Data symbols with fixed addresses"  # the hand-kept ``fixed`` block closing data.yaml
 
 
 def load_catalog(path: Path) -> dict[int, dict]:
@@ -577,9 +575,7 @@ def load_catalog(path: Path) -> dict[int, dict]:
     if not path.exists():
         return {}
     edits = {}
-    for section, origins in (yaml.safe_load(path.read_text()) or {}).items():
-        if section == "fixed":
-            continue
+    for origins in (yaml.safe_load(path.read_text()) or {}).values():
         for entries in origins.values():
             for addr, name, ctype, *_rest, note in (e + [None] * (9 - len(e)) for e in entries):
                 edit = {} if re.fullmatch(r"D_(?:L\d\d_)?[0-9A-Fa-f]{8}", name) else {"name": name}
@@ -612,8 +608,6 @@ def write_catalog(path: Path, sections: dict, edits: dict[int, dict],
                   what: str = "the boot executable's", origins: str = BOOT_ORIGINS,
                   extra: str = "") -> None:
     lines = [CATALOG_HEADER.format(what=what, origins=origins, extra=extra)]
-    old = path.read_text() if path.exists() else ""
-    fixed = old[old.index(FIXED_MARK):] if FIXED_MARK in old else ""
     for section, origins in sections.items():
         lines.append(f"{section}:")
         for origin, entries in origins.items():
@@ -628,7 +622,7 @@ def write_catalog(path: Path, sections: dict, edits: dict[int, dict],
                 lines.append(f"    - [{', '.join(str(f) for f in fields)}]")
             lines.append("")
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text("\n".join(lines).rstrip("\n") + "\n" + fixed)
+    path.write_text("\n".join(lines).rstrip("\n") + "\n")
 
 
 def build(accesses: Iterable[Access], data: list, owner_for: Callable[[int], str],
@@ -691,7 +685,7 @@ def main(argv=None) -> int:
                         help="extracted/overlays/ of the Tools checkout (with --level)")
     parser.add_argument("--catalog", nargs="?", type=Path, const=Path("-"), metavar="PATH",
                         help=f"write the grouped catalogue (default: {shown(DEFAULT_CATALOG)}, or "
-                             f"{shown(LEVEL_CATALOGS)}/level-NN.yaml with --level); "
+                             "data.yaml in the output directory with --level); "
                              "name, type and note already in it are kept")
     parser.add_argument("--out", type=Path, default=None, help="output directory")
     args = parser.parse_args(argv)
@@ -738,8 +732,7 @@ def main(argv=None) -> int:
             sections = catalog_sections(rows, data, {**member_names(declared, rows), **declared})
             write_catalog(target, sections, load_catalog(target))
         else:
-            target = LEVEL_CATALOGS / f"level-{args.level:02d}.yaml" \
-                if str(args.catalog) == "-" else args.catalog
+            target = out / "data.yaml" if str(args.catalog) == "-" else args.catalog
             own = {addr: row for addr, row in rows.items() if not row["section"].startswith("core.")}
             sections = catalog_sections(
                 own, data, {}, level_origin_of(),
