@@ -236,7 +236,91 @@ void FUN_L08_002e9a18(char *arg) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002deee0.s", FUN_L08_002deee0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e0328.s", FUN_L08_002e0328);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e16c0.s", FUN_L08_002e16c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e1d70.s", FUN_L08_002e1d70);
+/* Builds the target board: spawns the frame, the three rows of eight targets
+ * and their mounts, and records each piece with the piece it hangs from. */
+
+typedef struct {
+    struct Moby *moby;
+    struct Moby *anchor;
+    s32 joint;   /* joint on this piece */
+    s32 pjoint;  /* joint on the anchor it hangs from */
+} TargetSlot;
+
+typedef struct {
+    u8 pad0[0x60];
+    TargetSlot slots[34];
+    u8 pad280[0xC];
+    s16 points;
+} TargetBoardVars;
+
+void FUN_L08_002e1d70(struct Moby *moby) {
+    TargetBoardVars *vars = (TargetBoardVars *)moby->pvars;
+    struct Moby *m;
+    s32 i;
+    s32 pjoint;
+
+    vars->slots[0].moby = moby;
+    vars->slots[0].anchor = 0;
+    vars->slots[0].joint = 0;
+    vars->slots[0].pjoint = 0;
+    vars->slots[3].moby = FUN_L08_002e1c98((char *)moby, 0x1C1, 0, 2);
+    vars->slots[3].anchor = moby;
+    vars->slots[3].joint = 0;
+    vars->slots[3].pjoint = 2;
+    pjoint = 3;
+    vars->slots[1].moby = FUN_L08_002e1c98((char *)moby, 0x1C2, 0, pjoint);
+    vars->slots[1].anchor = moby;
+    vars->slots[1].joint = 0;
+    vars->slots[1].pjoint = pjoint;
+    m = FUN_L08_002e1c98((char *)moby, 0x1C2, 0, 4);
+    vars->slots[2].moby = m;
+    m->flags |= 0x8000;
+    vars->slots[2].anchor = moby;
+    vars->slots[2].joint = 0;
+    vars->slots[2].pjoint = 4;
+    vars->slots[7].moby = FUN_L08_002e1c98((char *)moby, 0x1C0, 0, 0);
+    vars->slots[7].anchor = moby;
+    vars->slots[7].joint = 0;
+    vars->slots[7].pjoint = 0;
+    vars->slots[8].moby = FUN_L08_002e1c98((char *)moby, 0x1C0, 1, 1);
+    vars->slots[8].anchor = moby;
+    vars->slots[8].joint = 1;
+    vars->slots[8].pjoint = 1;
+    vars->slots[9].moby = FUN_L08_002e1c98((char *)vars->slots[8].moby, 0x1C0, 1, 0);
+    vars->slots[9].anchor = vars->slots[8].moby;
+    vars->slots[9].joint = 1;
+    vars->slots[9].pjoint = 0;
+    vars->slots[5].moby = FUN_L08_002e1c98((char *)vars->slots[9].moby, 0x1BD, 0, 0);
+    vars->slots[5].anchor = vars->slots[9].moby;
+    vars->slots[5].joint = 0;
+    vars->slots[5].pjoint = 0;
+    vars->slots[6].moby = FUN_L08_002e1c98((char *)vars->slots[7].moby, 0x1BA, 1, 1);
+    vars->slots[6].anchor = vars->slots[7].moby;
+    vars->slots[6].joint = 1;
+    vars->slots[6].pjoint = 1;
+    vars->slots[4].moby = FUN_L08_002e1c98((char *)moby, 0x1B9, 0, 0);
+    vars->slots[4].anchor = vars->slots[6].moby;
+    vars->slots[4].joint = 0;
+    vars->slots[4].pjoint = 0;
+    for (i = 0; i < 8; i++) {
+        vars->slots[10 + i].moby = FUN_L08_002e1c98((char *)vars->slots[7].moby, 0x1BB, 0, i + 2);
+        vars->slots[10 + i].anchor = vars->slots[7].moby;
+        vars->slots[10 + i].joint = 0;
+        vars->slots[10 + i].pjoint = i + 2;
+    }
+    for (i = 0; i < 8; i++) {
+        vars->slots[18 + i].moby = FUN_L08_002e1c98((char *)vars->slots[8].moby, 0x1BB, 0, i + 2);
+        vars->slots[18 + i].anchor = vars->slots[8].moby;
+        vars->slots[18 + i].joint = 0;
+        vars->slots[18 + i].pjoint = i + 2;
+    }
+    for (i = 0; i < 8; i++) {
+        vars->slots[26 + i].moby = FUN_L08_002e1c98((char *)vars->slots[9].moby, 0x1BB, 0, i + 2);
+        vars->slots[26 + i].anchor = vars->slots[9].moby;
+        vars->slots[26 + i].joint = 0;
+        vars->slots[26 + i].pjoint = i + 2;
+    }
+}
 #include "rnc/gameplay/hero.h"
 extern float D_L08_00161C3C __attribute__((sda));
 extern f32 FUN_001f9e90(f32, f32);
