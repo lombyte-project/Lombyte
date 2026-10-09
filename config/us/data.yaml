@@ -2326,8 +2326,9 @@ lvl.camvtbl:
   gameplay:
     - [0x001E8C00, camera_types, "struct CameraType []", 0, 0, 0, 4, [gameplay/camera/camera_activation_check_priority, gameplay/camera/camera_exit, "+2 more"]]
 
-# Symbols the build pins to data addresses (see config/us/symbols.yaml for the rest);
-# the baseline build writes them to the files splat reads.
+# Data symbols with fixed addresses, read by the baseline build like the
+# function symbols in config/us/functions.yaml. named: splat names them in the
+# disassembly; linker: the linker resolves them.
 fixed:
   named:
     - [D_0013C940, 0x0013C940]

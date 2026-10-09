@@ -1,8 +1,8 @@
-# Function symbols the build gives fixed addresses (data ones are in data.yaml). Each list is written, when the
-# baseline is built, to the file splat reads for it (scripts/rnc_units.py,
-# write_symbol_files). Rows are [name, address] and an optional `ignore`.
+# Function symbols with fixed addresses (the data ones are in data.yaml).
+# Rows are [name, address]; the baseline build turns each list into the symbol
+# input splat and the linker read (scripts/rnc_units.py, write_symbol_files).
 
-# symbol_addrs.txt: names splat uses in the disassembly
+# named: names splat puts on these addresses in the disassembly
 named:
   - [SceDeci2Poll, 0x00119498]
   - [SceDeci2ExRecv, 0x001194C0]
@@ -470,7 +470,7 @@ named:
   - [subdate, 0x0012D548]
   - [entry, 0x0012D728]
 
-# undefined_syms.txt: addresses the linker resolves, not renamed
+# linker: addresses the linker resolves; splat leaves their names alone
 linker:
   - [FUN_001151b4, 0x001151B4]
   - [FUN_001160d8, 0x001160D8]
@@ -482,7 +482,7 @@ linker:
   - [FUN_001f97e8, 0x001F97E8]
   - [FUN_0023d1f8, 0x0023D1F8]
 
-# undefined_funcs_auto.txt: raw textbin functions and aliases that C units reference
+# functions: raw textbin functions and aliases that C units reference
 functions:
   - [func_00112468, 0x00112468]
   - [func_00116A38, 0x00116A38]

@@ -10,7 +10,7 @@
   (`docs/recovered-names.md`); `us/checksum.sha1` is the retail ELF's SHA-1.
 - `us/data.yaml` and `overlays/us/data/` catalogue the data
   (`scripts/data-refs.py`); the `fixed` block of `us/data.yaml` and
-  `us/symbols.yaml` (functions) hold the symbols with fixed addresses, and
+  `us/functions.yaml` hold the symbols with fixed addresses, and
   the baseline build writes the files splat reads from them.
 - `ghidra/` contains function, call-graph, and data-reference exports used by
   the build tooling.

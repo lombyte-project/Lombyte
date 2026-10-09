@@ -1854,7 +1854,7 @@ class DataRefsTests(unittest.TestCase):
             self.assertEqual(edits[0x20]["name"], "sound_table")
             self.assertEqual(edits[0x20]["type"], "u8 *[2]")
             self.assertIn("sound_table", path.read_text())
-            path.write_text(path.read_text() + "\n# Symbols the build pins\nfixed:\n  named: []\n")
+            path.write_text(path.read_text() + "\n# Data symbols with fixed addresses\nfixed:\n  named: []\n")
             self.refs.write_catalog(path, sections, self.refs.load_catalog(path))
             self.assertTrue(path.read_text().endswith("fixed:\n  named: []\n"))
 
@@ -1869,7 +1869,7 @@ class SymbolsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             repo, out = Path(tmp) / "repo", Path(tmp) / "out"
             (repo / "config/us").mkdir(parents=True)
-            (repo / "config/us/symbols.yaml").write_text("named:\n  - [Foo, 0x100]\n")
+            (repo / "config/us/functions.yaml").write_text("named:\n  - [Foo, 0x100]\n")
             (repo / "config/us/data.yaml").write_text(
                 "fixed:\n  named:\n    - [D_FFFF, 0xFFFF, ignore]\n  linker:\n    - [D_1, 0x200]\n")
             rnc_units.write_symbol_files(repo, out)

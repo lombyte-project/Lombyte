@@ -30,9 +30,9 @@ OVERLAY_NAME = re.compile(r"^FUN_L\d{2}_[0-9a-f]{8}$")
 CONFIG_PATH = Path("config") / "us" / "rnc1.us.yaml"
 CATEGORY_PATH = Path("config") / "us" / "unit_categories.json"
 RECOVERED_PATH = Path("config") / "us" / "recovered_names.json"
-SYMBOLS_PATH = Path("config") / "us" / "symbols.yaml"
+FUNCTIONS_PATH = Path("config") / "us" / "functions.yaml"
 DATA_PATH = Path("config") / "us" / "data.yaml"
-# symbols.yaml list -> the file splat reads for it (rnc1.us.yaml options).
+# functions.yaml list -> the file splat reads for it (rnc1.us.yaml options).
 SYMBOL_FILES = {
     "named": "symbol_addrs.txt",
     "linker": "undefined_syms.txt",
@@ -43,13 +43,13 @@ SYMBOL_FILES = {
 def load_symbols(repo: Path) -> dict[str, list[tuple[str, int, bool]]]:
     """The fixed-address symbols as {list: [(name, address, ignore)]}.
 
-    Functions come from config/us/symbols.yaml, data from the ``fixed`` block of
+    Functions come from config/us/functions.yaml, data from the ``fixed`` block of
     config/us/data.yaml.
     """
     import yaml
 
     out: dict[str, list[tuple[str, int, bool]]] = {key: [] for key in SYMBOL_FILES}
-    for path, key in ((SYMBOLS_PATH, None), (DATA_PATH, "fixed")):
+    for path, key in ((FUNCTIONS_PATH, None), (DATA_PATH, "fixed")):
         data = yaml.safe_load((repo / path).read_text()) or {}
         data = data.get(key, {}) if key else data
         for name in SYMBOL_FILES:
@@ -58,7 +58,7 @@ def load_symbols(repo: Path) -> dict[str, list[tuple[str, int, bool]]]:
 
 
 def write_symbol_files(repo: Path, dest: Path) -> None:
-    """Write the files splat reads (SYMBOL_FILES) from symbols.yaml into ``dest``."""
+    """Write the files splat reads (SYMBOL_FILES) from functions.yaml into ``dest``."""
     dest.mkdir(parents=True, exist_ok=True)
     for key, rows in load_symbols(repo).items():
         lines = [

@@ -278,7 +278,7 @@ def write_level_inputs(boundaries, text_addr, text_end, level_dir):
 def resident_symbols() -> list[tuple[int, str, int, str]]:
     """(address, name, size, kind) of everything resident the executable
     names: its C units below 0x15EF00 (FUN_xxxxxxxx) and the data symbols of
-    the config (symbols.yaml, the baseline's
+    the config (functions.yaml, the baseline's
     generated undefined_syms_auto.txt when present)."""
     out = []
     for _owner, vram, size in ov.exe_units():

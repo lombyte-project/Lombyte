@@ -569,7 +569,7 @@ def catalog_sections(rows: dict[int, dict], data: list, declared: dict,
 
 
 GUESSED_TYPES = {"unknown", "u8", "s16", "s32", "s64", "u128", "f32", "f64"}  # what guess_type writes
-FIXED_MARK = "\n# Symbols the build pins"  # the hand-kept ``fixed`` block closing data.yaml
+FIXED_MARK = "\n# Data symbols with fixed addresses"  # the hand-kept ``fixed`` block closing data.yaml
 
 
 def load_catalog(path: Path) -> dict[int, dict]:
