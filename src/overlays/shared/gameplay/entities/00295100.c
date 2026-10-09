@@ -855,7 +855,73 @@ void FUN_L00_00299560(s32 i) {
     }
     FUN_L00_002995d0(a, b, game_language);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002995d0.s", FUN_L00_002995d0);
+#else
+extern u8 D_0013E5BB;
+extern s32 D_L00_0015F5D8 __attribute__((section(".sdata")));
+extern s32 D_L00_0015F5C4;
+extern s32 D_L00_00161048, D_L00_0016104C, D_L00_00161050;
+extern s32 D_L00_00161054, D_L00_00161058;
+extern s32 D_L00_00173E04, D_L00_0015F40C;
+extern s32 D_0015EE88;
+extern s32 D_0015EE78_gp __asm__("D_0015EE78_gp") __attribute__((sda));
+extern void FUN_00118a80(s32);
+extern void FUN_L00_0028e048(void);
+extern void FUN_L00_002656c0(void);
+extern void FUN_L00_001f9838(s32);
+extern void FUN_L00_002039a0(void);
+extern void FUN_00122330(void *, s16, s32, s32, s32, s32, s32, s32);
+extern void FUN_00122658(void *, s32);
+extern void FUN_00120558(s32, s32);
+extern void FUN_L00_001eb078(s32, s32);
+extern void FUN_L00_001ff008(void);
+
+void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
+    u8 buffer[0x60] __attribute__((aligned(16)));
+    s32 source, destination, count, second_count, pal;
+
+    D_0013E5BB |= 8;
+    FUN_00118a80(0);
+    FUN_L00_0028e048();
+    FUN_L00_002656c0();
+    D_L00_0015F5D8 = 1;
+    D_L00_00161048 = sector;
+    D_L00_00161050 = language;
+    D_L00_0016104C = size;
+    FUN_L00_001f9838(4);
+    FUN_L00_002039a0();
+    D_L00_0015F5C4 = 1;
+    D_L00_00161054 = D_L00_00173E04;
+    destination = D_L00_0015F40C;
+    D_L00_00161058 = destination;
+    source = D_0015EE88;
+    pal = D_0015ED80;
+    second_count = pal != 0 ? 14 : 17;
+    count = pal != 0 ? 14 : 13;
+    for (; count != 0; count--) {
+        FUN_00122330(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
+        source += 0x10000;
+        FUN_00118a80(0);
+        FUN_00122658(buffer, destination);
+        destination += 0xc000;
+        FUN_00120558(0, 0);
+    }
+    source = D_0015EE78_gp;
+    for (; second_count != 0; second_count--) {
+        FUN_00122330(buffer, (source << 8) >> 16, 1, 0, 0, 0, 0x40, 0x40);
+        source += 0x4000;
+        FUN_00118a80(0);
+        FUN_00122658(buffer, destination);
+        destination += 0x4000;
+        FUN_00120558(0, 0);
+    }
+    if (source > 0x400000) {
+        FUN_L00_001eb078(0x1e9480, source - 0x400000);
+        FUN_L00_001ff008();
+    }
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002997c8.s", FUN_L00_002997c8);
 /* Stop sound, wait for the loader to go idle, then start the movie load. */
 /* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_0029AD18), where it is exact; names translated to the US level program. */
