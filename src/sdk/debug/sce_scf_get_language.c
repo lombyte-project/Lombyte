@@ -1,4 +1,6 @@
 #include "rnc/sdk/library/sdk_state.h"
+#include "sda.h"
+#include "types.h"
 
 extern void GetOsdConfigParam(int *config);
 extern int IsT10K(void);
@@ -20,3 +22,5 @@ int sceScfGetLanguage(void) {
     }
     return language;
 }
+
+u8 ScfLanguage DATA_AT(001330D4) = {0};

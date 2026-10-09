@@ -1,6 +1,9 @@
 #include "rnc/gameplay/entities/moby_class_tables.h"
+#include "sda.h"
 #include "types.h"
 #include "asm.h"
+#include "rnc/rendering/material_templates.h"
+#include "rnc/rendering/resident_class.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/world/data/"
@@ -124,3 +127,13 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
 extern void func_00204A40(s32 class_id, s32 buffer_index) __attribute__((alias("FUN_00204a40")));
 
 #endif /* NON_MATCHING */
+
+u64 gold_weapon_texture_state[3] DATA_AT(0019E6F0) = {0};
+
+s32 class_resource_ids[24] DATA_AT(001CBAC0) = {0};
+
+s32 compressed_class_resources[24] DATA_AT(001CBB20) = {0};
+
+char class_material_maps[24][16] DATA_AT(001CBBE0) = {0};
+
+s16 class_runtime_indices[24][16] DATA_AT(001CBD60) = {0};

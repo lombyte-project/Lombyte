@@ -1,4 +1,5 @@
+#include "sda.h"
 #include "types.h"
 #include "rnc/storage/disc_table.h"
 
-struct DiscTable disc_table __attribute__((section(".data"))) = {0};
+struct DiscTable disc_table DATA_AT(00137B80) = {0};

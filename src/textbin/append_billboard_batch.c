@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "qcopy.h"
+#include "sda.h"
 #include "rnc/rendering/billboard.h"
 
 typedef struct {
@@ -122,3 +123,5 @@ void append_billboard_batch(void) {
 }
 
 extern __typeof__(append_billboard_batch) func_001F92B0 __attribute__((alias("FUN_001f92b0")));
+
+BillboardRecord billboard_records[16] DATA_AT(0018ED00) = {0};

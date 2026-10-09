@@ -1,4 +1,5 @@
+#include "sda.h"
 #include "types.h"
 #include "rnc/runtime/resource_table.h"
 
-ResourceEntry ResourceTable[64] __attribute__((section(".data"))) = {0};
+ResourceEntry ResourceTable[64] DATA_AT(001DD1D8) = {0};

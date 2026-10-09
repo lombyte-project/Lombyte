@@ -428,13 +428,23 @@ SDATA_OVERLAYS = {
 # Typed data with no proven owning unit: src/data/<section>/<ADDR>_<name>.c,
 # placed at its retail address like the overlays above (move it into the
 # owning unit once a reference proves the owner).
-def data_units() -> list[tuple[str, int]]:
-    """(unit, retail VMA) of each file under src/data/."""
+_DATA_AT_RE = re.compile(r"\bDATA_AT\(([0-9A-F]{8})\)")
+
+def data_objects() -> list[tuple[str, int]]:
+    """(unit, retail VMA) of each object a C file pins with DATA_AT()."""
     root = ROOT / "src"
-    return [
-        (path.relative_to(root).with_suffix("").as_posix(), int(path.name.split("_", 1)[0], 16))
-        for path in sorted((root / "data").rglob("*.c"))
-    ]
+    objects = []
+    for path in sorted(root.rglob("*.c")):
+        text = path.read_text(errors="replace")
+        if "DATA_AT(" not in text:
+            continue
+        unit = path.relative_to(root).with_suffix("").as_posix()
+        objects += [(unit, int(addr, 16)) for addr in _DATA_AT_RE.findall(text)]
+    return objects
+
+def data_units() -> list[str]:
+    """Files under src/data/: data only, so they need their own build edge."""
+    return sorted({unit for unit, _ in data_objects() if unit.startswith("data/")})
 
 # —— Code ——
 
@@ -1308,7 +1318,7 @@ def build_stuff(
             print(f"ERROR: Unsupported build segment type {seg.type}")
             sys.exit(1)
 
-    for unit, _vram in data_units():
+    for unit in data_units():
         # Data only: no code, so the plain compiler route is enough.
         build(Path("build/src") / f"{unit}.c.o", [Path("..", "..", "src", f"{unit}.c")],
               "sdk-compiler")
@@ -1751,11 +1761,11 @@ def apply_retail_link_layout(config: dict[str, Any], linkerscript_path: Path):
                     f"        build/src/{unit}.c.o(.sdata);\n"
                     "    } :data_alt"
                 )
-    for unit, vram in data_units():
+    for unit, vram in data_objects():
         rodata_overlay_sections.append(
-            f"    {unit.replace('/', '.')}.data 0x{vram:X} : AT(0x{vram - 0xFF080:X}) SUBALIGN(4)\n"
+            f"    data.{vram:08X} 0x{vram:X} : AT(0x{vram - 0xFF080:X}) SUBALIGN(4)\n"
             "    {\n"
-            f"        build/src/{unit}.c.o(.data);\n"
+            f"        build/src/{unit}.c.o(.data.{vram:08X});\n"
             "    } :data_alt"
         )
     rodata_overlay = (

@@ -303,3 +303,5 @@ void initialize_level_runtime(void) {
 }
 
 extern __typeof__(initialize_level_runtime) func_00230F60 __attribute__((alias("FUN_00230f60")));
+
+char resident_indexed_textures[4096] DATA_AT(001CAAC0) = {0};

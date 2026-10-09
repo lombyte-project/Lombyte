@@ -1,4 +1,5 @@
+#include "sda.h"
 #include "types.h"
 #include "rnc/gameplay/state/item_state.h"
 
-u8 item_available[35] __attribute__((section(".data"))) = {0};
+u8 item_available[35] DATA_AT(0013D4C0) = {0};

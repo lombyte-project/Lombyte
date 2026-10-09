@@ -1,4 +1,5 @@
+#include "sda.h"
 #include "types.h"
 #include "rnc/audio/sound_read_work.h"
 
-struct StartSoundWork sound_read_work __attribute__((section(".data"))) = {0};
+struct StartSoundWork sound_read_work DATA_AT(00137B00) = {0};

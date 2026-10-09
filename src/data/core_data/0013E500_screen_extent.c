@@ -1,4 +1,5 @@
+#include "sda.h"
 #include "types.h"
 #include "rnc/rendering/screen.h"
 
-struct Screen screen_extent __attribute__((section(".data"))) = {0};
+struct Screen screen_extent DATA_AT(0013E500) = {0};

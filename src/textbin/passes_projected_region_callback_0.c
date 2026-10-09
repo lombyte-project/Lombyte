@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
+#include "sda.h"
 
 #include "types.h"
 
@@ -63,3 +64,5 @@ s32 passes_projected_region_callback_0(s32 projected_x, s32 projected_y, f32 x, 
 }
 extern __typeof__(passes_projected_region_callback_0) func_00206BD8
     __attribute__((alias("FUN_00206bd8")));
+
+s32 region_enabled DATA_AT(001A03B0) = {0};

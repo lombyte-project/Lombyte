@@ -1,4 +1,5 @@
+#include "sda.h"
 #include "types.h"
 #include "rnc/gameplay/hero.h"
 
-struct Hero hero __attribute__((section(".data"))) = {0};
+struct Hero hero DATA_AT(0013F350) = {0};

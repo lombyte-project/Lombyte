@@ -3,6 +3,7 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/ui/menus/menu_resource_stream.h"
+#include "sda.h"
 
 
 extern u8 skill_point_completed[] __asm__("D_0013D408");
@@ -298,3 +299,4 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
 
 extern s32 func_0021FDC8(struct MenuScreen *stream) __attribute__((alias("FUN_0021fdc8")));
 
+LanguageResourceOffsets menu_language_resource_offsets DATA_AT(001E87D0) = {{0, 0, 0xc, 0x24, 0x30, 0x18}};

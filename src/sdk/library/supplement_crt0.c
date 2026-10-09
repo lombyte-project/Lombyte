@@ -1,4 +1,6 @@
 #include "rnc/sdk/library/sdk_state.h"
+#include "sda.h"
+#include "types.h"
 extern int CreateSema(int *parameters) __asm__("CreateSema");
 
 void SupplementCrt0(void) __asm__("supplement_crt0");
@@ -17,3 +19,7 @@ void SupplementCrt0(void) {
     second = CreateSema(&parameters[8]);
     SecondSemaphore = second;
 }
+
+s32 FirstSemaphore DATA_AT(00130320) = {0};
+
+s32 SecondSemaphore DATA_AT(00130324) = {0};

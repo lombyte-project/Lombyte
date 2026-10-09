@@ -1,6 +1,8 @@
 #include "types.h"
 #include "rnc/ui/menus/panel_slots.h"
 #include "asm.h"
+#include "sda.h"
+#include "rnc/ui/menus/menu_system.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002196b8/FUN_002196b8.s", FUN_002196b8);
@@ -271,3 +273,5 @@ extern __typeof__(render_level_effects_and_screen_sprites) func_002196B8
     __attribute__((alias("FUN_002196b8")));
 
 #endif /* NON_MATCHING */
+
+s32 panel_slot_enabled[14] DATA_AT(001CE2C0) = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};

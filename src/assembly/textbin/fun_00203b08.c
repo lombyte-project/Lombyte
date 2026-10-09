@@ -1,5 +1,7 @@
 #include "types.h"
 #include "asm.h"
+#include "sda.h"
+#include "rnc/rendering/shrub_render_class.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00203b08/FUN_00203b08.s", FUN_00203b08);
@@ -176,3 +178,5 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
 extern __typeof__(register_shrub_render_class) func_00203B08 __attribute__((alias("FUN_00203b08")));
 
 #endif /* NON_MATCHING */
+
+s16 shrub_render_class_ids[64] DATA_AT(001D8030) = {0};

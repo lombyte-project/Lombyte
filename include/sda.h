@@ -16,8 +16,12 @@
  *                         destination register: retail's one-register
  *                         `lui $2,%hi(D)` / `lw $2,%lo(D)($2)` form. Loads only;
  *                         a store becomes a two-instruction $at macro.
+ *
+ * DATA_AT(ADDR) defines a data object at its retail address (8 upper-case hex
+ * digits, no 0x): configure.py links each one into place on its own.
  */
 #define NOT_SDA    __attribute__((section(".data")))
 #define MACRO_ADDR __attribute__((section(".sdata")))
+#define DATA_AT(addr) __attribute__((section(".data." #addr)))
 
 #endif /* LOMBYTE_SDA_H */

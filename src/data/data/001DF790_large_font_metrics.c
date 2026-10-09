@@ -1,7 +1,8 @@
+#include "sda.h"
 #include "types.h"
 #include "rnc/ui/text/font_metrics.h"
 
-u8 large_font_metrics[0x3A0] __attribute__((section(".data"))) = {
+u8 large_font_metrics[0x3A0] DATA_AT(001DF790) = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

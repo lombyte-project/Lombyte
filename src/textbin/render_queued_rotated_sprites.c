@@ -1,5 +1,6 @@
 #include "types.h"
 #include "asm.h"
+#include "sda.h"
 
 #include "types.h"
 #include "qcopy.h"
@@ -58,3 +59,5 @@ void render_queued_rotated_sprites(void) {
 }
 extern __typeof__(render_queued_rotated_sprites) func_001EE338
     __attribute__((alias("FUN_001ee338")));
+
+RotatedSpriteQueue rotated_sprite_queue DATA_AT(00189300) = {0};

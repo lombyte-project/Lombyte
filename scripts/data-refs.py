@@ -672,8 +672,8 @@ def emit_data(addr: int, elf: Path, sections: list) -> Path:
     out = ROOT / "src" / "data" / DATA_DIRS[section] / f"{addr:08X}_{name}.c"
     out.parent.mkdir(parents=True, exist_ok=True)
     dims = "".join(f"[{n}]" for n in counts)
-    out.write_text(f'#include "types.h"\n#include "{include}"\n\n'
-                   f'{elem} {name}{dims} __attribute__((section(".data"))) = {body};\n')
+    out.write_text(f'#include "types.h"\n#include "sda.h"\n#include "{include}"\n\n'
+                   f'{elem} {name}{dims} DATA_AT({addr:08X}) = {body};\n')
     return out
 
 

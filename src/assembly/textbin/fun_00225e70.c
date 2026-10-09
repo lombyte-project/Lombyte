@@ -1,6 +1,8 @@
 #include "rnc/gameplay/entities/moby_class_tables.h"
+#include "sda.h"
 #include "types.h"
 #include "asm.h"
+#include "rnc/ui/menus/item_preview/preview_animation.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00225e70/FUN_00225e70.s", FUN_00225e70);
@@ -252,3 +254,5 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
     return 0;
 }
 #endif /* NON_MATCHING */
+
+PreviewAnimationRequest active_preview_animation DATA_AT(001D6080) = {0};

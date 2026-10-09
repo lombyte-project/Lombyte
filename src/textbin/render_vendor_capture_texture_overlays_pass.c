@@ -1,5 +1,6 @@
 #include "types.h"
 #include "asm.h"
+#include "sda.h"
 
 #include "types.h"
 
@@ -92,3 +93,7 @@ void render_vendor_capture_texture_overlays_pass(s32 pass_index, f32 capture_wid
 }
 extern __typeof__(render_vendor_capture_texture_overlays_pass) func_00239328
     __attribute__((alias("FUN_00239328")));
+
+s32 vendor_flash_timers[8] DATA_AT(001E6620) = {0};
+
+s32 vendor_scroll_timers[8] DATA_AT(001E6640) = {0};
