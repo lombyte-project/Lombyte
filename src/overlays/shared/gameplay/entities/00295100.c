@@ -34,20 +34,7 @@ void FUN_L00_00297e30(void) {
     D_L00_0015F2F0 = 0;
     D_L00_0015F2F4 = 0;
 }
-/* The pad state D_0013C940 (struct PadState) as these functions read it: the stick axes, and the
-   held/pressed button words, which FUN_L00_00298f90 also tests together as one doubleword. */
-struct PadStateWords {
-    char pad0[0x100];
-    f32 analog[4];          /* 0x100: stick axes */
-    char pad110[0x1A0 - 0x110];
-    union {
-        u64 held_pressed;   /* 0x1A0: held | pressed << 32 */
-        struct {
-            s32 held;       /* 0x1A0 */
-            s32 pressed;    /* 0x1A4 */
-        } w;
-    } buttons;
-};
+#include "rnc/input/pad_state.h"
 extern struct PadStateWords D_0013C940;
 extern int D_L00_00160FF0 __attribute__((sda));
 extern int D_L00_0015F5CC;

@@ -100,16 +100,19 @@ void draw_debug_text(s32 x, s32 y, u64 color, const u8 *text) {
     *glyph_tag = (u64)(glyph_count | 0x8000) | 0x4400000000000000ULL;
 }
 #endif /* NON_MATCHING */
-/* Pending C: keep the oracle until the placed overlay bytes match. */
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f3aa0.s", FUN_L00_001f3aa0);
-#else
 #include "types.h"
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/math/vector.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/rendering/debug/debug_menu.h"
-extern u32 D_0013CAE0 NOT_SDA;
-extern s32 D_0013CB18 NOT_SDA;
+extern struct PadStateWords D_0013C940;
+/* The debug camera state sits 0x140 bytes into this block. */
+typedef struct {
+    u8 unk0[0x140];
+    DebugCameraState camera;
+} DebugCameraBlock;
+extern DebugCameraBlock D_L00_00166C80;
 extern s16 D_0013F658 NOT_SDA;
 extern void update_all_cameras(void) __asm__("FUN_001ec420");
 extern f32 FUN_001f9dc8(f32);
@@ -125,248 +128,253 @@ extern void FUN_001fa378(void *, void *, void *);
 extern void FUN_001fa2b8(void *, void *);
 extern void FUN_001fa050(void *, void *);
 extern void FUN_L00_002e6bf8(void *);
+
+static inline void copy_vector3(f32 *dst, f32 *src) {
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+}
+
+/* Flies the debug camera from the pad: the d-pad/stick moves it (along its basis in free-look mode,
+   on the ground plane otherwise), the shoulder chords yaw, pitch and roll it with eased speeds, and
+   in control mode 2 the result is copied to the camera it drives. */
 void update_debug_camera(void) __asm__("FUN_L00_001f3aa0");
 
 void update_debug_camera(void) {
-    b32 moving;
-    b32 use_euler_angles;
-    f32 cosine;
-    f32 sine;
-    f32 rotation[16] __attribute__((aligned(16)));
-    f32 temporary_basis[12] __attribute__((aligned(16)));
-    f32 combined_basis[12] __attribute__((aligned(16)));
-    moving = FALSE;
-    if ((D_0013CAE0 & 0x800) == 0) {
-        if ((g_debug_menu.update_flags & 8) != 0) {
-            update_all_cameras();
+    struct PadStateWords *pad;
+    DebugMenuState *menu;
+    int moved;
+    int free_look;
+    DebugCameraTarget *target;
+    pad = &D_0013C940;
+    moved = 0;
+    if (pad->buttons.w.held & 0x800)
+        return;
+    menu = &g_debug_menu;
+    if (menu->update_flags & 8)
+        update_all_cameras();
+    if (pad->stick_moved)
+        return;
+    free_look = D_0013F658 == 2;
+    {
+        Vec4 step;
+        if ((pad->buttons.held_pressed & 3) != 3) {
+            if (D_0013C940.buttons.w.held & 0x1000) {
+                if (free_look) {
+                    FUN_001f9bf8(&step, D_L00_00166C80.camera.basis,
+                                 g_debug_menu.movement_speed);
+                    FUN_001f9a10(D_L00_00166C80.camera.position,
+                                 D_L00_00166C80.camera.position, &step);
+                } else {
+                    D_L00_00166C80.camera.position[0] +=
+                        FUN_001f9dc8(D_L00_00166C80.camera.angles[2]) *
+                        g_debug_menu.movement_speed;
+                    D_L00_00166C80.camera.position[1] +=
+                        FUN_001f9de0(D_L00_00166C80.camera.angles[2]) *
+                        g_debug_menu.movement_speed;
+                }
+                moved = 1;
+            }
+            if (D_0013C940.buttons.w.held & 0x4000) {
+                if (free_look) {
+                    FUN_001f9bf8(&step, D_L00_00166C80.camera.basis,
+                                 g_debug_menu.movement_speed);
+                    FUN_001f9a28(D_L00_00166C80.camera.position,
+                                 D_L00_00166C80.camera.position, &step);
+                } else {
+                    D_L00_00166C80.camera.position[0] -=
+                        FUN_001f9dc8(D_L00_00166C80.camera.angles[2]) *
+                        g_debug_menu.movement_speed;
+                    D_L00_00166C80.camera.position[1] -=
+                        FUN_001f9de0(D_L00_00166C80.camera.angles[2]) *
+                        g_debug_menu.movement_speed;
+                }
+                moved = 1;
+            }
+            if (D_0013C940.buttons.w.held & 1) {
+                if (free_look) {
+                    FUN_001f9bf8(&step, D_L00_00166C80.camera.basis + 4,
+                                 g_debug_menu.movement_speed);
+                    FUN_001f9a10(D_L00_00166C80.camera.position,
+                                 D_L00_00166C80.camera.position, &step);
+                } else {
+                    D_L00_00166C80.camera.position[0] -=
+                        FUN_001f9de0(D_L00_00166C80.camera.angles[2]) *
+                        g_debug_menu.movement_speed;
+                    D_L00_00166C80.camera.position[1] +=
+                        FUN_001f9dc8(D_L00_00166C80.camera.angles[2]) *
+                        g_debug_menu.movement_speed;
+                }
+                moved = 1;
+            }
+            if (D_0013C940.buttons.w.held & 2) {
+                if (free_look) {
+                    FUN_001f9bf8(&step, D_L00_00166C80.camera.basis + 4,
+                                 g_debug_menu.movement_speed);
+                    FUN_001f9a28(D_L00_00166C80.camera.position,
+                                 D_L00_00166C80.camera.position, &step);
+                } else {
+                    D_L00_00166C80.camera.position[0] +=
+                        FUN_001f9de0(D_L00_00166C80.camera.angles[2]) *
+                        g_debug_menu.movement_speed;
+                    D_L00_00166C80.camera.position[1] -=
+                        FUN_001f9dc8(D_L00_00166C80.camera.angles[2]) *
+                        g_debug_menu.movement_speed;
+                }
+                moved = 1;
+            }
         }
-        if (D_0013CB18 == 0) {
-            use_euler_angles = D_0013F658 != 2;
-            if ((D_0013CAE0 & 3) != 3) {
-                if ((D_0013CAE0 & 0x1000) != 0) {
-                    if (use_euler_angles) {
-                        cosine = (float)FUN_001f9dc8(g_debug_camera.angles[2]);
-                        g_debug_camera.position[0] =
-                            g_debug_camera.position[0] + cosine * g_debug_menu.movement_speed;
-                        cosine = (float)FUN_001f9de0(g_debug_camera.angles[2]);
-                        g_debug_camera.position[1] =
-                            g_debug_camera.position[1] + cosine * g_debug_menu.movement_speed;
-                    } else {
-                        FUN_001f9bf8(rotation, g_debug_camera.basis, g_debug_menu.movement_speed);
-                        FUN_001f9a10(g_debug_camera.position, g_debug_camera.position, rotation);
-                    }
-                    moving = TRUE;
-                }
-                if ((D_0013CAE0 & 0x4000) != 0) {
-                    if (use_euler_angles) {
-                        cosine = (float)FUN_001f9dc8(g_debug_camera.angles[2]);
-                        g_debug_camera.position[0] =
-                            g_debug_camera.position[0] - cosine * g_debug_menu.movement_speed;
-                        cosine = (float)FUN_001f9de0(g_debug_camera.angles[2]);
-                        g_debug_camera.position[1] =
-                            g_debug_camera.position[1] - cosine * g_debug_menu.movement_speed;
-                    } else {
-                        FUN_001f9bf8(rotation, g_debug_camera.basis, g_debug_menu.movement_speed);
-                        FUN_001f9a28(g_debug_camera.position, g_debug_camera.position, rotation);
-                    }
-                    moving = TRUE;
-                }
-                if ((D_0013CAE0 & 1) != 0) {
-                    if (use_euler_angles) {
-                        cosine = (float)FUN_001f9de0(g_debug_camera.angles[2]);
-                        g_debug_camera.position[0] =
-                            g_debug_camera.position[0] - cosine * g_debug_menu.movement_speed;
-                        cosine = (float)FUN_001f9dc8(g_debug_camera.angles[2]);
-                        g_debug_camera.position[1] =
-                            g_debug_camera.position[1] + cosine * g_debug_menu.movement_speed;
-                    } else {
-                        FUN_001f9bf8(rotation, g_debug_camera.basis + 4,
-                                     g_debug_menu.movement_speed);
-                        FUN_001f9a10(g_debug_camera.position, g_debug_camera.position, rotation);
-                    }
-                    moving = TRUE;
-                }
-                if ((D_0013CAE0 & 2) != 0) {
-                    if (use_euler_angles) {
-                        cosine = (float)FUN_001f9de0(g_debug_camera.angles[2]);
-                        g_debug_camera.position[0] =
-                            g_debug_camera.position[0] + cosine * g_debug_menu.movement_speed;
-                        cosine = (float)FUN_001f9dc8(g_debug_camera.angles[2]);
-                        g_debug_camera.position[1] =
-                            g_debug_camera.position[1] - cosine * g_debug_menu.movement_speed;
-                        moving = TRUE;
-                    } else {
-                        FUN_001f9bf8(rotation, g_debug_camera.basis + 4,
-                                     g_debug_menu.movement_speed);
-                        FUN_001f9a28(g_debug_camera.position, g_debug_camera.position, rotation);
-                        moving = TRUE;
-                    }
-                }
-            }
-            if (moving) {
-                g_debug_menu.movement_speed = g_debug_menu.movement_speed + 0.004f;
-                if (0.3f < g_debug_menu.movement_speed) {
-                    g_debug_menu.movement_speed = 0.3f;
-                }
+        if (moved) {
+            g_debug_menu.movement_speed += 0.004f;
+            if (g_debug_menu.movement_speed > 0.3f)
+                g_debug_menu.movement_speed = 0.3f;
+        } else {
+            g_debug_menu.movement_speed *= 0.5f;
+            if (g_debug_menu.movement_speed < 0.004f)
+                g_debug_menu.movement_speed = 0;
+        }
+
+        if (!(free_look && (D_0013C940.buttons.held_pressed & 3) == 3) &&
+            (D_0013C940.buttons.w.held & 0xA000)) {
+            if (D_0013C940.buttons.w.held & 0x8000)
+                g_debug_menu.yaw_speed -= 0.002f;
+            else
+                g_debug_menu.yaw_speed += 0.002f;
+            if (g_debug_menu.yaw_speed > 0.04f)
+                g_debug_menu.yaw_speed = 0.04f;
+            else if (g_debug_menu.yaw_speed < -0.04f)
+                g_debug_menu.yaw_speed = -0.04f;
+            if (free_look) {
+                Vec4 r[4];
+                Vec4 m[4];
+                float sine = FUN_001f9de0(g_debug_menu.yaw_speed);
+                float cosine = FUN_001f9dc8(g_debug_menu.yaw_speed);
+                FUN_001f9fc8(r);
+                r[0].f[1] = -sine;
+                r[1].f[0] = sine;
+                r[0].f[0] = cosine;
+                r[1].f[1] = cosine;
+                FUN_001fa298(m, D_L00_00166C80.camera.basis);
+                FUN_001fa378(m, m, r);
+                FUN_001fa2b8(D_L00_00166C80.camera.basis, m);
             } else {
-                g_debug_menu.movement_speed = g_debug_menu.movement_speed * 0.5f;
-                if (g_debug_menu.movement_speed < 0.004f) {
-                    g_debug_menu.movement_speed = 0.0f;
-                }
+                D_L00_00166C80.camera.angles[2] = fast_subtract_rotations(
+                    D_L00_00166C80.camera.angles[2], g_debug_menu.yaw_speed);
             }
-            if (((use_euler_angles) || ((D_0013CAE0 & 3) != 3)) && ((D_0013CAE0 & 0xa000) != 0)) {
-                if ((D_0013CAE0 & 0x8000) == 0) {
-                    g_debug_menu.yaw_speed = g_debug_menu.yaw_speed + 0.002f;
-                } else {
-                    g_debug_menu.yaw_speed = g_debug_menu.yaw_speed - 0.002f;
-                }
-                if (g_debug_menu.yaw_speed <= 0.04f) {
-                    if (g_debug_menu.yaw_speed < -0.04f) {
-                        g_debug_menu.yaw_speed = -0.04f;
-                    }
-                } else {
-                    g_debug_menu.yaw_speed = 0.04f;
-                }
-                if (use_euler_angles) {
-                    g_debug_camera.angles[2] =
-                        fast_subtract_rotations(g_debug_camera.angles[2], g_debug_menu.yaw_speed);
-                } else {
-                    cosine = (float)FUN_001f9de0(g_debug_menu.yaw_speed);
-                    sine = (float)FUN_001f9dc8(g_debug_menu.yaw_speed);
-                    FUN_001f9fc8(rotation + 4);
-                    rotation[5] = -cosine;
-                    rotation[4] = sine;
-                    rotation[8] = cosine;
-                    rotation[9] = sine;
-                    FUN_001fa298(temporary_basis, g_debug_camera.basis);
-                    FUN_001fa378(temporary_basis, temporary_basis, rotation + 4);
-                    FUN_001fa2b8(g_debug_camera.basis, temporary_basis);
-                }
-            } else {
-                g_debug_menu.yaw_speed = g_debug_menu.yaw_speed / 1.5f;
-                cosine = (float)FUN_001f99c0(g_debug_menu.yaw_speed);
-                if (cosine < 0.002f) {
-                    g_debug_menu.yaw_speed = 0.0f;
-                }
-            }
-            if (((D_0013CAE0 & 3) == 3) && ((D_0013CAE0 & 0x5000) != 0)) {
-                if ((D_0013CAE0 & 0x1000) == 0) {
-                    g_debug_menu.pitch_speed = g_debug_menu.pitch_speed + 0.002f;
-                } else {
-                    g_debug_menu.pitch_speed = g_debug_menu.pitch_speed - 0.002f;
-                }
-                if (g_debug_menu.pitch_speed <= 0.04f) {
-                    if (g_debug_menu.pitch_speed < -0.04f) {
-                        g_debug_menu.pitch_speed = -0.04f;
-                    }
-                } else {
-                    g_debug_menu.pitch_speed = 0.04f;
-                }
-                if (use_euler_angles) {
-                    g_debug_camera.angles[1] =
-                        fast_subtract_rotations(g_debug_camera.angles[1], g_debug_menu.pitch_speed);
-                } else {
-                    cosine = (float)FUN_001f9de0(g_debug_menu.pitch_speed);
-                    sine = (float)FUN_001f9dc8(g_debug_menu.pitch_speed);
-                    FUN_001f9fc8(rotation);
-                    rotation[8] = -cosine;
-                    rotation[0] = sine;
-                    rotation[2] = cosine;
-                    rotation[10] = sine;
-                    FUN_001fa298(temporary_basis, g_debug_camera.basis);
-                    FUN_001fa378(temporary_basis, temporary_basis, rotation);
-                    FUN_001fa2b8(g_debug_camera.basis, temporary_basis);
-                }
-            } else {
-                g_debug_menu.pitch_speed = g_debug_menu.pitch_speed / 1.5f;
-                cosine = (float)FUN_001f99c0(g_debug_menu.pitch_speed);
-                if (cosine < 0.002f) {
-                    g_debug_menu.pitch_speed = 0.0f;
-                }
-            }
-            if (((use_euler_angles) || ((D_0013CAE0 & 3) != 3)) || ((D_0013CAE0 & 0xa000) == 0)) {
-                g_debug_menu.roll_speed = g_debug_menu.roll_speed / 1.5f;
-                cosine = (float)FUN_001f99c0(g_debug_menu.roll_speed);
-                if (cosine < 0.002f) {
-                    g_debug_menu.roll_speed = 0.0f;
-                }
-            } else {
-                if ((D_0013CAE0 & 0x8000) == 0) {
-                    g_debug_menu.roll_speed = g_debug_menu.roll_speed + 0.002f;
-                } else {
-                    g_debug_menu.roll_speed = g_debug_menu.roll_speed - 0.002f;
-                }
-                if (g_debug_menu.roll_speed <= 0.04f) {
-                    if (g_debug_menu.roll_speed < -0.04f) {
-                        g_debug_menu.roll_speed = -0.04f;
-                    }
-                } else {
-                    g_debug_menu.roll_speed = 0.04f;
-                }
-                cosine = (float)FUN_001f9de0(g_debug_menu.roll_speed);
-                sine = (float)FUN_001f9dc8(g_debug_menu.roll_speed);
-                FUN_001f9fc8(rotation);
-                rotation[6] = -cosine;
-                rotation[5] = sine;
-                rotation[9] = cosine;
-                rotation[10] = sine;
-                FUN_001fa298(temporary_basis, g_debug_camera.basis);
-                FUN_001fa378(combined_basis, temporary_basis, rotation);
-                FUN_001fa2b8(g_debug_camera.basis, combined_basis);
-            }
-            if ((D_0013CAE0 & 0xc) == 0) {
-                g_debug_menu.vertical_speed = g_debug_menu.vertical_speed * 0.5f;
-                if (g_debug_menu.vertical_speed < 0.004f) {
-                    g_debug_menu.vertical_speed = 0.0f;
-                }
-            } else {
-                if ((D_0013CAE0 & 8) == 0) {
-                    cosine = -0.3f;
-                    g_debug_menu.vertical_speed = g_debug_menu.vertical_speed - 0.004f;
-                    moving = g_debug_menu.vertical_speed < -0.3f;
-                } else {
-                    cosine = 0.3f;
-                    g_debug_menu.vertical_speed = g_debug_menu.vertical_speed + 0.004f;
-                    moving = 0.3f < g_debug_menu.vertical_speed;
-                }
-                if (moving) {
-                    g_debug_menu.vertical_speed = cosine;
-                }
-            }
-            if (use_euler_angles) {
-                g_debug_camera.position[2] =
-                    g_debug_camera.position[2] + g_debug_menu.vertical_speed;
-                FUN_001fa050(rotation, g_debug_camera.angles);
-                FUN_001f9bf8(rotation, rotation, 1.0f);
-                FUN_001f9bf8(rotation + 4, rotation + 4, 1.0f);
-                FUN_001f9bf8(rotation + 8, rotation + 8, 1.0f);
-                FUN_001fa2b8(g_debug_camera.basis, rotation);
-            } else {
-                FUN_001f9bf8(rotation, g_debug_camera.basis + 8, g_debug_menu.vertical_speed);
-                FUN_001f9a10(g_debug_camera.position, g_debug_camera.position, rotation);
-            }
-            if (g_debug_menu.control_mode == 2 && g_debug_camera.target != NULL) {
-                qcopy(g_debug_camera.target->position, g_debug_camera.position);
-                qcopy(g_debug_camera.target->basis, g_debug_camera.basis);
-                qcopy(g_debug_camera.target->basis + 4, g_debug_camera.basis + 4);
-                qcopy(g_debug_camera.target->basis + 8, g_debug_camera.basis + 8);
-                qcopy(g_debug_camera.target->previous_basis, g_debug_camera.basis);
-                g_debug_camera.target->camera_position[0] = g_debug_camera.position[0];
-                g_debug_camera.target->camera_position[1] = g_debug_camera.position[1];
-                g_debug_camera.target->camera_position[2] = g_debug_camera.position[2];
-                FUN_L00_002e6bf8(g_debug_camera.target);
-            }
+        } else {
+            g_debug_menu.yaw_speed = g_debug_menu.yaw_speed / 1.5f;
+            if (FUN_001f99c0(g_debug_menu.yaw_speed) < 0.002f)
+                g_debug_menu.yaw_speed = 0;
         }
     }
+    if ((D_0013C940.buttons.held_pressed & 3) == 3 &&
+        (D_0013C940.buttons.held_pressed & 0x5000)) {
+        if (D_0013C940.buttons.w.held & 0x1000)
+            g_debug_menu.pitch_speed -= 0.002f;
+        else
+            g_debug_menu.pitch_speed += 0.002f;
+        if (g_debug_menu.pitch_speed > 0.04f)
+            g_debug_menu.pitch_speed = 0.04f;
+        else if (g_debug_menu.pitch_speed < -0.04f)
+            g_debug_menu.pitch_speed = -0.04f;
+        if (free_look) {
+            Vec4 r[4];
+            Vec4 m[4];
+            float sine = FUN_001f9de0(g_debug_menu.pitch_speed);
+            float cosine = FUN_001f9dc8(g_debug_menu.pitch_speed);
+            FUN_001f9fc8(r);
+            r[0].f[0] = cosine;
+            r[0].f[2] = sine;
+            r[2].f[0] = -sine;
+            r[2].f[2] = cosine;
+            FUN_001fa298(m, D_L00_00166C80.camera.basis);
+            FUN_001fa378(m, m, r);
+            FUN_001fa2b8(D_L00_00166C80.camera.basis, m);
+        } else {
+            D_L00_00166C80.camera.angles[1] = fast_subtract_rotations(
+                D_L00_00166C80.camera.angles[1], g_debug_menu.pitch_speed);
+        }
+    } else {
+        g_debug_menu.pitch_speed = g_debug_menu.pitch_speed / 1.5f;
+        if (FUN_001f99c0(g_debug_menu.pitch_speed) < 0.002f)
+            g_debug_menu.pitch_speed = 0;
+    }
+
+    if (free_look && (D_0013C940.buttons.held_pressed & 3) == 3 &&
+        (D_0013C940.buttons.held_pressed & 0xA000)) {
+        if (D_0013C940.buttons.w.held & 0x8000)
+            g_debug_menu.roll_speed -= 0.002f;
+        else
+            g_debug_menu.roll_speed += 0.002f;
+        if (g_debug_menu.roll_speed > 0.04f)
+            g_debug_menu.roll_speed = 0.04f;
+        else if (g_debug_menu.roll_speed < -0.04f)
+            g_debug_menu.roll_speed = -0.04f;
+        {
+            Vec4 r[4];
+            Vec4 m[4];
+            Vec4 n[4];
+            float sine = FUN_001f9de0(g_debug_menu.roll_speed);
+            float cosine = FUN_001f9dc8(g_debug_menu.roll_speed);
+            FUN_001f9fc8(r);
+            r[1].f[1] = cosine;
+            r[1].f[2] = -sine;
+            r[2].f[1] = sine;
+            r[2].f[2] = cosine;
+            FUN_001fa298(m, D_L00_00166C80.camera.basis);
+            FUN_001fa378(n, m, r);
+            FUN_001fa2b8(D_L00_00166C80.camera.basis, n);
+        }
+    } else {
+        g_debug_menu.roll_speed = g_debug_menu.roll_speed / 1.5f;
+        if (FUN_001f99c0(g_debug_menu.roll_speed) < 0.002f)
+            g_debug_menu.roll_speed = 0;
+    }
+
+    if (D_0013C940.buttons.held_pressed & 0xC) {
+        if (D_0013C940.buttons.w.held & 8) {
+            g_debug_menu.vertical_speed += 0.004f;
+            if (g_debug_menu.vertical_speed > 0.3f)
+                g_debug_menu.vertical_speed = 0.3f;
+        } else {
+            g_debug_menu.vertical_speed -= 0.004f;
+            if (g_debug_menu.vertical_speed < -0.3f)
+                g_debug_menu.vertical_speed = -0.3f;
+        }
+    } else {
+        g_debug_menu.vertical_speed *= 0.5f;
+        if (g_debug_menu.vertical_speed < 0.004f)
+            g_debug_menu.vertical_speed = 0;
+    }
+    {
+        Vec4 r[3];
+        if (free_look) {
+            FUN_001f9bf8(&r[0], D_L00_00166C80.camera.basis + 8, g_debug_menu.vertical_speed);
+            FUN_001f9a10(D_L00_00166C80.camera.position, D_L00_00166C80.camera.position,
+                         &r[0]);
+        } else {
+            D_L00_00166C80.camera.position[2] += g_debug_menu.vertical_speed;
+        }
+        if (!free_look) {
+            FUN_001fa050(r, D_L00_00166C80.camera.angles);
+            FUN_001f9bf8(&r[0], &r[0], 1.0f);
+            FUN_001f9bf8(&r[1], &r[1], 1.0f);
+            FUN_001f9bf8(&r[2], &r[2], 1.0f);
+            FUN_001fa2b8(D_L00_00166C80.camera.basis, r);
+        }
+    }
+    if (g_debug_menu.control_mode == 2 && D_L00_00166C80.camera.target != 0) {
+        target = D_L00_00166C80.camera.target;
+        qcopy(target->position, D_L00_00166C80.camera.position);
+        qcopy(target->basis, D_L00_00166C80.camera.basis);
+        qcopy(target->basis + 4, D_L00_00166C80.camera.basis + 4);
+        qcopy(target->basis + 8, D_L00_00166C80.camera.basis + 8);
+        qcopy(target->previous_basis, D_L00_00166C80.camera.basis);
+        copy_vector3(target->camera_position, D_L00_00166C80.camera.position);
+        FUN_L00_002e6bf8(D_L00_00166C80.camera.target);
+    }
 }
-#endif /* NON_MATCHING */
 #include "qcopy.h"
-typedef struct {
-    u8 p[0x140];
-    f32 x, y, z;
-    u8 p14c[0xC];
-    f32 x158;
-} A001f4490;
 typedef struct {
     u8 p[0x84];
     f32 x84, x88, x8c, x90;
@@ -379,7 +387,6 @@ typedef struct {
     u8 p9c[0x2080 - 0x9C];
     u8 *x2080;
 } C001f4490;
-extern A001f4490 D_L00_00166C80;
 extern B001f4490 D_L00_0016C058;
 extern C001f4490 D_0013F350;
 f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -389,17 +396,17 @@ void FUN_001fa050(void *, void *);
 void FUN_001f9838(void *, void *, s32);
 void FUN_L00_00250df8(void *);
 void FUN_L00_001f4490(void) {
-    A001f4490 *a = &D_L00_00166C80;
+    DebugCameraBlock *a = &D_L00_00166C80;
     B001f4490 *b = &D_L00_0016C058;
     C001f4490 *c;
     u8 *d;
-    f32 ang = fast_add_rotations(a->x158, b->x88);
+    f32 ang = fast_add_rotations(a->camera.angles[2], b->x88);
     f32 s = FUN_001f9dc8(ang);
     c = &D_0013F350;
-    c->x80 = a->x + s * b->x8c;
-    c->x84 = a->y + FUN_001f9de0(ang) * b->x8c;
-    c->x88 = a->z + b->x90;
-    c->x98 = fast_add_rotations(a->x158, b->x84);
+    c->x80 = a->camera.position[0] + s * b->x8c;
+    c->x84 = a->camera.position[1] + FUN_001f9de0(ang) * b->x8c;
+    c->x88 = a->camera.position[2] + b->x90;
+    c->x98 = fast_add_rotations(a->camera.angles[2], b->x84);
     FUN_001fa050(c, c->x90);
     d = c->x2080;
     qcopy(d + 0x10, &c->x80);

@@ -41,4 +41,24 @@ struct PadState {
     s32 unk1DC;                         /* 0x1DC: 0x79 if the button profile is all ones, else 0; l01 picks pressure input on 0x79 */
 };
 
+/*
+ * The same pad state as some functions read it: the stick axes, and the held/pressed button words,
+ * which are also tested together as one doubleword (FUN_L00_00298f90, the debug camera's
+ * two-button chords).
+ */
+struct PadStateWords {
+    char pad0[0x100];
+    f32 analog[4];          /* 0x100: stick axes */
+    char pad110[0x1A0 - 0x110];
+    union {
+        u64 held_pressed;   /* 0x1A0: held | pressed << 32 */
+        struct {
+            s32 held;       /* 0x1A0 */
+            s32 pressed;    /* 0x1A4 */
+        } w;
+    } buttons;
+    char pad1A8[0x1D8 - 0x1A8];
+    s32 stick_moved;        /* 0x1D8: analog[2] or analog[3] nonzero */
+};
+
 #endif
