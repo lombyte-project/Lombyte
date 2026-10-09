@@ -229,7 +229,90 @@ void FUN_L06_002e9f30(struct Moby *moby) {
     mark_moby_for_removal(*(void **)(vars + 0x20C));
     *(int *)(vars + 0x20C) = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ea198.s", FUN_L06_002ea198);
+extern s32 D_L06_00161C18 __attribute__((sda));
+extern s32 D_L06_00161C1C __attribute__((sda));
+extern f32 D_L06_00161C20 __attribute__((sda));
+extern f32 D_L06_00161C24 __attribute__((sda));
+extern f32 D_L06_00161C28 __attribute__((sda));
+extern f32 D_L06_00161C2C __attribute__((sda));
+extern f32 D_L06_00161C30 __attribute__((sda));
+extern f32 D_L06_00161C34 __attribute__((sda));
+extern f32 D_L06_00161C38 __attribute__((sda));
+extern f32 D_L06_00161C3C __attribute__((sda));
+extern f32 D_L06_00161C40 __attribute__((sda));
+extern f32 D_L06_00161C44 __attribute__((sda));
+extern s32 D_L06_00161C48 __attribute__((sda));
+extern s32 D_L06_00161C4C __attribute__((sda));
+extern s32 D_L06_00161C50 __attribute__((sda));
+extern s32 D_L06_00161C54 __attribute__((sda));
+extern s32 D_L06_00161C58 __attribute__((sda));
+extern s32 D_L06_00161C5C __attribute__((sda));
+extern s32 D_L06_00161C60 __attribute__((sda));
+extern f32 D_L06_00161C64 __attribute__((sda));
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern void FUN_L00_0025f8e0(void *, float);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern float fast_cos(float);
+extern float fast_sin(float);
+extern int FUN_001f96f8(int);
+extern int FUN_001fa6e0(int, int, float);
+extern f32 scale_time(f32) __asm__("FUN_001f96b0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+
+/* Throws D_L06_00161C18 bursts of sparks from around the moby: each burst gets a random heading, speed and rise on top
+   of a push along dir, and spawns D_L06_00161C1C sparks with random sizes, colours and lifetimes. */
+void FUN_L06_002ea198(struct Moby *moby, Vec4 *dir) {
+    Vec4 pos;
+    Vec4 vel;
+    Vec4 accel;
+    int i;
+    int j;
+
+    for (i = 0; i < D_L06_00161C18; i++) {
+        float angle;
+        float speed;
+        float rise;
+        Vec4 *dst;
+        Vec4 *origin;
+        origin = &moby->pos;
+        dst = &pos;
+        qcopy_nc(dst, origin);
+        FUN_L00_0025f8e0(&pos, D_L06_00161C20);
+        pos.f[2] += 0.25f;
+        angle = random_angle_radians();
+        speed = random_float_between(D_L06_00161C2C, D_L06_00161C30);
+        rise = random_float_between(D_L06_00161C34, D_L06_00161C38);
+        scale_vector_xyz(&vel, dir, random_float_between(0.0f, D_L06_00161C64) * D_0015ED6C);
+        vel.f[0] += fast_cos(angle) * (speed * D_0015ED6C);
+        vel.f[1] += fast_sin(angle) * (speed * D_0015ED6C);
+        vel.f[2] += rise * D_0015ED6C;
+        qcopy(&accel, &vel);
+        accel.f[2] -= D_L06_00161C3C * D_0015ED70 * (float)FUN_001f96f8(D_L06_00161C5C);
+        for (j = 0; j < D_L06_00161C1C; j++) {
+            float size = random_float_between(0.5f, 1.5f);
+            int color0;
+            int color1;
+            int life;
+            int fade;
+            float n;
+            vel.f[3] = size * D_L06_00161C40;
+            accel.f[3] = size * D_L06_00161C44;
+            FUN_L00_0025f8e0(&pos, D_L06_00161C24);
+            FUN_L00_0025f8e0(&accel, D_L06_00161C28 * D_0015ED6C);
+            color0 = FUN_001fa6e0(D_L06_00161C48, D_L06_00161C50, random_float_between(0.0f, 1.0f));
+            color1 = FUN_001fa6e0(D_L06_00161C4C, D_L06_00161C54, random_float_between(0.0f, 1.0f));
+            life = FUN_001f96f8(D_L06_00161C58);
+            fade = FUN_001f96f8(D_L06_00161C5C);
+            n = (float)D_L06_00161C60;
+            spawn_spark(&pos, &vel, &accel, color0, color1, life, fade,
+                        truncate_float_to_s32(scale_time(random_float_between(n * 0.5f, n * 2.5f))), -1);
+        }
+    }
+}
 /* burst of 20 sparks around a point with random velocity and colour */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EB8C8), where it is exact; names translated to the US level program. */
 
