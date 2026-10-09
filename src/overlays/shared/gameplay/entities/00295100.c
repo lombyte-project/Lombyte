@@ -4,6 +4,9 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/storage/disc_table.h"
+#include "rnc/math/vector.h"
+#include "rnc/input/pad_state.h"
+#include "rnc/rendering/debug/debug_menu.h"
 
 #define NOT_SDA
 
@@ -31,13 +34,21 @@ void FUN_L00_00297e30(void) {
     D_L00_0015F2F0 = 0;
     D_L00_0015F2F4 = 0;
 }
-struct P {
-    char pad[0x100];
-    float a, b, c, d;
-    char pad2[0x1A0 - 0x110];
-    int busy;
+/* The pad state D_0013C940 (struct PadState) as these functions read it: the stick axes, and the
+   held/pressed button words, which FUN_L00_00298f90 also tests together as one doubleword. */
+struct PadStateWords {
+    char pad0[0x100];
+    f32 analog[4];          /* 0x100: stick axes */
+    char pad110[0x1A0 - 0x110];
+    union {
+        u64 held_pressed;   /* 0x1A0: held | pressed << 32 */
+        struct {
+            s32 held;       /* 0x1A0 */
+            s32 pressed;    /* 0x1A4 */
+        } w;
+    } buttons;
 };
-extern struct P D_0013C940;
+extern struct PadStateWords D_0013C940;
 extern int D_L00_00160FF0 __attribute__((sda));
 extern int D_L00_0015F5CC;
 extern int D_0015EEA4;
@@ -45,8 +56,8 @@ extern int D_L00_0015F598;
 extern int D_0015EE28;
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00297e70(void) {
-    if (D_0013C940.busy != 0 || D_0013C940.c != 0.0f || D_0013C940.d != 0.0f ||
-        D_0013C940.a != 0.0f || D_0013C940.b != 0.0f) {
+    if (D_0013C940.buttons.w.held != 0 || D_0013C940.analog[2] != 0.0f || D_0013C940.analog[3] != 0.0f ||
+        D_0013C940.analog[0] != 0.0f || D_0013C940.analog[1] != 0.0f) {
         D_L00_00160FF0 = 0;
     } else {
         D_L00_00160FF0++;
@@ -612,7 +623,183 @@ int FUN_L00_00298de8(void) {
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00298f90.s", FUN_L00_00298f90);
+/* Moby-sized (0x100) records used by the vendor menu. */
+typedef struct {
+    u8 pad0[0xC];
+    u8 count;            /* 0x0C */
+    u8 pad0D[0x3B];
+    s32 slots[1];        /* 0x48 */
+} VendorMobyClass;
+
+typedef struct {
+    u8 pad0[0x10];
+    Vec4 pos;            /* 0x10 */
+    u8 pad20[2];
+    u8 class_id;         /* 0x22 */
+    u8 pad23;
+    VendorMobyClass *pclass; /* 0x24 */
+    u8 pad28[0xA];
+    u16 h32;             /* 0x32 */
+    u8 pad34[0xC];
+    Vec4 rot;            /* 0x40 */
+    u8 frame;            /* 0x50 */
+    u8 next_frame;       /* 0x51 */
+    u8 pad52;
+    u8 b53;              /* 0x53 */
+    f32 blend;           /* 0x54 */
+    f32 f58;             /* 0x58 */
+    u8 pad5C[0x14];
+    u8 b70;              /* 0x70 */
+    u8 b71;              /* 0x71 */
+    u8 pad72[6];
+    Vec4 *keys;          /* 0x78 */
+    u8 pad7C[3];
+    u8 b7F;              /* 0x7F */
+    u8 pad80[0x26];
+    s16 oclass;          /* 0xA6 */
+    u8 padA8[0x18];
+    Vec4 mtx[4];         /* 0xC0 */
+} VendorMoby;
+
+typedef struct { f32 pos[3]; u8 flag; u8 padD[3]; f32 rot[4]; } CutsceneCameraKey;
+typedef struct {
+    char pad0[0x34];
+    s32 f34;
+    s32 f38;
+    s32 f3C;
+    s16 h40;
+    s16 pad42;
+    s16 h44;
+    s16 pad46;
+    s16 h48;            /* 0x48: frame at which FUN_00215b10 runs */
+    char pad4A[0xA];
+    CutsceneCameraKey *f54;
+    char pad58[0x120];
+    VendorMoby *f178[1];
+} VendorCutscene;
+
+extern u32 D_0013CAE4 __attribute__((section(".data")));
+extern f32 fade_level __asm__("D_L00_0015F3FC");
+extern VendorCutscene D_L00_0016C860;
+extern s32 D_0015EEA0;
+extern s32 D_0015EED8;
+extern void FUN_L00_0023e268(void);
+extern void FUN_00212e28(void);
+extern void FUN_00215b10(void);
+extern s32 FUN_002168a8(s32);
+extern void FUN_00204790(void);
+extern void FUN_L00_002451b8(s32);
+extern void FUN_0020c880(void *);
+extern f32 FUN_001fa6c0(s32);
+extern void FUN_001f9a68(void *, void *, f32);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_L00_00250df8(void *);
+extern void FUN_00213700(void *);
+extern void FUN_L00_00234b38(void *);
+extern void FUN_L00_00207430(void *);
+
+/* Per-frame update while the cutscene in D_L00_0016C860 plays: runs the debug-gated subsystem
+   updates, fades, advances the frame counters and either finishes the cutscene (end frame
+   reached or skipped) or steps each of its mobys between two keyframes. */
+void FUN_L00_00298f90(void) {
+    VendorCutscene *cs;
+    VendorMoby *m;
+    s32 done;
+    s32 last;
+    s32 i;
+    s32 id;
+    s32 lim;
+    Vec4 *keys;
+    f32 fade;
+    f32 a[4] __attribute__((aligned(16)));
+    f32 b[4] __attribute__((aligned(16)));
+
+    if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        FUN_L00_00297e30();
+    }
+    if (!(g_debug_menu.update_flags & 0x10) || (D_0013CAE4 & 0x220)) {
+        FUN_L00_0023e268();
+    }
+    if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        FUN_00212e28();
+        enqueue_voice_request();
+    }
+    FUN_001e93e8(D_L00_00160FF8, 3);
+    if ((g_debug_menu.update_flags & 1) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        FUN_L00_002070d0();
+    }
+    FUN_001e93e8(D_L00_00161008, 7);
+    if ((g_debug_menu.update_flags & 4) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        FUN_00217b88();
+    }
+    FUN_001e93e8(D_L00_00161018, 5);
+    cs = &D_L00_0016C860;
+    fade = fade_level - 0.34f;
+    cs->f34++;
+    cs->f38++;
+    fade_level = fade;
+    if (fade_level < 0.0f) {
+        fade_level = 0.0f;
+    }
+    if (cs->f34 >= cs->h48) {
+        FUN_00215b10();
+    }
+    done = cs->f34 >= cs->h40;
+    if (cs->f34 >= scale_game_frames(0x12) && fade_level == 0.0f) {
+
+        if ((D_0015EEA0 || D_0015EE20 || D_0015EED8 || current_level_index <= 0) && (D_0013C940.buttons.w.pressed & 0x800)) {
+            done = 1;
+        } else if ((D_0013C940.buttons.held_pressed & 0x8000000000FUL) == 0x8000000000FUL) {
+            done = 1;
+        }
+    }
+    if (done) {
+        FUN_L00_00298b18();
+    } else {
+        lim = pal_mode ? 0x50 : 0x60;
+        if (D_L00_0016C860.f38 >= lim) {
+            FUN_002168a8(1);
+            D_L00_0016C860.f3C++;
+            FUN_00204790();
+            FUN_L00_002451b8(D_L00_0016C860.f3C + 1);
+        }
+        last = FUN_L00_00298de8();
+        for (i = 0; i < D_L00_0016C860.h44; i++) {
+            m = D_L00_0016C860.f178[i];
+            id = D_L00_0016C860.f38 >> 1;
+            m->frame = id;
+            m->next_frame = id + 1;
+            FUN_0020c880(m);
+            m->blend = FUN_001fa6c0(D_L00_0016C860.f38 & 1) * 0.5f;
+            if (last && (D_L00_0016C860.f38 & 1)) {
+                m->blend = 1.0f;
+            }
+            keys = m->keys;
+            FUN_001f9a68(a, &keys[m->frame], 1.0f - m->blend);
+            FUN_001f9a68(b, &keys[m->next_frame], m->blend);
+            FUN_001f9a10(&m->pos, a, b);
+            m->b71 = 0xFF;
+            FUN_L00_00250df8(m);
+            if (m->b7F) {
+                FUN_00213700(m);
+            }
+            if (m->oclass == 0) {
+                FUN_L00_00234b38(m);
+            }
+            if (m->oclass == 10 || m->oclass == 0x1A3 || m->oclass == 0x555) {
+                FUN_L00_00207430(m);
+            }
+        }
+    }
+    FUN_001e93e8(D_L00_00161028, 8);
+    sound_update();
+    FUN_001e93e8(D_L00_00161038, 6);
+    update_all_point_lights();
+    FUN_0020cfd0();
+    if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        FUN_L00_00297e70();
+    }
+}
 typedef struct {
     s32 a, b;
 } P2;
@@ -837,7 +1024,6 @@ void FUN_L00_0029ab70(int a) {
     f12dc80_29ab70();
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ad08.s", FUN_L00_0029ad08);
-#include "rnc/math/vector.h"
 extern int D_L00_0015F5D8;
 extern int D_L00_0015F5C4;
 extern unsigned char D_001413F5[];
@@ -1062,51 +1248,12 @@ void FUN_L00_0029b680(void) {
 #undef P
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ba78.s", FUN_L00_0029ba78);
 #include "rnc/gameplay/hero.h"
-#include "rnc/rendering/debug/debug_menu.h"
-#include "rnc/input/pad_state.h"
 
 /* FUN_L00_0029c648 - Level-00 shared: vendor menu update. Dispatches on the
  * menu state vendor_menu.state (0 = opening, 1 = open, 2 = closing, 3 = exit
  * cutscene). The item list itself (D_L00_001CA4C0) is shared with the
  * buy/consume half FUN_L00_0029ba78, which this function calls every frame. */
 
-/* Moby-sized (0x100) records used by the vendor menu. */
-typedef struct {
-    u8 pad0[0xC];
-    u8 count;            /* 0x0C */
-    u8 pad0D[0x3B];
-    s32 slots[1];        /* 0x48 */
-} VendorMobyClass;
-
-typedef struct {
-    u8 pad0[0x10];
-    Vec4 pos;            /* 0x10 */
-    u8 pad20[2];
-    u8 class_id;         /* 0x22 */
-    u8 pad23;
-    VendorMobyClass *pclass; /* 0x24 */
-    u8 pad28[0xA];
-    u16 h32;             /* 0x32 */
-    u8 pad34[0xC];
-    Vec4 rot;            /* 0x40 */
-    u8 frame;            /* 0x50 */
-    u8 next_frame;       /* 0x51 */
-    u8 pad52;
-    u8 b53;              /* 0x53 */
-    f32 blend;           /* 0x54 */
-    f32 f58;             /* 0x58 */
-    u8 pad5C[0x14];
-    u8 b70;              /* 0x70 */
-    u8 b71;              /* 0x71 */
-    u8 pad72[6];
-    Vec4 *keys;          /* 0x78 */
-    u8 pad7C[3];
-    u8 b7F;              /* 0x7F */
-    u8 pad80[0x26];
-    s16 oclass;          /* 0xA6 */
-    u8 padA8[0x18];
-    Vec4 mtx[4];         /* 0xC0 */
-} VendorMoby;
 
 typedef struct { s32 fD0; s32 fD4; s32 fD8; char pad[0x14 - 0xC]; } VendorItem;
 
@@ -1144,21 +1291,7 @@ typedef struct { char pad[0x10]; s32 sound; } VendorItemSound;
 typedef struct { char pad0[0x10]; f32 f10; f32 f14; char pad18[8]; Vec4 v20; char pad30[0x10]; } VendorItemSlot40;
 typedef struct { f32 f0; f32 f4; f32 f8; char padC[4]; f32 f10; f32 f14; char pad18[8]; Vec4 v20; } VendorItemSlot30;
 typedef struct { char pad0; u8 b1; char pad2[0x3E]; } VendorRow;
-typedef struct { f32 pos[3]; u8 flag; u8 padD[3]; f32 rot[4]; } CutsceneCameraKey;
 typedef struct { char pad0[0x140]; Vec4 pos; char pad150[0x200]; f32 basis[12]; } ViewCamera;
-typedef struct {
-    char pad0[0x34];
-    s32 f34;
-    s32 f38;
-    s32 f3C;
-    s16 h40;
-    s16 pad42;
-    s16 h44;
-    char pad46[0xE];
-    CutsceneCameraKey *f54;
-    char pad58[0x120];
-    VendorMoby *f178[1];
-} VendorCutscene;
 
 
 extern VendorMenu vendor_menu __asm__("D_L00_001CA4C0");
@@ -1170,14 +1303,12 @@ extern VendorItemSlot40 D_L00_001C8FF0[];
 extern VendorItemSlot30 D_L00_001C9930[];
 extern s32 D_L00_001CA020[];
 extern VendorRow D_L00_00165E80[];
-extern u32 D_0013CAE4 __attribute__((section(".data")));
 extern s16 D_001516D8[];
 extern u8 D_L00_00161128[];
 extern u8 D_L00_00161138[];
 extern u8 D_L00_00161148[];
 extern s32 D_L00_00161188;
 extern s32 D_L00_0016118C;
-extern f32 fade_level __asm__("D_L00_0015F3FC");
 extern s32 D_L00_0015F5D8;
 extern s32 D_L00_00161080 __attribute__((sda));
 extern s32 D_L00_001610A0 __attribute__((sda));
@@ -1194,7 +1325,6 @@ extern f32 D_0015ED60;
 extern s32 D_0015ED80;
 extern Vec4 D_L00_00165F80[3];
 extern void *D_L00_00197300[];
-extern VendorCutscene D_L00_0016C860;
 extern ViewCamera D_L00_00166C80;
 extern f32 D_L00_0016CAF0 __attribute__((section(".data")));
 
