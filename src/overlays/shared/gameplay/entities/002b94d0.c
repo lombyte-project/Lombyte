@@ -936,7 +936,91 @@ void FUN_L00_002bdc50(void *o) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002be078.s", FUN_L00_002be078);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002be650.s", FUN_L00_002be650);
+#else
+typedef struct {
+    OvlQuad corner[4];
+    int color[4];
+    int unk50, unk54, unk58;
+    float unk5C, unk60;
+    int unk64;
+    float unk68, unk6C;
+    long unk70, tex, unk80, unk88;
+} Q_2be650;
+extern float D_L00_001617E8[] __attribute__((section(".data")));
+extern float D_L00_00161808[] __attribute__((section(".data")));
+extern int D_L00_00161818[] __attribute__((section(".data")));
+extern u128 D_L00_001DD0A0[] __attribute__((section(".data")));
+extern u128 D_L00_001DD0D0[] __attribute__((section(".data")));
+extern OvlVec4 D_L00_001DBF20_2be650[] __asm__("D_L00_001DBF20") __attribute__((section(".data")));
+extern OvlVec4 D_0013F5E0_2be650 __asm__("D_0013F5E0");
+extern int D_L00_00161760 __attribute__((sda));
+extern int D_L00_00161764 __attribute__((sda));
+extern long tex_2be650(int) __asm__("FUN_001f44b8");
+extern int color_alpha_2be650(float) __asm__("FUN_001fa6d0");
+extern void vmul_2be650(float, void *, void *) __asm__("FUN_001f9a68");
+extern void cross_2be650(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void normalize_2be650(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void xform_2be650(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void draw_2be650(void *, void *, int) __asm__("FUN_001f7d30");
+
+void FUN_L00_002be650(void *o) {
+    Q_2be650 quad;
+    OvlVec4 scaled;
+    OvlVec4 axis;
+    OvlVec4 negativeUp;
+    OvlVec4 vertex[2];
+    volatile int color;
+    OvlVec4 * volatile vertexTarget;
+    int i, j;
+    volatile int nextIndex;
+
+    (void)o;
+    quad.tex = tex_2be650(8);
+    quad.unk88 = 0x8000000048L;
+    quad.unk80 = 0xFF9000000260L;
+    quad.unk70 = 0;
+    quad.unk50 = 0;
+    quad.unk54 = 0;
+    quad.unk58 = 0;
+    quad.unk5C = 1.0f;
+    quad.unk60 = 1.0f;
+    quad.unk64 = 0;
+    quad.unk68 = 1.0f;
+    quad.unk6C = 1.0f;
+    if (D_0013E535) {
+        color = D_L00_00161764;
+    } else {
+        color = D_L00_00161760;
+    }
+    color &= 0xFFFFFF;
+    vertexTarget = &vertex[0];
+    i = 0;
+    do {
+        nextIndex = i + 1;
+        if (D_L00_00161818[i] != 0) {
+            int c = color | (color_alpha_2be650(D_L00_001617E8[i]) << 24);
+            quad.color[0] = c;
+            quad.color[1] = c;
+            quad.color[2] = c;
+            quad.color[3] = c;
+            *vertexTarget = *(OvlVec4 *)&D_L00_001DD0A0[i];
+            scaled = *(OvlVec4 *)&D_L00_001DD0D0[i];
+            vmul_2be650(-1.0f, &negativeUp, &D_0013F5E0_2be650);
+            cross_2be650(&axis, &scaled, &negativeUp);
+            normalize_2be650(&axis, &axis, 1.0f);
+            cross_2be650(&negativeUp, &axis, &scaled);
+            for (j = 0; j < 4; j++) {
+                vmul_2be650(D_L00_00161808[i], &vertex[1], &D_L00_001DBF20_2be650[j]);
+                xform_2be650(&quad.corner[j], &vertex[1], &scaled);
+            }
+            draw_2be650(&quad, 0, 0);
+        }
+        i = nextIndex;
+    } while (i < 3);
+}
+#endif
 typedef struct {
     float f[4];
 } __attribute__((aligned(16))) V_2be890;
