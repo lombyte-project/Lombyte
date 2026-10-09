@@ -381,14 +381,6 @@ typedef struct {
     u8 p[0x84];
     f32 x84, x88, x8c, x90;
 } B001f4490;
-typedef struct {
-    u8 p[0x80];
-    f32 x80, x84, x88, x8c;
-    u8 x90[8];
-    f32 x98;
-    u8 p9c[0x2080 - 0x9C];
-    u8 *x2080;
-} C001f4490;
 extern B001f4490 D_L00_0016C058;
 f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8(f32);
@@ -399,21 +391,21 @@ void FUN_L00_00250df8(void *);
 void FUN_L00_001f4490(void) {
     DebugCameraBlock *a = &D_L00_00166C80;
     B001f4490 *b = &D_L00_0016C058;
-    C001f4490 *c;
+    struct Hero *c;
     u8 *d;
     f32 ang = fast_add_rotations(a->camera.angles[2], b->x88);
     f32 s = FUN_001f9dc8(ang);
     c = &hero;
-    c->x80 = a->camera.position[0] + s * b->x8c;
-    c->x84 = a->camera.position[1] + FUN_001f9de0(ang) * b->x8c;
-    c->x88 = a->camera.position[2] + b->x90;
-    c->x98 = fast_add_rotations(a->camera.angles[2], b->x84);
-    FUN_001fa050(c, c->x90);
-    d = c->x2080;
-    qcopy(d + 0x10, &c->x80);
-    qcopy(d + 0x40, c->x90);
+    c->motion.pos.f[0] = a->camera.position[0] + s * b->x8c;
+    c->motion.pos.f[1] = a->camera.position[1] + FUN_001f9de0(ang) * b->x8c;
+    c->motion.pos.f[2] = a->camera.position[2] + b->x90;
+    c->motion.rot.f[2] = fast_add_rotations(a->camera.angles[2], b->x84);
+    FUN_001fa050(c, c->motion.rot.f);
+    d = *(u8 **)&c->moby;
+    qcopy(d + 0x10, &c->motion.pos);
+    qcopy(d + 0x40, c->motion.rot.f);
     FUN_001f9838(d + 0xC0, c, 0x30);
-    FUN_L00_00250df8(c->x2080);
+    FUN_L00_00250df8(*(u8 **)&c->moby);
 }
 /* Pending C: keep the oracle until the placed overlay bytes match. */
 #ifndef NON_MATCHING
