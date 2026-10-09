@@ -453,13 +453,6 @@ typedef struct {
     char pad48[0x130];
     M_298b18 *m[1];
 } C_298b18;
-typedef struct {
-    char pad[0x80];
-    char v[8];
-    float x88;
-    char pad8c[0x2019];
-    unsigned char x20a5;
-} P_298b18;
 extern struct {
     char pad[0x5A];
     unsigned short x5a;
@@ -469,7 +462,6 @@ extern float D_L00_0016CAF0_298b18 __asm__("D_L00_0016CAF0") __attribute__((sect
 extern int D_L00_0015F3FC_298b18 __asm__("D_L00_0015F3FC");
 extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
 extern C_298b18 D_L00_0016C860_298b18 __asm__("D_L00_0016C860") __attribute__((section(".data")));
-extern P_298b18 D_0013F350_298b18 __asm__("D_0013F350");
 extern struct {
     char pad[8];
     F_298b18 *a;
@@ -517,10 +509,10 @@ void FUN_L00_00298b18(void) {
             o->flags &= ~0x80;
     }
     hero_set_state(0, 1);
-    g = f213508_298b18(D_0013F350_298b18.v, 0, 0.5f);
-    if (2.0f < g && fabs_298b18(D_0013F350_298b18.x88 - g) < 4.5f)
-        D_0013F350_298b18.x88 = g;
-    D_0013F350_298b18.x20a5 = 0;
+    g = f213508_298b18(&hero.motion.pos, 0, 0.5f);
+    if (2.0f < g && fabs_298b18(hero.motion.pos.f[2] - g) < 4.5f)
+        hero.motion.pos.f[2] = g;
+    hero.unk20A5 = 0;
     f2330d0_298b18();
     if (D_L00_0016C860_298b18.x46) {
         f = f213508_298b18(D_L00_0016C860_298b18.v, 0, 0.5f);
