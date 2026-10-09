@@ -268,7 +268,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f728.s", FUN_L11_0030f728);
 extern char *func_0020D348_m(int);
 void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-char *FUN_L11_0030fd98(char *owner) {
+char *FUN_L11_0030fd98(struct Moby *owner) {
     char *moby = func_0020D348_m(0x4C3);
     if (moby != 0) {
         char *data;
@@ -278,8 +278,8 @@ char *FUN_L11_0030fd98(char *owner) {
         moby[0x31] = 1;
         moby[0x20] = 0;
         moby[0xBC] = 0;
-        qcopy(moby + 0x10, owner + 0x10);
-        qcopy(moby + 0x40, owner + 0x40);
+        qcopy(moby + 0x10, &owner->pos);
+        qcopy(moby + 0x40, &owner->rot);
         *(char **)(data + 0x70) = owner;
         if ((unsigned char)moby[0x53] != 2) {
             blend_moby_animation_c(moby, 2, 0xD, 0);

@@ -102,16 +102,16 @@ int FUN_L11_00316160(struct Moby *moby) {
 
 extern void *FUN_L00_002dbb20(void *);
 
-void *FUN_L11_00316210(unsigned char *arg) {
+void *FUN_L11_00316210(struct Moby *arg) {
     void *found = FUN_L00_002dbb20(arg);
     if (found != 0) {
-        unsigned char state = arg[0x20];
+        unsigned char state = arg->state;
         if (state != 0x14) {
-            arg[0xBC] = state;
-            arg[0x20] = 0x14;
+            arg->unkBC = state;
+            arg->state = 0x14;
         }
-    } else if (arg[0x20] == 0x14) {
-        arg[0x20] = arg[0xBC];
+    } else if (arg->state == 0x14) {
+        arg->state = arg->unkBC;
     }
     return found;
 }

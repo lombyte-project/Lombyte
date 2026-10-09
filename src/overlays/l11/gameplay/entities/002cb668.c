@@ -856,9 +856,9 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-int FUN_L11_0030a480(unsigned char *moby) {
+int FUN_L11_0030a480(struct Moby *moby) {
     char *current;
-    if (moby[0x20] != 1)
+    if (moby->state != 1)
         return 0;
     current = D_0013F350.current;
     if (current != (char *)moby || D_0013F350.active)
