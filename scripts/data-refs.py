@@ -520,12 +520,12 @@ def type_size(kind: str) -> int:
     return size * count
 
 
-# —— Typed data files (src/data/) ——
+# —— Data definitions (DATA_AT) ——
 
 SCALARS = {"u8": "<B", "s8": "<b", "char": "<b", "u16": "<H", "s16": "<h", "u32": "<I",
            "s32": "<i", "int": "<i", "u64": "<Q", "s64": "<q", "f32": "<f", "float": "<f",
            "f64": "<d", "double": "<d"}
-DATA_DIRS = {"core.data": "core_data", ".data": "data"}  # PROGBITS sections a data file may fill
+DATA_SECTIONS = ("core.data", ".data")  # PROGBITS sections a definition may fill
 
 
 def layout_tree(dump: str, record: str) -> list | None:
@@ -601,13 +601,17 @@ def c_initializer(members: list, size: int, raw: bytes, symbols: dict[int, str],
     return "{" + ", ".join(parts) + "}"
 
 
-def emit_data(addr: int, elf: Path, sections: list) -> Path:
-    """Write src/data/<section>/<ADDR>_<name>.c defining the declared object at ``addr``."""
+def emit_data(addr: int, elf: Path, sections: list, into: Path | None = None) -> Path:
+    """Append the definition of the declared object at ``addr`` to ``into``.
+
+    The default is src/data/<topic>.c, the topic being the header's directory
+    under include/rnc/ (data shared by several files); pass the user's own
+    file when one function reads it."""
     clang = shutil.which("clang")
     if clang is None:
         raise SystemExit("--emit needs clang to read the struct layout")
     section = section_name(addr, sections)
-    if section not in DATA_DIRS:
+    if section not in DATA_SECTIONS:
         raise SystemExit(f"0x{addr:08X} is in {section}, not a data section a file can fill")
     header, name, ctype = None, None, None
     for path in sorted((ROOT / "include").rglob("*.h")):
@@ -669,11 +673,16 @@ def emit_data(addr: int, elf: Path, sections: list) -> Path:
         return "{" + ", ".join(rows) + "}"
 
     body = "{0}" if not any(raw) else nest(raw, counts)
-    out = ROOT / "src" / "data" / DATA_DIRS[section] / f"{addr:08X}_{name}.c"
-    out.parent.mkdir(parents=True, exist_ok=True)
+    topic = include.split("/")[1] if include.startswith("rnc/") else "runtime"
+    out = into or ROOT / "src" / "data" / f"{topic}.c"
     dims = "".join(f"[{n}]" for n in counts)
-    out.write_text(f'#include "types.h"\n#include "sda.h"\n#include "{include}"\n\n'
-                   f'{elem} {name}{dims} DATA_AT({addr:08X}) = {body};\n')
+    text = out.read_text() if out.exists() else '#include "types.h"\n'
+    if f"DATA_AT({addr:08X})" in text:
+        raise SystemExit(f"{shown(out)} already defines 0x{addr:08X}")
+    lines = text.rstrip("\n").splitlines()
+    last = max(i for i, line in enumerate(lines) if line.startswith("#include"))
+    lines[last + 1:last + 1] = [line for line in ('#include "sda.h"', f'#include "{include}"') if line not in lines]
+    out.write_text("\n".join(lines) + f"\n\n{elem} {name}{dims} DATA_AT({addr:08X}) = {body};\n")
     return out
 
 
@@ -847,13 +856,15 @@ def main(argv=None) -> int:
                              "name, type and note already in it are kept")
     parser.add_argument("--out", type=Path, default=None, help="output directory")
     parser.add_argument("--emit", nargs="+", metavar="ADDR",
-                        help="write src/data/ files defining the declared objects at these addresses")
+                        help="define the declared objects at these addresses (default: src/data/<topic>.c)")
+    parser.add_argument("--into", type=Path, metavar="FILE",
+                        help="with --emit: the C file to append to (the only user's file)")
     args = parser.parse_args(argv)
 
     if args.emit:
         _code, data = read_sections(args.elf)
         for addr in args.emit:
-            print(f"wrote {shown(emit_data(int(addr, 16), args.elf, data))}")
+            print(f"wrote {shown(emit_data(int(addr, 16), args.elf, data, args.into))}")
         return 0
 
     if args.level is None:
