@@ -1,6 +1,5 @@
+#include "rnc/sdk/library/sdk_state.h"
 extern int CreateSema(int *parameters) __asm__("CreateSema");
-extern int FirstSemaphore __asm__("D_00130320") __attribute__((section(".data")));
-extern int SecondSemaphore __asm__("D_00130324") __attribute__((section(".data")));
 
 void SupplementCrt0(void) __asm__("supplement_crt0");
 
