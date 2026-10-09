@@ -103,7 +103,6 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
-extern char D_0013F350[];
 extern char D_00141848[];
 extern char D_0013F430[];
 

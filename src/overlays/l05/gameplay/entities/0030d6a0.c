@@ -1573,7 +1573,6 @@ typedef struct {
 extern PickupPose_318c78 *D_L05_001600EC_p __asm__("D_L05_001600EC");
 extern char *FUN_L05_00319598(void *, int);
 extern char D_0013CAE4[];
-extern char D_0013F350[];
 extern float advance_accelerated_scalar_c(float, float, float, float, float *,
                                           float *) __asm__("FUN_00213f38");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
@@ -1603,7 +1602,7 @@ void FUN_L05_00318c78(struct Moby *moby) {
     char *d = (char *)moby->pvars;
     float v00[4], v10[4], v20[4], v30[4], v40[4], v50[4], v60[4], v70[4];
     struct Hero *g;
-    char *g2;
+    struct Hero *g2;
     float z;
     char *m;
     char *e;
@@ -1706,9 +1705,9 @@ void FUN_L05_00318c78(struct Moby *moby) {
     }
     FUN_L05_00319740(moby);
     if (moby->state >= 3 && moby->state <= 5) {
-        g2 = D_0013F350;
-        *(short *)(g2 + 0x1F2) = 2;
-        *(short *)(g2 + 0x1F4) = 2;
+        g2 = &hero;
+        g2->unk1F2 = 2;
+        g2->unk1F4 = 2;
         FUN_L05_003198e8(moby);
         if (FUN_L00_0028d8c0(moby, *(short *)(d + 0xB2)) == 0) {
             *(short *)(d + 0xB2) = func_0022ED80_i(0, 4, moby);

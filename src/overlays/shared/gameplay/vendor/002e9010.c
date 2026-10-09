@@ -1207,7 +1207,7 @@ void FUN_L00_002ebbd8(void *arg) {
     O002ebb00 *o = (O002ebb00 *)arg;
     char *m = (char *)o->m;
     char *p = m + 0x40;
-    char *g = D_0013F350;
+    struct Hero *g = &hero;
     char *cam = D_00166C80_c;
     char *source;
     int state;
@@ -1216,7 +1216,7 @@ void FUN_L00_002ebbd8(void *arg) {
     *(int *)(p + 0x40) = 0;
     if (current_level_index != 14)
         goto normal_scale;
-    state = *(int *)(g + 0x2084);
+    state = g->state.current;
     if ((unsigned)(state - 0x2c) >= 2)
         goto normal_scale;
     *(float *)(p + 0x4c) = 2.0f;
@@ -1227,7 +1227,7 @@ scale_done:
     *(volatile float *)(p + 0x48) = 0.20943952f;
     *(volatile float *)(p + 0x58) = 0.0017453292f;
     *(volatile float *)(p + 0x5c) = -0.004363323f;
-    *(int *)(p + 0x44) = *(int *)(g + 0x2080);
+    *(int *)(p + 0x44) = ((int)g->moby);
     *(volatile float *)(m + 0xa0) = 4.64f;
     *(volatile float *)(m + 0xb4) = 0.05f;
     *(volatile float *)(m + 0xa4) = 0.5f;
@@ -1251,20 +1251,20 @@ scale_done:
     qcopy((char *)o + 0x20, source + 0x20);
     qcopy((char *)o + 0x40, o);
     *(short *)((char *)o + 0x7e) = 0;
-    if ((unsigned)(*(int *)(g + 0x2084) - 0x2c) < 2) {
-        *(float *)(p + 0x30) = FUN_001ff7e8_2ebbd8(*(float *)(g + 0x9ac));
-        *(float *)(p + 0x34) = FUN_001ff800_2ebbd8(*(float *)(g + 0x9ac));
+    if ((unsigned)(g->state.current - 0x2c) < 2) {
+        *(float *)(p + 0x30) = FUN_001ff7e8_2ebbd8(g->unk9AC);
+        *(float *)(p + 0x34) = FUN_001ff800_2ebbd8(g->unk9AC);
         *(int *)(p + 0x38) = 0;
-        *(float *)(m + 0xb8) = *(float *)(g + 0x9ac);
-        *(int *)(m + 0xc0) = *(int *)(g + 0x994);
+        *(float *)(m + 0xb8) = g->unk9AC;
+        *(int *)(m + 0xc0) = ((int)g->unk994);
     } else {
-        FUN_001ff2a8_2ebbd8(p + 0x30, *(char **)(g + 0x964) + 0x10, (char *)o + 0x30);
+        FUN_001ff2a8_2ebbd8(p + 0x30, ((char *)g->unk964) + 0x10, (char *)o + 0x30);
         *(int *)(p + 0x38) = 0;
         *(int *)(p + 0x3c) = 0;
         FUN_001ff500_2ebbd8(p + 0x30, p + 0x30, 1.0f);
         *(float *)(m + 0xb8) =
             FUN_001ff8b0_2ebbd8(*(float *)(p + 0x30), *(float *)(p + 0x34));
-        *(int *)(m + 0xc0) = *(int *)(g + 0x964);
+        *(int *)(m + 0xc0) = ((int)g->unk964);
     }
     *(short *)(cam + 0x270) = 1;
     *(char *)(cam + 0x273) = 2;
