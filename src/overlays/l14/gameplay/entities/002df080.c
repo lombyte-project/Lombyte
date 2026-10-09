@@ -418,7 +418,76 @@ void FUN_L14_002ee6b0(float *pos, int n) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ee8d8.s", FUN_L14_002ee8d8);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eef60.s", FUN_L14_002eef60);
+#else
+extern char *D_L14_001B0BB0_c3[] __asm__("D_L14_001B0BB0");
+extern float FUN_001f9b48(void *, void *);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+
+void FUN_L14_002eef60(struct Moby *m) {
+    char *d = (char *)m->pvars;
+    int *path;
+    int *point;
+    int *next;
+    float *length_out;
+    int *first;
+    int i;
+    float length;
+
+    if (*(int *)(d + 0xA0) == -1) {
+        mark_moby_for_removal(m);
+        return;
+    }
+    path = (int *)D_L14_001B0BB0_c3[*(int *)(d + 0xA0)];
+    if (*path == 0 || *(int *)(d + 0x114) == -1 ||
+        *(int *)D_L14_001B0BB0_c3[*(int *)(d + 0x114)] != 11) {
+        mark_moby_for_removal(m);
+        return;
+    }
+
+    *(float *)(d + 0xB4) = 0.0f;
+    i = 0;
+    first = path + 4;
+    if (0 < *path - 1) {
+        next = path + 8;
+        length_out = (float *)(path + 7);
+        point = path + 4;
+        do {
+            length = FUN_001f9b48(point, next);
+            i++;
+            *length_out = length;
+            next += 4;
+            point += 4;
+            *(float *)(d + 0xB4) += length;
+            length_out += 4;
+        } while (i < *path - 1);
+    }
+    *(float *)(path + i * 4 + 7) = FUN_001f9b48(path + i * 4 + 4, first);
+
+    path = (int *)D_L14_001B0BB0_c3[*(int *)(d + 0xB8)];
+    *(float *)(d + 0xBC) = 0.0f;
+    i = 0;
+    if (0 < *path - 1) {
+        next = path + 8;
+        length_out = (float *)(path + 7);
+        point = path + 4;
+        do {
+            length = FUN_001f9b48(point, next);
+            i++;
+            *length_out = length;
+            next += 4;
+            point += 4;
+            *(float *)(d + 0xBC) += length;
+            length_out += 4;
+        } while (i < *path - 1);
+    }
+    *(float *)(path + i * 4 + 7) = FUN_001f9b48(path + i * 4 + 4, path + 4);
+    *(float *)(d + 0xAC) = -1.0f;
+    *(int *)(d + 0xA4) = 0;
+    *(int *)(d + 0xA8) = 0;
+}
+#endif
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F05D8), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_001B0BB0_c3[] __asm__("D_L14_001B0BB0");
