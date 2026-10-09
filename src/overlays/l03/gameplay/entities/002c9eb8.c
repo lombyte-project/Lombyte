@@ -724,4 +724,110 @@ void FUN_L03_002dcbc8(char *m, int mode) {
         FUN_L00_00235e18(h, 0xA);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dccc0.s", FUN_L03_002dccc0);
+/* Pvars of a rail lift that carries the hero between the ends of two rail paths. */
+struct RailLiftVars {
+    u8 pad0[0x20];
+    u8 coll[0x44];     /* 0x20: collision record moved with the lift */
+    s32 unk64;         /* 0x64: set to 1 when a ride starts */
+    u8 pad68[0x10];
+    s32 snd;           /* 0x78: travel sound voice (FUN_L03_002d3918) */
+    s32 started;       /* 0x7C: set once the first ride starts */
+    u8 start_end;      /* 0x80: path end the lift spawns at */
+    u8 pad81[3];
+    s32 ready;         /* 0x84: set when the hero walks away from a stopped lift */
+    s32 timer;         /* 0x88: frames to wait after a ride */
+    s32 autostart;     /* 0x8C: start without waiting for the trigger volume */
+    s32 path[2];       /* 0x90: rail path index of each end (-1: none) */
+    s32 help[2];       /* 0x98: help message mode for each end (FUN_L03_002dcbc8) */
+    s32 volume;        /* 0xA0: trigger clip volume */
+    s32 hud;           /* 0xA4: hud queue entry (FUN_L03_002dcbc8) */
+};
+
+extern u32 D_0013CAE4 __attribute__((section(".data")));
+extern s32 D_L03_0015F594 __attribute__((sda));
+extern void FUN_L00_00266858(void *, int);
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern int FUN_L01_00277fb8(void *);
+extern void FUN_L00_00233ee8(void *, float, int);
+extern s32 FUN_L00_00233f38(void);
+void FUN_L03_002dd0f0(struct Moby *m);
+
+void FUN_L03_002dccc0(struct Moby *m) {
+    struct RailLiftVars *d = (struct RailLiftVars *)m->pvars;
+    Vec4 oldPos, oldRot, move;
+    s32 hero_end, lift_end;
+
+    if (d->path[0] == -1 || d->path[1] == -1)
+        return;
+    FUN_L00_00266858(m, FUN_L03_002dcb30((unsigned char *)m));
+    qcopy(&oldPos, &m->pos);
+    oldRot.q = *(u128 *)&m->rot;
+    FUN_001f9740(&d->timer);
+    switch (m->state) {
+    case 0:
+        m->unkBC = d->start_end;
+        qcopy(&m->pos, &D_L03_001B05B0[d->path[m->unkBC]]->pts[0]);
+        d->hud = -1;
+        d->timer = 0;
+        m->state = 1;
+        m->unk30 = 0xFF;
+        m->unk32 = 0xFF;
+        break;
+    case 1:
+        hero_end = vec_dist(&hero.motion.pos, &D_L03_001B05B0[d->path[0]]->pts[0]) <
+                   vec_dist(&hero.motion.pos, &D_L03_001B05B0[d->path[1]]->pts[0]);
+        lift_end = vec_dist(&m->pos, &D_L03_001B05B0[d->path[0]]->pts[0]) <
+                   vec_dist(&m->pos, &D_L03_001B05B0[d->path[1]]->pts[0]);
+        if (!d->started) {
+            if (d->autostart || is_point_inside_clip_volume(&hero.motion.pos, d->volume)) {
+                m->unk94 = m->pclass->unk10;
+                m->unkBC = hero_end;
+                m->flags &= 0xFFBE;
+                *(u128 *)&m->pos = *(u128 *)&D_L03_001B05B0[d->path[hero_end]]->pts[0];
+                m->state = 3;
+                d->unk64 = 1;
+                d->started = 1;
+                d->ready = 0;
+                break;
+            }
+        }
+        if (!d->started) {
+            m->unk94 = 0;
+            m->flags |= 0x41;
+        } else if (d->ready && FUN_L01_00277fb8(m)) {
+            FUN_L03_002dcbc8((char *)m, d->help[m->unkBC ^ 1]);
+            if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
+                FUN_L00_00233ee8(&m->pos, m->rot.z, 0);
+                m->unkBC ^= 1;
+                d->unk64 = 1;
+                d->ready = 0;
+                m->state = 2;
+            }
+        } else if (hero_end != lift_end) {
+            m->state = 3;
+            m->unkBC ^= 1;
+            d->unk64 = 1;
+            d->ready = 0;
+        }
+        break;
+    case 2:
+        if (!FUN_L00_00233f38())
+            m->state = 3;
+        break;
+    case 3:
+        if (FUN_L01_00277fb8(m)) {
+            hero.unk1F2 = 4;
+            hero.unk1F4 = 4;
+        }
+        if (FUN_L03_002d3918(m, d->path[m->unkBC], &d->snd)) {
+            m->state = 1;
+            d->timer = scale_game_frames(0xF);
+        }
+        break;
+    }
+    FUN_L03_002dd0f0(m);
+    vec_sub(&move, &m->pos, &oldPos);
+    FUN_L00_00260738(d->coll, &move, &oldRot, &m->rot);
+    if (!FUN_L01_00277fb8(m) && vector_distance(&m->pos, &hero.motion.pos) > 2.0f && d->timer == 0)
+        d->ready = 1;
+}
