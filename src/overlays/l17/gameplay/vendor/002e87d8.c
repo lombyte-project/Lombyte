@@ -6,6 +6,7 @@
 
 #include "sda.h"
 #include "rnc/overlay/moby_anim.h"
+#include "rnc/gameplay/hero.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/gameplay/hero.h"
 
@@ -1479,7 +1480,530 @@ void FUN_L17_002ec360(Moby *m, Obj *o) {
     FUN_L17_002ec000((char *)m, (char *)o, fast_add_rotations(o->f28, -o->f6C / 7.0f),
                      -fast_add_rotations(o->f24, -(o->f70 / 7.0f) - 0.1f));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ed018.s", FUN_L17_002ed018);
+/* Per-frame update for the player's ship moby on Veldin Orbit: takes hits, boards and leaves the ship, and runs the flight states. */
+
+typedef struct {
+    char pad00[0x10];
+    W4 pos;
+    unsigned char state;
+    char pad21[3];
+    char *pclass;
+    char pad28[4];
+    float scale;
+    unsigned char b30;
+    char pad31;
+    unsigned short h32;
+    unsigned short flags;
+    char pad36[0xA];
+    W4 rot;
+    char pad50[0x28];
+    char *vars;
+    char pad7C[0x28];
+    unsigned char bA4;
+    char padA5;
+    unsigned short oclass;
+    char padA8[8];
+    unsigned char bB0;
+} ShipMoby;
+
+typedef struct {
+    W4 dir;
+    W4 v10;
+    float f20, f24, f28, f2C;
+    W4 rot;
+    W4 home_pos;
+    W4 home_rot;
+    unsigned char b60;
+    char pad61;
+    short hit_timer;
+    float speed;
+    short s68;
+    short s6A;
+    float f6C;
+    float f70;
+    char pad74[0xC];
+    int i80;
+    int i84;
+    char pad88[0x24];
+    float fAC;
+    float fB0;
+    float fB4;
+    float fB8;
+    float fBC;
+    float fC0;
+    char padC4[0x18];
+    int timerDC;
+    char padE0[8];
+    int iE8;
+    char padEC[4];
+    int iF0;
+    int iF4;
+    int timerF8;
+    int exit_path;
+    int exit_path2;
+    int i104;
+    int voice;
+    int voice2;
+    char pad110[0xC];
+    int i11C;
+    int enter_path;
+    int i124;
+    char pad128[8];
+    float fade;
+} ShipVars;
+
+typedef struct {
+    char pad00[0x2C];
+    float damage;
+    int flags;
+} ShipHit;
+
+extern char D_0013E550_ed[] __asm__("D_0013E550");
+extern unsigned char D_0014C050_ed[][16] __asm__("D_0014C050");
+extern char D_0013F3D0_ed[] __asm__("D_0013F3D0");
+extern char D_0013CAE4_ed[] __asm__("D_0013CAE4");
+extern int D_0015ED84_ed __asm__("D_0015ED84");
+extern float D_0015ED6C_ed __asm__("D_0015ED6C");
+extern float D_L17_0015F3FC_ed __asm__("D_L17_0015F3FC");
+extern int D_L17_0015F608_ed __asm__("D_L17_0015F608");
+extern char *D_L17_0015F420_ed __asm__("D_L17_0015F420");
+typedef struct {
+    char pad0[0xA];
+    unsigned short idx;
+    char padC[4];
+} ShipLevelEntry;
+extern ShipLevelEntry D_L17_0016ShipLevelEntry[] __asm__("D_L17_0016DA80");
+extern char D_L17_001D9B68_ed[] __asm__("D_L17_001D9B68");
+extern char D_L17_001E6E00[];
+extern char D_L17_001E6E38[];
+extern float D_L17_00161FE0 __attribute__((sda));
+extern float D_L17_00161FE4 __attribute__((sda));
+extern float D_L17_00162054 __attribute__((sda));
+extern float D_L17_00162058 __attribute__((sda));
+/* tan(fov / 2) of the view (set by FUN_L17_002ec360); read as an array element, which keeps
+   the load after the stores to the ship vars like retail. */
+extern float D_L17_0016D3F0_a[] __asm__("D_L17_0016D3F0");
+extern unsigned char D_L17_00162064 __attribute__((sda));
+extern unsigned char D_L17_00162068 __attribute__((sda));
+extern float D_L17_00162084 __attribute__((sda));
+extern float D_L17_00162088 __attribute__((sda));
+extern int D_L17_00162178 __attribute__((sda));
+extern char *D_L17_00162180_ed __asm__("D_L17_00162180") __attribute__((sda));
+extern int D_L17_00162184 __attribute__((sda));
+typedef struct {
+    char pad[0x160];
+    float f160;
+    int pad164;
+    int i168;
+} ShipShake;
+extern ShipShake D_L17_00167580_ed __asm__("D_L17_00167580");
+typedef struct {
+    char pad[0x98];
+    int unk98;
+} ShipCamera;
+typedef struct {
+    char b[0x400];
+} ShipBlock400;
+
+extern int FUN_001f9740(void *);
+extern int FUN_001f9770(void *);
+extern void FUN_001f9c90(void *, void *, float);
+extern float FUN_001f9e90(float, float);
+extern float FUN_001f9b20(void *);
+extern float FUN_001fa580(float, float);
+extern float FUN_001fa5c8(float, float);
+extern float FUN_00213ed8(float *, float, float);
+extern int FUN_00215130(int, int);
+extern int FUN_002151d8(int, int);
+extern void FUN_0020e098(void *);
+extern void FUN_001ff570(int, int);
+extern void FUN_001e93b0(char *);
+extern int FUN_001f96f8(int);
+extern char *FUN_L00_0025a420(void *, int, int);
+extern float FUN_L00_00250430(void *, void *);
+extern void FUN_L00_00259fe8(void *, float);
+extern int FUN_L00_002644e0(int);
+extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
+extern void FUN_L00_002eac18(int);
+extern void FUN_L00_00203b18(void);
+extern void FUN_L00_00203b78(void);
+extern void FUN_L00_00211250(void);
+extern void FUN_L00_002502a0(int);
+extern void FUN_L00_00284e50(void *, void *);
+extern void FUN_L01_0027a248(int, int);
+extern void FUN_L11_003112b8(void *, void *);
+extern void FUN_L13_002650a8(int, int, int, int);
+extern void FUN_L17_0021e530(int, int);
+extern void FUN_L17_00253a90(int, int, int, int);
+extern int allocate_voice_ed(int, int, void *) __asm__("FUN_0022da68");
+extern void release_voice_ed(int) __asm__("FUN_0022d798");
+extern void spherical_offset_ed(void *, float, float, float) __asm__("FUN_00214db0");
+extern void add_vector_ed(void *, void *, void *) __asm__("FUN_001f9a10");
+
+void FUN_L17_002ed018(ShipMoby *moby) {
+    ShipVars *v;
+    ShipHit *hit;
+    W4 dir;
+    char *e;
+    int idx;
+    int board;
+    float k;
+    float fov;
+
+    if (moby != 0) {
+        v = (ShipVars *)moby->vars;
+        FUN_001f9740(&v->timerDC);
+        if (moby->state != 7 && moby->state != 1 && moby->state != 2) {
+            hit = (ShipHit *)FUN_L00_0025a420(moby, 0x30001, 0);
+            if (hit != 0 && moby->state == 4) {
+                struct Hero *g = &hero;
+                if (hit->damage < g->ship_hp) {
+                    g->ship_hp -= hit->damage;
+                    if (hit->flags & 1) {
+                        ShipShake *s = &D_L17_00167580_ed;
+                        s->f160 = 1.0f;
+                        s->i168 = FUN_001f96f8(4);
+                        k = hit->damage * D_L17_00162088;
+                        spherical_offset_ed(dir, v->speed, v->rot[2], -v->rot[1]);
+                        FUN_001f9c90((char *)hit + 0x10, (char *)hit + 0x10, D_0015ED6C_ed * 3.0f);
+                        add_vector_ed(moby->pos, moby->pos, (char *)hit + 0x10);
+                        FUN_L00_001ff660(dir, dir, (char *)hit + 0x10);
+                        v->rot[2] = FUN_001fa580(
+                            v->rot[2],
+                            FUN_001fa5c8(FUN_001f9e90(dir[0], dir[1]), v->rot[2]) * D_L17_00162018 * k);
+                        v->rot[1] = FUN_001fa580(
+                            v->rot[1],
+                            FUN_001fa5c8(FUN_001f9e90(FUN_001f9b20(dir), dir[2]), v->rot[1]) *
+                                D_L17_0016201C * k);
+                    }
+                } else {
+                    spherical_offset_ed(dir, v->speed, v->rot[2], -v->rot[1]);
+                    {
+                        ShipShake *s = &D_L17_00167580_ed;
+                        s->f160 = 0.2f;
+                        s->i168 = FUN_001f96f8(5);
+                    }
+                    g->ship_hp = 0.0f;
+                    moby->state = 7;
+                    v->hit_timer = FUN_001f96f8(30);
+                    g->motion.pos.f[2] += 0.2f;
+                    ((ShipCamera *)g->moby)->unk98 = 0;
+                    FUN_L17_0021e530(0, 1);
+                    g->ship_moby = 0;
+                    g->ship_oclass = -1;
+                    FUN_L00_0025e450(moby, dir, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f,
+                                     15.0f, 1, 1, -1, 0);
+                    moby->flags |= 0x41;
+                }
+            }
+        }
+        moby->bA4 = 0xFF;
+        {
+            struct Hero *g = &hero;
+            if (g->ship_moby == (struct Moby *)moby) {
+                g->ship_hp_percent =
+                    g->ship_hp / D_L17_00162084 * 200.0f;
+            }
+        }
+        switch (moby->state) {
+        case 0:
+            moby->state = 1;
+            v->b60 = 0;
+            moby->scale = *(float *)(moby->pclass + 0x24);
+            v->f20 = v->rot[0];
+            v->f24 = v->rot[1];
+            fov = FUN_001f9e90(1.0f, D_L17_0016D3F0_a[0]) * 2.0f;
+            v->fC0 = 0.0f;
+            v->fAC = fov;
+            v->fB0 = fov;
+            qcopy_nc(v->rot, moby->rot);
+            qcopy_nc(v->home_rot, moby->rot);
+            qcopy_nc(v->home_pos, moby->pos);
+            {
+                int n = v->i104 + 0x28;
+                D_L17_00162180_ed = D_L17_0015F420_ed + (D_L17_0016ShipLevelEntry + n)->idx * 16;
+            }
+            if (D_L17_00162184 == 0) {
+                *(ShipBlock400 *)D_L17_001D9B68_ed = *(ShipBlock400 *)D_L17_00162180_ed;
+            }
+            D_L17_00162184 = 1;
+            v->timerF8 = 1;
+            v->iE8 = 1;
+            if (moby->bB0 != 0xFF && D_0014C050_ed[D_0015ED84_ed][moby->bB0] == 0xFF) {
+                moby->state = 9;
+            }
+            if (v->i11C > 0) {
+                FUN_L13_002650a8(v->i11C, 0, 0, 0);
+            }
+            FUN_L17_00253a90(0x325, 1, 1, -1);
+            v->i124 = -1;
+            break;
+        case 1: {
+            struct Hero *g = &hero;
+            board = FUN_L00_00250430(moby, (ShipCamera *)g->moby) < D_L17_00161FE0 &&
+                    FUN_00215130(7, 0x53E4) != 0 && (*(int *)D_0013CAE4_ed & 0x10);
+            if (board) {
+                FUN_L00_002644e0(7);
+                moby->state = 2;
+                v->i124 = -1;
+            } else if (v->fade != 0.0f) {
+                FUN_00213ed8(&v->fade, 0.0f, D_0015ED6C_ed * 4.0f);
+                D_L17_0015F3FC_ed = v->fade;
+            }
+            FUN_L00_00259fe8(moby, D_L17_00162054 * D_L17_0016209C);
+            break;
+        }
+        case 2:
+            FUN_00213ed8(&v->fade, 1.0f, D_0015ED6C_ed * 4.0f);
+            D_L17_0015F3FC_ed = v->fade;
+            if (v->fade == 1.0f) {
+                struct Hero *g = &hero;
+                g->ship_moby = (struct Moby *)moby;
+                g->ship_oclass = moby->oclass;
+                g->ship_ammo = D_L17_00162064;
+                g->unk160E = 1;
+                g->ship_ammo_max = D_L17_00162068;
+                g->unk15F8 = D_L17_00162068;
+                g->ship_hp = D_L17_00162058;
+                v->iF0 = 0;
+                v->iF4 = 0xFF;
+                g->ship_hp_max = D_L17_00162084;
+                g->unk1604 = 100.0f;
+                g->unk15F9 = 3;
+                g->unk15FA = 3;
+                g->unk15FB = 3;
+                g->ship_flags = 0;
+                FUN_L01_0027a248(2, 4);
+                if (v->enter_path != -1) {
+                    char *p = D_L17_001600EC + (v->enter_path << 7);
+                    FUN_L00_00216f90(p + 0x30, p + 0x70, 50, 1);
+                    qcopy_nc(moby->pos, ((char (*)[128])D_L17_001600EC)[v->enter_path] + 0x30);
+                    qcopy_nc(moby->rot, ((char (*)[128])D_L17_001600EC)[v->enter_path] + 0x70);
+                }
+                FUN_002151d8(6, 0);
+                FUN_L17_0021e530(50, 1);
+                FUN_L00_002eaaa0(moby->pos, moby->rot, 1, 0, 0);
+                v->s68 = 0;
+                v->speed = D_L17_00161FE4;
+                v->f6C = 0.0f;
+                v->f70 = 0.0f;
+                v->i84 = 0;
+                v->i80 = 0;
+                moby->h32 = 0xFF;
+                moby->b30 = 0xFF;
+                v->f28 = v->rot[2] = moby->rot[2];
+                v->fB4 = D_L17_00162034 * D_L17_0016209C;
+                v->fBC = D_L17_00162038 * D_L17_0016209C;
+                v->fB8 = 0.0f;
+                ((ShipCamera *)g->moby)->unk98 = -1;
+                spherical_offset_ed(v->dir, D_L17_00161FE4, v->rot[2], -v->rot[1]);
+                if (v->i11C > 0) {
+                    FUN_L13_002650a8(v->i11C, 1, 1, 1);
+                }
+                FUN_L17_00253a90(0x325, 0, 0, -1);
+                moby->pos[2] += 3.0f;
+                moby->scale = *(float *)(moby->pclass + 0x24) * D_L17_0016209C;
+                g->unk20A5 = 1;
+                if (v->voice == -1) {
+                    v->voice = allocate_voice_ed(0, 4, moby);
+                }
+                FUN_L00_00203b18();
+                D_L17_0015F608_ed = 2;
+                FUN_L17_002ec360((Moby *)moby, (Obj *)v);
+                moby->state = 4;
+            }
+            break;
+        case 4:
+            FUN_002151d8(6, 0);
+            D_L17_0015F608_ed = 2;
+            e = D_0013E550_ed + v->voice * 0x70;
+            if (*(ShipMoby **)(e + 0x88) != moby || *(unsigned char *)(e + 0x74) == 0) {
+                v->voice = -1;
+                v->voice = allocate_voice_ed(0, 4, moby);
+            }
+            FUN_L17_002ec360((Moby *)moby, (Obj *)v);
+            if (v->iE8 <= 0) {
+                v->timerF8 = D_L17_00162178;
+                moby->state = 8;
+            }
+            if (v->fade != 0.0f) {
+                FUN_00213ed8(&v->fade, 0.0f, D_0015ED6C_ed * 4.0f);
+                D_L17_0015F3FC_ed = v->fade;
+            }
+            {
+                struct Hero *g = &hero;
+                if (g->ship_flags & 1) {
+                    moby->state = 5;
+                }
+            }
+            break;
+        case 5: {
+            char *p;
+            struct Hero *g = &hero;
+            g->unk20A5 = 0;
+            ((ShipCamera *)g->moby)->unk98 = 0;
+            FUN_L17_0021e530(0, 1);
+            FUN_L00_002eac18(0);
+            FUN_001ff570(g->unk160C, 0);
+            qcopy_nc(moby->pos, v->home_pos);
+            qcopy_nc(moby->rot, v->home_rot);
+            moby->scale = *(float *)(moby->pclass + 0x24);
+            FUN_0020e098(moby);
+            p = D_L17_001600EC + (v->exit_path << 7);
+            FUN_L00_00216f90(p + 0x30, p + 0x70, 0, 1);
+            FUN_L01_0027a248(0, 5);
+            idx = v->voice;
+            if (idx != -1) {
+                char *e = D_0013E550_ed + idx * 0x70;
+                if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+                    release_voice_ed(idx);
+                }
+            }
+            v->voice = -1;
+            idx = v->voice2;
+            if (idx != -1) {
+                char *e = D_0013E550_ed + idx * 0x70;
+                if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+                    release_voice_ed(idx);
+                }
+            }
+            v->voice2 = -1;
+            moby->state = 1;
+            v->fade = 0.99f;
+            D_L17_0015F3FC_ed = 0.99f;
+            break;
+        }
+        case 7:
+            FUN_002151d8(6, 0);
+            D_L17_0015F608_ed = 2;
+            if (FUN_001f9770(&v->hit_timer)) {
+                struct Hero *g = &hero;
+                FUN_L00_00203b78();
+                ((ShipCamera *)g->moby)->unk98 = 0;
+                FUN_L00_00211250();
+                FUN_L00_002eac18(0);
+                FUN_L01_0027a248(0, 5);
+                qcopy_nc(moby->pos, v->home_pos);
+                qcopy_nc(moby->rot, v->home_rot);
+                FUN_0020e098(moby);
+                idx = v->voice;
+                if (idx != -1) {
+                    char *e = D_0013E550_ed + idx * 0x70;
+                    if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+                        release_voice_ed(idx);
+                    }
+                }
+                v->voice = -1;
+                idx = v->voice2;
+                if (idx != -1) {
+                    char *e = D_0013E550_ed + idx * 0x70;
+                    if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+                        release_voice_ed(idx);
+                    }
+                }
+                v->voice2 = -1;
+                moby->state = 0;
+            }
+            break;
+        case 8:
+            FUN_002151d8(6, 0);
+            D_L17_0015F608_ed = 2;
+            FUN_L17_002ec360((Moby *)moby, (Obj *)v);
+            if (FUN_001f9740(&v->timerF8)) {
+                FUN_00213ed8(&v->fade, 1.0f, D_0015ED6C_ed * 4.0f);
+                D_L17_0015F3FC_ed = v->fade;
+            }
+            if (v->fade >= 1.0f) {
+                char *p;
+                struct Hero *g = &hero;
+                g->unk20A5 = 0;
+                ((ShipCamera *)g->moby)->unk98 = 0;
+                FUN_L17_0021e530(0, 1);
+                FUN_L00_002eac18(0);
+                FUN_L01_0027a248(0, 5);
+                if (v->exit_path2 == -1) {
+                    FUN_001e93b0(D_L17_001E6E00);
+                    qcopy_nc(moby->pos, v->home_pos);
+                    qcopy_nc(moby->rot, v->home_rot);
+                } else {
+                    qcopy_nc(moby->pos, ((char (*)[128])D_L17_001600EC)[v->exit_path2] + 0x30);
+                    qcopy_nc(moby->rot, ((char (*)[128])D_L17_001600EC)[v->exit_path2] + 0x70);
+                    moby->pos[2] += 0.57318f;
+                }
+                moby->scale = *(float *)(moby->pclass + 0x24);
+                FUN_0020e098(moby);
+                if (v->exit_path == -1) {
+                    FUN_001e93b0(D_L17_001E6E38);
+                } else {
+                    if (v->i11C > 0) {
+                        FUN_L13_002650a8(v->i11C, 0, 0, 0);
+                    }
+                    FUN_L17_00253a90(0x325, 1, 1, -1);
+                    p = D_L17_001600EC + (v->exit_path << 7);
+                    FUN_L00_00216f90(p + 0x30, p + 0x70, 0, 1);
+                }
+                if (moby->bB0 != 0xFF) {
+                    FUN_L00_002502a0(moby->bB0);
+                }
+                idx = v->voice;
+                if (idx != -1) {
+                    char *e = D_0013E550_ed + idx * 0x70;
+                    if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+                        release_voice_ed(idx);
+                    }
+                }
+                v->voice = -1;
+                idx = v->voice2;
+                if (idx != -1) {
+                    char *e = D_0013E550_ed + idx * 0x70;
+                    if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+                        release_voice_ed(idx);
+                    }
+                }
+                v->voice2 = -1;
+                FUN_L00_00284e50(D_0013F3D0_ed, D_0013F3D0_ed + 0x10);
+                moby->state = 9;
+            }
+            break;
+        case 10:
+            break;
+        case 9:
+            if (v->fade == 0.0f) {
+                mark_moby_for_removal((struct Obj *)moby);
+                return;
+            }
+            FUN_00213ed8(&v->fade, 0.0f, D_0015ED6C_ed * 4.0f);
+            D_L17_0015F3FC_ed = v->fade;
+            break;
+        }
+        if (moby->pos[0] < 15.0f) {
+            moby->pos[0] = 15.0f;
+        }
+        if (moby->pos[0] > 1008.0f) {
+            moby->pos[0] = 1008.0f;
+        }
+        if (moby->pos[1] < 15.0f) {
+            moby->pos[1] = 15.0f;
+        }
+        if (moby->pos[1] > 1008.0f) {
+            moby->pos[1] = 1008.0f;
+        }
+        if (moby->pos[2] < 15.0f) {
+            moby->pos[2] = 15.0f;
+        }
+        if (moby->pos[2] > 1008.0f) {
+            moby->pos[2] = 1008.0f;
+        }
+        if (moby->state == 4) {
+            qcopy_nc(D_0013F3D0_ed, moby->pos);
+            qcopy_nc(D_0013F3D0_ed + 0x10, v->rot);
+        }
+        if (moby->state == 3 || moby->state == 4) {
+            FUN_L11_003112b8(moby, v);
+        }
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EFA20), where it is exact; names translated to the US level program. */
 
 extern char *D_L17_001600EC;
