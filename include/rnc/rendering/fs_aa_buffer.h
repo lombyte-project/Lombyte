@@ -23,9 +23,10 @@ struct FsAaBuf {
     s16 storage_height; /* 0x15A */
     s16 storage_psm;    /* 0x15C */
     s16 fbp1;           /* 0x15E */
-    s16 pad160[2];
-    s16 reserved164; /* 0x164 */
-    s16 pad166;
+    s16 target_width;     /* 0x160: off-screen render target size set by FUN_001fb440 (also x/y of the map cursor sprite) */
+    s16 target_height;    /* 0x162 */
+    s16 target_psm;       /* 0x164 */
+    s16 target_fbp;       /* 0x166: GS address >> 13 */
     s16 display_offset_x; /* 0x168 */
     s16 display_offset_y; /* 0x16A */
     s16 zpsm;             /* 0x16C */

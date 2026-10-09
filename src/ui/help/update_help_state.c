@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/audio/music/music_stream_state.h"
 #include "sda.h"
 #include "rnc/globals.h"
 
@@ -30,20 +31,10 @@ typedef struct {
     u32 flags;
 } HelpRecord;
 
-typedef struct {
-    u8 pad00[0x1C];
-    s32 unk1C;
-    u8 pad20[0x30];
-    s32 unk50;
-    s16 unk54;
-    u8 pad56[0x4];
-    s16 unk5A;
-} PlayerHud;
 
 extern s32 D_0013CAE0 NOT_SDA;
 extern s32 D_0013CAE4 NOT_SDA;
 extern HelpRecord D_00141968[];
-extern PlayerHud D_001516D0;
 extern u8 D_0015EE1D;
 extern s32 D_0015EEA4;
 extern TextEntry *D_0015F6A0;
@@ -132,8 +123,8 @@ void update_help_state(void) {
 
         force_help_message(5, 0);
         id = D_0015F6A0[D_001996D0.msg].id;
-        if (id >= 0 && D_001516D0.unk50 == 0 && D_001516D0.unk1C == -1) {
-            D_001516D0.unk1C = id + 0x7530;
+        if (id >= 0 && music_stream_state.secondary.handle == 0 && music_stream_state.queued_secondary_track == -1) {
+            music_stream_state.queued_secondary_track = id + 0x7530;
         }
         if (D_0013CAE4 & 0x10) {
             RECORD_COUNT();
@@ -159,8 +150,8 @@ void update_help_state(void) {
             D_001996D0.timer = 0;
             RECORD_FLAGS();
         } else if (D_001996D0.timer >= scale_game_frames(0x18)) {
-            if (D_001516D0.unk5A == 3 || (id = D_0015F6A0[D_001996D0.msg].id) == -1 ||
-                id != D_001516D0.unk54 - 0x7530) {
+            if (music_stream_state.secondary.state == 3 || (id = D_0015F6A0[D_001996D0.msg].id) == -1 ||
+                id != music_stream_state.secondary.track - 0x7530) {
                 D_001996D0.state = 3;
                 D_001996D0.timer = 0;
             }
@@ -194,7 +185,7 @@ void update_help_state(void) {
             D_001996D0.timer = 4 - D_001996D0.timer;
         } else if (D_001996D0.timer >= 4) {
             id = D_0015F6A0[D_001996D0.msg].id;
-            if (id != -1 && id == D_001516D0.unk54 - 0x7530 && D_001516D0.unk5A == 3) {
+            if (id != -1 && id == music_stream_state.secondary.track - 0x7530 && music_stream_state.secondary.state == 3) {
                 continue_audio_stream_if_ready();
             }
             D_001996D0.state = 5;
@@ -208,8 +199,8 @@ void update_help_state(void) {
 
         force_help_message(5, 0);
         if ((D_001996D0.timer >= scale_game_frames(0x1A4) &&
-             ((id = D_0015F6A0[D_001996D0.msg].id) == -1 || id != D_001516D0.unk54 - 0x7530 ||
-              (D_001516D0.unk50 == 0 && D_001516D0.unk1C == -1))) ||
+             ((id = D_0015F6A0[D_001996D0.msg].id) == -1 || id != music_stream_state.secondary.track - 0x7530 ||
+              (music_stream_state.secondary.handle == 0 && music_stream_state.queued_secondary_track == -1))) ||
             (D_0013CAE4 & 0x10)) {
             RECORD_COUNT();
             RECORD_BEST();
@@ -232,8 +223,8 @@ void update_help_state(void) {
 
         force_help_message(5, 0);
         id = D_0015F6A0[D_001996D0.msg].id;
-        if (id != -1 && id == D_001516D0.unk54 - 0x7530 && (u16)D_001516D0.unk5A - 6U >= 2) {
-            D_001516D0.unk5A = 5;
+        if (id != -1 && id == music_stream_state.secondary.track - 0x7530 && (u16)music_stream_state.secondary.state - 6U >= 2) {
+            music_stream_state.secondary.state = 5;
         }
         if (D_001996D0.timer >= 8) {
             if (D_001996D0.queued != 0) {

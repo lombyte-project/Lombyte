@@ -51,7 +51,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     fs_aa_buffer.reserved170 = 0;
     fs_aa_buffer.storage_psm = 0;
     fs_aa_buffer.psm = 0;
-    fs_aa_buffer.reserved164 = 0;
+    fs_aa_buffer.target_psm = 0;
     fs_aa_buffer.zpsm = 0x31;
     fs_aa_buffer.fbp1 = display_buffer_address >> 13;
     fs_aa_buffer.fbp0 = draw_buffer_address >> 13;

@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/rendering/graphics_buffer.h"
 struct KeyedFlagRecord {
     s32 key;
     s32 flags;
@@ -11,8 +12,8 @@ s32 clear_record_flag_by_key(s32 arg0) {
     s32 i;
 
     for (i = 0; i < 5; i++) {
-        if (D_001D60B8[i].key == arg0) {
-            D_001D60B8[i].flags &= ~4;
+        if (graphics_buffer_descriptors[i].address == arg0) {
+            graphics_buffer_descriptors[i].flags &= ~4;
             return 0;
         }
     }

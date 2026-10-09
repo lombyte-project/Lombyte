@@ -1,6 +1,7 @@
 #include "rnc/ui/map/map_state.h"
 #include "types.h"
 #include "rnc/input/pad_state.h"
+#include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
 
 
@@ -21,14 +22,8 @@ struct MapEntry {
     s32 b;
 };
 
-struct Hdr16 {
-    u8 pad0[0x8];
-    s16 unk8;
-};
-
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
-extern struct Hdr16 D_001516D0;
 extern u8 D_001CF678[];
 extern u8 D_001CF418[];
 extern s32 *D_001601E0 __attribute__((sda));
@@ -187,7 +182,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         update_map_icons(level_map_selection.level, 0);
     }
 
-    if (D_001516D0.unk8 == 0) {
+    if (music_stream_state.read_state == 0) {
         if (level_map_selection.sel != -1) {
             menu_system.pending_buffer = 0;
             level_map_selection.slot_id[level_map_selection.sel] ^= 0x1000;
@@ -195,7 +190,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         }
     }
     pick = -1;
-    if (D_001516D0.unk8 == 0) {
+    if (music_stream_state.read_state == 0) {
         pick = promote_first_available_map_entry();
         if (pick != -1) {
             next = pick_next_map();
@@ -222,7 +217,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     }
     slot = find_map_entry_slot(id);
     if (level_map_selection.level != level_map_selection.loaded) {
-        if (D_001516D0.unk8 == 0 && slot == -1 && pick == slot) {
+        if (music_stream_state.read_state == 0 && slot == -1 && pick == slot) {
             pick_map_slot_to_evict(level_map_selection.loaded);
         }
     }

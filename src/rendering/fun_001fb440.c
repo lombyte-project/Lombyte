@@ -2,6 +2,7 @@
    func_001FB608). */
 #include "sda.h"
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/rendering/fs_aa_buffer.h"
 
 /* Sets up a (1 << a) x (1 << b) render target at GS address c: records
    TEX0 for it in D_0015EED0 (buffer width 1 << max(a - 6, 1) pages,
@@ -12,17 +13,6 @@
    FBP is set through the sceGsFrame bitfield, the form that
    sign-extends the halfword before masking as retail does. */
 typedef struct {
-    char unk_000[0x160];
-    short w;   /* 0x160 */
-    short h;   /* 0x162 */
-    short psm; /* 0x164 */
-    short fbp; /* 0x166 */
-    short unk_168[2];
-    short zpsm; /* 0x16C */
-    short zbp;  /* 0x16E */
-} FrameCfg;
-
-typedef struct {
     unsigned long FBP : 9;
     unsigned long pad09 : 7;
     unsigned long FBW : 6;
@@ -32,7 +22,6 @@ typedef struct {
     unsigned long FBMSK : 32;
 } GsFrame; /* sceGsFrame */
 
-extern FrameCfg D_00151780;
 extern long D_0015EED0 MACRO_ADDR;
 extern void FUN_001f9810(void *, int);
 extern int sceGsSetDefDrawEnv(void *, short, short, short, short, short);
@@ -47,9 +36,9 @@ void FUN_001fb440(int a, int b, int c) {
     if (x <= 0) {
         x = 1;
     }
-    D_00151780.fbp = c >> 13;
-    D_00151780.w = 1 << a;
-    D_00151780.h = 1 << b;
+    fs_aa_buffer.target_fbp = c >> 13;
+    fs_aa_buffer.target_width = 1 << a;
+    fs_aa_buffer.target_height = 1 << b;
     D_0015EED0 = (long)(c >> 8) | ((long)(1 << x) << 14) | ((long)a << 26) |
                  ((unsigned long)b << 30) | ((unsigned long)1 << 34);
     FUN_001f9810(render_packet_cursor.words, 0xF0);
@@ -63,9 +52,9 @@ void FUN_001fb440(int a, int b, int c) {
     q[1] = 0xE;
     render_packet_cursor.words += 4;
     d = (unsigned long *)render_packet_cursor.words;
-    sceGsSetDefDrawEnv(d, D_00151780.psm, D_00151780.w, D_00151780.h, 3, 0);
-    ((GsFrame *)d)->FBP = D_00151780.fbp;
-    d[2] = D_00151780.zbp | ((unsigned long)(D_00151780.zpsm & 0xF) << 24);
+    sceGsSetDefDrawEnv(d, fs_aa_buffer.target_psm, fs_aa_buffer.target_width, fs_aa_buffer.target_height, 3, 0);
+    ((GsFrame *)d)->FBP = fs_aa_buffer.target_fbp;
+    d[2] = fs_aa_buffer.zbp | ((unsigned long)(fs_aa_buffer.zpsm & 0xF) << 24);
     render_packet_cursor.words += 0x20;
     r = (long *)render_packet_cursor.words;
     r[0] = 0x1000000000000001L;
@@ -76,8 +65,8 @@ void FUN_001fb440(int a, int b, int c) {
     r[5] = 0x4410;
     r[6] = 0x106;
     r[7] = 0;
-    r[8] = (long)(0x8000 - D_00151780.w * 8) | ((long)(0x8000 - D_00151780.h * 8) << 16);
-    r[9] = (long)(D_00151780.w * 8 + 0x8000) | ((long)(D_00151780.h * 8 + 0x7FF0) << 16);
+    r[8] = (long)(0x8000 - fs_aa_buffer.target_width * 8) | ((long)(0x8000 - fs_aa_buffer.target_height * 8) << 16);
+    r[9] = (long)(fs_aa_buffer.target_width * 8 + 0x8000) | ((long)(fs_aa_buffer.target_height * 8 + 0x7FF0) << 16);
     render_packet_cursor.words += 0x14;
 }
 

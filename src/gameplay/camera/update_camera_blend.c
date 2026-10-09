@@ -5,13 +5,13 @@
 
 extern char D_001871B0[];
 extern char D_00187290[];
-extern int D_0018C32C NOT_SDA;
+#include "rnc/gameplay/camera/update_cam.h"
 extern int step_camera_blend(void *, void *) __asm__("func_001ECAF8");
 extern int advance_alternate_camera_transition(void *, void *) __asm__("FUN_001eccd8");
 
 /* Picks the update path by the flag at D_001871B0+2 (func_001ECAF8 when
    clear, FUN_001eccd8 when set), each passed arg0 and a slot inside
-   D_001871B0. On success, unless D_0018C32C is set, copies four 16-byte
+   D_001871B0. On success, unless camera_position_publication_suppressed is set, copies four 16-byte
    vectors from arg0 into D_00187290's block (retail's qcopy); the last
    destination is -0x210 from D_00187290, a different member reached by
    pointer arithmetic on the same char array. Either way it clears
@@ -28,7 +28,7 @@ void update_camera_blend(char *to_cam) {
         result = advance_alternate_camera_transition(to_cam, base + 0x70);
     }
     if (result != 0) {
-        if (D_0018C32C == 0) {
+        if (camera_position_publication_suppressed[0] == 0) {
             qcopy(D_00187290, to_cam);
             qcopy(D_00187290 + 0x10, to_cam + 0x10);
             qcopy(D_00187290 + 0x20, to_cam + 0x20);

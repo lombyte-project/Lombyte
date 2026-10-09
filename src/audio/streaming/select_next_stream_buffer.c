@@ -1,9 +1,5 @@
 #include "types.h"
-struct E {
-    s32 unk0;
-    s32 flags;
-};
-extern struct E D_001D60B8[];
+#include "rnc/rendering/graphics_buffer.h"
 extern void FillTransferWords();
 extern s32 get_stream_buffer_size() __asm__("func_00225D88");
 
@@ -15,17 +11,17 @@ s32 select_next_stream_buffer(s32 arg0) {
 
     for (i = 0; i < 5; i++) {
         if (arg0 != 0) {
-            f = D_001D60B8[i].flags ^ 1;
+            f = graphics_buffer_descriptors[i].flags ^ 1;
         } else {
-            f = D_001D60B8[i].flags;
+            f = graphics_buffer_descriptors[i].flags;
         }
         if (!(f & 1)) {
-            if (D_001D60B8[i].unk0 != 0) {
-                if (!(D_001D60B8[i].flags & 2)) {
-                    D_001D60B8[i].flags |= 2;
-                    FillTransferWords(D_001D60B8[i].unk0, 0xDEADBEEF,
-                                      get_stream_buffer_size(D_001D60B8[i].unk0));
-                    return D_001D60B8[i].unk0;
+            if (graphics_buffer_descriptors[i].address != 0) {
+                if (!(graphics_buffer_descriptors[i].flags & 2)) {
+                    graphics_buffer_descriptors[i].flags |= 2;
+                    FillTransferWords(graphics_buffer_descriptors[i].address, 0xDEADBEEF,
+                                      get_stream_buffer_size(graphics_buffer_descriptors[i].address));
+                    return graphics_buffer_descriptors[i].address;
                 }
             }
         }

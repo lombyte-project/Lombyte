@@ -1,12 +1,5 @@
 #include "types.h"
-
-/* Display size; init_view_context copies +0x150 into the screen width and
-   +0x152 into its height. */
-struct Display {
-    u8 pad0[0x150];
-    s16 width;
-    s16 height;
-};
+#include "rnc/rendering/fs_aa_buffer.h"
 
 struct Metrics {
     u8 pad0[4];
@@ -20,7 +13,6 @@ struct Metrics {
     u64 unk28;
 };
 
-extern struct Display D_00151780;
 extern struct Metrics *D_0015F350 __attribute__((sda));
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void draw_rect_overlay(s32, s32, s32, s32, u64) __asm__("func_001F52A0");
@@ -39,14 +31,14 @@ void draw_screen_effect(void) {
     u64 e28;
 
     i = 0;
-    height = D_00151780.height;
+    height = fs_aa_buffer.display_height;
     e = D_0015F350->enable;
     if (e != 0) {
         vu1_add_g_sregister(0x42, e & 0xFF000000FFULL);
     }
     c = D_0015F350->color;
     if (c & 0xFF000000) {
-        draw_rect_overlay(0, height, 0, D_00151780.width, (u64)((s64)c << 0x20) >> 0x20);
+        draw_rect_overlay(0, height, 0, fs_aa_buffer.display_width, (u64)((s64)c << 0x20) >> 0x20);
     }
     if (height > 0) {
         mask = 0xFF000000FFULL;
@@ -59,7 +51,7 @@ void draw_screen_effect(void) {
             if (v14 & 0xFF000000) {
                 draw_rect_overlay(i,
                                   (i + D_0015F350->unk10 < height - 1) ? i + D_0015F350->unk10 : height - 1,
-                                  0, D_00151780.width, (u64)((s64)v14 << 0x20) >> 0x20);
+                                  0, fs_aa_buffer.display_width, (u64)((s64)v14 << 0x20) >> 0x20);
             }
             i = i + D_0015F350->unk10;
             e28 = D_0015F350->unk28;
@@ -70,7 +62,7 @@ void draw_screen_effect(void) {
             if (v24 & 0xFF000000) {
                 draw_rect_overlay(i,
                                   (i + D_0015F350->unk20 < height - 1) ? i + D_0015F350->unk20 : height - 1,
-                                  0, D_00151780.width, (u64)((s64)v24 << 0x20) >> 0x20);
+                                  0, fs_aa_buffer.display_width, (u64)((s64)v24 << 0x20) >> 0x20);
             }
             i = i + D_0015F350->unk20;
         } while (i < height);

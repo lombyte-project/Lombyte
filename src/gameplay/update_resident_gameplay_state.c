@@ -141,12 +141,6 @@ typedef struct {
     Vector4 up;      /* 0x370 */
 } ResidentCameraState;
 
-typedef struct {
-    u8 pad0[0x1C];
-    s32 unk1C;
-    u8 pad20[0x3A];
-    u16 unk5A;
-} DialoguePlaybackState;
 
 
 typedef struct {
@@ -156,9 +150,9 @@ typedef struct {
 
 extern s32 D_0013CAE4[];
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/audio/music/music_stream_state.h"
 extern ResidentCinematicState level_render_state __asm__("D_0013E030");
 extern u8 D_001413F5[];
-extern DialoguePlaybackState D_001516D0;
 extern f32 D_0015ED60;
 extern f32 D_0015ED6C;
 extern f32 D_0015ED70 __attribute__((sda));
@@ -301,8 +295,8 @@ void update_resident_gameplay_state(void) {
             }
         }
         if (skip) {
-            if (D_001516D0.unk5A != 6 && D_001516D0.unk5A != 7) {
-                D_001516D0.unk5A = 5;
+            if (music_stream_state.secondary.state != 6 && music_stream_state.secondary.state != 7) {
+                music_stream_state.secondary.state = 5;
             }
             if (level_render_state.state == 0) {
                 render_sequence.time = scale_ticks(D_00160510[level_render_state.content_variant]);
@@ -320,8 +314,8 @@ void update_resident_gameplay_state(void) {
             }
         }
         if (render_sequence.time >= render_sequence.end) {
-            if (D_001516D0.unk5A != 6 && D_001516D0.unk5A != 7) {
-                D_001516D0.unk5A = 5;
+            if (music_stream_state.secondary.state != 6 && music_stream_state.secondary.state != 7) {
+                music_stream_state.secondary.state = 5;
             }
             CalculateDmaTransferAddress();
             D_0018CDB0[0] = 0.63f;
@@ -590,9 +584,9 @@ void update_resident_gameplay_state(void) {
         if (level_render_state.timer == 0) {
             music_pause(0);
             update_audio_stream_until_idle(0);
-            D_001516D0.unk1C = level_render_state.content_variant + 0x9C4F;
+            music_stream_state.queued_secondary_track = level_render_state.content_variant + 0x9C4F;
             fade_to_black(scale_ticks(12));
-            while ((s16)D_001516D0.unk5A != 3) {
+            while ((s16)music_stream_state.secondary.state != 3) {
                 sound_update();
                 sceGsSyncV(0);
             }
