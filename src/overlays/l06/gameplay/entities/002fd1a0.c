@@ -339,7 +339,64 @@ void FUN_L06_00300f70(char *arg, void *a, void *b) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00301070.s", FUN_L06_00301070);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00301b90.s", FUN_L06_00301b90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00302400.s", FUN_L06_00302400);
+#include "rnc/gameplay/entities/moby.h"
+
+struct TauntVoiceVars {
+    u8 pad0[0x38];
+    s32 greet[6];        /* 0x38: one per language */
+    s32 leave[6];        /* 0x50 */
+    s32 chatter[3][6];   /* 0x68 */
+};
+extern s32 game_language __asm__("D_0015ED88");
+extern s32 D_L06_001620B8[1] __attribute__((sda));
+extern s32 D_L06_001620BC;
+extern s32 D_L06_001620C0;
+extern s32 D_001516EC[];
+extern s32 FUN_00213260(s32);
+
+/* plays one of the vendor's greet, chatter or leave lines in the current language */
+void FUN_L06_00302400(struct Moby *m, s32 kind) {
+    struct TauntVoiceVars *v = (struct TauntVoiceVars *)m->pvars;
+    s32 id = -1;
+    s32 lang;
+    s32 r;
+    s32 i;
+
+    switch (kind) {
+    case 0:
+        lang = game_language;
+        if (lang != 0) lang--;
+        id = v->greet[lang];
+        break;
+    case 1:
+        r = FUN_00213260(3);
+        for (i = 0; i < 4; i++) {
+            if (D_L06_001620B8[r] == 0) {
+                D_L06_001620B8[r] = 1;
+                break;
+            }
+            r = (r + 1) % 3;
+            if (i == 2) {
+                D_L06_001620B8[0] = 0;
+                D_L06_001620BC = 0;
+                D_L06_001620C0 = 0;
+            }
+        }
+        lang = game_language;
+        if (lang != 0) lang--;
+        id = v->chatter[r][lang];
+        break;
+    case 2:
+        lang = game_language;
+        if (lang != 0) lang--;
+        id = v->leave[lang];
+        break;
+    }
+    if (id != -1) {
+        id += 20000;
+        D_001516EC[0] = id;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00302578.s", FUN_L06_00302578);
 
 #define NOT_SDA
