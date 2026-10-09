@@ -114,7 +114,55 @@ void FUN_L12_00306350(struct Moby *moby, int slot) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003064e8.s", FUN_L12_003064e8);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00306828.s", FUN_L12_00306828);
+#else
+extern int D_L12_0015F5CC;
+extern char *D_L12_0015FFD8_p __asm__("D_L12_0015FFD8");
+extern float ConvertIntegerToFloat(int) __asm__("FUN_001fa6c0");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+
+void FUN_L12_00306828(struct Moby *moby) {
+    int i;
+    int alpha = 0x80000000;
+    char *data = (char *)moby->pvars;
+    i = 0;
+    do {
+        struct Moby *other;
+        int period;
+        float sine;
+        float color;
+        int red;
+        int green;
+        int blue;
+        float phase;
+        float divisor;
+        if (i == 17) {
+            other = moby;
+        } else {
+            other = (struct Moby *)(D_L12_0015FFD8_p + (*(int *)(data + i * 0x30 + 0x20) * 0x100));
+        }
+        if (other->oclass != 0x4FE) {
+            period = scale_ticks(0xAA);
+            divisor = ConvertIntegerToFloat(period);
+            phase = (float)(D_L12_0015F5CC % period) / divisor;
+            sine = fast_sin((phase + phase) * 3.1415927f + -3.1415927f);
+            color = sine * 70.0f;
+            red = truncate_float_to_s32(color);
+            green = truncate_float_to_s32(color);
+            blue = truncate_float_to_s32(sine * 10.0f);
+            green += 0xB4;
+            red += 0xB4;
+            if (green > 0xFF) green = 0xFF;
+            if (red > 0xFF) red = 0xFF;
+            other->unk90 = ((blue + 0x46) << 16) | alpha | (green << 8) | red;
+            other->flags |= 0x10;
+        }
+        i++;
+    } while (i < 18);
+}
+#endif /* NON_MATCHING */
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003069d0.s", FUN_L12_003069d0);
 #include "qcopy.h"
 
