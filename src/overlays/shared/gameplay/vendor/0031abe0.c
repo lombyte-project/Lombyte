@@ -239,68 +239,6 @@ void FUN_L05_00329540(char *m) {
     normalize_vector_xyz(side, side, 1.0f);
     qcopy(m + 0x40, m);
 }
-extern char *D_L05_0015EF50_3296e0 __asm__("D_L05_0015EF50");
-extern s32 D_001413D0_3296e0[] __asm__("D_001413D0");
-extern void zero_vector_3296e0(void *) __asm__("FUN_001f99f8");
-
-/* Resets camera m from its preset (table D_L05_0015EF50, entry m->0x84): distances,
-   angle limits and damping, cleared velocities, then places it. */
-void FUN_L05_003296e0(char *m) {
-    char *s = *(char **)(D_L05_0015EF50_3296e0 + *(s16 *)(m + 0x84) * 32 + 0x1C);
-    char *d;
-    char *p;
-    char *q;
-    char *r;
-    char *t;
-    char *u;
-
-    *(s32 *)(s + 0x48) = 0;
-    d = *(char **)(m + 0x70);
-    *(f32 *)(d + 0x184) = *(f32 *)(s + 0x28);
-    *(f32 *)(d + 0x188) = *(f32 *)(s + 0x2C);
-    *(f32 *)(d + 0x180) = *(f32 *)(s + 0x30);
-    *(f32 *)(d + 0x190) = *(f32 *)(s + 0x34);
-    *(f32 *)(d + 0x194) = *(f32 *)(s + 0x38);
-    *(f32 *)(d + 0x18C) = *(f32 *)(s + 0x3C);
-    zero_vector_3296e0(d + 0x1B0);
-    zero_vector_3296e0(d + 0x1C0);
-    p = *(char **)(m + 0x70) + 0x80;
-    *(s32 *)(p + 0x40) = 5;
-    *(s32 *)(p + 0x44) = D_001413D0_3296e0[0];
-    *(f32 *)(p + 0x4C) = *(f32 *)(d + 0x180);
-    *(f32 *)(p + 0x48) = 0.209439516f;
-    *(f32 *)(p + 0x58) = 0.00174532924f;
-    *(f32 *)(p + 0x5C) = -0.0043633231f;
-    q = *(char **)(m + 0x70) + 0xE0;
-    *(f32 *)(q + 0x0) = *(f32 *)(d + 0x184);
-    *(f32 *)(q + 0x4) = 0.5f;
-    *(f32 *)(q + 0x10) = *(f32 *)(d + 0x188);
-    r = *(char **)(m + 0x70);
-    *(f32 *)(r + 0x10) = 0.01f;
-    *(f32 *)(r + 0x14) = 0.2f;
-    *(s32 *)(r + 0x18) = 0;
-    *(s16 *)(r + 0x1C) = 0;
-    zero_vector_3296e0(r);
-    t = *(char **)(m + 0x70) + 0x100;
-    zero_vector_3296e0(t);
-    zero_vector_3296e0(t + 0x20);
-    *(s32 *)(t + 0x40) = 0;
-    *(f32 *)(t + 0x10) = *(f32 *)(s + 0x0);
-    *(f32 *)(t + 0x34) = *(f32 *)(s + 0x20);
-    *(f32 *)(t + 0x38) = *(f32 *)(s + 0x24);
-    *(s32 *)(t + 0x3C) = 0;
-    u = *(char **)(m + 0x70) + 0x30;
-    *(f32 *)(u + 0x20) = 0.8f;
-    *(f32 *)(u + 0x24) = 0.3f;
-    *(f32 *)(u + 0x40) = 1.3333334f;
-    *(s32 *)(u + 0x28) = 0;
-    *(s16 *)(u + 0x2C) = 0;
-    zero_vector_3296e0(u);
-    FUN_L05_003294c0(*(f32 *)(s + 0x28), *(f32 *)(s + 0x2C), *(f32 *)(s + 0x30), *(f32 *)(s + 0x34),
-                     *(f32 *)(s + 0x38), *(f32 *)(s + 0x3C), *(f32 *)(s + 0x40), *(f32 *)(s + 0x44));
-    FUN_L05_00329540(m);
-    *(s16 *)(m + 0x7E) = 0;
-}
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
@@ -309,20 +247,74 @@ typedef struct {
     Vec4 pos;           /* 0x00 */
     u8 pad10[0x20];
     Vec4 side;          /* 0x30 */
+    s32 state;          /* 0x40: 5 after a preset reset */
+    s32 unk44;          /* 0x44 */
+    f32 max_angle;      /* 0x48 */
+    f32 dist;           /* 0x4C */
+    u8 pad50[8];
+    f32 unk58;          /* 0x58 */
+    f32 unk5C;          /* 0x5C */
 } CameraFocus;
+
+/* View block at orbit + 0x30. */
+typedef struct {
+    Vec4 vel;           /* 0x00 */
+    u8 pad10[0x10];
+    f32 unk20;          /* 0x20 */
+    f32 unk24;          /* 0x24 */
+    s32 unk28;          /* 0x28 */
+    s16 unk2C;          /* 0x2C */
+    u8 pad2E[0x12];
+    f32 aspect;         /* 0x40 */
+    u8 pad44[0xC];
+} CameraView;
+
+typedef struct {
+    f32 dist;           /* 0x00 */
+    f32 unk4;           /* 0x04 */
+    u8 pad8[8];
+    f32 height;         /* 0x10 */
+    u8 pad14[0xC];
+} CameraSpring;
+
+typedef struct {
+    Vec4 vel;           /* 0x00 */
+    f32 unk10;          /* 0x10 */
+    u8 pad14[0xC];
+    Vec4 accel;         /* 0x20 */
+    u8 pad30[4];
+    f32 unk34;          /* 0x34 */
+    f32 unk38;          /* 0x38 */
+    s32 unk3C;          /* 0x3C */
+    s32 unk40;          /* 0x40 */
+    u8 pad44[0xC];
+} CameraTrack;
 
 /* Orbit state the camera keeps while it circles the hero. */
 typedef struct {
     Vec4 axis;          /* 0x00 */
-    u8 pad10[0xC];
+    f32 unk10;          /* 0x10: 0.01 unless the preset gives one (FUN_L05_003294c0) */
+    f32 unk14;          /* 0x14: 0.2 unless the preset gives one */
+    s32 unk18;          /* 0x18 */
     s16 mode;           /* 0x1C: 0 waiting, 1 orbiting */
-    u8 pad1E[0x62];
+    u8 pad1E[0x12];
+    CameraView view;    /* 0x30 */
     CameraFocus focus;  /* 0x80 */
-    u8 padC0[0x90];
+    CameraSpring spring; /* 0xE0 */
+    CameraTrack track;  /* 0x100 */
     f32 goal[3];        /* 0x150: yaw, pitch, distance */
     f32 vel[3];         /* 0x15C */
     f32 accel[3];       /* 0x168 */
     f32 damp[3];        /* 0x174 */
+    f32 dist;           /* 0x180 */
+    f32 spring_dist;    /* 0x184 */
+    f32 spring_height;  /* 0x188 */
+    f32 unk18C;         /* 0x18C */
+    f32 unk190;         /* 0x190 */
+    f32 unk194;         /* 0x194 */
+    u8 pad198[0x18];
+    Vec4 unk1B0;        /* 0x1B0 */
+    Vec4 unk1C0;        /* 0x1C0 */
 } CameraOrbit;
 
 typedef struct {
@@ -334,7 +326,96 @@ typedef struct {
     f32 dist;           /* 0x58 */
     u8 pad5C[0x14];
     CameraOrbit *orbit; /* 0x70 */
+    u8 pad74[0xA];
+    s16 unk7E;          /* 0x7E: cleared after a preset reset */
+    u8 pad80[4];
+    s16 preset;         /* 0x84: row of D_L05_0015EF50 */
 } Camera;
+
+/* Camera preset: distances, angle limits and damping. */
+typedef struct {
+    f32 unk0;           /* 0x00 */
+    u8 pad4[0x1C];
+    f32 unk20;          /* 0x20 */
+    f32 unk24;          /* 0x24 */
+    f32 spring_dist;    /* 0x28 */
+    f32 spring_height;  /* 0x2C */
+    f32 dist;           /* 0x30 */
+    f32 unk34;          /* 0x34 */
+    f32 unk38;          /* 0x38 */
+    f32 unk3C;          /* 0x3C */
+    f32 unk40;          /* 0x40 */
+    f32 unk44;          /* 0x44 */
+    s32 unk48;          /* 0x48 */
+} CameraPreset;
+
+typedef struct {
+    u8 pad0[0x1C];
+    CameraPreset *preset; /* 0x1C */
+} CameraPresetRow;
+
+extern CameraPresetRow *D_L05_0015EF50;
+extern s32 D_001413D0[];
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+
+/* Resets the camera from its preset (row cam->preset of D_L05_0015EF50): distances,
+   angle limits and damping, cleared velocities, then places it. */
+void FUN_L05_003296e0(Camera *cam) {
+    CameraPreset *s = D_L05_0015EF50[cam->preset].preset;
+    CameraOrbit *d;
+    CameraFocus *focus;
+    CameraSpring *spring;
+    CameraOrbit *orbit;
+    CameraTrack *track;
+    CameraView *view;
+
+    s->unk48 = 0;
+    d = cam->orbit;
+    d->spring_dist = s->spring_dist;
+    d->spring_height = s->spring_height;
+    d->dist = s->dist;
+    d->unk190 = s->unk34;
+    d->unk194 = s->unk38;
+    d->unk18C = s->unk3C;
+    clear_u64_value(&d->unk1B0);
+    clear_u64_value(&d->unk1C0);
+    focus = &cam->orbit->focus;
+    focus->state = 5;
+    focus->unk44 = D_001413D0[0];
+    focus->dist = d->dist;
+    focus->max_angle = 0.209439516f;
+    focus->unk58 = 0.00174532924f;
+    focus->unk5C = -0.0043633231f;
+    spring = &cam->orbit->spring;
+    spring->dist = d->spring_dist;
+    spring->unk4 = 0.5f;
+    spring->height = d->spring_height;
+    orbit = cam->orbit;
+    orbit->unk10 = 0.01f;
+    orbit->unk14 = 0.2f;
+    orbit->unk18 = 0;
+    orbit->mode = 0;
+    clear_u64_value(orbit);
+    track = &cam->orbit->track;
+    clear_u64_value(track);
+    clear_u64_value(&track->accel);
+    track->unk40 = 0;
+    track->unk10 = s->unk0;
+    track->unk34 = s->unk20;
+    track->unk38 = s->unk24;
+    track->unk3C = 0;
+    view = &cam->orbit->view;
+    view->unk20 = 0.8f;
+    view->unk24 = 0.3f;
+    view->aspect = 1.3333334f;
+    view->unk28 = 0;
+    view->unk2C = 0;
+    clear_u64_value(view);
+    FUN_L05_003294c0(s->spring_dist, s->spring_height, s->dist, s->unk34,
+                     s->unk38, s->unk3C, s->unk40, s->unk44);
+    FUN_L05_00329540((char *)cam);
+    cam->unk7E = 0;
+}
 
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
@@ -444,7 +525,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00329ce8.s", FUN_L05_00329ce8);
 
 extern char *D_L05_00167204_d __asm__("D_L05_00167204") __attribute__((section(".data")));
 extern void FUN_002144d8(void *, void *);
-extern void FUN_L05_003296e0(char *);
+extern void FUN_L05_003296e0(Camera *);
 
 void FUN_L05_0032a6e0(char *out) {
     char *src = D_L05_00167204_d;
@@ -453,5 +534,5 @@ void FUN_L05_0032a6e0(char *out) {
     qcopy(out + 0x10, src + 0x10);
     qcopy(out + 0x20, src + 0x20);
     FUN_002144d8(out + 0x40, out);
-    FUN_L05_003296e0(out);
+    FUN_L05_003296e0((Camera *)out);
 }
