@@ -29,7 +29,57 @@ void FUN_L00_002df730(unsigned char *p) {
         break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df808.s", FUN_L00_002df808);
+#else
+#include "qcopy.h"
+typedef struct {
+    float x, y, z, w;
+} __attribute__((aligned(16))) V_2df808;
+typedef unsigned int U128_2df808 __attribute__((mode(TI), aligned(16)));
+typedef union {
+    U128_2df808 q;
+    float f[4];
+} R_2df808;
+extern unsigned char *FUN_L00_0024e838_2df808(int) __asm__("FUN_L00_0024e838");
+extern float FUN_L00_00257be8_2df808(float, float) __asm__("FUN_L00_00257be8");
+extern void FUN_L00_002502f0_2df808(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
+extern void FUN_L00_00250df8_2df808(unsigned char *) __asm__("FUN_L00_00250df8");
+unsigned char *FUN_L00_002df808(int owner, V_2df808 *position, V_2df808 *vector,
+                                 int flags, unsigned char red, unsigned char green,
+                                 unsigned char blue, unsigned char alpha,
+                                 float scale) {
+    unsigned char *moby = FUN_L00_0024e838_2df808(0x4a8);
+    unsigned char *data;
+    R_2df808 rotation_copy;
+    R_2df808 rotation;
+    if (moby != 0) {
+        data = *(unsigned char **)(moby + 0x78);
+        rotation.q = 0;
+        rotation.f[0] = FUN_L00_00257be8_2df808(-3.1415927f, 3.1415927f);
+        rotation.f[1] = FUN_L00_00257be8_2df808(-3.1415927f, 3.1415927f);
+        rotation.f[2] = FUN_L00_00257be8_2df808(-3.1415927f, 3.1415927f);
+        rotation_copy.q = rotation.q;
+        moby[0x20] = 0;
+        moby[0x23] = alpha;
+        moby[0x31] = 1;
+        moby[0x30] = 0xff;
+        *(unsigned short *)(moby + 0x32) = 0xff;
+        FUN_L00_002502f0_2df808(moby, red, green, blue);
+        *(float *)(data + 0x18) = *(float *)(moby + 0x2c) * scale;
+        *(int *)(moby + 0x2c) = 0;
+        *(int *)(data + 0x10) = owner;
+        qcopy(moby + 0x10, position);
+        *(U128_2df808 *)data = *(U128_2df808 *)vector;
+        qcopy(moby + 0x40, &rotation_copy);
+        *(unsigned short *)(data + 0x1e) = alpha;
+        *(int *)(data + 0x14) = flags;
+        *(unsigned short *)(data + 0x1c) = *(unsigned short *)(data + 0x14);
+        FUN_L00_00250df8_2df808(moby);
+    }
+    return moby;
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df9a0.s", FUN_L00_002df9a0);
 typedef struct {
     float x, y, z, w;
