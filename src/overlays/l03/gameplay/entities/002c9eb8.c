@@ -52,7 +52,126 @@ void FUN_L03_002d3c40(char *m) {
                      D_L03_00161B00 * DEG_TO_RAD * D_0015ED6C);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c9eb8.s", FUN_L03_002c9eb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ca808.s", FUN_L03_002ca808);
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
+
+/* Pvars of the l03 trooper (fields its hit handler touches). */
+typedef struct {
+    u8 pad0[0x20];
+    f32 health;           /* 0x20 */
+    u8 pad24[0x3C];
+    u8 anim[0x10];        /* 0x60: animation driver */
+    u8 knockback[0x10];   /* 0x70 */
+    f32 kb_speed;         /* 0x80 */
+    u8 pad84[4];
+    f32 kb_lift;          /* 0x88 */
+    f32 kb_gravity;       /* 0x8C */
+    u8 pad90[4];
+    s32 kb_frames;        /* 0x94 */
+    u8 pad98[0x15];
+    u8 kb_landed;         /* 0xAD */
+    u8 padAE[0x12];
+    f32 kb_min;           /* 0xC0 */
+    f32 kb_max;           /* 0xC4 */
+} TrooperVars;
+
+typedef struct {
+    u8 pad0[0x10];
+    Vec4 pos;             /* 0x10: where the hit landed */
+    struct Moby *source;  /* 0x20: moby that dealt it */
+} TrooperHit;
+
+extern float D_0015ED70 __attribute__((section(".sdata")));
+extern f32 D_L03_001618F8 __attribute__((sda));
+extern f32 D_L03_001618FC __attribute__((sda));
+extern f32 D_L03_00161900 __attribute__((sda));
+extern f32 D_L03_00161904 __attribute__((sda));
+extern f32 D_L03_00161908 __attribute__((sda));
+extern f32 D_L03_0016190C __attribute__((sda));
+extern TrooperHit *trooper_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
+extern s32 trooper_take_damage(struct Moby *, TrooperHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
+extern f32 trooper_atan2(f32, f32) __asm__("FUN_001f9e90");
+extern void trooper_set_knockback(void *, f32, f32) __asm__("FUN_L03_00250a78");
+extern void trooper_knockback_arc(Vec4 *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
+extern void trooper_start_knockback(f32, struct Moby *, void *, s32, s32, s32) __asm__("FUN_L00_0025c558");
+extern void trooper_anim_update(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+
+/* Trooper hit handler: takes damage, then knocks back away from the attacker by hit strength (dying on lethal hits). */
+void FUN_L03_002ca808(struct Moby *m) {
+    TrooperVars *v = (TrooperVars *)m->pvars;
+    TrooperHit *h;
+    Vec4 at;
+    s32 hit;
+    f32 dmg;
+    f32 ang;
+    s32 r;
+
+    dmg = 0.0f;
+    h = trooper_find_hit(m, 0x330000, 0);
+    r = trooper_take_damage(m, h, &v->health, 0, &hit, &dmg, 0, 4);
+    if (hit != 1 && m->state != 5) {
+        if (h->source != NULL) {
+            if (h->source != hero.items[0].moby)
+                ang = trooper_atan2(m->pos.x - h->source->pos.x, m->pos.y - h->source->pos.y);
+            else
+                ang = trooper_atan2(m->pos.x - hero.motion.pos.f[0], m->pos.y - hero.motion.pos.f[1]);
+        } else {
+            ang = trooper_atan2(m->pos.x - hero.motion.pos.f[0], m->pos.y - hero.motion.pos.f[1]);
+        }
+        v->health -= dmg;
+        if (v->health <= 0.0f)
+            r = 1;
+        switch (r) {
+        case 3:
+        case 6:
+            v->kb_speed = D_L03_001618FC * D_0015ED70;
+            trooper_set_knockback(v->knockback, D_L03_00161900, D_L03_00161904);
+            v->kb_landed = 0;
+            v->kb_frames = 9;
+            *(u128 *)&at = *(u128 *)&h->pos;
+            trooper_knockback_arc(&at, &ang, &v->kb_lift, &v->kb_gravity);
+            trooper_start_knockback(trooper_atan2(m->pos.x - hero.motion.pos.f[0], m->pos.y - hero.motion.pos.f[1]),
+                                    m, v->knockback, 3, 1, 0);
+            v->kb_min = 5.0f;
+            v->kb_max = 10.0f;
+            m->state = 4;
+            break;
+        case 4:
+        case 5:
+            v->kb_speed = D_L03_001618FC * D_0015ED70;
+            trooper_set_knockback(v->knockback, D_L03_00161900, D_L03_00161904);
+            v->kb_landed = 0;
+            v->kb_frames = 9;
+            *(u128 *)&at = *(u128 *)&h->pos;
+            trooper_knockback_arc(&at, &ang, &v->kb_lift, &v->kb_gravity);
+            trooper_start_knockback(trooper_atan2(m->pos.x - hero.motion.pos.f[0], m->pos.y - hero.motion.pos.f[1]),
+                                    m, v->knockback, 4, 1, 0);
+            v->kb_min = 7.5f;
+            v->kb_max = 15.0f;
+            m->state = 4;
+            break;
+        case 1:
+            v->kb_speed = D_L03_001618F8 * D_0015ED70;
+            trooper_set_knockback(v->knockback, D_L03_00161908, D_L03_0016190C);
+            v->kb_landed = 0;
+            v->kb_frames = 9;
+            *(u128 *)&at = *(u128 *)&h->pos;
+            trooper_knockback_arc(&at, &ang, &v->kb_lift, &v->kb_gravity);
+            trooper_start_knockback(trooper_atan2(m->pos.x - hero.motion.pos.f[0], m->pos.y - hero.motion.pos.f[1]),
+                                    m, v->knockback, 5, 1, 0);
+            v->kb_min = 8.0f;
+            v->kb_max = 15.0f;
+            m->flags &= 0xEFFF;
+            *((u8 *)v + 0x67) = 0xFA;
+            m->state = 5;
+            break;
+        }
+        trooper_anim_update(m, v->anim);
+    }
+    m->unkA4 = 0xFF;
+    trooper_anim_finish(m, v->anim);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cbea8.s", FUN_L03_002cbea8);
 
 #include "qcopy.h"
