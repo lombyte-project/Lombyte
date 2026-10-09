@@ -568,21 +568,32 @@ def c_value(kind: str, raw: bytes, symbols: dict[int, str]) -> str:
     return str(value) if value < 0 or value < 10 else hex(value)
 
 
-def c_initializer(members: list, size: int, raw: bytes, symbols: dict[int, str]) -> str:
-    """Brace initialiser for a record laid out by ``members`` over ``raw``."""
+def c_initializer(members: list, size: int, raw: bytes, symbols: dict[int, str],
+                  records: Callable[[str], list | None] = lambda name: None) -> str:
+    """Brace initialiser for a record laid out by ``members`` over ``raw``.
+
+    ``records`` gives the members of a nested record type clang did not expand
+    (the element type of an array of structs). All-zero parts collapse to ``{0}``.
+    """
+    if not any(raw):
+        return "{0}"
     parts = []
     for index, (off, kind, _name, sub) in enumerate(members):
         end = members[index + 1][0] if index + 1 < len(members) else size
         field = raw[off:end]
         if sub:
-            parts.append(c_initializer([(o - off, k, n, s) for o, k, n, s in sub], end - off, field, symbols))
+            parts.append(c_initializer([(o - off, k, n, s) for o, k, n, s in sub], end - off, field, symbols,
+                                       records))
             continue
         array = re.fullmatch(r"(.*)\[(\d+)\]", kind)
         if array:
             elem, count = array.group(1), int(array.group(2))
             step = len(field) // count if count else 0
-            parts.append("{" + ", ".join(c_value(elem, field[i * step:(i + 1) * step], symbols)
-                                         for i in range(count)) + "}")
+            inner = records(re.sub(r"^(struct|union)\s+", "", elem.strip()))
+            parts.append("{" + ", ".join(
+                c_initializer(inner, step, field[i * step:(i + 1) * step], symbols, records) if inner
+                else c_value(elem, field[i * step:(i + 1) * step], symbols)
+                for i in range(count)) + "}")
         else:
             parts.append(c_value(kind, field, symbols))
     return "{" + ", ".join(parts) + "}"
@@ -627,7 +638,8 @@ def emit_data(addr: int, elf: Path, sections: list) -> Path:
         else:
             raise SystemExit(f"0x{addr:08X} has no file bytes")
     symbols = {a: n for a, (n, _t) in c_declarations().items()}
-    body = "{0}" if not any(raw) else c_initializer(members, size, raw, symbols)
+    body = "{0}" if not any(raw) else c_initializer(members, size, raw, symbols,
+                                                    lambda rec: layout_tree(run.stdout, rec))
     out = ROOT / "src" / "data" / DATA_DIRS[section] / f"{addr:08X}_{name}.c"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(f'#include "types.h"\n#include "{include}"\n\n'
