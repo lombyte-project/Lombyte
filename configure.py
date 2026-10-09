@@ -362,6 +362,7 @@ RODATA_OVERLAYS = {
     # the same VMA/file offset for the relocations to resolve content-equal.
     "_getpic": (0x153AA0, 0x54A20),
     "sdk/debug/printfloat": (0x152798, 0x53718),  # its three f64 literals (0.1, 0.1, 1e6)
+    "audio/rpc/snd_send_iop_command_and_wait": (0x153D20, 0x54CA0),  # its RPC-collision message
     "fun_0021fdc8": (0x1E87F0, 0xE9770),  # stream-state switch table
     # vfprintf_r: blanks/zeroes, the xdigs strings, the short literals (kept in
     # .rodata via section attributes, in source order) and its switch table.
