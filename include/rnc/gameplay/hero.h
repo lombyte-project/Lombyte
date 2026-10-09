@@ -473,7 +473,9 @@ struct Hero {
     f32 unk8FC;                    /* 0x8FC */
     s16 unk900;                    /* 0x900 */
     s16 unk902;                    /* 0x902 */
-    u8 pad_904[0x6];
+    s16 unk904;                    /* 0x904 */
+    s16 unk906;                    /* 0x906 */
+    s16 unk908;                    /* 0x908 */
     s16 unk90A;                    /* 0x90A */
     s16 unk90C;                    /* 0x90C */
     s16 unk90E;                    /* 0x90E */
@@ -623,7 +625,9 @@ struct Hero {
     u8 pad_1D00[0x20];
     f32 unk1D20;                   /* 0x1D20 */
     f32 unk1D24;                   /* 0x1D24 */
-    u8 pad_1D28[0x238];
+    u8 pad_1D28[0x188];
+    s16 unk1EB0;                   /* 0x1EB0 */
+    u8 pad_1EB2[0xAE];
     u8 unk1F60[0x40];              /* 0x1F60: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
     u8 unk1FA0[0x40];              /* 0x1FA0: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
     u8 *unk1FE0;                   /* 0x1FE0: moby set by FUN_L00_002b58d8 */
