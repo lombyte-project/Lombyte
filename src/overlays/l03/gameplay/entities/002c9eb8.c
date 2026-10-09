@@ -430,7 +430,203 @@ void FUN_L03_002ca808(struct Moby *m) {
     m->unkA4 = 0xFF;
     trooper_anim_finish(m, v->anim);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cbea8.s", FUN_L03_002cbea8);
+#include "rnc/overlay/quad.h"
+
+typedef float MineVec[4] __attribute__((aligned(16)));
+
+/* Explosion description handed to FUN_L00_002d3838 (0x50 bytes, copied from a level constant). */
+typedef struct {
+    OvlQuad q[5];
+} MineBlast;
+
+/* Pvars of the l03 mine. */
+typedef struct {
+    u8 pad0[0x60];        /* 0x00: fall record (FUN_L00_0025c698) */
+    s32 unk60;
+    s32 timer;            /* 0x64: arming delay */
+    struct Moby *target;  /* 0x68: moby it is stuck to or homing on */
+    s32 age;              /* 0x6C: frames alive */
+} MineVars;
+
+/* The level camera record (only the shake fields written here). */
+typedef struct {
+    u8 pad0[0x160];
+    f32 shake;            /* 0x160 */
+    u8 pad164[4];
+    s32 shake_frames;     /* 0x168 */
+} MineCamera;
+
+extern MineBlast D_L03_001E32B0;
+extern struct Moby *D_L03_00178000[];
+extern MineCamera D_L03_00166D80_cbea8 __asm__("D_L03_00166D80");
+extern char D_L03_00166EC0[];
+extern char D_L03_001B08B0[];
+extern float D_0015ED60;
+extern int mine_fall(struct Moby *, void *) __asm__("FUN_L00_0025c698");
+extern s32 mine_frames(s32) __asm__("FUN_001f96f8");
+extern s32 mine_tick(s32 *) __asm__("FUN_001f9740");
+extern void mine_blend_anim(struct Moby *, int, int, int) __asm__("FUN_00212f90");
+extern void mine_kill(struct Moby *) __asm__("FUN_0020c828");
+extern void mine_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void mine_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern f32 mine_vec_len(void *) __asm__("FUN_001f9af0");
+extern void mine_set_len(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 mine_dist(void *, void *) __asm__("FUN_001f9b80");
+extern f32 mine_fabs(f32) __asm__("FUN_001f99c0");
+extern void mine_sound(int, int, struct Moby *) __asm__("FUN_0022da68");
+extern int mine_find_mobys(void *, int, struct Moby *, void *, f32) __asm__("FUN_L00_001f2868");
+extern void mine_blast_mobys(struct Moby *, void *, void *, int, int, int, int, int, f32, f32, f32) __asm__("FUN_L00_0025a9f8");
+extern s32 mine_ftoi(f32) __asm__("FUN_001fa6d0");
+extern s32 mine_rand_below(s32) __asm__("FUN_00213260");
+extern f32 mine_rand(f32, f32) __asm__("FUN_002132a8");
+extern f32 mine_rand_angle(void) __asm__("FUN_00213308");
+extern f32 mine_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 mine_sin(f32) __asm__("FUN_001f9de0");
+extern s32 mine_rand_between(s32, s32) __asm__("FUN_L00_00257b90");
+extern int mine_blend_color(int, int, f32) __asm__("FUN_L00_002371e0");
+extern void mine_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
+extern void mine_debris(void *, void *, int, int, f32, int, int) __asm__("FUN_L00_0026bed0");
+extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
+extern void mine_spawn_drops(struct Moby *, void *) __asm__("FUN_L00_0025f800");
+
+/* l03 mine update: falls until it lands, sticks to or homes on its target, arms,
+   and explodes on contact (debris, camera shake, blast) or shrinks away when old. */
+void FUN_L03_002cbea8(struct Moby *m) {
+    MineBlast blast = D_L03_001E32B0;
+    MineVec tmp;
+    MineVars *v = (MineVars *)m->pvars;
+    struct Moby *t;
+    float dist;
+    int n;
+    int i;
+    int k;
+
+    FUN_L03_002cc828((unsigned char *)m);
+    v->unk60 = 0;
+    v->age++;
+    switch (m->state) {
+    case 0:
+        break;
+    case 1:
+        if (mine_fall(m, v) & 1) {
+            m->state = 3;
+            if (m->prev_seq != 1) {
+                mine_blend_anim(m, 1, 0, mine_frames(10));
+            }
+            v->timer = mine_frames(60);
+        } else if (m->pos.z < 5.0f) {
+            mine_kill(m);
+            return;
+        }
+        break;
+    case 2:
+        mine_vec_sub(tmp, &v->target->pos, &m->pos);
+        if (mine_vec_len(tmp) < 0.25f) {
+            mine_kill(m);
+            return;
+        }
+        mine_set_len(tmp, tmp, D_0015ED6C * 14.0f);
+        tmp[2] += D_0015ED6C * 4.0f;
+        mine_vec_add(&m->pos, &m->pos, tmp);
+        break;
+    case 3:
+        mine_tick(&v->timer);
+        t = v->target;
+        if (t != 0 && t->state != 0xFE && t->state != 0xFD && mine_dist(&m->pos, &t->pos) < 3.0f && v->timer == 0) {
+            m->state = 2;
+            mine_sound(2, 0, m);
+        }
+        if (mine_frames(3600) < v->age &&
+            (v->target == 0 || v->target->state == 0xFE || v->target->state == 0xFD || mine_frames(5400) < v->age)) {
+            m->state = 5;
+        }
+        if (mine_dist(&hero.moby->pos, &m->pos) < 0.5f && mine_fabs(m->pos.z - hero.motion.pos.f[2]) < 0.25f) {
+            m->state = 4;
+            break;
+        }
+        n = mine_find_mobys(&m->pos, 0x10, m, 0, 1.0f);
+        for (k = 0; k < n; k++) {
+            struct Moby *o = D_L03_00178000[k];
+
+            if ((o->flags & 0x1000) && (o != v->target || v->timer == 0)) {
+                m->state = 4;
+                break;
+            }
+        }
+        break;
+    case 4: {
+        int cnt;
+
+        dist = mine_dist(&m->pos, D_L03_00166EC0);
+        n = mine_find_mobys(&m->pos, 0x10, m, 0, 2.0f);
+        *(OvlQuad *)tmp = *(OvlQuad *)&m->pos;
+        mine_blast_mobys(m, tmp, D_L03_00178000, n, 0, 0x810001, 4, 1, 3.0f, 0.25f, 1.5f);
+        cnt = mine_ftoi(dist * 15.0f);
+        for (i = 0; i < cnt; i++) {
+            int kind = mine_rand_below(4);
+
+            *(Vec4f *)tmp = (Vec4f){D_0015ED6C * 14.0f, D_0015ED6C * 22.0f, D_0015ED6C * 12.0f, 0.0f};
+            {
+                MineVec dir;
+                MineVec r;
+                float rr;
+                float ang;
+
+
+                *(OvlQuad *)r = 0;
+                r[0] = mine_rand(D_0015ED6C * -0.5f, D_0015ED6C * 0.5f);
+                r[1] = mine_rand(D_0015ED6C * -0.5f, D_0015ED6C * 0.5f);
+                r[2] = mine_rand(D_0015ED6C * 4.0f, tmp[kind]);
+                *(OvlQuad *)dir = *(OvlQuad *)r;
+                rr = mine_rand(0.0f, kind == 1 ? 0.5f : 0.25f);
+                ang = mine_rand_angle();
+                r[0] = mine_cos(ang) * rr;
+                r[1] = mine_sin(ang) * rr;
+                r[2] = 0.0f;
+                mine_vec_add(r, r, &m->pos);
+                r[2] -= rr * mine_cos(0.785398f);
+                dir[2] -= rr * D_0015ED6C * 8.0f;
+                switch (kind) {
+                case 0:
+                    mine_debris(r, dir, 0x1F101820, 0x101010, mine_rand(200000.0f, 300000.0f),
+                                mine_rand_between(mine_frames(0xB4), mine_frames(0xF0)), 0);
+                    break;
+                case 1:
+                    mine_debris(r, dir, 0x3F081020, 0x0F081020, mine_rand(50000.0f, 100000.0f), mine_frames(0xB4), 1);
+                    break;
+                case 2:
+                    mine_debris(r, dir, mine_rand_below(100) < 0x28 ? 0x5FF8F8F8 : 0x2F486078, 0x0F000020, 150000.0f,
+                                mine_rand_between(mine_frames(0x1E), mine_frames(0x2D)), 2);
+                    break;
+                case 3: {
+                    int c1 = mine_blend_color(0x7F000000, 0x7F182030, mine_rand(0.25f, 1.0f));
+                    int c2 = mine_blend_color(0, 0x5F5F5F, mine_rand(0.5f, 1.0f));
+
+                    mine_spherical_offset(dir, mine_rand(0.0f, 1.0f) * D_0015ED6C, ang, mine_rand_angle());
+                    mine_debris(r, dir, c1, c2, mine_rand(200000.0f, 300000.0f),
+                                mine_rand_between(mine_frames(0xF0), mine_frames(0x12C)), 3);
+                    break;
+                }
+                }
+            }
+        }
+        mine_sound(0, 0, m);
+        D_L03_00166D80_cbea8.shake = dist < 20.0f ? 0.4f - dist * 0.0175f : 0.050000012f;
+        D_L03_00166D80_cbea8.shake_frames = mine_frames(0x19);
+        mine_camera_blast(&blast, &m->pos, 0, 0);
+        mine_spawn_drops(m, D_L03_001B08B0);
+        mine_kill(m);
+        return;
+    }
+    case 5:
+        m->scale *= D_0015ED60 * -0.074f + 1.0f;
+        if (m->scale < m->pclass->scale * 0.01f) {
+            mine_spawn_drops(m, D_L03_001B08B0);
+            mine_kill(m);
+        }
+        break;
+    }
+}
 
 #include "qcopy.h"
 extern char *create_moby_2cc888(int) __asm__("FUN_0020c4f8");
