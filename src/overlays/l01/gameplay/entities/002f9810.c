@@ -702,7 +702,7 @@ void FUN_L01_002fed68(HoverMoby *m) {
 
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern char *FUN_L01_002ffa90_c(char *owner) __asm__("FUN_L01_002ffa90");
+extern char *FUN_L01_002ffa90_c(void *owner) __asm__("FUN_L01_002ffa90");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern float D_0015ED6C;
 extern float fast_cos(float);
@@ -716,10 +716,10 @@ extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 extern void add_vector_xyz(void *, void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
-void FUN_L01_002ff860(char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L01_002ff860(struct Moby *m) {
+    char *d = (char *)m->pvars;
     char *t = FUN_L00_0025a420(m, 0x10000, 0);
-    *(unsigned char *)(m + 0xA4) = 0xFF;
+    m->unkA4 = 0xFF;
     if (t != 0 && 0.0f < *(float *)(t + 0x2C)) {
         float v[4];
         float w[4];
@@ -737,7 +737,7 @@ void FUN_L01_002ff860(char *m) {
             v[0] = -0.2f;
             v[2] = 1.2f;
             k--;
-            add_vector_xyz(v, v, m + 0x10);
+            add_vector_xyz(v, v, &m->pos);
             a = fast_cos(random_angle_radians());
             b = random_float_between(1.5f, 3.0f);
             a = a * (b * D_0015ED6C);
@@ -922,22 +922,22 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
 /* Per-frame update of a falling debris moby: moves it, bursts into particles when it hits the ground, and removes it when its timer runs out. */
-void FUN_L01_002ffdc0(char *moby) {
+void FUN_L01_002ffdc0(struct Moby *moby) {
     float next_pos[4];
     float effect_pos[4];
     float particle_vel[4];
-    char *data = *(char **)(moby + 0x78);
+    char *data = (char *)moby->pvars;
     *(float *)(data + 8) -= *(float *)(data + 0x10);
-    *(float *)(moby + 0x40) += *(float *)(data + 0x1C);
-    add_vector_xyz(next_pos, moby + 0x10, data);
-    if (FUN_001efa68(moby + 0x10, next_pos, 2, 0, 0)) {
+    moby->rot.x += *(float *)(data + 0x1C);
+    add_vector_xyz(next_pos, &moby->pos, data);
+    if (FUN_001efa68(&moby->pos, next_pos, 2, 0, 0)) {
         int i;
         char *effect;
         if (!FUN_001f0b58()) {
             if (*(int *)(data + 0x18) == 0) {
                 allocate_voice_for_target_entry_alt(0, 0, (int)moby);
             }
-            FUN_L00_002a3ec8(D_L01_001612D0, D_L01_001612D8, 1, *(float *)(moby + 0x10), *(float *)(moby + 0x14), 0.5f, -0.35f);
+            FUN_L00_002a3ec8(D_L01_001612D0, D_L01_001612D8, 1, moby->pos.x, moby->pos.y, 0.5f, -0.35f);
             {
                 float pos_unit = D_0015ED6C;
                 float pos_unit2 = D_0015ED70;
@@ -947,8 +947,8 @@ void FUN_L01_002ffdc0(char *moby) {
                 *(float *)(data + 8) = pos_unit * -1.5f;
                 *(float *)(data + 0x10) = pos_unit2 * 0.8f;
             }
-            effect_pos[0] = *(float *)(moby + 0x10);
-            effect_pos[1] = *(float *)(moby + 0x14);
+            effect_pos[0] = moby->pos.x;
+            effect_pos[1] = moby->pos.y;
             effect_pos[2] = D_L01_001742E8;
             effect = FUN_L00_002d7e90(effect_pos, 2.0f);
             if (effect != 0) {
@@ -970,9 +970,9 @@ void FUN_L01_002ffdc0(char *moby) {
             return;
         }
     }
-    qcopy(moby + 0x10, next_pos);
+    qcopy(&moby->pos, next_pos);
     if (*(int *)(data + 0x18) != 0) {
-        *(float *)(moby + 0x2C) *= 0.99f;
+        moby->scale *= 0.99f;
     }
     if (tick_countdown_32_alt((int *)(data + 0x14))) {
         mark_moby_for_removal(moby);
