@@ -4,8 +4,26 @@
 #include "types.h"
 #include "rnc/math/vector.h"
 
-struct MobyClass;
 struct Manip;
+struct GifEntry;
+struct AnimSeq;
+
+/* A moby class header, pointed to by Moby.pclass. Size unknown;
+   only fields some matched function reads are named. */
+struct MobyClass {
+    u8 pad_0[0x10];
+    u32 unk10;                        /* copied into Moby.unk94 when a moby is (re)classed */
+    u8 pad_14[0x8];
+    void *unk1C;                      /* word table, indexed id * 4 + 4 (0024eec0) */
+    struct GifEntry *gifs;            /* patched by patch_moby_gifs */
+    f32 scale;                        /* default draw scale: copied into Moby.scale, divides it */
+    s32 unk28;
+    void **callbacks;                 /* function-pointer table, called with the moby */
+    u8 pad_30[0x14];
+    u16 flags;                        /* initial Moby.flags */
+    s16 unk46;                        /* class category; 5 is tested by targeting code */
+    struct AnimSeq *seqs[1];          /* animation sequences, indexed by Moby.seq */
+};
 
 /* A moby instance (MobyInstance in the recovered symbols), 0x100 bytes.
    Only fields some matched function reads or writes are named. */

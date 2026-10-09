@@ -9,10 +9,6 @@
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
 
-struct MobyClass {
-    u8 pad0[0x24];
-    f32 scale; /* base scale of the class */
-};
 
 /* A looping waypoint path: count points, 16 bytes apart. */
 typedef struct {

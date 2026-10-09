@@ -376,11 +376,6 @@ void FUN_L08_002e2078(struct Moby *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2250.s", FUN_L08_002e2250);
-struct MobyClass {
-    u8 pad0[0x24];
-    f32 scale; /* base scale of the class */
-};
-
 /* A looping waypoint path: count points, 16 bytes apart. */
 typedef struct {
     s32 count;

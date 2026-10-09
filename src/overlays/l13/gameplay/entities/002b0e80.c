@@ -455,10 +455,6 @@ void FUN_L13_002b48d8(unsigned char *moby) {
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
 
-struct MobyClass {
-    u8 pad0[0x24];
-    f32 scale;                        /* base scale of the class */
-};
 
 /* pvars of the child spawned by FUN_L13_002b4958 */
 typedef struct {

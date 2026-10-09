@@ -299,12 +299,6 @@ void FUN_L09_0030b350(void *moby, char *data) {
 #include "rnc/overlay/collision.h"
 #include "rnc/gameplay/entities/moby.h"
 
-struct MobyClass {
-    u8 pad0[0x10];
-    s32 unk10;   /* copied into moby->unk94 */
-    u8 pad14[0x10];
-    f32 scale;   /* 0x24: base scale of the class */
-};
 
 /* pvars of the class 0x75E bubble FUN_L09_0030b218 spawns */
 typedef struct {
