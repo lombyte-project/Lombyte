@@ -229,4 +229,63 @@ void FUN_L14_00302538(char *self) {
     vec_sub(&to, &end_b, &off);
     FUN_001efa68(&from, &to, 1, m, &req);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003039e0.s", FUN_L14_003039e0);
+#else
+extern s32 D_L14_00162148[] __attribute__((sda));
+extern s32 D_L14_001621D8[] __attribute__((sda));
+extern void FUN_L00_002e20f8(s32) __asm__("FUN_L00_002e20f8");
+extern void FUN_L00_002e2250(void *, s32) __asm__("FUN_L00_002e2250");
+extern void FUN_L00_002e2af0(char *) __asm__("FUN_L00_002e2af0");
+
+void FUN_L14_003039e0(struct Moby *m) {
+    s32 i;
+    s32 started;
+    s32 *objects;
+    s32 *states;
+    switch (m->state) {
+    case 0: {
+        s32 *states = D_L14_00162148;
+        s32 i = 2;
+        s32 *objects = D_L14_001621D8;
+        do {
+            *states = 0;
+            i--;
+            *objects = 0;
+            states++;
+            objects++;
+        } while (i >= 0);
+        m->state = 1;
+        m->unk30 = 0xff;
+        break;
+    }
+    case 1: {
+        started = 0;
+        i = 0;
+        states = D_L14_00162148;
+        objects = D_L14_001621D8;
+        do {
+            if (*states == 1) {
+                if ((s8)((struct Moby *)*objects)->state < 0) {
+                    *states = 0;
+                    *objects = 0;
+                }
+            } else if (*states == 4) {
+                FUN_L00_002e20f8(i);
+            } else if (*states != 0) {
+                started++;
+                FUN_L00_002e2250((void *)*objects, i);
+                *states = 4;
+            }
+            i++;
+            objects++;
+            states++;
+        } while (i < 3);
+        if (started != 0) {
+            enqueue_callback_list_1((void (*)(void))FUN_L00_002e2af0, m);
+        }
+        break;
+    }
+    }
+}
+#endif /* NON_MATCHING */
