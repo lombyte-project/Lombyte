@@ -446,7 +446,7 @@ segments:
           - [0x213c0, textbin, text_gap_001203b0_post_sdk_worker]
           - [0x213f8, c, sdk/library/fptodp]
           - [0x21438, c, assembly/textbin/reset_vif1_gif]
-          - [0x214d8, c, textbin/fun_00120558]
+          - [0x214d8, c, rendering/wait_for_graphics_pipeline_idle]
           - [0x21564, textbin, text_gap_001205e4_after_fun_00120558_prefix_001205e4]
           - [0x21568, c, assembly/sdk/callbacks/signal_native_cd_delay_alarm]
           - [0x2158c, textbin, text_gap_001205e4_after_fun_00120558_tail_0012060c]

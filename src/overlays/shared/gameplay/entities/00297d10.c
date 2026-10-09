@@ -545,7 +545,7 @@ typedef struct {
     float f128;
     char p12C[0x44];
     GbMoby *f170;
-    GbMoby *f174;
+    GbMoby *target; /* nearest mine/box moby found by FUN_L06_002f2910 (0: none) */
     char p178[4];
     float f17C;
     char p180[4];
@@ -556,7 +556,7 @@ typedef struct {
     char p192[2];
     int f194;
     short f198;
-    short f19A;
+    short target_searched; /* set once FUN_L06_002f2910 has run the search */
     GbMoby *f19C;
     char p1A0[0x40];
     GbPaths paths;
@@ -574,7 +574,7 @@ typedef struct {
     float f300;
     GbMoby *f304;
     float f308;
-    char p30C[4];
+    int target_group; /* moby group searched for targets (-1: whole level list) */
     int f310;
 } GbVars;
 
@@ -1023,9 +1023,9 @@ void FUN_L06_002f0040(GbMoby *moby) {
         }
         if (moby->sub == 0) {
             moby->sub = 1;
-            d->f174 = 0;
+            d->target = 0;
             d->f198 = 0;
-            d->f19A = 0;
+            d->target_searched = 0;
             d->f17C = FUN_L00_00257c48(0.13962634f, 0.34906584f);
             d->f18C = GB_FRAME;
         }
@@ -1034,7 +1034,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
             if (d->f18C < GB_FRAME) {
                 FUN_L06_002f2250();
             }
-            if (d->f174 != 0) {
+            if (d->target != 0) {
                 float a;
 
                 if (moby->anim != 5) {
@@ -1044,8 +1044,8 @@ void FUN_L06_002f0040(GbMoby *moby) {
                     int *p;
 
                     if (FUN_L01_00276fe8(&d->paths.id[d->f27C], 1, d->paths.node[d->f27C],
-                                         moby->pos, d->f174->pos, v40, 0.1f) == 0) {
-                        qcopy(v40, d->f174->pos);
+                                         moby->pos, d->target->pos, v40, 0.1f) == 0) {
+                        qcopy(v40, d->target->pos);
                     }
                     *(OvlQuad *)v60 = *(OvlQuad *)moby->pos;
                     FUN_L00_00261d78(0.17f, d->paths.id[d->f27C], moby->pos, v60);
@@ -1054,7 +1054,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                         *(OvlQuad *)moby->pos = *(OvlQuad *)v60;
                     }
                 } else {
-                    qcopy(v40, d->f174->pos);
+                    qcopy(v40, d->target->pos);
                 }
                 a = fast_add_rotations(FUN_001f9e90(v40[0] - moby->pos[0], v40[1] - moby->pos[1]),
                                        d->f17C);
@@ -1068,11 +1068,11 @@ void FUN_L06_002f0040(GbMoby *moby) {
                 FUN_L00_00258278((char *)moby, a, &d->ctl.f14, frame_scale_sq * 0.07f,
                                  frame_scale_sq * 0.3f, frame_time * 5.2359877f);
                 d->ctl.f24 = frame_time * 4.5f;
-                if (FUN_L00_00258b50(moby, &d->ctl, d->f174->pos, out, 1.0f) & 0x20) {
+                if (FUN_L00_00258b50(moby, &d->ctl, d->target->pos, out, 1.0f) & 0x20) {
                     moby->state = 4;
                     *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
                 }
-                if (FUN_001f9b80(moby->pos, d->f174->pos) < 1.5f) {
+                if (FUN_001f9b80(moby->pos, d->target->pos) < 1.5f) {
                     qcopy(v70, moby->pos);
                     v70[2] += 0.4f;
                     v70[0] += fast_cos(moby->rot) * 0.4f;
@@ -1080,12 +1080,13 @@ void FUN_L06_002f0040(GbMoby *moby) {
                     qcopy(v80, v70);
                     v70[0] += fast_cos(moby->rot) * 0.3f;
                     v70[1] += fast_sin(moby->rot) * 0.3f;
-                    if (FUN_001efa68(v70, v80, 0, (int)moby, 0) != 0 && D_L06_001745D8 == d->f174) {
+                    if (FUN_001efa68(v70, v80, 0, (int)moby, 0) != 0 &&
+                        D_L06_001745D8 == d->target) {
                         moby->sub = 2;
                     }
                 }
-            } else if (d->f19A != 0) {
-                d->f19A = 0;
+            } else if (d->target_searched != 0) {
+                d->target_searched = 0;
                 d->f194 = scale_game_frames(0x3C);
                 moby->sub = 4;
             }
@@ -1094,7 +1095,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
             if (moby->anim != 2) {
                 blend_moby_animation(moby, 2, 8, scale_game_frames(7));
             }
-            if (d->f174 != 0) {
+            if (d->target != 0) {
                 float t = compute_interpolated_record_value(moby);
 
                 if (t >= 12.0f && t <= 15.0f) {
@@ -1102,11 +1103,11 @@ void FUN_L06_002f0040(GbMoby *moby) {
                     v70[1] = fast_sin(moby->rot);
                     v70[2] = 0.0f;
                     FUN_L00_00259888(v40, moby, 0x10000, v70, 2.0f);
-                    FUN_L00_00259a88(d->f174, v40);
+                    FUN_L00_00259a88(d->target, v40);
                 }
             }
             if (moby->f70 & 2) {
-                d->f19A = 0;
+                d->target_searched = 0;
                 d->f194 = scale_game_frames(0x1E);
                 moby->sub = 3;
             }
@@ -1115,13 +1116,13 @@ void FUN_L06_002f0040(GbMoby *moby) {
             if (moby->anim != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(7));
             }
-            if (d->f19A != 0 && d->f174 == 0) {
-                d->f19A = 0;
+            if (d->target_searched != 0 && d->target == 0) {
+                d->target_searched = 0;
                 d->f194 = scale_game_frames(0x3C);
                 moby->sub = 4;
             }
             if (tick_countdown_32(&d->f194) != 0) {
-                if (d->f174 != 0) {
+                if (d->target != 0) {
                     moby->sub = 1;
                 }
             }
@@ -1133,13 +1134,13 @@ void FUN_L06_002f0040(GbMoby *moby) {
             if (moby->anim != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(7));
             }
-            if (tick_countdown_32(&d->f194) != 0 && d->f19A != 0 && d->f174 == 0) {
+            if (tick_countdown_32(&d->f194) != 0 && d->target_searched != 0 && d->target == 0) {
                 moby->state = 3;
                 moby->sub = 0;
-            } else if (d->f19A != 0 && d->f174 == 0) {
-                d->f19A = 0;
+            } else if (d->target_searched != 0 && d->target == 0) {
+                d->target_searched = 0;
             }
-            if (d->f174 != 0) {
+            if (d->target != 0) {
                 moby->sub = 1;
             }
             break;
@@ -1152,14 +1153,14 @@ void FUN_L06_002f0040(GbMoby *moby) {
             FUN_L06_002f2910(moby);
             break;
         case 1:
-            if (d->f174 != 0) {
+            if (d->target != 0) {
                 if (moby->anim != 1) {
                     blend_moby_animation(moby, 1, 0, scale_game_frames(7));
                 }
-                if (d->f174->cls_id != 0x515 && d->f174->cls_id != 0x15F) {
-                    add_vector_xyz(v40, d->f174->pos, d->f174->fC0);
+                if (d->target->cls_id != 0x515 && d->target->cls_id != 0x15F) {
+                    add_vector_xyz(v40, d->target->pos, d->target->fC0);
                 } else {
-                    *(OvlQuad *)v40 = *(OvlQuad *)d->f174->pos;
+                    *(OvlQuad *)v40 = *(OvlQuad *)d->target->pos;
                 }
                 FUN_L00_00258278(
                     (char *)moby, FUN_001f9e90(v40[0] - moby->pos[0], v40[1] - moby->pos[1]),
@@ -1168,7 +1169,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                     moby->state = 4;
                     *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
                 }
-            } else if (d->f19A != 0) {
+            } else if (d->target_searched != 0) {
                 moby->sub = 0;
                 moby->state = 3;
             }
@@ -1406,10 +1407,10 @@ float FUN_L06_002f2148(char *a, char *b, int c) {
     return r;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2250.s", FUN_L06_002f2250);
-extern float FUN_001f99c0(float);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
-extern int D_L06_001AC180_c[] __asm__("D_L06_001AC180");
+extern int D_L06_001AC180[];
 
 void FUN_L06_002f2910(void *moby_arg) {
     GbMoby *moby = moby_arg;
@@ -1419,20 +1420,20 @@ void FUN_L06_002f2910(void *moby_arg) {
     int list;
     int *cursor;
 
-    d->f174 = 0;
-    if (*(int *)d->p30C != -1) {
-        FUN_L00_002591d0(&list, *(int *)d->p30C, 0, 0);
+    d->target = 0;
+    if (d->target_group != -1) {
+        FUN_L00_002591d0(&list, d->target_group, 0, 0);
         while (list != 0) {
             if (((GbMoby *)list)->cls_id == 0x3b1 || ((GbMoby *)list)->cls_id == 0x400 ||
                 ((GbMoby *)list)->cls_id == 0x515 || ((GbMoby *)list)->cls_id == 0x516) {
-                if (!(best < FUN_001f9b80(moby->pos, ((GbMoby *)list)->pos)) &&
-                    !(0.2f < FUN_001f99c0(moby->pos[2] - ((GbMoby *)list)->pos[2])) &&
-                    !(1.5f < FUN_001f99c0(moby->pos[2] - ((GbMoby *)list)->pos[2]))) {
+                if (!(best < vector_distance(moby->pos, ((GbMoby *)list)->pos)) &&
+                    !(0.2f < AbsoluteFloat(moby->pos[2] - ((GbMoby *)list)->pos[2])) &&
+                    !(1.5f < AbsoluteFloat(moby->pos[2] - ((GbMoby *)list)->pos[2]))) {
                     if ((((GbMoby *)list)->cls_id != 0x400 && ((GbMoby *)list)->cls_id != 0x516) ||
                         ((GbMoby *)list)->state != 2) {
                         if (((GbMoby *)list)->cls_id != 0x515 || *(int *)((GbMoby *)list)->vars != -1) {
-                            best = FUN_001f9b80(moby->pos, ((GbMoby *)list)->pos);
-                            d->f174 = (GbMoby *)list;
+                            best = vector_distance(moby->pos, ((GbMoby *)list)->pos);
+                            d->target = (GbMoby *)list;
                         }
                     }
                 }
@@ -1440,18 +1441,18 @@ void FUN_L06_002f2910(void *moby_arg) {
             FUN_L00_002592b8(&list, list, 0, 0);
         }
     } else {
-        cursor = D_L06_001AC180_c;
+        cursor = D_L06_001AC180;
         while ((candidate = (GbMoby *)*cursor) != 0) {
             if (candidate->cls_id == 0x3b1 || candidate->cls_id == 0x400 ||
                 candidate->cls_id == 0x515 || candidate->cls_id == 0x516) {
-                if (!(best < FUN_001f9b80(moby->pos, candidate->pos)) &&
-                    !(0.2f < FUN_001f99c0(moby->pos[2] - candidate->pos[2])) &&
-                    !(1.5f < FUN_001f99c0(moby->pos[2] - candidate->pos[2]))) {
+                if (!(best < vector_distance(moby->pos, candidate->pos)) &&
+                    !(0.2f < AbsoluteFloat(moby->pos[2] - candidate->pos[2])) &&
+                    !(1.5f < AbsoluteFloat(moby->pos[2] - candidate->pos[2]))) {
                     if ((candidate->cls_id != 0x400 && candidate->cls_id != 0x516) ||
                         candidate->state != 2) {
                         if (candidate->cls_id != 0x515 || *(int *)candidate->vars != -1) {
-                            best = FUN_001f9b80(moby->pos, candidate->pos);
-                            d->f174 = candidate;
+                            best = vector_distance(moby->pos, candidate->pos);
+                            d->target = candidate;
                         }
                     }
                 }
@@ -1459,13 +1460,13 @@ void FUN_L06_002f2910(void *moby_arg) {
             cursor++;
         }
     }
-    d->f19A = 1;
+    d->target_searched = 1;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2c28.s", FUN_L06_002f2c28);
 extern int FUN_L00_002591d0_c(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int FUN_L00_002592b8_c(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int FUN_L06_002f2c28_c(char *, char *, int, int, int *) __asm__("FUN_L06_002f2c28");
-extern int D_L06_001AC180_c[] __asm__("D_L06_001AC180");
+extern int D_L06_001AC180[];
 
 typedef struct {
     int list;
@@ -1493,7 +1494,7 @@ int FUN_L06_002f32f0(char *moby, int flag)
             FUN_L00_002592b8_c(&iter.list, iter.list, 0, 0);
         }
     } else {
-        cursor = D_L06_001AC180_c;
+        cursor = D_L06_001AC180;
         entry = *cursor;
         while (entry != 0) {
             moby_ref = &moby;

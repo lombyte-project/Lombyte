@@ -8,6 +8,9 @@ extern u8 *D_001A00FC[];
 extern struct Table16 D_001E8080;
 extern void FillTransferWords(void *dst, s32 value, s32 size);
 
+/* Builds a 1bpp mask from the 4bpp map at D_001A00FC[0]: each nibble is
+   weighted through the 16-entry table D_001E8080, four source rows are summed
+   per column, and a column whose sum reaches 8 sets its bit in the output. */
 void FUN_00208030(u8 *out) {
     s32 acc[128];
     struct Table16 tbl;

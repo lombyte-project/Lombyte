@@ -341,8 +341,11 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 
+#include "rnc/gameplay/entities/moby.h"
+#define MOBY(p) ((struct Moby *)(p))
+
 void FUN_L11_0031a438(char *moby) {
-    char *d = *(char **)(moby + 0x78);
+    char *d = (char *)MOBY(moby)->pvars;
     int i = *(int *)(d + 0x64);
     char *table = *(char **)(D_L11_001B0EB0 + *(int *)(d + 0x60) * 4);
     int count;
@@ -364,10 +367,10 @@ void FUN_L11_0031a438(char *moby) {
     slope_b = fast_atan2(vector_distance_xy(b, c), c[2] - b[2]);
     turn[1] = fast_add_rotations(fast_subtract_rotations(slope_b, slope_a) * *(float *)(d + 0x68), slope_a);
     turn[2] = fast_add_rotations(fast_subtract_rotations(angle_b, angle_a) * *(float *)(d + 0x68), angle_a);
-    qcopy(moby + 0x40, turn);
+    qcopy(&MOBY(moby)->rot, turn);
     if (*(float *)(d + 0x6C) > 0.0f) {
-        *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), 3.14159f);
-        *(float *)(moby + 0x44) = -*(float *)(moby + 0x44);
+        MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, 3.14159f);
+        MOBY(moby)->rot.y = -MOBY(moby)->rot.y;
     }
     interpolate_vector_xyz(point, a, b, *(float *)(d + 0x68));
     rotation_matrix_from_euler(matrix, turn);
@@ -376,9 +379,9 @@ void FUN_L11_0031a438(char *moby) {
     normalize_vector_xyz(direction, matrix + 8, *(float *)(d + 0x78) * fast_cos(*(float *)(d + 0x70)));
     add_vector_xyz(point, point, direction);
     speed = 0.0f;
-    distance = vector_distance_xyz(moby + 0x10, point);
+    distance = vector_distance_xyz(&MOBY(moby)->pos, point);
     advance_accelerated_scalar(&speed, (float *)(d + 0x80), distance, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f);
-    subtract_vector_xyz(direction, point, moby + 0x10);
+    subtract_vector_xyz(direction, point, &MOBY(moby)->pos);
     normalize_vector_xyz(direction, direction, *(float *)(d + 0x80));
-    add_vector_xyz(moby + 0x10, moby + 0x10, direction);
+    add_vector_xyz(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);
 }

@@ -140,7 +140,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *) __asm__("FUN_L05_00316ab8");
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316810.s", FUN_L05_00316810);
 #else
-void FUN_L05_00316810(HoverboardGirlMoby *moby, HoverboardGirlState *state) {
+void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *moby, HoverboardGirlState *state) {
     extern FrameTiming frame_timing_gp __asm__("D_0015ED64") __attribute__((sda));
     s32 joint_index = 0;
     HoverboardGirlJoint *joint = &state->joints[2];
@@ -158,7 +158,7 @@ void FUN_L05_00316810(HoverboardGirlMoby *moby, HoverboardGirlState *state) {
             animation_value = (f32)(frame_number & 0x7F) * 0.0078125f;
             state_window->joints[2].target_rotation[1] =
                 fast_cos(animation_value * 3.1415927f) * 0.61086524f;
-            delta = *(f32 *)0x0015ED64;
+            delta = frame_timing_absolute.delta;
         }
         update_joint_animation(moby, joint, joint_index++ + 2, delta * 0.05f, delta * 0.3f);
         joint++;

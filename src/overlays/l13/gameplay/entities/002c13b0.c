@@ -293,20 +293,17 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c4428.s", FUN_L13_002c4428);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c7f38.s", FUN_L13_002c7f38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ce688.s", FUN_L13_002ce688);
 #include "rnc/overlay/quad.h"
-extern void FUN_001e93b0(char *, int, ...);
-extern int FUN_00120478(float);
+extern void DebugPrint(char *, int, ...) __asm__("FUN_001e93b0");
+extern int fptodp(float) __asm__("FUN_00120478");
 extern int FUN_00213928(struct Moby *, void *, float *, int, int *, int, int, int);
 extern void FUN_L00_00257470(struct Moby *, int, int);
-extern void FUN_00212f90(struct Moby *, int, int, int);
-extern int FUN_001f96f8(int);
-extern void FUN_0022d798(int);
-extern void emit_effect_l13(void *, void *, void *, float, float, int, int, int,
-                            float, float, float, float, int, float, int, int,
-                            int, int) __asm__("FUN_L00_0025e450");
-extern float D_0015ED6C;
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
+extern void emit_effect_l13(void *, void *, void *, float, float, int, int, int, float, float,
+                            float, float, int, float, int, int, int,
+                            int) __asm__("FUN_L00_0025e450");
 extern char D_L13_001f4980[];
 extern char D_L13_001f49a8[];
-extern unsigned char D_0013E550[];
+#include "rnc/audio/voice_pool.h"
 
 void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
     char *src;
@@ -314,17 +311,14 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
     float position[4];
     float velocity[4];
     int link;
-    unsigned char *record;
+    VoicePoolWindow *record;
 
     if (moby->state != 2) {
         src = FUN_L00_0025a420(moby, 0x330000, 0);
         if (src != 0) {
-            FUN_001e93b0(D_L13_001f4980, moby->oclass,
-                          FUN_00120478(*(float *)(src + 0x2c)));
-            FUN_001e93b0(D_L13_001f49a8, *(int *)(src + 0x38),
-                          FUN_00120478(*(float *)(src + 0)),
-                          FUN_00120478(*(float *)(src + 4)),
-                          FUN_00120478(*(float *)(src + 8)));
+            DebugPrint(D_L13_001f4980, moby->oclass, fptodp(*(float *)(src + 0x2c)));
+            DebugPrint(D_L13_001f49a8, *(int *)(src + 0x38), fptodp(*(float *)(src + 0)),
+                       fptodp(*(float *)(src + 4)), fptodp(*(float *)(src + 8)));
         }
         switch (FUN_00213928(moby, src, health, 0, &hit, 0, 0, 4)) {
         case 1:
@@ -351,7 +345,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
                 moby->pos.z + 8.7f < *(float *)(*(char **)(src + 0x20) + 0x18)) {
                 if (*health <= *(float *)(src + 0x2c)) {
                     *(OvlQuad *)velocity = 0;
-                    velocity[2] = D_0015ED6C * 8.0f;
+                    velocity[2] = frame_time * 8.0f;
                     *health = 0.0f;
                     moby->flags &= 0xefff;
                     *(OvlQuad *)position = *(OvlQuad *)velocity;
@@ -363,13 +357,14 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
                                     10, 3, 16, 4.0f, 2.0f, 0.0f, 1.0f,
                                     1, 20.0f, 1, 1, -1, 0);
                     if (moby->prev_seq != 1) {
-                        FUN_00212f90(moby, 1, 0, 0);
+                        blend_moby_animation((MobyAnim *)moby, 1, 0, 0);
                     }
                     link = *(int *)(d + 0x70);
                     if (link != -1) {
-                        record = D_0013E550 + link * 0x70;
-                        if (*(struct Moby **)(record + 0x88) == moby && record[0x74] != 0) {
-                            FUN_0022d798(link);
+                        record = (VoicePoolWindow *)((u8 *)&voice_pool + link * 0x70);
+                        if ((struct Moby *)record->voice.owner == moby &&
+                            record->voice.state != 0) {
+                            release_voice_slot(link);
                         }
                     }
                     *(int *)(d + 0x70) = -1;
@@ -377,7 +372,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
                 } else {
                     *health -= *(float *)(src + 0x2c);
                     d[0x67] = 0xfa;
-                    *(short *)(d + 0x26) = FUN_001f96f8(0x3c);
+                    *(short *)(d + 0x26) = scale_game_frames(0x3c);
                     FUN_L00_0025d458(moby, (short *)(d + 0x60));
                 }
             }
