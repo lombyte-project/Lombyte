@@ -1585,7 +1585,80 @@ void FUN_L02_002df730(struct Moby *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df948.s", FUN_L02_002df948);
+#include "rnc/gameplay/entities/moby.h"
+
+/* Pvars of a moby that turns from its spawn rotation to a goal rotation. */
+typedef struct {
+    Vec4 start;         /* 0x00: spawn rotation, then its quaternion */
+    Vec4 goal;          /* 0x10: goal angles in degrees, then their quaternion */
+    f32 speed;          /* 0x20 */
+    f32 t;              /* 0x24: 0..1 along the turn */
+} TurnerVars;
+
+extern s32 D_L02_0015F5C4;
+extern s32 D_0015ED84;
+extern f32 D_0015ED70;
+extern u8 D_0014C050[][16];
+extern void FUN_L00_001fff28(void *, int, float);
+extern void FUN_001fa3c0(void *, void *, void *);
+extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+extern void FUN_001fa400(void *, void *, void *, float);
+extern void quaternion_rotation_basis(void *, void *) __asm__("FUN_001fa480");
+
+/* Turns the moby from its spawn rotation to the goal angles once it is triggered (unkBC). */
+void FUN_L02_002df948(struct Moby *m) {
+    Vec4 qx;
+    Vec4 qy;
+    Vec4 qz;
+    Vec4 qxy;
+    Vec4 rxy;
+    TurnerVars *v = (TurnerVars *)m->pvars;
+
+    if (D_L02_0015F5C4 == 2 && m->unkBC == 0) {
+        m->unk31 = 0;
+        m->flags |= 1;
+    } else {
+        m->unk31 = 1;
+        m->flags &= ~1;
+    }
+    switch (m->state) {
+    case 0:
+        qcopy(&v->start, &m->rot);
+        v->start.f[3] = 0.0f;
+        if (D_0014C050[D_0015ED84][m->unkB0] == 0xFF) {
+            m->rot.x = v->goal.f[0] * 0.017453292f;
+            m->rot.y = v->goal.f[1] * 0.017453292f;
+            m->rot.z = v->goal.f[2] * 0.017453292f;
+            m->state = 3;
+        } else {
+            m->state = 1;
+            m->flags |= 0x100;
+            FUN_L00_001fff28(&qx, 0, v->goal.f[0] * 0.017453292f);
+            FUN_L00_001fff28(&qy, 1, v->goal.f[1] * 0.017453292f);
+            FUN_L00_001fff28(&qz, 2, v->goal.f[2] * 0.017453292f);
+            FUN_001fa3c0(&qxy, &qx, &qy);
+            FUN_001fa3c0(&v->goal, &qxy, &qz);
+            FUN_L00_001fff28(&qx, 0, m->rot.x);
+            FUN_L00_001fff28(&qy, 1, m->rot.y);
+            FUN_L00_001fff28(&qz, 2, m->rot.z);
+            FUN_001fa3c0(&rxy, &qx, &qy);
+            FUN_001fa3c0(&v->start, &rxy, &qz);
+        }
+        break;
+    case 1:
+        if (m->unkBC != 0) {
+            m->state = 2;
+            v->speed = 0.0f;
+            v->t = 0.0f;
+        }
+        break;
+    case 2:
+        FUN_L00_0025be00(&v->t, &v->speed, 1.0f, D_0015ED70 * 0.5f, D_0015ED70 * 0.5f, D_0015ED6C);
+        FUN_001fa400(&qx, &v->start, &v->goal, v->t);
+        quaternion_rotation_basis(&qx, &m->unkC0);
+        break;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E1400), where it is exact; names translated to the US level program. */
 
 extern char D_L02_0015FFD8_c2 __asm__("D_L02_0015FFD8");
