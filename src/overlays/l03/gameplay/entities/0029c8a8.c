@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/gameplay/entities/moby.h"
 
 #include "qcopy.h"
 #include "qzero.h"
@@ -16,7 +17,7 @@ extern void add_vector_xyz_q(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void cross_vectors_xyz_q(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void scale_vector_xyz_q(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 
-void FUN_L03_0029c8a8(char *moby, float *out) {
+void FUN_L03_0029c8a8(struct Moby *moby, float *out) {
     float v[4];
     float a[4];
     float c[4];
@@ -26,9 +27,9 @@ void FUN_L03_0029c8a8(char *moby, float *out) {
     char *data;
     *(OvlQuad *)v = 0;
     v[0] = 1.0f;
-    data = *(char **)(moby + 0x78);
+    data = (char *)moby->pvars;
     if (*(float *)(data + 0x140) != 0.0f || *(float *)(data + 0x144) != 0.0f) {
-        FUN_001fa050_q(m, (float *)(moby + 0x40));
+        FUN_001fa050_q(m, (float *)&moby->rot);
         FUN_001f9d20_q(a, v, m);
         *(OvlQuad *)b = *(OvlQuad *)a;
         b[2] = b[2] - 1.0f;
@@ -42,9 +43,9 @@ void FUN_L03_0029c8a8(char *moby, float *out) {
 }
 
 /* True for a moby of class 0x23E in state 9. */
-int FUN_L03_002c6d58(unsigned char *moby) {
-    if (moby && moby[0x20] != 0xFE && moby[0x20] != 0xFD && *(short *)(moby + 0xA6) == 0x23e &&
-        moby[0x20] == 0x9) {
+int FUN_L03_002c6d58(struct Moby *moby) {
+    if (moby && moby->state != 0xFE && moby->state != 0xFD && moby->oclass == 0x23e &&
+        moby->state == 0x9) {
         return 1;
     }
     return 0;
@@ -60,8 +61,8 @@ extern float D_L03_00161BE8 __attribute__((sda));
 extern void FUN_L00_00262b00(float, float, char *, float *, float *);
 extern void FUN_L00_00262b80(char *, char *, char *, float, float, float);
 
-void FUN_L03_002dd0f0(char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L03_002dd0f0(struct Moby *m) {
+    char *d = (char *)m->pvars;
     FUN_L00_00262b00(D_L03_00161BD8, D_L03_00161BDC * DEG_TO_RAD * D_0015ED6C, m,
                      (float *)(d + 0xac), (float *)(d + 0xa8));
     FUN_L00_00262b80(m, d + 0xb0, d + 0xb4, D_L03_00161BE0,

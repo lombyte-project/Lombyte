@@ -174,28 +174,6 @@ PADLESS_POLICY_UNITS = {}
 # scePad2Read and other already-exact siblings.
 SDK_COMPILER_FLAG_UNITS = {
     "sdk/rpc/sce_sif_init_iop_heap": "-fno-schedule-insns",
-    # Retail writes the absolute global through the assembler `$at` macro
-    # (`lui $1,%hi; sw ...,%lo($1)`); the default split-address sequence uses a
-    # general register instead.  Validated 100/100/100 under EE-GCC 2.9 + flag.
-    # DIntr: Sony libkernel privileged-loop glue.  The ps2sdk glue.c shape
-    # (pinned eie/next/res + `.p2align 3`) matches retail only under the size
-    # optimization with the missing-cse-follow-jumps policy; the default
-    # -O2 compile picks `daddu a0,v1` for the out arm instead of $zero and
-    # schedules the return move out of the jr delay slot.  100/100/100 under
-    # EE-GCC 2.9 with this flag pair (campaign pipeline-2026-09-11-7).
-    "sdk/library/DIntr": "-Os -fno-cse-follow-jumps",
-    # __swrite: retail's field layout is u16@0xC + s16@0xE (not s32@0xE, which
-    # the compiler pads to 0x10) and the s64 return is the dsll32/dsra32
-    # sign-extension pair, which the local compiler only emits when the s32
-    # result is forced through an s64 local + (u32) truncation.  Exact under
-    # -Os -fno-cse-follow-jumps (pipeline-2026-09-13-11).
-    "sdk/library/__swrite": "-Os",
-    # cmd_sem_init: retail stores the first CreateSema result in call 2's
-    # delay slot.  Under -fno-schedule-insns the E8 store is issued before
-    # call 2's `a0 = sp`, so the daddu takes the slot; the empty
-    # `asm("" : "+r"(r1))` one-cycle edge delays the E8 store so reorg fills
-    # the call-2 slot instead (pipeline-2026-09-13-12g).
-    "sdk/library/cmd_sem_init": "-fno-schedule-insns",
     # No -fno-edge-lcm entry remains: the six that did (draw_debug_profiler,
     # fun_0022f778, draw_dialog_text, memcard_update_state, sound_update,
     # setup_fs_aa_buffer) belong to units that are still assembly wrappers,
@@ -284,6 +262,7 @@ OVERLAY_SN_UNITS = {
     "l13/gameplay/vendor/003058a8.c",
     "l13/rendering/002b8320.c",
     "l14/gameplay/entities/002460f8.c",
+    "l14/gameplay/entities/002d6358.c",
     "l14/gameplay/entities/002df080.c",
     "l14/gameplay/entities/002fded0.c",
     "l14/gameplay/hero/0022ff58.c",
@@ -330,6 +309,7 @@ OVERLAY_SN_UNITS = {
     "shared/gameplay/entities/002b3840.c",
     "shared/gameplay/entities/002b8c08.c",
     "shared/gameplay/entities/002b94d0.c",
+    "shared/gameplay/entities/002bffa8.c",
     "shared/gameplay/entities/002c8440.c",
     "shared/gameplay/entities/002c8830.c",
     "shared/gameplay/entities/002cfcb8.c",
@@ -363,6 +343,7 @@ OVERLAY_SN_UNITS = {
     "shared/ui/menus/002497f8.c",
     "shared/ui/menus/0027f448.c",
     "shared/ui/text/001fb470.c",
+    "shared/ui/text/002377b8.c",
 }
 
 # —— Retail link layout ——
@@ -409,6 +390,9 @@ RODATA_OVERLAYS = {
     "fun_001e8d08": (0x1E7640, 0xE85C0),  # switch table
     "fun_00213928": (0x1E84E0, 0xE9460),  # switch table
     "fun_00204428": (0x1E7CE0, 0xE8C60),  # switch table
+    "mode_freeze_init": (0x1E78D0, 0xE8850),  # switch table
+    "fun_0021abf8": (0x1E8770, 0xE96F0),  # menu action switch table
+    "draw_dialog_text": (0x1E7920, 0xE88A0),  # switch table
 }
 
 # Recovered C units that define the small-data variables their original

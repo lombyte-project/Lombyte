@@ -138,8 +138,9 @@ The overlays count in the headline C_EXACT with these rules:
   route, placed at its address in the level, byte for byte the level's text,
   method `overlay-place-bytes-v1`, `make overlays`); it is **pending** while its line there is
   an `INCLUDE_ASM` stub. Overlay functions carry no C_FUZZY: a stub counts 0;
-- there is no intentional-asm class in the overlays yet: everything is
-  recoverable until a function is shown to be hand-written VU/MMI code.
+- an overlay function shown to be hand-written (VU0/COP2, MMI, raw `.word`
+  instructions, hand-placed `nop`s) is listed as `overlays/<name>` under
+  `intentional_asm` and stays out of the percentages, as in the executable.
 
 The report (`report.json`) keeps the executable and the overlays apart in its
 categories: `boot` (= `game` + `sdk`), `overlays` (= `shared` + `levels`), and

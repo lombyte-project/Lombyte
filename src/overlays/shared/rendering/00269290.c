@@ -728,7 +728,7 @@ extern unsigned char *FUN_L00_002678b8_26bb70(int) __asm__("FUN_L00_002678b8");
 extern int FUN_001fa6d0_26bb70(float) __asm__("FUN_001fa6d0");
 extern int FUN_001160d8_26bb70(void) __asm__("FUN_001160d8");
 
-unsigned char *FUN_L00_0026bb70(void *a, void *b, int c, int d, int n, float f, int e, int g,
+unsigned char *FUN_L00_0026bb70(void *a, void *b, int c, int d, float f, int n, int e, int g,
                                 int h) {
     unsigned char *m;
     unsigned char *q;
@@ -781,7 +781,7 @@ float FUN_001f9af0_26bca8(void *) __asm__("FUN_001f9af0");
 void FUN_001f9bf8_26bca8(void *, void *, float) __asm__("FUN_001f9bf8");
 int FUN_L00_00257b90_26bca8(int, int) __asm__("FUN_L00_00257b90");
 int FUN_001f96f8_26bca8(int) __asm__("FUN_001f96f8");
-unsigned char *FUN_L00_0026bb70_26bca8(void *, void *, int, int, int, float, int, int,
+unsigned char *FUN_L00_0026bb70_26bca8(void *, void *, int, int, float, int, int, int,
                                        int) __asm__("FUN_L00_0026bb70");
 void FUN_L00_0026bca8(unsigned char *m) {
     V26bca8 u, t, w;
@@ -815,8 +815,8 @@ void FUN_L00_0026bca8(unsigned char *m) {
         FUN_001f9a10_26bca8(&t, &t, o);
         FUN_001f9a68_26bca8(&t, &t, FUN_002132a8_26bca8(0.75f, 0.95f));
         FUN_L00_0026bb70_26bca8(p, &t, *(int *)(m + 4), *(int *)(o + 0x14),
-                                FUN_001f96f8_26bca8(FUN_L00_00257b90_26bca8(0xF, 0x1E)),
-                                *(float *)(m + 0xC), 0, m[2], m[3]);
+                                *(float *)(m + 0xC),
+                                FUN_001f96f8_26bca8(FUN_L00_00257b90_26bca8(0xF, 0x1E)), 0, m[2], m[3]);
     } else {
         FUN_001f9a68_26bca8(o, o, 0.96f);
     }
@@ -829,7 +829,7 @@ extern int FUN_001fa6d0_26bed0(float) __asm__("FUN_001fa6d0");
 extern int FUN_001160d8_26bed0(void) __asm__("FUN_001160d8");
 extern int FUN_00213260_26bed0(int) __asm__("FUN_00213260");
 
-unsigned char *FUN_L00_0026bed0(void *a, void *b, int c, int d, int n, int k, float f) {
+unsigned char *FUN_L00_0026bed0(void *a, void *b, int c, int d, float f, int n, int k) {
     unsigned char *m;
     unsigned char *q;
     if (n == 0) {

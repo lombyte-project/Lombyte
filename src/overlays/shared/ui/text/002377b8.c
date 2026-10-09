@@ -78,29 +78,6 @@ void FUN_L00_00237ae8(O00237ae8 *o) {
         d++;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00237ba0.s", FUN_L00_00237ba0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002382a0.s", FUN_L00_002382a0);
-extern int D_L00_0015FA90;
-extern void *D_L00_0015FAC0;
-extern int D_L00_0015F718 __attribute__((sda));
-extern int D_L00_0015F71C __attribute__((sda));
-extern int D_L00_0015F72C __attribute__((sda));
-extern int D_L00_0015F740 __attribute__((sda));
-int FUN_001f96f8(int);
-void FUN_L00_00238b18(char *p) {
-    int a, b;
-    D_L00_0015FA90 = 4;
-    D_L00_0015FAC0 = &D_L00_0015F740;
-    a = D_L00_0015F718;
-    b = D_L00_0015F71C;
-    *(short *)(p + 0x48) = 0;
-    *(short *)(p + 0x4A) = 0;
-    *(int *)(p + 0x58) = a;
-    *(int *)(p + 0x5C) = b;
-    *(int *)(p + 0x74) = -2;
-    *(int *)(p + 0x78) = FUN_001f96f8(30);
-    D_L00_0015F72C = 0;
-}
 typedef struct {
     int f0, f4, f8, fC, f10, f14, f18;
 } Ent;
@@ -125,6 +102,8 @@ typedef struct {
     int w1C4;
     u8 p1C8[4];
     int w1CC;
+    u8 p1D0[8];
+    int w1D8;
 } G_t;
 extern G_t D_0013C940;
 extern int D_L00_0017E504 __attribute__((section(".data")));
@@ -137,13 +116,169 @@ extern int D_L00_0017DC3C __attribute__((section(".data")));
 extern int D_L00_0017DC40 __attribute__((section(".data")));
 extern int D_L00_0017DC44 __attribute__((section(".data")));
 extern int D_00141610[];
-extern int D_L00_0015FA98;
+extern int D_L00_0015FA98 __attribute__((section(".sdata")));
 extern int D_L00_0015FA94;
 extern int D_L00_0015F3F8;
 extern int FUN_001f96f8(int);
 extern float FUN_001f9988(float);
 extern float FUN_001f9e90(float, float);
 extern int remove_hud_item(int) __asm__("FUN_001ff480");
+typedef struct {
+    u8 p0[0x10B8];
+    int w10B8;
+    u8 p10BC[0x1FF5 - 0x10BC];
+    u8 b1FF5;
+    u8 p1FF6[0x20B8 - 0x1FF6];
+    int w20B8;
+} Progress;
+typedef struct {
+    u8 p0[0xA0];
+    u16 hA0;
+    u16 hA2;
+    int wA4;
+} Stats;
+typedef struct {
+    u8 p0[8];
+    u16 h8;
+    u8 pA[4];
+    u16 hE;
+    u8 p10[8];
+} Route;
+extern Progress D_0013F350 __attribute__((section(".data")));
+extern Stats D_00141848 __attribute__((section(".data")));
+extern Route D_L00_001C40B0[] __attribute__((section(".data")));
+extern int D_0013D428[] __attribute__((section(".data")));
+extern u8 D_00141622[] __attribute__((section(".data")));
+extern float D_L00_0015F788 __attribute__((sda));
+extern float D_L00_0015F784 __attribute__((sda));
+extern int D_L00_0017DC18 __attribute__((section(".data")));
+extern int D_L00_0017DC1C __attribute__((section(".data")));
+extern int D_L00_0017DC20 __attribute__((section(".data")));
+extern int D_L00_0017DC24 __attribute__((section(".data")));
+extern int D_0015EEA4;
+extern int D_0015ED84;
+extern int FUN_001f9770(void *);
+extern float FUN_001fa6c0(int);
+extern float FUN_001fa5c8(float, float);
+extern float FUN_001fa688(float, float);
+extern int FUN_001fa6d0(float);
+extern float FUN_001fa610(float);
+
+/* Picks slot w74 from the stick angle (or steps it with the 0x1000-0x8000 pad bits), counts hold frames in b71/b70, records the slot's entry when released, and closes when b70 runs out. */
+void FUN_L00_00237ba0(Obj *p) {
+    float x, y, mag, ang, a, f, r;
+    int old, n, s, k, id;
+    u8 *c = &p->b70;
+
+    p->w7C = FUN_001f96f8(0xB4);
+    p->w6C = 0x18;
+    if (FUN_001f9770(D_00141622)) D_0013C940.w1CC = 2;
+    x = D_0013C940.f148;
+    y = D_0013C940.f14C;
+    mag = FUN_001f9988(x * x + y * y);
+    if (mag != 0.0f) {
+        x /= mag;
+        y /= mag;
+    }
+    ang = FUN_001f9e90(x, y);
+    if ((p->w78 >> 24) == 0) {
+        if ((D_0013C940.w1C4 & 0xF000) || mag < 0.5f || --p->w78 == -1) {
+            p->w74 = -1;
+            p->w78 = 0x10000FF;
+        }
+    }
+    n = 0;
+    old = p->w74;
+    if ((p->w78 >> 24) == 1 && (D_0013C940.w1C0 & 0x10)) {
+        if (mag > 0.9f) {
+            a = ang + 3.1415927f + 3.1415927f + 1.5707964f + 3.1415927f / (float)D_L00_0015FA90_c;
+            f = a * ((float)D_L00_0015FA90_c / 6.2831855f);
+            r = (float)old * 6.2831855f / FUN_001fa6c0(D_L00_0015FA90_c) - 3.1415927f;
+            if (old == -1 || FUN_001fa688(r, FUN_001fa5c8(ang, 1.5707964f)) > 0.58904862f) {
+                s = (int)f % D_L00_0015FA90_c;
+                if (((s ^ 1) & 1)) {
+                    float fr = f - (float)FUN_001fa6d0(f);
+                    if (fr > 1.0f - D_L00_0015F788) s++;
+                    else if (fr < D_L00_0015F788) s--;
+                    s = (s + D_L00_0015FA90_c) % D_L00_0015FA90_c;
+                }
+                p->w74 = s;
+                n = -1;
+                D_L00_0015F784 = FUN_001fa610(a - ((float)s * 0.7853982f + 0.39269909f));
+                if (D_L00_0015F784 > 0.0f) n = 1;
+            }
+        } else if (D_0013C940.w1D8 == 0 && (D_0013C940.w1C4 & 0xF000)) {
+            int w;
+            w = old;
+            if (D_0013C940.w1C4 & 0x1000) { int t; if (w == -1) t = D_L00_0017DC20; else t = D_L00_0015FAC0_c[D_L00_0015F72C][w].f10; w = t; }
+            if (D_0013C940.w1C4 & 0x4000) { int t; if (w == -1) t = D_L00_0017DC24; else t = D_L00_0015FAC0_c[D_L00_0015F72C][w].f14; w = t; }
+            if (D_0013C940.w1C4 & 0x8000) { int t; if (w == -1) t = D_L00_0017DC18; else t = D_L00_0015FAC0_c[D_L00_0015F72C][w].f8; w = t; }
+            if (D_0013C940.w1C4 & 0x2000) { int t; if (w == -1) t = D_L00_0017DC1C; else t = D_L00_0015FAC0_c[D_L00_0015F72C][w].fC; w = t; }
+            p->w74 = w;
+        }
+        {
+            Ent *t = D_L00_0015FAC0_c[D_L00_0015F72C];
+            int cur = p->w74;
+            if (t[cur].f0 == 0 && n != 0) {
+                k = (cur + n) % D_L00_0015FA90_c;
+                if (t[k].f0 != 0) p->w74 = k;
+            }
+        }
+    }
+    if (p->w74 != old) c[1] = 0;
+    else if (c[1] < D_L00_0015F780) c[1]++;
+    if (!(D_0013C940.w1C0 & 0x10)) {
+        int sel = p->w74;
+        if (sel >= 0 && (id = D_L00_0015FAC0_c[D_L00_0015F72C][sel].f18) != 0) {
+            Route *rr;
+            int ri = id;
+            if (D_0013F350.w10B8 != id) {
+                if (D_00141848.hA0 < 0xFFFF) D_00141848.hA0++;
+            }
+            if (FUN_001f96f8(D_0015EEA4) / 600 > D_00141848.hA2)
+                D_00141848.hA2 = FUN_001f96f8(D_0015EEA4) / 600;
+            D_00141848.wA4 = D_00141848.wA4 | (1 << D_0015ED84) | 0x80000000;
+            if (id == 0x18) D_0013F350.b1FF5 = 1;
+            else D_0013F350.w20B8 = id;
+            rr = &D_L00_001C40B0[ri];
+            if (rr->h8 && rr->hE < D_0013D428[id]) D_0013D428[id] = rr->hE;
+        }
+        if (c[0]) c[0]--;
+    } else if (c[0] < D_L00_0015F780) c[0]++;
+    if (c[0] == 0) {
+        {
+            int a = p->w78;
+            int b = p->w74;
+            D_L00_0015FA9C = b;
+            D_L00_0015FA98 = a;
+        }
+        remove_hud_item(p->w64);
+        p->w6C = -6;
+        D_L00_0015FA94 = D_L00_0015F3F8;
+    }
+}
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002382a0.s", FUN_L00_002382a0);
+extern int D_L00_0015FA90;
+extern void *D_L00_0015FAC0;
+extern int D_L00_0015F718 __attribute__((sda));
+extern int D_L00_0015F71C __attribute__((sda));
+extern int D_L00_0015F72C __attribute__((sda));
+extern int D_L00_0015F740 __attribute__((sda));
+int FUN_001f96f8(int);
+void FUN_L00_00238b18(char *p) {
+    int a, b;
+    D_L00_0015FA90 = 4;
+    D_L00_0015FAC0 = &D_L00_0015F740;
+    a = D_L00_0015F718;
+    b = D_L00_0015F71C;
+    *(short *)(p + 0x48) = 0;
+    *(short *)(p + 0x4A) = 0;
+    *(int *)(p + 0x58) = a;
+    *(int *)(p + 0x5C) = b;
+    *(int *)(p + 0x74) = -2;
+    *(int *)(p + 0x78) = FUN_001f96f8(30);
+    D_L00_0015F72C = 0;
+}
 
 void FUN_L00_00238b80(Obj *o) {
     float x, y, len, ang;
@@ -530,7 +665,115 @@ void FUN_L00_00239d00(T00239d00 *o) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239df8.s", FUN_L00_00239df8);
+/*
+ * Draw callback of the bolt counter HUD element (queued by FUN_L00_00266448
+ * with FUN_L00_00239cc8 / FUN_L00_00239d00): a panel that slides open by
+ * cnt[0] / D_L00_0015F824, the spinning bolt icon (frame from *unk80), the
+ * bolt count with a drop shadow, and a thousands separator every three
+ * digits (an apostrophe, or a dot for languages 3 and 5). Returns the element width.
+ */
+
+extern s32 camera_secondary_mode __asm__("D_001413D4") __attribute__((section(".data")));
+/* read through a volatile one-element array: retail reloads it */
+extern volatile s32 pal_mode[1] __asm__("D_0015ED80");
+extern s32 current_bolt_count __asm__("D_0015ED98");
+extern s32 game_language __asm__("D_0015ED88");
+extern s32 bolt_panel_open_steps __asm__("D_L00_0015F824") __attribute__((sda));
+extern s32 bolt_text_fade_steps __asm__("D_L00_0015F828") __attribute__((sda));
+extern s32 bolt_text_color_clear __asm__("D_L00_0015F82C") __attribute__((sda));
+extern s32 bolt_text_color_opaque __asm__("D_L00_0015F830") __attribute__((sda));
+extern s32 bolt_text_dx __asm__("D_L00_0015F834") __attribute__((sda));
+extern s32 bolt_text_dy __asm__("D_L00_0015F838") __attribute__((sda));
+/* separator offsets: apostrophe, then dot */
+extern s32 separator_apostrophe_dx __asm__("D_L00_0015F83C") __attribute__((sda));
+extern s32 separator_apostrophe_dy __asm__("D_L00_0015F840") __attribute__((sda));
+extern s32 separator_dot_dx __asm__("D_L00_0015F844") __attribute__((sda));
+extern s32 separator_dot_dy __asm__("D_L00_0015F848") __attribute__((sda));
+extern s32 digit_width __asm__("D_L00_0015F84C") __attribute__((sda));
+/* "%d" */
+extern char bolt_count_format[] __asm__("D_L00_0015F850") __attribute__((section(".data")));
+extern char separator_apostrophe[] __asm__("D_L00_0015F858") __attribute__((section(".data")));
+extern char separator_dot[] __asm__("D_L00_0015F860") __attribute__((section(".data")));
+
+extern f32 ConvertIntegerToFloat(int) __asm__("FUN_001fa6c0");
+extern int FastTweenColor(int, int, f32) __asm__("FUN_001fa6e0");
+extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
+extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
+extern void draw_hud_icon(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
+/* int return and no prototype are load-bearing */
+extern int sprintf_alt() __asm__("FUN_00116248");
+extern void font_print_right(int, int, int, char *, int) __asm__("FUN_001f6940");
+
+int FUN_L00_00239df8(HudElem *m)
+{
+    char buf[16];
+    s16 *frame;
+    u8 *fade;
+    int apostrophe;
+    int off;
+    int panel_x, cap_x, icon_x;
+    int y, x, digits, alpha, n, slide, color, shadow, sx, sy, i, dx, dy;
+    f32 open, text;
+
+    frame = m->unk80;
+    /* the byte offset kept in a local is load-bearing (retail tests m + off) */
+    off = 0x70;
+    if (camera_secondary_mode == 50 || ((u8 *)m)[off] == 0)
+        return m->w;
+
+    fade = m->cnt;
+    y = pal_mode[0] ? 10 : 18;
+    x = m->unk50;
+
+    open = ConvertIntegerToFloat(m->cnt[0]) / ConvertIntegerToFloat(bolt_panel_open_steps);
+    if (1.0f < open)
+        open = 1.0f;
+    else if (open < 0.0f)
+        open = 0.0f;
+    text = ConvertIntegerToFloat(fade[1]) / ConvertIntegerToFloat(bolt_text_fade_steps);
+    if (1.0f < text)
+        text = 1.0f;
+    else if (text < 0.0f)
+        text = 0.0f;
+
+    digits = 1;
+    panel_x = x - 0x1C;
+    cap_x = x - 0xC;
+    icon_x = x - 0x20;
+    alpha = truncate_float_to_s32((f32)truncate_float_to_s32(open * 128.0f) * 0.7f);
+    for (n = current_bolt_count; n >= 10; n /= 10)
+        digits++;
+    apostrophe = 0;
+
+    /* panel: right cap, stretched middle, left cap */
+    slide = truncate_float_to_s32((f32)(digit_width * digits) * open);
+    draw_hud_sprite_flipped(get_icon_frame(0x7580, 1), cap_x, y, 32, 32, alpha);
+    panel_x -= slide;
+    draw_hud_sprite(get_icon_frame(0x7580, 0), panel_x, y, slide + 0x10, 32, alpha);
+    draw_hud_sprite(get_icon_frame(0x7580, 1), panel_x - 0x20, y, 32, 32, alpha);
+    draw_hud_icon(m, get_icon_frame(0x754F, *frame >> 1), icon_x, y, 0, 0x80);
+
+    /* the count, shadow first */
+    color = FastTweenColor(bolt_text_color_clear, bolt_text_color_opaque, text);
+    shadow = FastTweenColor(0, 0x80000000, text);
+    sprintf_alt(buf, bolt_count_format, current_bolt_count);
+    font_print_right(x + bolt_text_dx + 1, y + bolt_text_dy + 1, shadow, buf, -1);
+    font_print_right(x + bolt_text_dx, y + bolt_text_dy, color, buf, -1);
+
+    /* thousands separators */
+    if (game_language != 3)
+        apostrophe = game_language != 5;
+    sprintf_alt(buf, apostrophe ? separator_apostrophe : separator_dot);
+    dy = apostrophe ? separator_apostrophe_dy : separator_dot_dy;
+    dx = apostrophe ? separator_apostrophe_dx : separator_dot_dx;
+    for (i = 3; i < digits; i += 3) {
+        sx = x + dx;
+        sy = y + dy;
+        font_print_right(sx - digit_width * i + 2, sy + 2, shadow, buf, -1);
+        font_print_right(sx - digit_width * i, sy, color, buf, -1);
+    }
+    return m->w;
+}
 #include "sda.h"
 extern s32 D_00141398 NOT_SDA;
 extern s32 D_L00_0015F7F0 __attribute__((sda));

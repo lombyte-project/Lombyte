@@ -3,6 +3,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
+#include "rnc/math/vector.h"
 #include "rnc/overlay/quad.h"
 extern unsigned char *D_L00_001B2130_2712b8 __asm__("D_L00_001B2130")
     __attribute__((section(".data")));
@@ -1039,7 +1040,99 @@ void FUN_L00_00273800(char *a) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002738e8.s", FUN_L00_002738e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00273a68.s", FUN_L00_00273a68);
+/* Falling ember: drifts under gravity until it reaches its floor height, then bursts into
+   smoke and, on level 10, a glow and a spark. */
+struct EmberMotion {
+    Vec4 vel;          /* 0x0 */
+    f32 floor_z;       /* 0x10: bursts once pos.z drops below this */
+    f32 gravity;       /* 0x14 */
+    s32 color2;        /* 0x18: smoke end colour */
+};
+
+struct EmberParticle {
+    u8 unk0;
+    u8 unk1;
+    u8 tex;            /* 0x2: passed on to the smoke puff (FUN_L00_0026bb70) */
+    u8 blend;          /* 0x3: passed on to the smoke puff */
+    s32 color;         /* 0x4: 0xAABBGGRR */
+    u8 spin;           /* 0x8 */
+    u8 unk9;
+    s16 life;          /* 0xA: frames left (FUN_001f9770) */
+    f32 size;          /* 0xC */
+    Vec4 pos;          /* 0x10 */
+    struct EmberMotion m;  /* 0x20 */
+};
+
+extern s32 FUN_L00_00257b90(s32, s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern unsigned char *FUN_L00_0026bb70(void *a, void *b, int c, int d, float f, int n, int e, int g,
+                                       int h);
+extern unsigned char *FUN_L00_0026bed0(void *a, void *b, int c, int d, float f, int n, int k);
+extern int FUN_L00_002371e0(int, int, float);
+extern u32 D_L00_00160228 __attribute__((sda));
+extern f32 D_0015ED6C;
+extern s32 D_0015ED84;
+
+void FUN_L00_00273a68(struct EmberParticle *p) {
+    struct EmberMotion *m = &p->m;
+    Vec4 t;
+    s32 cr, cg, cb;
+    s32 n, c1, c2;
+    f32 f;
+
+    if (FUN_001f9770(&p->life))
+        m->vel.f[2] -= m->gravity;
+    FUN_001f9a10(&p->pos, &p->pos, &m->vel);
+    p->spin += 2;
+    if (!(p->pos.f[2] < m->floor_z))
+        return;
+    cr = p->color & 0xFF;
+    cg = (p->color & 0xFF00) >> 8;
+    cb = ((u32)p->color >> 16) & 0xFF;
+    if (!random_integer_below(D_L00_00160228 - 1)) {
+        p->pos.f[2] = m->floor_z;
+        m->vel.f[0] *= random_float_between(1.0f, 3.5f);
+        m->vel.f[1] *= random_float_between(1.0f, 3.5f);
+        m->vel.f[2] *= random_float_between(-1.0f, -1.5f);
+        f = p->size;
+        f *= 0.5f;
+        n = FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x78));
+        FUN_L00_0026bb70(&p->pos, &m->vel, p->color, m->color2, f, n, 0, p->tex, p->blend);
+    } else {
+        p->pos.f[2] = m->floor_z;
+        m->vel.f[0] += random_float_between(-5.0f, 5.0f) * D_0015ED6C;
+        m->vel.f[1] += random_float_between(-5.0f, 5.0f) * D_0015ED6C;
+        m->vel.f[2] *= random_float_between(-0.5f, -1.0f);
+        f = p->size;
+        f *= 0.25f;
+        n = FUN_L00_00257b90(scale_game_frames(0x1E), scale_game_frames(0x3C));
+        FUN_L00_0026bb70(&p->pos, &m->vel, p->color, m->color2, f, n, 0, p->tex, p->blend);
+    }
+    if (D_0015ED84 == 10) {
+        if (!random_integer_below(0x13)) {
+            t.q = p->pos.q;
+            t.f[2] += 0.1f;
+            FUN_L00_002715e8(&t, 0, ((random_integer_below(6) + 0x34) << 24) | (cb << 16) | (cg << 8) | cr,
+                             0.05f, 10500.0f);
+        }
+        if (!random_integer_below(9)) {
+            c1 = FUN_L00_002371e0(0x7F000000, 0x7F000000 | (cb << 16) | (cg << 8) | cr,
+                                  random_float_between(0.25f, 1.0f));
+            c2 = FUN_L00_002371e0(0, 0x5F00, random_float_between(0.5f, 1.0f));
+            m->vel.f[0] = random_float_between(-1.0f, 1.0f);
+            m->vel.f[1] = random_float_between(-1.0f, 1.0f);
+            m->vel.f[2] = 0.0f;
+            FUN_001f9bf8(&m->vel, &m->vel, random_float_between(1.5f, 3.0f) * D_0015ED6C);
+            m->vel.f[2] = D_0015ED6C * 3.0f;
+            t.q = p->pos.q;
+            t.f[2] -= 1.5f;
+            f = random_float_between(420000.0f, 630000.0f);
+            n = FUN_L00_00257b90(scale_game_frames(0x5A), scale_game_frames(0x96));
+            FUN_L00_0026bed0(&t, &m->vel, c1, c2, f, n, 3);
+        }
+    }
+    FUN_L00_00267a08(p);
+}
 extern float D_0015ED60_273ee0 __asm__("D_0015ED60");
 extern float D_0015ED64_273ee0 __asm__("D_0015ED64");
 extern u128 D_L00_00173E60_273ee0[] __asm__("D_L00_00173E60") __attribute__((section(".data")));

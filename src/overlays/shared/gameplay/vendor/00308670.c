@@ -25,7 +25,79 @@ char *FUN_L12_00308670(char *a0) {
     }
     return (char *)m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308708.s", FUN_L12_00308708);
+extern float D_0015ED70;
+extern float D_0015ED6C;
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float fast_sqrt(float) __asm__("FUN_001f9988");
+extern void FUN_L00_0025ab48(void *, float *, void *, void *);
+extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
+
+#include "rnc/gameplay/entities/moby.h"
+
+/* Pvars of a lobbed projectile, as set up at launch. */
+typedef struct {
+    u8 pad0[0x20];
+    Vec4f arc;          /* 0x20: filled by FUN_L00_0025c558 */
+    f32 rise;           /* 0x30: D_0015ED70 * 40 */
+    f32 fall;           /* 0x34: D_0015ED70 * 100 */
+    f32 launch_speed;   /* 0x38 */
+    f32 unk3C;          /* 0x3C */
+    s32 timer;          /* 0x40 */
+    s32 unk44;          /* 0x44: set to 1 on launch */
+    f32 unk48;          /* 0x48: 0.7 on launch */
+    u8 pad4C[0x11];
+    u8 unk5D;
+    u8 pad5E[0xE];
+    f32 unk6C;          /* 0x6C */
+    f32 unk70;          /* 0x70: -1 on launch */
+    f32 unk74;          /* 0x74: -1 on launch */
+} LobbedVars;
+
+void FUN_L12_00308708(void *unused, struct Moby *m) {
+    LobbedVars *d = (LobbedVars *)m->pvars;
+    float dir[4];
+    float ang;
+    float t1, t2;
+    float a;
+    float g;
+
+    if (random_integer_below(3) == 0) {
+        allocate_voice_for_target_entry(1, 0x20, m);
+    }
+    d->unk48 = 0.7f;
+    d->timer = truncate_float_to_s32(716.8f);
+    d->unk6C = 0.0f;
+    m->unk30 = 0xFF;
+    m->flags &= ~6;
+    ang = fast_add_rotations(m->rot.z, 3.1415927f);
+    dir[0] = fast_cos(ang);
+    dir[1] = fast_sin(ang);
+    dir[2] = 1.0f;
+    dir[3] = 5627.925f;
+    g = D_0015ED70;
+    d->rise = g * 40.0f;
+    d->fall = g * 100.0f;
+    t1 = fast_sqrt(d->rise * 4.0f);
+    t2 = fast_sqrt(D_0015ED70 * 40.0f * 4.0f);
+    a = D_0015ED70 * 40.0f;
+    d->launch_speed = 3.0f / ((t1 + t1) / a) + D_0015ED70 * 100.0f * 0.5f * ((t2 + t2) / a);
+    d->unk3C = fast_sqrt(a * 4.0f);
+    d->unk5D = 0;
+    d->unk44 = 1;
+    FUN_L00_0025ab48(dir, &ang, &d->launch_speed, &d->unk3C);
+    FUN_L00_0025c558(ang, m, &d->arc, 1, 5, 2);
+    d->unk6C = D_0015ED6C + D_0015ED6C;
+    d->unk70 = -1.0f;
+    d->unk74 = -1.0f;
+    m->flags &= ~0x1000;
+    blend_moby_animation(m, 1, 0, 0);
+}
 #include "sda.h"
 
 #include "qcopy.h"

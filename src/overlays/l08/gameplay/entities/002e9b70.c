@@ -5,8 +5,239 @@
 #include "asm.h"
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/watch.h"
+#include "qcopy.h"
+#include "rnc/math/vector.h"
+#include "rnc/gameplay/entities/moby.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9b70.s", FUN_L08_002e9b70);
+
+/* A looping waypoint path: count points, 16 bytes apart. */
+typedef struct {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 points[1];
+} SwarmPath;
+
+/* Position on a path: the current point, the step direction and the path. */
+typedef struct {
+    s32 point;
+    s8 direction;
+    u8 pad5[0xB];
+    SwarmPath *path;
+    s32 path_id; /* index into D_L08_001B0CB0 */
+    u8 pad18[0x18];
+} SwarmPathFollower;
+
+/* Child moby slot, as FUN_L08_002e9558 fills them. */
+typedef struct {
+    struct Moby *moby;
+    struct Moby *parent;
+    s32 joint;
+    s32 parent_joint;
+} SwarmPart;
+
+typedef struct {
+    SwarmPathFollower follow[2]; /* 0x00: [0] cruising (state 1), [1] circling (state 2) */
+    SwarmPart root;              /* 0x60 */
+    SwarmPart parts[16];         /* 0x70 */
+    s32 target_index;            /* 0x170: moby slot of the target */
+    f32 turn_speed;              /* 0x174 */
+    s32 fire_timer;              /* 0x178 */
+    s16 pad17C;
+    s16 sound;                   /* 0x17E */
+} SwarmVars;
+
+/* pvars of the target: the projectiles fired at it. */
+typedef struct {
+    u8 pad0[0x60];
+    struct Moby *shots[8];
+} SwarmTargetVars;
+
+extern s32 D_L08_00161D40 __attribute__((sda));
+extern f32 D_L08_00161D34 __attribute__((sda));
+extern float D_0015ED6C;
+extern s32 current_level_index __asm__("D_0015ED84");
+extern u8 D_0014C050[];
+extern SwarmPath *D_L08_001B0CB0[];
+extern struct Moby *D_L08_0015FFD8;
+
+extern s32 FUN_L00_0028d8c0(struct Moby *, s32);
+extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
+extern f32 FUN_001f96b0(f32);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern f32 FUN_001f9e90(f32, f32);
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
+extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
+extern f32 FUN_001f9b48(void *, void *);
+extern float vector_length_xyz(void *);
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *);
+extern void FUN_L00_0024f7c8(void *, s32, void *);
+extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
+extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
+extern struct Moby *FUN_L08_002de3e0(void *, struct Moby *, void *, f32, f32);
+extern void FUN_L08_002e9558(struct Moby *);
+extern void FUN_L08_002e9758(struct Moby *);
+extern void FUN_L08_002e9a18(struct Moby *);
+
+void FUN_L08_002e9b70(struct Moby *moby) {
+    SwarmVars *vars = (SwarmVars *)moby->pvars;
+    SwarmPathFollower *follower;
+    struct Moby *target;
+    struct Moby *shot;
+    struct Moby *bolt;
+    SwarmTargetVars *target_vars;
+    Vec4 point;
+    Vec4 step;
+    Vec4 muzzle;
+    Vec4 velocity;
+    s32 waypoint;
+    s32 next;
+    s32 after;
+    s32 i;
+    s32 slot;
+    f32 distance;
+    f32 heading;
+    f32 next_heading;
+    f32 turn;
+    f32 pitch;
+    f32 yaw;
+
+    if (D_L08_00161D40 != 0) {
+        return;
+    }
+    if (!FUN_L00_0028d8c0(moby, vars->sound)) {
+        vars->sound = allocate_voice_for_target_entry(3, 4, moby);
+    }
+    switch (moby->state) {
+    case 0:
+        if (D_0014C050[moby->unkB0 + current_level_index * 16] == 0xFF) {
+            mark_moby_for_removal(moby);
+            return;
+        }
+        vars->follow[0].path = D_L08_001B0CB0[vars->follow[0].path_id];
+        vars->follow[1].path = D_L08_001B0CB0[vars->follow[1].path_id];
+        vars->fire_timer = truncate_float_to_s32(FUN_001f96b0(random_float_between(300.0f, 600.0f)));
+        moby->flags |= 0x4000;
+        qcopy(&moby->pos, &vars->follow[1].path->points[0]);
+        FUN_L08_002e9558(moby);
+        moby->state = 2;
+        moby->rot.z = FUN_001f9e90(vars->follow[1].path->points[1].f[0] - moby->pos.x,
+                                   vars->follow[1].path->points[1].f[1] - moby->pos.y);
+        break;
+    case 1:
+        waypoint = (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) % vars->follow[0].path->count;
+        target = &D_L08_0015FFD8[vars->target_index];
+        FUN_L00_00258278(moby,
+                         FUN_001f9e90(vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
+                                      vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
+                         &vars->turn_speed, 0.004f, 0.3f, 0.02f);
+        qcopy(&point, &vars->follow[0].path->points[waypoint]);
+        if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
+            vars->follow[0].point = waypoint;
+        }
+        subtract_vector_xyz(&step, &point, &moby->pos);
+        if (vector_length_xyz(&step) > D_L08_00161D34 * D_0015ED6C) {
+            normalize_vector_xyz(&step, &step, D_L08_00161D34 * D_0015ED6C);
+        }
+        add_vector_xyz(&moby->pos, &moby->pos, &step);
+        FUN_L08_002e9758(moby);
+        FUN_L08_002e9a18(moby);
+        if (moby->unkBC == 0) {
+            break;
+        }
+        moby->unkBC = 0;
+        FUN_L00_0024f7c8(vars->parts[3].moby, 1, &muzzle);
+        pitch = random_float_between(0.17453292f, 0.5235988f);
+        yaw = fast_add_rotations(FUN_001f9e90(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
+                                 3.1415927f);
+        yaw = fast_add_rotations(yaw, random_float_between(-0.2617994f, 0.7853982f));
+        if (yaw > 0.0f && yaw < 0.34f) {
+            yaw = 0.34f;
+        } else if (yaw <= 0.0f && yaw > -0.34f) {
+            yaw = -0.34f;
+        }
+        normalize_vector_xyz(&velocity, &step, (D_L08_00161D34 + D_L08_00161D34) * D_0015ED6C);
+        shot = FUN_L08_002de3e0(&muzzle, target, &velocity, pitch, yaw);
+        shot->scale = shot->pclass->scale / 5.0f;
+        target_vars = (SwarmTargetVars *)target->pvars;
+        for (slot = 0; slot < 8; slot++) {
+            if (target_vars->shots[slot] == NULL) {
+                target_vars->shots[slot] = shot;
+                break;
+            }
+        }
+        break;
+    case 2:
+        follower = &vars->follow[1];
+        next = (vars->follow[1].point + 1) % follower->path->count;
+        after = (vars->follow[1].point + 2) % follower->path->count;
+        heading = FUN_001f9e90(follower->path->points[next].f[0] - follower->path->points[vars->follow[1].point].f[0],
+                               follower->path->points[next].f[1] - follower->path->points[vars->follow[1].point].f[1]);
+        next_heading = FUN_001f9e90(follower->path->points[after].f[0] - follower->path->points[next].f[0],
+                                    follower->path->points[after].f[1] - follower->path->points[next].f[1]);
+        turn = fast_subtract_rotations(heading, next_heading);
+        distance = FUN_001f9b48(&moby->pos, &follower->path->points[next]);
+        distance /= FUN_001f9b48(&follower->path->points[vars->follow[1].point],
+                                 &follower->path->points[next]);
+        moby->rot.z = fast_add_rotations(turn * distance, next_heading);
+        qcopy(&point, &follower->path->points[next]);
+        if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
+            vars->follow[1].point = next;
+        }
+        subtract_vector_xyz(&step, &point, &moby->pos);
+        if (vector_length_xyz(&step) > D_L08_00161D34 * D_0015ED6C) {
+            normalize_vector_xyz(&step, &step, D_L08_00161D34 * D_0015ED6C);
+        }
+        add_vector_xyz(&moby->pos, &moby->pos, &step);
+        FUN_L08_002e9a18(moby);
+        if (!tick_countdown_32_alt(&vars->fire_timer)) {
+            break;
+        }
+        vars->fire_timer = truncate_float_to_s32(FUN_001f96b0(random_float_between(300.0f, 600.0f)));
+        FUN_L00_0024f7c8(vars->parts[3].moby, 1, &muzzle);
+        pitch = random_float_between(-0.5235988f, -0.2617994f);
+        yaw = random_angle_radians();
+        normalize_vector_xyz(&velocity, &step, (D_L08_00161D34 + D_L08_00161D34) * D_0015ED6C);
+        bolt = FUN_L08_002de3e0(&muzzle, NULL, &velocity, pitch, yaw);
+        if (bolt != NULL) {
+            bolt->rot.z = vars->parts[3].moby->rot.z;
+            bolt->state = 5;
+            bolt->rot.y = 0.0f;
+        }
+        break;
+    case 3: {
+        SwarmPath *path;
+
+        moby->state = 1;
+        path = vars->follow[0].path;
+        qcopy(&moby->pos, &path->points[0]);
+        moby->rot.z = FUN_001f9e90(path->points[1].f[0] - moby->pos.x, path->points[1].f[1] - moby->pos.y);
+        FUN_L08_002e9a18(moby);
+        break;
+    }
+    case 0x63:
+        for (i = 0; i < 16; i++) {
+            struct Moby *part = vars->parts[i].moby;
+            if (part != NULL) {
+                Vec4 *drift = (Vec4 *)part->pvars;
+                FUN_L00_0025f090(moby, &part->pos, -1, 3.0f, 13.0f);
+                subtract_vector_xyz(drift, &part->pos, &moby->pos);
+                normalize_vector_xyz(drift, drift, D_0015ED6C * 5.0f);
+                part->state = 1;
+                vars->parts[i].moby = NULL;
+            }
+        }
+        FUN_L00_0025f090(moby, &moby->pos, -1, 5.0f, 13.0f);
+        mark_moby_for_removal(moby);
+        break;
+    }
+}
+
 extern float D_0015ED6C;
 extern char *D_L08_0015FFD8_g __asm__("D_L08_0015FFD8");
 extern u8 D_0013D3BD_c __asm__("D_0013D3BD") __attribute__((section(".data")));
@@ -41,7 +272,89 @@ void FUN_L08_002ea398(char *m)
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002ea4c0.s", FUN_L08_002ea4c0);
+/* Pvars of a gate that swings with the progress of its driver moby. */
+typedef struct {
+    s32 driver;          /* 0x0: moby index whose pvars start with the 0..1 progress */
+    f32 open_deg;        /* 0x4: yaw at full progress, in degrees */
+    f32 shut_deg;        /* 0x8: yaw at zero progress, in degrees */
+    s32 flag;            /* 0xC: byte of D_0013D388 set when fully open */
+    Vec4 home;           /* 0x10: hinge position */
+    s32 voice;           /* 0x20: creak voice slot, -1 if none */
+} SwingGateVars;
+
+extern int D_L08_0015F5C4;
+/* Voice table entries are 0x70 bytes; the volume sits 0x80 past an entry's start. */
+typedef struct {
+    u8 pad0[0x80];
+    s32 volume;          /* 0x80 */
+} VoiceView;
+extern char D_0013E550[];
+extern u8 D_0013D388[];
+extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
+extern void FUN_001fa050(void *, void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern void FUN_L01_002a1968(s32, s32);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+
+/* Swings the gate to its driver's progress, fading a creak in while it
+ * moves and out when it stops, and latches its flag once fully open. */
+void FUN_L08_002ea4c0(struct Moby *moby) {
+    SwingGateVars *vars = (SwingGateVars *)moby->pvars;
+    f32 progress = *(f32 *)D_L08_0015FFD8[vars->driver].pvars;
+    Vec4 mat[4];
+    Vec4 off;
+    f32 yaw;
+
+    off.q = 0;
+    off.f[2] = 30.0f;
+    if (D_L08_0015F5C4 == 2) {
+        moby->unk31 = 0;
+        moby->flags |= 1;
+    } else {
+        moby->unk31 = 1;
+        moby->flags &= ~1;
+    }
+    if (moby->state == 0) {
+        moby->state = 1;
+        qcopy(&vars->home, &moby->pos);
+        return;
+    }
+    if (moby->state != 1)
+        return;
+    yaw = fast_subtract_rotations(vars->open_deg * DEG_TO_RAD, vars->shut_deg * DEG_TO_RAD);
+    yaw = fast_add_rotations(yaw * progress, vars->shut_deg * DEG_TO_RAD);
+    if (fast_difference_between_rotations(moby->rot.y, yaw) != 0.0f) {
+        moby->rot.y = yaw;
+        if (moby->oclass == 0x1D4) {
+            if (!FUN_L00_0028d8c0(moby, vars->voice)) {
+                vars->voice = allocate_voice_for_target_entry(0, 4, moby);
+                FUN_L01_002a1968(vars->voice, 1);
+            } else if (((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume < 0x400) {
+                FUN_L01_002a1968(vars->voice, ((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume +
+                                                  0x400 / scale_game_frames(60));
+            }
+        }
+    } else if (moby->oclass == 0x1D4 && FUN_L00_0028d8c0(moby, vars->voice)) {
+        if (((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume < 0x100) {
+            release_voice_slot(vars->voice);
+            vars->voice = -1;
+        } else {
+            FUN_L01_002a1968(vars->voice, ((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume -
+                                              0x400 / scale_game_frames(60));
+        }
+    }
+    FUN_001fa050(mat, &moby->rot);
+    FUN_001f9d20(&off, &off, mat);
+    add_vector_xyz(&moby->pos, &vars->home, &off);
+    if (progress == 1.0f && moby->oclass == 0x1D4) {
+        D_0013D388[vars->flag + 0x30] = 1;
+        moby->state = 2;
+        allocate_voice_for_target_entry(1, 0, moby);
+        if (moby->oclass == 0x1D4 && FUN_L00_0028d8c0(moby, vars->voice))
+            release_voice_slot(vars->voice);
+    }
+}
 /* Draws three rows of HUD elements with their colours. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
 
@@ -117,13 +430,13 @@ extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f460
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L08_002f1548(unsigned char *moby) {
+void FUN_L08_002f1548(struct Moby *moby) {
     int i;
     float v[4];
     float w[4];
     float d;
 
-    switch (moby[0x20]) {
+    switch (moby->state) {
     case 0:
         if (*(int *)&D_L08_00161E04 == 0) {
             FUN_L08_002f0f68(D_L08_001E8310, 0xD, D_L08_001E2858, 0.5f, 0.5f, 0.65f, 0.5f, 1);
@@ -131,7 +444,7 @@ void FUN_L08_002f1548(unsigned char *moby) {
             FUN_L08_002f0f68(D_L08_001E2828, 0xB, D_L08_001DDF40, 0.25f, 0.25f, 0.25f, 1.0f, 1);
             *(int *)&D_L08_00161E04 = 1;
         }
-        moby[0x20] = 1;
+        moby->state = 1;
         for (i = 0; i < 3; i++) {
             D_L08_001E8348[i].a = 0;
             D_L08_001E8348[i].b = 0;
@@ -205,7 +518,136 @@ float FUN_L08_002f5d98(float x, char *arg) {
     return *(float *)(t - (-(i * 4))) * (1.0f - fr) + *(float *)(t - (-(j * 4))) * fr;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f5e58.s", FUN_L08_002f5e58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f70a0.s", FUN_L08_002f70a0);
+/* Pvars of a flickering point light. */
+typedef struct {
+    f32 size_x;          /* 0x0: the larger of size_x/size_y sets the draw scale */
+    f32 size_y;          /* 0x4 */
+    u16 pad8;
+    u16 flags;           /* 0xA: bit 2 = cast light; bit 1 set every update */
+    u8 padC[0x64];
+    f32 period_a;        /* 0x70: must be in (0, 8] */
+    f32 period_b;        /* 0x74: must be in (0, 8] */
+    u8 pad78[0x10];
+    f32 jitter;          /* 0x88: lower bound of the random flicker levels */
+    u8 pad8C[4];
+    f32 levels_a[8];     /* 0x90: flicker ring (FUN_L08_002f5d98) */
+    f32 levels_b[8];     /* 0xB0 */
+    u8 padD0[0x23];
+    u8 unkF3;
+    u8 padF4[4];
+    s32 unkF8;
+    u8 padFC[0x38];
+    u8 red;              /* 0x134 */
+    u8 green;            /* 0x135 */
+    u8 blue;             /* 0x136 */
+    u8 radius;           /* 0x137 */
+    u8 falloff;          /* 0x138 */
+    u8 pad139[2];
+    s8 light;            /* 0x13B: point light handle (-1: none) */
+    u8 pad13C[4];
+    Vec4 light_pos;      /* 0x140 */
+    f32 fade_range;      /* 0x150: distance over which the light fades out */
+    f32 intensity;       /* 0x154 */
+} FlickerLightVars;
+
+/* A point light slot, 0x20 bytes apart. */
+typedef struct {
+    f32 red;
+    f32 green;
+    f32 blue;
+    u8 padC[0x14];
+} PointLight;
+
+extern PointLight D_L08_00180AC0[];
+extern char D_L08_001FC220[];
+extern char D_L08_001FC250[];
+extern char D_L08_001FC2A0[];
+extern char D_L08_001FC2D0[];
+extern s32 DebugPrint();
+extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern void FUN_L00_0023e838(int);
+void FUN_L08_002f5e58(void);
+
+void FUN_L08_002f70a0(struct Moby *m) {
+    FlickerLightVars *d;
+    Vec4 pos;
+    f32 view, dist, fade;
+    s32 hidden;
+    PointLight *l;
+    Vec4f *at;
+    int i;
+
+    if (m == NULL)
+        return;
+    d = (FlickerLightVars *)m->pvars;
+    if (d == NULL)
+        return;
+    hidden = 0;
+    at = &m->pos;
+    if (m->state == 0) {
+        d->light = -1;
+        d->unkF8 = d->unkF3;
+        qcopy(&d->light_pos, at);
+        if (d->period_a == 0.0f) {
+            DebugPrint(D_L08_001FC220);
+            d->period_a = 1.0f;
+        } else if (8.0f < d->period_b) {
+            DebugPrint(D_L08_001FC250, d->period_b);
+        }
+        if (d->period_b == 0.0f) {
+            DebugPrint(D_L08_001FC2A0);
+            d->period_b = 1.0f;
+        } else if (8.0f < d->period_a) {
+            DebugPrint(D_L08_001FC2D0, d->period_a);
+        }
+        for (i = 0; i < 8; i++) {
+            d->levels_a[i] = random_float_between(d->jitter, 1.0f);
+            d->levels_b[i] = random_float_between(d->jitter, 1.0f);
+        }
+        m->state = 1;
+    }
+    m->scale = m->pclass->scale * (d->size_x > d->size_y ? d->size_x : d->size_y) * 0.25f;
+    view = ConvertIntegerToFloat(m->unk32);
+    dist = FUN_001f9b48(at, D_L08_001675C0);
+    fade = view - d->fade_range;
+    if (fade < 0.0f)
+        fade = 0.0f;
+    if (view < dist) {
+        d->intensity = 0.0f;
+        hidden = 1;
+    } else {
+        if (fade < dist) {
+            dist -= fade;
+            dist /= d->fade_range;
+            fade = 1.0f - dist;
+        } else
+            fade = 1.0f;
+        d->intensity = fade;
+    }
+    pos.q = *(u128 *)at;
+    pos.f[3] = ConvertIntegerToFloat(d->radius);
+    if ((m->unk31 != 0 || FUN_001fa728((char *)&pos, 255.0f) != -1) && !hidden) {
+        enqueue_callback_list_1(FUN_L08_002f5e58, m);
+        if (d->flags & 4) {
+            if (d->light == -1) {
+                d->light = FUN_L00_0023e738(d->light_pos.f, (f32)d->radius,
+                                            ConvertIntegerToFloat(d->falloff) / 100.0f,
+                                            d->intensity * ConvertIntegerToFloat(d->red) / 100.0f,
+                                            d->intensity * ConvertIntegerToFloat(d->green) / 100.0f,
+                                            d->intensity * ConvertIntegerToFloat(d->blue) / 100.0f);
+            } else {
+                l = &D_L08_00180AC0[d->light];
+                l->red = d->intensity * ConvertIntegerToFloat(d->red) / 100.0f;
+                l->green = d->intensity * ConvertIntegerToFloat(d->green) / 100.0f;
+                l->blue = d->intensity * ConvertIntegerToFloat(d->blue) / 100.0f;
+            }
+        }
+    } else if (d->light != -1) {
+        FUN_L00_0023e838(d->light);
+        d->light = -1;
+    }
+    d->flags |= 2;
+}
 
 extern int D_L08_0015F5C4;
 

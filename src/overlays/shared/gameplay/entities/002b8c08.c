@@ -318,7 +318,86 @@ void FUN_L01_002e0bd8(char *moby)
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e0c68.s", FUN_L01_002e0c68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e1ac0.s", FUN_L01_002e1ac0);
+#include "sda.h"
+#include "rnc/gameplay/entities/moby.h"
+
+/* Bought-item price entry (0x18 bytes). */
+typedef struct {
+    u8 pad_00[0x14];
+    u16 bolts; /* 0x14 */
+    u8 pad_16[2];
+} ItemPrice_2e1ac0;
+
+/* pvars of the moby run by FUN_L01_002e1ac0: a scene trigger
+   (FUN_L00_00266448) followed by the item it sells. */
+typedef struct {
+    u8 pad_00[4];
+    s16 result;   /* 0x04: 2 once the scene finished with a sale */
+    u8 pad_06[6];
+    f32 radius;   /* 0x0C */
+    u8 pad_10[0x30];
+    s32 slot;     /* 0x40: -1 none, else index into D_L01_001DEB10 */
+} SaleVars_2e1ac0;
+
+extern s32 D_0015EE20_2e1ac0 __asm__("D_0015EE20") __attribute__((sda));
+extern s32 D_L01_0015F5C4_2e1ac0 __asm__("D_L01_0015F5C4");
+extern s32 D_0015ED98_2e1ac0 __asm__("D_0015ED98");
+extern s32 D_L01_001DEB10_2e1ac0[] __asm__("D_L01_001DEB10");
+extern u8 D_0013E520_2e1ac0[] __asm__("D_0013E520");
+extern ItemPrice_2e1ac0 D_L01_001C4530_2e1ac0[] __asm__("D_L01_001C4530");
+extern void FUN_0020c828_2e1ac0(struct Moby *) __asm__("FUN_0020c828");
+extern s32 FUN_L00_002668a0_2e1ac0(struct Moby *, SaleVars_2e1ac0 *) __asm__("FUN_L00_002668a0");
+extern s32 FUN_L00_00266448_2e1ac0(struct Moby *, SaleVars_2e1ac0 *) __asm__("FUN_L00_00266448");
+extern void FUN_L01_002aea70_2e1ac0(struct Moby *, s32, ItemPrice_2e1ac0 *) __asm__("FUN_L01_002aea70");
+extern s32 FUN_0020b178_2e1ac0(s32, s32) __asm__("FUN_0020b178");
+
+void FUN_L01_002e1ac0(struct Moby *m) {
+    SaleVars_2e1ac0 *v = (SaleVars_2e1ac0 *)m->pvars;
+    s32 item;
+    ItemPrice_2e1ac0 *price;
+
+    if (v != 0 && v->slot != -1 && ((v->slot ^ 1) & 1) && D_0015EE20_2e1ac0 == 0) {
+        FUN_0020c828_2e1ac0(m);
+        return;
+    }
+    switch (m->state) {
+    case 0:
+        if (m->oclass != 0x130) {
+            m->state = 2;
+        } else if (D_0013E520_2e1ac0[D_L01_001DEB10_2e1ac0[v->slot]] != 0 ||
+                   FUN_L00_002668a0_2e1ac0(m, v) == -1) {
+            m->state = 3;
+        } else {
+            m->state = 1;
+        }
+        break;
+    case 1:
+        v->radius = 1.9f;
+        FUN_L00_00266448_2e1ac0(m, v);
+        if (v->result == 2) {
+            D_0013E520_2e1ac0[D_L01_001DEB10_2e1ac0[v->slot]] = 1;
+            m->state = 4;
+            item = D_L01_001DEB10_2e1ac0[v->slot];
+            price = &D_L01_001C4530_2e1ac0[item];
+            D_0015ED98_2e1ac0 -= price->bolts;
+            FUN_L01_002aea70_2e1ac0(m, item, price);
+        }
+        break;
+    case 3: /* sold out or done: idle */
+        break;
+    case 4:
+        if (D_L01_0015F5C4_2e1ac0 == 0) {
+            FUN_0020b178_2e1ac0(0, -1);
+            m->state = 3;
+        }
+        break;
+    case 2:
+        if (D_0013E520_2e1ac0[D_L01_001DEB10_2e1ac0[v->slot]] != 0) {
+            FUN_0020c828_2e1ac0(m);
+        }
+        break;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002E4430), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
@@ -362,7 +441,26 @@ void FUN_L01_002e3110(char *a, char *m) {
         *(float *)(m + 8) = *(float *)(m + 8) + 1.0f;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e3208.s", FUN_L01_002e3208);
+struct DriftEmitter {
+    s32 count;          /* 0x00 */
+    u8 pad4[0x2C];
+    f32 spread;         /* 0x30 */
+};
+extern struct DriftEmitter D_L01_001DEB38;
+extern float D_0015ED60;
+extern float D_0015ED70;
+extern s32 FUN_L00_00258ad0(void *, void *, s32, s32, f32, f32);
+
+/* shrinks and sinks the moby, then hands it to the drift emitter */
+s32 FUN_L01_002e3208(void *ctx, struct Moby *m) {
+    f32 shrink;
+
+    m->pos.z -= D_0015ED70 * 29.7f;
+    shrink = D_0015ED60 * -0.050000012f + 1.0f;
+    m->pos.x *= shrink;
+    m->pos.y *= shrink;
+    return FUN_L00_00258ad0(ctx, &m->pos, D_L01_001DEB38.count, 0, 0.3f, D_L01_001DEB38.spread);
+}
 /* Picks the best lock-on target for moby from the visible-moby list: a living, drawn class-5 enemy within range whose direction from `from`
  * is inside the yaw/pitch cone (or the wider near cone when close), scored by angle error and distance,
  * with a clear line of sight (or the blocker is the same kind of enemy). */
@@ -792,7 +890,96 @@ void FUN_L01_002f2b68(unsigned char *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f2eb8.s", FUN_L01_002f2eb8);
+#include "sda.h"
+#include "qcopy.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
+
+/* pvars of the moby run by FUN_L01_002f2eb8 */
+typedef struct {
+    Vec4 home;         /* position at spawn */
+    union {
+        struct {
+            s32 path;   /* -1, or an index into D_L01_001B0930 */
+            s32 volume; /* -1, or a clip volume FUN_00214720 tests */
+        } s;
+        s64 both;       /* -1 when neither is set */
+    } area;
+    s32 count;         /* spawn budget; the moby is deleted when it runs out */
+} AreaVars_2f2eb8;
+
+extern s32 D_L01_00161AF0_2f2eb8 __asm__("D_L01_00161AF0") __attribute__((sda));
+extern s32 D_0015ED84_2f2eb8 __asm__("D_0015ED84");
+extern u8 D_0014BF10_2f2eb8[] __asm__("D_0014BF10");
+extern s32 *D_L01_001B0930_2f2eb8[] __asm__("D_L01_001B0930");
+extern void FUN_0020c828_2f2eb8(struct Moby *) __asm__("FUN_0020c828");
+extern s32 FUN_L00_00259740_2f2eb8(void *, void *, s32) __asm__("FUN_L00_00259740");
+extern s32 FUN_00214720_2f2eb8(void *, s32) __asm__("FUN_00214720");
+extern f32 FUN_001f9b80_2f2eb8(void *, void *) __asm__("FUN_001f9b80");
+
+void FUN_L01_002f2eb8(struct Moby *m) {
+    AreaVars_2f2eb8 *v = (AreaVars_2f2eb8 *)m->pvars;
+    Vec4 target;
+    s32 k;
+    s32 *path;
+    f32 d;
+
+    if (m->state == 0) {
+        if (v == 0) {
+            FUN_0020c828_2f2eb8(m);
+            return;
+        }
+        m->unk30 = 0xFF;
+        qcopy(&v->home, &m->pos);
+        m->flags |= 0x41;
+        m->state = 1;
+        if (m->unkBC == 0 && D_0015ED84_2f2eb8 < 20) {
+            k = D_0014BF10_2f2eb8[D_L01_00161AF0_2f2eb8 / 2 + D_0015ED84_2f2eb8 * 16];
+            if (D_L01_00161AF0_2f2eb8 & 1) {
+                k &= 0xF;
+            } else {
+                k = (k >> 4) & 0xF;
+            }
+            D_L01_00161AF0_2f2eb8++;
+            m->unkBC = D_L01_00161AF0_2f2eb8;
+            k *= 5;
+            v->count -= k;
+            if (v->count <= 0) {
+                FUN_0020c828_2f2eb8(m);
+                return;
+            }
+        }
+    } else {
+        D_L01_00161AF0_2f2eb8 = 0;
+    }
+    if (hero.items[0].moby != 0 && hero.items[0].item_id == 0x1B) {
+        qcopy(&target, hero.items[0].moby->pvars + 0x10);
+    } else {
+        qcopy(&target, &hero.motion.pos);
+    }
+    if (v->area.s.path != -1) {
+        path = D_L01_001B0930_2f2eb8[v->area.s.path];
+        k = FUN_L00_00259740_2f2eb8(&target, path + 4, path[0]);
+        if (k) {
+            goto in_range;
+        }
+    }
+    if (v->area.s.volume != -1 && FUN_00214720_2f2eb8(&target, v->area.s.volume)) {
+        goto in_range;
+    }
+    if (v->area.both != -1) {
+        return;
+    }
+in_range:
+    d = FUN_001f9b80_2f2eb8(&m->pos, &target);
+    if (d < hero.unk2044) {
+        hero.unk2040 = m;
+        hero.unk2044 = d;
+        if (d < 20.0f) {
+            hero.unk2048 = 1;
+        }
+    }
+}
 /* Builds two scaled offset vectors from the moby's matrix and adds them to out. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DA60), where it is exact; names translated to the US level program. */
 

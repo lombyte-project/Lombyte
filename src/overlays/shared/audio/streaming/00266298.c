@@ -2,7 +2,182 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00266448.s", FUN_L00_00266448);
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/entities/moby.h"
+
+/*
+ * Scene trigger attached to a moby: when the hero comes close enough (and,
+ * unless the entry allows any direction, faces the moby while it faces him)
+ * it starts the scene of its current entry, after paying a bolt price or
+ * clearing an item flag if the entry has a cost.
+ */
+
+/* One entry of a trigger's list (0x1C bytes, FUN_L00_002668a0_c reads bit 0 of flags). */
+struct SceneEntry {
+    u8 pad_00[4];
+    s16 scene;                     /* 0x04: -1 none; bit 0x4000 = other kind (FUN_L00_00299460) */
+    u8 pad_06[2];
+    s16 cost_kind;                 /* 0x08: 1 bolts (price table), 4 item flag, 6 bolts (no charge here) */
+    s16 cost_id;                   /* 0x0A: index into scene_prices / item_flags */
+    u8 pad_0C[4];
+    u16 flags;                     /* 0x10: 1 = no facing check, 8 = has a cost */
+    u8 pad_12[0xA];
+};
+
+/* Trigger state set up by FUN_L00_002668a0_c. */
+struct SceneTrigger {
+    u8 pad_00[8];
+    u8 any_direction;              /* 0x08: entry flags bit 0; 0xFF disables the trigger */
+    u8 initialised;                /* 0x09: set by FUN_L00_002668a0_c */
+    u8 pad_0A[2];
+    f32 radius;                    /* 0x0C: facing tolerance; twice this is the reach */
+    u8 pad_10[0x26];
+    s16 entry;                     /* 0x36: current entry, -1 none */
+    s32 start_frame;               /* 0x38: game_frame at setup */
+    struct SceneEntry *entries;    /* 0x3C */
+};
+
+/* The trigger that fired last. */
+struct ActiveSceneTrigger {
+    u8 pad_00[8];
+    struct Moby *moby;             /* 0x08 */
+    struct SceneTrigger *trigger;  /* 0x0C */
+    s32 next_frame;                /* 0x10: no trigger fires before this game_frame */
+};
+
+/* Per-moby record (16 bytes, indexed by FUN_L00_002667d0_c2). */
+struct MobyRecord {
+    s32 unk00;
+    s32 unk04;
+    s32 unk08;
+    s32 seen;                      /* 0x0C: set to 1 once its trigger fired */
+};
+
+/* Price table entry (0x18 bytes). */
+struct ScenePrice {
+    s32 bolts;
+    u8 pad_04[0x14];
+};
+
+extern s32 D_L00_0015F5C4;                                  /* nonzero blocks all triggers */
+extern s32 game_frame __asm__("D_L00_0015F5CC");
+extern struct ActiveSceneTrigger active_scene_trigger __asm__("D_L00_00179100");
+extern s32 D_0013CAE4[];                                    /* bit 0x10 lifts the facing check */
+extern s32 bolt_hud_item __asm__("D_L00_00160130") __attribute__((sda));
+extern struct MobyRecord moby_records[] __asm__("D_0013D5B0");
+extern s32 current_bolt_count __asm__("D_0015ED98");
+extern struct ScenePrice scene_prices[] __asm__("D_L00_001C40B0");
+extern u8 item_flags[] __asm__("D_0013D388");
+
+extern void FUN_L00_002668a0_c(struct Moby *, struct SceneTrigger *) __asm__("FUN_L00_002668a0");
+extern f32 FUN_001f9b48(void *, void *);                    /* distance */
+extern void FUN_00216c48(struct Moby *, struct SceneTrigger *, s32);
+extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
+extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
+extern s32 FUN_L00_002667d0_c2(struct Moby *) __asm__("FUN_L00_002667d0");
+extern void FUN_L00_00299460(s32);
+extern void remove_hud_item(s32) __asm__("FUN_001ff480");
+extern void start_scene(s32) __asm__("FUN_L00_00298840");
+extern s32 FUN_L00_00235e18(s32, s32);
+extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
+extern void FUN_L00_00237190(void);
+extern void FUN_L00_002371e0(void);
+extern void FUN_L00_00237200(void);
+extern void FUN_L00_00239cc8(void);
+extern void FUN_L00_00239d00(void);
+extern void FUN_L00_00239df8(void);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+
+s32 FUN_L00_00266448(struct Moby *moby, struct SceneTrigger *trigger)
+{
+    struct Hero *h = &hero;
+    struct SceneEntry *entry;
+    s32 index;
+    s32 handle;
+
+    if (h->state.current == 0x1D)
+        return 0;
+    if (h->health.hp == 0)
+        return 0;
+    if (trigger->initialised == 0)
+        FUN_L00_002668a0_c(moby, trigger);
+    if (D_L00_0015F5C4 != 0)
+        return 0;
+    if (trigger == 0)
+        return 0;
+    if (trigger->entry == -1)
+        return 0;
+    if (trigger->any_direction == 0xFF)
+        return 0;
+    if (FUN_001f9b48(&moby->pos, &h->motion.pos) > trigger->radius + trigger->radius)
+        return 0;
+
+    FUN_00216c48(moby, trigger, 0);
+
+    if (trigger->any_direction == 0) {
+        /* the moby must face the hero ... */
+        if (fast_difference_between_rotations(
+                atan2_f(h->motion.pos.f[0] - moby->pos.x, h->motion.pos.f[1] - moby->pos.y),
+                moby->rot.z) > trigger->radius)
+            return 0;
+        /* ... and the hero the moby, within 1.57 (about 90 degrees) */
+        if (fast_difference_between_rotations(
+                atan2_f(moby->pos.x - h->motion.pos.f[0], moby->pos.y - h->motion.pos.f[1]),
+                h->motion.rot.f[2]) > 1.57f)
+            return 0;
+    }
+
+    if (game_frame < active_scene_trigger.next_frame)
+        return 0;
+
+    if (trigger->any_direction != 0 || (D_0013CAE4[0] & 0x10)) {
+        index = FUN_L00_002667d0_c2(moby);
+        if (moby_records[index].seen == 0)
+            moby_records[index].seen = 1;
+        active_scene_trigger.moby = moby;
+        active_scene_trigger.trigger = trigger;
+
+        entry = &trigger->entries[trigger->entry];
+        if (entry->flags & 8) {
+            if (entry->cost_kind == 1)
+                current_bolt_count -= scene_prices[entry->cost_id].bolts;
+            else if (entry->cost_kind == 4)
+                item_flags[entry->cost_id] = 0;
+        }
+        if (entry->scene == -1) {
+            FUN_00216c48(moby, trigger, 1);
+            return 1;
+        }
+
+        /* stored again: retail repeats the two stores here */
+        active_scene_trigger.moby = moby;
+        active_scene_trigger.trigger = trigger;
+        if (entry->scene & 0x4000) {
+            FUN_L00_00299460((s16)(entry->scene ^ 0x4000));
+            return 1;
+        }
+        remove_hud_item(bolt_hud_item);
+        bolt_hud_item = -1;
+        start_scene(entry->scene);
+        return 1;
+    }
+
+    if (FUN_L00_00235e18(bolt_hud_item, 10)) {
+        bolt_hud_item = queue_animation_update(12, 0, FUN_L00_00237190, FUN_L00_002371e0,
+                                               FUN_L00_00237200, 0, 0);
+    }
+    {
+        /* a fresh block-local pointer (not `entry`) keeps retail's registers */
+        struct SceneEntry *unpaid = &trigger->entries[trigger->entry];
+
+        if (unpaid->cost_kind == 1 || unpaid->cost_kind == 6) {
+            handle = queue_animation_update(2, 0x754E, FUN_L00_00239cc8, FUN_L00_00239d00,
+                                            FUN_L00_00239df8, &current_bolt_count, 9999999);
+            FUN_L00_00235e18(handle, scale_game_frames(60));
+        }
+    }
+    return 0;
+}
 extern s32 D_0015ED84[];
 extern s32 D_L00_001791B8[] __attribute__((section(".data")));
 extern s32 D_L00_001C44B8[] __attribute__((section(".data")));

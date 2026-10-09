@@ -3,7 +3,219 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0dc0.s", FUN_L02_002e0dc0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e1950.s", FUN_L02_002e1950);
+#include "rnc/math_consts.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
+#include "qcopy.h"
+
+/* Pvars of the l02 watcher NPC: it idles, turns its head toward the hero and hands out a reward. */
+typedef struct {
+    u8 pad0[4];
+    s16 talk_state;       /* 0x04: 2 once the conversation is over */
+    u8 pad6[2];
+    u8 zone_check;        /* 0x08: 1 when the talk radius depends on a clip volume */
+    u8 pad9[3];
+    f32 talk_radius;      /* 0x0C */
+    u8 pad10[0x10];
+    void *dialog;         /* 0x20 */
+    u8 pad24[0x1C];
+    u8 body[0x64];        /* 0x40: body joint driver */
+    f32 pitch;            /* 0xA4 */
+    f32 yaw;              /* 0xA8 */
+    u8 padAC[4];
+    f32 height;           /* 0xB0 */
+    u8 padB4[0xC];
+    u8 head[0x68];        /* 0xC0: head joint driver */
+    f32 head_yaw;         /* 0x128 */
+    u8 pad12C[0x3E];
+    s16 idle_timer;       /* 0x16A */
+    s32 zone;             /* 0x16C: clip volume index */
+    Vec4f target;         /* 0x170: where it looks when the hero is away */
+    s32 unk180;
+    u8 pad184[4];
+    s32 moving_timer;     /* 0x188: frames left looking at the moving hero */
+    s32 target_timer;     /* 0x18C: frames until a new look target */
+} WatcherVars;
+
+/* The reward pickup the watcher drops when it leaves. */
+typedef struct {
+    u8 pad0[0x10];
+    Vec4f pos;            /* 0x10 */
+    Vec4f vel;            /* 0x20 */
+    u8 pad30[0x16];
+    s16 placed;           /* 0x46 */
+} WatcherReward;
+
+typedef struct {
+    Vec4f target;
+    Vec4f eye;
+    Vec4f delta;
+} WatcherLook;
+
+extern u8 D_0013D506 __attribute__((section(".data")));
+extern u8 D_0015EDB0 __attribute__((section(".sdata")));
+extern f32 D_0015ED64 __attribute__((section(".sdata")));
+extern s32 D_L02_0015F5C4 __attribute__((section(".sdata")));
+extern WatcherReward D_L02_0016CE60;
+extern char D_L02_00161D00[];
+extern void FUN_L02_002e0cd8(struct Moby *);
+extern void FUN_L02_002e1fb8(struct Moby *);
+extern void FUN_L02_0025c758(struct Moby *);
+extern void delete_moby(struct Moby *) __asm__("FUN_0020c828");
+extern void watcher_init(struct Moby *, WatcherVars *) __asm__("FUN_L00_002668a0");
+extern s32 watcher_talk(struct Moby *, WatcherVars *) __asm__("FUN_L00_00266448");
+extern void watcher_face(struct Moby *, f32) __asm__("FUN_L01_002783a8");
+extern s32 point_in_clip_volume(void *, s32) __asm__("FUN_00214720");
+extern void give_reward(s32, s32) __asm__("FUN_L00_00203908");
+extern void FUN_L00_00260860(s32, s32);
+extern void FUN_L00_002502a0(s32);
+extern void FUN_L00_00284e50(void *, void *);
+extern void end_conversation(s32, s32) __asm__("FUN_0020b178");
+extern s32 count_down_16(s16 *) __asm__("FUN_001f9770");
+extern s32 count_down(s32 *) __asm__("FUN_001f9740");
+extern f32 rand_range(f32, f32) __asm__("FUN_002132a8");
+extern f32 scale_time(f32) __asm__("FUN_001f96b0");
+extern s32 float_to_int(f32) __asm__("FUN_001fa6d0");
+extern s32 rand_int(s32) __asm__("FUN_00213260");
+extern s32 scale_frames(s32) __asm__("FUN_001f96f8");
+extern void blend_anim(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void vec_set_len(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void vec_clear(void *) __asm__("FUN_001f99f8");
+extern f32 vec_len(void *) __asm__("FUN_001f9af0");
+extern f32 vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern f32 vec_dist(void *, void *) __asm__("FUN_001f9b80");
+extern f32 ground_height(void *, s32, f32) __asm__("FUN_00213508");
+extern f32 angle_atan2(f32, f32) __asm__("FUN_001f9e90");
+extern f32 angle_add(f32, f32) __asm__("FUN_001fa580");
+extern f32 angle_sub(f32, f32) __asm__("FUN_001fa5c8");
+extern f32 angle_diff(f32, f32) __asm__("FUN_001fa688");
+extern void spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
+extern void drive_joint(f32, f32, struct Moby *, void *, s32) __asm__("FUN_L00_002628d8");
+
+/* Watcher NPC update (twin of FUN_L05_00317470): idles with random animations, talks to the hero and drops its reward, and turns its head toward the hero or a random look target. */
+void FUN_L02_002e1950(struct Moby *m) {
+    WatcherVars *v = (WatcherVars *)m->pvars;
+    WatcherLook look;
+    f32 rate;
+    f32 head_rate;
+    s32 tracking;
+
+    FUN_L02_002e0cd8(m);
+    FUN_L02_002e1fb8((char *)m);
+    switch (m->state) {
+    case 0:
+        if (D_0013D506) {
+            delete_moby(m);
+            return;
+        }
+        v->unk180 = 0;
+        v->dialog = D_L02_00161D00;
+        m->state = 1;
+        m->unk30 = 0xFF;
+        watcher_init(m, v);
+        FUN_L02_0025c758(m);
+        break;
+    case 1:
+        if (v->zone_check == 1 && point_in_clip_volume(&hero.motion.pos, v->zone))
+            v->talk_radius = 255.0f;
+        else
+            v->talk_radius = 2.5f;
+        if (watcher_talk(m, v)) {
+            watcher_face(m, 2.5f);
+            m->state = 2;
+        }
+        if (v->talk_state == 2) {
+            give_reward(2000, 10);
+            FUN_L00_00260860(30, 1);
+            FUN_L00_002502a0(*((u8 *)m + 0xB0));
+            FUN_L00_00284e50(&hero.motion.pos, &hero.motion.rot);
+            end_conversation(0, -1);
+            delete_moby(m);
+            return;
+        }
+        if (m->prev_seq == 0 && count_down_16(&v->idle_timer)) {
+            s32 a = 1;
+            v->idle_timer = float_to_int(scale_time(rand_range(1200.0f, 2400.0f)));
+            if (rand_int(2) == 0)
+                a = 2;
+            if (m->prev_seq != a)
+                blend_anim(m, a, 0, scale_frames(10));
+        } else if ((m->unk70 & 2) && m->prev_seq) {
+            blend_anim(m, 0, 0, scale_frames(10));
+        }
+        break;
+    case 2:
+        if (D_L02_0016CE60.placed == 0) {
+            vec_set_len(&D_L02_0016CE60.pos, &m->unkC0, 2.5f);
+            vec_add(&D_L02_0016CE60.pos, &D_L02_0016CE60.pos, &m->pos);
+            D_L02_0016CE60.pos.z += 10.0f;
+            D_L02_0016CE60.pos.z = ground_height(&D_L02_0016CE60.pos, 0, 0.5f);
+            vec_clear(&D_L02_0016CE60.vel);
+            D_L02_0016CE60.vel.z = angle_add(m->rot.z, 3.14159f);
+            D_L02_0016CE60.placed = 1;
+        }
+        if (D_L02_0015F5C4 != 2)
+            m->state = 1;
+        break;
+    }
+    rate = 0.02f;
+    head_rate = 0.3f;
+    tracking = 0;
+    if (m->prev_seq == 0) {
+        tracking = 1;
+        if (vec_dist(&m->pos, &hero.motion.pos) < 8.0f
+            && angle_diff(m->rot.z, angle_atan2(hero.motion.unkD0.f[0] - m->pos.x,
+                                                hero.motion.unkD0.f[1] - m->pos.y)) < 1.5707964f) {
+            if (vec_len(&hero.motion.unk100) > 0.01f)
+                v->moving_timer = scale_frames(120);
+            else
+                count_down(&v->moving_timer);
+        } else if (v->moving_timer) {
+            v->moving_timer = 0;
+            qcopy(&v->target, &hero.motion.unkD0);
+        }
+        if (count_down(&v->target_timer)) {
+            f32 heading;
+            v->target_timer = float_to_int(scale_time(rand_range(180.0f, 300.0f)));
+            heading = angle_add(m->rot.z, rand_range(-90.0f, 90.0f) * DEG_TO_RAD);
+            spherical_offset(&v->target, 6.0f, heading, rand_range(0.0f, 30.0f) * DEG_TO_RAD);
+            vec_add(&v->target, &v->target, &m->pos);
+        }
+        if (v->moving_timer) {
+            qcopy(&look.target, &hero.motion.unkD0);
+            rate = 0.04f;
+            head_rate = 0.3f;
+        } else {
+            qcopy(&look.target, &v->target);
+        }
+    }
+    if (tracking) {
+        f32 yaw;
+        f32 pitch;
+        qcopy(&look.eye, &m->pos);
+        look.eye.z += 2.0f;
+        vec_sub(&look.delta, &look.target, &look.eye);
+        yaw = angle_sub(angle_atan2(look.delta.x, look.delta.y), m->rot.z);
+        pitch = -angle_atan2(vec_len_xy(&look.delta), look.delta.z);
+        if (yaw > 1.5707964f)
+            yaw = 1.5707964f;
+        else if (yaw < -1.5707964f)
+            yaw = -1.5707964f;
+        if (pitch > 0.5235988f)
+            pitch = 0.5235988f;
+        else if (pitch < -0.5235988f)
+            pitch = -0.5235988f;
+        v->pitch = pitch;
+        v->yaw = yaw * 0.6f;
+        v->head_yaw = yaw * 0.4f;
+    }
+    if (D_0015EDB0)
+        v->height = 2.75f;
+    drive_joint(rate * D_0015ED64, head_rate * D_0015ED64, m, v->body, 0);
+    drive_joint(rate * D_0015ED64, head_rate * D_0015ED64, m, v->head, 1);
+}
 #include "qcopy.h"
 extern char D_0013F3D0_n[] __asm__("D_0013F3D0");
 extern char *D_L02_001600EC_n __asm__("D_L02_001600EC");
@@ -25,8 +237,8 @@ extern void FUN_L02_0023ccc8(void);
 extern void FUN_L02_0023cda8(void);
 
 /* Three-state controller (data+0x180): 0 waits for its trigger, 1 runs timed effects until released, then moves the moby to its spawn point, sets the two linked mobys' flags and enters state 2. */
-void FUN_L02_002e1fb8(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void FUN_L02_002e1fb8(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
     float fx_pos[4] __attribute__((aligned(16)));
     float fx_rot[4] __attribute__((aligned(16)));
     char *entry;
@@ -56,14 +268,14 @@ void FUN_L02_002e1fb8(char *moby) {
         entry_off = *(int *)(data + 0x154) << 7;
         mobys = table;
         *(int *)(data + 0x164) = -1;
-        qcopy(moby + 0x10, (char *)(entry_off + (int)mobys) + 0x30);
+        qcopy(&moby->pos, (char *)(entry_off + (int)mobys) + 0x30);
         entry = (char *)(entry_off + (int)mobys);
-        *(float *)(moby + 0x48) = yaw = atan2_n(*(float *)(entry + 0), *(float *)(entry + 4));
-        qcopy(fx_pos, moby + 0x10);
+        moby->rot.z = yaw = atan2_n(*(float *)(entry + 0), *(float *)(entry + 4));
+        qcopy(fx_pos, &moby->pos);
         fx_pos[0] += fdc8_n(yaw) * 1.5f;
-        fx_pos[1] += fde0_n(*(float *)(moby + 0x48)) * 1.5f;
+        fx_pos[1] += fde0_n(moby->rot.z) * 1.5f;
         f9f8_n(fx_rot);
-        fx_rot[2] = fa580_n(*(float *)(moby + 0x48), 3.1415927f);
+        fx_rot[2] = fa580_n(moby->rot.z, 3.1415927f);
         FUN_L00_00216f90_n(fx_pos, fx_rot, 0, 1);
         {
             int i0 = *(int *)(data + 0x158);
@@ -102,8 +314,8 @@ extern void draw_2ea048(void *) __asm__("FUN_00201f58");
 
 /* Draws the parts whose clip volumes contain the camera (all of them when
  * the override flag is set). */
-void FUN_L02_002ea048(char *m) {
-    int *d = *(int **)(m + 0x78);
+void FUN_L02_002ea048(struct Moby *m) {
+    int *d = (int *)m->pvars;
 
     begin_2ea048(0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, D_L02_001F3E80);
     if (D_L02_0015F608 != 0 || (d[0] != -1 && in_clip_2ea048(D_L02_001673C0, d[0]))) {
@@ -133,12 +345,12 @@ extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L02_002a47f8(float);
 extern void FUN_L02_002ea048_cb(void) __asm__("FUN_L02_002ea048");
 
-void FUN_L02_002ea198(unsigned char *moby) {
-    switch (moby[0x20]) {
+void FUN_L02_002ea198(struct Moby *moby) {
+    switch (moby->state) {
     case 0:
         FUN_L02_002a47f8(0.16666667f);
-        moby[0x20] = 1;
-        moby[0x30] = 0xFF;
+        moby->state = 1;
+        moby->unk30 = 0xFF;
         break;
     case 1:
         AddDrawCallback(FUN_L02_002ea048_cb, moby);

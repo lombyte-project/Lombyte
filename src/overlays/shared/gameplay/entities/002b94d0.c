@@ -774,7 +774,125 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bc3b0.s", FUN_L00_002bc3b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bc7e8.s", FUN_L00_002bc7e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bcf98.s", FUN_L00_002bcf98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bd0a0.s", FUN_L00_002bd0a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bdc50.s", FUN_L00_002bdc50);
+#include "qcopy.h"
+#include "rnc/overlay/quad.h"
+typedef struct {
+    OvlQuad corner[4];
+    int color[4];
+    float uv[8];
+    long unk70, tex, unk80, unk88;
+} Quad;
+extern float D_0015ED60;
+extern u8 D_0013E535 __attribute__((section(".data")));
+extern float D_L00_00161710 __attribute__((sda));
+extern float D_L00_00161714 __attribute__((sda));
+extern float D_L00_00161718 __attribute__((sda));
+extern float D_L00_0016171C __attribute__((sda));
+extern float D_L00_00161720 __attribute__((sda));
+extern float D_L00_00161724 __attribute__((sda));
+extern float D_L00_00161728 __attribute__((sda));
+extern int D_L00_0016176C __attribute__((sda));
+extern int D_L00_00161770 __attribute__((sda));
+extern float D_L00_00161774 __attribute__((sda));
+extern float D_L00_00161778 __attribute__((sda));
+extern float D_L00_0016177C __attribute__((sda));
+extern int D_L00_00161784 __attribute__((sda));
+extern int D_L00_00161788 __attribute__((sda));
+extern float D_L00_0016178C __attribute__((sda));
+extern float D_L00_00161790 __attribute__((sda));
+extern int D_L00_00161794 __attribute__((sda));
+extern int D_L00_00161798 __attribute__((sda));
+extern int D_L00_0016179C __attribute__((sda));
+extern OvlVec4 D_L00_00166DC0_v __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern OvlVec4 D_L00_001DC020[] __attribute__((section(".data")));
+extern OvlVec4 D_L00_001DC0E0[] __attribute__((section(".data")));
+extern OvlQuad D_L00_001DC060[][20] __attribute__((section(".data")));
+extern OvlQuad D_L00_001DC1A0[][20] __attribute__((section(".data")));
+void FUN_L00_002be078(void *, int, int, int, float, float, float, int);
+void FUN_L00_002be650(void *);
+void FUN_L00_002be890(void *);
+long FUN_001f44b8(int);
+void FUN_001f9a28(void *, void *, void *);
+void FUN_001f9ad8(void *, void *, void *);
+float FUN_001f9ab0(void *, void *);
+void FUN_001f7d30(void *, void *, int);
+/* scrolls the two texture-offset accumulators and draws the 10x20 band of
+   textured quads between the D_L00_001DC060/001DC1A0 rings, skipping
+   back-facing ones */
+void FUN_L00_002bdc50(void *o) {
+    Quad quad;
+    OvlVec4 d1, d2, n, e;
+    float y, a, b, t;
+    int c, i, j, k, off, jo;
+
+    D_L00_0016178C = D_L00_0016178C - D_L00_00161790 * D_0015ED60;
+    if (D_L00_0016178C <= -8.0f) D_L00_0016178C += 8.0f;
+    FUN_L00_002be078(D_L00_001DC020, D_L00_0016176C, D_L00_00161770, 12, D_L00_00161774, D_L00_00161778, D_L00_0016177C, D_L00_00161784);
+    FUN_L00_002be078(D_L00_001DC0E0, D_L00_0016176C, D_L00_00161770, 12, D_L00_00161774, D_L00_00161778, D_L00_0016177C, D_L00_00161788);
+    FUN_L00_002be650(o);
+    FUN_L00_002be890(o);
+    k = D_0013E535;
+    c = k ? D_L00_00161798 : D_L00_00161794;
+    quad.tex = FUN_001f44b8(D_L00_0016179C);
+    quad.unk80 = 0xFF9000000260L;
+    quad.unk88 = 0x8000000048L;
+    quad.unk70 = 0;
+    quad.color[3] = c;
+    quad.color[2] = c;
+    quad.color[1] = c;
+    quad.color[0] = c;
+    y = D_L00_00161718;
+    D_L00_00161718 = y - D_L00_0016171C * D_0015ED60;
+    if (D_L00_00161718 <= -8.0f) D_L00_00161718 += 8.0f;
+    t = D_L00_00161728 * D_0015ED60;
+    D_L00_00161720 = D_L00_00161720 - t;
+    if (D_L00_00161720 <= -7.0f) D_L00_00161720 += 7.0f;
+    D_L00_00161724 = D_L00_00161724 + t;
+    if (D_L00_00161724 >= 5.0f) D_L00_00161724 -= 5.0f;
+    for (i = 2; i < 12; i++) {
+        a = D_L00_00161720;
+        b = D_L00_00161724;
+        for (j = 0; j < 20; j++) {
+            qcopy(&quad.corner[0], &D_L00_001DC1A0[i][j]);
+            qcopy(&quad.corner[1], &D_L00_001DC1A0[i][(j + 1) % 20]);
+            qcopy(&quad.corner[2], &D_L00_001DC060[i][j]);
+            qcopy(&quad.corner[3], &D_L00_001DC060[i][(j + 1) % 20]);
+            FUN_001f9a28(&d1, &quad.corner[0], &quad.corner[1]);
+            FUN_001f9a28(&d2, &quad.corner[2], &quad.corner[1]);
+            FUN_001f9ad8(&n, &d2, &d1);
+            FUN_001f9a28(&e, &quad.corner[1], &D_L00_00166DC0_v);
+            if (FUN_001f9ab0(&n, &e) >= 0.0f) {
+                a += D_L00_00161714;
+                b += D_L00_00161714;
+            } else {
+                if (i == 11) {
+                    quad.color[0] = quad.color[1] = D_L00_00161794 & 0xFFFFFF;
+                }
+                quad.uv[5] = a;
+                quad.uv[1] = a;
+                quad.uv[3] = a + D_L00_00161714;
+                quad.uv[4] = y - D_L00_00161710;
+                quad.uv[0] = y;
+                quad.uv[2] = y;
+                quad.uv[7] = a + D_L00_00161714;
+                quad.uv[6] = y - D_L00_00161710;
+                a = a + D_L00_00161714;
+                FUN_001f7d30(&quad, 0, 0);
+                quad.uv[0] = y;
+                quad.uv[1] = b;
+                quad.uv[2] = y;
+                quad.uv[3] = b + D_L00_00161714;
+                quad.uv[5] = b;
+                quad.uv[4] = y - D_L00_00161710;
+                quad.uv[6] = y - D_L00_00161710;
+                quad.uv[7] = b + D_L00_00161714;
+                b = b + D_L00_00161714;
+                FUN_001f7d30(&quad, 0, 0);
+            }
+        }
+        y += D_L00_00161710;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002be078.s", FUN_L00_002be078);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002be650.s", FUN_L00_002be650);
 typedef struct {

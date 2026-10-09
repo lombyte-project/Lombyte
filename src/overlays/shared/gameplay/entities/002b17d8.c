@@ -213,9 +213,150 @@ unsigned char *FUN_L14_002ffaf8(unsigned char *owner, char *pos) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b17d8.s", FUN_L14_002b17d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2600.s", FUN_L14_002b2600);
+#include "rnc/math/vector.h"
+#include "rnc/gameplay/entities/moby.h"
+
+typedef struct {
+    u8 pad0[0x1E0];
+    Vec4 exhaust;    /* 0x1E0 */
+    Vec4 nozzle;     /* 0x1F0 */
+    Vec4 joint6;     /* 0x200 */
+    Vec4 beam_start; /* 0x210 */
+    Vec4 beam_end;   /* 0x220 */
+} ShipVars;
+
+typedef struct {
+    u8 pad0[0x10];
+    f32 scale;       /* 0x10 */
+    u8 pad14[2];
+    s16 mode;        /* 0x16 */
+    s32 color;       /* 0x18 */
+} ParticleFade;
+
+typedef struct {
+    u8 pad0[0xA];
+    s16 frames;      /* 0x0A */
+    f32 life;        /* 0x0C */
+    u8 pad10[0x10];
+    ParticleFade fade; /* 0x20 */
+} Particle;
+
+extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
+extern u8 D_L14_0015F580[] __attribute__((section(".sdata")));
+extern f32 D_L14_001614A8 __attribute__((sda));
+extern f32 D_L14_001614B0 __attribute__((sda));
+extern f32 D_L14_001614B4 __attribute__((sda));
+extern f32 D_L14_001614B8 __attribute__((sda));
+
+extern void FUN_L14_002b3a20_c(struct Moby *) __asm__("FUN_L14_002b3a20");
+extern void FUN_L14_002b2928(struct Moby *);
+extern void FUN_001f4600(void (*)(struct Moby *), struct Moby *);
+extern void FUN_L00_0024f7c8(struct Moby *, s32, void *);
+extern void FUN_0020cca8(struct Moby *, s32, void *);
+extern void FUN_00213358(void *, f32, f32);
+extern Particle *FUN_L00_00274948(void *, void *, s32, struct Moby *);
+extern f32 FUN_002132a8(f32, f32);
+extern s32 FUN_00213260(s32);
+extern s32 FUN_001f96f8(s32);
+extern f32 FUN_001fa6c0(s32);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, f32);
+extern void FUN_001f9bf8(void *, void *, f32);
+
+/* Ship engine effects: puffs exhaust particles from joint 1 and places the nozzle and beam points from joints 7 and 2. */
+void FUN_L14_002b2600(struct Moby *m)
+{
+    Vec4 pos;
+    Vec4 dir;
+    Vec4 vel;
+    Vec4 mat[4];
+    Vec4 dx;
+    Vec4 dy;
+    Vec4 dz;
+    ShipVars *pv;
+    Particle *p;
+    ParticleFade *fade;
+    s32 i;
+    f32 f;
+
+    pv = (ShipVars *)m->pvars;
+    FUN_001f4600(FUN_L14_002b3a20_c, m);
+    FUN_L00_0024f7c8(m, 1, &pos);
+    FUN_001f9a28(&dir, &pos, &D_L14_001674C0);
+    FUN_001f9bf8(&dir, &dir, -0.5f);
+    FUN_001f9a10(&pv->exhaust, &pos, &dir);
+    FUN_00213358(&vel, 0.005f, 0.03f);
+    p = FUN_L00_00274948(&pos, &vel, 0x7F, m);
+    if (p != NULL) {
+        p->life = FUN_002132a8(6000.0f, 32000.0f);
+    }
+    for (i = 0; i < 3; i++) {
+        p = FUN_L00_00274948(&pos, D_L14_0015F580, 0x7F, m);
+        if (p == NULL) {
+            continue;
+        }
+        fade = &p->fade;
+        if (i == 2 && FUN_00213260(8) == 0) {
+            p->life = 180000.0f;
+        } else {
+            p->life = FUN_002132a8(80000.0f, 120000.0f);
+        }
+        p->frames = FUN_001f96f8(2);
+        f = 1.0f / FUN_001fa6c0(p->frames);
+        fade->mode = 3;
+        fade->color = 0x7F7F7F;
+        fade->scale = f;
+    }
+    FUN_L00_0024f7c8(m, 6, &pv->joint6);
+    FUN_0020cca8(m, 7, mat);
+    FUN_001f9a68(&dx, &mat[0], D_L14_001614A8);
+    FUN_001f9a10(&pv->nozzle, &mat[3], &dx);
+    FUN_0020cca8(m, 2, mat);
+    FUN_001f9a68(&dx, &mat[0], D_L14_001614B0);
+    FUN_001f9a68(&dy, &mat[1], D_L14_001614B4);
+    FUN_001f9a68(&dz, &mat[2], D_L14_001614B8);
+    FUN_001f9a10(&pv->beam_start, &mat[3], &dx);
+    FUN_001f9a10(&pv->beam_start, &pv->beam_start, &dy);
+    FUN_001f9a10(&pv->beam_start, &pv->beam_start, &dz);
+    FUN_001f9a68(&dy, &dy, -2.0f);
+    FUN_001f9a10(&pv->beam_end, &pv->beam_start, &dy);
+    FUN_001f4600(FUN_L14_002b2928, m);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2928.s", FUN_L14_002b2928);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2ed8.s", FUN_L14_002b2ed8);
+#include "sda.h"
+#include "rnc/gameplay/entities/moby.h"
+
+/* pvars of the moby FUN_L14_002b2ed8 updates */
+typedef struct {
+    u8 pad00[0x38];
+    s32 restart;   /* 0x38: nonzero picks a new random delay */
+    u8 pad3C[0x1F8];
+    f32 unk234;    /* 0x234 */
+    s32 delay;     /* 0x238: frames, counted down */
+} DelayVars_2b2ed8;
+
+extern f32 D_L14_001614C4_2b2ed8 __asm__("D_L14_001614C4") __attribute__((sda));
+extern f32 random_float_between_2b2ed8(f32, f32) __asm__("FUN_002132a8");
+extern f32 FUN_001f96b0_2b2ed8(f32) __asm__("FUN_001f96b0");
+extern s32 truncate_float_to_s32_2b2ed8(f32) __asm__("FUN_001fa6d0");
+extern s32 tick_countdown_2b2ed8(s32 *) __asm__("FUN_001f9740");
+
+void FUN_L14_002b2ed8(struct Moby *m) {
+    DelayVars_2b2ed8 *pv = (DelayVars_2b2ed8 *)m->pvars;
+
+    if (pv->restart != 0) {
+        pv->delay = truncate_float_to_s32_2b2ed8(
+            FUN_001f96b0_2b2ed8(random_float_between_2b2ed8(180.0f, 240.0f)));
+        pv->restart = 0;
+    }
+    tick_countdown_2b2ed8(&pv->delay);
+    if (pv->delay != 0) {
+        pv->unk234 = D_L14_001614C4_2b2ed8 + 6.0f;
+    } else {
+        pv->unk234 = D_L14_001614C4_2b2ed8;
+    }
+}
 
 
 
@@ -514,55 +655,55 @@ extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_001f9740(void *);
 extern void set_moby_animation_c(void *, s32, s32) __asm__("FUN_00212ed8");
 
-void FUN_L14_002d96e0(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void FUN_L14_002d96e0(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
     if (D_001413F4[0] == 2) {
-        *(s32 *)(moby + 0x94) = 0;
+        moby->unk94 = 0;
     } else {
-        *(s32 *)(moby + 0x94) = *(s32 *)(*(char **)(moby + 0x24) + 0x10);
+        moby->unk94 = moby->pclass->unk10;
     }
-    switch ((u8)moby[0x20]) {
+    switch (moby->state) {
     case 0:
         if (*(s32 *)data != 0 && *(s16 *)(D_L14_00167500 + 0x86) == 0x14) {
-            moby[0x20] = 1;
+            moby->state = 1;
             *(s32 *)(data + 8) = FUN_001f96f8_c(*(s32 *)(data + 4));
         }
         break;
     case 1:
         if (FUN_001f9740(data + 8) != 0) {
-            moby[0x20] = 2;
+            moby->state = 2;
             set_moby_animation_c(moby, 1, 0);
         }
         break;
     case 2:
-        if ((moby[0x70] & 2) != 0) {
-            moby[0x20] = 3;
+        if ((moby->unk70 & 2) != 0) {
+            moby->state = 3;
             set_moby_animation_c(moby, 2, 0);
         }
         break;
     case 3:
         if (*(s16 *)(D_L14_00167500 + 0x86) != 0x14) {
             set_moby_animation_c(moby, 0, 0);
-            moby[0x20] = 4;
+            moby->state = 4;
         }
         break;
     case 4:
         break;
     case 5:
-        if ((moby[0x70] & 2) != 0) {
-            moby[0x20] = 6;
+        if ((moby->unk70 & 2) != 0) {
+            moby->state = 6;
             set_moby_animation_c(moby, 2, 0);
         }
         break;
     case 6:
         if (FUN_001f9740(data + 8) != 0) {
             set_moby_animation_c(moby, 3, 0);
-            moby[0x20] = 7;
+            moby->state = 7;
         }
         break;
     case 7:
-        if ((moby[0x70] & 2) != 0) {
-            moby[0x20] = 0;
+        if ((moby->unk70 & 2) != 0) {
+            moby->state = 0;
             set_moby_animation_c(moby, 0, 0);
         }
         break;

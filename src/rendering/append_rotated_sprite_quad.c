@@ -1,20 +1,8 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001f5ab0/FUN_001f5ab0.s", FUN_001f5ab0);
-#else
-#include "types.h"
 #include "rnc/rendering/screen.h"
 
 #include "rnc/rendering/dma_tag.h"
-
-struct Vec4 {
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 w;
-};
+#include "rnc/math/vector.h"
 
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
@@ -23,23 +11,23 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern s32 convert_float_to_integer(f32) __asm__("func_001FA6D0");
 
-void append_rotated_sprite_quad(s32 texture_width, s32 texture_height, s64 texture_tex0,
-                                s64 z_and_fog, s32 color, u8 flip_u, u8 flip_v, f32 center_x,
-                                f32 center_y, f32 quad_width, f32 quad_height, f32 angle,
+void append_rotated_sprite_quad(f32 center_x, f32 center_y, f32 quad_width, f32 quad_height,
+                                f32 angle, s32 texture_width, s32 texture_height,
+                                s64 texture_tex0, s64 z_and_fog, s32 color, u8 flip_u, u8 flip_v,
                                 f32 pivot_u, f32 pivot_v) __asm__("FUN_001f5ab0");
 
-void append_rotated_sprite_quad(s32 texture_width, s32 texture_height, s64 texture_tex0,
-                                s64 z_and_fog, s32 color, u8 flip_u, u8 flip_v, f32 center_x,
-                                f32 center_y, f32 quad_width, f32 quad_height, f32 angle,
+void append_rotated_sprite_quad(f32 center_x, f32 center_y, f32 quad_width, f32 quad_height,
+                                f32 angle, s32 texture_width, s32 texture_height,
+                                s64 texture_tex0, s64 z_and_fog, s32 color, u8 flip_u, u8 flip_v,
                                 f32 pivot_u, f32 pivot_v) {
-    struct Vec4 vertical_edge;
-    struct Vec4 horizontal_edge;
-    struct Vec4 center;
-    struct Vec4 temporary;
-    struct Vec4 top_left;
-    struct Vec4 top_right;
-    struct Vec4 bottom_left;
-    struct Vec4 bottom_right;
+    Vec4f vertical_edge;
+    Vec4f horizontal_edge;
+    Vec4f center;
+    Vec4f temporary;
+    Vec4f top_left;
+    Vec4f top_right;
+    Vec4f bottom_left;
+    Vec4f bottom_right;
     struct DmaTag *tag;
     u64 *packet_words;
     s32 texture_left;
@@ -65,8 +53,8 @@ void append_rotated_sprite_quad(s32 texture_width, s32 texture_height, s64 textu
     }
     center.x = center_x;
     center.y = center_y;
-    vertical_edge.x = quad_height * fast_sin(angle);
     inverse_pivot_v = 1.0f - pivot_v;
+    vertical_edge.x = quad_height * fast_sin(angle);
     vertical_edge.y = quad_height * fast_cos(angle);
     horizontal_edge.x = quad_width * fast_cos(angle);
     horizontal_edge.y = -quad_width * fast_sin(angle);
@@ -125,4 +113,3 @@ void append_rotated_sprite_quad(s32 texture_width, s32 texture_height, s64 textu
 
 extern __typeof__(append_rotated_sprite_quad) func_001F5AB0 __attribute__((alias("FUN_001f5ab0")));
 
-#endif /* NON_MATCHING */

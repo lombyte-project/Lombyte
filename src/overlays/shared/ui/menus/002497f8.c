@@ -10,4 +10,62 @@ int FUN_L00_002497f8(int a, float x, float y, float z) {
     return z >= 39.0f;
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024a618.s", FUN_L00_0024a618);
+typedef struct {
+    u8 pad0[0xA];
+    s16 label;       /* 0x0A: text id */
+    s16 cost_index;  /* 0x0C: row in D_L00_001C40B0 */
+    u8 padE[0x1A];
+} MenuItem;
+
+typedef struct {
+    u8 pad0[0x20];
+    MenuItem *items;
+} Menu;
+
+typedef struct {
+    s32 bolts;
+    u8 pad4[0x14];
+} ItemCost;
+
+extern Menu D_L00_001841F0;
+extern char D_L00_0015FE38[];
+extern char D_L00_0015FE40[];
+extern ItemCost D_L00_001C40B0[];
+extern u8 *FUN_001fdd10(s32);
+extern int sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");
+
+/* Copies menu item idx's label into out, expanding one %b (the bolt cost)
+ * or other % escape. */
+void FUN_L00_0024a618(s32 idx, u8 *out) {
+    u8 buf[16];
+    u8 *s;
+    u8 *t;
+
+    s = FUN_001fdd10(D_L00_001841F0.items[idx].label);
+    t = buf;
+    if (s == 0) {
+        return;
+    }
+    while (*s != 0 && *s != '%') {
+        *out++ = *s++;
+    }
+    if (*s == 0) {
+        *out = *s;
+        return;
+    }
+    s++;
+    if (*s == 'b') {
+        sprintf_alt((char *)buf, D_L00_0015FE38,
+                    D_L00_001C40B0[D_L00_001841F0.items[idx].cost_index].bolts);
+    } else {
+        sprintf_alt((char *)buf, D_L00_0015FE40);
+    }
+    s++;
+    while (*t != 0) {
+        *out++ = *t++;
+    }
+    while (*s != 0) {
+        *out++ = *s++;
+    }
+    *out = 0;
+}

@@ -2,6 +2,8 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/math/vector.h"
+#include "rnc/gameplay/entities/moby.h"
 
 #define NOT_SDA
 
@@ -948,8 +950,11 @@ void FUN_L04_002d6f68(char *moby) {
     qcopy(dst + 0x10, moby + 0x10);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d7e90.s", FUN_L04_002d7e90);
-float FUN_L04_002e1768(char *moby) {
-    switch (*(short *)(moby + 0xA6)) {
+/* Rise speed of a riser by its class. */
+float riser_rise_speed(struct Moby *moby) __asm__("FUN_L04_002e1768");
+
+float riser_rise_speed(struct Moby *moby) {
+    switch (moby->oclass) {
     case 0x44D:
     case 0x5FC:
         return 1.3f;
@@ -958,8 +963,143 @@ float FUN_L04_002e1768(char *moby) {
     }
     return -2.05f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e17d8.s", FUN_L04_002e17d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e1a10.s", FUN_L04_002e1a10);
+/* Riser: once its id is collected or its trigger moby reaches the open state, rises for a
+ * second, then records its id in the level bitsets. */
+typedef struct {
+    u8 pad[0x454];
+    u8 collected[1];
+} LevelCollected;
+
+struct RiserVars {
+    s32 trigger;   /* moby index whose state opens it, -1 for none */
+    f32 baseZ;
+    s32 timer;
+};
+
+extern s32 D_0015ED84;
+extern s32 D_0014C190[][64];
+extern s32 D_L04_001BA650[];
+extern LevelCollected D_L04_001BB3B0;
+extern int FUN_L00_0028dc90(int, int, struct Moby *, int);
+extern int FUN_001f96f8(int);
+extern int FUN_001f9740(s32 *);
+extern int FUN_0022da68(int, int, struct Moby *);
+
+void FUN_L04_002e17d8(struct Moby *m) {
+    struct RiserVars *d = (struct RiserVars *)m->pvars;
+    struct Moby *t;
+    s16 idx;
+    u16 id;
+
+    switch (m->state) {
+    case 0:
+        d->baseZ = m->pos.z;
+        m->state = 1;
+        break;
+    case 1:
+        id = m->save_id;
+        idx = id;
+        if (D_L04_001BB3B0.collected[idx] == 0 && !((D_0014C190[D_0015ED84][idx >> 5] >> (id & 0x1F)) & 1)) {
+            if (d->trigger == -1)
+                break;
+            t = (struct Moby *)((d->trigger << 8) + D_L04_0015FFD8);
+            if (!((t->oclass == 0x267 && t->state == 4) || (t->oclass == 0x4A6 && t->state == 2)))
+                return;
+        }
+        if (m->oclass == 0x44D || m->oclass == 0x5FC)
+            FUN_L00_0028dc90(0, 0, m, 0x44D);
+        m->state = 2;
+        d->timer = FUN_001f96f8(60);
+        break;
+    case 2:
+        m->pos.z += riser_rise_speed(m) * D_0015ED6C;
+        if (FUN_001f9740(&d->timer)) {
+            D_0014C190[D_0015ED84][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+            D_L04_001BA650[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+            if (m->oclass == 0x44D)
+                FUN_0022da68(1, 0, m);
+            m->state = 3;
+        }
+        break;
+    }
+}
+/* Warp portal: spins, opens once the hero is near, then warps to the exit moby. */
+struct PortalVars {
+    s32 unk0;
+    s32 exitMoby;   /* 0x04: moby index to warp to, -1 for none */
+};
+
+struct PortalMobyView {
+    u8 pad0[0xB2];
+    s16 uid;        /* 0xB2 */
+};
+
+extern s32 D_L04_0015F5C4;
+extern s32 D_L04_0015F640;
+extern u8 D_0013D4F1[];
+extern u8 D_0013D4C9[];
+extern char D_L04_001DC760[];
+extern struct Moby *portal_mobys_2e1a10 __asm__("D_L04_0015FFD8");
+extern void FUN_L00_002d6bf0(struct Moby *);
+extern void remove_moby_2e1a10(struct Moby *) __asm__("FUN_0020c828");
+extern void FUN_L04_002e1d00_m(struct Moby *) __asm__("FUN_L04_002e1d00");
+extern void FUN_L00_00298840(int);
+extern void FUN_L00_00263d40(int, int);
+extern void FUN_L00_00260860(int, int);
+extern void FUN_L00_00284e50(void *, void *);
+extern void FUN_001e93b0(char *, int);
+extern void FUN_0020b178(int, int);
+
+void FUN_L04_002e1a10(struct Moby *moby) {
+    struct PortalVars *vars = (struct PortalVars *)moby->pvars;
+    struct Moby *exit;
+
+    moby->rot.z = fast_add_rotations(moby->rot.z, D_0015ED6C * 1.5707964f);
+    if (D_L04_0015F5C4 == 2)
+        moby->flags |= 0x41;
+    else if (moby->flags & 1)
+        moby->flags &= ~0x41;
+    switch (moby->state) {
+    case 0:
+        FUN_L00_002d6bf0(moby);
+        if (D_0013D4F1[0]) {
+            remove_moby_2e1a10(moby);
+            break;
+        }
+        moby->state = 1;
+        moby->pos.z += 1.0f;
+        break;
+    case 1:
+        FUN_L04_002e1d00_m(moby);
+        if (FUN_001f9b80(&moby->pos, D_0013F3D0) < 3.0f) {
+            moby->flags |= 0x41;
+            FUN_L00_00298840(2);
+            moby->state = 2;
+        }
+        break;
+    case 2:
+        if (D_L04_0015F5C4 == 2)
+            break;
+        if (!D_0013D4C9[0])
+            FUN_L00_00263d40(0xFA7, -1);
+        else
+            FUN_L00_00263d40(0x53DF, -1);
+        D_L04_0015F640 = 0xB4;
+        FUN_L00_00260860(9, 1);
+        if (vars->exitMoby != -1) {
+            exit = &portal_mobys_2e1a10[vars->exitMoby];
+            FUN_L00_00284e50(&exit->pos, &exit->rot);
+        } else {
+            FUN_001e93b0(D_L04_001DC760, ((struct PortalMobyView *)moby)->uid);
+        }
+        moby->state = 3;
+        FUN_0020b178(0, -1);
+        break;
+    case 3:
+        remove_moby_2e1a10(moby);
+        break;
+    }
+}
 /* Same source as the exact FUN_L10_00298940, with a 0.25 lift and the draw skipped in mode 2. */
 typedef struct {
     float pad0[4];

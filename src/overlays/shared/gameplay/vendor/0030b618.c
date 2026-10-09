@@ -71,7 +71,76 @@ void FUN_L01_0030d260(void *unused, float *p) {
     FUN_001f9a10(p, p, g + 0x80);
     p[2] = p[2] + 1.0f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d308.s", FUN_L01_0030d308);
+#include "qcopy.h"
+#include "rnc/overlay/collision.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
+
+/* The part of a moby class FUN_L01_0030d308 reads */
+typedef struct {
+    u8 pad00[0x46];
+    s16 kind;      /* 0x46: 5 for lock-on targets */
+} TargetClass_30d308;
+
+extern struct Moby *D_L01_001ABE80_30d308[] __asm__("D_L01_001ABE80");
+extern CollisionHit D_L01_001742C0_30d308 __asm__("D_L01_001742C0");
+extern f32 distance_xyz_30d308(void *, void *) __asm__("FUN_001f9b48");
+extern f32 FUN_001f9988_30d308(f32) __asm__("FUN_001f9988");
+extern f32 atan2_30d308(f32, f32) __asm__("FUN_001f9e90");
+extern f32 fast_difference_between_rotations_30d308(f32, f32) __asm__("FUN_001fa688");
+extern f32 *FUN_002141f8_30d308(struct Moby *) __asm__("FUN_002141f8");
+extern s32 collision_line_30d308(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
+
+/* FUN_L01_002e32a8 over the null-terminated moby table D_L01_001ABE80: the
+   best lock-on target for moby seen from `from` along `ang`. */
+struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax, f32 pitchMax,
+                              f32 range, f32 near, f32 nearYaw, f32 nearPitch) {
+    f32 tp[4];
+    struct Moby *best = 0;
+    f32 bestScore = 1.0e9f;
+    s32 i;
+    struct Moby *t;
+
+    for (i = 0; (t = D_L01_001ABE80_30d308[i]) != 0; i++) {
+        f32 *hp;
+        s32 cls;
+        f32 dist, score, p2;
+        struct Moby *hit;
+
+        if (t->unk32 == 0) continue;
+        hp = FUN_002141f8_30d308(t);
+        if (t == 0 || t->pclass == 0) continue;
+        cls = ((TargetClass_30d308 *)t->pclass)->kind;
+        if (cls != 5 || hp == 0 || !(0.0f < *hp)) continue;
+        dist = distance_xyz_30d308(from, &t->pos);
+        if (!(dist < range)) continue;
+        qcopy(tp, &t->pos);
+        tp[2] += 0.4f;
+        score = fast_difference_between_rotations_30d308(ang[2], atan2_30d308(tp[0] - from[0], tp[1] - from[1]));
+        score = score * score;
+        if (!(score < yawMax * yawMax)) {
+            if (!(dist < near) || !(score < nearYaw * nearYaw)) continue;
+        }
+        p2 = fast_difference_between_rotations_30d308(ang[1], atan2_30d308(dist, tp[2] - from[2]));
+        p2 = p2 * p2;
+        if (!(p2 < pitchMax * pitchMax)) {
+            if (!(dist < near) || !(p2 < nearPitch * nearPitch)) continue;
+        }
+        score *= p2;
+        score *= FUN_001f9988_30d308(distance_xyz_30d308(from, tp));
+        if (!(score < bestScore)) continue;
+        if (collision_line_30d308(from, tp, 0, moby, 0)) {
+            hit = (struct Moby *)D_L01_001742C0_30d308.moby;
+            if (hit == 0 || hit == hero.moby || hit == 0 || hit->pclass == 0
+                || ((TargetClass_30d308 *)hit->pclass)->kind != cls) {
+                continue;
+            }
+        }
+        bestScore = score;
+        best = t;
+    }
+    return best;
+}
 #include "sda.h"
 
 
@@ -84,7 +153,8 @@ extern float FUN_001f9b80(void *, void *);
 extern void *FUN_002141f8(void *);
 extern int FUN_001f96f8(int);
 extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
-extern void *FUN_L01_0030d308(void *, void *, void *, float, float, float, float, float, float);
+struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax, f32 pitchMax,
+                              f32 range, f32 near, f32 nearYaw, f32 nearPitch);
 extern void FUN_L01_0030c898_c(void *, void *, float, float, float,
                                float) __asm__("FUN_L01_0030c898");
 
@@ -151,7 +221,128 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
         *(int *)(state + 0x60) = 0;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d880.s", FUN_L01_0030d880);
+/* pvars of the hovering moby FUN_L01_0030d880 steers */
+struct HoverVars {
+    Vec4 goal;            /* 0x00: point it flies back to */
+    Vec4 vel;             /* 0x10 */
+    u8 pad20[0x10];
+    Vec4 unk30;           /* 0x30: point it measures from in state 6 */
+    u8 pad40[0x10];
+    s16 stuck;            /* 0x50: frames it has been blocked and nearly still */
+    u8 pad52[0xE];
+    struct Moby *target;  /* 0x60: set by FUN_L01_0030d5f0 */
+};
+
+/* steering constants */
+struct HoverTuning {
+    s32 unk0;             /* passed to FUN_L00_00258ad0 */
+    u8 pad4[0x10];
+    f32 yaw_speed;        /* 0x14: turn speed FUN_L00_00258278 keeps (D_L01_001DEB4C) */
+    u8 pad18[0x18];
+    f32 unk30;
+};
+
+extern struct HoverTuning D_L01_001DEB38;
+extern f32 D_L01_001DEB4C NOT_SDA;
+extern f32 D_0015ED60;
+extern f32 D_0015ED64;
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+extern f32 D_L01_001620C4 __attribute__((sda));
+extern f32 D_L01_001620C8 __attribute__((sda));
+extern f32 D_L01_001620CC __attribute__((sda));
+extern f32 D_L01_001620D0 __attribute__((sda));
+extern f32 D_L01_001620D4 __attribute__((sda));
+extern f32 D_L01_001620D8 __attribute__((sda));
+extern f32 D_L01_001620DC __attribute__((sda));
+extern void FUN_001f9a68(void *, void *, f32);
+extern void FUN_001f9c90(void *, void *, f32);
+extern f32 FUN_001f9af0(void *);
+extern f32 FUN_001f9dc8(f32);
+extern f32 FUN_001f9de0(f32);
+extern void FUN_L00_00258278(struct Moby *, f32 *, f32, f32, f32, f32);
+extern s32 FUN_L00_00258ad0(struct Moby *, Vec4 *, f32, f32, s32, s32);
+extern f32 FUN_L00_0025e310(f32);
+
+void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
+    Vec4 v;
+    f32 d;
+    f32 k;
+    f32 ang;
+    f32 len;
+    s32 hit;
+    s16 n;
+    struct HoverTuning *t;
+
+    FUN_001f9a28(&v, p, &m->pos);
+    if (m->state == 6) {
+        d = FUN_001f9b80(&m->pos, &p->unk30);
+    } else {
+        d = FUN_001f9b80(&m->pos, &hero.motion.pos);
+    }
+    FUN_001f9b80(&m->pos, p);
+    switch (m->unkBC) {
+    case 0:
+        ang = FUN_001f9e90(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
+        FUN_L00_00258278(m, &D_L01_001DEB4C, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 3.1415927f,
+                         D_0015ED6C * 11.519173f);
+        if (1.3f < d) {
+            m->unkBC = 2;
+        }
+        break;
+    case 2:
+        if (p->target == 0) {
+            ang = FUN_001f9e90(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
+            FUN_L00_00258278(m, &D_L01_001DEB4C, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 3.1415927f,
+                             D_0015ED6C * 11.519173f);
+        } else {
+            ang = FUN_001f9e90(p->target->pos.x - m->pos.x, p->target->pos.y - m->pos.y);
+            FUN_L00_00258278(m, &D_L01_001DEB4C, ang,
+                             D_L01_001620C4 * DEG_TO_RAD * D_0015ED70, D_L01_001620C8 * DEG_TO_RAD * D_0015ED70,
+                             D_L01_001620CC * DEG_TO_RAD * D_0015ED6C);
+        }
+        FUN_001f9a68(&v, &v, D_0015ED60 * 0.04f);
+        FUN_001f9a28(&v, &v, &p->vel);
+        if (1.3f < d) {
+            FUN_001f9a68(&v, &v, D_0015ED64 * 0.13f);
+        } else {
+            FUN_001f9a68(&v, &v, D_0015ED64 * 0.25f);
+        }
+        v.f[2] *= D_0015ED60 * -0.100000024f + 1.0f;
+        FUN_001f9a10(&p->vel, &p->vel, &v);
+        if (m->state == 6) {
+            FUN_001f9c90(&p->vel, &p->vel, D_0015ED6C * 2.7f);
+        }
+        t = &D_L01_001DEB38;
+        hit = FUN_L00_00258ad0(m, &p->vel, 1.0f, t->unk30, t->unk0, 0);
+        len = FUN_001f9af0(&p->vel);
+        if (hit == 0) {
+            p->stuck = 0;
+        } else if (len < 0.005f) {
+            n = ++p->stuck;
+            if (FUN_001f96f8(20) < n && m->unk31 == 0) {
+                qcopy(&m->pos, p);
+                p->stuck = 0;
+            }
+        }
+        if (d < 1.1f) {
+            k = 1.1f - d;
+            ang = FUN_001f9e90(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y);
+            p->vel.f[0] -= k * FUN_001f9dc8(ang) * (D_0015ED64 * 0.1f);
+            p->vel.f[1] -= k * FUN_001f9de0(ang) * (D_0015ED64 * 0.1f);
+        }
+        break;
+    default:
+        m->unkBC = 0;
+        if (1.3f < d) {
+            m->unkBC = 2;
+        }
+        break;
+    }
+    t = &D_L01_001DEB38;
+    m->rot.x += (FUN_L00_0025e310(t->yaw_speed * D_L01_001620D0) - m->rot.x) * D_L01_001620D8;
+    m->rot.y += (FUN_L00_0025e310(FUN_001f9af0(&p->vel) * D_L01_001620D4) - m->rot.y) * D_L01_001620DC;
+}
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F178), where it is exact; names translated to the US level program. */
@@ -160,7 +351,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d880.s", FUN_L01_0030d880);
 extern char D_L01_001620E0 __attribute__((sda));
 extern char D_L01_001620F0 __attribute__((sda));
 extern char D_L01_00162100 __attribute__((sda));
-extern float D_0015ED6C;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L01_0028a7a8(void *, void *, void *, void *, int);
@@ -215,10 +405,279 @@ void FUN_L01_0030ded0(char *moby) {
     enqueue_callback_list_1_alt(FUN_L01_0030de68, moby);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030df40.s", FUN_L01_0030df40);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00314e98.s", FUN_L01_00314e98);
+/* Camera blocks FUN_L01_00314e98 resets (camera + 0x70 and its preset row in D_L01_0015EF50) */
+typedef struct {
+    Vec4 pos;           /* 0x00 */
+    u8 pad10[0x30];
+    s32 state;          /* 0x40 */
+    u8 pad44[4];
+    f32 max_angle;      /* 0x48 */
+    f32 dist;           /* 0x4C */
+    u8 pad50[0x10];
+} CameraFocus;
+
+typedef struct {
+    Vec4 vel;           /* 0x00 */
+    u8 pad10[0x10];
+    f32 unk20;          /* 0x20 */
+    f32 unk24;          /* 0x24 */
+    f32 unk28;          /* 0x28 */
+    s16 unk2C;          /* 0x2C */
+    u8 pad2E[0x22];
+} CameraView;
+
+typedef struct {
+    f32 dist;           /* 0x00 */
+    f32 unk4;           /* 0x04 */
+    u8 pad8[8];
+    f32 height;         /* 0x10 */
+    u8 pad14[0xC];
+} CameraSpring;
+
+typedef struct {
+    Vec4 vel;           /* 0x00 */
+    u8 pad10[0x10];
+    Vec4 accel;         /* 0x20 */
+    f32 unk30;          /* 0x30 */
+    f32 unk34;          /* 0x34 */
+    f32 unk38;          /* 0x38 */
+    s32 unk3C;          /* 0x3C */
+    f32 unk40;          /* 0x40 */
+    u8 pad44[0xC];
+} CameraTrack;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+} CameraBlend;
+
+typedef struct {
+    Vec4 axis;          /* 0x00 */
+    f32 unk10;          /* 0x10 */
+    f32 unk14;          /* 0x14 */
+    s32 unk18;          /* 0x18 */
+    s16 mode;           /* 0x1C */
+    u8 pad1E[2];
+    f32 unk20;          /* 0x20 */
+    s32 unk24;          /* 0x24 */
+    u8 pad28[8];
+    CameraView view;    /* 0x30 */
+    CameraFocus focus;  /* 0x80 */
+    CameraSpring spring; /* 0xE0 */
+    CameraTrack track;  /* 0x100 */
+    CameraBlend blend;  /* 0x150 */
+} CameraOrbit;
+
+typedef struct {
+    u8 padA[0xA];
+    s16 mode;           /* 0x7E */
+} CameraControl;
+
+typedef struct {
+    u8 pad0[0x70];
+    CameraOrbit *orbit; /* 0x70 */
+    CameraControl control; /* 0x74 */
+    u8 pad80[4];
+    s16 preset;         /* 0x84: row of D_L01_0015EF50 */
+} Camera;
+
+/* A camera path: the point count, then 16-byte points */
+typedef struct {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 pts[1];        /* 0x10 */
+} CameraPath;
+
+typedef struct {
+    u8 pad0[0x20];
+    s32 track_path;     /* 0x20: D_L01_001B0930 path the first path is measured along */
+    s32 target;         /* 0x24: row of D_L01_0015F70C */
+    s32 path;           /* 0x28: D_L01_001B0930 path */
+    s32 look_path;      /* 0x2C: D_L01_001B0930 path measured along the target's path */
+    s32 kind;           /* 0x30 */
+    s16 ready;          /* 0x34: paths prepared */
+} CameraPreset;
+
+typedef struct {
+    u8 pad0[0x1C];
+    CameraPreset *preset; /* 0x1C */
+} CameraPresetRow;
+
+typedef struct {
+    u8 pad0[0x10];
+    CameraPath *path;   /* 0x10 */
+    u8 pad14[0xC];
+} CameraTarget;
+
+extern CameraPresetRow *D_L01_0015EF50 MACRO_ADDR;
+extern CameraTarget *D_L01_0015F70C;
+extern CameraPath *D_L01_001B0930[];
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
+
+/* Resets the camera's orbit, focus, spring, view and track from fixed values; for a kind 2 preset it
+   also prepares its two paths once, measuring each point against the path it follows. */
+void FUN_L01_00314e98(Camera *cam) {
+    Vec4 at;
+    s32 seg;
+    f32 t;
+    CameraPreset *s = D_L01_0015EF50[cam->preset].preset;
+    CameraControl *control;
+    CameraFocus *focus;
+    CameraSpring *spring;
+    CameraOrbit *orbit;
+    CameraView *view;
+    CameraTrack *track;
+    CameraBlend *blend;
+    CameraPath *a, *b, *c, *d;
+    s32 i, j, k, n, prev;
+
+    focus = &cam->orbit->focus;
+    focus->dist = 1.5f;
+    focus->state = 0;
+    if (s->kind == 3) {
+        focus->dist = 0.5f;
+    }
+    control = &cam->control;
+    focus->max_angle = 0.20943952f;
+    spring = &cam->orbit->spring;
+    spring->dist = 6.0f;
+    spring->unk4 = 0.5f;
+    spring->height = 2.0f;
+    orbit = cam->orbit;
+    orbit->unk10 = 0.01f;
+    orbit->unk14 = 0.175f;
+    orbit->unk18 = 0;
+    orbit->mode = 0;
+    orbit->unk20 = 0.0005f;
+    orbit->unk24 = 0;
+    clear_u64_value(orbit);
+    view = &cam->orbit->view;
+    view->unk20 = 0.01f;
+    view->unk24 = 0.3f;
+    view->unk28 = 0.2f;
+    view->unk2C = 0;
+    clear_u64_value(view);
+    track = &cam->orbit->track;
+    clear_u64_value(track);
+    clear_u64_value(&track->accel);
+    track->unk40 = 3.0f;
+    track->unk30 = 0.003f;
+    track->unk34 = 0.1f;
+    track->unk38 = 0.2f;
+    track->unk3C = 0;
+    blend = &cam->orbit->blend;
+    blend->unk0 = 0;
+    blend->unk4 = 0;
+    blend->unk8 = 0;
+    blend->unkC = 0;
+    blend->unk10 = 1;
+    if (s->kind == 2 && s->ready == 0) {
+        b = D_L01_001B0930[s->track_path];
+        d = D_L01_0015F70C[s->target].path;
+        a = D_L01_001B0930[s->path];
+        c = D_L01_001B0930[s->look_path];
+        s->ready = 1;
+        for (i = 0; i < a->count; i++) {
+            FUN_L00_0025df68(b, &a->pts[i], &at, &seg, &t, 0, 20.0f, 5.0f, 0.0f);
+            a->pts[i].f[0] = a->pts[i].f[3];
+            a->pts[i].f[3] = seg;
+        }
+        prev = a->count - 1;
+        for (i = 0; i < a->count; i++) {
+            j = truncate_float_to_s32(a->pts[prev].f[3]);
+            n = truncate_float_to_s32(a->pts[i].f[3]) - j;
+            if (n < 0) {
+                n += b->count;
+            }
+            t = 0.0f;
+            for (k = 0; k < n; k++) {
+                t += b->pts[(j + i) % b->count].f[3];
+            }
+            a->pts[i].f[1] = t;
+            prev = i;
+        }
+        for (i = 0; i < c->count; i++) {
+            FUN_L00_0025df68(d, &c->pts[i], &at, &seg, &t, 0, 20.0f, 5.0f, 0.0f);
+            c->pts[i].f[0] = c->pts[i].f[3];
+            c->pts[i].f[3] = seg;
+        }
+        prev = c->count - 1;
+        for (i = 0; i < c->count; i++) {
+            j = truncate_float_to_s32(c->pts[prev].f[3]);
+            n = truncate_float_to_s32(c->pts[i].f[3]) - j;
+            if (n < 0) {
+                n += d->count;
+            }
+            t = 0.0f;
+            for (k = 0; k < n; k++) {
+                t += d->pts[(j + i) % d->count].f[3];
+            }
+            c->pts[i].f[1] = t;
+            prev = i;
+        }
+    }
+    control->mode = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315358.s", FUN_L01_00315358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315de0.s", FUN_L01_00315de0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00316030.s", FUN_L01_00316030);
+#include "sda.h"
+#include "rnc/gameplay/hero.h"
+
+/* Camera data reached through D_L01_0015EF50 */
+typedef struct {
+    u8 pad00[0x24];
+    s32 target;    /* 0x24: index into D_L01_0015F70C, -1 none */
+    u8 pad28[8];
+    s32 kind;      /* 0x30 */
+} CamData_316030;
+
+/* One 32-byte entry of D_L01_0015EF50 */
+typedef struct {
+    u8 pad00[0x1C];
+    CamData_316030 *data; /* 0x1C */
+} CamSlot_316030;
+
+/* One 32-byte entry of D_L01_0015F70C */
+typedef struct {
+    u8 pad00[0x10];
+    s32 unk10;     /* 0x10: compared with hero.unk560 */
+    u8 pad14[0xC];
+} CamTarget_316030;
+
+/* The object FUN_L01_00316030 updates */
+typedef struct {
+    u8 pad00[0x7E];
+    s16 mode;      /* 0x7E: set to 3 or 5 */
+    u8 pad80[4];
+    s16 slot;      /* 0x84: index into D_L01_0015EF50 */
+    s16 unk86;     /* 0x86: compared with hero.unk2284 */
+} CamUser_316030;
+
+extern CamSlot_316030 *D_L01_0015EF50_316030 __asm__("D_L01_0015EF50");
+extern CamTarget_316030 *D_L01_0015F70C_316030 __asm__("D_L01_0015F70C");
+
+void FUN_L01_00316030(CamUser_316030 *o) {
+    CamData_316030 *d = D_L01_0015EF50_316030[o->slot].data;
+
+    if (hero.unk2284 == o->unk86) {
+        if (d->target < 0) {
+            return;
+        }
+        if (hero.unk560 == D_L01_0015F70C_316030[d->target].unk10 && hero.unk570 == 0) {
+            return;
+        }
+    }
+    if (d->kind == 3) {
+        o->mode = 5;
+    } else {
+        o->mode = 3;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00318260), where it is exact; names translated to the US level program. */
 
 extern char *D_L01_00167280_d __asm__("D_L01_00167280") __attribute__((section(".data")));
@@ -242,7 +701,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00319928.s", FUN_L01_00319928);
 
 extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L01_002a1a90(int a, int b, int c, int d, int e);
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");

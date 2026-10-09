@@ -131,13 +131,13 @@ struct Hero {
     s32 unk19C;                    /* 0x19C */
     s32 unk1A0;                    /* 0x1A0 */
     s32 unk1A4;                    /* 0x1A4 */
-    u8 pad_1A8[0x4];
+    s32 unk1A8;                    /* 0x1A8 */
     s32 unk1AC;                    /* 0x1AC */
     s16 unk1B0;                    /* 0x1B0 */
     s16 unk1B2;                    /* 0x1B2 */
     s32 unk1B4;                    /* 0x1B4 */
     s32 unk1B8;                    /* 0x1B8 */
-    u8 pad_1BC[0x4];
+    s32 unk1BC;                    /* 0x1BC */
     s32 unk1C0;                    /* 0x1C0 */
     s32 unk1C4;                    /* 0x1C4 */
     s16 unk1C8;                    /* 0x1C8 */
@@ -146,7 +146,7 @@ struct Hero {
     s32 unk1D0;                    /* 0x1D0 */
     s32 unk1D4;                    /* 0x1D4 */
     s16 unk1D8;                    /* 0x1D8 */
-    u8 pad_1DA[0x2];
+    s16 unk1DA;                    /* 0x1DA */
     s16 unk1DC;                    /* 0x1DC */
     s16 unk1DE;                    /* 0x1DE */
     s16 unk1E0;                    /* 0x1E0 */
@@ -154,12 +154,13 @@ struct Hero {
     s16 unk1E4;                    /* 0x1E4 */
     s16 unk1E6;                    /* 0x1E6 */
     s16 unk1E8;                    /* 0x1E8 */
-    u8 pad_1EA[0x4];
+    s16 unk1EA;                    /* 0x1EA */
+    s16 unk1EC;                    /* 0x1EC */
     s16 unk1EE;                    /* 0x1EE */
-    u8 pad_1F0[0x2];
+    s16 unk1F0;                    /* 0x1F0 */
     s16 unk1F2;                    /* 0x1F2 */
     s16 unk1F4;                    /* 0x1F4 */
-    u8 pad_1F6[0x2];
+    s16 unk1F6;                    /* 0x1F6 */
     s16 unk1F8;                    /* 0x1F8 */
     u8 pad_1FA[0x6];
     Vec4 unk200;                   /* 0x200 */
@@ -276,7 +277,9 @@ struct Hero {
     s32 unk4E8;                    /* 0x4E8 */
     f32 unk4EC;                    /* 0x4EC */
     f32 unk4F0;                    /* 0x4F0 */
-    u8 pad_4F4[0xC];
+    u8 pad_4F4[0x4];
+    s32 unk4F8;                    /* 0x4F8: first argument of FUN_L00_00233f80 (FUN_L01_00233de0) */
+    u8 pad_4FC[0x4];
     Vec4 unk500;                   /* 0x500 */
     Vec4 unk510;                   /* 0x510 */
     Vec4 unk520;                   /* 0x520 */
@@ -328,7 +331,10 @@ struct Hero {
     f32 unk610;                    /* 0x610 */
     f32 unk614;                    /* 0x614 */
     union { f32 f; s32 i; } unk618; /* 0x618: float distance clamp, zeroed as an int */
-    u8 pad_61C[0x6C];
+    u8 pad_61C[0x54];
+    f32 unk670;                    /* 0x670 */
+    f32 unk674;                    /* 0x674 */
+    u8 pad_678[0x10];
     f32 unk688;                    /* 0x688 */
     u8 pad_68C[0x4];
     f32 unk690;                    /* 0x690 */
@@ -373,14 +379,15 @@ struct Hero {
     u8 unk88D;                     /* 0x88D */
     u8 unk88E;                     /* 0x88E */
     u8 unk88F;                     /* 0x88F */
-    u8 pad_890[0x8];
+    u8 pad_890[0x4];
+    s32 unk894;                    /* 0x894: frame counter shown as m:ss.hh on the HUD (FUN_L05_00266710) */
     s16 unk898;                    /* 0x898 */
-    u8 pad_89A[0x2];
+    s16 unk89A;                    /* 0x89A: shown + 1 (capped at 3) on the HUD (FUN_L05_00266320) */
     s16 unk89C;                    /* 0x89C */
     s16 unk89E;                    /* 0x89E */
     f32 unk8A0;                    /* 0x8A0 */
     f32 unk8A4;                    /* 0x8A4 */
-    u8 pad_8A8[0x4];
+    s32 unk8A8;                    /* 0x8A8: count shown on the HUD (FUN_L05_00266710) */
     s16 unk8AC;                    /* 0x8AC */
     u8 pad_8AE[0x1];
     u8 unk8AF;                     /* 0x8AF */
@@ -390,7 +397,7 @@ struct Hero {
     union { f32 f; s32 i; } unk8B8; /* 0x8B8: read as a float, zeroed as an int */
     s16 unk8BC;                    /* 0x8BC */
     s16 unk8BE;                    /* 0x8BE */
-    u8 pad_8C0[0x4];
+    s32 unk8C0;                    /* 0x8C0: 1..3 picks the HUD rank string (FUN_L05_00266320) */
     s32 unk8C4;                    /* 0x8C4 */
     u8 pad_8C8[0x4];
     s16 unk8CC;                    /* 0x8CC */
@@ -427,21 +434,21 @@ struct Hero {
     u8 pad_958[0x8];
     f32 unk960;                    /* 0x960 */
     struct Moby *unk964;           /* 0x964 */
-    u8 pad_968[0x4];
+    s32 unk968;                    /* 0x968 */
     f32 unk96C;                    /* 0x96C */
     f32 unk970;                    /* 0x970 */
     s32 unk974;                    /* 0x974 */
     u8 pad_978[0x4];
     f32 unk97C;                    /* 0x97C */
     f32 unk980;                    /* 0x980 */
-    u8 pad_984[0x4];
+    f32 unk984;                    /* 0x984 */
     s32 unk988;                    /* 0x988 */
     u8 pad_98C[0x4];
     struct Moby *unk990;           /* 0x990 */
     struct Moby *unk994;           /* 0x994 */
-    u8 pad_998[0x4];
+    f32 unk998;                    /* 0x998 */
     s16 unk99C;                    /* 0x99C */
-    u8 pad_99E[0x2];
+    s16 unk99E;                    /* 0x99E */
     f32 unk9A0;                    /* 0x9A0 */
     f32 unk9A4;                    /* 0x9A4 */
     f32 unk9A8;                    /* 0x9A8 */
@@ -455,9 +462,11 @@ struct Hero {
     f32 unk9C4;                    /* 0x9C4 */
     f32 unk9C8;                    /* 0x9C8 */
     f32 unk9CC;                    /* 0x9CC */
-    u8 pad_9D0[0x4];
+    f32 unk9D0;                    /* 0x9D0: rail yaw (FUN_L01_002f6328) */
     f32 unk9D4;                    /* 0x9D4 */
-    u8 pad_9D8[0xC];
+    u8 pad_9D8[0x4];
+    f32 unk9DC;                    /* 0x9DC: rail speed, eased toward the rail's speed */
+    f32 unk9E0;                    /* 0x9E0: pull toward the rail, capped at the distance */
     f32 unk9E4;                    /* 0x9E4 */
     f32 unk9E8;                    /* 0x9E8 */
     u8 pad_9EC[0x64];
@@ -512,7 +521,15 @@ struct Hero {
     u8 selector_13;                /* 0x12EC */
     u8 unk12ED;                    /* 0x12ED */
     u8 unk12EE;                    /* 0x12EE */
-    u8 pad_12EF[0x325];
+    u8 pad_12EF[0x307];
+    u8 ship_ammo;                  /* 0x15F6: shots left in the space levels; firing needs one and takes it (FUN_L11_003126f8) */
+    u8 ship_ammo_max;              /* 0x15F7: ammo pips the ship HUD draws, lit while below ship_ammo */
+    u8 pad_15F8[0x4];
+    f32 ship_hp;                   /* 0x15FC: ship health; l17 subtracts collision damage and explodes the ship below 0 */
+    f32 ship_hp_max;               /* 0x1600: full ship_hp; the HUD bar shows ship_hp over it */
+    u8 pad_1604[0xB];
+    u8 ship_flags;                 /* 0x160F: 2 = being steered back from the edge or height limit of the space arena (FUN_L11_00313f60) */
+    u8 pad_1610[0x4];
     s32 unk1614;                   /* 0x1614 */
     u8 pad_1618[0x8];
     void *unk1620;                 /* 0x1620 */
@@ -542,8 +559,8 @@ struct Hero {
     u8 ammo_used;                  /* 0x1FF6 */
     u8 ammo_capacity;              /* 0x1FF7 */
     u8 pad_1FF8[0x48];
-    s32 unk2040;                   /* 0x2040 */
-    f32 unk2044;                   /* 0x2044 */
+    struct Moby *unk2040;          /* 0x2040: nearest oclass 0x25D moby (FUN_L00_002d2ee8) */
+    f32 unk2044;                   /* 0x2044: distance to unk2040; 100000 when none */
     s32 unk2048;                   /* 0x2048 */
     u8 pad_204C[0x34];
     struct Moby *moby;             /* 0x2080: the hero's moby */
@@ -588,7 +605,8 @@ struct Hero {
     u8 pad_2278[0x8];
     struct Moby *unk2280;          /* 0x2280 */
     s32 unk2284;                   /* 0x2284 */
-    u8 pad_2288[0x8];
+    f32 unk2288;                   /* 0x2288 */
+    f32 unk228C;                   /* 0x228C */
     f32 unk2290;                   /* 0x2290 */
     s32 unk2294;                   /* 0x2294 */
     s32 unk2298;                   /* 0x2298 */
@@ -597,7 +615,8 @@ struct Hero {
     f32 unk22A4;                   /* 0x22A4 */
     struct HeroHealth health;      /* 0x22A8 */
     s32 unk22B4;                   /* 0x22B4 */
-    u8 pad_22B8[0xC];
+    f32 unk22B8;                   /* 0x22B8: distance to the nearest carrying path this frame (FUN_L01_002f3120 keeps the minimum) */
+    u8 pad_22BC[0x8];
     s32 unk22C4;                   /* 0x22C4 */
     s16 unk22C8;                   /* 0x22C8 */
     u8 unk22CA;                    /* 0x22CA */

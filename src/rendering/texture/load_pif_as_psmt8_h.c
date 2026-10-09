@@ -1,13 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM(
-    "config/us/expected/asm/assembly/textbin/rendering/texture/load_pif_as_psmt8_h/FUN_001e9168.s",
-    FUN_001e9168);
-#else
-
-#include "types.h"
 
 /* EE layouts: PIF header 0x20 bytes, scratch descriptor 0x54 bytes,
    sceGsLoadImage packet 0x60 bytes (16-byte aligned), output 0x18 bytes.
@@ -82,9 +73,7 @@ extern s32 wait_for_graphics_pipeline_idle(int, unsigned short) __asm__("func_00
    The output is three consecutive 64-bit words: TEX0, TEX1=1, CLAMP=0.
    Dimensions need not be powers of two for this code to run: TW/TH use
    highest_set_bit_index, not a rounded logarithm. No upload return is tested.
-
-   Status: pending C; the oracle stays selected. Static instruction and
-   caller review establish these accesses, not runtime font-upload success. */
+ */
 void load_pif_as_psmt8_h(PifHeader *pif, GsTextureRegisters *registers,
                          s32 texel_destination, s32 palette_destination)
     __asm__("FUN_001e9168");
@@ -95,7 +84,8 @@ void load_pif_as_psmt8_h(PifHeader *pif, GsTextureRegisters *registers,
     GsLoadImage load_image;
     s32 palette_block_offset;
     u64 tex0_word;
-    u64 field_word;
+    u64 format_word;
+    u64 size_word;
 
     FillTransferWords(&upload, 0, sizeof(upload));
     upload.palette = (u8 *)pif + 0x20;
@@ -124,13 +114,18 @@ void load_pif_as_psmt8_h(PifHeader *pif, GsTextureRegisters *registers,
     FlushCache(0);
     sceGsExecLoadImage(&load_image, upload.image);
     wait_for_graphics_pipeline_idle(0, 0);
-    field_word = (u64)(s64)0x1B << 20;
-    tex0_word = (u64)(s64)upload.texel_block_offset;
-    tex0_word |= (u64)(s64)upload.buffer_width << 14;
-    tex0_word |= field_word | ((u64)(s64)upload.width_log2 << 26);
+    format_word = (u64)(s64)0x1B << 20;
+    tex0_word = (u64)(s64)upload.texel_block_offset | ((u64)(s64)upload.buffer_width << 14);
+    size_word = ((u64)(s64)upload.width_log2 << 26) | format_word;
+    tex0_word |= size_word;
     tex0_word |= (u64)(s64)upload.height_log2 << 30;
-    field_word = ((u64)(s64)palette_block_offset << 37) | ((u64)(s64)1 << 34);
-    tex0_word |= field_word;
+    {
+        /* Its own temporary: reusing format_word changes retail's registers. */
+        u64 palette_word = (u64)(s64)palette_block_offset << 37;
+
+        palette_word |= (u64)(s64)1 << 34;
+        tex0_word |= palette_word;
+    }
     tex0_word |= (u64)(s64)pif->palette_storage_format << 51;
     tex0_word |= (u64)1 << 63;
     registers->tex0 = tex0_word;
@@ -140,4 +135,3 @@ void load_pif_as_psmt8_h(PifHeader *pif, GsTextureRegisters *registers,
 
 extern __typeof__(load_pif_as_psmt8_h) func_001E9168 __attribute__((alias("FUN_001e9168")));
 
-#endif /* NON_MATCHING */

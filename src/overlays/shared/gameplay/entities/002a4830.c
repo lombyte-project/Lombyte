@@ -2,6 +2,8 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "sda.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* per-frame level ambience (wind/sway) state machine: picks a random target, then eases toward it */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A5B20), where it is exact; names translated to the US level program. */
@@ -440,7 +442,97 @@ void FUN_L00_002a57a8(P_2a57a8 *p) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a5dd8.s", FUN_L00_002a5dd8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a6b70.s", FUN_L00_002a6b70);
+/* What a bolt moby's unkB8 points at: byte 0xB1 is its source's per-level id. */
+typedef struct {
+    u8 pad_00[0xB1];
+    u8 id;                         /* 0x80 set: no id */
+} BoltSource;
+
+/* Per-level, per-source collection counts. */
+typedef struct {
+    u16 unk0;
+    u16 bolts;
+} BoltSourceStats;
+
+extern s32 current_bolt_count __asm__("D_0015ED98");
+extern s32 D_0015EE2C;                       /* bolts counted when the bolt's pvars[0x40] is set or it is an early moby */
+extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
+/* second name for D_0015ED84: retail loads the level index again here */
+extern s32 current_level_index_b __asm__("D_0015ED84") MACRO_ADDR;
+extern BoltSourceStats bolt_source_stats[][64] __asm__("D_0014D590");
+extern s32 level_bolts[] __asm__("D_0013DF38");  /* bolts collected per level */
+extern s32 D_L00_0015F598;
+extern void *D_L00_0015FFDC;
+extern f32 D_0015ED6C;                       /* frame-rate scale */
+extern void FUN_L00_00239cc8(void);          /* bolt counter HUD: init */
+extern void FUN_L00_00239d00(void);          /* update */
+extern void FUN_L00_00239df8(void);          /* draw */
+extern void queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
+extern void FUN_L00_00257d78(void *, f32, f32);
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+/* spawns a sparkle particle */
+extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
+                            void *vel, f32 f2);
+
+/*
+ * CollectBolt: adds the bolt moby's value (1, or 5 / 20 / 50 for classes
+ * 0xE / 0xF / 0x10) to the bolt count, the level's total and its source's
+ * stats, shows the bolt counter and spawns two sparkles at the bolt.
+ */
+void FUN_L00_002a6b70(struct Moby *bolt)
+{
+    Vec4 vel;
+    Vec4 pos;
+    s32 value;
+    s32 spin;
+    f32 k;
+    f32 size;
+    BoltSource *src;
+
+    switch (bolt->oclass) {
+    default:
+    case 0:
+        value = 1;
+        break;
+    case 0xE:
+        value = 5;
+        break;
+    case 0xF:
+        value = 20;
+        break;
+    case 0x10:
+        value = 50;
+        break;
+    }
+
+    src = bolt->unkB8;
+    if (src && !(src->id & 0x80))
+        bolt_source_stats[current_level_index][src->id].bolts += value;
+    current_bolt_count += value;
+    if (bolt->pvars[0x40] || (D_L00_0015F598 && (void *)bolt < D_L00_0015FFDC))
+        D_0015EE2C += value;
+    level_bolts[current_level_index_b] += value;
+
+    k = 0.7f;
+    queue_animation_update(2, 0x754E, FUN_L00_00239cc8, FUN_L00_00239d00, FUN_L00_00239df8,
+                           &current_bolt_count, 9999999);
+
+    /* two sparkles 10 units out along a random direction, spinning opposite ways */
+    FUN_L00_00257d78(&vel, D_0015ED6C * k, D_0015ED6C);
+    scale_vector_xyz(&pos, &vel, 10.0f);
+    add_vector_xyz(&pos, &pos, &bolt->pos);
+    spin = random_integer_below(2);
+    if (spin == 0)
+        spin--;
+    size = random_float_between(0.4f, 0.5f);
+    FUN_L00_00272060(&pos, scale_game_frames(0x19), size * 0.2f, size, 0x7F207F7F, 0, spin, &vel, 0.0f);
+    spin = -spin;
+    FUN_L00_00272060(&pos, scale_game_frames(0x19), size * 0.14f, size * k, 0x7F7F7F7F, 1, spin, &vel, 0.0f);
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -615,7 +707,118 @@ int FUN_L00_002a7210(void *ov, void *tv, float a, float b) {
     *(unsigned char *)(o + 0x20) = 4;
     return 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a7438.s", FUN_L00_002a7438);
+/* Vars of a bolt moby (classes 0xD..0x10). */
+typedef struct {
+    u8 pad_00[0x20];
+    f32 vel[4] __attribute__((aligned(16)));   /* 0x20 */
+    f32 spin[4] __attribute__((aligned(16)));  /* 0x30: per-frame rotation (quaternion) */
+    u8 counted;                    /* 0x40: CollectBolt also adds the bolt to D_0015EE2C */
+    u8 pad_41[0xF];
+    f32 unk50;                     /* random angle */
+    u8 pad_54;
+    u8 unk55;                      /* bit 0 set at random */
+    u8 pad_56[2];
+    f32 unk58;                     /* random angle */
+    u8 pad_5C[0xC];
+    f32 start_z;                   /* 0x68 */
+    s16 unk6C;
+    s16 unk6E;                     /* random 0 .. 600 frames */
+} BoltVars;
+
+extern void *D_001413D0 __attribute__((section(".data")));
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
+extern void FUN_L00_002502f0(void *, int, int, int);       /* sets the moby colour */
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void FUN_L00_001ff500(void *, void *, float);
+extern void build_quaternion_from_axis_angle(void *, void *, float) __asm__("FUN_00214530");
+
+/*
+ * Spawns a bolt worth `value` (1, 5, 20 or 50) at `pos` with velocity `vel`,
+ * coloured like `src`, spinning about vel x (src - pos). flags & 2 sends it
+ * toward D_001413D0 (& 0x10 with a random angle). When no moby is free the
+ * value goes straight into the bolt count.
+ */
+struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags, int value, int counted)
+{
+    f32 dir[4] __attribute__((aligned(16)));
+    f32 tmp[4] __attribute__((aligned(16)));
+    struct Moby *m;
+    BoltVars *v;
+    struct Moby *root;
+    u8 *color;
+    float scale;
+    float spin;
+    float angle;
+
+    switch (value) {
+    default:
+    case 1:
+        m = (struct Moby *)create_moby(0xD);
+        scale = 0.65f;
+        break;
+    case 5:
+        m = (struct Moby *)create_moby(0xE);
+        scale = 0.7f;
+        break;
+    case 20:
+        m = (struct Moby *)create_moby(0xF);
+        scale = 0.75f;
+        break;
+    case 50:
+        m = (struct Moby *)create_moby(0x10);
+        scale = 0.6f;
+        break;
+    }
+    if (0 != m) {
+        v = (BoltVars *)m->pvars;
+        v->counted = counted;
+        /* the bolt source is the root of src's unkB8 chain */
+        root = src;
+        if (src != 0) {
+            while (root->unkB8 != 0)
+                root = root->unkB8;
+        }
+        m->unkB8 = root;
+        m->unk73 = 20;
+        m->flags |= 0x100;
+        m->unk30 = 0x40;
+        m->unk32 = 0x40;
+        m->unk31 = 1;
+        m->state = 1;
+        m->scale = m->pclass->scale * scale;
+        FUN_001fa030(&m->unkC0, &m->rot);
+        if ((src->flags & 0x20) && (color = *(u8 **)(src->pvars + 0xC)) != 0)
+            FUN_L00_002502f0(m, color[4], color[5], color[6]);
+        else
+            m->spawn_frame = src->spawn_frame;
+        v->unk6E = random_int_between(0, scale_game_frames(600));
+        v->unk6C = -1;
+        qcopy(&m->pos, pos);
+        qcopy(v->vel, vel);
+        if (random_integer_below(2))
+            v->unk55 |= 1;
+        v->unk50 = random_angle_radians();
+        v->unk58 = random_angle_radians();
+        v->start_z = m->pos.z;
+        spin = random_float_between(0.0f, D_1613A8_2a7210) * 0.017453292f * D_0015ED6C;
+        subtract_vector_xyz(tmp, &src->pos, &m->pos);
+        cross_vectors_xyz(dir, v->vel, tmp);
+        FUN_L00_001ff500(v->spin, dir, 1.0f);
+        build_quaternion_from_axis_angle(v->spin, v->spin, spin);
+        if (flags & 2) {
+            angle = 0.0f;
+            if (flags & 0x10)
+                angle = random_float_between(-30.0f, 30.0f) * 0.017453292f;
+            FUN_L00_002a7210(m, D_001413D0, angle, 0.0f);
+        }
+        FUN_L00_00250df8((u8 *)m);
+    } else {
+        current_bolt_count += value;
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a7780.s", FUN_L00_002a7780);
 typedef struct {
     char p0[0x50];

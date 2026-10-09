@@ -583,7 +583,29 @@ int FUN_L06_002e9d10(void *m_, void *pos) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9ea0.s", FUN_L06_002e9ea0);
+/* Returns 0 while any listed class-0x33B moby is in a state other than 0xFE, 0xFD or 0x10; else 1. */
+int FUN_L06_002e9ea0(int index) {
+    unsigned short *p = (unsigned short *)D_L06_001ABFC0[index];
+    char *base;
+    char *moby;
+    if (p == 0)
+        return 1;
+    base = (char *)D_L06_0015FFD8_d;
+    for (;;) {
+        moby = base + ((*p & 0x7FFF) << 8);
+        if (moby != 0 && *(short *)(moby + 0xA6) == 0x33B) {
+            unsigned char s = moby[0x20];
+            if (s != 0xFE) {
+                if (s != 0xFD) {
+                    if (s != 0x10)
+                        return 0;
+                }
+            }
+        }
+        if ((short)*p++ < 0)
+            return 1;
+    }
+}
 /* Swinging/spinning hazard: waits, swings with a looping sound, then rests for a random time. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F4F08), where it is exact; names translated to the US level program. */
 
@@ -671,7 +693,93 @@ void FUN_L06_002f3ad8(char *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3d70.s", FUN_L06_002f3d70);
+#include "rnc/math/vector.h"
+#include "qcopy.h"
+/* Sparks thrown off the swinging hazard while the camera is near it. */
+extern float camera_distance_to(void *, void *) __asm__("FUN_001f9b48");
+extern s32 sphere_visible(void *, f32) __asm__("FUN_001fa728");
+extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern f32 scale_time(f32) __asm__("FUN_001f96b0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
+extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern char camera_position[] __asm__("D_0013F3D0");
+extern float frame_scale __asm__("D_0015ED6C");
+extern float spark_speed __asm__("D_L06_00161CEC") __attribute__((sda));
+extern float spark_dir_w __asm__("D_L06_00161CF4") __attribute__((sda));
+extern float spark_vel_w __asm__("D_L06_00161CF8") __attribute__((sda));
+extern int spark_color0 __asm__("D_L06_00161CFC") __attribute__((sda));
+extern int spark_color1 __asm__("D_L06_00161D00") __attribute__((sda));
+extern int spark_life_min __asm__("D_L06_00161D04") __attribute__((sda));
+extern int spark_life_max __asm__("D_L06_00161D08") __attribute__((sda));
+extern int spark_fade_min __asm__("D_L06_00161D0C") __attribute__((sda));
+extern int spark_fade_max __asm__("D_L06_00161D10") __attribute__((sda));
+extern int spark_frames __asm__("D_L06_00161D14") __attribute__((sda));
+extern float spark_drift_z __asm__("D_L06_00161D18") __attribute__((sda));
+extern float spark_drift_scale __asm__("D_L06_00161D1C") __attribute__((sda));
+extern float spark_spread __asm__("D_L06_00161D20") __attribute__((sda));
+
+void FUN_L06_002f3d70(char *m) {
+    Vec4 mat[4];
+    Vec4 at;
+    Vec4 dir;
+    Vec4 drift;
+    Vec4 offset;
+    Vec4 vel;
+    Vec4 sphere;
+    Vec4 *pos = (Vec4 *)(m + 0x10);
+    int life;
+    int fade;
+    int frames;
+    int t;
+
+    qcopy(&sphere, pos);
+    sphere.f[3] = 4.0f;
+    if (camera_distance_to(camera_position, pos) > 10.0f &&
+        sphere_visible(&sphere, 24.0f) == -1) {
+        return;
+    }
+    if (camera_distance_to(camera_position, pos) > 24.0f) {
+        return;
+    }
+    qcopy(&at, pos);
+    rotation_matrix(mat, m + 0x40);
+    clear_vector(&dir);
+    dir.f[0] = spark_speed * frame_scale;
+    transform_vector(&dir, &dir, mat);
+    dir.f[3] = spark_dir_w;
+    scale_vector_xyz(&drift, &dir, spark_drift_scale);
+    drift.f[2] = spark_drift_z * frame_scale;
+    vel.f[3] = spark_vel_w;
+
+    life = truncate_float_to_s32(scale_time(random_float_between(spark_life_min, spark_life_max)));
+    fade = truncate_float_to_s32(scale_time(random_float_between(spark_fade_min, spark_fade_max)));
+    t = truncate_float_to_s32(scale_time(random_float_between(spark_life_min, spark_life_max)));
+    if (life < t) life = t;
+    t = truncate_float_to_s32(scale_time(random_float_between(spark_fade_min, spark_life_max)));
+    if (fade < t) fade = t;
+    frames = truncate_float_to_s32(scale_game_frames(spark_frames));
+
+    scale_vector_xyz(&offset, &dir, random_float_between(0.0f, 1.0f));
+    add_vector_xyz(&at, pos, &offset);
+    random_vector(&vel, 0.0f, spark_spread * frame_scale);
+    add_vector_xyz(&vel, &vel, &drift);
+    spawn_spark(&at, &dir, &vel, spark_color0, spark_color1, life, fade, frames, 0x30);
+
+    life = truncate_float_to_s32(scale_time(random_float_between(spark_life_min, spark_life_max)));
+    fade = truncate_float_to_s32(scale_time(random_float_between(spark_fade_min, spark_fade_max)));
+    scale_vector_xyz(&offset, &dir, random_float_between(0.0f, 1.0f));
+    add_vector_xyz(&at, pos, &offset);
+    random_vector(&vel, 0.0f, spark_spread * frame_scale);
+    add_vector_xyz(&vel, &vel, &drift);
+    spawn_spark(&at, &dir, &vel, spark_color0, spark_color1, life, fade, frames, 0x30);
+}
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F5560), where it is exact; names translated to the US level program. */
 
 typedef struct {
@@ -853,7 +961,67 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f55a0.s", FUN_L06_002f55a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f5d78.s", FUN_L06_002f5d78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f6470.s", FUN_L06_002f6470);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f6dd0.s", FUN_L06_002f6dd0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7000.s", FUN_L06_002f7000);
+#include "rnc/gameplay/entities/moby.h"
+
+extern f32 D_L06_00161E10 __attribute__((sda));
+extern f32 D_L06_00161E00 __attribute__((sda));
+extern f32 D_L06_00161DFC __attribute__((sda));
+extern f32 D_L06_00161E14 __attribute__((sda));
+extern f32 D_L06_00161E08 __attribute__((sda));
+extern f32 D_L06_00161E04 __attribute__((sda));
+extern int D_L06_00161E40[4] __attribute__((section(".sdata")));
+extern int D_L06_00161E50;
+extern Vec4 D_L06_001DB0F0[4][30];
+extern Vec4 D_L06_001DB870[4][30];
+extern float D_0015ED6C;
+extern float fast_add_rotations(float, float);
+extern void FUN_L06_00217300(void *);
+extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+
+/* Spins the moby and animates four 30-point strands: a strand whose timer ran out is rebuilt with a smoothed random
+   drift (each point averages three jitters) and its timer reset; otherwise every inner point moves by its drift. */
+void FUN_L06_002f7000(struct Moby *moby) {
+    Vec4 jitter[30];
+    float y;
+    float step;
+    float phase;
+    int i;
+    int j;
+    int k;
+
+    moby->rot.x = fast_add_rotations(moby->rot.x, D_L06_00161E10 * DEG_TO_RAD * D_0015ED6C);
+    phase = D_L06_00161DFC + D_L06_00161E00 * D_0015ED6C;
+    moby->scale = *(f32 *)((char *)moby->pclass + 0x24) * D_L06_00161E14;
+    D_L06_00161DFC = phase;
+    if (phase > 1.0f) {
+        D_L06_00161DFC = phase - 1.0f;
+    }
+    step = D_L06_00161E08 / 30.0f;
+    y = -(D_L06_00161E08 * 0.5f);
+    for (i = 0; i < 4; i++) {
+        if (D_L06_00161E40[i] == 0) {
+            for (k = 0; k < 30; k++) {
+                FUN_L06_00217300(&D_L06_001DB0F0[i][k]);
+                D_L06_001DB0F0[i][k].f[1] = y;
+                random_vector(&jitter[k], 0.0f, D_L06_00161E04 * D_0015ED6C);
+                y += step;
+            }
+            for (k = 1; k < 29; k++) {
+                add_vector_xyz(&D_L06_001DB870[i][k], &jitter[k - 1], &jitter[k]);
+                add_vector_xyz(&D_L06_001DB870[i][k], &D_L06_001DB870[i][k], &jitter[k + 1]);
+                scale_vector_xyz(&D_L06_001DB870[i][k], &D_L06_001DB870[i][k], 0.333f);
+            }
+            D_L06_00161E40[i] = D_L06_00161E50;
+        } else {
+            for (j = 1; j < 29; j++) {
+                add_vector_xyz(&D_L06_001DB0F0[i][j], &D_L06_001DB0F0[i][j], &D_L06_001DB870[i][j]);
+            }
+            D_L06_00161E40[i]--;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7d78.s", FUN_L06_002f7d78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f91e8.s", FUN_L06_002f91e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f9a28.s", FUN_L06_002f9a28);
@@ -888,6 +1056,81 @@ void FUN_L06_002fb148(char *moby) {
     FUN_L00_002eaa30(m);
     *D_L06_001B0FB0[*(int *)(data + 0xEC)] = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fbc88.s", FUN_L06_002fbc88);
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
+
+/* Pvars of a moby that circles a centre point, keeping to the side away from the hero. */
+typedef struct {
+    u8 pad0[0xB0];
+    struct Moby *focus;   /* 0xB0: moby it keeps facing */
+    u8 padB4[0x1C];
+    Vec3 center;          /* 0xD0 */
+    f32 radius;           /* 0xDC */
+    f32 yaw_vel;          /* 0xE0 */
+    u8 padE4[4];
+    f32 speed;            /* 0xE8 */
+    s32 ground;           /* 0xEC */
+} CirclerVars;
+
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern f32 D_L06_00161EF8 __attribute__((sda));
+extern f32 D_L06_00161EFC __attribute__((sda));
+extern f32 circler_atan2(f32, f32) __asm__("FUN_001f9e90");
+extern f32 circler_angle_add(f32, f32) __asm__("FUN_001fa580");
+extern f32 circler_angle_sub(f32, f32) __asm__("FUN_001fa5c8");
+extern f32 circler_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 circler_sin(f32) __asm__("FUN_001f9de0");
+extern void circler_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void circler_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void circler_vec_set_len(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 circler_dist(void *, void *) __asm__("FUN_001f9b48");
+extern f32 circler_dist_xyz(void *, void *) __asm__("FUN_001f9b80");
+extern f32 circler_approach_angle(f32 *angle, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025be00");
+extern f32 circler_approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern s32 circler_scale_frames(s32) __asm__("FUN_001f96f8");
+extern void circler_blend_anim(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void FUN_L00_00261d78(f32, s32, void *, void *);
+
+/* Circles its centre point on the side away from the hero (at most 45 degrees per step), faces its focus moby, moves while the hero is within 16 units and snaps to the ground. */
+void FUN_L06_002fbc88(struct Moby *m) {
+    CirclerVars *v = (CirclerVars *)m->pvars;
+    struct Moby *focus = v->focus;
+    Vec4f goal, step;
+    f32 hero_ang;
+    f32 self_ang;
+    f32 d;
+
+    hero_ang = circler_atan2(hero.motion.pos.f[0] - v->center.x, hero.motion.pos.f[1] - v->center.y);
+    self_ang = circler_atan2(m->pos.x - v->center.x, m->pos.y - v->center.y);
+    d = circler_angle_sub(circler_angle_add(hero_ang, 3.14159f), self_ang);
+    if (d > 0.7853982f)
+        d = 0.7853982f;
+    else if (d < -0.7853982f)
+        d = -0.7853982f;
+    d = circler_angle_add(d, self_ang);
+    goal.x = circler_cos(d) * v->radius;
+    goal.y = circler_sin(d) * v->radius;
+    goal.z = 0.0f;
+    circler_vec_add(&goal, &goal, &v->center);
+    circler_approach_angle(&m->rot.z, circler_atan2(focus->pos.x - m->pos.x, focus->pos.y - m->pos.y),
+                           &v->yaw_vel, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+                           D_0015ED6C * 3.1415927f);
+    if (circler_dist(&m->pos, &goal) > 1.0f && circler_dist_xyz(&m->pos, &hero.motion.pos) < 16.0f)
+        circler_approach_value(&v->speed, D_L06_00161EF8 * D_0015ED6C, D_L06_00161EFC * D_0015ED70);
+    else
+        circler_approach_value(&v->speed, 0.0f, D_L06_00161EFC * D_0015ED70);
+    if (v->speed == 0.0f) {
+        if (m->prev_seq != 1)
+            circler_blend_anim(m, 1, 0, circler_scale_frames(20));
+    } else if (m->prev_seq != 0) {
+        circler_blend_anim(m, 0, 0, circler_scale_frames(20));
+    }
+    circler_vec_sub(&step, &goal, &m->pos);
+    step.z = 0.0f;
+    circler_vec_set_len(&step, &step, v->speed);
+    circler_vec_add(&m->pos, &m->pos, &step);
+    FUN_L00_00261d78(1.0f, v->ground, &m->pos, &m->pos);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fbfb0.s", FUN_L06_002fbfb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fc640.s", FUN_L06_002fc640);

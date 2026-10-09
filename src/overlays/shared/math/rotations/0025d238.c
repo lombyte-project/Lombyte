@@ -307,9 +307,6 @@ s32 FUN_L00_0025e3f8(void *p) {
     return 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e450.s", FUN_L00_0025e450);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f090.s", FUN_L00_0025f090);
-/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260460), where it is exact; names translated to the US level program. */
-
 typedef struct { float x, y, z, w; } Vy10 __attribute__((aligned(16)));
 
 typedef struct { int v[6]; } S6y10;
@@ -328,6 +325,67 @@ extern void FUN_L00_0025c088(int *, int *, int *, int);
 extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
 extern void FUN_L00_002d3838(void *, void *, int, int);
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
+
+extern int FUN_001fa728(void *, float);
+extern void FUN_0022da68(int, int, void *);
+
+typedef struct {
+    u8 pad0[0x160];
+    f32 scale;      /* 0x160 */
+    u8 pad164[4];
+    s32 frames;     /* 0x168 */
+} Shake0025f090;
+
+extern Shake0025f090 D_L00_00166C80;
+
+/* Explosion burst at `pos`: three random-coloured particles, two tinted particles on `owner`, a camera shake when the
+   spot is in view, the owner's sound unless it is dying, and a light flash of intensity `flash` (13 if negative). */
+void FUN_L00_0025f090(u8 *owner, u128 *pos, int sound, float scale, float flash) {
+    Vy10 vel;
+    int i;
+    float sp, big;
+    clear_u64_value(&vel);
+    for (i = 2; i >= 0; i--) {
+        S6y10 c0;
+        S6y10 c1;
+        sp = random_float_between_c(8.0f, 10.0f) * D_0015ED6C;
+        big = scale * 400000.0f;
+        c0 = D_L00_001E9030;
+        c1 = D_L00_001E9048;
+        FUN_L00_0026a9f0(pos, &vel, c0.v[random_integer_below(6)], c1.v[random_integer_below(6)],
+            big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
+            FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
+    }
+    if (owner != 0) {
+        FUN_L00_002ac910(owner, pos, &vel, scale * 4.0f, scale_game_frames_c(0x14), 0x7F, 0x40, 0, 0x30);
+        FUN_L00_002ac910(owner, pos, &vel, scale * 3.0f, scale_game_frames_c(0x1D), 0x60, 0x20, 0, 0x20);
+    }
+    {
+        Vy10 at;
+        *(u128 *)&at = *pos;
+        at.w = 2.0f;
+        if (FUN_001fa728(&at, 10.0f) != -1) {
+            D_L00_00166C80.scale = scale * 0.1f;
+            D_L00_00166C80.frames = scale_game_frames_c(0x14);
+        }
+    }
+    if (owner != 0 && owner[0x20] != 0xFE && owner[0x20] != 0xFD && sound != -1) {
+        FUN_0022da68(sound, 0, owner);
+    }
+    if (flash != 0.0f) {
+        if (flash > 0.0f) {
+            D_L00_001B02F0[9] = flash;
+            D_L00_001B02F0[10] = flash;
+            D_L00_001B02F0[8] = flash;
+        } else {
+            D_L00_001B02F0[9] = 13.0f;
+            D_L00_001B02F0[10] = 13.0f;
+            D_L00_001B02F0[8] = 13.0f;
+        }
+        FUN_L00_002d3838(D_L00_001B02F0, pos, 0, 0);
+    }
+}
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260460), where it is exact; names translated to the US level program. */
 
 /* Spawns an explosion burst at `pos`: three random-coloured particles, two tinted particles when `owner` is set, and
    (when `flash` is nonzero) a light with intensity `flash` (or 13 if negative). */

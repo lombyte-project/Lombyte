@@ -4,8 +4,56 @@
 #include "asm.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/overlay/hero_tables.h"
+#include "rnc/math/vector.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00205830.s", FUN_L03_00205830);
+
+struct LedgeSpot {
+    Vec4 sphere;    /* xyz centre, w radius */
+    s32 *owner;     /* 0x10 */
+    s32 kind;       /* 0x14 */
+    u8 pad18[8];
+};
+
+extern struct LedgeSpot *D_L03_0015F70C;
+extern s32 D_L03_0015F710;
+extern f32 FUN_001f99c0(f32);
+extern f32 FUN_001f9b48(void *, void *);
+extern f32 FUN_001f9b80(void *, void *);
+extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
+
+s32 FUN_L03_00205830(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF, s32 *outKind,
+                     s32 *skip, s32 *only) {
+    Vec4 pos;
+    s32 gotI;
+    f32 gotF;
+    s32 i;
+    Vec4 *p = &pos;
+
+    *(u128 *)p = *(u128 *)from;
+    for (i = 0; i < D_L03_0015F710; i++) {
+        if (skip != 0 && D_L03_0015F70C[i].owner == skip)
+            continue;
+        if (only != 0 && D_L03_0015F70C[i].owner != only)
+            continue;
+        if (*D_L03_0015F70C[i].owner == 0)
+            continue;
+        if (FUN_001f9b48(&D_L03_0015F70C[i], p) > D_L03_0015F70C[i].sphere.f[3])
+            continue;
+        if (!FUN_L00_0025df68(D_L03_0015F70C[i].owner, p, to, &gotI, &gotF, D_L03_0015F70C[i].kind,
+                              12.0f, 10.0f, 0.0f))
+            continue;
+        if (!(FUN_001f9b80(p, to) < 1.7f))
+            continue;
+        if (!(FUN_001f99c0(p->f[2] - to->f[2]) < 1.5f))
+            continue;
+        *outOwner = D_L03_0015F70C[i].owner;
+        *outI = gotI;
+        *outF = gotF;
+        *outKind = D_L03_0015F70C[i].kind;
+        return 1;
+    }
+    return 0;
+}
 #include "eetypes.h"
 #include "qcopy.h"
 

@@ -2,8 +2,113 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/math/vector.h"
+#include "qcopy.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e3078.s", FUN_L04_002e3078);
+/* Vendor update: opens when the hero is close, sets up the shop camera in front of it once
+ * its phase reaches 2, and closes when the slot is already used. */
+struct VendorMobyView {
+    u8 pad0[0x7F];
+    u8 unk7F;
+    u8 pad80[0x30];
+    u8 slot;          /* 0xB0 */
+    u8 padB1[0xF];
+    Vec4 facing;      /* 0xC0 */
+};
+
+struct VendorVars {
+    u8 pad0[4];
+    s16 phase;        /* 0x04 */
+    u8 pad6[6];
+    f32 alpha;        /* 0x0C */
+    u8 pad10[0x130];
+    s32 item;         /* 0x140 */
+};
+
+struct ShopCamera {
+    Vec4 pos;
+    Vec4 rot;
+    u8 pad20[0x16];
+    s16 active;       /* 0x36 */
+};
+
+extern char D_L04_00166F40[];
+extern u8 D_0014C050[];
+extern s32 D_0015ED84;
+extern char D_0013F3D0[];
+extern struct ShopCamera D_L04_0016C9F0;
+extern s32 D_L04_0015F5C4;
+extern float FUN_001f9b48(void *, void *);
+extern void FUN_L00_0025a120(struct Moby *);
+extern void FUN_L02_002e0cd8(struct Moby *);
+extern void FUN_L00_002668a0(struct Moby *, struct VendorVars *);
+extern int FUN_00214720(char *, s32);
+extern int FUN_L00_00266448(struct Moby *, struct VendorVars *);
+extern void FUN_L00_002607d0(int);
+extern void FUN_L00_002502a0(int);
+extern void FUN_001f9bf8(Vec4 *, Vec4 *, float);
+extern void FUN_001f9a10(Vec4 *, Vec4 *, void *);
+extern float FUN_001fa580(float, float);
+extern void FUN_0020b178(int, int);
+
+void FUN_L04_002e3078(struct Moby *moby) {
+    Vec4 pos;
+    Vec4 rot;
+    Vec4 *r;
+    struct VendorVars *vars = (struct VendorVars *)moby->pvars;
+
+    if (moby->unk31 != 0 && FUN_001f9b48(&moby->pos, D_L04_00166F40) < 30.0f) {
+        FUN_L00_0025a120(moby);
+        ((struct VendorMobyView *)moby)->unk7F = 0x18;
+    }
+    FUN_L02_002e0cd8(moby);
+    switch (moby->state) {
+    case 0:
+        if (D_0014C050[((struct VendorMobyView *)moby)->slot + D_0015ED84 * 16] == 0xFF) {
+            moby->state = 3;
+            moby->flags |= 0x41;
+            moby->unk94 = 0;
+            break;
+        }
+        moby->state = 1;
+        FUN_L00_002668a0(moby, vars);
+        break;
+    case 1:
+        if (FUN_00214720(D_0013F3D0, vars->item))
+            vars->alpha = 255.0f;
+        else
+            vars->alpha = 1.0f;
+        if (FUN_L00_00266448(moby, vars))
+            moby->state = 2;
+        break;
+    case 2:
+        if (vars->phase == 2) {
+            FUN_L00_002607d0(6);
+            FUN_L00_002502a0(((struct VendorMobyView *)moby)->slot);
+            FUN_001f9bf8(&pos, &((struct VendorMobyView *)moby)->facing, 2.0f);
+            FUN_001f9a10(&pos, &pos, &moby->pos);
+            r = &rot;
+            qcopy(r, &moby->rot);
+            rot.f[2] = FUN_001fa580(rot.f[2], 3.14159f);
+            qcopy(&D_L04_0016C9F0.pos, &pos);
+            qcopy(&D_L04_0016C9F0.rot, r);
+            D_L04_0016C9F0.active = 1;
+            FUN_0020b178(0, -1);
+            moby->state = 3;
+            moby->flags |= 0x41;
+            moby->unk94 = 0;
+            break;
+        }
+        if (D_L04_0015F5C4 != 2)
+            FUN_L00_00266448(moby, vars);
+        break;
+    case 3:
+        moby->flags |= 0x41;
+        moby->unk94 = 0;
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e4418.s", FUN_L04_002e4418);
 #include "eetypes.h"
 #include "qcopy.h"
@@ -79,4 +184,37 @@ void FUN_L04_002e5178(M2e5178 *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e53a0.s", FUN_L04_002e53a0);
+/* Waits for state 1, then passes the slot for the level's current mode to FUN_L00_002637f8. */
+struct L04MissionState {
+    char pad0[0x30];
+    int mode;
+    char pad1[0x178 - 0x34];
+    int slot[4];
+};
+
+extern int D_L04_0015F5C4;
+extern struct L04MissionState D_L04_0016C9E0;
+extern void FUN_L00_002637f8(int);
+
+void FUN_L04_002e53a0(struct Moby *m) {
+    switch (m->state) {
+    case 0:
+        m->unk30 = 0xFF;
+        m->state = 1;
+        break;
+    case 1:
+        if (D_L04_0015F5C4 == 2) {
+            if (D_L04_0016C9E0.mode == 0 || D_L04_0016C9E0.mode == 1) {
+                int v = D_L04_0016C9E0.mode;
+                int i;
+                i = 0;
+                if (v == 0)
+                    i = 3;
+                else if (v == 1)
+                    i = 2;
+                FUN_L00_002637f8(D_L04_0016C9E0.slot[i]);
+            }
+        }
+        break;
+    }
+}

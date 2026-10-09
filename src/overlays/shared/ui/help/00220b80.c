@@ -27,7 +27,180 @@ void FUN_L02_00220b80(void) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002226d8.s", FUN_L02_002226d8);
+#include "rnc/globals.h"
+#include "rnc/gameplay/state/usage_stats.h"
+#include "eetypes.h"
+#include "qcopy.h"
+/*
+ * Hero movement step (FUN_L01_00233de0 twin; control modes 0xD and 0xE skip the speed cap): clamps the velocity, moves the hero by it (plus the
+ * one-frame impulse at unk920 and the push at unkF0), runs collision, then
+ * derives this frame's movement vectors and speeds:
+ *   motion.unk100  position change this frame
+ *   motion.unk110  movement direction scaled by the velocity along it
+ *   motion.unk120  same, without the gravity-up component
+ *   motion.unk130  same, gravity-up part only
+ *   motion.unk140  displacement caused by the push
+ *   motion.unk160  speed, unk164 horizontal speed, unk168 forward speed
+ *   motion.unk16C  slope: vertical / horizontal change, clamped to +-0.5
+ */
+
+extern f32 D_0015ED6C;             /* frame-rate scale (speeds are multiplied by it) */
+
+/* The FUN_L00_00233xxx helpers work in the hero's gravity frame (hero byte
+   0x20B3: 0 = world z up, otherwise the frame of the hero's moby). */
+extern void FUN_L00_00233f80(s32, void *, void *);
+extern f32 gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
+extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
+extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
+extern void gravity_flatten(void *, void *) __asm__("FUN_L00_002338d0");
+extern void FUN_L00_00233ba0(float *, float *, float);
+extern f32 forward_component(void *) __asm__("FUN_L00_00213350");  /* dot with (cos, sin) of the hero yaw */
+
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern f32 dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+
+extern void FUN_L00_002137a8(void);
+extern void FUN_L02_002216a0(void);
+extern void FUN_L00_00212ff0(void);
+
+void FUN_L02_002226d8(void)
+{
+    Vec4 old_pos;
+    Vec4 tmp;
+    Vec4 tmp2;
+    f32 limit;
+    f32 d;
+    f32 w;
+
+    qcopy(&old_pos, &hero.motion.pos);
+    FUN_L00_00233f80(hero.unk4F8, &hero.motion.unkF0, &hero.motion.rot);
+
+    /* cap the speed; states 0x22 and 0x14 cap the horizontal part and the fall speed */
+    if (hero.state.current == 0x22 || hero.state.current == 0x14) {
+        if (hero.unk1CC == 0) {
+            d = gravity_length_xy(&hero.motion.velocity);
+            limit = hero.unk234 - 0.02f;
+            if (limit < d) {
+                normalize_vector_xyz(&hero.motion.velocity, &hero.motion.velocity, limit);
+            }
+        }
+        d = gravity_z(&hero.motion.velocity);
+        limit = -hero.unk2DC;
+        if (d < limit) {
+            if (0.0f < limit) {
+                limit = 0.0f;
+            }
+            gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, limit);
+        }
+    } else if (hero.state.control_mode != 0xD) {
+        if (hero.state.control_mode != 0xE && hero.unk1CC == 0) {
+            d = vector_length_xyz(&hero.motion.velocity);
+            limit = hero.unk234 - 0.02f;
+            if (limit < d) {
+                normalize_vector_xyz(&hero.motion.velocity, &hero.motion.velocity, limit);
+            }
+        }
+    }
+
+    add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.motion.velocity);
+    add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.unk920);
+    clear_vector(&hero.unk920);
+    hero.unk257 = 0;
+    hero.coll_hit_moby = 0;
+
+    if (vector_length_xyz(&hero.motion.unkF0) <= 0.0001f) {
+        FUN_L00_002137a8();
+        FUN_L02_002216a0();
+        subtract_vector_xyz(&hero.motion.unk100, &hero.motion.pos, &old_pos);
+        FUN_L00_00212ff0();
+    } else {
+        FUN_L02_002216a0();
+    }
+
+    /* movement direction, scaled by the velocity along it (never negative) */
+    subtract_vector_xyz(&hero.motion.unk110, &hero.motion.pos, &old_pos);
+    qcopy(&hero.motion.unk130, &hero.motion.unk110);
+    qcopy(&hero.motion.unk120, &hero.motion.unk110);
+    normalize_vector_xyz(&hero.motion.unk110, &hero.motion.unk110, 1.0f);
+    d = dot_vectors_xyz(&hero.motion.unk110, &hero.motion.velocity);
+    if (d < 0.0f) {
+        d = 0.0f;
+    }
+    normalize_vector_xyz(&hero.motion.unk110, &hero.motion.velocity, d);
+
+    qcopy(&tmp, &hero.motion.velocity);
+    gravity_flatten(&tmp, &tmp);
+    gravity_flatten(&hero.motion.unk130, &hero.motion.unk130);
+    normalize_vector_xyz(&hero.motion.unk130, &hero.motion.unk130, 1.0f);
+    d = dot_vectors_xyz(&hero.motion.unk130, &tmp);
+    if (d < 0.0f) {
+        d = 0.0f;
+    }
+    normalize_vector_xyz(&hero.motion.unk130, &tmp, d);
+
+    qcopy(&tmp2, &hero.motion.velocity);
+    FUN_L00_00233ba0((float *)&tmp2, (float *)&tmp2, 0.0f);
+    FUN_L00_00233ba0((float *)&hero.motion.unk120, (float *)&hero.motion.unk120, 0.0f);
+    normalize_vector_xyz(&hero.motion.unk120, &hero.motion.unk120, 1.0f);
+    d = dot_vectors_xyz(&hero.motion.unk120, &tmp2);
+    if (d < 0.0f) {
+        d = 0.0f;
+    }
+    normalize_vector_xyz(&hero.motion.unk120, &tmp2, d);
+
+    hero.motion.unk160 = vector_length_xyz(&hero.motion.unk110);
+    hero.motion.unk164 = vector_length_xy(&hero.motion.unk110);
+    /* read through the address, as retail reloads the base register here */
+    tmp.q = (&hero.motion.unk110)->q;
+    hero.motion.unk168 = forward_component(&tmp);
+    if (hero.motion.unk168 < 0.0f) {
+        hero.motion.unk168 = 0.0f;
+    }
+
+    /* apply the push, keeping its w */
+    qcopy(&tmp, &hero.motion.pos);
+    if (vector_length_xyz(&hero.motion.unkF0) > 0.0001f) {
+        add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.motion.unkF0);
+        w = hero.motion.unkF0.f[3];
+        clear_vector(&hero.motion.unkF0);
+        hero.motion.unkF0.f[3] = w;
+        FUN_L00_002137a8();
+        FUN_L02_002216a0();
+        subtract_vector_xyz(&hero.motion.unk100, &hero.motion.pos, &old_pos);
+        FUN_L00_00212ff0();
+    }
+    subtract_vector_xyz(&hero.motion.unk140, &hero.motion.pos, &tmp);
+    {
+        /* push w moves to unk140.w; a block-local keeps retail's order */
+        f32 push_w = hero.motion.unkF0.f[3];
+
+        hero.motion.unkF0.f[3] = 0.0f;
+        hero.motion.unk140.f[3] = push_w;
+    }
+
+    subtract_vector_xyz(&hero.motion.unk100, &hero.motion.pos, &old_pos);
+    hero.motion.unk16C = 0.0f;
+    if (hero.motion.unk164 > 0.004f) {
+        hero.motion.unk16C = hero.motion.unk100.f[2] / hero.motion.unk164;
+        if (hero.motion.unk16C > 0.5f) {
+            hero.motion.unk16C = 0.5f;
+        } else if (hero.motion.unk16C < -0.5f) {
+            hero.motion.unk16C = -0.5f;
+        }
+    }
+
+    /* cap the step at 52 units per frame-rate unit */
+    if (hero.motion.unk160 > D_0015ED6C * 52.0f) {
+        scale_vector_xyz(&hero.motion.unk100, &hero.motion.unk100, D_0015ED6C * 52.0f / hero.motion.unk160);
+        hero.motion.unk160 = D_0015ED6C * 52.0f;
+    }
+}
 #include "eetypes.h"
 #include "qcopy.h"
 
@@ -173,4 +346,296 @@ void FUN_L02_00223450(void) {
         FUN_L01_00234358_223450(arg);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_0022ee00.s", FUN_L02_0022ee00);
+#include "sda.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/input/pad_state.h"
+#include "rnc/overlay/hero_tables.h"
+
+/* pvars of the gadget moby in slot 0 for item 15 */
+struct HeldGadgetVars {
+    u8 pad_0[0xC];
+    s32 voice;                     /* 0xC: allocate_voice_for_target_entry result */
+};
+
+extern struct PadState D_0013C940;
+extern int D_00141660 __attribute__((section(".data")));
+extern unsigned char D_0013D4DC[];
+extern HeroTableRow2C D_L02_0017C228[];
+extern s32 D_L02_0015F674 __attribute__((sda));
+
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern s32 hero_set_state(s32, s32) __asm__("FUN_L02_0022b728");
+extern u32 FUN_L00_00266d60(u32 mask, s32 n, s32 *out);
+extern s32 FUN_L00_0020d498(s32);
+extern void FUN_L00_0020e4c8(void);
+extern s32 FUN_L00_0020fe30(void);
+extern s32 FUN_L00_00211360(struct Moby *);
+extern s32 FUN_L00_00216de8(s32, s32);
+extern void FUN_L00_00217658(void);
+extern void FUN_L00_00221ee0(void);
+extern void FUN_L00_00222158(void);
+extern s32 FUN_L00_00233e98(s32);
+extern s32 FUN_L00_0028d8c0(struct Moby *, s32);
+extern void FUN_L00_0029a6b0(s32);
+
+/*
+ * Gadget button handling for the item in hero slot 0 (FUN_L00_00227fa0 twin).
+ * Reads the slot's button mask and, per item id, starts the matching hero
+ * state (hero_set_state) or gadget action once the buttons were pressed within
+ * a frame window (FUN_L00_00266d60). Afterwards, when the state did not change,
+ * it handles the 0x81 state on button 8 (D_L02_0015F674 counts the window down)
+ * or clears hero.unk22CA. Returns nonzero when the hero state changed.
+ */
+s32 FUN_L02_0022ee00(void)
+{
+    s32 out0;
+    s32 out1;
+    s32 out2;
+    s32 saved;
+    u32 buttons;
+    s32 frames;
+    s32 window;
+    struct Moby *moby;
+    HeroTableRow2C *row;
+    struct HeldGadgetVars *vars;
+
+    if (hero.unk20AC != 0 && (hero.items[0].item_id != 8 || hero.unk308 != 1)) {
+        return 0;
+    }
+    if (hero.unk20A4 != 0) {
+        return 0;
+    }
+    if (hero.items[0].moby == NULL) {
+        return 0;
+    }
+    if (hero.items[0].state != 2) {
+        return 0;
+    }
+    saved = hero.state_timer;
+    buttons = hero.items[0].button_mask;
+
+    switch (hero.items[0].item_id) {
+    case 8:
+        if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
+            (hero.state.control_mode == 4 && hero.unk418 != 0)) {
+            if (hero.unk12EA == 0 && FUN_L00_00266d60(buttons, scale_game_frames(7), &out0) != 0) {
+                moby = hero.items[0].moby;
+                if (moby != NULL && FUN_L00_00211360(moby) != 0 && moby->state == 0) {
+                    if ((D_0013C940.held & 0xA) ||
+                        ((hero.state.current == 1 || hero.state.current == 0x1E) &&
+                         scale_game_frames(0x14) < hero.state_timer)) {
+                        if ((hero.state.current == 1 || hero.state.current == 0x1E) &&
+                            scale_game_frames(0x14) < hero.state_timer) {
+                            FUN_L00_00217658();
+                        } else {
+                            hero_set_state(0x15, 1);
+                        }
+                    } else if (hero.unk308 == 1) {
+                        hero_set_state(0x70, 1);
+                    } else {
+                        hero_set_state(0x13, 1);
+                    }
+                }
+            }
+        } else if ((hero.state.current == 7 || hero.state.current == 9 || hero.state.current == 8 ||
+                    hero.state.current == 6 || (hero.state.current == 0xE && hero.unkAA8 > 32.0f) ||
+                    (hero.state.current == 0xB &&
+                     (hero.unk450 != 3 && hero.unkAA8 > 18.0f) || (hero.state.current == 0xB && hero.unk450 == 3 && hero.unkAA8 > 20.0f)) ||
+                    hero.state.current == 0x2D || hero.state.current == 0x11) &&
+                   scale_game_frames(0xA) < hero.state_timer) {
+            window = scale_game_frames(0xA);
+            if (hero.state.current == 0xB || hero.state.current == 0xE) {
+                window = scale_game_frames(0x12);
+            }
+            if (FUN_L00_00266d60(buttons, window, NULL) != 0) {
+                if ((hero.unk41E == 0 ? 0.1f < hero.unk2DC : 0.57f < hero.unk2DC) || (hero.state.current == 8 && 0.57f < hero.unk2DC)) {
+                    hero_set_state(0x14, 1);
+                } else if (hero.unk12EA == 0) {
+                    hero_set_state(0x13, 1);
+                }
+            }
+        } else if (hero.state.control_mode == 6) {
+            row = &D_L02_0017C228[hero.unkA60];
+            if (hero.state.current == 0x15 && scale_game_frames(0x1E) < hero.state_timer &&
+                hero.unkA9C == 0 && (f32)row->f10 <= hero.unkAA8 && (D_0013C940.held & 0xA) &&
+                FUN_L00_00266d60(buttons, scale_game_frames(0xF), NULL) != 0) {
+                hero_set_state(0x15, 1);
+            } else if (hero.unkA9C == 0 && (f32)row->f10 <= hero.unkAA8) {
+                frames = (truncate_float_to_s32(hero.unkAA8) - row->fC) * 2;
+                if (frames < 1) {
+                    frames = 1;
+                }
+                if (scale_game_frames(0xF) < frames) {
+                    frames = scale_game_frames(0xF);
+                }
+                if (hero.unk12EA == 0 && FUN_L00_00266d60(buttons, frames, NULL) != 0) {
+                    if (D_0013C940.held & 0xA) {
+                        hero_set_state(0x15, 1);
+                    } else if (hero.unk308 == 1) {
+                        hero_set_state(0x70, 1);
+                    } else {
+                        hero_set_state(0x13, 1);
+                    }
+                }
+            }
+        }
+        break;
+
+    case 12:
+        FUN_L00_00221ee0();
+        FUN_L00_00222158();
+        window = scale_game_frames(5);
+        if (hero.unk30E.s != 0) {
+            window = scale_game_frames(8);
+        }
+        if (hero.state.control_mode == 0 || hero.state.control_mode == 1 || hero.state.control_mode == 4 ||
+            hero.state.control_mode == 2 || hero.state.control_mode == 0xF || hero.state.control_mode == 5 ||
+            hero.state.current == 0x1E) {
+            if (FUN_L00_00266d60(buttons, window, NULL) != 0 ||
+                ((D_0013C940.held & buttons) && hero.items[0].unk20 > scale_game_frames(0xF))) {
+                if (hero.unk99E != 0) {
+                    if (hero.unk968 != 0) {
+                        if (hero.unk998 < hero.unk984) {
+                            hero.unk968 = 0;
+                        } else {
+                            hero.unk99E = 0;
+                        }
+                    }
+                }
+                if (hero.unk99E != 0 && hero.unk1E6 == 0 && hero.state.current != 0x2C) {
+                    hero_set_state(0x2C, 1);
+                } else if (hero.unk968 != 0 && hero.unk1E6 == 0) {
+                    hero_set_state(0x24, 1);
+                }
+            }
+        }
+        break;
+
+    case 31:
+        if (hero.unk20A4 == 0 && FUN_L00_0020fe30() != 0) {
+            if (FUN_L00_00266d60(buttons, scale_game_frames(7), NULL) != 0 && D_00141660 == 0x1F &&
+                hero.items[0].moby->oclass == 0x1E3 && hero.unk22DE == 0) {
+                FUN_L00_00216de8(0x18, 0);
+                hero.unk22DE = 0x12;
+                hero.unk22DC = 1;
+            }
+        }
+        break;
+
+    case 32:
+        if ((hero.state.control_mode == 0 || hero.state.control_mode == 1 || hero.state.control_mode == 2 ||
+             hero.state.control_mode == 4 || hero.state.control_mode == 5) &&
+            FUN_L00_00266d60(buttons, scale_game_frames(8), NULL) != 0) {
+            FUN_L00_0029a6b0(0);
+        }
+        break;
+
+    case 15:
+        if (hero.state.control_mode == 0 || hero.state.control_mode == 1 || hero.state.control_mode == 0xC ||
+            hero.state.control_mode == 2 || hero.state.control_mode == 4 || hero.state.control_mode == 5 ||
+            hero.state.control_mode == 0xF || hero.state.current == 0x1E) {
+            if (hero.items[0].moby != NULL) {
+                vars = (struct HeldGadgetVars *)hero.items[0].moby->pvars;
+                if ((((D_0013C940.held & buttons) && scale_game_frames(5) < hero.items[0].unk20) ||
+                     (D_0013C940.pressed & buttons)) &&
+                    FUN_L00_00233e98(-1) != 0) {
+                    if (hero.unk20A8 == 0) {
+                        FUN_L00_0020e4c8();
+                    }
+                } else if ((D_0013C940.held & buttons) && FUN_L00_00233e98(-1) == 0 &&
+                           FUN_L00_0028d8c0(hero.items[0].moby, vars->voice) == 0) {
+                    vars->voice = allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
+                }
+            }
+        }
+        break;
+
+    case 10:
+    case 17:
+    case 20:
+    case 24:
+    case 25:
+        if ((hero.state.control_mode == 0 && hero.state.current != 0x1E) || hero.state.control_mode == 1 ||
+            hero.state.control_mode == 0xC || hero.state.control_mode == 5 || hero.state.control_mode == 0xF ||
+            (hero.state.control_mode == 4 && hero.unk4AC != 0) ||
+            (hero.state.current == 0x23 && hero.unkAA8 > 25.0f)) {
+            if (hero.unk20A8 == 0) {
+                s32 hold;
+
+                window = scale_game_frames(7);
+                hold = hero.items[0].unk20;
+                if (hold < window) {
+                    window = hold;
+                }
+                if (FUN_L00_00266d60(buttons, window, &out1) != 0 ||
+                    ((D_0013C940.held & 0x20) && scale_game_frames(8) < hold && hold < scale_game_frames(0x11))) {
+                    if (FUN_L00_00233e98(-1) != 0) {
+                        if (hero.state.control_mode == 0xC || hero.state.control_mode == 0 ||
+                            hero.state.current == 3 ||
+                            (hero.state.control_mode == 1 && hero.unk229C < 0.7f)) {
+                            hero_set_state(0x23, 1);
+                        } else {
+                            FUN_L00_0020e4c8();
+                        }
+                    } else if (hero.items[0].moby != NULL) {
+                        allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
+                    }
+                }
+            }
+        }
+        break;
+
+    case 18:
+        if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
+            (hero.state.control_mode == 4 && hero.unk418 != 0)) {
+            if (hero.state.current != 1) {
+                s32 limit;
+                s32 hold;
+
+                limit = scale_game_frames(0xA);
+                hold = hero.items[0].unk20;
+                if (FUN_L00_00266d60(buttons, hold < limit ? hold : limit, &out2) != 0 &&
+                    hero.items[0].moby != NULL) {
+                    hero_set_state(0x20, 1);
+                    if (hero.items[0].moby != NULL) {
+                        allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
+                    }
+                }
+            }
+        }
+        break;
+
+    case 21:
+        if (hero.items[0].moby != NULL && (D_0013C940.pressed & buttons)) {
+            FUN_L00_0020e4c8();
+        }
+        break;
+    }
+
+    if (hero.state_timer == saved) {
+        if (FUN_L00_0020d498(3) == 3 && hero.state.current != 0x81 &&
+            (hero.unk308 == 0 || D_0013D4DC[0] == 0) && hero.unk22D8 == 0) {
+            tick_countdown_32_alt(&D_L02_0015F674);
+            if (D_L02_0015F674 != 0) {
+                if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
+                    hero.state.control_mode == 0xC ||
+                    ((hero.state.control_mode == 2 || hero.state.control_mode == 4) && hero.unk300 != 0)) {
+                    if ((D_0013C940.held & 8) && (D_0013C940.pressed & 8)) {
+                        hero_set_state(0x81, 1);
+                    }
+                }
+            }
+            if ((D_0013C940.pressed & 8) && hero.state.current != 0x81) {
+                D_L02_0015F674 = scale_game_frames(0x1E);
+            }
+        } else if (hero.state.current != 0x13 && hero.state.current != 0x81 && hero.state.current != 0x15 &&
+                   hero.state.current != 0x16) {
+            hero.unk22CA = 0;
+        }
+    }
+    return hero.state_timer < saved;
+}

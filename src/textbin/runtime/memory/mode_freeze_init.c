@@ -1,12 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM(
-    "config/us/expected/asm/assembly/textbin/runtime/memory/mode_freeze_init/FUN_001fbab8.s",
-    FUN_001fbab8);
-#else
-#include "types.h"
 
 struct FreezeModeState {
     s32 unk0;
@@ -24,7 +16,7 @@ struct FreezeModeState {
 
 extern s32 D_0015F604;
 extern struct FreezeModeState D_00193300;
-extern s32 snd_pause_all_sounds_in_group() __asm__("func_0012E3E8");
+extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern s32 music_pause();
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 get_help_message_text() __asm__("func_001FDD10");
@@ -70,16 +62,14 @@ void mode_freeze_init(u32 mode, s32 arg1) {
         break;
     case 5:
         push_help_history(0x4E2B);
-        st = &D_00193300;
-        st->unk4 = scale_game_frames(0x1E);
-        st->unk20 = 0;
-        st->unk24 = scale_game_frames(0x1E);
+        D_00193300.unk4 = scale_game_frames(0x1E);
+        D_00193300.unk20 = 0;
+        D_00193300.unk24 = scale_game_frames(0x1E);
         break;
     case 3:
-        st = &D_00193300;
-        st->unk4 = scale_game_frames(0x1E);
-        st->unk20 = 0;
-        st->unk24 = scale_game_frames(0x1E);
+        D_00193300.unk4 = scale_game_frames(0x1E);
+        D_00193300.unk20 = 0;
+        D_00193300.unk24 = scale_game_frames(0x1E);
         break;
     case 6:
         D_00193300.unk4 = scale_game_frames(0x1E);
@@ -93,4 +83,5 @@ void mode_freeze_init(u32 mode, s32 arg1) {
         break;
     }
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(mode_freeze_init) func_001FBAB8 __attribute__((alias("FUN_001fbab8")));

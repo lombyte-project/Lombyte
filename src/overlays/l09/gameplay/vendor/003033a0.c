@@ -209,7 +209,88 @@ void FUN_L09_003033a0(unsigned char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00303b30.s", FUN_L09_00303b30);
+#include "rnc/gameplay/entities/moby.h"
+
+/* Damage source returned by FUN_L00_0025a420. */
+typedef struct {
+    u8 pad0[0x2C];
+    f32 damage;
+} VendorHitSource;
+
+typedef struct {
+    u8 pad0[0x26];
+    s16 hurt_timer;
+    u8 pad28[0x38];
+    u8 anim[8];
+    u8 pad68[8];
+    s32 link;
+} VendorVars;
+
+extern struct Moby *moby_list __asm__("D_L09_0015FFD8");
+extern char D_L09_00208F90[];
+extern char D_L09_00208FF0[];
+extern VendorHitSource *FUN_L00_0025a420(struct Moby *, s32, s32);
+extern s32 FUN_00120478(f32);
+extern void FUN_001e93b0(char *, s32, s32);
+extern s32 FUN_00213928(struct Moby *, VendorHitSource *, f32 *, s32, s32 *, s32, s32, s32);
+extern void FUN_L00_00257470(struct Moby *, s32, s32);
+extern void FUN_L00_0025d458(struct Moby *, u8 *);
+extern void FUN_L00_0025d538(struct Moby *, u8 *);
+extern s32 FUN_001f96f8(s32);
+
+void FUN_L09_00303b30(struct Moby *moby, VendorVars *vars, f32 *health) {
+    VendorHitSource *src;
+    struct Moby *link;
+    s32 hit;
+
+    if (moby->state != 3) {
+        src = FUN_L00_0025a420(moby, 0x330000, 0);
+        if (src != 0) {
+            FUN_001e93b0(D_L09_00208F90, moby->oclass, FUN_00120478(src->damage));
+        }
+        switch (FUN_00213928(moby, src, health, 0, &hit, 0, 0, 4)) {
+        case 1:
+        case 2:
+            *health = 0.0f;
+            break;
+        case 0:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+            break;
+        }
+        if (hit >= 2) {
+            if (*health <= src->damage) {
+                *health = 0.0f;
+                moby->flags &= ~0x1000;
+                if (vars->link != -1) {
+                    link = &moby_list[vars->link];
+                    if (link != 0 && link->state != 0xFE && link->state != 0xFD
+                        && (link->oclass == 0x494 || link->oclass == 0x49D || link->oclass == 0x4A0)) {
+                        link->unkBC = 1;
+                    }
+                }
+                FUN_L00_00257470(moby, 0, -1);
+                vars->anim[7] = 0x78;
+                FUN_L00_0025d458(moby, vars->anim);
+                moby->state = 3;
+            } else {
+                *health -= src->damage;
+                vars->anim[7] = 0xFA;
+                vars->hurt_timer = FUN_001f96f8(60);
+                FUN_L00_0025d458(moby, vars->anim);
+            }
+        }
+        moby->unkA4 = 0xFF;
+    }
+    FUN_L00_0025d538(moby, vars->anim);
+}
 /* Pressure plate: waits for its trigger slot, hums while armed, wakes its linked moby when stepped on, then shatters. */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_003050C0), where it is exact; names translated to the US level program. */
 
@@ -219,7 +300,6 @@ extern int D_L09_0015F5CC;
 extern int D_L09_0015FFD8; /* no foreign declaration */
 extern int FUN_L00_0025e450();
 extern unsigned char D_0013E550_c[] __asm__("D_0013E550");
-extern void FUN_L09_00303b30(char *, char *, char *);
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 s32 allocate_voice_for_target_entry_c(s32 entry_index, s32 flags,
                                       void *target) __asm__("FUN_0022da68");
@@ -229,12 +309,12 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
 
-void FUN_L09_00303d10(char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L09_00303d10(struct Moby *m) {
+    char *d = (char *)m->pvars;
     float v[4];
     unsigned char *q;
     FUN_L09_00303b30(m, d, d + 0x20);
-    switch (((unsigned char *)m)[0x20]) {
+    switch (m->state) {
     case 0:
         if (*(short *)(d + 0x76) != -1 &&
             (q = (unsigned char *)D_0013D388 + *(short *)(d + 0x76))[0x39] != 0) {
@@ -242,7 +322,7 @@ void FUN_L09_00303d10(char *m) {
             return;
         }
         *(int *)(d + 0x7C) = -1;
-        m[0x20] = 1;
+        m->state = 1;
         break;
     case 1:
         if ((D_L09_0015F5CC & 7) == (((int)m >> 8) & 7)) {
@@ -251,7 +331,7 @@ void FUN_L09_00303d10(char *m) {
                 *(int *)(d + 0x7C) = func_0022ED80_r(1, 4, m);
             }
         }
-        if (((unsigned char *)m)[0xBC] == 1) {
+        if (m->unkBC == 1) {
             if (*(int *)(d + 0x78) != -1) {
                 unsigned char *o = (unsigned char *)(D_L09_0015FFD8 + (*(int *)(d + 0x78) << 8));
                 if (o[0x20] == 1)
@@ -265,8 +345,8 @@ void FUN_L09_00303d10(char *m) {
                 }
             }
             *(int *)(d + 0x7C) = -1;
-            ((unsigned char *)m)[0x30] = 0xFF;
-            m[0x20] = 2;
+            m->unk30 = 0xFF;
+            m->state = 2;
         }
         break;
     case 2:
@@ -280,18 +360,81 @@ void FUN_L09_00303d10(char *m) {
                     o[0xBC] = 1;
                 }
             }
-            m[0x20] = 3;
+            m->state = 3;
         }
         break;
     case 3:
-        subtract_vector_xyz_c(v, D_L09_00166F40, m + 0x10);
+        subtract_vector_xyz_c(v, D_L09_00166F40, &m->pos);
         func_L00_0025F4A8_alt(m, v, 0, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, 2.0f, 0,
                               40.0f, 0, 1, -1, 0);
         mark_moby_for_removal(m);
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00303fc8.s", FUN_L09_00303fc8);
+typedef struct {
+    u8 pad0[0x26];
+    s16 hurt_timer;
+    u8 pad28[0x38];
+    s32 link;
+    s32 link2;
+} VendorVars2;
+
+void FUN_L09_00303fc8(struct Moby *moby, VendorVars2 *vars, f32 *health) {
+    VendorHitSource *src;
+    struct Moby *link;
+    s32 hit;
+
+    if (moby->state != 3) {
+        src = FUN_L00_0025a420(moby, 0x330000, 0);
+        if (src != 0) {
+            FUN_001e93b0(D_L09_00208FF0, moby->oclass, FUN_00120478(src->damage));
+        }
+        switch (FUN_00213928(moby, src, health, 0, &hit, 0, 0, 4)) {
+        case 1:
+        case 2:
+            *health = 0.0f;
+            break;
+        case 0:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+            break;
+        }
+        if (hit >= 2) {
+            if (*health <= src->damage) {
+                *health = 0.0f;
+                moby->flags &= ~0x1000;
+                if (vars->link != -1) {
+                    link = &moby_list[vars->link];
+                    if (link != 0 && link->state != 0xFE && link->state != 0xFD
+                        && (link->oclass == 0x494 || link->oclass == 0x49D || link->oclass == 0x4A0)) {
+                        link->unkBC = 1;
+                    }
+                }
+                /* Retail checks the 0x64 link but indexes with the 0x60 one. */
+                if (vars->link2 != -1) {
+                    link = &moby_list[vars->link];
+                    if (link != 0 && link->state != 0xFE && link->state != 0xFD
+                        && (link->oclass == 0x494 || link->oclass == 0x49D || link->oclass == 0x4A0)) {
+                        link->unkBC = 1;
+                    }
+                }
+                FUN_L00_00257470(moby, 0, -1);
+                moby->state = 3;
+            } else {
+                *health -= src->damage;
+                vars->hurt_timer = FUN_001f96f8(60);
+            }
+        }
+        moby->unkA4 = 0xFF;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -357,7 +500,7 @@ extern int FUN_001f96f8(int);
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
-char *FUN_L09_00308220(char *owner, int cls) {
+char *FUN_L09_00308220(struct Moby *owner, int cls) {
     char *moby = func_0020D348_m(cls);
     if (moby != 0) {
         unsigned char state;
@@ -366,14 +509,14 @@ char *FUN_L09_00308220(char *owner, int cls) {
         *(short *)(moby + 0x32) = state;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        qcopy(moby + 0x10, owner + 0x10);
-        qcopy(moby + 0x40, owner + 0x40);
+        qcopy(moby + 0x10, &owner->pos);
+        qcopy(moby + 0x40, &owner->rot);
         moby[0xBC] = FUN_001f96f8(10);
         FUN_L00_00250df8(moby);
         FUN_L00_0025d1b8(moby);
-        *(float *)(moby + 0x2C) = *(float *)(owner + 0x2C);
-        *(unsigned short *)(moby + 0x34) = *(unsigned short *)(owner + 0x34);
-        **(int **)(moby + 0x78) = **(int **)(owner + 0x78);
+        *(float *)(moby + 0x2C) = owner->scale;
+        *(unsigned short *)(moby + 0x34) = owner->flags;
+        **(int **)(moby + 0x78) = *(int *)owner->pvars;
     }
     return moby;
 }
@@ -394,4 +537,96 @@ void FUN_L09_0030a238(float *dst, float a, float b, float scale) {
     *dst = v;
     *dst = FastAddRots(v, a);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030a298.s", FUN_L09_0030a298);
+typedef struct {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 node[1];
+} PathNodes;
+
+typedef struct {
+    u8 pad0[0x70];
+    u8 unk70[0x38];
+    f32 speed;          /* 0xA8 */
+    s32 path;           /* 0xAC: index into D_L09_001B0630 */
+    u8 padB0[8];
+    s16 dir;            /* 0xB8: > 0 runs the path forward, else backward */
+    s16 node;           /* 0xBA: node being flown to */
+    f32 yaw_offset;     /* 0xBC */
+    f32 spin;           /* 0xC0 */
+    u8 padC4[8];
+    f32 lag;            /* 0xCC: eases to 0, slowing the turn while high */
+} PathFlyerVars;
+
+extern f32 D_L09_00161DF8 __attribute__((sda));
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern float atan2_f(float, float) __asm__("FUN_001f9e90");
+extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
+extern void FUN_L00_001fff28(void *, int, float);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern void FUN_L00_0025f8e0(void *, f32);
+extern void FUN_L00_002715e8(void *, int, int, float, float);
+
+/* Flies the moby along its path toward the current node, turning and banking
+ * toward it, steps the node at each arrival and now and then drops a puff.
+ * Returns nonzero once it has run off the end of the path. */
+int FUN_L09_0030a298(struct Moby *moby) {
+    PathFlyerVars *vars = (PathFlyerVars *)moby->pvars;
+    PathNodes *path;
+    f32 d;
+    Vec4 target;
+    Vec4 step;
+    Vec4 puff;
+    int done = 0;
+
+    path = (PathNodes *)D_L09_001B0630[vars->path];
+    vars->lag += (0.0f - vars->lag) * 0.005f;
+    qcopy(&target, &path->node[vars->node]);
+    target.f[2] += vars->speed * D_L09_00161DF8;
+    subtract_vector_xyz(&step, &target, &moby->pos);
+    normalize_vector_xyz(&step, &step, vars->speed);
+    add_vector_xyz(&moby->pos, &moby->pos, &step);
+    FUN_L09_0030a238(&moby->rot.z, moby->rot.z,
+                     FastAddRots(atan2_f(path->node[vars->node].f[0] - moby->pos.x,
+                                         path->node[vars->node].f[1] - moby->pos.y),
+                                 vars->yaw_offset),
+                     (1.0f - vars->lag) * 0.02f);
+    FUN_L09_0030a238(&moby->rot.x, moby->rot.x, 0.0f, 0.02f);
+    FUN_L09_0030a238(&moby->rot.y, moby->rot.y, 0.0f, 0.02f);
+    if (vars->dir > 0) {
+        f32 v;
+        if (FUN_001f9b48(&target, &moby->pos) < vars->speed + vars->speed) {
+            vars->node++;
+            if (vars->node == path->count)
+                done = 1;
+        }
+        d = FUN_001f9b48(&moby->pos, &path->node[path->count - 1]);
+        v = 0.0f;
+        advance_accelerated_scalar(d, D_0015ED70 * 3.0f, D_0015ED70 * 3.0f, D_0015ED6C * 10.0f, &v, &vars->speed);
+    } else {
+        f32 v;
+        if (FUN_001f9b48(&target, &moby->pos) < vars->speed + vars->speed) {
+            vars->node--;
+            if (vars->node == -1)
+                done = 1;
+        }
+        d = FUN_001f9b48(&moby->pos, &path->node[0]);
+        v = 0.0f;
+        advance_accelerated_scalar(d, D_0015ED70 * 3.0f, D_0015ED70 * 3.0f, D_0015ED6C * 10.0f, &v, &vars->speed);
+    }
+    if (path->node[vars->node].f[3] == 42.0f)
+        vars->yaw_offset = 0.0f;
+    vars->spin = FastAddRots(vars->spin, vars->speed);
+    FUN_L00_001fff28(vars->unk70, 0, vars->spin);
+    if (vector_distance(&moby->pos, &path->node[path->count - 1]) > 8.0f &&
+        vector_distance(&moby->pos, &path->node[0]) > 8.0f && !random_integer_below(7)) {
+        qcopy(&puff, &moby->pos);
+        FUN_L00_0025f8e0(&puff, 0.5f);
+        puff.f[2] = 25.01f;
+        FUN_L00_002715e8(&puff, 0, 0x40103080, vars->speed * 3.0f / (D_0015ED6C * 10.0f), 12600.0f);
+    }
+    return done;
+}

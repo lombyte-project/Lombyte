@@ -3,7 +3,79 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ebf20.s", FUN_L02_002ebf20);
+#include "rnc/gameplay/entities/moby.h"
+#include "qcopy.h"
+typedef struct {
+    Vec4f vel;
+    s32 timer;
+} ShardVars;
+typedef struct {
+    u8 pad0[0x5C];
+    u8 *tint;
+} LevelFx;
+extern f32 D_L02_00161F58 __attribute__((sda));
+extern s32 D_L02_00161F5C __attribute__((sda));
+extern s32 D_L02_00161F60;
+extern f32 D_0015ED70;
+extern LevelFx D_L02_001B2680;
+extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
+extern void vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern f32 vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern f32 angle_atan2(f32, f32) __asm__("FUN_001f9e90");
+extern f32 rand_range(f32, f32) __asm__("FUN_002132a8");
+extern s32 float_to_int(f32) __asm__("FUN_001fa6d0");
+extern s32 scale_frames(s32) __asm__("FUN_001f96f8");
+extern void count_down(s32 *) __asm__("FUN_001f9740");
+extern u8 *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32) __asm__("FUN_L00_002712b8");
+extern void rand_vec(void *, f32, f32) __asm__("FUN_L00_00257d78");
+
+/* Shard debris update: drifts along its velocity, sheds particle trails and expires when its timer runs out. */
+void FUN_L02_002ebf20(struct Moby *m) {
+    ShardVars *v = (ShardVars *)m->pvars;
+    Vec4f p, back, half, jit;
+    u8 *q;
+    s32 i;
+
+    switch (m->state) {
+    case 0:
+        mark_moby_for_removal(m);
+        return;
+    case 1:
+        break;
+    default:
+        return;
+    }
+    vec_add(&m->pos, &m->pos, &v->vel);
+    approach_value(&v->vel.z, 0.0f, D_L02_00161F58 * D_0015ED70);
+    m->rot.y = 1.5707964f - angle_atan2(vec_len_xy(&v->vel), v->vel.z);
+    qcopy(&p, &m->pos);
+    vec_scale(&half, &v->vel, 0.5f);
+    vec_scale(&back, &v->vel, -0.1f);
+    for (i = 1; i >= 0; i--) {
+        s32 t = scale_frames(float_to_int(rand_range(20.0f, 60.0f)));
+        q = spawn_particle(&p, &back, t, D_L02_00161F5C >> 24, D_L02_00161F5C & 0xFFFFFF, 3,
+                                 rand_range(300000.0f, 500000.0f), 10000.0f, 1.0f, -0.0002f, 0.0f);
+        if (q) {
+            q[2] = *D_L02_001B2680.tint;
+            q[9] = float_to_int(4.0f) - 0x80;
+        }
+        vec_add(&p, &p, &half);
+        rand_vec(&jit, 0.5f, 1.5f);
+        vec_add(&p, &p, &jit);
+    }
+    q = spawn_particle(&m->pos, &back, scale_frames(6), D_L02_00161F60 >> 24, D_L02_00161F5C & 0xFFFFFF, 3,
+                             250000.0f, 5000.0f, 1.0f, -0.0004f, 0.0f);
+    if (q)
+        q[9] = float_to_int(4.0f) - 0x80;
+    if (m->unk31 == 0)
+        count_down(&v->timer);
+    else
+        v->timer = scale_frames(60);
+    if (v->timer == 0)
+        mark_moby_for_removal(m);
+}
 #include "qcopy.h"
 extern char *create_moby_c(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_002502f0_c(char *, int, int, int) __asm__("FUN_L00_002502f0");
@@ -79,9 +151,9 @@ extern char D_00141968[];
 extern char D_0013F350[];
 extern char D_0014EE90[];
 
-void FUN_L02_002ee890(unsigned char *moby) {
-    int *data = *(int **)(moby + 0x78);
-    moby[0x30] = 0xFF;
+void FUN_L02_002ee890(struct Moby *moby) {
+    int *data = (int *)moby->pvars;
+    moby->unk30 = 0xFF;
 
     if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data[0x17]) != 0 &&
         *(unsigned int *)(((char *)&D_0013F3D0) + 0x200C) < 2) {

@@ -4,6 +4,9 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/storage/disc_table.h"
+#include "rnc/math/vector.h"
+#include "rnc/input/pad_state.h"
+#include "rnc/rendering/debug/debug_menu.h"
 
 #define NOT_SDA
 
@@ -31,13 +34,8 @@ void FUN_L00_00297e30(void) {
     D_L00_0015F2F0 = 0;
     D_L00_0015F2F4 = 0;
 }
-struct P {
-    char pad[0x100];
-    float a, b, c, d;
-    char pad2[0x1A0 - 0x110];
-    int busy;
-};
-extern struct P D_0013C940;
+#include "rnc/input/pad_state.h"
+extern struct PadStateWords D_0013C940;
 extern int D_L00_00160FF0 __attribute__((sda));
 extern int D_L00_0015F5CC;
 extern int D_0015EEA4;
@@ -45,8 +43,8 @@ extern int D_L00_0015F598;
 extern int D_0015EE28;
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00297e70(void) {
-    if (D_0013C940.busy != 0 || D_0013C940.c != 0.0f || D_0013C940.d != 0.0f ||
-        D_0013C940.a != 0.0f || D_0013C940.b != 0.0f) {
+    if (D_0013C940.buttons.w.held != 0 || D_0013C940.analog[2] != 0.0f || D_0013C940.analog[3] != 0.0f ||
+        D_0013C940.analog[0] != 0.0f || D_0013C940.analog[1] != 0.0f) {
         D_L00_00160FF0 = 0;
     } else {
         D_L00_00160FF0++;
@@ -612,7 +610,183 @@ int FUN_L00_00298de8(void) {
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00298f90.s", FUN_L00_00298f90);
+/* Moby-sized (0x100) records used by the vendor menu. */
+typedef struct {
+    u8 pad0[0xC];
+    u8 count;            /* 0x0C */
+    u8 pad0D[0x3B];
+    s32 slots[1];        /* 0x48 */
+} VendorMobyClass;
+
+typedef struct {
+    u8 pad0[0x10];
+    Vec4 pos;            /* 0x10 */
+    u8 pad20[2];
+    u8 class_id;         /* 0x22 */
+    u8 pad23;
+    VendorMobyClass *pclass; /* 0x24 */
+    u8 pad28[0xA];
+    u16 h32;             /* 0x32 */
+    u8 pad34[0xC];
+    Vec4 rot;            /* 0x40 */
+    u8 frame;            /* 0x50 */
+    u8 next_frame;       /* 0x51 */
+    u8 pad52;
+    u8 b53;              /* 0x53 */
+    f32 blend;           /* 0x54 */
+    f32 f58;             /* 0x58 */
+    u8 pad5C[0x14];
+    u8 b70;              /* 0x70 */
+    u8 b71;              /* 0x71 */
+    u8 pad72[6];
+    Vec4 *keys;          /* 0x78 */
+    u8 pad7C[3];
+    u8 b7F;              /* 0x7F */
+    u8 pad80[0x26];
+    s16 oclass;          /* 0xA6 */
+    u8 padA8[0x18];
+    Vec4 mtx[4];         /* 0xC0 */
+} VendorMoby;
+
+typedef struct { f32 pos[3]; u8 flag; u8 padD[3]; f32 rot[4]; } CutsceneCameraKey;
+typedef struct {
+    char pad0[0x34];
+    s32 f34;
+    s32 f38;
+    s32 f3C;
+    s16 h40;
+    s16 pad42;
+    s16 h44;
+    s16 pad46;
+    s16 h48;            /* 0x48: frame at which FUN_00215b10 runs */
+    char pad4A[0xA];
+    CutsceneCameraKey *f54;
+    char pad58[0x120];
+    VendorMoby *f178[1];
+} VendorCutscene;
+
+extern u32 D_0013CAE4 __attribute__((section(".data")));
+extern f32 fade_level __asm__("D_L00_0015F3FC");
+extern VendorCutscene D_L00_0016C860;
+extern s32 D_0015EEA0;
+extern s32 D_0015EED8;
+extern void FUN_L00_0023e268(void);
+extern void FUN_00212e28(void);
+extern void FUN_00215b10(void);
+extern s32 FUN_002168a8(s32);
+extern void FUN_00204790(void);
+extern void FUN_L00_002451b8(s32);
+extern void FUN_0020c880(void *);
+extern f32 FUN_001fa6c0(s32);
+extern void FUN_001f9a68(void *, void *, f32);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_L00_00250df8(void *);
+extern void FUN_00213700(void *);
+extern void FUN_L00_00234b38(void *);
+extern void FUN_L00_00207430(void *);
+
+/* Per-frame update while the cutscene in D_L00_0016C860 plays: runs the debug-gated subsystem
+   updates, fades, advances the frame counters and either finishes the cutscene (end frame
+   reached or skipped) or steps each of its mobys between two keyframes. */
+void FUN_L00_00298f90(void) {
+    VendorCutscene *cs;
+    VendorMoby *m;
+    s32 done;
+    s32 last;
+    s32 i;
+    s32 id;
+    s32 lim;
+    Vec4 *keys;
+    f32 fade;
+    f32 a[4] __attribute__((aligned(16)));
+    f32 b[4] __attribute__((aligned(16)));
+
+    if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        FUN_L00_00297e30();
+    }
+    if (!(g_debug_menu.update_flags & 0x10) || (D_0013CAE4 & 0x220)) {
+        FUN_L00_0023e268();
+    }
+    if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        FUN_00212e28();
+        enqueue_voice_request();
+    }
+    FUN_001e93e8(D_L00_00160FF8, 3);
+    if ((g_debug_menu.update_flags & 1) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        FUN_L00_002070d0();
+    }
+    FUN_001e93e8(D_L00_00161008, 7);
+    if ((g_debug_menu.update_flags & 4) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        FUN_00217b88();
+    }
+    FUN_001e93e8(D_L00_00161018, 5);
+    cs = &D_L00_0016C860;
+    fade = fade_level - 0.34f;
+    cs->f34++;
+    cs->f38++;
+    fade_level = fade;
+    if (fade_level < 0.0f) {
+        fade_level = 0.0f;
+    }
+    if (cs->f34 >= cs->h48) {
+        FUN_00215b10();
+    }
+    done = cs->f34 >= cs->h40;
+    if (cs->f34 >= scale_game_frames(0x12) && fade_level == 0.0f) {
+
+        if ((D_0015EEA0 || D_0015EE20 || D_0015EED8 || current_level_index <= 0) && (D_0013C940.buttons.w.pressed & 0x800)) {
+            done = 1;
+        } else if ((D_0013C940.buttons.held_pressed & 0x8000000000FUL) == 0x8000000000FUL) {
+            done = 1;
+        }
+    }
+    if (done) {
+        FUN_L00_00298b18();
+    } else {
+        lim = pal_mode ? 0x50 : 0x60;
+        if (D_L00_0016C860.f38 >= lim) {
+            FUN_002168a8(1);
+            D_L00_0016C860.f3C++;
+            FUN_00204790();
+            FUN_L00_002451b8(D_L00_0016C860.f3C + 1);
+        }
+        last = FUN_L00_00298de8();
+        for (i = 0; i < D_L00_0016C860.h44; i++) {
+            m = D_L00_0016C860.f178[i];
+            id = D_L00_0016C860.f38 >> 1;
+            m->frame = id;
+            m->next_frame = id + 1;
+            FUN_0020c880(m);
+            m->blend = FUN_001fa6c0(D_L00_0016C860.f38 & 1) * 0.5f;
+            if (last && (D_L00_0016C860.f38 & 1)) {
+                m->blend = 1.0f;
+            }
+            keys = m->keys;
+            FUN_001f9a68(a, &keys[m->frame], 1.0f - m->blend);
+            FUN_001f9a68(b, &keys[m->next_frame], m->blend);
+            FUN_001f9a10(&m->pos, a, b);
+            m->b71 = 0xFF;
+            FUN_L00_00250df8(m);
+            if (m->b7F) {
+                FUN_00213700(m);
+            }
+            if (m->oclass == 0) {
+                FUN_L00_00234b38(m);
+            }
+            if (m->oclass == 10 || m->oclass == 0x1A3 || m->oclass == 0x555) {
+                FUN_L00_00207430(m);
+            }
+        }
+    }
+    FUN_001e93e8(D_L00_00161028, 8);
+    sound_update();
+    FUN_001e93e8(D_L00_00161038, 6);
+    update_all_point_lights();
+    FUN_0020cfd0();
+    if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        FUN_L00_00297e70();
+    }
+}
 typedef struct {
     s32 a, b;
 } P2;
@@ -837,9 +1011,6 @@ void FUN_L00_0029ab70(int a) {
     f12dc80_29ab70();
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ad08.s", FUN_L00_0029ad08);
-typedef struct {
-    float x, y, z, w;
-} __attribute__((aligned(16))) Vec4;
 extern int D_L00_0015F5D8;
 extern int D_L00_0015F5C4;
 extern unsigned char D_001413F5[];
@@ -852,8 +1023,8 @@ struct S16 {
 extern struct S16 D_001516D0;
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_002330d0(void);
-void FUN_001f9cf8(Vec4 *, void *, void *);
-void FUN_001f9a10(Vec4 *, Vec4 *, void *);
+void FUN_001f9cf8(void *, void *, void *);
+void FUN_001f9a10(void *, void *, void *);
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void FUN_L00_00216f90(Vec4 *, Vec4 *, int, int);
 void FUN_001ff768(void);
@@ -872,9 +1043,9 @@ void FUN_L00_0029af80(void) {
     g = D_L00_001CA4C0_u;
     FUN_001f9cf8(&v, &D_L00_00161100, *(char **)(g + 0x28) + 0xC0);
     FUN_001f9a10(&v, &v, *(char **)(g + 0x28) + 0x10);
-    r.x = 0.0f;
-    r.y = 0.0f;
-    r.z = fast_add_rotations(*(float *)(*(char **)(g + 0x28) + 0x48), -1.5707964f);
+    r.f[0] = 0.0f;
+    r.f[1] = 0.0f;
+    r.f[2] = fast_add_rotations(*(float *)(*(char **)(g + 0x28) + 0x48), -1.5707964f);
     FUN_L00_00216f90(&v, &r, 0, 1);
     FUN_001ff768();
     if ((unsigned short)(D_001516D0.mode - 6) >= 2)
@@ -1063,4 +1234,545 @@ void FUN_L00_0029b680(void) {
 }
 #undef P
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ba78.s", FUN_L00_0029ba78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029c648.s", FUN_L00_0029c648);
+#include "rnc/gameplay/hero.h"
+
+/* FUN_L00_0029c648 - Level-00 shared: vendor menu update. Dispatches on the
+ * menu state vendor_menu.state (0 = opening, 1 = open, 2 = closing, 3 = exit
+ * cutscene). The item list itself (D_L00_001CA4C0) is shared with the
+ * buy/consume half FUN_L00_0029ba78, which this function calls every frame. */
+
+
+typedef struct { s32 fD0; s32 fD4; s32 fD8; char pad[0x14 - 0xC]; } VendorItem;
+
+typedef struct {
+    s32 state;           /* 0x00: menu state 0..3 */
+    s32 f4;              /* 0x04: frame counter */
+    s32 f8;
+    s32 fC;
+    char pad10[4];
+    VendorMoby *f14;
+    char pad18[4];
+    VendorMoby *f1c;   /* 0x1C: the vendor */
+    VendorMoby *f20;   /* 0x20: menu mobys [0..5] */
+    VendorMoby *f24;
+    s32 f28;
+    char pad2C[0x14];
+    u32 f40;
+    char pad44[4];
+    s32 f48;
+    s32 f4c;
+    s32 f50;
+    char pad54[4];
+    s32 f58;             /* 0x58: selected row */
+    s32 f5c;
+    Vec4 f60;
+    Vec4 f70;
+    Vec4 f80[4];         /* 0x80: matrix */
+    Vec4 fC0;
+    VendorItem fD0[16];
+    s32 f210;            /* 0x210: row count */
+} VendorMenu;
+
+typedef struct { s32 f0; s32 f4; u16 h8; u16 hA; u16 hC; u16 hE; char pad[8]; } VendorItemInfo;
+typedef struct { char pad[0x10]; s32 sound; } VendorItemSound;
+typedef struct { char pad0[0x10]; f32 f10; f32 f14; char pad18[8]; Vec4 v20; char pad30[0x10]; } VendorItemSlot40;
+typedef struct { f32 f0; f32 f4; f32 f8; char padC[4]; f32 f10; f32 f14; char pad18[8]; Vec4 v20; } VendorItemSlot30;
+typedef struct { char pad0; u8 b1; char pad2[0x3E]; } VendorRow;
+typedef struct { char pad0[0x140]; Vec4 pos; char pad150[0x200]; f32 basis[12]; } ViewCamera;
+
+
+extern VendorMenu vendor_menu __asm__("D_L00_001CA4C0");
+extern struct PadState pad_state __asm__("D_0013C940");
+extern VendorItemInfo D_L00_001C40B0[];
+extern s32 D_0013D428[];
+extern VendorItemSound D_L00_001C2108[];
+extern VendorItemSlot40 D_L00_001C8FF0[];
+extern VendorItemSlot30 D_L00_001C9930[];
+extern s32 D_L00_001CA020[];
+extern VendorRow D_L00_00165E80[];
+extern s16 D_001516D8[];
+extern u8 D_L00_00161128[];
+extern u8 D_L00_00161138[];
+extern u8 D_L00_00161148[];
+extern s32 D_L00_00161188;
+extern s32 D_L00_0016118C;
+extern s32 D_L00_0015F5D8;
+extern s32 D_L00_00161080 __attribute__((sda));
+extern s32 D_L00_001610A0 __attribute__((sda));
+extern s32 D_L00_001610B0 __attribute__((sda));
+extern s32 D_L00_001610C0 __attribute__((sda));
+extern s32 D_L00_00161E14;
+extern s32 D_L00_00161E18;
+extern s32 D_L00_00161E1C;
+extern s32 D_L00_00161E20;
+extern f32 D_L00_00161E24;
+extern s32 D_L00_00161E30;
+extern s32 D_L00_00161E38;
+extern f32 D_0015ED60;
+extern s32 D_0015ED80;
+extern Vec4 D_L00_00165F80[3];
+extern void *D_L00_00197300[];
+extern ViewCamera D_L00_00166C80;
+extern f32 D_L00_0016CAF0 __attribute__((section(".data")));
+
+extern void FUN_L00_00297e30(void);
+extern void FUN_L00_00297e70(void);
+extern void FUN_00212e28(void);
+extern void FUN_0022dc50(void);
+extern void FUN_L00_002070d0(void);
+extern void FUN_00217b88(void);
+extern void FUN_001e93e8(void *, s32);
+extern s32 FUN_001f96f8(s32);
+extern void FUN_00212f90(void *, s32, s32, s32);
+extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
+extern void FUN_0020cb88(void *, void *);
+extern void FUN_L00_0029ad08(void);
+extern void FUN_L00_0029ab70(s32);
+extern void FUN_L00_0023ac78(s32);
+extern void FUN_001f4600(void *, void *);
+extern void FUN_L00_0029f990(void);
+extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaa30(void *);
+extern void FUN_00201a28(void);
+extern void FUN_L00_0029a330(void);
+extern void FUN_0020c5f0(void *, s32);
+extern void FUN_L00_00250df8(void *);
+extern void FUN_0020d4f0(void *, s32, s32, s32, s32);
+extern void FUN_L00_0029b4d8(s32);
+extern void FUN_0020d580(void *);
+extern void FUN_00237ed0(void *);
+extern f32 FUN_001f96b0(f32);
+extern f32 FUN_001fa580(f32, f32);
+extern f32 FUN_001f9de0(f32);
+extern void FUN_001fa030(void *, void *);
+extern s32 FUN_001fdd10(s32);
+extern void FUN_00237e90(s32);
+extern void FUN_001ff570(s32, s32);
+extern s32 FUN_001ff308(s32, s32, void *, void *, void *, void *, s32);
+extern void FUN_L00_0023a760(void);
+extern void FUN_L00_00235ea0(void);
+extern void FUN_L00_0023a7a8(void);
+extern void FUN_L00_0029ba78(void);
+extern void FUN_002335a0(void);
+extern void FUN_00204a40(s32, s32);
+extern void FUN_0020c880(void *);
+extern void FUN_L00_0029b680(void);
+extern void FUN_001f2d98(void);
+extern void FUN_0020c828(void *);
+extern void FUN_L00_0029af80(void);
+extern void FUN_002049f0(s32);
+extern void FUN_00125218(void *);
+extern void FUN_00125360(void *, void *, f32);
+extern void FUN_00125408(void *, void *, f32);
+extern void FUN_001252b8(void *, void *, f32);
+extern f32 FUN_001fa6c0(s32);
+extern void FUN_001f9a68(void *, void *, f32);
+extern void FUN_00213700(void *);
+extern void FUN_L00_00234b38(void *);
+extern void FUN_0022ca50(void);
+
+#define CUR_ITEM (vendor_menu.fD0[vendor_menu.f58])
+
+void FUN_L00_0029c648(void) {
+    Vec4 a;
+    Vec4 b;
+    f32 m[4][4];
+    s32 st;
+    s32 ok;
+    s32 i;
+    s32 j;
+    s32 k;
+    s32 id;
+    f32 k1;
+    f32 k2;
+    f32 k3;
+    f32 ang;
+    f32 one;
+    VendorRow *row;
+    VendorCutscene *cs;
+    CutsceneCameraKey *cam;
+    f32 *rot;
+    VendorMoby *mb;
+    VendorMoby *m2;
+    Vec4 *keys;
+    s32 lim;
+    u8 flag;
+
+    switch (vendor_menu.state) {
+    case 0:
+    case 2:
+        if (vendor_menu.f40 == 0 || vendor_menu.state == 2) {
+            if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+                FUN_L00_00297e30();
+            }
+            if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+                FUN_00212e28();
+                FUN_0022dc50();
+            }
+            FUN_001e93e8(D_L00_00161128, 3);
+            if ((g_debug_menu.update_flags & 1) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+                FUN_L00_002070d0();
+            }
+            FUN_001e93e8(D_L00_00161138, 7);
+            if ((g_debug_menu.update_flags & 4) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+                FUN_00217b88();
+            }
+            FUN_001e93e8(D_L00_00161148, 5);
+        }
+        st = vendor_menu.state;
+        if (st == 0) {
+            fade_level -= 0.34f;
+            if (fade_level < 0.0f) {
+                fade_level = 0.0f;
+            }
+            vendor_menu.f4++;
+            if (vendor_menu.f4 >= FUN_001f96f8(40) || vendor_menu.f40 != 0) {
+                fade_level = 0.0f;
+                vendor_menu.fC = 1;
+                vendor_menu.state = 1;
+                vendor_menu.f4 = 0;
+                FUN_00212f90(vendor_menu.f1c, 3, 0, 8);
+                vendor_menu.f1c->f58 = 1.0f;
+                D_L00_00161E20 = 1;
+                D_L00_00161E1C = 8;
+                allocate_voice_for_target_entry(4, 0, vendor_menu.f1c);
+            }
+        } else if (st == 2) {
+            ok = 0;
+            if (vendor_menu.f40 == 0 && vendor_menu.f48 >= 0) {
+                if (D_L00_001CA020[vendor_menu.f48] >= 0) { ok = 1; }
+            }
+            vendor_menu.f4++;
+            if (vendor_menu.f4 >= FUN_001f96f8(40) || vendor_menu.f40 != 0) {
+                FUN_00212f90(vendor_menu.f1c, 1, 0, 8);
+                row = D_L00_00165E80;
+                for (k = 0; k < 4; k++) {
+                    if (row->b1 == 1) {
+                        FUN_0020cb88(vendor_menu.f1c, row);
+                    }
+                    row++;
+                }
+                if (ok) {
+                    FUN_L00_0029ad08();
+                } else {
+                    FUN_L00_0029ab70(0);
+                    allocate_voice_for_target_entry(6, 0, vendor_menu.f1c);
+                }
+            }
+            FUN_L00_0023ac78(1);
+        }
+        if (vendor_menu.f4 <= FUN_001f96f8(36)) {
+            FUN_001f4600(FUN_L00_0029f990, vendor_menu.f1c);
+        }
+        if (vendor_menu.f40 == 0) {
+            FUN_L00_002ea9d8(&vendor_menu.f60);
+            FUN_L00_002eaa30(&vendor_menu.f70);
+        }
+        FUN_00201a28();
+        if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+            FUN_L00_00297e70();
+        }
+        break;
+    case 1:
+        if (D_L00_00161188 == 0 && D_001516D8[0] == 0 && D_L00_0016118C != 0) {
+            FUN_L00_0029a330();
+            vendor_menu.f24 = vendor_menu.f14;
+            FUN_0020c5f0(vendor_menu.f24, 0xC);
+            vendor_menu.f24->h32 = 0x40;
+            vendor_menu.f24->rot.f[2] = vendor_menu.f1c->rot.f[2];
+            FUN_L00_00250df8(vendor_menu.f24);
+            FUN_0020d4f0(vendor_menu.f24, 0x202020, 0xE, 0xE, 0);
+            D_L00_00161188 = 1;
+            D_L00_0016118C = 0;
+            FUN_L00_0029b4d8(1);
+        }
+        FUN_0020d580(vendor_menu.f1c);
+        FUN_L00_00250df8(vendor_menu.f1c);
+        if (D_L00_00161188 == 1) {
+            FUN_001f9cf8(&vendor_menu.f24->pos, &D_L00_00161080, vendor_menu.f1c->mtx);
+            FUN_001f9a10(&vendor_menu.f24->pos, &vendor_menu.f24->pos, &vendor_menu.f1c->pos);
+            FUN_0020d580(vendor_menu.f24);
+            FUN_L00_00250df8(vendor_menu.f24);
+            FUN_00237ed0(vendor_menu.f24);
+        }
+        k1 = -0.05f;
+        k2 = -0.36f;
+        FUN_001f9cf8(&vendor_menu.f20[0].pos, &D_L00_001610B0, vendor_menu.f1c->mtx);
+        k3 = 0.05f;
+        FUN_001f9a10(&vendor_menu.f20[0].pos, &vendor_menu.f20[0].pos, &vendor_menu.f1c->pos);
+        vendor_menu.f20[0].rot.f[0] = FUN_001fa580(vendor_menu.f20[0].rot.f[0], FUN_001f96b0(k1));
+        vendor_menu.f20[0].rot.f[1] = k2;
+        vendor_menu.f20[0].rot.f[2] = FUN_001fa580(vendor_menu.f20[0].rot.f[2], FUN_001f96b0(k3));
+        FUN_L00_00250df8(&vendor_menu.f20[0]);
+        FUN_001f9cf8(&vendor_menu.f20[5].pos, &D_L00_001610C0, vendor_menu.f1c->mtx);
+        FUN_001f9a10(&vendor_menu.f20[5].pos, &vendor_menu.f20[5].pos, &vendor_menu.f1c->pos);
+        vendor_menu.f20[5].rot.f[0] = FUN_001fa580(vendor_menu.f20[5].rot.f[0], FUN_001f96b0(k1));
+        vendor_menu.f20[5].rot.f[1] = k2;
+        vendor_menu.f20[5].rot.f[2] = FUN_001fa580(vendor_menu.f20[5].rot.f[2], FUN_001f96b0(k3));
+        FUN_L00_00250df8(&vendor_menu.f20[5]);
+        D_L00_00161E24 = FUN_001fa580(D_L00_00161E24, FUN_001f96b0(k3));
+        FUN_0020d580(&vendor_menu.f20[1]);
+        if (!vendor_menu.f20[1].b53 && (vendor_menu.f20[1].b70 & 2)) {
+            FUN_00212f90(&vendor_menu.f20[1], 1, 0, 8);
+        }
+        FUN_L00_00250df8(&vendor_menu.f20[1]);
+        b.q = 0;
+        b.f[2] = FUN_001f9de0(D_L00_00161E24) / 20.0f;
+        a.q = b.q;
+        FUN_001f9a10(&a, &D_L00_001610A0, &a);
+        FUN_001f9a10(&a, &a, &D_L00_001C8FF0[CUR_ITEM.fD0].v20);
+        FUN_001f9cf8(&vendor_menu.f20[2].pos, &a, vendor_menu.f1c->mtx);
+        FUN_001f9a10(&vendor_menu.f20[2].pos, &vendor_menu.f20[2].pos, &vendor_menu.f1c->pos);
+        vendor_menu.f20[2].rot.f[0] = D_L00_001C8FF0[CUR_ITEM.fD0].f10;
+        vendor_menu.f20[2].rot.f[1] = D_L00_001C8FF0[CUR_ITEM.fD0].f14;
+        vendor_menu.f20[2].rot.f[2] = D_L00_00161E24;
+        FUN_L00_00250df8(&vendor_menu.f20[2]);
+        b.q = 0;
+        b.f[2] = FUN_001f9de0(D_L00_00161E24) / 20.0f;
+        a.q = b.q;
+        FUN_001f9a10(&a, &D_L00_001610A0, &a);
+        FUN_001f9a10(&a, &a, &D_L00_001C9930[CUR_ITEM.fD0].v20);
+        FUN_001f9cf8(&vendor_menu.f20[3].pos, &a, vendor_menu.f1c->mtx);
+        FUN_001f9a10(&vendor_menu.f20[3].pos, &vendor_menu.f20[3].pos, &vendor_menu.f1c->pos);
+        vendor_menu.f20[3].rot.f[0] = D_L00_001C9930[CUR_ITEM.fD0].f10;
+        vendor_menu.f20[3].rot.f[1] = D_L00_001C9930[CUR_ITEM.fD0].f14;
+        vendor_menu.f20[3].rot.f[2] = D_L00_00161E24;
+        FUN_0020d580(&vendor_menu.f20[3]);
+        if (!vendor_menu.f20[3].b53 && (vendor_menu.f20[3].b70 & 2)) {
+            FUN_00212f90(&vendor_menu.f20[3], 1, 0, 8);
+        }
+        FUN_L00_00250df8(&vendor_menu.f20[3]);
+        b.f[0] = D_L00_001C9930[CUR_ITEM.fD0].f0;
+        b.f[1] = D_L00_001C9930[CUR_ITEM.fD0].f4;
+        b.f[2] = D_L00_001C9930[CUR_ITEM.fD0].f8;
+        FUN_001fa030(vendor_menu.f20[3].mtx, &vendor_menu.f20[3].rot);
+        FUN_001f9cf8(&b, &b, vendor_menu.f20[3].mtx);
+        FUN_001f9a10(&vendor_menu.f20[3].pos, &vendor_menu.f20[3].pos, &b);
+        vendor_menu.f4++;
+        if (vendor_menu.f5c == 0 && D_L00_00161E18 == 0) {
+            if (vendor_menu.f210 < 8) {
+                if ((pad_state.pressed_unmasked & 0x2000) && !(D_L00_00161E30 & 0x2000)) {
+                    if (vendor_menu.f58 < vendor_menu.f210 - 1) {
+                        D_L00_00161E38 = 1;
+                        FUN_L00_0029b4d8(0);
+                        vendor_menu.f58++;
+                        allocate_voice_for_target_entry(1, 0, vendor_menu.f1c);
+                        FUN_00237e90(FUN_001fdd10(D_L00_001C2108[CUR_ITEM.fD0].sound));
+                        if (vendor_menu.f50 != -1) {
+                            FUN_001ff570(vendor_menu.f50, 0);
+                        }
+                        vendor_menu.f50 = -1;
+                        if (CUR_ITEM.fD4 == 1) {
+                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, FUN_L00_0023a760, FUN_L00_00235ea0,
+                                                  FUN_L00_0023a7a8, &D_0013D428[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
+                        }
+                    }
+                }
+                if ((pad_state.pressed_unmasked & 0x8000) && !(D_L00_00161E30 & 0x8000)) {
+                    if (vendor_menu.f58 > 0) {
+                        D_L00_00161E38 = 1;
+                        FUN_L00_0029b4d8(0);
+                        vendor_menu.f58--;
+                        allocate_voice_for_target_entry(1, 0, vendor_menu.f1c);
+                        FUN_00237e90(FUN_001fdd10(D_L00_001C2108[CUR_ITEM.fD0].sound));
+                        if (vendor_menu.f50 != -1) {
+                            FUN_001ff570(vendor_menu.f50, 0);
+                        }
+                        vendor_menu.f50 = -1;
+                        if (CUR_ITEM.fD4 == 1) {
+                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, FUN_L00_0023a760, FUN_L00_00235ea0,
+                                                  FUN_L00_0023a7a8, &D_0013D428[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
+                        }
+                    }
+                }
+            } else {
+                if ((pad_state.pressed_unmasked & 0x2000) && !(D_L00_00161E30 & 0x2000)) {
+                    if (vendor_menu.f4c <= 0x38) {
+                        D_L00_00161E38 = 1;
+                        vendor_menu.f4c += 0x38;
+                        allocate_voice_for_target_entry(1, 0, vendor_menu.f1c);
+                        FUN_L00_0029b4d8(0);
+                        if (vendor_menu.f58 < vendor_menu.f210 - 1) {
+                            vendor_menu.f58++;
+                        } else {
+                            vendor_menu.f58 = 0;
+                        }
+                        FUN_00237e90(FUN_001fdd10(D_L00_001C2108[CUR_ITEM.fD0].sound));
+                        if (vendor_menu.f50 != -1) {
+                            FUN_001ff570(vendor_menu.f50, 0);
+                        }
+                        vendor_menu.f50 = -1;
+                        if (CUR_ITEM.fD4 == 1) {
+                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, FUN_L00_0023a760, FUN_L00_00235ea0,
+                                                  FUN_L00_0023a7a8, &D_0013D428[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
+                        }
+                    }
+                }
+                if ((pad_state.pressed_unmasked & 0x8000) && !(D_L00_00161E30 & 0x8000)) {
+                    if (vendor_menu.f4c >= -0x38) {
+                        D_L00_00161E38 = 1;
+                        vendor_menu.f4c -= 0x38;
+                        allocate_voice_for_target_entry(1, 0, vendor_menu.f1c);
+                        FUN_L00_0029b4d8(0);
+                        if (vendor_menu.f58 > 0) {
+                            vendor_menu.f58--;
+                        } else {
+                            vendor_menu.f58 = vendor_menu.f210 - 1;
+                        }
+                        FUN_00237e90(FUN_001fdd10(D_L00_001C2108[CUR_ITEM.fD0].sound));
+                        if (vendor_menu.f50 != -1) {
+                            FUN_001ff570(vendor_menu.f50, 0);
+                        }
+                        vendor_menu.f50 = -1;
+                        if (CUR_ITEM.fD4 == 1) {
+                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, FUN_L00_0023a760, FUN_L00_00235ea0,
+                                                  FUN_L00_0023a7a8, &D_0013D428[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
+                        }
+                    }
+                }
+            }
+            if ((pad_state.pressed_unmasked & 0x40) && !(D_L00_00161E30 & 0x40) && CUR_ITEM.fD8 == 0) {
+                vendor_menu.f5c = 1;
+                allocate_voice_for_target_entry(0, 0, vendor_menu.f1c);
+            }
+            if ((pad_state.pressed_unmasked & 0x10) && D_L00_0016118C == 0) {
+                D_L00_00161E14 = 8;
+                D_L00_00161E18 = 1;
+                allocate_voice_for_target_entry(5, 0, vendor_menu.f1c);
+            }
+        }
+        FUN_L00_0029ba78();
+        D_L00_00161E30 = pad_state.pressed_unmasked;
+        if (D_L00_00161E20 == 1) {
+            if (D_L00_00161E1C == 0) {
+                D_L00_00161E20 = 0;
+            } else {
+                D_L00_00161E1C--;
+            }
+        }
+        if (D_L00_00161E18 == 1) {
+            if (--D_L00_00161E14 == 0) {
+                D_L00_0015F5D8 = 1;
+                FUN_002335a0();
+                FUN_00212f90(vendor_menu.f1c, 4, 9, 8);
+                vendor_menu.f1c->f58 = D_0015ED60 * -0.5f;
+                if (vendor_menu.f40 != 0) {
+                    qcopy(g_debug_camera.angles, &vendor_menu.f70);
+                }
+                ((Vec4 *)g_debug_camera.basis)[0].q = D_L00_00165F80[0].q;
+                ((Vec4 *)g_debug_camera.basis)[1].q = D_L00_00165F80[1].q;
+                ((Vec4 *)g_debug_camera.basis)[2].q = D_L00_00165F80[2].q;
+                vendor_menu.state = 2;
+                vendor_menu.f8 = 0;
+                vendor_menu.f4 = 0;
+                if (hero.items[0].moby != 0) {
+                    FUN_00204a40(((VendorMoby *)hero.items[0].moby)->oclass, -1);
+                    ((VendorMoby *)hero.items[0].moby)->pclass =
+                        D_L00_00197300[((VendorMoby *)hero.items[0].moby)->class_id];
+                    FUN_0020c880(hero.items[0].moby);
+                }
+            }
+        } else if (D_L00_00161E38 != 0) {
+            FUN_L00_0029b680();
+        }
+        FUN_L00_0023ac78(1);
+        break;
+    case 3:
+        FUN_L00_00297e30();
+        FUN_00212e28();
+        FUN_0022dc50();
+        FUN_L00_002070d0();
+        FUN_00217b88();
+        D_L00_0016C860.f38++;
+        D_L00_0016C860.f34++;
+        if (D_L00_0016C860.h40 - 12 < D_L00_0016C860.f34) {
+            fade_level += 0.1f;
+            if (fade_level > 1.0f) {
+                fade_level = 1.0f;
+            }
+        } else {
+            fade_level -= 0.125f;
+            if (fade_level < 0.0f) {
+                fade_level = 0.0f;
+            }
+        }
+        cs = &D_L00_0016C860;
+        if (cs->f34 >= cs->h40) {
+            fade_level = 0.0f;
+            FUN_002335a0();
+            D_L00_0016CAF0 = 0.63f;
+            FUN_001f2d98();
+            for (j = 0; j < D_L00_0016C860.h44; j++) {
+                m2 = D_L00_0016C860.f178[j];
+                if (m2 != 0) {
+                    m2->pclass->count--;
+                    m2->pclass->slots[m2->pclass->count] = 0;
+                    FUN_0020c828(m2);
+                }
+            }
+            if (vendor_menu.f28 != 0) {
+                FUN_L00_0029af80();
+            } else {
+                FUN_L00_0029ab70(1);
+            }
+            break;
+        }
+        lim = D_0015ED80 ? 0x50 : 0x60;
+        if (cs->f38 >= lim) {
+            cs->f3C++;
+            FUN_002049f0(cs->f3C);
+        }
+        cam = &cs->f54[cs->f38];
+        rot = cam->rot;
+        flag = cam->flag;
+        D_L00_0016CAF0 = rot[3];
+        FUN_001f2d98();
+        qcopy(D_L00_00166C80.pos.f, cam);
+        FUN_001f9cf8(D_L00_00166C80.pos.f, D_L00_00166C80.pos.f, vendor_menu.f80);
+        FUN_001f9a10(D_L00_00166C80.pos.f, D_L00_00166C80.pos.f, &vendor_menu.fC0);
+        ang = FUN_001fa580(rot[2], vendor_menu.f80[3].f[2]);
+        FUN_00125218(m);
+        FUN_00125360(m, m, rot[0]);
+        FUN_00125408(m, m, rot[1]);
+        FUN_001252b8(m, m, ang);
+        D_L00_00166C80.basis[0] = -m[2][0];
+        D_L00_00166C80.basis[4] = -m[0][0];
+        D_L00_00166C80.basis[8] = m[1][0];
+        D_L00_00166C80.basis[1] = -m[2][1];
+        D_L00_00166C80.basis[5] = -m[0][1];
+        D_L00_00166C80.basis[9] = m[1][1];
+        D_L00_00166C80.basis[2] = -m[2][2];
+        D_L00_00166C80.basis[6] = -m[0][2];
+        D_L00_00166C80.basis[10] = m[1][2];
+        for (i = 0; i < D_L00_0016C860.h44; i++) {
+            mb = D_L00_0016C860.f178[i];
+            id = D_L00_0016C860.f38 >> 1;
+            mb->next_frame = id + 1;
+            mb->frame = id;
+            FUN_0020c880(mb);
+            mb->blend = FUN_001fa6c0(D_L00_0016C860.f38 & 1) * 0.5f;
+            if (flag && (D_L00_0016C860.f38 & 1)) {
+                mb->blend = 1.0f;
+            }
+            keys = mb->keys;
+            FUN_001f9a68(&a, &keys[mb->frame], 1.0f - mb->blend);
+            FUN_001f9a68(&b, &keys[mb->next_frame], mb->blend);
+            FUN_001f9a10(&mb->pos, &a, &b);
+            FUN_001f9cf8(&mb->pos, &mb->pos, vendor_menu.f80);
+            FUN_001f9a10(&mb->pos, &mb->pos, &vendor_menu.fC0);
+            mb->rot.f[2] = vendor_menu.f80[3].f[2];
+            mb->b71 = 0xFF;
+            FUN_L00_00250df8(mb);
+            if (mb->b7F) {
+                FUN_00213700(mb);
+            }
+            if (mb->oclass == 0) {
+                FUN_L00_00234b38(mb);
+            }
+        }
+        FUN_00201a28();
+        FUN_L00_00297e70();
+        break;
+    }
+    FUN_0022ca50();
+}

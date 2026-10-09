@@ -7,7 +7,8 @@ typedef struct {
     char pad0[0x8];
     int unk08;
     int *unk0C;
-    char pad10[0x38];
+    char pad10[0x34];
+    int icon;           /* 0x44: icon sprite id */
     short unk48;
     short unk4A;
     char pad4C[0x4];

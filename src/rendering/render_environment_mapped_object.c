@@ -1,18 +1,9 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002327a0/FUN_002327a0.s", FUN_002327a0);
-#else
-#include "types.h"
 #include "eetypes.h"
 #include "qcopy.h"
+#include "rnc/math/vector.h"
 
 typedef float FloatVector4[4] __attribute__((aligned(16)));
-
-typedef struct {
-    u128 q;
-} Quadword;
 
 typedef struct {
     s16 vertex_index;
@@ -45,12 +36,12 @@ extern s32 D_001604AC __attribute__((sda));
 extern s32 environment_mesh_colors[2] __asm__("D_00160520") __attribute__((sda));
 extern s32 environment_mesh_vertex_counts[2] __asm__("D_00160530") __attribute__((sda));
 extern s32 environment_mesh_quad_counts[2] __asm__("D_00160540") __attribute__((sda));
-extern Quadword *environment_mesh_normals[2] __asm__("D_00160550") __attribute__((sda));
-extern Quadword *environment_mesh_positions[2] __asm__("D_00160560") __attribute__((sda));
+extern Vec4 *environment_mesh_normals[2] __asm__("D_00160550") __attribute__((sda));
+extern Vec4 *environment_mesh_positions[2] __asm__("D_00160560") __attribute__((sda));
 extern IndexedQuad *environment_mesh_quads[2] __asm__("D_00160570") __attribute__((sda));
 extern EnvironmentCameraState D_00186F40;
 extern FloatVector4 camera_position __asm__("D_00187080");
-extern Quadword D_001DC4E0[];
+extern Vec4 D_001DC4E0[];
 extern float D_001DCB40[][2];
 extern float D_001DCE70[][2];
 
@@ -72,7 +63,7 @@ extern void calculate_object_transform(EnvironmentMappedObject *, int,
 void render_environment_mapped_object(EnvironmentMappedObject *object) __asm__("FUN_002327a0");
 
 void render_environment_mapped_object(EnvironmentMappedObject *object) {
-    Quadword quad_positions[4];
+    Vec4 quad_positions[4];
     int colors[4];
     float texture_coordinates[4][2];
     u64 quad_state[4];
@@ -81,8 +72,8 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     FloatVector4 reflection;
     FloatVector4 view_direction;
     IndexedQuad *indexed_quads;
-    Quadword *positions;
-    Quadword *normals;
+    Vec4 *positions;
+    Vec4 *normals;
     int quad_count;
     int vertex_count;
     int class_index;
@@ -90,9 +81,7 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     int mapping_enabled;
     float transition_fraction;
     float sphere_denominator;
-    float new_u;
-    float new_v;
-    float old_v;
+    float coordinate;
     int element_index;
     int corner_index;
 
@@ -143,16 +132,15 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
             sphere_denominator = square_root_float(reflection[2] * 2.0f) * 2.0f;
             if (D_001604A4 == 1 || D_001604AC == 0) {
                 D_001DCB40[element_index][0] = reflection[0] / sphere_denominator + 0.5f;
-                new_v = reflection[1] / sphere_denominator + 0.5f;
+                D_001DCB40[element_index][1] = reflection[1] / sphere_denominator + 0.5f;
             } else {
-                new_u = D_001DCE70[element_index][0];
-                new_v = reflection[0] / sphere_denominator + 0.5f;
-                D_001DCB40[element_index][0] = new_v + (new_u - new_v) * transition_fraction;
-                new_v = reflection[1] / sphere_denominator + 0.5f;
-                old_v = D_001DCE70[element_index][1];
-                new_v = new_v + (old_v - new_v) * transition_fraction;
+                coordinate = reflection[0] / sphere_denominator + 0.5f;
+                D_001DCB40[element_index][0] =
+                    coordinate + (D_001DCE70[element_index][0] - coordinate) * transition_fraction;
+                coordinate = reflection[1] / sphere_denominator + 0.5f;
+                D_001DCB40[element_index][1] =
+                    coordinate + (D_001DCE70[element_index][1] - coordinate) * transition_fraction;
             }
-            D_001DCB40[element_index][1] = new_v;
         }
         if (D_001604A4 == 1) {
             D_001604A4 = 2;
@@ -188,4 +176,3 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
 extern __typeof__(render_environment_mapped_object) func_002327A0
     __attribute__((alias("FUN_002327a0")));
 
-#endif /* NON_MATCHING */

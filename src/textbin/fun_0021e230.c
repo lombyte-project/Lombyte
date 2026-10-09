@@ -2,34 +2,12 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "qcopy.h"
+#include "rnc/gameplay/entities/moby.h"
 
-struct PreviewMobyResource {
-    u8 pad0[0xC];
-    u8 animation_count;
-};
 struct ItemPreviewVars {
     void *owner;
     u8 pad4[8];
     s32 item_index;
-};
-struct ItemPreviewMoby {
-    u8 pad0[0x10];
-    f32 x;
-    f32 y;
-    f32 z;
-    u8 pad1C[8];
-    struct PreviewMobyResource *resource;
-    u8 pad28[0xC];
-    s16 flags;
-    u8 pad36[0xA];
-    f32 rotation_x;
-    f32 rotation_y;
-    f32 rotation_z;
-    u8 pad4C[0x28];
-    void (*update)();
-    struct ItemPreviewVars *preview_vars;
-    u8 pad7C[0x2A];
-    s16 oclass;
 };
 struct ItemPreviewBinding {
     u8 pad0[0x14];
@@ -39,8 +17,8 @@ struct ItemPreviewBinding {
     s32 state;
     f32 rotation_angle;
     u8 pad3C[8];
-    struct ItemPreviewMoby *primary_moby;
-    struct ItemPreviewMoby *secondary_moby;
+    struct Moby *primary_moby;
+    struct Moby *secondary_moby;
 };
 struct PreviewItemDefinition {
     u8 pad0[8];
@@ -80,19 +58,19 @@ extern struct PreviewClassResource *moby_class_resources[] __asm__("D_001B3200")
 extern void update_item_preview_transform() __asm__("FUN_0021e698");
 
 extern void func_001E9470(s32, s32);
-extern void func_001E9478(struct ItemPreviewMoby *, s32);
+extern void func_001E9478(struct Moby *, s32);
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
-extern void set_moby_animation(struct ItemPreviewMoby *, s32, s32) __asm__("func_00212ED8");
-extern struct ItemPreviewMoby *create_menu_preview_moby(s32) __asm__("func_00225490");
-extern struct ItemPreviewMoby *delete_moby(struct ItemPreviewMoby *) __asm__("FUN_00225530");
+extern void set_moby_animation(struct Moby *, s32, s32) __asm__("func_00212ED8");
+extern struct Moby *create_menu_preview_moby(s32) __asm__("func_00225490");
+extern struct Moby *delete_moby(struct Moby *) __asm__("FUN_00225530");
 
 s32 update_item_preview_binding(struct ItemPreviewBinding *preview) __asm__("FUN_0021e230");
 
 s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
     struct MenuScreen *grid;
-    struct ItemPreviewMoby *moby;
-    struct ItemPreviewMoby *secondary_moby;
+    struct Moby *moby;
+    struct Moby *secondary_moby;
     struct PreviewItemDefinition *definition;
     s32 item_index;
     s32 previous_class;
@@ -103,7 +81,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
     s32 use_alternate_x;
     s32 animation_index;
     s32 last_animation;
-    struct ItemPreviewMoby *source_moby;
+    struct Moby *source_moby;
     s32 is_type2;
     struct ItemPreviewVars *preview_vars;
     s32 is_type1;
@@ -182,17 +160,17 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             } else {
                 position_x = camera_x + preview_placements[item_index].normal_x;
             }
-            moby->x = position_x;
-            moby->y = preview_camera.y + preview_placements[item_index].y;
-            moby->z = preview_camera.z + preview_placements[item_index].z;
-            moby->rotation_x = preview_placements[item_index].rotation_x;
-            moby->rotation_y = preview_placements[item_index].rotation_y;
-            moby->rotation_z = 3.1415927f;
+            moby->pos.x = position_x;
+            moby->pos.y = preview_camera.y + preview_placements[item_index].y;
+            moby->pos.z = preview_camera.z + preview_placements[item_index].z;
+            moby->rot.x = preview_placements[item_index].rotation_x;
+            moby->rot.y = preview_placements[item_index].rotation_y;
+            moby->rot.z = 3.1415927f;
             moby->update = update_item_preview_transform;
-            preview_vars = moby->preview_vars;
+            preview_vars = (struct ItemPreviewVars *)moby->pvars;
             preview_vars->owner = preview;
             preview_vars->item_index = item_index;
-            last_animation = moby->resource->animation_count - 1;
+            last_animation = moby->pclass->seq_count - 1;
             if (animation_index < last_animation) {
                 last_animation = animation_index;
             }
@@ -203,17 +181,17 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             if (moby != 0) {
                 moby->flags = 0;
                 source_moby = preview->primary_moby;
-                qcopy(&moby->x, &source_moby->x);
-                qcopy(&moby->rotation_x, &source_moby->rotation_x);
+                qcopy(&moby->pos, &source_moby->pos);
+                qcopy(&moby->rot, &source_moby->rot);
                 preview->secondary_moby = moby;
                 moby->update = update_item_preview_transform;
-                secondary_vars = moby->preview_vars;
+                secondary_vars = (struct ItemPreviewVars *)moby->pvars;
                 secondary_vars->item_index = item_index;
                 secondary_vars->owner = preview;
                 set_moby_animation(moby,
-                                   (animation_index < moby->resource->animation_count - 1)
+                                   (animation_index < moby->pclass->seq_count - 1)
                                        ? animation_index
-                                       : moby->resource->animation_count - 1,
+                                       : moby->pclass->seq_count - 1,
                                    0);
             }
         }

@@ -6,6 +6,8 @@
 #include "rnc/overlay/collision.h"
 #include "rnc/overlay/entities.h"
 #include "rnc/gameplay/hero.h"
+#include "qcopy.h"
+#include "rnc/math/circle_offset.h"
 
 #define NOT_SDA
 
@@ -151,7 +153,49 @@ void FUN_L01_00228870(void) {
     FUN_L01_00228e38();
     FUN_L00_00208b60();
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00228e38.s", FUN_L01_00228e38);
+extern int current_level_index __asm__("D_0015ED84");
+extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
+extern void FUN_L00_00250320(struct Moby *, int *, int *, int *);
+extern void FUN_L00_002502f0(struct Moby *, int, int, int);
+extern void FUN_L00_002072c8(void);
+extern void FUN_L00_00207330(struct Moby *, struct Moby *);
+
+/*
+ * Blinks the hero's moby colour for the first 30 frames of states 0x80 and
+ * 0x82 (and of state 0x76 for 20 frames in levels 15 and 17), then, when the
+ * equipped item is a gold weapon, runs FUN_L00_00207330 on its moby.
+ */
+void FUN_L01_00228e38(void)
+{
+    /* three scalars, not an array: an int[3] changes the stack layout */
+    int r, g, b;
+    int blink;
+
+    blink = 0;
+    if (hero.state.current == 0x80 || hero.state.current == 0x82)
+        blink = hero.state_timer < scale_game_frames(30);
+    if (current_level_index == 0xF || current_level_index == 0x11) {
+        if (hero.state.current == 0x76 && hero.state_timer < scale_game_frames(20))
+            blink = 1;
+    }
+    if (blink) {
+        FUN_L00_00250320(hero.moby, &r, &g, &b);
+        if (hero.state_timer % 4 < 3) {
+            r = 0;
+            g = 0;
+            b = 0;
+        } else {
+            r = 0x90;
+            g = 0x90;
+            b = 0xF0;
+        }
+        FUN_L00_002502f0(hero.moby, r, g, b);
+        FUN_L00_002072c8();
+    }
+    if (hero.items[0].item_id >= 0 && gold_weapon_purchased[hero.items[0].item_id] != 0
+        && hero.items[0].moby != 0)
+        FUN_L00_00207330(hero.items[0].moby, hero.moby);
+}
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
 #endif
@@ -267,7 +311,125 @@ void FUN_L01_0022cd48(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d090.s", FUN_L01_0022d090);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d838.s", FUN_L01_0022d838);
+extern CollisionHit coll_hit __asm__("D_L01_001742C0") __attribute__((section(".data")));
+/* line query from -> to; fills the collision hit record, nonzero on a hit */
+extern int collision_line(void *from, void *to, int mask, void *ignore, int) __asm__("FUN_001efa68");
+extern int collision_hit_material(void) __asm__("FUN_001f0b58");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
+
+/*
+ * Ledge probe, FUN_L00_0020c758 without its hero.unk20A4 == 1 variant:
+ * steps forward from `pos` along the hero's yaw looking for a flat top
+ * (normal within 20 degrees of up, not material 9 or 12) at least 1.8 above
+ * the floor and not above pos + up, then for the wall under it. Returns 1 when the hero (facing `*dir`) faces that wall within
+ * 65 degrees and the ledge edge is found within 2.4 units along it.
+ * Constants live in locals because retail loads each one once.
+ */
+int FUN_L01_0022d838(Vec4 *pos, f32 *dir)
+{
+    Vec4 probe, top, low, wall, edge;
+    f32 drop, fwd, up, reach;
+    f32 ang, wall_yaw, d, step, top_margin, max_slope, one, five, half, inc, limit;
+    int found, hit, i, j, material;
+
+    if (hero.unk308 == 2)
+        return 0;
+
+    drop = -0.7f;
+    fwd = 0.3f;
+    up = 1.5f;
+    reach = 1.15f;
+    wall_yaw = 0.0f;
+    found = 0;
+    qcopy(&probe, pos);
+    step = 0.25f;
+    i = 0;
+    top_margin = 0.15f;
+    max_slope = 0.34906584f;       /* 20 degrees */
+    probe.f[0] += fast_cos(hero.motion.rot.f[2]) * hero.unk234;
+    probe.f[1] += fast_sin(hero.motion.rot.f[2]) * hero.unk234;
+    do {
+        probe.f[0] += fast_cos(hero.motion.rot.f[2]) * fwd * step;
+        probe.f[1] += fast_sin(hero.motion.rot.f[2]) * fwd * step;
+        qcopy(&top, &probe);
+        top.f[2] += up + top_margin;
+        qcopy(&low, &probe);
+        low.f[2] += reach;
+        if (collision_line(&top, &low, 4, hero.moby, 0)) {
+            material = collision_hit_material();
+            if (material != 9 && material != 12) {
+                if (atan2_f(coll_hit.normal_z, vector_length_xy(&coll_hit.normal_x)) < max_slope)
+                    found = 1;
+            }
+        }
+        i++;
+        if (found)
+            break;
+    } while (i < 4);
+    if (!found)
+        return 0;
+    if (pos->f[2] + up < coll_hit.point.f[2])
+        return 0;
+
+    qcopy(&top, &coll_hit.point);
+    ang = atan2_f(top.f[0] - pos->f[0], top.f[1] - pos->f[1]);
+    if (top.f[2] - hero.unk2D8.f < 1.8f)
+        return 0;
+
+    /* the wall below the top, tested at five heights */
+    five = 5.0f;
+    one = 1.0f;
+    hit = 0;
+    for (j = 0; j < 5; j++) {
+        qcopy(&low, pos);
+        qcopy(&wall, &top);
+        circle_offset(&wall, ang, hero.unk234);
+        wall.f[2] += drop * (one - j / five);
+        low.f[2] = wall.f[2];
+        if (collision_line(&low, &wall, 2, 0, 0)) {
+            hit = 1;
+            wall_yaw = atan2_f(coll_hit.normal_x, coll_hit.normal_y);
+            break;
+        }
+    }
+    if (!hit)
+        return 0;
+
+    if (fast_difference_between_rotations(*dir, fast_add_rotations(wall_yaw, 3.14159274f)) < 1.13446403f) {
+        /* walk along the wall normal until the top ends */
+        limit = 2.4f;
+        inc = 0.07f;
+        d = 0.0f;
+        half = 0.5f;
+        do {
+            qcopy(&wall, &top);
+            wall.f[2] = top.f[2];
+            wall.f[0] += fast_cos(wall_yaw) * d;
+            wall.f[1] += fast_sin(wall_yaw) * d;
+            qcopy(&low, &wall);
+            wall.f[2] += half;
+            low.f[2] -= half;
+            if (collision_line(&wall, &low, 4, hero.moby, 0)) {
+                d += inc;
+                continue;
+            }
+            /* edge found: its point is computed but unused, as in retail */
+            qcopy(&edge, &wall);
+            d = inc * half;
+            d = -d;
+            edge.f[2] = top.f[2];
+            edge.f[0] += fast_cos(wall_yaw) * d;
+            edge.f[1] += fast_sin(wall_yaw) * d;
+            if (0.52359879f < fast_difference_between_rotations(fast_add_rotations(wall_yaw, 3.14159274f), *dir))
+                return 0;
+            return 1;
+        } while (d < limit);
+    }
+    return 0;
+}
 /* Starts a level scene: resets the player state, takes the new moby and sets up its flags. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00231960), where it is exact; names translated to the US level program. */
 
@@ -971,7 +1133,168 @@ s32 FUN_L01_00233940(s32 mode) {
     return 1;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00234358.s", FUN_L01_00234358);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0023c710.s", FUN_L01_0023c710);
+#include "eetypes.h"
+#include "qcopy.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/input/pad_state.h"
+
+typedef struct {
+    s32 w0;
+    u8 pad4[0x70 - 4];
+} Entry70_23c710;
+
+extern struct Hero hero_b __asm__("D_0013F350");
+extern struct PadState D_0013C940_23c710 __asm__("D_0013C940");
+extern Entry70_23c710 D_L01_00179D70_23c710[] __asm__("D_L01_00179D70");
+extern s32 D_L01_0015F5C4_23c710 __asm__("D_L01_0015F5C4");
+extern u8 D_0013D4C0_23c710[] __asm__("D_0013D4C0");
+extern f32 D_0015ED6C_23c710 __asm__("D_0015ED6C");
+
+extern void FUN_L00_002165b8_23c710(void) __asm__("FUN_L00_002165b8");
+extern s32 FUN_001f9740_23c710(s32 *) __asm__("FUN_001f9740");
+extern s16 FUN_001f9770_23c710(s16 *) __asm__("FUN_001f9770");
+extern void FUN_L01_00231450_23c710(void) __asm__("FUN_L01_00231450");
+extern s32 FUN_001f96f8_23c710(s32) __asm__("FUN_001f96f8");
+extern s32 FUN_L00_00266d60_23c710(s32, s32, s32) __asm__("FUN_L00_00266d60");
+extern struct Moby *FUN_0020c4f8_23c710(s32) __asm__("FUN_0020c4f8");
+extern void FUN_L00_00250df8_23c710(struct Moby *) __asm__("FUN_L00_00250df8");
+extern void FUN_L01_00231348_23c710(s32, s32, struct Moby *) __asm__("FUN_L01_00231348");
+extern f32 FUN_L00_00233a78_23c710(void *) __asm__("FUN_L00_00233a78");
+extern void FUN_001f99f8_23c710(void *) __asm__("FUN_001f99f8");
+extern void FUN_001f9a28_23c710(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001f9a10_23c710(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f9a68_23c710(void *, void *, f32) __asm__("FUN_001f9a68");
+extern f32 FUN_001f9af0_23c710(void *) __asm__("FUN_001f9af0");
+extern void FUN_L00_00221b68_23c710(void) __asm__("FUN_L00_00221b68");
+extern void FUN_L00_00233660_23c710(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
+extern void FUN_L00_00211250_23c710(void) __asm__("FUN_L00_00211250");
+
+void FUN_L01_0023c710(void) {
+    Vec4 sum;
+    Vec4 d;
+    struct Moby *m;
+    s32 i;
+    s32 n;
+    s32 n8;
+
+    if (hero.unk20AD == 0) {
+        FUN_L00_002165b8_23c710();
+    }
+    hero.state_timer++;
+    hero.unk19C++;
+    hero.unk1A0++;
+    hero.unk1A4++;
+    FUN_001f9740_23c710(&hero.unk1C4);
+    FUN_001f9740_23c710(&hero.unk1C0);
+    FUN_001f9770_23c710(&hero.unk1B2);
+    FUN_001f9740_23c710(&hero.unk1B8);
+    FUN_001f9770_23c710(&hero.unk1D8);
+    FUN_001f9770_23c710(&hero.unk1DE);
+    FUN_001f9740_23c710(&hero.unk1B4);
+    FUN_001f9770_23c710(&hero.unk1F0);
+    FUN_001f9770_23c710(&hero.unk1B0);
+    FUN_001f9770_23c710(&hero.unk1C8);
+    FUN_001f9770_23c710(&hero.unk1CA);
+    FUN_001f9770_23c710(&hero.unk1E4);
+    FUN_001f9770_23c710(&hero.unk1E6);
+    FUN_001f9740_23c710(&hero.unk1CC);
+    FUN_001f9740_23c710(&hero.unk1D0);
+    FUN_001f9740_23c710(&hero.unk1D4);
+    FUN_001f9770_23c710(&hero.unk1E8);
+    FUN_001f9770_23c710(&hero.unk1E0);
+    FUN_001f9770_23c710(&hero.unk1EE);
+    FUN_001f9770_23c710(&hero.unk1EA);
+    FUN_001f9770_23c710(&hero.unk1F4);
+    FUN_001f9770_23c710(&hero.unk1F2);
+    FUN_001f9770_23c710(&hero.unk1DC);
+    FUN_001f9770_23c710(&hero.unk1F6);
+    FUN_001f9770_23c710(&hero.unk1DA);
+    FUN_001f9770_23c710(&hero.unk1F8);
+    if (!(D_0013C940_23c710.held & 5)) {
+        hero.unk1EC = 0;
+    }
+    if (hero.unk20A8 != 0) {
+        hero.unk1BC++;
+    } else {
+        hero.unk1BC = 0;
+    }
+    if (D_0013C940_23c710.no_direction != 0) {
+        hero.unk1A8 = 0;
+        hero.unk1AC++;
+    } else {
+        hero.unk1AC = 0;
+        hero.unk1A8++;
+    }
+    if (hero.unk22DE != 0 && FUN_001f9770_23c710(&hero.unk22DE) != 0 &&
+        hero.health.hp != 0 && D_L01_0015F5C4_23c710 == 0) {
+        if (hero.unk20A4 == 3) {
+            FUN_L01_00231450_23c710();
+            if (FUN_L00_00266d60_23c710(0x80, FUN_001f96f8_23c710(0x12), 0)) {
+                hero.unk20A6 = 1;
+            }
+        } else {
+            m = FUN_0020c4f8_23c710(0x27A);
+            hero.unkA8C = m;
+            if (m != 0) {
+                qcopy(&m->pos, &hero.motion.pos);
+                qcopy(&m->rot, &hero.motion.rot);
+                m->unk32 = 0x40;
+                ((struct Moby *)hero.unkA8C)->unk31 = 1;
+                ((struct Moby *)hero.unkA8C)->unk90 = 0;
+                ((struct Moby *)hero.unkA8C)->spawn_frame = hero.moby->spawn_frame;
+                FUN_L00_00250df8_23c710(hero.unkA8C);
+                FUN_L01_00231348_23c710(3, 0x53, hero.unkA8C);
+            }
+        }
+    }
+    for (i = 0; i < 5; i++) {
+        FUN_001f9740_23c710(&D_L01_00179D70_23c710[i].w0);
+    }
+    hero.unk22B8 = 9999.0f;
+    if (hero.unk30E.s != 0 && FUN_L00_00233a78_23c710(&hero.motion.velocity) < 0.0f) {
+        if (hero.unk21B4 != 0x20) goto skip;
+        FUN_001f99f8_23c710(&sum);
+        n8 = 8;
+        for (i = 0; i < n8; i++) {
+            n = hero.unk21B0 - i;
+            {
+                s32 a = (n + 0x1F) % 32;
+                s32 b = (n + 0x1E) % 32;
+                FUN_001f9a28_23c710(&d, &hero.unk1B00[a], &hero.unk1B00[b]);
+            }
+            FUN_001f9a10_23c710(&sum, &sum, &d);
+        }
+        FUN_001f9a68_23c710(&sum, &sum, 1.0f / (f32)n8);
+        if (FUN_001f9af0_23c710(&sum) < D_0015ED6C_23c710) {
+            hero.unk1E2++;
+            goto skip;
+        }
+    }
+    hero.unk1E2 = 0;
+skip:
+    FUN_L00_00221b68_23c710();
+    FUN_L00_00233660_23c710(&hero_b.motion.unkD0, 0.0f, 0.0f, 0.7f);
+    if (D_0013D4C0_23c710[0x22]) {
+        hero_b.unk2288 = 12.0f;
+        hero_b.unk228C = 4.5f;
+    } else {
+        hero_b.unk2288 = 3.0f;
+        hero_b.unk228C = 1.75f;
+    }
+    {
+        f32 z = hero.unk2D8.f;
+        if (hero.motion.pos.f[2] - z < 4.0f) {
+            qcopy(&hero.motion.unkC0, &hero.motion.pos);
+            hero.motion.unkC0.f[2] = z + 0.5f;
+        } else {
+            qcopy(&hero.motion.unkC0, &hero.motion.unkD0);
+        }
+    }
+    if (hero.motion.pos.f[2] < 1.0f) {
+        FUN_L00_00211250_23c710();
+    }
+}
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00240CE8), where it is exact; names translated to the US level program. */
 
 void FUN_L01_002405a0(void) {

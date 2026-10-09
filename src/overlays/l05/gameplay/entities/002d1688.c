@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/moby_anim.h"
 
 #define NOT_SDA
@@ -347,15 +348,15 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char *D_L05_001B0CB0_x[] __asm__("D_L05_001B0930");
 extern int func_001F9908_v(void *) __asm__("FUN_001f9740");
 
-void FUN_L05_002dac80(unsigned char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L05_002dac80(struct Moby *m) {
+    char *d = (char *)m->pvars;
     float dir[4];
     FUN_L05_002daf58_c(m);
-    switch (m[0x20]) {
+    switch (m->state) {
     case 0:
-        m[0x20] = 1;
-        m[0x30] = 0x40;
-        if (m[0x53] != 0)
+        m->state = 1;
+        m->unk30 = 0x40;
+        if (m->prev_seq != 0)
             blend_moby_animation_c(m, 0, 0, 0);
         if (*(int *)(d + 0xB0) == -1 || *(int *)D_L05_001B0CB0_x[*(int *)(d + 0xB0)] == 0) {
             mark_moby_for_removal(m);
@@ -373,16 +374,16 @@ void FUN_L05_002dac80(unsigned char *m) {
         break;
     case 1: {
         char *p = D_L05_001B0CB0_x[*(int *)(d + 0xB0)] + *(int *)(d + 0xB4) * 16;
-        float yaw = FUN_001f9e90(*(float *)(p + 0x10) - *(float *)(m + 0x10),
-                                 *(float *)(p + 0x14) - *(float *)(m + 0x14));
-        FUN_L00_0025be00((float *)(m + 0x48), (float *)(d + 0xBC), yaw, D_0015ED70 * 1.0471976f,
+        float yaw = FUN_001f9e90(*(float *)(p + 0x10) - m->pos.x,
+                                 *(float *)(p + 0x14) - m->pos.y);
+        FUN_L00_0025be00(&m->rot.z, (float *)(d + 0xBC), yaw, D_0015ED70 * 1.0471976f,
                          D_0015ED70 * 1.0471976f, D_0015ED6C * 3.1415927f);
-        dir[0] = fast_cos_c(*(float *)(m + 0x48));
-        dir[1] = fast_sin_c(*(float *)(m + 0x48));
+        dir[0] = fast_cos_c(m->rot.z);
+        dir[1] = fast_sin_c(m->rot.z);
         dir[2] = 0.0f;
         FUN_L00_00258b50(m, d + 0x60, dir, d + 0x40, 1.0f);
         if (func_001F9908_v(d + 0xB8) != 0 ||
-            FUN_001f9b80(m + 0x10, D_L05_001B0CB0_x[*(int *)(d + 0xB0)] +
+            FUN_001f9b80(&m->pos, D_L05_001B0CB0_x[*(int *)(d + 0xB0)] +
                                        (*(int *)(d + 0xB4) * 16 + 0x10)) < 1.0f) {
             int r = random_integer_below_c(*(int *)D_L05_001B0CB0_x[*(int *)(d + 0xB0)]);
             *(int *)(d + 0xB4) =
@@ -393,11 +394,11 @@ void FUN_L05_002dac80(unsigned char *m) {
         break;
     }
     case 2:
-        if (48.0f < FUN_001f9b80(m + 0x10, D_0013F3D0)) {
-            m[0x20] = 1;
-            m[0x31] = 1;
-            *(unsigned short *)(m + 0x34) &= 0xFFFE;
-            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+        if (48.0f < FUN_001f9b80(&m->pos, D_0013F3D0)) {
+            m->state = 1;
+            m->unk31 = 1;
+            m->flags &= 0xFFFE;
+            m->unk94 = m->pclass->unk10;
         }
         break;
     }
@@ -497,7 +498,69 @@ void FUN_L05_002db238(void *moby, void *dir) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00301f48.s", FUN_L05_00301f48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303390.s", FUN_L05_00303390);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303b08.s", FUN_L05_00303b08);
+#include "rnc/gameplay/entities/moby.h"
+
+/* Pvars of a path-walking moby (only the fields this walker touches). */
+typedef struct {
+    u8 pad0[0xD0];
+    u8 move[0x24];        /* 0xD0: ground-move state */
+    f32 speed;            /* 0xF4 */
+    u8 padF8[0x164 - 0xF8];
+    s32 mode;             /* 0x164: 2 once the path is finished */
+    u8 pad168[0x280 - 0x168];
+    Vec4f goal;           /* 0x280: current path target */
+    f32 yaw_vel;          /* 0x290 */
+    u8 pad294[0x2C0 - 0x294];
+    s32 path;             /* 0x2C0 */
+    s32 path_pos;         /* 0x2C4 */
+    u8 pad2C8[0x2D4 - 0x2C8];
+    s32 stuck_timer;      /* 0x2D4 */
+} PathWalkerVars;
+
+extern f32 D_L05_00161A98 __attribute__((sda));
+extern s32 follow_path(void *, s32, s32, void *, s32, void *, f32) __asm__("FUN_L01_00276fe8");
+extern f32 angle_diff(f32, f32) __asm__("FUN_001fa688");
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern f32 approach_angle(f32 *angle, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025be00");
+extern s32 FUN_L05_00303e50(char *moby, float *goal, float s);
+extern f32 FUN_L05_00304058(s32, void *, void *, f32);
+
+/* Walks m toward its next path node, steering `side` radians off the direct heading while
+   FUN_L05_00303e50 reports the way blocked; slows near the goal and arms the stuck timer
+   when it drifts off the path. */
+void FUN_L05_00303b08(struct Moby *m, s32 node, f32 side) {
+    PathWalkerVars *v = (PathWalkerVars *)m->pvars;
+    Vec4f dir, out, goal;
+    f32 a;
+    f32 dist;
+
+    if ((((s32)m >> 8) & 3) == (D_L05_0015F5CC_2d7020 & 3)) {
+        if (follow_path(&v->path, 1, v->path_pos, &m->pos, node, &v->goal, D_L05_00161A98 * 0.4f) == 0)
+            v->mode = 2;
+    }
+    qcopy(&goal, &v->goal);
+    dist = FUN_001f9b80(&m->pos, &goal);
+    if (dist > 5.0f && side != 0.0f && FUN_L05_00303e50((char *)m, (float *)&goal, D_L05_00161A98 * 0.4f)) {
+        a = FUN_001fa580(FUN_001f9e90(goal.x - m->pos.x, goal.y - m->pos.y), side);
+        approach_angle(&m->rot.z, a, &v->yaw_vel, D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f,
+                       D_0015ED6C * 25.132742f);
+    } else {
+        approach_angle(&m->rot.z, FUN_001f9e90(goal.x - m->pos.x, goal.y - m->pos.y), &v->yaw_vel,
+                       D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 25.132742f);
+    }
+    if (angle_diff(m->rot.z, FUN_001f9e90(goal.x - m->pos.x, goal.y - m->pos.y)) < 1.5707964f && dist > 3.0f)
+        approach_value(&v->speed, D_0015ED6C * 6.0f, D_0015ED70 * 6.0f);
+    else
+        approach_value(&v->speed, D_0015ED6C, D_0015ED70 * 6.0f);
+    dir.x = FUN_001f9dc8(m->rot.z) * 2.0f;
+    dir.y = FUN_001f9de0(m->rot.z) * 2.0f;
+    dir.z = 0.0f;
+    FUN_L00_00258b50(m, v->move, &dir, &out, 1.0f);
+    if (v->stuck_timer == 0) {
+        if (FUN_L05_00304058(v->path, &m->pos, &m->pos, D_L05_00161A98 * 0.4f) > 2.0f)
+            v->stuck_timer = FUN_001f96f8(5);
+    }
+}
 extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f9dc8_c(float) __asm__("FUN_001f9dc8");
@@ -703,7 +766,95 @@ void FUN_L05_00306e10(char *obj) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307570.s", FUN_L05_00307570);
+/* Same routine as FUN_L16_002d0058 without the pitch step: times the leap animation to the
+ * remaining jump, then copies the animation speed to the rider. */
+struct LeapVars {
+    u8 pad0[0x208];
+    f32 height;           /* 0x208 */
+    u8 pad20C[0xC];
+    f32 targetHeight;     /* 0x218 */
+    u8 pad21C[0x30];
+    f32 verticalSpeed;    /* 0x24C */
+    u8 pad250[0x18];
+    struct Moby *rider;   /* 0x268 */
+    s32 timer;            /* 0x26C */
+    u8 pad270[2];
+    s16 sequence;         /* 0x272 */
+};
+
+extern float D_0015ED70;
+extern int FUN_001f96f8(int);
+extern int FUN_001fa6d0(float);
+extern int FUN_L00_00257b90(int, int);
+extern int FUN_L00_002595a0(float *, float *, float, float, float);
+extern float FUN_0020c9e0(struct Moby *);
+extern void leap_anim_307570(struct Moby *, int, int, int) __asm__("FUN_L05_00307480");
+
+void FUN_L05_00307570(struct Moby *m) {
+    float root0, root1;
+    struct LeapVars *d = (struct LeapVars *)m->pvars;
+
+    if (d->timer != 0) {
+        float duration;
+        float acceleration;
+        if (m->prev_seq != 5 && FUN_001f96f8(3) >= d->timer) {
+            leap_anim_307570(m, 5, 1, FUN_001f96f8(5));
+            d->sequence = -1;
+        }
+        acceleration = D_0015ED70 * 21.0f * -0.5f;
+        duration = 30.0f;
+        if (FUN_L00_002595a0(&root0, &root1, acceleration, d->verticalSpeed - acceleration,
+                             d->height - d->targetHeight) > 0 &&
+            root0 > 0.0f) {
+            duration = FUN_001fa6d0(root0);
+        }
+        if (FUN_001f96f8(7) < d->timer && FUN_001f96f8(11) > d->timer && m->prev_seq == 5 &&
+            (float)FUN_001f96f8(27) < duration) {
+            short sequence;
+            int chosen;
+            chosen = FUN_L00_00257b90(0, 3) + 1;
+            d->sequence = chosen;
+            sequence = chosen;
+            leap_anim_307570(m, sequence, 1, FUN_001f96f8(7));
+        }
+        if (d->sequence != -1) {
+            if (m->seq == m->prev_seq) {
+                float frame = FUN_0020c9e0(m);
+                if (frame > 7.0f && frame < 20.0f && duration != 0.0f) {
+                    float speed = 30.0f / duration;
+                    if (speed > 1.7f)
+                        speed = 1.7f;
+                    if (speed < 0.3f)
+                        speed = 0.3f;
+                    m->unk58 = speed;
+                }
+            }
+            if (d->sequence != -1) {
+                if (duration < (float)FUN_001f96f8(9)) {
+                    leap_anim_307570(m, 5, 3, FUN_001f96f8(7));
+                    d->sequence = -1;
+                } else if (m->unk70 & 2) {
+                    leap_anim_307570(m, 5, 2, FUN_001f96f8(7));
+                    d->sequence = -1;
+                }
+            }
+        }
+        if (m->seq == m->prev_seq && m->seq == 5 && duration != 0.0f) {
+            float remaining;
+            remaining = 25.0f;
+            remaining -= FUN_0020c9e0(m);
+            remaining /= duration * 0.5f;
+            m->unk58 = remaining;
+        }
+    } else {
+        m->unk58 = 1.0f;
+        if ((m->unk70 & 2) && m->prev_seq != 0) {
+            leap_anim_307570(m, 0, 0, FUN_001f96f8(8));
+        }
+    }
+    if (d->rider != 0)
+        d->rider->unk58 = m->unk58;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307910.s", FUN_L05_00307910);
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_0030D230), where it is exact; names translated to the US level program. */
 

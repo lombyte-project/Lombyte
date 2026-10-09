@@ -3,6 +3,7 @@
 #include "asm.h"
 
 #include "sda.h"
+#include "rnc/gameplay/entities/moby.h"
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
@@ -10,20 +11,20 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
 extern void FUN_L01_00278e20(void *, int);
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
 
-void FUN_L12_0030b6c8(char *m) {
+void FUN_L12_0030b6c8(struct Moby *m) {
     int hit = 0;
     char *r = FUN_L00_0025a420(m, 0x10000, 0);
-    switch (*(unsigned char *)(m + 0x20)) {
+    switch (m->state) {
     case 0:
-        m[0x20] = 1;
+        m->state = 1;
         break;
     case 1:
         if (r != 0 && *(float *)(r + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
-            m[0x20] = 2;
+            m->state = 2;
         break;
     case 2:
         allocate_voice_for_target_entry(0, 0, (int)m);
