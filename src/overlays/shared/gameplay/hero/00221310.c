@@ -2986,27 +2986,27 @@ int FUN_L00_002279b0(void) {
     float v2[4];
     float t;
     float scale;
-    if ((p->state.current) == 0x6A) {
+    if (p->state.current == 0x6A) {
         return 0;
     }
     r = 0;
     if (p->base_condition != 0) {
-        if ((p->state.control_mode) == 0x11) {
-            if ((p->state.step) != 1) {
-                if (0.0f < (p->motion.unk100.f[2])) {
-                    if ((p->height_threshold) - 0.4f < (p->motion.pos.f[2])) {
+        if (p->state.control_mode == 0x11) {
+            if (p->state.step != 1) {
+                if (0.0f < p->motion.unk100.f[2]) {
+                    if (p->height_threshold - 0.4f < p->motion.pos.f[2]) {
                         r = 1;
                     }
                 }
             }
-        } else if ((p->state.control_mode) != 0x12 && (p->state.control_mode) != 3) {
+        } else if (p->state.control_mode != 0x12 && p->state.control_mode != 3) {
             t = 0.2f;
-            if (t < AbsoluteFloat((p->motion.velocity.f[2])) + 0.07f) {
-                t = AbsoluteFloat((p->motion.velocity.f[2])) + 0.07f;
+            if (t < AbsoluteFloat(p->motion.velocity.f[2]) + 0.07f) {
+                t = AbsoluteFloat(p->motion.velocity.f[2]) + 0.07f;
             }
-            if (AbsoluteFloat((p->height_threshold) - ((p->motion.pos.f[2]) + 0.45f)) < t) {
-                if ((p->state.control_mode) != 4 || p->unk41E != 0) {
-                    if (0.8f < (p->unk22A4) && (p->motion.unk100.f[2]) < 0.0f) {
+            if (AbsoluteFloat(p->height_threshold - (p->motion.pos.f[2] + 0.45f)) < t) {
+                if (p->state.control_mode != 4 || p->unk41E != 0) {
+                    if (0.8f < p->unk22A4 && p->motion.unk100.f[2] < 0.0f) {
                         r = 1;
                     }
                 }
@@ -3021,12 +3021,12 @@ int FUN_L00_002279b0(void) {
     }
     p = &hero;
     t = 0.27f;
-    if (t < AbsoluteFloat((p->motion.velocity.f[2])) + 0.07f) {
-        t = AbsoluteFloat((p->motion.velocity.f[2]));
+    if (t < AbsoluteFloat(p->motion.velocity.f[2]) + 0.07f) {
+        t = AbsoluteFloat(p->motion.velocity.f[2]);
     }
-    if ((p->state.current) == 0x12) {
+    if (p->state.current == 0x12) {
         if (p->unk41E != 0) {
-            if ((p->motion.pos.f[2]) < (p->height_threshold) - 0.7f) {
+            if (p->motion.pos.f[2] < p->height_threshold - 0.7f) {
                 r = 1;
             }
         }

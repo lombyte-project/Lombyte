@@ -154,7 +154,6 @@ typedef union {
     u128_229910_00229910 q_00229910;
     float f[4];
 } V_229910_00229910;
-extern char D_0013F350_00229910[] __asm__("D_0013F350");
 extern float D_L00_00173E68_00229910 __asm__("D_L00_00173E68") __attribute__((section(".data")));
 extern int FUN_001f96f8_00229910(int) __asm__("FUN_001f96f8");
 extern float FUN_001f9e90_00229910(float, float) __asm__("FUN_001f9e90");
@@ -164,23 +163,23 @@ extern float FUN_001f9de0_00229910(float) __asm__("FUN_001f9de0");
 extern int FUN_001efa68_00229910(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 
 int FUN_L00_00229910(void) {
-    char *g = D_0013F350_00229910;
+    struct Hero *g = &hero;
     V_229910_00229910 v, w;
     float d;
-    if ((*(float *)(g + 0x164)) < (*(float *)(g + 0x234)) / (float)FUN_001f96f8_00229910(20))
+    if (g->motion.unk164 < g->unk234 / (float)FUN_001f96f8_00229910(20))
         return 0;
-    if (0.52359879f < FUN_001fa688_00229910(FUN_001f9e90_00229910((*(float *)(g + 0x100)),
-                                                                  (*(float *)(g + 0x104))),
-                                            (*(float *)(g + 0x98))))
+    if (0.52359879f < FUN_001fa688_00229910(FUN_001f9e90_00229910(g->motion.unk100.f[0],
+                                                                  g->motion.unk100.f[1]),
+                                            g->motion.rot.f[2]))
         return 0;
-    qcopy(&v, g + 0x80);
-    v.f[0] += FUN_001f9dc8_00229910((*(float *)(g + 0x98))) * (*(float *)(g + 0x234)) * 0.75f;
-    v.f[1] += FUN_001f9de0_00229910((*(float *)(g + 0x98))) * (*(float *)(g + 0x234)) * 0.75f;
+    qcopy(&v, &g->motion.pos);
+    v.f[0] += FUN_001f9dc8_00229910(g->motion.rot.f[2]) * g->unk234 * 0.75f;
+    v.f[1] += FUN_001f9de0_00229910(g->motion.rot.f[2]) * g->unk234 * 0.75f;
     qcopy(&w, &v);
     v.f[2] += 0.47f;
     w.f[2] -= 1.0f;
-    if (FUN_001efa68_00229910(&v, &w, 2, *(void **)(g + 0x2080), 0)) {
-        d = D_L00_00173E68_00229910 - (*(float *)(g + 0x88));
+    if (FUN_001efa68_00229910(&v, &w, 2, ((void *)g->moby), 0)) {
+        d = D_L00_00173E68_00229910 - g->motion.pos.f[2];
         if (d < 0.37f && -1.0f < d)
             return 1;
     }
