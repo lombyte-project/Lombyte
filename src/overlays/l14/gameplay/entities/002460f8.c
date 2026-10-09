@@ -137,7 +137,7 @@ extern int FUN_L01_00277fb8(void *);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32 FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
-extern void FUN_L14_002ac2b8(char *);
+extern void FUN_L14_002ac2b8(struct Moby *);
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
@@ -320,7 +320,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
         break;
     }
     if (moby->unkBC != 2) {
-        FUN_L14_002ac2b8((char *)moby);
+        FUN_L14_002ac2b8(moby);
     }
     subtract_vector_xyz(&delta, &moby->pos, &orig);
     FUN_L00_00260738(vars->carry, &delta, &moby->rot, &moby->rot);
