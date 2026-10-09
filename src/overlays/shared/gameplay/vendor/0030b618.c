@@ -405,7 +405,224 @@ void FUN_L01_0030ded0(char *moby) {
     enqueue_callback_list_1_alt(FUN_L01_0030de68, moby);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030df40.s", FUN_L01_0030df40);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00314e98.s", FUN_L01_00314e98);
+/* Camera blocks FUN_L01_00314e98 resets (camera + 0x70 and its preset row in D_L01_0015EF50) */
+typedef struct {
+    Vec4 pos;           /* 0x00 */
+    u8 pad10[0x30];
+    s32 state;          /* 0x40 */
+    u8 pad44[4];
+    f32 max_angle;      /* 0x48 */
+    f32 dist;           /* 0x4C */
+    u8 pad50[0x10];
+} CameraFocus;
+
+typedef struct {
+    Vec4 vel;           /* 0x00 */
+    u8 pad10[0x10];
+    f32 unk20;          /* 0x20 */
+    f32 unk24;          /* 0x24 */
+    f32 unk28;          /* 0x28 */
+    s16 unk2C;          /* 0x2C */
+    u8 pad2E[0x22];
+} CameraView;
+
+typedef struct {
+    f32 dist;           /* 0x00 */
+    f32 unk4;           /* 0x04 */
+    u8 pad8[8];
+    f32 height;         /* 0x10 */
+    u8 pad14[0xC];
+} CameraSpring;
+
+typedef struct {
+    Vec4 vel;           /* 0x00 */
+    u8 pad10[0x10];
+    Vec4 accel;         /* 0x20 */
+    f32 unk30;          /* 0x30 */
+    f32 unk34;          /* 0x34 */
+    f32 unk38;          /* 0x38 */
+    s32 unk3C;          /* 0x3C */
+    f32 unk40;          /* 0x40 */
+    u8 pad44[0xC];
+} CameraTrack;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+} CameraBlend;
+
+typedef struct {
+    Vec4 axis;          /* 0x00 */
+    f32 unk10;          /* 0x10 */
+    f32 unk14;          /* 0x14 */
+    s32 unk18;          /* 0x18 */
+    s16 mode;           /* 0x1C */
+    u8 pad1E[2];
+    f32 unk20;          /* 0x20 */
+    s32 unk24;          /* 0x24 */
+    u8 pad28[8];
+    CameraView view;    /* 0x30 */
+    CameraFocus focus;  /* 0x80 */
+    CameraSpring spring; /* 0xE0 */
+    CameraTrack track;  /* 0x100 */
+    CameraBlend blend;  /* 0x150 */
+} CameraOrbit;
+
+typedef struct {
+    u8 padA[0xA];
+    s16 mode;           /* 0x7E */
+} CameraControl;
+
+typedef struct {
+    u8 pad0[0x70];
+    CameraOrbit *orbit; /* 0x70 */
+    CameraControl control; /* 0x74 */
+    u8 pad80[4];
+    s16 preset;         /* 0x84: row of D_L01_0015EF50 */
+} Camera;
+
+/* A camera path: the point count, then 16-byte points */
+typedef struct {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 pts[1];        /* 0x10 */
+} CameraPath;
+
+typedef struct {
+    u8 pad0[0x20];
+    s32 track_path;     /* 0x20: D_L01_001B0930 path the first path is measured along */
+    s32 target;         /* 0x24: row of D_L01_0015F70C */
+    s32 path;           /* 0x28: D_L01_001B0930 path */
+    s32 look_path;      /* 0x2C: D_L01_001B0930 path measured along the target's path */
+    s32 kind;           /* 0x30 */
+    s16 ready;          /* 0x34: paths prepared */
+} CameraPreset;
+
+typedef struct {
+    u8 pad0[0x1C];
+    CameraPreset *preset; /* 0x1C */
+} CameraPresetRow;
+
+typedef struct {
+    u8 pad0[0x10];
+    CameraPath *path;   /* 0x10 */
+    u8 pad14[0xC];
+} CameraTarget;
+
+extern CameraPresetRow *D_L01_0015EF50 MACRO_ADDR;
+extern CameraTarget *D_L01_0015F70C;
+extern CameraPath *D_L01_001B0930[];
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
+
+/* Resets the camera's orbit, focus, spring, view and track from fixed values; for a kind 2 preset it
+   also prepares its two paths once, measuring each point against the path it follows. */
+void FUN_L01_00314e98(Camera *cam) {
+    Vec4 at;
+    s32 seg;
+    f32 t;
+    CameraPreset *s = D_L01_0015EF50[cam->preset].preset;
+    CameraControl *control;
+    CameraFocus *focus;
+    CameraSpring *spring;
+    CameraOrbit *orbit;
+    CameraView *view;
+    CameraTrack *track;
+    CameraBlend *blend;
+    CameraPath *a, *b, *c, *d;
+    s32 i, j, k, n, prev;
+
+    focus = &cam->orbit->focus;
+    focus->dist = 1.5f;
+    focus->state = 0;
+    if (s->kind == 3) {
+        focus->dist = 0.5f;
+    }
+    control = &cam->control;
+    focus->max_angle = 0.20943952f;
+    spring = &cam->orbit->spring;
+    spring->dist = 6.0f;
+    spring->unk4 = 0.5f;
+    spring->height = 2.0f;
+    orbit = cam->orbit;
+    orbit->unk10 = 0.01f;
+    orbit->unk14 = 0.175f;
+    orbit->unk18 = 0;
+    orbit->mode = 0;
+    orbit->unk20 = 0.0005f;
+    orbit->unk24 = 0;
+    clear_u64_value(orbit);
+    view = &cam->orbit->view;
+    view->unk20 = 0.01f;
+    view->unk24 = 0.3f;
+    view->unk28 = 0.2f;
+    view->unk2C = 0;
+    clear_u64_value(view);
+    track = &cam->orbit->track;
+    clear_u64_value(track);
+    clear_u64_value(&track->accel);
+    track->unk40 = 3.0f;
+    track->unk30 = 0.003f;
+    track->unk34 = 0.1f;
+    track->unk38 = 0.2f;
+    track->unk3C = 0;
+    blend = &cam->orbit->blend;
+    blend->unk0 = 0;
+    blend->unk4 = 0;
+    blend->unk8 = 0;
+    blend->unkC = 0;
+    blend->unk10 = 1;
+    if (s->kind == 2 && s->ready == 0) {
+        b = D_L01_001B0930[s->track_path];
+        d = D_L01_0015F70C[s->target].path;
+        a = D_L01_001B0930[s->path];
+        c = D_L01_001B0930[s->look_path];
+        s->ready = 1;
+        for (i = 0; i < a->count; i++) {
+            FUN_L00_0025df68(b, &a->pts[i], &at, &seg, &t, 0, 20.0f, 5.0f, 0.0f);
+            a->pts[i].f[0] = a->pts[i].f[3];
+            a->pts[i].f[3] = seg;
+        }
+        prev = a->count - 1;
+        for (i = 0; i < a->count; i++) {
+            j = truncate_float_to_s32(a->pts[prev].f[3]);
+            n = truncate_float_to_s32(a->pts[i].f[3]) - j;
+            if (n < 0) {
+                n += b->count;
+            }
+            t = 0.0f;
+            for (k = 0; k < n; k++) {
+                t += b->pts[(j + i) % b->count].f[3];
+            }
+            a->pts[i].f[1] = t;
+            prev = i;
+        }
+        for (i = 0; i < c->count; i++) {
+            FUN_L00_0025df68(d, &c->pts[i], &at, &seg, &t, 0, 20.0f, 5.0f, 0.0f);
+            c->pts[i].f[0] = c->pts[i].f[3];
+            c->pts[i].f[3] = seg;
+        }
+        prev = c->count - 1;
+        for (i = 0; i < c->count; i++) {
+            j = truncate_float_to_s32(c->pts[prev].f[3]);
+            n = truncate_float_to_s32(c->pts[i].f[3]) - j;
+            if (n < 0) {
+                n += d->count;
+            }
+            t = 0.0f;
+            for (k = 0; k < n; k++) {
+                t += d->pts[(j + i) % d->count].f[3];
+            }
+            c->pts[i].f[1] = t;
+            prev = i;
+        }
+    }
+    control->mode = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315358.s", FUN_L01_00315358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315de0.s", FUN_L01_00315de0);
 #include "sda.h"
@@ -442,7 +659,7 @@ typedef struct {
 } CamUser_316030;
 
 extern CamSlot_316030 *D_L01_0015EF50_316030 __asm__("D_L01_0015EF50");
-extern CamTarget_316030 *D_L01_0015F70C_316030 __asm__("D_L01_0015F70C") __attribute__((sda));
+extern CamTarget_316030 *D_L01_0015F70C_316030 __asm__("D_L01_0015F70C");
 
 void FUN_L01_00316030(CamUser_316030 *o) {
     CamData_316030 *d = D_L01_0015EF50_316030[o->slot].data;
@@ -484,7 +701,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00319928.s", FUN_L01_00319928);
 
 extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L01_002a1a90(int a, int b, int c, int d, int e);
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
