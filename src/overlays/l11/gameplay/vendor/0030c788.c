@@ -694,9 +694,9 @@ void FUN_L11_00311d50(struct Moby *moby) {
     s32 j;
 
     vu1_add_g_sregister(0x42, 0x8000000044);
-    draw_textured_quad(0x170, D_0013E500.height - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080,
+    draw_textured_quad(0x170, screen_extent.height - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080,
                        get_effect_texture(0x3C));
-    draw_textured_quad(0x170, D_0013E500.height - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080,
+    draw_textured_quad(0x170, screen_extent.height - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080,
                        get_effect_texture(0x3D));
     vu1_add_g_sregister(0x42, 0x8000000048);
     get_effect_texture(0x3E); /* fetched, but nothing below draws with it */

@@ -249,10 +249,10 @@ void FUN_L00_002018c8(void) {
             text = buf;
             break;
         }
-        box = (struct TextRegion){0, D_0013E500.height, 0x60, 0x1A0, 0x100, 0x68, 0, 0, 0x10, 5};
+        box = (struct TextRegion){0, screen_extent.height, 0x60, 0x1A0, 0x100, 0x68, 0, 0, 0x10, 5};
         font_print_window_regular(&box, 0, text, -1);
         h = box.rendered_height + 0x28;
-        y = (D_0013E500.height - h) >> 1;
+        y = (screen_extent.height - h) >> 1;
         box.bottom = y + h;
         box.anchor_y = y + 4;
         box.top = y;
