@@ -422,7 +422,56 @@ void FUN_L00_002061f0(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002062b0.s", FUN_L00_002062b0);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00206c08.s", FUN_L00_00206c08);
+#else
+#include "rnc/audio/voice_pool.h"
+extern void FUN_L00_0028d918(void);
+void FUN_L00_00206c08(void) {
+    u8 *hero_base = (u8 *)&hero;
+    s32 *slot = (s32 *)(hero_base + 0x2218);
+    u8 *owners = hero_base + 0x2238;
+    s32 offset = 0;
+    s32 remaining = 7;
+    s32 invalid = -1;
+    do {
+        s32 index = *slot;
+        void *target = *(void **)(owners + offset);
+        s32 state;
+        if (target != 0) {
+            if (index == invalid)
+                goto clear;
+            if (voice_pool.voices[index].owner != target) {
+                *slot = invalid;
+                goto next;
+            }
+            state = voice_pool.voices[index].state;
+            goto check_state;
+        } else {
+            if (index == invalid)
+                goto clear;
+            if (voice_pool.voices[index].owner !=
+                *(VoiceMoby **)(hero_base + 0x2080)) {
+                *slot = invalid;
+                goto next;
+            }
+            state = voice_pool.voices[index].state;
+        }
+check_state:
+        if (state == 0) {
+            *slot = invalid;
+            goto next;
+        }
+        FUN_L00_0028d918();
+clear:
+        *slot = invalid;
+next:
+        slot++;
+        remaining--;
+        offset += 4;
+    } while (remaining >= 0);
+}
+#endif
 #include "sda.h"
 #include "rnc/overlay/quad.h"
 typedef struct {
