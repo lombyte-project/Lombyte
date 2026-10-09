@@ -430,13 +430,13 @@ extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f460
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L08_002f1548(unsigned char *moby) {
+void FUN_L08_002f1548(struct Moby *moby) {
     int i;
     float v[4];
     float w[4];
     float d;
 
-    switch (moby[0x20]) {
+    switch (moby->state) {
     case 0:
         if (*(int *)&D_L08_00161E04 == 0) {
             FUN_L08_002f0f68(D_L08_001E8310, 0xD, D_L08_001E2858, 0.5f, 0.5f, 0.65f, 0.5f, 1);
@@ -444,7 +444,7 @@ void FUN_L08_002f1548(unsigned char *moby) {
             FUN_L08_002f0f68(D_L08_001E2828, 0xB, D_L08_001DDF40, 0.25f, 0.25f, 0.25f, 1.0f, 1);
             *(int *)&D_L08_00161E04 = 1;
         }
-        moby[0x20] = 1;
+        moby->state = 1;
         for (i = 0; i < 3; i++) {
             D_L08_001E8348[i].a = 0;
             D_L08_001E8348[i].b = 0;

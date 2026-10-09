@@ -19,15 +19,15 @@ extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-int FUN_L08_002e0228(char *m) {
+int FUN_L08_002e0228(struct Moby *m) {
     float a[4];
     float b[4];
-    int *p = (int *)(*(char **)(m + 0x78) + 0x60);
+    int *p = (int *)((char *)m->pvars + 0x60);
     int i;
     for (i = 0; i < 8; i++) {
         if (p[i] != 0) {
             float d;
-            build_spherical_offset(a, 1.0f, *(float *)(m + 0x48), -*(float *)(m + 0x44));
+            build_spherical_offset(a, 1.0f, m->rot.z, -m->rot.y);
             FUN_001f9a28(b, (char *)p[i] + 0x10, D_L08_001675C0);
             FUN_001f9bf8(b, b, 1.0f);
             d = FUN_001f9ab0(b, a);
@@ -46,8 +46,8 @@ int FUN_L08_002e0228(char *m) {
 extern int hero_set_state(int, int) __asm__("FUN_L08_00230b38");
 
 /* Sets the moby's byte 0xBC and calls hero_set_state(0x32, 1). */
-void FUN_L08_002e1698(char *arg) {
-    arg[0xBC] = 1;
+void FUN_L08_002e1698(struct Moby *arg) {
+    arg->unkBC = 1;
     hero_set_state(0x32, 1);
 }
 #include "qcopy.h"
@@ -59,7 +59,7 @@ extern char D_0013E533[];
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00250df8(void *);
 
-void *FUN_L08_002e1c98(char *parent, int oClass, int joint, int pjoint) {
+void *FUN_L08_002e1c98(struct Moby *parent, int oClass, int joint, int pjoint) {
     unsigned char *m = func_0020D348_m(oClass);
     float v0[4], v10[4];
     if (m != 0) {
@@ -68,7 +68,7 @@ void *FUN_L08_002e1c98(char *parent, int oClass, int joint, int pjoint) {
         m[0x31] = 1;
         *(unsigned short *)(m + 0x34) |= 0x4000;
         *(long *)(m + 0x38) = *(long *)(*(char **)(D_0013E533 + 0x2E9D) + 0x38);
-        qcopy(m + 0x40, parent + 0x40);
+        qcopy(m + 0x40, &parent->rot);
         FUN_L00_0024f7c8(m, joint, v0);
         FUN_L00_0024f7c8(parent, pjoint, v10);
         FUN_001f9a28(m + 0x10, v10, v0);
@@ -84,12 +84,12 @@ extern void FUN_001fa050(float *, float *);
 extern void FUN_00214598(void *, void *);
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 
-void FUN_L08_002e4db8(char *a, float *v) {
+void FUN_L08_002e4db8(struct Moby *a, float *v) {
     float m[16];
     float n[16];
     float r[4];
     float s[4];
-    char *d = *(char **)(a + 0x78);
+    char *d = (char *)a->pvars;
     r[1] = v[2];
     r[2] = v[0];
     r[0] = -v[1];
@@ -162,8 +162,8 @@ extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00250df8(void *);
 
-void FUN_L08_002e8ba0(char *a) {
-    char *data = *(char **)(a + 0x78);
+void FUN_L08_002e8ba0(struct Moby *a) {
+    char *data = (char *)a->pvars;
     float v0[4], v10[4], v20[4];
     char *base = data + 0x60;
     int i;
@@ -171,7 +171,7 @@ void FUN_L08_002e8ba0(char *a) {
         int *e = (int *)(base + 0x1C + i * 16);
         char *m = (char *)e[-3];
         if (m != 0) {
-            *(float *)(m + 0x48) = *(float *)(a + 0x48);
+            *(float *)(m + 0x48) = a->rot.z;
             FUN_L00_0024f7c8(m, e[-1], v0);
             FUN_L00_0024f7c8((void *)e[-2], e[0], v10);
             FUN_001f9a28(v20, v10, v0);
@@ -195,8 +195,8 @@ void FUN_L08_002e8ba0(char *a) {
 extern short D_L08_00161D38_d __asm__("D_L08_00161D38") __attribute__((sda));
 extern void FUN_001f9a68(void *, void *, float);
 
-void FUN_L08_002e9a18(char *arg) {
-    char *data = *(char **)(arg + 0x78);
+void FUN_L08_002e9a18(struct Moby *arg) {
+    char *data = (char *)arg->pvars;
     float v0[4];
     float v1[4];
     float v2[4];
@@ -207,7 +207,7 @@ void FUN_L08_002e9a18(char *arg) {
         char *e = parts + 0x1C + i * 16;
         char *part = *(char **)(e - 0xC);
         if (part != 0) {
-            *(float *)(part + 0x48) = *(float *)(arg + 0x48);
+            *(float *)(part + 0x48) = arg->rot.z;
             FUN_L00_0024f7c8(part, *(int *)(e - 4), v0);
             FUN_L00_0024f7c8(*(void **)(e - 8), *(int *)e, v1);
             FUN_001f9a28(v2, v1, v0);
@@ -615,8 +615,8 @@ void FUN_L08_002e24e8(struct Moby *moby) {
 
 extern char *D_L08_0015FFD8;
 
-void FUN_L08_002e2da0(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void FUN_L08_002e2da0(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
     int oclass = 0x279;
     char *base = D_L08_0015FFD8;
     int *ids = (int *)(data + 0x130);
@@ -665,7 +665,7 @@ extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
-void FUN_L08_002e4e90(char *moby, float *out, float *rot) {
+void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
     float r[16];
     float b[16];
     float up[4];
@@ -674,10 +674,10 @@ void FUN_L08_002e4e90(char *moby, float *out, float *rot) {
     float dir[4];
     float u[4];
     float v[4];
-    char *data = *(char **)(moby + 0x78);
+    char *data = (char *)moby->pvars;
     float sx, sy, sz;
     float t;
-    switch (*(short *)(moby + 0xA6)) {
+    switch (moby->oclass) {
     case 0x3DC:
         sx = *(float *)&D_L08_00161C68 * *(float *)&D_L08_00161CB8;
         sy = *(float *)&D_L08_00161C74 * *(float *)&D_L08_00161CB8;
@@ -777,7 +777,7 @@ extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
 extern struct Moby *FUN_L08_002de3e0(void *, struct Moby *, void *, f32, f32);
 extern void FUN_L08_002e8788(char *);
 extern void FUN_L08_002e88d8(struct Moby *);
-extern void FUN_L08_002e8ba0(char *);
+extern void FUN_L08_002e8ba0(struct Moby *);
 
 void FUN_L08_002e8cd0(struct Moby *moby) {
     SwarmVars *vars = (SwarmVars *)moby->pvars;

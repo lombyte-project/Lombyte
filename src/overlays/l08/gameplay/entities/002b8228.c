@@ -17,17 +17,17 @@ extern short D_L08_00161468_d __asm__("D_L08_00161468") __attribute__((sda));
 extern short D_L08_0016146C_d __asm__("D_L08_0016146C") __attribute__((sda));
 extern void FUN_L00_0025d1b8(void *);
 
-void FUN_L08_002b8228(char *moby) {
+void FUN_L08_002b8228(struct Moby *moby) {
     float a = *(float *)&D_L08_00161468_d;
     float b = *(float *)&D_L08_0016146C_d;
     char *d;
-    *(float *)(moby + 0x40) = 0.0f;
-    *(float *)(moby + 0x44) = 0.5235988f;
-    *(float *)(moby + 0x48) = 0.0f;
-    d = *(char **)(moby + 0x78);
+    moby->rot.x = 0.0f;
+    moby->rot.y = 0.5235988f;
+    moby->rot.z = 0.0f;
+    d = (char *)moby->pvars;
     *(float *)(d + 0xC) = random_float_between_alt(a, b);
     *(int *)(d + 0x28) = 0;
-    *(float *)(d + 8) = *(float *)(moby + 0x18);
+    *(float *)(d + 8) = moby->pos.z;
     FUN_L00_0025d1b8(moby);
     *(int *)(d + 0x24) = FUN_L08_00279f00(moby);
 }
@@ -229,8 +229,8 @@ extern float FUN_001f9b48(void *, void *);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern short *D_L08_001AC040[];
 
-char *FUN_L08_002daa10(char *moby) {
-    short *t = D_L08_001AC040[(unsigned char)moby[0x21]];
+char *FUN_L08_002daa10(struct Moby *moby) {
+    short *t = D_L08_001AC040[moby->unk21];
     char *best;
     char *p;
     float bestD, bestA;
@@ -246,13 +246,13 @@ char *FUN_L08_002daa10(char *moby) {
     for (;;) {
         if (*(short *)(p + 0xA6) != 0x14D && *(unsigned char *)(p + 0xBC) == 0) {
             float ang, d, a;
-            a = FUN_001f9e90(*(float *)(p + 0x10) - *(float *)(moby + 0x10),
-                             *(float *)(p + 0x14) - *(float *)(moby + 0x14));
+            a = FUN_001f9e90(*(float *)(p + 0x10) - moby->pos.x,
+                             *(float *)(p + 0x14) - moby->pos.y);
             base = D_0013F350;
             ang = fast_difference_between_rotations(
-                a, FUN_001f9e90(*(float *)(base + 0x80) - *(float *)(moby + 0x10),
-                                *(float *)(base + 0x84) - *(float *)(moby + 0x14)));
-            d = FUN_001f9b48(moby + 0x10, p + 0x10);
+                a, FUN_001f9e90(*(float *)(base + 0x80) - moby->pos.x,
+                                *(float *)(base + 0x84) - moby->pos.y));
+            d = FUN_001f9b48(&moby->pos, p + 0x10);
             if (ang < 1.5707964f) {
                 if (bestA < ang) {
                     best = p;
@@ -316,10 +316,10 @@ extern f32 camera_distance_to(void *, void *) __asm__("FUN_001f9b48");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 extern void FUN_L08_002dc4a0(struct Moby *);
-void FUN_L08_002dc0c8(char *moby);
+void FUN_L08_002dc0c8(struct Moby *moby);
 void FUN_L08_002dc180(struct Moby *moby);
-int FUN_L08_002dc648(char *m);
-void FUN_L08_002dc7f0(char *moby);
+int FUN_L08_002dc648(struct Moby *m);
+void FUN_L08_002dc7f0(struct Moby *moby);
 
 /* Lift update: runs the lift's state machine (0 setup, 2 carry the hero
  * when riding, 3 travel to the selected stop) and moves anything riding it
@@ -398,13 +398,13 @@ extern int D_L08_001B0CB0[];
 extern void FUN_001f9cf8(void *, void *, void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L08_002dc0c8(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void FUN_L08_002dc0c8(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
     int *t = (int *)D_L08_001B0CB0[*(int *)(data + 0x8C)];
     if (*t == 8) {
         char *q = D_L08_001DB280;
-        char *mat = moby + 0xC0;
-        char *pos = moby + 0x10;
+        char *mat = &moby->unkC0;
+        char *pos = &moby->pos;
         char *p = (char *)t + 0x10;
         int i;
         for (i = 7; i >= 0; i--) {
@@ -523,8 +523,8 @@ extern float D_0015ED70_q __asm__("D_0015ED70");
 extern void sample_camera_path_q(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
 float AbsoluteFloat_q(float input) __asm__("FUN_001f99c0");
 
-int FUN_L08_002dc648(char *m) {
-    char *d = *(char **)(m + 0x78);
+int FUN_L08_002dc648(struct Moby *m) {
+    char *d = (char *)m->pvars;
     int *path;
     float a = D_0015ED70_q * 0.1f;
     float b = D_0015ED6C_q * 0.08f;
@@ -557,8 +557,8 @@ int FUN_L08_002dc648(char *m) {
 
 extern int D_L08_001B0CB0[];
 
-void FUN_L08_002dc7f0(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void FUN_L08_002dc7f0(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
     if (*(float *)(data + 0x104) > 0.9f) {
         try_set_help_message(0xA, 0x1F4D);
     } else if (*(int *)(data + 0x120) == D_L08_001B0CB0[*(int *)(data + 0x80)]) {
@@ -626,7 +626,7 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L08_002dec90(char *m, char *pos) {
+void FUN_L08_002dec90(struct Moby *m, char *pos) {
     float v10[4];
     float v20[4];
     float v30[4];
@@ -635,12 +635,12 @@ void FUN_L08_002dec90(char *m, char *pos) {
     float v60[4];
     int a, b, c, d, e;
     char *r;
-    subtract_vector_xyz(v30, m + 0x10, pos);
+    subtract_vector_xyz(v30, &m->pos, pos);
     *(OvlQuad *)v60 = 0;
     v60[0] = -2.3f;
     v60[2] = 0.3f;
-    transform_vector_by_basis(v50, v60, m + 0xC0);
-    add_vector_xyz(v50, v50, m + 0x10);
+    transform_vector_by_basis(v50, v60, &m->unkC0);
+    add_vector_xyz(v50, v50, &m->pos);
     scale_vector_xyz(v10, v30, *(float *)&D_L08_00161A48);
     scale_vector_xyz(v20, v30, *(float *)&D_L08_00161A4C);
     FUN_L00_00257d78(v40, 0.0f, *(float *)&D_L08_00161A50 * D_0015ED6C);
