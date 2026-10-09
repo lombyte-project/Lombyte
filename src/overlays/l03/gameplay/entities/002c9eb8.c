@@ -1571,7 +1571,138 @@ void FUN_L03_002db280(struct RailSpawnerMoby *moby) {
         vars->voice = FUN_L00_0028dc90(0, 4, moby, 0x382);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db558.s", FUN_L03_002db558);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dbd90.s", FUN_L03_002dbd90);
+
+/* Pvars of the dialogue moby FUN_L03_002dbd90 drives (FUN_L00_002668a0 / FUN_L00_00266448 state). */
+struct TalkerVars {
+    u8 pad0[4];
+    s16 mode;         /* 0x04: 2 when the talk ends in a warp */
+    u8 pad6[0x30];
+    s16 unk36;
+    u8 pad38[0x14];
+    s32 warp;         /* 0x4C: index into D_L03_001600EC, -1 for none */
+};
+
+typedef struct {
+    u8 pad0[0x20];
+    struct Moby *source;  /* 0x20 */
+    u32 pad24;
+    u8 type;              /* 0x28 */
+} TalkerHit;
+
+extern L03LevelState D_L03_001BB330;
+extern s32 D_0014C190[][64];
+extern s32 D_L03_001BA5D0[];
+extern u8 D_0013D388[];
+extern u8 D_0013D408[];
+extern u8 D_0013D4CC[];
+extern char *D_001413D0[];
+extern char D_L03_00166EC0[];
+extern char *D_L03_001600EC;
+extern void FUN_L00_0025a120(struct Moby *);
+extern void FUN_00212ed8(struct Moby *, int, int);
+extern TalkerHit *talker_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
+extern void FUN_0022db10(int, int, int);
+extern void FUN_L00_00263d40(int, int);
+extern void talker_spawn_debris(struct Moby *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32,
+                             f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
+extern int talker_init(struct Moby *, struct TalkerVars *) __asm__("FUN_L00_002668a0");
+extern int talker_update(struct Moby *, struct TalkerVars *) __asm__("FUN_L00_00266448");
+extern void FUN_L01_002783a8(struct Moby *, f32);
+extern void FUN_L00_00284e50(void *, void *);
+extern f32 talker_rand_angle(void) __asm__("FUN_00213308");
+extern f32 talker_rand_range(f32, f32) __asm__("FUN_002132a8");
+extern f32 talker_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 talker_sin(f32) __asm__("FUN_001f9de0");
+extern s32 talker_rand_below(s32) __asm__("FUN_00213260");
+extern void FUN_L00_0026ced0(void *, void *, u32, u32, s32, f32);
+
+/* A talking moby that can be shot down: talks (and may warp the hero) when
+ * approached, and once hit by a type 3 hit or already recorded as collected
+ * it breaks, records its save bit, and keeps sparking. */
+void FUN_L03_002dbd90(struct Moby *m) {
+    struct TalkerVars *d = (struct TalkerVars *)m->pvars;
+    TalkerHit *hit;
+    u8 type;
+    char *w;
+    OvlVec4 vel;
+    OvlVec4 pos;
+    float tmp[4];
+
+    if (m->unk31 != 0 && FUN_001f9b48(&m->pos, D_L03_00166EC0) < 26.0f) {
+        FUN_L00_0025a120(m);
+        m->unk7F = 0x15;
+    }
+    if (D_L03_001BB330.collected[(s16)m->save_id] != 0 ||
+        (D_0014C190[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) & 1) {
+        if (m->state != 3) {
+            m->state = 3;
+            FUN_00212ed8(m, 1, 0);
+        }
+    }
+    hit = talker_find_hit(m, -1, 0);
+    if (hit != 0 && hit->source != 0 && (type = hit->type) == 3 &&
+        D_L03_001BB330.collected[(s16)m->save_id] == 0 &&
+        (((D_0014C190[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) ^ 1) & 1)) {
+        if (D_0013D408[5] == 0) {
+            D_0013D408[5] = 1;
+            FUN_0022db10(1, 0, 0);
+            FUN_L00_00263d40(0x53D6, -1);
+        }
+        pos.q = *(OvlQuad *)&m->pos;
+        pos.f[2] += 1.0f;
+        vel.q = 0;
+        talker_spawn_debris(m, &vel, &pos, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
+        m->state = type;
+        FUN_00212ed8(m, 1, 0);
+        D_0014C190[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+        D_L03_001BA5D0[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+    }
+    m->unkA4 = 0xFF;
+    if (D_0013D4CC[0] != 0 && m->state != 3) {
+        return;
+    }
+    switch (m->state) {
+    case 0:
+        m->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
+        m->state = 1;
+        talker_init(m, d);
+        if (D_0013D388[0x19] != 0) {
+            d->mode = 1;
+            d->unk36 = 2;
+        }
+        break;
+    case 1:
+        if (talker_update(m, d)) {
+            D_0013D388[0x19] = 1;
+            FUN_L01_002783a8(m, 2.7f);
+            m->state = 2;
+        }
+        break;
+    case 2:
+        if (D_L03_0015F5C4 == 2) {
+            break;
+        }
+        m->state = 1;
+        if (d->mode == 2 && d->warp != -1) {
+            w = D_L03_001600EC + d->warp * 128;
+            FUN_L00_00284e50(w + 0x30, w + 0x70);
+        }
+        break;
+    case 3:
+        vel.f[0] = talker_cos(talker_rand_angle()) * (talker_rand_range(0.0f, 0.25f) * frame_time);
+        vel.f[1] = talker_sin(talker_rand_angle()) * (talker_rand_range(0.0f, 0.25f) * frame_time);
+        vel.f[2] = 0.0f;
+        pos.f[0] = talker_cos(talker_rand_angle()) * talker_rand_range(0.0f, 0.5f) * talker_rand_range(0.0f, 1.0f);
+        pos.f[1] = talker_sin(talker_rand_angle()) * talker_rand_range(0.0f, 0.5f) * talker_rand_range(0.0f, 1.0f);
+        pos.f[2] = 0.0f;
+        FUN_L00_001ff290(tmp, &pos, &m->pos);
+        if (talker_rand_below(3) == 0) {
+            FUN_L00_0026ced0(&pos, &vel, 0x20202020, 0x7F7F7F, scale_game_frames(FUN_L00_00257b90(0x3C, 0x78)),
+                             157500.0f);
+        }
+        break;
+    }
+}
 int FUN_L03_002dcb30(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     if (moby->oclass != 0x3F4) {
