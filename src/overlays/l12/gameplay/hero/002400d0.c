@@ -562,7 +562,7 @@ int hero_set_state(int a, int b) {
                     t->unk194 = frame_time * 7.7f;
                 t->motion.velocity.f[2] = 0.0f;
                 FUN_L00_0025f730(&t->motion.velocity, frame_time * 7.7f);
-                t->unk3B4 = 0;
+                t->unk3B4.i = 0;
                 t->state.current = 0x2F;
                 FUN_L00_002323b8(0x37, 0, (float)scale_game_frames(8));
             } else if (t->unk20A9 != 0 || t->state.current == 0x73) {

@@ -256,7 +256,7 @@ struct Hero {
     union { s16 s; u16 u; } air_frames; /* 0x30E: frames off the ground, 0 on landing */
     u8 pad_310[0xA0];
     f32 unk3B0;                    /* 0x3B0 */
-    s32 unk3B4;                    /* 0x3B4 */
+    union { f32 f; s32 i; } unk3B4; /* 0x3B4: written as a float and zeroed as an int */
     s16 unk3B8;                    /* 0x3B8 */
     u8 pad_3BA[0x2];
     s16 unk3BC;                    /* 0x3BC */
