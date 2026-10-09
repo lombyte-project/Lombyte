@@ -52,14 +52,50 @@ void FUN_L03_002d3c40(struct Moby *m) {
                      D_L03_00161AFC * DEG_TO_RAD * D_0015ED6C,
                      D_L03_00161B00 * DEG_TO_RAD * D_0015ED6C);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c9eb8.s", FUN_L03_002c9eb8);
 #include "rnc/gameplay/hero.h"
+#include "qcopy.h"
 
-/* Pvars of the l03 trooper (fields its hit handler touches). */
+struct RailPath {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 pts[1];      /* 0x10: xyz point, w length of the segment to the next */
+};
+
+/* What FUN_L03_0024e830 finds within range of a moby (rocket, trooper). */
+typedef struct {
+    Vec4 aim;        /* 0x00: point to aim at (the trooper turns toward it) */
+    u8 pad10[0x10];
+    Vec4 pos;        /* 0x20 */
+    u8 pad30[0x10];
+    s32 found;       /* 0x40 */
+    u8 pad44[0xC];
+} RocketTarget;
+
+/* Patrol state of the l03 trooper: walks back and forth along a rail path. */
+typedef struct {
+    s32 idx;              /* 0x00: path point it is walking to */
+    s8 dir;               /* 0x04: +1 or -1 */
+    u8 pad5[0xB];
+    struct RailPath *path; /* 0x10 */
+    s32 path_index;       /* 0x14: index into D_L03_001B05B0 */
+} TrooperPatrol;
+
+/* Pvars of the l03 trooper. */
 typedef struct {
     u8 pad0[0x20];
     f32 health;           /* 0x20 */
-    u8 pad24[0x3C];
+    s16 unk24;
+    u8 pad26[2];
+    u8 unk28;
+    u8 unk29;
+    u8 pad2A[0xE];
+    s32 alerted;          /* 0x38: set when it is hit */
+    u8 pad3C[4];
+    u8 effect[0x18];      /* 0x40: debris record (FUN_L00_0025e450, FUN_L00_00259028) */
+    u8 unk58;
+    u8 pad59;
+    u8 unk5A;
+    u8 pad5B[5];
     u8 anim[0x10];        /* 0x60: animation driver */
     u8 knockback[0x10];   /* 0x70 */
     f32 kb_speed;         /* 0x80 */
@@ -73,8 +109,230 @@ typedef struct {
     u8 padAE[0x12];
     f32 kb_min;           /* 0xC0 */
     f32 kb_max;           /* 0xC4 */
+    u8 padC8[8];
+    u8 walk[8];           /* 0xD0: walk driver (FUN_L01_0026d930, FUN_L00_00259028) */
+    f32 unkD8;
+    f32 unkDC;
+    u8 padE0[8];
+    f32 fall_speed;       /* 0xE8 */
+    u8 padEC[8];
+    f32 unkF4;
+    u8 padF8[0x14];
+    f32 unk10C;
+    f32 unk110;
+    f32 unk114;
+    u8 pad118[8];
+    TrooperPatrol patrol; /* 0x120 */
+    u8 pad138[0x18];
+    u8 turn[4];           /* 0x150: turn driver (FUN_L00_00258278) */
+    s16 fire_timer;       /* 0x154 */
+    s16 patrol_timer;     /* 0x156 */
+    u8 pad158[4];
+    s32 alert_timer;      /* 0x15C */
+    u8 unk160[0x10];      /* 0x160: FUN_L00_00263ac8 record */
 } TrooperVars;
 
+extern struct RailPath *D_L03_001B05B0[];
+extern float D_0015ED70;
+extern s32 D_L03_00161918 __attribute__((sda));
+extern f32 D_L03_0016191C __attribute__((sda));
+extern f32 D_L03_00161920 __attribute__((sda));
+extern f32 D_L03_00161910 __attribute__((sda));
+extern f32 D_L03_00161914 __attribute__((sda));
+extern char D_L03_00166EC0[];
+extern void FUN_L03_0024e830(void *, void *, f32);
+extern void FUN_L00_00263ac8(struct Moby *, int, void *, f32);
+void FUN_L03_002ca808(struct Moby *m);
+char *FUN_L03_002cc888(char *p, void *pos, float *dir);
+extern s32 trooper_frames(s32) __asm__("FUN_001f96f8");
+extern s32 trooper_tick(s32 *) __asm__("FUN_001f9740");
+extern s32 trooper_tick16(s16 *) __asm__("FUN_001f9770");
+extern void FUN_L01_0026d930(void *);
+extern void trooper_blend_anim(struct Moby *, int, int, int) __asm__("FUN_00212f90");
+extern f32 trooper_atan2_9eb8(f32, f32) __asm__("FUN_001f9e90");
+extern void FUN_L00_00258278(f32, f32, f32, f32, struct Moby *, void *);
+extern f32 trooper_dist(void *, void *) __asm__("FUN_001f9b80");
+extern f32 trooper_dist2(void *, void *) __asm__("FUN_001f9b48");
+extern f32 trooper_fabs(f32) __asm__("FUN_001f99c0");
+extern void FUN_L00_00259028(struct Moby *, void *, void *, void *);
+extern void trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
+extern f32 trooper_itof(s32) __asm__("FUN_001fa6c0");
+extern f32 trooper_rand(f32, f32) __asm__("FUN_002132a8");
+extern void trooper_scale(void *, void *, f32) __asm__("FUN_001f9c48");
+extern void trooper_scale4(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void trooper_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int FUN_L00_0025c698(struct Moby *, void *);
+extern void FUN_L00_0025e450(struct Moby *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32,
+                             f32, s32, s32, s32, s32);
+extern void FUN_L00_00257470(struct Moby *, int, int);
+extern void trooper_kill(struct Moby *) __asm__("FUN_0020c828");
+extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
+extern void FUN_L00_0025a120(struct Moby *);
+
+/* l03 trooper update: patrols its rail path, turns to face the hero once in sight,
+   fires three-shot bursts, falls under gravity and blows up when shot down or
+   when it drops into a pit. */
+void FUN_L03_002c9eb8(struct Moby *m) {
+    TrooperVars *v = (TrooperVars *)m->pvars;
+    TrooperPatrol *pt;
+    struct RailPath *path;
+    float sight;
+    RocketTarget target;
+    float muzzle[4];
+    float vel[4];
+    float spread[4];
+    float scale;
+    float ground;
+    s32 n;
+    s32 i;
+
+    FUN_L03_0024e830(m, &target, 100.0f);
+    sight = 14.0f;
+    FUN_L00_00263ac8(m, 0, v->unk160, 4.5f);
+    FUN_L03_002ca808(m);
+    if (v->alerted) {
+        v->alerted = 0;
+        v->alert_timer = trooper_frames(240);
+    }
+    if (!trooper_tick(&v->alert_timer)) {
+        sight = 28.0f;
+    }
+    switch (m->state) {
+    case 0:
+        FUN_L01_0026d930(v->walk);
+        v->unk10C = D_0015ED70 * 6.2831855f;
+        v->unk114 = D_0015ED6C * 6.2831855f;
+        v->unk110 = D_0015ED70 * 18.849556f;
+        v->unkF4 = D_0015ED6C * 5.0f;
+        v->unk58 = 8;
+        v->unk5A = 8;
+        v->unkDC = 2.0f;
+        v->unkD8 = 2.0f;
+        v->health = 2.0f;
+        v->unk24 = 2;
+        v->unk28 = 1;
+        v->unk29 = 0;
+        path = D_L03_001B05B0[v->patrol.path_index];
+        v->patrol.path = path;
+        qcopy(&m->pos, &path->pts[0]);
+        v->patrol.idx = 1;
+        m->scale *= D_L03_00161920;
+        m->state = 1;
+        if (m->prev_seq != 0) {
+            trooper_blend_anim(m, 0, 0, 0);
+        }
+        break;
+    case 1:
+        FUN_L00_00258278(trooper_atan2_9eb8(target.aim.f[0] - m->pos.x, target.aim.f[1] - m->pos.y), 0.01f, 0.3f, 0.1f, m,
+                         v->turn);
+        if (trooper_dist(&m->pos, &target.aim) < sight && trooper_fabs(target.aim.f[2] - m->pos.z) < 4.0f) {
+            m->state = 2;
+            if (m->prev_seq != 1) {
+                trooper_blend_anim(m, 1, 0, trooper_frames(10));
+            }
+        }
+        break;
+    case 2:
+        if (m->unk70 & 2) {
+            m->state = 3;
+            v->patrol_timer = trooper_frames(120);
+            if (m->prev_seq != 2) {
+                trooper_blend_anim(m, 2, 0, trooper_frames(10));
+            }
+            m->unk58 = D_L03_0016191C;
+            v->fire_timer = trooper_frames(120);
+        }
+        break;
+    case 3:
+        pt = &v->patrol;
+        n = pt->idx;
+        FUN_L00_00259028(m, v->walk, &pt->path->pts[n], v->effect);
+        m->unk58 = D_L03_0016191C;
+        trooper_tick16(&v->patrol_timer);
+        if (trooper_dist2(&m->pos, &pt->path->pts[n]) < 1.0f) {
+            if (v->patrol_timer == 0 && trooper_dist(&m->pos, &target.aim) > 25.0f) {
+                m->state = 1;
+                if (m->prev_seq != 0) {
+                    trooper_blend_anim(m, 0, 0, trooper_frames(10));
+                }
+            } else {
+                n = (pt->idx + pt->path->count + pt->dir) % pt->path->count;
+                if (v->patrol_timer == 0) {
+                    scale = trooper_dist(&target.aim, &pt->path->pts[n]);
+                    if (scale < trooper_dist(&m->pos, &pt->path->pts[n])) {
+                        pt->dir *= -1;
+                        v->patrol_timer = trooper_frames(120);
+                    }
+                }
+                pt->idx = (pt->idx + pt->path->count + pt->dir) % pt->path->count;
+            }
+        }
+        if (trooper_tick16(&v->fire_timer)) {
+            v->fire_timer = trooper_frames(D_L03_00161918);
+            qcopy(muzzle, &m->pos);
+            muzzle[2] += 2.0f;
+            trooper_play_sound(1, 0, m, 0x273);
+            for (i = -2; i < 3; i++) {
+                scale = trooper_itof(i) * trooper_rand(0.9f, 1.1f);
+                trooper_scale(muzzle, &m->unkD0, (float)i * 0.5f);
+                trooper_add(muzzle, muzzle, &m->pos);
+                muzzle[2] += 2.0f;
+                trooper_scale(spread, &m->unkC0, trooper_rand(-1.0f, 1.0f) * D_0015ED6C);
+                trooper_scale(vel, &m->unkD0, D_L03_00161910 * D_0015ED6C);
+                trooper_scale4(vel, vel, scale);
+                trooper_add(vel, vel, spread);
+                vel[2] = D_L03_00161914 * D_0015ED6C * trooper_rand(0.9f, 1.1f);
+                FUN_L03_002cc888((char *)m, muzzle, vel);
+            }
+        }
+        break;
+    case 4:
+        if (FUN_L00_0025c698(m, v->knockback) & 0x60) {
+            if (m->prev_seq != 0) {
+                trooper_blend_anim(m, 0, 0, trooper_frames(10));
+            }
+            m->state = 1;
+        } else if (m->pos.z < 5.0f) {
+            qcopy(muzzle, &m->pos);
+            muzzle[2] += 0.5f;
+            FUN_L00_0025e450(m, v->effect, muzzle, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            FUN_L00_00257470(m, 0, -1);
+            trooper_kill(m);
+            return;
+        }
+        break;
+    case 5:
+        if ((FUN_L00_0025c698(m, v->knockback) & 0x60) || m->pos.z < 5.0f) {
+            qcopy(muzzle, &m->pos);
+            muzzle[2] += 0.5f;
+            FUN_L00_0025e450(m, v->effect, muzzle, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            FUN_L00_00257470(m, 0, -1);
+            trooper_kill(m);
+            return;
+        }
+        break;
+    }
+    if (m->state < 4) {
+        v->fall_speed += D_0015ED70 * 9.8f;
+        m->pos.z -= v->fall_speed - 2.0f;
+        ground = probe_ground_height(&m->pos, 0, 0.5f);
+        m->pos.z -= 2.0f;
+        if (m->pos.z < ground) {
+            m->pos.z = ground;
+            v->fall_speed = 0.0f;
+        } else if (m->pos.z < 5.0f) {
+            qcopy(muzzle, &m->pos);
+            muzzle[2] += 0.5f;
+            FUN_L00_0025e450(m, v->effect, muzzle, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            FUN_L00_00257470(m, 0, -1);
+            trooper_kill(m);
+            return;
+        }
+    }
+    if (m->unk31 != 0 && trooper_dist2(&m->pos, D_L03_00166EC0) < 32.0f) {
+        FUN_L00_0025a120(m);
+    }
+}
 typedef struct {
     u8 pad0[0x10];
     Vec4 pos;             /* 0x10: where the hit landed */
@@ -226,12 +484,6 @@ s32 FUN_L03_002d30d8(u8 *object) {
     return (u32)(object[0x20] - 2) < 5;
 }
 #include "rnc/gameplay/entities/moby.h"
-
-struct RailPath {
-    s32 count;
-    u8 pad4[0xC];
-    Vec4 pts[1];      /* 0x10: xyz point, w length of the segment to the next */
-};
 
 /* Pvars of a rail taxi: up to five routes, each called by a trigger volume and
    made of an outbound path, a return path and an optional onward path. */
@@ -588,15 +840,6 @@ typedef struct {
     f32 turn_vel;    /* 0x20 */
     f32 speed;       /* 0x24 */
 } RocketVars;
-
-/* What FUN_L03_0024e830 finds ahead of the rocket. */
-typedef struct {
-    u8 pad0[0x20];
-    Vec4 pos;        /* 0x20 */
-    u8 pad30[0x10];
-    s32 found;       /* 0x40 */
-    u8 pad44[0xC];
-} RocketTarget;
 
 /* Damage record passed to FUN_L00_00259a88. */
 typedef struct {
