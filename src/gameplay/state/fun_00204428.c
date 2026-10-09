@@ -22,8 +22,8 @@ extern s32 D_0015ED80 MACRO_ADDR;
 extern u16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A;
 extern struct LevelArchiveHeader *D_0015EE4C;
-extern u8 *D_0015EE50;
-extern u8 *D_0015EE54;
+extern u8 *D_0015EE50 MACRO_ADDR;
+extern u8 *D_0015EE54 MACRO_ADDR;
 extern s32 D_0015EEBC __attribute__((sda));
 extern s32 D_0015EEC0 MACRO_ADDR;
 extern u8 D_1FF8000[];
@@ -177,3 +177,7 @@ s32 service_level_archive_load(void) {
 }
 
 extern __typeof__(service_level_archive_load) func_00204428 __attribute__((alias("FUN_00204428")));
+
+/* Defined below their only user, so retail reaches them with lui. */
+u8 *D_0015EE50 MACRO_ADDR = 0;
+u8 *D_0015EE54 MACRO_ADDR = 0;

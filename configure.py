@@ -414,6 +414,8 @@ SDATA_OVERLAYS = {
     "runtime/callbacks/count_vsync": (0x15ED40, 0x5FCC0),
     "runtime/time/set_video_timing": (0x15ED60, 0x5FCE0),
     "ui/fonts/load_debug_font": (0x15EEC8, 0x5FE48),
+    "gameplay/state/fun_00204428": (0x15EE50, 0x5FDD0),
+    "rendering/draw_debug_profiler": (0x15EE40, 0x5FDC0),
     "rendering/vu1_chain": (0x160EE0, 0x61E60),
 }
 
