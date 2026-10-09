@@ -243,6 +243,7 @@
     "assembly/textbin/math/rotations/fast_add_rotations",
     "assembly/textbin/math/rotations/fast_subtract_rotations",
     "assembly/textbin/math/rotations/fast_difference_between_rotations",
+    "assembly/runtime/memory/fill_transfer_words",
     "runtime/cache/synchronize_cache_range",
     "runtime/interrupts/enable_intc",
     "runtime/interrupts/disable_intc",
