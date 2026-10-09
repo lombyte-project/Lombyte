@@ -2,42 +2,42 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4550,
-  "matching_c": 3492,
+  "matching_c": 3505,
   "intentional_asm": 308,
-  "pending_c": 750,
+  "pending_c": 737,
   "bytes_total": 3668944,
-  "bytes_matching_c": 2358592,
+  "bytes_matching_c": 2380060,
   "bytes_intentional_asm": 121292,
-  "bytes_pending_c": 1189060,
-  "c_exact_percent_of_recoverable": 66.4832,
-  "c_fuzzy_percent_of_recoverable": 68.1359,
+  "bytes_pending_c": 1167592,
+  "c_exact_percent_of_recoverable": 67.0883,
+  "c_fuzzy_percent_of_recoverable": 68.7043,
   "boot": {
     "units_total": 1475,
     "groups_total": 129,
-    "matching_c": 1143,
+    "matching_c": 1144,
     "intentional_asm": 246,
-    "pending_c": 86,
+    "pending_c": 85,
     "bytes_total": 448120,
-    "bytes_matching_c": 286612,
+    "bytes_matching_c": 288016,
     "bytes_intentional_asm": 93880,
-    "bytes_pending_c": 67628,
-    "c_exact_percent_of_recoverable": 80.909,
-    "c_fuzzy_percent_of_recoverable": 97.4608,
+    "bytes_pending_c": 66224,
+    "c_exact_percent_of_recoverable": 81.3053,
+    "c_fuzzy_percent_of_recoverable": 97.4891,
     "groups": [
       {
         "name": "game/unclassified",
         "logical_group": "unclassified",
         "category": "game",
         "functions": 146,
-        "matching_c": 17,
-        "pending_c": 30,
+        "matching_c": 18,
+        "pending_c": 29,
         "intentional_asm": 99,
         "bytes_total": 102228,
-        "bytes_matching_c": 11344,
-        "bytes_pending_c": 25552,
+        "bytes_matching_c": 12748,
+        "bytes_pending_c": 24148,
         "bytes_intentional_asm": 65332,
-        "c_exact_percent_of_recoverable": 30.7459,
-        "c_fuzzy_percent_of_recoverable": 89.2948
+        "c_exact_percent_of_recoverable": 34.5512,
+        "c_fuzzy_percent_of_recoverable": 89.5659
       },
       {
         "name": "sdk/library",
@@ -1963,12 +1963,12 @@
   },
   "overlays": {
     "functions_total": 3013,
-    "matching_c": 2349,
-    "pending_c": 664,
+    "matching_c": 2361,
+    "pending_c": 652,
     "bytes_total": 3193412,
-    "bytes_matching_c": 2071980,
-    "bytes_pending_c": 1121432,
-    "c_exact_percent_of_recoverable": 64.883,
+    "bytes_matching_c": 2092044,
+    "bytes_pending_c": 1101368,
+    "c_exact_percent_of_recoverable": 65.5112,
     "intentional_asm": 62,
     "bytes_intentional_asm": 27412,
     "shared": {
@@ -3620,12 +3620,12 @@
         "planet": "Kerwan",
         "description": "Metropolis: the city of towers and trains",
         "functions": 71,
-        "matching_c": 51,
-        "pending_c": 20,
+        "matching_c": 60,
+        "pending_c": 11,
         "bytes_total": 120576,
-        "bytes_matching_c": 86176,
-        "bytes_pending_c": 34400,
-        "c_exact_percent_of_recoverable": 71.4703,
+        "bytes_matching_c": 101516,
+        "bytes_pending_c": 19060,
+        "c_exact_percent_of_recoverable": 84.1925,
         "files": [
           {
             "file": "src/overlays/l03/gameplay/hero/00205830.c",
@@ -3679,9 +3679,9 @@
           {
             "file": "src/overlays/l03/gameplay/entities/00292578.c",
             "functions": 22,
-            "matching_c": 13,
+            "matching_c": 19,
             "bytes_total": 31116,
-            "bytes_matching_c": 13700
+            "bytes_matching_c": 24864
           },
           {
             "file": "src/overlays/l03/gameplay/entities/0029c8a8.c",
@@ -3707,9 +3707,9 @@
           {
             "file": "src/overlays/l03/gameplay/vendor/002df520.c",
             "functions": 9,
-            "matching_c": 5,
+            "matching_c": 8,
             "bytes_total": 5372,
-            "bytes_matching_c": 824
+            "bytes_matching_c": 5000
           },
           {
             "file": "src/overlays/l03/gameplay/vendor/002e2948.c",
@@ -4732,12 +4732,12 @@
         "planet": "Kalebo III",
         "description": "Gadgetron headquarters and the hoverboard finals",
         "functions": 96,
-        "matching_c": 95,
-        "pending_c": 1,
+        "matching_c": 96,
+        "pending_c": 0,
         "bytes_total": 132200,
-        "bytes_matching_c": 131632,
-        "bytes_pending_c": 568,
-        "c_exact_percent_of_recoverable": 99.5703,
+        "bytes_matching_c": 132200,
+        "bytes_pending_c": 0,
+        "c_exact_percent_of_recoverable": 100.0,
         "files": [
           {
             "file": "src/overlays/l16/gameplay/hero/002097a0.c",
@@ -4777,9 +4777,9 @@
           {
             "file": "src/overlays/l16/gameplay/entities/002a3f38.c",
             "functions": 43,
-            "matching_c": 42,
+            "matching_c": 43,
             "bytes_total": 22452,
-            "bytes_matching_c": 21884
+            "bytes_matching_c": 22452
           },
           {
             "file": "src/overlays/l16/gameplay/entities/002cfc00.c",
@@ -4810,12 +4810,12 @@
         "planet": "Veldin Orbit",
         "description": "Drek's Fleet: the flagship boarding",
         "functions": 60,
-        "matching_c": 58,
-        "pending_c": 2,
+        "matching_c": 60,
+        "pending_c": 0,
         "bytes_total": 140376,
-        "bytes_matching_c": 136220,
-        "bytes_pending_c": 4156,
-        "c_exact_percent_of_recoverable": 97.0394,
+        "bytes_matching_c": 140376,
+        "bytes_pending_c": 0,
+        "c_exact_percent_of_recoverable": 100.0,
         "files": [
           {
             "file": "src/overlays/l17/ui/help/002020a8.c",
@@ -4869,16 +4869,16 @@
           {
             "file": "src/overlays/l17/gameplay/entities/002a8da0.c",
             "functions": 8,
-            "matching_c": 7,
+            "matching_c": 8,
             "bytes_total": 8512,
-            "bytes_matching_c": 8184
+            "bytes_matching_c": 8512
           },
           {
             "file": "src/overlays/l17/gameplay/vendor/002e87d8.c",
             "functions": 27,
-            "matching_c": 26,
+            "matching_c": 27,
             "bytes_total": 32056,
-            "bytes_matching_c": 28228
+            "bytes_matching_c": 32056
           },
           {
             "file": "src/overlays/l17/gameplay/vendor/002ea418.c",
@@ -4999,14 +4999,14 @@
   },
   "total": {
     "units_total": 4550,
-    "matching_c": 3492,
+    "matching_c": 3505,
     "intentional_asm": 308,
-    "pending_c": 750,
+    "pending_c": 737,
     "bytes_total": 3668944,
-    "bytes_matching_c": 2358592,
+    "bytes_matching_c": 2380060,
     "bytes_intentional_asm": 121292,
-    "bytes_pending_c": 1189060,
-    "c_exact_percent_of_recoverable": 66.4832,
-    "c_fuzzy_percent_of_recoverable": 68.1359
+    "bytes_pending_c": 1167592,
+    "c_exact_percent_of_recoverable": 67.0883,
+    "c_fuzzy_percent_of_recoverable": 68.7043
   }
 }
