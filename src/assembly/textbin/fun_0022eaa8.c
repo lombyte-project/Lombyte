@@ -115,6 +115,7 @@ typedef struct {
 } ColorPair;
 
 #include "rnc/gameplay/state/level_state.h"
+extern s32 current_level_index __asm__("D_0015ED84");
 extern LevelRenderState level_render_state __asm__("D_0013E030");
 extern u8 D_0013E5C0[];
 extern s32 D_0015ED5C;
