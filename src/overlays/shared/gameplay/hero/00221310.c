@@ -2964,7 +2964,79 @@ int FUN_L00_002276c0(void) {
     }
     return 0;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00227778.s", FUN_L00_00227778);
+#else
+extern unsigned char D_0013D4C0[];
+extern unsigned int D_0013CAE0 __attribute__((section(".data")));
+extern int D_L00_00167014[];
+extern int FUN_L00_001fef20(int);
+extern void FUN_L00_00235700(int, int, void *, void *, void *, void *, int);
+extern void FUN_L00_00236268(void);
+extern void FUN_L00_00236458(void);
+extern void FUN_L00_002365a8(void);
+extern int FUN_L00_001efc70(void *, void *, int, void *, int);
+
+int FUN_L00_00227778(void) {
+    Vec4 start;
+    Vec4 end;
+    int decrement;
+    int state;
+
+    if (hero.state.control_mode == 0x11) {
+        if (D_0013D4C0[6] != 0) {
+            decrement = 0;
+            goto decrement_timer;
+        } else {
+            decrement = 10000 / (FUN_L00_001fef20(0x3C) * 15);
+            FUN_L00_00235700(4, 0x753F, FUN_L00_00236268,
+                FUN_L00_00236458, FUN_L00_002365a8, &hero.unk22A0, 10000);
+        }
+decrement_timer:
+        hero.unk22A0 -= decrement;
+        if (hero.unk22A0 < 0) {
+            hero.unk22A0 = 0;
+        }
+        if (hero.unk22A0 == 0 &&
+            (!(hero.height_threshold - 2.0f < hero.motion.pos.f[2]) ||
+             !(hero.motion.rot.f[1] < -0.87266463f) ||
+             !(D_0015ED6C_2215c8 < hero.motion.unk100.f[2]))) {
+            state = 0x6A;
+            goto change_state;
+        }
+        if (hero.height_threshold + 0.4f < hero.motion.pos.f[2]) {
+            D_L00_00167014[0] = 0;
+            state = 6;
+        } else {
+            goto collision_mode;
+        }
+change_state:
+        hero_set_state(state, 1);
+        return 1;
+    }
+    if (hero.state.current != 0x6A && hero.state.current != 0x76) {
+        hero.unk22A0 = 10000;
+    }
+
+collision_mode:
+    if (hero.state.control_mode != 0x12) {
+        return 0;
+    }
+    qcopy(&start, &hero.motion.pos);
+    start.f[2] = hero.height_threshold + 0.01f;
+    qcopy(&end, &start);
+    end.f[2] += 0.3f;
+    if (!FUN_L00_001efc70(&start, &end, 2, hero.moby, 0)) {
+        return 0;
+    }
+    if (D_0013D4C0[4] != 0 && (D_0013CAE0 & 10) != 0) {
+        hero_set_state(0x35, 1);
+        return 1;
+    }
+    hero_set_state(0x33, 1);
+    return 1;
+}
+#endif
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00228180), where it is exact; names translated to the US level program. */
 
 extern float D_L00_00173E68 __attribute__((section(".data")));
