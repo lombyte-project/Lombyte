@@ -411,6 +411,7 @@ SDATA_OVERLAYS = {
     "audio/rpc/snd_returns": (0x15EC80, 0x5FC00),
     "rendering/debug/print_debug_text": (0x15F000, 0x5FF80),
     "runtime/resources/update_resource_counter": (0x15F8F8, 0x60878),
+    "runtime/callbacks/count_vsync": (0x15ED40, 0x5FCC0),
     "rendering/vu1_chain": (0x160EE0, 0x61E60),
 }
 
