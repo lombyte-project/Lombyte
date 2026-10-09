@@ -851,7 +851,53 @@ s32 FUN_L00_002d5800(T6 *p) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5830.s", FUN_L00_002d5830);
+#include "rnc/globals.h"
+
+typedef struct {
+    u8 pad[0x454];
+    u8 killed[1]; /* per spawn id: spawn slot + 2 */
+} KillFlags;
+/* Row 0 holds the count; the keyed rows follow. */
+typedef struct {
+    s32 count;
+    u8 pad04[8];
+    f32 key;
+} KeyRow;
+typedef struct {
+    s32 table; /* -1, or an index into D_L00_001B04B0 */
+    f32 key;
+} KeyVars;
+extern KillFlags D_L00_001BA5D0 __attribute__((section(".data")));
+extern KillFlags D_L00_001BB230 __attribute__((section(".data")));
+extern u8 D_L00_0015FC88[8];
+extern u8 D_0014C050[][16] __attribute__((section(".data")));
+
+/* Kills a live moby: marks it in the level's spawn tables, starts its death sound and
+ * clears its key out of the shared key table. */
+void FUN_L00_002d5830(struct Moby *m) {
+    KeyVars *v = (KeyVars *)m->pvars;
+    s32 i;
+    if (m->state != 1) {
+        return;
+    }
+    D_L00_001BA5D0.killed[(s16)m->unkB2] = m->unkB0 + 2;
+    if (m->unkB0 == 0xFF || (D_L00_0015FC88[m->unkB0] != 0xFF && D_0014C050[current_level_index][m->unkB0] == 0xFF)) {
+        D_L00_001BB230.killed[(s16)m->unkB2] = m->unkB0 + 2;
+    }
+    m->state = 2;
+    m->unkBC = 1;
+    m->unk90 = 0x80208020;
+    allocate_voice_for_target_entry(0, 0, m);
+    if (v->table == -1) {
+        return;
+    }
+    for (i = 0; i < ((KeyRow *)D_L00_001B04B0_2d0538[v->table])[0].count; i++) {
+        KeyRow *row = &((KeyRow *)D_L00_001B04B0_2d0538[v->table])[i];
+        if (row[1].key == v->key) {
+            row[1].key = 0;
+        }
+    }
+}
 typedef unsigned int u128_2d5988 __attribute__((mode(TI), aligned(16)));
 typedef union {
     u128_2d5988 q;
