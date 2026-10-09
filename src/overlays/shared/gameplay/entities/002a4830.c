@@ -1332,13 +1332,6 @@ typedef struct {
     u8 pad[0x10];
     V_2aa008 v10;
 } Q_2aa008;
-typedef struct {
-    u8 pad[0x100];
-    u8 v100[0x2FC - 0x100];
-    void *p2FC;
-    u8 pad2[0x2080 - 0x300];
-    Q_2aa008 *p2080;
-} P_2aa008;
 extern f32 D_0015ED6C_2aa008 __asm__("D_0015ED6C");
 extern f32 D_0015ED70_2aa008 __asm__("D_0015ED70");
 extern N_2aa008 *D_L00_0015FFE4_2aa008 __asm__("D_L00_0015FFE4");
@@ -1356,7 +1349,7 @@ void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
     V_2aa008 t;
     V_2aa008 e;
     M_2aa008 *m;
-    P_2aa008 *P;
+    struct Hero *P;
     N_2aa008 *n;
     s32 count;
     N_2aa008 *best;
@@ -1374,8 +1367,8 @@ void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
                         FUN_002132a8_2aa008(D_0015ED6C_2aa008 * 0.01f, D_0015ED6C_2aa008 * 0.1f));
     FUN_001f9a10_2aa008(m, &d, arg);
     P = &hero;
-    if (P->p2FC && FUN_L00_002603d0_2aa008(P->p2FC)) {
-        FUN_001f9a10_2aa008(m, m, P->v100);
+    if (P->ground_moby && FUN_L00_002603d0_2aa008(P->ground_moby)) {
+        FUN_001f9a10_2aa008(m, m, &P->motion.unk100);
     }
     m->h34 = FUN_001f96f8_2aa008(0x78);
     count = 0;

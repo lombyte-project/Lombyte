@@ -1550,15 +1550,6 @@ typedef struct {
     s32 w38;
 } O;
 typedef struct {
-    char p0[0x80];
-    f32 x80;
-    f32 x84;
-    char p1[0x2E4 - 0x88];
-    f32 f2E4;
-    char p2[0x2080 - 0x2E8];
-    char *cam;
-} P_u;
-typedef struct {
     char p0[0xB];
     u8 bB;
 } E_u;
@@ -1591,7 +1582,7 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
     f32 best, yaw, pitch, dist, ang, z, angh, angv;
     char *spos;
     char *opos;
-    P_u *g;
+    struct Hero *g;
 
     i = 0;
     best = 10000.0f;
@@ -1638,10 +1629,10 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         angv = FUN_001f9e90(FUN_001f9b80(spos, &v), v.f[2] - *(f32 *)(self + 0x18));
         dist = FUN_001f9b48(spos, &v);
         if (dist < 2.5f) {
-            char *cam = g->cam;
+            char *cam = *(char **)&g->moby;
             if (fast_difference_between_rotations(
-                    *(f32 *)(cam + 0x48), FUN_001f9e90(*(f32 *)(o + 0x10) - g->x80,
-                                                       *(f32 *)(o + 0x14) - g->x84)) < 1.0471976f) {
+                    *(f32 *)(cam + 0x48), FUN_001f9e90(*(f32 *)(o + 0x10) - g->motion.pos.f[0],
+                                                       *(f32 *)(o + 0x14) - g->motion.pos.f[1])) < 1.0471976f) {
                 if (FUN_001f99c0(angv) < 0.7853982f)
                     return;
             }
@@ -1649,7 +1640,7 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         if (best < dist)
             goto next;
         ang = FUN_001fa6c0(D_0013E520_u.bB) * 0.6981317f;
-        FUN_00214db0(&lv, dist, yaw, pitch + g->f2E4 * 0.5f);
+        FUN_00214db0(&lv, dist, yaw, pitch + g->unk2E4.f * 0.5f);
         FUN_001f9a10(&lv, &lv, spos);
         z = FUN_001f9df8(FUN_001f9b48(&lv, &v) / (dist + dist));
         ang = ang + 1.5707964f;
