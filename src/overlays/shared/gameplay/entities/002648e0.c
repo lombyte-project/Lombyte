@@ -2,4 +2,105 @@
 #include "types.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002648e0.s", FUN_L00_002648e0);
+#else
+#include "rnc/gameplay/entities/moby.h"
+
+typedef struct {
+    s32 count;
+    s32 ticks;
+} MobyProfile;
+
+extern u64 D_0013CAE0;
+extern s32 D_L00_0015F3F8;
+extern struct Moby *D_L00_0015FFE4;
+extern s16 D_L00_00197A00[];
+extern char D_L00_00160118[];
+extern char D_L00_001E90B0[];
+extern char D_L00_001E90C8[];
+
+extern void FUN_L00_00264848(void);
+extern void FUN_L00_001eb078(const char *, ...);
+extern void FUN_L00_001ff040(void *, s32, s32);
+extern struct Moby *FUN_L00_00250768(void);
+extern void FUN_L00_00250480(struct Moby *);
+extern void FUN_L00_00250df8(struct Moby *);
+extern f32 FUN_L00_00200240(s32);
+extern s32 FUN_00120478(f32);
+
+void FUN_L00_002648e0(void) {
+    struct Moby *moby;
+    MobyProfile *profile;
+    s32 i;
+    s32 next_ticks;
+    s32 current_ticks;
+    f32 total_ticks;
+    f32 share;
+    s32 scaled_ticks;
+    s32 count;
+
+    if ((D_0013CAE0 & 0x800000007LL) != 0x800000007LL) {
+        FUN_L00_00264848();
+        return;
+    }
+
+    FUN_L00_001eb078(D_L00_00160118);
+    FUN_L00_001eb078(D_L00_001E90B0, D_L00_0015F3F8);
+    FUN_L00_001eb078(D_L00_00160118);
+    *(volatile u32 *)0x10000010 = 0x81;
+    FUN_L00_001ff040((void *)0x11004000, 0, 0x700);
+
+    moby = FUN_L00_00250768();
+    D_L00_0015FFE4 = moby;
+    while (moby != 0) {
+        if ((s8)moby->state >= 0) {
+            *(volatile u32 *)0x10000000 = 0;
+            if (!(moby->flags & 0x40)) {
+                FUN_L00_00250480(moby);
+            }
+            if (moby->update != 0) {
+                moby->update(moby);
+            }
+            if (!(((volatile struct Moby *)moby)->flags & 4)) {
+                FUN_L00_00250df8(moby);
+            }
+            current_ticks = *(volatile s32 *)0x10000000;
+            profile = &((MobyProfile *)0x11004000)[moby->unk22];
+            profile->count++;
+            profile->ticks += current_ticks;
+        }
+        moby = moby->next;
+    }
+
+    total_ticks = 0.0f;
+    profile = (MobyProfile *)0x11004000;
+    for (i = 0xdf; i-- > 0; profile++) {
+        if (profile->count != 0) {
+            total_ticks += (f32)profile->ticks;
+        }
+    }
+
+    current_ticks = 100000000;
+    do {
+        next_ticks = 0;
+        profile = (MobyProfile *)0x11004000;
+        for (i = 0; i < 0xe0; i++, profile++) {
+            if (profile->count != 0) {
+                if (profile->ticks == current_ticks) {
+                    count = profile->count;
+                    scaled_ticks = (current_ticks << 5) / count;
+                    share = FUN_L00_00200240(current_ticks) / total_ticks;
+                    share = share * 100.0f;
+                    FUN_L00_001eb078(D_L00_001E90C8, D_L00_00197A00[i], count,
+                                   scaled_ticks, FUN_00120478(share));
+                    profile->count = 0;
+                } else if (next_ticks < profile->ticks) {
+                    next_ticks = profile->ticks;
+                }
+            }
+        }
+        current_ticks = next_ticks;
+    } while (next_ticks != 0);
+}
+#endif
