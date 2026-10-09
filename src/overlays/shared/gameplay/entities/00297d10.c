@@ -180,7 +180,55 @@ void FUN_L06_002e9aa8(char *moby) {
     FUN_001efa68(b, a, 2, 0, 0);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9b60.s", FUN_L06_002e9b60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9f30.s", FUN_L06_002e9f30);
+#include "rnc/gameplay/entities/moby.h"
+
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
+extern float D_0015ED6C;
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern void FUN_L00_002af8b0(void *, void *, void *, void *, int, int, float, float);
+extern f32 D_L06_0015F580[] __attribute__((section(".sdata")));
+
+/* Bursts 4 then 8 particles up from the moby, then removes the moby stored at vars+0x20C. */
+void FUN_L06_002e9f30(struct Moby *moby) {
+    float origin[4];
+    float vel[4];
+    float pos[4];
+    float offset[4];
+    u8 *vars;
+    int i;
+    int j;
+
+    vars = moby->pvars;
+    allocate_voice_for_target_entry(4, 0, (int)moby);
+    qcopy(origin, &moby->pos);
+    origin[2] = origin[2] + 0.5f;
+    for (i = 3; i >= 0; i--) {
+        float speed = random_float_between(1.0f, 4.0f) * D_0015ED6C;
+        *(u128 *)offset = 0;
+        offset[0] = random_float_between(-0.625f, 0.625f);
+        offset[1] = random_float_between(-0.625f, 0.625f);
+        offset[2] = random_float_between(0.0f, 1.25f);
+        *(u128 *)pos = *(u128 *)offset;
+        FUN_001f9bf8(vel, pos, speed);
+        FUN_001f9a10(pos, pos, origin);
+        FUN_L00_002af8b0(*(void **)(vars + 0x20C), vel, pos, D_L06_0015F580, 0x165, 0, 0.3f, 0.6f);
+    }
+    for (j = 7; j >= 0; j--) {
+        float speed = random_float_between(1.0f, 4.0f) * D_0015ED6C;
+        *(u128 *)offset = 0;
+        offset[0] = random_float_between(-0.625f, 0.625f);
+        offset[1] = random_float_between(-0.625f, 0.625f);
+        offset[2] = random_float_between(0.0f, 1.25f);
+        *(u128 *)pos = *(u128 *)offset;
+        FUN_001f9bf8(vel, pos, speed);
+        FUN_001f9a10(pos, pos, origin);
+        FUN_L00_002af8b0(*(void **)(vars + 0x20C), vel, pos, D_L06_0015F580,
+                         random_integer_below(2) + 0x166, 0, 0.5f, 0.7f);
+    }
+    mark_moby_for_removal(*(void **)(vars + 0x20C));
+    *(int *)(vars + 0x20C) = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ea198.s", FUN_L06_002ea198);
 /* burst of 20 sparks around a point with random velocity and colour */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EB8C8), where it is exact; names translated to the US level program. */
