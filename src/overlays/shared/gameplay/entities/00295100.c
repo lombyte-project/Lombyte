@@ -1073,7 +1073,98 @@ void FUN_L00_0029ab70(int a) {
     f216088_29ab70();
     f12dc80_29ab70();
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ad08.s", FUN_L00_0029ad08);
+#else
+extern s32 D_L00_0015F5D8;
+extern s32 D_L00_0015F3FC;
+extern s32 D_L00_001611CC;
+extern s32 D_L00_00173E04;
+extern s32 D_L00_00173E08;
+extern s32 D_00140408;
+extern s32 D_00141408;
+extern s32 D_L00_001CA020[];
+extern s32 D_L00_001CA580[];
+extern char D_L00_001CA4C0_29ad08[] __asm__("D_L00_001CA4C0");
+extern s32 D_L00_0015F400_29ad08 __asm__("D_L00_0015F400");
+extern s32 D_L00_00161100 __attribute__((sda));
+extern s32 D_L00_001610F0 __attribute__((sda));
+extern struct S16_29ab70 D_001516D0_29ad08 __asm__("D_001516D0");
+extern char D_L00_00179AC0_29ad08[] __asm__("D_L00_00179AC0");
+extern void f2eac18_29ad08(s32) __asm__("FUN_L00_002eac18");
+extern void f1f9cf8_29ad08(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void f1f9a10_29ad08(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float f213508_29ad08(float, void *, s32) __asm__("FUN_00213508");
+extern void f1f97e8_29ad08(void *, s32, s32) __asm__("FUN_001f97e8");
+extern float f1fa580_29ad08(float, float) __asm__("FUN_001fa580");
+extern void f1fa030_29ad08(void *, void *) __asm__("FUN_001fa030");
+extern void f1f99f8_29ad08(void *) __asm__("FUN_001f99f8");
+extern void FUN_L00_002a09d8(s32);
+extern void sound_update(void) __asm__("FUN_0022ca50");
+extern void FUN_L00_0020fca8(s32, s32);
+extern void f2049f0_29ad08(s32, s32) __asm__("FUN_002049f0");
+extern void f2454c8_29ad08(s32) __asm__("FUN_L00_002454c8");
+extern void f204a40_29ad08(s32, s32) __asm__("FUN_00204a40");
+extern void FUN_L00_002455c0(s32);
+extern void f215b10_29ad08(void) __asm__("FUN_00215b10");
+extern void FUN_00122298(s32);
+extern void FUN_002335a0(void);
+
+void FUN_L00_0029ad08(void) {
+    char *g;
+    char *moby;
+    s32 index, item, offset;
+    f32 *vec;
+    struct S16_29ab70 *state;
+
+    f2eac18_29ad08(2);
+    state = &D_001516D0_29ad08;
+    g = D_L00_001CA4C0_29ad08;
+    if ((u16)(state->mode - 6) >= 2)
+        state->mode = 5;
+    D_L00_0015F5D8 = 1;
+    moby = *(char * volatile *)(g + 0x1C);
+    moby[0x20] = 1;
+    *(s32 *)g = 3;
+    *(s32 *)(g + 4) = 0;
+    vec = (f32 *)(g + 0xC0);
+    f1f9cf8_29ad08(vec, &D_L00_001610F0, moby + 0xC0);
+    moby = *(char * volatile *)(g + 0x1C);
+    f1f9a10_29ad08(vec, vec, moby + 0x10);
+    vec[2] += 2.0f;
+    vec[2] = f213508_29ad08(0.5f, vec, 0);
+    f1f99f8_29ad08(g + 0xB0);
+    moby = *(char * volatile *)(g + 0x1C);
+    *(f32 *)(g + 0xB8) = f1fa580_29ad08(*(f32 *)(moby + 0x48), 3.1415927f);
+    f1fa030_29ad08(g + 0x80, g + 0xB0);
+    f1f97e8_29ad08(&D_L00_0016C860_298840, 0, 0x1C0);
+    f1f97e8_29ad08(D_L00_0017C340_298840, 0, 0x40);
+    FUN_L00_002a09d8(1);
+    FUN_002335a0();
+    index = *(s32 *)(g + 0x48);
+    offset = D_L00_001611CC - 0x40000;
+    D_L00_001611CC = offset;
+    D_L00_0016C860_298840.x5c = D_L00_00173E08 + offset;
+    D_L00_0016C860_298840.x58 = D_L00_00173E04 + offset;
+    item = D_L00_001CA020[index];
+    D_L00_0015F3FC = 0;
+    D_L00_0015F400_29ad08 = 0;
+    if (D_00140408 != 0 && index != D_00140408)
+        FUN_L00_0020fca8(0, 0);
+    D_00141408 = index;
+    if (index == 0x18)
+        D_00141408 = 0;
+    f204a40_29ad08(*(s32 *)(D_L00_00179AC0_29ad08 + index * 0x4C + 0x10), -1);
+    f2454c8_29ad08(item);
+    *(s32 *)&state->pad[0x1C] = 0x2734;
+    FUN_L00_002455c0(0);
+    while ((s16)state->mode != 3) {
+        sound_update();
+        FUN_00122298(0);
+    }
+    f215b10_29ad08();
+}
+#endif
 extern int D_L00_0015F5D8;
 extern int D_L00_0015F5C4;
 extern unsigned char D_001413F5[];
