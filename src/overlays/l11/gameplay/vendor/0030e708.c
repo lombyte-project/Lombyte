@@ -22,7 +22,7 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
 extern void FUN_L01_00278e20(void *, int);
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
 
 void FUN_L11_0031d7d8(struct Moby *m) {
     int hit = 0;
@@ -42,7 +42,7 @@ void FUN_L11_0031d7d8(struct Moby *m) {
         FUN_L01_002787a0(m);
         FUN_L00_00263e30(m, 0x745, 1, 0x745, 1, 0xb, 2);
         FUN_L01_00278e20(m, 0x744);
-        mark_moby_for_removal((struct Obj *)m);
+        mark_moby_for_removal(m);
         break;
     }
 }
