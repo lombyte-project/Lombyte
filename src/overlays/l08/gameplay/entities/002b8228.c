@@ -151,7 +151,74 @@ void FUN_L08_002da0f0(struct Moby *moby) {
             *(short *)(q + 0xA) = truncate_float_to_s32(FUN_001f96b0(random_float_between(30.0f, 60.0f)));
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002da3f0.s", FUN_L08_002da3f0);
+extern float D_L08_00161998 __attribute__((sda));
+extern float D_L08_001619A0 __attribute__((sda));
+extern u16 D_L08_001619A8 __attribute__((sda));
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern float FUN_L00_00257c48(float, float);
+extern unsigned char *FUN_L00_0026d000(void *, float, float, float, int, void *, float, int);
+extern char *FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
+
+/* Strings count glowing puffs from one point to another, growing from size0
+ * to size1, then bursts a spark shower at each end. */
+void FUN_L08_002da3f0(struct Moby *moby, void *from, void *to, int count, f32 size0, f32 size1) {
+    Vec4 step;
+    Vec4 pos;
+    Vec4 vel;
+    f32 grow;
+    f32 size;
+    unsigned char *puff;
+    unsigned char *tail;
+    int alpha, grey;
+    int i;
+
+    subtract_vector_xyz(&step, to, from);
+    scale_vector_xyz(&step, &step, 1.0f / (f32)count);
+    grow = (size1 - size0) / (f32)count;
+    vel.q = 0;
+    vel.f[3] = 1.0f;
+    vel.f[2] = 0.01f;
+    for (i = 0; i < count; i++) {
+        scale_vector_xyz(&pos, &step, ConvertIntegerToFloat(i));
+        add_vector_xyz(&pos, from, &pos);
+        vel.f[0] = FUN_L00_00257c48(0.0f, 0.005f);
+        vel.f[1] = FUN_L00_00257c48(0.0f, 0.005f);
+        vel.f[2] = random_float_between(D_L08_00161998 * 0.1f, D_L08_00161998);
+        alpha = FUN_L00_00257b90(0x30, 0x70);
+        grey = FUN_L00_00257b90(0x30, 0x7F);
+        grey |= (grey << 16) | (grey << 8);
+        size = random_float_between(1.0f, 1.02f);
+        puff = FUN_L00_0026d000(&pos, D_L08_001619A0, 1.0f, size, FUN_L00_00257b90(-2, 2), &vel,
+                                grow + size0 * 210000.0f, (alpha << 24) | grey);
+        if (puff) {
+            tail = puff + 0x20;
+            if (random_integer_below(2)) {
+                puff[3] = 0x44;
+                grey = FUN_L00_00257b90(0x60, 0xE0);
+                grey |= (grey << 16) | (grey << 8);
+                *(u32 *)(puff + 4) = (alpha << 24) | grey;
+            }
+            *(u16 *)(puff + 0xA) = D_L08_001619A8;
+            *(s32 *)(tail + 4) = 2;
+            tail[0xA] = alpha;
+            tail[0xB] = D_L08_001619A8;
+        }
+    }
+    vel.f[0] = fast_cos(random_angle_radians()) * 0.05f;
+    vel.f[1] = fast_sin(random_angle_radians()) * 0.05f;
+    vel.f[2] = 0.0f;
+    vel.f[2] = random_float_between(0.01f, 0.03f);
+    FUN_L00_0026cbb0(from, &vel, 0x4F007FFF, 0x1FFFFFFF,
+                     FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1, 10000.0f);
+    vel.f[0] = fast_cos(random_angle_radians()) * 0.05f;
+    vel.f[1] = fast_sin(random_angle_radians()) * 0.05f;
+    vel.f[2] = 0.0f;
+    vel.f[2] = random_float_between(0.01f, 0.03f);
+    FUN_L00_0026cbb0(to, &vel, 0x4F007FFF, 0x1FFFFFFF,
+                     FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1, 20000.0f);
+}
 /* Picks the best candidate moby from the moby's list by heading and distance.
  * Exact since tools/ps2eeas_nops.py puts the hazard nop after the shared bc1fl's label. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DBD88), where it is exact; names translated to the US level program. */
