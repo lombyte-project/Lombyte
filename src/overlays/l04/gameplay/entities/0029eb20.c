@@ -2772,4 +2772,155 @@ void FUN_L04_002c6858(struct Moby *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c6bb8.s", FUN_L04_002c6bb8);
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
+
+/* Pvars of a door driven by a lever (FUN_L04_002c6bb8 update): follows the lever's travel and plays its sounds. */
+typedef struct {
+    s32 lever;       /* 0x00: moby index of the lever, -1 for none */
+    s32 target;      /* 0x04: moby index it carries along, -1 for none */
+    s32 voice;       /* 0x08: looping sound, -1 for none */
+    s32 locked;      /* 0x0C */
+} DoorVars;
+
+/* Pvars of the lever (oclass 0x118). */
+typedef struct {
+    f32 travel;      /* 0x00: 0..1 */
+    u8 pad4[0x14];
+    f32 spin;        /* 0x18 */
+    u8 pad1C[0x14];
+    f32 rate;        /* 0x30 */
+} LeverVars;
+
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern void moby_play_anim(void *, int, int, int) __asm__("FUN_00212f90");
+extern int FUN_L00_0028d8c0(void *, int);
+extern int start_moby_sound(int, int, int) __asm__("FUN_0022da68");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern struct Moby *level_moby_table __asm__("D_L04_0015FFD8") __attribute__((section(".sdata")));
+extern struct Moby *level_mobys __asm__("D_L04_0015FFD8");
+extern u8 voice_slots[] __asm__("D_0013E550");
+extern float D_0015ED6C;
+
+
+/* Door update: follows its lever's travel, pushes the lever back while opening, and runs the motor sounds. */
+void FUN_L04_002c6bb8(struct Moby *m) {
+    DoorVars *v = (DoorVars *)m->pvars;
+    f32 prev;
+    struct Moby *lever;
+    LeverVars *lv;
+    u8 *slot;
+
+    prev = m->unk54;
+    if (v == NULL) {
+        mark_moby_for_removal(m);
+        return;
+    }
+    switch (m->state) {
+    case 0:
+        moby_play_anim(m, 1, 0, scale_game_frames(300));
+        m->state = 1;
+        m->unk58 = 0;
+        v->voice = -1;
+        break;
+    case 1:
+        if (v->lever == -1) {
+            break;
+        }
+        lever = &level_mobys[v->lever];
+        if (lever->oclass != 0x118) {
+            break;
+        }
+        lv = (LeverVars *)lever->pvars;
+        if (lever->state == 3) {
+            m->unk54 = 1.0f - lv->travel;
+        } else if (lv->travel != 1.0f ||
+                   (v->target != -1 && v->locked == 0 &&
+                    ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9 ||
+                     hero.state.control_mode == 12) &&
+                    hero.unk2FC == &level_mobys[v->target])) {
+            m->state = 2;
+        }
+        if (m->unk54 != prev) {
+            if (lv->travel != 1.0f && lv->travel != 0.0f) {
+                if (FUN_L00_0028d8c0(m, v->voice) == 0) {
+                    v->voice = start_moby_sound(0, 4, (int)m);
+                }
+            } else {
+                if (FUN_L00_0028d8c0(m, v->voice) != 0) {
+                    if (v->voice != -1) {
+                        slot = voice_slots + v->voice * 0x70;
+                        if (*(struct Moby **)(slot + 0x88) == m && slot[0x74] != 0) {
+                            release_voice_slot(v->voice);
+                        }
+                    }
+                    v->voice = -1;
+                }
+                start_moby_sound(1, 0, (int)m);
+            }
+        } else if (FUN_L00_0028d8c0(m, v->voice) != 0) {
+            if (v->voice != -1) {
+                slot = voice_slots + v->voice * 0x70;
+                if (*(struct Moby **)(slot + 0x88) == m && slot[0x74] != 0) {
+                    release_voice_slot(v->voice);
+                }
+            }
+            v->voice = -1;
+        }
+        break;
+    case 2: {
+        struct Moby *link;
+        LeverVars *link_vars;
+
+        m->unk54 = prev + D_0015ED6C * 0.5f;
+        if (1.0f < m->unk54) {
+            m->unk54 = 1.0f;
+        }
+        if (v->lever == -1) {
+            break;
+        }
+        link = &level_moby_table[v->lever];
+        if (link->oclass != 0x118) {
+            break;
+        }
+        link_vars = (LeverVars *)link->pvars;
+        if (link->state == 3) {
+            m->unk54 = 1.0f - link_vars->travel;
+            m->state = 1;
+        } else {
+            link_vars->travel = 1.0f - m->unk54;
+            link_vars->spin = link_vars->travel * (link_vars->rate * 6.2831855f);
+        }
+        if (m->unk54 != prev) {
+            if (link_vars->travel == 1.0f || link_vars->travel == 0.0f) {
+                if (FUN_L00_0028d8c0(m, v->voice) != 0) {
+                    if (v->voice != -1) {
+                        slot = voice_slots + v->voice * 0x70;
+                        if (*(struct Moby **)(slot + 0x88) == m && slot[0x74] != 0) {
+                            release_voice_slot(v->voice);
+                        }
+                    }
+                    v->voice = -1;
+                }
+                start_moby_sound(1, 0, (int)m);
+            } else if (FUN_L00_0028d8c0(m, v->voice) == 0) {
+                v->voice = start_moby_sound(0, 4, (int)m);
+            }
+        } else if (FUN_L00_0028d8c0(m, v->voice) != 0) {
+            if (v->voice != -1) {
+                slot = voice_slots + v->voice * 0x70;
+                if (*(struct Moby **)(slot + 0x88) == m && slot[0x74] != 0) {
+                    release_voice_slot(v->voice);
+                }
+            }
+            v->voice = -1;
+        }
+        break;
+    }
+    }
+    if (v->target != -1) {
+        FUN_L00_0024f7c8(m, 0, &level_moby_table[v->target].pos);
+    }
+}
