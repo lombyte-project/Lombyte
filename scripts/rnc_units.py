@@ -30,35 +30,6 @@ OVERLAY_NAME = re.compile(r"^FUN_L\d{2}_[0-9a-f]{8}$")
 CONFIG_PATH = Path("config") / "us" / "rnc1.us.yaml"
 CATEGORY_PATH = Path("config") / "us" / "unit_categories.json"
 RECOVERED_PATH = Path("config") / "us" / "recovered_names.json"
-PINNED_PATH = Path("config") / "us" / "pinned.yaml"
-# pinned.yaml list -> the file splat reads for it (rnc1.us.yaml options).
-SYMBOL_FILES = {
-    "named": "symbol_addrs.txt",
-    "linker": "undefined_syms.txt",
-    "functions": "undefined_funcs_auto.txt",
-}
-
-
-def load_symbols(repo: Path) -> dict[str, list[tuple[str, int, bool]]]:
-    """config/us/pinned.yaml as {list: [(name, address, ignore)]}."""
-    import yaml
-
-    data = yaml.safe_load((repo / PINNED_PATH).read_text()) or {}
-    return {
-        key: [(row[0], row[1], "ignore" in row[2:]) for row in data.get(key, [])]
-        for key in SYMBOL_FILES
-    }
-
-
-def write_symbol_files(repo: Path, dest: Path) -> None:
-    """Write the files splat reads (SYMBOL_FILES) from pinned.yaml into ``dest``."""
-    dest.mkdir(parents=True, exist_ok=True)
-    for key, rows in load_symbols(repo).items():
-        lines = [
-            f"{name} = 0x{address:08X};" + (" // ignore:true" if ignore else "")
-            for name, address, ignore in rows
-        ]
-        (dest / SYMBOL_FILES[key]).write_text("\n".join(lines) + "\n")
 
 
 def parse_config_rows(config: Path) -> list[tuple[int, str, str]]:

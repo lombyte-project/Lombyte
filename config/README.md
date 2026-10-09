@@ -10,8 +10,8 @@
   (`docs/recovered-names.md`); `us/checksum.sha1` is the retail ELF's SHA-1.
 - `us/data.yaml` catalogues the data the boot code touches
   (`scripts/data-refs.py --catalog`); edit its names and types by hand.
-- `us/pinned.yaml` holds the symbols (functions and data) with fixed
-  addresses; the baseline build writes the files splat reads from it.
+- `us/symbol_addrs.txt`, `us/undefined_syms.txt`, and
+  `us/undefined_funcs_auto.txt` are active symbol inputs.
 - `ghidra/` contains function, call-graph, and data-reference exports used by
   the build tooling.
 

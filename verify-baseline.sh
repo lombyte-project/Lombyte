@@ -77,8 +77,9 @@ mkdir -p "$BASELINE_ROOT/config/us"
 cp "$PROJECT_ROOT/config/us/rnc1.us.yaml" "$BASELINE_ROOT/config/us/rnc1.us.yaml"
 cp "$PROJECT_ROOT/config/us/SCUS_971.99" "$BASELINE_ROOT/config/us/SCUS_971.99"
 cp "$PROJECT_ROOT/config/us/checksum.sha1" "$BASELINE_ROOT/config/us/checksum.sha1"
-cp "$PROJECT_ROOT/config/us/pinned.yaml" "$BASELINE_ROOT/config/us/"
-"$VENV/bin/python" -c 'import sys; sys.path.insert(0, sys.argv[1] + "/scripts"); import rnc_units; from pathlib import Path; rnc_units.write_symbol_files(Path(sys.argv[1]), Path(sys.argv[2]))' "$PROJECT_ROOT" "$BASELINE_ROOT/config/us"
+cp "$PROJECT_ROOT/config/us/undefined_syms.txt" "$BASELINE_ROOT/config/us/undefined_syms.txt"
+cp "$PROJECT_ROOT/config/us/undefined_funcs_auto.txt" "$BASELINE_ROOT/config/us/undefined_funcs_auto.txt" 2>/dev/null || true
+cp "$PROJECT_ROOT/config/us/symbol_addrs.txt" "$BASELINE_ROOT/config/us/symbol_addrs.txt" 2>/dev/null || true
 cp -a "$PROJECT_ROOT/include/." "$BASELINE_ROOT/include/"
 cp -a "$PROJECT_ROOT/src/." "$BASELINE_ROOT/src/"
 touch "$BASELINE_ROOT/config/us/undefined_syms_auto.txt"
