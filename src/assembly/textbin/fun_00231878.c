@@ -17,6 +17,8 @@ struct CommonArchiveMemory {
 };
 
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
+extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74");
+extern s32 gs_texture_allocation_start __asm__("D_0015EE78");
 extern struct CommonArchiveMemory D_001940C0;
 extern void FlushCache(s32 a0);
 extern s32 sceCdSync(s32 a0);
