@@ -1734,8 +1734,8 @@ extern void FUN_L06_002f7c68_c(char *m) __asm__("FUN_L06_002f7c68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L06_002f7ab8(char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L06_002f7ab8(struct Moby *m) {
+    char *d = (char *)m->pvars;
     if (FUN_L00_0025a420(m, 0x330000, 0) != 0) {
         int idx;
         FUN_L06_002f7c68_c(m);
@@ -1751,24 +1751,24 @@ void FUN_L06_002f7ab8(char *m) {
         mark_moby_for_removal_u(m);
         return;
     }
-    switch (*(unsigned char *)(m + 0x20)) {
+    switch (m->state) {
     case 0:
         FUN_L00_002502f0(m, 0x80, 0x80, 0x80);
-        *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * *(float *)&D_L06_00161E80;
+        m->scale = m->pclass->scale * *(float *)&D_L06_00161E80;
         *(char **)d = d + 0x20;
-        m[0x20] = 1;
-        *(unsigned short *)(m + 0x34) |= 0x20;
+        m->state = 1;
+        m->flags |= 0x20;
         *(int *)(d + 0x60) = -1;
     case 1: {
         float a0 = *(float *)&D_L06_00161E74 * DEG_TO_RAD * D_0015ED6C_c;
         float a1, a2;
-        float x = fast_add_rotations(*(float *)(m + 0x40), a0);
+        float x = fast_add_rotations(m->rot.x, a0);
         a1 = *(float *)&D_L06_00161E78 * DEG_TO_RAD * D_0015ED6C_c;
-        *(float *)(m + 0x40) = x;
-        x = fast_add_rotations(*(float *)(m + 0x44), a1);
+        m->rot.x = x;
+        x = fast_add_rotations(m->rot.y, a1);
         a2 = *(float *)&D_L06_00161E7C * DEG_TO_RAD * D_0015ED6C_c;
-        *(float *)(m + 0x44) = x;
-        *(float *)(m + 0x48) = fast_add_rotations(*(float *)(m + 0x48), a2);
+        m->rot.y = x;
+        m->rot.z = fast_add_rotations(m->rot.z, a2);
     }
     }
     if (FUN_L00_0028d8c0(m, *(int *)(d + 0x60)) == 0) {

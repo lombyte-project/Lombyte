@@ -905,25 +905,25 @@ void FUN_L01_00308550(char *m);
 extern void FUN_L01_003089f0_u(char *) __asm__("FUN_L01_003089f0");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-void FUN_L01_00308380(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void FUN_L01_00308380(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
     float r;
     float s;
     float k;
-    *(float *)(moby + 0x2C) =
-        *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)&D_L01_00161F10_d;
-    if (((unsigned char *)moby)[0x20] == 1) {
-        s = FUN_001f9de0(*(float *)(moby + 0x4C));
-        *(float *)(moby + 0x18) =
+    moby->scale =
+        moby->pclass->scale * *(float *)&D_L01_00161F10_d;
+    if (moby->state == 1) {
+        s = FUN_001f9de0(moby->rot.w);
+        moby->pos.z =
             *(float *)(data + 0x18) + *(float *)&D_L01_00161F14_d + *(float *)&D_L01_00161F18_d * s;
-        *(float *)(moby + 0x40) =
-            fast_add_rotations(*(float *)(moby + 0x40), *(float *)(data + 0x68));
-        *(float *)(moby + 0x44) =
-            fast_add_rotations(*(float *)(moby + 0x44), *(float *)(data + 0x64));
-        r = fast_add_rotations(*(float *)(moby + 0x48), *(float *)(data + 0x60));
+        moby->rot.x =
+            fast_add_rotations(moby->rot.x, *(float *)(data + 0x68));
+        moby->rot.y =
+            fast_add_rotations(moby->rot.y, *(float *)(data + 0x64));
+        r = fast_add_rotations(moby->rot.z, *(float *)(data + 0x60));
         k = *(float *)&D_L01_00161F2C_d * DEG_TO_RAD * D_0015ED6C;
-        *(float *)(moby + 0x48) = r;
-        *(float *)(moby + 0x4C) = fast_add_rotations(*(float *)(moby + 0x4C), k);
+        moby->rot.z = r;
+        moby->rot.w = fast_add_rotations(moby->rot.w, k);
     }
     FUN_L01_00308550(moby);
     if (random_integer_below(*(int *)&D_L01_00161F50_d) == 0) {

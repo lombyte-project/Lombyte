@@ -604,19 +604,19 @@ extern short D_L06_00162080_d __asm__("D_L06_00162080") __attribute__((sda));
 extern void FUN_001f9a10(float *, float *, float *);
 void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
 
-void FUN_L06_00300b90(char *moby) {
+void FUN_L06_00300b90(struct Moby *moby) {
     char *data;
     float t = D_0015ED70 * 15.0f;
-    *(float *)(moby + 0x2C) =
-        *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)&D_L06_00162080_d;
-    data = *(char **)(moby + 0x78);
+    moby->scale =
+        moby->pclass->scale * *(float *)&D_L06_00162080_d;
+    data = (char *)moby->pvars;
     *(float *)(data + 8) -= t;
-    FUN_001f9a10((float *)(moby + 0x10), (float *)(moby + 0x10), (float *)data);
-    FUN_001f9a10((float *)(moby + 0x40), (float *)(moby + 0x40), (float *)(data + 0x10));
-    *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(data + 0x10));
-    *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(moby + 0x44), *(float *)(data + 0x14));
-    *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *(float *)(data + 0x18));
-    if (--*(unsigned char *)(moby + 0xBC) == 0) {
+    FUN_001f9a10(&moby->pos.x, &moby->pos.x, (float *)data);
+    FUN_001f9a10(&moby->rot.x, &moby->rot.x, (float *)(data + 0x10));
+    moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(data + 0x10));
+    moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(data + 0x14));
+    moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(data + 0x18));
+    if (--moby->unkBC == 0) {
         mark_moby_for_removal(moby);
     }
 }

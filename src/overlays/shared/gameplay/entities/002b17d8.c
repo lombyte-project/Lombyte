@@ -655,55 +655,55 @@ extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_001f9740(void *);
 extern void set_moby_animation_c(void *, s32, s32) __asm__("FUN_00212ed8");
 
-void FUN_L14_002d96e0(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void FUN_L14_002d96e0(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
     if (D_001413F4[0] == 2) {
-        *(s32 *)(moby + 0x94) = 0;
+        moby->unk94 = 0;
     } else {
-        *(s32 *)(moby + 0x94) = *(s32 *)(*(char **)(moby + 0x24) + 0x10);
+        moby->unk94 = moby->pclass->unk10;
     }
-    switch ((u8)moby[0x20]) {
+    switch (moby->state) {
     case 0:
         if (*(s32 *)data != 0 && *(s16 *)(D_L14_00167500 + 0x86) == 0x14) {
-            moby[0x20] = 1;
+            moby->state = 1;
             *(s32 *)(data + 8) = FUN_001f96f8_c(*(s32 *)(data + 4));
         }
         break;
     case 1:
         if (FUN_001f9740(data + 8) != 0) {
-            moby[0x20] = 2;
+            moby->state = 2;
             set_moby_animation_c(moby, 1, 0);
         }
         break;
     case 2:
-        if ((moby[0x70] & 2) != 0) {
-            moby[0x20] = 3;
+        if ((moby->unk70 & 2) != 0) {
+            moby->state = 3;
             set_moby_animation_c(moby, 2, 0);
         }
         break;
     case 3:
         if (*(s16 *)(D_L14_00167500 + 0x86) != 0x14) {
             set_moby_animation_c(moby, 0, 0);
-            moby[0x20] = 4;
+            moby->state = 4;
         }
         break;
     case 4:
         break;
     case 5:
-        if ((moby[0x70] & 2) != 0) {
-            moby[0x20] = 6;
+        if ((moby->unk70 & 2) != 0) {
+            moby->state = 6;
             set_moby_animation_c(moby, 2, 0);
         }
         break;
     case 6:
         if (FUN_001f9740(data + 8) != 0) {
             set_moby_animation_c(moby, 3, 0);
-            moby[0x20] = 7;
+            moby->state = 7;
         }
         break;
     case 7:
-        if ((moby[0x70] & 2) != 0) {
-            moby[0x20] = 0;
+        if ((moby->unk70 & 2) != 0) {
+            moby->state = 0;
             set_moby_animation_c(moby, 0, 0);
         }
         break;
