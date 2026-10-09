@@ -20,7 +20,7 @@ typedef struct LevelRenderState {
     s16 timer;           /* 0x24 */
     s16 content_variant; /* 0x26: picks the effect and flare tables */
     s16 skip;            /* 0x28 */
-    u8 pad2A[2];
+    s16 unk2A;           /* 0x2A: set to 1 by startlevel */
     s16 unk2C; /* 0x2C */
     u8 pad2E[2];
     s32 path;                     /* 0x30 */

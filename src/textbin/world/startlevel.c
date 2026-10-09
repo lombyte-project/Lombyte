@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/rendering/level_render_state.h"
 #include "rnc/input/pad_state.h"
 #include "sda.h"
 #include "rnc/globals.h"
@@ -43,7 +44,6 @@ extern volatile SoundSlot * volatile D_0015F634;
 extern volatile s32 D_0015F630;
 extern u8 D_0016034C;
 extern s32 D_0015F600;
-extern u8 D_0013E030[];
 
 extern void init_once(void) __asm__("func_00201650");
 extern void InitializeStreamingState(void);
@@ -97,7 +97,6 @@ void startlevel(void) {
     s32 frames;
     s32 code;
     s32 bank;
-    u8 *p;
 
     D_0015F5E8 = 1;
     init_once();
@@ -203,9 +202,8 @@ void startlevel(void) {
         set_pal_mode();
         put_disp_buffer();
     }
-    p = D_0013E030;
     D_0015F600 = D_0015ED84;
-    *(s16 *)(p + 0x2A) = 1;
+    level_render_state.unk2A = 1;
     D_0015ED84 = -1;
     do_space_transition();
 }
