@@ -52,4 +52,42 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00241940.s", FUN_L00_00241940);
  * world units. Index 0x10 gives where the sky data starts and 0x14 where the
  * collision data starts. */
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00244110.s", FUN_L00_00244110);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002451b8.s", FUN_L00_002451b8);
+struct SectorListPair {
+    s32 x[71];                  /* 0x000 */
+    s32 y[77];                  /* 0x11C: used while D_0015ED80 is set */
+};
+struct SectorListTable {
+    u8 pad0[0x2AFC];
+    struct SectorListPair lists[1]; /* 0x2AFC, 0x250 apart */
+};
+struct StreamLoader {
+    u8 pad0[0x30];
+    s32 list;                   /* 0x30 */
+    u8 pad34[0x28];
+    u8 *buf;                    /* 0x5C */
+};
+extern s32 D_0015ED80;
+extern struct SectorListTable D_00137B80;
+extern struct StreamLoader D_L00_0016C860;
+extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
+extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
+
+/* streams entry i of the current sector list into the loader buffer */
+s32 FUN_L00_002451b8(s32 i) {
+    u8 *buf = D_L00_0016C860.buf;
+    s32 start;
+    s32 size;
+
+    if (D_0015ED80 != 0) {
+        size = D_00137B80.lists[D_L00_0016C860.list].y[i + 1] - D_00137B80.lists[D_L00_0016C860.list].y[i];
+        start = D_00137B80.lists[D_L00_0016C860.list].y[i];
+    } else {
+        size = D_00137B80.lists[D_L00_0016C860.list].x[i + 1] - D_00137B80.lists[D_L00_0016C860.list].x[i];
+        start = D_00137B80.lists[D_L00_0016C860.list].x[i];
+    }
+    if (size > 0) {
+        start_audio_stream_read(buf, start, size);
+        update_audio_stream_until_idle(0);
+    }
+    return 1;
+}
