@@ -28,6 +28,7 @@ from typing import Optional
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import rnc_overlays as ov  # noqa: E402
+import rnc_units  # noqa: E402
 
 WORK = ov.ROOT / "build/overlay-asm"
 OUT = ov.ASM_DIR
@@ -277,32 +278,26 @@ def write_level_inputs(boundaries, text_addr, text_end, level_dir):
 def resident_symbols() -> list[tuple[int, str, int, str]]:
     """(address, name, size, kind) of everything resident the executable
     names: its C units below 0x15EF00 (FUN_xxxxxxxx) and the data symbols of
-    the config (symbol_addrs.txt, undefined_syms*.txt, the baseline's
+    the config (symbols.yaml, the baseline's
     generated undefined_syms_auto.txt when present)."""
     out = []
     for _owner, vram, size in ov.exe_units():
         if vram < ov.RESIDENT_MAX:
             out.append((vram, f"FUN_{vram:08x}", size, "func"))
     seen = {a for a, _n, _s, _k in out}
-    config = ov.ROOT / "config/us"
-    files = [config / "symbol_addrs.txt", config / "undefined_syms.txt",
-             config / "undefined_funcs_auto.txt",
-             ov.ROOT / "build/baseline/config/us/undefined_syms_auto.txt"]
-    for path in files:
-        if not path.is_file():
-            continue
-        for line in path.read_text().splitlines():
+    rows = [row for group in rnc_units.load_symbols(ov.ROOT).values() for row in group]
+    generated = ov.ROOT / "build/baseline/config/us/undefined_syms_auto.txt"
+    if generated.is_file():
+        for line in generated.read_text().splitlines():
             m = ASSIGN_RE.match(line)
-            if not m:
-                continue
-            addr = int(m.group(2), 0)
-            if addr in seen or not 0x100000 <= addr < ov.RESIDENT_MAX:
-                continue
-            kind = "func" if "type:func" in line else "data"
-            if kind == "data" and (m.group(1).startswith("FUN_") or m.group(1).startswith("func_")):
-                kind = "func"
-            out.append((addr, m.group(1), 4, kind))
-            seen.add(addr)
+            if m:
+                rows.append((m.group(1), int(m.group(2), 0), False))
+    for name, addr, _ignore in rows:
+        if addr in seen or not 0x100000 <= addr < ov.RESIDENT_MAX:
+            continue
+        kind = "func" if name.startswith(("FUN_", "func_")) else "data"
+        out.append((addr, name, 4, kind))
+        seen.add(addr)
     return sorted(out)
 
 

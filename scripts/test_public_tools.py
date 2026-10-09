@@ -1846,5 +1846,20 @@ class DataRefsTests(unittest.TestCase):
         self.assertEqual(self.refs.scalar("u8 *[2]"), '"u8 *[2]"')
 
 
+class SymbolsTests(unittest.TestCase):
+    def test_symbols_yaml_becomes_the_files_splat_reads(self):
+        rnc_units = load_module("rnc_units_symbols", ROOT / "scripts" / "rnc_units.py")
+        with tempfile.TemporaryDirectory() as tmp:
+            repo, out = Path(tmp) / "repo", Path(tmp) / "out"
+            (repo / "config/us").mkdir(parents=True)
+            (repo / "config/us/symbols.yaml").write_text(
+                "named:\n  - [Foo, 0x100]\n  - [D_FFFF, 0xFFFF, ignore]\nlinker:\n  - [D_1, 0x200]\n")
+            rnc_units.write_symbol_files(repo, out)
+            self.assertEqual((out / "symbol_addrs.txt").read_text(),
+                             "Foo = 0x00000100;\nD_FFFF = 0x0000FFFF; // ignore:true\n")
+            self.assertEqual((out / "undefined_syms.txt").read_text(), "D_1 = 0x00000200;\n")
+            self.assertEqual((out / "undefined_funcs_auto.txt").read_text(), "\n")
+
+
 if __name__ == "__main__":
     unittest.main()

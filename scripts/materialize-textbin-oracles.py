@@ -134,15 +134,11 @@ def _textbin_oracle_labels(source_root: Path, symbol: str, address: int) -> list
     return [symbol] + [alias for alias in aliases if alias != symbol]
 
 
-def _symbol_addrs(path: Path) -> dict[int, tuple[str, ...]]:
+def _symbol_addrs(repo: Path) -> dict[int, tuple[str, ...]]:
     """Retail names the splat configuration assigns to addresses."""
     names: dict[int, list[str]] = {}
-    if not path.is_file():
-        return {}
-    for line in path.read_text(errors="replace").splitlines():
-        match = re.match(r"\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(0x[0-9A-Fa-f]+)\s*;", line)
-        if match:
-            names.setdefault(int(match.group(2), 16), []).append(match.group(1))
+    for name, address, _ignore in rnc_units.load_symbols(repo)["named"]:
+        names.setdefault(address, []).append(name)
     return {address: tuple(found) for address, found in names.items()}
 
 
@@ -255,7 +251,7 @@ def install(
     )
     installed: list[str] = []
     errors: list[dict[str, str]] = []
-    retail_names = _symbol_addrs(config.parent / "symbol_addrs.txt")
+    retail_names = _symbol_addrs(config.parents[2])
     for row in configured_textbin_functions(
         config, function_map, workspace / "src"
     ):

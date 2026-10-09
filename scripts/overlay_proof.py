@@ -18,6 +18,7 @@ from elftools.elf.relocation import RelocationSection
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import rnc_overlays as ov  # noqa: E402
+import rnc_units  # noqa: E402
 
 METHOD = "overlay-place-bytes-v1"
 
@@ -30,7 +31,6 @@ R_MIPS_GPREL16 = 7
 NAMED_SYMBOL = re.compile(r"^(?:FUN|func)_(?:L\d{2}_)?[0-9A-Fa-f]{8}$|^D_(?:L\d{2}_)?[0-9A-Fa-f]{8}(?:_gp)?$"
                           r"|^jtbl_(?:L\d{2}_)?[0-9A-Fa-f]{8}$")
 JTBL_REF = re.compile(r"%(?:hi|lo)\((jtbl_L(\d{2})_([0-9A-Fa-f]{8}))\)")
-ASSIGN_RE = re.compile(r"^\s*([A-Za-z_.$][\w.$]*)\s*=\s*(0x[0-9A-Fa-f]+|\d+)\s*;")
 LABEL_RE = re.compile(r'__asm__\s*\(\s*"((?:FUN|func)_[0-9A-Fa-f]{8})"\s*\)')
 
 
@@ -50,13 +50,9 @@ def exe_symbols(game_root: Path = ov.ROOT) -> dict[str, int]:
     unit's C name (the ``__asm__("FUN_x")`` label in its source)."""
     values: dict[str, int] = {}
     config = game_root / "config/us"
-    for name in ("symbol_addrs.txt", "undefined_syms.txt", "undefined_funcs_auto.txt"):
-        path = config / name
-        if path.is_file():
-            for line in path.read_text().splitlines():
-                m = ASSIGN_RE.match(line)
-                if m:
-                    values.setdefault(m.group(1), int(m.group(2), 0))
+    for rows in rnc_units.load_symbols(game_root).values():
+        for name, address, _ignore in rows:
+            values.setdefault(name, address)
     for owner, vram, _size in ov.exe_units():
         values.setdefault(f"FUN_{vram:08x}", vram)
         if owner.startswith("assembly/"):
