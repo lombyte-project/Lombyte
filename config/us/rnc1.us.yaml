@@ -1813,7 +1813,7 @@ segments:
           - [0x120cf4, textbin, text_gap_0021fd74_before_fun_0021fd78]
           - [0x120cf8, c, ui/menus/fun_0021fd78]
           - [0x120d44, textbin, text_gap_0021fdc4_after_fun_0021fd78]
-          - [0x120d48, c, assembly/textbin/fun_0021fdc8]
+          - [0x120d48, c, textbin/fun_0021fdc8]
           - [0x1212c4, textbin, text_gap_00220344_before_fun_00220348]
           - [0x1212c8, c, assembly/textbin/ui/menus/save_data/draw_checking_memory_card_data_menu]
           - [0x1215c4, textbin, text_gap_00220644_before_fun_00220648]
