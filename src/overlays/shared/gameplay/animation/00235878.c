@@ -312,7 +312,47 @@ void FUN_L00_00236128(HudElem *e) {
     }
     FUN_L00_0023aaa8((char *)e + 0x40);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236268.s", FUN_L00_00236268);
+#else
+typedef struct {
+    float x, y, vx, vy;
+} StarInit_236268;
+extern StarInit_236268 star_init_array[] __asm__("D_L00_0017E660");
+extern float star_init_limit0 __asm__("D_L00_0015F750") __attribute__((sda));
+extern float star_init_limit1 __asm__("D_L00_0015F754") __attribute__((sda));
+extern float star_init_limit2 __asm__("D_L00_0015F758") __attribute__((sda));
+extern int star_init_columns __asm__("D_L00_0015F75C") __attribute__((sda));
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+void FUN_L00_00236268(HudElem *e) {
+    int i;
+    float *vy = &star_init_array[0].vy;
+    float limit;
+    float step;
+    float y;
+
+    FUN_L00_00235d80(e);
+    for (i = 0; i < 100; i++, vy += 4) {
+        if (i < 10) {
+            limit = star_init_limit0;
+        } else if (i < 20) {
+            limit = star_init_limit1;
+        } else {
+            limit = star_init_limit2;
+        }
+        step = (232.0f - limit * 2.0f) / (float)star_init_columns;
+        y = (float)(i % star_init_columns) * step + (limit - 116.0f);
+        star_init_array[i].x = random_float_between(limit - 17.0f, 17.0f - limit);
+        star_init_array[i].y = random_float_between(y, y + step);
+        star_init_array[i].vx = random_float_between(-0.4f, 0.4f);
+        *vy = random_float_between(-0.6f, 0.6f);
+        star_init_array[i].vx += random_float_between(-0.4f, 0.4f);
+        *vy += random_float_between(-0.6f, 0.6f);
+        star_init_array[i].vx += random_float_between(-0.4f, 0.4f);
+        *vy += random_float_between(-0.6f, 0.6f);
+    }
+}
+#endif
 
 typedef struct {
     float x, y, vx, vy;
