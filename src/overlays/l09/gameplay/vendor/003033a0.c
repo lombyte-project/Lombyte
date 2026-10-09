@@ -537,4 +537,96 @@ void FUN_L09_0030a238(float *dst, float a, float b, float scale) {
     *dst = v;
     *dst = FastAddRots(v, a);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030a298.s", FUN_L09_0030a298);
+typedef struct {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 node[1];
+} PathNodes;
+
+typedef struct {
+    u8 pad0[0x70];
+    u8 unk70[0x38];
+    f32 speed;          /* 0xA8 */
+    s32 path;           /* 0xAC: index into D_L09_001B0630 */
+    u8 padB0[8];
+    s16 dir;            /* 0xB8: > 0 runs the path forward, else backward */
+    s16 node;           /* 0xBA: node being flown to */
+    f32 yaw_offset;     /* 0xBC */
+    f32 spin;           /* 0xC0 */
+    u8 padC4[8];
+    f32 lag;            /* 0xCC: eases to 0, slowing the turn while high */
+} PathFlyerVars;
+
+extern f32 D_L09_00161DF8 __attribute__((sda));
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern float atan2_f(float, float) __asm__("FUN_001f9e90");
+extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
+extern void FUN_L00_001fff28(void *, int, float);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern void FUN_L00_0025f8e0(void *, f32);
+extern void FUN_L00_002715e8(void *, int, int, float, float);
+
+/* Flies the moby along its path toward the current node, turning and banking
+ * toward it, steps the node at each arrival and now and then drops a puff.
+ * Returns nonzero once it has run off the end of the path. */
+int FUN_L09_0030a298(struct Moby *moby) {
+    PathFlyerVars *vars = (PathFlyerVars *)moby->pvars;
+    PathNodes *path;
+    f32 d;
+    Vec4 target;
+    Vec4 step;
+    Vec4 puff;
+    int done = 0;
+
+    path = (PathNodes *)D_L09_001B0630[vars->path];
+    vars->lag += (0.0f - vars->lag) * 0.005f;
+    qcopy(&target, &path->node[vars->node]);
+    target.f[2] += vars->speed * D_L09_00161DF8;
+    subtract_vector_xyz(&step, &target, &moby->pos);
+    normalize_vector_xyz(&step, &step, vars->speed);
+    add_vector_xyz(&moby->pos, &moby->pos, &step);
+    FUN_L09_0030a238(&moby->rot.z, moby->rot.z,
+                     FastAddRots(atan2_f(path->node[vars->node].f[0] - moby->pos.x,
+                                         path->node[vars->node].f[1] - moby->pos.y),
+                                 vars->yaw_offset),
+                     (1.0f - vars->lag) * 0.02f);
+    FUN_L09_0030a238(&moby->rot.x, moby->rot.x, 0.0f, 0.02f);
+    FUN_L09_0030a238(&moby->rot.y, moby->rot.y, 0.0f, 0.02f);
+    if (vars->dir > 0) {
+        f32 v;
+        if (FUN_001f9b48(&target, &moby->pos) < vars->speed + vars->speed) {
+            vars->node++;
+            if (vars->node == path->count)
+                done = 1;
+        }
+        d = FUN_001f9b48(&moby->pos, &path->node[path->count - 1]);
+        v = 0.0f;
+        advance_accelerated_scalar(d, D_0015ED70 * 3.0f, D_0015ED70 * 3.0f, D_0015ED6C * 10.0f, &v, &vars->speed);
+    } else {
+        f32 v;
+        if (FUN_001f9b48(&target, &moby->pos) < vars->speed + vars->speed) {
+            vars->node--;
+            if (vars->node == -1)
+                done = 1;
+        }
+        d = FUN_001f9b48(&moby->pos, &path->node[0]);
+        v = 0.0f;
+        advance_accelerated_scalar(d, D_0015ED70 * 3.0f, D_0015ED70 * 3.0f, D_0015ED6C * 10.0f, &v, &vars->speed);
+    }
+    if (path->node[vars->node].f[3] == 42.0f)
+        vars->yaw_offset = 0.0f;
+    vars->spin = FastAddRots(vars->spin, vars->speed);
+    FUN_L00_001fff28(vars->unk70, 0, vars->spin);
+    if (vector_distance(&moby->pos, &path->node[path->count - 1]) > 8.0f &&
+        vector_distance(&moby->pos, &path->node[0]) > 8.0f && !random_integer_below(7)) {
+        qcopy(&puff, &moby->pos);
+        FUN_L00_0025f8e0(&puff, 0.5f);
+        puff.f[2] = 25.01f;
+        FUN_L00_002715e8(&puff, 0, 0x40103080, vars->speed * 3.0f / (D_0015ED6C * 10.0f), 12600.0f);
+    }
+    return done;
+}
