@@ -4,7 +4,98 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00221310.s", FUN_L00_00221310);
+#else
+#include "rnc/gameplay/hero.h"
+extern s32 D_L00_0015F5CC_221310 __asm__("D_L00_0015F5CC");
+extern u8 D_L00_00173E80_221310[] __asm__("D_L00_00173E80");
+extern void *D_L00_00173E58_221310 __asm__("D_L00_00173E58");
+extern u8 D_L00_00173E60_221310[] __asm__("D_L00_00173E60");
+
+extern void FUN_L00_00213880(void);
+extern s32 FUN_L00_0020a240_221310(f32 *, f32, f32) __asm__("FUN_L00_0020a240");
+extern f32 FUN_001f9b20_221310(void *) __asm__("FUN_001f9b20");
+extern f32 FUN_001f9e90_221310(f32, f32) __asm__("FUN_001f9e90");
+extern s32 FUN_L00_0025e3b8_221310(void *) __asm__("FUN_L00_0025e3b8");
+extern void FUN_L00_00233660_221310(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
+extern s32 FUN_001efa68_221310(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
+extern f32 FUN_001f9b48_221310(void *, void *) __asm__("FUN_001f9b48");
+extern s32 FUN_L00_001f0d60_221310(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
+
+void FUN_L00_00221310(void) {
+    Vec4 first;
+    Vec4 second;
+    Vec4 probe;
+    f32 distance;
+    f32 offset;
+    s32 hit;
+    s32 frame;
+    u8 *hero_data = (u8 *)&hero;
+
+    if (hero.unk20AD == 0) {
+        FUN_L00_00213880();
+    }
+    frame = D_L00_0015F5CC_221310;
+    if (frame % 3 == 0) {
+        hero.unk248 = 4.0f;
+        *(u8 *)(hero_data + 0x254) = 0;
+        *(u8 *)(hero_data + 0x255) = 0;
+        if (FUN_L00_0020a240_221310(&hero.unk248, 0.7f, 4.0f)) {
+            *(f32 *)(hero_data + 0x250) =
+                FUN_001f9e90_221310(*(f32 *)(D_L00_00173E80_221310 + 8),
+                                     FUN_001f9b20_221310(D_L00_00173E80_221310));
+            if (D_L00_00173E58_221310 != 0) {
+                *(u8 *)(hero_data + 0x255) = 1;
+                if (FUN_L00_0025e3b8_221310(D_L00_00173E58_221310)) {
+                    *(u8 *)(hero_data + 0x254) = 1;
+                }
+            }
+        }
+    }
+    frame = D_L00_0015F5CC_221310;
+    if (frame % 5 == 0) {
+        *(s32 *)(hero_data + 0x260) = 0;
+        *(f32 *)(hero_data + 0x258) = 0.0f;
+        if (hero.unk300 != 0) {
+            f32 zero = *(f32 *)(hero_data + 0x258);
+            FUN_L00_00233660_221310(&first, 1.1f, zero, 1.0f);
+            FUN_L00_00233660_221310(&second, 1.1f, zero, -20.0f);
+            if (second.f[2] < 0.5f) {
+                second.f[2] = 0.5f;
+            }
+            distance = 20.0f;
+            hit = FUN_001efa68_221310(&first, &second, 2,
+                                       *(s32 *)(hero_data + 0x2080), 0);
+            if (hit != 0) {
+                distance = FUN_001f9b48_221310(&first, D_L00_00173E60_221310);
+            }
+            if (hit == 0 || distance > 3.0f) {
+                f32 step = 0.1f;
+                f32 default_distance = 20.0f;
+                offset = -0.4f;
+                do {
+                    FUN_L00_00233660_221310(&probe, 1.1f + offset, zero, zero);
+                    if (!FUN_L00_001f0d60_221310(hero.unk234, &probe, 2, 0)) {
+                        break;
+                    }
+                    offset += step;
+                    if (offset >= 0.5f) {
+                        return;
+                    }
+                } while (1);
+                *(s32 *)(hero_data + 0x260) = 1;
+                if (hit == 0) *(f32 *)(hero_data + 0x258) = default_distance;
+                else *(f32 *)(hero_data + 0x258) = distance;
+                *(f32 *)(hero_data + 0x25c) = hero.unk234 + offset;
+                if (*(f32 *)(hero_data + 0x25c) < 0.0f) {
+                    *(f32 *)(hero_data + 0x25c) = 0.0f;
+                }
+            }
+        }
+    }
+}
+#endif
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
