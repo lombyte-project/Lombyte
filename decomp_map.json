@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4550,
-  "matching_c": 3515,
+  "matching_c": 3528,
   "intentional_asm": 308,
-  "pending_c": 727,
+  "pending_c": 714,
   "bytes_total": 3668944,
-  "bytes_matching_c": 2391968,
+  "bytes_matching_c": 2416312,
   "bytes_intentional_asm": 121292,
-  "bytes_pending_c": 1155684,
-  "c_exact_percent_of_recoverable": 67.424,
-  "c_fuzzy_percent_of_recoverable": 69.04,
+  "bytes_pending_c": 1131340,
+  "c_exact_percent_of_recoverable": 68.1102,
+  "c_fuzzy_percent_of_recoverable": 69.7262,
   "boot": {
     "units_total": 1475,
     "groups_total": 129,
@@ -1963,12 +1963,12 @@
   },
   "overlays": {
     "functions_total": 3013,
-    "matching_c": 2371,
-    "pending_c": 642,
+    "matching_c": 2384,
+    "pending_c": 629,
     "bytes_total": 3193412,
-    "bytes_matching_c": 2103952,
-    "bytes_pending_c": 1089460,
-    "c_exact_percent_of_recoverable": 65.8841,
+    "bytes_matching_c": 2128296,
+    "bytes_pending_c": 1065116,
+    "c_exact_percent_of_recoverable": 66.6465,
     "intentional_asm": 62,
     "bytes_intentional_asm": 27412,
     "shared": {
@@ -3450,12 +3450,12 @@
         "planet": "Novalis",
         "description": "Tobruk Crater: a village under Blarg attack",
         "functions": 67,
-        "matching_c": 55,
-        "pending_c": 12,
+        "matching_c": 60,
+        "pending_c": 7,
         "bytes_total": 114728,
-        "bytes_matching_c": 94364,
-        "bytes_pending_c": 20364,
-        "c_exact_percent_of_recoverable": 82.2502,
+        "bytes_matching_c": 99900,
+        "bytes_pending_c": 14828,
+        "c_exact_percent_of_recoverable": 87.0755,
         "files": [
           {
             "file": "src/overlays/l01/gameplay/hero/00233de0.c",
@@ -3502,9 +3502,9 @@
           {
             "file": "src/overlays/l01/gameplay/entities/002b96e0.c",
             "functions": 21,
-            "matching_c": 18,
+            "matching_c": 19,
             "bytes_total": 31772,
-            "bytes_matching_c": 26180
+            "bytes_matching_c": 27936
           },
           {
             "file": "src/overlays/l01/gameplay/entities/00262618.c",
@@ -3516,9 +3516,9 @@
           {
             "file": "src/overlays/l01/gameplay/entities/002f9810.c",
             "functions": 22,
-            "matching_c": 17,
+            "matching_c": 20,
             "bytes_total": 14520,
-            "bytes_matching_c": 7752
+            "bytes_matching_c": 10420
           },
           {
             "file": "src/overlays/shared/gameplay/entities/002f6328.c",
@@ -3530,9 +3530,9 @@
           {
             "file": "src/overlays/l01/gameplay/vendor/00309bf8.c",
             "functions": 10,
-            "matching_c": 7,
+            "matching_c": 8,
             "bytes_total": 7144,
-            "bytes_matching_c": 1840
+            "bytes_matching_c": 2952
           }
         ]
       },
@@ -3542,12 +3542,12 @@
         "planet": "Aridia",
         "description": "Outpost X11: sand, swamps and the Trespasser",
         "functions": 62,
-        "matching_c": 56,
-        "pending_c": 6,
+        "matching_c": 62,
+        "pending_c": 0,
         "bytes_total": 101844,
-        "bytes_matching_c": 84028,
-        "bytes_pending_c": 17816,
-        "c_exact_percent_of_recoverable": 82.5066,
+        "bytes_matching_c": 101844,
+        "bytes_pending_c": 0,
+        "c_exact_percent_of_recoverable": 100.0,
         "files": [
           {
             "file": "src/overlays/l02/gameplay/hero/0021b698.c",
@@ -3587,23 +3587,23 @@
           {
             "file": "src/overlays/l02/gameplay/entities/002400c8.c",
             "functions": 37,
-            "matching_c": 33,
+            "matching_c": 37,
             "bytes_total": 30560,
-            "bytes_matching_c": 17988
+            "bytes_matching_c": 30560
           },
           {
             "file": "src/overlays/l02/gameplay/entities/002e0dc0.c",
             "functions": 6,
-            "matching_c": 5,
+            "matching_c": 6,
             "bytes_total": 6668,
-            "bytes_matching_c": 3940
+            "bytes_matching_c": 6668
           },
           {
             "file": "src/overlays/l02/gameplay/vendor/002ebf20.c",
             "functions": 5,
-            "matching_c": 4,
+            "matching_c": 5,
             "bytes_total": 5576,
-            "bytes_matching_c": 3060
+            "bytes_matching_c": 5576
           },
           {
             "file": "src/overlays/shared/gameplay/vendor/002ec308.c",
@@ -3726,12 +3726,12 @@
         "planet": "Eudora",
         "description": "Logging Site: forest and Blarg lumber mills",
         "functions": 53,
-        "matching_c": 41,
-        "pending_c": 12,
+        "matching_c": 43,
+        "pending_c": 10,
         "bytes_total": 60764,
-        "bytes_matching_c": 41432,
-        "bytes_pending_c": 19332,
-        "c_exact_percent_of_recoverable": 68.1851,
+        "bytes_matching_c": 42424,
+        "bytes_pending_c": 18340,
+        "c_exact_percent_of_recoverable": 69.8177,
         "files": [
           {
             "file": "src/overlays/l04/gameplay/entities/001f3038.c",
@@ -3757,16 +3757,16 @@
           {
             "file": "src/overlays/l04/runtime/dma/002922d0.c",
             "functions": 8,
-            "matching_c": 3,
+            "matching_c": 4,
             "bytes_total": 5164,
-            "bytes_matching_c": 312
+            "bytes_matching_c": 812
           },
           {
             "file": "src/overlays/l04/gameplay/entities/0029eb20.c",
             "functions": 17,
-            "matching_c": 15,
+            "matching_c": 16,
             "bytes_total": 28928,
-            "bytes_matching_c": 26960
+            "bytes_matching_c": 27452
           },
           {
             "file": "src/overlays/l04/gameplay/entities/002c40d0.c",
@@ -4999,14 +4999,14 @@
   },
   "total": {
     "units_total": 4550,
-    "matching_c": 3515,
+    "matching_c": 3528,
     "intentional_asm": 308,
-    "pending_c": 727,
+    "pending_c": 714,
     "bytes_total": 3668944,
-    "bytes_matching_c": 2391968,
+    "bytes_matching_c": 2416312,
     "bytes_intentional_asm": 121292,
-    "bytes_pending_c": 1155684,
-    "c_exact_percent_of_recoverable": 67.424,
-    "c_fuzzy_percent_of_recoverable": 69.04
+    "bytes_pending_c": 1131340,
+    "c_exact_percent_of_recoverable": 68.1102,
+    "c_fuzzy_percent_of_recoverable": 69.7262
   }
 }
