@@ -227,7 +227,379 @@ void FUN_L03_00292d10(struct Moby *moby) {
     *(unsigned short *)(D_L03_0015FFD8_292d10 + (*(int *)(data + 0xC4) << 8) + 0x34) |= 6;
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292e98.s", FUN_L03_00292e98);
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/entities/moby.h"
+
+typedef struct {
+    char p0[0x140];
+    float pos[4];
+} Cam292e98;
+
+typedef struct {
+    char p00[0x20];
+    int i20;
+    short s24;
+    char p26[2];
+    u8 b28;
+    char p29[0x15];
+    short s3E;
+    char p40[0x5C];
+    int i9C;
+    char pA0[4];
+    int iA4;
+    int iA8;
+    int iAC;
+    int iB0;
+    int iB4;
+    int iB8;
+    float fBC;
+    float fC0;
+    int iC4;
+    float fC8;
+    char pCC[8];
+    int iD4;
+    int iD8;
+    float fDC;
+    int ids[8];
+    int i100;
+    int i104;
+    int i108;
+    int i10C;
+} Engine292e98;
+
+typedef struct {
+    char p00[0x60];
+    int i60;
+    char p64[0xC];
+    char *path;
+    int i74;
+    char p78[0x78];
+    float fF0;
+    char pF4[8];
+    float fFC;
+} Coupling292e98;
+
+typedef struct {
+    char p00[0x14];
+    float f14;
+    float f18;
+    char p1C[0xC];
+    int i28;
+    int i2C;
+} Turret292e98;
+
+extern Cam292e98 D_L03_00166D80_292e98 __asm__("D_L03_00166D80");
+extern char *D_L03_0015FFD8_292e98 __asm__("D_L03_0015FFD8");
+extern struct Moby *D_L03_0015FFD8_m292 __asm__("D_L03_0015FFD8");
+extern char *D_L03_001B05B0_292e98[] __asm__("D_L03_001B05B0");
+typedef struct {
+    char p0[0x30];
+    float pos[4];
+    char p40[0x30];
+    float v70[4];
+} Slot292e98;
+
+extern Slot292e98 *D_L03_001600EC_292e98 __asm__("D_L03_001600EC");
+extern int D_L03_0015FDFC;
+extern char D_L03_001E2448[];
+extern char D_L03_001E2478[];
+extern float D_0015ED6C;
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern int FUN_001f9740(void *);
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
+extern int FUN_L01_00277fb8(char *);
+extern int FUN_L03_002c6c60(char *);
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern void FUN_001f4a58(int);
+extern void FUN_L00_00266858(void *, int);
+extern void FUN_L01_0027a248(int, int);
+extern void FUN_L01_002f5168(char *);
+extern void FUN_L03_002c6c90(char *);
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void debug_printf_292e98(char *, ...) __asm__("FUN_001e93b0");
+extern void mark_moby_for_removal_292e98(void *) __asm__("FUN_0020c828");
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
+void FUN_L03_00292890(char *moby);
+
+/* Heading of a path's first segment. */
+#define PATH_HEADING(p) \
+    FUN_001f9e90(*(float *)((p) + 0x20) - *(float *)((p) + 0x10), *(float *)((p) + 0x24) - *(float *)((p) + 0x14))
+
+/* Points a turret moby's data (yaw 0x18, pitch 0x14) at the hero, seen from the level camera. */
+#define AIM_AT_HERO(t)                                                                                          \
+    {                                                                                                           \
+        (t)->f18 = FUN_001f9e90(hero.motion.pos.f[0] - D_L03_00166D80_292e98.pos[0],                           \
+                                hero.motion.pos.f[1] - D_L03_00166D80_292e98.pos[1]);                          \
+        (t)->f14 = -FUN_001f9e90(FUN_001f9b80(D_L03_00166D80_292e98.pos, hero.motion.pos.f),                    \
+                                 hero.motion.pos.f[2] - D_L03_00166D80_292e98.pos[2]);                          \
+    }
+
+/* Keeps the engine loop sound playing and restarts the horn at random intervals. */
+#define ENGINE_SOUND()                                                                                          \
+    {                                                                                                           \
+        if (!FUN_L00_0028d8c0(moby, data->i108)) {                                                              \
+            data->i108 = allocate_voice_for_target_entry(1, 4, (int)moby);                                      \
+        }                                                                                                       \
+        if (FUN_001f9740(&data->i104)) {                                                                        \
+            allocate_voice_for_target_entry(0, 0, (int)moby);                                                   \
+            data->i104 = FUN_L00_00257b90(FUN_001f96f8(900), FUN_001f96f8(400));                                \
+        }                                                                                                       \
+    }
+
+#define RELEASE_VOICE(v)                                                                                        \
+    {                                                                                                           \
+        int idx_ = (v);                                                                                         \
+        if (idx_ != -1) {                                                                                       \
+            unsigned char *e_ = (unsigned char *)D_0013E550_292e98 + idx_ * 0x70;                               \
+            if (*(char **)(e_ + 0x88) == moby && e_[0x74]) {                                                    \
+                release_voice_slot(idx_);                                                                       \
+            }                                                                                                   \
+        }                                                                                                       \
+    }
+
+extern char D_0013E550_292e98[] __asm__("D_0013E550");
+
+/* Kerwan train engine: waits for the hero to board (clip volume 0xB4), then runs the ride: accelerates
+ * along its path pulling the cars, keeps the turret cars aimed at the hero, throws him off if he falls
+ * behind, switches to the second path when the cars are done and brakes at its end (state 6 resets). */
+void FUN_L03_00292e98(char *moby) {
+    float start[4];
+    int seg;
+    float frac;
+    char *coupling;
+    Engine292e98 *data;
+    Coupling292e98 *cdata;
+    Turret292e98 *td;
+    Turret292e98 *tdb;
+    char *car;
+    char *path;
+    int i;
+    int i6;
+    float lim;
+    char *m6;
+    int n;
+    char *p0;
+    u32 mode;
+    int ident;
+
+    data = *(Engine292e98 **)(moby + 0x78);
+    ident = *(unsigned short *)(moby + 0xA8);
+    data->iB8 = ident;
+    if (data->iA4 == -1) {
+        data->i20 = 0;
+        data->s24 = 0;
+        data->b28 = 4;
+        data->s3E = 0xD;
+        return;
+    }
+    if (data->iC4 == -1) {
+        debug_printf_292e98(D_L03_001E2448, ident);
+        mark_moby_for_removal_292e98(moby);
+    }
+    coupling = D_L03_0015FFD8_292e98 + (data->iC4 << 8);
+    cdata = *(Coupling292e98 **)(coupling + 0x78);
+    D_L03_0015FDFC = 0;
+    switch (((unsigned char *)moby)[0xBC]) {
+    case 0:
+        data->i20 = 0;
+        data->s24 = 0;
+        data->b28 = 4;
+        data->s3E = 0xD;
+        FUN_L00_0024f7c8(moby, 0, start);
+        data->fBC = FUN_001f9b80(start, moby + 0x10);
+        data->fDC = 20.0f;
+        data->fC8 = data->fC0 = data->fC0 * D_0015ED6C;
+        if (data->iAC != -1) {
+            p0 = D_L03_001B05B0_292e98[data->iAC];
+            data->iD4 = -1;
+            n = 0;
+            if (*(int *)p0 > 0) {
+                if (*(float *)(p0 + n * 0x10 + 0x1C) == 1.0f) {
+                    data->iD4 = n;
+                } else {
+                next:
+                    n++;
+                    if (n < *(int *)p0) {
+                        if (*(float *)((n << 4) + p0 + 0x1C) != 1.0f) {
+                            goto next;
+                        }
+                        data->iD4 = n;
+                    }
+                }
+            }
+        }
+        moby[0xBC] = 1;
+        data->i9C = 3;
+        *(unsigned short *)(coupling + 0x34) |= 6;
+        break;
+    case 1:
+        *(OvlQuad *)start = *(OvlQuad *)(D_L03_001B05B0_292e98[data->iA4] + 0x10);
+        FUN_L03_00292578(moby, start, 0.0f);
+        cdata->i74 = data->iA4;
+        cdata->fFC = data->fC0;
+        FUN_L01_002f5168(coupling);
+        moby[0xBC] = 2;
+        break;
+    case 2:
+        *(OvlQuad *)start = *(OvlQuad *)(D_L03_001B05B0_292e98[data->iA8] + 0x10);
+        FUN_L03_00292578(moby, start, PATH_HEADING(D_L03_001B05B0_292e98[data->iA8]));
+        moby[0xBC] = 3;
+        cdata->i74 = data->iA4;
+        cdata->path = D_L03_001B05B0_292e98[cdata->i74];
+        cdata->i60 = 1;
+        data->fC8 = 0.0f;
+        break;
+    case 3:
+        FUN_L03_00292d10(moby);
+        if (!is_point_inside_clip_volume(&hero.motion, data->iB4)) {
+            break;
+        }
+        if (data->i100 == -1) {
+            break;
+        }
+        mode = hero.state.control_mode;
+        if (mode < 2 || mode == 9 || mode == 12) {
+            moby[0xBC] = 4;
+            D_L03_0015FDFC = 1;
+            FUN_L01_0027a248(4, 7);
+            FUN_L00_00266858(moby, 1);
+            ((char *)&D_L03_0015FFD8_m292[data->i100])[0xBC] = 1;
+            td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[data->i100] + 0x78);
+            AIM_AT_HERO(td);
+            td->i2C = FUN_001f96f8(860);
+            data->i104 = FUN_001f96f8(30);
+            data->i108 = -1;
+        }
+        break;
+    case 4:
+        data->fC8 += data->fC0 / 5.0f * D_0015ED6C;
+        if (data->fC0 < data->fC8) {
+            data->fC8 = data->fC0;
+        }
+        D_L03_0015FDFC = 1;
+        FUN_L03_00292890(moby);
+        ENGINE_SOUND();
+        if (hero.unk30E.s != 0 && hero.state.control_mode != 3) {
+            FUN_L00_0025df68(cdata->path, hero.motion.pos.f, start, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
+            data->i10C += 1;
+            if (FUN_001f96f8(60) < data->i10C && hero.motion.pos.f[2] < start[2] - 10.0f) {
+                RELEASE_VOICE(data->i108);
+                data->i108 = -1;
+                FUN_001f4a58(FUN_001f96f8(16));
+                hero.unk20B1 = 1;
+                break;
+            }
+        } else {
+            data->i10C = 0;
+        }
+        if (((unsigned char *)(char *)&D_L03_0015FFD8_m292[data->i100])[0xBC] != 0) {
+            td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[data->i100] + 0x78);
+            AIM_AT_HERO(td);
+        }
+        if (hero.unk2FC != 0 && (*(short *)((char *)hero.unk2FC + 0xA6) == 0x336 ||
+                                 *(short *)((char *)hero.unk2FC + 0xA6) == 0x4BA)) {
+            FUN_L00_00266858(hero.unk2FC, 3);
+        }
+        if (!FUN_L01_00277fb8(moby)) {
+            break;
+        }
+        if (data->iAC == -1) {
+            break;
+        }
+        if (data->iD8 == -1) {
+            break;
+        }
+        if (((unsigned char *)(char *)&D_L03_0015FFD8_m292[data->i100])[0xBC] != 0) {
+            break;
+        }
+        for (i = 0; i < 8; i++) {
+            car = D_L03_0015FFD8_292e98 + (data->ids[i] << 8);
+            if (data->ids[i] != -1 && car != 0 && ((unsigned char *)car)[0x20] != 0xFE &&
+                ((unsigned char *)car)[0x20] != 0xFD && !FUN_L03_002c6c60(car)) {
+                FUN_L03_002c6c90(car);
+                break;
+            }
+        }
+        if (data->iD4 == -1) {
+            debug_printf_292e98(D_L03_001E2478);
+            break;
+        }
+        ((char *)&D_L03_0015FFD8_m292[data->iD8])[0xBC] = 1;
+        tdb = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[data->iD8] + 0x78);
+        path = D_L03_001B05B0_292e98[data->iAC];
+        tdb->f18 = FUN_001f9e90(*(float *)(path + 0x10) - D_L03_00166D80_292e98.pos[0],
+                                             *(float *)(path + 0x14) - D_L03_00166D80_292e98.pos[1]);
+        tdb->f14 =
+            -FUN_001f9e90(FUN_001f9b80(D_L03_00166D80_292e98.pos, D_L03_001B05B0_292e98[data->iAC] + 0x10),
+                          *(float *)(D_L03_001B05B0_292e98[data->iAC] + 0x18) - D_L03_00166D80_292e98.pos[2]);
+        D_L03_001600EC_292e98[tdb->i28].pos[0] =
+            FUN_001f9dc8(PATH_HEADING(D_L03_001B05B0_292e98[data->iAC])) * -(data->fDC + 4.0f);
+        D_L03_001600EC_292e98[tdb->i28].pos[1] =
+            FUN_001f9de0(PATH_HEADING(D_L03_001B05B0_292e98[data->iAC])) * -(data->fDC + 4.0f);
+        D_L03_001600EC_292e98[tdb->i28].pos[2] = 0.0f;
+        add_vector_xyz(D_L03_001600EC_292e98[tdb->i28].pos, D_L03_001600EC_292e98[tdb->i28].pos,
+                       D_L03_001B05B0_292e98[data->iAC] + 0x10);
+        D_L03_001600EC_292e98[tdb->i28].pos[2] += 2.7f;
+        clear_vector(D_L03_001600EC_292e98[tdb->i28].v70);
+        D_L03_001600EC_292e98[tdb->i28].v70[2] = PATH_HEADING(D_L03_001B05B0_292e98[data->iAC]);
+        tdb->i2C = FUN_001f96f8(10000);
+        *(OvlQuad *)start = *(OvlQuad *)(D_L03_001B05B0_292e98[data->iAC] + 0x10);
+        FUN_L03_00292578(moby, start, PATH_HEADING(D_L03_001B05B0_292e98[data->iAC]));
+        cdata->i74 = data->iAC;
+        cdata->i60 = 1;
+        cdata->fF0 = 1.0f;
+        data->fC0 = 2.0f * data->fC0;
+        cdata->fFC = data->fC0;
+        FUN_L01_002f5168(coupling);
+        moby[0xBC] = 5;
+        FUN_L01_0027a248(0, 8);
+        break;
+    case 5:
+        td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[data->iD8] + 0x78);
+        FUN_L03_00292890(moby);
+        D_L03_0015FDFC = 1;
+        ENGINE_SOUND();
+        if (cdata->i60 >= data->iD4) {
+            data->fDC = 0.0f;
+            lim = data->fDC;
+            data->fC8 -= data->fC0 / 1.9f * D_0015ED6C;
+            if (data->fC8 < lim) {
+                data->fC8 = lim;
+            }
+            if (data->fC8 == lim) {
+                ((char *)&D_L03_0015FFD8_m292[data->iD8])[0xBC] = 0;
+                moby[0xBC] = 6;
+                data->fC0 *= 0.5f;
+                RELEASE_VOICE(data->i108);
+                data->i108 = -1;
+            }
+        }
+        AIM_AT_HERO(td);
+        break;
+    case 6:
+        if (is_point_inside_clip_volume(&hero.motion, data->iB0)) {
+            for (i6 = 0; i6 < 8; i6++) {
+                m6 = D_L03_0015FFD8_292e98 + (data->ids[i6] << 8);
+                if (data->ids[i6] != -1 && m6 != 0 && ((unsigned char *)m6)[0x20] != 0xFE &&
+                    ((unsigned char *)m6)[0x20] != 0xFD && *(short *)(m6 + 0xA6) == 0x23E &&
+                    ((unsigned char *)m6)[0x20] == 0x10) {
+                    m6[0x20] = 0x11;
+                }
+            }
+            data->fC8 = data->fC0;
+            data->fDC = 20.0f;
+            moby[0xBC] = 1;
+        } else {
+            FUN_L03_00292d10(moby);
+        }
+        break;
+    case 7:
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00294c08.s", FUN_L03_00294c08);
 #include "qcopy.h"
 
