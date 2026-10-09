@@ -1176,18 +1176,18 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
     char *d;
     char *e;
     char *g;
-    char *pad;
-    char *padb;
-    char *padc;
+    struct Hero *pad;
+    struct Hero *padb;
+    struct Hero *padc;
     char *q;
     float x, y;
     int flag;
     g = D_L00_00166E10;
     d = *(char **)(m + 0x70);
     FUN_L00_002e4168_c(m, cam);
-    pad = D_0013F350;
+    pad = &hero;
     e = d + 0x40;
-    if (*(int *)(pad + 0x2084) == 0x77) {
+    if (pad->state.current == 0x77) {
         x = FUN_001f9ab0(e, g + 0x30);
         FUN_001f9a68_c2(v2, g + 0x30, x);
         FUN_001f9a28(e, e, v2);
@@ -1204,9 +1204,9 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
     }
     switch (*(unsigned char *)(e + 0xC4)) {
     case 2:
-        padb = D_0013F350;
-        if (*(int *)(padb + 0x2084) == 0x11 ||
-            (*(short *)(padb + 0x41E) != 0 && *(float *)(padb + 0x2DC) > 0.2f &&
+        padb = &hero;
+        if (padb->state.current == 0x11 ||
+            (padb->unk41E != 0 && padb->ground_distance > 0.2f &&
              ((y = FUN_L00_002e4580_u(m, *(float *)(e + 0xB0))) < *(float *)&D_L00_00161D10_d ||
               *(float *)&D_L00_00161D0C_d < y))) {
             int v;
@@ -1215,10 +1215,10 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
             *(short *)(e + 0xC6) = v;
             *(float *)(e + 0xC8) = 1.0f / ConvertIntegerToFloat((short)v);
         }
-        padc = D_0013F350;
+        padc = &hero;
         flag = 0;
-        if (*(short *)(padc + 0x30C) != 0 && *(float *)(g + 0xDC) == 0.0f &&
-            (*(short *)(padc + 0x41E) == 0 || *(int *)(padc + 0x44C) >= 0x10)) {
+        if (padc->unk30C.s != 0 && *(float *)(g + 0xDC) == 0.0f &&
+            (padc->unk41E == 0 || padc->unk44C >= 0x10)) {
             flag = 1;
         } else {
             if (func_L00_002E5770_r(tmp, 1) == 1) {
