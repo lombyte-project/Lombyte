@@ -44,7 +44,120 @@ void FUN_L01_00309c98(FlagMoby *m) {
     enqueue_callback_list_1(FUN_L01_00309bf8, m);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030acb8.s", FUN_L01_0030acb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030ba18.s", FUN_L01_0030ba18);
+#include "rnc/gameplay/entities/moby.h"
+
+/* pvars of the lava blob FUN_L01_0030ba18 moves */
+typedef struct {
+    Vec4f vel;         /* 0x00 */
+    Vec4f spin;        /* 0x10 */
+    s32 timer;         /* 0x20 */
+    s32 owner;         /* 0x24 */
+} BlobVars;
+
+typedef struct {
+    u8 pad0[0x1C];
+    s32 have_normal;   /* 0x1C */
+    u8 pad20[0x20];
+    Vec4f normal;      /* 0x40 */
+} BlobHitInfo;
+
+extern f32 D_0015ED60;
+extern f32 D_0015ED70;
+extern f32 D_L01_00162058 __attribute__((sda));
+extern f32 D_L01_0016205C __attribute__((sda));
+extern f32 D_L01_00162060 __attribute__((sda));
+extern BlobHitInfo D_L01_001742C0;
+extern s32 D_L01_0015F580;
+extern void FUN_L01_0030bfa8(void);
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern f32 FUN_001f99c0(f32);
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
+extern void FUN_L00_001ff660(void *, void *, void *);
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void FUN_L00_0025e450(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32, f32,
+                             s32, s32, s32, s32);
+extern void spark_cbb0(void *, void *, s32, s32, f32, s32, s32) __asm__("FUN_L00_0026cbb0");
+extern int FUN_L00_00257b90(int lo, int hi);
+extern u8 *spawn_puff(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+
+void FUN_L01_0030ba18(struct Moby *m) {
+    BlobVars *v;
+    s32 hit;
+    s32 i;
+    s32 n;
+    s32 c;
+    s32 alpha;
+    s32 grey;
+    f32 s;
+    u8 *p;
+    u8 *q;
+
+    v = (BlobVars *)m->pvars;
+    if (random_integer_below(2)) {
+        enqueue_callback_list_1(FUN_L01_0030bfa8, m);
+    }
+    add_vector_xyz(&m->pos, &m->pos, v);
+    if (FUN_001f99c0(v->vel.x) > D_L01_00162060 * D_0015ED60) {
+        v->vel.x *= (D_L01_0016205C - 1.0f) * D_0015ED60 + 1.0f;
+    }
+    if (FUN_001f99c0(v->vel.y) > D_L01_00162060 * D_0015ED60) {
+        v->vel.y *= (D_L01_0016205C - 1.0f) * D_0015ED60 + 1.0f;
+    }
+    if (v->vel.z > 0.0f) {
+        v->vel.z *= (D_L01_0016205C - 1.0f) * D_0015ED60 + 1.0f;
+    }
+    v->vel.z -= D_L01_00162058 * D_0015ED70;
+    m->rot.x = fast_add_rotations(m->rot.x, v->spin.x);
+    m->rot.y = fast_add_rotations(m->rot.y, v->spin.y);
+    m->rot.z = fast_add_rotations(m->rot.z, v->spin.z);
+    if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f ||
+        m->pos.z < 2.0f || m->pos.z > 1021.0f) {
+        mark_moby_for_removal(m);
+        return;
+    }
+    hit = FUN_L00_001f0d60(2.0f, &m->pos, 0, (void *)v->owner);
+    if (tick_countdown_32(&v->timer) || hit) {
+        if (hit) {
+            if (D_L01_001742C0.have_normal) {
+                FUN_L00_001ff660(v, v, &D_L01_001742C0.normal);
+            } else {
+                clear_vector(v);
+            }
+        }
+        FUN_L00_0025e450(m, v, &m->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 0, 3.0f, 15.0f, 1, 1,
+                         -1, 0);
+        mark_moby_for_removal(m);
+        return;
+    }
+    s = random_float_between(0.5f, 1.5f) * 210000.0f;
+    spark_cbb0(&m->pos, &D_L01_0015F580, 0x4F007FFF, 0x1FFFFFFF, s,
+               FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1);
+    alpha = 0x60000000;
+    for (i = 0; i < 2; i++) {
+        n = random_integer_below(6);
+        if (random_integer_below(2)) {
+            n = -n;
+        }
+        s = random_float_between(40000.0f, 100000.0f);
+        c = FUN_L00_00257b90(0x30, 0xFF);
+        grey = (c << 8) | alpha;
+        p = spawn_puff(&m->pos, 0.025f, 1.0f, 1.0f, n, &D_L01_0015F580, s, c | ((c << 16) | grey));
+        if (p != NULL) {
+            p[3] = 0x44;
+            q = p + 0x20;
+            *(s16 *)(p + 0xA) = scale_game_frames(60);
+            *(s32 *)(q + 4) = 2;
+            q[0xA] = 0x60;
+            q[0xB] = p[0xA];
+        }
+    }
+}
 #include "eetypes.h"
 #include "qcopy.h"
 
