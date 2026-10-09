@@ -670,7 +670,7 @@ struct Hero {
     s32 unk21B4;                   /* 0x21B4: unk1B00 ring count */
     u8 pad_21B8[0x20];
     s16 unk21D8[8][4];             /* 0x21D8: 8 slots of four s16 */
-    s32 unk2218;                   /* 0x2218 */
+    s32 unk2218;                   /* 0x2218: voice of sound slot 0, -1 = none (slots 0-7 run to 0x2234, FUN_L00_00206c08) */
     u8 pad_221C[0x4];
     s32 unk2220;                   /* 0x2220 */
     s32 unk2224;                   /* 0x2224 */

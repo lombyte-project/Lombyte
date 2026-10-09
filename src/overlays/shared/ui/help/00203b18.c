@@ -422,7 +422,52 @@ void FUN_L00_002061f0(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002062b0.s", FUN_L00_002062b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00206c08.s", FUN_L00_00206c08);
+#include "rnc/audio/voice_pool.h"
+
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+
+/* Stops the sounds the hero still owns in its 8 sound slots and clears them. */
+void FUN_L00_00206c08(void) {
+    s32 *slot;
+    s32 i;
+    s32 off;
+    s32 voice;
+    struct Moby *moby;
+    s32 active;
+    struct Hero *h;
+    struct Moby **mobys;
+
+    h = &hero;
+    mobys = h->unk2238;
+    slot = &h->unk2218;
+    off = 0;
+    for (i = 7; i >= 0; i--) {
+        moby = *(struct Moby **)(off + (s32)mobys);
+        voice = *slot;
+        if (moby != 0) {
+            if (voice == -1 || voice_pool.voices[voice].owner != (VoiceMoby *)moby) {
+                goto clear;
+            }
+            active = voice_pool.voices[voice].state;
+        } else {
+            if (voice == -1 || voice_pool.voices[voice].owner != (VoiceMoby *)h->moby) {
+                goto clear;
+            }
+            active = voice_pool.voices[voice].state;
+        }
+        if (active) {
+            release_voice_slot(voice);
+        }
+    clear:
+        *slot = -1;
+        slot++;
+        /* empty block between the two steps: retail steps slot before off */
+        do {
+        } while (0);
+        off += 4;
+    }
+    i = 0;
+}
 #include "sda.h"
 #include "rnc/overlay/quad.h"
 typedef struct {
