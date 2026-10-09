@@ -416,6 +416,11 @@ SDATA_OVERLAYS = {
     "ui/fonts/load_debug_font": (0x15EEC8, 0x5FE48),
     "gameplay/state/fun_00204428": (0x15EE50, 0x5FDD0),
     "rendering/draw_debug_profiler": (0x15EE40, 0x5FDC0),
+    "gameplay/camera/camera_activation_check_priority": (0x15EF40, 0x5FEC0),
+    "gameplay/camera/execute_camera_post_update_callbacks": (0x15EF8C, 0x5FF0C),
+    "gameplay/camera/refresh_camera_control_flags": (0x15EF98, 0x5FF18),
+    "audio/voices/pause_all_sounds": (0x15F674, 0x605F4),
+    "gameplay/entities/create_moby": (0x15FEFC, 0x60E7C),
     "rendering/vu1_chain": (0x160EE0, 0x61E60),
 }
 

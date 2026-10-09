@@ -1,5 +1,6 @@
 #include "types.h"
-extern s32 D_0015EF8C;
+#include "sda.h"
+extern s32 D_0015EF8C MACRO_ADDR;
 extern void (*D_001892B0[])(void);
 void execute_camera_post_update_callbacks(void) __asm__("FUN_001ebcf0");
 
@@ -14,3 +15,6 @@ void execute_camera_post_update_callbacks(void) {
 
 extern __typeof__(execute_camera_post_update_callbacks) func_001EBCF0
     __attribute__((alias("FUN_001ebcf0")));
+
+/* Defined below their only users, so retail reaches them with lui. */
+s32 D_0015EF8C MACRO_ADDR = 0;

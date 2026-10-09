@@ -86,3 +86,6 @@ void pause_all_sounds(s32 mode) {
 }
 
 extern __typeof__(pause_all_sounds) func_00218D78 __attribute__((alias("FUN_00218d78")));
+
+/* Defined below their only users, so retail reaches them with lui. */
+s32 D_0015F674 MACRO_ADDR = 0;
