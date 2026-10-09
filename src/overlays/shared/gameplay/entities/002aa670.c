@@ -150,7 +150,6 @@ extern B910 D_L00_001E9880;
 extern Cam910 D_L00_00166C80;
 extern E D_0013E520;
 extern M910 *D_L00_00173E58 __attribute__((section(".data")));
-extern P D_0013F350;
 extern char *D_L00_001ABA00[];
 extern char *FUN_L00_0026bed0(char *, char *, int, int, float, int, int);
 extern char *FUN_L00_002d3838(char *a, char *b, int c, char *d);
@@ -236,7 +235,6 @@ float AbsoluteFloat(float input) __asm__("func_001F99C0");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char D_0013E550[];
-extern G910 D_G910 __asm__("D_0013F350");
 extern E910 D_E910 __asm__("D_0013E520");
 extern H910 D_H910 __asm__("D_L00_00173E40");
 
@@ -257,22 +255,22 @@ void FUN_L00_002aa670(M910 *m) {
     up.f[2] = 1.0f;
     c.q = old.q;
     v = m->v;
-    if ((D_G910.b20A5 != 0 || D_G910.b20AF != 0) && m->state == 0) {
+    if ((hero.unk20A5 != 0 || hero.unk20AF != 0) && m->state == 0) {
         m->flags |= 0x41;
     } else {
         m->flags &= 0xFFBE;
     }
-    if ((D_G910.hero == 0 || D_G910.hero->cls != 0xBE) && m->state == 0) {
+    if ((hero.items[0].moby == 0 || ((M910 *)hero.items[0].moby)->cls != 0xBE) && m->state == 0) {
         mark_moby_for_removal(m);
         return;
     }
-    if (D_G910.b20A4 != 0 && m->state == 0) {
+    if (hero.unk20A4 != 0 && m->state == 0) {
         mark_moby_for_removal(m);
         return;
     }
     if (v->owner != 0 && v->owner->state != 0xFE && v->owner->state != 0xFD &&
         v->owner->cls == 0xBE && v->h36 == 0 && 0.0f < vector_length_xyz(v)) {
-        if (D_G910.p2FC == 0 || FUN_002141f8_cf(D_G910.p2FC) == 0) {
+        if (hero.unk2FC == 0 || FUN_002141f8_cf(hero.unk2FC) == 0) {
             FUN_L00_002aa2a8(v, m, 1);
         } else if (FUN_L00_002aa2a8(v, m, 0) == 0) {
             FUN_L00_002aa2a8(v, m, 2);
@@ -280,7 +278,7 @@ void FUN_L00_002aa670(M910 *m) {
     }
     st = m->state;
     if (st == 0) {
-        if (D_G910.hero != 0 && D_G910.hero->cls == 0xBE) {
+        if (hero.items[0].moby != 0 && ((M910 *)hero.items[0].moby)->cls == 0xBE) {
             float m1[4][4];
             float m2[4][4];
             U910 rot;
@@ -384,7 +382,7 @@ void FUN_L00_002aa670(M910 *m) {
                         if (D_H910.moby != 0 &&
                             (FUN_L00_0025e3b8((int)D_H910.moby) != 0 ||
                              (D_H910.moby->flags & 0x5000)) &&
-                            D_H910.moby->cls != m->cls && D_H910.moby != D_G910.cam &&
+                            D_H910.moby->cls != m->cls && D_H910.moby != hero.moby &&
                             D_H910.moby != v->owner) {
                             m->bBC = 1;
                             if (m->state != 1) {
@@ -410,7 +408,7 @@ void FUN_L00_002aa670(M910 *m) {
                                 qcopy(n, &D_H910.nrm);
                                 goto orient;
                             }
-                        } else if ((D_H910.moby != 0 && D_H910.moby != D_G910.cam &&
+                        } else if ((D_H910.moby != 0 && D_H910.moby != hero.moby &&
                                     D_H910.moby != v->owner) ||
                                    D_H910.i1C > 0) {
                             if (v->h50 != 0 || FUN_001f0b58() == 0 ||
@@ -640,18 +638,18 @@ void FUN_L00_002aa670(M910 *m) {
             m->bA4 = 0xFF;
             if (m->state & 2) {
                 if (!(m->state & 4) ||
-                    (FUN_001f9b80(&D_G910.cam->pos, &m->pos) < 0.75f &&
-                     AbsoluteFloat(m->pos.f[2] - D_G910.pos[2]) < 0.25f && (m->state & 0x10))) {
+                    (FUN_001f9b80(&((M910 *)hero.moby)->pos, &m->pos) < 0.75f &&
+                     AbsoluteFloat(m->pos.f[2] - hero.motion.pos.f[2]) < 0.25f && (m->state & 0x10))) {
                     m->bBC = 1;
-                } else if (FUN_001f9b48(&D_G910.cam->pos, &m->pos) < 0.75f) {
+                } else if (FUN_001f9b48(&((M910 *)hero.moby)->pos, &m->pos) < 0.75f) {
                     V910 t;
                     V910 n;
                     V910 r;
                     {
-                        subtract_vector_xyz(r, &m->pos, &D_G910.cam->pos);
+                        subtract_vector_xyz(r, &m->pos, &((M910 *)hero.moby)->pos);
                         *(OvlQuad *)t = *(OvlQuad *)r;
                         normalize_vector_xyz(t, t, 0.75f);
-                        add_vector_xyz(r, &D_G910.cam->pos, t);
+                        add_vector_xyz(r, &((M910 *)hero.moby)->pos, t);
                         *(OvlQuad *)n = *(OvlQuad *)r;
                         FUN_L00_00258490(m, &m->pos, n, 0.4f, 0.25f, 0.25f, 0.5235988f, 0);
                     }
@@ -938,7 +936,7 @@ void FUN_L00_002aa670(M910 *m) {
                 }
                 D_L00_00166C80.f160 = dist < 20.0f ? 0.4f - dist * 0.0175f : 0.050000012f;
                 D_L00_00166C80.i168 = scale_game_frames(0x19);
-                FUN_001f9b48(&m->pos, D_G910.pos);
+                FUN_001f9b48(&m->pos, hero.motion.pos.f);
                 if (D_E910.b11 != 0) {
                     FUN_L00_002d3838((char *)&b, (char *)&m->pos, 0, 0);
                 } else {
@@ -1566,7 +1564,6 @@ typedef struct {
 } E_u;
 
 extern char *D_L00_001ABA00[] __attribute__((section(".data")));
-extern P_u D_0013F350_u __asm__("D_0013F350");
 extern E_u D_0013E520_u __asm__("D_0013E520");
 extern s32 D_L00_00166DC0[] __attribute__((section(".data")));
 extern s32 D_L00_00173E40[0x1C] __attribute__((section(".data")));
@@ -1603,7 +1600,7 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
     o = D_L00_001ABA00[i];
     if (o == 0)
         return;
-    g = &D_0013F350_u;
+    g = &hero;
     while (o != 0) {
         if (*(s8 *)(o + 0x20) < 0)
             goto next;

@@ -690,7 +690,7 @@ typedef struct {
     u8 p2[0x2080 - 0x30E];
     void *p2080;
 } G_002e42c0;
-extern G_002e42c0 D_0013F350_002e42c0 __asm__("D_0013F350") __attribute__((section(".data")));
+extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
 extern u8 D_L00_00166E10_002e42c0[] __asm__("D_L00_00166E10") __attribute__((section(".data")));
 extern OvlQuad D_L00_00173E60_002e42c0 __asm__("D_L00_00173E60")
     __attribute__((section(".data")));
@@ -702,21 +702,21 @@ s32 FUN_001efa68_002e42c0(OvlQuad *, OvlQuad *, s32, void *,
                           s32) __asm__("FUN_001efa68");
 s32 FUN_L00_002e42c0(OvlQuad *out, s32 flag) {
     OvlQuad v[4];
-    G_002e42c0 *g = &D_0013F350_002e42c0;
+    struct Hero *g = &hero_data;
     u8 *q = D_L00_00166E10_002e42c0;
     f32 f;
-    if (g->h30C == 0) {
+    if (g->unk30C.s == 0) {
         FUN_L00_002e4168_002e42c0(*(s32 *)(q - 0x10), out);
         return 1;
     }
     FUN_L00_002e4168_002e42c0(*(s32 *)(q - 0x10), &v[0]);
-    f = g->f2DC;
+    f = g->unk2DC;
     if (30.0f <= f || flag == 0) {
         FUN_001f9a68_002e42c0(&v[3], q + 0x30, 0.2f);
         FUN_001f9a10_002e42c0(&v[1], &v[0], &v[3]);
         FUN_001f9a68_002e42c0(&v[3], q + 0x30, -30.0f);
         FUN_001f9a10_002e42c0(&v[2], &v[0], &v[3]);
-        if (FUN_001efa68_002e42c0(&v[1], &v[2], 0x12, g->p2080, 0)) {
+        if (FUN_001efa68_002e42c0(&v[1], &v[2], 0x12, g->moby, 0)) {
             qcopy(out, &D_L00_00173E60_002e42c0);
             return 0;
         }

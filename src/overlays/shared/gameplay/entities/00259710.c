@@ -341,7 +341,6 @@ typedef struct {
     u8 pad0[0x80];
     f32 x, y;
 } G_25a478;
-extern G_25a478 G_25a478v __asm__("D_0013F350");
 extern u8 D_0013E533[];
 extern f32 D_L00_00160080[2] __attribute__((sda));
 extern f32 D_L00_001B01C8[][8];

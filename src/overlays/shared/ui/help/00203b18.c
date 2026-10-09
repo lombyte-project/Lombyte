@@ -696,7 +696,6 @@ typedef struct {
     char *w2080;
     int w2084;
 } S13F350_2078a8;
-extern S13F350_2078a8 D_0013F350_002078a8 __asm__("D_0013F350");
 extern float D_0015ED6C_002078a8 __asm__("D_0015ED6C");
 extern char D_L00_0017A6C0_002078a8[] __asm__("D_L00_0017A6C0") __attribute__((section(".data")));
 void FUN_L00_00262b00_002078a8(char *, float *, float *, float, float) __asm__("FUN_L00_00262b00");
@@ -705,25 +704,25 @@ void FUN_001fa050_002078a8(void *, void *) __asm__("FUN_001fa050");
 void FUN_001f9d20_002078a8(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_002078a8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_002078a8(void) {
-    S13F350_2078a8 *P = &D_0013F350_002078a8;
+    struct Hero *P = &hero;
     Vec4_2078a8 v;
     float m[16] __attribute__((aligned(16)));
-    if (P->w2084 == 0x7F) {
-        FUN_L00_00262b00_002078a8(P->w2080, &P->f6A8, &P->f6AC, 0.3f,
+    if (P->state.current == 0x7F) {
+        FUN_L00_00262b00_002078a8(P->moby, &P->unk6A8, &P->unk6AC, 0.3f,
                                   D_0015ED6C_002078a8 * 6.981317f);
     }
-    if (P->w2084 == 0x6B && P->h8BC == 0) {
-        FUN_L00_00262b00_002078a8(P->w2080, &P->f6A8, &P->f6AC, 1.1f,
+    if (P->state.current == 0x6B && P->unk8BC == 0) {
+        FUN_L00_00262b00_002078a8(P->moby, &P->unk6A8, &P->unk6AC, 1.1f,
                                   D_0015ED6C_002078a8 * 5.2359877f);
-        if (P->o86C) {
-            char *s = P->w2080;
-            qcopy(P->o86C + 0x10, s + 0x10);
+        if (P->unk86C) {
+            char *s = P->moby;
+            qcopy(((char *)P->unk86C) + 0x10, s + 0x10);
             v.q = 0;
             v.f[2] = 0.21f;
             FUN_001f9cf8_002078a8(&v, &v, s + 0xC0);
             FUN_001fa050_002078a8(m, D_L00_0017A6C0_002078a8);
             FUN_001f9d20_002078a8(&v, &v, m);
-            FUN_001f9a10_002078a8(P->o86C + 0x10, P->o86C + 0x10, &v);
+            FUN_001f9a10_002078a8(((char *)P->unk86C) + 0x10, ((char *)P->unk86C) + 0x10, &v);
         }
     }
 }
@@ -1517,7 +1516,6 @@ typedef struct {
     void *p2080;
     int i2084;
 } P_209a40;
-extern P_209a40 D_0013F350_209a40 __asm__("D_0013F350");
 extern float D_0015ED6C_209a40 __asm__("D_0015ED6C");
 extern float FUN_002132a8_209a40(float, float) __asm__("FUN_002132a8");
 extern void FUN_001f9a68_209a40(void *, void *, float) __asm__("FUN_001f9a68");
@@ -1532,7 +1530,7 @@ void FUN_L00_00209a40(int n, int mode) {
     V_209a40 *src;
 
     for (i = 0; i < n; i++) {
-        p = &D_0013F350_209a40;
+        p = &hero;
         src = &p->v100;
         if (mode == 0) {
             pos[0] = p->f80 + FUN_002132a8_209a40(-0.1f, 0.1f);

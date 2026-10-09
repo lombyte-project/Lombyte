@@ -755,7 +755,6 @@ typedef struct {
     unsigned short index;
 } Globals;
 
-extern Globals D_0013F350;
 
 void FUN_L11_002f3350(struct Moby *moby) {
     char *state = (char *)moby->pvars;
@@ -767,8 +766,8 @@ void FUN_L11_002f3350(struct Moby *moby) {
             DeleteMoby(moby);
         break;
     case 1:
-        if (D_0013F350.timer > 194.0f && D_0013F350.mode != 0x32) {
-            D_0013F350.index = *(unsigned short *)state;
+        if (hero.motion.pos.f[2] > 194.0f && hero.state.current != 0x32) {
+            *(short unsigned int *)&hero.unk22DA = *(unsigned short *)state;
         }
         break;
     }
@@ -857,8 +856,8 @@ int FUN_L11_0030a480(struct Moby *moby) {
     char *current;
     if (moby->state != 1)
         return 0;
-    current = D_0013F350.current;
-    if (current != (char *)moby || D_0013F350.active)
+    current = hero.unk2FC;
+    if (current != (char *)moby || hero.unk30E.s)
         return 0;
     current[0x20] = 2;
     if (((unsigned char *)current)[0x53]) {

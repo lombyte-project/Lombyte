@@ -2302,7 +2302,7 @@ void FUN_L17_002ee9c0(struct Moby *moby, char *temp, char *state) {
     FastVecAdd(temp, temp, &moby->pos);
     clear_u64_value(state);
     *(float *)(state + 8) =
-        FUN_001f9e90(D_0013F350_u.x - *(float *)temp, D_0013F350_u.y - *(float *)(temp + 4));
+        FUN_001f9e90(hero.motion.unkD0.f[0] - *(float *)temp, hero.motion.unkD0.f[1] - *(float *)(temp + 4));
     *(int *)(state + 4) = 0;
 }
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F0580), where it is exact; names translated to the US level program. */

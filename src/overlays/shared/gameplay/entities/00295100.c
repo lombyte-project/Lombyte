@@ -112,7 +112,6 @@ typedef struct {
 } H_297f78;
 extern S_297f78 D_L00_0016C058;
 extern C_297f78 D_0013C940_c __asm__("D_0013C940");
-extern G_297f78 D_0013F350_c __asm__("D_0013F350");
 extern s32 D_L00_0015F5C0_m[] __asm__("D_L00_0015F5C0") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F5C8;
 extern s32 D_L00_0015F5CC_c __asm__("D_L00_0015F5CC");
@@ -184,55 +183,55 @@ void FUN_L00_00297f78(void) {
         return;
     }
     area = current_level_index;
-    if (area == 15 && D_L00_0015F5C8 >= 8 && D_0013F350_c.b20A4 == 2 && HELD &&
-        D_0013F350_c.w2084 != 0x72) {
+    if (area == 15 && D_L00_0015F5C8 >= 8 && hero.unk20A4 == 2 && HELD &&
+        hero.state.current != 0x72) {
         if (D_L00_00166E00->h86 == 0x13)
             return;
         mode_freeze_init(4, 0);
         return;
     }
     special = 0;
-    if (D_0013F350_c.w208C == 9 && D_0013F350_c.w2084 == 0x32 && D_0013F350_c.p15F0) {
-        s32 k = D_0013F350_c.p15F0->hA6;
+    if (hero.state.control_mode == 9 && hero.state.current == 0x32 && hero.ship_moby) {
+        s32 k = ((A_297f78 *)hero.ship_moby)->hA6;
         if (k == 0x45 || k == 0x563 || k == 0x4DA)
             special = 1;
     }
-    if (special && D_L00_0015F5C8 >= 8 && HELD && D_0013F350_c.w2084 != 0x72 &&
+    if (special && D_L00_0015F5C8 >= 8 && HELD && hero.state.current != 0x72 &&
         D_L00_00166E00->h86 != 0x13) {
         mode_freeze_init(1, 0);
         return;
     }
-    if (lvl == 0 && (area == 8 || area == 0xC) && HELD && D_0013F350_c.w2084 == 0x32) {
+    if (lvl == 0 && (area == 8 || area == 0xC) && HELD && hero.state.current == 0x32) {
         mode_freeze_init(1, 0);
         return;
     }
-    if (HELD && D_L00_0015F5C8 >= 8 && D_0013F350_c.w2084 != 0x72 && D_0013F350_c.w208C == 0x16) {
+    if (HELD && D_L00_0015F5C8 >= 8 && hero.state.current != 0x72 && hero.state.control_mode == 0x16) {
         mode_freeze_init(0, 0);
         return;
     }
-    if (HELD && D_L00_0015F5C8 >= 8 && D_0013F350_c.w2084 != 0x72 && D_0013F350_c.b10AC != 2 &&
-        D_0013F350_c.w2084 != 0x32 && D_0013F350_c.w2084 != 0x1D && !D_0013F350_c.b20B1 &&
-        D_0013F350_c.w22A8 && lvl == 0) {
+    if (HELD && D_L00_0015F5C8 >= 8 && hero.state.current != 0x72 && hero.items[0].unk1C != 2 &&
+        hero.state.current != 0x32 && hero.state.current != 0x1D && !hero.unk20B1 &&
+        hero.health.hp && lvl == 0) {
         pause_all_sounds(0);
         return;
     }
     if (!(D_L00_0016C058.w8 & 0x10) && D_L00_0015F5C8 >= 8 && (D_0013C940_c.w1A4 & 0x500) &&
-        D_0013F350_c.w208C != 0x16 && D_0013F350_c.w2084 != 0x72 && D_0013F350_c.w2084 != 0x32 &&
-        D_0013F350_c.w2084 != 0x1D && !D_0013F350_c.b20B1 && D_0013F350_c.w22A8 && lvl == 0 &&
+        hero.state.control_mode != 0x16 && hero.state.current != 0x72 && hero.state.current != 0x32 &&
+        hero.state.current != 0x1D && !hero.unk20B1 && hero.health.hp && lvl == 0 &&
         !special && !D_L00_0016C058.wEC) {
         pause_all_sounds(10);
         return;
     }
     if (D_0013D384 && !D_0013D388.b10 && D_L00_0015F5C8 >= 8 && !D_0015EE20 &&
-        !D_0013F350_c.b20B1 && D_0013F350_c.w22A8 && FUN_001f96f8_c(0x1E) < D_L00_0015F5CC_c &&
+        !hero.unk20B1 && hero.health.hp && FUN_001f96f8_c(0x1E) < D_L00_0015F5CC_c &&
         current_level_index) {
         mode_freeze_init(5, 0);
         D_0013D388.b10 = 1;
         return;
     }
-    if (D_0013F350_c.w2084 != 0x1D && D_0013F350_c.w2084 != 0x32)
+    if (hero.state.current != 0x1D && hero.state.current != 0x32)
         FUN_L00_00264328();
-    if ((D_0013C940_c.w1A4 & 0x200) && D_0013F350_c.w2084 != 0x1D && D_0013F350_c.w2084 != 0x32) {
+    if ((D_0013C940_c.w1A4 & 0x200) && hero.state.current != 0x1D && hero.state.current != 0x32) {
         s32 x;
         x = FUN_L00_00234e00();
         FUN_L00_00235e18(x, FUN_001f96f8_c(0xB4));
@@ -250,7 +249,7 @@ void FUN_L00_00297f78(void) {
     }
     if (D_L00_0015F630) {
         D_L00_0015F630 = 0;
-        if (D_0013F350_c.w22A8) {
+        if (hero.health.hp) {
             FUN_L00_0028ecd8();
             return;
         }
@@ -330,7 +329,6 @@ typedef struct {
     char pad20a6[0x202];
     int x22a8;
 } P_298840;
-extern P_298840 D_0013F350_298840 __asm__("D_0013F350");
 extern C_298840 D_L00_0016C860_298840 __asm__("D_L00_0016C860") __attribute__((section(".data")));
 extern int D_L00_0015F5D8_298840 __asm__("D_L00_0015F5D8");
 extern char D_L00_0017C440_298840[] __asm__("D_L00_0017C440") __attribute__((section(".data")));
@@ -371,7 +369,7 @@ void FUN_L00_00298840(int a) {
     int t, i;
     if (a < 0)
         return;
-    if (D_0013F350_298840.x22a8 == 0) {
+    if (hero.health.hp == 0) {
         f211250_298840();
         return;
     }
@@ -398,7 +396,7 @@ void FUN_L00_00298840(int a) {
     D_L00_0015F5C0_m[1] = 2;
     D_L00_0015F400_298840 = 0;
     hero_set_state(100, 2);
-    D_0013F350_298840.x20a5 = 1;
+    hero.unk20A5 = 1;
     f232fe8_298840();
     if (D_L00_00179108_298840)
         D_L00_00179108_298840->flags |= 1;

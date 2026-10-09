@@ -808,7 +808,6 @@ typedef struct {
     u8 p1[0x270 - 0xA0];
     Vec4_2332d0 v270;
 } S13F350_2332d0;
-extern S13F350_2332d0 D_0013F350_002332d0 __asm__("D_0013F350");
 float FUN_001f9dc8_002332d0(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_002332d0(float) __asm__("FUN_001f9de0");
 void FUN_001fa050_002332d0(void *, void *) __asm__("FUN_001fa050");
@@ -822,8 +821,8 @@ float FUN_L00_002332d0(void) {
     v.f[0] = FUN_001f9dc8_002332d0(0.0f);
     v.f[1] = FUN_001f9de0_002332d0(0.0f);
     v.f[2] = 0.0f;
-    FUN_001fa050_002332d0(m, &D_0013F350_002332d0.v90);
-    P = &D_0013F350_002332d0;
+    FUN_001fa050_002332d0(m, &hero.motion.rot);
+    P = &hero;
     FUN_001f9d20_002332d0(&v, &v, m);
     if (P->v270.f[0] != 0.0f || P->v270.f[1] != 0.0f) {
         w.q = P->v270.q;
@@ -948,7 +947,6 @@ struct G_00233708 {
     char pad2[0x20B3 - 0x2084];
     unsigned char mode;
 };
-extern struct G_00233708 D_0013F350_00233708 __asm__("D_0013F350");
 float FUN_001f9dc8_00233708(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_00233708(float) __asm__("FUN_001f9de0");
 void FUN_001fa050_00233708(Mtx_00233708 *, void *) __asm__("FUN_001fa050");
@@ -957,21 +955,21 @@ void FUN_001f9d20_00233708(Vec4_00233708 *, Vec4_00233708 *,
 void FUN_001f9a10_00233708(Vec4_00233708 *, Vec4_00233708 *,
                            Vec4_00233708 *) __asm__("FUN_001f9a10");
 void FUN_L00_00233708(Vec4_00233708 *out, Vec4_00233708 *in, float d) {
-    struct G_00233708 *g = &D_0013F350_00233708;
+    struct Hero *g = &hero;
     Mtx_00233708 m;
     Vec4_00233708 v;
-    switch (g->mode) {
+    switch (g->unk20B3) {
     case 0:
         *(u128_00233708 *)out = *(u128_00233708 *)in;
-        out->x += FUN_001f9dc8_00233708(*(float *)(g->obj + 0x48)) * d;
-        out->y += FUN_001f9de0_00233708(*(float *)(g->obj + 0x48)) * d;
+        out->x += FUN_001f9dc8_00233708(*(float *)(((char *)g->moby) + 0x48)) * d;
+        out->y += FUN_001f9de0_00233708(*(float *)(((char *)g->moby) + 0x48)) * d;
         break;
     case 1:
     case 2:
         v.x = FUN_001f9dc8_00233708(0.0f) * d;
         v.y = FUN_001f9de0_00233708(0.0f) * d;
         v.z = 0.0f;
-        FUN_001fa050_00233708(&m, g->obj + 0x40);
+        FUN_001fa050_00233708(&m, ((char *)g->moby) + 0x40);
         FUN_001f9d20_00233708(&v, &v, &m);
         FUN_001f9a10_00233708(out, in, &v);
         break;

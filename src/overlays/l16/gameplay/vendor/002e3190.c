@@ -2107,7 +2107,6 @@ typedef struct {
     short grounded;
 } L16PlatformHero;
 
-extern L16PlatformHero D_0013F350;
 extern char *D_L16_001600FC;
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern float D_0015ED6C;
@@ -2153,7 +2152,7 @@ void FUN_L16_002e7f80(L16PlatformMoby *moby) {
                 release_voice_slot(d->particle);
                 d->particle = -1;
             }
-            if (FUN_001f9b80(position, D_0013F350.position) < 20.0f) {
+            if (FUN_001f9b80(position, hero.motion.pos.f) < 20.0f) {
                 clear_u64_value(motion.v);
                 if (moby->reverse) {
                     motion.v[2] = -1.0f;
@@ -2162,7 +2161,7 @@ void FUN_L16_002e7f80(L16PlatformMoby *moby) {
                 }
                 transform_vector(motion.v, motion.v, D_L16_001600FC + (d->joint << 7));
                 motion.v[2] = motion.v[2] + *(float *)(D_L16_001600FC + d->joint * 0x80 + 0x38) + D_L16_00161EAC;
-                if (AbsoluteFloat(D_0013F350.position[2] - motion.v[2]) < 1.0f) {
+                if (AbsoluteFloat(hero.motion.pos.f[2] - motion.v[2]) < 1.0f) {
                     moby->reverse = (moby->reverse + 1) & 1;
                     d->goal = motion.v[2];
                     d->speed = 0.0f;
@@ -2170,7 +2169,7 @@ void FUN_L16_002e7f80(L16PlatformMoby *moby) {
                     break;
                 }
             }
-            if (D_0013F350.contact == moby && D_0013F350.grounded == 0) {
+            if (hero.unk2FC == moby && hero.unk30E.s == 0) {
                 clear_u64_value(motion.v);
                 if (moby->reverse) {
                     motion.v[2] = -1.0f;
@@ -2185,7 +2184,7 @@ void FUN_L16_002e7f80(L16PlatformMoby *moby) {
             }
             break;
         case 3: {
-            float *hero_position = D_0013F350.position;
+            float *hero_position = hero.motion.pos.f;
             float speed;
 
             if (FUN_001f9b80(hero_position, D_L16_001600FC + (d->joint << 7) + 0x30) > 2.25f
@@ -2210,7 +2209,7 @@ void FUN_L16_002e7f80(L16PlatformMoby *moby) {
                 release_voice_slot(d->particle);
                 d->particle = -1;
             }
-            if (moby->position[2] == d->goal && (D_0013F350.contact != moby || D_0013F350.grounded != 0)) {
+            if (moby->position[2] == d->goal && (hero.unk2FC != moby || hero.unk30E.s != 0)) {
                 clear_u64_value(d->basis[1]);
                 moby->state = 2;
                 break;

@@ -193,29 +193,28 @@ typedef struct {
     char pad4[0x229C - 0xA60];
     float x229C;
 } S_214ed8;
-extern S_214ed8 D_0013F350_214ed8 __asm__("D_0013F350");
 void FUN_L00_002118c8(int, float);
 char *FUN_L00_0020d8f8(float, float, float, float);
 float FUN_001f9e90(float, float);
 void FUN_L00_00214ed8(float a, float b, float c) {
-    S_214ed8 *g = &D_0013F350_214ed8;
+    struct Hero *g = &hero;
     float r;
     char *p;
-    if (g->xA58 != 0)
+    if (g->unkA58 != 0)
         return;
-    r = g->x98;
-    if (0.5f < g->x229C) {
+    r = g->motion.rot.f[2];
+    if (0.5f < g->unk229C) {
         FUN_L00_002118c8(0, 1.0f);
-        r = g->x180;
-        g->xA58 = 1;
-        g->xA54 = 0;
+        r = g->motion.unk180;
+        g->unkA58 = 1;
+        g->unkA54 = 0;
     }
     p = FUN_L00_0020d8f8(a, r, b, c);
-    if (p != 0 && (g->xA54 == 0 || g->xA58 != 0)) {
-        g->xA5C = FUN_001f9e90(*(float *)(p + 0x10) - g->x80, *(float *)(p + 0x14) - g->x84);
-        g->xA54 = p;
+    if (p != 0 && (g->unkA54 == 0 || g->unkA58 != 0)) {
+        g->unkA5C = FUN_001f9e90(*(float *)(p + 0x10) - g->motion.pos.f[0], *(float *)(p + 0x14) - g->motion.pos.f[1]);
+        g->unkA54 = p;
     } else {
-        D_0013F350_214ed8.xA5C = r;
+        hero.unkA5C = r;
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00214fe8.s", FUN_L00_00214fe8);
@@ -392,7 +391,6 @@ typedef struct {
 typedef struct {
     OvlQuad q[4];
 } QM_216130;
-extern M_216130 D_0013F350_216130 __asm__("D_0013F350");
 extern char D_0013F3F4_216130[] __asm__("D_0013F3F4");
 extern char D_0013F3E0_216130[] __asm__("D_0013F3E0");
 float dot_216130(void *, void *) __asm__("FUN_001f9ab0");
@@ -413,7 +411,7 @@ void FUN_L00_00216130(V_216130 *v, M_216130 *m, void *p, float a, float b, float
     float d, pitch, yaw, roll;
     t = 0.0f;
     {
-        QM_216130 *d = (QM_216130 *)m, *s = (QM_216130 *)&D_0013F350_216130;
+        QM_216130 *d = (QM_216130 *)m, *s = (QM_216130 *)&hero;
         d->q[0] = s->q[0];
         d->q[1] = s->q[1];
         d->q[2] = s->q[2];
