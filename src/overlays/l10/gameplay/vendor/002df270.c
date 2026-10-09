@@ -979,7 +979,88 @@ void FUN_L10_002e5968(struct Moby *m) {
         *(int *)(d + 0x110) = (int)hero.moby;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e5be0.s", FUN_L10_002e5be0);
+#else
+extern s32 D_L10_00161EF0 __attribute__((sda));
+extern s32 D_L10_00161EF4 __attribute__((sda));
+extern f32 D_L10_00161EF8 __attribute__((sda));
+extern f32 D_L10_00161EFC __attribute__((sda));
+extern f32 D_L10_00161F00 __attribute__((sda));
+extern s32 D_L10_00161F04 __attribute__((sda));
+extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_001f96b0");
+extern void scale_vector_xyz(f32 *, f32 *, f32) __asm__("FUN_001f9a68");
+extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
+extern s32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
+extern unsigned char *FUN_L00_002738e8(f32, f32, f32, void *, void *, s32, s32, s32, s32);
+
+void FUN_L10_002e5be0(struct Moby *moby) {
+    f32 *pvars = (f32 *)moby->pvars;
+    Vec4 *moby_position = (Vec4 *)&moby->pos;
+    s32 i = 0;
+
+    moby->unk30 = 0x80;
+    if (((s32 *)pvars)[3] > 0) {
+        do {
+            Vec4 position;
+            Vec4 velocity;
+            Vec4 offset;
+            f32 amount;
+            f32 radius;
+            f32 x;
+            f32 y;
+            f32 z;
+            f32 lower;
+            f32 upper;
+            s32 color;
+            s32 fade_color;
+            s32 first_color;
+            s32 second_color;
+            s32 life;
+            s32 variant;
+
+            variant = random_integer_below(100) < D_L10_00161F04;
+            position.q = moby_position->q;
+            offset.f[0] = fast_cos(fast_add_rotations(moby->rot.z, 1.5707964f)) *
+                            random_float_between(-pvars[4], pvars[4]);
+            offset.f[1] = fast_sin(fast_add_rotations(moby->rot.z, 1.5707964f)) *
+                            random_float_between(-pvars[4], pvars[4]);
+            *(volatile f32 *)&offset.f[2] = 0.0f;
+            offset.f[2] = random_float_between(-pvars[5], pvars[5]);
+            add_vector_xyz(&position, &position, &offset);
+
+            x = random_float_between(D_L10_00161EFC, D_L10_00161EF8);
+            y = random_float_between(D_L10_00161EFC, D_L10_00161EF8);
+            z = random_float_between(D_L10_00161EFC, D_L10_00161EF8);
+            radius = x;
+            if (radius < y) radius = y;
+            if (radius < z) radius = z;
+            build_spherical_offset(velocity.f, radius * D_0015ED6C, moby->rot.z,
+                                   -moby->rot.y);
+
+            if (variant) {
+                scale_vector_xyz(velocity.f, velocity.f, random_float_between(0.5f, 1.5f));
+                lower = 0.24f;
+                upper = 0.36f;
+            } else {
+                lower = 0.8f;
+                upper = 1.2f;
+            }
+            amount = pvars[1] * random_float_between(lower, upper);
+            first_color = D_L10_00161EF0;
+            second_color = D_L10_00161EF4;
+            color = fast_tween_color(random_float_between(0.5f, 1.0f),
+                                     first_color, second_color);
+            fade_color = fast_tween_color(random_float_between(0.25f, 0.5f),
+                                          second_color, second_color & 0xff000000);
+            life = truncate_float_to_s32(multiply_global_factor_ed64(pvars[2] * 60.0f));
+            ++i;
+            FUN_L00_002738e8(amount, pvars[0], D_L10_00161F00 * D_0015ED70,
+                               &position, &velocity, life, color, fade_color, variant);
+        } while (i < ((s32 *)pvars)[3]);
+    }
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e8358.s", FUN_L10_002e8358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e85b8.s", FUN_L10_002e85b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e8ab0.s", FUN_L10_002e8ab0);
