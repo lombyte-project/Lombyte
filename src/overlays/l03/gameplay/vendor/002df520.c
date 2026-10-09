@@ -317,7 +317,67 @@ void FUN_L03_002eb7e0(char *m) {
     normalize_vector_xyz(m + 0x10, m + 0x10, -1.0f);
     cross_vectors_xyz(m + 0x20, m + 0x10, m);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002eb978.s", FUN_L03_002eb978);
+#include "sda.h"
+extern void clear_u64_value_eb978(void *) __asm__("FUN_001f99f8");
+extern void FUN_001fa030(void *, void *);
+extern s32 D_L03_00167074 NOT_SDA;
+extern int D_L03_0015EF50;
+/* vendor camera init: aims the camera data at the hero, resets its blend state and places it (FUN_L03_002eb7e0) */
+void FUN_L03_002eb978(void *arg) {
+    char *m = arg;
+    char *e = *(char **)((char *)D_L03_0015EF50 + *(s16 *)(m + 0x84) * 32 + 0x1C);
+    char *target;
+    char *pos;
+    char *d;
+    char *timer;
+    char *ang;
+    int tbl;
+    float *p;
+    int i;
+    float f;
+    float mtx[12];
+    float v[4];
+
+    target = *(char **)(m + 0x70) + 0xB0;
+    *(float *)(target + 0x14) = 1.5f;
+    *(struct Moby **)(target + 0x10) = hero.moby;
+    qcopy(target, &hero.motion.pos);
+    *(s32 *)(target + 0xC) = 0;
+    d = *(char **)(m + 0x70);
+    p = (float *)(d + 0xD0);
+    f = *(float *)(e + 0x20);
+    p[2] = f;
+    *(float *)(d + 0xD0) = f;
+    p[4] = *(float *)(e + 0x24);
+    pos = *(char **)(m + 0x70);
+    *(s32 *)(pos + 0x28) = 0;
+    *(float *)(pos + 0x20) = 0.01f;
+    *(float *)(pos + 0x24) = 0.2f;
+    clear_u64_value_eb978(pos + 0x10);
+    qcopy(pos, &hero.motion.pos);
+    timer = *(char **)(m + 0x70);
+    ((s32 *)timer)[12] = scale_game_frames(0x78);
+    tbl = D_L03_0015EF50;
+    ang = *(char **)(m + 0x70) + 0xF0;
+    *(s32 *)(ang + 0x30) = 0;
+    *(s32 *)(ang + 0x28) = 0;
+    *(s32 *)(ang + 0x2C) = 0;
+    *(float *)(ang + 0x34) = hero.motion.pos.f[2];
+    *(s32 *)(ang + 0x20) = 0;
+    *(s32 *)(ang + 0x24) = 0;
+    i = (*(s16 *)(m + 0x84) << 5) + tbl;
+    i += 0x10;
+    p = (float *)i;
+    v[0] = p[0];
+    v[1] = p[1];
+    v[2] = p[2];
+    v[3] = 0.0f;
+    FUN_001fa030(mtx, v);
+    qcopy(ang, mtx);
+    FUN_L03_002eb7e0(m);
+    *(s16 *)(m + 0x7E) = 0;
+    D_L03_00167074 = 0x78;
+}
 #include "sda.h"
 extern void func_L00_001FF4B0_ebb00(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float func_001EC120_ebb00(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
