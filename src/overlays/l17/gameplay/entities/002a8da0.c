@@ -555,7 +555,54 @@ void FUN_L17_002cb310(struct Moby *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002cbd38.s", FUN_L17_002cbd38);
+extern short *D_L17_001AC140[];
+extern char D_L17_001B0DB0[];
+/* Second, %hi/%lo read of the moby array (retail reloads it for the placement pass). */
+extern char *D_L17_0015FFD8_m __asm__("D_L17_0015FFD8") __attribute__((section(".sdata")));
+
+/* Spreads the class-0x733 mobies of this moby's group evenly along its path. */
+void FUN_L17_002cbd38(char *m) {
+    char *d;
+    char *path;
+    char *mobys;
+    char *o;
+    char *od;
+    short *s;
+    int i;
+    short n;
+    short k;
+    short step;
+
+    d = *(char **)(m + 0x78);
+    n = 0;
+    k = 0;
+    i = *(short *)(d + 0x80);
+    if (i == -1)
+        return;
+    s = D_L17_001AC140[i];
+    if (s == 0)
+        return;
+    do {
+        if (*(short *)(((*s & 0x7FFF) << 8) + 0xA6 + D_L17_0015FFD8) == 0x733)
+            n++;
+    } while (*s++ >= 0);
+    path = ((char **)D_L17_001B0DB0)[*(int *)(d + 0x84)];
+    step = *(int *)path / n;
+    s = D_L17_001AC140[i];
+    mobys = D_L17_0015FFD8_m;
+    do {
+        i = (*s & 0x7FFF) << 8;
+        if (*(short *)(i + 0xA6 + mobys) == 0x733) {
+            o = i + mobys;
+            od = *(char **)(o + 0x78);
+            qcopy(o + 0x10, path + 0x10 + k * 0x10);
+            *(int *)(od + 0x60) = *(int *)(d + 0x84);
+            *(int *)(od + 0x64) = k;
+            *(int *)(od + 0x68) = 0;
+            k += step;
+        }
+    } while (*s++ >= 0);
+}
 
 #define NOT_SDA
 
