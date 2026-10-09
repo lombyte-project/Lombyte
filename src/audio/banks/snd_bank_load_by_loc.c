@@ -2,8 +2,6 @@
 
 extern s32 D_00137B40[];
 extern u8 D_00153D20[];
-extern u8 D_00153DA8[];
-extern u8 D_00153DD8[];
 extern u8 D_00153DF8[];
 extern u8 D_0015EBE8[];
 extern s32 D_0015EC88 __attribute__((sda));
@@ -21,11 +19,11 @@ s32 snd_bank_load_by_loc(s32 location, s32 arg1) __asm__("FUN_0012df20");
 s32 snd_bank_load_by_loc(s32 location, s32 arg1) {
     D_0015EC88 = 0;
     if (D_0015ECC8 != 0) {
-        printf(D_00153DA8);
+        printf("snd_BankLoadByLoc: Load already in progress!\n");
         return 0;
     }
     if (snd_stream_safe_cd_sync(1) == 1) {
-        printf(D_00153DD8);
+        printf("snd_BankLoadByLoc: CD BUSY!\n");
         return 0;
     }
     D_00137B40[1] = arg1;

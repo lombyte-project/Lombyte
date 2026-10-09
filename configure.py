@@ -363,6 +363,9 @@ RODATA_OVERLAYS = {
     "_getpic": (0x153AA0, 0x54A20),
     "sdk/debug/printfloat": (0x152798, 0x53718),  # its three f64 literals (0.1, 0.1, 1e6)
     "audio/rpc/snd_send_iop_command_and_wait": (0x153D20, 0x54CA0),  # its RPC-collision message
+    "audio/banks/snd_bank_load_by_loc": (0x153DA8, 0x54D28),  # its two error messages
+    "audio/rpc/snd_send_iop_command_no_wait": (0x154010, 0x54F90),  # its buffer-full message
+    "rendering/image/jump_to_image_setup": (0x153AD8, 0x54A58),  # its error message
     "fun_0021fdc8": (0x1E87F0, 0xE9770),  # stream-state switch table
     # vfprintf_r: blanks/zeroes, the xdigs strings, the short literals (kept in
     # .rodata via section attributes, in source order) and its switch table.

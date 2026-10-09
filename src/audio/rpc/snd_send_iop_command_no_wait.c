@@ -13,7 +13,6 @@ extern struct SndCb *D_0015ECB0[2] __attribute__((sda));
 extern s32 D_00133100[4];
 extern u8 D_0015EBC0[];
 extern char D_00153D20[];
-extern char D_00154010[];
 extern char D_00154070[];
 extern s32 printf(const char *, ...);
 extern s32 snd_flush_sound_commands(void) __asm__("func_0012DC80");
@@ -55,7 +54,7 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
         }
         snd_flush_sound_commands();
         if (tries == 1) {
-            printf(D_00154010, D_0015ECC0, *D_0015ECA0[D_0015ECC0]);
+            printf("snd_SendIOPCommandNoWait: BUFFER %d FULL(%d)! Sound stalled waiting for IOP comands to finish!\n", D_0015ECC0, *D_0015ECA0[D_0015ECC0]);
         }
         tries++;
     }
