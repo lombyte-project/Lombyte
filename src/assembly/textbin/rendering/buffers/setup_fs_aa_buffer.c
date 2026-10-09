@@ -16,6 +16,7 @@ INCLUDE_ASM(
 extern struct FsAaBuf *active_fs_aa_buffer __asm__("D_0015EEB8");
 extern s32 display_buffer_address __asm__("D_0015EE80");
 extern s32 draw_buffer_address __asm__("D_0015EE84");
+extern s32 depth_buffer_address __asm__("D_0015EE88");
 
 extern void sceGsSetDefDispEnv(void *, s16, s16, s16, s16, s16);
 extern s32 sceGsSetDefDrawEnv(struct sceGsDrawEnv1 *, s16, s16, s16, s16, s16);
@@ -66,8 +67,8 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     active_fs_aa_buffer->giftag1.NLOOP = 8;
     active_fs_aa_buffer->giftag1.EOP = 1;
     active_fs_aa_buffer->giftag1.NREG = 1;
-    packet_word = &fs_aa_transfer_packet[12];
     active_fs_aa_buffer->giftag1.REGS0 = 0xE;
+    packet_word = &fs_aa_transfer_packet[12];
 
     fs_aa_transfer_packet[0] = 0x408B400000000001;
     fs_aa_transfer_packet[1] = 0xEEEE;
@@ -106,6 +107,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
 
     fs_aa_resample_packet[0] = 0x308B400000000001;
     fs_aa_resample_packet[1] = 0xEEE;
+    packet_word = &fs_aa_resample_packet[10];
     fs_aa_resample_packet[2] = 0x30000;
     fs_aa_resample_packet[3] = 0x47;
     fs_aa_resample_packet[4] = 0x100000261;
@@ -116,7 +118,6 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     fs_aa_resample_packet[7] = 6;
     fs_aa_resample_packet[8] = 0x4400000000008010;
     fs_aa_resample_packet[9] = 0x5353;
-    packet_word = &fs_aa_resample_packet[10];
     left_x = 0x6FF8;
     next_x = 0x71F8;
     for (strip_index = 0; strip_index < 16; strip_index++) {
@@ -138,13 +139,13 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     fs_aa_draw_packet[5] = 8;
     fs_aa_draw_packet[6] = 0x100000261;
     fs_aa_draw_packet[7] = 0x14;
+    packet_word = &fs_aa_draw_packet[12];
     fs_aa_draw_packet[8] = ((u64)active_fs_aa_buffer->fbp0 << 5) |
                           ((u64)((active_fs_aa_buffer->display_width >> 6) & 0x3F) << 14) |
                           ((u64)active_fs_aa_buffer->psm << 20) | 0xEA8000000;
     fs_aa_draw_packet[9] = 6;
     fs_aa_draw_packet[10] = 0x4400000000008010;
     fs_aa_draw_packet[11] = 0x5353;
-    packet_word = &fs_aa_draw_packet[12];
     left_x = 0x7000;
     next_x = 0x200;
     right_x = 0x7200;
