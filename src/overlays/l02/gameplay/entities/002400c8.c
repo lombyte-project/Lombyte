@@ -1778,7 +1778,404 @@ void FUN_L02_002ddc00(struct Moby *moby)
     moby->rot.z = fast_add_rotations_c(moby->rot.z, D_0015ED6C * 0.08726646f);
     FUN_L00_00260738(data + 0x20, zero, pos, &moby->rot);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ddc88.s", FUN_L02_002ddc88);
+#include "rnc/gameplay/state/usage_stats.h"
+
+/* pvars of the class FUN_L02_002ddc88 updates (the lift: two rail mobys 0x421/0x422 ride with it). */
+typedef struct {
+    char pad0[0x20];
+    char riders[0x40];   /* 0x20: passed to FUN_L00_00260738 */
+    int node_a;          /* 0x60: D_L02_001600EC node of the lower stop */
+    int node_b;          /* 0x64: node of the upper stop */
+    int path;            /* 0x68: D_L02_001B0AB0 camera path */
+    int pad6C;
+    int gear[4];         /* 0x70: moby indices pushed along their axis in state 2 */
+    int timer;           /* 0x80 */
+    char *rail_a;        /* 0x84: class 0x421 moby */
+    char *rail_b;        /* 0x88: class 0x422 moby */
+    float rail_a_speed;  /* 0x8C */
+    float rail_b_speed;  /* 0x90 */
+    float rail_a_off;    /* 0x94 */
+    float rail_b_off;    /* 0x98 */
+    float speed;         /* 0x9C */
+    int cam_goal;        /* 0xA0 */
+    float cam_pos;       /* 0xA4 */
+    float cam_speed;     /* 0xA8 */
+    int ride_timer;      /* 0xAC */
+    float cam_accel;     /* 0xB0 */
+    float cam_max;       /* 0xB4 */
+} Varsdc88;
+
+extern float D_L02_00161C20 __attribute__((sda));
+extern float D_L02_00161C24 __attribute__((sda));
+extern float D_L02_00161C40 __attribute__((sda));
+extern float D_L02_00161C44 __attribute__((sda));
+extern float D_L02_00161C48 __attribute__((sda));
+extern float D_L02_00161C4C __attribute__((sda));
+extern float D_L02_00161C50 __attribute__((sda));
+extern float D_L02_00161C54 __attribute__((sda));
+extern float D_L02_00161C58 __attribute__((sda));
+extern float D_L02_00161C60 __attribute__((sda));
+extern float D_L02_00161C30_f __asm__("D_L02_00161C30") __attribute__((sda));
+extern float D_L02_00161C34_f __asm__("D_L02_00161C34") __attribute__((sda));
+extern int *D_L02_001B0AB0_dc88[] __asm__("D_L02_001B0AB0");
+extern unsigned char D_0014C050_dc88[] __asm__("D_0014C050");
+extern unsigned int D_00141BAC __attribute__((section(".data")));
+extern struct UsageStats D_00141848;
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9bf8(void *, void *, float);
+extern float FUN_001f9af0(void *);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern int FUN_001f9740(void *);
+extern float AbsoluteFloat_dc88(float) __asm__("func_001F99C0");
+extern float FUN_00213f38(float *, float *, float, float, float, float);
+extern void FUN_00214e58(void *, int, void *, void *, int, float);
+extern char *FUN_0020c4f8(int);
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+extern void FUN_0022da68_dc88(int, int, void *) __asm__("FUN_0022da68");
+extern void FUN_L00_00203908(int, int);
+extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void FUN_L00_00233ee8(void *, int, float);
+extern int FUN_L00_00233f38();
+extern void FUN_L00_00250df8(void *);
+extern void FUN_L00_00260738(char *, void *, void *, void *);
+extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaa30(void *);
+extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
+extern void FUN_L00_002eac18(int);
+extern void path_marker_dc88(void *, void *, int, int, int, int, int, float) __asm__("FUN_L01_00285768");
+extern void FUN_L02_0022b728(int, int);
+extern void FUN_L02_00237478(void);
+extern void FUN_L02_002def80(struct Moby *moby);
+extern void FUN_L02_002df0b0(struct Moby *moby);
+extern void FUN_L02_002f8a18(int, int);
+extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
+
+/* D_L02_001600EC entries (0x80 bytes): lift stops. */
+typedef struct {
+    char pad0[0x30];
+    float pos[4];        /* 0x30 */
+    char pad40[0x30];
+    float look[4];       /* 0x70: camera target */
+} Nodedc88;
+
+extern Nodedc88 *D_L02_001600EC_n __asm__("D_L02_001600EC");
+
+/* Aridia lift: carries the hero between two stops, with its two rail mobys, gears and a camera path. */
+void FUN_L02_002ddc88(unsigned char *moby) {
+    Varsdc88 *d = *(Varsdc88 **)(moby + 0x78);
+    int i;
+    int *path;
+    int lim;
+    int t;
+    float s;
+    OvlVec4 delta;
+    OvlVec4 rot;
+    OvlVec4 a;
+    OvlVec4 b;
+    OvlVec4 c;
+    OvlVec4 e;
+
+    FUN_001f9a68(&delta, moby + 0x10, -1.0f);
+    qcopy(&rot, moby + 0x40);
+    if (D_L02_00161C44 != 0.0f) {
+        for (i = 0; i < *D_L02_001B0AB0_dc88[d->path]; i++) {
+            qcopy(&a, (char *)D_L02_001B0AB0_dc88[d->path] + i * 0x10 + 0x10);
+            path_marker_dc88(&a, moby, 4, 0x800000FF, 0x7F, 2, 0xFF, 0.1f);
+        }
+    }
+    switch (moby[0x20]) {
+    case 0:
+        moby[0x30] = 0xFF;
+        moby[0xBC] = 1;
+        qcopy(moby + 0x10, D_L02_001600EC_n[d->node_b].pos);
+        moby[0x20] = 1;
+        ((struct Moby *)moby)->pos.z -= 6.0f;
+        d->rail_a = FUN_0020c4f8(0x421);
+        *(short *)(d->rail_a + 0x32) = 0x40;
+        d->rail_a[0x31] = 1;
+        *(u64 *)(d->rail_a + 0x38) = *(u64 *)(moby + 0x38);
+        *(unsigned short *)(d->rail_a + 0x34) = *(unsigned short *)(moby + 0x34);
+        qcopy_nc(d->rail_a + 0x10, moby + 0x10);
+        qcopy_nc(d->rail_a + 0x40, moby + 0x40);
+        d->rail_b = FUN_0020c4f8(0x422);
+        *(short *)(d->rail_b + 0x32) = 0x40;
+        d->rail_b[0x31] = 1;
+        *(u64 *)(d->rail_b + 0x38) = *(u64 *)(moby + 0x38);
+        *(unsigned short *)(d->rail_b + 0x34) = *(unsigned short *)(moby + 0x34);
+        qcopy_nc(d->rail_b + 0x10, moby + 0x10);
+        qcopy_nc(d->rail_b + 0x40, moby + 0x40);
+        d->rail_a_off = -1.0f;
+        d->rail_b_off = -1.0f;
+        d->cam_max = D_0015ED70 * 0.1f * (float)*D_L02_001B0AB0_dc88[d->path];
+        d->cam_accel = D_0015ED6C * 0.3f * (float)*D_L02_001B0AB0_dc88[d->path];
+        FUN_L02_002df0b0((struct Moby *)moby);
+        break;
+    case 1:
+        if (D_0014C050_dc88[moby[0xB0] + current_level_index * 16] == 0xFF) {
+            d->timer = scale_ticks(30);
+            moby[0x20] = 2;
+        }
+        break;
+    case 2:
+        s = D_0015ED6C * 5.0f;
+        FUN_001f9bf8(&a, (char *)D_L02_0015FFD8 + (d->gear[0] << 8) + 0xC0, -s);
+        FUN_001f9a10((char *)D_L02_0015FFD8 + (d->gear[0] << 8) + 0x10,
+                     (char *)D_L02_0015FFD8 + (d->gear[0] << 8) + 0x10, &a);
+        FUN_001f9bf8(&a, (char *)D_L02_0015FFD8 + (d->gear[1] << 8) + 0xC0, s);
+        FUN_001f9a10((char *)D_L02_0015FFD8 + (d->gear[1] << 8) + 0x10,
+                     (char *)D_L02_0015FFD8 + (d->gear[1] << 8) + 0x10, &a);
+        FUN_001f9bf8(&a, (char *)D_L02_0015FFD8 + (d->gear[2] << 8) + 0xC0, -s);
+        FUN_001f9a10((char *)D_L02_0015FFD8 + (d->gear[2] << 8) + 0x10,
+                     (char *)D_L02_0015FFD8 + (d->gear[2] << 8) + 0x10, &a);
+        FUN_001f9bf8(&a, (char *)D_L02_0015FFD8 + (d->gear[3] << 8) + 0xC0, s);
+        FUN_001f9a10((char *)D_L02_0015FFD8 + (d->gear[3] << 8) + 0x10,
+                     (char *)D_L02_0015FFD8 + (d->gear[3] << 8) + 0x10, &a);
+        FUN_L00_00250df8((char *)D_L02_0015FFD8 + (d->gear[0] << 8));
+        FUN_L00_00250df8((char *)D_L02_0015FFD8 + (d->gear[1] << 8));
+        FUN_L00_00250df8((char *)D_L02_0015FFD8 + (d->gear[2] << 8));
+        FUN_L00_00250df8((char *)D_L02_0015FFD8 + (d->gear[3] << 8));
+        if (FUN_001f9740(&d->timer)) {
+            moby[0x20] = 3;
+            FUN_0022da68_dc88(1, 0, moby);
+        }
+        break;
+    case 3:
+        FUN_00213f38((float *)(moby + 0x18), &d->speed, D_L02_001600EC_n[d->node_a].pos[2],
+                     D_L02_00161C34_f * D_0015ED70, D_L02_00161C34_f * D_0015ED70,
+                     D_L02_00161C30_f * D_0015ED6C);
+        FUN_L02_002df0b0((struct Moby *)moby);
+        if (D_L02_001600EC_n[d->node_a].pos[2] - 0.0001f <= ((struct Moby *)moby)->pos.z) {
+            moby[0x20] = 4;
+            FUN_0022da68_dc88(0, 0, moby);
+        }
+        break;
+    case 4:
+        d->rail_a_off = 2.0f;
+        d->rail_b_off = -4.0f;
+        FUN_L02_002def80((struct Moby *)moby);
+        if (AbsoluteFloat_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.0001f &&
+            AbsoluteFloat_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.0001f) {
+            moby[0x20] = 5;
+        }
+        break;
+    case 5:
+        if (moby[0xBC] == 0 &&
+            FUN_001f9b80(&hero.motion.pos, D_L02_001600EC_n[d->node_b].pos) < 16.0f) {
+            qcopy(moby + 0x10, D_L02_001600EC_n[d->node_b].pos);
+            ((struct Moby *)moby)->pos.z -= 6.0f;
+            d->rail_a_off = -1.0f;
+            d->rail_b_off = -1.0f;
+            FUN_L02_002df0b0((struct Moby *)moby);
+            moby[0x20] = 3;
+            moby[0xBC] = 1;
+            FUN_0022da68_dc88(1, 0, moby);
+        } else if (moby[0xBC] == 1 &&
+                   FUN_001f9b80(&hero.motion.pos, D_L02_001600EC_n[d->node_a].pos) < 16.0f) {
+            qcopy(moby + 0x10, D_L02_001600EC_n[d->node_a].pos);
+            ((struct Moby *)moby)->pos.z -= 6.0f;
+            d->rail_a_off = -1.0f;
+            d->rail_b_off = -1.0f;
+            FUN_L02_002df0b0((struct Moby *)moby);
+            moby[0xBC] = 0;
+            moby[0x20] = 3;
+            FUN_0022da68_dc88(1, 0, moby);
+        } else if ((unsigned char *)hero.unk2FC == moby && hero.unk30E.s == 0 && hero.unk20A4 == 0) {
+            qcopy(&b, moby + 0x10);
+            b.f[2] += 2.0f;
+            if (moby[0xBC] == 0) {
+                d->cam_goal = 0;
+                d->cam_pos = (float)(*D_L02_001B0AB0_dc88[d->path] - 1);
+                qcopy_nc(&a, D_L02_001600EC_n[d->node_a].look);
+                qcopy(&c, (char *)D_L02_001B0AB0_dc88[d->path] + trunc_d57f8(d->cam_pos) * 0x10 + 0x10);
+                clear_vec_d57f8(&e);
+                e.f[2] = FUN_001f9e90(b.f[0] - c.f[0], b.f[1] - c.f[1]);
+                e.f[1] = -FUN_001f9e90(FUN_001f9b80(&c, &b), b.f[2] - c.f[2]);
+            } else {
+                d->cam_goal = *D_L02_001B0AB0_dc88[d->path] - 1;
+                d->cam_pos = 0.0f;
+                qcopy_nc(&a, D_L02_001600EC_n[d->node_b].look);
+                qcopy(&c, (char *)D_L02_001B0AB0_dc88[d->path] + trunc_d57f8(d->cam_pos) * 0x10 + 0x10);
+                clear_vec_d57f8(&e);
+                e.f[2] = FUN_001f9e90(b.f[0] - c.f[0], b.f[1] - c.f[1]);
+                e.f[1] = -FUN_001f9e90(FUN_001f9b80(&c, &b), b.f[2] - c.f[2]);
+            }
+            moby[0x20] = 6;
+            d->ride_timer = scale_ticks(0xB4);
+            FUN_L00_00233ee8(moby + 0x10, 0, a.f[2]);
+            FUN_L00_002eaaa0(D_L02_001673C0, D_L02_001673C0 + 0x10, 3, scale_ticks(0xF0), 0);
+            FUN_L02_002f8aa0(D_L02_00161C48, D_L02_00161C4C, D_L02_00161C50, D_L02_00161C54, D_L02_00161C58,
+                             D_L02_00161C60);
+            FUN_L00_002ea9d8(&c);
+            FUN_L00_002eaa30(&e);
+        }
+        break;
+    case 6: {
+        int r6 = FUN_L00_00233f38();
+        if (r6 == 2) {
+            moby[0x20] = 7;
+            FUN_0022da68_dc88(2, 0, moby);
+            FUN_L02_0022b728(0x72, 0);
+        } else if (r6 == 0) {
+            FUN_L00_002eac18(2);
+            moby[0x20] = 0xD;
+        } else if (FUN_001f9740(&d->ride_timer)) {
+            FUN_L00_002eac18(2);
+            moby[0x20] = 0xD;
+            FUN_L02_00237478();
+        }
+        break;
+    }
+    case 7:
+        d->rail_a_off = -1.0f;
+        d->rail_b_off = -1.0f;
+        FUN_L02_002def80((struct Moby *)moby);
+        if (AbsoluteFloat_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f &&
+            AbsoluteFloat_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f) {
+            moby[0x20] = 8;
+        }
+        break;
+    case 8:
+        FUN_00213f38((float *)(moby + 0x18), &d->speed,
+                     D_L02_001600EC_n[d->node_a].pos[2] - 6.0f,
+                     D_L02_00161C34_f * D_0015ED70, D_L02_00161C34_f * D_0015ED70,
+                     D_L02_00161C30_f * D_0015ED6C);
+        FUN_L02_002df0b0((struct Moby *)moby);
+        if (((struct Moby *)moby)->pos.z < D_L02_001600EC_n[d->node_a].pos[2] - 5.999f) {
+            if (moby[0xBC] == 0) {
+                moby[0xBC] = 1;
+                qcopy_nc(moby + 0x10, D_L02_001600EC_n[d->node_b].pos);
+                qcopy_nc(&c, D_L02_001600EC_n[d->node_b].look);
+                FUN_001f9a28(&a, D_L02_001600EC_n[d->node_b].pos, D_L02_001600EC_n[d->node_a].pos);
+            } else {
+                moby[0xBC] = 0;
+                qcopy_nc(moby + 0x10, D_L02_001600EC_n[d->node_a].pos);
+                qcopy_nc(&c, D_L02_001600EC_n[d->node_a].look);
+                FUN_001f9a28(&a, D_L02_001600EC_n[d->node_a].pos, D_L02_001600EC_n[d->node_b].pos);
+            }
+            ((struct Moby *)moby)->pos.z -= 6.0f;
+            FUN_001f9a10(&b, &hero.motion.pos, &a);
+            FUN_L00_00216f90(&b, &c, 0x72, 0);
+            d->speed = -d->speed;
+            moby[0x20] = 9;
+            FUN_L02_002f8a18(2, scale_ticks(0xB4));
+        }
+        break;
+    case 9:
+        FUN_00213f38(&d->cam_pos, &d->cam_speed, (float)d->cam_goal, d->cam_max, d->cam_max, d->cam_accel);
+        if (d->cam_goal != 0 ? (float)d->cam_goal <= d->cam_pos : d->cam_pos <= (float)d->cam_goal) {
+            moby[0x20] = 10;
+        }
+        FUN_00214e58(D_L02_001B0AB0_dc88[d->path], 0, &c, &b, 0, d->cam_pos);
+        qcopy(&a, moby + 0x10);
+        a.f[2] += 8.0f;
+        clear_vec_d57f8(&b);
+        b.f[2] = FUN_001f9e90(a.f[0] - c.f[0], a.f[1] - c.f[1]);
+        b.f[1] = -FUN_001f9e90(FUN_001f9b80(&c, &a), a.f[2] - c.f[2]);
+        FUN_L00_002ea9d8(&c);
+        FUN_L00_002eaa30(&b);
+        break;
+    case 10:
+        FUN_00213f38((float *)(moby + 0x18), &d->speed, D_L02_001600EC_n[d->node_a].pos[2],
+                     D_L02_00161C34_f * D_0015ED70, D_L02_00161C34_f * D_0015ED70,
+                     D_L02_00161C30_f * D_0015ED6C);
+        FUN_L02_002df0b0((struct Moby *)moby);
+        if (D_L02_001600EC_n[d->node_a].pos[2] <= ((struct Moby *)moby)->pos.z) {
+            moby[0x20] = 0xB;
+            FUN_0022da68_dc88(0, 0, moby);
+        }
+        break;
+    case 11:
+        d->rail_a_off = 2.0f;
+        d->rail_b_off = -4.0f;
+        FUN_L02_002def80((struct Moby *)moby);
+        if (AbsoluteFloat_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.01f &&
+            AbsoluteFloat_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.01f) {
+            {
+                extern int D_0015EEA4_dc88 __asm__("D_0015EEA4") __attribute__((sda));
+                t = scale_ticks(D_0015EEA4_dc88) - D_00141848.stat[9].unk2 * 600;
+            }
+            lim = scale_ticks(3600) * 60.0f;
+            if (lim < t) {
+                extern int D_0015ED84_dc88 __asm__("D_0015ED84") __attribute__((sda));
+                if (!(D_00141BAC & (1 << D_0015ED84_dc88))) {
+                    FUN_L00_00203908(0x7DD, 0x48);
+                }
+            }
+            moby[0x20] = 0xD;
+            FUN_L00_002eac18(2);
+            FUN_L02_0022b728(0, 1);
+        }
+        break;
+    case 12:
+        ((struct Moby *)moby)->pos.z += D_0015ED6C * 4.0f;
+        if (D_L02_001600EC_n[d->node_a].pos[2] <= ((struct Moby *)moby)->pos.z) {
+            moby[0x20] = 5;
+        }
+        break;
+    case 13:
+        if ((unsigned char *)hero.unk2FC != moby) {
+            moby[0x20] = 5;
+        }
+        break;
+    case 14:
+        d->rail_a = FUN_0020c4f8(0x421);
+        *(short *)(d->rail_a + 0x32) = 0x40;
+        d->rail_a[0x31] = 1;
+        *(u64 *)(d->rail_a + 0x38) = *(u64 *)(moby + 0x38);
+        *(unsigned short *)(d->rail_a + 0x34) = *(unsigned short *)(moby + 0x34);
+        qcopy_nc(d->rail_a + 0x10, moby + 0x10);
+        qcopy_nc(d->rail_a + 0x40, moby + 0x40);
+        d->rail_b = FUN_0020c4f8(0x422);
+        *(short *)(d->rail_b + 0x32) = 0x40;
+        d->rail_b[0x31] = 1;
+        *(u64 *)(d->rail_b + 0x38) = *(u64 *)(moby + 0x38);
+        *(unsigned short *)(d->rail_b + 0x34) = *(unsigned short *)(moby + 0x34);
+        qcopy_nc(d->rail_b + 0x10, moby + 0x10);
+        qcopy_nc(d->rail_b + 0x40, moby + 0x40);
+        moby[0x20] = 0xF;
+        break;
+    case 15:
+        d->rail_a_off = D_L02_00161C20;
+        d->rail_b_off = D_L02_00161C24;
+        FUN_L02_002def80((struct Moby *)moby);
+        if (D_L02_00161C40 != 0.0f) {
+            moby[0x20] = 0x10;
+        }
+        break;
+    case 16:
+        d->rail_a_off = 2.0f;
+        d->rail_b_off = -4.0f;
+        FUN_L02_002def80((struct Moby *)moby);
+        if (D_L02_00161C40 == 0.0f) {
+            moby[0x20] = 0xF;
+        } else if (AbsoluteFloat_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.01f &&
+                   AbsoluteFloat_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.01f) {
+            moby[0x20] = 0x11;
+        }
+        break;
+    case 17:
+        d->rail_a_off = -1.0f;
+        d->rail_b_off = -1.0f;
+        FUN_L02_002def80((struct Moby *)moby);
+        if (D_L02_00161C40 == 0.0f) {
+            moby[0x20] = 0xF;
+        } else if (AbsoluteFloat_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f &&
+                   AbsoluteFloat_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f) {
+            moby[0x20] = 0x10;
+        }
+        break;
+    }
+    FUN_001f9a10(&delta, &delta, moby + 0x10);
+    if (FUN_001f9af0(&delta) > 4.0f) {
+        clear_vec_d57f8(&delta);
+    }
+    FUN_L00_00260738(d->riders, &delta, &rot, moby + 0x40);
+}
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E03B8), where it is exact; names translated to the US level program. */
 
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
