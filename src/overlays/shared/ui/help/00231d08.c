@@ -643,35 +643,35 @@ extern char D_0013F350[];
 extern int D_L00_0015F5C4;
 
 void FUN_L00_00232fe8(void) {
-    char *base = D_0013F350;
-    char *tail;
-    char *last;
+    struct Hero *base = &hero;
+    struct Hero *tail;
+    struct Hero *last;
     char *obj;
     int i;
 
-    *(unsigned short *)(*(char **)(base + 0xA88) + 0x34) |= 1;
+    *(unsigned short *)(((char *)base->unkA88) + 0x34) |= 1;
     for (i = 0; i < 7; i++) {
-        if (((ObjPair *)(base + 0x1090))[i].a != 0) {
-            *(unsigned short *)(((ObjPair *)(base + 0x1090))[i].a + 0x34) |= 1;
+        if (*(char **)&base->items[i].moby != 0) {
+            *(unsigned short *)(*(char **)&base->items[i].moby + 0x34) |= 1;
         }
-        if (((ObjPair *)(base + 0x1090))[i].b != 0) {
-            *(unsigned short *)(((ObjPair *)(base + 0x1090))[i].b + 0x34) |= 1;
+        if (*(char **)&base->items[i].moby2 != 0) {
+            *(unsigned short *)(*(char **)&base->items[i].moby2 + 0x34) |= 1;
         }
     }
-    tail = D_0013F350;
-    obj = *(char **)(tail + 0x118C);
+    tail = &hero;
+    obj = ((char *)tail->items[3].unk0C);
     if (obj != 0) {
         *(unsigned short *)(obj + 0x34) |= 1;
     }
-    if (*(unsigned char *)(tail + 0x20A4) == 1) {
-        obj = *(char **)(tail + 0x1624);
+    if (tail->unk20A4 == 1) {
+        obj = ((char *)tail->unk1624);
         if (obj != 0) {
             *(unsigned short *)(obj + 0x34) |= 1;
         }
     }
-    last = D_0013F350;
-    if (*(int *)(last + 0x10B8) == 8) {
-        obj = ((ObjPair *)(last + 0x1090))[0].a;
+    last = &hero;
+    if (last->items[0].item_id == 8) {
+        obj = ((char *)last->items[0].moby);
         if (obj != 0 && D_L00_0015F5C4 == 0 && *(unsigned char *)(obj + 0x20) != 0) {
             *(unsigned short *)(obj + 0x34) &= ~0x41;
         }
