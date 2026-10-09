@@ -2,42 +2,42 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4550,
-  "matching_c": 3533,
+  "matching_c": 3546,
   "intentional_asm": 313,
-  "pending_c": 704,
+  "pending_c": 691,
   "bytes_total": 3668944,
-  "bytes_matching_c": 2419796,
+  "bytes_matching_c": 2426860,
   "bytes_intentional_asm": 121516,
-  "bytes_pending_c": 1127632,
-  "c_exact_percent_of_recoverable": 68.2127,
-  "c_fuzzy_percent_of_recoverable": 69.8203,
+  "bytes_pending_c": 1120568,
+  "c_exact_percent_of_recoverable": 68.4118,
+  "c_fuzzy_percent_of_recoverable": 70.0027,
   "boot": {
     "units_total": 1475,
     "groups_total": 129,
-    "matching_c": 1145,
+    "matching_c": 1147,
     "intentional_asm": 251,
-    "pending_c": 79,
+    "pending_c": 77,
     "bytes_total": 448120,
-    "bytes_matching_c": 288344,
+    "bytes_matching_c": 289080,
     "bytes_intentional_asm": 94104,
-    "bytes_pending_c": 65672,
-    "c_exact_percent_of_recoverable": 81.4494,
-    "c_fuzzy_percent_of_recoverable": 97.5583,
+    "bytes_pending_c": 64936,
+    "c_exact_percent_of_recoverable": 81.6573,
+    "c_fuzzy_percent_of_recoverable": 97.5984,
     "groups": [
       {
         "name": "game/unclassified",
         "logical_group": "unclassified",
         "category": "game",
         "functions": 146,
-        "matching_c": 18,
-        "pending_c": 29,
+        "matching_c": 19,
+        "pending_c": 28,
         "intentional_asm": 99,
         "bytes_total": 102228,
-        "bytes_matching_c": 12748,
-        "bytes_pending_c": 24148,
+        "bytes_matching_c": 12888,
+        "bytes_pending_c": 24008,
         "bytes_intentional_asm": 65332,
-        "c_exact_percent_of_recoverable": 34.5512,
-        "c_fuzzy_percent_of_recoverable": 89.5659
+        "c_exact_percent_of_recoverable": 34.9306,
+        "c_fuzzy_percent_of_recoverable": 89.9454
       },
       {
         "name": "sdk/library",
@@ -734,15 +734,15 @@
         "logical_group": "storage/memory_card/data",
         "category": "game",
         "functions": 5,
-        "matching_c": 4,
-        "pending_c": 1,
+        "matching_c": 5,
+        "pending_c": 0,
         "intentional_asm": 0,
         "bytes_total": 1192,
-        "bytes_matching_c": 596,
-        "bytes_pending_c": 596,
+        "bytes_matching_c": 1192,
+        "bytes_pending_c": 0,
         "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 50.0,
-        "c_fuzzy_percent_of_recoverable": 99.8322
+        "c_exact_percent_of_recoverable": 100.0,
+        "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
         "name": "game/runtime/startup",
@@ -1963,12 +1963,12 @@
   },
   "overlays": {
     "functions_total": 3013,
-    "matching_c": 2388,
-    "pending_c": 625,
+    "matching_c": 2399,
+    "pending_c": 614,
     "bytes_total": 3193412,
-    "bytes_matching_c": 2131452,
-    "bytes_pending_c": 1061960,
-    "c_exact_percent_of_recoverable": 66.7453,
+    "bytes_matching_c": 2137780,
+    "bytes_pending_c": 1055632,
+    "c_exact_percent_of_recoverable": 66.9434,
     "intentional_asm": 62,
     "bytes_intentional_asm": 27412,
     "shared": {
@@ -1977,12 +1977,12 @@
       "planet": "Shared code",
       "description": "functions present in two or more levels",
       "functions": 1582,
-      "matching_c": 1266,
-      "pending_c": 316,
+      "matching_c": 1271,
+      "pending_c": 311,
       "bytes_total": 1130476,
-      "bytes_matching_c": 625000,
-      "bytes_pending_c": 505476,
-      "c_exact_percent_of_recoverable": 55.2864,
+      "bytes_matching_c": 628200,
+      "bytes_pending_c": 502276,
+      "c_exact_percent_of_recoverable": 55.5695,
       "files": [
         {
           "file": "src/overlays/shared/sdk/debug/001eb0b0.c",
@@ -2939,9 +2939,9 @@
         {
           "file": "src/overlays/shared/gameplay/entities/00278fd8.c",
           "functions": 31,
-          "matching_c": 21,
+          "matching_c": 22,
           "bytes_total": 31840,
-          "bytes_matching_c": 14384
+          "bytes_matching_c": 14952
         },
         {
           "file": "src/overlays/shared/gameplay/entities/00295100.c",
@@ -3114,9 +3114,9 @@
         {
           "file": "src/overlays/shared/gameplay/entities/002b8c08.c",
           "functions": 31,
-          "matching_c": 18,
+          "matching_c": 19,
           "bytes_total": 31432,
-          "bytes_matching_c": 8244
+          "bytes_matching_c": 8768
         },
         {
           "file": "src/overlays/shared/gameplay/entities/002b94d0.c",
@@ -3212,9 +3212,9 @@
         {
           "file": "src/overlays/shared/gameplay/entities/00297d10.c",
           "functions": 35,
-          "matching_c": 26,
+          "matching_c": 27,
           "bytes_total": 29548,
-          "bytes_matching_c": 16824
+          "bytes_matching_c": 17612
         },
         {
           "file": "src/overlays/shared/gameplay/vendor/002de370.c",
@@ -3303,9 +3303,9 @@
         {
           "file": "src/overlays/shared/gameplay/entities/002f6328.c",
           "functions": 23,
-          "matching_c": 20,
+          "matching_c": 21,
           "bytes_total": 18008,
-          "bytes_matching_c": 13412
+          "bytes_matching_c": 13936
         },
         {
           "file": "src/overlays/shared/gameplay/entities/002f7548.c",
@@ -3380,9 +3380,9 @@
         {
           "file": "src/overlays/shared/gameplay/vendor/0030e690.c",
           "functions": 9,
-          "matching_c": 5,
+          "matching_c": 6,
           "bytes_total": 6604,
-          "bytes_matching_c": 2892
+          "bytes_matching_c": 3688
         },
         {
           "file": "src/overlays/shared/gameplay/vendor/0030f270.c",
@@ -3804,12 +3804,12 @@
         "planet": "Rilgar",
         "description": "Blackwater City: canals and the hoverboard race",
         "functions": 78,
-        "matching_c": 58,
-        "pending_c": 20,
+        "matching_c": 60,
+        "pending_c": 18,
         "bytes_total": 135164,
-        "bytes_matching_c": 99676,
-        "bytes_pending_c": 35488,
-        "c_exact_percent_of_recoverable": 73.7445,
+        "bytes_matching_c": 100412,
+        "bytes_pending_c": 34752,
+        "c_exact_percent_of_recoverable": 74.289,
         "files": [
           {
             "file": "src/overlays/l05/gameplay/hero/00239fc0.c",
@@ -3849,9 +3849,9 @@
           {
             "file": "src/overlays/l05/rendering/0029bbe0.c",
             "functions": 2,
-            "matching_c": 1,
+            "matching_c": 2,
             "bytes_total": 616,
-            "bytes_matching_c": 324
+            "bytes_matching_c": 616
           },
           {
             "file": "src/overlays/l05/gameplay/entities/002d1688.c",
@@ -3877,9 +3877,9 @@
           {
             "file": "src/overlays/l05/gameplay/entities/0030d6a0.c",
             "functions": 27,
-            "matching_c": 21,
+            "matching_c": 22,
             "bytes_total": 20484,
-            "bytes_matching_c": 13968
+            "bytes_matching_c": 14412
           },
           {
             "file": "src/overlays/l05/hoverboard_girl.c",
@@ -4207,19 +4207,19 @@
         "planet": "Gaspar",
         "description": "Blarg Depot: lava fields and the Pilot's Helmet",
         "functions": 41,
-        "matching_c": 27,
-        "pending_c": 14,
+        "matching_c": 28,
+        "pending_c": 13,
         "bytes_total": 35716,
-        "bytes_matching_c": 13100,
-        "bytes_pending_c": 22616,
-        "c_exact_percent_of_recoverable": 36.6782,
+        "bytes_matching_c": 13600,
+        "bytes_pending_c": 22116,
+        "c_exact_percent_of_recoverable": 38.0782,
         "files": [
           {
             "file": "src/overlays/l09/gameplay/entities/0021e538.c",
             "functions": 25,
-            "matching_c": 17,
+            "matching_c": 18,
             "bytes_total": 19576,
-            "bytes_matching_c": 7440
+            "bytes_matching_c": 7940
           },
           {
             "file": "src/overlays/l09/runtime/startup/0025d648.c",
@@ -4378,12 +4378,12 @@
         "planet": "Hoven",
         "description": "Bomb Factory: ice, magnetic walls and the Hologuise",
         "functions": 77,
-        "matching_c": 53,
-        "pending_c": 24,
+        "matching_c": 54,
+        "pending_c": 23,
         "bytes_total": 127460,
-        "bytes_matching_c": 85236,
-        "bytes_pending_c": 42224,
-        "c_exact_percent_of_recoverable": 66.8727,
+        "bytes_matching_c": 85640,
+        "bytes_pending_c": 41820,
+        "c_exact_percent_of_recoverable": 67.1897,
         "files": [
           {
             "file": "src/overlays/l12/gameplay/hero/0022de30.c",
@@ -4458,9 +4458,9 @@
           {
             "file": "src/overlays/l12/gameplay/vendor/003028c8.c",
             "functions": 23,
-            "matching_c": 9,
+            "matching_c": 10,
             "bytes_total": 23892,
-            "bytes_matching_c": 3240
+            "bytes_matching_c": 3644
           },
           {
             "file": "src/overlays/l12/gameplay/vendor/0030b6c8.c",
@@ -4477,12 +4477,12 @@
         "planet": "Oltanis Orbit",
         "description": "Gemlik Base: Qwark's fighter and the ship dogfight",
         "functions": 109,
-        "matching_c": 73,
-        "pending_c": 36,
+        "matching_c": 74,
+        "pending_c": 35,
         "bytes_total": 105748,
-        "bytes_matching_c": 30932,
-        "bytes_pending_c": 74816,
-        "c_exact_percent_of_recoverable": 29.2507,
+        "bytes_matching_c": 31708,
+        "bytes_pending_c": 74040,
+        "c_exact_percent_of_recoverable": 29.9845,
         "files": [
           {
             "file": "src/overlays/l13/runtime/startup/002497d8.c",
@@ -4536,9 +4536,9 @@
           {
             "file": "src/overlays/l13/gameplay/entities/002c13b0.c",
             "functions": 38,
-            "matching_c": 24,
+            "matching_c": 25,
             "bytes_total": 32552,
-            "bytes_matching_c": 10696
+            "bytes_matching_c": 11472
           },
           {
             "file": "src/overlays/l13/gameplay/entities/002ea8c8.c",
@@ -4569,12 +4569,12 @@
         "planet": "Oltanis",
         "description": "Gorda City Ruins: a bombed city in a storm",
         "functions": 130,
-        "matching_c": 91,
-        "pending_c": 39,
+        "matching_c": 92,
+        "pending_c": 38,
         "bytes_total": 151084,
-        "bytes_matching_c": 96436,
-        "bytes_pending_c": 54648,
-        "c_exact_percent_of_recoverable": 63.8294,
+        "bytes_matching_c": 97148,
+        "bytes_pending_c": 53936,
+        "c_exact_percent_of_recoverable": 64.3007,
         "files": [
           {
             "file": "src/overlays/l14/gameplay/hero/0021dd30.c",
@@ -4607,9 +4607,9 @@
           {
             "file": "src/overlays/l14/gameplay/entities/002460f8.c",
             "functions": 41,
-            "matching_c": 34,
+            "matching_c": 35,
             "bytes_total": 25820,
-            "bytes_matching_c": 12124
+            "bytes_matching_c": 12836
           },
           {
             "file": "src/overlays/l14/rendering/view/00268038.c",
@@ -4999,14 +4999,14 @@
   },
   "total": {
     "units_total": 4550,
-    "matching_c": 3533,
+    "matching_c": 3546,
     "intentional_asm": 313,
-    "pending_c": 704,
+    "pending_c": 691,
     "bytes_total": 3668944,
-    "bytes_matching_c": 2419796,
+    "bytes_matching_c": 2426860,
     "bytes_intentional_asm": 121516,
-    "bytes_pending_c": 1127632,
-    "c_exact_percent_of_recoverable": 68.2127,
-    "c_fuzzy_percent_of_recoverable": 69.8203
+    "bytes_pending_c": 1120568,
+    "c_exact_percent_of_recoverable": 68.4118,
+    "c_fuzzy_percent_of_recoverable": 70.0027
   }
 }
