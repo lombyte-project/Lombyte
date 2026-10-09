@@ -940,24 +940,6 @@ void FUN_L00_00208038(u128 *v, int b, float x, float y) {
     g->n++;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002080b0.s", FUN_L00_002080b0);
-typedef struct {
-    char p0[0x80];
-    OvlQuad a;
-    OvlQuad b;
-    char p1[0x1CC - 0xA0];
-    int k;
-    char p2[0x220 - 0x1D0];
-    float f220, f224;
-    char p3[0x234 - 0x228];
-    float f234;
-    char p4[0x2080 - 0x238];
-    unsigned char *obj;
-    char p5[0x208C - 0x2084];
-    int w208C;
-    char p6[0x20A5 - 0x2090];
-    unsigned char mode;
-} G_208820;
-extern G_208820 D_0013F350_208820 __asm__("D_0013F350");
 extern unsigned char D_0015EDB5_208820 __asm__("D_0015EDB5");
 extern void f32fe8_208820(void) __asm__("FUN_L00_00232fe8");
 extern void f330d0_208820(void) __asm__("FUN_L00_002330d0");
@@ -974,39 +956,39 @@ void FUN_L00_00208820(void) {
     float m, f, d;
     unsigned char *o;
 
-    D_0013F350_208820.obj[0xA4] = 0xFF;
-    if (D_0013F350_208820.mode) {
+    ((unsigned char *)hero.moby)[0xA4] = 0xFF;
+    if (hero.unk20A5) {
         f32fe8_208820();
     } else {
         f330d0_208820();
     }
-    qcopy(D_0013F350_208820.obj + 0x10, &D_0013F350_208820.a);
+    qcopy(((unsigned char *)hero.moby) + 0x10, &hero.motion.pos);
     f78a8_208820();
-    qcopy(D_0013F350_208820.obj + 0x40, &D_0013F350_208820.b);
+    qcopy(((unsigned char *)hero.moby) + 0x40, &hero.motion.rot);
     f79e8_208820();
-    ff090_208820(D_0013F350_208820.obj + 0xC0, &D_0013F350_208820, 0x30);
-    f50df8_208820(D_0013F350_208820.obj);
-    if (D_0013F350_208820.k == 0 && *(int *)(D_0013F350_208820.obj + 0x94) != 0) {
-        qcopy(v, &D_0013F350_208820.a);
+    ff090_208820(((unsigned char *)hero.moby) + 0xC0, &hero, 0x30);
+    f50df8_208820(((unsigned char *)hero.moby));
+    if (hero.unk1CC == 0 && *(int *)(((unsigned char *)hero.moby) + 0x94) != 0) {
+        qcopy(v, &hero.motion.pos);
         m = 0.05f;
-        f336e8_208820(v, v, D_0013F350_208820.f224);
-        d = D_0013F350_208820.f220 - D_0013F350_208820.f224;
+        f336e8_208820(v, v, hero.unk224);
+        d = hero.unk220 - hero.unk224;
         if (d < m)
             d = m;
-        f4eed8_208820(D_0013F350_208820.obj, 0, v, D_0013F350_208820.f234, d);
-        f = D_0013F350_208820.f234 + m;
-        if (D_0013F350_208820.w208C == 4)
+        f4eed8_208820(((unsigned char *)hero.moby), 0, v, hero.unk234, d);
+        f = hero.unk234 + m;
+        if (hero.state.control_mode == 4)
             f += 0.15f;
         if (fd568_208820())
-            f = D_0013F350_208820.f224;
-        qcopy(v, &D_0013F350_208820.a);
+            f = hero.unk224;
+        qcopy(v, &hero.motion.pos);
         f336e8_208820(v, v, f);
-        d = D_0013F350_208820.f220 - f;
+        d = hero.unk220 - f;
         if (d < m)
             d = m;
-        f4eed8_208820(D_0013F350_208820.obj, 1, v, D_0013F350_208820.f234, d);
+        f4eed8_208820(((unsigned char *)hero.moby), 1, v, hero.unk234, d);
     }
-    o = D_0013F350_208820.obj;
+    o = ((unsigned char *)hero.moby);
     if (*(short *)(o + 0xA6) == 0) {
         if (D_0015EDB5_208820) {
             *(unsigned short *)(o + 0x34) |= 0x8000;
@@ -1015,22 +997,6 @@ void FUN_L00_00208820(void) {
         }
     }
 }
-typedef struct {
-    char p0[0x80];
-    u128 a;
-    u128 b;
-    char p1[0x1CC - 0xA0];
-    int k;
-    char p2[0x220 - 0x1D0];
-    float f220, f224;
-    char p3[0x234 - 0x228];
-    float f234;
-    char p4[0x2080 - 0x238];
-    unsigned char *obj;
-    char p5[0x20A5 - 0x2084];
-    unsigned char mode;
-} G_208a10_00208a10;
-extern G_208a10_00208a10 D_0013F350_00208a10 __asm__("D_0013F350");
 extern void FUN_L00_00233210_00208a10(void) __asm__("FUN_L00_00233210");
 extern void FUN_L00_00233248_00208a10(void) __asm__("FUN_L00_00233248");
 extern void FUN_L00_00232fe8_00208a10(void) __asm__("FUN_L00_00232fe8");
@@ -1044,28 +1010,28 @@ void FUN_L00_00208a10(void) {
     u128 v;
     float f;
     unsigned char *o;
-    if (D_0013F350_00208a10.mode) {
+    if (hero.unk20A5) {
         FUN_L00_00233210_00208a10();
     } else {
         FUN_L00_00233248_00208a10();
     }
     FUN_L00_00232fe8_00208a10();
-    D_0013F350_00208a10.obj[0xA4] = 0xFF;
-    o = D_0013F350_00208a10.obj;
-    qcopy(o + 0x10, &D_0013F350_00208a10.a);
-    qcopy(o + 0x40, &D_0013F350_00208a10.b);
-    FUN_001f9838_00208a10(o + 0xC0, &D_0013F350_00208a10, 0x30);
-    FUN_L00_00250df8_00208a10(D_0013F350_00208a10.obj);
-    if (D_0013F350_00208a10.k == 0 && *(int *)(D_0013F350_00208a10.obj + 0x94) != 0) {
-        qcopy(&v, &D_0013F350_00208a10.a);
-        FUN_L00_002336e8_00208a10(&v, &v, D_0013F350_00208a10.f224);
-        FUN_L00_0024eed8_00208a10(D_0013F350_00208a10.obj, 0, &v, D_0013F350_00208a10.f234,
-                                  D_0013F350_00208a10.f220 - D_0013F350_00208a10.f224);
-        f = D_0013F350_00208a10.f234 + 0.05f;
-        qcopy(&v, &D_0013F350_00208a10.a);
+    ((unsigned char *)hero.moby)[0xA4] = 0xFF;
+    o = ((unsigned char *)hero.moby);
+    qcopy(o + 0x10, &hero.motion.pos);
+    qcopy(o + 0x40, &hero.motion.rot);
+    FUN_001f9838_00208a10(o + 0xC0, &hero, 0x30);
+    FUN_L00_00250df8_00208a10(((unsigned char *)hero.moby));
+    if (hero.unk1CC == 0 && *(int *)(((unsigned char *)hero.moby) + 0x94) != 0) {
+        qcopy(&v, &hero.motion.pos);
+        FUN_L00_002336e8_00208a10(&v, &v, hero.unk224);
+        FUN_L00_0024eed8_00208a10(((unsigned char *)hero.moby), 0, &v, hero.unk234,
+                                  hero.unk220 - hero.unk224);
+        f = hero.unk234 + 0.05f;
+        qcopy(&v, &hero.motion.pos);
         FUN_L00_002336e8_00208a10(&v, &v, f);
-        FUN_L00_0024eed8_00208a10(D_0013F350_00208a10.obj, 1, &v, D_0013F350_00208a10.f234,
-                                  D_0013F350_00208a10.f220 - f);
+        FUN_L00_0024eed8_00208a10(((unsigned char *)hero.moby), 1, &v, hero.unk234,
+                                  hero.unk220 - f);
     }
 }
 typedef union {
