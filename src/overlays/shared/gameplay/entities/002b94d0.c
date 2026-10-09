@@ -771,7 +771,51 @@ void FUN_L00_002bc1a0(void *mv) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bc3b0.s", FUN_L00_002bc3b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bc7e8.s", FUN_L00_002bc7e8);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bcf98.s", FUN_L00_002bcf98);
+#else
+extern s32 D_L00_001617BC __attribute__((sda));
+#define D_L00_001617BC_abs (*(volatile s32 *)0x001617BC)
+extern f32 D_L00_001616DC __attribute__((sda));
+extern f32 D_L00_001617CC __attribute__((sda));
+extern volatile s32 D_L00_00161718_i __asm__("D_L00_00161718") __attribute__((sda));
+extern volatile s32 D_L00_00161720_i __asm__("D_L00_00161720") __attribute__((sda));
+extern volatile s32 D_L00_00161724_i __asm__("D_L00_00161724") __attribute__((sda));
+extern volatile s32 D_L00_001617D0 __attribute__((section(".data")));
+extern volatile s32 D_L00_00161824 __attribute__((section(".data")));
+extern s32 D_L00_00161818[] __attribute__((section(".data")));
+extern u128 D_L00_001DBF50[] __attribute__((section(".data")));
+extern u128 D_L00_001DD0D0[] __attribute__((section(".data")));
+extern void scale_vector_2bcf98(float, void *, void *) __asm__("FUN_001f9a68");
+extern void FUN_001f9a10(void *, void *, void *);
+
+void FUN_L00_002bcf98(u8 *m) {
+    u128 vec;
+    volatile u128 *source = *(u128 **)(m + 0x78);
+    s32 i;
+    f32 scale;
+
+    if (D_L00_001617BC_abs != 0) {
+        D_L00_001617BC = 0;
+        scale = D_L00_001616DC / ConvertIntegerToFloat(12);
+        D_L00_001617CC = scale;
+        scale_vector_2bcf98(-scale, &vec, m + 0xD0);
+        D_L00_001DBF50[1] = source[0];
+        for (i = 10; i >= 0; i--) {
+            FUN_001f9a10(&D_L00_001DBF50[12 - i], &D_L00_001DBF50[11 - i], &vec);
+        }
+        D_L00_00161718_i = 0;
+        D_L00_00161720_i = 0;
+        D_L00_00161724_i = 0;
+        D_L00_001617D0 = 0;
+        D_L00_00161824 = 0;
+        for (i = 2; i >= 0; i--) {
+            D_L00_00161818[2 - i] = 0;
+            D_L00_001DD0D0[2 - i] = vec;
+        }
+    }
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bd0a0.s", FUN_L00_002bd0a0);
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
