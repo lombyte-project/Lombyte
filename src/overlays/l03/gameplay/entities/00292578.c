@@ -451,7 +451,131 @@ void FUN_L03_0029cff0(struct Moby *m) {
                          *(float *)(d + 0x110) * 5.0f * DEG_TO_RAD * D_0015ED70,
                          *(float *)(d + 0x110) * DEG_TO_RAD * D_0015ED6C);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029d2e0.s", FUN_L03_0029d2e0);
+extern char D_0013E550_29d2e0[] __asm__("D_0013E550");
+extern unsigned char D_0013D408_29d2e0[] __asm__("D_0013D408");
+extern float D_0015ED60;
+extern float D_0015ED70;
+extern float D_L03_0015F580[] __attribute__((section(".sdata")));
+extern void *D_L03_00160770;
+extern void *FUN_L00_0025a420(void *, int, int);
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
+extern void FUN_0022dba0(int, int, void *);
+extern void FUN_L00_00260a88(void *, int, int, int, int);
+extern void FUN_L00_00263d40(int, int);
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
+                             float, int, float, float, int, int, int, int);
+extern void spawn_debris_29d2e0(char *, int, float *, void *, int, int, float, float *, float *, float *) __asm__("FUN_L00_00263fd8");
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
+extern void scale_vector_xyz(void *out, void *a, float s) __asm__("FUN_001f9a68");
+void FUN_L03_0029dba8(char *moby);
+
+#define SPAWN_DEBRIS(id) \
+    spawn_debris_29d2e0(moby, (id), (float *)(moby + 0x10), moby + 0x40, FUN_001f96f8(90), 0, D_0015ED70 * 12.0f, push, \
+                        D_L03_0015F580, D_L03_0015F580)
+
+/* Wreck reaction for the Kerwan train and turret classes: when hit by a qualifying attack it bursts into
+ * the class debris, starts the shake/smoke effects and arms the respawn countdown (0x14A); once that runs
+ * out the moby is hidden again unless the caller keeps it, and switches its update to the car update. */
+void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
+    float spot[4];
+    float vel[4];
+    float push[4];
+    char *data;
+    char *hit;
+    int idx;
+    unsigned char *e;
+
+    data = *(char **)(moby + 0x78);
+    hit = FUN_L00_0025a420(moby, 0xA30000, 0);
+    if (hit != 0 && *(unsigned short *)(hit + 0x28) != 0x102) {
+        clear_vector(spot);
+        if (*(short *)(moby + 0xA6) == 0x4B) {
+            spot[0] = FUN_001f9dc8(*(float *)(moby + 0x48)) * -2.747f;
+            spot[1] = FUN_001f9de0(*(float *)(moby + 0x48)) * -2.747f;
+            spot[2] = 0.0f;
+        }
+        *(OvlQuad *)vel = *(OvlQuad *)vel_in;
+        scale_vector_xyz(vel, vel, 0.5f);
+        add_vector_xyz(spot, spot, moby + 0x10);
+        if (*(int *)(hit + 0x24) & 0x800000) {
+            FUN_L00_00260a88(moby, 10, 20, 2, -1);
+        } else {
+            FUN_L00_00260a88(moby, 3, 5, 2, -1);
+        }
+        *(short *)(data + 0x14A) = FUN_001f96f8(600);
+        FUN_L00_0025e450(moby, vel, spot, 0.0f, 0.0f, 20, 3, 4, 4.0f, 2.0f, 100000.0f, -1, 3.0f, 15.0f, 1, 1,
+                         -1, 0);
+        scale_vector_xyz(push, moby + 0xC0, D_0015ED60 * 0.075f);
+        push[2] += D_0015ED60 * 0.08f;
+        switch (*(short *)(moby + 0xA6)) {
+        case 0x73:
+            SPAWN_DEBRIS(0x6A9);
+            SPAWN_DEBRIS(0x6AA);
+            SPAWN_DEBRIS(0x6AB);
+            break;
+        case 0x74:
+            SPAWN_DEBRIS(0x6AC);
+            SPAWN_DEBRIS(0x6AD);
+            SPAWN_DEBRIS(0x6AE);
+            break;
+        case 0x75:
+            SPAWN_DEBRIS(0x6AF);
+            SPAWN_DEBRIS(0x6B0);
+            SPAWN_DEBRIS(0x6B1);
+            break;
+        case 0x76:
+            SPAWN_DEBRIS(0x6B2);
+            SPAWN_DEBRIS(0x6B3);
+            SPAWN_DEBRIS(0x6B4);
+            break;
+        case 0x77:
+            SPAWN_DEBRIS(0x6B5);
+            SPAWN_DEBRIS(0x6B6);
+            SPAWN_DEBRIS(0x6B7);
+            break;
+        case 0x78:
+            SPAWN_DEBRIS(0x6B8);
+            SPAWN_DEBRIS(0x6B9);
+            SPAWN_DEBRIS(0x6BA);
+            break;
+        case 0x84:
+            SPAWN_DEBRIS(0x6BC);
+            SPAWN_DEBRIS(0x6BE);
+            SPAWN_DEBRIS(0x6BF);
+            break;
+        }
+        if (*(short *)(moby + 0xA6) == 0x31B && D_0013D408_29d2e0[4] == 0) {
+            D_0013D408_29d2e0[4] = 1;
+            allocate_voice_for_bank_entry(1, 0, 0);
+            FUN_L00_00263d40(0x53D6, -1);
+        }
+        FUN_0022dba0(0, 0, moby);
+    }
+    D_L03_00160770 = (void *)FUN_L03_0029dba8;
+    ((unsigned char *)moby)[0xA4] = 0xFF;
+    if (*(short *)(data + 0x14A) != 0) {
+        if (FUN_001f9770(data + 0x14A) && flag) {
+            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            *(unsigned short *)(moby + 0x34) = (*(unsigned short *)(moby + 0x34) & 0xFFBE) | 0x1000;
+        } else {
+            *(int *)(moby + 0x94) = 0;
+            *(unsigned short *)(moby + 0x34) |= 0x41;
+            idx = *(int *)(data + 0x150);
+            if (idx != -1) {
+                e = (unsigned char *)D_0013E550_29d2e0 + idx * 0x70;
+                if (*(char **)(e + 0x88) == moby && e[0x74]) {
+                    release_voice_slot(idx);
+                }
+            }
+            *(int *)(data + 0x150) = -1;
+            *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+        }
+    }
+}
+#undef SPAWN_DEBRIS
 extern char *D_L03_0015FFD8_29dba8 __asm__("D_L03_0015FFD8");
 extern char *D_L03_001B05B0_29dba8[] __asm__("D_L03_001B05B0");
 extern char D_0013E550_29dba8[] __asm__("D_0013E550");
