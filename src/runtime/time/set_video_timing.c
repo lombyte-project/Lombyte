@@ -1,14 +1,15 @@
 #include "types.h"
+#include "sda.h"
 #include "rnc/globals.h"
 
-extern f32 D_0015ED60;
-extern f32 D_0015ED64;
-extern f32 D_0015ED68;
-extern f32 D_0015ED6C;
-extern f32 D_0015ED70;
-extern f32 D_0015ED74;
-extern s32 D_0015ED78;
-extern f32 D_0015ED7C;
+extern f32 D_0015ED60 MACRO_ADDR;
+extern f32 D_0015ED64 MACRO_ADDR;
+extern f32 D_0015ED68 MACRO_ADDR;
+extern f32 D_0015ED6C MACRO_ADDR;
+extern f32 D_0015ED70 MACRO_ADDR;
+extern f32 D_0015ED74 MACRO_ADDR;
+extern s32 D_0015ED78 MACRO_ADDR;
+extern f32 D_0015ED7C MACRO_ADDR;
 
 void set_video_timing(s32 arg0) __asm__("FUN_00214970");
 
@@ -35,5 +36,15 @@ void set_video_timing(s32 arg0) {
     D_0015ED78 = 6;
     D_0015ED7C = 0.02f;
 }
+
+/* Defined below their only writer, so retail reaches them with lui. */
+f32 D_0015ED60 MACRO_ADDR = 1.0f;
+f32 D_0015ED64 MACRO_ADDR = 1.0f;
+f32 D_0015ED68 MACRO_ADDR = 1.0f;
+f32 D_0015ED6C MACRO_ADDR = 0.016666668f;
+f32 D_0015ED70 MACRO_ADDR = 0.00027777778f;
+f32 D_0015ED74 MACRO_ADDR = 0.0000046296295f;
+s32 D_0015ED78 MACRO_ADDR = 5;
+f32 D_0015ED7C MACRO_ADDR = 0.016666668f;
 
 extern __typeof__(set_video_timing) func_00214970 __attribute__((alias("FUN_00214970")));
