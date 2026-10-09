@@ -93,9 +93,9 @@ extern int FUN_L00_0020d498(int);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void FUN_L00_00231e78(int id, int arg, float t) {
-    char *base = D_0013F350;
-    char *blk2;
-    char *blk3;
+    struct Hero *base = &hero;
+    struct Hero *blk2;
+    struct Hero *blk3;
     char *a;
     char *b;
     int seq0;
@@ -103,11 +103,11 @@ void FUN_L00_00231e78(int id, int arg, float t) {
     int ok;
     int seq;
 
-    if (*(int *)(base + 0x11A4) != 2) {
+    if (base->items[3].state != 2) {
         return;
     }
-    a = *(char **)(base + 0x1180);
-    b = *(char **)(base + 0x1184);
+    a = ((char *)base->items[3].moby);
+    b = ((char *)base->items[3].moby2);
     if (a == 0 || b == 0) {
         return;
     }
@@ -119,9 +119,9 @@ void FUN_L00_00231e78(int id, int arg, float t) {
         blend_moby_animation(b, seq1, arg, (int)t);
         return;
     }
-    blk2 = D_0013F350;
+    blk2 = &hero;
     ok = 1;
-    if (*(int *)(blk2 + 0x208C) == 0 && FUN_L00_00231db0(*(unsigned char *)(a + 0x53), &id) != 0) {
+    if (blk2->state.control_mode == 0 && FUN_L00_00231db0(*(unsigned char *)(a + 0x53), &id) != 0) {
         if (id == 0) {
             ok = 0;
         }
@@ -130,8 +130,8 @@ void FUN_L00_00231e78(int id, int arg, float t) {
         return;
     }
     seq = scale_game_frames(7);
-    blk3 = D_0013F350;
-    if (*(int *)(blk3 + 0x2090) == 8 && FUN_L00_0020d498(3) == 2) {
+    blk3 = &hero;
+    if (blk3->state.prev == 8 && FUN_L00_0020d498(3) == 2) {
         seq = scale_game_frames(0x13);
     }
     if (*(unsigned char *)(a + 0x53) != 1) {
