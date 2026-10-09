@@ -923,15 +923,15 @@ void FUN_L00_002e4930(char *m) {
     int t;
 
     if (e->state == 0) {
-        char *p0 = D_0013F350;
-        if (*(int *)(p0 + 0x208C) == 2) {
+        struct Hero *p0 = &hero;
+        if (p0->state.control_mode == 2) {
             e->prev = e->state;
             e->state = 1;
             e->timer = D_L00_00161D3C;
             e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
         } else {
-            char *p1 = D_0013F350;
-            if (*(int *)(p1 + 0x2084) == 0xF && D_L00_00166EEC == 0.0f) {
+            struct Hero *p1 = &hero;
+            if (p1->state.current == 0xF && D_L00_00166EEC == 0.0f) {
                 e->prev = e->state;
                 e->state = 3;
                 e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D4C);
@@ -945,15 +945,15 @@ void FUN_L00_002e4930(char *m) {
                 FUN_L00_002e48a0_c(e->v30, x);
                 qcopy(e->v20, e->v10);
             } else {
-                char *p2 = D_0013F350;
-                if (*(int *)(p2 + 0x2084) == 0xC && D_L00_00166EEC == 0.0f) {
+                struct Hero *p2 = &hero;
+                if (p2->state.current == 0xC && D_L00_00166EEC == 0.0f) {
                     e->prev = e->state;
                     e->state = 8;
                     e->timer = D_L00_00161D60;
                     e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
                 } else {
-                    char *p3 = D_0013F350;
-                    if (*(int *)(p3 + 0x2084) == 0xB && D_L00_00166EEC == 0.0f) {
+                    struct Hero *p3 = &hero;
+                    if (p3->state.current == 0xB && D_L00_00166EEC == 0.0f) {
                         e->prev = e->state;
                         e->state = 6;
                         e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40);
@@ -967,8 +967,8 @@ void FUN_L00_002e4930(char *m) {
                         FUN_L00_002e48a0_c(e->v30, x);
                         qcopy(e->v20, e->v10);
                     } else {
-                        char *p4 = D_0013F350;
-                        if ((*(int *)(p4 + 0x2084) == 0xD || *(int *)(p4 + 0x2084) == 0xE) &&
+                        struct Hero *p4 = &hero;
+                        if ((p4->state.current == 0xD || p4->state.current == 0xE) &&
                             D_L00_00166EEC == 0.0f) {
                             e->prev = e->state;
                             e->state = 5;
@@ -983,8 +983,8 @@ void FUN_L00_002e4930(char *m) {
                             FUN_L00_002e48a0_c(e->v30, x);
                             qcopy(e->v20, e->v10);
                         } else {
-                            char *p5 = D_0013F350;
-                            if (*(int *)(p5 + 0x208C) == 4 && D_L00_00166EEC == 0.0f) {
+                            struct Hero *p5 = &hero;
+                            if (p5->state.control_mode == 4 && D_L00_00166EEC == 0.0f) {
                                 e->prev = e->state;
                                 e->state = 2;
                                 e->timer = D_L00_00161D38;
@@ -1021,8 +1021,8 @@ void FUN_L00_002e4930(char *m) {
         return;
     }
     if (e->state == 7) {
-        char *p = D_0013F350;
-        if (*(short *)(p + 0x41E) == 0) {
+        struct Hero *p = &hero;
+        if (p->unk41E == 0) {
             e->prev = e->state;
             e->state = 6;
             e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40);
@@ -1037,7 +1037,7 @@ void FUN_L00_002e4930(char *m) {
             qcopy(e->v20, e->v10);
             return;
         }
-        if (*(int *)(p + 0x208C) == 2) {
+        if (p->state.control_mode == 2) {
             e->prev = e->state;
             e->state = 1;
             e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
@@ -1103,14 +1103,14 @@ void FUN_L00_002e4930(char *m) {
         return;
     }
     if (e->state == 9) {
-        char *p = D_0013F350;
-        if (*(int *)(p + 0x208C) == 2 || *(short *)(p + 0x30C) >= scale_game_frames(0x37)) {
+        struct Hero *p = &hero;
+        if (p->state.control_mode == 2 || p->unk30C.s >= scale_game_frames(0x37)) {
             goto to_one;
         }
     }
     if (e->state == 0xA) {
-        char *p = D_0013F350;
-        if (*(int *)(p + 0x208C) == 2 || *(short *)(p + 0x30C) >= scale_game_frames(0x37)) {
+        struct Hero *p = &hero;
+        if (p->state.control_mode == 2 || p->unk30C.s >= scale_game_frames(0x37)) {
             float r;
         to_one:
             e->prev = e->state;
