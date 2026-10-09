@@ -1485,4 +1485,147 @@ unsigned char *FUN_L14_002bb310(struct Moby *owner, float angle, char *posp) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d5f40.s", FUN_L14_002d5f40);
+
+/* One record of the level's path table (D_L14_0015F70C), 0x20 bytes apart. */
+struct L14PathRec {
+    u8 pad0[0x10];
+    s32 *points;       /* 0x10: first word is the point count */
+    u8 pad14[0xC];
+};
+
+/* Pvars of a moby that waits for the race to start, rides its path and leaves at a trigger volume. */
+struct L14RacerVars {
+    u8 pad0[0x40];
+    Vec4 trail;        /* 0x40: effect state (FUN_L00_0025e450) */
+    u8 pad50[0x10];
+    s32 path;          /* 0x60: index into D_L14_0015F70C (-1: none) */
+    u8 pad64[8];
+    s32 timer;         /* 0x6C */
+    f32 inv_time;      /* 0x70: 1 / timer at the start of the run */
+    u8 pad74[0xC];
+    s32 delay;         /* 0x80: frames to wait once the race starts */
+    s32 end_point;     /* 0x84: D_L14_001B0BB0 entry the run ends at */
+    s32 start_point;   /* 0x88: D_L14_001B0BB0 entry the run starts from (-1: none) */
+    u8 pad8C[0x64];
+    s32 unkF0;
+    s32 unkF4;
+    u8 padF8[8];
+    u8 manips[3][0x40]; /* 0x100: attached as manipulators 2..4 */
+    u8 pad1C0[0xC];
+    s32 volume;        /* 0x1CC: clip volume where the racer leaves (-1: none) */
+};
+
+/* Race controller; its phase reaches 0x14 when the race starts. */
+struct L14RaceState {
+    u8 pad0[0x86];
+    s16 phase;         /* 0x86 */
+};
+
+extern struct L14PathRec *race_paths __asm__("D_L14_0015F70C") __attribute__((sda));
+extern struct L14RaceState *race_state __asm__("D_L14_00167500") __attribute__((section(".data")));
+extern s32 D_L14_00161A2C __attribute__((sda));
+extern s32 D_L14_00161A34 __attribute__((sda));
+extern s32 D_L14_00161A5C __attribute__((sda));
+extern void memset_words(void *, int, int) __asm__("FUN_001f97e8");
+extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
+extern int FUN_001f9740(s32 *);
+extern void set_moby_animation(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
+extern f32 FUN_0020c9e0(struct Moby *);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern unsigned char *FUN_L14_002dea98(char *owner, char *pos);
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern void FUN_L14_002e0170(struct Moby *, s32 *, int);
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
+                             float, int, float, float, int, int, int, int);
+void FUN_L14_002d6358(struct Moby *m);
+int FUN_L14_002d64d0(struct Moby *m);
+void FUN_L14_002d67e8(struct Moby *m);
+void FUN_L14_002d7198(struct Moby *m);
+void FUN_L14_002d7490(struct Moby *m);
+
+void FUN_L14_002d5f40(struct Moby *m) {
+    struct L14RacerVars *d = (struct L14RacerVars *)m->pvars;
+    u8 pos[16];
+    f32 vel[3];
+    unsigned char *spark;
+    f32 *sv;
+
+    switch (m->state) {
+    case 0:
+        if (d->path == -1 || *race_paths[d->path].points == 0 || d->start_point == -1 ||
+            *D_L14_001B0BB0[d->start_point] != 3 || d->volume == -1) {
+            FUN_0020c828(m);
+            return;
+        }
+        FUN_L14_002d6358(m);
+        m->state = 1;
+        m->flags = (m->flags & 0xEFFF) | 0x41;
+        m->unk94 = 0;
+        d->unkF4 = -1;
+        d->unkF0 = -1;
+        memset_words(d->manips[0], 0, 0x40);
+        attach_manipulator(m, 2, d->manips[0]);
+        memset_words(d->manips[1], 0, 0x40);
+        attach_manipulator(m, 3, d->manips[1]);
+        memset_words(d->manips[2], 0, 0x40);
+        attach_manipulator(m, 4, d->manips[2]);
+        return;
+    case 1:
+        if (race_state->phase == 0x14) {
+            d->timer = FUN_001f96f8(d->delay);
+            m->state = 2;
+        }
+        return;
+    case 2:
+        if (!FUN_001f9740(&d->timer))
+            return;
+        m->flags = (m->flags | 0x1000) & 0xFFBE;
+        m->unk94 = m->pclass->unk10;
+        m->state = 3;
+        set_moby_animation(m, 2, 0);
+        m->unk58 = 0.5f;
+        d->timer = FUN_001f96f8(D_L14_00161A2C);
+        d->inv_time = 1.0f / ConvertIntegerToFloat(d->timer);
+        qcopy(&m->pos, (char *)D_L14_001B0BB0[d->end_point] + 0x10);
+    case 3:
+        if (FUN_0020c9e0(m) >= 3.0f)
+            FUN_L14_002d64d0(m);
+        if ((m->unk70 & 2) && m->seq == m->prev_seq) {
+            m->state = 4;
+            blend_moby_animation((MobyAnim *)m, 0, 0, 10);
+            m->unk58 = 1.0f;
+        }
+        break;
+    case 4:
+        if (FUN_L14_002d64d0(m)) {
+            m->state = 5;
+            d->timer = FUN_001f96f8(D_L14_00161A34);
+        }
+        break;
+    case 5:
+        FUN_L14_002d7198(m);
+        break;
+    case 6:
+        FUN_L14_002d67e8(m);
+        if (is_point_inside_clip_volume(&m->pos, d->volume)) {
+            FUN_L00_0024f7c8(m, 2, pos);
+            spark = FUN_L14_002dea98((char *)m, (char *)pos);
+            if (spark) {
+                sv = *(f32 **)(spark + 0x78);
+                vel[0] = fast_cos(m->rot.z) * (D_0015ED60 * 0.4f);
+                vel[1] = fast_sin(m->rot.z) * (D_0015ED60 * 0.4f);
+                vel[2] = 0.0f;
+                sv[0] = vel[0];
+                sv[1] = vel[1];
+            }
+            FUN_L14_002e0170(m, &D_L14_00161A5C, 0);
+            FUN_L00_0025e450(m, &d->trail, &m->pos, 0.0f, 0.0f, 5, 2, 4, 4.0f, 2.0f, 9.0f, 1, 1.0f,
+                             15.0f, 1, 5, -1, 0);
+            FUN_0020c828(m);
+            return;
+        }
+        break;
+    }
+    FUN_L14_002d7490(m);
+}
