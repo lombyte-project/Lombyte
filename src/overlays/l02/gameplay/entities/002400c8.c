@@ -2229,4 +2229,90 @@ void FUN_L02_002e0280(struct Moby *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0720.s", FUN_L02_002e0720);
+typedef struct {
+    u32 c[3];
+} Colors0720;
+
+extern unsigned char D_0013D39D __attribute__((section(".data")));
+extern int D_L02_00161CC4 __attribute__((sda));
+extern int D_L02_00161CC8 __attribute__((sda));
+extern Colors0720 D_L02_00161CD0;
+extern char *FUN_L00_0025a420(void *, int, int);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9bf8(void *, void *, float);
+extern int FUN_L00_00257b90(int, int);
+extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
+/* Spark emitter; the size float is declared before the int lifetime (same registers) so the calls
+ * run in retail order: colour index, size, lifetime. */
+extern void FUN_L01_002f8530(void *, void *, u32, f32, s32, f32, f32, f32, s32);
+extern int FUN_0022da68(int, int, int);
+extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+
+/* One-shot burst: when hit, flags D_0013D39D, sprays 200 dust puffs and 50 sparks, then removes itself. */
+void FUN_L02_002e0720(struct Moby *moby) {
+    char *h;
+    int i;
+    int j;
+
+    h = FUN_L00_0025a420(moby, 0x800000, 0);
+    switch (moby->state) {
+    case 0:
+        if (D_0013D39D) {
+            DeleteMoby(moby);
+        } else {
+            moby->state = 1;
+        }
+        break;
+    case 1:
+        if (h) {
+            D_0013D39D = 1;
+            FUN_0022da68(0, 0, (int)moby);
+            /* Statement-expression bodies: their temporaries share stack slots with the second loop's, as in retail. */
+            for (i = 0; i < 200; i++) ({
+                OvlVec4 dir;
+                OvlVec4 pos;
+                OvlVec4 tmp;
+                pos.q = 0;
+                pos.f[0] = random_float_between_alt(-1.0f, 1.0f);
+                pos.f[1] = random_float_between_alt(-1.0f, 1.0f);
+                pos.f[2] = random_float_between_alt(-1.0f, 1.0f);
+                dir.q = pos.q;
+                tmp.q = 0;
+                tmp.f[0] = random_float_between_alt(-2.0f, 2.0f) * fast_cos_d57f8(moby->rot.z);
+                tmp.f[1] = random_float_between_alt(-1.0f, 1.0f) * fast_sin_d57f8(moby->rot.z);
+                tmp.f[2] = random_float_between_alt(0.0f, 4.0f);
+                pos.q = tmp.q;
+                FUN_001f9a10(&pos, &pos, &moby->pos);
+                FUN_001f9bf8(&dir, &dir, random_float_between_alt(1.5f, 3.5f) * D_0015ED6C);
+                FUN_L00_0026ced0(&pos, &dir, D_L02_00161CC4, D_L02_00161CC8,
+                                 random_float_between_alt(1.5f, 3.5f) * 210000.0f,
+                                 scale_ticks(FUN_L00_00257b90(0x78, 0xF0)));
+            });
+            for (j = 0; j < 50; j++) {
+                Colors0720 colors;
+                OvlVec4 dir;
+                OvlVec4 pos;
+                OvlVec4 tmp;
+                colors = D_L02_00161CD0;
+                pos.q = 0;
+                pos.f[0] = random_float_between_alt(-1.0f, 1.0f);
+                pos.f[1] = random_float_between_alt(-1.0f, 1.0f);
+                pos.f[2] = random_float_between_alt(-1.0f, 1.0f);
+                dir.q = pos.q;
+                tmp.q = 0;
+                tmp.f[0] = random_float_between_alt(-2.0f, 2.0f) * fast_cos_d57f8(moby->rot.z);
+                tmp.f[1] = random_float_between_alt(-1.0f, 1.0f) * fast_sin_d57f8(moby->rot.z);
+                tmp.f[2] = random_float_between_alt(1.0f, 4.0f);
+                pos.q = tmp.q;
+                FUN_001f9a10(&pos, &pos, &moby->pos);
+                FUN_001f9bf8(&dir, &dir, random_float_between_alt(1.0f, 5.0f) * D_0015ED6C);
+                FUN_L01_002f8530(&pos, &dir, colors.c[random_integer_below(3)],
+                                 random_float_between_alt(0.05f, 0.15f), FUN_L00_00257b90(0x3C, 0xB4),
+                                 1.0f, 1.0f, 0.75f, 0);
+            }
+            DeleteMoby(moby);
+        }
+        break;
+    }
+}
