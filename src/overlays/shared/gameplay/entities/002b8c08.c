@@ -27,7 +27,95 @@ void FUN_L01_002b8c08(f32 *pos) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b8cb0.s", FUN_L01_002b8cb0);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b8f98.s", FUN_L01_002b8f98);
+#else
+#include "qcopy.h"
+#include "rnc/rendering/dma_tag.h"
+typedef struct {
+    u8 pad0[0x190];
+    u8 v190[0x10];
+    u8 v1A0[0x10];
+    u8 pad1B0[0x60];
+    f32 f210;
+    u8 pad214[0x14];
+    f32 f228;
+    f32 f22C;
+} L01Camera;
+
+extern u16 D_0010E800[];
+extern u8 D_0010E810[];
+extern s32 D_L01_0015F5E0 __attribute__((section(".sdata")));
+#define D_0015F628 (*(u32 *)0x0015F628)
+#define D_0015F62C (*(u32 *)0x0015F62C)
+#define D_0015F630 (*(u32 *)0x0015F630)
+#define D_0015F634 (*(u32 *)0x0015F634)
+#define D_0015F5C0 (*(u8 **)0x0015F5C0)
+extern union PacketCursor l01_packet __asm__("D_L01_001611C0") __attribute__((section(".sdata")));
+extern char D_L01_00167240[];
+#define D_0016CEC0 (*(L01Camera *)0x0016CEC0)
+extern u8 D_L01_001CAC80[];
+extern void FUN_001f9ff8(f32 (*)[4], f32);
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void FUN_001fa378(void *, void *, void *);
+extern void vu1_add_data_ref(void *, s32) __asm__("FUN_00233830");
+extern void vu1_gs_regs_font(void) __asm__("FUN_00233c90");
+extern void FUN_L01_002b4c28(void);
+
+void FUN_L01_002b8f98(void) {
+    f32 m[4][4];
+    struct DmaTag *base;
+    u8 *p;
+
+    FUN_001f9ff8(m, 1024.0f);
+    scale_vector_xyz(m[3], D_L01_00167240, -1024.0f);
+    m[3][3] = 1.0f;
+    if (D_L01_0015F5E0 != 7) {
+        vu1_add_data_ref(D_0010E810, D_0010E800[0]);
+        D_L01_0015F5E0 = 7;
+    }
+    l01_packet.tag->tag = 0x10000000;
+    l01_packet.tag->addr = 0;
+    l01_packet.tag->vif0 = 0x11000000;
+    l01_packet.tag->vif1 = 0x1000404;
+    base = l01_packet.tag;
+    base[1].tag = 0;
+    base[1].addr = 0;
+    base[1].vif0 = 0;
+    base[1].vif1 = 0x6C0C43A4;
+    FUN_001fa378(base + 2, D_L01_00167240 - 0x100, m);
+    FUN_001fa378(base + 6, D_L01_00167240 - 0x80, m);
+    base[10].tag = 0x8000;
+    base[10].addr = 0x303EC000;
+    base[10].vif0 = 0x412;
+    *(f32 *)&base[10].vif1 = D_0016CEC0.f210;
+    p = (u8 *)(base + 11);
+    qcopy(p, D_0016CEC0.v190);
+    p = (u8 *)(base + 12);
+    qcopy(p, D_0016CEC0.v1A0);
+    *(f32 *)&base[13].tag = D_0016CEC0.f22C;
+    *(f32 *)&base[13].addr = D_0016CEC0.f228;
+    base[13].vif0 = 0;
+    base[13].vif1 = 0;
+    base[14].tag = 0x3000000;
+    base[14].addr = 0x20001D2;
+    base[14].vif0 = 0x15000000;
+    base[14].vif1 = 0;
+    p = (u8 *)(base + 15);
+    l01_packet.tag->tag |= ((p - (u8 *)l01_packet.tag) >> 4) - 1;
+    D_0015F5C0 = p;
+    FUN_L01_002b4c28();
+    l01_packet.tag->tag = 0x30000007;
+    l01_packet.tag->addr = (u32)D_L01_001CAC80;
+    l01_packet.tag->vif0 = 0;
+    l01_packet.tag->vif1 = 0x50000007;
+    D_0015F634 = -1;
+    D_0015F628 = -1;
+    D_0015F62C = -1;
+    l01_packet.tag++;
+    D_0015F630 = -1;
+}
+#endif
 #include "qcopy.h"
 #define F(p, o) (*(float *)((p) + (o)))
 
