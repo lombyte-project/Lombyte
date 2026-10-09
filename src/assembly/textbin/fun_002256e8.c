@@ -95,7 +95,7 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         class_slot = resident_class_slot_by_id[0x7A5];
         class_resource = (StreamedClassResource **)&moby_class_resources[class_slot];
         header = (AnimationTableHeader *)stream->buffer;
-        table_index = 0;
+        table_index = class_slot >> 8;
     next:
         animation_table = stream->buffer + header[table_index].offset;
         table_index++;
