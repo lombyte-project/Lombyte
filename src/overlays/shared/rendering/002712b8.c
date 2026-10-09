@@ -1037,7 +1037,44 @@ void FUN_L00_00273800(char *a) {
         *(int *)(a + 4) = (w & 0xFFFFFF) | (t << 24);
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002738e8.s", FUN_L00_002738e8);
+#else
+extern unsigned char *p2738e8_alloc(int) __asm__("FUN_L00_002678b8");
+extern float p2738e8_distance(void *, void *) __asm__("FUN_001f9b80");
+extern int p2738e8_trunc(float) __asm__("FUN_001fa6d0");
+extern float p2738e8_random(float, float) __asm__("FUN_002132a8");
+extern unsigned char *D_L00_001B2180 __attribute__((section(".data")));
+
+unsigned char *FUN_L00_002738e8(float size, float floor_z, float gravity, void *pos,
+                                void *vel, int life, int color, int color2, int mode) {
+    unsigned char *p = p2738e8_alloc(0x40);
+    if (p != 0) {
+        unsigned char *m = p + 0x20;
+        qcopy(p + 0x10, pos);
+        if (p2738e8_distance(D_0013F3D0, pos) < 80.0f) {
+            p[9] = p2738e8_trunc(1.0f) + 0x30;
+        } else {
+            p[9] = p2738e8_trunc(1.0f) + 0x20;
+        }
+        p[3] = mode ? 0x48 : 0x44;
+        p[1] = 0;
+        p[2] = D_L00_001B2180[1];
+        *(int *)(p + 4) = color;
+        *(float *)(p + 0xC) = size * 210000.0f;
+        {
+            float r = p2738e8_random(0.0f, 255.0f);
+            *(short *)(p + 0xA) = life;
+            p[8] = (int)r;
+        }
+        qcopy(m, vel);
+        *(float *)(m + 0x14) = gravity;
+        *(float *)(m + 0x10) = floor_z;
+        *(int *)(m + 0x18) = color2;
+    }
+    return p;
+}
+#endif
 /* Falling ember: drifts under gravity until it reaches its floor height, then bursts into
    smoke and, on level 10, a glow and a spark. */
 struct EmberMotion {
