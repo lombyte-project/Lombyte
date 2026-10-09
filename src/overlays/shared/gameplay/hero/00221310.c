@@ -2976,8 +2976,6 @@ extern unsigned char D_0013F350_c[] __asm__("D_0013F350");
 extern void FUN_L00_002126b8(void *, void *, int, float, float);
 float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
 
-#define F(o) (*(float *)(p + (o)))
-#define I(o) (*(int *)(p + (o)))
 
 int FUN_L00_002279b0(void) {
     char *p = (char *)D_0013F350_c;
@@ -2988,27 +2986,27 @@ int FUN_L00_002279b0(void) {
     float v2[4];
     float t;
     float scale;
-    if (I(0x2084) == 0x6A) {
+    if ((*(int *)(p + 0x2084)) == 0x6A) {
         return 0;
     }
     r = 0;
     if (*(unsigned char *)(p + 0x12E4) != 0) {
-        if (I(0x208C) == 0x11) {
-            if (I(0x2088) != 1) {
-                if (0.0f < F(0x108)) {
-                    if (F(0x2F0) - 0.4f < F(0x88)) {
+        if ((*(int *)(p + 0x208C)) == 0x11) {
+            if ((*(int *)(p + 0x2088)) != 1) {
+                if (0.0f < (*(float *)(p + 0x108))) {
+                    if ((*(float *)(p + 0x2F0)) - 0.4f < (*(float *)(p + 0x88))) {
                         r = 1;
                     }
                 }
             }
-        } else if (I(0x208C) != 0x12 && I(0x208C) != 3) {
+        } else if ((*(int *)(p + 0x208C)) != 0x12 && (*(int *)(p + 0x208C)) != 3) {
             t = 0.2f;
-            if (t < AbsoluteFloat(F(0xE8)) + 0.07f) {
-                t = AbsoluteFloat(F(0xE8)) + 0.07f;
+            if (t < AbsoluteFloat((*(float *)(p + 0xE8))) + 0.07f) {
+                t = AbsoluteFloat((*(float *)(p + 0xE8))) + 0.07f;
             }
-            if (AbsoluteFloat(F(0x2F0) - (F(0x88) + 0.45f)) < t) {
-                if (I(0x208C) != 4 || *(short *)(p + 0x41E) != 0) {
-                    if (0.8f < F(0x22A4) && F(0x108) < 0.0f) {
+            if (AbsoluteFloat((*(float *)(p + 0x2F0)) - ((*(float *)(p + 0x88)) + 0.45f)) < t) {
+                if ((*(int *)(p + 0x208C)) != 4 || *(short *)(p + 0x41E) != 0) {
+                    if (0.8f < (*(float *)(p + 0x22A4)) && (*(float *)(p + 0x108)) < 0.0f) {
                         r = 1;
                     }
                 }
@@ -3023,12 +3021,12 @@ int FUN_L00_002279b0(void) {
     }
     p = (char *)D_0013F350_c;
     t = 0.27f;
-    if (t < AbsoluteFloat(F(0xE8)) + 0.07f) {
-        t = AbsoluteFloat(F(0xE8));
+    if (t < AbsoluteFloat((*(float *)(p + 0xE8))) + 0.07f) {
+        t = AbsoluteFloat((*(float *)(p + 0xE8)));
     }
-    if (I(0x2084) == 0x12) {
+    if ((*(int *)(p + 0x2084)) == 0x12) {
         if (*(short *)(p + 0x41E) != 0) {
-            if (F(0x88) < F(0x2F0) - 0.7f) {
+            if ((*(float *)(p + 0x88)) < (*(float *)(p + 0x2F0)) - 0.7f) {
                 r = 1;
             }
         }

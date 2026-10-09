@@ -400,11 +400,6 @@ typedef struct {
     u8 xB20b3;
 } GS;
 extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
-#define GI(o) (*(s32 *)(D_0013F350_c2 + (o)))
-#define GF(o) (*(f32 *)(D_0013F350_c2 + (o)))
-#define GH(o) (*(s16 *)(D_0013F350_c2 + (o)))
-#define GU(o) (*(u16 *)(D_0013F350_c2 + (o)))
-#define GB(o) (D_0013F350_c2[o])
 extern CollisionHit HH __asm__("D_L06_001745C0") __attribute__((section(".data")));
 #define HI(o) (*(s32 *)(D_L06_001745C0 + (o)))
 #define HF(o) (*(f32 *)(D_L06_001745C0 + (o)))
