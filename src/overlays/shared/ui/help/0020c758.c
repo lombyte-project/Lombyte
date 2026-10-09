@@ -134,7 +134,73 @@ int FUN_L00_0020c758(Vec4 *pos, f32 *dir)
     }
     return 0;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020cd08.s", FUN_L00_0020cd08);
+#else
+struct LedgeSpot_20cd08 {
+    Vec4 sphere;
+    s32 *owner;
+    s32 kind;
+    u8 pad18[8];
+};
+
+extern struct LedgeSpot_20cd08 *D_L00_0015F70C;
+extern s32 D_L00_0015F710;
+extern s32 D_001413DC __attribute__((section(".data")));
+extern s16 D_0013F51A __attribute__((section(".data")));
+extern f32 FUN_001f9b48(void *, void *);
+extern f32 FUN_001f9b80(void *, void *);
+extern f32 FUN_001f99c0(f32);
+extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
+
+int FUN_L00_0020cd08(void *from, void *outOwner, void *to, void *outI, void *outF,
+                     void *outKind, int skip, int only)
+{
+    Vec4 pos;
+    s32 gotI;
+    f32 gotF;
+    s32 i;
+    s32 count = D_L00_0015F710;
+    Vec4 *p = &pos;
+    f32 distance_limit, height_limit, distance, height;
+
+    *(u128 *)p = *(u128 *)from;
+    i = 0;
+    if (count > 0) do {
+        if (skip != 0 && (int)D_L00_0015F70C[i].owner == skip)
+            goto next_spot;
+        if (only != 0 && (int)D_L00_0015F70C[i].owner != only)
+            goto next_spot;
+        if (*D_L00_0015F70C[i].owner == 0)
+            goto next_spot;
+        if (FUN_001f9b48(&D_L00_0015F70C[i], p) > D_L00_0015F70C[i].sphere.f[3])
+            goto next_spot;
+        if (!FUN_L00_0025df68(D_L00_0015F70C[i].owner, p, to, &gotI, &gotF,
+                              D_L00_0015F70C[i].kind, 12.0f, 10.0f, 0.0f))
+            goto next_spot;
+        distance_limit = 0.9f;
+        height_limit = 1.5f;
+        if ((u32)D_001413DC < 2)
+            distance_limit = 0.3f;
+        if (D_0013F51A != 0) {
+            height_limit = 10.0f;
+            distance_limit += 0.5f;
+        }
+        distance = FUN_001f9b80(p, to);
+        height = FUN_001f99c0(p->f[2] - ((Vec4 *)to)->f[2]);
+        if (!(distance < distance_limit && height < height_limit))
+            goto next_spot;
+        *(s32 **)outOwner = D_L00_0015F70C[i].owner;
+        *(s32 *)outI = gotI;
+        *(f32 *)outF = gotF;
+        *(s32 *)outKind = D_L00_0015F70C[i].kind;
+        return 1;
+next_spot:
+        i++;
+    } while (i < D_L00_0015F710);
+    return 0;
+}
+#endif /* NON_MATCHING */
 #include "qcopy.h"
 #include "rnc/overlay/hero.h"
 #include "rnc/overlay/collision.h"
