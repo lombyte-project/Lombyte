@@ -507,7 +507,67 @@ char *FUN_L13_002e8438(char *owner) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e84d8.s", FUN_L13_002e84d8);
+extern float D_0015ED60;
+extern void FUN_L00_0024efb0(unsigned char *, int, int);
+
+/* Fades the moby in (state 1), holds until its owner is gone or dying (state 2), fades it out (state 3) and removes it (state 4), easing its scale toward the class scale and spinning it all the while. */
+void FUN_L13_002e84d8(unsigned char *moby) {
+    int *d = *(int **)(moby + 0x78);
+    int old;
+    int step;
+
+    switch (moby[0x20]) {
+    case 0:
+        *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+        moby[0x20] = 1;
+        break;
+    case 1: {
+        float fade = D_0015ED60 * 0.02f;
+        *(float *)(moby + 0x2C) +=
+            (*(float *)(*(char **)(moby + 0x24) + 0x24) * 4.0f - *(float *)(moby + 0x2C)) * 0.1f;
+        ((float *)d)[1] += fade;
+        if (((float *)d)[1] >= 1.0f) {
+            ((float *)d)[1] = 1.0f;
+            moby[0x20] = 2;
+        }
+        moby[0x23] = truncate_float_to_s32(((float *)d)[1] * 60.0f);
+        break;
+    }
+    case 2:
+        *(float *)(moby + 0x2C) +=
+            (*(float *)(*(char **)(moby + 0x24) + 0x24) * 4.0f - *(float *)(moby + 0x2C)) * 0.1f;
+        if (d[0] == 0 || ((unsigned char *)d[0])[0x20] == 0xFE || ((unsigned char *)d[0])[0x20] == 0xFD) {
+            moby[0x20] = 3;
+        }
+        break;
+    case 3: {
+        float fade = D_0015ED60 * 0.02f;
+        *(float *)(moby + 0x2C) +=
+            (*(float *)(*(char **)(moby + 0x24) + 0x24) - *(float *)(moby + 0x2C)) * 0.1f;
+        ((float *)d)[1] -= fade;
+        if (((float *)d)[1] <= 0.0f) {
+            ((float *)d)[1] = 0.0f;
+            moby[0x20] = 4;
+        }
+        moby[0x23] = truncate_float_to_s32(((float *)d)[1] * 60.0f);
+        break;
+    }
+    case 4:
+        mark_moby_for_removal(moby);
+        return;
+    }
+    old = d[2];
+    step = -0x40;
+    d[2] = old + step;
+    if (d[2] > 0x1000) {
+        step = -0x1040;
+        d[2] = old + step;
+    } else if (d[2] < 0) {
+        step = 0xFC0;
+        d[2] = old + step;
+    }
+    FUN_L00_0024efb0(*(unsigned char **)(moby + 0x24), 0, step);
+}
 /* Picks a line to play from a group, starting at a random entry and skipping ones already used; returns 1 when one was queued. */
 extern unsigned char D_L13_001D3558_q[] __asm__("D_L13_001D3558");
 extern int rand_q(void) __asm__("FUN_001160d8");
