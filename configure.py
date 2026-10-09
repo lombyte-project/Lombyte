@@ -913,14 +913,29 @@ def hoist_sda_externs(assembly, source):
     return "\n".join(first + rest)
 
 
+def reference_assembly(assembly):
+    """Drop `.set noreorder` and `.set nomacro` from the copy GNU as reads.
+
+    GNU as only measures the data sections for `finish`, so its .text does
+    not matter.  It asserts (tc-mips.c:11454) when a relaxable access sits in
+    a noreorder delay slot and an unsized symbol is loaded later in the same
+    frag; in reorder mode the access gets its own frag.
+    """
+    return re.sub(r"^[ \t]*\.set[ \t]+no(?:reorder|macro)[ \t]*\r?\n", "", assembly, flags=re.M)
+
+
 def main(argv):
     if len(argv) == 5 and argv[1] == "externs":
         _, _, source, destination, c_source = argv
         assembly = hoist_sda_externs(open(source).read(), open(c_source, errors="replace").read())
         open(destination, "w").write(assembly)
         return
+    if len(argv) == 4 and argv[1] == "reference":
+        open(argv[3], "w").write(reference_assembly(open(argv[2]).read()))
+        return
     if len(argv) not in (4, 5):
-        raise SystemExit("usage: padless-asm.py normalize IN OUT [POLICY] | finish IN OUT [REFERENCE] | externs IN OUT SOURCE")
+        raise SystemExit("usage: padless-asm.py normalize IN OUT [POLICY] | finish IN OUT [REFERENCE] | "
+                         "externs IN OUT SOURCE | reference IN OUT")
     mode, source, destination = argv[1:4]
     policy = argv[4] if len(argv) == 5 else "none"
     data = open(source, "rb").read()
@@ -1925,10 +1940,14 @@ def build_overlays() -> Path:
     ee_assembler = _windows_exe(str(sn_root / "ee/bin/Ps2EeAs.exe"))
     ninja_path = OVERLAYS_BUILD / "build.ninja"
     ninja = ninja_syntax.Writer(open(str(ninja_path), "w"), width=9999)
+    # obj/ only checks that the file compiles as written; its code is never
+    # compared.  -G0 keeps GNU as from relaxing bare symbol accesses, which
+    # it asserts on (tc-mips.c:11454) when one sits in a noreorder delay slot
+    # and an unsized symbol is loaded later in the same frag.
     ninja.rule(
         "overlay-cc",
         description="overlay-cc $in",
-        command=f"{game_root}/ee-gcc -c {includes} {LANG_DEFINE} {COMPILER_FLAGS} $in -o $out",
+        command=f"{game_root}/ee-gcc -c {includes} -Wa,-G0 {LANG_DEFINE} {COMPILER_FLAGS} $in -o $out",
     )
     ninja.rule(
         "c-only",
@@ -1945,7 +1964,8 @@ def build_overlays() -> Path:
             f"{game_root}/ee-gcc -S {includes} {LANG_DEFINE} -DMATCHING_DECOMP -O2 $in -o {work}/cand.s && "
             f"{sys.executable} padless-asm.py normalize {work}/cand.s {work}/cand-final.s none && "
             f"{ee_assembler} -o '$work_win/cand-padded.o' '$work_win/cand-final.s' && "
-            f"{game_root}/as -mabi=eabi -o {work}/cand-ref.o {work}/cand-final.s && "
+            f"{sys.executable} padless-asm.py reference {work}/cand-final.s {work}/cand-ref.s && "
+            f"{game_root}/as -mabi=eabi -o {work}/cand-ref.o {work}/cand-ref.s && "
             f"{sys.executable} padless-asm.py finish {work}/cand-padded.o $out {work}/cand-ref.o"
         ),
     )
@@ -1964,7 +1984,8 @@ def build_overlays() -> Path:
             f"{sys.executable} padless-asm.py normalize {work}/cand.s {work}/cand-norm.s none && "
             f"{sys.executable} padless-asm.py externs {work}/cand-norm.s {work}/cand-final.s $in && "
             f"{ee_assembler} -o '$work_win/cand-padded.o' '$work_win/cand-final.s' && "
-            f"{game_root}/as -mabi=eabi -o {work}/cand-ref.o {work}/cand-final.s && "
+            f"{sys.executable} padless-asm.py reference {work}/cand-final.s {work}/cand-ref.s && "
+            f"{game_root}/as -mabi=eabi -o {work}/cand-ref.o {work}/cand-ref.s && "
             f"{sys.executable} padless-asm.py finish {work}/cand-padded.o $out {work}/cand-ref.o"
         ),
     )

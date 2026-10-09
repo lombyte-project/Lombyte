@@ -12,21 +12,50 @@
     CHECK((unsigned long)&((struct Hero *)0)->field == (off))
 #define SLOT_OFFSET_CHECK(field, off) \
     CHECK((unsigned long)&((struct HeroItemSlot *)0)->field == (off))
+#define EASE_OFFSET_CHECK(field, off) \
+    CHECK((unsigned long)&((struct HeroEase *)0)->field == (off))
 
 CHECK(sizeof(struct MobyTrail) == 0x140);
 CHECK((unsigned long)&((struct MobyTrail *)0)->copy_fade == 0x100);
 CHECK((unsigned long)&((struct MobyTrail *)0)->active == 0x13C);
 CHECK(sizeof(struct HeroItemSlot) == 0x50);
+CHECK(sizeof(struct HeroEase) == 0xB0);
+CHECK(sizeof(struct HeroVelocityKey) == 0xC);
 CHECK(sizeof(struct Hero) == 0x2300);
+EASE_OFFSET_CHECK(attached, 0x01);
+EASE_OFFSET_CHECK(quat, 0x10);
+EASE_OFFSET_CHECK(translation, 0x30);
+EASE_OFFSET_CHECK(rot, 0x40);
+EASE_OFFSET_CHECK(rot_target, 0x60);
+EASE_OFFSET_CHECK(pos, 0x70);
+EASE_OFFSET_CHECK(pos_target, 0x90);
+EASE_OFFSET_CHECK(kind, 0xA2);
+EASE_OFFSET_CHECK(scale, 0xAC);
 SLOT_OFFSET_CHECK(moby, 0x00);
 SLOT_OFFSET_CHECK(moby2, 0x04);
 SLOT_OFFSET_CHECK(button_mask, 0x10);
 SLOT_OFFSET_CHECK(timer, 0x18);
+SLOT_OFFSET_CHECK(unk1B, 0x1B);
 SLOT_OFFSET_CHECK(timer_reload, 0x1D);
 SLOT_OFFSET_CHECK(state, 0x24);
 SLOT_OFFSET_CHECK(item_id, 0x28);
 HERO_OFFSET_CHECK(items[1], 0x10E0);
 HERO_OFFSET_CHECK(items[3].item_id, 0x11A8);
+HERO_OFFSET_CHECK(items[6].state, 0x1294);
+HERO_OFFSET_CHECK(unk18F0[0].unkA0, 0x1990);
+HERO_OFFSET_CHECK(unk18F0[2].kind, 0x1AF2);
+HERO_OFFSET_CHECK(unk250, 0x250);
+HERO_OFFSET_CHECK(unk254, 0x254);
+HERO_OFFSET_CHECK(unk258, 0x258);
+HERO_OFFSET_CHECK(unk260, 0x260);
+HERO_OFFSET_CHECK(unk3E4, 0x3E4);
+HERO_OFFSET_CHECK(unk3F0, 0x3F0);
+HERO_OFFSET_CHECK(unk2128, 0x2128);
+HERO_OFFSET_CHECK(unk21A8, 0x21A8);
+HERO_OFFSET_CHECK(unk21AC, 0x21AC);
+HERO_OFFSET_CHECK(unk2238, 0x2238);
+HERO_OFFSET_CHECK(aim_yaw, 0xA74);
+HERO_OFFSET_CHECK(aim_pitch, 0xA78);
 HERO_OFFSET_CHECK(unk40, 0x40);
 HERO_OFFSET_CHECK(motion.pos, 0x80);
 HERO_OFFSET_CHECK(motion.rot, 0x90);

@@ -140,18 +140,76 @@ int FUN_L00_00205110(int a) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00205168.s", FUN_L00_00205168);
-typedef struct {
-    u8 pad[0xB0];
-} E002054e8;
-extern E002054e8 D_L00_0017A680_002054e8[] __asm__("D_L00_0017A680");
-void FUN_L00_00205168_002054e8(E002054e8 *) __asm__("FUN_L00_00205168");
+#include "qcopy.h"
+extern u8 D_001413F4 __attribute__((section(".data")));
+extern f32 D_0015ED64;
+f32 AbsoluteFloat(f32) __asm__("FUN_001f99c0");
+void clear_u64_value(void *) __asm__("FUN_001f99f8");
+void detach_manipulator(s32, void *) __asm__("FUN_0020cb88");
+void attach_manipulator(s32, s32, void *) __asm__("FUN_0020cb10");
+/* FUN_L00_0025bc98 (eases an angle toward a target) with its int argument last. EABI
+   passes ints and floats in separate registers, so the call is the same; this order
+   gives retail's register allocation. */
+f32 ease_angle_toward(f32 *, f32, f32 *, f32, f32, f32, s32) __asm__("FUN_L00_0025bc98");
+void FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
+void FUN_L00_00259f50(void *, void *);
+
+/* Eases one record's rotation and position toward their targets and rebuilds its matrix;
+   once targets are zero and it has settled, detaches it from its moby. */
+void FUN_L00_00205168(struct HeroEase *e) {
+    s32 moby = FUN_L00_00205110(e->kind);
+    if (moby == 0)
+        return;
+    if (D_001413F4 == 0) {
+        if (e->kind == 4 || e->kind == 2 || e->kind == 3)
+            return;
+    } else if (e->kind == 0) {
+        return;
+    }
+    if (e->rot_target.f[0] == 0.0f && e->rot_target.f[1] == 0.0f && e->rot_target.f[2] == 0.0f &&
+        e->pos_target.f[0] == 0.0f && e->pos_target.f[1] == 0.0f && e->pos_target.f[2] == 0.0f &&
+        AbsoluteFloat(e->pos.f[0]) < 0.003f && AbsoluteFloat(e->pos.f[1]) < 0.003f &&
+        AbsoluteFloat(e->pos.f[2]) < 0.003f && e->scale == 1.0f &&
+        AbsoluteFloat(e->rot.f[0]) < 0.005f && AbsoluteFloat(e->rot.f[1]) < 0.005f &&
+        AbsoluteFloat(e->rot.f[2]) < 0.005f) {
+        if (e->attached)
+            detach_manipulator(moby, e);
+    } else {
+        Vec4 *rot;
+        Vec4 *pos;
+        /* retail reads this flag at its literal address, with no relocation */
+        if (*(u8 *)0x15EDB5) {
+            e->rot_target.f[0] = -e->rot_target.f[0];
+            e->rot_target.f[2] = -e->rot_target.f[2];
+            e->pos.f[1] = -e->pos.f[1];
+        }
+        rot = &e->rot;
+        pos = &e->pos;
+        ease_angle_toward(&rot->f[0], e->rot_target.f[0], &e->rot_vel.f[0], e->accel * D_0015ED64, e->max_speed * D_0015ED64, 0.0f, 2);
+        ease_angle_toward(&rot->f[1], e->rot_target.f[1], &e->rot_vel.f[1], e->accel * D_0015ED64, e->max_speed * D_0015ED64, 0.0f, 2);
+        ease_angle_toward(&rot->f[2], e->rot_target.f[2], &e->rot_vel.f[2], e->accel * D_0015ED64, e->max_speed * D_0015ED64, 0.0f, 2);
+        FUN_L00_0025b8c0(&pos->f[0], &e->pos_vel.f[0], e->pos_target.f[0], e->accel, e->max_speed, 0.0f);
+        FUN_L00_0025b8c0(&pos->f[1], &e->pos_vel.f[1], e->pos_target.f[1], e->accel, e->max_speed, 0.0f);
+        FUN_L00_0025b8c0(&pos->f[2], &e->pos_vel.f[2], e->pos_target.f[2], e->accel, e->max_speed, 0.0f);
+        if (!e->attached)
+            attach_manipulator(moby, e->unkA0, e);
+        FUN_L00_00259f50(&e->quat, rot);
+        qcopy(&e->translation, pos);
+        e->scale3.f[0] = e->scale;
+        e->scale3.f[1] = e->scale;
+        e->scale3.f[2] = e->scale;
+    }
+    clear_u64_value(&e->pos_target);
+    clear_u64_value(&e->rot_target);
+    e->scale = 1.0f;
+}
+extern struct HeroEase D_L00_0017A680_002054e8[] __asm__("D_L00_0017A680");
 /* Runs FUN_L00_00205168 on each entry of D_L00_0017A680 (0x1550 bytes). */
 void FUN_L00_002054e8(void) {
-    E002054e8 *p = D_L00_0017A680_002054e8;
-    E002054e8 *end = (E002054e8 *)((u8 *)p + 0x1550);
+    struct HeroEase *p = D_L00_0017A680_002054e8;
+    struct HeroEase *end = (struct HeroEase *)((u8 *)p + 0x1550);
     do {
-        FUN_L00_00205168_002054e8(p);
+        FUN_L00_00205168(p);
         p++;
     } while ((s32)p < (s32)end);
 }
@@ -168,7 +226,7 @@ typedef struct {
 } Ent;
 extern Ent D_L00_0017A680_c[] __asm__("D_L00_0017A680");
 s32 FUN_L00_00205110_c(s32) __asm__("FUN_L00_00205110");
-void detach_manipulator(s32, Ent *) __asm__("FUN_0020cb88");
+
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00205538(void) {
     s32 i;
@@ -1274,7 +1332,7 @@ void FUN_L00_002090d0(float *inf, float x, float y, float z) {
 
 typedef float V[4] __attribute__((aligned(16)));
 
-extern void clear_u64_value(float *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_002090d0(float *, float, float, float);
 
 /* Calls FUN_L00_002090d0 with a vector (0, 0, 0.6) and x, y, z. */
@@ -1508,7 +1566,56 @@ void FUN_L00_00209a40(int n, int mode) {
         FUN_L00_0026f080_209a40(pos, &v, FUN_002132a8_209a40(4200.0f, 7350.0f), -1.0f);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00209ca8.s", FUN_L00_00209ca8);
+#include "rnc/math/circle_offset.h"
+
+extern f32 D_0015ED6C_c __asm__("D_0015ED6C");
+extern f32 random_float_between_c(f32 a, f32 b) __asm__("FUN_002132a8");
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
+extern s32 random_integer_below_c(s32 n) __asm__("FUN_00213260");
+extern s32 FUN_L00_00257b90(s32, s32);
+extern void FUN_L00_002d7e90(Vec4 *, f32);
+extern void FUN_L00_002715e8(Vec4 *, f32 *, s32, f32, f32);
+extern void FUN_L00_0026f548(Vec4 *, Vec4 *, s32, s32);
+
+/* Kicks up dust at the hero's feet (hero.height_threshold): with flash set,
+   first a flash at the hero; then `puffs` puffs within 0.3 of the hero and
+   `debris` bits thrown out in random directions. The debris start point adds
+   the x velocity to both x and y, as in the original. */
+void FUN_L00_00209ca8(s32 puffs, s32 debris, s32 flash) {
+    Vec4 v;
+    Vec4 start;
+    f32 ang;
+    f32 speed;
+    s32 color;
+    s32 life;
+    s32 i;
+    s32 j;
+
+    if (flash) {
+        qcopy(&v, &hero.motion.pos);
+        v.f[2] = hero.height_threshold;
+        FUN_L00_002d7e90(&v, 2.25f);
+    }
+    for (j = 0; j < puffs; j++) {
+        v.f[0] = hero.motion.pos.f[0] + random_float_between_c(-0.3f, 0.3f);
+        v.f[1] = hero.motion.pos.f[1] + random_float_between_c(-0.3f, 0.3f);
+        v.f[2] = hero.height_threshold;
+        FUN_L00_002715e8(&v, &hero.height_threshold, -1, random_float_between_c(0.3f, 0.6f), 5250.0f);
+    }
+    for (i = 0; i < debris; i++) {
+        ang = random_angle_radians();
+        speed = random_float_between_c(D_0015ED6C_c * 0.0f, D_0015ED6C_c * 3.0f);
+        v.f[0] = fast_cos(ang) * speed;
+        v.f[1] = fast_sin(ang) * speed;
+        v.f[2] = random_float_between_c(D_0015ED6C_c * 3.0f, D_0015ED6C_c * 8.0f);
+        start.f[0] = hero.motion.pos.f[0] + v.f[0] * 8.0f;
+        start.f[1] = hero.motion.pos.f[1] + v.f[0] * 8.0f;
+        start.f[2] = hero.height_threshold - random_float_between_c(0.0f, 0.2f);
+        color = random_integer_below_c(2);
+        life = FUN_L00_00257b90(0x5A, 0x78);
+        FUN_L00_0026f548(&start, &v, color, life);
+    }
+}
 extern char D_0013F7EE_209ec8[] __asm__("D_0013F7EE") __attribute__((section(".data")));
 extern char D_0013F350_209ec8[] __asm__("D_0013F350") __attribute__((section(".data")));
 extern float D_0015ED6C_209ec8 __asm__("D_0015ED6C");
