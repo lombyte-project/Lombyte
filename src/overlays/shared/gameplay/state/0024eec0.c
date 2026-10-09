@@ -104,7 +104,34 @@ Slot *FUN_L00_0024f028(char *o, int id) {
     *(Slot **)(o + 0x60) = s;
     return s;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f0e8.s", FUN_L00_0024f0e8);
+#else
+void FUN_001f97e8(void *, int, int);
+
+void FUN_L00_0024f0e8(char *o, Slot **slot) {
+    Slot *s = *slot;
+    Slot **head;
+    Slot *p;
+    Slot *next;
+    if (s == 0) return;
+    head = (Slot **)(o + 0x60);
+    p = *head;
+    if (p == s) {
+        *head = s->p1C;
+    } else {
+        next = p->p1C;
+        while (next != 0 && next != s) {
+            p = next;
+            next = p->p1C;
+        }
+        if (next == s)
+            p->p1C = s->p1C;
+    }
+    FUN_001f97e8(*slot, 0, 0x40);
+    *slot = 0;
+}
+#endif
 
 #define NOT_SDA
 
