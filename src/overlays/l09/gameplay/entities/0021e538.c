@@ -780,13 +780,13 @@ char *FUN_L09_002efe48(void *unused, float lower_radius, float upper_radius, voi
         *(float *)(moby + 0x10) = fast_cos_2efe48(angle) * radius;
         {
             float sine = fast_sin_2efe48(angle);
-            float speed = D_0015ED6C;
+            float speed = frame_time;
             *(float *)(moby + 0x14) = sine * radius;
             *(int *)(moby + 0x18) = 0;
             normalize_vector_xyz(data, moby + 0x10, difference * speed);
         }
         gap = pi - difference;
-        normalize_vector_xyz(offset, direction, gap * gap * 0.25f * D_0015ED6C);
+        normalize_vector_xyz(offset, direction, gap * gap * 0.25f * frame_time);
         add_vector_xyz(data, data, offset);
         *(int *)(data + 8) = 0;
         add_vector_xyz(moby + 0x10, moby + 0x10, origin);

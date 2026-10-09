@@ -425,15 +425,15 @@ void FUN_L05_0030f408(char *moby, float turn_scale, float speed_scale) {
     angle1 = FUN_001f9de0(*(float *)(data + 0x9c));
     target1 = FUN_001fa580(horizontal, angle1 * turn_scale * D_L05_00161DD8);
 
-    rate0 = D_L05_00161DDC * speed_scale * 0.017453292f * D_0015ED70;
-    rate1 = D_L05_00161DE0 * speed_scale * 0.017453292f * D_0015ED70;
-    limit = D_L05_00161DE4 * 0.017453292f * D_0015ED6C;
+    rate0 = D_L05_00161DDC * speed_scale * 0.017453292f * frame_time_sq;
+    rate1 = D_L05_00161DE0 * speed_scale * 0.017453292f * frame_time_sq;
+    limit = D_L05_00161DE4 * 0.017453292f * frame_time;
     approach_angle_f408((float *)(moby + 0x40), target0, (float *)(data + 0x90),
                         rate0, rate1, limit);
     approach_angle_f408((float *)(moby + 0x44), target1, (float *)(data + 0x94),
-                        D_L05_00161DDC * speed_scale * 0.017453292f * D_0015ED70,
-                        D_L05_00161DE0 * speed_scale * 0.017453292f * D_0015ED70,
-                        D_L05_00161DE4 * 0.017453292f * D_0015ED6C);
+                        D_L05_00161DDC * speed_scale * 0.017453292f * frame_time_sq,
+                        D_L05_00161DE0 * speed_scale * 0.017453292f * frame_time_sq,
+                        D_L05_00161DE4 * 0.017453292f * frame_time);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f5c8.s", FUN_L05_0030f5c8);
 
@@ -1019,8 +1019,8 @@ void FUN_L05_003166a0(struct Moby *moby) {
         else
             target = fast_add_rotations(*(float *)&data[3], 0.6981317f);
         FUN_L00_0025be00(&moby->rot.z, (float *)&data[1], target,
-                          D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f,
-                          D_0015ED6C * 12.566371f);
+                          frame_time_sq * 12.566371f, frame_time_sq * 12.566371f,
+                          frame_time * 12.566371f);
         break;
     }
     }

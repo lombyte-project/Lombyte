@@ -1035,7 +1035,7 @@ void FUN_L10_002e5be0(struct Moby *moby) {
             radius = x;
             if (radius < y) radius = y;
             if (radius < z) radius = z;
-            build_spherical_offset(velocity.f, radius * D_0015ED6C, moby->rot.z,
+            build_spherical_offset(velocity.f, radius * frame_time, moby->rot.z,
                                    -moby->rot.y);
 
             if (variant) {
@@ -1055,7 +1055,7 @@ void FUN_L10_002e5be0(struct Moby *moby) {
                                           second_color, second_color & 0xff000000);
             life = truncate_float_to_s32(multiply_global_factor_ed64(pvars[2] * 60.0f));
             ++i;
-            FUN_L00_002738e8(amount, pvars[0], D_L10_00161F00 * D_0015ED70,
+            FUN_L00_002738e8(amount, pvars[0], D_L10_00161F00 * frame_time_sq,
                                &position, &velocity, life, color, fade_color, variant);
         } while (i < ((s32 *)pvars)[3]);
     }

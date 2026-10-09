@@ -9,6 +9,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/display/set_pal_mode/
             FUN_001f34e8);
 #else
 #include "types.h"
+#include "rnc/globals.h"
 #include "rnc/rendering/fs_aa_buffer.h"
 #include "rnc/rendering/image_clear_buffer.h"
 #include "rnc/rendering/screen.h"

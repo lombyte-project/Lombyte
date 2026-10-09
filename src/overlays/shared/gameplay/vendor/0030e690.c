@@ -326,7 +326,6 @@ void FUN_L11_00310ad0(short *pts, int n, float x0, float y0, unsigned int col, u
     D_L11_001611C0_g += ((n + 1) / 2) * 16;
 }
 extern char D_L11_001B0EB0[];
-extern float D_0015ED70;
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -378,7 +377,7 @@ void FUN_L11_0031a438(char *moby) {
     add_vector_xyz(point, point, direction);
     speed = 0.0f;
     distance = vector_distance_xyz(moby + 0x10, point);
-    advance_accelerated_scalar(&speed, (float *)(d + 0x80), distance, D_0015ED70 * 10.0f, D_0015ED70 * 10.0f, D_0015ED6C * 20.0f);
+    advance_accelerated_scalar(&speed, (float *)(d + 0x80), distance, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f);
     subtract_vector_xyz(direction, point, moby + 0x10);
     normalize_vector_xyz(direction, direction, *(float *)(d + 0x80));
     add_vector_xyz(moby + 0x10, moby + 0x10, direction);

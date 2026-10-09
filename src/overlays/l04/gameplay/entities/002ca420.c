@@ -120,7 +120,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d1418.s", FUN_L04_002d1418);
 #else
 extern void FUN_L04_00292370(void *, char *);
 extern void FUN_L04_002923b8(void *, char *);
-extern float D_0015ED70;
 
 void FUN_L04_002d1418(void *m) {
     char *d = *(char **)(m + 0x78);
@@ -146,8 +145,8 @@ void FUN_L04_002d1418(void *m) {
     *(int *)(d + 0x1fc) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
     *(int *)(d + 0x200) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
     FUN_L04_00292370(m, p);
-    frameScale = D_0015ED70;
-    otherScale = D_0015ED6C;
+    frameScale = frame_time_sq;
+    otherScale = frame_time;
     angleFull = frameScale * 6.2831855f;
     angleOther = otherScale * 6.2831855f;
     speed = frameScale * 9.8f;
