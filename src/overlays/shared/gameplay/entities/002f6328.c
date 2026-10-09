@@ -1695,7 +1695,64 @@ void FUN_L01_00309430(char *moby) {
         break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003094f0.s", FUN_L01_003094f0);
+#else
+extern void FUN_001fa298(void *, void *);
+extern u64 get_effect_texture_3094f0(s32) __asm__("FUN_001f44b8");
+extern void FUN_001f7d30(float *, void *, int);
+extern float D_L01_00201630[];
+extern int D_L01_00161F80_3094f0 __asm__("D_L01_00161F80") __attribute__((sda));
+extern int D_L01_00161F88_3094f0 __asm__("D_L01_00161F88") __attribute__((sda));
+extern int D_L01_00161F8C_3094f0 __asm__("D_L01_00161F8C") __attribute__((sda));
+extern int D_L01_00161F90_3094f0 __asm__("D_L01_00161F90") __attribute__((sda));
+extern float D_L01_00161F98_3094f0 __asm__("D_L01_00161F98") __attribute__((sda));
+
+void FUN_L01_003094f0(char *moby) {
+    Vec4 verts[4];
+    int setup[36];
+    char *data = *(char **)(moby + 0x78);
+    float radius;
+    float thickness = 0.1f;
+    float angle;
+    int i, j, k;
+
+    FUN_001fa298((char *)setup + 0x50, moby + 0xc0);
+    *(u128 *)&setup[32] = *(u128 *)(moby + 0x10);
+    *(u64 *)&setup[12] = 0;
+    *(u64 *)&setup[14] = get_effect_texture_3094f0(D_L01_00161F90_3094f0);
+    *(u64 *)&setup[16] = 0xff9000000260LL;
+    *(u64 *)&setup[18] = (u64)D_L01_00161F80_3094f0 |
+                            ((u64)*(&D_L01_00161F80_3094f0 + 1) << 2) |
+                            ((u64)D_L01_00161F88_3094f0 << 4) |
+                            ((u64)D_L01_00161F8C_3094f0 << 6) | 0x8000000000LL;
+    for (i = 3; i >= 0; i--) {
+        k = 3 - i;
+        setup[k] = *(&D_L01_00161F90_3094f0 + 1);
+        ((float *)setup)[4 + k * 2] = D_L01_00201630[k * 2];
+        ((float *)setup)[5 + k * 2] = D_L01_00201630[k * 2 + 1];
+    }
+    radius = *(float *)(data + 0x34);
+    if (radius < 1.15f) {
+        thickness = (1.15f - radius) + (1.15f - radius);
+        if (thickness > 1.0f) thickness = 1.0f;
+        else if (thickness < 0.0f) thickness = 0.0f;
+        thickness += 0.1f;
+        if ((unsigned)((unsigned char)moby[0x20] - 7) > 1)
+            D_001413F5[0] = radius < 0.65f;
+    }
+    for (i = 0; i < 32; i++) {
+        for (j = 0; j < 4; j++) {
+            angle = (float)(i + j / 2) * 6.28318f * 0.03125f - 3.14159f;
+            verts[j].f[0] = FUN_001f9dc8(angle) * *(float *)(data + 0x34);
+            verts[j].f[1] = FUN_001f9de0(angle) * *(float *)(data + 0x34);
+            verts[j].f[2] = D_L01_00161F98_3094f0 + ((j & 1) ? thickness : -thickness) + 0.0f;
+            verts[j].f[3] = 1.0f;
+        }
+        FUN_001f7d30((float *)verts, (char *)setup + 0x50, 0);
+    }
+}
+#endif
 /* Mark the parent and its three attached objects active. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030ABC0), where it is exact; names translated to the US level program. */
 
