@@ -1400,8 +1400,8 @@ extern void FUN_L00_00263d40(int, int);
 extern void clear_vector(void *) __asm__("func_001F99F8");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
-void FUN_L12_002ebca8(char *m, int flag) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L12_002ebca8(struct Moby *m, int flag) {
+    char *d = (char *)m->pvars;
     float a[4];
     float b[4];
     unsigned char *q;
@@ -1417,27 +1417,27 @@ void FUN_L12_002ebca8(char *m, int flag) {
                 }
             }
         }
-        qcopy(a, m + 0x10);
+        qcopy(a, &m->pos);
         clear_vector(b);
         FUN_L00_00260a88(m, 0x1F, 0x4A, 2, -1);
         *(int *)(d + 0xA4) = scale_game_frames(500);
         FUN_L00_0025e450(m, b, a, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, -1, 3.0f, 15.0f, 1,
                          1, -1, 0);
     }
-    *(unsigned char *)(m + 0xA4) = 0xFF;
+    m->unkA4 = 0xFF;
     if (*(int *)&D_L12_001619B4 != 0 && flag != 0) {
-        *(int *)(m + 0x94) = 0;
-        *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) | 0x41) & 0xEFFF;
+        m->unk94 = 0;
+        m->flags = (m->flags | 0x41) & 0xEFFF;
     }
-    if (*(int *)(d + 0xA4) == 0 && (*(unsigned short *)(m + 0x34) & 1) == 0)
+    if (*(int *)(d + 0xA4) == 0 && (m->flags & 1) == 0)
         return;
     if (tick_countdown_32_alt((int *)(d + 0xA4)) != 0 && flag != 0 &&
         *(int *)&D_L12_001619B4 == 0) {
-        *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
-        *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) & 0xFFBE) | 0x1000;
+        m->unk94 = m->pclass->unk10;
+        m->flags = (m->flags & 0xFFBE) | 0x1000;
     } else {
-        *(int *)(m + 0x94) = 0;
-        *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) | 0x41) & 0xEFFF;
+        m->unk94 = 0;
+        m->flags = (m->flags | 0x41) & 0xEFFF;
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ebea8.s", FUN_L12_002ebea8);

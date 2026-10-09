@@ -721,14 +721,14 @@ void FUN_L11_002f2cd0(struct Moby *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f2d58.s", FUN_L11_002f2d58);
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F43B0), where it is exact; names translated to the US level program. */
 
-void FUN_L11_002f3040(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void FUN_L11_002f3040(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
     char **child = (char **)(data + 0x14);
     int count;
     int on;
-    moby[0x31] = 1;
-    *(unsigned short *)(moby + 0x34) &= 0xFFFE;
-    *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+    moby->unk31 = 1;
+    moby->flags &= 0xFFFE;
+    moby->unk94 = moby->pclass->unk10;
     on = 1;
     count = 2;
     do {

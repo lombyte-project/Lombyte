@@ -101,43 +101,43 @@ extern void func_L00_001FF4B0_u(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_u(void *, void *, void *) __asm__("FUN_001f9a10");
 extern char D_0013D355_t[] __asm__("D_0013D388");
 
-void FUN_L11_0030e978(unsigned char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L11_0030e978(struct Moby *m) {
+    char *d = (char *)m->pvars;
     float v[4] __attribute__((aligned(16)));
-    unsigned char *c;
-    unsigned char *o;
+    struct Moby *c;
+    struct Moby *o;
     char *p;
-    char *q;
-    switch (m[0x20]) {
+    struct MobyClass *q;
+    switch (m->state) {
     case 0:
-        *(float *)(m + 0x18) = *(float *)(m + 0x18) + *(float *)(d + 0xC) * 1.9f;
-        c = (unsigned char *)func_0020D348_c(0x487);
-        c[0x31] = 1;
-        *(short *)(c + 0x32) = 0x40;
-        *(long *)(c + 0x38) = *(long *)(m + 0x38);
-        *(unsigned short *)(c + 0x34) = *(unsigned short *)(m + 0x34);
-        qcopy(c + 0x10, m + 0x10);
-        qcopy(c + 0x40, m + 0x40);
-        *(float *)(c + 0x40) = func_001FA748_f(*(float *)(c + 0x40), 3.1415927f);
+        m->pos.z = m->pos.z + *(float *)(d + 0xC) * 1.9f;
+        c = (struct Moby *)func_0020D348_c(0x487);
+        c->unk31 = 1;
+        c->unk32 = 0x40;
+        c->spawn_frame = m->spawn_frame;
+        c->flags = m->flags;
+        qcopy(&c->pos, &m->pos);
+        qcopy(&c->rot, &m->rot);
+        c->rot.x = func_001FA748_f(c->rot.x, 3.1415927f);
         func_L00_00251E30_u(c);
-        p = *(char **)(c + 0x78);
+        p = (char *)c->pvars;
         *(int *)(p + 8) = *(int *)(d + 8);
         *(float *)(p + 0x10) = *(float *)(d + 0x10);
         *(int *)(p + 0x14) = *(int *)(d + 0x14);
-        q = *(char **)(m + 0x24);
-        *(float *)(m + 0x2C) = *(float *)(q + 0x24) * *(float *)(d + 0xC);
-        *(float *)(c + 0x2C) = *(float *)(q + 0x24) * *(float *)(d + 0xC);
-        c[0x20] = 1;
-        m[0x20] = 1;
+        q = m->pclass;
+        m->scale = q->scale * *(float *)(d + 0xC);
+        c->scale = q->scale * *(float *)(d + 0xC);
+        c->state = 1;
+        m->state = 1;
         break;
     case 1:
-        o = (unsigned char *)((*(int *)(d + 8) << 8) + (int)D_L11_0015FFD8);
-        if (*(short *)(o + 0xA6) == 0x267 && o[0x20] == 4) {
+        o = (struct Moby *)((*(int *)(d + 8) << 8) + (int)D_L11_0015FFD8);
+        if (o->oclass == 0x267 && o->state == 4) {
             goto go;
         }
-        if (*(short *)(o + 0xA6) == 0x33E && o[0xBC] != 0) {
+        if (o->oclass == 0x33E && o->unkBC != 0) {
         go:
-            m[0x20] = 2;
+            m->state = 2;
             ((Rec57 *)(*(int *)(d + 0x14) + (int)(D_0013D355_t)))->f57 = 1;
             func_0022ED80_u(0, 0, m);
         }
@@ -145,8 +145,8 @@ void FUN_L11_0030e978(unsigned char *m) {
     case 2:
         func_00214D88_f((float *)d, (float *)(d + 4), *(float *)(d + 0x10), D_0015ED70, D_0015ED70,
                         D_0015ED6C + D_0015ED6C);
-        func_L00_001FF4B0_u(v, m + 0xD0, -*(float *)(d + 4));
-        func_001F9BD8_u(m + 0x10, m + 0x10, v);
+        func_L00_001FF4B0_u(v, &m->unkD0, -*(float *)(d + 4));
+        func_001F9BD8_u(&m->pos, &m->pos, v);
         break;
     }
 }
