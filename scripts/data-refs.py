@@ -35,7 +35,10 @@ import argparse
 import bisect
 import json
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 
 import yaml
 from dataclasses import dataclass
@@ -422,6 +425,101 @@ def c_declarations() -> dict[int, tuple[str, str]]:
     return found
 
 
+LAYOUT_RE = re.compile(r"^\s*(\d+)(?::\d+-\d+)? \|( *)(.*?)\s*$")
+
+
+def parse_layouts(text: str) -> dict[str, list[tuple[int, int, str, str]]]:
+    """clang's record layouts as {record: [(offset, size, path, type)]}.
+
+    Leaf members only; a nested struct's members are listed with the
+    nested name in the path (``cd_mode.trycount``). Sizes are 0 when unknown.
+    """
+    out: dict[str, list] = {}
+    for block in text.split("*** Dumping AST Record Layout")[1:]:
+        lines = []
+        for line in block.splitlines():
+            m = LAYOUT_RE.match(line)
+            if m:
+                lines.append((int(m.group(1)), len(m.group(2)), m.group(3)))
+        if not lines:
+            continue
+        fields: list[tuple[int, int, str, str]] = []
+        stack: list[tuple[int, str]] = []  # (indent, name) of enclosing structs
+        for i, (off, indent, text_) in enumerate(lines[1:], 1):
+            while stack and stack[-1][0] >= indent:
+                stack.pop()
+            nxt = lines[i + 1] if i + 1 < len(lines) else None
+            kind, _, name = text_.rpartition(" ")
+            nested = nxt is not None and nxt[1] > indent
+            if nested:
+                stack.append((indent, name))
+                continue
+            path = ".".join([n for _, n in stack] + [name])
+            fields.append((off, 0, path, kind))
+        out[lines[0][2].replace("struct ", "", 1).replace("union ", "", 1)] = fields
+    return out
+
+
+def member_names(declared: dict[int, tuple[str, str]],
+                 addresses: Iterable[int]) -> dict[int, tuple[str, str | None]]:
+    """Names for addresses inside declared struct objects: ``object.field``."""
+    clang = shutil.which("clang")
+    if clang is None:
+        return {}
+    files = sorted((ROOT / "include").rglob("*.h")) + sorted(
+        p for p in (ROOT / "src").rglob("*.[ch]") if "overlays" not in p.parts)
+    layouts: dict[str, list] = {}
+    with tempfile.TemporaryDirectory() as tmp:
+        probe = Path(tmp) / "probe.c"
+        for path in files:
+            names = [name for _, name, _, _ in DECL_RE.findall(path.read_text(errors="replace"))]
+            if not names:
+                continue
+            # clang only dumps the layout of a record the code uses: take each object's address.
+            probe.write_text(f'#include "{path}"\n' + "".join(
+                f"void *keep_{i} = (void *)&{name};\n" for i, name in enumerate(names)))
+            run = subprocess.run(
+                [clang, "--target=mipsel-linux-gnu", "-c", "-o", "/dev/null", f"-I{ROOT / 'include'}",
+                 "-w", "-Xclang", "-fdump-record-layouts", str(probe)],
+                capture_output=True, text=True, check=False)
+            layouts.update(parse_layouts(run.stdout))
+    bases = sorted((a, n, t) for a, (n, t) in declared.items())
+    starts = [b[0] for b in bases]
+    out: dict[int, tuple[str, str]] = {}
+    for addr in addresses:
+        if addr in declared:
+            continue
+        for i in range(bisect.bisect_right(starts, addr) - 1, -1, -1):
+            base, name, ctype = bases[i]
+            fields = layouts.get(re.sub(r"^(struct|union)\s+", "", ctype.strip()))
+            if not fields:
+                continue
+            rel = addr - base
+            inside = [f for f in fields if f[0] <= rel]
+            if not inside:
+                continue
+            off, _size, path, kind = max(inside, key=lambda f: f[0])
+            if rel >= off + type_size(kind):
+                continue
+            out[addr] = (f"{name}.{path}" + (f"+0x{rel - off:X}" if rel != off else ""),
+                         kind if rel == off else None)
+            break
+    return out
+
+
+def type_size(kind: str) -> int:
+    """Byte size of a layout member type; unknown (struct) types count as 1."""
+    count = 1
+    m = re.match(r"(.*)\[(\d+)\]$", kind)
+    if m:
+        kind, count = m.group(1), int(m.group(2))
+    if kind.endswith("*"):
+        return 4 * count
+    size = {"u8": 1, "s8": 1, "char": 1, "s16": 2, "u16": 2, "s32": 4, "u32": 4, "f32": 4,
+            "float": 4, "int": 4, "s64": 8, "u64": 8, "f64": 8, "double": 8}.get(kind.strip(), 1)
+    return size * count
+
+
 def unit_of(owner: str) -> str:
     """``runtime/state/foo [C]`` -> ``runtime/state/foo``."""
     return re.sub(r" \[\w+\]$", "", owner)
@@ -470,6 +568,7 @@ def catalog_sections(rows: dict[int, dict], data: list, declared: dict,
             for sec in order if sec in out}
 
 
+GUESSED_TYPES = {"unknown", "u8", "s16", "s32", "s64", "u128", "f32", "f64"}  # what guess_type writes
 FIXED_MARK = "\n# Symbols the build pins"  # the hand-kept ``fixed`` block closing data.yaml
 
 
@@ -483,7 +582,13 @@ def load_catalog(path: Path) -> dict[int, dict]:
             continue
         for entries in origins.values():
             for addr, name, ctype, *_rest, note in (e + [None] * (9 - len(e)) for e in entries):
-                edits[addr] = {"name": name, "type": ctype, **({"note": note} if note else {})}
+                edit = {} if re.fullmatch(r"D_(?:L\d\d_)?[0-9A-Fa-f]{8}", name) else {"name": name}
+                if ctype not in GUESSED_TYPES:
+                    edit["type"] = ctype
+                if note:
+                    edit["note"] = note
+                if edit:
+                    edits[addr] = edit
     return edits
 
 
@@ -629,7 +734,8 @@ def main(argv=None) -> int:
     if args.catalog:
         if args.level is None:
             target = DEFAULT_CATALOG if str(args.catalog) == "-" else args.catalog
-            sections = catalog_sections(rows, data, c_declarations())
+            declared = c_declarations()
+            sections = catalog_sections(rows, data, {**member_names(declared, rows), **declared})
             write_catalog(target, sections, load_catalog(target))
         else:
             target = LEVEL_CATALOGS / f"level-{args.level:02d}.yaml" \

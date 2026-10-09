@@ -1807,6 +1807,20 @@ class DataRefsTests(unittest.TestCase):
         self.assertEqual(code, [("text", 0x1EAA00, b"\x00" * 8)])
         self.assertEqual(data, [("data", 0x166000, 64)])
 
+    def test_parse_layouts_lists_leaf_members_with_nested_paths(self):
+        dump = """*** Dumping AST Record Layout
+         0 | struct Outer
+         0 |   s32 a
+         4 |   struct Inner in
+         4 |     u8 x
+         5 |     u8[3] pad
+         8 |   s16 b
+           | [sizeof=12, align=4]
+"""
+        self.assertEqual(self.refs.parse_layouts(dump), {"Outer": [
+            (0, 0, "a", "s32"), (4, 0, "in.x", "u8"), (5, 0, "in.pad", "u8[3]"),
+            (8, 0, "b", "s16")]})
+
     def test_shown_keeps_paths_outside_the_checkout(self):
         self.assertEqual(self.refs.shown(Path("/nonexistent/out")), "/nonexistent/out")
 
