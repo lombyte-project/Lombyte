@@ -36,4 +36,110 @@ void FUN_L00_001fcb28(int x, int y, int mode, char *str, float s, float a) {
     FUN_001f6530_1fcb28(r, y - 8, d, str, -1);
     FUN_001f61e8_1fcb28();
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fcca0.s", FUN_L00_001fcca0);
+#else
+extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
+
+typedef struct {
+    s32 text_id;
+    s16 x;
+    s16 y;
+    s16 start;
+    s16 duration;
+    s16 mode;
+    s16 separator_mode;
+} LevelTextEntry;
+
+void FUN_L00_001fcca0(LevelTextEntry *entry, s32 frame) {
+    char buffer[256];
+    u8 *source;
+    char *out;
+    char *next;
+    s32 end;
+    s32 start;
+    s32 y;
+    f32 scale;
+    f32 alpha;
+    u8 ch;
+
+    start = entry->start;
+    end = start + entry->duration;
+    if (frame < start || frame > end)
+        return;
+
+    scale = 1.0f;
+    if (frame < start + 16)
+        scale = (f32)(frame - start) * 0.0625f;
+    if (frame > end - 8)
+        scale = (f32)(end - frame) * 0.125f;
+
+    alpha = 1.0f;
+    if (frame < start + 32) {
+        alpha = (f32)((frame + -16) - start) * 0.0625f;
+        if (alpha < 0.0f)
+            alpha = 0.0f;
+    }
+    if (frame > end - 16) {
+        alpha = (f32)((end - frame) - 8) * 0.125f;
+        if (alpha < 0.0f)
+            alpha = 0.0f;
+    }
+
+    source = get_help_message_text(entry->text_id);
+    ch = *source;
+    if (entry->separator_mode == 1) {
+        out = buffer;
+        next = out;
+        while (ch != 0) {
+            out = next;
+            if (ch != 1) {
+                *out = ch;
+                source++;
+                out++;
+                next = out;
+                ch = *source;
+            } else {
+                *out = ' ';
+                out++;
+                *out = '-';
+                out++;
+                *out = ' ';
+                ch = *source;
+                while (ch == 1) {
+                    source++;
+                    ch = *source;
+                }
+                next = out + 1;
+                if (ch == 0)
+                    next -= 3;
+            }
+        }
+        out = next;
+        *out = 0;
+        FUN_L00_001fcb28(entry->x, entry->y, entry->mode, buffer, scale, alpha);
+    } else {
+        y = entry->y;
+        out = buffer;
+        while (*source != 0) {
+            if (*source == 1) {
+                *out = 0;
+                FUN_L00_001fcb28(entry->x, y, entry->mode, buffer, scale, alpha);
+                y += 26;
+                while (*source == 1)
+                    source++;
+                out = buffer;
+                if (*source == 0)
+                    break;
+            } else {
+                *out++ = *source;
+                source++;
+            }
+        }
+        if (out > buffer) {
+            *out = 0;
+            FUN_L00_001fcb28(entry->x, y, entry->mode, buffer, scale, alpha);
+        }
+    }
+}
+#endif
