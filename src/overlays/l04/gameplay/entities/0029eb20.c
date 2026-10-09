@@ -1871,7 +1871,99 @@ void FUN_L04_002c2270(M_35F0 *moby) {
     }
     FUN_L00_0025d538(moby, data->fB0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c41e0.s", FUN_L04_002c41e0);
+typedef struct {
+    u8 pad0[4];
+    s32 mode;        /* 0x04 */
+    u8 pad8[2];
+    u8 tint;         /* 0x0A */
+    u8 fade;         /* 0x0B */
+} PuffTail;
+
+/* A smoke puff from FUN_L00_0026d000. */
+typedef struct {
+    u8 pad0[3];
+    u8 alpha;        /* 0x03 */
+    s32 color;       /* 0x04 */
+    u8 pad8[2];
+    s16 life;        /* 0x0A */
+    u8 padC[0x14];
+    PuffTail tail;   /* 0x20 */
+} Puff;
+
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern f32 FUN_L00_00257c48(f32, f32);
+extern int FUN_L00_00257b90(int, int);
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
+extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
+extern Puff *spawn_puff(void *, f32, f32, f32, int, void *, f32, int) __asm__("FUN_L00_0026d000");
+extern void spawn_burst(void *, void *, int, int, int, int, f32) __asm__("FUN_L00_0026cbb0");
+extern f32 D_L04_001618B4 __attribute__((sda));
+extern f32 D_L04_001618BC __attribute__((sda));
+
+/* Lays a trail of smoke puffs from FROM to TO with a burst at each end. */
+void FUN_L04_002c41e0(void *owner, void *from, void *to, int count, float a, float b) {
+    Vec4 step;
+    Vec4 at;
+    Vec4 vel;
+    float grow;
+    int i;
+    int tint;
+    int grey;
+    float size;
+    Puff *puff;
+    PuffTail *tail;
+    int spin;
+
+    subtract_vector_xyz_c(&step, to, from);
+    scale_vector_xyz(&step, &step, 1.0f / (float)count);
+    grow = (b - a) / (float)count;
+    vel.q = 0;
+    vel.f[3] = 1.0f;
+    vel.f[2] = 0.01f;
+    for (i = 0; i < count; i++) {
+        scale_vector_xyz(&at, &step, ConvertIntegerToFloat(i));
+        add_vector_xyz(&at, from, &at);
+        vel.f[0] = FUN_L00_00257c48(0.0f, 0.005f);
+        vel.f[1] = FUN_L00_00257c48(0.0f, 0.005f);
+        vel.f[2] = random_float_between(D_L04_001618B4 * 0.1f, D_L04_001618B4);
+        tint = FUN_L00_00257b90(0x40, 0x70);
+        grey = FUN_L00_00257b90(0x40, 0x7F);
+        grey = grey | (grey << 16 | grey << 8);
+        size = random_float_between(1.0f, 1.02f);
+        spin = FUN_L00_00257b90(-2, 2);
+        puff = spawn_puff(&at, D_L04_001618BC, 1.0f, size, spin, &vel, grow + a * 210000.0f, tint << 24 | grey);
+        if (puff != NULL) {
+            tail = &puff->tail;
+            if (random_integer_below(2) != 0) {
+                puff->alpha = 0x7E;
+                grey = FUN_L00_00257b90(0x60, 0xE0);
+                grey = grey | (grey << 16 | grey << 8);
+                puff->color = tint << 24 | grey;
+            }
+            puff->life = scale_game_frames(0x5A);
+            tail->mode = 2;
+            tail->tint = tint;
+            tail->fade = scale_game_frames(0x5A);
+        }
+    }
+    vel.f[0] = fast_cos(random_angle_radians()) * 0.05f;
+    vel.f[1] = fast_sin(random_angle_radians()) * 0.05f;
+    vel.f[2] = 0.0f;
+    vel.f[2] = random_float_between(0.01f, 0.03f);
+    spawn_burst(from, &vel, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1,
+                10000.0f);
+    vel.f[0] = fast_cos(random_angle_radians()) * 0.05f;
+    vel.f[1] = fast_sin(random_angle_radians()) * 0.05f;
+    vel.f[2] = 0.0f;
+    vel.f[2] = random_float_between(0.01f, 0.03f);
+    spawn_burst(to, &vel, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1,
+                20000.0f);
+}
 #include "qcopy.h"
 
 /* Blarg trooper update: takes hits, walks its path toward the target, fires, and keeps its gun moby attached. */
