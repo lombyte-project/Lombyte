@@ -961,7 +961,67 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f55a0.s", FUN_L06_002f55a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f5d78.s", FUN_L06_002f5d78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f6470.s", FUN_L06_002f6470);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f6dd0.s", FUN_L06_002f6dd0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7000.s", FUN_L06_002f7000);
+#include "rnc/gameplay/entities/moby.h"
+
+extern f32 D_L06_00161E10 __attribute__((sda));
+extern f32 D_L06_00161E00 __attribute__((sda));
+extern f32 D_L06_00161DFC __attribute__((sda));
+extern f32 D_L06_00161E14 __attribute__((sda));
+extern f32 D_L06_00161E08 __attribute__((sda));
+extern f32 D_L06_00161E04 __attribute__((sda));
+extern int D_L06_00161E40[4] __attribute__((section(".sdata")));
+extern int D_L06_00161E50;
+extern Vec4 D_L06_001DB0F0[4][30];
+extern Vec4 D_L06_001DB870[4][30];
+extern float D_0015ED6C;
+extern float fast_add_rotations(float, float);
+extern void FUN_L06_00217300(void *);
+extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+
+/* Spins the moby and animates four 30-point strands: a strand whose timer ran out is rebuilt with a smoothed random
+   drift (each point averages three jitters) and its timer reset; otherwise every inner point moves by its drift. */
+void FUN_L06_002f7000(struct Moby *moby) {
+    Vec4 jitter[30];
+    float y;
+    float step;
+    float phase;
+    int i;
+    int j;
+    int k;
+
+    moby->rot.x = fast_add_rotations(moby->rot.x, D_L06_00161E10 * DEG_TO_RAD * D_0015ED6C);
+    phase = D_L06_00161DFC + D_L06_00161E00 * D_0015ED6C;
+    moby->scale = *(f32 *)((char *)moby->pclass + 0x24) * D_L06_00161E14;
+    D_L06_00161DFC = phase;
+    if (phase > 1.0f) {
+        D_L06_00161DFC = phase - 1.0f;
+    }
+    step = D_L06_00161E08 / 30.0f;
+    y = -(D_L06_00161E08 * 0.5f);
+    for (i = 0; i < 4; i++) {
+        if (D_L06_00161E40[i] == 0) {
+            for (k = 0; k < 30; k++) {
+                FUN_L06_00217300(&D_L06_001DB0F0[i][k]);
+                D_L06_001DB0F0[i][k].f[1] = y;
+                random_vector(&jitter[k], 0.0f, D_L06_00161E04 * D_0015ED6C);
+                y += step;
+            }
+            for (k = 1; k < 29; k++) {
+                add_vector_xyz(&D_L06_001DB870[i][k], &jitter[k - 1], &jitter[k]);
+                add_vector_xyz(&D_L06_001DB870[i][k], &D_L06_001DB870[i][k], &jitter[k + 1]);
+                scale_vector_xyz(&D_L06_001DB870[i][k], &D_L06_001DB870[i][k], 0.333f);
+            }
+            D_L06_00161E40[i] = D_L06_00161E50;
+        } else {
+            for (j = 1; j < 29; j++) {
+                add_vector_xyz(&D_L06_001DB0F0[i][j], &D_L06_001DB0F0[i][j], &D_L06_001DB870[i][j]);
+            }
+            D_L06_00161E40[i]--;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7d78.s", FUN_L06_002f7d78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f91e8.s", FUN_L06_002f91e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f9a28.s", FUN_L06_002f9a28);
