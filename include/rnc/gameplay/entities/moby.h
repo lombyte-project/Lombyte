@@ -67,7 +67,8 @@ struct Moby {
     u8 pad80[0x10];
     s32 unk90;
     u32 unk94;                        /* set from the class header's word 0x10 */
-    u8 pad98[0xC];
+    s32 unk98;                        /* set to 1 while a carrier holds the moby (FUN_L00_002c7a58) */
+    u8 pad9C[8];
     u8 unkA4;
     u8 padA5;
     s16 oclass;

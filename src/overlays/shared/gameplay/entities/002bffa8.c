@@ -1030,4 +1030,121 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c4380.s", FUN_L00_002c4380);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c53c0.s", FUN_L00_002c53c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c6158.s", FUN_L00_002c6158);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c7548.s", FUN_L00_002c7548);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c7a58.s", FUN_L00_002c7a58);
+#include "rnc/globals.h"
+
+/* Vars of the carrier moby that picks up and holds another moby. */
+typedef struct {
+    u8 pad0[0x40];
+    OvlVec4 grip;           /* 0x40: where the held moby is carried */
+    struct Moby *held;      /* 0x50 */
+    s32 timer;              /* 0x54 */
+} CarrierVars;
+
+/* Counters kept at D_00141680 for the carrier's deliveries. */
+typedef struct {
+    u8 pad0[0xA0];
+    u16 deliveries;         /* 0xA0: counts up to 0xFFFF */
+    u16 unkA2;              /* 0xA2: raised to scale_game_frames(D_0015EEA4) / 600 */
+    u32 levels;             /* 0xA4: bit per level index, plus 0x80000000 */
+} DeliveryStats;
+
+extern DeliveryStats D_00141680;
+extern u32 D_0013CAE4 __attribute__((section(".data")));
+extern s32 D_0015EEA4;
+extern void FUN_0020cca8(void *, int, void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
+extern int FUN_L00_00216de8(int, int);
+extern int FUN_L00_00233db8(int, int);
+extern int FUN_L00_00233e98(int);
+extern void FUN_L00_002c7548(struct Moby *, CarrierVars *, OvlVec4 *);
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
+
+/* Carrier: keeps its grip point in front of it, hands the held moby over when the hero asks, and
+   picks a new one up when FUN_L00_00233e98 allows. */
+void FUN_L00_002c7a58(struct Moby *moby) {
+    OvlVec4 pos;
+    OvlVec4 offset;
+    OvlVec4 local;
+    OvlVec4 mat[4];
+    OvlVec4 grip;
+    CarrierVars *vars = (CarrierVars *)moby->pvars;
+
+    offset.q = 0;
+    offset.f[0] = 0.01f;
+    offset.f[1] = -0.14f;
+    offset.f[2] = -0.05f;
+    FUN_L00_0024f7c8((u8 *)moby, 0, &pos);
+    FUN_0020cca8(moby, 0, mat);
+    FUN_001f9d20(&local, &offset, mat);
+    add_vector_xyz(&vars->grip, &pos, &local);
+    if (vars->held != 0) {
+        vars->held->unk98 = 1;
+    }
+    if (vars->held == 0 || vars->held->state == 0xFE || vars->held->state == 0xFD) {
+        vars->held = 0;
+    }
+    if (hero.state.current == 1) {
+        hero_set_state(0x1E, 1);
+    }
+    if (tick_countdown(&vars->timer) && !hero.unk20AC) {
+        if ((hero.unk20A8 && hero.unk1BC == scale_game_frames(0x11)) ||
+            ((D_0013CAE4 & hero.items[0].button_mask) && hero.state.current == 0x1E && FUN_L00_00233e98(-1)) ||
+            (hero.state.current == 0x23 && hero.state_timer == scale_game_frames(0x10))) {
+            FUN_L00_00216de8(0x1A, 0);
+            FUN_L00_00233db8(-1, 1);
+            moby->state = 3;
+        }
+    }
+    grip.q = vars->grip.q;
+    FUN_L00_002c7548(moby, vars, &grip);
+    switch (moby->state) {
+    case 0:
+        vars->held = 0;
+        if (moby->unk70 & 2) {
+            moby->state = 2;
+        } else {
+            moby->state = 1;
+        }
+    case 1:
+        if (moby->unk70 & 2) {
+            moby->state = 2;
+        }
+        break;
+    case 2:
+        break;
+    case 3:
+        if (vars->held != 0) {
+            if (D_00141680.deliveries < 0xFFFF) {
+                D_00141680.deliveries++;
+            }
+            if (scale_game_frames(D_0015EEA4) / 600 > D_00141680.unkA2) {
+                D_00141680.unkA2 = scale_game_frames(D_0015EEA4) / 600;
+            }
+            D_00141680.levels = D_00141680.levels | (1 << current_level_index) | 0x80000000;
+            FUN_L00_002c82f0((void *)&vars->grip, (u8 *)vars->held, vars->held->pvars);
+            vars->held = 0;
+        } else {
+            allocate_voice_for_target_entry(0, 0, moby);
+        }
+        moby->state = 4;
+        vars->timer = scale_game_frames(0x14);
+        break;
+    case 4:
+        if (hero.state.current != 0x23 && !hero.unk20A8) {
+            moby->state = 2;
+        }
+        break;
+    case 5:
+        moby->state = 6;
+        break;
+    case 6:
+        return;
+    }
+    if (vars->held != 0) {
+        qcopy(&vars->held->pos, &vars->grip);
+    } else if (FUN_L00_00233e98(-1)) {
+        qzero(&grip);
+        vars->held = (struct Moby *)FUN_L00_002c8218((int)moby, (void *)&vars->grip, (void *)&grip);
+    }
+}
