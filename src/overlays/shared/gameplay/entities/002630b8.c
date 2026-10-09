@@ -211,7 +211,83 @@ void FUN_L00_00263618(float *pos, u32 col, float s, float r) {
     }
     FUN_001f7d30_00263618(&pk, 0, 0);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002637f8.s", FUN_L00_002637f8);
+#else
+typedef struct {
+    u8 pad[8];
+    u8 b8;
+    u8 b9;
+    s16 hA;
+    u8 padC[0x14];
+    u8 pad20[4];
+    s32 w24;
+    u8 pad28[2];
+    u8 b2A;
+    u8 b2B;
+} Effect_2637f8;
+extern void FUN_0020cca8_2637f8(void *, s32, void *) __asm__("FUN_0020cca8");
+extern f32 FUN_001f9af0_2637f8(void *) __asm__("FUN_001f9af0");
+extern void FUN_001f9bf8_2637f8(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void FUN_001f9a10_2637f8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern s32 FUN_00213260_2637f8(s32) __asm__("FUN_00213260");
+extern s32 FUN_001f96f8_2637f8(s32) __asm__("FUN_001f96f8");
+extern Effect_2637f8 *FUN_L00_0026d000_2637f8(void *, f32, f32, f32, f32, s32, void *, u32)
+    __asm__("FUN_L00_0026d000");
+extern u8 D_L00_0015F580_2637f8[] __asm__("D_L00_0015F580");
+void FUN_L00_002637f8(u8 *m) {
+    Vec4_2634f8 vectors[4];
+    Vec4_2634f8 pos;
+    Vec4_2634f8 scaled;
+    f32 fraction, size, lifetime, scale;
+    s32 count, n;
+    Effect_2637f8 *effect;
+    if (*(s16 *)(m + 0xa6) == 0x2ee && m != 0) {
+        FUN_0020cca8_2637f8(m, 0, vectors);
+        fraction = FUN_001f9af0_2637f8(vectors) / 1.026f;
+        if (1.0f < fraction)
+            fraction = 1.0f;
+        scale = fraction * -0.025f + -0.025f;
+        lifetime = fraction * 44000.0f + 6000.0f;
+        size = fraction * 0.02f + 0.01f;
+        FUN_001f9bf8_2637f8(&scaled, &vectors[2], scale);
+        FUN_001f9a10_2637f8(&pos, &vectors[3], &scaled);
+        count = 1;
+        do {
+            n = FUN_00213260_2637f8(0x10);
+            if (FUN_00213260_2637f8(2) != 0)
+                n = -n;
+            effect = FUN_L00_0026d000_2637f8(&pos, size, 1.0f, 0.75f, lifetime, n,
+                                               D_L00_0015F580_2637f8, 0x503030ff);
+            if (effect) {
+                effect->hA = FUN_001f96f8_2637f8(6);
+                effect->w24 = 2;
+                effect->b2A = 0x50;
+                effect->b2B = effect->hA;
+            }
+            count--;
+        } while (count >= 0);
+        scale = fraction * -0.015000001f + -0.01f;
+        lifetime = fraction * 25000.0f + 5000.0f;
+        size = fraction * 0.015000001f + 0.01f;
+        FUN_001f9bf8_2637f8(&scaled, &vectors[2], scale);
+        FUN_001f9a10_2637f8(&pos, &vectors[3], &scaled);
+        count = 4;
+        do {
+            effect = FUN_L00_0026d000_2637f8(&pos, size, 1.0f, 1.0f, lifetime, 0x10,
+                                               D_L00_0015F580_2637f8, 0x7fffffff);
+            if (effect) {
+                effect->hA = FUN_001f96f8_2637f8(2);
+                effect->b8 = FUN_00213260_2637f8(0xff);
+                effect->w24 = 2;
+                effect->b2A = 0x7f;
+                effect->b2B = effect->hA;
+            }
+            count--;
+        } while (count >= 0);
+    }
+}
+#endif
 extern unsigned char D_0015EDB7;
 void attach_manipulator() __asm__("FUN_0020cb10");
 void detach_manipulator() __asm__("FUN_0020cb88");
