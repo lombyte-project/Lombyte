@@ -977,7 +977,100 @@ int FUN_L18_002d6108(unsigned char *m) {
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d62e8.s", FUN_L18_002d62e8);
+#include "rnc/gameplay/hero.h"
+/* A path and the points along it (the count, then the points from 0x10) */
+typedef struct {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4f points[1];
+} PathPoints;
+
+/* One entry of the D_L18_0015F70C path list (0x20 bytes) */
+typedef struct {
+    u8 pad0[0xC];
+    f32 weight;       /* 0xC: 0 disables the path */
+    PathPoints *path; /* 0x10 */
+    u8 pad14[0xC];
+} PathLink;
+
+/* pvars of FUN_L18_002d62e8: up to 4 pairs of paths that meet, the hero gets the nearer one */
+typedef struct {
+    struct {
+        PathLink *first;
+        PathLink *second;
+    } pair[4];             /* 0x00: second starts where first's last point is */
+    struct {
+        f32 first;
+        f32 second;
+    } weight[4];           /* 0x20: their weights before they were cleared */
+    s32 node[2];           /* 0x40: indexes into D_L18_001600EC */
+} PathJunctionVars;
+
+extern PathLink *D_L18_0015F70C;
+extern s32 D_L18_0015F710;
+extern char *D_L18_001600EC;
+extern float FUN_001f9b48(void *, void *);
+extern char *FUN_L18_002e22c0(void *vector);
+
+void FUN_L18_002d62e8(struct Moby *moby) {
+    PathJunctionVars *vars = (PathJunctionVars *)moby->pvars;
+    s32 n;
+    s32 i;
+    s32 j;
+    s32 k;
+    f32 near_first;
+
+    switch (moby->state) {
+    case 0:
+        moby->state = 1;
+        moby->unk30 = 0xFF;
+        n = 0;
+        do {
+            for (i = 0; i < D_L18_0015F710; i++) {
+                if (D_L18_0015F70C[i].weight == 0.0f) {
+                    continue;
+                }
+                vars->pair[n].first = &D_L18_0015F70C[i];
+                vars->weight[n].first = D_L18_0015F70C[i].weight;
+                for (j = 0; j < D_L18_0015F710; j++) {
+                    if (D_L18_0015F70C[j].weight == 0.0f) {
+                        continue;
+                    }
+                    if (FUN_001f9b48(&D_L18_0015F70C[i].path->points[0],
+                                     &D_L18_0015F70C[j].path->points[D_L18_0015F70C[j].path->count - 1]) < 0.5f) {
+                        vars->pair[n].second = &D_L18_0015F70C[j];
+                        vars->weight[n].second = D_L18_0015F70C[j].weight;
+                        D_L18_0015F70C[j].weight = 0.0f;
+                        D_L18_0015F70C[i].weight = 0.0f;
+                        n++;
+                        break;
+                    }
+                }
+            }
+        } while (n < 4);
+        for (n = 0; n < 2; n++) {
+            FUN_L18_002e22c0(D_L18_001600EC + vars->node[n] * 0x80 + 0x30);
+        }
+        break;
+    case 1:
+        hero.unk1CA = 5;
+        for (k = 0; k < 4; k++) {
+            if (hero.state.control_mode == 0xF &&
+                (hero.unk560 == (s32)vars->pair[k].first->path || hero.unk560 == (s32)vars->pair[k].second->path)) {
+                continue;
+            }
+            near_first = FUN_001f9b80(&hero.motion.pos, &vars->pair[k].first->path->points[0]);
+            if (near_first < FUN_001f9b80(&hero.motion.pos, &vars->pair[k].second->path->points[0])) {
+                vars->pair[k].first->weight = vars->weight[k].first;
+                vars->pair[k].second->weight = 0.0f;
+            } else {
+                vars->pair[k].first->weight = 0.0f;
+                vars->pair[k].second->weight = vars->weight[k].second;
+            }
+        }
+        break;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D79F0), where it is exact; names translated to the US level program. */
 
 typedef struct {
