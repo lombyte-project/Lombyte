@@ -6,7 +6,47 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261968.s", FUN_L00_00261968);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261b48.s", FUN_L00_00261b48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261d78.s", FUN_L00_00261d78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262030.s", FUN_L00_00262030);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262360.s", FUN_L00_00262360);
+#include "rnc/math/vector.h"
+
+/* A polyline of evenly spaced points. */
+typedef struct {
+    s32 count;          /* 0x00 */
+    u8 pad4[0xC];
+    Vec4 points[1];     /* 0x10 */
+} PointPath;
+
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern f32 s32_to_float(s32) __asm__("FUN_001fa6c0");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+
+/* Samples path at distance dist (points spacing apart): stores the segment, the distance into it and the point. */
+void FUN_L00_00262360(PointPath *path, s32 *seg_out, f32 *along, Vec4 *out, f32 dist, f32 spacing) {
+    Vec4 tmp;
+    s32 seg;
+
+    seg = truncate_float_to_s32(dist / spacing);
+    *seg_out = seg;
+    if (seg >= path->count - 1) {
+        *seg_out = path->count - 1;
+        *along = 0.0f;
+        out->q = (path->points + *seg_out)->q;
+        return;
+    }
+    if (seg < 0) {
+        *seg_out = 0;
+        *along = 0.0f;
+        out->q = (path->points + *seg_out)->q;
+        return;
+    }
+    *along = dist - s32_to_float(seg) * spacing;
+    subtract_vector_xyz(&tmp, &path->points[*seg_out + 1], &path->points[*seg_out]);
+    out->q = tmp.q;
+    scale_vector_xyz(out, out, *along);
+    add_vector_xyz(&tmp, out, &path->points[*seg_out]);
+    out->q = tmp.q;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
