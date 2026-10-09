@@ -616,7 +616,37 @@ void FUN_L03_002db020(struct Moby *m) {
     FUN_L00_00260738(v + 0x20, a, &m->rot, &m->rot);
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db198.s", FUN_L03_002db198);
+extern void FUN_L00_0025d1b8(struct Moby *);
+extern void clear_2db198(void *) __asm__("FUN_001f99f8");
+
+/* Spawns a path mover (class 0x382, moved by FUN_L03_002db020) on path, dist
+ * units along it, facing the path's last point. */
+struct Moby *FUN_L03_002db198(struct RailPath *path, float dist) {
+    struct Moby *m = func_0020D348_m(0x382);
+    u8 *v;
+    u8 *move;
+    Vec4 *end;
+
+    if (m != 0) {
+        m->unk30 = 0x80;
+        m->unk32 = 0x40;
+        m->unk31 = 1;
+        m->state = 0;
+        v = m->pvars;
+        m->flags |= 0x20;
+        FUN_L00_0025d1b8(m);
+        qcopy(&m->pos, &path->pts[0]);
+        clear_2db198(&m->rot);
+        end = (Vec4 *)((u8 *)path + (path->count - 1) * 16) + 1;
+        m->rot.z = FUN_001f9e90(end->f[0] - m->pos.x, end->f[1] - m->pos.y);
+        move = v + 0x20;
+        *(float *)(v + 0x64) = dist;
+        *(struct RailPath **)(v + 0x60) = path;
+        *(u8 **)(v + 0x8) = move;
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 struct RailSpawnerVars {
     s32 path;         /* index into D_L03_001B05B0, -1 for none */
     s32 timer;
@@ -637,7 +667,7 @@ struct RailSpawnerMoby {
 extern char D_L03_001E35F0[];
 extern void FUN_001e93b0(char *, int);
 extern float FUN_001f9b48(void *, void *);
-extern void FUN_L03_002db198(struct RailPath *, float);
+extern struct Moby *FUN_L03_002db198(struct RailPath *, float);
 extern int FUN_001f9740(s32 *);
 extern int FUN_L00_0028d8c0(struct RailSpawnerMoby *, int);
 extern int FUN_L00_0028dc90(int, int, struct RailSpawnerMoby *, int);
