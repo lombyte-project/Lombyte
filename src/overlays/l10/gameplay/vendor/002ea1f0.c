@@ -4,7 +4,105 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002ea1f0.s", FUN_L10_002ea1f0);
+#else
+extern char *D_L10_001B0930[];
+extern float probe_ground_height(void *pos, int arg1, float arg2) __asm__("FUN_00213508");
+extern void FUN_L10_002ea4e8(void *pos, short *timer, short *burst);
+extern void FUN_L10_002ea7b0(void *pos, short *timer);
+extern void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height);
+
+void FUN_L10_002ea1f0(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    char *path;
+    char *point;
+    short *timer;
+    short *burst;
+    int count;
+    int i;
+
+    if (moby->state == 1) {
+        if (*(int *)(data + 4) == -1) {
+            FUN_L10_002ea4e8(&moby->pos, (short *)(data + 8), (short *)(data + 0x48));
+        } else {
+            path = D_L10_001B0930[*(int *)(data + 4)];
+            count = *(int *)path;
+            if (count > 32) count = 32;
+            if (count > 0) {
+                point = path + 0x10;
+                timer = (short *)(data + 8);
+                burst = (short *)(data + 0x48);
+                do {
+                    FUN_L10_002ea4e8(point, timer, burst);
+                    point += 0x10;
+                    timer++;
+                    burst++;
+                } while (--count != 0);
+            }
+        }
+    } else if (moby->state == 0) {
+        if (*(int *)data == 1) {
+            if (*(int *)(data + 4) == -1) {
+                *(float *)(data + 0x88) = probe_ground_height(&moby->pos, 0, 0.5f);
+            } else {
+                path = D_L10_001B0930[*(int *)(data + 4)];
+                count = *(int *)path;
+                if (count > 32) count = 32;
+                if (count > 0) {
+                    point = path + 0x10;
+                    do {
+                        *(float *)(path + 0x1c) = probe_ground_height(point, 0, 0.5f);
+                        point += 0x10;
+                        path += 0x10;
+                    } while (--count != 0);
+                }
+            }
+            moby->state = 2;
+        } else if (*(int *)data == 0) {
+            moby->state = 1;
+        } else if (*(int *)data == 2) {
+            moby->state = 3;
+        }
+    } else if (moby->state == 2) {
+        if (*(int *)(data + 4) == -1) {
+            FUN_L10_002eaa08(&moby->pos, (short *)(data + 8), (short *)(data + 0x48), *(float *)(data + 0x88));
+        } else {
+            path = D_L10_001B0930[*(int *)(data + 4)];
+            count = *(int *)path;
+            if (count > 32) count = 32;
+            if (count > 0) {
+                point = path + 0x10;
+                timer = (short *)(data + 8);
+                burst = (short *)(data + 0x48);
+                do {
+                    FUN_L10_002eaa08(point, timer, burst, *(float *)(point + 0xc));
+                    point += 0x10;
+                    timer++;
+                    burst++;
+                } while (--count != 0);
+            }
+        }
+    } else if (moby->state == 3) {
+        if (*(int *)(data + 4) == -1) {
+            FUN_L10_002ea7b0(&moby->pos, (short *)(data + 8));
+        } else {
+            path = D_L10_001B0930[*(int *)(data + 4)];
+            count = *(int *)path;
+            if (count > 32) count = 32;
+            if (count > 0) {
+                point = path + 0x10;
+                timer = (short *)(data + 8);
+                do {
+                    FUN_L10_002ea7b0(point, timer);
+                    point += 0x10;
+                    timer++;
+                } while (--count != 0);
+            }
+        }
+    }
+}
+#endif
 #include "qcopy.h"
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern char D_L10_00167240[];
