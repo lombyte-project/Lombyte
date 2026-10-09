@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "sda.h"
+#include "rnc/globals.h"
 
 /* Preserves selected state across func_00209370 using scratchpad copies.
    Only listed bytes of item_available are restored; each D_00141EA0 entry is
@@ -32,7 +33,6 @@ extern u8 D_0014BEC0[];
 extern s32 D_00141EA0[];
 extern u8 D_0015EDD0[] MACRO_ADDR;
 extern s32 D_0015EDA0;
-extern s32 D_0015ED98;
 extern u8 D_0015EE1C;
 extern u8 D_0015EE1D;
 extern s32 D_0015EE20;
@@ -62,7 +62,7 @@ void FUN_00226b08(s32 slot) {
     func_001F9838((void *)0x70000150, D_00141EA0, 0x20);
     func_001F9838((void *)0x70000170, D_0015EDD0, 0xC);
     func_001F9838((void *)0x70000180, item_unlocked, 0x20);
-    saved = D_0015ED98;
+    saved = current_bolt_count;
     count = D_0015EE20;
     flag4 = alternate_item_available[4] != 0;
     flag5 = alternate_item_available[5] != 0;
@@ -80,7 +80,7 @@ void FUN_00226b08(s32 slot) {
     }
     func_001F9838(D_0015EDD0, (void *)0x70000170, 0xC);
     func_001F9838(item_unlocked, (void *)0x70000180, 0x20);
-    D_0015ED98 = saved;
+    current_bolt_count = saved;
     if (flag4) {
         alternate_item_available[4] = 1;
         D_0015EDA0 = 5;

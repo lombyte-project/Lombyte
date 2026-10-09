@@ -169,7 +169,6 @@ typedef struct {
 extern Elem D_L00_00167150[];
 extern S D_L00_00166C80;
 extern char *D_L00_0015EF50;
-extern char D_0013F350[];
 extern char D_L00_00166EF0[];
 extern int D_L00_0015EF4C;
 extern int D_L00_0015EF54;
@@ -185,7 +184,7 @@ void FUN_L00_001ed358(void) {
     char *g1;
     char *q;
     char *p1;
-    char *base;
+    struct Hero *base;
     int i;
     int k;
 
@@ -198,19 +197,19 @@ void FUN_L00_001ed358(void) {
         D_L00_00169890[k] = 0;
     }
     g1 = (char *)&D_L00_00166C80;
-    base = D_0013F350;
+    base = &hero;
     q = g1 + 0x190;
     p1 = g1 + 0x1B0;
     *(int *)(g1 + 0x184) = 0;
     *(short *)(g1 + 0x270) = 0;
-    normalize_vector_xyz(p1, (char *)(*(int *)(base + 0x2080) + 0xE0), 1.0f);
+    normalize_vector_xyz(p1, (char *)(((int)base->moby) + 0xE0), 1.0f);
     qcopy(g1 + 0x1C0, p1);
     qcopy(g1 + 0x1D0, p1);
     clear_vector(g1 + 0x1E0);
-    qcopy(g1 + 0x1F0, base + 0x80);
+    qcopy(g1 + 0x1F0, &base->motion.pos);
     {
-        float f0 = *(float *)(base + 0x98);
-        float f1 = *(float *)(base + 0x88);
+        float f0 = base->motion.rot.f[2];
+        float f1 = base->motion.pos.f[2];
         *(int *)(q + 0xC4) = 0;
         *(int *)(q + 0xCC) = 0;
         *(int *)(q + 0xC0) = 0;

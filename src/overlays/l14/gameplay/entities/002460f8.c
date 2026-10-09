@@ -124,7 +124,6 @@ extern int *D_L14_001B0BB0[];
 extern L14LevelState D_L14_001BB930;
 extern s32 D_0014C190[][64];
 extern s32 D_L14_001BABD0[];
-extern float D_0015ED6C;
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32 f) __asm__("FUN_001fa6d0");
@@ -271,7 +270,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
             if (!FUN_L00_0028d8c0(moby, vars->voice)) {
                 vars->voice = allocate_voice_for_target_entry(0, 4, moby);
             }
-            vars->speed += vars->target_speed * D_0015ED6C;
+            vars->speed += vars->target_speed * frame_time;
             if (AbsoluteFloat(vars->speed) > AbsoluteFloat(vars->target_speed)) {
                 vars->speed = vars->target_speed;
             }
@@ -683,7 +682,6 @@ void FUN_L14_002ae7d8(struct Moby *moby) {
 /* Picks a target point from a list or searches for one, then eases the moby's position toward it per axis. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AFB40), where it is exact; names translated to the US level program. */
 
-extern float D_0015ED6C;
 extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2,
                                 float eps) __asm__("FUN_L00_0025b8c0");
 extern short D_L14_001613FC_d __asm__("D_L14_001613FC") __attribute__((sda));
@@ -697,7 +695,7 @@ void FUN_L14_002ae900(struct Moby *moby, float a, float b, float c) {
     if (*(short *)(data + 0x208) != 0) {
         qcopy(tmp, (char *)list + list[0] * 16);
     } else {
-        if (FUN_L00_0025d808_2afb40(list, tmp, data + 0x80, data + 0x8C, 0, b * D_0015ED6C * c) !=
+        if (FUN_L00_0025d808_2afb40(list, tmp, data + 0x80, data + 0x8C, 0, b * frame_time * c) !=
             0) {
             *(short *)(data + 0x208) = 1;
         }
@@ -1438,7 +1436,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002bac78.s", FUN_L14_002bac78);
 
 
 extern char D_0013F5E0[];
-extern float D_0015ED60;
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int);
@@ -1470,11 +1467,11 @@ unsigned char *FUN_L14_002bb310(struct Moby *owner, float angle, char *posp) {
         m[0x31] = 1;
         subtract_vector_xyz(v1, v0, &owner->pos);
         vec[6] = 0.0f;
-        normalize_vector_xyz(v1, v1, random_float_between(D_0015ED60 * 0.075f, D_0015ED60 * 0.2f));
+        normalize_vector_xyz(v1, v1, random_float_between(frame_scale * 0.075f, frame_scale * 0.2f));
         g = D_0013F5E0;
         cross_vectors_xyz(vec + 8, g, v1);
         build_look_at_matrix(d, v1, g, FUN_L00_00257c48(0.0f, 0.7853982f));
-        *(float *)(d + 8) = random_float_between(D_0015ED60 * 0.05f, D_0015ED60 * 0.32f);
+        *(float *)(d + 8) = random_float_between(frame_scale * 0.05f, frame_scale * 0.32f);
         *(float *)(d + 0x14) = FUN_L00_00257c48(0.0f, 0.034906585f);
         *(float *)(d + 0x18) = FUN_L00_00257c48(0.0f, 0.034906585f);
         *(float *)(d + 0x1C) = FUN_L00_00257c48(0.0f, 0.034906585f);
@@ -1613,8 +1610,8 @@ void FUN_L14_002d5f40(struct Moby *m) {
             spark = FUN_L14_002dea98((char *)m, (char *)pos);
             if (spark) {
                 sv = *(f32 **)(spark + 0x78);
-                vel[0] = fast_cos(m->rot.z) * (D_0015ED60 * 0.4f);
-                vel[1] = fast_sin(m->rot.z) * (D_0015ED60 * 0.4f);
+                vel[0] = fast_cos(m->rot.z) * (frame_scale * 0.4f);
+                vel[1] = fast_sin(m->rot.z) * (frame_scale * 0.4f);
                 vel[2] = 0.0f;
                 sv[0] = vel[0];
                 sv[1] = vel[1];

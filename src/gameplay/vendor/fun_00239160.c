@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 struct Goal {
     s32 bolts;
@@ -29,7 +30,6 @@ struct Shop {
 extern struct Shop D_001E63C0;
 extern struct Goal D_001DFFB0[];
 #include "rnc/gameplay/state/item_state.h"
-extern s32 D_0015ED98;
 extern void draw_framebuffer_rect(s32, s32, s32, s32, s32, s32, u32) __asm__("func_001FB8F0");
 extern s32 get_help_message_text(s32) __asm__("func_001FDD10");
 extern void font_print_center_small(s32, s32, u64, s32, s32) __asm__("func_001F6B88");
@@ -53,7 +53,7 @@ void FUN_00239160(void) {
             } else {
                 cost = D_001DFFB0[s->slots[s->cur].id].cost;
             }
-            if (D_0015ED98 < cost) {
+            if (current_bolt_count < cost) {
                 return;
             }
             id = 0x4EE0;
@@ -63,7 +63,7 @@ void FUN_00239160(void) {
             } else {
                 cost = D_001DFFB0[s->slots[s->cur].id].bolts;
             }
-            if (D_0015ED98 < cost) {
+            if (current_bolt_count < cost) {
                 return;
             }
             id = 0x524B;

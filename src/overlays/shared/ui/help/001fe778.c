@@ -109,16 +109,16 @@ void FUN_L15_0020a7a0(void) {
     f32 g;
 
     hero.unk270.f[2] = 1.0f;
-    hero.unk30E.s++;
+    hero.air_frames.s++;
     hero.unk30C.s++;
     hero.unk270.i[0] = 0;
     hero.unk270.i[1] = 0;
     *(s32 *)&hero.unk2E0 = 0;
-    *(s32 *)&hero.unk2D8 = 0;
+    *(s32 *)&hero.ground_z = 0;
     FUN_001f99f8_c((u8 *)&hero + 0x2A0);
     hero.unk30A = 0;
-    hero.unk2DC = 32.0f;
-    hero.unk2FC = 0;
+    hero.ground_distance = 32.0f;
+    hero.ground_moby = 0;
     if (hero.unk2F8 != 0) {
         hero.unk2F8++;
     }
@@ -175,26 +175,26 @@ void FUN_L15_0020a7a0(void) {
     }
     if (HH.unk1C > 0) {
         qcopy((u8 *)&hero + 0x2A0, &HH.point);
-        hero.unk2D8.f = HH.point.f[2];
-        hero.unk2DC = FUN_001f9b48((u8 *)&hero + 0x80, ((u8 *)&hero + 0x2A0));
-        hero.unk2FC = (struct Moby *)HH.moby;
+        hero.ground_z.f = HH.point.f[2];
+        hero.ground_distance = FUN_001f9b48((u8 *)&hero + 0x80, ((u8 *)&hero + 0x2A0));
+        hero.ground_moby = (struct Moby *)HH.moby;
         FUN_00125180_c((u8 *)&hero + 0x270, (u8 *)&HH.normal_x);
         hero.unk2E0.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
         hero.unk2EC = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
         FUN_001f9a28(&v20, ((u8 *)&hero + 0x2A0), (u8 *)&hero + 0x80);
         if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&hero + 0x270)) {
-            hero.unk2DC = -hero.unk2DC;
+            hero.ground_distance = -hero.ground_distance;
         }
-        if (hero.unk2DC < 0.02f) {
+        if (hero.ground_distance < 0.02f) {
             hero.unk30C.s = 0;
             if (hero.unk2E0.f <= 0.87266463f || hero.unk20B3 == 1 || hero.state.control_mode == 0x16) {
-                hero.unk30E.s = 0;
+                hero.air_frames.s = 0;
                 hero.unkA80 = HH.moby;
             }
         }
     }
 tail:
-    if (hero.unk30E.s != 0) {
+    if (hero.air_frames.s != 0) {
         hero.unk300 = 0;
     } else {
         hero.unk300++;
@@ -230,7 +230,7 @@ d1:
         hero.state.control_mode == 5 || hero.state.control_mode == 3) {
         return;
     }
-    if (!(hero.unk2DC < 0.25f)) {
+    if (!(hero.ground_distance < 0.25f)) {
         return;
     }
     FUN_L00_00216078((u8 *)&hero + 0x270, &v20);
@@ -248,7 +248,7 @@ d1:
         FUN_L00_002335c8(&v30, 0.2f, a, 0.45f);
         FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
         if (FUN_001efa68_c(&v30, &v0, 0x22, (s32)hero.moby, 0)) {
-            f = HH.point.f[2] - hero.unk2D8.f;
+            f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
             if (0.4f < FUN_001f99c0(f)) {
                 hero.unk2C0.f[i] = 0.0f;

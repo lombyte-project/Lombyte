@@ -1,5 +1,6 @@
 #include "types.h"
 #include "asm.h"
+#include "rnc/globals.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/state/transition_do_transition/"
@@ -35,11 +36,8 @@ typedef struct {
 } TransferState;
 
 extern s32 D_0015ED80 MACRO_ADDR;
-extern s32 D_0015ED84;
 extern s32 D_0015ED88 __attribute__((sda));
 extern WadHeader *D_0015EE4C;
-extern s32 D_0015EE74;
-extern s32 D_0015EE78;
 extern volatile s32 D_0015EE8C;
 extern s32 D_0015EF50;
 extern s32 D_0015EF54;
@@ -104,7 +102,7 @@ void transition_do_transition(void) {
     struct DiscTable *tbl;
     u32 align_mask = 0xFFFFFFF0;
 
-    D_0015ED84 = 0;
+    current_level_index = 0;
     *(volatile u32 *)0x10000010 = 0x83;
     *(volatile u32 *)0x10000000 = 0;
     load_and_initialize_level_chunk();
@@ -205,10 +203,10 @@ void transition_do_transition(void) {
             fade_to_black(4);
             func_001204B8();
             sceGsResetGraph(0, 1, D_0015ED80 != 0 ? 3 : 2, 0);
-            old = D_0015EE78;
+            old = gs_texture_allocation_start;
             D_0015F43C = 1.0f;
             set_pal_mode();
-            D_0015EE78 = old;
+            gs_texture_allocation_start = old;
         }
         vu1_sync_chain(1);
         sceGsSyncV(0);
@@ -217,6 +215,6 @@ void transition_do_transition(void) {
     if (D_0015ED80 == 0) {
         D_0015EE8C = 0x280000;
     }
-    D_0015EE74 = D_0015EE78 = D_0015EE8C;
+    gs_texture_allocation_cursor = gs_texture_allocation_start = D_0015EE8C;
 }
 #endif /* NON_MATCHING */

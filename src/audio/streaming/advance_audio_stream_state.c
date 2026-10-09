@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 struct AudioStream {
     u8 pad_0[0x44];
@@ -20,7 +21,6 @@ struct AudioStreamTableB {
 };
 #include "rnc/storage/disc_table.h"
 #include "rnc/audio/music/music_stream_state.h"
-#include "rnc/globals.h"
 
 extern s32 start_audio_stream_read() __asm__("FUN_00216788");
 

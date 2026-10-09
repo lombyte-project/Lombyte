@@ -193,29 +193,28 @@ typedef struct {
     char pad4[0x229C - 0xA60];
     float x229C;
 } S_214ed8;
-extern S_214ed8 D_0013F350_214ed8 __asm__("D_0013F350");
 void FUN_L00_002118c8(int, float);
 char *FUN_L00_0020d8f8(float, float, float, float);
 float FUN_001f9e90(float, float);
 void FUN_L00_00214ed8(float a, float b, float c) {
-    S_214ed8 *g = &D_0013F350_214ed8;
+    struct Hero *g = &hero;
     float r;
     char *p;
-    if (g->xA58 != 0)
+    if (g->unkA58 != 0)
         return;
-    r = g->x98;
-    if (0.5f < g->x229C) {
+    r = g->motion.rot.f[2];
+    if (0.5f < g->unk229C) {
         FUN_L00_002118c8(0, 1.0f);
-        r = g->x180;
-        g->xA58 = 1;
-        g->xA54 = 0;
+        r = g->motion.unk180;
+        g->unkA58 = 1;
+        g->unkA54 = 0;
     }
     p = FUN_L00_0020d8f8(a, r, b, c);
-    if (p != 0 && (g->xA54 == 0 || g->xA58 != 0)) {
-        g->xA5C = FUN_001f9e90(*(float *)(p + 0x10) - g->x80, *(float *)(p + 0x14) - g->x84);
-        g->xA54 = p;
+    if (p != 0 && (g->unkA54 == 0 || g->unkA58 != 0)) {
+        g->unkA5C = FUN_001f9e90(*(float *)(p + 0x10) - g->motion.pos.f[0], *(float *)(p + 0x14) - g->motion.pos.f[1]);
+        g->unkA54 = p;
     } else {
-        D_0013F350_214ed8.xA5C = r;
+        hero.unkA5C = r;
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00214fe8.s", FUN_L00_00214fe8);
@@ -392,7 +391,6 @@ typedef struct {
 typedef struct {
     OvlQuad q[4];
 } QM_216130;
-extern M_216130 D_0013F350_216130 __asm__("D_0013F350");
 extern char D_0013F3F4_216130[] __asm__("D_0013F3F4");
 extern char D_0013F3E0_216130[] __asm__("D_0013F3E0");
 float dot_216130(void *, void *) __asm__("FUN_001f9ab0");
@@ -413,7 +411,7 @@ void FUN_L00_00216130(V_216130 *v, M_216130 *m, void *p, float a, float b, float
     float d, pitch, yaw, roll;
     t = 0.0f;
     {
-        QM_216130 *d = (QM_216130 *)m, *s = (QM_216130 *)&D_0013F350_216130;
+        QM_216130 *d = (QM_216130 *)m, *s = (QM_216130 *)&hero;
         d->q[0] = s->q[0];
         d->q[1] = s->q[1];
         d->q[2] = s->q[2];
@@ -530,7 +528,6 @@ void FUN_L00_002163f0(void) {
         FUN_001f9a10_2163f0(&P.v80, &P.v80, &b);
     }
 }
-extern unsigned char D_0013F350_2165b8[] __asm__("D_0013F350");
 extern float D_0015ED64_2165b8 __asm__("D_0015ED64");
 extern float D_0015ED6C_2165b8 __asm__("D_0015ED6C");
 extern float FUN_L00_0025bc98_2165b8(void *, void *, int, float, float, float,
@@ -538,20 +535,20 @@ extern float FUN_L00_0025bc98_2165b8(void *, void *, int, float, float, float,
 extern void FUN_L00_002163f0_2165b8(void) __asm__("FUN_L00_002163f0");
 
 void FUN_L00_002165b8(void) {
-    unsigned char *g = D_0013F350_2165b8;
+    struct Hero *g = &hero;
     float v[2];
     int m, st, k;
-    m = g[0x20B3];
-    if (*(s16 *)(g + 0x1F8)) {
+    m = g->unk20B3;
+    if (g->unk1F8) {
         m = 1;
     }
     switch (m) {
     case 0:
-        st = *(int *)(g + 0x2084);
+        st = g->state.current;
         if ((u32)(st - 0x25) < 2) {
             return;
         }
-        k = *(int *)(g + 0x208C);
+        k = g->state.control_mode;
         if (k == 0x11 || k == 0x15 || k == 0x16) {
             return;
         }
@@ -560,9 +557,9 @@ void FUN_L00_002165b8(void) {
         }
         v[0] = 0.0f;
         v[1] = 0.0f;
-        FUN_L00_0025bc98_2165b8(g + 0x90, g + 0xA0, 0, -v[0], D_0015ED64_2165b8 * 0.015f,
+        FUN_L00_0025bc98_2165b8(&g->motion.rot, &g->motion.unkA0, 0, -v[0], D_0015ED64_2165b8 * 0.015f,
                                 D_0015ED64_2165b8 * 0.3f, D_0015ED6C_2165b8 * 5.2359877f);
-        FUN_L00_0025bc98_2165b8(g + 0x94, g + 0xA4, 0, -v[1], D_0015ED64_2165b8 * 0.015f,
+        FUN_L00_0025bc98_2165b8(&g->motion.rot.f[1], &g->motion.unkA0.f[1], 0, -v[1], D_0015ED64_2165b8 * 0.015f,
                                 D_0015ED64_2165b8 * 0.3f, D_0015ED6C_2165b8 * 5.2359877f);
         break;
     case 1:
@@ -639,9 +636,6 @@ typedef struct {
 extern G_167d0 D_0013F350_167d0 __asm__("D_0013F350");
 extern char D_0013F430[];
 extern char D_0013F480[];
-extern f32 D_0015ED6C;
-extern f32 D_0015ED64;
-extern f32 D_0015ED70;
 extern s32 D_0013CB14[];
 
 extern void FUN_L00_002118c8_c(s32, f32) __asm__("FUN_L00_002118c8");
@@ -672,7 +666,7 @@ void FUN_L00_002167d0(void) {
 
     FUN_L00_002118c8_c(0, 1.0f);
     f20 = 0.2f;
-    FUN_L00_00211e30(0, D_0015ED64 * 0.02f, D_0015ED64 * f20, D_0015ED6C * 3.66519141f);
+    FUN_L00_00211e30(0, frame_scale_sq * 0.02f, frame_scale_sq * f20, frame_time * 3.66519141f);
     if (D_0013F350_167d0.i2084 == 0x13) {
         if (D_0013F350_167d0.f229C < f20) {
             D_0013F350_167d0.f180 = D_0013F350_167d0.f98;
@@ -682,10 +676,10 @@ void FUN_L00_002167d0(void) {
         D_0013F350_167d0.f190 = 0.0f;
     }
     f20 = 5.9f;
-    v0.f[0] = FUN_001f9dc8(D_0013F350_167d0.f180) * D_0013F350_167d0.f190 * (D_0015ED6C * f20);
+    v0.f[0] = FUN_001f9dc8(D_0013F350_167d0.f180) * D_0013F350_167d0.f190 * (frame_time * f20);
     h = FUN_001f9de0(D_0013F350_167d0.f180) * D_0013F350_167d0.f190;
     v0.f[2] = 0.0f;
-    d = D_0015ED6C;
+    d = frame_time;
     f20 = d * f20;
     v0.f[1] = h * f20;
     qcopy(&v1, &v0);
@@ -707,17 +701,17 @@ void FUN_L00_002167d0(void) {
     if (f20 < f21) {
         f20 = f21;
     }
-    f21 = D_0015ED70 * 2.45f * D_0013F350_167d0.f190;
-    f21 = f21 + (D_0015ED70 + D_0015ED70) * f20;
+    f21 = frame_time_sq * 2.45f * D_0013F350_167d0.f190;
+    f21 = f21 + (frame_time_sq + frame_time_sq) * f20;
     if (D_0013CB14[0]) {
-        f21 = D_0015ED70 * 1.1f;
+        f21 = frame_time_sq * 1.1f;
     }
     if (D_0013F350_167d0.i2084 == 0x13 && D_0013F350_167d0.i198 < scale_game_frames(0xF) &&
-        D_0013F350_167d0.f160 < D_0015ED6C * 3.0f) {
-        f21 = D_0015ED70 * 11.0f;
+        D_0013F350_167d0.f160 < frame_time * 3.0f) {
+        f21 = frame_time_sq * 11.0f;
     }
-    if (D_0015ED6C * 5.9f < D_0013F350_167d0.f160) {
-        f21 = D_0015ED70 * 13.0f;
+    if (frame_time * 5.9f < D_0013F350_167d0.f160) {
+        f21 = frame_time_sq * 13.0f;
     }
     e = D_0013F350_167d0.f930;
     f22 = 0.0f;
@@ -729,7 +723,7 @@ void FUN_L00_002167d0(void) {
         }
         b = FUN_001f9b20(&v2);
         a = (b - f20) / b;
-        c = D_0015ED70 * 3.0f;
+        c = frame_time_sq * 3.0f;
         b = c * a;
         if (D_0013F350_167d0.f229C < 0.3f) {
             if (b < c) {
@@ -750,11 +744,11 @@ void FUN_L00_002167d0(void) {
     q = (H *)(D_0013F480 - 0x130);
     if (0.0872664601f < q->f2E0) {
         f21 = FUN_001f9e90_c(q->f270, q->f274);
-        f20 = D_0015ED6C;
+        f20 = frame_time;
         f20 = f20 * 8.0f;
         f20 = f20 * q->f2E0;
         f20 = f20 / 0.785398185f;
-        f22 = D_0015ED70 * 8.5f * q->f2E0 / 0.785398185f;
+        f22 = frame_time_sq * 8.5f * q->f2E0 / 0.785398185f;
         v3.f[0] = FUN_001f9dc8(f21) * f20;
         v3.f[1] = FUN_001f9de0(f21) * f20;
         v3.f[2] = 0.0f;
@@ -771,7 +765,7 @@ void FUN_L00_002167d0(void) {
     m->f3B0 = FUN_001f9ab0(&v3, &v0);
     k = FUN_001f9af0(&v0);
     if (0.0f < k) {
-        m->f3B0 = m->f3B0 / (k * (D_0015ED6C * 5.9f));
+        m->f3B0 = m->f3B0 / (k * (frame_time * 5.9f));
     }
     FUN_L00_00212318(0);
     if (m->f3B4 < DEG_TO_RAD && 0.0872664601f < m->f2E4) {
@@ -832,16 +826,15 @@ void FUN_L00_00216e48(int idx, int a, int b) {
 }
 /* D_0013F350 + 0x21D8 is an array of 8 s16 slots of four s16 fields each. */
 
-extern u8 D_0013F350_00216ec0[] __asm__("D_0013F350");
 
 void FUN_L00_00216ec0_00216ec0(s32, s32, s32) __asm__("FUN_L00_00216ec0");
 
 void FUN_L00_00216ec0_00216ec0(s32 a, s32 b, s32 c) {
-    u8 *base;
+    struct Hero *base;
     s16 *p;
     s32 n = 0;
-    base = D_0013F350_00216ec0;
-    p = (s16 *)(base + 0x21D8);
+    base = &hero;
+    p = (s16 *)(&base->unk21D8[0]);
     do {
         n = n + 1;
         if (p[0] == 0) {

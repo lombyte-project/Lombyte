@@ -14,7 +14,7 @@ s32 FUN_L01_00277fb8(struct Moby *m) {
         if ((struct Moby *)h->unk4F8 == m) {
             return 1;
         }
-    } else if (h->unk30E.s == 0 && h->unk2FC == m) {
+    } else if (h->air_frames.s == 0 && h->ground_moby == m) {
         return 1;
     }
     return 0;

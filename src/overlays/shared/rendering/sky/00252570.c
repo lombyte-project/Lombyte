@@ -9,7 +9,6 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/initonce_00252E80.c: func_L01_00252E80), where it is exact; names translated to the US level program. */
 
-extern int D_0015EE88;
 extern void FUN_L00_002892d0(void);
 extern void FUN_L00_00289420(void);
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
@@ -25,7 +24,7 @@ void FUN_L01_00252570(void) {
     }
     do_sky_gif_paging();
     vu1_add_g_sregister(0x47, 0x5360B);
-    vu1_add_g_sregister(0x4E, 0x1000000 | (D_0015EE88 >> 13));
+    vu1_add_g_sregister(0x4E, 0x1000000 | (depth_buffer_address >> 13));
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00261c10.s", FUN_L01_00261c10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00261d78.s", FUN_L01_00261d78);

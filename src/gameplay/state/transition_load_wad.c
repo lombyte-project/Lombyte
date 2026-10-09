@@ -1,6 +1,7 @@
 #include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "rnc/storage/disc_table.h"
+#include "rnc/globals.h"
 typedef struct 
 {
   s32 x0;
@@ -96,8 +97,6 @@ typedef struct
   u8 padE[0x1A];
   void *x28;
 } MobyClass;
-extern s32 D_0015EE74;
-extern s32 D_0015EE78;
 extern s32 D_0015EE8C;
 extern s64 D_0015EF48;
 extern s32 D_0015EF58;
@@ -190,8 +189,8 @@ void transition_load_wad(void)
   init_mem_slots();
   D_00160F0C = 0x100000;
   D_0015EE8C = 0x2C0000;
-  D_0015EE78 = 0x2C0000;
-  D_0015EE74 = 0x2C0000;
+  gs_texture_allocation_start = 0x2C0000;
+  gs_texture_allocation_cursor = 0x2C0000;
   FillTransferWords(D_00194180, 0x87654321, 0x10);
   FillTransferWords(resident_class_slot_by_id, -1, k_800);
   FillTransferWords(resident_class_material_maps, -1, 0xE00);
@@ -287,15 +286,15 @@ void transition_load_wad(void)
   new_var3 = data + hdr->x64;
   new_var4 = hdr->x54;
   parse_particle_textures(((u8 *) hdr) + (new_var = hdr->x6C), new_var3, ((u8 *) hdr) + new_var4, hdr->x50);
-  sceGsSetDefLoadImage(li, (D_0015EE74 << 8) >> 16, 4, 0, 0, 0, 0x100, 0x80);
+  sceGsSetDefLoadImage(li, (gs_texture_allocation_cursor << 8) >> 16, 4, 0, 0, 0, 0x100, 0x80);
   FlushCache(0);
   sceGsExecLoadImage(li, data + hdr->x84);
   FUN_00120558(0, 0);
   D_001940C0.x18 = ((s32) D_001940C0.hdr) + size;
-  v = D_0015EE74;
+  v = gs_texture_allocation_cursor;
   D_0015EF48 = ((v >> 8) | 0x20010000) | (((s64) 0xB800) << 19);
-  D_0015EE74 = v + 0x20000;
-  D_0015EE78 = v + 0x20000;
+  gs_texture_allocation_cursor = v + 0x20000;
+  gs_texture_allocation_start = v + 0x20000;
   D_001940C0.x1C = FUN_001e9b10(data + hdr->x7C);
   FillTransferWords(&D_0018CB20, 0, 0x1C0);
   FillTransferWords(D_00186310, 0, 0x40);

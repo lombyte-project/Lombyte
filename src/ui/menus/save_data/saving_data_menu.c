@@ -1,16 +1,13 @@
 #include "types.h"
+#include "rnc/globals.h"
 typedef struct __attribute__((packed)) {
     s64 v;
 } Unaligned64;
 extern Unaligned64 D_0015EE98[1];
 #include "rnc/storage/memory_card/memory_card_state.h"
-extern s32 D_0015ED84;
-extern s32 D_0015ED98;
 extern s32 D_0015EE20;
 extern s32 D_0015EE24;
 extern s32 D_0015EE34;
-extern s32 mode_freeze_state __asm__("D_0015EEB0");
-extern s32 mode_freeze_flags __asm__("D_0015EEB4");
 extern u8 D_001D2578[];
 extern s32 D_001D2640[];
 #include "rnc/ui/menus/menu_system.h"
@@ -51,9 +48,9 @@ s32 saving_data_menu(struct MenuScreen *menu) {
                     goto block_46;
                 }
                 *((s32 *)((((u8 *)&memory_card_state) + (memory_card_state.card[0].save_index * 0x1C)) + 0x24)) =
-                    (s32)D_0015ED98;
+                    (s32)current_bolt_count;
                 *((s32 *)((((u8 *)&memory_card_state) + (memory_card_state.card[0].save_index * 0x1C)) + 0x20)) =
-                    (s32)D_0015ED84;
+                    (s32)current_level_index;
                 *((s32 *)((((u8 *)&memory_card_state) + (memory_card_state.card[0].save_index * 0x1C)) + 0x2C)) =
                     (s32)D_0015EE24;
                 *((Unaligned64 *)((((u8 *)&memory_card_state) + (memory_card_state.card[0].save_index * 0x1C)) + 0x30)) =

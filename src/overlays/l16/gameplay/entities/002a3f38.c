@@ -2103,7 +2103,6 @@ typedef struct {
     L16LeapData_u *data;
 } L16LeapMoby_u;
 
-extern float D_0015ED64;
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
 extern int FUN_L00_00257b90(int, int);
@@ -2126,7 +2125,7 @@ void FUN_L16_002d0058(L16LeapMoby_u *m) {
         pitch = FUN_001f9e90(distance, *(float *)(d->path + next + 0x18) -
                                            ((L16LeapPath *)d->path)->points[d->node][2]);
     }
-    FUN_L00_0025bc98(&m->pitch, &d->pitch_speed, 0, pitch, D_0015ED64 * 0.02f, D_0015ED64 * 0.3f,
+    FUN_L00_0025bc98(&m->pitch, &d->pitch_speed, 0, pitch, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
                      D_0015ED6C * 3.14159265f);
     if (d->timer != 0) {
         float duration;
@@ -2254,7 +2253,6 @@ extern char *FUN_L00_0025a420(void *, int, int);
 extern char D_0013E533[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_0015ED64;
 extern float D_0015ED6C, D_0015EE70;
 extern float D_0015EE6C, D_0015ED70;
 extern float FUN_001f9b80(void *, void *);
@@ -2449,7 +2447,7 @@ void FUN_L16_002d04a0(unsigned char *m) {
         FUN_L16_002d0058_c((L16LeapMoby *)m);
         FUN_L16_002cf9d0_c((Level16VendorVectorMoby *)m, *(short *)(d + 0x2F4), pos);
         angle = FUN_001f9e90(pos[0] - *(float *)(m + 0x10), pos[1] - *(float *)(m + 0x14));
-        FUN_L00_0025bc98(m + 0x48, d + 0x2C4, 0, angle, D_0015ED64 * 0.035f, D_0015ED64 * 0.3f,
+        FUN_L00_0025bc98(m + 0x48, d + 0x2C4, 0, angle, frame_scale_sq * 0.035f, frame_scale_sq * 0.3f,
                          D_0015ED6C * 6.981317f);
         if (*(float *)(d + 0x268) < pos[2] - 5.0f) {
             *(float *)(d + 0x268) = pos[2];
@@ -2517,7 +2515,7 @@ void FUN_L16_002d04a0(unsigned char *m) {
             rate = -rate;
         }
         {
-            float coefficient = D_0015ED64;
+            float coefficient = frame_scale_sq;
 
             *(float *)(d + 0x248) = rate * 30.0f;
             *(float *)(d + 0xC8) = rate * 20.0f;
@@ -2525,9 +2523,9 @@ void FUN_L16_002d04a0(unsigned char *m) {
             *(float *)(d + 0x144) = rate * 40.0f;
             FUN_L00_002628d8(coefficient * 0.02f, coefficient * 0.3f, m, d + 0x1E0, 3);
         }
-        FUN_L00_002628d8(D_0015ED64 * 0.02f, D_0015ED64 * 0.3f, m, d + 0x60, 0);
-        FUN_L00_002628d8(D_0015ED64 * 0.02f, D_0015ED64 * 0.3f, m, d + 0x160, 1);
-        FUN_L00_002628d8(D_0015ED64 * 0.015f, D_0015ED64 * 0.3f, m, d + 0xE0, 2);
+        FUN_L00_002628d8(frame_scale_sq * 0.02f, frame_scale_sq * 0.3f, m, d + 0x60, 0);
+        FUN_L00_002628d8(frame_scale_sq * 0.02f, frame_scale_sq * 0.3f, m, d + 0x160, 1);
+        FUN_L00_002628d8(frame_scale_sq * 0.015f, frame_scale_sq * 0.3f, m, d + 0xE0, 2);
         qcopy(m + 0x10, d + 0x260);
         {
             float bob_time = D_0015ED6C;

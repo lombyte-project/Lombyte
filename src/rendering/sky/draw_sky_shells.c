@@ -1,6 +1,7 @@
 #include "types.h"
 #include "eetypes.h"
 #include "qcopy.h"
+#include "rnc/globals.h"
 struct SkyShellSet {
     u8 pad_0[4];
     u16 relocation_state;
@@ -15,7 +16,6 @@ extern f32 D_00160404 __attribute__((sda));
 extern struct SkyShellSet *D_0016045C;
 extern u8 D_00160460;
 extern struct SkyTransform D_001D96E0;
-extern s32 D_0015EE88;
 extern void clear_u64_value(f32 *) __asm__("func_001F99F8");
 extern void FUN_001f9a80(void *, void *, f32);
 extern void FUN_001f9fc8(void *);
@@ -89,7 +89,7 @@ void draw_sky_shells(void) {
     }
     do_sky_gif_paging();
     vu1_add_g_sregister(0x47, 0x5360B);
-    vu1_add_g_sregister(0x4E, 0x1000000 | (D_0015EE88 >> 13));
+    vu1_add_g_sregister(0x4E, 0x1000000 | (depth_buffer_address >> 13));
 }
 
 extern __typeof__(draw_sky_shells) func_0022B288 __attribute__((alias("FUN_0022b288")));

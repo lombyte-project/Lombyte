@@ -19,7 +19,6 @@ extern int D_L09_001BA650[];
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern char D_0013E533[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
-extern float D_0015ED6C;
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9b48(void *, void *);
@@ -152,7 +151,7 @@ void FUN_L09_003033a0(unsigned char *moby) {
             if (!FUN_L00_0028d8c0(moby, *(int *)(data + 0xC4))) {
                 *(int *)(data + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
             }
-            F(data, 0xA8) += F(data, 0xAC) * D_0015ED6C;
+            F(data, 0xA8) += F(data, 0xAC) * frame_time;
             if (AbsoluteFloat(F(data, 0xA8)) > AbsoluteFloat(F(data, 0xAC))) {
                 F(data, 0xA8) = F(data, 0xAC);
             }
@@ -558,8 +557,6 @@ typedef struct {
 } PathFlyerVars;
 
 extern f32 D_L09_00161DF8 __attribute__((sda));
-extern f32 D_0015ED6C;
-extern f32 D_0015ED70;
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern float atan2_f(float, float) __asm__("FUN_001f9e90");
@@ -605,7 +602,7 @@ int FUN_L09_0030a298(struct Moby *moby) {
         }
         d = FUN_001f9b48(&moby->pos, &path->node[path->count - 1]);
         v = 0.0f;
-        advance_accelerated_scalar(d, D_0015ED70 * 3.0f, D_0015ED70 * 3.0f, D_0015ED6C * 10.0f, &v, &vars->speed);
+        advance_accelerated_scalar(d, frame_time_sq * 3.0f, frame_time_sq * 3.0f, frame_time * 10.0f, &v, &vars->speed);
     } else {
         f32 v;
         if (FUN_001f9b48(&target, &moby->pos) < vars->speed + vars->speed) {
@@ -615,7 +612,7 @@ int FUN_L09_0030a298(struct Moby *moby) {
         }
         d = FUN_001f9b48(&moby->pos, &path->node[0]);
         v = 0.0f;
-        advance_accelerated_scalar(d, D_0015ED70 * 3.0f, D_0015ED70 * 3.0f, D_0015ED6C * 10.0f, &v, &vars->speed);
+        advance_accelerated_scalar(d, frame_time_sq * 3.0f, frame_time_sq * 3.0f, frame_time * 10.0f, &v, &vars->speed);
     }
     if (path->node[vars->node].f[3] == 42.0f)
         vars->yaw_offset = 0.0f;
@@ -626,7 +623,7 @@ int FUN_L09_0030a298(struct Moby *moby) {
         qcopy(&puff, &moby->pos);
         FUN_L00_0025f8e0(&puff, 0.5f);
         puff.f[2] = 25.01f;
-        FUN_L00_002715e8(&puff, 0, 0x40103080, vars->speed * 3.0f / (D_0015ED6C * 10.0f), 12600.0f);
+        FUN_L00_002715e8(&puff, 0, 0x40103080, vars->speed * 3.0f / (frame_time * 10.0f), 12600.0f);
     }
     return done;
 }

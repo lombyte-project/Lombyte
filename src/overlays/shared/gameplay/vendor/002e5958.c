@@ -53,7 +53,6 @@ typedef struct {
 
 extern char D_0013F3D0[];
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float D_0015ED6C;
 extern float FUN_001f9b48(void *, void *);
 extern int D_L15_0015F5C4;
 extern int D_L15_0015F640;
@@ -71,7 +70,7 @@ void FUN_L15_002ebd78(struct Moby *moby) {
     unsigned char *p;
     if (current_level_index != 0xF) {
         moby->rot.z =
-            fast_add_rotations(moby->rot.z, D_0015ED6C * 1.5707964f);
+            fast_add_rotations(moby->rot.z, frame_time * 1.5707964f);
         moby->scale =
             moby->pclass->scale * *(float *)&D_L15_001621A0_d;
         switch (moby->state) {

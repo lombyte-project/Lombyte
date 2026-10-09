@@ -117,8 +117,6 @@ typedef struct {
 extern unsigned char D_0013F350_cc2e8[] __asm__("D_0013F350");
 extern char D_0013F3D0_cc2e8[] __asm__("D_0013F3D0");
 extern char D_L10_001742C0_cc2e8[] __asm__("D_L10_001742C0");
-extern float D_0015ED70;
-extern float D_0015ED6C;
 extern float vlen_cc2e8(void *) __asm__("FUN_001f9af0");
 extern float vlenxy_cc2e8(void *) __asm__("FUN_001f9b20");
 extern float vdist_cc2e8(void *, void *) __asm__("FUN_001f9b48");
@@ -204,13 +202,13 @@ void FUN_L10_002cc2e8(char *m) {
                 yaw = atan2_cc2e8(diff[0], diff[1]);
                 pitch = -atan2_cc2e8(vlenxy_cc2e8(diff), diff[2]);
             }
-            ((Rot_cc2e8 *)m)->rz = turn_cc2e8(((Rot_cc2e8 *)m)->rz, yaw, D_0015ED70 * 6.2831855f,
-                                              D_0015ED70 * 3.1415927f, D_0015ED6C * 6.2831855f,
+            ((Rot_cc2e8 *)m)->rz = turn_cc2e8(((Rot_cc2e8 *)m)->rz, yaw, frame_time_sq * 6.2831855f,
+                                              frame_time_sq * 3.1415927f, frame_time * 6.2831855f,
                                               &d->yawSpeed);
-            ((Rot_cc2e8 *)m)->ry = turn_cc2e8(((Rot_cc2e8 *)m)->ry, pitch, D_0015ED70 * 6.2831855f,
-                                              D_0015ED70 * 3.1415927f, D_0015ED6C * 6.2831855f,
+            ((Rot_cc2e8 *)m)->ry = turn_cc2e8(((Rot_cc2e8 *)m)->ry, pitch, frame_time_sq * 6.2831855f,
+                                              frame_time_sq * 3.1415927f, frame_time * 6.2831855f,
                                               &d->pitchSpeed);
-            ((Rot_cc2e8 *)m)->rx = addrot_cc2e8(((Rot_cc2e8 *)m)->rx, D_0015ED6C * 6.2831855f);
+            ((Rot_cc2e8 *)m)->rx = addrot_cc2e8(((Rot_cc2e8 *)m)->rx, frame_time * 6.2831855f);
             setvel_cc2e8(speed, ((Rot_cc2e8 *)m)->rz, -((Rot_cc2e8 *)m)->ry, d);
         }
         vclear_cc2e8(c);

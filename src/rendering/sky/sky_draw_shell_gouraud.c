@@ -1,6 +1,7 @@
 #include "types.h"
 #include "eetypes.h"
 #include "sda.h"
+#include "rnc/globals.h"
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
 
@@ -24,7 +25,6 @@ struct Shell {
 extern s32 D_00160408[2] __attribute__((sda));
 extern s32 D_00160410 __attribute__((sda));
 extern u8 D_0013D0F0[];
-extern s32 D_0015EE88;
 
 extern void FUN_0022c4c8(struct SkyTile *tiles, s32 count, u8 *visibility) __asm__("FUN_0022c4c8");
 extern void WriteDmaChannelRegisters(s32 address, s32 qwc, s32 destination);
@@ -85,7 +85,7 @@ void sky_draw_shell_gouraud(struct Shell *shell) {
     }
 
     vu1_add_g_sregister(0x47, 0x3180B);
-    vu1_add_g_sregister(0x4E, (D_0015EE88 >> 13) | 0x1000000 | ((s64)1 << 32));
+    vu1_add_g_sregister(0x4E, (depth_buffer_address >> 13) | 0x1000000 | ((s64)1 << 32));
 }
 
 extern __typeof__(sky_draw_shell_gouraud) func_0022B928 __attribute__((alias("FUN_0022b928")));

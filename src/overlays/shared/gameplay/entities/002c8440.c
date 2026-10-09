@@ -75,7 +75,7 @@ s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *m, s32 mode)
         qcopy(&e, &v->vel);
         if (hero.state.control_mode == 15)
             add_vector_xyz_2c8440(&e, &e, &hero.motion.unk100);
-        if (hero.unk2FC && FUN_L00_002603d0_2c8440((int)hero.unk2FC) && mode)
+        if (hero.ground_moby && FUN_L00_002603d0_2c8440((int)hero.ground_moby) && mode)
             add_vector_xyz_2c8440(&e, &e, &hero.motion.unk100);
         t = scale_game_frames_2c8440(300);
     } else {
@@ -1121,7 +1121,7 @@ void FUN_L00_002cf218(struct Moby *moby) {
     case 1:
         if (moby->oclass == 0x1F9 &&
             (hero.unk240 == (s32)moby || hero.coll_hit_moby == (u8 *)moby ||
-             (hero.unk2FC == moby && hero.unk30E.s == 0) ||
+             (hero.ground_moby == moby && hero.air_frames.s == 0) ||
              hero.unk4F8 == (s32)moby || touched)) {
             moby->unkBC = 0;
             moby->state = 5;

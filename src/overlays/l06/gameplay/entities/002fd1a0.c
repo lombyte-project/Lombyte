@@ -347,7 +347,6 @@ struct TauntVoiceVars {
     s32 leave[6];        /* 0x50 */
     s32 chatter[3][6];   /* 0x68 */
 };
-extern s32 game_language __asm__("D_0015ED88");
 extern s32 D_L06_001620B8[1] __attribute__((sda));
 extern s32 D_L06_001620BC;
 extern s32 D_L06_001620C0;
@@ -511,7 +510,6 @@ typedef struct { int v[6]; } V6;
 extern V6 D_L06_002019A0;
 extern V6 D_L06_002019B8;
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED6C;
 extern int FUN_L00_00257b90(int, int);
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern short D_L06_001621B4_d __asm__("D_L06_001621B4") __attribute__((sda));
@@ -537,7 +535,7 @@ void FUN_L06_00304818(int unused, void *obj) {
             s = random_float_between(8.0f, 10.0f);
             a = D_L06_002019A0;
             b = D_L06_002019B8;
-            s = s * D_0015ED6C;
+            s = s * frame_time;
             pa = a.v + random_integer_below(6);
             pb = b.v + random_integer_below(6);
             f = *(float *)&D_L06_001621B4_d * 400000.0f;

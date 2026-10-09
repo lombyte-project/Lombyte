@@ -92,7 +92,7 @@ void FUN_001ed470(void) {
     }
     cam->hist[i] = hero.motion.rot.f[2];
 
-    m = hero.unk2FC;
+    m = hero.ground_moby;
     if (m != NULL && m->oclass != 0x4BA && m->oclass != 0x336) {
         if (m == cam->unkD4) {
             cam->unkDC = m->pos.z - cam->unkD8;

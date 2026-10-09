@@ -102,13 +102,10 @@ extern char D_L02_00161CF0[];
 extern char *D_L02_001600EC;
 extern f32 D_L02_0015F3FC;
 extern s32 D_0015EEA4;
-extern f32 D_0015ED6C;
-extern f32 D_0015ED70;
 extern f32 D_L02_00161CE0[2] __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
 extern struct UsageStat D_00141968[] __attribute__((section(".data"))); /* usage records 36 on (D_00141848 + 0x120) */
 extern u8 items_owned[] __asm__("D_0013D4C0") __attribute__((section(".data"))); /* by item id */
 extern s32 level_game_mode __asm__("D_L02_0015F5C4");
-extern f32 frame_delta __asm__("D_0015ED64");
 extern u8 big_head_cheat_enabled __asm__("D_0015EDB0");
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void initialize_npc_dialogue(struct Moby *, char *) __asm__("FUN_L00_002668a0");
@@ -227,8 +224,8 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
         Vec4 rot;
         Vec4 from;
         Vec4 to;
-        approach_two_stage((f32 *)(data + 0x180), (f32 *)(data + 0x184), 1.0f, D_0015ED70 * 0.1f,
-                           D_0015ED70 * 0.25f, D_0015ED6C * 0.5f);
+        approach_two_stage((f32 *)(data + 0x180), (f32 *)(data + 0x184), 1.0f, frame_time_sq * 0.1f,
+                           frame_time_sq * 0.25f, frame_time * 0.5f);
         lerp_vector(&pos, D_L02_001600EC + (*(s32 *)(data + 0x158) << 7) + 0x30,
                     D_L02_001600EC + (*(s32 *)(data + 0x15C) << 7) + 0x30, *(f32 *)(data + 0x180));
         qcopy_nc(&from, (char *)((*(s32 *)(data + 0x158) << 7) + (s32)D_L02_001600EC) + 0x70);
@@ -346,9 +343,9 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
         if (big_head_cheat_enabled != 0) {
             *(f32 *)(data + 0xB0) = 2.75f;
         }
-        delta = frame_delta;
+        delta = frame_scale_sq;
         drive_joint(rotation_step * delta, rotation_limit * delta, moby, data + 0x40, 0);
-        drive_joint(rotation_step * frame_delta, rotation_limit * frame_delta, moby, data + 0xC0, 1);
+        drive_joint(rotation_step * frame_scale_sq, rotation_limit * frame_scale_sq, moby, data + 0xC0, 1);
     }
 }
 
@@ -599,7 +596,7 @@ void FUN_L02_002e2228(struct Moby *moby) {
     case 3:
     case 5:
         ride = 0;
-        if (hero.unk2FC == moby && hero.unk30E.s == 0 && moby->unkBC == 0) {
+        if (hero.ground_moby == moby && hero.air_frames.s == 0 && moby->unkBC == 0) {
             ride = 1;
         } else if (distance_xyz(&moby->pos, &hero.motion.pos) < 16.0f) {
             if (moby->state == 5 && hero.motion.pos.f[2] < moby->pos.z - 5.0f) {
@@ -618,7 +615,7 @@ void FUN_L02_002e2228(struct Moby *moby) {
                 FUN_00212ed8(driver, 2, 0);
                 *(int *)(data + 0xA4) = allocate_voice_for_target(0, 4, driver);
             }
-        } else if (hero.unk2FC != moby) {
+        } else if (hero.ground_moby != moby) {
             moby->unkBC = 0;
         }
         break;
