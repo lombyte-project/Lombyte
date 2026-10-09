@@ -425,6 +425,17 @@ SDATA_OVERLAYS = {
     "rendering/vu1_chain": (0x160EE0, 0x61E60),
 }
 
+# Typed data with no proven owning unit: src/data/<section>/<ADDR>_<name>.c,
+# placed at its retail address like the overlays above (move it into the
+# owning unit once a reference proves the owner).
+def data_units() -> list[tuple[str, int]]:
+    """(unit, retail VMA) of each file under src/data/."""
+    root = ROOT / "src"
+    return [
+        (path.relative_to(root).with_suffix("").as_posix(), int(path.name.split("_", 1)[0], 16))
+        for path in sorted((root / "data").rglob("*.c"))
+    ]
+
 # —— Code ——
 
 def provenance_compiler(vram: int) -> str:
@@ -1297,6 +1308,11 @@ def build_stuff(
             print(f"ERROR: Unsupported build segment type {seg.type}")
             sys.exit(1)
 
+    for unit, _vram in data_units():
+        # Data only: no code, so the plain compiler route is enough.
+        build(Path("build/src") / f"{unit}.c.o", [Path("..", "..", "src", f"{unit}.c")],
+              "sdk-compiler")
+
     fallback_path = config_dir / "oracle-fallback-units.json"
     alias_path = config_dir / "oracle-aliases.txt"
     alias_entries: set[tuple[str, str]] = set()
@@ -1735,6 +1751,13 @@ def apply_retail_link_layout(config: dict[str, Any], linkerscript_path: Path):
                     f"        build/src/{unit}.c.o(.sdata);\n"
                     "    } :data_alt"
                 )
+    for unit, vram in data_units():
+        rodata_overlay_sections.append(
+            f"    {unit.replace('/', '.')}.data 0x{vram:X} : AT(0x{vram - 0xFF080:X}) SUBALIGN(4)\n"
+            "    {\n"
+            f"        build/src/{unit}.c.o(.data);\n"
+            "    } :data_alt"
+        )
     rodata_overlay = (
         "\n\n".join(rodata_overlay_sections) if rodata_overlay_sections else ""
     )
