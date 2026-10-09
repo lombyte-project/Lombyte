@@ -79,33 +79,33 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0026de90(char *, int, float);
 extern short *FUN_002141f8(unsigned char *);
 
-void FUN_L12_003076e0(char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L12_003076e0(struct Moby *m) {
+    char *d = (char *)m->pvars;
     int *s = (int *)(d + (*(int *)(d + 0xF0) << 2));
-    unsigned char *o = (unsigned char *)D_L12_0015FFD8_p + (s[0x30] << 8);
+    struct Moby *o = (struct Moby *)((unsigned char *)D_L12_0015FFD8_p + (s[0x30] << 8));
     char *p;
     short *r;
     int i;
-    qcopy(o + 0x10, m + 0x10);
-    *(float *)(o + 0x18) -= 0.35f;
-    o[0x20] = 0;
-    o[0xBC] = 0;
-    p = *(char **)(o + 0x24);
-    *(short *)(o + 0x34) = *(unsigned short *)(p + 0x44);
-    *(float *)(o + 0x2C) = *(float *)(p + 0x24);
-    o[0x30] = 0xFF;
-    o[0x31] = 1;
-    *(short *)(o + 0x36) = 0x7F80;
-    *(short *)(o + 0x32) = 0xFF;
-    o[0x71] = 0xFF;
-    o[0x72] = 0xFF;
-    o[0xA4] = 0xFF;
-    *(int *)(o + 0x94) = *(int *)(p + 0x10);
-    *(long *)(o + 0x38) = *(long *)(m + 0x38);
+    qcopy(&o->pos, &m->pos);
+    o->pos.z -= 0.35f;
+    o->state = 0;
+    o->unkBC = 0;
+    p = (char *)o->pclass;
+    o->flags = *(unsigned short *)(p + 0x44);
+    o->scale = *(float *)(p + 0x24);
+    o->unk30 = 0xFF;
+    o->unk31 = 1;
+    o->unk36 = 0x7F80;
+    o->unk32 = 0xFF;
+    o->unk71 = 0xFF;
+    o->unk72 = 0xFF;
+    o->unkA4 = 0xFF;
+    o->unk94 = *(int *)(p + 0x10);
+    o->spawn_frame = m->spawn_frame;
     FUN_L00_00250df8(o);
-    *(char **)(o + 0xB8) = m;
+    o->unkB8 = m;
     for (i = 0; i < 14; i++) {
-        FUN_L00_0026de90(m + 0x10, 0, random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 5.0f));
+        FUN_L00_0026de90(&m->pos, 0, random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 5.0f));
     }
     r = FUN_002141f8(o);
     if (r != 0) {
@@ -124,7 +124,7 @@ extern float FUN_001f9b80(void *, void *);
 extern int D_L12_0015FFD8_m __asm__("D_L12_0015FFD8");
 extern int FUN_001f9770(void *);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-void FUN_L12_003076e0(char *m);
+void FUN_L12_003076e0(struct Moby *m);
 extern void FUN_L12_00307ab8(struct Moby *m);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
