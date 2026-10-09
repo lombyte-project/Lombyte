@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
+#include "rnc/input/pad_state.h"
 #include "sda.h"
 #include "rnc/globals.h"
 
@@ -32,8 +33,6 @@ typedef struct {
 } HelpRecord;
 
 
-extern s32 D_0013CAE0 NOT_SDA;
-extern s32 D_0013CAE4 NOT_SDA;
 extern HelpRecord D_00141968[];
 extern u8 D_0015EE1D;
 extern s32 D_0015EEA4;
@@ -68,7 +67,7 @@ void update_help_state(void) __asm__("FUN_001fde90");
 void update_help_state(void) {
 
     if (D_001996D0.started == 0) {
-        if (D_001996D0.delay == 0 && (D_0013CAE0 & 0xF000)) {
+        if (D_001996D0.delay == 0 && (controller_state.held & 0xF000)) {
             D_001996D0.delay = 1;
         }
         if (D_001996D0.delay != 0) {
@@ -126,7 +125,7 @@ void update_help_state(void) {
         if (id >= 0 && music_stream_state.secondary.handle == 0 && music_stream_state.queued_secondary_track == -1) {
             music_stream_state.queued_secondary_track = id + 0x7530;
         }
-        if (D_0013CAE4 & 0x10) {
+        if (controller_state.pressed & 0x10) {
             RECORD_COUNT();
             RECORD_BEST();
             RECORD_FLAGS();
@@ -143,7 +142,7 @@ void update_help_state(void) {
         s32 id;
 
         force_help_message(5, 0);
-        if (D_0013CAE4 & 0x10) {
+        if (controller_state.pressed & 0x10) {
             RECORD_COUNT();
             RECORD_BEST();
             D_001996D0.state = 7;
@@ -161,7 +160,7 @@ void update_help_state(void) {
 
     case 3:
         force_help_message(5, 0);
-        if (D_0013CAE4 & 0x10) {
+        if (controller_state.pressed & 0x10) {
             RECORD_COUNT();
             RECORD_BEST();
             D_001996D0.state = 7;
@@ -177,7 +176,7 @@ void update_help_state(void) {
         s32 id;
 
         force_help_message(5, 0);
-        if (D_0013CAE4 & 0x10) {
+        if (controller_state.pressed & 0x10) {
             RECORD_COUNT();
             RECORD_BEST();
             D_001996D0.state = 6;
@@ -202,6 +201,9 @@ void update_help_state(void) {
              ((id = D_0015F6A0[D_001996D0.msg].id) == -1 || id != music_stream_state.secondary.track - 0x7530 ||
               (music_stream_state.secondary.handle == 0 && music_stream_state.queued_secondary_track == -1))) ||
             (D_0013CAE4 & 0x10)) {
+             ((id = D_0015F6A0[D_001996D0.msg].id) == -1 || id != D_001516D0.unk54 - 0x7530 ||
+              (D_001516D0.unk50 == 0 && D_001516D0.unk1C == -1))) ||
+            (controller_state.pressed & 0x10)) {
             RECORD_COUNT();
             RECORD_BEST();
             D_001996D0.state = 6;
@@ -212,7 +214,7 @@ void update_help_state(void) {
     }
 
     case 6:
-        if (D_0015EE1D == 0 || D_001996D0.timer >= 4 || (D_0013CAE4 & 0x10)) {
+        if (D_0015EE1D == 0 || D_001996D0.timer >= 4 || (controller_state.pressed & 0x10)) {
             D_001996D0.state = 7;
             D_001996D0.timer = 0;
         }

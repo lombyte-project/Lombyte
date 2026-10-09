@@ -5,7 +5,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/input/pad_state.h"
-extern u8 D_0013DD40[];
+#include "rnc/gameplay/state/level_state.h"
 extern u32 D_001CF874[];
 extern u32 D_001CF758[];
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
@@ -35,7 +35,7 @@ s32 FUN_0021c4c0(struct MenuScreen *m) {
     }
     if (controller_state.pressed_unmasked & 8) {
         for (i = level_map_selection.level + 1; i < 20; i++) {
-            if (D_0013DD40[i] != 0 || current_level_index == i) {
+            if (level_available[i] != 0 || current_level_index == i) {
                 level_map_selection.level = i;
                 break;
             }
@@ -43,7 +43,7 @@ s32 FUN_0021c4c0(struct MenuScreen *m) {
     }
     if (controller_state.pressed_unmasked & 4) {
         for (i = level_map_selection.level - 1; i >= 0; i--) {
-            if (D_0013DD40[i] != 0 || current_level_index == i) {
+            if (level_available[i] != 0 || current_level_index == i) {
                 level_map_selection.level = i;
                 break;
             }

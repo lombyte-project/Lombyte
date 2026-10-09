@@ -7,7 +7,7 @@ typedef struct {
     s32 half_height;
 } ScreenOfs;
 
-extern u8 D_0013CDD0[];
+#include "rnc/rendering/fs_aa_packets.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
@@ -73,7 +73,7 @@ void play_level_loading_slides(s32 language_index, s32 first_slide, s32 second_s
         if (frame <= 0x1F) {
             alpha = fade_in_alpha;
         }
-        render_packet_cursor.words[1] = (s32)D_0013CDD0;
+        render_packet_cursor.words[1] = (s32)second_clear_packet;
         render_packet_cursor.words[2] = 0;
         render_packet_cursor.words[3] = 0x50000014;
         render_packet_cursor.words += 4;

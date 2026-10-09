@@ -118,7 +118,7 @@ extern s32 D_0015FF30;
 extern s32 D_001600BC;
 extern s64 D_001604E0 __attribute__((sda));
 extern s64 D_001604F0 __attribute__((sda));
-extern u8 D_0013DD43[];
+#include "rnc/gameplay/state/level_state.h"
 extern SceneInfo D_0018CB20;
 extern u8 D_00186310[];
 extern u8 D_00186350[];
@@ -278,7 +278,7 @@ void initialize_level_runtime(void) {
     D_0013E030.unk50 = 0;
     D_0013E030.unk54 = 0;
     qcopy(&D_001604F0, &D_001604E0);
-    if (current_level_index == 0 || (current_level_index == 1 && D_0013DD43[0] == 0)) {
+    if (current_level_index == 0 || (current_level_index == 1 && level_available[3] == 0)) {
         D_0013E030.unk58 = 4;
         D_0013E030.unk5C = 2;
     }

@@ -13,7 +13,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021a328/FUN_0021a328.s
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/ui/text/font_metrics.h"
 
-extern int menu_input_repeat_state[] __asm__("D_0013CAE0");
+#include "rnc/input/pad_state.h"
 #include "rnc/gameplay/state/item_state.h"
 extern int pal_mode __asm__("D_0015ED80") __attribute__((sda));
 extern int current_level_index __asm__("D_0015ED84") __attribute__((sda));
@@ -284,7 +284,7 @@ int render_configured_text_label(struct MenuScreen *label) {
             c.anchor_y -= text_shadow_y;
             font_print_window(&c, color, text, -1, texture_tex0, font);
             if (label->data.label.flags & 0x400) {
-                label->data.label.scroll_offset += (menu_input_repeat_state[0] & 1) ? 10 : 3;
+                label->data.label.scroll_offset += (controller_state.held & 1) ? 10 : 3;
                 label->data.label.scroll_offset %= (c.rendered_height + text_line_spacing * 3) * 16;
             }
         }

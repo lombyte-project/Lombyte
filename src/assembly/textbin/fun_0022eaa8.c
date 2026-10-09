@@ -113,8 +113,7 @@ typedef struct {
     u32 w1;
 } ColorPair;
 
-extern u8 D_0013DD40[];
-extern u8 D_0013DD43[];
+#include "rnc/gameplay/state/level_state.h"
 extern LevelRenderState level_render_state __asm__("D_0013E030");
 extern u8 D_0013E5C0[];
 extern s32 D_0015ED5C;
@@ -210,7 +209,7 @@ void update_level_gameplay_frame(void) {
         sequence_fade = 0.0f;
     }
     if (render_sequence.time == 1 && current_level_index != 0 &&
-        (current_level_index != 1 || D_0013DD43[0] != 0)) {
+        (current_level_index != 1 || level_available[3] != 0)) {
         ReadGlobalTableEntry();
         sound_bank = D_0015ED5C;
         mode_advance = level_render_state.mode;
@@ -228,7 +227,7 @@ void update_level_gameplay_frame(void) {
                 mark_moby_for_removal(expired_object);
             }
         }
-        if (current_level_index != 0 && (current_level_index != 1 || D_0013DD43[0] != 0) &&
+        if (current_level_index != 0 && (current_level_index != 1 || level_available[3] != 0) &&
             D_0015EE48 < 3) {
             level_render_state.state = 0;
         }
@@ -327,7 +326,7 @@ void update_level_gameplay_frame(void) {
             qcopy(&level_render_state.secondary_history_positions[history_slot],
                   &second_transform.rows[3]);
             if (level_render_state.mode == 4) {
-                if (current_level_index == 0 || (current_level_index == 1 && D_0013DD40[3] == 0)) {
+                if (current_level_index == 0 || (current_level_index == 1 && level_available[3] == 0)) {
                     object->flags |= 1;
                     level_render_state.history_count = 0;
                 }

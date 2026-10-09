@@ -1,6 +1,6 @@
 #include "types.h"
 
-extern u64 D_00152078[];
+#include "rnc/rendering/fs_aa_packets.h"
 
 void PackDmaTag(s32 arg0, u64 arg1, u64 arg2) {
     u64 value;
@@ -9,5 +9,5 @@ void PackDmaTag(s32 arg0, u64 arg1, u64 arg2) {
     value |= arg0;
     value |= arg2 << 16;
     value |= 0x8000ULL << 16;
-    D_00152078[0] = value;
+    fs_aa_clear_packet[7] = value;
 }

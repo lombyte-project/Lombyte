@@ -9,8 +9,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001fd748/FUN_001fd748.s
 #include "rnc/ui/map/map_state.h"
 #include "rnc/ui/map/level_map.h"
 
-extern u8 D_0013DD40[];
-extern u8 g_abLevelVisitState[] __asm__("D_0013DD58");
+#include "rnc/gameplay/state/level_state.h"
 extern s32 pal_mode __asm__("D_0015ED80");
 extern s32 game_frame_counter __asm__("D_0015F438");
 extern s32 large_font_height __asm__("D_0015F690") __attribute__((sda));
@@ -69,11 +68,11 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
             continue;
         }
         availability = 3;
-        visit_state = g_abLevelVisitState[level_index];
+        visit_state = level_visit_state[level_index];
         if (visit_state == 0) {
             availability = 2;
             /* This separate state table gates markers that have not been visited. */
-            if (D_0013DD40[level_index] == 0) {
+            if (level_available[level_index] == 0) {
                 availability = 0;
             }
         }

@@ -69,7 +69,7 @@ struct S_00193300 {
     s32 unk24;
 };
 extern struct S_0013C940 D_0013C940;
-extern s32 D_0013CAE4[];
+#include "rnc/input/pad_state.h"
 extern u16 D_0013E05A[];
 extern struct S_0013F350 D_0013F350;
 extern u8 D_00141050[];
@@ -116,7 +116,7 @@ void update_mode_freeze(void) {
         }
         st = &D_00193300;
         if (scale_game_frames(0x78) < st->unk20) {
-            if (D_0013CAE4[0] & 0x40) {
+            if (controller_state.pressed & 0x40) {
                 D_0015F604 = 0;
                 if (D_0015ED84 == 1) {
                     memcard_save_data(0, -1);
@@ -127,7 +127,7 @@ void update_mode_freeze(void) {
     }
 
     case 4:
-        if (D_0013CAE4[0] & 0x10) {
+        if (controller_state.pressed & 0x10) {
             struct S_0013F350_2080 *p = D_0013F350.unk2080;
             p->unk31 = 0;
             p->unk94 = 0;
@@ -135,7 +135,7 @@ void update_mode_freeze(void) {
             func_001E93E8();
             func_001E9440(((u8 *)(&D_0013F350)) + 0x1D00, ((u8 *)(&D_0013F350)) + 0x1D10, 0, 1);
             D_0015F604 = 0;
-        } else if (D_0013CAE4[0] & 0x40) {
+        } else if (controller_state.pressed & 0x40) {
             D_0015F604 = 0;
         }
         break;
@@ -153,9 +153,9 @@ void update_mode_freeze(void) {
             break;
 
         case 1:
-            if (D_0013CAE4[0] & 0x10) {
+            if (controller_state.pressed & 0x10) {
                 D_0015F604 = D_00193300.unk14;
-            } else if (D_0013CAE4[0] & 0x40) {
+            } else if (controller_state.pressed & 0x40) {
                 fade_to_black(4);
                 D_0016034C = 0;
                 D_00193300.unk1C = 2;
@@ -167,18 +167,18 @@ void update_mode_freeze(void) {
             if ((D_00193300.unk20 == 0) || ((--D_00193300.unk20) == 0)) {
                 D_0016034C = 1;
                 D_00193300.unk1C = 3;
-            } else if (D_0013CAE4[0] & 0x10) {
+            } else if (controller_state.pressed & 0x10) {
                 fade_to_black(4);
                 D_0016034C = 1;
                 D_0015F604 = D_00193300.unk14;
-            } else if (D_0013CAE4[0] & 0x40) {
+            } else if (controller_state.pressed & 0x40) {
                 D_0016034C = 0;
                 D_0015F604 = D_00193300.unk14;
             }
             break;
 
         case 3:
-            if (D_0013CAE4[0] & 0x40) {
+            if (controller_state.pressed & 0x40) {
                 D_0015F604 = D_00193300.unk14;
             }
             break;
@@ -192,17 +192,17 @@ void update_mode_freeze(void) {
 
     case 1:
         D_0015F648 = 2;
-        if (D_0013CAE4[0] & 0x10) {
+        if (controller_state.pressed & 0x10) {
             D_0015F604 = 0;
             D_0013F350.unk160F = (u8)(D_0013F350.unk160F | 1);
-        } else if (D_0013CAE4[0] & 0x40) {
+        } else if (controller_state.pressed & 0x40) {
             D_0015F604 = 0;
         }
         break;
 
     case 2:
         D_0015F648 = 2;
-        if (D_0013CAE4[0] & 0x40) {
+        if (controller_state.pressed & 0x40) {
             D_0015F604 = 0;
         }
         break;
@@ -228,9 +228,9 @@ void update_mode_freeze(void) {
         }
         goto mode0_done;
     mode0_one:
-        if (D_0013CAE4[0] & 0x40) {
+        if (controller_state.pressed & 0x40) {
             D_00193300.unk1C = 2;
-        } else if (D_0013CAE4[0] & 0x820) {
+        } else if (controller_state.pressed & 0x820) {
             D_00193300.unk1C = 3;
         }
         goto mode0_done;
@@ -279,7 +279,7 @@ void update_mode_freeze(void) {
         switch (mode_freeze_state) {
         case 2:
             if (D_00193300.unk4 == 0) {
-                if (D_0013CAE4[0] & 0x40) {
+                if (controller_state.pressed & 0x40) {
                     mode_freeze_flags &= ~1;
                     D_0015F604 = D_00193300.unk14;
                 }
@@ -287,9 +287,9 @@ void update_mode_freeze(void) {
             break;
 
         case 6:
-            if (D_0013CAE4[0] & 0x20) {
+            if (controller_state.pressed & 0x20) {
                 mode_freeze_flags |= 8;
-            } else if (D_0013CAE4[0] & 0x10) {
+            } else if (controller_state.pressed & 0x10) {
                 mode_freeze_flags = mode_freeze_flags | 0x20;
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
@@ -300,9 +300,9 @@ void update_mode_freeze(void) {
             break;
 
         case 13:
-            if (D_0013CAE4[0] & 0x20) {
+            if (controller_state.pressed & 0x20) {
                 mode_freeze_flags |= 0x10;
-            } else if (D_0013CAE4[0] & 0x10) {
+            } else if (controller_state.pressed & 0x10) {
                 mode_freeze_flags = mode_freeze_flags | 0x20;
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
@@ -319,7 +319,7 @@ void update_mode_freeze(void) {
         case 20:
 
         case 21:
-            if (D_0013CAE4[0] & 0x40) {
+            if (controller_state.pressed & 0x40) {
                 mode_freeze_flags = mode_freeze_flags ^ 0x40;
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
@@ -340,7 +340,7 @@ void update_mode_freeze(void) {
         case 3:
 
         case 5:
-            if (D_0013CAE4[0] & 0x10) {
+            if (controller_state.pressed & 0x10) {
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
                 D_0015F604 = D_00193300.unk14;
@@ -349,19 +349,19 @@ void update_mode_freeze(void) {
 
         case 19:
             if ((D_0015F5E8 != 0) && (mode_freeze_flags & 2)) {
-                if (D_0013CAE4[0] & 0x40) {
+                if (controller_state.pressed & 0x40) {
                     load_and_initialize_level_chunk();
                     mode_freeze_flags = mode_freeze_flags & (~2);
                     mode_freeze_flags = mode_freeze_flags & (~4);
                     mode_freeze_flags = mode_freeze_flags | 0x20;
                     func_0022E188(0);
                     D_0013E05A[0] = 1;
-                } else if (D_0013CAE4[0] & 0x10) {
+                } else if (controller_state.pressed & 0x10) {
                     mode_freeze_flags = mode_freeze_flags & (~2);
                     mode_freeze_flags = mode_freeze_flags & (~4);
                     D_0015F604 = D_00193300.unk14;
                 }
-            } else if (D_0013CAE4[0] & 0x10) {
+            } else if (controller_state.pressed & 0x10) {
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
                 D_0015F604 = D_00193300.unk14;
@@ -371,14 +371,14 @@ void update_mode_freeze(void) {
         case 23:
 
         case 24:
-            if (D_0013CAE4[0] & 0x40) {
+            if (controller_state.pressed & 0x40) {
                 load_and_initialize_level_chunk();
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
                 mode_freeze_flags = mode_freeze_flags | 0x20;
                 func_0022E188(0);
                 D_0013E05A[0] = 1;
-            } else if (D_0013CAE4[0] & 0x10) {
+            } else if (controller_state.pressed & 0x10) {
                 mode_freeze_flags |= 0x20;
                 D_0015F604 = D_00193300.unk14;
             }
@@ -402,7 +402,7 @@ void update_mode_freeze(void) {
                         D_0015F604 = D_00193300.unk14;
                     }
                 } else if (mode_freeze_flags & 4) {
-                    if (D_0013CAE4[0] & 0x10) {
+                    if (controller_state.pressed & 0x10) {
                         mode_freeze_flags = mode_freeze_flags | 0x20;
                         mode_freeze_flags = mode_freeze_flags & (~2);
                         mode_freeze_flags = mode_freeze_flags & (~4);
@@ -411,7 +411,7 @@ void update_mode_freeze(void) {
                 } else {
                     D_0015F604 = D_00193300.unk14;
                 }
-            } else if (D_0013CAE4[0] & 0x10) {
+            } else if (controller_state.pressed & 0x10) {
                 mode_freeze_flags = mode_freeze_flags | 0x20;
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);

@@ -1,13 +1,5 @@
 #include "types.h"
 
-struct Globals_0013DD40 {
-    u8 pad_0[0x8];
-    u8 unk8;
-    u8 pad_9[0x5];
-    u8 unkE;
-    u8 unkF;
-    u8 pad_10[0x3];
-};
 
 struct Globals_0013DD58 {
     u8 unk0;
@@ -36,8 +28,7 @@ struct Globals_00194100 {
 #include "rnc/globals.h"
 
 #include "rnc/storage/memory_card/memory_card_state.h"
-extern struct Globals_0013DD40 D_0013DD40;
-extern u8 D_0013DD58[];
+#include "rnc/gameplay/state/level_state.h"
 extern struct Globals_0013E030 D_0013E030;
 extern s32 D_0015ED5C MACRO_ADDR;
 extern s32 D_0015ED84 MACRO_ADDR;
@@ -100,10 +91,10 @@ void do_space_transition(void) {
     D_00194100.unk10 |= 0x80000000;
     game_mode = 6;
     D_0013E030.unk26 = 0;
-    if (D_0013DD40.unk8 != 0 || D_0015F600 >= 8) {
+    if (level_available[8] != 0 || D_0015F600 >= 8) {
         D_0013E030.unk26 = 1;
     }
-    if (D_0013DD40.unkE != 0 || D_0015F600 >= 14) {
+    if (level_available[14] != 0 || D_0015F600 >= 14) {
         D_0013E030.unk26 = 2;
     }
     FlushCache(0);
@@ -142,7 +133,7 @@ void do_space_transition(void) {
         dmac_vif1_disable();
         return;
     }
-    if (D_0015F600 == 0 && D_0013DD58[0] == 0) {
+    if (D_0015F600 == 0 && level_visit_state[0] == 0) {
         fade_to_black(scale_game_frames(6));
         play_level_loading_slides(lvl, 0, 1, scale_game_frames(240), 0);
         play_level_transition_movie(0);
@@ -151,52 +142,52 @@ void do_space_transition(void) {
         D_0015ED84 = D_0015F600;
         play_level_loading_slides(lvl, 3, 4, scale_game_frames(240), 1);
         play_level_transition_movie(2);
-    } else if (D_0015ED84 == 0 && D_0015F600 == 1 && D_0013DD58[1] == 0) {
+    } else if (D_0015ED84 == 0 && D_0015F600 == 1 && level_visit_state[1] == 0) {
         fade_to_black(scale_game_frames(6));
         play_level_loading_slides(lvl, 5, 6, scale_game_frames(240), 0);
         play_level_transition_movie(3);
         play_level_transition_movie(4);
         play_level_loading_slides(lvl, 7, 7, scale_game_frames(180), 0);
         play_level_transition_movie(5);
-        D_0013DD58[D_0015ED84] = 2;
+        level_visit_state[D_0015ED84] = 2;
         D_0015ED84 = D_0015F600;
         play_level_loading_slides(lvl, 8, 8, scale_game_frames(240), 1);
     } else {
-        if (D_0015F600 == 4 && D_0013DD58[4] == 0) {
+        if (D_0015F600 == 4 && level_visit_state[4] == 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 9, 10, scale_game_frames(240), 0);
             play_level_transition_movie(6);
         }
-        if (D_0015ED84 == 7 && D_0013DD58[7] != 2 && D_0013DD40.unk8 != 0) {
+        if (D_0015ED84 == 7 && level_visit_state[7] != 2 && level_available[8] != 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 11, 11, scale_game_frames(240), 0);
             play_level_transition_movie(7);
         }
-        if (D_0015F600 == 13 && D_0013DD58[13] == 0) {
+        if (D_0015F600 == 13 && level_visit_state[13] == 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 12, 13, scale_game_frames(240), 0);
             play_level_transition_movie(8);
         }
-        if (D_0015ED84 == 14 && D_0013DD58[14] != 2 && D_0013DD40.unkF != 0) {
+        if (D_0015ED84 == 14 && level_visit_state[14] != 2 && level_available[15] != 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 14, 14, scale_game_frames(240), 0);
             play_level_transition_movie(9);
         }
-        if (D_0015F600 == 16 && D_0013DD58[16] == 0) {
+        if (D_0015F600 == 16 && level_visit_state[16] == 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 15, 16, scale_game_frames(240), 0);
             play_level_transition_movie(10);
         }
         if ((u32)D_0015ED84 < 19) {
             ok = 1;
-            if (D_0015ED84 == 7 && D_0013DD40.unk8 == 0) {
+            if (D_0015ED84 == 7 && level_available[8] == 0) {
                 ok = 0;
             }
-            if (D_0015ED84 == 14 && D_0013DD40.unkF == 0) {
+            if (D_0015ED84 == 14 && level_available[15] == 0) {
                 ok = 0;
             }
             if (ok) {
-                D_0013DD58[D_0015ED84] = 2;
+                level_visit_state[D_0015ED84] = 2;
             }
         }
         D_0015EE4A = 1;

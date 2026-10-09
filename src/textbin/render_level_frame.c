@@ -17,7 +17,7 @@ struct LevelProjectionState {
     f32 projection_scale;
 };
 #include "rnc/storage/memory_card/memory_card_state.h"
-extern u8 D_0013DD43[];
+#include "rnc/gameplay/state/level_state.h"
 extern struct LevelRenderState level_render_state __asm__("D_0013E030");
 extern struct LevelDisplayState screen_offsets __asm__("D_0013E500");
 extern s32 game_frame_counter __asm__("D_0015F438");
@@ -85,7 +85,7 @@ void render_level_frame(void) {
     draw_mobys();
     AppendDmaTag(0x02080000);
     setup_gif_paging(1);
-    if ((current_level_index != 0) && ((current_level_index != 1) || (D_0013DD43[0] != 0))) {
+    if ((current_level_index != 0) && ((current_level_index != 1) || (level_available[3] != 0))) {
         build_resident_indexed_texture_warp_meshes(D_0018CC98[0]);
     }
     if ((level_render_state.mode == 4) && (D_0018CB54[0] >= 0x3D)) {
@@ -95,7 +95,7 @@ void render_level_frame(void) {
         }
         draw_resident_textured_banner(overlay_alpha);
     }
-    if ((current_level_index != 0) && ((current_level_index != 1) || (D_0013DD43[0] != 0))) {
+    if ((current_level_index != 0) && ((current_level_index != 1) || (level_available[3] != 0))) {
         render_environment_mapped_object(D_0018CC98[0]);
     }
     if ((memory_card_state.state >= 3) || (memory_card_state.pending_state >= 0)) {

@@ -28,7 +28,7 @@ extern u8 D_001CF678[];
 extern u8 D_001CF418[];
 extern s32 *D_001601E0 __attribute__((sda));
 extern u8 D_0013D4E1[];
-extern u8 D_0013DD58[];
+#include "rnc/gameplay/state/level_state.h"
 extern u8 D_00141EC0[];
 extern struct MapEntry D_001383A0[];
 extern struct MapEntry D_00138438[];
@@ -150,7 +150,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             if (level_map_selection.level == current_level_index) {
                 compose_bitmap_from_mask(pal, pix, pal, level_map_selection.mask);
             } else {
-                if (D_0013DD58[level_map_selection.level] != 0) {
+                if (level_visit_state[level_map_selection.level] != 0) {
                     load_map_chunk(buf, D_00141EC0 + (level_map_selection.level << 11), base + hdr->unk4);
                 } else {
                     decode_map_mask(buf, a, a, base);
