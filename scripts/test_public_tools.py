@@ -1821,6 +1821,13 @@ class DataRefsTests(unittest.TestCase):
             (0, 0, "a", "s32"), (4, 0, "in.x", "u8"), (5, 0, "in.pad", "u8[3]"),
             (8, 0, "b", "s16")]})
 
+    def test_c_initializer_writes_nested_members_and_arrays(self):
+        members = [(0, "s32", "a", []), (4, "struct In", "in", [(4, "u8[2]", "x", []), (6, "s16", "y", [])]),
+                   (8, "f32", "f", [])]
+        raw = (5).to_bytes(4, "little") + b"\x01\x02" + (-2).to_bytes(2, "little", signed=True) \
+            + bytes.fromhex("0000803f")
+        self.assertEqual(self.refs.c_initializer(members, 12, raw, {}), "{5, {{1, 2}, -2}, 1.0f}")
+
     def test_shown_keeps_paths_outside_the_checkout(self):
         self.assertEqual(self.refs.shown(Path("/nonexistent/out")), "/nonexistent/out")
 

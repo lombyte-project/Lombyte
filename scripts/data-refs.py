@@ -36,6 +36,7 @@ import bisect
 import json
 import re
 import shutil
+import struct
 import subprocess
 import sys
 import tempfile
@@ -519,6 +520,121 @@ def type_size(kind: str) -> int:
     return size * count
 
 
+# —— Typed data files (src/data/) ——
+
+SCALARS = {"u8": "<B", "s8": "<b", "char": "<b", "u16": "<H", "s16": "<h", "u32": "<I",
+           "s32": "<i", "int": "<i", "u64": "<Q", "s64": "<q", "f32": "<f", "float": "<f",
+           "f64": "<d", "double": "<d"}
+DATA_DIRS = {"core.data": "core_data", ".data": "data"}  # PROGBITS sections a data file may fill
+
+
+def layout_tree(dump: str, record: str) -> list | None:
+    """``record``'s members from clang's layout dump as [(offset, type, name, children)]."""
+    for block in dump.split("*** Dumping AST Record Layout")[1:]:
+        rows = [(int(m.group(1)), len(m.group(2)), m.group(3)) for m in map(LAYOUT_RE.match, block.splitlines())
+                if m]
+        if not rows or rows[0][2].split(" ", 1)[-1] != record:
+            continue
+
+        def children(start: int, indent: int) -> tuple[list, int]:
+            out, i = [], start
+            while i < len(rows) and rows[i][1] > indent:
+                off, ind, text = rows[i]
+                kind, _, name = text.rpartition(" ")
+                sub, nxt = children(i + 1, ind)
+                out.append((off, kind, name, sub))
+                i = nxt
+            return out, i
+
+        return children(1, rows[0][1])[0]
+    return None
+
+
+def c_value(kind: str, raw: bytes, symbols: dict[int, str]) -> str:
+    """A scalar or pointer member as C source."""
+    if kind.endswith("*"):
+        word = struct.unpack("<I", raw[:4])[0]
+        if word == 0:
+            return "0"
+        if word in symbols:
+            return f"&{symbols[word]}"
+        raise ValueError(f"pointer 0x{word:08X} names no known symbol")
+    fmt = SCALARS.get(kind.strip())
+    if fmt is None:
+        raise ValueError(f"no scalar format for {kind!r}")
+    value = struct.unpack(fmt, raw[:struct.calcsize(fmt)])[0]
+    if fmt in ("<f", "<d"):
+        return repr(value) + ("f" if fmt == "<f" else "")
+    return str(value) if value < 0 or value < 10 else hex(value)
+
+
+def c_initializer(members: list, size: int, raw: bytes, symbols: dict[int, str]) -> str:
+    """Brace initialiser for a record laid out by ``members`` over ``raw``."""
+    parts = []
+    for index, (off, kind, _name, sub) in enumerate(members):
+        end = members[index + 1][0] if index + 1 < len(members) else size
+        field = raw[off:end]
+        if sub:
+            parts.append(c_initializer([(o - off, k, n, s) for o, k, n, s in sub], end - off, field, symbols))
+            continue
+        array = re.fullmatch(r"(.*)\[(\d+)\]", kind)
+        if array:
+            elem, count = array.group(1), int(array.group(2))
+            step = len(field) // count if count else 0
+            parts.append("{" + ", ".join(c_value(elem, field[i * step:(i + 1) * step], symbols)
+                                         for i in range(count)) + "}")
+        else:
+            parts.append(c_value(kind, field, symbols))
+    return "{" + ", ".join(parts) + "}"
+
+
+def emit_data(addr: int, elf: Path, sections: list) -> Path:
+    """Write src/data/<section>/<ADDR>_<name>.c defining the declared object at ``addr``."""
+    clang = shutil.which("clang")
+    if clang is None:
+        raise SystemExit("--emit needs clang to read the struct layout")
+    section = section_name(addr, sections)
+    if section not in DATA_DIRS:
+        raise SystemExit(f"0x{addr:08X} is in {section}, not a data section a file can fill")
+    header, name, ctype = None, None, None
+    for path in sorted((ROOT / "include").rglob("*.h")):
+        for prefix, found, dims, label in DECL_RE.findall(path.read_text(errors="replace")):
+            if int(label, 16) == addr:
+                header, name, ctype = path, found, " ".join((prefix + dims).split())
+    if header is None:
+        raise SystemExit(f"0x{addr:08X} has no declaration in include/: declare its type there first")
+    record = re.sub(r"^(struct|union)\s+", "", ctype.replace("extern", "").strip())
+    include = header.relative_to(ROOT / "include").as_posix()
+    with tempfile.TemporaryDirectory() as tmp:
+        probe = Path(tmp) / "probe.c"
+        probe.write_text(f'#include "types.h"\n#include "{include}"\n'
+                         f"void *keep = (void *)&{name};\nint size = sizeof({name});\n")
+        run = subprocess.run([clang, "--target=mipsel-linux-gnu", "-c", "-o", "/dev/null",
+                              f"-I{ROOT / 'include'}", "-w", "-Xclang", "-fdump-record-layouts", str(probe)],
+                             capture_output=True, text=True, check=False)
+    members = layout_tree(run.stdout, record)
+    size = re.search(r"\| \[sizeof=(\d+)", run.stdout[run.stdout.find(f" {record}\n"):])
+    if members is None or size is None:
+        raise SystemExit(f"no layout for {ctype!r}")
+    size = int(size.group(1))
+    with elf.open("rb") as fh:
+        image = ELFFile(fh)
+        for seg in image.iter_segments():
+            if seg["p_type"] == "PT_LOAD" and seg["p_vaddr"] <= addr < seg["p_vaddr"] + seg["p_filesz"]:
+                fh.seek(seg["p_offset"] + addr - seg["p_vaddr"])
+                raw = fh.read(size)
+                break
+        else:
+            raise SystemExit(f"0x{addr:08X} has no file bytes")
+    symbols = {a: n for a, (n, _t) in c_declarations().items()}
+    body = "{0}" if not any(raw) else c_initializer(members, size, raw, symbols)
+    out = ROOT / "src" / "data" / DATA_DIRS[section] / f"{addr:08X}_{name}.c"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(f'#include "types.h"\n#include "{include}"\n\n'
+                   f'{ctype.replace("extern ", "")} {name} __attribute__((section(".data"))) = {body};\n')
+    return out
+
+
 def unit_of(owner: str) -> str:
     """``runtime/state/foo [C]`` -> ``runtime/state/foo``."""
     return re.sub(r" \[\w+\]$", "", owner)
@@ -688,7 +804,15 @@ def main(argv=None) -> int:
                              "data.yaml in the output directory with --level); "
                              "name, type and note already in it are kept")
     parser.add_argument("--out", type=Path, default=None, help="output directory")
+    parser.add_argument("--emit", nargs="+", metavar="ADDR",
+                        help="write src/data/ files defining the declared objects at these addresses")
     args = parser.parse_args(argv)
+
+    if args.emit:
+        _code, data = read_sections(args.elf)
+        for addr in args.emit:
+            print(f"wrote {shown(emit_data(int(addr, 16), args.elf, data))}")
+        return 0
 
     if args.level is None:
         if not args.elf.exists():
