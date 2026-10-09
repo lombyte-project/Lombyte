@@ -1,5 +1,6 @@
 #include "types.h"
 #include "kernel.h"
+#include "rnc/sdk/library/sdk_state.h"
 struct SifFileState {
     s32 unk0;
     s32 unk4;
@@ -11,7 +12,6 @@ struct SifFileEntry {
     s32 unk0;
     s32 unk4;
 };
-extern u32 D_0012FC94[];
 extern struct SifFileState D_00156880;
 extern u8 D_001574C0[];
 extern u8 D_00157D80[];
@@ -34,7 +34,7 @@ s32 sceClose(s32 fd) {
 
     io = get_iob(fd);
     _sceFsWaitS(1);
-    if (D_0012FC94[0] == 0) {
+    if (FsResetState == 0) {
         ReadQueueStatus();
         return -1;
     }

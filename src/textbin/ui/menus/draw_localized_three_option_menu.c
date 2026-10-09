@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/text/font_metrics.h"
 
 struct ThreeOptionMenu {
     u8 pad0[0x20];
@@ -7,8 +8,6 @@ struct ThreeOptionMenu {
     s32 spacing_divisor;
 };
 
-extern u8 D_001DF050[];
-extern u8 D_001DF3F0[];
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
@@ -55,10 +54,10 @@ s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) {
     if (maximum_text_width < measured_width) {
         maximum_text_width = measured_width;
     }
-    glyphs = D_001DF050;
+    glyphs = normal_font_metrics;
     if (menu->menu_width < maximum_text_width + 0x18) {
         font_texture_index = 2;
-        glyphs = D_001DF3F0;
+        glyphs = small_font_metrics;
     }
     func_001F61F8();
     font_print_center(menu->menu_width >> 1, draw_y, 0x80FFA888, get_help_message_text(0x522E), -1);

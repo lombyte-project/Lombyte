@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/ipu_command_table.h"
 
 typedef struct NextBitContext {
     u8 pad_0[0x818];
@@ -10,7 +11,6 @@ typedef struct NextBitContext {
     s32 unk858;
 } NextBitContext;
 
-extern s32 D_00132E70[];
 extern s32 _dispatchMpegCbNodata();
 extern s64 _waitIpuIdle64();
 
@@ -28,17 +28,15 @@ s32 _nextBit(NextBitContext *ctx, s32 count) {
         } while ((*(volatile u32 *)0x10002010 & 0x80004000) == 0x80000000);
     }
     if (ctx->unk818 != 0 || ctx->unk83C < count) {
-        s32 *p;
         *(volatile u32 *)0x10002000 = 0x40000000;
-        p = D_00132E70;
-        ctx->unk818 = p[4];
+        ctx->unk818 = IpuCommandTable[4];
         ctx->unk838 = (s32)(s64)_waitIpuIdle64(ctx);
     }
     result = ((u32)ctx->unk838) >> (0x20 - count);
     ctx->unk83C = 0x20;
     word = count | 0x40000000;
     *(volatile u32 *)0x10002000 = word;
-    ctx->unk818 = D_00132E70[word >> 28];
+    ctx->unk818 = IpuCommandTable[word >> 28];
     ctx->unk838 = (s32)(s64)_waitIpuIdle64(ctx);
     return result;
 }

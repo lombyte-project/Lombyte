@@ -10,9 +10,7 @@
    Returns 1 once after flag 0x8000 is consumed, else 2. */
 
 #include "rnc/gameplay/state/item_state.h"
-extern u8 D_001DF050[];
-extern u8 D_001DF3F0[];
-extern u8 D_001DF790[];
+#include "rnc/ui/text/font_metrics.h"
 
 extern void vu1_add_g_sregister(s32, long) __asm__("FUN_00233980");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
@@ -47,17 +45,17 @@ s32 draw_menu_text_list(struct MenuScreen *menu) {
 
     font_size = 12;
     font_kind = 1;
-    font = D_001DF050;
+    font = normal_font_metrics;
     focused = menu_system.current->focus == menu;
     if (menu->data.list.flags & 4) {
         font_size = 14;
         font_kind = 3;
-        font = D_001DF790;
+        font = large_font_metrics;
     }
     if (menu->data.list.flags & 8) {
         font_size = 10;
         font_kind = 2;
-        font = D_001DF3F0;
+        font = small_font_metrics;
     }
     vu1_add_g_sregister(0x42, 0x44);
     vu1_add_g_sregister(0x47, 0x2004B);

@@ -1,10 +1,5 @@
 #include "types.h"
-struct SndCdSyncState {
-    s32 unk0;
-    u8 pad_4[0xC];
-    s32 unk10;
-};
-extern volatile struct SndCdSyncState D_00137B00;
+#include "rnc/audio/sound_read_work.h"
 extern s32 D_0015EC8C __attribute__((sda));
 extern s32 D_0015EC98 __attribute__((sda));
 extern void FlushCache(s32);
@@ -20,7 +15,7 @@ s32 snd_stream_safe_cd_sync(s32 mode) {
         return sceCdSync(mode);
     }
     FlushCache(0);
-    ready = D_00137B00.unk0 == 0;
+    ready = sound_read_work.read_active == 0;
     D_0015EC98 = ready;
     if (ready != 1) {
         if (mode == 1) {
@@ -30,7 +25,7 @@ s32 snd_stream_safe_cd_sync(s32 mode) {
             do {
                 snd_flush_sound_commands();
                 FlushCache(0);
-                next_ready = D_00137B00.unk0 == 0;
+                next_ready = sound_read_work.read_active == 0;
                 D_0015EC98 = next_ready;
             } while (next_ready == 0);
         }

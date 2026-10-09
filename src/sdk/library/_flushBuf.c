@@ -20,6 +20,7 @@
 /* _flushBuf f6: MPEG buffer flush with GS status polling and IPU idle wait. */
 
 #include "types.h"
+#include "rnc/sdk/ipu_command_table.h"
 
 typedef struct FlushBufContext {
     u8 pad_0[0x818];
@@ -31,7 +32,6 @@ typedef struct FlushBufContext {
     s32 unk858;
 } FlushBufContext;
 
-extern s32 D_00132E70[];
 extern s32 _dispatchMpegCbNodata();
 extern s64 _waitIpuIdle64();
 
@@ -57,9 +57,9 @@ void _flushBuf(FlushBufContext *context, s32 arg1) {
     command = value | 0x40000000;
     *(volatile u32 *)0x10002000 = command;
     index = command >> 0x1C;
-    table_value = D_00132E70[index];
+    table_value = IpuCommandTable[index];
     context->unk818 = table_value;
-    idle_result = _waitIpuIdle64(context, &D_00132E70[index]);
+    idle_result = _waitIpuIdle64(context, &IpuCommandTable[index]);
     context->unk838 = (s32)idle_result;
     context->unk83C = 0x20;
 }

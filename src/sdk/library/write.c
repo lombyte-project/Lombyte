@@ -6,15 +6,15 @@
 /* Source: newlib. */
 
 #include "types.h"
-extern u32 D_0012FBF0[];
+#include "rnc/runtime/core_state.h"
 extern s32 sceTtyInit();
 extern s32 sceTtyWrite();
 s32 write(s32 fd, s32 buf, s32 len) {
     register s32 tty_arg = buf;
     if ((u32)(fd - 1) < 2U) {
-        if (D_0012FBF0[0] == 0) {
+        if (CoreGlobalWord == 0) {
             if (sceTtyInit() != 0) {
-                D_0012FBF0[0] = 1;
+                CoreGlobalWord = 1;
                 goto block_4;
             }
             goto block_5;
