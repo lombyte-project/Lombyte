@@ -34,8 +34,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312e70.s", FUN_L07_00312e70);
 typedef union {
     unsigned int q __attribute__((mode(TI)));
     float f[4];
-} U3131b0;
-typedef float V3131b0[4] __attribute__((aligned(16)));
+} RopeQuad;
+typedef float RopeVec[4] __attribute__((aligned(16)));
 extern void normalize_vector_xyz(void *, void *, float);
 extern void add_vector_xyz(void *, void *, void *);
 extern void subtract_vector_xyz(void *, void *, void *);
@@ -51,9 +51,9 @@ extern void FUN_L07_00312e70(char *, float, int, float, int);
 
 /* Rope draw: moves the two end points along the rope direction, draws three strands, then casts a ray between the ends. */
 void FUN_L07_003131b0(char *moby) {
-    U3131b0 v;
+    RopeQuad v;
     char blk[0x30];
-    V3131b0 d;
+    RopeVec d;
     char *data;
     float one;
 
@@ -337,11 +337,6 @@ void FUN_L07_00314058(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00314150.s", FUN_L07_00314150);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00317910.s", FUN_L07_00317910);
 
-typedef float V317cb0[4] __attribute__((aligned(16)));
-typedef union {
-    unsigned int q __attribute__((mode(TI)));
-    float f[4];
-} U317cb0;
 extern int D_L07_00161B6C_c __asm__("D_L07_00161B6C") __attribute__((sda));
 extern int D_L07_00161B70_c __asm__("D_L07_00161B70") __attribute__((sda));
 extern float D_L07_00161B7C_c __asm__("D_L07_00161B7C") __attribute__((sda));
@@ -350,27 +345,27 @@ extern int D_L07_00161B84;
 extern float D_L07_00161BB0;
 extern char D_L07_00161B90[] __attribute__((section(".sdata")));
 extern char D_L07_00161BA0[] __attribute__((section(".sdata")));
-extern V317cb0 D_L07_0020DAF0_c[] __asm__("D_L07_0020DAF0");
-extern V317cb0 D_L07_0020DB00_c[] __asm__("D_L07_0020DB00");
+extern RopeVec D_L07_0020DAF0_c[] __asm__("D_L07_0020DAF0");
+extern RopeVec D_L07_0020DB00_c[] __asm__("D_L07_0020DB00");
 extern short D_L07_0020DBC8[];
 typedef struct {
     int pad[5];
     char *moby;
-} E317cb0;
-extern E317cb0 D_L07_0020C840_c[] __asm__("D_L07_0020C840");
+} RopeMobySlot;
+extern RopeMobySlot D_L07_0020C840_c[] __asm__("D_L07_0020C840");
 
 /* Starts the rope when one is pending: lays nine points out from the anchor along the moby's
  * axis, then resets the swing state and, once, clears every entry's link. */
 void FUN_L07_00317cb0(char *moby, void *anchor) {
-    V317cb0 step;
-    V317cb0 up;
-    U317cb0 c;
-    U317cb0 d;
+    RopeVec step;
+    RopeVec up;
+    RopeQuad c;
+    RopeQuad d;
     float r;
     int i;
     int j;
-    U317cb0 *pc;
-    U317cb0 *pd;
+    RopeQuad *pc;
+    RopeQuad *pd;
 
     if (D_L07_00161B6C_c == 0) {
         return;
