@@ -239,7 +239,68 @@ void FUN_L05_00329540(char *m) {
     normalize_vector_xyz(side, side, 1.0f);
     qcopy(m + 0x40, m);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003296e0.s", FUN_L05_003296e0);
+extern char *D_L05_0015EF50_3296e0 __asm__("D_L05_0015EF50");
+extern s32 D_001413D0_3296e0[] __asm__("D_001413D0");
+extern void zero_vector_3296e0(void *) __asm__("FUN_001f99f8");
+
+/* Resets camera m from its preset (table D_L05_0015EF50, entry m->0x84): distances,
+   angle limits and damping, cleared velocities, then places it. */
+void FUN_L05_003296e0(char *m) {
+    char *s = *(char **)(D_L05_0015EF50_3296e0 + *(s16 *)(m + 0x84) * 32 + 0x1C);
+    char *d;
+    char *p;
+    char *q;
+    char *r;
+    char *t;
+    char *u;
+
+    *(s32 *)(s + 0x48) = 0;
+    d = *(char **)(m + 0x70);
+    *(f32 *)(d + 0x184) = *(f32 *)(s + 0x28);
+    *(f32 *)(d + 0x188) = *(f32 *)(s + 0x2C);
+    *(f32 *)(d + 0x180) = *(f32 *)(s + 0x30);
+    *(f32 *)(d + 0x190) = *(f32 *)(s + 0x34);
+    *(f32 *)(d + 0x194) = *(f32 *)(s + 0x38);
+    *(f32 *)(d + 0x18C) = *(f32 *)(s + 0x3C);
+    zero_vector_3296e0(d + 0x1B0);
+    zero_vector_3296e0(d + 0x1C0);
+    p = *(char **)(m + 0x70) + 0x80;
+    *(s32 *)(p + 0x40) = 5;
+    *(s32 *)(p + 0x44) = D_001413D0_3296e0[0];
+    *(f32 *)(p + 0x4C) = *(f32 *)(d + 0x180);
+    *(f32 *)(p + 0x48) = 0.209439516f;
+    *(f32 *)(p + 0x58) = 0.00174532924f;
+    *(f32 *)(p + 0x5C) = -0.0043633231f;
+    q = *(char **)(m + 0x70) + 0xE0;
+    *(f32 *)(q + 0x0) = *(f32 *)(d + 0x184);
+    *(f32 *)(q + 0x4) = 0.5f;
+    *(f32 *)(q + 0x10) = *(f32 *)(d + 0x188);
+    r = *(char **)(m + 0x70);
+    *(f32 *)(r + 0x10) = 0.01f;
+    *(f32 *)(r + 0x14) = 0.2f;
+    *(s32 *)(r + 0x18) = 0;
+    *(s16 *)(r + 0x1C) = 0;
+    zero_vector_3296e0(r);
+    t = *(char **)(m + 0x70) + 0x100;
+    zero_vector_3296e0(t);
+    zero_vector_3296e0(t + 0x20);
+    *(s32 *)(t + 0x40) = 0;
+    *(f32 *)(t + 0x10) = *(f32 *)(s + 0x0);
+    *(f32 *)(t + 0x34) = *(f32 *)(s + 0x20);
+    *(f32 *)(t + 0x38) = *(f32 *)(s + 0x24);
+    *(s32 *)(t + 0x3C) = 0;
+    u = *(char **)(m + 0x70) + 0x30;
+    *(f32 *)(u + 0x20) = 0.8f;
+    *(f32 *)(u + 0x24) = 0.3f;
+    *(f32 *)(u + 0x40) = 1.3333334f;
+    *(s32 *)(u + 0x28) = 0;
+    *(s16 *)(u + 0x2C) = 0;
+    zero_vector_3296e0(u);
+    FUN_L05_003294c0(*(f32 *)(s + 0x28), *(f32 *)(s + 0x2C), *(f32 *)(s + 0x30), *(f32 *)(s + 0x34),
+                     *(f32 *)(s + 0x38), *(f32 *)(s + 0x3C), *(f32 *)(s + 0x40), *(f32 *)(s + 0x44));
+    FUN_L05_00329540(m);
+    *(s16 *)(m + 0x7E) = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003298d8.s", FUN_L05_003298d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00329ce8.s", FUN_L05_00329ce8);
 #define NOT_SDA
@@ -252,7 +313,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00329ce8.s", FUN_L05_00329ce8);
 
 extern char *D_L05_00167204_d __asm__("D_L05_00167204") __attribute__((section(".data")));
 extern void FUN_002144d8(void *, void *);
-extern void FUN_L05_003296e0(void *);
+extern void FUN_L05_003296e0(char *);
 
 void FUN_L05_0032a6e0(char *out) {
     char *src = D_L05_00167204_d;
