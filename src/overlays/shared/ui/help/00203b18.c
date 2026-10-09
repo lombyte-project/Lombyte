@@ -727,7 +727,70 @@ void FUN_L00_00207430(char *o) {
         *(float *)(t + 0x28) = x;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002076a8.s", FUN_L00_002076a8);
+#else
+extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
+extern void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
+extern int current_level_index_2076a8 __asm__("D_0015ED84") __attribute__((sda));
+extern int current_level_index_abs_2076a8 __asm__("D_0015ED84");
+extern u8 D_0013E520_2076a8[] __asm__("D_0013E520");
+
+void FUN_L00_002076a8(void) {
+    u8 *g = (u8 *)&hero;
+    int blink = 0;
+    int level;
+
+    if (*(int *)(g + 0x22f4) != 0) {
+        int color = *(int *)(g + 0x22f8);
+        int red = (color & 0xff) - 7;
+        int blue = ((color >> 16) & 0xff) - 7;
+        int green = ((color >> 8) & 0xff) - 7;
+        if (red < 0) red = 0;
+        if (green < 0) green = 0;
+        if (blue < 0) blue = 0;
+        set_moby_color(*(void **)(g + 0x2080), red, green, blue);
+        {
+            int packed = ((unsigned int)color >> 24) << 24;
+            packed |= blue << 16;
+            packed |= green << 8;
+            packed |= red;
+            *(int *)(g + 0x22f8) = packed;
+        }
+    }
+
+    if (*(int *)(g + 0x2084) == 0x80 || *(int *)(g + 0x2084) == 0x82) {
+        blink = *(int *)(g + 0x198) < FUN_001f96f8(0x1e);
+        level = current_level_index_abs_2076a8;
+    } else {
+        level = current_level_index_2076a8;
+    }
+    if ((level == 0xf || level == 0x11) && *(int *)(g + 0x2084) == 0x76 &&
+        *(int *)(g + 0x198) < FUN_001f96f8(0x14)) {
+        blink = 1;
+    }
+    if (blink) {
+        int red, green, blue;
+        get_moby_color(*(void **)(g + 0x2080), &red, &green, &blue);
+        if (*(int *)(g + 0x198) % 4 < 3) {
+            red = 0;
+            green = 0;
+            blue = 0;
+        } else {
+            green = 0x90;
+            blue = 0xf0;
+            red = 0x90;
+        }
+        set_moby_color(*(void **)(g + 0x2080), red, green, blue);
+        FUN_L00_002072c8();
+    }
+    if (*(int *)(g + 0x10b8) >= 0 &&
+        D_0013E520_2076a8[*(int *)(g + 0x10b8)] != 0 &&
+        *(int *)(g + 0x1090) != 0) {
+        FUN_L00_00207330(*(void **)(g + 0x1090), *(char **)(g + 0x2080));
+    }
+}
+#endif
 typedef unsigned int u128_2078a8 __attribute__((mode(TI), aligned(16)));
 typedef union {
     u128_2078a8 q;
