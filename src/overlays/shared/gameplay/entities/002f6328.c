@@ -142,7 +142,7 @@ extern int D_L01_0015F404;
 extern int D_L01_001600EC_q __asm__("D_L01_001600EC");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern unsigned char D_0014C190[];
+extern s32 D_0014C190[][64];
 extern void DebugPrint(char *, ...);
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_002ea9d8(void *);
@@ -150,7 +150,7 @@ extern void FUN_L00_002eaa30(void *);
 extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
 extern void FUN_L00_002eac18(int);
 extern void FUN_L01_002405a0(void);
-s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 void FUN_L01_002fb4b8_c(void) __asm__("FUN_L01_002fb4b8");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern void func_L01_002FC890_m(char *) __asm__("FUN_L01_002fb4b8");
@@ -547,7 +547,98 @@ void FUN_L01_002ff118(L01WatchMoby *m) {
     FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->body, 0);
     FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->head, 1);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00300220.s", FUN_L01_00300220);
+#include "rnc/globals.h"
+
+/* pvars of the respawning pickup FUN_L01_00300220 updates */
+typedef struct {
+    s32 volume;      /* 0x00: clip volume that arms it */
+    u8 pad4[4];
+    u32 flags;       /* 0x08: 2/4: needs a D_001413F4 mode; 8: disabled; 0x10: needs a D_001413DC state */
+    s32 armed;       /* 0x0C */
+    s32 rearm;       /* 0x10 */
+    s32 in_volume;   /* 0x14 */
+    s32 spawn_slot;  /* 0x18: slot in the level's D_0014C050 row, -1 for none */
+} PickupVars;
+
+/* Per-level pickup state; collected[] is indexed by the moby's unkB2 id. */
+typedef struct {
+    u8 pad0[0x454];
+    u8 collected[1];
+} L01LevelState;
+
+extern L01LevelState D_L01_001BB6B0;
+extern L01LevelState D_L01_001BAA50;
+extern s32 D_L01_001BA950[];
+extern s32 D_0014C190[][64];
+extern u8 D_0014C050[];
+extern u8 D_001413F4 __attribute__((section(".data")));
+extern u32 D_001413DC __attribute__((section(".data")));
+extern f32 FUN_001f99c0(f32);
+extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
+
+void FUN_L01_00300220(struct Moby *moby) {
+    PickupVars *vars = (PickupVars *)moby->pvars;
+    s32 armed = 0;
+    Vec4f pos;
+    u32 state;
+
+    if (vars->flags & 8) {
+        return;
+    }
+    if (moby->unkBC == 0) {
+        moby->unkBC = 1;
+        vars->in_volume = 0;
+        return;
+    }
+    if (vars->spawn_slot != -1 &&
+        D_0014C050[vars->spawn_slot + current_level_index * 16] != 0xFF) {
+        return;
+    }
+    if ((vars->flags & 2) && D_001413F4 != 1) {
+        return;
+    }
+    if ((vars->flags & 4) && D_001413F4 != 3 && D_001413F4 != 0) {
+        return;
+    }
+    if (vars->flags & 0x10) {
+        state = D_001413DC;
+        if (state > 1 && state != 9) {
+            return;
+        }
+    }
+    if (is_point_inside_clip_volume(D_0013F3D0, vars->volume)) {
+        if (vars->in_volume == 0) {
+            armed = 1;
+        }
+        vars->in_volume = 1;
+    } else {
+        vars->in_volume = 0;
+    }
+    if (armed || D_L01_001BB6B0.collected[(s16)moby->unkB2] != 0 ||
+        ((D_0014C190[current_level_index][(s16)moby->unkB2 >> 5] >> (moby->unkB2 & 0x1F)) & 1)) {
+        if (vars->armed == 0 || vars->rearm != 0) {
+            armed = 1;
+            vars->armed = armed;
+            FUN_L00_002502a0(moby->unkB0);
+            qcopy(&pos, &moby->pos);
+            pos.z = probe_ground_height(&pos, 0, 0.5f);
+            if (FUN_001f99c0(moby->pos.z - pos.z) > 2.0f) {
+                pos.z = moby->pos.z;
+            }
+            FUN_L00_00284e50(&pos, &moby->rot);
+            D_L01_001BAA50.collected[(s16)moby->unkB2] = 0;
+            D_L01_001BB6B0.collected[(s16)moby->unkB2] = 0;
+            D_0014C190[current_level_index][(s16)moby->unkB2 >> 5] &=
+                ~(armed << (moby->unkB2 & 0x1F));
+            D_L01_001BA950[(s16)moby->unkB2 >> 5] &= ~(armed << (moby->unkB2 & 0x1F));
+        }
+    } else {
+        vars->armed = 0;
+    }
+    if (moby->state == 0 && D_0014C050[moby->unkB0 + current_level_index * 16] == 0xFF) {
+        moby->state = 1;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302438.s", FUN_L01_00302438);
 /* pvars of the moby run by FUN_L01_00302648: 20 trigger zones and a hold counter */
 typedef struct {
@@ -1030,13 +1121,13 @@ void FUN_L01_003089f0(char *m) {
 
 extern int D_0015ED84; /* no foreign declaration */
 extern int D_L01_001BA950[];
-extern unsigned char D_0014C190[];
+extern s32 D_0014C190[][64];
 extern void FUN_L01_0026e0e0(char *arg, int val);
 
 void FUN_L01_00308b28(char *moby) {
     int d = D_0015ED84 << 8;
     unsigned char t;
-    *(int *)(D_0014C190 + (((short)*(unsigned short *)(moby + 0xB2) >> 5) * 4 + d)) |=
+    *(int *)((u8 *)D_0014C190 + (((short)*(unsigned short *)(moby + 0xB2) >> 5) * 4 + d)) |=
         1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
     D_L01_001BA950[(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
         1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
@@ -1052,10 +1143,6 @@ void FUN_L01_00308b28(char *moby) {
 
 typedef struct L01Moby L01Moby;
 
-typedef struct {
-    u8 pad0[0x454];
-    u8 collected[1];
-} L01LevelState;
 
 extern char D_0013F350[];
 extern L01LevelState D_L01_001BB6B0;
