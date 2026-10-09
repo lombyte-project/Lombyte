@@ -409,7 +409,7 @@ void FUN_L03_002c6a20(struct Moby *moby) {
  FUN_L00_0025a478(moby,hit,data+0x20,0,&result,&damage,0,4);
  if (result!=1 && moby->state!=21) {
   char *other;
-  if (moby->unk21!=255)FUN_L01_0026e090(moby->unk21,1);
+  if (moby->group!=255)FUN_L01_0026e090(moby->group,1);
   { float health=*(float *)(data+0x20)-damage;
   float speed=D_0015ED70*50.0f;
   *(int *)(data+0x144)=9;
