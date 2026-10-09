@@ -2,17 +2,56 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0025e2c0.s", FUN_L15_0025e2c0);
+#include "eetypes.h"
+#include "rnc/math/vector.h"
 #include "sda.h"
 
 #include "qcopy.h"
+
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern unsigned char *FUN_L00_002678b8(int);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern int FUN_001f96f8(int);
+extern int D_L15_001601FC __attribute__((sda));
+
+/* Spawns particle type 0x1F of colour `color` at `pos`, starting a quarter of the way from `owner` towards it. */
+void FUN_L15_0025e2c0(int color, u128 *pos, char *owner) {
+    Vec4 target;
+    Vec4 step;
+    u128 at;
+    unsigned char *p;
+    char *from;
+    u128 *a;
+    u128 *b;
+
+    target.q = *pos;
+    p = FUN_L00_002678b8(0x1F);
+    if (p != 0) {
+        a = &at;
+        from = owner + 0x10;
+        FUN_001f9a28(a, &target, from);
+        b = &step.q;
+        *b = *a;
+        FUN_001f9a68(b, b, 0.25f);
+        FUN_001f9a10(a, from, b);
+        *(u128 *)(p + 0x10) = *a;
+        *(u128 *)(p + 0x20) = target.q;
+        *(int *)(p + 4) = color;
+        *(int *)(p + 0xC) = color & 0xFFFFFF;
+        p[9] = truncate_float_to_s32(4.0f) + 0x70;
+        p[3] = 0x44;
+        p[1] = 2;
+        *(short *)(p + 0xA) = FUN_001f96f8(D_L15_001601FC);
+        *(char **)(p + 0x30) = owner;
+    }
+}
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0025F0A0.c: func_L15_002655D0), where it is exact; names translated to the US level program. */
 
 extern int *D_L15_001B2770_x __asm__("D_L15_001B2770") __attribute__((section(".data")));
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *FUN_L00_002678b8(int);
 extern void FUN_00214a98(float *, int *);
 void load_display_text_resource_entry(void *arg0, s32 *arg1) __asm__("FUN_00214bc0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
