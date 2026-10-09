@@ -300,7 +300,180 @@ void FUN_L02_002d5a68(Vec4 *from) {
     c = trunc_d57f8(rand_between_d57f8((float)D_L02_00161994, (float)D_L02_00161998));
     FUN_00218888(&at, &accel, &vel, D_L02_0016199C, D_L02_001619A0, a, b, c, D_L02_001619A4);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d5c88.s", FUN_L02_002d5c88);
+#include "rnc/gameplay/hero.h"
+
+/* pvars of the class FUN_L02_002d5c88 updates (only the fields it touches). */
+typedef struct {
+    char pad0[0x20];
+    float hp;             /* 0x20 */
+    char pad24[0xA];
+    unsigned char b2E;    /* 0x2E: 2 = respawn requested */
+    char pad2F[9];
+    int i38;              /* 0x38 */
+    char pad3C[0xD4];
+    short anim[3];        /* 0x110: passed to FUN_L00_0025d458 / FUN_L00_0025d538 */
+    char pad116;
+    unsigned char b117;   /* 0x117 */
+    char pad118[8];
+    char knock[0x10];     /* 0x120: passed to FUN_L00_0025c558 */
+    float f130;           /* 0x130 */
+    float f134;
+    float f138;
+    float f13C;
+    int i140;             /* 0x140 */
+    int i144;
+    float f148;
+    int i14C;             /* 0x14C: count kept by the spawner moby */
+    char pad150[0xD];
+    unsigned char b15D;   /* 0x15D */
+    char pad15E[0xE];
+    float f16C;           /* 0x16C */
+    float f170;
+    float f174;
+    char pad178[0x58];
+    float tgt[4];         /* 0x1D0: point followed along the path */
+    char pad1E0[0x30];
+    int i210;             /* 0x210 */
+    int i214;
+    char pad218[8];
+    float home[4];        /* 0x220 */
+    char pad230[0x1C];
+    float f24C;           /* 0x24C */
+    float f250;
+    char pad254[8];
+    short t25C;           /* 0x25C */
+    short t25E;
+    char pad260[0x1C];
+    int i27C;             /* 0x27C */
+    int i280;
+    char pad284[4];
+    int i288;             /* 0x288: spawner moby index, -1 if none */
+    char pad28C[4];
+    int i290;             /* 0x290: path index */
+    char pad294[8];
+    int i29C;             /* 0x29C */
+} Vars5c88;
+
+extern float D_L02_00161908 __attribute__((sda));
+extern float D_L02_0016190C __attribute__((sda));
+extern float D_L02_00161914 __attribute__((sda));
+extern float D_L02_00161918 __attribute__((sda));
+extern int *D_L02_001B0AB0_5c88[] __asm__("D_L02_001B0AB0");
+extern float D_0015ED70;
+extern int FUN_001f9770(void *);
+extern float FUN_001f9b80(void *, void *);
+extern float AbsoluteFloat_5c88(float) __asm__("func_001F99C0");
+extern float FUN_00213508(void *, int, float);
+extern void FUN_L00_0025ab48(void *, float *, void *, void *);
+extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
+extern int FUN_L02_002d5658(void *argp);
+extern void FUN_L02_002d5728(char *arg);
+extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+extern int hit_85b8(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern char *FUN_L00_0025a420(void *, int, int);
+extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
+extern void FUN_L00_0025d458(void *m, short *p);
+extern void FUN_L00_0025d538(void *, void *);
+
+/* Path-following enemy: respawns at its home point on request, takes hits (dies and drops to the
+   ground), then follows its path and retargets the hero when it strays. */
+void FUN_L02_002d5c88(unsigned char *moby) {
+    Vars5c88 *d = *(Vars5c88 **)(moby + 0x78);
+    char *h;
+    int *path;
+    int hit;
+    float dmg;
+    float k;
+    float g;
+    OvlVec4 p;
+    OvlVec4 v;
+
+    d->i280 = moby[0x20];
+    if (moby[0x20] == 0) {
+        return;
+    }
+    if (d->b2E == 2) {
+        d->b2E = 1;
+        if (d->i288 >= 0) {
+            (*(Vars5c88 **)((d->i288 << 8) + D_L02_0015FFD8 + 0x78))->i14C -= 1;
+        }
+        if ((d->i27C = FUN_L02_002d5658(moby)) == 0) {
+            DeleteMoby(moby);
+            return;
+        }
+        moby[0x20] = 0x1A;
+        qcopy(moby + 0x10, d->home);
+        *(int *)(moby + 0x94) = 0;
+        *(float *)(moby + 0x18) -= 10.0f;
+    }
+    if (d->i38 != 0 ||
+        (!FUN_001f9770(&d->t25C) && FUN_001f9b80(moby + 0x10, &hero.motion.pos) < 10.0f)) {
+        d->t25E = func_001FA898_r(FUN_001f96b0(random_float_between_alt(180.0f, 240.0f)));
+    }
+    d->i38 = 0;
+    if (FUN_001f9770(&d->t25E)) {
+        d->f250 = d->f24C;
+    } else {
+        d->f250 = d->f24C + 5.0f;
+    }
+    dmg = 0.0f;
+    h = FUN_L00_0025a420(moby, 0x330000, 0);
+    hit_85b8(moby, h, &d->hp, 0, &hit, &dmg, 0, 4);
+    if (hit != 1 && moby[0x20] != 0x18) {
+        FUN_L02_002d5728((char *)moby);
+        d->i29C = 0;
+        d->hp -= dmg;
+        if (d->hp <= 0.0f) {
+            d->hp -= dmg;
+            d->i140 = 0x200;
+            d->f130 = D_L02_00161914 * D_0015ED70;
+            d->f134 = D_L02_00161918 * D_0015ED70;
+            d->f138 = D_L02_0016190C * D_0015ED6C;
+            d->f13C = D_L02_00161908 * D_0015ED6C;
+            d->b15D = 0;
+            d->i144 = 9;
+            d->f16C = 2.0f * D_0015ED6C;
+            d->f148 = 0.5f;
+            qcopy(&p, moby + 0x10);
+            p.f[2] += 2.0f;
+            g = FUN_00213508(&p, 0, 0.5f);
+            if (*(float *)(moby + 0x18) < g) {
+                *(float *)(moby + 0x18) = g;
+            }
+            if (d->i288 >= 0) {
+                extern int D_L02_0015FFD8_s __asm__("D_L02_0015FFD8") __attribute__((sda));
+                (*(Vars5c88 **)((d->i288 << 8) + D_L02_0015FFD8_s + 0x78))->i14C -= 1;
+                d->b15D = 0;
+            } else {
+                p.f[2] += 0.01f;
+            }
+            d->i144 |= 0x20;
+            *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+            v.q = *(OvlQuad *)(h + 0x10);
+            FUN_L00_0025ab48(&v, &k, &d->f138, &d->f13C);
+            FUN_L00_0025c558(k, moby, d->knock, 6, 1, 0);
+            d->f148 = 0.85f;
+            d->f170 = 7.0f;
+            d->f174 = 14.0f;
+            moby[0x20] = 0x18;
+            *(int *)(moby + 0x94) = 0;
+            d->b117 = 0x78;
+            FUN_L00_0025d458(moby, d->anim);
+        }
+    }
+    moby[0xA4] = 0xFF;
+    FUN_L00_0025d538(moby, d->anim);
+    path = D_L02_001B0AB0_5c88[d->i290];
+    if (FUN_L00_0025ff38(d->f250, moby, d->tgt, 0, 0, path + 4, *path) != 2 &&
+        (d->f250 < FUN_001f9b80(d->home, d->tgt) ||
+         AbsoluteFloat_5c88(*(float *)(moby + 0x18) - d->tgt[2]) > 3.0f)) {
+        d->i214 = 2;
+    }
+    if (d->i210 == 0) {
+        d->i210 = (int)hero.moby;
+        qcopy(d->tgt, &hero.motion.pos);
+    }
+}
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7550), where it is exact; names translated to the US level program. */
