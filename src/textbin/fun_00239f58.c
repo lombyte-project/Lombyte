@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/gameplay/surface_height_grid.h"
 
 typedef struct {
     f32 samples[16][16];
@@ -18,16 +19,7 @@ typedef struct {
     SurfaceHeightLayer layers[3];
 } SurfaceHeightTile;
 
-typedef struct {
-    u8 pad_0[8];
-    f32 origin_x;
-    f32 origin_y;
-    f32 cell_width;
-    f32 cell_height;
-} SurfaceHeightGrid;
-
 extern SurfaceHeightTile *surface_height_tiles __asm__("D_00161190");
-extern SurfaceHeightGrid surface_height_grid __asm__("D_001E66E0");
 extern s32 surface_height_layer __asm__("D_001610E0") __attribute__((sda));
 
 extern s32 find_surface_height_map(f32, f32, f32) __asm__("func_00239D60");

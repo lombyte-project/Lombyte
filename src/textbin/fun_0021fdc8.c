@@ -2,11 +2,8 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/ui/menus/menu_resource_stream.h"
 
-typedef struct {
-    s32 values[6];
-} LanguageResourceOffsets;
-extern LanguageResourceOffsets menu_language_resource_offsets __asm__("D_001E87D0");
 
 extern u8 skill_point_completed[] __asm__("D_0013D408");
 extern s16 cd_read_active[] __asm__("D_001516D8");

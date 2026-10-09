@@ -3,6 +3,7 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/ui/menus/item_preview/item_preview_placement.h"
 
 struct ItemPreviewVars {
     void *owner;
@@ -27,15 +28,6 @@ struct PreviewItemDefinition {
     s32 oclass;
     u8 pad14[0x38];
 };
-struct ItemPreviewPlacement {
-    f32 alternate_x;
-    f32 normal_x;
-    f32 y;
-    f32 z;
-    f32 rotation_x;
-    f32 rotation_y;
-    u8 pad18[8];
-};
 struct PreviewCamera {
     u8 pad0[0x140];
     f32 x;
@@ -49,7 +41,6 @@ struct PreviewClassResource {
 
 extern struct PreviewItemDefinition preview_item_definitions[] __asm__("D_001863D0");
 extern struct PreviewCamera preview_camera __asm__("D_00186F40");
-extern struct ItemPreviewPlacement preview_placements[] __asm__("D_001E0408");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
 extern s32 active_preview_resource_class[] __asm__("D_00140408");
 extern s32 resource_request_state __asm__("D_0015FF50");

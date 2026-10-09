@@ -6,19 +6,13 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00239780/FUN_00239780.s
 #else
 #include "types.h"
 #include "eetypes.h"
+#include "rnc/ui/vendor/vendor_capture.h"
 
 typedef union {
     u128 q;
     f32 f[4];
 } CaptureVector;
-struct CaptureBoundsAdjustment {
-    f32 first_origin;
-    f32 second_origin;
-    f32 first_extent;
-    f32 second_extent;
-};
 
-extern struct CaptureBoundsAdjustment capture_bounds_adjustments[] __asm__("D_001E6218");
 struct CaptureTransitionFlag {
     s32 v;
 };

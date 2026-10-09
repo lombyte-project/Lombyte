@@ -3,14 +3,7 @@
 
 #include "types.h"
 #include "sda.h"
-
-struct LabelSelectorTable {
-    s32 values[8];
-};
-
-struct LabelTextTable {
-    s32 values[7];
-};
+#include "rnc/ui/menus/configured_labels.h"
 
 struct ConfiguredLabelEntry {
     s32 text;
@@ -20,8 +13,6 @@ struct ConfiguredLabelEntry {
     s32 value;
 };
 
-extern struct LabelSelectorTable label_selector_table __asm__("D_001E8728");
-extern struct LabelTextTable label_text_table __asm__("D_001E8748");
 extern u8 selector_available[] __asm__("D_0015EDC0") MACRO_ADDR;
 extern u8 selector_values[] __asm__("D_0015EDB0") MACRO_ADDR;
 extern struct ConfiguredLabelEntry configured_label_entries[] __asm__("D_001D3B10");

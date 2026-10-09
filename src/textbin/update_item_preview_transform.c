@@ -2,21 +2,12 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/ui/menus/item_preview/item_preview_placement.h"
 
 struct PreviewPosition {
     f32 x;
     f32 y;
     f32 z;
-};
-
-struct ItemPreviewPlacement {
-    f32 alternate_x;
-    f32 normal_x;
-    f32 y;
-    f32 z;
-    u8 pad10[8]; /* Per-item record stride is 0x20. */
-    f32 side_offset;
-    f32 forward_offset;
 };
 
 struct ItemPreviewBinding {
@@ -51,7 +42,6 @@ struct PreviewCamera {
 };
 
 extern struct PreviewCamera preview_camera __asm__("D_00186F40");
-extern struct ItemPreviewPlacement preview_placements[] __asm__("D_001E0408");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 

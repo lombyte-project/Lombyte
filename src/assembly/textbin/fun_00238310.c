@@ -5,10 +5,9 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00238310/FUN_00238310.s", FUN_00238310);
 #else
 #include "types.h"
+#include "rnc/ui/vendor/vendor_capture.h"
 
 extern s32 game_frame_counter __asm__("D_0015F438");
-extern volatile s32 capture_glyph_coordinates[] __asm__("D_001E6018");
-extern s32 capture_glyph_advances[] __asm__("D_001E6118");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");

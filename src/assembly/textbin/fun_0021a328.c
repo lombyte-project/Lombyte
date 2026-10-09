@@ -11,6 +11,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021a328/FUN_0021a328.s
 
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
+#include "rnc/ui/text/font_metrics.h"
 
 extern int menu_input_repeat_state[] __asm__("D_0013CAE0");
 extern u8 alternate_item_available[] __asm__("D_0013D388");
@@ -30,9 +31,6 @@ extern char unavailable_label_text[] __asm__("D_00160278");
 extern char label_format[] __asm__("D_00160280");
 extern char fallback_label_text[] __asm__("D_00160288");
 extern int selected_level_index[] __asm__("D_001A0314");
-extern u8 normal_font_metrics[] __asm__("D_001DF050");
-extern u8 small_font_metrics[] __asm__("D_001DF3F0");
-extern u8 large_font_metrics[] __asm__("D_001DF790");
 
 extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");

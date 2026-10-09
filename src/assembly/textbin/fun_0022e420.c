@@ -8,6 +8,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022e420/FUN_0022e420.s
 #include "eetypes.h"
 #include "sda.h"
 #include "qcopy.h"
+#include "rnc/rendering/warp_effect.h"
 
 typedef union {
     u128 quadword;
@@ -49,7 +50,6 @@ extern Vector4 D_0013E0F0[];
 extern Vector4 D_0013E2F0[];
 extern s32 game_stage __asm__("D_0015F604");
 extern f32 D_001604D0 __attribute__((sda));
-extern f32 warp_texture_coordinates[4][2] __asm__("D_001D9A10");
 extern u32 D_001D9A30[];
 extern u32 D_001D9A34[];
 

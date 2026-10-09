@@ -2,6 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/video/movie_text.h"
 
 struct AudioDecoderState {
     u8 pad0[0xD90F8];
@@ -23,7 +24,6 @@ extern s32 decoder_buffer_address __asm__("D_00161208");
 extern struct AudioDecoderState *decoder_state __asm__("D_0016120C");
 extern s32 decoder_thread_id __asm__("D_00161210");
 extern u8 D_00166C00;
-extern u8 movie_open_error_text[] __asm__("D_001E8AF0");
 extern void video_callback() __asm__("func_0023B5F0");
 extern void pcm_callback() __asm__("func_0023B728");
 extern void func_0023B3D8();

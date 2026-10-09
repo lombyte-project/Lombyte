@@ -6,27 +6,14 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001fd748/FUN_001fd748.s
 #else
 #include "types.h"
 
-typedef struct {
-    s32 x;
-    s32 y;
-    s32 label_offset_x;
-    s32 label_offset_y;
-} LevelMapMarker;
-
-typedef struct {
-    s32 label_text;
-    s32 pad4[2];
-} LevelMapMarkerText;
-
 #include "rnc/ui/map/map_state.h"
+#include "rnc/ui/map/level_map.h"
 
 extern u8 D_0013DD40[];
 extern u8 g_abLevelVisitState[] __asm__("D_0013DD58");
 extern s32 pal_mode __asm__("D_0015ED80");
 extern s32 game_frame_counter __asm__("D_0015F438");
 extern s32 large_font_height __asm__("D_0015F690") __attribute__((sda));
-extern LevelMapMarkerText level_map_labels[] __asm__("D_001DDD44");
-extern LevelMapMarker level_map_markers[] __asm__("D_001DDE28");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern s32 measure_text_width_regular(u8 *, s32) __asm__("func_001F6250");
