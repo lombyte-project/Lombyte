@@ -1704,7 +1704,66 @@ void FUN_L00_00211380(void) {
                                 D_0015ED64_211380 * 0.3f, D_0015ED6C_211380 * 4.0f);
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211670.s", FUN_L00_00211670);
+#else
+extern u8 FUN_L00_00233440(void);
+extern f32 FUN_L00_00211830(void);
+extern f32 FUN_L00_001ff408(void *);
+extern void FUN_L00_00217970(void);
+extern void FUN_L00_001ffa70(void *, void *);
+extern void FUN_L00_001ff9e8(void *);
+extern void matrix_from_basis_rows(void *, void *) __asm__("FUN_L00_001ffcf8");
+extern void FUN_L00_00221310(void);
+extern void FUN_L00_002215c8(void);
+extern u8 D_0013C940_211670[] __asm__("D_0013C940");
+
+void FUN_L00_00211670(void)
+{
+    s32 index;
+    s32 buttons;
+    u8 mode;
+    struct Hero *p;
+    u8 *source;
+    Vec4 *positions;
+
+    mode = FUN_L00_00233440();
+    p = &hero;
+    p->unk20B3 = mode;
+    p->unk229C = FUN_L00_00211830();
+    p->unk240 = 0;
+    source = D_0013C940_211670;
+    p->unk1D20 = *(f32 *)(source + 0x108);
+    p->unk1D24 = *(f32 *)(source + 0x10C);
+    if (FUN_L00_001ff408(&p->unk1D20) < 0.25f) {
+        buttons = *(s32 *)(source + 0x1B0);
+        p->unk1D20 = (f32)(((buttons >> 13) & 1) - ((buttons >> 15) & 1));
+        p->unk1D24 = (f32)(((buttons >> 14) & 1) - ((buttons >> 12) & 1));
+    }
+    FUN_L00_00217970();
+
+    *(f32 *)((u8 *)p + (*(s32 *)((u8 *)p + 0x21A8) * 4) + 0x2128) = *(f32 *)((u8 *)p + 0x98);
+    *(s32 *)((u8 *)p + 0x21A8) = (*(s32 *)((u8 *)p + 0x21A8) + 1) % 32;
+    ++*(s32 *)((u8 *)p + 0x21AC);
+    if (*(s32 *)((u8 *)p + 0x21AC) > 0x20)
+        *(s32 *)((u8 *)p + 0x21AC) = 0x20;
+
+    positions = (Vec4 *)((u8 *)p + 0x1B00);
+    index = p->unk21B0;
+    qcopy_nc(&positions[index], (u8 *)p + 0x80);
+    p->unk21B0 = (index + 1) % 32;
+    ++p->unk21B4;
+    if (p->unk21B4 > 0x20)
+        p->unk21B4 = 0x20;
+
+    FUN_L00_001ffa70(p, (u8 *)p + 0x90);
+    FUN_L00_001ff9e8((u8 *)p + 0x40);
+    matrix_from_basis_rows((u8 *)p + 0x40, p);
+    FUN_L00_00211380();
+    FUN_L00_00221310();
+    FUN_L00_002215c8();
+}
+#endif /* NON_MATCHING */
 #define NOT_SDA
 
 #define MACRO_ADDR
