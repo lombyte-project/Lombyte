@@ -735,10 +735,96 @@ void FUN_L07_002cdb28(unsigned char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002f5ba0.s", FUN_L07_002f5ba0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030af40.s", FUN_L07_0030af40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b000.s", FUN_L07_0030b000);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b6a8.s", FUN_L07_0030b6a8);
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
 
+/* Pvars of a flying bolt. */
+typedef struct {
+    u8 pad0[0x30];
+    Vec4 vel;        /* 0x30 */
+    Vec4 origin;     /* 0x40 */
+    void *ignore;    /* 0x50: collision owner to skip */
+    s32 solid;       /* 0x54 */
+} BoltVars;
+
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern int FUN_L00_00257b90(int, int);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern int coll_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern void FUN_L07_0029a2a0(void *, void *);
+extern void FUN_L00_001ff660(void *, void *, void *);
+extern char *FUN_L00_0026dd20(char *, char *, int c, int d, float f);
+extern int play_moby_sound(int, int, void *) __asm__("FUN_0022da68");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern char camera_position[] __asm__("D_0013F3D0");
+extern Vec4 D_L07_00173EE0;
+extern char D_L07_00173F00[];
+extern float D_0015ED6C;
+
+/* Bolt update: flies on, sparks out at the end of its range, bursts on impact, removes it out of bounds. */
+void FUN_L07_0030b6a8(struct Moby *m) {
+    BoltVars *v = (BoltVars *)m->pvars;
+    Vec4 old;
+    Vec4 dir;
+    Vec4 spark;
+    int pass;
+    int i;
+    int j;
+
+    qcopy(&old, &m->pos);
+    add_vector_xyz(&m->pos, &m->pos, &v->vel);
+    pass = v->solid == 0;
+    if (vector_distance(&m->pos, &v->origin) > 30.0f) {
+        if (m->unk31 != 0) {
+            for (i = 0; i < 3; i++) {
+                spark.q = 0;
+                spark.f[0] = random_float_between(-1.0f, 1.0f);
+                spark.f[1] = random_float_between(-1.0f, 1.0f);
+                spark.f[2] = random_float_between(-1.0f, 1.0f);
+                dir.q = spark.q;
+                normalize_vector_xyz(&dir, &dir, vector_length_xyz(&spark) * 0.1f);
+                add_vector_xyz(&dir, &spark, &dir);
+                normalize_vector_xyz(&dir, &dir,
+                                     random_float_between(D_0015ED6C + D_0015ED6C, D_0015ED6C * 4.0f));
+                FUN_L07_0029a2a0(&m->pos, &dir);
+            }
+        }
+        mark_moby_for_removal(m);
+        return;
+    }
+    if ((m->unk31 != 0 || vector_distance(&m->pos, camera_position) < 30.0f) &&
+        coll_line(&old, &m->pos, pass, v->ignore, v) != 0) {
+        qcopy(&m->pos, &D_L07_00173EE0);
+        if (m->unk31 != 0) {
+            for (j = 0; j < 5; j++) {
+                spark.q = 0;
+                spark.f[0] = random_float_between(-1.0f, 1.0f);
+                spark.f[1] = random_float_between(-1.0f, 1.0f);
+                spark.f[2] = random_float_between(-1.0f, 1.0f);
+                dir.q = spark.q;
+                FUN_L00_001ff660(&spark, &v->vel, D_L07_00173F00);
+                normalize_vector_xyz(&dir, &dir, vector_length_xyz(&spark) * 0.5f);
+                add_vector_xyz(&dir, &spark, &dir);
+                normalize_vector_xyz(&dir, &dir,
+                                     random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
+                FUN_L00_0026dd20((char *)&m->pos, (char *)&dir, 0x7F2F4F6F,
+                                 FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(15)),
+                                 30000.0f);
+            }
+        }
+        play_moby_sound(0, 0, m);
+        mark_moby_for_removal(m);
+        return;
+    }
+    if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f ||
+        m->pos.z < 2.0f || m->pos.z > 1021.0f) {
+        mark_moby_for_removal(m);
+    }
+}
 /* Pvars of a tumbling piece of debris. */
 typedef struct {
     Vec4f vel;       /* 0x00 */
@@ -748,16 +834,10 @@ typedef struct {
     f32 spin_z;      /* 0x1C */
 } DebrisVars;
 
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern int coll_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                             float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern int play_moby_sound(int, int, void *) __asm__("FUN_0022da68");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern struct Moby *debris_target __asm__("D_L07_00173ED8") __attribute__((section(".data")));
-extern char camera_position[] __asm__("D_0013F3D0");
 extern char debris_far_point[] __asm__("D_L07_00166E40");
 extern float D_0015ED70;
 
@@ -773,7 +853,7 @@ void FUN_L07_0030bbc8(struct Moby *m) {
     d->vel.z -= D_0015ED70 * 9.8f;
     m->rot.y = fast_add_rotations(m->rot.y, d->spin_y);
     m->rot.z = fast_add_rotations(m->rot.z, d->spin_z);
-    if (coll_line(&old, pos, 0, d->ignore, 0) != 0 || coll_sphere(0.5f, pos, 0, d->ignore) != 0) {
+    if (coll_line(&old, pos, 0, d->ignore, NULL) != 0 || coll_sphere(0.5f, pos, 0, d->ignore) != 0) {
         if (debris_target == NULL || (u16)(debris_target->oclass - 0x371) >= 2) {
             if (m->unk31 != 0 || vector_distance(pos, camera_position) < 5.0f) {
                 size = 0.0f;
