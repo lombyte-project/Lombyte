@@ -91,13 +91,12 @@ extern s32 D_0015F440;
 extern s32 D_0015EE8C;
 extern u8 D_00194180[];
 extern u8 D_001B3AC0[];
-extern u8 D_001B6880[];
+#include "rnc/rendering/resident_class.h"
 extern u8 D_001B6180[];
 extern MemInfo D_001940C0;
 #include "rnc/rendering/material_templates.h"
 extern s32 D_0015FF08;
 extern s32 D_001B5980[];
-extern u8 D_001CAAC0[];
 extern s32 D_0015FF00;
 extern s32 D_0015F460;
 extern s64 D_00160580;
@@ -191,7 +190,7 @@ void initialize_level_runtime(void) {
     gs_texture_allocation_start = D_0015EE8C;
     FillTransferWords(D_00194180, 0x87654321, 0x10);
     FillTransferWords(D_001B3AC0, -1, 0x800);
-    FillTransferWords(D_001B6880, -1, 0xE00);
+    FillTransferWords(resident_class_material_maps, -1, 0xE00);
     FillTransferWords(D_001B6180, 0, 0xE0);
     init_view_context();
     update_view_context();
@@ -218,7 +217,7 @@ void initialize_level_runtime(void) {
         D_001B5980[i] = class_data_base + class_entries[i].offset +
                         (highest_set_bit_index(class_entries[i].id) << 28);
     }
-    copy_blocks_16_forward(D_001CAAC0, class_entries, D_0015FF08 * 16);
+    copy_blocks_16_forward(resident_indexed_textures, class_entries, D_0015FF08 * 16);
     relocate_sky_definition(data_base + header->sky);
     moby_entry = (MobyEntry *)((s32)header + header->mobys);
     D_0015FF00 = 0;

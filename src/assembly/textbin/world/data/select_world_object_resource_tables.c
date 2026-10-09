@@ -32,11 +32,7 @@ extern s32 runtime_resource_tag __asm__("D_0015FF44") MACRO_ADDR;
 extern s32 class_resource_count __asm__("D_0015FF48") MACRO_ADDR;
 extern s32 active_class_resource_index __asm__("D_0015FF4C") MACRO_ADDR;
 extern s32 active_decode_buffer __asm__("D_0015FF50") MACRO_ADDR;
-extern s32 class_resource_ids[] __asm__("D_001CBAC0");
-extern s32 compressed_class_resources[] __asm__("D_001CBB20");
-extern char class_material_maps[][0x10] __asm__("D_001CBBE0");
-extern s16 class_runtime_indices[][0x10] __asm__("D_001CBD60");
-extern char resident_indexed_textures[] __asm__("D_001CAAC0");
+#include "rnc/rendering/resident_class.h"
 typedef struct {
     u8 pad0[0x10];
     char *decode_buffers;

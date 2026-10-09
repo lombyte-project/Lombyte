@@ -123,7 +123,7 @@ extern MobyClass *D_001B3200[];
 extern u8 D_001B3AC0[];
 extern s32 D_001B5980[];
 extern s32 D_001B6180[];
-extern u8 D_001B6880[];
+#include "rnc/rendering/resident_class.h"
 extern s32 D_001D84B0[];
 extern s32 D_001E0900[];
 extern s32 D_001E2600[];
@@ -195,7 +195,7 @@ void transition_load_wad(void)
   D_0015EE74 = 0x2C0000;
   FillTransferWords(D_00194180, 0x87654321, 0x10);
   FillTransferWords(D_001B3AC0, -1, k_800);
-  FillTransferWords(D_001B6880, -1, 0xE00);
+  FillTransferWords(resident_class_material_maps, -1, 0xE00);
   FillTransferWords(D_001B6180, 0, 0xE0);
   init_view_context();
   update_view_context();

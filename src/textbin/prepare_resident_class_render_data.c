@@ -59,7 +59,6 @@ typedef struct {
 } ResidentClassRenderHeader;
 
 extern u8 resident_class_slot_by_id[] __asm__("D_001B3AC0");
-extern MaterialMap resident_class_material_maps[] __asm__("D_001B6880");
 
 extern void build_indexed_resident_render_packet(ResidentRenderPacket *, void *, s32, s32, s32, s32,
                                                  s32) __asm__("func_00202D78");
