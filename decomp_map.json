@@ -2,27 +2,27 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4550,
-  "matching_c": 3528,
-  "intentional_asm": 308,
-  "pending_c": 714,
+  "matching_c": 3532,
+  "intentional_asm": 313,
+  "pending_c": 705,
   "bytes_total": 3668944,
-  "bytes_matching_c": 2416312,
-  "bytes_intentional_asm": 121292,
-  "bytes_pending_c": 1131340,
-  "c_exact_percent_of_recoverable": 68.1102,
-  "c_fuzzy_percent_of_recoverable": 69.7262,
+  "bytes_matching_c": 2419468,
+  "bytes_intentional_asm": 121516,
+  "bytes_pending_c": 1127960,
+  "c_exact_percent_of_recoverable": 68.2034,
+  "c_fuzzy_percent_of_recoverable": 69.8164,
   "boot": {
     "units_total": 1475,
     "groups_total": 129,
     "matching_c": 1144,
-    "intentional_asm": 246,
-    "pending_c": 85,
+    "intentional_asm": 251,
+    "pending_c": 80,
     "bytes_total": 448120,
     "bytes_matching_c": 288016,
-    "bytes_intentional_asm": 93880,
-    "bytes_pending_c": 66224,
-    "c_exact_percent_of_recoverable": 81.3053,
-    "c_fuzzy_percent_of_recoverable": 97.4891,
+    "bytes_intentional_asm": 94104,
+    "bytes_pending_c": 66000,
+    "c_exact_percent_of_recoverable": 81.3568,
+    "c_fuzzy_percent_of_recoverable": 97.519,
     "groups": [
       {
         "name": "game/unclassified",
@@ -420,14 +420,14 @@
         "category": "game",
         "functions": 9,
         "matching_c": 6,
-        "pending_c": 3,
-        "intentional_asm": 0,
+        "pending_c": 2,
+        "intentional_asm": 1,
         "bytes_total": 3196,
         "bytes_matching_c": 916,
-        "bytes_pending_c": 2280,
-        "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 28.6608,
-        "c_fuzzy_percent_of_recoverable": 97.363
+        "bytes_pending_c": 2272,
+        "bytes_intentional_asm": 8,
+        "c_exact_percent_of_recoverable": 28.7327,
+        "c_fuzzy_percent_of_recoverable": 97.4316
       },
       {
         "name": "game/gameplay/vendor",
@@ -855,14 +855,14 @@
         "category": "game",
         "functions": 7,
         "matching_c": 3,
-        "pending_c": 4,
-        "intentional_asm": 0,
+        "pending_c": 1,
+        "intentional_asm": 3,
         "bytes_total": 852,
         "bytes_matching_c": 532,
-        "bytes_pending_c": 320,
-        "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 62.4413,
-        "c_fuzzy_percent_of_recoverable": 80.723
+        "bytes_pending_c": 120,
+        "bytes_intentional_asm": 200,
+        "c_exact_percent_of_recoverable": 81.5951,
+        "c_fuzzy_percent_of_recoverable": 90.9755
       },
       {
         "name": "game/audio/banks",
@@ -1425,14 +1425,14 @@
         "category": "game",
         "functions": 9,
         "matching_c": 2,
-        "pending_c": 2,
-        "intentional_asm": 5,
+        "pending_c": 1,
+        "intentional_asm": 6,
         "bytes_total": 228,
         "bytes_matching_c": 64,
-        "bytes_pending_c": 44,
-        "bytes_intentional_asm": 120,
-        "c_exact_percent_of_recoverable": 59.2593,
-        "c_fuzzy_percent_of_recoverable": 96.2937
+        "bytes_pending_c": 28,
+        "bytes_intentional_asm": 136,
+        "c_exact_percent_of_recoverable": 69.5652,
+        "c_fuzzy_percent_of_recoverable": 99.997
       },
       {
         "name": "game/audio/decoder/callbacks",
@@ -1963,12 +1963,12 @@
   },
   "overlays": {
     "functions_total": 3013,
-    "matching_c": 2384,
-    "pending_c": 629,
+    "matching_c": 2388,
+    "pending_c": 625,
     "bytes_total": 3193412,
-    "bytes_matching_c": 2128296,
-    "bytes_pending_c": 1065116,
-    "c_exact_percent_of_recoverable": 66.6465,
+    "bytes_matching_c": 2131452,
+    "bytes_pending_c": 1061960,
+    "c_exact_percent_of_recoverable": 66.7453,
     "intentional_asm": 62,
     "bytes_intentional_asm": 27412,
     "shared": {
@@ -1977,12 +1977,12 @@
       "planet": "Shared code",
       "description": "functions present in two or more levels",
       "functions": 1582,
-      "matching_c": 1262,
-      "pending_c": 320,
+      "matching_c": 1266,
+      "pending_c": 316,
       "bytes_total": 1130476,
-      "bytes_matching_c": 621844,
-      "bytes_pending_c": 508632,
-      "c_exact_percent_of_recoverable": 55.0073,
+      "bytes_matching_c": 625000,
+      "bytes_pending_c": 505476,
+      "c_exact_percent_of_recoverable": 55.2864,
       "files": [
         {
           "file": "src/overlays/shared/sdk/debug/001eb0b0.c",
@@ -2148,9 +2148,9 @@
         {
           "file": "src/overlays/shared/ui/help/00203b18.c",
           "functions": 64,
-          "matching_c": 51,
+          "matching_c": 53,
           "bytes_total": 32012,
-          "bytes_matching_c": 18476
+          "bytes_matching_c": 19912
         },
         {
           "file": "src/overlays/shared/ui/help/0020a1f8.c",
@@ -2176,9 +2176,9 @@
         {
           "file": "src/overlays/shared/ui/help/00214658.c",
           "functions": 21,
-          "matching_c": 18,
+          "matching_c": 19,
           "bytes_total": 13020,
-          "bytes_matching_c": 9292
+          "bytes_matching_c": 10084
         },
         {
           "file": "src/overlays/shared/gameplay/hero/00217970.c",
@@ -2624,9 +2624,9 @@
         {
           "file": "src/overlays/shared/gameplay/entities/002630b8.c",
           "functions": 13,
-          "matching_c": 11,
+          "matching_c": 12,
           "bytes_total": 4804,
-          "bytes_matching_c": 3156
+          "bytes_matching_c": 4084
         },
         {
           "file": "src/overlays/shared/gameplay/state/00263a28.c",
@@ -4999,14 +4999,14 @@
   },
   "total": {
     "units_total": 4550,
-    "matching_c": 3528,
-    "intentional_asm": 308,
-    "pending_c": 714,
+    "matching_c": 3532,
+    "intentional_asm": 313,
+    "pending_c": 705,
     "bytes_total": 3668944,
-    "bytes_matching_c": 2416312,
-    "bytes_intentional_asm": 121292,
-    "bytes_pending_c": 1131340,
-    "c_exact_percent_of_recoverable": 68.1102,
-    "c_fuzzy_percent_of_recoverable": 69.7262
+    "bytes_matching_c": 2419468,
+    "bytes_intentional_asm": 121516,
+    "bytes_pending_c": 1127960,
+    "c_exact_percent_of_recoverable": 68.2034,
+    "c_fuzzy_percent_of_recoverable": 69.8164
   }
 }
