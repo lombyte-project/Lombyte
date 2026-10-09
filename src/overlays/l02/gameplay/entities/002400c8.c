@@ -75,7 +75,64 @@ void FUN_L02_002a4818(int a, int b, int c, int d, float x, float y, float z, flo
     FUN_L02_002a40f0(scratch);
     write_dma_channel_002101b8(D_L02_001CB400, 0x70002800, 0xF8);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3a50.s", FUN_L02_002d3a50);
+#include "rnc/overlay/quad.h"
+extern float D_L02_001619D4 __attribute__((sda));
+extern float D_L02_001619DC __attribute__((sda));
+extern unsigned short D_L02_001619E0 __attribute__((sda));
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_001f9a10(void *, void *, void *);
+extern float FUN_001fa6c0(int);
+extern int FUN_L00_00257b90(int, int);
+extern float FUN_L00_00257c48(float, float);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+/* Dust puff emitter, declared in the argument order the other levels use (pos, three floats, n, vel, size, colour). */
+extern unsigned char *FUN_L00_0026d000(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color);
+
+/* Emits n dust puffs evenly spaced along the segment from a to b. */
+void FUN_L02_002d3a50(void *moby, void *a, void *b, int n, float sa, float sb) {
+    float step[4];
+    float pos[4];
+    float vel[4];
+    int i;
+    int r, g, color;
+    int spin;
+    float scale;
+    float d;
+    unsigned char *m;
+    unsigned char *p;
+
+    FUN_001f9a28(step, b, a);
+    FUN_001f9a68(step, step, 1.0f / (float)n);
+    *(OvlQuad *)vel = (OvlQuad)0;
+    vel[2] = 0.01f;
+    vel[3] = 1.0f;
+    d = (sb - sa) / (float)n;
+    for (i = 0; i < n; i++) {
+        FUN_001f9a68(pos, step, FUN_001fa6c0(i));
+        FUN_001f9a10(pos, a, pos);
+        r = FUN_L00_00257b90(0x40, 0x70);
+        g = FUN_L00_00257b90(0x40, 0x7F);
+        color = g | (g << 16 | g << 8);
+        scale = random_float_between_alt(1.0f, 1.02f);
+        spin = FUN_L00_00257b90(-2, 2);
+        vel[0] = FUN_L00_00257c48(0.0f, 0.0025f);
+        vel[1] = FUN_L00_00257c48(0.0f, 0.0025f);
+        vel[2] = random_float_between_alt(D_L02_001619D4 * 0.1f, D_L02_001619D4);
+        m = FUN_L00_0026d000(pos, D_L02_001619DC, 1.0f, scale, spin, vel, d + sa * 210000.0f, r << 24 | color);
+        if (m) {
+            p = m + 0x20;
+            if (random_integer_below(2)) {
+                m[3] = 0x44;
+            }
+            *(unsigned short *)(m + 0xA) = D_L02_001619E0;
+            *(int *)(p + 4) = 2;
+            p[0xA] = r;
+            p[0xB] = D_L02_001619E0;
+        }
+    }
+}
 #include "qcopy.h"
 
 /* Transforms two table vectors by the moby's matrix and passes them on. */
