@@ -1795,6 +1795,18 @@ class DataRefsTests(unittest.TestCase):
         ])
         self.assertEqual(found, [(0x100008, 0x160008, 4, "store")])
 
+    def test_level_image_splits_text_from_data_records(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp) / "level_07"
+            folder.mkdir()
+            (folder / "text.bin").write_bytes(b"\x00" * 8)
+            (folder / "manifest.json").write_text(json.dumps({"records": [
+                {"name": "data", "address": 0x166000, "bytes": 64},
+                {"name": "text", "address": 0x1EAA00, "bytes": 8}]}))
+            code, data = self.refs.level_image(Path(tmp), 7)
+        self.assertEqual(code, [("text", 0x1EAA00, b"\x00" * 8)])
+        self.assertEqual(data, [("data", 0x166000, 64)])
+
     def test_shown_keeps_paths_outside_the_checkout(self):
         self.assertEqual(self.refs.shown(Path("/nonexistent/out")), "/nonexistent/out")
 

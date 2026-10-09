@@ -23,12 +23,16 @@ Usage:
   python3 scripts/data-refs.py --owner runtime/      # only units under a path
   python3 scripts/data-refs.py --labels             # also check src/ D_ labels
   python3 scripts/data-refs.py --elf PATH           # another executable
+  python3 scripts/data-refs.py --level 0 --overlays DIR
+                                                    # one level image, DIR is
+                                                    # extracted/overlays/ from Tools
 """
 
 from __future__ import annotations
 
 import argparse
 import bisect
+import json
 import re
 import sys
 from dataclasses import dataclass
@@ -46,6 +50,8 @@ ROOT = Path(__file__).resolve().parents[1]
 ELF_PATH = ROOT / "config" / "us" / "SCUS_971.99"
 CONFIG_PATH = ROOT / "config" / "us" / "rnc1.us.yaml"
 OUT_DIR = ROOT / "build" / "data-refs"
+FUNCTIONS_PATH = ROOT / "config" / "overlays" / "us" / "functions.tsv"
+DEFAULT_GP = 0x166C00
 
 SHF_ALLOC = 0x2
 SHF_EXECINSTR = 0x4
@@ -159,6 +165,40 @@ def owner_of(addr: int, starts: list[int], owners: list[tuple[str, str]]) -> str
     if kind != "c":
         return f"{owner} [{kind}]"
     return f"{owner} [C]" if (ROOT / "src" / f"{owner}.c").exists() else owner
+
+
+def level_image(overlays: Path, level: int) -> tuple[list, list]:
+    """(code, data) of one level program, from extracted/overlays in the Tools checkout."""
+    folder = overlays / f"level_{level:02d}"
+    manifest = json.loads((folder / "manifest.json").read_text())
+    code, data = [], []
+    for record in manifest["records"]:
+        if record["name"] == "text":
+            code.append(("text", record["address"], (folder / "text.bin").read_bytes()))
+        else:
+            data.append((record["name"], record["address"], record["bytes"]))
+    return code, data
+
+
+def level_owner_of(level: int) -> Callable[[int], str]:
+    """Owner of an address in a level: the nearest function at or below it."""
+    tag = f"{level:02d}:"
+    places = []
+    for line in FUNCTIONS_PATH.read_text().splitlines():
+        fields = line.split("\t")
+        if line.startswith("#") or len(fields) < 6:
+            continue
+        for place in fields[5].split(","):
+            if place.startswith(tag):
+                places.append((int(place[len(tag):], 16), fields[0]))
+    places.sort()
+    starts = [address for address, _ in places]
+
+    def owner(addr: int) -> str:
+        index = bisect.bisect_right(starts, addr) - 1
+        return places[index][1] if index >= 0 else "?"
+
+    return owner
 
 
 def disassemble(code: bytes, base: int) -> Iterator[Union[object, Quad, Opaque]]:
@@ -286,18 +326,25 @@ def section_name(addr: int, data: list[tuple[str, int, int]]) -> str | None:
     return None
 
 
-def c_labels() -> set[int]:
-    """Data addresses named by a ``D_`` label in the C sources, outside overlays."""
+def c_labels(level: int | None = None) -> set[int]:
+    """Data addresses named by a ``D_`` label in the C sources.
+
+    The boot executable's labels are those outside src/overlays/; a level's are
+    the ``D_LNN_`` labels inside src/overlays/lNN/.
+    """
+    if level is None:
+        pattern, files = LABEL_RE, [p for p in (ROOT / "src").rglob("*.c") if "overlays" not in p.parts]
+    else:
+        pattern = re.compile(rf'__asm__\("D_L{level:02d}_([0-9A-Fa-f]{{8}})"\)')
+        files = list((ROOT / "src" / "overlays" / f"l{level:02d}").rglob("*.c"))
     labels = set()
-    for path in (ROOT / "src").rglob("*.c"):
-        if "overlays" in path.parts:
-            continue
-        labels.update(int(m, 16) for m in LABEL_RE.findall(path.read_text(errors="replace")))
+    for path in files:
+        labels.update(int(m, 16) for m in pattern.findall(path.read_text(errors="replace")))
     return labels
 
 
-def build(accesses: Iterable[Access], data: list, owner_filter: str | None):
-    starts, owners = owners_table(CONFIG_PATH)
+def build(accesses: Iterable[Access], data: list, owner_for: Callable[[int], str],
+          owner_filter: str | None):
     rows: dict[int, dict] = {}
     outside = 0
     for access in accesses:
@@ -305,7 +352,7 @@ def build(accesses: Iterable[Access], data: list, owner_filter: str | None):
         if name is None:
             outside += 1
             continue
-        owner = owner_of(access.insn, starts, owners)
+        owner = owner_for(access.insn)
         if owner_filter and owner_filter not in owner:
             continue
         row = rows.setdefault(access.target, {
@@ -349,31 +396,51 @@ def main(argv=None) -> int:
     parser.add_argument("--owner", help="only accesses made by units whose owner contains TEXT")
     parser.add_argument("--labels", action="store_true",
                         help="compare with the D_ labels in src/ (outside overlays)")
-    parser.add_argument("--out", type=Path, default=OUT_DIR, help="output directory")
+    parser.add_argument("--level", type=int, metavar="N",
+                        help="scan level N's program instead of the boot executable")
+    parser.add_argument("--overlays", type=Path, metavar="DIR",
+                        help="extracted/overlays/ of the Tools checkout (with --level)")
+    parser.add_argument("--out", type=Path, default=None, help="output directory")
     args = parser.parse_args(argv)
 
-    if not args.elf.exists():
-        print(f"missing {args.elf}: copy your own SCUS_971.99 there (see docs/building.md)",
-              file=sys.stderr)
-        return 1
-    gp_match = GP_VALUE_RE.search(CONFIG_PATH.read_text())
-    gp = int(gp_match.group(1), 16) if gp_match else 0x166C00
+    if args.level is None:
+        if not args.elf.exists():
+            print(f"missing {args.elf}: copy your own SCUS_971.99 there (see docs/building.md)",
+                  file=sys.stderr)
+            return 1
+        gp_match = GP_VALUE_RE.search(CONFIG_PATH.read_text())
+        gp = int(gp_match.group(1), 16) if gp_match else DEFAULT_GP
+        code, data = read_sections(args.elf)
+        starts, owners = owners_table(CONFIG_PATH)
+        owner_for = lambda addr: owner_of(addr, starts, owners)  # noqa: E731
+        name = "boot"
+    else:
+        if args.overlays is None:
+            print("--level needs --overlays DIR (extracted/overlays/ of Tools)", file=sys.stderr)
+            return 1
+        gp, name = DEFAULT_GP, f"level-{args.level:02d}"
+        code, data = level_image(args.overlays, args.level)
+        # A level keeps the executable's core.* data, which its records do not replace.
+        if args.elf.exists():
+            _, boot_data = read_sections(args.elf)
+            data += [section for section in boot_data if section[0].startswith("core.")]
+        owner_for = level_owner_of(args.level)
 
-    code, data = read_sections(args.elf)
-    rows, outside = build(scan_elf(code, data, gp), data, args.owner)
+    out = args.out or OUT_DIR / name
+    rows, outside = build(scan_elf(code, data, gp), data, owner_for, args.owner)
 
-    args.out.mkdir(parents=True, exist_ok=True)
-    write_tsv(rows, args.out / "refs.tsv")
+    out.mkdir(parents=True, exist_ok=True)
+    write_tsv(rows, out / "refs.tsv")
     summary = summarise(rows, data, outside)
     if args.labels:
-        labels = c_labels()
+        labels = c_labels(args.level)
         reached = {t for t in rows if section_name(t, data)}
         summary.append(f"C D_ labels reached by the code\t{len(labels & reached)}\t"
                        f"of {len(labels)}\t-")
         summary.append(f"C D_ labels not reached\t{len(labels - reached)}\t-\t-")
-    (args.out / "summary.txt").write_text("\n".join(summary) + "\n")
+    (out / "summary.txt").write_text("\n".join(summary) + "\n")
     print("\n".join(summary))
-    print(f"wrote {shown(args.out / 'refs.tsv')}")
+    print(f"wrote {shown(out / 'refs.tsv')}")
     return 0
 
 
