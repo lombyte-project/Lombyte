@@ -783,7 +783,72 @@ void FUN_L01_002fd9a0(SparkMoby *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002feb58.s", FUN_L01_002feb58);
+/* The four scrolling layers FUN_L01_002feb28 draws (0x60 bytes each, the ScrollLayer layout of 002b96e0.c). */
+typedef struct {
+    Vec4 *verts;
+    u8 pad4[8];
+    s32 count;
+    u8 pad10[0x4C];
+    f32 glow;
+} WaterLayer;
+
+extern WaterLayer D_L01_001FBC80[];
+extern s32 D_L01_00161CE0 __attribute__((sda));
+extern s32 D_L01_0015F5CC;
+extern f32 FUN_001fa6c0(s32);
+extern f32 FUN_001f9de0(f32);
+extern void FUN_L01_002feb28(void);
+extern int enqueue_callback_2518(void (*)(void), void *) __asm__("FUN_001f4600");
+
+/* On first use, lowers and ripples the layers' vertices; every frame, pulses their glow and queues FUN_L01_002feb28. */
+void FUN_L01_002feb58(void *arg) {
+    s32 i;
+    s32 g;
+    s32 j;
+    s32 k;
+    s32 n;
+    s32 m;
+    Vec4 *v;
+    Vec4 *w;
+    f32 s;
+
+    if (D_L01_00161CE0 == 0) {
+        D_L01_00161CE0 = 1;
+        for (i = 0; i < 4; i++) {
+            v = (D_L01_001FBC80 + i)->verts;
+            for (j = 0; j < (D_L01_001FBC80 + i)->count; j++) {
+                v->f[3] = v->f[2] = v->f[2] - 0.45f;
+                v++;
+            }
+        }
+        k = 1;
+        for (n = 0; n < 4; n++) {
+            k--;
+            w = (D_L01_001FBC80 + n)->verts;
+            for (m = 0; m < (D_L01_001FBC80 + n)->count; m += 2) {
+                if (k & 1) {
+                    w[0].f[2] += 0.05f;
+                    w[0].f[3] -= 0.05f;
+                    w[1].f[2] -= 0.05f;
+                    w[1].f[3] += 0.05f;
+                } else {
+                    w[0].f[2] -= 0.05f;
+                    w[0].f[3] += 0.05f;
+                    w[1].f[2] += 0.05f;
+                    w[1].f[3] -= 0.05f;
+                }
+                w += 2;
+                k++;
+            }
+        }
+    }
+    s = FUN_001f9de0((FUN_001fa6c0(D_L01_0015F5CC & 0x3F) - 32.0f) * 0.09817477f);
+    s = s * 0.5f + 0.5f;
+    for (g = 3; g >= 0; g--) {
+        D_L01_001FBC80[g].glow = s;
+    }
+    enqueue_callback_2518(FUN_L01_002feb28, arg);
+}
 typedef struct {
     Vec4 home;
     f32 t;
