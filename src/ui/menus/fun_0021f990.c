@@ -51,7 +51,7 @@ s32 FUN_0021f990(struct MenuScreen *stream) {
             if (stream->data.stream.state == -1) {
                 stream->data.stream.state = 0;
             }
-            idx = memory_card_state.card[0].entries[idx].unk0;
+            idx = memory_card_state.card[0].entries[idx].id;
         } else {
             stream->data.stream.state = -1;
         }

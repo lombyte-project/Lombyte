@@ -1,24 +1,14 @@
 #include "types.h"
 #include "qcopy.h"
+#include "rnc/rendering/view.h"
 #include "rnc/rendering/dma_tag.h"
 
-typedef struct {
-    u8 pad0[0x190];
-    u8 v190[0x10];
-    u8 v1A0[0x10];
-    u8 pad1B0[0x60];
-    f32 f210;
-    u8 pad214[0x14];
-    f32 f228;
-    f32 f22C;
-} Camera;
 
 extern u16 D_0010E800[];
 extern u8 D_0010E810[];
 extern s32 D_0015F620;
 extern f32 D_0015F348 __attribute__((sda));
 extern u8 D_00187080[];
-extern Camera D_0018CD00;
 extern void FUN_001f9ff8(f32 (*)[4], f32);
 extern void FUN_001f9a68(f32 *, u8 *, f32);
 extern void FUN_001fa378(void *, u8 *, f32 (*)[4]);
@@ -57,13 +47,13 @@ void font_queue_vu_state(void) {
     base[10].tag = 0x8000;
     base[10].addr = 0x303EC000;
     base[10].vif0 = 0x412;
-    *(f32 *)&base[10].vif1 = D_0018CD00.f210;
+    *(f32 *)&base[10].vif1 = view_context.fog_mul;
     p = (u8 *)(base + 11);
-    qcopy(p, D_0018CD00.v190);
+    qcopy(p, &view_context.screen_scale);
     p = (u8 *)(base + 12);
-    qcopy(p, D_0018CD00.v1A0);
-    *(f32 *)&base[13].tag = D_0018CD00.f22C;
-    *(f32 *)&base[13].addr = D_0018CD00.f228;
+    qcopy(p, &view_context.screen_bias);
+    *(f32 *)&base[13].tag = view_context.fog_far_int;
+    *(f32 *)&base[13].addr = view_context.fog_near_int;
     base[13].vif0 = 0;
     base[13].vif1 = 0;
     base[14].tag = 0x3000000;

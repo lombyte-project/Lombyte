@@ -15,8 +15,15 @@
 
 /* One save entry in the card directory listing (0x1C bytes, five per card). */
 struct MemoryCardSaveEntry {
-    s32 unk0;                  /* 0x00: read by the load menu */
-    u8 pad_4[0x18];
+    s32 id;                    /* 0x00: -1 = empty; the load menu reads it */
+    s32 bolts;                 /* 0x04 */
+    s32 count;                 /* 0x08 */
+    s32 time;                  /* 0x0C: play ticks */
+    u8 pad_10[5];
+    u8 b15;                    /* 0x15 */
+    u8 b16;                    /* 0x16 */
+    u8 b17;                    /* 0x17 */
+    u8 pad_18[4];
 };
 
 struct MemoryCard {

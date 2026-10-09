@@ -27,23 +27,12 @@ struct Globals_0015F634 {
     s32 unk1C;
 };
 
-struct Globals_0018CD00 {
-    u8 pad_0[0x218];
-    s32 unk218;
-    f32 unk21C;
-    u8 pad_220[0x8];
-    f32 unk228;
-    f32 unk22C;
-    s32 unk230;
-    s32 unk234;
-    s32 unk238;
-};
-
 struct Globals_00194100 {
     u8 pad_0[0x10];
     s32 unk10;
 };
 #include "sda.h"
+#include "rnc/rendering/view.h"
 #include "rnc/globals.h"
 
 #include "rnc/storage/memory_card/memory_card_state.h"
@@ -58,7 +47,6 @@ extern s32 D_0015F438 MACRO_ADDR;
 extern s32 D_0015F600 MACRO_ADDR;
 extern s32 D_0015F618 MACRO_ADDR;
 extern struct Globals_0015F634 *D_0015F634;
-extern struct Globals_0018CD00 D_0018CD00;
 extern struct Globals_00194100 D_00194100;
 extern u8 D_001E8988[];
 
@@ -133,13 +121,13 @@ void do_space_transition(void) {
     D_0015ED5C = 0;
     snd_stream_safe_cd_callback(0);
     snd_stream_safe_cd_sync(0);
-    D_0018CD00.unk238 = 16;
-    D_0018CD00.unk21C = 524288.0f;
-    D_0018CD00.unk228 = 255.0f;
-    D_0018CD00.unk230 = 0;
-    D_0018CD00.unk234 = 0;
-    D_0018CD00.unk218 = 0;
-    D_0018CD00.unk22C = 128.0f;
+    view_context.fog_b = 16;
+    view_context.fog_far_dist = 524288.0f;
+    view_context.fog_near_int = 255.0f;
+    view_context.fog_r = 0;
+    view_context.fog_g = 0;
+    view_context.fog_near_dist = 0;
+    view_context.fog_far_int = 128.0f;
     PackDmaTag(0, 0, 0);
     if (D_0015F600 < 0) {
         while (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0) {

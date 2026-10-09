@@ -1,5 +1,6 @@
 #include "types.h"
 #include "sda.h"
+#include "rnc/storage/memory_card/memory_card_state.h"
 
 typedef struct {
     u8 pad_0[0x20];
@@ -8,30 +9,8 @@ typedef struct {
     s32 selected_slot;
 } SaveMenu;
 
-typedef struct {
-    s32 id;
-    s32 bolts;
-    s32 count;
-    s32 time;
-    u8 pad_10[5];
-    u8 b15;
-    u8 b16;
-    u8 b17;
-    u8 pad_18[4];
-} SaveSlot;
 
-typedef struct {
-    u8 pad_0[8];
-    s32 state;
-    u8 pad_C[0x14];
-    SaveSlot slots[5];
-    u8 pad_AC[0x28];
-    s32 xD4;
-    s32 pad_D8;
-    s32 xDC;
-} SaveInfo;
 
-extern SaveInfo D_0013D290;
 extern s32 D_0015ED80 MACRO_ADDR;
 extern s32 D_001601B0 __attribute__((sda));
 extern char D_001602A0[];
@@ -54,7 +33,7 @@ s32 draw_save_slot_list(SaveMenu *menu) __asm__("FUN_002239e0");
 
 s32 draw_save_slot_list(SaveMenu *menu) {
     char text[0x50];
-    SaveSlot *slot;
+    struct MemoryCardSaveEntry *slot;
     s32 color;
     s32 width;
     s32 inner_right;
@@ -78,13 +57,13 @@ s32 draw_save_slot_list(SaveMenu *menu) {
         inner_right = width - 3;
         inner_top = y - 1;
         inner_bottom = y + 0x31;
-        if (D_0013D290.xD4 < 3 && D_0013D290.xDC < 0 && menu->selected_slot == i) {
+        if (memory_card_state.state < 3 && memory_card_state.pending_state < 0 && menu->selected_slot == i) {
             append_screen_sprite(0, highlight_top, width, highlight_bottom, 0x8020FFFF, 0);
             append_screen_sprite(3, inner_top, inner_right, inner_bottom, D_001601B0, 0);
         }
         append_screen_sprite(3, inner_top, inner_right, inner_bottom, 0x80303030, 0);
-        slot = &D_0013D290.slots[i];
-        if (D_0013D290.xD4 >= 3 || D_0013D290.xDC >= 0 || D_0013D290.state != 2) {
+        slot = &memory_card_state.card[0].entries[i];
+        if (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0 || memory_card_state.card[0].type != 2) {
             y += 0x30;
         } else {
             if (slot->id == -1) {
