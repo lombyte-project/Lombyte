@@ -1244,7 +1244,74 @@ float FUN_L00_002bec80(Vec4_2bec80 *p, void *q) {
     }
     return 0.0f;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bed90.s", FUN_L00_002bed90);
+#else
+extern char *D_L00_001ABA00[];
+extern char D_0013F3D0[] __attribute__((section(".data")));
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern float FUN_001fa688(float, float);
+extern float FUN_001f99c0(float);
+extern int FUN_001efa68_2bed90(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+
+char *FUN_L00_002bed90(char *self, float *position, float *angles, int unused, int mode) {
+    char *candidate;
+    char *best = 0;
+    float target[4] __attribute__((aligned(16)));
+    float bestScore = 1000000000.0f;
+    float distance, score, angleError, heightError, bonus;
+    int checkCollision = 1;
+    int valid;
+    int i;
+    (void)unused;
+    for (i = 0; (candidate = D_L00_001ABA00[i]) != 0; i++) {
+        char *classData = *(char **)(candidate + 0x24);
+        short classId = classData ? *(short *)(classData + 0x46) : 0;
+        if (classId != 5)
+            continue;
+        distance = FUN_001f9b48(position, candidate + 0x10);
+        if (distance > 40.0f)
+            continue;
+        if (distance > 30.0f)
+            checkCollision = 0;
+        qcopy(target, candidate + 0x10);
+        target[2] += 0.4f;
+        angleError = FUN_001fa688(angles[2], FUN_001f9e90(target[0] - position[0], target[1] - position[1]));
+        angleError *= angleError;
+        heightError = FUN_001fa688(angles[1], FUN_001f9e90(distance, target[2] - position[2]));
+        heightError *= heightError;
+        if (checkCollision) {
+            if (8.0f < FUN_001f99c0(*(float *)(candidate + 0x18) - *(float *)(self + 0x18)))
+                valid = 1;
+            else
+                valid = FUN_001efa68_2bed90(position, target, 6, candidate, 0) != 0;
+        } else {
+            valid = *(unsigned char *)(candidate + 0x31) == 0;
+        }
+        bonus = 0.0f;
+        if (mode != 0 || !valid) {
+            score = FUN_001f9b48(position, target);
+            if (*(float *)(candidate + 0x18) - *(float *)(self + 0x18) > 3.25f)
+                score += 15.0f;
+            if (valid)
+                bonus = 5.0f;
+            score = score + bonus + heightError + angleError;
+            if (score < bestScore) {
+                bestScore = score;
+                best = candidate;
+            }
+        }
+    }
+    if (best == 0) {
+        char *playerPosition = D_0013F3D0;
+        if (FUN_001f9b80(self + 0x10, playerPosition) > 3.2f)
+            best = *(char **)(playerPosition + 0x2000);
+    }
+    return best;
+}
+#endif
 #include "sda.h"
 
 typedef int V4 __attribute__((mode(TI), aligned(16)));
