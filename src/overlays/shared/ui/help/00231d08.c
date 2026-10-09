@@ -802,12 +802,6 @@ typedef union {
     u128_2332d0 q;
     float f[4];
 } Vec4_2332d0;
-typedef struct {
-    u8 p0[0x90];
-    Vec4_2332d0 v90;
-    u8 p1[0x270 - 0xA0];
-    Vec4_2332d0 v270;
-} S13F350_2332d0;
 float FUN_001f9dc8_002332d0(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_002332d0(float) __asm__("FUN_001f9de0");
 void FUN_001fa050_002332d0(void *, void *) __asm__("FUN_001fa050");
@@ -817,18 +811,18 @@ float FUN_001f9e90_002332d0(float, float) __asm__("FUN_001f9e90");
 float FUN_L00_002332d0(void) {
     float m[16] __attribute__((aligned(16)));
     Vec4_2332d0 v, a, b, w;
-    S13F350_2332d0 *P;
+    struct Hero *P;
     v.f[0] = FUN_001f9dc8_002332d0(0.0f);
     v.f[1] = FUN_001f9de0_002332d0(0.0f);
     v.f[2] = 0.0f;
     FUN_001fa050_002332d0(m, &hero.motion.rot);
     P = &hero;
     FUN_001f9d20_002332d0(&v, &v, m);
-    if (P->v270.f[0] != 0.0f || P->v270.f[1] != 0.0f) {
-        w.q = P->v270.q;
+    if (P->unk270.f[0] != 0.0f || P->unk270.f[1] != 0.0f) {
+        w.q = P->unk270.q;
         FUN_001f99f8_002332d0(&a);
         FUN_001f99f8_002332d0(&b);
-        a.f[2] = -FUN_001f9e90_002332d0(P->v270.f[0], P->v270.f[1]);
+        a.f[2] = -FUN_001f9e90_002332d0(P->unk270.f[0], P->unk270.f[1]);
         FUN_001fa050_002332d0(m, &a);
         FUN_001f9d20_002332d0(&v, &v, m);
         FUN_001f9d20_002332d0(&w, &w, m);

@@ -1505,17 +1505,6 @@ typedef union {
     OvlQuad q;
     float f[4];
 } V_209a40;
-typedef struct {
-    unsigned char pad0[0x80];
-    float f80;
-    float f84;
-    float f88;
-    unsigned char pad8C[0x100 - 0x8C];
-    V_209a40 v100;
-    unsigned char pad110[0x2080 - 0x110];
-    void *p2080;
-    int i2084;
-} P_209a40;
 extern float D_0015ED6C_209a40 __asm__("D_0015ED6C");
 extern float FUN_002132a8_209a40(float, float) __asm__("FUN_002132a8");
 extern void FUN_001f9a68_209a40(void *, void *, float) __asm__("FUN_001f9a68");
@@ -1526,31 +1515,31 @@ void FUN_L00_00209a40(int n, int mode) {
     float pos[4];
     V_209a40 v;
     int i;
-    P_209a40 *p;
+    struct Hero *p;
     V_209a40 *src;
 
     for (i = 0; i < n; i++) {
         p = &hero;
-        src = &p->v100;
+        src = (V_209a40 *)&p->motion.unk100;
         if (mode == 0) {
-            pos[0] = p->f80 + FUN_002132a8_209a40(-0.1f, 0.1f);
-            pos[1] = p->f84 + FUN_002132a8_209a40(-0.1f, 0.1f);
-            pos[2] = p->f88 + FUN_002132a8_209a40(-0.5f, 0.1f);
+            pos[0] = p->motion.pos.f[0] + FUN_002132a8_209a40(-0.1f, 0.1f);
+            pos[1] = p->motion.pos.f[1] + FUN_002132a8_209a40(-0.1f, 0.1f);
+            pos[2] = p->motion.pos.f[2] + FUN_002132a8_209a40(-0.5f, 0.1f);
         } else if (mode == 1) {
             if (!(i & 1)) {
-                FUN_L00_0024f7c8_209a40(p->p2080, 0, pos);
+                FUN_L00_0024f7c8_209a40(p->moby, 0, pos);
             } else {
-                FUN_L00_0024f7c8_209a40(p->p2080, 0xE, pos);
+                FUN_L00_0024f7c8_209a40(p->moby, 0xE, pos);
             }
         } else if (mode == 2) {
             if (!(i & 1)) {
-                FUN_L00_0024f7c8_209a40(p->p2080, 0x17, pos);
+                FUN_L00_0024f7c8_209a40(p->moby, 0x17, pos);
             } else {
-                FUN_L00_0024f7c8_209a40(p->p2080, 0x16, pos);
+                FUN_L00_0024f7c8_209a40(p->moby, 0x16, pos);
             }
         }
         qcopy(&v, src);
-        if (p->i2084 == 0x34) {
+        if (p->state.current == 0x34) {
             FUN_001f9a68_209a40(&v, &v, 1.15f);
         } else {
             FUN_001f9a68_209a40(&v, &v, 0.7f);
