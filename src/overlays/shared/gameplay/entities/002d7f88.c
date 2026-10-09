@@ -876,7 +876,93 @@ void FUN_L00_002ddca0(void) {
     D_L00_00161B44_002ddca0 = 1;
     D_L00_001E6008_002ddca0 = 0;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ddcb8.s", FUN_L00_002ddcb8);
+#else
+extern float D_L00_00161B80_002ddcb8 __asm__("D_L00_00161B80") __attribute__((sda));
+extern float D_L00_00161B84_002ddcb8 __asm__("D_L00_00161B84") __attribute__((sda));
+extern float D_L00_00161B50_002ddcb8 __asm__("D_L00_00161B50") __attribute__((sda));
+extern int D_L00_00161B54_002ddcb8 __asm__("D_L00_00161B54") __attribute__((sda));
+extern int D_L00_00161B58_002ddcb8 __asm__("D_L00_00161B58") __attribute__((sda));
+extern char D_L00_00166FD0_002ddcb8[] __asm__("D_L00_00166FD0");
+extern char D_L00_001E5F40_002ddcb8[] __asm__("D_L00_001E5F40");
+extern char D_L00_001E5F30_002ddcb8[] __asm__("D_L00_001E5F30");
+extern char D_L00_00161B60_002ddcb8[] __asm__("D_L00_00161B60");
+extern char D_L00_00161B70_002ddcb8[] __asm__("D_L00_00161B70");
+void FUN_001ff300_002ddcb8(void *, void *, float) __asm__("FUN_L00_001ff300");
+void FUN_001ff500_002ddcb8(void *, void *, float) __asm__("FUN_L00_001ff500");
+void FUN_001ff278_002ddcb8(void *, void *, void *) __asm__("FUN_L00_001ff278");
+void FUN_001ff260_002ddcb8(void *) __asm__("FUN_L00_001ff260");
+float FUN_00257cb0_002ddcb8(void) __asm__("FUN_L00_00257cb0");
+void FUN_0025fc08_002ddcb8(void *, float, void *, void *) __asm__("FUN_L00_0025fc08");
+typedef union {
+    unsigned int bits __attribute__((mode(TI)));
+    float f[4];
+} __attribute__((aligned(16))) V_002ddcb8;
+
+void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
+    V_002ddcb8 first, second, third, scaled_first, scaled_third, temp1, temp2;
+    V_002ddcb8 *next;
+    char *global = (char *)&D_0013F350_c;
+    char *vector_source;
+    float sampled;
+    int i;
+    char *record;
+    short *halfword;
+
+    if (!*(int *)((char *)&D_L00_00161B84_002ddcb8 - 0x44))
+        return;
+    D_L00_00161B84_002ddcb8 = 1.7f;
+    *(int *)((char *)&D_L00_00161B84_002ddcb8 - 0x44) = 0;
+    if ((*(int *)(global + 0x2084) == 30 || *(int *)(global + 0x2084) == 1) &&
+        (*(u16 *)(*(char **)(global + 0x2080) + 0x34) & 1)) {
+        qcopy(&first, D_L00_00166FD0_002ddcb8);
+        qcopy(&second, D_L00_00166FD0_002ddcb8 + 0x10);
+        qcopy(&third, D_L00_00166FD0_002ddcb8 + 0x20);
+    } else if (*(short *)(global + 0x22c8) == 1) {
+        FUN_001ff300_002ddcb8(&first, frame_context + 0xd0, -1.0f);
+        qcopy(&second, frame_context + 0xc0);
+        qcopy(&third, frame_context + 0xe0);
+    } else {
+        vector_source = global + 0x640;
+        qcopy(&first, vector_source);
+        qcopy(&second, vector_source + 0x10);
+        qcopy(&third, vector_source + 0x20);
+    }
+    FUN_001ff500_002ddcb8(&scaled_first, &first, 1.7f);
+    FUN_001ff500_002ddcb8(&scaled_third, &third, 1.0f);
+    *(V_002ddcb8 *)D_L00_001E5F40_002ddcb8 = *(V_002ddcb8 *)initial_vector;
+    *(short *)(D_L00_001E5F40_002ddcb8 + 0xc8) = 0;
+    next = (V_002ddcb8 *)(D_L00_001E5F40_002ddcb8 + 0x10);
+    record = D_L00_001E5F30_002ddcb8 + 0x10;
+    halfword = (short *)(D_L00_001E5F40_002ddcb8 + 0xca);
+    i = 9;
+    while (i--) {
+        FUN_001ff278_002ddcb8(next, record, &scaled_first);
+        ++next;
+        *halfword++ = 0;
+        record += 0x10;
+    }
+    FUN_001ff260_002ddcb8(D_L00_00161B60_002ddcb8);
+    temp1.bits = 0;
+    temp2.bits = 0;
+    temp2.f[3] = 1.0f;
+    temp1.f[2] = 0.1f;
+    temp1.f[3] = 1.0f;
+    temp2.f[0] = 1.0f;
+    sampled = FUN_00257cb0_002ddcb8();
+    FUN_0025fc08_002ddcb8(D_L00_00161B70_002ddcb8, sampled, &temp1, &temp2);
+    D_L00_00161B80_002ddcb8 = sampled;
+    D_L00_00161B50_002ddcb8 = 0.006f;
+    D_L00_00161B54_002ddcb8 = 0;
+    D_L00_00161B58_002ddcb8 = 0;
+    if (*(int *)((char *)&D_L00_00161B84_002ddcb8 - 0x40)) {
+        *(int *)((char *)&D_L00_00161B84_002ddcb8 - 0x40) = 0;
+        for (i = 199; i >= 0; --i)
+            *(int *)(D_L00_001E5F30_002ddcb8 - 0xC + i * 0x18) = 0;
+    }
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ddf60.s", FUN_L00_002ddf60);
 #define NOT_SDA
 
