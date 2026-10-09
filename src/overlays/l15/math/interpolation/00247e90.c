@@ -2,4 +2,42 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00247e90.s", FUN_L15_00247e90);
+#include "eetypes.h"
+#include "qcopy.h"
+#include "rnc/math/vector.h"
+#include "rnc/overlay/collision.h"
+
+extern CollisionHit coll_hit __asm__("D_L15_00174440") __attribute__((section(".data")));
+extern int FUN_L00_001f0d60(void *, float, int, void *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern f32 FUN_001f9b20(void *);
+extern f32 FUN_001f9e90(f32, f32);
+
+int FUN_L15_00247e90(char *obj, u128 *delta, int flags, float step, float radius) {
+    Vec4 start;
+    Vec4 probe;
+    int pushed = 0;
+    int i;
+    int mask;
+
+    qcopy(&start, obj + 0x10);
+    FUN_001f9a10(obj + 0x10, obj + 0x10, delta);
+    i = 0;
+    do {
+        mask = (flags << 1) & 0x20;
+        qcopy(&probe, obj + 0x10);
+        probe.f[2] += step;
+        if (FUN_L00_001f0d60(&probe, radius, mask | 4, obj) == 0) {
+            break;
+        }
+        if (FUN_001f9e90(coll_hit.normal_z, FUN_001f9b20(&coll_hit.normal_x)) > 0.5235988f) {
+            qcopy(obj + 0x10, coll_hit.pad30);
+            *(float *)(obj + 0x18) -= step;
+            pushed |= 1;
+        }
+        i++;
+    } while (i < 6);
+    FUN_001f9a28(delta, obj + 0x10, &start);
+    return pushed;
+}
