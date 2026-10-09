@@ -591,7 +591,79 @@ void FUN_L05_00253850(void) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00253b48.s", FUN_L05_00253b48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254058.s", FUN_L05_00254058);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254358.s", FUN_L05_00254358);
+#else
+extern char *D_L05_001B0930[];
+extern f32 FUN_001f9e90(f32, f32);
+extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
+extern f32 FUN_001f9b80(void *, void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern f32 find_ground_height(f32, void *, s32) __asm__("FUN_00213508");
+extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
+
+typedef struct {
+    f32 x, y, z, w;
+} __attribute__((aligned(16))) HelpPathPoint;
+
+typedef struct {
+    s32 count;
+    u8 pad[12];
+    HelpPathPoint points[1];
+} HelpPath;
+
+void FUN_L05_00254358(f32 *position, f32 *direction) {
+    char *g = D_0013F350_c2;
+    HelpPath *path;
+    f32 best;
+    s32 index = 0;
+    s32 selected = 0;
+    f32 point[4] __attribute__((aligned(16)));
+    HelpPathPoint *p;
+
+    if (*(void **)(g + 0x86C) == 0) {
+        *(HelpPathPoint *)position = *(HelpPathPoint *)(g + 0x80);
+        *(HelpPathPoint *)direction = *(HelpPathPoint *)(g + 0x90);
+        return;
+    }
+    path = (HelpPath *)D_L05_001B0930[*(s32 *)(*(char **)(g + 0x86C) + 0x78)];
+    best = 9999999.0f;
+    p = path->points;
+    while (index < path->count) {
+        f32 a = FUN_001f9e90(p->x - *(f32 *)(g + 0x80), p->y - *(f32 *)(g + 0x84));
+        s32 next = (index + path->count + 2) % path->count;
+        f32 b = FUN_001f9e90(path->points[next].x - p->x, path->points[next].y - p->y);
+        if (fast_difference_between_rotations(a, b) > 1.5707964f) {
+            s32 eligible = 1;
+            if (current_level_index == 0x10 && *(void **)(g + 0x8B4) != 0) {
+                char *v = *(char **)(g + 0x8B4);
+                f32 a = *(f32 *)(v + *(s16 *)(g + 0x8C8) * 16 + 0x18);
+                f32 b = *(f32 *)(v + *(s16 *)(g + 0x898) * 16 + 0x18);
+                f32 high = a < b ? b : a;
+                if (AbsoluteFloat(high - p->z) > 4.0f) {
+                    eligible = 0;
+                }
+            }
+            if (eligible) {
+                f32 distance = FUN_001f9b80(g + 0x80, p);
+                if (distance < best) {
+                    best = distance;
+                    selected = index;
+                }
+            }
+        }
+        index += 2;
+        p += 2;
+    }
+    *(HelpPathPoint *)position = path->points[selected];
+    *(HelpPathPoint *)point = *(HelpPathPoint *)position;
+    point[2] += 2.0f;
+    position[2] = find_ground_height(0.5f, point, 0);
+    clear_u64_value(direction);
+    direction[2] = FUN_001f9e90(path->points[selected + 1].x - path->points[selected].x,
+                                 path->points[selected + 1].y - path->points[selected].y);
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254608.s", FUN_L05_00254608);
 #include "sda.h"
 
