@@ -12,11 +12,11 @@ void FUN_00207b08(s32 buffer) {
     s32 n;
 
     func_00208810();
-    if (D_001A00F0.unk28 == 0) {
+    if (level_map_selection.unk28 == 0) {
         FillTransferWords(buffer, 0, 0x800);
         return;
     }
-    n = func_001FA860(buffer, 0x800, D_001A00F0.unk14, D_001A00F0.mask);
+    n = func_001FA860(buffer, 0x800, level_map_selection.unk14, level_map_selection.mask);
     if (n == -1) {
         func_00208030(buffer);
     }

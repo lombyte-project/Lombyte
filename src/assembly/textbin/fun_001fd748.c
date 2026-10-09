@@ -25,7 +25,6 @@ extern u8 g_abLevelVisitState[] __asm__("D_0013DD58");
 extern s32 pal_mode __asm__("D_0015ED80");
 extern s32 game_frame_counter __asm__("D_0015F438");
 extern s32 large_font_height __asm__("D_0015F690") __attribute__((sda));
-extern struct MapState level_map_selection __asm__("D_001A00F0");
 extern LevelMapMarkerText level_map_labels[] __asm__("D_001DDD44");
 extern LevelMapMarker level_map_markers[] __asm__("D_001DDE28");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");

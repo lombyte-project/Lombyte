@@ -6,18 +6,18 @@ extern void request_audio_stream_break() __asm__("FUN_002166e8");
 
 s32 FUN_0021bda0(void) {
     if (music_stream_state.read_state == 0) {
-        if (D_001A00F0.sel != -1) {
+        if (level_map_selection.sel != -1) {
             menu_system.pending_buffer = 0;
-            D_001A00F0.slot_id[D_001A00F0.sel] ^= 0x1000;
-            D_001A00F0.sel = -1;
+            level_map_selection.slot_id[level_map_selection.sel] ^= 0x1000;
+            level_map_selection.sel = -1;
         }
     }
     if (music_stream_state.read_state != 0) {
         if (menu_system.pending_buffer != 0) {
             request_audio_stream_break();
             menu_system.pending_buffer = 0;
-            D_001A00F0.slot_id[D_001A00F0.sel] = -1;
-            D_001A00F0.sel = -1;
+            level_map_selection.slot_id[level_map_selection.sel] = -1;
+            level_map_selection.sel = -1;
         }
     }
     return 0;

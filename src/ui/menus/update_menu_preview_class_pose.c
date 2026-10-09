@@ -1,9 +1,9 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00225E00). */
 #include "qcopy.h"
 #include "rnc/ui/menus/pause_moby.h"
+#include "rnc/gameplay/gadgets/hand_gadget.h"
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern char preview_binding_table[] __asm__("D_001863D0");
-extern char preview_manipulator[] __asm__("D_001D5DD0");
 extern char preview_binding_table_alias[] __asm__("D_001863D0");
 extern void refresh_moby_spatial_bounds(void *) __asm__("FUN_0020def8");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
@@ -55,7 +55,7 @@ void update_menu_preview_class_pose(void *preview) {
     }
     refresh_moby_spatial_bounds_from_basis(moby);
     attachment_active = 0;
-    attachment = (unsigned char *)preview_manipulator;
+    attachment = (unsigned char *)&class_pose_manipulator;
     if (attachment[1] != 0) {
         attachment_active = 1;
         detach_manipulator(source_moby_address, attachment);

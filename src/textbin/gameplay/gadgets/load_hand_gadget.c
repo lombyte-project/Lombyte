@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/gadgets/hand_gadget.h"
 #include "asm.h"
 
 #include "types.h"
@@ -44,38 +45,12 @@ typedef struct HandGadgetDefinition {
     s32 oclass;
     u8 pad14[0x38];
 } HandGadgetDefinition;
-typedef struct HandGadgetManipulator {
-    u8 pad0;
-    u8 active;
-    u8 pad2[0x1E];
-    float rotation_x;
-    float rotation_y;
-    float rotation_z;
-} HandGadgetManipulator;
-typedef struct HandGadgetAnimation {
-    s32 resource_first;
-    s32 resource_count;
-    s32 primary_animation;
-    s32 delay_frames;
-    s32 item_animation;
-    s32 secondary_animation;
-    s32 attachment0_class;
-    s32 attachment0_animation;
-    s32 attachment1_class;
-    s32 attachment1_animation;
-    s32 attachment2_class;
-    s32 attachment2_animation;
-} HandGadgetAnimation;
 extern u8 gadget_available[] __asm__("D_0013D4C0");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
 extern s32 resource_request_state __asm__("D_0015FF50");
 extern HandGadgetDefinition gadget_definitions[] __asm__("D_001863D0");
 extern u8 *moby_class_resources[] __asm__("D_001B3200");
 extern u8 moby_class_slots[] __asm__("D_001B3AC0");
-extern HandGadgetAnimation gadget_animations[] __asm__("D_001D52E8");
-extern HandGadgetManipulator class_pose_manipulator __asm__("D_001D5DD0");
-extern HandGadgetManipulator first_attachment_manipulator __asm__("D_001D5E10");
-extern HandGadgetManipulator second_attachment_manipulator __asm__("D_001D5E50");
 extern float ammo_preview_offsets[] __asm__("D_001D5E90");
 extern s32 ammo_preview_velocities[] __asm__("D_001D5EA8");
 extern void func_001E9470(s32, s32);

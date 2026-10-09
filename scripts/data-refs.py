@@ -663,7 +663,10 @@ def emit_data(addr: int, elf: Path, sections: list) -> Path:
         if not dims:
             return one(chunk)
         width = len(chunk) // dims[0]
-        return "{" + ", ".join(nest(chunk[i * width:(i + 1) * width], dims[1:]) for i in range(dims[0])) + "}"
+        rows = [nest(chunk[i * width:(i + 1) * width], dims[1:]) for i in range(dims[0])]
+        if members is not None and len(dims) == 1:  # one record per line
+            return "{\n    " + ",\n    ".join(rows) + ",\n}"
+        return "{" + ", ".join(rows) + "}"
 
     body = "{0}" if not any(raw) else nest(raw, counts)
     out = ROOT / "src" / "data" / DATA_DIRS[section] / f"{addr:08X}_{name}.c"

@@ -13,7 +13,7 @@ s32 promote_first_available_map_entry(void) {
         return i;
     }
     for (i = 1; i < 5; i++) {
-        if (!(D_001A00F0.slot_id[i] & 0x1000) && D_001A00F0.slot[i] != 0) {
+        if (!(level_map_selection.slot_id[i] & 0x1000) && level_map_selection.slot[i] != 0) {
             break;
         }
     }

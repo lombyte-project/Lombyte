@@ -29,13 +29,13 @@ s32 update_mission_list(void) {
     struct MenuItem *it;
     struct MenuItem *items;
 
-    items = D_001A2B70[D_001A00F0.level];
+    items = D_001A2B70[level_map_selection.level];
     D_001A2C10.items = items;
     if (items == 0) {
         return 0;
     }
     for (it = items; it->id != 0; it++) {
-        if ((it->flags & 4) && D_0013DD58[D_001A00F0.level] == 0) {
+        if ((it->flags & 4) && D_0013DD58[level_map_selection.level] == 0) {
             it->state = 0;
         } else if (!check_mission_condition(it->kind1, it->value1)) {
             it->state = 0;

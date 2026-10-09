@@ -20,7 +20,7 @@ void format_menu_item_text(s32 idx, u8 *dst) {
     u8 *src;
     u8 *p;
 
-    src = get_help_message_text(D_001A00F0.icons[idx].label_text_id);
+    src = get_help_message_text(level_map_selection.icons[idx].label_text_id);
     p = buf;
     if (src == 0) {
         return;
@@ -34,7 +34,7 @@ void format_menu_item_text(s32 idx, u8 *dst) {
     }
     src++;
     if (*src == 'b') {
-        sprintf((char *)buf, D_0015FDA0, D_001DFFB0[D_001A00F0.icons[idx].label_item].name);
+        sprintf((char *)buf, D_0015FDA0, D_001DFFB0[level_map_selection.icons[idx].label_item].name);
     } else {
         sprintf((char *)buf, D_0015FDA8);
     }
