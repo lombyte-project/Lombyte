@@ -41,7 +41,124 @@ void FUN_L15_002e46b0(struct Moby *moby) {
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029aff0.s", FUN_L15_0029aff0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a36d0.s", FUN_L15_002a36d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a3ba8.s", FUN_L15_002a3ba8);
+#include "rnc/gameplay/entities/moby.h"
+/* pvars of the swinging door FUN_L15_002a3ba8 updates */
+typedef struct {
+    f32 closed_yaw;   /* 0x00: yaw when shut */
+    s32 open_volume;  /* 0x04: someone inside opens it */
+    s32 close_volume; /* 0x08: nobody inside lets it close */
+    f32 swing;        /* 0x0C: current swing from closed_yaw */
+    s32 reverse;      /* 0x10: swings the other way */
+    s32 trigger;      /* 0x14: moby index that opens it, -1 for the volumes */
+    s32 sound;        /* 0x18 */
+} DoorVars;
+
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
+extern void *FUN_002141f8(struct Moby *);
+extern char D_0013F3D0[];
+extern char D_L15_001673C0[];
+extern char *D_L15_0015FFE4;
+extern struct Moby *D_L15_0015FFD8;
+extern f32 D_L15_001614FC __attribute__((sda));
+extern f32 D_L15_00161500 __attribute__((sda));
+
+void FUN_L15_002a3ba8(struct Moby *moby) {
+    DoorVars *vars = (DoorVars *)moby->pvars;
+    s32 open = 0;
+    s32 close = 0;
+    struct Moby *m;
+    f32 step;
+    f32 limit;
+    f32 yaw;
+
+    if (vars->trigger == -1) {
+        if (moby->state != 0) {
+            if (is_point_inside_clip_volume(D_0013F3D0, vars->open_volume) ||
+                is_point_inside_clip_volume(D_L15_001673C0, vars->open_volume)) {
+                open = 1;
+            } else if (!is_point_inside_clip_volume(D_0013F3D0, vars->close_volume) &&
+                       !is_point_inside_clip_volume(D_L15_001673C0, vars->close_volume)) {
+                close = 1;
+            }
+            for (m = (struct Moby *)D_L15_0015FFE4; m != 0; m = m->next) {
+                if (FUN_002141f8(m) == 0) {
+                    continue;
+                }
+                if (is_point_inside_clip_volume(&m->pos, vars->open_volume)) {
+                    open = 1;
+                } else if (!is_point_inside_clip_volume(&m->pos, vars->close_volume)) {
+                    close = 1;
+                }
+            }
+        }
+    } else {
+        if (D_L15_0015FFD8[vars->trigger].oclass == 0x49B) {
+            open = D_L15_0015FFD8[vars->trigger].state == 2;
+        }
+    }
+    if (open) {
+        close = 0;
+    }
+    switch (moby->state) {
+    case 0:
+        if (vars->reverse) {
+            moby->flags |= 0x8000;
+        }
+        step = D_L15_001614FC * DEG_TO_RAD;
+        if (!vars->reverse) {
+            step = -step;
+        }
+        yaw = fast_add_rotations(moby->rot.z, step);
+        vars->swing = 0.0f;
+        vars->closed_yaw = yaw;
+        moby->rot.z = yaw;
+        moby->state = 1;
+        break;
+    case 1:
+        vars->swing = 0.0f;
+        moby->rot.z = vars->closed_yaw;
+        if (open) {
+            moby->state = 2;
+            vars->sound = allocate_voice_for_target_entry(0, 0, (int)moby);
+        }
+        break;
+    case 2:
+        vars->swing = fast_add_rotations(vars->swing, D_L15_001614FC / D_L15_00161500 * DEG_TO_RAD * D_0015ED6C);
+        limit = D_L15_001614FC * DEG_TO_RAD;
+        if (vars->swing < limit) {
+            vars->swing = limit;
+            moby->state = 3;
+        }
+        step = vars->swing;
+        if (vars->reverse) {
+            step = -step;
+        }
+        moby->rot.z = fast_add_rotations(vars->closed_yaw, step);
+        break;
+    case 3:
+        if (close) {
+            moby->state = 4;
+            vars->sound = allocate_voice_for_target_entry(0, 0, (int)moby);
+        }
+        break;
+    case 4:
+        vars->swing = fast_add_rotations(vars->swing, -(D_L15_001614FC / D_L15_00161500 * DEG_TO_RAD * D_0015ED6C));
+        if (0.0f < vars->swing) {
+            vars->swing = 0.0f;
+            moby->state = 1;
+        }
+        step = vars->swing;
+        if (vars->reverse) {
+            step = -step;
+        }
+        moby->rot.z = fast_add_rotations(vars->closed_yaw, step);
+        if (open) {
+            moby->state = 2;
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a7880.s", FUN_L15_002a7880);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002aa280.s", FUN_L15_002aa280);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c2938.s", FUN_L15_002c2938);
