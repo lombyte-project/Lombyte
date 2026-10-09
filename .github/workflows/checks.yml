@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install the script test dependencies
-        run: python3 -m pip install capstone==5.0.7 pyelftools==0.33
+        run: python3 -m pip install capstone==5.0.7 pyelftools==0.33 PyYAML==6.0.3
       - name: Script regression tests
         run: python3 scripts/test_public_tools.py -v
       - name: Byte-compile the public scripts
