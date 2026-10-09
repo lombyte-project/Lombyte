@@ -434,21 +434,21 @@ struct Hero {
     u8 pad_958[0x8];
     f32 unk960;                    /* 0x960 */
     struct Moby *unk964;           /* 0x964 */
-    u8 pad_968[0x4];
+    s32 unk968;                    /* 0x968 */
     f32 unk96C;                    /* 0x96C */
     f32 unk970;                    /* 0x970 */
     s32 unk974;                    /* 0x974 */
     u8 pad_978[0x4];
     f32 unk97C;                    /* 0x97C */
     f32 unk980;                    /* 0x980 */
-    u8 pad_984[0x4];
+    f32 unk984;                    /* 0x984 */
     s32 unk988;                    /* 0x988 */
     u8 pad_98C[0x4];
     struct Moby *unk990;           /* 0x990 */
     struct Moby *unk994;           /* 0x994 */
-    u8 pad_998[0x4];
+    f32 unk998;                    /* 0x998 */
     s16 unk99C;                    /* 0x99C */
-    u8 pad_99E[0x2];
+    s16 unk99E;                    /* 0x99E */
     f32 unk9A0;                    /* 0x9A0 */
     f32 unk9A4;                    /* 0x9A4 */
     f32 unk9A8;                    /* 0x9A8 */
