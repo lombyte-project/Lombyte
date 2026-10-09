@@ -394,7 +394,136 @@ char *FUN_L03_002d4288(char *a, char *pos, char *parent, int n, float f0, float 
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d43c8.s", FUN_L03_002d43c8);
+#include "qcopy.h"
+#include "rnc/gameplay/entities/moby.h"
+
+/* Pvars of a homing rocket. */
+typedef struct {
+    Vec4 vel;        /* 0x00 */
+    void *ignore;    /* 0x10: collision owner to skip */
+    s32 timer;       /* 0x14: frames left */
+    u8 pad18[4];
+    f32 heading;     /* 0x1C */
+    f32 turn_vel;    /* 0x20 */
+    f32 speed;       /* 0x24 */
+} RocketVars;
+
+/* What FUN_L03_0024e830 finds ahead of the rocket. */
+typedef struct {
+    u8 pad0[0x20];
+    Vec4 pos;        /* 0x20 */
+    u8 pad30[0x10];
+    s32 found;       /* 0x40 */
+    u8 pad44[0xC];
+} RocketTarget;
+
+/* Damage record passed to FUN_L00_00259a88. */
+typedef struct {
+    Vec4 dir;        /* 0x00: w is the force */
+    u8 pad10[8];
+    u8 kind;         /* 0x18 */
+    u8 source;       /* 0x19 */
+    s16 oclass;      /* 0x1A */
+    u8 pad1C[0x14];
+} RocketHit;
+
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern void FUN_L03_0024e830(void *, void *, f32);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern void FUN_L00_001ff290(void *, void *, void *);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern int FUN_L00_00257b90(int, int);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern void FUN_L00_00259888(void *, void *, int, float, void *);
+extern void FUN_L00_00259a88(void *, void *);
+extern void FUN_L00_0025f090(void *, void *, int, float, float);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern Vec4 D_0013F490_v __asm__("D_0013F490");
+extern float D_L03_00161B28 __attribute__((sda));
+extern char D_L03_00173F40[];
+
+/* Homing rocket update: flies on, trails smoke, steers up or down toward a target, explodes on impact or timeout. */
+void FUN_L03_002d43c8(struct Moby *m) {
+    Vec4 old;
+    Vec4 side;
+    Vec4 back;
+    Vec4 cam;
+    RocketTarget target;
+    Vec4 trail;
+    RocketHit hit;
+    RocketVars *v = (RocketVars *)m->pvars;
+    Vec4f *pos;
+    u8 state = m->state;
+    void **level;
+    float pitch;
+    float range;
+
+    switch (state) {
+    case 1:
+        pos = &m->pos;
+        range = ConvertIntegerToFloat(v->timer * 2) * v->speed;
+        FUN_L03_0024e830(m, &target, range);
+        qcopy(&old, pos);
+        add_vector_xyz(pos, pos, v);
+        cam.q = D_0013F490_v.q;
+        cam.f[2] *= D_L03_00161B28;
+        FUN_L00_001ff290(&trail, pos, &cam);
+        m->rot.z = v->heading;
+        m->rot.x = fast_add_rotations(m->rot.x, D_0015ED6C * 6.2831855f);
+        side.f[0] = FUN_001f9dc8(v->heading) * v->speed * -0.5f;
+        side.f[1] = FUN_001f9de0(v->heading) * v->speed * -0.5f;
+        side.f[2] = 0.0f;
+        add_vector_xyz(&trail, &side, v);
+        side.q = trail.q;
+        add_vector_xyz(&trail, &side, &cam);
+        side.q = trail.q;
+        normalize_vector_xyz(&back, v, -0.2f);
+        FUN_L00_001ff290(&trail, &back, pos);
+        FUN_L00_00269958(&back, &side, 0x6F00AFFF, 0xFF, scale_game_frames(FUN_L00_00257b90(0xF, 0x16)), 0x28,
+                         FUN_L00_00257b90(0x14, 0x23), 1);
+        FUN_L00_00269958(&back, &side, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(FUN_L00_00257b90(0x1E, 0x3C)),
+                         0x28, FUN_L00_00257b90(0x32, 0x4B), 0);
+        if (target.found != 0) {
+            pitch = -FUN_001f9e90(vector_distance(pos, &target.pos), target.pos.f[2] - m->pos.z);
+            m->rot.y = FUN_L00_00258110(&v->turn_vel, m->rot.y, pitch, D_0015ED70 * 0.7853982f,
+                                        D_0015ED70 * 3.1415927f, D_0015ED6C * 0.5235988f);
+            m->pos.z += FUN_001f9de0(-m->rot.y) * v->speed;
+        }
+        if (FUN_001efa68(pos, &old, 0, v->ignore, 0) != 0 ||
+            FUN_L00_001f0d60(0.2f, pos, 0, v->ignore) != 0) {
+            level = (void **)D_L03_00173F40;
+            if (level[6] != NULL) {
+                FUN_L00_00259888(&hit, m, 0x10001, 1.0f, v);
+                hit.dir.f[0] = FUN_001f9dc8(v->heading);
+                hit.dir.f[1] = FUN_001f9de0(v->heading);
+                hit.dir.f[2] = 1.0f;
+                hit.dir.f[3] = 5627.925f;
+                hit.kind = state;
+                hit.source = state;
+                hit.oclass = m->oclass;
+                FUN_L00_00259a88(level[6], &hit);
+            }
+            m->state = 2;
+        }
+        if (FUN_001f9740(&v->timer) != 0) {
+            m->state = 2;
+        }
+        break;
+    case 2:
+        FUN_L00_0025f090(m, &m->pos, 0, 0.25f, 13.0f);
+        mark_moby_for_removal(m);
+        break;
+    }
+}
 
 typedef struct {
     char pad0[0x30];
