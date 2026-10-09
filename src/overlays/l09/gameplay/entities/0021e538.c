@@ -618,7 +618,48 @@ void FUN_L09_002ef750(void) {
     FUN_L03_00291918(D_L09_001FC740);
     FUN_L09_002c1978(D_L09_001FC740, D_L09_001F63C0, 10);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ef868.s", FUN_L09_002ef868);
+struct DebrisVars {
+    Vec4 vel;           /* 0x00 */
+    f32 spin;           /* 0x10 */
+    f32 tumble;         /* 0x14 */
+    struct Moby *src;   /* 0x18 */
+    s32 life;           /* 0x1C */
+};
+extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
+
+/* spawns a debris moby of class 0x140 + kind at pos with velocity vel and a random spin */
+struct Moby *FUN_L09_002ef868(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, f32 scale) {
+    Vec4 p;
+    Vec4 v;
+    Vec4 *pp = &p;
+    Vec4 *pv = &v;
+    struct Moby *m;
+    struct DebrisVars *d;
+
+    p.q = pos->q;
+    v.q = vel->q;
+    m = create_moby(kind + 0x140);
+    if (m != 0) {
+        d = (struct DebrisVars *)m->pvars;
+        d->src = src;
+        m->unk30 = 0x7F;
+        m->unk32 = 0x7F;
+        m->unk31 = 1;
+        m->spawn_frame = src->spawn_frame;
+        m->rot.x = random_angle_radians();
+        m->rot.y = random_angle_radians();
+        m->rot.z = random_angle_radians();
+        qcopy(&m->pos, pp);
+        qcopy(&d->vel, pv);
+        m->scale = m->pclass->scale * scale;
+        d->spin = random_float_between(-(D_0015ED6C * 9.075712f), D_0015ED6C * 9.075712f);
+        d->tumble = random_float_between(-(D_0015ED6C * 6.2831855f), D_0015ED6C * 6.2831855f);
+        d->life = scale_game_frames(FUN_L00_00257b90(0x5A, 0x6E));
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 #include "rnc/globals.h"
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
