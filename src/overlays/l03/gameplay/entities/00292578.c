@@ -601,8 +601,6 @@ void FUN_L03_00292e98(char *moby) {
 }
 extern char *D_L03_001B05B0_294c08[] __asm__("D_L03_001B05B0");
 extern char D_0013E550_294c08[] __asm__("D_0013E550");
-extern float D_0015ED6C;
-extern float D_0015ED70;
 extern float ConvertIntegerToFloat(int) __asm__("FUN_001fa6c0");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern int FUN_001f9740(void *);
@@ -735,11 +733,11 @@ void FUN_L03_00294c08(char *moby) {
             node_off = 0; /* dead store: unused afterwards, but needed for the retail register allocation */
         }
         if (FUN_001f9b48(pos, target) < *(float *)(data + 0xF4)) {
-            approach_value((float *)(data + 0xE4), D_0015ED6C * 0.5f,
-                           *(float *)(data + 0xEC) * *(float *)(data + 0xEC) / *(float *)(data + 0xF4) * D_0015ED70 * 0.5f);
+            approach_value((float *)(data + 0xE4), frame_time * 0.5f,
+                           *(float *)(data + 0xEC) * *(float *)(data + 0xEC) / *(float *)(data + 0xF4) * frame_time_sq * 0.5f);
         } else {
-            approach_value((float *)(data + 0xE4), *(float *)(data + 0xEC) * D_0015ED6C,
-                           *(float *)(data + 0xEC) * *(float *)(data + 0xEC) / *(float *)(data + 0xF4) * D_0015ED70 * 0.5f);
+            approach_value((float *)(data + 0xE4), *(float *)(data + 0xEC) * frame_time,
+                           *(float *)(data + 0xEC) * *(float *)(data + 0xEC) / *(float *)(data + 0xF4) * frame_time_sq * 0.5f);
         }
         FUN_L00_0025f730(data + 0xA0, *(float *)(data + 0xE4));
         add_vector_xyz(moby + 0x10, moby + 0x10, data + 0xA0);
