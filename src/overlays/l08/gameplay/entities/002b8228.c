@@ -620,7 +620,51 @@ char *FUN_L08_002dc8a0(char *src, char *pos, char *vec) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc9a8.s", FUN_L08_002dc9a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dd3c0.s", FUN_L08_002dd3c0);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de3e0.s", FUN_L08_002de3e0);
+#else
+extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
+extern float D_L08_001675C0[];
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern void FUN_L00_002502f0(void *, int, int, int);
+extern int D_L08_00161A34 __attribute__((sda));
+extern int D_L08_00161A38 __attribute__((sda));
+extern int D_L08_00161A3C __attribute__((sda));
+extern float D_L08_00161A40 __attribute__((sda));
+
+struct Moby *FUN_L08_002de3e0(void *pos, struct Moby *target, void *velocity, float pitch, float yaw) {
+    struct Moby *moby = create_moby(0x1B3);
+    char *data;
+    float *reference;
+    float distance;
+    float scale;
+    if (moby != 0) {
+        data = (char *)moby->pvars;
+        qcopy(&moby->pos, pos);
+        reference = D_L08_001675C0;
+        distance = FUN_001f9b80(reference, &moby->pos);
+        reference = (float *)((char *)reference - 0x140);
+        moby->rot.y = -FUN_001f9e90(distance, reference[82] - moby->pos.z);
+        *(volatile float *)&moby->rot.z = FUN_001f9e90(reference[80] - moby->pos.x,
+                                                        reference[81] - moby->pos.y);
+        scale = D_L08_00161A40 * moby->pclass->scale;
+        moby->unk30 = 0xFF;
+        moby->unk31 = 1;
+        *(volatile u8 *)&moby->state = 1;
+        moby->unk32 = 0xFF;
+        moby->scale = scale;
+        FUN_L00_002502f0(moby, D_L08_00161A34, D_L08_00161A38, D_L08_00161A3C);
+        *(float *)(data + 0x40) = pitch;
+        *(float *)(data + 0x48) = 70.0f;
+        *(float *)(data + 0x44) = yaw;
+        *(struct Moby **)(data + 0x4C) = target;
+        qcopy(data + 0x20, velocity);
+        FUN_L00_00250df8(moby);
+    }
+    return moby;
+}
+#endif /* NON_MATCHING */
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de528.s", FUN_L08_002de528);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de848.s", FUN_L08_002de848);
 /* Spawns a burst of particles at an offset from the moby, with random sizes and colours from level tuning values. */
