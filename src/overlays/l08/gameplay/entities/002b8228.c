@@ -3,6 +3,7 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/entities/moby.h"
 
 #define NOT_SDA
 
@@ -205,7 +206,124 @@ char *FUN_L08_002daa10(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dabf0.s", FUN_L08_002dabf0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dbdb0.s", FUN_L08_002dbdb0);
+/* Pvars of the hero-carrying lift. */
+typedef struct {
+    u8 pad0[0x20];
+    u8 motion[0x40];     /* 0x20: carried-moby motion state for FUN_L00_00260738 */
+    Vec4 home_pos;       /* 0x60 */
+    Vec4 home_rot;       /* 0x70 */
+    s32 path;            /* 0x80: -1 when it has no path */
+    u8 pad84[8];
+    s32 stop;            /* 0x8C: -1 when no stop is selected */
+    u8 pad90[0x10];
+    u8 manip;            /* 0xA0 */
+    u8 manip_set;        /* 0xA1 */
+    u8 padA2[0xE];
+    u8 spin_state[0x30]; /* 0xB0 */
+    s16 unkE0;           /* 0xE0 */
+    u8 padE2[0x1E];
+    s32 unk100;          /* 0x100 */
+    u8 pad104[0xC];
+    Vec4 spin;           /* 0x110: x is the wheel angle */
+    s32 active;          /* 0x120 */
+    s32 ridable;         /* 0x124 */
+} LiftVars;
+
+typedef struct {
+    s32 busy;
+    u8 pad4[0x20];
+    s32 owner;           /* 0x24: -1 when free */
+} LiftLock;
+
+extern s32 D_L08_0015F5C4;
+extern s32 D_L08_0015F594 __attribute__((sda));
+extern LiftLock D_L08_00179C10;
+extern s32 D_0013CAE4[];
+extern float D_0015ED6C;
+extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern void FUN_L00_00259f50(void *, void *);
+extern void FUN_L00_00261d78(s32, float, void *, void *);
+extern f32 camera_distance_to(void *, void *) __asm__("FUN_001f9b48");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void FUN_L08_002dc4a0(struct Moby *);
+void FUN_L08_002dc0c8(char *moby);
+void FUN_L08_002dc180(char *moby);
+int FUN_L08_002dc648(char *m);
+void FUN_L08_002dc7f0(char *moby);
+
+/* Lift update: runs the lift's state machine (0 setup, 2 carry the hero
+ * when riding, 3 travel to the selected stop) and moves anything riding it
+ * by how far it moved this frame. */
+void FUN_L08_002dbdb0(struct Moby *moby) {
+    LiftVars *vars = (LiftVars *)moby->pvars;
+    Vec4 old_pos;
+    Vec4 old_rot;
+    Vec4 delta;
+    Vec4 p;
+
+    qcopy(&old_pos, &moby->pos);
+    qcopy(&old_rot, &moby->rot);
+    if (D_L08_0015F5C4 != 2 && vars->ridable != 0) {
+        moby->unk31 = 1;
+        moby->flags &= ~1;
+    } else {
+        moby->unk31 = 0;
+        moby->flags |= 1;
+    }
+    if (vars->manip_set == 0)
+        attach_manipulator(moby, 0, &vars->manip);
+    vars->spin.f[0] = fast_add_rotations(vars->spin.f[0], D_0015ED6C * 1.5707964f);
+    FUN_L00_00259f50(vars->spin_state, &vars->spin);
+    switch (moby->state) {
+    case 0:
+        clear_vector(&vars->spin);
+        if (vars->path == -1) {
+            qcopy(&vars->home_pos, &moby->pos);
+            qcopy(&vars->home_rot, &moby->rot);
+            moby->state = 4;
+            vars->ridable = 1;
+        } else {
+            vars->unk100 = -1;
+            vars->unkE0 = -1;
+            FUN_L08_002dc180((char *)moby);
+            moby->state = 2;
+            moby->unk30 = 0xFF;
+        }
+        break;
+    case 2:
+        if (hero.unk2FC == moby) {
+            if (D_L08_00179C10.busy == 0 && D_L08_00179C10.owner == -1) {
+                qcopy(&p, &hero.motion.pos);
+                FUN_L00_00261d78(vars->stop, 0.5f, &p, &p);
+                if (camera_distance_to(&hero.motion.pos, &p) < 0.001f) {
+                    FUN_L08_002dc7f0((char *)moby);
+                    if ((D_0013CAE4[0] & 0x10) && hero.unk30E.s == 0 && D_L08_0015F594 == 10)
+                        moby->state = 3;
+                }
+            }
+        } else {
+            FUN_L08_002dc180((char *)moby);
+        }
+        break;
+    case 3:
+        hero.unk1F2 = 5;
+        hero.unk1F4 = 5;
+        hero.unk22DA = vars->stop;
+        if (FUN_L08_002dc648((char *)moby)) {
+            FUN_L08_002dc180((char *)moby);
+            moby->state = 2;
+        }
+        break;
+    }
+    FUN_L08_002dc4a0(moby);
+    if (vars->stop != -1)
+        FUN_L08_002dc0c8((char *)moby);
+    subtract_vector_xyz(&delta, &moby->pos, &old_pos);
+    FUN_L00_00260738(vars->motion, &delta, &old_rot, &moby->rot);
+}
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD440), where it is exact; names translated to the US level program. */
 
 extern char D_L08_001DB280[];
