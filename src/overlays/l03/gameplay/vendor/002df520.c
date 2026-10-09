@@ -2,7 +2,224 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002df520.s", FUN_L03_002df520);
+#include "rnc/globals.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/state/usage_stats.h"
+
+/* Help message playback state (same layout as S00203908 in shared/ui/help/00203880.c). */
+struct L03HelpState {
+    s32 state;
+    u8 pad4[0x20];
+    s32 cur;
+};
+
+/* Per-message help record at D_00141968 (same layout as P00203908): id 0xFFFF = disabled. */
+struct L03HelpRecord {
+    u16 id;
+    u16 pad;
+    s32 v;
+};
+
+/* One of the 37 item entries at D_L03_00179BC0 (stride 0x4C, as Entry_L02_0017A140 in l02). */
+struct L03ItemEntry {
+    s32 pad0;
+    s32 pad4;
+    s32 active;
+    u8 rest[0x40];
+};
+
+extern struct L03HelpState D_L03_00179510;
+extern struct L03HelpRecord help_records[] __asm__("D_00141968");
+extern struct L03ItemEntry D_L03_00179BC0[];
+extern struct UsageStats D_00141848;
+extern struct Moby *D_L03_0015FFE4;
+extern s32 D_L03_0015F5C4;
+extern s32 D_L03_0015F688;
+extern s32 D_L03_0015F68C;
+extern s32 D_0015EEA4;
+extern u8 D_0013D388[];
+extern u8 D_0013D408[];
+extern u8 D_0013D4C0[];
+
+extern s32 is_point_inside_clip_volume(void *point, s32 volume) __asm__("FUN_00214720");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern s32 tick_countdown(s32 *) __asm__("FUN_001f9740");
+extern f32 FUN_001f9b80(void *, void *);
+extern s32 FUN_L00_00203908(s32, s32);
+extern s32 FUN_L00_00233e98(s32);
+extern s32 allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
+extern void FUN_L00_00263d40(s32, s32);
+
+/* Kerwan tutorial hint triggers: plays help messages and counts usage stats while the hero is inside the moby's clip volumes. */
+void FUN_L03_002df520(u8 *moby) {
+    s32 *data = *(s32 **)(moby + 0x78);
+    struct Moby *m;
+    s32 count;
+    s32 i;
+    s32 t;
+
+    tick_countdown(&data[22]);
+    switch (moby[0x20]) {
+    case 0:
+        data[20] = 0;
+        data[21] = 0;
+        moby[0x30] = 0xFF;
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[30]) &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
+            D_0013D388[0x1A] = 1;
+        }
+        if (D_0013D388[0x1A] == 0) {
+            if (is_point_inside_clip_volume(&hero.motion.pos, data[0]) &&
+                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_00179510.state == 0 &&
+                D_L03_00179510.cur == -1 && help_records[0x14].v >= 0) {
+                FUN_L00_00203908(0xBB8, 0x14);
+            }
+            if (is_point_inside_clip_volume(&hero.motion.pos, data[3]) &&
+                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_00179510.state == 0 &&
+                D_L03_00179510.cur == -1 && help_records[0x15].v >= 0) {
+                FUN_L00_00203908(0xBB9, 0x15);
+            }
+            if (is_point_inside_clip_volume(&hero.motion.pos, data[6]) &&
+                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_00179510.state == 0 &&
+                D_L03_00179510.cur == -1 && help_records[0x17].v >= 0) {
+                FUN_L00_00203908(0xBBB, 0x17);
+            }
+        }
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[12]) && D_00141848.stat[3].count == 0 &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
+            D_00141848.stat[3].count++;
+            t = scale_game_frames(D_0015EEA4) / 600;
+            if (D_00141848.stat[3].unk2 < t) {
+                D_00141848.stat[3].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            }
+            D_00141848.stat[3].level_mask = D_00141848.stat[3].level_mask | (1 << current_level_index) | 0x80000000;
+        }
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[9]) && D_00141848.stat[3].count == 0 &&
+            !((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && data[22] == 0) {
+            data[20]++;
+            data[22] = scale_game_frames(60);
+        } else if (data[22] != 0 && ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
+            data[22] = 0;
+        }
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[9]) && D_00141848.stat[3].count == 0 &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && data[20] % 6 == 0 && data[20] != 0 &&
+            D_L03_00179510.state == 0 && D_L03_00179510.cur == -1 && help_records[0x16].id == 0) {
+            FUN_L00_00203908(0xBBA, 0x16);
+        }
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[10]) &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_00179510.state == 0 &&
+            D_L03_00179510.cur == -1 && help_records[0x18].id == 0) {
+            t = scale_game_frames(D_0015EEA4) - D_00141848.stat[9].unk2 * 600;
+            if (scale_game_frames(216000) < t) {
+                FUN_L00_00203908(0xBBC, 0x18);
+            }
+        }
+        count = 0;
+        for (m = D_L03_0015FFE4; m != 0; m = m->next) {
+            if (m->pclass != 0 && *(s16 *)((u8 *)m->pclass + 0x46) == 5 &&
+                FUN_001f9b80(&m->pos, &hero.motion.pos) < 8.0f) {
+                count++;
+            }
+        }
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[15]) && count == 0 &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && hero.state.current != 0x1E &&
+            D_0013D4C0[0xF] != 0 && FUN_L00_00233e98(0xF) >= 0x15 && D_L03_00179510.state == 0 &&
+            D_L03_00179510.cur == -1 && help_records[0x4A].id == 0 && D_00141848.stat[19].count == 0) {
+            FUN_L00_00203908(0x4E20, 0x4A);
+        } else if (hero.state.current == 0x1E) {
+            if (D_00141848.stat[19].count < 0xFFFF) {
+                D_00141848.stat[19].count++;
+            }
+            t = scale_game_frames(D_0015EEA4) / 600;
+            if (D_00141848.stat[19].unk2 < t) {
+                D_00141848.stat[19].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            }
+            D_00141848.stat[19].level_mask = D_00141848.stat[19].level_mask | (1 << current_level_index) | 0x80000000;
+        }
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[14]) &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_0015F68C < 3 &&
+            D_L03_00179510.state == 0 && D_L03_00179510.cur == -1 && help_records[0x40].id == 0) {
+            FUN_L00_00203908(0x3EC, 0x40);
+        }
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[14]) &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && hero.state.current == 1 &&
+            D_L03_0015F688 == -1 && D_L03_00179510.state == 0 && D_L03_00179510.cur == -1 &&
+            help_records[0x40].id != 0 && help_records[0x41].id == 0) {
+            FUN_L00_00203908(0x3ED, 0x41);
+        }
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[16]) &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_00179510.state == 0 &&
+            D_L03_00179510.cur == -1 && help_records[0x54].id == 0) {
+            FUN_L00_00203908(0xBC0, 0x54);
+        }
+        if (D_L03_0015F5C4 == 0 && D_0013D4C0[0x34] != 0 && D_L03_00179510.state == 0 &&
+            D_L03_00179510.cur == -1 && help_records[0x19].id == 0) {
+            FUN_L00_00203908(0xBBD, 0x19);
+        }
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[13]) && D_00141848.stat[15].count == 0 &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
+            D_00141848.stat[15].count++;
+            t = scale_game_frames(D_0015EEA4) / 600;
+            if (D_00141848.stat[15].unk2 < t) {
+                D_00141848.stat[15].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            }
+            D_00141848.stat[15].level_mask = D_00141848.stat[15].level_mask | (1 << current_level_index) | 0x80000000;
+        }
+        if (hero.unk988 != 0 && D_00141848.stat[15].count == 0) {
+            hero.unk988 = 0;
+            data[21]++;
+        }
+        if (D_00141848.stat[15].count == 0 && ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
+            data[21] >= 3 && D_L03_00179510.state == 0 && D_L03_00179510.cur == -1 && help_records[0x1A].id == 0) {
+            FUN_L00_00203908(0xBBE, 0x1A);
+        }
+        if (hero.state.current == 0x74 && D_00141848.stat[16].count == 0) {
+            D_00141848.stat[16].count++;
+            t = scale_game_frames(D_0015EEA4) / 600;
+            if (D_00141848.stat[16].unk2 < t) {
+                D_00141848.stat[16].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            }
+            D_00141848.stat[16].level_mask = D_00141848.stat[16].level_mask | (1 << current_level_index) | 0x80000000;
+        }
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[11]) && D_00141848.stat[16].count == 0 &&
+            hero.state.control_mode == 6 && hero.items[0].item_id == 8 && D_L03_00179510.state == 0 &&
+            D_L03_00179510.cur == -1 && help_records[0x1B].id == 0) {
+            FUN_L00_00203908(0xBBF, 0x1B);
+        }
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[17]) &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_00179510.state == 0 &&
+            D_L03_00179510.cur == -1 && help_records[0x79].id == 0) {
+            FUN_L00_00203908(0x4E2F, 0x79);
+        }
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[31]) && (u32)hero.state.control_mode < 2 &&
+            help_records[0x4F].id == 0 && D_00141848.stat[20].count == 0) {
+            s32 owned = 0;
+            for (i = 0; i < 37; i++) {
+                if (D_L03_00179BC0[i].active == 0 && i != 8 && i != 24) {
+                    if (D_0013D4C0[i] != 0) {
+                        owned++;
+                    }
+                }
+            }
+            if (owned >= 2) {
+                FUN_L00_00203908(0x4E25, 0x4F);
+            }
+        }
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[28])) {
+            D_0013D388[0x18] = 1;
+        }
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[29]) && D_0013D408[3] == 0) {
+            D_0013D408[3] = 1;
+            allocate_voice_for_bank_entry(1, 0, 0);
+            FUN_L00_00263d40(0x53D6, -1);
+        }
+        break;
+    }
+}
 #include "rnc/math/vector.h"
 /* Cutscene state at D_L03_0016C960 (same layout as G_2da710 in entities/002c9eb8.c). */
 struct L03Cutscene {
