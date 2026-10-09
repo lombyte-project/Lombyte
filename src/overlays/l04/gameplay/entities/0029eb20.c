@@ -3,6 +3,7 @@
 #include "asm.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/audio/voice_pool.h"
 
 #define NOT_SDA
 
@@ -955,7 +956,78 @@ void FUN_L04_002ba520(M_B7B0 *moby) {
         data->f424 = FUN_L04_002d34d8(moby, p);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1b80.s", FUN_L04_002c1b80);
+/* The engine-sound fields of the moby's pvars. */
+typedef struct {
+    /* 0x000 */ u8 pad0[0x230];
+    /* 0x230 */ f32 volume;
+    /* 0x234 */ f32 pitch;
+    /* 0x238 */ s32 voice;
+} EngineSoundVars;
+
+extern s32 engine_voice_playing(long moby, s32 voice) __asm__("FUN_L00_0028d8c0");
+extern s32 engine_voice_start(s32, s32, struct Moby *m) __asm__("FUN_0022da68");
+extern void engine_voice_release(s32 voice) __asm__("FUN_0022d798");
+extern f32 engine_int_to_float(s32) __asm__("FUN_001fa6c0");
+extern s32 engine_float_to_int(f32) __asm__("FUN_001fa6d0");
+extern f32 engine_approach(f32 *value, f32 target, f32 step) __asm__("FUN_00213ed8");
+extern void engine_voice_set_volume(s32 voice, s32 volume) __asm__("FUN_L01_002a1968");
+extern void engine_voice_set_pitch(s32 voice, s32 pitch) __asm__("FUN_L00_0028df38");
+extern float D_0015ED6C;
+
+/* Keeps the moby's engine voice playing, easing its volume and pitch toward the animation's levels. */
+void FUN_L04_002c1b80(struct Moby *m) {
+    EngineSoundVars *v = (EngineSoundVars *)m->pvars;
+    f32 volume;
+    f32 pitch;
+
+    if (m->state != 9) {
+        if (engine_voice_playing((long)m, v->voice) == 0 && m->prev_seq < 8) {
+            v->voice = engine_voice_start(0, 4, m);
+            v->volume = engine_int_to_float(0x400);
+            v->pitch = 0;
+        }
+        switch (m->prev_seq) {
+        case 0:
+            pitch = 0.0f;
+            volume = engine_int_to_float(0x400) * 0.6f;
+            break;
+        case 1:
+            pitch = 3.0f;
+            volume = engine_int_to_float(0x400);
+            break;
+        case 2:
+            pitch = -2.0f;
+            volume = engine_int_to_float(0x400);
+            break;
+        case 3:
+        case 4:
+            pitch = 4.0f;
+            volume = engine_int_to_float(0x400);
+            break;
+        case 5:
+        case 6:
+        case 7:
+            pitch = 0.0f;
+            volume = engine_int_to_float(0x400) * 0.8f;
+            break;
+        default:
+            goto release;
+        }
+    } else {
+    release:
+        if (v->voice != -1) {
+            VoicePoolWindow *w = (VoicePoolWindow *)((u8 *)&voice_pool + v->voice * 0x70);
+            if (w->voice.owner == (VoiceMoby *)m && w->voice.state != 0)
+                engine_voice_release(v->voice);
+        }
+        v->voice = -1;
+        return;
+    }
+    engine_approach(&v->volume, volume, engine_int_to_float(0x400) * D_0015ED6C * 2.0f);
+    engine_approach(&v->pitch, pitch, D_0015ED6C * 8.0f);
+    engine_voice_set_volume(v->voice, engine_float_to_int(v->volume));
+    engine_voice_set_pitch(v->voice, engine_float_to_int(v->pitch));
+}
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C30F0), where it is exact; names translated to the US level program. */
@@ -1284,7 +1356,7 @@ extern void FUN_L00_00261630(char *moby, char *d, float a, float b);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 extern void FUN_L01_0026d930(char *p);
-extern void FUN_L04_002c1b80(void *);
+extern void FUN_L04_002c1b80(struct Moby *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, void *, void *, void *) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -1331,7 +1403,7 @@ void FUN_L04_002c2270(M_35F0 *moby) {
     qcopy(prev, moby->pos);
     qcopy(dest, moby->pos);
     moby->f30 = 0x20;
-    FUN_L04_002c1b80(moby);
+    FUN_L04_002c1b80((struct Moby *)moby);
     if (moby->state == 1 || moby->state == 3) {
         H_35F0 *h = (H_35F0 *)(((char *)&D_0013F350));
         if (h->f240 == moby || FUN_001f9b48(moby->pos, h->pos) < 1.5f) {
