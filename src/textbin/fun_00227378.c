@@ -1,10 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00227378/FUN_00227378.s", FUN_00227378);
-#else
-#include "types.h"
 #include "rnc/rendering/fs_aa_buffer.h"
 
 struct ClearStripPacket {
@@ -32,7 +26,7 @@ void append_fullscreen_clear_strips(s64 color) {
     struct ClearStripPacket *base;
     struct ClearStripPacket *packet_cursor;
     s64 *commands;
-    volatile s64 *vertices;
+    volatile s64 *vertices; /* GIF packet words, written in order */
     struct FsAaBuf *dimensions;
     s32 strip_count;
     s32 display_height;
@@ -46,8 +40,6 @@ void append_fullscreen_clear_strips(s64 color) {
     s32 dividend;
     s64 packed_top_y;
     s64 packed_bottom_y;
-    s64 first_vertex;
-    s64 second_vertex;
 
     dimensions = &fs_aa_buffer;
     display_width = dimensions->display_width;
@@ -55,6 +47,7 @@ void append_fullscreen_clear_strips(s64 color) {
     /* Retail truncates signed display width toward zero before packing strips. */
     dividend = (display_width > -1) ? display_width : (display_width + 0x1F);
     strip_count = dividend >> 5;
+    strip_index = 0;
     render_packet_cursor[0]->dma_control = (strip_count + 5) | 0x10000000;
     render_packet_cursor[0]->address = 0;
     render_packet_cursor[0]->vif_command = 0;
@@ -73,7 +66,7 @@ void append_fullscreen_clear_strips(s64 color) {
     commands[7] = color;
     commands[8] = (s64)(strip_count | 0x8000) | 0x2400000000000000;
     commands[9] = 0x44;
-    if (strip_count > 0) {
+    if (strip_index < strip_count) {
         bottom_y = display_height * 8 + 0x7FF0;
         top_y = 0x8000 - display_height * 8;
         negative_half_width = -(display_width * 8);
@@ -82,20 +75,16 @@ void append_fullscreen_clear_strips(s64 color) {
         right_x = negative_half_width + 0x8200;
         packed_bottom_y = (s64)bottom_y << 16;
         vertices = (volatile s64 *)((u8 *)base + 0x60);
-        strip_index = 0;
         do {
-            first_vertex = (s64)left_x | packed_top_y;
-            second_vertex = (s64)right_x | packed_bottom_y;
-            *vertices++ = first_vertex;
-            strip_index += 1;
+            *vertices++ = (s64)left_x | packed_top_y;
+            *vertices++ = (s64)right_x | packed_bottom_y;
+            strip_index++;
             right_x += 0x200;
-            *vertices++ = second_vertex;
             left_x += 0x200;
         } while (strip_index < strip_count);
     }
-    packet_cursor = render_packet_cursor[0];
-    packet_cursor = (struct ClearStripPacket *)((u8 *)packet_cursor + (strip_count * 0x10 + 0x50));
-    render_packet_cursor[0] = packet_cursor;
+    packet_cursor = render_packet_cursor[0] =
+        (struct ClearStripPacket *)((u8 *)render_packet_cursor[0] + (strip_count * 0x10 + 0x50));
     packet_cursor->dma_control = 0x10000000;
     render_packet_cursor[0]->address = 0;
     render_packet_cursor[0]->vif_command = 0x13000000;
@@ -105,4 +94,3 @@ void append_fullscreen_clear_strips(s64 color) {
 extern __typeof__(append_fullscreen_clear_strips) func_00227378
     __attribute__((alias("FUN_00227378")));
 
-#endif /* NON_MATCHING */
