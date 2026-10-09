@@ -628,7 +628,70 @@ char *FUN_L05_00303f80(char *self, int idx) {
     }
     return res;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304058.s", FUN_L05_00304058);
+#else
+extern float absolute_float_304058(float) __asm__("FUN_001f99c0");
+extern void subtract_vector_304058(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_vector_304058(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void cross_vector_304058(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern float dot_vector_304058(void *, void *) __asm__("FUN_001f9ab0");
+extern float length_vector_304058(void *) __asm__("FUN_001f9af0");
+extern void scale_vector_304058(void *, void *, float) __asm__("FUN_001f9bf8");
+
+float FUN_L05_00304058(volatile s32 path_index, void *position, void *out, float reach) {
+    Vec4 segment, result, from_point, normal, projection, cross, offset;
+    float separation;
+    float along;
+    float segment_length;
+    float best = 512.0f;
+    volatile int changed = 0;
+    int i;
+    char *path;
+
+    *(u128 *)&from_point = *(u128 *)position;
+    for (i = 0; i < *(int *)D_L05_001B0930[path_index] - 1; i++) {
+        char *next;
+        path = D_L05_001B0930[path_index];
+        next = path + (i + 1) * 16 + 0x10;
+        if (*(float *)(path + i * 16 + 0x1c) == 0.0f &&
+            *(float *)(path + (i + 1) * 16 + 0x1c) == 0.0f)
+            continue;
+
+        subtract_vector_304058(&segment, &from_point, next);
+        segment.f[2] = 0.0f;
+        subtract_vector_304058(&normal, path + i * 16 + 0x20, next);
+        normal.f[2] = 0.0f;
+        scale_vector_304058(&projection, &normal, 1.0f);
+        cross_vector_304058(&cross, &segment, &projection);
+        separation = absolute_float_304058(cross.f[2]);
+        if (separation < best)
+            best = separation;
+        if (reach < separation)
+            continue;
+        segment_length = length_vector_304058(&normal);
+        along = dot_vector_304058(&segment, &projection);
+        if (segment_length < along || along < 0.0f) {
+            if (!(length_vector_304058(&segment) < reach))
+                continue;
+            changed = 1;
+            scale_vector_304058(&result, &segment, reach);
+        } else {
+            changed = 1;
+            scale_vector_304058(&offset, &projection, along);
+            subtract_vector_304058(&result, &segment, &offset);
+            scale_vector_304058(&result, &result, reach);
+            add_vector_304058(&result, &result, &offset);
+        }
+        add_vector_304058(&from_point, &result, next);
+        from_point.f[2] = ((Vec4f *)position)->z;
+        path = D_L05_001B0930[path_index];
+    }
+    if (changed)
+        *(u128 *)out = *(u128 *)&from_point;
+    return best;
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304320.s", FUN_L05_00304320);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00305178.s", FUN_L05_00305178);
 /* Drops stale entries from the moby's 8 slots, then pushes each remaining one away from the hero. */
