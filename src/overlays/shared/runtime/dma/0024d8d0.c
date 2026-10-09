@@ -5,15 +5,5 @@
 /* Scratchpad (0x70000000) transfer through the DMA channel at 0x1000D400; calls the two below. */
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024d8d0.s", FUN_L00_0024d8d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024dba0.s", FUN_L00_0024dba0);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024dbc0.s", FUN_L00_0024dbc0);
-#else
 /* Spins while bit 0x100 of the register at 0x1000D400 is set. */
-void FUN_L00_0024dbc0(void)
-{
-poll:
-    if (*(vu32 *)0x1000d400 & 0x100) {
-        goto poll;
-    }
-}
-#endif
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024dbc0.s", FUN_L00_0024dbc0);

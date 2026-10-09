@@ -2,14 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00200228.s", FUN_L00_00200228);
-#else
 /* Splits value into its truncated whole part (stored to *whole) and returns the fraction. */
-f32 FUN_L00_00200228(f32 *whole, f32 value) {
-    f32 rounded = (f32)(s32)value;
-    *whole = rounded;
-    return value - rounded;
-}
-#endif
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00200228.s", FUN_L00_00200228);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00200260.s", FUN_L00_00200260);

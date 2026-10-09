@@ -2,22 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002502f0.s", FUN_L00_002502f0);
-#else
 /* Packs red, green and blue into the upper bytes of the 64-bit word at moby+0x38. */
-void FUN_L00_002502f0(void *moby, s32 red, s32 green, s32 blue) {
-    volatile u64 *value = (volatile u64 *)((u8 *)moby + 0x38);
-    u64 packed = *value;
-    u64 r = (u64)red << 32;
-    u64 g = (u64)green << 40;
-    u64 b = (u64)blue << 48;
-    packed = (packed << 32) >> 32;
-    packed |= r;
-    packed |= g;
-    packed |= b;
-    *value = packed;
-}
-#endif
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002502f0.s", FUN_L00_002502f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00250320.s", FUN_L00_00250320);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00250430.s", FUN_L00_00250430);
