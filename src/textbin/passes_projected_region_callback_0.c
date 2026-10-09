@@ -7,7 +7,9 @@
 
 #include "eetypes.h"
 
-#include "rnc/ui/menus/region_enabled.h"
+/* One word: passes_projected_region_callback_0 reads it as a flag. The words around it
+   (D_001A03AC, D_001A03B4 ...) are each a flag of another region callback. */
+extern s32 region_enabled __asm__("D_001A03B0") NOT_SDA;
 
 union RegionVector {
     u128 region_center;

@@ -3,7 +3,8 @@
 #include "sda.h"
 
 #include "types.h"
-#include "rnc/video/movie_text.h"
+
+extern u8 movie_open_error_text[18] __asm__("D_001E8AF0");
 
 struct AudioDecoderState {
     u8 pad0[0xD90F8];

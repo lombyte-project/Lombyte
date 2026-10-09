@@ -4,10 +4,32 @@
 
 #include "types.h"
 #include "qcopy.h"
-#include "rnc/rendering/rotated_sprite_queue.h"
+
+/* The queue of rotated sprites to draw this frame: 0x30-byte records, the count
+   at +0xC0. */
+typedef struct {
+    f32 position[4];
+    f32 scale;
+    u32 color;
+    s32 texture_definition;
+    f32 angle;
+    u8 *resource;         /* 0x20 */
+    s16 project_position; /* 0x24 */
+    s16 repetition_count;
+    f32 angle_step;
+    s32 mode;
+} QueuedRotatedSprite;
+
+typedef struct {
+    QueuedRotatedSprite records[4];
+    s32 count; /* 0xC0 */
+} RotatedSpriteQueue;
+
+extern RotatedSpriteQueue rotated_sprite_queue __asm__("D_00189300");
 
 #include "rnc/gameplay/hero.h"
 #include "rnc/rendering/screen.h"
+
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void project_to_screen(f32 *, void *) __asm__("func_001F2070");
 extern void spawn_particle_burst(void *, f32, f32) __asm__("func_001EE008");

@@ -1,7 +1,14 @@
-#include "rnc/rendering/effect_quad_tables.h"
+typedef struct { float f[4]; } __attribute__((aligned(16))) V_28efc8;
+
+extern float D_L00_001BD990_28efc8[8] __asm__("D_001D9890") __attribute__((section(".data")));
+extern V_28efc8 D_L00_001BD9B0_28efc8[8] __asm__("D_001D98B0") __attribute__((section(".data")));
+extern V_28efc8 D_L00_001BDA30_28efc8[2] __asm__("D_001D9930") __attribute__((section(".data")));
+extern V_28efc8 D_L00_001BDA50_28efc8[2] __asm__("D_001D9950") __attribute__((section(".data")));
+extern V_28efc8 D_L00_001BDA70_28efc8[10] __asm__("D_001D9970") __attribute__((section(".data")));
 #include "rnc/rendering/level_render_state.h"
 #include "sda.h"
 #include "types.h"
+
 typedef struct {
     V_28efc8 corner[4];
     unsigned int color[4];

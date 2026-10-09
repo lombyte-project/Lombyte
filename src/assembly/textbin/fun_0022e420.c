@@ -1,7 +1,8 @@
 #include "types.h"
 #include "sda.h"
 #include "asm.h"
-#include "rnc/rendering/warp_effect.h"
+
+extern f32 warp_texture_coordinates[4][2] __asm__("D_001D9A10");
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022e420/FUN_0022e420.s", FUN_0022e420);
@@ -10,7 +11,6 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022e420/FUN_0022e420.s
 #include "eetypes.h"
 #include "sda.h"
 #include "qcopy.h"
-#include "rnc/rendering/warp_effect.h"
 
 typedef union {
     u128 quadword;

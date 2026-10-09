@@ -4,7 +4,18 @@
 #include "types.h"
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/rendering/billboard.h"
+
+/* One glow billboard; append_billboard_batch draws the active ones. */
+typedef struct BillboardRecord {
+    f32 position[4]; /* x, y, z, w */
+    s16 active_count;
+    s16 alpha;
+    u8 pad14[4];
+    f32 angle;
+    f32 radius_scale;
+} BillboardRecord; /* size 0x20 */
+
+extern BillboardRecord billboard_records[16] __asm__("D_0018ED00");
 
 typedef struct {
     f32 x, y, z, w;

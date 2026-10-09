@@ -5,7 +5,10 @@
 
 #include "eetypes.h"
 #include "rnc/rendering/dma_tag.h"
-#include "rnc/rendering/graphics_setup.h"
+
+/* GIF packets that program the GS for the NTSC and PAL video modes. */
+extern u8 ntsc_graphics_setup_packet[0x70] __asm__("D_001D7E50");
+extern u8 pal_graphics_setup_packet[0x70] __asm__("D_001D7EC0");
 struct GraphicsSetupRecord {
     s32 command_count;
     s32 command_flags;
