@@ -157,7 +157,71 @@ void FUN_L06_0030bef8(char *src, int a1, int a2, int a3) {
         m[0x20] = 1;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_0030bfa8.s", FUN_L06_0030bfa8);
+#else
+extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
+extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
+extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
+extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
+extern s32 D_0013E500[];
+extern s32 D_L06_00162414 __attribute__((sda));
+extern s32 D_L06_00162418 __attribute__((sda));
+extern s32 D_L06_0016241C __attribute__((sda));
+extern s32 D_L06_00162420 __attribute__((sda));
+extern s32 D_L06_00162424 __attribute__((sda));
+extern s32 D_L06_00162428 __attribute__((sda));
+
+#define FUN_L06_0030bfa8 FUN_L06_0030bfa8_c
+void FUN_L06_0030bfa8(char *moby) __asm__("FUN_L06_0030bfa8");
+void FUN_L06_0030bfa8(char *moby) {
+    float *d = *(float **)(moby + 0x78);
+    OvlVec4 pos;
+    s64 corners[4];
+    u32 colors[4];
+    s32 uvs[4];
+    float screen[4];
+    float size;
+    float fade;
+    s32 y, x, radius;
+    long raw_x;
+    u64 texture;
+    u32 color;
+    s32 *screen_center;
+    float screen_offset;
+
+    qcopy(&pos, moby + 0x10);
+    size = d[0];
+    if (1.0f < size) size = 1.0f;
+    fade = d[0] - 1.0f;
+    if (1.0f < fade) fade = 1.0f;
+    else if (fade < 0.0f) fade = 0.0f;
+    vu1_add_g_sregister(0x47, 0x5380B);
+    project_to_screen(screen, &pos);
+    screen_center = D_0013E500;
+    raw_x = truncate_float_to_s32(screen[0] - (float)screen_center[4]);
+    screen_offset = (float)screen_center[4];
+    x = (s32)raw_x - 0x1000;
+    y = truncate_float_to_s32(screen[1] - screen_offset) - 0x1000;
+    uvs[0] = D_L06_0016241C;
+    uvs[1] = D_L06_00162420;
+    uvs[2] = D_L06_00162424;
+    uvs[3] = D_L06_00162428;
+    color = fast_tween_color(fade, *(s32 *)&d[2], *(s32 *)&d[3]);
+    colors[3] = colors[2] = colors[1] = colors[0] = color;
+    radius = truncate_float_to_s32((float)(D_L06_00162418 << 4) * size);
+    corners[0] = (s64)(s32)((y - radius) << 16) + 0xfffff080008000LL + (x + radius);
+    corners[1] = (s64)(s32)((y - radius) << 16) + 0xfffff080008000LL + (x - radius);
+    corners[2] = (s64)(s32)((y + radius) << 16) + 0xfffff080008000LL + (x + radius);
+    corners[3] = (s64)(s32)((y + radius) << 16) + 0xfffff080008000LL + (x - radius);
+    texture = get_effect_texture(D_L06_00162414);
+    FUN_L02_0020bc88(corners, uvs, colors, texture, 1);
+    vu1_add_g_sregister(0x47, 0x5360B);
+}
+#undef FUN_L06_0030bfa8
+#endif
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00317770), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_0015EF50;
