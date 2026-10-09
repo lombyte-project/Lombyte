@@ -11,7 +11,7 @@ extern int D_L12_0015FFD8; /* no foreign declaration */
 extern short *D_L12_001ABCC0[];
 
 void FUN_L12_002bf6d0(struct Moby *moby) {
-    short *p = D_L12_001ABCC0[moby->unk21];
+    short *p = D_L12_001ABCC0[moby->group];
     int base = D_L12_0015FFD8;
     do {
         int i = (*p & 0x7FFF) * 256;

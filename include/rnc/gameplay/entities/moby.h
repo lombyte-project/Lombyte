@@ -31,7 +31,7 @@ struct Moby {
     Vec4f bsphere;
     Vec4f pos;
     u8 state;                         /* >= 0xFE: dead, waiting to respawn */
-    u8 unk21;
+    u8 group;                         /* linked group: index into the level moby-list table D_Lxx_001ABCC0 (0xFF: none) */
     u8 unk22;                         /* class slot: pclass = D_L00_00197300[unk22] (FUN_L00_002cf218) */
     u8 unk23;                         /* 0x40 for the smoke trail FUN_L09_00307ba8 spawns */
     struct MobyClass *pclass;
@@ -75,7 +75,7 @@ struct Moby {
     u8 padA8[8];
     u8 unkB0;                         /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
     u8 padB1;
-    u16 unkB2;
+    u16 save_id;                      /* index into the level collected[]/killed[] tables and save bits D_0014C190[level][id >> 5] */
     s16 unkB4;
     u8 padB6[2];
     void *unkB8;                      /* 0xB8: bolt source record; its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */

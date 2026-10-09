@@ -175,11 +175,11 @@ void FUN_L14_002aba80(struct Moby *moby) {
         u16 id;
 
         if (vars->trigger == -1 || is_point_inside_clip_volume(&hero.motion.pos, vars->trigger) ||
-            D_L14_001BB930.collected[(s16)(id = moby->unkB2)] != 0 ||
+            D_L14_001BB930.collected[(s16)(id = moby->save_id)] != 0 ||
             (D_0014C190[current_level_index][(s16)id >> 5] >> (id & 0x1F)) & 1) {
             if (vars->trigger != -1) {
-                D_0014C190[current_level_index][(s16)moby->unkB2 >> 5] |= 1 << (moby->unkB2 & 0x1F);
-                D_L14_001BABD0[(s16)moby->unkB2 >> 5] |= 1 << (moby->unkB2 & 0x1F);
+                D_0014C190[current_level_index][(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
+                D_L14_001BABD0[(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
                 vars->trigger = -1;
             }
             on = 1;
@@ -882,7 +882,7 @@ void FUN_L14_002aee28(struct Moby *moby) {
         int *ids = D_L14_001D8680_b;
         out = ids;
         do {
-            char *m = FUN_L14_002aef28(moby->unk21, ids);
+            char *m = FUN_L14_002aef28(moby->group, ids);
             char *md;
             *out++ = *(short *)(m + 0xB2);
             md = *(char **)(m + 0x78);
@@ -943,7 +943,7 @@ char *FUN_L14_002aef28(int index, int *ids) {
 extern int *D_L14_001ABF40_c[] __asm__("D_L14_001ABF40");
 
 int FUN_L14_002af048(struct Moby *moby) {
-    short *table = D_L14_001AC2C0_2B0168[moby->unk21];
+    short *table = D_L14_001AC2C0_2B0168[moby->group];
     int count = 0;
     if (table == 0)
         return 0;
@@ -1591,7 +1591,7 @@ void FUN_L14_002d6570(struct Moby *m) {
     float rot[4];
     int idx;
     float t;
-    unsigned short *p = D_L14_001ABF40_6570[m->unk21];
+    unsigned short *p = D_L14_001ABF40_6570[m->group];
     char **out;
     int i;
     float s;

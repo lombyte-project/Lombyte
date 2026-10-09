@@ -230,7 +230,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern short *D_L08_001AC040[];
 
 char *FUN_L08_002daa10(struct Moby *moby) {
-    short *t = D_L08_001AC040[moby->unk21];
+    short *t = D_L08_001AC040[moby->group];
     char *best;
     char *p;
     float bestD, bestA;

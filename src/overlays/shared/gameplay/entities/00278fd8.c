@@ -1482,9 +1482,9 @@ void FUN_L15_002a35d8(int addr) {
     struct Moby *m = (struct Moby *)addr;
     s32 slot;
     m->unk94 = 0;
-    D_L15_001BABD0.killed[(s16)m->unkB2] = m->unkB0 + 2;
+    D_L15_001BABD0.killed[(s16)m->save_id] = m->unkB0 + 2;
     if (m->unkB0 == 0xFF || (D_L15_0015FC88[m->unkB0] != 0xFF && D_0014C050[current_level_index][m->unkB0] == 0xFF)) {
-        D_L15_001BB830.killed[(s16)m->unkB2] = m->unkB0 + 2;
+        D_L15_001BB830.killed[(s16)m->save_id] = m->unkB0 + 2;
     }
     if (m->unkBC != 0xFF) {
         VoiceSlot *e;

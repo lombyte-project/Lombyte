@@ -682,7 +682,7 @@ struct Moby *FUN_L14_002f12f0(struct Moby *moby, int tag) {
     struct Moby *pool;
     int idx;
 
-    if (moby->unk21 < D_L14_0015FFF4 && (p = D_L14_001ABF40[moby->unk21]) != 0) {
+    if (moby->group < D_L14_0015FFF4 && (p = D_L14_001ABF40[moby->group]) != 0) {
         pool = D_L14_0015FFD8_12f0;
         do {
             idx = *p & 0x7FFF;

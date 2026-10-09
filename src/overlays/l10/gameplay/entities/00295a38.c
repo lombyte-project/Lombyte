@@ -847,7 +847,7 @@ void FUN_L10_002dd650(struct Moby *m) {
     char *e;
     float w[16];
     float v[4];
-    unsigned short id = m->unkB2;
+    unsigned short id = m->save_id;
     if (D_L10_001BB6B0.collected[(short)id] != 0 ||
         (*(int *)(D_0014C190 + (((short)id >> 5) * 4 + (D_0015ED84_m << 8))) >> (id & 0x1F)) & 1) {
         mark_moby_for_removal_d650(m);
@@ -864,11 +864,11 @@ void FUN_L10_002dd650(struct Moby *m) {
                     FUN_001fa2d8(w, &m->unkC0);
                     FUN_001f9d20(v, v, w);
                     if (v[0] > 0.25f) {
-                        *(int *)(D_0014C190 + (((short)m->unkB2 >> 5) * 4 +
+                        *(int *)(D_0014C190 + (((short)m->save_id >> 5) * 4 +
                                                (D_0015ED84_m << 8))) |=
-                            1 << (m->unkB2 & 0x1F);
-                        D_L10_001BA950[(short)m->unkB2 >> 5] |=
-                            1 << (m->unkB2 & 0x1F);
+                            1 << (m->save_id & 0x1F);
+                        D_L10_001BA950[(short)m->save_id >> 5] |=
+                            1 << (m->save_id & 0x1F);
                         mark_moby_for_removal_d650(m);
                         return;
                     }

@@ -42,7 +42,7 @@ typedef struct {
 } M_4be0;
 
 char *FUN_L16_002e4be0(struct Moby *arg, int id) {
-    unsigned short *p = D_L16_001ABCC0_4be0[arg->unk21];
+    unsigned short *p = D_L16_001ABCC0_4be0[arg->group];
     char *pool;
     int idx;
     if (p != 0) {

@@ -119,7 +119,7 @@ void FUN_L09_002c5990(struct Moby *moby) {
         vars->unk5A = 6;
         vars->unk58 = 8;
         if (vars->unk180 == -1) {
-            FUN_001e93b0(D_L09_00208320, moby->unkB2);
+            FUN_001e93b0(D_L09_00208320, moby->save_id);
             mark_moby_for_removal(moby);
             break;
         }
@@ -151,8 +151,8 @@ void FUN_L09_002c5990(struct Moby *moby) {
             moby->unk58 = random_float_between(0.95f, 1.05f);
         }
         if (vars->unk164 != 2) {
-            if (moby->unk21 != 0xFF) {
-                FUN_L01_0026e090(moby->unk21, 1);
+            if (moby->group != 0xFF) {
+                FUN_L01_0026e090(moby->group, 1);
             }
             if (vars->voice == -1) {
                 vars->voice = allocate_voice_for_target_entry(1, 4, moby);
@@ -163,8 +163,8 @@ void FUN_L09_002c5990(struct Moby *moby) {
         break;
     case 3:
         if (moby->unk70 & 2) {
-            if (moby->unk21 != 0xFF) {
-                FUN_L01_0026e090(moby->unk21, 1);
+            if (moby->group != 0xFF) {
+                FUN_L01_0026e090(moby->group, 1);
             }
             vars->moving = 1;
             moby->state = 4;

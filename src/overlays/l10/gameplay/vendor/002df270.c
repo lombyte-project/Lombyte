@@ -30,8 +30,8 @@ extern short *D_L10_001ABCC0[];
 
 void FUN_L10_002e0138(struct Moby *m) {
     short *p;
-    if (m->unk21 != 0xFF) {
-        p = D_L10_001ABCC0[m->unk21];
+    if (m->group != 0xFF) {
+        p = D_L10_001ABCC0[m->group];
         if (p != 0) {
             do {
                 Ent *base = D_L10_0015FFD0_e[2];
@@ -52,8 +52,8 @@ extern short D_L10_00161E00_d __asm__("D_L10_00161E00") __attribute__((sda));
 
 void FUN_L10_002e1cb0(struct Moby *moby) {
     short *p;
-    if (moby->unk21 != 0xFF) {
-        p = D_L10_001ABCC0[moby->unk21];
+    if (moby->group != 0xFF) {
+        p = D_L10_001ABCC0[moby->group];
         if (p != 0) {
             do {
                 int idx = *(unsigned short *)p & 0x7FFF;
@@ -871,7 +871,7 @@ float FUN_L10_002e4840(struct Moby *self) {
     char *owner = *(char **)(self->pvars + 0x160);
     float hi, lo, ang, dist, v[3];
     short *p;
-    if (self->unk21 == 0xFF) {
+    if (self->group == 0xFF) {
         return FUN_001f9e90(self->pos.x - *(float *)(owner + 0x10),
                             self->pos.y - *(float *)(owner + 0x14));
     }
@@ -884,7 +884,7 @@ float FUN_L10_002e4840(struct Moby *self) {
     v[1] = FUN_001f9de0(ang) * 2.0f;
     v[2] = 0.0f;
     FUN_001f9a10(v, v, D_0013E533 + 0xE9D);
-    p = D_L10_001ABCC0[self->unk21];
+    p = D_L10_001ABCC0[self->group];
     if (p != 0) {
         do {
             int idx = *(unsigned short *)p & 0x7FFF;

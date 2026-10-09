@@ -1962,7 +1962,7 @@ void FUN_L16_002e7ba0(struct Moby *moby) {
     unsigned char *objects[16];
     unsigned char *previous;
     L16WalkerData *d = (L16WalkerData *)moby->pvars;
-    short *list = D_L16_001ABCC0[moby->unk21];
+    short *list = D_L16_001ABCC0[moby->group];
     short count = 0, rank;
     int i;
     float period;

@@ -243,7 +243,7 @@ struct Moby *FUN_L03_002bec60(struct Moby *m, Vec4 *at, s32 oclass)
         }
     }
     if (spawned == NULL) {
-        FUN_001e93b0(D_L03_001E2FA0, D_L03_0015F5CC, (s16)m->unkB2, m->oclass);
+        FUN_001e93b0(D_L03_001E2FA0, D_L03_0015F5CC, (s16)m->save_id, m->oclass);
     }
     return spawned;
 }
@@ -722,7 +722,7 @@ void FUN_L03_002dca30(struct Moby *m)
     case 0:
         /* one quadword copy (lq/sq); qcopy() schedules differently */
         target->q = ((Vec4 *)&m->pos)->q;
-        id = m->unkB2;
+        id = m->save_id;
         idx = id;
         if (D_L03_001BB330.collected[idx] == 0) {
             if (!((D_0014C190[D_0015ED84][idx >> 5] >> (id & 0x1F)) & 1))

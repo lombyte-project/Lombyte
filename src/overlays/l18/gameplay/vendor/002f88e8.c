@@ -778,7 +778,7 @@ extern unsigned short *D_L18_001AC240_c[] __asm__("D_L18_001AC240");
 extern void FUN_L00_00263618(void *, int, float, float);
 
 void FUN_L18_002fca98(struct Moby *moby) {
-    unsigned short *p = D_L18_001AC240_c[moby->unk21];
+    unsigned short *p = D_L18_001AC240_c[moby->group];
     if (p != 0) {
         while (1) {
             unsigned char *obj = D_L18_0015FFD8 + ((p[0] & 0x7FFF) << 8);

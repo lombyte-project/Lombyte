@@ -526,7 +526,7 @@ void FUN_L05_003150f0(struct Moby *m) {
         break;
     case 1:
         if (d->trigger >= 0 && D_L05_0015FFD8[d->trigger].unkBC != 0) {
-            FUN_L01_0026e0e0(m->unk21, 2);
+            FUN_L01_0026e0e0(m->group, 2);
         }
         break;
     case 2:

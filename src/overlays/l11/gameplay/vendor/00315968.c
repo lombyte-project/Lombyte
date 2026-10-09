@@ -46,9 +46,9 @@ short FUN_L11_00316090(struct Moby *self) {
     short n;
     char *base;
 
-    if (self->unk21 == 0xFF)
+    if (self->group == 0xFF)
         return 0;
-    p = (unsigned short *)D_L11_001AC240[self->unk21];
+    p = (unsigned short *)D_L11_001AC240[self->group];
     n = 0;
     if (p == 0)
         return 0;

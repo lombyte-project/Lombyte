@@ -211,7 +211,7 @@ extern int *D_L16_001ABCC0_c[] __asm__("D_L16_001ABCC0");
 extern int FUN_L16_002cf678_u(char *) __asm__("FUN_L16_002cf678");
 
 void FUN_L16_002cf5c8(struct Moby *moby) {
-    short *p = D_L16_001ABCC0_c[moby->unk21];
+    short *p = D_L16_001ABCC0_c[moby->group];
     if (p != 0) {
         do {
             char *other = D_L16_0015FFD8 + (((unsigned short)*p & 0x7FFF) << 8);
@@ -891,7 +891,7 @@ void FUN_L16_002c9878(struct Moby *m) {
         if (*(float *)(d + 0x6C) != target) {
             approach_value((float *)(d + 0x6C), target, D_0015ED70_c * 12.0f);
             normalize_vector_xyz(vec, &m->unkC0, *(float *)(d + 0x6C));
-            FUN_L16_002c9c38_c(m->unk21, vec);
+            FUN_L16_002c9c38_c(m->group, vec);
         }
         if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x68)))
             m->state = one;
@@ -902,7 +902,7 @@ void FUN_L16_002c9878(struct Moby *m) {
         if (*(float *)(d + 0x6C) != target) {
             approach_value((float *)(d + 0x6C), target, D_0015ED70_c * 12.0f);
             normalize_vector_xyz(vec, &m->unkC0, *(float *)(d + 0x6C));
-            FUN_L16_002c9c38_c(m->unk21, vec);
+            FUN_L16_002c9c38_c(m->group, vec);
         }
         if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x64)))
             m->state = 2;
@@ -927,7 +927,7 @@ extern char *D_L16_00160098_c9a50 __asm__("D_L16_0015FFD8");
 extern char D_L16_00167240_c9a50[] __asm__("D_L16_001671C0");
 extern char D_0013E633_c9a50[] __asm__("D_0013E550");
 void FUN_L16_002c9a50(struct Moby *m) {
-    short *p = (short *)D_L16_001ABFC0_c9a50[m->unk21];
+    short *p = (short *)D_L16_001ABFC0_c9a50[m->group];
     char *d = (char *)m->pvars;
     char *nearest = 0;
     float best = 1024.0f;
@@ -1657,9 +1657,9 @@ void FUN_L16_002cee70(struct Moby *moby) {
     float f;
     char *m;
     char *data;
-    if (moby->unk21 != 0xFF) {
+    if (moby->group != 0xFF) {
         f = *(float *)&D_L16_001619DC * DEG_TO_RAD * D_0015ED6C;
-        p = (short *)D_L16_001ABCC0_c2[moby->unk21];
+        p = (short *)D_L16_001ABCC0_c2[moby->group];
         do {
         again:
             m = (char *)(((*(unsigned short *)p & 0x7FFF) << 8) + (int)D_L16_0015FFD8);
@@ -1768,7 +1768,7 @@ float AbsoluteFloat(float input) __asm__("func_001F99C0");
 extern short *D_L16_001ABFC0_2d0a40[] __asm__("D_L16_001ABCC0");
 
 int FUN_L16_002cf678(struct Moby *m) {
-    short *p = D_L16_001ABFC0_2d0a40[m->unk21];
+    short *p = D_L16_001ABFC0_2d0a40[m->group];
     if (p == 0)
         return 0;
     while (1) {
@@ -1810,7 +1810,7 @@ extern int *D_L16_001ABCC0_c3[] __asm__("D_L16_001ABCC0");
 void FUN_L16_002cf850(char *moby, char *partner);
 
 void FUN_L16_002cf7a8(struct Moby *arg) {
-    short *p = (short *)D_L16_001ABCC0_c3[arg->unk21];
+    short *p = (short *)D_L16_001ABCC0_c3[arg->group];
     if (p) {
         do {
             char *m = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);

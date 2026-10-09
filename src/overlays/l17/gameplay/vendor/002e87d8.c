@@ -2975,10 +2975,10 @@ void FUN_L17_002f1940(struct Moby *m) {
     m->scale = m->pclass->scale * *(float *)&D_L17_001623AC;
     switch (m->state) {
     case 0:
-        if (D_L17_001BBB30.collected[(short)m->unkB2] != 0 ||
+        if (D_L17_001BBB30.collected[(short)m->save_id] != 0 ||
             (*(int *)(((char *)&D_0014C190) +
-                      (((short)m->unkB2 >> 5) * 4 + (D_0015ED84_m << 8))) >>
-             (m->unkB2 & 0x1F)) &
+                      (((short)m->save_id >> 5) * 4 + (D_0015ED84_m << 8))) >>
+             (m->save_id & 0x1F)) &
                 1) {
             v->sel = 0;
             v->dir = 0;
@@ -3057,11 +3057,11 @@ void FUN_L17_002f1940(struct Moby *m) {
             FUN_L00_002eaa30(rot);
             FUN_L00_00216f90(D_L17_001600EC + (v->cut << 7) + 0x30,
                              D_L17_001600EC + (v->cut << 7) + 0x70, 0x72, 0);
-        } else if (D_L17_001BBB30.collected[(short)m->unkB2] != 0 ||
+        } else if (D_L17_001BBB30.collected[(short)m->save_id] != 0 ||
                    (*(int *)(((char *)&D_0014C190) +
-                             (((short)m->unkB2 >> 5) * 4 +
+                             (((short)m->save_id >> 5) * 4 +
                               (D_0015ED84_m << 8))) >>
-                    (m->unkB2 & 0x1F)) &
+                    (m->save_id & 0x1F)) &
                        1) {
             float d =
                 FUN_001f9b80(((char *)&D_0013F3D0), D_L17_001600EC + (v->cam[v->sel] << 7) + 0x30);
@@ -3103,10 +3103,10 @@ void FUN_L17_002f1940(struct Moby *m) {
             FUN_L00_00216f90(b, rot, 0, 0);
             FUN_L00_002eac18(0);
             *(int *)(((char *)&D_0014C190) +
-                     (((short)m->unkB2 >> 5) * 4 + (D_0015ED84_m << 8))) |=
-                1 << (m->unkB2 & 0x1F);
-            D_L17_001BADD0[(short)m->unkB2 >> 5] |=
-                1 << (m->unkB2 & 0x1F);
+                     (((short)m->save_id >> 5) * 4 + (D_0015ED84_m << 8))) |=
+                1 << (m->save_id & 0x1F);
+            D_L17_001BADD0[(short)m->save_id >> 5] |=
+                1 << (m->save_id & 0x1F);
         }
         break;
     case 3:

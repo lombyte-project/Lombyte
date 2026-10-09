@@ -297,7 +297,7 @@ void FUN_L18_002f06c0(struct Moby *m) {
     if (D_L18_00162238_c7 != 0) {
         return;
     }
-    p = D_L18_001AC240_c7[m->unk21];
+    p = D_L18_001AC240_c7[m->group];
     a = D_L18_00162258_c7 * DEG_TO_RAD * D_0015ED6C_c7;
     b = D_L18_0016225C_c7 * DEG_TO_RAD * D_0015ED6C_c7;
     do {
@@ -473,7 +473,7 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             int j;
             qcopy(d->v10, &moby->pos);
             qcopy(d->v20, &moby->rot);
-            tp = D_L18_001AC240 + moby->unk21;
+            tp = D_L18_001AC240 + moby->group;
             j = 0;
             t = *tp;
             if (t == 0)
@@ -592,7 +592,7 @@ void FUN_L18_002f1c38(struct Moby *moby) {
             FUN_L18_002f1d08_u(0x954, *(int *)(state + 0xC));
         }
         moby->state = 2;
-        FUN_L18_002fa888(moby->unk21, 1);
+        FUN_L18_002fa888(moby->group, 1);
     }
 }
 /* Reset this vendor moby's counters before its per-frame update. */

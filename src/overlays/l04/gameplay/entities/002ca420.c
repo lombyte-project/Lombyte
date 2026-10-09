@@ -997,7 +997,7 @@ void FUN_L04_002e17d8(struct Moby *m) {
         m->state = 1;
         break;
     case 1:
-        id = m->unkB2;
+        id = m->save_id;
         idx = id;
         if (D_L04_001BB3B0.collected[idx] == 0 && !((D_0014C190[D_0015ED84][idx >> 5] >> (id & 0x1F)) & 1)) {
             if (d->trigger == -1)
@@ -1014,8 +1014,8 @@ void FUN_L04_002e17d8(struct Moby *m) {
     case 2:
         m->pos.z += riser_rise_speed(m) * D_0015ED6C;
         if (FUN_001f9740(&d->timer)) {
-            D_0014C190[D_0015ED84][(s16)m->unkB2 >> 5] |= 1 << (m->unkB2 & 0x1F);
-            D_L04_001BA650[(s16)m->unkB2 >> 5] |= 1 << (m->unkB2 & 0x1F);
+            D_0014C190[D_0015ED84][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+            D_L04_001BA650[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
             if (m->oclass == 0x44D)
                 FUN_0022da68(1, 0, m);
             m->state = 3;

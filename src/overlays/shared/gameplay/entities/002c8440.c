@@ -1243,7 +1243,7 @@ void FUN_L00_002cf218(struct Moby *moby) {
         if (!FUN_L00_001fefc8(&pv->unkC9)) {
             break;
         }
-        if (moby->unk21 == 0xFF) {
+        if (moby->group == 0xFF) {
             moby->state = 1;
             moby->unk31 = 1;
             moby->flags &= ~1;
@@ -1277,7 +1277,7 @@ void FUN_L00_002cf218(struct Moby *moby) {
                 break;
             }
         }
-        FUN_L00_002591d0(&it, moby->unk21, 0, 0);
+        FUN_L00_002591d0(&it, moby->group, 0, 0);
         while (it != NULL) {
             if (moby != it && !(FUN_001f9b80(&moby->pos, &it->pos) > 0.1f) && it->state == 1) {
                 CrateVars *ipv = (CrateVars *)it->pvars;

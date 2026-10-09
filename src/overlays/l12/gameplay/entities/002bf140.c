@@ -79,8 +79,8 @@ int FUN_L12_002e16b8(struct Moby *moby) {
         return 0;
     active = FUN_L00_002db8f8(moby);
     if (active) {
-        if (moby->unk21 != 0xFF)
-            FUN_L01_0026e090(moby->unk21, 1);
+        if (moby->group != 0xFF)
+            FUN_L01_0026e090(moby->group, 1);
         moby->state = 8;
     } else if (moby->state == 8) {
         moby->state = 1;
@@ -381,8 +381,8 @@ void FUN_L12_002e3528(struct Moby *moby) {
     }
     if (vars->call_enabled != 0 && moby->state != 9) {
         s16 n = ++vars->call_timer;
-        if (scale_game_frames_e3528(0x3C) * 15 < n && moby->unk31 == 0 && moby->unk21 < 0xFF &&
-            count_group_e3528(moby->unk21, -1) >= 4 && random_integer_below_e3528(0x45) == 0) {
+        if (scale_game_frames_e3528(0x3C) * 15 < n && moby->unk31 == 0 && moby->group < 0xFF &&
+            count_group_e3528(moby->group, -1) >= 4 && random_integer_below_e3528(0x45) == 0) {
             v.f[0] = fast_cos_e3528(fast_add_rotations_e3528(moby->rot.z, 3.1415927f));
             v.f[1] = fast_sin_e3528(fast_add_rotations_e3528(moby->rot.z, 3.1415927f));
             v.f[2] = 0.0f;
@@ -393,8 +393,8 @@ void FUN_L12_002e3528(struct Moby *moby) {
     dmg = 0.0f;
     take_damage_e3528(moby, coll, &vars->health, 0, &hit, &dmg, 0, 4);
     if (coll != 0 && moby->state != 0x63 && moby->state != 8) {
-        if (moby->unk21 != 0xFF) {
-            alert_group_e3528(moby->unk21, 7);
+        if (moby->group != 0xFF) {
+            alert_group_e3528(moby->group, 7);
         }
         if (dmg != 0.0f) {
             vars->health -= dmg;
@@ -921,8 +921,8 @@ void FUN_L12_002e81e0(struct Moby *moby) {
     take_damage_e81e0(moby, coll, &vars->health, 0, &hit, &dmg, 0, 4);
     if (coll != 0 && coll->moby->oclass != moby->oclass && coll->moby->oclass != 0xB8 &&
         moby->state != 9 && dmg != 0.0f) {
-        if (moby->unk21 != 0xFF) {
-            alert_group_e81e0(moby->unk21, 1);
+        if (moby->group != 0xFF) {
+            alert_group_e81e0(moby->group, 1);
         }
         vars->health -= dmg;
         vars->unk80 = D_0015ED70_e81e0 * 30.0f;
