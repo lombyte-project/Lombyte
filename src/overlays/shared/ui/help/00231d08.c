@@ -1267,22 +1267,13 @@ s32 FUN_L00_00233e98(s32 idx) {
         return 1;
     return D_0013D428[idx];
 }
-struct G_00233ee8 {
-    char pad[0x1640];
-    float pos[3];
-    float f;
-    int n;
-    char pad2[0x2084 - 0x1654];
-    int state;
-};
-extern struct G_00233ee8 D_0013F350_00233ee8 __asm__("D_0013F350");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 /* Stores v, f and n in D_0013F350; calls 002223f8(0x65, 1) unless state is 0x65..0x67. */
 void FUN_L00_00233ee8(void *v, float f, int n) {
-    qcopy(D_0013F350_00233ee8.pos, v);
-    D_0013F350_00233ee8.f = f;
-    D_0013F350_00233ee8.n = n;
-    if ((unsigned)(D_0013F350_00233ee8.state - 0x65) >= 3) {
+    qcopy(&hero.unk1640, v);
+    hero.unk1640.f[3] = f;
+    hero.unk1650 = n;
+    if ((unsigned)(hero.state.current - 0x65) >= 3) {
         hero_set_state(0x65, 1);
     }
 }
