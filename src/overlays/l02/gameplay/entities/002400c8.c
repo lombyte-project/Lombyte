@@ -1407,7 +1407,146 @@ void FUN_L02_002dca10(struct Moby *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dcb38.s", FUN_L02_002dcb38);
+/* pvars of the class FUN_L02_002dcb38 updates (only the fields it touches). */
+typedef struct {
+    char pad0[0x20];
+    float f20;           /* 0x20 */
+    short s24;           /* 0x24 */
+    char pad26[8];
+    unsigned char b2E;   /* 0x2E */
+    char pad2F[0x11];
+    float vel[4];        /* 0x40: passed to FUN_L00_0025e450 */
+    char pad50[0x20];
+    char anim[0x64];     /* 0x70: passed to FUN_L00_0025c698 */
+    int delay;           /* 0xD4: frames between spawns */
+    int timer;           /* 0xD8 */
+    char padDC[4];
+    int spawner;         /* 0xE0: spawner moby index, -1 if none */
+} Varscb38;
+
+/* Counters kept in the spawner moby's pvars. */
+typedef struct {
+    char pad0[0x14C];
+    int i14C;
+    int i150;
+} Spawnercb38;
+
+extern unsigned short D_0014D590_cb38[][64][2] __asm__("D_0014D590") __attribute__((section(".data")));
+extern int D_0014EE90[];
+extern int D_L02_0015FFD8;
+extern int FUN_001f9740(void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9c48(void *, void *, float);
+extern float FUN_0020c9e0(void *);
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+extern void FUN_L02_002dcfe0(struct Moby *m);
+extern char *find_group_target_cb38(void *) __asm__("FUN_L02_002dd2a8");
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, int,
+                             float, float, int, int, int, int);
+
+/* Spawner-fed moby: counts itself in on spawn, hands itself to a group target on a timer, fires a
+   projectile at it (state 2) and bursts into debris when its hit animation flags it (state 4). */
+void FUN_L02_002dcb38(unsigned char *moby) {
+    Varscb38 *d = *(Varscb38 **)(moby + 0x78);
+    char *o;
+    int n;
+    OvlVec4 v;
+    OvlVec4 p;
+
+    FUN_L02_002dcfe0((struct Moby *)moby);
+    if ((signed char)moby[0x20] < 0) {
+        return;
+    }
+    if (moby[0x31] != 0 && distance_xyz(moby + 0x10, D_L02_001673C0) < 28.0f) {
+        FUN_L00_0025a120(moby);
+        moby[0x7F] = 0x16;
+    }
+    switch (moby[0x20]) {
+    case 0:
+        *(short *)(moby + 0xB4) -= D_0014D590_cb38[2][moby[0xB1]][1];
+        if (*(short *)(moby + 0xB4) <= 0) {
+            *(short *)(moby + 0xB4) = 1;
+        }
+        moby[0x20] = 1;
+        d->f20 = 3.0f;
+        d->s24 = 3;
+        d->b2E = 1;
+        d->timer = scale_ticks(d->delay);
+        if (d->spawner >= 0) {
+            (*(Spawnercb38 **)((d->spawner << 8) + D_L02_0015FFD8 + 0x78))->i150 += 1;
+        }
+        break;
+    case 1:
+        if (FUN_001f9740(&d->timer)) {
+            if (find_group_target_cb38(moby)) {
+                moby[0x20] = 2;
+                if (moby[0x53] != 1) {
+                    blend_moby_animation_c3(moby, 1, 0, scale_ticks(10));
+                }
+            } else {
+                d->timer = scale_ticks(d->delay);
+            }
+        }
+        break;
+    case 2:
+        if (moby[0x70] & 2) {
+            moby[0x20] = 1;
+            if (moby[0x53] != 0) {
+                blend_moby_animation_c3(moby, 0, 0, scale_ticks(10));
+            }
+        } else if (FUN_0020c9e0(moby) == 12.0f) {
+            n = D_0014EE90[moby[0xB0]];
+            if (n > 20) {
+                n = 20;
+            }
+            d->timer = scale_ticks(d->delay + scale_ticks(n * 15));
+            o = find_group_target_cb38(moby);
+            if (o) {
+                char *od = *(char **)(o + 0x78);
+                if (d->spawner >= 0) {
+                    (*(Spawnercb38 **)((d->spawner << 8) + D_L02_0015FFD8 + 0x78))->i14C += 1;
+                }
+                qcopy(&p, moby + 0x10);
+                p.f[2] += 1.5f;
+                FUN_001f9a28(&v, od + 0x220, moby + 0x10);
+                FUN_001f9c48(&v, &v, 2.0f * D_0015ED6C);
+                v.f[2] = D_0015ED6C * 6.0f;
+                FUN_L02_002d6118((unsigned char *)o, &p, v.f);
+            }
+        }
+        break;
+    case 3:
+        FUN_L00_0025c698(moby, d->anim);
+        if (moby[0x70] & 2) {
+            moby[0x20] = 1;
+            if (moby[0x53] != 0) {
+                blend_moby_animation_c3(moby, 0, 0, scale_ticks(20));
+            }
+        }
+        break;
+    case 4:
+        if (FUN_L00_0025c698(moby, d->anim) & 0x40) {
+            if (d->spawner >= 0) {
+                extern int D_L02_0015FFD8_s __asm__("D_L02_0015FFD8") __attribute__((sda));
+                (*(Spawnercb38 **)((d->spawner << 8) + D_L02_0015FFD8_s + 0x78))->i150 -= 1;
+            }
+            qcopy(&v, moby + 0x10);
+            FUN_L00_0025e450(moby, d->vel, &v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1,
+                             -1, 0);
+            FUN_L00_00263fd8((char *)moby, 0x6E4, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L02_0015F580,
+                             D_L02_0015F580, D_L02_0015F580);
+            FUN_L00_00263fd8((char *)moby, 0x6E4, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L02_0015F580,
+                             D_L02_0015F580, D_L02_0015F580);
+            FUN_L00_00263fd8((char *)moby, 0x6E5, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L02_0015F580,
+                             D_L02_0015F580, D_L02_0015F580);
+            FUN_L00_00263fd8((char *)moby, 0x6E5, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L02_0015F580,
+                             D_L02_0015F580, D_L02_0015F580);
+            DeleteMoby(moby);
+        }
+        break;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DE418), where it is exact; names translated to the US level program. */
 
 
