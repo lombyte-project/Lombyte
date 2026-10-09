@@ -12,6 +12,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022e420/FUN_0022e420.s
 #include "sda.h"
 #include "qcopy.h"
 
+extern f32 warp_texture_coordinates[4][2] __asm__("D_001D9A10");
+
 typedef union {
     u128 quadword;
     f32 components[4];
