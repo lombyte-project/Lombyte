@@ -770,7 +770,6 @@ extern struct Moby *nearby_mobys[] __asm__("D_L10_00178380");
 extern GroundHit ground_hit __asm__("D_L10_001742C0");
 extern u8 D_0014C050[][16];
 extern void FUN_L00_002502f0(void *, int, int, int);
-extern int FUN_L00_001f2868(float, void *, int, void *, void *);
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern f32 fabsf_fast(f32) __asm__("FUN_001f99c0");
 extern s32 FUN_0022da68(s32, s32, struct Moby *);
@@ -790,7 +789,7 @@ void FUN_L10_002d92b8(struct Moby *m) {
         return;
     }
     door = &D_L10_0015FFD8[v->door];
-    n = FUN_L00_001f2868(1.0f, &m->pos, 0, m, NULL);
+    n = FUN_L00_001f2868(&m->pos, 1.0f, 0, m, NULL);
     if (n != 0) {
         for (i = 0; i < n; i++) {
             other = nearby_mobys[i];
