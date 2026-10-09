@@ -1188,7 +1188,257 @@ void FUN_L03_002da710(struct Moby *m) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002da870.s", FUN_L03_002da870);
+#include "rnc/globals.h"
+
+/* Pvars of the l03 dialogue mobys (the record FUN_L00_002668a0 / FUN_L00_00266448 run). */
+struct TalkState {
+    u8 pad0[4];
+    s16 mode;          /* 0x04: 1 talked, 2 talked and accepted */
+    u8 pad6[0x1A];
+    void *script;      /* 0x20 */
+    u8 pad24[0x12];
+    s16 unk36;
+    u8 pad38[0x10];
+    s32 unk48;
+    s32 warp;          /* 0x4C: index into D_L03_001600EC, -1 for none */
+};
+
+/* Pvars of the Kerwan quest giver FUN_L03_002da870 drives. */
+struct QuestGiverVars {
+    u8 pad0[0x80];
+    struct TalkState talk;  /* 0x80 */
+    s32 reward;        /* 0xD0: moby index removed (and recorded) when the deal is accepted, -1 for none */
+    s32 link;          /* 0xD4: moby index of the class 0x3F4 helper it drives, -1 for none */
+    s32 link_arg;      /* 0xD8: stored into the helper when it is released */
+    u8 padDC[4];
+    u8 body[0x64];     /* 0xE0: body look-at driver (FUN_L00_002628d8) */
+    f32 pitch;         /* 0x144 */
+    f32 yaw;           /* 0x148 */
+    u8 pad14C[4];
+    f32 height;        /* 0x150 */
+    u8 pad154[0xC];
+    u8 head[0x80];     /* 0x160: head look-at driver */
+    Vec4 target;       /* 0x1E0: point it looks at while idle */
+    s32 watch_timer;   /* 0x1F0: frames left watching the hero */
+    s32 target_timer;  /* 0x1F4: frames until a new idle target */
+};
+
+extern u8 D_0013D4CC[];
+extern char *D_001413D0[];
+extern struct Moby *D_L03_0015FFD8;
+extern s32 D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
+extern s32 D_L03_001BA720[];
+extern char D_L03_00161BB8[];
+extern u8 D_0014C050[];
+extern u8 D_L03_0015FC88[];
+extern L03LevelState D_L03_001BA6D0;
+extern char *D_L03_001600EC;
+extern float D_0015ED64;
+extern void FUN_L01_0029b0a0(void *, int, struct Moby *, int, void *);
+extern void FUN_L00_002668a0(struct Moby *, struct TalkState *);
+extern int FUN_L00_00266448(struct Moby *, struct TalkState *);
+extern void FUN_L02_0025c758(struct Moby *);
+extern void FUN_L01_002783a8(struct Moby *, f32);
+extern void FUN_L00_002502a0(int);
+extern void FUN_L00_00284e50(void *, void *);
+extern void FUN_L00_00260860(int, int);
+extern void FUN_L00_00263d40(int, int);
+extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
+extern float FUN_001fa688(float, float);
+extern float FUN_001fa5c8(float, float);
+extern float FUN_001f96b0(float);
+extern int FUN_001fa6d0(float);
+extern s32 FUN_001f9740(s32 *);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
+extern void FUN_L00_002628d8(float, float, void *, void *, int);
+
+/* Quest giver: talks when approached (driving its class 0x3F4 helper), warps the
+   hero or, once the deal is accepted, removes the reward moby, records it and saves.
+   While idle it turns its head toward the hero or toward random points. */
+void FUN_L03_002da870(struct Moby *m) {
+    struct QuestGiverVars *v = (struct QuestGiverVars *)m->pvars;
+    struct TalkState *talk = &v->talk;
+    struct Moby *t;
+    struct Moby *o;
+    u8 group;
+    s32 *flag;
+    Vec4 *g;
+    struct Hero *h;
+    float scratch_target[4];
+    float eye[4];
+    float delta[4];
+    float rate;
+    float head_rate;
+    float yaw;
+    float pitch;
+    int tracking;
+
+    FUN_L03_002da710(m);
+    switch (m->state) {
+    case 0:
+        if (D_0013D4CC[0] != 0) {
+            if (v->link != -1) {
+                t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                if (t->oclass == 0x3F4) {
+                    flag = (s32 *)(t->pvars + 0x8C);
+                    *flag = 1;
+                    FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
+                }
+            }
+            taxi_kill(m);
+            return;
+        }
+        if (D_0014C050[m->unkB0 + current_level_index * 16] == 0xFF && v->link != -1) {
+            t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+            if (t->oclass == 0x3F4) {
+                flag = (s32 *)(t->pvars + 0x8C);
+                *flag = 1;
+                FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
+            }
+        }
+        m->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
+        m->state = 1;
+        talk->script = D_L03_00161BB8;
+        v->talk.unk48 = 5;
+        FUN_L00_002668a0(m, talk);
+        FUN_L02_0025c758(m);
+        break;
+    case 1:
+        if (FUN_L00_00266448(m, talk)) {
+            FUN_L01_002783a8(m, 2.3f);
+            m->state = 2;
+            if (v->link != -1) {
+                t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                if (t->oclass == 0x3F4) {
+                    flag = (s32 *)(t->pvars + 0x8C);
+                    *flag = 1;
+                    FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
+                }
+            }
+        }
+        break;
+    case 2:
+        if (D_L03_0015F5C4 != 2) {
+            if (v->talk.mode != 2) {
+                FUN_L00_002502a0(m->unkB0);
+                if (v->link != -1) {
+                    t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                    if (t->oclass == 0x3F4) {
+                        flag = (s32 *)(t->pvars + 0x8C);
+                        *flag = 1;
+                        FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
+                    }
+                }
+                if (v->talk.warp != -1) {
+                    FUN_L00_00284e50(D_L03_001600EC + v->talk.warp * 128 + 0x30,
+                                     D_L03_001600EC + v->talk.warp * 128 + 0x70);
+                }
+            }
+            m->state = 1;
+            if (v->talk.mode == 2) {
+                FUN_L00_00260860(0xC, 1);
+                FUN_L00_00263d40(0xBC8, -1);
+                if (v->reward != -1) {
+                    D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
+                        ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->unkB0 + 2;
+                    o = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
+                    /* Same record as the || test in the level's other reward code; the
+                       do/while (0) blocks keep the loop notes that make gcc predict the
+                       0xFF branch taken and keep the group load ahead of the table load. */
+                    if (o->unkB0 == 0xFF)
+                        goto record;
+                    do {
+                        group = o->unkB0;
+                    } while (0);
+                    if (D_L03_0015FC88[group] != 0xFF && D_0014C050[group + current_level_index * 16] == 0xFF) {
+                        do {
+                        record:
+                            D_L03_001BB330.collected[(s16)o->save_id] = o->unkB0 + 2;
+                        } while (0);
+                    }
+                    taxi_kill(&D_L03_0015FFD8[v->reward]);
+                }
+                if (v->link != -1) {
+                    t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                    if (t->oclass == 0x3F4) {
+                        u8 *tv = t->pvars;
+                        *(s32 *)(tv + 0x7C) = 0;
+                        *(s32 *)(tv + 0x8C) = 0;
+                        *(s32 *)(tv + 0xA0) = v->link_arg;
+                    }
+                }
+                memcard_save_data(0, -1);
+                taxi_kill(m);
+                return;
+            }
+        } else if (v->talk.unk36 == 2 && v->link != -1) {
+            t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+            if (t->oclass == 0x3F4) {
+                u8 *tv = t->pvars;
+                *(s32 *)(tv + 0x7C) = 0;
+                *(s32 *)(tv + 0x8C) = 0;
+                *(s32 *)(tv + 0xA0) = v->link_arg;
+            }
+        }
+        break;
+    }
+    rate = 0.02f;
+    head_rate = 0.3f;
+    tracking = 0;
+    if (m->prev_seq == 0) {
+        g = &hero.motion.pos;
+        tracking = 1;
+        if (taxi_dist2(&m->pos, g) < 8.0f &&
+            (h = (struct Hero *)((u8 *)g - 0x80),
+             FUN_001fa688(m->rot.z, taxi_atan2(h->motion.unkD0.f[0] - m->pos.x, h->motion.unkD0.f[1] - m->pos.y))) <
+                1.5707964f) {
+            if (vec_len((u8 *)g + 0x80) > 0.01f) {
+                v->watch_timer = scale_game_frames(120);
+            } else {
+                FUN_001f9740(&v->watch_timer);
+            }
+        } else if (v->watch_timer) {
+            v->watch_timer = 0;
+            qcopy(&v->target, &hero.motion.unkD0);
+        }
+        if (FUN_001f9740(&v->target_timer)) {
+            float heading;
+            v->target_timer = FUN_001fa6d0(FUN_001f96b0(random_float_between(180.0f, 300.0f)));
+            heading = fast_add_rotations(m->rot.z, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
+            build_spherical_offset(&v->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
+            vec_add(&v->target, &v->target, &m->pos);
+        }
+        if (v->watch_timer) {
+            qcopy(scratch_target, &hero.motion.unkD0);
+            rate = 0.04f;
+            head_rate = 0.3f;
+        } else {
+            qcopy(scratch_target, &v->target);
+        }
+    }
+    if (tracking) {
+        qcopy(eye, &m->pos);
+        eye[2] += 1.0f;
+        taxi_vec_sub(delta, scratch_target, eye);
+        yaw = FUN_001fa5c8(taxi_atan2(delta[0], delta[1]), m->rot.z);
+        pitch = -taxi_atan2(vec_len_xy(delta), delta[2]);
+        if (yaw > 1.5707964f)
+            yaw = 1.5707964f;
+        else if (yaw < -1.5707964f)
+            yaw = -1.5707964f;
+        if (pitch > 0.5235988f)
+            pitch = 0.5235988f;
+        else if (pitch < -0.5235988f)
+            pitch = -0.5235988f;
+        v->pitch = pitch;
+        v->yaw = yaw * 0.5f;
+    }
+    if (D_0015EDB0)
+        v->height = 2.75f;
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, v->body, 0);
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, v->head, 1);
+}
 
 extern float D_L03_00161BC0_2db020 __asm__("D_L03_00161BC0");
 extern float cos_2db020(float) __asm__("FUN_001f9dc8");
