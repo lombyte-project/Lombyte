@@ -1406,7 +1406,61 @@ float FUN_L06_002f2148(char *a, char *b, int c) {
     return r;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2250.s", FUN_L06_002f2250);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2910.s", FUN_L06_002f2910);
+extern float FUN_001f99c0(float);
+extern int FUN_L00_002591d0(int *, int, int, int);
+extern int FUN_L00_002592b8(int *, int, int, int);
+extern int D_L06_001AC180_c[] __asm__("D_L06_001AC180");
+
+void FUN_L06_002f2910(void *moby_arg) {
+    GbMoby *moby = moby_arg;
+    GbVars *d = moby->vars;
+    GbMoby *candidate;
+    float best = 12.0f;
+    int list;
+    int *cursor;
+
+    d->f174 = 0;
+    if (*(int *)d->p30C != -1) {
+        FUN_L00_002591d0(&list, *(int *)d->p30C, 0, 0);
+        while (list != 0) {
+            if (((GbMoby *)list)->cls_id == 0x3b1 || ((GbMoby *)list)->cls_id == 0x400 ||
+                ((GbMoby *)list)->cls_id == 0x515 || ((GbMoby *)list)->cls_id == 0x516) {
+                if (!(best < FUN_001f9b80(moby->pos, ((GbMoby *)list)->pos)) &&
+                    !(0.2f < FUN_001f99c0(moby->pos[2] - ((GbMoby *)list)->pos[2])) &&
+                    !(1.5f < FUN_001f99c0(moby->pos[2] - ((GbMoby *)list)->pos[2]))) {
+                    if ((((GbMoby *)list)->cls_id != 0x400 && ((GbMoby *)list)->cls_id != 0x516) ||
+                        ((GbMoby *)list)->state != 2) {
+                        if (((GbMoby *)list)->cls_id != 0x515 || *(int *)((GbMoby *)list)->vars != -1) {
+                            best = FUN_001f9b80(moby->pos, ((GbMoby *)list)->pos);
+                            d->f174 = (GbMoby *)list;
+                        }
+                    }
+                }
+            }
+            FUN_L00_002592b8(&list, list, 0, 0);
+        }
+    } else {
+        cursor = D_L06_001AC180_c;
+        while ((candidate = (GbMoby *)*cursor) != 0) {
+            if (candidate->cls_id == 0x3b1 || candidate->cls_id == 0x400 ||
+                candidate->cls_id == 0x515 || candidate->cls_id == 0x516) {
+                if (!(best < FUN_001f9b80(moby->pos, candidate->pos)) &&
+                    !(0.2f < FUN_001f99c0(moby->pos[2] - candidate->pos[2])) &&
+                    !(1.5f < FUN_001f99c0(moby->pos[2] - candidate->pos[2]))) {
+                    if ((candidate->cls_id != 0x400 && candidate->cls_id != 0x516) ||
+                        candidate->state != 2) {
+                        if (candidate->cls_id != 0x515 || *(int *)candidate->vars != -1) {
+                            best = FUN_001f9b80(moby->pos, candidate->pos);
+                            d->f174 = candidate;
+                        }
+                    }
+                }
+            }
+            cursor++;
+        }
+    }
+    d->f19A = 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2c28.s", FUN_L06_002f2c28);
 extern int FUN_L00_002591d0_c(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int FUN_L00_002592b8_c(int *, int, int, int) __asm__("FUN_L00_002592b8");
