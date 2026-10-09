@@ -7,6 +7,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/display/set_pal_mode/
 #else
 #include "types.h"
 #include "rnc/rendering/fs_aa_buffer.h"
+#include "rnc/rendering/image_clear_buffer.h"
 #include "rnc/rendering/screen.h"
 #include "rnc/rendering/draw_environment.h"
 
@@ -17,7 +18,6 @@ extern s32 display_buffer_address __asm__("D_0015EE80");
 extern s32 draw_buffer_address __asm__("D_0015EE84");
 extern s32 depth_buffer_address __asm__("D_0015EE88");
 extern s32 image_buffer_address __asm__("D_0015EE8C");
-extern u8 image_clear_buffer[] __asm__("D_001941C0");
 extern void FillTransferWords(u8 *, s32, s32);
 extern void FlushCache(s32);
 extern void func_00120558(s32, s32);
