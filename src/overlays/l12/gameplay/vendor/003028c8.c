@@ -66,8 +66,6 @@ void FUN_L12_00304d98(Level12VendorCounterMoby *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00304e00.s", FUN_L12_00304e00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003054b0.s", FUN_L12_003054b0);
-extern float D_0015ED70;
-extern float D_0015ED6C;
 extern char *D_L12_0015FFD8_p __asm__("D_L12_0015FFD8");
 extern int D_L12_001FB688[];
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -92,25 +90,25 @@ void FUN_L12_00306350(struct Moby *moby, int slot) {
         offset = slot * 4;
     }
 
-    initial_speed = random_float_between(D_0015ED70 * 3.7f, D_0015ED70 * 5.0f);
-    angle_scale = D_0015ED6C;
+    initial_speed = random_float_between(frame_time_sq * 3.7f, frame_time_sq * 5.0f);
+    angle_scale = frame_time;
     {
         char *base = data + 0x570;
         speed = (float *)(base + offset);
     }
     *speed = initial_speed;
     first_angle = FUN_L00_00257c48(angle_scale * 0.05235988f, angle_scale * 0.13962634f);
-    second_scale = D_0015ED6C;
+    second_scale = frame_time;
     slot_data = data + slot * 0x10;
     *(float *)(slot_data + 0x450) = first_angle;
     *(float *)(slot_data + 0x454) = FUN_L00_00257c48(second_scale * 0.05235988f, second_scale * 0.17453292f);
     if (selected->oclass == 0x4fd) {
         float variation = random_float_between(0.001f, 0.0045f);
-        float speed_scale = D_0015ED70;
+        float speed_scale = frame_time_sq;
         *(float *)(slot_data + 0x45c) = variation;
         *speed = random_float_between(speed_scale * 5.5f, speed_scale * 9.0f);
     } else if (selected->oclass == 0x500) {
-        *speed = D_0015ED70 * 13.0f;
+        *speed = frame_time_sq * 13.0f;
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003064e8.s", FUN_L12_003064e8);

@@ -1452,43 +1452,45 @@ int FUN_L15_002a2868(int idx, void *pos) {
     } while (*p++ > -1);
     return 0;
 }
+#include "rnc/gameplay/entities/moby.h"
+#define MOBY(p) ((struct Moby *)(p))
 typedef struct {
     float v[4][4];
     int col[4];
     float uv[4][2];
     long long r70;
-    long long r78;
+    long long texture; /* get_effect_texture */
     unsigned long long r80;
-    unsigned long long r88;
-} Quad29B8;
+    unsigned long long alpha; /* GS ALPHA register value (0x8000000044) */
+} EffectQuad;
 
 extern float D_L15_001CE110[4][4][4];
 extern float D_L15_001CE210[8];
 typedef struct {
     char pad[0x140];
     float position[4];
-} LevelView29B8;
-extern LevelView29B8 D_L15_00167280;
+} LevelView;
+extern LevelView D_L15_00167280;
 extern float D_L15_001614C4 __attribute__((sda));
 extern int D_L15_001614C8 __attribute__((sda));
-extern long long get_effect_texture_29b8(int) __asm__("FUN_001f44b8");
-extern void clear_vector_29b8(void *) __asm__("FUN_001f99f8");
-extern float distance_xy_29b8(float, float) __asm__("FUN_001f9e90");
-extern float distance_between_29b8(void *, void *) __asm__("FUN_001f9b80");
-extern void make_rotation_29b8(void *, void *) __asm__("FUN_001fa050");
-extern void draw_quad_29b8(void *, void *, int) __asm__("FUN_001f7d30");
+extern long long get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern float fast_atan2(float, float) __asm__("FUN_001f9e90");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern void rotation_matrix_from_euler(void *, void *) __asm__("FUN_001fa050");
+extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 void FUN_L15_002a29b8(unsigned char *moby) {
-    Quad29B8 q;
+    EffectQuad q;
     float angles[4] __attribute__((aligned(16)));
     float rotation[12] __attribute__((aligned(16)));
     float position[4] __attribute__((aligned(16)));
     unsigned short *p;
     int i, j;
 
-    q.r78 = get_effect_texture_29b8(8);
+    q.texture = get_effect_texture(8);
     q.r80 = 0xff9000000260LL;
-    q.r88 = 0x8000000044LL;
+    q.alpha = 0x8000000044LL;
     q.r70 = 0;
     {
         int count = 3;
@@ -1504,17 +1506,17 @@ void FUN_L15_002a29b8(unsigned char *moby) {
             v += 2;
         } while (count >= 0);
     }
-    p = (unsigned short *)D_L15_001ABE40[moby[0x21]];
+    p = (unsigned short *)D_L15_001ABE40[MOBY(moby)->group];
     do {
         unsigned char *other = (unsigned char *)(D_L15_0015FFD8 + ((*p & 0x7fff) << 8));
-        if (other[0x20] != 1) {
-            clear_vector_29b8(angles);
-            angles[2] = distance_xy_29b8(D_L15_00167280.position[0] - *(float *)(other + 0x10),
-                                           D_L15_00167280.position[1] - *(float *)(other + 0x14));
-            angles[1] = -distance_xy_29b8(distance_between_29b8(other + 0x10, D_L15_00167280.position),
-                                            D_L15_00167280.position[2] - *(float *)(other + 0x18));
-            make_rotation_29b8(rotation, angles);
-            qcopy(position, other + 0x10);
+        if (MOBY(other)->state != 1) {
+            clear_vector(angles);
+            angles[2] = fast_atan2(D_L15_00167280.position[0] - MOBY(other)->pos.x,
+                                   D_L15_00167280.position[1] - MOBY(other)->pos.y);
+            angles[1] = -fast_atan2(vector_distance(&MOBY(other)->pos, D_L15_00167280.position),
+                                    D_L15_00167280.position[2] - MOBY(other)->pos.z);
+            rotation_matrix_from_euler(rotation, angles);
+            qcopy(position, &MOBY(other)->pos);
             position[2] += D_L15_001614C4;
             position[3] = 1.0f;
             for (i = 0; i < 4; i++) {
@@ -1524,7 +1526,7 @@ void FUN_L15_002a29b8(unsigned char *moby) {
                     colors[j] = color;
                     qcopy(q.v[j], D_L15_001CE110[i][j]);
                 }
-                draw_quad_29b8(&q, rotation, 0);
+                draw_geometry_quad(&q, rotation, 0);
             }
         }
     } while ((short)*p++ >= 0);
@@ -1587,7 +1589,7 @@ extern float D_L15_001E27F0[];
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
-extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
+extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 

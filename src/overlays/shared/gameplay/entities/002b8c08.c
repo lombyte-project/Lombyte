@@ -919,6 +919,8 @@ char *FUN_L01_002ef478(char *self, int idx) {
         }
     }
 }
+#include "rnc/gameplay/entities/moby.h"
+#define MOBY(p) ((struct Moby *)(p))
 extern int D_L01_001619E0 __attribute__((sda));
 extern int D_L01_001619E4 __attribute__((sda));
 extern float D_L01_001619E8 __attribute__((sda));
@@ -936,27 +938,29 @@ extern int D_L01_001619D8 __attribute__((sda));
 extern int D_L01_001619DC __attribute__((sda));
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float FUN_001f9dc8(float);
-extern float FUN_001f9de0(float);
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void FUN_L01_00287158(float *, float, float, int, int, int);
 
 void FUN_L01_002ef560(unsigned char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    char *data = (char *)MOBY(moby)->pvars;
     float pos[3];
     float angle, radius, lower, upper;
     int time;
-    if (moby[0x31] == 0) return;
+    if (MOBY(moby)->unk31 == 0)
+        return;
     if (random_integer_below(D_L01_001619E0 - 1) == 0) {
         angle = random_angle_radians();
         radius = random_float_between_alt(0.0f, D_L01_001619E8);
         lower = random_float_between_alt(0.0f, D_L01_001619B8) * *(float *)(data + 0x250);
         upper = random_float_between_alt(D_L01_001619B8, D_L01_001619BC) * *(float *)(data + 0x250);
         time = truncate_float_to_s32(random_float_between_alt((float)D_L01_001619C0, (float)D_L01_001619C4));
-        pos[0] = FUN_001f9dc8(angle) * radius;
-        pos[1] = FUN_001f9de0(angle) * radius;
+        pos[0] = fast_cos(angle) * radius;
+        pos[1] = fast_sin(angle) * radius;
         pos[2] = 0.0f;
-        FUN_001f9a10(pos, pos, moby + 0x10);
-        FUN_L01_00287158(pos, lower, upper, D_L01_001619B0, D_L01_001619B4, FUN_001f96f8(time));
+        add_vector_xyz(pos, pos, &MOBY(moby)->pos);
+        FUN_L01_00287158(pos, lower, upper, D_L01_001619B0, D_L01_001619B4,
+                         scale_game_frames(time));
     }
     if (random_integer_below(D_L01_001619E4 - 1) == 0) {
         angle = random_angle_radians();
@@ -964,11 +968,12 @@ void FUN_L01_002ef560(unsigned char *moby) {
         lower = random_float_between_alt(0.0f, D_L01_001619D0) * *(float *)(data + 0x250);
         upper = random_float_between_alt(D_L01_001619D0, D_L01_001619D4) * *(float *)(data + 0x250);
         time = truncate_float_to_s32(random_float_between_alt((float)D_L01_001619D8, (float)D_L01_001619DC));
-        pos[0] = FUN_001f9dc8(angle) * radius;
-        pos[1] = FUN_001f9de0(angle) * radius;
+        pos[0] = fast_cos(angle) * radius;
+        pos[1] = fast_sin(angle) * radius;
         pos[2] = 0.0f;
-        FUN_001f9a10(pos, pos, moby + 0x10);
-        FUN_L01_00287158(pos, lower, upper, D_L01_001619C8, D_L01_001619CC, FUN_001f96f8(time));
+        add_vector_xyz(pos, pos, &MOBY(moby)->pos);
+        FUN_L01_00287158(pos, lower, upper, D_L01_001619C8, D_L01_001619CC,
+                         scale_game_frames(time));
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef770.s", FUN_L01_002ef770);

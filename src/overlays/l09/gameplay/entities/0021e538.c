@@ -760,45 +760,44 @@ char *FUN_L09_002efda8(struct Moby *owner, void *position, float angle) {
     }
     return moby;
 }
-extern float fast_cos_2efe48(float) __asm__("FUN_001f9dc8");
-extern float fast_sin_2efe48(float) __asm__("FUN_001f9de0");
-extern float fast_difference_between_rotations_2efe48(float, float) __asm__("FUN_001fa688");
-extern float FUN_001f9e90(float, float);
+#define MOBY(p) ((struct Moby *)(p))
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
+extern float fast_atan2(float, float) __asm__("FUN_001f9e90");
 
 char *FUN_L09_002efe48(void *unused, float lower_radius, float upper_radius, void *origin, float *direction) {
     float offset[4];
-    char *moby = CreateMoby_c(0x1A1);
+    char *moby = (char *)create_moby(0x1A1);
     if (moby != 0) {
         float pi = 3.1415927f;
-        char *data = *(char **)(moby + 0x78);
+        char *data = (char *)MOBY(moby)->pvars;
         float angle = random_float_between_alt(-3.1415927f, 3.1415927f);
         float radius = random_float_between_alt(lower_radius, upper_radius);
-        float heading = FUN_001f9e90(direction[0], direction[1]);
-        float difference = fast_difference_between_rotations_2efe48(heading, angle);
+        float heading = fast_atan2(direction[0], direction[1]);
+        float difference = fast_difference_between_rotations(heading, angle);
         float gap;
 
-        *(float *)(moby + 0x10) = fast_cos_2efe48(angle) * radius;
+        MOBY(moby)->pos.x = fast_cos(angle) * radius;
         {
-            float sine = fast_sin_2efe48(angle);
+            float sine = fast_sin(angle);
             float speed = frame_time;
-            *(float *)(moby + 0x14) = sine * radius;
-            *(int *)(moby + 0x18) = 0;
-            normalize_vector_xyz(data, moby + 0x10, difference * speed);
+            MOBY(moby)->pos.y = sine * radius;
+            MOBY(moby)->pos.z = 0.0f;
+            normalize_vector_xyz(data, &MOBY(moby)->pos, difference * speed);
         }
         gap = pi - difference;
         normalize_vector_xyz(offset, direction, gap * gap * 0.25f * frame_time);
         add_vector_xyz(data, data, offset);
         *(int *)(data + 8) = 0;
-        add_vector_xyz(moby + 0x10, moby + 0x10, origin);
-        add_vector_xyz(moby + 0x10, moby + 0x10, direction);
+        add_vector_xyz(&MOBY(moby)->pos, &MOBY(moby)->pos, origin);
+        add_vector_xyz(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);
         scale_vector_xyz(data, data, 0.35f);
-        *(float *)(moby + 0x58) *= 0.5f;
-        *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)data, *(float *)(data + 4));
-        ((unsigned char *)moby)[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
-        moby[0x31] = 1;
+        MOBY(moby)->unk58 *= 0.5f;
+        MOBY(moby)->rot.z = fast_atan2(*(float *)data, *(float *)(data + 4));
+        MOBY(moby)->unk30 = 0xFF;
+        MOBY(moby)->unk32 = 0xFF;
+        MOBY(moby)->unk31 = 1;
         pi -= difference;
-        *(float *)(moby + 0x2C) *= (3.1415927f - difference) + (3.1415927f - difference) + 1.0f;
+        MOBY(moby)->scale *= (3.1415927f - difference) + (3.1415927f - difference) + 1.0f;
         FUN_L00_00250df8(moby);
     }
     return moby;
