@@ -393,7 +393,37 @@ void FUN_L14_002ae6d8(char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ae7d8.s", FUN_L14_002ae7d8);
+/* Moves the moby to the point on its second path that matches how far along its first path it is. */
+void FUN_L14_002ae7d8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *seg = (char *)D_L14_001B0BB0[*(int *)(data + 0x78)];
+    int n = *(int *)(data + 0x84);
+    float dist = 0.0f;
+    float out[4];
+    int idx;
+    float frac;
+    int i;
+    int *tab;
+    int dir;
+    float t;
+
+    for (i = 0; i < n; i++) {
+        dist += *(float *)(seg + i * 16 + 0x1C);
+    }
+    dist += *(float *)(data + 0x1CC);
+    tab = D_L14_001B0BB0[*(int *)(data + 0x74)];
+    t = dist / *(float *)(data + 0x16C) * *(float *)(data + 0x190);
+    dir = *(short *)(data + 0x8A);
+    idx = 0;
+    frac = 0.0f;
+    FUN_L00_0025d808_2af918(tab, out, &idx, &frac, dir, t);
+    FUN_L00_0025b8c0_c((float *)(moby + 0x10), (float *)(data + 0x194), out[0],
+                       *(float *)&D_L14_001613A0_d, *(float *)&D_L14_001613A4_d, 0.0f);
+    FUN_L00_0025b8c0_c((float *)(moby + 0x14), (float *)(data + 0x198), out[1],
+                       *(float *)&D_L14_001613A0_d, *(float *)&D_L14_001613A4_d, 0.0f);
+    FUN_L00_0025b8c0_c((float *)(moby + 0x18), (float *)(data + 0x19C), out[2],
+                       *(float *)&D_L14_001613A0_d, *(float *)&D_L14_001613A4_d, 0.0f);
+}
 /* Picks a target point from a list or searches for one, then eases the moby's position toward it per axis. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AFB40), where it is exact; names translated to the US level program. */
 
