@@ -117,8 +117,8 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
     texture_bits = ((u64)texture_bases[2] << 37) | (0xB000ULL << 19);
     *first_output = (texture_bases[3] | 0x25320000) |
                     texture_bits | (1ULL << 63);
-    *second_output = (((u64)texture_bases[4] << 37) | (0xB000ULL << 19)) |
-                     (texture_bases[5] | 0x25320000) | (1ULL << 63);
+    *second_output = (((u64)texture_bases[4] << 37) | (1ULL << 63)) |
+                     (texture_bases[5] | 0x25320000) | (0xB000ULL << 19);
 }
 
 extern __typeof__(prepare_loading_slide_textures) func_00231878
