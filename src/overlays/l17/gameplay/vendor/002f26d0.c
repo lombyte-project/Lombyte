@@ -30,7 +30,6 @@ extern unsigned char D_0013D408[];
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern unsigned char D_0013D4DF __attribute__((section(".data")));
 extern int D_0015ED80_e[] __asm__("D_0015ED80") __attribute__((section(".sdata")));
-extern char D_0013F3D0[];
 extern void DebugPrint();
 extern void FUN_L00_002039a0(void);
 extern void FUN_L00_00263d40(int arg0, int arg1);
@@ -516,7 +515,6 @@ done:
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5C18), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len, float z);
-extern char D_0013F3D0[];
 extern char D_L17_001676C0[];
 extern char D_L17_001676D0[];
 extern char D_L17_001B0DB0[];

@@ -414,7 +414,6 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
-extern char D_0013F3D0[];
 extern char D_0013E550[];
 
 #define F(p, o) (*(float *)((p) + (o)))
@@ -576,7 +575,6 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
-extern char D_0013F3D0[];
 extern char D_0013E550[];
 
 void FUN_L07_002cdb28(struct Moby *moby) {

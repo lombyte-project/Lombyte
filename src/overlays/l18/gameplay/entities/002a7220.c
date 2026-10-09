@@ -1631,7 +1631,6 @@ void FUN_L18_002db938(char *pos, float *vec, int arg, float fa, float fb) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dba20.s", FUN_L18_002dba20);
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD270), where it is exact; names translated to the US level program. */
 
-extern char D_0013F3D0[];
 extern float FUN_001f9dc8(float);
 extern void FUN_L18_002dc0c8_u(char *moby, void *a1, void *a2) __asm__("FUN_L18_002dc0c8");
 

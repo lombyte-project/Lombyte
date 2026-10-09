@@ -144,7 +144,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030de90.s", FUN_L05_0030de90);
  * tints a colour by the hero's side of a gate while inside the third. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030F6C0), where it is exact; names translated to the US level program. */
 
-extern char D_0013F3D0[];
 extern float D_L05_0015F448;
 extern float D_L05_0015F44C;
 extern float D_L05_0015F450;

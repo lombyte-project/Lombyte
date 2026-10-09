@@ -313,7 +313,7 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L14_002dee28(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    char *x;
+    struct Hero *x;
     float v[4];
     float w[4];
     int idx;
@@ -329,17 +329,17 @@ void FUN_L14_002dee28(struct Moby *moby) {
         *(int *)(data + 0x204) = -1;
         break;
     case 1:
-        x = D_0013E633 - 0x80;
-        if (*(int *)(x + 0x208C) != 0xF ||
-            (*(int *)(x + 0x560) !=
+        x = &hero;
+        if (x->state.control_mode != 0xF ||
+            (x->unk560 !=
                  *(int *)((*(int *)(data + 0x1F4) << 5) + D_L14_0015F7EC + 0x10) &&
-             *(int *)(x + 0x560) !=
+             x->unk560 !=
                  *(int *)((*(int *)(data + 0x1F8) << 5) + D_L14_0015F7EC + 0x10) &&
-             *(int *)(x + 0x560) !=
+             x->unk560 !=
                  *(int *)((*(int *)(data + 0x1FC) << 5) + D_L14_0015F7EC + 0x10))) {
-            if (16.0f < AbsoluteFloat(*(float *)(x + 0x80) - moby->pos.x))
+            if (16.0f < AbsoluteFloat(x->motion.pos.f[0] - moby->pos.x))
                 goto end;
-            if (16.0f < AbsoluteFloat(*(float *)(x + 0x84) - moby->pos.y))
+            if (16.0f < AbsoluteFloat(x->motion.pos.f[1] - moby->pos.y))
                 goto end;
         }
         if (FUN_L00_0028d8c0(moby, *(int *)(data + 0x204)) == 0) {

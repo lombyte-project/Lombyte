@@ -92,7 +92,6 @@ extern int D_L15_0015F640;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L15_00162078_d __asm__("D_L15_00162078") __attribute__((sda));
 extern unsigned char D_0013D4FD[];
-extern unsigned char D_0013F3D0[];
 extern void FUN_L00_00260860(int, int);
 extern void FUN_L00_00263d40(int, int);
 extern void FUN_L00_00298840(int);

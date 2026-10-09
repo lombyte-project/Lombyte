@@ -61,7 +61,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002df510.s", FUN_L14_002df510);
 extern s32 is_point_inside_clip_volume(u8 *base, s32 arg) __asm__("FUN_00214720");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_00259a88(s32, void *);
-extern u8 D_0013F3D0[];
 
 typedef struct {
     f32 v[4];

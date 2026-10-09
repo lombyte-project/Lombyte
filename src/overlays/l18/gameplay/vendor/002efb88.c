@@ -451,7 +451,6 @@ extern void FUN_L18_002fa8e0(void *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern char D_0013F350[];
-extern char D_0013F3D0[];
 extern void func_L12_0027C368_v(char *, void *, int) __asm__("FUN_L12_0027b370");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -2999,7 +2998,6 @@ extern void FUN_L03_00250ae8(void *, void *, int);
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 s32 is_value_within_interpolated_window(void *arg0, f32 fparg0) __asm__("FUN_00214cc8");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
-extern char D_0013F3D0[];
 extern short D_L18_0016250C_b __asm__("D_L18_0016247C");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 extern void func_L18_002F9AB8_v(void *) __asm__("FUN_L18_002f8658");
@@ -3119,7 +3117,6 @@ void FUN_L18_002f7c40(M1454 *m) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F8F38.c: func_L18_002F94B0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern char D_0013F3D0[];
 extern float D_L18_0015F580[];
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);

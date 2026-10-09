@@ -620,7 +620,6 @@ extern void FUN_L06_002f4130_c(char *) __asm__("FUN_L06_002f4130");
 extern void FUN_L06_002f4390_c(char *) __asm__("FUN_L06_002f4390");
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern char D_0013F3D0[];
 extern char D_0013E550[];
 extern int func_0022ED80_r(int, int, int) __asm__("FUN_0022da68");
 

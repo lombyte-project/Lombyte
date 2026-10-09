@@ -451,7 +451,6 @@ char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int a3, float f) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E2690), where it is exact; names translated to the US level program. */
 
 char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int a3, float f);
-extern char D_0013F3D0[];
 extern char D_L13_00160680[] __attribute__((section(".sdata")));
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");

@@ -391,8 +391,6 @@ typedef struct {
 typedef struct {
     OvlQuad q[4];
 } QM_216130;
-extern char D_0013F3F4_216130[] __asm__("D_0013F3F4");
-extern char D_0013F3E0_216130[] __asm__("D_0013F3E0");
 float dot_216130(void *, void *) __asm__("FUN_001f9ab0");
 float sqrt_216130(float) __asm__("FUN_001f9988");
 float atan2_216130(float, float) __asm__("FUN_001f9e90");
@@ -443,7 +441,7 @@ void FUN_L00_00216130(V_216130 *v, M_216130 *m, void *p, float a, float b, float
         r.f[2] = pitch;
         r.f[0] = 0.0f;
     } else {
-        smooth_216130(&t, D_0013F3F4_216130, pitch, a, b, c, 0);
+        smooth_216130(&t, (&hero.motion.unkA0.f[1]), pitch, a, b, c, 0);
         r.f[0] = 0.0f;
         r.f[2] = t;
     }
@@ -461,7 +459,7 @@ void FUN_L00_00216130(V_216130 *v, M_216130 *m, void *p, float a, float b, float
     if (p)
         set_216130(m, p);
     else
-        set_216130(m, D_0013F3E0_216130);
+        set_216130(m, (&hero.motion.rot));
 }
 typedef union {
     OvlQuad q;
@@ -568,14 +566,13 @@ void FUN_L00_002165b8(void) {
         break;
     }
 }
-extern char D_0013F4A0[];
 float FUN_L00_002339d0(void *);
 void FUN_L00_00233b20(void *, void *, float);
 void FUN_L00_00233ba0(void *, void *, float);
 void FUN_001f9a10(void *, void *, void *);
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00216710(float x) {
-    char *g = D_0013F4A0;
+    char *g = (&hero.motion.unk150);
     float d = FUN_L00_002339d0(g);
     if (0.001f < d) {
         float z = 0.0f;
@@ -809,12 +806,11 @@ void FUN_L00_00216ec0_00216ec0(s32 a, s32 b, s32 c) {
 
 extern int FUN_001f9770(void *);
 extern int FUN_L00_00216de8();
-extern unsigned char D_001413F5[];
 
 /* For each of eight timers that FastDecTimer reports as 2, clears a field and calls 00216de8. */
 void FUN_L00_00216f10(void) {
-    char *p = (char *)D_001413F5 + 0x137;
-    short *q = (short *)(D_001413F5 + 0x139);
+    char *p = (char *)&hero.unk21D8[0][2];
+    short *q = (short *)(&hero.unk21D8[0][3]);
     int i;
 
     for (i = 0; i < 8; i++) {
@@ -885,9 +881,7 @@ void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag
         FUN_L00_001ed280_00216f90();
     FUN_L00_002500b8_00216f90(D_001413D0_00216f90);
 }
-extern unsigned char D_0013F430_217118[] __asm__("D_0013F430");
 extern unsigned char D_0013F350_217118[] __asm__("D_0013F350");
-extern unsigned char D_0013F3D0_217118[] __asm__("D_0013F3D0");
 extern unsigned char D_L00_00173E40_217118[] __asm__("D_L00_00173E40")
     __attribute__((section(".data")));
 float FUN_L00_002339d0_217118(void *) __asm__("FUN_L00_002339d0");
@@ -904,7 +898,7 @@ void FUN_L00_00213de8_217118(float) __asm__("FUN_L00_00213de8");
 void FUN_L00_00217118(float a, float b) {
     OvlQuad t[1];
     OvlQuad u[1];
-    unsigned char *P = D_0013F430_217118;
+    unsigned char *P = (&hero.motion.velocity);
     unsigned char *G;
     unsigned char *Q;
     float k, r;
@@ -927,10 +921,10 @@ void FUN_L00_00217118(float a, float b) {
         FUN_L00_00233708_217118(t, t, b);
     }
     FUN_L00_00233b20_217118(t, t, 0.0f);
-    FUN_001f9a10_217118(t, t, D_0013F3D0_217118);
+    FUN_001f9a10_217118(t, t, (&hero.motion.pos));
     qcopy(u, t);
     FUN_L00_00233810_217118(t, t, 0.3f);
-    P = D_0013F3D0_217118 - 0x80;
+    P = ((char *)&hero);
     k = -0.2f;
     if (*(int *)(P + 0x2084) == 0x20)
         k = -0.35f;
@@ -1038,7 +1032,6 @@ typedef struct {
 
 extern f32 D_0015ED6C_217658 __asm__("D_0015ED6C");
 extern f32 cam_217658[] __asm__("D_L00_00166C80");
-extern char D_00140B00_217658[] __asm__("D_00140B00");
 extern int FUN_L00_00211360(void *);
 extern void FUN_L00_00233660(void *, f32, f32, f32);
 extern float FUN_001f9e90_c2(float, float) __asm__("FUN_001f9e90");
@@ -1125,8 +1118,8 @@ void FUN_L00_00217658(void) {
     FUN_00214598(out_mat, &item->rot);
     pv->unk64 = 0;
     pv->unk60 = D_0015ED6C_217658 * 23.0f;
-    FUN_L00_00262500(item, D_00140B00_217658);
-    FUN_L00_00262528(D_00140B00_217658, 0x30, 3);
-    FUN_L00_00262528(D_00140B00_217658, 0x17, 5);
+    FUN_L00_00262500(item, (((char *)&hero) + 0x17b0));
+    FUN_L00_00262528((((char *)&hero) + 0x17b0), 0x30, 3);
+    FUN_L00_00262528((((char *)&hero) + 0x17b0), 0x17, 5);
     blend_moby_animation(item, 6, 0, scale_game_frames(5));
 }

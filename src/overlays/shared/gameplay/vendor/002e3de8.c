@@ -61,11 +61,10 @@ extern void FUN_L10_002e91b8(void);
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
 
-extern unsigned char D_0014161B_q[] __asm__("D_0014161B");
 void FUN_L10_002e9028(unsigned char *m) {
     float v[4] __attribute__((aligned(16)));
     float mtx[16] __attribute__((aligned(16)));
-    char *hero;
+    char *player;
     unsigned int s = m[0x20];
     switch (s) {
     case 0:
@@ -74,19 +73,19 @@ void FUN_L10_002e9028(unsigned char *m) {
         m[0x31] = 0;
         break;
     case 1:
-        hero = D_0013F3D0;
-        if (FUN_001f9b48(m + 0x10, hero) < 8.0f) {
-            subtract_vector_xyz(v, hero + 0x50, m + 0x10);
+        player = (((char *)&hero) + 0x80);
+        if (FUN_001f9b48(m + 0x10, player) < 8.0f) {
+            subtract_vector_xyz(v, player + 0x50, m + 0x10);
             FUN_001fa2d8(mtx, m + 0xC0);
             FUN_001f9d20(v, v, mtx);
             if (-5.0f < v[0] && v[0] < 5.0f && 0.0f < v[2] && v[2] < 8.0f) {
                 if (v[1] < 0.5f) {
-                    hero[0x224B] = 1;
+                    player[0x224B] = 1;
                 } else {
-                    hero[0x224B] = 0;
+                    player[0x224B] = 0;
                 }
             } else if (0.0f < v[1]) {
-                D_0014161B_q[0] = 0;
+                ((unsigned char *)((char *)&hero))[0x22cb] = 0;
             }
         }
         enqueue_callback_list_1(FUN_L10_002e91b8, m);

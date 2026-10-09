@@ -375,7 +375,6 @@ typedef struct {
 } TpLevelState;
 
 extern TpLevelState D_L01_001BB6B0_c __asm__("D_L01_001BB6B0");
-extern char D_0013F3D0[];
 extern char D_L01_00167240[];
 extern char D_L01_0020B550[];
 extern int D_0015ED84; /* no foreign declaration */
@@ -1415,7 +1414,6 @@ extern int D_0015ED84_c __asm__("D_0015ED84");
 extern s32 D_0014C190_c[][64] __asm__("D_0014C190");
 extern unsigned char D_0014C050[];
 extern int D_0015EE20 __attribute__((sda));
-extern char D_0013F3D0[];
 extern int D_0013CAE4[];
 extern char *D_L01_0015FFD8;
 extern int D_L01_0015F594 __attribute__((sda));
