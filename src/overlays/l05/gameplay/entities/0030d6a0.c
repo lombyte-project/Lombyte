@@ -381,7 +381,75 @@ void FUN_L05_0030f218(char *obj, float a, float b) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f408.s", FUN_L05_0030f408);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f5c8.s", FUN_L05_0030f5c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00314eb0.s", FUN_L05_00314eb0);
+
+struct GateVars {
+    s32 trigger;   /* D_L05_0015FFD8 index of the moby whose byte 0xBC opens it */
+    s32 riseTimer;
+    s32 swingTimer;
+    f32 topZ;
+    f32 riseSpeed;
+    f32 swingSpeed;
+};
+
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float D_L05_00161E80 __attribute__((sda));
+extern float D_L05_00161E84 __attribute__((sda));
+extern float D_L05_00161E88 __attribute__((sda));
+extern float D_L05_00161E8C __attribute__((sda));
+extern float D_L05_00161E90 __attribute__((sda));
+extern float D_L05_00161E94 __attribute__((sda));
+extern int gate_mobys_314eb0 __asm__("D_L05_0015FFD8");
+extern float advance_accelerated_scalar(float, float, float, float, float *,
+                                        float *) __asm__("FUN_00213f38");
+extern int gate_tick_314eb0(s32 *) __asm__("FUN_001f9740");
+extern float FUN_001f99c0(float);
+extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
+extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+
+/* Gate: waits for its trigger moby, then rises to topZ and swings its yaw back to 0, with sounds per class. */
+void FUN_L05_00314eb0(struct Moby *m) {
+    struct GateVars *d = (struct GateVars *)m->pvars;
+    struct Moby *t;
+
+    switch (m->state) {
+    case 0:
+        d->topZ = m->pos.z + 1.0f;
+        m->state = 1;
+        m->pos.z -= 8.0f;
+        break;
+    case 1:
+        t = (struct Moby *)((d->trigger << 8) + gate_mobys_314eb0);
+        if (t->unkBC == 1) {
+            m->state = 2;
+            break;
+        }
+        if (t->unkBC == 2) {
+            m->pos.z = d->topZ;
+            m->state = 3;
+            m->rot.y = 0.0f;
+        }
+        break;
+    case 2:
+        if (gate_tick_314eb0(&d->riseTimer)) {
+            advance_accelerated_scalar(d->topZ, D_L05_00161E80 * D_0015ED70, D_L05_00161E84 * D_0015ED70,
+                                       D_L05_00161E88 * D_0015ED6C, &m->pos.z, &d->riseSpeed);
+            if (m->oclass == 0x355 && FUN_001f99c0(m->pos.z - d->topZ) < 3.0f &&
+                3.0f < FUN_001f99c0(d->topZ - m->pos.z + d->riseSpeed))
+                func_0022ED80_i(0, 0, m);
+        }
+        if (gate_tick_314eb0(&d->swingTimer)) {
+            FUN_L00_0025be00(&m->rot.y, &d->swingSpeed, 0.0f, D_L05_00161E8C * 0.017453292f * D_0015ED70,
+                             D_L05_00161E90 * 0.017453292f * D_0015ED70,
+                             D_L05_00161E94 * 0.017453292f * D_0015ED6C);
+            if (m->rot.y == 0.0f)
+                m->state = 3;
+        } else if (d->swingTimer == 1 && m->oclass == 0x354) {
+            func_0022ED80_i(0, 0, m);
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003150f0.s", FUN_L05_003150f0);
 /* pvars of the lift: it rides between two heights with the hero standing on it. */
 typedef struct {
