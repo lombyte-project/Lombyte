@@ -590,7 +590,78 @@ void FUN_L05_00253850(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00253b48.s", FUN_L05_00253b48);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254058.s", FUN_L05_00254058);
+#else
+#include "rnc/gameplay/state/usage_stats.h"
+extern u8 D_0013D388;
+extern struct UsageStats D_00141848;
+extern s32 D_0015EEA4;
+extern s32 D_0015ED84 __attribute__((sda));
+extern s32 D_0015EEA4_sda __asm__("D_0015EEA4") __attribute__((sda));
+extern f32 D_L05_002169F8[] __asm__("D_L05_002169F8");
+extern f32 FUN_001f96b0(f32) __asm__("FUN_L05_0022dbc8");
+
+void FUN_L05_00254058(void) {
+    char *g = D_0013F350_c2;
+    int i;
+    int total;
+    int step;
+    struct { f32 values[5]; } table;
+    f32 frames;
+
+    if (D_0013D388 == 0) return;
+    if (*(s32 *)(g + 0x8A8) != 0) {
+        struct UsageStat *stat = &D_00141848.stat[30];
+        s32 duration = D_0015EEA4_sda;
+        if (stat->count <= 0xFFFE) {
+            stat->count++;
+            duration = *(s32 *)0x0015EEA4;
+        }
+        if (stat->unk2 < scale_game_frames(duration) / 600)
+            stat->unk2 = scale_game_frames(D_0015EEA4_sda) / 600;
+        stat->level_mask |= (1 << D_0015ED84) | 0x80000000;
+    }
+    {
+        s32 *counter = (s32 *)(g + 0x700);
+        for (i = 2; i >= 0; i--, counter++) {
+            if (AbsoluteFloat(*(f32 *)(counter - 12)) > 3.3161256f) {
+                f32 rotation = *(f32 *)(counter - 12);
+                s32 count = *counter;
+                if (0.0f < rotation) rotation -= 6.2831855f;
+                else rotation += 6.2831855f;
+                *(f32 *)(counter - 12) = rotation;
+                *counter = count + 1;
+            }
+        }
+    }
+    *(s32 *)(g + 0x70C) = 0;
+    for (i = 0; i < 3; i++) {
+        if (*(s32 *)(g + 0x70C) < *(s32 *)(g + 0x700 + i * 4))
+            *(s32 *)(g + 0x70C) = *(s32 *)(g + 0x700 + i * 4);
+    }
+    *(s32 *)(g + 0x710) = 0;
+    total = *(s32 *)(g + 0x70C);
+    if (total > 0) {
+        step = 100;
+        do {
+            *(s32 *)(g + 0x710) += step;
+            step += 50;
+        } while (--total != 0);
+    }
+    *(s32 *)(g + 0x6F0) = 0;
+    for (i = 0; i < 4; i++) {
+        if (*(s32 *)(g + 0x6E0 + i * 4) != 0) (*(s32 *)(g + 0x6F0))++;
+    }
+    table = *(typeof(table) *)D_L05_002169F8;
+    *(f32 *)(g + 0x6F4) = table.values[*(s32 *)(g + 0x6F0)];
+    frames = FUN_001f96b0(1.0f);
+    *(s32 *)(g + 0x6FC) = truncate_float_to_s32((f32)((*(s32 *)(g + 0x6F8) * 100) / (s32)(frames * 60.0f)));
+    *(s32 *)(g + 0x6FC) += *(s32 *)(g + 0x6F0) * 25;
+    *(s32 *)(g + 0x6FC) = truncate_float_to_s32((f32)*(s32 *)(g + 0x6FC) * *(f32 *)(g + 0x6F4));
+    *(s32 *)(g + 0x714) = *(s32 *)(g + 0x710) + *(s32 *)(g + 0x6FC);
+}
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254358.s", FUN_L05_00254358);
 #else
