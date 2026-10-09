@@ -139,7 +139,95 @@ s32 FUN_L00_0025d7a0(s32 *tab, s32 i, s32 d, s32 wrap) {
     }
     return i;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d808.s", FUN_L00_0025d808);
+#else
+void FUN_001ff2a8_25d808(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_001ff500_25d808(void *, void *, f32) __asm__("FUN_001f9bf8");
+void FUN_001ff278_25d808(void *, void *, void *) __asm__("FUN_001f9a10");
+
+s32 FUN_L00_0025d808(f32 step, s32 *keys, u128 *out, s32 *index, f32 *fraction, s32 stop_at_end) {
+    u128 difference;
+    s32 crossed_end = 0;
+    s32 direction = 1;
+    s32 count, current, next;
+    f32 old_fraction, remaining;
+    s32 advance;
+
+    if (step < 0.0f) {
+        step = -step;
+        direction = -1;
+    }
+    count = *keys;
+    do {
+        current = *index;
+        if (step == 0.0f || (current == count - 1 && stop_at_end == 0))
+            break;
+        if (direction == 1) {
+            old_fraction = *fraction;
+            advance = *(f32 *)(keys + current * 4 + 7) < old_fraction + step;
+        } else {
+            old_fraction = *fraction;
+            advance = old_fraction < step;
+        }
+        next = current + direction;
+        if (advance) {
+            count = *keys;
+            if (count <= next || next < 0)
+                next = (next + count) % count;
+            if (direction == 1) {
+                f32 duration = *(f32 *)(keys + *index * 4 + 7);
+                *fraction = 0.0f;
+                remaining = *fraction;
+                step = step - (duration - old_fraction);
+                remaining = step;
+                if (remaining < *fraction)
+                    remaining = *fraction;
+            } else {
+                remaining = step - old_fraction;
+                *fraction = *(f32 *)(keys + next * 4 + 7);
+            }
+            if ((direction == 1 && *index == *keys - 1) ||
+                (direction == -1 && *index == 0)) {
+                crossed_end = 1;
+            }
+            *index = next;
+        } else {
+            if (direction == 1)
+                old_fraction = old_fraction + step;
+            else
+                old_fraction = old_fraction - step;
+            *fraction = old_fraction;
+            remaining = 0.0f;
+        }
+        count = *keys;
+        step = remaining;
+    } while (1);
+        {
+            *out = *(u128 *)(keys + current * 4 + 4);
+            if (current == count - 1 && stop_at_end == 0) {
+                crossed_end = 1;
+                if (direction == -1) {
+                    *index = 0;
+                    *out = *(u128 *)(keys + 4);
+                    *fraction = 0.0f;
+                }
+            } else {
+                next = current + 1;
+                if (next < count)
+                    next = next * 16;
+                else
+                    next = next % count << 4;
+                FUN_001ff2a8_25d808(&difference, (char *)keys + next + 0x10,
+                                     keys + current * 4 + 4);
+                FUN_001ff500_25d808(&difference, &difference, *fraction);
+                FUN_001ff278_25d808(out, out, &difference);
+            }
+            return crossed_end;
+        }
+
+}
+#endif
 typedef unsigned int u128_0025da70 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     float x, y, z, w_0025da70;
