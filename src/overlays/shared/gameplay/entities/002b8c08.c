@@ -294,7 +294,73 @@ void FUN_L01_002c72c8(void) {
                          FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(20)), 1, 20000.0f);
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002c7530.s", FUN_L01_002c7530);
+#else
+extern int FUN_001f9740(int *);
+extern int FUN_001e9448(void *);
+extern int FUN_L00_001f2868(void *, int, int, void *, float);
+extern void FUN_L00_00259bc8(void *, void *, int, void *, void *, float);
+extern void FUN_L00_00259888(void *, void *, int, float, void *);
+extern void FUN_001f9bf8(void *, void *, float);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern int FUN_001f96f8(int);
+extern int truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_L01_00280970(int, void *);
+extern void FUN_0020c828(void *);
+extern int D_L01_001742C0_sda __asm__("D_L01_001742C0") __attribute__((sda));
+
+void FUN_L01_002c7530(char *moby) {
+    int *data = *(int **)(moby + 0x78);
+    char *camera = D_L01_00167240;
+    char hit[0x30];
+    float normal[4];
+    float distance;
+    u8 state;
+
+    distance = FUN_001f9b80(camera, moby + 0x10);
+    camera -= 0x140;
+    *(float *)(moby + 0x44) = -FUN_001f9e90(distance, *(float *)(camera + 0x148) - *(float *)(moby + 0x18));
+    *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)(camera + 0x140) - *(float *)(moby + 0x10),
+                                             *(float *)(camera + 0x144) - *(float *)(moby + 0x14));
+    *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(data + 3));
+    FUN_001f9a10(moby + 0x10, moby + 0x10, data + 8);
+    state = (u8)moby[0x20];
+    if (state == 1) {
+        FUN_L01_00280970(*(int *)((char *)&D_L01_001742C0_sda + 0x18), moby);
+        FUN_001f9bf8(normal, data + 8, 1.0f);
+        FUN_L00_00259888(hit, moby, 0, 0.0f, normal);
+        if (FUN_L00_001f2868(moby + 0x10, 0x10, data[6], hit, *(float *)((char *)&D_L01_001742C0_sda + 0x20)) &&
+            !FUN_001e9448(moby)) {
+            if (*(int *)((char *)&D_L01_001742C0_sda + 0x18) != 0)
+                FUN_L00_00259bc8(*(void **)((char *)&D_L01_001742C0_sda + 0x18), moby, 0x10001,
+                                   (char *)&D_L01_001742C0_sda + 0x20, normal, 1.0f);
+            FUN_L01_002c72c8();
+            goto mark;
+        }
+        if (FUN_001f9740(data)) {
+            data[0] = FUN_001f96f8(0x1e);
+            moby[0x20] = 2;
+            if (data[4] != 0)
+                data[4] = 0;
+        }
+        return;
+    }
+    if (state < 2) return;
+    if (state != 2) return;
+    {
+        if (!FUN_001f9740(data)) {
+            int duration = FUN_001f96f8(0x1e);
+            moby[0x23] = truncate_float_to_s32((float)data[0] * (127.0f / (float)duration));
+            return;
+        }
+    }
+mark:
+    FUN_0020c828(moby);
+}
+#endif
 extern int D_0015ED84_r __asm__("D_0015ED84");
 extern unsigned char D_0013D394 __attribute__((section(".data")));
 extern unsigned char D_0013D395 __attribute__((section(".data")));
