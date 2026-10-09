@@ -12,6 +12,8 @@
     CHECK((unsigned long)&((struct Hero *)0)->field == (off))
 #define SLOT_OFFSET_CHECK(field, off) \
     CHECK((unsigned long)&((struct HeroItemSlot *)0)->field == (off))
+#define EASE_OFFSET_CHECK(field, off) \
+    CHECK((unsigned long)&((struct HeroEase *)0)->field == (off))
 
 CHECK(sizeof(struct MobyTrail) == 0x140);
 CHECK((unsigned long)&((struct MobyTrail *)0)->copy_fade == 0x100);
@@ -20,6 +22,15 @@ CHECK(sizeof(struct HeroItemSlot) == 0x50);
 CHECK(sizeof(struct HeroEase) == 0xB0);
 CHECK(sizeof(struct HeroVelocityKey) == 0xC);
 CHECK(sizeof(struct Hero) == 0x2300);
+EASE_OFFSET_CHECK(attached, 0x01);
+EASE_OFFSET_CHECK(quat, 0x10);
+EASE_OFFSET_CHECK(translation, 0x30);
+EASE_OFFSET_CHECK(rot, 0x40);
+EASE_OFFSET_CHECK(rot_target, 0x60);
+EASE_OFFSET_CHECK(pos, 0x70);
+EASE_OFFSET_CHECK(pos_target, 0x90);
+EASE_OFFSET_CHECK(kind, 0xA2);
+EASE_OFFSET_CHECK(scale, 0xAC);
 SLOT_OFFSET_CHECK(moby, 0x00);
 SLOT_OFFSET_CHECK(moby2, 0x04);
 SLOT_OFFSET_CHECK(button_mask, 0x10);

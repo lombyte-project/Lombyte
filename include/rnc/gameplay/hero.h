@@ -35,11 +35,27 @@ struct MobyTrail {
  */
 /* A 0xB0-byte record FUN_L00_00205168 eases toward its targets; the
    D_L00_0017A680 table FUN_L00_002054e8 walks has the same layout. */
+/* A manipulator record eased by FUN_L00_00205168: it moves rot and pos toward
+   their targets, then rebuilds quat, scale3 and translation (the part
+   attach_manipulator, FUN_0020cb10, hands to the moby) from them. */
 struct HeroEase {
-    u8 pad_0[0xA0];
+    u8 unk0;                       /* 0x00 */
+    u8 attached;                   /* 0x01: attached to its moby (FUN_0020cb10 / FUN_0020cb88) */
+    u8 pad_2[0xE];
+    Vec4 quat;                     /* 0x10: rotation built from rot (FUN_L00_00259f50) */
+    Vec4 scale3;                   /* 0x20: x/y/z = scale */
+    Vec4 translation;              /* 0x30: copy of pos */
+    Vec4 rot;                      /* 0x40: eased toward rot_target */
+    Vec4 rot_vel;                  /* 0x50 */
+    Vec4 rot_target;               /* 0x60: cleared every frame */
+    Vec4 pos;                      /* 0x70: eased toward pos_target */
+    Vec4 pos_vel;                  /* 0x80 */
+    Vec4 pos_target;               /* 0x90: cleared every frame */
     s16 unkA0;                     /* 0xA0: -1 = unused */
-    s16 kind;                      /* 0xA2: passed to FUN_L00_00205110 */
-    u8 pad_A4[0xC];
+    s16 kind;                      /* 0xA2: picks the moby (FUN_L00_00205110) */
+    f32 accel;                     /* 0xA4 */
+    f32 max_speed;                 /* 0xA8 */
+    f32 scale;                     /* 0xAC: reset to 1 every frame */
 };
 
 struct HeroItemSlot {

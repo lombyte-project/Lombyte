@@ -140,18 +140,76 @@ int FUN_L00_00205110(int a) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00205168.s", FUN_L00_00205168);
-typedef struct {
-    u8 pad[0xB0];
-} E002054e8;
-extern E002054e8 D_L00_0017A680_002054e8[] __asm__("D_L00_0017A680");
-void FUN_L00_00205168_002054e8(E002054e8 *) __asm__("FUN_L00_00205168");
+#include "qcopy.h"
+extern u8 D_001413F4 __attribute__((section(".data")));
+extern f32 D_0015ED64;
+f32 AbsoluteFloat(f32) __asm__("FUN_001f99c0");
+void clear_u64_value(void *) __asm__("FUN_001f99f8");
+void detach_manipulator(s32, void *) __asm__("FUN_0020cb88");
+void attach_manipulator(s32, s32, void *) __asm__("FUN_0020cb10");
+/* FUN_L00_0025bc98 (eases an angle toward a target) with its int argument last. EABI
+   passes ints and floats in separate registers, so the call is the same; this order
+   gives retail's register allocation. */
+f32 ease_angle_toward(f32 *, f32, f32 *, f32, f32, f32, s32) __asm__("FUN_L00_0025bc98");
+void FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
+void FUN_L00_00259f50(void *, void *);
+
+/* Eases one record's rotation and position toward their targets and rebuilds its matrix;
+   once targets are zero and it has settled, detaches it from its moby. */
+void FUN_L00_00205168(struct HeroEase *e) {
+    s32 moby = FUN_L00_00205110(e->kind);
+    if (moby == 0)
+        return;
+    if (D_001413F4 == 0) {
+        if (e->kind == 4 || e->kind == 2 || e->kind == 3)
+            return;
+    } else if (e->kind == 0) {
+        return;
+    }
+    if (e->rot_target.f[0] == 0.0f && e->rot_target.f[1] == 0.0f && e->rot_target.f[2] == 0.0f &&
+        e->pos_target.f[0] == 0.0f && e->pos_target.f[1] == 0.0f && e->pos_target.f[2] == 0.0f &&
+        AbsoluteFloat(e->pos.f[0]) < 0.003f && AbsoluteFloat(e->pos.f[1]) < 0.003f &&
+        AbsoluteFloat(e->pos.f[2]) < 0.003f && e->scale == 1.0f &&
+        AbsoluteFloat(e->rot.f[0]) < 0.005f && AbsoluteFloat(e->rot.f[1]) < 0.005f &&
+        AbsoluteFloat(e->rot.f[2]) < 0.005f) {
+        if (e->attached)
+            detach_manipulator(moby, e);
+    } else {
+        Vec4 *rot;
+        Vec4 *pos;
+        /* retail reads this flag at its literal address, with no relocation */
+        if (*(u8 *)0x15EDB5) {
+            e->rot_target.f[0] = -e->rot_target.f[0];
+            e->rot_target.f[2] = -e->rot_target.f[2];
+            e->pos.f[1] = -e->pos.f[1];
+        }
+        rot = &e->rot;
+        pos = &e->pos;
+        ease_angle_toward(&rot->f[0], e->rot_target.f[0], &e->rot_vel.f[0], e->accel * D_0015ED64, e->max_speed * D_0015ED64, 0.0f, 2);
+        ease_angle_toward(&rot->f[1], e->rot_target.f[1], &e->rot_vel.f[1], e->accel * D_0015ED64, e->max_speed * D_0015ED64, 0.0f, 2);
+        ease_angle_toward(&rot->f[2], e->rot_target.f[2], &e->rot_vel.f[2], e->accel * D_0015ED64, e->max_speed * D_0015ED64, 0.0f, 2);
+        FUN_L00_0025b8c0(&pos->f[0], &e->pos_vel.f[0], e->pos_target.f[0], e->accel, e->max_speed, 0.0f);
+        FUN_L00_0025b8c0(&pos->f[1], &e->pos_vel.f[1], e->pos_target.f[1], e->accel, e->max_speed, 0.0f);
+        FUN_L00_0025b8c0(&pos->f[2], &e->pos_vel.f[2], e->pos_target.f[2], e->accel, e->max_speed, 0.0f);
+        if (!e->attached)
+            attach_manipulator(moby, e->unkA0, e);
+        FUN_L00_00259f50(&e->quat, rot);
+        qcopy(&e->translation, pos);
+        e->scale3.f[0] = e->scale;
+        e->scale3.f[1] = e->scale;
+        e->scale3.f[2] = e->scale;
+    }
+    clear_u64_value(&e->pos_target);
+    clear_u64_value(&e->rot_target);
+    e->scale = 1.0f;
+}
+extern struct HeroEase D_L00_0017A680_002054e8[] __asm__("D_L00_0017A680");
 /* Runs FUN_L00_00205168 on each entry of D_L00_0017A680 (0x1550 bytes). */
 void FUN_L00_002054e8(void) {
-    E002054e8 *p = D_L00_0017A680_002054e8;
-    E002054e8 *end = (E002054e8 *)((u8 *)p + 0x1550);
+    struct HeroEase *p = D_L00_0017A680_002054e8;
+    struct HeroEase *end = (struct HeroEase *)((u8 *)p + 0x1550);
     do {
-        FUN_L00_00205168_002054e8(p);
+        FUN_L00_00205168(p);
         p++;
     } while ((s32)p < (s32)end);
 }
@@ -168,7 +226,7 @@ typedef struct {
 } Ent;
 extern Ent D_L00_0017A680_c[] __asm__("D_L00_0017A680");
 s32 FUN_L00_00205110_c(s32) __asm__("FUN_L00_00205110");
-void detach_manipulator(s32, Ent *) __asm__("FUN_0020cb88");
+
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00205538(void) {
     s32 i;
@@ -1274,7 +1332,7 @@ void FUN_L00_002090d0(float *inf, float x, float y, float z) {
 
 typedef float V[4] __attribute__((aligned(16)));
 
-extern void clear_u64_value(float *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_002090d0(float *, float, float, float);
 
 /* Calls FUN_L00_002090d0 with a vector (0, 0, 0.6) and x, y, z. */
