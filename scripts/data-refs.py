@@ -470,12 +470,17 @@ def catalog_sections(rows: dict[int, dict], data: list, declared: dict,
             for sec in order if sec in out}
 
 
+FIXED_MARK = "\n# Symbols the build pins"  # the hand-kept ``fixed`` block closing data.yaml
+
+
 def load_catalog(path: Path) -> dict[int, dict]:
     """The hand-edited fields of an existing catalogue, by address."""
     if not path.exists():
         return {}
     edits = {}
-    for origins in (yaml.safe_load(path.read_text()) or {}).values():
+    for section, origins in (yaml.safe_load(path.read_text()) or {}).items():
+        if section == "fixed":
+            continue
         for entries in origins.values():
             for addr, name, ctype, *_rest, note in (e + [None] * (9 - len(e)) for e in entries):
                 edits[addr] = {"name": name, "type": ctype, **({"note": note} if note else {})}
@@ -502,6 +507,8 @@ def write_catalog(path: Path, sections: dict, edits: dict[int, dict],
                   what: str = "the boot executable's", origins: str = BOOT_ORIGINS,
                   extra: str = "") -> None:
     lines = [CATALOG_HEADER.format(what=what, origins=origins, extra=extra)]
+    old = path.read_text() if path.exists() else ""
+    fixed = old[old.index(FIXED_MARK):] if FIXED_MARK in old else ""
     for section, origins in sections.items():
         lines.append(f"{section}:")
         for origin, entries in origins.items():
@@ -516,7 +523,7 @@ def write_catalog(path: Path, sections: dict, edits: dict[int, dict],
                 lines.append(f"    - [{', '.join(str(f) for f in fields)}]")
             lines.append("")
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text("\n".join(lines).rstrip("\n") + "\n")
+    path.write_text("\n".join(lines).rstrip("\n") + "\n" + fixed)
 
 
 def build(accesses: Iterable[Access], data: list, owner_for: Callable[[int], str],

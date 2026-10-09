@@ -1,17 +1,9 @@
-# Symbols the build gives fixed addresses. Each list is written, when the
+# Function symbols the build gives fixed addresses (data ones are in data.yaml). Each list is written, when the
 # baseline is built, to the file splat reads for it (scripts/rnc_units.py,
 # write_symbol_files). Rows are [name, address] and an optional `ignore`.
 
 # symbol_addrs.txt: names splat uses in the disassembly
 named:
-  - [D_0013C940, 0x0013C940]
-  - [D_0012F76C, 0x0012F76C]
-  - [D_00152370, 0x00152370]
-  - [D_00154940, 0x00154940]
-  - [D_0015EE74, 0x0015EE74]
-  - [D_0015F49C, 0x0015F49C]
-  - [D_0015ED68, 0x0015ED68]
-  - [D_0015EC80, 0x0015EC80]
   - [SceDeci2Poll, 0x00119498]
   - [SceDeci2ExRecv, 0x001194C0]
   - [SceDeci2ExSend, 0x001194F8]
@@ -45,14 +37,6 @@ named:
   - [TimeToBcd, 0x0012D370]
   - [BcdToTime, 0x0012D3A0]
   - [DebugPrint, 0x001E93B0]
-  - [D_00132DA8, 0x00132DA8]
-  - [D_00132DAC, 0x00132DAC]
-  - [D_00159A00, 0x00159A00]
-  - [D_00159A80, 0x00159A80]
-  - [D_0015AFC0, 0x0015AFC0]
-  - [D_FFFFF, 0x000FFFFF, ignore]
-  - [D_FFFFFF, 0x00FFFFFF, ignore]
-  - [D_FFFF, 0x0000FFFF, ignore]
   - [func_0011C938, 0x0011C938]
   - [func_0011DC18, 0x0011DC18]
   - [PackRenderCommandFields, 0x0020D4F0]
@@ -488,18 +472,6 @@ named:
 
 # undefined_syms.txt: addresses the linker resolves, not renamed
 linker:
-  - [D_0013C940, 0x0013C940]
-  - [D_0012F76C, 0x0012F76C]
-  - [D_00152370, 0x00152370]
-  - [D_00154940, 0x00154940]
-  - [D_0015EE74, 0x0015EE74]
-  - [D_0015F49C, 0x0015F49C]
-  - [D_0015ED68, 0x0015ED68]
-  - [D_0015EC80, 0x0015EC80]
-  - [D_001162B8, 0x001162B8]
-  - [D_00116320, 0x00116320]
-  - [D_001163A0, 0x001163A0]
-  - [D_00127220, 0x00127220]
   - [FUN_001151b4, 0x001151B4]
   - [FUN_001160d8, 0x001160D8]
   - [FUN_001188c0, 0x001188C0]
@@ -509,28 +481,6 @@ linker:
   - [FUN_0012b9e0, 0x0012B9E0]
   - [FUN_001f97e8, 0x001F97E8]
   - [FUN_0023d1f8, 0x0023D1F8]
-  - [D_00160F00_store, 0x00160F00]
-  - [D_0015FF14_gp, 0x0015FF14]
-  - [D_0015FF14_2, 0x0015FF14]
-  - [D_00160F00_gp, 0x00160F00]
-  - [D_0015EE78_gp, 0x0015EE78]
-  - [D_0023D0A8, 0x0023D0A8]
-  - [D_0015EE74_gp, 0x0015EE74]
-  - [D_0015FF1C_2, 0x0015FF1C]
-  - [D_0015F60C_2, 0x0015F60C]
-  - [D_0015FEFC_2, 0x0015FEFC]
-  - [D_001E83C0, 0x001E83C0]
-  - [D_00160F00_abs, 0x00160F00]
-  - [D_001E8360, 0x001E8360]
-  - [D_00159750, 0x00159750]
-  - [D_00159758, 0x00159758]
-  - [D_0015EBE8, 0x0015EBE8]
-  - [D_00187000, 0x00187000]
-  - [D_002169C0, 0x002169C0]
-  - [D_0018E340, 0x0018E340]
-  # Interior sceLseek label referenced by music_start_track_30000.
-  - [D_0011C178, 0x0011C178]
-  - [D_0015FFC8, 0x0015FFC8]
 
 # undefined_funcs_auto.txt: raw textbin functions and aliases that C units reference
 functions:

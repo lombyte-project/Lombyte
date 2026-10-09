@@ -8,9 +8,10 @@
 - `us/unit_categories.json` lists the intentional-asm units excluded from the
   C goal; `us/recovered_names.json` records the recovered function names
   (`docs/recovered-names.md`); `us/checksum.sha1` is the retail ELF's SHA-1.
-- `us/symbols.yaml` holds the symbols with fixed addresses; the baseline build
-  writes the files splat reads from it. `us/data.yaml` and
-  `overlays/us/data/` catalogue the data (`scripts/data-refs.py`).
+- `us/data.yaml` and `overlays/us/data/` catalogue the data
+  (`scripts/data-refs.py`); the `fixed` block of `us/data.yaml` and
+  `us/symbols.yaml` (functions) hold the symbols with fixed addresses, and
+  the baseline build writes the files splat reads from them.
 - `ghidra/` contains function, call-graph, and data-reference exports used by
   the build tooling.
 

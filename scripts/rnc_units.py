@@ -31,6 +31,7 @@ CONFIG_PATH = Path("config") / "us" / "rnc1.us.yaml"
 CATEGORY_PATH = Path("config") / "us" / "unit_categories.json"
 RECOVERED_PATH = Path("config") / "us" / "recovered_names.json"
 SYMBOLS_PATH = Path("config") / "us" / "symbols.yaml"
+DATA_PATH = Path("config") / "us" / "data.yaml"
 # symbols.yaml list -> the file splat reads for it (rnc1.us.yaml options).
 SYMBOL_FILES = {
     "named": "symbol_addrs.txt",
@@ -40,14 +41,20 @@ SYMBOL_FILES = {
 
 
 def load_symbols(repo: Path) -> dict[str, list[tuple[str, int, bool]]]:
-    """config/us/symbols.yaml as {list: [(name, address, ignore)]}."""
+    """The fixed-address symbols as {list: [(name, address, ignore)]}.
+
+    Functions come from config/us/symbols.yaml, data from the ``fixed`` block of
+    config/us/data.yaml.
+    """
     import yaml
 
-    data = yaml.safe_load((repo / SYMBOLS_PATH).read_text()) or {}
-    return {
-        key: [(row[0], row[1], "ignore" in row[2:]) for row in data.get(key, [])]
-        for key in SYMBOL_FILES
-    }
+    out: dict[str, list[tuple[str, int, bool]]] = {key: [] for key in SYMBOL_FILES}
+    for path, key in ((SYMBOLS_PATH, None), (DATA_PATH, "fixed")):
+        data = yaml.safe_load((repo / path).read_text()) or {}
+        data = data.get(key, {}) if key else data
+        for name in SYMBOL_FILES:
+            out[name] += [(row[0], row[1], "ignore" in row[2:]) for row in data.get(name, [])]
+    return out
 
 
 def write_symbol_files(repo: Path, dest: Path) -> None:
