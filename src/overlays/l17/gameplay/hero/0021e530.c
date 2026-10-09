@@ -38,7 +38,6 @@ extern char D_L17_0017C820_e[] __asm__("D_L17_0017C820");
 extern unsigned char D_0015EDB5;
 extern T2C_21ED38 D_L17_0017C528[];
 extern char *FUN_L00_0020d460(int);
-extern char D_0014161B[];
 extern char D_00141680[];
 extern float AbsoluteFloat(float);
 extern float D_L17_0017C6F0[][25];
@@ -52,7 +51,6 @@ extern float dot_vectors_xyz(void *a, void *b);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
-extern char D_0013F4A0[];
 extern int D_0015ED80;
 extern int D_L17_001612D0;
 extern int D_L17_001612D8;
@@ -104,7 +102,6 @@ extern void clear_vector(void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern char D_00141848[];
-extern char D_0013F430[];
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
@@ -465,7 +462,7 @@ int hero_set_state(int a, int b) {
                 *(unsigned int *)(h + 0xEC) | (1 << current_level_index) | 0x80000000;
         }
         {
-            char *v = (char *)((char *)&D_0013F4A0);
+            char *v = (char *)(&hero.motion.unk150);
             qcopy(v, v - 0x40);
         }
         if (b)
@@ -1120,7 +1117,7 @@ int hero_set_state(int a, int b) {
             p->unk2284 = 0x50;
         }
         {
-            char *v = (char *)((char *)&D_0013F430);
+            char *v = (char *)(&hero.motion.velocity);
             char *r;
             qcopy(v, v + 0x30);
             r = v - 0xE0;

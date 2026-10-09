@@ -5,7 +5,6 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00229010.s", FUN_L00_00229010);
 extern u8 D_0013F350_002293a8[] __asm__("D_0013F350");
-extern u8 D_0013F4A0_002293a8[] __asm__("D_0013F4A0");
 extern f32 D_0015ED6C_002293a8 __asm__("D_0015ED6C");
 extern s32 D_0013CAE0_002293a8 __asm__("D_0013CAE0") __attribute__((section(".data")));
 extern s32 D_L00_0015F6DC_002293a8 __asm__("D_L00_0015F6DC");
@@ -54,7 +53,7 @@ void FUN_L00_002293a8(void) {
         *(s32 *)(d + 0x2084) == 0x10) {
         if (hero_set_state(3, 0)) {
             FUN_L00_002323b8_002293a8(5, 0, -1.0f);
-            FUN_L00_0025f730_002293a8(D_0013F4A0_002293a8, D_0015ED6C_002293a8 * 5.0f);
+            FUN_L00_0025f730_002293a8(&hero.motion.unk150, D_0015ED6C_002293a8 * 5.0f);
         }
         return;
     }

@@ -38,11 +38,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00204c60.s", FUN_L00_00204c60);
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205598), where it is exact; names translated to the US level program. */
 
-extern unsigned char D_0014161B[];
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_00232628(void);
 
 /* Resets hero fields 0x220..0x234, 0x22CB, 0x2084 and 0xA94, then calls 00232628 and 002223f8. */
+extern unsigned char D_0014161B[];
 void FUN_L00_00204f80(void) {
     struct Hero *g = &hero;
     g->unk220 = 0.8f;
@@ -1409,7 +1409,6 @@ typedef struct {
 } T00209240;
 extern T00209240 D_L00_001E7C10;
 extern s32 D_001413D0_00209240 __asm__("D_001413D0") __attribute__((section(".data")));
-extern u8 D_0013FE10[];
 void FUN_L00_0024f8f0(s32, s32, T00209240 *, void *);
 /* Calls 0024f8f0 with mode 9 and a copy of D_L00_001E7C10 on a, or on D_001413D0 when a is 0. */
 void FUN_L00_00209240(s32 a) {
@@ -1417,7 +1416,7 @@ void FUN_L00_00209240(s32 a) {
     if (a == 0)
         a = D_001413D0_00209240;
     t = D_L00_001E7C10;
-    FUN_L00_0024f8f0(a, 9, &t, D_0013FE10);
+    FUN_L00_0024f8f0(a, 9, &t, (((char *)&hero) + 0xac0));
 }
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002092c8.s", FUN_L00_002092c8);

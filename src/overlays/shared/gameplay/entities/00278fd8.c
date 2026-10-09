@@ -1271,7 +1271,6 @@ void FUN_L15_0029aba8(char *m) {
 #include "rnc/overlay/quad.h"
 extern char D_L15_001673C0_y[] __asm__("D_L15_001673C0");
 extern int D_L15_00174458_y[] __asm__("D_L15_00174458");
-extern unsigned char D_001413F4_y[] __asm__("D_001413F4");
 extern float D_0015ED6C_y __asm__("D_0015ED6C");
 extern float dist_y(void *, void *) __asm__("FUN_001f9b48");
 extern int sound_y(int, int, void *, int) __asm__("FUN_L00_0028dc90");
@@ -1305,7 +1304,7 @@ void FUN_L15_0029ac30(unsigned char *m) {
     add_y(next, m + 0x10, d);
     scale_y(back, d, -2.0f);
     add_y(back, back, m + 0x10);
-    if (D_001413F4_y[0] == 2 && randbelow_y(5) != 0)
+    if (hero.unk20A4 == 2 && randbelow_y(5) != 0)
         s = 0.0f;
     setupcol_y(col, m, 0x10003, s, d);
     *(short *)(col + 0x1A) = *(short *)(m + 0xA6);
@@ -1648,7 +1647,6 @@ typedef struct {
     s32 stop_volume;
 } MovingMobyVars;
 
-extern char D_0013F3D0[];
 extern f32 FUN_001f99c0(f32);
 extern f32 fast_cos_door(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin_door(f32) __asm__("FUN_001f9de0");
@@ -1714,14 +1712,14 @@ void FUN_L15_002bddb0(struct Moby *moby) {
         }
     case 4:
         vars->travel = 0.0f;
-        if (!is_point_inside_clip_volume(D_0013F3D0, vars->start_volume))
+        if (!is_point_inside_clip_volume(&hero.motion.pos, vars->start_volume))
             return;
         if (reversed)
             allocate_voice_for_target_entry(0, 0, (int)moby);
         moby->state = 2;
         break;
     case 5:
-        if (is_point_inside_clip_volume(D_0013F3D0, vars->stop_volume))
+        if (is_point_inside_clip_volume(&hero.motion.pos, vars->stop_volume))
             return;
         if (reversed)
             allocate_voice_for_target_entry(0, 0, (int)moby);

@@ -520,9 +520,7 @@ extern OvlMobyEntry40 D_L01_00178580_8[] __asm__("D_L01_00178580");
 extern s32 D_0015ED84_8 __asm__("D_0015ED84");
 extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
-extern u8 D_0013F3D0_8[] __asm__("D_0013F3D0");
 extern f32 D_0015ED6C_8 __asm__("D_0015ED6C");
-extern u8 D_0013F430_8[] __asm__("D_0013F430");
 
 void FUN_L00_00206c08_8(void) __asm__("FUN_L00_00206c08");
 void FUN_001f9a28_8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -656,8 +654,8 @@ s32 FUN_L01_00231580(s32 arg) {
         FUN_L00_00210c80_8(&v, flag, D_0015ED6C_8 * 5.0f, D_0015ED6C_8 * 2.4f);
         break;
     }
-    FUN_001f9a10_8(D_0013F430_8, D_0013F430_8, &v);
-    FUN_001f9a10_8(D_0013F430_8 + 0x20, D_0013F430_8 + 0x20, &v);
+    FUN_001f9a10_8(&hero.motion.velocity, &hero.motion.velocity, &v);
+    FUN_001f9a10_8(&hero.motion.unk100, &hero.motion.unk100, &v);
     return 1;
 }
 /* Adapted from the exact FUN_L17_0020e1c0 (src/overlays/l17/ui_help_002020a8.c) /
@@ -1382,7 +1380,6 @@ void FUN_L01_002405a0(void) {
         break;
     }
 }
-extern u8 D_0013F4A0_242198[] __asm__("D_0013F4A0");
 extern f32 D_0015ED6C_242198 __asm__("D_0015ED6C");
 extern s32 D_0013CAE0_242198 __asm__("D_0013CAE0") __attribute__((section(".data")));
 extern s32 D_L01_0015F6DC_242198 __asm__("D_L01_0015F6DC");
@@ -1427,7 +1424,7 @@ void FUN_L01_00242198(void) {
         d->state.current == 0x10) {
         if (hero_set_state(3, 0)) {
             FUN_L00_002323b8_242198(5, 0, -1.0f);
-            FUN_L00_0025f730_242198(D_0013F4A0_242198, D_0015ED6C_242198 * 5.0f);
+            FUN_L00_0025f730_242198(&hero.motion.unk150, D_0015ED6C_242198 * 5.0f);
         }
         return;
     }

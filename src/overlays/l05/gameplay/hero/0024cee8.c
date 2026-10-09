@@ -31,7 +31,6 @@ extern T2C_24D680 D_L05_0017C088[];
 extern char *D_L05_0015FFD8;
 extern char *FUN_L00_0020d460(int);
 extern char D_0013E533[];
-extern char D_0014161B[];
 extern char D_00141848[];
 extern float AbsoluteFloat(float);
 extern float D_L05_0017C250[][25];
@@ -65,7 +64,6 @@ extern short D_L05_0015F688 __attribute__((sda));
 extern char D_L05_0015F6E8[4] __attribute__((sda));
 extern char D_L05_0015F6F8[4] __attribute__((sda));
 extern short D_L05_0017C380;
-extern unsigned char D_0013F4A0[];
 extern unsigned char D_0013D388[];
 extern unsigned char D_L05_0017C238[];
 extern void *D_L05_001612D0;
@@ -105,7 +103,6 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
 extern void FUN_L05_00266710(void);
 extern void scale_vector_xyz(void *, void *, float);
-extern char D_0013F430[];
 extern char D_00141680[];
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
@@ -459,7 +456,7 @@ int hero_set_state(int a, int b) {
             }
             *(unsigned int *)(h + 0xEC) =
                 *(unsigned int *)(h + 0xEC) | (1 << current_level_index) | 0x80000000;
-            v = ((char *)&D_0013F4A0);
+            v = (char *)&hero.motion.unk150;
             qcopy(v, v - 0x40);
         }
         if (b)
@@ -597,7 +594,7 @@ int hero_set_state(int a, int b) {
             p->unk690 = -0.2f;
         }
         {
-            char *v2 = ((char *)&D_0013F430);
+            char *v2 = (char *)&hero.motion.velocity;
             char *w;
             clear_vector(v2);
             w = v2 + 0x70;
@@ -1145,7 +1142,7 @@ int hero_set_state(int a, int b) {
             p->unk2284 = 0x50;
         }
         {
-            char *v = ((char *)&D_0013F430);
+            char *v = (char *)&hero.motion.velocity;
             char *r;
             qcopy(v, v + 0x30);
             r = v - 0xE0;

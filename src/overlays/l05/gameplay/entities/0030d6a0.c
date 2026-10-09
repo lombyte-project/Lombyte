@@ -166,7 +166,7 @@ void FUN_L05_0030e1f8(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float v[4];
     float w[4];
-    char *g = D_0013F3D0;
+    char *g = (char *)&hero.motion.pos;
     if (is_point_inside_clip_volume(g, *(int *)(data + 0x28))) {
         *(float *)(g + 0x270) = 500.0f;
     }
@@ -200,7 +200,7 @@ void FUN_L05_0030e1f8(char *moby) {
         moby[0x20] = 1;
         break;
     case 1:
-        if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(data + 0x2C))) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0x2C))) {
             D_L05_0015F444 = data[0x23];
             D_L05_0015F445 = data[0x24];
             D_L05_0015F446 = data[0x25];
@@ -218,7 +218,7 @@ void FUN_L05_0030e1f8(char *moby) {
         }
         break;
     case 2:
-        if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(data + 0x28))) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0x28))) {
             D_L05_0015F444 = data[0x20];
             D_L05_0015F445 = data[0x21];
             D_L05_0015F446 = data[0x22];
@@ -236,7 +236,7 @@ void FUN_L05_0030e1f8(char *moby) {
         }
         break;
     }
-    g = D_0013F3D0;
+    g = (char *)&hero.motion.pos;
     if (is_point_inside_clip_volume(g, *(int *)(data + 0x38))) {
         int c;
         subtract_vector_xyz(v, g, D_L05_001600EC + *(int *)(data + 0x38) * 128 + 0x30);
@@ -960,7 +960,6 @@ extern int D_L05_0015F5CC_c __asm__("D_L05_0015F5CC");
 extern void FUN_L02_002a40d0(void *, float);
 void FUN_L05_00316070_c(char *moby) __asm__("FUN_L05_00316070");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
-extern char D_001413DC[];
 extern void func_L05_00317538_3175D8(void) __asm__("FUN_L05_00316070");
 extern float D_L05_00211E60_3175D8[] __asm__("D_L05_00211B20");
 
@@ -972,7 +971,7 @@ void FUN_L05_00316110(char *moby) {
         ((unsigned char *)moby)[0x30] = 0xFF;
         break;
     case 1:
-        if (*(int *)(((char *)&D_001413DC)) == 0x16) {
+        if (hero.state.control_mode == 0x16) {
             D_L05_00211E60_3175D8[2] =
                 fast_sin((float)(D_L05_0015F5CC_c % 360) * 0.017444444f - 3.14f) * 0.25f + 61.5f;
         } else {
@@ -1376,7 +1375,6 @@ extern void FUN_L02_002e0cd8(char *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void subtract_vector_xyz(void *, void *, void *);
-extern char D_001413DC[];
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 extern L16WatchFlags D_0013D355_watch __asm__("D_0013D24D");
 
@@ -1490,7 +1488,6 @@ void FUN_L05_003180a0(WM *m) {
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
 }
 
-extern char D_0013F3D0_318a68[] __asm__("D_0013F3D0");
 extern int D_L05_001612DC_318a68 __asm__("D_L05_001612DC");
 extern int D_L05_001612D8_318a68[] __asm__("D_L05_001612D8") MACRO_ADDR;
 extern char D_L05_001612E0_318a68[16] __asm__("D_L05_001612E0") MACRO_ADDR __attribute__((sda));
@@ -1515,7 +1512,7 @@ void FUN_L05_00318a68(char *m) {
         *(int *)(m + 0x94) = 0;
         break;
     case 1:
-        t = D_0013F3D0_318a68;
+        t = (char *)&hero.motion.pos;
         if (find_318a68(t, *v) != 0) {
             D_L05_001612D8_318a68[1] = state;
             qcopy(D_L05_001612E0_318a68, t);

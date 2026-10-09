@@ -27,8 +27,6 @@ extern unsigned char D_0015EDB5;
 extern T2C_22BE40 D_L02_0017C228[];
 extern char *FUN_L00_0020d460(int);
 extern char D_0013E533[];
-extern char D_0013F430[];
-extern char D_0014161B[];
 extern char D_00141848[];
 extern float D_0015ED60 __attribute__((sda));
 /* D_0015ED60 reached through the word below it: retail loads it with lui here, not $gp. */
@@ -731,7 +729,7 @@ int hero_set_state(int a, int b) {
             p->unk2284 = 0x50;
         }
         {
-            char *v = ((char *)&D_0013F430);
+            char *v = (char *)&hero.motion.velocity;
             char *r;
             qcopy(v, v + 0x30);
             r = v - 0xE0;
@@ -3634,12 +3632,11 @@ void FUN_L02_00230988(void) {
     }
 }
 #include "sda.h"
-extern char D_0013E633_37478[] __asm__("D_0013F3D0");
 extern float D_0015EE6C_37478 __asm__("D_0015ED6C");
 extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 
 void FUN_L02_00237478(void) {
-    if (*(float *)(D_0013E633_37478 + 0xE0) < D_0015EE6C_37478 * 2.7f) {
+    if (hero.motion.unk160 < D_0015EE6C_37478 * 2.7f) {
         hero_set_state(0, 1);
     } else {
         hero_set_state(3, 1);

@@ -527,7 +527,6 @@ extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 void FUN_L01_002e6518_c(SplashMoby *m, u128 *origin) __asm__("FUN_L01_002e6518");
 extern char D_0013F350[];
-extern char D_0013F3D0[];
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L01_002e6bf0(PeMoby *m) {
@@ -572,18 +571,18 @@ void FUN_L01_002e6bf0(PeMoby *m) {
     FUN_001f9770(&v->h26);
     if (hit != 0 && v->h26 == 0) {
         if (hit->src != 0) {
-            PeHero *hero = (PeHero *)(((char *)&D_0013F350));
+            PeHero *player = (PeHero *)(((char *)&D_0013F350));
 
-            if (hit->src != hero->f1090) {
+            if (hit->src != player->f1090) {
                 ang = FUN_001f9e90_cf(m->pos.f[0] - hit->src->pos.f[0],
                                       m->pos.f[1] - hit->src->pos.f[1]);
             } else {
-                ang = FUN_001f9e90_cf(m->pos.f[0] - hero->pos.f[0], m->pos.f[1] - hero->pos.f[1]);
+                ang = FUN_001f9e90_cf(m->pos.f[0] - player->pos.f[0], m->pos.f[1] - player->pos.f[1]);
             }
         } else {
-            PeHero *hero = (PeHero *)(((char *)&D_0013F350));
+            PeHero *player = (PeHero *)(((char *)&D_0013F350));
 
-            ang = FUN_001f9e90_cf(m->pos.f[0] - hero->pos.f[0], m->pos.f[1] - hero->pos.f[1]);
+            ang = FUN_001f9e90_cf(m->pos.f[0] - player->pos.f[0], m->pos.f[1] - player->pos.f[1]);
         }
         v->h1E2 = scale_game_frames(0x258);
         v->f20 -= dmg;
@@ -785,7 +784,7 @@ void FUN_L01_002e6bf0(PeMoby *m) {
     }
     case 2:
         if (FUN_001f9b80(&m->pos, &tgt) < v->f1A8 ||
-            is_point_inside_clip_volume(((char *)&D_0013F3D0), v->w1C0) != 0 || v->w1E8 != 0) {
+            is_point_inside_clip_volume(&hero.motion.pos, v->w1C0) != 0 || v->w1E8 != 0) {
             if (v->w1C4 != -1) {
                 char *p;
 
@@ -2412,7 +2411,7 @@ void FUN_L01_002f4960(CarrierMoby *m) {
         m->flags |= 0x41;
         return;
     case 1:
-        if (is_point_inside_clip_volume(D_0013F3D0, n) != 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, n) != 0) {
             v->state = 2;
             m->flags &= ~0x41;
             if (v->camera != -1) {
@@ -2702,7 +2701,6 @@ typedef struct {
     HoverVars *pvars;
 } HoverMoby;
 
-#include "rnc/gameplay/hero.h"
 
 extern f32 D_L01_00161BF0 __attribute__((sda));
 extern f32 D_L01_00161BF4 __attribute__((sda));

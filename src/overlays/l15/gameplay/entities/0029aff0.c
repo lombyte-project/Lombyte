@@ -56,7 +56,6 @@ typedef struct {
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void *FUN_002141f8(struct Moby *);
-extern char D_0013F3D0[];
 extern char D_L15_001673C0[];
 extern char *D_L15_0015FFE4;
 extern struct Moby *D_L15_0015FFD8;
@@ -74,10 +73,10 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
 
     if (vars->trigger == -1) {
         if (moby->state != 0) {
-            if (is_point_inside_clip_volume(D_0013F3D0, vars->open_volume) ||
+            if (is_point_inside_clip_volume(&hero.motion.pos, vars->open_volume) ||
                 is_point_inside_clip_volume(D_L15_001673C0, vars->open_volume)) {
                 open = 1;
-            } else if (!is_point_inside_clip_volume(D_0013F3D0, vars->close_volume) &&
+            } else if (!is_point_inside_clip_volume(&hero.motion.pos, vars->close_volume) &&
                        !is_point_inside_clip_volume(D_L15_001673C0, vars->close_volume)) {
                 close = 1;
             }
@@ -533,8 +532,6 @@ extern short D_L15_00161B38 __attribute__((sda));
 extern short D_L15_00161B3C __attribute__((sda));
 extern short D_L15_00161B1C __attribute__((sda));
 extern unsigned char D_0013E533[];
-extern unsigned char D_001413F4[];
-extern unsigned char D_0014161B[];
 extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void FUN_001f9c48(void *, void *, float);
 extern void FUN_L00_001f2868(void *, int, void *, void *, float);
@@ -558,7 +555,6 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void transform_vector_by_basis(void *, void *, void *);
 extern char D_0013E550[];
-extern char D_0013F3D0[];
 extern char D_0014C190[];
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern char *func_L10_002CD578_v(void *vel, float scale, void *pos, int a, int b,
@@ -582,7 +578,7 @@ void FUN_L15_002cf3a8(UMoby *m) {
     d = m->data;
     FUN_L15_002d0fa8(m);
     tgt = d->target;
-    if (m->state != 0 && m->state != 0x40 && D_001413F4[0] != 2) {
+    if (m->state != 0 && m->state != 0x40 && hero.unk20A4 != 2) {
         m->w94 = 0;
         m->flags |= 0x41;
         idx = d->snd;
@@ -629,10 +625,10 @@ void FUN_L15_002cf3a8(UMoby *m) {
             blend_moby_animation(m, 0, 0, 5);
         break;
     case 1:
-        if (d->w1CC != -1 || is_point_inside_clip_volume(((char *)&D_0013F3D0), d->w1DC)) {
+        if (d->w1CC != -1 || is_point_inside_clip_volume(&hero.motion.pos, d->w1DC)) {
             if (d->w1CC != -1 && FUN_L01_0026e008(d->w1CC, 0x40))
                 break;
-            if (D_001413F4[0] == 2) {
+            if (hero.unk20A4 == 2) {
                 m->w94 = *(int *)(m->cls + 0x10);
                 m->flags = (m->flags & 0xFFBE) | 0x1000;
             }
@@ -999,7 +995,7 @@ void FUN_L15_002cf3a8(UMoby *m) {
         *(int *)(((char *)&D_0014C190) + (((short)m->id >> 5) * 4 + (current_level_index << 8))) &=
             ~(1 << (m->id & 0x1F));
         D_L15_001BAAD0[(short)m->id >> 5] &= ~(1 << (m->id & 0x1F));
-        if (D_001413F4[0] != 2)
+        if (hero.unk20A4 != 2)
             m->state = 0;
         break;
     }

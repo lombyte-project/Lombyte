@@ -417,7 +417,6 @@ void FUN_L03_002ebb00(void *arg) {
 /* smooths the moby's data floats and rebuilds its orientation axes */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED020), where it is exact; names translated to the US level program. */
 
-extern char D_0013E633[] __asm__("D_0013F3D0");
 extern char D_L03_00166F40[];
 extern short D_L03_00161E70 __attribute__((sda));
 extern short D_L03_00161E74 __attribute__((sda));
@@ -436,7 +435,7 @@ void FUN_L03_002ebc58(void *arg) {
     float b[4];
     float c[4];
     qcopy(b, d);
-    p[2] = cam_interp_values(d + 0xBC, p[2], *(float *)(D_0013E633 + 0x8),
+    p[2] = cam_interp_values(d + 0xBC, p[2], hero.motion.pos.f[2],
                              *(float *)&D_L03_00161E70, *(float *)&D_L03_00161E74, 0.0f);
     normalize_vector_xyz(c, D_L03_00166F40, p[5]);
     add_vector_xyz(b, c, b);

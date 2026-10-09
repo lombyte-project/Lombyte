@@ -24,7 +24,6 @@ extern char D_L11_0017C920_e[] __asm__("D_L11_0017C920");
 extern T2C_24E240 D_L11_0017C628[];
 extern char *FUN_L00_0020d460(int);
 extern char D_0013E533[];
-extern char D_0014161B[];
 extern char D_00141680[];
 extern float AbsoluteFloat(float);
 extern float D_L11_0017C7F0[][25];
@@ -80,8 +79,6 @@ extern void FUN_L01_002405a0(void);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
 extern char D_00141848[];
-extern char D_0013F4A0[];
-extern char D_0013F430[];
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L11_0024db50");
@@ -429,7 +426,7 @@ int hero_set_state(int a, int b) {
                 *(unsigned int *)(h + 0xEC) | (1 << current_level_index) | 0x80000000;
         }
         {
-            char *v = ((char *)&D_0013F4A0);
+            char *v = (char *)&hero.motion.unk150;
             qcopy(v, v - 0x40);
         }
         if (b)
@@ -960,7 +957,7 @@ int hero_set_state(int a, int b) {
             p->unk2284 = 0x50;
         }
         {
-            char *v = ((char *)&D_0013F430);
+            char *v = (char *)&hero.motion.velocity;
             char *r;
             qcopy(v, v + 0x30);
             r = v - 0xE0;

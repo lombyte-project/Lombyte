@@ -646,7 +646,6 @@ void FUN_L14_002b3a20(char *m) {
 }
 #define NOT_SDA __attribute__((section(".data")))
 
-extern u8 D_001413F4[] __asm__("D_001413F4");
 extern u8 *D_L14_00167500 NOT_SDA;
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_001f9740(void *);
@@ -654,7 +653,7 @@ extern void set_moby_animation_c(void *, s32, s32) __asm__("FUN_00212ed8");
 
 void FUN_L14_002d96e0(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    if (D_001413F4[0] == 2) {
+    if (hero.unk20A4 == 2) {
         moby->unk94 = 0;
     } else {
         moby->unk94 = moby->pclass->unk10;
@@ -746,7 +745,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de670.s", FUN_L14_002de670);
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002DFE98), where it is exact; names translated to the US level program. */
 
-extern char D_0013F3D0[];
 extern float FUN_L00_00257c48(float lo, float hi);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L14_00161B08_x __asm__("D_L14_00161B08") __attribute__((sda));
@@ -773,7 +771,7 @@ unsigned char *FUN_L14_002dea98(char *owner, char *pos) {
         m[0x30] = 0xFF;
         *(short *)(m + 0x32) = 0xFF;
         m[0x31] = 1;
-        g = D_0013F3D0;
+        g = (char *)&hero.motion.pos;
         subtract_vector_xyz(vec, m + 0x10, g);
         g = g + 0x210;
         vec[2] = 0.0f;
@@ -840,13 +838,13 @@ unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
                 pos, vec, d + 0x10, d + 0x14, 0);
         } else {
             *(int *)(d + 4) = scale_game_frames_2e0170(200);
-            subtract_vector_2e0170(vec, pos, D_0013F3D0);
+            subtract_vector_2e0170(vec, pos, &hero.motion.pos);
             vec[2] = 0.0f;
             normalize_vector_2e0170(vec, vec,
                 random_scaled_2e0170(*(float *)&D_L14_00161B30_2e0170 * D_0015ED60,
                                        *(float *)&D_L14_00161B34_2e0170 * D_0015ED60));
-            cross_vectors_2e0170(other, D_0013F3D0 + 0x210, vec);
-            build_look_at_2e0170(d + 0x30, vec, D_0013F3D0 + 0x210,
+            cross_vectors_2e0170(other, &hero.unk290, vec);
+            build_look_at_2e0170(d + 0x30, vec, &hero.unk290,
                 random_angle_2e0170(0.5759586691856384f, 1.3962633609771729f));
             *(float *)(d + 0x38) = random_scaled_2e0170(*(float *)&D_L14_00161B38_2e0170 * D_0015ED60,
                 *(float *)&D_L14_00161B3C_2e0170 * D_0015ED60);

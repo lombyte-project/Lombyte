@@ -7,7 +7,6 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00221310.s", FUN_L00_00221310);
 #else
-#include "rnc/gameplay/hero.h"
 extern s32 D_L00_0015F5CC_221310 __asm__("D_L00_0015F5CC");
 extern u8 D_L00_00173E80_221310[] __asm__("D_L00_00173E80");
 extern void *D_L00_00173E58_221310 __asm__("D_L00_00173E58");
@@ -489,7 +488,6 @@ extern float FUN_001f9b48(void *, void *);
 extern float FUN_L00_0020d6b0(void *, int *, float, float, float, float);
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
-extern char D_0013F3D0[];
 
 int FUN_L00_00222158(void) {
     char *g0, *g, *gb, *g2, *g3;
@@ -518,7 +516,7 @@ int FUN_L00_00222158(void) {
         if (*(int *)q != 0)
             continue;
         if (*(float *)(q + 0x20) != 0.0f &&
-            *(float *)(q + 0x20) < FUN_001f9b48((char *)((char *)&D_0013F3D0), m + 0x10))
+            *(float *)(q + 0x20) < FUN_001f9b48((char *)(&hero.motion.pos), m + 0x10))
             continue;
         g = (char *)((char *)&D_0013F350);
         k = *(int *)(g + 0x2084);
@@ -604,7 +602,6 @@ extern char D_L00_0017BF60_e[] __asm__("D_L00_0017BF60");
 extern unsigned char D_0015EDB5;
 extern T2C_222B80 D_L00_0017BC28[];
 extern char *FUN_L00_0020d460(int);
-extern char D_0014161B[];
 extern char D_00141680[];
 extern char D_L00_0017BF60[];
 extern float AbsoluteFloat(float);
@@ -619,7 +616,6 @@ extern float dot_vectors_xyz(void *a, void *b);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
-extern char D_0013F4A0[];
 extern int D_0015ED80;
 extern int D_0015EEA4;
 extern int D_L00_001612D0;
@@ -672,7 +668,6 @@ extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern char D_0013F350[];
 extern char D_00141848[];
-extern char D_0013F430[];
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -1033,7 +1028,7 @@ int hero_set_state(int a, int b) {
                 *(unsigned int *)(h + 0xEC) | (1 << current_level_index) | 0x80000000;
         }
         {
-            char *v = (char *)((char *)&D_0013F4A0);
+            char *v = (char *)(&hero.motion.unk150);
             qcopy(v, v - 0x40);
         }
         if (b)
@@ -1688,7 +1683,7 @@ int hero_set_state(int a, int b) {
             p->unk2284 = 0x50;
         }
         {
-            char *v = (char *)((char *)&D_0013F430);
+            char *v = (char *)(&hero.motion.velocity);
             char *r;
             qcopy(v, v + 0x30);
             r = v - 0xE0;

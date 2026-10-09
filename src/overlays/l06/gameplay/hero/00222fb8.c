@@ -106,9 +106,7 @@ extern OvlMobyEntry40 D_L08_00178900_8[] __asm__("D_L06_00178880");
 extern s32 D_0015ED84_8 __asm__("D_0015ED84");
 extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
-extern u8 D_0013F3D0_8[] __asm__("D_0013F3D0");
 extern f32 D_0015ED6C_8 __asm__("D_0015ED6C");
-extern u8 D_0013F430_8[] __asm__("D_0013F430");
 
 void FUN_L00_00206c08_8(void) __asm__("FUN_L00_00206c08");
 void FUN_001f9a28_8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -218,8 +216,8 @@ s32 FUN_L06_00227e78(s32 arg) {
         FUN_L00_00210c80_8(&v, flag, D_0015ED6C_8 * 5.0f, D_0015ED6C_8 * 2.4f);
         break;
     }
-    FUN_001f9a10_8(D_0013F430_8, D_0013F430_8, &v);
-    FUN_001f9a10_8(D_0013F430_8 + 0x20, D_0013F430_8 + 0x20, &v);
+    FUN_001f9a10_8(&hero.motion.velocity, &hero.motion.velocity, &v);
+    FUN_001f9a10_8(&hero.motion.unk100, &hero.motion.unk100, &v);
     return 1;
 }
 #include "qcopy.h"

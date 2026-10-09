@@ -233,7 +233,6 @@ void FUN_L00_002e9c28(u8 *m) {
     FUN_001e93e8(m);
     FUN_L00_002e5e38(m);
 }
-extern char D_0013F3D0_002e9cc0[] __asm__("D_0013F3D0");
 extern unsigned char D_0015EDB3_002e9cc0 __asm__("D_0015EDB3");
 extern void FUN_001f9bf8_002e9cc0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a68_002e9cc0(void *, void *, float) __asm__("FUN_001f9a68");
@@ -258,8 +257,8 @@ void FUN_L00_002e9cc0(char *p) {
         FUN_001f9a68_002e9cc0(b, a, 1.6f);
     }
     p += 0x30;
-    FUN_001f9a10_002e9cc0(p, D_0013F3D0_002e9cc0, b);
-    FUN_001f9a10_002e9cc0(p, D_0013F3D0_002e9cc0 + 0xC0, p);
+    FUN_001f9a10_002e9cc0(p, &hero.motion.pos, b);
+    FUN_001f9a10_002e9cc0(p, &hero.motion.unk140, p);
 }
 #include "eetypes.h"
 #include "qcopy.h"
@@ -724,7 +723,6 @@ void FUN_L00_002eaaa0(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) {
     *(s32 *)(n + 0xE0) = w;
 }
 extern char D_L00_00166C80_2eac18[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
-extern char D_0013F3E0_2eac18[] __asm__("D_0013F3E0");
 void FUN_L00_001eb448_2eac18(void) __asm__("FUN_L00_001eb448");
 void FUN_001fa050_2eac18(void *, void *) __asm__("FUN_001fa050");
 void FUN_001fa2b8_2eac18(void *, void *) __asm__("FUN_001fa2b8");
@@ -738,7 +736,7 @@ void FUN_L00_002eac18(int mode) {
         float v0[4] __attribute__((aligned(16)));
         float v1[4] __attribute__((aligned(16)));
         float m[16] __attribute__((aligned(16)));
-        char *d = D_0013F3E0_2eac18;
+        char *d = (char *)&hero.motion.rot;
         char *p = o + 0x30;
         FUN_001fa050_2eac18(m, d);
         FUN_001fa2b8_2eac18(o, m);
@@ -796,7 +794,6 @@ void FUN_L00_002ead60(char *m) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC2D0), where it is exact; names translated to the US level program. */
 
-extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_L00_00166DD8 __attribute__((section(".data")));
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -837,7 +834,7 @@ void FUN_L00_002eae20(void *arg) {
             float t, x, y, diff, z;
             t = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) /
                 ConvertIntegerToFloat(*(int *)(c + 4));
-            FUN_L00_001ed630(d + 0xE8, b, D_0013F3D0_c);
+            FUN_L00_001ed630(d + 0xE8, b, &hero.motion.pos);
             x = fast_subtract_rotations(F(c, 8), F(c, 0x1C));
             y = fast_subtract_rotations(F(b, 0x18), D_L00_00166DD8);
             if ((x > 0.34906584f && y < -0.34906584f) || (x < -0.34906584f && y > 0.34906584f)) {
@@ -855,7 +852,7 @@ void FUN_L00_002eae20(void *arg) {
             F(c, 0x24) = F(c, 0x24) + (F(c, 0x10) - F(c, 0x24)) *
                                           FUN_L00_00257e20(F(c, 0x44), 0, 1.0f, F(c, 0x48), t);
             F(c, 0x20) = FUN_L00_00257ef0(F(c, 0x20), F(c, 0xC), t);
-            FUN_L00_00257f70(c + 0x30, c + 0x30, D_0013F3D0_c, t);
+            FUN_L00_00257f70(c + 0x30, c + 0x30, &hero.motion.pos, t);
             FUN_L00_001ed580(m + 0x30, c + 0x1C, c + 0x30);
             FUN_L00_00258050((float *)(m + 0x40), (float *)(m + 0x40), (float *)(b + 0x10), t);
         }
@@ -1182,9 +1179,9 @@ void FUN_L00_002ebb00(O002ebb00 *o) {
     u8 *m = o->m;
     u8 *a = m + 0xB0;
     u8 *m2;
-    qcopy(a, D_0013F3D0);
+    qcopy(a, &hero.motion.pos);
     *(f32 *)(a + 8) += 2.0f;
-    qcopy(m + 0xC0, D_0013F3D0 + 0x10);
+    qcopy(m + 0xC0, &hero.motion.rot);
     m2 = o->m;
     qcopy(m2 + 0x80, a);
     FUN_L00_001eb0b0(m2 + 0x14);
@@ -1276,7 +1273,6 @@ typedef union {
     OvlQuad q;
     float f[4];
 } V_2ec4a8;
-extern unsigned char D_0013F3D0_2ec4a8[] __asm__("D_0013F3D0");
 extern unsigned char D_L00_00166E30_2ec4a8[] __asm__("D_L00_00166E30")
     __attribute__((section(".data")));
 void FUN_001f9a28_2ec4a8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1292,7 +1288,7 @@ void FUN_L00_002ec4a8(unsigned char *m) {
     V_2ec4a8 v;
     V_2ec4a8 w;
     V_2ec4a8 x;
-    unsigned char *g = D_0013F3D0_2ec4a8;
+    unsigned char *g = (unsigned char *)&hero.motion.pos;
     unsigned char *q = *(unsigned char **)(m + 0x70);
     unsigned char *p = q + 0x40;
     float *t = (float *)(q + 0x30);
@@ -1417,15 +1413,15 @@ s32 FUN_L00_002ec7e8(A_2ec7e8 *a) {
     } else if ((s16)w == 4 && D_001415D4[0] == 3) {
         v17 = 0 < o->f2E;
     }
-    if (o->f0C >= 0 && (v17 || is_point_inside_clip_volume(&D_0013F3D0[0], o->f0C)))
+    if (o->f0C >= 0 && (v17 || is_point_inside_clip_volume(&hero.motion.pos, o->f0C)))
         return 1;
-    if (o->f4C >= 0 && (v17 || is_point_inside_clip_volume(&D_0013F3D0[0], o->f4C)))
+    if (o->f4C >= 0 && (v17 || is_point_inside_clip_volume(&hero.motion.pos, o->f4C)))
         return 1;
-    if (o->f10 >= 0 && (v17 || FUN_L00_0025fa38(&D_0013F3D0[0], o->f10)))
+    if (o->f10 >= 0 && (v17 || FUN_L00_0025fa38(&hero.motion.pos, o->f10)))
         return 1;
-    if (o->f08 >= 0 && (v17 || FUN_L00_0025faf0(&D_0013F3D0[0], o->f08)))
+    if (o->f08 >= 0 && (v17 || FUN_L00_0025faf0(&hero.motion.pos, o->f08)))
         return 1;
-    if (o->f14 >= 0 && (v17 || FUN_L00_00259740(&D_0013F3D0[0], D_L00_001B04B0[o->f14] + 0x10,
+    if (o->f14 >= 0 && (v17 || FUN_L00_00259740(&hero.motion.pos, D_L00_001B04B0[o->f14] + 0x10,
                                                 *(s32 *)D_L00_001B04B0[o->f14])))
         return 1;
     return 0;
@@ -1481,7 +1477,6 @@ typedef struct {
 extern char *D_L00_0015EF50_002ed348 __asm__("D_L00_0015EF50");
 extern char *D_L00_00166E00_002ed348 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 extern unsigned char D_001413F4_002ed348 __asm__("D_001413F4") __attribute__((section(".data")));
-extern char D_0013F3D0_002ed348[] __asm__("D_0013F3D0");
 extern float FUN_001f99c0_002ed348(float) __asm__("FUN_001f99c0");
 extern int FUN_00214720_002ed348(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_0025fa38_002ed348(void *, int) __asm__("FUN_L00_0025fa38");
@@ -1507,11 +1502,11 @@ int FUN_L00_002ed348(void *pv) {
         if (0.01f < FUN_001f99c0_002ed348(*(float *)(a + 8)))
             return 0;
     }
-    if (s->a >= 0 && FUN_00214720_002ed348(D_0013F3D0_002ed348, s->a))
+    if (s->a >= 0 && FUN_00214720_002ed348(&hero.motion.pos, s->a))
         return 1;
-    if (s->b >= 0 && FUN_L00_0025fa38_002ed348(D_0013F3D0_002ed348, s->b))
+    if (s->b >= 0 && FUN_L00_0025fa38_002ed348(&hero.motion.pos, s->b))
         return 1;
-    if (s->c >= 0 && FUN_L00_0025faf0_002ed348(D_0013F3D0_002ed348, s->c))
+    if (s->c >= 0 && FUN_L00_0025faf0_002ed348(&hero.motion.pos, s->c))
         return 1;
     s->done = 1;
     return 0;

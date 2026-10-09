@@ -856,7 +856,6 @@ int FUN_L00_00233440(void) {
 typedef struct {
     f32 v[4];
 } V002334d0 __attribute__((aligned(16)));
-extern u8 D_0013F5E0_002334d0[] __asm__("D_0013F5E0");
 void FUN_001f9bf8_002334d0(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_002334d0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
@@ -874,7 +873,7 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
         if (b->state.current == 0x3E && b->air_frames.s == 0) {
             FUN_001f9bf8_002334d0(&t, &b->unk270, -k);
         } else {
-            FUN_001f9bf8_002334d0(&t, D_0013F5E0_002334d0, k);
+            FUN_001f9bf8_002334d0(&t, &hero.unk290, k);
         }
         FUN_001f9a10_002334d0(out, in, &t);
         break;
@@ -1526,5 +1525,5 @@ void queue_animation_update() __asm__("FUN_001ff308");
 /* Queues animation update 0x7535 with three FUN_L00_ callbacks and D_001415F8. */
 void FUN_L00_00234e00(void) {
     queue_animation_update(1, 0x7535, FUN_L00_002395b0, FUN_L00_00239630, FUN_L00_00239810,
-                           D_001415F8, 8);
+                           &hero.health, 8);
 }

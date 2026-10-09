@@ -465,7 +465,7 @@ int FUN_L00_0020d5d0(int mode, float *out) {
     case 3: {
         float c;
         c = 25.0f;
-        if (c < *(float *)D_0013FDF8) {
+        if (c < hero.unkAA8) {
             *out = -1.3089969f;
         }
         return 1;
@@ -513,7 +513,6 @@ typedef struct {
     float f154;
     float f158;
 } C_20d6b0;
-extern char D_0013F3D0_20d6b0[] __asm__("D_0013F3D0");
 extern C_20d6b0 D_166C80_20d6b0 __asm__("D_L00_00166C80");
 extern float dist_20d6b0(void *, void *) __asm__("FUN_001f9b48");
 extern float atan2_20d6b0(float, float) __asm__("FUN_001f9e90");
@@ -523,14 +522,14 @@ extern int f5e3b8_20d6b0(void *) __asm__("FUN_L00_0025e3b8");
 
 float FUN_L00_0020d6b0(char *o, float yaw, float range, float ylim, float plim, int *out) {
     float v[4] __attribute__((aligned(16)));
-    char *g;
+    struct Hero *g;
     float d, a, s, p, m, r;
 
     *out = 0;
-    qcopy(v, D_0013F3D0_20d6b0);
-    g = D_0013F3D0_20d6b0 - 0x80;
-    if (*(int *)(g + 0x2084) == 0x14) {
-        v[2] = *(float *)(g + 0x2D8);
+    qcopy(v, &hero.motion.pos);
+    g = &hero;
+    if (g->state.current == 0x14) {
+        v[2] = g->ground_z.f;
     }
     d = dist_20d6b0(v, o + 0x10);
     if (range < d)
@@ -539,7 +538,7 @@ float FUN_L00_0020d6b0(char *o, float yaw, float range, float ylim, float plim, 
     s = a;
     m = a;
     p = adiff_20d6b0(atan2_20d6b0(hdist_20d6b0(v, o + 0x10), *(float *)(o + 0x18) - v[2]), 0.0f);
-    if (*(int *)(g + 0x2084) == 1 || *(int *)(g + 0x2084) == 0x1E) {
+    if (g->state.current == 1 || g->state.current == 0x1E) {
         C_20d6b0 *c = &D_166C80_20d6b0;
         float b = adiff_20d6b0(
             atan2_20d6b0(*(float *)(o + 0x10) - c->v140[0], *(float *)(o + 0x14) - c->v140[1]),
@@ -1499,9 +1498,7 @@ extern T_210ce8 D_L00_00178100_210ce8[] __asm__("D_L00_00178100");
 extern s32 D_0015ED84_210ce8 __asm__("D_0015ED84");
 extern s32 D_0013DF88_210ce8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_210ce8 __asm__("D_0015EEA8");
-extern u8 D_0013F3D0_210ce8[] __asm__("D_0013F3D0");
 extern f32 D_0015ED6C_210ce8 __asm__("D_0015ED6C");
-extern u8 D_0013F430_210ce8[] __asm__("D_0013F430");
 
 s32 FUN_001fa6d0_210ce8(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_00206c08_210ce8(void) __asm__("FUN_L00_00206c08");
@@ -1580,7 +1577,7 @@ s32 FUN_L00_00210ce8(s32 arg) {
             flag = 1;
         }
     } else if (tbl->p20 != 0) {
-        FUN_001f9a28_210ce8(&v, D_0013F3D0_210ce8, tbl->p20 + 0x10);
+        FUN_001f9a28_210ce8(&v, &hero.motion.pos, tbl->p20 + 0x10);
     } else {
         v.f[0] = FUN_001f9dc8_210ce8(FUN_001fa580_210ce8(hero.motion.rot.f[2], 3.1415927f));
         v.f[1] = FUN_001f9de0_210ce8(FUN_001fa580_210ce8(hero.motion.rot.f[2], 3.1415927f));
@@ -1666,8 +1663,8 @@ s32 FUN_L00_00210ce8(s32 arg) {
         FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 5.0f, D_0015ED6C_210ce8 * 2.4f);
         break;
     }
-    FUN_001f9a10_210ce8(D_0013F430_210ce8, D_0013F430_210ce8, &v);
-    FUN_001f9a10_210ce8(D_0013F430_210ce8 + 0x20, D_0013F430_210ce8 + 0x20, &v);
+    FUN_001f9a10_210ce8(&hero.motion.velocity, &hero.motion.velocity, &v);
+    FUN_001f9a10_210ce8(&hero.motion.unk100, &hero.motion.unk100, &v);
     return 1;
 }
 extern s32 D_0015ED84_211250 __asm__("D_0015ED84");
@@ -2015,7 +2012,7 @@ void FUN_L00_00211d78(int a, float x, float y, float z) {
     V4_211d78 t;
     float out;
     float zero = 0.0f;
-    char *g = D_0013F4C0;
+    char *g = (char *)&hero.motion.unk170;
     float r;
     FUN_001f9d20(t, g, g - 0x130);
     r = FUN_001f9e90(t[0], t[1]);
@@ -2278,7 +2275,6 @@ typedef unsigned int u128_002126b8 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     float x, y, z, w_002126b8;
 } __attribute__((aligned(16))) Vec4_002126b8;
-extern char D_0013F5E0_002126b8[] __asm__("D_0013F5E0");
 extern u128_002126b8 D_0013F3D0_002126b8 __asm__("D_0013F3D0");
 void FUN_001f9bf8_002126b8(Vec4_002126b8 *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_002126b8(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2286,7 +2282,7 @@ void FUN_L00_0025d238_002126b8(Vec4_002126b8 *, void *) __asm__("FUN_L00_0025d23
 void FUN_L00_002126b8(Vec4_002126b8 *a, Vec4_002126b8 *b, int mode, float fa, float fb) {
     Vec4_002126b8 t[2];
     if (mode) {
-        char *up = D_0013F5E0_002126b8;
+        char *up = (char *)&hero.unk290;
         char *base = up - 0x210;
         FUN_001f9bf8_002126b8(&t[0], up, -fb);
         FUN_001f9a10_002126b8(b, base, &t[0]);
@@ -2558,7 +2554,7 @@ void FUN_L00_00212ff0(void) {
             len = len * 0.5f;
         }
         normalize_vector_xyz(v, v, len);
-        add_vector_xyz(((char *)&D_0013F3D0), ((char *)&D_0013F3D0), v);
+        add_vector_xyz(&hero.motion.pos, &hero.motion.pos, v);
     } else {
         if (globals->air_frames.s == 0 && globals->motion.pos.f[2] < globals->ground_z.f) {
             float x = AbsoluteFloat(globals->motion.pos.f[2] - globals->ground_z.f);

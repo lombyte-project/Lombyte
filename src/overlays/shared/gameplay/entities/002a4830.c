@@ -204,7 +204,6 @@ typedef struct {
     char *c;
 } C_2a4e48;
 extern C_2a4e48 D_166C80_2a4e48 __asm__("D_L00_00166C80") __attribute__((section(".data")));
-extern char D_0013F3D0_2a4e48[] __asm__("D_0013F3D0");
 extern float D_0015ED6C_2a4e48 __asm__("D_0015ED6C");
 extern void f9a28_2a4e48(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float f9ab0_2a4e48(void *, void *) __asm__("FUN_001f9ab0");
@@ -226,7 +225,7 @@ void FUN_L00_002a4e48(char *o) {
     if (C->c != 0) {
         s = o + 0x10;
         qcopy(s, C->c + 0x30);
-        pos = D_0013F3D0_2a4e48;
+        pos = (char *)&hero.motion.pos;
         f9a28_2a4e48(d, s, pos);
         P = (G_2a4e48 *)(pos - 0x80);
         f = f9ab0_2a4e48(d, P->obj + 0xE0);

@@ -80,7 +80,7 @@ typedef struct {
  * func_L14_002E1058), where it is exact; names translated to the US level
  * program. */
 void FUN_L14_002dfc58(u8 *moby) {
-    u8 *base = D_0013F3D0;
+    u8 *base = (u8 *)&hero.motion.pos;
     Level14Req r;
     u8 *q;
     if (is_point_inside_clip_volume(base, *(s32 *)(*(u8 **)(moby + 0x78) + 0x200)) != 0) {
@@ -201,7 +201,7 @@ void FUN_L14_002eb568(struct Moby *m) {
     dir[0] = fast_cos_spark(m->rot.z);
     dir[1] = fast_sin_spark(m->rot.z);
     dir[2] = 0.0f;
-    qcopy(clip, D_0013F3D0);
+    qcopy(clip, &hero.motion.pos);
     clip[2] += 1.0f;
     in_clip = spark_inside_clip_volume(clip, d->i504);
     i = 0;
@@ -378,7 +378,6 @@ extern void FUN_L00_0028e990(void);
 extern void FUN_L00_00298840(int);
 extern void FUN_L01_002a2480(void);
 extern void FUN_L14_002ed530(char *);
-extern char D_0014171B_c[] __asm__("D_0014161B");
 extern int *D_L14_001B0F30_ee[] __asm__("D_L14_001B0BB0");
 extern float D_L14_00161CCC_f __asm__("D_L14_00161CCC");
 extern float D_L14_00161CD0_f __asm__("D_L14_00161CD0");
@@ -391,7 +390,7 @@ void FUN_L14_002ed280(struct Moby *moby) {
     float v[4];
     int st;
     if (MOBY(moby)->state == 0) {
-        if (current_level_index == 0xE) *(short *)(D_0014171B_c + 0xD) = 1;
+        if (current_level_index == 0xE) hero.unk22D8 = 1;
         MOBY(moby)->state = 1;
         moby->unk30 = 0xFF;
         *(int *)&D_L14_00161C58 = 0;
@@ -969,7 +968,6 @@ typedef struct {
     char pad00[0xD0];
     float aim[4];
 } L14Player;
-extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
 extern float D_0013F420[4];
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern float FUN_001f96b0(float);
@@ -1046,7 +1044,7 @@ void FUN_L14_002fba20(L14WatchMoby *m) {
         break;
     }
     case 1:
-        if (d->b8 == 1 && FUN_00214720_c(D_0013F3D0_c, d->i40)) {
+        if (d->b8 == 1 && FUN_00214720_c(&hero.motion.pos, d->i40)) {
             if (D_0014C050[m->bB0 + current_level_index * 16] != 0xFF) {
                 char *t;
                 FUN_L00_002502a0(m->bB0);
@@ -1089,7 +1087,7 @@ void FUN_L14_002fba20(L14WatchMoby *m) {
     head_rate = 0.3f;
     tracking = 0;
     if (m->animation == 0) {
-        char *g = D_0013F3D0_c;
+        char *g = (char *)&hero.motion.pos;
         L14Player *q;
         tracking = 1;
         if (FUN_001f9b80(m->position, g) < 8.0f &&

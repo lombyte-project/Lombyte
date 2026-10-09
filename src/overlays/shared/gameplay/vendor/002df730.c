@@ -191,7 +191,6 @@ extern u8 D_L00_001EA1B0_2e03a0[] __asm__("D_L00_001EA1B0");
 extern u8 D_L00_001EA1D8_2e03a0[] __asm__("D_L00_001EA1D8");
 extern u8 D_L00_001EA200_2e03a0[] __asm__("D_L00_001EA200");
 extern u8 D_L00_00161BC0_2e03a0[] __asm__("D_L00_00161BC0");
-extern char D_0013F3D0_2e03a0[] __asm__("D_0013F3D0");
 extern s32 D_L00_0015F5C4_2e03a0 __asm__("D_L00_0015F5C4");
 extern s32 D_L00_0015F640_2e03a0 __asm__("D_L00_0015F640");
 extern u16 D_00141B08_2e03a0[] __asm__("D_00141B08");
@@ -244,7 +243,7 @@ void FUN_L00_002e03a0(M_2e03a0_2e03a0 *m) {
         break;
     case 1:
         FUN_L00_002e0788_2e03a0(m);
-        g = D_0013F3D0_2e03a0;
+        g = (char *)&hero.motion.pos;
         if (FUN_001f9b80_2e03a0((char *)m + 0x10, g) < 3.0f) {
             g -= 0x80;
             if (FUN_001f99c0_2e03a0(m->z - *(f32 *)(g + 0x88)) < 2.0f && *(s32 *)(g + 0x22A8)) {
@@ -510,7 +509,6 @@ extern T_e3388 D_L00_001E6D50_e3388[] __asm__("D_L00_001E6D50");
 extern f32 D_L00_001E6E10_e3388[][4] __asm__("D_L00_001E6E10");
 extern f32 D_L00_001E6CE0_e3388[4][4] __asm__("D_L00_001E6CE0");
 extern u8 D_L00_00166DC0_e3388[] __asm__("D_L00_00166DC0");
-extern u8 D_0013F5E0_e3388[] __asm__("D_0013F5E0");
 
 void FUN_001f9a28_e3388(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_001f9bf8_e3388(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -538,7 +536,7 @@ void FUN_L00_002e3388(s32 unused, s32 idx) {
     d[3] = 1.0f;
     FUN_001f9a28_e3388(a, D_L00_00166DC0_e3388, d);
     FUN_001f9bf8_e3388(a, a, 1.0f);
-    FUN_001f9ad8_e3388(b, a, D_0013F5E0_e3388);
+    FUN_001f9ad8_e3388(b, a, &hero.unk290);
     FUN_001f9bf8_e3388(b, b, -1.0f);
     FUN_001f9ad8_e3388(c, b, a);
     q.r78 = FUN_001f44b8_e3388(0xB);
@@ -580,7 +578,7 @@ void FUN_L00_002e3388(s32 unused, s32 idx) {
     qcopy(d, D_L00_001E6E10_e3388[idx]);
     FUN_001f9a28_e3388(a, D_L00_00166DC0_e3388, d);
     FUN_001f9bf8_e3388(a, a, 1.0f);
-    FUN_001f9ad8_e3388(b, a, D_0013F5E0_e3388);
+    FUN_001f9ad8_e3388(b, a, &hero.unk290);
     FUN_001f9bf8_e3388(b, b, -1.0f);
     FUN_001f9ad8_e3388(c, b, a);
     s = FUN_002132a8_e3388(0.2f, 0.225f);
@@ -669,7 +667,7 @@ float FUN_001f9af0(void *);
 int FUN_001f96f8(int);
 void blend_moby_animation(unsigned char *, int, int, int) __asm__("FUN_00212f90");
 void FUN_L00_002e3ca8(unsigned char *p) {
-    char *g = D_0013F3D0;
+    char *g = (char *)&hero.motion.pos;
     if (FUN_001f9b48(g, p + 0x10) < 1.0f) {
         if (FUN_001f9af0(g + 0x80) > frame_time + frame_time && p[0x53] != 1) {
             blend_moby_animation(p, 1, 0, FUN_001f96f8(6));
@@ -682,10 +680,9 @@ void FUN_L00_002e3ca8(unsigned char *p) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e3d88.s", FUN_L00_002e3d88);
-extern u8 D_0013F3D0_002e4168[] __asm__("D_0013F3D0");
 /* Copies the vector at D_0013F3D0 into b; a is unused. */
 void FUN_L00_002e4168(int a, void *b) {
-    qcopy(b, D_0013F3D0_002e4168);
+    qcopy(b, &hero.motion.pos);
 }
 #include "eetypes.h"
 typedef struct {

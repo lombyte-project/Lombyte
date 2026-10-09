@@ -49,7 +49,6 @@ unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int s, int a, int col,
     }
     return m;
 }
-extern char D_0013F490_271450[] __asm__("D_0013F490");
 extern int FUN_001f9770_271450(void *) __asm__("FUN_001f9770");
 extern void FUN_L00_00267a08_271450(void *) __asm__("FUN_L00_00267a08");
 extern float FUN_001fa6c0_271450(int) __asm__("FUN_001fa6c0");
@@ -85,10 +84,10 @@ void FUN_L00_00271450(unsigned char *p) {
         v[2] = *(float *)(q + 8);
         *(int *)&v[3] = 0;
         FUN_001f9a10_271450(r, r, v);
-        t[0] = *(OvlQuad *)D_0013F490_271450;
+        t[0] = *(OvlQuad *)(&hero.motion.unk140);
         FUN_L00_001ff318_271450(m, t, *(float *)(p + 0x1C));
         FUN_L00_001ff290_271450(m, r, t);
-        FUN_001f9a68_271450(m, D_0013F490_271450 + 0x150, *(float *)(q + 0xC));
+        FUN_001f9a68_271450(m, &hero.unk290, *(float *)(q + 0xC));
         FUN_001f9a10_271450(v, v, m);
         FUN_001f9a68_271450(v, v, *(float *)(q + 0x18));
         *(float *)(p + 0x20) = v[0];
@@ -801,7 +800,7 @@ void FUN_L00_00267a08(void *);
 void FUN_L00_00273088(u8 *a) {
     u8 *q = a + 0x20;
     if (*(s32 *)(q + 0x10) == 1)
-        FUN_001f9a10(a + 0x10, D_0013F3D0, q);
+        FUN_001f9a10(a + 0x10, &hero.motion.pos, q);
     if (FUN_001f9770(a + 0xA))
         FUN_L00_00267a08(a);
 }
@@ -1052,7 +1051,7 @@ unsigned char *FUN_L00_002738e8(float size, float floor_z, float gravity, void *
     if (p != 0) {
         unsigned char *m = p + 0x20;
         qcopy(p + 0x10, pos);
-        if (p2738e8_distance(D_0013F3D0, pos) < 80.0f) {
+        if (p2738e8_distance(&hero.motion.pos, pos) < 80.0f) {
             p[9] = p2738e8_trunc(1.0f) + 0x30;
         } else {
             p[9] = p2738e8_trunc(1.0f) + 0x20;

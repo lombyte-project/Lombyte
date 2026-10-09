@@ -1083,7 +1083,6 @@ typedef struct {
 } __attribute__((aligned(16))) Vec4_29ab70;
 extern int D_L00_0015F5D8_29ab70 __asm__("D_L00_0015F5D8");
 extern int D_L00_0015F5C4_29ab70 __asm__("D_L00_0015F5C4");
-extern unsigned char D_001413F5_29ab70[] __asm__("D_001413F5");
 extern char D_L00_001CA4C0_29ab70[] __asm__("D_L00_001CA4C0");
 extern int D_L00_00161070_29ab70 __asm__("D_L00_00161070") __attribute__((sda));
 struct S16_29ab70 {
@@ -1118,7 +1117,7 @@ void FUN_L00_0029ab70(int a) {
     D_L00_0015F5D8_29ab70 = 1;
     D_L00_0015F5C4_29ab70 = 0;
     hero_set_state(0, 1);
-    D_001413F5_29ab70[0] = 0;
+    hero.unk20A5 = 0;
     f2330d0_29ab70();
     if (*(int *)(g + 0x40) == 0) {
         f1f9cf8_29ab70(&v, &D_L00_00161070_29ab70, *(char **)(g + 0x1C) + 0xC0);
@@ -1239,7 +1238,6 @@ void FUN_L00_0029ad08(void) {
 #endif
 extern int D_L00_0015F5D8;
 extern int D_L00_0015F5C4;
-extern unsigned char D_001413F5[];
 extern char D_L00_001CA4C0_u[] __asm__("D_L00_001CA4C0");
 extern int D_L00_00161100 __attribute__((sda));
 struct S16 {
@@ -1264,7 +1262,7 @@ void FUN_L00_0029af80(void) {
     D_L00_0015F5D8 = 1;
     D_L00_0015F5C4 = 0;
     hero_set_state(0, 1);
-    D_001413F5[0] = 0;
+    hero.unk20A5 = 0;
     FUN_L00_002330d0();
     g = D_L00_001CA4C0_u;
     FUN_001f9cf8(&v, &D_L00_00161100, *(char **)(g + 0x28) + 0xC0);

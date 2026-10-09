@@ -506,7 +506,6 @@ typedef struct {
     float head_yaw;
 } WD11b;
 
-extern char D_0013F3D0_b[] __asm__("D_0013F3D0");
 
 /* Guard head update: in its watching states it turns its body and head toward the hero. */
 void FUN_L11_002d27b0(WM11 *m) {
@@ -529,7 +528,7 @@ void FUN_L11_002d27b0(WM11 *m) {
     case 14:
     case 16:
         tracking = 1;
-        qcopy(scratch.target, D_0013F3D0_b);
+        qcopy(scratch.target, &hero.motion.pos);
         break;
     default:
         tracking = 0;
@@ -989,7 +988,7 @@ int FUN_L11_0030a480(struct Moby *moby) {
     char *current;
     if (moby->state != 1)
         return 0;
-    current = hero.ground_moby;
+    current = (char *)hero.ground_moby;
     if (current != (char *)moby || hero.air_frames.s)
         return 0;
     current[0x20] = 2;

@@ -257,7 +257,6 @@ extern int D_L02_0015F5CC_e50 __asm__("D_L02_0015F5CC");
 extern int D_001413D4_e50 __asm__("D_001413D4") __attribute__((section(".data")));
 extern int *D_L02_001B0AB0_e50[] __asm__("D_L02_001B0AB0");
 extern char D_L02_001673C0_e50[] __asm__("D_L02_001673C0");
-extern char D_0013F3D0_e50[] __asm__("D_0013F3D0");
 extern char D_L02_001FA8A0[];
 extern char D_L02_001FA8C0[];
 extern void FUN_001e93b0_e50(char *, short) __asm__("FUN_001e93b0");
@@ -404,7 +403,7 @@ void FUN_L02_002d3e50(struct Moby *moby) {
         }
         break;
     case 1:
-        FUN_001f9a28(&v0, D_0013F3D0_e50, &moby->pos);
+        FUN_001f9a28(&v0, &hero.motion.pos, &moby->pos);
         moby->state = 0x12;
         if (moby->prev_seq != 0) {
             blend_e50(moby, 0, 0, scale_ticks_e50(3));
@@ -747,10 +746,10 @@ void FUN_L02_002d3e50(struct Moby *moby) {
         break;
     case 12: {
         int in;
-        if (inside_e50(D_0013F3D0_e50, vars->unk26C)) {
+        if (inside_e50(&hero.motion.pos, vars->unk26C)) {
             in = 1;
         } else {
-            in = inside_e50(D_0013F3D0_e50, vars->unk270) != 0;
+            in = inside_e50(&hero.motion.pos, vars->unk270) != 0;
         }
         if (in) {
             struct Moby *dest = &D_L02_0015FFD8_e50[vars->unk28C];
@@ -1389,9 +1388,6 @@ extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float AbsoluteFloat_c(float input) __asm__("func_001F99C0");
-extern char D_001413D0[];
-extern char D_0013F5F0[];
-extern char D_0013F3D0[];
 
 void FUN_L02_002d7748(struct Moby *moby) {
     float position[4];
@@ -1424,7 +1420,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
         data->b58 = 0xF;
         data->b5A = 8;
         data->b29 = 0;
-        moby->spawn_frame = *(long *)(*(char **)(((char *)&D_001413D0)) + 0x38);
+        moby->spawn_frame = *(long *)(((char *)hero.moby) + 0x38);
         FUN_L01_0026d930(data->walk);
         step = D_0015ED6C * 4.0f;
         data->b28 = 2;
@@ -1569,8 +1565,8 @@ void FUN_L02_002d7748(struct Moby *moby) {
     case 10:
         triggered = 0;
         if (data->wake_volume >= 0) {
-            triggered = is_point_inside_clip_volume(((char *)&D_0013F5F0), data->wake_volume) != 0;
-        } else if (distance_xyz(((char *)&D_0013F3D0), D_L02_001600EC + data->post * 0x80 + 0x30) < data->wake_range) {
+            triggered = is_point_inside_clip_volume(&hero.ground_point, data->wake_volume) != 0;
+        } else if (distance_xyz(&hero.motion.pos, D_L02_001600EC + data->post * 0x80 + 0x30) < data->wake_range) {
             triggered = 1;
         }
         if (triggered) {
@@ -1795,7 +1791,7 @@ void FUN_L02_002d85b8(void *arg) {
         d->target = (char *)target[16];
     }
     if (d->target == 0) {
-        d->target = *(char **)D_001413D0;
+        d->target = ((char *)hero.moby);
     }
     FUN_L00_0025d538(moby, d->anim);
 }

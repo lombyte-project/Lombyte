@@ -644,7 +644,6 @@ void FUN_L11_00311be8(void *moby, void *a1, void *a2) {
 }
 /* Keeps the moby's current target, picking a new one when it is lost and restarting the timer. */
 
-extern unsigned char D_00140946[];
 extern int D_L11_00162160 __attribute__((sda));
 extern int D_L11_00162164 __attribute__((sda));
 extern float D_L11_001677D0[];
@@ -655,7 +654,7 @@ void FUN_L11_00311c80(void *self, char *moby) {
     float *src;
     unsigned char *t;
     void *r;
-    if (D_00140946[0] == 0) {
+    if (hero.ship_ammo == 0) {
         *(void **)(moby + 0x88) = 0;
     } else {
         t = *(unsigned char **)(moby + 0x88);

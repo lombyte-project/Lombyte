@@ -758,7 +758,6 @@ typedef struct {
     char pad1C[0x14];
 } Hit_2eedd8;
 
-extern char D_0013F5F8[];
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
@@ -793,7 +792,7 @@ void FUN_L01_002eda00(char *m) {
         if (gz < *(float *)(d + 0x18)) {
             *(float *)(m + 0x18) = *(float *)(m + 0x18) + (*(float *)(d + 0x18) - gz);
             *(int *)(d + 8) = 0;
-        } else if (*(float *)(m + 0x18) < *(float *)(D_0013F5F8) + *(float *)(d + 0x18)) {
+        } else if (*(float *)(m + 0x18) < hero.ground_point.f[2] + *(float *)(d + 0x18)) {
             *(int *)(d + 8) = 0;
         } else {
             *(float *)(d + 8) -= frame_time_sq * 10.8f;
@@ -1040,7 +1039,6 @@ extern float FUN_L00_00258110_w7(float *vel, float cur, float target, float k, f
 extern int FUN_001f96f8_w7(int) __asm__("FUN_001f96f8");
 extern void blend_moby_animation_w7(void *m, int a, int b, int c) __asm__("FUN_00212f90");
 extern float D_0015ED70_w7 __asm__("D_0015ED70");
-extern char D_001404A8_w7[] __asm__("D_001404A8");
 extern unsigned char D_0013D4C5_w7 __asm__("D_0013D4C5") __attribute__((section(".data")));
 
 void FUN_L01_002f2b68(unsigned char *m) {
@@ -1051,7 +1049,7 @@ void FUN_L01_002f2b68(unsigned char *m) {
     if (d != 0) {
         if (m[0x20] != 0) {
             if (D_0013D4C5_w7 != 0) {
-                if (*(int *)D_001404A8_w7 == 5) {
+                if (hero.items[2].item_id == 5) {
                     float s = D_0015ED70_w7;
                     *(float *)(m + 0x48) =
                         FUN_L00_00258110_w7((float *)(d + 4), *(float *)(m + 0x48), *(float *)d,

@@ -161,9 +161,7 @@ extern T_210ce8 D_L15_00178700_210ce8[] __asm__("D_L15_00178700");
 extern s32 D_0015ED84_210ce8 __asm__("D_0015ED84");
 extern s32 D_0013DF88_210ce8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_210ce8 __asm__("D_0015EEA8");
-extern u8 D_0013F3D0_210ce8[] __asm__("D_0013F3D0");
 extern f32 D_0015ED6C_210ce8 __asm__("D_0015ED6C");
-extern u8 D_0013F430_210ce8[] __asm__("D_0013F430");
 
 s32 FUN_001fa6d0_210ce8(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_00206c08_210ce8(void) __asm__("FUN_L00_00206c08");
@@ -238,7 +236,7 @@ s32 FUN_L15_00208e10(s32 arg) {
             flag = 1;
         }
     } else if (tbl->p20 != 0) {
-        FUN_001f9a28_210ce8(&v, D_0013F3D0_210ce8, tbl->p20 + 0x10);
+        FUN_001f9a28_210ce8(&v, &hero.motion.pos, tbl->p20 + 0x10);
     } else {
         v.f[0] = FUN_001f9dc8_210ce8(FUN_001fa580_210ce8(hero.motion.rot.f[2], 3.1415927f));
         v.f[1] = FUN_001f9de0_210ce8(FUN_001fa580_210ce8(hero.motion.rot.f[2], 3.1415927f));
@@ -320,8 +318,8 @@ s32 FUN_L15_00208e10(s32 arg) {
         FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 5.0f, D_0015ED6C_210ce8 * 2.4f);
         break;
     }
-    FUN_001f9a10_210ce8(D_0013F430_210ce8, D_0013F430_210ce8, &v);
-    FUN_001f9a10_210ce8(D_0013F430_210ce8 + 0x20, D_0013F430_210ce8 + 0x20, &v);
+    FUN_001f9a10_210ce8(&hero.motion.velocity, &hero.motion.velocity, &v);
+    FUN_001f9a10_210ce8(&hero.motion.unk100, &hero.motion.unk100, &v);
     return 1;
 }
 #include "eetypes.h"

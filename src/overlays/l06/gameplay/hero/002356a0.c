@@ -28,8 +28,6 @@ extern unsigned char D_0015EDB5;
 extern T2C_235E08 D_L06_0017C3A8[];
 extern char *FUN_L00_0020d460(int);
 extern char D_0013E533[];
-extern char D_0013F430[];
-extern char D_0014161B[];
 extern char D_00141848[];
 extern float D_L06_0017C570[][25];
 extern float FUN_001f9b48(void *, void *);
@@ -779,7 +777,7 @@ int hero_set_state(int a, int b) {
             p->unk2284 = 0x50;
         }
         {
-            char *v = ((char *)&D_0013F430);
+            char *v = (char *)&hero.motion.velocity;
             char *r;
             qcopy(v, v + 0x30);
             r = v - 0xE0;

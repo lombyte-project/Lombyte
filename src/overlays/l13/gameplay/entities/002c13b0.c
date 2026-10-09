@@ -476,7 +476,7 @@ void FUN_L13_002e1348(struct Moby *moby, char *d, float s) {
     float b;
     int i;
     b = s * 10.0f;
-    if (20.0f < distance_xyz(&moby->pos, D_0013F3D0)) {
+    if (20.0f < distance_xyz(&moby->pos, &hero.motion.pos)) {
         a = b = 0.0f;
     }
     func_0022ED80_s(0, 0, (int)moby);
@@ -959,7 +959,6 @@ int FUN_L13_002e9160(struct Moby *m, char *d, int idx, int aim) {
 }
 /* Picks the racer's direction along its path from where the hero is, eases its speed, then steps it; bit 1 of the result is set past a marked node. */
 extern char *D_L13_001B07B0_9408[] __asm__("D_L13_001B07B0");
-extern char D_0013F3D0_9408[] __asm__("D_0013F3D0");
 extern float D_0015ED60_9408 __asm__("D_0015ED60");
 extern float dist_9408(void *, void *) __asm__("FUN_001f9b48");
 extern int step_9408(char *, char *, int, int) __asm__("FUN_L13_002e9160");
@@ -979,13 +978,13 @@ int FUN_L13_002e9408(struct Moby *m, char *d, int idx, int aim) {
             n = 0;
         }
         qcopy(ahead, path + n * 16 + 0x10);
-        a = dist_9408(ahead, D_0013F3D0_9408);
+        a = dist_9408(ahead, &hero.motion.pos);
         k = *(short *)(d + 0x9C) - 1;
         if (k < 0) {
             k = *(int *)path - 1;
         }
         qcopy(behind, path + k * 16 + 0x10);
-        b = dist_9408(behind, D_0013F3D0_9408);
+        b = dist_9408(behind, &hero.motion.pos);
         if (a < b) {
             dir = -1;
         } else if (b < a) {
@@ -1003,7 +1002,7 @@ int FUN_L13_002e9408(struct Moby *m, char *d, int idx, int aim) {
                 *(short *)(d + 0x9E) = cur;
             }
         } else {
-            float dist = dist_9408(&m->pos, D_0013F3D0_9408);
+            float dist = dist_9408(&m->pos, &hero.motion.pos);
             float s = 1.0f;
             float sp;
             if (m->unkBC == 4) {

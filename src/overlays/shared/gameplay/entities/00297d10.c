@@ -644,7 +644,6 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
 extern float D_L06_00161CE0 __attribute__((sda));
-extern unsigned char D_001413F4[];
 extern unsigned char D_0014C050[];
 #define GB_FLAG (*(unsigned char *)0x15EDB3)
 extern void FUN_L00_001ff290(void *, void *, void *);
@@ -814,7 +813,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
             moby->f94 = moby->cls->f10;
             moby->state = 3;
         } else {
-            if (D_001413F4[0] == 0) {
+            if (hero.unk20A4 == 0) {
                 moby->flags |= 0x41;
                 d->f170->flags |= 0x41;
                 moby->flags &= 0xEFFF;
@@ -1868,7 +1867,6 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_00211250(void);
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
-extern char D_0013F3D0[];
 
 void FUN_L06_002f7930(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -1898,19 +1896,19 @@ void FUN_L06_002f7930(char *m) {
         }
     }
     for (i = 0; i < 32; i++) {
-        if (list[i] >= 0 && is_point_inside_clip_volume(((char *)&D_0013F3D0), list[i])) {
-            char *h = ((char *)&D_0013F3D0) - 0x80;
-            if (*(unsigned char *)(h + 0x20A4) != 0) {
+        if (list[i] >= 0 && is_point_inside_clip_volume(&hero.motion.pos, list[i])) {
+            struct Hero *h = &hero;
+            if (h->unk20A4 != 0) {
                 fade_to_black(scale_game_frames(10));
                 FUN_L00_00211250();
-            } else if (*(int *)(h + 0x2084) != 0x77) {
+            } else if (h->state.current != 0x77) {
                 hero_set_state(0x77, 1);
             }
         }
     }
     list2 = (int *)(d + 0x80);
     for (j = 0; j < 32; j++) {
-        if (list2[j] >= 0 && is_point_inside_clip_volume(((char *)&D_0013F3D0), list2[j])) {
+        if (list2[j] >= 0 && is_point_inside_clip_volume(&hero.motion.pos, list2[j])) {
             fade_to_black(scale_game_frames(10));
             FUN_L00_00211250();
         }
