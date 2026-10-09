@@ -221,7 +221,128 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
         *(int *)(state + 0x60) = 0;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d880.s", FUN_L01_0030d880);
+/* pvars of the hovering moby FUN_L01_0030d880 steers */
+struct HoverVars {
+    Vec4 goal;            /* 0x00: point it flies back to */
+    Vec4 vel;             /* 0x10 */
+    u8 pad20[0x10];
+    Vec4 unk30;           /* 0x30: point it measures from in state 6 */
+    u8 pad40[0x10];
+    s16 stuck;            /* 0x50: frames it has been blocked and nearly still */
+    u8 pad52[0xE];
+    struct Moby *target;  /* 0x60: set by FUN_L01_0030d5f0 */
+};
+
+/* steering constants */
+struct HoverTuning {
+    s32 unk0;             /* passed to FUN_L00_00258ad0 */
+    u8 pad4[0x10];
+    f32 yaw_speed;        /* 0x14: turn speed FUN_L00_00258278 keeps (D_L01_001DEB4C) */
+    u8 pad18[0x18];
+    f32 unk30;
+};
+
+extern struct HoverTuning D_L01_001DEB38;
+extern f32 D_L01_001DEB4C NOT_SDA;
+extern f32 D_0015ED60;
+extern f32 D_0015ED64;
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+extern f32 D_L01_001620C4 __attribute__((sda));
+extern f32 D_L01_001620C8 __attribute__((sda));
+extern f32 D_L01_001620CC __attribute__((sda));
+extern f32 D_L01_001620D0 __attribute__((sda));
+extern f32 D_L01_001620D4 __attribute__((sda));
+extern f32 D_L01_001620D8 __attribute__((sda));
+extern f32 D_L01_001620DC __attribute__((sda));
+extern void FUN_001f9a68(void *, void *, f32);
+extern void FUN_001f9c90(void *, void *, f32);
+extern f32 FUN_001f9af0(void *);
+extern f32 FUN_001f9dc8(f32);
+extern f32 FUN_001f9de0(f32);
+extern void FUN_L00_00258278(struct Moby *, f32 *, f32, f32, f32, f32);
+extern s32 FUN_L00_00258ad0(struct Moby *, Vec4 *, f32, f32, s32, s32);
+extern f32 FUN_L00_0025e310(f32);
+
+void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
+    Vec4 v;
+    f32 d;
+    f32 k;
+    f32 ang;
+    f32 len;
+    s32 hit;
+    s16 n;
+    struct HoverTuning *t;
+
+    FUN_001f9a28(&v, p, &m->pos);
+    if (m->state == 6) {
+        d = FUN_001f9b80(&m->pos, &p->unk30);
+    } else {
+        d = FUN_001f9b80(&m->pos, &hero.motion.pos);
+    }
+    FUN_001f9b80(&m->pos, p);
+    switch (m->unkBC) {
+    case 0:
+        ang = FUN_001f9e90(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
+        FUN_L00_00258278(m, &D_L01_001DEB4C, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 3.1415927f,
+                         D_0015ED6C * 11.519173f);
+        if (1.3f < d) {
+            m->unkBC = 2;
+        }
+        break;
+    case 2:
+        if (p->target == 0) {
+            ang = FUN_001f9e90(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
+            FUN_L00_00258278(m, &D_L01_001DEB4C, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 3.1415927f,
+                             D_0015ED6C * 11.519173f);
+        } else {
+            ang = FUN_001f9e90(p->target->pos.x - m->pos.x, p->target->pos.y - m->pos.y);
+            FUN_L00_00258278(m, &D_L01_001DEB4C, ang,
+                             D_L01_001620C4 * DEG_TO_RAD * D_0015ED70, D_L01_001620C8 * DEG_TO_RAD * D_0015ED70,
+                             D_L01_001620CC * DEG_TO_RAD * D_0015ED6C);
+        }
+        FUN_001f9a68(&v, &v, D_0015ED60 * 0.04f);
+        FUN_001f9a28(&v, &v, &p->vel);
+        if (1.3f < d) {
+            FUN_001f9a68(&v, &v, D_0015ED64 * 0.13f);
+        } else {
+            FUN_001f9a68(&v, &v, D_0015ED64 * 0.25f);
+        }
+        v.f[2] *= D_0015ED60 * -0.100000024f + 1.0f;
+        FUN_001f9a10(&p->vel, &p->vel, &v);
+        if (m->state == 6) {
+            FUN_001f9c90(&p->vel, &p->vel, D_0015ED6C * 2.7f);
+        }
+        t = &D_L01_001DEB38;
+        hit = FUN_L00_00258ad0(m, &p->vel, 1.0f, t->unk30, t->unk0, 0);
+        len = FUN_001f9af0(&p->vel);
+        if (hit == 0) {
+            p->stuck = 0;
+        } else if (len < 0.005f) {
+            n = ++p->stuck;
+            if (FUN_001f96f8(20) < n && m->unk31 == 0) {
+                qcopy(&m->pos, p);
+                p->stuck = 0;
+            }
+        }
+        if (d < 1.1f) {
+            k = 1.1f - d;
+            ang = FUN_001f9e90(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y);
+            p->vel.f[0] -= k * FUN_001f9dc8(ang) * (D_0015ED64 * 0.1f);
+            p->vel.f[1] -= k * FUN_001f9de0(ang) * (D_0015ED64 * 0.1f);
+        }
+        break;
+    default:
+        m->unkBC = 0;
+        if (1.3f < d) {
+            m->unkBC = 2;
+        }
+        break;
+    }
+    t = &D_L01_001DEB38;
+    m->rot.x += (FUN_L00_0025e310(t->yaw_speed * D_L01_001620D0) - m->rot.x) * D_L01_001620D8;
+    m->rot.y += (FUN_L00_0025e310(FUN_001f9af0(&p->vel) * D_L01_001620D4) - m->rot.y) * D_L01_001620DC;
+}
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F178), where it is exact; names translated to the US level program. */
@@ -230,7 +351,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d880.s", FUN_L01_0030d880);
 extern char D_L01_001620E0 __attribute__((sda));
 extern char D_L01_001620F0 __attribute__((sda));
 extern char D_L01_00162100 __attribute__((sda));
-extern float D_0015ED6C;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L01_0028a7a8(void *, void *, void *, void *, int);
