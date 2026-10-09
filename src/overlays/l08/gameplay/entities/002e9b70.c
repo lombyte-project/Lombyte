@@ -518,7 +518,136 @@ float FUN_L08_002f5d98(float x, char *arg) {
     return *(float *)(t - (-(i * 4))) * (1.0f - fr) + *(float *)(t - (-(j * 4))) * fr;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f5e58.s", FUN_L08_002f5e58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f70a0.s", FUN_L08_002f70a0);
+/* Pvars of a flickering point light. */
+typedef struct {
+    f32 size_x;          /* 0x0: the larger of size_x/size_y sets the draw scale */
+    f32 size_y;          /* 0x4 */
+    u16 pad8;
+    u16 flags;           /* 0xA: bit 2 = cast light; bit 1 set every update */
+    u8 padC[0x64];
+    f32 period_a;        /* 0x70: must be in (0, 8] */
+    f32 period_b;        /* 0x74: must be in (0, 8] */
+    u8 pad78[0x10];
+    f32 jitter;          /* 0x88: lower bound of the random flicker levels */
+    u8 pad8C[4];
+    f32 levels_a[8];     /* 0x90: flicker ring (FUN_L08_002f5d98) */
+    f32 levels_b[8];     /* 0xB0 */
+    u8 padD0[0x23];
+    u8 unkF3;
+    u8 padF4[4];
+    s32 unkF8;
+    u8 padFC[0x38];
+    u8 red;              /* 0x134 */
+    u8 green;            /* 0x135 */
+    u8 blue;             /* 0x136 */
+    u8 radius;           /* 0x137 */
+    u8 falloff;          /* 0x138 */
+    u8 pad139[2];
+    s8 light;            /* 0x13B: point light handle (-1: none) */
+    u8 pad13C[4];
+    Vec4 light_pos;      /* 0x140 */
+    f32 fade_range;      /* 0x150: distance over which the light fades out */
+    f32 intensity;       /* 0x154 */
+} FlickerLightVars;
+
+/* A point light slot, 0x20 bytes apart. */
+typedef struct {
+    f32 red;
+    f32 green;
+    f32 blue;
+    u8 padC[0x14];
+} PointLight;
+
+extern PointLight D_L08_00180AC0[];
+extern char D_L08_001FC220[];
+extern char D_L08_001FC250[];
+extern char D_L08_001FC2A0[];
+extern char D_L08_001FC2D0[];
+extern s32 DebugPrint();
+extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern void FUN_L00_0023e838(int);
+void FUN_L08_002f5e58(void);
+
+void FUN_L08_002f70a0(struct Moby *m) {
+    FlickerLightVars *d;
+    Vec4 pos;
+    f32 view, dist, fade;
+    s32 hidden;
+    PointLight *l;
+    Vec4f *at;
+    int i;
+
+    if (m == NULL)
+        return;
+    d = (FlickerLightVars *)m->pvars;
+    if (d == NULL)
+        return;
+    hidden = 0;
+    at = &m->pos;
+    if (m->state == 0) {
+        d->light = -1;
+        d->unkF8 = d->unkF3;
+        qcopy(&d->light_pos, at);
+        if (d->period_a == 0.0f) {
+            DebugPrint(D_L08_001FC220);
+            d->period_a = 1.0f;
+        } else if (8.0f < d->period_b) {
+            DebugPrint(D_L08_001FC250, d->period_b);
+        }
+        if (d->period_b == 0.0f) {
+            DebugPrint(D_L08_001FC2A0);
+            d->period_b = 1.0f;
+        } else if (8.0f < d->period_a) {
+            DebugPrint(D_L08_001FC2D0, d->period_a);
+        }
+        for (i = 0; i < 8; i++) {
+            d->levels_a[i] = random_float_between(d->jitter, 1.0f);
+            d->levels_b[i] = random_float_between(d->jitter, 1.0f);
+        }
+        m->state = 1;
+    }
+    m->scale = m->pclass->scale * (d->size_x > d->size_y ? d->size_x : d->size_y) * 0.25f;
+    view = ConvertIntegerToFloat(m->unk32);
+    dist = FUN_001f9b48(at, D_L08_001675C0);
+    fade = view - d->fade_range;
+    if (fade < 0.0f)
+        fade = 0.0f;
+    if (view < dist) {
+        d->intensity = 0.0f;
+        hidden = 1;
+    } else {
+        if (fade < dist) {
+            dist -= fade;
+            dist /= d->fade_range;
+            fade = 1.0f - dist;
+        } else
+            fade = 1.0f;
+        d->intensity = fade;
+    }
+    pos.q = *(u128 *)at;
+    pos.f[3] = ConvertIntegerToFloat(d->radius);
+    if ((m->unk31 != 0 || FUN_001fa728((char *)&pos, 255.0f) != -1) && !hidden) {
+        enqueue_callback_list_1(FUN_L08_002f5e58, m);
+        if (d->flags & 4) {
+            if (d->light == -1) {
+                d->light = FUN_L00_0023e738(d->light_pos.f, (f32)d->radius,
+                                            ConvertIntegerToFloat(d->falloff) / 100.0f,
+                                            d->intensity * ConvertIntegerToFloat(d->red) / 100.0f,
+                                            d->intensity * ConvertIntegerToFloat(d->green) / 100.0f,
+                                            d->intensity * ConvertIntegerToFloat(d->blue) / 100.0f);
+            } else {
+                l = &D_L08_00180AC0[d->light];
+                l->red = d->intensity * ConvertIntegerToFloat(d->red) / 100.0f;
+                l->green = d->intensity * ConvertIntegerToFloat(d->green) / 100.0f;
+                l->blue = d->intensity * ConvertIntegerToFloat(d->blue) / 100.0f;
+            }
+        }
+    } else if (d->light != -1) {
+        FUN_L00_0023e838(d->light);
+        d->light = -1;
+    }
+    d->flags |= 2;
+}
 
 extern int D_L08_0015F5C4;
 
