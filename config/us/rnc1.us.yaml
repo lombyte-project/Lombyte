@@ -1195,7 +1195,7 @@ segments:
           - [0xfc870, c, rendering/framebuffer/draw_framebuffer_rect]
           - [0xfca30, textbin, text_gap_001fbab0_before_fun_001fbab8]
           - [0xfca38, c, textbin/runtime/memory/mode_freeze_init]
-          - [0xfcbd0, c, assembly/textbin/rendering/draw_dialog_text]
+          - [0xfcbd0, c, rendering/draw_dialog_text]
           - [0xfdda4, textbin, text_gap_001fce24_before_fun_001fce28]
           - [0xfdda8, c, assembly/textbin/runtime/memory/update_mode_freeze]
           - [0xfe660, c, runtime/memory/calculate_ring_buffer_bounds]
