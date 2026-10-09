@@ -932,7 +932,43 @@ void FUN_L05_00316110(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316258.s", FUN_L05_00316258);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003166a0.s", FUN_L05_003166a0);
+#else
+void FUN_L05_003166a0(struct Moby *moby) {
+    int *data = (int *)moby->pvars;
+
+    switch (moby->state) {
+    case 0:
+        if (data[0] != 0)
+            moby->flags |= 0x8000;
+        moby->state = 1;
+        *(float *)&data[3] = moby->rot.z;
+        if (data[0] != 0)
+            moby->rot.z = fast_subtract_rotations(moby->rot.z, 1.5707964f);
+        else
+            moby->rot.z = fast_add_rotations(moby->rot.z, 1.5707964f);
+        /* fall through */
+    case 1:
+        if (((unsigned char *)*(int *)&D_L05_0015FFD8_d)[data[2] * 256 + 0xBC] != 0) {
+            func_0022ED80_i(0, 0, moby);
+            moby->state = 2;
+        }
+        break;
+    case 2: {
+        float target;
+        if (data[0] != 0)
+            target = fast_subtract_rotations(*(float *)&data[3], 0.6981317f);
+        else
+            target = fast_add_rotations(*(float *)&data[3], 0.6981317f);
+        FUN_L00_0025be00(&moby->rot.z, (float *)&data[1], target,
+                          D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f,
+                          D_0015ED6C * 12.566371f);
+        break;
+    }
+    }
+}
+#endif
 #include "sda.h"
 
 /* Applies breast growth (D_L05_00161ED0) and big-head manipulators to
