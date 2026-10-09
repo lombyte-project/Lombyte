@@ -274,4 +274,4 @@ extern __typeof__(render_level_effects_and_screen_sprites) func_002196B8
 
 #endif /* NON_MATCHING */
 
-s32 panel_slot_enabled[14] DATA_AT(001CE2C0) = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+s32 panel_slot_enabled[14] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};

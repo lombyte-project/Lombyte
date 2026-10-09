@@ -255,4 +255,4 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
 }
 #endif /* NON_MATCHING */
 
-PreviewAnimationRequest active_preview_animation DATA_AT(001D6080) = {0};
+PreviewAnimationRequest active_preview_animation = {0};

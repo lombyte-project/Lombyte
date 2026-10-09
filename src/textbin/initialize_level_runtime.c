@@ -56,7 +56,6 @@ typedef struct {
     s32 size;
 } Chunk;
 
-
 typedef struct {
     u8 pad0[4];
     s32 unk4;
@@ -72,7 +71,6 @@ typedef struct {
     s32 unk5C;
     s32 chunks[70];
 } SceneInfo;
-
 
 extern f32 D_0015F43C;
 extern s32 D_001413D0[];
@@ -304,4 +302,4 @@ void initialize_level_runtime(void) {
 
 extern __typeof__(initialize_level_runtime) func_00230F60 __attribute__((alias("FUN_00230f60")));
 
-char resident_indexed_textures[4096] DATA_AT(001CAAC0) = {0};
+char resident_indexed_textures[4096] = {0};

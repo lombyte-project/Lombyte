@@ -1,6 +1,5 @@
 #include "types.h"
 #include "asm.h"
-#include "sda.h"
 #include "rnc/rendering/object_render_class.h"
 
 #ifndef NON_MATCHING
@@ -141,4 +140,4 @@ extern __typeof__(register_object_render_class) func_00203730
 
 #endif /* NON_MATCHING */
 
-s16 object_render_class_ids[128] DATA_AT(001E1900) = {0};
+s16 object_render_class_ids[128] = {0};

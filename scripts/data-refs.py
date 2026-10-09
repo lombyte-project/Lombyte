@@ -34,6 +34,7 @@ from __future__ import annotations
 import argparse
 import bisect
 import json
+import os
 import re
 import shutil
 import struct
@@ -520,7 +521,7 @@ def type_size(kind: str) -> int:
     return size * count
 
 
-# —— Data definitions (DATA_AT) ——
+# —— Data definitions ——
 
 SCALARS = {"u8": "<B", "s8": "<b", "char": "<b", "u16": "<H", "s16": "<h", "u32": "<I",
            "s32": "<i", "int": "<i", "u64": "<Q", "s64": "<q", "f32": "<f", "float": "<f",
@@ -601,12 +602,9 @@ def c_initializer(members: list, size: int, raw: bytes, symbols: dict[int, str],
     return "{" + ", ".join(parts) + "}"
 
 
-def emit_data(addr: int, elf: Path, sections: list, into: Path | None = None) -> Path:
-    """Append the definition of the declared object at ``addr`` to ``into``.
-
-    The default is src/data/<topic>.c, the topic being the header's directory
-    under include/rnc/ (data shared by several files); pass the user's own
-    file when one function reads it."""
+def emit_data(addr: int, elf: Path, sections: list, into: Path) -> Path:
+    """Append the definition of the declared object at ``addr`` to ``into``,
+    the C file of the only unit that reads it (listed in DATA_OVERLAYS)."""
     clang = shutil.which("clang")
     if clang is None:
         raise SystemExit("--emit needs clang to read the struct layout")
@@ -673,16 +671,20 @@ def emit_data(addr: int, elf: Path, sections: list, into: Path | None = None) ->
         return "{" + ", ".join(rows) + "}"
 
     body = "{0}" if not any(raw) else nest(raw, counts)
-    topic = include.split("/")[1] if include.startswith("rnc/") else "runtime"
-    out = into or ROOT / "src" / "data" / f"{topic}.c"
+    out = into
     dims = "".join(f"[{n}]" for n in counts)
-    text = out.read_text() if out.exists() else '#include "types.h"\n'
-    if f"DATA_AT({addr:08X})" in text:
-        raise SystemExit(f"{shown(out)} already defines 0x{addr:08X}")
+    text = out.read_text()
+    if re.search(rf"\b{name}\b[^;]*=", text):
+        raise SystemExit(f"{shown(out)} already defines {name}")
     lines = text.rstrip("\n").splitlines()
     last = max(i for i, line in enumerate(lines) if line.startswith("#include"))
-    lines[last + 1:last + 1] = [line for line in ('#include "sda.h"', f'#include "{include}"') if line not in lines]
-    out.write_text("\n".join(lines) + f"\n\n{elem} {name}{dims} DATA_AT({addr:08X}) = {body};\n")
+    if f'#include "{include}"' not in lines:
+        lines.insert(last + 1, f'#include "{include}"')
+    small = " NOT_SDA" if len(raw) <= 8 else ""
+    out.write_text("\n".join(lines) + f"\n\n{elem} {name}{dims}{small} = {body};\n")
+    unit = os.path.relpath(out.resolve().with_suffix(""), ROOT / "src")
+    print(f'add to DATA_OVERLAYS in configure.py: "{unit}": '
+          f"(0x{addr:X}, 0x{addr - 0xFF080:X})")
     return out
 
 
@@ -856,12 +858,14 @@ def main(argv=None) -> int:
                              "name, type and note already in it are kept")
     parser.add_argument("--out", type=Path, default=None, help="output directory")
     parser.add_argument("--emit", nargs="+", metavar="ADDR",
-                        help="define the declared objects at these addresses (default: src/data/<topic>.c)")
+                        help="define the declared objects at these addresses (with --into)")
     parser.add_argument("--into", type=Path, metavar="FILE",
-                        help="with --emit: the C file to append to (the only user's file)")
+                        help="with --emit: the C file of the only unit that reads them")
     args = parser.parse_args(argv)
 
     if args.emit:
+        if args.into is None:
+            parser.error("--emit needs --into FILE")
         _code, data = read_sections(args.elf)
         for addr in args.emit:
             print(f"wrote {shown(emit_data(int(addr, 16), args.elf, data, args.into))}")

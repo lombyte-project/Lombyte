@@ -165,4 +165,4 @@ extern __typeof__(build_resident_indexed_texture_warp_meshes) func_0022E420
 
 #endif /* NON_MATCHING */
 
-f32 warp_texture_coordinates[4][2] DATA_AT(001D9A10) = {{0, 0.5f}, {1.0f, 0.5f}, {0, 0.5f}, {1.0f, 0.5f}};
+f32 warp_texture_coordinates[4][2] = {{0, 0.5f}, {1.0f, 0.5f}, {0, 0.5f}, {1.0f, 0.5f}};

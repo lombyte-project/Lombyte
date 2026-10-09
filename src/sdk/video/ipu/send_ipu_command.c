@@ -1,6 +1,5 @@
 #include "types.h"
 #include "rnc/sdk/ipu_command_table.h"
-#include "sda.h"
 
 typedef struct IpuCommandState {
     u8 reserved[0x818];
@@ -19,4 +18,4 @@ u32 SendIpuCommand(IpuCommandState *state, u32 command) {
     return result;
 }
 
-u32 IpuCommandTable[16] DATA_AT(00132E70) = {1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 2, 0, 2, 0, 2, 3};
+u32 IpuCommandTable[16] = {1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 2, 0, 2, 0, 2, 3};

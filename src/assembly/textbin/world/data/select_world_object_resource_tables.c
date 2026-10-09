@@ -128,12 +128,6 @@ extern void func_00204A40(s32 class_id, s32 buffer_index) __attribute__((alias("
 
 #endif /* NON_MATCHING */
 
-u64 gold_weapon_texture_state[3] DATA_AT(0019E6F0) = {0};
+char class_material_maps[24][16] = {0};
 
-s32 class_resource_ids[24] DATA_AT(001CBAC0) = {0};
-
-s32 compressed_class_resources[24] DATA_AT(001CBB20) = {0};
-
-char class_material_maps[24][16] DATA_AT(001CBBE0) = {0};
-
-s16 class_runtime_indices[24][16] DATA_AT(001CBD60) = {0};
+s16 class_runtime_indices[24][16] = {0};

@@ -20,6 +20,6 @@ void SupplementCrt0(void) {
     SecondSemaphore = second;
 }
 
-s32 FirstSemaphore DATA_AT(00130320) = {0};
+s32 FirstSemaphore NOT_SDA = {0};
 
-s32 SecondSemaphore DATA_AT(00130324) = {0};
+s32 SecondSemaphore NOT_SDA = {0};

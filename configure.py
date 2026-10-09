@@ -425,26 +425,35 @@ SDATA_OVERLAYS = {
     "rendering/vu1_chain": (0x160EE0, 0x61E60),
 }
 
-# Typed data with no proven owning unit: src/data/<section>/<ADDR>_<name>.c,
-# placed at its retail address like the overlays above (move it into the
-# owning unit once a reference proves the owner).
-_DATA_AT_RE = re.compile(r"\bDATA_AT\(([0-9A-F]{8})\)")
-
-def data_objects() -> list[tuple[str, int]]:
-    """(unit, retail VMA) of each object a C file pins with DATA_AT()."""
-    root = ROOT / "src"
-    objects = []
-    for path in sorted(root.rglob("*.c")):
-        text = path.read_text(errors="replace")
-        if "DATA_AT(" not in text:
-            continue
-        unit = path.relative_to(root).with_suffix("").as_posix()
-        objects += [(unit, int(addr, 16)) for addr in _DATA_AT_RE.findall(text)]
-    return objects
-
-def data_units() -> list[str]:
-    """Files under src/data/: data only, so they need their own build edge."""
-    return sorted({unit for unit, _ in data_objects() if unit.startswith("data/")})
+# The same for a unit's `.data`: data only that unit reads, defined in it.
+DATA_OVERLAYS = {
+    "sdk/library/supplement_crt0": (0x130320, 0x312A0),
+    "runtime/data/get_core_data_table": (0x132D40, 0x33CC0),
+    "sdk/video/ipu/send_ipu_command": (0x132E70, 0x33DF0),
+    "sdk/debug/sce_scf_get_language": (0x1330D4, 0x34054),
+    "assembly/textbin/video/display/set_pal_mode": (0x13D100, 0x3E080),
+    "rendering/texture/append_palette_transfer_packet": (0x151B60, 0x52AE0),
+    "textbin/render_queued_rotated_sprites": (0x189300, 0x8A280),
+    "gameplay/camera/backup_current_cam": (0x1893D0, 0x8A350),
+    "textbin/append_billboard_batch": (0x18ED00, 0x8FC80),
+    "textbin/passes_projected_region_callback_0": (0x1A03B0, 0xA1330),
+    "textbin/initialize_level_runtime": (0x1CAAC0, 0xCBA40),
+    "assembly/textbin/world/data/select_world_object_resource_tables": (0x1CBBE0, 0xCCB60),
+    "assembly/textbin/fun_002196b8": (0x1CE2C0, 0xCF240),
+    "textbin/gameplay/gadgets/load_hand_gadget": (0x1D52E8, 0xD6268),
+    "assembly/textbin/fun_00225e70": (0x1D6080, 0xD7000),
+    "assembly/textbin/fun_00203b08": (0x1D8030, 0xD8FB0),
+    "gameplay/fun_0022e1b0": (0x1D9890, 0xDA810),
+    "assembly/textbin/fun_0022e420": (0x1D9A10, 0xDA990),
+    "assembly/textbin/fun_001fd748": (0x1DDE28, 0xDEDA8),
+    "assembly/textbin/fun_00203730": (0x1E1900, 0xE2880),
+    "assembly/textbin/fun_00238310": (0x1E6018, 0xE6F98),
+    "assembly/textbin/fun_00239780": (0x1E6218, 0xE7198),
+    "textbin/render_vendor_capture_texture_overlays_pass": (0x1E6620, 0xE75A0),
+    "textbin/rebuild_configured_text_label_list": (0x1E8728, 0xE96A8),
+    "textbin/fun_0021fdc8": (0x1E87D0, 0xE9750),
+    "textbin/video/player/init_all": (0x1E8AF0, 0xE9A70),
+}
 
 # —— Code ——
 
@@ -1333,11 +1342,6 @@ def build_stuff(
             print(f"ERROR: Unsupported build segment type {seg.type}")
             sys.exit(1)
 
-    for unit in data_units():
-        # Data only: no code, so the plain compiler route is enough.
-        build(Path("build/src") / f"{unit}.c.o", [Path("..", "..", "src", f"{unit}.c")],
-              "sdk-compiler")
-
     fallback_path = config_dir / "oracle-fallback-units.json"
     alias_path = config_dir / "oracle-aliases.txt"
     alias_entries: set[tuple[str, str]] = set()
@@ -1776,13 +1780,15 @@ def apply_retail_link_layout(config: dict[str, Any], linkerscript_path: Path):
                     f"        build/src/{unit}.c.o(.sdata);\n"
                     "    } :data_alt"
                 )
-    for unit, vram in data_objects():
-        rodata_overlay_sections.append(
-            f"    data.{vram:08X} 0x{vram:X} : AT(0x{vram - 0xFF080:X}) SUBALIGN(4)\n"
-            "    {\n"
-            f"        build/src/{unit}.c.o(.data.{vram:08X});\n"
-            "    } :data_alt"
-        )
+    for unit in c_units:
+        for suffix, (vram, at) in DATA_OVERLAYS.items():
+            if unit.endswith(suffix):
+                rodata_overlay_sections.append(
+                    f"    {suffix.replace('/', '.')}.data 0x{vram:X} : AT(0x{at:X}) SUBALIGN(4)\n"
+                    "    {\n"
+                    f"        build/src/{unit}.c.o(.data);\n"
+                    "    } :data_alt"
+                )
     rodata_overlay = (
         "\n\n".join(rodata_overlay_sections) if rodata_overlay_sections else ""
     )

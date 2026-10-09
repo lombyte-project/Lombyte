@@ -5,7 +5,6 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/gadgets/hand_gadget.h"
 #include "asm.h"
-#include "sda.h"
 
 #include "types.h"
 
@@ -315,7 +314,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     return 0;
 }
 
-HandGadgetAnimation gadget_animations[37] DATA_AT(001D52E8) = {
+HandGadgetAnimation gadget_animations[37] = {
     {0, 0, 7, 1, 1, 7, -1, 0, -1, 0, -1, 0},
     {0, 0, 7, 1, 1, 7, -1, 0, -1, 0, -1, 0},
     {0, 0, 7, 1, 1, 7, -1, 0, -1, 0, -1, 0},

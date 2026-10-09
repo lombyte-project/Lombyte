@@ -101,6 +101,5 @@ extern __typeof__(set_pal_mode) func_001F34E8 __attribute__((alias("FUN_001f34e8
 
 #endif /* NON_MATCHING */
 
-u64 depth_buffer_register DATA_AT(0013D100) = 0x31000000;
+u64 depth_buffer_register NOT_SDA = 0x31000000;
 
-u64 masked_depth_buffer_register DATA_AT(0013D170) = 0x131000000;

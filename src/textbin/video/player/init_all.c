@@ -1,6 +1,5 @@
 #include "types.h"
 #include "asm.h"
-#include "sda.h"
 
 #include "types.h"
 
@@ -98,4 +97,4 @@ s32 init_all(s32 stream_source, s32 source_mode, s32 callback_context) {
 }
 extern __typeof__(init_all) func_0023A7C0 __attribute__((alias("FUN_0023a7c0")));
 
-u8 movie_open_error_text[18] DATA_AT(001E8AF0) = "Can't Open movie\n";
+u8 movie_open_error_text[18] = "Can't Open movie\n";

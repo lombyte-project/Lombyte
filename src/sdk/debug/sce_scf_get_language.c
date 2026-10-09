@@ -23,4 +23,4 @@ int sceScfGetLanguage(void) {
     return language;
 }
 
-u8 ScfLanguage DATA_AT(001330D4) = {0};
+u8 ScfLanguage NOT_SDA = {0};

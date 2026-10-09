@@ -8,8 +8,6 @@ typedef struct {
 } LanguageResourceOffsets;
 
 extern LanguageResourceOffsets menu_language_resource_offsets __asm__("D_001E87D0");
-#include "sda.h"
-
 
 extern u8 skill_point_completed[] __asm__("D_0013D408");
 extern s16 cd_read_active[] __asm__("D_001516D8");
@@ -304,4 +302,4 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
 
 extern s32 func_0021FDC8(struct MenuScreen *stream) __attribute__((alias("FUN_0021fdc8")));
 
-LanguageResourceOffsets menu_language_resource_offsets DATA_AT(001E87D0) = {{0, 0, 0xc, 0x24, 0x30, 0x18}};
+LanguageResourceOffsets menu_language_resource_offsets = {{0, 0, 0xc, 0x24, 0x30, 0x18}};

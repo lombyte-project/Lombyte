@@ -1,7 +1,6 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/fs_aa_packets.h"
-#include "sda.h"
 void append_palette_transfer_packet(void) __asm__("FUN_001fb6e0");
 
 void append_palette_transfer_packet(void) {
@@ -15,4 +14,4 @@ void append_palette_transfer_packet(void) {
 extern __typeof__(append_palette_transfer_packet) func_001FB6E0
     __attribute__((alias("FUN_001fb6e0")));
 
-u64 fs_aa_transfer_packet[82] DATA_AT(00151B60) = {0};
+u64 fs_aa_transfer_packet[82] = {0};

@@ -1,6 +1,5 @@
 #include "types.h"
 #include "asm.h"
-#include "sda.h"
 #include "rnc/ui/vendor/vendor_capture.h"
 
 #ifndef NON_MATCHING
@@ -113,7 +112,7 @@ extern __typeof__(render_capture_scrolling_text) func_00238310
 
 #endif /* NON_MATCHING */
 
-volatile s32 capture_glyph_coordinates[64] DATA_AT(001E6018) = {
+volatile s32 capture_glyph_coordinates[64] = {
     -1, 0x2400120, -1, -1, -1, -1, -1, 0x2d00000,
     -1, -1, -1, -1, 0x24001b0, 0x24002d0, 0x2400240, -1,
     -1, -1, -1, -1, -1, -1, -1, -1,
@@ -124,7 +123,7 @@ volatile s32 capture_glyph_coordinates[64] DATA_AT(001E6018) = {
     0x1b002d0, 0x2400000, 0x2400090, -1, -1, -1, -1, -1,
 };
 
-s32 capture_glyph_advances[64] DATA_AT(001E6118) = {
+s32 capture_glyph_advances[64] = {
     9, 5, 0xa, 0xa, 0xa, 0xa, 0xa, 5,
     0xa, 0xa, 0xa, 0xa, 5, 9, 5, 0xa,
     0xa, 0xa, 0xa, 0xa, 0xa, 0xa, 0xa, 0xa,
