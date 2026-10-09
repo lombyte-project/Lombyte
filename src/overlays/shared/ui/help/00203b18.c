@@ -729,8 +729,6 @@ void FUN_L00_002079e8(void) {
                          frame_time * 1.5707963705062866f, frame_time * 2.094395160675049f);
     }
 }
-extern unsigned char D_0013F350_207a58[] __asm__("D_0013F350");
-extern unsigned char D_0013F420_207a58[] __asm__("D_0013F420");
 extern float D_L00_001797D8_207a58[] __asm__("D_L00_001797D8") __attribute__((section(".data")));
 void FUN_001f9a68_207a58(void *, void *, float) __asm__("FUN_001f9a68");
 void FUN_001f9a28_207a58(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -738,36 +736,36 @@ void FUN_001f9a10_207a58(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00233b20_207a58(void *, void *, float) __asm__("FUN_L00_00233b20");
 
 void FUN_L00_00207a58(void) {
-    unsigned char *G = D_0013F350_207a58;
+    struct Hero *G = &hero;
     OvlQuad t[1];
     float s, f;
     int i, j;
-    unsigned char *o, *e, *H;
-    if (*(short *)(G + 0x22DC)) {
-        s = D_L00_001797D8_207a58[++*(short *)(G + 0x22DC)];
+    unsigned char *o;
+    if (G->unk22DC) {
+        s = D_L00_001797D8_207a58[++G->unk22DC];
         if (s == -1.0f) {
-            *(short *)(G + 0x22DC) = 0;
+            G->unk22DC = 0;
             return;
         }
-        FUN_001f9a68_207a58(*(unsigned char **)(G + 0x2080) + 0xC0,
-                            *(unsigned char **)(G + 0x2080) + 0xC0, s);
-        FUN_001f9a68_207a58(*(unsigned char **)(G + 0x2080) + 0xD0,
-                            *(unsigned char **)(G + 0x2080) + 0xD0, s);
-        if (G[0x20A4] == 0) {
+        FUN_001f9a68_207a58(((unsigned char *)G->moby) + 0xC0,
+                            ((unsigned char *)G->moby) + 0xC0, s);
+        FUN_001f9a68_207a58(((unsigned char *)G->moby) + 0xD0,
+                            ((unsigned char *)G->moby) + 0xD0, s);
+        if (G->unk20A4 == 0) {
 
             for (i = 0; i < 7; i++) {
                 for (j = 0; j < 3; j++) {
-                    e = D_0013F350_207a58 + i * 0x50;
-                    o = *(unsigned char **)(e + 0x1090);
+                    struct Hero *h = &hero;
+                    o = *(unsigned char **)&h->items[i].moby;
                     if (j == 1)
-                        o = *(unsigned char **)(e + 0x1094);
+                        o = *(unsigned char **)&h->items[i].moby2;
                     f = s;
-                    if (i == 0 && D_0013F350_207a58[0x20A4] == 0 && 1.0f < s)
+                    if (i == 0 && h->unk20A4 == 0 && 1.0f < s)
                         f = 1.0f;
                     if (o) {
                         FUN_001f9a68_207a58(o + 0xC0, o + 0xC0, f);
                         FUN_001f9a68_207a58(o + 0xD0, o + 0xD0, f);
-                        FUN_001f9a28_207a58(t, o + 0x10, D_0013F420_207a58);
+                        FUN_001f9a28_207a58(t, o + 0x10, &hero.motion.unkD0);
                         FUN_L00_00233b20_207a58(t, t, 0.0f);
                         FUN_001f9a28_207a58(o + 0x10, o + 0x10, t);
                         FUN_001f9a68_207a58(t, t, s);
