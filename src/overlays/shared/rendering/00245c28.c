@@ -4,4 +4,111 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00245c28.s", FUN_L00_00245c28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002464a8.s", FUN_L00_002464a8);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002468b8.s", FUN_L00_002468b8);
+#else
+#include "rnc/storage/disc_table.h"
+
+typedef struct {
+    u8 pad0[0x24];
+    s32 active;
+    u8 pad28[0x1fc];
+    s32 archive_index;
+    s32 load_state;
+    s32 file_handle;
+    s32 loaded;
+    s32 transfer_bytes;
+    u8 pad238[4];
+    s32 old_base;
+    u8 pad240[0x38];
+    s32 start;
+    s32 buffer;
+    s32 old_end;
+    s32 zero_284;
+    s32 zero_288;
+    s32 slot_28c;
+    s32 level_slot;
+    s32 slot_294;
+    s32 slot_298;
+    s32 slot_29c;
+    s32 slot_2a0;
+    u8 pad2a4[4];
+    s32 last_transfer_bytes;
+} RenderArchiveState;
+
+extern RenderArchiveState D_L00_001841F0 __asm__("D_L00_001841F0");
+typedef struct {
+    u8 pad[0xfc];
+    s32 first_base;
+    s32 second_base;
+} ArchiveMemory;
+#define archive_memory (*(ArchiveMemory *)0x001B9CF0)
+extern u8 D_0013D4E1;
+extern s32 current_level_index __asm__("D_0015ED84");
+extern struct DiscFile D_00138438[];
+
+void FUN_001e93e8(void);
+void FUN_0020bf90(s32, s32);
+void FUN_00216788(s32, s32, s32);
+void FUN_002168a8(s32);
+void FUN_L00_00293d38(s32, s32, s32, s32);
+void FUN_00232f20(s32, s32, s32, s32, s32);
+
+void FUN_L00_002468b8(void) {
+    s32 first_base;
+    s32 second_base;
+    s32 buffer;
+    s32 bytes;
+    s32 file_handle;
+    RenderArchiveState *state = &D_L00_001841F0;
+
+    FUN_001e93e8();
+    FUN_0020bf90(state->archive_index, 1);
+    first_base = archive_memory.first_base;
+    second_base = archive_memory.second_base;
+    buffer = first_base + 0x9a800;
+    file_handle = state->file_handle;
+    archive_memory.second_base = second_base + 0x48000;
+    archive_memory.first_base = buffer + 0x48000;
+    state->old_base = first_base;
+    state->start = 0;
+    state->buffer = buffer;
+    state->old_end = second_base;
+    state->zero_284 = 0;
+    state->zero_288 = 0;
+    state->slot_28c = -1;
+    state->level_slot = -1;
+    state->slot_294 = -1;
+    state->slot_298 = -1;
+    state->slot_29c = -1;
+    state->slot_2a0 = -1;
+    if (file_handle != -1) {
+        if (state->loaded == 0 && D_0013D4E1 != 0) {
+            bytes = D_00138438[state->archive_index].size << 7;
+            FUN_00216788(buffer, D_00138438[state->archive_index].sector,
+                         D_00138438[state->archive_index].size);
+            FUN_002168a8(1);
+            state->loaded = 1;
+            state->transfer_bytes = bytes;
+            FUN_L00_00293d38(state->buffer, state->file_handle, 0, bytes);
+            state->level_slot = current_level_index + 0x100;
+            state->last_transfer_bytes = bytes;
+            state->active = 1;
+            state->load_state = -2;
+            return;
+        }
+        if (state->file_handle != -1) {
+            state->last_transfer_bytes = state->transfer_bytes;
+            FUN_00232f20(state->buffer, state->file_handle, 0, state->transfer_bytes, 0);
+            state->level_slot = current_level_index;
+            if (D_0013D4E1 != 0) {
+                state->level_slot = current_level_index + 0x100;
+            }
+            state->active = 1;
+            state->load_state = -2;
+            return;
+        }
+    }
+    state->active = 0;
+}
+#endif

@@ -23,13 +23,6 @@ struct M2c_D_00154E58 {
     s32 unk1C;
 };
 
-struct M2c_D_00154E80 {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-};
-
 struct M2c_var_3_42 {
     s32 unk0;
     s32 unk4;
@@ -43,8 +36,8 @@ extern u8 D_00154E00[];
 extern struct M2c_D_00154E40 D_00154E40;
 extern u32 D_00154E54[];
 extern struct M2c_D_00154E58 D_00154E58;
-extern struct M2c_D_00154E80 D_00154E80;
-extern u8 D_00154F80[];
+extern struct M2c_var_3_42 D_00154E80[32];
+extern s32 D_00154F80[32];
 extern s32 AddDmacHandler();
 extern s32 DIntr();
 extern s32 EnableInterrupts();
@@ -83,25 +76,23 @@ block_3:
     D_00154E58.unk0 = temp_6_30;
     D_00154E58.unk4 = temp_5_29;
     D_00154E58.unk1C = D_00154F80;
-    handlers = (struct M2c_var_3_42 *)&D_00154E80;
+    handlers = D_00154E80;
     var_3_42 = handlers;
     D_00154E58.unk8 = 0;
 
     var_16_46 = 0x1F;
-    D_00154E58.unkC = &D_00154E80;
+    D_00154E58.unkC = D_00154E80;
     D_00154E58.unk14 = 0;
     D_00154E58.unk18 = 0;
     D_00154E58.unk10 = ipval;
-loop_4:
-    var_3_42->unk0 = 0;
-    var_16_46 -= 1;
-    var_3_42->unk4 = 0;
-    var_3_42 += 1;
-    if (var_16_46 >= 0) {
-        goto loop_4;
-    }
+    do {
+        var_3_42->unk0 = 0;
+        var_16_46 -= 1;
+        var_3_42->unk4 = 0;
+        var_3_42 += 1;
+    } while (var_16_46 >= 0);
     var_16_59 = 0x1F;
-    var_2_61 = D_00154F80 + 0x7C;
+    var_2_61 = D_00154F80 + 0x1F;
 loop_6:
     *var_2_61 = 0;
     var_16_59 -= 1;

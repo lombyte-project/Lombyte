@@ -17,4 +17,73 @@ void FUN_L00_0024a798(s32 v, s32 i) {
     }
 }
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249d80.s", FUN_L00_00249d80);
+#else
+typedef unsigned int MenuCacheQuad __attribute__((mode(TI), aligned(16)));
+
+typedef struct {
+    s32 key;
+    s32 last_used;
+    u8 *pixels;
+    s32 unused;
+} MenuCacheEntry;
+
+typedef struct {
+    u8 *source;
+    s16 *offsets;
+    u8 pad08[0x20];
+    s32 enabled;
+    u8 pad2c[4];
+    MenuCacheEntry entries[8];
+} MenuCache;
+
+extern MenuCache D_L00_001841F0_49d80 __asm__("D_L00_001841F0") NOT_SDA;
+extern s32 D_L00_0015F3F8;
+extern void FUN_L00_002483c8(u8 *, s32, u8 *, s16 *);
+
+s32 FUN_L00_00249d80(s32 key) {
+    s32 i;
+    s32 victim;
+    s32 miss;
+    s32 *entry;
+    s32 *times;
+    MenuCacheQuad *base;
+    MenuCacheQuad *other;
+    MenuCacheQuad temp;
+
+    if (!D_L00_001841F0_49d80.enabled) {
+        return 0;
+    }
+    miss = 0;
+    victim = 0;
+    i = 0;
+    if (D_L00_001841F0_49d80.entries[0].key != key) {
+        times = &D_L00_001841F0_49d80.entries[0].last_used;
+        entry = &D_L00_001841F0_49d80.entries[0].key;
+        do {
+            if (entry[1] < times[victim * 4]) {
+                victim = i;
+            }
+            ++i;
+            entry += 4;
+        } while (i < 8 && *entry != key);
+    }
+    if (i == 8) {
+        FUN_L00_002483c8(D_L00_001841F0_49d80.entries[victim].pixels, key,
+                          D_L00_001841F0_49d80.source, D_L00_001841F0_49d80.offsets);
+        D_L00_001841F0_49d80.entries[victim].key = key;
+        i = victim;
+        miss = 1;
+    }
+    if (i != 0) {
+        base = (MenuCacheQuad *)&D_L00_001841F0_49d80.entries[0];
+        other = base + i;
+        temp = *other;
+        *other = *base;
+        *base = temp;
+    }
+    D_L00_001841F0_49d80.entries[0].last_used = D_L00_0015F3F8;
+    return miss;
+}
+#endif

@@ -410,7 +410,56 @@ void FUN_L00_002061f0(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002062b0.s", FUN_L00_002062b0);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00206c08.s", FUN_L00_00206c08);
+#else
+#include "rnc/audio/voice_pool.h"
+extern void FUN_L00_0028d918(void);
+void FUN_L00_00206c08(void) {
+    u8 *hero_base = (u8 *)&hero;
+    s32 *slot = (s32 *)(hero_base + 0x2218);
+    u8 *owners = hero_base + 0x2238;
+    s32 offset = 0;
+    s32 remaining = 7;
+    s32 invalid = -1;
+    do {
+        s32 index = *slot;
+        void *target = *(void **)(owners + offset);
+        s32 state;
+        if (target != 0) {
+            if (index == invalid)
+                goto clear;
+            if (voice_pool.voices[index].owner != target) {
+                *slot = invalid;
+                goto next;
+            }
+            state = voice_pool.voices[index].state;
+            goto check_state;
+        } else {
+            if (index == invalid)
+                goto clear;
+            if (voice_pool.voices[index].owner !=
+                *(VoiceMoby **)(hero_base + 0x2080)) {
+                *slot = invalid;
+                goto next;
+            }
+            state = voice_pool.voices[index].state;
+        }
+check_state:
+        if (state == 0) {
+            *slot = invalid;
+            goto next;
+        }
+        FUN_L00_0028d918();
+clear:
+        *slot = invalid;
+next:
+        slot++;
+        remaining--;
+        offset += 4;
+    } while (remaining >= 0);
+}
+#endif
 #include "sda.h"
 #include "rnc/overlay/quad.h"
 typedef struct {
@@ -666,7 +715,70 @@ void FUN_L00_00207430(char *o) {
         *(float *)(t + 0x28) = x;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002076a8.s", FUN_L00_002076a8);
+#else
+extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
+extern void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
+extern int current_level_index_2076a8 __asm__("D_0015ED84") __attribute__((sda));
+extern int current_level_index_abs_2076a8 __asm__("D_0015ED84");
+extern u8 D_0013E520_2076a8[] __asm__("D_0013E520");
+
+void FUN_L00_002076a8(void) {
+    u8 *g = (u8 *)&hero;
+    int blink = 0;
+    int level;
+
+    if (*(int *)(g + 0x22f4) != 0) {
+        int color = *(int *)(g + 0x22f8);
+        int red = (color & 0xff) - 7;
+        int blue = ((color >> 16) & 0xff) - 7;
+        int green = ((color >> 8) & 0xff) - 7;
+        if (red < 0) red = 0;
+        if (green < 0) green = 0;
+        if (blue < 0) blue = 0;
+        set_moby_color(*(void **)(g + 0x2080), red, green, blue);
+        {
+            int packed = ((unsigned int)color >> 24) << 24;
+            packed |= blue << 16;
+            packed |= green << 8;
+            packed |= red;
+            *(int *)(g + 0x22f8) = packed;
+        }
+    }
+
+    if (*(int *)(g + 0x2084) == 0x80 || *(int *)(g + 0x2084) == 0x82) {
+        blink = *(int *)(g + 0x198) < FUN_001f96f8(0x1e);
+        level = current_level_index_abs_2076a8;
+    } else {
+        level = current_level_index_2076a8;
+    }
+    if ((level == 0xf || level == 0x11) && *(int *)(g + 0x2084) == 0x76 &&
+        *(int *)(g + 0x198) < FUN_001f96f8(0x14)) {
+        blink = 1;
+    }
+    if (blink) {
+        int red, green, blue;
+        get_moby_color(*(void **)(g + 0x2080), &red, &green, &blue);
+        if (*(int *)(g + 0x198) % 4 < 3) {
+            red = 0;
+            green = 0;
+            blue = 0;
+        } else {
+            green = 0x90;
+            blue = 0xf0;
+            red = 0x90;
+        }
+        set_moby_color(*(void **)(g + 0x2080), red, green, blue);
+        FUN_L00_002072c8();
+    }
+    if (*(int *)(g + 0x10b8) >= 0 &&
+        D_0013E520_2076a8[*(int *)(g + 0x10b8)] != 0 &&
+        *(int *)(g + 0x1090) != 0) {
+        FUN_L00_00207330(*(void **)(g + 0x1090), *(char **)(g + 0x2080));
+    }
+}
+#endif
 typedef unsigned int u128_2078a8 __attribute__((mode(TI), aligned(16)));
 typedef union {
     u128_2078a8 q;
@@ -1307,7 +1419,92 @@ void FUN_L00_00209240(s32 a) {
     t = D_L00_001E7C10;
     FUN_L00_0024f8f0(a, 9, &t, D_0013FE10);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002092c8.s", FUN_L00_002092c8);
+#else
+extern u64 FUN_001ff768_002092c8(int, float) __asm__("FUN_L00_001ff768");
+extern void FUN_00254b58_002092c8(int) __asm__("FUN_L00_00254b58");
+extern volatile s32 D_001413D0_002092c8 __asm__("D_001413D0");
+
+void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32 context) {
+    s32 *index;
+    u64 *out;
+    s32 first_count;
+    s32 second_count;
+    s32 third_count;
+    s32 i;
+    u64 value;
+
+    if (context == 0)
+        context = D_001413D0_002092c8;
+    FUN_00254b58_002092c8(context);
+    out = (u64 *)(header + 12);
+    *(u64 *)(header + 8) = 0x7fff000000000000ULL;
+    first_count = 1;
+    if (indices[1] >= 0) {
+        index = indices + 1;
+        do {
+            i = *index;
+            first_count++;
+            index++;
+            *out = FUN_001ff768_002092c8(0x70000000 + (i << 6), 32768.0f);
+            out++;
+        } while (*index >= 0);
+    }
+    if (padding > 0) {
+        s32 remaining = padding;
+        do {
+            *out = 0x7fff000000000000ULL;
+            out++;
+            first_count++;
+        } while (--remaining != 0);
+    }
+    second_count = 0;
+    i = 1;
+    if (indices[1] >= 0) {
+        index = indices + 1;
+        do {
+            value = FUN_001ff768_002092c8(0x70000010 + (*index << 6), 4096.0f);
+            index++;
+            if ((value & 0xffffffffffffULL) != 0x100010001000ULL) {
+                *out = value & 0xffffffffffffULL;
+                second_count++;
+                *(u16 *)((u8 *)out + 6) = i | 0x8000;
+                out++;
+            }
+            i++;
+        } while (*index >= 0);
+    }
+    third_count = 0;
+    i = 1;
+    if (indices[1] >= 0) {
+        index = indices + 1;
+        do {
+            value = FUN_001ff768_002092c8(0x70000020 + (*index << 6), 1.0f);
+            index++;
+            if ((value & 0xffffffffffffULL) !=
+                (FUN_001ff768_002092c8(*(s32 *)(reference + 0x18) + (i << 4), 1.0f) &
+                 0xffffffffffffULL)) {
+                *out = value & 0xffffffffffffULL;
+                third_count++;
+                *(u16 *)((u8 *)out + 6) = i;
+                out++;
+            }
+            i++;
+        } while (*index >= 0);
+    }
+    if ((u32)out & 0xf)
+        *out++ = 0;
+    header[7] = third_count;
+    header[5] = second_count;
+    header[4] = first_count << 3;
+    header[3] = ((u8 *)out - (u8 *)header - 0x10) >> 4;
+    header[6] = (first_count + second_count) << 3;
+    header[0] = 0;
+    header[1] = 0;
+    header[2] = 0;
+}
+#endif
 typedef struct {
     float x, y, z, w_00209540;
 } V4_00209540;

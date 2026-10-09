@@ -65,7 +65,17 @@ void FUN_L00_00259888(char *a, int b, int c, float d, void *q) {
     qcopy(a, q);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002598b0.s", FUN_L00_002598b0);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002599e8.s", FUN_L00_002599e8);
+#else
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_002598b0(void *, void *, int, float, float, float, int, int, int);
+void FUN_L00_002599e8(void *a, int b, int c, float d, float e, float f, int g, int h, int i) {
+    float position[4] __attribute__((aligned(16)));
+    FUN_L00_0024f7c8(a, b, position);
+    FUN_L00_002598b0(a, position, c, d, (float)c, f, g, h, i);
+}
+#endif
 typedef unsigned int u128_259a88 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     u128_259a88 v;
@@ -543,7 +553,26 @@ int FUN_L00_0025b440(O_25b440 *o, S_25b440 *s) {
 f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t) {
     return a + (b - a) * t;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025b6b8.s", FUN_L00_0025b6b8);
+#else
+typedef union {
+    u128 q;
+    f32 f[4];
+} Vec4_25b6b8 __attribute__((aligned(16)));
+
+void FUN_L00_0025b6b8(f32 t, f32 *out, f32 *a, f32 *b) {
+    Vec4_25b6b8 left, right;
+    f32 *dest = out;
+    volatile f32 *rightPtr = right.f;
+    left.q = *(u128 *)a;
+    right.q = *(u128 *)b;
+    dest[0] = FUN_L00_0025b6a8(left.f[0], right.f[0], t);
+    dest[1] = FUN_L00_0025b6a8(left.f[1], right.f[1], t);
+    dest[2] = FUN_L00_0025b6a8(left.f[2], rightPtr[2], t);
+    dest[3] = FUN_L00_0025b6a8(left.f[3], rightPtr[3], t);
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

@@ -141,13 +141,14 @@ void update_hoverboard_girl(HoverboardGirlMoby *) __asm__("FUN_L05_00316ab8");
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316810.s", FUN_L05_00316810);
 #else
 void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *moby, HoverboardGirlState *state) {
+    extern FrameTiming frame_timing_gp __asm__("D_0015ED64") __attribute__((sda));
     s32 joint_index = 0;
     HoverboardGirlJoint *joint = &state->joints[2];
     HoverboardGirlState *state_window = state;
     f32 delta;
     f32 animation_value;
     do {
-        delta = frame_timing.delta;
+        delta = frame_timing_gp.delta;
         if (breast_growth_count != 0) {
             animation_value = (f32)breast_growth_count * 0.15f + 1.0f;
             if (3.7f < animation_value) {
@@ -159,8 +160,7 @@ void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *moby, Hoverboard
                 fast_cos(animation_value * 3.1415927f) * 0.61086524f;
             delta = frame_timing_absolute.delta;
         }
-        update_joint_animation(moby, joint, joint_index + 2, delta * 0.05f, delta * 0.3f);
-        joint_index++;
+        update_joint_animation(moby, joint, joint_index++ + 2, delta * 0.05f, delta * 0.3f);
         joint++;
         /* Retail advances both its state window and joint cursor by 0x80. */
         state_window = (HoverboardGirlState *)((u8 *)state_window + 0x80);

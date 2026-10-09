@@ -2,4 +2,56 @@
 #include "types.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fc558.s", FUN_L00_001fc558);
+#else
+extern s32 D_0013E504;
+extern s32 D_0015EE84;
+extern u8 *D_L00_001611C0;
+void FUN_L00_002a0d90(void);
+
+void FUN_L00_001fc558(u32 source) {
+    s32 remaining = D_0013E504;
+    s32 destination = D_0015EE84 >> 8;
+    s32 count;
+    u64 transfer;
+    u8 *packet;
+    u64 *words;
+
+    do {
+        count = remaining;
+        if ((u32)remaining > 0x80)
+            count = 0x80;
+        *(u32 *)(D_L00_001611C0 + 0) = 0x10000006;
+        remaining -= 0x80;
+        *(u32 *)(D_L00_001611C0 + 4) = 0;
+        *(u32 *)(D_L00_001611C0 + 8) = 0;
+        *(u32 *)(D_L00_001611C0 + 12) = 0x50000006;
+        packet = D_L00_001611C0;
+        D_L00_001611C0 = packet + 0x10;
+        transfer = (u64)count << 7;
+        words = (u64 *)(packet + 0x10);
+        words[0] = 0x4000000000000001ULL;
+        words[1] = 0x0eeeeeee;
+        words[2] = ((u64)(u32)destination << 32) | 0x8000000000000ULL;
+        words[3] = 0x50;
+        words[4] = 0;
+        words[5] = 0x51;
+        words[6] = ((u64)(u32)count << 32) | 0x200;
+        words[7] = 0x52;
+        words[8] = 0;
+        words[9] = 0x53;
+        words[10] = transfer | 0x0800000000008000ULL;
+        words[11] = 0;
+        destination += count << 3;
+        D_L00_001611C0 = packet + 0x70;
+        *(u32 *)(packet + 0x70) = (u32)transfer | 0x30000000;
+        *(u32 *)(D_L00_001611C0 + 4) = source;
+        source += count << 11;
+        *(u32 *)(D_L00_001611C0 + 8) = 0;
+        *(u32 *)(D_L00_001611C0 + 12) = (u32)transfer | 0x50000000;
+        D_L00_001611C0 += 0x10;
+    } while (remaining > 0);
+    FUN_L00_002a0d90();
+}
+#endif /* NON_MATCHING */

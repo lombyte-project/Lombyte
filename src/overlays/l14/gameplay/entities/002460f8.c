@@ -1266,7 +1266,95 @@ void FUN_L14_002b5850(char *moby, float *target, float a, float b, float c, floa
         func_L00_002592B0_2B6AA0(moby, a, (float *)(data + 0xE4), e, f, g);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5968.s", FUN_L14_002b5968);
+typedef struct {
+    unsigned char pad0[4];
+    int w4;
+    unsigned char pad8[2];
+    unsigned char bA;
+    unsigned char bB;
+} PuffParticleTail;
+typedef struct {
+    unsigned char pad0[8];
+    unsigned char b8;
+    unsigned char b9;
+    short life; /* 0xA: frames left (scale_game_frames) */
+    unsigned char padC[0x14];
+    PuffParticleTail tail;
+} PuffParticle;
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern void add_vector_xyz(void *, void *, void *);
+extern void scale_vector_xyz(void *, void *, float);
+extern int random_integer_below(int);
+extern int FUN_L00_00257b90(int, int);
+extern float FUN_L00_00257c48(float, float);
+extern float random_float_between(float, float);
+extern int scale_game_frames(int);
+extern void build_look_at_matrix(void *, void *, void *, float);
+extern void FUN_L00_0026c6e8(void *, void *);
+extern void FUN_L00_002d3838(int, void *, int, int);
+extern char D_L14_001D88D0[] __asm__("D_L14_001D88D0");
+extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
+extern PuffParticle *spawn_puff(void *, float, float, float, int, void *, float,
+                                int) __asm__("FUN_L00_0026d000");
+
+void FUN_L14_002b5968(struct Moby *moby, float *point, float angle) {
+    float offset[4];
+    float pos[4];
+    float small_offset[4];
+    float direction[4];
+    float original_pos[4];
+    float value;
+    float puff_size;
+    float step;
+    PuffParticle *part;
+    PuffParticleTail *tail;
+    int i;
+    int j;
+    int n;
+    int color;
+    int packed_color;
+    int low_color;
+    int high_color;
+
+    value = fast_add_rotations(angle, moby->rot.z);
+    offset[0] = fast_cos(value) * 0.8f;
+    offset[1] = fast_sin(value) * 0.8f;
+    offset[2] = 0.0f;
+    add_vector_xyz(pos, point, offset);
+    for (i = 5; i >= 0; i--) {
+        n = random_integer_below(2);
+        if (random_integer_below(2)) n = -n;
+        puff_size = random_float_between(40000.0f, 150000.0f);
+        color = FUN_L00_00257b90(10, 0x7f);
+        low_color = (color << 8) | 0x7f000000;
+        high_color = color << 16;
+        packed_color = color | (high_color | low_color);
+        part = spawn_puff(pos, 0.2f, 1.0f, 1.01f, n, D_L14_0015F580_x, puff_size, packed_color);
+        if (part) {
+            tail = &part->tail;
+            part->life = scale_game_frames(120);
+            tail->w4 = 2;
+            tail->bA = 0x7f;
+            tail->bB = part->life;
+        }
+    }
+    qcopy(small_offset, offset);
+    scale_vector_xyz(offset, offset, 0.0625f);
+    offset[2] = random_float_between(0.025f, 0.06f);
+    qcopy(original_pos, pos);
+    step = 0.6283f;
+    for (j = 0; j < 16; j++) {
+        value = FUN_L00_00257c48(0.0f, 0.5f);
+        build_look_at_matrix(direction, offset, small_offset, (float)j * step + value);
+        pos[0] = original_pos[0] + FUN_L00_00257c48(0.0f, 0.2f);
+        pos[1] = original_pos[1] + FUN_L00_00257c48(0.0f, 0.2f);
+        pos[2] = original_pos[2] + FUN_L00_00257c48(0.0f, 0.2f);
+        FUN_L00_0026c6e8(pos, direction);
+    }
+    FUN_L00_002d3838((int)D_L14_001D88D0, original_pos, 0, 0);
+}
 /* Points the mover at the second-to-last node of its active path and clears its offset. */
 
 typedef struct {
@@ -1354,26 +1442,10 @@ void FUN_L14_002b5d18(struct Moby *moby) {
     clear_u64_value(d + 0xF0);
 }
 /* Exhaust puffs: two red sparks and three white puffs of shrinking size behind the moby. */
-typedef struct {
-    unsigned char pad0[4];
-    int w4;
-    unsigned char pad8[2];
-    unsigned char bA;
-    unsigned char bB;
-} T_5dd8;
-typedef struct {
-    unsigned char pad0[8];
-    unsigned char b8;
-    unsigned char b9;
-    short hA;
-    unsigned char padC[0x14];
-    T_5dd8 tail;
-} P_5dd8;
 extern int below_x(int) __asm__("FUN_00213260");
 extern int frames_x(int) __asm__("FUN_001f96f8");
 extern void scale_x(void *, void *, float) __asm__("FUN_001f9a68");
 extern void add_x(void *, void *, void *) __asm__("FUN_001f9a10");
-extern P_5dd8 *puff_x(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 
 void FUN_L14_002b5dd8(struct Moby *m) {
@@ -1389,16 +1461,17 @@ void FUN_L14_002b5dd8(struct Moby *m) {
     scale_x(off, &m->unkC0, -1.25f);
     add_x(pos, &m->pos, off);
     for (i = 0; i < 2; i++) {
-        P_5dd8 *part;
-        T_5dd8 *tail;
+        PuffParticle *part;
+        PuffParticleTail *tail;
         n = below_x(0x10);
-        part = puff_x(pos, 0.2f, 1.0f, 0.75f, below_x(2) == 0 ? n : -n, D_L14_0015F580_x, 160000.0f, 0x7F3030FF);
+        part = spawn_puff(pos, 0.2f, 1.0f, 0.75f, below_x(2) == 0 ? n : -n, D_L14_0015F580_x,
+                          160000.0f, 0x7F3030FF);
         if (part) {
             tail = &part->tail;
-            part->hA = frames_x(6);
+            part->life = frames_x(6);
             tail->w4 = 2;
             tail->bA = 0x7F;
-            tail->bB = part->hA;
+            tail->bB = part->life;
         }
     }
     scale_x(off, &m->unkC0, -1.0f);
@@ -1407,16 +1480,16 @@ void FUN_L14_002b5dd8(struct Moby *m) {
     life = frames_x(2);
     size = 100000.0f;
     for (j = 0; j < 3; j++) {
-        P_5dd8 *part;
-        T_5dd8 *tail;
-        part = puff_x(pos, 0.05f, 1.0f, 1.0f, n, D_L14_0015F580_x, size, 0x7FFFFFFF);
+        PuffParticle *part;
+        PuffParticleTail *tail;
+        part = spawn_puff(pos, 0.05f, 1.0f, 1.0f, n, D_L14_0015F580_x, size, 0x7FFFFFFF);
         if (part) {
             tail = &part->tail;
-            part->hA = life;
+            part->life = life;
             part->b8 = below_x(0xFF);
             tail->w4 = 2;
             tail->bA = 0x7F;
-            tail->bB = part->hA;
+            tail->bB = part->life;
         }
         n = -n;
         life *= 2;

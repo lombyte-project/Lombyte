@@ -66,9 +66,101 @@ void FUN_L12_00304d98(Level12VendorCounterMoby *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00304e00.s", FUN_L12_00304e00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003054b0.s", FUN_L12_003054b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00306350.s", FUN_L12_00306350);
+extern char *D_L12_0015FFD8_p __asm__("D_L12_0015FFD8");
+extern int D_L12_001FB688[];
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern float FUN_L00_00257c48(float, float);
+
+void FUN_L12_00306350(struct Moby *moby, int slot) {
+    char *data = (char *)moby->pvars;
+    struct Moby *selected;
+    float *speed;
+    int offset;
+    float initial_speed;
+    float angle_scale;
+    float first_angle;
+    float second_scale;
+    char *slot_data;
+
+    if (slot == 0x11) {
+        selected = moby;
+        offset = 0x44;
+    } else {
+        selected = (struct Moby *)(D_L12_0015FFD8_p + D_L12_001FB688[slot] * 0x100);
+        offset = slot * 4;
+    }
+
+    initial_speed = random_float_between(frame_time_sq * 3.7f, frame_time_sq * 5.0f);
+    angle_scale = frame_time;
+    {
+        char *base = data + 0x570;
+        speed = (float *)(base + offset);
+    }
+    *speed = initial_speed;
+    first_angle = FUN_L00_00257c48(angle_scale * 0.05235988f, angle_scale * 0.13962634f);
+    second_scale = frame_time;
+    slot_data = data + slot * 0x10;
+    *(float *)(slot_data + 0x450) = first_angle;
+    *(float *)(slot_data + 0x454) = FUN_L00_00257c48(second_scale * 0.05235988f, second_scale * 0.17453292f);
+    if (selected->oclass == 0x4fd) {
+        float variation = random_float_between(0.001f, 0.0045f);
+        float speed_scale = frame_time_sq;
+        *(float *)(slot_data + 0x45c) = variation;
+        *speed = random_float_between(speed_scale * 5.5f, speed_scale * 9.0f);
+    } else if (selected->oclass == 0x500) {
+        *speed = frame_time_sq * 13.0f;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003064e8.s", FUN_L12_003064e8);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00306828.s", FUN_L12_00306828);
+#else
+extern int D_L12_0015F5CC;
+extern char *D_L12_0015FFD8_p __asm__("D_L12_0015FFD8");
+extern float ConvertIntegerToFloat(int) __asm__("FUN_001fa6c0");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+
+void FUN_L12_00306828(struct Moby *moby) {
+    int i;
+    int alpha = 0x80000000;
+    char *data = (char *)moby->pvars;
+    i = 0;
+    do {
+        struct Moby *other;
+        int period;
+        float sine;
+        float color;
+        int red;
+        int green;
+        int blue;
+        float phase;
+        float divisor;
+        if (i == 17) {
+            other = moby;
+        } else {
+            other = (struct Moby *)(D_L12_0015FFD8_p + (*(int *)(data + i * 0x30 + 0x20) * 0x100));
+        }
+        if (other->oclass != 0x4FE) {
+            period = scale_ticks(0xAA);
+            divisor = ConvertIntegerToFloat(period);
+            phase = (float)(D_L12_0015F5CC % period) / divisor;
+            sine = fast_sin((phase + phase) * 3.1415927f + -3.1415927f);
+            color = sine * 70.0f;
+            red = truncate_float_to_s32(color);
+            green = truncate_float_to_s32(color);
+            blue = truncate_float_to_s32(sine * 10.0f);
+            green += 0xB4;
+            red += 0xB4;
+            if (green > 0xFF) green = 0xFF;
+            if (red > 0xFF) red = 0xFF;
+            other->unk90 = ((blue + 0x46) << 16) | alpha | (green << 8) | red;
+            other->flags |= 0x10;
+        }
+        i++;
+    } while (i < 18);
+}
+#endif /* NON_MATCHING */
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003069d0.s", FUN_L12_003069d0);
 #include "qcopy.h"
 
@@ -344,7 +436,47 @@ void FUN_L12_003093c8(struct Moby *moby) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003094a0.s", FUN_L12_003094a0);
+#else
+typedef struct {
+    char pad0[0x30];
+    int phase;
+    char pad34[0x144];
+    int mobys[1];
+} L12VendorMobyList;
+extern L12VendorMobyList D_L12_0016CCE0;
+extern void FUN_L00_002637f8(int);
+
+void FUN_L12_003094a0(struct Moby *moby) {
+    int state = moby->state;
+    int phase;
+    int index;
+    L12VendorMobyList *list;
+
+    switch (state) {
+    case 0:
+        moby->unk30 = 0xff;
+        moby->state = 1;
+        break;
+    case 1:
+        if (D_L12_0015F5C4 != 2) {
+            break;
+        }
+        list = &D_L12_0016CCE0;
+        phase = list->phase;
+        if (phase == state) {
+            index = 2;
+        } else if (phase == 7) {
+            index = 0;
+        } else {
+            break;
+        }
+        FUN_L00_002637f8(list->mobys[index]);
+        break;
+    }
+}
+#endif
 
 #define NOT_SDA
 

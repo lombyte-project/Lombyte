@@ -1128,7 +1128,87 @@ s32 FUN_L01_00233940(s32 mode) {
     }
     return 1;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00234358.s", FUN_L01_00234358);
+#else
+extern f32 FUN_L00_00213350_34358(void *) __asm__("FUN_L00_00213350");
+extern f32 FUN_L00_002339d0_34358(void *) __asm__("FUN_L00_002339d0");
+extern f32 approach_value_34358(f32, f32, f32 *) __asm__("FUN_00213ed8");
+extern void FUN_L00_00233ba0_34358(void *, void *, f32) __asm__("FUN_L00_00233ba0");
+extern void FUN_L00_00233708_34358(void *, void *, f32) __asm__("FUN_L00_00233708");
+extern void subtract_vector_xyz_34358(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_vector_xyz_34358(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f9c48_34358(void *, void *, f32) __asm__("FUN_001f9c48");
+extern f32 vector_length_xy_34358(void *) __asm__("FUN_001f9b20");
+
+void FUN_L01_00234358(float amount) {
+    f32 delta[4];
+    Vec4 saved;
+    f32 value;
+    f32 angle;
+    f32 speed;
+    f32 factor;
+    f32 length;
+    f32 current_length;
+    f32 minimum_factor;
+
+    switch (hero.unk20B3) {
+        case 0:
+            angle = hero.motion.unk180;
+            speed = hero.unk190;
+            if (hero.state.control_mode == 4 && hero.unk30A == 0 && hero.unk4A4 != 0 && hero.unk257 != 0)
+                speed = D_0015ED6C * 2.1f;
+            if (hero.unk30A != 0 && hero.state.current == 0xE && D_0015ED6C < speed)
+                speed = D_0015ED6C;
+            delta[0] = fast_cos(angle) * speed;
+            delta[1] = fast_sin(angle) * speed;
+            delta[2] = hero.motion.velocity.f[2];
+            factor = -(hero.motion.velocity.f[0] * delta[0] + hero.motion.velocity.f[1] * delta[1]);
+            length = vector_length_xy_34358(delta);
+            current_length = vector_length_xy_34358(&hero.motion.velocity);
+            if (length == 0.0f) {
+                factor = 0.0f;
+                goto ratio_done;
+            }
+            if (current_length != 0.0f) {
+                factor /= length;
+                goto divide_current;
+            }
+            factor = 0.0f;
+            goto ratio_done;
+        divide_current:
+            factor /= current_length;
+        ratio_done:
+            minimum_factor = 1.0f;
+            factor += minimum_factor;
+            factor *= 1.5f;
+            if (hero.state.current == 0x81) {
+                if (factor > 1.7f)
+                    factor = 1.7f;
+            } else if (factor > 3.0f) {
+                factor = 3.0f;
+            }
+            if (factor < minimum_factor)
+                factor = minimum_factor;
+            amount *= factor;
+            subtract_vector_xyz_34358(delta, delta, &hero.motion.velocity);
+            length = vector_length_xy_34358(delta);
+            if (amount < length)
+                FUN_001f9c48_34358(delta, delta, amount);
+            add_vector_xyz_34358(&hero.motion.velocity, &hero.motion.velocity, delta);
+            saved.q = hero.unk920.q;
+            hero.unk194 = hero.motion.unk168 - FUN_L00_00213350_34358(&saved);
+            break;
+        case 1:
+        case 2:
+            value = FUN_L00_002339d0_34358(&hero.motion.velocity);
+            approach_value_34358(hero.unk190, amount, &value);
+            FUN_L00_00233ba0_34358(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
+            FUN_L00_00233708_34358(&hero.motion.velocity, &hero.motion.velocity, value);
+            break;
+    }
+}
+#endif /* NON_MATCHING */
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/gameplay/hero.h"

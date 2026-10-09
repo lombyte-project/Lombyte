@@ -955,7 +955,106 @@ void FUN_L06_002f54a0(char *a) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f55a0.s", FUN_L06_002f55a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f5d78.s", FUN_L06_002f5d78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f6470.s", FUN_L06_002f6470);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f6dd0.s", FUN_L06_002f6dd0);
+#else
+extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void FUN_001f9ff8(void *, float);
+extern void FUN_001fa378(void *, void *, void *);
+extern int get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern unsigned int blend_colors(unsigned int, unsigned int, float) __asm__("FUN_001fa6e0");
+extern void FUN_L06_00216b88(int *, float *);
+extern float D_L06_00161E0C __attribute__((sda));
+extern int D_L06_00161DD0 __attribute__((sda));
+extern int D_L06_00161DD4 __attribute__((sda));
+extern int D_L06_00161DD8 __attribute__((sda));
+extern int D_L06_00161DDC __attribute__((sda));
+extern int D_L06_00161DF0 __attribute__((sda));
+extern int D_L06_00161DF4 __attribute__((sda));
+extern float D_L06_00161DF8 __attribute__((sda));
+extern float D_L06_00161DFC __attribute__((sda));
+extern int D_L06_00161E50;
+extern int D_L06_00161E54;
+extern int D_L06_00161E40[];
+extern float D_L06_001DAFD0[];
+extern float D_L06_001DB060[];
+extern Vec4 D_L06_001DB0F0[4][30];
+
+void FUN_L06_002f6dd0(char *m) {
+    float a[16];
+    float b[16];
+    float mat[9][16];
+    float v[4];
+    int s[9];
+    char *data = *(char **)(m + 0x78);
+    float *mp;
+    float *tp;
+    float *vp;
+    float *sp;
+    float *m0;
+    int *s0;
+    unsigned int color;
+    int first, second, fourth;
+    int *points, *sequence;
+    float seventh, eighth;
+    int i;
+    int j;
+
+    rotation_matrix(a, m + 0x40);
+    FUN_001f9ff8(b, D_L06_00161E0C);
+    FUN_001fa378(a, a, b);
+    vu1_add_g_sregister(6, get_effect_texture(14));
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x42, (long)D_L06_00161DD0 | ((long)D_L06_00161DD4 << 2) |
+                                  ((long)D_L06_00161DD8 << 4) | ((long)D_L06_00161DDC << 6) |
+                                  0x8000000000L);
+    font_queue_vu_state();
+    m0 = mat[0];
+    s0 = s;
+    tp = D_L06_001DB060;
+    vp = D_L06_001DAFD0;
+    sp = mat[0] + 12;
+    mp = m0;
+    for (i = 8; i >= 0; i--) {
+        rotation_matrix(mp, tp);
+        tp += 4;
+        FUN_001fa378(mp, a, mp);
+        transform_vector(v, vp, a);
+        vp += 4;
+        add_vector_xyz(sp, v, m + 0x10);
+        mp[15] = 1.0f;
+        mp += 16;
+        sp += 16;
+    }
+    color = blend_colors(D_L06_00161DF0 & 0xFFFFFF, D_L06_00161DF0, *(float *)(data + 0x18));
+    first = D_L06_00161E50;
+    points = (int *)D_L06_001DB0F0;
+    second = D_L06_00161E54;
+    fourth = D_L06_00161DF4;
+    seventh = D_L06_00161DF8;
+    sequence = D_L06_00161E40;
+    eighth = D_L06_00161DFC;
+    s[0] = first;
+    s[2] = (int)sequence;
+    s[1] = second;
+    s[3] = color;
+    s[4] = fourth;
+    *(float *)&s[7] = seventh;
+    *(float *)&s[8] = eighth;
+    s[5] = 0x1E;
+    s[6] = (int)points;
+    mp = m0;
+    for (j = 8; j >= 0; j--) {
+        FUN_L06_00216b88(s0, mp);
+        mp += 16;
+    }
+}
+#endif /* NON_MATCHING */
 #include "rnc/gameplay/entities/moby.h"
 
 extern f32 D_L06_00161E10 __attribute__((sda));

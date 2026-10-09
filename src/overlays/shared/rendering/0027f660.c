@@ -404,4 +404,62 @@ void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4
     FUN_001f9a68(tmp, p2, b - a);
     FUN_001f9a10(out, out, tmp);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028bb90.s", FUN_L01_0028bb90);
+#else
+float FUN_L01_0028bb90(T_28b828 *path, int particles, void *moby, float a, float b) {
+    OvlVec4 previousTangent;
+    OvlVec4 nextTangent;
+    OvlVec4 currentNode;
+    OvlVec4 nextNode;
+    OvlVec4 point;
+    OvlVec4 previousPoint;
+    int savedIndex = *(int *)path;
+    int count = *path->f10;
+    int index;
+    float total = 0.0f;
+    int emitParticles;
+
+    *(int *)path = 0;
+    nextNode.q = *(OvlQuad *)((char *)path->f10 + 0x10);
+    emitParticles = particles;
+    if (emitParticles) {
+        FUN_L01_00285768(0.666f, &nextNode, (int)moby, 0, 0x80101080, 0x7f, -1, 0xff);
+    }
+    FUN_L01_0028b8c8(&nextTangent, (int *)path, 0, a, b);
+
+    index = 0;
+    while (index < count) {
+        float t;
+        float step;
+        float segmentLength = 0.0f;
+        int nextIndex;
+        previousTangent.q = nextTangent.q;
+        currentNode.q = nextNode.q;
+        if (emitParticles) {
+            FUN_L01_00285768(1.0f, &currentNode, (int)moby, index % 15 + 2, 0x80108010, 0x7f, -1, 0xff);
+        }
+        t = 0.05f;
+        nextIndex = FUN_L01_0028b828(path, index + 1);
+        nextNode.q = *(OvlQuad *)((char *)path->f10 + nextIndex * 16 + 0x10);
+        *(int *)path = index;
+        FUN_L01_0028b8c8(&nextTangent, (int *)path, 1, a, b);
+        previousPoint.q = currentNode.q;
+        step = t;
+        do {
+            if (emitParticles) {
+                FUN_L01_00285768(0.2f, &previousPoint, (int)moby, 0, 0x80404080, 0x7f, -1, 0xff);
+            }
+            FUN_L01_0028ba80(t, &point, &currentNode, &nextNode, &previousTangent, &nextTangent);
+            t += step;
+            segmentLength += FUN_001f9b48(&previousPoint, &point);
+            previousPoint.q = point.q;
+        } while (t <= 1.0f);
+        total += segmentLength;
+        *(float *)((char *)path->f10 + index * 16 + 0x1c) = segmentLength;
+        index++;
+    }
+    *(int *)path = savedIndex;
+    return total;
+}
+#endif

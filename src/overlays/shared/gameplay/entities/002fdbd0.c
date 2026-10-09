@@ -409,7 +409,52 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002feb40.s", FUN_L06_002feb40);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff100.s", FUN_L06_002ff100);
+#else
+extern f32 probe_ground_height_2ff100(Vec4f *, s32, f32) __asm__("FUN_00213508");
+extern void fast_vec_normalize_2ff100(Vec4f *, s32, f32) __asm__("FUN_001f9bf8");
+extern f32 fast_add_rotations_2ff100(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_cos_2ff100(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin_2ff100(f32) __asm__("FUN_001f9de0");
+extern f32 convert_integer_to_float_2ff100(s32) __asm__("FUN_001fa6c0");
+extern void fast_vec_add_2ff100(Vec4f *, Vec4f *, Vec4f *) __asm__("FUN_001f9a10");
+extern f32 D_L06_00161FD4 __attribute__((sda));
+extern s32 D_L06_00161FD8 __attribute__((sda));
+
+void FUN_L06_002ff100(struct Moby *moby) {
+    u8 *vars = moby->pvars;
+    Vec4f offset;
+    f32 angle;
+    volatile f32 zero = 0.0f;
+    f32 one = 1.0f;
+    f32 *weight;
+    Vec4f *point;
+    s32 i;
+
+    probe_ground_height_2ff100(&moby->pos, 0, 0.5f);
+    fast_vec_normalize_2ff100((Vec4f *)(vars + 0x220), 0x174600, 1.0f);
+    FUN_L00_0024f7c8(moby, 0, vars + 0x210);
+    *(f32 *)(vars + 0x218) = moby->pos.z;
+    weight = (f32 *)(vars + 0x23c);
+    point = (Vec4f *)(vars + 0x230);
+    for (i = 0; i < 16; i++) {
+        angle = (convert_integer_to_float_2ff100(i) * 0.0625f - 0.5f) * (D_L06_00161FD4 * 0.017453292f);
+        offset.x = fast_cos_2ff100(fast_add_rotations_2ff100(angle, moby->rot.z)) * 0.2f;
+        offset.y = fast_sin_2ff100(fast_add_rotations_2ff100(angle, moby->rot.z)) * 0.2f;
+        offset.z = 0.15f;
+        fast_vec_add_2ff100(point, (Vec4f *)(vars + 0x210), &offset);
+        if (i != 0 && i != 15) {
+            *weight = one;
+        } else {
+            *weight = zero;
+        }
+        weight += 4;
+        point++;
+    }
+    *(f32 *)(vars + 0x21c) = (f32)scale_game_frames(D_L06_00161FD8);
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff2c8.s", FUN_L06_002ff2c8);
 
 /* GS quad packet for draw_quad_packet: four corners, their colours and

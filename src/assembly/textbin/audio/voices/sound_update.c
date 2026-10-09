@@ -176,9 +176,8 @@ s32 sound_update(void) {
         history_index %= 4;
         *history_position = history_index;
     }
-    qcopy(&D_0013E550.listener_history[history_index], &D_00187080);
-
     listener_sample_count = 0;
+    qcopy(&D_0013E550.listener_history[history_index], &D_00187080);
     previous_history_index = (history_index + 3) % 4;
     if (previous_history_index != history_index) {
         do {

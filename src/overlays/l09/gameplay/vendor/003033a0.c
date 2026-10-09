@@ -484,7 +484,64 @@ char *FUN_L09_003041d0(char *self, char *pos, int bone) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00304360.s", FUN_L09_00304360);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00304c80.s", FUN_L09_00304c80);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00305a28.s", FUN_L09_00305a28);
+#else
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_001f9bf8(f32, void *, void *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_L00_00259858(f32, void *, void *, s32);
+extern s32 FUN_L00_001f2868(f32, void *, s32, void *, void *);
+extern void print_vendor_contact(void *, s16, s16, s16, s32) __asm__("FUN_001e93b0");
+extern char D_L09_002090B0[];
+
+void FUN_L09_00305a28(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    float work[24];
+    int i;
+    float count_as_float;
+    float start;
+    float end;
+    int context_arg;
+    float context_float;
+    char *collision_state = (char *)0x00173fc0;
+
+    if (moby->state == 0) {
+        moby->state = 1;
+        *(s32 *)(data + 0x14) = -1;
+    }
+    if ((D_L09_0015F5CC & 7) == (((int)moby >> 8) & 7)) {
+        if (*(s32 *)(data + 0x14) == -1 ||
+            (FUN_L00_0028d8c0(moby, *(s32 *)(data + 0x14)) == 0 &&
+             *(s32 *)(data + 0x14) == -1)) {
+            *(s32 *)(data + 0x14) = allocate_voice_for_target_entry(0, 4, moby);
+        }
+    }
+    count_as_float = ConvertIntegerToFloat(*(s32 *)(data + 8));
+    start = F(data, 0);
+    end = F(data, 4);
+    *(OvlQuad *)work = 0;
+    work[2] = (end - (start + start)) / count_as_float;
+    qcopy(work + 4, (char *)moby + 0x10);
+    FUN_001f9cf8(work, work, (char *)moby + 0xc0);
+    FUN_001f9bf8(F(data, 0), work + 8, work);
+    FUN_001f9a10(work + 4, work + 4, work + 8);
+    context_arg = *(volatile s32 *)(data + 0x10);
+    context_float = F(data, 0xc);
+    FUN_L00_00259858(context_float, work + 12, moby, context_arg);
+    i = 0;
+    if (*(s32 *)(data + 8) > 0) do {
+        if (FUN_L00_001f2868(F(data, 0), work + 4, 1, moby, work + 12) != 0) {
+            char *hit = *(char **)(collision_state + 0x18);
+            print_vendor_contact(D_L09_002090B0, *(s16 *)((char *)moby + 0xb2),
+                          *(s16 *)(hit + 0xa6), *(s16 *)(hit + 0xb2),
+                          FUN_00120478(F(data, 0xc)));
+        }
+        i++;
+        FUN_001f9a10(work + 4, work + 4, work);
+    } while (i < *(s32 *)(data + 8));
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

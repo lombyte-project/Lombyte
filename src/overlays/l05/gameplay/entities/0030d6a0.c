@@ -377,7 +377,59 @@ void FUN_L05_0030f218(char *obj, float a, float b) {
         FUN_L05_0029bbe0(u, w, v, k, m, n);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f408.s", FUN_L05_0030f408);
+#define MOBY(p) ((struct Moby *)(p))
+extern float dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern float D_L05_00161DD8 __attribute__((sda));
+extern float D_L05_00161DDC __attribute__((sda));
+extern float D_L05_00161DE0 __attribute__((sda));
+extern float D_L05_00161DE4 __attribute__((sda));
+extern float approach_angle(float *, float, float *, float, float,
+                            float) __asm__("FUN_L00_0025be00");
+
+void FUN_L05_0030f408(char *moby, float turn_scale, float speed_scale) {
+    char *data = (char *)MOBY(moby)->pvars;
+    struct Hero *game = &hero;
+    float offset[4];
+    float horizontal;
+    float vertical;
+    float angle0;
+    float angle1;
+    float target0;
+    float target1;
+    float rate0;
+    float rate1;
+    float limit;
+    float dot0;
+    float dot1;
+
+    if ((char *)game->ground_moby == moby && game->air_frames.s == 0) {
+        subtract_vector_xyz(offset, &game->motion.pos, &MOBY(moby)->pos);
+        dot0 = dot_vectors_xyz(offset, &MOBY(moby)->unkC0);
+        dot1 = dot_vectors_xyz(offset, &MOBY(moby)->unkD0);
+        horizontal = turn_scale * dot0;
+        vertical = -turn_scale * dot1;
+    } else {
+        horizontal = 0.0f;
+        vertical = 0.0f;
+    }
+
+    *(float *)(data + 0x98) = fast_add_rotations(*(float *)(data + 0x98), *(float *)(data + 0xa0));
+    *(float *)(data + 0x9c) = fast_add_rotations(*(float *)(data + 0x9c), *(float *)(data + 0xa4));
+    angle0 = fast_sin(*(float *)(data + 0x98));
+    target0 = fast_add_rotations(vertical, angle0 * turn_scale * D_L05_00161DD8);
+    angle1 = fast_sin(*(float *)(data + 0x9c));
+    target1 = fast_add_rotations(horizontal, angle1 * turn_scale * D_L05_00161DD8);
+
+    rate0 = D_L05_00161DDC * speed_scale * 0.017453292f * frame_time_sq;
+    rate1 = D_L05_00161DE0 * speed_scale * 0.017453292f * frame_time_sq;
+    limit = D_L05_00161DE4 * 0.017453292f * frame_time;
+    approach_angle(&MOBY(moby)->rot.x, target0, (float *)(data + 0x90), rate0, rate1, limit);
+    approach_angle(&MOBY(moby)->rot.y, target1, (float *)(data + 0x94),
+                   D_L05_00161DDC * speed_scale * 0.017453292f * frame_time_sq,
+                   D_L05_00161DE0 * speed_scale * 0.017453292f * frame_time_sq,
+                   D_L05_00161DE4 * 0.017453292f * frame_time);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f5c8.s", FUN_L05_0030f5c8);
 
 struct GateVars {
@@ -932,7 +984,43 @@ void FUN_L05_00316110(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316258.s", FUN_L05_00316258);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003166a0.s", FUN_L05_003166a0);
+#else
+void FUN_L05_003166a0(struct Moby *moby) {
+    int *data = (int *)moby->pvars;
+
+    switch (moby->state) {
+    case 0:
+        if (data[0] != 0)
+            moby->flags |= 0x8000;
+        moby->state = 1;
+        *(float *)&data[3] = moby->rot.z;
+        if (data[0] != 0)
+            moby->rot.z = fast_subtract_rotations(moby->rot.z, 1.5707964f);
+        else
+            moby->rot.z = fast_add_rotations(moby->rot.z, 1.5707964f);
+        /* fall through */
+    case 1:
+        if (((unsigned char *)*(int *)&D_L05_0015FFD8_d)[data[2] * 256 + 0xBC] != 0) {
+            func_0022ED80_i(0, 0, moby);
+            moby->state = 2;
+        }
+        break;
+    case 2: {
+        float target;
+        if (data[0] != 0)
+            target = fast_subtract_rotations(*(float *)&data[3], 0.6981317f);
+        else
+            target = fast_add_rotations(*(float *)&data[3], 0.6981317f);
+        FUN_L00_0025be00(&moby->rot.z, (float *)&data[1], target,
+                          frame_time_sq * 12.566371f, frame_time_sq * 12.566371f,
+                          frame_time * 12.566371f);
+        break;
+    }
+    }
+}
+#endif
 #include "sda.h"
 
 /* Applies breast growth (D_L05_00161ED0) and big-head manipulators to

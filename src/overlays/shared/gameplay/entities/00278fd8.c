@@ -1452,7 +1452,85 @@ int FUN_L15_002a2868(int idx, void *pos) {
     } while (*p++ > -1);
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a29b8.s", FUN_L15_002a29b8);
+#include "rnc/gameplay/entities/moby.h"
+#define MOBY(p) ((struct Moby *)(p))
+typedef struct {
+    float v[4][4];
+    int col[4];
+    float uv[4][2];
+    long long r70;
+    long long texture; /* get_effect_texture */
+    unsigned long long r80;
+    unsigned long long alpha; /* GS ALPHA register value (0x8000000044) */
+} EffectQuad;
+
+extern float D_L15_001CE110[4][4][4];
+extern float D_L15_001CE210[8];
+typedef struct {
+    char pad[0x140];
+    float position[4];
+} LevelView;
+extern LevelView D_L15_00167280;
+extern float D_L15_001614C4 __attribute__((sda));
+extern int D_L15_001614C8 __attribute__((sda));
+extern long long get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern float fast_atan2(float, float) __asm__("FUN_001f9e90");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern void rotation_matrix_from_euler(void *, void *) __asm__("FUN_001fa050");
+extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
+
+void FUN_L15_002a29b8(unsigned char *moby) {
+    EffectQuad q;
+    float angles[4] __attribute__((aligned(16)));
+    float rotation[12] __attribute__((aligned(16)));
+    float position[4] __attribute__((aligned(16)));
+    unsigned short *p;
+    int i, j;
+
+    q.texture = get_effect_texture(8);
+    q.r80 = 0xff9000000260LL;
+    q.alpha = 0x8000000044LL;
+    q.r70 = 0;
+    {
+        int count = 3;
+        float *source = D_L15_001CE210;
+        float *v = &q.uv[0][1];
+        float *u = &q.uv[0][0];
+        do {
+            count--;
+            *u = source[0];
+            *v = source[1];
+            source += 2;
+            u += 2;
+            v += 2;
+        } while (count >= 0);
+    }
+    p = (unsigned short *)D_L15_001ABE40[MOBY(moby)->group];
+    do {
+        unsigned char *other = (unsigned char *)(D_L15_0015FFD8 + ((*p & 0x7fff) << 8));
+        if (MOBY(other)->state != 1) {
+            clear_vector(angles);
+            angles[2] = fast_atan2(D_L15_00167280.position[0] - MOBY(other)->pos.x,
+                                   D_L15_00167280.position[1] - MOBY(other)->pos.y);
+            angles[1] = -fast_atan2(vector_distance(&MOBY(other)->pos, D_L15_00167280.position),
+                                    D_L15_00167280.position[2] - MOBY(other)->pos.z);
+            rotation_matrix_from_euler(rotation, angles);
+            qcopy(position, &MOBY(other)->pos);
+            position[2] += D_L15_001614C4;
+            position[3] = 1.0f;
+            for (i = 0; i < 4; i++) {
+                int *colors = q.col;
+                int color = (&D_L15_001614C8)[i];
+                for (j = 0; j < 4; j++) {
+                    colors[j] = color;
+                    qcopy(q.v[j], D_L15_001CE110[i][j]);
+                }
+                draw_geometry_quad(&q, rotation, 0);
+            }
+        }
+    } while ((short)*p++ >= 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a2bf0.s", FUN_L15_002a2bf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a3138.s", FUN_L15_002a3138);
 #include "rnc/gameplay/entities/moby.h"
@@ -1511,7 +1589,7 @@ extern float D_L15_001E27F0[];
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
-extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
+extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
@@ -1559,7 +1637,127 @@ void FUN_L15_002a7628(char *moby) {
     *(OvlQuad *)q.v[3] = *(OvlQuad *)D;
     draw_geometry_quad(&q, 0, 0);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002bddb0.s", FUN_L15_002bddb0);
+#else
+typedef struct {
+    Vec4 origin;
+    s32 trigger;
+    f32 travel;
+    s32 start_volume;
+    s32 stop_volume;
+} MovingMobyVars;
+
+extern char D_0013F3D0[];
+extern f32 FUN_001f99c0(f32);
+extern f32 fast_cos_door(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin_door(f32) __asm__("FUN_001f9de0");
+extern void add_vector_door(void *, void *, void *) __asm__("FUN_001f9a10");
+
+void FUN_L15_002bddb0(struct Moby *moby) {
+    MovingMobyVars *vars = (MovingMobyVars *)moby->pvars;
+    Vec4 offset;
+    Vec4 next;
+    f32 step;
+    f32 magnitude;
+    f32 travel;
+    s32 reversed;
+    s32 next_state;
+
+    reversed = moby->oclass == 0xc4 || moby->oclass == 0x7a6;
+    if (vars->trigger == -1 &&
+        (vars->start_volume == -1 || vars->stop_volume == -1)) {
+        mark_moby_for_removal(moby);
+        return;
+    }
+
+    switch (moby->state) {
+    case 0:
+        vars->origin.q = *(u128 *)&moby->pos;
+        if (vars->trigger != 0) {
+            moby->state = 1;
+            return;
+        }
+        moby->state = 4;
+        return;
+    case 1:
+        if (((struct Moby *)(D_L15_0015FFD8_m + vars->trigger * 0x100))->state != 4)
+            return;
+        if (reversed)
+            allocate_voice_for_target_entry(0, 0, (int)moby);
+        moby->state = 2;
+        break;
+    case 2:
+        {
+        union { u32 bits; f32 value; } triple;
+        f32 increment;
+        travel = vars->travel;
+        increment = (moby->scale * 3.0f / moby->pclass->scale) / 3.0f * D_0015ED6C;
+        if (reversed)
+            increment = -increment;
+        vars->travel = travel + increment;
+        offset.f[0] = fast_cos_door(moby->rot.z) * vars->travel;
+        offset.f[1] = fast_sin_door(moby->rot.z) * vars->travel;
+        offset.f[2] = 0.0f;
+        add_vector_door(&next, &vars->origin, &offset);
+        *(u128 *)&moby->pos = next.q;
+        magnitude = FUN_001f99c0(vars->travel);
+        triple.bits = 0x40400000;
+        if (!(moby->scale * triple.value / moby->pclass->scale < magnitude))
+            return;
+        if (vars->trigger != -1) {
+            moby->state = 3;
+            return;
+        }
+        moby->state = 5;
+        return;
+        }
+    case 4:
+        vars->travel = 0.0f;
+        if (!is_point_inside_clip_volume(D_0013F3D0, vars->start_volume))
+            return;
+        if (reversed)
+            allocate_voice_for_target_entry(0, 0, (int)moby);
+        moby->state = 2;
+        break;
+    case 5:
+        if (is_point_inside_clip_volume(D_0013F3D0, vars->stop_volume))
+            return;
+        if (reversed)
+            allocate_voice_for_target_entry(0, 0, (int)moby);
+        moby->state = 6;
+        break;
+    case 6:
+        {
+        f32 old_travel;
+        f32 new_travel;
+        magnitude = FUN_001f99c0(vars->travel);
+        step = (moby->scale * 3.0f / moby->pclass->scale) / 3.0f * D_0015ED6C;
+        if (step < magnitude) {
+            old_travel = vars->travel;
+            if (reversed) {
+                f32 reverse_step = -step;
+                new_travel = old_travel - reverse_step;
+            } else {
+                new_travel = old_travel - step;
+            }
+            vars->travel = new_travel;
+        } else {
+            vars->travel = 0.0f;
+        }
+        offset.f[0] = fast_cos_door(moby->rot.z) * vars->travel;
+        offset.f[1] = fast_sin_door(moby->rot.z) * vars->travel;
+        offset.f[2] = 0.0f;
+        add_vector_door(&next, &vars->origin, &offset);
+        *(u128 *)&moby->pos = next.q;
+        if (vars->travel != 0.0f)
+            return;
+        moby->state = 4;
+        break;
+        }
+    }
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cb4c8.s", FUN_L15_002cb4c8);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCE50), where it is exact; names translated to the US level program. */
 

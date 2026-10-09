@@ -27,7 +27,61 @@ void FUN_L00_00241728(s32 *h) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00241788.s", FUN_L00_00241788);
+#else
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern f64 fptodp(f32);
+extern void STUB_printf(const char *, ...) __asm__("FUN_001e93b0");
+
+struct MobySortEntry {
+    f32 id;
+    f32 value;
+};
+
+void FUN_L00_00241788(s32 *entries, s32 count) {
+    struct MobySortEntry sorted[512];
+    s32 i;
+    s32 changed;
+    f32 id;
+    f32 value;
+
+    for (i = 0; i < count; i++, entries += 8) {
+        sorted[i].id = (f32)entries[1];
+        if (entries[0] == 0) {
+            sorted[i].value = 0.0f;
+        } else {
+            s32 end = entries[8];
+            if (end == 0)
+                end = entries[16];
+            sorted[i].value = convert_integer_to_float(end - entries[0]) * 0.0009765625f;
+            sorted[i + 1].id = -1.0f;
+            sorted[i + 1].value = 0.0f;
+        }
+    }
+
+    do {
+        changed = 0;
+        for (i = 0; i < count; i++) {
+            if (sorted[i].value < sorted[i + 1].value) {
+                id = sorted[i].id;
+                value = sorted[i].value;
+                sorted[i].id = sorted[i + 1].id;
+                sorted[i].value = sorted[i + 1].value;
+                sorted[i + 1].id = id;
+                sorted[i + 1].value = value;
+                changed = 1;
+            }
+        }
+    } while (changed);
+
+    for (i = 0; i < count; i++) {
+        STUB_printf((const char *)0x001e8640, truncate_float_to_s32(sorted[i].id),
+                    fptodp(sorted[i].value));
+    }
+}
+#endif
 /* Reads the gameplay file of a level, which lists the objects placed in the
  * world. The file header holds offsets to lists. Each list starts with the
  * number of entries, then 12 bytes of padding, then the entries:

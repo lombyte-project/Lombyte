@@ -2,7 +2,35 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0029bbe0.s", FUN_L05_0029bbe0);
+#include "qcopy.h"
+extern unsigned char *FUN_L00_002678b8(int);
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern unsigned char *D_L05_001B25C0 __asm__("D_L05_001B25C0") __attribute__((section(".data")));
+
+unsigned char *FUN_L05_0029bbe0(float a, void *pos, void *vel, int life, int size, int color) {
+    unsigned char *p = FUN_L00_002678b8(0x30);
+    if (p != 0) {
+        unsigned char *q;
+        qcopy(p + 0x10, pos);
+        q = p + 0x20;
+        *(int *)(p + 4) = color & 0xffffff;
+        p[9] = truncate_float_to_s32(2.0f) + 0x10;
+        p[3] = 0x44;
+        p[1] = 0;
+        p[2] = *D_L05_001B25C0;
+        *(float *)(p + 0xc) = a * 210000.0f;
+        p[8] = random_integer_below(0x100);
+        qcopy(q, vel);
+        *(float *)(q + 0x10) = 2.0f / convert_integer_to_float(life);
+        *(short *)(p + 0xa) = life;
+        *(volatile int *)(q + 0x18) = color;
+        *(volatile short *)(q + 0x1c) = size;
+        *(volatile int *)(q + 0x14) = color & 0xffffff;
+    }
+    return p;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -17,7 +45,7 @@ extern s32 scale_game_frames_q(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L05_001B25C8_q __asm__("D_L05_001B25C8") __attribute__((section(".data")));
 extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
-extern int func_001FA898_r_q(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32_q(float) __asm__("FUN_001fa6d0");
 
 unsigned char *FUN_L05_0029be70(void *pos, void *vel, int arg2, int arg3, float a, float b,
                                 float c) {
@@ -26,7 +54,7 @@ unsigned char *FUN_L05_0029be70(void *pos, void *vel, int arg2, int arg3, float 
     if (p != 0) {
         q = p + 0x20;
         qcopy(p + 0x10, pos);
-        p[9] = func_001FA898_r_q(1.0f) + 0x40;
+        p[9] = truncate_float_to_s32_q(1.0f) + 0x40;
         p[3] = 0x44;
         p[1] = 0;
         p[2] = D_L05_001B25C8_q[arg3];
@@ -36,7 +64,7 @@ unsigned char *FUN_L05_0029be70(void *pos, void *vel, int arg2, int arg3, float 
         *(short *)(p + 0xA) = scale_game_frames_q(0xF);
         qcopy(q, vel);
         *(float *)(q + 0x10) = b;
-        *(int *)(q + 0x14) = func_001FA898_r_q(random_float_between_alt_q(-3.0f, 3.0f));
+        *(int *)(q + 0x14) = truncate_float_to_s32_q(random_float_between_alt_q(-3.0f, 3.0f));
         *(float *)(q + 0x18) = c;
     }
     return p;

@@ -760,7 +760,48 @@ char *FUN_L09_002efda8(struct Moby *owner, void *position, float angle) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002efe48.s", FUN_L09_002efe48);
+#define MOBY(p) ((struct Moby *)(p))
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
+extern float fast_atan2(float, float) __asm__("FUN_001f9e90");
+
+char *FUN_L09_002efe48(void *unused, float lower_radius, float upper_radius, void *origin, float *direction) {
+    float offset[4];
+    char *moby = (char *)create_moby(0x1A1);
+    if (moby != 0) {
+        float pi = 3.1415927f;
+        char *data = (char *)MOBY(moby)->pvars;
+        float angle = random_float_between_alt(-3.1415927f, 3.1415927f);
+        float radius = random_float_between_alt(lower_radius, upper_radius);
+        float heading = fast_atan2(direction[0], direction[1]);
+        float difference = fast_difference_between_rotations(heading, angle);
+        float gap;
+
+        MOBY(moby)->pos.x = fast_cos(angle) * radius;
+        {
+            float sine = fast_sin(angle);
+            float speed = frame_time;
+            MOBY(moby)->pos.y = sine * radius;
+            MOBY(moby)->pos.z = 0.0f;
+            normalize_vector_xyz(data, &MOBY(moby)->pos, difference * speed);
+        }
+        gap = pi - difference;
+        normalize_vector_xyz(offset, direction, gap * gap * 0.25f * frame_time);
+        add_vector_xyz(data, data, offset);
+        *(int *)(data + 8) = 0;
+        add_vector_xyz(&MOBY(moby)->pos, &MOBY(moby)->pos, origin);
+        add_vector_xyz(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);
+        scale_vector_xyz(data, data, 0.35f);
+        MOBY(moby)->unk58 *= 0.5f;
+        MOBY(moby)->rot.z = fast_atan2(*(float *)data, *(float *)(data + 4));
+        MOBY(moby)->unk30 = 0xFF;
+        MOBY(moby)->unk32 = 0xFF;
+        MOBY(moby)->unk31 = 1;
+        pi -= difference;
+        MOBY(moby)->scale *= (3.1415927f - difference) + (3.1415927f - difference) + 1.0f;
+        FUN_L00_00250df8(moby);
+    }
+    return moby;
+}
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002F1390), where it is exact; names translated to the US level program. */
 
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
