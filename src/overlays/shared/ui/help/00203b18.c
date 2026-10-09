@@ -341,35 +341,23 @@ void FUN_L00_00205f60(int a0, char *a1, int a2) {
         }
     }
 }
-typedef struct {
-    char pad[0x198];
-    int i198;
-    char pad2[0xA9C - 0x19C];
-    int iA9C;
-    char pad3[0x12ED - 0xAA0];
-    u8 b12ED;
-    char pad4[0x2080 - 0x12EE];
-    unsigned char *p2080;
-    int i2084;
-} G_206080;
-extern G_206080 D_0013F350_206080 __asm__("D_0013F350");
 extern int FUN_001f96f8_206080(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_00211870_206080(float) __asm__("FUN_L00_00211870");
 extern void FUN_L00_00205f60_206080(int, char *, int) __asm__("FUN_L00_00205f60");
 
 void FUN_L00_00206080(void) {
-    G_206080 *g = &D_0013F350_206080;
+    struct Hero *g = &hero;
     int k;
-    if (g->i2084 == 2 && g->i198 < FUN_001f96f8_206080(0xF)) {
+    if (g->state.current == 2 && g->state_timer < FUN_001f96f8_206080(0xF)) {
         return;
     }
-    k = g->b12ED;
-    if (g->i2084 == 2 && g->i198 == FUN_001f96f8_206080(0x16)) {
+    k = g->unk12ED;
+    if (g->state.current == 2 && g->state_timer == FUN_001f96f8_206080(0x16)) {
         FUN_L00_00205f60_206080(k, 0, 1);
     }
-    switch (D_0013F350_206080.p2080[0x53]) {
+    switch (((unsigned char *)hero.moby)[0x53]) {
     case 3:
-        if (D_0013F350_206080.iA9C) {
+        if (hero.unkA9C) {
             return;
         }
         if (FUN_L00_00211870_206080(49.5f)) {
@@ -380,7 +368,7 @@ void FUN_L00_00206080(void) {
         }
         break;
     case 4:
-        if (D_0013F350_206080.iA9C) {
+        if (hero.unkA9C) {
             return;
         }
         if (FUN_L00_00211870_206080(12.5f)) {
