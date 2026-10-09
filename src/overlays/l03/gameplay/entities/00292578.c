@@ -452,7 +452,230 @@ void FUN_L03_0029cff0(struct Moby *m) {
                          *(float *)(d + 0x110) * DEG_TO_RAD * D_0015ED6C);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029d2e0.s", FUN_L03_0029d2e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029dba8.s", FUN_L03_0029dba8);
+extern char *D_L03_0015FFD8_29dba8 __asm__("D_L03_0015FFD8");
+extern char *D_L03_001B05B0_29dba8[] __asm__("D_L03_001B05B0");
+extern char D_0013E550_29dba8[] __asm__("D_0013E550");
+extern char D_L03_001E2A28[];
+extern float ConvertIntegerToFloat(int) __asm__("FUN_001fa6c0");
+extern float add_rotations_29dba8(float, float) __asm__("FUN_001fa580");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern float FUN_001f9de0(float);
+extern int FUN_001fa728(void *, float);
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern int FUN_L00_002591d0(int *, int, int, int);
+extern int FUN_L00_002592b8(int *, int, int, int);
+extern int FUN_L01_00275690(char *, float);
+extern int FUN_L01_0028b510(void *, void *, float);
+extern int FUN_L01_0028b828(void *, int);
+extern int FUN_L01_0028b878(char *);
+extern void FUN_L01_0028b410(char *);
+extern void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b);
+extern void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4);
+extern void FUN_L01_0028bb90(void *, int, void *, float, float);
+extern void FUN_L03_0029c8a8(char *, char *);
+extern void FUN_L03_0029d2e0(char *, void *, int);
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
+extern void report_29dba8(void *, int, int) __asm__("FUN_001e93b0");
+
+/* Train car update: keeps the cars of a group in step (stops them all when none can move), and on its
+ * first frame snaps to the nearest path node and sets up the spline; then runs along the path spline,
+ * steering, banking and spawning its hit/smoke effects; state 2 waits without a path, 3 waits a timer. */
+void FUN_L03_0029dba8(char *moby) {
+    float zero[4];
+    float old_rot[4];
+    float old_pos[4];
+    float vec[4];
+    float tmp[4];
+    char *item;
+    char *data;
+    char *pm;
+    char *cur;
+    char *cur0;
+    char *pos0;
+    char *p;
+    char *d;
+    int *path;
+    int flag;
+    int found;
+    int n;
+    int r;
+    int idx;
+    unsigned char *e;
+    float f;
+    float step;
+
+    *(OvlQuad *)zero = 0;
+    flag = 0;
+    data = *(char **)(moby + 0x78);
+    if (((unsigned char *)moby)[0x31] == 0) {
+        *(OvlQuad *)vec = *(OvlQuad *)(moby + 0x10);
+        vec[3] = 7.0f;
+        flag = FUN_001fa728(vec, *(short *)(moby + 0x32)) == -1;
+    }
+    if (data == 0) {
+        return;
+    }
+    pm = data + 0x60;
+    if (((unsigned char *)moby)[0x21] != 0xFF && ((unsigned char *)moby)[0x20] != 0 &&
+        ((unsigned char *)moby)[0x20] != 3) {
+        found = 0;
+        FUN_L00_002591d0((int *)&item, ((unsigned char *)moby)[0x21], 0, 0);
+        if (item == moby) {
+            goto test;
+            for (;;) {
+                FUN_L00_002592b8((int *)&item, (int)item, 0, 0);
+            test:
+                if (item == 0) {
+                    break;
+                }
+                if (FUN_L01_00275690(item, ConvertIntegerToFloat(*(short *)(item + 0x32))) != -1) {
+                    found = 1;
+                    break;
+                }
+            }
+            if (!found) {
+                FUN_L00_002591d0((int *)&item, ((unsigned char *)moby)[0x21], 0, 0);
+                while (item != 0) {
+                    d = *(char **)(item + 0x78);
+                    item[0x20] = 3;
+                    *(short *)(d + 0x12C) = FUN_001f96f8(5);
+                    FUN_L00_002592b8((int *)&item, (int)item, 0, 0);
+                }
+            }
+        }
+    }
+    FUN_L03_0029c9d0((unsigned char *)moby);
+    FUN_L03_0029d1b8(moby);
+    switch (((unsigned char *)moby)[0x20]) {
+    case 0:
+        *(unsigned short *)(moby + 0x34) |= 0x1000;
+        if (*(int *)(pm + 0x14) != -1) {
+            path = (int *)D_L03_001B05B0_29dba8[*(int *)(pm + 0x14)];
+            if (FUN_001f9b48((char *)path + 0x10, (char *)path + *path * 0x10) < 0.5f) {
+                *path -= 1;
+            }
+        } else {
+            report_29dba8(D_L03_001E2A28, *(short *)(moby + 0xA6),
+                         truncate_float_to_s32((moby - D_L03_0015FFD8_29dba8) >> 8));
+        }
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        data[0x2B] = 1;
+        data[0x2C] = 0x25;
+        if (*(float *)(data + 0x140) > 500.0f) {
+            *(float *)(data + 0x140) = random_float_between(-1.0f, 1.0f) * *(float *)(data + 0x140) / 1000.0f;
+        }
+        if (*(float *)(data + 0x144) > 500.0f) {
+            *(float *)(data + 0x144) = random_float_between(-1.0f, 1.0f) * *(float *)(data + 0x144) / 1000.0f;
+        }
+        if (*(int *)(pm + 0x14) == -1) {
+            moby[0x20] = 2;
+            break;
+        }
+        pos0 = moby + 0x10;
+        data[0x131] = ((moby - D_L03_0015FFD8_29dba8) >> 8) / 2 % 7;
+        FUN_L01_0028b410(pm);
+        if (((unsigned char *)pm)[5] == 0) {
+            if (*(int *)pm <= 0) {
+                r = FUN_L01_0028b510(pos0, *(void **)(pm + 0x10), 0.0f);
+                *(int *)pm = r;
+                if (pm[4] >= 0 ? r == **(int **)(pm + 0x10) - 1 : r == 0) {
+                    *(int *)pm = 0;
+                }
+            }
+            *(float *)(pm + 0xC) = FUN_001f9b48(pos0, *(char **)(pm + 0x10) + (*(int *)pm * 0x10 + 0x10));
+            p = *(char **)(pm + 0x10) + *(int *)pm * 0x10;
+            *(float *)(pm + 0x18) = FUN_001f9e90(*(float *)(p + 0x10) - *(float *)(moby + 0x10),
+                                                 *(float *)(p + 0x14) - *(float *)(moby + 0x14));
+            pm[5] = 2;
+            *(int *)(pm + 0x8) = 0;
+            *(int *)(pm + 0x1C) = 0;
+        }
+        cur0 = data + 0xA0;
+        *(OvlQuad *)(data + 0xE0) = *(OvlQuad *)(*(char **)(pm + 0x10) + *(int *)pm * 0x10 + 0x10);
+        *(float *)(data + 0x100) = 1.0f;
+        FUN_L01_0028b8c8(cur0, (int *)pm, 0, *(float *)(data + 0x104), *(float *)(data + 0x108));
+        *(OvlQuad *)(data + 0xB0) = *(OvlQuad *)(data + 0xC0) =
+            *(OvlQuad *)(*(char **)(pm + 0x10) + *(int *)pm * 0x10 + 0x10);
+        *(float *)(moby + 0x40) = 0.0f;
+        *(float *)(moby + 0x44) = -FUN_001f9e90(vector_length_xy(cur0), *(float *)(data + 0xA8));
+        *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)(data + 0xA0) - zero[0], *(float *)(data + 0xA4) - zero[1]);
+        *(float *)(data + 0x114) = 0.0f;
+        *(float *)(data + 0x11C) = 0.0f;
+        *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(data + 0xE0);
+        FUN_L03_0029c8a8(moby, pos0);
+        data[0x131] = 7;
+        f = *(float *)(data + 0x13C);
+        if (f > 6.2831855f) {
+            *(float *)(data + 0x13C) = f * DEG_TO_RAD;
+        } else if (*(float *)(data + 0x134) != 0.0f && f == -1.0f) {
+            *(float *)(data + 0x13C) = random_angle_radians();
+        }
+        *(OvlQuad *)(data + 0xD0) = *(OvlQuad *)(data + 0xC0);
+        FUN_L01_0028bb90(pm, 0, moby, *(float *)(data + 0x104), *(float *)(data + 0x108));
+        if (*(short *)(data + 0x12C) > 0) {
+            moby[0x20] = 3;
+        } else {
+            *(short *)(data + 0x14A) = 0;
+            moby[0x20] = 1;
+        }
+        break;
+    case 2:
+        if (*(int *)(pm + 0x14) != -1) {
+            moby[0x20] = 0;
+        }
+        idx = *(int *)(data + 0x150);
+        if (idx != -1) {
+            e = (unsigned char *)D_0013E550_29dba8 + idx * 0x70;
+            if (*(char **)(e + 0x88) == moby && e[0x74]) {
+                release_voice_slot(idx);
+            }
+        }
+        *(int *)(data + 0x150) = -1;
+        break;
+    case 3:
+        if (FUN_001f9770(data + 0x12C)) {
+            moby[0x20] = 1;
+        }
+        break;
+    case 1:
+        *(OvlQuad *)old_rot = *(OvlQuad *)(moby + 0x40);
+        *(OvlQuad *)old_pos = *(OvlQuad *)(moby + 0x10);
+        cur = data + 0xA0;
+        if (*(float *)(data + 0x100) >= 1.0f) {
+            *(float *)(data + 0x100) -= 1.0f;
+            n = FUN_L01_0028b878(pm);
+            *(OvlQuad *)(data + 0x90) = *(OvlQuad *)(data + 0xA0);
+            FUN_L01_0028b8c8(cur, (int *)pm, 1, *(float *)(data + 0x104), *(float *)(data + 0x108));
+            *(OvlQuad *)(data + 0xB0) = *(OvlQuad *)(data + 0xC0);
+            *(OvlQuad *)(data + 0xC0) = *(OvlQuad *)(*(char **)(pm + 0x10) + FUN_L01_0028b828(pm, n + 1) * 0x10 + 0x10);
+        }
+        step = (*(float *)(data + 0x10C) + *(float *)(data + 0x134) * FUN_001f9de0(*(float *)(data + 0x13C))) /
+               *(float *)(data + 0xBC);
+        *(float *)(data + 0x13C) = add_rotations_29dba8(*(float *)(data + 0x13C), *(float *)(data + 0x138) * DEG_TO_RAD);
+        *(OvlQuad *)(data + 0xE0) = *(OvlQuad *)(data + 0xD0);
+        FUN_L01_0028ba80(*(float *)(data + 0x100) + step, data + 0xD0, data + 0xB0, data + 0xC0, data + 0x90, cur);
+        if (!flag) {
+            FUN_L03_0029cff0(moby);
+        } else {
+            clear_vector(moby + 0x40);
+            *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)(data + 0xD0) - *(float *)(data + 0xE0),
+                                                   *(float *)(data + 0xD4) - *(float *)(data + 0xE4));
+        }
+        cur = moby + 0x10;
+        *(float *)(data + 0x100) += step;
+        *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(data + 0xE0);
+        if (!flag) {
+            FUN_L03_0029c8a8(moby, cur);
+        }
+        subtract_vector_xyz(tmp, cur, old_pos);
+        *(OvlQuad *)vec = *(OvlQuad *)tmp;
+        FUN_L03_0029caa8(moby, vec, flag);
+        FUN_L03_0029d2e0(moby, vec, flag);
+        break;
+    }
+}
 
 char *f20c4f8_2bad40(int) __asm__("FUN_0020c4f8");
 float f213308_2bad40(void) __asm__("FUN_00213308");
