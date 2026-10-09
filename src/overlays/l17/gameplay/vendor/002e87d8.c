@@ -2957,8 +2957,8 @@ extern unsigned char D_0013F350[];
 extern char D_0013CAE4[];
 extern char D_0013F3D0[];
 
-void FUN_L17_002f1940(unsigned char *m) {
-    Vars1448 *v = *(Vars1448 **)(m + 0x78);
+void FUN_L17_002f1940(struct Moby *m) {
+    Vars1448 *v = (Vars1448 *)m->pvars;
     float old_pos[4];
     float old_rot[4];
     float delta[4];
@@ -2970,25 +2970,25 @@ void FUN_L17_002f1940(unsigned char *m) {
     char *p;
     char *pl;
 
-    qcopy(old_pos, m + 0x10);
-    qcopy(old_rot, m + 0x40);
-    *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * *(float *)&D_L17_001623AC;
-    switch (m[0x20]) {
+    qcopy(old_pos, &m->pos);
+    qcopy(old_rot, &m->rot);
+    m->scale = m->pclass->scale * *(float *)&D_L17_001623AC;
+    switch (m->state) {
     case 0:
-        if (D_L17_001BBB30.collected[(short)*(unsigned short *)(m + 0xB2)] != 0 ||
+        if (D_L17_001BBB30.collected[(short)m->unkB2] != 0 ||
             (*(int *)(((char *)&D_0014C190) +
-                      (((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 + (D_0015ED84_m << 8))) >>
-             (*(unsigned short *)(m + 0xB2) & 0x1F)) &
+                      (((short)m->unkB2 >> 5) * 4 + (D_0015ED84_m << 8))) >>
+             (m->unkB2 & 0x1F)) &
                 1) {
             v->sel = 0;
             v->dir = 0;
             v->side = 0;
         }
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0x80;
-        *(long *)(m + 0x38) = *(long *)(*(char **)(((char *)&D_001413D0)) + 0x38);
-        m[0x20] = 1;
-        if (m[0x53] != 2) {
+        m->unk30 = 0xFF;
+        m->unk32 = 0x80;
+        m->spawn_frame = *(long *)(*(char **)(((char *)&D_001413D0)) + 0x38);
+        m->state = 1;
+        if (m->prev_seq != 2) {
             blend_moby_animation(m, 2, 0, 0);
         }
         {
@@ -2996,12 +2996,12 @@ void FUN_L17_002f1940(unsigned char *m) {
             v->sel = 1;
             v->side = 1;
             v->dir = 1;
-            *(OvlQuad *)(m + 0x10) = *(OvlQuad *)((v->cam[1] << 7) + base + 0x30);
-            *(OvlQuad *)(m + 0x40) = *(OvlQuad *)((v->cam[1] << 7) + base + 0x70);
+            *(OvlQuad *)&m->pos = *(OvlQuad *)((v->cam[1] << 7) + base + 0x30);
+            *(OvlQuad *)&m->rot = *(OvlQuad *)((v->cam[1] << 7) + base + 0x70);
         }
         break;
     case 1:
-        if (m[0x53] == 2 && (m[0x70] & 2) && v->sfx == 0) {
+        if (m->prev_seq == 2 && (m->unk70 & 2) && v->sfx == 0) {
             allocate_voice_for_target_entry(1, 0, (int)m);
             v->sfx = 0;
         }
@@ -3038,9 +3038,9 @@ void FUN_L17_002f1940(unsigned char *m) {
         if (v->go != 0) {
             v->go = 0;
             FUN_L00_002644e0(10);
-            m[0x20] = 2;
+            m->state = 2;
             allocate_voice_for_target_entry(2, 0, (int)m);
-            if (m[0x53] != 0) {
+            if (m->prev_seq != 0) {
                 blend_moby_animation(m, 0, 0, 0);
             }
             fade_to_black(scale_game_frames(10));
@@ -3057,11 +3057,11 @@ void FUN_L17_002f1940(unsigned char *m) {
             FUN_L00_002eaa30(rot);
             FUN_L00_00216f90(D_L17_001600EC + (v->cut << 7) + 0x30,
                              D_L17_001600EC + (v->cut << 7) + 0x70, 0x72, 0);
-        } else if (D_L17_001BBB30.collected[(short)*(unsigned short *)(m + 0xB2)] != 0 ||
+        } else if (D_L17_001BBB30.collected[(short)m->unkB2] != 0 ||
                    (*(int *)(((char *)&D_0014C190) +
-                             (((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 +
+                             (((short)m->unkB2 >> 5) * 4 +
                               (D_0015ED84_m << 8))) >>
-                    (*(unsigned short *)(m + 0xB2) & 0x1F)) &
+                    (m->unkB2 & 0x1F)) &
                        1) {
             float d =
                 FUN_001f9b80(((char *)&D_0013F3D0), D_L17_001600EC + (v->cam[v->sel] << 7) + 0x30);
@@ -3075,10 +3075,10 @@ void FUN_L17_002f1940(unsigned char *m) {
                 v->sel = t;
                 base = (int)D_L17_001600EC;
                 ofs = v->cam[t] << 7;
-                qcopy(m + 0x10, (char *)(ofs + base + 0x30));
-                qcopy(m + 0x40, (char *)(ofs + base + 0x70));
-                vu_euler_rotation_basis(m + 0xC0, m + 0x40);
-                *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24);
+                qcopy(&m->pos, (char *)(ofs + base + 0x30));
+                qcopy(&m->rot, (char *)(ofs + base + 0x70));
+                vu_euler_rotation_basis(&m->unkC0, &m->rot);
+                m->scale = m->pclass->scale;
             }
         }
         break;
@@ -3086,40 +3086,40 @@ void FUN_L17_002f1940(unsigned char *m) {
         if (FUN_L17_002f2180(m, v->side)) {
             int ofs;
             int base;
-            m[0x20] = 3;
+            m->state = 3;
             v->wA4 = 0;
             ofs = v->cam[v->sel] << 7;
             base = (int)D_L17_001600EC;
-            qcopy(m + 0x10, (char *)(ofs + base + 0x30));
-            qcopy(m + 0x40, (char *)(ofs + base + 0x70));
-            vu_euler_rotation_basis(m + 0xC0, m + 0x40);
-            *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24);
-            qcopy(b, m + 0x10);
-            normalize_vector_xyz(a, m + 0xC0, -2.0f);
-            add_vector_xyz(a, a, m + 0xE0);
+            qcopy(&m->pos, (char *)(ofs + base + 0x30));
+            qcopy(&m->rot, (char *)(ofs + base + 0x70));
+            vu_euler_rotation_basis(&m->unkC0, &m->rot);
+            m->scale = m->pclass->scale;
+            qcopy(b, &m->pos);
+            normalize_vector_xyz(a, &m->unkC0, -2.0f);
+            add_vector_xyz(a, a, &m->unkE0);
             add_vector_xyz(b, b, a);
             clear_vector(rot);
-            rot[2] = fast_add_rotations(*(float *)(m + 0x48), 3.1415927f);
+            rot[2] = fast_add_rotations(m->rot.z, 3.1415927f);
             FUN_L00_00216f90(b, rot, 0, 0);
             FUN_L00_002eac18(0);
             *(int *)(((char *)&D_0014C190) +
-                     (((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 + (D_0015ED84_m << 8))) |=
-                1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
-            D_L17_001BADD0[(short)*(unsigned short *)(m + 0xB2) >> 5] |=
-                1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
+                     (((short)m->unkB2 >> 5) * 4 + (D_0015ED84_m << 8))) |=
+                1 << (m->unkB2 & 0x1F);
+            D_L17_001BADD0[(short)m->unkB2 >> 5] |=
+                1 << (m->unkB2 & 0x1F);
         }
         break;
     case 3:
-        m[0x20] = 1;
-        if (m[0x53] != 2) {
+        m->state = 1;
+        if (m->prev_seq != 2) {
             blend_moby_animation(m, 2, 0, scale_game_frames(30));
         }
         allocate_voice_for_target_entry(0, 0, (int)m);
         v->sfx = 1;
         break;
     }
-    subtract_vector_xyz(delta, m + 0x10, old_pos);
-    FUN_L00_00260738(v->area, delta, old_rot, m + 0x40);
+    subtract_vector_xyz(delta, &m->pos, old_pos);
+    FUN_L00_00260738(v->area, delta, old_rot, &m->rot);
 }
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F3C18), where it is exact; names translated to the US level program. */
 

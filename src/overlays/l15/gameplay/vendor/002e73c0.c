@@ -101,25 +101,25 @@ extern void FUN_L10_00298940(char *);
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
-void FUN_L15_002ea748(unsigned char *m) {
-    *(float *)(m + 0x48) = fast_add_rotations(*(float *)(m + 0x48), D_0015ED6C * 1.5707964f);
-    *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * *(float *)&D_L15_00162078_d;
-    switch (m[0x20]) {
+void FUN_L15_002ea748(struct Moby *m) {
+    m->rot.z = fast_add_rotations(m->rot.z, D_0015ED6C * 1.5707964f);
+    m->scale = m->pclass->scale * *(float *)&D_L15_00162078_d;
+    switch (m->state) {
     case 0:
         FUN_L00_002d6bf0((char *)m);
         if (D_0013D4FD[0xD] != 0) {
             mark_moby_for_removal(m);
             return;
         }
-        m[0x20] = 1;
-        *(float *)(m + 0x18) = *(float *)(m + 0x18) + 1.0f;
+        m->state = 1;
+        m->pos.z = m->pos.z + 1.0f;
         break;
     case 1:
         FUN_L10_00298940((char *)m);
-        if (FUN_001f9b80(m + 0x10, D_0013F3D0) < 3.0f) {
-            *(unsigned short *)(m + 0x34) |= 0x41;
+        if (FUN_001f9b80(&m->pos, D_0013F3D0) < 3.0f) {
+            m->flags |= 0x41;
             FUN_L00_00298840(5);
-            m[0x20] = 2;
+            m->state = 2;
         }
         break;
     case 2:
@@ -128,7 +128,7 @@ void FUN_L15_002ea748(unsigned char *m) {
             D_L15_0015F640 = scale_game_frames(0xB4);
             FUN_L00_00260860(0x22, 1);
             memcard_save_data(0, -1);
-            m[0x20] = 3;
+            m->state = 3;
         }
         break;
     case 3:

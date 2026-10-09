@@ -787,7 +787,7 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
         m->unk32 = 0x40;
         m->unk31 = 1;
         m->state = 1;
-        m->scale = *(f32 *)((u8 *)m->pclass + 0x24) * scale;
+        m->scale = m->pclass->scale * scale;
         FUN_001fa030(&m->unkC0, &m->rot);
         if ((src->flags & 0x20) && (color = *(u8 **)(src->pvars + 0xC)) != 0)
             FUN_L00_002502f0(m, color[4], color[5], color[6]);

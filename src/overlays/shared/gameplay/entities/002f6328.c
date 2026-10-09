@@ -784,7 +784,7 @@ void FUN_L01_00307ca0(struct Moby *moby) {
         FUN_L01_00308470(moby);
         return;
     case 1:
-        moby->scale = *(f32 *)((u8 *)moby->pclass + 0x24) * D_L01_00161F10_f;
+        moby->scale = moby->pclass->scale * D_L01_00161F10_f;
         moby->pos.z = vars->home.z + D_L01_00161F14_f + D_L01_00161F18_f * FUN_001f9de0(moby->rot.w);
         moby->rot.x = FUN_001fa580_c(moby->rot.x, D_L01_00161F20_f * 0.017453292f * D_0015ED6C_f);
         moby->rot.y = FUN_001fa580_c(moby->rot.y, D_L01_00161F24_f * 0.017453292f * D_0015ED6C_f);
@@ -1180,39 +1180,39 @@ extern void FUN_L01_0027a248(int, int);
 extern int enqueue_callback_list_1(void (*)(char *), char *) __asm__("FUN_001f4600");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
-void FUN_L01_00308bd8(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void FUN_L01_00308bd8(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
     int active = 0;
 
-    if (D_L01_001BB6B0.collected[(short)*(unsigned short *)(moby + 0xB2)] != 0 ||
-        (D_0014C190_c[D_0015ED84_c][((short)*(unsigned short *)(moby + 0xB2)) >> 5] >>
-         (*(unsigned short *)(moby + 0xB2) & 0x1F)) &
+    if (D_L01_001BB6B0.collected[(short)moby->unkB2] != 0 ||
+        (D_0014C190_c[D_0015ED84_c][((short)moby->unkB2) >> 5] >>
+         (moby->unkB2 & 0x1F)) &
             1) {
         active = 1;
     }
     active = active != 0;
-    if (*(unsigned char *)(moby + 0x20) != 0 && *(int *)(data + 4) != -1 && !active &&
+    if (moby->state != 0 && *(int *)(data + 4) != -1 && !active &&
         FUN_00214720(D_0013F3D0, *(int *)(data + 4)) != 0) {
         active = 1;
         FUN_L01_00308b28_c(moby);
         FUN_L01_00309838_u(moby);
-        if (*(unsigned char *)(moby + 0x20) == 5)
-            *(unsigned char *)(moby + 0x20) = active;
+        if (moby->state == 5)
+            moby->state = active;
     }
     if (*(int *)(data + 0x3C) != 0) {
         if (D_0015EE20 == 0) {
-            *(int *)(moby + 0x94) = 0;
-            *(unsigned short *)(moby + 0x34) |= 0x41;
+            moby->unk94 = 0;
+            moby->flags |= 0x41;
             return;
         }
-        *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
-        *(unsigned short *)(moby + 0x34) &= ~0x41;
+        moby->unk94 = moby->pclass->unk10;
+        moby->flags &= ~0x41;
     }
-    switch (*(unsigned char *)(moby + 0x20)) {
+    switch (moby->state) {
     case 0: {
         char **slots = (char **)(data + 0x14);
         int i;
-        *(unsigned char *)(moby + 0x30) = 0xFF;
+        moby->unk30 = 0xFF;
         for (i = 0; i < 3; i++) {
             char *g = D_0013F350;
             char *c;
@@ -1220,27 +1220,27 @@ void FUN_L01_00308bd8(char *moby) {
             *(short *)(slots[i] + 0x32) = 0x40;
             slots[i][0x31] = 1;
             *(long *)(slots[i] + 0x38) = *(long *)(*(char **)(g + 0x2080) + 0x38);
-            *(unsigned short *)(slots[i] + 0x34) = *(unsigned short *)(moby + 0x34);
+            *(unsigned short *)(slots[i] + 0x34) = moby->flags;
             c = slots[i];
-            qcopy(c + 0x10, moby + 0x10);
-            qcopy(c + 0x40, moby + 0x40);
+            qcopy(c + 0x10, &moby->pos);
+            qcopy(c + 0x40, &moby->rot);
             *(float *)(slots[i] + 0x48) =
                 fast_add_rotations(*(float *)(c + 0x48), (float)i * 2.0943952f);
         }
         if (*(int *)(data + 0x38) != 0 || active) {
-            *(unsigned char *)(moby + 0x20) = 6;
+            moby->state = 6;
         } else {
-            *(unsigned char *)(moby + 0x20) = 5;
+            moby->state = 5;
             FUN_L01_003097e8_c((L01Moby *)moby);
         }
         FUN_L01_003092d0_c(moby);
         break;
     }
     case 6:
-        if (*(unsigned char *)(moby + 0x21) != 0xFF) {
-            FUN_L01_0026e0e0_c((char *)*(unsigned char *)(moby + 0x21), 1);
+        if (moby->unk21 != 0xFF) {
+            FUN_L01_0026e0e0_c((char *)moby->unk21, 1);
         }
-        *(unsigned char *)(moby + 0x20) = 1;
+        moby->state = 1;
     case 1: {
         char *g;
         if (*(int *)(data + 8) >= 0 && D_0014C050[*(int *)(data + 8) + D_0015ED84_c * 16] != 0xFF)
@@ -1258,12 +1258,12 @@ void FUN_L01_00308bd8(char *moby) {
         if (!(D_0013CAE4[0] & 0x10))
             break;
         allocate_voice_for_target_entry(0, 0, (void *)moby);
-        *(unsigned char *)(moby + 0x20) = 2;
+        moby->state = 2;
         *(int *)(data + 0x30) = -1;
         *(int *)(data + 0x2C) = 0;
         *(int *)(data + 0x28) = 0;
-        FUN_L00_00233ee8((float *)(moby + 0x10), 0, *(float *)(moby + 0x48));
-        FUN_L00_002598b0((int)moby, 1.5f, moby + 0x10, 0x10000, 20.0f, 1.0f, 0, 1, 0);
+        FUN_L00_00233ee8(&moby->pos.x, 0, moby->rot.z);
+        FUN_L00_002598b0((int)moby, 1.5f, &moby->pos, 0x10000, 20.0f, 1.0f, 0, 1, 0);
         break;
     }
     case 7:
@@ -1279,7 +1279,7 @@ void FUN_L01_00308bd8(char *moby) {
                                        *(float *)&D_L01_00161F90_d * D_0015ED6C);
         } else {
             allocate_voice_for_target_entry(1, 0, (void *)moby);
-            *(unsigned char *)(moby + 0x20) = 8;
+            moby->state = 8;
             *(float *)(data + 0x34) = 0.0f;
         }
         FUN_L01_003092d0_c(moby);
@@ -1299,9 +1299,9 @@ void FUN_L01_00308bd8(char *moby) {
         } else if (D_L01_0015F594 != 4 || !(*(float *)(data + 0x20) > 0.25f)) {
             if (r == 2) {
                 *(float *)(data + 0x34) = 1.95f;
-                *(unsigned char *)(moby + 0x20) = 3;
+                moby->state = 3;
             } else if (r == 0) {
-                *(unsigned char *)(moby + 0x20) = 4;
+                moby->state = 4;
             }
         }
         FUN_L01_003092d0_c(moby);
@@ -1329,7 +1329,7 @@ void FUN_L01_00308bd8(char *moby) {
             *(float *)(td + 0x20) = 1.0f;
             *(float *)(td + 0x24) = 1.0f;
             allocate_voice_for_target_entry(1, 0, (void *)t);
-            *(unsigned char *)(moby + 0x20) = 1;
+            moby->state = 1;
             *(float *)(data + 0x20) = 0.0f;
             *(float *)(data + 0x24) = 0.0f;
             *(float *)(data + 0x28) = 0.0f;
@@ -1354,7 +1354,7 @@ void FUN_L01_00308bd8(char *moby) {
                                        *(float *)&D_L01_00161F8C_d * D_0015ED70,
                                        *(float *)&D_L01_00161F90_d * D_0015ED6C);
         } else {
-            *(unsigned char *)(moby + 0x20) = 1;
+            moby->state = 1;
         }
         FUN_L01_003092d0_c(moby);
         break;

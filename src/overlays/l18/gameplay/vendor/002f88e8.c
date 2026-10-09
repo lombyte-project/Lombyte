@@ -657,7 +657,7 @@ int FUN_L18_002fc668(int group, void *from, void *to, float speed) {
             if (moby->state == 8) {
                 LaunchedMobyVars *v = (LaunchedMobyVars *)moby->pvars;
                 moby->flags &= ~0x41;
-                moby->unk94 = *(u32 *)((char *)moby->pclass + 0x10);
+                moby->unk94 = moby->pclass->unk10;
                 moby->flags |= 0x1000;
                 qcopy(&moby->pos, from);
                 moby->state = 1;
