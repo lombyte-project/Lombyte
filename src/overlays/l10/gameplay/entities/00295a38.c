@@ -748,7 +748,91 @@ void FUN_L10_002d90a8(unsigned char *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d92b8.s", FUN_L10_002d92b8);
+#include "rnc/globals.h"
+
+/* Pvars of a floor plate that opens a door while something stands on it. */
+typedef struct {
+    s32 door;           /* 0x00: level moby index of the door, -1 for none */
+    s32 link;           /* 0x04: level moby index of a plate it holds down, -1 for none */
+    u8 pad8[4];
+    s32 held;           /* 0x0C: set by a linked plate */
+    s32 sound_timer;    /* 0x10 */
+} FloorPlateVars;
+
+/* Result of the last probe_ground_height: the moby that was hit at 0x18. */
+typedef struct {
+    u8 pad0[0x18];
+    struct Moby *moby;  /* 0x18 */
+} GroundHit;
+
+extern struct Moby *D_L10_0015FFD8;
+extern struct Moby *nearby_mobys[] __asm__("D_L10_00178380");
+extern GroundHit ground_hit __asm__("D_L10_001742C0");
+extern u8 D_0014C050[][16];
+extern void FUN_L00_002502f0(void *, int, int, int);
+extern int FUN_L00_001f2868(float, void *, int, void *, void *);
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
+extern f32 fabsf_fast(f32) __asm__("FUN_001f99c0");
+extern s32 FUN_0022da68(s32, s32, struct Moby *);
+
+/* Floor plate: lit and opening its door while a moby (other than class 0x3EF) rests on it, dark and closing it otherwise. */
+void FUN_L10_002d92b8(struct Moby *m) {
+    FloorPlateVars *v = (FloorPlateVars *)m->pvars;
+    s32 pressed = 0;
+    struct Moby *door;
+    struct Moby *other;
+    s32 i;
+    f32 h;
+    s32 n;
+
+    if (v->door == -1) {
+        FUN_L00_002502f0(m, 8, 8, 8);
+        return;
+    }
+    door = &D_L10_0015FFD8[v->door];
+    n = FUN_L00_001f2868(1.0f, &m->pos, 0, m, NULL);
+    if (n != 0) {
+        for (i = 0; i < n; i++) {
+            other = nearby_mobys[i];
+            h = probe_ground_height(&other->pos, 0, 0.5f);
+            if (ground_hit.moby == m && fabsf_fast(h - nearby_mobys[i]->pos.z) < 0.1f) {
+                if (nearby_mobys[i]->oclass != 0x3EF) {
+                    pressed = 1;
+                }
+            }
+        }
+    }
+    FUN_001f9740(&v->sound_timer);
+    if (D_0014C050[current_level_index][m->unkB0] == 0xFF) {
+        pressed = 1;
+    }
+    if (pressed || v->held != 0) {
+        if (pressed && v->link != -1) {
+            ((FloorPlateVars *)D_L10_0015FFD8[v->link].pvars)->held = 1;
+        } else {
+            v->held = 0;
+        }
+        if (door->state == 1 || door->state == 2) {
+            door->state = 3;
+            if (v->sound_timer == 0) {
+                FUN_0022da68(0, 0, door);
+                FUN_0022da68(0, 0, m);
+                v->sound_timer = FUN_001f96f8(30);
+            }
+        }
+        FUN_L00_002502f0(m, 0x7F, 0x7F, 0x7F);
+    } else {
+        if (door->state == 4) {
+            door->state = 1;
+            if (v->sound_timer == 0) {
+                FUN_0022da68(1, 0, door);
+                FUN_0022da68(0, 0, m);
+                v->sound_timer = FUN_001f96f8(30);
+            }
+        }
+        FUN_L00_002502f0(m, 8, 8, 8);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d9eb8.s", FUN_L10_002d9eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da2c8.s", FUN_L10_002da2c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da690.s", FUN_L10_002da690);
