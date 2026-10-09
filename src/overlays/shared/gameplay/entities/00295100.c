@@ -1004,7 +1004,87 @@ void FUN_L00_0029a330(void) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029a400.s", FUN_L00_0029a400);
+#else
+typedef struct {
+    s32 item;
+    s32 selected;
+    s32 state;
+    s32 unused;
+    s32 sound;
+} VendorListEntry_29a400;
+typedef struct {
+    u8 pad[0xD0];
+    VendorListEntry_29a400 entries[16];
+    u8 padAfterEntries[0x210 - 0xD0 - 16 * 0x14];
+    s32 count;
+} VendorList_29a400;
+typedef struct {
+    u8 pad[8];
+    u16 owned;
+    u8 tail[0x18 - 10];
+} VendorItemInfo_29a400;
+extern u8 D_0015EDD0[];
+extern u8 D_0013D4C0[];
+extern VendorList_29a400 vendor_list_29a400 __asm__("D_L00_001CA4C0");
+extern VendorItemInfo_29a400 vendor_info_29a400[] __asm__("D_L00_001C40B0");
+extern u8 vendor_sound_29a400[] __asm__("D_L00_001C2108");
+
+void FUN_L00_0029a400(s32 param_1) {
+    s32 listLength = 0;
+    s32 i;
+    s32 j;
+    s32 sound;
+    u8 value;
+    s32 item;
+
+    if (D_0015EDD0[0] != 0xFF) {
+        listLength = 1;
+        while (listLength < 12 && D_0015EDD0[listLength] != 0xFF)
+            listLength++;
+    }
+    vendor_list_29a400.count = 0;
+    for (i = 0; i < listLength; i++) {
+        value = D_0015EDD0[i];
+        item = value & 0x3F;
+        if (value == 0xFF)
+            continue;
+        if (value & 0x40) {
+            if (vendor_info_29a400[item].owned == 0)
+                continue;
+            sound = *(s32 *)(vendor_sound_29a400 + item * 0x14);
+            vendor_list_29a400.entries[vendor_list_29a400.count].item = item;
+            vendor_list_29a400.entries[vendor_list_29a400.count].selected = 1;
+        } else {
+            if (param_1 != 0)
+                continue;
+            sound = *(s32 *)(vendor_sound_29a400 + item * 0x14);
+            vendor_list_29a400.entries[vendor_list_29a400.count].item = item;
+            vendor_list_29a400.entries[vendor_list_29a400.count].selected = 0;
+        }
+        vendor_list_29a400.entries[vendor_list_29a400.count].state = 0;
+        vendor_list_29a400.entries[vendor_list_29a400.count].sound = sound;
+        vendor_list_29a400.count++;
+    }
+    for (i = 0; i < 37; i++) {
+        if (D_0013D4C0[i] == 0 || vendor_info_29a400[i].owned == 0)
+            continue;
+        for (j = 0; j < vendor_list_29a400.count; j++) {
+            if (vendor_list_29a400.entries[j].item == i)
+                break;
+        }
+        if (j < vendor_list_29a400.count)
+            continue;
+        sound = *(s32 *)(vendor_sound_29a400 + i * 0x14);
+        vendor_list_29a400.entries[vendor_list_29a400.count].item = i;
+        vendor_list_29a400.entries[vendor_list_29a400.count].selected = 1;
+        vendor_list_29a400.entries[vendor_list_29a400.count].state = 0;
+        vendor_list_29a400.entries[vendor_list_29a400.count].sound = sound;
+        vendor_list_29a400.count++;
+    }
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029a6b0.s", FUN_L00_0029a6b0);
 typedef struct {
     float x, y, z, w;
