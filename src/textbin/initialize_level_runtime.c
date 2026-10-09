@@ -1,4 +1,5 @@
 #include "rnc/gameplay/entities/moby_class_tables.h"
+#include "rnc/rendering/level_render_state.h"
 #include "types.h"
 #include "asm.h"
 #include "rnc/globals.h"
@@ -55,16 +56,6 @@ typedef struct {
     s32 size;
 } Chunk;
 
-typedef struct {
-    u8 pad0[0x20];
-    s32 unk20;
-    s16 unk24;
-    u8 pad26[0x2A];
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-} GameState;
 
 typedef struct {
     u8 pad0[4];
@@ -83,7 +74,6 @@ typedef struct {
 } SceneInfo;
 
 
-extern GameState D_0013E030;
 extern f32 D_0015F43C;
 extern s32 D_001413D0[];
 extern s32 D_00160F0C;
@@ -178,8 +168,8 @@ void initialize_level_runtime(void) {
     s32 scene_variant;
     s32 workspace_offset;
 
-    D_0013E030.unk20 = 4;
-    D_0013E030.unk24 = -1;
+    level_render_state.state = 4;
+    level_render_state.timer = -1;
     D_0015F43C = 1.0f;
     D_001413D0[0] = 0;
     D_00160F0C = 0x100000;
@@ -273,25 +263,25 @@ void initialize_level_runtime(void) {
     D_0015FF30 = 0x1F4;
     D_001600BC = 0x1F4000;
     scene_variant = (rand() >> 16) & 3;
-    D_0013E030.unk5C = 0;
-    D_0013E030.unk58 = scene_variant;
-    D_0013E030.unk50 = 0;
-    D_0013E030.unk54 = 0;
+    level_render_state.scene_state = 0;
+    level_render_state.scene_mode = scene_variant;
+    level_render_state.history_index = 0;
+    level_render_state.history_count = 0;
     qcopy(&D_001604F0, &D_001604E0);
     if (current_level_index == 0 || (current_level_index == 1 && level_available[3] == 0)) {
-        D_0013E030.unk58 = 4;
-        D_0013E030.unk5C = 2;
+        level_render_state.scene_mode = 4;
+        level_render_state.scene_state = 2;
     }
     FillTransferWords(&D_0018CB20, 0, 0x1C0);
     FillTransferWords(D_00186310, 0, 0x40);
     FillTransferWords(D_00186350, 0, 0x40);
     scene_offsets = header->scenes;
     workspace_offset = D_00160F0C - 0x60000;
-    scene_offset = &scene_offsets[D_0013E030.unk58];
+    scene_offset = &scene_offsets[level_render_state.scene_mode];
     D_0018CB20.unk58 = D_001940C0.unk4 + workspace_offset;
     D_0018CB20.unk5C = D_001940C0.unk8 + workspace_offset;
     D_00160F0C = workspace_offset;
-    scene_chunk = (Chunk *)(data_base + scene_offsets[D_0013E030.unk58]);
+    scene_chunk = (Chunk *)(data_base + scene_offsets[level_render_state.scene_mode]);
     /* The archive list is terminated by a zero size and the resident table holds 70 entries. */
     for (k = 0; k < 70 && scene_chunk->size != 0; k++) {
         {

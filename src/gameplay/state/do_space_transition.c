@@ -1,15 +1,10 @@
 #include "types.h"
+#include "rnc/rendering/level_render_state.h"
 
 
 struct Globals_0013DD58 {
     u8 unk0;
     u8 unk1;
-};
-
-struct Globals_0013E030 {
-    u8 pad_0[0x26];
-    s16 unk26;
-    u8 pad_28[0x2];
 };
 
 #include "rnc/audio/music/music_stream_state.h"
@@ -29,7 +24,6 @@ struct Globals_00194100 {
 
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/gameplay/state/level_state.h"
-extern struct Globals_0013E030 D_0013E030;
 extern s32 D_0015ED5C MACRO_ADDR;
 extern s32 D_0015ED84 MACRO_ADDR;
 extern s16 D_0015EE48 MACRO_ADDR;
@@ -90,12 +84,12 @@ void do_space_transition(void) {
     }
     D_00194100.unk10 |= 0x80000000;
     game_mode = 6;
-    D_0013E030.unk26 = 0;
+    level_render_state.content_variant = 0;
     if (level_available[8] != 0 || D_0015F600 >= 8) {
-        D_0013E030.unk26 = 1;
+        level_render_state.content_variant = 1;
     }
     if (level_available[14] != 0 || D_0015F600 >= 14) {
-        D_0013E030.unk26 = 2;
+        level_render_state.content_variant = 2;
     }
     FlushCache(0);
     snd_set_reverb_ex(2, 0, 0, 0, 0);

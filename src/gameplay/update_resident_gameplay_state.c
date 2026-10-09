@@ -4,6 +4,7 @@
 #include "qcopy.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/rendering/level_render_state.h"
 
 typedef union {
     u128 quadword;
@@ -77,44 +78,6 @@ typedef struct {
     ResidentRenderObject *objects[1]; /* 0x178 */
 } ResidentPlaybackState;
 
-typedef struct {
-    ResidentRenderObject *player; /* 0x00 */
-    u8 pad4[4];
-    ResidentRenderObject *attachment; /* 0x08 */
-    u8 padC[4];
-    ResidentRenderObject *companion_a; /* 0x10 */
-    ResidentRenderObject *companion_b; /* 0x14 */
-    u8 pad18[8];
-    s32 state;           /* 0x20 */
-    s16 timer;           /* 0x24 */
-    s16 content_variant; /* 0x26 */
-    s16 skip;            /* 0x28 */
-    u8 pad2A[2];
-    s16 unk2C; /* 0x2C */
-    u8 pad2E[2];
-    s32 path;                     /* 0x30 */
-    s32 source_camera_index;      /* 0x34 */
-    s32 destination_camera_index; /* 0x38 */
-    f32 path_progress;            /* 0x3C */
-    f32 speed;                    /* 0x40 */
-    f32 path_segment_length;      /* 0x44 */
-    f32 blend;                    /* 0x48 */
-    f32 interpolation_velocity;   /* 0x4C */
-    s32 trail;                    /* 0x50 */
-    s32 history_count;            /* 0x54 */
-    u8 pad58[8];
-    Vector4 unk60;    /* 0x60 */
-    Vector4 unk70;    /* 0x70 */
-    Vector4 startPos; /* 0x80 */
-    Vector4 pathPos;  /* 0x90 */
-    Vector4 startRot; /* 0xA0 */
-    f32 unkB0;
-    f32 rotY; /* 0xB4 */
-    f32 rotZ; /* 0xB8 */
-    f32 unkBC;
-    Vector4 trailA[32]; /* 0xC0 */
-    Vector4 trailB[32]; /* 0x2C0 */
-} ResidentCinematicState;
 
 typedef struct {
     s32 point_count;
@@ -151,7 +114,6 @@ typedef struct {
 #include "rnc/input/pad_state.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/audio/music/music_stream_state.h"
-extern ResidentCinematicState level_render_state __asm__("D_0013E030");
 extern u8 D_001413F5[];
 extern f32 D_0015ED60;
 extern f32 D_0015ED6C;
@@ -652,7 +614,7 @@ void update_resident_gameplay_state(void) {
                 level_render_state.path_segment_length = distance_xyz(&path->p[0], &path->p[1]);
                 level_render_state.path_progress = 0.0f;
                 level_render_state.speed = 0.0f;
-                level_render_state.trail = 0;
+                level_render_state.history_index = 0;
                 level_render_state.history_count = 0;
                 player = level_render_state.player;
                 qcopy(&level_render_state.startPos, &player->position);
@@ -710,14 +672,14 @@ void update_resident_gameplay_state(void) {
                               &level_render_state.pathPos, blend);
                 level_render_state.player->rotation.components[0] = 0.0f;
                 level_render_state.player->rotation.components[1] = fast_add_rotations(
-                    level_render_state.startRot.components[1],
+                    level_render_state.startRot.f[1],
                     fast_subtract_rotations(level_render_state.rotY,
-                                            level_render_state.startRot.components[1]) *
+                                            level_render_state.startRot.f[1]) *
                         blend);
                 level_render_state.player->rotation.components[2] = fast_add_rotations(
-                    level_render_state.startRot.components[2],
+                    level_render_state.startRot.f[2],
                     fast_subtract_rotations(level_render_state.rotZ,
-                                            level_render_state.startRot.components[2]) *
+                                            level_render_state.startRot.f[2]) *
                         blend);
                 if (sequence_fade > 0.0f) {
                     sequence_fade -= 0.125f;
@@ -759,24 +721,24 @@ void update_resident_gameplay_state(void) {
                                        level_render_state.path_progress);
                     level_render_state.player->rotation.components[0] =
                         level_render_state.player->rotation.components[3];
-                    level_render_state.trail = (level_render_state.trail + 1) & 0x1F;
+                    level_render_state.history_index = (level_render_state.history_index + 1) & 0x1F;
                     if (level_render_state.history_count < 0x20) {
                         level_render_state.history_count++;
                     }
-                    func_001F9CF8(&level_render_state.trailA[level_render_state.trail],
+                    func_001F9CF8(&level_render_state.primary_history[level_render_state.history_index],
                                   &D_001D99B0[level_render_state.content_variant].a,
                                   level_render_state.player->transform);
-                    add_vectors(&level_render_state.trailA[level_render_state.trail],
-                                &level_render_state.trailA[level_render_state.trail],
+                    add_vectors(&level_render_state.primary_history[level_render_state.history_index],
+                                &level_render_state.primary_history[level_render_state.history_index],
                                 &level_render_state.player->position);
-                    level_render_state.trailA[level_render_state.trail].components[3] = 1.0f;
-                    func_001F9CF8(&level_render_state.trailB[level_render_state.trail],
+                    level_render_state.primary_history[level_render_state.history_index].f[3] = 1.0f;
+                    func_001F9CF8(&level_render_state.secondary_history[level_render_state.history_index],
                                   &D_001D99B0[level_render_state.content_variant].b,
                                   level_render_state.player->transform);
-                    add_vectors(&level_render_state.trailB[level_render_state.trail],
-                                &level_render_state.trailB[level_render_state.trail],
+                    add_vectors(&level_render_state.secondary_history[level_render_state.history_index],
+                                &level_render_state.secondary_history[level_render_state.history_index],
                                 &level_render_state.player->position);
-                    level_render_state.trailB[level_render_state.trail].components[3] = 1.0f;
+                    level_render_state.secondary_history[level_render_state.history_index].f[3] = 1.0f;
                     enqueue_callback_list_1(build_resident_indexed_texture_warp_meshes,
                                             level_render_state.player);
                     if (sequence_fade > 0.0f) {

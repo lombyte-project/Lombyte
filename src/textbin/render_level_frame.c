@@ -1,20 +1,16 @@
 #include "types.h"
+#include "rnc/rendering/level_render_state.h"
 #include "asm.h"
 
 #include "types.h"
 #include "rnc/globals.h"
 
-struct LevelRenderState {
-    u8 pad_0[0x58];
-    s32 mode;
-};
 struct LevelProjectionState {
     u8 pad_0[0xB0];
     f32 projection_scale;
 };
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/gameplay/state/level_state.h"
-extern struct LevelRenderState level_render_state __asm__("D_0013E030");
 #include "rnc/rendering/screen.h"
 extern s32 game_frame_counter __asm__("D_0015F438");
 extern f32 sequence_fade __asm__("D_0015F43C");
@@ -71,7 +67,7 @@ void render_level_frame(void) {
     view_context.projection_scale = saved_projection_scale;
     update_view_context();
     func_001F2260();
-    if (level_render_state.mode == 4) {
+    if (level_render_state.scene_mode == 4) {
         setup_gif_paging(1);
         draw_resident_textured_quad();
         do_gif_paging();
@@ -82,7 +78,7 @@ void render_level_frame(void) {
     if ((current_level_index != 0) && ((current_level_index != 1) || (level_available[3] != 0))) {
         build_resident_indexed_texture_warp_meshes(D_0018CC98[0]);
     }
-    if ((level_render_state.mode == 4) && (D_0018CB54[0] >= 0x3D)) {
+    if ((level_render_state.scene_mode == 4) && (D_0018CB54[0] >= 0x3D)) {
         overlay_alpha = (D_0018CB54[0] - 0x3C) * 2;
         if (overlay_alpha >= 0x81) {
             overlay_alpha = 0x80;

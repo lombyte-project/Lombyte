@@ -1,6 +1,7 @@
 /* Ported from rac1-decomp (src/game/loaders.c, func_00204FC0). */
 
 #include "sda.h"
+#include "rnc/rendering/level_render_state.h"
 #include "rnc/gameplay/hero.h"
 
 extern void FlushCache(int);
@@ -17,11 +18,6 @@ struct PartList {
 struct ColorSrc {
     unsigned char pad00[0x38];
     unsigned long color; /* 0x38 */
-};
-
-struct GlobalIndex {
-    unsigned char pad00[0x26];
-    short slot; /* 0x26 */
 };
 
 struct Moby {
@@ -78,7 +74,6 @@ struct TransferState {
 };
 
 extern struct TransferState D_0018CB20_t __asm__("D_0018CB20") NOT_SDA;
-extern struct GlobalIndex D_0013E030_g __asm__("D_0013E030");
 extern int D_0015F604 MACRO_ADDR;
 extern int D_00160488[];
 extern int func_0020C468_2(int, int) __asm__("FUN_0020b618");
@@ -124,7 +119,7 @@ void update_world_object_animation(void *arg0) {
         endp = (int)rec + sp[0];
         sp = (int *)((unsigned char *)sp + 4);
         if (D_0015F604 == 6 && i == 0 && id == 0x215) {
-            id = D_00160488[D_0013E030_g.slot];
+            id = D_00160488[level_render_state.content_variant];
         }
         mob = D_0018CB20_t.slots[i];
         if (mob == 0) {
