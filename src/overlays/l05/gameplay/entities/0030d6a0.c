@@ -377,7 +377,64 @@ void FUN_L05_0030f218(char *obj, float a, float b) {
         FUN_L05_0029bbe0(u, w, v, k, m, n);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f408.s", FUN_L05_0030f408);
+extern char D_0013F350[];
+extern float FUN_001f9ab0(void *, void *);
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+extern float D_L05_00161DD8 __attribute__((sda));
+extern float D_L05_00161DDC __attribute__((sda));
+extern float D_L05_00161DE0 __attribute__((sda));
+extern float D_L05_00161DE4 __attribute__((sda));
+extern float approach_angle_f408(float *, float, float *, float, float, float)
+    __asm__("FUN_L00_0025be00");
+
+void FUN_L05_0030f408(char *moby, float turn_scale, float speed_scale) {
+    char *data = *(char **)(moby + 0x78);
+    char *game = D_0013F350;
+    float offset[4];
+    float horizontal;
+    float vertical;
+    float angle0;
+    float angle1;
+    float target0;
+    float target1;
+    float rate0;
+    float rate1;
+    float limit;
+    float dot0;
+    float dot1;
+
+    if (*(char **)(game + 0x2fc) == moby &&
+        *(short *)(game + 0x30e) == 0) {
+        subtract_vector_xyz(offset, game + 0x80, moby + 0x10);
+        dot0 = FUN_001f9ab0(offset, moby + 0xc0);
+        dot1 = FUN_001f9ab0(offset, moby + 0xd0);
+        horizontal = turn_scale * dot0;
+        vertical = -turn_scale * dot1;
+    } else {
+        horizontal = 0.0f;
+        vertical = 0.0f;
+    }
+
+    *(float *)(data + 0x98) = FUN_001fa580(*(float *)(data + 0x98),
+                                             *(float *)(data + 0xa0));
+    *(float *)(data + 0x9c) = FUN_001fa580(*(float *)(data + 0x9c),
+                                             *(float *)(data + 0xa4));
+    angle0 = FUN_001f9de0(*(float *)(data + 0x98));
+    target0 = FUN_001fa580(vertical, angle0 * turn_scale * D_L05_00161DD8);
+    angle1 = FUN_001f9de0(*(float *)(data + 0x9c));
+    target1 = FUN_001fa580(horizontal, angle1 * turn_scale * D_L05_00161DD8);
+
+    rate0 = D_L05_00161DDC * speed_scale * 0.017453292f * D_0015ED70;
+    rate1 = D_L05_00161DE0 * speed_scale * 0.017453292f * D_0015ED70;
+    limit = D_L05_00161DE4 * 0.017453292f * D_0015ED6C;
+    approach_angle_f408((float *)(moby + 0x40), target0, (float *)(data + 0x90),
+                        rate0, rate1, limit);
+    approach_angle_f408((float *)(moby + 0x44), target1, (float *)(data + 0x94),
+                        D_L05_00161DDC * speed_scale * 0.017453292f * D_0015ED70,
+                        D_L05_00161DE0 * speed_scale * 0.017453292f * D_0015ED70,
+                        D_L05_00161DE4 * 0.017453292f * D_0015ED6C);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f5c8.s", FUN_L05_0030f5c8);
 
 struct GateVars {
