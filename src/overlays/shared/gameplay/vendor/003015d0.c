@@ -7,6 +7,8 @@
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/math/vector.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00302A58), where it is exact; names translated to the US level program. */
 
@@ -15,14 +17,26 @@ typedef struct {
     short s4, s6, s8, sA;
     int wC;
     short s10, s12;
-    char pad14[0x610];
+    char pad14[8];
+    float radius;     /* 0x1C: beam half width */
+    char pad20[0x604];
     float f624;
+    char pad628[8];
+    Vec4 end_a;       /* 0x630: end of the line along +axis 1 */
+    Vec4 end_b;       /* 0x640: end of the line along -axis 1 */
 } D1224;
+
+/* A 0x80-byte transform of D_L14_001600EC: three axes and the origin. */
+typedef struct {
+    Vec4 axis[3];
+    Vec4 origin;
+    u8 pad40[0x40];
+} VendorBeamFrame;
 
 extern char D_0013F3D0[];
 extern float FUN_001f9b80(void *, void *);
 extern float vector_length_xyz(void *);
-extern int D_L14_001600EC;   /* no foreign declaration */
+extern VendorBeamFrame *D_L14_001600EC;
 extern int D_L14_001620B8;   /* no foreign declaration */
 extern int D_L14_001620C8;   /* no foreign declaration */
 extern int D_L14_001620CC;   /* no foreign declaration */
@@ -65,7 +79,7 @@ void FUN_L14_003015d0(unsigned char *m) {
         FUN_L14_003017f8((char *)m);
         d->s10 = scale_game_frames(d->wC);
         m[0x20] = 2;
-        d->f624 = vector_length_xyz(D_L14_001600EC + (d->w0 << 7) + 0x10);
+        d->f624 = vector_length_xyz(&D_L14_001600EC[d->w0].axis[1]);
         d->s8 = 1;
         d->sA = 1;
         break;
@@ -118,5 +132,101 @@ void FUN_L14_003015d0(unsigned char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003017f8.s", FUN_L14_003017f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00301de8.s", FUN_L14_00301de8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00301fa8.s", FUN_L14_00301fa8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00302538.s", FUN_L14_00302538);
+/* Damage request passed to the collision line test (FUN_001efa68). */
+typedef struct {
+    f32 v[4];          /* 0x0: push direction xy; w 5627.925 */
+    struct Moby *moby; /* 0x10: source */
+    s32 flags;         /* 0x14 */
+    s8 a;              /* 0x18 */
+    s8 b;              /* 0x19 */
+    s16 oclass;        /* 0x1A: source class */
+    f32 range;         /* 0x1C */
+    s32 one;           /* 0x20 */
+} VendorBeamReq;
+
+extern u8 D_L14_00174560[];
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern void vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void vec_set_len(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 vec_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+
+/* Sweeps the beam's two end lines; anything they cross takes damage pushed away from the beam. */
+void FUN_L14_00302538(char *self) {
+    struct Moby *m = (struct Moby *)self;
+    D1224 *d = (D1224 *)m->pvars;
+    VendorBeamReq req;
+    Vec4 dir, to_hero, base, end_a, end_b, from, to, off;
+    f32 dot, len;
+
+    if (d->radius == 0.0f)
+        return;
+    req.flags = 0x10001;
+    req.range = 1.0f;
+    req.one = 1;
+    req.moby = m;
+    clear_vector(&req);
+    req.v[2] = 1.0f;
+    req.b = 1;
+    req.v[3] = 5627.925f;
+    req.a = 3;
+    req.oclass = m->oclass;
+    dir.f[0] = fast_cos(m->rot.z);
+    dir.f[1] = fast_sin(m->rot.z);
+    dir.f[2] = 0.0f;
+    vec_sub(&to_hero, D_0013F3D0, &m->pos);
+    to_hero.f[2] = 0.0f;
+    dot = vec_dot(&dir, &to_hero);
+    if (vector_length_xyz(&to_hero) != 0.0f) {
+        if (dot < 0.0f)
+            vec_scale(&dir, &dir, -1.0f);
+        req.v[0] = dir.f[0];
+        req.v[1] = dir.f[1];
+    }
+    qcopy_nc(&base, &D_L14_001600EC[d->w0].origin);
+    if (d->s8) {
+        vec_add(&end_a, &base, &D_L14_001600EC[d->w0].axis[1]);
+        if (FUN_001efa68(&base, &end_a, 0, m, 0)) {
+            vec_sub(&from, D_L14_00174560, &base);
+            len = vector_length_xyz(&from);
+            vec_scale(&from, &from, len * 0.98f / len);
+            vec_add(&d->end_a, &base, &from);
+            d->s8 = 0;
+        } else {
+            qcopy(&d->end_a, &end_a);
+        }
+    }
+    if (d->sA) {
+        vec_sub(&end_b, &base, &D_L14_001600EC[d->w0].axis[1]);
+        if (FUN_001efa68(&base, &end_b, 0, m, 0)) {
+            vec_sub(&from, D_L14_00174560, &base);
+            len = vector_length_xyz(&from);
+            vec_scale(&from, &from, len * 0.98f / len);
+            vec_add(&d->end_b, &base, &from);
+            d->sA = 0;
+        } else {
+            qcopy(&d->end_b, &end_b);
+        }
+    }
+    qcopy(&end_a, &d->end_a);
+    qcopy(&end_b, &d->end_b);
+    vec_set_len(&off, &D_L14_001600EC[d->w0].axis[0], d->radius);
+    vec_add(&from, &end_a, &off);
+    vec_add(&to, &end_b, &off);
+    FUN_001efa68(&from, &to, 1, m, &req);
+    vec_sub(&from, &end_a, &off);
+    vec_sub(&to, &end_b, &off);
+    FUN_001efa68(&from, &to, 1, m, &req);
+    vec_set_len(&off, &D_L14_001600EC[d->w0].axis[2], d->radius);
+    vec_add(&from, &end_a, &off);
+    vec_add(&to, &end_b, &off);
+    FUN_001efa68(&from, &to, 1, m, &req);
+    vec_sub(&from, &end_a, &off);
+    vec_sub(&to, &end_b, &off);
+    FUN_001efa68(&from, &to, 1, m, &req);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003039e0.s", FUN_L14_003039e0);
