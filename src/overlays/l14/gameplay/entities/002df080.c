@@ -162,7 +162,86 @@ void FUN_L14_002eb388(struct Moby *m, int i, void *dir) {
     d->n380[i] = n;
     d->n3E0[i] = 0;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eb568.s", FUN_L14_002eb568);
+#else
+extern float fast_cos_spark(float) __asm__("FUN_001f9dc8");
+extern float fast_sin_spark(float) __asm__("FUN_001f9de0");
+extern int tick_spark_timer(short *) __asm__("FUN_001f9770");
+extern float spark_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern short spark_float_to_integer(float) __asm__("FUN_001fa6d0");
+extern float spark_absolute_float(float) __asm__("FUN_001f99c0");
+extern float spark_angle_difference(float, float) __asm__("FUN_001fa688");
+extern int spark_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern void spark_scale_vector(void *, void *, float) __asm__("FUN_001f9a68");
+extern void spark_add_vector(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int spark_scale_frames(int) __asm__("FUN_001f96f8");
+extern void spark_enqueue_callback(void (*)(struct Moby *), struct Moby *) __asm__("FUN_001f4600");
+extern int D_L14_00161C10_spark __asm__("D_L14_00161C10") __attribute__((sda));
+extern int D_L14_00161C2C_spark __asm__("D_L14_00161C2C") __attribute__((sda));
+extern float D_L14_001674C0_spark __asm__("D_L14_001674C0");
+extern float D_L14_001674C4_spark __asm__("D_L14_001674C4");
+extern float D_L14_001674D8_spark __asm__("D_L14_001674D8");
+void FUN_L14_002eb810(struct Moby *m);
+
+void FUN_L14_002eb568(struct Moby *m) {
+    Spk_k *d = (Spk_k *)m->pvars;
+    float dir[4];
+    float clip[4];
+    float work[4];
+    float ratio;
+    float first;
+    float second;
+    int in_clip;
+    int i;
+    int count;
+    int age;
+    int opacity;
+    short *shade;
+    dir[0] = fast_cos_spark(m->rot.z);
+    dir[1] = fast_sin_spark(m->rot.z);
+    dir[2] = 0.0f;
+    qcopy(clip, D_0013F3D0);
+    clip[2] += 1.0f;
+    in_clip = spark_inside_clip_volume(clip, d->i504);
+    i = 0;
+    shade = d->n3E0;
+    do {
+        if (tick_spark_timer(&d->n320[i]) != 0) {
+            if (in_clip == 0 || i < 24) {
+                FUN_L14_002eb388(m, i, dir);
+            }
+        } else {
+            opacity = D_L14_00161C10_spark;
+            age = d->n380[i];
+            count = d->n320[i];
+            if (age - D_L14_00161C2C_spark < count) {
+                first = spark_integer_to_float(age - count);
+                age = D_L14_00161C2C_spark;
+            } else {
+                first = spark_integer_to_float(count);
+                age -= D_L14_00161C2C_spark;
+            }
+            second = spark_integer_to_float(age);
+            ratio = first / second;
+            *shade = spark_float_to_integer(((float)opacity - 0.0f) * ratio + 0.0f);
+            spark_scale_vector(work, dir, d->f440[i]);
+            spark_add_vector(d->pos[i], d->pos[i], work);
+            if (in_clip != 0 &&
+                spark_absolute_float(d->pos[i][0] - D_L14_001674C0_spark) < 8.0f &&
+                spark_absolute_float(d->pos[i][1] - D_L14_001674C4_spark) < 8.0f &&
+                spark_angle_difference(m->rot.z, D_L14_001674D8_spark) > 2.3561945f) {
+                if (spark_scale_frames(20) < d->n320[i]) {
+                    d->n320[i] = spark_scale_frames(20);
+                }
+            }
+        }
+        i++;
+        shade++;
+    } while (i < 48);
+    spark_enqueue_callback(FUN_L14_002eb810, m);
+}
+#endif
 /* Draws every live spark as a quad that faces the camera, faded by its age. */
 typedef unsigned int u128_m __attribute__((mode(TI)));
 typedef struct {
