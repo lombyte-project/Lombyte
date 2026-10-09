@@ -1,11 +1,8 @@
 #include "rnc/ui/map/map_state.h"
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/globals.h"
 
-struct Pad {
-    u8 pad0[0x1C4];
-    u32 pressed;
-};
 
 
 
@@ -29,7 +26,6 @@ struct Hdr16 {
     s16 unk8;
 };
 
-extern struct Pad D_0013C940;
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 extern struct Hdr16 D_001516D0;
@@ -90,22 +86,22 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     update_map_zoom_and_pan();
     if (!(screen->data.raw.unk34 & 0x40)) {
         prev = level_map_selection.level;
-        if (D_0013C940.pressed & 0xD00) {
+        if (controller_state.pressed_unmasked & 0xD00) {
             if (menu_system.close_locked == 0) {
                 return 1;
             }
         }
-        if (D_0013C940.pressed & 0x10) {
+        if (controller_state.pressed_unmasked & 0x10) {
             if (menu_system.current->back != 0) {
                 menu_system.next = menu_system.current->back;
             } else if (menu_system.close_locked == 0) {
                 return -1;
             }
         }
-        if (D_0013C940.pressed & 0x40) {
+        if (controller_state.pressed_unmasked & 0x40) {
             menu_system.next = (struct MenuPage *)D_001CF678;
         }
-        if ((D_0013C940.pressed & 0x20) && level_map_selection.level != 0) {
+        if ((controller_state.pressed_unmasked & 0x20) && level_map_selection.level != 0) {
             menu_system.unkF0 = (struct MenuPage *)D_001CF418;
             menu_system.unkF4 = 0xB;
             menu_system.close_request = 3;
@@ -115,7 +111,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         }
         idx = find_id_in_terminated_table(level_map_selection.level);
         if (idx >= 0) {
-            if (D_0013C940.pressed & 8) {
+            if (controller_state.pressed_unmasked & 8) {
                 if (idx < 0x13) {
                     t = D_001601E0[idx + 1];
                     if (t != 0) {
@@ -123,7 +119,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
                     }
                 }
             }
-            if ((D_0013C940.pressed & 4) && idx != 0) {
+            if ((controller_state.pressed_unmasked & 4) && idx != 0) {
                 if (D_001601E0[idx - 1] != 0) {
                     level_map_selection.level = D_001601E0[idx - 1];
                 }

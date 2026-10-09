@@ -1,12 +1,6 @@
 
 #include "types.h"
-struct PadState {
-    u8 pad0[0x1A0];
-    s64 unk1A0;
-    u8 pad1A4[0x18];
-    u32 held;
-    u32 pressed;
-};
+#include "rnc/input/pad_state.h"
 struct Menu {
     u8 pad0[0x34];
     s32 str;
@@ -17,7 +11,6 @@ struct Menu {
     u32 unk50;
     s32 unk54;
 };
-extern struct PadState D_0013C940;
 #include "rnc/ui/menus/menu_system.h"
 extern s32 D_001D2AF4[];
 extern u8 D_001D5098[];
@@ -30,12 +23,12 @@ s32 FUN_002223f0(struct Menu *menu) {
     int flag;
     s32 n;
 
-    flag = (D_0013C940.unk1A0 & 0xF) == 0xF;
-    if ((menu_system.unkDC == 0) || (flag && (((s32)D_0013C940.unk1A0) & 0x10))) {
-        if ((D_0013C940.pressed & 0xD00) && (menu_system.close_locked == 0)) {
+    flag = (((struct PadStateWords *)&controller_state)->buttons.held_pressed & 0xF) == 0xF;
+    if ((menu_system.unkDC == 0) || (flag && (((s32)((struct PadStateWords *)&controller_state)->buttons.held_pressed) & 0x10))) {
+        if ((controller_state.pressed_unmasked & 0xD00) && (menu_system.close_locked == 0)) {
             return 1;
         }
-        if (D_0013C940.pressed & 0x10) {
+        if (controller_state.pressed_unmasked & 0x10) {
             if (menu_system.current->back != 0) {
                 menu_system.next = menu_system.current->back;
             } else if (menu_system.close_locked == 0) {

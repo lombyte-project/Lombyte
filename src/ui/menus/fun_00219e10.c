@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/ui/menus/menu_system.h"
 
 /* Pause list handler (func_0022DA68's family): one `char *` pad local per
@@ -11,21 +12,18 @@
    literal 0x260, so gcc keeps the divide-by-zero trap retail has. The
    switch target has no early return: "else if" instead, which is what
    gives retail's bnel with the store in the delay slot. */
-extern u8 D_0013C940[];
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 
 int FUN_00219e10(char *menu) {
     {
-        char *pad = D_0013C940;
-        if (*(int *)(pad + 0x1C4) & 0xD00) {
+        if (controller_state.pressed_unmasked & 0xD00) {
             if (menu_system.close_locked == 0) {
                 return 1;
             }
         }
     }
     {
-        char *pad2 = D_0013C940;
-        if (*(int *)(pad2 + 0x1C4) & 0x10) {
+        if (controller_state.pressed_unmasked & 0x10) {
             struct MenuSystem *g = &menu_system;
             struct MenuPage *t = g->current->back;
             if (t != 0) {
@@ -36,8 +34,7 @@ int FUN_00219e10(char *menu) {
         }
     }
     {
-        char *pad3 = D_0013C940;
-        int v = *(int *)(pad3 + 0x1C4);
+        int v = controller_state.pressed_unmasked;
         int old = *(int *)(menu + 0x3C);
 
         if ((v & 0x1000) && old != 0) {

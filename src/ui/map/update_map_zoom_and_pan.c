@@ -1,20 +1,18 @@
 #include "types.h"
+#include "rnc/input/pad_state.h"
 
 extern void func_00208810(void);
-extern u8 D_0013C940[];
 #include "rnc/ui/map/map_state.h"
 
 int update_map_zoom_and_pan(void) __asm__("FUN_00205440");
 
 int update_map_zoom_and_pan(void) {
-    char *pad;
     float *zoom;
     int *xs;
     int *ys;
 
     func_00208810();
-    pad = D_0013C940;
-    if (*(int *)(pad + 0x1A4) & 0x500) {
+    if (controller_state.pressed & 0x500) {
         return 1;
     }
     if (level_map_selection.unk24 == 0) {
@@ -24,7 +22,7 @@ int update_map_zoom_and_pan(void) {
         return 0;
     }
     zoom = level_map_selection.zoom;
-    zoom[level_map_selection.loaded] *= 1.0f - *(float *)(pad + 0x104) * 0.02f;
+    zoom[level_map_selection.loaded] *= 1.0f - controller_state.analog[1] * 0.02f;
     if (zoom[level_map_selection.loaded] > 4.0f) {
         zoom[level_map_selection.loaded] = 4.0f;
     }
@@ -35,8 +33,8 @@ int update_map_zoom_and_pan(void) {
     ys = level_map_selection.pan_y;
     {
         float scale = 3000000.0f / zoom[level_map_selection.loaded];
-        xs[level_map_selection.loaded] += (int)(*(float *)(pad + 0x108) * scale);
-        ys[level_map_selection.loaded] += (int)(*(float *)(pad + 0x10C) * scale);
+        xs[level_map_selection.loaded] += (int)(controller_state.analog[2] * scale);
+        ys[level_map_selection.loaded] += (int)(controller_state.analog[3] * scale);
     }
     {
         float z = zoom[level_map_selection.loaded];
