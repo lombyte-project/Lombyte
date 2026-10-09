@@ -5,12 +5,9 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/math/convert_integer_to_float/func_001FA6C0.s",
             func_001FA6C0);
 #else
-#include "types.h"
-
-f32 convert_integer_to_float(s32 value) __asm__("func_001FA6C0");
-
-/* Retail converts the signed word directly with CVT.S.W. */
-f32 convert_integer_to_float(s32 value) {
-    return (f32)value;
-}
+/* No C body on purpose: this unit is intentional low-level assembly
+   (config/us/unit_categories.json), so it has no C goal and no public
+   fuzzy score. The assembly oracle above is the whole unit. It has no
+   hazard nop between mtc1 and cvt.s.w, which the assembler inserts after
+   every compiled mtc1. */
 #endif /* NON_MATCHING */

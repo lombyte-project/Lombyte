@@ -5,15 +5,9 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/runtime/memory/clear_u64_value/FUN_001f99f8.s",
             FUN_001f99f8);
 #else
-#include "types.h"
-#include "eetypes.h"
-
-void clear_u64_value(s64 *dst) __asm__("FUN_001f99f8");
-
-void clear_u64_value(s64 *dst) {
-    /* Retail stores a full 16-byte quadword through dst. */
-    *(u128 *)dst = 0;
-}
-
-extern void func_001F99F8(s64 *dst) __attribute__((alias("FUN_001f99f8")));
+/* No C body on purpose: this unit is intentional low-level assembly
+   (config/us/unit_categories.json), so it has no C goal and no public
+   fuzzy score. The assembly oracle above is the whole unit. It stores
+   the zero register straight to memory (`sq $0`); the compiler's quadword
+   move has no zero alternative and always goes through `por` first. */
 #endif /* NON_MATCHING */
