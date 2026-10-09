@@ -5,7 +5,114 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f88e8.s", FUN_L18_002f88e8);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9780.s", FUN_L18_002f9780);
+#else
+extern float D_L18_00162520_9780 __asm__("D_L18_00162520");
+extern float D_L18_00162550_9780 __asm__("D_L18_00162550");
+extern volatile float D_L18_00162554_9780 __asm__("D_L18_00162554");
+extern volatile float D_L18_00162558_9780 __asm__("D_L18_00162558");
+extern float D_L18_0016255C_9780 __asm__("D_L18_0016255C");
+extern char D_L18_001679D0_9780[] __asm__("D_L18_001679D0");
+extern int D_L18_001624F8_9780 __asm__("D_L18_001624F8") __attribute__((sda));
+extern int D_L18_001624FC_9780 __asm__("D_L18_001624FC") __attribute__((sda));
+
+typedef unsigned int u128_9780 __attribute__((mode(TI)));
+typedef struct {
+    float m[4][4];
+    int col[4];
+    float uv[8];
+    unsigned long a, b, c, d;
+} Pk_9780;
+typedef struct { char pad[0x30]; int state; int n; } ML_9780;
+extern ML_9780 D_L18_0016D260_9780 __asm__("D_L18_0016D260");
+extern int D_L18_00162498_9780 __asm__("D_L18_00162498") __attribute__((sda));
+extern float D_L18_001DFB90_9780[4][4] __asm__("D_L18_001DFB90");
+extern char D_L18_001677C0_9780[] __asm__("D_L18_001677C0");
+extern int frames_9780(int) __asm__("FUN_001f96f8");
+extern unsigned long tex_9780(int) __asm__("FUN_001f44b8");
+extern void gs_9780(int, long) __asm__("FUN_00233980");
+extern void rot_9780(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void add_9780(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void sub_9780(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void norm_9780(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void cross_9780(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void scale_9780(void *, void *, float) __asm__("FUN_001f9a68");
+extern void xform_9780(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void draw_9780(void *, void *, int) __asm__("FUN_001f7d30");
+void FUN_L18_002f9780(void) {
+    Pk_9780 pk;
+    float mat[4][4];
+    float up[4];
+    int i;
+    int color;
+    float tilt;
+    char *target;
+
+    if (D_L18_0016D260_9780.n == frames_9780(D_L18_00162498_9780 + 1)) {
+        D_L18_00162550_9780 = 1.0f;
+        D_L18_00162554_9780 = 0.0f;
+        if (D_L18_0016D260_9780.state == 7) {
+            tilt = -0.15f;
+        } else {
+            tilt = 0.15f;
+        }
+        D_L18_00162558_9780 = tilt;
+        D_L18_0016255C_9780 = 1.0f;
+    }
+    pk.b = tex_9780(0xB);
+    pk.c = 0x0000FF9000000260ULL;
+    pk.d = 0x8000000048ULL;
+    pk.a = 0;
+    gs_9780(0x4A, 0);
+    gs_9780(0x47, 0x51001);
+    target = D_L18_001679D0_9780;
+    rot_9780(mat[3], &D_L18_00162550_9780, target);
+    target -= 0x210;
+    add_9780(mat[3], mat[3], target);
+    sub_9780(mat[0], mat[3], target);
+    norm_9780(mat[0], mat[0], 1.0f);
+    *(u128_9780 *)up = 0;
+    up[2] = 1.0f;
+    up[3] = 1.0f;
+    cross_9780(mat[1], mat[0], up);
+    norm_9780(mat[1], mat[1], 1.0f);
+    cross_9780(mat[2], mat[1], mat[0]);
+    pk.uv[0] = 1.0f;
+    pk.uv[1] = 1.0f;
+    pk.uv[2] = 0.0f;
+    pk.uv[3] = 1.0f;
+    pk.uv[4] = 1.0f;
+    pk.uv[5] = 0.0f;
+    pk.uv[6] = 0.0f;
+    pk.uv[7] = 0.0f;
+    color = D_L18_001624F8_9780;
+    pk.col[3] = color;
+    pk.col[2] = color;
+    pk.col[1] = color;
+    pk.col[0] = color;
+    for (i = 0; i < 4; i++) {
+        scale_9780(pk.m[i], D_L18_001DFB90_9780[i], D_L18_00162520_9780);
+        xform_9780(pk.m[i], pk.m[i], mat);
+    }
+    draw_9780(&pk, 0, 0);
+    color = D_L18_001624FC_9780;
+    pk.col[3] = color;
+    pk.col[2] = color;
+    pk.col[1] = color;
+    pk.col[0] = color;
+    for (i = 0; i < 4; i++) {
+        scale_9780(pk.m[i], D_L18_001DFB90_9780[i], D_L18_00162520_9780 * 0.75f);
+        xform_9780(pk.m[i], pk.m[i], mat);
+    }
+    draw_9780(&pk, 0, 0);
+    for (i = 0; i < 4; i++) {
+        scale_9780(pk.m[i], D_L18_001DFB90_9780[i], D_L18_00162520_9780 * 0.5f);
+        xform_9780(pk.m[i], pk.m[i], mat);
+    }
+    draw_9780(&pk, 0, 0);
+}
+#endif
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FAEF8), where it is exact; names translated to the US level program. */
