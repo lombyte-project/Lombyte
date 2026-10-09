@@ -38,8 +38,6 @@ typedef struct {
 extern s32 preview_request_count __asm__("D_00160350");
 extern s32 preview_request_count_address __asm__("D_00160350") MACRO_ADDR;
 extern CdReadState cd_read_state __asm__("D_001516D0");
-extern PreviewAnimationRequest preview_animation_requests[] __asm__("D_001D5EC0");
-extern PreviewAnimationRequest active_preview_animation __asm__("D_001D6080");
 typedef struct {
     u8 pad0[0x48];
     s32 animation_tables[1];

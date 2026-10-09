@@ -28,4 +28,12 @@ typedef struct {
     s32 animation_index;
 } PreviewResourceBinding;
 
+extern f32 ammo_preview_offsets[6] __asm__("D_001D5E90");
+
+extern f32 ammo_preview_velocities[6] __asm__("D_001D5EA8");
+
+extern PreviewAnimationRequest preview_animation_requests[8] __asm__("D_001D5EC0");
+
+extern PreviewAnimationRequest active_preview_animation __asm__("D_001D6080");
+
 #endif /* LOMBYTE_RNC_UI_MENUS_ITEM_PREVIEW_PREVIEW_ANIMATION_H */

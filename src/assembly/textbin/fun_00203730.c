@@ -6,52 +6,12 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00203730/FUN_00203730.s
 #else
 
 #include "types.h"
-#include "rnc/rendering/resident_class.h"
+#include "rnc/rendering/object_render_class.h"
 #include "qcopy.h"
 #include "eetypes.h"
 
-typedef struct {
-    u64 tex0;
-    u64 pad8;
-    union {
-        u64 d;
-        s32 w[2];
-    } tex1;
-    u64 pad18;
-    u64 mip;
-    u64 pad28;
-    union {
-        u64 d;
-        s32 w[2];
-    } clamp;
-    u64 pad38;
-    u64 end;
-    u64 pad48;
-} ObjectRenderRecord;
-typedef struct {
-    s32 offset;
-    u8 pad4[0xC];
-} RenderStreamEntry;
-typedef struct {
-    RenderStreamEntry *streams[3];
-    s32 packed_normals;
-    u8 pad10[0x10];
-    u8 stream_counts[3];
-    u8 record_count;
-    u8 pad24[2];
-    s16 runtime_index;
-    s32 runtime_data;
-    ObjectRenderRecord *records;
-    u8 pad30[0x16];
-    u16 class_slot;
-    f32 scale;
-} ObjectRenderClass;
 extern s32 registered_object_render_class_count __asm__("D_00160F4C");
-extern s16 object_render_class_ids[] __asm__("D_001E1900");
 extern u8 object_render_class_slot_by_id[] __asm__("D_001E1A00");
-extern ObjectRenderClass *object_render_classes[] __asm__("D_001E1700");
-extern s32 object_render_class_fixed_thresholds[] __asm__("D_001E2E00");
-extern MaterialMap object_render_class_material_maps[] __asm__("D_001E3600");
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 #include "rnc/rendering/material_templates.h"
 extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");

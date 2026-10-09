@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/menus/item_preview/preview_animation.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/gadgets/hand_gadget.h"
@@ -51,8 +52,6 @@ extern s32 resource_request_state __asm__("D_0015FF50");
 extern HandGadgetDefinition gadget_definitions[] __asm__("D_001863D0");
 extern u8 *moby_class_resources[] __asm__("D_001B3200");
 extern u8 moby_class_slots[] __asm__("D_001B3AC0");
-extern float ammo_preview_offsets[] __asm__("D_001D5E90");
-extern s32 ammo_preview_velocities[] __asm__("D_001D5EA8");
 extern void func_001E9470(s32, s32);
 extern void func_001E9478(Moby *, s32);
 extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
