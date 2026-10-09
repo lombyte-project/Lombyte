@@ -1467,7 +1467,92 @@ void FUN_L00_00209240(s32 a) {
     t = D_L00_001E7C10;
     FUN_L00_0024f8f0(a, 9, &t, D_0013FE10);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002092c8.s", FUN_L00_002092c8);
+#else
+extern u64 FUN_001ff768_002092c8(int, float) __asm__("FUN_L00_001ff768");
+extern void FUN_00254b58_002092c8(int) __asm__("FUN_L00_00254b58");
+extern volatile s32 D_001413D0_002092c8 __asm__("D_001413D0");
+
+void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32 context) {
+    s32 *index;
+    u64 *out;
+    s32 first_count;
+    s32 second_count;
+    s32 third_count;
+    s32 i;
+    u64 value;
+
+    if (context == 0)
+        context = D_001413D0_002092c8;
+    FUN_00254b58_002092c8(context);
+    out = (u64 *)(header + 12);
+    *(u64 *)(header + 8) = 0x7fff000000000000ULL;
+    first_count = 1;
+    if (indices[1] >= 0) {
+        index = indices + 1;
+        do {
+            i = *index;
+            first_count++;
+            index++;
+            *out = FUN_001ff768_002092c8(0x70000000 + (i << 6), 32768.0f);
+            out++;
+        } while (*index >= 0);
+    }
+    if (padding > 0) {
+        s32 remaining = padding;
+        do {
+            *out = 0x7fff000000000000ULL;
+            out++;
+            first_count++;
+        } while (--remaining != 0);
+    }
+    second_count = 0;
+    i = 1;
+    if (indices[1] >= 0) {
+        index = indices + 1;
+        do {
+            value = FUN_001ff768_002092c8(0x70000010 + (*index << 6), 4096.0f);
+            index++;
+            if ((value & 0xffffffffffffULL) != 0x100010001000ULL) {
+                *out = value & 0xffffffffffffULL;
+                second_count++;
+                *(u16 *)((u8 *)out + 6) = i | 0x8000;
+                out++;
+            }
+            i++;
+        } while (*index >= 0);
+    }
+    third_count = 0;
+    i = 1;
+    if (indices[1] >= 0) {
+        index = indices + 1;
+        do {
+            value = FUN_001ff768_002092c8(0x70000020 + (*index << 6), 1.0f);
+            index++;
+            if ((value & 0xffffffffffffULL) !=
+                (FUN_001ff768_002092c8(*(s32 *)(reference + 0x18) + (i << 4), 1.0f) &
+                 0xffffffffffffULL)) {
+                *out = value & 0xffffffffffffULL;
+                third_count++;
+                *(u16 *)((u8 *)out + 6) = i;
+                out++;
+            }
+            i++;
+        } while (*index >= 0);
+    }
+    if ((u32)out & 0xf)
+        *out++ = 0;
+    header[7] = third_count;
+    header[5] = second_count;
+    header[4] = first_count << 3;
+    header[3] = ((u8 *)out - (u8 *)header - 0x10) >> 4;
+    header[6] = (first_count + second_count) << 3;
+    header[0] = 0;
+    header[1] = 0;
+    header[2] = 0;
+}
+#endif
 typedef struct {
     float x, y, z, w_00209540;
 } V4_00209540;
