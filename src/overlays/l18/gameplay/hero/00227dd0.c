@@ -950,7 +950,7 @@ int hero_set_state(int a, int b) {
                     FUN_L00_002323b8(6, 0, (float)scale_game_frames(8));
                     return 1;
                 }
-                if (1.75f < q->unk2DC) {
+                if (1.75f < q->ground_distance) {
                     FUN_L00_002323b8(0xB, 0, (float)scale_game_frames(0xC));
                     q->state.step = 1;
                 } else {
@@ -1801,7 +1801,7 @@ int hero_set_state(int a, int b) {
         p->unk944 = frame_time_sq * 7.0f;
         qcopy(&p->motion.velocity, &p->motion.unk110);
         if (b) {
-            if (2.5f < p->unk2DC) {
+            if (2.5f < p->ground_distance) {
                 FUN_L00_002323b8(5, 0, (float)scale_game_frames(8));
             } else {
                 FUN_L00_002323b8(0, 0, (float)scale_game_frames(0xB));

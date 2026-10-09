@@ -1071,7 +1071,7 @@ int hero_set_state(int a, int b) {
                     FUN_L00_002323b8(6, 0, (float)scale_game_frames(8));
                     return 1;
                 }
-                if (1.75f < q->unk2DC) {
+                if (1.75f < q->ground_distance) {
                     FUN_L00_002323b8(0xB, 0, (float)scale_game_frames(0xC));
                     q->state.step = 1;
                 } else {
@@ -1809,7 +1809,7 @@ int hero_set_state(int a, int b) {
             p->unk2284 = 0;
             p->health.hp = 0;
             p->unk1CC = 0x2710;
-            p->unk2F4 = p->unk2D8.f;
+            p->unk2F4 = p->ground_z.f;
             FUN_L00_00216de8(9, 0);
             if (b)
                 FUN_L00_002323b8(0x71, 0, (float)scale_game_frames(8));

@@ -233,13 +233,13 @@ struct Hero {
     Vec4 unk270;                   /* 0x270 */
     Vec4 unk280;                   /* 0x280 */
     Vec4 unk290;                   /* 0x290 */
-    Vec4 unk2A0;                   /* 0x2A0 */
+    Vec4 ground_point;             /* 0x2A0: ground probe hit point under the hero */
     Vec4 unk2B0;                   /* 0x2B0 */
     union { f32 f[2]; s32 i[2]; } unk2C0; /* 0x2C0: written as floats and zeroed as ints */
     union { f32 f[2]; s32 i[2]; } unk2C8; /* 0x2C8: written as floats and zeroed as ints */
     union { f32 f[2]; s32 i[2]; } unk2D0; /* 0x2D0: written as floats and zeroed as ints */
-    union { f32 f; s32 i; } unk2D8; /* 0x2D8: written as a float and zeroed as an int */
-    f32 unk2DC;                    /* 0x2DC */
+    union { f32 f; s32 i; } ground_z; /* 0x2D8: ground_point.z; zeroed as an int */
+    f32 ground_distance;           /* 0x2DC: distance from motion.pos to ground_point */
     union { f32 f; s32 i; } unk2E0; /* 0x2E0: written as a float and zeroed as an int */
     union { f32 f; s32 i; } unk2E4; /* 0x2E4: written as a float and zeroed as an int */
     union { f32 f; s32 i; } unk2E8; /* 0x2E8: written as a float and zeroed as an int */
@@ -247,13 +247,13 @@ struct Hero {
     f32 height_threshold;          /* 0x2F0 */
     f32 unk2F4;                    /* 0x2F4 */
     s32 unk2F8;                    /* 0x2F8 */
-    struct Moby *unk2FC;           /* 0x2FC */
+    struct Moby *ground_moby;      /* 0x2FC: moby the ground probe hit (0 = level ground) */
     s32 unk300;                    /* 0x300 */
     f32 unk304;                    /* 0x304 */
     s16 unk308;                    /* 0x308 */
     s16 unk30A;                    /* 0x30A */
     union { s16 s; u16 u; } unk30C; /* 0x30C: read signed, incremented unsigned */
-    union { s16 s; u16 u; } unk30E; /* 0x30E: read signed, incremented unsigned */
+    union { s16 s; u16 u; } air_frames; /* 0x30E: frames off the ground, 0 on landing */
     u8 pad_310[0xA0];
     f32 unk3B0;                    /* 0x3B0 */
     s32 unk3B4;                    /* 0x3B4 */

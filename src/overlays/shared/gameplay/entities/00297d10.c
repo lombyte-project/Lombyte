@@ -652,7 +652,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
     flags = 0;
     c = &d->ctl;
     dist = FUN_001f9b80(moby->pos, hero.motion.pos.f);
-    dz = AbsoluteFloat(moby->pos[2] - hero.unk2A0.f[2]);
+    dz = AbsoluteFloat(moby->pos[2] - hero.ground_point.f[2]);
     *(OvlQuad *)save1 = *(OvlQuad *)save0 = *(OvlQuad *)moby->pos;
     if (moby->state != 1) {
         FUN_L06_002f3640_u(moby);
@@ -904,7 +904,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                     }
                 }
                 dist = FUN_001f9b80(moby->pos, hero.motion.pos.f);
-                dz = AbsoluteFloat(moby->pos[2] - hero.unk2A0.f[2]);
+                dz = AbsoluteFloat(moby->pos[2] - hero.ground_point.f[2]);
                 probe_ground_height(moby->pos, 0, 0.5f);
                 if (D_L06_001745D8 != 0 && D_L06_001745D8->cls_id == 0x3B1) {
                     *(OvlQuad *)moby->pos = *(OvlQuad *)v60;

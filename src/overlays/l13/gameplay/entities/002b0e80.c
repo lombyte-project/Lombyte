@@ -300,7 +300,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
             release_voice_slot(vars->voice);
             vars->voice = -1;
         }
-        if (hero.unk2FC != moby || hero.unk30E.s != 0 ||
+        if (hero.ground_moby != moby || hero.air_frames.s != 0 ||
             FUN_001f9b80(&hero.motion.pos, &moby->pos) > 0.5f) {
             u8 s = moby->state;
             vars->armed = 0;
@@ -325,11 +325,11 @@ void FUN_L13_002b39e0(struct Moby *moby) {
             int t = (i << 8) | 0x80000000;
             moby->unk90 = (i << 16) | t | i;
         }
-        if (hero.unk2FC != moby || hero.unk30E.s != 0 ||
+        if (hero.ground_moby != moby || hero.air_frames.s != 0 ||
             FUN_001f9b80(&hero.motion.pos, &moby->pos) > 1.1f) {
             vars->armed = 1;
         }
-        if (vars->armed != 0 && hero.unk2FC == moby && hero.unk30E.s == 0 &&
+        if (vars->armed != 0 && hero.ground_moby == moby && hero.air_frames.s == 0 &&
             FUN_001f9b80(&hero.motion.pos, &moby->pos) < 0.5f) {
             moby->unk90 = 0x80208020;
             if (moby->state == 5) {

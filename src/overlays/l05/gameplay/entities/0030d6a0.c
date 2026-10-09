@@ -764,7 +764,7 @@ void FUN_L05_003156d0(struct Moby *moby) {
         if (vars->timer > scale_game_frames(30) || FUN_001f9b80(&hero.motion.pos, &moby->pos) > 0.5f) {
             tick_countdown_32_alt(&vars->timer);
         }
-        if (hero.unk2FC != moby) {
+        if (hero.ground_moby != moby) {
             FUN_L00_002eac18(1);
             if (moby->state == 7) {
                 moby->state = 5;
@@ -784,7 +784,7 @@ void FUN_L05_003156d0(struct Moby *moby) {
             level = 0x20;
         }
         moby->unk90 = 0x80000000 | (level << 16) | (level << 8) | level;
-        if (hero.unk2FC == moby && hero.unk30E.s == 0 && FUN_001f9b80(&hero.motion.pos, &moby->pos) < 0.5f) {
+        if (hero.ground_moby == moby && hero.air_frames.s == 0 && FUN_001f9b80(&hero.motion.pos, &moby->pos) < 0.5f) {
             allocate_voice_for_target_entry(1, 0, moby);
             moby->unk90 = 0x80208020;
             if (moby->state == 7) {
@@ -804,7 +804,7 @@ void FUN_L05_003156d0(struct Moby *moby) {
             level = 0x20;
         }
         moby->unk90 = 0x80000000 | (level << 16) | (level << 8) | level;
-        if (hero.unk2FC == moby && hero.unk30E.s == 0 && FUN_001f9b80(&hero.motion.pos, &moby->pos) < 0.5f) {
+        if (hero.ground_moby == moby && hero.air_frames.s == 0 && FUN_001f9b80(&hero.motion.pos, &moby->pos) < 0.5f) {
             allocate_voice_for_target_entry(1, 0, moby);
             if (vars->marker != -1) {
                 place_marker_ring(moby);
@@ -819,13 +819,13 @@ void FUN_L05_003156d0(struct Moby *moby) {
             vars->fade = 0.0f;
         } else if (moby->state == 4) {
             f32 dist = FUN_001f9b80(&moby->pos, &hero.motion.pos);
-            if (FUN_001f99c0(hero.unk2D8.f - vars->bottom) < 2.0f && dist < 32.0f && dist > 5.0f) {
+            if (FUN_001f99c0(hero.ground_z.f - vars->bottom) < 2.0f && dist < 32.0f && dist > 5.0f) {
                 moby->unkBC = 0;
                 moby->state = 3;
             }
         } else if (moby->state == 5) {
             f32 dist = FUN_001f9b80(&moby->pos, &hero.motion.pos);
-            if (FUN_001f99c0(hero.unk2D8.f - vars->top) < 2.0f && dist < 32.0f && dist > 5.0f) {
+            if (FUN_001f99c0(hero.ground_z.f - vars->top) < 2.0f && dist < 32.0f && dist > 5.0f) {
                 moby->unkBC = 0;
                 moby->state = 2;
             }
@@ -1533,7 +1533,7 @@ void FUN_L05_00318c78(struct Moby *moby) {
         break;
     case 1:
         g = &hero;
-        if (((char *)g->unk2FC) == moby && g->unk30E.s == 0) {
+        if (((char *)g->ground_moby) == moby && g->air_frames.s == 0) {
             FUN_001fa2d8(v30, &moby->unkC0);
             subtract_vector_xyz(v70, &g->motion.pos, &moby->pos);
             v70[3] = 0;

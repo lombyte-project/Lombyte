@@ -33,7 +33,7 @@ void FUN_L16_002097a0(void) {
     if (st == -1)
         return;
     if (st == 2) {
-        if (g->unk30C.s == 0 || g->unk2DC < 0.3f) {
+        if (g->unk30C.s == 0 || g->ground_distance < 0.3f) {
             g->unk12E7 = 1;
             if (g->unk20A4 == 0) {
                 char *p = (char *)g->items[1].moby;
@@ -46,11 +46,11 @@ void FUN_L16_002097a0(void) {
         struct Hero *q = &hero;
         q->base_condition = 1;
         q->unk22A4 = 0.2f;
-        q->height_threshold = q->unk2D8.f + 0.2f;
+        q->height_threshold = q->ground_z.f + 0.2f;
     }
     if (st == 0) {
         struct Hero *q = &hero;
-        float d = q->height_threshold - q->unk2D8.f;
+        float d = q->height_threshold - q->ground_z.f;
         q->unk22A4 = d;
         if (d < 0.85f && 0.25f < d)
             q->unk20A9 = 1;
@@ -205,16 +205,16 @@ void FUN_L16_0020ffb0(void) {
     f32 g;
 
     hero.unk270.f[2] = 1.0f;
-    hero.unk30E.u++;
+    hero.air_frames.u++;
     hero.unk30C.u++;
     hero.unk270.i[0] = 0;
     hero.unk270.i[1] = 0;
     hero.unk2E0.i = 0;
-    hero.unk2D8.i = 0;
-    FUN_001f99f8_c((u8 *)&hero.unk2A0);
+    hero.ground_z.i = 0;
+    FUN_001f99f8_c((u8 *)&hero.ground_point);
     hero.unk30A = 0;
-    hero.unk2DC = 32.0f;
-    hero.unk2FC = 0;
+    hero.ground_distance = 32.0f;
+    hero.ground_moby = 0;
     if (hero.unk2F8 != 0) {
         hero.unk2F8++;
     }
@@ -273,31 +273,31 @@ void FUN_L16_0020ffb0(void) {
         }
     }
     if (HH.unk1C > 0) {
-        qcopy((u8 *)&hero.unk2A0, &HH.point);
-        hero.unk2D8.f = HH.point.f[2];
-        hero.unk2DC = FUN_001f9b48((u8 *)&hero.motion.pos, (u8 *)&hero.unk2A0);
-        hero.unk2FC = (struct Moby *)HH.moby;
+        qcopy((u8 *)&hero.ground_point, &HH.point);
+        hero.ground_z.f = HH.point.f[2];
+        hero.ground_distance = FUN_001f9b48((u8 *)&hero.motion.pos, (u8 *)&hero.ground_point);
+        hero.ground_moby = (struct Moby *)HH.moby;
         FUN_00125180((u8 *)&hero.unk270, (u8 *)&HH.normal_x);
         hero.unk2E0.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
         hero.unk2EC = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
-        FUN_001f9a28(&v20, (u8 *)&hero.unk2A0, (u8 *)&hero.motion.pos);
+        FUN_001f9a28(&v20, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
         if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&hero.unk270)) {
-            hero.unk2DC = -hero.unk2DC;
+            hero.ground_distance = -hero.ground_distance;
         }
-        if (hero.unk2DC < 0.02f) {
+        if (hero.ground_distance < 0.02f) {
             hero.unk30C.s = 0;
             if (hero.unk2E0.f <= 0.87266463f || hero.unk20B3 == 1 || hero.state.control_mode == 0x16) {
-                hero.unk30E.s = 0;
+                hero.air_frames.s = 0;
                 hero.unkA80 = HH.moby;
             }
         }
     }
 tail:
-    if (hero.unk30E.s != 0) {
+    if (hero.air_frames.s != 0) {
         hero.unk300 = 0;
     } else {
         hero.unk300++;
-        qcopy((u8 *)&hero.unk2B0, (u8 *)&hero.unk2A0);
+        qcopy((u8 *)&hero.unk2B0, (u8 *)&hero.ground_point);
     }
     if (hero.motion.pos.f[2] > hero.height_threshold) {
         hero.unk2F8 = 0;
@@ -329,7 +329,7 @@ d1:
         hero.state.control_mode == 5 || hero.state.control_mode == 3) {
         return;
     }
-    if (!(hero.unk2DC < 0.25f)) {
+    if (!(hero.ground_distance < 0.25f)) {
         return;
     }
     FUN_L00_00216078((u8 *)&hero.unk270, &v20);
@@ -347,7 +347,7 @@ d1:
         FUN_L00_002335c8(&v30, 0.2f, a, 0.45f);
         FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
         if (FUN_001efa68(&v30, &v0, 0x22, (s32)hero.moby, 0)) {
-            f = HH.point.f[2] - hero.unk2D8.f;
+            f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
             if (0.4f < FUN_001f99c0(f)) {
                 hero.unk2C0.f[i] = 0.0f;

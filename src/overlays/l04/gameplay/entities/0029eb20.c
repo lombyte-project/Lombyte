@@ -2903,7 +2903,7 @@ void FUN_L04_002c6bb8(struct Moby *m) {
                    (v->target != -1 && v->locked == 0 &&
                     ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9 ||
                      hero.state.control_mode == 12) &&
-                    hero.unk2FC == &level_mobys[v->target])) {
+                    hero.ground_moby == &level_mobys[v->target])) {
             m->state = 2;
         }
         if (m->unk54 != prev) {

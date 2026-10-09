@@ -133,7 +133,7 @@ void FUN_L05_002f8080(char *m) {
     struct Hero *g = &hero;
     int f = 0;
     int *d = *(int **)(m + 0x78);
-    if (((char *)g->unk2FC) == m) {
+    if (((char *)g->ground_moby) == m) {
         f = g->state.control_mode == 0x13;
     }
     switch ((unsigned char)m[0x53]) {
@@ -178,7 +178,7 @@ void FUN_L05_002f81b8(void *mv) {
     char *data = *(char **)(moby + 0x78);
     int r;
     float s;
-    if (((char *)base->unk2FC) == moby) {
+    if (((char *)base->ground_moby) == moby) {
         approach_value((float *)(data + 0x1C), 1.0f, frame_time + frame_time);
         if (((int)base->items[0].moby) != 0) {
             if (base->items[0].item_id == 0x16)

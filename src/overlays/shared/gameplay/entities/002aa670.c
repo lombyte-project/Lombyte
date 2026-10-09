@@ -270,7 +270,7 @@ void FUN_L00_002aa670(M910 *m) {
     }
     if (v->owner != 0 && v->owner->state != 0xFE && v->owner->state != 0xFD &&
         v->owner->cls == 0xBE && v->h36 == 0 && 0.0f < vector_length_xyz(v)) {
-        if (hero.unk2FC == 0 || FUN_002141f8_cf(hero.unk2FC) == 0) {
+        if (hero.ground_moby == 0 || FUN_002141f8_cf(hero.ground_moby) == 0) {
             FUN_L00_002aa2a8(v, m, 1);
         } else if (FUN_L00_002aa2a8(v, m, 0) == 0) {
             FUN_L00_002aa2a8(v, m, 2);

@@ -705,7 +705,7 @@ int hero_set_state(int a, int b) {
                     FUN_L00_002323b8(6, 0, (float)scale_game_frames(8));
                     return 1;
                 }
-                if (1.75f < q->unk2DC) {
+                if (1.75f < q->ground_distance) {
                     FUN_L00_002323b8(0xB, 0, (float)scale_game_frames(0xC));
                     q->state.step = 1;
                 } else {
@@ -973,7 +973,7 @@ int hero_set_state(int a, int b) {
                 FUN_L00_00262528(x, 0xA, 6);
                 u->unk4AE = 1;
                 u->unk3F4 = frame_time * 11.5f;
-                if (1.4f < u->unk2DC)
+                if (1.4f < u->ground_distance)
                     u->unk3F4 = frame_time * 5.7f;
                 u->unk4A0 = frame_time_sq * 8.5f;
                 u->unk480 = frame_time_sq * 44.0f;
@@ -1078,8 +1078,8 @@ int hero_set_state(int a, int b) {
                 }
             } else if (u->state.current == 0xE) {
                 float v = 0.7f;
-                if (u->unk2DC < 2.0f)
-                    v = (2.5f - u->unk2DC) * 0.5f + 0.7f;
+                if (u->ground_distance < 2.0f)
+                    v = (2.5f - u->ground_distance) * 0.5f + 0.7f;
                 u->unk434 = 0.6f;
                 u->unk440 = 32.0f;
                 u->unk444 = 43.0f;
@@ -1483,7 +1483,7 @@ int hero_set_state(int a, int b) {
             p->unk2284 = 0;
             p->health.hp = 0;
             p->unk1CC = 0x2710;
-            p->unk2F4 = p->unk2D8.f;
+            p->unk2F4 = p->ground_z.f;
             FUN_L00_00216de8(9, 0);
             if (b)
                 FUN_L00_002323b8(0x71, 0, (float)scale_game_frames(8));
@@ -1497,7 +1497,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         p->health.hp = 0;
         p->unk1CC = 0x2710;
-        p->unk2F4 = p->unk2D8.f;
+        p->unk2F4 = p->ground_z.f;
         m = ((char *)p->unkA88);
         qcopy(m + 0x10, &p->motion.pos);
         allocate_voice_for_target_entry(9, 0, (int)m);

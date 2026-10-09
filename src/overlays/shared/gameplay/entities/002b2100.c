@@ -107,7 +107,7 @@ void FUN_L00_002b3058(O_b3058 *o) {
         goto tail;
     if (g->unk300 == 0)
         goto tail;
-    if (((u8 *)g->unk2FC) != 0 && (*(s16 *)(((u8 *)g->unk2FC) + 0xA6) == 0x13E || *(s16 *)(((u8 *)g->unk2FC) + 0xA6) == 0x46F))
+    if (((u8 *)g->ground_moby) != 0 && (*(s16 *)(((u8 *)g->ground_moby) + 0xA6) == 0x13E || *(s16 *)(((u8 *)g->ground_moby) + 0xA6) == 0x46F))
         goto tail;
     if (FUN_L00_00233db8_b3058(-1, 1) != 0) {
         b = 0.0f;
@@ -605,7 +605,7 @@ unsigned char *FUN_L00_002b58d8(unsigned char *a, V_2b58d8 *pos, float fa, float
         qcopy(m + 0x10, pos);
         *(int *)(v + 0x8) = 0;
         *(int *)(v + 0xC) = 0;
-        if ((void *)G->unk2FC && FUN_L00_002603d0_2b58d8((void *)G->unk2FC))
+        if ((void *)G->ground_moby && FUN_L00_002603d0_2b58d8((void *)G->ground_moby))
             *(float *)(v + 0x4) = FUN_001f9af0_2b58d8(&G->motion.unk100);
         else
             *(int *)(v + 0x4) = 0;
@@ -1429,7 +1429,7 @@ void FUN_L00_002b4198(void *p) {
             }
             if (hero.state.current == 0x22) {
                 if (hero.state_timer < FUN_001f96f8_4198(0xF) ||
-                    (FUN_001f96f8_4198(0x21) < hero.state_timer && hero.unk30E.s != 0)) {
+                    (FUN_001f96f8_4198(0x21) < hero.state_timer && hero.air_frames.s != 0)) {
                     flag = 1;
                 }
             }

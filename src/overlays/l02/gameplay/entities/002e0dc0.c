@@ -596,7 +596,7 @@ void FUN_L02_002e2228(struct Moby *moby) {
     case 3:
     case 5:
         ride = 0;
-        if (hero.unk2FC == moby && hero.unk30E.s == 0 && moby->unkBC == 0) {
+        if (hero.ground_moby == moby && hero.air_frames.s == 0 && moby->unkBC == 0) {
             ride = 1;
         } else if (distance_xyz(&moby->pos, &hero.motion.pos) < 16.0f) {
             if (moby->state == 5 && hero.motion.pos.f[2] < moby->pos.z - 5.0f) {
@@ -615,7 +615,7 @@ void FUN_L02_002e2228(struct Moby *moby) {
                 FUN_00212ed8(driver, 2, 0);
                 *(int *)(data + 0xA4) = allocate_voice_for_target(0, 4, driver);
             }
-        } else if (hero.unk2FC != moby) {
+        } else if (hero.ground_moby != moby) {
             moby->unkBC = 0;
         }
         break;

@@ -314,7 +314,7 @@ s32 FUN_L18_00218a90(s32 arg) {
         if ((tbl->i24 & 4) || hero.unk1630 <= 0) {
             hero_set_state(0x5D, 1);
             FUN_L00_002a9be0_210ce8();
-            if (hero.unk30E.s == 0) {
+            if (hero.air_frames.s == 0) {
                 FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 7.0f,
                                         D_0015ED6C_210ce8 * 3.5f);
                 break;

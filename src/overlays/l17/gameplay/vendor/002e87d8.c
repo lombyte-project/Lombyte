@@ -3515,7 +3515,7 @@ void FUN_L17_002f1940(struct Moby *m) {
             v->sfx = 0;
         }
         pl = &hero;
-        if (((unsigned char *)pl->unk2FC) == m && pl->unk30E.s == 0) {
+        if (((unsigned char *)pl->ground_moby) == m && pl->air_frames.s == 0) {
             FUN_L17_002f20d8(m);
             if ((*(int *)(((char *)&D_0013CAE4)) & 0x10) && D_L17_0015F594 == 10) {
                 int s = v->dir;

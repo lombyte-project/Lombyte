@@ -358,13 +358,13 @@ void FUN_L08_002dbdb0(struct Moby *moby) {
         }
         break;
     case 2:
-        if (hero.unk2FC == moby) {
+        if (hero.ground_moby == moby) {
             if (D_L08_00179C10.busy == 0 && D_L08_00179C10.owner == -1) {
                 qcopy(&p, &hero.motion.pos);
                 FUN_L00_00261d78(vars->stop, 0.5f, &p, &p);
                 if (camera_distance_to(&hero.motion.pos, &p) < 0.001f) {
                     FUN_L08_002dc7f0((char *)moby);
-                    if ((D_0013CAE4[0] & 0x10) && hero.unk30E.s == 0 && D_L08_0015F594 == 10)
+                    if ((D_0013CAE4[0] & 0x10) && hero.air_frames.s == 0 && D_L08_0015F594 == 10)
                         moby->state = 3;
                 }
             }

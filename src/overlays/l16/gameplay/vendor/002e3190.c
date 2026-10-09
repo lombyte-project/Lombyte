@@ -649,7 +649,7 @@ void FUN_L16_002e43e0(struct Moby *moby) {
         break;
     case 1:
         g = &hero;
-        if (((char *)g->unk2FC) == moby && g->unk30E.s == 0) {
+        if (((char *)g->ground_moby) == moby && g->air_frames.s == 0) {
             FUN_001fa2d8(v30, &moby->unkC0);
             subtract_vector_xyz(v70, &g->motion.pos, &moby->pos);
             v70[3] = 0;
@@ -2169,7 +2169,7 @@ void FUN_L16_002e7f80(L16PlatformMoby *moby) {
                     break;
                 }
             }
-            if (hero.unk2FC == moby && hero.unk30E.s == 0) {
+            if (hero.ground_moby == moby && hero.air_frames.s == 0) {
                 clear_u64_value(motion.v);
                 if (moby->reverse) {
                     motion.v[2] = -1.0f;
@@ -2209,7 +2209,7 @@ void FUN_L16_002e7f80(L16PlatformMoby *moby) {
                 release_voice_slot(d->particle);
                 d->particle = -1;
             }
-            if (moby->position[2] == d->goal && (hero.unk2FC != moby || hero.unk30E.s != 0)) {
+            if (moby->position[2] == d->goal && (hero.ground_moby != moby || hero.air_frames.s != 0)) {
                 clear_u64_value(d->basis[1]);
                 moby->state = 2;
                 break;

@@ -518,7 +518,7 @@ float FUN_L14_002b35d8(char *moby, int flag, float target_angle) {
         float t;
         qcopy(a, owner + 0x10);
         g = &hero;
-        if (((char *)g->moby) == owner) a[2] = a[2] - g->unk2DC;
+        if (((char *)g->moby) == owner) a[2] = a[2] - g->ground_distance;
         bp = b;
         subtract_vector_xyz_c2(bp, a, moby + 0x10);
         b[2] = b[2] + 1.5f;

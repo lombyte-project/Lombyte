@@ -814,7 +814,7 @@ void FUN_L03_002d3198(struct Moby *m) {
                             D_L03_00161B10 * DEG_TO_RAD * D_0015ED70, frame_time * 12.566371f);
         taxi_approach_angle(&m->rot.x, 0.0f, &v->roll_vel, D_L03_00161B18 * DEG_TO_RAD * D_0015ED70,
                             D_L03_00161B18 * DEG_TO_RAD * D_0015ED70, frame_time * 12.566371f);
-        if (hero.unk2FC == m && hero.unk30E.s == 0) {
+        if (hero.ground_moby == m && hero.air_frames.s == 0) {
             FUN_L03_002d3100(m, v->help[m->unkBC]);
             if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
                 FUN_L00_00233ee8(&m->pos, m->rot.z, 0);

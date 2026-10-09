@@ -331,7 +331,7 @@ void FUN_L00_00205f60(int a0, char *a1, int a2) {
     }
     if (D_0015ED84_205f60 == 12) {
         struct Hero *g = &hero;
-        if (g->unk12ED == 0 && ((int)g->unk2FC) == 0) {
+        if (g->unk12ED == 0 && ((int)g->ground_moby) == 0) {
             float k = 0.15f;
             FUN_L00_0024f7c8_205f60(((int)g->moby), a1 + 0x16, v);
             v[0] += FUN_001f9dc8_205f60(g->motion.rot.f[2]) * k;

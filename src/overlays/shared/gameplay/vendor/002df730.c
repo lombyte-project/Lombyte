@@ -74,7 +74,7 @@ s32 FUN_L00_002e02e0(void) {
     u8 flags;
     base = &hero;
     tbl = D_L00_0015FFD8;
-    v = ((s32)base->unk2FC);
+    v = ((s32)base->ground_moby);
     flags = (u8)base->unk20B0;
     tbl += *(s32 *)*(s32 *)((u8 *)v + 0x78) << 8;
     if (!flags) {
@@ -710,7 +710,7 @@ s32 FUN_L00_002e42c0(OvlQuad *out, s32 flag) {
         return 1;
     }
     FUN_L00_002e4168_002e42c0(*(s32 *)(q - 0x10), &v[0]);
-    f = g->unk2DC;
+    f = g->ground_distance;
     if (30.0f <= f || flag == 0) {
         FUN_001f9a68_002e42c0(&v[3], q + 0x30, 0.2f);
         FUN_001f9a10_002e42c0(&v[1], &v[0], &v[3]);

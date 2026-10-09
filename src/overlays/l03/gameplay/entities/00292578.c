@@ -481,7 +481,7 @@ void FUN_L03_00292e98(char *moby) {
         D_L03_0015FDFC = 1;
         FUN_L03_00292890(moby);
         ENGINE_SOUND();
-        if (hero.unk30E.s != 0 && hero.state.control_mode != 3) {
+        if (hero.air_frames.s != 0 && hero.state.control_mode != 3) {
             FUN_L00_0025df68(cdata->path, hero.motion.pos.f, start, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
             data->i10C += 1;
             if (FUN_001f96f8(60) < data->i10C && hero.motion.pos.f[2] < start[2] - 10.0f) {
@@ -498,9 +498,9 @@ void FUN_L03_00292e98(char *moby) {
             td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[data->i100] + 0x78);
             AIM_AT_HERO(td);
         }
-        if (hero.unk2FC != 0 && (*(short *)((char *)hero.unk2FC + 0xA6) == 0x336 ||
-                                 *(short *)((char *)hero.unk2FC + 0xA6) == 0x4BA)) {
-            FUN_L00_00266858(hero.unk2FC, 3);
+        if (hero.ground_moby != 0 && (*(short *)((char *)hero.ground_moby + 0xA6) == 0x336 ||
+                                 *(short *)((char *)hero.ground_moby + 0xA6) == 0x4BA)) {
+            FUN_L00_00266858(hero.ground_moby, 3);
         }
         if (!FUN_L01_00277fb8(moby)) {
             break;

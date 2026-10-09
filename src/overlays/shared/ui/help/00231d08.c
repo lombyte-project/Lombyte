@@ -854,7 +854,7 @@ int FUN_L00_00233440(void) {
 
     if (state == 0x3F || state == 0x71 || state == 0x70 ||
         (base->unk12E7 != 0 && D_0013D4DC[0] != 0 && state == 0 &&
-         base->unk30E.s < scale_ticks(4))) {
+         base->air_frames.s < scale_ticks(4))) {
         r = 1;
     }
     return r;
@@ -877,7 +877,7 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
         FUN_001f9a10_002334d0(out, in, &t);
         break;
     case 2:
-        if (b->state.current == 0x3E && b->unk30E.s == 0) {
+        if (b->state.current == 0x3E && b->air_frames.s == 0) {
             FUN_001f9bf8_002334d0(&t, &b->unk270, -k);
         } else {
             FUN_001f9bf8_002334d0(&t, D_0013F5E0_002334d0, k);

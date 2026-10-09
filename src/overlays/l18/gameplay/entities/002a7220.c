@@ -1219,7 +1219,7 @@ void FUN_L18_002d6600(char *moby) {
             }
             {
                 struct Hero *b = &hero;
-                if (b->unk30E.s == 0 && b->state.current == 0x22) {
+                if (b->air_frames.s == 0 && b->state.current == 0x22) {
                     FUN_0022da68_q(0, 0, (int)moby);
                     d->f24 = 0;
                 }

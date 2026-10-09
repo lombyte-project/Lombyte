@@ -1467,9 +1467,9 @@ void FUN_L01_00308bd8(struct Moby *moby) {
         g = &hero;
         if (g->unk20A4 == 2)
             break;
-        if (((char *)g->unk2FC) != moby)
+        if (((char *)g->ground_moby) != moby)
             break;
-        if (g->unk30E.s != 0)
+        if (g->air_frames.s != 0)
             break;
         FUN_L01_00309430_c(moby);
         if (!(D_0013CAE4[0] & 0x10))

@@ -591,9 +591,9 @@ void FUN_L11_002f2518(struct Moby *moby) {
             D_0014C050_2518[*(int *)(data + 8) + D_0015ED84_2518 * 16] == 0xFF)
             FUN_L11_002f3040_2518(moby);
         g = &hero;
-        if (((char *)g->unk2FC) != moby)
+        if (((char *)g->ground_moby) != moby)
             break;
-        if (g->unk30E.s != 0)
+        if (g->air_frames.s != 0)
             break;
         FUN_L11_002f2cd0_2518(moby);
         if (!(D_0013CAE4_2518 & 0x10))
@@ -856,8 +856,8 @@ int FUN_L11_0030a480(struct Moby *moby) {
     char *current;
     if (moby->state != 1)
         return 0;
-    current = hero.unk2FC;
-    if (current != (char *)moby || hero.unk30E.s)
+    current = hero.ground_moby;
+    if (current != (char *)moby || hero.air_frames.s)
         return 0;
     current[0x20] = 2;
     if (((unsigned char *)current)[0x53]) {

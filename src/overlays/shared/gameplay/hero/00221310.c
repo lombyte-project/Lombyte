@@ -126,7 +126,7 @@ void FUN_L00_002215c8(void) {
         FUN_001f9740_2215c8(&D_L00_001798F0_2215c8[i].w0);
     }
     hero.unk22B8 = 9999.0f;
-    if (hero.unk30E.s != 0 && FUN_L00_00233a78_2215c8(&hero.motion.velocity) < 0.0f) {
+    if (hero.air_frames.s != 0 && FUN_L00_00233a78_2215c8(&hero.motion.velocity) < 0.0f) {
         if (hero.unk21B4 != 0x20) goto skip;
         FUN_001f99f8_2215c8(&sum);
         n8 = 8;
@@ -171,7 +171,7 @@ skip:
         break;
     }
     {
-        f32 z = hero.unk2D8.f;
+        f32 z = hero.ground_z.f;
         if (hero.motion.pos.f[2] - z < 4.0f) {
             qcopy(&hero.motion.unkC0, &hero.motion.pos);
             hero.motion.unkC0.f[2] = z + 0.5f;

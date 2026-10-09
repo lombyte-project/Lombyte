@@ -89,7 +89,7 @@ void FUN_L02_002226d8(void)
             }
         }
         d = gravity_z(&hero.motion.velocity);
-        limit = -hero.unk2DC;
+        limit = -hero.ground_distance;
         if (d < limit) {
             if (0.0f < limit) {
                 limit = 0.0f;
@@ -450,7 +450,7 @@ s32 FUN_L02_0022ee00(void)
                 window = scale_game_frames(0x12);
             }
             if (FUN_L00_00266d60(buttons, window, NULL) != 0) {
-                if ((hero.unk41E == 0 ? 0.1f < hero.unk2DC : 0.57f < hero.unk2DC) || (hero.state.current == 8 && 0.57f < hero.unk2DC)) {
+                if ((hero.unk41E == 0 ? 0.1f < hero.ground_distance : 0.57f < hero.ground_distance) || (hero.state.current == 8 && 0.57f < hero.ground_distance)) {
                     hero_set_state(0x14, 1);
                 } else if (hero.unk12EA == 0) {
                     hero_set_state(0x13, 1);
@@ -487,7 +487,7 @@ s32 FUN_L02_0022ee00(void)
         FUN_L00_00221ee0();
         FUN_L00_00222158();
         window = scale_game_frames(5);
-        if (hero.unk30E.s != 0) {
+        if (hero.air_frames.s != 0) {
             window = scale_game_frames(8);
         }
         if (hero.state.control_mode == 0 || hero.state.control_mode == 1 || hero.state.control_mode == 4 ||

@@ -852,7 +852,7 @@ void FUN_L00_002c3888(float *pos,char *moby,void *vec) {
  char *player;
  qcopy(state+0x10,vec);
  { struct Hero *view = &hero;
-   if(((int)view->unk2FC) && FUN_L00_002603d0(((int)view->unk2FC))) add_vector_xyz(state+0x10,state+0x10,&view->motion.unk100);
+   if(((int)view->ground_moby) && FUN_L00_002603d0(((int)view->ground_moby))) add_vector_xyz(state+0x10,state+0x10,&view->motion.unk100);
  }
  qcopy(moby+0x10,pos);
  camera = &hero;
@@ -941,7 +941,7 @@ s32 FUN_L00_002c3af8(ThrowVars *v, struct Moby *m, s32 mode)
         qcopy(&e, &v->vel);
         if (hero.state.control_mode == 15)
             add_vector_xyz(&e, &e, &hero.motion.unk100);
-        if (hero.unk2FC && FUN_L00_002603d0((int)hero.unk2FC) && mode)
+        if (hero.ground_moby && FUN_L00_002603d0((int)hero.ground_moby) && mode)
             add_vector_xyz(&e, &e, &hero.motion.unk100);
         t = scale_game_frames(300);
     } else {
