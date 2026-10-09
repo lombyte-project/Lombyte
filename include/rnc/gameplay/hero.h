@@ -33,6 +33,31 @@ struct MobyTrail {
  * FUN_L00_0020d460 / FUN_L00_0020d498 return a ready slot's moby / item id.
  * A slot change clears +0x1A, sets +0x20 to 3 and blends the moby (2, 0, 2).
  */
+/* A 0xB0-byte record FUN_L00_00205168 eases toward its targets; the
+   D_L00_0017A680 table FUN_L00_002054e8 walks has the same layout. */
+/* A manipulator record eased by FUN_L00_00205168: it moves rot and pos toward
+   their targets, then rebuilds quat, scale3 and translation (the part
+   attach_manipulator, FUN_0020cb10, hands to the moby) from them. */
+struct HeroEase {
+    u8 unk0;                       /* 0x00 */
+    u8 attached;                   /* 0x01: attached to its moby (FUN_0020cb10 / FUN_0020cb88) */
+    u8 pad_2[0xE];
+    Vec4 quat;                     /* 0x10: rotation built from rot (FUN_L00_00259f50) */
+    Vec4 scale3;                   /* 0x20: x/y/z = scale */
+    Vec4 translation;              /* 0x30: copy of pos */
+    Vec4 rot;                      /* 0x40: eased toward rot_target */
+    Vec4 rot_vel;                  /* 0x50 */
+    Vec4 rot_target;               /* 0x60: cleared every frame */
+    Vec4 pos;                      /* 0x70: eased toward pos_target */
+    Vec4 pos_vel;                  /* 0x80 */
+    Vec4 pos_target;               /* 0x90: cleared every frame */
+    s16 unkA0;                     /* 0xA0: -1 = unused */
+    s16 kind;                      /* 0xA2: picks the moby (FUN_L00_00205110) */
+    f32 accel;                     /* 0xA4 */
+    f32 max_speed;                 /* 0xA8 */
+    f32 scale;                     /* 0xAC: reset to 1 every frame */
+};
+
 struct HeroItemSlot {
     struct Moby *moby;             /* 0x00: item moby */
     struct Moby *moby2;            /* 0x04: second item moby */
@@ -41,7 +66,7 @@ struct HeroItemSlot {
     s32 unk14;                     /* 0x14: set on release */
     s16 timer;                     /* 0x18: counts down; a slot change waits for 0 */
     u8 unk1A;                      /* 0x1A: cleared on a slot change */
-    u8 pad_1B[0x1];
+    u8 unk1B;                      /* 0x1B: counts releases (FUN_L00_00210748, state 3) */
     u8 unk1C;                      /* 0x1C: 2 blocks a slot change, 1 reloads timer */
     u8 timer_reload;               /* 0x1D: timer reload value */
     u8 pad_1E[0x2];
@@ -49,6 +74,18 @@ struct HeroItemSlot {
     s32 state;                     /* 0x24: 0 empty, 2 ready, 3 released */
     s32 item_id;                   /* 0x28: item in the slot */
     u8 pad_2C[0x24];
+};
+
+/*
+ * One key of the hero's per-state vertical velocity curve (hero.unk3E4[i]),
+ * run by FUN_L00_00214108 between state frames unk3D0 and unk3D4. Entering a
+ * key sets hero.unk3F0 to value * D_0015ED70 (-1000000 keeps it); each later
+ * frame adds delta * D_0015ED70. A key lasts scale_game_frames(frames).
+ */
+struct HeroVelocityKey {
+    f32 value;
+    f32 delta;
+    s32 frames;
 };
 
 /* Position, rotation and velocities (hero + 0x80) */
@@ -176,9 +213,16 @@ struct Hero {
     s32 unk240;                    /* 0x240 */
     u8 pad_244[0x4];
     f32 unk248;                    /* 0x248 */
-    u8 pad_24C[0xB];
+    u8 pad_24C[0x4];
+    f32 unk250;                    /* 0x250 */
+    u8 unk254;                     /* 0x254 */
+    u8 unk255;                     /* 0x255 */
+    u8 pad_256[0x1];
     u8 unk257;                     /* 0x257 */
-    u8 pad_258[0x18];
+    f32 unk258;                    /* 0x258 */
+    f32 unk25C;                    /* 0x25C */
+    s32 unk260;                    /* 0x260 */
+    u8 pad_264[0xC];
     Vec4 unk270;                   /* 0x270 */
     Vec4 unk280;                   /* 0x280 */
     Vec4 unk290;                   /* 0x290 */
@@ -216,9 +260,10 @@ struct Hero {
     f32 unk3D8;                    /* 0x3D8 */
     f32 unk3DC;                    /* 0x3DC */
     s32 unk3E0;                    /* 0x3E0 */
-    u8 *unk3E4;                    /* 0x3E4 */
-    s32 unk3E8;                    /* 0x3E8 */
-    u8 pad_3EC[0x8];
+    struct HeroVelocityKey *unk3E4; /* 0x3E4: keys run by FUN_L00_00214108 while unk41C is set */
+    s32 unk3E8;                    /* 0x3E8: current key in unk3E4, -1 before the first */
+    s32 unk3EC;                    /* 0x3EC: frames spent in the current key */
+    f32 unk3F0;                    /* 0x3F0: value added to velocity.z each frame */
     f32 unk3F4;                    /* 0x3F4 */
     f32 unk3F8;                    /* 0x3F8 */
     u8 pad_3FC[0x4];
@@ -479,7 +524,8 @@ struct Hero {
     f32 unkA68;                    /* 0xA68 */
     f32 unkA6C;                    /* 0xA6C */
     f32 unkA70;                    /* 0xA70 */
-    u8 pad_A74[0x8];
+    f32 aim_yaw;                   /* 0xA74: gadget aim yaw (FUN_L00_00217658) */
+    f32 aim_pitch;                 /* 0xA78: gadget aim pitch */
     s32 unkA7C;                    /* 0xA7C */
     s32 unkA80;                    /* 0xA80 */
     u8 *unkA84;                    /* 0xA84 */
@@ -505,8 +551,8 @@ struct Hero {
     u8 pad_FFC[0x14];
     s32 unk1010;                   /* 0x1010 */
     u8 pad_1014[0x7C];
-    struct HeroItemSlot items[4];  /* 0x1090: item slots; slot 0 is the equipped gadget */
-    u8 pad_11D0[0x110];
+    struct HeroItemSlot items[7];  /* 0x1090: item slots; slot 0 is the equipped gadget */
+    u8 pad_12C0[0x20];
     s16 unk12E0;                   /* 0x12E0 */
     u8 unk12E2;                    /* 0x12E2 */
     u8 unk12E3;                    /* 0x12E3 */
@@ -553,7 +599,8 @@ struct Hero {
     s32 unk1660;                   /* 0x1660 */
     u8 pad_1664[0xC];
     struct MobyTrail trail;        /* 0x1670: trail of moby copies following hero.moby */
-    u8 pad_17B0[0x350];
+    u8 pad_17B0[0x140];
+    struct HeroEase unk18F0[3];    /* 0x18F0: eased records, kind 5 set when an item slot is ready (FUN_L00_00210748) */
     Vec4 unk1B00[32];              /* 0x1B00: ring of 32 quads indexed by unk21B0 */
     u8 pad_1D00[0x20];
     f32 unk1D20;                   /* 0x1D20 */
@@ -595,7 +642,9 @@ struct Hero {
     s32 selected_item[7];          /* 0x20D4: per slot: item after a switch */
     s32 saved_item[7];             /* 0x20F0: per slot: item kept while another is forced in */
     s32 restore_item[7];           /* 0x210C: per slot: 1 puts saved_item back */
-    u8 pad_2128[0x88];
+    f32 unk2128[32];               /* 0x2128: ring of 32 yaws (motion.rot.z) indexed by unk21A8 */
+    s32 unk21A8;                   /* 0x21A8: unk2128 ring index */
+    s32 unk21AC;                   /* 0x21AC: unk2128 ring count */
     s32 unk21B0;                   /* 0x21B0: unk1B00 ring index */
     s32 unk21B4;                   /* 0x21B4: unk1B00 ring count */
     u8 pad_21B8[0x60];
@@ -607,7 +656,8 @@ struct Hero {
     s32 unk222C;                   /* 0x222C */
     s32 unk2230;                   /* 0x2230 */
     s32 unk2234;                   /* 0x2234 */
-    u8 pad_2238[0x38];
+    struct Moby *unk2238[8];       /* 0x2238: per sound slot (unk2218 + i * 4): moby the sound plays on, 0 = hero.moby */
+    u8 pad_2258[0x18];
     s32 unk2270;                   /* 0x2270 */
     s32 unk2274;                   /* 0x2274 */
     u8 pad_2278[0x8];

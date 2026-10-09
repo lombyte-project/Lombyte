@@ -1074,4 +1074,109 @@ void FUN_L00_00217450(void) {
     if (!ang) {
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00217658.s", FUN_L00_00217658);
+typedef struct {
+    u8 pad00[0x40];
+    f32 unk40[4];   /* 0x40: launch direction */
+    f32 unk50[4];   /* 0x50 */
+    f32 unk60;      /* 0x60: speed */
+    s32 unk64;
+    u8 pad68[0xE];
+    s16 unk76;
+    u8 pad78[6];
+    s16 unk7E;
+} ThrowPvars_217658;
+
+extern f32 D_0015ED6C_217658 __asm__("D_0015ED6C");
+extern f32 cam_217658[] __asm__("D_L00_00166C80");
+extern char D_00140B00_217658[] __asm__("D_00140B00");
+extern int FUN_L00_00211360(void *);
+extern void FUN_L00_00233660(void *, f32, f32, f32);
+extern float FUN_001f9e90_c2(float, float) __asm__("FUN_001f9e90");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern int FUN_L00_00216de8_c(int, int) __asm__("FUN_L00_00216de8");
+extern void clear_u64_value_c(void *) __asm__("FUN_001f99f8");
+extern void FUN_L00_00233708(void *, void *, f32);
+extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
+extern void rotmat_e(void *, void *) __asm__("FUN_001fa030");
+extern void FUN_001fa328(void *, void *, void *);
+extern void FUN_001fa298(void *, void *);
+extern void FUN_00214598(void *, void *);
+extern void FUN_L00_00262500(void *, char *);
+extern void FUN_L00_00262528(char *, int, int);
+extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
+
+/* Launches the equipped gadget moby: aims it at its target (or along the camera),
+ * builds its orientation matrix and starts its animation/sound. */
+void FUN_L00_00217658(void) {
+    f32 dir[4];
+    f32 delta[4];
+    f32 mat[12];
+    f32 cam_mat[12];
+    f32 out_mat[16];
+    struct Moby *target;
+    struct Moby *item;
+    ThrowPvars_217658 *tpv;
+    ThrowPvars_217658 *pv;
+    s32 aimed;
+    s32 has_target;
+    s32 state;
+
+    state = hero.state.current;
+    aimed = (state == 1 || state == 0x1E) && scale_game_frames(0x14) < hero.state_timer;
+    if (aimed) {
+        target = hero.items[0].moby;
+        has_target = 0;
+        if (target != NULL && FUN_L00_00211360(target)) {
+            tpv = (ThrowPvars_217658 *)target->pvars;
+            if (tpv->unk7E) {
+                has_target = 1;
+                FUN_L00_00233660(dir, 0.5f, 0.0f, 0.5f);
+                FUN_001f9a28(delta, tpv->unk50, dir);
+                hero.aim_yaw = FUN_001f9e90_c2(delta[0], delta[1]);
+                hero.aim_pitch = FUN_001f9e90_c2(FUN_001f9b20(delta), delta[2]);
+            }
+        }
+        if (!has_target) {
+            hero.aim_yaw = cam_217658[0x158 / 4];
+            hero.aim_pitch = fast_add_rotations(-cam_217658[0x154 / 4], 0.12217305f);
+        }
+    }
+    item = hero.items[0].moby;
+    if (!FUN_L00_00211360(item)) {
+        return;
+    }
+    hero.items[0].unk1A = 1;
+    if (aimed) {
+        FUN_L00_00216de8_c(0x1B, 0);
+    }
+    item->state = 10;
+    pv = (ThrowPvars_217658 *)item->pvars;
+    if (hero.unk248 < 1.2f && 0.6632251f < hero.unk250 && !hero.unk254) {
+        pv->unk76 = 1;
+    }
+    clear_u64_value_c(pv->unk40);
+    if (!aimed) {
+        FUN_L00_00233708(pv->unk40, pv->unk40, 1.0f);
+    } else {
+        build_spherical_offset(pv->unk40, 1.0f, hero.aim_yaw, hero.aim_pitch);
+    }
+    clear_u64_value_c(dir);
+    rotmat_e(mat, dir);
+    if (aimed) {
+        dir[0] = cam_217658[0x150 / 4];
+        dir[1] = cam_217658[0x154 / 4];
+        dir[2] = cam_217658[0x158 / 4];
+        rotmat_e(cam_mat, dir);
+        FUN_001fa328(mat, cam_mat, mat);
+    } else {
+        FUN_001fa328(mat, &hero.moby->unkC0, mat);
+    }
+    FUN_001fa298(out_mat, mat);
+    FUN_00214598(out_mat, &item->rot);
+    pv->unk64 = 0;
+    pv->unk60 = D_0015ED6C_217658 * 23.0f;
+    FUN_L00_00262500(item, D_00140B00_217658);
+    FUN_L00_00262528(D_00140B00_217658, 0x30, 3);
+    FUN_L00_00262528(D_00140B00_217658, 0x17, 5);
+    blend_moby_animation(item, 6, 0, scale_game_frames(5));
+}
