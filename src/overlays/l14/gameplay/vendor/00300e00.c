@@ -97,7 +97,68 @@ char *FUN_L14_003014e0(int a0, float *pos, float *a2, int a3, float f) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305408.s", FUN_L14_00305408);
+#include "rnc/globals.h"
+
+typedef struct {
+    u8 pad0[0x454];
+    u8 collected[1];
+} L14LevelState;
+
+extern char *D_L14_0015FFD8;
+extern L14LevelState D_L14_001BB930;
+extern s32 D_0014C190[][64];
+extern int D_L14_001BABD0[];
+extern void FUN_0020c828(void *);
+extern int FUN_001f96f8(int);
+extern float FUN_001fa6c0(int);
+extern int FUN_001f9740(int *);
+extern void FUN_L10_002f5a50(int);
+extern void FUN_L14_00305600(char *);
+extern void FUN_L14_00305680(char *);
+
+/* Moby that unlocks once: skips straight to done if this level already recorded it, otherwise waits for its trigger moby to reach state 2, records the unlock in the level's bit sets and runs a countdown. */
+void FUN_L14_00305408(unsigned char *moby) {
+    int *d = *(int **)(moby + 0x78);
+    short id;
+
+    switch (moby[0x20]) {
+    case 0:
+        if (d[3] < 0 || d[0] < 0 || d[4] < 0) {
+            FUN_0020c828(moby);
+            return;
+        }
+        id = *(short *)(moby + 0xB2);
+        if (D_L14_001BB930.collected[id] != 0) {
+            moby[0x20] = 3;
+            return;
+        }
+        if (D_0014C190[current_level_index][id >> 5] >> (*(unsigned short *)(moby + 0xB2) & 0x1F) & 1) {
+            moby[0x20] = 3;
+            return;
+        }
+        moby[0x20] = 1;
+        FUN_L14_00305600((char *)moby);
+        break;
+    case 1:
+        if (((unsigned char *)D_L14_0015FFD8)[d[3] * 0x100 + 0x20] != 2) {
+            return;
+        }
+        D_0014C190[current_level_index][*(short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
+        D_L14_001BABD0[*(short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
+        moby[0x20] = 2;
+        d[1] = FUN_001f96f8(0x78);
+        ((float *)d)[2] = 1.0f / FUN_001fa6c0(d[1]);
+        FUN_L10_002f5a50(d[4]);
+        break;
+    case 2:
+        FUN_001f9740(&d[1]);
+        FUN_L14_00305680((char *)moby);
+        if (d[1] == 0) {
+            moby[0x20] = 3;
+        }
+        break;
+    }
+}
 /* For each entry in a moby-id list, saves the moby's Y and lowers it by 20. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00306A88), where it is exact; names translated to the US level program. */
 
