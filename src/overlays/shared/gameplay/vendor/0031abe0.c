@@ -140,7 +140,6 @@ char *FUN_L05_0031d160(unsigned char *a0) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
 
 
-extern char D_0013F350[];
 extern char D_0013F5E0[];
 extern float FUN_001f9b80(float *, float *);
 extern void FUN_001f9d20(void *, void *, void *);
@@ -153,8 +152,8 @@ void FUN_L05_00329358(char *moby) {
     float *p = (float *)(d + 0x80);
     *(OvlQuad *)v = 0;
     v[2] = 0.7f;
-    FUN_001f9d20(v, v, D_0013F350);
-    add_vector_xyz(p, D_0013F350 + 0x80, v);
+    FUN_001f9d20(v, v, &hero);
+    add_vector_xyz(p, &hero.motion.pos, v);
     qcopy(d + 0x1D0, p);
     if (current_level_index == 5) {
         float w[4];
