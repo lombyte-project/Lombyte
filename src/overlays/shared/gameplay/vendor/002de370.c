@@ -35,7 +35,46 @@ void FUN_L03_002de370(char *moby) {
         mark_moby_for_removal(moby);
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002e8628.s", FUN_L03_002e8628);
+#else
+#include "qcopy.h"
+extern int D_L03_0015EF50;
+extern void FUN_001f97b0(void);
+extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+
+void FUN_L03_002e8628(char *moby) {
+    float angles[4] __attribute__((aligned(16)));
+    float matrix[16] __attribute__((aligned(16)));
+    int table = D_L03_0015EF50;
+    char *data = *(char **)(moby + 0x70);
+    char *params = data + 0x10;
+    char *entry;
+    char *sub;
+
+    *(float *)(params + 0x4c) = 1.5f;
+    *(int *)(params + 0x40) = 0;
+    *(int *)(*(char **)(moby + 0x70) + 0x80) = 0;
+    data = *(char **)(moby + 0x70);
+    *(float *)(data + 4) = 0.02f;
+    *(float *)(data + 8) = 0.1f;
+    *(int *)(data + 0xc) = 0;
+    entry = (char *)(table + (*(short *)(moby + 0x84) << 5));
+    sub = *(char **)(entry + 0x1c);
+    if (*(short *)(moby + 0x84) < 0)
+        FUN_001f97b0();
+    else
+        *(float *)(params + 0x4c) = *(float *)(sub + 0x18);
+    qcopy(moby + 0x30, entry);
+    qcopy(&angles, entry + 0x10);
+    rotation_matrix(matrix, &angles);
+    qcopy(moby, matrix);
+    qcopy(moby + 0x10, matrix + 4);
+    qcopy(moby + 0x20, matrix + 8);
+    qcopy(moby + 0x40, moby);
+    *(short *)(moby + 0x7e) = 0;
+}
+#endif
 #include "sda.h"
 
 #include "qcopy.h"
