@@ -398,15 +398,15 @@ extern void FlushCache(s32);
 void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
 
 void FUN_L00_002323b8(int a0, int a1, float t) {
-    char *g2;
-    char *g3;
-    char *g1 = D_0013F350;
-    char *obj = *(char **)(g1 + 0x2080);
+    struct Hero *g2;
+    struct Hero *g3;
+    struct Hero *g1 = &hero;
+    char *obj = ((char *)g1->moby);
     int slot;
     int o;
     char *e;
 
-    if (*(int *)(g1 + 0xA98) & 2) {
+    if (g1->unkA98 & 2) {
         *(int *)(obj + 0x54) = 0;
     }
     if (D_0015EDB4_m[1] != 0) {
@@ -432,32 +432,32 @@ void FUN_L00_002323b8(int a0, int a1, float t) {
     *(unsigned char *)(obj + 0x51) = a1;
     *(unsigned char *)(obj + 0x53) = a0;
     update_moby_animation_state(obj);
-    g2 = D_0013F350;
-    *(float *)(g2 + 0xA90) = 1.0f;
+    g2 = &hero;
+    g2->unkA90 = 1.0f;
     if (t > 0.0f) {
-        *(float *)(g2 + 0xA94) = 1.0f / t;
+        g2->unkA94 = 1.0f / t;
         *(float *)(obj + 0x54) = 0.0f;
-        *(int *)(g2 + 0xAA0) = -1;
+        g2->unkAA0 = -1;
     } else {
-        *(float *)(g2 + 0xA94) = 1.0f;
-        *(int *)(g2 + 0xAA0) = truncate_float_to_s32(-t) - 1;
-        *(int *)(g2 + 0xAA4) = 0;
+        g2->unkA94 = 1.0f;
+        g2->unkAA0 = truncate_float_to_s32(-t) - 1;
+        g2->unkAA4 = 0;
         *(float *)(obj + 0x54) = 0.0f;
     }
     FUN_L00_00232628();
-    g3 = D_0013F350;
+    g3 = &hero;
     o = a0 * 4;
     *(unsigned char *)(obj + 0x7C) =
         *(unsigned char *)(*(int *)(*(int *)(obj + 0x24) + o + 0x48) + 0x11);
-    *(int *)(g3 + 0xA9C) = 1;
+    g3->unkA9C = 1;
     if (t < 0.0f) {
-        t = *(int *)((char *)&D_L00_0015F6E0 + *(int *)(g3 + 0xAA0) * 4);
+        t = *(int *)((char *)&D_L00_0015F6E0 + g3->unkAA0 * 4);
     }
-    if (*(unsigned char *)(g3 + 0x20A4) == 0) {
+    if (g3->unk20A4 == 0) {
         FUN_L00_00231e78_c(a0, a1, t);
     }
     FUN_L00_002321a8();
-    if (*(int *)(g3 + 0x2278) != 0) {
+    if (((int)g3->unk2278) != 0) {
         FUN_L00_00232220_c(a0, a1, t);
     }
 }
