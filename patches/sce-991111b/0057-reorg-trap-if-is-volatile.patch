@@ -1,0 +1,19 @@
+diff --git a/gcc/resource.c b/gcc/resource.c
+index f8e424a..1bfb985 100644
+--- a/gcc/resource.c
++++ b/gcc/resource.c
+@@ -705,6 +705,14 @@ mark_set_resources (x, res, in_dest, include_delayed_effects)
+       mark_set_resources (XEXP (x, 2), res, 0, 0);
+       return;
+ 
++    case TRAP_IF:
++      /* ASTRA 0057: a conditional trap is a volatile effect, as gcc 2.95
++	 keeps it.  Without this, reorg's redundant_insn looks past the
++	 divide-by-zero trap of a division and drops a reload of the dividend
++	 from a branch's delay slot, where retail copies it.  */
++      res->volatil = 1;
++      break;
++
+     case MEM:
+       if (in_dest)
+ 	{

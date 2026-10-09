@@ -41,7 +41,7 @@ Apply with `git apply` at the root of the extracted archive, in this order:
 2. `0001`, `0015`, `0016`, `0019`, `0020`, `0021`, `0022`, `0025`, `0026`,
    `0027`, `0028`, `0029`, `0030`, `0031`, `0032`, `0033`, `0037`
 3. `0036`, `0044`, `0045`, `0046`, `0047`, `0048`, `0049`,
-   `0050`, `0051`, `0052`, `0053`, `0054`, `0055`, `0056`
+   `0050`, `0051`, `0052`, `0053`, `0054`, `0055`, `0056`, `0057`
 
 Configure for `--target=mips64r5900-sf-elf --host=i686-linux-gnu
 --build=i686-linux-gnu --disable-nls --enable-languages=c --without-headers`
@@ -75,6 +75,15 @@ differs. `make` does not track header dependencies: after changing
 `mips.h`, remove `toplev.o` (or build from a fresh tree).
 
 ## Published patches
+
+- `0057-reorg-trap-if-is-volatile.patch` SHA-256: `7e546b8973748312fffa72f76189c80f1d45bf48d39650641bcdf8b467622615`
+  - role: default. `mark_set_resources` treats a `trap_if` as a volatile
+    effect, as gcc 2.95 does. Without it, delay-slot filling sees a reload of
+    a division's dividend as redundant across the divide-by-zero trap and
+    branches past it; retail copies the reload into the delay slot
+    (`bnez v1,L; lw a0,%gp_rel(x)(gp)`).
+  - fixture: overlay `FUN_L00_00221310` delay slot after `x % 3`; full-ELF
+    gate PASS and all overlay functions in C still match
 
 - `0056-sda-extern-before-use.patch` SHA-256: `3cddcbd64614d349a827f1bc51678dbe383996575b9e7c27f3a79bb3da0998ad`
   - role: default. A variable declared `__attribute__((sda))` gets its
