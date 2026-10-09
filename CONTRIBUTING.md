@@ -91,6 +91,13 @@ next to the C and the surrounding units.
   global or layout. Reuse or extend an existing header (a slice of a bigger
   type uses that type); a layout that two files need goes in `include/`.
   Only a layout used by this one file stays in the `.c`.
+- A global has one type, declared once in a header; files never redeclare it
+  with their own local struct.
+- To define a typed global's initial value in C, mark it with its retail
+  address: `s32 weapon_ammo_counts[37] DATA_AT(0013D428) = {0};` (`sda.h`).
+  Put it at the end of its only user's file, or in `src/data/<topic>.c` when
+  several files use it. `python3 scripts/data-refs.py --emit 0013D428` writes
+  it for you. Data that is only raw bytes stays in assembly.
 
 ### 5. Check your work
 
