@@ -1,5 +1,6 @@
 #include "types.h"
 #include "asm.h"
+#include "rnc/globals.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM(
@@ -18,7 +19,6 @@ struct EffectTextureDefinition {
     s16 height_log2;
 };
 
-extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74");
 extern s32 pending_texture_upload_count __asm__("D_0015F458");
 extern s32 level_texture_payload_address __asm__("D_0015F460");
 extern struct EffectTextureDefinition effect_texture_definitions[] __asm__("D_0018D440");

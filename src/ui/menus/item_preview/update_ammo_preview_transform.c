@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 #include "rnc/ui/menus/item_preview/preview_animation.h"
 #include "qcopy.h"
 
@@ -29,8 +30,6 @@ struct AmmoPreviewMoby {
     f32 basis[12];
 };
 
-extern f32 frame_delta __asm__("D_0015ED6C");
-extern f32 animation_delta __asm__("D_0015ED70");
 extern s32 game_frame __asm__("D_0015F438");
 extern void clear_vector(void *) __asm__("func_001F99F8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("func_001F9A10");
@@ -92,7 +91,7 @@ void update_ammo_preview_transform(struct AmmoPreviewMoby *moby) {
     if (ammo_preview_offsets[moby->slot] != zero) {
         advance_accelerated_scalar(&ammo_preview_offsets[moby->slot],
                                    &ammo_preview_velocities[moby->slot], zero, 1.0f,
-                                   animation_delta * 6.0f, frame_delta * 6.0f);
+                                   frame_time_sq * 6.0f, frame_time * 6.0f);
     }
     offset[0] = fast_cos(orbit_angle);
     offset[1] = fast_sin(orbit_angle);

@@ -12,7 +12,6 @@
 /* Updates a moby: initialises its vector, then applies an angle-based offset. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E87B0), where it is exact; names translated to the US level program. */
 
-extern float D_0015ED6C;
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern float FUN_001fa580(float, float);
@@ -35,10 +34,10 @@ void FUN_L15_002e73c0(struct Moby *moby) {
             moby->unk58 = 1.3888889f;
             *(float *)(data + 0x40) =
                 FUN_001f9dc8(FUN_001fa580(moby->rot.z, 1.5707964f)) *
-                (D_0015ED6C * 2.5f);
+                (frame_time * 2.5f);
             *(float *)(data + 0x44) =
                 FUN_001f9de0(FUN_001fa580(moby->rot.z, 1.5707964f)) *
-                (D_0015ED6C * 2.5f);
+                (frame_time * 2.5f);
             *(int *)(data + 0x48) = 0;
             break;
         }
@@ -102,7 +101,7 @@ int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void FUN_L15_002ea748(struct Moby *m) {
-    m->rot.z = fast_add_rotations(m->rot.z, D_0015ED6C * 1.5707964f);
+    m->rot.z = fast_add_rotations(m->rot.z, frame_time * 1.5707964f);
     m->scale = m->pclass->scale * *(float *)&D_L15_00162078_d;
     switch (m->state) {
     case 0:
@@ -188,7 +187,6 @@ extern float FUN_001f9988(float);
 extern float FUN_L00_00200260(float, float);
 extern float fast_add_rotations(float, float);
 extern float wrap_angle(float);
-extern float D_0015ED6C;
 extern int D_L15_0015F5CC;
 extern int D_L15_001620EC __attribute__((sda));
 extern int D_L15_001620F0 __attribute__((sda));
@@ -217,14 +215,14 @@ void FUN_L15_002eac90(struct Moby *moby) {
     int color;
     int i, j, m, n, q;
 
-    scale = ConvertIntegerToFloat(D_L15_0015F5CC) * (D_L15_00162104 * D_0015ED6C);
+    scale = ConvertIntegerToFloat(D_L15_0015F5CC) * (D_L15_00162104 * frame_time);
     vu1_add_g_sregister(6, get_effect_texture(D_L15_001620F0));
     vu1_add_g_sregister(0x42, ((long)D_L15_001620EC << 32) | 0x44);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, ((long)0xFF90 << 32) | 0x260);
     d->f0 = d->f4;
     d->f4 = fast_add_rotations(d->f4,
-                               360.0f / FUN_001f96b0(D_L15_001620FC) * DEG_TO_RAD * D_0015ED6C);
+                               360.0f / FUN_001f96b0(D_L15_001620FC) * DEG_TO_RAD * frame_time);
     FUN_L00_00250320(moby, &r, &g, &b);
     color = (D_L15_001620F4 << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 3; i++) {
@@ -289,7 +287,6 @@ extern float FUN_001f9988(float);
 extern float FUN_L00_00200260(float, float);
 extern float fast_add_rotations(float, float);
 extern float wrap_angle(float);
-extern float D_0015ED6C;
 extern int D_L15_0015F5CC;
 extern int D_L15_00162120[2] __attribute__((sda));
 extern int D_L15_00162140[2] __attribute__((sda));
@@ -323,14 +320,14 @@ void FUN_L15_002eb108(struct Moby *moby) {
     float scale;
     Quad4 *p;
     float *o;
-    scale = ConvertIntegerToFloat(D_L15_0015F5CC) * (D_L15_0016216C * D_0015ED6C);
+    scale = ConvertIntegerToFloat(D_L15_0015F5CC) * (D_L15_0016216C * frame_time);
     vu1_add_g_sregister(6, get_effect_texture(D_L15_00162158));
     vu1_add_g_sregister(0x42, ((long)D_L15_00162154 << 32) | 0x44);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     data->prev = data->angle;
     data->angle = fast_add_rotations(data->angle, 360.0f / FUN_001f96b0(D_L15_00162164) *
-                                                      DEG_TO_RAD * D_0015ED6C);
+                                                      DEG_TO_RAD * frame_time);
     FUN_L00_00250320(moby, &r, &g, &b);
     /* The second float of each pair in t: p->f[0] is t.f[1], p->f[2] is t.f[3]. */
     p = (Quad4 *)&t.f[1];
@@ -534,7 +531,7 @@ void FUN_L15_002eb928(struct Moby *moby) {
     if (random_integer_below(*(int *)&D_L15_0016219C_d - 1) == 0) {
         char *pos = &moby->pos;
         clear_u64_value(vec);
-        vec[2] = random_float_between_alt(0.75f, 1.5f) * *(float *)&D_L15_00162198_d * D_0015ED6C;
+        vec[2] = random_float_between_alt(0.75f, 1.5f) * *(float *)&D_L15_00162198_d * frame_time;
         FUN_L00_0026f080(random_float_between_alt(0.06f, 0.12f) * 210000.0f, *data, pos, vec);
     }
 }

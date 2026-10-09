@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 #include "rnc/rendering/level_render_state.h"
 
 
@@ -20,7 +21,6 @@ struct Globals_00194100 {
 };
 #include "sda.h"
 #include "rnc/rendering/view.h"
-#include "rnc/globals.h"
 
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/gameplay/state/level_state.h"

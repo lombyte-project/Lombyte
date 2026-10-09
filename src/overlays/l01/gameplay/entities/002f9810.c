@@ -22,7 +22,6 @@ typedef struct {
 } DebrisHit;
 
 extern DebrisColors D_L01_00161C50;
-extern f32 D_0015ED6C;
 extern void *FUN_L00_0025a420_u(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -71,7 +70,7 @@ void FUN_L01_002f9810(struct Moby *m) {
                 off.f[2] = random_float_between(0.0f, 2.0f);
                 pos.q = off.q;
                 FUN_001f9a10(&pos, &pos, &m->pos);
-                FUN_001f9bf8(&vel, &vel, random_float_between(0.5f, 1.5f) * D_0015ED6C);
+                FUN_001f9bf8(&vel, &vel, random_float_between(0.5f, 1.5f) * frame_time);
                 s = random_float_between(0.5f, 1.0f) * 210000.0f;
                 FUN_L00_0026ced0(&pos, &vel, 0x5F787878, 0x181818, s, FUN_001f96f8(FUN_L00_00257b90(30, 90)));
             }
@@ -98,7 +97,7 @@ void FUN_L01_002f9810(struct Moby *m) {
             off.f[2] = random_float_between(0.5f, 2.0f);
             pos.q = off.q;
             FUN_001f9a10(&pos, &pos, &m->pos);
-            FUN_001f9bf8(&vel, &vel, random_float_between(1.0f, 5.0f) * D_0015ED6C);
+            FUN_001f9bf8(&vel, &vel, random_float_between(1.0f, 5.0f) * frame_time);
             spawn_debris_chunk(&pos, &vel, colors.c[random_integer_below(3)], random_float_between(0.04f, 0.09f),
                                FUN_L00_00257b90(60, 180), 1.0f, 1.0f, 0.75f, 0);
         }
@@ -140,7 +139,6 @@ extern void FUN_L00_001f2868(void *, s32, void *, void *, f32);
 extern s32 FUN_001f9740(void *);
 extern s32 FUN_001f96f8(s32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern f32 D_0015ED6C;
 
 void FUN_L01_002f9bf0(SwayMoby *m) {
     SwayVars *v;
@@ -165,14 +163,14 @@ void FUN_L01_002f9bf0(SwayMoby *m) {
             v->timer = FUN_001f96f8(0x5A);
         }
     }
-    v->sway += D_0015ED6C * 4.0f * v->dir;
+    v->sway += frame_time * 4.0f * v->dir;
     if (v->sway > 1.0f) {
         v->sway = 1.0f;
     }
     if (v->sway < -1.0f) {
         v->sway = -1.0f;
     }
-    m->rotz = fast_add_rotations(m->rotz, D_0015ED6C * -12.566371f * v->sway);
+    m->rotz = fast_add_rotations(m->rotz, frame_time * -12.566371f * v->sway);
 }
 typedef union {
     u128 q;
@@ -240,16 +238,16 @@ void FUN_L01_002f9d80(BurstMoby *self) {
         for (i = 0; i < 20; i++) {
             colors = D_L01_00161C60;
             pos.q = 0;
-            pos.f[0] = random_float_between(-D_0015ED6C, D_0015ED6C);
-            pos.f[1] = random_float_between(-D_0015ED6C, D_0015ED6C);
-            pos.f[2] = random_float_between(-D_0015ED6C, D_0015ED6C);
+            pos.f[0] = random_float_between(-frame_time, frame_time);
+            pos.f[1] = random_float_between(-frame_time, frame_time);
+            pos.f[2] = random_float_between(-frame_time, frame_time);
             dir.q = pos.q;
             r = random_float_between(2.0f, 3.0f);
             ang = random_angle_radians();
             pos.f[0] = FUN_001f9dc8(ang) * r;
             pos.f[1] = FUN_001f9de0(ang) * r;
             pos.f[2] = 0.0f;
-            FUN_001f9bf8(&dir, &dir, random_float_between(D_0015ED6C * 5.0f, D_0015ED6C * 20.0f));
+            FUN_001f9bf8(&dir, &dir, random_float_between(frame_time * 5.0f, frame_time * 20.0f));
             FUN_001f9a10(&pos, &pos, &self->pos);
             FUN_L01_002f8530(&pos, &dir, colors.c[random_integer_below(3)],
                              FUN_L00_00257b90(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
@@ -371,7 +369,7 @@ void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 
     clear_vector(&vel);
     inner_p = &inner;
     for (i = 2; i >= 0; i--) {
-        speed = random_float_between(8.0f, 10.0f) * D_0015ED6C;
+        speed = random_float_between(8.0f, 10.0f) * frame_time;
         size = scale * 400000.0f;
         inner = D_L01_0020B4F0;
         outer = D_L01_0020B508;
@@ -540,7 +538,7 @@ void FUN_L01_002fa800(struct Moby *m) {
                 off.f[2] = random_float_between(0.0f, 8.0f);
                 pos.q = off.q;
                 FUN_001f9a10(&pos, &pos, &m->pos);
-                FUN_001f9bf8(&vel, &vel, random_float_between(1.5f, 3.5f) * D_0015ED6C);
+                FUN_001f9bf8(&vel, &vel, random_float_between(1.5f, 3.5f) * frame_time);
                 s = random_float_between(1.5f, 3.5f) * 210000.0f;
                 FUN_L00_0026ced0(&pos, &vel, 0x5F787878, 0x181818, s, FUN_001f96f8(FUN_L00_00257b90(120, 240)));
             }
@@ -567,7 +565,7 @@ void FUN_L01_002fa800(struct Moby *m) {
             off.f[2] = random_float_between(1.0f, 8.0f);
             pos.q = off.q;
             FUN_001f9a10(&pos, &pos, &m->pos);
-            FUN_001f9bf8(&vel, &vel, random_float_between(1.0f, 5.0f) * D_0015ED6C);
+            FUN_001f9bf8(&vel, &vel, random_float_between(1.0f, 5.0f) * frame_time);
             spawn_debris_chunk(&pos, &vel, colors.c[random_integer_below(3)], random_float_between(0.05f, 0.15f),
                                FUN_L00_00257b90(60, 180), 1.0f, 1.0f, 0.75f, 0);
         }
@@ -675,7 +673,7 @@ void FUN_L01_002fb8a8(PendulumMoby *self) {
         }
         break;
     case 2:
-        v->swing -= D_0015ED6C * 0.5f;
+        v->swing -= frame_time * 0.5f;
         if (v->swing < 0.0f) {
             v->swing = 0.0f;
         }
@@ -941,7 +939,6 @@ void FUN_L01_002fed68(HoverMoby *m) {
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char *FUN_L01_002ffa90_c(void *owner) __asm__("FUN_L01_002ffa90");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
-extern float D_0015ED6C;
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern float random_float_between(float, float);
@@ -977,14 +974,14 @@ void FUN_L01_002ff860(struct Moby *m) {
             add_vector_xyz(v, v, &m->pos);
             a = fast_cos(random_angle_radians());
             b = random_float_between(1.5f, 3.0f);
-            a = a * (b * D_0015ED6C);
+            a = a * (b * frame_time);
             w[0] = a;
             a = fast_sin(random_angle_radians());
             b = random_float_between(1.5f, 3.0f);
-            a = a * (b * D_0015ED6C);
+            a = a * (b * frame_time);
             w[1] = a;
             w[2] = 0;
-            w[2] = random_float_between(w[2], 3.0f) * D_0015ED6C;
+            w[2] = random_float_between(w[2], 3.0f) * frame_time;
             a = random_float_between(125000.0f, 175000.0f);
             FUN_L00_0026ced0(v, w, 0x207F7F7F, 0x272727, a,
                              scale_game_frames(FUN_L00_00257b90(0x2D, 0x3C)));
@@ -1067,8 +1064,8 @@ void FUN_L01_002ffb28(SmokeMoby *self) {
         tmp.q = 0;
         pos.f[0] = -0.2f;
         pos.f[2] = 1.2f;
-        tmp.f[0] = random_float_between(0.8f, 1.2f) * (D_0015ED6C * 3.0f);
-        tmp.f[2] = random_float_between(0.8f, 1.2f) * (D_0015ED6C + D_0015ED6C);
+        tmp.f[0] = random_float_between(0.8f, 1.2f) * (frame_time * 3.0f);
+        tmp.f[2] = random_float_between(0.8f, 1.2f) * (frame_time + frame_time);
         vel.q = tmp.q;
         FUN_001f9cf8(&vel, &vel, self->mtx);
         FUN_001f9a10(&pos, &pos, &self->pos);
@@ -1104,8 +1101,6 @@ typedef struct {
 extern void FUN_L00_0025d1b8(OrbMoby *);
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern f32 D_0015ED6C;
-extern f32 D_0015ED70;
 
 OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
     OrbMoby *m;
@@ -1122,9 +1117,9 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
         m->rotz = random_angle_radians();
         qcopy(&m->pos, pos);
         qzero(pv);
-        pv->f8 = -D_0015ED6C;
+        pv->f8 = -frame_time;
         pv->timer = 0x78;
-        pv->f10 = D_0015ED70 * 15.0f;
+        pv->f10 = frame_time_sq * 15.0f;
         pv->spin = random_float_between(0.0031415929f, 0.062831856f);
         FUN_L00_00250df8(m);
     }
@@ -1142,8 +1137,6 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED70;
-extern float D_0015ED6C; /* no foreign declaration */
 extern int D_L01_001612D8; /* no foreign declaration */
 extern int D_L01_001612D0; /* no foreign declaration */
 extern float D_L01_001742E8 __attribute__((section(".data"))); /* no foreign declaration */
@@ -1176,8 +1169,8 @@ void FUN_L01_002ffdc0(struct Moby *moby) {
             }
             FUN_L00_002a3ec8(D_L01_001612D0, D_L01_001612D8, 1, moby->pos.x, moby->pos.y, 0.5f, -0.35f);
             {
-                float pos_unit = D_0015ED6C;
-                float pos_unit2 = D_0015ED70;
+                float pos_unit = frame_time;
+                float pos_unit2 = frame_time_sq;
                 *(int *)(data + 0x18) = 1;
                 *(int *)(data + 0x14) = 0x78;
                 *(int *)(data + 0x1C) = 0;
@@ -1193,10 +1186,10 @@ void FUN_L01_002ffdc0(struct Moby *moby) {
             }
             for (i = 0; i < 16; i++) {
                 float a = random_angle_radians();
-                float r = random_float_between(D_0015ED6C * 0.0f, D_0015ED6C * 3.0f);
+                float r = random_float_between(frame_time * 0.0f, frame_time * 3.0f);
                 particle_vel[0] = fast_cos(a) * r;
                 particle_vel[1] = fast_sin(a) * r;
-                particle_vel[2] = random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.5f);
+                particle_vel[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
                 {
                     int lifetime = FUN_L00_00257b90(0x5A, 0x78);
                     FUN_L00_0026f548(effect_pos, particle_vel, random_integer_below(2), lifetime);

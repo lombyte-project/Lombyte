@@ -10,7 +10,6 @@ typedef struct __attribute__((packed)) {
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
 extern volatile u16 D_0013E05A[];
-extern s32 D_0015ED98;
 extern s32 D_0015EE20;
 extern s32 D_0015EE24;
 extern s32 D_0015EE34;
@@ -66,7 +65,7 @@ s32 saving_data_menu2(struct MenuScreen *w) {
             mode_freeze_init(3, menu_system.current);
             return 0;
         }
-        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x24) = D_0015ED98;
+        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x24) = current_bolt_count;
         *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x20) = current_level_index;
         *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x2C) = D_0015EE24;
         *(Unaligned64 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x30) = D_0015EE98[0];

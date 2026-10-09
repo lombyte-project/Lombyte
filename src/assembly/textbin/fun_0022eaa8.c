@@ -1,5 +1,6 @@
 #include "types.h"
 #include "asm.h"
+#include "rnc/globals.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022eaa8/FUN_0022eaa8.s", FUN_0022eaa8);
@@ -117,7 +118,6 @@ typedef struct {
 extern LevelRenderState level_render_state __asm__("D_0013E030");
 extern u8 D_0013E5C0[];
 extern s32 D_0015ED5C;
-extern s32 current_level_index __asm__("D_0015ED84");
 extern s16 D_0015EE48 __attribute__((sda));
 #define D_0015EE4A (*(s16 *)0x0015EE4A)
 extern f32 sequence_fade __asm__("D_0015F43C") MACRO_ADDR;

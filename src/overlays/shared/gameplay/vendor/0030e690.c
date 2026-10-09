@@ -75,7 +75,6 @@ void FUN_L11_00311210(void *pt, int *outx, int *outy, int yoff) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312780), where it is exact; names translated to the US level program. */
 
 
-extern float D_0015ED6C;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern short D_L11_00161FF4_d __asm__("D_L11_00161FF4") __attribute__((sda));
 extern short D_L11_001621C8_d __asm__("D_L11_001621C8") __attribute__((sda));
@@ -113,15 +112,15 @@ void FUN_L11_003112b8(void *m, char *t) {
         FUN_L00_0025f8e0(b, *(float *)(t + 0xC4) * 0.02f + 0.02f);
         FUN_L00_0025f8e0(c, *(float *)(t + 0xC4) * 0.01f + 0.02f);
         vel[0] =
-            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * D_0015ED6C) *
+            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * frame_time) *
             scale;
         FUN_L01_0028a7a8(m, a, vel, &D_L11_001621C8_d, 1);
         vel[0] =
-            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * D_0015ED6C) *
+            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * frame_time) *
             scale;
         FUN_L01_0028a7a8(m, b, vel, &D_L11_001621D8_d, 1);
         vel[0] =
-            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 4.0f) * D_0015ED6C) *
+            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 4.0f) * frame_time) *
             scale;
         FUN_L01_0028a7a8(m, c, vel, &D_L11_001621E8_d, 1);
         if (*(float *)(t + 0xC4) > 0.5f) {
@@ -129,23 +128,23 @@ void FUN_L11_003112b8(void *m, char *t) {
             FUN_L00_0025f8e0(b, *(float *)(t + 0xC4) * 0.02f + 0.01f);
             FUN_L00_0025f8e0(c, *(float *)(t + 0xC4) * 0.01f + 0.01f);
             vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) *
-                       D_0015ED6C) *
+                       frame_time) *
                      scale;
             FUN_L01_0028a7a8(m, a, vel, &D_L11_001621C8_d, 1);
             vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) *
-                       D_0015ED6C) *
+                       frame_time) *
                      scale;
             FUN_L01_0028a7a8(m, b, vel, &D_L11_001621D8_d, 1);
             vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 4.0f) *
-                       D_0015ED6C) *
+                       frame_time) *
                      scale;
             FUN_L01_0028a7a8(m, c, vel, &D_L11_001621E8_d, 1);
             vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) *
-                       D_0015ED6C) *
+                       frame_time) *
                      scale;
             FUN_L01_0028a7a8(m, a, vel, &D_L11_001621F8_d, 1);
             vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) *
-                       D_0015ED6C) *
+                       frame_time) *
                      scale;
             FUN_L01_0028a7a8(m, pos, vel, &D_L11_00162208_d, 1);
         }

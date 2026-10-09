@@ -11,7 +11,6 @@
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/initonce_0022D028.c: func_L03_0022D028), where it is exact; names translated to the US level program. */
 
 extern char D_L03_0016C960[];
-extern float D_0015ED6C;
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int FUN_L00_00257b90(int, int);
@@ -45,7 +44,7 @@ void FUN_L03_0022c728(void) {
         FUN_L00_0024f7c8(m, i % 2, w);
         a = random_angle_radians();
         b = random_angle_radians();
-        build_spherical_offset(v, random_float_between(D_0015ED6C * 0.7f, D_0015ED6C * 2.2f), a, b);
+        build_spherical_offset(v, random_float_between(frame_time * 0.7f, frame_time * 2.2f), a, b);
         FUN_L00_0026ced0(w, v, 0x80808080, 0x808080, 147000.0f,
                          FUN_L00_00257b90(scale_game_frames(12), scale_game_frames(35)));
     }

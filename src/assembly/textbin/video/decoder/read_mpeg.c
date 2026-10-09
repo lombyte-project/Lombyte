@@ -1,5 +1,6 @@
 #include "types.h"
 #include "asm.h"
+#include "rnc/globals.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/decoder/read_mpeg/FUN_0023a460.s",
@@ -9,7 +10,6 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/decoder/read_mpeg/FUN
 
 #include "rnc/input/pad_state.h"
 extern struct Globals_0013E550 D_0013E550;
-extern s32 D_0015ED84;
 extern s32 D_0015EE20;
 extern s32 D_0015EEA0;
 extern s32 D_0015EED8;
@@ -124,7 +124,7 @@ check_skip_policy:
     if (*(volatile s32 *)&D_0015EED8 != 0) {
         goto check_start_button;
     }
-    if (D_0015ED84 > 0) {
+    if (current_level_index > 0) {
         goto check_pad_chord;
     }
 check_start_button:

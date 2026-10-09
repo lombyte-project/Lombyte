@@ -43,7 +43,6 @@ extern Suffixes D_001E8680;
 extern char D_00160088[];
 extern char D_00160090[];
 extern Weapon D_001DFFB0[];
-extern s32 D_0015ED98;
 extern u8 D_0013D4E8[];
 #include "rnc/gameplay/state/item_state.h"
 extern void func_001E9458(s32);
@@ -129,7 +128,7 @@ void FUN_00216c48(void *arg0, Menu *menu, s32 arg2) {
     ok = 0;
     switch (e->unk8) {
     case 1:
-        ok = !(D_0015ED98 < D_001DFFB0[e->unkA].unk0);
+        ok = !(current_bolt_count < D_001DFFB0[e->unkA].unk0);
         break;
     case 2:
         ok = item_available[e->unkA] != 0;
@@ -147,7 +146,7 @@ void FUN_00216c48(void *arg0, Menu *menu, s32 arg2) {
         ok = !(compute_clamped_count_difference() < e->unkA);
         break;
     case 6:
-        ok = D_0015ED98 >= D_001DFFB0[e->unkA].unk14 && compute_clamped_count_difference() >= 4;
+        ok = current_bolt_count >= D_001DFFB0[e->unkA].unk14 && compute_clamped_count_difference() >= 4;
         break;
     default:
         ok = 0;

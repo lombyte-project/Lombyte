@@ -639,9 +639,6 @@ typedef struct {
 extern G_167d0 D_0013F350_167d0 __asm__("D_0013F350");
 extern char D_0013F430[];
 extern char D_0013F480[];
-extern f32 D_0015ED6C;
-extern f32 D_0015ED64;
-extern f32 D_0015ED70;
 extern s32 D_0013CB14[];
 
 extern void FUN_L00_002118c8_c(s32, f32) __asm__("FUN_L00_002118c8");
@@ -672,7 +669,7 @@ void FUN_L00_002167d0(void) {
 
     FUN_L00_002118c8_c(0, 1.0f);
     f20 = 0.2f;
-    FUN_L00_00211e30(0, D_0015ED64 * 0.02f, D_0015ED64 * f20, D_0015ED6C * 3.66519141f);
+    FUN_L00_00211e30(0, frame_scale_sq * 0.02f, frame_scale_sq * f20, frame_time * 3.66519141f);
     if (D_0013F350_167d0.i2084 == 0x13) {
         if (D_0013F350_167d0.f229C < f20) {
             D_0013F350_167d0.f180 = D_0013F350_167d0.f98;
@@ -682,10 +679,10 @@ void FUN_L00_002167d0(void) {
         D_0013F350_167d0.f190 = 0.0f;
     }
     f20 = 5.9f;
-    v0.f[0] = FUN_001f9dc8(D_0013F350_167d0.f180) * D_0013F350_167d0.f190 * (D_0015ED6C * f20);
+    v0.f[0] = FUN_001f9dc8(D_0013F350_167d0.f180) * D_0013F350_167d0.f190 * (frame_time * f20);
     h = FUN_001f9de0(D_0013F350_167d0.f180) * D_0013F350_167d0.f190;
     v0.f[2] = 0.0f;
-    d = D_0015ED6C;
+    d = frame_time;
     f20 = d * f20;
     v0.f[1] = h * f20;
     qcopy(&v1, &v0);
@@ -707,17 +704,17 @@ void FUN_L00_002167d0(void) {
     if (f20 < f21) {
         f20 = f21;
     }
-    f21 = D_0015ED70 * 2.45f * D_0013F350_167d0.f190;
-    f21 = f21 + (D_0015ED70 + D_0015ED70) * f20;
+    f21 = frame_time_sq * 2.45f * D_0013F350_167d0.f190;
+    f21 = f21 + (frame_time_sq + frame_time_sq) * f20;
     if (D_0013CB14[0]) {
-        f21 = D_0015ED70 * 1.1f;
+        f21 = frame_time_sq * 1.1f;
     }
     if (D_0013F350_167d0.i2084 == 0x13 && D_0013F350_167d0.i198 < scale_game_frames(0xF) &&
-        D_0013F350_167d0.f160 < D_0015ED6C * 3.0f) {
-        f21 = D_0015ED70 * 11.0f;
+        D_0013F350_167d0.f160 < frame_time * 3.0f) {
+        f21 = frame_time_sq * 11.0f;
     }
-    if (D_0015ED6C * 5.9f < D_0013F350_167d0.f160) {
-        f21 = D_0015ED70 * 13.0f;
+    if (frame_time * 5.9f < D_0013F350_167d0.f160) {
+        f21 = frame_time_sq * 13.0f;
     }
     e = D_0013F350_167d0.f930;
     f22 = 0.0f;
@@ -729,7 +726,7 @@ void FUN_L00_002167d0(void) {
         }
         b = FUN_001f9b20(&v2);
         a = (b - f20) / b;
-        c = D_0015ED70 * 3.0f;
+        c = frame_time_sq * 3.0f;
         b = c * a;
         if (D_0013F350_167d0.f229C < 0.3f) {
             if (b < c) {
@@ -750,11 +747,11 @@ void FUN_L00_002167d0(void) {
     q = (H *)(D_0013F480 - 0x130);
     if (0.0872664601f < q->f2E0) {
         f21 = FUN_001f9e90_c(q->f270, q->f274);
-        f20 = D_0015ED6C;
+        f20 = frame_time;
         f20 = f20 * 8.0f;
         f20 = f20 * q->f2E0;
         f20 = f20 / 0.785398185f;
-        f22 = D_0015ED70 * 8.5f * q->f2E0 / 0.785398185f;
+        f22 = frame_time_sq * 8.5f * q->f2E0 / 0.785398185f;
         v3.f[0] = FUN_001f9dc8(f21) * f20;
         v3.f[1] = FUN_001f9de0(f21) * f20;
         v3.f[2] = 0.0f;
@@ -771,7 +768,7 @@ void FUN_L00_002167d0(void) {
     m->f3B0 = FUN_001f9ab0(&v3, &v0);
     k = FUN_001f9af0(&v0);
     if (0.0f < k) {
-        m->f3B0 = m->f3B0 / (k * (D_0015ED6C * 5.9f));
+        m->f3B0 = m->f3B0 / (k * (frame_time * 5.9f));
     }
     FUN_L00_00212318(0);
     if (m->f3B4 < DEG_TO_RAD && 0.0872664601f < m->f2E4) {

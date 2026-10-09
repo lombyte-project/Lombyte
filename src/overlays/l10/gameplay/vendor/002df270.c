@@ -195,8 +195,6 @@ typedef struct Moby2E30F8 {
 extern char D_L10_00167240[];
 extern char D_L10_001742C0[];
 extern float AbsoluteFloat(float);
-extern float D_0015ED6C;
-extern float D_0015ED70;
 extern float D_L10_0015F580[] __attribute__((section(".sdata")));
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b48(void *, void *);
@@ -313,7 +311,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             d->fDC = 0.5f;
             d->fD8 = 2.0f;
             r = truncate_float_to_s32(k);
-            s = d->f1A4 * D_0015ED6C;
+            s = d->f1A4 * frame_time;
             e = *(float *)&D_L10_00161E24;
             d->iD0 = r;
             d->fD4 = e;
@@ -340,7 +338,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
         d->f1A0 = *(float *)&D_L10_00161E40;
         break;
     case 1:
-        FUN_L00_00258278((char *)m, &d->f190, d->v170[3], 0.02f, 0.3f, D_0015ED6C * 6.2831855f);
+        FUN_L00_00258278((char *)m, &d->f190, d->v170[3], 0.02f, 0.3f, frame_time * 6.2831855f);
         if (d->i1BC != -1) {
             char *base = D_L10_0015FFD8;
             Moby2E30F8 *p = (Moby2E30F8 *)(base + (d->i1BC << 8));
@@ -401,7 +399,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
         break;
     case 3: {
         float ang = FUN_001f9e90(d->f120 - m->pos[0], d->f124 - m->pos[1]);
-        FUN_L00_00258278((char *)m, &d->f190, ang, 0.02f, 0.3f, D_0015ED6C * 6.2831855f);
+        FUN_L00_00258278((char *)m, &d->f190, ang, 0.02f, 0.3f, frame_time * 6.2831855f);
         if (d->i164 != 2) {
             m->state = 4;
             d->i1A8 = truncate_float_to_s32(random_float_between(0.0f, (float)d->i1B8));
@@ -435,27 +433,27 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
 
             dist = FUN_001f9b48(m->pos, t + 0x10);
             if (dist > (*(short *)(t + 0xA6) == 0x359 ? 2.0f : 3.57f)) {
-                approach_value(&d->fF4, d->f1A4 * D_0015ED6C, D_0015ED70 * 8.0f);
+                approach_value(&d->fF4, d->f1A4 * frame_time, frame_time_sq * 8.0f);
             } else {
-                approach_value(&d->fF4, d->f1A4 * D_0015ED6C * 0.3f, D_0015ED70 * 20.0f);
+                approach_value(&d->fF4, d->f1A4 * frame_time * 0.3f, frame_time_sq * 20.0f);
             }
             *(OvlQuad *)old = *(OvlQuad *)m->pos;
             if (see &&
                 AbsoluteFloat(dist - (*(short *)(t + 0xA6) == 0x359 ? 2.0f : 3.57f)) < 0.35f) {
-                approach_value(&d->fF4, 0.0f, D_0015ED70 * 30.0f);
+                approach_value(&d->fF4, 0.0f, frame_time_sq * 30.0f);
             } else if (d->i1D8 != 0) {
-                approach_value(&d->fF4, 0.0f, D_0015ED70 * 10.0f);
+                approach_value(&d->fF4, 0.0f, frame_time_sq * 10.0f);
             }
             ang = FUN_001f9e90(*(float *)(t + 0x10) - m->pos[0], *(float *)(t + 0x14) - m->pos[1]);
             diff = fast_difference_between_rotations(ang, m->f48);
             if (0.87266463f < diff) {
-                float lim = d->f1A4 * D_0015ED6C * 0.25f;
+                float lim = d->f1A4 * frame_time * 0.25f;
                 if (lim < d->fF4) {
                     d->fF4 = lim;
                 }
             }
             if (*(float *)&D_L10_00161E4C * DEG_TO_RAD < diff || d->i1D8 == 0) {
-                FUN_L00_00258278((char *)m, &d->f190, ang, 0.02f, 0.3f, D_0015ED6C * 6.2831855f);
+                FUN_L00_00258278((char *)m, &d->f190, ang, 0.02f, 0.3f, frame_time * 6.2831855f);
             }
             aim = FUN_L10_002e4840((struct Moby *)m);
             v[0] = fast_cos(aim) * (*(short *)(t + 0xA6) == 0x359 ? 2.0f : 3.57f);
@@ -519,7 +517,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
                     blend_moby_animation(m, 3, 0, scale_game_frames(7));
                 }
             } else {
-                if (AbsoluteFloat(d->f190) > D_0015ED6C * 0.08726646f) {
+                if (AbsoluteFloat(d->f190) > frame_time * 0.08726646f) {
                     if (m->anim != 3) {
                         blend_moby_animation(m, 3, 0, scale_game_frames(7));
                     }
@@ -559,7 +557,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             FUN_001f9e90(*(float *)(t + 0x10) - m->pos[0], *(float *)(t + 0x14) - m->pos[1]),
             m->f48);
         if (0.87266463f < diff) {
-            float lim = d->f1A4 * D_0015ED6C * 0.25f;
+            float lim = d->f1A4 * frame_time * 0.25f;
             if (lim < d->fF4) {
                 d->fF4 = lim;
             }
@@ -614,7 +612,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
 
         fr = compute_interpolated_record_value(m);
         ang = FUN_001f9e90(*(float *)(t + 0x10) - m->pos[0], *(float *)(t + 0x14) - m->pos[1]);
-        FUN_L00_00258278((char *)m, &d->f190, ang, 0.03f, 0.3f, D_0015ED6C * 6.2831855f);
+        FUN_L00_00258278((char *)m, &d->f190, ang, 0.03f, 0.3f, frame_time * 6.2831855f);
         if (m->anim >= 6 && m->anim <= 7 && 4.0f <= fr && fr <= 7.0f) {
             Hit2E30F8 hit;
             float v[4];
@@ -669,9 +667,9 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             float rot;
             float ang;
 
-            approach_value(&d->fF4, d->f1A4 * 3.0f * D_0015ED6C, D_0015ED70 * 20.0f);
+            approach_value(&d->fF4, d->f1A4 * 3.0f * frame_time, frame_time_sq * 20.0f);
             ang = FUN_001f9e90(*(float *)(t + 0x10) - m->pos[0], *(float *)(t + 0x14) - m->pos[1]);
-            FUN_L00_00258278((char *)m, &d->f190, ang, 0.02f, 0.3f, D_0015ED6C * 6.2831855f);
+            FUN_L00_00258278((char *)m, &d->f190, ang, 0.02f, 0.3f, frame_time * 6.2831855f);
             rot = m->f48;
             m->f48 = fast_add_rotations(
                 FUN_001f9e90(*(float *)(t + 0x10) - m->pos[0], *(float *)(t + 0x14) - m->pos[1]),
@@ -686,7 +684,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
                     *(float *)&D_L10_00161E44 < FUN_001f9b48(m->pos, t + 0x10)) {
                     int anim;
                     m->state = 7;
-                    d->fF4 = D_0015ED6C * 5.0f;
+                    d->fF4 = frame_time * 5.0f;
                     anim = 7;
                     if (random_integer_below(100) & 1) {
                         anim = 6;
@@ -703,11 +701,11 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             float out[4];
             float ang;
 
-            approach_value(&d->fF4, d->f1A4 * D_0015ED6C, D_0015ED70 * 5.0f);
+            approach_value(&d->fF4, d->f1A4 * frame_time, frame_time_sq * 5.0f);
             ang = FUN_001f9e90(d->v170[0] - m->pos[0], d->v170[1] - m->pos[1]);
-            func_L00_002592B0_b((char *)m, ang, 0.02f, 0.3f, D_0015ED6C * 6.2831855f, &d->f190);
+            func_L00_002592B0_b((char *)m, ang, 0.02f, 0.3f, frame_time * 6.2831855f, &d->f190);
             if (0.87266463f < fast_difference_between_rotations(ang, m->f48)) {
-                float lim = d->f1A4 * D_0015ED6C * 0.25f;
+                float lim = d->f1A4 * frame_time * 0.25f;
                 if (lim < d->fF4) {
                     d->fF4 = lim;
                 }
@@ -737,7 +735,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
         if (FUN_L00_0025c698(m, d->v70) & 0x41) {
             int anim;
             m->state = 7;
-            d->fF4 = D_0015ED6C * 5.0f;
+            d->fF4 = frame_time * 5.0f;
             anim = 7;
             if (random_integer_below(100) & 1) {
                 anim = 6;
@@ -770,7 +768,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
                 m->s34 &= 0xEFFF;
                 m->state = 0xB;
                 q = truncate_float_to_s32(768.0f);
-                x = *(float *)&D_L10_00161E28 * D_0015ED70;
+                x = *(float *)&D_L10_00161E28 * frame_time_sq;
                 d->bAD = 0;
                 d->i90 = q;
                 d->f98 = 0.75f;
@@ -823,8 +821,8 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
         float g = probe_ground_height(m->pos, 0, 0.5f);
         if (g < m->pos[2]) {
             d->f78 = d->f78 - d->f80;
-            if (d->f78 < D_0015ED6C * -7.0f) {
-                d->f78 = D_0015ED6C * -7.0f;
+            if (d->f78 < frame_time * -7.0f) {
+                d->f78 = frame_time * -7.0f;
             }
             m->pos[2] = m->pos[2] + d->f78;
             if (m->pos[2] < g) {

@@ -142,7 +142,6 @@ void FUN_L00_0024f7c8(char *arg0, int arg1, void *arg2);
 extern void FUN_L00_00257024(void *);
 extern int FUN_L00_00257b90(int, int);
 extern void FUN_L00_0026ced0(void *, void *, s32, s32, s32, f32);
-extern f32 D_0015ED6C;
 extern VeldinLevelState D_L00_0016C860;
 
 void FUN_L00_0023e268(void) {
@@ -185,7 +184,7 @@ void FUN_L00_0023e268(void) {
                 a = veldin_random_angle();
                 b = veldin_random_angle();
                 build_spherical_offset(
-                    v.f, veldin_random_range(D_0015ED6C * 0.7f, D_0015ED6C * 2.2f), a, b);
+                    v.f, veldin_random_range(frame_time * 0.7f, frame_time * 2.2f), a, b);
                 r = scale_game_frames(0xC);
                 FUN_L00_0026ced0(&buf, &v, 0x80808080, 0x808080,
                                  FUN_L00_00257b90(r, scale_game_frames(0x23)), 147000.0f);

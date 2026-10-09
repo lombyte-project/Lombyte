@@ -54,8 +54,6 @@ typedef struct {
 
 extern s32 D_L08_00161D40 __attribute__((sda));
 extern f32 D_L08_00161D34 __attribute__((sda));
-extern float D_0015ED6C;
-extern s32 current_level_index __asm__("D_0015ED84");
 extern u8 D_0014C050[];
 extern SwarmPath *D_L08_001B0CB0[];
 extern struct Moby *D_L08_0015FFD8;
@@ -141,8 +139,8 @@ void FUN_L08_002e9b70(struct Moby *moby) {
             vars->follow[0].point = waypoint;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        if (vector_length_xyz(&step) > D_L08_00161D34 * D_0015ED6C) {
-            normalize_vector_xyz(&step, &step, D_L08_00161D34 * D_0015ED6C);
+        if (vector_length_xyz(&step) > D_L08_00161D34 * frame_time) {
+            normalize_vector_xyz(&step, &step, D_L08_00161D34 * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         FUN_L08_002e9758(moby);
@@ -161,7 +159,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
         } else if (yaw <= 0.0f && yaw > -0.34f) {
             yaw = -0.34f;
         }
-        normalize_vector_xyz(&velocity, &step, (D_L08_00161D34 + D_L08_00161D34) * D_0015ED6C);
+        normalize_vector_xyz(&velocity, &step, (D_L08_00161D34 + D_L08_00161D34) * frame_time);
         shot = FUN_L08_002de3e0(&muzzle, target, &velocity, pitch, yaw);
         shot->scale = shot->pclass->scale / 5.0f;
         target_vars = (SwarmTargetVars *)target->pvars;
@@ -190,8 +188,8 @@ void FUN_L08_002e9b70(struct Moby *moby) {
             vars->follow[1].point = next;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        if (vector_length_xyz(&step) > D_L08_00161D34 * D_0015ED6C) {
-            normalize_vector_xyz(&step, &step, D_L08_00161D34 * D_0015ED6C);
+        if (vector_length_xyz(&step) > D_L08_00161D34 * frame_time) {
+            normalize_vector_xyz(&step, &step, D_L08_00161D34 * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         FUN_L08_002e9a18(moby);
@@ -202,7 +200,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
         FUN_L00_0024f7c8(vars->parts[3].moby, 1, &muzzle);
         pitch = random_float_between(-0.5235988f, -0.2617994f);
         yaw = random_angle_radians();
-        normalize_vector_xyz(&velocity, &step, (D_L08_00161D34 + D_L08_00161D34) * D_0015ED6C);
+        normalize_vector_xyz(&velocity, &step, (D_L08_00161D34 + D_L08_00161D34) * frame_time);
         bolt = FUN_L08_002de3e0(&muzzle, NULL, &velocity, pitch, yaw);
         if (bolt != NULL) {
             bolt->rot.z = vars->parts[3].moby->rot.z;
@@ -227,7 +225,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
                 Vec4 *drift = (Vec4 *)part->pvars;
                 FUN_L00_0025f090(moby, &part->pos, -1, 3.0f, 13.0f);
                 subtract_vector_xyz(drift, &part->pos, &moby->pos);
-                normalize_vector_xyz(drift, drift, D_0015ED6C * 5.0f);
+                normalize_vector_xyz(drift, drift, frame_time * 5.0f);
                 part->state = 1;
                 vars->parts[i].moby = NULL;
             }
@@ -238,7 +236,6 @@ void FUN_L08_002e9b70(struct Moby *moby) {
     }
 }
 
-extern float D_0015ED6C;
 extern char *D_L08_0015FFD8_g __asm__("D_L08_0015FFD8");
 extern u8 D_0013D3BD_c __asm__("D_0013D3BD") __attribute__((section(".data")));
 extern int FUN_0022da68_c(int, int, char *) __asm__("FUN_0022da68");
@@ -264,11 +261,11 @@ void FUN_L08_002ea398(char *m)
             FUN_0022da68_c(0, 0, m);
             *(u8 *)(m + 0x20) = 2;
         } else {
-            FUN_00213ed8_c(m + 0x18, (*(float *)d - *(float *)(d + 4)) * **(float **)(o + 0x78) + *(float *)(d + 4), D_0015ED6C * 10.0f);
+            FUN_00213ed8_c(m + 0x18, (*(float *)d - *(float *)(d + 4)) * **(float **)(o + 0x78) + *(float *)(d + 4), frame_time * 10.0f);
         }
         break;
     case 2:
-        FUN_00213ed8_c(m + 0x18, *(float *)d, D_0015ED6C * 10.0f);
+        FUN_00213ed8_c(m + 0x18, *(float *)d, frame_time * 10.0f);
         break;
     }
 }
@@ -698,7 +695,6 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern float D_0015ED64;
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa688");
@@ -892,7 +888,7 @@ void FUN_L08_00302ce8(WM *m) {
     }
     if (D_0015EDB0_b)
         d->height = 2.75f;
-    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->body, 0);
-    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->head, 1);
+    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
+    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
 }
 

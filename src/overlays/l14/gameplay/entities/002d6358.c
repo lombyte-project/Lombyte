@@ -158,7 +158,6 @@ void FUN_L14_002d6570(struct Moby *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d67e8.s", FUN_L14_002d67e8);
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D84A8), where it is exact; names translated to the US level program. */
 
-extern float D_0015ED6C;
 extern int D_L14_0015F70C;
 extern short D_L14_00161A30_d __asm__("D_L14_00161A30") __attribute__((sda));
 extern void FUN_L00_0025d808(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
@@ -167,7 +166,7 @@ void FUN_L14_002d7198(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int idx = *(int *)(data + 0x60);
     FUN_L00_0025d808(*(int *)((idx << 5) + D_L14_0015F70C + 0x10), &moby->pos, data + 0x64,
-                     data + 0x68, 0, *(float *)&D_L14_00161A30_d * D_0015ED6C);
+                     data + 0x68, 0, *(float *)&D_L14_00161A30_d * frame_time);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d71f0.s", FUN_L14_002d71f0);
 

@@ -124,7 +124,6 @@ extern s32 D_L00_00184214 __attribute__((section(".data")));
 extern H_297f78 D_00141848;
 extern s32 D_0015EEA4_c __asm__("D_0015EEA4");
 extern s32 D_L00_0015F630;
-extern s32 D_0015ED98;
 extern u8 D_L00_00160FF8[], D_L00_00161008[], D_L00_00161018[], D_L00_00161028[], D_L00_00161038[];
 extern void mode_freeze_init(s32, s32) __asm__("FUN_001fbab8");
 extern void pause_all_sounds(s32) __asm__("FUN_00218d78");
@@ -237,7 +236,7 @@ void FUN_L00_00297f78(void) {
         x = FUN_L00_00234e00();
         FUN_L00_00235e18(x, FUN_001f96f8_c(0xB4));
         x = queue_animation_update(2, 0x754E, FUN_L00_00239cc8, FUN_L00_00239d00, FUN_L00_00239df8,
-                                   &D_0015ED98, 9999999);
+                                   &current_bolt_count, 9999999);
         FUN_L00_00235e18(x, FUN_001f96f8_c(0xB4));
     }
     if (D_L00_00184214) {
@@ -1308,7 +1307,6 @@ extern s32 D_L00_00161E20;
 extern f32 D_L00_00161E24;
 extern s32 D_L00_00161E30;
 extern s32 D_L00_00161E38;
-extern f32 D_0015ED60;
 extern s32 D_0015ED80;
 extern Vec4 D_L00_00165F80[3];
 extern void *D_L00_00197300[];
@@ -1655,7 +1653,7 @@ void FUN_L00_0029c648(void) {
                 D_L00_0015F5D8 = 1;
                 FUN_002335a0();
                 FUN_00212f90(vendor_menu.f1c, 4, 9, 8);
-                vendor_menu.f1c->f58 = D_0015ED60 * -0.5f;
+                vendor_menu.f1c->f58 = frame_scale * -0.5f;
                 if (vendor_menu.f40 != 0) {
                     qcopy(g_debug_camera.angles, &vendor_menu.f70);
                 }

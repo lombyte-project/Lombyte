@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 #include "sda.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/ui/menus/menu_screen.h"

@@ -115,8 +115,6 @@ typedef struct {
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/audio/music/music_stream_state.h"
 extern u8 D_001413F5[];
-extern f32 D_0015ED60;
-extern f32 D_0015ED6C;
 extern f32 D_0015ED70 __attribute__((sda));
 extern u8 D_0015EDB4;
 extern f32 sequence_fade __asm__("D_0015F43C");
@@ -447,7 +445,7 @@ void update_resident_gameplay_state(void) {
                     } else if (render_sequence.time < scale_ticks(0x1F8)) {
                         s32 color_intensity =
                             (s32)(((f32)render_sequence.time - func_001F96E8(360.0f)) *
-                                  (D_0015ED60 * 1.25f));
+                                  (frame_scale * 1.25f));
                         if (color_intensity >= 256) {
                             color_intensity = 255;
                         }
@@ -460,7 +458,7 @@ void update_resident_gameplay_state(void) {
                         if (scale_ticks(0x1A4) < render_sequence.time) {
                             level_render_state.player->unkBC =
                                 (s32)(((f32)render_sequence.time - func_001F96E8(420.0f)) *
-                                      (D_0015ED60 * 1.2f));
+                                      (frame_scale * 1.2f));
                             level_render_state.player->unkB2 = 0;
                             enqueue_callback_list_1(FUN_0022e1b0, level_render_state.player);
                         }
@@ -480,8 +478,8 @@ void update_resident_gameplay_state(void) {
                 } else if (render_sequence.time < scale_ticks(0xF0)) {
                     s32 color_intensity;
                     if (render_sequence.time < scale_ticks(0xC8)) {
-                        func_0022F5B0(object, D_0015ED6C * -4.0f);
-                        func_0022F5B0(object, D_0015ED6C * -3.0f);
+                        func_0022F5B0(object, frame_time * -4.0f);
+                        func_0022F5B0(object, frame_time * -3.0f);
                     }
                     color_intensity = (s32)(fast_cos(convert_integer_to_float(
                                                          (render_sequence.time & 0x3F) - 32) *
@@ -503,12 +501,12 @@ void update_resident_gameplay_state(void) {
                     if (render_sequence.time < scale_ticks(300)) {
                         level_render_state.player->unkBC =
                             (s32)((func_001F96E8(300.0f) - (f32)render_sequence.time) *
-                                  (D_0015ED60 * 1.5f));
+                                  (frame_scale * 1.5f));
                         level_render_state.player->unkB2 = 0;
                         enqueue_callback_list_1(FUN_0022e1b0, level_render_state.player);
                     }
                     color_intensity = (s32)((func_001F96E8(360.0f) - (f32)render_sequence.time) *
-                                            (D_0015ED60 * 1.25f));
+                                            (frame_scale * 1.25f));
                     if (object->class_id == 0x215) {
                         object->color = (color_intensity << 8) | (color_intensity << 16);
                     } else {
@@ -633,7 +631,7 @@ void update_resident_gameplay_state(void) {
             camera_blend_step = D_0015ED70 * 0.666f;
             advance_accelerated_scalar(&level_render_state.blend,
                                        &level_render_state.interpolation_velocity, 1.0f,
-                                       camera_blend_step, camera_blend_step, D_0015ED6C * 0.5f);
+                                       camera_blend_step, camera_blend_step, frame_time * 0.5f);
             func_001F9A40(&scratch_vectors[0],
                           &D_00160034[level_render_state.source_camera_index].position,
                           &D_00160034[level_render_state.destination_camera_index].position,
@@ -688,7 +686,7 @@ void update_resident_gameplay_state(void) {
                     }
                 }
                 if (blend < 1.0f) {
-                    func_0022F5B0(level_render_state.player, D_0015ED6C * -3.75f);
+                    func_0022F5B0(level_render_state.player, frame_time * -3.75f);
                 }
             } else {
                 ScriptedPath *active_path;
@@ -710,7 +708,7 @@ void update_resident_gameplay_state(void) {
                     enqueue_callback_list_1(FUN_0022e1b0, level_render_state.player);
                 }
                 level_render_state.path_progress +=
-                    level_render_state.speed * D_0015ED6C / level_render_state.path_segment_length;
+                    level_render_state.speed * frame_time / level_render_state.path_segment_length;
                 if ((f32)(active_path->point_count - 1) < level_render_state.path_progress ||
                     sequence_fade >= 1.0f) {
                     D_0015F5B0 = 1;

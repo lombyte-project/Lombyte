@@ -1,5 +1,6 @@
 #include "types.h"
 #include "asm.h"
+#include "rnc/globals.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001e9b10/FUN_001e9b10.s", FUN_001e9b10);
@@ -130,7 +131,6 @@ typedef struct S160AB0 {
 extern u8 D_00100AE0[];
 extern u8 D_0013F350[];
 extern s32 D_0015ED80;
-extern f32 D_0015ED60;
 extern f32 D_0015F43C;
 extern u8 D_0015F484;
 extern u8 D_0015F485;
@@ -256,10 +256,10 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     FillTransferWords(D_00186F40, 0, 0x3A0);
     FillTransferWords(D_001AAA40, 0, 0x180);
     if (D_0015ED80 != 0) {
-        if (D_0015ED60 == 1.0f) {
+        if (frame_scale == 1.0f) {
             set_video_timing(1);
         }
-    } else if (D_0015ED60 != 1.0f) {
+    } else if (frame_scale != 1.0f) {
         set_video_timing(0);
     }
     D_0016034C = *(u8 *)&D_0015ED80;

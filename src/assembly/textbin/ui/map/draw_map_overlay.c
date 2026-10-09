@@ -1,5 +1,6 @@
 #include "types.h"
 #include "asm.h"
+#include "rnc/globals.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/map/draw_map_overlay/FUN_00205640.s",
@@ -32,7 +33,6 @@ typedef struct {
 
 extern u8 D_0013D5BC[];
 extern u16 D_001518D2[];
-extern s32 D_0015ED84;
 extern u8 D_0015EDB4;
 extern s32 D_0015FD60 __attribute__((sda));
 extern f32 D_0015FD80 __attribute__((sda));
@@ -440,7 +440,7 @@ void draw_map_overlay(void) {
     {
         struct MapState *m = &level_map_selection;
 
-        if (D_0015ED84 == m->loaded) {
+        if (current_level_index == m->loaded) {
             s32 image_index;
             f32 s;
             f32 angle;
@@ -454,11 +454,11 @@ void draw_map_overlay(void) {
                 angle = fast_add_rotations(angle, 1.5707964f);
             }
             if (D_0015FD60 != 0) {
-                world_to_map_coords(&label_buffer.f[0], &label_buffer.f[1], D_0015ED84 + 100,
+                world_to_map_coords(&label_buffer.f[0], &label_buffer.f[1], current_level_index + 100,
                                     hero.motion.pos.f[0], hero.motion.pos.f[1]);
                 angle = fast_add_rotations(angle, 1.5707964f);
             } else {
-                world_to_map_coords(&label_buffer.f[0], &label_buffer.f[1], D_0015ED84,
+                world_to_map_coords(&label_buffer.f[0], &label_buffer.f[1], current_level_index,
                                     hero.motion.pos.f[0], hero.motion.pos.f[1]);
             }
             label_buffer.f[0] = (f32)rx0 + label_buffer.f[0] * (f32)(rx1 - rx0);

@@ -1,5 +1,6 @@
 #include "types.h"
 #include "asm.h"
+#include "rnc/globals.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM(
@@ -73,11 +74,8 @@ extern struct S_0013C940 D_0013C940;
 extern u16 D_0013E05A[];
 extern struct S_0013F350 D_0013F350;
 extern u8 D_00141050[];
-extern s32 D_0015ED84;
 extern s32 D_0015EE38;
 extern s32 D_0015EE3C;
-extern s32 mode_freeze_state __asm__("D_0015EEB0");
-extern s32 mode_freeze_flags __asm__("D_0015EEB4");
 extern s32 D_0015F5E8;
 extern s32 D_0015F604;
 extern s32 D_0015F648;
@@ -118,7 +116,7 @@ void update_mode_freeze(void) {
         if (scale_game_frames(0x78) < st->unk20) {
             if (controller_state.pressed & 0x40) {
                 D_0015F604 = 0;
-                if (D_0015ED84 == 1) {
+                if (current_level_index == 1) {
                     memcard_save_data(0, -1);
                 }
             }
@@ -249,9 +247,9 @@ void update_mode_freeze(void) {
                     }
                     func_001FF768();
                     if (scale_game_frames(0x1068) < D_0013F350.unk19C) {
-                        if (D_0015ED84 == 5) {
+                        if (current_level_index == 5) {
                             D_0015EE38++;
-                        } else if (D_0015ED84 == 0x10) {
+                        } else if (current_level_index == 0x10) {
                             D_0015EE3C++;
                         }
                     }
