@@ -1,16 +1,6 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM(
-    "config/us/expected/asm/assembly/textbin/ui/menus/inventory/draw_items_menu/FUN_0021eb20.s",
-    FUN_0021eb20);
-#else
-#include "types.h"
 #include "rnc/rendering/screen.h"
 #include "rnc/ui/text/text_region.h"
-
-#include "types.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -37,7 +27,7 @@ extern void font_print_window_regular(struct TextRegion *, u64, char *,
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern void draw_moby_list(s32, s32) __asm__("func_0020D330");
-extern s32 compute_clamped_count_difference(void) __asm__("func_00215248");
+extern s32 compute_clamped_count_difference(void) __asm__("FUN_00215248");
 extern s32 count_nonzero_entries_up_to_40(void) __asm__("func_00215290");
 extern s32 count_nonzero_entries_up_to_10(void) __asm__("func_00215300");
 extern void *memset(void *, s32, u32);
@@ -69,21 +59,24 @@ s32 draw_items_menu(ItemsMenu *menu) {
     s32 x;
     s32 y;
     s32 collected_count;
-    s32 window_left = 8;
     if (menu->help_tip != 0) {
         draw_moby_list(menu->help_tip, 1);
     }
     setup_gif_paging(0);
     column_divisor = 3;
     {
-        /* Retail initializes the 24-byte text window with the menu height,
-       signed width / 3, and the 0x10 and 5 fields before drawing the title. */
-        struct TextRegion text_window = {
-            0,           menu->height,
-            window_left, divide_coordinate(menu->width, column_divisor),
-            0,           0,
-            0,           0,
-            0x10,        5};
+        /* Retail clears the 24-byte text window, fills the height, left (8), signed
+           width / 3, line advance 0x10 and flags 5, copies it, then centres the anchor. */
+        struct TextRegion text_window;
+        struct TextRegion window_fields;
+
+        memset(&window_fields, 0, sizeof(window_fields));
+        window_fields.bottom = menu->height;
+        window_fields.left = 8;
+        window_fields.right = divide_coordinate(menu->width, column_divisor);
+        window_fields.line_advance = 0x10;
+        window_fields.flags = 5;
+        text_window = window_fields;
         text_window.anchor_x = add_offset(text_window.left, text_window.right) >> 1;
         strcpy(text_buffer, get_help_message_text(0x4F4E));
         if (D_0015ED88[0] == column_divisor) {
@@ -141,4 +134,3 @@ s32 draw_items_menu(ItemsMenu *menu) {
     return 8;
 }
 extern __typeof__(draw_items_menu) func_0021EB20 __attribute__((alias("FUN_0021eb20")));
-#endif /* NON_MATCHING */

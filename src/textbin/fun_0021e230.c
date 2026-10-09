@@ -1,10 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021e230/FUN_0021e230.s", FUN_0021e230);
-#else
-#include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "qcopy.h"
@@ -83,7 +77,7 @@ extern s32 active_preview_resource_class[] __asm__("D_00140408");
 extern s32 resource_request_state __asm__("D_0015FF50");
 extern u8 moby_class_slots[] __asm__("D_001B3AC0");
 extern struct PreviewClassResource *moby_class_resources[] __asm__("D_001B3200");
-extern void update_item_preview_transform() __asm__("func_0021E698");
+extern void update_item_preview_transform() __asm__("FUN_0021e698");
 
 extern void func_001E9470(s32, s32);
 extern void func_001E9478(struct ItemPreviewMoby *, s32);
@@ -91,7 +85,7 @@ extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
 extern void set_moby_animation(struct ItemPreviewMoby *, s32, s32) __asm__("func_00212ED8");
 extern struct ItemPreviewMoby *create_menu_preview_moby(s32) __asm__("func_00225490");
-extern struct ItemPreviewMoby *delete_moby(struct ItemPreviewMoby *) __asm__("func_00225530");
+extern struct ItemPreviewMoby *delete_moby(struct ItemPreviewMoby *) __asm__("FUN_00225530");
 
 s32 update_item_preview_binding(struct ItemPreviewBinding *preview) __asm__("FUN_0021e230");
 
@@ -115,7 +109,8 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
     s32 is_type1;
     s32 item_two_difference;
     f32 camera_x;
-    volatile f32 *camera_position;
+    struct ItemPreviewVars *secondary_vars;
+    f32 position_x;
 
     grid = menu_system.current->focus;
     item_index = grid->data.grid.cells[grid->data.grid.selected_cell].id;
@@ -181,16 +176,15 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             }
             preview->primary_moby = moby;
             moby->flags = 0;
-            camera_position = &preview_camera.x;
-            camera_x = *(f32 *)((u8 *)&preview_camera + 0x140);
+            camera_x = preview_camera.x;
             if (use_alternate_x) {
-                moby->x = camera_x + preview_placements[item_index].alternate_x;
+                position_x = camera_x + preview_placements[item_index].alternate_x;
             } else {
-                moby->x = camera_x + preview_placements[item_index].normal_x;
+                position_x = camera_x + preview_placements[item_index].normal_x;
             }
-            moby->y = ((volatile struct PreviewCamera *)&preview_camera)->y +
-                      preview_placements[item_index].y;
-            moby->z = camera_position[2] + preview_placements[item_index].z;
+            moby->x = position_x;
+            moby->y = preview_camera.y + preview_placements[item_index].y;
+            moby->z = preview_camera.z + preview_placements[item_index].z;
             moby->rotation_x = preview_placements[item_index].rotation_x;
             moby->rotation_y = preview_placements[item_index].rotation_y;
             moby->rotation_z = 3.1415927f;
@@ -213,9 +207,9 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
                 qcopy(&moby->rotation_x, &source_moby->rotation_x);
                 preview->secondary_moby = moby;
                 moby->update = update_item_preview_transform;
-                preview_vars = moby->preview_vars;
-                preview_vars->item_index = item_index;
-                preview_vars->owner = preview;
+                secondary_vars = moby->preview_vars;
+                secondary_vars->item_index = item_index;
+                secondary_vars->owner = preview;
                 set_moby_animation(moby,
                                    (animation_index < moby->resource->animation_count - 1)
                                        ? animation_index
@@ -235,4 +229,3 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
     }
     return 0;
 }
-#endif /* NON_MATCHING */
