@@ -13,6 +13,7 @@ extern struct Globals_0013E550 D_0013E550;
 extern s32 D_0015EE20;
 extern s32 D_0015EEA0;
 extern s32 D_0015EED8;
+extern s32 current_level_index __asm__("D_0015ED84");
 extern s32 D_0016120C;
 extern void FlushCache(s32);
 extern s32 sceGsSyncV(s32);
