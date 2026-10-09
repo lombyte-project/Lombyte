@@ -599,7 +599,7 @@ extern char D_0013F350[];
 extern float AbsoluteFloat(float);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_sin(float);
-extern int D_0015ED6C; /* no foreign declaration */
+extern float D_0015ED6C;
 extern int FUN_001fa6e0(int, int, float);
 extern int truncate_float_to_s32();
 extern short D_0015EE6C_s __asm__("D_0015ED6C");
@@ -1111,4 +1111,82 @@ int FUN_L14_002fd918(char *m) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fdbb8.s", FUN_L14_002fdbb8);
+#include "rnc/overlay/quad.h"
+/* pvars of the flyer FUN_L14_002fdbb8 moves to a path point */
+typedef struct {
+    s32 point;   /* 0x0: path point index into D_L14_001600EC (0x80 each, position at 0x30) */
+    s32 target;  /* 0x4: moby index removed on arrival */
+    s32 sound;   /* 0x8: voice slot, -1 when none */
+    s32 timer;   /* 0xC */
+} FlyerVars;
+
+extern s32 D_L14_00161FB0 __attribute__((sda));
+extern f32 D_L14_00161FA8 __attribute__((sda));
+extern f32 D_L14_00161FAC __attribute__((sda));
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
+                             float, int, float, float, int, int, int, int);
+extern int FUN_L00_0028d8c0(void *, int);
+extern void FUN_L14_002fded0(struct Moby *);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
+
+void FUN_L14_002fdbb8(struct Moby *moby) {
+    FlyerVars *vars = (FlyerVars *)moby->pvars;
+    Vec4f diff;
+    OvlVec4 step;
+    f32 dist;
+    f32 speed;
+    char *slot;
+    struct Moby *target;
+
+    switch (moby->state) {
+    case 0:
+        if (vars->point < 0 || vars->target < 0) {
+            mark_moby_for_removal(moby);
+            return;
+        }
+        moby->state = 1;
+        moby->unk30 = 0xFF;
+        moby->pos.z += 1.5f;
+        vars->sound = -1;
+        vars->timer = scale_game_frames(D_L14_00161FB0);
+        return;
+    case 1:
+        return;
+    case 2:
+        FUN_001f9a28(&diff, D_L14_001600EC + vars->point * 0x80 + 0x30, &moby->pos);
+        dist = FUN_001f9af0(&diff);
+        FUN_001f9740(&vars->timer);
+        speed = D_L14_00161FA8 * D_0015ED6C;
+        if (dist < speed || dist <= 0.0f) {
+            if (vars->sound != -1) {
+                slot = D_0013E550 + vars->sound * 0x70;
+                if (*(struct Moby **)(slot + 0x88) == moby && ((u8 *)slot)[0x74] != 0) {
+                    release_voice_slot(vars->sound);
+                }
+            }
+            target = (struct Moby *)(D_L14_0015FFD8 + vars->target * 0x100);
+            vars->sound = -1;
+            if (target != 0) {
+                mark_moby_for_removal(target);
+            }
+            qcopy(&moby->pos, D_L14_001600EC + vars->point * 0x80 + 0x30);
+            qcopy(&step, &moby->unkC0);
+            step.f[2] = 1.0f;
+            FUN_L00_0025e450(moby, &step, &moby->pos, 0.0f, 0.0f, 0x14, 0xA, 0xC, 10.0f, 6.0f,
+                             9.0f, 0, 1.0f, 30.0f, 1, 0xA, -1, 0);
+            mark_moby_for_removal(moby);
+            return;
+        }
+        moby->rot.x = fast_add_rotations(moby->rot.x, 2.0f * DEG_TO_RAD);
+        moby->rot.y = FUN_L00_0025b750(moby->rot.y, -FUN_001f9e90(FUN_001f9b20(&diff), diff.z), D_L14_00161FAC);
+        moby->rot.z = FUN_L00_0025b750(moby->rot.z, FUN_001f9e90(diff.x, diff.y), D_L14_00161FAC);
+        FUN_001f9a68(&step, &moby->unkC0, speed);
+        FUN_001f9a10((u8 *)&moby->pos, (u8 *)&moby->pos, (u8 *)&step);
+        FUN_L14_002fded0(moby);
+        if (FUN_L00_0028d8c0(moby, vars->sound) == 0) {
+            vars->sound = allocate_voice_for_target_entry(1, 4, (int)moby);
+        }
+        return;
+    }
+}
