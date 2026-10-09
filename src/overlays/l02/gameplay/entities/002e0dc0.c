@@ -59,7 +59,7 @@ extern s32 D_L02_0015F5C4 __attribute__((section(".sdata")));
 extern WatcherReward D_L02_0016CE60;
 extern char D_L02_00161D00[];
 extern void FUN_L02_002e0cd8(struct Moby *);
-extern void FUN_L02_002e1fb8(char *);
+extern void FUN_L02_002e1fb8(struct Moby *);
 extern void FUN_L02_0025c758(struct Moby *);
 extern void delete_moby(struct Moby *) __asm__("FUN_0020c828");
 extern void watcher_init(struct Moby *, WatcherVars *) __asm__("FUN_L00_002668a0");
@@ -237,8 +237,8 @@ extern void FUN_L02_0023ccc8(void);
 extern void FUN_L02_0023cda8(void);
 
 /* Three-state controller (data+0x180): 0 waits for its trigger, 1 runs timed effects until released, then moves the moby to its spawn point, sets the two linked mobys' flags and enters state 2. */
-void FUN_L02_002e1fb8(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void FUN_L02_002e1fb8(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
     float fx_pos[4] __attribute__((aligned(16)));
     float fx_rot[4] __attribute__((aligned(16)));
     char *entry;
@@ -268,14 +268,14 @@ void FUN_L02_002e1fb8(char *moby) {
         entry_off = *(int *)(data + 0x154) << 7;
         mobys = table;
         *(int *)(data + 0x164) = -1;
-        qcopy(moby + 0x10, (char *)(entry_off + (int)mobys) + 0x30);
+        qcopy(&moby->pos, (char *)(entry_off + (int)mobys) + 0x30);
         entry = (char *)(entry_off + (int)mobys);
-        *(float *)(moby + 0x48) = yaw = atan2_n(*(float *)(entry + 0), *(float *)(entry + 4));
-        qcopy(fx_pos, moby + 0x10);
+        moby->rot.z = yaw = atan2_n(*(float *)(entry + 0), *(float *)(entry + 4));
+        qcopy(fx_pos, &moby->pos);
         fx_pos[0] += fdc8_n(yaw) * 1.5f;
-        fx_pos[1] += fde0_n(*(float *)(moby + 0x48)) * 1.5f;
+        fx_pos[1] += fde0_n(moby->rot.z) * 1.5f;
         f9f8_n(fx_rot);
-        fx_rot[2] = fa580_n(*(float *)(moby + 0x48), 3.1415927f);
+        fx_rot[2] = fa580_n(moby->rot.z, 3.1415927f);
         FUN_L00_00216f90_n(fx_pos, fx_rot, 0, 1);
         {
             int i0 = *(int *)(data + 0x158);
@@ -314,8 +314,8 @@ extern void draw_2ea048(void *) __asm__("FUN_00201f58");
 
 /* Draws the parts whose clip volumes contain the camera (all of them when
  * the override flag is set). */
-void FUN_L02_002ea048(char *m) {
-    int *d = *(int **)(m + 0x78);
+void FUN_L02_002ea048(struct Moby *m) {
+    int *d = (int *)m->pvars;
 
     begin_2ea048(0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, D_L02_001F3E80);
     if (D_L02_0015F608 != 0 || (d[0] != -1 && in_clip_2ea048(D_L02_001673C0, d[0]))) {
@@ -345,12 +345,12 @@ extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L02_002a47f8(float);
 extern void FUN_L02_002ea048_cb(void) __asm__("FUN_L02_002ea048");
 
-void FUN_L02_002ea198(unsigned char *moby) {
-    switch (moby[0x20]) {
+void FUN_L02_002ea198(struct Moby *moby) {
+    switch (moby->state) {
     case 0:
         FUN_L02_002a47f8(0.16666667f);
-        moby[0x20] = 1;
-        moby[0x30] = 0xFF;
+        moby->state = 1;
+        moby->unk30 = 0xFF;
         break;
     case 1:
         AddDrawCallback(FUN_L02_002ea048_cb, moby);
