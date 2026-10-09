@@ -868,7 +868,55 @@ void FUN_L01_00300220(struct Moby *moby) {
         moby->state = 1;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302438.s", FUN_L01_00302438);
+extern s32 D_0013E500[];
+extern f32 convert_integer_to_float_302438(s32) __asm__("FUN_001fa6c0");
+extern s32 truncate_float_to_s32_302438(f32) __asm__("FUN_001fa6d0");
+extern u64 get_effect_texture_302438(s32) __asm__("FUN_001f44b8");
+extern s32 random_integer_below_302438(s32) __asm__("FUN_00213260");
+extern void draw_textured_quad_302438(s32, s32, s32, s32, s32, s32, s32, s32,
+                                      u64, u64) __asm__("FUN_001f5450");
+
+void FUN_L01_00302438(struct Moby *moby) {
+    s32 *vars = (s32 *)moby->pvars;
+    s32 row_count;
+    s32 column_count;
+    s32 row;
+    s32 column;
+    f32 screen_center[2];
+    volatile f32 coordinate[2];
+    f32 opacity;
+    s32 color;
+    s32 texture_x;
+    s32 texture_y;
+    s32 draw_x;
+    s32 draw_y;
+    s32 tile_size = 32;
+    s32 tile_half;
+    u64 texture;
+
+    screen_center[0] = convert_integer_to_float_302438(D_0013E500[2]);
+    screen_center[1] = convert_integer_to_float_302438(D_0013E500[3]);
+    texture = get_effect_texture_302438(30);
+    row_count = D_0013E500[0] / 32 + 1;
+    column_count = D_0013E500[1] / 32 + 1;
+    for (row = 0; row < row_count; row++) {
+        s32 base_color = 0xff7f7f;
+        for (column = 0; column < column_count; column++) {
+            coordinate[0] = (f32)(row * 32);
+            coordinate[1] = (f32)(column * 32);
+            tile_half = tile_size >> 1;
+            opacity = convert_integer_to_float_302438(vars[0x50]) * 127.5f /
+                      convert_integer_to_float_302438(FUN_001f96f8(90));
+            color = (truncate_float_to_s32_302438(opacity) << 24) + base_color;
+            texture_x = random_integer_below_302438(32);
+            texture_y = random_integer_below_302438(32);
+            draw_x = truncate_float_to_s32_302438(coordinate[0] - (f32)tile_half);
+            draw_y = truncate_float_to_s32_302438(coordinate[1] - (f32)tile_half);
+            draw_textured_quad_302438(draw_x, draw_y, 32, 32, texture_x, texture_y,
+                                      32, 32, color, texture);
+        }
+    }
+}
 /* pvars of the moby run by FUN_L01_00302648: 20 trigger zones and a hold counter */
 typedef struct {
     s32 path;   /* -1, or an index into D_L01_001B0930 */
