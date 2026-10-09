@@ -3,7 +3,108 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd1a0.s", FUN_L06_002fd1a0);
+#else
+#include "eetypes.h"
+#include "qcopy.h"
+typedef struct {
+    u128 v[4];
+    int color[4];
+    float uv[4][2];
+    long unk70, tex, unk80, unk88;
+} Packet_2fd1a0;
+
+extern int D_L06_00161F7C __attribute__((sda));
+extern int D_L06_00161F80 __attribute__((sda));
+extern int D_L06_00161F84 __attribute__((sda));
+extern int D_L06_00161F88 __attribute__((sda));
+extern int D_L06_00161F8C __attribute__((sda));
+extern int D_L06_00161F90 __attribute__((sda));
+extern unsigned int D_L06_00161F94 __attribute__((sda));
+extern int D_L06_00161F98 __attribute__((sda));
+extern float D_L06_00161F9C __attribute__((sda));
+extern float D_L06_00161FA0 __attribute__((sda));
+extern float D_L06_00161FA4 __attribute__((sda));
+extern float D_L06_00167554;
+extern float D_L06_00167558;
+extern float D_L06_00167540[];
+extern float D_L06_001F1540[][2];
+extern short D_L06_001F1220[][4][2];
+extern float D_L06_001F0900[][4] __attribute__((aligned(16)));
+extern char D_L06_001F2610[][16];
+extern char D_L06_001F19D0[][16];
+extern long texture_2fd1a0(int) __asm__("FUN_001f44b8");
+extern void initialize_matrix_2fd1a0(void *) __asm__("FUN_001f9fc8");
+extern void transform_2fd1a0(void *, void *, float) __asm__("FUN_001f9a68");
+extern void multiply_2fd1a0(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void subtract_2fd1a0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void normalize_2fd1a0(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void transform_other_2fd1a0(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void normalize_other_2fd1a0(void *, void *) __asm__("FUN_001f9ab0");
+extern void draw_2fd1a0(void *, void *, int) __asm__("FUN_001f7d30");
+
+void FUN_L06_002fd1a0(void) {
+    Packet_2fd1a0 first, second;
+    float matrix[4][4] __attribute__((aligned(16)));
+    float vec1[4] __attribute__((aligned(16)));
+    float vec2[4] __attribute__((aligned(16)));
+    u128 scratch;
+    float x_offset = D_L06_00161FA4 * D_L06_00167554;
+    float y_offset = D_L06_00161FA0 * D_L06_00167558;
+    long flags;
+    int i, j;
+
+    first.tex = texture_2fd1a0(D_L06_00161F90);
+    second.tex = texture_2fd1a0(0x2a);
+    flags = (long)D_L06_00161F7C | (long)D_L06_00161F80 << 2 |
+            (long)D_L06_00161F84 << 4 | (long)D_L06_00161F88 << 6 |
+            (long)D_L06_00161F8C << 32;
+    first.unk88 = flags;
+    second.unk88 = flags;
+    first.unk80 = 0xFF9000000260L;
+    second.unk80 = 0xFF9000000260L;
+    first.unk70 = 0;
+    second.unk70 = 0;
+    initialize_matrix_2fd1a0(matrix);
+    first.color[0] = D_L06_00161F94;
+    first.color[1] = D_L06_00161F94;
+    first.color[2] = D_L06_00161F94;
+    first.color[3] = D_L06_00161F94;
+    second.color[0] = D_L06_00161F98;
+    second.color[1] = D_L06_00161F98;
+    second.color[2] = D_L06_00161F98;
+    second.color[3] = D_L06_00161F98;
+    i = 0;
+    do {
+        transform_2fd1a0(vec1, D_L06_001F2610[i], D_L06_00161F9C);
+        multiply_2fd1a0(vec1, vec1, matrix);
+        subtract_2fd1a0(vec2, vec1, D_L06_00167540);
+        normalize_2fd1a0(vec2, vec2, 1.0f);
+        transform_other_2fd1a0(vec1, D_L06_001F19D0[i], matrix);
+        normalize_other_2fd1a0(vec2, vec1);
+        j = 0;
+        do {
+            int a = D_L06_001F1220[i][j][0];
+            int b = D_L06_001F1220[i][j][1];
+            float u, v;
+            qcopy(&scratch, D_L06_001F0900[a]);
+            qcopy(&first.v[j], &scratch);
+            qcopy(&second.v[j], &first.v[j]);
+            u = D_L06_001F1540[b][0];
+            v = D_L06_001F1540[b][1];
+            first.uv[j][0] = u + y_offset;
+            first.uv[j][1] = v + x_offset;
+            second.uv[j][0] = u;
+            second.uv[j][1] = v;
+            j++;
+        } while (j < 4);
+        draw_2fd1a0(&first, matrix, 0);
+        draw_2fd1a0(&second, matrix, 0);
+        i++;
+    } while (i < 50);
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd460.s", FUN_L06_002fd460);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd748.s", FUN_L06_002fd748);
 
