@@ -23,7 +23,7 @@ Usage:
   python3 scripts/data-refs.py --owner runtime/      # only units under a path
   python3 scripts/data-refs.py --labels             # also check src/ D_ labels
   python3 scripts/data-refs.py --elf PATH           # another executable
-  python3 scripts/data-refs.py --catalog            # write config/us/data.yaml
+  python3 scripts/data-refs.py --catalog            # write build/data-refs/boot/data.yaml
   python3 scripts/data-refs.py --level 0 --overlays DIR
                                                     # one level image, DIR is
                                                     # extracted/overlays/ from Tools
@@ -59,7 +59,7 @@ CONFIG_PATH = ROOT / "config" / "us" / "rnc1.us.yaml"
 OUT_DIR = ROOT / "build" / "data-refs"
 FUNCTIONS_PATH = ROOT / "config" / "overlays" / "us" / "functions.tsv"
 DEFAULT_GP = 0x166C00
-DEFAULT_CATALOG = ROOT / "config" / "us" / "data.yaml"
+DEFAULT_CATALOG = ROOT / "build" / "data-refs" / "boot" / "data.yaml"
 LEVEL_DATA_START = 0x15EF00  # D_LNN_ labels begin here; below it a level keeps the executable's names
 
 SHF_ALLOC = 0x2
@@ -917,7 +917,7 @@ def main(argv=None) -> int:
                 else f"D_L{args.level:02d}_{addr:08X}", "mixed")
             write_catalog(target, sections, load_catalog(target),
                           what=f"level {args.level:02d}'s", origins=LEVEL_ORIGINS,
-                          extra="# The executable's core.* data is in config/us/data.yaml.\n")
+                          extra="# The executable's core.* data is in build/data-refs/boot/data.yaml.\n")
         summary.append(f"catalogue: {sum(len(e) for o in sections.values() for e in o.values())} "
                        f"entries in {shown(target)}")
     (out / "summary.txt").write_text("\n".join(summary) + "\n")
