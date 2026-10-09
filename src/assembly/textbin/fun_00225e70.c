@@ -53,6 +53,7 @@ typedef struct {
 } PreviewItemDefinition;
 
 extern PreviewItemDefinition preview_item_definitions[] __asm__("D_001863D0");
+extern void *moby_class_resources[224] __asm__("D_001B3200");
 extern u8 attachment_update_callback[] __asm__("FUN_00224b68");
 
 extern void decompress_wad() __asm__("func_0020B618");
@@ -240,8 +241,7 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
                                      0, 10);
                 (*attachment2)->flags = 0;
                 moby = *attachment2;
-                qcopy(&(*attachment2)->position, &source_moby->position);
-                /* This expression preserves the retail reload of the third attachment. */
+                qcopy(&moby->position, &source_moby->position);
                 qcopy(&(*attachment2)->rotation, &source_moby->rotation);
                 if (moby->oclass == 0x4A) {
                     moby->scale *= 3.0f;
