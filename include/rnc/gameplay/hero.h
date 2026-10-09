@@ -462,9 +462,11 @@ struct Hero {
     f32 unk9C4;                    /* 0x9C4 */
     f32 unk9C8;                    /* 0x9C8 */
     f32 unk9CC;                    /* 0x9CC */
-    u8 pad_9D0[0x4];
+    f32 unk9D0;                    /* 0x9D0: rail yaw (FUN_L01_002f6328) */
     f32 unk9D4;                    /* 0x9D4 */
-    u8 pad_9D8[0xC];
+    u8 pad_9D8[0x4];
+    f32 unk9DC;                    /* 0x9DC: rail speed, eased toward the rail's speed */
+    f32 unk9E0;                    /* 0x9E0: pull toward the rail, capped at the distance */
     f32 unk9E4;                    /* 0x9E4 */
     f32 unk9E8;                    /* 0x9E8 */
     u8 pad_9EC[0x64];

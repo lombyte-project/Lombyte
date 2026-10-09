@@ -5,7 +5,159 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6328.s", FUN_L01_002f6328);
+#include "qcopy.h"
+
+/* A path of points: the point count, then 16-byte points whose w is the length of the segment to the next one */
+typedef struct {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 pts[1];        /* 0x10 */
+} RailPath;
+
+/* pvars of the rail: paths[] are D_L01_001B0930 rows (paths[0] -1: none) */
+typedef struct {
+    s32 paths[0x18];
+    f32 speed;          /* 0x60: speed it pulls the hero along with */
+    f32 range;          /* 0x64: farthest the hero may be from it */
+    s32 ready;          /* 0x68: segment lengths measured */
+    u8 pad6C[4];
+    s32 count;          /* 0x70 */
+} RailVars;
+
+extern RailPath *D_L01_001B0930[];
+extern s32 D_0015ED84;
+extern f32 D_0015ED60;
+extern f32 D_0015ED64;
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+extern f32 FUN_001f9b48(void *, void *);
+extern f32 FUN_001f9b80(void *, void *);
+extern f32 FUN_001f9b20(void *);
+extern f32 FUN_001f9af0(void *);
+extern f32 FUN_001f9e90(f32, f32);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, f32);
+extern void FUN_001f9bf8(void *, void *, f32);
+extern s32 FUN_001f96f8(s32);
+extern void approach_value(float *, float, float) __asm__("FUN_00213ed8");
+extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
+extern s32 FUN_L00_0025d808(void *, void *, s32 *, f32 *, s32, f32);
+extern f32 FUN_L00_0025b8c0(f32 *value, f32 target, f32 *speed, f32 accel, f32 decel, f32 max);
+
+/* Grind rail: measures its paths once, then while the hero is in control mode 0x10 snaps it to the nearest path
+   point in range and pulls it along, faster on level 1 the more rail is left. */
+void FUN_L01_002f6328(struct Moby *m) {
+    RailVars *d = (RailVars *)m->pvars;
+    RailPath *path;
+    RailPath *best_path;
+    Vec4 best_pt;
+    Vec4 pt;
+    Vec4 dir;
+    Vec4 pull;
+    s32 seg;
+    f32 t;
+    s32 best_seg;
+    f32 best_t;
+    f32 drag;
+    f32 best;
+    f32 dist;
+    f32 left;
+    f32 rate;
+    s32 i, j, k, n, end;
+
+    if (d == 0 || d->paths[0] == -1 || d->count == 0) {
+        return;
+    }
+    if (d->ready == 0) {
+        d->ready = 1;
+        for (i = 0; i < d->count; i++) {
+            RailPath *p = D_L01_001B0930[d->paths[i]];
+            for (j = 0; j < p->count - 1; j++) {
+                p->pts[j].f[3] = FUN_001f9b48(&p->pts[j], &p->pts[j + 1]);
+            }
+            p->pts[j].f[3] = FUN_001f9b48(&p->pts[j], &p->pts[0]);
+        }
+        m->unk30 = 0xFF;
+    }
+    if (hero.state.control_mode != 0x10) {
+        return;
+    }
+    best = 9999.0f;
+    best_path = 0;
+    for (k = 0; k < d->count; k++) {
+        path = D_L01_001B0930[d->paths[k]];
+        FUN_L00_0025df68(path, &hero.motion.pos, &pt, &seg, &t, 0, 999.0f, 5.0f, 0.0f);
+        dist = FUN_001f9b80(&hero.motion.pos, &pt);
+        if (dist < best) {
+            best_path = path;
+            qcopy(&best_pt, &pt);
+            best = dist;
+            best_seg = seg;
+            best_t = t;
+        }
+    }
+    if (best_path == 0) {
+        return;
+    }
+    end = FUN_L00_0025d808(best_path, &pt, &best_seg, &best_t, 0, 0.3f);
+    if (d->range < best) {
+        return;
+    }
+    if (D_0015ED84 == 1) {
+        left = 0.0f;
+        for (n = best_seg; n < best_path->count - 1; n++) {
+            left += best_path->pts[n].f[3];
+        }
+        if (left < 8.0f) {
+            d->speed = D_0015ED6C * 3.0f;
+        } else if (left < 15.0f) {
+            d->speed = D_0015ED6C * 4.0f;
+        } else if (left < 30.0f) {
+            d->speed = D_0015ED6C * 5.0f;
+        } else {
+            d->speed = D_0015ED6C * 9.0f;
+        }
+    }
+    if (end == 0) {
+        FUN_001f9a28(&dir, &pt, &best_pt);
+        hero.unk9D4 = FUN_001f9e90(FUN_001f9b20(&dir), dir.f[2]);
+        hero.unk9D0 = FUN_001f9e90(dir.f[0], dir.f[1]);
+        dir.i[2] = 0;
+        if (hero.unk9DC < d->speed) {
+            approach_value(&hero.unk9DC, d->speed, D_0015ED70 * 6.0f);
+        } else {
+            approach_value(&hero.unk9DC, d->speed, D_0015ED70 * 6.0f);
+        }
+        if (0.001f < FUN_001f9af0(&dir)) {
+            FUN_001f9bf8(&hero.motion.unkF0, &dir, hero.unk9DC);
+        }
+        FUN_001f9a28(&pull, &best_pt, &hero.motion.pos);
+        rate = D_0015ED6C * 5.0f;
+        pull.f[2] = 0.0f;
+        drag = -FUN_001f9b20(&pull);
+        FUN_L00_0025b8c0(&drag, 0.0f, &hero.unk9E0, D_0015ED64 * 0.008f, D_0015ED64 * 0.3f, rate);
+        {
+            f32 len = FUN_001f9af0(&pull);
+            if (len < hero.unk9E0) {
+                hero.unk9E0 = len;
+            }
+            if (hero.unk9E0 < len) {
+                FUN_001f9bf8(&pull, &pull, hero.unk9E0);
+            }
+        }
+        FUN_001f9a10(&hero.motion.unkF0, &hero.motion.unkF0, &pull);
+        hero.motion.unkF0.f[3] = 0.0f;
+        qcopy(&hero.motion.unk150, &hero.motion.unkF0);
+        if (hero.unk1E0 < FUN_001f96f8(30)) {
+            hero.unk1E0 = FUN_001f96f8(30);
+        }
+    } else {
+        FUN_001f9a68(&hero.motion.unk150, &hero.motion.unk150, D_0015ED60 * -0.0099999905f + 1.0f);
+        qcopy(&hero.motion.unkF0, &hero.motion.unk150);
+        hero.motion.unkF0.i[3] = 0;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6a30.s", FUN_L01_002f6a30);
 #include "qcopy.h"
 
@@ -78,12 +230,6 @@ struct Moby *FUN_L01_002f8530(Vec4f *pos, Vec4f *vel, s32 oclass, s32 a3, s32 a4
 #include "rnc/overlay/collision.h"
 
 extern CollisionHit D_L01_001742C0;
-extern float D_0015ED6C;
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_001f9bf8(void *, void *, float);
-extern float FUN_001f9af0(void *);
-extern float FUN_001f9e90(float, float);
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -93,7 +239,6 @@ extern s32 FUN_001efa68(void *, void *, s32, void *, s32);
 extern s32 FUN_L00_001f0d60(f32, void *, s32, void *);
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern s32 FUN_L00_00257b90(s32, s32);
-extern int FUN_001f96f8(int);
 extern void FUN_L00_0026ced0(void *, void *, s32, s32, f32, s32);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
@@ -452,17 +597,12 @@ typedef struct {
 } L01Player;
 extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
 extern float D_0013F420[4];
-extern float D_0015ED64;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern float FUN_001f96b0(float);
-extern float FUN_001f9b80(void *, void *);
-extern float FUN_001f9b20(void *);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001fa5c8_c(float, float) __asm__("FUN_001fa5c8");
 extern int FUN_001f9740(int *);
 extern int FUN_001fa6d0(float);
-extern float FUN_001f9b48(void *, void *);
-extern void FUN_001f9a28(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_002628d8(float, float, void *, void *, int);
@@ -1239,7 +1379,6 @@ extern char D_0013F3D0[];
 extern int D_0013CAE4[];
 extern unsigned char D_001413F5[];
 extern char *D_L01_0015FFD8;
-extern float D_0015ED70;
 extern int D_L01_0015F594 __attribute__((sda));
 extern short D_L01_00161F88_d __asm__("D_L01_00161F88") __attribute__((sda));
 extern short D_L01_00161F8C_d __asm__("D_L01_00161F8C") __attribute__((sda));
@@ -1258,7 +1397,6 @@ extern void FUN_L00_00233ee8(float *, int, float);
 extern void FUN_L00_002598b0(int, float, void *, int, float, float, int, int, int);
 extern void advance_accelerated_scalar(float *, float *, float, float, float,
                                        float) __asm__("FUN_00213f38");
-extern void approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern int FUN_L00_00233f38(void);
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L01_0027a248(int, int);
