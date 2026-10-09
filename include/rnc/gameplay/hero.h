@@ -521,13 +521,21 @@ struct Hero {
     u8 selector_13;                /* 0x12EC */
     u8 unk12ED;                    /* 0x12ED */
     u8 unk12EE;                    /* 0x12EE */
-    u8 pad_12EF[0x307];
+    u8 pad_12EF[0x301];
+    struct Moby *ship_moby;        /* 0x15F0: the ship the hero is flying (l17 FUN_L17_002ed018) */
+    s16 ship_oclass;               /* 0x15F4: its oclass, -1 when none */
     u8 ship_ammo;                  /* 0x15F6: shots left in the space levels; firing needs one and takes it (FUN_L11_003126f8) */
     u8 ship_ammo_max;              /* 0x15F7: ammo pips the ship HUD draws, lit while below ship_ammo */
-    u8 pad_15F8[0x4];
+    u8 unk15F8;                    /* 0x15F8 */
+    u8 unk15F9;                    /* 0x15F9 */
+    u8 unk15FA;                    /* 0x15FA */
+    u8 unk15FB;                    /* 0x15FB */
     f32 ship_hp;                   /* 0x15FC: ship health; l17 subtracts collision damage and explodes the ship below 0 */
     f32 ship_hp_max;               /* 0x1600: full ship_hp; the HUD bar shows ship_hp over it */
-    u8 pad_1604[0xB];
+    f32 unk1604;                   /* 0x1604 */
+    s32 ship_hp_percent;           /* 0x1608: ship_hp as a percentage for the HUD */
+    s16 unk160C;                   /* 0x160C */
+    u8 unk160E;                    /* 0x160E */
     u8 ship_flags;                 /* 0x160F: 2 = being steered back from the edge or height limit of the space arena (FUN_L11_00313f60) */
     u8 pad_1610[0x4];
     s32 unk1614;                   /* 0x1614 */

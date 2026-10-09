@@ -1672,7 +1672,81 @@ void FUN_L16_002cee70(struct Moby *moby) {
         enqueue_callback_list_1_alt(FUN_L16_002cef60, moby);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cef60.s", FUN_L16_002cef60);
+/* Draw callback queued by FUN_L16_002cee70: one camera-facing glow quad on each live part (class 541) of the group, its colour pulsing with the part's spin angle. */
+
+typedef struct {
+    float v[4][4];
+    int rgba[4];
+    struct {
+        float x, y;
+    } uv[4];
+    long z70;
+    long tex;
+    long q80;
+    long alpha;
+} GlowQuad;
+
+extern float D_L16_001D3130[4][4] __attribute__((section(".data")));
+extern char D_L16_001671C0[];
+extern u8 D_0013F5E0[] __attribute__((section(".data")));
+extern int D_L16_001619E0 __attribute__((sda));
+extern int D_L16_001619E4 __attribute__((sda));
+extern long get_effect_texture_alt(int) __asm__("FUN_001f44b8");
+extern float fast_sin_alt(float) __asm__("FUN_001f9de0");
+extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void draw_geometry_quad_alt(void *, void *, int) __asm__("FUN_001f7d30");
+
+void FUN_L16_002cef60(char *moby) {
+    GlowQuad q;
+    float mat[4][4] __attribute__((aligned(16)));
+    short *p;
+    char *m;
+    int color;
+    int i;
+
+    q.tex = get_effect_texture_alt(0xB);
+    q.alpha = 0x8000000048L;
+    q.q80 = 0xFF9000000260L;
+    q.z70 = 5;
+    q.uv[0].x = 0.0f;
+    q.uv[0].y = 0.0f;
+    q.uv[1].x = 0.0f;
+    q.uv[1].y = 1.0f;
+    q.uv[2].x = 1.0f;
+    q.uv[2].y = 0.0f;
+    q.uv[3].x = 1.0f;
+    q.uv[3].y = 1.0f;
+    for (i = 0; i < 4; i++) {
+        scale_vector_xyz_c(q.v[i], D_L16_001D3130[i], 0.2f);
+    }
+    p = (short *)D_L16_001ABCC0_c2[((unsigned char *)moby)[0x21]];
+    for (;; p++) {
+        m = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+        color = FastTweenColor(D_L16_001619E0, D_L16_001619E4,
+                               (fast_sin_alt(*(float *)(*(char **)(m + 0x78) + 0x11C)) + 1.0f) * 0.5f);
+        q.rgba[3] = color;
+        q.rgba[2] = color;
+        q.rgba[1] = color;
+        q.rgba[0] = color;
+        if (m != 0 && *(short *)(m + 0xA6) == 0x21D && (unsigned char)m[0x20] != 0xFE &&
+            (unsigned char)m[0x20] != 0xFD) {
+            /* basis facing the camera, origin just above the part */
+            qcopy(mat[3], m + 0x10);
+            mat[3][2] += 0.2f;
+            mat[3][3] = 1.0f;
+            subtract_vector_xyz(mat[0], D_L16_001671C0, mat[3]);
+            normalize_vector_xyz(mat[0], mat[0], 1.0f);
+            cross_vectors_xyz(mat[1], mat[0], D_0013F5E0);
+            normalize_vector_xyz(mat[1], mat[1], -1.0f);
+            cross_vectors_xyz(mat[2], mat[1], mat[0]);
+            draw_geometry_quad_alt(&q, mat, 0);
+        }
+        /* a negative entry ends the group */
+        if (*p < 0)
+            return;
+    }
+}
 
 /* Pulse a linked control object and toggle its child when hit or its timer expires. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0560), where it is exact; names translated to the US level program. */
