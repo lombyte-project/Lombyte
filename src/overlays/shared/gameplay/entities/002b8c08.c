@@ -441,7 +441,26 @@ void FUN_L01_002e3110(char *a, char *m) {
         *(float *)(m + 8) = *(float *)(m + 8) + 1.0f;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e3208.s", FUN_L01_002e3208);
+struct DriftEmitter {
+    s32 count;          /* 0x00 */
+    u8 pad4[0x2C];
+    f32 spread;         /* 0x30 */
+};
+extern struct DriftEmitter D_L01_001DEB38;
+extern float D_0015ED60;
+extern float D_0015ED70;
+extern s32 FUN_L00_00258ad0(void *, void *, s32, s32, f32, f32);
+
+/* shrinks and sinks the moby, then hands it to the drift emitter */
+s32 FUN_L01_002e3208(void *ctx, struct Moby *m) {
+    f32 shrink;
+
+    m->pos.z -= D_0015ED70 * 29.7f;
+    shrink = D_0015ED60 * -0.050000012f + 1.0f;
+    m->pos.x *= shrink;
+    m->pos.y *= shrink;
+    return FUN_L00_00258ad0(ctx, &m->pos, D_L01_001DEB38.count, 0, 0.3f, D_L01_001DEB38.spread);
+}
 /* Picks the best lock-on target for moby from the visible-moby list: a living, drawn class-5 enemy within range whose direction from `from`
  * is inside the yaw/pitch cone (or the wider near cone when close), scored by angle error and distance,
  * with a clear line of sight (or the blocker is the same kind of enemy). */
