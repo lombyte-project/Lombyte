@@ -42,7 +42,6 @@ import subprocess
 import sys
 import tempfile
 
-import yaml
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Iterable, Iterator, Union
@@ -87,7 +86,7 @@ CATALOG_HEADER = """\
 # from the retail code. Grouped by section, then by where the data comes from:
 # {origins}
 #
-# One entry per line: [addr, name, type, width, loads, stores, address_taken, used_by, note]
+# One entry per line: [addr, name, type, width, loads, stores, address_taken, used_by]
 #
 #   name           the C name where src/ declares it, else its D_<addr> label
 #   type           the C type where src/ declares it, else guessed from the access width
@@ -95,12 +94,11 @@ CATALOG_HEADER = """\
 #   loads, stores  how many instructions read and write it
 #   address_taken  how many times only its address is formed (a table, struct or string)
 #   used_by        units whose code touches it
-#   note           optional, yours
 #
 # Float constants in the literal pools (only loaded, through the FPU) are left out:
 # the compiler makes them from the float literals in the C.
 #
-# Edit name, type and note by hand: a rerun keeps them and refreshes the rest.
+# Names and types come from the headers; rename there, then rerun.
 {extra}"""
 BOOT_ORIGINS = "the subsystem whose code uses it (`shared` = used from several)."
 LEVEL_ORIGINS = ("the kind of code that uses it (`exe`: the executable's own code, `shared`: code\n"
@@ -736,27 +734,6 @@ def catalog_sections(rows: dict[int, dict], data: list, declared: dict,
             for sec in order if sec in out}
 
 
-GUESSED_TYPES = {"unknown", "u8", "s16", "s32", "s64", "u128", "f32", "f64"}  # what guess_type writes
-
-
-def load_catalog(path: Path) -> dict[int, dict]:
-    """The hand-edited fields of an existing catalogue, by address."""
-    if not path.exists():
-        return {}
-    edits = {}
-    for origins in (yaml.safe_load(path.read_text()) or {}).values():
-        for entries in origins.values():
-            for addr, name, ctype, *_rest, note in (e + [None] * (9 - len(e)) for e in entries):
-                edit = {} if re.fullmatch(r"D_(?:L\d\d_)?[0-9A-Fa-f]{8}", name) else {"name": name}
-                if ctype not in GUESSED_TYPES:
-                    edit["type"] = ctype
-                if note:
-                    edit["note"] = note
-                if edit:
-                    edits[addr] = edit
-    return edits
-
-
 def scalar(text: str) -> str:
     """A YAML flow scalar: plain when it is simple, quoted when a type has brackets or stars."""
     return text if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_ ]*", text) else json.dumps(text)
@@ -773,7 +750,7 @@ def users_text(users: list[str]) -> str:
     return ", ".join(shown) + (f', "+{rest} more"' if rest else "")
 
 
-def write_catalog(path: Path, sections: dict, edits: dict[int, dict],
+def write_catalog(path: Path, sections: dict,
                   what: str = "the boot executable's", origins: str = BOOT_ORIGINS,
                   extra: str = "") -> None:
     lines = [CATALOG_HEADER.format(what=what, origins=origins, extra=extra)]
@@ -782,12 +759,9 @@ def write_catalog(path: Path, sections: dict, edits: dict[int, dict],
         for origin, entries in origins.items():
             lines.append(f"  {origin}:")
             for entry in entries:
-                entry = {**entry, **edits.get(entry["addr"], {})}
                 fields = [f"0x{entry['addr']:08X}", scalar(entry["name"]), scalar(entry["type"]),
                           entry["width"], entry["loads"], entry["stores"],
                           entry["address_taken"], f"[{users_text(entry['used_by'])}]"]
-                if "note" in entry:
-                    fields.append(json.dumps(entry["note"]))
                 lines.append(f"    - [{', '.join(str(f) for f in fields)}]")
             lines.append("")
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -854,8 +828,7 @@ def main(argv=None) -> int:
                         help="extracted/overlays/ of the Tools checkout (with --level)")
     parser.add_argument("--catalog", nargs="?", type=Path, const=Path("-"), metavar="PATH",
                         help=f"write the grouped catalogue (default: {shown(DEFAULT_CATALOG)}, or "
-                             "data.yaml in the output directory with --level); "
-                             "name, type and note already in it are kept")
+                             "data.yaml in the output directory with --level)")
     parser.add_argument("--out", type=Path, default=None, help="output directory")
     parser.add_argument("--emit", nargs="+", metavar="ADDR",
                         help="define the declared objects at these addresses (with --into)")
@@ -911,7 +884,7 @@ def main(argv=None) -> int:
             target = DEFAULT_CATALOG if str(args.catalog) == "-" else args.catalog
             declared = c_declarations()
             sections = catalog_sections(rows, data, {**member_names(declared, rows), **declared})
-            write_catalog(target, sections, load_catalog(target))
+            write_catalog(target, sections)
         else:
             target = out / "data.yaml" if str(args.catalog) == "-" else args.catalog
             own = {addr: row for addr, row in rows.items() if not row["section"].startswith("core.")}
@@ -919,7 +892,7 @@ def main(argv=None) -> int:
                 own, data, {}, level_origin_of(),
                 lambda addr: f"D_{addr:08X}" if addr < LEVEL_DATA_START
                 else f"D_L{args.level:02d}_{addr:08X}", "mixed")
-            write_catalog(target, sections, load_catalog(target),
+            write_catalog(target, sections,
                           what=f"level {args.level:02d}'s", origins=LEVEL_ORIGINS,
                           extra="# The executable's core.* data is in build/data-refs/boot/data.yaml.\n")
         summary.append(f"catalogue: {sum(len(e) for o in sections.values() for e in o.values())} "
