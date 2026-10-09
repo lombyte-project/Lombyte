@@ -225,7 +225,6 @@ s32 FUN_L03_002d30d8(u8 *object) {
     }
     return (u32)(object[0x20] - 2) < 5;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3198.s", FUN_L03_002d3198);
 #include "rnc/gameplay/entities/moby.h"
 
 struct RailPath {
@@ -233,6 +232,188 @@ struct RailPath {
     u8 pad4[0xC];
     Vec4 pts[1];      /* 0x10: xyz point, w length of the segment to the next */
 };
+
+/* Pvars of a rail taxi: up to five routes, each called by a trigger volume and
+   made of an outbound path, a return path and an optional onward path. */
+struct RailTaxiVars {
+    u8 pad0[0x20];
+    u8 coll[0x40];     /* 0x20: collision record moved with the taxi */
+    f32 speed;         /* 0x60: FUN_L03_002d3918 state (RailFlyerVars) */
+    s32 idx;           /* 0x64 */
+    f32 yaw_vel;       /* 0x68 */
+    f32 pitch_vel;     /* 0x6C */
+    f32 roll_vel;      /* 0x70 */
+    s32 route;         /* 0x74: route kept while the hero stays aboard (-1: none) */
+    s32 snd;           /* 0x78: travel sound voice */
+    s32 active;        /* 0x7C */
+    s32 volume[5];     /* 0x80: trigger clip volume of each route (-1: none) */
+    s32 out[5];        /* 0x94: rail path index of each route's outbound leg (-1: none) */
+    s32 back[5];       /* 0xA8: return leg */
+    s32 onward[5];     /* 0xBC: optional leg taken when the hero walks away (-1: none) */
+    s32 help[5];       /* 0xD0: help message mode at each route's stop (FUN_L03_002d3100) */
+    s32 unkE4;         /* 0xE4: set to -1 on arrival */
+};
+
+typedef struct {
+    u8 pad0[0x454];
+    u8 collected[1];
+} L03LevelState;
+
+extern struct RailPath *D_L03_001B05B0[];
+extern s32 D_L03_00161B04 __attribute__((sda));
+extern f32 D_L03_00161B08 __attribute__((sda));
+extern f32 D_L03_00161B10 __attribute__((sda));
+extern f32 D_L03_00161B18 __attribute__((sda));
+extern float D_0015ED70;
+extern s32 D_0014C190[][64];
+extern s32 D_0015ED84_d3198 __asm__("D_0015ED84");
+extern L03LevelState D_L03_001BB330;
+extern u32 D_0013CAE4 __attribute__((section(".data")));
+extern s32 D_L03_0015F594 __attribute__((sda));
+extern void FUN_L00_00266858(void *, int);
+extern void FUN_L01_00285768(void *, struct Moby *, s32, u32, s32, s32, s32, f32);
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern int FUN_L01_00277fb8(void *);
+extern void FUN_L00_00233ee8(void *, float, int);
+extern s32 FUN_L00_00233f38(void);
+extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void taxi_kill(struct Moby *) __asm__("FUN_0020c828");
+extern f32 taxi_atan2(f32, f32) __asm__("FUN_001f9e90");
+extern void taxi_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 taxi_dist(void *, void *) __asm__("FUN_001f9b48");
+extern f32 taxi_dist2(void *, void *) __asm__("FUN_001f9b80");
+extern f32 taxi_approach_angle(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_0025be00");
+s32 FUN_L03_002d3918(struct Moby *m, s32 path, s32 *snd);
+
+/* Rail taxi: waits at its stop until the hero enters a route's trigger volume,
+   flies the outbound path, lets the hero off, flies back (or onward) and returns
+   to waiting. With the debug flag set it draws its first route's paths. */
+void FUN_L03_002d3198(struct Moby *m) {
+    struct RailTaxiVars *v = (struct RailTaxiVars *)m->pvars;
+    Vec4 oldPos, oldRot, move;
+    struct RailPath *p;
+    s32 i;
+    s32 r;
+
+    FUN_L00_00266858(m, FUN_L03_002d30d8((u8 *)m));
+    if (D_L03_00161B04 != 0) {
+        for (i = 0; i < D_L03_001B05B0[v->out[0]]->count; i++) {
+            FUN_L01_00285768(&D_L03_001B05B0[v->out[0]]->pts[i], m, 4, 0x800000FF, 0x7F, 2, 0xFF, 0.333f);
+        }
+        for (i = 0; i < D_L03_001B05B0[v->back[0]]->count; i++) {
+            FUN_L01_00285768(&D_L03_001B05B0[v->back[0]]->pts[i], m, 4, 0x8000FF00, 0x7F, 2, 0xFF, 0.333f);
+        }
+        for (i = 0; i < D_L03_001B05B0[v->onward[0]]->count; i++) {
+            FUN_L01_00285768(&D_L03_001B05B0[v->onward[0]]->pts[i], m, 4, 0x80FF0000, 0x7F, 2, 0xFF, 0.333f);
+        }
+    }
+    qcopy(&oldPos, &m->pos);
+    qcopy(&oldRot, &m->rot);
+    switch (m->state) {
+    case 0:
+        if (v->out[0] != -1) {
+            qcopy_nc(&m->pos, &D_L03_001B05B0[v->out[0]]->pts[0]);
+            m->rot.z = taxi_atan2(D_L03_001B05B0[v->out[0]]->pts[1].f[0] - m->pos.x, D_L03_001B05B0[v->out[0]]->pts[1].f[1] - m->pos.y);
+        } else if (v->back[0] != -1) {
+            qcopy_nc(&m->pos, &D_L03_001B05B0[v->back[0]]->pts[0]);
+            m->rot.z = taxi_atan2(D_L03_001B05B0[v->back[0]]->pts[1].f[0] - m->pos.x, D_L03_001B05B0[v->back[0]]->pts[1].f[1] - m->pos.y);
+        }
+        m->unk32 = 0;
+        m->unk30 = 0xFF;
+        v->route = -1;
+        m->state = 1;
+        m->unk94 = 0;
+        if (D_L03_001BB330.collected[(s16)m->save_id] != 0 ||
+            (D_0014C190[D_0015ED84_d3198][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) & 1) {
+            taxi_kill(m);
+            return;
+        }
+        break;
+    case 1:
+        if (v->active == 0) {
+            break;
+        }
+        for (r = 0; r < 5; r++) {
+            if ((v->volume[r] != -1 || v->route == r) &&
+                (is_point_inside_clip_volume(&hero.motion.pos, v->volume[r]) || v->route == r)) {
+                m->unk94 = m->pclass->unk10;
+                if (v->out[r] != -1) {
+                    p = D_L03_001B05B0[v->out[r]];
+                    qcopy(&m->pos, &p->pts[0]);
+                    m->rot.z = taxi_atan2(p->pts[1].f[0] - m->pos.x, p->pts[1].f[1] - m->pos.y);
+                } else if (v->back[r] != -1) {
+                    p = D_L03_001B05B0[v->back[r]];
+                    qcopy(&m->pos, &p->pts[0]);
+                    m->rot.z = taxi_atan2(p->pts[1].f[0] - m->pos.x, p->pts[1].f[1] - m->pos.y);
+                }
+                m->unkBC = r;
+                m->state = 2;
+                m->unk32 = 0x80;
+                v->idx = 1;
+                v->speed = D_L03_00161B08 * D_0015ED6C;
+                v->route = -1;
+                break;
+            }
+        }
+        break;
+    case 2:
+        if (v->out[m->unkBC] == -1 || FUN_L03_002d3918(m, v->out[m->unkBC], &v->snd)) {
+            m->state = 3;
+            v->unkE4 = -1;
+        }
+        break;
+    case 3:
+        taxi_approach_angle(&m->rot.y, 0.0f, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * D_0015ED70,
+                            D_L03_00161B10 * DEG_TO_RAD * D_0015ED70, D_0015ED6C * 12.566371f);
+        taxi_approach_angle(&m->rot.x, 0.0f, &v->roll_vel, D_L03_00161B18 * DEG_TO_RAD * D_0015ED70,
+                            D_L03_00161B18 * DEG_TO_RAD * D_0015ED70, D_0015ED6C * 12.566371f);
+        if (hero.unk2FC == m && hero.unk30E.s == 0) {
+            FUN_L03_002d3100(m, v->help[m->unkBC]);
+            if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
+                FUN_L00_00233ee8(&m->pos, m->rot.z, 0);
+                m->state = 4;
+                v->idx = 1;
+            }
+        }
+        break;
+    case 4:
+        if (!FUN_L00_00233f38()) {
+            m->state = 5;
+        }
+        break;
+    case 5:
+        if (FUN_L01_00277fb8(m)) {
+            hero.unk1F2 = 4;
+            hero.unk1F4 = 4;
+        }
+        if (FUN_L03_002d3918(m, v->back[m->unkBC], &v->snd)) {
+            m->state = 6;
+        }
+        break;
+    case 6:
+        taxi_approach_angle(&m->rot.y, 0.0f, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * D_0015ED70,
+                            D_L03_00161B10 * DEG_TO_RAD * D_0015ED70, D_0015ED6C * 12.566371f);
+        taxi_approach_angle(&m->rot.x, 0.0f, &v->roll_vel, D_L03_00161B18 * DEG_TO_RAD * D_0015ED70,
+                            D_L03_00161B18 * DEG_TO_RAD * D_0015ED70, D_0015ED6C * 12.566371f);
+        if (v->onward[m->unkBC] != -1 && taxi_dist(&m->pos, &hero.motion.pos) > 15.0f) {
+            m->state = 7;
+            v->idx = 1;
+        } else if (v->onward[m->unkBC] == -1 && taxi_dist2(&m->pos, &hero.motion.pos) > 5.0f) {
+            m->state = 1;
+        }
+        break;
+    case 7:
+        if (FUN_L03_002d3918(m, v->onward[m->unkBC], &v->snd)) {
+            m->unk32 = 0;
+            m->state = 1;
+            m->unk94 = 0;
+        }
+        break;
+    }
+    FUN_L03_002d3c40(m);
+    taxi_vec_sub(&move, &m->pos, &oldPos);
+    FUN_L00_00260738(v->coll, &move, &oldRot, &m->rot);
+}
 
 /* Pvars of a moby flying along a rail path. */
 typedef struct {
