@@ -1216,7 +1216,50 @@ void FUN_L00_0020fea0(int i) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00210748.s", FUN_L00_00210748);
+#else
+#include "rnc/gameplay/entities/moby.h"
+extern void FUN_L00_00205168(void *);
+extern void FUN_L00_00257880(void *, int, int, int);
+extern s32 D_L00_0015F3F8;
+
+void FUN_L00_00210748(void) {
+    int i = 0;
+    do {
+        struct Hero *slot_hero = (struct Hero *)((char *)&hero + i * 0x50);
+        struct Moby *moby = slot_hero->items[0].moby;
+        if (moby == 0) {
+            FUN_L00_0020fea0(i);
+        } else {
+            if (slot_hero->items[0].state == 2) {
+                slot_hero->items[0].unk20++;
+                FUN_L00_0020fea0(i);
+                if (i == 0) {
+                    int j = 0;
+                    do {
+                        char *base = (char *)&hero + j * 0xb0;
+                        if (*(s16 *)(base + 0x1990) != -1) {
+                            *(s16 *)(base + 0x1992) = 5;
+                            FUN_L00_00205168(base + 0x18f0);
+                        }
+                        j++;
+                    } while (j < 3);
+                }
+                if ((moby->unk70 & 2) && moby->prev_seq == 0)
+                    FUN_L00_00257880(moby, 1, 0, 2);
+            } else if (slot_hero->items[0].state == 3) {
+                (*(u8 *)((char *)&slot_hero->items[0] + 0x1b))++;
+                if ((moby->unk70 & 2) || i == 1 || i == 0)
+                    FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
+            }
+            if (moby->state != 0xfe && moby->state != 0xfd && i != 6 && moby->update)
+                moby->update(moby);
+        }
+        i++;
+    } while (i < 7);
+}
+#endif /* NON_MATCHING */
 s32 FUN_L00_0020d568_u() __asm__("FUN_L00_0020d568");
 void FUN_L00_0020ea80();
 void FUN_L00_0020f580();
