@@ -60,8 +60,6 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
-extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
-extern char D_0013F350_s[] __asm__("D_0013F350");
 extern char D_0013E550[];
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -69,7 +67,6 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L01_002b9eb0(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
-    char *hero;
     char *path;
     float orig[4], delta[4], tmp[4];
     int on = 0;
@@ -78,14 +75,14 @@ void FUN_L01_002b9eb0(unsigned char *moby) {
     }
     path = D_L01_001B0930[*(int *)(data + 0xB4)];
     if (*(int *)(data + 0xCC) != -1) {
-        if (is_point_inside_clip_volume(D_0013F3D0_c, *(int *)(data + 0xCC)) == 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0xCC)) == 0) {
             moby[0x30] = 0xFF;
             *(int *)(moby + 0x94) = 0;
             *(unsigned short *)(moby + 0x34) |= 0x41;
             return;
         }
         if (*(int *)(data + 0xCC) != -1 &&
-            is_point_inside_clip_volume(D_0013F3D0_c, *(int *)(data + 0xCC))) {
+            is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0xCC))) {
             *(unsigned short *)(moby + 0x34) &= 0xFFBE;
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
             *(int *)(data + 0xCC) = -1;
@@ -93,7 +90,7 @@ void FUN_L01_002b9eb0(unsigned char *moby) {
     }
     if (*(int *)(data + 0xC0) != -1) {
         unsigned short id;
-        if (is_point_inside_clip_volume(D_0013F3D0_c, *(int *)(data + 0xC0)) ||
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0xC0)) ||
             D_L01_001BB6B0.collected[(short)(id = *(unsigned short *)(moby + 0xB2))] != 0 ||
             (D_0014C190[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
             if (*(int *)(data + 0xC0) != -1) {
@@ -137,8 +134,8 @@ void FUN_L01_002b9eb0(unsigned char *moby) {
         if (on) {
             float far;
             if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
-                (far = FUN_001f9b48(D_0013F3D0_c, path + *(int *)path * 16),
-                 FUN_001f9b48(D_0013F3D0_c, path + 0x10) < far)) {
+                (far = FUN_001f9b48(&hero.motion.pos, path + *(int *)path * 16),
+                 FUN_001f9b48(&hero.motion.pos, path + 0x10) < far)) {
                 moby[0xBC] = 2;
                 F(data, 0xAC) = -1.0f / FUN_001f96b0(F(data, 0xB0) * 60.0f);
                 *(short *)(data + 0xB8) = 0;
@@ -149,8 +146,8 @@ void FUN_L01_002b9eb0(unsigned char *moby) {
         if (on) {
             float near;
             if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
-                (near = FUN_001f9b48(D_0013F3D0_c, path + 0x10),
-                 FUN_001f9b48(D_0013F3D0_c, path + *(int *)path * 16) < near)) {
+                (near = FUN_001f9b48(&hero.motion.pos, path + 0x10),
+                 FUN_001f9b48(&hero.motion.pos, path + *(int *)path * 16) < near)) {
                 moby[0xBC] = 2;
                 F(data, 0xAC) = 1.0f / FUN_001f96b0(F(data, 0xB0) * 60.0f);
                 *(short *)(data + 0xB8) = 0;
@@ -159,15 +156,15 @@ void FUN_L01_002b9eb0(unsigned char *moby) {
         break;
     case 2:
         if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
-            char *g = D_0013F350_s;
-            *(short *)(g + 0x1F2) = 4;
-            *(short *)(g + 0x1F4) = 4;
+            struct Hero *g = &hero;
+            g->unk1F2 = 4;
+            g->unk1F4 = 4;
         }
         if (*(short *)(data + 0xBA) != 0 ||
             (F(data, 0xBC) < 0.0f &&
-             FUN_001f9b80((moby + 0x10), hero = ((char *)&D_0013F3D0_c)) < 2.83f &&
-             AbsoluteFloat(F(hero -= 0x80, 0x88) - F(moby, 0x18)) < 4.0f &&
-             F(moby, 0x18) - F(hero, 0x88) > 0.9f)) {
+             FUN_001f9b80((moby + 0x10), &hero.motion.pos) < 2.83f &&
+             AbsoluteFloat(hero.motion.pos.f[2] - F(moby, 0x18)) < 4.0f &&
+             F(moby, 0x18) - hero.motion.pos.f[2] > 0.9f)) {
             int r;
             if (*(short *)(data + 0xBA) == 0) {
                 *(short *)(data + 0xBA) = scale_game_frames(30);
@@ -234,7 +231,7 @@ void FUN_L01_002b9eb0(unsigned char *moby) {
     subtract_vector_xyz(delta, (moby + 0x10), orig);
     FUN_L00_00260738(data + 0x60, delta, moby + 0x40, moby + 0x40);
     if (!FUN_L01_00277fb8(moby)) {
-        if (2.0f < FUN_001f9b80((moby + 0x10), ((char *)&D_0013F3D0_c))) {
+        if (2.0f < FUN_001f9b80((moby + 0x10), &hero.motion.pos)) {
             if (*(short *)(data + 0xBA) == 0) {
                 *(short *)(data + 0xB8) = 1;
             }
