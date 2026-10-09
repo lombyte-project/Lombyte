@@ -447,7 +447,74 @@ s32 FUN_L00_002caf40(s32 arg0) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002caf70.s", FUN_L00_002caf70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cb418.s", FUN_L00_002cb418);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cbcc0.s", FUN_L00_002cbcc0);
+#else
+extern void FUN_00267a08_2cbcc0(void *) __asm__("FUN_L00_00267a08");
+extern f32 FUN_L00_00257be8_2cbcc0(f32, f32) __asm__("FUN_L00_00257be8");
+extern s32 FUN_L00_00257b90_2cbcc0(s32, s32) __asm__("FUN_L00_00257b90");
+extern s32 FUN_L00_00257b50_2cbcc0(s32) __asm__("FUN_L00_00257b50");
+extern s32 FUN_001fef20_2cbcc0(s32) __asm__("FUN_L00_001fef20");
+extern void FUN_001ff500_2cbcc0(void *, void *, f32) __asm__("FUN_L00_001ff500");
+extern void *FUN_0026dd20_2cbcc0(void *, void *, u32, s32, f32) __asm__("FUN_L00_0026dd20");
+extern u8 *FUN_0026d000_2cbcc0(void *, s32, void *, u32, f32, f32, f32, f32) __asm__("FUN_L00_0026d000");
+extern f32 D_0015ED6C_2cbcc0 __asm__("D_0015ED6C");
+extern f32 D_0015ED60_2cbcc0 __asm__("D_0015ED60");
+
+void FUN_L00_002cbcc0(u8 *m, s32 enabled)
+{
+    s32 i;
+    s32 j;
+    void **handle;
+    u8 *pos;
+    V4 vectors[2];
+    s32 lifetime;
+    s32 color;
+    s32 sign;
+    u8 *effect;
+
+    handle = (void **)(*(u8 **)(m + 0x78) + 0x2c);
+    for (i = 16; i >= 0; i--) {
+        if (*handle != 0)
+            FUN_00267a08_2cbcc0(*handle);
+        *handle++ = 0;
+    }
+    pos = m + 0x10;
+
+    if (enabled != 0) {
+        for (j = 4; j >= 0; j--) {
+            vectors[1].q = 0;
+            vectors[1].f[0] = FUN_L00_00257be8_2cbcc0(-1.0f, 1.0f);
+            vectors[1].f[1] = FUN_L00_00257be8_2cbcc0(-1.0f, 1.0f);
+            vectors[1].f[2] = FUN_L00_00257be8_2cbcc0(-1.0f, 1.0f);
+            vectors[0].q = vectors[1].q;
+            FUN_001ff500_2cbcc0(&vectors[1], &vectors[0],
+                FUN_L00_00257be8_2cbcc0(D_0015ED6C_2cbcc0 * 3.0f, D_0015ED6C_2cbcc0 * 6.0f));
+            lifetime = FUN_L00_00257b90_2cbcc0(FUN_001fef20_2cbcc0(10), FUN_001fef20_2cbcc0(15));
+            FUN_0026dd20_2cbcc0(pos, &vectors[1], 0x7f2f4f6f, lifetime, 35000.0f);
+        }
+    }
+
+    for (j = 2; j >= 0; j--) {
+        color = ((u32)FUN_L00_00257b90_2cbcc0(0x20, 0x80) << 24) | 0x606060;
+        sign = FUN_L00_00257b50_2cbcc0(2) ? -1 : 1;
+        vectors[0].q = 0;
+        vectors[0].f[2] = 1.0f;
+        vectors[0].f[3] = 1.0f;
+        vectors[0].f[2] = FUN_L00_00257be8_2cbcc0(0.01f, 0.025f) * D_0015ED60_2cbcc0;
+        effect = FUN_0026d000_2cbcc0(pos, sign, &vectors[0], color,
+            0.2f, 1.0f, 1.02f, 140000.0f);
+        if (effect != 0) {
+            *(s16 *)(effect + 0xa) = FUN_001fef20_2cbcc0(FUN_L00_00257b90_2cbcc0(50, 80));
+            *(s32 *)(effect + 0x24) = 2;
+            effect[0x2a] = color >> 24;
+            effect[0x2b] = effect[0xa];
+            if (FUN_L00_00257b50_2cbcc0(2))
+                effect[3] = 0x44;
+        }
+    }
+}
+#endif
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 extern float D_0015ED6C_2cbf68 __asm__("D_0015ED6C");
