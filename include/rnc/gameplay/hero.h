@@ -402,7 +402,10 @@ struct Hero {
     Vec4 unk6C0;                   /* 0x6C0: 0x60 bytes cleared by FillTransferWords */
     f32 unk6D0;                    /* 0x6D0 */
     f32 unk6D4;                    /* 0x6D4 */
-    u8 pad_6D8[0x48];
+    u8 pad_6D8[0x8];
+    s32 unk6E0[6];                 /* 0x6E0: one flag per pose, indexed by unk88F */
+    s32 unk6F8;                    /* 0x6F8: counts the flags set in unk6E0 */
+    u8 pad_6FC[0x24];
     Vec4 unk720;                   /* 0x720 */
     u8 pad_730[0x10];
     Vec4 unk740;                   /* 0x740 */
