@@ -1456,7 +1456,46 @@ int FUN_L15_002a2868(int idx, void *pos) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a29b8.s", FUN_L15_002a29b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a2bf0.s", FUN_L15_002a2bf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a3138.s", FUN_L15_002a3138);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a35d8.s", FUN_L15_002a35d8);
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/globals.h"
+
+typedef struct {
+    u8 pad[0x454];
+    u8 killed[1]; /* per spawn id: spawn slot + 2 */
+} KillFlags;
+typedef struct {
+    u8 pad0[0x74];
+    u8 active;
+    u8 pad75[0x13];
+    struct Moby *owner;
+} VoiceSlot;
+extern KillFlags D_L15_001BABD0 __attribute__((section(".data")));
+extern KillFlags D_L15_001BB830 __attribute__((section(".data")));
+extern u8 D_L15_0015FC88[8];
+extern u8 D_0014C050[][16] __attribute__((section(".data")));
+extern u8 D_0013E550[] __attribute__((section(".data")));
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+
+/* Marks the moby as killed in the level's spawn tables and releases the voice slot it still owns. */
+void FUN_L15_002a35d8(int addr) {
+    struct Moby *m = (struct Moby *)addr;
+    s32 slot;
+    m->unk94 = 0;
+    D_L15_001BABD0.killed[(s16)m->unkB2] = m->unkB0 + 2;
+    if (m->unkB0 == 0xFF || (D_L15_0015FC88[m->unkB0] != 0xFF && D_0014C050[current_level_index][m->unkB0] == 0xFF)) {
+        D_L15_001BB830.killed[(s16)m->unkB2] = m->unkB0 + 2;
+    }
+    if (m->unkBC != 0xFF) {
+        VoiceSlot *e;
+        slot = m->unkBC;
+        e = (VoiceSlot *)(D_0013E550 + slot * 0x70);
+        if (e->owner == m && e->active != 0) {
+            release_voice_slot(slot);
+        }
+    }
+    m->unkBC = 0xFF;
+    m->state = 2;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a6e68.s", FUN_L15_002a6e68);
 /* Builds a screen-space quad from the moby's offset and draws it. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A8850), where it is exact; names translated to the US level program. */
@@ -1593,7 +1632,6 @@ extern short D_L15_00161AC4_d __asm__("D_L15_00161AC4") __attribute__((sda));
 extern short D_L15_00161AC8_d __asm__("D_L15_00161AC8") __attribute__((sda));
 extern void FUN_L15_002cbd88_u(void) __asm__("FUN_L15_002cbd88");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 void FUN_L15_002cbc30(void *arg) {
     char *base = D_0013F350;
