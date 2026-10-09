@@ -3,7 +3,69 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002df520.s", FUN_L03_002df520);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002e01d0.s", FUN_L03_002e01d0);
+#include "rnc/math/vector.h"
+/* Cutscene state at D_L03_0016C960 (same layout as G_2da710 in entities/002c9eb8.c). */
+struct L03Cutscene {
+    char pad0[0x30];
+    int mode;
+    int t;
+    char pad38[0x140];
+    char *mobys[4];
+};
+
+extern int D_L03_0015F5C4;
+extern struct L03Cutscene D_L03_0016C960;
+extern void FUN_L00_002637f8(void *);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern int FUN_L00_00257b90(int, int);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
+
+/* Starts the cutscene, then during mode 3 (frames 900-10000) emits two particle beams from the listed moby. */
+void FUN_L03_002e01d0(char *m) {
+    char *moby;
+    float from[4];
+    float to[4];
+    Vec4 zero;
+
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0:
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        m[0x20] = 1;
+        break;
+    case 1:
+        if (D_L03_0015F5C4 != 2)
+            break;
+        if (D_L03_0016C960.mode == 4 || D_L03_0016C960.mode == 10) {
+            int v = D_L03_0016C960.mode;
+            int i;
+            i = 0;
+            if (v == 4)
+                i = 2;
+            else if (v == 10)
+                i = 0;
+            FUN_L00_002637f8(D_L03_0016C960.mobys[i]);
+        }
+        if (D_L03_0015F5C4 != 2 || D_L03_0016C960.mode != 3)
+            break;
+        if (D_L03_0016C960.t < scale_game_frames(900))
+            break;
+        if (D_L03_0016C960.t > scale_game_frames(10000))
+            break;
+        moby = D_L03_0016C960.mobys[3];
+        if (moby == 0)
+            break;
+        zero.q = 0;
+        FUN_L00_0024f7c8(moby, 0, from);
+        FUN_L00_0024f7c8(moby, 1, to);
+        FUN_L00_0026ced0(from, &zero, 0x7F7F7F7F, 0x7F7F7F, random_float_between(0.25f, 0.5f) * 210000.0f,
+                         scale_game_frames(FUN_L00_00257b90(45, 60)));
+        FUN_L00_0026ced0(to, &zero, 0x407F7F7F, 0x7F7F7F, random_float_between(0.25f, 0.5f) * 210000.0f,
+                         scale_game_frames(FUN_L00_00257b90(45, 60)));
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002eb7e0.s", FUN_L03_002eb7e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002eb978.s", FUN_L03_002eb978);
 #include "sda.h"
