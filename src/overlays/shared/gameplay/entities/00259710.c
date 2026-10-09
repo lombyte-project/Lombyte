@@ -543,7 +543,26 @@ int FUN_L00_0025b440(O_25b440 *o, S_25b440 *s) {
 f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t) {
     return a + (b - a) * t;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025b6b8.s", FUN_L00_0025b6b8);
+#else
+typedef union {
+    u128 q;
+    f32 f[4];
+} Vec4_25b6b8 __attribute__((aligned(16)));
+
+void FUN_L00_0025b6b8(f32 t, f32 *out, f32 *a, f32 *b) {
+    Vec4_25b6b8 left, right;
+    f32 *dest = out;
+    volatile f32 *rightPtr = right.f;
+    left.q = *(u128 *)a;
+    right.q = *(u128 *)b;
+    dest[0] = FUN_L00_0025b6a8(left.f[0], right.f[0], t);
+    dest[1] = FUN_L00_0025b6a8(left.f[1], right.f[1], t);
+    dest[2] = FUN_L00_0025b6a8(left.f[2], rightPtr[2], t);
+    dest[3] = FUN_L00_0025b6a8(left.f[3], rightPtr[3], t);
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
