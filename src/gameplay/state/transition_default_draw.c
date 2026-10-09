@@ -7,7 +7,7 @@ struct Globals_0016045C {
 };
 #include "rnc/globals.h"
 extern u8 D_00100AE0[];
-extern s32 D_0013E504[];
+#include "rnc/rendering/screen.h"
 extern s64 D_0015EF48;
 extern s32 D_0015EF50;
 extern s32 D_0015EF54;
@@ -109,7 +109,7 @@ void transition_default_draw(s32 *arg0) {
         if (n < 0) {
             n = 0;
         }
-        draw_textured_quad(0xA0, D_0013E504[0] - 0x50, 0xC0, 0x60, 0, 0, 0x100, 0x80,
+        draw_textured_quad(0xA0, screen_extent.height - 0x50, 0xC0, 0x60, 0, 0, 0x100, 0x80,
                            (long)(D_0015EF54 << 24 | 0x808080), get_effect_texture(n + 4));
     }
     do_gif_paging();

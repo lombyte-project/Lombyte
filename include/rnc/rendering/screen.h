@@ -2,6 +2,7 @@
 #define LOMBYTE_RNC_RENDERING_SCREEN_H
 
 #include "types.h"
+#include "sda.h"
 
 /*
  * Screen extent at D_0013E500, filled by init_view_context from the display
@@ -28,6 +29,6 @@ SCREEN_OFFSET_CHECK(left, 0x10);
 SCREEN_OFFSET_CHECK(bottom, 0x1C);
 #undef SCREEN_OFFSET_CHECK
 
-extern struct Screen D_0013E500;
+extern struct Screen screen_extent __asm__("D_0013E500") NOT_SDA;
 
 #endif /* LOMBYTE_RNC_RENDERING_SCREEN_H */

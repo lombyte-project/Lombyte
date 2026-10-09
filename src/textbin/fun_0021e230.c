@@ -43,7 +43,7 @@ struct PreviewClassResource {
 extern struct PreviewItemDefinition preview_item_definitions[] __asm__("D_001863D0");
 extern struct PreviewCamera preview_camera __asm__("D_00186F40");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
-extern s32 active_preview_resource_class[] __asm__("D_00140408");
+#include "rnc/gameplay/hero.h"
 extern s32 resource_request_state __asm__("D_0015FF50");
 extern void update_item_preview_transform() __asm__("FUN_0021e698");
 
@@ -119,8 +119,8 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             break;
         }
         if (load_class) {
-            if (active_preview_resource_class[0] != 0 &&
-                oclass != active_preview_resource_class[0]) {
+            if (hero.items[0].item_id != 0 &&
+                oclass != hero.items[0].item_id) {
                 func_001E9470(0, 0);
             }
             if (oclass != menu_system.unk11C) {

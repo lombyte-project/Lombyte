@@ -55,19 +55,19 @@ void set_pal_mode(void) {
     }
     /* Retail sign-extends the 16-bit dimensions before halving them. */
     display_width = fs_aa_buffer.display_width;
-    D_0013E500.width = display_width;
-    D_0013E500.half_width = display_width >> 1;
-    D_0013E500.half_height = fs_aa_buffer.display_height >> 1;
-    D_0013E500.bottom = (D_0013E500.half_height + 0x800) << 4;
-    D_0013E500.height = fs_aa_buffer.display_height;
-    D_0013E500.left = (0x800 - D_0013E500.half_width) << 4;
-    D_0013E500.right = (D_0013E500.half_width + 0x800) << 4;
-    D_0013E500.top = (0x800 - D_0013E500.half_height) << 4;
+    screen_extent.width = display_width;
+    screen_extent.half_width = display_width >> 1;
+    screen_extent.half_height = fs_aa_buffer.display_height >> 1;
+    screen_extent.bottom = (screen_extent.half_height + 0x800) << 4;
+    screen_extent.height = fs_aa_buffer.display_height;
+    screen_extent.left = (0x800 - screen_extent.half_width) << 4;
+    screen_extent.right = (screen_extent.half_width + 0x800) << 4;
+    screen_extent.top = (0x800 - screen_extent.half_height) << 4;
     FlushCache(0);
     func_00120558(0, 0);
     zbuf = (depth_buffer_address >> 13) | 0x1000000;
-    frame = (draw_buffer_address >> 13) | ((u64)(D_0013E500.width >> 6) << 16);
-    scissor = ((u64)(D_0013E500.width - 1) << 16) | ((u64)(D_0013E500.height - 1) << 48);
+    frame = (draw_buffer_address >> 13) | ((u64)(screen_extent.width >> 6) << 16);
+    scissor = ((u64)(screen_extent.width - 1) << 16) | ((u64)(screen_extent.height - 1) << 48);
     draw_environment.scissor1 = scissor;
     first_image_buffer_address = image_buffer_address;
     masked_depth_buffer_register = zbuf | ((u64)0x8000 << 17);
@@ -75,8 +75,8 @@ void set_pal_mode(void) {
     draw_environment.zbuf2 = zbuf;
     draw_environment.zbuf1 = zbuf;
     draw_environment.frame2 = draw_environment.frame1 = frame;
-    draw_environment.xyoffset2 = D_0013E500.left | ((u64)D_0013E500.top << 32);
-    draw_environment.xyoffset1 = D_0013E500.left | ((u64)D_0013E500.top << 32);
+    draw_environment.xyoffset2 = screen_extent.left | ((u64)screen_extent.top << 32);
+    draw_environment.xyoffset1 = screen_extent.left | ((u64)screen_extent.top << 32);
     depth_buffer_register = zbuf;
     draw_environment.scissor2 = scissor;
     FlushCache(0);

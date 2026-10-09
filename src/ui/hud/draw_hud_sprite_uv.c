@@ -28,9 +28,9 @@ void draw_hud_sprite_uv(s32 id, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 al
     q[3] = 0x156;
     q[4] = (u64)alpha << 24 | 0x7F7F7F;
     q[5] = u | ((u64)v << 16);
-    q[6] = (x + D_0013E500.left - 8) | ((u64)(y + D_0013E500.top - 8) << 16) | ((u64)hud->z << 32);
+    q[6] = (x + screen_extent.left - 8) | ((u64)(y + screen_extent.top - 8) << 16) | ((u64)hud->z << 32);
     q[7] = (u + tw) | ((u64)(v + th) << 16);
-    q[8] = (x + w + D_0013E500.left - 8) | ((u64)(y + h + D_0013E500.top - 8) << 16) |
+    q[8] = (x + w + screen_extent.left - 8) | ((u64)(y + h + screen_extent.top - 8) << 16) |
            ((u64)hud->z << 32);
     q[9] = 0;
     render_packet_cursor.tag += 5;

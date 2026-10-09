@@ -11,7 +11,7 @@ extern const float D_001602A4_f __asm__("D_001602A4") __attribute__((sda));
 extern short D_001602A4_s __asm__("D_001602A4");
 extern char D_001602A8[];
 extern int D_001E0888[];
-extern int D_0013E500[];
+#include "rnc/rendering/screen.h"
 extern int sprintf(char *, const char *, ...);
 extern void func_001F6CF8_c(int, int, long, char *, int) __asm__("func_001F6940");
 int setup_menu_display_text(char *menu) __asm__("FUN_0021ef78");
@@ -40,8 +40,8 @@ int setup_menu_display_text(char *menu) {
     }
     sprintf(buf, D_001602A8, func_001FE540_id(0x4F4F), count, func_001FE540_id(0x4F53),
             D_001E0888[level_map_selection.level]);
-    func_001F6CF8_c(*(int *)(menu + 0x20) - 0x10, (D_0013E500[1] >> 1) - 8, 0x80000000L, buf, -1);
-    func_001F6CF8_c(*(int *)(menu + 0x20) - 0x11, (D_0013E500[1] >> 1) - 9, 0x80FFA888L, buf, -1);
+    func_001F6CF8_c(*(int *)(menu + 0x20) - 0x10, (screen_extent.height >> 1) - 8, 0x80000000L, buf, -1);
+    func_001F6CF8_c(*(int *)(menu + 0x20) - 0x11, (screen_extent.height >> 1) - 9, 0x80FFA888L, buf, -1);
     do_gif_paging();
     if (0) {
         (void)D_001602A4_s;

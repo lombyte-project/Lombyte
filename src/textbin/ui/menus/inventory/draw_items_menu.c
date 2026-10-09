@@ -98,7 +98,7 @@ s32 draw_items_menu(ItemsMenu *menu) {
         }
         font_print_window_regular(&text_window, 0x8000C0C0L, text_buffer, -1);
         text_window.flags ^= 4;
-        text_window.anchor_y = (D_0013E500.height - text_window.rendered_height) >> 1;
+        text_window.anchor_y = (screen_extent.height - text_window.rendered_height) >> 1;
         font_print_window_regular(&text_window, 0x8000C0C0L, text_buffer, -1);
     }
     x = add_offset(D_001601B8, 0xC8);

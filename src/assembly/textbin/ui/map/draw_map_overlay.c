@@ -158,10 +158,10 @@ void draw_map_overlay(void) {
     packet_words[3] = 0x156;
     packet_words[4] = 0x80808080;
     packet_words[5] = 0;
-    packet_words[6] = ((x0 + D_0013E500.left) - 8) | ((u64)((y0 + D_0013E500.top) - 8) << 16) |
+    packet_words[6] = ((x0 + screen_extent.left) - 8) | ((u64)((y0 + screen_extent.top) - 8) << 16) |
                       ((u64)level_map_selection.z << 32);
     packet_words[7] = u | ((u64)v << 16);
-    packet_words[8] = ((x1 + D_0013E500.left) - 8) | ((u64)((y1 + D_0013E500.top) - 8) << 16) |
+    packet_words[8] = ((x1 + screen_extent.left) - 8) | ((u64)((y1 + screen_extent.top) - 8) << 16) |
                       ((u64)level_map_selection.z << 32);
     packet_words[9] = 0;
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x50);
@@ -185,10 +185,10 @@ void draw_map_overlay(void) {
     packet_words[3] = 0x156;
     packet_words[4] = 0x80808080;
     packet_words[5] = 0;
-    packet_words[6] = ((rx0 + D_0013E500.left) - 8) | ((u64)((ry0 + D_0013E500.top) - 8) << 16) |
+    packet_words[6] = ((rx0 + screen_extent.left) - 8) | ((u64)((ry0 + screen_extent.top) - 8) << 16) |
                       ((u64)level_map_selection.z << 32);
     packet_words[7] = 0x20002000;
-    packet_words[8] = ((rx1 + D_0013E500.left) - 8) | ((u64)((ry1 + D_0013E500.top) - 8) << 16) |
+    packet_words[8] = ((rx1 + screen_extent.left) - 8) | ((u64)((ry1 + screen_extent.top) - 8) << 16) |
                       ((u64)level_map_selection.z << 32);
     packet_words[9] = 0;
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x50);

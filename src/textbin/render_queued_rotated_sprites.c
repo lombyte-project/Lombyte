@@ -5,8 +5,8 @@
 #include "qcopy.h"
 #include "rnc/rendering/rotated_sprite_queue.h"
 
-extern s32 camera_secondary_mode[] __asm__("D_001413D4");
-extern s32 screen_offsets[] __asm__("D_0013E500");
+#include "rnc/gameplay/hero.h"
+#include "rnc/rendering/screen.h"
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void project_to_screen(f32 *, void *) __asm__("func_001F2070");
 extern void spawn_particle_burst(void *, f32, f32) __asm__("func_001EE008");
@@ -22,12 +22,12 @@ void render_queued_rotated_sprites(void) {
     f32 screen_position[4];
     s32 record_index;
 
-    if (camera_secondary_mode[0] == 0x72) {
+    if (hero.state.current == 0x72) {
         rotated_sprite_queue.count = 0;
     }
     if (rotated_sprite_queue.count != 0) {
-        screen_center[0] = convert_integer_to_float(screen_offsets[2]);
-        screen_center[1] = convert_integer_to_float(screen_offsets[3]);
+        screen_center[0] = convert_integer_to_float(screen_extent.half_width);
+        screen_center[1] = convert_integer_to_float(screen_extent.half_height);
         for (record_index = 0; record_index < rotated_sprite_queue.count; record_index++) {
             QueuedRotatedSprite *record = &rotated_sprite_queue.records[record_index];
             s32 resource_state;
@@ -45,9 +45,9 @@ void render_queued_rotated_sprites(void) {
             if (record->project_position != 0) {
                 project_to_screen(screen_position, record);
                 screen_position[0] =
-                    (screen_position[0] - convert_integer_to_float(screen_offsets[4])) * 0.0625f;
+                    (screen_position[0] - convert_integer_to_float(screen_extent.left)) * 0.0625f;
                 screen_position[1] =
-                    (screen_position[1] - convert_integer_to_float(screen_offsets[5])) * 0.0625f;
+                    (screen_position[1] - convert_integer_to_float(screen_extent.top)) * 0.0625f;
             } else {
                 qcopy(screen_position, screen_center);
             }

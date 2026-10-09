@@ -8,10 +8,6 @@ struct LevelRenderState {
     u8 pad_0[0x58];
     s32 mode;
 };
-struct LevelDisplayState {
-    u8 pad_0[0x4];
-    s32 screen_height;
-};
 struct LevelProjectionState {
     u8 pad_0[0xB0];
     f32 projection_scale;
@@ -19,7 +15,7 @@ struct LevelProjectionState {
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/gameplay/state/level_state.h"
 extern struct LevelRenderState level_render_state __asm__("D_0013E030");
-extern struct LevelDisplayState screen_offsets __asm__("D_0013E500");
+#include "rnc/rendering/screen.h"
 extern s32 game_frame_counter __asm__("D_0015F438");
 extern f32 sequence_fade __asm__("D_0015F43C");
 extern s32 D_0015F620;
@@ -50,8 +46,6 @@ extern void render_environment_mapped_object(s32) __asm__("func_002327A0");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
 
-extern struct LevelDisplayState D_0013E500_far __asm__("D_0013E500")
-    __attribute__((section(".data")));
 void render_level_frame(void) __asm__("FUN_0022f288");
 
 void render_level_frame(void) {
@@ -60,7 +54,7 @@ void render_level_frame(void) {
     f32 quad_extent;
     s32 overlay_alpha;
     f32 saved_projection_scale;
-    struct LevelDisplayState *display_state;
+    struct Screen *display_state;
     s64 texture;
     append_gif_transfer_packet();
     func_001F2260();
@@ -102,10 +96,10 @@ void render_level_frame(void) {
         vu1_add_g_sregister(0x47, 0x3004B);
         quad_extent = 272.0f;
         texture = get_effect_texture(2);
-        display_state = &D_0013E500_far;
-        draw_textured_quad(0x2C, display_state->screen_height - 0x60, 0x40, 0x40, 0, 0, 0x40, 0x40,
+        display_state = &screen_extent;
+        draw_textured_quad(0x2C, display_state->height - 0x60, 0x40, 0x40, 0, 0, 0x40, 0x40,
                            0x80808080, texture);
-        screen_y = (f32)((display_state->screen_height - 0x40) * 16);
+        screen_y = (f32)((display_state->height - 0x40) * 16);
         rotation_angle = ((game_frame_counter % 55) * (-6.2831855f)) / 55.0f;
         /* The frame counter contributes only the sprite angle modulo 55. */
         /* Retail passes the full texture value in a2 and the five floats in f12-f16. */
