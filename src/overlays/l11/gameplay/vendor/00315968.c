@@ -168,7 +168,53 @@ int FUN_L11_00318050(struct Moby *moby, void **out) {
     }
     return count;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003180a0.s", FUN_L11_003180a0);
+#else
+extern char D_L11_001B0EB0[];
+typedef u32 L11Quadword __attribute__((mode(TI), aligned(16)));
+
+void FUN_L11_003180a0(struct Moby *moby, int table_index) {
+    int group = *(short *)((char *)moby->pvars + 0xE4);
+    u16 *list = (u16 *)D_L11_001AC240[group];
+    char *base;
+    char *table;
+    int count = 0;
+    u32 count_accumulator = 0x10000;
+    short offset = 0;
+    int stride;
+    u16 entry;
+
+    if (list == 0)
+        return;
+    base = D_L11_0015FFD8;
+    do {
+        entry = *list;
+        if (*(short *)(base + ((entry & 0x7FFF) << 8) + 0xA6) == 0x527) {
+            count = count_accumulator >> 16;
+            count_accumulator += 0x10000;
+        }
+        list++;
+    } while ((int)((u32)entry << 16) >= 0);
+
+    table = *(char **)(D_L11_001B0EB0 + table_index * 4);
+    stride = (short)(*(int *)table / count);
+    list = (u16 *)D_L11_001AC240[group];
+    table += 0x10;
+    do {
+        char *listed = base + ((*list & 0x7FFF) << 8);
+        if (*(short *)(listed + 0xA6) == 0x527) {
+            char *data = *(char **)(listed + 0x78);
+            qcopy(listed + 0x10, table);
+            *(int *)(data + 0x64) = offset;
+            *(int *)(data + 0x68) = 0;
+            *(int *)(data + 0x60) = table_index;
+            offset = (short)(offset + stride);
+            table += stride * 0x10;
+        }
+    } while (*((short *)list++) >= 0);
+}
+#endif /* NON_MATCHING */
 
 #define NOT_SDA
 
