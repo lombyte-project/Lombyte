@@ -302,7 +302,114 @@ void FUN_L03_0029c9d0(struct Moby *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029caa8.s", FUN_L03_0029caa8);
+extern float D_0015ED6C;
+extern float FUN_001f9af0(void *);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern int FUN_L00_001fefc8(void *);
+extern void FUN_L00_0026ced0(void *, void *, int, int, int, float);
+extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
+extern void scale_vector_xyz(void *out, void *a, float s) __asm__("FUN_001f9a68");
+struct Moby;
+char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int a3, int a4, float f, float scale);
+
+/* Hit effects for the Kerwan train and turret classes: sparks or smoke puffs pushed along the hit velocity,
+ * with countdowns in the moby data (0x12E, 0x12F) limiting how often they spawn. */
+void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
+    float vel[4];
+    float *vp;
+    float pos[4];
+    float v[4];
+    char *data;
+    int i;
+    int j;
+    int k;
+    float a;
+    float b;
+    int color;
+    int color2;
+
+    data = *(char **)(moby + 0x78);
+    vp = vel;
+    *(OvlQuad *)vp = *(OvlQuad *)vel_in;
+    if (*(unsigned short *)(moby + 0x34) & 1) {
+        return;
+    }
+    switch (*(short *)(moby + 0xA6)) {
+    case 0x74:
+        if (quiet == 0) {
+            scale_vector_xyz(vp, vp, 0.35f);
+            for (i = 0; i < 2; i++) {
+                FUN_L00_0024f7c8(moby, i, pos);
+                a = random_angle_radians();
+                b = random_angle_radians();
+                build_spherical_offset(v, D_0015ED6C * 0.15f, a, b);
+                add_vector_xyz(v, v, vp);
+                FUN_L00_0026ced0(pos, v, 0x8040C0F0, 0x808080, FUN_001f96f8(20), 84000.0f);
+            }
+        }
+        break;
+    case 0x73:
+    case 0x75:
+    case 0x78:
+    case 0x84:
+        if (quiet == 0 && FUN_L00_001fefc8(data + 0x12E)) {
+            if (FUN_001f9af0(vp) < D_0015ED6C * 40.0f && FUN_001f9b48(moby + 0x10, D_L03_00166EC0) < 75.0f) {
+                scale_vector_xyz(vp, vp, 0.7f);
+                for (j = 0; j < 10; j++) {
+                    FUN_L00_0024f7c8(moby, 0, pos);
+                    a = random_angle_radians();
+                    b = random_angle_radians();
+                    build_spherical_offset(v, D_0015ED6C * 0.6f, a, b);
+                    add_vector_xyz(v, v, vp);
+                    FUN_L00_0026ced0(pos, v, 0x80808080, 0x808080, FUN_001f96f8(35), 105000.0f);
+                }
+            }
+            data[0x12E] = FUN_L00_00257b90(FUN_001f96f8(7), FUN_001f96f8(20));
+        }
+        break;
+    case 0x76:
+        if (quiet == 0 && FUN_L00_001fefc8(data + 0x12E)) {
+            if (FUN_001f9af0(vp) < D_0015ED6C * 40.0f && FUN_001f9b48(moby + 0x10, D_L03_00166EC0) < 90.0f) {
+                scale_vector_xyz(vp, vp, 0.5f);
+                for (k = 0; k < 15; k++) {
+                    FUN_L00_0024f7c8(moby, 0, pos);
+                    a = random_angle_radians();
+                    b = random_angle_radians();
+                    build_spherical_offset(v, D_0015ED6C * 1.2f, a, b);
+                    add_vector_xyz(v, v, vp);
+                    FUN_L00_0026ced0(pos, v, 0x80808080, 0x808080, FUN_001f96f8(45), 168000.0f);
+                }
+            }
+            data[0x12E] = FUN_L00_00257b90(FUN_001f96f8(7), FUN_001f96f8(20));
+        }
+        break;
+    case 0x4B:
+    case 0x77:
+        FUN_L00_001fefc8(data + 0x12F);
+        if (quiet != 0 && ((unsigned char *)data)[0x12F] == 0) {
+            break;
+        }
+        FUN_L00_001fefc8(data + 0x12E);
+        if (((unsigned char *)data)[0x12E] == 0 || ((unsigned char *)data)[0x12F] != 0) {
+            FUN_L00_0024f7c8(moby, 0, data + 0xF0);
+        }
+        if (((unsigned char *)data)[0x12E] != 0) {
+            break;
+        }
+        if (FUN_001f9af0(vp) < D_0015ED6C * 40.0f && FUN_001f9b48(moby + 0x10, D_L03_00166EC0) < 90.0f) {
+            color = 0xA040;
+            color2 = 0xA080;
+            if (*(short *)(moby + 0xA6) == 0x4B) {
+                color = 0x30A0;
+                color2 = 0x90A0;
+            }
+            FUN_L03_002bad40((struct Moby *)moby, (int)(data + 0xF0), color, color2, FUN_001f96f8(50), D_0015ED6C * 2.5f, 0.15f);
+            ((unsigned char *)data)[0x12F] = FUN_001f96f8(50);
+        }
+        data[0x12E] = FUN_001f96f8(13);
+        break;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029E1A8), where it is exact; names translated to the US level program. */
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
