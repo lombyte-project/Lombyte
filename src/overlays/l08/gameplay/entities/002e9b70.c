@@ -276,7 +276,89 @@ void FUN_L08_002ea398(char *m)
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002ea4c0.s", FUN_L08_002ea4c0);
+/* Pvars of a gate that swings with the progress of its driver moby. */
+typedef struct {
+    s32 driver;          /* 0x0: moby index whose pvars start with the 0..1 progress */
+    f32 open_deg;        /* 0x4: yaw at full progress, in degrees */
+    f32 shut_deg;        /* 0x8: yaw at zero progress, in degrees */
+    s32 flag;            /* 0xC: byte of D_0013D388 set when fully open */
+    Vec4 home;           /* 0x10: hinge position */
+    s32 voice;           /* 0x20: creak voice slot, -1 if none */
+} SwingGateVars;
+
+extern int D_L08_0015F5C4;
+/* Voice table entries are 0x70 bytes; the volume sits 0x80 past an entry's start. */
+typedef struct {
+    u8 pad0[0x80];
+    s32 volume;          /* 0x80 */
+} VoiceView;
+extern char D_0013E550[];
+extern u8 D_0013D388[];
+extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
+extern void FUN_001fa050(void *, void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern void FUN_L01_002a1968(s32, s32);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+
+/* Swings the gate to its driver's progress, fading a creak in while it
+ * moves and out when it stops, and latches its flag once fully open. */
+void FUN_L08_002ea4c0(struct Moby *moby) {
+    SwingGateVars *vars = (SwingGateVars *)moby->pvars;
+    f32 progress = *(f32 *)D_L08_0015FFD8[vars->driver].pvars;
+    Vec4 mat[4];
+    Vec4 off;
+    f32 yaw;
+
+    off.q = 0;
+    off.f[2] = 30.0f;
+    if (D_L08_0015F5C4 == 2) {
+        moby->unk31 = 0;
+        moby->flags |= 1;
+    } else {
+        moby->unk31 = 1;
+        moby->flags &= ~1;
+    }
+    if (moby->state == 0) {
+        moby->state = 1;
+        qcopy(&vars->home, &moby->pos);
+        return;
+    }
+    if (moby->state != 1)
+        return;
+    yaw = fast_subtract_rotations(vars->open_deg * DEG_TO_RAD, vars->shut_deg * DEG_TO_RAD);
+    yaw = fast_add_rotations(yaw * progress, vars->shut_deg * DEG_TO_RAD);
+    if (fast_difference_between_rotations(moby->rot.y, yaw) != 0.0f) {
+        moby->rot.y = yaw;
+        if (moby->oclass == 0x1D4) {
+            if (!FUN_L00_0028d8c0(moby, vars->voice)) {
+                vars->voice = allocate_voice_for_target_entry(0, 4, moby);
+                FUN_L01_002a1968(vars->voice, 1);
+            } else if (((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume < 0x400) {
+                FUN_L01_002a1968(vars->voice, ((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume +
+                                                  0x400 / scale_game_frames(60));
+            }
+        }
+    } else if (moby->oclass == 0x1D4 && FUN_L00_0028d8c0(moby, vars->voice)) {
+        if (((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume < 0x100) {
+            release_voice_slot(vars->voice);
+            vars->voice = -1;
+        } else {
+            FUN_L01_002a1968(vars->voice, ((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume -
+                                              0x400 / scale_game_frames(60));
+        }
+    }
+    FUN_001fa050(mat, &moby->rot);
+    FUN_001f9d20(&off, &off, mat);
+    add_vector_xyz(&moby->pos, &vars->home, &off);
+    if (progress == 1.0f && moby->oclass == 0x1D4) {
+        D_0013D388[vars->flag + 0x30] = 1;
+        moby->state = 2;
+        allocate_voice_for_target_entry(1, 0, moby);
+        if (moby->oclass == 0x1D4 && FUN_L00_0028d8c0(moby, vars->voice))
+            release_voice_slot(vars->voice);
+    }
+}
 /* Draws three rows of HUD elements with their colours. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
 
