@@ -31,4 +31,51 @@ unsigned char *FUN_L07_0029a2a0(char *pos, char *vec) {
     }
     return p;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0029b8d8.s", FUN_L07_0029b8d8);
+#else
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern int rand(void);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern unsigned char *D_L07_001B21F4 __asm__("D_L07_001B21F4") __attribute__((section(".data")));
+extern float D_0015ED60;
+extern float D_L07_00166E40[];
+
+unsigned char *FUN_L07_0029b8d8(void *m, short index, float amount, float factor) {
+    float v[4];
+    float t[4];
+    unsigned char *p = FUN_L00_002678b8(0x3d);
+    if (p != 0) {
+        unsigned char *q = p + 0x20;
+        *(void **)q = m;
+        *(short *)(p + 0xa) = scale_game_frames(0x50);
+        *(float *)(q + 4) = 0.0f;
+        *(float *)(q + 8) = random_float_between(*(float *)(q + 4), 1.0f);
+        {
+            int random_index = rand() & 15;
+            *(float *)(q + 0x14) = factor;
+            *(short *)(q + 0xc) = random_index;
+        }
+        p[8] = rand();
+        *(int *)(p + 4) = 0x7f7f7f;
+        p[9] = func_001FA898_r(4.0f) + 0x40;
+        p[3] = 0x48;
+        p[1] = 0;
+        *(float *)(p + 0xc) = amount;
+        p[2] = D_L07_001B21F4[*(short *)(q + 0xc)];
+        *(float *)(q + 0x10) = D_0015ED60 * 0.015f;
+        *(short *)(q + 0xe) = index;
+        p[8] = func_001FA898_r(*(float *)(q + 8) * 255.0f);
+        FUN_L00_0024f7c8(*(void **)q, *(short *)(q + 0xe), v);
+        subtract_vector_xyz(t, D_L07_00166E40, v);
+        normalize_vector_xyz(t, t, *(float *)(q + 0x14));
+        add_vector_xyz(p + 0x10, v, t);
+    }
+    return p;
+}
+#endif /* NON_MATCHING */
