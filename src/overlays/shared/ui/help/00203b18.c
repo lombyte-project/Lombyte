@@ -44,16 +44,16 @@ extern void FUN_L00_00232628(void);
 
 /* Resets hero fields 0x220..0x234, 0x22CB, 0x2084 and 0xA94, then calls 00232628 and 002223f8. */
 void FUN_L00_00204f80(void) {
-    char *g = ((char *)&hero);
-    *(float *)(g + 0x220) = 0.8f;
-    *(float *)(g + 0x234) = 0.45f;
-    *(float *)(g + 0x228) = 0.8f;
-    *(float *)(g + 0x224) = 0.7f;
-    *(float *)(g + 0x22C) = 0.7f;
-    *(unsigned char *)(g + 0x22CB) = 0;
-    *(int *)(g + 0x2084) = 0;
+    struct Hero *g = &hero;
+    g->unk220 = 0.8f;
+    g->unk234 = 0.45f;
+    g->unk228 = 0.8f;
+    g->unk224 = 0.7f;
+    g->unk22C = 0.7f;
+    g->unk22CB = 0;
+    g->state.current = 0;
     *(int *)(D_0014161B + 0x4D) = 0;
-    *(float *)(g + 0xA94) = 1.0f;
+    g->unkA94 = 1.0f;
     FUN_L00_00232628();
     hero_set_state(0, 1);
 }
@@ -258,17 +258,17 @@ extern int FUN_001f96f8(int);
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void FUN_L00_00205600(void) {
-    char *g = ((char *)&hero);
-    if (*(int *)(g + 0xFF0) == 0) {
-        if (*(int *)(g + 0xFF8) == 0) {
-            *(int *)(g + 0xFF4) = D_L00_0015F5CC + FUN_001f96f8(30);
-        } else if (D_L00_0015F5CC > *(int *)(g + 0xFF4)) {
+    struct Hero *g = &hero;
+    if (g->rand_timer.fired == 0) {
+        if (g->rand_timer.range == 0) {
+            g->rand_timer.deadline = D_L00_0015F5CC + FUN_001f96f8(30);
+        } else if (D_L00_0015F5CC > g->rand_timer.deadline) {
             int a, b;
-            *(int *)(g + 0xFF0) = 1;
+            g->rand_timer.fired = 1;
             a = FUN_001f96f8(20);
-            b = random_integer_below(*(int *)(g + 0xFF8));
-            *(int *)(g + 0xFF4) =
-                D_L00_0015F5CC + a + b + random_integer_below(*(int *)(g + 0xFF8));
+            b = random_integer_below(g->rand_timer.range);
+            g->rand_timer.deadline =
+                D_L00_0015F5CC + a + b + random_integer_below(g->rand_timer.range);
         }
     }
 }
@@ -604,7 +604,7 @@ void FUN_L00_002070d0(void) {
 
 void FUN_L00_002072c8(void) {
     int i, j;
-    char *g = (char *)&hero;
+    char *g = ((char *)&hero);
     for (i = 0; i < 7; i++) {
         for (j = 0; j < 2; j++) {
             char *e = g + i * 0x50;
@@ -1268,23 +1268,23 @@ void FUN_L00_00208b60(void) {
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
 f32 FUN_L00_00208f20(f32 a, f32 b, f32 c, f32 d) {
-    u8 *g = ((char *)&hero);
-    f32 thresh = *(f32 *)(g + 0xAA8);
+    struct Hero *g = &hero;
+    f32 thresh = g->unkAA8;
     f32 step;
     f32 negone = -1.0f;
 
     if (thresh < a) {
         step = a - thresh;
     } else {
-        s32 flag = *(s32 *)(g + 0xA9C);
+        s32 flag = g->unkA9C;
         f32 rate = 2.0f;
 
         if (flag == 0) {
-            rate = 0.5f / *(f32 *)(g + 0xA94);
+            rate = 0.5f / g->unkA94;
         }
 
         {
-            void *obj = *(void **)(g + 0x2080);
+            void *obj = ((void *)g->moby);
             s32 idx = *(u8 *)((u8 *)obj + 0x53);
             u8 *arr = *(u8 **)((u8 *)obj + 0x24);
             void *entry = *(void **)(arr + (idx << 2) + 0x48);
@@ -1294,11 +1294,11 @@ f32 FUN_L00_00208f20(f32 a, f32 b, f32 c, f32 d) {
     }
 
     if (b > 0.0f) {
-        u8 *g2 = ((char *)&hero);
-        f32 rate2 = *(f32 *)(g2 + 0xA94);
+        struct Hero *g2 = &hero;
+        f32 rate2 = g2->unkA94;
 
-        if (*(s32 *)(g2 + 0xA9C) != 0) {
-            void *obj2 = *(void **)(g2 + 0x2080);
+        if (g2->unkA9C != 0) {
+            void *obj2 = ((void *)g2->moby);
             rate2 = *(f32 *)(*(void **)((u8 *)obj2 + 0x6C));
         }
 
@@ -1308,10 +1308,10 @@ f32 FUN_L00_00208f20(f32 a, f32 b, f32 c, f32 d) {
             f32 result = target / speed;
 
             if (d == negone) {
-                *(f32 *)(g2 + 0xA90) = result;
+                g2->unkA90 = result;
                 return negone;
             }
-            return approach_value((f32 *)(g2 + 0xA90), result, d);
+            return approach_value((f32 *)(&g2->unkA90), result, d);
         }
     }
 
@@ -2402,7 +2402,7 @@ extern void FUN_L00_00210b30(void);
 
 /* Calls FUN_L00_00210b30 when the byte at 0x20A4 of ((char *)&hero) is 3. */
 void FUN_L00_0020b930(void) {
-    if (*(unsigned char *)(((char *)&hero) + 0x20A4) == 3) {
+    if (hero.unk20A4 == 3) {
         FUN_L00_00210b30();
     }
 }

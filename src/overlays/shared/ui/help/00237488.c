@@ -342,7 +342,7 @@ void FUN_L05_0023dc88(int i) {
         }
     }
     {
-        struct Hero *s = (struct Hero *)((char *)&hero + i * sizeof(struct HeroItemSlot));
+        struct Hero *s = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
         st = s->items[0].unk1C;
         if (st == 2) {
             changed = 0;
@@ -351,7 +351,7 @@ void FUN_L05_0023dc88(int i) {
             s->items[0].timer = s->items[0].timer_reload;
         }
     }
-    if (FUN_001f9770(((char *)&hero) + 0x10A8 + i * 0x50) == 0) {
+    if (FUN_001f9770(&hero.items[i].timer) == 0) {
         changed = 0;
     }
     if (changed) {
@@ -359,13 +359,13 @@ void FUN_L05_0023dc88(int i) {
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
         FUN_L00_0020a500();
         *(int *)((char *)g + 0x1010) = FUN_L00_00257b90(FUN_001f96f8(0x32), FUN_001f96f8(0x5A));
-        FUN_L00_0020fde0(*((int *)(((char *)&hero) + 0x20D4) + i));
-        FUN_L00_0020fd80(*((int *)(((char *)&hero) + 0x20D4) + i));
+        FUN_L00_0020fde0(*(hero.selected_item + i));
+        FUN_L00_0020fd80(*(hero.selected_item + i));
         if (g->unk20A8 != 0) {
             FUN_L00_0020e698();
         }
         if (i == 0) {
-            if (*(int *)(((char *)&hero) + 0x20D4) == 8) {
+            if (*hero.selected_item == 8) {
                 D_0015ED90 = 1;
             } else {
                 D_0015ED90 = 0;
@@ -398,7 +398,7 @@ void FUN_L05_0023dc88(int i) {
             }
         }
         {
-            struct Hero *e = (struct Hero *)((char *)&hero + i * sizeof(struct HeroItemSlot));
+            struct Hero *e = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
             e->items[0].state = 3;
         }
     }

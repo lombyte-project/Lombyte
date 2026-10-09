@@ -1038,247 +1038,247 @@ int hero_set_state(int a, int b) {
             }
         }
         {
-            char *u = (char *)&hero;
-            *(float *)(u + 0x410) = *(float *)(u + 0x88);
-            *(float *)(u + 0x4A0) = frame_time_sq * 29.7f;
-            *(int *)(u + 0x3E8) = -1;
-            *(float *)(u + 0x480) = frame_time_sq * 20.0f;
-            *(float *)(u + 0x484) = frame_time_sq * 11.0f;
-            *(short *)(u + 0x4A8) = *(unsigned char *)(u + 0x12E2);
-            *(short *)(u + 0x41E) = 0;
-            *(int *)(u + 0x418) = 0;
-            *(float *)(u + 0x428) = 0.0f;
-            *(float *)(u + 0x42C) = 0.0f;
-            *(short *)(u + 0x41C) = 0;
-            *(float *)(u + 0x490) = 2.5f;
-            *(short *)(u + 0x4A4) = 0;
-            *(short *)(u + 0x4AC) = 0;
-            *(unsigned char *)(u + 0x4AE) = 0;
-            *(unsigned char *)(u + 0x4AF) = 0;
-            *(short *)(u + 0x49A) = scale_game_frames(0x50);
-            *(short *)(u + 0x4AA) = scale_game_frames(0x46);
-            *(short *)(u + 0x4A6) = 0;
-            *(float *)(u + 0x494) = 0.5f;
-            *(float *)(u + 0x424) = frame_time * 5.7f;
-            *(float *)(u + 0x414) = frame_time * 15.0098314f;
-            *(float *)(u + 0x3F8) = 0.0f;
-            *(int *)(u + 0x22B4) = 0;
-            if (*(int *)(u + 0x2084) == 7) {
-                *(float *)(u + 0x430) = 1.47f;
-                *(int *)(u + 0x420) = scale_game_frames(5);
-                *(float *)(u + 0x434) = 0.6f;
-                *(float *)(u + 0x440) = 18.0f;
-                *(float *)(u + 0x444) = 30.0f;
-                *(float *)(u + 0x448) = 12.0f;
-                *(float *)(u + 0x48C) = 2.62f;
-                *(float *)(u + 0x488) = 1.47f;
-                *(short *)(u + 0x498) = scale_game_frames(0xF);
-                *(short *)(u + 0x4AC) = 1;
-                *(unsigned char *)(u + 0x4AE) = 1;
-                *(unsigned char *)(u + 0x4AF) = 1;
-                *(float *)(u + 0x3F8) = *(float *)(u + 0x4A0) * 1.17f;
-            } else if (*(int *)(u + 0x2084) == 0x12) {
-                *(float *)(u + 0x430) = 0.1f;
-                *(int *)(u + 0x420) = scale_game_frames(2);
-                *(float *)(u + 0x434) = 0.6f;
-                *(float *)(u + 0x440) = 18.0f;
-                *(float *)(u + 0x444) = 28.0f;
-                *(float *)(u + 0x448) = 14.0f;
-                *(float *)(u + 0x48C) = 0.2f;
-                *(float *)(u + 0x488) = 0.1f;
-                *(short *)(u + 0x498) = scale_game_frames(0xA);
-                if (*(float *)(u + 0x22A4) < 1.25f) {
-                    *(int *)(u + 0x420) = scale_game_frames(0xF);
-                    *(float *)(u + 0x488) = 1.95f;
-                    *(float *)(u + 0x48C) = 1.98f;
-                    *(float *)(u + 0x430) = 1.95f;
+            struct Hero *u = &hero;
+            u->unk410 = u->motion.pos.f[2];
+            u->unk4A0 = frame_time_sq * 29.7f;
+            u->unk3E8 = -1;
+            u->unk480 = frame_time_sq * 20.0f;
+            u->unk484 = frame_time_sq * 11.0f;
+            u->unk4A8 = u->unk12E2;
+            u->unk41E = 0;
+            u->unk418 = 0;
+            u->unk428 = 0.0f;
+            u->unk42C = 0.0f;
+            u->unk41C = 0;
+            u->unk490 = 2.5f;
+            u->unk4A4 = 0;
+            u->unk4AC = 0;
+            u->unk4AE = 0;
+            u->unk4AF = 0;
+            u->unk49A = scale_game_frames(0x50);
+            u->unk4AA = scale_game_frames(0x46);
+            u->unk4A6 = 0;
+            u->unk494 = 0.5f;
+            u->unk424 = frame_time * 5.7f;
+            u->unk414 = frame_time * 15.0098314f;
+            u->unk3F8 = 0.0f;
+            u->unk22B4 = 0;
+            if (u->state.current == 7) {
+                u->unk430 = 1.47f;
+                u->unk420 = scale_game_frames(5);
+                u->unk434 = 0.6f;
+                u->unk440 = 18.0f;
+                u->unk444 = 30.0f;
+                u->unk448 = 12.0f;
+                u->unk48C = 2.62f;
+                u->unk488 = 1.47f;
+                u->unk498 = scale_game_frames(0xF);
+                u->unk4AC = 1;
+                u->unk4AE = 1;
+                u->unk4AF = 1;
+                u->unk3F8 = u->unk4A0 * 1.17f;
+            } else if (u->state.current == 0x12) {
+                u->unk430 = 0.1f;
+                u->unk420 = scale_game_frames(2);
+                u->unk434 = 0.6f;
+                u->unk440 = 18.0f;
+                u->unk444 = 28.0f;
+                u->unk448 = 14.0f;
+                u->unk48C = 0.2f;
+                u->unk488 = 0.1f;
+                u->unk498 = scale_game_frames(0xA);
+                if (u->unk22A4 < 1.25f) {
+                    u->unk420 = scale_game_frames(0xF);
+                    u->unk488 = 1.95f;
+                    u->unk48C = 1.98f;
+                    u->unk430 = 1.95f;
                 } else {
-                    FUN_L00_00233b20((float *)(u + 0xE0), (float *)(u + 0xE0), 0.0f);
-                    *(short *)(u + 0x41C) = 1;
-                    *(int *)(u + 0x3D0) = scale_game_frames(2);
-                    *(int *)(u + 0x3D4) = scale_game_frames(0x23) + *(int *)(u + 0x3D0);
-                    *(float *)(u + 0x3D8) = 0.0f;
-                    *(float *)(u + 0x3DC) = 18.0f;
-                    *(int *)(u + 0x3E0) = scale_game_frames(0x28);
-                    *(char **)(u + 0x3E4) = D_L08_0017C760_e;
+                    FUN_L00_00233b20((float *)(&u->motion.velocity), (float *)(&u->motion.velocity), 0.0f);
+                    u->unk41C = 1;
+                    u->unk3D0 = scale_game_frames(2);
+                    u->unk3D4 = scale_game_frames(0x23) + u->unk3D0;
+                    u->unk3D8 = 0.0f;
+                    u->unk3DC = 18.0f;
+                    u->unk3E0 = scale_game_frames(0x28);
+                    u->unk3E4 = D_L08_0017C760_e;
                 }
                 {
                     struct Hero *w = &hero;
                     w->unk20A7 = 1;
                 }
-            } else if (*(int *)(u + 0x2084) == 0x29) {
-                *(float *)(u + 0x430) = 2.4f;
-                *(int *)(u + 0x420) = scale_game_frames(5);
-                *(float *)(u + 0x434) = 0.8f;
-                *(float *)(u + 0x440) = 18.0f;
-                *(float *)(u + 0x444) = 28.0f;
-                *(float *)(u + 0x448) = 14.0f;
-                *(float *)(u + 0x48C) = 2.45f;
-                *(float *)(u + 0x488) = 2.4f;
-                *(short *)(u + 0x498) = scale_game_frames(0x11);
-                *(int *)(u + 0x208C) = 0xF;
-                *(int *)(u + 0x5C4) = 0;
-                *(float *)(u + 0x4A0) = frame_time_sq * 27.0f;
-                if (*(unsigned char *)(u + 0x12E8) != 0) {
+            } else if (u->state.current == 0x29) {
+                u->unk430 = 2.4f;
+                u->unk420 = scale_game_frames(5);
+                u->unk434 = 0.8f;
+                u->unk440 = 18.0f;
+                u->unk444 = 28.0f;
+                u->unk448 = 14.0f;
+                u->unk48C = 2.45f;
+                u->unk488 = 2.4f;
+                u->unk498 = scale_game_frames(0x11);
+                u->state.control_mode = 0xF;
+                u->unk5C4 = 0;
+                u->unk4A0 = frame_time_sq * 27.0f;
+                if (u->unk12E8 != 0) {
                     float k = 4.7f;
                     *(u128 *)vec = 0;
-                    *(float *)(u + 0x430) = *(float *)(u + 0x430) + k;
-                    *(float *)(u + 0x488) = *(float *)(u + 0x488) + k;
-                    *(float *)(u + 0x48C) = *(float *)(u + 0x48C) + k;
-                    *(float *)(u + 0x4A0) = frame_time_sq * 14.0f;
+                    u->unk430 = u->unk430 + k;
+                    u->unk488 = u->unk488 + k;
+                    u->unk48C = u->unk48C + k;
+                    u->unk4A0 = frame_time_sq * 14.0f;
                     vec[0] = 331.0f;
                     vec[1] = 104.0f;
                     vec[2] = 145.0f;
-                    if (FUN_001f9b48(u + 0x80, vec) < 10.0f) {
+                    if (FUN_001f9b48(&u->motion.pos, vec) < 10.0f) {
                         k = 0.7f;
-                        *(float *)(u + 0x430) = *(float *)(u + 0x430) + k;
-                        *(float *)(u + 0x488) = *(float *)(u + 0x488) + k;
-                        *(float *)(u + 0x48C) = *(float *)(u + 0x48C) + k;
+                        u->unk430 = u->unk430 + k;
+                        u->unk488 = u->unk488 + k;
+                        u->unk48C = u->unk48C + k;
                     }
                 }
-            } else if (*(int *)(u + 0x2084) == 0x2A) {
-                *(float *)(u + 0x430) = 2.5f;
-                *(int *)(u + 0x420) = scale_game_frames(2);
-                *(float *)(u + 0x434) = 0.8f;
-                *(float *)(u + 0x440) = 18.0f;
-                *(float *)(u + 0x444) = 31.0f;
-                *(float *)(u + 0x448) = 14.0f;
-                *(float *)(u + 0x48C) = 2.55f;
-                *(float *)(u + 0x488) = 2.5f;
-                *(short *)(u + 0x498) = scale_game_frames(0xA);
-                *(int *)(u + 0x208C) = 0xF;
-                *(int *)(u + 0x5C4) = 0;
-                *(float *)(u + 0x4A0) = frame_time_sq * 24.0f;
-            } else if (*(int *)(u + 0x2084) == 9) {
-                *(float *)(u + 0x430) = 1.0f;
-                *(int *)(u + 0x420) = scale_game_frames(5);
-                *(float *)(u + 0x434) = 0.6f;
-                *(float *)(u + 0x440) = 18.0f;
-                *(float *)(u + 0x444) = 29.0f;
-                *(float *)(u + 0x448) = 11.0f;
-                *(float *)(u + 0x48C) = 2.7f;
-                *(float *)(u + 0x488) = 1.0f;
-                *(short *)(u + 0x498) = scale_game_frames(0xF);
-                *(float *)(u + 0x424) = frame_time * 5.7f;
-                *(short *)(u + 0x4AC) = 1;
-                *(unsigned char *)(u + 0x4AE) = 1;
-                *(unsigned char *)(u + 0x4AF) = 1;
-            } else if (*(int *)(u + 0x2084) == 0xA) {
-                *(float *)(u + 0x430) = 1.9f;
-                *(int *)(u + 0x420) = scale_game_frames(5);
-                *(float *)(u + 0x434) = 0.6f;
-                *(float *)(u + 0x440) = 18.0f;
-                *(float *)(u + 0x444) = 29.0f;
-                *(float *)(u + 0x448) = 10.0f;
-                *(float *)(u + 0x48C) = 1.95f;
-                *(float *)(u + 0x488) = 1.9f;
-                *(short *)(u + 0x498) = scale_game_frames(0xE);
-                *(unsigned char *)(u + 0x4AE) = 1;
-                *(float *)(u + 0x4A0) = frame_time_sq * 11.0f;
-                *(short *)(u + 0x49A) = scale_game_frames(0x78);
-                *(short *)(u + 0x4AA) = scale_game_frames(0x5A);
-                *(short *)(u + 0x4A6) = scale_game_frames(0x46);
-            } else if (*(int *)(u + 0x2084) == 0x10) {
-                char *x = u + 0x1670;
-                *(float *)(u + 0x430) = 1.5f;
-                *(int *)(u + 0x420) = scale_game_frames(5);
-                *(float *)(u + 0x434) = 0.8f;
-                *(float *)(u + 0x440) = 18.0f;
-                *(float *)(u + 0x444) = 30.0f;
-                *(float *)(u + 0x448) = 11.0f;
-                *(float *)(u + 0x48C) = 1.55f;
-                *(float *)(u + 0x488) = 1.5f;
-                *(short *)(u + 0x498) = scale_game_frames(1);
-                *(float *)(u + 0x430) = 0.4f;
-                *(float *)(u + 0x488) = 0.4f;
-                *(float *)(u + 0x48C) = 0.9f;
-                FUN_L00_00262500(*(int *)(u + 0x2080), x);
+            } else if (u->state.current == 0x2A) {
+                u->unk430 = 2.5f;
+                u->unk420 = scale_game_frames(2);
+                u->unk434 = 0.8f;
+                u->unk440 = 18.0f;
+                u->unk444 = 31.0f;
+                u->unk448 = 14.0f;
+                u->unk48C = 2.55f;
+                u->unk488 = 2.5f;
+                u->unk498 = scale_game_frames(0xA);
+                u->state.control_mode = 0xF;
+                u->unk5C4 = 0;
+                u->unk4A0 = frame_time_sq * 24.0f;
+            } else if (u->state.current == 9) {
+                u->unk430 = 1.0f;
+                u->unk420 = scale_game_frames(5);
+                u->unk434 = 0.6f;
+                u->unk440 = 18.0f;
+                u->unk444 = 29.0f;
+                u->unk448 = 11.0f;
+                u->unk48C = 2.7f;
+                u->unk488 = 1.0f;
+                u->unk498 = scale_game_frames(0xF);
+                u->unk424 = frame_time * 5.7f;
+                u->unk4AC = 1;
+                u->unk4AE = 1;
+                u->unk4AF = 1;
+            } else if (u->state.current == 0xA) {
+                u->unk430 = 1.9f;
+                u->unk420 = scale_game_frames(5);
+                u->unk434 = 0.6f;
+                u->unk440 = 18.0f;
+                u->unk444 = 29.0f;
+                u->unk448 = 10.0f;
+                u->unk48C = 1.95f;
+                u->unk488 = 1.9f;
+                u->unk498 = scale_game_frames(0xE);
+                u->unk4AE = 1;
+                u->unk4A0 = frame_time_sq * 11.0f;
+                u->unk49A = scale_game_frames(0x78);
+                u->unk4AA = scale_game_frames(0x5A);
+                u->unk4A6 = scale_game_frames(0x46);
+            } else if (u->state.current == 0x10) {
+                char *x = &u->trail.pos[0];
+                u->unk430 = 1.5f;
+                u->unk420 = scale_game_frames(5);
+                u->unk434 = 0.8f;
+                u->unk440 = 18.0f;
+                u->unk444 = 30.0f;
+                u->unk448 = 11.0f;
+                u->unk48C = 1.55f;
+                u->unk488 = 1.5f;
+                u->unk498 = scale_game_frames(1);
+                u->unk430 = 0.4f;
+                u->unk488 = 0.4f;
+                u->unk48C = 0.9f;
+                FUN_L00_00262500(((int)u->moby), x);
                 FUN_L00_00262528(x, 0x28, 2);
                 FUN_L00_00262528(x, 0x14, 4);
                 FUN_L00_00262528(x, 0xA, 6);
-                *(unsigned char *)(u + 0x4AE) = 1;
-                *(float *)(u + 0x3F4) = frame_time * 11.5f;
-                if (1.4f < *(float *)(u + 0x2DC))
-                    *(float *)(u + 0x3F4) = frame_time * 5.7f;
-                *(float *)(u + 0x4A0) = frame_time_sq * 8.5f;
-                *(float *)(u + 0x480) = frame_time_sq * 44.0f;
-                *(float *)(u + 0x484) = frame_time_sq * 50.0f;
-            } else if (*(int *)(u + 0x2084) == 0x1C) {
-                *(float *)(u + 0x430) = 2.0f;
-                *(int *)(u + 0x420) = scale_game_frames(0xA);
-                *(float *)(u + 0x434) = 0.85f;
-                *(float *)(u + 0x440) = 20.0f;
-                *(float *)(u + 0x444) = 29.0f;
-                *(float *)(u + 0x448) = 19.0f;
-                *(float *)(u + 0x48C) = 2.05f;
-                *(float *)(u + 0x488) = 2.0f;
-                *(short *)(u + 0x498) = scale_game_frames(1);
-                *(float *)(u + 0x494) = 1.0f;
-                *(float *)(u + 0x4A0) = frame_time_sq * 25.0f;
-                *(int *)(u + 0x45C) = 0;
-                *(unsigned char *)(u + 0x20A7) = 1;
-                *(unsigned char *)(u + 0x4AE) = 1;
-            } else if (*(int *)(u + 0x2084) == 0x11) {
-                *(float *)(u + 0x430) = 3.3f;
-                *(int *)(u + 0x420) = scale_game_frames(9);
-                *(float *)(u + 0x434) = 0.6f;
-                *(float *)(u + 0x440) = 12.0f;
-                *(float *)(u + 0x444) = 20.0f;
-                *(float *)(u + 0x448) = 10.0f;
-                *(float *)(u + 0x48C) = 3.35f;
-                *(float *)(u + 0x488) = 3.3f;
-                *(short *)(u + 0x498) = scale_game_frames(0xC);
-                *(short *)(u + 0x4AA) = scale_game_frames(0x50);
-                *(float *)(u + 0x4A0) = frame_time_sq * 29.0f;
-                qcopy(u + 0x470, u + 0x460);
-                *(int *)(u + 0x22B4) = 1;
-                *(unsigned char *)(u + 0x20A7) = 1;
-                *(short *)(u + 0x4AC) = 1;
-            } else if (*(int *)(u + 0x2084) == 0xD) {
-                char *x = u + 0x1670;
-                *(float *)(u + 0x430) = 0.1f;
-                *(int *)(u + 0x420) = scale_game_frames(9);
-                *(float *)(u + 0x434) = 0.6f;
-                *(float *)(u + 0x440) = 26.0f;
-                *(float *)(u + 0x444) = 38.0f;
-                *(float *)(u + 0x448) = 18.0f;
-                *(float *)(u + 0x48C) = 0.2f;
-                *(float *)(u + 0x488) = 0.1f;
-                *(short *)(u + 0x498) = scale_game_frames(0xE);
-                *(float *)(u + 0x490) = 4.5f;
-                *(short *)(u + 0x49A) = scale_game_frames(0x78);
-                *(float *)(u + 0x424) = frame_time * 1.9f;
-                FUN_L00_00262500(*(int *)(u + 0x2080), x);
+                u->unk4AE = 1;
+                u->unk3F4 = frame_time * 11.5f;
+                if (1.4f < u->ground_distance)
+                    u->unk3F4 = frame_time * 5.7f;
+                u->unk4A0 = frame_time_sq * 8.5f;
+                u->unk480 = frame_time_sq * 44.0f;
+                u->unk484 = frame_time_sq * 50.0f;
+            } else if (u->state.current == 0x1C) {
+                u->unk430 = 2.0f;
+                u->unk420 = scale_game_frames(0xA);
+                u->unk434 = 0.85f;
+                u->unk440 = 20.0f;
+                u->unk444 = 29.0f;
+                u->unk448 = 19.0f;
+                u->unk48C = 2.05f;
+                u->unk488 = 2.0f;
+                u->unk498 = scale_game_frames(1);
+                u->unk494 = 1.0f;
+                u->unk4A0 = frame_time_sq * 25.0f;
+                *(int *)&u->unk45C = 0;
+                u->unk20A7 = 1;
+                u->unk4AE = 1;
+            } else if (u->state.current == 0x11) {
+                u->unk430 = 3.3f;
+                u->unk420 = scale_game_frames(9);
+                u->unk434 = 0.6f;
+                u->unk440 = 12.0f;
+                u->unk444 = 20.0f;
+                u->unk448 = 10.0f;
+                u->unk48C = 3.35f;
+                u->unk488 = 3.3f;
+                u->unk498 = scale_game_frames(0xC);
+                u->unk4AA = scale_game_frames(0x50);
+                u->unk4A0 = frame_time_sq * 29.0f;
+                qcopy(&u->unk470, &u->unk460);
+                u->unk22B4 = 1;
+                u->unk20A7 = 1;
+                u->unk4AC = 1;
+            } else if (u->state.current == 0xD) {
+                char *x = &u->trail.pos[0];
+                u->unk430 = 0.1f;
+                u->unk420 = scale_game_frames(9);
+                u->unk434 = 0.6f;
+                u->unk440 = 26.0f;
+                u->unk444 = 38.0f;
+                u->unk448 = 18.0f;
+                u->unk48C = 0.2f;
+                u->unk488 = 0.1f;
+                u->unk498 = scale_game_frames(0xE);
+                u->unk490 = 4.5f;
+                u->unk49A = scale_game_frames(0x78);
+                u->unk424 = frame_time * 1.9f;
+                FUN_L00_00262500(((int)u->moby), x);
                 FUN_L00_00262528(x, 0x28, 3);
                 FUN_L00_00262528(x, 0x14, 5);
-                *(short *)(u + 0x41C) = 1;
-                *(int *)(u + 0x3D0) = scale_game_frames(9);
-                *(int *)(u + 0x3D4) = scale_game_frames(0x23) + *(int *)(u + 0x3D0);
-                *(float *)(u + 0x3DC) = 26.0f;
-                *(float *)(u + 0x3D8) = 0.0f;
-                *(int *)(u + 0x3E0) = scale_game_frames(0x2D);
-                *(char **)(u + 0x3E4) = D_L08_0017C720_e;
-                *(unsigned char *)(u + 0x4AE) = 1;
-            } else if (*(int *)(u + 0x2084) == 0xF) {
-                *(float *)(u + 0x430) = 1.9f;
-                *(int *)(u + 0x420) = scale_game_frames(9);
-                *(float *)(u + 0x434) = 0.6f;
-                *(float *)(u + 0x440) = 50.0f;
-                *(float *)(u + 0x444) = 64.0f;
-                *(float *)(u + 0x448) = 28.0f;
-                *(float *)(u + 0x48C) = 1.95f;
-                *(float *)(u + 0x488) = 1.9f;
-                *(short *)(u + 0x498) = scale_game_frames(5);
-                *(float *)(u + 0x490) = 4.5f;
-                *(short *)(u + 0x49A) = scale_game_frames(0x82);
-                *(float *)(u + 0x424) = frame_time * 3.3f;
-                *(short *)(u + 0x4A6) = scale_game_frames(0x55);
-                *(short *)(u + 0x1B0) = scale_game_frames(0x46);
-                *(short *)(u + 0x41C) = 1;
+                u->unk41C = 1;
+                u->unk3D0 = scale_game_frames(9);
+                u->unk3D4 = scale_game_frames(0x23) + u->unk3D0;
+                u->unk3DC = 26.0f;
+                u->unk3D8 = 0.0f;
+                u->unk3E0 = scale_game_frames(0x2D);
+                u->unk3E4 = D_L08_0017C720_e;
+                u->unk4AE = 1;
+            } else if (u->state.current == 0xF) {
+                u->unk430 = 1.9f;
+                u->unk420 = scale_game_frames(9);
+                u->unk434 = 0.6f;
+                u->unk440 = 50.0f;
+                u->unk444 = 64.0f;
+                u->unk448 = 28.0f;
+                u->unk48C = 1.95f;
+                u->unk488 = 1.9f;
+                u->unk498 = scale_game_frames(5);
+                u->unk490 = 4.5f;
+                u->unk49A = scale_game_frames(0x82);
+                u->unk424 = frame_time * 3.3f;
+                u->unk4A6 = scale_game_frames(0x55);
+                u->unk1B0 = scale_game_frames(0x46);
+                u->unk41C = 1;
                 if (D_0015ED80 != 0) {
-                    *(int *)(u + 0x3D0) = scale_game_frames(0x22);
+                    u->unk3D0 = scale_game_frames(0x22);
                 } else {
-                    *(int *)(u + 0x3D0) = scale_game_frames(0x23);
+                    u->unk3D0 = scale_game_frames(0x23);
                 }
                 {
                     struct Hero *w = &hero;
@@ -1289,42 +1289,42 @@ int hero_set_state(int a, int b) {
                     *(char **)&w->unk3E4 = (char *)&D_L08_0015F6E8;
                     w->unk4AE = 1;
                 }
-            } else if (*(int *)(u + 0x2084) == 0xE) {
+            } else if (u->state.current == 0xE) {
                 float v = 0.7f;
-                if (*(float *)(u + 0x2DC) < 2.0f)
-                    v = (2.5f - *(float *)(u + 0x2DC)) * 0.5f + 0.7f;
-                *(float *)(u + 0x434) = 0.6f;
-                *(float *)(u + 0x440) = 32.0f;
-                *(float *)(u + 0x444) = 43.0f;
-                *(float *)(u + 0x448) = 19.0f;
-                *(float *)(u + 0x48C) = v + 0.05f;
-                *(float *)(u + 0x430) = v;
-                *(float *)(u + 0x488) = v;
-                *(int *)(u + 0x420) = -1;
-                *(short *)(u + 0x498) = scale_game_frames(0xE);
-                *(float *)(u + 0x494) = 1.0f;
-                *(float *)(u + 0x424) = frame_time * 3.5f;
-                *(short *)(u + 0x4A6) = scale_game_frames(0x1E);
-            } else if (*(int *)(u + 0x2084) == 0xB) {
-                *(float *)(u + 0x430) = 3.2f;
-                *(int *)(u + 0x420) = scale_game_frames(5);
-                *(float *)(u + 0x434) = 0.6f;
-                *(float *)(u + 0x440) = 18.0f;
-                *(float *)(u + 0x444) = 31.0f;
-                *(float *)(u + 0x448) = 24.0f;
-                *(float *)(u + 0x48C) = 3.25f;
-                *(float *)(u + 0x488) = 3.2f;
-                *(short *)(u + 0x498) = scale_game_frames(0xE);
-                *(float *)(u + 0x490) = 4.5f;
-                *(short *)(u + 0x4AA) = scale_game_frames(0x32);
-                *(float *)(u + 0x494) = 1.0f;
-                *(float *)(u + 0x43C) = FUN_L00_0020d658(scale_game_frames(0xA));
-                *(int *)(u + 0x450) = FUN_L00_00221df8();
-                *(float *)(u + 0x438) = *(float *)(u + 0x180);
-                if (frame_time * 1.5f < *(float *)(u + 0x164)) {
-                    *(float *)(u + 0x454) = *(float *)(u + 0x164);
+                if (u->ground_distance < 2.0f)
+                    v = (2.5f - u->ground_distance) * 0.5f + 0.7f;
+                u->unk434 = 0.6f;
+                u->unk440 = 32.0f;
+                u->unk444 = 43.0f;
+                u->unk448 = 19.0f;
+                u->unk48C = v + 0.05f;
+                u->unk430 = v;
+                u->unk488 = v;
+                u->unk420 = -1;
+                u->unk498 = scale_game_frames(0xE);
+                u->unk494 = 1.0f;
+                u->unk424 = frame_time * 3.5f;
+                u->unk4A6 = scale_game_frames(0x1E);
+            } else if (u->state.current == 0xB) {
+                u->unk430 = 3.2f;
+                u->unk420 = scale_game_frames(5);
+                u->unk434 = 0.6f;
+                u->unk440 = 18.0f;
+                u->unk444 = 31.0f;
+                u->unk448 = 24.0f;
+                u->unk48C = 3.25f;
+                u->unk488 = 3.2f;
+                u->unk498 = scale_game_frames(0xE);
+                u->unk490 = 4.5f;
+                u->unk4AA = scale_game_frames(0x32);
+                u->unk494 = 1.0f;
+                u->unk43C = FUN_L00_0020d658(scale_game_frames(0xA));
+                u->unk450 = FUN_L00_00221df8();
+                u->unk438 = u->motion.unk180;
+                if (frame_time * 1.5f < u->motion.unk164) {
+                    u->unk454 = u->motion.unk164;
                 } else {
-                    *(float *)(u + 0x454) = 0.0f;
+                    u->unk454 = 0.0f;
                 }
                 {
                     struct Hero *w = &hero;

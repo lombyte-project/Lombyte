@@ -2392,7 +2392,7 @@ void FUN_L16_002d04a0(unsigned char *m) {
         }
         break;
     case 2:
-        g = (char *)&hero;
+        g = ((char *)&hero);
         if (*(int *)(g + 0x208C) != 22) {
             m[0x20] = 0;
             break;
@@ -2483,7 +2483,7 @@ void FUN_L16_002d04a0(unsigned char *m) {
             if (z < *(float *)(d + 0x268)) {
                 speed = D_0015ED6C * 19.0f;
             }
-            g = (char *)&hero;
+            g = ((char *)&hero);
             if (*(int *)(g + 0x894) < scale_game_frames(700)) {
                 speed += D_0015ED6C * 3.0f;
             }
