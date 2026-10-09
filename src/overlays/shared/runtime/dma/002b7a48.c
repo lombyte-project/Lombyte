@@ -21,4 +21,80 @@ void FUN_L01_002b7c68(float *in, int *out) {
     ((short *)out)[7] = func_001FA898_r(D_L01_001CAD00[0] * 1024.0f);
 }
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b7a48.s", FUN_L01_002b7a48);
+#else
+extern void memset(void *, int, unsigned int) __asm__("FUN_001153fc");
+
+typedef struct VuChainSlot {
+    char data[0x400];
+    char blocks[6][0x40];
+    char tail[0x18];
+    char pad[0x28];
+} VuChainSlot;
+
+typedef struct VuChainRecord {
+    char pad0[0x20];
+    int f20, f24;
+    float f28, f2C, f30, f34, f38, f3C, f40;
+    int f44;
+    char pad48[8];
+    VuChainSlot slots[3];
+} VuChainRecord;
+
+void FUN_L01_002b7a48(VuChainRecord *records, int count) {
+    int i = 0;
+    if (count <= 0) return;
+    do {
+        volatile int j = 2;
+        int offset = i * 0x1190;
+        VuChainRecord *record = (VuChainRecord *)((char *)records + offset);
+        int tail = offset + 0x5d0;
+        int block5 = offset + 0x590;
+        int block4 = offset + 0x550;
+        int block3 = offset + 0x510;
+        int block2 = offset + 0x4d0;
+        int block1 = offset + 0x490;
+        int block0 = offset + 0x450;
+        int data = offset + 0x50;
+        tail += (int)records;
+        block5 += (int)records;
+        block4 += (int)records;
+        block3 += (int)records;
+        block2 += (int)records;
+        block1 += (int)records;
+        block0 += (int)records;
+        data += (int)records;
+        do {
+            memset((void *)data, 0, 0x400);
+            data += 0x5c0;
+            j--;
+            memset((void *)block0, 0, 0x40);
+            block0 += 0x5c0;
+            memset((void *)block1, 0, 0x40);
+            block1 += 0x5c0;
+            memset((void *)block2, 0, 0x40);
+            block2 += 0x5c0;
+            memset((void *)block4, 0, 0x40);
+            block4 += 0x5c0;
+            memset((void *)block3, 0, 0x40);
+            block3 += 0x5c0;
+            memset((void *)block5, 0, 0x40);
+            block5 += 0x5c0;
+            memset((void *)tail, 0, 0x18);
+            tail += 0x5c0;
+        } while (j >= 0);
+        record->f30 = 1.57079637f;
+        record->f34 = -1.57079637f;
+        record->f38 = 0.02f;
+        record->f3C = -0.031f;
+        record->f40 = 0.03f;
+        record->f20 = 0;
+        record->f24 = 0;
+        record->f28 = -0.0016f;
+        record->f2C = -0.0016f;
+        record->f44 = 0;
+        i++;
+    } while (i < count);
+}
+#endif
