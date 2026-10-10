@@ -129,7 +129,7 @@ void FUN_L14_002df138(u8 *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002E0858), where it is exact; names translated to the US level program. */
 
-extern void FUN_L14_002df510(void *, void *, int, int, int);
+extern void FUN_L14_002df510(struct Moby *, void *, int, int, int);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void FUN_L14_002df458(struct Moby *m) {
@@ -143,7 +143,186 @@ void FUN_L14_002df458(struct Moby *m) {
     FUN_L14_002df510(m, d, 0x80, 0x40, 10);
     FUN_L14_002df510(m, d + 0xA0, 0x30, 0x10, 0x14);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002df510.s", FUN_L14_002df510);
+/* Draws a two-layer ribbon along a path of points: each segment builds a basis from the segment direction and
+ * the camera, sweeps two textured quads (an outer glow and an inner core) across it and, for the alpha-0x10
+ * variant, brightens the first and last segments. The texture scrolls with the moby's pvars+0x1EC. */
+#include "qcopy.h"
+typedef int u128_df510 __attribute__((mode(TI)));
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V_DF510;
+typedef struct {
+    V_DF510 v[4];
+    int col[4];
+    float uv[4][2];
+    long r70;
+    long tex;
+    long r80;
+    long r88;
+} Q_DF510;
+extern char D_L14_001674C0[];
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern f32 fast_cos_df510(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin_df510(f32) __asm__("FUN_001f9de0");
+extern void euler_matrix_df510(void *, void *) __asm__("FUN_001fa050");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern float FUN_L00_00257e20(float, float, float, float, float);
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
+
+void FUN_L14_002df510(struct Moby *m, void *path, int outer_alpha, int inner_alpha, int n) {
+    V_DF510 *pts = (V_DF510 *)path;
+    Q_DF510 q[2];
+    V_DF510 w[2];
+    V_DF510 t;
+    V_DF510 mat[4];
+    V_DF510 wm[4];
+    V_DF510 p[2];
+    char *d = (char *)m->pvars;
+    int c;
+    int i;
+
+    q[0].tex = get_effect_texture(0x2D);
+    q[0].r88 = 0x8000000048L;
+    q[0].r80 = 0xFF9000000260L;
+    q[0].r70 = 0;
+    q[0].col[0] = q[0].col[1] = q[0].col[2] = q[0].col[3] = (outer_alpha << 24) | 0x7F7F7F;
+    q[1].tex = get_effect_texture(0x2C);
+    c = (inner_alpha << 24) | 0x7F4040;
+    q[1].col[3] = c;
+    q[1].col[2] = c;
+    q[1].col[1] = c;
+    q[1].col[0] = c;
+    q[1].r88 = q[0].r88;
+    q[1].r80 = q[0].r80;
+    q[1].r70 = q[0].r70;
+    q[1].uv[0][0] = 1.0f;
+    q[1].uv[0][1] = 0.0f;
+    q[1].uv[1][0] = 1.0f;
+    q[1].uv[1][1] = 1.0f;
+    q[1].uv[2][0] = 0.0f;
+    q[1].uv[2][1] = 0.0f;
+    q[1].uv[3][0] = 0.0f;
+    q[1].uv[3][1] = 1.0f;
+    q[0].uv[0][0] = *(float *)(d + 0x1EC) + 0.0f;
+    q[0].uv[0][1] = 0.0f;
+    q[0].uv[1][0] = *(float *)(d + 0x1EC) + 0.0f;
+    q[0].uv[1][1] = 1.0f;
+    q[0].uv[2][0] = *(float *)(d + 0x1EC) + 1.0f;
+    q[0].uv[2][1] = 0.0f;
+    q[0].uv[3][0] = *(float *)(d + 0x1EC) + 1.0f;
+    q[0].uv[3][1] = 1.0f;
+    *(u128_df510 *)&w[0] = 0;
+    w[0].w = 1.0f;
+    *(u128_df510 *)&w[1] = 0;
+    w[0].z = 0.2f;
+    w[1].z = 0.4f;
+    w[1].w = 1.0f;
+    t.x = fast_cos_df510(m->rot.z);
+    t.y = fast_sin_df510(m->rot.z);
+    t.z = 0.0f;
+    qcopy(&mat[0], &t);
+    subtract_vector_xyz_c2(&mat[1], D_L14_001674C0, &m->pos);
+    scale_vector_xyz(&mat[1], &mat[1], 1.0f);
+    cross_vectors_xyz(&mat[2], &mat[1], &mat[0]);
+    normalize_vector_xyz(&mat[2], &mat[2], 1.0f);
+    cross_vectors_xyz(&mat[0], &mat[2], &mat[1]);
+    qcopy(&mat[3], &m->pos);
+    euler_matrix_df510(&wm[0], &m->rot);
+    qcopy(&wm[3], &m->pos);
+    qcopy(&q[0].v[0], &w[0]);
+    scale_vector_xyz(&q[0].v[1], &q[0].v[0], -1.0f);
+    qcopy(&q[1].v[0], &w[1]);
+    scale_vector_xyz(&q[1].v[1], &q[1].v[0], -1.0f);
+    transform_vector(&p[0], &pts[0], &wm[0]);
+    transform_vector(&p[1], &pts[1], &wm[0]);
+    subtract_vector_xyz_c2(&mat[0], &p[1], &p[0]);
+    normalize_vector_xyz(&mat[0], &mat[0], 1.0f);
+    subtract_vector_xyz_c2(&mat[1], D_L14_001674C0, &p[0]);
+    cross_vectors_xyz(&mat[2], &mat[1], &mat[0]);
+    normalize_vector_xyz(&mat[2], &mat[2], 1.0f);
+    cross_vectors_xyz(&mat[1], &mat[0], &mat[2]);
+    qcopy(&mat[3], &p[0]);
+    transform_vector(&q[0].v[0], &q[0].v[0], &mat[0]);
+    transform_vector(&q[0].v[1], &q[0].v[1], &mat[0]);
+    transform_vector(&q[1].v[0], &q[1].v[0], &mat[0]);
+    transform_vector(&q[1].v[1], &q[1].v[1], &mat[0]);
+    for (i = 1; i < n; i++) {
+        float f;
+        qcopy(&q[0].v[2], &w[0]);
+        scale_vector_xyz(&q[0].v[3], &q[0].v[2], -1.0f);
+        qcopy(&q[1].v[2], &w[1]);
+        scale_vector_xyz(&q[1].v[3], &q[1].v[2], -1.0f);
+        if (i == n - 1) {
+            transform_vector(&mat[3], &pts[i], &wm[0]);
+        } else {
+            transform_vector(&p[0], &pts[i], &wm[0]);
+            transform_vector(&p[1], &pts[i + 1], &wm[0]);
+            subtract_vector_xyz_c2(&mat[0], &p[1], &p[0]);
+            normalize_vector_xyz(&mat[0], &mat[0], 1.0f);
+            subtract_vector_xyz_c2(&mat[1], D_L14_001674C0, &p[0]);
+            cross_vectors_xyz(&mat[2], &mat[1], &mat[0]);
+            normalize_vector_xyz(&mat[2], &mat[2], 1.0f);
+            cross_vectors_xyz(&mat[1], &mat[0], &mat[2]);
+            qcopy(&mat[3], &p[0]);
+        }
+        transform_vector(&q[0].v[2], &q[0].v[2], &mat[0]);
+        transform_vector(&q[0].v[3], &q[0].v[3], &mat[0]);
+        transform_vector(&q[1].v[2], &q[1].v[2], &mat[0]);
+        transform_vector(&q[1].v[3], &q[1].v[3], &mat[0]);
+        if (i == 1 && inner_alpha == 0x10) {
+            int c0 = q[0].col[0];
+            int c1 = q[1].col[0];
+            q[0].col[0] = q[0].col[1] = 0xFFFFFF;
+            q[1].col[0] = q[1].col[1] = 0x7F4040;
+            draw_geometry_quad(&q[0], 0, 0);
+            draw_geometry_quad(&q[1], 0, 0);
+            q[0].col[3] = c0;
+            q[0].col[2] = c0;
+            q[0].col[1] = c0;
+            q[0].col[0] = c0;
+            q[1].col[3] = c1;
+            q[1].col[2] = c1;
+            q[1].col[1] = c1;
+            q[1].col[0] = c1;
+        } else if (i == n - 2 && inner_alpha == 0x10) {
+            int c0 = q[0].col[2];
+            int c1 = q[1].col[2];
+            q[0].col[2] = q[0].col[3] = 0xFFFFFF;
+            q[1].col[2] = q[1].col[3] = 0x7F4040;
+            draw_geometry_quad(&q[0], 0, 0);
+            draw_geometry_quad(&q[1], 0, 0);
+            q[0].col[3] = c0;
+            q[0].col[2] = c0;
+            q[0].col[1] = c0;
+            q[0].col[0] = c0;
+            q[1].col[3] = c1;
+            q[1].col[2] = c1;
+            q[1].col[1] = c1;
+            q[1].col[0] = c1;
+        } else {
+            draw_geometry_quad(&q[0], 0, 0);
+            draw_geometry_quad(&q[1], 0, 0);
+        }
+        qcopy(&q[0].v[0], &q[0].v[2]);
+        qcopy(&q[0].v[1], &q[0].v[3]);
+        qcopy(&q[1].v[0], &q[1].v[2]);
+        qcopy(&q[1].v[1], &q[1].v[3]);
+        f = FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(i) / convert_integer_to_float(n)) * 0.0f + 0.2f;
+        w[0].z = f;
+        w[1].z = 2.0f * f;
+        q[0].uv[0][0] = *(float *)(d + 0x1EC) + 0.0f;
+        q[0].uv[0][1] = 0.0f;
+        q[0].uv[1][0] = *(float *)(d + 0x1EC) + 0.0f;
+        q[0].uv[1][1] = 1.0f;
+        q[0].uv[2][0] = *(float *)(d + 0x1EC) + 1.0f;
+        q[0].uv[2][1] = 0.0f;
+        q[0].uv[3][0] = *(float *)(d + 0x1EC) + 1.0f;
+        q[0].uv[3][1] = 1.0f;
+    }
+}
 extern s32 is_point_inside_clip_volume(u8 *base, s32 arg) __asm__("FUN_00214720");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_00259a88(s32, void *);
