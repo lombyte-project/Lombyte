@@ -429,7 +429,53 @@ unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, fl
     }
     return m;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002721f0.s", FUN_L00_002721f0);
+#else
+extern float FUN_001fa6c0_2721f0(int) __asm__("FUN_001fa6c0");
+extern int FUN_001fa6d0_2721f0(float) __asm__("FUN_001fa6d0");
+extern void FUN_001f9a10_2721f0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int FUN_001f9770_2721f0(void *) __asm__("FUN_001f9770");
+extern void FUN_L00_00267a08_2721f0(void *) __asm__("FUN_L00_00267a08");
+
+void FUN_L00_002721f0(unsigned char *p) {
+    unsigned char *q = p + 0x20;
+    float *r;
+    struct { float x, y, z, w; } v;
+    float t;
+    float a;
+    unsigned char alpha;
+    p[8] += q[0xA];
+    if (*(short *)(q + 8) - *(short *)(p + 0xA) < 6) {
+        t = (float)(*(short *)(q + 8) - *(short *)(p + 0xA)) / 5.0f;
+        *(float *)(p + 0xC) = *(float *)(q + 4) +
+            ((*(float *)q + *(float *)(q + 4)) * 0.5f - *(float *)(q + 4)) * t;
+        alpha = q[0xB];
+        a = (float)alpha + (float)((alpha >> 1) - alpha) * t;
+    } else {
+        t = (float)*(short *)(p + 0xA) / FUN_001fa6c0_2721f0(*(short *)(q + 8) - 6);
+        *(float *)(p + 0xC) = *(float *)q +
+            ((*(float *)q + *(float *)(q + 4)) * 0.5f - *(float *)q) * t;
+        a = (float)(q[0xB] >> 1) * t + 0.0f;
+    }
+    *(unsigned int *)(p + 4) = (FUN_001fa6d0_2721f0(a) << 24) |
+                                (*(unsigned int *)(p + 4) & 0xFFFFFF);
+    r = (float *)(q + 0xC);
+    v.x = r[0];
+    v.y = r[1];
+    v.z = r[2];
+    v.w = 0.0f;
+    FUN_001f9a10_2721f0(p + 0x10, p + 0x10, &v);
+    *(float *)(q + 0x14) -= *(float *)(q + 0x18);
+    if (*(float *)(p + 0x10) < 2.0f || 1021.0f < *(float *)(p + 0x10) ||
+        *(float *)(p + 0x14) < 2.0f || 1021.0f < *(float *)(p + 0x14) ||
+        *(float *)(p + 0x18) < 2.0f || 1021.0f < *(float *)(p + 0x18)) {
+        FUN_L00_00267a08_2721f0(p);
+    } else if (FUN_001f9770_2721f0(p + 0xA)) {
+        FUN_L00_00267a08_2721f0(p);
+    }
+}
+#endif
 typedef unsigned int u128_272438 __attribute__((mode(TI), aligned(16)));
 extern unsigned char D_L00_00177F00_272438[] __asm__("D_L00_00177F00");
 void FUN_L00_00262360_272438(int, float *, float *, void *, float,
