@@ -1087,7 +1087,79 @@ int FUN_L11_0030a480(struct Moby *moby) {
     }
     return 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a500.s", FUN_L11_0030a500);
+extern void FUN_0020cb10(struct Moby *, int, void *);
+extern void FUN_L00_001fff28(void *, int, float);
+extern void FUN_L00_0024f7c8(struct Moby *, int, float *);
+extern float FUN_L00_00257c48(float, float);
+extern void FUN_L00_0026f080(float *, float *, float, float);
+extern float fast_cos_a500(float) __asm__("FUN_001f9dc8");
+extern float fast_sin_a500(float) __asm__("FUN_001f9de0");
+extern int D_L11_0015F5CC;
+
+struct PartA500 {
+    u8 unk0;
+    u8 active;
+    u8 pad2[0xE];
+    u8 joint[0x30];
+};
+
+struct DataA500 {
+    u8 pad0[0xF0];
+    float angle[4];
+    struct PartA500 parts[4];
+};
+
+void FUN_L11_0030a500(struct Moby *moby) {
+    struct DataA500 *d = (struct DataA500 *)moby->pvars;
+    float base[4];
+    float pos[4];
+    float vel[4];
+    float speed;
+    float step;
+    float heading;
+    int i;
+    int n;
+    int j;
+    int k;
+    float life;
+
+    for (i = 0; i < 4; i++) {
+        if (!((u8 *)d)[i * 0x40 + 0x101])
+            FUN_0020cb10(moby, i, &d->parts[i]);
+        step = frame_time * 12.217304f;
+        if (moby->state == 1)
+            step = frame_time * 2.6179938f;
+        if (((u8 *)d)[i * 0x40 + 0x101]) {
+            d->angle[i] = fast_add_rotations(d->angle[i], step);
+            FUN_L00_001fff28(d->parts[i].joint, 0, d->angle[i]);
+        }
+    }
+    if (FUN_001f9b80(&moby->pos, D_L11_001677C0) > 38.0f)
+        return;
+    if (moby->state == 1 && (D_L11_0015F5CC & 1))
+        return;
+    if (!(moby->pos.z < 224.5f))
+        return;
+    for (j = 0; j < 4; j++) {
+        FUN_L00_0024f7c8(moby, j, base);
+        n = moby->state == 1 ? 1 : 2;
+        for (k = 0; k < n; k++) {
+            pos[0] = base[0] + FUN_L00_00257c48(0.0f, 0.3f);
+            pos[1] = base[1] + FUN_L00_00257c48(0.0f, 0.3f);
+            pos[2] = base[2] + FUN_L00_00257c48(0.0f, 0.3f);
+            heading = fast_add_rotations(moby->rot.z, FUN_L00_00257c48(0.0f, 0.122173049f) + 3.1415927f);
+            speed = random_float_between(2.0f, 5.0f) * frame_time;
+            if (moby->state == 1)
+                speed *= 0.4f;
+            vel[0] = fast_cos_a500(heading) * speed;
+            vel[1] = fast_sin_a500(heading) * speed;
+            vel[2] = 0.0f;
+            vel[2] = random_float_between(-2.0f, 2.0f) * frame_time;
+            life = random_float_between(6300.0f, 14700.0f);
+            FUN_L00_0026f080(pos, vel, life, 222.5f);
+        }
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC00), where it is exact; names translated to the US level program. */
 
 int FUN_L11_0030a830(struct Moby *arg) {
