@@ -166,7 +166,7 @@ struct HeroHealth {
  * fields, zeroes state.step and state_timer and clears trail.
  */
 struct Hero {
-    u8 pad_0[0x40];
+    f32 unk0[16];                  /* 0x00: matrix */
     f32 unk40[16];                 /* 0x40 */
     struct HeroMotion motion;      /* 0x80 */
     f32 unk190;                    /* 0x190 */
@@ -553,7 +553,7 @@ struct Hero {
     s32 unkAA0;                    /* 0xAA0 */
     s32 unkAA4;                    /* 0xAA4 */
     f32 unkAA8;                    /* 0xAA8 */
-    u8 pad_AAC[0x4];
+    f32 unkAAC;                    /* 0xAAC */
     s32 unkAB0;                    /* 0xAB0 */
     s32 unkAB4;                    /* 0xAB4 */
     s32 unkAB8;                    /* 0xAB8 */
@@ -625,7 +625,9 @@ struct Hero {
     u8 pad_1D00[0x20];
     f32 unk1D20;                   /* 0x1D20 */
     f32 unk1D24;                   /* 0x1D24 */
-    u8 pad_1D28[0x188];
+    u8 pad_1D28[0x68];
+    struct HeroEase unk1D90;       /* 0x1D90: manipulator record handed to attach_manipulator (FUN_L00_00234808) */
+    u8 pad_1E40[0x70];
     s16 unk1EB0;                   /* 0x1EB0 */
     u8 pad_1EB2[0xAE];
     u8 unk1F60[0x40];              /* 0x1F60: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
@@ -716,7 +718,10 @@ struct Hero {
     s16 unk22DC;                   /* 0x22DC */
     s16 unk22DE;                   /* 0x22DE */
     s16 unk22E0;                   /* 0x22E0 */
-    u8 pad_22E2[0x12];
+    u8 pad_22E2[0x6];
+    f32 unk22E8;                   /* 0x22E8: phase for the items[4].moby colour */
+    f32 unk22EC;                   /* 0x22EC: phase for the items[4].moby2 colour */
+    f32 unk22F0;                   /* 0x22F0: phase for the items[5].moby colour */
     s32 unk22F4;                   /* 0x22F4 */
     s32 unk22F8;                   /* 0x22F8 */
     s16 unk22FC;                   /* 0x22FC */
