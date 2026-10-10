@@ -1313,7 +1313,203 @@ void FUN_L14_002ee6b0(float *pos, int n) {
     } while (--i != 0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ee8d8.s", FUN_L14_002ee8d8);
+/* level save state: per-moby collected flags at 0x454 */
+struct L14VendorLevel {
+    u8 pad0[0x454];
+    u8 collected[1];
+};
+extern struct L14VendorLevel D_L14_001BB930_v __asm__("D_L14_001BB930");
+extern char *D_L14_001B0BB0_v[] __asm__("D_L14_001B0BB0");
+extern s32 D_0014C190[][64];
+extern unsigned char D_0014C050[];
+extern char D_0013E550[];
+extern int vendor_inside(void *, int) __asm__("FUN_00214720");
+extern int vendor_sound(int, int, void *) __asm__("FUN_0022da68");
+extern void vendor_volume(s32 voice, s32 volume) __asm__("FUN_L01_002a1968");
+extern void vendor_release(s32) __asm__("FUN_0022d798");
+extern float vendor_distance(void *, void *) __asm__("FUN_001f9b80");
+extern float vendor_length(void *) __asm__("FUN_001f9af0");
+extern float vendor_itof(int) __asm__("FUN_001fa6c0");
+extern int vendor_ftoi(float) __asm__("FUN_001fa6d0");
+extern int FUN_001fa6e0(int, int, float);
+extern void vendor_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float vendor_spring(float *p, float t, float *v, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
+void FUN_L14_002eef60(struct Moby *m);
+int FUN_L14_002ef150(struct Moby *m);
+void FUN_L14_002ef3e0(struct Moby *m);
+void FUN_L14_002ef630(u8 *moby);
+void FUN_L14_002ef6f0(struct Moby *moby);
+
+/* pvars of the vendor platform (shared with FUN_L14_002eef60/ef150/ef3e0/ef630) */
+typedef struct {
+    u8 pad0[0x60];
+    u8 spring[0x40];   /* 0x60 */
+    s32 path;          /* 0xA0 */
+    s32 segment;       /* 0xA4 */
+    f32 along;         /* 0xA8 */
+    f32 dir;           /* 0xAC */
+    s32 travelled;     /* 0xB0 */
+    f32 lengthB4;      /* 0xB4 */
+    s32 path2;         /* 0xB8 */
+    f32 lengthBC;      /* 0xBC */
+    f32 vel[4];        /* 0xC0 */
+    f32 rot[4];        /* 0xD0 */
+    u8 padE0[0x30];
+    s32 item;          /* 0x110 */
+    s32 target;        /* 0x114 */
+    s32 clip_a;        /* 0x118 */
+    s32 clip_b;        /* 0x11C */
+    s32 clip_c;        /* 0x120 */
+    s16 bought;        /* 0x124 */
+    s16 level;         /* 0x126 */
+    f32 level_vel;     /* 0x128 */
+    s32 motor;         /* 0x12C */
+    s32 motor_volume;  /* 0x130 */
+    s32 hum_volume;    /* 0x134 */
+    s32 i138;          /* 0x138 */
+} L14VendorVars;
+/* Vendor platform update: rides its two rails between the trigger volumes, with hum and motor sounds. */
+void FUN_L14_002ee8d8(struct Moby *m) {
+    L14VendorVars *d = (L14VendorVars *)m->pvars;
+    Vec4 old;
+    Vec4 rot;
+    Vec4 delta;
+    float level;
+
+    if (m->state != 0 && m->unkBC == 2 && d->dir < 0.0f) {
+        int *path = (int *)D_L14_001B0BB0_v[d->path2];
+        d->dir = -d->dir;
+        d->segment = *path - 2;
+        d->along = *(float *)((char *)path + (d->segment << 4) + 0x1C);
+        m->unkBC = 1;
+    }
+    qcopy(&old, &m->pos);
+    qcopy(&rot, &m->rot);
+    switch (m->state) {
+    case 0: {
+        u16 id;
+        m->unkBC = 0;
+        m->state = 1;
+        FUN_L14_002eef60(m);
+        qcopy(&m->pos, D_L14_001B0BB0_v[d->path] + 0x10);
+        qcopy(&m->rot, d->rot);
+        id = m->save_id;
+        if (D_L14_001BB930_v.collected[(short)id] == 0 &&
+            (((D_0014C190[current_level_index][(short)id >> 5] >> (id & 0x1F)) ^ 1) & 1) &&
+            D_0014C050[d->item + current_level_index * 16] == 0xFF)
+            d->bought = 1;
+        else
+            d->bought = 0;
+        m->unk30 = 0xFF;
+        m->unk90 = 0x80303030;
+        d->motor = -1;
+        d->motor_volume = -1;
+        d->hum_volume = -1;
+        d->i138 = 0;
+        break;
+    }
+    case 1:
+        FUN_L14_002ef6f0(m);
+        if (d->clip_a >= 0 && vendor_inside(&hero.motion.pos, d->clip_a) != 0) {
+            m->unkBC = 0;
+            d->dir = -1.0f;
+            d->segment = 0;
+            d->along = 0;
+        }
+        if (d->clip_b >= 0 && vendor_inside(&hero.motion.pos, d->clip_b) != 0) {
+            char **e;
+            m->unkBC = 0;
+            e = &D_L14_001B0BB0_v[d->path];
+            d->segment = **(int **)e - 2;
+            d->along = *(float *)(*e + (d->segment << 4) + 0x1C);
+            d->dir = 1.0f;
+        }
+        if (d->clip_c >= 0 && vendor_inside(&hero.motion.pos, d->clip_c) != 0) {
+            char **e;
+            m->unkBC = 1;
+            e = &D_L14_001B0BB0_v[d->path2];
+            d->segment = **(int **)e - 2;
+            d->along = *(float *)(*e + (d->segment << 4) + 0x1C);
+            d->dir = 1.0f;
+        }
+        if (hero.ground_moby == m && hero.unk30C.s == 0 &&
+            vendor_distance(&hero.motion.pos, &m->pos) < 1.0f) {
+            int voice = vendor_sound(1, 0, m);
+            if (voice >= 0) {
+                if (d->hum_volume < 0)
+                    d->hum_volume = *(int *)(D_0013E550 + 0xF0);
+                vendor_volume(voice, d->hum_volume);
+            }
+            if (d->dir == -1.0f) {
+                if (d->bought != 0)
+                    m->unkBC = 2;
+                else
+                    m->unkBC = 0;
+            }
+            m->state = 2;
+            d->travelled = 0;
+            d->dir = -d->dir;
+        }
+        break;
+    case 2:
+        if (FUN_L00_0028d8c0(m, d->motor) == 0) {
+            d->motor = vendor_sound(0, 4, m);
+            if (d->motor != 0) {
+                if (d->motor_volume < 0)
+                    d->motor_volume = *(int *)(D_0013E550 + 0x80);
+                vendor_volume(d->motor, d->motor_volume);
+            }
+        }
+        m->unk90 = FUN_001fa6e0(m->unk90, 0x80808040, 0.1f);
+        if (FUN_L14_002ef150(m) != 0) {
+            m->state = 3;
+            d->level = d->motor_volume;
+        }
+        FUN_L14_002ef630((u8 *)m);
+        vendor_sub(&delta, &m->pos, &old);
+        FUN_L00_00260738(d->spring, &delta, &rot, &m->rot);
+        break;
+    case 3:
+        if (vendor_length(d->vel) >= 0.001f) {
+            if (FUN_L00_0028d8c0(m, d->motor) == 0)
+                d->motor = vendor_sound(0, 4, m);
+            level = vendor_itof(d->level);
+            vendor_spring(&level, vendor_itof(d->motor_volume) * 0.25f, &d->level_vel, 0.003f, 0.2f, 0.0f);
+            d->level = vendor_ftoi(level);
+            if (d->motor >= 0)
+                vendor_volume(d->motor, d->level);
+            FUN_L14_002ef630((u8 *)m);
+        } else {
+            int voice;
+            FUN_L14_002ef6f0(m);
+            if (d->motor != -1) {
+                char *e = D_0013E550 + d->motor * 0x70;
+                if (*(struct Moby **)(e + 0x88) == m && ((u8 *)e)[0x74] != 0)
+                    vendor_release(d->motor);
+            }
+            d->motor = -1;
+            voice = vendor_sound(1, 0, m);
+            if (voice >= 0)
+                vendor_volume(voice, d->hum_volume / 3);
+            m->state = 4;
+            if (hero.ground_moby != m)
+                m->state = 1;
+        }
+        break;
+    case 4:
+        FUN_L14_002ef6f0(m);
+        if (hero.ground_moby != m)
+            m->state = 1;
+        break;
+    }
+    if (m->state != 2 && m->state != 0) {
+        FUN_L14_002ef3e0(m);
+        if (hero.ground_moby == m) {
+            vendor_sub(&delta, &m->pos, &old);
+            FUN_L00_00260738(d->spring, &delta, &rot, &m->rot);
+        }
+    }
+}
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eef60.s", FUN_L14_002eef60);
 #else
