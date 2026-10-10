@@ -648,7 +648,7 @@ float FUN_L05_00304058(volatile s32 path_index, void *position, void *out, float
     int i;
     char *path;
 
-    *(u128 *)&from_point = *(u128 *)position;
+    from_point = *(Vec4 *)position;
     for (i = 0; i < *(int *)D_L05_001B0930[path_index] - 1; i++) {
         char *next;
         path = D_L05_001B0930[path_index];
