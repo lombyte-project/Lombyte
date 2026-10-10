@@ -174,7 +174,139 @@ void FUN_L03_00292578(struct Moby *moby, float *pos, float heading) {
     coupling[0x20] = 0;
     *(unsigned short *)(coupling + 0x34) |= 6;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292890.s", FUN_L03_00292890);
+extern char *D_L03_0015FFD8_292890 __asm__("D_L03_0015FFD8");
+extern char D_L03_001E2410_292890[] __asm__("D_L03_001E2410");
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f9af0(void *);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
+extern void FUN_001e93b0(void *, int);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_001f9c48(void *, void *, float);
+extern void FUN_L01_002f5168(char *);
+extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
+extern void mark_moby_for_removal_292890(void *) __asm__("FUN_0020c828");
+
+typedef struct {
+    char p00[0x60];
+    char motion[0x40];
+    int iA0;
+    char pA4[0x14];
+    int iB8;
+    char pBC[4];
+    float fC0;
+    int iC4;
+    float fC8;
+    float fCC;
+    float fD0;
+    char pD4[8];
+    float fDC;
+} Train292890;
+
+typedef struct {
+    char p00[0x20];
+    char motion[0x80];
+    float prev_pos[4];
+    float prev_rot[4];
+    int iC0;
+    float fC4;
+} Car292890;
+
+void FUN_L03_00292890(char *moby) {
+    float old_pos[4];
+    float old_rot[4];
+    float delta[4];
+    float front[4];
+    float hitch[4];
+    float dir[4];
+    float rear[4];
+    char *coupling;
+    Train292890 *data;
+    char *coupling_data;
+    char *car;
+    Car292890 *car_data;
+    char *target;
+    int next_id;
+    int id;
+    float d;
+
+    data = *(Train292890 **)(moby + 0x78);
+    coupling = D_L03_0015FFD8_292890 + (data->iC4 << 8);
+    coupling_data = *(char **)(coupling + 0x78);
+    ((unsigned char *)moby)[0x72] = 0xFF;
+    qcopy(old_pos, moby + 0x10);
+    qcopy(old_rot, moby + 0x40);
+    next_id = data->iA0;
+    if (next_id != -1) {
+        /* Fakematch: writing the unchanged next car id back is a no-op, but the
+         * test-and-store survives until after register allocation (reload's cse
+         * drops the redundant store, then the empty branch is deleted). Until
+         * then the branch's label stops reload from reusing the $4 copy of
+         * `coupling` below, which gives retail's reload of it from the stack. */
+        if (next_id != 0) {
+            data->iA0 = next_id;
+        }
+        id = next_id;
+        target = coupling + 0x10;
+        d = data->fDC - FUN_001f9b80(moby + 0x10, target);
+        *(float *)(coupling_data + 0xFC) = d;
+        if (d < 0.0f) {
+            *(float *)(coupling_data + 0xFC) = 0.0f;
+        }
+        FUN_L01_002f5168(coupling);
+        build_spherical_offset(delta, data->fC8,
+                               fast_add_rotations(*(float *)(moby + 0x48), 3.1415927f), *(float *)(moby + 0x44));
+        FUN_001f9bf8(delta, delta, data->fC8);
+        add_vector_xyz(moby + 0x10, moby + 0x10, delta);
+        d = fast_add_rotations(FUN_001f9e90(*(float *)(coupling + 0x10) - *(float *)(moby + 0x10),
+                                            *(float *)(coupling + 0x14) - *(float *)(moby + 0x14)),
+                               3.1415927f);
+        *(float *)(moby + 0x48) =
+            FUN_L00_00258110(&data->fCC, *(float *)(moby + 0x48), d,
+                             (data->fC8 * 60.0f / data->fC0) * 0.25f * DEG_TO_RAD * D_0015ED70, (data->fC8 * 60.0f / data->fC0) * 0.5f * DEG_TO_RAD * D_0015ED70,
+                             (data->fC8 * 60.0f / data->fC0) * D_0015ED6C);
+        d = FUN_001f9e90(FUN_001f9b80(moby + 0x10, target), *(float *)(coupling + 0x18) - *(float *)(moby + 0x18));
+        *(float *)(moby + 0x44) =
+            FUN_L00_00258110(&data->fD0, *(float *)(moby + 0x44), d,
+                             (data->fC8 * 60.0f / data->fC0) * 0.25f * DEG_TO_RAD * D_0015ED70, (data->fC8 * 60.0f / data->fC0) * 0.5f * DEG_TO_RAD * D_0015ED70,
+                             (data->fC8 * 60.0f / data->fC0) * D_0015ED6C);
+        FUN_L00_0024f7c8(moby, 0, front);
+        do {
+            car = D_L03_0015FFD8_292890 + (id << 8);
+            ((unsigned char *)car)[0x72] = 0xFF;
+            car_data = *(Car292890 **)(car + 0x78);
+            FUN_L00_0024f7c8(car, 0, rear);
+            subtract_vector_xyz(hitch, rear, front);
+            FUN_001f9c48(hitch, hitch, *(float *)&D_L03_00161368);
+            add_vector_xyz(hitch, hitch, front);
+            hitch[2] = front[2];
+            subtract_vector_xyz(dir, hitch, car + 0x10);
+            FUN_001f9bf8(dir, dir, FUN_001f9af0(dir) - car_data->fC4);
+            add_vector_xyz(car + 0x10, dir, car + 0x10);
+            *(float *)(car + 0x48) = fast_add_rotations(
+                FUN_001f9e90(hitch[0] - *(float *)(car + 0x10), hitch[1] - *(float *)(car + 0x14)), 0.0f);
+            *(float *)(car + 0x44) =
+                -FUN_001f9e90(FUN_001f9b80(car + 0x10, front), front[2] - *(float *)(car + 0x18));
+            advance_moby_animation_alt(car);
+            FUN_L00_00250df8(car);
+            *(unsigned short *)(car + 0x34) |= 6;
+            FUN_L00_0024f7c8(car, 1, front);
+            subtract_vector_xyz(delta, car + 0x10, car_data->prev_pos);
+            FUN_L00_00260738(car_data->motion, delta, car_data->prev_rot, car + 0x40);
+            qcopy(car_data->prev_pos, car + 0x10);
+            qcopy(car_data->prev_rot, car + 0x40);
+            id = car_data->iC0;
+        } while (id != -1);
+        subtract_vector_xyz(delta, moby + 0x10, old_pos);
+        FUN_L00_00260738(data->motion, delta, old_rot, moby + 0x40);
+    } else {
+        FUN_001e93b0(D_L03_001E2410_292890, data->iB8);
+        mark_moby_for_removal_292890(moby);
+        return;
+    }
+    *(unsigned short *)(coupling + 0x34) |= 6;
+}
 
 extern char *D_L03_0015FFD8_292d10 __asm__("D_L03_0015FFD8");
 extern char D_L03_001E2410[];
