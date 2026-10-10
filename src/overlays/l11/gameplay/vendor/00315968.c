@@ -265,7 +265,7 @@ struct L11ChainVars {
     f32 t;                   /* 0x6C: progress between points */
     struct Moby *links[8];   /* 0x70 */
     s16 offsets[8];          /* 0x90 */
-    u8 padA0[0x20];
+    f32 frac[8];             /* 0xA0: position between path points */
     f32 glow[8];             /* 0xC0 */
     f32 health;              /* 0xE0 */
     s16 group;               /* 0xE4 */
@@ -404,7 +404,103 @@ void FUN_L11_00317678(struct Moby *moby) {
         fast_add_rotations(fast_subtract_rotations(y, x) * *(float *)(d + 0x6C), x);
     FUN_001f9a40(&moby->pos, a, pb, *(float *)(d + 0x6C));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00317820.s", FUN_L11_00317820);
+extern float D_L11_00162324 __attribute__((sda));
+extern float D_L11_00162328 __attribute__((sda));
+extern s32 D_L11_0016232C __attribute__((sda));
+extern s32 D_L11_0015F5C4;
+extern float FUN_001f9b48(void *, void *);
+extern s32 FUN_001fa6d0(float);
+extern s32 FUN_001f96f8(s32);
+
+/* A chain path in D_L11_001B0EB0: a point count, then the points (w = 42 marks a sound point). */
+struct L11ChainPath {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4f pts[1];
+};
+
+/* Moves each chain link along the path to a fixed distance behind the one before it and turns it to follow the curve. */
+void FUN_L11_00317820(struct Moby *moby) {
+    struct L11ChainVars *d = (struct L11ChainVars *)moby->pvars;
+    char *path = d->path;
+    struct L11ChainPath *p = (struct L11ChainPath *)d->path;
+    float v[4];
+    int i;
+
+    FUN_001f9bf8(v, &moby->unkC0, D_L11_00162328);
+    FUN_001f9a10(v, v, &moby->pos);
+    for (i = 0; i < d->count; i++) {
+        int a = d->offsets[i];
+        int b = (a + 1) % p->count;
+        int c = (a + 2) % p->count;
+        float d0 = FUN_001f9b48(&p->pts[a], v);
+        float d1 = FUN_001f9b48(&p->pts[b], v);
+        float t;
+        struct Moby *link;
+        float yaw0, yaw1, pitch0;
+        float *qa, *qb, *qc; /* the points as raw rows: [4], [5], [6] = x, y, z */
+
+        while (d1 > D_L11_00162324) {
+            a = b;
+            b = (a + 1) % p->count;
+            d0 = d1;
+            c = (b + 1) % p->count;
+            d1 = FUN_001f9b48(&p->pts[b], v);
+        }
+        {
+            float *q = (float *)(path + a * 16);
+
+            if (q[7] == 42.0f) {
+                u8 *lv = d->links[i]->pvars;
+                if (*(s32 *)(lv + 0x28) == 0) {
+                    if (D_L11_0015F5C4 == 0) {
+                        FUN_0022da68(2, 0, d->links[i]);
+                    }
+                    *(s32 *)(lv + 0x28) = FUN_001f96f8(D_L11_0016232C);
+                }
+            }
+        }
+        if (d0 > D_L11_00162324) {
+            t = (d0 - D_L11_00162324) / (d0 - d1);
+        } else {
+            t = 0.0f;
+        }
+        d->offsets[i] = a;
+        d->frac[i] = t;
+        if (d->glow[i] != 0.0f) {
+            float f = t - d->glow[i];
+            int k = FUN_001fa6d0(f);
+            f -= (float)FUN_001fa6d0(f);
+            if (f < 0.0f) {
+                k--;
+                f += 1.0f;
+            }
+            a = (a + k + p->count) % p->count;
+            b = (b + k + p->count) % p->count;
+            c = (c + k + p->count) % p->count;
+            t = f;
+        }
+        link = d->links[i];
+        FUN_001f9a40(&link->pos, &p->pts[a], &p->pts[b], t);
+        qcopy(v, &d->links[i]->pos);
+        qa = (float *)(path + a * 16);
+        qb = (float *)(path + b * 16);
+        qc = (float *)(path + c * 16);
+        yaw0 = FUN_001f9e90(qa[4] - qb[4], qa[5] - qb[5]);
+        yaw1 = FUN_001f9e90(qb[4] - qc[4], qb[5] - qc[5]);
+        pitch0 = -FUN_001f9e90(FUN_001f9b80(&p->pts[b].x, &p->pts[a].x),
+                               qa[6] - qb[6]);
+        d->links[i]->rot.y = fast_add_rotations(
+            fast_subtract_rotations(-FUN_001f9e90(FUN_001f9b80(&p->pts[c].x, &p->pts[b].x),
+                                                  qb[6] - qc[6]),
+                                    pitch0) * t,
+            pitch0);
+        d->links[i]->rot.z = fast_add_rotations(fast_subtract_rotations(yaw1, yaw0) * t, yaw0);
+        FUN_L00_00250df8(d->links[i]);
+        FUN_001f9bf8(v, &d->links[i]->unkC0, D_L11_00162328);
+        FUN_001f9a10(v, v, &d->links[i]->pos);
+    }
+}
 extern char D_00141C18[];
 extern float D_L11_0015F580[] __attribute__((section(".sdata")));
 extern float D_L11_00162330 __attribute__((sda));
