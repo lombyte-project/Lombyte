@@ -1054,7 +1054,7 @@ void FUN_L02_00225c20(void) {
         hero.unk970 = FUN_001f9b48(hero.motion.pos.f, vec[0]);
         hero.unk96C = scale_game_frames(0x3C);
         if (hero.unk960 > 0.0f) {
-            hero.unk96C = hero.unk970 / hero.motion.unk160;
+            hero.unk96C = hero.unk970 / hero.motion.speed_xy;
         }
         if (hero.state.step == 0) {
             approach_value(&hero.unk960, frame_time * 27.0f, frame_time_sq * 80.0f);
@@ -1284,7 +1284,7 @@ void FUN_L02_00225c20(void) {
 
         hero.unk190 = 0.0f;
         FUN_L00_00212088(frame_time_sq * 30.0f, frame_time_sq * 30.0f);
-        FUN_L00_00233ba0(hero.motion.velocity.f, hero.motion.velocity.f, hero.unk194);
+        FUN_L00_00233ba0(hero.motion.velocity.f, hero.motion.velocity.f, hero.ground_speed);
         t0 = scale_game_frames(0xC);
         a = frame_time * 5.7f;
         b = frame_time_sq * 70.0f;
@@ -1341,11 +1341,11 @@ void FUN_L02_00225c20(void) {
                 hero.unk190 = frame_time * 4.5f;
             }
             FUN_L00_00212088(frame_time_sq * 25.0f, frame_time_sq * 25.0f);
-            hero.motion.velocity.f[0] = fast_cos(hero.motion.rot.f[2]) * hero.unk194;
-            hero.motion.velocity.f[1] = fast_sin(hero.motion.rot.f[2]) * hero.unk194;
+            hero.motion.velocity.f[0] = fast_cos(hero.motion.rot.f[2]) * hero.ground_speed;
+            hero.motion.velocity.f[1] = fast_sin(hero.motion.rot.f[2]) * hero.ground_speed;
         } else {
             FUN_L00_00212088(frame_time_sq * 15.0f, frame_time_sq * 15.0f);
-            FUN_L00_00233ba0(hero.motion.velocity.f, hero.motion.velocity.f, hero.unk194);
+            FUN_L00_00233ba0(hero.motion.velocity.f, hero.motion.velocity.f, hero.ground_speed);
         }
         if (hero.unkA58 != 0 || ((Moby *)hero.unkA54) != 0) {
             hero.motion.unk180 = hero.unkA5C;
@@ -1561,9 +1561,9 @@ void FUN_L02_00225c20(void) {
     } break;
     case 0x21:
     case 0x7A:
-        approach_value(&hero.unk194, 0.0f, frame_time_sq * 24.0f);
-        hero.motion.velocity.f[0] = fast_cos(hero.unkA68) * hero.unk194;
-        hero.motion.velocity.f[1] = fast_sin(hero.unkA68) * hero.unk194;
+        approach_value(&hero.ground_speed, 0.0f, frame_time_sq * 24.0f);
+        hero.motion.velocity.f[0] = fast_cos(hero.unkA68) * hero.ground_speed;
+        hero.motion.velocity.f[1] = fast_sin(hero.unkA68) * hero.ground_speed;
         if (hero.ground_distance > 0.0f) {
             hero.motion.velocity.f[2] = hero.motion.unk110.f[2] - frame_time_sq * 25.0f;
         } else {
@@ -1739,12 +1739,12 @@ void FUN_L02_00225c20(void) {
         if (hero.unk930 > 0.0f) {
 
             FUN_L00_002132b8(0.7f, 0.0f);
-            *(OvlQuad *)vec[0] = *(OvlQuad *)hero.unk920.f;
+            *(OvlQuad *)vec[0] = *(OvlQuad *)hero.move_impulse.f;
             hero.unk190 = hero.unk190 + FUN_L00_00213350(vec[0]);
             if (hero.unk190 < frame_time * 0.7f) {
                 hero.unk190 = frame_time * 0.7f;
             }
-            clear_vector(hero.unk920.f);
+            clear_vector(hero.move_impulse.f);
         }
         k = 1.0f;
         if (hero.state.step == 1 && hero.unk3BE == 0) {
@@ -2026,7 +2026,7 @@ void FUN_L02_00225c20(void) {
             }
         }
         if (hero.unk4A8 != 0 && hero.unk12E2 != 0) {
-            hero.unk190 = hero.unk194;
+            hero.unk190 = hero.ground_speed;
         } else {
             if (hero.unk418 != 0) {
                 FUN_L00_002118c8(frame_time * 5.7f, 0);
@@ -2050,22 +2050,22 @@ void FUN_L02_00225c20(void) {
 
                 FUN_L00_00211e30(0, frame_scale_sq * 0.015f, frame_scale_sq * 0.2f,
                                  frame_time * 15.009831f);
-                keep = hero.unk194;
+                keep = hero.ground_speed;
                 if (hero.unk418 > 1) {
-                    hero.unk194 = keep * 0.4f;
+                    hero.ground_speed = keep * 0.4f;
                 }
                 FUN_L00_002120d8(99999.0f);
-                hero.unk194 = keep;
+                hero.ground_speed = keep;
                 if (hero.unk418 != 1) {
                     FUN_L00_00212088(hero.unk480, hero.unk484);
                 }
                 if (hero.unk308 != 0) {
-                    hero.unk194 = 0.0f;
+                    hero.ground_speed = 0.0f;
                 }
                 if (hero.unk418 != 0) {
                     if (*(int *)(((char *)&D_0013CB14)) != 0) {
                         if (hero.unk30A != 0) {
-                            hero.unk194 = 0.0f;
+                            hero.ground_speed = 0.0f;
                         }
                     }
                 }
