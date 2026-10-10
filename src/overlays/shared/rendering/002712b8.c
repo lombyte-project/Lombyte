@@ -2000,7 +2000,7 @@ void FUN_L00_00275aa0(unsigned char *m) {
     h = *(short *)(q + 8);
     h -= *(short *)(m + 0xa);
     if (h < 6) {
-        f = (float)h / 5.0f;
+        f = (float)(*(short *)(q + 8) - *(short *)(m + 0xa)) / 5.0f;
         *(float *)(m + 0xc) = *(float *)(q + 4) +
             ((*(float *)q + *(float *)(q + 4)) * 0.5f - *(float *)(q + 4)) * f;
         alpha = (float)q[0xb] + (float)((q[0xb] >> 1) - q[0xb]) * f;
