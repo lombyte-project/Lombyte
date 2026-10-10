@@ -809,53 +809,48 @@ int FUN_L11_00318050(struct Moby *moby, void **out) {
     }
     return count;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003180a0.s", FUN_L11_003180a0);
-#else
 extern char D_L11_001B0EB0[];
-typedef u32 L11Quadword __attribute__((mode(TI), aligned(16)));
 
+/* Spreads the 0x527 chain mobys of a D_L11_001AC240 group evenly along path table_index: each gets a start point and its path index. */
+/* idx is shared by both loops (one multi-block pseudo), which gives the second loop retail's register choice. */
 void FUN_L11_003180a0(struct Moby *moby, int table_index) {
-    int group = *(short *)((char *)moby->pvars + 0xE4);
+    short group = ((struct L11ChainVars *)moby->pvars)->group;
     u16 *list = (u16 *)D_L11_001AC240[group];
-    char *base;
-    char *table;
-    int count = 0;
-    u32 count_accumulator = 0x10000;
+    short count = 0;
     short offset = 0;
-    int stride;
+    short stride;
+    char *table;
     u16 entry;
+    int idx;
 
     if (list == 0)
         return;
-    base = D_L11_0015FFD8;
     do {
         entry = *list;
-        if (*(short *)(base + ((entry & 0x7FFF) << 8) + 0xA6) == 0x527) {
-            count = count_accumulator >> 16;
-            count_accumulator += 0x10000;
-        }
+        idx = entry & 0x7FFF;
+        if (((struct Moby *)D_L11_0015FFD8)[idx].oclass == 0x527)
+            count++;
         list++;
-    } while ((int)((u32)entry << 16) >= 0);
+    } while ((short)entry >= 0);
 
     table = *(char **)(D_L11_001B0EB0 + table_index * 4);
-    stride = (short)(*(int *)table / count);
+    stride = *(int *)table / count;
     list = (u16 *)D_L11_001AC240[group];
-    table += 0x10;
     do {
-        char *listed = base + ((*list & 0x7FFF) << 8);
-        if (*(short *)(listed + 0xA6) == 0x527) {
-            char *data = *(char **)(listed + 0x78);
-            qcopy(listed + 0x10, table);
-            *(int *)(data + 0x64) = offset;
-            *(int *)(data + 0x68) = 0;
-            *(int *)(data + 0x60) = table_index;
-            offset = (short)(offset + stride);
-            table += stride * 0x10;
+        struct Moby *m;
+        idx = *list & 0x7FFF;
+        m = (struct Moby *)((idx << 8) + (u32)D_L11_0015FFD8);
+        if (m->oclass == 0x527) {
+            struct L11ChainVars *data = (struct L11ChainVars *)m->pvars;
+            /* no memory clobber: lets the D_L11_0015FFD8 load be hoisted out of the loop as in retail */
+            qcopy_nc(&m->pos, table + offset * 16 + 0x10);
+            data->count = offset;
+            data->path_index = table_index;
+            data->point = 0;
+            offset += stride;
         }
-    } while (*((short *)list++) >= 0);
+    } while (*(short *)list++ >= 0);
 }
-#endif /* NON_MATCHING */
 
 #define NOT_SDA
 
