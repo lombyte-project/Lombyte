@@ -237,7 +237,6 @@ extern void FUN_001f9838(void *, void *, int);
 extern void FUN_00118a80(int);
 
 void FUN_L00_0024f440(void *statePointer, int tableIndex, int frameIndex, int outputAddress) {
-    int state = (int)statePointer;
     int table;
     int baseTable;
     unsigned char count;
@@ -250,31 +249,29 @@ void FUN_L00_0024f440(void *statePointer, int tableIndex, int frameIndex, int ou
     int baseBytes;
     int countBytes;
     int copyBytes;
-    int copyOffset;
     unsigned char *copySource;
     unsigned long long *sentinel;
 
-    table = *(int *)(state + 0x18);
-    baseTable = *(int *)(state + 0x14);
-    count = *(unsigned char *)(table + 8);
+    table = *(int *)((char *)statePointer + 0x18);
+    baseTable = *(int *)((char *)statePointer + 0x14);
     baseCount = *(unsigned char *)(baseTable + 8);
+    count = *(unsigned char *)(table + 8);
     frame = *(unsigned char **)(*(int *)(table + tableIndex * 4 + 0x48) + frameIndex * 4 + 0x1c);
     FUN_001f9810((void *)outputAddress, ((baseCount + 3) * 8) & 0xff0);
     baseBytes = baseCount * 8;
     countBytes = count * 8;
-    *(short *)(outputAddress + 8) = baseBytes;
     *(short *)(outputAddress + 6) = (baseCount + *(short *)(frame + 10) + *(short *)(frame + 14) + 1) >> 1;
+    *(short *)(outputAddress + 8) = baseBytes;
     frameStart = *(unsigned short *)(frame + 10);
     *(short *)(outputAddress + 10) = frameStart;
     *(unsigned short *)(outputAddress + 12) = (frameStart + baseCount) * 8;
     *(unsigned short *)(outputAddress + 14) = *(unsigned short *)(frame + 14);
-    copyOffset = baseBytes + 16;
     copySource = frame + countBytes + 16;
     copyBytes = *(short *)(frame + 6) * 16 - countBytes;
     if (copyBytes != 0) {
-        FUN_001f9838((void *)(outputAddress + copyOffset), copySource, copyBytes);
+        FUN_001f9838((void *)(outputAddress + baseBytes + 16), copySource, copyBytes);
     }
-    indices = (unsigned char *)(*(int *)(*(int *)(state + 0x18) + 0x1c) + 4);
+    indices = (unsigned char *)(*(int *)(*(int *)((char *)statePointer + 0x18) + 0x1c) + 4);
     values = (unsigned long long *)(frame + 16);
     remainingCount = count;
     for (; remainingCount != 0; remainingCount--) {
