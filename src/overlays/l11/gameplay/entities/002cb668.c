@@ -932,7 +932,380 @@ unsigned char *FUN_L11_00309378(char *src, char *pos, char *target, char *vec, i
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00309ac0.s", FUN_L11_00309ac0);
+#include "sda.h"
+
+/* Pokitaru boat update: follows its path points, turns toward the next one and swings its rotor. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030AE90), where it is exact; names translated to the US level program. */
+
+typedef struct MobyClass_309ac0 MobyClass_309ac0;
+
+typedef struct Moby_309ac0 Moby_309ac0;
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 w;
+} Vec4f_309ac0;
+
+struct MobyClass_309ac0 {
+    u8 pad_0[0xC];
+    u8 seq_count; /* number of entries in seqs[] (menu previews clamp the sequence to it) */
+    u8 pad_D[3];
+    u32 unk10; /* copied into Moby_309ac0.unk94 when a moby is (re)classed */
+    u8 pad_14[0x8];
+    void *unk1C; /* word table, indexed id * 4 + 4 (0024eec0) */
+    struct GifEntry *gifs; /* patched by patch_moby_gifs */
+    f32 scale; /* default draw scale: copied into Moby_309ac0.scale, divides it */
+    s32 unk28;
+    void **callbacks; /* function-pointer table, called with the moby */
+    u8 pad_30[0x14];
+    u16 flags; /* initial Moby_309ac0.flags */
+    s16 unk46; /* class category; 5 is tested by targeting code */
+    struct AnimSeq_309ac0 *seqs[1]; /* animation sequences, indexed by Moby_309ac0.seq */
+};
+
+struct Moby_309ac0 {
+    Vec4f_309ac0 bsphere;
+    Vec4f_309ac0 pos;
+    u8 state; /* >= 0xFE: dead, waiting to respawn */
+    u8 group; /* linked group: index into the level moby-list table D_Lxx_001ABCC0 (0xFF: none) */
+    u8 unk22; /* class slot: pclass = D_L00_00197300[unk22] (FUN_L00_002cf218) */
+    u8 unk23; /* 0x40 for the smoke trail FUN_L09_00307ba8 spawns */
+    struct MobyClass_309ac0 *pclass;
+    struct Moby_309ac0 *next;
+    f32 scale; /* draw scale (FUN_L01_002fa068 halves it, FUN_L00_00215ef8 divides by it) */
+    u8 unk30; /* set to 0xFF (0x7F for beams) by spawners */
+    u8 unk31; /* set to 1 by spawners */
+    s16 unk32; /* set to 0xFF (0x7F for beams) by spawners */
+    u16 flags;
+    u16 unk36; /* set to 0x7F80 by spawners */
+    u64 spawn_frame; /* frame count at which it may respawn */
+    Vec4f_309ac0 rot; /* z: yaw (FUN_L00_00266448 compares it with atan2 to the hero) */
+    u8 frame; /* animation frame */
+    u8 prev_frame; /* frame index in prev_seq */
+    u8 seq; /* animation sequence id */
+    u8 prev_seq;
+    f32 unk54;
+    f32 unk58;
+    u8 pad5C[8];
+    struct Manip *manips;
+    void *cur_frame_data;
+    void *prev_frame_data;
+    u8 unk70;
+    u8 unk71; /* set to 0xFF when a moby changes class */
+    u8 unk72;
+    u8 unk73;
+    void (*update)(struct Moby_309ac0 *moby);
+    u8 *pvars;
+    u8 unk7C;
+    u8 pad7D;
+    u8 unk7E;
+    u8 unk7F; /* set to 0x17 by FUN_L09_002c5990 near D_L09_00166F40 */
+    u8 pad80[0x10];
+    s32 unk90;
+    u32 unk94; /* set from the class header's word 0x10 */
+    s32 unk98; /* set to 1 while a carrier holds the moby (FUN_L00_002c7a58) */
+    u8 pad9C[8];
+    u8 unkA4;
+    u8 padA5;
+    s16 oclass;
+    u8 padA8[8];
+    u8 unkB0; /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
+    u8 padB1;
+    u16 save_id; /* index into the level collected[]/killed[] tables and save bits D_0014C190[level][id >> 5] */
+    s16 unkB4;
+    u8 padB6[2];
+    void *unkB8; /* 0xB8: bolt source record; its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */
+    u8 unkBC;
+    u8 padBD[3];
+    Vec4f_309ac0 unkC0; /* 0xC0: first row of a matrix built from rot (FUN_001fa030) */
+    Vec4f_309ac0 unkD0;
+    Vec4f_309ac0 unkE0;
+    u8 padF0[0x10];
+};
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq_309ac0;
+
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V_30AE90;
+
+typedef struct { int count; char p4[0xC]; V_30AE90 nodes[1]; } Path_30AE90;
+
+typedef struct D_30AE90 {
+    char p0[0x60];
+    char a60[0x3C];
+    int f9C;
+    int fA0;
+    char pA4[4];
+    int fA8;
+    int fAC;
+    int fB0;
+    char pB4[4];
+    int fB8;
+    char pBC[4];
+    int fC0;
+    Path_30AE90 *fC4;
+    int fC8;
+    int fCC;
+    float fD0;
+    int fD4;
+    float fD8;
+    char pDC[4];
+    float fE0;
+    float fE4;
+    float fE8;
+    float fEC;
+    float fF0[4];
+} D_30AE90;
+
+typedef struct Moby_30AE90 {
+    char p0[0x10];
+    V_30AE90 pos;
+    unsigned char state;
+    char p21[0x11];
+    short h32;
+    char p34[0xC];
+    V_30AE90 rot;
+    char p50[3];
+    unsigned char b53;
+    char p54[0x24];
+    D_30AE90 *data;
+    char p7C[0x44];
+    V_30AE90 vC0;
+} Moby_30AE90;
+
+typedef struct { char p0[0x74]; unsigned char f74; char p1[0x13]; Moby_30AE90 *f88; } Row_30AE90;
+
+typedef union { float mtx[4][4]; struct { V_30AE90 d; V_30AE90 e; } v; } W_30AE90;
+
+extern char D_0013F64C[];
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern f32 fast_add_rotations_c2(f32, f32) __asm__("func_001FA580");
+extern f32 random_angle_radians(void) __asm__("func_00213308");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float approach_value_alt(float *, float, float) __asm__("FUN_00213ed8");
+extern int D_0013E550; /* no foreign declaration */
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float D_L11_00161DD4 __attribute__((sda));
+extern float D_L11_00161DD8 __attribute__((sda));
+extern float D_L11_00161DDC __attribute__((sda));
+extern float D_L11_00161DEC __attribute__((sda));
+extern float D_L11_00161DF0 __attribute__((sda));
+extern int FUN_001fa2d8();
+extern int FUN_L11_0030a500();
+extern void advance_accelerated_scalar_alt(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
+int FUN_L00_0028d8c0(int a, int i);
+int FUN_L11_0030a850_c(struct Moby_309ac0 *m) __asm__("FUN_L11_0030a850");
+void FUN_L00_0025f730(void *a, float x);
+void FUN_L00_00260738(char *out, void *pos, void *m1, void *m2);
+void FUN_L00_00262b80(float *o, float *a, float *b, float r, float l1, float l2);
+void FUN_L00_002e8450(s32 f, f32 a, f32 b);
+void FUN_L00_002e84b8(float a, float b);
+extern void func_L11_0030B8D0_30AE90(void *) __asm__("FUN_L11_0030a500");
+extern void func_00213DE0_30AE90(void *, int, int, int) __asm__("FUN_00212f90");
+extern void func_001FA4A0_30AE90(void *, void *) __asm__("FUN_001fa2d8");
+extern void func_001F9BF0_30AE90(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_001F9EE8_30AE90(void *, void *, void *) __asm__("FUN_001f9d20");
+extern float func_00214158_30AE90(void) __asm__("FUN_00213308");
+extern float func_L00_001FF860_30AE90(float, float) __asm__("FUN_001f9e90");
+extern int func_L00_0028EB98_30AE90(void *, int) __asm__("FUN_L00_0028d8c0");
+extern int func_0022ED80_30AE90(int, int, void *) __asm__("FUN_0022da68");
+extern void func_L00_0028EBF0_30AE90(int) __asm__("FUN_0022d798");
+extern float func_00214D28_30AE90(float *, float, float) __asm__("FUN_00213ed8");
+extern void func_L00_002607A8_30AE90(void *, float) __asm__("FUN_L00_0025f730");
+extern void func_001F9BD8_30AE90(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float func_001F9D10_30AE90(void *, void *) __asm__("FUN_001f9b48");
+extern float func_001F9CE8_30AE90(void *) __asm__("FUN_001f9b20");
+extern float func_L00_0025CE58_30AE90(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
+extern void func_L00_002E9900_30AE90(float, float, int) __asm__("FUN_L00_002e8450");
+extern void func_L00_002E9968_30AE90(float, float) __asm__("FUN_L00_002e84b8");
+extern void func_001F9EC0_30AE90(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern int func_L11_0030BC20_30AE90(void *) __asm__("FUN_L11_0030a850");
+extern float func_00214D88_30AE90(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern float func_001FA748_30AE90(float, float) __asm__("FUN_001fa580");
+extern float func_001F9FA8_30AE90(float) __asm__("FUN_001f9de0");
+extern void func_L00_00263BF8_30AE90(void *, float *, float *, float, float, float) __asm__("FUN_L00_00262b80");
+extern void func_L00_002617B0_30AE90(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
+extern Path_30AE90 *D_L11_001B11B0_30AE90[] __asm__("D_L11_001B0EB0");
+extern char D_0013E633_30AE90[] __asm__("D_0013F64C");
+extern char D_0013F3D8_c[] __asm__("D_0013F3D8");
+extern char D_0013E650_30AE90[] __asm__("D_0013E550");
+
+void FUN_L11_00309ac0(Moby_30AE90 *m) {
+    V_30AE90 A;
+    V_30AE90 B;
+    V_30AE90 C;
+    W_30AE90 W;
+    V_30AE90 F;
+    D_30AE90 *d = m->data;
+
+    qcopy(&A, &m->pos);
+    qcopy(&B, &m->rot);
+    if (m->state != 0) m->pos.z = d->fE4;
+    func_L11_0030B8D0_30AE90(m);
+    switch (m->state) {
+    case 0: {
+        Path_30AE90 *a;
+        Path_30AE90 *b;
+        int i;
+        m->h32 = 0xFF;
+        if (m->b53 != 1) func_00213DE0_30AE90(m, 1, 0, 1);
+        a = D_L11_001B11B0_30AE90[d->fA8];
+        b = D_L11_001B11B0_30AE90[d->fAC];
+        func_001FA4A0_30AE90(W.mtx, &m->vC0);
+        for (i = 0; i < a->count; i++) {
+            func_001F9BF0_30AE90(&F, &a->nodes[i], &m->pos);
+            func_001F9EE8_30AE90(&b->nodes[i], &F, W.mtx);
+        }
+        d->fC4 = D_L11_001B11B0_30AE90[d->fA0];
+        qcopy(&m->pos, &d->fC4->nodes[0]);
+        d->fD4 = 1;
+        m->state = 1;
+        {
+            int j;
+            for (j = 0; j < 4; j++) d->fF0[j] = func_00214158_30AE90();
+        }
+        d->f9C |= 1;
+        d->fC8 = -1;
+        d->fCC = -1;
+        break;
+    }
+    case 1: {
+        Path_30AE90 *p;
+        int n;
+        if (d->fB8 == 0) break;
+        p = D_L11_001B11B0_30AE90[d->fA0];
+        d->fC4 = p;
+        n = p->count;
+        qcopy(&m->pos, &p->nodes[n - 2]);
+        m->rot.z = func_L00_001FF860_30AE90(p->nodes[n - 1].x - m->pos.x, p->nodes[n - 1].y - m->pos.y);
+        m->state = 5;
+        break;
+    }
+    case 2: {
+        Path_30AE90 *a;
+        Path_30AE90 *b;
+        int i;
+        qcopy(&W.v.d, &d->fC4->nodes[d->fD4]);
+        if (*(Moby_30AE90 **)D_0013E633_30AE90 == m) {
+            if (!func_L00_0028EB98_30AE90(m, d->fCC)) d->fCC = func_0022ED80_30AE90(1, 4, m);
+            if (func_L00_0028EB98_30AE90(m, d->fC8)) {
+                if (d->fC8 != -1) {
+                    Row_30AE90 *e = (Row_30AE90 *)(D_0013E650_30AE90 + d->fC8 * 0x70);
+                    if (e->f88 == m) {
+                        if (e->f74 != 0) func_L00_0028EBF0_30AE90(d->fC8);
+                    }
+                }
+                d->fC8 = -1;
+            }
+            func_00214D28_30AE90(&d->fD0, D_L11_00161DD4 * D_0015ED6C, D_0015ED70 * 6.0f);
+        } else {
+            if (!func_L00_0028EB98_30AE90(m, d->fC8)) d->fC8 = func_0022ED80_30AE90(0, 4, m);
+            if (func_L00_0028EB98_30AE90(m, d->fCC)) {
+                if (d->fCC != -1) {
+                    Row_30AE90 *e = (Row_30AE90 *)(D_0013E650_30AE90 + d->fCC * 0x70);
+                    if (e->f88 == m) {
+                        if (e->f74 != 0) func_L00_0028EBF0_30AE90(d->fCC);
+                    }
+                }
+                d->fCC = -1;
+            }
+            func_00214D28_30AE90(&d->fD0, 0.0f, D_0015ED70 * 6.0f);
+        }
+        func_001F9BF0_30AE90(&W.v.e, &W.v.d, &m->pos);
+        func_L00_002607A8_30AE90(&W.v.e, d->fD0);
+        func_001F9BD8_30AE90(&m->pos, &m->pos, &W.v.e);
+        if (d->fD4 < d->fC4->count - 1) {
+            if (func_001F9D10_30AE90(&m->pos, &W.v.d) < D_L11_00161DD4 * D_0015ED6C) {
+                d->fD4++;
+                if (d->fC4->nodes[d->fD4].w == 37.0f) d->fC0 = 1;
+            }
+        } else if (func_001F9CE8_30AE90(&W.v.e) < 0.001f) {
+            if (func_L00_0028EB98_30AE90(m, d->fCC)) {
+                if (d->fCC != -1) {
+                    Row_30AE90 *e = (Row_30AE90 *)(D_0013E650_30AE90 + d->fCC * 0x70);
+                    if (e->f88 == m) {
+                        if (e->f74 != 0) func_L00_0028EBF0_30AE90(d->fCC);
+                    }
+                }
+                d->fCC = -1;
+            }
+            if (func_L00_0028EB98_30AE90(m, d->fC8)) {
+                if (d->fC8 != -1) {
+                    Row_30AE90 *e = (Row_30AE90 *)(D_0013E650_30AE90 + d->fC8 * 0x70);
+                    if (e->f88 == m) {
+                        if (e->f74 != 0) func_L00_0028EBF0_30AE90(d->fC8);
+                    }
+                }
+                d->fC8 = -1;
+            }
+            m->state = 3;
+        }
+        func_L00_0025CE58_30AE90(&m->rot.z, func_L00_001FF860_30AE90(W.v.d.x - m->pos.x, W.v.d.y - m->pos.y), &d->fD8,
+            D_L11_00161DD8 * 0.0174532924f * D_0015ED70, D_L11_00161DD8 * 0.0174532924f * D_0015ED70,
+            D_L11_00161DDC * 0.0174532924f * D_0015ED6C);
+        if (d->fC0 != 0) {
+            func_L00_002E9900_30AE90(D_L11_00161DEC, 0.003f, 0);
+            func_L00_002E9968_30AE90(D_L11_00161DF0, 0.003f);
+        }
+        b = D_L11_001B11B0_30AE90[d->fAC];
+        a = D_L11_001B11B0_30AE90[d->fA8];
+        for (i = 0; i < a->count; i++) {
+            func_001F9EC0_30AE90(&a->nodes[i], &b->nodes[i], &m->vC0);
+            func_001F9BD8_30AE90(&a->nodes[i], &a->nodes[i], &m->pos);
+        }
+        break;
+    }
+    case 3:
+        if (func_L11_0030BC20_30AE90(m)) {
+            if (d->fB0 != 0) {
+                d->fD0 = 0.0f;
+                m->state = 4;
+            } else {
+                m->state = 5;
+            }
+        }
+        break;
+    case 4:
+        qcopy(&W.v.d, &d->fC4->nodes[d->fD4]);
+        func_00214D88_30AE90(&m->pos.z, &d->fD0, W.v.d.z + 6.0f, D_0015ED70, D_0015ED70, D_0015ED6C);
+        if (W.v.d.z + 5.9000001f <= m->pos.z) m->state = 5;
+        break;
+    case 5:
+        qcopy(&W.v.d, &d->fC4->nodes[d->fD4]);
+        if (d->fB0 != 0) {
+            if (*(float *)D_0013F3D8_c < m->pos.z) {
+                func_00214D88_30AE90(&m->pos.z, &d->fD0, W.v.d.z + 1.0f, D_0015ED70, D_0015ED70, D_0015ED6C);
+            } else {
+                func_00214D88_30AE90(&m->pos.z, &d->fD0, W.v.d.z + 8.0f, D_0015ED70, D_0015ED70, D_0015ED6C);
+            }
+        }
+        break;
+    }
+    {
+        float k = D_0015ED6C;
+        float t21 = k * 0.436332315f;
+        float t20 = k * 0.610865235f;
+        float c;
+        d->fE4 = m->pos.z;
+        d->fE0 = func_001FA748_30AE90(d->fE0, k * 1.5707964f);
+        c = 0.13f;
+        m->pos.z = m->pos.z + func_001F9FA8_30AE90(d->fE0) * c;
+        func_L00_00263BF8_30AE90(m, &d->fE8, &d->fEC, 0.0418879017f, t21, t20);
+    }
+    func_001F9BF0_30AE90(&C, &m->pos, &A);
+    func_L00_002617B0_30AE90(d->a60, &C, &B, &m->rot);
+}
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030B850), where it is exact; names translated to the US level program. */
