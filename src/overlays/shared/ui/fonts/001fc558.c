@@ -13,14 +13,14 @@ void FUN_L00_002a0d90(void);
 void FUN_L00_001fc558(u32 source) {
     s32 remaining = D_0013E504;
     s32 destination = D_0015EE84 >> 8;
-    s32 count;
+    u64 count;
     u64 transfer;
     u8 *packet;
     u64 *words;
 
     do {
-        count = remaining;
-        if ((u32)remaining > 0x80)
+        count = (s64)remaining;
+        if (count > 0x80)
             count = 0x80;
         *(u32 *)(D_L00_001611C0 + 0) = 0x10000006;
         remaining -= 0x80;
@@ -43,11 +43,11 @@ void FUN_L00_001fc558(u32 source) {
         words[9] = 0x53;
         words[10] = transfer | 0x0800000000008000ULL;
         words[11] = 0;
-        destination += count << 3;
+        destination += (s32)((count << 35) >> 32);
         D_L00_001611C0 = packet + 0x70;
         *(u32 *)(packet + 0x70) = (u32)transfer | 0x30000000;
         *(u32 *)(D_L00_001611C0 + 4) = source;
-        source += count << 11;
+        source += (s32)((count << 43) >> 32);
         *(u32 *)(D_L00_001611C0 + 8) = 0;
         *(u32 *)(D_L00_001611C0 + 12) = (u32)transfer | 0x50000000;
         D_L00_001611C0 += 0x10;
