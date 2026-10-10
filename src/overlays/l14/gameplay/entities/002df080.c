@@ -530,7 +530,125 @@ char *FUN_L14_002eccf0(void *a, float *b, int c, int d) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ece00.s", FUN_L14_002ece00);
+/* Pvars of a flying bolt (same code as FUN_L07_0030b6a8, plus a sweep that skips class 0xFC mobys). */
+typedef struct {
+    Vec4 vel;        /* 0x00 */
+    Vec4 origin;     /* 0x10 */
+    void *ignore;    /* 0x20: collision owner to skip */
+    s32 solid;       /* 0x24 */
+} L14BoltVars;
+
+/* Sweep request filled by FUN_L00_00259888 for the second collision test. */
+typedef struct {
+    u8 pad0[0x18];
+    u8 flag18;
+    u8 flag19;
+    u8 pad1A[0x16];
+} L14BoltSweep;
+
+extern void bolt_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float bolt_distance(void *, void *) __asm__("FUN_001f9b80");
+extern f32 bolt_length(void *) __asm__("FUN_001f9af0");
+extern void bolt_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void bolt_normalize_xy(void *, void *, f32) __asm__("FUN_001f9c48");
+extern f32 bolt_random(f32, f32) __asm__("FUN_002132a8");
+extern int FUN_L00_00257b90(int, int);
+extern s32 bolt_frames(s32) __asm__("FUN_001f96f8");
+extern int bolt_coll_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern void FUN_L00_00259888(void *, struct Moby *, s32, void *, f32);
+extern void FUN_L07_0029a2a0(void *, void *);
+extern void FUN_L00_001ff660(void *, void *, void *);
+extern char *FUN_L00_0026dd20(char *, char *, int c, int d, float f);
+extern int bolt_sound(int, int, void *) __asm__("FUN_0022da68");
+extern void bolt_remove(void *) __asm__("FUN_0020c828");
+/* Result of the last collision line test. */
+extern struct {
+    u8 pad0[0x18];
+    struct Moby *moby;   /* 0x18 */
+    u8 pad1C[4];
+    Vec4 pos;            /* 0x20 */
+} D_L14_00174540;
+extern char D_L14_00174580[];
+
+void FUN_L14_002ece00(struct Moby *m) {
+    L14BoltVars *v = (L14BoltVars *)m->pvars;
+    Vec4 old;
+    Vec4 target;
+    L14BoltSweep sweep;
+    Vec4 aim;
+    Vec4 dir;
+    Vec4 spark;
+    void *ignore;
+    struct Moby *hit;
+    int pass;
+    int tries;
+    int i;
+    int j;
+
+    qcopy(&old, &m->pos);
+    bolt_add(&m->pos, &m->pos, &v->vel);
+    qcopy(&target, &m->pos);
+    ignore = v->ignore;
+    qcopy(&aim, &v->vel);
+    aim.f[2] = 0.0f;
+    bolt_normalize_xy(&aim, &aim, 1.0f);
+    tries = 0;
+    aim.f[2] = 1.0f;
+    FUN_L00_00259888(&sweep, m, 0x10001, &aim, 1.0f);
+    sweep.flag18 = 1;
+    sweep.flag19 = 1;
+    pass = v->solid == 0;
+    if (bolt_distance(&m->pos, &v->origin) > 30.0f) {
+        if (m->unk31 != 0) {
+            for (i = 0; i < 3; i++) {
+                spark.q = 0;
+                spark.f[0] = bolt_random(-1.0f, 1.0f);
+                spark.f[1] = bolt_random(-1.0f, 1.0f);
+                spark.f[2] = bolt_random(-1.0f, 1.0f);
+                dir.q = spark.q;
+                bolt_normalize(&dir, &dir, bolt_length(&spark) * 0.1f);
+                bolt_add(&dir, &spark, &dir);
+                bolt_normalize(&dir, &dir, bolt_random(frame_time + frame_time, frame_time * 4.0f));
+                FUN_L07_0029a2a0(&m->pos, &dir);
+            }
+        }
+        bolt_remove(m);
+        return;
+    }
+    while (tries < 3 && bolt_coll_line(&old, &target, pass, ignore, 0) != 0) {
+        hit = D_L14_00174540.moby;
+        tries++;
+        if (hit != 0 && hit->oclass == 0xFC) {
+            qcopy(&old, &D_L14_00174540.pos);
+            ignore = hit;
+            continue;
+        }
+        bolt_coll_line(&old, &target, pass, ignore, &sweep);
+        qcopy(&m->pos, &D_L14_00174540.pos);
+        if (m->unk31 != 0) {
+            for (j = 0; j < 5; j++) {
+                spark.q = 0;
+                spark.f[0] = bolt_random(-1.0f, 1.0f);
+                spark.f[1] = bolt_random(-1.0f, 1.0f);
+                spark.f[2] = bolt_random(-1.0f, 1.0f);
+                dir.q = spark.q;
+                FUN_L00_001ff660(&spark, &v->vel, D_L14_00174580);
+                bolt_normalize(&dir, &dir, bolt_length(&spark) * 0.5f);
+                bolt_add(&dir, &spark, &dir);
+                bolt_normalize(&dir, &dir, bolt_random(frame_time * 3.0f, frame_time * 6.0f));
+                FUN_L00_0026dd20((char *)&m->pos, (char *)&dir, 0x7F2F4F6F,
+                                 FUN_L00_00257b90(bolt_frames(10), bolt_frames(15)), 30000.0f);
+            }
+        }
+        bolt_sound(0, 0, m);
+        bolt_remove(m);
+        return;
+    }
+    if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f ||
+        m->pos.z < 2.0f || m->pos.z > 1021.0f) {
+        bolt_remove(m);
+    }
+}
 
 #define NOT_SDA
 
