@@ -75,6 +75,6 @@ Work-in-progress C is also welcome when it preserves the matching baseline. Do n
 
 <h3>License</h3>
 
-Repository code is distributed under the [GNU General Public License v3.0](LICENSE). Code reconstructed from third-party binaries remains the intellectual property of the respective copyright holders; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Repository code is distributed under the [GNU General Public License v3.0](LICENSE). Code reconstructed from third-party binaries belongs to its copyright holders; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 The Lombyte emblem in [`assets/`](assets/) is the project's original artwork.
