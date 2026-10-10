@@ -3110,7 +3110,7 @@ collision_mode:
     qcopy(&start, &hero.motion.pos);
     start.f[2] = hero.height_threshold + 0.01f;
     qcopy(&end, &start);
-    end.f[2] += 0.3f;
+    end.f[2] = start.f[2] + 0.3f;
     if (!FUN_L00_001efc70(&start, &end, 2, hero.moby, 0)) {
         return 0;
     }
