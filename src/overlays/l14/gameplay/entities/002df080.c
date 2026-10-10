@@ -349,107 +349,135 @@ void FUN_L14_002e7bd8(struct Moby *m) {
         d->height = (d->from - 0.005f) * t + 0.005f;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eaf88.s", FUN_L14_002eaf88);
-#else
-extern void spark_debug_print(const char *, short) __asm__("FUN_001e93b0");
-extern void spark_remove_moby(struct Moby *) __asm__("FUN_0020c828");
-extern float spark_vector_length(void *) __asm__("FUN_001f9af0");
-extern int spark_frames(int) __asm__("FUN_001f96f8");
-extern float spark_float_frames(short) __asm__("FUN_001fa6c0");
-extern int spark_tick(short *) __asm__("FUN_001f9770");
-extern float spark_cos(float) __asm__("FUN_001f9dc8");
-extern float spark_sin(float) __asm__("FUN_001f9de0");
-extern void spark_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int spark_in_clip(void *, int) __asm__("FUN_00214720");
-extern char *D_L14_001600EC_af __asm__("D_L14_001600EC");
-extern int D_L14_00161C04_af __asm__("D_L14_00161C04") __attribute__((sda));
-extern float D_L14_00161C08_af __asm__("D_L14_00161C08") __attribute__((sda));
-extern float D_0015ED6C_af __asm__("D_0015ED6C");
-extern float D_L14_00162230_af[5] __asm__("D_L14_00162230");
-void FUN_L14_002eb388(struct Moby *, int, void *);
-void FUN_L14_002eb568(struct Moby *);
+typedef struct {
+    s32 clip_push;   /* 0x0: clip volume that pushes the hero */
+    char pad4[4];
+    f32 push;        /* 0x8 */
+    s16 push_timer;  /* 0xC */
+    s16 pushing;     /* 0xE */
+    f32 push_inv;    /* 0x10 */
+    f32 f14, f18, f1C;
+    char pad20[0x4E0];
+    s32 clip_area;   /* 0x500 */
+    s32 point;       /* 0x504 */
+    s16 period;      /* 0x508 */
+    s16 period_timer; /* 0x50A */
+    f32 period_inv;  /* 0x50C */
+} L14WindVars;
+extern char *D_L14_001600EC_w __asm__("D_L14_001600EC");
+extern f32 D_L14_00161C08_w __asm__("D_L14_00161C08") __attribute__((sda));
+extern s32 D_L14_00161C04_w __asm__("D_L14_00161C04") __attribute__((sda));
+extern f32 D_0015ED6C_w __asm__("D_0015ED6C");
+/* wind applied to the sparks: direction scaled by strength, and a weight */
+extern struct { f32 v; } D_L14_00162230, D_L14_00162234;
+extern s32 D_L14_00162238;
+extern f32 D_L14_00162240;
+extern char D_L14_001FC980[];
+extern char D_L14_001FC9E0[];
+extern char D_L14_001FCA38[];
+extern void wind_print(const char *, short) __asm__("FUN_001e93b0");
+extern void wind_remove(struct Moby *) __asm__("FUN_0020c828");
+extern float wind_length(void *) __asm__("FUN_001f9af0");
+extern int wind_frames(int) __asm__("FUN_001f96f8");
+extern float wind_itof(int) __asm__("FUN_001fa6c0");
+extern float wind_cos(float) __asm__("FUN_001f9dc8");
+extern float wind_sin(float) __asm__("FUN_001f9de0");
+extern int wind_inside(void *, int) __asm__("FUN_00214720");
+extern int wind_tick(short *) __asm__("FUN_001f9770");
+extern void wind_add(void *, void *, void *) __asm__("FUN_001f9a10");
+void FUN_L14_002eb568(struct Moby *m);
+void FUN_L14_002eb388(struct Moby *m, int i, void *dir);
 
 void FUN_L14_002eaf88(struct Moby *m) {
-    char *d = (char *)m->pvars;
-float dir[3];
-    float scale;
-short time;
+    L14WindVars *d = (L14WindVars *)m->pvars;
+    float dir[4];
+    char *pos;
+    struct Hero *h;
+    int i;
 
     if (m->state == 0) {
-        int i;
         m->state = 1;
-        if (*(int *)(d + 0) < 0) {
-            spark_debug_print((const char *)0x001fc980, *(short *)((char *)m + 0xb2));
-            spark_remove_moby(m);
+        if (d->clip_push < 0) {
+            wind_print(D_L14_001FC980, m->save_id);
+            wind_remove(m);
             return;
         }
-        if (*(int *)(d + 0x504) < 0) {
-            spark_debug_print((const char *)0x001fc9e0, *(short *)((char *)m + 0xb2));
-            spark_remove_moby(m);
+        if (d->point < 0) {
+            wind_print(D_L14_001FC9E0, m->save_id);
+            wind_remove(m);
             return;
         }
-        if (*(int *)(d + 0x500) < 0) {
-            spark_debug_print((const char *)0x001fca38, *(short *)((char *)m + 0xb2));
-            spark_remove_moby(m);
+        if (d->clip_area < 0) {
+            wind_print(D_L14_001FCA38, m->save_id);
+            wind_remove(m);
             return;
         }
-        *(short *)(d + 0xe) = 0;
-*(float *)(d + 0x14) = spark_vector_length(D_L14_001600EC_af + *(int *)(d + 0x504) * 0x80) * 2.0f;
-        *(float *)(d + 0x18) = spark_vector_length(D_L14_001600EC_af + *(int *)(d + 0x504) * 0x80 + 0x10);
-        *(float *)(d + 0x1c) = spark_vector_length(D_L14_001600EC_af + *(int *)(d + 0x504) * 0x80 + 0x20);
-        time = spark_frames(*(short *)(d + 0x508));
-        *(short *)(d + 0x50a) = time;
-        *(float *)(d + 0x50c) = 1.0f / spark_float_frames(time);
-        dir[0] = spark_cos(m->rot.z);
-        dir[1] = spark_sin(m->rot.z);
-dir[2] = 0.0f;
-for (i = 0; i < 48; i++) FUN_L14_002eb388(m, i, dir);
+        d->pushing = 0;
+        d->f14 = 2.0f * wind_length(D_L14_001600EC_w + (d->point << 7));
+        d->f18 = wind_length(D_L14_001600EC_w + (d->point << 7) + 0x10);
+        d->f1C = wind_length(D_L14_001600EC_w + (d->point << 7) + 0x20);
+        d->period_timer = wind_frames(d->period);
+        d->period_inv = 1.0f / wind_itof(d->period_timer);
+        dir[0] = wind_cos(m->rot.z);
+        dir[1] = wind_sin(m->rot.z);
+        dir[2] = 0.0f;
+        for (i = 0; i < 48; i++) {
+            FUN_L14_002eb388(m, i, dir);
+        }
     }
-    if (spark_in_clip(&hero.motion.pos, *(int *)(d + 0x500))) {
-        D_L14_00162230_af[0] = spark_cos(m->rot.z) * (D_L14_00161C08_af * D_0015ED6C_af);
-        D_L14_00162230_af[1] = spark_sin(m->rot.z) * (D_L14_00161C08_af * D_0015ED6C_af);
-        D_L14_00162230_af[2] = 0.0f;
-        D_L14_00162230_af[4] = 1.0f;
+    pos = (char *)&hero.motion.pos;
+    if (wind_inside(pos, d->clip_area) != 0) {
+        D_L14_00162230.v = wind_cos(m->rot.z) * (D_L14_00161C08_w * D_0015ED6C_w);
+        D_L14_00162234.v = wind_sin(m->rot.z) * (D_L14_00161C08_w * D_0015ED6C_w);
+        D_L14_00162238 = 0;
+        D_L14_00162240 = 1.0f;
+        /* Fakematch: storing the weight again is a no-op that reload's cse drops, but the
+         * branch around it keeps the call's argument move out of the stores above, so it
+         * lands in the call's delay slot as in retail. */
+        if (m != 0) {
+            D_L14_00162240 = 1.0f;
+        }
         FUN_L14_002eb568(m);
-        if (*(short *)((char *)&hero + 0x308) == 0 && *(int *)((char *)&hero + 0x2284) != 13 &&
-            (*(u8 *)((char *)&hero + 0x12e2) != 0 || *(short *)((char *)&hero + 0x30c) != 0) &&
-            spark_in_clip(&hero.motion.pos, *(int *)d)) {
-            spark_tick((short *)(d + 0x50a));
-            scale = (1.0f - spark_float_frames(*(short *)(d + 0x50a)) * *(float *)(d + 0x50c)) *
-                    *(float *)(d + 8) * D_0015ED6C_af;
-            *(short *)(d + 0xe) = 1;
-            dir[0] = spark_cos(m->rot.z) * scale;
-            dir[1] = spark_sin(m->rot.z) * scale;
+        h = (struct Hero *)(pos - 0x80);
+        if (h->unk308 == 0 && h->unk2284 != 13 && (h->unk12E2 != 0 || h->unk30C.s != 0) &&
+            wind_inside(pos, d->clip_push) != 0) {
+            float t;
+            float k;
+            wind_tick(&d->period_timer);
+            t = wind_itof(d->period_timer) * d->period_inv;
+            d->pushing = 1;
+            k = D_0015ED6C_w;
+            t = 1.0f - t;
+            t = t * (d->push * k);
+            dir[0] = wind_cos(m->rot.z) * t;
+            dir[1] = wind_sin(m->rot.z) * t;
             dir[2] = 0.0f;
-            spark_add((char *)&hero.motion.pos + 0x70, (char *)&hero.motion.pos + 0x70, dir);
-            time = spark_frames(D_L14_00161C04_af);
-            *(short *)(d + 0xc) = time;
-            *(float *)(d + 0x10) = 1.0f / spark_float_frames(time);
+            wind_add(pos + 0x70, pos + 0x70, dir);
+            d->push_timer = wind_frames(D_L14_00161C04_w);
+            d->push_inv = 1.0f / wind_itof(d->push_timer);
             return;
         }
     }
-if (*(short *)(d + 0xe) == 0 || *(short *)(d + 0xc) == 0) return;
-if (spark_tick((short *)(d + 0xc))) {
-        *(short *)(d + 0xe) = 0;
-        time = spark_frames(*(short *)(d + 0x508));
-        *(short *)(d + 0x50a) = time;
-        *(float *)(d + 0x50c) = 1.0f / spark_float_frames(time);
-    }
-    if (*(short *)((char *)&hero + 0x308) != 0 || *(u8 *)((char *)&hero + 0x12e2) == 0) {
-        if (*(short *)(d + 0xc) > spark_frames(15)) {
-            time = spark_frames(15);
-            *(short *)(d + 0xc) = time;
-            *(float *)(d + 0x10) = 1.0f / (float)time;
+    if (d->pushing != 0 && d->push_timer != 0) {
+        float t;
+        if (wind_tick(&d->push_timer) != 0) {
+            d->pushing = 0;
+            d->period_timer = wind_frames(d->period);
+            d->period_inv = 1.0f / wind_itof(d->period_timer);
         }
+        if (hero.unk308 != 0 || hero.unk12E2 == 0) {
+            if (d->push_timer > wind_frames(15)) {
+                d->push_timer = wind_frames(15);
+                d->push_inv = 1.0f / (float)d->push_timer;
+            }
+        }
+        t = (d->push * D_0015ED6C_w - 0.0f) * (wind_itof(d->push_timer) * d->push_inv) + 0.0f;
+        dir[0] = wind_cos(m->rot.z) * t;
+        dir[1] = wind_sin(m->rot.z) * t;
+        dir[2] = 0.0f;
+        wind_add(&hero.motion.unkF0, &hero.motion.unkF0, dir);
     }
-scale = (*(float *)(d + 8) * D_0015ED6C_af - 0.0f) *
-            spark_float_frames(*(short *)(d + 0xc)) * *(float *)(d + 0x10) + 0.0f;
-    dir[0] = spark_cos(m->rot.z) * scale;
-    dir[1] = spark_sin(m->rot.z) * scale;
-    dir[2] = 0.0f;
-    spark_add((char *)&hero.motion.pos + 0x70, (char *)&hero.motion.pos + 0x70, dir);
 }
-#endif
 /* Starts one spark: places it at a random spot around the emitter, picks its speed and its life. */
 #include "qcopy.h"
 extern struct { char pad[0x30]; float v[4]; char rest[0x40]; } *D_L14_001600EC_k __asm__("D_L14_001600EC");
