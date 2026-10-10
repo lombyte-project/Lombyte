@@ -1,16 +1,16 @@
 {
   "measures": {
-    "fuzzy_match_percent": 70.137634,
+    "fuzzy_match_percent": 70.333381,
     "total_code": "3547428",
-    "matched_code": "2431648",
-    "matched_code_percent": 68.546789,
+    "matched_code": "2438592",
+    "matched_code_percent": 68.742537,
     "total_functions": 4237,
-    "matched_functions": 3549,
-    "matched_functions_percent": 83.762096,
-    "complete_code": "2431648",
-    "complete_code_percent": 68.546789,
+    "matched_functions": 3552,
+    "matched_functions_percent": 83.832901,
+    "complete_code": "2438592",
+    "complete_code_percent": 68.742537,
     "total_units": 507,
-    "complete_units": 336
+    "complete_units": 338
   },
   "units": [
     {
@@ -29682,17 +29682,17 @@
     {
       "name": "level_03/gameplay/entities/00292578",
       "measures": {
-        "fuzzy_match_percent": 84.445301,
+        "fuzzy_match_percent": 100.0,
         "total_code": "31116",
-        "matched_code": "26276",
-        "matched_code_percent": 84.445301,
+        "matched_code": "31116",
+        "matched_code_percent": 100.0,
         "total_functions": 22,
-        "matched_functions": 20,
-        "matched_functions_percent": 90.909091,
-        "complete_code": "26276",
-        "complete_code_percent": 84.445301,
+        "matched_functions": 22,
+        "matched_functions_percent": 100.0,
+        "complete_code": "31116",
+        "complete_code_percent": 100.0,
         "total_units": 1,
-        "complete_units": 0
+        "complete_units": 1
       },
       "functions": [
         {
@@ -29707,7 +29707,7 @@
         {
           "name": "FUN_L03_00292890",
           "size": "1152",
-          "fuzzy_match_percent": 0.0,
+          "fuzzy_match_percent": 100.0,
           "address": "792",
           "metadata": {
             "virtual_address": "2697360"
@@ -29824,7 +29824,7 @@
         {
           "name": "FUN_L03_002c5bb8",
           "size": "3688",
-          "fuzzy_match_percent": 0.0,
+          "fuzzy_match_percent": 100.0,
           "address": "210496",
           "metadata": {
             "virtual_address": "2907064"
@@ -29895,7 +29895,7 @@
         }
       ],
       "metadata": {
-        "complete": false,
+        "complete": true,
         "progress_categories": [
           "overlays",
           "levels",
@@ -37747,17 +37747,17 @@
     {
       "name": "level_03/gameplay/entities/002c9eb8",
       "measures": {
-        "fuzzy_match_percent": 88.898269,
+        "fuzzy_match_percent": 100.0,
         "total_code": "18952",
-        "matched_code": "16848",
-        "matched_code_percent": 88.898269,
+        "matched_code": "18952",
+        "matched_code_percent": 100.0,
         "total_functions": 23,
-        "matched_functions": 22,
-        "matched_functions_percent": 95.652174,
-        "complete_code": "16848",
-        "complete_code_percent": 88.898269,
+        "matched_functions": 23,
+        "matched_functions_percent": 100.0,
+        "complete_code": "18952",
+        "complete_code_percent": 100.0,
         "total_units": 1,
-        "complete_units": 0
+        "complete_units": 1
       },
       "functions": [
         {
@@ -37925,7 +37925,7 @@
         {
           "name": "FUN_L03_002db558",
           "size": "2104",
-          "fuzzy_match_percent": 0.0,
+          "fuzzy_match_percent": 100.0,
           "address": "71328",
           "metadata": {
             "virtual_address": "2995544"
@@ -37969,7 +37969,7 @@
         }
       ],
       "metadata": {
-        "complete": false,
+        "complete": true,
         "progress_categories": [
           "overlays",
           "levels",
@@ -51065,17 +51065,17 @@
       "id": "overlays",
       "name": "Level overlays",
       "measures": {
-        "fuzzy_match_percent": 67.093378,
+        "fuzzy_match_percent": 67.310826,
         "total_code": "3193412",
-        "matched_code": "2142568",
-        "matched_code_percent": 67.093378,
+        "matched_code": "2149512",
+        "matched_code_percent": 67.310826,
         "total_functions": 3013,
-        "matched_functions": 2402,
-        "matched_functions_percent": 79.721208,
-        "complete_code": "2142568",
-        "complete_code_percent": 67.093378,
+        "matched_functions": 2405,
+        "matched_functions_percent": 79.820777,
+        "complete_code": "2149512",
+        "complete_code_percent": 67.310826,
         "total_units": 389,
-        "complete_units": 243
+        "complete_units": 245
       }
     },
     {
@@ -51099,17 +51099,17 @@
       "id": "levels",
       "name": "Per-level code",
       "measures": {
-        "fuzzy_match_percent": 73.408385,
+        "fuzzy_match_percent": 73.744993,
         "total_code": "2062936",
-        "matched_code": "1514368",
-        "matched_code_percent": 73.408385,
+        "matched_code": "1521312",
+        "matched_code_percent": 73.744993,
         "total_functions": 1431,
-        "matched_functions": 1131,
-        "matched_functions_percent": 79.035639,
-        "complete_code": "1514368",
-        "complete_code_percent": 73.408385,
+        "matched_functions": 1134,
+        "matched_functions_percent": 79.245283,
+        "complete_code": "1521312",
+        "complete_code_percent": 73.744993,
         "total_units": 186,
-        "complete_units": 132
+        "complete_units": 134
       }
     },
     {
@@ -51167,17 +51167,17 @@
       "id": "level_03",
       "name": "Level 03",
       "measures": {
-        "fuzzy_match_percent": 94.240977,
+        "fuzzy_match_percent": 100.0,
         "total_code": "120576",
-        "matched_code": "113632",
-        "matched_code_percent": 94.240977,
+        "matched_code": "120576",
+        "matched_code_percent": 100.0,
         "total_functions": 71,
-        "matched_functions": 68,
-        "matched_functions_percent": 95.774648,
-        "complete_code": "113632",
-        "complete_code_percent": 94.240977,
+        "matched_functions": 71,
+        "matched_functions_percent": 100.0,
+        "complete_code": "120576",
+        "complete_code_percent": 100.0,
         "total_units": 13,
-        "complete_units": 11
+        "complete_units": 13
       }
     },
     {
