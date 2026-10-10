@@ -8,7 +8,110 @@
 #include "rnc/overlay/quad.h"
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e5e38.s", FUN_L00_002e5e38);
+#else
+extern float D_L00_0015EF44;
+extern int D_L00_0015EF60;
+extern char *D_L00_00168FC0;
+extern float D_L00_00161CA0 __attribute__((sda));
+extern float D_L00_00161CDC __attribute__((sda));
+extern float D_L00_00161CE0 __attribute__((sda));
+extern float D_L00_00161CE4 __attribute__((sda));
+extern float D_L00_00161D04 __attribute__((sda));
+extern float D_L00_00161D08 __attribute__((sda));
+extern float D_L00_00161D1C __attribute__((sda));
+extern float FUN_001ebd78_2e5e38(float, float, float, float, float, float *) __asm__("FUN_001ebd78");
+
+void FUN_L00_002e5e38(char *m) {
+    char *d = *(char **)(m + 0x70);
+    char *orbit;
+    char *target;
+    char *default_orbit;
+    char *default_target;
+    char *init = d + 0x1a8;
+    float goal, current, velocity;
+    float reset_a, reset_b, reset_c;
+    float *spring;
+    char *end;
+    short flag;
+
+    *(volatile float *)(init + 0x14) = D_L00_0015EF44;
+    *(volatile int *)(init + 0x1c) = 0;
+    *(volatile int *)(init + 0x20) = 0;
+    *(volatile int *)(init + 0x10) = 0;
+    *(volatile int *)(init + 0x24) = 0;
+
+    default_orbit = D_L00_00168FC0 + 0x130;
+    default_target = D_L00_00168FC0 + 0x40;
+    d = *(char **)(m + 0x70);
+    orbit = d + 0x130;
+    target = d + 0x40;
+    if (*(short *)(orbit + 0x3c)) {
+        velocity = *(float *)(init + 0x1c);
+        spring = (float *)(d + 0x174);
+        current = *(float *)(orbit + 0x2c);
+        goal = *(float *)(orbit + 0x40);
+    } else {
+        velocity = *(float *)(init + 0x1c);
+        spring = (float *)(d + 0x174);
+        current = *(float *)(orbit + 0x2c);
+        goal = *(float *)(default_orbit + 0x2c);
+    }
+    *(float *)(orbit + 0x2c) = FUN_001ebd78_2e5e38(current, goal,
+        *(float *)(orbit + 0x48), D_L00_00161D04, velocity, spring);
+
+    flag = *(short *)(orbit + 0x3e);
+    spring = (float *)(orbit + 0x50);
+    if (flag) {
+        current = *(float *)(orbit + 0x30);
+        goal = *(float *)(orbit + 0x4c);
+    } else {
+        current = *(float *)(orbit + 0x30);
+        goal = *(float *)(default_orbit + 0x30);
+    }
+    *(float *)(orbit + 0x30) = FUN_001ebd78_2e5e38(current, goal,
+        *(float *)(orbit + 0x54), D_L00_00161D08, 0.0f, spring);
+
+    spring = (float *)(target + 0xbc);
+    if (*(short *)(target + 0xda)) {
+        current = *(float *)(target + 0xb0);
+        goal = *(float *)(target + 0xb4);
+    } else {
+        goal = *(float *)(default_target + 0xb0);
+        current = *(float *)(target + 0xb0);
+    }
+    *(float *)(target + 0xb0) = FUN_001ebd78_2e5e38(current, goal,
+        *(float *)(target + 0xb8), 0.2f, 0.0f, spring);
+
+    *(short *)(orbit + 0x3c) = 0;
+    *(short *)(orbit + 0x3e) = 0;
+    *(int *)(orbit + 0x40) = 0;
+    *(int *)(orbit + 0x4c) = 0;
+    *(float *)(orbit + 0x58) = *(float *)(default_orbit + 0x2c);
+    *(short *)(target + 0xda) = 0;
+    *(int *)(target + 0xb4) = 0;
+    *(short *)(*(char **)(m + 0x70) + 0x10) = 1;
+    *(short *)(*(char **)(m + 0x70) + 0x22) = 0;
+    *(char *)(target + 0xd6) = 0;
+    *(float *)(target + 0xe4) = D_L00_00161CA0;
+    *(int *)(target + 0xe8) = 0x3e4ccccd;
+    *(float *)(target + 0xdc) = D_L00_00161CA0;
+    *(int *)(target + 0xe0) = 0x3e4ccccd;
+    reset_a = D_L00_00161CDC;
+    reset_b = D_L00_00161CE0;
+    reset_c = D_L00_00161CE4;
+    d = *(char **)(m + 0x70);
+    d += 0x1d0;
+    *(volatile float *)(d + 0x44) = reset_a;
+    *(volatile int *)(d + 0x48) = D_L00_0015EF60;
+    *(volatile float *)(d + 0x3c) = reset_c;
+    *(volatile float *)(d + 0x40) = reset_b;
+    end = *(char **)(m + 0x70) + 0x220;
+    *(float *)(end + 0xc) = D_L00_00161D1C;
+    *(short *)(end + 0x6) = 0;
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e6000.s", FUN_L00_002e6000);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E7B68), where it is exact; names translated to the US level program. */
 
