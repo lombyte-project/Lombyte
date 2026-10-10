@@ -1549,7 +1549,6 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void FUN_L14_002eef60(struct Moby *m) {
     char *d = (char *)m->pvars;
-    int i;
     int *path;
     int *e;
     int *first;
