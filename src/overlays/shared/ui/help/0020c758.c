@@ -3068,10 +3068,14 @@ tail:
         if (z < floor) {
             z = floor;
         }
-        /* Never true (unk20AD is a u8): combine folds the test away only
-           after it has kept g alive past the clamp, so the call result stays
-           in its own register (retail's mov.s $f2,$f0). Jump2 then deletes
-           the dead block. */
+        /* Hypothesis: a test that never fires in this build (perhaps a
+           debug flag; unk20AD is a u8, so bit 8 is never set) reads g after
+           the clamp. Retail evidence: it keeps g in its own register
+           (mov.s $f2,$f0) with 0.1f in $f0, so g was still live after the
+           subtraction, yet nothing visible reads $f2 later. Combine folds the
+           test only after keeping g, and the dead block is removed after
+           allocation. MIN/MAX macros, inline helpers and ternary clamps all
+           fold g into the sub.s instead. */
         boost = hero.unk20AD;
         if (boost & 0x100) {
             z = g;

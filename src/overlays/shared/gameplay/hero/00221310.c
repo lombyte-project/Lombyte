@@ -26,12 +26,6 @@ void FUN_L00_00221310(void) {
     f32 dist;
     f32 off;
     s32 hit;
-    f32 h;
-    f32 lim;
-    f32 h2;
-    struct Hero *hp;
-    f32 l2;
-    f32 b2;
 
     if (hero.unk20AD == 0) {
         FUN_L00_00213880();
@@ -55,12 +49,10 @@ void FUN_L00_00221310(void) {
         hero.unk258 = 0.0f;
         if (hero.unk300 != 0) {
             base = hero.unk258;
-            h = 1.1f;
-            lim = 0.5f;
-            FUN_L00_00233660(&first, h, base, 1.0f);
-            FUN_L00_00233660(&second, h, base, -20.0f);
-            if (second.f[2] < lim) {
-                second.f[2] = lim;
+            FUN_L00_00233660(&first, 1.1f, base, 1.0f);
+            FUN_L00_00233660(&second, 1.1f, base, -20.0f);
+            if (second.f[2] < 0.5f) {
+                second.f[2] = 0.5f;
             }
             dist = 20.0f;
             hit = collision_line(&first, &second, 2, hero.moby, 0);
@@ -70,27 +62,21 @@ void FUN_L00_00221310(void) {
                     return;
                 }
             }
-            /* Loop copies of h, base and lim. The dead stores to base and lim
-               stop GCSE propagating the originals back into the loop, which
-               keeps retail's register shuffle (h f21->f25, base f24->f21). */
-            h2 = h;
-            b2 = base;
-            base = h;
-            l2 = lim;
-            lim = h;
-            hp = &hero;
-            for (off = -0.4f; off < l2; off += 0.1f) {
-                h = off + h2; /* written back into h: keeps h2 a separate pseudo */
-                FUN_L00_00233660(&probe, h, b2, b2);
-                if (!FUN_L00_001f0d60(hp->unk234, &probe, 2, 0)) {
-                    hp->unk260 = 1;
+            /* The loop spells its constants out again. loop.c hoists them and
+               cse2 turns 1.1f and 0.0f into copies of the registers that
+               already hold them (base is known to be the 0.0f just stored),
+               which gives retail's two mov.s before the loop. */
+            for (off = -0.4f; off < 0.5f; off += 0.1f) {
+                FUN_L00_00233660(&probe, off + 1.1f, 0.0f, 0.0f);
+                if (!FUN_L00_001f0d60(hero.unk234, &probe, 2, 0)) {
+                    hero.unk260 = 1;
                     if (hit == 0) {
-                        hp->unk258 = 20.0f;
+                        hero.unk258 = 20.0f;
                     } else {
-                        hp->unk258 = dist;
+                        hero.unk258 = dist;
                     }
                     hero.unk25C = hero.unk234 + off;
-                    if (hero.unk25C < b2) {
+                    if (hero.unk25C < 0.0f) {
                         hero.unk25C = 0.0f;
                     }
                     return;
