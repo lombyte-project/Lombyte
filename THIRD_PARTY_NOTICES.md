@@ -1,6 +1,7 @@
 # Third-party notices
 
-Most of this repository is covered by the MIT license. Parts of `src/`
+Most of this repository is covered by the GNU General Public License v3.0
+(`LICENSE`). Parts of `src/`
 reconstruct runtime code that was statically linked into the retail
 executable; code reconstructed from third-party binaries remains the sole
 intellectual property of the respective copyright holders.
@@ -19,10 +20,9 @@ GPL. Full text: [`licenses/GPL-2.0.txt`](licenses/GPL-2.0.txt).
 ## rac1-decomp
 
 Some functions in `src/` are C written by the
-[rac1-decomp](https://github.com/OpenRAC/rac1-decomp) project, ported here
-while it was MIT licensed (before its switch to GPL-3.0 in `8753a55`). Each
-such file names its origin in its first line (`Ported from rac1-decomp ...`).
-No code is taken from later versions. Their notice:
+[rac1-decomp](https://github.com/OpenRAC/rac1-decomp) project (GPL-3.0 since
+`8753a55`, MIT before). Each such file names its origin in its first line
+(`Ported from rac1-decomp ...`). Code taken while it was MIT keeps its notice:
 [`licenses/MIT-rac1-decomp.txt`](licenses/MIT-rac1-decomp.txt).
 
 ## newlib
