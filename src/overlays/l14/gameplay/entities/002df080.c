@@ -1797,7 +1797,296 @@ void FUN_L14_002ef6f0(struct Moby *moby) {
         moby->unk90 = FUN_001fa6e0(moby->unk90, col, 0.1f);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f0538.s", FUN_L14_002f0538);
+/* A stop of the taxi route (D_L14_001600EC, 0x80 bytes each). */
+struct L14TaxiStop {
+    u8 pad0[0x30];
+    f32 pos[4];      /* 0x30 */
+    u8 pad40[0x30];
+    f32 rot[4];      /* 0x70 */
+};
+/* pvars of the taxi ship (same layout as FUN_L14_002f1040/f1140/f13f8 use) */
+typedef struct {
+    u8 pad0[0x20];
+    u8 spring[0x40];  /* 0x20 */
+    f32 pos[4];       /* 0x60 */
+    f32 rot[4];       /* 0x70 */
+    s32 points[5];    /* 0x80 */
+    u8 pad94[0x18];
+    s32 *path;        /* 0xAC: camera path */
+    s16 hB0;          /* 0xB0 */
+    s16 sound;        /* 0xB2 */
+    s16 picked;       /* 0xB4 */
+    s16 target;       /* 0xB6 */
+    s32 item_a;       /* 0xB8 */
+    s32 item_b;       /* 0xBC */
+    f32 t;            /* 0xC0 */
+    f32 tv;           /* 0xC4 */
+    u8 padC8[0x18];
+    f32 save_pos[4];  /* 0xE0 */
+    f32 save_rot[4];  /* 0xF0 */
+    s32 clip[3];      /* 0x100 */
+} L14TaxiVars;
+extern struct L14TaxiStop *D_L14_001600EC_taxi __asm__("D_L14_001600EC");
+extern s32 D_L14_0015F5CC;
+extern s32 D_L14_0015F594;
+extern char D_0013CAE4[];
+extern unsigned char D_0014C050[];
+extern char D_0013E550[];
+extern float D_0015ED70;
+extern float advance_accelerated_scalar_c(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
+extern f32 taxi_add_rot(f32 a, f32 b) __asm__("FUN_001fa580");
+extern f32 taxi_sub_rot(f32, f32) __asm__("FUN_001fa5c8");
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L05_003195f8(char *);
+extern void FUN_001f9a40(void *, void *, void *, float);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa2d8(void *, void *);
+extern void FUN_L00_00260738(void *a, void *b, void *c, void *d);
+extern void FUN_L00_00266858(void *, int);
+extern void FUN_L00_002e8450(int, float, float);
+extern float FUN_L00_00257e20(float, float, float, float, float);
+extern void FUN_L05_00319510(void *);
+extern void FUN_L05_00319740(char *);
+extern void FUN_L05_003198e8(char *);
+extern void taxi_release(s32) __asm__("FUN_0022d798");
+extern void taxi_sample(float, s32 *, int, void *, void *, int) __asm__("FUN_00214e58");
+extern void taxi_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern float taxi_fabs(float) __asm__("FUN_001f99c0");
+extern int taxi_frames(int) __asm__("FUN_001f96f8");
+extern int taxi_inside(void *, int) __asm__("FUN_00214720");
+extern int taxi_sound(int, int, void *) __asm__("FUN_0022da68");
+void FUN_L14_002f1040(struct Moby *moby);
+void FUN_L14_002f1140(struct Moby *moby);
+struct Moby *FUN_L14_002f12f0(struct Moby *moby, int tag);
+void FUN_L14_002f13f8(struct Moby *moby);
+
+extern void taxi_sample_f(s32 *, int, void *, void *, int, float) __asm__("FUN_00214e58");
+/* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002E0538.c (func_L14_002F19C0) */
+void FUN_L14_002f0538(struct Moby *moby) {
+    L14TaxiVars *d = (L14TaxiVars *)moby->pvars;
+    float v00[4], v10[4], v20[4], v30[4], v40[4], v50[4], v60[4], v70[4];
+    float m80[16];
+    int ticks = 10;
+    int button = 0x10;
+    int wrap = 0;
+    int flags = 0;
+    qcopy(v00, &moby->pos);
+    qcopy(v10, &moby->rot);
+    FUN_L00_00266858(moby, (moby->flags ^ 1) & 1);
+    switch (moby->state) {
+    case 0:
+        d->hB0 = -1;
+        d->sound = -1;
+        FUN_L14_002f1040(moby);
+        break;
+    case 1: {
+        struct Hero *g = &hero;
+        if (g->ground_moby == moby && g->air_frames.s == 0) {
+            FUN_001fa2d8(v30, &moby->unkC0);
+            taxi_sub(v70, &g->motion.pos, &moby->pos);
+            v70[3] = 0;
+            FUN_001f9d20(v70, v70, v30);
+            if (taxi_fabs(v70[1]) < 1.2f) {
+                FUN_L14_002f1140(moby);
+                FUN_L14_002f13f8(moby);
+                if ((*(int *)D_0013CAE4 & button) && D_L14_0015F594 == 4) {
+                    struct Moby *m;
+                    moby->state = 3;
+                    m = FUN_L14_002f12f0(moby, d->target);
+                    if (m != 0) {
+                        m->state = 2;
+                        m->flags |= 1;
+                        m->unk31 = 0;
+                        m->unk94 = 0;
+                    }
+                    d->hB0 = -1;
+                }
+            }
+        } else {
+            if (d->clip[0] >= 0 && d->picked != 0 && taxi_inside(&hero.motion.pos, d->clip[0])) {
+                if (D_L14_0015F5CC < taxi_frames(ticks)) {
+                    d->target = 0;
+                    d->picked = 0;
+                    qcopy_nc(&moby->pos, D_L14_001600EC_taxi[d->points[d->picked]].pos);
+                    qcopy_nc(&moby->rot, D_L14_001600EC_taxi[d->points[d->picked]].rot);
+                    moby->state = 1;
+                    qcopy_nc(d->pos, D_L14_001600EC_taxi[d->points[d->picked]].pos);
+                    qcopy_nc(d->rot, D_L14_001600EC_taxi[d->points[d->picked]].rot);
+                } else {
+                    if (d->picked == 2) {
+                        d->picked = 3;
+                    } else {
+                        d->picked = 1;
+                    }
+                    FUN_L14_002f1140(moby);
+                    moby->state = 3;
+                }
+            }
+            if (d->clip[1] >= 0 && d->picked != 1 && taxi_inside(&hero.motion.pos, d->clip[1])) {
+                if (D_L14_0015F5CC < taxi_frames(ticks)) {
+                    d->target = 1;
+                    d->picked = 1;
+                    qcopy_nc(&moby->pos, D_L14_001600EC_taxi[d->points[d->picked]].pos);
+                    qcopy_nc(&moby->rot, D_L14_001600EC_taxi[d->points[d->picked]].rot);
+                    moby->state = 1;
+                    qcopy_nc(d->pos, D_L14_001600EC_taxi[d->points[d->picked]].pos);
+                    qcopy_nc(d->rot, D_L14_001600EC_taxi[d->points[d->picked]].rot);
+                } else {
+                    d->picked = 0;
+                    FUN_L14_002f1140(moby);
+                    moby->state = 3;
+                }
+            }
+            if (d->clip[2] >= 0 && d->picked < 2 && taxi_inside(&hero.motion.pos, d->clip[2])) {
+                if (D_L14_0015F5CC < taxi_frames(ticks)) {
+                    d->target = 2;
+                    d->picked = 2;
+                    qcopy_nc(&moby->pos, D_L14_001600EC_taxi[d->points[d->picked]].pos);
+                    qcopy_nc(&moby->rot, D_L14_001600EC_taxi[d->points[d->picked]].rot);
+                    moby->state = 1;
+                    qcopy_nc(d->pos, D_L14_001600EC_taxi[d->points[d->picked]].pos);
+                    qcopy_nc(d->rot, D_L14_001600EC_taxi[d->points[d->picked]].rot);
+                } else {
+                    d->picked = 2;
+                    FUN_L14_002f1140(moby);
+                    moby->state = 3;
+                }
+            }
+        }
+        break;
+    }
+    case 3: {
+        struct Hero *g = &hero;
+        if (g->ground_moby == moby && g->air_frames.s == 0) {
+            FUN_L00_002e8450(0, 7.0f, 0.002f);
+        }
+        advance_accelerated_scalar_c(1.0f, D_0015ED70, D_0015ED70, frame_time * 0.5f, &d->t, &d->tv);
+        qcopy_nc(v30, D_L14_001600EC_taxi[d->points[d->picked]].pos);
+        qcopy_nc(v50, D_L14_001600EC_taxi[d->points[d->picked]].rot);
+        taxi_sample(0.0f, d->path, wrap, v40, v60, flags);
+        FUN_001f9a40(d->pos, v30, v40, d->t);
+        d->rot[1] = taxi_add_rot(taxi_sub_rot(v60[1], v50[1]) * d->t, v50[1]);
+        d->rot[2] = taxi_add_rot(taxi_sub_rot(v60[2], v50[2]) * d->t, v50[2]);
+        if (1.0f <= d->t) {
+            d->t = 0.0f;
+            d->tv = 0.0f;
+            moby->state = 4;
+        }
+        break;
+    }
+    case 7: {
+        float f;
+        advance_accelerated_scalar_c(1.0f, D_0015ED70, D_0015ED70, frame_time * 0.5f, &d->t, &d->tv);
+        qcopy(v30, d->save_pos);
+        qcopy(v50, d->save_rot);
+        taxi_sample_f(d->path, wrap, v40, v60, flags, 0.0f);
+        f = FUN_L00_00257e20(1.0f, 0.0f, 1.0f, 0.0f, d->t);
+        FUN_001f9a40(d->pos, v30, v40, f);
+        d->rot[1] = taxi_add_rot(taxi_sub_rot(v60[1], v50[1]) * f, v50[1]);
+        d->rot[2] = taxi_add_rot(taxi_sub_rot(v60[2], v50[2]) * f, v50[2]);
+        if (1.0f <= d->t) {
+            d->t = 0.0f;
+            d->tv = 0.0f;
+            moby->state = 4;
+        }
+        break;
+    }
+    case 4: {
+        struct Hero *g = &hero;
+        if (g->ground_moby == moby && g->air_frames.s == 0) {
+            FUN_L00_002e8450(0, 7.0f, 0.003f);
+        }
+        if (FUN_L05_003195f8((char *)moby)) {
+            d->t = 0.0f;
+            d->tv = 0.0f;
+            moby->state = 5;
+        }
+        break;
+    }
+    case 5: {
+        struct Hero *g;
+        advance_accelerated_scalar_c(1.0f, D_0015ED70, D_0015ED70, frame_time * 0.25f, &d->t, &d->tv);
+        qcopy_nc(v40, D_L14_001600EC_taxi[d->points[d->target]].pos);
+        qcopy_nc(v60, D_L14_001600EC_taxi[d->points[d->target]].rot);
+        taxi_sample_f(d->path, wrap, v30, v50, flags, (float)*d->path);
+        FUN_001f9a40(d->pos, v30, v40, d->t);
+        d->rot[1] = taxi_add_rot(taxi_sub_rot(v60[1], v50[1]) * d->t, v50[1]);
+        d->rot[2] = taxi_add_rot(taxi_sub_rot(v60[2], v50[2]) * d->t, v50[2]);
+        if (1.0f <= d->t) {
+            d->t = 0.0f;
+            d->tv = 0.0f;
+            moby->state = 1;
+            FUN_L05_00319510(moby);
+        }
+        g = &hero;
+        if (g->ground_moby == moby && g->air_frames.s == 0) {
+            FUN_001fa2d8(m80, &moby->unkC0);
+            taxi_sub(v70, &g->motion.pos, &moby->pos);
+            v70[3] = 0;
+            FUN_001f9d20(v70, v70, m80);
+            if (taxi_fabs(v70[1]) < 1.2f) {
+                FUN_L14_002f13f8(moby);
+                if (*(int *)D_0013CAE4 & button) {
+                    qcopy(d->save_pos, d->pos);
+                    qcopy(d->save_rot, d->rot);
+                    FUN_L14_002f1040(moby);
+                    d->picked = d->target;
+                    FUN_L14_002f1140(moby);
+                    moby->state = 7;
+                    qcopy(d->pos, d->save_pos);
+                    qcopy(d->rot, d->save_rot);
+                    {
+                        struct Moby *m = FUN_L14_002f12f0(moby, d->target);
+                        if (m != 0) {
+                            m->state = 2;
+                            m->flags |= 1;
+                            m->unk31 = 0;
+                            m->unk94 = 0;
+                        }
+                    }
+                }
+            }
+        }
+        break;
+    }
+    case 6: {
+        unsigned char *t = D_0014C050;
+        int k = current_level_index * 16;
+        if (t[d->item_a + k] == 0xFF || t[d->item_b + k] == 0xFF) {
+            unsigned short bits = moby->flags;
+            int value = moby->pclass->unk10;
+            moby->unk31 = 1;
+            moby->unk94 = value;
+            moby->flags = bits & 0xFFFE;
+            moby->state = 1;
+        }
+        break;
+    }
+    }
+    FUN_L05_00319740((char *)moby);
+    if (moby->state >= 3 && moby->state <= 4) {
+        struct Hero *g = &hero;
+        if (g->ground_moby == moby && g->air_frames.s == 0) {
+            g->unk1F2 = 2;
+            g->unk1F4 = 2;
+            FUN_L05_003198e8((char *)moby);
+        }
+        if (FUN_L00_0028d8c0(moby, d->sound) == 0) {
+            d->sound = taxi_sound(0, 4, moby);
+        }
+    } else if (FUN_L00_0028d8c0(moby, d->sound) != 0) {
+        int h = d->sound;
+        if (h != -1) {
+            char *e = D_0013E550 + h * 0x70;
+            if (*(struct Moby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+                taxi_release(h);
+            }
+        }
+        d->sound = -1;
+    }
+    taxi_sub(v20, &moby->pos, v00);
+    FUN_L00_00260738(d->spring, v20, v10, &moby->rot);
+}
 extern float FUN_001f9b48_2f1040(void *, void *) __asm__("FUN_001f9b48");
 struct L14PathPoint {
     char pad0[0x30];
