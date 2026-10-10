@@ -72,7 +72,7 @@ void FUN_L10_002e9028(unsigned char *m) {
         m[0x31] = 0;
         break;
     case 1:
-        player = (((char *)&hero) + 0x80);
+        player = (&hero.motion.pos);
         if (FUN_001f9b48(m + 0x10, player) < 8.0f) {
             subtract_vector_xyz(v, player + 0x50, m + 0x10);
             FUN_001fa2d8(mtx, m + 0xC0);
@@ -84,7 +84,7 @@ void FUN_L10_002e9028(unsigned char *m) {
                     player[0x224B] = 0;
                 }
             } else if (0.0f < v[1]) {
-                ((unsigned char *)((char *)&hero))[0x22cb] = 0;
+                hero.unk22CB = 0;
             }
         }
         enqueue_callback_list_1(FUN_L10_002e91b8, m);

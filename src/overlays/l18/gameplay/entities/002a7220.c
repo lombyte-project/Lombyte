@@ -2127,7 +2127,6 @@ extern unsigned int D_L18_00162054 __asm__("D_L18_00162054") __attribute__((sda)
 extern float D_L18_001620A8 __asm__("D_L18_001620A8") __attribute__((sda));
 extern float D_L18_001620AC __asm__("D_L18_001620AC") __attribute__((sda));
 extern Vec130 D_L18_001677C0 __asm__("D_L18_001677C0") __attribute__((section(".data")));
-extern Vec130 D_0013F5E0 __asm__("D_0013F5E0");
 extern Vec130 D_L18_001D9CA0[] __asm__("D_L18_001D9CA0") __attribute__((section(".data")));
 extern UVec130 D_L18_001D9CE0[] __asm__("D_L18_001D9CE0") __attribute__((section(".data")));
 extern void vsub_ec130(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -2159,7 +2158,7 @@ void FUN_L18_002ec130(void *mv) {
     mat[3].f[3] = 1.0f;
     vsub_ec130(&mat[0], &D_L18_001677C0, &mat[3]);
     vscl_ec130(&mat[0], &mat[0], 1.0f);
-    cross_ec130(&mat[1], &mat[0], &D_0013F5E0);
+    cross_ec130(&mat[1], &mat[0], (Vec130 *)&hero.unk290);
     vscl_ec130(&mat[1], &mat[1], -1.0f);
     cross_ec130(&mat[2], &mat[1], &mat[0]);
     c = D_L18_001620A0;

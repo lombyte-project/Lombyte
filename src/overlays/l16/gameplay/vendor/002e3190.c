@@ -1502,7 +1502,7 @@ void FUN_L16_002e6808(L16ChallengeMoby *m) {
             m->event = 0;
             pose = D_L16_001D9840;
             FUN_L00_00216f90(pose, pose + 0x10, 0, 1);
-            camera = (((char *)&hero) + 0x1d00);
+            camera = (char *)hero.unk1D00;
             qcopy(camera, pose + 0x20);
             qcopy(camera + 0x10, pose + 0x30);
             m->state = 3;
@@ -1578,7 +1578,7 @@ void FUN_L16_002e6808(L16ChallengeMoby *m) {
             char *pose = D_L16_001D9840;
             m->event = 0;
             FUN_L00_00216f90(pose, pose + 0x10, 0, 1);
-            camera = (((char *)&hero) + 0x1d00);
+            camera = (char *)hero.unk1D00;
             qcopy(camera, pose + 0x20);
             qcopy(camera + 0x10, pose + 0x30);
         }

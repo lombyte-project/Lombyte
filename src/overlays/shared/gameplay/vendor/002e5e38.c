@@ -6,7 +6,6 @@
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/overlay/quad.h"
-extern char D_0013F350[];
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e5e38.s", FUN_L00_002e5e38);
@@ -49,23 +48,23 @@ void FUN_L00_002e66b8(int snap) {
     if (snap) {
         float offset[4], part[4], basis[12], delta[4], start[4];
         float length;
-        char *player = D_0013F350;
-        char *hero2, *hero3;
+        struct Hero *player = &hero;
+        struct Hero *hero2, *hero3;
         part[0] = -*(float *)(orbit + 0x2C);
         part[1] = 0.0f;
         part[2] = *(float *)(orbit + 0x30);
         part[3] = 0.0f;
         mask = 0x94;
-        copy_matrix3x4(basis, player);
+        copy_matrix3x4(basis, player->unk0);
         transform_vector_by_basis(offset, part, *(char **)(target + 0xC0) + 0xC0);
         add_vector_xyz(cam + 0x30, target, offset);
         scale_vector_xyz(rise, *(char **)(target + 0xC0) + 0xE0, *(float *)(target + 0xB0));
         add_vector_xyz(eye, target, rise);
-        if (FUN_001efa68(eye, cam + 0x30, mask, *(int *)(player + 0x2080), 0)) {
+        if (FUN_001efa68(eye, cam + 0x30, mask, (int)player->moby, 0)) {
             if (FUN_001f9b80(D_L00_00173F60_a, eye) < 0.001f) mask = 0x96;
         }
-        hero2 = D_0013F350;
-        if (FUN_001efa68(eye, cam + 0x30, mask, *(int *)(hero2 + 0x2080), 0)) {
+        hero2 = &hero;
+        if (FUN_001efa68(eye, cam + 0x30, mask, (int)hero2->moby, 0)) {
             subtract_vector_xyz(delta, (float *)D_L00_00173F60_a, eye);
             length = vector_length_xyz(delta);
             if (length == 0.0f) {
@@ -93,8 +92,8 @@ void FUN_L00_002e66b8(int snap) {
                 } else {
                     scale_vector_xyz(delta, delta, *(float *)(orbit + 0x2C) / length);
                     add_vector_xyz(cam + 0x30, start, delta);
-                    hero3 = D_0013F350;
-                    if (FUN_001efa68(start, cam + 0x30, mask, *(int *)(hero3 + 0x2080), 0)) {
+                    hero3 = &hero;
+                    if (FUN_001efa68(start, cam + 0x30, mask, (int)hero3->moby, 0)) {
                         subtract_vector_xyz(delta, (float *)D_L00_00173F60_a, eye);
                         length = vector_length_xyz(delta);
                         if (length == 0.0f) {

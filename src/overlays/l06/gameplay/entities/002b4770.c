@@ -292,7 +292,6 @@ void FUN_L06_002fb090(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC6D8), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern char D_L06_00167540[] __attribute__((section(".data")));
 extern short D_0015ED70_s __asm__("D_0015ED70");
 extern float FUN_001f9b80(void *, void *);
@@ -309,7 +308,7 @@ int FUN_L06_002fb2a8(char *moby) {
     float v0[4], m[4], v1[4], v2[4];
     char *data;
     char *pos;
-    char *x;
+    struct Hero *x;
     float t;
     data = *(char **)(moby + 0x78);
     clear_u64_value(m);
@@ -322,10 +321,10 @@ int FUN_L06_002fb2a8(char *moby) {
                      frame_time + frame_time);
         FUN_001f9bf8(v1, moby + 0xC0, 8.0f);
         FUN_001f9a10(v1, v1, moby + 0x10);
-        x = D_0013F350;
-        v1[2] = *(float *)(x + 0x88) + 2.0f;
-        FUN_001f9bf8(v2, x, -7.0f);
-        FUN_001f9a10(v2, v2, x + 0x80);
+        x = &hero;
+        v1[2] = x->motion.pos.f[2] + 2.0f;
+        FUN_001f9bf8(v2, x->unk0, -7.0f);
+        FUN_001f9a10(v2, v2, &x->motion.pos);
         v2[2] += 4.0f;
         pos = moby + 0x10;
         FUN_001f9a40(v0, v1, v2, *(float *)(data + 0x118));
@@ -366,7 +365,7 @@ int FUN_L06_002fb668(char *moby) {
     float v0[4], m[4], v1[4], v2[4];
     char *data;
     char *pos;
-    char *x;
+    struct Hero *x;
     float t;
     data = *(char **)(moby + 0x78);
     clear_u64_value(m);
@@ -379,10 +378,10 @@ int FUN_L06_002fb668(char *moby) {
                      frame_time * 0.5f);
         FUN_001f9bf8(v1, moby + 0xC0, 8.0f);
         FUN_001f9a10(v1, v1, moby + 0x10);
-        x = D_0013F350;
-        v1[2] = *(float *)(x + 0x88) + 2.0f;
-        FUN_001f9bf8(v2, x, -7.0f);
-        FUN_001f9a10(v2, v2, x + 0x80);
+        x = &hero;
+        v1[2] = x->motion.pos.f[2] + 2.0f;
+        FUN_001f9bf8(v2, x->unk0, -7.0f);
+        FUN_001f9a10(v2, v2, &x->motion.pos);
         v2[2] += 4.0f;
         pos = moby + 0x10;
         FUN_001f9a40(v0, v1, v2, *(float *)(data + 0x118));

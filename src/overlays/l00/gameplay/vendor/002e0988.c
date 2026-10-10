@@ -718,7 +718,6 @@ typedef struct {
 } GlowMoby;
 
 extern GlowVec glow_origin __asm__("D_L00_00166DC0");
-extern GlowVec D_0013F5E0;
 extern GlowVec D_L00_001E6CA0[4];
 extern void FUN_001f9a68(f32, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
@@ -739,7 +738,7 @@ void FUN_L00_002e1c78(GlowMoby *m) {
     mat[3].f[3] = one;
     FUN_001f9a28(&mat[0], &glow_origin, &mat[3]);
     FUN_001f9bf8(&mat[0], &mat[0], one);
-    fast_vec_cross(&mat[1], &mat[0], &D_0013F5E0);
+    fast_vec_cross(&mat[1], &mat[0], (GlowVec *)&hero.unk290);
     FUN_001f9bf8(&mat[1], &mat[1], -1.0f);
     fast_vec_cross(&mat[2], &mat[1], &mat[0]);
     quad.tex = get_effect_texture(0xB);

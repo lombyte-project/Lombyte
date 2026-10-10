@@ -1118,8 +1118,8 @@ void FUN_L00_00217658(void) {
     FUN_00214598(out_mat, &item->rot);
     pv->unk64 = 0;
     pv->unk60 = D_0015ED6C_217658 * 23.0f;
-    FUN_L00_00262500(item, (((char *)&hero) + 0x17b0));
-    FUN_L00_00262528((((char *)&hero) + 0x17b0), 0x30, 3);
-    FUN_L00_00262528((((char *)&hero) + 0x17b0), 0x17, 5);
+    FUN_L00_00262500(item, hero.unk17B0);
+    FUN_L00_00262528(hero.unk17B0, 0x30, 3);
+    FUN_L00_00262528(hero.unk17B0, 0x17, 5);
     blend_moby_animation(item, 6, 0, scale_game_frames(5));
 }

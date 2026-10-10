@@ -1685,7 +1685,6 @@ typedef struct {
 
 extern float D_L16_001D3130[4][4] __attribute__((section(".data")));
 extern char D_L16_001671C0[];
-extern u8 D_0013F5E0[] __attribute__((section(".data")));
 extern int D_L16_001619E0 __attribute__((sda));
 extern int D_L16_001619E4 __attribute__((sda));
 extern long get_effect_texture_alt(int) __asm__("FUN_001f44b8");
@@ -1734,7 +1733,7 @@ void FUN_L16_002cef60(char *moby) {
             mat[3][3] = 1.0f;
             subtract_vector_xyz(mat[0], D_L16_001671C0, mat[3]);
             normalize_vector_xyz(mat[0], mat[0], 1.0f);
-            cross_vectors_xyz(mat[1], mat[0], D_0013F5E0);
+            cross_vectors_xyz(mat[1], mat[0], (u8 *)&hero.unk290);
             normalize_vector_xyz(mat[1], mat[1], -1.0f);
             cross_vectors_xyz(mat[2], mat[1], mat[0]);
             draw_geometry_quad_alt(&q, mat, 0);

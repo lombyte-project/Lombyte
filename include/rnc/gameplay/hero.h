@@ -398,7 +398,9 @@ struct Hero {
     struct Moby *unk6A4;           /* 0x6A4 */
     f32 unk6A8;                    /* 0x6A8 */
     f32 unk6AC;                    /* 0x6AC */
-    u8 pad_6B0[0x10];
+    f32 unk6B0;                    /* 0x6B0 */
+    f32 unk6B4;                    /* 0x6B4 */
+    u8 pad_6B8[0x8];
     Vec4 unk6C0;                   /* 0x6C0: 0x60 bytes cleared by FillTransferWords */
     f32 unk6D0;                    /* 0x6D0 */
     f32 unk6D4;                    /* 0x6D4 */
@@ -428,7 +430,7 @@ struct Hero {
     f32 unk874;                    /* 0x874 */
     f32 unk878;                    /* 0x878 */
     f32 unk87C;                    /* 0x87C */
-    u8 pad_880[0x4];
+    s32 unk880;                    /* 0x880 */
     s16 unk884;                    /* 0x884 */
     s16 unk886;                    /* 0x886 */
     s16 unk888;                    /* 0x888 */
@@ -437,7 +439,7 @@ struct Hero {
     u8 unk88D;                     /* 0x88D */
     u8 unk88E;                     /* 0x88E */
     u8 unk88F;                     /* 0x88F */
-    u8 pad_890[0x4];
+    u8 *unk890;                    /* 0x890 */
     s32 unk894;                    /* 0x894: frame counter shown as m:ss.hh on the HUD (FUN_L05_00266710) */
     s16 unk898;                    /* 0x898 */
     s16 unk89A;                    /* 0x89A: shown + 1 (capped at 3) on the HUD (FUN_L05_00266320) */
@@ -619,10 +621,10 @@ struct Hero {
     s32 unk1660;                   /* 0x1660 */
     u8 pad_1664[0xC];
     struct MobyTrail trail;        /* 0x1670: trail of moby copies following hero.moby */
-    u8 pad_17B0[0x140];
+    u8 unk17B0[0x140];             /* 0x17B0: buffer handed to FUN_L00_00262500 / FUN_L00_00262528 */
     struct HeroEase unk18F0[3];    /* 0x18F0: eased records, kind 5 set when an item slot is ready (FUN_L00_00210748) */
     Vec4 unk1B00[32];              /* 0x1B00: ring of 32 quads indexed by unk21B0 */
-    u8 pad_1D00[0x20];
+    u8 unk1D00[0x20];              /* 0x1D00 */
     f32 unk1D20;                   /* 0x1D20 */
     f32 unk1D24;                   /* 0x1D24 */
     u8 pad_1D28[0x68];
@@ -630,7 +632,23 @@ struct Hero {
     u8 pad_1E40[0x70];
     s16 unk1EB0;                   /* 0x1EB0 */
     s16 unk1EB2;                   /* 0x1EB2: once flag for queueing FUN_L00_00207d40 */
-    u8 pad_1EB4[0xAC];
+    u8 pad_1EB4[0x1C];
+    f32 unk1ED0;                   /* 0x1ED0 */
+    f32 unk1ED4;                   /* 0x1ED4 */
+    f32 unk1ED8;                   /* 0x1ED8 */
+    u8 pad_1EDC[0x8];
+    f32 unk1EE4;                   /* 0x1EE4 */
+    u8 pad_1EE8[0x20];
+    s32 unk1F08;                   /* 0x1F08 */
+    u8 pad_1F0C[0x4];
+    Vec4 unk1F10;                  /* 0x1F10 */
+    f32 unk1F20;                   /* 0x1F20 */
+    f32 unk1F24;                   /* 0x1F24 */
+    f32 unk1F28;                   /* 0x1F28 */
+    u8 pad_1F2C[0x13];
+    s8 unk1F3F;                    /* 0x1F3F */
+    f32 unk1F40;                   /* 0x1F40 */
+    u8 pad_1F44[0x1C];
     u8 unk1F60[0x40];              /* 0x1F60: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
     u8 unk1FA0[0x40];              /* 0x1FA0: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
     u8 *unk1FE0;                   /* 0x1FE0: moby set by FUN_L00_002b58d8 */
