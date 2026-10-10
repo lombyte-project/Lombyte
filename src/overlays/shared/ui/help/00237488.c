@@ -683,50 +683,53 @@ void FUN_L05_00254358(f32 *position, f32 *direction) {
     f32 best;
     s32 index = 0;
     s32 selected = 0;
-    f32 point[4] __attribute__((aligned(16)));
+    HelpPathPoint point;
     HelpPathPoint *p;
+    char *origin = g + 0x80;
 
     if (*(void **)(g + 0x86C) == 0) {
-        *(HelpPathPoint *)position = *(HelpPathPoint *)(g + 0x80);
-        *(HelpPathPoint *)direction = *(HelpPathPoint *)(g + 0x90);
+        *(HelpPathPoint *)position = *(HelpPathPoint *)origin;
+        *(HelpPathPoint *)direction = *(HelpPathPoint *)(origin + 0x10);
         return;
     }
-    path = (HelpPath *)D_L05_001B0930[*(s32 *)(*(char **)(g + 0x86C) + 0x78)];
+    path = (HelpPath *)D_L05_001B0930[*(s32 *)(*(char **)(*(char **)(g + 0x86C) + 0x78) + 0x24)];
     best = 9999999.0f;
-    p = path->points;
-    while (index < path->count) {
-        f32 a = FUN_001f9e90(p->x - *(f32 *)(g + 0x80), p->y - *(f32 *)(g + 0x84));
-        s32 next = (index + path->count + 2) % path->count;
-        f32 b = FUN_001f9e90(path->points[next].x - p->x, path->points[next].y - p->y);
+    if (path->count > 0) do {
+        f32 a;
+        s32 next;
+        f32 b;
+        p = &path->points[index];
+        next = (index + (path->count + 2)) % path->count;
+        a = FUN_001f9e90(p->x - *(f32 *)(origin + 0), p->y - *(f32 *)(origin + 4));
+        b = FUN_001f9e90(path->points[next].x - p->x, path->points[next].y - p->y);
         if (fast_difference_between_rotations(a, b) > 1.5707964f) {
-            s32 eligible = 1;
             if (current_level_index == 0x10 && *(void **)(g + 0x8B4) != 0) {
-                char *v = *(char **)(g + 0x8B4);
-                f32 a = *(f32 *)(v + *(s16 *)(g + 0x8C8) * 16 + 0x18);
-                f32 b = *(f32 *)(v + *(s16 *)(g + 0x898) * 16 + 0x18);
-                f32 high = a < b ? b : a;
+                f32 a = *(f32 *)(origin + *(s16 *)(g + 0x8C8) * 16 + 0x18);
+                f32 b = *(f32 *)(origin + *(s16 *)(g + 0x898) * 16 + 0x18);
+                f32 high = b;
+                if (!(a < b)) high = a;
                 if (AbsoluteFloat(high - p->z) > 4.0f) {
-                    eligible = 0;
+                    goto next_point;
                 }
             }
-            if (eligible) {
-                f32 distance = FUN_001f9b80(g + 0x80, p);
+            {
+                f32 distance = FUN_001f9b80(origin, p);
                 if (distance < best) {
                     best = distance;
                     selected = index;
                 }
             }
         }
+next_point:
         index += 2;
-        p += 2;
-    }
-    *(HelpPathPoint *)position = path->points[selected];
-    *(HelpPathPoint *)point = *(HelpPathPoint *)position;
-    point[2] += 2.0f;
-    position[2] = find_ground_height(0.5f, point, 0);
+    } while (index < path->count);
+    p = &path->points[selected];
+    *(HelpPathPoint *)position = *p;
+    point = *(HelpPathPoint *)position;
+    point.z += 2.0f;
+    position[2] = find_ground_height(0.5f, &point, 0);
     clear_u64_value(direction);
-    direction[2] = FUN_001f9e90(path->points[selected + 1].x - path->points[selected].x,
-                                 path->points[selected + 1].y - path->points[selected].y);
+    direction[2] = FUN_001f9e90(p[1].x - p->x, p[1].y - p->y);
 }
 #endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254608.s", FUN_L05_00254608);
