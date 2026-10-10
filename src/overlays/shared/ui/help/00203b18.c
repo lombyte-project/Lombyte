@@ -512,63 +512,95 @@ extern s32 FUN_001f96f8(s32);
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 
 void FUN_L00_00206e00(void) {
-    s32 input = 0;
+    struct Hero *g;
+    s32 input;
     s32 level;
     s32 i, j, length, position;
     u8 *sequence;
+    u8 *history;
     s32 *history_count;
     if (D_0015EEA0 == 0 && D_0015EE20 == 0)
         return;
+    g = &hero;
     level = FUN_001f96f8(15);
-    if (hero.state_timer == level) {
-        if (hero.state.control_mode == 4) {
-            if (hero.state.current == HERO_STATE_HIGH_JUMP) {
-                if (hero.unk450 == 0)
-                    input = D_0015EDB4 ? 2 : 1;
-                else if (hero.unk450 == 1)
-                    input = D_0015EDB4 ? 1 : 2;
-                else if (hero.unk450 == 3)
-                    input = 3;
-            } else if (hero.state.current == 0x11)
+    input = 0;
+    if (g->state_timer == level) {
+        if (g->state.control_mode == 4) {
+            if (g->state.current == HERO_STATE_HIGH_JUMP) {
+                if (g->unk450 == 0) {
+                    input = 1;
+                    if (D_0015EDB4)
+                        input = 2;
+                    goto append;
+                }
+                if (g->unk450 == 1) {
+                    input = 2;
+                    if (D_0015EDB4)
+                        input = 1;
+                    goto append;
+                }
+                input = 3;
+                if (g->unk450 != 3)
+                    input = 0;
+            } else if (g->state.current == 0x11) {
                 input = 9;
-            else if (hero.state.current == HERO_STATE_PACK_JUMP)
+                goto append;
+            } else if (g->state.current == HERO_STATE_PACK_JUMP) {
                 input = 10;
-            else if (hero.state.current == 0xE)
+                goto append;
+            } else {
                 input = 5;
-        } else if (hero.state.control_mode == 6) {
-            if (hero.state.current == HERO_STATE_WRENCH_SLAM)
+                if (g->state.current != 0xE)
+                    input = 0;
+            }
+        } else if (g->state.control_mode == 6) {
+            if (g->state.current == HERO_STATE_WRENCH_SLAM) {
                 input = 6;
-            else if (hero.state.current == HERO_STATE_WRENCH_COMBO)
-                input = hero.attack_record + 12;
-            else if (hero.state.current == HERO_STATE_CROUCH_SWING)
-                input = 4;
-        } else if (hero.state.current == 0x22)
+                goto append;
+            }
+            if (g->state.current == HERO_STATE_WRENCH_COMBO) {
+                input = g->attack_record + 12;
+                goto append;
+            }
+            input = 4;
+            if (g->state.current != HERO_STATE_CROUCH_SWING)
+                input = 0;
+        } else {
             input = 11;
-    } else if (hero.state_timer == FUN_001f96f8(0x3C)) {
-        if (hero.state.current == HERO_STATE_CROUCH)
-            input = 7;
-        else if (hero.state.current == HERO_STATE_LAND)
+            if (g->state.current != 0x22)
+                input = 0;
+        }
+    } else {
+        level = FUN_001f96f8(0x3C);
+        if (g->state_timer == level) {
+            if (g->state.current == HERO_STATE_CROUCH) {
+                input = 7;
+                goto append;
+            }
             input = 8;
+            if (g->state.current != HERO_STATE_LAND)
+                input = 0;
+        }
     }
+append:
     if (input == 0)
         return;
-    history_count = (s32 *)((u8 *)&hero + 0x21D4);
-    ((u8 *)&hero + 0x21C4)[*history_count] = input;
+    history_count = (s32 *)((u8 *)g + 0x21D4);
+    history = (u8 *)g + 0x21C4;
+    history[*history_count] = input;
     (*history_count)++;
     sequence = D_L00_00179700;
     for (i = 0; i < 12; i++, sequence += 16) {
         length = 0;
         if (*sequence != 0) {
-            do {
-                length++;
-            } while (sequence[length] != 0);
+            for (length = 1; sequence[length] != 0; length++) { }
         }
         if (length != 0) {
             position = *history_count - length;
             if (position < 0)
                 position += 16;
             j = 0;
-            if (((u8 *)&hero + 0x21C4)[position] == sequence[0]) {
+            if (history[position] == sequence[0]) {
                 do {
                     position++;
                     j++;
@@ -576,7 +608,7 @@ void FUN_L00_00206e00(void) {
                         position -= 16;
                     if (j >= length)
                         break;
-                } while (((u8 *)&hero + 0x21C4)[position] == sequence[j]);
+                } while (history[position] == sequence[j]);
             }
             if (j == length) {
                 selector_available[i] = 1;
