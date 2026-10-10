@@ -263,8 +263,7 @@ void FUN_L08_00316fa8(char *moby) {
                                           (*(float *)&data[1] + 1.0f)) * 1024.0f));
         }
     }
-    voice = data[2];
-    slot = D_0013E550 + voice * 0x70;
+    slot = D_0013E550 + data[2] * 0x70;
     qcopy(slot + 0x90, D_L08_001675C0);
     if (*(char **)(slot + 0x8c) == moby) {
         if (*(unsigned char *)(slot + 0x74) != 0) {
