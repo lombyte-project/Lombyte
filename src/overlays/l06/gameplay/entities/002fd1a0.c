@@ -30,6 +30,7 @@ extern float D_L06_00161FA4 __attribute__((sda));
 extern float D_L06_00167554;
 extern float D_L06_00167558;
 extern float D_L06_00167540[];
+extern float D_L06_00167400[];
 extern float D_L06_001F1540[][2];
 extern short D_L06_001F1220[][4][2];
 extern float D_L06_001F0900[][4] __attribute__((aligned(16)));
@@ -48,11 +49,11 @@ extern void draw_2fd1a0(void *, void *, int) __asm__("FUN_001f7d30");
 void FUN_L06_002fd1a0(void) {
     Packet_2fd1a0 first, second;
     float matrix[4][4] __attribute__((aligned(16)));
-    float vec1[4] __attribute__((aligned(16)));
     float vec2[4] __attribute__((aligned(16)));
+    float vec1[4] __attribute__((aligned(16)));
     u128 scratch;
-    float x_offset = D_L06_00161FA4 * D_L06_00167554;
-    float y_offset = D_L06_00161FA0 * D_L06_00167558;
+    float y_offset = D_L06_00161FA0 * D_L06_00167400[86];
+    float x_offset = D_L06_00161FA4 * D_L06_00167400[85];
     long flags;
     int i, j;
 
@@ -68,10 +69,7 @@ void FUN_L06_002fd1a0(void) {
     first.unk70 = 0;
     second.unk70 = 0;
     initialize_matrix_2fd1a0(matrix);
-    first.color[0] = D_L06_00161F94;
-    first.color[1] = D_L06_00161F94;
-    first.color[2] = D_L06_00161F94;
-    first.color[3] = D_L06_00161F94;
+    first.color[0] = first.color[1] = first.color[2] = first.color[3] = D_L06_00161F94;
     second.color[0] = D_L06_00161F98;
     second.color[1] = D_L06_00161F98;
     second.color[2] = D_L06_00161F98;
@@ -89,9 +87,9 @@ void FUN_L06_002fd1a0(void) {
             int a = D_L06_001F1220[i][j][0];
             int b = D_L06_001F1220[i][j][1];
             float u, v;
-            qcopy(&scratch, D_L06_001F0900[a]);
-            qcopy(&first.v[j], &scratch);
-            qcopy(&second.v[j], &first.v[j]);
+            qcopy(&first.v[j], D_L06_001F0900[a]);
+            qcopy(&scratch, &first.v[j]);
+            qcopy(&second.v[j], &scratch);
             u = D_L06_001F1540[b][0];
             v = D_L06_001F1540[b][1];
             first.uv[j][0] = u + y_offset;
