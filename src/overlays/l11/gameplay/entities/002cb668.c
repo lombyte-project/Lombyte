@@ -5,6 +5,8 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/state/item_state.h"
+#include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/overlay/moby_anim.h"
 #define MOBY(p) ((struct Moby *)(p))
 
@@ -645,7 +647,161 @@ void FUN_L11_002d27b0(WM11 *m) {
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f0e40.s", FUN_L11_002f0e40);
+/* Pokitaru sentry pvars (class of FUN_L11_002f0e40). */
+struct PokSentryVars {
+    char pad00[4];
+    short h04;
+    char pad06[6];
+    float f0C;
+    char pad10[0x38];
+    int slot;
+    char pad4C[4];
+    char body[0x64];
+    float pitch;
+    float yaw;
+    char padBC[4];
+    float height;
+    char padC4[0xC];
+    char head[0x68];
+    float head_yaw;
+    char pad13C[0x14];
+    float target[4];
+    int moving_timer;
+    int target_timer;
+};
+
+extern unsigned char D_0013D50B __attribute__((section(".data")));
+extern int D_0015EEA4;
+extern int D_0015ED84;
+extern unsigned char D_0014C050[];
+extern char *D_L11_001600EC;
+extern struct UsageStat usage_stats_f0e40[] __asm__("D_00141968") __attribute__((section(".data")));
+extern void DeleteMoby_f0e40(void *) __asm__("FUN_0020c828");
+extern float AbsoluteFloat_f0e40(float) __asm__("FUN_001f99c0");
+extern void FUN_L00_002502a0(int);
+extern void FUN_L00_00263d40(int, int);
+
+void FUN_L11_002f0e40(struct Moby *moby) {
+    WS11 scratch;
+    struct PokSentryVars *d = (struct PokSentryVars *)moby->pvars;
+    float rate;
+    float head_rate;
+    int tracking;
+
+    FUN_L02_002e0cd8(moby);
+    if (moby->unk31 && FastVecDist(&moby->pos, D_L11_001677C0) < 30.0f) {
+        FUN_L00_0025a120(moby);
+        moby->unk7F = 24;
+    }
+    switch (moby->state) {
+    case 0:
+        moby->state = 1;
+        if (moby->prev_seq != 1)
+            FUN_00212f90(moby, 1, 0, scale_game_frames(20));
+        if (D_0013D50B) {
+            DeleteMoby_f0e40(moby);
+            return;
+        }
+        FUN_L00_002668a0(moby, d);
+        d->f0C = 4.0f;
+        break;
+    case 1:
+        if (FUN_L00_00266448(moby, d)) {
+            FUN_L01_002783a8(moby, 3.0f);
+            moby->state = 2;
+        }
+        if (alternate_item_available[1] == 0 && discount_purchase_pricing[0] == 0) {
+            if (FastVecDist(&moby->pos, hero.motion.pos.f) < 4.0f) {
+                int t = scale_game_frames(D_0015EEA4) - usage_stats_f0e40[0x86].unk2 * 600;
+                if ((int)(scale_game_frames(18) * 60.0f) < t || usage_stats_f0e40[0x86].unk2 * 600 == 0) {
+                    FUN_L00_00203908(0x2B03, 0x86);
+                } else if (scale_game_frames(D_0015EEA4) / 600 > usage_stats_f0e40[0x86].unk2) {
+                    usage_stats_f0e40[0x86].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                }
+            }
+        }
+        if (D_0014C050[moby->unkB0 + D_0015ED84 * 16] != 0xFF &&
+            FastVecDist(hero.motion.pos.f, &moby->pos) < 4.0f &&
+            AbsoluteFloat_f0e40(hero.motion.pos.f[2] - moby->pos.z) < 4.0f) {
+            char *entry;
+            FUN_L00_002502a0(moby->unkB0);
+            entry = D_L11_001600EC + d->slot * 128;
+            FUN_L00_00284e50(entry + 0x30, entry + 0x70);
+        }
+        break;
+    case 2:
+        if (D_L11_0015F5C4 != 2) {
+            moby->state = 1;
+            if (d->h04 == 2) {
+                alternate_item_available[1] = 0;
+                discount_purchase_pricing[0] = 1;
+                D_0013D50B = 1;
+                FUN_L00_00263d40(0x2B06, scale_game_frames(300));
+                memcard_save_data_d0710(0, -1);
+                FUN_L00_00203908(0x2AF9, 0x3B);
+            }
+        }
+        break;
+    }
+    rate = 0.02f;
+    head_rate = 0.3f;
+    tracking = 0;
+    if (moby->prev_seq == 1) {
+        char *player = D_0013E533 + 0xE9D;
+        tracking = 1;
+        if (FUN_001f9b80(&moby->pos, player) < 8.0f &&
+            fast_difference_between_rotations(
+                moby->rot.z, FUN_001f9e90(((WP11 *)(D_0013E533 + 0xE1D))->aim[0] - moby->pos.x,
+                                          ((WP11 *)(D_0013E533 + 0xE1D))->aim[1] - moby->pos.y)) <
+                1.5707964f) {
+            if (FUN_001f9af0(player + 0x80) > 0.01f)
+                d->moving_timer = scale_game_frames(120);
+            else
+                FUN_001f9740(&d->moving_timer);
+        } else if (d->moving_timer) {
+            d->moving_timer = 0;
+            qcopy(d->target, hero.motion.unkD0.f);
+        }
+        if (FUN_001f9740(&d->target_timer)) {
+            float heading;
+            d->target_timer =
+                truncate_float_to_s32(FUN_001f96b0(random_float_between(180.0f, 300.0f)));
+            heading = fast_add_rotations(moby->rot.z, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
+            FUN_00214db0(d->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
+            FUN_001f9a10(d->target, d->target, &moby->pos);
+        }
+        if (d->moving_timer) {
+            qcopy(scratch.target, hero.motion.unkD0.f);
+            rate = 0.04f;
+            head_rate = 0.3f;
+        } else {
+            qcopy(scratch.target, d->target);
+        }
+    }
+    if (tracking) {
+        float yaw;
+        float pitch;
+        qcopy(scratch.eye, &moby->pos);
+        scratch.eye[2] += 1.0f;
+        FUN_001f9a28(scratch.delta, scratch.target, scratch.eye);
+        yaw = FUN_001fa5c8(FUN_001f9e90(scratch.delta[0], scratch.delta[1]), moby->rot.z);
+        pitch = -FUN_001f9e90(FUN_001f9b20(scratch.delta), scratch.delta[2]);
+        if (yaw > 1.5707964f)
+            yaw = 1.5707964f;
+        else if (yaw < -1.5707964f)
+            yaw = -1.5707964f;
+        if (pitch > 0.5235988f)
+            pitch = 0.5235988f;
+        else if (pitch < -0.5235988f)
+            pitch = -0.5235988f;
+        d->pitch = pitch;
+        d->head_yaw = d->yaw = yaw * 0.5f;
+    }
+    if (D_0015EDB0)
+        d->height = 2.75f;
+    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, d->body, 0);
+    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, d->head, 1);
+}
 #include "qcopy.h"
 
 extern float D_0013F3D8_2518 __asm__("D_0013F3D8") __attribute__((section(".data")));          /* hero z */
