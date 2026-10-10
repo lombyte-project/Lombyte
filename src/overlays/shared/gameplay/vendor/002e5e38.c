@@ -9,7 +9,214 @@
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e5e38.s", FUN_L00_002e5e38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e6000.s", FUN_L00_002e6000);
+typedef struct { u8 pad[0xB0]; f32 fB0; } S40_2e6000;
+typedef struct { u8 pad[0x3C]; f32 f3C; u8 pad2[4]; f32 f44; } S1D0_2e6000;
+typedef struct { s32 i0; u8 pad[0xC]; s32 i10; } S220_2e6000;
+typedef struct {
+    u8 pad0[0x12];
+    s16 h12;
+    s16 h14;
+    s16 h16;
+    u8 pad1[0xF0 - 0x18];
+    f32 fF0;
+} M_2e6000;
+typedef struct { u8 pad[0x70]; M_2e6000 *m; } O_2e6000;
+typedef struct {
+    u8 pad0[0x10];
+    void (*fn)(void);
+    u8 pad1[0x25C - 0x14];
+    u8 *p25C;
+    s32 i260;
+    u8 pad2[0x380 - 0x264];
+} A_2e6000;
+typedef struct { u8 pad[0x100]; f32 f100; f32 f104; } C_2e6000;
+typedef struct { u8 pad[0x2000]; s32 i2000; } L_2e6000;
+extern A_2e6000 D_L00_00166C80_c[] __asm__("D_L00_00166C80");
+extern C_2e6000 D_0013C940_2e6000 __asm__("D_0013C940");
+extern L_2e6000 D_0013F3D0_2e6000 __asm__("D_0013F3D0");
+extern s32 D_L00_00177F00[];
+extern s32 D_0013CAE0[];
+extern f32 D_L00_00166E10[];
+extern f32 D_L00_0015EF40;
+extern s32 D_L00_00161D94 __attribute__((sda));
+extern f32 D_L00_00161D84 __attribute__((sda));
+extern f32 D_L00_00161D88 __attribute__((sda));
+extern f32 D_L00_00161D98 __attribute__((sda));
+extern f32 D_L00_00161D9C __attribute__((sda));
+extern f32 D_L00_00161DA0 __attribute__((sda));
+extern f32 D_L00_00161DA4 __attribute__((sda));
+extern f32 D_L00_00161DA8 __attribute__((sda));
+extern f32 FUN_001fa580(f32, f32);
+extern f32 FUN_001f9dc8(f32);
+extern f32 FUN_001f9de0(f32);
+extern f32 FUN_001f99c0(f32);
+extern f32 FUN_001fa688(f32, f32);
+extern f32 FUN_001fa6c0(s32);
+extern s32 FUN_001f96f8(s32);
+extern s32 FUN_001f9770(s16 *);
+extern u8 *FUN_002141f8(s32);
+extern s32 FUN_L00_001f2868(void *, s32, s32, s32, f32);
+extern void FUN_L00_002e8918(f32 *, f32, f32);
+extern void FUN_L00_002e8970(void *, f32, f32);
+extern void FUN_L00_002e8648(void);
+extern void FUN_L00_002e8620(void);
+extern void FUN_L00_002e84b8(f32, f32);
+extern void FUN_L00_002e8450(s32, f32, f32);
+extern void FUN_L00_002e84f0(s32, f32, f32);
+extern void FUN_L00_002e8568(s32);
+extern void FUN_L00_002e8590(f32, f32);
+
+/* Per-frame follow camera adjustments driven by the hero's state: sway, zoom and lookat tweaks, then the shake timers in m->h12/h14/h16. */
+void FUN_L00_002e6000(O_2e6000 *o) {
+    S220_2e6000 *s;
+    S40_2e6000 *q;
+    S1D0_2e6000 *t;
+    M_2e6000 *m;
+    A_2e6000 *a;
+    A_2e6000 *x;
+    f32 v[4];
+    f32 f, sum;
+    s32 flag = 0;
+    s32 n, i;
+    s16 k;
+    s32 *lp;
+    u8 *e;
+
+    s = (S220_2e6000 *)((u8 *)o->m + 0x220);
+    if (hero.unk2284 == 0xD && s->i10 != 0x14D) {
+        f = FUN_001fa580(hero.unk4E4, 3.14159265f);
+        v[0] = FUN_001f9dc8(f);
+        v[1] = FUN_001f9de0(f);
+        v[2] = 0.0f;
+        FUN_L00_002e8918(v, 0.20943952f, v[2]);
+        FUN_L00_002e8648();
+    }
+    if (hero.state.control_mode == 0x11) {
+        o->m->fF0 = 0.25f;
+        FUN_L00_002e84b8(0.5f, 0.003f);
+    }
+    if (hero.state.control_mode == 5) {
+        flag = 1;
+        {
+            S40_2e6000 *q5 = (S40_2e6000 *)((u8 *)o->m + 0x40);
+            if (hero.unk20A4 == 1) {
+                q5->fB0 = 0.25f;
+                FUN_L00_002e84b8(1.5f, 0.003f);
+            } else {
+                q5->fB0 = 0.25f;
+                FUN_L00_002e84b8(2.5f, 0.003f);
+            }
+        }
+    }
+    if (hero.state.control_mode == 0x10) o->m->fF0 = 0.25f;
+    if (hero.unk20A4 == 1) {
+        if (s->i0 == 0) {
+            q = (S40_2e6000 *)((u8 *)o->m + 0x40);
+            FUN_L00_002e8450(1, 3.0f, 0.003f);
+            if (flag == 0) {
+                q->fB0 = 1.0f;
+                FUN_L00_002e84b8(1.0f, 0.003f);
+            }
+        }
+        *(f32 *)((u8 *)o->m + 0x20C) = 0.6f;
+    }
+    if (hero.unk20A4 == 2) {
+        if (s->i10 < 2) {
+            FUN_L00_002e84f0(0, D_L00_00161D98, 0.005f);
+            FUN_L00_002e8450(1, D_L00_00161D9C, 0.003f);
+            FUN_L00_002e84b8(D_L00_00161DA0, 0.003f);
+        }
+        FUN_L00_002e8620();
+        t = (S1D0_2e6000 *)((u8 *)o->m + 0x1D0);
+        t->f3C = D_L00_00161DA8;
+        t->f44 = D_L00_00161DA4;
+    }
+    if (hero.unk20AA != 0 && hero.state.control_mode != 0xF) {
+        FUN_L00_002e8568(0);
+        FUN_L00_002e8648();
+        FUN_L00_002e8590(0.04f, 0.2f);
+    }
+    x = &D_L00_00166C80_c[1];
+    if (x->fn != 0) x->fn();
+    a = &D_L00_00166C80_c[0];
+    if (a->p25C != 0 && s->i10 < 2) {
+        if ((s8)a->p25C[0x20] < 0) {
+            a->p25C = 0;
+        } else {
+            if (0.3f <= FUN_001f99c0(D_0013C940_2e6000.f100) || 0.3f <= FUN_001f99c0(D_0013C940_2e6000.f104)) {
+                a->i260 = 0;
+            }
+            x = &D_L00_00166C80_c[0];
+            x->i260++;
+            if (FUN_001f96f8(400) < x->i260) x->i260 = FUN_001f96f8(400);
+            f = FUN_001fa6c0(x->i260) / FUN_001fa6c0(FUN_001f96f8(400));
+            FUN_L00_002e8970(x->p25C + 0x10, f * 0.20943952f, 0.0f);
+        }
+    }
+    s->i10 = 0;
+    n = FUN_L00_001f2868(&D_0013F3D0_2e6000, 1, D_0013F3D0_2e6000.i2000, 0, 15.0f);
+    if (n > 0) {
+        lp = D_L00_00177F00;
+        for (i = 0; i < n; lp++, i++) {
+            e = FUN_002141f8(*lp);
+            if (e != 0 && (f32)e[0xD] != 0.0f) {
+                s->i10 = 1;
+                break;
+            }
+        }
+    }
+    if (hero.state.current == 0x81 && (D_0013CAE0[0] & 3)) {
+        FUN_L00_002e8568(0);
+        FUN_L00_002e8648();
+        FUN_L00_002e8590(0.04f, 0.2f);
+        { M_2e6000 *mm = o->m;
+        mm->h16 = 0;
+        mm->h12 = 0;
+        mm->h14 = 0; }
+        return;
+    }
+    if (D_L00_00161D94 == 0) return;
+    m = o->m;
+    sum = 0.0f;
+    {
+        /* `next` is a separate variable: with a plain j++ gcc reverses the loop or gives the counter another saved register. */
+        s32 j = 0, next;
+        f32 *q = v;
+        do {
+            next = j + 1;
+            *q = FUN_001fa688(D_L00_00166E10[j + 43], D_L00_00166E10[j + 44]);
+            sum += *q;
+            q++;
+            j = next;
+        } while (j < 4);
+    }
+
+    sum *= 0.25f;
+    { f32 c = sum * 5.0f;
+    if (1.0f < c) c = 1.0f;
+    c = 1.0f - c;
+    if (c < D_L00_00161D84) m->h12 = FUN_001f96f8(0x20); }
+    if (m->h12 != 0) {
+        if (FUN_001f9770(&m->h12)) m->h14 = FUN_001f96f8(0x2D);
+        FUN_L00_002e8648();
+        k = ++m->h16;
+        if (FUN_001f96f8(0x1E) < k) m->h16 = FUN_001f96f8(0x1E);
+        f = FUN_001fa6c0(m->h16) / FUN_001fa6c0(FUN_001f96f8(0x1E));
+        FUN_L00_002e8590((D_L00_00161D88 - 0.015f) * f + 0.015f, 0.2f);
+        D_L00_0015EF40 = 0.0f;
+    } else if (m->h14 != 0) {
+        FUN_001f9770(&m->h14);
+        f = FUN_001fa6c0(m->h14) / FUN_001fa6c0(FUN_001f96f8(0x2D));
+        f *= -0.75f;
+        f += 0.75f;
+        D_L00_0015EF40 = f;
+        m->h16 = 0;
+    } else {
+        m->h16 = 0;
+        D_L00_0015EF40 = 0.75f;
+    }
+}
+
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E7B68), where it is exact; names translated to the US level program. */
 
 typedef float V[4] __attribute__((aligned(16)));
