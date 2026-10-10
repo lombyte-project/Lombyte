@@ -243,6 +243,8 @@
     "assembly/textbin/runtime/memory/clear_u64_value",
     "assembly/math/convert_integer_to_float",
     "assembly/textbin/math/rotations/fast_add_rotations",
+    "assembly/textbin/math/rotations/fast_normalize_angle",
+    "assembly/textbin/fun_001fa2b8",
     "assembly/textbin/math/rotations/fast_subtract_rotations",
     "assembly/textbin/math/rotations/fast_difference_between_rotations",
     "assembly/runtime/memory/fill_transfer_words",
