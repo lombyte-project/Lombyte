@@ -104,6 +104,7 @@
     "assembly/sdk/library/memcpy",
     "assembly/sdk/library/memset",
     "assembly/sdk/library/sbrk",
+    "assembly/sdk/library/sceVu0RotMatrixZ",
     "assembly/sdk/library/sce_vu0_unit_matrix",
     "assembly/sdk/library/scesdc",
     "assembly/sdk/library/scevu0ecossin",
