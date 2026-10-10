@@ -102,7 +102,8 @@ int render_configured_text_label(struct MenuScreen *label) {
         label->data.label.cached_value = 0;
         label->data.label.value_variant = 0;
     } else if (selector_flags & 0x80) {
-        value_index = menu_system.current->focus->data.list.selected;
+        page = menu_system.current->focus;
+        value_index = page->data.list.selected;
         if (selector_flags & 0x8000) {
             value_variant = pal_mode != 0;
         }
@@ -235,7 +236,7 @@ int render_configured_text_label(struct MenuScreen *label) {
                               func_001FA6E0(menu_text_color, 0x80FFA888, 0.5f), 0x80FFA888);
         c.flags |= 4;
         font_print_window(&c, color, text, -1, texture_tex0, font);
-        window->flags ^= 4;
+        window->flags = c.flags ^ 4;
         flags = label->data.label.flags;
         text_extent = c.rendered_height + 4;
         visible_height = c.bottom - c.top;

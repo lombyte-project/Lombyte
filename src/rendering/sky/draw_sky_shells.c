@@ -2,6 +2,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/globals.h"
+#include "rnc/rendering/sky_shell.h"
 struct SkyShellSet {
     u8 pad_0[4];
     u16 relocation_state;
@@ -14,7 +15,6 @@ struct SkyTransform {
 
 extern f32 D_00160404 __attribute__((sda));
 extern struct SkyShellSet *D_0016045C;
-extern u8 D_00160460;
 extern struct SkyTransform D_001D96E0;
 extern void clear_u64_value(f32 *) __asm__("func_001F99F8");
 extern void FUN_001f9a80(void *, void *, f32);

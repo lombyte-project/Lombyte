@@ -734,12 +734,13 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void FUN_L14_002eef60(struct Moby *m) {
     char *d = (char *)m->pvars;
+    int i;
     int *path;
+    int *second_path;
     int *point;
     int *next;
     float *length_out;
     int *first;
-    int i;
     float length;
 
     if (*(int *)(d + 0xA0) == -1) {
@@ -756,10 +757,10 @@ void FUN_L14_002eef60(struct Moby *m) {
     *(float *)(d + 0xB4) = 0.0f;
     i = 0;
     first = path + 4;
+    point = path + 4;
     if (0 < *path - 1) {
         next = path + 8;
         length_out = (float *)(path + 7);
-        point = path + 4;
         do {
             length = FUN_001f9b48(point, next);
             i++;
@@ -772,13 +773,13 @@ void FUN_L14_002eef60(struct Moby *m) {
     }
     *(float *)(path + i * 4 + 7) = FUN_001f9b48(path + i * 4 + 4, first);
 
-    path = (int *)D_L14_001B0BB0_c3[*(int *)(d + 0xB8)];
+    second_path = (int *)D_L14_001B0BB0_c3[*(int *)(d + 0xB8)];
     *(float *)(d + 0xBC) = 0.0f;
     i = 0;
-    if (0 < *path - 1) {
-        next = path + 8;
-        length_out = (float *)(path + 7);
-        point = path + 4;
+    length_out = (float *)(second_path + 7);
+    if (0 < *second_path - 1) {
+        next = second_path + 8;
+        point = second_path + 4;
         do {
             length = FUN_001f9b48(point, next);
             i++;
@@ -787,9 +788,9 @@ void FUN_L14_002eef60(struct Moby *m) {
             point += 4;
             *(float *)(d + 0xBC) += length;
             length_out += 4;
-        } while (i < *path - 1);
+        } while (i < *second_path - 1);
     }
-    *(float *)(path + i * 4 + 7) = FUN_001f9b48(path + i * 4 + 4, path + 4);
+    *(float *)(second_path + i * 4 + 7) = FUN_001f9b48(second_path + i * 4 + 4, second_path + 4);
     *(float *)(d + 0xAC) = -1.0f;
     *(int *)(d + 0xA4) = 0;
     *(int *)(d + 0xA8) = 0;
@@ -1029,9 +1030,10 @@ void FUN_L14_002f1040(struct Moby *moby) {
 selected:
     moby->state = 1;
     {
-        char *entry = D_L14_001600EC_2f1040 + (entries[*(short *)(data + 0xB4)] << 7);
-        qcopy(data + 0x60, entry + 0x30);
-        qcopy(data + 0x70, entry + 0x70);
+        int offset = entries[*(short *)(data + 0xB4)] << 7;
+        char *base = D_L14_001600EC_2f1040;
+        qcopy(data + 0x60, base + offset + 0x30);
+        qcopy(data + 0x70, base + offset + 0x70);
     }
 }
 #endif
@@ -1405,7 +1407,7 @@ void FUN_L14_002fc0f0(struct Moby *moby) {
     char *path;
     moby->unkA4 = 0xff;
     if (hit && moby->state != 2) {
-        if (D_0015ED84 == 14) {
+        if (D_0015ED84_m == 14) {
             D_0015EE08 = D_0015EE08 + 1;
             if (D_0015EE08 > 2 && D_0013D408.flag == 0) {
                 D_0013D408.flag = 1;

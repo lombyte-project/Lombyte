@@ -1827,6 +1827,7 @@ void FUN_L07_00311eb8(float size, void *moby, void *state, int sequence, void *p
     char *s = state;
     char *effect;
     u128 spawn_position;
+    unsigned short slot;
     short handle;
     short old_duration;
     int faded_duration;
@@ -1839,8 +1840,7 @@ void FUN_L07_00311eb8(float size, void *moby, void *state, int sequence, void *p
         qcopy(&spawn_position, position);
     handle = *(short *)(s + 0x280);
     if (handle == -1) {
-        if (duration <= 0)
-            return;
+      if (duration > 0) {
         if (size == -1.0f)
             size = 15.0f;
         if (color == -1U)
@@ -1850,11 +1850,13 @@ void FUN_L07_00311eb8(float size, void *moby, void *state, int sequence, void *p
         handle = FUN_L00_0023e5e0_l07(size, 0.0f, &spawn_position, color);
         *(short *)(s + 0x280) = handle;
         *(short *)(s + 0x284) = 0;
-        if (handle == -1)
-            return;
+      }
     }
-
-    effect = D_L07_00180340 + (short)handle * 32;
+    handle = *(short *)(s + 0x280);
+    if (handle == -1)
+        return;
+    slot = *(unsigned short *)(s + 0x280);
+    effect = D_L07_00180340 + ((int)(short)slot << 5);
     if (*(short *)(s + 0x282) == sequence && sequence != -1 &&
         (old_duration = *(short *)(s + 0x284)) != 0) {
         if (duration != -1) {

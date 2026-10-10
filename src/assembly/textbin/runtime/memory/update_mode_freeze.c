@@ -8,25 +8,9 @@ INCLUDE_ASM(
     FUN_001fce28);
 #else
 
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
-typedef unsigned long long u64;
-typedef volatile s8 vs8;
-typedef volatile u8 vu8;
-typedef volatile s16 vs16;
-typedef volatile u16 vu16;
-typedef volatile s32 vs32;
-typedef volatile u32 vu32;
-typedef volatile s64 vs64;
-typedef volatile u64 vu64;
-typedef float f32;
-typedef double f64;
-typedef s32 b32;
+#include "types.h"
+#include "rnc/globals.h"
+
 struct S_0013C940 {
     u8 pad_0[0x1A4];
     s32 unk1A4;
@@ -215,7 +199,7 @@ void update_mode_freeze(void) {
         }
         if (D_00193300.unk1C < 4)
             goto mode0_countdown;
-        goto mode0_done;
+        break;
     mode0_zero:
         if (D_00193300.unk20 < 8) {
             D_00193300.unk20++;

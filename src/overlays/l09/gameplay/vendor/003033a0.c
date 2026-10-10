@@ -526,15 +526,17 @@ void FUN_L09_00305a28(struct Moby *moby) {
     FUN_001f9bf8(F(data, 0), work + 8, work);
     FUN_001f9a10(work + 4, work + 4, work + 8);
     context_arg = *(volatile s32 *)(data + 0x10);
-    context_float = F(data, 0xc);
+    context_float = *(volatile float *)(data + 0xc);
     FUN_L00_00259858(context_float, work + 12, moby, context_arg);
     i = 0;
     if (*(s32 *)(data + 8) > 0) do {
         if (FUN_L00_001f2868(F(data, 0), work + 4, 1, moby, work + 12) != 0) {
             char *hit = *(char **)(collision_state + 0x18);
-            print_vendor_contact(D_L09_002090B0, *(s16 *)((char *)moby + 0xb2),
-                          *(s16 *)(hit + 0xa6), *(s16 *)(hit + 0xb2),
-                          FUN_00120478(F(data, 0xc)));
+            s16 hit_index = *(s16 *)(hit + 0xb2);
+            s16 hit_class = *(s16 *)(hit + 0xa6);
+            s16 moby_index = *(s16 *)((char *)moby + 0xb2);
+            s32 converted = FUN_00120478(F(data, 0xc));
+            print_vendor_contact(D_L09_002090B0, moby_index, hit_class, hit_index, converted);
         }
         i++;
         FUN_001f9a10(work + 4, work + 4, work);

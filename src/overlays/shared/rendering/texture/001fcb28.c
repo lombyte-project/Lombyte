@@ -61,7 +61,7 @@ void FUN_L00_001fcca0(LevelTextEntry *entry, s32 frame) {
     s32 y;
     f32 scale;
     f32 alpha;
-    u8 ch;
+    char ch;
 
     start = entry->start;
     end = start + entry->duration;
@@ -76,7 +76,7 @@ void FUN_L00_001fcca0(LevelTextEntry *entry, s32 frame) {
 
     alpha = 1.0f;
     if (frame < start + 32) {
-        alpha = (f32)((frame + -16) - start) * 0.0625f;
+        alpha = (f32)(frame - (start + 16)) * 0.0625f;
         if (alpha < 0.0f)
             alpha = 0.0f;
     }
@@ -106,7 +106,7 @@ void FUN_L00_001fcca0(LevelTextEntry *entry, s32 frame) {
                 out++;
                 *out = ' ';
                 ch = *source;
-                while (ch == 1) {
+                while ((u8)ch == 1) {
                     source++;
                     ch = *source;
                 }

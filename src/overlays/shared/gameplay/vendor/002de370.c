@@ -55,10 +55,10 @@ void FUN_L03_002e8628(char *moby) {
 
     *(float *)(params + 0x4c) = 1.5f;
     *(int *)(params + 0x40) = 0;
-    *(int *)(*(char **)(moby + 0x70) + 0x80) = 0;
-    data = *(char **)(moby + 0x70);
     *(float *)(data + 4) = 0.02f;
     *(float *)(data + 8) = 0.1f;
+    *(int *)(*(char **)(moby + 0x70) + 0x80) = 0;
+    data = *(char **)(moby + 0x70);
     *(int *)(data + 0xc) = 0;
     entry = (char *)(table + (*(short *)(moby + 0x84) << 5));
     sub = *(char **)(entry + 0x1c);

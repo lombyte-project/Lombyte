@@ -1,15 +1,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 
-struct GeometryQuad {
-    f32 positions[4][4];
-    u32 colors[4];
-    u8 texture_coordinates[0x20];
-    u64 reserved;
-    u64 texture;
-    u64 texture_state;
-    u64 primitive;
-};
+#include "rnc/rendering/geometry_quad.h"
 
 extern u64 D_00160580;
 extern u8 D_001D97B0[];
@@ -34,15 +26,15 @@ void draw_resident_textured_quad(void) {
     quad.texture = D_00160580;
     quad.texture_state = 0xFF9000000260;
     quad.primitive = 0x8000000044;
-    quad.reserved = 0;
+    quad.reserved.value = 0;
     copy_blocks_16_forward(quad.texture_coordinates, D_001D97B0, 0x20);
     if ((u32)current_level_index < 0x13) {
         scale = D_001D9A90[current_level_index];
     }
     for (vertex = 0; vertex < 4; vertex++) {
         quad.colors[vertex] = 0x80808080;
-        scale_vector_xyz(quad.positions[vertex], D_001D9A50[vertex], scale);
-        add_vector_xyz(quad.positions[vertex], quad.positions[vertex], (f32 *)&D_001604F0);
+        scale_vector_xyz(quad.positions[vertex].f, D_001D9A50[vertex], scale);
+        add_vector_xyz(quad.positions[vertex].f, quad.positions[vertex].f, (f32 *)&D_001604F0);
     }
     draw_geometry_quad(&quad, 0, 0);
     vu1_add_g_sregister(0x47, 0x5360B);

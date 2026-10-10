@@ -5,8 +5,10 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002256e8/FUN_002256e8.s", FUN_002256e8);
 #else
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "rnc/storage/disc_table.h"
+
 
 typedef struct {
     u8 pad_0[0x20];
@@ -92,7 +94,7 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         class_slot = resident_class_slot_by_id[0x7A5];
         class_resource = (StreamedClassResource **)&moby_class_resources[class_slot];
         header = (AnimationTableHeader *)stream->buffer;
-        table_index = 0;
+        table_index = class_slot >> 8;
     next:
         animation_table = stream->buffer + header[table_index].offset;
         table_index++;

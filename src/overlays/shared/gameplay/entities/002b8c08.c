@@ -90,9 +90,9 @@ void FUN_L01_002b8f98(void) {
     base[10].vif0 = 0x412;
     *(f32 *)&base[10].vif1 = D_0016CEC0.f210;
     p = (u8 *)(base + 11);
-    qcopy(p, D_0016CEC0.v190);
+    *(u128 *)p = *(u128 *)D_0016CEC0.v190;
     p = (u8 *)(base + 12);
-    qcopy(p, D_0016CEC0.v1A0);
+    *(u128 *)p = *(u128 *)D_0016CEC0.v1A0;
     *(f32 *)&base[13].tag = D_0016CEC0.f22C;
     *(f32 *)&base[13].addr = D_0016CEC0.f228;
     base[13].vif0 = 0;
@@ -403,7 +403,7 @@ void FUN_L01_002c7530(char *moby) {
     char hit[0x30];
     float normal[4];
     float distance;
-    u8 state;
+    s32 state;
 
     distance = FUN_001f9b80(camera, moby + 0x10);
     camera -= 0x140;
@@ -422,7 +422,7 @@ void FUN_L01_002c7530(char *moby) {
             if (*(int *)((char *)&D_L01_001742C0_sda + 0x18) != 0)
                 FUN_L00_00259bc8(*(void **)((char *)&D_L01_001742C0_sda + 0x18), moby, 0x10001,
                                    (char *)&D_L01_001742C0_sda + 0x20, normal, 1.0f);
-            FUN_L01_002c72c8();
+            ((void (*)(void *))FUN_L01_002c72c8)(moby);
             goto mark;
         }
         if (FUN_001f9740(data)) {

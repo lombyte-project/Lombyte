@@ -77,7 +77,7 @@ void func_0012C4C8(struct sceMpeg *arg0) {
     u8 *sp38;
     u8 *sp3C;
     u8 *sp40;
-    u8 *sp44;
+    u8 *var_2_53;
     s32 chroma_height;
     s32 height;
     s32 width;
@@ -92,7 +92,6 @@ void func_0012C4C8(struct sceMpeg *arg0) {
     u8 *temp_20_71;
     u8 *temp_21_73;
     struct MpegDecoder *mpeg;
-    u8 *var_2_53;
 
     mpeg = arg0->sys;
     temp_6_16 = mpeg->unk848;
@@ -137,7 +136,6 @@ void func_0012C4C8(struct sceMpeg *arg0) {
         sp38 = ((u8 *)mpeg + (0x3F0));
         temp_18_75 = temp_22_48 >> 1;
         temp_16_77 = (u32)((0x180 * temp_23_51) * temp_22_48) >> 8;
-        sp44 = var_2_53;
         sp3C = ((u8 *)mpeg + (0x458));
         sp40 = ((u8 *)mpeg + (0x4C0));
         width = temp_23_51;
@@ -158,7 +156,7 @@ void func_0012C4C8(struct sceMpeg *arg0) {
         InitializeReferenceImage(sp38, width, chroma_height);
         InitializeReferenceImage(sp3C, width, chroma_height);
         InitializeReferenceImage(sp40, width, chroma_height);
-        InitializeReferenceImage(sp44, width, chroma_height);
+        InitializeReferenceImage(var_2_53, width, chroma_height);
     }
 }
 #endif /* NON_MATCHING */

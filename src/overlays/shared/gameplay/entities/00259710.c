@@ -565,12 +565,13 @@ void FUN_L00_0025b6b8(f32 t, f32 *out, f32 *a, f32 *b) {
     Vec4_25b6b8 left, right;
     f32 *dest = out;
     volatile f32 *rightPtr = right.f;
+    volatile f32 *leftPtr = left.f;
     left.q = *(u128 *)a;
     right.q = *(u128 *)b;
     dest[0] = FUN_L00_0025b6a8(left.f[0], right.f[0], t);
     dest[1] = FUN_L00_0025b6a8(left.f[1], right.f[1], t);
     dest[2] = FUN_L00_0025b6a8(left.f[2], rightPtr[2], t);
-    dest[3] = FUN_L00_0025b6a8(left.f[3], rightPtr[3], t);
+    dest[3] = FUN_L00_0025b6a8(leftPtr[3], rightPtr[3], t);
 }
 #endif
 #define NOT_SDA
