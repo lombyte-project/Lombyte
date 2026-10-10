@@ -541,7 +541,6 @@ typedef struct {
     char pad00[0xD0];
     float aim[4];
 } L03Player;
-extern float D_0013F420[4];
 extern unsigned char *D_L03_0015FFD8 __attribute__((sda));
 extern char D_L03_00166EC0[];
 extern char D_L03_001E3628[], D_L03_001E3660[], D_L03_001E3690[];
@@ -632,7 +631,7 @@ void FUN_L03_002dc478(L03WatchMoby *m) {
                 FUN_001f9740(&d->moving_timer);
         } else if (d->moving_timer) {
             d->moving_timer = 0;
-            qcopy(d->target, D_0013F420);
+            qcopy(d->target, hero.motion.unkD0.f);
         }
         if (FUN_001f9740(&d->target_timer)) {
             float heading;
@@ -644,7 +643,7 @@ void FUN_L03_002dc478(L03WatchMoby *m) {
             FUN_001f9a10(d->target, d->target, m->position);
         }
         if (d->moving_timer) {
-            qcopy(scratch.target, D_0013F420);
+            qcopy(scratch.target, hero.motion.unkD0.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {

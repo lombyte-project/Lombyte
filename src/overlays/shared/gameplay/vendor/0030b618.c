@@ -172,7 +172,6 @@ typedef union {
     OvlQuad q;
     float f[4];
 } V4_w22c;
-extern V4_w22c D_0013F3D0_u __asm__("D_0013F3D0");
 
 void FUN_L01_0030d5f0(char *moby, char *state) {
     V4_w22c v;
@@ -190,7 +189,7 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
                          3.1415927f);
     if (e != 0) {
         *(char **)(state + 0x60) = e;
-        if (D_0013F3D0_u.f[2] + 1.1f < *(float *)(moby + 0x18)) {
+        if (hero.motion.pos.f[2] + 1.1f < *(float *)(moby + 0x18)) {
             t = FUN_001f9e90(*(float *)(e + 0x10) - *(float *)(moby + 0x10),
                              *(float *)(e + 0x14) - *(float *)(moby + 0x14));
             if (fast_difference_between_rotations(*(float *)(moby + 0x48), t) < 0.5235988f) {

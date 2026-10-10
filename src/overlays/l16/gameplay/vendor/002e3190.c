@@ -360,7 +360,6 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void set_moby_animation_alt(void *, int, int) __asm__("FUN_00212ed8");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
-extern char D_0013F350_c[] __asm__("D_0013F350");
 extern void func_L00_002592B0_path54(char*,float,float*,float,float,float) __asm__("FUN_L00_00258278");
 
 void FUN_L16_002e37a0(L16CrateMoby *moby) {
@@ -369,13 +368,13 @@ void FUN_L16_002e37a0(L16CrateMoby *moby) {
 
     if ((moby->status & 2) && moby->frame == moby->animation && moby->frame == 1)
         blend_moby_animation(moby, 4, 0, scale_game_frames(5));
-    if (((L16CratePlayer *)(((char *)&D_0013F350_c)))->standing == moby && moby->animation != 1 && moby->frame != 1)
+    if (hero.coll_hit_moby == moby && moby->animation != 1 && moby->frame != 1)
         blend_moby_animation(moby, 1, 0, scale_game_frames(5));
     hit = FUN_L00_0025a420(moby, 0x210000, 0);
     if (!hit && d->child)
         hit = FUN_L00_0025a420(d->child, 0x210000, 0);
     if (hit && moby->state != 6) {
-        L16CratePlayer *player = (L16CratePlayer *)(((char *)&D_0013F350_c));
+        struct Hero *player = &hero;
 
         d->knock_drag = 0.008f;
         d->knock_gravity = 0.0005f;
@@ -384,7 +383,7 @@ void FUN_L16_002e37a0(L16CrateMoby *moby) {
         d->knock_flags = 1;
         d->knock_bAD = 0;
         FUN_L00_0025c558(moby, d->knock, 1, 1, 0,
-                          FUN_001f9e90(moby->position[0] - player->position[0], moby->position[1] - player->position[1]));
+                          FUN_001f9e90(moby->position[0] - player->motion.pos.f[0], moby->position[1] - player->motion.pos.f[1]));
         d->ticks = 0x78;
         FUN_L00_00257470(moby, 0, -1);
         moby->state = 6;
@@ -433,10 +432,10 @@ void FUN_L16_002e37a0(L16CrateMoby *moby) {
         d->child = 0;
         break;
     case 1: {
-        L16CratePlayer *player = (L16CratePlayer *)(((char *)&D_0013F350_c));
+        struct Hero *player = &hero;
 
         func_L00_002592B0_path54((char *)moby,
-                                 FUN_001f9e90(player->position[0] - moby->position[0], player->position[1] - moby->position[1]),
+                                 FUN_001f9e90(player->motion.pos.f[0] - moby->position[0], player->motion.pos.f[1] - moby->position[1]),
                                  &d->turn, 0.005f, 0.2f, 0.0f);
         FUN_L14_002feca8(moby);
         break;
@@ -1222,7 +1221,6 @@ typedef struct {
 
 extern char *D_L16_001B0930[];
 extern char *FUN_L00_0025a420(void *, int, int);
-extern char D_0013F350_c[] __asm__("D_0013F350");
 extern float D_0015EE6C_c __asm__("D_0015EE6C");
 extern float D_L16_00161E58 __attribute__((sda));
 extern float D_0015EE70;

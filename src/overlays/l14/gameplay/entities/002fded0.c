@@ -119,7 +119,6 @@ extern void FUN_L14_002feca8(void *);
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void set_moby_animation_alt(void *, int, int) __asm__("FUN_00212ed8");
-extern char D_0013F350_c[] __asm__("D_0013F350");
 extern void func_L00_002592B0_path54(char*,float,float*,float,float,float) __asm__("FUN_L00_00258278");
 
 /* Same routine as FUN_L16_002e37a0, without the child hit test. */
@@ -129,11 +128,11 @@ void FUN_L14_002fe2a0(L16CrateMoby *moby) {
 
     if ((moby->status & 2) && moby->frame == moby->animation && moby->frame == 1)
         blend_moby_animation(moby, 4, 0, scale_game_frames(5));
-    if (((L16CratePlayer *)(((char *)&D_0013F350_c)))->standing == moby && moby->animation != 1 && moby->frame != 1)
+    if (hero.coll_hit_moby == moby && moby->animation != 1 && moby->frame != 1)
         blend_moby_animation(moby, 1, 0, scale_game_frames(5));
     hit = FUN_L00_0025a420(moby, 0x210000, 0);
     if (hit && moby->state != 6) {
-        L16CratePlayer *player = (L16CratePlayer *)(((char *)&D_0013F350_c));
+        struct Hero *player = &hero;
 
         d->knock_drag = 0.008f;
         d->knock_gravity = 0.0005f;
@@ -142,7 +141,7 @@ void FUN_L14_002fe2a0(L16CrateMoby *moby) {
         d->knock_flags = 1;
         d->knock_bAD = 0;
         FUN_L00_0025c558(moby, d->knock, 1, 1, 0,
-                          FUN_001f9e90(moby->position[0] - player->position[0], moby->position[1] - player->position[1]));
+                          FUN_001f9e90(moby->position[0] - player->motion.pos.f[0], moby->position[1] - player->motion.pos.f[1]));
         d->ticks = 0x78;
         FUN_L00_00257470(moby, 0, -1);
         moby->state = 6;
@@ -191,10 +190,10 @@ void FUN_L14_002fe2a0(L16CrateMoby *moby) {
         d->child = 0;
         break;
     case 1: {
-        L16CratePlayer *player = (L16CratePlayer *)(((char *)&D_0013F350_c));
+        struct Hero *player = &hero;
 
         func_L00_002592B0_path54((char *)moby,
-                                 FUN_001f9e90(player->position[0] - moby->position[0], player->position[1] - moby->position[1]),
+                                 FUN_001f9e90(player->motion.pos.f[0] - moby->position[0], player->motion.pos.f[1] - moby->position[1]),
                                  &d->turn, 0.005f, 0.2f, 0.0f);
         FUN_L14_002feca8(moby);
         break;
@@ -396,7 +395,6 @@ typedef struct {
     char pad00[0xD0];
     float aim[4];
 } L14Player;
-extern float D_0013F420[4];
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
@@ -530,7 +528,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
                 FUN_001f9740(&d->moving_timer);
         } else if (d->moving_timer) {
             d->moving_timer = 0;
-            qcopy(d->target, D_0013F420);
+            qcopy(d->target, hero.motion.unkD0.f);
         }
         if (FUN_001f9740(&d->target_timer)) {
             float heading;
@@ -543,7 +541,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
             FUN_001f9a10(d->target, d->target, m->position);
         }
         if (d->moving_timer) {
-            qcopy(scratch.target, D_0013F420);
+            qcopy(scratch.target, hero.motion.unkD0.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {

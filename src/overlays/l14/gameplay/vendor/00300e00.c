@@ -212,7 +212,6 @@ void FUN_L14_00305680(struct Moby *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305758.s", FUN_L14_00305758);
 #else
 extern u8 D_0014C050[];
-extern f32 D_0013F3D0[];
 extern u8 D_0013D4D5 __attribute__((section(".data")));
 extern f32 D_L14_00174568;
 extern s32 D_L14_0015F5CC;
@@ -263,9 +262,9 @@ void FUN_L14_00305758(struct Moby *moby) {
         FUN_L14_00305b18(moby);
         if (D_L14_0015F5CC % 10 != 0)
             return;
-        if (!(FUN_001f9b80(o + 0x10, D_0013F3D0) < 1.0f))
+        if (!(FUN_001f9b80(o + 0x10, hero.motion.pos.f) < 1.0f))
             return;
-        if (!(AbsoluteFloat(*(f32 *)(o + 0x18) - D_0013F3D0[2]) < 2.0f))
+        if (!(AbsoluteFloat(*(f32 *)(o + 0x18) - hero.motion.pos.f[2]) < 2.0f))
             return;
         if (D_0013D4D5 != 0)
             *(s32 *)(d + 0x18) = state;

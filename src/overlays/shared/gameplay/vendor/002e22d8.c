@@ -25,7 +25,6 @@ extern char *D_L16_0015FFD8;
 extern char *D_L16_001B0930[];
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_0013F3D0[];
 extern float D_L16_0015F580[] __attribute__((section(".sdata")));
 extern float D_L16_001D9680[4];
 extern float FUN_001f9e90(float, float);
@@ -101,7 +100,7 @@ void FUN_L16_002e22d8(char *m) {
 
         if (D_L16_0015F5C4 == 0
             && (*(int *)(d + 0xD4) == -1
-                || FUN_L00_00259740(D_0013F3D0, D_L16_001B0930[*(int *)(d + 0xD4)] + 0x10,
+                || FUN_L00_00259740(hero.motion.pos.f, D_L16_001B0930[*(int *)(d + 0xD4)] + 0x10,
                                      *(int *)D_L16_001B0930[*(int *)(d + 0xD4)]))) {
             m[0x20] = 2;
             *(unsigned short *)(m + 0x34) &= 0xFFFE;

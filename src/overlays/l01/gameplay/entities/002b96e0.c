@@ -526,7 +526,6 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 void FUN_L01_002e6518_c(SplashMoby *m, u128 *origin) __asm__("FUN_L01_002e6518");
-extern char D_0013F350[];
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L01_002e6bf0(PeMoby *m) {
@@ -571,18 +570,18 @@ void FUN_L01_002e6bf0(PeMoby *m) {
     FUN_001f9770(&v->h26);
     if (hit != 0 && v->h26 == 0) {
         if (hit->src != 0) {
-            PeHero *player = (PeHero *)(((char *)&D_0013F350));
+            struct Hero *player = &hero;
 
-            if (hit->src != player->f1090) {
+            if (hit->src != player->items[0].moby) {
                 ang = FUN_001f9e90_cf(m->pos.f[0] - hit->src->pos.f[0],
                                       m->pos.f[1] - hit->src->pos.f[1]);
             } else {
-                ang = FUN_001f9e90_cf(m->pos.f[0] - player->pos.f[0], m->pos.f[1] - player->pos.f[1]);
+                ang = FUN_001f9e90_cf(m->pos.f[0] - player->motion.pos.f[0], m->pos.f[1] - player->motion.pos.f[1]);
             }
         } else {
-            PeHero *player = (PeHero *)(((char *)&D_0013F350));
+            struct Hero *player = &hero;
 
-            ang = FUN_001f9e90_cf(m->pos.f[0] - player->pos.f[0], m->pos.f[1] - player->pos.f[1]);
+            ang = FUN_001f9e90_cf(m->pos.f[0] - player->motion.pos.f[0], m->pos.f[1] - player->motion.pos.f[1]);
         }
         v->h1E2 = scale_game_frames(0x258);
         v->f20 -= dmg;

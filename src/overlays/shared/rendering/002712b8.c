@@ -2001,7 +2001,6 @@ extern void FUN_001f9ad8_275aa0(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern float FUN_001f9af0_275aa0(void *) __asm__("FUN_001f9af0");
 extern void FUN_001f9bf8_275aa0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_00267a08_275aa0(void *) __asm__("FUN_L00_00267a08");
-extern float D_0013F5E0_275aa0[] __asm__("D_0013F5E0");
 extern float D_0015964C_275aa0 __asm__("D_0015964C") __attribute__((section(".sdata")));
 
 void FUN_L00_00275aa0(unsigned char *m) {
@@ -2036,7 +2035,7 @@ void FUN_L00_00275aa0(unsigned char *m) {
     if (*(int *)(q + 0x18)) {
         FUN_001f9a28_275aa0(d, (char *)*(int *)(q + 0x18) + 0x10, m + 0x10);
         if (d[0] <= 2.0f && d[1] <= 2.0f) {
-            FUN_001f9ad8_275aa0(t, d, D_0013F5E0_275aa0);
+            FUN_001f9ad8_275aa0(t, d, hero.unk290.f);
             FUN_001f9bf8_275aa0(t, t, D_0015964C_275aa0);
             FUN_001f9a10_275aa0(m + 0x10, m + 0x10, t);
             if (d[0] <= 0.5f && d[1] <= 0.5f)

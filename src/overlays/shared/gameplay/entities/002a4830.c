@@ -1019,7 +1019,6 @@ void FUN_L00_002a82c0(unsigned char *m) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A96B8), where it is exact; names translated to the US level program. */
 
-extern float D_0013F3E8[];
 extern float FastDiffRots(float, float) __asm__("FUN_001fa688");
 extern float FastVecLength(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9e90(float, float);
@@ -1028,7 +1027,7 @@ extern void FUN_001f9bf8(float *, float *, float);
 void FUN_L00_002a8418(float *v) {
     float k = 1.8325957f;
     float a = FUN_001f9e90(v[0], v[1]);
-    float t = FastDiffRots(D_0013F3E8[0], a);
+    float t = FastDiffRots(hero.motion.rot.f[2], a);
     if (t > k)
         t = k;
     FUN_001f9bf8(v, v, FastVecLength(v) * ((k - t) / k * 0.3f + 0.7f));
