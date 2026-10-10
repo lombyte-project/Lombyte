@@ -627,7 +627,111 @@ void FUN_L10_002d7b18(struct Moby *a, float t) {
         a->pos.z = t;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b80.s", FUN_L10_002d7b80);
+#else
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern void FUN_001f9c48(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_L00_001ff660(void *, void *, void *);
+extern void FUN_L00_00259888(void *, void *, int, float, void *);
+extern int FUN_001f9770(void *);
+extern int FUN_L01_00274b78(float, void *, void *);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9af0(void *);
+extern int FUN_L00_00257b90(int, int);
+extern int FUN_001f96f8(int);
+extern void FUN_L00_0026dd20(void *, void *, int, int, float);
+extern void mark_moby_for_removal_d7b80(void *) __asm__("FUN_0020c828");
+extern char D_L10_001742C0[];
+extern char D_L10_00174300[];
+extern float D_0015ED6C;
+extern OvlQuad D_L10_00167240;
+extern struct Moby *D_001413D0_d7b80 __asm__("D_001413D0") __attribute__((section(".data")));
+
+void FUN_L10_002d7b80(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    float old[4] __attribute__((aligned(16)));
+    float found[20] __attribute__((aligned(16)));
+    float check[4] __attribute__((aligned(16)));
+    float raised[4] __attribute__((aligned(16)));
+    float hit[12] __attribute__((aligned(16)));
+    float rand_dir[4] __attribute__((aligned(16)));
+    int i;
+
+    qcopy(old, &moby->pos);
+    FUN_001f9a10(&moby->pos, &moby->pos, data);
+    FUN_L01_00274b78(20.0f, moby, found);
+    switch (*(short *)(data + 0x12)) {
+    case 0:
+        break;
+    case 1:
+        FUN_L10_002d7b18(moby, *(float *)(data + 0x1c));
+        break;
+    case 2:
+        qcopy(check, &moby->pos);
+        qcopy(raised, &moby->pos);
+        check[2] += 0.1f;
+        raised[2] -= *(float *)(data + 0x1c) + *(float *)(data + 0x1c);
+        if (FUN_001efa68(check, raised, 2, (int)moby, 0))
+            FUN_L10_002d7b18(moby, *(float *)(D_L10_001742C0 + 0x28) + *(float *)(data + 0x1c));
+        else
+            FUN_L10_002d7b18(moby, moby->pos.z - 0.1f);
+        break;
+    case 3:
+        if (*(int *)((char *)found + 0x40) != 0)
+            FUN_L10_002d7b18(moby, found[2] + *(float *)(data + 0x1c));
+        break;
+    case 4:
+        break;
+    }
+    qcopy(check, data);
+    check[2] = 0.0f;
+    FUN_001f9c48(check, check, 1.0f);
+    check[2] = 1.0f;
+    FUN_L00_00259888(hit, moby, 0x10001, *(float *)(data + 0x18), check);
+    if (FUN_001f9770(data + 0x10)) {
+        mark_moby_for_removal_d7b80(moby);
+        return;
+    }
+    if (FUN_001efa68(old, &moby->pos, 0, *(int *)(data + 0x20), (int)hit)) {
+        char *collision = D_L10_001742C0;
+        struct Moby *other = *(struct Moby **)(collision + 0x18);
+        if (other == 0 || other->oclass != 0x359) {
+            qcopy(&moby->pos, collision + 0x20);
+            if (*(char **)(data + 0x14) != 0) {
+                if (other != 0) {
+                    if (other == D_001413D0_d7b80 &&
+                        *(struct Moby **)(data + 0x20) != 0 &&
+                        (*(struct Moby **)(data + 0x20))->state != 0xfe &&
+                        (*(struct Moby **)(data + 0x20))->state != 0xfd)
+                        **(char **)(data + 0x14) = 1;
+                }
+            }
+            for (i = 4; i >= 0; i--) {
+                *(OvlQuad *)rand_dir = 0;
+                rand_dir[0] = random_float_between_alt(-1.0f, 1.0f);
+                rand_dir[1] = random_float_between_alt(-1.0f, 1.0f);
+                rand_dir[2] = random_float_between_alt(-1.0f, 1.0f);
+                *(OvlQuad *)raised = *(OvlQuad *)rand_dir;
+                FUN_L00_001ff660(rand_dir, data, D_L10_00174300);
+                FUN_001f9bf8(raised, raised, FUN_001f9af0(rand_dir) * 0.5f);
+                FUN_001f9a10(raised, rand_dir, raised);
+                FUN_001f9bf8(raised, raised,
+                    random_float_between_alt(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
+                FUN_L00_0026dd20(&moby->pos, raised, 0x7f2f4f6f,
+                    FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(15)), 30000.0f);
+            }
+            mark_moby_for_removal_d7b80(moby);
+            return;
+        }
+    }
+    if (moby->pos.x < 2.0f || moby->pos.y < 2.0f || moby->pos.z < 2.0f ||
+        moby->pos.x > 510.0f || moby->pos.y > 510.0f || moby->pos.z > 510.0f ||
+        FUN_001f9b80(&moby->pos, &D_L10_00167240) > 80.0f)
+        mark_moby_for_removal_d7b80(moby);
+}
+#endif
 #ifndef NOT_SDA
 #endif
 #ifndef MACRO_ADDR
