@@ -379,7 +379,198 @@ DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c190.s", FUN_L01_0030c190);
+/* Cutscene state at D_L01_0016CCE0 (as struct L10Data in l10/gameplay/vendor/002ea1f0.c). */
+typedef struct {
+    u8 pad0[0x30];
+    s32 scene;
+    s32 frame;
+    u8 pad38[0x178 - 0x38];
+    struct Moby *slot[5];
+} CutsceneFx;
+
+typedef union {
+    u128 q;
+    f32 f[4];
+} FxVec;
+
+/* FlockTail/FlockPart in l00/gameplay/vendor/002e0988.c */
+typedef struct {
+    u8 pad0[4];
+    s32 unk4;
+    u8 pad8[2];
+    u8 unkA;
+    u8 unkB;
+} FxSparkTail;
+
+typedef struct {
+    u8 pad0[9];
+    u8 unk9;
+    s16 unkA;
+    u8 padC[0x20 - 0xC];
+    FxSparkTail tail;
+} FxSpark;
+
+extern CutsceneFx fx_cutscene __asm__("D_L01_0016CCE0");
+extern s32 fx_cutscene_mode __asm__("D_L01_0015F5C4");
+/* MACRO_ADDR: retail rebuilds this address with lui/addiu at each use */
+extern u128 fx_prev_pos __asm__("D_L01_00162070") MACRO_ADDR;
+extern s32 fx_scale(s32) __asm__("FUN_001f96f8");
+extern void fx_set_camera_target(struct Moby *) __asm__("FUN_L00_002637f8");
+extern void fx_get_pos(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
+extern f32 fx_randf(f32, f32) __asm__("FUN_002132a8");
+extern s32 fx_rand(s32) __asm__("FUN_00213260");
+extern f32 fx_rand_angle(void) __asm__("FUN_00213308");
+extern s32 fx_rand_range(s32, s32) __asm__("FUN_L00_00257b90");
+extern f32 fx_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 fx_sin(f32) __asm__("FUN_001f9de0");
+extern s32 fx_ftoi(f32) __asm__("FUN_001fa6d0");
+extern char *fx_spawn_splash(f32, f32, void *, void *, void *) __asm__("FUN_L00_002718d0");
+extern char *fx_spawn_burst(void *, f32) __asm__("FUN_L00_002d7e90");
+extern void fx_spawn_debris(void *, void *, s32, s32) __asm__("FUN_L00_0026f548");
+extern FxSpark *fx_spawn_spark(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
+extern void fx_explode(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32,
+                       s32) __asm__("FUN_L00_0025e450");
+extern void fx_trail(void *, void *, void *, f32, f32) __asm__("FUN_L00_00263b70");
+extern void fx_vec_zero(void *) __asm__("FUN_001f99f8");
+extern void fx_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fx_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fx_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void fx_enqueue(void *, void *) __asm__("FUN_001f4600");
+extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
+
+/* Cutscene effects: camera targets, splashes, sparks and trails keyed on the cutscene scene and frame. */
+void FUN_L01_0030c190(struct Moby *moby) {
+    FxVec a;
+    FxVec b;
+    FxVec c;
+    FxVec d;
+    struct Moby *m;
+    char *e;
+    FxSpark *s;
+    f32 ang;
+    f32 r;
+    s32 i;
+    s32 j;
+    s32 n;
+    s32 color;
+    s32 spread;
+    s32 step;
+    s32 node;
+
+    switch (moby->state) {
+    case 0:
+        moby->unk30 = 0xFF;
+        moby->state = 1;
+        break;
+    case 1:
+        if (fx_cutscene_mode == 2) {
+            if (fx_cutscene.scene == 1 || (fx_cutscene.scene == 2 && fx_cutscene.frame <= fx_scale(148)) ||
+                fx_cutscene.scene == 3 || fx_cutscene.scene == 4) {
+                s32 target = 3;
+
+                if (fx_cutscene.scene == 1 || fx_cutscene.scene == 3 || fx_cutscene.scene == 4) {
+                    target = 3;
+                } else if (fx_cutscene.scene == 2) {
+                    target = 2;
+                }
+                fx_set_camera_target(fx_cutscene.slot[target]);
+            }
+            if (fx_cutscene.scene == 1) {
+                if (fx_cutscene.frame >= fx_scale(472) && fx_cutscene.frame <= fx_scale(537) &&
+                    fx_cutscene.slot[0] != 0) {
+                    fx_get_pos(fx_cutscene.slot[0], 1, &a);
+                    e = fx_spawn_splash(fx_randf(0.5f, 2.0f), fx_rand(2) ? 2.0f : -2.0f, &a, &D_L01_0015F580,
+                                        &a.f[2]);
+                    if (e != 0) {
+                        *(s16 *)(e + 0xA) = fx_scale(60);
+                    }
+                }
+                if (fx_cutscene.scene == 1 && fx_cutscene.frame == fx_scale(472) && fx_cutscene.slot[0] != 0) {
+                    fx_get_pos(fx_cutscene.slot[0], 1, &a);
+                    {
+                        char *burst = fx_spawn_burst(&a, 3.0f);
+
+                        if (burst != 0) {
+                            burst[0x23] = 0x70;
+                        }
+                    }
+                    for (i = 0; i < 16; i++) {
+                        ang = fx_rand_angle();
+                        r = fx_randf(frame_time * 0.0f, frame_time * 3.0f);
+                        b.f[0] = fx_cos(ang) * r;
+                        b.f[1] = fx_sin(ang) * r;
+                        b.f[2] = fx_randf(frame_time * 3.0f, frame_time * 6.5f);
+                        n = fx_rand_range(90, 120);
+                        fx_spawn_debris(&a, &b, fx_rand(2), n);
+                    }
+                }
+            }
+            if (fx_cutscene.scene == 4) {
+                m = fx_cutscene.slot[4];
+                if (m != 0 && m->oclass == 0x213) {
+                    fx_enqueue(render_environment_mapped_object, m);
+                    if (fx_cutscene.frame >= fx_scale(850) && fx_cutscene.frame <= fx_scale(1160)) {
+                        color = 0x7F204080;
+                        for (node = 1; node < 7; node++) {
+                            fx_get_pos(m, node, &a);
+                            for (j = 0; j < 2; j++) {
+                                spread = fx_rand(16);
+                                s = fx_spawn_spark(&a, 0.1f, 1.0f, 0.9f, fx_rand(2) == 0 ? spread : -spread,
+                                                   &D_L01_0015F580, 200000.0f, color);
+                                if (s != 0) {
+                                    FxSparkTail *t = &s->tail;
+
+                                    if (fx_cutscene.frame >= fx_scale(1100)) {
+                                        s->unkA = fx_scale(30);
+                                    } else {
+                                        s->unkA = fx_scale(6);
+                                    }
+                                    s->unk9 = fx_ftoi(4.0f) + 0x40;
+                                    t->unk4 = 2;
+                                    t->unkA = color >> 24;
+                                    t->unkB = s->unkA;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (fx_cutscene.scene == 5 && fx_cutscene.frame < fx_scale(120)) {
+                m = fx_cutscene.slot[2];
+                if (m != 0) {
+                    a.q = 0;
+                    fx_get_pos(m, 5, &b);
+                    if (fx_cutscene.frame >= 2) {
+                        fx_vec_sub(&a, &b, &fx_prev_pos);
+                        qcopy(&fx_prev_pos, &b);
+                    } else {
+                        qcopy(&fx_prev_pos, &b);
+                    }
+                    if (fx_cutscene.frame == fx_scale(118)) {
+                        fx_vec_zero(&c);
+                        fx_explode(m, &c, &b, 0.0f, 0.0f, 3, 200, 200, 5.0f, 2.5f, 9.0f, 1.0f, -1, 60.0f, 0, 60, -1, 0);
+                        qcopy(&d, &b);
+                        d.f[2] = d.f[2] - 1.0f;
+                        fx_explode(m, &c, &d, 0.0f, 0.0f, 300, 2, 2, 1.0f, 0.5f, 9.0f, 1.0f, -1, 60.0f, 0, 0, -1, 0);
+                    }
+                    fx_enqueue(render_environment_mapped_object, m);
+                    fx_get_pos(m, 1, &c);
+                    fx_get_pos(m, 2, &d);
+                    fx_vec_sub(&c, &c, &a);
+                    fx_vec_sub(&d, &d, &a);
+                    fx_vec_scale(&a, &a, 0.25f);
+                    for (step = 0; step < 4; step++) {
+                        fx_trail(&c, &c, &D_L01_0015F580, 150000.0f, 60000.0f);
+                        fx_trail(&d, &d, &D_L01_0015F580, 150000.0f, 60000.0f);
+                        fx_vec_add(&c, &c, &a);
+                        fx_vec_add(&d, &d, &a);
+                    }
+                }
+            }
+        }
+        break;
+    }
+}
 typedef struct {
     u8 pad0[0x2C];
     f32 f2c;
