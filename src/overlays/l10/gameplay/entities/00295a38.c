@@ -538,7 +538,112 @@ int FUN_L10_002d8058(int owner, char *pos, char *vec) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8170.s", FUN_L10_002d8170);
+/* Ported from rac1-decomp src/overlays/l10_orxon/vendor_00296BD8.c (func_L10_002D9530) */
+
+
+extern char D_L10_001742C0[];
+extern char D_L10_00174300[];
+extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern float D_0015ED70;
+extern float FUN_001f9e90(float, float);
+extern float FUN_L00_00200510(float, float, float);
+extern float probe_ground_height_c(void *, int, float) __asm__("func_00213508");
+extern float square_root_float(float) __asm__("func_001F9988");
+extern float D_0015ED6C;
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern void FUN_L00_001ff660(void *, void *, void *);
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
+
+int FUN_L10_002d8170(char *m, char *c, float *a2) {
+    float v0[4] __attribute__((aligned(16)));
+    float v10[4] __attribute__((aligned(16)));
+    float v20[4] __attribute__((aligned(16)));
+    float v30[4] __attribute__((aligned(16)));
+    float v40[4] __attribute__((aligned(16)));
+    char *g;
+    int w6;
+    float p, q, r, t, u;
+
+    float one = 1.0f;
+    float k;
+
+    *(u128 *)v0 = *(u128 *)a2;
+    *(u128 *)v10 = 0;
+    v10[2] = one;
+    if (*(short *)(c + 0x14) == 0) {
+      if (FUN_001efa68(v0, m + 0x10, 0x10, (int)m, 0)) {
+        g = D_L10_001742C0;
+        w6 = *(int *)(g + 0x18);
+        if (w6 != 0) {
+            subtract_vector_xyz(g + 0x40, m + 0x10, (void *)(w6 + 0x10));
+            qcopy(m + 0x10, g + 0x20);
+            normalize_vector_xyz(v20, g + 0x40, D_0015ED70 * 9.7f);
+            add_vector_xyz(m + 0x10, m + 0x10, v20);
+            FUN_L00_001ff660(c, c, g + 0x40);
+            scale_vector_xyz_c(c, c, 0.35f);
+            normalize_vector_xyz(v20, g + 0x40, one);
+            dot_vectors_xyz(v20, v10);
+            qcopy(v30, g + 0x40);
+                k = 0.052359879f;
+                p = fast_cos(*(float *)(m + 0x48));
+                q = fast_sin(*(float *)(m + 0x48));
+                v40[0] = v30[0] * p + v30[1] * q;
+                k = 0.052359879f;
+                p = fast_cos(*(float *)(m + 0x48));
+                q = fast_sin(*(float *)(m + 0x48));
+                v40[2] = v30[2];
+                v40[1] = v30[1] * p - v30[0] * q;
+                r = square_root_float(v40[0] * v40[0] + v40[2] * v40[2]);
+                t = FUN_001f9e90(r, v40[1]);
+                *(float *)(m + 0x40) = FUN_L00_00200510(*(float *)(m + 0x40), -t, k);
+                u = FUN_001f9e90(v40[2], v40[0]);
+                *(float *)(m + 0x44) = FUN_L00_00200510(*(float *)(m + 0x44), u, k);
+                allocate_voice_for_target_entry_alt(1, 0, (int)m);
+            return 1;
+        }
+        if (*(int *)(g + 0x1C) > 0) {
+            qcopy(m + 0x10, g + 0x20);
+            normalize_vector_xyz(v20, g + 0x40, D_0015ED70 * 9.7f);
+            add_vector_xyz(m + 0x10, m + 0x10, v20);
+            FUN_L00_001ff660(c, c, g + 0x40);
+            scale_vector_xyz_c(c, c, 0.5f);
+            normalize_vector_xyz(v20, g + 0x40, one);
+            if (0.707f < dot_vectors_xyz(v20, v10)) {
+                r = probe_ground_height_c(m + 0x10, 0, 0.5f);
+                if (*(float *)(m + 0x18) < r) *(float *)(m + 0x18) = r;
+                if (*(float *)(c + 0x8) < 0.0f) *(float *)(c + 0x8) = *(float *)(c + 0x8) * -0.4f;
+                if (vector_length_xyz(c) < D_0015ED6C) {
+                    clear_u64_value((float *)c);
+                    return 3;
+                }
+            }
+            qcopy(v30, D_L10_00174300);
+                k = 0.052359879f;
+                p = fast_cos(*(float *)(m + 0x48));
+                q = fast_sin(*(float *)(m + 0x48));
+                v40[0] = v30[0] * p + v30[1] * q;
+                k = 0.052359879f;
+                p = fast_cos(*(float *)(m + 0x48));
+                q = fast_sin(*(float *)(m + 0x48));
+                v40[2] = v30[2];
+                v40[1] = v30[1] * p - v30[0] * q;
+                r = square_root_float(v40[0] * v40[0] + v40[2] * v40[2]);
+                t = FUN_001f9e90(r, v40[1]);
+                *(float *)(m + 0x40) = FUN_L00_00200510(*(float *)(m + 0x40), -t, k);
+                u = FUN_001f9e90(v40[2], v40[0]);
+                *(float *)(m + 0x44) = FUN_L00_00200510(*(float *)(m + 0x44), u, k);
+                allocate_voice_for_target_entry_alt(1, 0, (int)m);
+            return 2;
+        }
+      }
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d85c8.s", FUN_L10_002d85c8);
 /* Electric spark: runs along its wire path with a light and a buzzing sound, then rests for a random time. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA0F0), where it is exact; names translated to the US level program. */
@@ -829,7 +934,84 @@ void FUN_L10_002d92b8(struct Moby *m) {
         FUN_L00_002502f0(m, 8, 8, 8);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d9eb8.s", FUN_L10_002d9eb8);
+/* Ported from rac1-decomp src/overlays/l10_orxon/vendor_00296BD8.c (func_L10_002DB278) */
+
+/* Orxon moby update: destroys itself when its item is taken, else fires its effect once per pass. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DB278), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad0[0x454]; unsigned char collected[1]; } L10State;
+
+typedef union { u128 q; float f[4]; } UVec;
+
+extern L10State D_L10_001BB6B0;
+extern char *FUN_L00_0025a420(void *, int, int);
+extern char *FUN_L10_002dd848_c(char *owner) __asm__("FUN_L10_002dd848");
+extern char *FUN_L10_002eb8c0(char *owner);
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern int D_0015ED84; /* no foreign declaration */
+extern int D_L10_001BA950[];
+extern unsigned char D_0014C190_c[] __asm__("D_0014C190");
+extern void FUN_L00_001ff290(void *, void *, void *);
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
+extern void FUN_L01_002f8530(void *, void *, unsigned int, float, int, float, float, float, int);
+extern void mark_moby_for_removal_c3(void *) __asm__("func_0020C828");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
+
+void FUN_L10_002d9eb8(char *moby) {
+    typedef union { u128 q; float f[4]; } UVec;
+    UVec v20, v30, v40, v50;
+    unsigned short id = *(unsigned short *)(moby + 0xB2);
+    int n;
+    int k;
+    int c16;
+    int r2;
+    float f20, f21;
+
+    if (D_L10_001BB6B0.collected[(short)id] != 0
+        || ((*(int *)(D_0014C190_c + (((short)id >> 5) * 4 + (D_0015ED84 << 8))) >> (id & 0x1F)) & 1)) {
+        FUN_L10_002dd848_c(moby);
+        FUN_L10_002eb8c0(moby);
+        mark_moby_for_removal_c3(moby);
+        return;
+    }
+    if (FUN_L00_0025a420(moby, 0x40000, 0)) {
+        char *c0 = moby + 0xC0;
+        v20.q = 0;
+        FUN_L00_0025e450(moby, &v20, moby + 0x10, 0.0f, 0.0f, 5, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, -1, 15.0f, 1, 1, -1, 0);
+        func_L00_0028EF68_v(0, 0, moby, 0x99);
+        n = 0x1D;
+        do {
+            k = 0x70F;
+            v40.q = 0;
+            v40.f[0] = -1.0f;
+            v40.f[1] = random_float_between(-3.0f, 3.0f);
+            v40.f[2] = random_float_between(-3.0f, 3.0f);
+            n--;
+            v30.q = v40.q;
+            transform_vector_by_basis(&v30, &v30, c0);
+            normalize_vector_xyz(&v40, &v30, random_float_between(5.0f, 10.0f) * D_0015ED6C);
+            FUN_L00_001ff290(&v50, &v30, moby + 0x10);
+            if (random_integer_below(1) == 0)
+                k = 0x70E;
+            f21 = random_float_between(0.5f, 1.0f);
+            c16 = FUN_L00_00257b90(0x3C, 0x78);
+            f20 = random_float_between(2.0f, 3.0f);
+            r2 = random_integer_below(4);
+            FUN_L01_002f8530(&v30, &v40, k, f21, c16, f20, 1.0f, 3.0f, r2 == 0);
+        } while (n >= 0);
+        v30.q = 0;
+        v30.f[0] = 2.8599999f;
+        v30.f[1] = 1.57000005f;
+        v30.f[2] = 1.83099997f;
+        transform_vector_by_basis(&v30, &v30, c0);
+        FUN_L00_0025e450(moby, &v20, &v30, 0.0f, 0.0f, 5, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, -1, 15.0f, 1, 1, -1, 0);
+        FUN_L10_002dd848_c(moby);
+        FUN_L10_002eb8c0(moby);
+        *(int *)(D_0014C190_c + (((short)*(unsigned short *)(moby + 0xB2) >> 5) * 4 + (D_0015ED84 << 8))) |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
+        D_L10_001BA950[(short)*(unsigned short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
+        mark_moby_for_removal_c3(moby);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da2c8.s", FUN_L10_002da2c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da690.s", FUN_L10_002da690);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dcc58.s", FUN_L10_002dcc58);
@@ -909,10 +1091,6 @@ void FUN_L10_002dd3d8(char *moby) {
 /* Collectible trigger: deletes itself once taken, else watches for its toucher. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DEA10), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    char pad0[0x454];
-    unsigned char collected[1];
-} L10State;
 
 extern L10State D_L10_001BB6B0;
 extern char D_L10_00178580[];

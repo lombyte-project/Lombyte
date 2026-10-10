@@ -402,7 +402,188 @@ void FUN_L13_002b4060(struct Moby *moby, float *v, float *w) {
     w[2] = FUN_001f9e90(*(float *)(x + 0xD0) - v[0], *(float *)(x + 0xD4) - v[1]);
     *(int *)(w + 1) = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b41b8.s", FUN_L13_002b41b8);
+/* Ported from rac1-decomp src/overlays/l13_gemlik/vendor_002B2020.c (func_L13_002B5368) */
+
+/* Update for moby class 29 (blarg_turret) on level 13: turns toward its target and fires its gun moby. */
+
+typedef struct Moby Moby;
+
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_2B5368;
+
+typedef struct Cls_2B5368 { char pad0[0x24]; float scale; } Cls_2B5368;
+
+typedef struct Moby_2B5368 {
+    char pad0[0x10];
+    V4_2B5368 pos;
+    signed char state;
+    char pad21[3];
+    Cls_2B5368 *cls;
+    char pad28[4];
+    float scale;
+    char pad30[0x10];
+    V4_2B5368 rot;
+    char pad50[3];
+    unsigned char b53;
+    char pad54[0x24];
+    void *data;
+    char pad7C[0x2A];
+    short cls_id;
+    char padA8[0x18];
+    V4_2B5368 mat[3];
+} Moby_2B5368;
+
+typedef struct Data_2B5368 {
+    char pad0[0x40];
+    Moby_2B5368 *target;
+    char pad44[0xC];
+    int volume;
+    float f54;
+    char pad58[4];
+    Moby_2B5368 *gun;
+    float f60;
+    float f64;
+    float f68;
+    float f6C;
+    char fx[0x10];
+} Data_2B5368;
+
+extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern float approach_value_alt(float *, float, float) __asm__("FUN_00213ed8");
+extern float D_0015ED6C;
+extern float D_0015ED70_c __asm__("D_0015ED70");
+extern int FUN_L00_00257b90(int, int);
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
+extern unsigned char D_0013F420[];
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
+extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
+float FUN_L00_0025be00(float *cur, float *vel, float target, float lim, float accel, float maxv);
+struct Moby *FUN_L13_002b4958_c(struct Moby *parent) __asm__("FUN_L13_002b4958");
+void FUN_L00_00257d78(float *out, float lo, float hi);
+void FUN_L13_002b47a0_c(struct Moby *moby) __asm__("FUN_L13_002b47a0");
+void FUN_L13_002b48d8_c(struct Moby *moby) __asm__("FUN_L13_002b48d8");
+extern void func_L13_002B5A88_2B5368(void *) __asm__("FUN_L13_002b48d8");
+extern void *func_L13_002B5B08_2B5368(void *) __asm__("FUN_L13_002b4958");
+extern void func_L00_00264B40_2B5368(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
+extern void func_00213DE0_2B5368(void *, int, int, int) __asm__("FUN_00212f90");
+extern float func_L00_001FF860_2B5368(float, float) __asm__("FUN_001f9e90");
+extern float func_001FA850_2B5368(float, float) __asm__("FUN_001fa688");
+extern float func_001F9D48_2B5368(void *, void *) __asm__("FUN_001f9b80");
+extern int func_00215570_2B5368(void *, int) __asm__("FUN_00214720");
+extern int func_L00_00258BC8_2B5368(int, int) __asm__("FUN_L00_00257b90");
+extern float func_L00_0025CE58_2B5368(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
+extern float func_00214D28_2B5368(float *, float, float) __asm__("FUN_00213ed8");
+extern float func_001FA790_2B5368(float, float) __asm__("FUN_001fa5c8");
+extern float func_001FA748_2B5368(float, float) __asm__("FUN_001fa580");
+extern void func_L13_002B5950_2B5368(void *) __asm__("FUN_L13_002b47a0");
+extern void func_L00_002584A8_2B5368(void *, int, int) __asm__("FUN_L00_00257470");
+extern void func_L00_0025F4A8_2B5368(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void func_0020D678_2B5368(void *) __asm__("FUN_0020c828");
+extern void func_L00_00258DB0_2B5368(float *, float, float) __asm__("FUN_L00_00257d78");
+extern unsigned char D_0013E633_2B5368[] __asm__("D_0013F420");
+
+void FUN_L13_002b41b8(Moby_2B5368 *m) {
+    Data_2B5368 *data = m->data;
+    Moby_2B5368 *t;
+    Moby_2B5368 *gun;
+    float r;
+
+    func_L13_002B5A88_2B5368(m);
+    t = data->target;
+    if (data->gun != 0 && data->gun->cls_id == 0x24 && data->gun->state >= 0) {
+        func_L00_00264B40_2B5368(2.7f, data->gun, 1, data->fx);
+    }
+    switch ((unsigned char)m->state) {
+    case 0:
+        m->scale = m->cls->scale * 1.5f;
+        data->gun = func_L13_002B5B08_2B5368(m);
+        data->f54 = m->rot.z;
+        if (m->b53 != 0) {
+            func_00213DE0_2B5368(m, 0, 0, 10);
+        }
+        m->state = 1;
+        break;
+    case 1:
+        r = func_001FA850_2B5368(func_L00_001FF860_2B5368(t->pos.x - m->pos.x, t->pos.y - m->pos.y), data->f54);
+        if (r < 1.5707964f && func_001F9D48_2B5368(&m->pos, &t->pos) < 20.0f
+            && (data->volume == -1 || func_00215570_2B5368(D_0013E633_2B5368, data->volume) != 0)) {
+            data->f68 = 8.0f;
+            if (m->b53 != 1) {
+                int a = func_L00_00258BC8_2B5368(0, 3);
+                func_00213DE0_2B5368(m, 1, a, func_L00_00258BC8_2B5368(7, 13));
+            }
+            m->state = 3;
+        }
+        func_L00_0025CE58_2B5368(&m->rot.z, data->f54, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, D_0015ED6C * 12.566371f);
+        if (data->gun == 0 || data->gun->cls_id != 0x24 || (unsigned char)data->gun->state == 0xFE
+            || (unsigned char)data->gun->state == 0xFD || (unsigned char)data->gun->state == 2) {
+            if (m->b53 != 0) {
+                func_00213DE0_2B5368(m, 0, 0, func_L00_00258BC8_2B5368(7, 13));
+            }
+            data->f64 = 1.0f;
+            m->state = 5;
+        }
+        break;
+    case 3:
+        r = func_001FA850_2B5368(func_L00_001FF860_2B5368(t->pos.x - m->pos.x, t->pos.y - m->pos.y), data->f54);
+        if (r >= 1.5707964f || func_001F9D48_2B5368(&m->pos, &t->pos) > 22.0f
+            || (data->volume != -1 && func_00215570_2B5368(D_0013E633_2B5368, data->volume) == 0)) {
+            if (m->b53 != 0) {
+                func_00213DE0_2B5368(m, 0, 0, func_L00_00258BC8_2B5368(7, 13));
+            }
+            m->state = 1;
+        } else {
+            float lim;
+            func_00214D28_2B5368(&data->f68, 20.0f, D_0015ED6C * 6.0f);
+            r = func_001FA790_2B5368(func_L00_001FF860_2B5368(t->pos.x - m->pos.x, t->pos.y - m->pos.y), data->f54);
+            lim = data->f6C * 0.017453292f;
+            if (lim < r) {
+                r = lim;
+            } else if (r < -lim) {
+                r = -lim;
+            }
+            r = func_001FA748_2B5368(r, data->f54);
+            func_L00_0025CE58_2B5368(&m->rot.z, r, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, D_0015ED6C * 12.566371f);
+            func_L13_002B5950_2B5368(m);
+            if (data->gun == 0 || data->gun->cls_id != 0x24 || (unsigned char)data->gun->state == 0xFE
+                || (unsigned char)data->gun->state == 0xFD || (unsigned char)data->gun->state == 2) {
+                if (m->b53 != 0) {
+                    func_00213DE0_2B5368(m, 0, 0, func_L00_00258BC8_2B5368(7, 13));
+                }
+                data->f64 = 1.0f;
+                m->state = 5;
+            }
+        }
+        break;
+    case 4: {
+        V4_2B5368 v;
+        func_L00_00258DB0_2B5368(&v.x, 0.5f, 1.0f);
+        func_L00_002584A8_2B5368(m, 0, -1);
+        func_L00_0025F4A8_2B5368(m, &v, &m->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
+        func_0020D678_2B5368(m);
+        return;
+    }
+    case 5:
+        func_L00_0025CE58_2B5368(&m->rot.z, data->f54, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, D_0015ED6C * 25.132742f);
+        data->f64 -= 1.0f;
+        if (data->f64 <= 0.0f) {
+            m->state = 4;
+        }
+        break;
+    }
+    gun = data->gun;
+    if (gun != 0 && gun->cls_id == 0x24 && (unsigned char)gun->state != 0xFE && (unsigned char)gun->state != 0xFD) {
+        qcopy(&gun->rot, &m->rot);
+        *(u128 *)&gun->mat[0] = *(u128 *)&m->mat[0];
+        *(u128 *)&gun->mat[1] = *(u128 *)&m->mat[1];
+        *(u128 *)&gun->mat[2] = *(u128 *)&m->mat[2];
+    } else {
+        data->gun = 0;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5950), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L13_003061c8(float, float *, float *, void *);

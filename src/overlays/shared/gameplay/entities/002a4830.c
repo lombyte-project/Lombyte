@@ -1407,4 +1407,106 @@ void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
         FUN_001f9a68_2aa008(m, m, 0.6f);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002aa2a8.s", FUN_L00_002aa2a8);
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AB548), where it is exact; names translated to the US level program. */
+
+typedef float V[4] __attribute__((aligned(16)));
+
+
+extern V D_L00_00166DC0;
+extern char *FUN_L00_002603d0(void *);
+extern char D_0013F350[];
+extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float D_0015ED70;
+extern float D_L00_00173E80[];
+extern int D_L00_0015F5C4_c __asm__("D_L00_0015F5C4");
+extern int D_L00_00173E40[];
+extern int FUN_001efa68(void*,void*,int,int,int);
+extern int FUN_001f0b58(void);
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern int tick_countdown_32_alt(int*) __asm__("FUN_001f9740");
+extern void *D_L00_00173E58_c[] __asm__("D_L00_00173E58");
+extern void FUN_L00_002a9c50_c(void) __asm__("FUN_L00_002a9c50");
+extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
+extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
+
+int FUN_L00_002aa2a8(char *a0, char *o, int mode) {
+    float w[4];
+    float B[4];
+    float C[4];
+    float box[4];
+    int x;
+    char *base = D_0013F350;
+    int i;
+    char *tmp;
+    if (*(int *)(base + 0x2084) == 0x72) return 0;
+    if (D_L00_0015F5C4_c != 0) return 0;
+    qcopy(C, o + 0x10);
+    if (*(unsigned char *)(o + 0x20) == 0) {
+        w[0] = fast_cos(fast_add_rotations_c(-0.36196801f, FUN_001f9e90(*(float *)(base + 0x670), *(float *)(base + 0x674)))) * 0.859039f;
+        w[1] = fast_sin(fast_add_rotations_c(-0.36196801f, FUN_001f9e90(*(float *)(base + 0x670), *(float *)(base + 0x674)))) * 0.859039f;
+        *(int *)&w[2] = 0;
+        add_vector_xyz(w, w, base + 0x80);
+        w[2] = w[2] + 0.49082f;
+        qcopy(B, a0);
+        if (*(int *)(base + 0x2FC) != 0 && FUN_L00_002603d0((void *)*(int *)(base + 0x2FC)) != 0 && mode != 0) {
+            add_vector_xyz(B, B, base + 0x100);
+        }
+        x = scale_game_frames_alt(0x78);
+    } else {
+        tmp = *(char **)(*(char **)(a0 + 0x30) + 0x78);
+        qcopy(w, o + 0x10);
+        qcopy(B, a0);
+        {
+            short xs = *(short *)(a0 + 0x34);
+            int c50 = *(int *)(tmp + 0x50);
+            x = xs;
+            if (c50 != 0) *(short *)(a0 + 0x36) = 1;
+        }
+    }
+    {
+        char *base2 = D_0013F350;
+        char *b2 = *(char **)(base2 + 0x2080);
+        *(u128 *)box = *(u128 *)(b2 + 0x10);
+        box[2] = w[2];
+        if (FUN_001efa68(box, w, 0x10, (int)b2, 0) != 0) {
+            if (FUN_001f0b58() != 0 && D_L00_00173E40[7] > 0) {
+                qcopy(a0 + 0x10, (char *)D_L00_00173E40 + 0x20);
+            }
+        }
+    }
+    while (tick_countdown_32_alt(&x) == 0) {
+        qcopy(C, w);
+        i = 9;
+        do {
+            add_vector_xyz(w, w, B);
+            B[2] = B[2] - D_0015ED70 * 9.8f;
+        } while (--i >= 0);
+        if (FUN_001efa68(C, w, 0x12, (int)o, 0) == 0) continue;
+        if (FUN_001f0b58() == 0 && 0.0f < B[2]) continue;
+        if (D_L00_00173E40[7] > 0) {
+            qcopy(a0 + 0x10, (char *)D_L00_00173E40 + 0x20);
+            break;
+        }
+    }
+    if (x != 0) {
+        if (mode == 0) {
+            if (D_L00_00173E58_c[0] == 0) return 0;
+            if (FUN_L00_002603d0(D_L00_00173E58_c[0]) == 0) return 0;
+        }
+        if (mode != 2 || D_L00_00173E58_c[0] == 0 || FUN_L00_002603d0(D_L00_00173E58_c[0]) == 0) {
+            enqueue_callback_list_1_alt(FUN_L00_002a9c50_c, o);
+        }
+        {
+            char *g = (char *)&D_L00_00166DC0;
+            char *a10 = a0 + 0x10;
+            *(u128 *)(a0 + 0x20) = *(u128 *)D_L00_00173E80;
+            subtract_vector_xyz(C, a10, g);
+            scale_vector_xyz_c(C, C, 0.95f);
+            add_vector_xyz(a10, C, g);
+        }
+        return 1;
+    }
+    return 0;
+}
