@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4550,
-  "matching_c": 3552,
+  "matching_c": 3573,
   "intentional_asm": 313,
-  "pending_c": 685,
+  "pending_c": 664,
   "bytes_total": 3668944,
-  "bytes_matching_c": 2438592,
+  "bytes_matching_c": 2469892,
   "bytes_intentional_asm": 121516,
-  "bytes_pending_c": 1108836,
-  "c_exact_percent_of_recoverable": 68.7425,
-  "c_fuzzy_percent_of_recoverable": 70.3334,
+  "bytes_pending_c": 1077536,
+  "c_exact_percent_of_recoverable": 69.6249,
+  "c_fuzzy_percent_of_recoverable": 71.2157,
   "boot": {
     "units_total": 1475,
     "groups_total": 129,
@@ -1963,12 +1963,12 @@
   },
   "overlays": {
     "functions_total": 3013,
-    "matching_c": 2405,
-    "pending_c": 608,
+    "matching_c": 2426,
+    "pending_c": 587,
     "bytes_total": 3193412,
-    "bytes_matching_c": 2149512,
-    "bytes_pending_c": 1043900,
-    "c_exact_percent_of_recoverable": 67.3108,
+    "bytes_matching_c": 2180812,
+    "bytes_pending_c": 1012600,
+    "c_exact_percent_of_recoverable": 68.291,
     "intentional_asm": 62,
     "bytes_intentional_asm": 27412,
     "shared": {
@@ -4300,12 +4300,12 @@
         "planet": "Pokitaru",
         "description": "Jowai Resort: the ocean and the Thruster-Pack",
         "functions": 101,
-        "matching_c": 75,
-        "pending_c": 26,
+        "matching_c": 96,
+        "pending_c": 5,
         "bytes_total": 129604,
-        "bytes_matching_c": 88372,
-        "bytes_pending_c": 41232,
-        "c_exact_percent_of_recoverable": 68.1862,
+        "bytes_matching_c": 119672,
+        "bytes_pending_c": 9932,
+        "c_exact_percent_of_recoverable": 92.3367,
         "files": [
           {
             "file": "src/overlays/l11/gameplay/hero/0023c7a0.c",
@@ -4338,16 +4338,16 @@
           {
             "file": "src/overlays/l11/gameplay/entities/002cb668.c",
             "functions": 26,
-            "matching_c": 18,
+            "matching_c": 24,
             "bytes_total": 17192,
-            "bytes_matching_c": 6500
+            "bytes_matching_c": 13920
           },
           {
             "file": "src/overlays/l11/gameplay/vendor/0030c788.c",
             "functions": 29,
-            "matching_c": 17,
+            "matching_c": 27,
             "bytes_total": 32376,
-            "bytes_matching_c": 8168
+            "bytes_matching_c": 26040
           },
           {
             "file": "src/overlays/shared/gameplay/vendor/0030e690.c",
@@ -4366,9 +4366,9 @@
           {
             "file": "src/overlays/l11/gameplay/vendor/00315968.c",
             "functions": 35,
-            "matching_c": 29,
+            "matching_c": 34,
             "bytes_total": 18756,
-            "bytes_matching_c": 12424
+            "bytes_matching_c": 18432
           }
         ]
       },
@@ -4999,14 +4999,14 @@
   },
   "total": {
     "units_total": 4550,
-    "matching_c": 3552,
+    "matching_c": 3573,
     "intentional_asm": 313,
-    "pending_c": 685,
+    "pending_c": 664,
     "bytes_total": 3668944,
-    "bytes_matching_c": 2438592,
+    "bytes_matching_c": 2469892,
     "bytes_intentional_asm": 121516,
-    "bytes_pending_c": 1108836,
-    "c_exact_percent_of_recoverable": 68.7425,
-    "c_fuzzy_percent_of_recoverable": 70.3334
+    "bytes_pending_c": 1077536,
+    "c_exact_percent_of_recoverable": 69.6249,
+    "c_fuzzy_percent_of_recoverable": 71.2157
   }
 }
