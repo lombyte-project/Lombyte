@@ -39,7 +39,7 @@
           }
         },
         {
-          "name": "GetGlobalStatePointer",
+          "name": "get_global_state_pointer",
           "size": "12",
           "fuzzy_match_percent": 100.0,
           "address": "5416",
@@ -48,7 +48,7 @@
           }
         },
         {
-          "name": "SetGlobalStateSlot",
+          "name": "set_global_state_slot",
           "size": "16",
           "fuzzy_match_percent": 100.0,
           "address": "15688",
@@ -57,7 +57,7 @@
           }
         },
         {
-          "name": "ClearCoreGlobal",
+          "name": "clear_core_global",
           "size": "12",
           "fuzzy_match_percent": 100.0,
           "address": "26688",
@@ -66,7 +66,7 @@
           }
         },
         {
-          "name": "Func0011AD90",
+          "name": "fun_0011ad90",
           "size": "28",
           "fuzzy_match_percent": 100.0,
           "address": "35344",
@@ -75,7 +75,7 @@
           }
         },
         {
-          "name": "InvokeStateInitializer",
+          "name": "invoke_state_initializer",
           "size": "28",
           "fuzzy_match_percent": 100.0,
           "address": "42544",
@@ -93,7 +93,7 @@
           }
         },
         {
-          "name": "EnableGlobalStateFlag",
+          "name": "enable_global_state_flag",
           "size": "12",
           "fuzzy_match_percent": 100.0,
           "address": "933480",
@@ -102,7 +102,7 @@
           }
         },
         {
-          "name": "DisableGlobalStateFlag",
+          "name": "disable_global_state_flag",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "933496",
@@ -120,7 +120,7 @@
           }
         },
         {
-          "name": "ResetGlobalStateFields",
+          "name": "reset_global_state_fields",
           "size": "20",
           "fuzzy_match_percent": 100.0,
           "address": "1068192",
@@ -138,7 +138,7 @@
           }
         },
         {
-          "name": "IsStateFieldLarge",
+          "name": "is_state_field_large",
           "size": "16",
           "fuzzy_match_percent": 100.0,
           "address": "1215328",
@@ -147,7 +147,7 @@
           }
         },
         {
-          "name": "SetStateFields",
+          "name": "set_state_fields",
           "size": "16",
           "fuzzy_match_percent": 100.0,
           "address": "1218248",
@@ -156,7 +156,7 @@
           }
         },
         {
-          "name": "GetStateCallbackResult",
+          "name": "get_state_callback_result",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "1218264",
@@ -1761,7 +1761,7 @@
       },
       "functions": [
         {
-          "name": "GetStateResource",
+          "name": "get_state_resource",
           "size": "12",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -1770,7 +1770,7 @@
           }
         },
         {
-          "name": "GetStateResourceWrapper",
+          "name": "get_state_resource_wrapper",
           "size": "36",
           "fuzzy_match_percent": 100.0,
           "address": "24",
@@ -1779,7 +1779,7 @@
           }
         },
         {
-          "name": "Func00115808",
+          "name": "fun_00115808",
           "size": "56",
           "fuzzy_match_percent": 100.0,
           "address": "4912",
@@ -1788,7 +1788,7 @@
           }
         },
         {
-          "name": "Func00116408",
+          "name": "fun_00116408",
           "size": "32",
           "fuzzy_match_percent": 100.0,
           "address": "7984",
@@ -1797,7 +1797,7 @@
           }
         },
         {
-          "name": "CallGlobalStateResource",
+          "name": "call_global_state_resource",
           "size": "52",
           "fuzzy_match_percent": 100.0,
           "address": "10136",
@@ -1806,7 +1806,7 @@
           }
         },
         {
-          "name": "DecrementResourceCounter",
+          "name": "decrement_resource_counter",
           "size": "24",
           "fuzzy_match_percent": 100.0,
           "address": "963216",
@@ -1849,7 +1849,7 @@
       },
       "functions": [
         {
-          "name": "ConvertMultibyteCharacter",
+          "name": "convert_multibyte_character",
           "size": "60",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -1883,7 +1883,7 @@
       },
       "functions": [
         {
-          "name": "NoOpCoreUtility",
+          "name": "no_op_core_utility",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -1892,7 +1892,7 @@
           }
         },
         {
-          "name": "NoOpCoreUtilitySecondary",
+          "name": "no_op_core_utility_secondary",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "8",
@@ -1910,7 +1910,7 @@
           }
         },
         {
-          "name": "NoOpMainCallback",
+          "name": "no_op_main_callback",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "868136",
@@ -1919,7 +1919,7 @@
           }
         },
         {
-          "name": "NoOpCoreCallback",
+          "name": "no_op_core_callback",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "904432",
@@ -1928,7 +1928,7 @@
           }
         },
         {
-          "name": "NoOpCoreCallbackSecondary",
+          "name": "no_op_core_callback_secondary",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "904440",
@@ -1937,7 +1937,7 @@
           }
         },
         {
-          "name": "NoOpMemoryCallback",
+          "name": "no_op_memory_callback",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "996176",
@@ -2325,7 +2325,7 @@
       },
       "functions": [
         {
-          "name": "ClassifyDoubleNaN",
+          "name": "classify_double_nan",
           "size": "56",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -2343,7 +2343,7 @@
           }
         },
         {
-          "name": "AbsoluteFloat",
+          "name": "absolute_float",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "931856",
@@ -2377,7 +2377,7 @@
       },
       "functions": [
         {
-          "name": "ReturnMinusOne",
+          "name": "return_minus_one",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -2386,7 +2386,7 @@
           }
         },
         {
-          "name": "ReturnMinusOneAt00118E08",
+          "name": "return_minus_one_00118e08",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "8",
@@ -2395,7 +2395,7 @@
           }
         },
         {
-          "name": "ReturnSuccessCode",
+          "name": "return_success_code",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "192",
@@ -2404,7 +2404,7 @@
           }
         },
         {
-          "name": "ReturnSuccessAt0012B9E0",
+          "name": "return_success_0012b9e0",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "76768",
@@ -2438,7 +2438,7 @@
       },
       "functions": [
         {
-          "name": "InitializeObject",
+          "name": "initialize_object",
           "size": "20",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -2447,7 +2447,7 @@
           }
         },
         {
-          "name": "Func0012BA48",
+          "name": "fun_0012ba48",
           "size": "12",
           "fuzzy_match_percent": 100.0,
           "address": "76672",
@@ -2456,7 +2456,7 @@
           }
         },
         {
-          "name": "Func0012BA58",
+          "name": "fun_0012ba58",
           "size": "16",
           "fuzzy_match_percent": 100.0,
           "address": "76688",
@@ -2465,7 +2465,7 @@
           }
         },
         {
-          "name": "Func0012BC00",
+          "name": "fun_0012bc00",
           "size": "12",
           "fuzzy_match_percent": 100.0,
           "address": "77112",
@@ -2474,7 +2474,7 @@
           }
         },
         {
-          "name": "Func0012BC10",
+          "name": "fun_0012bc10",
           "size": "12",
           "fuzzy_match_percent": 100.0,
           "address": "77128",
@@ -2551,7 +2551,7 @@
       },
       "functions": [
         {
-          "name": "InitBlockFn",
+          "name": "init_block_fn",
           "size": "36",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -2941,7 +2941,7 @@
       },
       "functions": [
         {
-          "name": "LookupIndex",
+          "name": "lookup_index",
           "size": "24",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -2959,7 +2959,7 @@
           }
         },
         {
-          "name": "ReadGlobalTableEntry",
+          "name": "read_global_table_entry",
           "size": "12",
           "fuzzy_match_percent": 100.0,
           "address": "83608",
@@ -2993,7 +2993,7 @@
       },
       "functions": [
         {
-          "name": "ResetRpcCommandState",
+          "name": "reset_rpc_command_state",
           "size": "36",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -5222,7 +5222,7 @@
           }
         },
         {
-          "name": "GetDmaPacketSpanBytes",
+          "name": "get_dma_packet_span_bytes",
           "size": "56",
           "fuzzy_match_percent": 100.0,
           "address": "931880",
@@ -5265,7 +5265,7 @@
       },
       "functions": [
         {
-          "name": "ClearImageBufferFlag",
+          "name": "clear_image_buffer_flag",
           "size": "12",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -6713,7 +6713,7 @@
           }
         },
         {
-          "name": "CalculateDmaTransferAddress",
+          "name": "calculate_dma_transfer_address",
           "size": "44",
           "fuzzy_match_percent": 100.0,
           "address": "304248",
@@ -6932,7 +6932,7 @@
       },
       "functions": [
         {
-          "name": "Func001E93F0",
+          "name": "fun_001e93f0",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -6941,7 +6941,7 @@
           }
         },
         {
-          "name": "Func001E93F8",
+          "name": "fun_001e93f8",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "8",
@@ -6950,7 +6950,7 @@
           }
         },
         {
-          "name": "Func001E9400",
+          "name": "fun_001e9400",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "16",
@@ -6959,7 +6959,7 @@
           }
         },
         {
-          "name": "Func001E9408",
+          "name": "fun_001e9408",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "24",
@@ -6968,7 +6968,7 @@
           }
         },
         {
-          "name": "Func001E9410",
+          "name": "fun_001e9410",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "32",
@@ -6977,7 +6977,7 @@
           }
         },
         {
-          "name": "Func001E9418",
+          "name": "fun_001e9418",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "40",
@@ -6986,7 +6986,7 @@
           }
         },
         {
-          "name": "Func001E9420",
+          "name": "fun_001e9420",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "48",
@@ -6995,7 +6995,7 @@
           }
         },
         {
-          "name": "Func001E9428",
+          "name": "fun_001e9428",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "56",
@@ -7004,7 +7004,7 @@
           }
         },
         {
-          "name": "Func001E9430",
+          "name": "fun_001e9430",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "64",
@@ -7013,7 +7013,7 @@
           }
         },
         {
-          "name": "Func001E9438",
+          "name": "fun_001e9438",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "72",
@@ -7022,7 +7022,7 @@
           }
         },
         {
-          "name": "Func001E9440",
+          "name": "fun_001e9440",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "80",
@@ -7031,7 +7031,7 @@
           }
         },
         {
-          "name": "Func001E9448",
+          "name": "fun_001e9448",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "88",
@@ -7040,7 +7040,7 @@
           }
         },
         {
-          "name": "Func001E9450",
+          "name": "fun_001e9450",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "96",
@@ -7049,7 +7049,7 @@
           }
         },
         {
-          "name": "Func001E9458",
+          "name": "fun_001e9458",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "104",
@@ -7058,7 +7058,7 @@
           }
         },
         {
-          "name": "Func001E9460",
+          "name": "fun_001e9460",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "112",
@@ -7067,7 +7067,7 @@
           }
         },
         {
-          "name": "Func001E9468",
+          "name": "fun_001e9468",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "120",
@@ -7076,7 +7076,7 @@
           }
         },
         {
-          "name": "Func001E9470",
+          "name": "fun_001e9470",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "128",
@@ -7085,7 +7085,7 @@
           }
         },
         {
-          "name": "Func001E9478",
+          "name": "fun_001e9478",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "136",
@@ -7103,7 +7103,7 @@
           }
         },
         {
-          "name": "NoOpGraphicsCallback",
+          "name": "no_op_graphics_callback",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "321152",
@@ -8915,7 +8915,7 @@
           }
         },
         {
-          "name": "InitializeResourceEntry",
+          "name": "initialize_resource_entry",
           "size": "40",
           "fuzzy_match_percent": 100.0,
           "address": "984",
@@ -10951,7 +10951,7 @@
       },
       "functions": [
         {
-          "name": "Func00208818",
+          "name": "fun_00208818",
           "size": "36",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -11857,7 +11857,7 @@
       },
       "functions": [
         {
-          "name": "PackRenderCommandFields",
+          "name": "pack_render_command_fields",
           "size": "32",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -13301,7 +13301,7 @@
           }
         },
         {
-          "name": "ClearStateField",
+          "name": "clear_state_field",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "10360",
@@ -13328,7 +13328,7 @@
           }
         },
         {
-          "name": "GetStateField",
+          "name": "get_state_field",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "10440",
@@ -13427,7 +13427,7 @@
           }
         },
         {
-          "name": "NoOpStateUpdate",
+          "name": "no_op_state_update",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "11816",
@@ -13436,7 +13436,7 @@
           }
         },
         {
-          "name": "ClearStateFields",
+          "name": "clear_state_fields",
           "size": "16",
           "fuzzy_match_percent": 100.0,
           "address": "11824",
@@ -13865,7 +13865,7 @@
       },
       "functions": [
         {
-          "name": "InitializeStateFields",
+          "name": "initialize_state_fields",
           "size": "24",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -13874,7 +13874,7 @@
           }
         },
         {
-          "name": "NoOpStateCallback",
+          "name": "no_op_state_callback",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "24",
@@ -13883,7 +13883,7 @@
           }
         },
         {
-          "name": "GetStateOffsetAddress",
+          "name": "get_state_offset_address",
           "size": "48",
           "fuzzy_match_percent": 100.0,
           "address": "32",
