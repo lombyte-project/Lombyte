@@ -39,6 +39,7 @@ void FUN_L00_002648e0(void) {
     f32 share;
     s32 scaled_ticks;
     s32 count;
+    s32 *entry;
 
     if ((D_0013CAE0 & 0x800000007LL) != 0x800000007LL) {
         FUN_L00_00264848();
@@ -66,9 +67,9 @@ void FUN_L00_002648e0(void) {
                 FUN_L00_00250df8(moby);
             }
             current_ticks = *(volatile s32 *)0x10000000;
-            profile = &((MobyProfile *)0x11004000)[moby->unk22];
-            profile->count++;
-            profile->ticks += current_ticks;
+            entry = (s32 *)0x11004000 + (moby->unk22 * 2);
+            entry[0] = entry[0] + 1;
+            entry[1] = entry[1] + current_ticks;
         }
         moby = moby->next;
     }
