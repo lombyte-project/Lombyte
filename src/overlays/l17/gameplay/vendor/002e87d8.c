@@ -3441,7 +3441,6 @@ int FUN_L17_002f2180(char *moby, int idx);
 void FUN_L17_002f20d8(struct Moby *moby);
 extern char D_0014C190[];
 extern char D_0013CAE4[];
-extern char D_0013F3D0[];
 
 void FUN_L17_002f1940(struct Moby *m) {
     Vars1448 *v = (Vars1448 *)m->pvars;

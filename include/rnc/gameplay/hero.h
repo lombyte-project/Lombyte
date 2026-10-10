@@ -629,7 +629,8 @@ struct Hero {
     struct HeroEase unk1D90;       /* 0x1D90: manipulator record handed to attach_manipulator (FUN_L00_00234808) */
     u8 pad_1E40[0x70];
     s16 unk1EB0;                   /* 0x1EB0 */
-    u8 pad_1EB2[0xAE];
+    s16 unk1EB2;                   /* 0x1EB2: once flag for queueing FUN_L00_00207d40 */
+    u8 pad_1EB4[0xAC];
     u8 unk1F60[0x40];              /* 0x1F60: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
     u8 unk1FA0[0x40];              /* 0x1FA0: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
     u8 *unk1FE0;                   /* 0x1FE0: moby set by FUN_L00_002b58d8 */

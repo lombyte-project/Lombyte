@@ -109,7 +109,7 @@ s32 FUN_L00_002050b8(s32 a) {
     return a;
 }
 void FUN_L00_00234e00(void);
-/* Lowers the counter at ((char *)&hero)+0x22A8 by one (not below 0) and calls 00234e00. */
+/* Lowers hero.health.hp by one (not below 0) and calls 00234e00. */
 void FUN_L00_002050c0(s32 n) {
     if (n) {
         struct Hero *g = &hero;
@@ -416,9 +416,9 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00206c08.s", FUN_L00_00206c08);
 #include "rnc/audio/voice_pool.h"
 extern void FUN_L00_0028d918(void);
 void FUN_L00_00206c08(void) {
-    u8 *hero_base = (u8 *)&hero;
-    s32 *slot = (s32 *)(hero_base + 0x2218);
-    u8 *owners = hero_base + 0x2238;
+    struct Hero *hero_base = &hero;
+    s32 *slot = (s32 *)(&hero_base->unk2218);
+    u8 *owners = &hero_base->unk2238;
     s32 offset = 0;
     s32 remaining = 7;
     s32 invalid = -1;
@@ -439,7 +439,7 @@ void FUN_L00_00206c08(void) {
             if (index == invalid)
                 goto clear;
             if (voice_pool.voices[index].owner !=
-                *(VoiceMoby **)(hero_base + 0x2080)) {
+                ((VoiceMoby *)hero_base->moby)) {
                 *slot = invalid;
                 goto next;
             }
@@ -540,19 +540,19 @@ void FUN_L00_00257024(int);
 void FUN_L00_002076a8(void);
 void FUN_L00_00208b60_u(void) __asm__("FUN_L00_00208b60");
 void FUN_L00_002070d0(void) {
-    unsigned char *g = ((char *)&hero);
-    if (*(float *)(g + 0x80) < 2.0f || *(float *)(g + 0x84) < 2.0f ||
-        1022.0f < *(float *)(g + 0x80) || 1022.0f < *(float *)(g + 0x84)) {
+    struct Hero *g = &hero;
+    if (g->motion.pos.f[0] < 2.0f || g->motion.pos.f[1] < 2.0f ||
+        1022.0f < g->motion.pos.f[0] || 1022.0f < g->motion.pos.f[1]) {
         fade_to_black(FUN_001f96f8(0x10));
         {
-            unsigned char *g2 = ((char *)&hero);
-            g2[0x20B1] = 1;
+            struct Hero *g2 = &hero;
+            g2->unk20B1 = 1;
         }
         return;
     }
-    *(short *)(g + 0x1EB2) = 0;
-    *(short *)(g + 0x1EB0) = 0;
-    if (g[0x20A4]) {
+    g->unk1EB2 = 0;
+    g->unk1EB0 = 0;
+    if (g->unk20A4) {
         FUN_L00_002062b0();
         return;
     }
@@ -563,7 +563,7 @@ void FUN_L00_002070d0(void) {
     FUN_L00_0020cf58();
     FUN_L00_0020d330();
     FUN_L00_00229b70();
-    if (g[0x20A4])
+    if (g->unk20A4)
         return;
     FUN_L00_00216f10();
     FUN_L00_0020b1d8_u();
@@ -585,12 +585,12 @@ void FUN_L00_002070d0(void) {
     FUN_L00_00205ea8();
     FUN_L00_00206080();
     FUN_L00_00206e00();
-    FUN_001e93e8(*(int *)(g + 0x2080));
-    if (*(int *)(g + 0x208C) != 0x16 && *(int *)(g + 0x2084) != 0x32)
-        FUN_L00_002484e0(g + 0x80);
+    FUN_001e93e8((int)g->moby);
+    if (g->state.control_mode != 0x16 && g->state.current != 0x32)
+        FUN_L00_002484e0(&g->motion.pos);
     {
-        unsigned char *g2 = ((char *)&hero);
-        FUN_L00_00257024(*(int *)(g2 + 0x2080));
+        struct Hero *g2 = &hero;
+        FUN_L00_00257024((int)g2->moby);
     }
     FUN_L00_002076a8();
     FUN_L00_00208b60_u();
@@ -725,42 +725,42 @@ extern int current_level_index_abs_2076a8 __asm__("D_0015ED84");
 extern u8 D_0013E520_2076a8[] __asm__("D_0013E520");
 
 void FUN_L00_002076a8(void) {
-    u8 *g = (u8 *)&hero;
+    struct Hero *g = &hero;
     int blink = 0;
     int level;
 
-    if (*(int *)(g + 0x22f4) != 0) {
-        int color = *(int *)(g + 0x22f8);
+    if (g->unk22F4 != 0) {
+        int color = g->unk22F8;
         int red = (color & 0xff) - 7;
         int blue = ((color >> 16) & 0xff) - 7;
         int green = ((color >> 8) & 0xff) - 7;
         if (red < 0) red = 0;
         if (green < 0) green = 0;
         if (blue < 0) blue = 0;
-        set_moby_color(*(void **)(g + 0x2080), red, green, blue);
+        set_moby_color(((void *)g->moby), red, green, blue);
         {
             int packed = ((unsigned int)color >> 24) << 24;
             packed |= blue << 16;
             packed |= green << 8;
             packed |= red;
-            *(int *)(g + 0x22f8) = packed;
+            g->unk22F8 = packed;
         }
     }
 
-    if (*(int *)(g + 0x2084) == 0x80 || *(int *)(g + 0x2084) == 0x82) {
-        blink = *(int *)(g + 0x198) < FUN_001f96f8(0x1e);
+    if (g->state.current == 0x80 || g->state.current == 0x82) {
+        blink = g->state_timer < FUN_001f96f8(0x1e);
         level = current_level_index_abs_2076a8;
     } else {
         level = current_level_index_2076a8;
     }
-    if ((level == 0xf || level == 0x11) && *(int *)(g + 0x2084) == 0x76 &&
-        *(int *)(g + 0x198) < FUN_001f96f8(0x14)) {
+    if ((level == 0xf || level == 0x11) && g->state.current == 0x76 &&
+        g->state_timer < FUN_001f96f8(0x14)) {
         blink = 1;
     }
     if (blink) {
         int red, green, blue;
-        get_moby_color(*(void **)(g + 0x2080), &red, &green, &blue);
-        if (*(int *)(g + 0x198) % 4 < 3) {
+        get_moby_color(((void *)g->moby), &red, &green, &blue);
+        if (g->state_timer % 4 < 3) {
             red = 0;
             green = 0;
             blue = 0;
@@ -769,13 +769,13 @@ void FUN_L00_002076a8(void) {
             blue = 0xf0;
             red = 0x90;
         }
-        set_moby_color(*(void **)(g + 0x2080), red, green, blue);
+        set_moby_color(((void *)g->moby), red, green, blue);
         FUN_L00_002072c8();
     }
-    if (*(int *)(g + 0x10b8) >= 0 &&
-        D_0013E520_2076a8[*(int *)(g + 0x10b8)] != 0 &&
-        *(int *)(g + 0x1090) != 0) {
-        FUN_L00_00207330(*(void **)(g + 0x1090), *(char **)(g + 0x2080));
+    if (g->items[0].item_id >= 0 &&
+        D_0013E520_2076a8[g->items[0].item_id] != 0 &&
+        ((int)g->items[0].moby) != 0) {
+        FUN_L00_00207330(((void *)g->items[0].moby), ((char *)g->moby));
     }
 }
 #endif
@@ -919,10 +919,10 @@ void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 /* Once (flag at ((char *)&hero)+0x1EB2) queues FUN_L00_00207d40 with the object at +0x2080. */
 void FUN_L00_00207d00(void) {
-    char *g = ((char *)&hero);
-    if (*(short *)(g + 0x1EB2) == 0) {
-        *(short *)(g + 0x1EB2) = 1;
-        enqueue_callback_list_1(FUN_L00_00207d40_u, *(int *)(g + 0x2080));
+    struct Hero *g = &hero;
+    if (g->unk1EB2 == 0) {
+        g->unk1EB2 = 1;
+        enqueue_callback_list_1(FUN_L00_00207d40_u, ((int)g->moby));
     }
 }
 typedef struct {

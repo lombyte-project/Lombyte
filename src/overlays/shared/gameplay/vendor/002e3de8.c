@@ -53,7 +53,6 @@ void FUN_L10_002e3de8(char *moby) {
  * D_0014171B. Then queues func_L10_002EA578. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002EA3E8), where it is exact; names translated to the US level program. */
 
-extern char D_0013F3D0[];
 extern float FUN_001f9b48(void *, void *);
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa2d8(void *, void *);

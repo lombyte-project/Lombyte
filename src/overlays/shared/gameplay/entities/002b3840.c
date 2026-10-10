@@ -178,7 +178,6 @@ void FUN_L05_002f5200(struct Moby *m) {
 /* Moby update: plays an animation when its state and a flag allow, then calls the next stage. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F9478), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern short D_L05_0015FFD8;
 extern void FUN_L05_002f81b8_u(void *) __asm__("FUN_L05_002f81b8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -268,7 +267,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f87a8.s", FUN_L05_002f87a8);
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0FC8), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern float AbsoluteFloat(float);
 extern float vector_length_xyz(void *);
 extern int FUN_L00_002591d0(int *, int, int, int);
@@ -586,7 +584,6 @@ void FUN_L05_00319740(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ADF8), where it is exact; names translated to the US level program. */
 
 extern char *D_L05_001B0930[];
-extern char D_0013F350[];
 extern char D_L05_00215C00[];
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);

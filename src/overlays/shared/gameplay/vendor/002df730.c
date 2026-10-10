@@ -112,7 +112,6 @@ void FUN_L00_002e01b0(char *m) {
     a = FUN_001f96f8_2e01b0(5);
     *(int *)(d + 4) = FUN_L00_00257b90_2e01b0(a, FUN_001f96f8_2e01b0(15));
 }
-extern char D_0013F350[];
 extern u8 *D_L00_0015FFD8;
 
 /* Tests flag 2 (or 1 when &hero.unk20B0 is set) at 0xBC of the moby selected by +0x2FC. */
@@ -142,7 +141,6 @@ s32 FUN_L00_002e02e0(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E17F0), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern int D_L00_0015F404;
 extern short D_L00_0015F3FC;
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -661,7 +659,6 @@ void FUN_L00_002e3a88(unsigned char *m) {
         break;
     }
 }
-extern char D_0013F3D0[];
 float FUN_001f9b48(void *, void *);
 float FUN_001f9af0(void *);
 int FUN_001f96f8(int);

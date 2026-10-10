@@ -361,7 +361,6 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void set_moby_animation_alt(void *, int, int) __asm__("FUN_00212ed8");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 extern char D_0013F350_c[] __asm__("D_0013F350");
-extern char D_0013F3D0[];
 extern void func_L00_002592B0_path54(char*,float,float*,float,float,float) __asm__("FUN_L00_00258278");
 
 void FUN_L16_002e37a0(L16CrateMoby *moby) {
@@ -831,7 +830,6 @@ void FUN_L16_002e4a58(struct Moby *moby) {
 /* Moves the moby through its trigger states and checks its local bounds. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E6478), where it is exact; names translated to the US level program. */
 
-extern char D_0013F3D0[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_L16_001D9750[];
 extern float fast_sin(float) __asm__("func_001F9DE0");
@@ -964,7 +962,6 @@ typedef struct {
 } Level16VendorTurnMoby;
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern char D_0013F3D0[];
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9de0(float);
 extern float FUN_001fa580(float, float);
@@ -1446,7 +1443,6 @@ extern void FUN_L16_002e7168(struct Moby *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void subtract_vector_xyz(void *, void *, void *);
-extern char D_0013F3D0[];
 extern char D_00141968[];
 extern L16ChallengePlayer D_0013E633_challenge __asm__("D_0013E533");
 

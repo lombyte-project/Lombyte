@@ -808,7 +808,6 @@ void FUN_L01_0031a078(int a0) {
 /* sound instance update: fade/stop test against a listener distance */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0031AD00.c: func_L01_0031B500), where it is exact; names translated to the US level program. */
 
-extern char D_0013F3D0[];
 extern float AbsoluteFloat(float);
 extern void FUN_L01_0027a248(int, int);
 extern void subtract_vector_xyz(void *, void *, void *);

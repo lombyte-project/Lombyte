@@ -1143,7 +1143,6 @@ char *FUN_L00_002eb930(void *arg) {
     FUN_L00_001eb0b0_002eb930(m + 0x50);
     return o;
 }
-extern char D_0013F350[];
 extern char D_00166C80_c[] __asm__("D_L00_00166C80");
 float FUN_001f9e90(float, float);
 float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -1171,7 +1170,6 @@ typedef struct {
     u8 x50[0x20];
     u8 *m;
 } O002ebb00;
-extern u8 D_0013F3D0[];
 void FUN_L00_001eb0b0(void *);
 void FUN_L00_001eb0c8(void *, void *, f32);
 void FUN_L00_002eb3b0_u(O002ebb00 *) __asm__("FUN_L00_002eb3b0");
@@ -1360,7 +1358,6 @@ done:
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EDC60), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 
 /* Resets moby bytes 0x7D/0x7E unless its id at 0x86 is &hero.unk2284 or 0x2084 is 6. */
 void FUN_L00_002ec7b0(char *a) {

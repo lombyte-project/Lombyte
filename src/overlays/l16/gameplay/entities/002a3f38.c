@@ -553,7 +553,6 @@ extern s32 allocate_voice_for_target_entry_u(s32, s32, void *) __asm__("func_002
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
-extern char D_0013F3D0[];
 
 void FUN_L16_002c3d38(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -857,7 +856,6 @@ void FUN_L16_002c9650(struct Moby *m) {
 /* Updates a linked moby's movement and follows it while its state is active. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CAC40), where it is exact; names translated to the US level program. */
 
-extern char D_0013F3D0[];
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED6C, D_0015EE70;
 extern float D_0015EE6C, D_0015ED70_c __asm__("D_0015ED70");
@@ -2850,7 +2848,6 @@ void FUN_L16_002d5ef8(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D7628), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_001B0930[];
-extern char D_0013F3D0[];
 extern int D_L16_001600EC; /* no foreign declaration */
 extern short D_L16_00161A8C_d __asm__("D_L16_00161A8C") __attribute__((sda));
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");

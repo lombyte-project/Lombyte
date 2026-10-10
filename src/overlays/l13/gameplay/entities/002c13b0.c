@@ -213,7 +213,6 @@ int FUN_L13_002c3ac8(char *pt, int *tbl, int start, float ref) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4F10), where it is exact; names translated to the US level program. */
 
 extern char *D_L13_001B07B0[];
-extern char D_0013F350[];
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern void add_vector_xyz(void *, void *, void *);
@@ -897,7 +896,6 @@ void FUN_L13_002e9018(struct Moby *m, char *p, float a, float b) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4F10), where it is exact; names translated to the US level program. */
 
 extern char *D_L13_001B07B0[];
-extern char D_0013F350[];
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9b20(void *);
@@ -1227,7 +1225,6 @@ unsigned char *FUN_L13_002ea540(struct Moby *m, unsigned char *d) {
 /* computes a velocity vector for a moby from the camera/player and spawns a projectile */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EBAF0), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern unsigned char *FUN_L13_002c1f28_c(char *owner, char *pos,
                                          char *vec) __asm__("FUN_L13_002c1f28");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");

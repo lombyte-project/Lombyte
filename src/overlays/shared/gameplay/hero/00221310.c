@@ -30,7 +30,7 @@ void FUN_L00_00221310(void) {
     f32 offset;
     s32 hit;
     s32 frame;
-    u8 *hero_data = (u8 *)&hero;
+    struct Hero *hero_data = &hero;
 
     if (hero.unk20AD == 0) {
         FUN_L00_00213880();
@@ -38,26 +38,26 @@ void FUN_L00_00221310(void) {
     frame = D_L00_0015F5CC_221310;
     if (frame % 3 == 0) {
         hero.unk248 = 4.0f;
-        *(u8 *)(hero_data + 0x254) = 0;
-        *(u8 *)(hero_data + 0x255) = 0;
+        hero_data->unk254 = 0;
+        hero_data->unk255 = 0;
         if (FUN_L00_0020a240_221310(&hero.unk248, 0.7f, 4.0f)) {
-            *(f32 *)(hero_data + 0x250) =
+            hero_data->unk250 =
                 FUN_001f9e90_221310(*(f32 *)(D_L00_00173E80_221310 + 8),
                                      FUN_001f9b20_221310(D_L00_00173E80_221310));
             if (D_L00_00173E58_221310 != 0) {
-                *(u8 *)(hero_data + 0x255) = 1;
+                hero_data->unk255 = 1;
                 if (FUN_L00_0025e3b8_221310(D_L00_00173E58_221310)) {
-                    *(u8 *)(hero_data + 0x254) = 1;
+                    hero_data->unk254 = 1;
                 }
             }
         }
     }
     frame = D_L00_0015F5CC_221310;
     if (frame % 5 == 0) {
-        *(s32 *)(hero_data + 0x260) = 0;
-        *(f32 *)(hero_data + 0x258) = 0.0f;
+        hero_data->unk260 = 0;
+        hero_data->unk258 = 0.0f;
         if (hero.unk300 != 0) {
-            f32 zero = *(f32 *)(hero_data + 0x258);
+            f32 zero = hero_data->unk258;
             FUN_L00_00233660_221310(&first, 1.1f, zero, 1.0f);
             FUN_L00_00233660_221310(&second, 1.1f, zero, -20.0f);
             if (second.f[2] < 0.5f) {
@@ -65,7 +65,7 @@ void FUN_L00_00221310(void) {
             }
             distance = 20.0f;
             hit = FUN_001efa68_221310(&first, &second, 2,
-                                       *(s32 *)(hero_data + 0x2080), 0);
+                                       ((s32)hero_data->moby), 0);
             if (hit != 0) {
                 distance = FUN_001f9b48_221310(&first, D_L00_00173E60_221310);
             }
@@ -83,12 +83,12 @@ void FUN_L00_00221310(void) {
                         return;
                     }
                 } while (1);
-                *(s32 *)(hero_data + 0x260) = 1;
-                if (hit == 0) *(f32 *)(hero_data + 0x258) = default_distance;
-                else *(f32 *)(hero_data + 0x258) = distance;
-                *(f32 *)(hero_data + 0x25c) = hero.unk234 + offset;
-                if (*(f32 *)(hero_data + 0x25c) < 0.0f) {
-                    *(f32 *)(hero_data + 0x25c) = 0.0f;
+                hero_data->unk260 = 1;
+                if (hit == 0) hero_data->unk258 = default_distance;
+                else hero_data->unk258 = distance;
+                hero_data->unk25C = hero.unk234 + offset;
+                if (hero_data->unk25C < 0.0f) {
+                    hero_data->unk25C = 0.0f;
                 }
             }
         }
