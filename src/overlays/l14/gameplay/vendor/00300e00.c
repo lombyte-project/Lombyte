@@ -800,7 +800,7 @@ void FUN_L14_00307510(struct Moby *moby) {
  * lets its rider go and returns 0; otherwise it speeds up while the hero rides it (or holds it), slows down
  * otherwise, sinks by its speed, eases onto the path point and banks into the turns, and returns 1. */
 extern char *D_L14_001B0BB0_7620[] __asm__("D_L14_001B0BB0");
-extern char *D_L14_0015FFD8_7620 __asm__("D_L14_0015FFD8") __attribute__((sda));
+extern char *D_L14_0015FFD8_7620 __asm__("D_L14_0015FFD8");
 extern float D_L14_0016226C __attribute__((sda));
 extern float D_L14_00162270 __attribute__((sda));
 extern float D_L14_00162274 __attribute__((sda));
