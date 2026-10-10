@@ -236,7 +236,144 @@ void FUN_L08_002e9a18(struct Moby *arg) {
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002deee0.s", FUN_L08_002deee0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e0328.s", FUN_L08_002e0328);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e16c0.s", FUN_L08_002e16c0);
+#include "sda.h"
+
+/* Update function for moby classes 441-443 on level 08 (falling debris): picks its spin, falls with a smoke trail, bursts into particles near the ground, then falls on until out of bounds. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E2A38), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float vel[4];              /* 0x00 */
+    float spin_x;              /* 0x10 */
+    float spin_y;              /* 0x14 */
+    int life;                  /* 0x18 */
+} Data_2E2A38;
+
+typedef struct {
+    char pad0[0x10];
+    float pos[4];              /* 0x10 */
+    unsigned char state;       /* 0x20 */
+    char pad21[0x1F];
+    float rot[4];              /* 0x40 */
+    char pad50[0x28];
+    Data_2E2A38 *data;         /* 0x78 */
+} Moby_2E2A38;
+
+typedef struct {
+    int v[2];
+} Pair_2E2A38;
+
+extern Pair_2E2A38 D_L08_00161C30 __attribute__((section(".data")));
+extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern f32 random_angle_radians_c(void) __asm__("func_00213308");
+extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED70 __attribute__((section(".sdata")));
+extern float FUN_001f96b0_c(float) __asm__("FUN_001f96b0");
+extern int D_L08_00161C00 __attribute__((sda));
+extern int D_L08_00161C04 __attribute__((sda));
+extern int D_L08_00161C08 __attribute__((sda));
+extern float D_L08_00161C0C __attribute__((sda));
+extern float D_L08_00161C10 __attribute__((sda));
+extern float D_L08_00161C14 __attribute__((sda));
+extern float D_L08_00161C18 __attribute__((sda));
+extern int D_L08_00161C1C __attribute__((sda));
+extern int D_L08_00161C20 __attribute__((sda));
+extern int D_L08_00161C24 __attribute__((sda));
+extern float D_L08_00161C28 __attribute__((sda));
+extern float D_L08_00161C2C __attribute__((sda));
+extern int FUN_00218888();
+extern int FUN_L00_00257b90(int, int);
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern s32 random_integer_below_c(s32) __asm__("func_00213260");
+extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
+void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int b18, int b19, float x, float y);
+extern void func_L00_0026B890_2E2A38(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
+extern char *func_00219780_2E2A38(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+
+void FUN_L08_002e16c0(Moby_2E2A38 *m) {
+    Data_2E2A38 *d = m->data;
+    float v10[4];
+    Pair_2E2A38 tab;
+    float v30[4];
+    float a40[4];
+    int i;
+
+    switch (m->state) {
+    case 1:
+        d->spin_x = random_float_between_c2(-(D_0015ED6C_c * 1.5707964f), D_0015ED6C_c * 1.5707964f);
+        d->spin_y = random_float_between_c2(-(D_0015ED6C_c * 1.5707964f), D_0015ED6C_c * 1.5707964f);
+        d->life = (int)random_float_between_c2((float)scale_game_frames_alt(0x5A), (float)scale_game_frames_alt(0x96));
+        m->state = 2;
+    case 2:
+        d->vel[2] -= D_0015ED70 * 10.8f * 0.5f;
+        add_vector_xyz(m->pos, m->pos, d);
+        m->rot[0] = fast_add_rotations_c(m->rot[0], d->spin_x);
+        m->rot[1] = fast_add_rotations_c(m->rot[1], d->spin_y);
+        if (m->pos[0] < 8.0f || m->pos[1] < 8.0f || m->pos[0] > 500.0f || m->pos[1] > 500.0f ||
+            m->pos[2] > 500.0f) {
+            mark_moby_for_removal_c(m);
+            return;
+        }
+        if (random_integer_below_c(3) == 0) {
+            int *q;
+            int a;
+            int b;
+            clear_u64_value(v10);
+            tab = D_L08_00161C30;
+            q = &tab.v[random_integer_below_c(2)];
+            {
+                int lo = scale_game_frames_alt(15), hi = scale_game_frames_alt(20);
+                a = FUN_L00_00257b90(lo, hi);
+            }
+            {
+                int lo = scale_game_frames_alt(25);
+                b = FUN_L00_00257b90(lo, scale_game_frames_alt(30));
+            }
+            func_L00_0026B890_2E2A38(m->pos, v10, 0x2F3F3F7F, *q, a, b, 0, 0, 400000.0f,
+                                     random_float_between_c2(8.0f, 16.0f) * D_0015ED6C_c);
+        }
+        if (m->pos[2] < 15.2f) {
+            for (i = 0; i < D_L08_00161C00; i++) {
+                float ang = random_angle_radians_c();
+                int c1;
+                int c2;
+                int c3;
+                qcopy(a40, m->pos);
+                a40[0] += random_float_between_c2(-3.0f, 3.0f);
+                a40[1] += random_float_between_c2(-3.0f, 3.0f);
+                v10[2] = D_L08_00161C0C * D_0015ED6C_c;
+                v10[0] += fast_cos(ang) * D_L08_00161C14;
+                v10[1] += fast_sin(ang) * D_L08_00161C14;
+                v30[2] = D_L08_00161C10 * D_0015ED6C_c;
+                v30[0] += fast_cos(ang) * D_L08_00161C18;
+                v30[1] += fast_sin(ang) * D_L08_00161C18;
+                v10[3] = D_L08_00161C28;
+                v30[3] = D_L08_00161C2C;
+                c1 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C1C, (float)(D_L08_00161C1C * 2))));
+                c2 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C20, (float)(D_L08_00161C20 * 2))));
+                c3 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C24, (float)(D_L08_00161C24 * 2))));
+                func_00219780_2E2A38(a40, v10, v30, D_L08_00161C04, D_L08_00161C08, c1, c2, c3, -1);
+            }
+            m->state = 3;
+        }
+        break;
+    case 3:
+        d->vel[2] -= D_0015ED70 * 10.8f * 0.5f;
+        add_vector_xyz(m->pos, m->pos, d);
+        m->rot[0] = fast_add_rotations_c(m->rot[0], d->spin_x);
+        m->rot[1] = fast_add_rotations_c(m->rot[1], d->spin_y);
+        if (m->pos[0] < 8.0f || m->pos[1] < 8.0f || m->pos[2] < 8.0f || m->pos[0] > 500.0f ||
+            m->pos[1] > 500.0f) {
+            mark_moby_for_removal_c(m);
+        }
+        break;
+    }
+}
 /* Builds the target board: spawns the frame, the three rows of eight targets
  * and their mounts, and records each piece with the piece it hangs from. */
 

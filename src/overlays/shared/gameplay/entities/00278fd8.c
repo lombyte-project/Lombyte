@@ -1418,7 +1418,263 @@ void FUN_L15_0029ead0(struct Moby *moby) {
     if (tick_countdown_32_alt((int *)(state + 8)))
         mark_moby_for_removal_c(moby);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029edb0.s", FUN_L15_0029edb0);
+/* update of moby class 1523: charges up a screen fade and a light, then bursts into particles and deletes itself */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029FF90), where it is exact; names translated to the US level program. */
+
+typedef int u128_29FF90 __attribute__((mode(TI)));
+
+typedef struct {
+    float vel[4];
+    int f10;
+    int f14;
+    char pad18[0x14];
+    short light;
+    short active;
+} Data29FF90;
+
+typedef struct {
+    char pad0[0x10];
+    float pos[4];
+    unsigned char state;
+    char pad21[0x57];
+    Data29FF90 *data;
+} Moby29FF90;
+
+typedef struct {
+    char pad0[0x98];
+    float f98;
+    char pad9C[0x2008];
+    unsigned char f20A4;
+} Hero29FF90;
+
+typedef struct {
+    float f0;
+    float f4;
+    char pad8[8];
+    float f10;
+    float f14;
+    float f18;
+    float f1C;
+} Light29FF90;
+
+typedef struct {
+    char pad0[0x10];
+    float f10;
+    short f14;
+    short f16;
+    int f18;
+} PartSub29FF90;
+
+typedef struct {
+    char pad0[0xA];
+    short fA;
+    float fC;
+    char pad10[0x10];
+    PartSub29FF90 sub;
+} Part29FF90;
+
+typedef struct {
+    int on;
+    union {
+        unsigned int rgba;
+        unsigned char b[4];
+    } col;
+    long reg;
+} Fade29FF90;
+
+extern Fade29FF90 D_L15_0015F330 __attribute__((section(".sdata")));
+extern Fade29FF90 D_L15_0015F320 __attribute__((section(".sdata")));
+extern Light29FF90 D_L15_001808C0[];
+extern char *D_L15_00178500[];
+extern char *FUN_L00_00274948(void *, void *, int, void *);
+extern char D_0013E533[];
+extern f32 ConvertIntegerToFloat_c(s32) __asm__("func_001FA6C0");
+extern f32 fast_cos_c2(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED60 __attribute__((section(".sdata")));
+extern float D_0015ED6C __attribute__((section(".sdata")));
+extern int D_L15_0015F5CC_c2 __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
+extern int D_L15_00161484; /* no foreign declaration */
+extern int FUN_L00_001f2868();
+extern int FUN_L00_0023e5e0(float *pos, float radius, float intensity, int color);
+extern int FUN_L00_00257b90(int, int);
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
+extern s32 truncate_float_to_s32_c3(f32) __asm__("func_001FA6D0");
+extern unsigned char *D_L15_001B26AC __attribute__((section(".data")));
+extern void FUN_L00_001ff290(void *, void *, void *);
+extern void FUN_L00_0023e838(int);
+extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
+extern void FUN_L15_0025e2c0(int a0, void *a1, char *a2);
+extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
+extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
+unsigned char *FUN_L00_0026bb70(void *a, void *b, int c, int d, float f, int n, int e, int g, int h);
+unsigned char *FUN_L00_0026daa0(char *src, int color, int n, int h, float f);
+void FUN_L00_00269b70(void *pos, unsigned char red, unsigned char green, unsigned char blue, int target, float a, float b);
+void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
+extern char D_001413F4[];
+extern void func_L00_0026AA10_29FF90(void *, unsigned char, unsigned char, unsigned char, float, float, int) __asm__("FUN_L00_00269b70");
+extern int func_L00_001F2BE8_29FF90(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
+extern char *func_L00_0026E940_29FF90(float, char *, int, int, int) __asm__("FUN_L00_0026daa0");
+extern void *func_L00_0026CA10_29FF90(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
+
+void FUN_L15_0029edb0(Moby29FF90 *moby) {
+    float w[4];
+    float v[4];
+    float v2[4];
+    Data29FF90 *d = moby->data;
+
+    switch (moby->state) {
+    case 0:
+        if (d->active != 0 && ((Hero29FF90 *)(((char *)&D_0013F350)))->f20A4 == 2) {
+            float t;
+            int i;
+
+            if (d->f10 == 0) {
+                D_L15_0015F330.on = 1;
+                D_L15_0015F330.col.rgba = 0xFFFF00;
+            }
+            d->f10++;
+            t = ConvertIntegerToFloat_c(d->f10) / FUN_001f96b0(30.0f);
+            if (t > 1.0f) t = 1.0f;
+            t = t * t;
+            for (i = 0; i < func_001FA898_r(t * 10.0f); i++) {
+                int g;
+                int r;
+                int rc;
+
+                *(u128_29FF90 *)v = 0;
+                v[0] = random_float_between(-1.0f, 1.0f);
+                v[1] = random_float_between(-1.0f, 1.0f);
+                v[2] = random_float_between(-1.0f, 1.0f);
+                *(u128_29FF90 *)w = *(u128_29FF90 *)v;
+                g = FUN_L00_00257b90(0x4F, 0xAF);
+                r = FUN_L00_00257b90(0x4F, 0xFF);
+                rc = r > 0xFF ? 0xFF : r;
+                if (g > 0xFF) g = 0xFF;
+                normalize_vector_xyz_c(w, w, random_float_between(20.0f, 40.0f));
+                FUN_L00_001ff290(v, w, moby->pos);
+                FUN_L15_0025e2c0((0x7F << 24) | (rc << 16) | (g << 8) | 0x4F, w, (char *)moby);
+            }
+            if (d->f10 < 0x32) {
+                int a = D_L15_0015F330.col.b[3];
+
+                if (D_L15_0015F330.reg == 0 && a == 0xFF) a = 0x25;
+                D_L15_0015F330.reg = 0x1F00000042L;
+                if (a < 0x25 - scale_game_frames_alt(1)) a = a + scale_game_frames_alt(1);
+                else a = 0x25;
+                D_L15_0015F330.col.rgba = (D_L15_0015F330.col.rgba & 0xFFFF00) | (a << 24);
+            } else {
+                D_L15_0015F330.col.rgba = D_L15_0015F330.col.rgba | 0xFF000000;
+            }
+            if (d->light != -1) {
+                float s;
+                int n;
+
+                (D_L15_001808C0 + d->light)->f10 = moby->pos[0];
+                (D_L15_001808C0 + d->light)->f14 = moby->pos[1];
+                (D_L15_001808C0 + d->light)->f18 = moby->pos[2];
+                n = d->f10;
+                if (n > 0x32) n = 0x32;
+                if (n < 0) n = 0;
+                (D_L15_001808C0 + d->light)->f1C = ConvertIntegerToFloat_c(n) * 7.0f / 50.0f;
+                s = ConvertIntegerToFloat_c(d->f10) / FUN_001f96b0(30.0f);
+                if (s > 1.0f) s = 1.0f;
+                func_L00_0026AA10_29FF90(&D_L15_001808C0[d->light].f10, FUN_L00_00257b90(0xF, 0x2F), FUN_L00_00257b90(0x2F, 0x3F),
+                                         FUN_L00_00257b90(0x3F, 0x7F), s * 4.0f * 210000.0f, 0.0f, scale_game_frames_alt(0x14));
+                (D_L15_001808C0 + d->light)->f0 = random_float_between((D_L15_001808C0 + d->light)->f0 * 0.8f, (D_L15_001808C0 + d->light)->f1C * 2.0f / 7.0f);
+                (D_L15_001808C0 + d->light)->f4 = random_float_between(
+                    (D_L15_001808C0 + d->light)->f0 < (D_L15_001808C0 + d->light)->f4 * 0.8f ? (D_L15_001808C0 + d->light)->f0 : (D_L15_001808C0 + d->light)->f4 * 0.8f,
+                    (D_L15_001808C0 + d->light)->f0);
+            } else if ((D_L15_0015F5CC_c2 & 3) == 0) {
+                d->light = FUN_L00_0023e5e0(moby->pos, 0.0f, 0.0f, 0);
+            }
+        } else {
+            D_L15_0015F320.on = 0;
+            D_L15_0015F330.on = 0;
+            d->f10 = 0;
+            d->vel[0] = fast_cos_c2(((Hero29FF90 *)(((char *)&D_0013F350)))->f98) * (D_0015ED6C * 40.0f);
+            d->vel[1] = fast_sin_c2(((Hero29FF90 *)(((char *)&D_0013F350)))->f98) * (D_0015ED6C * 40.0f);
+            d->vel[2] = 0.0f;
+            moby->state = 1;
+            d->f14 = 0;
+        }
+        break;
+    case 1: {
+        float r = D_0015ED6C * 40.0f * ConvertIntegerToFloat_c(d->f14) * 0.5f + 3.0f;
+        int cnt;
+        int n;
+        int col;
+
+        d->f14++;
+        if (d->light != -1) {
+            (D_L15_001808C0 + d->light)->f1C = (D_L15_001808C0 + d->light)->f1C * (D_0015ED60 * -0.6f + 1.0f);
+            if ((D_L15_001808C0 + d->light)->f1C < 0.0001f) {
+                FUN_L00_0023e838(d->light);
+                d->light = -1;
+            }
+        }
+        if (scale_game_frames_alt(0x3C) < d->f14 || *(unsigned char *)(((char *)&D_001413F4)) != 2
+            || (FUN_L00_001ff290(v2, moby->pos, d), moby->pos[0] < 2.0f) || moby->pos[0] > 1021.0f
+            || moby->pos[1] < 2.0f || moby->pos[1] > 1021.0f
+            || moby->pos[2] < 2.0f || moby->pos[2] > 1021.0f) {
+            mark_moby_for_removal_c2(D_L15_00161484);
+            D_L15_00161484 = 0;
+            return;
+        }
+        n = func_L00_001F2BE8_29FF90(moby->pos, r, 0x10, moby, 0);
+        *(u128_29FF90 *)v2 = *(u128_29FF90 *)moby->pos;
+        FUN_L00_0025a9f8(moby, v2, D_L15_00178500, n, 0, 0x8B0000, 2, 1, 20.0f, 1.0f, 1.0f);
+        cnt = scale_game_frames_alt(0x3C) - d->f14 < scale_game_frames_alt(5) ? scale_game_frames_alt(0x3C) - d->f14 : scale_game_frames_alt(5);
+        func_L00_0026E940_29FF90(r * 0.5f * 210000.0f, (char *)moby,
+                                 (0x4F << 24) | (FUN_L00_00257b90(0x3F, 0x7F) << 16) | (FUN_L00_00257b90(0x2F, 0x3F) << 8) | FUN_L00_00257b90(0xF, 0x2F),
+                                 cnt, -1);
+        random_spherical_offset(w, r * D_0015ED6C, r * 2.0f * D_0015ED6C);
+        col = (0x7F << 24) | (FUN_L00_00257b90(0x3F, 0x7F) << 16) | (FUN_L00_00257b90(0x2F, 0x3F) << 8) | FUN_L00_00257b90(0xF, 0x2F);
+        func_L00_0026CA10_29FF90(moby->pos, w, col, 0x4F7F4F2F, 210000.0f, scale_game_frames_alt(0x2D), 1, *D_L15_001B26AC, -1);
+        {
+            int i;
+
+            for (i = 0; i < 8; i++) {
+                Part29FF90 *p;
+
+                random_spherical_offset(w, r * D_0015ED6C, r * 2.0f * D_0015ED6C);
+                random_spherical_offset(v, 0.0f, r * 0.5f);
+                FUN_L00_001ff290(v2, v, moby->pos);
+                p = (Part29FF90 *)FUN_L00_00274948(v, w, 0x7F, moby);
+                if (p != 0) {
+                    p->fC = random_float_between(6000.0f, 32000.0f) * r * 0.4f;
+                }
+            }
+        }
+        {
+            int i;
+
+            for (i = 0; i < 12; i++) {
+                Part29FF90 *p = (Part29FF90 *)FUN_L00_00274948(moby->pos, D_L15_0015F580, 0x7F, moby);
+
+                if (p != 0) {
+                    PartSub29FF90 *q = &p->sub;
+
+                    if (i == 2 && random_integer_below_c2(8) == 0) {
+                        p->fC = 180000.0f;
+                    } else {
+                        p->fC = random_float_between(80000.0f, 120000.0f);
+                    }
+                    p->fC = p->fC * r;
+                    p->fA = scale_game_frames_alt(2);
+                    q->f10 = 1.0f / ConvertIntegerToFloat_c(p->fA);
+                    q->f18 = 0x7F7F7F;
+                    q->f16 = 3;
+                }
+            }
+        }
+        break;
+    }
+    }
+    d->active = 0;
+}
 /* Shared level 15/17 moby update (class 77): steers the moby toward its target and runs its state machine. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3668), where it is exact; names translated to the US level program. */
 
