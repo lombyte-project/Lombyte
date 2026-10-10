@@ -128,8 +128,7 @@ extern int D_L06_00161F98 __attribute__((sda));
 extern float D_L06_00161F9C __attribute__((sda));
 extern float D_L06_00161FA0 __attribute__((sda));
 extern float D_L06_00161FA4 __attribute__((sda));
-extern float D_L06_00167554;
-extern float D_L06_00167558;
+extern float D_L06_00167400[];
 extern float D_L06_00167540[];
 extern float D_L06_001F1540[][2];
 extern short D_L06_001EF310[][4][2];
@@ -150,13 +149,13 @@ extern void draw_2fd1a0(void *, void *, int) __asm__("FUN_001f7d30");
 void FUN_L06_002fd460(void) {
     Packet_2fd460 first, second;
     float matrix[4][4] __attribute__((aligned(16)));
-    float vec1[4] __attribute__((aligned(16)));
     float vec2[4] __attribute__((aligned(16)));
-    u128 scratch;
-    float x_offset = D_L06_00161FA4 * D_L06_00167554;
-    float y_offset = D_L06_00161FA0 * D_L06_00167558;
+    float vec1[4] __attribute__((aligned(16)));
+    float y_offset = D_L06_00161FA0 * D_L06_00167400[86];
+    float x_offset = D_L06_00161FA4 * D_L06_00167400[85];
     long flags;
     int i, j;
+    float facing;
 
     first.tex = texture_2fd1a0(D_L06_00161F90);
     second.tex = texture_2fd1a0(0x2a);
@@ -185,15 +184,19 @@ void FUN_L06_002fd460(void) {
         subtract_2fd1a0(vec2, vec1, D_L06_00167540);
         normalize_2fd1a0(vec2, vec2, 1.0f);
         transform_other_2fd1a0(vec1, D_L06_001EFBE0[i], matrix);
-        if (!(normalize_other_2fd1a0(vec2, vec1) > 0.0f)) {
+        facing = normalize_other_2fd1a0(vec2, vec1);
+        if (facing > 0.0f) {
+            i++;
+            continue;
+        }
+        {
             j = 0;
             do {
                 int a = D_L06_001EF310[i][j][0];
                 int b = D_L06_001EF310[i][j][1];
                 float u, v;
                 transform_2fd1a0(&first.v[j], D_L06_001EED30[a], D_L06_00161F9C);
-                qcopy(&scratch, &first.v[j]);
-                qcopy(&second.v[j], &scratch);
+                qcopy(&second.v[j], &first.v[j]);
                 u = D_L06_001EF6B0[b][0];
                 v = D_L06_001EF6B0[b][1];
                 first.uv[j][0] = u + y_offset;
