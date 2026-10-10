@@ -498,7 +498,97 @@ void FUN_L00_00206cf8(void) {
     if (n >= 9)
         give_reward(0x4E26, 0x50);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00206e00.s", FUN_L00_00206e00);
+#else
+extern s32 D_0015EEA0 MACRO_ADDR;
+extern s32 D_0015EE20 MACRO_ADDR;
+extern u8 D_0015EDB4 MACRO_ADDR;
+extern u8 selector_values_00206e00[] __asm__("D_0015EDB0") MACRO_ADDR;
+extern u8 selector_available_00206e00[] __asm__("D_0015EDC0") MACRO_ADDR;
+extern u8 D_L00_00179700[];
+extern s32 FUN_001f96f8(s32);
+extern void queue_dialogue_message_00206e00(s32, s32) __asm__("FUN_L00_00263d40");
+
+void FUN_L00_00206e00(void) {
+    s32 input = 0;
+    s32 level;
+    s32 i, j, length, position;
+    u8 *sequence;
+    s32 *history_count;
+    if (D_0015EEA0 == 0 && D_0015EE20 == 0)
+        return;
+    level = FUN_001f96f8(15);
+    if (hero.state_timer == level) {
+        if (hero.state.control_mode == 4) {
+            if (hero.state.current == 0xB) {
+                if (hero.unk450 == 0)
+                    input = D_0015EDB4 ? 2 : 1;
+                else if (hero.unk450 == 1)
+                    input = D_0015EDB4 ? 1 : 2;
+                else if (hero.unk450 == 3)
+                    input = 3;
+            } else if (hero.state.current == 0x11)
+                input = 9;
+            else if (hero.state.current == 0xA)
+                input = 10;
+            else if (hero.state.current == 0xE)
+                input = 5;
+        } else if (hero.state.control_mode == 6) {
+            if (hero.state.current == 0x14)
+                input = 6;
+            else if (hero.state.current == 0x13)
+                input = hero.unkA60 + 12;
+            else if (hero.state.current == 0x15)
+                input = 4;
+        } else if (hero.state.current == 0x22)
+            input = 11;
+    } else if (hero.state_timer == FUN_001f96f8(0x3C)) {
+        if (hero.state.current == 4)
+            input = 7;
+        else if (hero.state.current == 8)
+            input = 8;
+    }
+    if (input == 0)
+        return;
+    history_count = (s32 *)((u8 *)&hero + 0x21D4);
+    ((u8 *)&hero + 0x21C4)[*history_count] = input;
+    (*history_count)++;
+    sequence = D_L00_00179700;
+    for (i = 0; i < 12; i++, sequence += 16) {
+        length = 0;
+        if (*sequence != 0) {
+            do {
+                length++;
+            } while (sequence[length] != 0);
+        }
+        if (length != 0) {
+            position = *history_count - length;
+            if (position < 0)
+                position += 16;
+            j = 0;
+            if (((u8 *)&hero + 0x21C4)[position] == sequence[0]) {
+                do {
+                    position++;
+                    j++;
+                    if (position > 15)
+                        position -= 16;
+                    if (j >= length)
+                        break;
+                } while (((u8 *)&hero + 0x21C4)[position] == sequence[j]);
+            }
+            if (j == length) {
+                selector_available_00206e00[i] = 1;
+                selector_values_00206e00[i] = !selector_values_00206e00[i];
+                queue_dialogue_message_00206e00(selector_values_00206e00[i] ? 0x4FBE : 0x4FBF, -1);
+                break;
+            }
+        }
+    }
+    if (*history_count > 15)
+        *history_count = 0;
+}
+#endif
 int FUN_001f96f8(int);
 void FadeToBlack(int) __asm__("FUN_001f4a58");
 void FUN_L00_002062b0(void);
