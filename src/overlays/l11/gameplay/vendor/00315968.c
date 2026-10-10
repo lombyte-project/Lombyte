@@ -488,7 +488,7 @@ struct L11ChainVars {
     struct Moby *links[8];   /* 0x70 */
     s16 offsets[8];          /* 0x90 */
     f32 frac[8];             /* 0xA0: position between path points */
-    f32 glow[8];             /* 0xC0 */
+    f32 catchup[8];          /* 0xC0: path distance a link still trails its slot by after a link dies; eased to 0 */
     f32 health;              /* 0xE0 */
     s16 group;               /* 0xE4 */
     u8 padE6[6];
@@ -545,7 +545,7 @@ void FUN_L11_003172c0(struct Moby *moby) {
             qcopy(&c->pos, &moby->pos);
             qcopy(&c->rot, &moby->rot);
             d->offsets[i] = *(u16 *)d->path - 100;
-            d->glow[i] = 0.0f;
+            d->catchup[i] = 0.0f;
         }
         break;
     }
@@ -558,7 +558,7 @@ void FUN_L11_003172c0(struct Moby *moby) {
             d->point = 0;
             for (i = 0; i < 8; i++) {
                 d->offsets[i] = *(u16 *)d->path - 100;
-                d->glow[i] = 0.0f;
+                d->catchup[i] = 0.0f;
             }
         }
         /* fallthrough */
@@ -571,9 +571,9 @@ void FUN_L11_003172c0(struct Moby *moby) {
             d->point = (d->point + 1) % *(s32 *)d->path;
         }
         for (i = 0; i < 8; i++) {
-            float before = d->glow[i];
-            approach_value(&d->glow[i], 0.0f, frame_time * 5.0f);
-            if (before != 0.0f && d->glow[i] == 0.0f && d->links[i] != 0) {
+            float before = d->catchup[i];
+            approach_value(&d->catchup[i], 0.0f, frame_time * 5.0f);
+            if (before != 0.0f && d->catchup[i] == 0.0f && d->links[i] != 0) {
                 FUN_0022da68(0, 0, d->links[i]);
             }
         }
@@ -688,8 +688,8 @@ void FUN_L11_00317820(struct Moby *moby) {
         }
         d->offsets[i] = a;
         d->frac[i] = t;
-        if (d->glow[i] != 0.0f) {
-            float f = t - d->glow[i];
+        if (d->catchup[i] != 0.0f) {
+            float f = t - d->catchup[i];
             int k = FUN_001fa6d0(f);
             f -= (float)FUN_001fa6d0(f);
             if (f < 0.0f) {
@@ -768,11 +768,11 @@ void FUN_L11_00317c98(struct Moby *moby) {
             float diff = d->offsets[idx] - d->offsets[idx + 1];
             int j;
             for (j = idx; j < d->count; j++) {
-                d->glow[j] = d->glow[j + 1];
+                d->catchup[j] = d->catchup[j + 1];
             }
-            d->glow[idx] += diff;
-            if (d->glow[idx] < 0.0f) {
-                d->glow[idx] += (float)*(s32 *)d->path;
+            d->catchup[idx] += diff;
+            if (d->catchup[idx] < 0.0f) {
+                d->catchup[idx] += (float)*(s32 *)d->path;
             }
         }
         {
