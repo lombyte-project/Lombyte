@@ -2,4 +2,66 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f190.s", FUN_L00_0024f190);
+/* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002501C8), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_0024f440(void *, int, int, int);
+extern void FUN_L00_00252990(void *);
+
+/* advances an animation blend timer and steps through its frame table */
+void FUN_L00_0024f190(void *unused, unsigned char *a) {
+    float s = *(float *)(a + 0x28);
+    a[5] = 0;
+    if (s != 0.0f && *(float *)(a + 0x2C) != 0.0f) {
+        float t = *(float *)(a + 0x24) + s * *(float *)(a + 0x2C);
+        *(float *)(a + 0x24) = t;
+        if (s > 0.0f) {
+            if (t > 0.99f && t < 1.01f) {
+                *(float *)(a + 0x24) = 1.0f;
+            }
+            if (*(float *)(a + 0x24) >= 1.0f) {
+                int u = a[7];
+                do {
+                    int o, p, o2;
+                    a[6] = u;
+                    a[5] |= 1;
+                    a[0x20] = a[0x21];
+                    if ((unsigned char)u) {
+                        *(int *)(a + 0x38) = *(int *)(a + 0x3C);
+                    }
+                    a[0x22] = a[0x23];
+                    a[0x21]++;
+                    o = a[0x23] * 4;
+                    if (a[0x21] >= *(unsigned char *)(*(int *)(*(unsigned char **)(a + 0x14) + o + 0x48) + 0x10)) {
+                        a[0x21] = 0;
+                        a[5] |= 2;
+                    }
+                    {
+                        float f = (*(float *)(a + 0x24) - 1.0f) / *(float *)(a + 0x2C);
+                        float g;
+                        o2 = a[0x22] * 4;
+                        p = a[0x20] * 4;
+                        *(float *)(a + 0x24) = f;
+                        g = **(float **)(*(int *)(*(unsigned char **)(a + 0x14) + o2 + 0x48) + p + 0x1C);
+                        *(float *)(a + 0x2C) = g;
+                        *(float *)(a + 0x24) = f * g;
+                    }
+                } while (*(float *)(a + 0x24) >= 1.0f);
+            }
+        }
+    }
+    if (a[6]) {
+        FUN_L00_0024f440(a, a[0x22], a[0x20], *(int *)(a + 0x38));
+    } else {
+        int o = a[0x22] * 4;
+        int p = a[0x20] * 4;
+        *(int *)(a + 0x38) = *(int *)(*(int *)(*(unsigned char **)(a + 0x14) + o + 0x48) + p + 0x1C);
+    }
+    if (a[7]) {
+        FUN_L00_0024f440(a, a[0x23], a[0x21], *(int *)(a + 0x3C));
+    } else {
+        int o = a[0x23] * 4;
+        int p = a[0x21] * 4;
+        *(int *)(a + 0x3C) = *(int *)(*(int *)(*(unsigned char **)(a + 0x14) + o + 0x48) + p + 0x1C);
+    }
+    FUN_L00_00252990(a);
+}

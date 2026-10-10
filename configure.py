@@ -323,6 +323,7 @@ OVERLAY_SN_UNITS = {
     "shared/gameplay/hero/00221310.c",
     "shared/gameplay/hero/00229b70.c",
     "shared/gameplay/state/0024eec0.c",
+    "shared/gameplay/state/0024f190.c",
     "shared/gameplay/state/0027b268.c",
     "shared/gameplay/vendor/002e22d8.c",
     "shared/gameplay/vendor/002e3de8.c",
