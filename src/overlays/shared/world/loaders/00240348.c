@@ -421,7 +421,7 @@ extern char D_L00_001E86A8[];
 extern char D_L00_001E86E0[];
 extern char D_L00_001E8708[];
 extern char D_L00_001E8740[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED60 MACRO_ADDR;
 extern float D_L00_0015F448 MACRO_ADDR;
@@ -464,7 +464,7 @@ extern int D_L00_00160FCC MACRO_ADDR;
 extern int D_L00_0016C058[];
 extern int D_L00_001AB840[];
 extern int D_L00_001BA4D0[];
-extern int DebugPrint_alt() __asm__("FUN_001e93b0");
+extern int debug_print_alt() __asm__("FUN_001e93b0");
 extern int FUN_L00_0024d8d0(void *, void *);
 extern int FUN_L00_00284d90(int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -480,7 +480,7 @@ extern unsigned char D_L00_001804C0[];
 extern unsigned char D_L00_001BB684[];
 extern unsigned char D_L00_001BC1B0[];
 extern unsigned char D_L00_001C5B00[];
-extern void EnableGlobalStateFlag(void) __asm__("func_001F61E8");
+extern void enable_global_state_flag(void) __asm__("func_001F61E8");
 extern void FUN_001f9838(void *, void *, int);
 extern void FUN_001f9a80(void *, void *, float);
 extern void FUN_0022a5e0(void *);
@@ -508,8 +508,8 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 extern void update_camera(void) __asm__("func_001EDAA8");
 extern void update_fog(void) __asm__("func_001F2588");
 extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
-void ResetGlobalStateFields(void) __asm__("func_00217020");
-void SetGlobalStateSlot(int value) __asm__("func_001160C8");
+void reset_global_state_fields(void) __asm__("func_00217020");
+void set_global_state_slot(int value) __asm__("func_001160C8");
 void init_moby_instance(void *moby_mem, int oClass) __asm__("FUN_0020c5f0");
 extern void load(void *, int, int) __asm__("FUN_00216828");
 extern GameState137B80 D_00137B80;
@@ -537,7 +537,7 @@ char *FUN_L00_00241940(int arg0) {
     FillTransferWords(&D_0013F350, 0, 0x2310);
     FillTransferWords(D_L00_00166C80, 0, 0x3A0);
     FillTransferWords(D_L00_0018EB40, 0, 0x180);
-    SetGlobalStateSlot(0x4D2);
+    set_global_state_slot(0x4D2);
     if (D_0015ED80 != 0) {
         if (D_0015ED60 == 1.0f) {
             set_video_timing(1);
@@ -593,7 +593,7 @@ char *FUN_L00_00241940(int arg0) {
 
         p += 0x10;
         if (n >= 12) {
-            DebugPrint_alt(D_L00_001E8658);
+            debug_print_alt(D_L00_001E8658);
             n = 12;
         }
         if (n != 0) {
@@ -793,7 +793,7 @@ char *FUN_L00_00241940(int arg0) {
                 float d;
 
                 inst->f17 = truncate_float_to_s32(*D_L00_001BC030[cls]->f1C);
-                d = ConvertIntegerToFloat(inst->f17) + 24.0f;
+                d = convert_integer_to_float(inst->f17) + 24.0f;
                 if (inst->f10 < d) {
                     inst->f10 = d;
                 }
@@ -1567,13 +1567,13 @@ char *FUN_L00_00241940(int arg0) {
                 }
             }
             if (flag) {
-                DebugPrint_alt(D_L00_001E86A8, cnt, k);
+                debug_print_alt(D_L00_001E86A8, cnt, k);
             }
         }
         if (bad1) {
             int i;
 
-            DebugPrint_alt(D_L00_001E86E0);
+            debug_print_alt(D_L00_001E86E0);
             for (i = 0; i < D_L00_00160F50; i++) {
                 D_L00_00160F4C[i].f3A = 0x7F80;
             }
@@ -1613,7 +1613,7 @@ char *FUN_L00_00241940(int arg0) {
                     t->f18 = ((w >> 3) << 8) | (1 << (w & 7));
                 }
             }
-            DebugPrint_alt(D_L00_001E8708, cnt, k);
+            debug_print_alt(D_L00_001E8708, cnt, k);
         } else {
             int i;
 
@@ -1631,7 +1631,7 @@ char *FUN_L00_00241940(int arg0) {
         TieInst *t;
         int i;
 
-        DebugPrint_alt(D_L00_001E8740);
+        debug_print_alt(D_L00_001E8740);
         for (m = D_L00_0015FFD8; m != D_L00_0015FFE0; m++) {
             m->f36 = 0x7F80;
         }
@@ -1648,8 +1648,8 @@ char *FUN_L00_00241940(int arg0) {
     FUN_L00_00204f80();
     FUN_L00_001ed358();
     update_camera();
-    ResetGlobalStateFields();
-    EnableGlobalStateFlag();
+    reset_global_state_fields();
+    enable_global_state_flag();
     D_L00_001B0770[0] = 0;
     D_L00_001B07B0[0] = 0;
     D_L00_001B0830[0] = 0;

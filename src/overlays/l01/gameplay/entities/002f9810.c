@@ -696,15 +696,15 @@ extern int D_001413DC_u[] __asm__("D_001413DC");
 extern unsigned char D_0013D388_u[] __asm__("D_0013D388");
 extern void func_L01_002FC058_2FC140(void) __asm__("FUN_L01_002fac80");
 extern int func_001F9938_2FC140(void *) __asm__("FUN_001f9770");
-extern int scale_game_frames_2FC140(int) __asm__("FUN_001f96f8");
-extern void blend_moby_animation_2FC140(void *, int, int, int) __asm__("FUN_00212f90");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void func_L00_00299B68_2FC140(int) __asm__("FUN_L00_00298840");
 extern void func_L00_0028FC68_2FC140(void) __asm__("FUN_L00_0028e990");
 extern int func_00215570_2FC140(void *, int) __asm__("FUN_00214720");
-extern void clear_u64_value_2FC140(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float func_001F9D48_2FC140(void *, void *) __asm__("FUN_001f9b80");
 extern float func_L00_001FF860_2FC140(float, float) __asm__("FUN_001f9e90");
-extern void set_moby_animation_2FC140(void *, int, int) __asm__("FUN_00212ed8");
+extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void func_L00_0029A7D0_2FC140(int) __asm__("FUN_L00_00299460");
 extern void func_L00_00261848_2FC140(int) __asm__("FUN_L00_002607d0");
 extern void func_L00_00263DB0_2FC140(int) __asm__("FUN_L00_00262d38");
@@ -744,7 +744,7 @@ void FUN_L01_002fad68(Moby_2FC140 *moby) {
         r16 = *(unsigned char *)(moby->fB0 + (D_0015EE84_2FC140 << 4) + D_0014C050_u);
         if (r16 == 0xFF) {
             if (moby->f53 != 2) {
-                blend_moby_animation_2FC140(moby, 2, 0, scale_game_frames_2FC140(0x14));
+                blend_moby_animation(moby, 2, 0, scale_game_frames(0x14));
             }
             moby->state = 10;
             moby->flags = moby->flags & 0xFFBE;
@@ -764,10 +764,10 @@ void FUN_L01_002fad68(Moby_2FC140 *moby) {
                 moby->f94 = moby->pclass->f10;
                 if (data->link != -1) {
                     q = D_L01_00160058_2FC140[data->link].data;
-                    q->timer = scale_game_frames_2FC140(0x1A4);
+                    q->timer = scale_game_frames(0x1A4);
                     D_L01_00160058_2FC140[data->link].fBC = 1;
-                    clear_u64_value_2FC140(&D_L01_0016016C_2FC140[q->rec].b);
-                    clear_u64_value_2FC140(&q->v);
+                    clear_u64_value(&D_L01_0016016C_2FC140[q->rec].b);
+                    clear_u64_value(&q->v);
                     D_L01_0016016C_2FC140[q->rec].b.y = -func_L00_001FF860_2FC140(
                         func_001F9D48_2FC140(&D_L01_0016016C_2FC140[q->rec].a, &moby->pos),
                         moby->pos.z - D_L01_0016016C_2FC140[q->rec].a.z);
@@ -792,7 +792,7 @@ void FUN_L01_002fad68(Moby_2FC140 *moby) {
         }
         if (moby->f53 == 0) {
             if (moby->pos.z - data->fC <= 0.0f) {
-                set_moby_animation_2FC140(moby, 1, 0);
+                set_moby_animation(moby, 1, 0);
             }
         }
         if (moby->pos.z <= data->fC) {
@@ -808,7 +808,7 @@ void FUN_L01_002fad68(Moby_2FC140 *moby) {
             break;
         }
         if (moby->f53 != 2) {
-            blend_moby_animation_2FC140(moby, 2, 0, scale_game_frames_2FC140(0x14));
+            blend_moby_animation(moby, 2, 0, scale_game_frames(0x14));
         }
         if (moby->oclass == 0x2DA) {
             moby->state = 10;
@@ -840,7 +840,7 @@ void FUN_L01_002fad68(Moby_2FC140 *moby) {
         if (n4 == 0x14) {
             break;
         }
-        data->timer = scale_game_frames_2FC140(0x2D);
+        data->timer = scale_game_frames(0x2D);
         moby->state = 5;
         break;
     case 5:
@@ -883,7 +883,7 @@ void FUN_L01_002fad68(Moby_2FC140 *moby) {
         }
         if (data->f3C != -1) {
             q = D_L01_00160058_2FC140[data->f3C].data;
-            q->timer = scale_game_frames_2FC140(0xB4);
+            q->timer = scale_game_frames(0xB4);
             D_L01_00160058_2FC140[data->f3C].fBC = 1;
             if (data->f34 != -1 && data->f38 != -1) {
                 D_L01_00160058_2FC140[data->f34].fBC = 2;

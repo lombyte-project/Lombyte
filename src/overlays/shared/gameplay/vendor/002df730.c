@@ -1540,7 +1540,7 @@ void FUN_L00_002e5730(O002e5730 *o, void *a) {
 /*
  * State of the follow camera, at UpdateCam +0x70 (the record's saved state).
  * FUN_L00_002e4fe8 writes `velocity`, FUN_L00_002e5730 reads the same block
- * for its spring constants, and FUN_001f9770 (FastDecTimer) counts
+ * for its spring constants, and FUN_001f9770 (fast_dec_timer) counts
  * `blend_timer` down.
  */
 typedef struct {
@@ -1601,8 +1601,8 @@ extern void add_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void lerp_vector(f32 t, void *out, void *a, void *b) __asm__("FUN_001f9a40");
-extern f32 ConvertIntegerToFloat(s32 i) __asm__("FUN_001fa6c0");
-extern s32 FastDecTimer(void *timer) __asm__("FUN_001f9770");
+extern f32 convert_integer_to_float(s32 i) __asm__("FUN_001fa6c0");
+extern s32 fast_dec_timer(void *timer) __asm__("FUN_001f9770");
 extern f32 cam_interp_values(void *state, f32 value, f32 target, f32 stiffness, f32 damping, f32 limit) __asm__("FUN_001ebd78");
 extern s32 collision_line(void *from, void *to, s32 mask, s32 ignore, s32 flags) __asm__("FUN_001efa68");
 extern void follow_cam_hero_position(void *cam, void *out) __asm__("FUN_L00_002e4168");
@@ -1642,14 +1642,14 @@ void FUN_L00_002e5830(void *cam) {
         if (++q->blend_timer > scale_game_frames(follow_cam_blend_frames)) {
             q->blend_timer = scale_game_frames(follow_cam_blend_frames);
         }
-        lerp_vector((f32)q->blend_timer / ConvertIntegerToFloat(scale_game_frames(follow_cam_blend_frames)), base, q, s->follow.offset);
+        lerp_vector((f32)q->blend_timer / convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)), base, q, s->follow.offset);
         add_vector_xyz(s->follow.look_target, look, base);
     } else {
-        FastDecTimer(&s->follow.blend_timer);
+        fast_dec_timer(&s->follow.blend_timer);
         if (q->blend_timer < 0) {
             q->blend_timer = 0;
         }
-        lerp_vector((f32)q->blend_timer / ConvertIntegerToFloat(scale_game_frames(follow_cam_blend_frames)), base, q, s->follow.offset);
+        lerp_vector((f32)q->blend_timer / convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)), base, q, s->follow.offset);
         add_vector_xyz(s->follow.look_target, look, base);
     }
     follow_cam_spring_offset(cam, look);
