@@ -1248,7 +1248,84 @@ void FUN_L10_002e5be0(struct Moby *moby) {
     }
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e8358.s", FUN_L10_002e8358);
+#else
+extern void tick_countdown_32_vendor(void *) __asm__("FUN_001f9740");
+extern void FUN_L00_00266858_vendor(struct Moby *, int) __asm__("FUN_L00_00266858");
+extern int try_set_help_message_vendor(int, int) __asm__("FUN_00215130");
+extern void FUN_L00_00298840_vendor(int) __asm__("FUN_L00_00298840");
+extern void memcard_save_data_vendor(int, int) __asm__("FUN_0020b178");
+extern void FUN_L00_00263d40_vendor(int, int) __asm__("FUN_L00_00263d40");
+extern float D_0013F3D0_vendor[] __asm__("D_0013F3D0");
+extern u8 D_0013D38C[];
+extern u32 D_0013CAE4;
+extern int D_L10_0015F5C4_vendor __asm__("D_L10_0015F5C4");
+extern int D_001415F8 __attribute__((section(".data")));
+extern int D_0013ED98 __attribute__((section(".sdata")));
+extern int D_0013EDA0 __attribute__((sda));
+extern int D_L10_0013F640 __asm__("D_L10_0013F640") __attribute__((section(".sdata")));
+
+void FUN_L10_002e8358(struct Moby *moby) {
+    int *timer;
+    int accepted;
+    float angle;
+    int purchase;
+
+    timer = (int *)moby->pvars;
+    tick_countdown_32_vendor(timer + 1);
+    if (moby->state != 0) {
+        if (moby->state == 1) goto state_one;
+        return;
+    }
+    {
+        angle = FUN_001f9e90(D_0013F3D0_vendor[0] - moby->pos.x,
+                              D_0013F3D0_vendor[1] - moby->pos.y);
+        if (fast_difference_between_rotations(moby->rot.z, angle) < 1.5707964f &&
+            FUN_001f9b80(&moby->pos, D_0013F3D0_vendor) < 4.0f &&
+            timer[1] == 0 && D_L10_0015F5C4_vendor != 2) {
+            FUN_L00_00266858_vendor(moby, 1);
+            if (D_0013D38C[0] == 0) {
+                if (current_bolt_count < 4001) {
+                    try_set_help_message_vendor(1, 0x2720);
+                    return;
+                }
+                accepted = try_set_help_message_vendor(1, 0x271e);
+                if (!(D_0013CAE4 & 0x10) || !accepted) return;
+                D_0013D38C[0] = 1;
+                D_001415F8 = 5;
+                current_bolt_count = D_0013ED98 - 4000;
+                D_0013EDA0 = 5;
+                purchase = 0;
+            } else {
+                if (D_0013D38C[1] != 0 || timer[1] != 0) return;
+                if (current_bolt_count < 30001) {
+                    try_set_help_message_vendor(1, 0x2721);
+                    return;
+                }
+                accepted = try_set_help_message_vendor(1, 0x271f);
+                if (!(D_0013CAE4 & 0x10) || !accepted) return;
+                D_0013D38C[1] = 1;
+                D_001415F8 = 8;
+                current_bolt_count = D_0013ED98 - 30000;
+                D_0013EDA0 = 8;
+                purchase = 1;
+            }
+            FUN_L00_00298840_vendor(purchase);
+            moby->state = 1;
+        }
+    }
+    return;
+state_one:
+    if (D_L10_0015F5C4_vendor != 2) {
+        memcard_save_data_vendor(0, -1);
+        FUN_L00_00263d40_vendor(D_0013D38C[1] ? 0x271d : 0x271c, -1);
+        D_L10_0013F640 = 0xb4;
+        timer[1] = scale_game_frames(0xf0);
+        moby->state = 0;
+    }
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e85b8.s", FUN_L10_002e85b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e8ab0.s", FUN_L10_002e8ab0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e9648.s", FUN_L10_002e9648);
