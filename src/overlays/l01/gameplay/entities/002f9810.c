@@ -991,7 +991,234 @@ void FUN_L01_002fb8a8(PendulumMoby *self) {
     d.f[2] = FUN_001f9dc8(self->rot_x) * 11.0f;
     FUN_001f9a10(&self->pos, &arm, &d);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fd0e8.s", FUN_L01_002fd0e8);
+#include "sda.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+    u8 pad0C[0x12];
+    u16 c1E;
+    f32 f20;
+    f32 f24;
+    f32 f28;
+    f32 f2C;
+    u8 pad30[0x14];
+    s32 i44;
+    u8 rest[0x1148];
+} PoolTile;
+
+typedef struct {
+    f32 f00, f04, f08, f0C, f10, f14, f18, f1C, f20, f24;
+    s32 i28, i2C;
+    f32 f30, f34, f38;
+    u8 c3C, c3D;
+} PoolLight;
+
+typedef struct {
+    f32 x, y, z, w;
+} PoolVec;
+
+extern PoolTile pool_tiles[] __asm__("D_L01_001E34C0");
+extern PoolLight pool_light __asm__("D_L01_001CAD00");
+extern f32 pool_sun[] __asm__("D_L01_00180340");
+extern u8 pool_tile_tex[] __asm__("D_L01_001FA6C0");
+extern s32 pool_first[] __asm__("D_L01_001FA5E8");
+extern s32 pool_count[] __asm__("D_L01_001FA608");
+extern s32 pool_odds[] __asm__("D_L01_001FA628");
+extern u32 pool_colors[] __asm__("D_L01_001FA590");
+extern u128 pool_drips[] __asm__("D_L01_001FA650");
+extern u8 pool_wave[] __asm__("D_L01_001FA6A0");
+extern u8 pool_cam_pos[] __asm__("D_L01_00167240");
+extern s32 pool_frame __asm__("D_L01_0015F5CC") MACRO_ADDR;
+extern s32 pool_drip_timer __asm__("D_L01_00161C84") __attribute__((sda));
+extern u8 pool_c200 __asm__("D_L01_00161200") MACRO_ADDR;
+extern u8 pool_c201 __asm__("D_L01_00161201") MACRO_ADDR;
+extern u8 pool_c202 __asm__("D_L01_00161202") MACRO_ADDR;
+extern u8 pool_c203 __asm__("D_L01_00161203") MACRO_ADDR;
+extern u8 pool_c204 __asm__("D_L01_00161204") MACRO_ADDR;
+extern u8 pool_c205 __asm__("D_L01_00161205") MACRO_ADDR;
+extern u8 pool_c206 __asm__("D_L01_00161206") MACRO_ADDR;
+extern f32 pool_f208 __asm__("D_L01_00161208") MACRO_ADDR;
+extern f32 pool_f20C __asm__("D_L01_0016120C") MACRO_ADDR;
+extern f32 pool_f210 __asm__("D_L01_00161210") MACRO_ADDR;
+extern f32 pool_f214 __asm__("D_L01_00161214") MACRO_ADDR;
+extern PoolTile *pool_draw_tiles __asm__("D_L01_001612D0") MACRO_ADDR;
+extern u8 *pool_draw_tex __asm__("D_L01_001612D4") MACRO_ADDR;
+extern s32 pool_draw_count __asm__("D_L01_001612D8") MACRO_ADDR;
+extern void pool_init_tiles(void *, s32) __asm__("FUN_L01_002b7a48");
+extern void pool_bind_tile(void *, void *) __asm__("FUN_L01_002b7c68");
+extern void pool_set_scale(f32) __asm__("FUN_L01_002b7ef0");
+extern void pool_flush(void *, s32) __asm__("FUN_L01_002b7fe0");
+extern void pool_ripple(f32, f32, f32, f32, void *, s32) __asm__("FUN_L01_002b8288");
+extern void pool_splash(f32, f32, f32, f32, void *, s32, s32) __asm__("FUN_L00_002a3ec8");
+extern f32 pool_atan2(f32, f32) __asm__("FUN_001f9e90");
+extern f32 pool_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 pool_sin(f32) __asm__("FUN_001f9de0");
+extern f32 pool_randf(f32, f32) __asm__("FUN_002132a8");
+extern s32 pool_rand(s32) __asm__("FUN_00213260");
+extern s32 pool_in_volume(void *, s32) __asm__("FUN_00214720");
+extern s32 pool_rand_range(s32, s32) __asm__("FUN_L00_00257b90");
+extern void pool_enqueue(void *, void *) __asm__("FUN_001f4600");
+extern void FUN_L01_002fd0c0(void);
+extern void pool_drip(void *, f32) __asm__("FUN_L01_002ffcd0");
+extern void pool_bubble(void *, void *, f32) __asm__("FUN_L01_00287b00");
+extern void pool_bubbles(void *, void *, f32, f32) __asm__("FUN_L01_00287c80");
+
+void FUN_L01_002fd0e8(struct Moby *moby) {
+    s32 *vol;
+    s32 found;
+    s32 i;
+    s32 j;
+    PoolVec v;
+    PoolVec p;
+    s32 k;
+    f32 f;
+    f32 zero;
+    u8 *tex;
+    s32 n;
+    s32 m;
+    PoolTile *tiles;
+
+    vol = (s32 *)moby->pvars;
+    switch (moby->state) {
+    case 0:
+        moby->state = 1;
+        moby->unk30 = 0xFF;
+        moby->pos.z = moby->pos.z + 0.5f;
+        pool_init_tiles(pool_tiles, 21);
+        zero = 0.0f;
+        pool_tiles[15].i44 = 8;
+        pool_tiles[16].f28 = -0.0016f;
+        pool_tiles[15].f28 = -0.0016f;
+        pool_tiles[14].f28 = -0.0016f;
+        pool_tiles[16].f2C = zero;
+        pool_tiles[13].f28 = -0.0016f;
+        pool_tiles[14].f2C = zero;
+        pool_tiles[15].f2C = zero;
+        pool_tiles[13].f2C = zero;
+        pool_set_scale(1.0f);
+        {
+            PoolLight *l;
+            f32 a;
+
+            l = &pool_light;
+            l->f00 = 16.0f;
+            l->f04 = 16.0f;
+            l->f08 = -8.0f;
+            l->f0C = -8.0f;
+            l->f10 = 1.0f;
+            l->f14 = 1.0f;
+            l->f18 = 0.9f;
+            l->f20 = 0.1f;
+            a = pool_atan2(pool_sun[4], pool_sun[5]);
+            l->f30 = pool_cos(a) * 0.57735f;
+            l->f34 = pool_sin(a) * 0.57735f;
+            l->f38 = -0.57735f;
+            l->i28 = 0x29;
+            l->i2C = 0x2A;
+            l->c3C = 0x1C;
+            l->c3D = 0x40;
+        }
+        pool_draw_count = 21;
+        pool_f208 = zero;
+        tex = pool_tile_tex;
+        pool_f20C = 32768.0f;
+        pool_f210 = 255.0f;
+        pool_f214 = 48.0f;
+        pool_draw_tiles = pool_tiles;
+        pool_draw_tex = pool_tile_tex;
+        for (m = 0; m < 21; m++) {
+            pool_bind_tile(&pool_tiles[m], tex + m * 16);
+        }
+        for (n = 0; n < 21; n++) {
+            PoolTile *tile = &pool_tiles[n];
+            tiles = pool_tiles;
+
+            for (j = 0; j < 2; j++) {
+                f32 x = tile->x + pool_randf(-6.0f, 6.0f);
+                f32 y = tile->y + pool_randf(-6.0f, 6.0f);
+
+                pool_ripple(x, y, 2.0f, 0.2f, tiles, 21);
+            }
+        }
+        break;
+    case 1:
+        found = -1;
+        for (i = 0; i < 7; i++) {
+            if (*(s32 *)((u8 *)vol + (i << 2)) == -1 || pool_in_volume(pool_cam_pos, *(s32 *)((u8 *)vol + (i << 2))) == 0) {
+                for (k = 0; k < pool_count[i]; k++) {
+                    pool_tiles[pool_first[i] + k].c1E = 0;
+                }
+            } else {
+                found = i;
+                for (j = 0; j < pool_count[i]; j++) {
+                    tiles = pool_tiles;
+                    tiles[pool_first[i] + j].c1E = pool_colors[pool_first[i] + j];
+                    if (pool_rand(pool_odds[i]) == 0) {
+                        f32 x = tiles[pool_first[i] + j].x + pool_randf(-4.0f, 4.0f);
+                        f32 y = tiles[pool_first[i] + j].y + pool_randf(-4.0f, 4.0f);
+
+                        pool_splash(x, y, 1.0f, -0.05f, pool_draw_tiles + pool_first[i] + j, 1, 1);
+                    }
+                }
+            }
+        }
+        if (found >= 0) {
+            if (found > 0 && found < 4) {
+                pool_c200 = 0;
+                pool_c201 = 0x28;
+                pool_c202 = 0x30;
+                pool_c203 = 0x40;
+                pool_c204 = 0;
+                pool_c205 = 0x28;
+                pool_c206 = 0x30;
+            } else {
+                pool_c200 = 0x18;
+                pool_c201 = 0x30;
+                pool_c202 = 0x90;
+                pool_c203 = 0x30;
+                pool_c204 = 0x18;
+                pool_c205 = 0x30;
+                pool_c206 = 0x90;
+            }
+        }
+        pool_flush(pool_tiles, 21);
+        pool_enqueue(FUN_L01_002fd0c0, moby);
+        if (found == 0 || found == 6) {
+            pool_drip_timer--;
+            if (pool_drip_timer <= 0) {
+                qcopy(&v, &pool_drips[pool_rand(5)]);
+                v.x = v.x + pool_randf(-0.15f, 0.15f);
+                v.y = v.y + pool_randf(-0.15f, 0.15f);
+                pool_drip(&v, 0.2f);
+                pool_drip_timer = pool_rand_range(300, 1200);
+            }
+        }
+        if (found == 5) {
+            f = pool_wave[pool_frame % 20] / 20.0f;
+            v.x = 0.02f;
+            v.y = 0.0f;
+            v.z = 0.0f;
+            p.x = pool_randf(-0.6f, 0.6f) + 177.0f;
+            p.y = f * -11.0f + 176.0f + pool_randf(-0.1f, 0.1f);
+            p.z = 39.0f;
+            pool_bubbles(&p, &v, 1.0f, pool_randf(0.4f, 0.5f));
+            v.x = 0.0f;
+            v.y = 0.0f;
+            v.z = 0.0f;
+            for (f = v.x; f < 1.0f; f += 0.05f) {
+                if (pool_rand(32) == 0) {
+                    p.x = pool_randf(-0.6f, 0.6f) + 178.0f;
+                    p.y = f * -11.0f + 176.0f + pool_randf(-0.1f, 0.1f);
+                    p.z = pool_randf(-0.2f, 0.0f) + 39.0f;
+                    pool_bubble(&p, &v, pool_randf(4.0f, 10.0f));
+                }
+            }
+        }
+        break;
+    }
+}
 typedef struct {
     f32 x, y, z, w;
 } SparkVec;
