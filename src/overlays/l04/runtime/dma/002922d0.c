@@ -45,9 +45,9 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002923b8.s", FUN_L04_002923b8);
 #else
 extern void STUB_printf() __asm__("FUN_001e93b0");
 extern void FUN_001f97b0(void);
-extern float FUN_L04_002418b0(int, unsigned int);
-extern float FUN_L04_00241910(int, unsigned int);
-extern float FUN_001f96b0(float);
+extern float animation_start_923b8(int, unsigned int) __asm__("FUN_L04_002418b0");
+extern float FUN_L04_00241910(int, unsigned int) __asm__("FUN_L04_00241910");
+extern float FUN_001f96b0(float) __asm__("FUN_L04_001f1978");
 extern void transform_scaled_vertex_batch(char *, int, void *, char *) __asm__("FUN_0020cd48");
 extern void FUN_0020cca8(char *, int, void *);
 extern float FUN_001f9e90(float, float);
@@ -70,23 +70,27 @@ void FUN_L04_002923b8(char *arg0, char *arg1) {
             STUB_printf((char *)0x1db360, i, *(short *)(arg0 + 0xa6));
             FUN_001f97b0();
         }
-        *(float *)((char *)*slot + 0xc) = FUN_L04_002418b0((unsigned char)arg0[0x22], **slot);
+        *(float *)((char *)*slot + 0xc) = animation_start_923b8((unsigned char)arg0[0x22], **slot);
         *(float *)((char *)*slot + 0x10) = FUN_L04_00241910((unsigned char)arg0[0x22], **slot) -
                                                 *(float *)((char *)*slot + 0xc);
         if (*(float *)((char *)*slot + 0x10) != 0.0f) {
-            j = 1;
+            j = 0;
             do {
-                int offset = (1 - j) * 4;
+                int offset = j * 4;
                 char *item = (char *)*slot;
                 float start = *(float *)(item + 0x40 + offset);
                 float end = *(float *)(item + 0x48 + offset);
-                *(float *)(item + 0x38 + offset) = (end < start ? end + *(float *)(item + 0x10) : end) - start;
+                if (!(start <= end))
+                    end += *(float *)(item + 0x10);
+                *(float *)(item + 0x38 + offset) = end - start;
                 item = (char *)*slot;
                 start = *(float *)(item + 0x28 + offset);
                 end = *(float *)(item + 0x30 + offset);
-                *(float *)(item + 0x20 + offset) = (end < start ? end + *(float *)(item + 0x10) : end) - start;
-                j--;
-            } while (j >= 0);
+                if (!(start <= end))
+                    end += *(float *)(item + 0x10);
+                *(float *)(item + 0x20 + offset) = end - start;
+                j++;
+            } while (j < 2);
             *(float *)((char *)*slot + 8) = *(float *)((char *)*slot + 4) /
                 FUN_001f96b0(*(float *)((char *)*slot + 0x10) + *(float *)((char *)*slot + 0x10));
         }
