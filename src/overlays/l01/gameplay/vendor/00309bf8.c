@@ -44,7 +44,170 @@ void FUN_L01_00309c98(FlagMoby *m) {
     m->b30 = v;
     enqueue_callback_list_1(FUN_L01_00309bf8, m);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030acb8.s", FUN_L01_0030acb8);
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/state/level_state.h"
+#include "sda.h"
+
+/* Help message playback state (same layout as S00203908 in shared/ui/help/00203880.c). */
+struct L01HelpState {
+    s32 state;
+    u8 pad4[0x20];
+    s32 cur;
+};
+
+/* Per-message help record at D_00141968: id 0xFFFF = disabled. */
+struct L01HelpRecord {
+    u16 id;
+    u16 pad;
+    s32 v;
+};
+
+extern struct L01HelpState l01_help_state __asm__("D_L01_00179890");
+extern struct L01HelpRecord l01_help_records[] __asm__("D_00141968");
+extern struct UsageStats usage_stats __asm__("D_00141848");
+extern s32 l01_level_frames __asm__("D_L01_0015F5CC");
+extern s32 l01_cutscene __asm__("D_L01_0015F5C4") MACRO_ADDR;
+extern s32 l01_f688 __asm__("D_L01_0015F688") MACRO_ADDR;
+extern s32 l01_f68c __asm__("D_L01_0015F68C") MACRO_ADDR;
+extern struct Moby *l01_mobys __asm__("D_L01_0015FFE4") MACRO_ADDR;
+extern s32 l01_game_frames __asm__("D_0015EEA4") MACRO_ADDR;
+extern s32 l01_level_index __asm__("D_0015ED84") MACRO_ADDR;
+extern s32 l01_max_hp __asm__("D_0015EDA0");
+extern s32 l01_tick(s32 *) __asm__("FUN_001f9740");
+extern s32 l01_scale(s32) __asm__("FUN_001f96f8");
+extern s32 l01_in_volume(void *, s32) __asm__("FUN_00214720");
+extern f32 l01_dist(void *, void *) __asm__("FUN_001f9b48");
+extern s32 FUN_L00_00203908(s32, s32);
+extern s32 FUN_L00_002d8128(void *);
+extern s32 FUN_L01_00275690(f32, void *);
+
+/* Novalis tutorial hint triggers: plays help messages and counts usage stats. */
+void FUN_L01_0030acb8(struct Moby *moby) {
+    s32 *data;
+    struct Moby *m;
+    struct Moby *m2;
+    s32 t;
+
+    data = (s32 *)moby->pvars;
+    l01_tick(&data[6]);
+    switch (moby->state) {
+    case 0:
+        data[5] = 0;
+        moby->unk30 = 0xFF;
+        moby->state = 1;
+        data[10] = 0;
+        break;
+    case 1:
+        if (l01_level_frames < l01_scale(400) && usage_stats.stat[12].count != 0 && usage_stats.stat[11].count == 0) {
+            if (l01_scale(l01_game_frames) - usage_stats.stat[12].unk2 * 600 < l01_scale(1100) && l01_help_records[0x51].v >= 0) {
+                FUN_L00_00203908(0x4E27, 0x51);
+            }
+        }
+        if (l01_level_frames < l01_scale(400) && usage_stats.stat[29].count != 0) {
+            if (l01_scale(l01_game_frames) - usage_stats.stat[29].unk2 * 600 < l01_scale(1100) && l01_help_records[0x72].v >= 0) {
+                FUN_L00_00203908(0x4E28, 0x72);
+            }
+        }
+        if (l01_cutscene == 0) {
+            if (level_available[3] != 0 && level_available[2] == 0 && l01_help_state.state == 0 &&
+                l01_help_state.cur == -1 && l01_help_records[4].id == 0) {
+                FUN_L00_00203908(0x3E8, 4);
+            } else if (level_available[3] == 0 && level_available[2] != 0 && l01_help_state.state == 0 &&
+                       l01_help_state.cur == -1 && l01_help_records[5].id == 0) {
+                FUN_L00_00203908(0x3E9, 5);
+            } else if (level_available[3] != 0 && level_available[2] != 0 && l01_help_state.state == 0 &&
+                       l01_help_state.cur == -1 && l01_help_records[6].id == 0 && l01_help_records[4].id == 0) {
+                FUN_L00_00203908(0x3EA, 6);
+            }
+        }
+        if (l01_in_volume(&hero.motion.pos, data[15]) &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l01_help_state.state == 0 &&
+            l01_help_state.cur == -1) {
+            t = l01_scale(l01_game_frames) - usage_stats.stat[9].unk2 * 600;
+            /* "< 1" rather than "!": cc1 would otherwise test the bit as (v >> level) & 1 */
+            if (l01_scale(216000) < t && (u32)(l01_help_records[0x43].v & (1 << l01_level_index)) < 1) {
+                FUN_L00_00203908(0x3EF, 0x43);
+            }
+        }
+        if (l01_in_volume(&hero.motion.pos, data[14]) &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l01_f68c < 3 &&
+            l01_help_state.state == 0 && l01_help_state.cur == -1 && l01_help_records[0x40].id == 0) {
+            FUN_L00_00203908(0x3EC, 0x40);
+        }
+        if (l01_in_volume(&hero.motion.pos, data[14]) &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && hero.state.current == 1 &&
+            l01_f688 == -1 && l01_help_state.state == 0 && l01_help_state.cur == -1 &&
+            l01_help_records[0x40].id != 0 && l01_help_records[0x41].id == 0) {
+            FUN_L00_00203908(0x3ED, 0x41);
+        }
+        if (l01_help_records[0x42].id < 2 && l01_in_volume(&hero.motion.pos, data[12]) && hero.state.prev == 0x3B &&
+            hero.state_timer == 0) {
+            for (m = l01_mobys; m != 0; m = m->next) {
+                if (m->oclass == 0x118 && l01_dist(&m->pos, &hero.motion.pos) < 3.0f &&
+                    *(f32 *)m->pvars != 1.0f) {
+                    data[13]++;
+                    if (data[13] == 3 || data[13] == 6) {
+                        FUN_L00_00203908(0x3EE, 0x42);
+                    }
+                }
+            }
+        }
+        if (hero.state.control_mode == 0x12 && data[10] == 0 && l01_help_state.state == 0 &&
+            l01_help_state.cur == -1 &&
+            (l01_in_volume(&hero.motion.pos, data[8]) || l01_in_volume(&hero.motion.pos, data[9]))) {
+            data[11]++;
+            if (l01_in_volume(&hero.motion.pos, data[8]) && l01_scale(240) < data[11] &&
+                usage_stats.stat[22].count == 0) {
+                FUN_L00_00203908(0x3F0, 0x44);
+                if (usage_stats.stat[22].count < 0xFFFF) {
+                    usage_stats.stat[22].count++;
+                }
+                t = l01_scale(l01_game_frames) / 600;
+                if (usage_stats.stat[22].unk2 < t) {
+                    usage_stats.stat[22].unk2 = l01_scale(l01_game_frames) / 600;
+                }
+                usage_stats.stat[22].level_mask = usage_stats.stat[22].level_mask | (1 << l01_level_index) | 0x80000000;
+            } else if (l01_in_volume(&hero.motion.pos, data[9]) && l01_scale(360) < data[11] &&
+                       usage_stats.stat[23].count == 0) {
+                FUN_L00_00203908(0x3F0, 0x44);
+                if (usage_stats.stat[23].count < 0xFFFF) {
+                    usage_stats.stat[23].count++;
+                }
+                t = l01_scale(l01_game_frames) / 600;
+                if (usage_stats.stat[23].unk2 < t) {
+                    usage_stats.stat[23].unk2 = l01_scale(l01_game_frames) / 600;
+                }
+                usage_stats.stat[23].level_mask = usage_stats.stat[23].level_mask | (1 << l01_level_index) | 0x80000000;
+            }
+        } else if (hero.state.control_mode == 0x11) {
+            l01_help_records[0x44].id = 0xFFFF;
+        } else {
+            data[11] = 0;
+        }
+        for (m2 = l01_mobys; m2 != 0; m2 = m2->next) {
+            if (m2->oclass == 0x326 && l01_dist(&m2->pos, &hero.motion.pos) < 10.0f && l01_help_state.state == 0 &&
+                l01_help_state.cur == -1 && l01_help_records[1].id == 0 && l01_help_records[2].id == 0 &&
+                usage_stats.stat[13].count == 0 && FUN_L00_002d8128(m2) == 0) {
+                if (hero.health.hp < l01_max_hp) {
+                    if (usage_stats.stat[13].count < 0xFFFF) {
+                        usage_stats.stat[13].count++;
+                    }
+                    t = l01_scale(l01_game_frames) / 600;
+                    if (usage_stats.stat[13].unk2 < t) {
+                        usage_stats.stat[13].unk2 = l01_scale(l01_game_frames) / 600;
+                    }
+                    usage_stats.stat[13].level_mask = usage_stats.stat[13].level_mask | (1 << l01_level_index) | 0x80000000;
+                    FUN_L00_00203908(1, 1);
+                } else if (FUN_L01_00275690(255.0f, m2) != 0) {
+                    FUN_L00_00203908(2, 2);
+                }
+            }
+        }
+        break;
+    }
+}
 #include "rnc/gameplay/entities/moby.h"
 
 /* pvars of the lava blob FUN_L01_0030ba18 moves */
