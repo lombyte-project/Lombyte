@@ -764,7 +764,87 @@ void FUN_L14_003061d8(void *arg) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00306b78.s", FUN_L14_00306b78);
+extern char *D_L14_001B0BB0[];
+extern u8 D_0014C050[];
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+
+void FUN_L14_00306b78(struct Moby *moby) {
+    s32 *d = (s32 *)moby->pvars;
+    s16 id;
+    s32 i;
+    s32 list;
+    char *p;
+    f32 angle;
+    s32 color;
+    u32 shade;
+    u32 high;
+
+    switch (moby->state) {
+    case 0:
+        *(f32 *)(d + 3) = random_angle_radians();
+        moby->pos.z -= 0.35f;
+        id = (s16)moby->save_id;
+        if (D_L14_001BB930.collected[id] != 0 ||
+            (D_0014C190[current_level_index][id >> 5] >> (moby->save_id & 31) & 1) != 0 ||
+            (d[2] != 0 && D_0014C050[moby->unkB0 + current_level_index * 16] == 0xFF)) {
+            moby->unkBC = 2;
+            moby->unk90 = 0x80208020;
+            moby->state = 2;
+            list = d[0];
+            if (list != -1) {
+                i = 0;
+                if (*(s32 *)D_L14_001B0BB0[list] > 0) {
+                    do {
+                        p = D_L14_001B0BB0[list] + i * 16;
+                        if (*(f32 *)(p + 0x1C) == ((f32 *)d)[1])
+                            *(s32 *)(p + 0x1C) = 0;
+                        list = d[0];
+                        i++;
+                    } while (i < *(s32 *)D_L14_001B0BB0[list]);
+                }
+            }
+        } else {
+            moby->state = 1;
+        }
+        break;
+    case 1:
+        angle = fast_add_rotations(*(f32 *)(d + 3), frame_time * 6.2831855f);
+        *(f32 *)(d + 3) = angle;
+        color = truncate_float_to_s32((fast_sin(angle) * 4.0f - 3.0f) * 128.0f);
+        if (color > 0x80) color = 0x80;
+        else if (color < 0x20) color = 0x20;
+        shade = 0x80000000 | (color << 8);
+        high = color << 16;
+        moby->unk90 = high | shade | color;
+        if (hero.ground_moby == moby && hero.air_frames.s == 0) {
+            id = (s16)moby->save_id;
+            D_0014C190[current_level_index][id >> 5] |= 1 << (moby->save_id & 31);
+            D_L14_001BABD0[(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 31);
+            moby->state = 2;
+            moby->unkBC = 1;
+            moby->unk90 = 0x80208020;
+            allocate_voice_for_target_entry(0, 0, moby);
+            list = d[0];
+            if (list != -1) {
+                i = 0;
+                if (*(s32 *)D_L14_001B0BB0[list] > 0) {
+                    do {
+                        p = D_L14_001B0BB0[list] + i * 16;
+                        if (*(f32 *)(p + 0x1C) == ((f32 *)d)[1])
+                            *(s32 *)(p + 0x1C) = 0;
+                        list = d[0];
+                        i++;
+                    } while (i < *(s32 *)D_L14_001B0BB0[list]);
+                }
+            }
+        }
+        break;
+    }
+}
 /* pvars of the Blarg heavy interceptor (class 1417) */
 typedef struct {
     char pad0[2];
