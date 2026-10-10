@@ -40,7 +40,202 @@ void FUN_L15_002e46b0(struct Moby *moby) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029aff0.s", FUN_L15_0029aff0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a36d0.s", FUN_L15_002a36d0);
+/* Ported from rac1-decomp src/overlays/l15_quartu/vendor_0029C1D0.c (func_L15_002A48B0) */
+#include "eetypes.h"
+
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2A48B0;
+
+typedef struct {
+    Vec_2A48B0 home;   /* 0x00: x y z w at open */
+    int vol_near;       /* 0x10 */
+    int vol_trigger;    /* 0x14 */
+    float travel;       /* 0x18 */
+    int sound;          /* 0x1C */
+    int key;            /* 0x20 */
+    int trigger;        /* 0x24 */
+    int locked;         /* 0x28 */
+} GateVars_2A48B0;
+
+typedef struct {
+    char pad00[0x10];
+    Vec_2A48B0 pos;    /* 0x10 */
+    unsigned char state; /* 0x20 */
+    char pad21[0xF];
+    unsigned char f30;  /* 0x30 */
+    char pad31[0x47];
+    GateVars_2A48B0 *vars; /* 0x78 */
+} GateMoby_2A48B0;
+
+typedef struct {
+    char pad00[0x20];
+    unsigned char state; /* 0x20 */
+} OtherMoby_2A48B0;
+
+typedef struct {
+    char pad00[0x74];
+    unsigned char active; /* 0x74 */
+    char pad75[0x13];
+    GateMoby_2A48B0 *owner; /* 0x88 */
+} SoundSlot_2A48B0;
+
+extern float D_0015ED6C;
+extern float D_L15_001614F8 __attribute__((sda));
+extern int D_L15_00161AC0;
+extern int D_L15_00184AA8;
+extern unsigned char D_001413F4[];
+extern int func_00215570_2A48B0(void *arg0, int arg1) __asm__("FUN_00214720");
+extern int func_0022ED80_2A48B0(int, int, GateMoby_2A48B0 *) __asm__("FUN_0022da68");
+extern void func_L00_0028EBF0_2A48B0(int) __asm__("FUN_0022d798");
+extern unsigned char D_0013DD50 __attribute__((section(".data")));
+extern unsigned char D_0013F3D0_2A48B0[] __asm__("D_0013F3D0");
+extern char D_0013E550[];
+extern char D_L15_00167440_2A48B0[] __asm__("D_L15_001673C0");
+extern int D_L15_00184B28_2A48B0 __asm__("D_L15_00184AA8") __attribute__((section(".data")));
+
+void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
+{
+    GateVars_2A48B0 *d = m->vars;
+    float step;
+
+    switch (m->state) {
+    case 0:
+        *(u128 *)&d->home = *(u128 *)&m->pos;
+        m->state = 1;
+        d->locked = 0;
+        if (d->key != -1) {
+            m->f30 = 0xFF;
+        }
+        if (D_0013DD50 != 0 && d->key != -1) {
+            m->pos.z = m->pos.z - D_L15_001614F8;
+            m->state = 5;
+        }
+        break;
+    case 1:
+        d->travel = 0;
+        if (d->key != -1) {
+            D_L15_00184B28_2A48B0 = 0;
+        }
+        if (d->trigger != -1) {
+            OtherMoby_2A48B0 *p = (OtherMoby_2A48B0 *)((char *)*(int *)&D_L15_0015FFD8_d + (d->trigger << 8));
+            if (p == 0 || p->state == 0xFE || p->state == 0xFD) {
+                if (D_L15_00161AC0 == 0) {
+                    m->state = 2;
+                    d->locked = 1;
+                }
+            }
+        } else {
+            if (func_00215570_2A48B0(D_0013F3D0_2A48B0, d->vol_near)) {
+                if (d->key == -1 || D_0013F3D0_2A48B0[0x2024] == 2) {
+                    m->state = 2;
+                }
+            }
+        }
+        if (D_0013DD50 != 0 && d->key != -1) {
+            m->pos.z = d->home.z - D_L15_001614F8;
+            m->state = 5;
+        }
+        break;
+    case 2:
+        step = (D_L15_001614F8 / 0.6f) * D_0015ED6C;
+        if (d->key != -1) {
+            step = step * 5.0f;
+        }
+        if (((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->owner != m ||
+            ((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->active == 0) {
+            d->sound = func_0022ED80_2A48B0(0, 4, m);
+        }
+        if (D_L15_001614F8 < (d->travel = d->travel + step)) {
+            if (d->sound != -1 &&
+                ((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->owner == m &&
+                ((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->active != 0) {
+                func_L00_0028EBF0_2A48B0(d->sound);
+            }
+            d->sound = -1;
+            d->travel = D_L15_001614F8;
+            m->state = 3;
+        }
+        {
+            float t = d->travel;
+            float h = d->home.z;
+            float z;
+            if (d->key != -1) {
+                t = -t;
+                z = h + t;
+            } else {
+                z = h + t;
+            }
+            m->pos.z = z;
+        }
+        break;
+    case 3:
+        if (d->key != -1) {
+            D_L15_00184B28_2A48B0 = 1;
+        }
+        if (func_00215570_2A48B0(D_0013F3D0_2A48B0, d->vol_trigger) != 0 ||
+            func_00215570_2A48B0(D_L15_00167440_2A48B0, d->vol_trigger) != 0) {
+            if (func_00215570_2A48B0(D_0013F3D0_2A48B0, d->key) == 0) {
+                break;
+            }
+        }
+        if (d->locked == 0) {
+            m->state = 4;
+        }
+        break;
+    case 4:
+        step = (D_L15_001614F8 / 0.6f) * D_0015ED6C;
+        if (d->key != -1) {
+            step = step * 5.0f;
+        }
+        if (((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->owner != m ||
+            ((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->active == 0) {
+            d->sound = func_0022ED80_2A48B0(0, 4, m);
+        }
+        if ((d->travel = d->travel - step) < 0.0f) {
+            if (d->sound != -1 &&
+                ((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->owner == m &&
+                ((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->active != 0) {
+                func_L00_0028EBF0_2A48B0(d->sound);
+            }
+            d->travel = 0;
+            d->sound = -1;
+            m->state = 1;
+            if (d->key != -1) {
+                m->state = 5;
+                D_L15_00184B28_2A48B0 = 0;
+            }
+        }
+        {
+            float t = d->travel;
+            float h = d->home.z;
+            float z;
+            if (d->key != -1) {
+                t = -t;
+                z = h + t;
+            } else {
+                z = h + t;
+            }
+            m->pos.z = z;
+        }
+        if (func_00215570_2A48B0(D_0013F3D0_2A48B0, d->vol_near) != 0 ||
+            func_00215570_2A48B0(D_L15_00167440_2A48B0, d->vol_near) != 0) {
+            m->state = 2;
+        }
+        break;
+    case 5:
+        if (D_0013DD50 != 0) {
+            m->pos.z = d->home.z - D_L15_001614F8;
+            D_L15_00184B28_2A48B0 = 1;
+        } else {
+            if (D_001413F4[0] == 2) {
+                break;
+            }
+            m->pos.z = d->home.z;
+            m->state = 1;
+            D_L15_00184B28_2A48B0 = 0;
+        }
+        break;
+    }
+}
 #include "rnc/gameplay/entities/moby.h"
 /* pvars of the swinging door FUN_L15_002a3ba8 updates */
 typedef struct {

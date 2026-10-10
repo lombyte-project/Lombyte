@@ -1829,4 +1829,144 @@ void FUN_L07_00311bc8(char *m) {
     FUN_L00_00260738(d + 0x60, v, m + 0x40, m + 0x40);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00311eb8.s", FUN_L07_00311eb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312420.s", FUN_L07_00312420);
+/* Ported from rac1-decomp src/overlays/l07_umbris/vendor_002CE470.c (func_L07_00313800) */
+/* Ported from rac1-decomp src/overlays/l07_umbris/vendor_002CE470.c () */
+#include "sda.h"
+
+/* Umbris: sets up the effect vectors from the moby's data block and emits the GS packet. */
+
+typedef int u128_30CA88 __attribute__((mode(TI)));
+
+typedef union {
+    u128_30CA88 q;
+    float f[4];
+} Vec4_30CA88;
+
+typedef struct EffData_313800 {
+    char pad0[0x140];
+    float f140[4];
+    float f150[3];
+    float f15C;
+} EffData_313800;
+
+typedef struct Moby_313800 {
+    char pad0[0x78];
+    EffData_313800 *data;
+} Moby_313800;
+
+typedef struct Packet_313800 {
+    float a[4];
+    float b[4];
+    float c[4];
+    float d[4];
+    unsigned int col[4];
+    float uv[8];
+    long x120;
+    long x128;
+    long x130;
+    long x138;
+} Packet_313800;
+
+extern Vec4_30CA88 D_L07_00173EE0_c __asm__("D_L07_00173EE0");
+extern int D_L07_0015F5CC_c __asm__("D_L07_0015F5CC");
+extern int D_L07_00167050; /* no foreign declaration */
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
+unsigned char *FUN_L00_002729c8(void *pos, unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned char e, int g, float x, float y);
+extern float func_001FA888_313800(int) __asm__("FUN_001fa6c0");
+extern float func_L00_0025F368_313800(float) __asm__("FUN_L00_0025e310");
+extern float func_001F9F90_313800(float) __asm__("FUN_001f9dc8");
+extern float func_001F9FA8_313800(float) __asm__("FUN_001f9de0");
+extern void func_L00_00250800_313800(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void func_001F9BF0_313800(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_L00_001FF4B0_313800(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void func_001F9BD8_313800(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int func_L00_001EFFF0_313800(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern void func_001F9CA0_313800(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern int func_001160D8_313800(void) __asm__("FUN_001160d8");
+extern int func_001F9850_313800(int) __asm__("FUN_001f96f8");
+extern void *func_L00_00273868_313800(float *pos, unsigned char a1, unsigned char a2, unsigned char a3,
+    unsigned char a4, unsigned char a5, void *a6, float f0, float f1) __asm__("FUN_L00_002729c8");
+extern long func_001F4868_313800(int) __asm__("FUN_001f44b8");
+extern void func_L00_001FD1D8_313800(void *, int, int) __asm__("FUN_001f7d30");
+extern char D_L07_001670D0_313800[] __asm__("D_L07_00167050");
+extern char D_L07_00173F60_313800[] __asm__("D_L07_00173EE0");
+
+void FUN_L07_00312420(Moby_313800 *arg)
+{
+    float v0[4], v10[4], v20[4], v30[4], v40[4], v50[4], m[4], c2[4], h[4], ii[4], jj[4];
+    float f20, t;
+    int flag = 1;
+    EffData_313800 *p = arg->data;
+    int k;
+    Packet_313800 pkt;
+
+    f20 = func_001FA888_313800(D_L07_0015F5CC_c);
+    qcopy(v50, p->f140);
+    t = func_001F9F90_313800(func_L00_0025F368_313800(f20 / 11.0f));
+    f20 = f20 / 10.0f;
+    t = func_L00_0025F368_313800(f20 + t * 1.5707964f);
+    v50[0] = v50[0] + func_001F9FA8_313800(t);
+    func_L00_00250800_313800(arg, 2, v30);
+    func_001F9BF0_313800(v10, v50, v30);
+    func_L00_001FF4B0_313800(v10, v10, 30.0f);
+    func_001F9BD8_313800(v0, v50, v10);
+    if (func_L00_001EFFF0_313800(v30, v0, 2, arg, 0)) {
+        qcopy(v0, D_L07_00173F60_313800);
+    } else {
+        flag = 0;
+    }
+    func_001F9BF0_313800(v40, v30, v0);
+    func_001F9CA0_313800(v20, D_L07_001670D0_313800, v40);
+    func_L00_001FF4B0_313800(v20, v20, 0.25f);
+    func_001F9BD8_313800(v10, v20, v0);
+    if (flag) {
+        func_L00_00273868_313800(v0, 0, func_001F9850_313800((func_001160D8_313800() & 1) + 0x2D),
+            func_001F9850_313800((func_001160D8_313800() & 7) + 0x37), 1,
+            func_001F9850_313800((func_001160D8_313800() & 3) + 0xD), arg, 1.0f, 1.0f);
+        if (p->f15C != 0.0f) {
+            func_001F9BF0_313800(c2, v0, p->f150);
+            func_L00_001FF4B0_313800(c2, c2, 0.2f);
+            qcopy(m, p->f150);
+            for (k = 0; k < 4; k++) {
+                func_001F9BD8_313800(m, m, c2);
+                func_001F9BF0_313800(h, m, v30);
+                func_L00_001FF4B0_313800(h, h, 5.0f);
+                func_001F9BF0_313800(ii, m, h);
+                func_001F9BD8_313800(jj, m, h);
+                if (func_L00_001EFFF0_313800(ii, jj, 2, arg, 0)) {
+                    qcopy(m, D_L07_00173F60_313800);
+                }
+                if (k == 2) {
+                    func_L00_00273868_313800(m, 0, func_001F9850_313800((func_001160D8_313800() & 1) + 0x2D),
+                        func_001F9850_313800((func_001160D8_313800() & 7) + 0x37), 1,
+                        func_001F9850_313800((func_001160D8_313800() & 3) + 0xD), arg, 1.0f, 1.0f);
+                } else {
+                    func_L00_00273868_313800(m, 1, func_001F9850_313800(0x2D),
+                        func_001F9850_313800(0x37), 1,
+                        func_001F9850_313800(0xD), arg, 1.0f, 1.0f);
+                }
+            }
+        }
+        qcopy(p->f150, v0);
+        p->f15C = 1.0f;
+    } else {
+        p->f15C = 0.0f;
+    }
+    pkt.x128 = func_001F4868_313800(0x3B);
+    pkt.col[0] = pkt.col[1] = pkt.col[2] = pkt.col[3] = 0x80808080;
+    pkt.x130 = 0xFF9000000260;
+    pkt.x120 = 4;
+    pkt.x138 = 0x8000000048;
+    pkt.uv[4] = pkt.uv[0] = 0.0f;
+    pkt.uv[6] = pkt.uv[2] = 1.0f;
+    pkt.uv[3] = pkt.uv[1] = 0.0f;
+    pkt.uv[7] = pkt.uv[5] = 1.0f;
+    qcopy_nc(pkt.a, v30);
+    func_001F9BD8_313800(pkt.b, pkt.a, v20);
+    qcopy(pkt.c, v0);
+    qcopy(pkt.d, v10);
+    func_L00_001FD1D8_313800(&pkt, 0, 1);
+}

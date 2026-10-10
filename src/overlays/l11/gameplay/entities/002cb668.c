@@ -715,7 +715,94 @@ void FUN_L11_002f2cd0(struct Moby *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f2d58.s", FUN_L11_002f2d58);
+/* Ported from rac1-decomp src/overlays/l11_pokitaru/vendor_002CC828.c (func_L11_002F40C8) */
+
+/* Draws the moby's shimmering ring as 32 four-vertex strips around its radius, thicker as the ring
+ * shrinks below 1.15, and flags when it gets below 0.65. */
+
+typedef struct {
+    float v[16];
+    int c[4];
+    float uv[8];
+    long g[4];
+} Quad_2f40c8;
+
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float D_L11_001D3530[];
+extern char D_001413F5 __attribute__((section(".data"))); /* no foreign declaration */
+extern int D_L11_00161920 __attribute__((sda));
+extern int D_L11_00161924 __attribute__((sda));
+extern int D_L11_00161928 __attribute__((sda));
+extern int D_L11_0016192C __attribute__((sda));
+extern int D_L11_00161930 __attribute__((sda));
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern float D_L11_00161938 __attribute__((sda));
+extern short D_L11_001619B0;
+extern short D_L11_001619B4;
+extern short D_L11_001619B8;
+extern short D_L11_001619BC;
+extern short D_L11_001619C0;
+extern int D_L11_00161934 __attribute__((sda));
+extern void FUN_001fa298(void *, void *);
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+
+void FUN_L11_002f2d58(char *moby) {
+    Quad_2f40c8 q;
+    float m[12];
+    float pos[4];
+    char *d;
+    float h;
+    int i, j, nj;
+    d = *(char **)(moby + 0x78);
+    FUN_001fa298(m, moby + 0xC0);
+    qcopy(pos, moby + 0x10);
+    q.g[1] = get_effect_texture(D_L11_00161930);
+    q.g[3] = (long)D_L11_00161920 | ((long)D_L11_00161924 << 2) | ((long)D_L11_00161928 << 4) | ((long)D_L11_0016192C << 6) | (0x8000L << 24);
+    q.g[2] = 0xFF9000000260UL;
+    q.g[0] = 0;
+    for (i = 0; i < 4; i++) {
+        q.uv[i * 2] = D_L11_001D3530[i * 2];
+        *(&q.uv[i * 2] + 1) = D_L11_001D3530[i * 2 + 1];
+        q.c[i] = D_L11_00161934;
+    }
+    h = 0.1f;
+    if (*(float *)(d + 0x3C) < 1.15f) {
+        float t = (1.15f - *(float *)(d + 0x3C)) * 2.0f;
+        if (1.0f < t) {
+            t = 1.0f;
+        } else if (t < 0.0f) {
+            t = 0.0f;
+        }
+        h = t + 0.1f;
+        if (*(float *)(d + 0x3C) < 0.65f) {
+            D_001413F5 = 1;
+        } else {
+            D_001413F5 = 0;
+        }
+    }
+    for (j = 0; j < 32; j = nj) {
+        int k;
+        float *p;
+        k = 0;
+        nj = j + 1;
+        p = q.v;
+        for (; k < 4;) {
+            float a = (float)(j + k / 2) * 6.28318f * 0.03125f - 3.14159f;
+            p[0] = fast_cos(a) * *(float *)(d + 0x3C);
+            p[1] = fast_sin(a) * *(float *)(d + 0x3C);
+            p[2] = 0.0f;
+            if (k++ & 1) {
+                p[2] = D_L11_00161938 + h + p[2];
+            } else {
+                p[2] = D_L11_00161938 - h + p[2];
+            }
+            p[3] = 1.0f;
+            p += 4;
+        }
+        draw_geometry_quad(&q, m, 0);
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F43B0), where it is exact; names translated to the US level program. */
 
 void FUN_L11_002f3040(struct Moby *moby) {

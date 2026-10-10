@@ -1453,7 +1453,143 @@ int FUN_L15_002a2868(int idx, void *pos) {
     return 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a29b8.s", FUN_L15_002a29b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a2bf0.s", FUN_L15_002a2bf0);
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3DD0), where it is exact; names translated to the US level program. */
+
+#include "qzero.h"
+
+/* Level 15 moby update (class 78), three states: 0 picks the first state from the kill and save flags,
+ * 1 sprays sixteen random sparks around the moby and parks its data vector, 2 counts down. */
+
+typedef struct { unsigned char pad[0x454]; unsigned char killed[1]; } KillFlags_2A3DD0;
+
+typedef struct { unsigned char pad0[0x74]; unsigned char active; unsigned char pad75[0x13]; char *owner; } Voice_2A3DD0;
+
+typedef struct { u8 pad[0x20]; u8 state; u8 pad21[0xDF]; } MobySlot_2A3DD0;
+extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8");
+extern char D_0013F420[];
+extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
+extern unsigned char D_0014C190[];
+extern int D_0015ED84;
+extern int FUN_001fa2d8();
+extern int FUN_L15_002a3138();
+extern u8 D_0013E550_c[] __asm__("D_0013E550");
+unsigned char *FUN_L15_002647f0(void *pos, float *p, float *c, int d, int e, int f, int g, int h, char *owner);
+extern KillFlags_2A3DD0 D_L15_001BBB40_2A3DD0 __asm__("D_L15_001BB830");
+extern unsigned char D_0013E650_2A3DD0[] __asm__("D_0013E550");
+extern char D_0013E633_2A3DD0[] __asm__("D_0013F420");
+extern float func_002140F8_2A3DD0(float, float) __asm__("FUN_002132a8");
+extern int func_002140B0_2A3DD0(int) __asm__("FUN_00213260");
+extern int func_001F9850_2A3DD0(int) __asm__("FUN_001f96f8");
+extern float func_001F9B88_2A3DD0(float) __asm__("FUN_001f99c0");
+extern int func_001FA898_2A3DD0(float) __asm__("FUN_001fa6d0");
+extern void func_001F9BF0_2A3DD0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_001F9EE8_2A3DD0(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void func_001F9EC0_2A3DD0(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void func_001F9BD8_2A3DD0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void func_L00_001FF4B0_2A3DD0(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void func_001FA4A0_2A3DD0(void *, void *) __asm__("FUN_001fa2d8");
+extern void func_L15_002A47B8_2A3DD0(void *) __asm__("FUN_L15_002a35d8");
+extern int func_0022ED80_2A3DD0(int, int, void *) __asm__("FUN_0022da68");
+extern void func_001F49B0_2A3DD0(void (*)(void), void *) __asm__("FUN_001f4600");
+extern void func_L15_002A4318_2A3DD0(void) __asm__("FUN_L15_002a3138");
+extern unsigned char *func_L15_002655D0_2A3DD0(void *, void *, void *, int, int, int, int, int, void *) __asm__("FUN_L15_002647f0");
+
+void FUN_L15_002a2bf0(unsigned char *moby) {
+    unsigned char *d = *(unsigned char **)(moby + 0x78);
+    float V[4];
+    float W[16];
+    float A[4];
+    float B[4];
+    float C[4];
+
+    switch (moby[0x20]) {
+    case 0: {
+        unsigned short id;
+        *(unsigned short *)(moby + 0x34) |= 1;
+        moby[0x31] = 0;
+        id = *(unsigned short *)(moby + 0xB2);
+        if (D_L15_001BBB40_2A3DD0.killed[(short)id] == 0 && (((*(int *)(D_0014C190 + (((short)id >> 5) * 4) + (D_0015ED84 << 8)) >> (id & 0x1F)) ^ 1) & 1)) {
+            moby[0x20] = 1;
+        } else {
+            moby[0xBC] = 0xFF;
+            *(int *)(moby + 0x94) = 0;
+            moby[0x20] = 3;
+        }
+        break;
+    }
+    case 1: {
+        int idx = *(int *)(d + 0x10);
+        if ((idx != -1 && (*(MobySlot_2A3DD0 **)&D_L15_0015FFD8_d)[idx].state == 2)
+            || D_0014C050_c[(unsigned char)moby[0xB0] + (D_0015ED84 << 4)] == 0xFF) {
+            func_L15_002A47B8_2A3DD0(moby);
+        } else {
+            Voice_2A3DD0 *e = (Voice_2A3DD0 *)(D_0013E650_2A3DD0 + moby[0xBC] * 0x70);
+            float lo, hi, z, one;
+            int i;
+            if (e->owner != (char *)moby || e->active == 0) {
+                moby[0xBC] = func_0022ED80_2A3DD0(0, 4, moby);
+            }
+            func_001F9BF0_2A3DD0(V, D_0013E633_2A3DD0, moby + 0x10);
+            func_001FA4A0_2A3DD0(W, moby + 0xC0);
+            func_001F9EE8_2A3DD0(V, V, W);
+            V[0] = 0.0f;
+            z = V[0];
+            i = 15;
+            do {
+                int col, fa, fb, fc;
+                lo = -5.0f;
+                hi = 5.0f;
+                one = 1.0f;
+                i--;
+                A[0] = func_002140F8_2A3DD0(-0.25f, 0.25f);
+                A[1] = func_002140F8_2A3DD0(lo, hi);
+                A[2] = func_002140F8_2A3DD0(z, hi);
+                B[0] = z;
+                B[1] = func_002140F8_2A3DD0(lo, hi);
+                B[2] = func_002140F8_2A3DD0(lo, hi);
+                C[0] = z;
+                C[1] = func_002140F8_2A3DD0(lo, hi);
+                C[2] = func_002140F8_2A3DD0(lo, hi);
+                func_001F9EC0_2A3DD0(A, A, moby + 0xC0);
+                func_001F9EC0_2A3DD0(B, B, moby + 0xC0);
+                func_001F9EC0_2A3DD0(C, C, moby + 0xC0);
+                func_001F9BD8_2A3DD0(A, A, moby + 0x10);
+                func_L00_001FF4B0_2A3DD0(B, B, one / (float)func_001F9850_2A3DD0(30));
+                func_L00_001FF4B0_2A3DD0(C, C, one / (float)func_001F9850_2A3DD0(30));
+                B[3] = 0.125f;
+                {
+                    int ra = func_002140B0_2A3DD0(0x10);
+                    int rb = func_002140B0_2A3DD0(0x20);
+                    int rc = func_002140B0_2A3DD0(0x20);
+                    int m = ((rb + 0x60) << 8) | 0x60000000;
+                    col = ((ra + 0x20) << 16) | m;
+                    col |= rc + 0x60;
+                }
+                fa = func_001FA898_2A3DD0((float)(func_001F9850_2A3DD0(30) / 4));
+                fb = func_001FA898_2A3DD0((float)(func_001F9850_2A3DD0(30) / 2));
+                fc = func_001FA898_2A3DD0((float)(func_001F9850_2A3DD0(30) / 4));
+                func_L15_002655D0_2A3DD0(A, B, C, col, 0x60808080, fa, fb, fc, moby);
+            } while (i >= 0);
+            if (func_001F9B88_2A3DD0(V[1]) < hi && z < V[2] && V[2] < hi) {
+                func_001F9EC0_2A3DD0(d, V, moby + 0xC0);
+                func_001F9BD8_2A3DD0(d, d, moby + 0x10);
+            } else {
+                qzero(d);
+            }
+            func_001F49B0_2A3DD0(func_L15_002A4318_2A3DD0, moby);
+        }
+        break;
+    }
+    case 2:
+        if ((*(int *)(d + 0x14))++ >= 0x3D) {
+            moby[0x20] = 3;
+        } else {
+            qzero(d);
+            func_001F49B0_2A3DD0(func_L15_002A4318_2A3DD0, moby);
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a3138.s", FUN_L15_002a3138);
 #include "rnc/gameplay/entities/moby.h"
 

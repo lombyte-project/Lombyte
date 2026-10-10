@@ -75,7 +75,265 @@ char *FUN_L15_002e7ed8(void *unused, void *vector) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e7f68.s", FUN_L15_002e7f68);
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E9358). */
+#include "sda.h"
+
+/* Poison vessel update (moby class 1257): tracks its target and fires its effect. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 w;
+} Vec4f_A4D88;
+
+struct MobyClass_A4D88 {
+    u8 pad_0[0xC];
+    u8 seq_count; /* number of entries in seqs[] (menu previews clamp the sequence to it) */
+    u8 pad_D[3];
+    u32 unk10; /* copied into Moby_A4D88.unk94 when a moby is (re)classed */
+    u8 pad_14[0x8];
+    void *unk1C; /* word table, indexed id * 4 + 4 (0024eec0) */
+    struct GifEntry *gifs; /* patched by patch_moby_gifs */
+    f32 scale; /* default draw scale: copied into Moby_A4D88.scale, divides it */
+    s32 unk28;
+    void **callbacks; /* function-pointer table, called with the moby */
+    u8 pad_30[0x14];
+    u16 flags; /* initial Moby_A4D88.flags */
+    s16 unk46; /* class category; 5 is tested by targeting code */
+    struct AnimSeq *seqs[1]; /* animation sequences, indexed by Moby_A4D88.seq */
+};
+
+struct Moby_A4D88 {
+    Vec4f_A4D88 bsphere;
+    Vec4f_A4D88 pos;
+    u8 state; /* >= 0xFE: dead, waiting to respawn */
+    u8 group; /* linked group: index into the level moby-list table D_Lxx_001ABCC0 (0xFF: none) */
+    u8 unk22; /* class slot: pclass = D_L00_00197300[unk22] (FUN_L00_002cf218) */
+    u8 unk23; /* 0x40 for the smoke trail FUN_L09_00307ba8 spawns */
+    struct MobyClass_A4D88 *pclass;
+    struct Moby_A4D88 *next;
+    f32 scale; /* draw scale (FUN_L01_002fa068 halves it, FUN_L00_00215ef8 divides by it) */
+    u8 unk30; /* set to 0xFF (0x7F for beams) by spawners */
+    u8 unk31; /* set to 1 by spawners */
+    s16 unk32; /* set to 0xFF (0x7F for beams) by spawners */
+    u16 flags;
+    u16 unk36; /* set to 0x7F80 by spawners */
+    u64 spawn_frame; /* frame count at which it may respawn */
+    Vec4f_A4D88 rot; /* z: yaw (FUN_L00_00266448 compares it with atan2 to the hero) */
+    u8 frame; /* animation frame */
+    u8 prev_frame; /* frame index in prev_seq */
+    u8 seq; /* animation sequence id */
+    u8 prev_seq;
+    f32 unk54;
+    f32 unk58;
+    u8 pad5C[8];
+    struct Manip *manips;
+    void *cur_frame_data;
+    void *prev_frame_data;
+    u8 unk70;
+    u8 unk71; /* set to 0xFF when a moby changes class */
+    u8 unk72;
+    u8 unk73;
+    void (*update)(struct Moby_A4D88 *moby);
+    u8 *pvars;
+    u8 unk7C;
+    u8 pad7D;
+    u8 unk7E;
+    u8 unk7F; /* set to 0x17 by FUN_L09_002c5990 near D_L09_00166F40 */
+    u8 pad80[0x10];
+    s32 unk90;
+    u32 unk94; /* set from the class header's word 0x10 */
+    s32 unk98; /* set to 1 while a carrier holds the moby (FUN_L00_002c7a58) */
+    u8 pad9C[8];
+    u8 unkA4;
+    u8 padA5;
+    s16 oclass;
+    u8 padA8[8];
+    u8 unkB0; /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
+    u8 padB1;
+    u16 save_id; /* index into the level collected[]/killed[] tables and save bits D_0014C190[level][id >> 5] */
+    s16 unkB4;
+    u8 padB6[2];
+    void *unkB8; /* 0xB8: bolt source record; its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */
+    u8 unkBC;
+    u8 padBD[3];
+    Vec4f_A4D88 unkC0; /* 0xC0: first row of a matrix built from rot (FUN_001fa030) */
+    Vec4f_A4D88 unkD0;
+    Vec4f_A4D88 unkE0;
+    u8 padF0[0x10];
+};
+
+#include "rnc/overlay/quad.h"
+
+typedef union Vec_2E9358 {
+    OvlQuad q;
+    float f[4];
+} Vec_2E9358;
+
+typedef struct Data_2E9358 {
+    float f0;
+    float f4;
+    float f8;
+    float fC;
+    struct Moby_2E9358 *target; /* 0x10 */
+} Data_2E9358;
+
+typedef struct Moby_2E9358 {
+    char pad0[0x10];
+    OvlQuad pos; /* 0x10 */
+    unsigned char state; /* 0x20 */
+    char pad21[0x1F];
+    OvlQuad v40; /* 0x40 */
+    char pad50[0x28];
+    Data_2E9358 *data; /* 0x78 */
+    char pad7C[0x28];
+    unsigned char bA4;
+    char padA5;
+    short hA6;
+    char padA8[0x14];
+    unsigned char bBC;
+} Moby_2E9358;
+
+typedef struct Res_2E9358 {
+    char pad0[0x20];
+    Moby_2E9358 *owner; /* 0x20 */
+} Res_2E9358;
+
+typedef struct Tb_2E9358 {
+    char pad0[0x18];
+    int f18;
+    int f1C;
+    OvlQuad v20;
+    OvlQuad v30;
+    OvlQuad v40;
+} Tb_2E9358;
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
+extern int D_001413D0; /* no foreign declaration */
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float D_L15_00161FBC __attribute__((sda));
+extern int D_L15_00174440; /* no foreign declaration */
+extern int D_L15_00174458; /* no foreign declaration */
+extern int D_L15_00178500; /* no foreign declaration */
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int FUN_L00_001f0d60();
+extern int FUN_L00_001ff660();
+extern int FUN_L00_0025e450();
+extern void *FUN_002141f8(struct Moby_A4D88 *);
+extern void FUN_L00_001f2868(void *, int, void *, void *, float);
+extern void FUN_L00_001ff290(void *, void *, void *);
+extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
+extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out);
+int FUN_L00_0028dc90(int i, int a1, int v, int k);
+void FUN_L00_0025a9f8(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, s32 c0, s32 c1, f32 f, f32 spd, f32 z);
+extern char D_L15_001744C0_2E9358[] __asm__("D_L15_00174440");
+extern int D_L15_001744D8_2E9358 __asm__("D_L15_00174458") __attribute__((section(".data")));
+extern int D_001414D0_2E9358 __asm__("D_001413D0") __attribute__((section(".data")));
+extern char *D_L15_00178580_2E9358[] __asm__("D_L15_00178500");
+extern int func_L00_001F10E0_2E9358(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern Res_2E9358 *func_L00_0025B478_2E9358(void *, int, int) __asm__("FUN_L00_0025a420");
+extern char *func_L00_0025D390_2E9358(int) __asm__("FUN_L00_002603d0");
+extern void func_L00_001FF240_2E9358(void *, void *, void *) __asm__("FUN_L00_001ff290");
+extern int func_L00_001EFFF0_2E9358(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern void func_L00_001FF610_2E9358(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void func_L00_001FF4B0_2E9358(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float func_00214358_2E9358(void *, int, float) __asm__("FUN_00213508");
+extern int func_L00_00261478_2E9358(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
+extern void func_001F9BF0_2E9358(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_L00_0025F4A8_2E9358(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern int func_L00_0028EF68_2E9358(int, int, void *, int) __asm__("FUN_L00_0028dc90");
+extern int func_L00_001F2BE8_2E9358(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
+extern void func_L00_0025BA50_2E9358(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
+extern void func_0020D678_2E9358(void *) __asm__("FUN_0020c828");
+extern void func_001F9BC0_2E9358(void *) __asm__("FUN_001f99f8");
+
+void FUN_L15_002e7f68(Moby_2E9358 *moby) {
+    Vec_2E9358 s20;
+    Vec_2E9358 s30;
+    Vec_2E9358 s40;
+    Data_2E9358 *data = moby->data;
+    char *p20 = 0;
+    unsigned char state;
+    int ret;
+    Res_2E9358 *r;
+
+    s20.q = moby->pos;
+    func_001F9BC0_2E9358(&s30);
+    if (func_L00_001F10E0_2E9358(0.5f, &moby->pos, 1, moby)) {
+        if (D_L15_001744D8_2E9358 == 0 || func_L00_0025D390_2E9358(D_L15_001744D8_2E9358) == 0) {
+            moby->bBC = 1;
+        }
+    }
+    r = func_L00_0025B478_2E9358(moby, 0x830000, 0);
+    if (r != 0 && r->owner != 0 && r->owner->hA6 != moby->hA6) {
+        moby->bBC = 1;
+    }
+    moby->bA4 = 0xFF;
+
+    state = moby->state;
+    switch (state) {
+    case 0:
+        data->f8 = data->f8 - D_L15_00161FBC * D_0015ED70;
+        func_L00_001FF240_2E9358(&s40, &moby->pos, data);
+        if (func_L00_001EFFF0_2E9358(&s20, &moby->pos, 0x10, moby, 0)) {
+            if (((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18 != 0 && func_L00_0025D390_2E9358(((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18) != 0) {
+                data->target = (Moby_2E9358 *)((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18;
+                moby->state = 1;
+                data->f8 = 0.0f;
+                moby->pos = ((Tb_2E9358 *)D_L15_001744C0_2E9358)->v20;
+            } else if (((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18 == D_001414D0_2E9358 || data->f8 < D_0015ED6C * -9.8f) {
+                moby->bBC = 1;
+                qcopy(&moby->pos, &((Tb_2E9358 *)D_L15_001744C0_2E9358)->v20);
+                func_L00_001FF610_2E9358(&s30, data, &((Tb_2E9358 *)D_L15_001744C0_2E9358)->v40);
+                func_L00_001FF4B0_2E9358(&s30, &s30, D_0015ED6C + D_0015ED6C);
+            }
+        }
+        break;
+    case 1:
+        func_00214358_2E9358(&moby->pos, 0, 0.5f);
+        if (data->target != 0) {
+            Moby_2E9358 *t = data->target;
+
+            if (t->state == 0xFE || data->target->state == 0xFD) {
+                moby->bBC = state;
+                data->target = 0;
+            } else if (D_L15_001744D8_2E9358 != 0) {
+                p20 = func_L00_0025D390_2E9358(D_L15_001744D8_2E9358);
+                if (p20 != 0) {
+                    func_L00_00261478_2E9358(moby, data->target, &moby->pos, &moby->v40, &moby->pos, &moby->v40);
+                    func_001F9BF0_2E9358(&s40, &moby->pos, &s20);
+                    *(OvlQuad *)data = s40.q;
+                }
+            }
+        }
+        if (p20 == 0) {
+            moby->state = 0;
+            data->f8 = 0.0f;
+            data->target = 0;
+        }
+        break;
+    }
+
+    if (moby->bBC != 0) {
+        func_L00_0025F4A8_2E9358(moby, data, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, -1, 7.0f, 0, 1, -1, 0);
+        func_L00_0028EF68_2E9358(0, 0, moby, 0x79);
+        ret = func_L00_001F2BE8_2E9358(&moby->pos, 0x10, moby, 0, 2.0f);
+        s40.q = moby->pos;
+        func_L00_0025BA50_2E9358(moby, &s40, D_L15_00178580_2E9358, ret, 0, 0x830001, 2, 1, 1.0f, 1.0f, 1.0f);
+        func_0020D678_2E9358(moby);
+    }
+}
 /* UpdateMoby_1388 (names.tsv role). Every frame: func_001FA748 on the heading at +0x48 with
  * frame time * pi/2, and the +0x2C scale from the model's +0x24 value. State 0: runs
  * func_L00_002D80A0, then deletes the moby if flag byte 0xD is set, else raises it by 1.0
