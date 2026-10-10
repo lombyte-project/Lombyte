@@ -993,11 +993,7 @@ void FUN_L00_002be650(void *o) {
     quad.unk64 = 0;
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
-    if (D_0013E535) {
-        color = D_L00_00161764;
-    } else {
-        color = D_L00_00161760;
-    }
+    color = D_0013E535 ? D_L00_00161764 : D_L00_00161760;
     color &= 0xFFFFFF;
     vertexTarget = &vertex[0];
     i = 0;
