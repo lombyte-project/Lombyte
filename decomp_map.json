@@ -2,57 +2,57 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4550,
-  "matching_c": 3573,
+  "matching_c": 3581,
   "intentional_asm": 313,
-  "pending_c": 664,
+  "pending_c": 656,
   "bytes_total": 3668944,
-  "bytes_matching_c": 2469892,
+  "bytes_matching_c": 2480920,
   "bytes_intentional_asm": 121516,
-  "bytes_pending_c": 1077536,
-  "c_exact_percent_of_recoverable": 69.6249,
-  "c_fuzzy_percent_of_recoverable": 71.2157,
+  "bytes_pending_c": 1066508,
+  "c_exact_percent_of_recoverable": 69.9357,
+  "c_fuzzy_percent_of_recoverable": 71.4958,
   "boot": {
     "units_total": 1475,
     "groups_total": 129,
-    "matching_c": 1147,
+    "matching_c": 1150,
     "intentional_asm": 251,
-    "pending_c": 77,
+    "pending_c": 74,
     "bytes_total": 448120,
-    "bytes_matching_c": 289080,
+    "bytes_matching_c": 290176,
     "bytes_intentional_asm": 94104,
-    "bytes_pending_c": 64936,
-    "c_exact_percent_of_recoverable": 81.6573,
-    "c_fuzzy_percent_of_recoverable": 97.5984,
+    "bytes_pending_c": 63840,
+    "c_exact_percent_of_recoverable": 81.9669,
+    "c_fuzzy_percent_of_recoverable": 97.5991,
     "groups": [
       {
         "name": "game/unclassified",
         "logical_group": "unclassified",
         "category": "game",
         "functions": 145,
-        "matching_c": 18,
-        "pending_c": 28,
+        "matching_c": 19,
+        "pending_c": 27,
         "intentional_asm": 99,
         "bytes_total": 102088,
-        "bytes_matching_c": 12748,
-        "bytes_pending_c": 24008,
+        "bytes_matching_c": 13252,
+        "bytes_pending_c": 23504,
         "bytes_intentional_asm": 65332,
-        "c_exact_percent_of_recoverable": 34.6828,
-        "c_fuzzy_percent_of_recoverable": 89.9071
+        "c_exact_percent_of_recoverable": 36.054,
+        "c_fuzzy_percent_of_recoverable": 89.912
       },
       {
         "name": "sdk/library",
         "logical_group": "sdk/library",
         "category": "sdk",
         "functions": 187,
-        "matching_c": 149,
-        "pending_c": 14,
+        "matching_c": 150,
+        "pending_c": 13,
         "intentional_asm": 24,
         "bytes_total": 65860,
-        "bytes_matching_c": 42768,
-        "bytes_pending_c": 8564,
+        "bytes_matching_c": 42904,
+        "bytes_pending_c": 8428,
         "bytes_intentional_asm": 14528,
-        "c_exact_percent_of_recoverable": 83.3164,
-        "c_fuzzy_percent_of_recoverable": 98.0186
+        "c_exact_percent_of_recoverable": 83.5814,
+        "c_fuzzy_percent_of_recoverable": 98.0187
       },
       {
         "name": "game/ui/menus",
@@ -929,15 +929,15 @@
         "logical_group": "math/vectors",
         "category": "game",
         "functions": 5,
-        "matching_c": 1,
-        "pending_c": 1,
+        "matching_c": 2,
+        "pending_c": 0,
         "intentional_asm": 3,
         "bytes_total": 732,
-        "bytes_matching_c": 188,
-        "bytes_pending_c": 456,
+        "bytes_matching_c": 644,
+        "bytes_pending_c": 0,
         "bytes_intentional_asm": 88,
-        "c_exact_percent_of_recoverable": 29.1925,
-        "c_fuzzy_percent_of_recoverable": 99.9379
+        "c_exact_percent_of_recoverable": 100.0,
+        "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
         "name": "game/ui/frames",
@@ -1963,12 +1963,12 @@
   },
   "overlays": {
     "functions_total": 3013,
-    "matching_c": 2426,
-    "pending_c": 587,
+    "matching_c": 2431,
+    "pending_c": 582,
     "bytes_total": 3193412,
-    "bytes_matching_c": 2180812,
-    "bytes_pending_c": 1012600,
-    "c_exact_percent_of_recoverable": 68.291,
+    "bytes_matching_c": 2190744,
+    "bytes_pending_c": 1002668,
+    "c_exact_percent_of_recoverable": 68.602,
     "intentional_asm": 62,
     "bytes_intentional_asm": 27412,
     "shared": {
@@ -4300,12 +4300,12 @@
         "planet": "Pokitaru",
         "description": "Jowai Resort: the ocean and the Thruster-Pack",
         "functions": 101,
-        "matching_c": 96,
-        "pending_c": 5,
+        "matching_c": 101,
+        "pending_c": 0,
         "bytes_total": 129604,
-        "bytes_matching_c": 119672,
-        "bytes_pending_c": 9932,
-        "c_exact_percent_of_recoverable": 92.3367,
+        "bytes_matching_c": 129604,
+        "bytes_pending_c": 0,
+        "c_exact_percent_of_recoverable": 100.0,
         "files": [
           {
             "file": "src/overlays/l11/gameplay/hero/0023c7a0.c",
@@ -4338,16 +4338,16 @@
           {
             "file": "src/overlays/l11/gameplay/entities/002cb668.c",
             "functions": 26,
-            "matching_c": 24,
+            "matching_c": 26,
             "bytes_total": 17192,
-            "bytes_matching_c": 13920
+            "bytes_matching_c": 17192
           },
           {
             "file": "src/overlays/l11/gameplay/vendor/0030c788.c",
             "functions": 29,
-            "matching_c": 27,
+            "matching_c": 29,
             "bytes_total": 32376,
-            "bytes_matching_c": 26040
+            "bytes_matching_c": 32376
           },
           {
             "file": "src/overlays/shared/gameplay/vendor/0030e690.c",
@@ -4366,9 +4366,9 @@
           {
             "file": "src/overlays/l11/gameplay/vendor/00315968.c",
             "functions": 35,
-            "matching_c": 34,
+            "matching_c": 35,
             "bytes_total": 18756,
-            "bytes_matching_c": 18432
+            "bytes_matching_c": 18756
           }
         ]
       },
@@ -4999,14 +4999,14 @@
   },
   "total": {
     "units_total": 4550,
-    "matching_c": 3573,
+    "matching_c": 3581,
     "intentional_asm": 313,
-    "pending_c": 664,
+    "pending_c": 656,
     "bytes_total": 3668944,
-    "bytes_matching_c": 2469892,
+    "bytes_matching_c": 2480920,
     "bytes_intentional_asm": 121516,
-    "bytes_pending_c": 1077536,
-    "c_exact_percent_of_recoverable": 69.6249,
-    "c_fuzzy_percent_of_recoverable": 71.2157
+    "bytes_pending_c": 1066508,
+    "c_exact_percent_of_recoverable": 69.9357,
+    "c_fuzzy_percent_of_recoverable": 71.4958
   }
 }
