@@ -116,6 +116,26 @@ void *FUN_L11_00316210(struct Moby *arg) {
     return found;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316320.s", FUN_L11_00316320);
+/* Private variables of the chained moby class 0x527 (FUN_L11_003172c0 and its helpers). */
+struct L11ChainVars {
+    u8 pad0[0x60];
+    s32 path_index;          /* 0x60: index into D_L11_001B0EB0 */
+    s32 count;               /* 0x64: live links */
+    s32 point;               /* 0x68: current path point */
+    f32 t;                   /* 0x6C: progress between points */
+    struct Moby *links[8];   /* 0x70 */
+    s16 offsets[8];          /* 0x90 */
+    u8 padA0[0x20];
+    f32 glow[8];             /* 0xC0 */
+    f32 health;              /* 0xE0 */
+    s16 group;               /* 0xE4 */
+    u8 padE6[6];
+    u8 path_sel;             /* 0xEC */
+    u8 padED[3];
+    char *path;              /* 0xF0 */
+    s32 sound;               /* 0xF4 */
+};
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003172c0.s", FUN_L11_003172c0);
 #include "qcopy.h"
 
@@ -155,7 +175,80 @@ void FUN_L11_00317678(struct Moby *moby) {
     FUN_001f9a40(&moby->pos, a, pb, *(float *)(d + 0x6C));
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00317820.s", FUN_L11_00317820);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00317c98.s", FUN_L11_00317c98);
+extern char D_00141C18[];
+extern float D_L11_0015F580[] __attribute__((section(".sdata")));
+extern float D_L11_00162330 __attribute__((sda));
+extern struct Moby *FUN_L00_0025a420(void *, s32, s32);
+extern void FUN_001f9a68(void *, void *, float);
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern s32 FUN_0022da68(s32, s32, void *);
+extern void FUN_L00_0025f090(void *, void *, int, float, float);
+void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
+                       float *v11, float scale, float *v12);
+extern s32 FUN_001f96f8(s32);
+void FUN_L11_00318488(struct Moby *);
+
+/* Drops the chain's damaged links: takes the hits, shrinks the chain as its health falls and blows the head up when no link is left. */
+void FUN_L11_00317c98(struct Moby *moby) {
+    struct L11ChainVars *d = (struct L11ChainVars *)moby->pvars;
+    int i;
+    int idx = -1;
+    float total = 0.0f;
+    float vec[4];
+
+    for (i = 0; i < d->count; i++) {
+        struct Moby *hit = FUN_L00_0025a420(d->links[i], -1, 0);
+        if (hit != 0) {
+            idx = i;
+            total += hit->scale;
+            d->links[i]->unkA4 = 0xFF;
+        }
+    }
+    approach_value(&d->health, 0.0f, total);
+    if (total != 0.0f && d->health / 80.0f * 8.0f <= (float)(d->count - 1)) {
+        struct Moby *src;
+        struct Moby *dst;
+        *(u16 *)D_00141C18 = 0xFFFF;
+        d->count--;
+        FUN_L11_00318488(d->links[d->count]);
+        src = d->links[idx];
+        dst = d->links[d->count];
+        qcopy(&dst->pos, &src->pos);
+        qcopy(&dst->rot, &src->rot);
+        FUN_0022da68(1, 0, dst);
+        if (idx < d->count) {
+            float diff = d->offsets[idx] - d->offsets[idx + 1];
+            int j;
+            for (j = idx; j < d->count; j++) {
+                d->glow[j] = d->glow[j + 1];
+            }
+            d->glow[idx] += diff;
+            if (d->glow[idx] < 0.0f) {
+                d->glow[idx] += (float)*(s32 *)d->path;
+            }
+        }
+        {
+            int k;
+            for (k = idx; k < d->count; k++) {
+                d->offsets[k] = d->offsets[k + 1];
+            }
+        }
+        if (d->count == 0) {
+            char *p1 = (char *)&moby->pos;
+            float *dv;
+            char *p2;
+            FUN_001f9a68(vec, &moby->unkC0, (dv = D_L11_0015F580, p2 = (char *)&moby->rot, D_L11_00162330 * frame_scale));
+            vec[2] += frame_scale * 0.08f;
+            FUN_0022da68(2, 0, moby);
+            FUN_L00_0025f090(moby, p1, -1, 3.0f, 13.0f);
+            FUN_L00_00263fd8((char *)moby, 0x602, (float *)p1, p2, FUN_001f96f8(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
+            FUN_L00_00263fd8((char *)moby, 0x603, (float *)p1, p2, FUN_001f96f8(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
+            FUN_L00_00263fd8((char *)moby, 0x784, (float *)p1, p2, FUN_001f96f8(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
+            mark_moby_for_removal(moby);
+        }
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003194C0), where it is exact; names translated to the US level program. */
 
 int FUN_L11_00318050(struct Moby *moby, void **out) {
