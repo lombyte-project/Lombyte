@@ -794,6 +794,8 @@ void FUN_L00_002bcf98(u8 *m) {
     volatile u128 *source = *(u128 **)(m + 0x78);
     s32 i;
     f32 scale;
+    u128 *copies;
+    s32 *clears;
 
     if (D_L00_001617BC_abs != 0) {
         D_L00_001617BC = 0;
@@ -809,9 +811,11 @@ void FUN_L00_002bcf98(u8 *m) {
         D_L00_00161724_i = 0;
         D_L00_001617D0 = 0;
         D_L00_00161824 = 0;
+        copies = D_L00_001DD0D0;
+        clears = D_L00_00161818;
         for (i = 2; i >= 0; i--) {
-            D_L00_00161818[2 - i] = 0;
-            D_L00_001DD0D0[2 - i] = vec;
+            *clears++ = 0;
+            *copies++ = vec;
         }
     }
 }
