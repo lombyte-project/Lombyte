@@ -15,9 +15,9 @@ extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern int FUN_L00_001fefc8(void *);
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L13_002e86f8(void *, void *, int, int);
-extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern int FastDecTimer(void *) __asm__("FUN_001f9740");
 extern unsigned char *FUN_L13_002ea6b8(char *, char *);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L13_002ea540(void *, void *);
@@ -58,7 +58,7 @@ s1:
     if (((unsigned char *)moby)[0x20] != 4) {
         goto s1b;
     }
-    if (!tick_countdown_32_alt(p + 0xF8)) {
+    if (!FastDecTimer(p + 0xF8)) {
         return;
     }
     FUN_L13_002ea540(moby, p);
@@ -73,7 +73,7 @@ s1:
     return;
 
 s1b:
-    if (!tick_countdown_32_alt(p + 0xF8)) {
+    if (!FastDecTimer(p + 0xF8)) {
         return;
     }
     if (!(*(unsigned short *)(p + 0x138) & 1)) {
@@ -86,9 +86,9 @@ s1b:
     return;
 
 s3:
-    tick_countdown_32_alt(p + 0x124);
-    tick_countdown_32_alt(p + 0x100);
-    tick_countdown_32_alt(p + 0xF8);
+    FastDecTimer(p + 0x124);
+    FastDecTimer(p + 0x100);
+    FastDecTimer(p + 0xF8);
     if (((unsigned char *)moby)[0x20] == 5) {
         goto s308;
     }
@@ -166,7 +166,7 @@ s308:
     *(int *)(p + 0x100) = scale_game_frames_alt(0x258);
     *(int *)(p + 0xF8) = scale_game_frames_alt(0x78);
     moby[0x20] = 4;
-    allocate_voice_for_target_entry_alt(5, 0, (int)moby);
+    allocate_voice_for_target_entry(5, 0, (int)moby);
     return;
 
 s358:
@@ -181,7 +181,7 @@ s384:
     return;
 
 s2:
-    if (!tick_countdown_32_alt(p + 0xF8)) {
+    if (!FastDecTimer(p + 0xF8)) {
         return;
     }
     if (((unsigned char *)moby)[0xBC] != 2) {
@@ -248,14 +248,14 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002eb098.s", FUN_L13_002eb098);
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002EE148), where it is exact; names translated to the US level program. */
 
 
-extern char *func_0020D348_m(int);
+extern char *CreateMoby(int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00250df8(void *);
-extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+extern char *CreateMoby(int) __asm__("FUN_0020c4f8");
 
 char *FUN_L13_002ecd10(char *src, int arg, int id) {
-    char *moby = func_0020D348_m(id);
+    char *moby = CreateMoby(id);
     if (moby != 0) {
         char *data;
         float f = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)(src + 0x2C) /
@@ -287,12 +287,12 @@ extern int D_0014C190_n[][64] __asm__("D_0014C190");
 extern int D_0015ED84_n __asm__("D_0015ED84");
 extern float D_0015ED60_n __asm__("D_0015ED60");
 extern char D_L13_001F4FB0_n[] __asm__("D_L13_001F4FB0");
-extern void print_n(char *, int, int) __asm__("FUN_001e93b0");
+extern void STUB_printf(char *, int, int) __asm__("FUN_001e93b0");
 extern void glow_n(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L13_002ed158(void *, void *);
 extern int ftoi_n(float) __asm__("FUN_001fa6d0");
 extern void stop_n(int) __asm__("FUN_L00_0023e838");
-extern void kill_n(void *) __asm__("FUN_0020c828");
+extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 extern void spin_n(void *, int, int) __asm__("FUN_L00_0024efb0");
 
 void FUN_L13_002ed4a8(unsigned char *m) {
@@ -318,7 +318,7 @@ void FUN_L13_002ed4a8(unsigned char *m) {
         } else {
             *(float *)(d + 4) = 1.0f;
             m[0x20] = 2;
-            print_n(D_L13_001F4FB0_n, *(short *)(m + 0xA6), *(short *)(m + 0xB2));
+            STUB_printf(D_L13_001F4FB0_n, *(short *)(m + 0xA6), *(short *)(m + 0xB2));
         }
         FUN_L13_002ed158(m, d);
         break;
@@ -334,7 +334,7 @@ void FUN_L13_002ed4a8(unsigned char *m) {
             stop_n(*(short *)(d + 0xE));
             *(short *)(d + 0xE) = -1;
         }
-        kill_n(m);
+        DeleteMoby(m);
         return;
     }
     a = 0xC0;
@@ -561,7 +561,6 @@ extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_0024efb0(unsigned char *, int, int);
 extern void FUN_L00_002502f0(void *, int, int, int);
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern int func_001FA898_d(float) __asm__("FUN_001fa6d0");
 
 void FUN_L13_002f8a78(char *moby) {
@@ -594,7 +593,7 @@ void FUN_L13_002f8a78(char *moby) {
     case 0:
         if (c == 0) {
             DebugPrint_alt(D_L13_001F51E0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
-            mark_moby_for_removal(moby);
+            DeleteMoby(moby);
             return;
         }
         FUN_L00_002502f0(moby, 0x80, 0x80, 0x80);

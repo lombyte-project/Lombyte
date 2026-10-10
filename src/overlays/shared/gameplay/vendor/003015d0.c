@@ -137,9 +137,9 @@ extern int D_L14_001620C4 __attribute__((sda));
 extern int D_L14_001620F0 __attribute__((sda));
 extern int D_L14_001620F4 __attribute__((sda));
 extern int D_L14_001620F8 __attribute__((sda));
-extern float FUN_001fa6c0(int) __asm__("FUN_001fa6c0");
-extern int FUN_001fa6e0(int, int, float) __asm__("FUN_001fa6e0");
-extern void vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float ConvertIntegerToFloat(int);
+extern int FastTweenColor(int, int, float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L14_00301de8(char *m) {
     char *d = *(char **)(m + 0x78);
     char *dst, *src, *indices;
@@ -152,7 +152,7 @@ void FUN_L14_00301de8(char *m) {
         src = d + 0x260;
         dst = d + 0x60;
         for (j = 22; j >= 0; j--) {
-            vec_add(dst, dst, src);
+            add_vector_xyz(dst, dst, src);
             dst += 0x10;
             src += 0x10;
         }
@@ -163,7 +163,7 @@ void FUN_L14_00301de8(char *m) {
             dst = d + offset + 0x460;
             src = d + offset + 0x560;
             for (k = 2; k >= 0; k--) {
-                vec_add(dst, dst, src);
+                add_vector_xyz(dst, dst, src);
                 dst += 0x40;
                 src += 0x40;
             }
@@ -176,13 +176,13 @@ void FUN_L14_00301de8(char *m) {
         } while (i < 4);
     }
     if (*(s16 *)(d + 0x12) > D_L14_001620C4) {
-        t = FUN_001fa6c0(*(s16 *)(d + 0x12) - D_L14_001620C4) /
-            FUN_001fa6c0(*(int *)(d + 0x620) - D_L14_001620C4);
-        *(int *)(d + 0x14) = FUN_001fa6e0(D_L14_001620F4, D_L14_001620F0, t);
+        t = ConvertIntegerToFloat(*(s16 *)(d + 0x12) - D_L14_001620C4) /
+            ConvertIntegerToFloat(*(int *)(d + 0x620) - D_L14_001620C4);
+        *(int *)(d + 0x14) = FastTweenColor(D_L14_001620F4, D_L14_001620F0, t);
     } else if (*(s16 *)(d + 0x12) > D_L14_001620C8) {
-        t = FUN_001fa6c0(*(s16 *)(d + 0x12) - D_L14_001620C8) /
-            FUN_001fa6c0(D_L14_001620C4 - D_L14_001620C8);
-        *(int *)(d + 0x14) = FUN_001fa6e0(D_L14_001620F8, D_L14_001620F4, t);
+        t = ConvertIntegerToFloat(*(s16 *)(d + 0x12) - D_L14_001620C8) /
+            ConvertIntegerToFloat(D_L14_001620C4 - D_L14_001620C8);
+        *(int *)(d + 0x14) = FastTweenColor(D_L14_001620F8, D_L14_001620F4, t);
     } else {
         *(int *)(d + 0x14) = 0;
     }
@@ -202,14 +202,13 @@ typedef struct {
 } VendorBeamReq;
 
 extern u8 D_L14_00174560[];
-extern void clear_vector(void *) __asm__("FUN_001f99f8");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void vec_set_len(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern f32 vec_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern float FastCos(float) __asm__("FUN_001f9dc8");
+extern float FastSin(float) __asm__("FUN_001f9de0");
+extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void FastVecNormalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 FastVecDot(void *, void *) __asm__("FUN_001f9ab0");
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 
 /* Sweeps the beam's two end lines; anything they cross takes damage pushed away from the beam. */
@@ -226,44 +225,44 @@ void FUN_L14_00302538(char *self) {
     req.range = 1.0f;
     req.one = 1;
     req.moby = m;
-    clear_vector(&req);
+    clear_u64_value(&req);
     req.v[2] = 1.0f;
     req.b = 1;
     req.v[3] = 5627.925f;
     req.a = 3;
     req.oclass = m->oclass;
-    dir.f[0] = fast_cos(m->rot.z);
-    dir.f[1] = fast_sin(m->rot.z);
+    dir.f[0] = FastCos(m->rot.z);
+    dir.f[1] = FastSin(m->rot.z);
     dir.f[2] = 0.0f;
-    vec_sub(&to_hero, &hero.motion.pos, &m->pos);
+    FastVecSub(&to_hero, &hero.motion.pos, &m->pos);
     to_hero.f[2] = 0.0f;
-    dot = vec_dot(&dir, &to_hero);
+    dot = FastVecDot(&dir, &to_hero);
     if (vector_length_xyz(&to_hero) != 0.0f) {
         if (dot < 0.0f)
-            vec_scale(&dir, &dir, -1.0f);
+            scale_vector_xyz(&dir, &dir, -1.0f);
         req.v[0] = dir.f[0];
         req.v[1] = dir.f[1];
     }
     qcopy_nc(&base, &D_L14_001600EC[d->w0].origin);
     if (d->s8) {
-        vec_add(&end_a, &base, &D_L14_001600EC[d->w0].axis[1]);
+        add_vector_xyz(&end_a, &base, &D_L14_001600EC[d->w0].axis[1]);
         if (FUN_001efa68(&base, &end_a, 0, m, 0)) {
-            vec_sub(&from, D_L14_00174560, &base);
+            FastVecSub(&from, D_L14_00174560, &base);
             len = vector_length_xyz(&from);
-            vec_scale(&from, &from, len * 0.98f / len);
-            vec_add(&d->end_a, &base, &from);
+            scale_vector_xyz(&from, &from, len * 0.98f / len);
+            add_vector_xyz(&d->end_a, &base, &from);
             d->s8 = 0;
         } else {
             qcopy(&d->end_a, &end_a);
         }
     }
     if (d->sA) {
-        vec_sub(&end_b, &base, &D_L14_001600EC[d->w0].axis[1]);
+        FastVecSub(&end_b, &base, &D_L14_001600EC[d->w0].axis[1]);
         if (FUN_001efa68(&base, &end_b, 0, m, 0)) {
-            vec_sub(&from, D_L14_00174560, &base);
+            FastVecSub(&from, D_L14_00174560, &base);
             len = vector_length_xyz(&from);
-            vec_scale(&from, &from, len * 0.98f / len);
-            vec_add(&d->end_b, &base, &from);
+            scale_vector_xyz(&from, &from, len * 0.98f / len);
+            add_vector_xyz(&d->end_b, &base, &from);
             d->sA = 0;
         } else {
             qcopy(&d->end_b, &end_b);
@@ -271,19 +270,19 @@ void FUN_L14_00302538(char *self) {
     }
     qcopy(&end_a, &d->end_a);
     qcopy(&end_b, &d->end_b);
-    vec_set_len(&off, &D_L14_001600EC[d->w0].axis[0], d->radius);
-    vec_add(&from, &end_a, &off);
-    vec_add(&to, &end_b, &off);
+    FastVecNormalize(&off, &D_L14_001600EC[d->w0].axis[0], d->radius);
+    add_vector_xyz(&from, &end_a, &off);
+    add_vector_xyz(&to, &end_b, &off);
     FUN_001efa68(&from, &to, 1, m, &req);
-    vec_sub(&from, &end_a, &off);
-    vec_sub(&to, &end_b, &off);
+    FastVecSub(&from, &end_a, &off);
+    FastVecSub(&to, &end_b, &off);
     FUN_001efa68(&from, &to, 1, m, &req);
-    vec_set_len(&off, &D_L14_001600EC[d->w0].axis[2], d->radius);
-    vec_add(&from, &end_a, &off);
-    vec_add(&to, &end_b, &off);
+    FastVecNormalize(&off, &D_L14_001600EC[d->w0].axis[2], d->radius);
+    add_vector_xyz(&from, &end_a, &off);
+    add_vector_xyz(&to, &end_b, &off);
     FUN_001efa68(&from, &to, 1, m, &req);
-    vec_sub(&from, &end_a, &off);
-    vec_sub(&to, &end_b, &off);
+    FastVecSub(&from, &end_a, &off);
+    FastVecSub(&to, &end_b, &off);
     FUN_001efa68(&from, &to, 1, m, &req);
 }
 #include "sda.h"
@@ -296,7 +295,6 @@ extern int D_L14_001621D8[] __attribute__((section(".sdata")));
 extern void FUN_L00_002e20f8(int);
 extern void FUN_L00_002e2250(int, int);
 extern void FUN_L00_002e2af0(void);
-extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
 void FUN_L14_003039e0(unsigned char *m) {
     int i;
@@ -331,7 +329,7 @@ void FUN_L14_003039e0(unsigned char *m) {
             }
         }
         if (n != 0) {
-            enqueue_callback_list_1_alt(FUN_L00_002e2af0, m);
+            enqueue_callback_list_1(FUN_L00_002e2af0, m);
         }
         break;
     }

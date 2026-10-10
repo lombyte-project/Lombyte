@@ -92,7 +92,7 @@ extern int D_L10_00161FB0 __attribute__((sda));
 extern int D_L10_00161FB4 __attribute__((sda));
 extern int D_L10_00161FB8 __attribute__((sda));
 extern void FUN_L00_00257d78(float *, float, float);
-extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
@@ -119,7 +119,7 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
         return;
     if (!FUN_001f9770(timer))
         return;
-    clear_vector(vel);
+    clear_u64_value(vel);
     vel[2] = D_L10_00161F68 * frame_time;
     FUN_L00_00257d78(acc, 0.0f, D_L10_00161F70 * frame_time);
     acc[2] += D_L10_00161F6C * frame_time;
@@ -172,7 +172,7 @@ extern int D_L10_00161FEC __attribute__((sda));
 extern int D_L10_00161FF0 __attribute__((sda));
 extern int D_L10_00161FF4 __attribute__((sda));
 extern void FUN_L00_00257d78(float *, float, float);
-extern void clear_vector(void *);
+extern void clear_u64_value(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L10_002ea7b0(void *pos, short *timer) {
@@ -190,7 +190,7 @@ void FUN_L10_002ea7b0(void *pos, short *timer) {
         return;
     if (!FUN_001f9770(timer))
         return;
-    clear_vector(vel);
+    clear_u64_value(vel);
     vel[2] = D_L10_00161FBC * frame_time;
     FUN_L00_00257d78(acc, 0.0f, D_L10_00161FC4 * frame_time);
     acc[2] += D_L10_00161FC0 * frame_time;
@@ -242,7 +242,6 @@ extern short D_L10_00162044 __attribute__((sda));
 extern short D_L10_0016204C __attribute__((sda));
 extern short D_L10_00162050 __attribute__((sda));
 extern void FUN_L00_00257d78(float *, float, float);
-extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
@@ -328,7 +327,7 @@ extern char *FUN_L00_0025a420(void *, int, int);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
-void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
+void DeleteMoby(struct Moby *moby) __asm__("FUN_0020c828");
 
 void FUN_L10_002eb6f0(struct Moby *m) {
     int hit = 0;
@@ -347,7 +346,7 @@ void FUN_L10_002eb6f0(struct Moby *m) {
         allocate_voice_for_target_entry(0, 0, (int)m);
         FUN_L01_002787a0(m);
         FUN_L00_00263e30(m, 0x742, 1, 0x742, 1, 11, 2);
-        mark_moby_for_removal(m);
+        DeleteMoby(m);
         break;
     }
 }
@@ -375,7 +374,7 @@ void FUN_L10_002eb7e0(struct Moby *moby) {
         allocate_voice_for_target_entry(0, 0, (int)moby);
         FUN_L01_002787a0(moby);
         FUN_L01_00278e20(moby, 0x741);
-        mark_moby_for_removal(moby);
+        DeleteMoby(moby);
         break;
     }
 }
