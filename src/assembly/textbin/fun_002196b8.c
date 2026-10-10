@@ -42,6 +42,7 @@ struct RenderPanel {
 
 extern s64 capture_texture_tex0 __asm__("D_0015EED0");
 extern void *resident_object_pool __asm__("D_0015FF18");
+extern void *panel_slots[14] __asm__("D_001D5D90");
 extern s32 panel_clear_color __asm__("D_001601B0") __attribute__((sda));
 
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
