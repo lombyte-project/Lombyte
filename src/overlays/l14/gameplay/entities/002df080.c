@@ -1407,7 +1407,7 @@ void FUN_L14_002fc0f0(struct Moby *moby) {
     char *path;
     moby->unkA4 = 0xff;
     if (hit && moby->state != 2) {
-        if (D_0015ED84 == 14) {
+        if (D_0015ED84_m == 14) {
             D_0015EE08 = D_0015EE08 + 1;
             if (D_0015EE08 > 2 && D_0013D408.flag == 0) {
                 D_0013D408.flag = 1;
