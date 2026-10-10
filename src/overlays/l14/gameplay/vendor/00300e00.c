@@ -996,119 +996,335 @@ int FUN_L14_00315920(char *a, char *b) {
 }
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003159d8.s", FUN_L14_003159d8);
-#else
-extern char *D_L14_0015EF50;
-extern char *D_L14_0015F70C;
-extern float D_L14_001624A8 __attribute__((sda));
-extern char D_0013F3D0[];
-extern char D_0013F5E0[];
-extern char *D_001413D0[];
-extern float FUN_001f9e90_159d8(float, float) __asm__("FUN_001f9e90");
-extern void FUN_L00_001ed580_159d8(void *, void *, void *) __asm__("FUN_L00_001ed580");
-extern void FUN_001f9a28_159d8(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_001f9a68_159d8(void *, void *, float) __asm__("FUN_001f9a68");
-extern void FUN_001f9a10_159d8(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_001f9bf8_159d8(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_001f9ad8_159d8(void *, void *, void *) __asm__("FUN_001f9ad8");
+/* Camera 21 (level 14) layouts */
+typedef struct {
+    char pad0[0x24];
+    int m24;
+    int m28;
+    int m2C;
+    short n30;
+    short n32;
+    int p34;
+    int p38;
+} CamRec5d48;
+typedef struct {
+    int count;
+    int idx;
+    float f8;
+    float fC;
+    float f10;
+} CamState5d48;
+typedef struct {
+    float f0;
+    float f4;
+    float f8;
+    float fC;
+    float f10;
+} CamAngles5d48;
+typedef struct {
+    char pad0[0x60];
+    CamAngles5d48 cur;
+    float vel[5];
+    CamState5d48 st;
+} CamData5d48;
+typedef struct {
+    char pad0[0x70];
+    CamData5d48 *data;
+    char pad1[0x10];
+    short slot;
+} CamObj5d48;
+typedef struct {
+    char pad0[0x1C];
+    CamRec5d48 *rec;
+} CamSlot5d48;
+typedef struct {
+    char pad0[0x10];
+    int id;
+    char pad1[0xC];
+} CamZone5d48;
+typedef struct {
+    char pad0[0x60];
+    int zone;
+    char pad1[0x164];
+    int timer;
+} CamMobyData5d48;
+typedef struct {
+    float a0;
+    float a4;
+    float a8;
+    float aC;
+    float a10;
+    int n14;
+    float t18;
+    float t1C;
+    float t20;
+    float t24;
+    float t28;
+    float t2C;
+} CamKey5d48;
+typedef struct {
+    char pad0[0x274];
+    float f274;
+    float f278;
+} CamBones5d48;
 
-void FUN_L14_003159d8(char *moby) {
-    char *rec = *(char **)(D_L14_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
-    char *path;
-    char *motion;
-    float *lengths;
-    float *out;
-    float total;
-    int i;
-    float v0[4], v1[4];
-    float angle[3];
+#define MOBYDATA_5d48(m) ((CamMobyData5d48 *)(m)->pvars)
+extern CamSlot5d48 *D_L14_0015EF50_s __asm__("D_L14_0015EF50") __attribute__((section(".sdata")));
+extern CamZone5d48 *D_L14_0015F70C_z __asm__("D_L14_0015F70C") __attribute__((section(".sdata")));
+extern char *D_L14_0015FFD8_5d48 __asm__("D_L14_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L14_001624B4 __attribute__((section(".sdata")));
+extern int D_L14_001624B8 __attribute__((section(".sdata")));
+extern float D_L14_001624BC __attribute__((section(".sdata")));
+extern float D_L14_001624C0 __attribute__((section(".sdata")));
+extern float D_L14_00162490 __attribute__((sda));
+extern float D_L14_00162494 __attribute__((sda));
+extern float D_L14_00162498 __attribute__((sda));
+extern float D_L14_0016249C __attribute__((sda));
+extern float D_L14_001624A0 __attribute__((sda));
+extern float D_L14_001624A4 __attribute__((sda));
+extern float D_L14_001624AC __attribute__((sda));
+extern float D_L14_001624B0 __attribute__((sda));
+extern float D_L14_001F6C80[][1000];
+extern float D_L14_001F6C38[][3];
+extern float D_L14_001F6C08[][3];
+extern CamKey5d48 D_L14_001F6488[];
+extern char D_L14_0017AD80[];
+extern int scale_ticks_5d48(int) __asm__("FUN_001f96f8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern float lerp_angle_5d48(float, float, float) __asm__("FUN_L00_0025b750");
+extern float cam_interp_angle_5d48(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
+extern float cam_interp_5d48(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
+extern float atan2_5d48(float, float) __asm__("FUN_001f9e90");
+extern float add_rots_5d48(float, float) __asm__("FUN_001fa580");
+extern float ease_5d48(float, float, float, float, float) __asm__("FUN_L00_00257e20");
+extern void FUN_L00_001ed580_5d48(void *, void *, void *) __asm__("FUN_L00_001ed580");
+extern void vec_sub_5d48(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void vec_scale_5d48(void *, void *, float) __asm__("FUN_001f9a68");
+extern void vec_add_5d48(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vec_normalize_5d48(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void vec_cross_5d48(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void rotate_axis_5d48(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
 
-    *(int *)(rec + 0x20) = 2;
-    *(short *)(rec + 0x30) = 0;
-    *(short *)(rec + 0x32) = 0;
-    path = *(char **)(D_L14_0015F70C + *(int *)(rec + 0x34) * 32 + 0x10);
-    lengths = (float *)(path + 0x1C);
-    out = (float *)0x001F6C80;
-    total = 0.0f;
-    i = 0;
-    if (*(int *)path - 1 > 0) {
-        do {
-            out[i] = total;
-            i++;
-            total += *lengths;
-            lengths += 4;
-        } while (i < *(int *)path - 1);
+/* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002FF358.c (func_L14_003171D0) */
+void FUN_L14_00315d48(char *cam) {
+    CamData5d48 *data = ((CamObj5d48 *)cam)->data;
+    CamState5d48 *st = &data->st;
+    CamRec5d48 *rec = D_L14_0015EF50_s[((CamObj5d48 *)cam)->slot].rec;
+    CamAngles5d48 *cur = &data->cur;
+    float *vel = data->vel;
+    int side;
+    float t;
+    float k;
+    float x;
+    float ang;
+    float a;
+    float b;
+    float v0[4];
+    float unused[4];
+    CamKey5d48 *keys;
+    int next;
+    float v2[4];
+    float v3[4];
+
+    D_L14_001624B4 = data->st.count;
+    D_L14_001624B8 = st->idx;
+    if (hero.unk560 == D_L14_0015F70C_z[rec->p34].id) {
+        side = 0;
+    } else if (hero.unk560 == D_L14_0015F70C_z[rec->p38].id) {
+        side = 1;
+    } else {
+        side = 2;
     }
-    out[i] = total;
-
-    path = *(char **)(D_L14_0015F70C + *(int *)(rec + 0x38) * 32 + 0x10);
-    lengths = (float *)(path + 0x1C);
-    out = (float *)0x001F7C20;
-    total = 0.0f;
-    i = 0;
-    if (*(int *)path - 1 > 0) {
-        do {
-            out[i] = total;
-            i++;
-            total += *lengths;
-            lengths += 4;
-        } while (i < *(int *)path - 1);
+    D_L14_001624C0 = (D_L14_001F6C80[side][hero.unk564] + hero.unk568) / D_L14_001F6C80[side][999];
+    if (rec->n32 < 2 && D_L14_001F6C38[rec->n32][side] <= D_L14_001624C0) {
+        rec->n32++;
     }
-    out[i] = total;
-
-    path = *(char **)(D_L14_0015F70C + *(int *)(rec + 0x3C) * 32 + 0x10);
-    lengths = (float *)(path + 0x1C);
-    out = (float *)0x001F8BC0;
-    total = 0.0f;
-    i = 0;
-    if (*(int *)path - 1 > 0) {
-        do {
-            out[i] = total;
-            i++;
-            total += *lengths;
-            lengths += 4;
-        } while (i < *(int *)path - 1);
+    if (rec->n32 == 1) {
+        ((CamBones5d48 *)D_L14_0017AD80)->f274 = D_L14_001624B0 * 0.017453292f;
+        ((CamBones5d48 *)D_L14_0017AD80)->f278 = D_L14_001624AC * 0.017453292f;
     }
-    out[i] = total;
+    if (rec->n30 < 3 && D_L14_001F6C08[rec->n30][side] <= D_L14_001624C0) {
+        struct Moby *m0 = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m24 << 8));
+        struct Moby *m1 = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m28 << 8));
+        struct Moby *m2 = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m2C << 8));
 
-    motion = *(char **)(moby + 0x70);
-    *(int *)(motion + 0x88) = 1;
-    *(int *)(motion + 0x98) = 0;
-    *(int *)(motion + 0x8C) = 0;
-    *(int *)(motion + 0x90) = 0;
-    *(int *)(motion + 0x94) = 0;
-    D_L14_001624A8 = 1.0f;
-    *(float *)(motion + 0x60) = *(float *)0x001F6488 * 0.017453292f;
-    *(float *)(motion + 0x64) = *(float *)0x001F648C * 0.017453292f;
-    *(float *)(motion + 0x68) = *(float *)0x001F6490;
-    *(float *)(motion + 0x6C) = *(float *)0x001F6494 * 0.017453292f;
-    *(float *)(motion + 0x70) = *(float *)0x001F6498 * 0.017453292f;
-    *(int *)(motion + 0x74) = 0;
-    *(int *)(motion + 0x84) = 0;
-    *(int *)(motion + 0x78) = 0;
-    *(int *)(motion + 0x7C) = 0;
-    *(int *)(motion + 0x80) = 0;
+        if (hero.unk560 == D_L14_0015F70C_z[MOBYDATA_5d48(m0)->zone].id) {
+            m0->unkBC = 1;
+            if (rec->n30 > 0) {
+                {
+                    CamMobyData5d48 *d = MOBYDATA_5d48(m1);
 
-    angle[0] = FUN_001f9e90_159d8(*(float *)(D_001413D0[0] + 0xD0), *(float *)(D_001413D0[0] + 0xD4));
-    angle[1] = *(float *)(motion + 0x64);
-    angle[2] = *(float *)(motion + 0x68);
-    FUN_L00_001ed580_159d8(moby + 0x30, angle, D_0013F3D0);
-    FUN_001f9a28_159d8(v0, D_0013F3D0, moby + 0x30);
-    FUN_001f9a68_159d8(v1, D_0013F5E0, -1.5f);
-    FUN_001f9a10_159d8(v0, v0, v1);
-    FUN_001f9bf8_159d8(moby, v0, 1.0f);
-    FUN_001f9ad8_159d8(moby + 0x10, moby, v1);
-    FUN_001f9bf8_159d8(moby + 0x10, moby + 0x10, 1.0f);
-    FUN_001f9ad8_159d8(moby + 0x20, moby + 0x10, moby);
+                    m1->unkBC = 5;
+                    if (rec->n30 == 2) {
+                        CamMobyData5d48 *d2;
 
-    for (i = 0; i < 39; i++) {
-        int *value = (int *)(0x001F64CC + i * 0x30);
-        if (*value == 0) {
-            *value = 10000;
+                        d->timer = scale_ticks_5d48(0x2D);
+                        m2->unkBC = 5;
+                        d2 = MOBYDATA_5d48(m2);
+                        d2->timer = scale_ticks_5d48(0x6E);
+                    } else if (rec->n30 == 3) {
+                        d->timer = scale_ticks_5d48(0x2D);
+                    } else {
+                        d->timer = scale_ticks_5d48(0x50);
+                    }
+                }
+            }
+        } else if (hero.unk560 == D_L14_0015F70C_z[MOBYDATA_5d48(m1)->zone].id) {
+            m1->unkBC = 1;
+            if (rec->n30 > 0) {
+                if (random_integer_below(2)) {
+                    CamMobyData5d48 *d = MOBYDATA_5d48(m0);
+
+                    m0->unkBC = 5;
+                    if (rec->n30 == 2) {
+                        CamMobyData5d48 *d2;
+
+                        d->timer = scale_ticks_5d48(0x2D);
+                        m2->unkBC = 5;
+                        d2 = MOBYDATA_5d48(m2);
+                        d2->timer = scale_ticks_5d48(0x6E);
+                    } else if (rec->n30 == 3) {
+                        d->timer = scale_ticks_5d48(0x2D);
+                    } else {
+                        d->timer = scale_ticks_5d48(0x50);
+                    }
+                } else {
+                    CamMobyData5d48 *d = MOBYDATA_5d48(m2);
+
+                    m2->unkBC = 5;
+                    if (rec->n30 == 2) {
+                        CamMobyData5d48 *d2;
+
+                        d->timer = scale_ticks_5d48(0x2D);
+                        m0->unkBC = 5;
+                        d2 = MOBYDATA_5d48(m0);
+                        d2->timer = scale_ticks_5d48(0x6E);
+                    } else if (rec->n30 == 3) {
+                        d->timer = scale_ticks_5d48(0x2D);
+                    } else {
+                        d->timer = scale_ticks_5d48(0x50);
+                    }
+                }
+            }
+        } else {
+            m2->unkBC = 1;
+            if (rec->n30 > 0) {
+                {
+                    CamMobyData5d48 *d = MOBYDATA_5d48(m1);
+
+                    m1->unkBC = 5;
+                    if (rec->n30 == 2) {
+                        CamMobyData5d48 *d2;
+
+                        d->timer = scale_ticks_5d48(0x2D);
+                        m0->unkBC = 5;
+                        d2 = MOBYDATA_5d48(m0);
+                        d2->timer = scale_ticks_5d48(0x6E);
+                    } else if (rec->n30 == 3) {
+                        d->timer = scale_ticks_5d48(0x2D);
+                    } else {
+                        d->timer = scale_ticks_5d48(0x50);
+                    }
+                }
+            }
+        }
+        rec->n30++;
+    }
+    /* Unused reads (not in rac1-decomp's SN build): with them the game compiler computes the key table's
+     * high half and the next key index above the three side tests, as retail does. */
+    keys = D_L14_001F6488;
+    next = st->idx + 1;
+    if (side == 0 && D_L14_001F6488[st->idx + 1].t24 <= D_L14_001624C0) {
+        st->idx++;
+    } else if (side == 1 && D_L14_001F6488[st->idx + 1].t28 <= D_L14_001624C0) {
+        st->idx++;
+    } else if (side == 2 && D_L14_001F6488[st->idx + 1].t2C <= D_L14_001624C0) {
+        st->idx++;
+    }
+    if (D_L14_001F6488[st->idx + 1].n14 == 0x2710) {
+        t = 1.0f;
+        st->idx--;
+    } else {
+        float num;
+        float den;
+
+        if (side == 0) {
+            den = D_L14_001F6488[st->idx + 1].t24 - D_L14_001F6488[st->idx].t24;
+            num = D_L14_001624C0 - D_L14_001F6488[st->idx].t24;
+        } else if (side == 1) {
+            den = D_L14_001F6488[st->idx + 1].t28 - D_L14_001F6488[st->idx].t28;
+            num = D_L14_001624C0 - D_L14_001F6488[st->idx].t28;
+        } else {
+            den = D_L14_001F6488[st->idx + 1].t2C - D_L14_001F6488[st->idx].t2C;
+            num = D_L14_001624C0 - D_L14_001F6488[st->idx].t2C;
+        }
+        t = num / den;
+    }
+    k = D_L14_00162490;
+    x = lerp_angle_5d48(D_L14_001F6488[st->idx].a0 * 0.017453292f, D_L14_001F6488[st->idx + 1].a0 * 0.017453292f, t);
+    cur->f0 = cam_interp_angle_5d48(vel, cur->f0, x, k, 0.2f, 0.0f);
+    k = D_L14_00162494;
+    x = lerp_angle_5d48(D_L14_001F6488[st->idx].a4 * 0.017453292f, D_L14_001F6488[st->idx + 1].a4 * 0.017453292f, t);
+    cur->f4 = cam_interp_angle_5d48(vel + 1, cur->f4, x, k, 0.2f, 0.0f);
+    cur->f8 = cam_interp_5d48(vel + 2, cur->f8, D_L14_001F6488[st->idx].a8 + (D_L14_001F6488[st->idx + 1].a8 - D_L14_001F6488[st->idx].a8) * t, D_L14_00162498, 0.2f, 0.0f);
+    k = D_L14_0016249C;
+    x = lerp_angle_5d48(D_L14_001F6488[st->idx].aC * 0.017453292f, D_L14_001F6488[st->idx + 1].aC * 0.017453292f, t);
+    cur->fC = cam_interp_angle_5d48(vel + 3, cur->fC, x, k, 0.2f, 0.0f);
+    k = D_L14_001624A0;
+    x = lerp_angle_5d48(D_L14_001F6488[st->idx].a10 * 0.017453292f, D_L14_001F6488[st->idx + 1].a10 * 0.017453292f, t);
+    cur->f10 = cam_interp_angle_5d48(vel + 4, cur->f10, x, k, 0.2f, 0.0f);
+    ang = add_rots_5d48(atan2_5d48(hero.moby->unkD0.x, hero.moby->unkD0.y), cur->f0);
+    D_L14_001624BC = ang;
+    if (side == 0) {
+        a = D_L14_001F6488[st->idx].t18;
+        b = D_L14_001F6488[st->idx + 1].t18;
+    } else if (side == 1) {
+        a = D_L14_001F6488[st->idx].t1C;
+        b = D_L14_001F6488[st->idx + 1].t1C;
+    } else {
+        a = D_L14_001F6488[st->idx].t20;
+        b = D_L14_001F6488[st->idx + 1].t20;
+    }
+    if (b == 0.0f && a == 0.0f) {
+        b = (st->fC != 0.0f) ? st->fC : st->f8;
+        st->f10 += (0.0f - st->f10) * D_L14_001624A4;
+        ang = lerp_angle_5d48(ang, b, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
+    } else {
+        if (b != 0.0f) {
+            st->f10 += (1.0f - st->f10) * D_L14_001624A4;
+            ang = lerp_angle_5d48(ang, b, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
+            st->f8 = a;
+            st->fC = b;
+        } else {
+            st->f10 += (0.0f - st->f10) * D_L14_001624A4;
+            ang = lerp_angle_5d48(ang, a, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
+            st->f8 = a;
+            st->fC = b;
         }
     }
+    v0[1] = cur->f4;
+    v0[0] = ang;
+    v0[2] = cur->f8;
+    FUN_L00_001ed580_5d48(cam + 0x30, v0, &hero.motion.pos);
+    vec_sub_5d48(v2, &hero.motion.pos, cam + 0x30);
+    vec_scale_5d48(v3, &hero.unk290, -1.5f);
+    vec_add_5d48(v2, v2, v3);
+    vec_normalize_5d48(cam, v2, 1.0f);
+    vec_cross_5d48(cam + 0x10, cam, v3);
+    if (cur->fC != 0.0f) {
+        rotate_axis_5d48(cam, cam, cam + 0x10, cur->fC);
+        vec_normalize_5d48(cam, cam, 1.0f);
+        vec_cross_5d48(cam + 0x10, cam, v3);
+    }
+    if (cur->f10 != 0.0f) {
+        rotate_axis_5d48(cam, cam, v3, cur->f10);
+        vec_normalize_5d48(cam, cam, 1.0f);
+        vec_cross_5d48(cam + 0x10, cam, v3);
+    }
+    vec_normalize_5d48(cam + 0x10, cam + 0x10, 1.0f);
+    vec_cross_5d48(cam + 0x20, cam + 0x10, cam);
+    st->count++;
 }
-#endif
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315d48.s", FUN_L14_00315d48);
 /* Tells whether the vendor slot still blocks the menu (1) or lets it through (0). */
 
 extern char *D_L14_0015EF50;
