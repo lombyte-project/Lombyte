@@ -1819,44 +1819,41 @@ void FUN_L14_002ef6f0(struct Moby *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f0538.s", FUN_L14_002f0538);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f1040.s", FUN_L14_002f1040);
-#else
 extern float FUN_001f9b48_2f1040(void *, void *) __asm__("FUN_001f9b48");
-extern char *D_L14_001600EC_2f1040 __asm__("D_L14_001600EC");
+struct L14PathPoint {
+    char pad0[0x30];
+    float pos[4];
+    char pad40[0x30];
+    float rot[4];
+};
+extern struct L14PathPoint *D_L14_001600EC_2f1040 __asm__("D_L14_001600EC");
+struct L14PickVars {
+    char pad0[0x60];
+    float pos[4];
+    float rot[4];
+    int points[5];
+    char pad94[0x20];
+    short picked;
+};
 
 void FUN_L14_002f1040(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    int *entries = (int *)(data + 0x80);
-    int *scan = entries;
-    int i = 0;
-    float one = 1.0f;
-    *(short *)(data + 0xB4) = -1;
-    do {
-        float distance;
-        char *entry;
-        if (i > 4) goto selected;
-        entry = D_L14_001600EC_2f1040 + (*scan << 7);
-        distance = FUN_001f9b48_2f1040(&moby->pos, entry + 0x30);
-        scan++;
-        if (!(distance < one)) {
-            i++;
-            continue;
+    struct L14PickVars *d = (struct L14PickVars *)moby->pvars;
+    int i;
+    d->picked = -1;
+    for (i = 0; i < 5; i++) {
+        if (FUN_001f9b48_2f1040(&moby->pos, D_L14_001600EC_2f1040[d->points[i]].pos) < 1.0f) {
+            d->picked = i;
+            break;
         }
-        *(short *)(data + 0xB4) = i;
-        goto selected;
-    } while (1);
-selected:
+    }
     moby->state = 1;
     {
-        int *selected_entry = entries + *(short *)(data + 0xB4);
-        int offset = *selected_entry << 7;
-        char *base = D_L14_001600EC_2f1040;
-        qcopy(data + 0x60, base + offset + 0x30);
-        qcopy(data + 0x70, base + offset + 0x70);
+        int k = d->points[d->picked];
+        struct L14PathPoint *t = D_L14_001600EC_2f1040;
+        qcopy(d->pos, t[k].pos);
+        qcopy(d->rot, t[k].rot);
     }
 }
-#endif
 /* Picks the path for the current point and sets the travel speeds; same source as FUN_L16_002e4a58 with five points. */
 extern char *D_L14_001B0BB0_c2[] __asm__("D_L14_001B0BB0");
 extern float D_0015ED6C_u __asm__("D_0015ED6C");
