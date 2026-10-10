@@ -635,7 +635,135 @@ extern int FUN_L00_0025ff38_p(struct Moby *, void *, int, int, void *, int, floa
 extern float distance_0698(void *, void *) __asm__("FUN_001f9b80");
 extern float abs_0698(float) __asm__("FUN_001f99c0");
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310180.s", FUN_L11_00310180);
+/* Path moby update: hit handling first, then a state machine that turns toward the player or its target,
+   spawns and fires a projectile (pvars 0x160) and dies by explosion or by reaching the end of its path. */
+void FUN_L11_00310180(struct Moby *m) {
+    struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
+    struct Moby *target;
+    Vec4f v;
+    float angle;
+    s32 *path;
+    int r;
+
+    FUN_L11_00310698(m);
+    target = pv->target;
+    FUN_L00_00263ac8_0180(m, 0, pv->unk1E0, 2.5f);
+    if (m->unk31 != 0 && distance_0180(&m->pos, D_L11_001677C0) < 28.0f) {
+        FUN_L00_0025a120_p(m);
+        m->unk7F = 0x16;
+    }
+    switch (m->state) {
+    case 0:
+        pv->unk24 = 3;
+        pv->health = 3.0f;
+        pv->unk28 = 2;
+        pv->unk2A = 6;
+        pv->unk58 = random_int_0180(8.0f);
+        pv->unk5A = random_int_0180(8.0f);
+        m->state = 3;
+        if (m->prev_seq != 0) {
+            blend_0180(m, 0, 0, frames_0180(10));
+        }
+        if (pv->unk130 != 0) {
+            m->state = 1;
+            qcopy(&m->pos, (char *)D_L11_001B0EB0[pv->unk134] + 0x10);
+            break;
+        }
+        m->state = 3;
+        if (m->prev_seq != 0) {
+            blend_0180(m, 0, 0, frames_0180(10));
+        }
+        break;
+    case 3:
+        {
+        float *yaw = &m->rot.z;
+        angle = atan2_0180(D_001413D0->pos.x - m->pos.x, D_001413D0->pos.y - m->pos.y);
+        FUN_L00_0025be00(yaw, angle, &pv->unk14C, frame_time_sq * 6.2831855f,
+                         frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
+        }
+        if (pv->unk114 != 2) {
+            m->state = 4;
+            if (m->prev_seq != 2) {
+                blend_0180(m, 2, 0, frames_0180(10));
+            }
+        }
+        break;
+    case 4:
+        {
+        float *yaw = &m->rot.z;
+        angle = atan2_0180(target->pos.x - m->pos.x, target->pos.y - m->pos.y);
+        FUN_L00_0025be00(yaw, angle, &pv->unk14C, frame_time_sq * 6.2831855f,
+                         frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
+        }
+        if (in_window_0180(m, 15.0f) != 0) {
+            normalize_0180(&v, &m->unkC0, D_L11_00161FC8);
+            add_0180(&v, &v, &m->pos);
+            v.z += D_L11_00161FCC;
+            pv->unk160 = FUN_L11_00318d10_p(m, &v, 5);
+            break;
+        }
+        if (m->unk70 & 2) {
+            m->state = 5;
+            if (m->prev_seq != 3) {
+                blend_0180(m, 3, 0, frames_0180(10));
+            }
+        }
+        break;
+    case 5:
+        {
+        float *yaw = &m->rot.z;
+        angle = atan2_0180(target->pos.x - m->pos.x, target->pos.y - m->pos.y);
+        FUN_L00_0025be00(yaw, angle, &pv->unk14C, frame_time_sq * 6.2831855f,
+                         frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
+        }
+        if (pv->unk160 != 0 && in_window_0180(m, 33.0f) != 0) {
+            normalize_0180(&v, &m->unkC0, frame_time * 30.0f);
+            FUN_L11_00318e98_p(pv->unk160, &v);
+            pv->unk160 = 0;
+        }
+        if (m->unk70 & 2) {
+            m->state = 6;
+            if (m->prev_seq != 4) {
+                blend_0180(m, 4, 0, frames_0180(10));
+            }
+        }
+        break;
+    case 6:
+        if (m->unk70 & 2) {
+            m->state = 3;
+            if (m->prev_seq != 0) {
+                blend_0180(m, 0, 0, frames_0180(10));
+            }
+        }
+        break;
+    case 7:
+        r = FUN_L00_0025c698_p(m, pv->unk70);
+        if (r & 0x41) {
+            path = D_L11_001B0EB0[pv->unk13C];
+            if (FUN_L00_00259740_p(&m->pos, path + 4, *path) != 0) {
+                m->state = 3;
+                if (m->prev_seq != 0) {
+                    blend_0180(m, 0, 0, frames_0180(10));
+                }
+                break;
+            }
+            r = 0x100;
+        }
+        if (r & 0x120) {
+            FUN_L00_00257470_p(m, 0, -1);
+            FUN_L00_0025f3e8_p(m, &m->pos, -1, 0.5f, 10.0f);
+            remove_0180(m);
+        }
+        break;
+    case 8:
+        if (FUN_L00_0025c698_p(m, pv->unk70) & 0x160) {
+            FUN_L00_0025f3e8_p(m, &m->pos, -1, 1.0f, 10.0f);
+            FUN_L00_00257470_p(m, 0, -1);
+            remove_0180(m);
+        }
+        break;
+    }
+}
 /* Hit handling for the FUN_L11_00310180 moby: takes damage, picks the hurt or death reaction, keeps it on its path. */
 void FUN_L11_00310698(struct Moby *m) {
     struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
