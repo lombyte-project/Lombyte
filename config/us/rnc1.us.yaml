@@ -471,7 +471,7 @@ segments:
           - [0x21cbc, textbin, text_gap_00120d3c_before_fun_00120d40]
           - [0x21cc0, c, sdk/storage/cd_check_scmd]
           - [0x21e30, c, assembly/sdk/library/sceCdInit]
-          - [0x22110, c, assembly/textbin/fun_00121190]
+          - [0x22110, c, textbin/fun_00121190]
           - [0x22308, c, sdk/library/scecdmmode]
           - [0x223cc, textbin, text_gap_00121388_post_sdk_worker]
           - [0x223d0, c, assembly/sdk/library/sceCdRead]
