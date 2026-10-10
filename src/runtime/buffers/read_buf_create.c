@@ -1,8 +1,8 @@
 /* Rebase the state pointer and clear its first fields. */
 
-void InitializeStateFields(int *state_fields) __asm__("func_0023B940");
+void initialize_state_fields(int *state_fields) __asm__("func_0023B940");
 
-void InitializeStateFields(int *state_fields) {
+void initialize_state_fields(int *state_fields) {
     state_fields = (int *)((char *)state_fields + 0x50000);
     state_fields[2] = 0x50000;
     state_fields[0] = 0;
@@ -10,5 +10,5 @@ void InitializeStateFields(int *state_fields) {
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(InitializeStateFields) readBufCreate__FP7ReadBuf
+extern __typeof__(initialize_state_fields) readBufCreate__FP7ReadBuf
     __attribute__((alias("func_0023B940")));

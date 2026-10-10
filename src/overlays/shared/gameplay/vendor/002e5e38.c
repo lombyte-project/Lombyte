@@ -18,18 +18,18 @@ extern V D_L00_00173E60;
 extern char D_L00_00166C80[];
 extern char D_L00_00173E70_c[] __asm__("D_L00_00173E70");
 extern f32 FUN_001f9b80(void *, void *);
-extern f32 FastVecDot(void *, void *) __asm__("func_001F9AB0");
-extern f32 FastVecLength(void *) __asm__("FUN_001f9af0");
+extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_L00_00166E40[];
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern short D_L00_00161CC8;
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
-extern void FastVecCross(void *, void *, void *) __asm__("func_001F9AD8");
-extern void FastVecNormalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 extern char D_L00_00173F60_a[] __asm__("D_L00_00173E60");
 
@@ -65,8 +65,8 @@ void FUN_L00_002e66b8(int snap) {
         }
         hero2 = &hero;
         if (FUN_001efa68(eye, cam + 0x30, mask, (int)hero2->moby, 0)) {
-            FastVecSub(delta, (float *)D_L00_00173F60_a, eye);
-            length = FastVecLength(delta);
+            subtract_vector_xyz(delta, (float *)D_L00_00173F60_a, eye);
+            length = vector_length_xyz(delta);
             if (length == 0.0f) {
                 qcopy(cam + 0x30, target);
             } else if (length < *(float *)&D_L00_00161CC8) {
@@ -85,8 +85,8 @@ void FUN_L00_002e66b8(int snap) {
                         break;
                     }
                 }
-                FastVecSub(delta, eye, start);
-                length = FastVecLength(delta);
+                subtract_vector_xyz(delta, eye, start);
+                length = vector_length_xyz(delta);
                 if (length == 0.0f) {
                     qcopy(cam + 0x30, target);
                 } else {
@@ -94,8 +94,8 @@ void FUN_L00_002e66b8(int snap) {
                     add_vector_xyz(cam + 0x30, start, delta);
                     hero3 = &hero;
                     if (FUN_001efa68(start, cam + 0x30, mask, (int)hero3->moby, 0)) {
-                        FastVecSub(delta, (float *)D_L00_00173F60_a, eye);
-                        length = FastVecLength(delta);
+                        subtract_vector_xyz(delta, (float *)D_L00_00173F60_a, eye);
+                        length = vector_length_xyz(delta);
                         if (length == 0.0f) {
                             qcopy(cam + 0x30, target);
                         } else {
@@ -110,11 +110,11 @@ void FUN_L00_002e66b8(int snap) {
             }
         }
         /* straight above or below the target: nudge the camera sideways */
-        FastVecSub(offset, (float *)(cam + 0x30), (float *)target);
-        length = FastVecDot(offset, track + 0x30);
+        subtract_vector_xyz(offset, (float *)(cam + 0x30), (float *)target);
+        length = dot_vectors_xyz(offset, track + 0x30);
         scale_vector_xyz(part, track + 0x30, length);
-        FastVecSub(offset, offset, part);
-        if (FastVecLength(offset) < 0.05f) {
+        subtract_vector_xyz(offset, offset, part);
+        if (vector_length_xyz(offset) < 0.05f) {
             if (random_integer_below(2)) *(float *)(cam + 0x30) += 0.5f;
             else *(float *)(cam + 0x30) -= 0.5f;
             if (random_integer_below(2)) *(float *)(cam + 0x34) += 0.5f;
@@ -128,14 +128,14 @@ void FUN_L00_002e66b8(int snap) {
     to[1] = from[1];
     to[2] = from[2];
     qcopy(up, D_L00_00166E40);
-    FastVecNormalize(rise, up, *(float *)(target + 0xB0));
+    normalize_vector_xyz(rise, up, *(float *)(target + 0xB0));
     add_vector_xyz(eye, rise, target);
-    FastVecSub(look, eye, (float *)(cam + 0x30));
-    FastVecNormalize(cam, look, 1.0f);
+    subtract_vector_xyz(look, eye, (float *)(cam + 0x30));
+    normalize_vector_xyz(cam, look, 1.0f);
     qcopy(cam + 0x20, up);
-    FastVecCross(cam + 0x10, cam, cam + 0x20);
-    FastVecNormalize(cam + 0x10, cam + 0x10, 1.0f);
-    FastVecCross(cam + 0x20, cam + 0x10, cam);
+    cross_vectors_xyz(cam + 0x10, cam, cam + 0x20);
+    normalize_vector_xyz(cam + 0x10, cam + 0x10, 1.0f);
+    cross_vectors_xyz(cam + 0x20, cam + 0x10, cam);
     qcopy(cam + 0x40, cam);
 }
 
@@ -169,7 +169,7 @@ void FUN_L00_002e6bf8(char *m) {
         scale_vector_xyz(t, dn, *(float *)(b + 0xB0));
         add_vector_xyz(d + 0xD0, t, e);
         qcopy(d + 0x80, d + 0xD0);
-        FastVecSub(c, m + 0x30, d + 0x90);
+        subtract_vector_xyz(c, m + 0x30, d + 0x90);
         qcopy(d + 0x140, c);
         qcopy(d, m + 0x30);
         add_vector_xyz(d + 0x1F0, d + 0x90, c);
@@ -495,12 +495,12 @@ void FUN_L00_002e6d60(Moby_2E8210 *m) {
         func_L00_002E58E0_2E8210(m);
         func_L00_002E7B68_2E8210(1);
     }
-    FastVecSub(b->v0, m->v30, a->f50);
+    subtract_vector_xyz(b->v0, m->v30, a->f50);
     qcopy(b->v10, b->v0);
     qcopy(c->pos, m->v30);
     qcopy(g->v20, m->v30);
     scale_vector_xyz(v0, D_0013F6E0_2E8210, dot_vectors_xyz_c(b->v0, D_0013F6E0_2E8210));
-    FastVecSub(v1, b->v0, v0);
+    subtract_vector_xyz(v1, b->v0, v0);
     t = b->f2C - func_001F9CB8_2E8210(v1);
     g->f30 = t;
     if (t < -0.1f) {
@@ -533,7 +533,7 @@ int FUN_L00_002e7138(unsigned char *m, void *b, int c, int d) {
     float len, dist, k;
     G_2e7138 *G;
     len = FUN_001f9af0_2e7138(A);
-    FastVecSub(A, b, q + 0x90);
+    subtract_vector_xyz(A, b, q + 0x90);
     if (*(short *)(B + 0x38)) {
         FUN_L00_001ff500_2e7138(A, A, *(float *)(A + 0x2C) - *(float *)(B + 0x30));
         return d;
@@ -627,9 +627,9 @@ s32 FUN_L00_002e7318(O002e7318 *o) {
             hb = 1;
         }
         if (x->s38 != 0) {
-            FastVecSub(&tmp, &D_L00_00173E60_c, &pos);
-            FastVecNormalize(&tmp, &tmp, 1.0f);
-            d = FastVecDot(&g->v40, &tmp);
+            subtract_vector_xyz(&tmp, &D_L00_00173E60_c, &pos);
+            normalize_vector_xyz(&tmp, &tmp, 1.0f);
+            d = dot_vectors_xyz(&g->v40, &tmp);
             if (d > 0.75f)
                 x->s38 = 1;
             else if (d < -0.75f)
@@ -662,14 +662,14 @@ void FUN_L00_002e7530(O002e7530 *o, V002e7530 *a, V002e7530 *b, V002e7530 *c, V0
                       f32 k1, f32 k2) {
     V002e7530 t0, t1, t2, t3;
     u8 *m = o->m;
-    FastVecSub(&t0, b, c);
+    subtract_vector_xyz(&t0, b, c);
     m += 0x90;
-    FastVecNormalize(&t1, &t0, k1);
+    normalize_vector_xyz(&t1, &t0, k1);
     add_vector_xyz(b, b, &t1);
-    FastVecSub(&t2, b, m);
-    FastVecNormalize(&t2, &t2, k2);
+    subtract_vector_xyz(&t2, b, m);
+    normalize_vector_xyz(&t2, &t2, k2);
     add_vector_xyz(&t3, m, &t2);
-    FastVecSub(a, &t3, out);
+    subtract_vector_xyz(a, &t3, out);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7618.s", FUN_L00_002e7618);
 #define NOT_SDA
@@ -754,7 +754,7 @@ int FUN_L00_002e7a30(unsigned char *a) {
                 if (FUN_L00_002e7618_2e7a30(a, pos, i, dist, spd)) {
                     found = 1;
                     if (g->unk20A4 != 2 && AbsoluteFloat(D_0013CA40_2e7a30) > 0.05f) {
-                        FastVecSub(d, step, save);
+                        subtract_vector_xyz(d, step, save);
                         FUN_001f9bf8_2e7a30(d, d, 1.0f);
                         if (AbsoluteFloat(FUN_001f9ab0_2e7a30(D_L00_00166E40_2e7a30, d)) <
                             0.75f) {
@@ -771,7 +771,7 @@ int FUN_L00_002e7a30(unsigned char *a) {
                             }
                         }
                     }
-                    FastVecSub(d, pos, p + 0x50);
+                    subtract_vector_xyz(d, pos, p + 0x50);
                     FUN_001f9bf8_2e7a30(c, d, *(float *)(c + 0x2C) - *(float *)(e + 0x30));
                     FUN_001f9bf8_2e7a30(ndir, c, 1.0f);
                 }

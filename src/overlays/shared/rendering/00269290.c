@@ -75,7 +75,7 @@ void FUN_L00_00269290(char *o) {
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026A398), where it is exact; names translated to the US level program. */
 
 extern char D_L00_00166DC0[];
-extern f32 ConvertIntegerToFloat_c(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float_c(s32) __asm__("FUN_001fa6c0");
 extern float D_L00_001CB7C0[];
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9dc8(float);
@@ -166,9 +166,9 @@ after:
     if (d < 8.0f || d > 96.0f)
         goto kill;
     if (d < 16.0f) {
-        k = func_001FA898_r(ConvertIntegerToFloat_c(k) * (d - 8.0f) * 0.125f);
+        k = func_001FA898_r(convert_integer_to_float_c(k) * (d - 8.0f) * 0.125f);
     } else if (d > 80.0f) {
-        k = func_001FA898_r(ConvertIntegerToFloat_c(k) * (96.0f - d) * 0.0625f);
+        k = func_001FA898_r(convert_integer_to_float_c(k) * (96.0f - d) * 0.0625f);
     }
     *(int *)(m + 4) = (k << 24) | (*(int *)(m + 4) & 0xFFFFFF);
     if (FUN_001f9770(m + 0xA)) {
@@ -984,7 +984,7 @@ typedef struct {
 extern float D_0015ED70;
 extern float D_L00_0015F5D0_c __asm__("D_L00_0015F5D0");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9770");
-extern f32 ConvertIntegerToFloat_c2(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float_c2(s32) __asm__("FUN_001fa6c0");
 extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1006,8 +1006,8 @@ void FUN_L00_0026c088(Part_0026CF28 *m) {
         return;
     }
     {
-        float f20 = ConvertIntegerToFloat_c2(m->timer);
-        m->col = FUN_L00_002371e0_c(p->c14, p->c10, f20 / ConvertIntegerToFloat_c2(p->life));
+        float f20 = convert_integer_to_float_c2(m->timer);
+        m->col = FUN_L00_002371e0_c(p->c14, p->c10, f20 / convert_integer_to_float_c2(p->life));
         c = m->col >> 24;
         f = distance_xyz(m->pos, D_L00_00166DC0);
         if (m->timer < scale_game_frames_alt(6))
@@ -1017,7 +1017,7 @@ void FUN_L00_0026c088(Part_0026CF28 *m) {
             return;
         }
         if (f < 8.0f)
-            c = truncate_float_to_s32(ConvertIntegerToFloat_c2(c) * (f - 4.0f) * 0.25f);
+            c = truncate_float_to_s32(convert_integer_to_float_c2(c) * (f - 4.0f) * 0.25f);
         m->col = (c << 24) | (m->col & 0xFFFFFF);
         add_vector_xyz(m->pos, m->pos, p);
         k = p->kind;

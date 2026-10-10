@@ -2073,7 +2073,7 @@ void FUN_L00_00212088(f32 x, f32 y) {
     else
         FUN_00213ed8_00212088(&p->ground_speed, p->target_speed, y);
 }
-extern float FastCos(float) __asm__("FUN_001f9dc8");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
 
 /* Builds a direction vector into hero.motion.velocity: either func_00215C00's
    spherical formula from the hero.ground_speed radius, the clamped angle arg0
@@ -2082,7 +2082,7 @@ extern float FastCos(float) __asm__("FUN_001f9dc8");
    func_001FA218 builds from the hero moby's +0x40 axis. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00212790), where it is exact; names translated to the US level program. */
 
-extern float FastSin(float) __asm__("FUN_001f9de0");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void func_001F9EE8(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void func_001FA218(void *, void *) __asm__("FUN_001fa050");
 extern void func_00215C00(void *, float, float, float) __asm__("FUN_00214db0");
@@ -2103,8 +2103,8 @@ void FUN_L00_002120d8(float radians) {
         float matrix[16];
         float vec[4];
 
-        vec[0] = FastCos(0.0f) * r;
-        vec[1] = FastSin(0.0f) * r;
+        vec[0] = fast_cos(0.0f) * r;
+        vec[1] = fast_sin(0.0f) * r;
         vec[2] = 0.0f;
 
         func_001FA218(matrix, ((char *)g->moby) + 0x40);
@@ -2591,7 +2591,7 @@ typedef struct {
 float FUN_001f9dc8(float);
 float FUN_001f9de0(float);
 void FUN_001f9ab0(void *, Vec4_213350 *);
-/* FastVecDot of v with (cos, sin, 0) of the angle hero.motion.rot.z. */
+/* dot_vectors_xyz of v with (cos, sin, 0) of the angle hero.motion.rot.z. */
 void FUN_L00_00213350(u128_213350 *v) {
     u128_213350 a[2];
     struct Hero *g = &hero;

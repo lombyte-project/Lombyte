@@ -527,7 +527,7 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
 extern float FUN_001f9af0(void *);
 extern void FUN_001f9bf8(void *, void *, float);
 
-/* Clamps vector a to length x: normalizes it to x when FastVecLength is longer. */
+/* Clamps vector a to length x: normalizes it to x when vector_length_xyz is longer. */
 void FUN_L00_0025f730(void *a, float x) {
     if (x < FUN_001f9af0(a)) {
         FUN_001f9bf8(a, a, x);

@@ -203,12 +203,12 @@ typedef struct {
 
 extern u8 D_L14_00174560[];
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern float FastCos(float) __asm__("FUN_001f9dc8");
-extern float FastSin(float) __asm__("FUN_001f9de0");
-extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void FastVecNormalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern f32 FastVecDot(void *, void *) __asm__("FUN_001f9ab0");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 
 /* Sweeps the beam's two end lines; anything they cross takes damage pushed away from the beam. */
@@ -231,12 +231,12 @@ void FUN_L14_00302538(char *self) {
     req.v[3] = 5627.925f;
     req.a = 3;
     req.oclass = m->oclass;
-    dir.f[0] = FastCos(m->rot.z);
-    dir.f[1] = FastSin(m->rot.z);
+    dir.f[0] = fast_cos(m->rot.z);
+    dir.f[1] = fast_sin(m->rot.z);
     dir.f[2] = 0.0f;
-    FastVecSub(&to_hero, &hero.motion.pos, &m->pos);
+    subtract_vector_xyz(&to_hero, &hero.motion.pos, &m->pos);
     to_hero.f[2] = 0.0f;
-    dot = FastVecDot(&dir, &to_hero);
+    dot = dot_vectors_xyz(&dir, &to_hero);
     if (vector_length_xyz(&to_hero) != 0.0f) {
         if (dot < 0.0f)
             scale_vector_xyz(&dir, &dir, -1.0f);
@@ -247,7 +247,7 @@ void FUN_L14_00302538(char *self) {
     if (d->s8) {
         add_vector_xyz(&end_a, &base, &D_L14_001600EC[d->w0].axis[1]);
         if (FUN_001efa68(&base, &end_a, 0, m, 0)) {
-            FastVecSub(&from, D_L14_00174560, &base);
+            subtract_vector_xyz(&from, D_L14_00174560, &base);
             len = vector_length_xyz(&from);
             scale_vector_xyz(&from, &from, len * 0.98f / len);
             add_vector_xyz(&d->end_a, &base, &from);
@@ -257,9 +257,9 @@ void FUN_L14_00302538(char *self) {
         }
     }
     if (d->sA) {
-        FastVecSub(&end_b, &base, &D_L14_001600EC[d->w0].axis[1]);
+        subtract_vector_xyz(&end_b, &base, &D_L14_001600EC[d->w0].axis[1]);
         if (FUN_001efa68(&base, &end_b, 0, m, 0)) {
-            FastVecSub(&from, D_L14_00174560, &base);
+            subtract_vector_xyz(&from, D_L14_00174560, &base);
             len = vector_length_xyz(&from);
             scale_vector_xyz(&from, &from, len * 0.98f / len);
             add_vector_xyz(&d->end_b, &base, &from);
@@ -270,19 +270,19 @@ void FUN_L14_00302538(char *self) {
     }
     qcopy(&end_a, &d->end_a);
     qcopy(&end_b, &d->end_b);
-    FastVecNormalize(&off, &D_L14_001600EC[d->w0].axis[0], d->radius);
+    normalize_vector_xyz(&off, &D_L14_001600EC[d->w0].axis[0], d->radius);
     add_vector_xyz(&from, &end_a, &off);
     add_vector_xyz(&to, &end_b, &off);
     FUN_001efa68(&from, &to, 1, m, &req);
-    FastVecSub(&from, &end_a, &off);
-    FastVecSub(&to, &end_b, &off);
+    subtract_vector_xyz(&from, &end_a, &off);
+    subtract_vector_xyz(&to, &end_b, &off);
     FUN_001efa68(&from, &to, 1, m, &req);
-    FastVecNormalize(&off, &D_L14_001600EC[d->w0].axis[2], d->radius);
+    normalize_vector_xyz(&off, &D_L14_001600EC[d->w0].axis[2], d->radius);
     add_vector_xyz(&from, &end_a, &off);
     add_vector_xyz(&to, &end_b, &off);
     FUN_001efa68(&from, &to, 1, m, &req);
-    FastVecSub(&from, &end_a, &off);
-    FastVecSub(&to, &end_b, &off);
+    subtract_vector_xyz(&from, &end_a, &off);
+    subtract_vector_xyz(&to, &end_b, &off);
     FUN_001efa68(&from, &to, 1, m, &req);
 }
 #include "sda.h"

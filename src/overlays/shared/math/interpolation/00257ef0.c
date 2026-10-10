@@ -19,10 +19,10 @@ float FUN_L00_00257ef0(float x, float y, float z) {
     return fast_add_rotations(x, t * ((1.0f - c) * 0.5f));
 }
 #include "qcopy.h"
-extern void FastVecAdd(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FastVecScale(void *, void *, float) __asm__("FUN_001f9a68");
-extern float FastCos(float) __asm__("FUN_001f9dc8");
-extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Vector cosine interpolation: dst = a + (b - a) * ((1 - cos(t * pi)) * 0.5).
    Scalar analogue matched at src/game/mobyutil.c:func_00214220. */
@@ -40,10 +40,10 @@ void FUN_L00_00257f70(void *dst, void *a, void *b, float t) {
         qcopy(dst, b);
         return;
     }
-    ease = (1.0f - FastCos(t * 3.14159274f)) * 0.5f;
-    FastVecSub(tmp, b, a);
-    FastVecScale(tmp, tmp, ease);
-    FastVecAdd(dst, a, tmp);
+    ease = (1.0f - fast_cos(t * 3.14159274f)) * 0.5f;
+    subtract_vector_xyz(tmp, b, a);
+    scale_vector_xyz(tmp, tmp, ease);
+    add_vector_xyz(dst, a, tmp);
 }
 #define NOT_SDA
 

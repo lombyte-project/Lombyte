@@ -676,7 +676,7 @@ void FUN_L03_002dc478(L03WatchMoby *m) {
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, (char *)d + 0x80, 1);
 }
 extern void FUN_L02_002a4058(void *, int, float);
-extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern unsigned char D_L03_001DC1A0[];
 extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
 
@@ -688,7 +688,7 @@ void FUN_L03_002dc9b0(unsigned char *moby) {
         moby[0x30] = 0xFF;
         break;
     case 1:
-        AddDrawCallback(register_audio_stream_callback, moby);
+        add_draw_callback(register_audio_stream_callback, moby);
         break;
     }
 }

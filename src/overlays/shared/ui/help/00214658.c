@@ -807,7 +807,7 @@ void FUN_L00_00216ec0_00216ec0(s32 a, s32 b, s32 c) {
 extern int FUN_001f9770(void *);
 extern int FUN_L00_00216de8();
 
-/* For each of eight timers that FastDecTimer reports as 2, clears a field and calls 00216de8. */
+/* For each of eight timers that fast_dec_timer reports as 2, clears a field and calls 00216de8. */
 void FUN_L00_00216f10(void) {
     char *p = (char *)&hero.unk21D8[0][2];
     short *q = (short *)(&hero.unk21D8[0][3]);

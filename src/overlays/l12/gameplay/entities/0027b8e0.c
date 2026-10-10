@@ -31,7 +31,7 @@ int FUN_L12_0027b8e0(char *a, float *b, float x, float y, float z) {
     }
     return 1;
 }
-extern void MobyAnimAdvance(void *) __asm__("FUN_0020d580");
+extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 #include "qcopy.h"
 
@@ -50,7 +50,7 @@ void FUN_L12_0027b9c0(struct Moby *parent, unsigned char *child, int mode) {
     char workspace[0x40];
     func_0020DAF8(parent, mode, workspace);
     qcopy(child + 0x10, workspace + 0x30);
-    MobyAnimAdvance(child);
+    advance_moby_animation(child);
     FUN_L00_00250df8(child);
     func_001FA480(child + 0xC0, workspace);
     normalize_vector_triplet(child + 0xC0);

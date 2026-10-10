@@ -80,7 +80,7 @@ void FUN_L05_002daf58(unsigned char *m) {
     }
 }
 #include "qcopy.h"
-extern void *CreateMoby() __asm__("FUN_0020c4f8");
+extern void *create_moby() __asm__("FUN_0020c4f8");
 
 #define NOT_SDA
 
@@ -91,7 +91,7 @@ extern void *CreateMoby() __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L05_002f8718(char *owner) {
-    char *moby = CreateMoby(0x1B7);
+    char *moby = create_moby(0x1B7);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;

@@ -16,7 +16,7 @@ extern char D_L00_001E8ED8[];
 extern float FUN_001f9af0(void *);
 extern int D_L00_00160014;
 extern unsigned char D_0014161B[];
-extern void DebugPrint_alt() __asm__("FUN_001e93b0");
+extern void debug_print_alt() __asm__("FUN_001e93b0");
 extern void FUN_001f9a28(void *, void *, void *);
 extern void PackRenderCommandFields(struct RenderEntry *, s32, s32, s32, s32);
 
@@ -42,7 +42,7 @@ void FUN_L00_002500b8(char *o) {
         }
     }
     if (idx == -1) {
-        DebugPrint_alt(D_L00_001E8ED8);
+        debug_print_alt(D_L00_001E8ED8);
         return;
     }
     off = idx * 0x30;

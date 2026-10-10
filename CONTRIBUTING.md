@@ -83,7 +83,10 @@ next to the C and the surrounding units.
   sections.
 - Keep the unit's canonical symbol name (the second argument of its
   `INCLUDE_ASM(...)` line). A friendly name is welcome as an alias, e.g.
-  `int MyName(int a0) __asm__("FUN_00123456");`.
+  `int count_items(int a0) __asm__("FUN_00123456");`.
+- Function names are `lower_snake_case` and say what the function does
+  (`fast_difference_between_rotations`, not `FastDiffRots`), also when a
+  recovered original symbol exists. Sony SDK functions keep their own names.
 - Declare variables at the start of blocks and use the project typedefs
   (`u32`, `s32`, `f32`, …) — this is GCC 2.9 era, not modern C.
 - Keep it descriptive C: no inline assembly or copied disassembly in the body.

@@ -6,7 +6,7 @@
 #include "qcopy.h"
 #include "sda.h"
 extern void FUN_L02_002a4058(void *, int, float);
-extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern unsigned char D_L14_001E9C60[];
 extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
 
@@ -18,7 +18,7 @@ void FUN_L14_00303370(struct Moby *moby) {
         moby->unk30 = 0xFF;
         break;
     case 1:
-        AddDrawCallback(register_audio_stream_callback, moby);
+        add_draw_callback(register_audio_stream_callback, moby);
         break;
     }
 }

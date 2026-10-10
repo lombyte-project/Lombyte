@@ -464,7 +464,7 @@ void FUN_L07_00318e98(int target_entry) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00319040.s", FUN_L07_00319040);
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
-extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 #define NOT_SDA
 
@@ -527,7 +527,7 @@ void FUN_L07_00319698(struct Moby *moby, SwooperSpawnerVars *spawner_vars) {
     if (spawner_vars != NULL) {
         vars->life_timer = scale_ticks(spawner_vars->linger_time);
     }
-    DeleteMoby(moby);
+    mark_moby_for_removal(moby);
 }
 
 extern Vec4 D_L07_00166E40;
@@ -732,7 +732,7 @@ void FUN_L07_00319f48(struct Moby *m) {
                               0.75f, 0);
         }
         FUN_L00_0025e450(m, &h->pos, h, 3.0f, 1.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
-        DeleteMoby(m);
+        mark_moby_for_removal(m);
         return;
     }
     m->unkA4 = 0xFF;

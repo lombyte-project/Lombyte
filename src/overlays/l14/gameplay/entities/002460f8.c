@@ -8,7 +8,7 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/entities.h"
 
-extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 #define NOT_SDA
 
@@ -37,7 +37,7 @@ void FUN_L14_002460f8(void) {
     moby = D_L14_0016CF60.moby;
     if (moby != 0 && (unsigned)(D_L14_0016CF60.phase - 0x1C) < 6) {
         FUN_L00_0023e008(moby);
-        AddDrawCallback(func_L00_0023E4C8, moby);
+        add_draw_callback(func_L00_0023E4C8, moby);
     }
 }
 
@@ -973,7 +973,7 @@ extern int D_L14_00161530 __attribute__((sda)); /* no foreign declaration */
 extern int D_L14_00161534 __attribute__((sda)); /* no foreign declaration */
 extern int D_L14_001FBD50; /* no foreign declaration */
 extern int D_L14_001FBD78; /* no foreign declaration */
-extern int DebugPrint_alt() __asm__("FUN_001e93b0");
+extern int debug_print_alt() __asm__("FUN_001e93b0");
 extern int FUN_001f9770_c2(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_002502f0();
 extern int is_point_inside_clip_volume_c(void *arg0, int arg1) __asm__("func_00214720");
@@ -1468,7 +1468,7 @@ extern float D_L14_00161584 __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_00161588 __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_0016158C __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_00161590 __attribute__((sda)); /* no foreign declaration */
-extern int DebugPrint_alt() __asm__("FUN_001e93b0");
+extern int debug_print_alt() __asm__("FUN_001e93b0");
 extern int FUN_001f9770_c(void *) __asm__("FUN_001f9770");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames_c(int) __asm__("FUN_001f96f8");
@@ -1539,43 +1539,43 @@ void FUN_L14_002b46e8(Moby_2B5938 *moby) {
     case 0: {
         PathNode_2B5938 *path;
         if (d->fD0 == -1) {
-            DebugPrint_alt(D_L14_001FBDF0, moby->fB2);
+            debug_print_alt(D_L14_001FBDF0, moby->fB2);
             mark_moby_for_removal(moby);
             return;
         }
         path = D_L14_001B0F30_2B5938[d->fD0];
         if (path->n == 0) {
-            DebugPrint_alt(D_L14_001FBE18, moby->fB2);
+            debug_print_alt(D_L14_001FBE18, moby->fB2);
             mark_moby_for_removal(moby);
             return;
         }
         if (d->fD4 == -1) {
-            DebugPrint_alt(D_L14_001FBE58, moby->fB2);
+            debug_print_alt(D_L14_001FBE58, moby->fB2);
             mark_moby_for_removal(moby);
             return;
         }
         if (D_L14_001B0F30_2B5938[d->fD4]->n == 0) {
-            DebugPrint_alt(D_L14_001FBE80, moby->fB2);
+            debug_print_alt(D_L14_001FBE80, moby->fB2);
             mark_moby_for_removal(moby);
             return;
         }
         if (d->fD8 == -1) {
-            DebugPrint_alt(D_L14_001FBEC0, moby->fB2);
+            debug_print_alt(D_L14_001FBEC0, moby->fB2);
             mark_moby_for_removal(moby);
             return;
         }
         if (D_L14_001B0F30_2B5938[d->fD8]->n == 0) {
-            DebugPrint_alt(D_L14_001FBEE8, moby->fB2);
+            debug_print_alt(D_L14_001FBEE8, moby->fB2);
             mark_moby_for_removal(moby);
             return;
         }
         if (d->f150 == -1) {
-            DebugPrint_alt(D_L14_001FBF20, moby->fB2);
+            debug_print_alt(D_L14_001FBF20, moby->fB2);
             mark_moby_for_removal(moby);
             return;
         }
         if (D_L14_001B0F30_2B5938[d->f150]->n == 0) {
-            DebugPrint_alt(D_L14_001FBF48, moby->fB2);
+            debug_print_alt(D_L14_001FBF48, moby->fB2);
             mark_moby_for_removal(moby);
             return;
         }

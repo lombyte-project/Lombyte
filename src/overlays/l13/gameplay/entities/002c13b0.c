@@ -10,7 +10,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
 
-extern char *CreateMoby_c13(int) __asm__("FUN_0020c4f8");
+extern char *create_moby_c13(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8(void *);
 extern char *FUN_L00_0026daa0(char *, int, int, int, float);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -18,7 +18,7 @@ extern void blend_moby_animation_c13(void *, int, int, int) __asm__("FUN_00212f9
 
 unsigned char *FUN_L13_002c13b0(char *src, char *pos, char *target, char *vec, int arg, float scale,
                                 float f2) {
-    unsigned char *moby = (unsigned char *)CreateMoby_c13(0x52);
+    unsigned char *moby = (unsigned char *)create_moby_c13(0x52);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
         moby[0x30] = 0xFF;
@@ -1244,7 +1244,7 @@ int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e4448.s", FUN_L13_002e4448);
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-extern void *CreateMoby() __asm__("FUN_0020c4f8");
+extern void *create_moby() __asm__("FUN_0020c4f8");
 
 #define NOT_SDA
 
@@ -1256,7 +1256,7 @@ extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
 char *FUN_L13_002e8438(char *owner) {
-    char *moby = CreateMoby(0x160);
+    char *moby = create_moby(0x160);
     if (moby != 0) {
         char *data;
         ((unsigned char *)moby)[0x30] = 0xFF;

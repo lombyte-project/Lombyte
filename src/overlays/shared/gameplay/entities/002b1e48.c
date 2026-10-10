@@ -40,8 +40,8 @@ extern int FUN_001fa2d8();
 extern int FUN_L00_002502f0();
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
-extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FastDecTimer(s32 *) __asm__("func_001F9740");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_dec_timer(s32 *) __asm__("func_001F9740");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 void FUN_L00_002502a0(int idx);
@@ -93,7 +93,7 @@ void FUN_L07_0030bf90(unsigned char *moby)
             if (vector_distance(moby + 0x10, p + 0x80) < 2.0f) {
                 if (*(int *)(p + 0x2084) == 0x11) {
                     if (*(float *)(p + 0xAA8) < 7.0f) {
-                        FastVecSub(o, moby + 0x10, p + 0x80);
+                        subtract_vector_xyz(o, moby + 0x10, p + 0x80);
                         func_001FA190_30D370(q);
                         func_001FA4A0_30D370(q, moby + 0xC0);
                         transform_vector(o, o, q);

@@ -49,7 +49,7 @@ unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int s, int a, int col,
     }
     return m;
 }
-extern int FastDecTimer(void *) __asm__("FUN_001f9770");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9770");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 extern float FUN_001fa6c0_271450(int) __asm__("FUN_001fa6c0");
 extern int FUN_001fa6d0_271450(float) __asm__("FUN_001fa6d0");
@@ -67,7 +67,7 @@ void FUN_L00_00271450(unsigned char *p) {
     float a;
     int w;
 
-    if (FastDecTimer(p + 0xA)) {
+    if (fast_dec_timer(p + 0xA)) {
         free_effect_particle(p);
     } else {
         q = p + 0x20;
@@ -105,8 +105,8 @@ int FUN_001fa6d0_2715e8(float) __asm__("FUN_001fa6d0");
 int rand_e50(void) __asm__("FUN_001160d8");
 float random_angle_radians(void) __asm__("FUN_00213308");
 float FUN_002132a8_2715e8(float, float) __asm__("FUN_002132a8");
-float FastCos(float) __asm__("FUN_001f9dc8");
-float FastSin(float) __asm__("FUN_001f9de0");
+float fast_cos(float) __asm__("FUN_001f9dc8");
+float fast_sin(float) __asm__("FUN_001f9de0");
 unsigned char *FUN_L00_002715e8(void *pos, int x, int color, float size, float w) {
     unsigned char *m = p27fe00_alloc(0x2D);
     if (m) {
@@ -130,8 +130,8 @@ unsigned char *FUN_L00_002715e8(void *pos, int x, int color, float size, float w
         *(float *)(m + 0xC) = size * 210000.0f;
         a = random_angle_radians();
         r = FUN_002132a8_2715e8(0.0015f, 0.0025f);
-        *(float *)(q + 0) = FastCos(a) * r;
-        *(float *)(q + 4) = FastSin(a) * r;
+        *(float *)(q + 0) = fast_cos(a) * r;
+        *(float *)(q + 4) = fast_sin(a) * r;
         *(int *)(q + 0x14) = x;
         *(float *)(q + 0x10) = w;
         *(int *)(q + 8) = 0;
@@ -329,7 +329,7 @@ void FUN_001f9a10_00271df8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00267a08_00271df8(unsigned char *) __asm__("FUN_L00_00267a08");
 void FUN_L00_00271df8(unsigned char *p) {
     unsigned char *q = p + 0x20;
-    if (FastDecTimer(p + 0xA)) {
+    if (fast_dec_timer(p + 0xA)) {
         *(float *)(q + 8) -= *(float *)(q + 0x18);
     }
     FUN_001f9a10_00271df8(p + 0x10, p + 0x10, q);
@@ -456,7 +456,7 @@ void FUN_L00_00272438(unsigned char *m) {
     old = *pos;
     q->f4 += q->f8;
     FUN_L00_00262360_272438(q->i0, &x, &y, pos, q->f4, q->fc);
-    if (FastDecTimer(m + 0xA)) {
+    if (fast_dec_timer(m + 0xA)) {
         free_effect_particle(m);
         return;
     }
@@ -670,9 +670,9 @@ extern int FUN_001f96f8_272bc0(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_002729c8_272bc0(void *, int, int, int, int, int, int, float,
                                    float) __asm__("FUN_L00_002729c8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_272bc0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FastVecNormalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_00259bc8_272bc0(int, int, int, void *, void *,
                                     float) __asm__("FUN_L00_00259bc8");
 
@@ -692,7 +692,7 @@ void FUN_L00_00272bc0(unsigned char *p) {
         *(int *)(p + 4) =
             FastTweenColor((n - FUN_001fa6c0_272bc0(*(short *)(p + 0xA))) / n, 0xFF4080FF, 0);
     }
-        if (FastDecTimer(p + 0xA)) {
+        if (fast_dec_timer(p + 0xA)) {
             if (q[0x10] == 1) {
                 free_effect_particle(p);
             } else {
@@ -714,15 +714,15 @@ void FUN_L00_00272bc0(unsigned char *p) {
                                     *(float *)(q + 0x1C), m);
         }
     }
-        if (FastDecTimer(p + 0xA)) {
+        if (fast_dec_timer(p + 0xA)) {
             free_effect_particle(p);
         }
         c = (unsigned char *)D_0013F3D0_272bc0;
         if (vector_distance(p + 0x10, c) < 0.3f) {
             g = (P_272bc0 *)(c - 0x80);
             if (g->f88 < *(float *)(p + 0x18) + 1.2f) {
-                FastVecSub(t, c, p + 0x10);
-                FastVecNormalize(t, t, 1.0f);
+                subtract_vector_xyz(t, c, p + 0x10);
+                normalize_vector_xyz(t, t, 1.0f);
                 t[2] = 1.0f;
                 FUN_L00_00259bc8_272bc0(g->i2080, *(int *)(q + 0x18), 1, p + 0x10, t,
                                         *(float *)(q + 0x1C));
@@ -746,7 +746,7 @@ void FUN_L00_00272bc0(unsigned char *p) {
         } else {
             p[8]--;
         }
-        if (FastDecTimer(p + 0xA)) {
+        if (fast_dec_timer(p + 0xA)) {
             free_effect_particle(p);
         }
         break;
@@ -763,7 +763,7 @@ unsigned char *FUN_L00_00272f68(u128 *a, int c, unsigned char b, int idx, int fl
         int *e = (int *)(m + 0x20);
         e[4] = mode;
         if (mode == 1)
-            FastVecSub(e, a, D_0013F3D0_00272f68);
+            subtract_vector_xyz(e, a, D_0013F3D0_00272f68);
         qcopy(m + 0x10, a);
         *(int *)(m + 4) = c;
         m[9] = FUN_001fa6d0_00272f68(1.0f) + 0x20;
@@ -953,7 +953,7 @@ void FUN_L00_00273448(P_273448 *p) {
     p->w4 = (p->w4 & 0xFFFFFF) + (truncate_float_to_s32(e->f4 * 256.0f) << 24);
     e->f14 += (1.0f - e->f14) * (frame_scale * 0.175f);
     pos_273448(e->m, e->hE, a);
-    FastVecSub(v, org_273448, a);
+    subtract_vector_xyz(v, org_273448, a);
     vscl_273448(v, v, e->f14);
     vadd_273448(p->pos, a, v);
 }
@@ -1138,7 +1138,7 @@ extern float D_0015ED60_273ee0 __asm__("D_0015ED60");
 extern float D_0015ED64_273ee0 __asm__("D_0015ED64");
 extern u128 D_L00_00173E60_273ee0[] __asm__("D_L00_00173E60") __attribute__((section(".data")));
 void FUN_001f9a10_273ee0(void *, void *, void *) __asm__("FUN_001f9a10");
-int CollLine_Fix(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 int FUN_L00_0025bfe0_273ee0(float, float, float, float) __asm__("FUN_L00_0025bfe0");
 void FUN_L00_00273ee0(unsigned char *o) {
@@ -1153,7 +1153,7 @@ void FUN_L00_00273ee0(unsigned char *o) {
     *(float *)(o + 0xC) += D_0015ED60_273ee0 * -100.0f;
     FUN_001f9a10_273ee0(out, b, c);
     if (*(float *)(o + 0x20) != 0.0f || c[1] != 0.0f || c[2] != 0.0f) {
-        if (CollLine_Fix(o + 0x10, out, 2, o, 0)) {
+        if (collision_line(o + 0x10, out, 2, o, 0)) {
             *(u128 *)(o + 0x10) = D_L00_00173E60_273ee0[0];
             clear_u64_value(c);
             *(float *)(o + 0xC) += *(float *)(o + 0xC);
@@ -1166,7 +1166,7 @@ void FUN_L00_00273ee0(unsigned char *o) {
             }
         }
     }
-    if (c[7] <= 0.0f || FastDecTimer(o + 0xA) || *(float *)(o + 0xC) < 0.0f ||
+    if (c[7] <= 0.0f || fast_dec_timer(o + 0xA) || *(float *)(o + 0xC) < 0.0f ||
         ((float *)out)[0] < 0.01f || ((float *)out)[1] < 0.01f || ((float *)out)[2] < 0.01f) {
         free_effect_particle(o);
         return;
@@ -1213,8 +1213,8 @@ unsigned char *FUN_L00_002741a0(void *a, int color, float s, float z) {
         *(float *)(m + 0xC) = s * 210000.0f;
         ang = random_angle_radians();
         r = FUN_002132a8_2741a0(0.0015f, 0.0025f);
-        q[0] = FastCos(ang) * r;
-        q[1] = FastSin(ang) * r;
+        q[0] = fast_cos(ang) * r;
+        q[1] = fast_sin(ang) * r;
         q[4] = z;
         q[2] = 0;
     }
@@ -1320,7 +1320,7 @@ f32 FUN_001f9de0_274518(f32) __asm__("FUN_001f9de0");
 void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9cf8_274518(void *, void *, void *) __asm__("FUN_001f9cf8");
-f32 FastAddRots(f32, f32) __asm__("FUN_001fa580");
+f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 void FUN_L00_00274518(M_274518 *m) {
     R_274518 *r = &m->r;
     V_274518 a, b, c;
@@ -1382,8 +1382,8 @@ void FUN_L00_00274518(M_274518 *m) {
     FUN_001f9a10_274518(&a, &a, &b);
     FUN_001f9cf8_274518(&a, &a, r->iC + 0xC0);
     FUN_001f9a10_274518(m->v10, m->v10, &a);
-    r->f10 = FastAddRots(r->f10, D_0015ED6C_274518 * 0.9599310755729675f);
-    r->f14 = FastAddRots(r->f14, D_0015ED6C_274518 * 4.363323211669922f);
+    r->f10 = fast_add_rotations(r->f10, D_0015ED6C_274518 * 0.9599310755729675f);
+    r->f14 = fast_add_rotations(r->f14, D_0015ED6C_274518 * 4.363323211669922f);
 }
 typedef struct {
     void *o;
@@ -1418,7 +1418,7 @@ void FUN_L00_00274818(char *p) {
     FUN_0020cca8_274818(s->o, s->b4, a);
     x = FUN_001fa6c0_274818(s->b5);
     x = FUN_002132a8_274818(-x, x);
-    FastVecNormalize(&b, a, (x / 100.0f - one) * s->fC);
+    normalize_vector_xyz(&b, a, (x / 100.0f - one) * s->fC);
     FUN_001f9a10_274818(p + 0x20, v, &b);
     *(float *)(p + 0x1C) = f;
     *(float *)(p + 0x2C) = save;
@@ -1568,7 +1568,7 @@ typedef struct {
 extern s32 D_L00_0015F5CC_274e48 __asm__("D_L00_0015F5CC");
 extern V_274e48 D_0013F420_274e48 __asm__("D_0013F420");
 f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
-f32 FastVecLength(void *) __asm__("FUN_001f9af0");
+f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 void FUN_001f9bf8_274e48(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_274e48(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_00214a98_274e48(void *, void *) __asm__("FUN_00214a98");
@@ -1585,8 +1585,8 @@ void FUN_L00_00274e48(M_274e48 *m) {
         m->b8++;
     d = distance_xyz(&m->v10, &D_0013F420_274e48);
     if (d < 5.0f && 0.0f < r->p18[2]) {
-        FastVecSub(&a, r->p18, &m->v10);
-        if (0.5f < FastVecLength(&a)) {
+        subtract_vector_xyz(&a, r->p18, &m->v10);
+        if (0.5f < vector_length_xyz(&a)) {
             FUN_001f9bf8_274e48(&a, &a, 0.1f / d);
             FUN_001f9a10_274e48(&m->v10, &m->v10, &a);
         } else {
@@ -1814,7 +1814,7 @@ void FUN_L00_00275510(char *m) {
     *(int *)(m + 4) =
         mine_blend_color((float)*(short *)(m + 0xA) / ConvertIntegerToFloat(*(int *)(d + 0xC)),
                             *(int *)(d + 4), *(int *)d);
-    if (FastDecTimer(m + 0xA)) {
+    if (fast_dec_timer(m + 0xA)) {
         free_effect_particle(m);
     }
 }
@@ -1834,7 +1834,7 @@ void FUN_L00_002756f0(unsigned char *m) {
     s = ((l * 0.97f - 1.0f) * D_0015ED60_002756f0 + 1.0f) / l;
     *(float *)(m + 0x20) *= s;
     *(float *)(v + 4) *= s;
-    if (!FastDecTimer(m + 0xA)) {
+    if (!fast_dec_timer(m + 0xA)) {
         x = *(float *)(m + 0xC) + (*(float *)(v + 0x14) + *(float *)(v + 0x14));
         *(float *)(m + 0xC) = x;
         if (x < 15000.0f)
@@ -1937,7 +1937,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00275aa0.s", FUN_L00_00275aa0);
 extern float FUN_001fa6c0_275aa0(int) __asm__("FUN_001fa6c0");
 extern int FUN_001fa6d0_275aa0(float) __asm__("FUN_001fa6d0");
 extern void FUN_001f9a10_275aa0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FastVecCross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern float FUN_001f9af0_275aa0(void *) __asm__("FUN_001f9af0");
 extern float D_0015964C_275aa0 __asm__("D_0015964C") __attribute__((section(".sdata")));
 
@@ -1971,22 +1971,22 @@ void FUN_L00_00275aa0(unsigned char *m) {
     *(int *)&v[3] = 0;
     FUN_001f9a10_275aa0(m + 0x10, m + 0x10, v);
     if (*(int *)(q + 0x18)) {
-        FastVecSub(d, (char *)*(int *)(q + 0x18) + 0x10, m + 0x10);
+        subtract_vector_xyz(d, (char *)*(int *)(q + 0x18) + 0x10, m + 0x10);
         if (d[0] <= 2.0f && d[1] <= 2.0f) {
-            FastVecCross(t, d, hero.unk290.f);
-            FastVecNormalize(t, t, D_0015964C_275aa0);
+            cross_vectors_xyz(t, d, hero.unk290.f);
+            normalize_vector_xyz(t, t, D_0015964C_275aa0);
             FUN_001f9a10_275aa0(m + 0x10, m + 0x10, t);
             if (d[0] <= 0.5f && d[1] <= 0.5f)
-                FastVecNormalize(v, d, 0.03f);
+                normalize_vector_xyz(v, d, 0.03f);
             else
-                FastVecNormalize(v, d, FUN_001f9af0_275aa0(v));
+                normalize_vector_xyz(v, d, FUN_001f9af0_275aa0(v));
             v[2] += 0.02f;
             *(float *)(q + 0xc) = v[0];
             *(float *)(q + 0x10) = v[1];
             *(float *)(q + 0x14) = v[2];
         }
     }
-    if (FastDecTimer(m + 0xa))
+    if (fast_dec_timer(m + 0xa))
         free_effect_particle(m);
 }
 #endif
@@ -2070,7 +2070,7 @@ extern T1_276078 D_00137B80;
 extern T2_276078 D_L00_001B9CF0;
 extern u8 D_L00_001602D0[];
 void Load(s32, s32, s32) __asm__("FUN_00216828");
-s32 Stash_SendData(s32, s32, s32, void *) __asm__("FUN_00232e40");
+s32 stash_send_data(s32, s32, s32, void *) __asm__("FUN_00232e40");
 void FUN_L00_00276078(void) {
     s32 h = D_L00_00173E08;
     s32 i;
@@ -2078,7 +2078,7 @@ void FUN_L00_00276078(void) {
         s32 sz = D_00137B80.e[i].n << 7;
         if (sz) {
             Load(h, D_00137B80.e[i].a, D_00137B80.e[i].n);
-            D_L00_001B9CF0.o[i] = Stash_SendData(h, sz, sz, D_L00_001602D0);
+            D_L00_001B9CF0.o[i] = stash_send_data(h, sz, sz, D_L00_001602D0);
         }
     }
 }

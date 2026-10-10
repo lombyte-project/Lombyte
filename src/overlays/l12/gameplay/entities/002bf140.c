@@ -767,7 +767,7 @@ void FUN_L12_002e6c48(L16WatchMoby *m) {
         FUN_L12_0027b9c0_x(m, *(void **)((char *)d + 0x180), 2);
     }
 }
-extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E8588), where it is exact; names translated to the US level program. */
 
@@ -784,7 +784,7 @@ void FUN_L12_002e7208(struct Moby *moby) {
     case 1: {
         int value = *(int *)(data + 0xC);
         if (value == -1 || is_point_inside_clip_volume(D_L12_00167240, value)) {
-            AddDrawCallback((void *)FUN_L12_002e71b0, moby);
+            add_draw_callback((void *)FUN_L12_002e71b0, moby);
         }
     } break;
     }
@@ -971,7 +971,7 @@ void FUN_L12_002e8608(struct Moby *moby, float *pos) {
     *(float *)(data + 0x188) = d * 0.35f;
     *(float *)(data + 0x208) = d * 0.8f;
 }
-extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Release the vendor moby and any child it owns. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9A50), where it is exact; names translated to the US level program. */
@@ -988,9 +988,9 @@ void FUN_L12_002e86d0(struct Moby *moby) {
     moby->unkB4 = 0;
     FUN_L00_00257470(moby, 0, -1);
     if (((Level12VendorData *)moby->pvars)->child != 0) {
-        DeleteMoby(((Level12VendorData *)moby->pvars)->child);
+        mark_moby_for_removal(((Level12VendorData *)moby->pvars)->child);
     }
-    DeleteMoby(moby);
+    mark_moby_for_removal(moby);
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9AA0), where it is exact; names translated to the US level program. */
 

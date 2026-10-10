@@ -290,7 +290,7 @@ void FUN_L11_002d0710(WM11 *m) {
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
 }
 
-extern float FastVecDist(void *, void *) __asm__("FUN_001f9b48");
+extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2168), where it is exact; names translated to the US level program. */
 
@@ -304,7 +304,7 @@ void FUN_L11_002d27b0(WM11 *m);
 
 void FUN_L11_002d0fa8(struct Moby *moby) {
     FUN_L02_002e0cd8(moby);
-    if (moby->unk31 && FastVecDist(&moby->pos, D_L11_001677C0) < 38.0f) {
+    if (moby->unk31 && distance_xyz(&moby->pos, D_L11_001677C0) < 38.0f) {
         FUN_L00_0025a120(moby);
         moby->unk7F = 30;
     }
@@ -575,7 +575,7 @@ void FUN_L11_002d14b0(void *arg) {
             }
         }
         if (D_0014C050[d->unk108 + D_0015ED84 * 16] == 0xFF &&
-            FastVecDist(&hero.motion.pos, &path_points_14b0[d->points[1]].pos) < 12.0f) {
+            distance_xyz(&hero.motion.pos, &path_points_14b0[d->points[1]].pos) < 12.0f) {
             d->leg = 1;
             qcopy_nc(&moby->pos, &path_points_14b0[d->points[1]].pos);
             qcopy_nc(&moby->rot, &path_points_14b0[d->points[1]].rot);
@@ -1062,8 +1062,8 @@ extern int D_0015ED84;
 extern unsigned char D_0014C050[];
 extern char *D_L11_001600EC;
 extern struct UsageStat usage_stats_f0e40[] __asm__("D_00141968") __attribute__((section(".data")));
-extern void DeleteMoby_f0e40(void *) __asm__("FUN_0020c828");
-extern float AbsoluteFloat_f0e40(float) __asm__("FUN_001f99c0");
+extern void mark_moby_for_removal_f0e40(void *) __asm__("FUN_0020c828");
+extern float absolute_float_f0e40(float) __asm__("FUN_001f99c0");
 extern void FUN_L00_002502a0(int);
 extern void FUN_L00_00263d40(int, int);
 
@@ -1075,7 +1075,7 @@ void FUN_L11_002f0e40(struct Moby *moby) {
     int tracking;
 
     FUN_L02_002e0cd8(moby);
-    if (moby->unk31 && FastVecDist(&moby->pos, D_L11_001677C0) < 30.0f) {
+    if (moby->unk31 && distance_xyz(&moby->pos, D_L11_001677C0) < 30.0f) {
         FUN_L00_0025a120(moby);
         moby->unk7F = 24;
     }
@@ -1085,7 +1085,7 @@ void FUN_L11_002f0e40(struct Moby *moby) {
         if (moby->prev_seq != 1)
             FUN_00212f90(moby, 1, 0, scale_game_frames(20));
         if (D_0013D50B) {
-            DeleteMoby_f0e40(moby);
+            mark_moby_for_removal_f0e40(moby);
             return;
         }
         FUN_L00_002668a0(moby, d);
@@ -1097,7 +1097,7 @@ void FUN_L11_002f0e40(struct Moby *moby) {
             moby->state = 2;
         }
         if (alternate_item_available[1] == 0 && discount_purchase_pricing[0] == 0) {
-            if (FastVecDist(&moby->pos, hero.motion.pos.f) < 4.0f) {
+            if (distance_xyz(&moby->pos, hero.motion.pos.f) < 4.0f) {
                 int t = scale_game_frames(D_0015EEA4) - usage_stats_f0e40[0x86].unk2 * 600;
                 if ((int)(scale_game_frames(18) * 60.0f) < t || usage_stats_f0e40[0x86].unk2 * 600 == 0) {
                     FUN_L00_00203908(0x2B03, 0x86);
@@ -1107,8 +1107,8 @@ void FUN_L11_002f0e40(struct Moby *moby) {
             }
         }
         if (D_0014C050[moby->unkB0 + D_0015ED84 * 16] != 0xFF &&
-            FastVecDist(hero.motion.pos.f, &moby->pos) < 4.0f &&
-            AbsoluteFloat_f0e40(hero.motion.pos.f[2] - moby->pos.z) < 4.0f) {
+            distance_xyz(hero.motion.pos.f, &moby->pos) < 4.0f &&
+            absolute_float_f0e40(hero.motion.pos.f[2] - moby->pos.z) < 4.0f) {
             char *entry;
             FUN_L00_002502a0(moby->unkB0);
             entry = D_L11_001600EC + d->slot * 128;
@@ -1501,7 +1501,7 @@ void FUN_L11_002f3040(struct Moby *moby) {
         count--;
     } while (count >= 0);
 }
-extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+extern void delete_moby(void *) __asm__("FUN_0020c828");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F46C0), where it is exact; names translated to the US level program. */
 
@@ -1526,7 +1526,7 @@ void FUN_L11_002f3350(struct Moby *moby) {
         moby->unk30 = 0xFF;
         moby->state = 1;
         if (*(int *)state == -1)
-            DeleteMoby(moby);
+            delete_moby(moby);
         break;
     case 1:
         if (hero.motion.pos.f[2] > 194.0f && hero.state.current != 0x32) {
@@ -1762,7 +1762,7 @@ void FUN_L11_00309ac0(struct Moby *moby) {
         scale_vec_309ac0(diff, pv->approach_d0);
         add_vector_xyz(&moby->pos, &moby->pos, diff);
         if (pv->seg_d4 < pv->path_c4[0] - 1) {
-            if (FastVecDist(&moby->pos, target) < D_L11_00161DD4_309ac0 * frame_time) {
+            if (distance_xyz(&moby->pos, target) < D_L11_00161DD4_309ac0 * frame_time) {
                 float *pt;
                 pv->seg_d4 += 1;
                 pt = (float *)((char *)pv->path_c4 + pv->seg_d4 * 16);

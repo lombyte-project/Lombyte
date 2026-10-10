@@ -1100,13 +1100,13 @@ extern int *D_L02_001B0AB0_5c88[] __asm__("D_L02_001B0AB0");
 extern float D_0015ED70;
 extern int FUN_001f9770(void *);
 extern float FUN_001f9b80(void *, void *);
-extern float AbsoluteFloat_5c88(float) __asm__("func_001F99C0");
+extern float absolute_float_5c88(float) __asm__("func_001F99C0");
 extern float FUN_00213508(void *, int, float);
 extern void FUN_L00_0025ab48(void *, float *, void *, void *);
 extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern int FUN_L02_002d5658(void *argp);
 extern void FUN_L02_002d5728(char *arg);
-extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int hit_85b8(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern char *FUN_L00_0025a420(void *, int, int);
 extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
@@ -1136,7 +1136,7 @@ void FUN_L02_002d5c88(unsigned char *moby) {
             (*(Vars5c88 **)((d->i288 << 8) + D_L02_0015FFD8 + 0x78))->i14C -= 1;
         }
         if ((d->i27C = FUN_L02_002d5658(moby)) == 0) {
-            DeleteMoby(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         moby[0x20] = 0x1A;
@@ -1204,7 +1204,7 @@ void FUN_L02_002d5c88(unsigned char *moby) {
     path = D_L02_001B0AB0_5c88[d->i290];
     if (FUN_L00_0025ff38(d->f250, moby, d->tgt, 0, 0, path + 4, *path) != 2 &&
         (d->f250 < FUN_001f9b80(d->home, d->tgt) ||
-         AbsoluteFloat_5c88(*(float *)(moby + 0x18) - d->tgt[2]) > 3.0f)) {
+         absolute_float_5c88(*(float *)(moby + 0x18) - d->tgt[2]) > 3.0f)) {
         d->i214 = 2;
     }
     if (d->i210 == 0) {
@@ -1253,7 +1253,7 @@ void *FUN_L02_002d6210(struct Moby *moby) {
     return r;
 }
 #include "qcopy.h"
-extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7778), where it is exact; names translated to the US level program. */
 
@@ -1271,7 +1271,7 @@ void FUN_L02_002d6340(struct Moby *moby) {
         moby->pos.z -= 10.0f;
     } else {
         FUN_L02_002d3dd0(moby);
-        DeleteMoby(moby);
+        mark_moby_for_removal(moby);
     }
 }
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
@@ -1387,7 +1387,7 @@ extern void blend_moby_animation_c3(void *, s32, s32, s32) __asm__("FUN_00212f90
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
-float AbsoluteFloat_c(float input) __asm__("func_001F99C0");
+float absolute_float_c(float input) __asm__("func_001F99C0");
 
 void FUN_L02_002d7748(struct Moby *moby) {
     float position[4];
@@ -1511,7 +1511,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
             moby->state = 7;
         } else if (distance_xyz(data->target + 0x10, D_L02_001600EC + data->post * 0x80 + 0x30) < data->attack_range
-                   && AbsoluteFloat_c(*(float *)(data->target + 0x18) - moby->pos.z) < 4.0f) {
+                   && absolute_float_c(*(float *)(data->target + 0x18) - moby->pos.z) < 4.0f) {
             moby->state = 5;
             if (moby->prev_seq != 6) {
                 blend_moby_animation_c3(moby, 6, 0, scale_game_frames(10));
@@ -1520,7 +1520,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
         break;
     case 7:
         if (distance_xyz(data->target + 0x10, D_L02_001600EC + data->post * 0x80 + 0x30) < data->attack_range
-            && AbsoluteFloat_c(*(float *)(data->target + 0x18) - moby->pos.z) < 4.0f) {
+            && absolute_float_c(*(float *)(data->target + 0x18) - moby->pos.z) < 4.0f) {
             if (distance_xyz(&moby->pos, D_L02_001600EC + data->post * 0x80 + 0x30) < 1.0f) {
                 target = data->target;
                 angle = FUN_001f9e90(*(float *)(target + 0x10) - moby->pos.x,
@@ -1635,7 +1635,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
         FUN_L00_00258278((char *)moby, angle, &data->turn_speed, 0.02f, 0.3f, 0.1f);
         if (moby->unk70 & 2) {
             if (FUN_001f9b80(&moby->pos, data->target + 0x10) < data->attack_range + 1.0f
-                && AbsoluteFloat_c(*(float *)(data->target + 0x18) - moby->pos.z) < 3.0f) {
+                && absolute_float_c(*(float *)(data->target + 0x18) - moby->pos.z) < 3.0f) {
                 moby->state = 0xC;
                 if (moby->prev_seq != 9) {
                     blend_moby_animation_c3(moby, 9, 0, scale_game_frames(6));
@@ -2162,7 +2162,7 @@ extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9c48(void *, void *, float);
 extern float FUN_0020c9e0(void *);
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
-extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L02_002dcfe0(struct Moby *m);
 extern char *find_group_target_cb38(void *) __asm__("FUN_L02_002dd2a8");
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, int,
@@ -2265,7 +2265,7 @@ void FUN_L02_002dcb38(unsigned char *moby) {
                              D_L02_0015F580, D_L02_0015F580);
             FUN_L00_00263fd8((char *)moby, 0x6E5, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L02_0015F580,
                              D_L02_0015F580, D_L02_0015F580);
-            DeleteMoby(moby);
+            mark_moby_for_removal(moby);
         }
         break;
     }
@@ -2497,7 +2497,7 @@ extern float FUN_001f9af0(void *);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern int FUN_001f9740(void *);
-extern float AbsoluteFloat_dc88(float) __asm__("func_001F99C0");
+extern float absolute_float_dc88(float) __asm__("func_001F99C0");
 extern float FUN_00213f38(float *, float *, float, float, float, float);
 extern void FUN_00214e58(void *, int, void *, void *, int, float);
 extern char *FUN_0020c4f8(int);
@@ -2624,8 +2624,8 @@ void FUN_L02_002ddc88(unsigned char *moby) {
         d->rail_a_off = 2.0f;
         d->rail_b_off = -4.0f;
         FUN_L02_002def80((struct Moby *)moby);
-        if (AbsoluteFloat_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.0001f &&
-            AbsoluteFloat_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.0001f) {
+        if (absolute_float_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.0001f &&
+            absolute_float_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.0001f) {
             moby[0x20] = 5;
         }
         break;
@@ -2700,8 +2700,8 @@ void FUN_L02_002ddc88(unsigned char *moby) {
         d->rail_a_off = -1.0f;
         d->rail_b_off = -1.0f;
         FUN_L02_002def80((struct Moby *)moby);
-        if (AbsoluteFloat_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f &&
-            AbsoluteFloat_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f) {
+        if (absolute_float_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f &&
+            absolute_float_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f) {
             moby[0x20] = 8;
         }
         break;
@@ -2759,8 +2759,8 @@ void FUN_L02_002ddc88(unsigned char *moby) {
         d->rail_a_off = 2.0f;
         d->rail_b_off = -4.0f;
         FUN_L02_002def80((struct Moby *)moby);
-        if (AbsoluteFloat_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.01f &&
-            AbsoluteFloat_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.01f) {
+        if (absolute_float_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.01f &&
+            absolute_float_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.01f) {
             {
                 extern int D_0015EEA4_dc88 __asm__("D_0015EEA4") __attribute__((sda));
                 t = scale_ticks(D_0015EEA4_dc88) - D_00141848.stat[9].unk2 * 600;
@@ -2819,8 +2819,8 @@ void FUN_L02_002ddc88(unsigned char *moby) {
         FUN_L02_002def80((struct Moby *)moby);
         if (D_L02_00161C40 == 0.0f) {
             moby[0x20] = 0xF;
-        } else if (AbsoluteFloat_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.01f &&
-                   AbsoluteFloat_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.01f) {
+        } else if (absolute_float_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.01f &&
+                   absolute_float_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.01f) {
             moby[0x20] = 0x11;
         }
         break;
@@ -2830,8 +2830,8 @@ void FUN_L02_002ddc88(unsigned char *moby) {
         FUN_L02_002def80((struct Moby *)moby);
         if (D_L02_00161C40 == 0.0f) {
             moby[0x20] = 0xF;
-        } else if (AbsoluteFloat_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f &&
-                   AbsoluteFloat_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f) {
+        } else if (absolute_float_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f &&
+                   absolute_float_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f) {
             moby[0x20] = 0x10;
         }
         break;
@@ -3366,7 +3366,7 @@ extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
  * run in retail order: colour index, size, lifetime. */
 extern void FUN_L01_002f8530(void *, void *, u32, f32, s32, f32, f32, f32, s32);
 extern int FUN_0022da68(int, int, int);
-extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 /* One-shot burst: when hit, flags D_0013D39D, sprays 200 dust puffs and 50 sparks, then removes itself. */
@@ -3379,7 +3379,7 @@ void FUN_L02_002e0720(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         if (D_0013D39D) {
-            DeleteMoby(moby);
+            mark_moby_for_removal(moby);
         } else {
             moby->state = 1;
         }
@@ -3431,7 +3431,7 @@ void FUN_L02_002e0720(struct Moby *moby) {
                                  random_float_between_alt(0.05f, 0.15f), FUN_L00_00257b90(0x3C, 0xB4),
                                  1.0f, 1.0f, 0.75f, 0);
             }
-            DeleteMoby(moby);
+            mark_moby_for_removal(moby);
         }
         break;
     }

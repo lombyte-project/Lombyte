@@ -93,9 +93,9 @@ typedef struct {
     float f568;
 } G_6570;
 extern int near_6570(void *, void *, void *, int *, float *, int, float, float, float) __asm__("FUN_L00_0025df68");
-extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float FastArcTan(float, float) __asm__("FUN_001f9e90");
-extern float FastAddRots(float, float) __asm__("FUN_001fa580");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void place_6570(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_0025d808_6570(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -124,10 +124,10 @@ void FUN_L14_002d6570(struct Moby *m) {
             char *tp = D_L14_001B0BB0_6570[*(int *)(od + 0x88)];
             t = 0.0f;
             near_6570(path, tp + 0x10, near, &idx, &t, 0, 20.0f, 5.0f, 0.0f);
-            FastVecSub(v, path + (idx * 16 + 0x40), path + (idx * 16 + 0x10));
+            subtract_vector_xyz(v, path + (idx * 16 + 0x40), path + (idx * 16 + 0x10));
             rot[0] = 0.0f;
             rot[1] = 0.0f;
-            rot[2] = FastAddRots(FastArcTan(v[0], v[1]), -1.5707964f);
+            rot[2] = fast_add_rotations(angle_atan2(v[0], v[1]), -1.5707964f);
             rot[3] = 0.0f;
             hero.unk564 = idx;
             hero.unk568 = 0.0f;
@@ -140,7 +140,7 @@ void FUN_L14_002d6570(struct Moby *m) {
         char *od = *(char **)(o + 0x78);
         char *path = *(char **)(D_L14_0015F70C_6570 + *(int *)(od + 0x60) * 32 + 0x10);
         o[0x20] = 6;
-        ((M_6570 *)o)->f48 = FastArcTan(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y);
+        ((M_6570 *)o)->f48 = angle_atan2(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y);
         s = -D_L14_00161A38_6570;
         *(int *)(od + 0x64) = hero.unk564;
         *(float *)(od + 0x68) = hero.unk568;
@@ -280,18 +280,18 @@ void FUN_L14_002de1f8(struct Moby *moby) {
 typedef int u128_s07 __attribute__((mode(TI)));
 
 extern char D_0013E533[];
-extern f32 FastArcSin(f32) __asm__("func_001F9DF8");
-extern f32 FastVecDot(void *, void *) __asm__("func_001F9AB0");
-extern f32 FastVecLength(void *) __asm__("FUN_001f9af0");
+extern f32 fast_arc_sin(f32) __asm__("func_001F9DF8");
+extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern int FastDecTimer(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern float D_L14_00161B00 __attribute__((sda));
 extern float D_L14_00161B04 __attribute__((sda));
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
-extern void FastVecCross(void *, void *, void *) __asm__("func_001F9AD8");
-extern void FastVecNormalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 extern char D_0013F350[];
 extern char D_0013F3D0[];
@@ -320,21 +320,21 @@ void FUN_L14_002de2b8(char *moby) {
             AbsoluteFloat(*(float *)(p + 0x84) - *(float *)(moby + 0x14)) < 0.1f) {
             qcopy(v, up);
         } else {
-            FastVecSub(d, (char *)((char *)&D_0013F3D0), moby + 0x10);
+            subtract_vector_xyz(d, (char *)((char *)&D_0013F3D0), moby + 0x10);
             d[2] = d[2] + D_L14_00161B04;
-            len = FastVecLength(d);
+            len = vector_length_xyz(d);
             if (len == 0.0f) {
                 qcopy(v, up);
             } else {
-                dt = FastVecDot(up, d);
-                ang = 1.5707963705f - FastArcSin(dt / len);
+                dt = dot_vectors_xyz(up, d);
+                ang = 1.5707963705f - fast_arc_sin(dt / len);
                 lim = D_L14_00161B00 * 0.0174532924f;
                 if (lim < ang) {
                     ang = lim;
                 }
-                FastVecCross(ax, d, up);
+                cross_vectors_xyz(ax, d, up);
                 build_look_at_matrix(v, up, ax, ang);
-                FastVecNormalize(v, v, 1.0f);
+                normalize_vector_xyz(v, v, 1.0f);
             }
         }
     } else {
@@ -342,7 +342,7 @@ void FUN_L14_002de2b8(char *moby) {
         *(char *)(moby + 0xBC) = 0;
     }
 
-    if (FastDecTimer(data + 0x70)) {
+    if (fast_dec_timer(data + 0x70)) {
         if (0.1f < AbsoluteFloat(*(float *)(moby + 0xE0) - v[0]) ||
             0.1f < AbsoluteFloat(*(float *)(moby + 0xE4) - v[1]) ||
             0.1f < AbsoluteFloat(*(float *)(moby + 0xE8) - v[2])) {
@@ -357,13 +357,13 @@ void FUN_L14_002de2b8(char *moby) {
     FUN_L00_0025b8c0((float *)(moby + 0xE4), (float *)(data + 0x64), v[1], 0.005f, 0.2f, 0.0f);
     FUN_L00_0025b8c0((float *)(moby + 0xE8), (float *)(data + 0x68), v[2], 0.005f, 0.2f, 0.0f);
 
-    FastVecNormalize(moby + 0xE0, moby + 0xE0, 1.0f);
+    normalize_vector_xyz(moby + 0xE0, moby + 0xE0, 1.0f);
     *(u128_s07 *)d = 0;
     d[0] = 1.0f;
     d[3] = 1.0f;
-    FastVecCross(moby + 0xD0, d, moby + 0xE0);
-    FastVecNormalize(moby + 0xD0, moby + 0xD0, 1.0f);
-    FastVecCross(moby + 0xC0, moby + 0xE0, moby + 0xD0);
+    cross_vectors_xyz(moby + 0xD0, d, moby + 0xE0);
+    normalize_vector_xyz(moby + 0xD0, moby + 0xD0, 1.0f);
+    cross_vectors_xyz(moby + 0xC0, moby + 0xE0, moby + 0xD0);
     *(float *)(moby + 0xCC) = 0.0f;
     *(float *)(moby + 0xDC) = 0.0f;
     *(float *)(moby + 0xEC) = 0.0f;
@@ -392,17 +392,17 @@ typedef struct {
 } Obj;
 
 extern char D_0013E633[] __asm__("D_0013F3D0");
-extern float FastCos(float) __asm__("FUN_001f9dc8");
-extern float FastSin(float) __asm__("FUN_001f9de0");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int D_L14_0015F7EC __asm__("D_L14_0015F70C");
-extern int FastBSphereCheck(char *, float) __asm__("FUN_001fa728");
+extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
 extern void FUN_L14_002df080(char *);
 extern void FUN_L14_002df138(char *);
 extern void FUN_L14_002dfc58(char *);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-void DeleteMoby(struct Obj *obj) __asm__("FUN_0020c828");
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L14_002dee28(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -414,7 +414,7 @@ void FUN_L14_002dee28(struct Moby *moby) {
     case 0:
         if (*(int *)(data + 0x1F4) == -1 || *(int *)(data + 0x1F8) == -1 ||
             *(int *)(data + 0x1FC) == -1 || *(int *)(data + 0x200) < 0) {
-            DeleteMoby(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         FUN_L14_002df080(moby);
@@ -439,13 +439,13 @@ void FUN_L14_002dee28(struct Moby *moby) {
             *(int *)(data + 0x204) = FUN_L00_0028dc90(6, 4, (int)moby, 0xD3);
         }
         FUN_L14_002dfc58(moby);
-        v[0] = FastCos(moby->rot.z) * 3.125f;
-        v[1] = FastSin(moby->rot.z) * 3.125f;
+        v[0] = fast_cos(moby->rot.z) * 3.125f;
+        v[1] = fast_sin(moby->rot.z) * 3.125f;
         v[2] = 0.0f;
         add_vector_xyz(v, &moby->pos, v);
         qcopy(w, v);
         w[3] = 4.5f;
-        if (FastBSphereCheck((char *)w, 64.0f) >= 0) {
+        if (fast_bsphere_check((char *)w, 64.0f) >= 0) {
             FUN_L14_002df138(moby);
         }
         return;

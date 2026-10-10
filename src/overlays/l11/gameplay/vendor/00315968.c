@@ -1107,7 +1107,7 @@ void FUN_L11_00318ed8(struct Moby *m) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A498), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat_q(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float_q(s32) __asm__("FUN_001fa6c0");
 extern float D_L11_001677C0_q[] __asm__("D_L11_001677C0") __attribute__((section(".data")));
 extern int FUN_001fa6e0_q(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
@@ -1140,7 +1140,7 @@ void FUN_L11_00319028(struct Moby *moby) {
         unsigned char c;
         q[0] += q[4];
         c = func_001FA898_r_q((float)q[0]);
-        FUN_L00_00272f68_q(*(float *)(data + 0x1C) * ConvertIntegerToFloat_q(q[8]) * 0.025f, v0, a,
+        FUN_L00_00272f68_q(*(float *)(data + 0x1C) * convert_integer_to_float_q(q[8]) * 0.025f, v0, a,
                            c, 0x35, 1, 2, 0);
         q++;
         add_vector_xyz_q(v0, v0, v1);
@@ -1594,13 +1594,13 @@ void FUN_L11_0031ab08(struct Moby *m) {
     approach_value(&len, 0.0f, *(float *)&D_L11_00162408_d * frame_time_sq);
     FUN_001f9c48(d, d, len);
 }
-extern void *CreateMoby() __asm__("FUN_0020c4f8");
+extern void *create_moby() __asm__("FUN_0020c4f8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C210), where it is exact; names translated to the US level program. */
 
 char *FUN_L11_0031ada0(void *position, void *vector, void *owner, float scale) {
-    char *moby = CreateMoby(0x5F4);
+    char *moby = create_moby(0x5F4);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
         moby[0x20] = 1;

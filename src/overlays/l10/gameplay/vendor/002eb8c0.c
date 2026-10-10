@@ -5,13 +5,13 @@
 
 #include "qcopy.h"
 #include "sda.h"
-extern void *CreateMoby() __asm__("FUN_0020c4f8");
+extern void *create_moby() __asm__("FUN_0020c4f8");
 
 
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L10_002eb8c0(struct Moby *owner) {
-    char *moby = CreateMoby(0x781);
+    char *moby = create_moby(0x781);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;

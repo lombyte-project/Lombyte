@@ -32,8 +32,8 @@ extern int selected_level_index[] __asm__("D_001A0314");
 extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern long get_effect_texture(int) __asm__("func_001F44B8");
-extern void EnableGlobalStateFlag(void) __asm__("func_001F61E8");
-extern void DisableGlobalStateFlag(void) __asm__("func_001F61F8");
+extern void enable_global_state_flag(void) __asm__("func_001F61E8");
+extern void disable_global_state_flag(void) __asm__("func_001F61F8");
 extern void font_print_window(struct TextRegion *, long, char *, int, long,
                               u8 *) __asm__("func_001F7090");
 extern int scale_game_frames(int) __asm__("func_001F96F8");
@@ -255,9 +255,9 @@ int render_configured_text_label(struct MenuScreen *label) {
         c.right += text_shadow_x;
         c.anchor_x += text_shadow_x;
         c.anchor_y += text_shadow_y;
-        DisableGlobalStateFlag();
+        disable_global_state_flag();
         font_print_window(&c, 0x80000000L, text, -1, texture_tex0, font);
-        EnableGlobalStateFlag();
+        enable_global_state_flag();
         c.top -= text_shadow_y;
         c.bottom -= text_shadow_y;
         c.left -= text_shadow_x;
@@ -273,9 +273,9 @@ int render_configured_text_label(struct MenuScreen *label) {
             c.right += text_shadow_x;
             c.anchor_x += text_shadow_x;
             c.anchor_y += text_shadow_y;
-            DisableGlobalStateFlag();
+            disable_global_state_flag();
             font_print_window(&c, 0x80000000L, text, -1, texture_tex0, font);
-            EnableGlobalStateFlag();
+            enable_global_state_flag();
             c.top -= text_shadow_y;
             c.bottom -= text_shadow_y;
             c.left -= text_shadow_x;

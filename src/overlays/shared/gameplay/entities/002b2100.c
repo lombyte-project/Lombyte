@@ -1181,7 +1181,7 @@ void FUN_L00_002b8230(unsigned char *m) {
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern char D_0013E520[];
-extern f32 ConvertIntegerToFloat_c(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern f32 D_0015ED6C_c2 __asm__("D_0015ED6C");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float FUN_001f96b0(float);
@@ -1229,7 +1229,7 @@ void FUN_L00_002b8438(char *moby) {
             FUN_001f9c48(vec, src, 1.0f);
             vec[2] = 1.0f;
             vec[3] = 5627.9248046875f;
-            FUN_L00_00259888(buf, (int)moby, 0x10000, vec, ConvertIntegerToFloat_c(q[0x10]) + 1.0f);
+            FUN_L00_00259888(buf, (int)moby, 0x10000, vec, convert_integer_to_float_c(q[0x10]) + 1.0f);
             *(unsigned char *)(buf + 0x18) = 5;
             *(unsigned char *)(buf + 0x19) = 1;
             *(unsigned short *)(buf + 0x1A) = *(unsigned short *)(moby + 0xA6);

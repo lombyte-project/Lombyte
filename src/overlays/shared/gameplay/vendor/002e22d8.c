@@ -24,17 +24,17 @@ char *FUN_L16_002a0dc0_5(char *owner, char *vec, void *pos, void *vel, int c) __
 extern char *D_L16_0015FFD8;
 extern char *D_L16_001B0930[];
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
-extern f32 FastSin(f32) __asm__("func_001F9DE0");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L16_0015F580[] __attribute__((section(".sdata")));
 extern float D_L16_001D9680[4];
 extern float FUN_001f9e90(float, float);
 extern float distance_xyz(void *) __asm__("FUN_001f9b48");
-extern float FastAddRots(float, float) __asm__("func_001FA580");
-extern float FastDiffRots(float, float) __asm__("func_001FA688");
+extern float fast_add_rotations(float, float) __asm__("func_001FA580");
+extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_L16_0015F5C4;
 extern int FUN_L00_00259740(void *, void *, int);
 extern int FUN_L16_002e2e88(char *, char *);
-extern int FastDecTimer(int*) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int*) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_001413F4[];
 extern short D_L16_00161D7C __attribute__((sda));
@@ -51,9 +51,9 @@ extern void FUN_L16_002e3050(char *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void DeleteMoby(void *) __asm__("func_0020C828");
-extern void FastVecNormalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 void FUN_L16_002d3dc0(char *moby, void *owner, void *position, char *vector);
 void FUN_L16_002d3de0(char *moby, int arg);
@@ -144,14 +144,14 @@ void FUN_L16_002e22d8(char *m) {
     case 3: {
         int i, *slot;
 
-        if (!FastDecTimer((int *)(d + 0x184))) break;
+        if (!fast_dec_timer((int *)(d + 0x184))) break;
         slot = (int *)(d + 0xC0);
         for (i = 0; i < 4; i++, slot++) {
             if (((int *)(d + 0xC0))[i] >= 0) {
                 char *passenger = D_L16_0015FFD8 + (((int *)(d + 0xC0))[i] << 8);
 
                 clear_u64_value(rotation.f);
-                rotation.f[2] = FastAddRots(*(float *)(m + 0x48), 3.14159f);
+                rotation.f[2] = fast_add_rotations(*(float *)(m + 0x48), 3.14159f);
                 transform_vector_by_basis(vector.f, D_L16_001D9680, m + 0xC0);
                 add_vector_xyz(vector.f, vector.f, m + 0x10);
                 FUN_L16_002d3de0(passenger, scale_game_frames(90));
@@ -174,7 +174,7 @@ void FUN_L16_002e22d8(char *m) {
 
         advance_accelerated_scalar((float *)(m + 0x48), (float *)(d + 0x178), heading, frame_time_sq * 6.2831855f,
                       frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
-        if (FastDiffRots(*(float *)(m + 0x48), heading) < 0.01f) {
+        if (fast_difference_between_rotations(*(float *)(m + 0x48), heading) < 0.01f) {
             m[0x20] = 5;
             *(int *)(d + 0x168) = 0;
             *(int *)(d + 0x16C) = 0;
@@ -186,7 +186,7 @@ void FUN_L16_002e22d8(char *m) {
                       frame_time_sq * 12.566371f, frame_time * 6.2831855f);
         if (FUN_L16_002e2e88(m, D_L16_001B0930[*(int *)(d + 0xDC)])) {
             if (*(int *)(d + 0xD0) == -1) {
-                DeleteMoby(m);
+                mark_moby_for_removal(m);
                 return;
             }
             m[0x20] = 6;
@@ -204,13 +204,13 @@ void FUN_L16_002e22d8(char *m) {
                       frame_time * 6.2831855f);
         advance_accelerated_scalar((float *)(m + 0x40), (float *)(d + 0x188), 0.0f, frame_time_sq * 1.5707964f,
                       frame_time_sq * 1.5707964f, frame_time * 6.2831855f);
-        if (FastDecTimer((int *)(d + 0x164)) && *(int *)(d + 0xB4) != 2) m[0x20] = 7;
+        if (fast_dec_timer((int *)(d + 0x164)) && *(int *)(d + 0xB4) != 2) m[0x20] = 7;
         break;
     }
     case 7:
         FUN_L00_0024f7c8(m, 1, vector.f);
-        FastVecSub(rotation.f, d + 0x70, vector.f);
-        FastVecNormalize(rotation.f, rotation.f, *(float *)&D_L16_00161D7C * frame_time);
+        subtract_vector_xyz(rotation.f, d + 0x70, vector.f);
+        normalize_vector_xyz(rotation.f, rotation.f, *(float *)&D_L16_00161D7C * frame_time);
         func_0022ED80_update(1, 0, m);
         FUN_L16_002a0dc0_5(m, (char *)rotation.f, vector.f, d + 0x70, scale_game_frames(45));
         m[0x20] = 6;
@@ -221,7 +221,7 @@ void FUN_L16_002e22d8(char *m) {
 
         *(float *)(d + 0x194) -= dt + dt;
         *(float *)(m + 0x40) += dt * 0.2617994f;
-        if (FastDecTimer((int *)(d + 0x160)) || hero.unk20A4 == 2) {
+        if (fast_dec_timer((int *)(d + 0x160)) || hero.unk20A4 == 2) {
             FUN_L00_0025e450(m, D_L16_0015F580, m + 0x10, 0.0f, 0.0f, 20, 12, 8, 4.0f, 2.5f, 9.0f, -1, 2.0f, 0.0f,
                               0, 0, -1, 0);
             FUN_L00_00263fd8(m, 0x634, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
@@ -231,15 +231,15 @@ void FUN_L16_002e22d8(char *m) {
             FUN_L00_00263fd8(m, 0x636, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
                               D_L16_0015F580);
             FUN_L00_00257470(m, 0, -1);
-            DeleteMoby(m);
+            mark_moby_for_removal(m);
             return;
         }
         break;
     }
     }
-    *(float *)(d + 0x18C) = FastAddRots(*(float *)(d + 0x18C),
+    *(float *)(d + 0x18C) = fast_add_rotations(*(float *)(d + 0x18C),
                                           *(float *)&D_L16_00161D88 * DEG_TO_RAD * frame_time);
-    *(float *)(m + 0x18) = *(float *)(d + 0x194) + *(float *)&D_L16_00161D8C * FastSin(*(float *)(d + 0x18C));
+    *(float *)(m + 0x18) = *(float *)(d + 0x194) + *(float *)&D_L16_00161D8C * fast_sin(*(float *)(d + 0x18C));
     FUN_L16_002e3050(m);
 }
 #include "qcopy.h"
@@ -462,11 +462,11 @@ void FUN_L16_002e5708(struct Moby *m) {
         if (FUN_L00_0028d8c0(m, *(int *)(d + 0x24)) == 0) {
             *(int *)(d + 0x24) = func_0022ED80_6B70(0, 4, m);
         }
-        *(float *)(d + 8) = FastAddRots(*(float *)(d + 8), *(float *)&D_L16_00161E00_d *
+        *(float *)(d + 8) = fast_add_rotations(*(float *)(d + 8), *(float *)&D_L16_00161E00_d *
                                                                       DEG_TO_RAD * frame_time);
         p = (float *)(d + 0x10);
         for (i = 0; i < 4; i++) {
-            p[i] = FastAddRots(p[i],
+            p[i] = fast_add_rotations(p[i],
                                       ((float *)&D_L16_00161E08_d)[i] * DEG_TO_RAD * frame_time);
         }
         if (m->unk31)
@@ -518,8 +518,8 @@ extern int D_L16_00161E38 __attribute__((sda));
 extern int D_L16_00161E3C __attribute__((sda));
 extern int D_L16_00161E40 __attribute__((sda));
 extern int FUN_001fa6e0(int,int,float);
-extern s64 GetEffectTex(s32) __asm__("func_001F44B8");
-extern void FastDrawQuadReal(void *, int, int) __asm__("func_001F7D30");
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 
@@ -535,7 +535,7 @@ void FUN_L16_002e58d8(char *m) {
     int i;
     qcopy(rotation, m + 0x40);
     qcopy(transform[3], m + 0x10);
-    quad.texture = GetEffectTex(*(int *)&D_L16_00161E38);
+    quad.texture = get_effect_texture(*(int *)&D_L16_00161E38);
     u = &quad.uv[0][0];
     v = &quad.uv[0][1];
     quad.giftag = 0xFF9000000260UL;
@@ -574,9 +574,9 @@ void FUN_L16_002e58d8(char *m) {
         for (j = 1; j >= 0; --j) color_base[j] = color;
         phase += phase_step;
         if (phase > 1.0f) phase -= 1.0f;
-        FastDrawQuadReal(&quad, transform, 0);
+        draw_geometry_quad(&quad, transform, 0);
     }
-    quad.texture = GetEffectTex(*(int *)&D_L16_00161E3C);
+    quad.texture = get_effect_texture(*(int *)&D_L16_00161E3C);
     {
         int k;
         int solid_color = *(int *)&D_L16_00161E20;
@@ -592,7 +592,7 @@ void FUN_L16_002e58d8(char *m) {
         for (count = 3; count >= 0; --count) {
             rotation[0] = angles[3 - count];
             vu_euler_rotation_basis(transform, rotation);
-            FastDrawQuadReal(&quad, transform, 0);
+            draw_geometry_quad(&quad, transform, 0);
         }
     }
 }

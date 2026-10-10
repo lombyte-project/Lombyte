@@ -104,7 +104,7 @@ int FUN_L04_002c1e98(struct Moby *moby) {
     }
     return 1;
 }
-extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C5B88), where it is exact; names translated to the US level program. */
 
@@ -114,10 +114,10 @@ void FUN_L04_002c4808(char *arg) {
     char *data = *(char **)(arg + 0x78);
     void *other = *(void **)(data + 0xF8);
     if (other != 0) {
-        DeleteMoby(other);
+        mark_moby_for_removal(other);
     }
     FUN_L04_002c46d0(arg);
-    DeleteMoby(arg);
+    mark_moby_for_removal(arg);
 }
 
 /* Moves a moby along a path by a distance, stepping to the next point when it passes one. */
@@ -341,7 +341,7 @@ extern float fast_cos_cf(float cur, float target, float *vel, float k, float d,
 extern float fast_sin_cf(float) __asm__("FUN_001f9dc8");
 extern float fast_subtract_rotations_cf(float, float) __asm__("FUN_001fa580");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern int AbsoluteFloat_cf(void *, void *, int) __asm__("FUN_L00_00259740");
+extern int absolute_float_cf(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int D_L04_0015F5C4;
 extern int FUN_001f9770(void *);
 extern int FUN_L00_001fefc8(void *);
@@ -727,13 +727,13 @@ void FUN_L04_002ba520(M_B7B0 *moby) {
             v[1] = add_vector_xyz_cf(moby->rot[2]) * 2.0f;
             v[2] = 0.0f;
             FUN_L00_00258490_cf(v, v, moby->pos);
-            if (AbsoluteFloat_cf(v, D_L04_001B0930_B7B0[data->f41C]->pts,
+            if (absolute_float_cf(v, D_L04_001B0930_B7B0[data->f41C]->pts,
                                  D_L04_001B0930_B7B0[data->f41C]->count) == 0) {
                 data->f410 = 0.0f;
                 FUN_L04_002ba3e0((char *)moby, (void *)8, 0, (void *)scale_game_frames(0xC));
                 moby->state = 9;
             }
-            if (AbsoluteFloat_cf(tpos, D_L04_001B0930_B7B0[data->f41C]->pts,
+            if (absolute_float_cf(tpos, D_L04_001B0930_B7B0[data->f41C]->pts,
                                  D_L04_001B0930_B7B0[data->f41C]->count) == 0) {
                 moby->state = 6;
             }
@@ -763,14 +763,14 @@ void FUN_L04_002ba520(M_B7B0 *moby) {
                 v[1] = add_vector_xyz_cf(moby->rot[2]) * 2.0f;
                 v[2] = 0.0f;
                 FUN_L00_00258490_cf(v, v, moby->pos);
-                if (AbsoluteFloat_cf(v, D_L04_001B0930_B7B0[data->f41C]->pts,
+                if (absolute_float_cf(v, D_L04_001B0930_B7B0[data->f41C]->pts,
                                      D_L04_001B0930_B7B0[data->f41C]->count) == 0) {
                     data->f410 = 0.0f;
                     FUN_L04_002ba3e0((char *)moby, (void *)8, 0, (void *)scale_game_frames(0xC));
                     moby->state = 9;
                     moby->fBC |= 0x10;
                 }
-                if (AbsoluteFloat_cf(tpos, D_L04_001B0930_B7B0[data->f41C]->pts,
+                if (absolute_float_cf(tpos, D_L04_001B0930_B7B0[data->f41C]->pts,
                                      D_L04_001B0930_B7B0[data->f41C]->count) != 0) {
                     moby->state = 1;
                 }

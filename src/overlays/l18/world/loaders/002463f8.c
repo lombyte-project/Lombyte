@@ -19,15 +19,15 @@ extern short D_L18_00161A30 __attribute__((sda));
 extern short D_L18_00161A34 __attribute__((sda));
 extern short D_L18_00161A38 __attribute__((sda));
 extern short D_L18_00161A3C __attribute__((sda));
-extern void DrawUIFrame(int, int, int, int, int) __asm__("FUN_001f5f18");
+extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern float func_001FA888(int) __asm__("FUN_001fa6c0");
-extern float FastSin(float) __asm__("FUN_001f9de0");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
-extern void FontPrintCenterLarge(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
-extern void FontPrintCenterLarge_001f6c20(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
+extern void font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
+extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
 
 #define W(x) (*(int *)&(x))
 
@@ -38,10 +38,10 @@ void FUN_L18_002d8098(struct Moby *moby) {
     float v;
     int col;
 
-    DrawUIFrame(W(D_L18_00161A2C) + W(D_L18_00161A20), W(D_L18_00161A30) + W(D_L18_00161A20),
+    draw_ui_frame(W(D_L18_00161A2C) + W(D_L18_00161A20), W(D_L18_00161A30) + W(D_L18_00161A20),
                 W(D_L18_00161A34) + W(D_L18_00161A1C), W(D_L18_00161A38) + W(D_L18_00161A1C),
                 W(D_L18_00161A3C));
-    v = FastSin(func_001FA888(D_L18_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
+    v = fast_sin(func_001FA888(D_L18_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
     if (v > 1.0f) {
         v = 1.0f;
     } else if (v < 0.0f) {
@@ -56,7 +56,7 @@ void FUN_L18_002d8098(struct Moby *moby) {
     buf[5] = 0x3A;
     buf[6] = *(int *)(data + 0x6c) % scale_ticks(0x3C) / scale_ticks(6) + 0x30;
     buf[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
-    FontPrintCenterLarge_001f6c20(W(D_L18_00161A1C), W(D_L18_00161A20), col, (int)buf, 8);
+    font_print_center_large_001f6c20(W(D_L18_00161A1C), W(D_L18_00161A20), col, (int)buf, 8);
 }
 
 extern void FUN_L02_002a4058_u(char *arg, int val) __asm__("FUN_L01_0026e0e0");

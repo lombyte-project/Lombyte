@@ -1486,7 +1486,7 @@ extern Light29FF90 D_L15_001808C0[];
 extern char *D_L15_00178500[];
 extern char *FUN_L00_00274948(void *, void *, int, void *);
 extern char D_0013E533[];
-extern f32 ConvertIntegerToFloat_c(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos_c2(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
@@ -1534,7 +1534,7 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
                 D_L15_0015F330.col.rgba = 0xFFFF00;
             }
             d->f10++;
-            t = ConvertIntegerToFloat_c(d->f10) / FUN_001f96b0(30.0f);
+            t = convert_integer_to_float_c(d->f10) / FUN_001f96b0(30.0f);
             if (t > 1.0f) t = 1.0f;
             t = t * t;
             for (i = 0; i < func_001FA898_r(t * 10.0f); i++) {
@@ -1576,8 +1576,8 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
                 n = d->f10;
                 if (n > 0x32) n = 0x32;
                 if (n < 0) n = 0;
-                (D_L15_001808C0 + d->light)->f1C = ConvertIntegerToFloat_c(n) * 7.0f / 50.0f;
-                s = ConvertIntegerToFloat_c(d->f10) / FUN_001f96b0(30.0f);
+                (D_L15_001808C0 + d->light)->f1C = convert_integer_to_float_c(n) * 7.0f / 50.0f;
+                s = convert_integer_to_float_c(d->f10) / FUN_001f96b0(30.0f);
                 if (s > 1.0f) s = 1.0f;
                 func_L00_0026AA10_29FF90(&D_L15_001808C0[d->light].f10, FUN_L00_00257b90(0xF, 0x2F), FUN_L00_00257b90(0x2F, 0x3F),
                                          FUN_L00_00257b90(0x3F, 0x7F), s * 4.0f * 210000.0f, 0.0f, scale_game_frames_alt(0x14));
@@ -1600,7 +1600,7 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
         }
         break;
     case 1: {
-        float r = D_0015ED6C * 40.0f * ConvertIntegerToFloat_c(d->f14) * 0.5f + 3.0f;
+        float r = D_0015ED6C * 40.0f * convert_integer_to_float_c(d->f14) * 0.5f + 3.0f;
         int cnt;
         int n;
         int col;
@@ -1662,7 +1662,7 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
                     }
                     p->fC = p->fC * r;
                     p->fA = scale_game_frames_alt(2);
-                    q->f10 = 1.0f / ConvertIntegerToFloat_c(p->fA);
+                    q->f10 = 1.0f / convert_integer_to_float_c(p->fA);
                     q->f18 = 0x7F7F7F;
                     q->f16 = 3;
                 }

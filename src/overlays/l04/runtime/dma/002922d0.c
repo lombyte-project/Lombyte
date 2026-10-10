@@ -43,7 +43,7 @@ void FUN_L04_00292370(void *unused, char *arg) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002923b8.s", FUN_L04_002923b8);
 #else
-extern void STUB_printf() __asm__("FUN_001e93b0");
+extern void stub_printf() __asm__("FUN_001e93b0");
 extern void FUN_001f97b0(void);
 extern float FUN_L04_002418b0(int, unsigned int);
 extern float FUN_L04_00241910(int, unsigned int);
@@ -51,7 +51,7 @@ extern float FUN_001f96b0(float);
 extern void transform_scaled_vertex_batch(char *, int, void *, char *) __asm__("FUN_0020cd48");
 extern void FUN_0020cca8(char *, int, void *);
 extern float FUN_001f9e90(float, float);
-extern void AttachManipulator(char *, int, void *) __asm__("FUN_0020cb10");
+extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
 
 void FUN_L04_002923b8(char *arg0, char *arg1) {
     int joints[6];
@@ -67,7 +67,7 @@ void FUN_L04_002923b8(char *arg0, char *arg1) {
     for (i = 0; i < 13; i++) {
         int **slot = entry + i;
         if (**slot < 0) {
-            STUB_printf((char *)0x1db360, i, *(short *)(arg0 + 0xa6));
+            stub_printf((char *)0x1db360, i, *(short *)(arg0 + 0xa6));
             FUN_001f97b0();
         }
         *(float *)((char *)*slot + 0xc) = FUN_L04_002418b0((unsigned char)arg0[0x22], **slot);
@@ -109,9 +109,9 @@ void FUN_L04_002923b8(char *arg0, char *arg1) {
         *(int *)(record + 0xfc) = 0;
         *(float *)(record + 0xf8) = FUN_001f9e90(transformed[4], transformed[5]);
         if ((unsigned char)record[0x161] == 0)
-            AttachManipulator(arg0, (unsigned char)record[0xf3], upper);
+            attach_manipulator(arg0, (unsigned char)record[0xf3], upper);
         if ((unsigned char)record[0x121] == 0)
-            AttachManipulator(arg0, (unsigned char)record[0xf2], lower);
+            attach_manipulator(arg0, (unsigned char)record[0xf2], lower);
         record += 0xb0;
         lower += 0xb0;
         upper += 0xb0;
@@ -128,7 +128,7 @@ void FUN_L04_002923b8(char *arg0, char *arg1) {
     *(int *)(arg1 + 0xe4) = 0;
     *(short *)(arg1 + 0xec) = 0;
     *(unsigned char *)(arg1 + 0xb6) = 5;
-    STUB_printf((char *)0x1db3f0, 0x250);
+    stub_printf((char *)0x1db3f0, 0x250);
 }
 #endif
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293990), where it is exact; names translated to the US level program. */
@@ -183,21 +183,21 @@ typedef struct {
     Vec_2939E8 v40;         /* 0x40 */
 } StTab_2939E8;
 
-extern f32 FastCos(f32) __asm__("func_001F9DC8");
-extern f32 FastSin(f32) __asm__("func_001F9DE0");
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float FUN_001f9e90(float, float);
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_L04_00173FC0; /* no foreign declaration */
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void FastVecCross(void *, void *, void *) __asm__("func_001F9AD8");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 float FUN_L04_002922d0_c(float *pos) __asm__("FUN_L04_002922d0");
 extern void func_001F9BC0_2939E8(float *) __asm__("FUN_001f99f8");
 extern float func_001F9F90_2939E8(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2939E8(float) __asm__("FUN_001f9de0");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float FastArcTan(float, float) __asm__("FUN_001f9e90");
+extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
 extern char D_L04_00174040_2939E8[] __asm__("D_L04_00173FC0");
 
 int FUN_L04_00292828(StMoby_2939E8 *m, Steer_2939E8 *a)
@@ -260,9 +260,9 @@ int FUN_L04_00292828(StMoby_2939E8 *m, Steer_2939E8 *a)
             dir[0] = func_001F9F90_2939E8(m->rotz);
             dir[1] = func_001F9FA8_2939E8(m->rotz);
             dir[2] = 0.0f;
-            FastVecCross(dir, dir, push);
-            FastVecCross(dir, dir, push);
-            a->tilt = FastArcTan(vector_length_xy(dir), dir[2]);
+            cross_vectors_xyz(dir, dir, push);
+            cross_vectors_xyz(dir, dir, push);
+            a->tilt = angle_atan2(vector_length_xy(dir), dir[2]);
         } else {
             a->tilt = 0.0f;
         }
@@ -270,7 +270,7 @@ int FUN_L04_00292828(StMoby_2939E8 *m, Steer_2939E8 *a)
             ret = 2;
         }
         if (a->kind == 0xD && 0.0f < a->ground && (a->mask & 0xF) == 0) {
-            t = -FastArcTan(a->f8C[1], a->ground - m->pos.z);
+            t = -angle_atan2(a->f8C[1], a->ground - m->pos.z);
             if (AbsoluteFloat(t) < 0.5235988f) {
                 pinned = 1;
                 dz += a->ground - m->pos.z;

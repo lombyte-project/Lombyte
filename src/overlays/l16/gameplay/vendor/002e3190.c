@@ -339,7 +339,7 @@ extern char D_L16_001E89A0[], D_L16_001E89D8[], D_L16_001E8A20[], D_L16_001E8A58
 extern float D_0015ED6C ,D_0015EE70;
 extern float FUN_001f9e90(float,float);
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
-extern int DebugPrint_alt() __asm__("FUN_001e93b0");
+extern int debug_print_alt() __asm__("FUN_001e93b0");
 extern int FUN_L00_0025c698(void *,void *);
 extern int FUN_L16_002e3fa0(struct Moby *moby);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
@@ -397,29 +397,29 @@ void FUN_L16_002e37a0(L16CrateMoby *moby) {
             set_moby_animation_alt(moby, 4, 0);
         } else {
             if (d->path == -1) {
-                DebugPrint_alt(D_L16_001E86A0, moby->id);
+                debug_print_alt(D_L16_001E86A0, moby->id);
                 mark_moby_for_removal(moby);
                 return;
             }
             if (*(int *)D_L16_001B0930[d->path] == 0) {
-                DebugPrint_alt(D_L16_001E86D8, moby->id);
+                debug_print_alt(D_L16_001E86D8, moby->id);
                 mark_moby_for_removal(moby);
                 return;
             }
             if (d->mode != 1) {
                 if (d->other_path == -1) {
-                    DebugPrint_alt(D_L16_001E8720, moby->id);
+                    debug_print_alt(D_L16_001E8720, moby->id);
                     mark_moby_for_removal(moby);
                     return;
                 }
                 if (*(int *)D_L16_001B0930[d->other_path] == 0) {
-                    DebugPrint_alt(D_L16_001E8758, moby->id);
+                    debug_print_alt(D_L16_001E8758, moby->id);
                     mark_moby_for_removal(moby);
                     return;
                 }
             }
             if (d->trigger == -1) {
-                DebugPrint_alt(D_L16_001E87A0, moby->id);
+                debug_print_alt(D_L16_001E87A0, moby->id);
                 mark_moby_for_removal(moby);
                 return;
             }
@@ -888,7 +888,7 @@ void FUN_L16_002e5010(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E66C0), where it is exact; names translated to the US level program. */
 
 extern char D_0013F3D0_q[] __asm__("D_0013F3D0") __attribute__((section(".data")));
-extern f32 ConvertIntegerToFloat_q(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float_q(s32) __asm__("FUN_001fa6c0");
 extern float D_L16_001D9768_q[] __asm__("D_L16_001D9768") __attribute__((section(".data")));
 extern float FUN_001f9b48_q(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_sin_q(float) __asm__("FUN_001f9de0");
@@ -912,7 +912,7 @@ void FUN_L16_002e5258(struct Moby *m) {
     float mat[4];
     float f;
     int period = scale_game_frames_q(30);
-    f = ConvertIntegerToFloat_q(D_L16_0015F5CC_q % period) / ConvertIntegerToFloat_q(period);
+    f = convert_integer_to_float_q(D_L16_0015F5CC_q % period) / convert_integer_to_float_q(period);
     m->unk90 = FUN_001fa6e0_q(fast_sin_q(f * 6.28318f - 3.14159f) * 0.5f + 0.5f,
                                         *(int *)&D_L16_00161DE8_q, *(int *)&D_L16_00161DEC_q);
     switch (m->state) {

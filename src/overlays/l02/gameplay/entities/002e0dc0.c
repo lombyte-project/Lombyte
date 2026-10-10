@@ -706,7 +706,7 @@ void FUN_L02_002ea048(struct Moby *m) {
     end_2ea048();
 }
 
-extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 #define NOT_SDA
 
@@ -725,7 +725,7 @@ void FUN_L02_002ea198(struct Moby *moby) {
         moby->unk30 = 0xFF;
         break;
     case 1:
-        AddDrawCallback(FUN_L02_002ea048_cb, moby);
+        add_draw_callback(FUN_L02_002ea048_cb, moby);
         break;
     }
 }

@@ -66,7 +66,7 @@ extern void strncpy(void *, char *, s32);
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void DrawUIFrame(s32, s32, s32, s32, s32) __asm__("func_001F5F18");
+extern void draw_ui_frame(s32, s32, s32, s32, s32) __asm__("func_001F5F18");
 extern void draw_outlined_rect(s32, s32, s32, s32, s32) __asm__("func_001F6060");
 extern s32 font_print_center(s32, s32, s64, char *, s32) __asm__("func_001F6AF0");
 extern void font_print_window(struct TextRegion *, s64, void *, s32, s32, u8 *) __asm__("FUN_001f7090");
@@ -107,7 +107,7 @@ void draw_dialog_text(void) {
         f32 pivot;
 
         alpha = 1.0f - (f32)D_00193300.timer / (f32)scale_game_frames(30);
-        DrawUIFrame(0x50, 0x154, 0x60, 0x1A0, (s32)(alpha * 80.0f));
+        draw_ui_frame(0x50, 0x154, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         box = D_001E78F0;
         color = func_001FA6E0(D_0015F4F0, D_0015F4F4, alpha);
         strncpy(SCRATCHPAD, get_help_message_text(0x4E2B), 0x400);
@@ -258,7 +258,7 @@ void draw_dialog_text(void) {
         box.anchor_y = y + 4;
         box.top = y;
         alpha = 1.0f - (f32)D_00193300.timer / (f32)scale_game_frames(30);
-        DrawUIFrame(box.top, box.bottom, 0x60, 0x1A0, (s32)(alpha * 80.0f));
+        draw_ui_frame(box.top, box.bottom, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         box.flags ^= 4;
         font_print_window_regular(&box, func_001FA6E0(D_0015F4F0, D_0015F4F4, alpha), text, -1);
         tint = func_001FA6E0(0x20FFFF, 0x8020FFFF,
@@ -282,7 +282,7 @@ void draw_dialog_text(void) {
 
         box = D_001E7908;
         alpha = 1.0f - (f32)D_00193300.timer / (f32)scale_game_frames(30);
-        DrawUIFrame(0x64, 0x12C, 0x60, 0x1A0, (s32)(alpha * 80.0f));
+        draw_ui_frame(0x64, 0x12C, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         text_color = func_001FA6E0(D_0015F4F0, D_0015F4F4, alpha);
         button_color = func_001FA6E0(0x20FFFF, 0x8020FFFF, alpha);
         switch (D_00193300.choice) {

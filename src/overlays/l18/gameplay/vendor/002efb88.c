@@ -2718,7 +2718,7 @@ int FUN_L18_002f70b8(struct Moby *moby) {
     return state;
 }
 typedef unsigned int u128_f7220 __attribute__((mode(TI)));
-extern float FastSubRots(float, float) __asm__("FUN_001fa5c8");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F8680), where it is exact; names translated to the US level program. */
 
@@ -2734,7 +2734,7 @@ void FUN_L18_002f7220(struct Moby *source, char *dest, L18Vector *from, L18Vecto
     a.quad = from->quad;
     b.quad = to->quad;
     *(float *)(dest + 0x68) =
-        FastSubRots(FUN_001f9e90(b.f[0] - a.f[0], b.f[1] - a.f[1]), source->rot.z);
+        fast_subtract_rotations(FUN_001f9e90(b.f[0] - a.f[0], b.f[1] - a.f[1]), source->rot.z);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7288.s", FUN_L18_002f7288);
 

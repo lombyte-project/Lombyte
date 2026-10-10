@@ -13,7 +13,7 @@
 /* Nudge a moby's field 0x48 toward a signed step depending on a linked moby's state. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E5AA0), where it is exact; names translated to the US level program. */
 
-extern float FastAddRots(float, float) __asm__("FUN_001fa580");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8");
 extern short D_L15_00161EC0_d __asm__("D_L15_00161EC0") __attribute__((sda));
 
@@ -35,7 +35,7 @@ void FUN_L15_002e46b0(struct Moby *moby) {
         } else {
             return;
         }
-        moby->rot.z = FastAddRots(moby->rot.z, step);
+        moby->rot.z = fast_add_rotations(moby->rot.z, step);
     }
 }
 
@@ -298,7 +298,7 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
         if (!vars->reverse) {
             step = -step;
         }
-        yaw = FastAddRots(moby->rot.z, step);
+        yaw = fast_add_rotations(moby->rot.z, step);
         vars->swing = 0.0f;
         vars->closed_yaw = yaw;
         moby->rot.z = yaw;
@@ -313,7 +313,7 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
         }
         break;
     case 2:
-        vars->swing = FastAddRots(vars->swing, D_L15_001614FC / D_L15_00161500 * DEG_TO_RAD * frame_time);
+        vars->swing = fast_add_rotations(vars->swing, D_L15_001614FC / D_L15_00161500 * DEG_TO_RAD * frame_time);
         limit = D_L15_001614FC * DEG_TO_RAD;
         if (vars->swing < limit) {
             vars->swing = limit;
@@ -323,7 +323,7 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
         if (vars->reverse) {
             step = -step;
         }
-        moby->rot.z = FastAddRots(vars->closed_yaw, step);
+        moby->rot.z = fast_add_rotations(vars->closed_yaw, step);
         break;
     case 3:
         if (close) {
@@ -332,7 +332,7 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
         }
         break;
     case 4:
-        vars->swing = FastAddRots(vars->swing, -(D_L15_001614FC / D_L15_00161500 * DEG_TO_RAD * frame_time));
+        vars->swing = fast_add_rotations(vars->swing, -(D_L15_001614FC / D_L15_00161500 * DEG_TO_RAD * frame_time));
         if (0.0f < vars->swing) {
             vars->swing = 0.0f;
             moby->state = 1;
@@ -341,7 +341,7 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
         if (vars->reverse) {
             step = -step;
         }
-        moby->rot.z = FastAddRots(vars->closed_yaw, step);
+        moby->rot.z = fast_add_rotations(vars->closed_yaw, step);
         if (open) {
             moby->state = 2;
         }
@@ -368,10 +368,10 @@ extern char *D_L15_0015FFE4_52b8 __asm__("D_L15_0015FFE4");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void add_vector_xyz_52b8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void FastVecNormalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz_52b8(void *, void *, float) __asm__("FUN_001f9a68");
-extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float FastArcTan(float, float) __asm__("FUN_001f9e90");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
 
 /* Flocking step toward goal (cf. FUN_L15_002cf110): separates from live
  * same-class mobys within 10 units and keeps ~15 units off the goal while
@@ -397,7 +397,7 @@ float FUN_L15_002c52b8(struct Moby *m, float *out, Goal_52b8 goal) {
             continue;
         if (vector_distance(o + 0x10, &m->pos) < 10.0f) {
             wsum += 6.0f;
-            FastVecSub(tmp, &m->pos, o + 0x10);
+            subtract_vector_xyz(tmp, &m->pos, o + 0x10);
             scale_vector_xyz_52b8(tmp, tmp, 6.0f);
             add_vector_xyz_52b8(out, out, tmp);
         }
@@ -405,7 +405,7 @@ float FUN_L15_002c52b8(struct Moby *m, float *out, Goal_52b8 goal) {
             clear = 0;
     }
     if (clear == 0) {
-        FastVecSub(tmp, &m->pos, &goal);
+        subtract_vector_xyz(tmp, &m->pos, &goal);
         if (dist < 14.5f) {
             k = 15.0f;
         } else if (15.5f < dist) {
@@ -414,12 +414,12 @@ float FUN_L15_002c52b8(struct Moby *m, float *out, Goal_52b8 goal) {
             k = 0.0f;
         }
         wsum += 10.0f;
-        FastVecNormalize(tmp, tmp, k * 10.0f);
+        normalize_vector_xyz(tmp, tmp, k * 10.0f);
         add_vector_xyz_52b8(out, out, tmp);
         scale_vector_xyz_52b8(out, out, 1.0f / wsum);
         add_vector_xyz_52b8(out, out, &m->pos);
     } else {
-        FastVecSub(tmp, &m->pos, &goal);
+        subtract_vector_xyz(tmp, &m->pos, &goal);
         if (dist < 9.5f) {
             k = 10.0f;
         } else if (10.5f < dist) {
@@ -428,26 +428,26 @@ float FUN_L15_002c52b8(struct Moby *m, float *out, Goal_52b8 goal) {
             k = 0.0f;
         }
         wsum += 10.0f;
-        FastVecNormalize(tmp, tmp, k * 10.0f);
+        normalize_vector_xyz(tmp, tmp, k * 10.0f);
         add_vector_xyz_52b8(out, out, tmp);
         scale_vector_xyz_52b8(out, out, 1.0f / wsum);
         add_vector_xyz_52b8(out, out, &m->pos);
     }
     if (vector_distance(&m->pos, out) < 1.0f) {
         qcopy(out, &m->pos);
-        return FastArcTan(goal.pos.f[0] - m->pos.x, goal.pos.f[1] - m->pos.y);
+        return angle_atan2(goal.pos.f[0] - m->pos.x, goal.pos.f[1] - m->pos.y);
     }
-    return FastArcTan(out[0] - m->pos.x, out[1] - m->pos.y);
+    return angle_atan2(out[0] - m->pos.x, out[1] - m->pos.y);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c5630.s", FUN_L15_002c5630);
 /* Steps a moby's countdown from a helper's output, then aims it at its target. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002C7C20), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern f32 FastSubRots(f32, f32) __asm__("func_001FA5C8");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float FUN_001f9e90(float, float);
-extern float FastCos(float) __asm__("func_001F9DC8");
-extern float FastSin(float) __asm__("func_001F9DE0");
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int FUN_L00_0025a478(void *, void *, void *, int, void *, void *, int, int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_0025d458(void *m, short *p);
@@ -476,9 +476,9 @@ void FUN_L15_002c6900(struct Moby *m) {
             if (*(float *)(r + 0x1C) == 5627.925f && m->state != 6) {
                 a = FUN_001f9e90(m->pos.x - *(float *)(r + 0),
                                  m->pos.y - *(float *)(r + 4));
-                b = FastSubRots(a, m->rot.z);
-                p = FastCos(b) * 0.08726646f;
-                q = FastSin(b) * -0.34906584f;
+                b = fast_subtract_rotations(a, m->rot.z);
+                p = fast_cos(b) * 0.08726646f;
+                q = fast_sin(b) * -0.34906584f;
                 if (AbsoluteFloat(m->rot.x) < AbsoluteFloat(q)) {
                     m->rot.x = q;
                     *(float *)(d + 0x174) = 0.0f;
@@ -688,8 +688,8 @@ extern float FUN_L00_0025abf0(void *a, void *b, void *out, float speed, float g)
 extern float FUN_L00_0025be00(void *, float, void *, float, float, float);
 extern float FUN_L15_002cf110_u(void *, void *, float) __asm__("FUN_L15_002cf110");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern float FastCos(float);
-extern float FastSin(float);
+extern float fast_cos(float);
+extern float fast_sin(float);
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xyz(void *);
@@ -1115,8 +1115,8 @@ void FUN_L15_002cf3a8(UMoby *m) {
             if (h >= 17.0f && h <= 24.0f) {
                 qcopy(&v50, &m->pos);
                 v50.f[2] += 0.5f;
-                v40.f[0] = FastCos(m->rot.f[2]);
-                v40.f[1] = FastSin(m->rot.f[2]);
+                v40.f[0] = fast_cos(m->rot.f[2]);
+                v40.f[1] = fast_sin(m->rot.f[2]);
                 v40.f[2] = 1.0f;
                 FUN_L00_00259888(&v10, m, 0x10007, &v40, 4.0f);
                 FUN_L00_001f2868(&v60, 9, m, &v10, 2.5f);

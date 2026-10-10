@@ -2,11 +2,11 @@
 
 #include "rnc/runtime/core_state.h"
 
-extern int StateResourceCall(int resource, int first, int second,
+extern int state_resource_call(int resource, int first, int second,
                              int third) __asm__("func_00116A38");
 
 int CallGlobalStateResource(int resource, int first, int second) __asm__("CallGlobalStateResource");
 
 int CallGlobalStateResource(int resource, int first, int second) {
-    return StateResourceCall(GlobalStateResource, resource, first, second);
+    return state_resource_call(GlobalStateResource, resource, first, second);
 }

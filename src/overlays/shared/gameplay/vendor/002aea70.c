@@ -37,7 +37,7 @@ extern void FUN_L00_00232fe8(void);
 extern void FUN_L00_0023aef8(void);
 extern void FUN_L00_002454c8(int);
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
-extern void FillTransferWords_alt() __asm__("FUN_001f97e8");
+extern void fill_transfer_words_alt() __asm__("FUN_001f97e8");
 extern void music_pause(s32);
 extern void add_vector_xyz(void *, void *, void *);
 extern void clear_vector(void *);
@@ -64,7 +64,7 @@ void FUN_L01_002aea70(char *m, int lvl) {
     music_pause(0);
     snd_flush_sound_commands_alt();
     D_L01_0015F5D8_d = 1;
-    FillTransferWords_alt(s, 0, 0x220);
+    fill_transfer_words_alt(s, 0, 0x220);
     *(int *)D_L01_001CA940 = 3;
     D_L01_0015F5C4 = 5;
     *(int *)(s + 4) = 0;
@@ -82,8 +82,8 @@ void FUN_L01_002aea70(char *m, int lvl) {
     clear_vector(s + 0xB0);
     *(float *)(s + 0xB8) = fast_add_rotations(*(float *)(m + 0x48), -1.5707964f);
     vu_euler_rotation_basis(s + 0x80, s + 0xB0);
-    FillTransferWords_alt(c, 0, 0x1C0);
-    FillTransferWords_alt(D_L01_0017C7C0, 0, 0x40);
+    fill_transfer_words_alt(c, 0, 0x1C0);
+    fill_transfer_words_alt(D_L01_0017C7C0, 0, 0x40);
     CalculateDmaTransferAddress();
     n = D_L01_001611CC + (int)0xFFFC0000;
     *(int *)(c + 0x58) = D_L01_00174280[1] + n;

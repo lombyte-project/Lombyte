@@ -578,8 +578,8 @@ char *FUN_L09_00308220(struct Moby *owner, int cls) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_003082d8.s", FUN_L09_003082d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_003091b0.s", FUN_L09_003091b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00309c08.s", FUN_L09_00309c08);
-extern float FastAddRots(float, float) __asm__("FUN_001fa580");
-extern float FastSubRots(float, float) __asm__("FUN_001fa5c8");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 #define NOT_SDA
 
@@ -588,9 +588,9 @@ extern float FastSubRots(float, float) __asm__("FUN_001fa5c8");
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_0030B5E8.c: func_L09_0030B5E8), where it is exact; names translated to the US level program. */
 
 void FUN_L09_0030a238(float *dst, float a, float b, float scale) {
-    float v = FastSubRots(b, a) * scale;
+    float v = fast_subtract_rotations(b, a) * scale;
     *dst = v;
-    *dst = FastAddRots(v, a);
+    *dst = fast_add_rotations(v, a);
 }
 typedef struct {
     s32 count;
@@ -643,7 +643,7 @@ int FUN_L09_0030a298(struct Moby *moby) {
     normalize_vector_xyz(&step, &step, vars->speed);
     add_vector_xyz(&moby->pos, &moby->pos, &step);
     FUN_L09_0030a238(&moby->rot.z, moby->rot.z,
-                     FastAddRots(atan2_f(path->node[vars->node].f[0] - moby->pos.x,
+                     fast_add_rotations(atan2_f(path->node[vars->node].f[0] - moby->pos.x,
                                          path->node[vars->node].f[1] - moby->pos.y),
                                  vars->yaw_offset),
                      (1.0f - vars->lag) * 0.02f);
@@ -672,7 +672,7 @@ int FUN_L09_0030a298(struct Moby *moby) {
     }
     if (path->node[vars->node].f[3] == 42.0f)
         vars->yaw_offset = 0.0f;
-    vars->spin = FastAddRots(vars->spin, vars->speed);
+    vars->spin = fast_add_rotations(vars->spin, vars->speed);
     FUN_L00_001fff28(vars->unk70, 0, vars->spin);
     if (vector_distance(&moby->pos, &path->node[path->count - 1]) > 8.0f &&
         vector_distance(&moby->pos, &path->node[0]) > 8.0f && !random_integer_below(7)) {
