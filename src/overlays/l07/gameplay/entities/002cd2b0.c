@@ -1883,7 +1883,6 @@ void FUN_L07_00311eb8(float size, void *moby, void *state, int sequence, void *p
 }
 #endif
 /* Ported from rac1-decomp src/overlays/l07_umbris/vendor_002CE470.c (func_L07_00313800) */
-/* Ported from rac1-decomp src/overlays/l07_umbris/vendor_002CE470.c () */
 #include "sda.h"
 
 /* Umbris: sets up the effect vectors from the moby's data block and emits the GS packet. */

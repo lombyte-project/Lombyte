@@ -30,7 +30,6 @@ void FUN_L07_002f8058(unsigned char *moby) {
 
 
 
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002F9438.c: func_L07_0030D370), where it is exact; names translated to the US level program. */
 
 extern int D_0013F350; /* no foreign declaration */
 extern int D_0015ED84;

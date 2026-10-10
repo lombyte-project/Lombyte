@@ -151,7 +151,6 @@ int FUN_L04_002927d0(char *arg0, char *arg1) {
 /* Ported from rac1-decomp src/overlays/l04_eudora/vuchain_00293490.c (func_L04_002939E8) */
 
 /* Steers a moby from the arg block: height and push terms, returns 2 when the tilt is past pi/4. */
-/* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_002939E8), where it is exact; names translated to the US level program. */
 
 typedef struct { float x, y, z, w; } Vec_2939E8;
 

@@ -180,7 +180,6 @@ void FUN_L00_002e6bf8(char *m) {
 /* Ported from rac1-decomp src/overlays/shared/vendor_002E1660.c (func_L00_002E8210) */
 
 /* Initialises the type-0 camera: fills its data blocks and seeds the first position. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E8210), where it is exact; names translated to the US level program. */
 
 typedef struct CamE_2E8210 {
     short h0;                     /* 0x00 */

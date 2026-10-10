@@ -276,7 +276,6 @@ void FUN_L14_002de1f8(struct Moby *moby) {
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002ACCC0.c (func_L14_002DF6B8) */
 #include "eetypes.h"
 
-/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002DF6B8), where it is exact; names translated to the US level program. */
 
 typedef int u128_s07 __attribute__((mode(TI)));
 

@@ -857,12 +857,8 @@ unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
     return m;
 }
 #endif /* NON_MATCHING */
-/* Exhaust puffs from the moby's nozzle: two coloured sparks and three white puffs of shrinking size. */
 /* Ported from rac1-decomp src/overlays/shared/vendor_002B2A28.c (func_L14_002E17B8) */
-
-/* Engine exhaust of a level-14 moby: puffs particles behind it (as func_L14_002B3850 does for the ship), then
- * spawns a trail piece and a smoke puff at the nozzle, offset along the moby's heading. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002E17B8), where it is exact; names translated to the US level program. */
+/* Exhaust puffs from the moby's nozzle: two coloured sparks and three white puffs of shrinking size. */
 
 typedef struct Moby Moby;
 

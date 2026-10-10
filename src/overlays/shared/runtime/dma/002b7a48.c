@@ -27,7 +27,6 @@ void FUN_L01_002b7c68(float *in, int *out) {
 
 
 /* Clears each record's three buffer groups and resets its scalar parameters. */
-/* Ported from rac1-decomp (src/overlays/shared/vuchain_002B8C00.c: func_L01_002B8C00), where it is exact; names translated to the US level program. */
 
 typedef struct VuChainSlot {
     char data[0x400];

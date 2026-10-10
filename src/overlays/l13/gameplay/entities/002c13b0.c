@@ -54,7 +54,6 @@ unsigned char *FUN_L13_002c13b0(char *src, char *pos, char *target, char *vec, i
 /* Ported from rac1-decomp src/overlays/l13_gemlik/vendor_002C2638.c (func_L13_002C27B0) */
 
 /* Update for the homing rocket (class 82): smoke trail, steering toward its target, collision and expiry. */
-/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C27B0), where it is exact; names translated to the US level program. */
 
 typedef int Q_2C27B0 __attribute__((mode(TI)));
 
@@ -494,7 +493,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c3fc0.s", FUN_L13_002c3fc0);
 #include "eetypes.h"
 
 /* Update for the blarg space fighter (class 111): joins its path, follows it while its carrier lives, fires at the hero's ship, and explodes. */
-/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C56B0), where it is exact; names translated to the US level program. */
 
 typedef struct MobyClass MobyClass;
 

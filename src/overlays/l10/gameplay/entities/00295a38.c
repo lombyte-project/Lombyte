@@ -923,7 +923,6 @@ void FUN_L10_002d92b8(struct Moby *m) {
 /* Ported from rac1-decomp src/overlays/l10_orxon/vendor_00296BD8.c (func_L10_002DB278) */
 
 /* Orxon moby update: destroys itself when its item is taken, else fires its effect once per pass. */
-/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DB278), where it is exact; names translated to the US level program. */
 
 typedef struct { char pad0[0x454]; unsigned char collected[1]; } L10State;
 
