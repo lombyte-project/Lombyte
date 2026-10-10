@@ -343,6 +343,7 @@ OVERLAY_SN_UNITS = {
     "shared/rendering/sky/00288ec0.c",
     "shared/runtime/dma/002b7a48.c",
     "shared/ui/help/001fe778.c",
+    "shared/ui/help/00204c60.c",
     "shared/ui/help/0020c758.c",
     "shared/ui/help/0021d0a0.c",
     "shared/ui/help/00231d08.c",

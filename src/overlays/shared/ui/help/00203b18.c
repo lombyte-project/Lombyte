@@ -32,7 +32,6 @@ extern char D_L00_00179448[];
 void FUN_L00_00203b78(void) {
     *(short *)D_L00_00179448 = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00204c60.s", FUN_L00_00204c60);
 #define NOT_SDA
 
 #define MACRO_ADDR

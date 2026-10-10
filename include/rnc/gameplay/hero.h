@@ -572,14 +572,18 @@ struct Hero {
     u8 *unkD08[2];                 /* 0xD08: per item slot 0/1: moby from FUN_L00_0024f028 */
     u8 *unkD10;                    /* 0xD10 */
     s32 unkD14;                    /* 0xD14 */
-    u8 pad_D18[0x2D8];
+    u8 pad_D18[0x8];
+    f32 unkD20;                    /* 0xD20 */
+    u8 pad_D24[0x2CC];
     struct HeroRandTimer rand_timer;/* 0xFF0 */
     u8 pad_FFC[0x8];
     s32 unk1004;                   /* 0x1004 */
     s32 unk1008;                   /* 0x1008 */
     u8 pad_100C[0x4];
     s32 unk1010;                   /* 0x1010 */
-    u8 pad_1014[0x7C];
+    f32 unk1014;                   /* 0x1014 */
+    f32 unk1018;                   /* 0x1018 */
+    u8 pad_101C[0x74];
     struct HeroItemSlot items[7];  /* 0x1090: item slots; slot 0 is the equipped gadget */
     u8 pad_12C0[0x20];
     s16 unk12E0;                   /* 0x12E0 */
