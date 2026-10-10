@@ -160,7 +160,12 @@ void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *moby, Hoverboard
                 fast_cos(animation_value * 3.1415927f) * 0.61086524f;
             delta = frame_timing_absolute.delta;
         }
-        update_joint_animation(moby, joint, joint_index++ + 2, delta * 0.05f, delta * 0.3f);
+        {
+            s32 animation_joint_index = joint_index + 2;
+            joint_index++;
+            update_joint_animation(moby, joint, animation_joint_index, delta * 0.05f,
+                                   delta * 0.3f);
+        }
         joint++;
         /* Retail advances both its state window and joint cursor by 0x80. */
         state_window = (HoverboardGirlState *)((u8 *)state_window + 0x80);
