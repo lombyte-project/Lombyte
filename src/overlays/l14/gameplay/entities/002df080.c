@@ -734,12 +734,13 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void FUN_L14_002eef60(struct Moby *m) {
     char *d = (char *)m->pvars;
+    int i;
     int *path;
+    int *second_path;
     int *point;
     int *next;
     float *length_out;
     int *first;
-    int i;
     float length;
 
     if (*(int *)(d + 0xA0) == -1) {
@@ -756,10 +757,10 @@ void FUN_L14_002eef60(struct Moby *m) {
     *(float *)(d + 0xB4) = 0.0f;
     i = 0;
     first = path + 4;
+    point = path + 4;
     if (0 < *path - 1) {
         next = path + 8;
         length_out = (float *)(path + 7);
-        point = path + 4;
         do {
             length = FUN_001f9b48(point, next);
             i++;
@@ -772,13 +773,13 @@ void FUN_L14_002eef60(struct Moby *m) {
     }
     *(float *)(path + i * 4 + 7) = FUN_001f9b48(path + i * 4 + 4, first);
 
-    path = (int *)D_L14_001B0BB0_c3[*(int *)(d + 0xB8)];
+    second_path = (int *)D_L14_001B0BB0_c3[*(int *)(d + 0xB8)];
     *(float *)(d + 0xBC) = 0.0f;
     i = 0;
-    if (0 < *path - 1) {
-        next = path + 8;
-        length_out = (float *)(path + 7);
-        point = path + 4;
+    length_out = (float *)(second_path + 7);
+    if (0 < *second_path - 1) {
+        next = second_path + 8;
+        point = second_path + 4;
         do {
             length = FUN_001f9b48(point, next);
             i++;
@@ -787,9 +788,9 @@ void FUN_L14_002eef60(struct Moby *m) {
             point += 4;
             *(float *)(d + 0xBC) += length;
             length_out += 4;
-        } while (i < *path - 1);
+        } while (i < *second_path - 1);
     }
-    *(float *)(path + i * 4 + 7) = FUN_001f9b48(path + i * 4 + 4, path + 4);
+    *(float *)(second_path + i * 4 + 7) = FUN_001f9b48(second_path + i * 4 + 4, second_path + 4);
     *(float *)(d + 0xAC) = -1.0f;
     *(int *)(d + 0xA4) = 0;
     *(int *)(d + 0xA8) = 0;
