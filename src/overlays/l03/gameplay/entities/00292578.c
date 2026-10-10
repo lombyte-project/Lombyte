@@ -599,7 +599,173 @@ void FUN_L03_00292e98(char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00294c08.s", FUN_L03_00294c08);
+extern char *D_L03_001B05B0_294c08[] __asm__("D_L03_001B05B0");
+extern char D_0013E550_294c08[] __asm__("D_0013E550");
+extern float ConvertIntegerToFloat(int) __asm__("FUN_001fa6c0");
+extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
+extern int FUN_001f9740(void *);
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L00_0028dc90(int, int, int, int);
+extern void FUN_001e93e8(void *);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_L00_0025f730(void *, float);
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
+extern void scale_vector_xyz(void *out, void *a, float s) __asm__("FUN_001f9a68");
+
+/* Path platform update: waits, then glides along its path one way and back (ease in/out over 240 frames),
+ * or steps node to node towards the path end, pausing between runs and playing its loop sound. */
+void FUN_L03_00294c08(char *moby) {
+    float delta[4];
+    float old_rot[4];
+    float step[4];
+    float tmp[4];
+    char *data;
+    char *pa;
+    char *pb;
+    char *pc;
+    char *p;
+    int *path;
+    char *pos;
+    char *vel;
+    char *target;
+    int idx;
+    int t;
+    int next;
+    int end;
+    int count;
+    int off;
+    int node_off;
+    signed char dir;
+    float speed;
+    float base;
+    float d;
+    unsigned char *e;
+
+    data = *(char **)(moby + 0x78);
+    scale_vector_xyz(delta, moby + 0x10, -1.0f);
+    qcopy(old_rot, moby + 0x40);
+    FUN_001e93e8(moby);
+    switch (((unsigned char *)moby)[0x20]) {
+    case 0:
+        pa = data + 0xB0;
+        *(char **)(data + 0xC0) = D_L03_001B05B0_294c08[*(int *)(data + 0xE0)];
+        if (*(int *)(data + 0xF8) != 0) {
+            pa[4] = -1;
+        } else {
+            pa[4] = 1;
+        }
+        p = *(char **)(data + 0xC0) + 0x10;
+        if (pa[4] >= 0) {
+            p += (**(int **)(pa + 0x10) - 1) * 0x10;
+        }
+        qcopy_nc(moby + 0x10, p);
+        *(int *)pa = pa[4] < 0 ? 0 : **(int **)(pa + 0x10) - 1;
+        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)(data + 0xFC);
+        *(int *)(data + 0x104) = -1;
+        if (FUN_001f9740(data + 0x100)) {
+            *(float *)(data + 0x110) = FUN_001f9b48(*(char **)(pa + 0x10) + 0x10,
+                                                    *(char **)(pa + 0x10) + **(int **)(pa + 0x10) * 0x10);
+            t = FUN_001f96f8(240);
+            *(float *)(data + 0x114) = *(float *)(data + 0x110) * 4.0f / ConvertIntegerToFloat(t * FUN_001f96f8(240));
+            *(int *)(data + 0x10C) = 0;
+            moby[0x20] = 1;
+        }
+        break;
+    case 1:
+        pb = data + 0xB0;
+        speed = *(float *)(data + 0x114);
+        base = 0.0f;
+        if ((*(short *)(moby + 0xA6) == 0x389 || *(short *)(moby + 0xA6) == 0x364) &&
+            !FUN_L00_0028d8c0(moby, *(int *)(data + 0x104))) {
+            *(int *)(data + 0x104) = FUN_L00_0028dc90(0, 4, (int)moby, 0x389);
+        }
+        t = ++*(int *)(data + 0x10C);
+        if (FUN_001f96f8(240) / 2 < *(int *)(data + 0x10C)) {
+            speed = -speed;
+            t = FUN_001f96f8(240) - *(int *)(data + 0x10C);
+            base = *(float *)(data + 0x110);
+        }
+        base += speed * 0.5f * ConvertIntegerToFloat(t * t);
+        if (pb[4] < 0) {
+            base = *(float *)(data + 0x110) - base;
+        }
+        subtract_vector_xyz(tmp, *(char **)(pb + 0x10) + **(int **)(pb + 0x10) * 0x10, *(char **)(pb + 0x10) + 0x10);
+        *(OvlQuad *)step = *(OvlQuad *)tmp;
+        FUN_001f9bf8(step, step, base);
+        add_vector_xyz(tmp, *(char **)(pb + 0x10) + 0x10, step);
+        *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)tmp;
+        if (*(int *)(data + 0x10C) >= FUN_001f96f8(240)) {
+            pb[4] = pb[4] * -1;
+            idx = *(int *)(data + 0x104);
+            if (idx != -1) {
+                e = (unsigned char *)D_0013E550_294c08 + idx * 0x70;
+                if (*(char **)(e + 0x88) == moby && e[0x74]) {
+                    release_voice_slot(idx);
+                }
+            }
+            *(int *)(data + 0x104) = -1;
+            moby[0x20] = 2;
+            *(int *)(data + 0xE8) = FUN_001f96f8(*(int *)(data + 0xF0));
+        }
+        break;
+    case 2:
+        if (FUN_001f9740(data + 0xE8)) {
+            *(int *)(data + 0x10C) = 0;
+            moby[0x20] = 1;
+        }
+        break;
+    case 3:
+        pc = data + 0xB0;
+        path = *(int **)(pc + 0x10);
+        dir = pc[4];
+        count = *path;
+        end = dir < 0 ? 0 : count - 1;
+        next = (*(int *)(data + 0xB0) + count + dir) % count;
+        node_off = next * 0x10;
+        pos = moby + 0x10;
+        subtract_vector_xyz(data + 0xA0, (char *)path + (node_off + 0x10), pos);
+        off = node_off;
+        target = *(char **)(pc + 0x10) + 0x10;
+        if (*(int *)(data + 0x108) != 0) {
+            target += off;
+        } else {
+            target += end * 0x10;
+            node_off = 0; /* dead store: unused afterwards, but needed for the retail register allocation */
+        }
+        if (FUN_001f9b48(pos, target) < *(float *)(data + 0xF4)) {
+            approach_value((float *)(data + 0xE4), frame_time * 0.5f,
+                           *(float *)(data + 0xEC) * *(float *)(data + 0xEC) / *(float *)(data + 0xF4) * frame_time_sq * 0.5f);
+        } else {
+            approach_value((float *)(data + 0xE4), *(float *)(data + 0xEC) * frame_time,
+                           *(float *)(data + 0xEC) * *(float *)(data + 0xEC) / *(float *)(data + 0xF4) * frame_time_sq * 0.5f);
+        }
+        FUN_L00_0025f730(data + 0xA0, *(float *)(data + 0xE4));
+        add_vector_xyz(moby + 0x10, moby + 0x10, data + 0xA0);
+        if (FUN_001f9b48(moby + 0x10, *(char **)(pc + 0x10) + (off + 0x10)) < *(float *)(data + 0xE4) * 2.0f) {
+            *(int *)pc = next;
+            if ((next == end || *(int *)(data + 0x108) != 0) && *(int *)(data + 0xF0) > 0) {
+                idx = *(int *)(data + 0x104);
+                if (idx != -1) {
+                    e = (unsigned char *)D_0013E550_294c08 + idx * 0x70;
+                    if (*(char **)(e + 0x88) == moby && e[0x74]) {
+                        release_voice_slot(idx);
+                    }
+                }
+                *(int *)(data + 0x104) = -1;
+                moby[0x20] = 4;
+                *(int *)(data + 0xE8) = FUN_001f96f8(*(int *)(data + 0xF0));
+            }
+        }
+        break;
+    case 4:
+        if (FUN_001f9740(data + 0xE8)) {
+            moby[0x20] = 3;
+        }
+        break;
+    }
+    add_vector_xyz(delta, delta, moby + 0x10);
+    FUN_L00_00260738(data + 0x60, delta, old_rot, moby + 0x40);
+}
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002965A0), where it is exact; names translated to the US level program. */

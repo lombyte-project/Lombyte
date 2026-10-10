@@ -1188,7 +1188,257 @@ void FUN_L03_002da710(struct Moby *m) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002da870.s", FUN_L03_002da870);
+#include "rnc/globals.h"
+
+/* Pvars of the l03 dialogue mobys (the record FUN_L00_002668a0 / FUN_L00_00266448 run). */
+struct TalkState {
+    u8 pad0[4];
+    s16 mode;          /* 0x04: 1 talked, 2 talked and accepted */
+    u8 pad6[0x1A];
+    void *script;      /* 0x20 */
+    u8 pad24[0x12];
+    s16 unk36;
+    u8 pad38[0x10];
+    s32 unk48;
+    s32 warp;          /* 0x4C: index into D_L03_001600EC, -1 for none */
+};
+
+/* Pvars of the Kerwan quest giver FUN_L03_002da870 drives. */
+struct QuestGiverVars {
+    u8 pad0[0x80];
+    struct TalkState talk;  /* 0x80 */
+    s32 reward;        /* 0xD0: moby index removed (and recorded) when the deal is accepted, -1 for none */
+    s32 link;          /* 0xD4: moby index of the class 0x3F4 helper it drives, -1 for none */
+    s32 link_arg;      /* 0xD8: stored into the helper when it is released */
+    u8 padDC[4];
+    u8 body[0x64];     /* 0xE0: body look-at driver (FUN_L00_002628d8) */
+    f32 pitch;         /* 0x144 */
+    f32 yaw;           /* 0x148 */
+    u8 pad14C[4];
+    f32 height;        /* 0x150 */
+    u8 pad154[0xC];
+    u8 head[0x80];     /* 0x160: head look-at driver */
+    Vec4 target;       /* 0x1E0: point it looks at while idle */
+    s32 watch_timer;   /* 0x1F0: frames left watching the hero */
+    s32 target_timer;  /* 0x1F4: frames until a new idle target */
+};
+
+extern u8 D_0013D4CC[];
+extern char *D_001413D0[];
+extern struct Moby *D_L03_0015FFD8;
+extern s32 D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
+extern s32 D_L03_001BA720[];
+extern char D_L03_00161BB8[];
+extern u8 D_0014C050[];
+extern u8 D_L03_0015FC88[];
+extern L03LevelState D_L03_001BA6D0;
+extern char *D_L03_001600EC;
+extern float D_0015ED64;
+extern void FUN_L01_0029b0a0(void *, int, struct Moby *, int, void *);
+extern void FUN_L00_002668a0(struct Moby *, struct TalkState *);
+extern int FUN_L00_00266448(struct Moby *, struct TalkState *);
+extern void FUN_L02_0025c758(struct Moby *);
+extern void FUN_L01_002783a8(struct Moby *, f32);
+extern void FUN_L00_002502a0(int);
+extern void FUN_L00_00284e50(void *, void *);
+extern void FUN_L00_00260860(int, int);
+extern void FUN_L00_00263d40(int, int);
+extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
+extern float FUN_001fa688(float, float);
+extern float FUN_001fa5c8(float, float);
+extern float FUN_001f96b0(float);
+extern int FUN_001fa6d0(float);
+extern s32 FUN_001f9740(s32 *);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
+extern void FUN_L00_002628d8(float, float, void *, void *, int);
+
+/* Quest giver: talks when approached (driving its class 0x3F4 helper), warps the
+   hero or, once the deal is accepted, removes the reward moby, records it and saves.
+   While idle it turns its head toward the hero or toward random points. */
+void FUN_L03_002da870(struct Moby *m) {
+    struct QuestGiverVars *v = (struct QuestGiverVars *)m->pvars;
+    struct TalkState *talk = &v->talk;
+    struct Moby *t;
+    struct Moby *o;
+    u8 group;
+    s32 *flag;
+    Vec4 *g;
+    struct Hero *h;
+    float scratch_target[4];
+    float eye[4];
+    float delta[4];
+    float rate;
+    float head_rate;
+    float yaw;
+    float pitch;
+    int tracking;
+
+    FUN_L03_002da710(m);
+    switch (m->state) {
+    case 0:
+        if (D_0013D4CC[0] != 0) {
+            if (v->link != -1) {
+                t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                if (t->oclass == 0x3F4) {
+                    flag = (s32 *)(t->pvars + 0x8C);
+                    *flag = 1;
+                    FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
+                }
+            }
+            taxi_kill(m);
+            return;
+        }
+        if (D_0014C050[m->unkB0 + current_level_index * 16] == 0xFF && v->link != -1) {
+            t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+            if (t->oclass == 0x3F4) {
+                flag = (s32 *)(t->pvars + 0x8C);
+                *flag = 1;
+                FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
+            }
+        }
+        m->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
+        m->state = 1;
+        talk->script = D_L03_00161BB8;
+        v->talk.unk48 = 5;
+        FUN_L00_002668a0(m, talk);
+        FUN_L02_0025c758(m);
+        break;
+    case 1:
+        if (FUN_L00_00266448(m, talk)) {
+            FUN_L01_002783a8(m, 2.3f);
+            m->state = 2;
+            if (v->link != -1) {
+                t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                if (t->oclass == 0x3F4) {
+                    flag = (s32 *)(t->pvars + 0x8C);
+                    *flag = 1;
+                    FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
+                }
+            }
+        }
+        break;
+    case 2:
+        if (D_L03_0015F5C4 != 2) {
+            if (v->talk.mode != 2) {
+                FUN_L00_002502a0(m->unkB0);
+                if (v->link != -1) {
+                    t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                    if (t->oclass == 0x3F4) {
+                        flag = (s32 *)(t->pvars + 0x8C);
+                        *flag = 1;
+                        FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
+                    }
+                }
+                if (v->talk.warp != -1) {
+                    FUN_L00_00284e50(D_L03_001600EC + v->talk.warp * 128 + 0x30,
+                                     D_L03_001600EC + v->talk.warp * 128 + 0x70);
+                }
+            }
+            m->state = 1;
+            if (v->talk.mode == 2) {
+                FUN_L00_00260860(0xC, 1);
+                FUN_L00_00263d40(0xBC8, -1);
+                if (v->reward != -1) {
+                    D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
+                        ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->unkB0 + 2;
+                    o = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
+                    /* Same record as the || test in the level's other reward code; the
+                       do/while (0) blocks keep the loop notes that make gcc predict the
+                       0xFF branch taken and keep the group load ahead of the table load. */
+                    if (o->unkB0 == 0xFF)
+                        goto record;
+                    do {
+                        group = o->unkB0;
+                    } while (0);
+                    if (D_L03_0015FC88[group] != 0xFF && D_0014C050[group + current_level_index * 16] == 0xFF) {
+                        do {
+                        record:
+                            D_L03_001BB330.collected[(s16)o->save_id] = o->unkB0 + 2;
+                        } while (0);
+                    }
+                    taxi_kill(&D_L03_0015FFD8[v->reward]);
+                }
+                if (v->link != -1) {
+                    t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                    if (t->oclass == 0x3F4) {
+                        u8 *tv = t->pvars;
+                        *(s32 *)(tv + 0x7C) = 0;
+                        *(s32 *)(tv + 0x8C) = 0;
+                        *(s32 *)(tv + 0xA0) = v->link_arg;
+                    }
+                }
+                memcard_save_data(0, -1);
+                taxi_kill(m);
+                return;
+            }
+        } else if (v->talk.unk36 == 2 && v->link != -1) {
+            t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+            if (t->oclass == 0x3F4) {
+                u8 *tv = t->pvars;
+                *(s32 *)(tv + 0x7C) = 0;
+                *(s32 *)(tv + 0x8C) = 0;
+                *(s32 *)(tv + 0xA0) = v->link_arg;
+            }
+        }
+        break;
+    }
+    rate = 0.02f;
+    head_rate = 0.3f;
+    tracking = 0;
+    if (m->prev_seq == 0) {
+        g = &hero.motion.pos;
+        tracking = 1;
+        if (taxi_dist2(&m->pos, g) < 8.0f &&
+            (h = (struct Hero *)((u8 *)g - 0x80),
+             FUN_001fa688(m->rot.z, taxi_atan2(h->motion.unkD0.f[0] - m->pos.x, h->motion.unkD0.f[1] - m->pos.y))) <
+                1.5707964f) {
+            if (vec_len((u8 *)g + 0x80) > 0.01f) {
+                v->watch_timer = scale_game_frames(120);
+            } else {
+                FUN_001f9740(&v->watch_timer);
+            }
+        } else if (v->watch_timer) {
+            v->watch_timer = 0;
+            qcopy(&v->target, &hero.motion.unkD0);
+        }
+        if (FUN_001f9740(&v->target_timer)) {
+            float heading;
+            v->target_timer = FUN_001fa6d0(FUN_001f96b0(random_float_between(180.0f, 300.0f)));
+            heading = fast_add_rotations(m->rot.z, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
+            build_spherical_offset(&v->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
+            vec_add(&v->target, &v->target, &m->pos);
+        }
+        if (v->watch_timer) {
+            qcopy(scratch_target, &hero.motion.unkD0);
+            rate = 0.04f;
+            head_rate = 0.3f;
+        } else {
+            qcopy(scratch_target, &v->target);
+        }
+    }
+    if (tracking) {
+        qcopy(eye, &m->pos);
+        eye[2] += 1.0f;
+        taxi_vec_sub(delta, scratch_target, eye);
+        yaw = FUN_001fa5c8(taxi_atan2(delta[0], delta[1]), m->rot.z);
+        pitch = -taxi_atan2(vec_len_xy(delta), delta[2]);
+        if (yaw > 1.5707964f)
+            yaw = 1.5707964f;
+        else if (yaw < -1.5707964f)
+            yaw = -1.5707964f;
+        if (pitch > 0.5235988f)
+            pitch = 0.5235988f;
+        else if (pitch < -0.5235988f)
+            pitch = -0.5235988f;
+        v->pitch = pitch;
+        v->yaw = yaw * 0.5f;
+    }
+    if (D_0015EDB0)
+        v->height = 2.75f;
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, v->body, 0);
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, v->head, 1);
+}
 
 extern float D_L03_00161BC0_2db020 __asm__("D_L03_00161BC0");
 extern float cos_2db020(float) __asm__("FUN_001f9dc8");
@@ -1321,7 +1571,138 @@ void FUN_L03_002db280(struct RailSpawnerMoby *moby) {
         vars->voice = FUN_L00_0028dc90(0, 4, moby, 0x382);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db558.s", FUN_L03_002db558);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dbd90.s", FUN_L03_002dbd90);
+
+/* Pvars of the dialogue moby FUN_L03_002dbd90 drives (FUN_L00_002668a0 / FUN_L00_00266448 state). */
+struct TalkerVars {
+    u8 pad0[4];
+    s16 mode;         /* 0x04: 2 when the talk ends in a warp */
+    u8 pad6[0x30];
+    s16 unk36;
+    u8 pad38[0x14];
+    s32 warp;         /* 0x4C: index into D_L03_001600EC, -1 for none */
+};
+
+typedef struct {
+    u8 pad0[0x20];
+    struct Moby *source;  /* 0x20 */
+    u32 pad24;
+    u8 type;              /* 0x28 */
+} TalkerHit;
+
+extern L03LevelState D_L03_001BB330;
+extern s32 D_0014C190[][64];
+extern s32 D_L03_001BA5D0[];
+extern u8 D_0013D388[];
+extern u8 D_0013D408[];
+extern u8 D_0013D4CC[];
+extern char *D_001413D0[];
+extern char D_L03_00166EC0[];
+extern char *D_L03_001600EC;
+extern void FUN_L00_0025a120(struct Moby *);
+extern void FUN_00212ed8(struct Moby *, int, int);
+extern TalkerHit *talker_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
+extern void FUN_0022db10(int, int, int);
+extern void FUN_L00_00263d40(int, int);
+extern void talker_spawn_debris(struct Moby *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32,
+                             f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
+extern int talker_init(struct Moby *, struct TalkerVars *) __asm__("FUN_L00_002668a0");
+extern int talker_update(struct Moby *, struct TalkerVars *) __asm__("FUN_L00_00266448");
+extern void FUN_L01_002783a8(struct Moby *, f32);
+extern void FUN_L00_00284e50(void *, void *);
+extern f32 talker_rand_angle(void) __asm__("FUN_00213308");
+extern f32 talker_rand_range(f32, f32) __asm__("FUN_002132a8");
+extern f32 talker_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 talker_sin(f32) __asm__("FUN_001f9de0");
+extern s32 talker_rand_below(s32) __asm__("FUN_00213260");
+extern void FUN_L00_0026ced0(void *, void *, u32, u32, s32, f32);
+
+/* A talking moby that can be shot down: talks (and may warp the hero) when
+ * approached, and once hit by a type 3 hit or already recorded as collected
+ * it breaks, records its save bit, and keeps sparking. */
+void FUN_L03_002dbd90(struct Moby *m) {
+    struct TalkerVars *d = (struct TalkerVars *)m->pvars;
+    TalkerHit *hit;
+    u8 type;
+    char *w;
+    OvlVec4 vel;
+    OvlVec4 pos;
+    float tmp[4];
+
+    if (m->unk31 != 0 && FUN_001f9b48(&m->pos, D_L03_00166EC0) < 26.0f) {
+        FUN_L00_0025a120(m);
+        m->unk7F = 0x15;
+    }
+    if (D_L03_001BB330.collected[(s16)m->save_id] != 0 ||
+        (D_0014C190[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) & 1) {
+        if (m->state != 3) {
+            m->state = 3;
+            FUN_00212ed8(m, 1, 0);
+        }
+    }
+    hit = talker_find_hit(m, -1, 0);
+    if (hit != 0 && hit->source != 0 && (type = hit->type) == 3 &&
+        D_L03_001BB330.collected[(s16)m->save_id] == 0 &&
+        (((D_0014C190[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) ^ 1) & 1)) {
+        if (D_0013D408[5] == 0) {
+            D_0013D408[5] = 1;
+            FUN_0022db10(1, 0, 0);
+            FUN_L00_00263d40(0x53D6, -1);
+        }
+        pos.q = *(OvlQuad *)&m->pos;
+        pos.f[2] += 1.0f;
+        vel.q = 0;
+        talker_spawn_debris(m, &vel, &pos, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
+        m->state = type;
+        FUN_00212ed8(m, 1, 0);
+        D_0014C190[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+        D_L03_001BA5D0[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+    }
+    m->unkA4 = 0xFF;
+    if (D_0013D4CC[0] != 0 && m->state != 3) {
+        return;
+    }
+    switch (m->state) {
+    case 0:
+        m->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
+        m->state = 1;
+        talker_init(m, d);
+        if (D_0013D388[0x19] != 0) {
+            d->mode = 1;
+            d->unk36 = 2;
+        }
+        break;
+    case 1:
+        if (talker_update(m, d)) {
+            D_0013D388[0x19] = 1;
+            FUN_L01_002783a8(m, 2.7f);
+            m->state = 2;
+        }
+        break;
+    case 2:
+        if (D_L03_0015F5C4 == 2) {
+            break;
+        }
+        m->state = 1;
+        if (d->mode == 2 && d->warp != -1) {
+            w = D_L03_001600EC + d->warp * 128;
+            FUN_L00_00284e50(w + 0x30, w + 0x70);
+        }
+        break;
+    case 3:
+        vel.f[0] = talker_cos(talker_rand_angle()) * (talker_rand_range(0.0f, 0.25f) * frame_time);
+        vel.f[1] = talker_sin(talker_rand_angle()) * (talker_rand_range(0.0f, 0.25f) * frame_time);
+        vel.f[2] = 0.0f;
+        pos.f[0] = talker_cos(talker_rand_angle()) * talker_rand_range(0.0f, 0.5f) * talker_rand_range(0.0f, 1.0f);
+        pos.f[1] = talker_sin(talker_rand_angle()) * talker_rand_range(0.0f, 0.5f) * talker_rand_range(0.0f, 1.0f);
+        pos.f[2] = 0.0f;
+        FUN_L00_001ff290(tmp, &pos, &m->pos);
+        if (talker_rand_below(3) == 0) {
+            FUN_L00_0026ced0(&pos, &vel, 0x20202020, 0x7F7F7F, scale_game_frames(FUN_L00_00257b90(0x3C, 0x78)),
+                             157500.0f);
+        }
+        break;
+    }
+}
 int FUN_L03_002dcb30(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     if (moby->oclass != 0x3F4) {
