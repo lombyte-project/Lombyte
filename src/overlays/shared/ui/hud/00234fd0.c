@@ -125,22 +125,18 @@ extern volatile int D_L00_0015FA74;
 extern int D_L00_0015FA78;
 extern int D_L00_0015FA7C;
 extern int D_L00_0015FFD8;
-extern int D_L00_0015FFDC;
+extern volatile int D_L00_0015FFDC;
 extern int D_L00_0015FFE0;
 extern int D_L00_0015FFE8;
 extern int D_L00_0015F728 __attribute__((sda));
 
 void FUN_L00_00235668(int state) {
+    int oldState = D_L00_0015F728;
     int incoming = D_L00_0015FFD8;
-    if (state != D_L00_0015F728) {
-        int old70 = D_L00_0015FA70;
-        int old74;
-        int old78;
-        int old7C;
-        int oldDC;
-        int oldE0;
-        int oldE8;
-        D_L00_0015F728 ^= 1;
+    if (state != oldState) {
+        int old70, old74, old78, old7C, oldDC, oldE0, oldE8;
+        oldState ^= 1;
+        old70 = D_L00_0015FA70;
         D_L00_0015FA70 = incoming;
         oldDC = D_L00_0015FFDC;
         old74 = D_L00_0015FA74;
@@ -149,6 +145,7 @@ void FUN_L00_00235668(int state) {
         old78 = D_L00_0015FA78;
         oldE8 = D_L00_0015FFE8;
         old7C = D_L00_0015FA7C;
+        D_L00_0015F728 = oldState;
         D_L00_0015FFD8 = old70;
         D_L00_0015FFDC = old74;
         D_L00_0015FFE0 = old78;
