@@ -1,9 +1,11 @@
 #include "types.h"
+#include "rnc/rendering/sky_shell.h"
 #include "asm.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022abc0/FUN_0022abc0.s", FUN_0022abc0);
 #else
+#include "rnc/rendering/sky_shell.h"
 #include "types.h"
 #include "eetypes.h"
 #include "qcopy.h"
@@ -23,7 +25,6 @@ struct SkyShellSet {
 
 extern f32 D_00160404 __attribute__((sda));
 extern struct SkyShellSet *D_0016045C;
-extern u8 D_00160460;
 extern u8 D_001D96E0[];
 extern void FUN_001f9fc8(void *);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");

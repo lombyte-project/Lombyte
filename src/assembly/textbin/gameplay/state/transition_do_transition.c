@@ -7,6 +7,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/state/transition_d
             "FUN_001eb798.s",
             FUN_001eb798);
 #else
+#include "rnc/globals.h"
 #include "types.h"
 #include "rnc/storage/disc_table.h"
 #include "sda.h"
@@ -36,11 +37,8 @@ typedef struct {
 } TransferState;
 
 extern s32 D_0015ED80 MACRO_ADDR;
-extern s32 current_level_index __asm__("D_0015ED84");
 extern s32 D_0015ED88 __attribute__((sda));
 extern WadHeader *D_0015EE4C;
-extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74");
-extern s32 gs_texture_allocation_start __asm__("D_0015EE78");
 extern volatile s32 D_0015EE8C;
 extern s32 D_0015EF50;
 extern s32 D_0015EF54;

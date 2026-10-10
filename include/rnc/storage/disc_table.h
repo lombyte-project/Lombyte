@@ -29,7 +29,10 @@ struct DiscTable {
     struct DiscFile unk2F8[6];             /* 0x2F8, one per language */
     u8 pad_328[0x1D0];
     struct DiscFile level_chunk;           /* 0x4F8, read by load_level_chunk_from_disc */
-    u8 pad_500[0xA00];
+    u8 pad_500[0x3B8];
+    /* 0x8B8: render archive sector/length records; extent reaches the next
+       known field, not a proven count of valid archives. */
+    struct DiscFile render_archives[201];
     s32 music_50000[40][6];                /* 0xF00, tracks 50000.., one location per language */
     struct DiscFile unk12C0;               /* 0x12C0 */
     struct DiscFile level_archives[24];    /* 0x12C8, by level index */

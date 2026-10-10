@@ -1137,7 +1137,6 @@ extern void add_vector_xyz_34358(void *, void *, void *) __asm__("FUN_001f9a10")
 extern void FUN_001f9c48_34358(void *, void *, f32) __asm__("FUN_001f9c48");
 extern f32 vector_length_xy_34358(void *) __asm__("FUN_001f9b20");
 
-
 void FUN_L01_00234358(float amount) {
     struct Hero *h = &hero;
     Vec4 *velocity;

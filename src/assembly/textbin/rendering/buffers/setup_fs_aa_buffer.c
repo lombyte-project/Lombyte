@@ -7,6 +7,7 @@ INCLUDE_ASM(
     "config/us/expected/asm/assembly/textbin/rendering/buffers/setup_fs_aa_buffer/FUN_001fa978.s",
     FUN_001fa978);
 #else
+#include "rnc/globals.h"
 #include "types.h"
 
 #include "eetypes.h"
@@ -16,7 +17,6 @@ INCLUDE_ASM(
 extern struct FsAaBuf *active_fs_aa_buffer __asm__("D_0015EEB8");
 extern s32 display_buffer_address __asm__("D_0015EE80");
 extern s32 draw_buffer_address __asm__("D_0015EE84");
-extern s32 depth_buffer_address __asm__("D_0015EE88");
 
 extern void sceGsSetDefDispEnv(void *, s16, s16, s16, s16, s16);
 extern s32 sceGsSetDefDrawEnv(struct sceGsDrawEnv1 *, s16, s16, s16, s16, s16);

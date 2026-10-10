@@ -10,6 +10,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/world/data/"
             "select_world_object_resource_tables/FUN_00204a40.s",
             FUN_00204a40);
 #else
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 /* Verified against the US retail body at 0x00204a40. */
 #include "sda.h"
@@ -36,8 +37,6 @@ extern s32 runtime_resource_tag __asm__("D_0015FF44") MACRO_ADDR;
 extern s32 class_resource_count __asm__("D_0015FF48") MACRO_ADDR;
 extern s32 active_class_resource_index __asm__("D_0015FF4C") MACRO_ADDR;
 extern s32 active_decode_buffer __asm__("D_0015FF50") MACRO_ADDR;
-extern void *moby_class_resources[224] __asm__("D_001B3200");
-extern u8 resident_class_slot_by_id[0x800] __asm__("D_001B3AC0");
 #include "rnc/rendering/resident_class.h"
 typedef struct {
     u8 pad0[0x10];

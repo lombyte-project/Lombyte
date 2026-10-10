@@ -5,6 +5,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00238f08/FUN_00238f08.s", FUN_00238f08);
 #else
+#include "rnc/globals.h"
 #include "types.h"
 #include "rnc/ui/text/text_region.h"
 #include "rnc/ui/vendor/vendor_capture.h"
@@ -29,7 +30,6 @@ struct VendorState {
 
 extern struct VendorState vendor_state __asm__("D_001E63C0");
 #include "rnc/gameplay/state/item_state.h"
-extern s32 current_bolt_count __asm__("D_0015ED98");
 extern void draw_framebuffer_rect(s32, s32, s32, s32, s32, s32, u32) __asm__("func_001FB8F0");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void font_print_window_small(void *, u64, void *, s32) __asm__("func_001F75F0");

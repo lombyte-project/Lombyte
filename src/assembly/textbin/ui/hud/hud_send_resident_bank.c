@@ -8,7 +8,6 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/hud/hud_send_resident_ba
 #include "types.h"
 #include "rnc/ui/hud/hud_state.h"
 #define depth_buffer_address (*(s32 *)0x0015EE88)
-extern struct HudTexCounts *hud_counts __asm__("D_0019A400");
 extern void link_hud_bank(s32, s32) __asm__("FUN_001fefc0");
 extern void hud_send_texture(u32, s32, s32, s32, s32, s32) __asm__("FUN_00200b10");
 void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) __asm__("FUN_001ff128");
@@ -27,7 +26,7 @@ void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) {
         link_hud_bank(0, base);
     }
     addr = depth_buffer_address;
-    previous_counts = hud_counts;
+    previous_counts = hud_state.header.counts;
     i = bank == 0 ? 0 : previous_counts->ends[bank - 1];
     end = *(s32 *)((u8 *)hud_state.header.counts + 0x34 + (bank << 2));
     for (; i < end; i++) {

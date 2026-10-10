@@ -5,11 +5,10 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002256e8/FUN_002256e8.s", FUN_002256e8);
 #else
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "rnc/storage/disc_table.h"
 
-extern void *moby_class_resources[224] __asm__("D_001B3200");
-extern u8 resident_class_slot_by_id[0x800] __asm__("D_001B3AC0");
 
 typedef struct {
     u8 pad_0[0x20];

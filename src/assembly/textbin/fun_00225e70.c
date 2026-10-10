@@ -7,6 +7,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00225e70/FUN_00225e70.s", FUN_00225e70);
 #else
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/storage/disc_table.h"
@@ -53,7 +54,6 @@ typedef struct {
 } PreviewItemDefinition;
 
 extern PreviewItemDefinition preview_item_definitions[] __asm__("D_001863D0");
-extern void *moby_class_resources[224] __asm__("D_001B3200");
 extern u8 attachment_update_callback[] __asm__("FUN_00224b68");
 
 extern void decompress_wad() __asm__("func_0020B618");

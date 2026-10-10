@@ -714,8 +714,6 @@ extern int FUN_001f96f8_26b500(int) __asm__("FUN_001f96f8");
 extern int FUN_001f9770_26b500(void *) __asm__("FUN_001f9770");
 extern void FUN_L00_00267a08_26b500(void *) __asm__("FUN_L00_00267a08");
 extern unsigned char D_0013E530_26b500 __asm__("D_0013E530") __attribute__((section(".data")));
-extern float D_0015ED6C_26b500 __asm__("D_0015ED6C");
-extern float D_0015ED70_26b500 __asm__("D_0015ED70");
 extern float D_L00_001601B8_26b500 __asm__("D_L00_001601B8") __attribute__((sda));
 extern float D_L00_001601BC_26b500 __asm__("D_L00_001601BC") __attribute__((sda));
 extern float D_L00_001601D8_26b500 __asm__("D_L00_001601D8") __attribute__((sda));
@@ -736,10 +734,10 @@ void FUN_L00_0026b500(unsigned char *m) {
     FUN_001f9a10_26b500(m + 0x10, m + 0x10, p);
     rotation = -FUN_001f9af0_26b500(p);
     advance_accelerated_scalar_26b500(0.0f, 0.0f,
-                                       D_L00_001601E8_26b500 * D_0015ED70_26b500,
+                                       D_L00_001601E8_26b500 * frame_time_sq,
                                        rotation, (float *)(p + 0x10), &rotation);
     FUN_001f9bf8_26b500(p, p, -rotation);
-    *(float *)(m + 0x18) += D_L00_001601EC_26b500 * D_0015ED6C_26b500;
+    *(float *)(m + 0x18) += D_L00_001601EC_26b500 * frame_time;
 
     life = FUN_001fa6c0_26b500(*(short *)(m + 0xa));
     duration = FUN_001fa6c0_26b500(p[0x1d]);

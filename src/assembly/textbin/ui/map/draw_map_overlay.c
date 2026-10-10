@@ -6,6 +6,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/map/draw_map_overlay/FUN_00205640.s",
             FUN_00205640);
 #else
+#include "rnc/globals.h"
 #include "types.h"
 #include "rnc/ui/text/text_region.h"
 #include "sda.h"
@@ -32,7 +33,6 @@ typedef struct {
 #define SPR ((MapIconBounds *)0x70000000)
 
 extern u8 D_0013D5BC[];
-extern s32 current_level_index __asm__("D_0015ED84");
 extern u16 D_001518D2[];
 extern u8 D_0015EDB4;
 extern s32 D_0015FD60 __attribute__((sda));

@@ -50,4 +50,6 @@ extern s32 depth_buffer_address __asm__("D_0015EE88");
 extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74");
 extern s32 gs_texture_allocation_start __asm__("D_0015EE78");
 
+extern f32 warp_texture_coordinates[4][2] __asm__("D_001D9A10");
+
 #endif /* LOMBYTE_RNC_GLOBALS_H */

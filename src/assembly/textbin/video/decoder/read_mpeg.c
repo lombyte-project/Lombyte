@@ -6,6 +6,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/decoder/read_mpeg/FUN_0023a460.s",
             FUN_0023a460);
 #else
+#include "rnc/globals.h"
 #include "rnc/video/decoder/read_mpeg.h"
 
 #include "rnc/input/pad_state.h"
@@ -13,7 +14,6 @@ extern struct Globals_0013E550 D_0013E550;
 extern s32 D_0015EE20;
 extern s32 D_0015EEA0;
 extern s32 D_0015EED8;
-extern s32 current_level_index __asm__("D_0015ED84");
 extern s32 D_0016120C;
 extern void FlushCache(s32);
 extern s32 sceGsSyncV(s32);

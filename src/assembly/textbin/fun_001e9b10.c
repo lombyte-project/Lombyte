@@ -5,6 +5,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001e9b10/FUN_001e9b10.s", FUN_001e9b10);
 #else
+#include "rnc/globals.h"
 #include "types.h"
 #include "eetypes.h"
 #include "qcopy.h"
@@ -132,7 +133,6 @@ typedef struct S160AB0 {
 extern u8 D_00100AE0[];
 extern u8 D_0013F350[];
 extern s32 D_0015ED80;
-extern f32 frame_scale __asm__("D_0015ED60");
 extern f32 D_0015F43C;
 extern u8 D_0015F484;
 extern u8 D_0015F485;
