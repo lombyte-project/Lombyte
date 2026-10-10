@@ -491,7 +491,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
-        p->unk194 = vector_length_xy(&p->motion.unk100);
+        p->ground_speed = vector_length_xy(&p->motion.unk100);
         p->state.step = 0;
         p->unk3B8 = 0;
         p->unk3BC = 0;
@@ -505,12 +505,12 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 1;
         p->unk2284 = 0;
         if (p->state.prev_control_mode != 4 && p->state.prev2_control_mode != 4) {
-            p->unk194 = vector_length_xy(&p->motion.unk110);
+            p->ground_speed = vector_length_xy(&p->motion.unk110);
         }
         {
             struct Hero *q = &hero;
-            if (frame_time * 7.0f < q->unk194)
-                q->unk194 = frame_time * 7.0f;
+            if (frame_time * 7.0f < q->ground_speed)
+                q->ground_speed = frame_time * 7.0f;
             q->unk3BE = 0;
             FUN_L00_002118c8(1.0f, 0);
             if (1.5707964f <
@@ -518,7 +518,7 @@ int hero_set_state(int a, int b) {
                 if (q->state.prev_control_mode == 7 || q->state.prev == 3 ||
                     q->state.prev2 == 3) {
                     struct Hero *r = &hero;
-                    r->unk194 = 0.0f;
+                    r->ground_speed = 0.0f;
                 }
             }
         }
@@ -565,7 +565,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
-        p->unk194 = vector_length_xy(&p->motion.unk110);
+        p->ground_speed = vector_length_xy(&p->motion.unk110);
         p->unk20AC = 1;
         if (p->unk20A4 == 0)
             FUN_L00_0020e698();
@@ -625,7 +625,7 @@ int hero_set_state(int a, int b) {
         char *v = (char *)&p->motion.unk110;
         p->state.control_mode = 1;
         p->unk2284 = 0;
-        p->unk194 = FUN_L00_002339d0((float *)v);
+        p->ground_speed = FUN_L00_002339d0((float *)v);
         qcopy(&p->motion.unk150, v);
         if (b) {
             int id = 6;
@@ -640,9 +640,9 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 0xC;
         p->unk2284 = 0;
-        p->unk194 = vector_length_xy(&p->motion.unk110);
-        if (frame_time * 7.0f < p->unk194)
-            p->unk194 = frame_time * 7.0f;
+        p->ground_speed = vector_length_xy(&p->motion.unk110);
+        if (frame_time * 7.0f < p->ground_speed)
+            p->ground_speed = frame_time * 7.0f;
         if (p->unk12EA != 0 && p->unk30C.s == 0) {
             hero_set_state(0x79, 1);
             return 0;
@@ -924,8 +924,8 @@ int hero_set_state(int a, int b) {
         p->unk22CA = 1;
         p->rand_timer.range = 0x68;
         p->unk2284 = 0;
-        if (frame_time * 4.5f < p->motion.unk160) {
-            FUN_L00_00213de8(frame_time * 4.5f / p->motion.unk160);
+        if (frame_time * 4.5f < p->motion.speed_xy) {
+            FUN_L00_00213de8(frame_time * 4.5f / p->motion.speed_xy);
         }
         qcopy(&p->motion.velocity, &p->motion.unk110);
         if (b) {
@@ -939,8 +939,8 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 5;
         p->rand_timer.range = 0x68;
         p->unk2284 = 0;
-        if (frame_time * 4.5f < p->motion.unk160) {
-            FUN_L00_00213de8(frame_time * 4.5f / p->motion.unk160);
+        if (frame_time * 4.5f < p->motion.speed_xy) {
+            FUN_L00_00213de8(frame_time * 4.5f / p->motion.speed_xy);
         }
         qcopy(&p->motion.velocity, &p->motion.unk100);
         if (b) {
@@ -1317,7 +1317,7 @@ int hero_set_state(int a, int b) {
     case 0x51: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
-        p->unkA6C = 1.0f;
+        p->speed_scale = 1.0f;
         p->unk2284 = 0;
         p->unkA58 = 0;
         *(int *)&p->unkA54 = 0;
@@ -1475,7 +1475,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
-        p->unk194 = frame_time * 9.0f;
+        p->ground_speed = frame_time * 9.0f;
         if (b) {
             char *m;
             T2C_216D38 *e = &D_L03_0017BD28[p->unkA60];
@@ -1496,7 +1496,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
         p->unkA68 = fast_add_rotations(p->motion.rot.f[2], 3.1415927f);
-        p->unk194 = frame_time * 9.0f;
+        p->ground_speed = frame_time * 9.0f;
         if (b)
             FUN_L00_002323b8(0x29, 5, (float)scale_game_frames(8));
         break;

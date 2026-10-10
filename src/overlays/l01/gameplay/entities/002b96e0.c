@@ -2040,8 +2040,8 @@ void FUN_L01_002f3120(Moby *self)
         if (hero.state.control_mode == 0x12 && hero.state.prev == hero.state.control_mode) {
             if (hero.state_timer < scale_game_frames(3)) {
                 cap = frame_time * 1.5f;
-                if (cap < hero.unk194) {
-                    hero.unk194 = cap;
+                if (cap < hero.ground_speed) {
+                    hero.ground_speed = cap;
                 }
                 clear_vector(&hero.motion.unk150);
             }

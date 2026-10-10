@@ -2456,7 +2456,7 @@ void FUN_L18_002f6960(struct Moby *m) {
         FUN_L00_0025f730(v, *(float *)&D_L18_00162408_u);
     }
     add_vector_xyz(v, v, D_L18_0016016C + (*(int *)(d + 0x344) << 7) + 0x30);
-    t = hero.motion.unk160;
+    t = hero.motion.speed_xy;
     t += (FUN_001f9b80(&m->pos, v) - *(float *)&D_L18_001623DC) / *(float *)&D_L18_001623DC *
          (D_0015EE6C * 4.75f);
     hi = D_0015EE6C * 20.0f;
