@@ -950,7 +950,59 @@ void FUN_L00_002999a8(void) {
     sceCdSync_alt(0);
     FUN_L00_002997c8();
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00299a68.s", FUN_L00_00299a68);
+#else
+extern s32 D_L00_0015F5D8;
+extern s32 D_L00_0015F5C4;
+extern s32 D_L00_001611CC;
+extern s32 D_L00_00173E04;
+extern s32 D_L00_00173E08;
+extern s32 D_L00_0015F628;
+extern s32 D_L00_0015F62C;
+extern u16 D_L00_0015F622;
+extern volatile s16 D_L00_0015F622_signed __asm__("D_L00_0015F622");
+extern void FUN_L00_002660c0(s32);
+extern void FUN_L00_001ff040(void *, s32, s32);
+extern void FUN_L00_00265fa0(s32, s32, s32);
+
+void FUN_L00_00299a68(void) {
+    s32 offset;
+    char *table;
+    s32 index;
+
+    FUN_L00_002660c0(0);
+    FUN_L00_001f9838(8);
+    D_L00_0015F5D8 = 1;
+    D_L00_0015F5C4 = 7;
+    D_L00_0015F3FC_298840 = 1.0f;
+    FUN_L00_001ff040((char *)&D_L00_0015F622 - 2, 0, 0x10);
+    offset = D_L00_001611CC - 0xE0000;
+    D_L00_001611CC = offset;
+    D_L00_0015F62C = D_L00_00173E00_298840.x8 + offset;
+    D_L00_0015F628 = D_L00_00173E00_298840.x4 + offset;
+    table = (char *)&disc_table;
+    if (pal_mode != 0) {
+        index = D_L00_0015F622_signed * 8;
+        FUN_L00_00265fa0(D_L00_0015F628, *(s32 *)(table + index + 0x1748),
+                           *(s32 *)(table + index + 0x174C));
+    } else {
+        index = D_L00_0015F622_signed * 8;
+        FUN_L00_00265fa0(D_L00_0015F628, *(s32 *)(table + index + 0x16A8),
+                           *(s32 *)(table + index + 0x16AC));
+    }
+    FUN_L00_002660c0(1);
+    D_L00_0015F622++;
+    index = (s16)D_L00_0015F622 * 8;
+    if (pal_mode != 0) {
+        FUN_L00_00265fa0(D_L00_0015F62C, *(s32 *)(table + index + 0x1748),
+                           *(s32 *)(table + index + 0x174C));
+    } else {
+        FUN_L00_00265fa0(D_L00_0015F62C, *(s32 *)(table + index + 0x16A8),
+                           *(s32 *)(table + index + 0x16AC));
+    }
+}
+#endif
 extern s32 D_L00_0015F5D8;
 extern s32 D_L00_0015F3FC;
 void FUN_L00_002a09d8(s32);
