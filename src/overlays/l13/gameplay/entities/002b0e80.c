@@ -960,7 +960,133 @@ skip:
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b97f8.s", FUN_L13_002b97f8);
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BAA68). */
+
+/* Draws the Gemlik turret HUD: target marker, ammo icons, gauge sprites and warning, refreshes the gauge colour table, then the two frame halves. */
+
+extern char *get_help_message_text(s32) __asm__("func_001FDD10");
+extern char D_L13_001CBC60[];
+extern float FUN_L00_0025e310(float);
+extern int D_L13_001CBE70[];
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern s32 font_print_center_large(s32, s32, u64, s32, s32) __asm__("func_001F6C20");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern s32 get_effect_texture_c(s32) __asm__("func_001F44B8");
+extern int *D_L13_001613C0[1] __attribute__((sda));
+extern unsigned char D_0013E500[];
+extern unsigned char D_0013F350[];
+extern void FUN_L11_00310ad0(float, float, float, void *, int, int, long);
+extern void FUN_L11_00311210(void *, void *, void *, int);
+extern void append_rotated_sprite_quad(float, float, float, float, float, int, int, int, int, int, int, int, float, float);
+extern void draw_textured_quad_alt(int, int, int, int, int, int, int, int, long, long) __asm__("FUN_001f5450");
+float AbsoluteFloat_c(float input) __asm__("func_001F99C0");
+void FUN_L13_002b8320(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x, float y, float s, float ang);
+void FUN_L13_002b95b8_c(int a, char *p) __asm__("FUN_L13_002b95b8");
+extern long func_001F4868_l(int) __asm__("FUN_001f44b8");
+extern void func_L13_002B9590_f(float, float, float, float, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L13_002b8320");
+extern void *func_001FE540_id(int) __asm__("FUN_001fdd10");
+extern int func_001F6F40_c(int, int, long, void *, int) __asm__("FUN_001f6b88");
+
+void FUN_L13_002b97f8(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    char *s;
+    unsigned char *base;
+    unsigned char *g;
+    unsigned char *h;
+    unsigned char *b;
+    int sp10;
+    int sp14;
+    int tex;
+    int i;
+    unsigned char n;
+    unsigned char c;
+    int j;
+    int x;
+    int y;
+    int ex;
+    int ey;
+    int a;
+    int v;
+    int lo;
+    int hi;
+    int idx;
+    float t;
+    float k;
+    float m;
+    float f;
+    float q;
+
+    FUN_L13_002b95b8_c((int)moby, d);
+    if (*(int *)(d + 0x88) != 0) {
+        FUN_L11_00311210(*(char **)(d + 0x88) + 0x10, &sp10, &sp14, 0);
+        if (*(int *)(d + 0x8C) > scale_game_frames_alt(0x1F4)) {
+            t = ConvertIntegerToFloat(*(int *)(d + 0x8C) - scale_game_frames_alt(0x1F4));
+            t = t / ConvertIntegerToFloat(scale_game_frames_alt(0x4B));
+            m = 2.0f * (1.0f - t);
+            k = t * 5.0f + 1.0f;
+            if (m > 1.0f) m = 1.0f;
+            c = func_001FA898_r(m * 96.0f);
+            func_L13_002B9590_f(ConvertIntegerToFloat(sp10), ConvertIntegerToFloat(sp14), k, FUN_L00_0025e310(ConvertIntegerToFloat(D_L13_0015F5CC) / 30.0f), 0, 0xFF, 0, c);
+            *(int *)(d + 0xEC) = 0;
+        } else {
+            a = 0xFF;
+            if ((*(int *)(d + 0x8C) / scale_game_frames_alt(0x14)) & 1) a = 0;
+            func_L13_002B9590_f(ConvertIntegerToFloat(sp10), ConvertIntegerToFloat(sp14), 1.0f, 0.0f, 0xFF, a, 0, 0x60);
+            *(int *)(d + 0xEC) = *(int *)(d + 0x88);
+        }
+    }
+    y = 0x40;
+    x = 0x18;
+    base = D_0013F350;
+    n = base[0x15F7];
+    for (i = 0; i < n; i++) {
+        g = D_0013F350;
+        if (i < g[0x15F6]) {
+            FUN_L11_00310ad0(x, y, 0.5f, D_L13_001CBC60, 0x19, 0xFFFFF3, 0x50008F00);
+        } else {
+            FUN_L11_00310ad0(x, y, 0.5f, D_L13_001CBC60, 0x19, 0xFFFFF3, 0x20004F00);
+        }
+        n = g[0x15F7];
+        if (i == n >> 1) {
+            y = 0x2E;
+            x += 0x1E;
+        }
+        y += 0x12;
+    }
+    ex = *(int *)(d + 0xE0);
+    ey = *(int *)(d + 0xE4);
+    tex = get_effect_texture_c(0x11);
+    append_rotated_sprite_quad(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, tex, 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
+    append_rotated_sprite_quad(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, get_effect_texture_c(0x12), 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
+    append_rotated_sprite_quad(ex, ey, 10.0f, 10.0f, 0.0f, 0x1F, 0x1F, get_effect_texture_c(8), 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
+    b = D_0013F350;
+    if (*(float *)(b + 0x15FC) < *(float *)(b + 0x1600) / 10.0f && (D_L13_0015F5CC / 90) & 1) {
+        func_001F6F40_c(0x100, 0x186, 0x80000080L, func_001FE540_id(0x5269), 0x64);
+    }
+    h = D_0013F350;
+    f = *(float *)(h + 0x15FC) - *(float *)(d + 0xF0);
+    f *= 0.2f;
+    q = AbsoluteFloat_c(f);
+    if (q > 1.0f) f /= q;
+    *(float *)(d + 0xF0) += f;
+    v = func_001FA898_r(*(float *)(d + 0xF0) * 251.0f / *(float *)(h + 0x1600)) + 2;
+    if (v > 0xFD) v = 0xFD;
+    if (v < 2) v = 2;
+    lo = *(int *)(d + 0xF4) <= v ? *(int *)(d + 0xF4) : v;
+    hi = *(int *)(d + 0xF4) < v ? v : *(int *)(d + 0xF4);
+    for (j = lo; j <= hi; j++) {
+        idx = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
+        if (j < v) {
+            D_L13_001613C0[0][idx] = D_L13_001CBE70[idx];
+        } else {
+            D_L13_001613C0[0][idx] = 0x80000000;
+        }
+    }
+    s = (char *)D_0013E500;
+    draw_textured_quad_alt(0x170, *(int *)(s + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(d + 0x104) + 0x28));
+    draw_textured_quad_alt(0x170, *(int *)(s + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(d + 0x104) + 0x29));
+    *(int *)(d + 0xF4) = v;
+}
 /* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB068), where it is exact; names translated to the US level program. */
 

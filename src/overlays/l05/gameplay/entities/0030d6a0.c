@@ -377,7 +377,51 @@ void FUN_L05_0030f218(char *obj, float a, float b) {
         FUN_L05_0029bbe0(u, w, v, k, m, n);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f408.s", FUN_L05_0030f408);
+/* Ported from rac1-decomp src/overlays/l05_rilgar/vendor_0030EB68.c (func_L05_003108D0) */
+
+extern char D_0013F350[];
+extern f32 dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_sin_c(f32) __asm__("FUN_001f9de0");
+extern void FUN_L00_0025be00_c(float *value, float target, float *velocity, float accel, float damping, float limit) __asm__("FUN_L00_0025be00");
+
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float D_L05_00161DD8 __attribute__((sda));
+extern float D_L05_00161DDC __attribute__((sda));
+extern float D_L05_00161DE0 __attribute__((sda));
+extern float D_L05_00161DE4 __attribute__((sda));
+
+void FUN_L05_0030f408(char *moby, float k, float m) {
+    char *g = D_0013F350;
+    char *data = *(char **)(moby + 0x78);
+    float v[4];
+    float x, y;
+    float s, x2, y2, d;
+
+    if (*(char **)(g + 0x2FC) == moby && *(short *)(g + 0x30E) == 0) {
+        subtract_vector_xyz(v, g + 0x80, moby + 0x10);
+        d = dot_vectors_xyz(v, moby + 0xC0);
+        x = -k * dot_vectors_xyz(v, moby + 0xD0);
+        y = k * d;
+    } else {
+        y = 0.0f;
+        x = y;
+    }
+    s = 0.017453292f;
+    *(float *)(data + 0x98) = fast_add_rotations(*(float *)(data + 0x98), *(float *)(data + 0xA0));
+    *(float *)(data + 0x9C) = fast_add_rotations(*(float *)(data + 0x9C), *(float *)(data + 0xA4));
+    x2 = fast_add_rotations(x, fast_sin_c(*(float *)(data + 0x98)) * k * D_L05_00161DD8);
+    y2 = fast_add_rotations(y, fast_sin_c(*(float *)(data + 0x9C)) * k * D_L05_00161DD8);
+    FUN_L00_0025be00_c((float *)(moby + 0x40), x2, (float *)(data + 0x90),
+                     D_L05_00161DDC * m * s * D_0015ED70,
+                     D_L05_00161DE0 * m * s * D_0015ED70,
+                     D_L05_00161DE4 * s * D_0015ED6C);
+    FUN_L00_0025be00_c((float *)(moby + 0x44), y2, (float *)(data + 0x94),
+                     D_L05_00161DDC * m * s * D_0015ED70,
+                     D_L05_00161DE0 * m * s * D_0015ED70,
+                     D_L05_00161DE4 * s * D_0015ED6C);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f5c8.s", FUN_L05_0030f5c8);
 
 struct GateVars {

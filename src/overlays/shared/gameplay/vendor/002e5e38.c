@@ -182,7 +182,344 @@ void FUN_L00_002e6bf8(char *m) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e6d60.s", FUN_L00_002e6d60);
+/* Ported from rac1-decomp src/overlays/shared/vendor_002E1660.c (func_L00_002E8210) */
+
+/* Initialises the type-0 camera: fills its data blocks and seeds the first position. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E8210), where it is exact; names translated to the US level program. */
+
+typedef struct CamE_2E8210 {
+    short h0;                     /* 0x00 */
+    short h2;                     /* 0x02 */
+    float f4;                     /* 0x04 */
+    float f8;                     /* 0x08 */
+    int iC;                       /* 0x0C */
+    int i10;                      /* 0x10 */
+    int i14;                      /* 0x14 */
+    int i18;                      /* 0x18 */
+    int pad1C;
+} CamE_2E8210;
+
+typedef struct CamA_2E8210 {
+    float pos[4];                 /* 0x00 */
+    char pad10[0x40];
+    float f50[4];                 /* 0x50 */
+    char pad60[0x50];
+    float fB0;                    /* 0xB0 */
+    int iB4;                      /* 0xB4 */
+    float fB8;                    /* 0xB8 */
+    int iBC;                      /* 0xBC */
+    int iC0;                      /* 0xC0 */
+    unsigned char bC4;            /* 0xC4 */
+    char padC5;
+    short hC6;                    /* 0xC6 */
+    char padC8[0xE];
+    unsigned char bD6;            /* 0xD6 */
+    char padD7;
+    short hD8;                    /* 0xD8 */
+    short hDA;                    /* 0xDA */
+    float fDC;                    /* 0xDC */
+    float fE0;                    /* 0xE0 */
+    float fE4;                    /* 0xE4 */
+    float fE8;                    /* 0xE8 */
+    char padEC[4];
+} CamA_2E8210;
+
+typedef struct CamB_2E8210 {
+    float v0[4];                  /* 0x00 */
+    float v10[4];                 /* 0x10 */
+    int i20;                      /* 0x20 */
+    int i24;                      /* 0x24 */
+    int i28;                      /* 0x28 */
+    float f2C;                    /* 0x2C */
+    float f30;                    /* 0x30 */
+    int i34;                      /* 0x34 */
+    int i38;                      /* 0x38 */
+    short h3C;                    /* 0x3C */
+    short h3E;                    /* 0x3E */
+    char pad40[4];
+    int i44;                      /* 0x44 */
+    float f48;                    /* 0x48 */
+    char pad4C[4];
+    int i50;                      /* 0x50 */
+    float f54;                    /* 0x54 */
+    float f58;                    /* 0x58 */
+    char pad5C[4];
+} CamB_2E8210;
+
+typedef struct Cam190_2E8210 {
+    int i0;                       /* 0x00 */
+    int i4;                       /* 0x04 */
+    float f8;                     /* 0x08 */
+    float fC;                     /* 0x0C */
+    float f10;                    /* 0x10 */
+    float f14;                    /* 0x14 */
+} Cam190_2E8210;
+
+typedef struct Cam1A8_2E8210 {
+    int flags;                    /* 0x00 */
+    int i4;                       /* 0x04 */
+    int i8;                       /* 0x08 */
+    int iC;                       /* 0x0C */
+    int i10;                      /* 0x10 */
+    float f14;                    /* 0x14 */
+    float f18;                    /* 0x18 */
+    int i1C;                      /* 0x1C */
+    int i20;                      /* 0x20 */
+    int i24;                      /* 0x24 */
+} Cam1A8_2E8210;
+
+typedef struct CamG_2E8210 {
+    char pad0[0x10];
+    float v10[4];                 /* 0x10 */
+    float v20[4];                 /* 0x20 */
+    float f30;                    /* 0x30 */
+    short h34;                    /* 0x34 */
+    short h36;                    /* 0x36 */
+    short h38;                    /* 0x38 */
+    short h3A;                    /* 0x3A */
+    float f3C;                    /* 0x3C */
+    float f40;                    /* 0x40 */
+    float f44;                    /* 0x44 */
+    int i48;                      /* 0x48 */
+    int i4C;                      /* 0x4C */
+} CamG_2E8210;
+
+typedef struct Cam220_2E8210 {
+    int i0;                       /* 0x00 */
+    short h4;                     /* 0x04 */
+    short h6;                     /* 0x06 */
+    float f8;                     /* 0x08 */
+    float fC;                     /* 0x0C */
+    int i10;                      /* 0x10 */
+    char pad14[0xC];
+} Cam220_2E8210;
+
+typedef struct Cam240_2E8210 {
+    float v0[4];                  /* 0x00 */
+    float v10[4];                 /* 0x10 */
+    char pad20[4];
+    int i24;                      /* 0x24 */
+    short h28;                    /* 0x28 */
+} Cam240_2E8210;
+
+typedef struct Cam_2E8210 {
+    float pos[4];                 /* 0x000 */
+    short h10;                    /* 0x010 */
+    short h12;                    /* 0x012 */
+    short h14;                    /* 0x014 */
+    short h16;                    /* 0x016 */
+    char pad18[8];
+    CamE_2E8210 e;                /* 0x020 */
+    CamA_2E8210 a;                /* 0x040 */
+    CamB_2E8210 b;                /* 0x130 */
+    Cam190_2E8210 p190;           /* 0x190 */
+    Cam1A8_2E8210 p1A8;           /* 0x1A8 */
+    CamG_2E8210 g;                /* 0x1D0 */
+    Cam220_2E8210 p220;           /* 0x220 */
+    Cam240_2E8210 p240;           /* 0x240 */
+} Cam_2E8210;
+
+typedef struct Moby_2E8210 {
+    float v0[4];                  /* 0x00 */
+    char pad10[0x20];
+    float v30[4];                 /* 0x30 */
+    float v40[4];                 /* 0x40 */
+    char pad50[0x20];
+    Cam_2E8210 *cam;              /* 0x70 */
+    char pad74[9];
+    unsigned char b7D;            /* 0x7D */
+    short h7E;                    /* 0x7E */
+} Moby_2E8210;
+
+typedef struct Hero_2E8210 {
+    char pad0[0x30C];
+    short h30C;                   /* 0x30C */
+    char pad30E[0x1D72];
+    int i2080;                    /* 0x2080 */
+} Hero_2E8210;
+
+typedef struct Ctl_2E8210 {
+    char pad0[0x86];
+    short h86;                    /* 0x86 */
+} Ctl_2E8210;
+
+extern int D_L00_00161D90 __attribute__((sda));
+extern float D_L00_0015EF40; /* no foreign declaration */
+extern float D_L00_0015EF44; /* no foreign declaration */
+extern int D_L00_0015EF60;
+extern float D_L00_00161CA0 __attribute__((sda));
+extern float D_L00_00161CDC __attribute__((sda));
+extern float D_L00_00161CE0 __attribute__((sda));
+extern float D_L00_00161CE4 __attribute__((sda));
+extern float D_L00_00161D1C __attribute__((sda));
+extern int D_L00_00161D24 __attribute__((sda));
+extern int D_L00_00161D8C __attribute__((sda));
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern u8 D_0013F5E0[];
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+void FUN_L00_002e4430(char *o);
+void FUN_L00_002e66b8_c(int snap) __asm__("FUN_L00_002e66b8");
+void FUN_L00_002e6bf8_c(char *m) __asm__("FUN_L00_002e6bf8");
+extern Hero_2E8210 D_0013F450_2E8210 __asm__("D_0013F350");
+extern char D_0013F4D0_2E8210[] __asm__("D_0013F3D0");
+extern char D_0013F6E0_2E8210[] __asm__("D_0013F5E0");
+extern Ctl_2E8210 *D_L00_00166F04_2E8210 __asm__("D_L00_00166E04") __attribute__((section(".data")));
+extern int func_001F9850_2E8210(int) __asm__("FUN_001f96f8");
+extern void func_001F9BC0_2E8210(void *) __asm__("FUN_001f99f8");
+extern void func_001F9BF0_2E8210(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float dot_vectors_xyz_c(void *, void *) __asm__("FUN_001f9ab0");
+extern float func_001F9CB8_2E8210(void *) __asm__("FUN_001f9af0");
+extern void func_L00_002E80A8_2E8210(Moby_2E8210 *) __asm__("FUN_L00_002e6bf8");
+extern void func_L00_002E58E0_2E8210(Moby_2E8210 *) __asm__("FUN_L00_002e4430");
+extern void func_L00_002E7B68_2E8210(int) __asm__("FUN_L00_002e66b8");
+
+void FUN_L00_002e6d60(Moby_2E8210 *m) {
+    CamA_2E8210 *a;
+    CamB_2E8210 *b;
+    Cam_2E8210 *c;
+    Cam_2E8210 *e;
+    CamE_2E8210 *f;
+    Cam_2E8210 *d;
+    CamG_2E8210 *g;
+    char *q1;
+    char *q2;
+    char *q3;
+    Cam240_2E8210 *p240;
+    int r;
+    float t;
+    float v0[4];
+    float v1[4];
+
+    D_L00_00161D8C = 0;
+    D_L00_00161D90 = 0;
+    a = &m->cam->a;
+    qcopy(a->pos, D_0013F4D0_2E8210);
+    a->fB0 = 1.5f;
+    a->iC0 = D_0013F450_2E8210.i2080;
+    a->bC4 = 0;
+    a->bD6 = 0;
+    a->fE0 = 0.2f;
+    a->fDC = D_L00_00161CA0;
+    a->fE4 = D_L00_00161CA0;
+    a->fE8 = 0.2f;
+    a->fB8 = 0.005f;
+    a->hC6 = 0;
+    a->hD8 = 0;
+    a->iB4 = 0;
+    a->hDA = 0;
+    a->iBC = 0;
+
+    b = &m->cam->b;
+    b->f2C = 4.64f;
+    b->f48 = 0.003f;
+    b->f54 = 0.003f;
+    b->f30 = 2.0f;
+    b->f58 = 4.64f;
+    b->i34 = 0;
+    b->i38 = 0;
+    b->i28 = 0;
+    b->i20 = 0;
+    b->i24 = 0;
+    b->h3C = 0;
+    b->h3E = 0;
+    b->i44 = 0;
+    b->i50 = 0;
+
+    c = m->cam;
+    c->h10 = 1;
+    c->h12 = 0;
+    c->h14 = 0;
+    c->h16 = 0;
+    D_L00_0015EF40 = 0.75f;
+
+    e = m->cam;
+    e->e.h0 = 0;
+    f = &e->e;
+    f->i10 = 0;
+    f->iC = 0;
+    f->h2 = 0;
+    f->i14 = 0;
+    f->i18 = 0;
+
+    q1 = (char *)m->cam;
+    ((Cam_2E8210 *)q1)->p190.i0 = 0;
+    q1 = (char *)&((Cam_2E8210 *)q1)->p190;
+    ((Cam190_2E8210 *)q1)->f8 = 0.005f;
+    ((Cam190_2E8210 *)q1)->fC = 0.2f;
+    ((Cam190_2E8210 *)q1)->f10 = 0.15707964f;
+    ((Cam190_2E8210 *)q1)->i4 = 0;
+    ((Cam190_2E8210 *)q1)->f14 = 14.2857f;
+
+    q2 = (char *)m->cam;
+    ((Cam_2E8210 *)q2)->p1A8.flags = 0;
+    q2 = (char *)&((Cam_2E8210 *)q2)->p1A8;
+    ((Cam1A8_2E8210 *)q2)->f14 = D_L00_0015EF44;
+    ((Cam1A8_2E8210 *)q2)->f18 = 0.5235988f;
+    ((Cam1A8_2E8210 *)q2)->i8 = 0;
+    ((Cam1A8_2E8210 *)q2)->i4 = 0;
+    ((Cam1A8_2E8210 *)q2)->iC = 0;
+    ((Cam1A8_2E8210 *)q2)->i10 = 0;
+    ((Cam1A8_2E8210 *)q2)->i1C = 0;
+    ((Cam1A8_2E8210 *)q2)->i20 = 0;
+    ((Cam1A8_2E8210 *)q2)->i24 = 0;
+
+    q3 = (char *)m->cam;
+    ((Cam_2E8210 *)q3)->p220.i0 = 0;
+    q3 = (char *)&((Cam_2E8210 *)q3)->p220;
+    ((Cam220_2E8210 *)q3)->i10 = 0;
+    ((Cam220_2E8210 *)q3)->h4 = 0;
+    ((Cam220_2E8210 *)q3)->h6 = 0;
+    ((Cam220_2E8210 *)q3)->f8 = b->f2C;
+    ((Cam220_2E8210 *)q3)->fC = D_L00_00161D1C;
+
+    d = m->cam;
+    r = func_001F9850_2E8210(0x7D0);
+    g = &d->g;
+    g->f30 = 0.0f;
+    g->h3A = 0;
+    g->h36 = 0;
+    g->h38 = 0;
+    g->i4C = 0;
+    g->h34 = r;
+    g->f44 = D_L00_00161CDC;
+    g->f3C = D_L00_00161CE4;
+    g->f40 = D_L00_00161CE0;
+    g->i48 = D_L00_0015EF60;
+    func_001F9BC0_2E8210(d->g.v10);
+
+    p240 = &m->cam->p240;
+    p240->h28 = 0;
+    p240->i24 = 0;
+    qcopy(p240->v0, D_0013F4D0_2E8210);
+    qcopy(p240->v10, D_0013F4D0_2E8210);
+
+    if (m->b7D == 2) {
+        func_L00_002E80A8_2E8210(m);
+        qcopy(m->v40, m->v0);
+        if (D_L00_00166F04_2E8210->h86 == 7 && D_0013F450_2E8210.h30C == 0) {
+            e->e.h0 = 0;
+        } else {
+            f->h0 = func_001F9850_2E8210(D_L00_00161D24);
+        }
+    } else {
+        func_L00_002E58E0_2E8210(m);
+        func_L00_002E7B68_2E8210(1);
+    }
+    func_001F9BF0_2E8210(b->v0, m->v30, a->f50);
+    qcopy(b->v10, b->v0);
+    qcopy(c->pos, m->v30);
+    qcopy(g->v20, m->v30);
+    scale_vector_xyz(v0, D_0013F6E0_2E8210, dot_vectors_xyz_c(b->v0, D_0013F6E0_2E8210));
+    func_001F9BF0_2E8210(v1, b->v0, v0);
+    t = b->f2C - func_001F9CB8_2E8210(v1);
+    g->f30 = t;
+    if (t < -0.1f) {
+        g->h3A = 1;
+    }
+    f->f8 = b->f30;
+    f->f4 = a->fB0;
+    m->h7E = 0;
+}
 typedef struct {
     unsigned char p0[0x208C];
     int w208C;
