@@ -114,7 +114,7 @@ extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_L00_001fefc8(void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L06_002d8178(void *, void *);
-extern void FUN_L06_002d8738(void);
+extern void FUN_L06_002d8738(char *);
 extern void enqueue_callback_list_1(int, int) __asm__("FUN_001f4600");
 
 void FUN_L06_002d85a0(unsigned char *moby) {
@@ -152,7 +152,120 @@ void FUN_L06_002d85a0(unsigned char *moby) {
         break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8738.s", FUN_L06_002d8738);
+#else
+extern float FUN_001f99c0(float);
+extern float FUN_001f9988(float);
+extern long FUN_001f44b8(int);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern float FUN_001f9ab0(void *, void *);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_001f7d30(void *, int, int);
+extern char D_L06_00167540[];
+extern float D_L06_001D3290[][4] __attribute__((section(".data")));
+extern short D_L06_001D3620[][8] __attribute__((section(".data")));
+extern float D_L06_001D38C0[][2] __attribute__((section(".data")));
+extern float D_L06_001D3A90[][4] __attribute__((section(".data")));
+extern float D_L06_001D3D30[][4] __attribute__((section(".data")));
+extern float D_L06_001D40C0[][4] __attribute__((section(".data")));
+extern float D_L06_001D4360[][2] __attribute__((section(".data")));
+extern float D_L06_001D4530[][4] __attribute__((section(".data")));
+extern float D_L06_00161C64 __attribute__((sda));
+#define L06_BACKDROP_WORD(offset) (*(int *)((char *)&D_L06_00161C64 + (offset)))
+#define L06_BACKDROP_FLOAT(offset) (*(float *)((char *)&D_L06_00161C64 + (offset)))
+
+typedef struct {
+    float corner[4][4];
+    int color[4];
+    float uv[4][2];
+    long unk70;
+    long tex;
+    long unk80;
+    long unk88;
+} L06BackdropQuad;
+
+void FUN_L06_002d8738(char *moby) {
+    L06BackdropQuad quad;
+    float matrix[3][4] __attribute__((aligned(16)));
+    float pos[4] __attribute__((aligned(16)));
+    float direction[4] __attribute__((aligned(16)));
+    float facePos[4] __attribute__((aligned(16)));
+    float normal[4] __attribute__((aligned(16)));
+    float projected[4] __attribute__((aligned(16)));
+    int near;
+    int i, j;
+    float scale;
+    qcopy(matrix[0], moby + 0xc0);
+    qcopy(matrix[1], moby + 0xd0);
+    qcopy(matrix[2], moby + 0xe0);
+    pos[0] = *(float *)(moby + 0x10);
+    pos[1] = *(float *)(moby + 0x14);
+    pos[2] = *(float *)(moby + 0x18);
+    pos[3] = 1.0f;
+    near = 0;
+    if (FUN_001f99c0(((float *)D_L06_00167540)[0] - pos[0]) < 16.0f &&
+        FUN_001f99c0(((float *)D_L06_00167540)[1] - *(float *)(moby + 0x14)) < 16.0f) {
+        near = 1;
+    }
+    if (near) {
+        for (i = 0; i < 57; i++) {
+            FUN_001f9d20(D_L06_001D4530[i], D_L06_001D3290[i], matrix);
+            FUN_001f9a28(direction, D_L06_001D4530[i], D_L06_00167540);
+            FUN_001f9bf8(direction, direction, 1.0f);
+            FUN_001f9d20(normal, D_L06_001D3D30[i], matrix);
+            FUN_001f9bf8(normal, normal, L06_BACKDROP_FLOAT(0x28));
+            scale = FUN_001f9ab0(normal, direction);
+            FUN_001f9a68(projected, normal, scale + scale);
+            FUN_001f9a28(projected, direction, projected);
+            FUN_001f9bf8(projected, projected, 1.0f);
+            projected[2] += 1.0f;
+            scale = FUN_001f9988(projected[2] + projected[2]);
+            D_L06_001D4360[i][1] = projected[1] / (scale + scale) + 0.5f;
+            D_L06_001D4360[i][0] = projected[0] / (scale + scale) + 0.5f;
+        }
+    } else {
+        for (i = 0; i < 57; i++) {
+            FUN_001f9d20(D_L06_001D4530[i], D_L06_001D3290[i], matrix);
+        }
+    }
+    quad.tex = FUN_001f44b8(L06_BACKDROP_WORD(0x20));
+    quad.unk80 = 0xff9000000260L;
+    quad.unk88 = (long)L06_BACKDROP_WORD(0xc) | (long)L06_BACKDROP_WORD(0x10) << 2 |
+                 (long)L06_BACKDROP_WORD(0x14) << 4 | (long)L06_BACKDROP_WORD(0x18) << 6 |
+                 (long)L06_BACKDROP_WORD(0x1c) << 32;
+    quad.unk70 = 0;
+    quad.color[0] = L06_BACKDROP_WORD(0x24);
+    quad.color[1] = L06_BACKDROP_WORD(0x24);
+    quad.color[2] = L06_BACKDROP_WORD(0x24);
+    quad.color[3] = L06_BACKDROP_WORD(0x24);
+    for (i = 0; i < 42; i++) {
+        FUN_001f9d20(facePos, D_L06_001D40C0[i], matrix);
+        FUN_001f9a28(direction, facePos, D_L06_00167540);
+        FUN_001f9bf8(direction, direction, 1.0f);
+        FUN_001f9cf8(facePos, D_L06_001D3A90[i], matrix);
+        if (!(0.0f < FUN_001f9ab0(direction, facePos))) {
+            for (j = 0; j < 4; j++) {
+                short *indices = D_L06_001D3620[i];
+                short vertex = indices[j * 2];
+                qcopy(quad.corner[j], D_L06_001D4530[vertex]);
+                if (near) {
+                    quad.uv[j][0] = D_L06_001D4360[vertex][0];
+                    quad.uv[j][1] = D_L06_001D4360[vertex][1];
+                } else {
+                    short uv = indices[j * 2 + 1];
+                    quad.uv[j][0] = D_L06_001D38C0[uv][0];
+                    quad.uv[j][1] = D_L06_001D38C0[uv][1];
+                }
+            }
+            FUN_001f7d30(&quad, 0, 0);
+        }
+    }
+}
+#endif
 /* Spawns a moby of type 0x12F at the owner's position and links it to the owner. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002D9F68), where it is exact; names translated to the US level program. */
 
