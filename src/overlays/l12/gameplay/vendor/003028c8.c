@@ -452,7 +452,6 @@ void FUN_L12_003094a0(struct Moby *moby) {
     int state = moby->state;
     int phase;
     int index;
-    L12VendorMobyList *list;
 
     switch (state) {
     case 0:
@@ -460,19 +459,15 @@ void FUN_L12_003094a0(struct Moby *moby) {
         moby->state = 1;
         break;
     case 1:
-        if (D_L12_0015F5C4 != 2) {
-            break;
+        if (D_L12_0015F5C4 != 2) break;
+
+        phase = D_L12_0016CCE0.phase;
+        switch (phase) {
+        case 1: index = 2; break;
+        case 7: index = 0; break;
+        default: return;
         }
-        list = &D_L12_0016CCE0;
-        phase = list->phase;
-        if (phase == state) {
-            index = 2;
-        } else if (phase == 7) {
-            index = 0;
-        } else {
-            break;
-        }
-        FUN_L00_002637f8(list->mobys[index]);
+        FUN_L00_002637f8(D_L12_0016CCE0.mobys[index]);
         break;
     }
 }
