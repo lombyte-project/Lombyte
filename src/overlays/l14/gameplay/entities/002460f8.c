@@ -406,140 +406,133 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
     FUN_L00_0025d538(moby, data + 0x60);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ada18.s", FUN_L14_002ada18);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002add48.s", FUN_L14_002add48);
-#else
+/* Draws the moby's spinning beam: sixteen camera-facing quads stepped out along its heading, each pair
+ * fainter and larger than the last. */
 typedef struct {
     float m[4][4];
-    u32 color[4];
+    u32 col[4];
     float uv[8];
-    u64 a, b, c, d;
+    unsigned long a, b, c, d;
 } Pk_2add48;
 
-typedef struct {
-    float trig[4];
-    u8 unused[0x20];
-    float initial_pos[4];
-    Pk_2add48 pk;
-    float mat[3][4];
-    float pos[4];
-    float scaled[4];
-    float axis[4];
-    float dir[4];
-    float rot[4];
-    float rotation_matrix[3][4];
-} BeamFrame;
-
-extern float D_L14_00161434_beam __asm__("D_L14_00161434") __attribute__((sda));
-extern float D_L14_00161438_beam __asm__("D_L14_00161438") __attribute__((sda));
-extern float D_L14_0016143C_beam __asm__("D_L14_0016143C") __attribute__((sda));
-extern float D_L14_00161440_beam __asm__("D_L14_00161440") __attribute__((sda));
-extern s32 D_L14_00161444_beam __asm__("D_L14_00161444") __attribute__((sda));
-extern s32 D_L14_00161448_beam __asm__("D_L14_00161448") __attribute__((sda));
-extern s32 D_L14_0016144C_beam __asm__("D_L14_0016144C") __attribute__((sda));
-extern s32 D_L14_00161450_beam __asm__("D_L14_00161450") __attribute__((sda));
-extern s32 D_L14_00161454_beam __asm__("D_L14_00161454") __attribute__((sda));
-extern s32 D_L14_00161458_beam __asm__("D_L14_00161458") __attribute__((sda));
-extern s32 D_L14_0016145C_beam __asm__("D_L14_0016145C") __attribute__((sda));
-extern s32 D_L14_00161460_beam __asm__("D_L14_00161460") __attribute__((sda));
-extern float D_L14_001D8600_beam[4][4] __asm__("D_L14_001D8600");
-extern char D_L14_001674C0_beam[] __asm__("D_L14_001674C0");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float D_L14_00161434 __attribute__((sda));
+extern float D_L14_00161438 __attribute__((sda));
+extern float D_L14_0016143C __attribute__((sda));
+extern float D_L14_00161440 __attribute__((sda));
+extern int D_L14_00161444 __attribute__((sda));
+extern int D_L14_00161448 __attribute__((sda));
+extern int D_L14_0016144C __attribute__((sda));
+extern int D_L14_00161450 __attribute__((sda));
+extern int D_L14_00161454 __attribute__((sda));
+extern int D_L14_00161458 __attribute__((sda));
+extern int D_L14_0016145C __attribute__((sda));
+extern int D_L14_00161460 __attribute__((sda));
+extern char D_L14_001674C0_b[] __asm__("D_L14_001674C0");
+extern float D_L14_001D8600_b[4][4] __asm__("D_L14_001D8600");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern unsigned long get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void subtract_vector_xyz(void *, void *, void *);
-extern float atan2_e(float, float) __asm__("FUN_001f9e90");
-extern float lenxy_e(void *) __asm__("FUN_001f9b20");
-extern void rotmat_e(void *, void *) __asm__("FUN_001fa030");
-extern void scale_vector_xyz(void *, void *, float);
-extern void xform_e(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void draw_e(void *, int, int) __asm__("FUN_001f7d30");
-extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
+extern void scale_b(void *, void *, float) __asm__("FUN_001f9a68");
+extern void add_b(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void sub_b(void *, void *, void *) __asm__("FUN_001f9a28");
+extern unsigned long tex_b(s32) __asm__("FUN_001f44b8");
+extern void sreg_b(s32, s64) __asm__("FUN_00233980");
+extern float atan2_b(float, float) __asm__("FUN_001f9e90");
+extern float lenxy_b(void *) __asm__("FUN_001f9b20");
+extern void rotmat_b(void *, void *) __asm__("FUN_001fa030");
+extern void xform_b(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void draw_b(void *, int, int) __asm__("FUN_001f7d30");
 
-void FUN_L14_002add48(char *m) {
-    char *data = *(char **)(m + 0x78);
-    BeamFrame frame;
-    float *position = (float *)(data + 0x1D4);
-    float angle;
-    float scale;
-    s32 alpha, blue, green, red;
-    u32 color;
-    int i, j, next;
+void FUN_L14_002add48(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    float src[4][4];
+    Pk_2add48 pk;
+    float mat[4][4];
+    float t[4];
+    float dir[4];
+    float v[4];
+    float rot[4];
+    float rm[3][4];
+    float size;
+    float step;
+    int r, g, b, a;
+    u32 col;
+    int i, j;
+    float *p;
 
-    frame.initial_pos[0] = position[0];
-    frame.initial_pos[1] = position[1];
-    frame.initial_pos[2] = position[2] + 0.125f;
-    frame.initial_pos[3] = 1.0f;
-    frame.trig[0] = fast_cos(*(float *)(data + 0x160));
-    frame.trig[1] = fast_sin(*(float *)(data + 0x160));
-    frame.trig[2] = 0.0f;
-    *(float *)(data + 0x160) = fast_add_rotations(*(float *)(data + 0x160), -0.06981317f);
-    frame.pk.b = get_effect_texture(11);
-    frame.pk.c = 0x0000FF9000000260ULL;
-    frame.pk.d = 0x8000000048ULL;
-    frame.pk.a = 0;
-    qcopy(frame.axis, frame.trig);
-    qcopy(frame.pos, frame.initial_pos);
-    frame.pos[3] = 1.0f;
-    subtract_vector_xyz(frame.dir, D_L14_001674C0_beam, frame.pos);
-    frame.rot[2] = atan2_e(frame.dir[0], frame.dir[1]);
-    frame.rot[1] = -atan2_e(lenxy_e(frame.dir), frame.dir[2]);
-    frame.rot[0] = 0.0f;
-    rotmat_e(frame.rotation_matrix, frame.rot);
-    qcopy(frame.mat[0], frame.rotation_matrix[0]);
-    qcopy(frame.mat[1], frame.rotation_matrix[1]);
-    qcopy(frame.mat[2], frame.rotation_matrix[2]);
-
-    frame.pk.uv[0] = 1.0f;
-    frame.pk.uv[1] = 1.0f;
-    frame.pk.uv[2] = 0.0f;
-    frame.pk.uv[3] = 1.0f;
-    frame.pk.uv[4] = 1.0f;
-    frame.pk.uv[5] = 0.0f;
-    frame.pk.uv[6] = 0.0f;
-    frame.pk.uv[7] = 0.0f;
-    alpha = D_L14_00161444_beam;
-    blue = D_L14_00161448_beam;
-    green = D_L14_0016144C_beam;
-    red = D_L14_00161450_beam;
-    scale = D_L14_0016143C_beam;
-    angle = D_L14_00161434_beam;
-    vu1_add_g_sregister(0x47, 0x51001);
-    i = 0;
-    do {
-        next = i + 1;
-        color = red << 24 | green << 16 | blue << 8 | alpha;
-        frame.pk.color[3] = color;
-        frame.pk.color[2] = color;
-        frame.pk.color[1] = color;
-        frame.pk.color[0] = color;
-        scale_vector_xyz(frame.scaled, frame.axis, angle);
+    p = (float *)(d + 0x1D4);
+    src[3][0] = p[0];
+    src[3][1] = p[1];
+    src[3][2] = p[2] + 0.125f;
+    src[3][3] = 1.0f;
+    src[0][0] = fast_cos(*(float *)(d + 0x160));
+    src[0][1] = fast_sin(*(float *)(d + 0x160));
+    src[0][2] = 0.0f;
+    *(float *)(d + 0x160) = fast_add_rotations(*(float *)(d + 0x160), -0.06981317f);
+    pk.b = tex_b(0xB);
+    pk.c = 0x0000FF9000000260ULL;
+    pk.d = 0x8000000048ULL;
+    pk.a = 0;
+    qcopy(dir, src[0]);
+    qcopy(mat[3], src[3]);
+    mat[3][3] = 1.0f;
+    sub_b(v, D_L14_001674C0_b, mat[3]);
+    rot[2] = atan2_b(v[0], v[1]);
+    rot[1] = -atan2_b(lenxy_b(v), v[2]);
+    rot[0] = 0.0f;
+    rotmat_b(rm, rot);
+    qcopy(mat[0], rm[0]);
+    qcopy(mat[1], rm[1]);
+    qcopy(mat[2], rm[2]);
+    pk.uv[0] = 1.0f;
+    pk.uv[1] = 1.0f;
+    pk.uv[3] = 1.0f;
+    pk.uv[4] = 1.0f;
+    pk.uv[2] = 0.0f;
+    pk.uv[5] = 0.0f;
+    pk.uv[6] = 0.0f;
+    pk.uv[7] = 0.0f;
+    size = D_L14_0016143C;
+    step = D_L14_00161434;
+    r = D_L14_00161444;
+    g = D_L14_00161448;
+    b = D_L14_0016144C;
+    a = D_L14_00161450;
+    sreg_b(0x47, 0x51001);
+    for (i = 0; i < 16; i++) {
+        col = (a << 24) | (b << 16) | (g << 8) | r;
+        pk.col[3] = col;
+        pk.col[2] = col;
+        pk.col[1] = col;
+        pk.col[0] = col;
+        scale_b(t, dir, step);
         for (j = 0; j < 4; j++) {
-            scale_vector_xyz(frame.pk.m[j], D_L14_001D8600_beam[j], scale);
-            xform_e(frame.pk.m[j], frame.pk.m[j], frame.mat);
-            add_vector_xyz(frame.pk.m[j], frame.pk.m[j], frame.scaled);
+            scale_b(pk.m[j], D_L14_001D8600_b[j], size);
+            xform_b(pk.m[j], pk.m[j], mat);
+            add_b(pk.m[j], pk.m[j], t);
         }
-        draw_e(&frame.pk, 0, 0);
-        scale_vector_xyz(frame.scaled, frame.axis, angle * -2.0f);
+        draw_b(&pk, 0, 0);
+        scale_b(t, dir, step * -2.0f);
         for (j = 0; j < 4; j++) {
-            add_vector_xyz(frame.pk.m[j], frame.pk.m[j], frame.scaled);
+            add_b(pk.m[j], pk.m[j], t);
         }
-        draw_e(&frame.pk, 0, 0);
-        blue -= D_L14_00161458_beam;
-        red -= D_L14_00161460_beam;
-        alpha -= D_L14_00161454_beam;
-        green -= D_L14_0016145C_beam;
-        scale += D_L14_00161440_beam;
-        angle += D_L14_00161438_beam;
-        if (alpha < 0) alpha = 0;
-        if (blue < 0) blue = 0;
-        if (green < 0) green = 0;
-        if (red < 0) red = 0;
-        i = next;
-    } while (i < 16);
+        draw_b(&pk, 0, 0);
+        r -= D_L14_00161454;
+        g -= D_L14_00161458;
+        b -= D_L14_0016145C;
+        a -= D_L14_00161460;
+        size += D_L14_00161440;
+        step += D_L14_00161438;
+        if (r < 0)
+            r = 0;
+        if (g < 0)
+            g = 0;
+        if (b < 0)
+            b = 0;
+        if (a < 0)
+            a = 0;
+    }
 }
-#endif
 /* Draws the moby's glow quad, turned to face the camera. */
 typedef struct {
     float m[4][4];
