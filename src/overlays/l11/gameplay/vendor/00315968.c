@@ -7,9 +7,231 @@
 #include "asm.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/entities.h"
+#include "qcopy.h"
 extern float D_0015ED6C_n[] __asm__("D_0015ED68") __attribute__((section(".sdata")));
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00315968.s", FUN_L11_00315968);
+extern char *D_L11_0015FFD8;
+extern char *path_table[] __asm__("D_L11_001B0EB0");
+extern float D_L11_001622CC __attribute__((sda));
+extern float D_L11_001622D0 __attribute__((sda));
+extern float D_L11_001622D4 __attribute__((sda));
+extern float D_L11_001622D8 __attribute__((sda));
+extern float D_L11_001622DC __attribute__((sda));
+extern float D_L11_001622E0 __attribute__((sda));
+extern float D_L11_001622FC __attribute__((sda));
+
+/* Private variables of the moby FUN_L11_00315968 updates (only the fields it uses). */
+struct L11PatrolVars {
+    u8 pad0[0x20];
+    f32 hp;                 /* 0x20 */
+    u8 pad24[0x14];
+    s32 retimer;            /* 0x38: nonzero restarts the timer at 0x244 */
+    u8 pad3C[0xD4];
+    u8 move[7];             /* 0x110: movement state (FUN_L00_0025d458 / FUN_L00_0025d538) */
+    u8 unk117;              /* 0x117 */
+    u8 pad118[8];
+    u8 unk120[0x10];        /* 0x120 */
+    f32 unk130;             /* 0x130 */
+    f32 unk134;             /* 0x134 */
+    f32 unk138;             /* 0x138 */
+    f32 unk13C;             /* 0x13C */
+    s32 unk140;             /* 0x140 */
+    s32 unk144;             /* 0x144 */
+    f32 unk148;             /* 0x148 */
+    u8 pad14C[0x11];
+    u8 unk15D;              /* 0x15D */
+    u8 pad15E[0x12];
+    f32 unk170;             /* 0x170 */
+    f32 unk174;             /* 0x174 */
+    u8 pad178[0x2C];
+    f32 unk1A4;             /* 0x1A4 */
+    u8 pad1A8[0x28];
+    Vec4f goal;             /* 0x1D0 */
+    u8 pad1E0[0x30];
+    struct Moby *target;    /* 0x210 */
+    s32 unk214;             /* 0x214 */
+    u8 pad218[0x18];
+    s32 path_index;         /* 0x230 */
+    s32 path2_index;        /* 0x234 */
+    u8 pad238[4];
+    f32 range;              /* 0x23C */
+    u8 pad240[4];
+    s32 timer;              /* 0x244 */
+    f32 reach;              /* 0x248 */
+    u8 pad24C[8];
+    s32 carrier;            /* 0x254: listed moby index, -1: none */
+};
+
+/* What FUN_L00_0025a420 reports about the moby's last hit. */
+struct L11HitInfo {
+    u8 pad0[0x10];
+    Vec4 pos;           /* 0x10 */
+    struct Moby *moby;  /* 0x20: the moby that hit */
+};
+
+extern struct L11HitInfo *FUN_L00_0025a420_h(void *, s32, s32) __asm__("FUN_L00_0025a420");
+extern s32 FUN_00213928(void *, void *, void *, s32, s32 *, f32 *, s32, s32);
+extern void FUN_L00_0025f3e8(void *, void *, s32, f32, f32);
+extern s32 FUN_L11_0030a830(void *);
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern s32 FUN_001fa6d0(float);
+extern float FUN_001f9e90(float, float);
+extern float FUN_001f9b80(float *, float *);
+extern void FUN_L00_0025ab48(void *, float *, void *, void *);
+extern void FUN_L00_0025c558(void *, void *, s32, s32, s32, float);
+extern void FUN_L00_00257470(void *, s32, s32);
+extern void FUN_L00_0025d458(void *, void *);
+extern void FUN_L00_0025d538(void *, void *);
+extern void FUN_00212f90(void *, s32, s32, s32);
+extern s32 FUN_001f96f8(s32);
+extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
+extern float FUN_001f96b0(float);
+extern s32 FUN_001f9740(void *);
+extern s32 FUN_L00_0025ff38(void *, void *, s32, s32, void *, s32, float);
+
+/* Path patroller update: rides its carrier moby until dropped, takes hits (hit and death states), and follows its D_L11_001B0EB0 path toward the hero. */
+void FUN_L11_00315968(struct Moby *moby) {
+    struct L11PatrolVars *d = (struct L11PatrolVars *)moby->pvars;
+    Vec4 v;
+    s32 out;
+    float dmg;
+    struct L11HitInfo *hit;
+    char *path;
+
+    moby->scale = moby->pclass->scale * D_L11_001622CC;
+    d->unk1A4 = D_L11_001622FC * frame_time;
+    if (d->carrier != -1 && moby->state != 0xB && moby->state != 9 && moby->state != 0x12 &&
+        moby->state != 0x11 && moby->state != 0 && moby->state != 0xC && moby->state != 0xD) {
+        if (moby->pos.z < ((struct Moby *)D_L11_0015FFD8)[d->carrier].pos.z + 0.5f) {
+            FUN_L00_0025f3e8(moby, &moby->pos, -1, 0.5f, 10.0f);
+            mark_moby_for_removal(moby);
+        }
+    }
+    if (moby->state == 0xC && d->carrier != -1) {
+        if (FUN_L11_0030a830(&((struct Moby *)D_L11_0015FFD8)[d->carrier]) != 0 && moby->unk31 == 0) {
+            mark_moby_for_removal(moby);
+            return;
+        }
+        if (((struct Moby *)D_L11_0015FFD8)[d->carrier].state >= 2) {
+            moby->unk31 = 1;
+            moby->flags &= ~1;
+            moby->unk94 = moby->pclass->unk10;
+        }
+    }
+    dmg = 0.0f;
+    hit = FUN_L00_0025a420_h(moby, 0x330000, 0);
+    {
+        s32 kind = FUN_00213928(moby, hit, &d->hp, 0, &out, &dmg, 0, 4);
+        if (out != 1 && moby->state != 0xB) {
+            d->hp -= dmg;
+            if (hit->moby->oclass == 0x47) {
+                kind = 3;
+            }
+            if (d->hp <= 0.0f) {
+                kind = 1;
+            }
+            d->unk140 = FUN_001fa6d0(512.0f);
+            d->unk148 = 0.2f;
+            d->unk134 = 0.0f;
+            d->unk130 = D_L11_001622D0 * frame_time_sq;
+            d->unk144 = 9;
+            d->unk15D = 0;
+            switch (kind) {
+            case 0:
+                break;
+            case 9:
+            case 10:
+                d->unk117 = 0xFA;
+                break;
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8: {
+                float yaw;
+                d->unk138 = D_L11_001622D8 * frame_time;
+                d->unk13C = D_L11_001622D4 * frame_time;
+                d->unk170 = 7.5f;
+                d->unk174 = 11.0f;
+                yaw = FUN_001f9e90(moby->pos.x - hit->moby->pos.x, moby->pos.y - hit->moby->pos.y);
+                v.q = hit->pos.q;
+                FUN_L00_0025ab48(&v, &yaw, &d->unk138, &d->unk13C);
+                FUN_L00_0025c558(moby, d->unk120, 3, 1, 0, yaw);
+                if (moby->state < 0xC) {
+                    moby->state = 9;
+                } else {
+                    moby->state = 0x11;
+                }
+                d->unk117 = 0x78;
+                break;
+            }
+            case 1:
+            case 2: {
+                float yaw;
+                moby->flags &= ~0x1000;
+                d->unk130 = D_L11_001622D0 * frame_time_sq;
+                d->unk138 = D_L11_001622E0 * frame_time;
+                d->unk13C = D_L11_001622DC * frame_time;
+                d->unk170 = 7.5f;
+                d->unk174 = 11.0f;
+                yaw = FUN_001f9e90(moby->pos.x - hit->moby->pos.x, moby->pos.y - hit->moby->pos.y);
+                v.q = hit->pos.q;
+                FUN_L00_0025ab48(&v, &yaw, &d->unk138, &d->unk13C);
+                FUN_L00_0025c558(moby, d->unk120, 3, 1, 0, yaw);
+                if (moby->state < 0xC) {
+                    moby->state = 0xB;
+                } else {
+                    moby->state = 0x12;
+                }
+                d->unk117 = 0xF0;
+                FUN_L00_00257470(moby, 0, -1);
+                break;
+            }
+            case 11:
+                break;
+            }
+            FUN_L00_0025d458(moby, d->move);
+        }
+    }
+    moby->unkA4 = 0xFF;
+    FUN_L00_0025d538(moby, d->move);
+    if (d->timer != 0) {
+        if (moby->state == 2 || (moby->state == 3 && (moby->unk70 & 2))) {
+            moby->state = 0xA;
+            if (moby->prev_seq != 2) {
+                FUN_00212f90(moby, 2, 0, FUN_001f96f8(10));
+            }
+        }
+    }
+    if (d->retimer != 0) {
+        d->timer = FUN_001fa6d0(FUN_001f96b0(random_float_between(180.0f, 240.0f)));
+        d->retimer = 0;
+    }
+    FUN_001f9740(&d->timer);
+    if (d->timer != 0) {
+        d->reach = d->range + 64.0f;
+    } else {
+        d->reach = d->range;
+    }
+    path = path_table[d->path_index];
+    if (FUN_L00_0025ff38(moby, &d->goal, 0, 0, path + 0x10, *(s32 *)path, d->reach) != 2) {
+        Vec4f *p;
+        if (moby->state == 1) {
+            p = (Vec4f *)(path_table[d->path2_index] + 0x20);
+        } else {
+            p = &moby->pos;
+        }
+        qcopy(&v, p);
+        if (FUN_001f9b80(v.f, &d->goal.x) > d->reach || v.f[2] - d->goal.z > 3.0f) {
+            d->unk214 = 2;
+        }
+    }
+    if (d->target == 0) {
+        d->target = hero.moby;
+        qcopy(&d->goal, &hero.motion.pos);
+    }
+}
 extern float D_6C_e[] __asm__("D_0015ED68") __attribute__((section(".sdata")));
 extern float D_0015ED6C_g __asm__("D_0015ED6C");
 extern float D_L11_001622FC_g __asm__("D_L11_001622FC") __attribute__((sda));
@@ -276,7 +498,6 @@ struct L11ChainVars {
 };
 
 extern u8 D_0014C050[];
-extern char *chain_paths[] __asm__("D_L11_001B0EB0");
 extern s32 D_001413D4[];
 extern float D_L11_00162320 __attribute__((sda));
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -303,7 +524,7 @@ void FUN_L11_003172c0(struct Moby *moby) {
         }
         moby->unk30 = 0xFF;
         moby->unk32 = 0x200;
-        d->path = chain_paths[d->path_sel];
+        d->path = path_table[d->path_sel];
         qcopy(&moby->pos, d->path + 0x10);
         d->health = 80.0f;
         d->count = 8;
@@ -333,7 +554,7 @@ void FUN_L11_003172c0(struct Moby *moby) {
             int i;
 
             moby->state = 2;
-            d->path = chain_paths[d->path_index];
+            d->path = path_table[d->path_index];
             d->point = 0;
             for (i = 0; i < 8; i++) {
                 d->offsets[i] = *(u16 *)d->path - 100;
