@@ -2192,107 +2192,119 @@ void FUN_L14_002fba20(L14WatchMoby *m) {
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fc0f0.s", FUN_L14_002fc0f0);
-#else
-extern int FUN_L00_00262848(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
-extern void FUN_L00_00267410(float, float, struct Moby *, void *, int) __asm__("FUN_L00_0025f090");
-extern void FUN_L00_00293f98(int, int, int) __asm__("FUN_0022db10");
-extern void FUN_L00_0026b7f8(int, int) __asm__("FUN_L00_00263d40");
-extern void FUN_L00_00293b70(int) __asm__("FUN_0022d798");
+extern int cart_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
+extern void cart_burst(float, float, struct Moby *, void *, int) __asm__("FUN_L00_0025f090");
+extern void cart_bank_voice(int, int, int) __asm__("FUN_0022db10");
+extern void cart_dialog(int, int) __asm__("FUN_L00_00263d40");
+extern void cart_release(int) __asm__("FUN_0022d798");
 extern void FUN_L14_002fc890(struct Moby *);
 extern void FUN_L14_002fc9a0(struct Moby *);
 extern void FUN_L14_002fc3e8(struct Moby *);
-extern void FUN_L00_001fe1f8(const char *, short) __asm__("FUN_001e93b0");
-extern void FUN_L00_00257068(struct Moby *) __asm__("FUN_0020c828");
-extern int FUN_L00_002124c0(void *) __asm__("FUN_001f96f8");
-extern int FUN_L00_00212508(void *) __asm__("FUN_001f9740");
-extern float FUN_L00_00212ec0(float, float) __asm__("FUN_001f9e90");
-extern int FUN_L00_00293b18(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
-extern int FUN_L00_00293e40(int, int, struct Moby *) __asm__("FUN_0022da68");
+extern void cart_print(const char *, short) __asm__("FUN_001e93b0");
+extern void cart_remove(struct Moby *) __asm__("FUN_0020c828");
+extern int cart_frames(int) __asm__("FUN_001f96f8");
+extern int cart_tick(void *) __asm__("FUN_001f9740");
+extern float cart_atan2(float, float) __asm__("FUN_001f9e90");
+extern int cart_voice_alive(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
+extern int cart_sound(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern int D_0015EE08;
 extern struct { char pad[0x18]; unsigned char flag; } D_0013D408;
-extern void *D_L14_00161F5C __attribute__((sda));
+extern s32 D_L14_00161F5C __attribute__((sda));
 extern char D_0013E550[];
-extern char *D_L14_001B0BB0_c[] __asm__("D_L14_001B0BB0");
 extern char D_L14_001FCE10[];
 extern char D_L14_001FCE48[];
+extern char *D_L14_001B0BB0_cart[] __asm__("D_L14_001B0BB0");
 
+typedef struct {
+    u8 pad0[0x60];
+    s32 segment;     /* 0x60 */
+    s32 along;       /* 0x64 */
+    s32 path;        /* 0x68 */
+    s32 sound;       /* 0x6C */
+    f32 f70;         /* 0x70 */
+    f32 f74;         /* 0x74 */
+    f32 f78;         /* 0x78 */
+    s32 timer;       /* 0x7C */
+    f32 f80;         /* 0x80 */
+    f32 f84;         /* 0x84 */
+    f32 f88;         /* 0x88 */
+} L14CartVars;
+
+/* Cart update: follows its path, bursts when shot and respawns at the path start after a delay. */
 void FUN_L14_002fc0f0(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    int hit = FUN_L00_00262848(moby, 0x800000, 0);
+    L14CartVars *data = (L14CartVars *)moby->pvars;
+    int hit = cart_hit(moby, 0x800000, 0);
     int index;
     int path_index;
     char *path;
     moby->unkA4 = 0xff;
     if (hit && moby->state != 2) {
-        if (D_0015ED84_m == 14) {
+        if (current_level_index == 14) {
             D_0015EE08 = D_0015EE08 + 1;
             if (D_0015EE08 > 2 && D_0013D408.flag == 0) {
                 D_0013D408.flag = 1;
-                FUN_L00_00293f98(1, 0, 0);
-                FUN_L00_0026b7f8(0x53d6, -1);
+                cart_bank_voice(1, 0, 0);
+                cart_dialog(0x53d6, -1);
             }
         }
         moby->state = 2;
-        FUN_L00_00267410(5.0f, 13.0f, moby, &moby->pos, -1);
+        cart_burst(5.0f, 13.0f, moby, &moby->pos, -1);
         moby->unk94 = 0;
         moby->flags |= 0x41;
-        index = *(int *)(data + 0x6c);
+        index = data->sound;
         if (index != -1) {
             char *entry = D_0013E550 + index * 0x70;
             if (*(struct Moby **)(entry + 0x88) == moby && *(unsigned char *)(entry + 0x74) != 0)
-                FUN_L00_00293b70(index);
+                cart_release(index);
         }
-        *(int *)(data + 0x6c) = -1;
+        data->sound = -1;
     }
     switch (moby->state) {
     case 0:
-        path_index = *(int *)(data + 0x68);
+        path_index = data->path;
         if (path_index == -1) {
-            FUN_L00_001fe1f8(D_L14_001FCE10, moby->save_id);
-            FUN_L00_00257068(moby);
+            cart_print(D_L14_001FCE10, moby->save_id);
+            cart_remove(moby);
             return;
         }
-        if (*(int *)D_L14_001B0BB0_c[path_index] == 0) {
-            FUN_L00_001fe1f8(D_L14_001FCE48, moby->save_id);
-            FUN_L00_00257068(moby);
+        if (*(int *)D_L14_001B0BB0_cart[path_index] == 0) {
+            cart_print(D_L14_001FCE48, moby->save_id);
+            cart_remove(moby);
             return;
         }
         FUN_L14_002fc890(moby);
-        ((volatile struct Moby *)moby)->state = 1;
-        ((volatile struct Moby *)moby)->unk30 = 0xff;
-        ((volatile struct Moby *)moby)->unk32 = 0xff;
-        *(int *)(data + 0x6c) = -1;
-        *(int *)(data + 0x7c) = FUN_L00_002124c0(D_L14_00161F5C);
+        moby->state = 1;
+        moby->unk30 = 0xff;
+        moby->unk32 = 0xff;
+        data->sound = -1;
+        data->timer = cart_frames(D_L14_00161F5C);
         break;
     case 1:
         FUN_L14_002fc9a0(moby);
         break;
     case 2:
-      if (FUN_L00_00212508(data + 0x7c)) {
-        path = D_L14_001B0BB0_c[*(int *)(data + 0x68)];
+      if (cart_tick(&data->timer)) {
+        path = D_L14_001B0BB0_cart[data->path];
         moby->flags &= 0xffbe;
         moby->unk94 = moby->pclass->unk10;
-        *(int *)(data + 0x7c) = FUN_L00_002124c0(D_L14_00161F5C);
+        data->timer = cart_frames(D_L14_00161F5C);
         moby->state = 1;
-        *(int *)(data + 0x60) = 0;
-        *(int *)(data + 0x64) = 0;
+        data->segment = 0;
+        data->along = 0;
         qcopy(&moby->pos, path + 0x10);
-        moby->rot.z = FUN_L00_00212ec0(*(float *)(path + 0x20) - *(float *)(path + 0x10),
+        moby->rot.z = cart_atan2(*(float *)(path + 0x20) - *(float *)(path + 0x10),
                                            *(float *)(path + 0x24) - *(float *)(path + 0x14));
-        *(float *)(data + 0x80) = *(float *)(data + 0x84) =
-            *(float *)(data + 0x88) = *(float *)(data + 0x70) =
-            *(float *)(data + 0x74) = *(float *)(data + 0x78) = 0.0f;
+        data->f80 = data->f84 =
+            data->f88 = data->f70 =
+            data->f74 = data->f78 = 0.0f;
       }
       break;
     }
     FUN_L14_002fc3e8(moby);
     if (moby->state != 0 && moby->state != 2 &&
-        FUN_L00_00293b18(moby, *(int *)(data + 0x6c)) == 0)
-        *(int *)(data + 0x6c) = FUN_L00_00293e40(0, 4, moby);
+        cart_voice_alive(moby, data->sound) == 0)
+        data->sound = cart_sound(0, 4, moby);
 }
-#endif
 /* A smoke puff from FUN_L00_0026d000. */
 typedef struct {
     u8 pad0[4];
