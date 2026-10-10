@@ -97,7 +97,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
                          ((u64)((active_fs_aa_buffer->storage_height << 3) + 0x7FF8) << 16);
         strip_index++;
     } while (strip_index < 16);
-    packet_word[0] = 0x4400000000008001;
+    fs_aa_transfer_packet[76] = 0x4400000000008001;
     fs_aa_transfer_packet[77] = 0x4410;
     packet_word[2] = 0x181;
     packet_word[3] = 0x80000000;
