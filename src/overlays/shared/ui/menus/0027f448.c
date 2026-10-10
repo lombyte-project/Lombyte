@@ -55,22 +55,20 @@ int FUN_L00_00284d90(int groupIndex, int itemIndex) {
         if (current == value) goto store;
         if (current == 0) {
             *writeSlot = value;
-            goto done;
+            return slotIndex;
         }
-        for (slotIndex = 62; (slot -= 2, slotIndex >= 0); slotIndex--) {
+        do {
+            if (--slotIndex < 0) break;
+            slot -= 2;
             writeSlot = slot;
             current = *writeSlot;
-            if (current == value) {
-                *writeSlot = value;
-                goto done;
-            }
-            if (current == 0) goto store;
-        }
+            if (current == value) goto store;
+        } while (current != 0);
+        if (slotIndex >= 0) goto store;
     }
-    goto done;
+    return slotIndex;
 store:
     *writeSlot = value;
-done:
     return slotIndex;
 }
 #endif /* NON_MATCHING */
