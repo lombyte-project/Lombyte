@@ -213,7 +213,6 @@ typedef struct G2d1428 {
     u8 p224[0x10];
     f32 f234;
 } G2d1428;
-extern G2d1428 D_0013F350;
 extern V2d1428 D_L00_00173E60;
 s32 FUN_L00_0025e3b8(M2d1428 *);
 void FUN_001f9a28(void *, void *, void *);

@@ -56,20 +56,20 @@ s32 sceGsSetDefLoadImage(sceGsLoadImage *image, s16 destination_base,
     ((struct GifTag *)&image->q[0])->NLOOP = 4;
     ((struct GifTag *)&image->q[0])->NREG = 1;
     image->q[1] = (image->q[1] & ~0xfULL) | 0xe;
-    ((struct GifTag *)&image->q[10])->NLOOP = size;
-    ((struct GifTag *)&image->q[10])->EOP = 1;
-    ((struct GifTag *)&image->q[10])->FLG = 2;
     image->q[2] = ((u64)(s64)destination_base << 0x20) |
                   ((u64)(s64)destination_width << 0x30) |
                   ((u64)(s64)pixel_format << 0x38);
     image->q[3] = 0x50;
-    image->q[4] = ((u64)(s64)destination_y << 0x30) |
-                  ((u64)(s64)destination_x << 0x20);
+    image->q[4] = ((u64)(s64)destination_x << 0x20) |
+                  ((u64)(s64)destination_y << 0x30);
     image->q[5] = 0x51;
     image->q[6] = (u64)(s64)width | ((u64)(s64)height << 0x20);
     image->q[7] = 0x52;
     image->q[8] = 0;
     image->q[9] = 0x53;
+    ((struct GifTag *)&image->q[10])->NLOOP = size;
+    ((struct GifTag *)&image->q[10])->EOP = 1;
+    ((struct GifTag *)&image->q[10])->FLG = 2;
     __sync_synchronize();
     return 6;
 }

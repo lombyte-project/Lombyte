@@ -342,7 +342,7 @@ void FUN_L05_0023dc88(int i) {
         }
     }
     {
-        struct Hero *s = (struct Hero *)((char *)&hero + i * sizeof(struct HeroItemSlot));
+        struct Hero *s = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
         st = s->items[0].unk1C;
         if (st == 2) {
             changed = 0;
@@ -351,7 +351,7 @@ void FUN_L05_0023dc88(int i) {
             s->items[0].timer = s->items[0].timer_reload;
         }
     }
-    if (FUN_001f9770(((char *)&hero) + 0x10A8 + i * 0x50) == 0) {
+    if (FUN_001f9770(&hero.items[i].timer) == 0) {
         changed = 0;
     }
     if (changed) {
@@ -359,13 +359,13 @@ void FUN_L05_0023dc88(int i) {
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
         FUN_L00_0020a500();
         *(int *)((char *)g + 0x1010) = FUN_L00_00257b90(FUN_001f96f8(0x32), FUN_001f96f8(0x5A));
-        FUN_L00_0020fde0(*((int *)(((char *)&hero) + 0x20D4) + i));
-        FUN_L00_0020fd80(*((int *)(((char *)&hero) + 0x20D4) + i));
+        FUN_L00_0020fde0(*(hero.selected_item + i));
+        FUN_L00_0020fd80(*(hero.selected_item + i));
         if (g->unk20A8 != 0) {
             FUN_L00_0020e698();
         }
         if (i == 0) {
-            if (*(int *)(((char *)&hero) + 0x20D4) == 8) {
+            if (*hero.selected_item == 8) {
                 D_0015ED90 = 1;
             } else {
                 D_0015ED90 = 0;
@@ -398,7 +398,7 @@ void FUN_L05_0023dc88(int i) {
             }
         }
         {
-            struct Hero *e = (struct Hero *)((char *)&hero + i * sizeof(struct HeroItemSlot));
+            struct Hero *e = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
             e->items[0].state = 3;
         }
     }
@@ -411,86 +411,83 @@ extern int D_L05_0015F5CC;
 extern int FUN_001f0b58(void);
 extern int FUN_L00_00216de8_c(int a, int b) __asm__("FUN_L00_00216de8");
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern unsigned char D_0013F350_c[] __asm__("D_0013F350");
 extern void FUN_L00_002126b8(void *, void *, int, float, float);
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
 
-#define F(o) (*(float *)(p + (o)))
-#define I(o) (*(int *)(p + (o)))
 
 int FUN_L05_002515d0(void) {
-    char *p = (char *)D_0013F350_c;
-    char *q;
-    char *u;
+    struct Hero *p = &hero;
+    struct Hero *q;
+    struct Hero *u;
     int r;
     float v1[4];
     float v2[4];
     float t;
     float scale;
-    if ((unsigned)(I(0x208C) - 0x15) < 2) {
+    if ((unsigned)(p->state.control_mode - 0x15) < 2) {
         return 0;
     }
-    if (I(0x2084) == 0x6F || I(0x2084) == 0x6D || I(0x2084) == 0x6E || I(0x2084) == 0x6A) {
+    if (p->state.current == 0x6F || p->state.current == 0x6D || p->state.current == 0x6E || p->state.current == 0x6A) {
         return 0;
     }
     r = 0;
-    if (*(unsigned char *)(p + 0x12E4) != 0) {
-        if (I(0x208C) == 0x11) {
-            if (I(0x2088) != 1) {
-                if (0.0f < F(0x108)) {
-                    if (F(0x2F0) - 0.4f < F(0x88)) {
+    if (p->base_condition != 0) {
+        if (p->state.control_mode == 0x11) {
+            if (p->state.step != 1) {
+                if (0.0f < p->motion.unk100.f[2]) {
+                    if (p->height_threshold - 0.4f < p->motion.pos.f[2]) {
                         r = 1;
                     }
                 }
             }
-        } else if (I(0x208C) != 0x12 && I(0x208C) != 3) {
+        } else if (p->state.control_mode != 0x12 && p->state.control_mode != 3) {
             t = 0.2f;
-            if (t < AbsoluteFloat(F(0xE8)) + 0.07f) {
-                t = AbsoluteFloat(F(0xE8)) + 0.07f;
+            if (t < AbsoluteFloat(p->motion.velocity.f[2]) + 0.07f) {
+                t = AbsoluteFloat(p->motion.velocity.f[2]) + 0.07f;
             }
-            if (AbsoluteFloat(F(0x2F0) - (F(0x88) + 0.45f)) < t) {
-                if (I(0x208C) != 4 || *(short *)(p + 0x41E) != 0) {
-                    if (0.8f < F(0x22A4) && F(0x108) < 0.0f) {
+            if (AbsoluteFloat(p->height_threshold - (p->motion.pos.f[2] + 0.45f)) < t) {
+                if (p->state.control_mode != 4 || p->unk41E != 0) {
+                    if (0.8f < p->unk22A4 && p->motion.unk100.f[2] < 0.0f) {
                         r = 1;
                     }
                 }
             }
-            q = (char *)D_0013F350_c;
-            if (*(float *)(q + 0x88) < *(float *)(q + 0x2F0) - 0.8f) {
-                if (*(int *)(q + 0x208C) != 4 || *(short *)(q + 0x41E) != 0) {
+            q = &hero;
+            if (q->motion.pos.f[2] < q->height_threshold - 0.8f) {
+                if (q->state.control_mode != 4 || q->unk41E != 0) {
                     r = 1;
                 }
             }
         }
     }
-    p = (char *)D_0013F350_c;
+    p = &hero;
     t = 0.27f;
-    if (t < AbsoluteFloat(F(0xE8)) + 0.07f) {
-        t = AbsoluteFloat(F(0xE8));
+    if (t < AbsoluteFloat(p->motion.velocity.f[2]) + 0.07f) {
+        t = AbsoluteFloat(p->motion.velocity.f[2]);
     }
-    if (I(0x2084) == 0x12) {
-        if (*(short *)(p + 0x41E) != 0) {
-            if (F(0x88) < F(0x2F0) - 0.7f) {
+    if (p->state.current == 0x12) {
+        if (p->unk41E != 0) {
+            if (p->motion.pos.f[2] < p->height_threshold - 0.7f) {
                 r = 1;
             }
         }
     }
-    u = (char *)D_0013F350_c;
-    if (*(int *)(u + 0x208C) - 0x11 >= 2u && *(int *)(u + 0x208C) != 7 &&
-        *(int *)(u + 0x208C) != 0x14 && *(int *)(u + 0x2084) != 0x12 &&
+    u = &hero;
+    if (u->state.control_mode - 0x11 >= 2u && u->state.control_mode != 7 &&
+        u->state.control_mode != 0x14 && u->state.current != 0x12 &&
         (D_L05_0015F5CC & 0xF) == 0) {
         scale = 4.0f;
         if ((D_L05_0015F5CC & 0x3F) == 0) {
             scale = 16.0f;
         }
         FUN_L00_002126b8(v1, v2, 0, scale, 1.3f);
-        if (func_L00_001EFFF0(v1, v2, 2, *(int *)(u + 0x2080), 0) != 0) {
+        if (func_L00_001EFFF0(v1, v2, 2, *(int *)&u->moby, 0) != 0) {
             int s = FUN_001f0b58();
-            *(short *)(u + 0x12E0) = s;
+            u->unk12E0 = s;
             if ((short)s == 0) {
                 v1[2] = D_L05_00174268 - 0.01f;
-                if (func_L00_001EFFF0(v1, v2, 2, *(int *)(u + 0x2080), 0) == 0) {
+                if (func_L00_001EFFF0(v1, v2, 2, *(int *)&u->moby, 0) == 0) {
                     hero_set_state(0x34, 1);
                     return 1;
                 }
@@ -513,10 +510,6 @@ typedef struct {
     int seq;
 } SndPair_254030;
 
-typedef struct {
-    char pad[0x6E0];
-    int flags[6];
-} Hero6E0_254030;
 
 extern SndPair_254030 D_L05_00179BC0[];
 extern char D_0013CAE0[];
@@ -524,49 +517,48 @@ extern float FUN_L00_00232b90(float a, float b, float c);
 extern int FUN_L05_002551b8_c(void) __asm__("FUN_L05_002551b8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern unsigned char D_0013F350_c2[] __asm__("D_0013F350");
 extern void FUN_L00_002323b8(int, int, float);
 extern void FUN_L00_002325e0(int bank, int seq);
 
 void FUN_L05_00253850(void) {
-    char *g = (char *)D_0013F350_c2;
+    struct Hero *g = &hero;
     int pad;
-    *(short *)(g + 0x888) =
-        truncate_float_to_s32(FUN_L00_00232b90(60.0f, *(float *)(g + 0x860), -1.0f));
-    if (((unsigned char *)g)[0x88D] != 0 && ((pad = *(int *)(D_0013CAE0)) & 0xF) != 0) {
-        g[0x88F] = 0;
+    g->unk888 =
+        truncate_float_to_s32(FUN_L00_00232b90(60.0f, g->unk860, -1.0f));
+    if (g->unk88D != 0 && ((pad = *(int *)(D_0013CAE0)) & 0xF) != 0) {
+        g->unk88F = 0;
         if (pad & 8)
-            g[0x88F] = 1;
+            g->unk88F = 1;
         else if (pad & 1)
-            g[0x88F] = 2;
+            g->unk88F = 2;
         else if (pad & 2)
-            g[0x88F] = 3;
+            g->unk88F = 3;
         {
-            char *h = (char *)D_0013F350_c2;
-            int a = ((unsigned char *)h)[0x88F] + 0x69;
-            if (((unsigned char *)*(char **)(h + 0x2080))[0x53] != a) {
+            struct Hero *h = &hero;
+            int a = h->unk88F + 0x69;
+            if (((unsigned char *)*(char **)&h->moby)[0x53] != a) {
                 FUN_L00_002323b8(a, 2, (float)scale_game_frames(5));
-                FUN_L00_002325e0(D_L05_00179BC0[((unsigned char *)h)[0x88F]].bank,
-                                 D_L05_00179BC0[((unsigned char *)h)[0x88F]].seq);
-            } else if ((float)*(int *)(h + 0xAB0) - 2.0f < *(float *)(h + 0xAA8)) {
-                ((Hero6E0_254030 *)h)->flags[((unsigned char *)h)[0x88F]] = 1;
-                *(int *)(h + 0x6F8) += 1;
+                FUN_L00_002325e0(D_L05_00179BC0[h->unk88F].bank,
+                                 D_L05_00179BC0[h->unk88F].seq);
+            } else if ((float)h->unkAB0 - 2.0f < h->unkAA8) {
+                h->unk6E0[h->unk88F] = 1;
+                h->unk6F8 += 1;
             }
         }
     }
     {
-        char *k = (char *)D_0013F350_c2;
-        if ((*(short *)(k + 0x30E) == 0 || (*(int *)(D_0013CAE0) & 0xF) == 0) &&
-            (unsigned int)(((unsigned char *)*(char **)(k + 0x2080))[0x53] - 0x69) < 4 &&
-            *(int *)(k + 0xA9C) == 0 &&
-            *(int *)(k + 0xAB0) < ((unsigned char *)*(char **)(k + 0x2080))[0x51] &&
-            ((unsigned char *)*(char **)(k + 0x2080))[0x51] < *(int *)(k + 0xAB4)) {
-            int t = *(short *)(k + 0x888);
+        struct Hero *k = &hero;
+        if ((k->air_frames.s == 0 || (*(int *)(D_0013CAE0) & 0xF) == 0) &&
+            (unsigned int)(((unsigned char *)((char *)k->moby))[0x53] - 0x69) < 4 &&
+            k->unkA9C == 0 &&
+            k->unkAB0 < ((unsigned char *)((char *)k->moby))[0x51] &&
+            ((unsigned char *)((char *)k->moby))[0x51] < k->unkAB4) {
+            int t = k->unk888;
             if (t > scale_game_frames(0x1E)) {
                 int x = FUN_L05_002551b8_c();
                 FUN_L00_002323b8(x, 9, (float)scale_game_frames(0x11));
             } else {
-                t = *(short *)(k + 0x888);
+                t = k->unk888;
                 if (t < scale_game_frames(0xA))
                     t = scale_game_frames(0xA);
                 FUN_L00_002323b8(FUN_L05_002551b8_c(), 0xD, (float)t);
@@ -574,9 +566,9 @@ void FUN_L05_00253850(void) {
         }
     }
     {
-        char *h = (char *)D_0013F350_c2;
-        if (*(short *)(h + 0x8BC) != 0) {
-            int a = ((unsigned char *)*(char **)(h + 0x2080))[0x53];
+        struct Hero *h = &hero;
+        if (h->unk8BC != 0) {
+            int a = ((unsigned char *)((char *)h->moby))[0x53];
             if (a == 0x52 || a == 0x7D || a == 0x68 || a == 0x7E) {
                 int x = FUN_L05_002551b8_c();
                 FUN_L00_002323b8(x, 0xB, (float)scale_game_frames(0xA));
@@ -584,25 +576,167 @@ void FUN_L05_00253850(void) {
         }
     }
     {
-        char *h = (char *)D_0013F350_c2;
-        if ((*(int *)(h + 0xA98) & 2) && *(short *)(h + 0x30C) != 0) {
+        struct Hero *h = &hero;
+        if ((h->unkA98 & 2) && h->unk30C.s != 0) {
             int x = FUN_L05_002551b8_c();
             FUN_L00_002323b8(x, 9, (float)scale_game_frames(7));
         }
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00253b48.s", FUN_L05_00253b48);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254058.s", FUN_L05_00254058);
+#else
+#include "rnc/gameplay/state/usage_stats.h"
+extern u8 D_0013D388;
+extern struct UsageStats D_00141848;
+extern s32 D_0015EEA4;
+extern s32 D_0015ED84 __attribute__((sda));
+extern s32 D_0015EEA4_sda __asm__("D_0015EEA4") __attribute__((sda));
+extern f32 D_L05_002169F8[] __asm__("D_L05_002169F8");
+extern f32 FUN_001f96b0(f32) __asm__("FUN_L05_0022dbc8");
+
+void FUN_L05_00254058(void) {
+    char *g = D_0013F350_c2;
+    int i;
+    int total;
+    int step;
+    struct { f32 values[5]; } table;
+    f32 frames;
+
+    if (D_0013D388 == 0) return;
+    if (*(s32 *)(g + 0x8A8) != 0) {
+        struct UsageStat *stat = &D_00141848.stat[30];
+        s32 duration = D_0015EEA4_sda;
+        if (stat->count <= 0xFFFE) {
+            stat->count++;
+            duration = *(s32 *)0x0015EEA4;
+        }
+        if (stat->unk2 < scale_game_frames(duration) / 600)
+            stat->unk2 = scale_game_frames(D_0015EEA4_sda) / 600;
+        stat->level_mask |= (1 << D_0015ED84) | 0x80000000;
+    }
+    {
+        s32 *counter = (s32 *)(g + 0x700);
+        for (i = 2; i >= 0; i--, counter++) {
+            if (AbsoluteFloat(*(f32 *)(counter - 12)) > 3.3161256f) {
+                f32 rotation = *(f32 *)(counter - 12);
+                s32 count = *counter;
+                if (0.0f < rotation) rotation -= 6.2831855f;
+                else rotation += 6.2831855f;
+                *(f32 *)(counter - 12) = rotation;
+                *counter = count + 1;
+            }
+        }
+    }
+    *(s32 *)(g + 0x70C) = 0;
+    for (i = 0; i < 3; i++) {
+        if (*(s32 *)(g + 0x70C) < *(s32 *)(g + 0x700 + i * 4))
+            *(s32 *)(g + 0x70C) = *(s32 *)(g + 0x700 + i * 4);
+    }
+    *(s32 *)(g + 0x710) = 0;
+    total = *(s32 *)(g + 0x70C);
+    if (total > 0) {
+        step = 100;
+        do {
+            *(s32 *)(g + 0x710) += step;
+            step += 50;
+        } while (--total != 0);
+    }
+    *(s32 *)(g + 0x6F0) = 0;
+    for (i = 0; i < 4; i++) {
+        if (*(s32 *)(g + 0x6E0 + i * 4) != 0) (*(s32 *)(g + 0x6F0))++;
+    }
+    table = *(typeof(table) *)D_L05_002169F8;
+    *(f32 *)(g + 0x6F4) = table.values[*(s32 *)(g + 0x6F0)];
+    frames = FUN_001f96b0(1.0f);
+    *(s32 *)(g + 0x6FC) = truncate_float_to_s32((f32)((*(s32 *)(g + 0x6F8) * 100) / (s32)(frames * 60.0f)));
+    *(s32 *)(g + 0x6FC) += *(s32 *)(g + 0x6F0) * 25;
+    *(s32 *)(g + 0x6FC) = truncate_float_to_s32((f32)*(s32 *)(g + 0x6FC) * *(f32 *)(g + 0x6F4));
+    *(s32 *)(g + 0x714) = *(s32 *)(g + 0x710) + *(s32 *)(g + 0x6FC);
+}
+#endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254358.s", FUN_L05_00254358);
+#else
+extern char *D_L05_001B0930[];
+extern f32 FUN_001f9e90(f32, f32);
+extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
+extern f32 FUN_001f9b80(void *, void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern f32 find_ground_height(f32, void *, s32) __asm__("FUN_00213508");
+extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
+
+typedef struct {
+    f32 x, y, z, w;
+} __attribute__((aligned(16))) HelpPathPoint;
+
+typedef struct {
+    s32 count;
+    u8 pad[12];
+    HelpPathPoint points[1];
+} HelpPath;
+
+void FUN_L05_00254358(f32 *position, f32 *direction) {
+    char *g = D_0013F350_c2;
+    HelpPath *path;
+    f32 best;
+    s32 index = 0;
+    s32 selected = 0;
+    f32 point[4] __attribute__((aligned(16)));
+    HelpPathPoint *p;
+
+    if (*(void **)(g + 0x86C) == 0) {
+        *(HelpPathPoint *)position = *(HelpPathPoint *)(g + 0x80);
+        *(HelpPathPoint *)direction = *(HelpPathPoint *)(g + 0x90);
+        return;
+    }
+    path = (HelpPath *)D_L05_001B0930[*(s32 *)(*(char **)(g + 0x86C) + 0x78)];
+    best = 9999999.0f;
+    p = path->points;
+    while (index < path->count) {
+        f32 a = FUN_001f9e90(p->x - *(f32 *)(g + 0x80), p->y - *(f32 *)(g + 0x84));
+        s32 next = (index + path->count + 2) % path->count;
+        f32 b = FUN_001f9e90(path->points[next].x - p->x, path->points[next].y - p->y);
+        if (fast_difference_between_rotations(a, b) > 1.5707964f) {
+            s32 eligible = 1;
+            if (current_level_index == 0x10 && *(void **)(g + 0x8B4) != 0) {
+                char *v = *(char **)(g + 0x8B4);
+                f32 a = *(f32 *)(v + *(s16 *)(g + 0x8C8) * 16 + 0x18);
+                f32 b = *(f32 *)(v + *(s16 *)(g + 0x898) * 16 + 0x18);
+                f32 high = a < b ? b : a;
+                if (AbsoluteFloat(high - p->z) > 4.0f) {
+                    eligible = 0;
+                }
+            }
+            if (eligible) {
+                f32 distance = FUN_001f9b80(g + 0x80, p);
+                if (distance < best) {
+                    best = distance;
+                    selected = index;
+                }
+            }
+        }
+        index += 2;
+        p += 2;
+    }
+    *(HelpPathPoint *)position = path->points[selected];
+    *(HelpPathPoint *)point = *(HelpPathPoint *)position;
+    point[2] += 2.0f;
+    position[2] = find_ground_height(0.5f, point, 0);
+    clear_u64_value(direction);
+    direction[2] = FUN_001f9e90(path->points[selected + 1].x - path->points[selected].x,
+                                 path->points[selected + 1].y - path->points[selected].y);
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254608.s", FUN_L05_00254608);
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_002559A0), where it is exact; names translated to the US level program. */
 
-extern unsigned char D_0013FC1E __attribute__((section(".data")));
 
 int FUN_L05_002551b8(void) {
-    unsigned char b = D_0013FC1E; // selected help mode
+    unsigned char b = hero.unk8CE; // selected help mode
     int r = 0x7F;
     if (b == 0)
         r = 0x55;

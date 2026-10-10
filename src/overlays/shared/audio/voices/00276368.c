@@ -4,7 +4,115 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00276368.s", FUN_L00_00276368);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00276908.s", FUN_L00_00276908);
+#else
+struct GameState;
+struct Ent;
+extern struct GameState D_L00_001B9CF0;
+extern struct Ent *D_L00_001B9E90[];
+extern s32 D_L00_0015F5D8;
+extern s32 current_bolt_count __asm__("D_0015ED98");
+extern void FUN_L00_00239cc8(void);
+extern void FUN_L00_00239d00(void);
+extern void FUN_L00_00239df8(void);
+extern s32 D_00141660[];
+extern s32 D_00141408[];
+extern s32 D_0015EE78_gp __attribute__((sda));
+extern void *D_L00_00197300[];
+extern u8 D_L00_0017E4D8[] __attribute__((section(".data")));
+extern u8 D_L00_00173E40[] __attribute__((section(".data")));
+extern void FUN_L00_002a09d8(s32);
+extern void FUN_L00_002a07f8(void) __asm__("FUN_002335d0");
+extern void FUN_L00_002a08c8(void);
+extern void hud_send_resident_bank(s32, s32, s32) __asm__("FUN_001ff128");
+extern void FUN_L00_00235310(s32);
+extern struct Ent *delete_moby(struct Ent *) __asm__("FUN_00225530");
+extern s32 FUN_L00_00234e00(void);
+extern void FUN_L00_00235e18(s32, s32);
+extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
+
+void FUN_L00_00276908(void) {
+    s32 i;
+    s32 value;
+    s32 handle;
+    void *obj;
+    void (*callback)(void *, s32);
+    u8 *state = (u8 *)&D_L00_001B9CF0;
+    s32 *saved;
+    s32 remaining;
+    s32 *desired;
+    s32 *active;
+    u8 *table;
+
+    if (*(s32 *)(state + 0x110) < 10) {
+        return;
+    }
+    FUN_L00_002a09d8(1);
+    FUN_L00_002a07f8();
+    if (*(void **)(state + 4) != 0) {
+        for (i = 0; i < 14; i++) {
+            obj = *(void **)((u8 *)*(void **)(state + 4) + 0x44 + i * 4);
+            if (obj != 0) {
+                callback = *(void (**)(void *, s32))((u8 *)obj + 0xc);
+                if (callback != 0) {
+                    callback(obj, 0);
+                }
+            }
+        }
+        *(void **)(state + 4) = 0;
+    }
+    saved = D_00141408;
+    desired = (s32 *)(state + 0x30);
+    active = D_00141660;
+    remaining = 3;
+    do {
+        if (*active != *desired) {
+            *saved = *desired != 0 ? *desired : 0x26;
+        }
+        saved++;
+        desired++;
+        active++;
+        remaining--;
+    } while (remaining >= 0);
+    D_0015EE78_gp = *(s32 *)(state + 0x18);
+    hud_send_resident_bank(0, *(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x74), 0);
+    FUN_L00_00235310(2);
+    if (*(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x80) != 0) {
+        FUN_L00_00235310(3);
+    }
+    if (*(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x84) != 0) {
+        FUN_L00_00235310(4);
+    }
+    for (i = 13; i >= 0; i--) {
+        D_L00_001B9E90[13 - i] = delete_moby(D_L00_001B9E90[13 - i]);
+    }
+    handle = FUN_L00_00234e00();
+    FUN_L00_00235e18(handle, scale_game_frames(0xb4));
+    handle = queue_animation_update(2, 0x754e, FUN_L00_00239cc8, FUN_L00_00239d00,
+                                FUN_L00_00239df8, &current_bolt_count, 9999999);
+    FUN_L00_00235e18(handle, scale_game_frames(0xb4));
+    *(s32 *)(state + 0) = 0x14;
+    *(s32 *)(state + 0x14) = 2;
+    table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
+    value = *(s32 *)(state + 0xcc);
+    if (value < table[0xc]) {
+        i = value;
+        do {
+            table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
+            *(s32 *)(table + 0x48 + i * 4) = 0;
+            i++;
+            table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
+        } while (i < table[0xc]);
+    }
+    table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
+    table[0xc] = (u8)value;
+    D_L00_0015F5D8 = 1;
+    *(s32 *)(D_L00_00173E40 + 0x10) &= 0x7fffffff;
+    FUN_L00_002a08c8();
+    FUN_L00_002a09d8(1);
+}
+#endif
 #include "eetypes.h"
 #include "qcopy.h"
 

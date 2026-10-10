@@ -2,9 +2,223 @@
 #include "types.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261968.s", FUN_L00_00261968);
+#else
+#include "rnc/overlay/quad.h"
+
+typedef struct {
+    s32 count;
+    u8 pad[12];
+    OvlVec4 points[1];
+} SegmentPath_261968;
+
+extern SegmentPath_261968 *D_L00_001B04B0_261968[] __asm__("D_L00_001B04B0");
+extern void FUN_001ff2a8_261968(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
+extern f32 FUN_001ff3d8_261968(OvlVec4 *) __asm__("FUN_001f9af0");
+extern void FUN_001ff500_261968(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
+extern void FUN_001ff260_261968(OvlVec4 *) __asm__("FUN_001f99f8");
+extern void FUN_001ff6d0_261968(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9cf8");
+
+s32 FUN_L00_00261968(s32 path_index, OvlVec4 *start, OvlVec4 *end) {
+    OvlVec4 direction;
+    OvlVec4 axis;
+    OvlVec4 origin;
+    OvlVec4 first;
+    OvlVec4 next;
+    OvlVec4 *previous;
+    SegmentPath_261968 **entry;
+    s32 i;
+    s32 offset;
+    f32 crossing;
+
+    FUN_001ff2a8_261968(&direction, end, start);
+    direction.i[2] = 0;
+    FUN_001ff500_261968(&direction, &direction, 1.0f / FUN_001ff3d8_261968(&direction));
+    FUN_001ff260_261968(&axis);
+    axis.f[0] = direction.f[1];
+    axis.f[1] = -direction.f[0];
+    FUN_001ff260_261968(&origin);
+    origin.f[2] = 1.0f;
+    entry = &D_L00_001B04B0_261968[path_index];
+    previous = &first;
+    FUN_001ff2a8_261968(previous, &(*entry)->points[0], start);
+    FUN_001ff6d0_261968(previous, previous, &direction);
+    i = 1;
+    if (i < (*entry)->count) {
+    offset = 0x20;
+    do {
+        FUN_001ff2a8_261968(&next, (OvlVec4 *)((u8 *)*entry + offset), start);
+        FUN_001ff6d0_261968(&next, &next, &direction);
+        if (previous->f[3] != 0.0f || next.f[3] != 0.0f) {
+            if (next.f[1] * previous->f[1] < 0.0f) {
+                crossing = (previous->f[0] - next.f[0]) / (previous->f[1] - next.f[1]) * -next.f[1] + next.f[0];
+                if (crossing > 0.0f && crossing < 1.0f)
+                    return 1;
+            }
+        }
+        previous->q = next.q;
+        offset += 0x10;
+        i++;
+    } while (i < (*entry)->count);
+    }
+    return 0;
+}
+#endif /* NON_MATCHING */
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261b48.s", FUN_L00_00261b48);
+#else
+#include "rnc/overlay/quad.h"
+
+typedef struct {
+    s32 count;
+    u8 pad[12];
+    OvlVec4 points[1];
+} SegmentPath_261b48;
+
+extern SegmentPath_261b48 *D_L00_001B04B0_261b48[] __asm__("D_L00_001B04B0");
+extern void FUN_001ff2a8_261b48(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
+extern f32 FUN_001ff3d8_261b48(OvlVec4 *) __asm__("FUN_001f9af0");
+extern void FUN_001ff500_261b48(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
+extern void FUN_001ff260_261b48(OvlVec4 *) __asm__("FUN_001f99f8");
+extern void FUN_001ff6d0_261b48(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9cf8");
+extern void FUN_001ff2d8_261b48(OvlVec4 *, OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9a40");
+
+s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out) {
+    OvlVec4 direction;
+    OvlVec4 axis;
+    OvlVec4 origin;
+    OvlVec4 first;
+    OvlVec4 next;
+    OvlVec4 *previous;
+    OvlVec4 *current;
+    SegmentPath_261b48 **entry;
+    s32 i;
+    s32 offset;
+    s32 found;
+    f32 nearest;
+    f32 crossing;
+
+    FUN_001ff2a8_261b48(&direction, end, start);
+    direction.i[2] = 0;
+    FUN_001ff500_261b48(&direction, &direction, 1.0f / FUN_001ff3d8_261b48(&direction));
+    nearest = 1.0f;
+    FUN_001ff260_261b48(&axis);
+    axis.f[0] = direction.f[1];
+    axis.f[1] = -direction.f[0];
+    FUN_001ff260_261b48(&origin);
+    origin.f[2] = 1.0f;
+    entry = &D_L00_001B04B0_261b48[path_index];
+    previous = &first;
+    FUN_001ff2a8_261b48(previous, &(*entry)->points[0], start);
+    FUN_001ff6d0_261b48(previous, previous, &direction);
+    found = 0;
+    i = 1;
+    current = &next;
+    if (i < (*entry)->count) {
+        offset = 0x20;
+        do {
+            FUN_001ff2a8_261b48(current, (OvlVec4 *)((u8 *)*entry + offset), start);
+            FUN_001ff6d0_261b48(current, &next, &direction);
+            if (previous->f[3] != 0.0f || current->f[3] != 0.0f) {
+                if (current->f[1] * previous->f[1] < 0.0f) {
+                    crossing = (previous->f[0] - current->f[0]) / (previous->f[1] - current->f[1]) * -current->f[1] + current->f[0];
+                    if (crossing > 0.0f && crossing < nearest) {
+                        nearest = crossing;
+                        found = 1;
+                    }
+                }
+            }
+            previous->q = current->q;
+            i++;
+            offset += 0x10;
+        } while (i < (*entry)->count);
+    }
+    FUN_001ff2d8_261b48(out, start, end, nearest);
+    return found;
+}
+#endif /* NON_MATCHING */
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261d78.s", FUN_L00_00261d78);
+#else
+#include "rnc/overlay/quad.h"
+
+typedef struct {
+    s32 count;
+    u8 pad[12];
+    OvlVec4 points[1];
+} SegmentPath_261d78;
+
+extern SegmentPath_261d78 *D_L00_001B04B0_261d78[] __asm__("D_L00_001B04B0");
+extern f32 FUN_001ff218_261d78(f32) __asm__("FUN_001f99c0");
+extern void FUN_001ff278_261d78(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
+extern void FUN_001ff2a8_261d78(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
+extern f32 FUN_001ff398_261d78(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ab0");
+extern void FUN_001ff3c0_261d78(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ad8");
+extern f32 FUN_001ff3d8_261d78(OvlVec4 *) __asm__("FUN_001f9af0");
+extern void FUN_001ff500_261d78(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
+
+s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) {
+    OvlVec4 difference;
+    OvlVec4 scaled_difference;
+    OvlVec4 working;
+    OvlVec4 segment;
+    OvlVec4 scaled_segment;
+    OvlVec4 cross;
+    OvlVec4 scaled_cross;
+    SegmentPath_261d78 **entry;
+    s32 i;
+    s32 found;
+    f32 segment_length;
+    f32 projection;
+
+    working.q = point->q;
+    found = 0;
+    entry = &D_L00_001B04B0_261d78[path_index];
+    i = 0;
+    if (i < (*entry)->count - 1) {
+        do {
+            if ((*entry)->points[i].f[3] != 0.0f || (*entry)->points[i + 1].f[3] != 0.0f) {
+                FUN_001ff2a8_261d78(&difference, &working, &(*entry)->points[i + 1]);
+                difference.i[2] = 0;
+                FUN_001ff2a8_261d78(&segment, &(*entry)->points[i + 1], &(*entry)->points[i]);
+                segment.i[2] = 0;
+                FUN_001ff500_261d78(&scaled_segment, &segment, 1.0f);
+                FUN_001ff3c0_261d78(&cross, &difference, &scaled_segment);
+                segment_length = FUN_001ff218_261d78(cross.f[2]);
+                if (distance < segment_length)
+                    goto next_segment;
+                {
+                    segment_length = FUN_001ff3d8_261d78(&segment);
+                    projection = FUN_001ff398_261d78(&difference, &scaled_segment);
+                    if (segment_length < projection || projection < 0.0f) {
+                        segment_length = FUN_001ff3d8_261d78(&difference);
+                        if (!(segment_length < distance))
+                            goto next_segment;
+                        found = 1;
+                        FUN_001ff500_261d78(&scaled_difference, &difference, distance);
+                        FUN_001ff278_261d78(&working, &scaled_difference, &(*entry)->points[i + 1]);
+                        working.f[2] = point->f[2];
+                    } else {
+                        found = 1;
+                        FUN_001ff500_261d78(&scaled_cross, &scaled_segment, projection);
+                        FUN_001ff2a8_261d78(&scaled_difference, &difference, &scaled_cross);
+                        FUN_001ff500_261d78(&scaled_difference, &scaled_difference, distance);
+                        FUN_001ff278_261d78(&scaled_difference, &scaled_difference, &scaled_cross);
+                        FUN_001ff278_261d78(&working, &scaled_difference, &(*entry)->points[i + 1]);
+                        working.f[2] = point->f[2];
+                    }
+                }
+            }
+next_segment:
+            i++;
+        } while (i < (*entry)->count - 1);
+    }
+    if (found)
+        out->q = working.q;
+    return found;
+}
+#endif /* NON_MATCHING */
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262030.s", FUN_L00_00262030);
 #include "rnc/math/vector.h"
 

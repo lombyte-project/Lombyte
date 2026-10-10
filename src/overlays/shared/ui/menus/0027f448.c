@@ -37,4 +37,40 @@ int FUN_L00_0027f448(P_27f448 *p) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0027f700.s", FUN_L00_0027f700);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00284d90.s", FUN_L00_00284d90);
+#else
+extern short bolt_source_stats[][64][2] __asm__("D_0014D590");
+int FUN_L00_00284d90(int groupIndex, int itemIndex) {
+    int slotIndex = -1;
+    int value, current;
+    short *slot, *writeSlot;
+    if (itemIndex >= 0) {
+        value = itemIndex + 1;
+        slot = &bolt_source_stats[groupIndex][0][0];
+        current = slot[126];
+        slotIndex = 63;
+        slot += 126;
+        writeSlot = slot;
+        if (current == value) goto store;
+        if (current == 0) {
+            *writeSlot = value;
+            goto done;
+        }
+        for (slotIndex = 62; (slot -= 2, slotIndex >= 0); slotIndex--) {
+            writeSlot = slot;
+            current = *writeSlot;
+            if (current == value) {
+                *writeSlot = value;
+                goto done;
+            }
+            if (current == 0) goto store;
+        }
+    }
+    goto done;
+store:
+    *writeSlot = value;
+done:
+    return slotIndex;
+}
+#endif /* NON_MATCHING */

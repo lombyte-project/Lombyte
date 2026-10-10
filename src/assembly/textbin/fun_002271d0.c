@@ -53,7 +53,7 @@ void append_fullscreen_setup_strips(void) {
         negative_half_width = -(display_width * 8);
         top_y = (u64)(0x8000 - display_height * 8) << 16;
         left_x = negative_half_width + 0x8000;
-    strip_words = (u64 *)(tag + 6);
+        strip_words = packet_words + 10;
         right_x = negative_half_width + 0x8200;
         bottom_y = (u64)(display_height * 8 + 0x7FF0) << 16;
     loop:

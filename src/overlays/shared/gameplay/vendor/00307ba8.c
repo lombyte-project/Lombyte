@@ -190,7 +190,90 @@ void FUN_L09_00307d68(struct Moby *m)
     FUN_L00_001f2868_307d68(1.1f, &m->pos, 0x10, m, probe);
     mark_moby_for_removal_307d68(m);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030a778.s", FUN_L09_0030a778);
+#else
+extern s32 FUN_L00_002591d0_30a778(struct Moby **, s32, s32, s32) __asm__("FUN_L00_002591d0");
+extern void FUN_00212ed8_30a778(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
+extern struct Moby *FUN_L00_002db890_30a778(struct Moby *) __asm__("FUN_L00_002db890");
+extern void FUN_L00_0025d1b8_30a778(struct Moby *) __asm__("FUN_L00_0025d1b8");
+extern void FUN_L00_00250df8_30a778(struct Moby *) __asm__("FUN_L00_00250df8");
+extern s16 *FUN_002141f8_30a778(struct Moby *) __asm__("FUN_002141f8");
+extern void FUN_001e93b0_30a778(char *, s32, s32) __asm__("FUN_001e93b0");
+extern char D_L09_00209280[];
+extern s32 D_L09_0015F5CC;
+
+struct Moby *FUN_L09_0030a778(struct Moby *owner, Vec4 *pos)
+{
+    struct Moby *m;
+    struct Moby *other;
+    u8 *owner_vars;
+    s16 *data;
+    s32 left;
+    Vec4 pos_copy;
+    Vec4 *volatile pos_ptr;
+    struct Moby *result;
+
+    pos_copy.q = pos->q;
+
+    if (owner == 0)
+        return 0;
+    owner_vars = owner->pvars;
+    m = 0;
+    result = 0;
+    pos_ptr = &pos_copy;
+    if (FUN_L00_002591d0_30a778(&m, *(s32 *)(owner_vars + 0x94), 1, 1) == 0) {
+        owner_vars[0x91] = owner_vars[0x91] + 1;
+        ((Vec4 *)&m->pos)->q = pos_ptr->q;
+        m->pos.w = 0.0f;
+        m->state = 0;
+        m->unkBC = 0;
+        m->flags = m->pclass->flags;
+        m->scale = m->pclass->scale;
+        m->unk30 = 0xff;
+        m->unk32 = 0xff;
+        m->unk31 = 1;
+        if (*(s32 *)((u8 *)m->pclass + 0x40) != 0)
+            m->flags |= 0x10;
+        if (*((u8 *)m->pclass + 0x0f) != 0)
+            m->flags |= 0x400;
+        m->unk36 = 0x7f80;
+        m->unk71 = 0xff;
+        m->unk72 = 0xff;
+        m->unkA4 = 0xff;
+        if (owner_vars[0x93] != 0)
+            m->scale = m->pclass->scale * 0.1f;
+        FUN_00212ed8_30a778(m, 0, 0);
+        other = FUN_L00_002db890_30a778(m);
+        if (other != 0) {
+            *(volatile s32 *)((u8 *)other + 0x6c) = 0;
+            *(volatile s32 *)((u8 *)other + 0x94) = 0;
+            *(volatile s16 *)((u8 *)other + 0x68) = 0;
+        }
+        if (owner->unkB4 < m->unkB4)
+            m->unkB4 = owner->unkB4;
+        if (m->unkB4 < 1)
+            m->unkB4 = 1;
+        left = (u16)owner->unkB4 - (u16)m->unkB4;
+        owner->unkB4 = left;
+        if ((s16)left < 0)
+            owner->unkB4 = 1;
+        m->unk94 = m->pclass->unk10;
+        FUN_L00_0025d1b8_30a778(m);
+        FUN_L00_00250df8_30a778(m);
+        result = m;
+        data = FUN_002141f8_30a778(result);
+        if (data != 0) {
+            *(f32 *)((u8 *)data + 0x34) = 0.0f;
+            *(f32 *)((u8 *)data + 0x30) = 0.0f;
+            *(f32 *)data = (f32)data[2];
+        }
+    } else {
+        FUN_001e93b0_30a778(D_L09_00209280, (s16)owner->save_id, D_L09_0015F5CC);
+    }
+    return result;
+}
+#endif
 extern char *FUN_L00_0025a420_c(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int,
                               int) __asm__("FUN_L00_0025a478");

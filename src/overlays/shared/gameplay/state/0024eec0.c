@@ -104,7 +104,34 @@ Slot *FUN_L00_0024f028(char *o, int id) {
     *(Slot **)(o + 0x60) = s;
     return s;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f0e8.s", FUN_L00_0024f0e8);
+#else
+void FUN_001f97e8(void *, int, int);
+
+void FUN_L00_0024f0e8(char *o, Slot **slot) {
+    Slot *s = *slot;
+    Slot **head;
+    Slot *p;
+    Slot *next;
+    if (s == 0) return;
+    head = (Slot **)(o + 0x60);
+    p = *head;
+    if (p == s) {
+        *head = s->p1C;
+    } else {
+        next = p->p1C;
+        while (next != 0 && next != s) {
+            p = next;
+            next = p->p1C;
+        }
+        if (next == s)
+            p->p1C = s->p1C;
+    }
+    FUN_001f97e8(*slot, 0, 0x40);
+    *slot = 0;
+}
+#endif
 
 #define NOT_SDA
 
@@ -202,4 +229,63 @@ void FUN_L00_0024f3e0(A *a0, S *a1, s32 a2, s32 a3, s32 a4, s32 a5) {
     if (a5)
         FUN_L00_0024f190();
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f440.s", FUN_L00_0024f440);
+#else
+extern void FUN_001f9810(void *, int);
+extern void FUN_001f9838(void *, void *, int);
+extern void FUN_00118a80(int);
+
+void FUN_L00_0024f440(void *statePointer, int tableIndex, int frameIndex, int outputAddress) {
+    int state = (int)statePointer;
+    int table;
+    int baseTable;
+    unsigned char count;
+    unsigned char baseCount;
+    unsigned char *frame;
+    unsigned char *indices;
+    unsigned long long *values;
+    unsigned int remainingCount;
+    unsigned short frameStart;
+    int baseBytes;
+    int countBytes;
+    int copyBytes;
+    int copyOffset;
+    unsigned char *copySource;
+    unsigned long long *sentinel;
+
+    table = *(int *)(state + 0x18);
+    baseTable = *(int *)(state + 0x14);
+    count = *(unsigned char *)(table + 8);
+    baseCount = *(unsigned char *)(baseTable + 8);
+    frame = *(unsigned char **)(*(int *)(table + tableIndex * 4 + 0x48) + frameIndex * 4 + 0x1c);
+    FUN_001f9810((void *)outputAddress, ((baseCount + 3) * 8) & 0xff0);
+    baseBytes = baseCount * 8;
+    countBytes = count * 8;
+    *(short *)(outputAddress + 8) = baseBytes;
+    *(short *)(outputAddress + 6) = (baseCount + *(short *)(frame + 10) + *(short *)(frame + 14) + 1) >> 1;
+    frameStart = *(unsigned short *)(frame + 10);
+    *(short *)(outputAddress + 10) = frameStart;
+    *(unsigned short *)(outputAddress + 12) = (frameStart + baseCount) * 8;
+    *(unsigned short *)(outputAddress + 14) = *(unsigned short *)(frame + 14);
+    copyOffset = baseBytes + 16;
+    copySource = frame + countBytes + 16;
+    copyBytes = *(short *)(frame + 6) * 16 - countBytes;
+    if (copyBytes != 0) {
+        FUN_001f9838((void *)(outputAddress + copyOffset), copySource, copyBytes);
+    }
+    indices = (unsigned char *)(*(int *)(*(int *)(state + 0x18) + 0x1c) + 4);
+    values = (unsigned long long *)(frame + 16);
+    remainingCount = count;
+    for (; remainingCount != 0; remainingCount--) {
+        unsigned char index = *indices++;
+        unsigned long long value = *values++;
+        *(unsigned long long *)(outputAddress + index * 8 + 16) = value;
+    }
+    sentinel = (unsigned long long *)(outputAddress + *(short *)(outputAddress + 6) * 16);
+    if (*sentinel == 0) {
+        *sentinel = 1;
+    }
+    FUN_00118a80(0);
+}
+#endif

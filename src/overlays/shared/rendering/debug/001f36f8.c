@@ -44,9 +44,10 @@ extern s32 D_L00_00169980[];
 extern s32 D_L00_00169B00[];
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 
-void draw_debug_text(s32 x, s32 y, u64 color, const u8 *text) __asm__("FUN_L00_001f3770");
+void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) __asm__("FUN_L00_001f3770");
 
-void draw_debug_text(s32 x, s32 y, u64 color, const u8 *text) {
+void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) {
+    const u8 *text = (const u8 *)text_address;
     u32 glyph_count = 0;
     u32 quadwords;
     u32 glyph;
@@ -61,7 +62,7 @@ void draw_debug_text(s32 x, s32 y, u64 color, const u8 *text) {
     packet = D_L00_001611C0;
     D_L00_001611C0 = packet + 2;
     packet[2] = 0x10AB400000000001ULL;
-    tags = D_L00_001611C0;
+    tags = packet + 2;
     tags[1] = 0xE;
     tags[2] = 1;
     tags[3] = 0x14;
@@ -91,7 +92,7 @@ void draw_debug_text(s32 x, s32 y, u64 color, const u8 *text) {
             cursor[3] = (s64)(((x + 10) * 16) + D_0013E500.left - 8) |
                         ((u64)(s64)(((y + 12) * 16) + D_0013E500.top - 8) << 16) |
                         0xFFFFF300000000ULL;
-            D_L00_001611C0 += 4;
+            D_L00_001611C0 = cursor + 4;
         }
         x += D_L00_00169B00[glyph];
     }
@@ -115,7 +116,6 @@ typedef struct {
     DebugCameraState camera;
 } DebugCameraBlock;
 extern DebugCameraBlock D_L00_00166C80;
-extern s16 D_0013F658 NOT_SDA;
 extern void update_all_cameras(void) __asm__("FUN_001ec420");
 extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001f9de0(f32);
@@ -157,7 +157,7 @@ void update_debug_camera(void) {
         update_all_cameras();
     if (pad->stick_moved)
         return;
-    free_look = D_0013F658 == 2;
+    free_look = hero.unk308 == 2;
     {
         Vec4 step;
         if ((pad->buttons.held_pressed & 3) != 3) {
@@ -381,14 +381,6 @@ typedef struct {
     u8 p[0x84];
     f32 x84, x88, x8c, x90;
 } B001f4490;
-typedef struct {
-    u8 p[0x80];
-    f32 x80, x84, x88, x8c;
-    u8 x90[8];
-    f32 x98;
-    u8 p9c[0x2080 - 0x9C];
-    u8 *x2080;
-} C001f4490;
 extern B001f4490 D_L00_0016C058;
 f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8(f32);
@@ -399,21 +391,21 @@ void FUN_L00_00250df8(void *);
 void FUN_L00_001f4490(void) {
     DebugCameraBlock *a = &D_L00_00166C80;
     B001f4490 *b = &D_L00_0016C058;
-    C001f4490 *c;
+    struct Hero *c;
     u8 *d;
     f32 ang = fast_add_rotations(a->camera.angles[2], b->x88);
     f32 s = FUN_001f9dc8(ang);
     c = &hero;
-    c->x80 = a->camera.position[0] + s * b->x8c;
-    c->x84 = a->camera.position[1] + FUN_001f9de0(ang) * b->x8c;
-    c->x88 = a->camera.position[2] + b->x90;
-    c->x98 = fast_add_rotations(a->camera.angles[2], b->x84);
-    FUN_001fa050(c, c->x90);
-    d = c->x2080;
-    qcopy(d + 0x10, &c->x80);
-    qcopy(d + 0x40, c->x90);
+    c->motion.pos.f[0] = a->camera.position[0] + s * b->x8c;
+    c->motion.pos.f[1] = a->camera.position[1] + FUN_001f9de0(ang) * b->x8c;
+    c->motion.pos.f[2] = a->camera.position[2] + b->x90;
+    c->motion.rot.f[2] = fast_add_rotations(a->camera.angles[2], b->x84);
+    FUN_001fa050(c, c->motion.rot.f);
+    d = *(u8 **)&c->moby;
+    qcopy(d + 0x10, &c->motion.pos);
+    qcopy(d + 0x40, c->motion.rot.f);
     FUN_001f9838(d + 0xC0, c, 0x30);
-    FUN_L00_00250df8(c->x2080);
+    FUN_L00_00250df8(*(u8 **)&c->moby);
 }
 /* Pending C: keep the oracle until the placed overlay bytes match. */
 #ifndef NON_MATCHING
@@ -428,8 +420,6 @@ typedef struct {
 extern DebugRowCounts D_L00_001E7920;
 extern u32 D_0013CAE0 NOT_SDA;
 extern u32 D_0013CAE4 NOT_SDA;
-extern f32 D_0013F3D8 NOT_SDA;
-extern f32 D_0013F3E8 NOT_SDA;
 extern u16 D_001518D0 NOT_SDA;
 extern u16 D_001518D2 NOT_SDA;
 extern s32 D_0015ED84 NOT_SDA;
@@ -470,7 +460,6 @@ extern const char D_L00_001E7958[];
 extern const char D_L00_001E7970[];
 extern const char D_L00_001E7990[];
 extern u8 D_L00_0015EFD0[];
-extern f32 D_0013F3D0[];
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void FUN_001fb280(s32, s32, s32);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -592,14 +581,14 @@ void update_debug_menu(void) {
                     }
                 } else if (g_debug_menu.control_mode == 2) {
                     g_debug_menu.update_flags = 0;
-                    FUN_001f9a28(difference, D_0013F3D0, g_debug_camera.position);
+                    FUN_001f9a28(difference, hero.motion.pos.f, g_debug_camera.position);
                     g_debug_menu.target_distance = FUN_001f9b20(difference);
                     angle = FUN_001f9e90(difference[0], difference[1]);
                     g_debug_menu.target_angle =
                         fast_subtract_rotations(angle, g_debug_camera.angles[2]);
-                    g_debug_menu.target_height = D_0013F3D8 - g_debug_camera.position[2];
+                    g_debug_menu.target_height = hero.motion.pos.f[2] - g_debug_camera.position[2];
                     g_debug_menu.target_yaw =
-                        fast_subtract_rotations(D_0013F3E8, g_debug_camera.angles[2]);
+                        fast_subtract_rotations(hero.motion.rot.f[2], g_debug_camera.angles[2]);
                 } else if (g_debug_menu.control_mode == 3) {
                     g_debug_menu.update_flags = 6;
                 }

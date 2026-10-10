@@ -66,15 +66,15 @@ void build_indexed_resident_render_packet(u64 *packet,
         texture_word = ((u64)width_log2 << 26) | 0x1300000;
         texture_word = ((u64)width_units_64 << 14) | texture_word;
         texture_word |= (u64)height_log2 << 30;
-        texture_address_word = ((u64)texture_block << 37) | ((u64)0x8000 << 19);
+        texture_address_word = ((u64)0x8000 << 19) | ((u64)texture_block << 37);
         texture_word |= texture_address_word;
         texture_word |= (u64)-1 << 63;
         mip_word = ((u64)width_units_128 << 14) | ((u64)mip_block_0 << 20);
         mip_address_word = ((u64)mip_block_1 << 40) | ((u64)0x8000 << 19);
         mip_word |= mip_address_word;
         mip_word |= (u64)0x8000 << 39;
-        packet[0] = texture_word;
         packet[2] = mip_word;
+        packet[0] = texture_word;
     } else if (material_index < -1) {
         fallback_packet = special_material_template;
         if (material_index == -3) {

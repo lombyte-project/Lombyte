@@ -115,7 +115,66 @@ void FUN_L04_002ce060(void *moby) {
     remove_moby_2ce060(moby);
 }
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d1418.s", FUN_L04_002d1418);
+#else
+extern void FUN_L04_00292370(void *, char *);
+extern void FUN_L04_002923b8(void *, char *);
+
+void FUN_L04_002d1418(void *m) {
+    char *d = *(char **)(m + 0x78);
+    char *p = d + 0x160;
+    float speed;
+    float angleHalf;
+    float angleFull;
+    float angleOther;
+    float amount;
+    float frameScale;
+    float otherScale;
+    *(int *)(d + 0x1d0) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1d4) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1d8) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1dc) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1e0) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1e4) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1e8) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1ec) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x54) + 0x14);
+    *(int *)(d + 0x1f0) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1f4) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1f8) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1fc) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x200) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    FUN_L04_00292370(m, p);
+    frameScale = frame_time_sq;
+    otherScale = frame_time;
+    angleFull = frameScale * 6.2831855f;
+    angleOther = otherScale * 6.2831855f;
+    speed = frameScale * 9.8f;
+    angleHalf = frameScale * 3.1415927f;
+    amount = frameScale * 10.0f;
+    *(unsigned char *)(d + 0x210) = 0;
+    *(unsigned char *)(d + 0x211) = 0;
+    *(float *)(d + 0x240) = 0.5f;
+    *(float *)(d + 0x23c) = speed;
+    *(float *)(d + 0x22c) = angleHalf;
+    *(float *)(d + 0x230) = angleFull;
+    *(float *)(d + 0x234) = angleOther;
+    *(float *)(d + 0x224) = amount;
+    *(unsigned char *)(d + 0x212) = 0xff;
+    *(unsigned char *)(d + 0x213) = 0x10;
+    *(unsigned char *)(d + 0x214) = 7;
+    *(unsigned char *)(d + 0x250) = 10;
+    *(unsigned char *)(d + 0x251) = 8;
+    *(unsigned char *)(d + 0x253) = 12;
+    *(unsigned char *)(d + 0x252) = 14;
+    *(unsigned char *)(d + 0x300) = 11;
+    *(unsigned char *)(d + 0x301) = 9;
+    *(unsigned char *)(d + 0x303) = 13;
+    *(unsigned char *)(d + 0x302) = 15;
+    *(unsigned char *)(d + 0x215) = 7;
+    FUN_L04_002923b8(m, p);
+}
+#endif /* NON_MATCHING */
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D29E8), where it is exact; names translated to the US level program. */
@@ -301,7 +360,6 @@ extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
 void FUN_L04_002d1608(void *m);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
-extern char D_0013F3D0[];
 
 void FUN_L04_002d16b8(WBMoby *m) {
     int excited = 0;
@@ -468,7 +526,7 @@ void FUN_L04_002d16b8(WBMoby *m) {
             s.f14 = 0x10001;
             s.f1C = 1.0f;
             s.m = m;
-            subtract_vector_xyz(&s, ((char *)&D_0013F3D0), pos);
+            subtract_vector_xyz(&s, &hero.motion.pos, pos);
             normalize_vector_xyz(&s, &s, frame_time * 5.0f);
             s.f20 = 1;
             transform_scaled_vertex_batch(m, 6, &joints, pts);
@@ -1066,7 +1124,7 @@ void FUN_L04_002e1a10(struct Moby *moby) {
         break;
     case 1:
         FUN_L04_002e1d00_m(moby);
-        if (FUN_001f9b80(&moby->pos, D_0013F3D0) < 3.0f) {
+        if (FUN_001f9b80(&moby->pos, &hero.motion.pos) < 3.0f) {
             moby->flags |= 0x41;
             FUN_L00_00298840(2);
             moby->state = 2;

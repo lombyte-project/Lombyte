@@ -867,7 +867,6 @@ typedef struct {
 } HoverMoby;
 
 extern f32 FUN_001f99c0(f32);
-extern Vec4 D_0013F3D0;
 
 void FUN_L01_002fed68(HoverMoby *m) {
     HoverVars *v;
@@ -883,7 +882,7 @@ void FUN_L01_002fed68(HoverMoby *m) {
         m->state = 1;
         break;
     case 1:
-        player = &D_0013F3D0;
+        player = &hero.motion.pos;
         if (FUN_001f9b80(v, player) < v->radius &&
             FUN_001f99c0(m->pos.f[2] - player->f[2]) < 2.0f) {
             m->state = 2;
@@ -901,7 +900,7 @@ void FUN_L01_002fed68(HoverMoby *m) {
         break;
     case 3:
         k = 1.1f;
-        if (FUN_001f9b80(v, &D_0013F3D0) > v->radius * k &&
+        if (FUN_001f9b80(v, &hero.motion.pos) > v->radius * k &&
             FUN_001f9b80(v, D_L01_00167240) > v->radius * k) {
             m->state = 4;
             if (m->oclass == 0x300) {
@@ -910,7 +909,7 @@ void FUN_L01_002fed68(HoverMoby *m) {
         }
         break;
     case 4:
-        player = &D_0013F3D0;
+        player = &hero.motion.pos;
         if (FUN_001f9b80(v, player) < v->radius &&
             FUN_001f99c0(m->pos.f[2] - player->f[2]) < 2.0f) {
             m->state = 2;

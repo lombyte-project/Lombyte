@@ -266,7 +266,36 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d4ca0.s", FUN_L08_002d4ca0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d55c8.s", FUN_L08_002d55c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5950.s", FUN_L08_002d5950);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5d08.s", FUN_L08_002d5d08);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d6450.s", FUN_L08_002d6450);
+#else
+extern char *D_L08_0015FFD8;
+extern short *D_L08_001AC040[];
+extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
+
+/* Remove active mobys of the selected classes from this moby's linked group. */
+void FUN_L08_002d6450(struct Moby *moby) {
+    short *list = D_L08_001AC040[*(u8 *)(D_L08_0015FFD8 + (*(s32 *)(moby->pvars + 0x144) << 8) + 0x21)];
+    struct Moby *other;
+    if (list != 0) {
+        other = (struct Moby *)(D_L08_0015FFD8 + ((*list & 0x7fff) << 8));
+        for (;;) {
+            if (other->state < 0x7f && other != moby) {
+                u16 class_id = (u16)other->oclass;
+                if ((u32)(class_id - 0x24c) < 0xb) {
+                    mark_moby_for_removal(other);
+                } else if ((s16)class_id == 0x1d8) {
+                    mark_moby_for_removal(other);
+                }
+            }
+            if (*list < -1)
+                break;
+            list++;
+            other = (struct Moby *)(D_L08_0015FFD8 + ((*list & 0x7fff) << 8));
+        }
+    }
+}
+#endif
 
 /* Splashes the hero into the water: once inits the water plane, queues the
  * surface draw, and when the hero breaks the surface spawns spray and ripples. */
@@ -620,7 +649,6 @@ typedef struct {
     float e[1][4];
 } Route_2dd4f8;
 
-extern char D_0013F3D0[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
@@ -631,7 +659,7 @@ extern Route_2dd4f8 *D_L08_001B0FB0_r[] __asm__("D_L08_001B0CB0");
 
 void FUN_L08_002dc180(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    char *pl = D_0013F3D0;
+    char *pl = (char *)&hero.motion.pos;
     Route_2dd4f8 *a = D_L08_001B0FB0_r[*(int *)(data + 0x88)];
     Route_2dd4f8 *b = D_L08_001B0FB0_r[*(int *)(data + 0x80)];
     Route_2dd4f8 *c = D_L08_001B0FB0_r[*(int *)(data + 0x84)];
@@ -783,7 +811,51 @@ char *FUN_L08_002dc8a0(char *src, char *pos, char *vec) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc9a8.s", FUN_L08_002dc9a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dd3c0.s", FUN_L08_002dd3c0);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de3e0.s", FUN_L08_002de3e0);
+#else
+extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
+extern float D_L08_001675C0[];
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern void FUN_L00_002502f0(void *, int, int, int);
+extern int D_L08_00161A34 __attribute__((sda));
+extern int D_L08_00161A38 __attribute__((sda));
+extern int D_L08_00161A3C __attribute__((sda));
+extern float D_L08_00161A40 __attribute__((sda));
+
+struct Moby *FUN_L08_002de3e0(void *pos, struct Moby *target, void *velocity, float pitch, float yaw) {
+    struct Moby *moby = create_moby(0x1B3);
+    char *data;
+    float *reference;
+    float distance;
+    float scale;
+    if (moby != 0) {
+        data = (char *)moby->pvars;
+        qcopy(&moby->pos, pos);
+        reference = D_L08_001675C0;
+        distance = FUN_001f9b80(reference, &moby->pos);
+        reference = (float *)((char *)reference - 0x140);
+        moby->rot.y = -FUN_001f9e90(distance, reference[82] - moby->pos.z);
+        *(volatile float *)&moby->rot.z = FUN_001f9e90(reference[80] - moby->pos.x,
+                                                        reference[81] - moby->pos.y);
+        scale = D_L08_00161A40 * moby->pclass->scale;
+        moby->unk30 = 0xFF;
+        moby->unk31 = 1;
+        *(volatile u8 *)&moby->state = 1;
+        moby->unk32 = 0xFF;
+        moby->scale = scale;
+        FUN_L00_002502f0(moby, D_L08_00161A34, D_L08_00161A38, D_L08_00161A3C);
+        *(float *)(data + 0x40) = pitch;
+        *(float *)(data + 0x48) = 70.0f;
+        *(float *)(data + 0x44) = yaw;
+        *(struct Moby **)(data + 0x4C) = target;
+        qcopy(data + 0x20, velocity);
+        FUN_L00_00250df8(moby);
+    }
+    return moby;
+}
+#endif /* NON_MATCHING */
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de528.s", FUN_L08_002de528);
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002DFBC0) */
 

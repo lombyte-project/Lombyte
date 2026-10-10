@@ -26,22 +26,35 @@ void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 void update_visible_resident_objects(void) {
     struct Moby *moby;
     void (*callback)(struct Moby *);
+    s8 state;
 
-    moby = visible_moby_list = build_resident_visibility_list();
-    while (moby != 0) {
-        if (moby->state >= 0) {
-            if (!(moby->flags & 0x40)) {
-                advance_resident_object_animation(moby);
+    visible_moby_list = build_resident_visibility_list();
+    moby = visible_moby_list;
+    if (moby != 0) {
+        state = moby->state;
+        while (1) {
+            if (state < 0) {
+                moby = moby->next;
+            } else {
+                if (!(moby->flags & 0x40)) {
+                    advance_resident_object_animation(moby);
+                    callback = moby->update_callback;
+                } else {
+                    callback = moby->update_callback;
+                }
+                if (callback != 0) {
+                    callback(moby);
+                }
+                if (!(moby->flags & 0x4)) {
+                    refresh_resident_object_spatial_bounds(moby);
+                    moby = moby->next;
+                } else {
+                    moby = moby->next;
+                }
             }
-            callback = moby->update_callback;
-            if (callback != 0) {
-                callback(moby);
-            }
-            if (!(moby->flags & 0x4)) {
-                refresh_resident_object_spatial_bounds(moby);
-            }
+            if (moby == 0) break;
+            state = moby->state;
         }
-        moby = moby->next;
     }
 }
 

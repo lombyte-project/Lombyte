@@ -203,4 +203,74 @@ extern char *D_L08_00167600_d __asm__("D_L08_00167600") __attribute__((section("
 void FUN_L08_00313ba8(void) {
     D_L08_00167600_d[0x88] = 1;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00316fa8.s", FUN_L08_00316fa8);
+#else
+extern void rotate_about_axis(void *, void *, void *, float) __asm__("FUN_00214890");
+extern float ground_height_at(void *) __asm__("FUN_L00_00263468");
+extern int play_voice(int, int, void *, int) __asm__("FUN_L00_0028ddd8");
+extern int set_voice_volume(int, int) __asm__("FUN_L01_002a1968");
+extern float D_0015ED7C;
+extern char D_0013E550[];
+#define D_L08_001675C8 (*(float *)(D_L08_001675C0 + 8))
+#define D_L08_001625D8 (*(float *)((char *)&D_L08_0016234C_d + 0x28c))
+
+void FUN_L08_00316fa8(char *moby) {
+    float point[4];
+    float radius[4];
+    float axis[4];
+    float fraction = 0.0f;
+    float angle = 0.0f;
+    int *data = *(int **)(moby + 8);
+    int voice;
+    char *slot;
+    float smoothed;
+
+    radius[0] = 4.0f;
+    radius[1] = 0.0f;
+    radius[2] = 0.0f;
+    radius[3] = 1.0f;
+    axis[0] = 0.0f;
+    axis[1] = 0.0f;
+    axis[2] = 1.0f;
+    do {
+        rotate_about_axis(point, radius, axis, angle);
+        add_vector_xyz(point, D_L08_001675C0, point);
+        if (ground_height_at(point) < D_L08_001675C8) {
+            fraction += 0.05f;
+        }
+        angle += 0.31415927f;
+    } while (angle < 6.2831855f);
+
+    smoothed = D_L08_001625D8;
+    if (smoothed < fraction) {
+        smoothed = smoothed + D_0015ED7C * 0.2f;
+    } else {
+        smoothed = smoothed - D_0015ED7C * 0.75f;
+    }
+    D_L08_001625D8 = smoothed;
+    if (D_L08_001625D8 > 1.0f) {
+        D_L08_001625D8 = 1.0f;
+    } else if (D_L08_001625D8 < 0.0f) {
+        D_L08_001625D8 = 0.0f;
+    }
+
+    voice = data[2];
+    slot = D_0013E550 + voice * 0x70;
+    if (*(char **)(slot + 0x8c) == moby) {
+        if (*(unsigned char *)(slot + 0x74) != 0) {
+            set_voice_volume(voice, (int)(((*(float *)&data[1] + D_L08_001625D8) /
+                                          (*(float *)&data[1] + 1.0f)) * 1024.0f));
+        }
+    }
+    voice = data[2];
+    slot = D_0013E550 + voice * 0x70;
+    qcopy(slot + 0x90, D_L08_001675C0);
+    if (*(char **)(slot + 0x8c) == moby) {
+        if (*(unsigned char *)(slot + 0x74) != 0) {
+            return;
+        }
+    }
+    data[2] = play_voice(data[0], 0x15, moby, 0x400);
+}
+#endif

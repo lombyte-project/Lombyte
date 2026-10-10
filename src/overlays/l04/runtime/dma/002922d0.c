@@ -40,7 +40,97 @@ void FUN_L04_00292370(void *unused, char *arg) {
     *(float *)(arg + 0x1BC) = -1.5707964f;
     *(float *)(arg + 0x1C0) = 0.19634955f;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002923b8.s", FUN_L04_002923b8);
+#else
+extern void DebugPrint_923b8() __asm__("FUN_001e93b0");
+extern void FUN_001f97b0(void);
+extern float FUN_L04_002418b0(int, unsigned int);
+extern float FUN_L04_00241910(int, unsigned int);
+extern float FUN_001f96b0(float);
+extern void transform_scaled_vertex_batch(char *, int, void *, char *) __asm__("FUN_0020cd48");
+extern void FUN_0020cca8(char *, int, void *);
+extern float FUN_001f9e90(float, float);
+extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
+
+void FUN_L04_002923b8(char *arg0, char *arg1) {
+    int joints[6];
+    float transformed[16];
+    int **entry = (int **)(arg1 + 0x70);
+    int *current;
+    int i;
+    int j;
+    char *record;
+    char *upper;
+    char *lower;
+
+    for (i = 0; i < 13; i++) {
+        int **slot = entry + i;
+        if (**slot < 0) {
+            DebugPrint_923b8((char *)0x1db360, i, *(short *)(arg0 + 0xa6));
+            FUN_001f97b0();
+        }
+        *(float *)((char *)*slot + 0xc) = FUN_L04_002418b0((unsigned char)arg0[0x22], **slot);
+        *(float *)((char *)*slot + 0x10) = FUN_L04_00241910((unsigned char)arg0[0x22], **slot) -
+                                                *(float *)((char *)*slot + 0xc);
+        if (*(float *)((char *)*slot + 0x10) != 0.0f) {
+            j = 1;
+            do {
+                int offset = (1 - j) * 4;
+                char *item = (char *)*slot;
+                float start = *(float *)(item + 0x40 + offset);
+                float end = *(float *)(item + 0x48 + offset);
+                *(float *)(item + 0x38 + offset) = (end < start ? end + *(float *)(item + 0x10) : end) - start;
+                item = (char *)*slot;
+                start = *(float *)(item + 0x28 + offset);
+                end = *(float *)(item + 0x30 + offset);
+                *(float *)(item + 0x20 + offset) = (end < start ? end + *(float *)(item + 0x10) : end) - start;
+                j--;
+            } while (j >= 0);
+            *(float *)((char *)*slot + 8) = *(float *)((char *)*slot + 4) /
+                FUN_001f96b0(*(float *)((char *)*slot + 0x10) + *(float *)((char *)*slot + 0x10));
+        }
+    }
+
+    joints[0] = (unsigned char)arg1[0xf0];
+    joints[1] = (unsigned char)arg1[0xf1];
+    joints[2] = (unsigned char)arg1[0x1a0];
+    joints[3] = (unsigned char)arg1[0x1a1];
+    joints[4] = (unsigned char)arg1[0xb4];
+    joints[5] = (unsigned char)arg1[0xb5];
+    transform_scaled_vertex_batch(arg0, 6, joints, arg1);
+
+    upper = arg1 + 0x160;
+    lower = arg1 + 0x120;
+    record = arg1;
+    do {
+        FUN_0020cca8(arg0, (unsigned char)record[0xf0], transformed);
+        *(int *)(record + 0x104) = 0;
+        *(int *)(record + 0xfc) = 0;
+        *(float *)(record + 0xf8) = FUN_001f9e90(transformed[4], transformed[5]);
+        if ((unsigned char)record[0x161] == 0)
+            attach_manipulator(arg0, (unsigned char)record[0xf3], upper);
+        if ((unsigned char)record[0x121] == 0)
+            attach_manipulator(arg0, (unsigned char)record[0xf2], lower);
+        record += 0xb0;
+        lower += 0xb0;
+        upper += 0xb0;
+    } while ((int)record < (int)(arg1 + 0x160));
+
+    *(short *)(arg1 + 0xee) = 0;
+    *(unsigned char *)(arg1 + 0xb7) = 0;
+    *(int *)(arg1 + 0xb8) = 0;
+    *(int *)(arg1 + 0xbc) = 0;
+    *(int *)(arg1 + 0xc0) = 0;
+    *(int *)(arg1 + 0xc8) = 0;
+    *(int *)(arg1 + 0xe8) = 0;
+    *(int *)(arg1 + 0xd8) = 0;
+    *(int *)(arg1 + 0xe4) = 0;
+    *(short *)(arg1 + 0xec) = 0;
+    *(unsigned char *)(arg1 + 0xb6) = 5;
+    DebugPrint_923b8((char *)0x1db3f0, 0x250);
+}
+#endif
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293990), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002a13f0(int *a, char *b);

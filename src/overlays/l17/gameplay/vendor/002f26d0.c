@@ -29,9 +29,7 @@ extern int tick_countdown_32();
 extern unsigned char D_0013D408[];
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern unsigned char D_0013D4DF __attribute__((section(".data")));
-extern unsigned char D_0014161B[];
 extern int D_0015ED80_e[] __asm__("D_0015ED80") __attribute__((section(".sdata")));
-extern char D_0013F3D0[];
 extern void DebugPrint();
 extern void FUN_L00_002039a0(void);
 extern void FUN_L00_00263d40(int arg0, int arg1);
@@ -39,8 +37,6 @@ extern void FUN_L00_002e8680(void);
 extern void FUN_L00_002e8970(int a, float x, float y);
 extern void FUN_L06_00239528(void);
 extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
-extern char D_001413D4[];
-extern char D_001413DC[];
 extern char D_00141D54[];
 extern char D_00141D7C[];
 extern unsigned char D_0014C050[];
@@ -67,7 +63,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
     st = *(int *)(d + 0x6C);
     switch (st) {
     case 0: {
-        char *h = D_0013F3D0;
+        char *h = (char *)&hero.motion.pos;
         if (is_point_inside_clip_volume(h, *(int *)(d + 0x60))) {
             if (*(int *)(h + 0x200C) == 0x11) {
                 *(int *)(d + 0x6C) = 1;
@@ -136,7 +132,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         found = 0;
         for (i = 0; i < 1; i++) {
             off = i * 4;
-            if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + off))) {
+            if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(d + off))) {
                 found = 1;
                 if (*(int *)(d + 0x30) != *(int *)(d + off)) {
                     tgt = *(int *)(d + off);
@@ -166,8 +162,8 @@ void FUN_L17_002f26d0(struct Moby *moby) {
                 goto skip1;
         }
         if (*(int *)(d + 0xC) > *(int *)(d + 0x38) && tgt != -1 &&
-            ((unsigned int)*(int *)(((char *)&D_001413DC)) < 2 ||
-             *(int *)(((char *)&D_001413DC)) == 9) &&
+            ((unsigned int)hero.state.control_mode < 2 ||
+             hero.state.control_mode == 9) &&
             D_L17_00179D10[0] == 0 && D_L17_00179D10[9] == -1 && D_0013D4DF != 0) {
             *(int *)(d + 0x38) = scale_game_frames(0x708);
             if (*(int *)(((char *)&D_00141D54)) >= 0) {
@@ -177,7 +173,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
             *(int *)(d + 0xC) = 0;
         }
     skip1:
-        if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x20)) && D_L17_00179D10[0] == 0 &&
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(d + 0x20)) && D_L17_00179D10[0] == 0 &&
             D_L17_00179D10[9] == -1 && D_0013D408_b[0xBC] == 0) {
             int w = *(int *)(((char *)&D_00141D7C));
             mask = 1 << D_0015ED80_e[1];
@@ -190,7 +186,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         for (i = 0; i < 3; i++) {
             off = i * 4;
             q = (int *)(d + 0x20 + off);
-            if (is_point_inside_clip_volume(D_0013F3D0, *q)) {
+            if (is_point_inside_clip_volume(&hero.motion.pos, *q)) {
                 found = 1;
                 if (*(int *)(d + 0x30) != *q) {
                     tgt = *q;
@@ -198,7 +194,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
                 break;
             }
         }
-        if (!found || (*(int *)(d + 0x2C) += 1, *(int *)D_001413D4 == 0x35)) {
+        if (!found || (*(int *)(d + 0x2C) += 1, hero.state.current == 0x35)) {
             *(int *)(d + 0x2C) = 0;
             *(int *)(d + 0x30) = -1;
         }
@@ -213,7 +209,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
             *(unsigned char *)(d + 0x4C) = 1;
         }
         if (*(unsigned char *)(d + 0x4C) == 0 &&
-            is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x3C))) {
+            is_point_inside_clip_volume(&hero.motion.pos, *(int *)(d + 0x3C))) {
             FUN_L00_002039a0();
             if (*(int *)(((char *)&D_00141DC4)) >= 0) {
                 FUN_L00_00203908(0x4268, 0x8B);
@@ -436,7 +432,6 @@ void FUN_L17_002f32f0(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5388), where it is exact; names translated to the US level program. */
 
 
-extern char D_0013E633[] __asm__("D_0013F3D0");
 extern float D_L17_001DE2B0[] __asm__("D_L17_001DDFE0");
 extern float D_L17_001DE328[] __asm__("D_L17_001DE058");
 extern float D_L17_001DE340[] __asm__("D_L17_001DE070");
@@ -456,10 +451,10 @@ void FUN_L17_002f3848(struct Moby *moby) {
     float t2[4];
     int i;
     if (*(int *)(d + 0x4C) != -1) {
-        char *g = D_0013E633 - 0x80;
-        if (*(int *)(g + 0x2084) != 0x32 || *(char **)(g + 0x15F0) == 0 ||
-            *(short *)(*(char **)(g + 0x15F0) + 0xA6) != 0x563) {
-            if (is_point_inside_clip_volume_u(D_0013E633 + 0x0, *(int *)(d + 0x4C))) {
+        struct Hero *g = &hero;
+        if (g->state.current != 0x32 || ((char *)g->ship_moby) == 0 ||
+            *(short *)(((char *)g->ship_moby) + 0xA6) != 0x563) {
+            if (is_point_inside_clip_volume_u(&hero.motion.pos, *(int *)(d + 0x4C))) {
                 D_L17_0015F718_m = 150.0f;
                 goto done;
             }
@@ -520,7 +515,6 @@ done:
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5C18), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len, float z);
-extern char D_0013F3D0[];
 extern char D_L17_001676C0[];
 extern char D_L17_001676D0[];
 extern char D_L17_001B0DB0[];
@@ -622,7 +616,7 @@ void FUN_L17_002f40d8(struct Moby *moby) {
             moby->unk94 = 0;
             moby->flags |= 1;
         } else if (moby->unk31 == 0) {
-            if (FUN_001f9b48(&moby->pos, D_0013F3D0) < 32.0f) {
+            if (FUN_001f9b48(&moby->pos, &hero.motion.pos) < 32.0f) {
                 moby->state = 3;
                 moby->unk94 = 0;
                 moby->flags |= 1;
@@ -633,7 +627,7 @@ void FUN_L17_002f40d8(struct Moby *moby) {
         qcopy(s0, &moby->pos);
         s0[3] = 3.0f;
         if (FUN_001fa728((char *)&moby->pos, 512.0f) == -1) {
-            if (FUN_001f9b48(&moby->pos, D_0013F3D0) > 32.0f) {
+            if (FUN_001f9b48(&moby->pos, &hero.motion.pos) > 32.0f) {
                 *(int *)(d + 0x84) += 1;
                 if (scale_game_frames(60) < *(int *)(d + 0x84)) {
                     moby->state = 1;
@@ -662,8 +656,8 @@ void FUN_L17_002f40d8(struct Moby *moby) {
             s30[1] = -0.2617994f;
         }
         vu_euler_rotation_basis(m40, s30);
-        subtract_vector_xyz(s20, D_0013F3D0, d + 0xB0);
-        qcopy(d + 0xB0, D_0013F3D0);
+        subtract_vector_xyz(s20, &hero.motion.pos, d + 0xB0);
+        qcopy(d + 0xB0, &hero.motion.pos);
         add_vector_xyz(&moby->pos, &moby->pos, s20);
         f = fast_add_rotations(0.7853982f, (float)*(int *)(d + 0x88) * 1.5707964f);
         normalize_vector_xyz(s0, m50, fast_sin(f) * 8.0f);
@@ -674,7 +668,7 @@ void FUN_L17_002f40d8(struct Moby *moby) {
         add_vector_xyz(s10, s10, s0);
         subtract_vector_xyz(s0, s10, &moby->pos);
         len = vector_length_xyz(s0);
-        if ((D_0013F3D0)[0x158F] & 2) {
+        if (*(char *)&hero.ship_flags & 2) {
             advance_accelerated_scalar(&c0, (float *)(d + 0x6C), len, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, frame_time);
         } else if (moby->unkBC) {
@@ -696,7 +690,7 @@ void FUN_L17_002f40d8(struct Moby *moby) {
                 moby->unkBC = 0;
             }
         } else {
-            float *tgt = (float *)(D_0013F3D0);
+            float *tgt = (float *)(&hero.motion.pos);
             float *yaw = &moby->rot.z;
             float *pitch = &moby->rot.y;
             float ang;
@@ -736,8 +730,8 @@ void FUN_L17_002f40d8(struct Moby *moby) {
         }
         break;
     case 6:
-        subtract_vector_xyz(s0, D_0013F3D0, d + 0xB0);
-        qcopy(d + 0xB0, D_0013F3D0);
+        subtract_vector_xyz(s0, &hero.motion.pos, d + 0xB0);
+        qcopy(d + 0xB0, &hero.motion.pos);
         add_vector_xyz(&moby->pos, &moby->pos, s0);
         FUN_L00_0025f090(moby, &moby->pos, -1, 2.0f, 13.0f);
         if (random_integer_below_c(2)) {

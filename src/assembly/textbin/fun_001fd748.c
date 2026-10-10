@@ -49,7 +49,6 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
     s32 line_end_x;
     s32 text_x;
     u8 *label_text;
-    u8 visit_state;
     s32 texture_index;
 
     setup_gif_paging(0);
@@ -70,8 +69,7 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
             continue;
         }
         availability = 3;
-        visit_state = level_visit_state[level_index];
-        if (visit_state == 0) {
+        if (level_visit_state[level_index] == 0) {
             availability = 2;
             /* This separate state table gates markers that have not been visited. */
             if (level_available[level_index] == 0) {

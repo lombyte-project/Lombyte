@@ -331,7 +331,6 @@ typedef struct {
 } Obj;
 
 extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
-extern char D_0013F410[];
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
@@ -370,7 +369,7 @@ void FUN_L18_002a7220(char *moby) {
     *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), frame_time * 6.2831855f);
     if (*(short *)(data + 0x12) != 0) {
         f20 = vector_length_xyz(data);
-        subtract_vector_xyz(data, D_0013F410, moby + 0x10);
+        subtract_vector_xyz(data, &hero.motion.unkC0, moby + 0x10);
         f1 = vector_length_xyz(data);
         if (f20 < f1) {
             normalize_vector_xyz(data, data, f20);
@@ -487,7 +486,7 @@ void FUN_L18_002d5050(struct Moby *moby) {
     float aA0[16];
     float s, f, k;
     int r;
-    if (*(int *)(D_001413D4) == 0x72 || D_L18_0015F5C4 == 2) {
+    if (hero.state.current == 0x72 || D_L18_0015F5C4 == 2) {
         mark_moby_for_removal_c(moby);
     } else if (moby->state == 0) {
         qcopy(a30, &moby->pos);
@@ -620,7 +619,6 @@ typedef struct {
     float v[4];
 } __attribute__((aligned(16))) QVec;
 
-extern unsigned char D_001413F4_d5610[] __asm__("D_001413F4");
 extern short D_L18_0016196C __attribute__((sda));
 
 void FUN_L18_002d5610(void *m, void *src) {
@@ -638,7 +636,7 @@ void FUN_L18_002d5610(void *m, void *src) {
     func_L00_0025F4A8_alt(moby, qp, moby + 0x10, d, 1.0f, 0x14, 6, 0x20, a, b, 9.0f, c, 1, 5.0f, 0,
                           0, -1, 0);
     if (d != 0.0f) {
-        if (D_001413F4_d5610[0] == 2) {
+        if (hero.unk20A4 == 2) {
             FUN_L00_002598b0((int)moby, 2.0f, moby + 0x10, 2, *(float *)&D_L18_0016196C, 1.0f, 0, 1,
                              0);
         }
@@ -1514,7 +1512,7 @@ void FUN_L18_002db460(struct Moby *moby) {
     int i;
     int i0, i1, i2, i3, i4;
 
-    if (*(int *)(D_001413D4) == 0x72 || D_L18_0015F5C4 == 2) {
+    if (hero.state.current == 0x72 || D_L18_0015F5C4 == 2) {
         mark_moby_for_removal_p(moby);
         return;
     }
@@ -1633,7 +1631,6 @@ void FUN_L18_002db938(char *pos, float *vec, int arg, float fa, float fb) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dba20.s", FUN_L18_002dba20);
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD270), where it is exact; names translated to the US level program. */
 
-extern char D_0013F3D0[];
 extern float FUN_001f9dc8(float);
 extern void FUN_L18_002dc0c8_u(char *moby, void *a1, void *a2) __asm__("FUN_L18_002dc0c8");
 
@@ -1646,7 +1643,7 @@ void FUN_L18_002dbe80(struct Moby *moby) {
     float p, q, step;
     int i;
 
-    FUN_001f9a28(v, D_0013F3D0, &moby->pos);
+    FUN_001f9a28(v, &hero.motion.pos, &moby->pos);
     v[2] = 0.0f;
     FUN_001f9bf8(v, v, frame_time * 4.0f);
     v[2] = frame_time * 4.0f;
@@ -1873,7 +1870,6 @@ void FUN_L18_002df608(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002E0E90), where it is exact; names translated to the US level program. */
 
-extern char D_0013E633[] __asm__("D_0013F3D0");
 extern float D_0015EE70 __asm__("D_0015ED70");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
@@ -1892,7 +1888,7 @@ void FUN_L18_002dfaa0(struct Moby *moby, void *v0, void *v1, void *v2, void *v3,
     *(float *)(data + 0x70) = 1.0f / (float)scale_game_frames(a6);
     *(int *)(data + 0x74) = scale_game_frames(a7);
     *(int *)(data + 0x78) = a8;
-    *(int *)(D_0013E633 + 0x140) = scale_game_frames(a6);
+    hero.unk1C0 = scale_game_frames(a6);
 }
 /* Maps states 2 and 3 to results 1 and 2; all other states return 0. */
 s32 FUN_L18_002dfba0(const u8 *moby) {
@@ -2367,7 +2363,6 @@ extern unsigned int D_L18_00162054 __asm__("D_L18_00162054") __attribute__((sda)
 extern float D_L18_001620A8 __asm__("D_L18_001620A8") __attribute__((sda));
 extern float D_L18_001620AC __asm__("D_L18_001620AC") __attribute__((sda));
 extern Vec130 D_L18_001677C0 __asm__("D_L18_001677C0") __attribute__((section(".data")));
-extern Vec130 D_0013F5E0 __asm__("D_0013F5E0");
 extern Vec130 D_L18_001D9CA0[] __asm__("D_L18_001D9CA0") __attribute__((section(".data")));
 extern UVec130 D_L18_001D9CE0[] __asm__("D_L18_001D9CE0") __attribute__((section(".data")));
 extern void vsub_ec130(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -2399,7 +2394,7 @@ void FUN_L18_002ec130(void *mv) {
     mat[3].f[3] = 1.0f;
     vsub_ec130(&mat[0], &D_L18_001677C0, &mat[3]);
     vscl_ec130(&mat[0], &mat[0], 1.0f);
-    cross_ec130(&mat[1], &mat[0], &D_0013F5E0);
+    cross_ec130(&mat[1], &mat[0], (Vec130 *)&hero.unk290);
     vscl_ec130(&mat[1], &mat[1], -1.0f);
     cross_ec130(&mat[2], &mat[1], &mat[0]);
     c = D_L18_001620A0;

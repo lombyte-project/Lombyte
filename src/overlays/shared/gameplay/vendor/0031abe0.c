@@ -11,7 +11,6 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
 
-extern char D_001413DC[];
 extern char D_L05_0015F580[] MACRO_ADDR;
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_001fa728(char *, float);
@@ -32,7 +31,7 @@ void FUN_L05_0031abe0(char *moby) {
         qcopy(v, moby + 0x10);
         v[3] = 8.0f;
         if (FUN_001fa728((char *)v, 128.0f) != -1) {
-            if (*(int *)(D_001413DC) == 0x16) {
+            if (hero.state.control_mode == 0x16) {
                 for (i = 0; i < 3; i++) {
                     float a = random_angle_radians();
                     float b = random_angle_radians();
@@ -140,8 +139,6 @@ char *FUN_L05_0031d160(unsigned char *a0) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
 
 
-extern char D_0013F350[];
-extern char D_0013F5E0[];
 extern float FUN_001f9b80(float *, float *);
 extern void FUN_001f9d20(void *, void *, void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -153,8 +150,8 @@ void FUN_L05_00329358(char *moby) {
     float *p = (float *)(d + 0x80);
     *(OvlQuad *)v = 0;
     v[2] = 0.7f;
-    FUN_001f9d20(v, v, D_0013F350);
-    add_vector_xyz(p, D_0013F350 + 0x80, v);
+    FUN_001f9d20(v, v, &hero);
+    add_vector_xyz(p, &hero.motion.pos, v);
     qcopy(d + 0x1D0, p);
     if (current_level_index == 5) {
         float w[4];
@@ -177,7 +174,7 @@ void FUN_L05_00329358(char *moby) {
             p[2] = 77.5f;
         }
     }
-    normalize_vector_xyz(p + 8, D_0013F5E0, -1.0f);
+    normalize_vector_xyz(p + 8, &hero.unk290, -1.0f);
 }
 extern char *D_L05_00167200 __attribute__((section(".data")));
 void FUN_L05_003294c0(float a, float b, float c, float d, float e, float f, float g, float h) {

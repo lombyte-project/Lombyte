@@ -50,14 +50,14 @@ void FUN_L08_0021d9c0(void) {
         q->height_threshold = q->ground_z.f + 0.2f;
     }
     if (v == 0) {
-        char *q = (char *)&hero;
-        *(float *)(q + 0x22A4) = *(float *)(q + 0x2F0) - *(float *)(q + 0x2D8);
-        if (*(float *)(q + 0x22A4) < 0.85f) {
-            if (*(float *)(q + 0x22A4) > 0.25f)
-                *(unsigned char *)(q + 0x20A9) = 1;
+        struct Hero *q = &hero;
+        q->unk22A4 = q->height_threshold - q->ground_z.f;
+        if (q->unk22A4 < 0.85f) {
+            if (q->unk22A4 > 0.25f)
+                q->unk20A9 = 1;
         }
-        q = (char *)&hero;
-        *(unsigned char *)(q + 0x12E4) = 1;
+        q = &hero;
+        q->base_condition = 1;
     }
     if (D_0015ED84 == 0xD) {
         struct Hero *q = &hero;
@@ -128,7 +128,6 @@ void FUN_L08_0021d9c0(void) {
 #include "qcopy.h"
 
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/hero.h"
 
 struct MobyView {
     u8 pad0[0xC];

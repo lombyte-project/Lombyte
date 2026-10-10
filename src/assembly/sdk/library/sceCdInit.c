@@ -102,9 +102,9 @@ int sceCdInit(int init_mode) {
     }
     /* Read the RPC result through the EE uncached alias. The signed division
        below preserves the retail rounding for negative response components. */
-    stat = *(s32 *)((u32)(rbuf + 0xC) | 0x20000000);
-    b = *(s32 *)((u32)(rbuf + 8) | 0x20000000);
     a = *(s32 *)((u32)(rbuf + 4) | 0x20000000);
+    b = *(s32 *)((u32)(rbuf + 8) | 0x20000000);
+    stat = *(s32 *)((u32)(rbuf + 0xC) | 0x20000000);
     ret = 1;
     if (stat == 0xFF) {
     } else if (stat == 0xFE) {
