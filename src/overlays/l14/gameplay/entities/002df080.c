@@ -657,7 +657,128 @@ void FUN_L14_002eb810(struct Moby *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ec810.s", FUN_L14_002ec810);
+/* pvars of the drifting mine that follows a looped path */
+typedef struct {
+    u8 pad0[0x20];
+    f32 health[0x10];  /* 0x20 */
+    s32 path;          /* 0x60 */
+    s32 segment;       /* 0x64 */
+    f32 along;         /* 0x68 */
+    f32 dir;           /* 0x6C */
+    f32 vel[3];        /* 0x70 */
+    f32 phase;         /* 0x7C */
+    f32 spin[3];       /* 0x80 */
+} L14MineVars;
+
+typedef struct {
+    s32 count;
+    s32 pad4[3];
+    struct {
+        f32 pos[3];
+        f32 length;
+    } points[1];
+} L14MinePath;
+
+typedef struct {
+    u8 pad0[0x20];
+    struct Moby *moby;  /* 0x20 */
+} L14MineHit;
+
+extern L14MinePath *D_L14_001B0BB0_mine[] __asm__("D_L14_001B0BB0");
+extern char D_L14_001FCA98[];
+extern char D_L14_001FCAD8[];
+extern f32 D_L14_00161C44 __attribute__((sda));
+extern f32 D_L14_00161C48 __attribute__((sda));
+extern f32 D_0015ED6C_mine __asm__("D_0015ED6C");
+extern void mine_print(const char *, short) __asm__("FUN_001e93b0");
+extern void mine_remove(void *) __asm__("FUN_0020c828");
+extern float mine_distance(void *, void *) __asm__("FUN_001f9b48");
+extern int mine_rand(int) __asm__("FUN_00213260");
+extern float mine_random(float, float) __asm__("FUN_002132a8");
+extern void mine_clear(void *) __asm__("FUN_001f99f8");
+extern float FUN_L00_00257c48(float, float);
+extern int FUN_L00_0025d808_mine(void *, float *, int *, float *, int, float) __asm__("FUN_L00_0025d808");
+extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
+extern L14MineHit *mine_hit(void *, int, int) __asm__("FUN_L00_0025a420");
+extern s32 FUN_00213928(struct Moby *, void *, f32 *, s32, s32 *, s32, s32, s32);
+extern int mine_sound(int, int, void *) __asm__("FUN_0022da68");
+extern void mine_explode(void *, void *, void *, float, float, int, int, int, float, float, float, float,
+                         int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern float mine_add_rot(float, float) __asm__("FUN_001fa580");
+extern float mine_sin(float) __asm__("FUN_001f9de0");
+extern int mine_ftoi(float) __asm__("FUN_001fa6d0");
+
+/* Mine update: drifts along its looped path while spinning and pulsing; blows up on a hit. */
+void FUN_L14_002ec810(struct Moby *m) {
+    L14MineVars *d = (L14MineVars *)m->pvars;
+    float v[4];
+    Vec4 vel;
+    s32 count;
+    L14MinePath *path;
+    L14MineHit *hit;
+    int i;
+    float s;
+    int r;
+    int g;
+
+    switch (m->state) {
+    case 0:
+        if (d->path == -1) {
+            mine_print(D_L14_001FCA98, m->save_id);
+            mine_remove(m);
+            return;
+        }
+        path = D_L14_001B0BB0_mine[d->path];
+        if (path->count == 0) {
+            mine_print(D_L14_001FCAD8, m->save_id);
+            mine_remove(m);
+            return;
+        }
+        for (i = 0; i < path->count; i++) {
+            f32 len = mine_distance(&((f32 *)path)[i * 4 + 4], &((f32 *)path)[((i + 1) % path->count) * 4 + 4]);
+            char *pt = (char *)path + i * 16;
+            *(f32 *)(pt + 0x1C) = len;
+        }
+        d->segment = 0;
+        d->along = 0;
+        d->dir = mine_rand(2) != 0 ? 1.0f : -1.0f;
+        qcopy(&m->pos, path->points[0].pos);
+        m->state = 1;
+        d->spin[0] = mine_random(0.05235988f, 0.10471976f);
+        d->spin[1] = mine_random(0.034906585f, 0.06981317f);
+        d->spin[2] = mine_random(0.017453292f, 0.034906585f);
+        mine_clear(d->vel);
+        d->phase = FUN_L00_00257c48(0.0f, 3.1415927f);
+        break;
+    case 1:
+        FUN_L00_0025d808_mine(D_L14_001B0BB0_mine[d->path], v, &d->segment, &d->along, 1,
+                              D_L14_00161C44 * D_0015ED6C_mine * d->dir);
+        FUN_L00_0025b8c0(&m->pos.x, &d->vel[0], v[0], 0.02f, 0.2f, 0.0f);
+        FUN_L00_0025b8c0(&m->pos.y, &d->vel[1], v[1], 0.02f, 0.2f, 0.0f);
+        FUN_L00_0025b8c0(&m->pos.z, &d->vel[2], v[2], 0.02f, 0.2f, 0.0f);
+        hit = mine_hit(m, 0x230000, 0);
+        FUN_00213928(m, hit, d->health, 0, &count, 0, 0, 4);
+        if ((count >= 2 && hit != 0 && hit->moby->oclass != 0x283) || hero.coll_hit_moby == (u8 *)m) {
+            mine_clear(&vel);
+            mine_sound(0, 0, m);
+            if (hero.coll_hit_moby == (u8 *)m)
+                mine_explode(m, &vel, &m->pos, 3.0f, 1.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            else
+                mine_explode(m, &vel, &m->pos, 0.0f, 0.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            mine_remove(m);
+            return;
+        }
+        m->rot.x = mine_add_rot(m->rot.x, d->spin[0]);
+        m->rot.y = mine_add_rot(m->rot.y, d->spin[1]);
+        m->rot.z = mine_add_rot(m->rot.z, d->spin[2]);
+        d->phase = mine_add_rot(d->phase, D_L14_00161C48);
+        s = mine_sin(d->phase);
+        r = mine_ftoi(s * 48.0f) + 0xCF;
+        g = mine_ftoi(s * 32.0f) + 0x30;
+        m->unk90 = g << 16 | (0xFF000000 | g << 8) | r;
+        break;
+    }
+}
 #include "qcopy.h"
 
 /* Spawn a projectile moby at a, aimed along b, with two parameters. */
