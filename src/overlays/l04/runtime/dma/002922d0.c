@@ -43,7 +43,7 @@ void FUN_L04_00292370(void *unused, char *arg) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002923b8.s", FUN_L04_002923b8);
 #else
-extern void DebugPrint_923b8() __asm__("FUN_001e93b0");
+extern void STUB_printf() __asm__("FUN_001e93b0");
 extern void FUN_001f97b0(void);
 extern float FUN_L04_002418b0(int, unsigned int);
 extern float FUN_L04_00241910(int, unsigned int);
@@ -51,7 +51,7 @@ extern float FUN_001f96b0(float);
 extern void transform_scaled_vertex_batch(char *, int, void *, char *) __asm__("FUN_0020cd48");
 extern void FUN_0020cca8(char *, int, void *);
 extern float FUN_001f9e90(float, float);
-extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
+extern void AttachManipulator(char *, int, void *) __asm__("FUN_0020cb10");
 
 void FUN_L04_002923b8(char *arg0, char *arg1) {
     int joints[6];
@@ -67,7 +67,7 @@ void FUN_L04_002923b8(char *arg0, char *arg1) {
     for (i = 0; i < 13; i++) {
         int **slot = entry + i;
         if (**slot < 0) {
-            DebugPrint_923b8((char *)0x1db360, i, *(short *)(arg0 + 0xa6));
+            STUB_printf((char *)0x1db360, i, *(short *)(arg0 + 0xa6));
             FUN_001f97b0();
         }
         *(float *)((char *)*slot + 0xc) = FUN_L04_002418b0((unsigned char)arg0[0x22], **slot);
@@ -109,9 +109,9 @@ void FUN_L04_002923b8(char *arg0, char *arg1) {
         *(int *)(record + 0xfc) = 0;
         *(float *)(record + 0xf8) = FUN_001f9e90(transformed[4], transformed[5]);
         if ((unsigned char)record[0x161] == 0)
-            attach_manipulator(arg0, (unsigned char)record[0xf3], upper);
+            AttachManipulator(arg0, (unsigned char)record[0xf3], upper);
         if ((unsigned char)record[0x121] == 0)
-            attach_manipulator(arg0, (unsigned char)record[0xf2], lower);
+            AttachManipulator(arg0, (unsigned char)record[0xf2], lower);
         record += 0xb0;
         lower += 0xb0;
         upper += 0xb0;
@@ -128,7 +128,7 @@ void FUN_L04_002923b8(char *arg0, char *arg1) {
     *(int *)(arg1 + 0xe4) = 0;
     *(short *)(arg1 + 0xec) = 0;
     *(unsigned char *)(arg1 + 0xb6) = 5;
-    DebugPrint_923b8((char *)0x1db3f0, 0x250);
+    STUB_printf((char *)0x1db3f0, 0x250);
 }
 #endif
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293990), where it is exact; names translated to the US level program. */
@@ -148,7 +148,161 @@ int FUN_L04_002927d0(char *arg0, char *arg1) {
         return (unsigned char)arg1[0xB6];
     return FUN_L00_002a13f0(found, arg1);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00292828.s", FUN_L04_00292828);
+/* Ported from rac1-decomp src/overlays/l04_eudora/vuchain_00293490.c (func_L04_002939E8) */
+
+/* Steers a moby from the arg block: height and push terms, returns 2 when the tilt is past pi/4. */
+
+typedef struct { float x, y, z, w; } Vec_2939E8;
+
+typedef struct {
+    Vec_2939E8 pts[6];      /* 0x00: probe points */
+    char pad60[0x2C];
+    float *f8C;             /* 0x8C */
+    char pad90[0x26];
+    unsigned char mask;     /* 0xB6 */
+    unsigned char kind;     /* 0xB7 */
+    float tilt;             /* 0xB8 */
+    char padBC[0x1C];
+    float vel;              /* 0xD8 */
+    float accel;            /* 0xDC */
+    char padE0[0x4];
+    float ground;           /* 0xE4 */
+    char padE8[0x6];
+    unsigned short flags;   /* 0xEE */
+} Steer_2939E8;
+
+typedef struct {
+    char pad00[0x10];
+    Vec_2939E8 pos;         /* 0x10 */
+    char pad20[0x28];
+    float rotz;             /* 0x48 */
+} StMoby_2939E8;
+
+typedef struct {
+    char pad00[0x40];
+    Vec_2939E8 v40;         /* 0x40 */
+} StTab_2939E8;
+
+extern f32 FastCos(f32) __asm__("func_001F9DC8");
+extern f32 FastSin(f32) __asm__("func_001F9DE0");
+extern float FUN_001f9e90(float, float);
+extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
+extern int D_L04_00173FC0; /* no foreign declaration */
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern void FastVecCross(void *, void *, void *) __asm__("func_001F9AD8");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float FUN_L04_002922d0_c(float *pos) __asm__("FUN_L04_002922d0");
+extern void func_001F9BC0_2939E8(float *) __asm__("FUN_001f99f8");
+extern float func_001F9F90_2939E8(float) __asm__("FUN_001f9dc8");
+extern float func_001F9FA8_2939E8(float) __asm__("FUN_001f9de0");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float FastArcTan(float, float) __asm__("FUN_001f9e90");
+extern char D_L04_00174040_2939E8[] __asm__("D_L04_00173FC0");
+
+int FUN_L04_00292828(StMoby_2939E8 *m, Steer_2939E8 *a)
+{
+    float push[4];
+    float dir[4];
+    int ret = 0;
+    int pinned = 0;
+    int bit = 1;
+    int j;
+    float dz;
+    float n;
+    float h;
+    float sum;
+    float t;
+
+    dz = 0.0f;
+    n = dz;
+    if (a->flags & 4) {
+        h = probe_ground_height(&m->pos, 0, 0.5f);
+        if (m->pos.z < h - 0.05f) {
+            dz = m->pos.z - h;
+        } else {
+            if (a->vel < dz && m->pos.z < h + 0.1f - a->vel) {
+                dz = h - m->pos.z;
+            } else {
+                dz = -1.0f;
+            }
+        }
+        a->tilt = 0.0f;
+    } else {
+        func_001F9BC0_2939E8(push);
+        sum = 0.0f;
+        for (j = 0; j < 4; j++) {
+            Vec_2939E8 *e = &a->pts[j];
+            if (a->mask & bit) {
+                h = FUN_L04_002922d0_c((float *)e);
+                sum += h;
+                if (0.0f < h) {
+                    t = AbsoluteFloat(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.x);
+                    t = t + AbsoluteFloat(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.y);
+                    if (t < AbsoluteFloat(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.z)) {
+                        add_vector_xyz(push, push, &((StTab_2939E8 *)D_L04_00174040_2939E8)->v40);
+                        n += 4.0f;
+                        dz += h - e->z;
+                    }
+                }
+            }
+            j++;
+            bit <<= 2;
+        }
+        if (sum == 0.0f) {
+            h = probe_ground_height(&m->pos, 0, 0.5f);
+            if (0.0f < h) {
+                n += 4.0f;
+                dz += h - m->pos.z;
+            }
+        }
+        if (push[0] != 0.0f || push[1] != 0.0f || push[2] != 0.0f) {
+            dir[0] = func_001F9F90_2939E8(m->rotz);
+            dir[1] = func_001F9FA8_2939E8(m->rotz);
+            dir[2] = 0.0f;
+            FastVecCross(dir, dir, push);
+            FastVecCross(dir, dir, push);
+            a->tilt = FastArcTan(vector_length_xy(dir), dir[2]);
+        } else {
+            a->tilt = 0.0f;
+        }
+        if (0.785398f < AbsoluteFloat(a->tilt)) {
+            ret = 2;
+        }
+        if (a->kind == 0xD && 0.0f < a->ground && (a->mask & 0xF) == 0) {
+            t = -FastArcTan(a->f8C[1], a->ground - m->pos.z);
+            if (AbsoluteFloat(t) < 0.5235988f) {
+                pinned = 1;
+                dz += a->ground - m->pos.z;
+                a->tilt = t;
+                n += 4.0f;
+            }
+        }
+    }
+    if (n != 0.0f) {
+        dz = dz / n;
+    }
+    if (a->flags & 8) {
+        if (dz < -0.025f) {
+            dz = 0.0f;
+        }
+        a->vel = 0.0f;
+    } else if (-0.025f < dz) {
+        if (0.025f < dz && pinned == 0) {
+            dz = 0.0f;
+        }
+        a->vel = 0.0f;
+    } else {
+        a->vel = a->vel - a->accel;
+        dz = a->vel;
+    }
+    for (j = 0; j < 6; j++) {
+        Vec_2939E8 *p = &a->pts[j];
+        p->z += dz;
+    }
+    m->pos.z = m->pos.z + dz;
+    return ret;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00292d48.s", FUN_L04_00292d48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00295778.s", FUN_L04_00295778);
 extern u8 D_L04_001CA938[13][4];

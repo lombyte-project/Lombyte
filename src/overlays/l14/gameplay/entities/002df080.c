@@ -444,7 +444,237 @@ void FUN_L14_002ed280(struct Moby *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ed530.s", FUN_L14_002ed530);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002edc18.s", FUN_L14_002edc18);
+#include "sda.h"
+
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002EF078), where it is exact; names translated to the US level program. */
+
+typedef int u128_2EF078 __attribute__((mode(TI)));
+
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V_2EF078;
+
+typedef struct {
+    V_2EF078 v[4];
+    int col[4];
+    float uv[4][2];
+    long r70;
+    long tex;
+    long r80;
+    long r88;
+} Q_2EF078;
+
+extern V_2EF078 D_L14_001DFD80[];
+extern V_2EF078 D_L14_001E0050[];
+extern char D_L14_001674C0[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float D_L14_00161CD0_c[] __asm__("D_L14_00161CD0") __attribute__((section(".sdata")));
+extern float FUN_L00_00257e20(float, float, float, float, float);
+extern int D_L14_00161C70 __attribute__((sda));
+extern int D_L14_00161C78 __attribute__((sda));
+extern int D_L14_00161C7C __attribute__((sda));
+extern float D_L14_00161C80 __attribute__((sda));
+extern float D_L14_00161C84 __attribute__((sda));
+extern float D_L14_00161C88 __attribute__((sda));
+extern int D_L14_00161CF8[] __attribute__((section(".sdata")));
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern short D_L14_001E0000[];
+extern short D_L14_001E0350[];
+extern unsigned char D_L14_00161CE0[] __attribute__((section(".sdata")));
+extern void copy_blocks_16_forward(void *dst, void *src, s32 size) __asm__("func_001F98D0");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L14_002edc18(void) {
+    Q_2EF078 q[2];
+    V_2EF078 m[4];
+    V_2EF078 sz[2];
+    V_2EF078 p[2];
+    V_2EF078 m2[4];
+    V_2EF078 r[3];
+    int a;
+    int i;
+    int j;
+    V_2EF078 *n;
+    short *s;
+    int c;
+    V_2EF078 *nd;
+
+    q[0].tex = get_effect_texture(0x2D);
+    q[0].r88 = 0x8000000048L;
+    q[0].r80 = 0xFF9000000260L;
+    q[0].r70 = 0;
+    a = func_001FA898_r(ConvertIntegerToFloat(D_L14_001E0000[0]) / ConvertIntegerToFloat(scale_game_frames_alt(D_L14_00161C70)) * 255.0f) - D_L14_00161CE0[0];
+    if (a < 0) a = 0;
+    if (a > 0xFF) a = 0xFF;
+    c = D_L14_00161C78 | (a << 24);
+    q[0].col[1] = c;
+    q[0].col[0] = c;
+    q[0].uv[0][0] = 0.0f;
+    q[0].uv[0][1] = 0.0f;
+    q[0].uv[1][0] = 0.0f;
+    q[0].uv[1][1] = 1.0f;
+    q[0].uv[2][0] = 1.0f;
+    q[0].uv[2][1] = 0.0f;
+    q[0].uv[3][0] = 1.0f;
+    q[0].uv[3][1] = 1.0f;
+    copy_blocks_16_forward(&q[1], &q[0], 0x90);
+    q[1].tex = get_effect_texture(0x2C);
+    q[1].col[0] = q[1].col[1] = D_L14_00161C7C | ((a >> 1) << 24);
+    subtract_vector_xyz_c2(&m[0], D_L14_00161CC0, D_L14_00161CD0_c);
+    normalize_vector_xyz(&m[0], &m[0], 1.0f);
+    m[0].w = 0.0f;
+    m[2].x = 1.0f;
+    m[2].y = 0.0f;
+    m[2].z = 0.0f;
+    m[2].w = 0.0f;
+    cross_vectors_xyz(&m[1], &m[0], &m[2]);
+    normalize_vector_xyz(&m[1], &m[1], 1.0f);
+    m[1].w = 0.0f;
+    cross_vectors_xyz(&m[2], &m[1], &m[0]);
+    m[2].w = 0.0f;
+    qcopy(&m[3], D_L14_00161CD0_c);
+    *(u128_2EF078 *)&sz[0] = 0;
+    sz[0].z = D_L14_00161C84;
+    sz[0].w = 1.0f;
+    *(u128_2EF078 *)&sz[1] = 0;
+    sz[1].z = D_L14_00161C84 * D_L14_00161C88;
+    sz[1].w = 1.0f;
+    qcopy(&q[0].v[0], &sz[0]);
+    scale_vector_xyz(&q[0].v[1], &q[0].v[0], -1.0f);
+    qcopy_nc(&q[1].v[0], &sz[1]);
+    scale_vector_xyz(&q[1].v[1], &q[1].v[0], -1.0f);
+    nd = &D_L14_001DFD80[1];
+    transform_vector(&p[0], nd, &m[0]);
+    transform_vector(&p[1], nd + 1, &m[0]);
+    qcopy(&m2[0], &m[0]);
+    subtract_vector_xyz_c2(&m2[1], D_L14_001674C0, &p[0]);
+    normalize_vector_xyz(&m2[1], &m2[1], 1.0f);
+    cross_vectors_xyz(&m2[2], &m2[1], &m2[0]);
+    qcopy(&m2[3], &p[0]);
+    transform_vector(&q[0].v[0], &q[0].v[0], &m2[0]);
+    transform_vector(&q[0].v[1], &q[0].v[1], &m2[0]);
+    transform_vector(&q[1].v[0], &q[1].v[0], &m2[0]);
+    transform_vector(&q[1].v[1], &q[1].v[1], &m2[0]);
+    for (i = 1; i < 0x28; i++) {
+        int b;
+        float *e = D_L14_00161CC0;
+        qcopy(&q[0].v[2], &sz[0]);
+        scale_vector_xyz(&q[0].v[3], &q[0].v[2], -1.0f);
+        qcopy(&q[1].v[2], &sz[1]);
+        scale_vector_xyz(&q[1].v[3], &q[1].v[2], -1.0f);
+        if (i == 0x27) {
+            qcopy(&p[0], e);
+        } else {
+            transform_vector(&p[0], &D_L14_001DFD80[i], &m[0]);
+        }
+        qcopy(&m2[0], &m[0]);
+        subtract_vector_xyz_c2(&m2[1], D_L14_001674C0, &p[0]);
+        normalize_vector_xyz(&m2[1], &m2[1], 1.0f);
+        cross_vectors_xyz(&m2[2], &m2[1], &m2[0]);
+        qcopy(&m2[3], &p[0]);
+        transform_vector(&q[0].v[2], &q[0].v[2], &m2[0]);
+        transform_vector(&q[0].v[3], &q[0].v[3], &m2[0]);
+        transform_vector(&q[1].v[2], &q[1].v[2], &m2[0]);
+        transform_vector(&q[1].v[3], &q[1].v[3], &m2[0]);
+        if (i == 0x27) {
+            b = 0;
+        } else {
+            b = func_001FA898_r(ConvertIntegerToFloat(D_L14_001E0000[i]) / ConvertIntegerToFloat(scale_game_frames_alt(D_L14_00161C70)) * 255.0f) - D_L14_00161CE0[0];
+            if (b < 0) b = 0;
+            if (b > 0xFF) b = 0xFF;
+        }
+        q[0].col[2] = q[0].col[3] = D_L14_00161C78 | (b << 24);
+        q[1].col[2] = q[1].col[3] = D_L14_00161C7C | ((b >> 1) << 24);
+        draw_geometry_quad(&q[0], 0, 0);
+        draw_geometry_quad(&q[1], 0, 0);
+        q[0].col[0] = q[0].col[1] = q[0].col[2];
+        q[1].col[0] = q[1].col[1] = q[1].col[2];
+        qcopy(&q[0].v[0], &q[0].v[2]);
+        qcopy(&q[0].v[1], &q[0].v[3]);
+        qcopy(&q[1].v[0], &q[1].v[2]);
+        qcopy(&q[1].v[1], &q[1].v[3]);
+        sz[0].z = D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, ConvertIntegerToFloat(i) / ConvertIntegerToFloat(0x28));
+        sz[1].z = sz[0].z * D_L14_00161C88;
+    }
+    qcopy(&m2[0], &m[0]);
+    qcopy(&m2[1], &m[1]);
+    qcopy(&m2[2], &m[2]);
+    for (j = 0; j < 3; j++) {
+        float t;
+        short *as = D_L14_001E0350;
+        V_2EF078 *os = D_L14_001E0050;
+        V_2EF078 *o;
+
+        t = ConvertIntegerToFloat(as[j * 16]) / ConvertIntegerToFloat(scale_game_frames_alt(D_L14_00161C70));
+        a = func_001FA898_r(t * 255.0f) - D_L14_00161CE0[0];
+        if (a < 0) a = 0;
+        if (a > 0xFF) a = 0xFF;
+        c = D_L14_00161C78 | (a << 24);
+        q[0].col[1] = c;
+        q[0].col[0] = c;
+        q[1].col[0] = q[1].col[1] = D_L14_00161C7C | ((a >> 1) << 24);
+        sz[0].z = (D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, ConvertIntegerToFloat(D_L14_00161CF8[j]) / ConvertIntegerToFloat(0x28))) * 0.75f;
+        sz[1].z = sz[0].z * 4.0f;
+        qcopy(&q[0].v[0], &sz[0]);
+        scale_vector_xyz(&q[0].v[1], &q[0].v[0], -1.0f);
+        qcopy(&q[1].v[0], &sz[1]);
+        scale_vector_xyz(&q[1].v[1], &q[1].v[0], -1.0f);
+        qcopy(&r[0], &D_L14_001DFD80[D_L14_00161CF8[j]]);
+        transform_vector(&r[1], &r[0], &m[0]);
+        o = &os[j * 16];
+        r[0].x += o->x;
+        r[0].z += o->z;
+        transform_vector(&r[2], &r[0], &m[0]);
+        qcopy(&m2[3], &r[1]);
+        transform_vector(&q[0].v[0], &q[0].v[0], &m2[0]);
+        transform_vector(&q[0].v[1], &q[0].v[1], &m2[0]);
+        transform_vector(&q[1].v[0], &q[1].v[0], &m2[0]);
+        transform_vector(&q[1].v[1], &q[1].v[1], &m2[0]);
+        n = o + 1;
+        s = &as[j * 16 + 1];
+        for (i = 1; i < 16; i++) {
+            qcopy(&q[0].v[2], &sz[0]);
+            scale_vector_xyz(&q[0].v[3], &q[0].v[2], -1.0f);
+            qcopy(&q[1].v[2], &sz[1]);
+            scale_vector_xyz(&q[1].v[3], &q[1].v[2], -1.0f);
+            qcopy_nc(&r[1], &r[2]);
+            r[0].x += n->x;
+            r[0].z += n->z;
+            transform_vector(&r[2], &r[0], &m[0]);
+            qcopy(&m2[3], &r[1]);
+            transform_vector(&q[0].v[2], &q[0].v[2], &m2[0]);
+            transform_vector(&q[0].v[3], &q[0].v[3], &m2[0]);
+            transform_vector(&q[1].v[2], &q[1].v[2], &m2[0]);
+            transform_vector(&q[1].v[3], &q[1].v[3], &m2[0]);
+            t = ConvertIntegerToFloat(*s) / ConvertIntegerToFloat(scale_game_frames_alt(D_L14_00161C70));
+            a = func_001FA898_r(t * 255.0f) - D_L14_00161CE0[0];
+            if (a < 0) a = 0;
+            if (a > 0xFF) a = 0xFF;
+            c = D_L14_00161C78 | (a << 24);
+            q[0].col[3] = c;
+            q[0].col[2] = c;
+            q[1].col[2] = q[1].col[3] = D_L14_00161C7C | ((a >> 1) << 24);
+            draw_geometry_quad(&q[0], 0, 0);
+            draw_geometry_quad(&q[1], 0, 0);
+            q[0].col[0] = q[0].col[1] = q[0].col[2];
+            q[1].col[0] = q[1].col[1] = q[1].col[2];
+            qcopy(&q[0].v[0], &q[0].v[2]);
+            qcopy(&q[0].v[1], &q[0].v[3]);
+            qcopy(&q[1].v[0], &q[1].v[2]);
+            qcopy(&q[1].v[1], &q[1].v[3]);
+            sz[0].z *= 0.95f;
+            sz[1].z = sz[0].z * 4.0f;
+            s++;
+            n++;
+        }
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002EFB10), where it is exact; names translated to the US level program. */
 
 extern f32 random_angle_radians(void) __asm__("func_00213308");

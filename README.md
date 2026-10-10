@@ -11,6 +11,7 @@
 
 <p align="center">
   <a href="https://decomp.dev/lombyte-project/lombyte"><img src="https://img.shields.io/badge/decomp.dev-Progress-de812f?style=flat-square&logo=hackthebox&logoColor=de812f&labelColor=0d1117" alt="decomp.dev progress"></a>
+  <a href="https://discord.gg/Sfd2B54PDG"><img src="https://img.shields.io/badge/Discord-Community-5865F2?style=flat-square&logo=discord&logoColor=5865F2&labelColor=0d1117" alt="Community Discord"></a>
   <a href="docs/building.md"><img src="https://img.shields.io/badge/Build-Guide-c3cbd8?style=flat-square&logo=gnubash&logoColor=c3cbd8&labelColor=0d1117" alt="Build guide"></a>
   <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/Contributing-Guide-c3cbd8?style=flat-square&logo=github&logoColor=c3cbd8&labelColor=0d1117" alt="Contributing guide"></a>
 </p>
@@ -75,6 +76,6 @@ Work-in-progress C is also welcome when it preserves the matching baseline. Do n
 
 <h3>License</h3>
 
-Repository code is distributed under the [MIT License](LICENSE). Code reconstructed from third-party binaries remains the intellectual property of the respective copyright holders; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Repository code is distributed under the [GNU General Public License v3.0](LICENSE). Code reconstructed from third-party binaries belongs to its copyright holders; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 The Lombyte emblem in [`assets/`](assets/) is the project's original artwork.

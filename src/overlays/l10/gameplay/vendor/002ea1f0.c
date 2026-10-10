@@ -4,105 +4,63 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002ea1f0.s", FUN_L10_002ea1f0);
-#else
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EB5B0), where it is exact; names translated to the US level program. */
+
 extern char *D_L10_001B0930[];
-extern float probe_ground_height(void *pos, int arg1, float arg2) __asm__("FUN_00213508");
-extern void FUN_L10_002ea4e8(void *pos, short *timer, short *burst);
-extern void FUN_L10_002ea7b0(void *pos, short *timer);
-extern void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height);
+extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
+extern void FUN_L10_002ea4e8_c(void *,short *,short *) __asm__("FUN_L10_002ea4e8");
+extern void FUN_L10_002ea7b0_c(void *,short *) __asm__("FUN_L10_002ea7b0");
+void FUN_L10_002eaa08_c(void *pos, short *timer, short *burst, float height) __asm__("FUN_L10_002eaa08");
+extern void func_L10_002EBDC8_a01(float,void *,short *,short *) __asm__("FUN_L10_002eaa08");
 
-void FUN_L10_002ea1f0(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    char *path;
-    char *point;
-    short *timer;
-    short *burst;
-    int count;
-    int i;
-
-    if (moby->state == 1) {
-        if (*(int *)(data + 4) == -1) {
-            FUN_L10_002ea4e8(&moby->pos, (short *)(data + 8), (short *)(data + 0x48));
-        } else {
-            path = D_L10_001B0930[*(int *)(data + 4)];
-            count = *(int *)path;
-            if (count > 32) count = 32;
-            if (count > 0) {
-                point = path + 0x10;
-                timer = (short *)(data + 8);
-                burst = (short *)(data + 0x48);
-                do {
-                    FUN_L10_002ea4e8(point, timer, burst);
-                    point += 0x10;
-                    timer++;
-                    burst++;
-                } while (--count != 0);
-            }
-        }
-    } else if (moby->state == 0) {
-        if (*(int *)data == 1) {
-            if (*(int *)(data + 4) == -1) {
-                *(float *)(data + 0x88) = probe_ground_height(&moby->pos, 0, 0.5f);
-            } else {
-                path = D_L10_001B0930[*(int *)(data + 4)];
-                count = *(int *)path;
-                if (count > 32) count = 32;
-                if (count > 0) {
-                    point = path + 0x10;
-                    do {
-                        *(float *)(path + 0x1c) = probe_ground_height(point, 0, 0.5f);
-                        point += 0x10;
-                        path += 0x10;
-                    } while (--count != 0);
-                }
-            }
-            moby->state = 2;
-        } else if (*(int *)data == 0) {
-            moby->state = 1;
-        } else if (*(int *)data == 2) {
-            moby->state = 3;
-        }
-    } else if (moby->state == 2) {
-        if (*(int *)(data + 4) == -1) {
-            FUN_L10_002eaa08(&moby->pos, (short *)(data + 8), (short *)(data + 0x48), *(float *)(data + 0x88));
-        } else {
-            path = D_L10_001B0930[*(int *)(data + 4)];
-            count = *(int *)path;
-            if (count > 32) count = 32;
-            if (count > 0) {
-                point = path + 0x10;
-                timer = (short *)(data + 8);
-                burst = (short *)(data + 0x48);
-                do {
-                    FUN_L10_002eaa08(point, timer, burst, *(float *)(point + 0xc));
-                    point += 0x10;
-                    timer++;
-                    burst++;
-                } while (--count != 0);
-            }
-        }
-    } else if (moby->state == 3) {
-        if (*(int *)(data + 4) == -1) {
-            FUN_L10_002ea7b0(&moby->pos, (short *)(data + 8));
-        } else {
-            path = D_L10_001B0930[*(int *)(data + 4)];
-            count = *(int *)path;
-            if (count > 32) count = 32;
-            if (count > 0) {
-                point = path + 0x10;
-                timer = (short *)(data + 8);
-                do {
-                    FUN_L10_002ea7b0(point, timer);
-                    point += 0x10;
-                    timer++;
-                } while (--count != 0);
-            }
-        }
-    }
+void FUN_L10_002ea1f0(char *m) {
+ char *d=*(char **)(m+0x78);
+ switch((unsigned char)m[0x20]) {
+ case 0:
+  switch(*(int *)d) {
+  case 0:m[0x20]=1;break;
+  case 1:
+   if(*(int *)(d+4)!=-1) {
+    char *tab=D_L10_001B0930[*(int *)(d+4)];
+    char *pos=tab+0x10;
+    int n=*(int *)tab;
+    if(n>32)n=32;
+    if(n>0) {int count=n;float *height=(float *)(tab+0x1C);
+    do {*height=probe_ground_height(pos,0,0.5f);pos+=0x10;height+=4;}while(--count);}
+   }else *(float *)(d+0x88)=probe_ground_height(m+0x10,0,0.5f);
+   m[0x20]=2;break;
+  case 2:m[0x20]=3;break;
+  }
+  break;
+ case 1:
+  if(*(int *)(d+4)==-1)FUN_L10_002ea4e8_c(m+0x10,(short *)(d+8),(short *)(d+0x48));
+  else {
+   char *tab=D_L10_001B0930[*(int *)(d+4)];int n=*(int *)tab;
+   if(n>32)n=32;
+   if(n>0) {short *burst=(short *)(d+0x48);short *timer=(short *)(d+8);char *pos=tab+0x10;int count=n;
+   do {FUN_L10_002ea4e8_c(pos,timer,burst);timer++;++burst;--count;pos+=0x10;}while(count);}
+  }
+  break;
+ case 2:
+  if(*(int *)(d+4)==-1)func_L10_002EBDC8_a01(*(float *)(d+0x88),m+0x10,(short *)(d+8),(short *)(d+0x48));
+  else {
+   char *tab=D_L10_001B0930[*(int *)(d+4)];int n=*(int *)tab;
+   if(n>32)n=32;
+   if(n>0) {float *height=(float *)(tab+0x1C);short *burst=(short *)(d+0x48);short *timer=(short *)(d+8);char *pos=tab+0x10;int count=n;
+   do {func_L10_002EBDC8_a01(*height,pos,timer,burst);height+=4;++burst;++timer;--count;pos+=0x10;}while(count);}
+  }
+  break;
+ case 3:
+  if(*(int *)(d+4)==-1)FUN_L10_002ea7b0_c(m+0x10,(short *)(d+8));
+  else {
+   char *tab=D_L10_001B0930[*(int *)(d+4)];int n=*(int *)tab;
+   if(n>32)n=32;
+   if(n>0) {short *timer=(short *)(d+8);char *pos=tab+0x10;int count=n;
+   do {FUN_L10_002ea7b0_c(pos,timer);++timer;--count;pos+=0x10;}while(count);}
+  }
+  break;
+ }
 }
-#endif
 #include "qcopy.h"
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern char D_L10_00167240[];
@@ -134,7 +92,7 @@ extern int D_L10_00161FB0 __attribute__((sda));
 extern int D_L10_00161FB4 __attribute__((sda));
 extern int D_L10_00161FB8 __attribute__((sda));
 extern void FUN_L00_00257d78(float *, float, float);
-extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
@@ -161,7 +119,7 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
         return;
     if (!FUN_001f9770(timer))
         return;
-    clear_vector(vel);
+    clear_u64_value(vel);
     vel[2] = D_L10_00161F68 * frame_time;
     FUN_L00_00257d78(acc, 0.0f, D_L10_00161F70 * frame_time);
     acc[2] += D_L10_00161F6C * frame_time;
@@ -214,7 +172,7 @@ extern int D_L10_00161FEC __attribute__((sda));
 extern int D_L10_00161FF0 __attribute__((sda));
 extern int D_L10_00161FF4 __attribute__((sda));
 extern void FUN_L00_00257d78(float *, float, float);
-extern void clear_vector(void *);
+extern void clear_u64_value(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L10_002ea7b0(void *pos, short *timer) {
@@ -232,7 +190,7 @@ void FUN_L10_002ea7b0(void *pos, short *timer) {
         return;
     if (!FUN_001f9770(timer))
         return;
-    clear_vector(vel);
+    clear_u64_value(vel);
     vel[2] = D_L10_00161FBC * frame_time;
     FUN_L00_00257d78(acc, 0.0f, D_L10_00161FC4 * frame_time);
     acc[2] += D_L10_00161FC0 * frame_time;
@@ -284,7 +242,6 @@ extern short D_L10_00162044 __attribute__((sda));
 extern short D_L10_0016204C __attribute__((sda));
 extern short D_L10_00162050 __attribute__((sda));
 extern void FUN_L00_00257d78(float *, float, float);
-extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
@@ -370,7 +327,7 @@ extern char *FUN_L00_0025a420(void *, int, int);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
-void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
+void DeleteMoby(struct Moby *moby) __asm__("FUN_0020c828");
 
 void FUN_L10_002eb6f0(struct Moby *m) {
     int hit = 0;
@@ -389,7 +346,7 @@ void FUN_L10_002eb6f0(struct Moby *m) {
         allocate_voice_for_target_entry(0, 0, (int)m);
         FUN_L01_002787a0(m);
         FUN_L00_00263e30(m, 0x742, 1, 0x742, 1, 11, 2);
-        mark_moby_for_removal(m);
+        DeleteMoby(m);
         break;
     }
 }
@@ -417,7 +374,7 @@ void FUN_L10_002eb7e0(struct Moby *moby) {
         allocate_voice_for_target_entry(0, 0, (int)moby);
         FUN_L01_002787a0(moby);
         FUN_L01_00278e20(moby, 0x741);
-        mark_moby_for_removal(moby);
+        DeleteMoby(moby);
         break;
     }
 }

@@ -367,7 +367,166 @@ void FUN_L14_00305b18(struct Moby *p) {
         add_vector_xyz(v, v, &v[4]);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305d28.s", FUN_L14_00305d28);
+/* Update function
+ * for moby class 1395 on level 14: fills the six-slot table of helper mobys, then lowers them one by one. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_003071B0), where it is exact; names translated to the US level program. */
+
+typedef struct Moby_3071B0 {
+    char pad0[0x10];
+    float pos[4];                 /* 0x10 */
+    unsigned char state;          /* 0x20 */
+    char pad21[0x23];
+    float f44;                    /* 0x44 */
+    char pad48[0x30];
+    struct Data_3071B0 *data;     /* 0x78 */
+    char pad7C[0x44];
+    float rot[4];                 /* 0xC0 */
+    char padD0[0x10];
+    float fE0[4];                 /* 0xE0 */
+    char padF0[0x10];
+} Moby_3071B0;
+
+typedef struct Slots_3071B0 {
+    Moby_3071B0 *m[6];
+} Slots_3071B0;
+
+typedef struct Data_3071B0 {
+    Moby_3071B0 *owner;           /* 0x00 */
+    Slots_3071B0 slots;           /* 0x04 */
+    int trigger;                  /* 0x1C: index of the moby that starts it */
+    short timer;                  /* 0x20 */
+    short cur;                    /* 0x22 */
+    float rate;                   /* 0x24 */
+    int idx[6];                   /* 0x28 */
+    int voice;                    /* 0x40 */
+} Data_3071B0;
+
+typedef struct Snd_3071B0 {
+    char pad0[0x74];
+    unsigned char f74;
+    char pad75[0x13];
+    Moby_3071B0 *f88;
+} Snd_3071B0;
+
+extern char D_0013E550[];
+extern float FUN_L00_0025b750(float, float, float);
+extern int D_L14_0015FFD8_c __asm__("D_L14_0015FFD8");
+extern float D_L14_001621F4 __attribute__((sda)); /* no foreign declaration */
+extern float D_L14_001621F8 __attribute__((sda)); /* no foreign declaration */
+extern float D_L14_001621FC __attribute__((sda)); /* no foreign declaration */
+extern float D_L14_00162200 __attribute__((sda)); /* no foreign declaration */
+extern int D_L14_00162204 __attribute__((sda)); /* no foreign declaration */
+extern int D_L14_0016220C __attribute__((sda)); /* no foreign declaration */
+extern int FUN_001f9770();
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t);
+int FUN_L00_0028d8c0(int a, int i);
+int FUN_L00_0028dc90(int i, int a1, int v, int k);
+u8 *FUN_L14_00306158_c(u8 *self) __asm__("FUN_L14_00306158");
+extern Moby_3071B0 *func_L14_003075E0_3071B0(Moby_3071B0 *owner) __asm__("FUN_L14_00306158");
+extern void func_001F9C30_3071B0(void *, void *, float) __asm__("FUN_001f9a68");
+extern void func_001F9BD8_3071B0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int func_001F9850_3071B0(int) __asm__("FUN_001f96f8");
+extern float func_001FA888_3071B0(int) __asm__("FUN_001fa6c0");
+extern int func_L00_0028EF68_3071B0(int i, int a1, Moby_3071B0 *v, int k) __asm__("FUN_L00_0028dc90");
+extern int func_001F9938_3071B0(void *) __asm__("FUN_001f9770");
+extern float func_L00_0025C7A8_3071B0(float, float, float) __asm__("FUN_L00_0025b750");
+extern int func_L00_0028EB98_3071B0(void *, int) __asm__("FUN_L00_0028d8c0");
+extern int func_0022ED80_3071B0(int, int, Moby_3071B0 *) __asm__("FUN_0022da68");
+extern float func_L00_0025C700_3071B0(float, float, float) __asm__("FUN_L00_0025b6a8");
+extern void func_L00_0028EBF0_3071B0(int) __asm__("FUN_0022d798");
+extern char D_0013E633_3071B0[] __asm__("D_0013E550");
+
+void FUN_L14_00305d28(Moby_3071B0 *moby) {
+    Data_3071B0 *data = moby->data;
+    float vec[4];
+
+    switch (moby->state) {
+    case 0: {
+        int i;
+        if (data->owner == 0) {
+            data->owner = func_L14_003075E0_3071B0(moby);
+            func_001F9C30_3071B0(vec, moby->rot, D_L14_001621F4);
+            func_001F9BD8_3071B0(data->owner->pos, moby->pos, vec);
+        }
+        for (i = 0; i < 6; i++) {
+            if (data->slots.m[i] == 0) {
+                data->slots.m[i] = (Moby_3071B0 *)(D_L14_0015FFD8_c + (data->idx[i] << 8));
+                func_001F9C30_3071B0(vec, moby->rot, D_L14_001621F4);
+                func_001F9BD8_3071B0(data->slots.m[i]->pos, moby->pos, vec);
+                data->slots.m[i]->pos[2] = data->slots.m[i]->pos[2] + (D_L14_001621F8 * (float)i + D_L14_001621FC);
+            }
+        }
+        data->voice = -1;
+        if (data->owner != 0) {
+            moby->state = 1;
+        }
+        break;
+    }
+    case 1:
+        if (((Moby_3071B0 *)(D_L14_0015FFD8_c + (data->trigger << 8)))->state == 2) {
+            moby->state = 2;
+            data->cur = 5;
+            data->timer = func_001F9850_3071B0(D_L14_00162204);
+            data->rate = 1.0f / func_001FA888_3071B0(data->timer);
+            func_L00_0028EF68_3071B0(0, 0, data->slots.m[data->cur], 0x575);
+        }
+        break;
+    case 2: {
+        Slots_3071B0 *slots = &data->slots;
+        Moby_3071B0 *o = slots->m[data->cur];
+        func_001F9938_3071B0(&data->timer);
+        o->f44 = func_L00_0025C7A8_3071B0(1.5707964f, 0.0f, func_001FA888_3071B0(data->timer) * data->rate);
+        if (data->timer == 0) {
+            data->timer = func_001F9850_3071B0(D_L14_00162204);
+            data->cur--;
+            if (data->cur < 0) {
+                moby->state = 3;
+                data->timer = func_001F9850_3071B0(D_L14_0016220C);
+                data->rate = 1.0f / func_001FA888_3071B0(data->timer);
+            } else {
+                func_L00_0028EF68_3071B0(0, 0, slots->m[data->cur], 0x575);
+            }
+        }
+        break;
+    }
+    case 3: {
+        Moby_3071B0 *owner = data->owner;
+        Moby_3071B0 **slots;
+        int i;
+        float t;
+        if (!func_L00_0028EB98_3071B0(moby, data->voice)) {
+            data->voice = func_0022ED80_3071B0(0, 4, moby);
+        }
+        func_001F9938_3071B0(&data->timer);
+        slots = data->slots.m;
+        t = func_001FA888_3071B0(data->timer) * data->rate;
+        owner->f44 = func_L00_0025C700_3071B0(D_L14_00162200 * 0.017453292f, 0.0f, t);
+        for (i = 0; i < 6; i++) {
+            func_001F9C30_3071B0(vec, owner->fE0, D_L14_001621F8 * (float)i + D_L14_001621FC);
+            func_001F9BD8_3071B0(slots[i]->pos, owner->pos, vec);
+        }
+        if (data->timer == 0) {
+            int j;
+            if (data->voice != -1) {
+                Snd_3071B0 *e = (Snd_3071B0 *)(D_0013E633_3071B0 + data->voice * 0x70);
+                if (e->f88 == moby && e->f74) {
+                    func_L00_0028EBF0_3071B0(data->voice);
+                }
+            }
+            data->voice = -1;
+            moby->state = 4;
+            for (j = 0; j < 6; j++) {
+                slots[j]->state = 2;
+            }
+        }
+        break;
+    }
+    }
+}
 void FUN_L14_003061d8(void *arg) {
     char *moby = arg;
     char *d;

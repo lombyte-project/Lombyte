@@ -2,29 +2,12 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-/* Exact low-cost entry recovered with target symbolic relocations. */
 INCLUDE_ASM(
     "config/us/expected/asm/assembly/runtime/memory/fill_transfer_words/FillTransferWords.s",
     FillTransferWords);
 #else
-#include "types.h"
-
-/* size is a byte count. The retail routine writes the first word even when
- * size is zero or negative, then advances in four-byte steps. Callers supply
- * word-aligned destinations and normally use sizes divisible by four. */
-void FillTransferWords(void *dst, s32 value, s32 size) {
-    volatile u32 *words = (volatile u32 *)dst;
-    do {
-        *words = (u32)value;
-        size -= 4;
-        words++;
-        if (size > 0) {
-            *words = (u32)value;
-            size -= 4;
-            words++;
-        } else {
-            return;
-        }
-    } while (size > 0);
-}
+/* No C body on purpose: this unit is intentional low-level assembly
+   (config/us/unit_categories.json), so it has no C goal and no public
+   fuzzy score. The assembly oracle above is the whole unit. It steps with
+   `addi`, the trapping add, where the compiler always emits `addiu`. */
 #endif /* NON_MATCHING */

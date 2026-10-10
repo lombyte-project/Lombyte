@@ -254,7 +254,14 @@ struct Hero {
     s16 unk30A;                    /* 0x30A */
     union { s16 s; u16 u; } unk30C; /* 0x30C: read signed, incremented unsigned */
     union { s16 s; u16 u; } air_frames; /* 0x30E: frames off the ground, 0 on landing */
-    u8 pad_310[0xA0];
+    Vec4 unk310;                   /* 0x310: attach anchor position (written by FUN_L00_00260668, read by FUN_L00_002604f0) */
+    Vec4 unk320;                   /* 0x320: attach anchor rotation */
+    Vec4 unk330;                   /* 0x330: attach anchor second position */
+    u8 pad_340[0x10];
+    Vec4 unk350;                   /* 0x350: per-frame move of the moby the hero is attached to (FUN_L00_00233f80) */
+    s32 unk360;                    /* 0x360: attached moby (FUN_L00_00233f80) */
+    s32 unk364;                    /* 0x364: attach flags, bits 0 and 1 */
+    u8 pad_368[0x48];
     f32 unk3B0;                    /* 0x3B0 */
     union { f32 f; s32 i; } unk3B4; /* 0x3B4: written as a float and zeroed as an int */
     s16 unk3B8;                    /* 0x3B8 */
@@ -324,12 +331,12 @@ struct Hero {
     s32 unk4C4;                    /* 0x4C4 */
     u8 pad_4C8[0x8];
     Vec4 unk4D0;                   /* 0x4D0 */
-    u8 pad_4E0[0x4];
+    f32 unk4E0;                    /* 0x4E0: ledge height (FUN_L00_0020bed0) */
     f32 unk4E4;                    /* 0x4E4 */
     s32 unk4E8;                    /* 0x4E8 */
     f32 unk4EC;                    /* 0x4EC */
     f32 unk4F0;                    /* 0x4F0 */
-    u8 pad_4F4[0x4];
+    u32 unk4F4;                    /* 0x4F4: ledge flags, bit 0: no headroom above the ledge (FUN_L00_0020bed0) */
     s32 unk4F8;                    /* 0x4F8: first argument of FUN_L00_00233f80 (FUN_L01_00233de0) */
     u8 pad_4FC[0x4];
     Vec4 unk500;                   /* 0x500 */
@@ -694,7 +701,7 @@ struct Hero {
     s32 unk21B4;                   /* 0x21B4: unk1B00 ring count */
     u8 pad_21B8[0x20];
     s16 unk21D8[8][4];             /* 0x21D8: 8 slots of four s16 */
-    s32 unk2218;                   /* 0x2218 */
+    s32 unk2218;                   /* 0x2218: voice of sound slot 0, -1 = none (slots 0-7 run to 0x2234, FUN_L00_00206c08) */
     u8 pad_221C[0x4];
     s32 unk2220;                   /* 0x2220 */
     s32 unk2224;                   /* 0x2224 */

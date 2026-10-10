@@ -857,8 +857,47 @@ unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
     return m;
 }
 #endif /* NON_MATCHING */
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002e03b8.s", FUN_L14_002e03b8);
+/* Ported from rac1-decomp src/overlays/shared/vendor_002B2A28.c (func_L14_002E17B8) */
 /* Exhaust puffs from the moby's nozzle: two coloured sparks and three white puffs of shrinking size. */
+
+typedef struct Moby Moby;
+
+typedef int u128_2E17B8 __attribute__((mode(TI)));
+
+typedef union {
+    u128_2E17B8 q;
+    float f[4];
+} Vec4_2E17B8;
+
+typedef struct Vars_2E17B8 {
+    char pad0[0x18];
+    float f18;                    /* 0x18 */
+    float f1C;                    /* 0x1C */
+} Vars_2E17B8;
+
+typedef struct ParticleFade_2E17B8 {
+    char pad0[4];
+    int i4;                       /* 0x04 */
+    char pad8[2];
+    unsigned char bA;             /* 0x0A */
+    unsigned char bB;             /* 0x0B */
+    char padC[4];
+    float scale;                  /* 0x10 */
+    char pad14[2];
+    short mode;                   /* 0x16 */
+    int color;                    /* 0x18 */
+} ParticleFade_2E17B8;
+
+typedef struct Particle_2E17B8 {
+    char pad0[3];
+    unsigned char b3;             /* 0x03 */
+    char pad4[6];
+    short frames;                 /* 0x0A */
+    float life;                   /* 0x0C */
+    char pad10[0x10];
+    ParticleFade_2E17B8 fade;     /* 0x20 */
+} Particle_2E17B8;
+
 typedef struct {
     unsigned char pad0[4];
     int w4;
@@ -866,6 +905,7 @@ typedef struct {
     unsigned char bA;
     unsigned char bB;
 } T_eca8;
+
 typedef struct {
     unsigned char pad0[8];
     unsigned char b8;
@@ -874,6 +914,120 @@ typedef struct {
     unsigned char padC[0x14];
     T_eca8 tail;
 } P_eca8;
+
+char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+extern P_eca8 *FUN_L00_0026d000(void *, float, float, float, int, void *, float, int);
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED60;
+extern int D_L14_0015F580_c __asm__("D_L14_0015F580");
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
+int FUN_L00_00257b90(int lo, int hi);
+unsigned char *FUN_L00_00274948_c(u128_2E17B8 *a, u128_2E17B8 *b, int c, int d) __asm__("FUN_L00_00274948");
+void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
+extern void func_L00_001FF4B0_2E17B8(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void func_001F9BD8_2E17B8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void func_002141A8_2E17B8(void *, float, float) __asm__("FUN_00213358");
+extern Particle_2E17B8 *func_L00_002757E8_2E17B8(void *, void *, int, Moby *) __asm__("FUN_L00_00274948");
+extern float func_002140F8_2E17B8(float, float) __asm__("FUN_002132a8");
+extern int func_002140B0_2E17B8(int) __asm__("FUN_00213260");
+extern int func_001F9850_2E17B8(int) __asm__("FUN_001f96f8");
+extern float func_001FA888_2E17B8(int) __asm__("FUN_001fa6c0");
+extern float func_001F9F90_2E17B8(float x) __asm__("FUN_001f9dc8");
+extern float func_001F9FA8_2E17B8(float) __asm__("FUN_001f9de0");
+extern float func_L00_00258C80_2E17B8(float lo, float hi) __asm__("FUN_L00_00257c48");
+extern int func_L00_00258BC8_2E17B8(int, int) __asm__("FUN_L00_00257b90");
+extern void func_L00_0026DA50_2E17B8(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
+extern Particle_2E17B8 *func_L00_0026DEA0_2E17B8(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
+
+void FUN_L14_002e03b8(Moby *m) {
+    Vec4_2E17B8 pos;
+    Vec4_2E17B8 dir;
+    Vec4_2E17B8 vel;
+    Vec4_2E17B8 off;
+    Vars_2E17B8 *pv;
+    Particle_2E17B8 *p;
+    Particle_2E17B8 *e;
+    ParticleFade_2E17B8 *fade;
+    int i;
+    int n;
+    int c;
+    int alpha;
+    float size;
+
+    pv = *(Vars_2E17B8 **)&m->pvars;
+    func_L00_001FF4B0_2E17B8(&dir, &*(Vec4_2E17B8 *)&m->unkE0, 0.2f);
+    func_001F9BD8_2E17B8(&pos, &*(Vec4_2E17B8 *)&m->pos, &dir);
+    func_002141A8_2E17B8(&vel, 0.005f, 0.03f);
+    p = func_L00_002757E8_2E17B8(&pos, &vel, 0x7F, m);
+    if (p != 0) {
+        p->life = func_002140F8_2E17B8(6000.0f, 32000.0f);
+    }
+    for (i = 0; i < 3; i++) {
+        float f;
+        int color;
+        p = func_L00_002757E8_2E17B8(&pos, &D_L14_0015F580_c, 0x7F, m);
+        if (p == 0) {
+            continue;
+        }
+        fade = &p->fade;
+        if (i == 2 && func_002140B0_2E17B8(8) == 0) {
+            p->life = 180000.0f;
+        } else {
+            p->life = func_002140F8_2E17B8(80000.0f, 120000.0f);
+        }
+        p->frames = func_001F9850_2E17B8(2);
+        f = 1.0f / func_001FA888_2E17B8(p->frames);
+        color = 0x7F7F7F;
+        fade->mode = 4;
+        fade->color = color;
+        fade->scale = f;
+    }
+    vel.f[0] = pv->f18;
+    vel.f[1] = pv->f1C;
+    vel.f[2] = 0.0f;
+    vel.f[3] = 1.0f;
+    if (m->state == 0) {
+        func_L00_001FF4B0_2E17B8(&dir, &*(Vec4_2E17B8 *)&m->unkE0, 0.95f);
+    } else {
+        func_L00_001FF4B0_2E17B8(&dir, &*(Vec4_2E17B8 *)&m->unkE0, 1.15f);
+        vel.f[2] = D_0015ED60 * 0.03f;
+    }
+    func_001F9BD8_2E17B8(&pos, &*(Vec4_2E17B8 *)&m->pos, &dir);
+    off.f[0] = func_001F9F90_2E17B8(m->rot.z) * 0.3f;
+    off.f[1] = func_001F9FA8_2E17B8(m->rot.z) * 0.3f;
+    off.f[2] = 0.0f;
+    func_001F9BD8_2E17B8(&pos, &pos, &off);
+    if (m->state == 1) {
+        pos.f[0] += func_L00_00258C80_2E17B8(0.0f, 0.1f);
+        pos.f[1] += func_L00_00258C80_2E17B8(0.0f, 0.1f);
+    }
+    func_L00_0026DA50_2E17B8(&pos, &vel, 0x4F007FFF, 0x1FFFFFFF,
+                             func_L00_00258BC8_2E17B8(func_001F9850_2E17B8(10), func_001F9850_2E17B8(20)), 1, 60000.0f);
+    n = func_002140B0_2E17B8(6);
+    if (func_002140B0_2E17B8(2) != 0) {
+        n = -n;
+    }
+    size = func_002140F8_2E17B8(60000.0f, 140000.0f);
+    c = func_L00_00258BC8_2E17B8(0x30, 0xFF);
+    alpha = 0x60000000;
+    e = func_L00_0026DEA0_2E17B8(&pos, 0.025f, 1.0f, 1.0f, n, &vel, size, c | ((c << 16) | ((c << 8) | alpha)));
+    if (e != 0) {
+        ParticleFade_2E17B8 *ef;
+        ef = &e->fade;
+        e->b3 = 0x44;
+        e->frames = func_001F9850_2E17B8(0x3C);
+        ef->i4 = 2;
+        ef->bA = 0x60;
+        ef->bB = e->frames;
+    }
+}
+/* Exhaust puffs from the moby's nozzle: two coloured sparks and three white puffs of shrinking size. */
 extern int below_y(int) __asm__("FUN_00213260");
 extern int frames_y(int) __asm__("FUN_001f96f8");
 extern void scale_y(void *, void *, float) __asm__("FUN_001f9a68");
