@@ -886,72 +886,75 @@ void FUN_L11_0030e978(struct Moby *m) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030eb90.s", FUN_L11_0030eb90);
-#else
-extern float D_L11_0015B36C __attribute__((section(".sdata")));
-extern float D_L11_0015B370 __attribute__((section(".sdata")));
-extern float D_L11_0015B374 __attribute__((section(".sdata")));
-extern float D_L11_0015B378 __attribute__((section(".sdata")));
-extern float D_L11_0015B37C __attribute__((section(".sdata")));
-extern float D_L11_0015B380 __attribute__((section(".sdata")));
-extern float D_L11_0015B384 __attribute__((section(".sdata")));
-extern float D_L11_0015B368 __attribute__((section(".sdata")));
+extern float D_L11_00161F68 __attribute__((sda));
+extern float D_L11_00161F6C __attribute__((sda));
+extern float D_L11_00161F70 __attribute__((sda));
+extern float D_L11_00161F74 __attribute__((sda));
+extern float D_L11_00161F78 __attribute__((sda));
+extern float D_L11_00161F7C __attribute__((sda));
+extern float D_L11_00161F80 __attribute__((sda));
+extern float D_L11_00161F84 __attribute__((sda));
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001fa2d8(void *, void *);
 extern void FUN_001f9d20(void *, void *, void *);
-extern float AbsoluteFloat(float) __asm__("FUN_001f99c0");
-extern float func_001FA748_f(float, float) __asm__("FUN_001fa580");
+extern float AbsoluteFloat_eb90(float) __asm__("FUN_001f99c0");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int hero_set_state(int, int) __asm__("FUN_L11_0024db50");
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 
-void FUN_L11_0030eb90(struct Moby *m) {
-    float v[4] __attribute__((aligned(16)));
-    float rot[4] __attribute__((aligned(16)));
-    float matrix[16] __attribute__((aligned(16)));
-    float diff[4] __attribute__((aligned(16)));
-    char *d = (char *)m->pvars;
-    struct Hero *control;
-    float angle;
-    float change;
+/* Private variables of the tilting platform (FUN_L11_0030eb90). */
+struct L11TiltVars {
+    u8 pad0[0x20];
+    u8 unk20[0x3C]; /* 0x20: rider state for FUN_L00_00260738 */
+    s32 unk5C;      /* 0x5C */
+    f32 spin;       /* 0x60: rot.y speed */
+};
 
-    scale_vector_xyz(v, &m->pos, -1.0f);
-    qcopy(rot, &m->rot);
-    *(int *)(d + 0x5c) = 1;
-    angle = *(float *)(d + 0x60);
-    angle = angle + D_L11_0015B37C * 0.017453292f * D_0015ED70 *
-                    (D_L11_0015B36C * m->rot.y) +
-                    D_L11_0015B380 * 0.017453292f * D_0015ED70 *
-                    (D_L11_0015B370 * angle);
-    *(float *)(d + 0x60) = angle;
-    control = &hero;
-    if (((struct Moby *)control->ground_moby) == m && control->air_frames.s == 0) {
-        subtract_vector_xyz(diff, &control->motion.pos, &m->pos);
-        FUN_001fa2d8(matrix, (char *)m + 0xc0);
-        FUN_001f9d20(diff, diff, matrix);
-        change = D_L11_0015B378 * 0.017453292f * D_0015ED70 *
-                 (D_L11_0015B368 * diff[0]);
-        if (*(float *)(d + 0x60) * change < 0.0f && m->rot.y * change < 0.0f) {
-            change = change + change;
+/* Tilting platform: rot.y springs back and is damped through its spin; the hero standing on it tilts it toward
+   his side, and a tilt past D_L11_00161F84 degrees knocks him into hero state 6. */
+void FUN_L11_0030eb90(struct Moby *m) {
+    Vec4f v;
+    Vec4f rot;
+    float matrix[16] __attribute__((aligned(16)));
+    Vec4f diff;
+    struct L11TiltVars *d = (struct L11TiltVars *)m->pvars;
+    float spin;
+    float change;
+    float scaled;
+
+    scale_vector_xyz(&v, &m->pos, -1.0f);
+    qcopy(&rot, &m->rot);
+    d->unk5C = 1;
+    spin = d->spin;
+    /* two separate updates (not one sum): gives retail's FP register allocation */
+    d->spin = spin + D_L11_00161F7C * 0.017453292f * frame_time_sq * (D_L11_00161F6C * m->rot.y);
+    d->spin = d->spin + D_L11_00161F80 * 0.017453292f * frame_time_sq * (D_L11_00161F70 * spin);
+    if (hero.ground_moby == m && hero.air_frames.s == 0) {
+        subtract_vector_xyz(&diff, &hero.motion.pos, &m->pos);
+        FUN_001fa2d8(matrix, &m->unkC0);
+        FUN_001f9d20(&diff, &diff, matrix);
+        scaled = D_L11_00161F68 * diff.x;
+        change = D_L11_00161F78 * 0.017453292f * frame_time_sq * scaled;
+        if (d->spin * change < 0.0f && m->rot.y * change < 0.0f) {
+            change += change;
         }
         if (change < 0.0f) {
-            change = change - D_L11_0015B374 * 0.017453292f * D_0015ED70;
+            change -= D_L11_00161F74 * 0.017453292f * frame_time_sq;
         } else {
-            change = change + D_L11_0015B374 * 0.017453292f * D_0015ED70;
+            change += D_L11_00161F74 * 0.017453292f * frame_time_sq;
         }
-        *(float *)(d + 0x60) = *(float *)(d + 0x60) + change;
-        if (D_L11_0015B384 * 0.017453292f < AbsoluteFloat(m->rot.y) &&
-            ((unsigned int)control->state.control_mode) < 2) {
+        d->spin = d->spin + change;
+        if (AbsoluteFloat_eb90(m->rot.y) > D_L11_00161F84 * 0.017453292f &&
+            (u32)hero.state.control_mode < 2) {
             hero_set_state(6, 1);
         }
     }
-    m->rot.y = func_001FA748_f(m->rot.y, *(float *)(d + 0x60));
-    add_vector_xyz(v, v, &m->pos);
-    FUN_L00_00260738(d + 0x20, v, rot, &m->rot);
+    m->rot.y = fast_add_rotations(m->rot.y, d->spin);
+    add_vector_xyz(&v, &v, &m->pos);
+    FUN_L00_00260738(d->unk20, &v, &rot, &m->rot);
 }
-#endif
 /* Waits for its linked moby, then either hands off to a cutscene or turns toward its target. */
 extern char *D_L11_0015FFD8_t __asm__("D_L11_0015FFD8");
 extern int D_L11_0015F5CC_t __asm__("D_L11_0015F5CC");
