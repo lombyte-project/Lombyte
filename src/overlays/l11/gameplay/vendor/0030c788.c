@@ -2587,7 +2587,6 @@ extern char *D_L11_0015F420;
 extern char *D_L11_001600EC;
 extern unsigned char D_0014C050[][16];
 extern char D_0013E550[];
-extern char D_0013F3D0[];
 extern char D_L11_001677C0[];
 extern char D_L11_0021B610[];
 extern char D_L11_0021B648[];
@@ -2912,8 +2911,8 @@ void FUN_L11_00313290(struct Moby *moby) {
             moby->pos.z = 1008.0f;
         }
         if (moby->state == 4) {
-            qcopy_nc(D_0013F3D0, &moby->pos);
-            qcopy_nc(D_0013F3D0 + 0x10, &v->f30);
+            qcopy_nc(&hero.motion.pos, &moby->pos);
+            qcopy_nc(&hero.motion.rot, &v->f30);
         }
         if (moby->state == 3 || moby->state == 4) {
             FUN_L11_003112b8(moby, v);
