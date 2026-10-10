@@ -89,21 +89,197 @@ void FUN_L11_0030dd18(struct Moby *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030e088.s", FUN_L11_0030e088);
+/* D_L11_001DA880 rows (0x1190 bytes each); see FUN_L11_0030e730 and FUN_L11_0030e088 */
+typedef struct {
+    float x;
+    float y;
+    float z;
+    unsigned char n[8];
+    int unk14;
+    int unk18;
+    unsigned char unk1C;
+    unsigned char unk1D;
+    unsigned short unk1E;
+    char rest[0x1170];
+} Ent;
+
+extern Ent D_L11_001DA880[];
+void FUN_L11_0030e730(int arg);
+
+typedef struct {
+    f32 unk0;
+    f32 unk4;
+    f32 unk8;
+    f32 unkC;
+    f32 unk10;
+    f32 unk14;
+    f32 unk18;
+    f32 unk1C;
+    f32 unk20;
+    f32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    f32 unk30;
+    f32 unk34;
+    f32 unk38;
+    u8 unk3C;
+    u8 unk3D;
+} Light_e088;
+
+extern Light_e088 D_L11_001CB280;
+extern int D_L11_00161F64 __attribute__((sda));
+extern char D_L11_0021B4C0[];
+extern char D_L11_001DA740[];
+extern float D_L11_001808C0[];
+extern void *D_L11_001612D0;
+extern void *D_L11_001612D4;
+extern int D_L11_001612D8;
+extern float D_L11_0016120C;
+extern float D_L11_00161210;
+extern float D_L11_00161214;
+extern int D_L11_00161208;
+extern void print_e088(char *) __asm__("FUN_001e93b0");
+extern void FUN_L01_002b7a48(void *, int);
+extern void FUN_L01_002b7ef0(float);
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_001f9e90(float, float);
+extern void FUN_L01_002b7c68(void *, void *);
+extern void FUN_L01_0026e0e0(int, int);
+extern void approach_e088(float *, void *, float, float, float, float) __asm__("FUN_00213f38");
+extern void FUN_L11_0030e690(struct Moby *);
+extern int random_below_e088(int) __asm__("FUN_00213260");
+extern float rand_range_e088(float, float) __asm__("FUN_002132a8");
+extern void FUN_L00_002a3ec8(float, float, float, float, void *, int, int);
+extern int FUN_L01_00275690(float, void *);
+extern void FUN_L01_002b7fe0(void *, int);
+extern void FUN_L11_0030e708(void);
+extern void enqueue_e088(void *, void *) __asm__("FUN_001f4600");
+
+/* Tile moby: claims a D_L11_001DA880 row on spawn (row 0 also sets up the shared light block), then moves
+   up or down once its switch fires and throws random sparks; row 0 flushes the visible rows each frame. */
+void FUN_L11_0030e088(struct Moby *m) {
+    int *pv = (int *)m->pvars;
+    int i;
+    float f;
+
+    switch (m->state) {
+    case 0:
+        m->unk30 = 0xFF;
+        pv[1] = D_L11_00161F64;
+        D_L11_00161F64 = D_L11_00161F64 + 1;
+        if (D_L11_00161F64 >= 0x80) {
+            print_e088(D_L11_0021B4C0);
+        }
+        m->unk30 = 0xFF;
+        m->flags |= 1;
+        m->scale = m->pclass->scale + m->pclass->scale;
+        if (pv[1] == 0) {
+            Light_e088 *l;
+            float a;
+            for (i = 19; i >= 0; i--) {
+                D_L11_001DA880[i].unk1E = 0;
+            }
+            FUN_L01_002b7a48(D_L11_001DA880, 20);
+            FUN_L01_002b7ef0(1.0f);
+            l = &D_L11_001CB280;
+            l->unk0 = 16.0f;
+            l->unk4 = 16.0f;
+            l->unk8 = -8.0f;
+            l->unkC = -8.0f;
+            l->unk10 = 1.0f;
+            l->unk14 = 1.0f;
+            l->unk18 = 0.9f;
+            l->unk20 = 0.1f;
+            a = FUN_001f9e90(D_L11_001808C0[4], D_L11_001808C0[5]);
+            l->unk30 = FUN_001f9dc8(a) * 0.57735f;
+            l->unk34 = FUN_001f9de0(a) * 0.57735f;
+            l->unk38 = -0.57735f;
+            l->unk28 = 0x38;
+            l->unk2C = 0x39;
+            l->unk3C = 0x1C;
+            l->unk3D = 0x40;
+            D_L11_001612D0 = D_L11_001DA880;
+            D_L11_001612D4 = D_L11_001DA740;
+            D_L11_001612D8 = 20;
+            D_L11_0016120C = 32768.0f;
+            D_L11_00161210 = 255.0f;
+            D_L11_00161214 = 48.0f;
+            D_L11_00161208 = 0;
+        }
+        D_L11_001DA880[pv[1]].x = m->pos.x;
+        D_L11_001DA880[pv[1]].y = m->pos.y;
+        D_L11_001DA880[pv[1]].z = m->pos.z;
+        D_L11_001DA880[pv[1]].unk14 = 0x38;
+        D_L11_001DA880[pv[1]].unk18 = 0x39;
+        D_L11_001DA880[pv[1]].unk1C = 0x1C;
+        D_L11_001DA880[pv[1]].unk1D = 0x44;
+        D_L11_001DA880[pv[1]].unk1E = 0xFFFF;
+        FUN_L01_002b7c68(&D_L11_001DA880[pv[1]], D_L11_001DA740 + pv[1] * 16);
+        m->state = 1;
+        break;
+    case 1:
+        D_L11_00161F64 = 0;
+        FUN_L11_0030e730(pv[1]);
+        m->state = 2;
+        break;
+    case 3:
+        if (m->unkBC & 4) {
+            pv[2] = 1;
+            FUN_L01_0026e0e0(m->group, 2);
+        }
+        m->unkBC = 1;
+        if (pv[2] != 0) {
+            approach_e088(&m->pos.z, pv, 132.36f, frame_time_sq * 4.0f, frame_time_sq * 4.0f, frame_time * 4.0f);
+            FUN_L11_0030e690(m);
+        }
+        if (random_below_e088(200) == 0) {
+            float x = D_L11_001DA880[pv[1]].x + rand_range_e088(-4.0f, 4.0f);
+            float y = rand_range_e088(-4.0f, 4.0f);
+            Ent *t = &D_L11_001DA880[pv[1]];
+            FUN_L00_002a3ec8(x, t->y + y, 1.0f, -0.03f, t, 1, 1);
+        }
+        break;
+    case 2:
+        if (m->unkBC & 8) {
+            pv[2] = 1;
+            FUN_L01_0026e0e0(m->group, 3);
+        }
+        m->unkBC = 2;
+        if (pv[2] != 0) {
+            approach_e088(&m->pos.z, pv, 137.0f, frame_time_sq * 4.0f, frame_time_sq * 4.0f, frame_time * 4.0f);
+            FUN_L11_0030e690(m);
+        }
+        if (random_below_e088(200) == 0) {
+            float x = D_L11_001DA880[pv[1]].x + rand_range_e088(-4.0f, 4.0f);
+            float y = rand_range_e088(-4.0f, 4.0f);
+            Ent *t = &D_L11_001DA880[pv[1]];
+            FUN_L00_002a3ec8(x, t->y + y, 1.0f, -0.03f, t, 1, 1);
+        }
+        break;
+    }
+    if (pv[1] >= 0) {
+        f = 0.0f;
+        if (FUN_L01_00275690(64.0f, m) != -1) {
+            f = 1.0f;
+        }
+        if (f == 0.0f) {
+            D_L11_001DA880[pv[1]].unk1E = 0;
+        } else {
+            D_L11_001DA880[pv[1]].unk1E = 0xFFFF;
+        }
+        if (pv[1] == 0) {
+            FUN_L01_002b7fe0(D_L11_001DA880, 20);
+            enqueue_e088(FUN_L11_0030e708, m);
+        }
+    }
+}
 /* Level overlay code after unclassified; generated by `decomp overlays stubs`, stubs replaced by C as functions are matched. */
 
 /* records, for entry arg, which of the 48 entries sit one grid step away */
 /* Same routine as FUN_L05_0030d6a0, with this level's table and entry count. */
 
-typedef struct {
-    float x;
-    float y;
-    int pad;
-    unsigned char n[0x14];
-    char rest[0x1170];
-} Ent;
 
-extern Ent D_L11_001DA880[];
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
 void FUN_L11_0030e730(int arg) {
@@ -1083,6 +1259,7 @@ void FUN_L11_00311c80(void *self, char *moby) {
     }
 }
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/state/usage_stats.h"
