@@ -304,6 +304,7 @@ OVERLAY_SN_UNITS = {
     "shared/gameplay/entities/0029f990.c",
     "shared/gameplay/entities/002a09a0.c",
     "shared/gameplay/entities/002a4038.c",
+    "shared/gameplay/entities/002a4830.c",
     "shared/gameplay/entities/002aa670.c",
     "shared/gameplay/entities/002aee30.c",
     "shared/gameplay/entities/002b17d8.c",
