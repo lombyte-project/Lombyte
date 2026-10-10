@@ -21,15 +21,27 @@ typedef struct {
     char pad14[0x38];
 } GadgetRec;
 
+typedef struct {
+    char pad00[0x1A];
+    s16 runtime_index;
+    s32 resource_tag;
+} ClassRuntimeEntry;
+
+typedef struct {
+    char *packet_data;
+    s32 packed_packet_extent;
+    char pad08[8];
+} ClassRenderGroup;
+
 /* Render groups at +0; the third group count and patch selector are at +6/+7.
    The runtime table at +0x28 has 0x20-byte entries. The +0x2C meaning is unresolved. */
 typedef struct {
-    char *render_groups;
+    ClassRenderGroup *render_groups;
     char pad04[2];
     u8 third_render_group_count;
     u8 patch_group_index;
     char pad08[0x20];
-    char *runtime_table;
+    ClassRuntimeEntry *runtime_table;
     s32 original_field_2c;
 } ClassResourceHeader;
 
@@ -59,10 +71,10 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     s32 runtime_index;
     s32 resource_table_index;
     char *resource_data;
+    ClassResourceHeader **resource_table;
     u8 class_slot;
     s32 resource_tag;
     s32 vendor_item_index;
-    ClassResourceHeader **resource_table;
 
     if (active_class_resource_index >= 0 &&
         class_resource_ids[active_class_resource_index] == class_id) {
@@ -96,16 +108,16 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     for (runtime_index = 0; runtime_index < 16; runtime_index++) {
         s16 runtime_entry_index = class_runtime_indices[resource_table_index][runtime_index];
         if (runtime_entry_index >= 0) {
-            *(s16 *)(resource_table[class_slot]->runtime_table +
-                     runtime_index * 0x20 + 0x1A) = runtime_entry_index;
-            *(s32 *)(resource_table[class_slot]->runtime_table +
-                     runtime_index * 0x20 + 0x1C) = resource_tag;
+            resource_table[class_slot]->runtime_table[runtime_index].runtime_index =
+                runtime_entry_index;
+            resource_table[class_slot]->runtime_table[runtime_index].resource_tag =
+                resource_tag;
         }
     }
     for (vendor_item_index = 0; vendor_item_index < 0x25; vendor_item_index++) {
         if (vendor_item_definitions[vendor_item_index].class_id == class_id) {
             ClassResourceHeader *resource_header;
-            char *render_group;
+            ClassRenderGroup *render_group;
             char *patch_packet;
 
             if (gold_weapon_purchased[vendor_item_index] == 0) {
@@ -115,9 +127,9 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
             if (resource_header->third_render_group_count == 0) {
                 return;
             }
-            render_group =
-                resource_header->render_groups + resource_header->patch_group_index * 0x10;
-            patch_packet = *(char **)render_group + (*(s32 *)(render_group + 4) - 4) * 0x10;
+            render_group = &resource_header->render_groups[resource_header->patch_group_index];
+            patch_packet = render_group->packet_data +
+                           (render_group->packed_packet_extent - 4) * 0x10;
             *(u64 *)(patch_packet + 0x20) = gold_weapon_texture_state[0];
             *(u64 *)(patch_packet + 0x30) = gold_weapon_texture_state[2];
             return;
