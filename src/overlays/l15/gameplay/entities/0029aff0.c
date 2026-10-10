@@ -1343,4 +1343,147 @@ void FUN_L15_002cf3a8(UMoby *m) {
         FUN_L00_002598b0((int)m, 2.5f, &m->pos, 0x10000, 40.0f, 1.0f, 0, 1, 0);
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d0fa8.s", FUN_L15_002d0fa8);
+#else
+extern float D_L15_00161B00 __attribute__((sda));
+extern float D_L15_00161B04 __attribute__((sda));
+extern float D_L15_00161B08 __attribute__((sda));
+extern float D_L15_00161B2C __attribute__((sda));
+extern float D_L15_00161B30 __attribute__((sda));
+extern float D_0015ED70;
+extern int D_001413D0 __attribute__((section(".data")));
+extern char D_00178700[] __asm__("D_L15_00178700");
+extern int FUN_00249d60(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
+extern int FUN_001f99c8_f(float) __asm__("FUN_001fa6d0");
+extern void FUN_0023ee30(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void FUN_0024dcf8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int) __asm__("FUN_L00_0025e450");
+extern void FUN_0027bb68(int, int, void *, int) __asm__("FUN_L00_0028dc90");
+extern void FUN_00246ad8(void *, int, long long) __asm__("FUN_L00_00257470");
+extern float FUN_001f9028(float, float) __asm__("FUN_001f9e90");
+extern void FUN_0024a430(void *, void *, void *, void *) __asm__("FUN_L00_0025ab48");
+extern void FUN_0024be00(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
+extern void FUN_00251c90(void *, float, float) __asm__("FUN_L03_00250a78");
+extern void FUN_0024cd00(void *, void *) __asm__("FUN_L00_0025d458");
+extern void FUN_0024cde0(void *, void *) __asm__("FUN_L00_0025d538");
+extern void FUN_0024f560(float, void *, void *) __asm__("FUN_L02_00261c80");
+extern void FUN_0024f7e0(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern float FUN_001f8bc8(void *, void *) __asm__("FUN_001f9b48");
+
+void FUN_L15_002d0fa8(void *arg) {
+    UMoby *m = arg;
+    UData *d = m->data;
+    char *slot = 0;
+    int kind;
+    float impact = 0.0f;
+    int i;
+    int hit;
+    int code;
+    float angle;
+    UVec origin;
+    UVec effect;
+    float direction;
+
+    *(float *)((char *)m + 0x2C) = D_L15_00161B2C * *(float *)(m->cls + 0x24);
+    d->w1C8 = 0;
+    for (i = 0; i < 64; i++) {
+        char *entry = D_00178700 + i * 0x40;
+        if (*(UMoby **)(entry + 0x34) == m) {
+            unsigned int flags = *(unsigned int *)(entry + 0x24);
+            if (flags & 0xA0000) {
+                if (*(int *)(entry + 0x20) != D_001413D0 || (flags & 0x80000)) {
+                    slot = entry;
+                    break;
+                }
+                *(int *)(entry + 0x34) = 0;
+            }
+        }
+    }
+    hit = FUN_00249d60(m, slot, &d->f20, 0, &kind, &impact, 0, 4);
+    if (slot != 0) {
+        if (kind != 1 && m->state != 10 && m->state != 0x40 &&
+            *(short *)(*(char **)(slot + 0x20) + 0xA6) != 0x350) {
+            d->f20 -= impact;
+            code = 9;
+            if (*(unsigned short *)(slot + 0x2A) != 0x100)
+                code = hit;
+            if (m->state == 2)
+                code = 9;
+            if (d->f20 <= 0.0f)
+                code = 1;
+            *(int *)((char *)d + 0x90) = FUN_001f99c8_f(2560.0f);
+            *(float *)((char *)d + 0x98) = 2.5f;
+            *(float *)((char *)d + 0x80) = D_L15_00161B00 * D_0015ED70;
+            *(float *)((char *)d + 0x84) = 0.0005f;
+            *(int *)((char *)d + 0x94) = 9;
+            *(unsigned char *)((char *)d + 0xAD) = 0;
+            switch (code) {
+            case 0:
+            case 11:
+                break;
+            case 9:
+            case 10:
+                d->w1C8 = 1;
+                *(unsigned char *)((char *)d + 0x67) = 0xFA;
+                break;
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+                d->w1C8 = 1;
+                *(float *)((char *)d + 0x88) = D_L15_00161B08 * D_0015ED6C;
+                *(float *)((char *)d + 0x8C) = D_L15_00161B04 * D_0015ED6C;
+                FUN_00251c90((char *)d + 0x70, 4.0f, 1.0f);
+                *(float *)((char *)d + 0xC0) = 12.0f;
+                *(float *)((char *)d + 0xC4) = 16.0f;
+                direction = FUN_001f9028(m->pos.f[0] - *(float *)(*(char **)(slot + 0x20) + 0x10),
+                                          m->pos.f[1] - *(float *)(*(char **)(slot + 0x20) + 0x14));
+                origin.q = *(u128 *)(slot + 0x10);
+                FUN_0024a430(&origin, &direction, (char *)d + 0x88, (char *)d + 0x8C);
+                FUN_0024be00(direction, m, (char *)d + 0x70, 8, 1, 0);
+                FUN_0027bb68(0, 0, m, 0x79);
+                m->state = 9;
+                *(unsigned char *)((char *)d + 0x67) = 0x78;
+                break;
+            case 1:
+            case 2:
+                origin.q = 0;
+                m->flags &= 0xEFFF;
+                FUN_0023ee30(m, 7, &effect);
+                FUN_0024dcf8(m, &origin, &effect, 0.0f, 0.0f, 0x14, 6, 0x20,
+                              16.0f, 8.0f, 9.0f, -1, 4.0f, 32.0f, 1, 16, -1);
+                FUN_0027bb68(0, 0, m, 0x79);
+                m->state = 10;
+                *(unsigned char *)((char *)d + 0x67) = 0xF0;
+                FUN_00246ad8(m, 0x200, -1);
+                break;
+            }
+            FUN_0024cd00(m, (char *)d + 0x60);
+        }
+        *(int *)(slot + 0x34) = 0;
+    }
+    *(unsigned char *)((char *)m + 0xA4) = 0xFF;
+    FUN_0024cde0(m, (char *)d + 0x60);
+    *(float *)((char *)m + 0x2C) = *(float *)(m->cls + 0x24) * D_L15_00161B30;
+    d->w164 = 0;
+    if (m->state == 1) {
+        angle = d->f174;
+    } else if (d->w1D0 != -1) {
+        UPath *path = D_L15_001B0AB0[d->w1D0];
+        d->f1B8 = *(float *)((char *)d + 0x178);
+        FUN_0024f7e0(d->f1B8, m, (char *)d + 0x120, 0, 0, &path->pt[0], path->n);
+        goto check_path;
+    } else {
+        angle = *(float *)((char *)d + 0x178);
+    }
+    d->f1B8 = angle;
+    FUN_0024f560(d->f1B8, m, (char *)d + 0x120);
+check_path:
+    if (d->f1B8 < FUN_001f8bc8(&m->pos, (char *)d + 0x120))
+        d->w164 = 2;
+    if (d->target == 0)
+        d->target = (UMoby *)D_001413D0;
+}
+#endif
