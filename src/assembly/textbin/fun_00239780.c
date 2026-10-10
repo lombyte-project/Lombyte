@@ -50,6 +50,9 @@ extern void append_subpixel_textured_screen_quad(f32, f32, f32, f32, s32, s32, s
 void render_vendor_capture_pass_sequence(void *capture_context) __asm__("FUN_00239780");
 
 void render_vendor_capture_pass_sequence(void *capture_context) {
+    static void *const pass_dispatch[6] = {
+        &&pass_0, &&pass_1, &&pass_2, &&pass_3, &&pass_4, &&pass_5
+    };
     CaptureVector first_edge;
     CaptureVector second_edge;
     CaptureVector origin;
@@ -137,26 +140,28 @@ void render_vendor_capture_pass_sequence(void *capture_context) {
         configure_capture_target(9, 7, 1.0f);
         draw_centered_capture_background(0x200, 0x200);
         vu1_add_g_sregister(0x42, 0x8000000064LL);
-        switch (point_base >> 2) {
-        case 0:
-            update_scrolling_status_message(capture_context);
-            break;
-        case 1:
-            render_vendor_item_details_pass(capture_context);
-            break;
-        case 2:
-            render_capture_effect_pass(capture_context);
-            break;
-        case 3:
-            render_vendor_buy_label_pass(capture_context, (s32)inner_width, (s32)inner_height);
-            break;
-        case 4:
-            render_vendor_purchase_prompt_pass(capture_context);
-            break;
-        case 5:
-            render_vendor_item_icon_strip_pass(capture_context);
-            break;
+        if ((u32)pass_index >= 6) {
+            goto pass_dispatch_end;
         }
+        goto *(*(void *const *)((char *)pass_dispatch + point_base));
+    pass_0:
+            update_scrolling_status_message(capture_context);
+            goto pass_dispatch_end;
+    pass_1:
+            render_vendor_item_details_pass(capture_context);
+            goto pass_dispatch_end;
+    pass_2:
+            render_capture_effect_pass(capture_context);
+            goto pass_dispatch_end;
+    pass_3:
+            render_vendor_buy_label_pass(capture_context, (s32)inner_width, (s32)inner_height);
+            goto pass_dispatch_end;
+    pass_4:
+            render_vendor_purchase_prompt_pass(capture_context);
+            goto pass_dispatch_end;
+    pass_5:
+            render_vendor_item_icon_strip_pass(capture_context);
+    pass_dispatch_end:
         render_vendor_capture_texture_overlays_pass(pass_index, inner_width, inner_height);
         restore_capture_projection();
         draw_centered_capture_background(0x200, 0x200);
