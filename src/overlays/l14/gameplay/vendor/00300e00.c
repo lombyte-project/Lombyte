@@ -1479,8 +1479,111 @@ int FUN_L14_00315920(char *a, char *b) {
         return 0;
     return 1;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003159d8.s", FUN_L14_003159d8);
+/* Starts the vendor camera: measures the three camera paths of the slot record into the length tables,
+ * resets the camera's blend state, loads the default angles and aims the camera at the hero. */
+extern char *D_L14_0015EF50_59d8 __asm__("D_L14_0015EF50");
+extern char *D_L14_0015F70C_59d8 __asm__("D_L14_0015F70C");
+/* the third path read goes through a volatile alias (retail reloads the zone table there) */
+extern char *volatile D_L14_0015F70C_59v __asm__("D_L14_0015F70C");
+extern float D_L14_001F6C80[][1000];
+extern float D_L14_001F6488_59d8[] __asm__("D_L14_001F6488");
+extern float D_L14_001624A8 __attribute__((sda));
+extern float atan2_59d8(float, float) __asm__("FUN_001f9e90");
+extern void FUN_L00_001ed580(void *, void *, void *);
+extern void sub_59d8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_59d8(void *, void *, float) __asm__("FUN_001f9a68");
+extern void add_59d8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_59d8(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void cross_59d8(void *, void *, void *) __asm__("FUN_001f9ad8");
+
+void FUN_L14_003159d8(struct UpdateCam *cam) {
+    float ang[4];
+    float pad[4]; /* unused; keeps the frame layout */
+    float dir[4];
+    float up[4];
+    char *rec = *(char **)(D_L14_0015EF50_59d8 + cam->descriptor_index * 32 + 0x1C);
+    char *path;
+    char *tbl;
+    char *p;
+    float *v;
+    int *q;
+    int j;
+    int *w;
+    int *r;
+    float sum;
+    float f;
+    int i;
+
+    tbl = D_L14_0015F70C_59d8;
+    *(int *)(rec + 0x20) = 2;
+    *(short *)(rec + 0x30) = 0;
+    *(short *)(rec + 0x32) = 0;
+    path = *(char **)(tbl + *(int *)(rec + 0x34) * 32 + 0x10);
+    sum = 0.0f;
+    for (i = 0; i < *(int *)path - 1; i++) {
+        D_L14_001F6C80[0][i] = sum;
+        sum += *(float *)(path + i * 16 + 0x1C);
+    }
+    D_L14_001F6C80[0][i] = sum;
+    path = *(char **)(D_L14_0015F70C_59d8 + *(int *)(rec + 0x38) * 32 + 0x10);
+    sum = 0.0f;
+    for (i = 0; i < *(int *)path - 1; i++) {
+        D_L14_001F6C80[1][i] = sum;
+        sum += *(float *)(path + i * 16 + 0x1C);
+    }
+    D_L14_001F6C80[1][i] = sum;
+    path = *(char **)(D_L14_0015F70C_59v + *(int *)(rec + 0x3C) * 32 + 0x10);
+    sum = 0.0f;
+    for (i = 0; i < *(int *)path - 1; i++) {
+        D_L14_001F6C80[2][i] = sum;
+        sum += *(float *)(path + i * 16 + 0x1C);
+    }
+    D_L14_001F6C80[2][i] = sum;
+    p = cam->saved_state;
+    *(int *)(p + 0x88) = 1;
+    q = (int *)(p + 0x88);
+    q[1] = 0;
+    q[2] = 0;
+    q[3] = 0;
+    q[4] = 0;
+    D_L14_001624A8 = 1.0f;
+    v = (float *)((char *)cam->saved_state + 0x60);
+    v[0] = D_L14_001F6488_59d8[0] * 0.017453292f;
+    v[1] = D_L14_001F6488_59d8[1] * 0.017453292f;
+    v[2] = D_L14_001F6488_59d8[2];
+    v[3] = D_L14_001F6488_59d8[3] * 0.017453292f;
+    v[4] = D_L14_001F6488_59d8[4] * 0.017453292f;
+    w = (int *)((char *)cam->saved_state + 0x74);
+    *w = 0;
+    w[1] = 0;
+    w[2] = 0;
+    w[3] = 0;
+    w[4] = 0;
+    f = atan2_59d8(hero.moby->unkD0.x, hero.moby->unkD0.y);
+    ang[1] = v[1];
+    ang[0] = f;
+    ang[2] = v[2];
+    FUN_L00_001ed580(&cam->pos, ang, &hero.motion);
+    sub_59d8(dir, &hero.motion, &cam->pos);
+    scale_59d8(up, &hero.unk290, -1.5f);
+    add_59d8(dir, dir, up);
+    normalize_59d8(&cam->m0, dir, 1.0f);
+    cross_59d8(&cam->m1, &cam->m0, up);
+    normalize_59d8(&cam->m1, &cam->m1, 1.0f);
+    cross_59d8(&cam->m2, &cam->m1, &cam->m0);
+    /* give every key without a duration (+0x44) the default 10000 */
+    r = (int *)&D_L14_001F6488_59d8[0x11];
+    for (j = 38; j >= 0; j--) {
+        if (*r == 0)
+            goto fix;
+    next:
+        r += 12;
+        continue;
+    fix:
+        *r = 10000;
+        goto next;
+    }
+}
 /* Camera 21 (level 14) layouts */
 typedef struct {
     char pad0[0x24];
