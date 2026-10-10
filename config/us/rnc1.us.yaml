@@ -2147,7 +2147,7 @@ segments:
           - [0x13b298, c, gameplay/vendor/fun_0023a318]
           - [0x13b334, textbin, text_gap_0023a3b4_after_fun_0023a318]
           - [0x13b338, c, video/decoder/play_mpeg_movie]
-          - [0x13b3e0, c, assembly/textbin/video/decoder/read_mpeg]
+          - [0x13b3e0, c, video/decoder/read_mpeg]
           - [0x13b6f0, c, runtime/threads/switch_thread]
           - [0x13b70c, textbin, text_gap_0023a78c_before_fun_0023a790]
           - [0x13b710, c, audio/decoder/is_audio_ok]
