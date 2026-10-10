@@ -273,7 +273,73 @@ void FUN_L00_00205600(void) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002056a8.s", FUN_L00_002056a8);
+#else
+typedef u32 Quad_56a8 __attribute__((mode(TI), aligned(16)));
+extern u8 D_L00_0017A680_56a8[] __asm__("D_L00_0017A680");
+
+void FUN_L00_002056a8(void) {
+    u8 *g = (u8 *)&hero;
+    u8 *e = D_L00_0017A680_56a8;
+    s32 i;
+    s32 *timer = (s32 *)(g + 0xff0);
+    f32 *pitch = (f32 *)(e + 0x8a4);
+    f32 *yaw = (f32 *)(e + 0x8a8);
+
+    *yaw = *(f32 *)(e + 0x278) * 0.25f;
+    if (*yaw > 0.14835298f)
+        *yaw = 0.14835298f;
+    else if (*yaw < -0.14835298f)
+        *yaw = -0.14835298f;
+    *pitch = *(f32 *)(e + 0x274) / 2.8f;
+    if (*pitch > 0.29670596f)
+        *pitch = 0.29670596f;
+    if (*pitch < -0.17453292f)
+        *pitch = -0.17453292f;
+    if ((u8)(*(u8 *)(*(u32 *)(g + 0x2080) + 0x53) - 1) < 2) {
+        if (*yaw > 0.034906585f)
+            *yaw = 0.034906585f;
+        if (*yaw < -0.034906585f)
+            *yaw = -0.034906585f;
+        if (*pitch > 0.12217305f)
+            *pitch = 0.12217305f;
+        if (*pitch < -0.12217305f)
+            *pitch = -0.12217305f;
+    }
+    FUN_L00_00205600();
+    if (*timer != 0) {
+        *timer = *timer + 1;
+        if (*timer > 11)
+            *timer = 0;
+        if (*timer == 0) {
+            u8 *slot = g + 0xd30;
+            u8 *active = g + 0xd31;
+            for (i = 6; i >= 0; i--, slot += 0x40, active += 0x40) {
+                if (*active != 0)
+                    detach_manipulator(*(s32 *)(g + 0x2080), slot);
+            }
+        } else {
+            u8 *slot = g + 0xd30;
+            Quad_56a8 *src_a = (Quad_56a8 *)0x17c040;
+            Quad_56a8 *src_b = (Quad_56a8 *)0x17c0b0;
+            Quad_56a8 *src_c = (Quad_56a8 *)0x17c120;
+            s32 *kind = (s32 *)0x17c1c0;
+            for (i = 0; i < 7; i++, slot += 0x40, src_a++, src_b++, src_c++, kind++) {
+                if (slot[1] == 0) {
+                    attach_manipulator(*(s32 *)(g + 0x2080), *kind, slot);
+                    slot[3] = 1;
+                    *(Quad_56a8 *)(slot + 0x10) = *src_a;
+                    *(Quad_56a8 *)(slot + 0x20) = *src_b;
+                    *(Quad_56a8 *)(slot + 0x30) = *src_c;
+                }
+            }
+            for (i = 0; i < 7; i++)
+                *(f32 *)(g + 0xd3c + i * 0x40) = *(f32 *)(0x17c190 + *timer * 4);
+        }
+    }
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002059d8.s", FUN_L00_002059d8);
 #define NOT_SDA
 
