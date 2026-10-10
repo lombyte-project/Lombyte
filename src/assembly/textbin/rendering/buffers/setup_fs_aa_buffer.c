@@ -28,6 +28,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
 void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width,
                         s32 storage_height, s32 display_offset_x, s32 display_offset_y) {
     volatile u64 *packet_word;
+    volatile u64 *packet_base;
     s32 strip_index;
     s32 left_x, next_x, right_x;
 
@@ -68,7 +69,8 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     active_fs_aa_buffer->giftag1.EOP = 1;
     active_fs_aa_buffer->giftag1.NREG = 1;
     active_fs_aa_buffer->giftag1.REGS0 = 0xE;
-    packet_word = &fs_aa_transfer_packet[12];
+    packet_base = fs_aa_transfer_packet;
+    packet_word = packet_base + 12;
 
     fs_aa_transfer_packet[0] = 0x408B400000000001;
     fs_aa_transfer_packet[1] = 0xEEEE;
@@ -101,7 +103,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     fs_aa_transfer_packet[77] = 0x4410;
     packet_word[2] = 0x181;
     packet_word[3] = 0x80000000;
-    fs_aa_transfer_packet[80] =
+    packet_base[80] =
         0x6FF8 | ((u64)(0x7FF8 - (active_fs_aa_buffer->storage_height << 3)) << 16);
     packet_word[5] = 0x6FF8 | ((u64)((active_fs_aa_buffer->storage_height << 3) + 0x7FF8) << 16);
 
