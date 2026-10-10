@@ -19,10 +19,6 @@ typedef struct {
     char pad[0x20];
 } T2C_21EA88;
 
-typedef struct {
-    char pad[0x86C];
-    char *f86C;
-} H86C_21EA88;
 
 extern char D_L16_0017C380_e[] __asm__("D_L16_0017C380");
 extern char D_L16_0017C3C0_e[] __asm__("D_L16_0017C3C0");
@@ -477,12 +473,12 @@ int hero_set_state(int a, int b) {
         break;
     }
     case 0x3E: {
-        char *p = ((char *)&hero);
-        *(int *)(p + 0x208C) = 0x15;
-        *(int *)(p + 0x2284) = 8;
-        *(unsigned char *)(p + 0x20A7) = 1;
-        qcopy(p + 0x770, p);
-        *(float *)(p + 0x860) = frame_time_sq * 18.0f;
+        struct Hero *p = &hero;
+        p->state.control_mode = 0x15;
+        p->unk2284 = 8;
+        p->unk20A7 = 1;
+        qcopy(&p->unk770, p->unk0);
+        p->unk860 = frame_time_sq * 18.0f;
         if (b)
             FUN_L00_002323b8(0x52, 0, (float)scale_game_frames(5));
         break;
@@ -514,37 +510,37 @@ int hero_set_state(int a, int b) {
             }
         }
         {
-            char *q = ((char *)&hero);
-            if (*(int *)(q + 0x2094) != 0x16) {
+            struct Hero *q = &hero;
+            if (q->state.prev_control_mode != 0x16) {
                 char *m;
                 if (current_level_index == 5) {
-                    *(float *)(q + 0x80) = 247.0f;
-                    *(float *)(q + 0x84) = 287.0f;
-                    *(float *)(q + 0x88) = 76.0f;
-                    *(float *)(q + 0x98) = -2.1f;
+                    q->motion.pos.f[0] = 247.0f;
+                    q->motion.pos.f[1] = 287.0f;
+                    q->motion.pos.f[2] = 76.0f;
+                    q->motion.rot.f[2] = -2.1f;
                 }
-                m = *(char **)(q + 0x86C);
-                FillTransferWords(q + 0x6C0, 0, 0x210);
-                ((H86C_21EA88 *)q)->f86C = m;
-                *(char **)(q + 0x890) =
+                m = (char *)q->unk86C;
+                FillTransferWords(&q->unk6C0, 0, 0x210);
+                q->unk86C = (u8 *)m;
+                q->unk890 = (u8 *)
                     D_L16_0015FFD8 + (*(int *)(*(char **)(m + 0x78) + 0x28) << 8);
-                *(float *)(q + 0x860) = frame_time_sq * 22.0f;
-                *(float *)(q + 0x87C) = 1.2217305f;
-                *(int *)(q + 0x880) = -1;
+                q->unk860 = frame_time_sq * 22.0f;
+                q->unk87C = 1.2217305f;
+                q->unk880 = -1;
                 if (D_0013D388[0] != 0) {
                     FUN_L05_00264298();
-                    *(int *)(q + 0x880) = queue_animation_update(
+                    q->unk880 = queue_animation_update(
                         0x10, 0xFFFF, (int)FUN_L05_00262ae8, (int)FUN_L05_00262b58,
-                        (int)FUN_L05_00262f50, (int)(q + 0x864),
+                        (int)FUN_L05_00262f50, (int)&q->unk864,
                         (int)((float)scale_game_frames(0x11) * 60.0f));
                 }
-                *(float *)(q + 0x874) = *(float *)(q + 0x98);
+                q->unk874 = q->motion.rot.f[2];
                 queue_animation_update(5, 0xFFFF, (int)FUN_L05_002661a0, (int)FUN_L05_002661e8,
                                        (int)FUN_L05_00266320, 0, 0);
                 queue_animation_update(7, 0xFFFF, (int)FUN_L05_002661a0, (int)FUN_L05_002661e8,
                                        (int)FUN_L05_00266710, 0, 0);
             } else {
-                *(float *)(q + 0x854) = -dot_vectors_xyz(q + 0x290, q + 0x100);
+                q->unk854 = -dot_vectors_xyz(&q->unk290, &q->motion.unk100);
             }
         }
         if (b) {

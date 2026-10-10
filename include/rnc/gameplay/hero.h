@@ -500,7 +500,7 @@ struct Hero {
     f32 unk96C;                    /* 0x96C */
     f32 unk970;                    /* 0x970 */
     s32 unk974;                    /* 0x974 */
-    u8 pad_978[0x4];
+    s32 unk978;                    /* 0x978 */
     f32 unk97C;                    /* 0x97C */
     f32 unk980;                    /* 0x980 */
     f32 unk984;                    /* 0x984 */

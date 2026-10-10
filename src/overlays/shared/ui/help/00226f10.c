@@ -755,7 +755,8 @@ void FUN_L01_00232978(int flag) {
     struct Hero *g = &hero;
     float f2, f21, f20;
     int k, x;
-    char *h1, *h2, *h3, *w, *w3;
+    struct Hero *h1, *h2, *h3;
+    char *w, *w3;
     float *u;
 
     if (g->unk308 != 0) {
@@ -792,33 +793,33 @@ void FUN_L01_00232978(int flag) {
     FUN_001f9a10(p, p, s);
     k = -1;
     FUN_001f9a10(q, q, t);
-    h1 = ((char *)&hero);
-    if (FUN_001efa68(t, q, 4, *(int *)(h1 + 0x2080), 0) != 0) {
+    h1 = &hero;
+    if (FUN_001efa68(t, q, 4, (int)h1->moby, 0) != 0) {
         if (D_L01_001742DC_d > 0) {
             k = FUN_001f0b58();
         }
     }
     f20 = 0.0f;
-    h2 = ((char *)&hero);
-    if (FUN_001efa68(s, p, 4, *(int *)(h2 + 0x2080), 0) != 0) {
+    h2 = &hero;
+    if (FUN_001efa68(s, p, 4, (int)h2->moby, 0) != 0) {
         w = D_L01_001742C0_d;
         if (*(int *)(w + 0x1C) > 0) {
             f20 = FUN_001f9e90(*(float *)(w + 0x48), FUN_001f9b20(w + 0x40));
         }
     }
     if (f20 >= 0.87266463f || k == 8 || k == 12) {
-        h3 = ((char *)&hero);
+        h3 = &hero;
         w3 = D_L01_001742C0_d;
         u = (float *)(w3 + 0x40);
         *(int *)(w3 + 0x48) = 0;
-        *(int *)(h3 + 0x240) = *(int *)(w3 + 0x18);
+        h3->unk240 = *(int *)(w3 + 0x18);
         FUN_00125180(u, u);
         {
-            float c = -*(float *)(h3 + 0xE0) * *(float *)(w3 + 0x40) -
-                      *(float *)(h3 + 0xE4) * *(float *)(w3 + 0x44);
+            float c = -h3->motion.velocity.f[0] * *(float *)(w3 + 0x40) -
+                      h3->motion.velocity.f[1] * *(float *)(w3 + 0x44);
             if (c > 0.0f) {
                 FUN_001f9a68(u, u, c);
-                FUN_001f9a10(h3 + 0xE0, h3 + 0xE0, u);
+                FUN_001f9a10(&h3->motion.velocity, &h3->motion.velocity, u);
             }
         }
     }
