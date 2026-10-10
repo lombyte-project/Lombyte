@@ -38,8 +38,8 @@ typedef struct {
 } DebugViewport;
 
 extern DebugViewport D_0013E500;
-extern u64 *D_L00_001611C0;
-extern u64 D_0015EEC8;
+extern u64 * volatile D_L00_001611C0;
+extern volatile u64 D_0015EEC8;
 extern s32 D_L00_00169980[];
 extern s32 D_L00_00169B00[];
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
@@ -69,9 +69,9 @@ void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) {
     tags[4] = 0x2400000000000001ULL;
     tags[5] = 0x61;
     tags[6] = color & 0xFFFFFFFFULL;
-    tags[7] = D_0015EEC8;
-    tags[8] = 0x4400000000008003ULL;
     tags[9] = 0x5353;
+    tags[8] = 0x4400000000008003ULL;
+    tags[7] = D_0015EEC8;
     glyph_tag = packet + 10;
     D_L00_001611C0 += 10;
     quadwords = 5;
