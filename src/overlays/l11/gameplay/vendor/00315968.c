@@ -339,6 +339,7 @@ void *FUN_L11_00316210(struct Moby *arg) {
     }
     return found;
 }
+
 #include "qcopy.h"
 
 extern float D_L11_00162308 __attribute__((sda));

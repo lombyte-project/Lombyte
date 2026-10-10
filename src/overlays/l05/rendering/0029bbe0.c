@@ -3,39 +3,31 @@
 #include "asm.h"
 
 #include "qcopy.h"
-
-/* Ported from rac1-decomp (src/overlays/l05_rilgar/partupd_0029CA28.c: func_L05_0029CA28), where it is exact; names translated to the US level program. */
-
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern unsigned char *D_L05_001B25C0 __attribute__((section(".data")));
 extern unsigned char *FUN_L00_002678b8(int);
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern unsigned char *D_L05_001B25C0 __asm__("D_L05_001B25C0") __attribute__((section(".data")));
 
-unsigned char *FUN_L05_0029bbe0(void *pos, void *vel, int a2, int a3, int a4, float a) {
+unsigned char *FUN_L05_0029bbe0(float a, void *pos, void *vel, int life, int size, int color) {
     unsigned char *p = FUN_L00_002678b8(0x30);
-    unsigned char *q;
     if (p != 0) {
-        int m;
-        float two;
+        unsigned char *q;
         qcopy(p + 0x10, pos);
         q = p + 0x20;
-        m = a4 & 0xFFFFFF;
-        two = 2.0f;
-        *(int *)(p + 4) = m;
-        p[9] = func_001FA898_r(two) + 0x10;
+        *(int *)(p + 4) = color & 0xffffff;
+        p[9] = truncate_float_to_s32(2.0f) + 0x10;
         p[3] = 0x44;
         p[1] = 0;
         p[2] = *D_L05_001B25C0;
-        *(float *)(p + 0xC) = a * 210000.0f;
+        *(float *)(p + 0xc) = a * 210000.0f;
         p[8] = random_integer_below(0x100);
         qcopy(q, vel);
-        *(float *)(q + 0x10) = two / ConvertIntegerToFloat(a2);
-        *(short *)(p + 0xA) = a2;
-        *(short *)(q + 0x1C) = a3;
-        *(int *)(q + 0x14) = m;
-        *(int *)(q + 0x18) = a4;
+        *(float *)(q + 0x10) = 2.0f / convert_integer_to_float(life);
+        *(short *)(p + 0xa) = life;
+        *(volatile int *)(q + 0x18) = color;
+        *(volatile short *)(q + 0x1c) = size;
+        *(volatile int *)(q + 0x14) = color & 0xffffff;
     }
     return p;
 }
@@ -53,7 +45,7 @@ extern s32 scale_game_frames_q(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L05_001B25C8_q __asm__("D_L05_001B25C8") __attribute__((section(".data")));
 extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
-extern int func_001FA898_r_q(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32_q(float) __asm__("FUN_001fa6d0");
 
 unsigned char *FUN_L05_0029be70(void *pos, void *vel, int arg2, int arg3, float a, float b,
                                 float c) {
@@ -62,7 +54,7 @@ unsigned char *FUN_L05_0029be70(void *pos, void *vel, int arg2, int arg3, float 
     if (p != 0) {
         q = p + 0x20;
         qcopy(p + 0x10, pos);
-        p[9] = func_001FA898_r_q(1.0f) + 0x40;
+        p[9] = truncate_float_to_s32_q(1.0f) + 0x40;
         p[3] = 0x44;
         p[1] = 0;
         p[2] = D_L05_001B25C8_q[arg3];
@@ -72,7 +64,7 @@ unsigned char *FUN_L05_0029be70(void *pos, void *vel, int arg2, int arg3, float 
         *(short *)(p + 0xA) = scale_game_frames_q(0xF);
         qcopy(q, vel);
         *(float *)(q + 0x10) = b;
-        *(int *)(q + 0x14) = func_001FA898_r_q(random_float_between_alt_q(-3.0f, 3.0f));
+        *(int *)(q + 0x14) = truncate_float_to_s32_q(random_float_between_alt_q(-3.0f, 3.0f));
         *(float *)(q + 0x18) = c;
     }
     return p;

@@ -646,7 +646,6 @@ void FUN_L14_002b3a20(char *m) {
 }
 #define NOT_SDA __attribute__((section(".data")))
 
-extern u8 D_001413F4[] __asm__("D_001413F4");
 extern u8 *D_L14_00167500 NOT_SDA;
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_001f9740(void *);
@@ -654,7 +653,7 @@ extern void set_moby_animation_c(void *, s32, s32) __asm__("FUN_00212ed8");
 
 void FUN_L14_002d96e0(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    if (D_001413F4[0] == 2) {
+    if (hero.unk20A4 == 2) {
         moby->unk94 = 0;
     } else {
         moby->unk94 = moby->pclass->unk10;
@@ -746,7 +745,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de670.s", FUN_L14_002de670);
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002DFE98), where it is exact; names translated to the US level program. */
 
-extern char D_0013F3D0[];
 extern float FUN_L00_00257c48(float lo, float hi);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L14_00161B08_x __asm__("D_L14_00161B08") __attribute__((sda));
@@ -773,7 +771,7 @@ unsigned char *FUN_L14_002dea98(char *owner, char *pos) {
         m[0x30] = 0xFF;
         *(short *)(m + 0x32) = 0xFF;
         m[0x31] = 1;
-        g = D_0013F3D0;
+        g = (char *)&hero.motion.pos;
         subtract_vector_xyz(vec, m + 0x10, g);
         g = g + 0x210;
         vec[2] = 0.0f;
@@ -793,7 +791,73 @@ unsigned char *FUN_L14_002dea98(char *owner, char *pos) {
     return m;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002dfd10.s", FUN_L14_002dfd10);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002e0170.s", FUN_L14_002e0170);
+#else
+extern unsigned char *spawn_moby_2e0170(int) __asm__("FUN_0020c4f8");
+extern int scale_game_frames_2e0170(int) __asm__("FUN_001f96f8");
+extern void subtract_vector_2e0170(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void normalize_vector_2e0170(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void cross_vectors_2e0170(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void build_look_at_2e0170(void *, void *, void *, float) __asm__("FUN_00214890");
+extern float random_scaled_2e0170(float, float) __asm__("FUN_002132a8");
+extern float random_angle_2e0170(float, float) __asm__("FUN_L00_00257c48");
+extern void create_effect_2e0170(float, float, float, void *, void *, void *, void *, void *, int) __asm__("FUN_L00_0025df68");
+extern float D_0015ED60;
+extern float D_0015ED6C;
+extern char *race_paths_2e0170 __asm__("D_L14_0015F70C");
+extern short D_L14_00161B30_2e0170 __asm__("D_L14_00161B30") __attribute__((sda));
+extern short D_L14_00161B34_2e0170 __asm__("D_L14_00161B34") __attribute__((sda));
+extern short D_L14_00161B38_2e0170 __asm__("D_L14_00161B38") __attribute__((sda));
+extern short D_L14_00161B3C_2e0170 __asm__("D_L14_00161B3C") __attribute__((sda));
+
+unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
+    unsigned char *m = spawn_moby_2e0170(0x193);
+    if (m != 0) {
+        unsigned char *pos = m + 0x10;
+        char *d = *(char **)(m + 0x78);
+        float vec[8];
+        float *other = vec + 4;
+        *(u128 *)pos = *(u128 *)(owner + 0x10);
+        *(float *)(m + 0x48) = *(float *)(owner + 0x48);
+        m[0x20] = mode;
+        m[0x30] = 0xFF;
+        *(short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        *(char **)d = owner;
+        if (m[0x20] == 0) {
+            int index;
+            *(int *)(d + 4) = scale_game_frames_2e0170(90);
+            *(float *)(d + 8) = *scale * D_0015ED6C;
+            index = *(int *)(*(char **)(owner + 0x78) + 0x60);
+            *(int *)(d + 0x14) = 0;
+            *(int *)(d + 0x0C) = index;
+            *(int *)(d + 0x10) = 0;
+            create_effect_2e0170(20.0f, 5.0f, *(float *)(d + 0x14),
+                *(void **)(race_paths_2e0170 + index * 0x20 + 0x10),
+                pos, vec, d + 0x10, d + 0x14, 0);
+        } else {
+            *(int *)(d + 4) = scale_game_frames_2e0170(200);
+            subtract_vector_2e0170(vec, pos, &hero.motion.pos);
+            vec[2] = 0.0f;
+            normalize_vector_2e0170(vec, vec,
+                random_scaled_2e0170(*(float *)&D_L14_00161B30_2e0170 * D_0015ED60,
+                                       *(float *)&D_L14_00161B34_2e0170 * D_0015ED60));
+            cross_vectors_2e0170(other, &hero.unk290, vec);
+            build_look_at_2e0170(d + 0x30, vec, &hero.unk290,
+                random_angle_2e0170(0.5759586691856384f, 1.3962633609771729f));
+            *(float *)(d + 0x38) = random_scaled_2e0170(*(float *)&D_L14_00161B38_2e0170 * D_0015ED60,
+                *(float *)&D_L14_00161B3C_2e0170 * D_0015ED60);
+            *(float *)(d + 0x20) = random_angle_2e0170(0.0f, 0.008726646f);
+            *(float *)(d + 0x24) = random_angle_2e0170(0.05235988f, 0.13962634f);
+            *(float *)(d + 0x28) = random_angle_2e0170(0.0f, 0.017453293f);
+        }
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
+#endif /* NON_MATCHING */
+/* Exhaust puffs from the moby's nozzle: two coloured sparks and three white puffs of shrinking size. */
 /* Ported from rac1-decomp src/overlays/shared/vendor_002B2A28.c (func_L14_002E17B8) */
 
 /* Engine exhaust of a level-14 moby: puffs particles behind it (as func_L14_002B3850 does for the ship), then

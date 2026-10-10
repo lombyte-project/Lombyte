@@ -415,7 +415,6 @@ int FUN_L13_002c3ac8(char *pt, int *tbl, int start, float ref) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4F10), where it is exact; names translated to the US level program. */
 
 extern char *D_L13_001B07B0[];
-extern char D_0013F350[];
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern void add_vector_xyz(void *, void *, void *);
@@ -976,64 +975,37 @@ void FUN_L13_002ce688(unsigned char *a0, void *a1, int a2)
     s = scale_game_frames_alt(29);
     FUN_L00_002ac910(a0, pA, vC, 3.0f, s, 0x20, 0, 0, 0x20);
 }
-/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002CFF90), where it is exact; names translated to the US level program. */
+#include "rnc/overlay/quad.h"
+extern int fptodp(float) __asm__("FUN_00120478");
+extern int FUN_00213928(struct Moby *, void *, float *, int, int *, int, int, int);
+extern void FUN_L00_00257470(struct Moby *, int, int);
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
+extern void emit_effect_l13(void *, void *, void *, float, float, int, int, int, float, float,
+                            float, float, int, float, int, int, int,
+                            int) __asm__("FUN_L00_0025e450");
+extern char D_L13_001f4980[];
+extern char D_L13_001f49a8[];
+#include "rnc/audio/voice_pool.h"
 
-typedef int Q_2cff90 __attribute__((mode(TI)));
+void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
+    char *src;
+    int hit;
+    float position[4];
+    float velocity[4];
+    int link;
+    VoicePoolWindow *record;
 
-typedef struct HitMoby2CFF90 {
-    char pad0[0x18]; float z;
-    char pad1C[4]; unsigned char state;
-    char pad21[0x13]; unsigned short flags;
-    char pad36[0x1D]; unsigned char kind;
-    char pad54[0x50]; unsigned char hitState;
-    char padA5; short id;
-} HitMoby2CFF90;
-
-typedef struct HitAttack2CFF90 {
-    float position[4]; char pad10[0x10]; HitMoby2CFF90 *owner;
-    char pad24[8]; float damage; char pad30[8]; int kind;
-} HitAttack2CFF90;
-
-extern char D_0013E550[];
-extern char D_L13_001F4980[];
-extern char D_L13_001F49A8[];
-extern float D_0015ED6C;
-extern int FUN_00213928(void *, void *, void *, int, void *, void *, int, int);
-extern int FUN_L00_0025e450();
-extern int fptodp(float);
-extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern void DebugPrint(char *, ...);
-extern void FUN_L00_0024f7c8(void *, int, void *);
-extern void FUN_L00_00257470(void *, int, int);
-extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern int func_001E9730_d(void *, ...) __asm__("FUN_001e93b0");
-
-void FUN_L13_002cecb8(char *m, char *d, float *hp) {
-    HitMoby2CFF90 *mob = (HitMoby2CFF90 *)m;
-    if (mob->state != 2) {
-        int cnt;
-        float u[4];
-        float v[4];
-        HitAttack2CFF90 *t = (HitAttack2CFF90 *)FUN_L00_0025a420(m, 0x330000, 0);
-        if (t != 0) {
-            int a, b, c;
-            char *fmt = D_L13_001F4980;
-            int id = mob->id;
-            func_001E9730_d(fmt, id, fptodp(t->damage));
-            {
-            char *fmt2 = D_L13_001F49A8;
-            a = fptodp(t->position[0]);
-            b = fptodp(t->position[1]);
-            c = fptodp(t->position[2]);
-            func_001E9730_d(fmt2, t->kind, a, b, c);
-            }
+    if (moby->state != 2) {
+        src = FUN_L00_0025a420(moby, 0x330000, 0);
+        if (src != 0) {
+            DebugPrint(D_L13_001f4980, moby->oclass, fptodp(*(float *)(src + 0x2c)));
+            DebugPrint(D_L13_001f49a8, *(int *)(src + 0x38), fptodp(*(float *)(src + 0)),
+                       fptodp(*(float *)(src + 4)), fptodp(*(float *)(src + 8)));
         }
-        switch (FUN_00213928(m, t, hp, 0, &cnt, 0, 0, 4)) {
+        switch (FUN_00213928(moby, src, health, 0, &hit, 0, 0, 4)) {
         case 1:
         case 2:
-            *hp = 0;
+            *health = 0.0f;
             break;
         case 0:
         case 3:
@@ -1047,44 +1019,50 @@ void FUN_L13_002cecb8(char *m, char *d, float *hp) {
         case 11:
             break;
         }
-        if (cnt >= 2) {
-            if (t == 0) {
-                mob->hitState = 0xFF;
-                goto end;
+        if (hit >= 2) {
+            if (src == 0) {
+                goto mark;
             }
-            if (t->owner != 0 && mob->z + 8.7f < t->owner->z) {
-                if (*hp <= t->damage) {
-                    *(Q_2cff90 *)v = 0;
-                    v[2] = D_0015ED6C * 8.0f;
-                    *hp = 0;
-                    mob->flags &= 0xEFFF;
-                    *(Q_2cff90 *)u = *(Q_2cff90 *)v;
-                    FUN_L00_00257470(m, 0, -1);
+            if (*(char **)(src + 0x20) != 0 &&
+                moby->pos.z + 8.7f < *(float *)(*(char **)(src + 0x20) + 0x18)) {
+                if (*health <= *(float *)(src + 0x2c)) {
+                    *(OvlQuad *)velocity = 0;
+                    velocity[2] = frame_time * 8.0f;
+                    *health = 0.0f;
+                    moby->flags &= 0xefff;
+                    *(OvlQuad *)position = *(OvlQuad *)velocity;
+                    FUN_L00_00257470(moby, 0, -1);
                     d[0x67] = 0x78;
-                    FUN_L00_0025d458(m, (short *)(d + 0x60));
-                    FUN_L00_0024f7c8(m, 0, v);
-                    func_L00_0025F4A8_alt(m, u, v, 0.0f, 0.0f, 0xA, 3, 0x10, 4.0f, 2.0f, 0.0f, 1.0f, 1, 20.0f, 1, 1, -1, 0);
-                    if (mob->kind != 1) blend_moby_animation_c(m, 1, 0, 0);
-                    if (*(int *)(d + 0x70) != -1) {
-                        char *e = D_0013E550 + *(int *)(d + 0x70) * 0x70;
-                        if (*(char **)(e + 0x88) == m && ((unsigned char *)e)[0x74] != 0) {
-                            release_voice_slot(*(int *)(d + 0x70));
+                    FUN_L00_0025d458(moby, (short *)(d + 0x60));
+                    FUN_L00_0024f7c8(moby, 0, velocity);
+                    emit_effect_l13(moby, position, velocity, 0.0f, 0.0f,
+                                    10, 3, 16, 4.0f, 2.0f, 0.0f, 1.0f,
+                                    1, 20.0f, 1, 1, -1, 0);
+                    if (moby->prev_seq != 1) {
+                        blend_moby_animation((MobyAnim *)moby, 1, 0, 0);
+                    }
+                    link = *(int *)(d + 0x70);
+                    if (link != -1) {
+                        record = (VoicePoolWindow *)((u8 *)&voice_pool + link * 0x70);
+                        if ((struct Moby *)record->voice.owner == moby &&
+                            record->voice.state != 0) {
+                            release_voice_slot(link);
                         }
                     }
                     *(int *)(d + 0x70) = -1;
-                    mob->state = 2;
+                    moby->state = 2;
                 } else {
-                    *hp = *hp - t->damage;
-                    ((unsigned char *)d)[0x67] = 0xFA;
-                    *(short *)(d + 0x26) = scale_game_frames_alt(0x3C);
-                    FUN_L00_0025d458(m, (short *)(d + 0x60));
+                    *health -= *(float *)(src + 0x2c);
+                    d[0x67] = 0xfa;
+                    *(short *)(d + 0x26) = scale_game_frames(0x3c);
+                    FUN_L00_0025d458(moby, (short *)(d + 0x60));
                 }
             }
         }
-        mob->hitState = 0xFF;
+mark:
+        moby->unkA4 = 0xff;
     }
-end:
-    FUN_L00_0025d538(m, d + 0x60);
+    FUN_L00_0025d538(moby, d + 0x60);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002cefc0.s", FUN_L13_002cefc0);
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E2488), where it is exact; names translated to the US level program. */
@@ -1155,7 +1133,6 @@ char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int a3, float f) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E2690), where it is exact; names translated to the US level program. */
 
 char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int a3, float f);
-extern char D_0013F3D0[];
 extern char D_L13_00160680[] __attribute__((section(".sdata")));
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
@@ -1180,7 +1157,7 @@ void FUN_L13_002e1348(struct Moby *moby, char *d, float s) {
     float b;
     int i;
     b = s * 10.0f;
-    if (20.0f < distance_xyz(&moby->pos, D_0013F3D0)) {
+    if (20.0f < distance_xyz(&moby->pos, &hero.motion.pos)) {
         a = b = 0.0f;
     }
     func_0022ED80_s(0, 0, (int)moby);
@@ -1602,7 +1579,6 @@ void FUN_L13_002e9018(struct Moby *m, char *p, float a, float b) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4F10), where it is exact; names translated to the US level program. */
 
 extern char *D_L13_001B07B0[];
-extern char D_0013F350[];
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9b20(void *);
@@ -1663,7 +1639,6 @@ int FUN_L13_002e9160(struct Moby *m, char *d, int idx, int aim) {
 }
 /* Picks the racer's direction along its path from where the hero is, eases its speed, then steps it; bit 1 of the result is set past a marked node. */
 extern char *D_L13_001B07B0_9408[] __asm__("D_L13_001B07B0");
-extern char D_0013F3D0_9408[] __asm__("D_0013F3D0");
 extern float D_0015ED60_9408 __asm__("D_0015ED60");
 extern float dist_9408(void *, void *) __asm__("FUN_001f9b48");
 extern int step_9408(char *, char *, int, int) __asm__("FUN_L13_002e9160");
@@ -1683,13 +1658,13 @@ int FUN_L13_002e9408(struct Moby *m, char *d, int idx, int aim) {
             n = 0;
         }
         qcopy(ahead, path + n * 16 + 0x10);
-        a = dist_9408(ahead, D_0013F3D0_9408);
+        a = dist_9408(ahead, &hero.motion.pos);
         k = *(short *)(d + 0x9C) - 1;
         if (k < 0) {
             k = *(int *)path - 1;
         }
         qcopy(behind, path + k * 16 + 0x10);
-        b = dist_9408(behind, D_0013F3D0_9408);
+        b = dist_9408(behind, &hero.motion.pos);
         if (a < b) {
             dir = -1;
         } else if (b < a) {
@@ -1707,7 +1682,7 @@ int FUN_L13_002e9408(struct Moby *m, char *d, int idx, int aim) {
                 *(short *)(d + 0x9E) = cur;
             }
         } else {
-            float dist = dist_9408(&m->pos, D_0013F3D0_9408);
+            float dist = dist_9408(&m->pos, &hero.motion.pos);
             float s = 1.0f;
             float sp;
             if (m->unkBC == 4) {
@@ -1766,7 +1741,80 @@ void FUN_L13_002e9680(void *unused, char *p, int idx) {
         *slot = 0;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e97e0.s", FUN_L13_002e97e0);
+#else
+extern void FUN_L00_00257470(struct Moby *, int, int);
+extern void FUN_001f9bf8(void *, void *, float);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern void FUN_L10_002f5a50(int);
+extern int FUN_001f96f8(int);
+extern void FUN_001ff570(int, int);
+extern char *D_L13_001B07B0[];
+extern float D_0015ED6C;
+
+void FUN_L13_002e97e0(struct Moby *m, char *d, int *result) {
+    char *path;
+    char *node;
+    char *other;
+    char *destination;
+    char *child;
+    char *path_slots = d + 0xB0;
+    int idx;
+    float dx;
+    float dy;
+    float dz;
+    float horizontal;
+    float velocity_scale;
+    char *velocity;
+    *result = 0;
+    m->flags &= 0xEFFF;
+    FUN_L00_00257470(m, 0, -1);
+    d[0x67] = 0x78;
+    FUN_L00_0025d458(m, (short *)(d + 0x60));
+    d[0x13B] = 4;
+    velocity_scale = D_0015ED6C * 10.0f;
+    velocity = *(char **)0x001600EC + (*(int *)(d + 0x130) << 7);
+    *(volatile short *)(d + 0x9C) = 0;
+    FUN_001f9bf8(d + 0x70, velocity, velocity_scale);
+    idx = *(short *)(d + 0x9C);
+    path = D_L13_001B07B0[*(int *)(path_slots + (unsigned char)d[0x13B] * 4)];
+    node = path + idx * 16;
+    destination = (char *)m + 0x10;
+    qcopy(destination, node + 0x10);
+    other = path + (idx + 1) * 16;
+    dx = *(float *)(other + 0x10) - *(float *)(node + 0x10);
+    dy = *(float *)(other + 0x14) - *(float *)(node + 0x14);
+    m->rot.z = FUN_001f9e90(dx, dy);
+    idx = *(short *)(d + 0x9C);
+    path = D_L13_001B07B0[*(int *)(path_slots + (unsigned char)d[0x13B] * 4)];
+    node = path + idx * 16 + 0x10;
+    horizontal = FUN_001f9b80(node, node + 0x10);
+    idx = *(short *)(d + 0x9C);
+    path = D_L13_001B07B0[*(int *)(path_slots + (unsigned char)d[0x13B] * 4)];
+    node = path + idx * 16 + 0x10;
+    dz = *(float *)(node + 0x18) - *(float *)(node + 8);
+    m->rot.y = -FUN_001f9e90(horizontal, dz);
+    d[0x10C] = 1;
+    child = *(char **)0x0015FFD8 + (*(int *)(d + 0x134) << 8);
+    *(volatile unsigned short *)(child + 0x34) |= 2;
+    *(volatile unsigned short *)(child + 0x34) |= 1;
+    child[0x31] = 0;
+    FUN_L10_002f5a50(*(int *)(d + 0x12C));
+    m->state = 7;
+    *(float *)(d + 0xAC) = D_0015ED6C * 80.0f;
+    *(int *)(d + 0xF8) = FUN_001f96f8(600);
+    FUN_L13_002e86f8(m, (unsigned char *)d, 0x22, 1);
+    *(short *)(d + 0x138) = 0;
+    d[0x148] = 0;
+    if (*(int *)(d + 0x104) != -1) {
+        FUN_001ff570(*(int *)(d + 0x104), 0);
+        *(int *)(d + 0x104) = -1;
+    }
+    *(int *)(d + 0x13C) = -1;
+}
+#endif
 /* Per-frame update of a breakable vehicle part (level 13): probes the first attached object and then the
    eleven attached children for hits, takes damage from them, advances the damage stage (unkBC) with its
    effects and sounds, and runs the stage's follow-up action. */
@@ -2185,7 +2233,6 @@ unsigned char *FUN_L13_002ea540(struct Moby *m, unsigned char *d) {
 /* computes a velocity vector for a moby from the camera/player and spawns a projectile */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EBAF0), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern unsigned char *FUN_L13_002c1f28_c(char *owner, char *pos,
                                          char *vec) __asm__("FUN_L13_002c1f28");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");

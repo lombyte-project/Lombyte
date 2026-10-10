@@ -1487,19 +1487,19 @@ extern char *D_L15_00178500[];
 extern char *FUN_L00_00274948(void *, void *, int, void *);
 extern char D_0013E533[];
 extern f32 ConvertIntegerToFloat_c(s32) __asm__("func_001FA6C0");
-extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
+extern f32 fast_cos_c2(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED60 __attribute__((section(".sdata")));
 extern float D_0015ED6C __attribute__((section(".sdata")));
-extern int D_L15_0015F5CC_c __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
+extern int D_L15_0015F5CC_c2 __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
 extern int D_L15_00161484; /* no foreign declaration */
 extern int FUN_L00_001f2868();
 extern int FUN_L00_0023e5e0(float *pos, float radius, float intensity, int color);
 extern int FUN_L00_00257b90(int, int);
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern s32 random_integer_below_c(s32) __asm__("func_00213260");
-extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
+extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
+extern s32 truncate_float_to_s32_c3(f32) __asm__("func_001FA6D0");
 extern unsigned char *D_L15_001B26AC __attribute__((section(".data")));
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void FUN_L00_0023e838(int);
@@ -1511,7 +1511,6 @@ unsigned char *FUN_L00_0026bb70(void *a, void *b, int c, int d, float f, int n, 
 unsigned char *FUN_L00_0026daa0(char *src, int color, int n, int h, float f);
 void FUN_L00_00269b70(void *pos, unsigned char red, unsigned char green, unsigned char blue, int target, float a, float b);
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
-extern char D_0013F350[];
 extern char D_001413F4[];
 extern void func_L00_0026AA10_29FF90(void *, unsigned char, unsigned char, unsigned char, float, float, int) __asm__("FUN_L00_00269b70");
 extern int func_L00_001F2BE8_29FF90(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -1526,7 +1525,7 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
 
     switch (moby->state) {
     case 0:
-        if (d->active != 0 && ((Hero29FF90 *)(((char *)&D_0013F350)))->f20A4 == 2) {
+        if (d->active != 0 && ((Hero29FF90 *)&hero)->f20A4 == 2) {
             float t;
             int i;
 
@@ -1586,15 +1585,15 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
                 (D_L15_001808C0 + d->light)->f4 = random_float_between(
                     (D_L15_001808C0 + d->light)->f0 < (D_L15_001808C0 + d->light)->f4 * 0.8f ? (D_L15_001808C0 + d->light)->f0 : (D_L15_001808C0 + d->light)->f4 * 0.8f,
                     (D_L15_001808C0 + d->light)->f0);
-            } else if ((D_L15_0015F5CC_c & 3) == 0) {
+            } else if ((D_L15_0015F5CC_c2 & 3) == 0) {
                 d->light = FUN_L00_0023e5e0(moby->pos, 0.0f, 0.0f, 0);
             }
         } else {
             D_L15_0015F320.on = 0;
             D_L15_0015F330.on = 0;
             d->f10 = 0;
-            d->vel[0] = fast_cos_c(((Hero29FF90 *)(((char *)&D_0013F350)))->f98) * (D_0015ED6C * 40.0f);
-            d->vel[1] = fast_sin_c(((Hero29FF90 *)(((char *)&D_0013F350)))->f98) * (D_0015ED6C * 40.0f);
+            d->vel[0] = fast_cos_c2(((Hero29FF90 *)&hero)->f98) * (D_0015ED6C * 40.0f);
+            d->vel[1] = fast_sin_c2(((Hero29FF90 *)&hero)->f98) * (D_0015ED6C * 40.0f);
             d->vel[2] = 0.0f;
             moby->state = 1;
             d->f14 = 0;
@@ -1656,7 +1655,7 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
                 if (p != 0) {
                     PartSub29FF90 *q = &p->sub;
 
-                    if (i == 2 && random_integer_below_c(8) == 0) {
+                    if (i == 2 && random_integer_below_c2(8) == 0) {
                         p->fC = 180000.0f;
                     } else {
                         p->fC = random_float_between(80000.0f, 120000.0f);
@@ -1678,20 +1677,23 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3668), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
+extern char D_0013E533[];
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
-extern f32 fast_cos_c2(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
-extern int D_L15_0015F5CC_c2 __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
+extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
+extern float D_0015ED6C __attribute__((section(".sdata")));
+extern int D_L15_0015F5CC_c __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
 extern int D_L15_00161AB8; /* no foreign declaration */
-extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
-extern s32 truncate_float_to_s32_c3(f32) __asm__("func_001FA6D0");
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern s32 random_integer_below_c(s32) __asm__("func_00213260");
+extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern float D_L15_001614B4 __attribute__((sda));
 extern short D_L15_001614B8 __attribute__((sda));
 extern float D_L15_001614BC __attribute__((sda));
 extern short D_L15_001614C0 __attribute__((sda));
 extern float D_L15_001614C4 __attribute__((sda));
 extern void FUN_L00_002730e0(float *pos, char *vel, int color, unsigned char life, unsigned char b, int mode, float scale);
-extern void FUN_L15_002a29b8_c(void) __asm__("FUN_L15_002a29b8");
+extern void FUN_L15_002a29b8(unsigned char *);
 extern void blend_moby_animation_c2(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern char D_0013F420[];
@@ -1734,14 +1736,14 @@ void FUN_L15_002a2488(char *moby) {
         ret1 = scale_game_frames_alt(*(int *)&D_L15_001614C0);
         ret2 = func_001FA898_r((float)ret1);
         life = (unsigned char)ret2;
-        ret3 = random_integer_below_c2(0xFF);
+        ret3 = random_integer_below_c(0xFF);
         FUN_L00_002730e0(pb, (char *)va, *(int *)&D_L15_001614B8, life, (unsigned char)ret3, 0, *(float *)&D_L15_001614BC);
         p = *(char **)(data + 0x6C);
-        if (p == 0 || *(int *)p != D_L15_0015F5CC_c2) {
+        if (p == 0 || *(int *)p != D_L15_0015F5CC_c) {
             if (p != 0) {
-                *(int *)p = D_L15_0015F5CC_c2;
+                *(int *)p = D_L15_0015F5CC_c;
             }
-            enqueue_callback_list_1_alt(FUN_L15_002a29b8_c, moby);
+            enqueue_callback_list_1_alt(FUN_L15_002a29b8, moby);
         }
     }
     state = ((unsigned char *)moby)[0x20];
@@ -1766,14 +1768,14 @@ s2:
     return;
 
 s3:
-    c = (char *)((char *)&D_0013F350);
+    c = (char *)&hero;
     fa = *(float *)(c + 0x80) - *(float *)(moby + 0x10);
     fb = *(float *)(c + 0x84) - *(float *)(moby + 0x14);
     f20 = fast_add_rotations_c(*(float *)(data + 0x64), FUN_001f9e90(fa, fb));
     f21 = *(float *)(c + 0xC8);
-    g = fast_cos_c2(f20);
+    g = fast_cos_c(f20);
     va[0] = g * (*(float *)&D_L15_001614B4 * D_0015ED6C);
-    r0 = fast_sin_c2(f20);
+    r0 = fast_sin_c(f20);
     va[1] = r0 * (*(float *)&D_L15_001614B4 * D_0015ED6C);
     va[2] = 0.0f;
     fd = *(float *)(moby + 0x18) - f21;
@@ -1928,6 +1930,7 @@ typedef struct { unsigned char pad0[0x74]; unsigned char active; unsigned char p
 
 typedef struct { u8 pad[0x20]; u8 state; u8 pad21[0xDF]; } MobySlot_2A3DD0;
 extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8");
+extern char D_0013F420[];
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
 extern unsigned char D_0014C190[];
 extern int D_0015ED84;

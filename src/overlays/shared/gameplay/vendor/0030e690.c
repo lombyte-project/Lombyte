@@ -325,108 +325,63 @@ void FUN_L11_00310ad0(short *pts, int n, float x0, float y0, unsigned int col, u
     }
     D_L11_001611C0_g += ((n + 1) / 2) * 16;
 }
-/* Path follower: turns the moby to the blend of the headings of its current and next path segments, and eases its position toward the blended path point offset sideways around the path. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031B8A8), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    int count;
-    int pad4[3];
-    float pts[1][4];
-} Path_0031B8A8;
-
-typedef struct {
-    char pad0[0x60];
-    int path;
-    int idx;
-    float t;
-    float flip;
-    float ang;
-    float f74;
-    float radius;
-    float f7C;
-    float speed;
-} Data_0031B8A8;
-
-typedef struct {
-    char pad0[0x10];
-    float pos[4];
-    char pad20[0x20];
-    float rot[4];
-    char pad50[0x28];
-    Data_0031B8A8 *data;
-} Moby_0031B8A8;
-
-extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
-extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
-extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern float FUN_001f9b80(void *, void *);
-extern float FUN_001f9e90(float, float);
-extern float D_0015ED6C;
-extern float D_0015ED70;
-extern int D_L11_001B0EB0; /* no foreign declaration */
-extern int FUN_001f9a40();
-extern int FUN_001fa050();
-extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern char D_L11_001B0EB0[];
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern Path_0031B8A8 *D_L11_001B11B0_0031B8A8[] __asm__("D_L11_001B0EB0");
-extern void func_001F9BC0_0031B8A8(void *) __asm__("FUN_001f99f8");
-extern float func_L00_001FF860_0031B8A8(float, float) __asm__("FUN_001f9e90");
-extern float func_001F9D48_0031B8A8(void *, void *) __asm__("FUN_001f9b80");
-extern float add_rot_B(float, float) __asm__("FUN_001fa580");
-extern float sub_rot_B(float, float) __asm__("FUN_001fa5c8");
-extern void func_001F9C08_0031B8A8(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern void func_001FA218_0031B8A8(void *, void *) __asm__("FUN_001fa050");
-extern float func_001F9FA8_0031B8A8(float) __asm__("FUN_001f9de0");
-extern void func_L00_001FF4B0_0031B8A8(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void func_001F9BD8_0031B8A8(void *, void *, void *) __asm__("FUN_001f9a10");
-extern float func_001F9F90_0031B8A8(float) __asm__("FUN_001f9dc8");
-extern float func_001F9D10_0031B8A8(void *, void *) __asm__("FUN_001f9b48");
-extern float func_00214D88_0031B8A8(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern void func_001F9BF0_0031B8A8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void interpolate_vector_xyz(void *, void *, void *, float) __asm__("FUN_001f9a40");
+extern float vector_distance_xyz(void *, void *) __asm__("FUN_001f9b48");
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float fast_atan2(float, float) __asm__("FUN_001f9e90");
+extern void rotation_matrix_from_euler(void *, void *) __asm__("FUN_001fa050");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 
-void FUN_L11_0031a438(Moby_0031B8A8 *moby) {
-    float mtx[4][4];
-    float A[4];
-    float B[4];
-    float C[4];
-    float E[4];
-    float rot[4];
-    float G[4];
-    float vel;
-    Data_0031B8A8 *data = moby->data;
-    Path_0031B8A8 *path = D_L11_001B11B0_0031B8A8[data->path];
-    int i = data->idx;
-    int n;
-    float a, b, pitch, d;
+#include "rnc/gameplay/entities/moby.h"
+#define MOBY(p) ((struct Moby *)(p))
 
-    qcopy(A, path->pts[i]);
-    n = path->count;
-    qcopy(B, path->pts[(i + 1) % n]);
-    qcopy(C, path->pts[(i + 2) % n]);
-    func_001F9BC0_0031B8A8(rot);
-    a = func_L00_001FF860_0031B8A8(A[0] - B[0], A[1] - B[1]);
-    b = func_L00_001FF860_0031B8A8(B[0] - C[0], B[1] - C[1]);
-    pitch = func_L00_001FF860_0031B8A8(func_001F9D48_0031B8A8(A, B), B[2] - A[2]);
-    rot[1] = add_rot_B(sub_rot_B(func_L00_001FF860_0031B8A8(func_001F9D48_0031B8A8(B, C), C[2] - B[2]), pitch) * data->t, pitch);
-    rot[2] = add_rot_B(sub_rot_B(b, a) * data->t, a);
-    qcopy(moby->rot, rot);
-    if (data->flip > 0.0f) {
-        moby->rot[2] = add_rot_B(moby->rot[2], 3.14159f);
-        moby->rot[1] = -moby->rot[1];
+void FUN_L11_0031a438(char *moby) {
+    char *d = (char *)MOBY(moby)->pvars;
+    int i = *(int *)(d + 0x64);
+    char *table = *(char **)(D_L11_001B0EB0 + *(int *)(d + 0x60) * 4);
+    int count;
+    float matrix[16];
+    float a[4], b[4], c[4];
+    float point[4], turn[4], direction[4];
+    float angle_a, angle_b, slope_a, slope_b;
+    float distance;
+    float speed;
+
+    qcopy(a, table + i * 16 + 0x10);
+    count = *(int *)table;
+    qcopy(b, table + (i + 1) % count * 16 + 0x10);
+    qcopy(c, table + (i + 2) % count * 16 + 0x10);
+    clear_u64_value(turn);
+    angle_a = fast_atan2(a[0] - b[0], a[1] - b[1]);
+    angle_b = fast_atan2(b[0] - c[0], b[1] - c[1]);
+    slope_a = fast_atan2(vector_distance_xy(a, b), b[2] - a[2]);
+    slope_b = fast_atan2(vector_distance_xy(b, c), c[2] - b[2]);
+    turn[1] = fast_add_rotations(fast_subtract_rotations(slope_b, slope_a) * *(float *)(d + 0x68), slope_a);
+    turn[2] = fast_add_rotations(fast_subtract_rotations(angle_b, angle_a) * *(float *)(d + 0x68), angle_a);
+    qcopy(&MOBY(moby)->rot, turn);
+    if (*(float *)(d + 0x6C) > 0.0f) {
+        MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, 3.14159f);
+        MOBY(moby)->rot.y = -MOBY(moby)->rot.y;
     }
-    func_001F9C08_0031B8A8(E, A, B, data->t);
-    func_001FA218_0031B8A8(mtx, rot);
-    func_L00_001FF4B0_0031B8A8(G, mtx[1], data->radius * func_001F9FA8_0031B8A8(data->ang));
-    func_001F9BD8_0031B8A8(E, E, G);
-    func_L00_001FF4B0_0031B8A8(G, mtx[2], data->radius * func_001F9F90_0031B8A8(data->ang));
-    func_001F9BD8_0031B8A8(E, E, G);
-    vel = 0.0f;
-    d = func_001F9D10_0031B8A8(moby->pos, E);
-    func_00214D88_0031B8A8(&vel, &data->speed, d, D_0015ED70 * 10.0f, D_0015ED70 * 10.0f, D_0015ED6C * 20.0f);
-    func_001F9BF0_0031B8A8(G, E, moby->pos);
-    func_L00_001FF4B0_0031B8A8(G, G, data->speed);
-    func_001F9BD8_0031B8A8(moby->pos, moby->pos, G);
+    interpolate_vector_xyz(point, a, b, *(float *)(d + 0x68));
+    rotation_matrix_from_euler(matrix, turn);
+    normalize_vector_xyz(direction, matrix + 4, *(float *)(d + 0x78) * fast_sin(*(float *)(d + 0x70)));
+    add_vector_xyz(point, point, direction);
+    normalize_vector_xyz(direction, matrix + 8, *(float *)(d + 0x78) * fast_cos(*(float *)(d + 0x70)));
+    add_vector_xyz(point, point, direction);
+    speed = 0.0f;
+    distance = vector_distance_xyz(&MOBY(moby)->pos, point);
+    advance_accelerated_scalar(&speed, (float *)(d + 0x80), distance, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f);
+    subtract_vector_xyz(direction, point, &MOBY(moby)->pos);
+    normalize_vector_xyz(direction, direction, *(float *)(d + 0x80));
+    add_vector_xyz(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);
 }
