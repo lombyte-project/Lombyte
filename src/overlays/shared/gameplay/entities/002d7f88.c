@@ -700,7 +700,79 @@ s32 FUN_L00_002db890(Obj_db890 *o) {
         return f(o);
     return 0;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002db8f8.s", FUN_L00_002db8f8);
+#else
+extern u8 D_L00_001EA030_002db8f8[] __asm__("D_L00_001EA030");
+void FUN_001e93b0_002db8f8(void *) __asm__("FUN_001e93b0");
+u8 *FUN_L00_002db890_002db8f8(u8 *) __asm__("FUN_L00_002db890");
+s32 FUN_001f96f8_002db8f8(s32) __asm__("FUN_001f96f8");
+void FUN_00212f90_002db8f8(void *, s32, s32, s32) __asm__("FUN_00212f90");
+f32 FUN_001f9b80_002db8f8(void *, void *) __asm__("FUN_001f9b80");
+s32 FUN_L00_002db8f8(u8 *m, u8 *v, u8 *target) {
+    u8 *o = FUN_L00_002db890_002db8f8(m);
+    s32 c;
+    s32 state;
+    if (o == 0)
+        goto missing;
+    if (m == 0 || m[0x20] == 0xFE || m[0x20] == 0xFD || *(s16 *)(o + 0x68) == 8)
+        goto fail;
+    *(u128 *)o = *(u128 *)v;
+    *(u8 **)(o + 0x60) = target;
+    *(f32 *)(o + 0xC) = 1.0f;
+    state = (s16)(*(u16 *)(o + 0x68) - 1);
+    switch (state) {
+    case 0:
+        if (1.0f <= *(f32 *)(o + 0x6C)) {
+            c = (*(u8 **)(o + 0x70))[2];
+            if (m[0x53] == c)
+                goto state_two;
+            FUN_00212f90_002db8f8(m, c, 0, FUN_001f96f8_002db8f8(10));
+        state_two:
+            *(s32 *)(o + 0x6C) = 0;
+            *(s16 *)(o + 0x68) = 2;
+            return 1;
+        }
+        c = (*(u8 **)(o + 0x70))[1];
+        if (m[0x53] == c)
+            goto return_one;
+        FUN_00212f90_002db8f8(m, c, 0, FUN_001f96f8_002db8f8(10));
+    return_one:
+        return 1;
+    case 1:
+        if (!(1.0f <= *(f32 *)(o + 0x6C)))
+            return 1;
+        return 2;
+    case 2:
+        break;
+    case 3:
+        return 3;
+    case 4:
+    case 5:
+    case 6:
+        c = (*(u8 **)(o + 0x70))[3];
+        if (m[0x53] != c)
+            FUN_00212f90_002db8f8(m, c, 0, FUN_001f96f8_002db8f8(10));
+        *(s16 *)(o + 0x68) = 3;
+        *(s32 *)(o + 0x6C) = 0;
+        *(f32 *)(m + 0x58) = 1.0f;
+        *(f32 *)(o + 0x64) = FUN_001f9b80_002db8f8(m + 0x10, target + 0x10);
+        break;
+    default:
+        c = (*(u8 **)(o + 0x70))[1];
+        if (m[0x53] != c)
+            FUN_00212f90_002db8f8(m, c, 0, FUN_001f96f8_002db8f8(10));
+        *(s32 *)(o + 0x6C) = 0;
+        *(s16 *)(o + 0x68) = 1;
+        return 1;
+    }
+    return 2;
+missing:
+    FUN_001e93b0_002db8f8(D_L00_001EA030_002db8f8);
+fail:
+    return 0;
+}
+#endif
 extern u32 D_L00_00161B20_002dbb20[1] __asm__("D_L00_00161B20") __attribute__((sda));
 extern u8 *D_001403E0_002dbb20 __asm__("D_001403E0") __attribute__((section(".data")));
 u8 *FUN_L00_002db890_002dbb20(u8 *) __asm__("FUN_L00_002db890");
