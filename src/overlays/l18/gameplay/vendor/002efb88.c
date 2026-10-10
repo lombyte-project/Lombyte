@@ -450,7 +450,6 @@ extern void FUN_L12_0027b370(Level18VendorMoby *, void *, int);
 extern void FUN_L18_002fa8e0(void *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern char D_0013F350[];
 extern void func_L12_0027C368_v(char *, void *, int) __asm__("FUN_L12_0027b370");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -511,19 +510,19 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             v9 = 0;
             for (i = 0; i < d->cnt; i++) {
                 unsigned char *e = D_L18_0015FFD8 + (d->ent[i].idx << 8);
-                if (((VG *)(((char *)&D_0013F350)))->p2FC == e) {
+                if (hero.ground_moby == e) {
                     d->f348 = 1;
                     v9 = 1;
                     break;
                 }
             }
-            p = ((VG *)(((char *)&D_0013F350)))->p2FC;
+            p = hero.ground_moby;
             if (p != 0) {
                 short s = *(short *)(p + 0xA6);
                 if (s == 0x764)
                     v9 = 1;
             }
-            if (d->f348 != 0 && v9 == 0 && ((VG *)(((char *)&D_0013F350)))->s30E == 0) {
+            if (d->f348 != 0 && v9 == 0 && hero.air_frames.s == 0) {
                 if (tick_countdown_32(&d->f34C))
                     moby->state = 4;
             }

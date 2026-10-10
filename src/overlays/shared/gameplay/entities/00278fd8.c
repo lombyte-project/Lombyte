@@ -29,7 +29,6 @@ typedef struct {
 } Sentry98BB8;
 
 extern char *FUN_L15_002e4580(char *, float *, char *, char *);
-extern char D_0013F350[];
 extern float ConvertIntegerToFloat(int);
 extern float D_L15_001673C0[4];
 extern float D_L15_001CBFE0[];
@@ -143,7 +142,7 @@ void FUN_L15_002979d8(unsigned char *moby) {
         FUN_L00_0025a120(moby);
         moby[0x7F] = 0x16;
     }
-    if (((Hero98BB8 *)(D_0013F350))->f2084 == 0x65)
+    if (hero.state.current == 0x65)
         *(short *)(data + 0x156) = 0;
     FUN_001f9770(data + 0x154);
     FUN_001f9770(data + 0x156);
@@ -250,7 +249,7 @@ void FUN_L15_002979d8(unsigned char *moby) {
                     moby[0x20] = 3;
                 }
             } else if (*(short *)(data + 0x158) != 0 &&
-                       ((Hero98BB8 *)(D_0013F350))->f2084 == 0x59) {
+                       hero.state.current == 0x59) {
                 if (*(int *)(data + 0x150) != -1 || *(int *)(data + 0x12C) != -1 ||
                     (*(short *)(data + 0x154) == 0 && random_integer_below(0x78) == 0)) {
                     data[0x15D] = 0;
@@ -423,7 +422,7 @@ void FUN_L15_002979d8(unsigned char *moby) {
         } else if (*(short *)(data + 0x19C) != 0) {
             FUN_L15_00299a68((char *)moby, data, (float *)(*(char **)(data + 0x198) + 0x10),
                              (void *)0xA, (void *)0xF);
-        } else if (*(short *)(data + 0x158) != 0 && ((Hero98BB8 *)(D_0013F350))->f2084 == 0x59) {
+        } else if (*(short *)(data + 0x158) != 0 && hero.state.current == 0x59) {
             if (*(int *)(data + 0x150) != -1 || *(int *)(data + 0x12C) != -1 ||
                 *(short *)(data + 0x154) == 0) {
                 data[0x15C] = moby[0x20];
@@ -529,7 +528,7 @@ void FUN_L15_002979d8(unsigned char *moby) {
             FUN_L15_002cbba0((unsigned char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)));
         }
         if (moby[0x70] & 2) {
-            if (((Hero98BB8 *)(D_0013F350))->f2084 == 0x65) {
+            if (hero.state.current == 0x65) {
                 moby[0x20] = 0xC;
                 if (moby[0x53] != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
@@ -582,7 +581,7 @@ void FUN_L15_002979d8(unsigned char *moby) {
         *(short *)(data + 0x194) = 0;
         FUN_L15_0029a0d0(moby);
         if (moby[0x70] & 2) {
-            if (((Hero98BB8 *)(D_0013F350))->f2084 == 0x65) {
+            if (hero.state.current == 0x65) {
                 moby[0x20] = 0xC;
                 if (moby[0x53] != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
@@ -599,7 +598,7 @@ void FUN_L15_002979d8(unsigned char *moby) {
         *(short *)(data + 0x194) = 0;
         FUN_L15_0029a0d0(moby);
         if (moby[0x70] & 2) {
-            if (((Hero98BB8 *)(D_0013F350))->f2084 == 0x65) {
+            if (hero.state.current == 0x65) {
                 moby[0x20] = 0xC;
                 if (moby[0x53] != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
@@ -637,7 +636,7 @@ void FUN_L15_002979d8(unsigned char *moby) {
             }
         }
         if (moby[0x70] & 2) {
-            if (((Hero98BB8 *)(D_0013F350))->f2084 == 0x65) {
+            if (hero.state.current == 0x65) {
                 moby[0x20] = 0xC;
                 if (moby[0x53] != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
@@ -695,7 +694,7 @@ void FUN_L15_002979d8(unsigned char *moby) {
             }
         }
         if (moby[0x70] & 2) {
-            if (((Hero98BB8 *)(D_0013F350))->f2084 == 0x65) {
+            if (hero.state.current == 0x65) {
                 moby[0x20] = 0xC;
                 if (moby[0x53] != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
@@ -728,7 +727,7 @@ void FUN_L15_002979d8(unsigned char *moby) {
         }
         break;
     case 12:
-        if (((Hero98BB8 *)(D_0013F350))->f2084 == 0x65) {
+        if (hero.state.current == 0x65) {
             moby[0x20] = 9;
             if (moby[0x53] != 0xD)
                 blend_moby_animation(moby, 0xD, 0, scale_game_frames(10));
@@ -787,7 +786,7 @@ void FUN_L15_002979d8(unsigned char *moby) {
         if (r & 0x40) {
             probe_ground_height(moby + 0x10, 0, 0.5f);
             if (FUN_001f0b58() == -1 && *(float *)(data + 0x168) - 5.0f < *(float *)(moby + 0x18)) {
-                if (((Hero98BB8 *)(D_0013F350))->f2084 == 0x65) {
+                if (hero.state.current == 0x65) {
                     moby[0x20] = 0xC;
                     if (moby[0x53] != 0)
                         blend_moby_animation(moby, 0, 0, scale_game_frames(10));
@@ -854,9 +853,9 @@ void FUN_L15_002979d8(unsigned char *moby) {
         lvl = *(short *)(data + 0x158) != 0;
     }
     tick = D_L15_0015F5CC;
-    if (tick != *(int *)&D_L15_001613E8 || ((Hero98BB8 *)(D_0013F350))->f22E0 < lvl) {
+    if (tick != *(int *)&D_L15_001613E8 || hero.unk22E0 < lvl) {
         *(int *)&D_L15_001613E8 = tick;
-        ((Hero98BB8 *)(D_0013F350))->f22E0 = lvl;
+        hero.unk22E0 = lvl;
     }
     alpha = 0x80;
     n = scale_game_frames(0xAA);
@@ -1421,7 +1420,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029edb0.s", FUN_L15_0029edb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a2488.s", FUN_L15_002a2488);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3A48), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern int D_L15_0015FFD8;
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
@@ -1813,7 +1811,6 @@ void FUN_L15_002cbba0(unsigned char *moby) {
 /* per-frame update of the level's looping effect: ramp the gauge, then start, run or stop the draw callback */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCFC0), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L15_002cbac0_u() __asm__("FUN_L15_002cbac0");

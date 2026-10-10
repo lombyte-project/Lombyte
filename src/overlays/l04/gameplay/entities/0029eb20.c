@@ -457,16 +457,16 @@ void FUN_L04_002ba520(M_B7B0 *moby) {
         r = FUN_L00_0025a478(moby, hit, &data->hp, 0, &tmp, &dmg, 0, 4);
         if (hit != 0 && dmg != 0.0f && moby->state != 0) {
             if (hit->att != 0) {
-                H_B7B0 *h = (H_B7B0 *)(((char *)&D_0013F350));
-                if (hit->att != h->f1090) {
+                struct Hero *h = &hero;
+                if (hit->att != h->items[0].moby) {
                     ang2 = FUN_001f9e90(moby->pos[0] - hit->att->pos[0],
                                         moby->pos[1] - hit->att->pos[1]);
                 } else {
-                    ang2 = FUN_001f9e90(moby->pos[0] - h->pos[0], moby->pos[1] - h->pos[1]);
+                    ang2 = FUN_001f9e90(moby->pos[0] - h->motion.pos.f[0], moby->pos[1] - h->motion.pos.f[1]);
                 }
             } else {
-                H_B7B0 *h = (H_B7B0 *)(((char *)&D_0013F350));
-                ang2 = FUN_001f9e90(moby->pos[0] - h->pos[0], moby->pos[1] - h->pos[1]);
+                struct Hero *h = &hero;
+                ang2 = FUN_001f9e90(moby->pos[0] - h->motion.pos.f[0], moby->pos[1] - h->motion.pos.f[1]);
             }
             data->fD4 = frame_time_sq * 12.0f;
             data->fD0 = frame_time_sq * 35.0f;
@@ -878,11 +878,11 @@ void FUN_L04_002ba520(M_B7B0 *moby) {
     }
     FUN_L00_0025d538(moby, data->fB0);
     if (data->f42C > 0.0f) {
-        H_B7B0 *h = (H_B7B0 *)(((char *)&D_0013F350));
+        struct Hero *h = &hero;
 
-        v[0] = fast_sin_cf(FUN_001f9e90(moby->pos[0] - h->pos[0], moby->pos[1] - h->pos[1])) *
+        v[0] = fast_sin_cf(FUN_001f9e90(moby->pos[0] - h->motion.pos.f[0], moby->pos[1] - h->motion.pos.f[1])) *
                data->f42C;
-        v[1] = add_vector_xyz_cf(FUN_001f9e90(moby->pos[0] - h->pos[0], moby->pos[1] - h->pos[1])) *
+        v[1] = add_vector_xyz_cf(FUN_001f9e90(moby->pos[0] - h->motion.pos.f[0], moby->pos[1] - h->motion.pos.f[1])) *
                data->f42C;
         v[2] = 0.0f;
         FUN_L00_00258490_cf(v, v, moby->pos);
@@ -1419,16 +1419,16 @@ void FUN_L04_002c2270(M_35F0 *moby) {
         r = FUN_L00_0025a478(moby, hit, &data->hp, 0, &tmp, &dmg, 0, 4);
         if (hit != 0 && moby->state != 0 && data->f14D == 0) {
             if (hit->att != 0) {
-                H_35F0 *h = (H_35F0 *)(((char *)&D_0013F350));
-                if (hit->att != h->f1090) {
+                struct Hero *h = &hero;
+                if (hit->att != h->items[0].moby) {
                     ang = FUN_001f9e90(moby->pos[0] - hit->att->pos[0],
                                        moby->pos[1] - hit->att->pos[1]);
                 } else {
-                    ang = FUN_001f9e90(moby->pos[0] - h->pos[0], moby->pos[1] - h->pos[1]);
+                    ang = FUN_001f9e90(moby->pos[0] - h->motion.pos.f[0], moby->pos[1] - h->motion.pos.f[1]);
                 }
             } else {
-                H_35F0 *h = (H_35F0 *)(((char *)&D_0013F350));
-                ang = FUN_001f9e90(moby->pos[0] - h->pos[0], moby->pos[1] - h->pos[1]);
+                struct Hero *h = &hero;
+                ang = FUN_001f9e90(moby->pos[0] - h->motion.pos.f[0], moby->pos[1] - h->motion.pos.f[1]);
             }
             data->fD0 = 0.008f;
             data->fD4 = 0.0005f;

@@ -697,7 +697,7 @@ void FUN_L01_002e6bf0(PeMoby *m) {
         }
         m->h34 |= 0x1000;
         v->b29 = 0;
-        m->l38 = ((PeHero *)(((char *)&D_0013F350)))->f2080->l38;
+        m->l38 = ((struct PeMoby *)hero.moby)->l38;
         v->b58 = 8;
         v->b5A = 8;
         FUN_L01_0026d930_u(v->xD0);

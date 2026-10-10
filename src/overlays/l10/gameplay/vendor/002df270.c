@@ -253,7 +253,6 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern char D_0014C190[];
-extern char D_0013F350[];
 extern void func_L00_0025D5B0_b(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void func_L00_002592B0_b(char *moby, float target, float k, float d, float max,
                                 float *vel) __asm__("FUN_L00_00258278");
@@ -458,7 +457,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             v[1] = fast_sin(aim) * (*(short *)(t + 0xA6) == 0x359 ? 2.0f : 3.57f);
             v[2] = 0.0f;
             add_vector_xyz(v, v, t + 0x10);
-            if (((Hero2E30F8 *)(((char *)&D_0013F350)))->f20A4 != 1) {
+            if (hero.unk20A4 != 1) {
                 float rot = m->f48;
                 int r;
                 m->f48 = FUN_001f9e90(v[0] - m->pos[0], v[1] - m->pos[1]);
@@ -528,13 +527,13 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             m->f58 = 1.2f;
             {
                 float home = FUN_001f9b48(m->pos, d->v170);
-                if ((((Hero2E30F8 *)(((char *)&D_0013F350)))->f20A4 == 1 ? 1.0f : 30.0f) < home ||
+                if ((hero.unk20A4 == 1 ? 1.0f : 30.0f) < home ||
                     d->i164 == 2) {
                     m->state = 8;
                     blend_moby_animation(m, 4, 0, scale_game_frames(0xC));
                 } else if (FUN_001f9b80(m->pos, t + 0x10) <
                            (*(short *)(t + 0xA6) == 0x359 ? 2.45f : 4.02f)) {
-                    if (((Hero2E30F8 *)(((char *)&D_0013F350)))->f1C0 < scale_game_frames(10) &&
+                    if (hero.unk1C0 < scale_game_frames(10) &&
                         diff < 0.34906584f && see) {
                         int anim = 7;
                         if (random_integer_below(100) & 1) {
@@ -586,13 +585,13 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
         }
         {
             float home = FUN_001f9b48(m->pos, d->v170);
-            if ((((Hero2E30F8 *)(((char *)&D_0013F350)))->f20A4 == 1 ? 1.0f : 30.0f) < home ||
+            if ((hero.unk20A4 == 1 ? 1.0f : 30.0f) < home ||
                 d->i164 == 2) {
                 m->state = 8;
                 blend_moby_animation(m, 4, 0, scale_game_frames(0xC));
             } else if (FUN_001f9b80(m->pos, t + 0x10) <
                        (*(short *)(t + 0xA6) == 0x359 ? 2.45f : 4.02f)) {
-                if (((Hero2E30F8 *)(((char *)&D_0013F350)))->f1C0 < scale_game_frames(10) &&
+                if (hero.unk1C0 < scale_game_frames(10) &&
                     diff < *(float *)&D_L10_00161E4C * DEG_TO_RAD && see) {
                     int anim = 7;
                     if (random_integer_below(100) & 1) {

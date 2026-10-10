@@ -1571,8 +1571,8 @@ void FUN_L16_002ce9f0(void *moby) {
             }
             {
                 float x = m->position[0], y = m->position[1];
-                L16HitPlayer *player = (L16HitPlayer *)(((char *)&hero));
-                d->heading = FUN_001f9e90_c2(player->position[0] - x, player->position[1] - y);
+                struct Hero *player = &hero;
+                d->heading = FUN_001f9e90_c2(player->motion.pos.f[0] - x, player->motion.pos.f[1] - y);
             }
             m->state = 9;
             /* No pointer local for the reaction record anywhere: d->reaction is written at each call and the

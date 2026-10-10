@@ -115,9 +115,6 @@ typedef union {
     OvlQuad q;
     f32 f[4];
 } V;
-extern u8 D_0013F5E0[] __attribute__((section(".data")));
-extern u8 D_0013F5F0[] __attribute__((section(".data")));
-extern u8 D_0013F610[] __attribute__((section(".data")));
 extern u8 D_L05_00174240[] __attribute__((section(".data")));
 extern u8 D_L05_00174260[] __attribute__((section(".data")));
 extern f32 D_L05_00174268 __attribute__((section(".data")));

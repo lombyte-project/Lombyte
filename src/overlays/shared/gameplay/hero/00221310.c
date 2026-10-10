@@ -105,7 +105,6 @@ typedef struct {
     u8 pad4[0x70 - 4];
 } Entry70_2215c8;
 
-extern struct Hero hero_b __asm__("D_0013F350");
 extern struct PadState D_0013C940_2215c8 __asm__("D_0013C940");
 extern Entry70_2215c8 D_L00_001798F0_2215c8[] __asm__("D_L00_001798F0");
 extern s32 D_L00_0015F5C4_2215c8 __asm__("D_L00_0015F5C4");
@@ -250,13 +249,13 @@ skip:
         hero.unk228C = 3.0f;
         break;
     default:
-        FUN_L00_00233660_2215c8(&hero_b.motion.unkD0, 0.0f, 0.0f, 0.7f);
+        FUN_L00_00233660_2215c8(&hero.motion.unkD0, 0.0f, 0.0f, 0.7f);
         if (D_0013D4E2_2215c8) {
-            hero_b.unk2288 = 12.0f;
-            hero_b.unk228C = 4.5f;
+            hero.unk2288 = 12.0f;
+            hero.unk228C = 4.5f;
         } else {
-            hero_b.unk2288 = 3.0f;
-            hero_b.unk228C = 1.75f;
+            hero.unk2288 = 3.0f;
+            hero.unk228C = 1.75f;
         }
         break;
     }

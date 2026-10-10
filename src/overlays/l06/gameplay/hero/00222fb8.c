@@ -298,9 +298,6 @@ typedef union {
     f32 f[4];
 } V;
 extern struct Hero hero_data2 __asm__("D_0013F350") __attribute__((section(".data")));
-extern u8 D_0013F5E0[] __attribute__((section(".data")));
-extern u8 D_0013F5F0[] __attribute__((section(".data")));
-extern u8 D_0013F610[] __attribute__((section(".data")));
 extern u8 D_L06_001745C0[] __attribute__((section(".data")));
 extern u8 D_L06_001745E0[] __attribute__((section(".data")));
 extern f32 D_L06_001745E8 __attribute__((section(".data")));

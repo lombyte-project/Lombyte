@@ -827,9 +827,6 @@ typedef union {
     OvlQuad q;
     f32 f[4];
 } V;
-extern u8 D_0013F5E0[] __attribute__((section(".data")));
-extern u8 D_0013F5F0[] __attribute__((section(".data")));
-extern u8 D_0013F610[] __attribute__((section(".data")));
 extern u8 D_L01_001742C0[] __attribute__((section(".data")));
 extern u8 D_L01_001742E0[] __attribute__((section(".data")));
 
@@ -1217,7 +1214,6 @@ typedef struct {
     u8 pad4[0x70 - 4];
 } Entry70_23c710;
 
-extern struct Hero hero_b __asm__("D_0013F350");
 extern struct PadState D_0013C940_23c710 __asm__("D_0013C940");
 extern Entry70_23c710 D_L01_00179D70_23c710[] __asm__("D_L01_00179D70");
 extern s32 D_L01_0015F5C4_23c710 __asm__("D_L01_0015F5C4");
@@ -1347,13 +1343,13 @@ void FUN_L01_0023c710(void) {
     hero.unk1E2 = 0;
 skip:
     FUN_L00_00221b68_23c710();
-    FUN_L00_00233660_23c710(&hero_b.motion.unkD0, 0.0f, 0.0f, 0.7f);
+    FUN_L00_00233660_23c710(&hero.motion.unkD0, 0.0f, 0.0f, 0.7f);
     if (D_0013D4C0_23c710[0x22]) {
-        hero_b.unk2288 = 12.0f;
-        hero_b.unk228C = 4.5f;
+        hero.unk2288 = 12.0f;
+        hero.unk228C = 4.5f;
     } else {
-        hero_b.unk2288 = 3.0f;
-        hero_b.unk228C = 1.75f;
+        hero.unk2288 = 3.0f;
+        hero.unk228C = 1.75f;
     }
     {
         f32 z = hero.ground_z.f;

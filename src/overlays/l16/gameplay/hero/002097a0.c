@@ -161,9 +161,6 @@ typedef union {
     OvlQuad q;
     f32 f[4];
 } V_u;
-extern u8 D_0013F5E0[] __attribute__((section(".data")));
-extern u8 D_0013F5F0[] __attribute__((section(".data")));
-extern u8 D_0013F610[] __attribute__((section(".data")));
 extern u8 D_L16_00174240[] __attribute__((section(".data")));
 extern u8 D_L16_00174260[] __attribute__((section(".data")));
 extern s32 D_0015ED84_c __asm__("D_0015ED84");
