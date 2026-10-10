@@ -1543,10 +1543,7 @@ void FUN_L14_002ee8d8(struct Moby *m) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eef60.s", FUN_L14_002eef60);
-#else
-extern char *D_L14_001B0BB0_c3[] __asm__("D_L14_001B0BB0");
+extern char *D_L14_001B0BB0_rail[] __asm__("D_L14_001B0BB0");
 extern float FUN_001f9b48(void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
@@ -1554,67 +1551,49 @@ void FUN_L14_002eef60(struct Moby *m) {
     char *d = (char *)m->pvars;
     int i;
     int *path;
-    int *second_path;
-    int *point;
-    int *next;
-    float *length_out;
+    int *e;
     int *first;
-    float length;
+    int i;
 
     if (*(int *)(d + 0xA0) == -1) {
         mark_moby_for_removal(m);
         return;
     }
-    path = (int *)D_L14_001B0BB0_c3[*(int *)(d + 0xA0)];
-    if (*path == 0 || *(int *)(d + 0x114) == -1 ||
-        *(int *)D_L14_001B0BB0_c3[*(int *)(d + 0x114)] != 11) {
+    e = (int *)D_L14_001B0BB0_rail[*(int *)(d + 0xA0)];
+    if (*e == 0 || *(int *)(d + 0x114) == -1 ||
+        *(int *)D_L14_001B0BB0_rail[*(int *)(d + 0x114)] != 11) {
         mark_moby_for_removal(m);
         return;
     }
 
     *(float *)(d + 0xB4) = 0.0f;
-    i = 0;
-    point = path;
-    first = point + 4;
-    if (0 < *point - 1) {
-        length_out = (float *)(point + 7);
-        next = point + 8;
-        point = first;
-        do {
-            length = FUN_001f9b48(point, next);
-            i++;
-            *length_out = length;
-            next += 4;
-            point += 4;
-            *(float *)(d + 0xB4) += length;
-            length_out += 4;
-        } while (i < *path - 1);
+    path = e;
+    first = path + 4;
+    for (i = 0; i < *path - 1; i++) {
+        ((f32 *)path)[i * 4 + 7] = FUN_001f9b48(&path[i * 4 + 4], &path[i * 4 + 8]);
+        *(float *)(d + 0xB4) += ((f32 *)path)[i * 4 + 7];
     }
-    *(float *)(path + i * 4 + 7) = FUN_001f9b48(path + i * 4 + 4, first);
+    {
+        f32 len = FUN_001f9b48(&((f32 *)e)[i * 4 + 4], first);
+        char *pt = (char *)e + i * 16;
+        *(f32 *)(pt + 0x1C) = len;
+    }
 
-    second_path = (int *)D_L14_001B0BB0_c3[*(int *)(d + 0xB8)];
+    path = (int *)D_L14_001B0BB0_rail[*(int *)(d + 0xB8)];
     *(float *)(d + 0xBC) = 0.0f;
-    i = 0;
-    length_out = (float *)(second_path + 7);
-    if (0 < *second_path - 1) {
-        next = second_path + 8;
-        point = second_path + 4;
-        do {
-            length = FUN_001f9b48(point, next);
-            i++;
-            *length_out = length;
-            next += 4;
-            point += 4;
-            *(float *)(d + 0xBC) += length;
-            length_out += 4;
-        } while (i < *second_path - 1);
+    for (i = 0; i < *path - 1; i++) {
+        ((f32 *)path)[i * 4 + 7] = FUN_001f9b48(&path[i * 4 + 4], &path[i * 4 + 8]);
+        *(float *)(d + 0xBC) += ((f32 *)path)[i * 4 + 7];
     }
-    *(float *)(second_path + i * 4 + 7) = FUN_001f9b48(second_path + i * 4 + 4, second_path + 4);
+    {
+        f32 len = FUN_001f9b48(&((f32 *)path)[i * 4 + 4], path + 4);
+        char *pt = (char *)path + i * 16;
+        *(f32 *)(pt + 0x1C) = len;
+    }
     *(float *)(d + 0xAC) = -1.0f;
     *(int *)(d + 0xA8) = 0;
     *(int *)(d + 0xA4) = 0;
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F05D8), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_001B0BB0_c3[] __asm__("D_L14_001B0BB0");
