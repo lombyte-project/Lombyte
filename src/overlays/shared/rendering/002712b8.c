@@ -1037,7 +1037,41 @@ void FUN_L00_00273800(char *a) {
         *(int *)(a + 4) = (w & 0xFFFFFF) | (t << 24);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002738e8.s", FUN_L00_002738e8);
+/* Spawns a type-64 particle at pos moving with vel, sprite size chosen by distance to the hero. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00274788), where it is exact; names translated to the US level program. */
+
+extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
+extern float FUN_001f9b80(void *, void *);
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern unsigned char *D_L00_001B2180[];
+extern unsigned char *FUN_L00_002678b8_c3(int) __asm__("FUN_L00_002678b8");
+extern unsigned char D_0013F3D0_c[] __asm__("D_0013F3D0");
+
+unsigned char *FUN_L00_002738e8(void *pos, void *vel, float scale, int life, float f1, int col, float f2, int a4, int big) {
+    unsigned char *r = FUN_L00_002678b8_c3(0x40);
+    unsigned char *u;
+    if (r != 0) {
+        u = r + 0x20;
+        qcopy(r + 0x10, pos);
+        if (FUN_001f9b80(D_0013F3D0_c, pos) < 80.0f) {
+            r[9] = truncate_float_to_s32_c(1.0f) + 0x30;
+        } else {
+            r[9] = truncate_float_to_s32_c(1.0f) + 0x20;
+        }
+        r[3] = big ? 0x48 : 0x44;
+        r[1] = 0;
+        r[2] = D_L00_001B2180[0][1];
+        *(int *)(r + 4) = col;
+        *(float *)(r + 0xC) = scale * 210000.0f;
+        r[8] = (int)random_float_between_c(0.0f, 255.0f);
+        *(short *)(r + 0xA) = life;
+        qcopy(u, vel);
+        *(float *)(u + 0x10) = f1;
+        *(float *)(u + 0x14) = f2;
+        *(int *)(u + 0x18) = a4;
+    }
+    return r;
+}
 /* Falling ember: drifts under gravity until it reaches its floor height, then bursts into
    smoke and, on level 10, a glow and a spark. */
 struct EmberMotion {

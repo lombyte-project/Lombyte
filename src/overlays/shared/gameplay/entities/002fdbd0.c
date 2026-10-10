@@ -108,7 +108,7 @@ extern void FUN_L00_00263ac8(struct Moby *, s32, void *, f32);
 extern void FUN_L00_00263fd8(struct Moby *, s32, void *, void *, s32, s32, f32, f32 *, f32 *, f32 *);
 extern void FUN_L01_0026d930(MoveCtl *);
 extern void FUN_L06_002feb40(void);
-extern void FUN_L06_002ff100(struct Moby *);
+extern void FUN_L06_002ff100_u(struct Moby *) __asm__("FUN_L06_002ff100");
 
 void FUN_L06_002fdbd0(struct Moby *moby) {
     Moby1068Vars *vars = (Moby1068Vars *)moby->pvars;
@@ -223,7 +223,7 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
                          &vars->turn_speed, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                          frame_time * 3.1415927f);
         if (moby->unk70 & 2) {
-            FUN_L06_002ff100(moby);
+            FUN_L06_002ff100_u(moby);
             moby->state = 3;
             if (moby->prev_seq != 5) {
                 blend_moby_animation(moby, 5, 0, scale_game_frames(10));
@@ -251,7 +251,7 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
                          &vars->turn_speed, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                          frame_time * 3.1415927f);
         if (FUN_001f9740(&vars->timer) != 0) {
-            FUN_L06_002ff100(moby);
+            FUN_L06_002ff100_u(moby);
             moby->state = 3;
             if (moby->prev_seq != 5) {
                 blend_moby_animation(moby, 5, 0, scale_game_frames(5));
@@ -409,7 +409,45 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002feb40.s", FUN_L06_002feb40);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff100.s", FUN_L06_002ff100);
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00300530), where it is exact; names translated to the US level program. */
+
+extern char D_L06_00174600_d[] __asm__("D_L06_00174600") __attribute__((section(".data")));
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
+extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
+extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
+extern s32 scale_game_frames_alt(s32) __asm__("FUN_001f96f8");
+extern short D_L06_00161FD4_d __asm__("D_L06_00161FD4") __attribute__((sda));
+extern short D_L06_00161FD8_d __asm__("D_L06_00161FD8") __attribute__((sda));
+extern void FUN_L00_0024f7c8_c(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+
+void FUN_L06_002ff100(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float v[4];
+    int i;
+    probe_ground_height(m + 0x10, 0, 0.5f);
+    normalize_vector_xyz(d + 0x220, D_L06_00174600_d, 1.0f);
+    FUN_L00_0024f7c8_c(m, 0, d + 0x210);
+    *(float *)(d + 0x218) = *(float *)(m + 0x18);
+    for (i = 0; i < 16; i++) {
+        float f = ConvertIntegerToFloat(i) * 0.0625f - 0.5f;
+        f = f * (*(float *)&D_L06_00161FD4_d * 0.017453292f);
+        v[0] = fast_cos_c(fast_add_rotations_c(f, *(float *)(m + 0x48))) * 0.2f;
+        v[1] = fast_sin_c(fast_add_rotations_c(f, *(float *)(m + 0x48))) * 0.2f;
+        v[2] = 0.15f;
+        add_vector_xyz((float *)(d + 0x230 + i * 16), (float *)(d + 0x210), v);
+        if (i == 0 || i == 15) {
+            float *w = (float *)(d + 0x23C + i * 16);
+            *w = *w = 0.0f;
+        } else {
+            *(float *)(d + 0x23C + i * 16) = 1.0f;
+        }
+    }
+    *(float *)(d + 0x21C) = (float)scale_game_frames_alt(*(int *)&D_L06_00161FD8_d);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff2c8.s", FUN_L06_002ff2c8);
 
 /* GS quad packet for draw_quad_packet: four corners, their colours and

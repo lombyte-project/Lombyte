@@ -4,7 +4,63 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002ea1f0.s", FUN_L10_002ea1f0);
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EB5B0), where it is exact; names translated to the US level program. */
+
+extern char *D_L10_001B0930[];
+extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
+extern void FUN_L10_002ea4e8_c(void *,short *,short *) __asm__("FUN_L10_002ea4e8");
+extern void FUN_L10_002ea7b0_c(void *,short *) __asm__("FUN_L10_002ea7b0");
+void FUN_L10_002eaa08_c(void *pos, short *timer, short *burst, float height) __asm__("FUN_L10_002eaa08");
+extern void func_L10_002EBDC8_a01(float,void *,short *,short *) __asm__("FUN_L10_002eaa08");
+
+void FUN_L10_002ea1f0(char *m) {
+ char *d=*(char **)(m+0x78);
+ switch((unsigned char)m[0x20]) {
+ case 0:
+  switch(*(int *)d) {
+  case 0:m[0x20]=1;break;
+  case 1:
+   if(*(int *)(d+4)!=-1) {
+    char *tab=D_L10_001B0930[*(int *)(d+4)];
+    char *pos=tab+0x10;
+    int n=*(int *)tab;
+    if(n>32)n=32;
+    if(n>0) {int count=n;float *height=(float *)(tab+0x1C);
+    do {*height=probe_ground_height(pos,0,0.5f);pos+=0x10;height+=4;}while(--count);}
+   }else *(float *)(d+0x88)=probe_ground_height(m+0x10,0,0.5f);
+   m[0x20]=2;break;
+  case 2:m[0x20]=3;break;
+  }
+  break;
+ case 1:
+  if(*(int *)(d+4)==-1)FUN_L10_002ea4e8_c(m+0x10,(short *)(d+8),(short *)(d+0x48));
+  else {
+   char *tab=D_L10_001B0930[*(int *)(d+4)];int n=*(int *)tab;
+   if(n>32)n=32;
+   if(n>0) {short *burst=(short *)(d+0x48);short *timer=(short *)(d+8);char *pos=tab+0x10;int count=n;
+   do {FUN_L10_002ea4e8_c(pos,timer,burst);timer++;++burst;--count;pos+=0x10;}while(count);}
+  }
+  break;
+ case 2:
+  if(*(int *)(d+4)==-1)func_L10_002EBDC8_a01(*(float *)(d+0x88),m+0x10,(short *)(d+8),(short *)(d+0x48));
+  else {
+   char *tab=D_L10_001B0930[*(int *)(d+4)];int n=*(int *)tab;
+   if(n>32)n=32;
+   if(n>0) {float *height=(float *)(tab+0x1C);short *burst=(short *)(d+0x48);short *timer=(short *)(d+8);char *pos=tab+0x10;int count=n;
+   do {func_L10_002EBDC8_a01(*height,pos,timer,burst);height+=4;++burst;++timer;--count;pos+=0x10;}while(count);}
+  }
+  break;
+ case 3:
+  if(*(int *)(d+4)==-1)FUN_L10_002ea7b0_c(m+0x10,(short *)(d+8));
+  else {
+   char *tab=D_L10_001B0930[*(int *)(d+4)];int n=*(int *)tab;
+   if(n>32)n=32;
+   if(n>0) {short *timer=(short *)(d+8);char *pos=tab+0x10;int count=n;
+   do {FUN_L10_002ea7b0_c(pos,timer);++timer;--count;pos+=0x10;}while(count);}
+  }
+  break;
+ }
+}
 #include "qcopy.h"
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern char D_L10_00167240[];

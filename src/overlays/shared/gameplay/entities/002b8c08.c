@@ -716,7 +716,66 @@ char *FUN_L01_002ef478(char *self, int idx) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef560.s", FUN_L01_002ef560);
+/* Spawns up to two particle effects on the moby, each aimed by a random direction and speed. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002F0938), where it is exact; names translated to the US level program. */
+
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern f32 random_angle_radians(void) __asm__("func_00213308");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern float D_L01_001619B8 __attribute__((sda));
+extern float D_L01_001619BC __attribute__((sda));
+extern float D_L01_001619C0 __attribute__((sda));
+extern float D_L01_001619C4 __attribute__((sda));
+extern float D_L01_001619D0 __attribute__((sda));
+extern float D_L01_001619D4 __attribute__((sda));
+extern float D_L01_001619D8 __attribute__((sda));
+extern float D_L01_001619DC __attribute__((sda));
+extern float D_L01_001619E8 __attribute__((sda));
+extern int D_L01_001619B0 __attribute__((sda));
+extern int D_L01_001619B4 __attribute__((sda));
+extern int D_L01_001619C8 __attribute__((sda));
+extern int D_L01_001619CC __attribute__((sda));
+extern int D_L01_001619E0 __attribute__((sda));
+extern int D_L01_001619E4 __attribute__((sda));
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern void FUN_L01_00287158(float *, float, float, int, int, int);
+
+void FUN_L01_002ef560(unsigned char *moby) {
+    char *d;
+    float v[3];
+    d = *(char **)(moby + 0x78);
+    if (moby[0x31] != 0) {
+    if (random_integer_below(*(int *)&D_L01_001619E0 - 1) == 0) {
+        float a = random_angle_radians();
+        float z = 0.0f;
+        float b = random_float_between(z, *(float *)&D_L01_001619E8);
+        float c = random_float_between(z, *(float *)&D_L01_001619B8) * *(float *)(d + 0x250);
+        float e = random_float_between(*(float *)&D_L01_001619B8, *(float *)&D_L01_001619BC) * *(float *)(d + 0x250);
+        int s = func_001FA898_r(random_float_between((float)*(int *)&D_L01_001619C0, (float)*(int *)&D_L01_001619C4));
+        v[0] = fast_cos(a) * b;
+        v[1] = fast_sin(a) * b;
+        v[2] = z;
+        add_vector_xyz(v, v, moby + 0x10);
+        FUN_L01_00287158(v, c, e, *(int *)&D_L01_001619B0, *(int *)&D_L01_001619B4, scale_game_frames_alt(s));
+    }
+    if (random_integer_below(*(int *)&D_L01_001619E4 - 1) == 0) {
+        float a = random_angle_radians();
+        float z = 0.0f;
+        float b = random_float_between(z, *(float *)&D_L01_001619E8);
+        float c = random_float_between(z, *(float *)&D_L01_001619D0) * *(float *)(d + 0x250);
+        float e = random_float_between(*(float *)&D_L01_001619D0, *(float *)&D_L01_001619D4) * *(float *)(d + 0x250);
+        int s = func_001FA898_r(random_float_between((float)*(int *)&D_L01_001619D8, (float)*(int *)&D_L01_001619DC));
+        v[0] = fast_cos(a) * b;
+        v[1] = fast_sin(a) * b;
+        v[2] = z;
+        add_vector_xyz(v, v, moby + 0x10);
+        FUN_L01_00287158(v, c, e, *(int *)&D_L01_001619C8, *(int *)&D_L01_001619CC, scale_game_frames_alt(s));
+    }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef770.s", FUN_L01_002ef770);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002F0E60), where it is exact; names translated to the US level program. */
 

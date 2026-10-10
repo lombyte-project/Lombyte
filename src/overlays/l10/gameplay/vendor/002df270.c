@@ -984,4 +984,139 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e8358.s", FUN_L10_002e8358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e85b8.s", FUN_L10_002e85b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e8ab0.s", FUN_L10_002e8ab0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e9648.s", FUN_L10_002e9648);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e9990.s", FUN_L10_002e9990);
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EAD50), where it is exact; names translated to the US level program. */
+
+typedef OvlQuad Vec_2EAD50;
+
+typedef struct {
+    Vec_2EAD50 home;        /* 0x00 */
+    int sound;              /* 0x10 */
+    int timer;              /* 0x14 */
+    char pad18[0x4];
+    int door;               /* 0x1C: index of the linked moby */
+} GateVars_2EAD50;
+
+typedef struct {
+    char pad00[0x10];
+    Vec_2EAD50 pos;         /* 0x10 */
+    unsigned char state;    /* 0x20 */
+    char pad21[0xF];
+    unsigned char f30;      /* 0x30 */
+    char pad31[0x3];
+    unsigned short flags;   /* 0x34 */
+    char pad36[0x12];
+    float rotz;             /* 0x48 */
+    char pad4C[0x2C];
+    GateVars_2EAD50 *vars;  /* 0x78 */
+    char pad7C[0x36];
+    unsigned short uid;     /* 0xB2 */
+    char padB4[0x4C];
+} GateMoby_2EAD50;
+
+typedef struct { char pad0[0x454]; unsigned char collected[1]; } L10State_2EAD50;
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
+extern float fast_add_rotations_alt(float) __asm__("FUN_001fa580");
+extern float fast_cos_alt(float, float) __asm__("FUN_001f9dc8");
+extern int D_0013DD4C; /* no foreign declaration */
+extern unsigned char D_0014C190_c[] __asm__("D_0014C190");
+extern int D_0015ED84;
+extern GateMoby_2EAD50 *D_L10_0015FFD8_c __asm__("D_L10_0015FFD8") __attribute__((sda));
+extern int D_L10_001BA950; /* no foreign declaration */
+extern int D_L10_001BB6B0; /* no foreign declaration */
+extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern s32 FUN_001f96b0_c(f32) __asm__("FUN_001f96b0");
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern unsigned char D_001413F4[];
+extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
+void FUN_L10_002f5a50(int i);
+extern unsigned char D_001413F4[];
+extern unsigned char D_0013DE4B_2EAD50[] __asm__("D_0013DD4C");
+extern int D_L10_001BAC60_2EAD50[] __asm__("D_L10_001BA950");
+extern L10State_2EAD50 D_L10_001BB9C0_2EAD50 __asm__("D_L10_001BB6B0");
+extern void func_L10_002F6E10_2EAD50(int) __asm__("FUN_L10_002f5a50");
+extern float func_001FA748_2EAD50(float, float) __asm__("FUN_001fa580");
+extern float func_001F9F90_2EAD50(float) __asm__("FUN_001f9dc8");
+extern float func_001F9FA8_2EAD50(float) __asm__("FUN_001f9de0");
+extern void func_001F9BD8_2EAD50(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int func_001F9878_2EAD50(float) __asm__("FUN_001fa6d0");
+extern float func_001FA898_2EAD50(float) __asm__("FUN_001f96b0");
+extern float func_001FA888_2EAD50(int) __asm__("FUN_001fa6c0");
+extern int func_001F9908_2EAD50(int *) __asm__("FUN_001f9740");
+
+void FUN_L10_002e9990(GateMoby_2EAD50 *m)
+{
+    GateVars_2EAD50 *d = m->vars;
+    float v[3];
+    Vec_2EAD50 out;
+    unsigned char st = m->state;
+
+    switch (st) {
+    case 0:
+        m->f30 = 0xFF;
+        d->home = m->pos;
+        if (D_001413F4[0] != 0 ||
+            D_L10_001BB9C0_2EAD50.collected[(short)m->uid] != 0 ||
+            ((*(int *)(D_0014C190_c + ((((short)m->uid >> 5) * 4) + (D_0015ED84 << 8))) >> (m->uid & 0x1F)) & 1) != 0) {
+            v[0] = func_001F9F90_2EAD50(func_001FA748_2EAD50(m->rotz, 3.14159265f)) * 1.5f;
+            v[1] = func_001F9FA8_2EAD50(func_001FA748_2EAD50(m->rotz, 3.14159265f)) * 1.5f;
+            v[2] = 0.0f;
+            func_001F9BD8_2EAD50(&out, &d->home, v);
+            m->state = 3;
+            m->pos = out;
+        } else {
+            if (d->door > 0) {
+                D_L10_0015FFD8_c[d->door].flags |= 2;
+            }
+            m->state = 1;
+        }
+        break;
+    case 1: {
+        unsigned char *bits;
+        if (D_001413F4[0] != 0 ||
+            D_L10_001BB9C0_2EAD50.collected[(short)m->uid] != 0 ||
+            ((*(int *)((bits = (char *)D_0014C190_c) + ((((short)m->uid >> 5) * 4) + (D_0015ED84 << 8))) >> (m->uid & 0x1F)) & 1) != 0) {
+            m->pos = d->home;
+            m->state = 3;
+            if (d->door > 0) {
+                D_L10_0015FFD8_c[d->door].flags &= 0xFFFD;
+            }
+        } else if (D_0013DE4B_2EAD50[0] != 0) {
+            if (d->door > 0) {
+                D_L10_0015FFD8_c[d->door].flags &= 0xFFFD;
+            }
+            *(int *)(bits + ((((short)m->uid >> 5) * 4) + (D_0015ED84 << 8))) |= st << (m->uid & 0x1F);
+            D_L10_001BAC60_2EAD50[(short)m->uid >> 5] |= st << (m->uid & 0x1F);
+            if (d->sound > 0) {
+                func_L10_002F6E10_2EAD50(d->sound);
+            }
+            d->timer = func_001F9878_2EAD50(func_001FA898_2EAD50(90.0f));
+            m->state = 2;
+        }
+        break;
+    }
+    case 2:
+        v[0] = func_001F9F90_2EAD50(func_001FA748_2EAD50(m->rotz, 3.14159265f)) * 1.5f *
+               func_001FA888_2EAD50(func_001F9878_2EAD50(func_001FA898_2EAD50(90.0f)) - d->timer) /
+               func_001FA898_2EAD50(90.0f);
+        v[1] = func_001F9FA8_2EAD50(func_001FA748_2EAD50(m->rotz, 3.14159265f)) * 1.5f *
+               func_001FA888_2EAD50(func_001F9878_2EAD50(func_001FA898_2EAD50(90.0f)) - d->timer) /
+               func_001FA898_2EAD50(90.0f);
+        v[2] = 0.0f;
+        func_001F9BD8_2EAD50(&out, &d->home, v);
+        m->pos = out;
+        if (func_001F9908_2EAD50(&d->timer)) {
+            m->state = 3;
+        }
+        break;
+    case 3:
+        if (D_001413F4[0] == 0 &&
+            D_L10_001BB9C0_2EAD50.collected[(short)m->uid] == 0 &&
+            (((*(int *)(D_0014C190_c + ((((short)m->uid >> 5) * 4) + (D_0015ED84 << 8))) >> (m->uid & 0x1F)) ^ 1) & 1)) {
+            m->pos = d->home;
+            m->state = 0;
+        }
+        break;
+    }
+}

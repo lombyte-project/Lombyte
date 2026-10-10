@@ -390,7 +390,172 @@ void FUN_L09_002ead30(unsigned char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eaea8.s", FUN_L09_002eaea8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eb970.s", FUN_L09_002eb970);
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002ECC50), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float pos[3];              /* 0x00 */
+    float speed;               /* 0x0C */
+    int path;                  /* 0x10 */
+    int node;                  /* 0x14 */
+    int count;                 /* 0x18 */
+    int timer;                 /* 0x1C */
+    float target[4];           /* 0x20 */
+    float centre[4];           /* 0x30 */
+    float f40;                 /* 0x40 */
+    float f44;                 /* 0x44 */
+    int init;                  /* 0x48 */
+    int mode;                  /* 0x4C */
+    struct Moby *owner;        /* 0x50 */
+} Data_2ECC50;
+
+typedef struct {
+    int n;
+    int pad[3];
+    float pts[1][4];           /* 0x10 */
+} Path_2ECC50;
+
+char *FUN_L09_002ea778_c(void) __asm__("FUN_L09_002ea778");
+extern char *D_L09_001B0630[];
+extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
+extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
+extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED6C;
+extern float vector_length_xyz_c2(void *) __asm__("FUN_001f9af0");
+extern int FUN_L09_002eaea8();
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
+extern void FUN_L09_002ead30_c(unsigned char *m) __asm__("FUN_L09_002ead30");
+extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
+extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void normalize_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9bf8");
+s32 FUN_L09_00294ae0(struct Moby *m, void *path, void *out, s32 i, s32 dir, f32 dist);
+struct Moby *FUN_L09_002eaa50_c(struct Moby *owner) __asm__("FUN_L09_002eaa50");
+extern Path_2ECC50 *D_L09_001B0930_2ECC50[] __asm__("D_L09_001B0630");
+extern struct Moby *func_L09_002EBD30_2ECC50(void *m) __asm__("FUN_L09_002eaa50");
+extern struct Moby *func_L09_002EBA58_2ECC50(void) __asm__("FUN_L09_002ea778");
+extern int func_001F9908_2ECC50(int *) __asm__("FUN_001f9740");
+extern int func_L09_00295880_2ECC50(void *, void *, void *, int, int, float) __asm__("FUN_L09_00294ae0");
+extern float func_001F9C78_2ECC50(void *, void *) __asm__("FUN_001f9ab0");
+
+void FUN_L09_002eb970(struct Moby *m) {
+    Data_2ECC50 *d = (*(Data_2ECC50 **)&m->pvars);
+    Path_2ECC50 *path;
+    float v0[4];
+    float v1[4];
+    float len;
+    float dot;
+    int i;
+
+    if (d->mode == 2) {
+        FUN_L09_002ead30_c((unsigned char *)m);
+        return;
+    }
+    if (d->mode == 1) {
+        FUN_L09_002eaea8((void *)m);
+        return;
+    }
+    if (m->unkBC == 0 && d->init == 0) {
+        d->speed = D_0015ED6C * 10.0f;
+        d->centre[0] = d->centre[1] = d->centre[2] = 0.0f;
+        if (d->path >= 0) {
+            Path_2ECC50 *ring = D_L09_001B0930_2ECC50[d->path];
+            for (i = 0; i < ring->n; i++) {
+                add_vector_xyz(d->centre, d->centre, ring->pts[i]);
+            }
+            scale_vector_xyz_c(d->centre, d->centre, 1.0f / (float)ring->n);
+            d->centre[2] = ring->pts[0][2] - 10.0f;
+            for (i = 0; i < 23; i++) {
+                struct Moby *q = func_L09_002EBA58_2ECC50();
+                if (q != 0) {
+                    Data_2ECC50 *e = (*(Data_2ECC50 **)&q->pvars);
+                    subtract_vector_xyz_c2(v0, e->target, e);
+                    normalize_vector_xyz_c2(v0, v0, random_float_between_c2(0.0f, vector_length_xyz_c2(v0) - 32.0f));
+                    add_vector_xyz(e, e, v0);
+                }
+            }
+            for (i = 0; i < 50; i++) {
+                struct Moby *q = func_L09_002EBD30_2ECC50(m);
+                if (q != 0) {
+                    Data_2ECC50 *e = (*(Data_2ECC50 **)&q->pvars);
+                    int n = random_integer_below_c2(ring->n - 2);
+                    float t = random_float_between_c2(0.0f, 1.0f);
+                    e->node = n;
+                    subtract_vector_xyz_c2(v0, ring->pts[n + 1], ring->pts[n]);
+                    scale_vector_xyz_c(v0, v0, t);
+                    add_vector_xyz(e->target, v0, ring->pts[n]);
+                    qcopy(((f32 *)&q->pos), e->target);
+                    add_vector_xyz(((f32 *)&q->pos), ring->pts[0], e);
+                    add_vector_xyz(((f32 *)&q->pos), ((f32 *)&q->pos), D_L09_00166F40);
+                    subtract_vector_xyz_c2(((f32 *)&q->pos), ((f32 *)&q->pos), e->centre);
+                }
+            }
+        }
+        d->init = 1;
+    }
+    if (m->unkBC == 0) {
+        if (random_integer_below_c2(scale_game_frames_alt(40)) == 0) {
+            func_L09_002EBA58_2ECC50();
+        }
+    }
+    m->unk30 = 0xFF;
+    m->unk32 = 0xFF;
+    if (d->path < 0) {
+        return;
+    }
+    qcopy_nc(((f32 *)&m->pos), d->target);
+    path = D_L09_001B0930_2ECC50[d->path];
+    if (m->unkBC == 0 && d->count < 50 && func_001F9908_2ECC50(&d->timer)) {
+        d->timer = scale_game_frames_alt(15) + random_integer_below_c2(scale_game_frames_alt(30));
+        func_L09_002EBD30_2ECC50(m);
+    }
+    m->rot.x = fast_add_rotations_c(m->rot.x, d->f40);
+    m->rot.y = fast_add_rotations_c(m->rot.y, d->f44);
+    d->node = func_L09_00295880_2ECC50(m, path, ((f32 *)&m->pos), d->node, 1, d->speed);
+    if (d->node == path->n - 1) {
+        if (m->unkBC != 0) {
+            (*(Data_2ECC50 **)&(*(Data_2ECC50 **)&m->pvars)->owner->pvars)->count--;
+            mark_moby_for_removal_c2(m);
+        } else {
+            d->node = 0;
+            qcopy(((f32 *)&m->pos), path->pts[0]);
+        }
+    }
+    if (d->node == 0) {
+        subtract_vector_xyz_c2(v0, path->pts[1], path->pts[0]);
+        len = vector_length_xyz_c2(v0);
+        normalize_vector_xyz_c2(v0, v0, 1.0f);
+        subtract_vector_xyz_c2(v1, ((f32 *)&m->pos), path->pts[0]);
+        dot = func_001F9C78_2ECC50(v1, v0);
+        if (dot < 0.0f) {
+            dot = 0.0f;
+        }
+        m->unk23 = (int)(dot * 128.0f / len);
+        if (m->unk23 > 0x80) {
+            m->unk23 = 0x80;
+        }
+    } else if (d->node == path->n - 2) {
+        subtract_vector_xyz_c2(v0, path->pts[path->n - 2], path->pts[path->n - 1]);
+        len = vector_length_xyz_c2(v0);
+        normalize_vector_xyz_c2(v0, v0, 1.0f);
+        subtract_vector_xyz_c2(v1, ((f32 *)&m->pos), path->pts[path->n - 1]);
+        dot = func_001F9C78_2ECC50(v1, v0);
+        if (dot < 0.0f) {
+            dot = 0.0f;
+        }
+        m->unk23 = (int)(dot * 128.0f / len);
+        if (m->unk23 > 0x80) {
+            m->unk23 = 0x80;
+        }
+    } else {
+        m->unk23 = 0x80;
+    }
+    qcopy(d->target, ((f32 *)&m->pos));
+    add_vector_xyz(((f32 *)&m->pos), ((f32 *)&m->pos), d);
+    add_vector_xyz(((f32 *)&m->pos), ((f32 *)&m->pos), D_L09_00166F40);
+    subtract_vector_xyz_c2(((f32 *)&m->pos), ((f32 *)&m->pos), d->centre);
+}
 /* spawns a moby of the given class at a source moby's position */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EEEB0), where it is exact; names translated to the US level program. */
 

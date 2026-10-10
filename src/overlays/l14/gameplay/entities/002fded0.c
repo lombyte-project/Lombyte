@@ -5,7 +5,132 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fded0.s", FUN_L14_002fded0);
+#include "qcopy.h"
+
+/* Spawns the effect pieces for a moby: two sparks, the ring of three and a final coloured one. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_002FF358), where it is exact; names translated to the US level program. */
+
+typedef float Vec_2FF358[4] __attribute__((aligned(16)));
+
+typedef struct Moby_2FF358 {
+    char pad0[0x10];
+    Vec_2FF358 pos; /* 0x10 */
+    char pad20[0xA0];
+    Vec_2FF358 right; /* 0xC0 */
+    Vec_2FF358 fwd; /* 0xD0 */
+    Vec_2FF358 up; /* 0xE0 */
+} Moby_2FF358;
+
+typedef struct Part_2FF358 {
+    char pad0[3];
+    unsigned char b3;
+    char pad4[4];
+    unsigned char b8;
+    char pad9;
+    short life; /* 0xA */
+    char padC[0x14];
+    struct PartSub_2FF358 {
+        int f0;
+        int f4;
+        char pad8[2];
+        unsigned char bA;
+        unsigned char bB;
+    } sub; /* 0x20 */
+} Part_2FF358;
+
+extern float D_L14_0015F580;
+extern float D_L14_00161F90 __attribute__((sda));
+extern float D_L14_00161F94 __attribute__((sda));
+extern float D_L14_00161F98 __attribute__((sda));
+extern float D_L14_00161F9C __attribute__((sda));
+extern float D_L14_00161FA0 __attribute__((sda));
+extern int D_L14_00161FA4 __attribute__((sda));
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+int FUN_L00_00257b90(int lo, int hi);
+unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
+extern Part_2FF358 *func_L00_0026DEA0_2FF358(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
+extern void func_001F9C30_2FF358(void *, void *, float) __asm__("FUN_001f9a68");
+extern void func_001F9BD8_2FF358(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int func_002140B0_2FF358(int) __asm__("FUN_00213260");
+extern int func_001F9850_2FF358(int) __asm__("FUN_001f96f8");
+extern int func_L00_00258BC8_2FF358(int, int) __asm__("FUN_L00_00257b90");
+
+void FUN_L14_002fded0(Moby_2FF358 *p) {
+    Vec_2FF358 A;
+    Vec_2FF358 B;
+    Vec_2FF358 C;
+    Part_2FF358 *e;
+    int i, j, n, m, k, col;
+    float s;
+
+    func_001F9C30_2FF358(A, p->right, D_L14_00161F90);
+    func_001F9BD8_2FF358(B, p->pos, A);
+    func_001F9C30_2FF358(A, p->up, D_L14_00161F98);
+    func_001F9BD8_2FF358(B, B, A);
+    qcopy(C, B);
+    func_001F9C30_2FF358(A, p->fwd, D_L14_00161F94);
+    func_001F9BD8_2FF358(B, B, A);
+    for (i = 1; i >= 0; i--) {
+        n = func_002140B0_2FF358(0x10);
+        k = func_002140B0_2FF358(2) == 0 ? n : -n;
+        e = func_L00_0026DEA0_2FF358(B, 0.2f, 1.0f, 0.9f, k, &D_L14_0015F580, 200000.0f, D_L14_00161FA4);
+        if (e != 0) {
+            struct PartSub_2FF358 *f = &e->sub;
+
+            e->life = func_001F9850_2FF358(0xC);
+            f->f4 = 2;
+            f->bA = 0x7F;
+            f->bB = e->life;
+        }
+    }
+    func_001F9C30_2FF358(A, p->right, D_L14_00161F9C);
+    s = 100000.0f;
+    func_001F9BD8_2FF358(B, B, A);
+    n = 0x10;
+    m = func_001F9850_2FF358(2);
+    for (j = 0; j < 3; j++) {
+        e = func_L00_0026DEA0_2FF358(B, 0.05f, 1.0f, 1.0f, n, &D_L14_0015F580, s, 0x7FFFFFFF);
+        if (e != 0) {
+            struct PartSub_2FF358 *f = &e->sub;
+
+            e->life = m;
+            e->b8 = func_002140B0_2FF358(0xFF);
+            f->f4 = 2;
+            f->bA = 0x7F;
+            f->bB = e->life;
+        }
+        n = -n;
+        m = m << 1;
+        s = s - 20000.0f;
+    }
+    s = 300000.0f;
+    func_001F9C30_2FF358(A, p->right, D_L14_00161FA0);
+    func_001F9BD8_2FF358(B, C, A);
+    col = func_L00_00258BC8_2FF358(0x40, 0x80);
+    k = (col << 8) | 0x7F000000;
+    col = col | ((col << 16) | k);
+    if (func_002140B0_2FF358(3)) {
+        Part_2FF358 *g;
+
+        n = func_002140B0_2FF358(4);
+        k = func_002140B0_2FF358(2) == 0 ? n : -n;
+        g = func_L00_0026DEA0_2FF358(B, 0.05f, 1.0f, 1.0f, k, &D_L14_0015F580, s, col);
+        if (g != 0) {
+            struct PartSub_2FF358 *f = &g->sub;
+
+            g->life = func_001F9850_2FF358(0x3C);
+            if (func_002140B0_2FF358(2)) {
+                g->b3 = 0x44;
+            }
+            f->bA = 0x40;
+            f->f4 = 2;
+            f->bB = func_001F9850_2FF358(0x3C);
+        }
+    }
+}
 #include "sda.h"
 
 /* deletes the linked moby and then the owner if still active */

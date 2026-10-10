@@ -722,7 +722,77 @@ void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
     add_vector_xyz(out, out, v);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e5188.s", FUN_L08_002e5188);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e88d8.s", FUN_L08_002e88d8);
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9CB0), where it is exact; names translated to the US level program. */
+
+typedef struct Moby Moby;
+
+extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED6C;
+extern s32 allocate_voice_for_target_entry_alt(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern void *FUN_L00_0025a420(void *, int, int);
+extern void func_0022ED80_2E9CB0(int, int, int) __asm__("FUN_0022da68");
+
+void FUN_L08_002e88d8(char *m) {
+    char *data = *(char **)(m + 0x78);
+    char *base = data + 0x60;
+    char **p = (char **)base;
+    char **sq;
+    int n = 0;
+    int idx = 0;
+    int r = -1;
+    int i;
+    for (i = 0; i < 13; i++, p += 4) {
+        if (*p != 0) {
+            if (FUN_L00_0025a420(*p, 0x10000, 0) != 0) {
+                if (i < 3) {
+                    if (n <= 0) { n = 1; r = 1; }
+                } else if (i < 5) {
+                    if (n < 2) { n = 2; r = 1; }
+                } else {
+                    if (n < 4) { n += 4; idx = i; r = 2; }
+                }
+                ((unsigned char *)*p)[0xA4] = 0xFF;
+            }
+        }
+    }
+    *(unsigned short *)(data + 0x13C) += n;
+    if (*(short *)(data + 0x13C) >= 8) {
+        *(short *)(data + 0x13C) = *(short *)(data + 0x13C) % 8;
+        if (idx != 0) {
+            int o1 = idx * 16;
+            char **q = (char **)(base + o1);
+            char *t = *q;
+            char *d2;
+            d2 = *(char **)(t + 0x78);
+            FUN_L00_0025f090(m, t + 0x10, -1, 2.0f, 13.0f);
+            subtract_vector_xyz(d2, *q + 0x10, *(char **)(o1 + data + 0x64) + 0x10);
+            normalize_vector_xyz(d2, d2, D_0015ED6C * 10.0f);
+            (*q)[0x20] = 1;
+            *q = 0;
+            return;
+        } else {
+            int s = truncate_float_to_s32_c(random_float_between_c(0.0f, 23.0f));
+                        char *b2 = base;
+            for (i = 0; i < 8; i++) {
+                int k = (i + s) % 8 + 5;
+                int off = k * 16;
+                base = b2 + off; sq = (char **)base;
+                if (*sq != 0) {
+                    char *d2 = *(char **)(*sq + 0x78);
+                    FUN_L00_0025f090(m, *sq + 0x10, -1, 2.0f, 13.0f);
+                    subtract_vector_xyz(d2, *sq + 0x10, *(char **)(data + off + 0x64) + 0x10);
+                    normalize_vector_xyz(d2, d2, D_0015ED6C * 10.0f);
+                    (*sq)[0x20] = 1;
+                    *sq = 0;
+                    return;
+                }
+            }
+            m[0x20] = 0x63;
+        }
+    }
+    if (r >= 0) func_0022ED80_2E9CB0(r, 0, (int)m);
+}
 /* Flying gunship: cruises one path and fires at its target, or circles a second path and fires at random. */
 /* Child moby slot, as FUN_L08_002e8788 fills them. */
 typedef struct {
@@ -772,7 +842,7 @@ extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
 extern struct Moby *FUN_L08_002de3e0(void *, struct Moby *, void *, f32, f32);
 extern void FUN_L08_002e8788(char *);
-extern void FUN_L08_002e88d8(struct Moby *);
+extern void FUN_L08_002e88d8_u(struct Moby *) __asm__("FUN_L08_002e88d8");
 extern void FUN_L08_002e8ba0(struct Moby *);
 
 void FUN_L08_002e8cd0(struct Moby *moby) {
@@ -827,7 +897,7 @@ void FUN_L08_002e8cd0(struct Moby *moby) {
                          FUN_001f9e90(vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
                                       vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
                          &vars->turn_speed, 0.004f, 0.3f, 0.02f);
-        FUN_L08_002e88d8(moby);
+        FUN_L08_002e88d8_u(moby);
         FUN_L08_002e8ba0((char *)moby);
         qcopy(&point, &vars->follow[0].path->points[waypoint]);
         if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {

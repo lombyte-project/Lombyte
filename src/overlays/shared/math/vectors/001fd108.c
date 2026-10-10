@@ -69,7 +69,13 @@ void FUN_L00_001fea18(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fefc8.s", FUN_L00_001fefc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ff250.s", FUN_L00_001ff250);
+/* Ported from rac1-decomp (src/overlays/shared/fastfunc_001FEF78.c: func_L00_001FF200), where it is exact; names translated to the US level program. */
+
+void FUN_L00_001ff250(s64 *v) {
+    v[0] = 0;
+    __asm__ volatile ("nop");
+    ((s32 *)v)[2] = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ff290.s", FUN_L00_001ff290);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ff2c0.s", FUN_L00_001ff2c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ff318.s", FUN_L00_001ff318);

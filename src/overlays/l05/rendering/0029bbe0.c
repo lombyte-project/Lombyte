@@ -2,7 +2,43 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0029bbe0.s", FUN_L05_0029bbe0);
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/partupd_0029CA28.c: func_L05_0029CA28), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern unsigned char *D_L05_001B25C0 __attribute__((section(".data")));
+extern unsigned char *FUN_L00_002678b8(int);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+unsigned char *FUN_L05_0029bbe0(void *pos, void *vel, int a2, int a3, int a4, float a) {
+    unsigned char *p = FUN_L00_002678b8(0x30);
+    unsigned char *q;
+    if (p != 0) {
+        int m;
+        float two;
+        qcopy(p + 0x10, pos);
+        q = p + 0x20;
+        m = a4 & 0xFFFFFF;
+        two = 2.0f;
+        *(int *)(p + 4) = m;
+        p[9] = func_001FA898_r(two) + 0x10;
+        p[3] = 0x44;
+        p[1] = 0;
+        p[2] = *D_L05_001B25C0;
+        *(float *)(p + 0xC) = a * 210000.0f;
+        p[8] = random_integer_below(0x100);
+        qcopy(q, vel);
+        *(float *)(q + 0x10) = two / ConvertIntegerToFloat(a2);
+        *(short *)(p + 0xA) = a2;
+        *(short *)(q + 0x1C) = a3;
+        *(int *)(q + 0x14) = m;
+        *(int *)(q + 0x18) = a4;
+    }
+    return p;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

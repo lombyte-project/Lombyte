@@ -444,7 +444,7 @@ extern short D_L16_00161E00_d __asm__("D_L16_00161E00") __attribute__((sda));
 extern short D_L16_00161E04_d __asm__("D_L16_00161E04") __attribute__((sda));
 extern short D_L16_00161E08_d __asm__("D_L16_00161E08") __attribute__((sda));
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L16_002e58d8(void);
+extern void FUN_L16_002e58d8_u(void) __asm__("FUN_L16_002e58d8");
 extern void FUN_L16_002e5d30_c(int) __asm__("FUN_L16_002e5d30");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int func_0022ED80_6B70(int, int, void *) __asm__("FUN_0022da68");
@@ -475,7 +475,7 @@ void FUN_L16_002e5708(struct Moby *m) {
                                       ((float *)&D_L16_00161E08_d)[i] * DEG_TO_RAD * frame_time);
         }
         if (m->unk31)
-            enqueue_callback_list_1_alt(FUN_L16_002e58d8, m);
+            enqueue_callback_list_1_alt(FUN_L16_002e58d8_u, m);
         if (*(int *)(d + 0x20) != -1 && FUN_L16_002e5cd0(*(int *)(d + 0x20))) {
             m->unk94 = 0;
             m->state = 2;
@@ -490,7 +490,117 @@ void FUN_L16_002e5708(struct Moby *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e58d8.s", FUN_L16_002e58d8);
+/* Draw the animated ring quads and four rotating accents around a moby. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E6D40), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float position[4][4];
+    int color[4];
+    float uv[4][2];
+    unsigned long flags, texture, giftag, primitive;
+} RingQuad;
+
+typedef struct { char pad00[8]; float yaw, phase; float cardinal_angles[4]; } RingData;
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
+extern float D_L16_001D9780[4][2];
+extern float D_L16_001D9A70[4][2];
+extern float D_L16_001D97C0[4][4];
+extern float D_L16_001D9AD0[4][4];
+extern float D_L16_001D9A50[4][2];
+extern float D_L16_001D97A0[4][2];
+extern float D_L16_001D9A90[4][4];
+extern float D_L16_001D9800[4][4];
+extern int D_L16_00161E18 __attribute__((sda));
+extern int D_L16_00161E1C __attribute__((sda));
+extern int D_L16_00161E20 __attribute__((sda));
+extern int D_L16_00161E28 __attribute__((sda));
+extern int D_L16_00161E2C __attribute__((sda));
+extern int D_L16_00161E30 __attribute__((sda));
+extern int D_L16_00161E34 __attribute__((sda));
+extern int D_L16_00161E38 __attribute__((sda));
+extern int D_L16_00161E3C __attribute__((sda));
+extern int D_L16_00161E40 __attribute__((sda));
+extern int FUN_001fa6e0(int,int,float);
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
+
+void FUN_L16_002e58d8(char *m) {
+    RingQuad quad;
+    float transform[4][4], rotation[4];
+    RingData *data = *(RingData **)(m + 0x78);
+    float scale = *(float *)(m + 0x2C) / *(float *)(*(char **)(m + 0x24) + 0x24);
+    float *u, *v;
+    float *angles;
+    int *color_base;
+    float phase, angle_step, phase_step;
+    int i;
+    qcopy(rotation, m + 0x40);
+    qcopy(transform[3], m + 0x10);
+    quad.texture = get_effect_texture(*(int *)&D_L16_00161E38);
+    u = &quad.uv[0][0];
+    v = &quad.uv[0][1];
+    quad.giftag = 0xFF9000000260UL;
+    quad.primitive = *(int *)&D_L16_00161E28;
+    quad.primitive |= (unsigned long)*(int *)&D_L16_00161E2C << 2;
+    quad.primitive |= (unsigned long)*(int *)&D_L16_00161E30 << 4;
+    quad.primitive |= (unsigned long)*(int *)&D_L16_00161E34 << 6;
+    quad.primitive |= 0x8000000000UL;
+    quad.flags = 0;
+    color_base = quad.color;
+    {
+        int k;
+        for (k = 0; k < 4; ++k) {
+            u[k * 2] = D_L16_001D9780[k][0];
+            v[k * 2] = D_L16_001D9780[k][1];
+            color_base[k] = *(int *)&D_L16_00161E1C;
+            qcopy(quad.position[k], D_L16_001D97C0[k]);
+            scale_vector_xyz(quad.position[k], quad.position[k], scale);
+        }
+    }
+    angles = data->cardinal_angles;
+    angle_step = 6.2831855f / ConvertIntegerToFloat(*(int *)&D_L16_00161E40);
+    phase_step = 3.0f / ConvertIntegerToFloat(*(int *)&D_L16_00161E40);
+    phase = data->phase;
+    while (phase < 0.0f) phase += 1.0f;
+    while (phase > 1.0f) phase -= 1.0f;
+    for (i = 0; i < *(int *)&D_L16_00161E40;) {
+        float blend;
+        int color, j;
+        rotation[0] = fast_add_rotations_c(data->yaw, (float)i * angle_step);
+        vu_euler_rotation_basis(transform, rotation);
+        if (phase > 0.5f) blend = (-phase + 1.0f) + (-phase + 1.0f);
+        else blend = phase + phase;
+        ++i;
+        color = FUN_001fa6e0(*(int *)&D_L16_00161E18, *(int *)&D_L16_00161E1C, blend);
+        for (j = 1; j >= 0; --j) color_base[j] = color;
+        phase += phase_step;
+        if (phase > 1.0f) phase -= 1.0f;
+        draw_geometry_quad(&quad, transform, 0);
+    }
+    quad.texture = get_effect_texture(*(int *)&D_L16_00161E3C);
+    {
+        int k;
+        int solid_color = *(int *)&D_L16_00161E20;
+        for (k = 0; k < 4; ++k) {
+            u[k * 2] = D_L16_001D97A0[k][0];
+            v[k * 2] = D_L16_001D97A0[k][1];
+            color_base[k] = solid_color;
+            qcopy(quad.position[k], D_L16_001D9800[k]);
+        }
+    }
+    {
+        int count;
+        for (count = 3; count >= 0; --count) {
+            rotation[0] = angles[3 - count];
+            vu_euler_rotation_basis(transform, rotation);
+            draw_geometry_quad(&quad, transform, 0);
+        }
+    }
+}
 /* Returns 1 when every moby in the list is active, 0 if any is not or the list is empty. */
 extern short *D_L16_001ABCC0_5cd0[] __asm__("D_L16_001ABCC0");
 typedef struct {

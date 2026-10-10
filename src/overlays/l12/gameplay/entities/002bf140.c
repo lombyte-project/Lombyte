@@ -1437,7 +1437,97 @@ void FUN_L12_002ebca8(struct Moby *m, int flag) {
         m->flags = (m->flags | 0x41) & 0xEFFF;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ebea8.s", FUN_L12_002ebea8);
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002ED228), where it is exact; names translated to the US level program. */
+
+extern char *D_L12_001B0930[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
+extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
+extern float D_0015ED6C;
+extern short D_L12_001619A8_d __asm__("D_L12_001619A8") __attribute__((sda));
+extern short D_L12_001619AC_d __asm__("D_L12_001619AC") __attribute__((sda));
+extern short D_L12_001619B0_d __asm__("D_L12_001619B0") __attribute__((sda));
+extern void FUN_L01_0028b410(char *p);
+extern void FUN_L12_002ebca8_c(char *m, int flag) __asm__("FUN_L12_002ebca8");
+extern void add_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_L01_00275690(char *vec, float scale);
+extern int func_L01_00276680_i(char *vec, float scale) __asm__("FUN_L01_00275690");
+
+void FUN_L12_002ebea8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float A[4];
+    float B[4];
+    float C[4];
+    float E[4];
+    if (d != 0) {
+        int r = func_L01_00276680_i(m, ConvertIntegerToFloat(*(short *)(m + 0x32)));
+        FUN_L12_002ebca8_c(m, r == -1);
+        switch ((unsigned char)m[0x20]) {
+        case 0:
+            if (*(int *)(d + 0x74) != -1) {
+                char *tbl;
+                int idx;
+                int cnt;
+                FUN_L01_0028b410(d + 0x60);
+                tbl = D_L12_001B0930[*(int *)(d + 0x74)];
+                *(char **)(d + 0x70) = tbl;
+                idx = *(int *)(d + 0xA0);
+                cnt = *(int *)tbl - 1;
+                if (cnt < idx) idx = cnt;
+                qcopy((m + 0x10), tbl + idx * 16 + 0x10);
+                d[0x2A] = 0x10;
+                d[0x28] = 2;
+                d[0x2C] = 0x2C;
+                *(float *)(d + 0x30) = 1.4f;
+                d[0x2B] = 1;
+                *(int *)(d + 0x60) = idx;
+                m[0x20] = 1;
+                *(short *)(m + 0x32) = 0xAA;
+                *(unsigned short *)(m + 0x34) |= 0x1000;
+            }
+            break;
+        case 1: {
+            char *p = d + 0x60;
+            int cur = *(int *)p;
+            char *tbl = *(char **)(p + 0x10);
+            int step = *(char *)(p + 4);
+            int n = *(int *)tbl;
+            int prev = (cur + n - step) % n;
+            int next = (cur + n + step) % n;
+            float h;
+            float ang;
+            qcopy(A, tbl + prev * 16 + 0x10);
+            qcopy(B, tbl + cur * 16 + 0x10);
+            qcopy(C, tbl + next * 16 + 0x10);
+            subtract_vector_xyz_c(A, B, A);
+            subtract_vector_xyz_c(B, C, B);
+            h = FUN_001f9e90(A[0], A[1]);
+            h = fast_subtract_rotations(h, FUN_001f9e90(B[0], B[1]));
+            ang = h / vector_length_xyz_c(A);
+            *(float *)(m + 0x40) = fast_add_rotations_c(*(float *)(m + 0x40),
+                fast_subtract_rotations(ang * *(float *)&D_L12_001619AC_d, *(float *)(m + 0x40)) / *(float *)&D_L12_001619B0_d);
+            if (distance_xyz(m + 0x10, C) < *(float *)&D_L12_001619A8_d * D_0015ED6C) {
+                char *t3;
+                *(int *)(d + 0x60) = next;
+                t3 = *(char **)(p + 0x10);
+                if (next == *(int *)t3 - 1) {
+                    qcopy((m + 0x10), t3 + 0x10);
+                }
+            }
+            subtract_vector_xyz_c(E, C, m + 0x10);
+            normalize_vector_xyz(E, E, *(float *)&D_L12_001619A8_d * D_0015ED6C);
+            add_vector_xyz_c2(m + 0x10, m + 0x10, E);
+            *(float *)(m + 0x48) = fast_add_rotations_c(*(float *)(m + 0x48),
+                fast_subtract_rotations(FUN_001f9e90(E[0], E[1]), *(float *)(m + 0x48)) / *(float *)&D_L12_001619B0_d);
+            *(float *)(m + 0x44) = 0.52359879f;
+            break;
+        }
+        }
+    }
+}
 
 #define NOT_SDA
 
