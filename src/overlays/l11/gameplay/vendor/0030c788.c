@@ -2,12 +2,140 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
 #include "asm.h"
 #include "rnc/overlay/moby_anim.h"
+#include "qcopy.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030c788.s", FUN_L11_0030c788);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030d1b0.s", FUN_L11_0030d1b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030d800.s", FUN_L11_0030d800);
+typedef struct {
+    struct Moby *grid[4][6];
+    int link;
+    int from;
+    int to;
+    float t;
+    float vel;
+    float prev;
+    float fade;
+} GridVars_d800;
+
+extern int D_L11_0015FFD8_d800 __asm__("D_L11_0015FFD8");
+extern int D_L11_001600EC_d800 __asm__("D_L11_001600EC");
+extern int D_L11_00161F54 __attribute__((sda));
+extern float D_L11_00161F58 __attribute__((sda));
+extern float D_L11_00161F5C __attribute__((sda));
+extern float D_L11_00161F60 __attribute__((sda));
+extern float D_L11_0015F3FC __attribute__((sda));
+extern struct Moby *CreateMoby_d800(int) __asm__("FUN_0020c4f8");
+extern void FUN_0022da68_d800(int, int, struct Moby *) __asm__("FUN_0022da68");
+extern int FUN_001f96f8(int);
+extern float approach_value_d800(float *, float, float) __asm__("FUN_00213ed8");
+extern float AbsoluteFloat_d800(float) __asm__("FUN_001f99c0");
+extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
+extern void approach_d800(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern void lerp_vector_d800(void *, void *, void *, float) __asm__("FUN_001f9a40");
+extern void FUN_001f99f8(void *);
+extern float sub_rot_d800(float, float) __asm__("FUN_001fa5c8");
+extern float add_rot_d800(float, float) __asm__("FUN_001fa580");
+extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaa30(void *);
+extern void FUN_L00_002eac18(int);
+void FUN_L11_0030dd18(struct Moby *m);
+
+/* Spawns the 4x6 child grid, waits for its linked moby, then fades and blends between two D_L11_001600EC
+   points (pos at 0x30, rotation at 0x70) before handing back to the hero. */
+void FUN_L11_0030d800(struct Moby *m) {
+    GridVars_d800 *pv = (GridVars_d800 *)m->pvars;
+    Vec4f pos;
+    Vec4f rot;
+    int row;
+    int col;
+    float old;
+
+    switch (m->state) {
+    case 0:
+        for (row = 0; row < 4; row++) {
+            for (col = 0; col < 6; col++) {
+                pv->grid[row][col] = CreateMoby_d800(0x4B7);
+                pv->grid[row][col]->unk32 = 0x40;
+                pv->grid[row][col]->unk31 = 1;
+                pv->grid[row][col]->spawn_frame = hero.moby->spawn_frame;
+                pv->grid[row][col]->flags = m->flags;
+                qcopy_nc(&pv->grid[row][col]->pos, &m->pos);
+                qcopy(&pv->grid[row][col]->rot, &m->rot);
+            }
+        }
+        pv->t = 0.0f;
+        m->state = 1;
+        break;
+    case 1: {
+        struct Moby *link = (struct Moby *)((pv->link << 8) + D_L11_0015FFD8_d800);
+        if (link->unkBC == 1) {
+            m->state = 2;
+            pv->fade = -1.0f;
+            D_L11_00161F54 = 0;
+            FUN_0022da68_d800(0, 0, m);
+        } else if (link->unkBC == 2) {
+            pv->t = 1.0f;
+            m->state = 5;
+        }
+        break;
+    }
+    case 2:
+        old = pv->fade;
+        approach_value_d800(&pv->fade, 1.0f, 1.0f / (float)FUN_001f96f8(20));
+        D_L11_0015F3FC = 1.0f - AbsoluteFloat_d800(pv->fade);
+        if (old < 0.0f && 0.0f <= pv->fade) {
+            struct Moby *link = (struct Moby *)(D_L11_0015FFD8_d800 + (pv->link << 8));
+            char *cam;
+            FUN_L00_00216f90(&link->pos, &link->rot, 0x72, 1);
+            cam = (char *)(D_L11_001600EC_d800 + (pv->from << 7));
+            FUN_L00_002eaaa0(cam + 0x30, cam + 0x70, 1, 0, 0);
+        } else if (1.0f <= pv->fade) {
+            m->state = 3;
+        }
+        break;
+    case 3:
+        pv->prev = pv->t;
+        approach_d800(&pv->t, &pv->vel, 1.0f, D_L11_00161F58 * frame_time_sq, D_L11_00161F5C * frame_time_sq,
+                      D_L11_00161F60 * frame_time);
+        lerp_vector_d800(&pos, (char *)(D_L11_001600EC_d800 + (pv->from << 7)) + 0x30,
+                         (char *)(D_L11_001600EC_d800 + (pv->to << 7)) + 0x30, pv->t);
+        FUN_001f99f8(&rot);
+        rot.x = sub_rot_d800(((float *)((pv->to << 7) + D_L11_001600EC_d800))[28],
+                             ((float *)((pv->from << 7) + D_L11_001600EC_d800))[28]) * pv->t;
+        rot.x = add_rot_d800(((float *)((pv->from << 7) + D_L11_001600EC_d800))[28], rot.x);
+        rot.y = sub_rot_d800(((float *)((pv->to << 7) + D_L11_001600EC_d800))[29],
+                             ((float *)((pv->from << 7) + D_L11_001600EC_d800))[29]) * pv->t;
+        rot.y = add_rot_d800(((float *)((pv->from << 7) + D_L11_001600EC_d800))[29], rot.y);
+        rot.z = sub_rot_d800(((float *)((pv->to << 7) + D_L11_001600EC_d800))[30],
+                             ((float *)((pv->from << 7) + D_L11_001600EC_d800))[30]) * pv->t;
+        rot.z = add_rot_d800(((float *)((pv->from << 7) + D_L11_001600EC_d800))[30], rot.z);
+        FUN_L00_002ea9d8(&pos);
+        FUN_L00_002eaa30(&rot);
+        if (1.0f <= pv->t) {
+            m->state = 4;
+            pv->fade = -1.0f;
+        }
+        break;
+    case 4:
+        old = pv->fade;
+        approach_value_d800(&pv->fade, 1.0f, 1.0f / (float)FUN_001f96f8(20));
+        D_L11_0015F3FC = 1.0f - AbsoluteFloat_d800(pv->fade);
+        if (old < 0.0f && 0.0f <= pv->fade) {
+            FUN_L00_00216f90(&hero.motion.pos, &hero.motion.rot, 0, 1);
+            FUN_L00_002eac18(3);
+        } else if (1.0f <= pv->fade) {
+            m->state = 5;
+        }
+        break;
+    case 5:
+        break;
+    }
+    FUN_L11_0030dd18(m);
+}
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
