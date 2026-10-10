@@ -2934,4 +2934,149 @@ void FUN_L00_00213de8(float s) {
     f[0x194 / 4] = f[0x194 / 4] * s;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213e68.s", FUN_L00_00213e68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00214108.s", FUN_L00_00214108);
+#include "types.h"
+#include "rnc/gameplay/hero.h"
+
+extern Vec4 hero_velocity __asm__("D_0013F430");
+extern char hero_pos[] __asm__("D_0013F3D0");
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+extern u8 D_0013D4C2 __attribute__((section(".data")));
+extern s32 D_0013CAE0 __attribute__((section(".data")));
+
+extern s32 FUN_L00_0020d498(s32);
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
+extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
+extern void FUN_L00_00233810(void *, void *, f32);
+extern void FUN_L00_002334d0(void *, void *, f32);
+extern f32 approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern f32 sqrtf_(f32) __asm__("FUN_001f9988");
+
+struct Curve {
+    s32 start;
+    s32 end;
+    u8 pad8[0xC];
+    struct HeroVelocityKey *keys;
+    s32 key;
+    s32 frames;
+    f32 value;
+};
+
+void FUN_L00_00214108(void) {
+    struct Curve *c;
+    f32 z;
+    Vec4 offset;
+    f32 speed;
+    f32 max_speed;
+    s32 boost;
+    s32 no_lift;
+    f32 d;
+    f32 floor;
+    f32 g;
+
+    if (hero.state.current == 0xE) {
+        max_speed = D_0015ED6C * 7.0f;
+        boost = 0;
+        if (D_0013D4C2 != 0 && hero.unk22D8 == 0) {
+            boost = FUN_L00_0020d498(3) == 3;
+        }
+        subtract_vector_xyz(&offset, hero_pos, hero_pos + 0x380);
+        d = gravity_z(&offset);
+        if (boost) {
+            if (2.7f < d) {
+                max_speed *= 0.47f;
+            } else if (2.1f < d) {
+                max_speed *= 0.7f;
+            }
+        } else {
+            if (2.1f < d) {
+                max_speed *= 0.45f;
+            } else if (1.7f < d) {
+                max_speed *= 0.7f;
+            }
+        }
+        if (FUN_L00_0020d498(3) == 3 && hero.unk22D8 == 0) {
+            max_speed *= 1.25f;
+        }
+        if (hero.state_timer < scale_game_frames(8)) {
+            speed = gravity_z(&hero.motion.velocity);
+            if (speed < max_speed) {
+                approach_value(&speed, max_speed, D_0015ED70 * 150.0f);
+            }
+            gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, speed);
+        }
+    } else {
+        no_lift = 0;
+        if (hero.unk428 == 0.0f && hero.unk42C == 0.0f) {
+            no_lift = 1;
+        }
+        if ((D_0013CAE0 & 0x40) || no_lift || hero.state.current == 0x12) {
+            if (hero.unk430 < hero.unk48C && !(scale_game_frames(15) < hero.state_timer)) {
+                hero.unk430 += (hero.unk48C - hero.unk488) / hero.unk498;
+                if (hero.unk48C < hero.unk430) {
+                    hero.unk430 = hero.unk48C;
+                }
+                hero.unk428 += sqrtf_((hero.unk430 + hero.unk430) * hero.unk4A0) - hero.unk42C - hero.unk428;
+            }
+        }
+        if (!(hero.state_timer < hero.unk420) && 0.0f < hero.unk428) {
+            FUN_L00_00233810(&hero.motion.velocity, &hero.motion.velocity, hero.unk428);
+            hero.unk42C += hero.unk428;
+            hero.unk428 = 0.0f;
+        }
+        if (hero.unk41C != 0) {
+            if (hero.state_timer < hero.unk3D0) {
+                goto tail;
+            }
+            if (hero.state_timer < hero.unk3D4) {
+                c = (struct Curve *)&hero.unk3D0;
+                c->frames++;
+                while (c->key == -1 || !(c->frames < scale_game_frames(c->keys[c->key].frames))) {
+                    c->key++;
+                    c->frames = 0;
+                    if (c->keys[c->key].value != -999999.0f) {
+                        c->value = c->keys[c->key].value * D_0015ED70;
+                    }
+                }
+                if (c->frames > 0) {
+                    c->value += c->keys[c->key].delta * D_0015ED70;
+                }
+                FUN_L00_00233810(&hero_velocity, &hero_velocity, c->value);
+            }
+        }
+    }
+tail:
+    if (hero.state.current == 0x1C || hero.state.current == 0x4C) {
+        if (hero.state_timer < scale_game_frames(10)) {
+            return;
+        }
+    }
+    if (hero.state_timer < hero.unk420) {
+        gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
+        FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, D_0015ED70 * 48.0f);
+    } else {
+        FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, hero.unk4A0);
+        z = gravity_z(&hero.motion.velocity);
+        g = gravity_z(&hero.motion.unk110);
+        floor = g - 0.1f;
+        if (z < floor) {
+            z = floor;
+        }
+        floor = -(D_0015ED6C * 50.0f);
+        if (z < floor) {
+            z = floor;
+        }
+        /* Never true (unk20AD is a u8): combine folds the test away only
+           after it has kept g alive past the clamp, so the call result stays
+           in its own register (retail's mov.s $f2,$f0). Jump2 then deletes
+           the dead block. */
+        boost = hero.unk20AD;
+        if (boost & 0x100) {
+            z = g;
+        }
+        gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, z);
+    }
+}
+
