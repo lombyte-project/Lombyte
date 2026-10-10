@@ -1535,7 +1535,175 @@ void FUN_L00_002e5730(O002e5730 *o, void *a) {
     }
     FUN_L00_002e55b8(o, s->x90, &t, x, y, 0.0f);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e5830.s", FUN_L00_002e5830);
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E6CE0); names and data translated to the US level program. */
+
+/*
+ * State of the follow camera, at UpdateCam +0x70 (the record's saved state).
+ * FUN_L00_002e4fe8 writes `velocity`, FUN_L00_002e5730 reads the same block
+ * for its spring constants, and FUN_001f9770 (fast_dec_timer) counts
+ * `blend_timer` down.
+ */
+typedef struct {
+    f32 focus[4];          /* 0x40: point the camera looks at, moved by velocity each frame */
+    f32 velocity[4];       /* 0x50: focus displacement for this frame */
+    u8 pad60[0x20];
+    f32 look_target[4];    /* 0x80: focus offset blended towards the hero */
+    f32 eye[4];            /* 0x90: resulting camera position */
+    f32 offset[4];         /* 0xA0: eased offset, split into a lateral and an up part */
+    f32 lateral_ease[4];   /* 0xB0: cam_interp_values state of the lateral part */
+    f32 up_ease[4];        /* 0xC0: cam_interp_values state of the up part */
+    u8 padD0[0x20];
+    f32 look_height;       /* 0xF0: height of look_target above the hero */
+    u8 padF4[0x22];
+    u8 blending_in;        /* 0x116: nonzero while blend_timer counts up */
+    u8 pad117;
+    s16 blend_timer;       /* 0x118: frames into the focus blend */
+    u8 pad11A[2];
+    f32 lateral_stiffness; /* 0x11C */
+    f32 lateral_damping;   /* 0x120 */
+    f32 up_stiffness;      /* 0x124 */
+    f32 up_damping;        /* 0x128 */
+    u8 pad12C[4];
+} FollowCamBlock;
+
+typedef struct {
+    u8 pad130[0x30];
+    f32 distance;          /* 0x160: distance of the eye behind the hero */
+    u8 pad164[0xA8];
+    f32 zoom_scale;        /* 0x20C */
+    f32 zoom;              /* 0x210: 1.0 is no zoom */
+    f32 zoom_range;        /* 0x214 */
+} FollowCamTail;
+
+typedef struct {
+    u8 pad0[0x40];
+    FollowCamBlock follow; /* 0x40 */
+    FollowCamTail tail;    /* 0x130 */
+} FollowCamState;
+
+/* The camera record (UpdateCam); its saved state holds the follow camera. */
+typedef struct {
+    u8 pad0[0x70];
+    FollowCamState *state;
+} FollowCam;
+
+/* The camera view: +0x20 its forward axis, +0x30 its up axis. */
+extern u8 camera_view[] __asm__("D_L00_00166E10");
+extern FollowCam *current_follow_cam __asm__("D_L00_00166E00") __attribute__((section(".data")));
+extern f32 follow_cam_min_distance __asm__("D_L00_00161CD8") __attribute__((sda));
+extern s32 follow_cam_blend_frames __asm__("D_L00_00161D20");
+extern s32 camera_collision_mask __asm__("D_L00_0015EF58");
+/* Point where the last collision line stopped (CollisionHit.point). */
+extern f32 collision_hit_point[4] __asm__("D_L00_00173E60") __attribute__((aligned(16)));
+
+extern f32 vector_length_xyz(void *v) __asm__("FUN_001f9af0");
+extern void add_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void lerp_vector(f32 t, void *out, void *a, void *b) __asm__("FUN_001f9a40");
+extern f32 convert_integer_to_float(s32 i) __asm__("FUN_001fa6c0");
+extern s32 fast_dec_timer(void *timer) __asm__("FUN_001f9770");
+extern f32 cam_interp_values(void *state, f32 value, f32 target, f32 stiffness, f32 damping, f32 limit) __asm__("FUN_001ebd78");
+extern s32 collision_line(void *from, void *to, s32 mask, s32 ignore, s32 flags) __asm__("FUN_001efa68");
+extern void follow_cam_hero_position(void *cam, void *out) __asm__("FUN_L00_002e4168");
+extern void follow_cam_update_mode(void *cam) __asm__("FUN_L00_002e4930");
+extern void follow_cam_focus_velocity(void *cam, f32 *out) __asm__("FUN_L00_002e4fe8");
+extern void follow_cam_spring_offset(void *cam, f32 *offset) __asm__("FUN_L00_002e5730");
+extern void follow_cam_turn_towards(f32 amount, f32 rate) __asm__("FUN_L00_002e84b8");
+
+/* Updates the follow camera: eases its focus and offset vectors, then places
+   the eye behind the hero, pulled in where collision lines hit. */
+void FUN_L00_002e5830(void *cam) {
+    f32 velocity[4], hero_pos[4], focus[4], up[4], lateral[4], look[4], base[4], probe[4], left[4], diff[4], mid[4];
+    u8 *view = camera_view;
+    FollowCamState *s = ((FollowCam *)cam)->state;
+    FollowCamTail *t = &s->tail;
+    FollowCamBlock *q = &s->follow;
+    f32 len, back;
+
+    follow_cam_hero_position(cam, hero_pos);
+    follow_cam_update_mode(cam);
+    follow_cam_focus_velocity(cam, velocity);
+    qcopy(&s->follow.velocity, velocity);
+    qcopy(focus, q);
+    len = dot_vectors_xyz(view + 0x30, s->follow.offset);
+    scale_vector_xyz(up, view + 0x30, len);
+    subtract_vector_xyz(lateral, s->follow.offset, up);
+    up[0] = cam_interp_values(&s->follow.up_ease[0], up[0], q->velocity[0], q->up_stiffness, q->up_damping, 0.0f);
+    up[1] = cam_interp_values(&s->follow.up_ease[1], up[1], q->velocity[1], q->up_stiffness, q->up_damping, 0.0f);
+    up[2] = cam_interp_values(&s->follow.up_ease[2], up[2], q->velocity[2], q->up_stiffness, q->up_damping, 0.0f);
+    lateral[0] = cam_interp_values(&s->follow.lateral_ease[0], lateral[0], q->focus[0], q->lateral_stiffness, q->lateral_damping, 0.0f);
+    lateral[1] = cam_interp_values(&s->follow.lateral_ease[1], lateral[1], q->focus[1], q->lateral_stiffness, q->lateral_damping, 0.0f);
+    lateral[2] = cam_interp_values(&s->follow.lateral_ease[2], lateral[2], q->focus[2], q->lateral_stiffness, q->lateral_damping, 0.0f);
+    add_vector_xyz(q, q, s->follow.velocity);
+    add_vector_xyz(s->follow.offset, lateral, up);
+    scale_vector_xyz(look, view + 0x20, q->look_height);
+    if (q->blending_in) {
+        if (++q->blend_timer > scale_game_frames(follow_cam_blend_frames)) {
+            q->blend_timer = scale_game_frames(follow_cam_blend_frames);
+        }
+        lerp_vector((f32)q->blend_timer / convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)), base, q, s->follow.offset);
+        add_vector_xyz(s->follow.look_target, look, base);
+    } else {
+        fast_dec_timer(&s->follow.blend_timer);
+        if (q->blend_timer < 0) {
+            q->blend_timer = 0;
+        }
+        lerp_vector((f32)q->blend_timer / convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)), base, q, s->follow.offset);
+        add_vector_xyz(s->follow.look_target, look, base);
+    }
+    follow_cam_spring_offset(cam, look);
+    if (hero.unk20A4 == 2) {
+        scale_vector_xyz(look, view + 0x20, 3.0f);
+    } else if (hero.unk20A4 == 1) {
+        scale_vector_xyz(look, view + 0x20, 0.4f);
+    } else {
+        scale_vector_xyz(look, view + 0x20, 0.5f);
+    }
+    add_vector_xyz(base, hero_pos, look);
+    scale_vector_xyz(look, view + 0x20, t->distance);
+    add_vector_xyz(q->eye, look, q);
+    len = follow_cam_min_distance + current_follow_cam->state->tail.zoom_range * current_follow_cam->state->tail.zoom_scale * (current_follow_cam->state->tail.zoom - 1.0f);
+    scale_vector_xyz(probe, view + 0x20, 20.0f);
+    add_vector_xyz(probe, base, probe);
+    if (collision_line(base, probe, camera_collision_mask, (s32)hero.moby, 0)) {
+        qcopy(left, collision_hit_point);
+    } else {
+        qcopy(left, probe);
+    }
+    scale_vector_xyz(probe, view + 0x20, 20.0f);
+    subtract_vector_xyz(probe, base, probe);
+    if (collision_line(base, probe, camera_collision_mask, (s32)hero.moby, 0)) {
+        qcopy(probe, collision_hit_point);
+    }
+    subtract_vector_xyz(diff, probe, left);
+    if (vector_length_xyz(diff) < len + len) {
+        add_vector_xyz(mid, left, probe);
+        scale_vector_xyz(mid, mid, 0.5f);
+        qcopy(q->eye, mid);
+        subtract_vector_xyz(diff, mid, q);
+        follow_cam_turn_towards(dot_vectors_xyz(diff, view + 0x20), 0.003f);
+    } else {
+        f32 reach;
+        subtract_vector_xyz(diff, left, q);
+        back = vector_length_xyz(diff);
+        reach = t->distance;
+        if (back <= reach + len) {
+            scale_vector_xyz(mid, view + 0x20, len);
+            subtract_vector_xyz(mid, left, mid);
+            qcopy(q->eye, mid);
+            subtract_vector_xyz(diff, mid, q);
+            follow_cam_turn_towards(dot_vectors_xyz(diff, view + 0x20), 0.003f);
+        } else {
+            len = dot_vectors_xyz(q, view + 0x30);
+            if (dot_vectors_xyz(probe, view + 0x30) < len) {
+                qcopy(probe, q);
+            }
+            scale_vector_xyz(look, view + 0x20, reach);
+            add_vector_xyz(q->eye, look, probe);
+        }
+    }
+}
 /* Empty apart from an unused 0x50-byte volatile stack buffer. */
 void FUN_L00_002e8378(void) {
     volatile char buf[0x50];

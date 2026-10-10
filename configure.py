@@ -304,6 +304,7 @@ OVERLAY_SN_UNITS = {
     "shared/gameplay/entities/0029f990.c",
     "shared/gameplay/entities/002a09a0.c",
     "shared/gameplay/entities/002a4038.c",
+    "shared/gameplay/entities/002a4830.c",
     "shared/gameplay/entities/002aa670.c",
     "shared/gameplay/entities/002aee30.c",
     "shared/gameplay/entities/002b17d8.c",
@@ -341,6 +342,7 @@ OVERLAY_SN_UNITS = {
     "shared/rendering/sky/00288ec0.c",
     "shared/runtime/dma/002b7a48.c",
     "shared/ui/help/001fe778.c",
+    "shared/ui/help/0020c758.c",
     "shared/ui/help/0021d0a0.c",
     "shared/ui/help/00231d08.c",
     "shared/ui/help/00237488.c",
@@ -348,6 +350,7 @@ OVERLAY_SN_UNITS = {
     "shared/ui/menus/0027f448.c",
     "shared/ui/text/001fb470.c",
     "shared/ui/text/002377b8.c",
+    "shared/world/loaders/00240348.c",
 }
 
 # —— Retail link layout ——

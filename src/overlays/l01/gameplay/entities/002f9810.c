@@ -615,7 +615,296 @@ void FUN_L01_002fac80(void) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fad68.s", FUN_L01_002fad68);
+#include "qcopy.h"
+#include "sda.h"
+
+/* Agnogg ship update (moby classes 730, 731, 790 on level 01): state machine on moby->state. */
+/* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002FABE8.c: func_L01_002FC140), where it is exact; names translated to the US level program. */
+
+typedef struct { float x, y, z, w; } V4_2FC140;
+typedef struct { int pad0[4]; int f10; } Class_2FC140;
+typedef struct {
+    /* 0x00 */ char pad0[0x10];
+    /* 0x10 */ V4_2FC140 v;
+    /* 0x20 */ int pad20;
+    /* 0x24 */ int rec;
+    /* 0x28 */ int pad28;
+    /* 0x2C */ int timer;
+} Link_2FC140;
+typedef struct {
+    /* 0x00 */ char pad0[0x10];
+    /* 0x10 */ V4_2FC140 pos;
+    /* 0x20 */ unsigned char state;
+    /* 0x21 */ char pad21[3];
+    /* 0x24 */ Class_2FC140 *pclass;
+    /* 0x28 */ char pad28[8];
+    /* 0x30 */ unsigned char f30;
+    /* 0x31 */ char pad31;
+    /* 0x32 */ unsigned short f32;
+    /* 0x34 */ unsigned short flags;
+    /* 0x36 */ char pad36[0x1C];
+    /* 0x52 */ unsigned char f52;
+    /* 0x53 */ unsigned char f53;
+    /* 0x54 */ char pad54[0x1C];
+    /* 0x70 */ unsigned char f70;
+    /* 0x71 */ char pad71[7];
+    /* 0x78 */ void *data;
+    /* 0x7C */ char pad7C[0x18];
+    /* 0x94 */ int f94;
+    /* 0x98 */ char pad98[0xE];
+    /* 0xA6 */ short oclass;
+    /* 0xA8 */ char padA8[8];
+    /* 0xB0 */ unsigned char fB0;
+    /* 0xB1 */ char padB1;
+    /* 0xB2 */ short fB2;
+    /* 0xB4 */ char padB4[8];
+    /* 0xBC */ unsigned char fBC;
+    /* 0xBD */ char padBD[0x43];
+} Moby_2FC140;
+typedef struct {
+    /* 0x00 */ float f0;
+    /* 0x04 */ int link;
+    /* 0x08 */ short timer;
+    /* 0x0A */ short fA;
+    /* 0x0C */ float fC;
+    /* 0x10 */ int f10;
+    /* 0x14 */ int list[7];
+    /* 0x30 */ int rec;
+    /* 0x34 */ int f34;
+    /* 0x38 */ int f38;
+    /* 0x3C */ int f3C;
+} Data_2FC140;
+typedef struct {
+    /* 0x00 */ char pad0[0x30];
+    /* 0x30 */ V4_2FC140 a;
+    /* 0x40 */ char pad40[0x30];
+    /* 0x70 */ V4_2FC140 b;
+} Rec_2FC140;
+typedef struct { unsigned char pad0[0x454]; unsigned char collected[1]; } Lv_2FC140;
+extern Moby_2FC140 *D_L01_00160058_2FC140 __asm__("D_L01_0015FFD8") MACRO_ADDR;
+extern Rec_2FC140 *D_L01_0016016C_2FC140 __asm__("D_L01_001600EC") MACRO_ADDR;
+extern float D_0015EE6C_2FC140 __asm__("D_0015ED6C") MACRO_ADDR;
+extern int D_L01_0015F6A8_2FC140 __asm__("D_L01_0015F5C4") MACRO_ADDR;
+extern int D_0015EE84_2FC140 __asm__("D_0015ED84") MACRO_ADDR;
+extern char D_L01_001BAD60_2FC140[] __asm__("D_L01_001BAA50");
+extern Lv_2FC140 D_L01_001BB9C0_2FC140 __asm__("D_L01_001BB6B0");
+extern unsigned char D_L01_0015FD08_2FC140[] __asm__("D_L01_0015FC88") MACRO_ADDR;
+extern char D_L01_001BADB0_2FC140[] __asm__("D_L01_001BAAA0");
+extern unsigned char D_0014C050_u[] __asm__("D_0014C050");
+extern char D_0013F3D0_u[] __asm__("D_0013F3D0");
+extern int D_001413DC_u[] __asm__("D_001413DC");
+extern unsigned char D_0013D388_u[] __asm__("D_0013D388");
+extern void func_L01_002FC058_2FC140(void) __asm__("FUN_L01_002fac80");
+extern int func_001F9938_2FC140(void *) __asm__("FUN_001f9770");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
+extern void func_L00_00299B68_2FC140(int) __asm__("FUN_L00_00298840");
+extern void func_L00_0028FC68_2FC140(void) __asm__("FUN_L00_0028e990");
+extern int func_00215570_2FC140(void *, int) __asm__("FUN_00214720");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern float func_001F9D48_2FC140(void *, void *) __asm__("FUN_001f9b80");
+extern float func_L00_001FF860_2FC140(float, float) __asm__("FUN_001f9e90");
+extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
+extern void func_L00_0029A7D0_2FC140(int) __asm__("FUN_L00_00299460");
+extern void func_L00_00261848_2FC140(int) __asm__("FUN_L00_002607d0");
+extern void func_L00_00263DB0_2FC140(int) __asm__("FUN_L00_00262d38");
+extern void func_L01_0029C2A0_2FC140(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
+extern void func_L00_002512D8_2FC140(int) __asm__("FUN_L00_002502a0");
+extern void func_L00_00286128_2FC140(void *, void *) __asm__("FUN_L00_00284e50");
+extern int func_0020BFC8_2FC140(int, int) __asm__("FUN_0020b178");
+extern void func_L01_002A3680_2FC140(void) __asm__("FUN_L01_002a2480");
+
+void FUN_L01_002fad68(Moby_2FC140 *moby) {
+    Data_2FC140 *data;
+    Link_2FC140 *q;
+    int r16;
+    int cnt;
+    int flag;
+    int i;
+    int n4;
+    float fz;
+    float fd;
+
+    data = moby->data;
+    func_L01_002FC058_2FC140();
+    func_001F9938_2FC140(&data->timer);
+    switch (moby->state) {
+    case 0:
+        fz = moby->pos.z - 0.75f;
+        moby->f30 = 0xFF;
+        moby->state = 1;
+        data->timer = 0;
+        fd = data->f0;
+        data->fC = fz;
+        moby->f94 = 0;
+        moby->flags = moby->flags | 0x41;
+        moby->pos.z = moby->pos.z + fd;
+        break;
+    case 1:
+        r16 = *(unsigned char *)(moby->fB0 + (D_0015EE84_2FC140 << 4) + D_0014C050_u);
+        if (r16 == 0xFF) {
+            if (moby->f53 != 2) {
+                blend_moby_animation(moby, 2, 0, scale_game_frames(0x14));
+            }
+            moby->state = 10;
+            moby->flags = moby->flags & 0xFFBE;
+            moby->f32 = r16;
+            moby->f94 = moby->pclass->f10;
+        } else {
+            if (D_L01_0015F6A8_2FC140 == 0) {
+                unsigned char *pp = D_0013D388_u;
+                if (pp[0xF] == 0) {
+                    func_L00_00299B68_2FC140(5);
+                    pp[0xF] = 1;
+                }
+            }
+            func_L00_0028FC68_2FC140();
+            if (func_00215570_2FC140(D_0013F3D0_u, data->f10) != 0) {
+                moby->flags = moby->flags & 0xFFBE;
+                moby->f94 = moby->pclass->f10;
+                if (data->link != -1) {
+                    q = D_L01_00160058_2FC140[data->link].data;
+                    q->timer = scale_game_frames(0x1A4);
+                    D_L01_00160058_2FC140[data->link].fBC = 1;
+                    clear_u64_value(&D_L01_0016016C_2FC140[q->rec].b);
+                    clear_u64_value(&q->v);
+                    D_L01_0016016C_2FC140[q->rec].b.y = -func_L00_001FF860_2FC140(
+                        func_001F9D48_2FC140(&D_L01_0016016C_2FC140[q->rec].a, &moby->pos),
+                        moby->pos.z - D_L01_0016016C_2FC140[q->rec].a.z);
+                    D_L01_0016016C_2FC140[q->rec].b.z = func_L00_001FF860_2FC140(
+                        moby->pos.x - D_L01_0016016C_2FC140[q->rec].a.x,
+                        moby->pos.y - D_L01_0016016C_2FC140[q->rec].a.y);
+                }
+                moby->state = 2;
+            }
+        }
+        break;
+    case 2:
+        moby->pos.z = moby->pos.z - D_0015EE6C_2FC140 * 5.0f;
+        if (data->link != -1) {
+            q = D_L01_00160058_2FC140[data->link].data;
+            q->v.y = -func_L00_001FF860_2FC140(
+                func_001F9D48_2FC140(&D_L01_0016016C_2FC140[q->rec].a, &moby->pos),
+                moby->pos.z - D_L01_0016016C_2FC140[q->rec].a.z);
+            q->v.z = func_L00_001FF860_2FC140(
+                moby->pos.x - D_L01_0016016C_2FC140[q->rec].a.x,
+                moby->pos.y - D_L01_0016016C_2FC140[q->rec].a.y);
+        }
+        if (moby->f53 == 0) {
+            if (moby->pos.z - data->fC <= 0.0f) {
+                set_moby_animation(moby, 1, 0);
+            }
+        }
+        if (moby->pos.z <= data->fC) {
+            moby->pos.z = data->fC;
+            moby->state = 3;
+        }
+        break;
+    case 3:
+        if (moby->f52 != 1) {
+            break;
+        }
+        if ((moby->f70 & 2) == 0) {
+            break;
+        }
+        if (moby->f53 != 2) {
+            blend_moby_animation(moby, 2, 0, scale_game_frames(0x14));
+        }
+        if (moby->oclass == 0x2DA) {
+            moby->state = 10;
+        } else {
+            moby->state = 4;
+        }
+        break;
+    case 4:
+        flag = 1;
+        cnt = 0;
+        i = 0;
+        do {
+            if (data->list[i] != -1 && (char *)D_L01_00160058_2FC140 + (data->list[i] << 8) != 0
+                && ((Moby_2FC140 *)((char *)D_L01_00160058_2FC140 + (data->list[i] << 8)))->state != 0xFE
+                && ((Moby_2FC140 *)((char *)D_L01_00160058_2FC140 + (data->list[i] << 8)))->state != 0xFD) {
+                flag = 0;
+                break;
+            }
+            cnt++;
+            i++;
+        } while (cnt < 3);
+        if (flag == 0) {
+            break;
+        }
+        n4 = D_001413DC_u[0];
+        if (n4 == 7) {
+            break;
+        }
+        if (n4 == 0x14) {
+            break;
+        }
+        data->timer = scale_game_frames(0x2D);
+        moby->state = 5;
+        break;
+    case 5:
+        if (data->timer != 0) {
+            break;
+        }
+        data->fA = moby->f32;
+        moby->flags = moby->flags | 0x41;
+        func_L00_00299B68_2FC140(3);
+        moby->state = 6;
+        break;
+    case 6:
+        if (D_L01_0015F6A8_2FC140 == 2) {
+            break;
+        }
+        func_L00_0029A7D0_2FC140(3);
+        moby->state = 7;
+        break;
+    case 7:
+        if (D_L01_0015F6A8_2FC140 == 2) {
+            break;
+        }
+        func_L00_00299B68_2FC140(4);
+        moby->state = 8;
+        break;
+    case 8:
+        if (D_L01_0015F6A8_2FC140 == 2) {
+            break;
+        }
+        func_L00_00261848_2FC140(3);
+        func_L00_00263DB0_2FC140(3);
+        moby->flags = moby->flags & 0xFFBE;
+        if (data->link != -1) {
+            ((Lv_2FC140 *)D_L01_001BAD60_2FC140)->collected[D_L01_00160058_2FC140[data->link].fB2] = D_L01_00160058_2FC140[data->link].fB0 + 2;
+            if (D_L01_00160058_2FC140[data->link].fB0 == 0xFF
+                || (D_L01_0015FD08_2FC140[D_L01_00160058_2FC140[data->link].fB0] != 0xFF
+                    && D_0014C050_u[D_L01_00160058_2FC140[data->link].fB0 + (D_0015EE84_2FC140 << 4)] == 0xFF)) {
+                D_L01_001BB9C0_2FC140.collected[D_L01_00160058_2FC140[data->link].fB2] = D_L01_00160058_2FC140[data->link].fB0 + 2;
+            }
+        }
+        if (data->f3C != -1) {
+            q = D_L01_00160058_2FC140[data->f3C].data;
+            q->timer = scale_game_frames(0xB4);
+            D_L01_00160058_2FC140[data->f3C].fBC = 1;
+            if (data->f34 != -1 && data->f38 != -1) {
+                D_L01_00160058_2FC140[data->f34].fBC = 2;
+                D_L01_00160058_2FC140[data->f38].fBC = 2;
+                func_L01_0029C2A0_2FC140(&D_L01_00160058_2FC140[data->f34].fBC, 1, &D_L01_00160058_2FC140[data->f34], 1, D_L01_001BADB0_2FC140);
+                func_L01_0029C2A0_2FC140(&D_L01_00160058_2FC140[data->f38].fBC, 1, &D_L01_00160058_2FC140[data->f38], 1, D_L01_001BADB0_2FC140);
+            }
+        }
+        func_L00_002512D8_2FC140(moby->fB0);
+        if (data->rec != -1) {
+            func_L00_00286128_2FC140(&D_L01_0016016C_2FC140[data->rec].a, &D_L01_0016016C_2FC140[data->rec].b);
+        }
+        func_0020BFC8_2FC140(0, -1);
+        func_L01_002A3680_2FC140();
+        moby->state = 10;
+        break;
+    case 10:
+        moby->pos.z = data->fC;
+        break;
+    }
+}
 typedef union {
     u128 q;
     f32 f[4];

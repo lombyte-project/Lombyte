@@ -4,96 +4,87 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00221310.s", FUN_L00_00221310);
-#else
-extern s32 D_L00_0015F5CC_221310 __asm__("D_L00_0015F5CC");
-extern u8 D_L00_00173E80_221310[] __asm__("D_L00_00173E80");
-extern void *D_L00_00173E58_221310 __asm__("D_L00_00173E58");
-extern u8 D_L00_00173E60_221310[] __asm__("D_L00_00173E60");
+#include "rnc/overlay/collision.h"
 
+extern s32 D_L00_0015F5CC;
+extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern void FUN_L00_00213880(void);
-extern s32 FUN_L00_0020a240_221310(f32 *, f32, f32) __asm__("FUN_L00_0020a240");
-extern f32 FUN_001f9b20_221310(void *) __asm__("FUN_001f9b20");
-extern f32 FUN_001f9e90_221310(f32, f32) __asm__("FUN_001f9e90");
-extern s32 FUN_L00_0025e3b8_221310(void *) __asm__("FUN_L00_0025e3b8");
-extern void FUN_L00_00233660_221310(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
-extern s32 FUN_001efa68_221310(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-extern f32 FUN_001f9b48_221310(void *, void *) __asm__("FUN_001f9b48");
-extern s32 FUN_L00_001f0d60_221310(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
+extern s32 FUN_L00_0020a240(f32 *, f32, f32);
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
+extern s32 FUN_L00_0025e3b8(s32);
+extern void FUN_L00_00233660(Vec4 *, f32, f32, f32);
+extern int collision_line(void *from, void *to, int mask, void *ignore, int) __asm__("FUN_001efa68");
+extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern s32 FUN_L00_001f0d60(f32, Vec4 *, s32, s32);
 
 void FUN_L00_00221310(void) {
     Vec4 first;
     Vec4 second;
     Vec4 probe;
-    f32 distance;
-    f32 offset;
+    f32 base;
+    f32 dist;
+    f32 off;
     s32 hit;
-    s32 frame;
-    struct Hero *hero_data = &hero;
 
     if (hero.unk20AD == 0) {
         FUN_L00_00213880();
     }
-    frame = D_L00_0015F5CC_221310;
-    if (frame % 3 == 0) {
+    if (D_L00_0015F5CC % 3 == 0) {
         hero.unk248 = 4.0f;
-        hero_data->unk254 = 0;
-        hero_data->unk255 = 0;
-        if (FUN_L00_0020a240_221310(&hero.unk248, 0.7f, 4.0f)) {
-            hero_data->unk250 =
-                FUN_001f9e90_221310(*(f32 *)(D_L00_00173E80_221310 + 8),
-                                     FUN_001f9b20_221310(D_L00_00173E80_221310));
-            if (D_L00_00173E58_221310 != 0) {
-                hero_data->unk255 = 1;
-                if (FUN_L00_0025e3b8_221310(D_L00_00173E58_221310)) {
-                    hero_data->unk254 = 1;
+        hero.unk254 = 0;
+        hero.unk255 = 0;
+        if (FUN_L00_0020a240(&hero.unk248, 0.7f, 4.0f)) {
+            hero.unk250 = atan2_f(coll_hit.normal_z, vector_length_xy(&coll_hit.normal_x));
+            if (coll_hit.moby != 0) {
+                hero.unk255 = 1;
+                if (FUN_L00_0025e3b8(coll_hit.moby)) {
+                    hero.unk254 = 1;
                 }
             }
         }
     }
-    frame = D_L00_0015F5CC_221310;
-    if (frame % 5 == 0) {
-        hero_data->unk260 = 0;
-        hero_data->unk258 = 0.0f;
+    if (D_L00_0015F5CC % 5 == 0) {
+        hero.unk260 = 0;
+        hero.unk258 = 0.0f;
         if (hero.unk300 != 0) {
-            f32 zero = hero_data->unk258;
-            FUN_L00_00233660_221310(&first, 1.1f, zero, 1.0f);
-            FUN_L00_00233660_221310(&second, 1.1f, zero, -20.0f);
+            base = hero.unk258;
+            FUN_L00_00233660(&first, 1.1f, base, 1.0f);
+            FUN_L00_00233660(&second, 1.1f, base, -20.0f);
             if (second.f[2] < 0.5f) {
                 second.f[2] = 0.5f;
             }
-            distance = 20.0f;
-            hit = FUN_001efa68_221310(&first, &second, 2,
-                                       ((s32)hero_data->moby), 0);
+            dist = 20.0f;
+            hit = collision_line(&first, &second, 2, hero.moby, 0);
             if (hit != 0) {
-                distance = FUN_001f9b48_221310(&first, D_L00_00173E60_221310);
+                dist = fast_vec_dist(&first, &coll_hit.point);
+                if (!(3.0f < dist)) {
+                    return;
+                }
             }
-            if (hit == 0 || distance > 3.0f) {
-                f32 default_distance = 20.0f;
-                offset = -0.4f;
-                do {
-                    FUN_L00_00233660_221310(&probe, 1.1f + offset, zero, zero);
-                    if (!FUN_L00_001f0d60_221310(hero.unk234, &probe, 2, 0)) {
-                        break;
+            /* The loop spells its constants out again. loop.c hoists them and
+               cse2 turns 1.1f and 0.0f into copies of the registers that
+               already hold them (base is known to be the 0.0f just stored),
+               which gives retail's two mov.s before the loop. */
+            for (off = -0.4f; off < 0.5f; off += 0.1f) {
+                FUN_L00_00233660(&probe, off + 1.1f, 0.0f, 0.0f);
+                if (!FUN_L00_001f0d60(hero.unk234, &probe, 2, 0)) {
+                    hero.unk260 = 1;
+                    if (hit == 0) {
+                        hero.unk258 = 20.0f;
+                    } else {
+                        hero.unk258 = dist;
                     }
-                    offset += 0.1f;
-                    if (offset >= 0.5f) {
-                        return;
+                    hero.unk25C = hero.unk234 + off;
+                    if (hero.unk25C < 0.0f) {
+                        hero.unk25C = 0.0f;
                     }
-                } while (1);
-                hero_data->unk260 = 1;
-                if (hit == 0) hero_data->unk258 = default_distance;
-                else hero_data->unk258 = distance;
-                hero_data->unk25C = hero.unk234 + offset;
-                if (hero_data->unk25C < 0.0f) {
-                    hero_data->unk25C = 0.0f;
+                    return;
                 }
             }
         }
     }
 }
-#endif
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
