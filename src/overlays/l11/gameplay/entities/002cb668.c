@@ -848,9 +848,6 @@ void FUN_L11_002f2cd0(struct Moby *moby) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f2d58.s", FUN_L11_002f2d58);
-#else
 typedef struct {
     float corner[4][4];
     unsigned int color[4];
@@ -871,12 +868,15 @@ extern int D_L11_00161930_2f2d58 __asm__("D_L11_00161930") __attribute__((sda));
 extern unsigned int D_L11_00161934_2f2d58 __asm__("D_L11_00161934") __attribute__((sda));
 extern float D_L11_00161938_2f2d58 __asm__("D_L11_00161938") __attribute__((sda));
 
+extern float D_L11_001D3530[];
+
+/* Draws a ring of 32 textured quads around the moby; the band widens as the radius at pvars+0x3C shrinks below 1.15. */
 void FUN_L11_002f2d58(struct Moby *moby) {
     QuadPacket_2f2d58 quad;
     float matrix[16];
     char *data = (char *)moby->pvars;
     float width;
-    float radius, angle;
+    float angle;
     int i, j;
 
     FUN_001fa298(matrix, &moby->unkC0);
@@ -889,7 +889,7 @@ void FUN_L11_002f2d58(struct Moby *moby) {
     quad.tag[2] = 0xff9000000260ULL;
     quad.tag[0] = 0;
     {
-        float *uv = (float *)0x001d3530;
+        float *uv = D_L11_001D3530;
         unsigned int *colors = quad.color;
         float *dest1 = &quad.uv[0][1];
         float *dest0 = &quad.uv[0][0];
@@ -907,18 +907,23 @@ void FUN_L11_002f2d58(struct Moby *moby) {
         } while (k >= 0);
     }
     width = 0.1f;
-    radius = *(float *)(data + 0x3c);
-    if (radius < 1.15f) {
-        float v = (1.15f - radius) + (1.15f - radius);
-        width = (v > 1.0f ? 1.0f : (v < 0.0f ? 0.0f : v)) + 0.1f;
-        if (radius < 0.65f) D_001413F5_2518 = 1;
-        else D_001413F5_2518 = 0;
+    if (*(float *)(data + 0x3c) < 1.15f) {
+        float v = (1.15f - *(float *)(data + 0x3c)) + (1.15f - *(float *)(data + 0x3c));
+        if (v > 1.0f)
+            v = 1.0f;
+        else if (v < 0.0f)
+            v = 0.0f;
+        width = v + 0.1f;
+        if (*(float *)(data + 0x3c) < 0.65f)
+            D_001413F5_2518 = 1;
+        else
+            D_001413F5_2518 = 0;
     }
     i = 0;
     do {
-        float *corner = &quad.corner[0][0];
         j = 0;
         do {
+            float *corner = quad.corner[j];
             angle = (float)(i + j / 2) * 6.28318f * 0.03125f - 3.14159f;
             corner[0] = fast_cos_2f2d58(angle) * *(float *)(data + 0x3c);
             corner[1] = fast_sin_2f2d58(angle) * *(float *)(data + 0x3c);
@@ -927,13 +932,11 @@ void FUN_L11_002f2d58(struct Moby *moby) {
             else corner[2] = D_L11_00161938_2f2d58 - width + 0.0f;
             corner[3] = 1.0f;
             j++;
-            corner += 4;
         } while (j < 4);
         draw_quad_2f2d58(&quad, matrix, 0);
         i++;
     } while (i < 32);
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F43B0), where it is exact; names translated to the US level program. */
 
 void FUN_L11_002f3040(struct Moby *moby) {
