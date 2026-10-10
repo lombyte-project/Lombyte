@@ -166,16 +166,17 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     } while (strip_index < 16);
 
     fs_aa_clear_packet[0] = 0x1000000000000001;
+    fs_aa_clear_packet[4] = 0x2400000000008001;
     fs_aa_clear_packet[1] = 0xE;
     fs_aa_clear_packet[2] = 0x30000;
     fs_aa_clear_packet[3] = 0x47;
-    fs_aa_clear_packet[4] = 0x2400000000008001;
     fs_aa_clear_packet[5] = 0x10;
     fs_aa_clear_packet[6] = 0x106;
     fs_aa_clear_packet[7] = 0x80008000;
     fs_aa_clear_packet[8] = 0x2400000000008010;
     fs_aa_clear_packet[9] = 0x44;
-    packet_word = &fs_aa_clear_packet[10];
+    packet_base = fs_aa_clear_packet;
+    packet_word = packet_base + 10;
     left_x = 0x6FF8;
     next_x = 0x71F8;
     for (strip_index = 0; strip_index < 16; strip_index++) {
