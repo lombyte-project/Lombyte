@@ -1218,4 +1218,342 @@ void FUN_L06_002fbc88(struct Moby *m) {
     FUN_L00_00261d78(1.0f, v->ground, &m->pos, &m->pos);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fbfb0.s", FUN_L06_002fbfb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fc640.s", FUN_L06_002fc640);
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FDA70), where it is exact; names translated to the US level program. */
+
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2FDA70;
+
+typedef struct {
+    char pad0[0x10];
+    int f10;
+    char pad14[0x10];
+    float f24;
+} Cls_2FDA70;
+
+typedef struct {
+    char pad0[0x20];
+    char f20[0x40];
+    int f60;
+    int f64;
+    int f68;
+    int f6C;
+    int f70;
+    int f74;
+    int f78;
+    int f7C;
+    int f80;
+    int f84;
+    int f88;
+    float f8C;
+    int f90;
+    int f94;
+    int f98;
+    float f9C;
+} Data_2FDA70;
+
+typedef struct Moby_2FDA70 {
+    char pad0[0x10];
+    Vec_2FDA70 pos;
+    unsigned char state;
+    char pad21[3];
+    Cls_2FDA70 *cls;
+    char pad28[4];
+    float f2C;
+    char pad30[4];
+    unsigned short f34;
+    char pad36[0xA];
+    Vec_2FDA70 rot;
+    char pad50[0x28];
+    Data_2FDA70 *data;
+    char pad7C[0x14];
+    int f90;
+    int f94;
+    char pad98[0xE];
+    short fA6;
+    char padA8[0x58];
+} Moby_2FDA70;
+
+typedef struct {
+    char pad0[0x20];
+    Vec_2FDA70 v20;
+    Vec_2FDA70 v30;
+    char pad40[0x40];
+} Node_2FDA70;
+
+typedef struct {
+    char pad0[0x80];
+    Vec_2FDA70 pos;
+    char pad90[0x162];
+    short f1F2;
+    char pad1F4[0x108];
+    Moby_2FDA70 *f2FC;
+    char pad300[0xE];
+    short f30E;
+    char pad310[0x1D70];
+    Moby_2FDA70 *moby;
+    int f2084;
+    char pad2088[0x1C];
+    unsigned char f20A4;
+    char pad20A5[0x226];
+    unsigned char f22CB;
+} Hero_2FDA70;
+
+typedef struct {
+    char pad0[0x20];
+    unsigned char f20;
+} Flags_2FDA70;
+
+extern char *D_L06_001600EC_c __asm__("D_L06_001600EC") __attribute__((section(".sdata")));
+extern char *D_L06_0015FFD8_c __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
+extern char D_0013F350[];
+extern f32 advance_accelerated_scalar_c(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
+extern f32 fast_add_rotations_c2(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_sin_c3(f32) __asm__("FUN_001f9de0");
+extern float D_0015ED6C __attribute__((section(".sdata")));
+extern float D_0015ED70 __attribute__((section(".sdata")));
+extern int D_0013CAE4; /* no foreign declaration */
+extern int D_0013D388; /* no foreign declaration */
+extern int D_0013D3A8; /* no foreign declaration */
+extern int D_0013D4C6; /* no foreign declaration */
+extern int D_L06_0015F5C4_c __asm__("D_L06_0015F5C4") __attribute__((section(".sdata")));
+extern int D_0013D3A8; /* no foreign declaration */
+extern float D_L06_00161F60 __attribute__((sda));
+extern float D_L06_00161F64 __attribute__((sda));
+extern float D_L06_00161F68 __attribute__((sda));
+extern int D_L06_00161F6C __attribute__((sda));
+extern int D_L06_00161F70 __attribute__((sda));
+extern int D_L06_00161F74 __attribute__((sda));
+extern int D_L06_00161F78 __attribute__((sda));
+extern int FUN_001fa6e0(int, int, float);
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern void FUN_L00_00260738(char *, void *, void *, void *);
+extern void FUN_L00_00298840(int);
+extern void FUN_L01_00231348(int, int, int);
+extern void FUN_L01_0027a248(int, int);
+extern void FUN_L06_00227cf8(void);
+extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
+extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
+float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
+s32 try_set_help_message(s32 owner, s32 message_id) __asm__("FUN_00215130");
+void FUN_L06_002f5360_c(char *moby) __asm__("FUN_L06_002f5360");
+void FUN_L06_002f53e8_c(char *moby) __asm__("FUN_L06_002f53e8");
+void FUN_L06_002f54a0_c(char *a) __asm__("FUN_L06_002f54a0");
+extern unsigned char D_0013D5DD_2FDA70[] __asm__("D_0013D4C6");
+extern unsigned char D_0013D4AF_2FDA70[] __asm__("D_0013D3A8");
+extern unsigned char D_0013D5CA_2FDA70[] __asm__("D_0013D4C6");
+extern unsigned char D_0013D355_2FDA70[] __asm__("D_0013D388");
+extern char D_0013A5E0_2FDA70[] __asm__("D_0013CAE4");
+
+void FUN_L06_002fc640(Moby_2FDA70 *moby) {
+    Vec_2FDA70 v0;
+    Vec_2FDA70 v10;
+    Data_2FDA70 *d = moby->data;
+
+    scale_vector_xyz_c(&v0, &moby->pos, -1.0f);
+    qcopy(&v10, &moby->rot);
+    moby->f2C = moby->cls->f24 * D_L06_00161F60;
+    switch (moby->state) {
+    case 0:
+        if (D_L06_00161F78 == -1) {
+            if (D_0013D5DD_2FDA70[0x10] != 0) {
+                D_L06_00161F78 = 1;
+            } else {
+                D_L06_00161F78 = 0;
+            }
+        }
+        d->f94 = 0;
+        d->f88 = -1;
+        if (D_0013D4AF_2FDA70[0] == 0) {
+            moby->state = 1;
+        } else {
+            moby->state = 3;
+        }
+        moby->pos.z = ((Node_2FDA70 *)D_L06_001600EC_c)[d->f78].v30.z + ((Node_2FDA70 *)D_L06_001600EC_c)[d->f78].v20.z;
+        if (((Hero_2FDA70 *)(D_0013F350))->f20A4 == 0) {
+            ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f34 |= 1;
+            ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f34 |= 2;
+            ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f94 = 0;
+        } else if (((Hero_2FDA70 *)(D_0013F350))->f20A4 == 1) {
+            FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f60 << 8));
+        }
+        FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f64 << 8));
+        FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f68 << 8));
+        break;
+    case 1:
+        if (is_point_inside_clip_volume(&((Hero_2FDA70 *)(D_0013F350))->pos, d->f70) != 0) {
+            if (((Flags_2FDA70 *)(D_0013D355_2FDA70))->f20 == 0) {
+                ((Flags_2FDA70 *)(D_0013D355_2FDA70))->f20 = 1;
+            }
+            moby->state = 3;
+            d->f90 = 0;
+        } else if (((Hero_2FDA70 *)(D_0013F350))->moby->fA6 == 0x57) {
+            moby->state = 3;
+            d->f84 = 1;
+        }
+        break;
+    case 2:
+        if (D_L06_0015F5C4_c == 0) {
+            moby->state = 3;
+        }
+        break;
+    case 3:
+    case 4:
+        if (tick_countdown_32_alt(&d->f90) != 0 && is_point_inside_clip_volume(&((Hero_2FDA70 *)(D_0013F350))->pos, d->f70) != 0) {
+            int ok;
+            if (((Hero_2FDA70 *)(D_0013F350))->f20A4 == 1) {
+                ok = try_set_help_message(9, 0x1781) != 0;
+            } else if (D_0013D5CA_2FDA70[0] == 0) {
+                ok = try_set_help_message(9, 0x177E) != 0;
+            } else if (d->f84 != 0) {
+                ok = try_set_help_message(9, 0x1785) != 0;
+            } else {
+                ok = try_set_help_message(9, 0x1789) != 0;
+            }
+            if ((*(int *)D_0013A5E0_2FDA70 & 0x10) && ((Hero_2FDA70 *)(D_0013F350))->f2084 != 100 && ok) {
+                ((Hero_2FDA70 *)(D_0013F350))->f1F2 = scale_game_frames_alt(0x3C);
+                d->f90 = scale_game_frames_alt(0x78);
+                if (((Hero_2FDA70 *)(D_0013F350))->f20A4 == 1) {
+                    fade_to_black(scale_game_frames_alt(0x10));
+                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (d->f64 << 8));
+                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (d->f68 << 8));
+                    FUN_L06_002f5360_c(D_L06_0015FFD8_c + (d->f60 << 8));
+                    d->f84 = 0;
+                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f94 = 0;
+                    FUN_L06_00227cf8();
+                    {
+                        char *b = D_L06_001600EC_c + (d->f7C << 7);
+                        FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
+                    }
+                    FUN_L01_0027a248(0, 10);
+                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f34 |= 1;
+                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f34 |= 2;
+                    if (D_0013D5DD_2FDA70[0x10] != 0 && D_L06_00161F78 == 0) {
+                        D_L06_00161F78 = 1;
+                        FUN_L00_00298840(3);
+                        moby->state = 2;
+                        break;
+                    }
+                } else if (D_0013D5CA_2FDA70[0] == 0) {
+                    fade_to_black(scale_game_frames_alt(0x10));
+                    FUN_L06_002f5360_c(D_L06_0015FFD8_c + (d->f64 << 8));
+                    FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f68 << 8));
+                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (d->f60 << 8));
+                    d->f84 = 1;
+                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f94 = ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].cls->f10;
+                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f34 &= 0xFFFE;
+                    {
+                        char *b = D_L06_001600EC_c + (d->f80 << 7);
+                        FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
+                    }
+                    FUN_L01_00231348(1, 0x43, (int)(D_L06_0015FFD8_c + (d->f6C << 8)));
+                    FUN_L01_0027a248(2, 7);
+                } else if (d->f84 == 0) {
+                    fade_to_black(scale_game_frames_alt(0x10));
+                    FUN_L06_002f5360_c(D_L06_0015FFD8_c + (d->f64 << 8));
+                    FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f68 << 8));
+                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (d->f60 << 8));
+                    d->f84 = 1;
+                    d->f94 = 1;
+                    {
+                        char *b = D_L06_001600EC_c + (d->f80 << 7);
+                        FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
+                    }
+                } else {
+                    fade_to_black(scale_game_frames_alt(0x10));
+                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (d->f64 << 8));
+                    FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f68 << 8));
+                    FUN_L06_002f5360_c(D_L06_0015FFD8_c + (d->f60 << 8));
+                    d->f84 = 0;
+                    d->f94 = 0;
+                    {
+                        char *b = D_L06_001600EC_c + (d->f7C << 7);
+                        FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
+                    }
+                }
+            }
+        }
+        if (((Hero_2FDA70 *)(D_0013F350))->f2FC == moby
+            && ((Hero_2FDA70 *)(D_0013F350))->f30E == 0
+            && tick_countdown_32_alt(&d->f90) != 0
+            && moby->pos.z + 0.29f < ((Hero_2FDA70 *)(D_0013F350))->pos.z
+            && FUN_001f9b80(&((Hero_2FDA70 *)(D_0013F350))->pos, &moby->pos) < 1.0f) {
+            allocate_voice_for_target_entry_alt(0, 0, (int)moby);
+            if (moby->state == 3) {
+                moby->state = 5;
+                FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f64 << 8));
+                d->f90 = scale_game_frames_alt(0x78);
+            } else {
+                moby->state = 6;
+                FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f68 << 8));
+                d->f90 = scale_game_frames_alt(0x78);
+            }
+        } else if (FUN_001f9b80(&moby->pos, &((Hero_2FDA70 *)(D_0013F350))->pos) < 24.0f
+                   && moby->state == 3
+                   && ((Hero_2FDA70 *)(D_0013F350))->pos.z + 5.0f < moby->pos.z) {
+            d->f84 = 1;
+            d->f94 = 1;
+            moby->state = 5;
+            FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f64 << 8));
+            FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f60 << 8));
+            d->f90 = scale_game_frames_alt(0x78);
+        } else if (FUN_001f9b80(&moby->pos, &((Hero_2FDA70 *)(D_0013F350))->pos) < 24.0f
+                   && moby->state == 4
+                   && moby->pos.z < ((Hero_2FDA70 *)(D_0013F350))->pos.z - 5.0f) {
+            moby->state = 6;
+            FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f68 << 8));
+            d->f90 = scale_game_frames_alt(0x78);
+        }
+        break;
+    case 5:
+    case 6: {
+        float target;
+        float t;
+        target = ((Node_2FDA70 *)D_L06_001600EC_c)[d->f78].v30.z;
+        if (moby->state == 6) {
+            target += ((Node_2FDA70 *)D_L06_001600EC_c)[d->f78].v20.z;
+        }
+        t = D_L06_00161F68 * D_0015ED70;
+        advance_accelerated_scalar_c(&moby->pos.z, &d->f8C, target, t, t, D_L06_00161F64 * D_0015ED6C);
+        if (AbsoluteFloat(moby->pos.z - target) < 0.01f) {
+            if (moby->state == 6) {
+                moby->state = 7;
+                FUN_L06_002f5360_c(D_L06_0015FFD8_c + (d->f64 << 8));
+            } else {
+                FUN_L06_002f5360_c(D_L06_0015FFD8_c + (d->f68 << 8));
+                moby->state = 8;
+            }
+        }
+        break;
+    }
+    case 7:
+    case 8:
+        if (FUN_001f9b80(&((Hero_2FDA70 *)(D_0013F350))->pos, &moby->pos) >= 1.0f) {
+            if (moby->state == 7) {
+                moby->state = 3;
+            } else {
+                moby->state = 4;
+            }
+        }
+        break;
+    }
+    if (d->f94 != 0) {
+        ((Hero_2FDA70 *)(D_0013F350))->f22CB = 1;
+    } else {
+        ((Hero_2FDA70 *)(D_0013F350))->f22CB = 0;
+    }
+    if (moby->state >= 5 && moby->state <= 8) {
+        d->f9C = 0.0f;
+        moby->f90 = D_L06_00161F74;
+    } else {
+        float f;
+        d->f9C = fast_add_rotations_c2(d->f9C, D_0015ED6C * 5.2359877f);
+        f = fast_sin_c3(d->f9C) * 4.0f - 3.0f;
+        if (f > 1.0f) {
+            f = 1.0f;
+        } else if (f < 0.0f) {
+            f = 0.0f;
+        }
+        moby->f90 = FUN_001fa6e0(D_L06_00161F6C, D_L06_00161F70, f);
+    }
+    add_vector_xyz(&v0, &v0, &moby->pos);
+    FUN_L00_00260738(d->f20, &v0, &v10, &moby->rot);
+}
