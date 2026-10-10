@@ -7,9 +7,9 @@ struct GlobalStatePointer {
 
 extern struct GlobalStatePointer GlobalStatePointer __asm__("D_0012F76C");
 
-int *GetGlobalStatePointer(void) __asm__("func_001138A8");
+int *get_global_state_pointer(void) __asm__("func_001138A8");
 
-int *GetGlobalStatePointer(void) {
+int *get_global_state_pointer(void) {
     register int **state_pointer = &GlobalStatePointer.value;
 
     return *state_pointer;

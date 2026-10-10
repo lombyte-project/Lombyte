@@ -67,14 +67,14 @@ extern void strncpy(void *, char *, s32) __asm__("FUN_00116808");
 extern void FUN_001f4280(s32);
 extern void FUN_001f4398(void);
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void DrawUIFrame(s32, s32, s32, s32, s32) __asm__("FUN_001f5f18");
+extern void draw_ui_frame(s32, s32, s32, s32, s32) __asm__("FUN_001f5f18");
 extern void FUN_001f6060(s32, s32, s32, s32, s32);
 extern s32 font_print_center(s32, s32, s64, char *, s32) __asm__("FUN_001f6af0");
 extern void font_print_window(struct TextRegion *, s64, void *, s32, s32, u8 *) __asm__("FUN_001f7090");
 extern void font_print_window_regular(struct TextRegion *, s32, char *, s32) __asm__("FUN_001f7580");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 FUN_001f9de0(f32);
-extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 FUN_001fa6e0(s32, s32, f32);
 extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
@@ -106,7 +106,7 @@ void FUN_L00_002018c8(void) {
         f32 pivot;
 
         alpha = 1.0f - (f32)D_L00_00173040.timer / (f32)scale_game_frames(30);
-        DrawUIFrame(0x50, 0x154, 0x60, 0x1A0, (s32)(alpha * 80.0f));
+        draw_ui_frame(0x50, 0x154, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         box = D_L00_001E7A50;
         color = FUN_001fa6e0(D_L00_0015F4B0, D_L00_0015F4B4, alpha);
         strncpy(SCRATCHPAD, get_help_message_text(0x4E2B), 0x400);
@@ -257,7 +257,7 @@ void FUN_L00_002018c8(void) {
         box.anchor_y = y + 4;
         box.top = y;
         alpha = 1.0f - (f32)D_L00_00173040.timer / (f32)scale_game_frames(30);
-        DrawUIFrame(box.top, box.bottom, 0x60, 0x1A0, (s32)(alpha * 80.0f));
+        draw_ui_frame(box.top, box.bottom, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         box.flags ^= 4;
         font_print_window_regular(&box, FUN_001fa6e0(D_L00_0015F4B0, D_L00_0015F4B4, alpha), text, -1);
         tint = FUN_001fa6e0(0x20FFFF, 0x8020FFFF,
@@ -281,7 +281,7 @@ void FUN_L00_002018c8(void) {
 
         box = D_L00_001E7A68;
         alpha = 1.0f - (f32)D_L00_00173040.timer / (f32)scale_game_frames(30);
-        DrawUIFrame(0x64, 0x12C, 0x60, 0x1A0, (s32)(alpha * 80.0f));
+        draw_ui_frame(0x64, 0x12C, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         text_color = FUN_001fa6e0(D_L00_0015F4B0, D_L00_0015F4B4, alpha);
         button_color = FUN_001fa6e0(0x20FFFF, 0x8020FFFF, alpha);
         switch (D_L00_00173040.choice) {
@@ -327,7 +327,7 @@ void FUN_L00_002018c8(void) {
         f32 f;
 
         pulse = FUN_001fa6e0(D_L00_0015F4E4, D_L00_0015F4E8,
-                             FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / ConvertIntegerToFloat(D_L00_0015F4E0) * 6.28318f - 3.14159f) *
+                             FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / convert_integer_to_float(D_L00_0015F4E0) * 6.28318f - 3.14159f) *
                                      0.5f +
                                  0.5f);
         scale = (f32)D_L00_00173040.unk20 * 0.125f;
@@ -413,7 +413,7 @@ void FUN_L00_002018c8(void) {
     case 2:
         FUN_001f6060(0x64, 0xA0, 0xB0, 0x150,
                      FUN_001fa6e0(D_L00_0015F4E4, D_L00_0015F4E8,
-                                  FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / ConvertIntegerToFloat(D_L00_0015F4E0) * 6.28318f -
+                                  FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / convert_integer_to_float(D_L00_0015F4E0) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
                                       0.5f));
@@ -424,7 +424,7 @@ void FUN_L00_002018c8(void) {
         s32 pulse;
 
         pulse = FUN_001fa6e0(D_L00_0015F4E4, D_L00_0015F4E8,
-                                  FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / ConvertIntegerToFloat(D_L00_0015F4E0) * 6.28318f -
+                                  FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / convert_integer_to_float(D_L00_0015F4E0) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
                                       0.5f);

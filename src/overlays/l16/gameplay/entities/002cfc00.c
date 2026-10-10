@@ -8,7 +8,7 @@
 #include "qcopy.h"
 
 
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float vector_length_xyz(void *);
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
@@ -54,8 +54,8 @@ void FUN_L16_002cfc00(struct Moby *moby) {
                     FUN_001f9fc8(m);
                     FUN_001fa2d8(m, l1 + 0xC0);
                     FUN_001f9d20(v, v, m);
-                    if (AbsoluteFloat(v[0]) < 0.5f && AbsoluteFloat(v[1]) < 2.5f &&
-                        AbsoluteFloat(v[2]) < 2.5f) {
+                    if (absolute_float(v[0]) < 0.5f && absolute_float(v[1]) < 2.5f &&
+                        absolute_float(v[2]) < 2.5f) {
                         *(unsigned short *)(data + 0x2F6) += scale_game_frames(0x78);
                         *(int *)(data + 0x2DC) = scale_game_frames(0x3C);
                     }
@@ -74,8 +74,8 @@ void FUN_L16_002cfc00(struct Moby *moby) {
                     FUN_001f9fc8(m);
                     FUN_001fa2d8(m, l2 + 0xC0);
                     FUN_001f9d20(v, v, m);
-                    if (AbsoluteFloat(v[0]) < 2.8f && AbsoluteFloat(v[1]) < 1.4f &&
-                        AbsoluteFloat(v[2]) < 0.5f) {
+                    if (absolute_float(v[0]) < 2.8f && absolute_float(v[1]) < 1.4f &&
+                        absolute_float(v[2]) < 0.5f) {
                         *(unsigned short *)(data + 0x2F6) += scale_game_frames(0x78);
                         *(int *)(data + 0x2DC) = scale_game_frames(0x3C);
                     }

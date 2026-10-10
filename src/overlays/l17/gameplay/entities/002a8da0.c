@@ -620,7 +620,7 @@ struct Blk {
     int pad[3];
 };
 
-extern float ConvertIntegerToFloat(int);
+extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b48(void *, void *);
 extern float dot_vectors_xyz(void *, void *);
@@ -717,14 +717,14 @@ void FUN_L17_002d77f0(char *m) {
                 j = 0;
                 do {
                     f21 = wrap_angle(*(float *)&D_L17_00161B80 * DEG_TO_RAD *
-                                     ConvertIntegerToFloat(j) * 0.5f) -
+                                     convert_integer_to_float(j) * 0.5f) -
                           *(float *)&D_L17_00161B80 * DEG_TO_RAD;
                     g = *(float *)&D_L17_00161B7C * DEG_TO_RAD;
                     build_spherical_offset(
                         spC0, *(float *)&D_L17_00161B84, 1.5707964f,
                         fast_add_rotations(
                             fast_add_rotations(g,
-                                               wrap_angle(ConvertIntegerToFloat(i) * 2.0943952f)),
+                                               wrap_angle(convert_integer_to_float(i) * 2.0943952f)),
                             f21));
                     FUN_001f9d20(spC0, spC0, mat2);
                     FUN_L00_001ff290(spD0, spC0, (m + 0x10));
@@ -761,7 +761,7 @@ void FUN_L17_002d77f0(char *m) {
                                 f20 *= 10.0f;
                                 normalize_vector_xyz(
                                     spF0, spF0,
-                                    random_float_between(f20, len / ConvertIntegerToFloat(c * 4)));
+                                    random_float_between(f20, len / convert_integer_to_float(c * 4)));
                                 FUN_L00_002730e0((float *)spE0, (char *)spF0,
                                                  *(int *)&D_L17_00161B94, c & 0xFF,
                                                  random_integer_below(0xFF) & 0xFF, 0,
@@ -802,7 +802,7 @@ typedef struct {
 
 extern float D_L17_00161B80_c __asm__("D_L17_00161B80") __attribute__((sda));
 extern RingUV D_L17_001D3F70[4];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L17_00161BBC __attribute__((sda));
 extern float FUN_L00_00200260(float, float);
 extern float build_spherical_offset_alt(float) __asm__("FUN_001fa610");
@@ -830,7 +830,7 @@ void FUN_L17_002d7cf0(struct Moby *moby) {
     int j;
     int k;
 
-    scroll = ConvertIntegerToFloat(D_L17_0015F5CC) * (D_L17_00161BBC * frame_time);
+    scroll = convert_integer_to_float(D_L17_0015F5CC) * (D_L17_00161BBC * frame_time);
     scroll = FUN_L00_00200260(scroll, 1.0f);
     FUN_001fa050(mat, &moby->rot.x);
     *(OvlQuad *)&mat[12] = *(OvlQuad *)&moby->pos;
@@ -862,7 +862,7 @@ void FUN_L17_002d7cf0(struct Moby *moby) {
                 vj = q.v[j];
                 wrap_angle_alt(vj, radius, 1.5707964f,
                                build_spherical_offset_alt(*(float *)&D_L17_00161B7C * DEG_TO_RAD +
-                                                          ConvertIntegerToFloat(i) * 2.0943952f +
+                                                          convert_integer_to_float(i) * 2.0943952f +
                                                           spread[j]));
                 vj[3] = 1.0f;
             }

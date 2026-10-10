@@ -295,7 +295,7 @@ extern float FUN_001f9e90(float, float);
 extern void FUN_001f9a28(float *);
 extern void fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
-/* Fills a from a FastVecSub result: two FUN_001f9e90 angles and its length. */
+/* Fills a from a subtract_vector_xyz result: two FUN_001f9e90 angles and its length. */
 int FUN_L00_001ed630(float *a) {
     W v;
     float t;

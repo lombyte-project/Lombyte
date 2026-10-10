@@ -8,7 +8,7 @@ extern int D_0015FF4C;
 extern void FUN_00224b60();
 extern int func_001E9410();
 extern int update_menu_preview_animation_pose() __asm__("FUN_00224fc0");
-extern int FillTransferWords();
+extern int fill_transfer_words() __asm__("func_001F97E8");
 extern int create_menu_preview_moby() __asm__("func_00225490");
 extern int initialize_graphics_buffer_descriptors() __asm__("FUN_00225ac0");
 extern s32 clear_preview_animation_queue(void) __asm__("FUN_00226718");
@@ -73,7 +73,7 @@ int initialize_menu_preview_objects(char *preview) {
         object_variables[2] = 0;
         g = &menu_system;
         g->unkC0 = -1;
-        FillTransferWords(D_00186310, 0, 0x40);
+        fill_transfer_words(D_00186310, 0, 0x40);
         func_001E9410(object);
     }
     object = create_menu_preview_moby(0x259);

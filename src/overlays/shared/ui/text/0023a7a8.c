@@ -8,7 +8,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B140), where it is exact; names translated to the US level program. */
 
 extern char D_L00_0015F7C8[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int D_0015ED80;
 extern int FUN_001fa6e0(int, int, float);
 extern int find_valid_animation_frame_index_alt(int, int) __asm__("FUN_001ff960");
@@ -42,14 +42,14 @@ int FUN_L00_0023a7a8(char *m) {
     if (*(unsigned char *)(m + 0x70) == 0)
         return *(int *)(m + 0x58);
     {
-        f20 = ConvertIntegerToFloat(*(unsigned char *)(m + 0x70));
-        f21 = f20 / ConvertIntegerToFloat(*(int *)&D_L00_0015F91C_d);
+        f20 = convert_integer_to_float(*(unsigned char *)(m + 0x70));
+        f21 = f20 / convert_integer_to_float(*(int *)&D_L00_0015F91C_d);
         if (f21 > 1.0f)
             f21 = 1.0f;
         else if (f21 < 0.0f)
             f21 = 0.0f;
-        f20 = ConvertIntegerToFloat(*(unsigned char *)(q + 1));
-        f20 = f20 / ConvertIntegerToFloat(*(int *)&D_L00_0015F920_d);
+        f20 = convert_integer_to_float(*(unsigned char *)(q + 1));
+        f20 = f20 / convert_integer_to_float(*(int *)&D_L00_0015F920_d);
         if (f20 > 1.0f)
             f20 = 1.0f;
         else if (f20 < 0.0f)

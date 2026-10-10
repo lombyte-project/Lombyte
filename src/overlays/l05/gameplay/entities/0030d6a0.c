@@ -25,7 +25,7 @@ typedef struct {
 } Ent;
 
 extern Ent D_L05_001D6880[];
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L05_0030d6a0(int arg) {
     int i;
@@ -35,26 +35,26 @@ void FUN_L05_0030d6a0(int arg) {
             Ent *e = &t[arg];
             float x = e->x - t[i].x;
             float y = e->y - t[i].y;
-            if (AbsoluteFloat(x) < 0.1f) {
-                if (AbsoluteFloat(y - 16.0f) < 0.1f)
+            if (absolute_float(x) < 0.1f) {
+                if (absolute_float(y - 16.0f) < 0.1f)
                     e->n[0] = i;
-                if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                if (absolute_float(y + 16.0f) < 0.1f)
                     e->n[2] = i;
-            } else if (AbsoluteFloat(y) < 0.1f) {
-                if (AbsoluteFloat(x - 16.0f) < 0.1f)
+            } else if (absolute_float(y) < 0.1f) {
+                if (absolute_float(x - 16.0f) < 0.1f)
                     e->n[1] = i;
-                if (AbsoluteFloat(x + 16.0f) < 0.1f)
+                if (absolute_float(x + 16.0f) < 0.1f)
                     e->n[3] = i;
             } else {
-                if (AbsoluteFloat(x - 16.0f) < 0.1f) {
-                    if (AbsoluteFloat(x - 16.0f) < 0.1f)
+                if (absolute_float(x - 16.0f) < 0.1f) {
+                    if (absolute_float(x - 16.0f) < 0.1f)
                         e->n[5] = i;
-                    if (AbsoluteFloat(x + 16.0f) < 0.1f)
+                    if (absolute_float(x + 16.0f) < 0.1f)
                         e->n[7] = i;
-                } else if (AbsoluteFloat(x + 16.0f) < 0.1f) {
-                    if (AbsoluteFloat(x - 16.0f) < 0.1f)
+                } else if (absolute_float(x + 16.0f) < 0.1f) {
+                    if (absolute_float(x - 16.0f) < 0.1f)
                         e->n[4] = i;
-                    if (AbsoluteFloat(x + 16.0f) < 0.1f)
+                    if (absolute_float(x + 16.0f) < 0.1f)
                         e->n[6] = i;
                 }
             }
@@ -327,7 +327,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e7f8.s", FUN_L05_0030e7f8);
 /* Scatters points along a range, placing each one with a heading and radius. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003106E0), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
@@ -355,7 +355,7 @@ void FUN_L05_0030f218(char *obj, float a, float b) {
     int i, j, k, m, n;
     clear_vector(v);
     v[2] = *(float *)&D_L05_00161DC8_d * frame_time;
-    ground = v[2] * 0.75f * ConvertIntegerToFloat(*(int *)&D_L05_00161DB8_d);
+    ground = v[2] * 0.75f * convert_integer_to_float(*(int *)&D_L05_00161DB8_d);
     j = 0;
     for (i = j; (float)i < (b - a) / *(float *)&D_L05_00161DB4_d; i++) {
         float fi = (float)j;
@@ -1591,7 +1591,7 @@ extern void FUN_L05_003193a8_u(char *) __asm__("FUN_L05_003193a8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__("FUN_00214e58");
 
 void FUN_L05_00318c78(struct Moby *moby) {
@@ -1621,7 +1621,7 @@ void FUN_L05_00318c78(struct Moby *moby) {
             subtract_vector_xyz(v70, &g->motion.pos, &moby->pos);
             v70[3] = 0;
             FUN_001f9d20(v70, v70, v30);
-            if (AbsoluteFloat(v70[1]) < 1.2f && v70[0] < 1.0f && v70[0] > -0.75f) {
+            if (absolute_float(v70[1]) < 1.2f && v70[0] < 1.0f && v70[0] > -0.75f) {
                 FUN_L05_003193a8_u(moby);
                 FUN_L05_00319690(moby);
                 if (*(int *)(D_0013CAE4) & 0x10) {

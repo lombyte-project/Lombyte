@@ -396,7 +396,7 @@ extern struct UsageStats D_00141848;
 extern S17BEB8 D_L01_0017C238;
 extern char D_0013A4E0[];
 extern char D_0013E550[];
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L01_001C4130[];
 extern float D_L01_00167450;
 extern float D_L01_00167258_d __asm__("D_L01_00167258") __attribute__((section(".data")));
@@ -584,7 +584,7 @@ void FUN_L01_002370b8(void) {
                 } else if (hero.state.current == 0x17) {
                     FUN_L00_00211e98();
                 }
-                if (AbsoluteFloat(hero.motion.unk184) > frame_time * 0.34906584f) {
+                if (absolute_float(hero.motion.unk184) > frame_time * 0.34906584f) {
                     int neg;
                     int anim;
 
@@ -596,7 +596,7 @@ void FUN_L01_002370b8(void) {
                     if (((Moby *)hero.moby)->f53 != anim) {
                         FUN_L00_002323b8(anim, 0, scale_game_frames(5));
                     }
-                    hero.unkA90 = AbsoluteFloat(hero.motion.unk184) / (frame_time * 3.3161256f);
+                    hero.unkA90 = absolute_float(hero.motion.unk184) / (frame_time * 3.3161256f);
                     if (hero.unkA90 < 0.55f) {
                         hero.unkA90 = 0.55f;
                     }
@@ -1111,7 +1111,7 @@ void FUN_L01_002370b8(void) {
             if (D_0013C940.no_direction != 0 && hero.unk698 != 0) {
                 hero.target_speed = frame_time * 3.0f;
             }
-            if (AbsoluteFloat(hero.motion.unk188) > 0.7853982f) {
+            if (absolute_float(hero.motion.unk188) > 0.7853982f) {
                 hero.target_speed = 0.0f;
             }
             FUN_L00_00212088(frame_time_sq * 4.0f, frame_time_sq * 5.0f);
@@ -1374,7 +1374,7 @@ void FUN_L01_002370b8(void) {
                 cap = 1.9f;
             }
             e = d - off;
-            if (AbsoluteFloat(e) < range + 3.0f) {
+            if (absolute_float(e) < range + 3.0f) {
                 float q;
 
                 q = e / 0.9f;
@@ -1578,12 +1578,12 @@ void FUN_L01_002370b8(void) {
         if (hero.motion.unk164 < frame_time * 0.3f && hero.unk229C > 0.85f) {
             hero.unk3B8 = 1;
         }
-        if (AbsoluteFloat(hero.motion.unk188) < 0.05235988f || hero.unk20A8 != 0 ||
+        if (absolute_float(hero.motion.unk188) < 0.05235988f || hero.unk20A8 != 0 ||
             hero.state.step == 1) {
             hero.unk3B8 = 0;
         }
         if (hero.unk3BE != 0) {
-            if (AbsoluteFloat(hero.motion.unk188) < 0.06981317f || hero.unk20A8 != 0) {
+            if (absolute_float(hero.motion.unk188) < 0.06981317f || hero.unk20A8 != 0) {
                 hero.unk3BE = 0;
             }
         }

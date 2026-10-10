@@ -38,7 +38,7 @@ extern HeroTableEntry70 D_L12_00179D10[];
 extern struct UsageStats D_00141848;
 extern S17AB80 D_L12_0017AB00;
 extern S17C2B8 D_L12_0017C238;
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L12_0015F638;
 extern float D_L12_00167258 __attribute__((section(".data")));
 extern float FUN_001f96b0(float);
@@ -979,8 +979,8 @@ void FUN_L12_002461f0(void) {
                         break;
                     }
                     hero.unk1F8 = scale_game_frames(0x28);
-                    if (AbsoluteFloat(hero.motion.rot.f[1]) > 0.7853982f ||
-                        AbsoluteFloat(hero.motion.rot.f[0]) > 0.7853982f) {
+                    if (absolute_float(hero.motion.rot.f[1]) > 0.7853982f ||
+                        absolute_float(hero.motion.rot.f[0]) > 0.7853982f) {
                         hero.unk1B0 = scale_game_frames(0x28);
                     }
                     if ((hero.unk300 != 0 && hero.unk12E7 == 0) ||
@@ -1839,7 +1839,7 @@ void FUN_L12_002461f0(void) {
                                     scale_game_frames(0xE) < hero.state_timer &&
                                     (hero.unk41E == 0 ||
                                      (hero.ground_distance > 0.7f &&
-                                      AbsoluteFloat(FUN_L00_00233a78(hero.motion.velocity.f)) <
+                                      absolute_float(FUN_L00_00233a78(hero.motion.velocity.f)) <
                                           frame_time * 5.8f))) {
                                     hero_set_state(0xE, 1);
                                 } else if (D_0013D4C0[2] != 0 && FUN_L00_0020d498(3) != 4 &&

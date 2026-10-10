@@ -11,7 +11,7 @@ extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern void FUN_001f9810(void *, int);
 extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L18_00213b40(void) {
     struct Hero *g = &hero;
@@ -108,7 +108,7 @@ void FUN_L18_00213b40(void) {
         h = &hero;
         if (h->selector_3 != 0 && h->state.current != 0x68 &&
             h->state.current != 0x7B) {
-            if (AbsoluteFloat(h->unk2F4 - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
+            if (absolute_float(h->unk2F4 - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
                 if (h->unk2F4 - h->motion.pos.f[2] > 0.0f) {
                     if (h->state.current != 0x69 || h->unk41E != 0) {
                         if (h->motion.unk100.f[2] < 0.0f) {
@@ -125,7 +125,7 @@ void FUN_L18_00213b40(void) {
         }
         h = &hero;
         if (h->selector_11 != 0 && h->state.current != 0x7B) {
-            if (AbsoluteFloat(h->unk2F4 - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
+            if (absolute_float(h->unk2F4 - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
                 if (h->unk2F4 - h->motion.pos.f[2] > 0.0f) {
                     if (h->motion.unk100.f[2] < 0.0f) {
                         FUN_L00_0020b930();

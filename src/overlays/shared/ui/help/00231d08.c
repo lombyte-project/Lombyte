@@ -984,9 +984,9 @@ void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
         break;
     }
 }
-extern float FastVecDot(void *, void *) __asm__("FUN_001f9ab0");
-extern void FastVecScale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234150), where it is exact; names translated to the US level program. */
 
@@ -1003,12 +1003,12 @@ void FUN_L00_002338d0(float *dst, float *src) {
         break;
     case 1:
         FUN_001f9bf8(n, &base->unk270, 1.0f);
-        FastVecScale(n, n, FastVecDot(n, src));
-        FastVecSub(dst, src, n);
+        scale_vector_xyz(n, n, dot_vectors_xyz(n, src));
+        subtract_vector_xyz(dst, src, n);
         break;
     case 2:
-        FastVecScale(n, &base->unk290, FastVecDot(&base->unk290, src));
-        FastVecSub(dst, src, n);
+        scale_vector_xyz(n, &base->unk290, dot_vectors_xyz(&base->unk290, src));
+        subtract_vector_xyz(dst, src, n);
         break;
     }
 }
@@ -1122,7 +1122,7 @@ void FUN_L00_00233ba0(float *dst, float *src, float z) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002344B0), where it is exact; names translated to the US level program. */
 
 extern float FUN_L00_00233a78_c(void *) __asm__("FUN_L00_00233a78");
-extern float ConvertIntegerToFloat(int) __asm__("FUN_001fa6c0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
@@ -1134,8 +1134,8 @@ float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
     switch (hero.unk20B3) {
     case 0:
         n = truncate_float_to_s32(vel[2] / step);
-        a = ConvertIntegerToFloat(n);
-        r = pos[2] + vel[2] * a - ConvertIntegerToFloat((n * n + n) >> 1) * step;
+        a = convert_integer_to_float(n);
+        r = pos[2] + vel[2] * a - convert_integer_to_float((n * n + n) >> 1) * step;
         if (steps != 0) {
             *steps = n;
         }

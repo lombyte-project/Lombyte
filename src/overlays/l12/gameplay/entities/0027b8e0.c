@@ -13,10 +13,10 @@
 extern float FUN_001f9b48(void *, void *);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9e90(float, float);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 int FUN_L12_0027b8e0(char *a, float *b, float x, float y, float z) {
-    float d = AbsoluteFloat(b[2] - *(float *)(a + 0x18));
+    float d = absolute_float(b[2] - *(float *)(a + 0x18));
     if (d > y)
         return 0;
     if (FUN_001f9b48(b, a + 0x10) > x)
@@ -31,7 +31,7 @@ int FUN_L12_0027b8e0(char *a, float *b, float x, float y, float z) {
     }
     return 1;
 }
-extern void MobyAnimAdvance(void *) __asm__("FUN_0020d580");
+extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 #include "qcopy.h"
 
@@ -50,7 +50,7 @@ void FUN_L12_0027b9c0(struct Moby *parent, unsigned char *child, int mode) {
     char workspace[0x40];
     func_0020DAF8(parent, mode, workspace);
     qcopy(child + 0x10, workspace + 0x30);
-    MobyAnimAdvance(child);
+    advance_moby_animation(child);
     FUN_L00_00250df8(child);
     func_001FA480(child + 0xC0, workspace);
     normalize_vector_triplet(child + 0xC0);

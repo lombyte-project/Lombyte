@@ -322,7 +322,7 @@ extern f32 D_0015EE18;
 /* read by absolute address: retail has no symbol relocation here, and a
    symbol (D_0015EDB0[3]) changes the code */
 #define BYTE_0015EDB3 (*(u8 *)0x15EDB3)
-extern f32 AbsoluteFloat(f32) __asm__("FUN_001f99c0");
+extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 
 /* In hero state 2, sets the lean values from motion.unk188 (clamped to
    +-1.4); needs the moby in item slot 3. */
@@ -354,7 +354,7 @@ void FUN_L00_00215ef8(void)
             lean = -1.3089969f;
         lean_state.fCC8 = lean;
         sway = 0.1f;
-        sway = AbsoluteFloat(a) * sway + sway;
+        sway = absolute_float(a) * sway + sway;
         if (sway > 0.07f)
             sway = 0.07f;
         lean_state.fCF8 = sway * scale;
@@ -807,7 +807,7 @@ void FUN_L00_00216ec0_00216ec0(s32 a, s32 b, s32 c) {
 extern int FUN_001f9770(void *);
 extern int FUN_L00_00216de8();
 
-/* For each of eight timers that FastDecTimer reports as 2, clears a field and calls 00216de8. */
+/* For each of eight timers that fast_dec_timer reports as 2, clears a field and calls 00216de8. */
 void FUN_L00_00216f10(void) {
     char *p = (char *)&hero.unk21D8[0][2];
     short *q = (short *)(&hero.unk21D8[0][3]);

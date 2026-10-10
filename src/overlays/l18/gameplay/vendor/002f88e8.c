@@ -117,7 +117,7 @@ void FUN_L18_002f9780(void) {
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FAEF8), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L18_00162454;
 extern float D_L18_00162450;
 extern float fast_sin(float) __asm__("func_001F9DE0");
@@ -142,9 +142,9 @@ void FUN_L18_002f9a98(void *moby) {
     char d[16];
     char e[16];
     int n = scale_game_frames(D_L18_00162460);
-    float f = ConvertIntegerToFloat(D_L18_0015F5CC % n);
+    float f = convert_integer_to_float(D_L18_0015F5CC % n);
     int h;
-    f = f / ConvertIntegerToFloat(n);
+    f = f / convert_integer_to_float(n);
     f = f * 6.18318f;
     f = fast_sin(f - 3.14159f);
     h = FUN_001fa6e0(D_L18_00162458, D_L18_0016245C, f * 0.5f + 0.5f);
@@ -415,7 +415,7 @@ void FUN_L18_002fa888(int idx, int value) {
     }
 }
 
-extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 #define NOT_SDA
 
@@ -440,9 +440,9 @@ void FUN_L18_002fa8e0(L18VM_a8e0 *moby) {
     if (moby->class_id == 0x630) {
         void *child = moby->data->child;
         if (child != 0) {
-            DeleteMoby(child);
+            mark_moby_for_removal(child);
         }
-        DeleteMoby(moby);
+        mark_moby_for_removal(moby);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FC188), where it is exact; names translated to the US level program. */

@@ -19,7 +19,7 @@ extern s32 D_0014C190[][64];
 extern int D_L09_001BA650[];
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern char D_0013E533[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9b48(void *, void *);
@@ -36,7 +36,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E550[];
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -128,7 +128,7 @@ void FUN_L09_003033a0(unsigned char *moby) {
         if (*(short *)(data + 0xBA) != 0 ||
             (F(data, 0xBC) < 0.0f &&
              FUN_001f9b80((moby + 0x10), &hero.motion.pos) < 2.0f &&
-             AbsoluteFloat(hero.motion.pos.f[2] - F(moby, 0x18)) < 4.0f &&
+             absolute_float(hero.motion.pos.f[2] - F(moby, 0x18)) < 4.0f &&
              F(moby, 0x18) - hero.motion.pos.f[2] > 1.0f)) {
             int r;
             if (*(short *)(data + 0xBA) == 0) {
@@ -151,11 +151,11 @@ void FUN_L09_003033a0(unsigned char *moby) {
                 *(int *)(data + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
             }
             F(data, 0xA8) += F(data, 0xAC) * frame_time;
-            if (AbsoluteFloat(F(data, 0xA8)) > AbsoluteFloat(F(data, 0xAC))) {
+            if (absolute_float(F(data, 0xA8)) > absolute_float(F(data, 0xAC))) {
                 F(data, 0xA8) = F(data, 0xAC);
             }
             F(data, 0xA4) = F(data, 0xA4) + F(data, 0xA8);
-            if (0.5f < AbsoluteFloat(F(data, 0xA4) - 0.5f)) {
+            if (0.5f < absolute_float(F(data, 0xA4) - 0.5f)) {
                 int r;
                 if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
                     hero_set_state(0, 1);
@@ -179,10 +179,10 @@ void FUN_L09_003033a0(unsigned char *moby) {
                 }
                 *(int *)(data + 0xC4) = -1;
             }
-            f20 = ConvertIntegerToFloat(*(int *)path - 1);
+            f20 = convert_integer_to_float(*(int *)path - 1);
             i = func_001FA898_r(f20 * F(data, 0xA4));
-            f20 = ConvertIntegerToFloat(*(int *)path - 1);
-            t = ConvertIntegerToFloat(i);
+            f20 = convert_integer_to_float(*(int *)path - 1);
+            t = convert_integer_to_float(i);
             f20 *= F(data, 0xA4);
             f20 -= t;
             if (i == *(int *)path - 1) {
@@ -516,7 +516,7 @@ void FUN_L09_00305a28(struct Moby *moby) {
             *(s32 *)(data + 0x14) = allocate_voice_for_target_entry(0, 4, moby);
         }
     }
-    count_as_float = ConvertIntegerToFloat(*(s32 *)(data + 8));
+    count_as_float = convert_integer_to_float(*(s32 *)(data + 8));
     start = F(data, 0);
     end = F(data, 4);
     *(OvlQuad *)work = 0;
@@ -580,8 +580,8 @@ char *FUN_L09_00308220(struct Moby *owner, int cls) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_003082d8.s", FUN_L09_003082d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_003091b0.s", FUN_L09_003091b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00309c08.s", FUN_L09_00309c08);
-extern float FastAddRots(float, float) __asm__("FUN_001fa580");
-extern float FastSubRots(float, float) __asm__("FUN_001fa5c8");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 #define NOT_SDA
 
@@ -590,9 +590,9 @@ extern float FastSubRots(float, float) __asm__("FUN_001fa5c8");
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_0030B5E8.c: func_L09_0030B5E8), where it is exact; names translated to the US level program. */
 
 void FUN_L09_0030a238(float *dst, float a, float b, float scale) {
-    float v = FastSubRots(b, a) * scale;
+    float v = fast_subtract_rotations(b, a) * scale;
     *dst = v;
-    *dst = FastAddRots(v, a);
+    *dst = fast_add_rotations(v, a);
 }
 typedef struct {
     s32 count;
@@ -645,7 +645,7 @@ int FUN_L09_0030a298(struct Moby *moby) {
     normalize_vector_xyz(&step, &step, vars->speed);
     add_vector_xyz(&moby->pos, &moby->pos, &step);
     FUN_L09_0030a238(&moby->rot.z, moby->rot.z,
-                     FastAddRots(atan2_f(path->node[vars->node].f[0] - moby->pos.x,
+                     fast_add_rotations(atan2_f(path->node[vars->node].f[0] - moby->pos.x,
                                          path->node[vars->node].f[1] - moby->pos.y),
                                  vars->yaw_offset),
                      (1.0f - vars->lag) * 0.02f);
@@ -674,7 +674,7 @@ int FUN_L09_0030a298(struct Moby *moby) {
     }
     if (path->node[vars->node].f[3] == 42.0f)
         vars->yaw_offset = 0.0f;
-    vars->spin = FastAddRots(vars->spin, vars->speed);
+    vars->spin = fast_add_rotations(vars->spin, vars->speed);
     FUN_L00_001fff28(vars->unk70, 0, vars->spin);
     if (vector_distance(&moby->pos, &path->node[path->count - 1]) > 8.0f &&
         vector_distance(&moby->pos, &path->node[0]) > 8.0f && !random_integer_below(7)) {

@@ -33,7 +33,7 @@ extern struct CamColl D_001870D0;
 
 extern f32 cam_interp_values(f32 *vel, f32 from, f32 to, f32 stiffness, f32 damping,
                              f32 max) __asm__("FUN_001ebd78");
-extern float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern float absolute_float(float input) __asm__("func_001F99C0");
 extern void FUN_001f9a28(void *out, void *a, void *b);
 extern void FUN_001f9a68(void *out, void *a, f32 s);
 extern f32 FUN_001f9ab0(void *a, void *b);
@@ -96,7 +96,7 @@ void FUN_001ed470(void) {
     if (m != NULL && m->oclass != 0x4BA && m->oclass != 0x336) {
         if (m == cam->unkD4) {
             cam->unkDC = m->pos.z - cam->unkD8;
-            if (AbsoluteFloat(cam->unkDC) < 0.001f) {
+            if (absolute_float(cam->unkDC) < 0.001f) {
                 cam->unkDC = 0.0f;
             }
             cam->unkD8 = cam->unkD4->pos.z;

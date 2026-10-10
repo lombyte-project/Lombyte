@@ -465,7 +465,7 @@ typedef struct {
 extern V_2EF078 D_L14_001DFD80[];
 extern V_2EF078 D_L14_001E0050[];
 extern char D_L14_001674C0[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L14_00161CD0_c[] __asm__("D_L14_00161CD0") __attribute__((section(".sdata")));
 extern float FUN_L00_00257e20(float, float, float, float, float);
 extern int D_L14_00161C70 __attribute__((sda));
@@ -509,7 +509,7 @@ void FUN_L14_002edc18(void) {
     q[0].r88 = 0x8000000048L;
     q[0].r80 = 0xFF9000000260L;
     q[0].r70 = 0;
-    a = func_001FA898_r(ConvertIntegerToFloat(D_L14_001E0000[0]) / ConvertIntegerToFloat(scale_game_frames_alt(D_L14_00161C70)) * 255.0f) - D_L14_00161CE0[0];
+    a = func_001FA898_r(convert_integer_to_float(D_L14_001E0000[0]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70)) * 255.0f) - D_L14_00161CE0[0];
     if (a < 0) a = 0;
     if (a > 0xFF) a = 0xFF;
     c = D_L14_00161C78 | (a << 24);
@@ -585,7 +585,7 @@ void FUN_L14_002edc18(void) {
         if (i == 0x27) {
             b = 0;
         } else {
-            b = func_001FA898_r(ConvertIntegerToFloat(D_L14_001E0000[i]) / ConvertIntegerToFloat(scale_game_frames_alt(D_L14_00161C70)) * 255.0f) - D_L14_00161CE0[0];
+            b = func_001FA898_r(convert_integer_to_float(D_L14_001E0000[i]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70)) * 255.0f) - D_L14_00161CE0[0];
             if (b < 0) b = 0;
             if (b > 0xFF) b = 0xFF;
         }
@@ -599,7 +599,7 @@ void FUN_L14_002edc18(void) {
         qcopy(&q[0].v[1], &q[0].v[3]);
         qcopy(&q[1].v[0], &q[1].v[2]);
         qcopy(&q[1].v[1], &q[1].v[3]);
-        sz[0].z = D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, ConvertIntegerToFloat(i) / ConvertIntegerToFloat(0x28));
+        sz[0].z = D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(i) / convert_integer_to_float(0x28));
         sz[1].z = sz[0].z * D_L14_00161C88;
     }
     qcopy(&m2[0], &m[0]);
@@ -611,7 +611,7 @@ void FUN_L14_002edc18(void) {
         V_2EF078 *os = D_L14_001E0050;
         V_2EF078 *o;
 
-        t = ConvertIntegerToFloat(as[j * 16]) / ConvertIntegerToFloat(scale_game_frames_alt(D_L14_00161C70));
+        t = convert_integer_to_float(as[j * 16]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70));
         a = func_001FA898_r(t * 255.0f) - D_L14_00161CE0[0];
         if (a < 0) a = 0;
         if (a > 0xFF) a = 0xFF;
@@ -619,7 +619,7 @@ void FUN_L14_002edc18(void) {
         q[0].col[1] = c;
         q[0].col[0] = c;
         q[1].col[0] = q[1].col[1] = D_L14_00161C7C | ((a >> 1) << 24);
-        sz[0].z = (D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, ConvertIntegerToFloat(D_L14_00161CF8[j]) / ConvertIntegerToFloat(0x28))) * 0.75f;
+        sz[0].z = (D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(D_L14_00161CF8[j]) / convert_integer_to_float(0x28))) * 0.75f;
         sz[1].z = sz[0].z * 4.0f;
         qcopy(&q[0].v[0], &sz[0]);
         scale_vector_xyz(&q[0].v[1], &q[0].v[0], -1.0f);
@@ -652,7 +652,7 @@ void FUN_L14_002edc18(void) {
             transform_vector(&q[0].v[3], &q[0].v[3], &m2[0]);
             transform_vector(&q[1].v[2], &q[1].v[2], &m2[0]);
             transform_vector(&q[1].v[3], &q[1].v[3], &m2[0]);
-            t = ConvertIntegerToFloat(*s) / ConvertIntegerToFloat(scale_game_frames_alt(D_L14_00161C70));
+            t = convert_integer_to_float(*s) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70));
             a = func_001FA898_r(t * 255.0f) - D_L14_00161CE0[0];
             if (a < 0) a = 0;
             if (a > 0xFF) a = 0xFF;
@@ -971,7 +971,7 @@ void FUN_L14_002ef630(u8 *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F0B78), where it is exact; names translated to the US level program. */
 
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_sin(float);
 extern int FUN_001fa6e0(int, int, float);
@@ -982,8 +982,8 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 void FUN_L14_002ef6f0(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     struct Hero *x = &hero;
-    if (AbsoluteFloat(moby->pos.x - x->motion.pos.f[0]) > 40.0f ||
-        AbsoluteFloat(moby->pos.y - x->motion.pos.f[1]) > 40.0f) {
+    if (absolute_float(moby->pos.x - x->motion.pos.f[0]) > 40.0f ||
+        absolute_float(moby->pos.y - x->motion.pos.f[1]) > 40.0f) {
         moby->unk90 = FUN_001fa6e0(moby->unk90, 0x80303030, 0.1f);
     } else {
         int i, col;
@@ -1508,7 +1508,7 @@ extern short D_L14_00161F58_d __asm__("D_L14_00161F58") __attribute__((sda));
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void FUN_L00_0025d808_c(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L14_002fc9a0(struct Moby *moby) {
     char *d = (char *)moby->pvars;
@@ -1520,8 +1520,8 @@ void FUN_L14_002fc9a0(struct Moby *moby) {
     FUN_L00_0025b8c0(&moby->pos.y, (float *)(d + 0x74), v[1], (*(float *)&D_L14_00161F4C_d), (*(float *)&D_L14_00161F50_d), 0.0f);
     FUN_L00_0025b8c0(&moby->pos.z, (float *)(d + 0x78), v[2], (*(float *)&D_L14_00161F4C_d), (*(float *)&D_L14_00161F50_d), 0.0f);
     subtract_vector_xyz_c(t, v, &moby->pos);
-    if (AbsoluteFloat(t[0]) > 0.01f) {
-        if (AbsoluteFloat(t[1]) > 0.01f) {
+    if (absolute_float(t[0]) > 0.01f) {
+        if (absolute_float(t[1]) > 0.01f) {
             a = FUN_001f9e90(t[0], t[1]);
             b = fast_subtract_rotations(moby->rot.z, a);
             FUN_L00_00258278(moby, (float *)(d + 0x88), a, (*(float *)&D_L14_00161F4C_d), (*(float *)&D_L14_00161F50_d), 0.0f);
@@ -1560,7 +1560,7 @@ extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, floa
 extern void FUN_L13_00316f48(int);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
@@ -1595,8 +1595,8 @@ int FUN_L14_002fd918(struct Moby *m) {
     FUN_L00_0025b8c0(&m->pos.z, (float *)(d + 0x78), v[2], D_L14_00161F7C, D_L14_00161F80,
                      0.0f);
     subtract_vector_xyz(w, v, &m->pos);
-    if (0.01f < AbsoluteFloat(w[0])) {
-        if (0.01f < AbsoluteFloat(w[1])) {
+    if (0.01f < absolute_float(w[0])) {
+        if (0.01f < absolute_float(w[1])) {
             yaw = FUN_001f9e90(w[0], w[1]);
             t = fast_subtract_rotations(m->rot.z, yaw);
             FUN_L00_00258278(m, (float *)(d + 0x88), yaw, D_L14_00161F7C, D_L14_00161F80, 0.0f);

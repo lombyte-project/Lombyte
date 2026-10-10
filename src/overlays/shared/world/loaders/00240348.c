@@ -33,7 +33,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00241788.s", FUN_L00_00241788);
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern f64 fptodp(f32);
-extern void STUB_printf(const char *, ...) __asm__("FUN_001e93b0");
+extern void stub_printf(const char *, ...) __asm__("FUN_001e93b0");
 
 struct MobySortEntry {
     f32 id;
@@ -77,7 +77,7 @@ void FUN_L00_00241788(s32 *entries, s32 count) {
     } while (changed);
 
     for (i = 0; i < count; i++) {
-        STUB_printf((const char *)0x001e8640, truncate_float_to_s32(sorted[i].id),
+        stub_printf((const char *)0x001e8640, truncate_float_to_s32(sorted[i].id),
                     fptodp(sorted[i].value));
     }
 }

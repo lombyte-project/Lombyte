@@ -41,7 +41,7 @@ extern void FUN_L01_00228e38(void);
 extern void FUN_L01_0022cd48(void);
 extern void FUN_L01_0022d090(void);
 extern void FUN_L03_0021c668(void);
-extern void NoOpMainCallback_alt(void *) __asm__("FUN_001e93e8");
+extern void no_op_main_callback_alt(void *) __asm__("FUN_001e93e8");
 void begin_draw_frame(void) __asm__("FUN_001f7978");
 void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
@@ -90,7 +90,7 @@ void FUN_L03_002002f8(void) {
     FUN_L00_00205ea8();
     FUN_L00_00206080();
     FUN_L00_00206e00();
-    NoOpMainCallback_alt(*(void **)(g + 0x2080));
+    no_op_main_callback_alt(*(void **)(g + 0x2080));
     if (*(int *)(g + 0x208C) != 0x16 && *(int *)(g + 0x2084) != 0x32) {
         FUN_L00_002484e0(g + 0x80);
     }

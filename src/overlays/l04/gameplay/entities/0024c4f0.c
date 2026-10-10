@@ -32,7 +32,7 @@ int FUN_L04_0024c4f0(float *p, float *poly, int n) {
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 float FUN_L04_0024c660(float *dst, float *a, float *b, float *c) {
     float d0[4];
@@ -48,7 +48,7 @@ float FUN_L04_0024c660(float *dst, float *a, float *b, float *c) {
     add_vector_xyz(d3, c, d3);
     subtract_vector_xyz(d1, c, d3);
     det = d0[1] * d1[0] - d0[0] * d1[1];
-    if (AbsoluteFloat(det) < 0.0001f) {
+    if (absolute_float(det) < 0.0001f) {
         qcopy(dst, a);
         return 0.0f;
     }

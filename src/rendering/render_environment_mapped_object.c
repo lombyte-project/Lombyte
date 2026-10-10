@@ -50,7 +50,7 @@ extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 extern int scale_ticks(int) __asm__("func_001F96F8");
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 extern float square_root_float(float) __asm__("func_001F9988");
-extern float AbsoluteFloat(float) __asm__("func_001F99C0");
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern void subtract_vectors(void *, void *, void *) __asm__("func_001F9A28");
 extern void scale_vector(void *, void *, float) __asm__("func_001F9A68");
 extern float vector_dot_product(void *, void *) __asm__("func_001F9AB0");
@@ -106,8 +106,8 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     colors[1] = color;
     colors[0] = color;
     calculate_object_transform(object, 0, object_transform);
-    if (game_stage != 0 || (AbsoluteFloat(D_00186F40.position_x - object->position_x) < 16.0f &&
-                            AbsoluteFloat(D_00186F40.position_y - object->position_y) < 16.0f)) {
+    if (game_stage != 0 || (absolute_float(D_00186F40.position_x - object->position_x) < 16.0f &&
+                            absolute_float(D_00186F40.position_y - object->position_y) < 16.0f)) {
         mapping_enabled = 1;
     }
     if (game_stage == 6 && D_0013E050[0] == 4) {

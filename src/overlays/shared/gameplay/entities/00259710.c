@@ -594,7 +594,7 @@ float FUN_L00_0025b750(float a, float b, float c) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C7F0), where it is exact; names translated to the US level program. */
 
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L00_0025b798(float *ptr, float rate, float b, float c, float limit) {
     float v = *ptr + (b * rate - c * (*ptr));
@@ -607,9 +607,9 @@ void FUN_L00_0025b798(float *ptr, float rate, float b, float c, float limit) {
             *ptr = -limit;
         }
     }
-    if (AbsoluteFloat(rate) < *ptr) {
-        *ptr = AbsoluteFloat(rate);
-    } else if (*ptr < -AbsoluteFloat(rate)) {
-        *ptr = -AbsoluteFloat(rate);
+    if (absolute_float(rate) < *ptr) {
+        *ptr = absolute_float(rate);
+    } else if (*ptr < -absolute_float(rate)) {
+        *ptr = -absolute_float(rate);
     }
 }

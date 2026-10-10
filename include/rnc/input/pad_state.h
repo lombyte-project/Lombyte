@@ -20,7 +20,7 @@ struct PadState {
     u8 pad_180[0x9];
     u8 unk189;                          /* 0x189: copied by FUN_L00_002d2ee8 on spawn */
     u8 pad_18A[0x4];
-    s16 unk18E;                         /* 0x18E: cleared with unk190 by ResetGlobalStateFields */
+    s16 unk18E;                         /* 0x18E: cleared with unk190 by reset_global_state_fields */
     s32 unk190;                         /* 0x190 */
     s32 socket;                         /* 0x194: scePad2CreateSocket(&param, &D_0013C940) result, init_pads */
     s32 profile_state;                  /* 0x198: 0 query profile, 1 read pad, 2 profile too long */

@@ -216,7 +216,7 @@ extern u8 D_0014C050[];
 extern u8 D_0013D4D5 __attribute__((section(".data")));
 extern s32 D_L14_0015F5CC;
 extern s32 D_L14_0015F5C4;
-extern f32 AbsoluteFloat(f32) __asm__("FUN_001f99c0");
+extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern void FUN_L14_00305b18(struct Moby *);
 extern f32 D_L14_001621E8 __attribute__((sda));
 extern f32 D_L14_001621EC __attribute__((sda));
@@ -264,7 +264,7 @@ void FUN_L14_00305758(struct Moby *moby) {
             return;
         if (!(FUN_001f9b80(o + 0x10, hero.motion.pos.f) < 1.0f))
             return;
-        if (!(AbsoluteFloat(*(f32 *)(o + 0x18) - hero.motion.pos.f[2]) < 2.0f))
+        if (!(absolute_float(*(f32 *)(o + 0x18) - hero.motion.pos.f[2]) < 2.0f))
             return;
         if (D_0013D4D5 != 0)
             *(s32 *)(d + 0x18) = state;
@@ -316,7 +316,7 @@ typedef struct {
 } FxData14;
 
 extern char D_L14_001674C0[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int FUN_001fa6e0(int, int, float);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -326,7 +326,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void tick_countdown_32(void *) __asm__("func_001F9740");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001F9908_r(int *arg0) __asm__("FUN_001f9740");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -358,9 +358,9 @@ void FUN_L14_00305b18(struct Moby *p) {
             m->t[j] = scale_game_frames(255);
         }
         t++;
-        g = ConvertIntegerToFloat(scale_game_frames(255) - m->t[j]);
+        g = convert_integer_to_float(scale_game_frames(255) - m->t[j]);
         g = g / (float)scale_game_frames(255);
-        c = FUN_001fa6e0(0x4040FFFF, 0x1040FFFF, AbsoluteFloat(0.5f - g));
+        c = FUN_001fa6e0(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - g));
         k = func_001FA898_r(*a++);
         FUN_L00_00272f68(m->c[j], v, c, k, 0x35, 1, 2, 0);
         j++;

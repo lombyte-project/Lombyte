@@ -1047,7 +1047,7 @@ typedef struct {
 } RocketHit;
 
 extern float D_0015ED70;
-extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void FUN_L03_0024e830(void *, void *, f32);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -1088,7 +1088,7 @@ void FUN_L03_002d43c8(struct Moby *m) {
     switch (state) {
     case 1:
         pos = &m->pos;
-        range = ConvertIntegerToFloat(v->timer * 2) * v->speed;
+        range = convert_integer_to_float(v->timer * 2) * v->speed;
         FUN_L03_0024e830(m, &target, range);
         qcopy(&old, pos);
         add_vector_xyz(pos, pos, v);

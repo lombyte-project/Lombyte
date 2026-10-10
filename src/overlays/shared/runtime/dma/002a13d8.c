@@ -150,7 +150,7 @@ typedef struct WalkData {
 } WalkData;
 
 extern char D_L00_001611E0[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
@@ -162,7 +162,7 @@ extern int D_L00_001CA760[];
 extern int FUN_L00_0024ed18(char *a, float time);
 extern int FUN_L00_002a13f0_c(WalkAnim *a, float t) __asm__("FUN_L00_002a13f0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void DebugPrint_alt() __asm__("FUN_001e93b0");
+extern void debug_print_alt() __asm__("FUN_001e93b0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
@@ -809,7 +809,7 @@ void FUN_L00_002a1670(WalkMoby *m, WalkData *d, int flags, float speed, float an
     case 15:
         if (flags & 0x30) {
             float dist = FUN_001f9b80(m->pos, d->v60);
-            DebugPrint_alt(D_L00_001611E0, dist);
+            debug_print_alt(D_L00_001611E0, dist);
             d->fD8 = FUN_L00_0025abf0(m->pos, d->v60, 0, d->fC0, -d->fDC);
             d->uEE |= 4;
             d->f6C = FUN_001f9e90(d->v60[0] - m->pos[0], d->v60[1] - m->pos[1]);
@@ -839,7 +839,7 @@ void FUN_L00_002a1670(WalkMoby *m, WalkData *d, int flags, float speed, float an
     case 14:
         if (flags & 0x30) {
             float dist = FUN_001f9b48(m->pos, d->v60);
-            DebugPrint_alt(D_L00_001611E0, dist);
+            debug_print_alt(D_L00_001611E0, dist);
             d->fD8 = FUN_L00_0025abf0(m->pos, d->v60, 0, d->fC0, -d->fDC);
             d->uEE |= 4;
             d->f6C = FUN_001f9e90(d->v60[0] - m->pos[0], d->v60[1] - m->pos[1]);
@@ -884,14 +884,14 @@ void FUN_L00_002a1670(WalkMoby *m, WalkData *d, int flags, float speed, float an
         if (m->b52 == d->anim[12]->id) {
             float t = FUN_L00_002a15c8_c((char *)m, (char *)d);
             if (t > 1.0f) {
-                float base = ConvertIntegerToFloat(m->b50) + m->f54;
+                float base = convert_integer_to_float(m->b50) + m->f54;
                 t = d->anim[12]->f44 + 2.0f - t * 0.5f - d->anim[12]->f0C;
                 if (t < base + 0.1f) {
                     t = base + 0.1f;
                 }
                 m->f58 = frame_scale_inv * (t - base);
             } else {
-                float base = ConvertIntegerToFloat(m->b50) + m->f54;
+                float base = convert_integer_to_float(m->b50) + m->f54;
                 t = d->anim[12]->f44 - d->anim[12]->f0C;
                 if (t < base + 0.1f) {
                     t = base + 0.1f;
@@ -911,14 +911,14 @@ void FUN_L00_002a1670(WalkMoby *m, WalkData *d, int flags, float speed, float an
         if (m->b52 == d->anim[10]->id) {
             float t = FUN_L00_002a15c8_c((char *)m, (char *)d);
             if (t > 1.0f) {
-                float base = ConvertIntegerToFloat(m->b50) + m->f54;
+                float base = convert_integer_to_float(m->b50) + m->f54;
                 t = d->anim[10]->f44 + 2.0f - t * 0.5f - d->anim[10]->f0C;
                 if (t < base + 0.1f) {
                     t = base + 0.1f;
                 }
                 m->f58 = frame_scale_inv * (t - base);
             } else {
-                float base = ConvertIntegerToFloat(m->b50) + m->f54;
+                float base = convert_integer_to_float(m->b50) + m->f54;
                 t = d->anim[10]->f44 - d->anim[10]->f0C;
                 if (t < base + 0.1f) {
                     t = base + 0.1f;

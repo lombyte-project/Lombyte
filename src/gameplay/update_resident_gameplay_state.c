@@ -133,7 +133,7 @@ extern Vector4 D_001D9C80[];
 extern Vector4 D_001D9CB0[];
 extern void FUN_0022e1b0();
 
-extern void CalculateDmaTransferAddress(void);
+extern void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
 extern void music_pause(s32);
 extern void music_unpause(void);
 extern void sceVu0UnitMatrix(void *);
@@ -160,7 +160,7 @@ extern void enqueue_callback_list_4(void *, ResidentRenderObject *) __asm__("FUN
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern f32 func_001F96E8(f32);
 extern s32 scale_ticks(s32) __asm__("func_001F96F8");
-extern f32 AbsoluteFloat(f32) __asm__("func_001F99C0");
+extern f32 absolute_float(f32) __asm__("func_001F99C0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void add_vectors(void *, void *, void *) __asm__("func_001F9A10");
 extern void func_001F9A40(void *, void *, void *, f32);
@@ -277,7 +277,7 @@ void update_resident_gameplay_state(void) {
             if (music_stream_state.secondary.state != 6 && music_stream_state.secondary.state != 7) {
                 music_stream_state.secondary.state = 5;
             }
-            CalculateDmaTransferAddress();
+            calculate_dma_transfer_address();
             D_0018CDB0[0] = 0.63f;
             update_view_context();
             /* Retail releases the attachment once per sequence object, even when that object is null. */
@@ -592,8 +592,8 @@ void update_resident_gameplay_state(void) {
                                       path->p[path_point_index + 1].components[1] -
                                           path->p[path_point_index].components[1]),
                         segment_angle);
-                    if (maximum_turn < AbsoluteFloat(path->p[path_point_index].components[3])) {
-                        maximum_turn = AbsoluteFloat(path->p[path_point_index].components[3]);
+                    if (maximum_turn < absolute_float(path->p[path_point_index].components[3])) {
+                        maximum_turn = absolute_float(path->p[path_point_index].components[3]);
                     }
                 }
                 segment_angle = func_001F9E90(path->p[path->point_count - 1].components[0] -

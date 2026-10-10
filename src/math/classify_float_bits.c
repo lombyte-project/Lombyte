@@ -9,7 +9,8 @@ typedef union {
     } parts;
 } ieee_double_shape_type;
 
-s32 ClassifyDoubleNaN(f64 x) {
+s32 classify_double_nan(f64 x) __asm__("ClassifyDoubleNaN");
+s32 classify_double_nan(f64 x) {
     s32 hx;
     s32 lx;
     ieee_double_shape_type ew_u;

@@ -34,7 +34,7 @@ typedef struct {
 } MipTextureUpload;
 
 extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
-extern void FillTransferWords(void *dst, s32 value, s32 size) __asm__("func_001F97E8");
+extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("func_001F97E8");
 extern void FlushCache(s32);
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(sceGsLoadImage *, u128 *);
@@ -54,7 +54,7 @@ s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) {
     u64 palette_word;
     u64 mip_word;
 
-    FillTransferWords(&upload, 0, sizeof(upload));
+    fill_transfer_words(&upload, 0, sizeof(upload));
     switch (tex->pixel_storage_format) {
     default:
         break;

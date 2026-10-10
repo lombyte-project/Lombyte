@@ -35,7 +35,7 @@ struct SkyEffect {
 extern struct LevelSkyEffectData *level_sky_effect_data __asm__("D_0016045C");
 extern u8 D_001D96E0[];
 extern void func_001160C8(s32);
-extern f32 AbsoluteFloat(f32) __asm__("func_001F99C0");
+extern f32 absolute_float(f32) __asm__("func_001F99C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern void func_001F9FC8(u8 *);
@@ -140,7 +140,7 @@ void update_sky_effects(void) {
             trig_product = trig_product * fast_sin(elevation);
             trig_product = trig_product * 50.0f;
             effect->position_y = trig_product;
-            effect->position_z = AbsoluteFloat(fast_cos(elevation)) * 50.0f;
+            effect->position_z = absolute_float(fast_cos(elevation)) * 50.0f;
             if ((u32)(orbit->azimuth & 0x3F) < 8U) {
                 effect->color = 0x702020F0;
             } else {

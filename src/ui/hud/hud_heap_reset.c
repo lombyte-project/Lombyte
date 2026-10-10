@@ -3,9 +3,9 @@
 
 extern u32 D_001940CC[4] __asm__("D_001940CC");
 
-void InitializeResourceEntry(void) __asm__("InitializeResourceEntry");
+void initialize_resource_entry(void) __asm__("InitializeResourceEntry");
 
-void InitializeResourceEntry(void) {
+void initialize_resource_entry(void) {
     u32 base;
     struct HudState *entry;
 
@@ -16,5 +16,5 @@ void InitializeResourceEntry(void) {
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(InitializeResourceEntry) Hud_HeapReset__Fv
+extern __typeof__(initialize_resource_entry) Hud_HeapReset__Fv
     __attribute__((alias("InitializeResourceEntry")));

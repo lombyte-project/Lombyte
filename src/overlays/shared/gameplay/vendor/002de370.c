@@ -11,7 +11,7 @@
 /* Falling moby: applies gravity, eases its angles toward the target and fades out until its timer ends. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002DF738), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_001f9740(int *arg0);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -28,8 +28,8 @@ void FUN_L03_002de370(char *moby) {
     *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(moby + 0x44), *(float *)(d + 0x14));
     *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *(float *)(d + 0x18));
     {
-        float a = ConvertIntegerToFloat(*(int *)(d + 0x24));
-        float b = ConvertIntegerToFloat(*(int *)(d + 0x20));
+        float a = convert_integer_to_float(*(int *)(d + 0x24));
+        float b = convert_integer_to_float(*(int *)(d + 0x20));
         moby[0x23] = func_001FA898_r(a * 255.0f / b);
     }
     if (FUN_001f9740((int *)(d + 0x24)) != 0) {

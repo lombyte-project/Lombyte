@@ -24,19 +24,19 @@ extern f32 D_0015ED70_2d0538 __asm__("D_0015ED70");
 extern u8 *D_L00_001B04B0_2d0538[] __asm__("D_L00_001B04B0") __attribute__((section(".data")));
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00260400_2d0538(u8 *, s32, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
-void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
-f32 AbsoluteFloat(f32) __asm__("FUN_001f99c0");
+void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void mark_moby_for_removal_cf(u8 *, s32, s32) __asm__("FUN_L00_00257470");
 s32 FUN_L00_00257218_2d0538(u8 *, s32 *) __asm__("FUN_L00_00257218");
 f32 FUN_00213308_2d0538(void) __asm__("FUN_00213308");
 f32 FUN_002132a8_2d0538(f32, f32) __asm__("FUN_002132a8");
-f32 FastCos(f32) __asm__("FUN_001f9dc8");
-f32 FastSin(f32) __asm__("FUN_001f9de0");
+f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+f32 fast_sin(f32) __asm__("FUN_001f9de0");
 s32 FUN_L00_002595a0_2d0538(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void path_e50(s32, void *, void *, void *) __asm__("FUN_L00_00261b48");
-void FastVecNormalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 u8 *FUN_L00_002c52a8_2d0538(u8 *, s32, s32, s32) __asm__("FUN_L00_002c52a8");
 
 void FUN_L00_002d0538(u8 *a) {
@@ -61,10 +61,10 @@ void FUN_L00_002d0538(u8 *a) {
             if (a)
                 *(s16 *)(a + 0x36) = 0x7F80;
             FUN_L00_00260400_2d0538(a, *(s32 *)(b + 0xF0), a + 0x10, a + 0x40, &v30, &v40);
-            FastVecSub(&v20, &v30, a + 0x10);
+            subtract_vector_xyz(&v20, &v30, a + 0x10);
         }
-        if (D_0015ED84_2d0538 == 0xF && AbsoluteFloat(*(f32 *)(a + 0x10) - 166.0f) < 6.0f &&
-            AbsoluteFloat(*(f32 *)(a + 0x14) - 193.0f) < 6.0f) {
+        if (D_0015ED84_2d0538 == 0xF && absolute_float(*(f32 *)(a + 0x10) - 166.0f) < 6.0f &&
+            absolute_float(*(f32 *)(a + 0x14) - 193.0f) < 6.0f) {
             s32 save = D_L00_0015F598_2d0538;
             D_L00_0015F598_2d0538 = 0;
             mark_moby_for_removal_cf(a, 0x100, -1);
@@ -123,9 +123,9 @@ void FUN_L00_002d0538(u8 *a) {
             *(s16 *)(q + 4) = *(s16 *)(b + 0xC4);
             t = FUN_00213308_2d0538();
             r = FUN_002132a8_2d0538(0.0f, D_L00_001618C8_2d0538) * D_0015ED6C_2d0538;
-            *(f32 *)(q + 0x10) = FastCos(t) * r;
+            *(f32 *)(q + 0x10) = fast_cos(t) * r;
             {
-                f32 sn = FastSin(t) * r;
+                f32 sn = fast_sin(t) * r;
                 {
                     f32 hi = D_L00_001618D0_2d0538, lo = D_L00_001618CC_2d0538;
                     *(f32 *)(q + 0x18) = 0.0f;
@@ -145,10 +145,10 @@ void FUN_L00_002d0538(u8 *a) {
                 scale_vector_xyz(&v20, q + 0x10, e);
                 add_vector_xyz(&v20, &v20, a + 0x10);
                 path_e50(*(s32 *)(b + 0xC0), a + 0x10, &v20, &v30);
-                FastVecSub(&v20, &v30, p + 0x10);
+                subtract_vector_xyz(&v20, &v30, p + 0x10);
                 v20.f[2] = 0.0f;
-                FastVecNormalize(&v40, &v20, 0.25f);
-                FastVecSub(&v20, &v20, &v40);
+                normalize_vector_xyz(&v40, &v20, 0.25f);
+                subtract_vector_xyz(&v20, &v20, &v40);
                 scale_vector_xyz(&v20, &v20, 1.0f / e);
                 *(f32 *)(q + 0x10) = v20.f[0];
                 *(f32 *)(q + 0x14) = v20.f[1];
@@ -219,7 +219,7 @@ void FUN_001f9a28(void *, void *, void *);
 void FUN_001f9cf8(void *, void *, void *);
 void FUN_001f9a10(void *, void *, void *);
 f32 FUN_001f99c0(f32);
-f32 FastVecLength(void *) __asm__("FUN_001f9af0");
+f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 s32 FUN_001efa68(void *, void *, s32, s32, s32);
 void FUN_L00_002d09b8(M2d1428 *, s32, s32);
@@ -317,7 +317,7 @@ void FUN_L00_002d1428(M2d1428 *m) {
                 hit = 1;
         }
         if (hit != 0) {
-            f = FastVecLength(&o->vel);
+            f = vector_length_xyz(&o->vel);
             if (D_0015ED6C_c * 0.5f < f) {
                 if (m->oclass == 0x1F9 && m->state == 1) {
                     m->bBC = 0;
@@ -420,9 +420,9 @@ extern int D_L00_00161910 __attribute__((sda));
 extern int D_L00_00161914 __attribute__((sda));
 extern int D_L00_00161918 __attribute__((sda));
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern s64 GetEffectTex(s32) __asm__("func_001F44B8");
-extern void FastVecCross(void *, void *, void *) __asm__("func_001F9AD8");
-extern void FastDrawQuadReal(void *, int, int) __asm__("func_001F7D30");
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 extern int func_001F4868_2D3F40(int) __asm__("FUN_001f44b8");
 extern void func_L00_001FF4B0_2D3F40(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int func_001FA898_2D3F40(float) __asm__("FUN_001fa6d0");
@@ -457,9 +457,9 @@ void FUN_L00_002d2a90(Moby_2D3F40 *moby) {
     tt[1].q = 0;
     tt[1].f[0] = 1.0f;
     func_L00_001FF4B0_2D3F40(tt[0].f, d->dir, 1.0f);
-    FastVecCross(tt[2].f, tt[0].f, tt[1].f);
+    cross_vectors_xyz(tt[2].f, tt[0].f, tt[1].f);
     func_L00_001FF4B0_2D3F40(tt[2].f, tt[2].f, 1.0f);
-    FastVecCross(tt[1].f, tt[0].f, tt[2].f);
+    cross_vectors_xyz(tt[1].f, tt[0].f, tt[2].f);
     func_L00_001FF4B0_2D3F40(tt[1].f, tt[1].f, 1.0f);
     for (s = d->t; d->t - 1.0f < s; s -= 0.1f) {
         if (t <= d->tmax) {
@@ -467,17 +467,17 @@ void FUN_L00_002d2a90(Moby_2D3F40 *moby) {
             func_L00_001FF4B0_2D3F40(tt[3].f, tt[0].f, t);
             func_L00_001FF4B0_2D3F40(tt[4].f, tt[1].f, k);
             func_L00_001FF4B0_2D3F40(tt[5].f, tt[2].f, k);
-            FastVecSub(q.v[0], d->pos, tt[3].f);
+            subtract_vector_xyz(q.v[0], d->pos, tt[3].f);
             qcopy(q.v[1], q.v[0]);
             qcopy(q.v[2], q.v[0]);
             qcopy(q.v[3], q.v[0]);
-            FastVecSub(q.v[0], q.v[0], tt[4].f);
+            subtract_vector_xyz(q.v[0], q.v[0], tt[4].f);
             add_vector_xyz(q.v[1], q.v[1], tt[4].f);
-            FastVecSub(q.v[2], q.v[2], tt[4].f);
+            subtract_vector_xyz(q.v[2], q.v[2], tt[4].f);
             add_vector_xyz(q.v[3], q.v[3], tt[4].f);
-            FastVecSub(q.v[0], q.v[0], tt[5].f);
+            subtract_vector_xyz(q.v[0], q.v[0], tt[5].f);
             add_vector_xyz(q.v[2], q.v[2], tt[5].f);
-            FastVecSub(q.v[1], q.v[1], tt[5].f);
+            subtract_vector_xyz(q.v[1], q.v[1], tt[5].f);
             add_vector_xyz(q.v[3], q.v[3], tt[5].f);
             col = (moby->rgba & 0xFFFFFF) | (func_001FA898_2D3F40((1.0f - t) * 255.0f) << 24);
             q.c[0] = q.c[1] = q.c[2] = q.c[3] = col;
@@ -572,11 +572,11 @@ extern s32 D_L00_00161930 __attribute__((sda));
 extern f32 D_L00_00161940 __attribute__((sda));
 
 extern void FUN_L00_0024f7c8(struct Moby *, s32, void *);
-extern void AttachManipulator(void *, s32, void *) __asm__("FUN_0020cb10");
+extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f9e90(f32, f32);
-extern f32 FastSubRots(f32, f32) __asm__("FUN_001fa5c8");
-extern f32 FastAddRots(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void FUN_001e93e8(void *, void *);
 extern void FUN_001f9bf8(void *, void *, f32);
@@ -593,7 +593,7 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_L00_0025f8e0(void *, f32);
 extern void FUN_L00_002a7438(void *, void *, void *, s32, s32, s32);
 /* the unit declares mark_moby_for_removal() without a prototype further down */
-extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+extern void delete_moby(void *) __asm__("FUN_0020c828");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void FUN_L00_002d2a90_u(void) __asm__("FUN_L00_002d2a90");
 extern s32 FUN_001f96f8(s32);
@@ -637,7 +637,7 @@ void FUN_L00_002d2ee8(struct Moby *moby) {
         vars->unk24 = 0;
         vars->unk28 = 0;
         qzero(&D_L00_001E1160);
-        AttachManipulator(moby, 3, &D_L00_001E1160);
+        attach_manipulator(moby, 3, &D_L00_001E1160);
         moby->state = 1;
         break;
     case 3:
@@ -653,8 +653,8 @@ void FUN_L00_002d2ee8(struct Moby *moby) {
             pitch = FUN_001f9b80(&vars->pos, &hero.unk2040->pos);
             pitch = FUN_001f9e90(pitch, hero.unk2040->pos.z - vars->pos.f[2]);
             yaw = FUN_001f9e90(hero.unk2040->pos.x - vars->pos.f[0], hero.unk2040->pos.y - vars->pos.f[1]);
-            yaw = FastSubRots(yaw, hero.motion.rot.f[2]);
-            pitch = FastSubRots(pitch, -1.5707964f);
+            yaw = fast_subtract_rotations(yaw, hero.motion.rot.f[2]);
+            pitch = fast_subtract_rotations(pitch, -1.5707964f);
             abs_yaw = FUN_001f99c0(yaw);
             abs_pitch = FUN_001f99c0(pitch);
             lim = D_L00_00161950 * 0.017453292f;
@@ -668,8 +668,8 @@ void FUN_L00_002d2ee8(struct Moby *moby) {
                 pitch *= lim;
             }
             zero = 0.0f;
-            yaw = FastAddRots(yaw, hero.motion.rot.f[2]);
-            pitch = FastAddRots(pitch, -1.5707964f);
+            yaw = fast_add_rotations(yaw, hero.motion.rot.f[2]);
+            pitch = fast_add_rotations(pitch, -1.5707964f);
             build_spherical_offset(v, -3.0f, yaw, pitch);
             FUN_001f9a10(w, &vars->pos, v);
             FUN_001e93e8(&vars->pos, w);
@@ -747,7 +747,7 @@ void FUN_L00_002d2ee8(struct Moby *moby) {
                             FUN_L00_002d2e28((u8 *)t);
                         }
                     }
-                    DeleteMoby(hero.unk2040);
+                    delete_moby(hero.unk2040);
                     hero.unk2040 = 0;
                     hero.unk2044 = 100000.0f;
                     vars->unk8 = 0x7FFF;
@@ -839,12 +839,12 @@ void FUN_L00_002d37d0(char *a) {
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-void *CreateMoby(int) __asm__("FUN_0020c4f8");
+void *create_moby_local(int) __asm__("FUN_0020c4f8");
 void upd_a(void *) __asm__("FUN_L00_00250df8");
 void FUN_L00_0025d1b8_2d3838(void *) __asm__("FUN_L00_0025d1b8");
 
 unsigned char *FUN_L00_002d3838(unsigned char *s, void *b, int c, void *d) {
-    unsigned char *m = CreateMoby(0x27F);
+    unsigned char *m = create_moby_local(0x27F);
     if (m) {
         unsigned char *q;
         m[0x30] = 0xFF;
@@ -905,7 +905,7 @@ extern float D_0015ED6C_2d54c8 __asm__("D_0015ED6C");
 /* D_0015ED70 is declared sda above (FUN_L00_002d0538), but here retail loads it
    absolute: reach it as D_0015ED6C + 4, past whose size the assembler skips $gp. */
 #define D_0015ED70_2d54c8 (((float *)&D_0015ED6C_2d54c8)[1])
-float FastArcTan(float, float) __asm__("FUN_001f9e90");
+float angle_atan2(float, float) __asm__("FUN_001f9e90");
 float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 float FUN_001fa580_2d54c8(float, float) __asm__("FUN_001fa580");
 float FUN_L00_0025be00_2d54c8(void *, float, void *, float, float,
@@ -920,7 +920,7 @@ float FUN_L00_002d54c8(unsigned char *m, float *t, float vel) {
     unsigned char *v;
     float ang, d, z, a, lim, w;
     v = *(unsigned char **)(m + 0x78);
-    ang = FastArcTan(t[0] - *(float *)(m + 0x10), t[1] - *(float *)(m + 0x14));
+    ang = angle_atan2(t[0] - *(float *)(m + 0x10), t[1] - *(float *)(m + 0x14));
     z = *(float *)(m + 0x18);
     d = distance_xyz(m + 0x10, t);
     if (2.0f < d)
@@ -1060,7 +1060,7 @@ extern float FUN_001f9dc8_2d5988(f32) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2d5988(f32) __asm__("FUN_001f9de0");
 extern float FUN_001f9e90_2d5988(f32, f32) __asm__("FUN_001f9e90");
 extern float FUN_001fa5c8_2d5988(f32, f32) __asm__("FUN_001fa5c8");
-extern float ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 
 void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
     St_2d5988 *st;
@@ -1079,7 +1079,7 @@ void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
 
     st = o->st;
     FUN_L00_0025df68_2d5988(path, &o->v[0], &w, &idx, &t, 0, 999.0f, 5.0f, 0.0f);
-    d = ConvertIntegerToFloat(idx) * path->a[0].f[3] + t;
+    d = convert_integer_to_float(idx) * path->a[0].f[3] + t;
     w_ = d + 2.0f;
     l = distance_xyz(&o->v[0], (void *)((char *)path + path->n * 16));
     s = D_0015ED70_2d5988 * 16.0f;
@@ -1098,12 +1098,12 @@ void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
             st->v60 = b2;
     }
     idx = truncate_float_to_s32(w_ / path->a[0].f[3]);
-    t = (w_ - ConvertIntegerToFloat(idx) * path->a[0].f[3]) / path->a[0].f[3];
+    t = (w_ - convert_integer_to_float(idx) * path->a[0].f[3]) / path->a[0].f[3];
     if (idx >= path->n - 1) {
         idx = path->n - 2;
         t = 1.0f;
     }
-    FastVecSub(&w, &path->b[idx], &path->a[idx]);
+    subtract_vector_xyz(&w, &path->b[idx], &path->a[idx]);
     FUN_001f9a68_2d5988(&w, &w, t);
     add_vector_xyz(&w, &w, &path->a[idx]);
     l = vector_distance((void *)((char *)path + path->n * 16), &o->v[0]);
@@ -1119,7 +1119,7 @@ void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
         r = FUN_001f9e90_2d5988(hero.motion.pos.f[0] - o->v[0], hero.motion.pos.f[1] - o->v[1]);
         o->f48 = turn_f(&st->v6C, o->f48, r, 0.01f, 0.3f, 0.1f);
     }
-    FastVecSub(&v, &w, &o->v[0]);
+    subtract_vector_xyz(&v, &w, &o->v[0]);
     l = FUN_001f9af0_2d5988(&v);
     if (st->v60 < l)
         l = st->v60;
@@ -1182,11 +1182,11 @@ typedef struct {
 extern char D_166DC0_2d6cd0[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern int D_15F5C4_2d6cd0 __asm__("D_L00_0015F5C4");
 extern void ff500_2d6cd0(void *, void *, float) __asm__("FUN_001f9bf8");
-extern int FastDecTimer(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float i2f_2d6cd0(int) __asm__("FUN_001fa6c0");
 extern float fabs_2d6cd0(float) __asm__("FUN_001f99c0");
-extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int f2i_2d6cd0(float) __asm__("FUN_001fa6d0");
 extern void spr_2d6cd0(void *, int, int, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 
@@ -1206,7 +1206,7 @@ void FUN_L00_002d6cd0(char *o) {
     }
     v.q = *(OvlQuad *)(o + 0x10);
     v.f[2] += 0.333000004f;
-    FastVecSub(d, D_166DC0_2d6cd0, o + 0x10);
+    subtract_vector_xyz(d, D_166DC0_2d6cd0, o + 0x10);
     ff500_2d6cd0(d, d, -0.3f);
     ff500_2d6cd0(e, d, 0.1f);
     add_vector_xyz(d, d, o + 0x10);
@@ -1221,12 +1221,12 @@ void FUN_L00_002d6cd0(char *o) {
                 p->a[i] = h + 255.0f;
             }
         }
-        if (FastDecTimer(&p->c[i])) {
+        if (fast_dec_timer(&p->c[i])) {
             p->c[i] = scale_game_frames(0xFF);
         }
         f = i2f_2d6cd0(scale_game_frames(0xFF) - p->c[i]);
         f = f / (float)scale_game_frames(0xFF);
-        col = FastTweenColor(0x4040FFFF, 0x1040FFFF, fabs_2d6cd0(0.5f - f));
+        col = fast_tween_color(0x4040FFFF, 0x1040FFFF, fabs_2d6cd0(0.5f - f));
         if (D_15F5C4_2d6cd0 != 2) {
             spr_2d6cd0(d, col, f2i_2d6cd0(p->a[i]) & 0xFF, 0x35, 1, 2, 0, p->d[i]);
         }

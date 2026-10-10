@@ -413,7 +413,7 @@ extern int FUN_L00_00216de8_c(int a, int b) __asm__("FUN_L00_00216de8");
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void FUN_L00_002126b8(void *, void *, int, float, float);
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
-float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
+float absolute_float(float input) __asm__("FUN_001f99c0");
 
 
 int FUN_L05_002515d0(void) {
@@ -443,10 +443,10 @@ int FUN_L05_002515d0(void) {
             }
         } else if (p->state.control_mode != 0x12 && p->state.control_mode != 3) {
             t = 0.2f;
-            if (t < AbsoluteFloat(p->motion.velocity.f[2]) + 0.07f) {
-                t = AbsoluteFloat(p->motion.velocity.f[2]) + 0.07f;
+            if (t < absolute_float(p->motion.velocity.f[2]) + 0.07f) {
+                t = absolute_float(p->motion.velocity.f[2]) + 0.07f;
             }
-            if (AbsoluteFloat(p->height_threshold - (p->motion.pos.f[2] + 0.45f)) < t) {
+            if (absolute_float(p->height_threshold - (p->motion.pos.f[2] + 0.45f)) < t) {
                 if (p->state.control_mode != 4 || p->unk41E != 0) {
                     if (0.8f < p->unk22A4 && p->motion.unk100.f[2] < 0.0f) {
                         r = 1;
@@ -463,8 +463,8 @@ int FUN_L05_002515d0(void) {
     }
     p = &hero;
     t = 0.27f;
-    if (t < AbsoluteFloat(p->motion.velocity.f[2]) + 0.07f) {
-        t = AbsoluteFloat(p->motion.velocity.f[2]);
+    if (t < absolute_float(p->motion.velocity.f[2]) + 0.07f) {
+        t = absolute_float(p->motion.velocity.f[2]);
     }
     if (p->state.current == 0x12) {
         if (p->unk41E != 0) {
@@ -619,7 +619,7 @@ void FUN_L05_00254058(void) {
     {
         s32 *counter = (s32 *)(g + 0x700);
         for (i = 2; i >= 0; i--, counter++) {
-            if (AbsoluteFloat(*(f32 *)(counter - 12)) > 3.3161256f) {
+            if (absolute_float(*(f32 *)(counter - 12)) > 3.3161256f) {
                 f32 rotation = *(f32 *)(counter - 12);
                 s32 count = *counter;
                 if (0.0f < rotation) rotation -= 6.2831855f;
@@ -708,7 +708,7 @@ void FUN_L05_00254358(f32 *position, f32 *direction) {
                 f32 b = *(f32 *)(origin + *(s16 *)(g + 0x898) * 16 + 0x18);
                 f32 high = b;
                 if (!(a < b)) high = a;
-                if (AbsoluteFloat(high - p->z) > 4.0f) {
+                if (absolute_float(high - p->z) > 4.0f) {
                     goto next_point;
                 }
             }

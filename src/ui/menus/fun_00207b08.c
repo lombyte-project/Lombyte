@@ -3,7 +3,7 @@
 #include "rnc/ui/map/map_state.h"
 
 extern s32 D_0013D560[];
-extern void FillTransferWords();
+extern void fill_transfer_words() __asm__("func_001F97E8");
 extern s32 func_001FA860();
 extern void func_00208030();
 extern void func_00208810();
@@ -13,7 +13,7 @@ void FUN_00207b08(s32 buffer) {
 
     func_00208810();
     if (level_map_selection.unk28 == 0) {
-        FillTransferWords(buffer, 0, 0x800);
+        fill_transfer_words(buffer, 0, 0x800);
         return;
     }
     n = func_001FA860(buffer, 0x800, level_map_selection.unk14, level_map_selection.mask);

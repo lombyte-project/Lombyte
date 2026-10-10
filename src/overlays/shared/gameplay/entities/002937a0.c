@@ -16,7 +16,7 @@ extern float FUN_001f9b80(void *, void *);
 extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
 extern int FUN_L00_0025ff38();
 extern void FUN_L00_00257470(void *, int, int);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_L00_00260FB0_f(char *, void *, float, int, int, void *,
                                int) __asm__("FUN_L00_0025ff38");
 
@@ -44,7 +44,7 @@ void FUN_L08_002d36e0(char *m) {
         if (func_L00_00260FB0_f(m, d + 0x170, 14.0f, 0, 0, e + 0x10, *(int *)e) != 2) {
             if (14.0f < FUN_001f9b80(d + 0x1C0, d + 0x170)) {
                 *(int *)(d + 0x1B4) = 2;
-            } else if (3.0f < AbsoluteFloat(*(float *)(d + 0x1C8) - *(float *)(d + 0x178))) {
+            } else if (3.0f < absolute_float(*(float *)(d + 0x1C8) - *(float *)(d + 0x178))) {
                 *(int *)(d + 0x1B4) = 2;
             }
         }
@@ -251,7 +251,7 @@ void FUN_L08_002f0c18(int a) {
 /* Scales every RGBA word of a set of colour tables by four factors, optionally using the flat 255 for colour. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2428), where it is exact; names translated to the US level program. */
 
-extern float ConvertIntegerToFloat(int);
+extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -267,15 +267,15 @@ void FUN_L08_002f0f68(int **tabs, int n, int *counts, int flat, float r, float g
             int c3 = (unsigned)w >> 24;
             float fr, fg, fb, fa;
             if (flat == 0) {
-                fr = r * ConvertIntegerToFloat(c0);
-                fg = g * ConvertIntegerToFloat(c1);
-                fb = b * ConvertIntegerToFloat(c2);
-                fa = a * ConvertIntegerToFloat(c3);
+                fr = r * convert_integer_to_float(c0);
+                fg = g * convert_integer_to_float(c1);
+                fb = b * convert_integer_to_float(c2);
+                fa = a * convert_integer_to_float(c3);
             } else {
                 fr = r * 255.0f;
                 fg = g * 255.0f;
                 fb = b * 255.0f;
-                fa = a * ConvertIntegerToFloat(c3);
+                fa = a * convert_integer_to_float(c3);
             }
             tabs[i][j] = (func_001FA898_r(fa) << 24) + (func_001FA898_r(fb) << 16) +
                          (func_001FA898_r(fg) << 8) + func_001FA898_r(fr);

@@ -25,7 +25,7 @@ extern T2C_2407C0 D_L12_0017C0A8[];
 extern char *FUN_L00_0020d460(int);
 extern char D_0013E533[];
 extern char D_00141680[];
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L12_0017C270[][25];
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9e90(float, float);
@@ -305,7 +305,7 @@ int hero_set_state(int a, int b) {
                                  p->motion.pos.f[1], 0.4f, 0.3f);
             }
         } else if (p->motion.unk100.f[2] < frame_time * -0.5f) {
-            int n = truncate_float_to_s32(AbsoluteFloat(p->motion.unk100.f[2]) * 300.0f);
+            int n = truncate_float_to_s32(absolute_float(p->motion.unk100.f[2]) * 300.0f);
             FUN_L00_00209ca8(3, n < 0x28 ? n : 0x28, 1);
             if (D_L12_001612D0 != 0) {
                 FUN_L00_002a3ec8(D_L12_001612D0, D_L12_001612D8, 0, p->motion.pos.f[0],

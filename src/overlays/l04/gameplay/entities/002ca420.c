@@ -969,7 +969,7 @@ void FUN_L04_002d16b8(WBMoby *m) {
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D8348), where it is exact; names translated to the US level program. */
 
 extern char *D_L04_0015FFD0_e[] __asm__("D_L04_0015FFD0") __attribute__((section(".sdata")));
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_L00_00200260(float, float);
 extern int *D_L04_001B0630[];
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -991,7 +991,7 @@ void FUN_L04_002d6f68(char *moby) {
     int n = 1;
     float one = 1.0f;
 
-    f = ConvertIntegerToFloat(t[0] - 1);
+    f = convert_integer_to_float(t[0] - 1);
     g = (one - src[0]) * f;
     f = FUN_L00_00200260(g, one);
     idx = func_001FA898_r(g);

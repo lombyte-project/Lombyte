@@ -31,7 +31,7 @@ extern char D_001A08A0[];
 extern char D_001E81E8[];
 
 extern void DebugPrint(char *fmt, ...);
-extern s32 GetDmaPacketSpanBytes(const u32 *packet);
+extern s32 get_dma_packet_span_bytes(const u32 *packet) __asm__("GetDmaPacketSpanBytes");
 extern void RaiseKernelTrap();
 extern s32 SceMcFormat(s32 port, s32 slot);
 extern s32 SceMcUnformat(s32 port, s32 slot);
@@ -226,10 +226,10 @@ void memcard_update_state(void) {
         case 4:
             if (MC.result == MC.size) {
                 CARD.errors = 0;
-                if (CARD.main_size != GetDmaPacketSpanBytes(D_001A04C0)) {
+                if (CARD.main_size != get_dma_packet_span_bytes(D_001A04C0)) {
                     CARD.errors++;
                 }
-                if (CARD.record_size != GetDmaPacketSpanBytes(D_001A07C0)) {
+                if (CARD.record_size != get_dma_packet_span_bytes(D_001A07C0)) {
                     CARD.errors++;
                 }
                 MC.busy = 0;
@@ -379,8 +379,8 @@ void memcard_update_state(void) {
                     MC.buf = &current_level_index;
                     break;
                 case 14: {
-                    s32 n = GetDmaPacketSpanBytes(D_001A04C0);
-                    MC.size = n + GetDmaPacketSpanBytes(D_001A07C0) * 20 + 8;
+                    s32 n = get_dma_packet_span_bytes(D_001A04C0);
+                    MC.size = n + get_dma_packet_span_bytes(D_001A07C0) * 20 + 8;
                     MC.buf = (u8 *)chunk + chunk->x10;
                     break;
                 }
@@ -802,12 +802,12 @@ void memcard_update_state(void) {
             }
             break;
         case 4:
-            if (sceMcWrite(MC.fd, D_0014EED0, GetDmaPacketSpanBytes(D_001A04C0)) == 0) {
+            if (sceMcWrite(MC.fd, D_0014EED0, get_dma_packet_span_bytes(D_001A04C0)) == 0) {
                 MC.sub = 5;
             }
             break;
         case 5:
-            if (MC.result == GetDmaPacketSpanBytes(D_001A04C0)) {
+            if (MC.result == get_dma_packet_span_bytes(D_001A04C0)) {
                 MC.sub = 6;
                 break;
             }
@@ -841,7 +841,7 @@ void memcard_update_state(void) {
                 MC.sub = 8;
                 break;
             }
-            if (sceMcSeek(MC.fd, MC.record_index * GetDmaPacketSpanBytes(D_001A07C0), 1) == 0) {
+            if (sceMcSeek(MC.fd, MC.record_index * get_dma_packet_span_bytes(D_001A07C0), 1) == 0) {
                 MC.sub = 7;
             }
             break;
@@ -855,12 +855,12 @@ void memcard_update_state(void) {
             }
             break;
         case 8:
-            if (sceMcWrite(MC.fd, D_001506D0, GetDmaPacketSpanBytes(D_001A07C0)) == 0) {
+            if (sceMcWrite(MC.fd, D_001506D0, get_dma_packet_span_bytes(D_001A07C0)) == 0) {
                 MC.sub = 9;
             }
             break;
         case 9:
-            if (MC.result == GetDmaPacketSpanBytes(D_001A07C0)) {
+            if (MC.result == get_dma_packet_span_bytes(D_001A07C0)) {
                 MC.sub = 10;
                 break;
             }
@@ -952,8 +952,8 @@ void memcard_update_state(void) {
                 s32 n;
 
                 MC.fd = MC.result;
-                n = GetDmaPacketSpanBytes(D_001A04C0);
-                MC.size = n + GetDmaPacketSpanBytes(D_001A07C0) * 20 + 8;
+                n = get_dma_packet_span_bytes(D_001A04C0);
+                MC.size = n + get_dma_packet_span_bytes(D_001A07C0) * 20 + 8;
                 if (sceMcWrite(MC.fd, MC.buf, MC.size) == 0) {
                     MC.sub = 2;
                 }

@@ -21,7 +21,7 @@ extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern void FUN_001f9810(void *, int);
 extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L14_0021dd30(void) {
     struct Hero *h;
@@ -89,7 +89,7 @@ void FUN_L14_0021dd30(void) {
     if (h->selector_13 != 0) {
         if (h->state.current == 0x7F)
             return;
-        if (AbsoluteFloat(h->height_threshold - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
+        if (absolute_float(h->height_threshold - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
             if (h->height_threshold - h->motion.pos.f[2] > 0.0f) {
                 if (h->motion.unk100.f[2] < 0.0f) {
                     FUN_L00_0020b930();

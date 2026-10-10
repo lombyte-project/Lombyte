@@ -10,13 +10,13 @@
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025CB90), where it is exact; names translated to the US level program. */
 
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 float FUN_L00_0025bb38(int n, float x, float y) {
     float d = fast_subtract_rotations(x, y);
     if (n == 0 || d * (float)n > 0.0f)
         return d;
-    if (AbsoluteFloat(d) <= 0.0017453292f)
+    if (absolute_float(d) <= 0.0017453292f)
         return 0.0f;
     if (d > 0.0f)
         return d - 6.2831855f;

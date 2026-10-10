@@ -33,14 +33,14 @@ void FUN_L02_0023ccc8(char *m) {
 #include "rnc/overlay/hud.h"
 
 extern int hud_screen_position(HudElem *, int *, int *) __asm__("FUN_L00_00235a70");
-extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int sprintf_alt(char *str, const char *fmt, ...) __asm__("FUN_00116248");
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
 extern void draw_hud_icon(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
-extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void font_print_right(s32, s32, s32, char *, s32) __asm__("FUN_001f6940");
 extern s32 D_0013E504[];
 extern s32 D_0015ED80;
@@ -87,13 +87,13 @@ s32 FUN_L02_0023cda8(HudElem *m) {
     }
     bottom = D_0013E504[0];
     y = D_0015ED80 != 0 ? bottom - 0x2A : bottom - 0x32;
-    grow = ConvertIntegerToFloat(fade[0]) / ConvertIntegerToFloat(D_L02_0015F91C);
+    grow = convert_integer_to_float(fade[0]) / convert_integer_to_float(D_L02_0015F91C);
     if (1.0f < grow) {
         grow = 1.0f;
     } else if (grow < 0.0f) {
         grow = 0.0f;
     }
-    shade = ConvertIntegerToFloat(fade[1]) / ConvertIntegerToFloat(D_L02_0015F920);
+    shade = convert_integer_to_float(fade[1]) / convert_integer_to_float(D_L02_0015F920);
     if (1.0f < shade) {
         shade = 1.0f;
     } else if (shade < 0.0f) {
@@ -130,8 +130,8 @@ s32 FUN_L02_0023cda8(HudElem *m) {
     } else {
         draw_hud_icon(m, m->icon, x - 0x16, y, 0, 0x80);
     }
-    bright = FastTweenColor(D_L02_0015F950, D_L02_0015F954, shade);
-    dark = FastTweenColor(0, 0x80000000, shade);
+    bright = fast_tween_color(D_L02_0015F950, D_L02_0015F954, shade);
+    dark = fast_tween_color(0, 0x80000000, shade);
     if (left) {
         font_print_right(x + 0x43, y + 9, dark, text, -1);
         font_print_right(x + 0x42, y + 8, bright, text, -1);

@@ -28,7 +28,7 @@ extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern f32 approximate_arcsine(f32) __asm__("func_001F9DF8");
-extern f32 AbsoluteFloat(f32) __asm__("func_001F99C0");
+extern f32 absolute_float(f32) __asm__("func_001F99C0");
 extern void build_quaternion_from_axis_angle(void *, void *, f32) __asm__("FUN_00214530");
 extern void rotate_vector_by_quaternion(void *, void *, void *) __asm__("func_00214800");
 extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("func_002144D8");
@@ -108,7 +108,7 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
         roll_sign = 1.0f;
     }
     alignment_angle = alignment_angle * roll_sign;
-    if (AbsoluteFloat(orbit_yaw_delta) > 1.5707964f &&
+    if (absolute_float(orbit_yaw_delta) > 1.5707964f &&
         ((orbit_yaw_delta >= 0.0f && roll_sign < 0.0f) ||
          (orbit_yaw_delta < 0.0f && roll_sign >= 0.0f))) {
         if (alignment_angle < 0.0f) {
@@ -118,7 +118,7 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
         }
     }
     rotation_step = alignment_angle * step;
-    if (AbsoluteFloat(rotation_step) < 1e-5f) {
+    if (absolute_float(rotation_step) < 1e-5f) {
         qcopy(&smoothed_axis_0, &rotation_matrix[0]);
         qcopy(&smoothed_axis_1, &rotation_matrix[1]);
     } else {
@@ -126,7 +126,7 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
         rotate_vector_by_quaternion(&smoothed_axis_0, &rotation_matrix[0], &rotation_reference);
         rotate_vector_by_quaternion(&smoothed_axis_1, &rotation_matrix[1], &rotation_reference);
     }
-    if (AbsoluteFloat(alignment_angle) < 1e-5f) {
+    if (absolute_float(alignment_angle) < 1e-5f) {
         qcopy(&rotation_reference, &rotation_matrix[0]);
     } else {
         build_quaternion_from_axis_angle(&rotation_quaternion, &rotation_matrix[2],

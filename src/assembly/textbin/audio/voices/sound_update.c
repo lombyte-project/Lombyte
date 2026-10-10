@@ -86,8 +86,8 @@ extern s32 D_001872D4;
 
 extern s32 ComputeByteStringHash(u8 *, s32);
 extern int snd_get_doppler_pitch_mod(int arg0);
-extern void FillTransferWords(void *, s32, s32);
-extern void ReadGlobalTableEntry(void);
+extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
+extern void read_global_table_entry(void) __asm__("ReadGlobalTableEntry");
 extern s32 snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void snd_set_master_volume(s32, s32) __asm__("FUN_0012e208");
 extern void snd_play_sound_vol_pan_pmpb() __asm__("FUN_0012e308");
@@ -105,7 +105,7 @@ extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void func_001F9CF8(void *out, void *a, void *b) __asm__("FUN_001f9cf8");
 extern void func_001FA2D8(void *out, void *a) __asm__("FUN_001fa2d8");
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void music_update() __asm__("FUN_00216290");
 extern void clamp_voice_position_to_collision(void *) __asm__("FUN_0022c5a8");
@@ -195,7 +195,7 @@ s32 sound_update(void) {
     }
     if (listener_sample_count >= 2) {
         scale_vector_xyz(&listener_velocity, &listener_velocity,
-                         1.0f / ConvertIntegerToFloat(listener_sample_count));
+                         1.0f / convert_integer_to_float(listener_sample_count));
     }
 
     if (D_0015F604 == 2) {
@@ -217,9 +217,9 @@ s32 sound_update(void) {
 
     voice_flags = flags;
     volumes = voice_volumes;
-    FillTransferWords(voice_flags, 0, 0x78);
-    FillTransferWords(volumes, 0, 0x78);
-    FillTransferWords(radial_velocities, 0, 0x78);
+    fill_transfer_words(voice_flags, 0, 0x78);
+    fill_transfer_words(volumes, 0, 0x78);
+    fill_transfer_words(radial_velocities, 0, 0x78);
 
     for (slot_index = 0; slot_index < 30; slot_index++) {
         if (D_0013E550.voices[slot_index].state != 7) {
@@ -436,7 +436,7 @@ s32 sound_update(void) {
     music_update();
     snd_reset_state_and_flush_commands();
     snd_flush_sound_commands();
-    ReadGlobalTableEntry();
+    read_global_table_entry();
     D_0013E550.pending_commands = 0;
     return 0;
 }

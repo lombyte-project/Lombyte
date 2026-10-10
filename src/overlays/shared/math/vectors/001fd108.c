@@ -47,15 +47,15 @@ typedef struct {
 } P;
 
 extern P D_L00_0016EA40[16];
-extern float FastSubRots(float, float) __asm__("FUN_001fa5c8");
-extern void FillTransferWords(u8 *, s32, s32);
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+extern void fill_transfer_words(u8 *, s32, s32) __asm__("func_001F97E8");
 
 void FUN_L00_001fea18(void) {
     int i;
     P *p = D_L00_0016EA40;
     for (i = 15; i >= 0; i--, p++) {
         if (p->life > 0) {
-            p->f = FastSubRots(p->f, frame_time * 5.2359877f);
+            p->f = fast_subtract_rotations(p->f, frame_time * 5.2359877f);
             if (p->life > 12) {
                 p->ang = p->ang + 5;
             } else {
@@ -63,7 +63,7 @@ void FUN_L00_001fea18(void) {
             }
             p->life = p->life - 1;
             if (p->life <= 0) {
-                FillTransferWords(p, 0, 0x20);
+                fill_transfer_words(p, 0, 0x20);
             }
         }
     }

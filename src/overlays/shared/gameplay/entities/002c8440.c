@@ -260,7 +260,7 @@ extern s32 D_L00_00161854 __attribute__((sda));
 extern s32 D_L00_00161854_b __asm__("D_L00_00161854") __attribute__((sda));
 extern u32 D_L00_00161840[1] __attribute__((sda));
 
-extern void *CreateMoby(int) __asm__("FUN_0020c4f8");
+extern void *create_moby(int) __asm__("FUN_0020c4f8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern f32 FUN_001f9e90(f32, f32);
@@ -292,7 +292,7 @@ struct Moby *FUN_L00_002c9348(State *a) {
     f32 c1;
     f32 sn;
 
-    n = (struct Moby *)CreateMoby(0x10E);
+    n = (struct Moby *)create_moby(0x10E);
     if (n != NULL) {
         n->unk30 = 0x7F;
         n->unk32 = 0x7F;

@@ -159,7 +159,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00308d10.s", FUN_L13_00308d10);
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030A828), where it is exact; names translated to the US level program. */
 
 extern char D_L13_00174180[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -179,7 +179,7 @@ void FUN_L13_00309370(struct Moby *m) {
     normalize_vector_xyz(d + 0x200, D_L13_00174180, 1.0f);
     FUN_L00_0024f7c8(m, 0, d + 0x1F0);
     for (i = 0; i < 16; i++) {
-        float a = (ConvertIntegerToFloat(i) * 0.0625f - 0.5f) *
+        float a = (convert_integer_to_float(i) * 0.0625f - 0.5f) *
                   (*(float *)&D_L13_00161E80 * DEG_TO_RAD);
         v[0] = fast_cos(fast_add_rotations(a, m->rot.z)) * 0.5f;
         v[1] = fast_sin(fast_add_rotations(a, m->rot.z)) * 0.5f;
@@ -379,7 +379,7 @@ typedef struct {
 } Ent;
 
 extern Ent D_L13_001D9BC0[];
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L13_0030a488(int arg) {
     int i;
@@ -397,26 +397,26 @@ void FUN_L13_0030a488(int arg) {
             Ent *e = &t[arg];
             float x = e->x - t[i].x;
             float y = e->y - t[i].y;
-            if (AbsoluteFloat(x) < 0.1f) {
-                if (AbsoluteFloat(y - 16.0f) < 0.1f)
+            if (absolute_float(x) < 0.1f) {
+                if (absolute_float(y - 16.0f) < 0.1f)
                     e->n[0] = i;
-                if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                if (absolute_float(y + 16.0f) < 0.1f)
                     e->n[2] = i;
-            } else if (AbsoluteFloat(y) < 0.1f) {
-                if (AbsoluteFloat(x - 16.0f) < 0.1f)
+            } else if (absolute_float(y) < 0.1f) {
+                if (absolute_float(x - 16.0f) < 0.1f)
                     e->n[1] = i;
-                if (AbsoluteFloat(x + 16.0f) < 0.1f)
+                if (absolute_float(x + 16.0f) < 0.1f)
                     e->n[3] = i;
             } else {
-                if (AbsoluteFloat(x + 16.0f) < 0.1f) {
-                    if (AbsoluteFloat(y - 16.0f) < 0.1f)
+                if (absolute_float(x + 16.0f) < 0.1f) {
+                    if (absolute_float(y - 16.0f) < 0.1f)
                         e->n[5] = i;
-                    if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                    if (absolute_float(y + 16.0f) < 0.1f)
                         e->n[7] = i;
-                } else if (AbsoluteFloat(x - 16.0f) < 0.1f) {
-                    if (AbsoluteFloat(y - 16.0f) < 0.1f)
+                } else if (absolute_float(x - 16.0f) < 0.1f) {
+                    if (absolute_float(y - 16.0f) < 0.1f)
                         e->n[4] = i;
-                    if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                    if (absolute_float(y + 16.0f) < 0.1f)
                         e->n[6] = i;
                 }
             }

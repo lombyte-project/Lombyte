@@ -39,7 +39,7 @@ extern HeroTableEntry70 D_L14_00179F90[];
 extern struct UsageStats D_00141848;
 extern S17AE80 D_L14_0017AD80;
 extern S17C5B8 D_L14_0017C4B8;
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L14_0015F638;
 extern float D_L14_001674D8 __attribute__((section(".data")));
 extern float FUN_001f96b0(float);
@@ -829,8 +829,8 @@ void FUN_L14_00235600(void) {
                         break;
                     }
                     hero.unk1F8 = scale_game_frames(0x28);
-                    if (AbsoluteFloat(hero.motion.rot.f[1]) > 0.7853982f ||
-                        AbsoluteFloat(hero.motion.rot.f[0]) > 0.7853982f) {
+                    if (absolute_float(hero.motion.rot.f[1]) > 0.7853982f ||
+                        absolute_float(hero.motion.rot.f[0]) > 0.7853982f) {
                         hero.unk1B0 = scale_game_frames(0x28);
                     }
                     if ((hero.unk300 != 0 && hero.unk12E7 == 0) ||
@@ -1339,7 +1339,7 @@ void FUN_L14_00235600(void) {
                             break;
                         }
                         if (hero.motion.velocity.f[2] < 0.0f) {
-                            if (AbsoluteFloat(hero.motion.pos.f[2] - hero.unk500.f[2]) < 0.3f) {
+                            if (absolute_float(hero.motion.pos.f[2] - hero.unk500.f[2]) < 0.3f) {
                                 hero_set_state(0x28, 1);
                             }
                         }
@@ -2007,7 +2007,7 @@ void FUN_L14_00235600(void) {
                                     scale_game_frames(0xE) < hero.state_timer &&
                                     (hero.unk41E == 0 ||
                                      (hero.ground_distance > 0.7f &&
-                                      AbsoluteFloat(FUN_L00_00233a78(hero.motion.velocity.f)) <
+                                      absolute_float(FUN_L00_00233a78(hero.motion.velocity.f)) <
                                           frame_time * 5.8f))) {
                                     hero_set_state(0xE, 1);
                                 } else if (D_0013D4DC[-0x1A] != 0 && FUN_L00_0020d498(3) != 4 &&

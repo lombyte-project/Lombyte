@@ -38,7 +38,7 @@ typedef struct {
     u64 clamp;
 } GsTextureRegisters;
 
-extern void FillTransferWords(void *, int, int);
+extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
 extern s32 sceGsSetDefLoadImage(GsLoadImage *, short, short, short, short, short, short, short);
 extern void FlushCache(int);
@@ -87,7 +87,7 @@ void load_pif_as_psmt8_h(PifHeader *pif, GsTextureRegisters *registers,
     u64 format_word;
     u64 size_word;
 
-    FillTransferWords(&upload, 0, sizeof(upload));
+    fill_transfer_words(&upload, 0, sizeof(upload));
     upload.palette = (u8 *)pif + 0x20;
     if (pif->palette_storage_format == 0) {
         upload.palette_size = 0x400;

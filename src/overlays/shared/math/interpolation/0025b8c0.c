@@ -9,7 +9,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C918), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_0025b798(float *ptr, float rate, float b, float c, float limit);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps) {
     float n, d;
@@ -17,7 +17,7 @@ float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float ep
     n = *p + *v;
     d = t - n;
     *p = n;
-    if (AbsoluteFloat(d) < eps * 0.01f) {
+    if (absolute_float(d) < eps * 0.01f) {
         *p = t;
         *(int *)v = 0;
         return *v;

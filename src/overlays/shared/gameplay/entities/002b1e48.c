@@ -40,10 +40,10 @@ extern int FUN_001fa2d8();
 extern int FUN_L00_002502f0();
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
-extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FastDecTimer(s32 *) __asm__("func_001F9740");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_dec_timer(s32 *) __asm__("func_001F9740");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L00_002502a0(int idx);
 void FUN_L01_0026e090(int i, int v);
 void FUN_L01_0026e0e0(int list, int state);
@@ -89,17 +89,17 @@ void FUN_L07_0030bf90(unsigned char *moby)
         p = (char *)D_0013E633_30D370;
         if (*(short *)(p + 0x30E) == 0)
             flag = *(unsigned char **)(p + 0x2FC) == moby;
-        if (0.7853982f < AbsoluteFloat(*(float *)(moby + 0x44))) {
+        if (0.7853982f < absolute_float(*(float *)(moby + 0x44))) {
             if (vector_distance(moby + 0x10, p + 0x80) < 2.0f) {
                 if (*(int *)(p + 0x2084) == 0x11) {
                     if (*(float *)(p + 0xAA8) < 7.0f) {
-                        FastVecSub(o, moby + 0x10, p + 0x80);
+                        subtract_vector_xyz(o, moby + 0x10, p + 0x80);
                         func_001FA190_30D370(q);
                         func_001FA4A0_30D370(q, moby + 0xC0);
                         transform_vector(o, o, q);
-                        if (AbsoluteFloat(o[0]) < 0.6f) {
-                            if (AbsoluteFloat(o[1]) < 0.6f) {
-                                if (AbsoluteFloat(o[2]) < 0.957f)
+                        if (absolute_float(o[0]) < 0.6f) {
+                            if (absolute_float(o[1]) < 0.6f) {
+                                if (absolute_float(o[2]) < 0.957f)
                                     flag = 1;
                             }
                         }

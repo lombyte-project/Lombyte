@@ -16,8 +16,8 @@ extern void vu1_add_g_sregister(s32, long) __asm__("FUN_00233980");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void EnableGlobalStateFlag(void) __asm__("func_001F61E8");
-extern void DisableGlobalStateFlag(void) __asm__("func_001F61F8");
+extern void enable_global_state_flag(void) __asm__("func_001F61E8");
+extern void disable_global_state_flag(void) __asm__("func_001F61F8");
 extern void font_print_window(struct TextRegion *, long, char *, s32, s32,
                               u8 *) __asm__("FUN_001f7090");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
@@ -102,11 +102,11 @@ s32 draw_menu_text_list(struct MenuScreen *menu) {
                 box.anchor_x = menu->width >> 1;
             }
             if (selected) {
-                DisableGlobalStateFlag();
+                disable_global_state_flag();
             }
             font_print_window(&box, color, text, -1, glyph_texture, font);
             if (selected) {
-                EnableGlobalStateFlag();
+                enable_global_state_flag();
             }
             if (menu->data.list.flags & 0x200) {
                 draw_menu_selection_marker(0xF, box.anchor_y + 9, item_unlocked[i] != 0);

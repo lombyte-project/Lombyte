@@ -4,7 +4,7 @@ struct Manip {
     struct Manip *next;
 };
 #include "rnc/gameplay/entities/moby.h"
-extern void FillTransferWords(void *, s32, s32);
+extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
 void detach_manipulator(struct Moby *moby, struct Manip *manip) __asm__("FUN_0020cb88");
 
 void detach_manipulator(struct Moby *moby, struct Manip *manip) {
@@ -24,7 +24,7 @@ void detach_manipulator(struct Moby *moby, struct Manip *manip) {
             p->next = manip->next;
         }
     }
-    FillTransferWords(manip, 0, 0x40);
+    fill_transfer_words(manip, 0, 0x40);
 }
 
 extern __typeof__(detach_manipulator) func_0020CB88 __attribute__((alias("FUN_0020cb88")));

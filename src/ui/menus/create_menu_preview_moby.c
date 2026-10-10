@@ -18,7 +18,7 @@ struct PreviewMoby {
 };
 extern struct PreviewMoby *create_moby(s32) __asm__("func_0020C4F8");
 extern void refresh_moby_spatial_bounds(struct PreviewMoby *) __asm__("func_0020DEF8");
-extern void PackRenderCommandFields(struct PreviewMoby *, s32, s32, s32, s32);
+extern void pack_render_command_fields(struct PreviewMoby *, s32, s32, s32, s32) __asm__("PackRenderCommandFields");
 
 struct PreviewMoby *create_menu_preview_moby(s32 oclass) __asm__("FUN_00225490");
 
@@ -36,7 +36,7 @@ struct PreviewMoby *create_menu_preview_moby(s32 oclass) {
             moby->state = 0;
             moby->force_visible = 1;
             refresh_moby_spatial_bounds(moby);
-            PackRenderCommandFields(moby, 0x202020, 0xE, 0xE, 0);
+            pack_render_command_fields(moby, 0x202020, 0xE, 0xE, 0);
             if (moby->resource->class_flags != 0) {
                 moby->state_73 = 0x18;
             }

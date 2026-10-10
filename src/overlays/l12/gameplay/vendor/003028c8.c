@@ -232,7 +232,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003064e8.s", FUN_L12_003064e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00306828.s", FUN_L12_00306828);
 #else
 extern int D_L12_0015F5CC;
-extern float ConvertIntegerToFloat(int) __asm__("FUN_001fa6c0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
@@ -259,7 +259,7 @@ void FUN_L12_00306828(struct Moby *moby) {
         if (other->oclass == 0x4FE) continue;
         {
             period = scale_ticks(0xAA);
-            divisor = ConvertIntegerToFloat(period);
+            divisor = convert_integer_to_float(period);
             phase = (float)(D_L12_0015F5CC % period) / divisor;
             sine = fast_sin((phase + phase) * 3.1415927f + -3.1415927f);
             color = sine * 70.0f;
@@ -411,7 +411,7 @@ extern char D_0013E533[];
 extern int FUN_001f96f8(int);
 extern int FUN_001f9770(void *);
 extern int FUN_L00_0025fcb8(char *, char *, float);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L12_00307ab8(struct Moby *m) {
     char *d = (char *)m->pvars;
@@ -427,7 +427,7 @@ void FUN_L12_00307ab8(struct Moby *m) {
             *(float *)(d + 0xF8) = *(float *)(d + 0xF4) + 5.0f;
         }
         if (FUN_L00_0025fcb8(m, d + 0x70, *(float *)(d + 0xF8)) != 2) {
-            if (AbsoluteFloat(m->pos.z - *(float *)(d + 0x78)) > 3.0f) {
+            if (absolute_float(m->pos.z - *(float *)(d + 0x78)) > 3.0f) {
                 *(int *)(d + 0xB4) = 2;
             }
         }

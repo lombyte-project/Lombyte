@@ -9,7 +9,7 @@ extern char D_0013A4E0[];
 extern char D_0013E533[];
 extern char D_L00_0015F630[];
 extern char D_L00_00166DC0[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float fast_cos(float) __asm__("func_001F9DC8");
@@ -42,7 +42,7 @@ void FUN_L00_0028e180(unsigned char *m) {
     if (m[0x20] != 0x2A) {
         if (m[0x31] != 0) {
             m[0xBC] += 2;
-            v = (int)(fast_cos(ConvertIntegerToFloat((unsigned char)m[0xBC] - 0x80) *
+            v = (int)(fast_cos(convert_integer_to_float((unsigned char)m[0xBC] - 0x80) *
                                0.024543693f) *
                       50.0f) +
                 0x96;

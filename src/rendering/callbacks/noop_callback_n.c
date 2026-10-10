@@ -1,5 +1,6 @@
 #include "rnc1_functions.h"
 
-void Func001E9458(void) {
+void fun_001e9458(void) __asm__("func_001E9458");
+void fun_001e9458(void) {
     return;
 }

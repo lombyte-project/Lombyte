@@ -1,9 +1,9 @@
 #include "eetypes.h"
 
-void PackRenderCommandFields(u64 *command_words, u64 upper_field, u64 middle_field, u64 low_field,
+void pack_render_command_fields(u64 *command_words, u64 upper_field, u64 middle_field, u64 low_field,
                              u64 tail_field) __asm__("PackRenderCommandFields");
 
-void PackRenderCommandFields(u64 *command_words, u64 upper_field, u64 middle_field, u64 low_field,
+void pack_render_command_fields(u64 *command_words, u64 upper_field, u64 middle_field, u64 low_field,
                              u64 tail_field) {
     int command_word_index;
     if (middle_field) {

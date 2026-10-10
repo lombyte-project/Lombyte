@@ -88,7 +88,7 @@ extern void build_look_at_matrix(void *dst, void *vec, void *axis,
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 vel) __asm__("FUN_001ebd78");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L00_002e9720(int arg) {
     char *m = (char *)arg;
@@ -147,10 +147,10 @@ void FUN_L00_002e9720(int arg) {
     len = FUN_001f9af0(p140);
     if (len != 0.0f) {
         x = 1.5707964f - FUN_001f9df8(e / len);
-        if (AbsoluteFloat(x) < 0.2617994f) {
+        if (absolute_float(x) < 0.2617994f) {
             fast_vec_cross(t8, p140, fw);
             build_look_at_matrix(p140, p140, t8,
-                                 fast_subtract_rotations(0.2617994f, AbsoluteFloat(x)));
+                                 fast_subtract_rotations(0.2617994f, absolute_float(x)));
             *(float *)(p130 + 0x28) = 0.0f;
             *(float *)(p130 + 0x20) = 0.0f;
             *(float *)(p130 + 0x24) = 0.0f;
@@ -794,7 +794,7 @@ void FUN_L00_002ead60(char *m) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC2D0), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L00_00166DD8 __attribute__((section(".data")));
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_L00_001eb328(void *, float, float, float, float, float);
@@ -823,7 +823,7 @@ void FUN_L00_002eae20(void *arg) {
     } else if (t == 2) {
         float u;
         FUN_001f9740((int *)c);
-        u = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) / ConvertIntegerToFloat(*(int *)(c + 4));
+        u = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) / convert_integer_to_float(*(int *)(c + 4));
         FUN_L00_00257f70(m + 0x30, m + 0x30, b, u);
         FUN_L00_00258050((float *)(m + 0x40), (float *)(m + 0x40), (float *)(d + 0x90), u);
     } else if (t == 3) {
@@ -833,7 +833,7 @@ void FUN_L00_002eae20(void *arg) {
         } else {
             float t, x, y, diff, z;
             t = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) /
-                ConvertIntegerToFloat(*(int *)(c + 4));
+                convert_integer_to_float(*(int *)(c + 4));
             FUN_L00_001ed630(d + 0xE8, b, &hero.motion.pos);
             x = fast_subtract_rotations(F(c, 8), F(c, 0x1C));
             y = fast_subtract_rotations(F(b, 0x18), D_L00_00166DD8);

@@ -50,7 +50,7 @@ unsigned char *FUN_L17_0026fb60(struct Moby *parent, void *pos, float *vec) {
 
 /* Ported from rac1-decomp (src/overlays/l17_fleet/partupd_00270A28.c: func_L17_00270C98), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat_q(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float_q(s32) __asm__("func_001FA6C0");
 extern int FUN_001fa6e0_q(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_integer_below_q(int) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
@@ -78,10 +78,10 @@ unsigned char *FUN_L17_0026fdd0(char *pos, int mode, int step) {
                 *(float *)(p + 0xC) = 630000.0f;
                 *(short *)(p + 0xA) = d;
                 if (step != 0) {
-                    float a = ConvertIntegerToFloat_q((short)d - 1);
+                    float a = convert_integer_to_float_q((short)d - 1);
                     *(int *)(p + 4) =
                         FUN_001fa6e0_q(0x603F1008, *(int *)(p + 4),
-                                       a / ConvertIntegerToFloat_q(*(short *)(p + 0xA)));
+                                       a / convert_integer_to_float_q(*(short *)(p + 0xA)));
                 }
             } else {
                 int d = 5 - step;
@@ -90,10 +90,10 @@ unsigned char *FUN_L17_0026fdd0(char *pos, int mode, int step) {
                 *(float *)(p + 0xC) = 420000.0f;
                 *(short *)(p + 0xA) = d;
                 if (step != 0) {
-                    float a = ConvertIntegerToFloat_q((short)d - 1);
+                    float a = convert_integer_to_float_q((short)d - 1);
                     *(int *)(p + 4) =
                         FUN_001fa6e0_q(0x30FFFFFF, *(int *)(p + 4),
-                                       a / ConvertIntegerToFloat_q(*(short *)(p + 0xA)));
+                                       a / convert_integer_to_float_q(*(short *)(p + 0xA)));
                 }
             }
             p[1] = 0;

@@ -62,7 +62,7 @@ extern float FUN_001fa580(float, float);
 extern void FUN_L16_002c9568(struct Moby *);
 extern void FUN_L16_002c9650_u(char *) __asm__("FUN_L16_002c9650");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L16_002c9480(struct Moby *m) {
     switch (m->state) {
@@ -72,7 +72,7 @@ void FUN_L16_002c9480(struct Moby *m) {
         FUN_L16_002c9568((char *)m);
         m->scale = m->scale * 0.9f;
         f = probe_ground_height(&m->pos, 0, 0.5f);
-        h = AbsoluteFloat(f - m->pos.z);
+        h = absolute_float(f - m->pos.z);
         if (h < 1.0f) {
             m->pos.z = f + 0.9f;
         }
@@ -810,7 +810,7 @@ typedef struct {
 } L16SpriteData;
 
 extern char D_L16_001671C0[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern int FUN_001f9740_c(int *) __asm__("FUN_001f9740");
 extern int FUN_001fa6e0(float, int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -818,7 +818,7 @@ extern unsigned char *FUN_L00_00272f68(void *, int, unsigned char, int, int, int
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA8A8_caa18(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
@@ -846,9 +846,9 @@ void FUN_L16_002c9650(struct Moby *m) {
         if (FUN_001f9740_c(&p->c[i])) {
             p->c[i] = FUN_001f96f8(0xFF);
         }
-        f = ConvertIntegerToFloat(FUN_001f96f8(0xFF) - p->c[i]);
+        f = convert_integer_to_float(FUN_001f96f8(0xFF) - p->c[i]);
         f = f / (float)FUN_001f96f8(0xFF);
-        col = func_001FA8A8_caa18(0x4040FFFF, 0x1040FFFF, AbsoluteFloat(0.5f - f));
+        col = func_001FA8A8_caa18(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - f));
         FUN_L00_00272f68(d, col, func_001FA898_caa18(p->a[i]) & 0xFF, 0x35, 1, 2, 0, p->d[i]);
         FUN_001f9a10(d, d, e);
     }
@@ -979,7 +979,7 @@ typedef struct {
     long zero, texture, flags, mode;
 } L16RibbonPacket_u;
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L16_001D2FF0[][2], D_L16_001D32E0[][2], D_L16_001D3300[][4];
 extern float D_L16_001D32C0[][2], D_L16_001D3010[][2], D_L16_001D3300[][4];
@@ -1023,8 +1023,8 @@ void FUN_L16_002c9cd0(char *m) {
     period = scale_game_frames(120);
     flags = 0xFF9000000260L;
     limit = count + 2;
-    phase = ConvertIntegerToFloat(D_L16_0015F5CC % period);
-    phase = phase / ConvertIntegerToFloat(period);
+    phase = convert_integer_to_float(D_L16_0015F5CC % period);
+    phase = phase / convert_integer_to_float(period);
     phase = fast_sin(phase * 6.28318f - 3.14159f) * 0.5f + 0.5f;
     tint = func_001FA8A8_caa18(D_L16_001619A8, D_L16_001619AC, phase);
     color = D_L16_001619B0;
@@ -1689,7 +1689,7 @@ extern int D_L16_001619E0 __attribute__((sda));
 extern int D_L16_001619E4 __attribute__((sda));
 extern long get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern float fast_sin_alt(float) __asm__("FUN_001f9de0");
-extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void draw_geometry_quad_alt(void *, void *, int) __asm__("FUN_001f7d30");
 
@@ -1719,7 +1719,7 @@ void FUN_L16_002cef60(char *moby) {
     p = (short *)D_L16_001ABCC0_c2[((unsigned char *)moby)[0x21]];
     for (;; p++) {
         m = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
-        color = FastTweenColor(D_L16_001619E0, D_L16_001619E4,
+        color = fast_tween_color(D_L16_001619E0, D_L16_001619E4,
                                (fast_sin_alt(*(float *)(*(char **)(m + 0x78) + 0x11C)) + 1.0f) * 0.5f);
         q.rgba[3] = color;
         q.rgba[2] = color;
@@ -1833,7 +1833,7 @@ void FUN_L16_002cf198(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0A40), where it is exact; names translated to the US level program. */
 
 extern int *D_L16_001ABCC0_c4[] __asm__("D_L16_001ABCC0");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 extern short *D_L16_001ABFC0_2d0a40[] __asm__("D_L16_001ABCC0");
 
 int FUN_L16_002cf678(struct Moby *m) {
@@ -1843,7 +1843,7 @@ int FUN_L16_002cf678(struct Moby *m) {
     while (1) {
         char *o = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
         if (*(short *)(o + 0xA6) == 0x228 && m != o) {
-            if (AbsoluteFloat(*(float *)(o + 0x18) - m->pos.z) < 0.1f) {
+            if (absolute_float(*(float *)(o + 0x18) - m->pos.z) < 0.1f) {
                 return (int)o;
             }
         }
@@ -2285,7 +2285,7 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L16_002cf9d0_c(Level16VendorVectorMoby *moby, int index,
                         void *out) __asm__("FUN_L16_002cf9d0");
 void FUN_L16_002cff48(struct Moby *moby);
@@ -2466,7 +2466,7 @@ void FUN_L16_002d04a0(unsigned char *m) {
         gap = *(float *)(d + 0x268) - z;
         if (gap > 0.0f || *(float *)(d + 0x2C8) > 0.0f) {
             *(float *)(d + 0x2C8) -= D_0015ED70 * 21.0f;
-        } else if (AbsoluteFloat(gap) < 0.5f) {
+        } else if (absolute_float(gap) < 0.5f) {
             *(float *)(d + 0x2C8) = 0.0f;
             *(float *)(d + 0x268) = z;
             *(int *)(d + 0x2E4) = 0;

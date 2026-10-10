@@ -22,7 +22,7 @@ typedef struct {
 } Ent;
 
 extern Ent D_L12_001CBF40[];
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L12_002bf770(int arg) {
     int i;
@@ -40,26 +40,26 @@ void FUN_L12_002bf770(int arg) {
             Ent *e = &t[arg];
             float x = e->x - t[i].x;
             float y = e->y - t[i].y;
-            if (AbsoluteFloat(x) < 0.1f) {
-                if (AbsoluteFloat(y - 16.0f) < 0.1f)
+            if (absolute_float(x) < 0.1f) {
+                if (absolute_float(y - 16.0f) < 0.1f)
                     e->n[0] = i;
-                if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                if (absolute_float(y + 16.0f) < 0.1f)
                     e->n[2] = i;
-            } else if (AbsoluteFloat(y) < 0.1f) {
-                if (AbsoluteFloat(x - 16.0f) < 0.1f)
+            } else if (absolute_float(y) < 0.1f) {
+                if (absolute_float(x - 16.0f) < 0.1f)
                     e->n[1] = i;
-                if (AbsoluteFloat(x + 16.0f) < 0.1f)
+                if (absolute_float(x + 16.0f) < 0.1f)
                     e->n[3] = i;
             } else {
-                if (AbsoluteFloat(x + 16.0f) < 0.1f) {
-                    if (AbsoluteFloat(y - 16.0f) < 0.1f)
+                if (absolute_float(x + 16.0f) < 0.1f) {
+                    if (absolute_float(y - 16.0f) < 0.1f)
                         e->n[5] = i;
-                    if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                    if (absolute_float(y + 16.0f) < 0.1f)
                         e->n[7] = i;
-                } else if (AbsoluteFloat(x - 16.0f) < 0.1f) {
-                    if (AbsoluteFloat(y - 16.0f) < 0.1f)
+                } else if (absolute_float(x - 16.0f) < 0.1f) {
+                    if (absolute_float(y - 16.0f) < 0.1f)
                         e->n[4] = i;
-                    if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                    if (absolute_float(y + 16.0f) < 0.1f)
                         e->n[6] = i;
                 }
             }
@@ -767,7 +767,7 @@ void FUN_L12_002e6c48(L16WatchMoby *m) {
         FUN_L12_0027b9c0_x(m, *(void **)((char *)d + 0x180), 2);
     }
 }
-extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E8588), where it is exact; names translated to the US level program. */
 
@@ -784,7 +784,7 @@ void FUN_L12_002e7208(struct Moby *moby) {
     case 1: {
         int value = *(int *)(data + 0xC);
         if (value == -1 || is_point_inside_clip_volume(D_L12_00167240, value)) {
-            AddDrawCallback((void *)FUN_L12_002e71b0, moby);
+            add_draw_callback((void *)FUN_L12_002e71b0, moby);
         }
     } break;
     }
@@ -971,7 +971,7 @@ void FUN_L12_002e8608(struct Moby *moby, float *pos) {
     *(float *)(data + 0x188) = d * 0.35f;
     *(float *)(data + 0x208) = d * 0.8f;
 }
-extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Release the vendor moby and any child it owns. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9A50), where it is exact; names translated to the US level program. */
@@ -988,9 +988,9 @@ void FUN_L12_002e86d0(struct Moby *moby) {
     moby->unkB4 = 0;
     FUN_L00_00257470(moby, 0, -1);
     if (((Level12VendorData *)moby->pvars)->child != 0) {
-        DeleteMoby(((Level12VendorData *)moby->pvars)->child);
+        mark_moby_for_removal(((Level12VendorData *)moby->pvars)->child);
     }
-    DeleteMoby(moby);
+    mark_moby_for_removal(moby);
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9AA0), where it is exact; names translated to the US level program. */
 
@@ -1113,7 +1113,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void FUN_L00_0025d538(void *, void *);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L12_002eb220(struct Moby *m) {
     int st;
@@ -1146,11 +1146,11 @@ void FUN_L12_002eb220(struct Moby *m) {
                 b = fast_subtract_rotations(a, m->rot.z);
                 p = fast_cos(b) * 0.08726646f;
                 q = fast_sin(b) * -0.34906584f;
-                if (AbsoluteFloat(m->rot.x) < AbsoluteFloat(q)) {
+                if (absolute_float(m->rot.x) < absolute_float(q)) {
                     m->rot.x = q;
                     *(float *)(d + 0x98) = 0.0f;
                 }
-                if (AbsoluteFloat(m->rot.y) < AbsoluteFloat(p)) {
+                if (absolute_float(m->rot.y) < absolute_float(p)) {
                     m->rot.y = p;
                     *(float *)(d + 0x9C) = 0.0f;
                 }
@@ -1428,7 +1428,7 @@ void FUN_L12_002ebca8(struct Moby *m, int flag) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002ED228), where it is exact; names translated to the US level program. */
 
 extern char *D_L12_001B0930[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
@@ -1451,7 +1451,7 @@ void FUN_L12_002ebea8(char *m) {
     float C[4];
     float E[4];
     if (d != 0) {
-        int r = func_L01_00276680_i(m, ConvertIntegerToFloat(*(short *)(m + 0x32)));
+        int r = func_L01_00276680_i(m, convert_integer_to_float(*(short *)(m + 0x32)));
         FUN_L12_002ebca8_c(m, r == -1);
         switch ((unsigned char)m[0x20]) {
         case 0:

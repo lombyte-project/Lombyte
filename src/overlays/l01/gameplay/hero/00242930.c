@@ -45,7 +45,7 @@ extern struct UsageStats D_00141848;
 extern S17AB80 D_L01_0017AB00;
 extern S17C2B8 D_L01_0017C238;
 extern char D_0013E550[];
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L01_0015F638;
 extern float D_L01_00167258 __attribute__((section(".data")));
 extern float FUN_001f96b0(float);
@@ -1672,7 +1672,7 @@ void FUN_L01_00242930(void) {
                                     scale_game_frames(0xE) < hero.state_timer &&
                                     (hero.unk41E == 0 ||
                                      (hero.ground_distance > 0.7f &&
-                                      AbsoluteFloat(FUN_L00_00233a78(hero.motion.velocity.f)) <
+                                      absolute_float(FUN_L00_00233a78(hero.motion.velocity.f)) <
                                           frame_time * 5.8f))) {
                                     hero_set_state(0xE, 1);
                                 } else if (D_0013D4C0[2] != 0 && FUN_L00_0020d498(3) != 4 &&

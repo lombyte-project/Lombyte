@@ -1107,7 +1107,7 @@ void FUN_L11_00318ed8(struct Moby *m) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A498), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat_q(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float_q(s32) __asm__("FUN_001fa6c0");
 extern float D_L11_001677C0_q[] __asm__("D_L11_001677C0") __attribute__((section(".data")));
 extern int FUN_001fa6e0_q(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
@@ -1140,7 +1140,7 @@ void FUN_L11_00319028(struct Moby *moby) {
         unsigned char c;
         q[0] += q[4];
         c = func_001FA898_r_q((float)q[0]);
-        FUN_L00_00272f68_q(*(float *)(data + 0x1C) * ConvertIntegerToFloat_q(q[8]) * 0.025f, v0, a,
+        FUN_L00_00272f68_q(*(float *)(data + 0x1C) * convert_integer_to_float_q(q[8]) * 0.025f, v0, a,
                            c, 0x35, 1, 2, 0);
         q++;
         add_vector_xyz_q(v0, v0, v1);
@@ -1535,7 +1535,7 @@ void FUN_L11_0031ae68(struct Moby *m, float *ground, int n1, int n2);
 extern void FUN_L11_0031b098_c(char *) __asm__("FUN_L11_0031b098");
 extern void add_vector_xyz(void *, void *, void *);
 extern void scale_vector_xyz(void *, void *, float);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y);
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char *func_L00_0026FF20_p(void *, float *, float, float) __asm__("FUN_L00_0026f080");
@@ -1574,7 +1574,7 @@ void FUN_L11_0031ab08(struct Moby *m) {
         if ((D_L11_0015F5CC & 3) == 0) {
             FUN_L11_0031ae68((struct Moby *)m, *(float **)(d + 0x24), 0, 1);
             FUN_L00_00257d78(v, 0.0f, D_0015ED6C_n[1]);
-            v[2] = AbsoluteFloat(v[2]);
+            v[2] = absolute_float(v[2]);
             p = func_L00_0026FF20_p(&m->pos, v, *(float *)&D_L11_00162414_d,
                                     **(float **)(d + 0x24));
             if (p != 0) {
@@ -1594,13 +1594,13 @@ void FUN_L11_0031ab08(struct Moby *m) {
     approach_value(&len, 0.0f, *(float *)&D_L11_00162408_d * frame_time_sq);
     FUN_001f9c48(d, d, len);
 }
-extern void *CreateMoby() __asm__("FUN_0020c4f8");
+extern void *create_moby() __asm__("FUN_0020c4f8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C210), where it is exact; names translated to the US level program. */
 
 char *FUN_L11_0031ada0(void *position, void *vector, void *owner, float scale) {
-    char *moby = CreateMoby(0x5F4);
+    char *moby = create_moby(0x5F4);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
         moby[0x20] = 1;

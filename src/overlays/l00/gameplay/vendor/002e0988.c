@@ -645,7 +645,7 @@ extern void FUN_L00_0024f7c8(void *, s32, void *);
 extern void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern SparkPart *FUN_L00_00274948(void *, void *, s32, void *);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void FUN_L00_002e1c78();
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
@@ -678,7 +678,7 @@ void FUN_L00_002e1aa8(SparkMoby *m) {
             }
             life = vend_rand(2);
             p->life = life;
-            t->unk10 = 1.0f / ConvertIntegerToFloat((s16)life);
+            t->unk10 = 1.0f / convert_integer_to_float((s16)life);
             t->color = 0x7F7F7F;
             t->unk16 = 3;
         }

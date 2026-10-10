@@ -47,7 +47,7 @@ extern struct UsageStats D_00141848;
 extern S17AB60 D_L16_0017AAE0;
 extern S17C298 D_L16_0017C218;
 extern char D_0013E550[];
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L16_0015F638;
 extern float D_L16_001671D8 __attribute__((section(".data")));
 extern float FUN_001f96b0(float);
@@ -143,7 +143,7 @@ extern void FUN_L05_0023dc88(int i);
 extern void FUN_L05_00253850(void);
 extern void FUN_L05_00253b48(void);
 extern void FUN_L05_00254058(void);
-extern void FillTransferWords(void *, int, int);
+extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
@@ -953,8 +953,8 @@ void FUN_L16_002270c8(void) {
                         break;
                     }
                     hero.unk1F8 = scale_game_frames(0x28);
-                    if (AbsoluteFloat(hero.motion.rot.f[1]) > 0.7853982f ||
-                        AbsoluteFloat(hero.motion.rot.f[0]) > 0.7853982f) {
+                    if (absolute_float(hero.motion.rot.f[1]) > 0.7853982f ||
+                        absolute_float(hero.motion.rot.f[0]) > 0.7853982f) {
                         hero.unk1B0 = scale_game_frames(0x28);
                     }
                     if ((hero.unk300 != 0 && hero.unk12E7 == 0) ||
@@ -1484,7 +1484,7 @@ void FUN_L16_002270c8(void) {
                             break;
                         }
                         if (hero.motion.velocity.f[2] < 0.0f &&
-                            AbsoluteFloat(hero.motion.pos.f[2] - hero.unk500.f[2]) < 0.3f) {
+                            absolute_float(hero.motion.pos.f[2] - hero.unk500.f[2]) < 0.3f) {
                             hero_set_state(0x28, 1);
                         }
                     }
@@ -2151,7 +2151,7 @@ void FUN_L16_002270c8(void) {
                                     scale_game_frames(0xE) < hero.state_timer &&
                                     (hero.unk41E == 0 ||
                                      (hero.ground_distance > 0.7f &&
-                                      AbsoluteFloat(FUN_L00_00233a78(hero.motion.velocity.f)) <
+                                      absolute_float(FUN_L00_00233a78(hero.motion.velocity.f)) <
                                           frame_time * 5.8f))) {
                                     hero_set_state(0xE, 1);
                                 } else if (D_0013D4C0[2] != 0 && FUN_L00_0020d498(3) != 4 &&
@@ -2262,7 +2262,7 @@ void FUN_L16_002270c8(void) {
                                 if (FUN_L00_00266d60(0x40, scale_game_frames(9), 0)) {
                                     hero.unk89C = 1;
                                     hero.unk8BC = 1;
-                                    FillTransferWords(&hero.unk6C0, 0, 0x60);
+                                    fill_transfer_words(&hero.unk6C0, 0, 0x60);
                                     if (hero.unk8AC != 0) {
                                         float z = up + frame_time * 14.7f;
                                         hero.motion.unk110.f[2] = z;

@@ -7,9 +7,9 @@ struct InitBlock {
 
 extern struct InitBlock InitBlockData __asm__("D_00154940");
 
-int InitBlockFn(int value) __asm__("func_00119568");
+int init_block_fn(int value) __asm__("func_00119568");
 
-int InitBlockFn(int value) {
+int init_block_fn(int value) {
     struct InitBlock *base;
     int *ptr;
     base = &InitBlockData;

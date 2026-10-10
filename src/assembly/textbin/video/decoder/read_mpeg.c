@@ -34,7 +34,7 @@ extern s32 read_buf_begin_get(struct ReadBuf *, u8 **) __asm__("func_0023B9D8");
 extern s32 read_buf_end_get(struct ReadBuf *, s32) __asm__("func_0023BA20");
 extern s32 read_cd_stream_sectors(struct MpegCdStream *, u8 *, s32, s32) __asm__("func_0023BA60");
 extern s32 video_dec_abort(s32) __asm__("func_0023CC70");
-extern s32 videoDecGetState(struct VideoDec *) __asm__("func_0023CC80");
+extern s32 video_dec_get_state(struct VideoDec *) __asm__("func_0023CC80");
 extern s32 video_dec_flush(struct VideoDec *) __asm__("func_0023CD08");
 extern s32 video_dec_is_flushed(struct VideoDec *) __asm__("func_0023CDE0");
 extern s32 vo_buf_is_full(s32) __asm__("func_0023D1F8");
@@ -183,7 +183,7 @@ start_audio_when_ready:
     audio_dec_start(D_0016120C + 0xD9100);
 check_decoder_state:
 check_remaining_bytes:
-    if (decode_remaining >= 5 && videoDecGetState(video_dec) != 3) {
+    if (decode_remaining >= 5 && video_dec_get_state(video_dec) != 3) {
         goto feed_movie;
     }
     /* Retail reuses the ring-pointer register for decoder state 3 here. */
@@ -193,7 +193,7 @@ check_remaining_bytes:
         switch_thread();
     }
     read_buf = (struct ReadBuf *)3;
-    while (video_dec_is_flushed(video_dec) == 0 && videoDecGetState(video_dec) != (s32)read_buf) {
+    while (video_dec_is_flushed(video_dec) == 0 && video_dec_get_state(video_dec) != (s32)read_buf) {
         proceed_audio();
         switch_thread();
     }

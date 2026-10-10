@@ -466,11 +466,11 @@ int FUN_L03_002ebd70(void) {
 
 extern void FUN_L03_002ebb00_u(void *) __asm__("FUN_L03_002ebb00");
 extern void FUN_L03_002ebc58_u(void *) __asm__("FUN_L03_002ebc58");
-void NoOpMainCallback(void *) __asm__("FUN_001e93e8");
+void no_op_main_callback(void *) __asm__("FUN_001e93e8");
 
 void FUN_L03_002ebdb0(void *arg) {
     FUN_L03_002ebb00_u(arg);
-    NoOpMainCallback(arg);
+    no_op_main_callback(arg);
     FUN_L03_002ebc58_u(arg);
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED1B0), where it is exact; names translated to the US level program. */

@@ -6,10 +6,10 @@ struct Resource {
     int value;
 };
 
-int Func00112468(int value, int index) __asm__("func_00112468");
+int fun_00112468(int value, int index) __asm__("func_00112468");
 
-int Func00116408(Resource *resource) __asm__("func_00116408");
+int fun_00116408(Resource *resource) __asm__("func_00116408");
 
-int Func00116408(Resource *resource) {
-    return Func00112468(resource->value, resource->index);
+int fun_00116408(Resource *resource) {
+    return fun_00112468(resource->value, resource->index);
 }

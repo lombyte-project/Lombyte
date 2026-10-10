@@ -130,7 +130,7 @@ extern s32 D_0014C190[][64];
 extern int D_L01_001BA950[];
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern char D_0013E533[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9b48(void *, void *);
@@ -147,7 +147,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E550[];
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -251,7 +251,7 @@ void FUN_L01_002b9eb0(unsigned char *moby) {
         if (*(short *)(data + 0xBA) != 0 ||
             (F(data, 0xBC) < 0.0f &&
              FUN_001f9b80((moby + 0x10), &hero.motion.pos) < 2.83f &&
-             AbsoluteFloat(hero.motion.pos.f[2] - F(moby, 0x18)) < 4.0f &&
+             absolute_float(hero.motion.pos.f[2] - F(moby, 0x18)) < 4.0f &&
              F(moby, 0x18) - hero.motion.pos.f[2] > 0.9f)) {
             int r;
             if (*(short *)(data + 0xBA) == 0) {
@@ -274,11 +274,11 @@ void FUN_L01_002b9eb0(unsigned char *moby) {
                 *(int *)(data + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
             }
             F(data, 0xA8) += F(data, 0xAC) * frame_time;
-            if (AbsoluteFloat(F(data, 0xA8)) > AbsoluteFloat(F(data, 0xAC))) {
+            if (absolute_float(F(data, 0xA8)) > absolute_float(F(data, 0xAC))) {
                 F(data, 0xA8) = F(data, 0xAC);
             }
             F(data, 0xA4) = F(data, 0xA4) + F(data, 0xA8);
-            if (0.5f < AbsoluteFloat(F(data, 0xA4) - 0.5f)) {
+            if (0.5f < absolute_float(F(data, 0xA4) - 0.5f)) {
                 int r;
                 if (0.0f < F(data, 0xAC)) {
                     moby[0xBC] = 0;
@@ -298,10 +298,10 @@ void FUN_L01_002b9eb0(unsigned char *moby) {
                 }
                 *(int *)(data + 0xC4) = -1;
             }
-            f20 = ConvertIntegerToFloat(*(int *)path - 1);
+            f20 = convert_integer_to_float(*(int *)path - 1);
             i = func_001FA898_r(f20 * F(data, 0xA4));
-            f20 = ConvertIntegerToFloat(*(int *)path - 1);
-            t = ConvertIntegerToFloat(i);
+            f20 = convert_integer_to_float(*(int *)path - 1);
+            t = convert_integer_to_float(i);
             f20 *= F(data, 0xA4);
             f20 -= t;
             if (i == *(int *)path - 1) {

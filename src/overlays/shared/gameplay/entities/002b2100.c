@@ -974,7 +974,7 @@ extern float D_L00_001614B8 __attribute__((sda));
 extern unsigned short D_L00_001614BC __attribute__((sda));
 extern int D_L00_001614D8;
 extern int D_L00_001614D0_e[] __asm__("D_L00_001614D0") __attribute__((section(".sdata")));
-extern float ConvertIntegerToFloat(int);
+extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int FUN_001f9770(void *);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32(int *arg0);
@@ -995,7 +995,7 @@ void FUN_L00_002b7398(void *arg) {
         D_L00_001614D0 = 0;
         r = f_to_int(D_L00_001614B4 / (D_L00_001614B8 * frame_time));
         D_L00_001614D8 = r;
-        D_L00_001614DC = 1.0f / ConvertIntegerToFloat(r);
+        D_L00_001614DC = 1.0f / convert_integer_to_float(r);
     }
     if (D_L00_001614D4 == 0) {
         if (tick_countdown_32(&D_L00_001614D0) != 0) {
@@ -1181,7 +1181,7 @@ void FUN_L00_002b8230(unsigned char *m) {
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern char D_0013E520[];
-extern f32 ConvertIntegerToFloat_c(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern f32 D_0015ED6C_c2 __asm__("D_0015ED6C");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float FUN_001f96b0(float);
@@ -1229,7 +1229,7 @@ void FUN_L00_002b8438(char *moby) {
             FUN_001f9c48(vec, src, 1.0f);
             vec[2] = 1.0f;
             vec[3] = 5627.9248046875f;
-            FUN_L00_00259888(buf, (int)moby, 0x10000, vec, ConvertIntegerToFloat_c(q[0x10]) + 1.0f);
+            FUN_L00_00259888(buf, (int)moby, 0x10000, vec, convert_integer_to_float_c(q[0x10]) + 1.0f);
             *(unsigned char *)(buf + 0x18) = 5;
             *(unsigned char *)(buf + 0x19) = 1;
             *(unsigned short *)(buf + 0x1A) = *(unsigned short *)(moby + 0xA6);

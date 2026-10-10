@@ -66,15 +66,15 @@ extern short D_L15_00161BE8 __attribute__((sda));
 extern short D_L15_00161BEC __attribute__((sda));
 extern short D_L15_00161BF0 __attribute__((sda));
 extern short D_L15_00161BF4 __attribute__((sda));
-extern void DrawUIFrame(int, int, int, int, int) __asm__("FUN_001f5f18");
+extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern float func_001FA888(int) __asm__("FUN_001fa6c0");
-extern float FastSin(float) __asm__("FUN_001f9de0");
-extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
-extern void FontPrintCenterLarge(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
-extern void FontPrintCenterLarge_001f6c20(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
+extern void font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
+extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
 
 #define W(x) (*(int *)&(x))
 
@@ -84,16 +84,16 @@ void FUN_L15_002d77c0(char *moby) {
     float v;
     int col;
 
-    DrawUIFrame(W(D_L15_00161BE4) + W(D_L15_00161BD8), W(D_L15_00161BE8) + W(D_L15_00161BD8),
+    draw_ui_frame(W(D_L15_00161BE4) + W(D_L15_00161BD8), W(D_L15_00161BE8) + W(D_L15_00161BD8),
                 W(D_L15_00161BEC) + W(D_L15_00161BD4), W(D_L15_00161BF0) + W(D_L15_00161BD4),
                 W(D_L15_00161BF4));
-    v = FastSin(func_001FA888(D_L15_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
+    v = fast_sin(func_001FA888(D_L15_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
     if (v > 1.0f) {
         v = 1.0f;
     } else if (v < 0.0f) {
         v = 0.0f;
     }
-    col = FastTweenColor(W(D_L15_00161BDC), W(D_L15_00161BE0), v);
+    col = fast_tween_color(W(D_L15_00161BDC), W(D_L15_00161BE0), v);
     buf[0] = 0x30;
     buf[1] = *(short *)(data + 0x12) / scale_ticks(0xE10) + 0x30;
     buf[2] = 0x3A;
@@ -102,7 +102,7 @@ void FUN_L15_002d77c0(char *moby) {
     buf[5] = 0x3A;
     buf[6] = *(short *)(data + 0x12) % scale_ticks(0x3C) / scale_ticks(6) + 0x30;
     buf[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
-    FontPrintCenterLarge_001f6c20(W(D_L15_00161BD4), W(D_L15_00161BD8), col, (int)buf, 8);
+    font_print_center_large_001f6c20(W(D_L15_00161BD4), W(D_L15_00161BD8), col, (int)buf, 8);
 }
 /* Starts the moby's trail when requested: resets the trail points and the counters. */
 extern int D_L15_00161BF8_r __asm__("D_L15_00161BF8") __attribute__((sda));

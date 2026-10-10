@@ -73,7 +73,7 @@ int FUN_L00_00235a70(HudElem *rec, int *x, int *y) {
    8 (right), rounded (func_001FA888 / func_001FA898 convert). */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236468), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L00_0017E3A0[];
 extern float D_L00_0017E400[];
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -100,13 +100,13 @@ void FUN_L00_00235ad8(HudElem *e, int *x, int *y, int t, int d) {
         s = D_L00_0017E400[t];
     }
     if (e->flags & 1) {
-        dy = -truncate_float_to_s32(s * (ConvertIntegerToFloat(e->h) + 52.0f) + 0.5f);
+        dy = -truncate_float_to_s32(s * (convert_integer_to_float(e->h) + 52.0f) + 0.5f);
     } else if (e->flags & 2) {
-        dy = truncate_float_to_s32(s * (ConvertIntegerToFloat(e->h) + 52.0f) + 0.5f);
+        dy = truncate_float_to_s32(s * (convert_integer_to_float(e->h) + 52.0f) + 0.5f);
     } else if (e->flags & 4) {
-        dx = -truncate_float_to_s32(s * (ConvertIntegerToFloat(e->w) + 20.0f) + 0.5f);
+        dx = -truncate_float_to_s32(s * (convert_integer_to_float(e->w) + 20.0f) + 0.5f);
     } else if (e->flags & 8) {
-        dx = truncate_float_to_s32(s * (ConvertIntegerToFloat(e->w) + 20.0f) + 0.5f);
+        dx = truncate_float_to_s32(s * (convert_integer_to_float(e->w) + 20.0f) + 0.5f);
     }
     *x += dx;
     *y += dy;

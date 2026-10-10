@@ -34,7 +34,7 @@ extern s32 D_0015FE90 __attribute__((sda));
 extern s32 validate_data_crc(u8 *header) __asm__("func_0020AD38");
 extern s32 memcmp(const void *, const void *, s32);
 extern void func_001F9838(void *, void *, s32);
-extern s32 GetDmaPacketSpanBytes(struct RestoreEntry *tbl);
+extern s32 get_dma_packet_span_bytes(struct RestoreEntry *tbl) __asm__("GetDmaPacketSpanBytes");
 
 s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) __asm__("FUN_0020af20");
 
@@ -94,7 +94,7 @@ s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) {
         buf += ((((struct RestoreBlock *)buf)->size + 3) & ~3) + 8;
     }
     total += 8;
-    if (total != GetDmaPacketSpanBytes(tbl)) {
+    if (total != get_dma_packet_span_bytes(tbl)) {
         errors++;
     }
     buf += 8;
