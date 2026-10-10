@@ -118,15 +118,16 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
         do {
             FUN_001ff2a8_261b48(current, (OvlVec4 *)((u8 *)*entry + offset), start);
             FUN_001ff6d0_261b48(current, &next, &direction);
-            if (previous->f[3] != 0.0f || current->f[3] != 0.0f) {
-                if (current->f[1] * previous->f[1] < 0.0f) {
-                    crossing = (previous->f[0] - current->f[0]) / (previous->f[1] - current->f[1]) * -current->f[1] + current->f[0];
-                    if (crossing > 0.0f && crossing < nearest) {
-                        nearest = crossing;
-                        found = 1;
-                    }
-                }
+            if (previous->f[3] == 0.0f && current->f[3] == 0.0f)
+                goto next_point_261b48;
+            if (!(current->f[1] * previous->f[1] < 0.0f))
+                goto next_point_261b48;
+            crossing = (previous->f[0] - current->f[0]) / (previous->f[1] - current->f[1]) * -current->f[1] + current->f[0];
+            if (crossing > 0.0f && crossing < nearest) {
+                nearest = crossing;
+                found = 1;
             }
+next_point_261b48:
             previous->q = current->q;
             i++;
             offset += 0x10;
