@@ -1946,7 +1946,127 @@ void FUN_L14_002fc0f0(struct Moby *moby) {
         *(int *)(data + 0x6c) = FUN_L00_00293e40(0, 4, moby);
 }
 #endif
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fc3e8.s", FUN_L14_002fc3e8);
+/* A smoke puff from FUN_L00_0026d000. */
+typedef struct {
+    u8 pad0[4];
+    s32 mode;        /* 0x04 */
+    u8 pad8[2];
+    u8 tint;         /* 0x0A */
+    u8 fade;         /* 0x0B */
+} L14PuffTail;
+
+typedef struct {
+    u8 pad0[8];
+    u8 shade;        /* 0x08 */
+    s8 frame;        /* 0x09 */
+    s16 life;        /* 0x0A */
+    u8 padC[0x14];
+    L14PuffTail tail; /* 0x20 */
+} L14Puff;
+
+extern f32 D_L14_00161F30 __attribute__((sda));
+extern f32 D_L14_00161F34 __attribute__((sda));
+extern f32 D_L14_00161F38 __attribute__((sda));
+extern f32 D_L14_00161F3C __attribute__((sda));
+extern s32 D_L14_00161F44 __attribute__((sda));
+extern char D_L14_0015F580[] __attribute__((section(".sdata")));
+extern void exhaust_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void exhaust_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void exhaust_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern int exhaust_rand(int) __asm__("FUN_00213260");
+extern s32 exhaust_frames(s32) __asm__("FUN_001f96f8");
+extern int exhaust_ftoi(float) __asm__("FUN_001fa6d0");
+extern L14Puff *exhaust_puff(void *, f32, f32, f32, int, void *, f32, int) __asm__("FUN_L00_0026d000");
+
+/* Engine exhaust: two smoke puffs and three fading rings on each side of the moby. */
+void FUN_L14_002fc3e8(struct Moby *m) {
+    Vec4 step;
+    Vec4 pos;
+    Vec4 base;
+    L14Puff *puff;
+    int i;
+    int j;
+    int r;
+    int spin;
+    int life;
+    float size;
+
+    if (m->state == 0 || m->state == 2 || m->unk31 == 0)
+        return;
+    exhaust_scale(&step, &m->unkC0, D_L14_00161F30);
+    exhaust_add(&pos, &m->pos, &step);
+    exhaust_scale(&step, &m->unkE0, D_L14_00161F38);
+    exhaust_add(&pos, &pos, &step);
+    qcopy(&base, &pos);
+    exhaust_scale(&step, &m->unkD0, D_L14_00161F34);
+    exhaust_add(&pos, &pos, &step);
+    for (j = 0; j < 2; j++) {
+        spin = exhaust_rand(16);
+        puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, D_L14_00161F44);
+        if (puff != 0) {
+            L14PuffTail *tail = &puff->tail;
+            puff->life = exhaust_frames(12);
+            puff->frame = (m->unk32 >> 5 << 4) + exhaust_ftoi(4.0f);
+            tail->mode = 2;
+            tail->tint = 0x7F;
+            tail->fade = puff->life;
+        }
+    }
+    spin = 16;
+    size = 100000.0f;
+    exhaust_scale(&step, &m->unkC0, D_L14_00161F3C);
+    exhaust_add(&pos, &pos, &step);
+    life = exhaust_frames(2);
+    for (i = 0; i < 3; i++) {
+        puff = exhaust_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, size, 0x7FFFFFFF);
+        if (puff != 0) {
+            L14PuffTail *tail = &puff->tail;
+            puff->frame = (m->unk32 >> 5 << 4) + exhaust_ftoi(4.0f);
+            puff->life = life;
+            puff->shade = exhaust_rand(0xFF);
+            tail->mode = 2;
+            tail->tint = 0x7F;
+            tail->fade = puff->life;
+        }
+        spin = -spin;
+        life *= 2;
+        size -= 20000.0f;
+    }
+    exhaust_scale(&step, &m->unkD0, D_L14_00161F34);
+    exhaust_sub(&pos, &base, &step);
+    for (j = 0; j < 2; j++) {
+        spin = exhaust_rand(16);
+        puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, D_L14_00161F44);
+        if (puff != 0) {
+            L14PuffTail *tail = &puff->tail;
+            puff->frame = (m->unk32 >> 5 << 4) + exhaust_ftoi(4.0f);
+            puff->life = exhaust_frames(12);
+            tail->mode = 2;
+            tail->tint = 0x7F;
+            tail->fade = puff->life;
+        }
+    }
+    spin = 16;
+    size = 100000.0f;
+    exhaust_scale(&step, &m->unkC0, D_L14_00161F3C);
+    exhaust_add(&pos, &pos, &step);
+    life = exhaust_frames(2);
+    for (i = 0; i < 3; i++) {
+        puff = exhaust_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, size, 0x7FFFFFFF);
+        if (puff != 0) {
+            L14PuffTail *tail = &puff->tail;
+            puff->frame = (m->unk32 >> 5 << 4) + exhaust_ftoi(4.0f);
+            puff->life = life;
+            puff->shade = exhaust_rand(0xFF);
+            tail->mode = 2;
+            tail->tint = 0x7F;
+            tail->fade = puff->life;
+        }
+        spin = -spin;
+        life *= 2;
+        size -= 20000.0f;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002FDD18), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_001B0BB0_c[] __asm__("D_L14_001B0BB0");
