@@ -7,7 +7,67 @@
 #include "rnc/overlay/entities.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003028c8.s", FUN_L12_003028c8);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00302c58.s", FUN_L12_00302c58);
+#else
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
+extern void FUN_L00_00257d78(float *, float, float);
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern float D_0015ED6C;
+extern float D_L12_00161DF8 __attribute__((sda));
+extern float D_L12_00161DFC __attribute__((sda));
+extern float D_L12_00161E00 __attribute__((sda));
+extern int D_L12_00161E04 __attribute__((sda));
+extern char D_L12_00167240[];
+extern void FUN_L12_003028c8(struct Moby *);
+
+void FUN_L12_00302c58(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    float cycle = D_L12_00161DF8 + D_L12_00161DFC * D_0015ED6C;
+    int strip;
+    D_L12_00161DF8 = cycle;
+    if (cycle > 1.0f) D_L12_00161DF8 = cycle - 1.0f;
+    for (strip = 0; strip < 4; strip++) {
+        int count;
+        int i;
+        float *points;
+        float *intermediate;
+        if (tick_countdown_32_alt((int *)(data + 0x2300 + strip * 4))) {
+            count = *(int *)(data + 0x232c);
+            intermediate = (float *)__builtin_alloca((count & 0x1ffffff) * 16);
+            points = (float *)(data + strip * 0x460);
+            for (i = 0; i < *(int *)(data + 0x232c); i++) {
+                clear_u64_value(points);
+                points[3] = 1.0f;
+                points[0] = (float)i * (*(float *)(data + 0x2324) / (float)*(int *)(data + 0x232c));
+                FUN_L00_00257d78(intermediate + i * 4, 0.0f, D_L12_00161E00 * D_0015ED6C);
+                points += 4;
+            }
+            i = 1;
+            if (1 < *(int *)(data + 0x232c) - 1) do {
+                float *out = (float *)(data + strip * 0x460 + 0x1190 + i * 16 - 16);
+                fast_vec_add(out, intermediate + (i - 1) * 4, intermediate + i * 4);
+                fast_vec_add(out, out, intermediate + (i + 1) * 4);
+                scale_vector_xyz(out, out, 0.333f);
+                i++;
+            } while (i < *(int *)(data + 0x232c) - 1);
+            *(int *)(data + 0x2300 + strip * 4) = D_L12_00161E04;
+        } else {
+            for (i = 1; i < *(int *)(data + 0x232c) - 1; i++) {
+                float *point = (float *)(data + strip * 0x460 + i * 16);
+                float *delta = (float *)(data + strip * 0x460 + 0x1190 + i * 16 - 16);
+                fast_vec_add(point, point, delta);
+            }
+        }
+    }
+    if (distance_xyz(&moby->pos, D_L12_00167240) < 48.0f)
+        enqueue_callback_list_1(FUN_L12_003028c8, moby);
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00302f30.s", FUN_L12_00302f30);
 #define NOT_SDA
 
