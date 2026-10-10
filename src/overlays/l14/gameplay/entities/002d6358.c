@@ -156,7 +156,276 @@ void FUN_L14_002d6570(struct Moby *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d67e8.s", FUN_L14_002d67e8);
+/* Racer, racing: measures how far along its stretch of track it is (sets the catch-up speed), snaps to the
+ * track point nearest the hero and runs along the track, springing its position towards it, and faces along the
+ * track. While its gun is active (states 2-4) it swings the gun joint to aim at the track ahead, blending in and
+ * out over the aim timers, then fires a ray (3) or shows the muzzle flash and its light (2, 4). Last it turns
+ * its head towards the hero. */
+typedef int u128_67e8 __attribute__((mode(TI)));
+typedef struct { char pad00[0x64]; int seg; float frac; } RacerSeg_67e8;
+typedef struct { float x, y, z, w; } V_67e8;
+extern V_67e8 D_0013F3D0_67e8 __asm__("D_0013F3D0");
+typedef struct {
+    V_67e8 dir;                 /* 0x00 */
+    struct Moby *self;          /* 0x10 */
+    int flags;                  /* 0x14 */
+    unsigned char b18;
+    unsigned char b19;
+    short oclass;               /* 0x1A */
+    float f1C;
+    int i20;
+    int pad[3];
+} Ray_67e8;
+extern float D_L14_00161A3C_f __asm__("D_L14_00161A3C");
+extern int D_L14_00161A3C_67e8 __asm__("D_L14_00161A3C") __attribute__((sda));
+extern float D_L14_00161A40 __attribute__((sda));
+extern float D_L14_00161A44 __attribute__((sda));
+extern float D_L14_00161A48 __attribute__((sda));
+extern float D_L14_00161A4C __attribute__((sda));
+extern float D_L14_00161A50 __attribute__((sda));
+extern float D_L14_00161A54 __attribute__((sda));
+extern float D_L14_00161A58 __attribute__((sda));
+extern char D_L14_001809C0_67e8[] __asm__("D_L14_001809C0");
+extern char D_L14_0015F580_67e8[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
+extern void track_67e8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
+extern void spring_67e8(void *, void *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
+extern float atan2_67e8(float, float) __asm__("FUN_001f9e90");
+extern float sub_rot_67e8(float, float) __asm__("FUN_001fa5c8");
+extern int timer_67e8(void *) __asm__("FUN_001f9740");
+extern int frames_67e8(int) __asm__("FUN_001f96f8");
+extern float itof_67e8(int) __asm__("FUN_001fa6c0");
+extern int ftoi_67e8(float) __asm__("FUN_001fa6d0");
+extern void joint_matrix_67e8(struct Moby *, int, void *) __asm__("FUN_0020cca8");
+extern void joint_pos_67e8(struct Moby *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void normalize_67e8(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void cross_67e8(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void sub_67e8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_67e8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_67e8(void *, void *, float) __asm__("FUN_001f9a68");
+extern void invert_67e8(void *, void *) __asm__("FUN_001fa2d8");
+extern void matmul_67e8(void *, void *, void *) __asm__("FUN_001fa378");
+extern void to_quat_67e8(void *, void *) __asm__("FUN_00214260");
+extern void slerp_67e8(void *, void *, void *, float) __asm__("FUN_001fa400");
+extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
+extern void anim_67e8(struct Moby *, int, int) __asm__("FUN_L00_002e1f28");
+extern int aim_ok_67e8(struct Moby *, void *, void *) __asm__("FUN_L00_002e2190");
+extern int ray_67e8(void *, void *, int, struct Moby *, void *) __asm__("FUN_001efa68");
+extern char *flash_67e8(void *, void *, int, struct Moby *) __asm__("FUN_L00_00274948");
+extern int light_67e8(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
+extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
+extern float cos_67e8(float) __asm__("FUN_001f9dc8");
+extern float sin_67e8(float) __asm__("FUN_001f9de0");
+
+void FUN_L14_002d67e8(struct Moby *m) {
+    char *d = (char *)m->pvars;
+    char *path = *(char **)(D_L14_0015F70C + *(int *)(d + 0x60) * 32 + 0x10);
+    V_67e8 near;
+    V_67e8 v[4];
+    V_67e8 ma[4];
+    V_67e8 mb[4];
+    V_67e8 mc[4];
+    V_67e8 md[4];
+    V_67e8 scl;
+    V_67e8 rot;
+    V_67e8 one;
+    Ray_67e8 ray;
+    int ti;
+    float tf;
+    float z;
+    float yaw;
+    float blend;
+    float a;
+
+    if (*(int *)(d + 0x64) >= *(short *)(d + 0x8E)) {
+        float sum = 0.0f;
+        int k;
+        for (k = *(short *)(d + 0x8E); k < *(int *)(d + 0x64); k++) {
+            sum += *(float *)(path + k * 16 + 0x1C);
+        }
+        sum += *(float *)(d + 0x68);
+        sum /= *(float *)(d + 0x78);
+        if (sum > 1.0f) {
+            sum = 1.0f;
+        }
+        *(float *)(d + 0x74) = D_L14_00161A38 + (-3.0f - D_L14_00161A38) * sum;
+    }
+    *(int *)(d + 0x68) = 0;
+    *(int *)(d + 0x64) = 0;
+    z = *(float *)(d + 0x68);
+    FUN_L00_0025df68(path, &D_0013F3D0_67e8, &near.x, (int *)(d + 0x64), (float *)(d + 0x68), 0, 20.0f, 5.0f, z);
+    track_67e8(path, &near, d + 0x64, d + 0x68, 0, -*(float *)(d + 0x74));
+    spring_67e8(&m->pos.x, d + 0x90, near.x, 0.01f, 0.2f, z);
+    spring_67e8(&m->pos.y, d + 0x94, near.y, 0.01f, 0.2f, z);
+    spring_67e8(&m->pos.z, d + 0x98, near.z, 0.01f, 0.2f, z);
+    {
+        int i = *(int *)(d + 0x64);
+        char *p0 = path + i * 16;
+        char *p1 = path + (i + 5) * 16;
+        m->rot.z = atan2_67e8(*(float *)(p1 + 0x10) - *(float *)(p0 + 0x10), *(float *)(p1 + 0x14) - *(float *)(p0 + 0x14));
+    }
+    if (m->unkBC == 5 && timer_67e8(d + 0x1C8) != 0) {
+        m->unkBC = 1;
+    }
+    if (m->unkBC == 1) {
+        *(int *)(d + 0x1C0) = frames_67e8(D_L14_00161A3C_67e8);
+        *(int *)(d + 0x1C4) = 0;
+        m->unkBC = 2;
+        joint_matrix_67e8(m, 4, v);
+        joint_matrix_67e8(m, 5, ma);
+        normalize_67e8(&ma[0], &ma[0], 1.0f);
+        normalize_67e8(&ma[1], &ma[1], 1.0f);
+        normalize_67e8(&ma[2], &ma[2], 1.0f);
+        invert_67e8(mb, ma);
+        mb[3].w = 1.0f;
+        mb[3].x = mb[3].y = mb[3].z = 0.0f;
+        matmul_67e8(mc, mb, v);
+        to_quat_67e8(d + 0x1D0, mc);
+    }
+    yaw = m->rot.z;
+    if ((unsigned char)(m->unkBC - 2) < 3) {
+        float turn;
+        float t;
+        float k;
+        joint_matrix_67e8(m, 0, d + 0xA0);
+        blend = 1.0f;
+        t = itof_67e8(*(int *)(d + 0x1C0)) / itof_67e8(frames_67e8(D_L14_00161A3C_67e8));
+        k = D_L14_00161A40;
+        ti = ((RacerSeg_67e8 *)d)->seg;
+        tf = ((RacerSeg_67e8 *)d)->frac;
+        track_67e8(path, &v[0], &ti, &tf, 0, k + (1.0f - k) * t);
+        qcopy(d + 0x1E0, &v[0]);
+        sub_67e8(&v[1], &v[0], &m->pos);
+        yaw = atan2_67e8(v[1].x, v[1].y);
+        turn = sub_rot_67e8(yaw, m->rot.z);
+        if (turn > 1.2217305f) {
+            turn = 1.2217305f;
+        } else if (turn < -1.2217305f) {
+            turn = -1.2217305f;
+        }
+        (*(int *)(d + 0x1C4))++;
+        if (frames_67e8(30) < *(int *)(d + 0x1C4)) {
+            if (m->unkBC == 4) {
+                m->unkBC = 0;
+            } else {
+                unsigned char s = 3;
+                anim_67e8(m, s, 1);
+                m->unkBC = s;
+            }
+            *(int *)(d + 0x1C4) = frames_67e8(30);
+        }
+        if (m->unkBC == 2 || m->unkBC == 4) {
+            blend = itof_67e8(*(int *)(d + 0x1C4)) / itof_67e8(frames_67e8(30));
+            if (m->unkBC == 4) {
+                blend = 1.0f - blend;
+            }
+            turn = (turn - 0.0f) * blend + 0.0f;
+        }
+        set_joint_67e8(d + 0x150, 2, turn);
+        joint_pos_67e8(m, 4, &v[2]);
+        *(u128_67e8 *)&v[3] = 0;
+        v[3].z = 1.0f;
+        v[3].w = 1.0f;
+        normalize_67e8(&ma[1], &v[1], 1.0f);
+        cross_67e8(&ma[2], &ma[1], &v[3]);
+        normalize_67e8(&ma[2], &ma[2], 1.0f);
+        cross_67e8(&ma[0], &ma[2], &ma[1]);
+        ma[3].x = ma[3].y = ma[3].z = 0.0f;
+        ma[3].w = 1.0f;
+        joint_matrix_67e8(m, 5, mb);
+        normalize_67e8(&mb[0], &mb[0], 1.0f);
+        normalize_67e8(&mb[1], &mb[1], 1.0f);
+        normalize_67e8(&mb[2], &mb[2], 1.0f);
+        invert_67e8(mc, mb);
+        mc[3].x = mc[3].y = mc[3].z = 0.0f;
+        mc[3].w = 1.0f;
+        matmul_67e8(md, mc, ma);
+        *(u128_67e8 *)&scl = 0;
+        scl.w = 1.0f;
+        scl.y = 512.0f / m->scale;
+        to_quat_67e8(&rot, md);
+        if (m->unkBC == 2 || m->unkBC == 4) {
+            slerp_67e8(d + 0x190, d + 0x1D0, &rot, blend);
+        } else {
+            qcopy(d + 0x190, &rot);
+        }
+        *(char *)(d + 0x183) = 1;
+        *(float *)(d + 0x18C) = 1.0f;
+        *(u128_67e8 *)&one = 0;
+        one.x = 1.0f;
+        one.y = 1.0f;
+        one.z = 1.0f;
+        one.w = 1.0f;
+        qcopy(d + 0x1A0, &one);
+        qcopy(d + 0x1B0, &scl);
+        if (timer_67e8(d + 0x1C0) != 0) {
+            m->unkBC = 4;
+            *(int *)(d + 0x1C4) = 0;
+        }
+        if (m->unkBC == 3) {
+            if (aim_ok_67e8(m, d + 0xA0, d + 0x1E0) == 0) {
+                anim_67e8(m, 3, 1);
+            }
+            ray.flags = 0x10001;
+            ray.self = m;
+            ray.i20 = 1;
+            ray.f1C = 1.0f;
+            ray.dir.x = cos_67e8(m->rot.z);
+            ray.dir.y = sin_67e8(m->rot.z);
+            ray.dir.z = 1.0f;
+            ray.dir.w = 5627.925f;
+            ray.b19 = 1;
+            ray.oclass = m->oclass;
+            ray.b18 = 0;
+            ray_67e8(d + 0xD0, d + 0x1E0, 9, m, &ray);
+        } else if (m->unkBC == 2 || m->unkBC == 4) {
+            char *p;
+            float r;
+            char *muzzle = d + 0xD0;
+            scale_67e8(&ray, d + 0xA0, D_L14_00161A44);
+            add_67e8(&ray, &ray, muzzle);
+            p = flash_67e8(&ray, D_L14_0015F580_67e8, 0x7F, m);
+            if (p != 0) {
+                char *q = p + 0x20;
+                int n;
+                *(float *)(p + 0xC) = (D_L14_00161A48 - 1000.0f) * blend + 1000.0f;
+                *(short *)(q + 0x14) = ftoi_67e8(blend * 111.0f + 16.0f);
+                *(short *)(q + 0x16) = 1;
+                n = frames_67e8(4);
+                *(short *)(p + 0xA) = n;
+                *(float *)(q + 0x10) = 1.0f / itof_67e8((short)n);
+                *(int *)(q + 0x18) = 0x7F7F7F;
+            }
+            qcopy(&ray.self, muzzle);
+            ((float *)&ray.self)[2] -= 0.5f;
+            r = (D_L14_00161A4C - 0.1f) * blend + 0.1f;
+            if (*(int *)(d + 0xF0) == -1) {
+                *(int *)(d + 0xF0) = light_67e8(&ray.self, r, 0.0f, D_L14_00161A50, D_L14_00161A54, D_L14_00161A58);
+            }
+            if (*(int *)(d + 0xF0) >= 0) {
+                float *l = (float *)(D_L14_001809C0_67e8 + (*(int *)(d + 0xF0) << 5));
+                qcopy(l + 4, &ray.self);
+                l[7] = r;
+                l[0] = D_L14_00161A50;
+                l[1] = D_L14_00161A54;
+                l[2] = D_L14_00161A58;
+            }
+        } else if (*(int *)(d + 0xF0) != -1) {
+            light_off_67e8(*(int *)(d + 0xF0));
+            *(int *)(d + 0xF0) = -1;
+        }
+    } else if (*(int *)(d + 0xF0) != -1) {
+        light_off_67e8(*(int *)(d + 0xF0));
+        *(int *)(d + 0xF0) = -1;
+    }
+    sub_67e8(&v[0], &D_0013F3D0_67e8, &m->pos);
+    a = sub_rot_67e8(atan2_67e8(v[0].x, v[0].y), yaw);
+    if (a > 1.2217305f) {
+        a = 1.2217305f;
+    } else if (a < -1.2217305f) {
+        a = -1.2217305f;
+    }
+    set_joint_67e8(d + 0x110, 2, a);
+}
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D84A8), where it is exact; names translated to the US level program. */
 
 extern int D_L14_0015F70C;
