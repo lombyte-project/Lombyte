@@ -1059,7 +1059,229 @@ void FUN_L13_002b89f8(char *rot, char *from, char *moby, int icon, long color, i
                            get_effect_texture(tex + 0x28 + t->tex));
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b8be0.s", FUN_L13_002b8be0);
+/* Ported from rac1-decomp src/overlays/l13_gemlik/vendor_002B2020.c (func_L13_002B9E50) */
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Walks the moby list: picks the on-screen target, draws the radar icons and target markers, and points an arrow at
+ * off-screen pickups. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B9E50), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x34];
+    unsigned short f34;
+    char pad36[2];
+    long f38;
+} Moby_2B9E50;
+
+extern char *D_L13_0015FFE4;
+extern char D_L13_001672D0[];
+extern char D_L13_001CBD40[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern float D_L13_001672E0[];
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern float FUN_L00_0025e310(float);
+extern float square_root_float(float) __asm__("func_001F9988");
+extern int D_L13_0015F5CC;
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern short D_L13_001613C8 __attribute__((sda));
+extern unsigned char D_0013E500[];
+extern unsigned char D_0013F3D0[];
+extern void FUN_001fa2d8(void *, void *);
+extern void FUN_L11_00311210(void *, void *, void *, int);
+extern void FUN_L13_002b7d50(void *, int, int, long, float, float, float, float);
+extern void FUN_L13_002b89f8(char *rot, char *from, char *moby, int icon, long color, int tex);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void project_to_screen(f32 *, void *) __asm__("func_001F2070");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, float f2, char *cur, char *g) {
+    float v[4];
+    float mat[16];
+    float u[4];
+    int sx, sy, tx, ty;
+    char *m;
+    char *ret;
+    int best;
+    int *scr;
+    int dx, dy, r, d2;
+    float ang, dist, h, k, s, t;
+    char *tab;
+
+    m = D_L13_0015FFE4;
+    ret = 0;
+    best = 0x7FFFFFFF;
+    *(int *)(p + 0xE8) = 0;
+    while (m != 0) {
+        tab = D_L13_001CBD40;
+        scr = (int *)(D_0013E500);
+        if ((((Moby_2B9E50 *)m)->f34 & 0x1000) && !(((Moby_2B9E50 *)m)->f34 & 3) && *(unsigned char *)(m + 0x31) != 0 &&
+            m != 0 && *(char **)(m + 0x24) != 0 && *(short *)(*(char **)(m + 0x24) + 0x46) == 5) {
+            FUN_L11_00311210(m + 0x10, &sx, &sy, 0);
+            dx = sx - *(int *)(p + 0xE0);
+            dy = sy - *(int *)(p + 0xE4);
+            if (dx < 0) dx = -dx;
+            if (dy < 0) dy = -dy;
+            qcopy(v, D_L13_001672E0);
+            scale_vector_xyz(v, D_L13_001672E0, *(float *)(m + 0xC) / 1280.0f);
+            add_vector_xyz(v, v, m + 0x10);
+            FUN_L11_00311210(v, &tx, &ty, 0);
+            tx -= sx;
+            ty -= sy;
+            r = func_001FA898_r(square_root_float(ConvertIntegerToFloat(tx * tx + ty * ty))) + 0x1C;
+            if (dx < r && dy < r) {
+                if (cur != 0) {
+                    if (m == cur) {
+                        best = 0;
+                        ret = m;
+                    }
+                } else if (m != g) {
+                    d2 = dx * dx + dy * dy;
+                    if (d2 < best) {
+                        best = d2;
+                        ret = m;
+                    }
+                }
+            }
+        }
+        switch (*(short *)(m + 0xA6)) {
+        case 0xE0:
+        case 0x4C2:
+            FUN_L13_002b89f8(a3, a2, m, 2, 0x75808080, *(int *)(p + 0x104));
+            break;
+        case 0xE4:
+        case 0x4C4:
+            FUN_L13_002b89f8(a3, a2, m, 2, 0x75808080, *(int *)(p + 0x104));
+            break;
+        case 0x52:
+            FUN_L13_002b89f8(a3, a2, m, 1, 0x75004080, *(int *)(p + 0x104));
+            break;
+        case 0x53:
+            FUN_L13_002b89f8(a3, a2, m, 1, 0x75007080, *(int *)(p + 0x104));
+            break;
+        case 0x184:
+        case 0x191:
+        case 0x3EB:
+        case 0x504:
+            project_to_screen(v, m + 0x10);
+            if (*(short *)(m + 0xA6) != 0x184) {
+                if (*(unsigned char *)(m + 0x31) != 0) {
+                    {
+                        float x = (v[0] - scr[4]) * 0.0625f;
+                        float y = (v[1] - scr[5]) * 0.0625f;
+                        float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L13_0015F5CC) / 20.0f);
+                        FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f, ang);
+                    }
+                    {
+                        float x = (v[0] - scr[4]) * 0.0625f;
+                        float y = (v[1] - scr[5]) * 0.0625f;
+                        float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L13_0015F5CC) / 20.0f);
+                        FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
+                    }
+                }
+            }
+            if (*(short *)(m + 0xA6) != 0x191) {
+                if (*(unsigned char *)(m + 0x31) == 0) {
+                    char *np = m + 0x10;
+                    int c;
+                    FUN_001fa2d8(mat, D_L13_001672D0);
+                    subtract_vector_xyz(u, np, D_0013F3D0);
+                    transform_vector(u, u, mat);
+                    u[0] = -u[1];
+                    u[1] = -u[2];
+                    u[2] = 0.0f;
+                    normalize_vector_xyz(u, u, 160.0f);
+                    ang = fast_add_rotations(FUN_001f9e90(u[0], u[1]), 1.5707964f);
+                    u[0] += 256.0f;
+                    u[1] += 208.0f;
+                    dist = distance_xyz((char *)a + 0x10, np);
+                    h = AbsoluteFloat(fast_subtract_rotations(FUN_001f9e90(*(float *)(m + 0x10) - *(float *)((char *)a + 0x10),
+                                                                      *(float *)(m + 0x14) - *(float *)((char *)a + 0x14)),
+                                                    *(float *)(p + 0x38)));
+                    k = AbsoluteFloat(fast_subtract_rotations(-FUN_001f9e90(FUN_001f9b80((char *)a + 0x10, np),
+                                                                       *(float *)(m + 0x18) - *(float *)((char *)a + 0x18)),
+                                                    *(float *)(p + 0x34)));
+                    s = square_root_float(h * h + k * k);
+                    t = fast_add_rotations(*(float *)(p + 0x114), 0.1f / (s / 3.1415927f));
+                    *(float *)(p + 0x114) = t;
+                    c = func_001FA898_r((fast_sin(t) + 1.4f) * 53.0f);
+                    if (h < 0.7853982f && k < 0.7853982f) {
+                        {
+                            float x = (v[0] - scr[4]) * 0.0625f;
+                            float y = (v[1] - scr[5]) * 0.0625f;
+                            float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L13_0015F5CC) / 20.0f);
+                            FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f, ang);
+                        }
+                        {
+                            float x = (v[0] - scr[4]) * 0.0625f;
+                            float y = (v[1] - scr[5]) * 0.0625f;
+                            float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L13_0015F5CC) / 20.0f);
+                            FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
+                        }
+                    } else {
+                        FUN_L13_002b7d50(&D_L13_001613C8, 3, 0xFFFFF3, (c << 24) | 0x8000, u[0], u[1], 240.0f / dist + 1.5f, ang);
+                    }
+                }
+                FUN_L13_002b89f8(a3, a2, m, 0, 0x75808080, *(int *)(p + 0x104));
+                if (*(short *)(m + 0xA6) != 0x191) {
+                    *(int *)(p + 0xE8) = *(int *)(p + 0xE8) + 1;
+                }
+            }
+            break;
+        case 0x6F:
+        case 0x4BE:
+            if (!(*(unsigned short *)(m + 0x34) & 1)) {
+                project_to_screen(v, m + 0x10);
+                if (*(unsigned char *)(m + 0x31) != 0) {
+                    {
+                        float x = (v[0] - scr[4]) * 0.0625f;
+                        float y = (v[1] - scr[5]) * 0.0625f;
+                        float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L13_0015F5CC) / 20.0f);
+                        FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
+                    }
+                }
+                FUN_L13_002b89f8(a3, a2, m, 1, 0x75808080, *(int *)(p + 0x104));
+            }
+            break;
+        case 0x4BF:
+            if (!(*(unsigned short *)(m + 0x34) & 1) && *(unsigned char *)(m + 0x20) >= 2) {
+                project_to_screen(v, m + 0x10);
+                if (*(unsigned char *)(m + 0x31) != 0) {
+                    {
+                        float x = (v[0] - scr[4]) * 0.0625f;
+                        float y = (v[1] - scr[5]) * 0.0625f;
+                        float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L13_0015F5CC) / 20.0f);
+                        FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
+                    }
+                }
+                FUN_L13_002b89f8(a3, a2, m, 1, 0x75808080, *(int *)(p + 0x104));
+            }
+            break;
+        case 0x185: case 0x186: case 0x187: case 0x188:
+        case 0x189: case 0x18A: case 0x18B: case 0x18C:
+        case 0x18F: case 0x190:
+        case 0x534: case 0x535: case 0x536: case 0x537:
+        case 0x538: case 0x539: case 0x53A:
+            break;
+        }
+        m = *(char **)(m + 0x28);
+    }
+    return (int)ret;
+}
 #include "qcopy.h"
 
 /* Per-frame target tracking: validates the current target, re-picks one and drops it when lost. */
@@ -1070,7 +1292,7 @@ extern int D_L13_0015F5C4;
 extern char D_0013C940[];
 extern unsigned char D_00140946[];
 extern int FUN_001f96f8(int);
-extern int FUN_L13_002b8be0(int, char *, char *, void *, float, float, float, char *, char *);
+int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, float f2, char *cur, char *g);
 extern void FUN_001f9740(int *arg0);
 
 #define W(p, o) (*(int *)((char *)(p) + (o)))
