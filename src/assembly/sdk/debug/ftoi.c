@@ -6,7 +6,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/debug/ftoi/ftoi.s", ftoi);
 #include "types.h"
 
 s64 ftoi(s64 arg) {
-    s64 input;
+    u64 input;
     u64 v;
     s64 exp;
     u64 t;
