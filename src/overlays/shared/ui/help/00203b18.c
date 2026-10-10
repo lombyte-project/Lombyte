@@ -1434,10 +1434,8 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
     if (indices[1] >= 0) {
         index = indices + 1;
         do {
-            i = *index;
             first_count++;
-            index++;
-            *out = FUN_001ff768_002092c8(0x70000000 + (i << 6), 32768.0f);
+            *out = FUN_001ff768_002092c8(0x70000000 + (*index++ << 6), 32768.0f);
             out++;
         } while (*index >= 0);
     }
@@ -1445,9 +1443,10 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
         s32 remaining = padding;
         do {
             *out = 0x7fff000000000000ULL;
+            remaining--;
             out++;
             first_count++;
-        } while (--remaining != 0);
+        } while (remaining != 0);
     }
     second_count = 0;
     i = 1;
@@ -1455,13 +1454,13 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
         index = indices + 1;
         do {
             value = FUN_001ff768_002092c8(0x70000010 + (*index << 6), 4096.0f);
-            index++;
             if ((value & 0xffffffffffffULL) != 0x100010001000ULL) {
                 *out = value & 0xffffffffffffULL;
                 second_count++;
                 *(u16 *)((u8 *)out + 6) = i | 0x8000;
                 out++;
             }
+            index++;
             i++;
         } while (*index >= 0);
     }
@@ -1471,7 +1470,6 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
         index = indices + 1;
         do {
             value = FUN_001ff768_002092c8(0x70000020 + (*index << 6), 1.0f);
-            index++;
             if ((value & 0xffffffffffffULL) !=
                 (FUN_001ff768_002092c8(*(s32 *)(reference + 0x18) + (i << 4), 1.0f) &
                  0xffffffffffffULL)) {
@@ -1480,6 +1478,7 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
                 *(u16 *)((u8 *)out + 6) = i;
                 out++;
             }
+            index++;
             i++;
         } while (*index >= 0);
     }
@@ -1487,9 +1486,9 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
         *out++ = 0;
     header[7] = third_count;
     header[5] = second_count;
+    header[6] = (first_count + second_count) << 3;
     header[4] = first_count << 3;
     header[3] = ((u8 *)out - (u8 *)header - 0x10) >> 4;
-    header[6] = (first_count + second_count) << 3;
     header[0] = 0;
     header[1] = 0;
     header[2] = 0;
