@@ -90,9 +90,9 @@ void FUN_L01_002b8f98(void) {
     base[10].vif0 = 0x412;
     *(f32 *)&base[10].vif1 = D_0016CEC0.f210;
     p = (u8 *)(base + 11);
-    qcopy(p, D_0016CEC0.v190);
+    *(u128 *)p = *(u128 *)D_0016CEC0.v190;
     p = (u8 *)(base + 12);
-    qcopy(p, D_0016CEC0.v1A0);
+    *(u128 *)p = *(u128 *)D_0016CEC0.v1A0;
     *(f32 *)&base[13].tag = D_0016CEC0.f22C;
     *(f32 *)&base[13].addr = D_0016CEC0.f228;
     base[13].vif0 = 0;
