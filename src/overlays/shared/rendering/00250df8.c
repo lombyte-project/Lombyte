@@ -10,7 +10,91 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00252990.s", FUN_L00_00252990);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00254b58.s", FUN_L00_00254b58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00256f14.s", FUN_L00_00256f14);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00257024.s", FUN_L00_00257024);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00257218.s", FUN_L00_00257218);
+#else
+#include "rnc/gameplay/state/item_state.h"
+
+typedef struct {
+    u8 pad[0xE];
+    u16 count;
+    u8 tail[8];
+} ItemCount_257218;
+
+extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0");
+extern ItemCount_257218 D_L00_001C40B0_257218[] __asm__("D_L00_001C40B0");
+extern s32 D_0015ED84_257218 __asm__("D_0015ED84");
+extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+
+int FUN_L00_00257218(u8 *m, s32 *item) {
+    s32 shortfall = 0;
+    s32 available = 0;
+    s32 stocked = 0;
+    s32 i;
+    s32 choice;
+    u32 id;
+    u8 *entry;
+
+    if (*item <= 0 || (m != 0 &&
+        ((D_0014C190_257218[D_0015ED84_257218][(s16)*(u16 *)(m + 0xB2) >> 5] >>
+          (*(u16 *)(m + 0xB2) & 31)) & 1))) {
+        entry = D_0015EDD0_257218;
+        i = 0;
+        if (*entry != 0xFF) {
+            while (1) {
+                id = *entry & 0x3F;
+                if (item_available[id]) {
+                    available++;
+                    if (D_L00_001C40B0_257218[id].count != 0) {
+                        stocked++;
+                    }
+                    shortfall += weapon_ammo_counts[id] < D_L00_001C40B0_257218[id].count;
+                }
+                i++;
+                entry++;
+                if (i == 12) break;
+                if (*entry == 0xFF) break;
+            }
+        }
+        i = -1;
+        if (shortfall == 0) {
+            id = 10;
+            if (available != 0) {
+                choice = random_integer_below(stocked);
+                if (choice >= 0) {
+                    i = -1;
+                    while (1) {
+                        i++;
+                        id = D_0015EDD0_257218[i] & 0x3F;
+                        if (item_available[id]) {
+                            if (D_L00_001C40B0_257218[id].count != 0) choice--;
+                        }
+                        if (choice < 0) break;
+                    }
+                }
+                id = D_0015EDD0_257218[i] & 0x3F;
+            }
+        } else {
+            choice = random_integer_below(shortfall);
+            if (choice >= 0) {
+                i = 0;
+                while (1) {
+                    id = D_0015EDD0_257218[i] & 0x3F;
+                    if (item_available[id]) {
+                        choice -= weapon_ammo_counts[id] < D_L00_001C40B0_257218[id].count;
+                    }
+                    if (choice < 0) break;
+                    ++i;
+                }
+            }
+            id = D_0015EDD0_257218[i] & 0x3F;
+        }
+        *item = id;
+    }
+    return random_integer_below(5) != 0 ? 1 : 2;
+}
+#endif
 extern int D_0015ED84_257470 __asm__("D_0015ED84");
 extern int D_0015ED84_257470b __asm__("D_0015ED84");
 extern int D_L00_0015FFBC_257470 __asm__("D_L00_0015FFBC");
