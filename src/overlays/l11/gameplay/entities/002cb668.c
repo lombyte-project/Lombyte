@@ -347,7 +347,96 @@ void FUN_L11_002d1340(void *mp) {
     FUN_001f9a28(d + 0x140, moby + 0x10, A);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d14b0.s", FUN_L11_002d14b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d2088.s", FUN_L11_002d2088);
+extern int FUN_001f96f8(int);
+extern void FUN_00212f90(void *, int, int, int);
+extern void FUN_001f99f8(void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern float D_L11_001613D0 __attribute__((sda));
+extern float D_L11_001613D4 __attribute__((sda));
+extern float D_L11_001613E0 __attribute__((sda));
+extern float D_L11_00161400 __attribute__((sda));
+extern int D_L11_0015FFD8;
+
+void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
+    char *d = (char *)moby->pvars;
+    float tmp[4];
+
+    moby->state = state;
+    switch (moby->state) {
+    case 1:
+    case 3:
+    case 11:
+    case 12:
+    case 14:
+        if (moby->prev_seq != 0)
+            FUN_00212f90(moby, 0, 0, FUN_001f96f8(0x14));
+        if (moby->state == 14)
+            *(float *)(d + 0x2C) = 10.0f;
+        FUN_001f99f8(d + 0x130);
+        if (moby->state == 14)
+            *(short *)(d + 0x56) = 2;
+        break;
+    case 4:
+        if (moby->prev_seq != 2)
+            FUN_00212f90(moby, 2, 0, FUN_001f96f8(0x14));
+        *(float *)(d + 0x154) = D_L11_001613D0 * frame_time;
+        break;
+    case 5:
+    case 6:
+        if (moby->prev_seq != 3)
+            FUN_00212f90(moby, 3, 0, FUN_001f96f8(0x14));
+        *(float *)(d + 0x154) = D_L11_001613D4 * frame_time;
+        break;
+    case 7:
+        if (moby->prev_seq != 4)
+            FUN_00212f90(moby, 4, 0, FUN_001f96f8(0x14));
+        FUN_001f99f8(d + 0x130);
+        break;
+    case 8:
+        if (moby->prev_seq != 3)
+            FUN_00212f90(moby, 3, 0, FUN_001f96f8(0x14));
+        {
+            int *tbl = (int *)(d + 0xF0);
+            unsigned int idx = 0U < *(unsigned int *)(d + 0x158);
+            int p;
+            char *o;
+            tbl += idx;
+            p = *tbl;
+            o = (char *)D_L11_0015FFD8;
+            o += p << 8;
+            qcopy(d + 0x120, o + 0x10);
+            FUN_001f9cf8(tmp, &D_L11_001613E0, o + 0xC0);
+            FUN_001f9a10(d + 0x120, d + 0x120, tmp);
+        }
+        break;
+    case 9:
+    case 16:
+        if (moby->prev_seq != 0)
+            FUN_00212f90(moby, 0, 0, FUN_001f96f8(0x14));
+        FUN_001f99f8(d + 0x130);
+        break;
+    case 10:
+        if (moby->prev_seq != 3)
+            FUN_00212f90(moby, 3, 0, FUN_001f96f8(0x14));
+        {
+            int *tbl = (int *)(d + 0xF0);
+            unsigned int idx = 0U < *(unsigned int *)(d + 0x158);
+            int p;
+            char *o;
+            tbl += idx;
+            p = *tbl;
+            o = (char *)D_L11_0015FFD8;
+            o += p << 8;
+            qcopy(d + 0x120, o + 0x10);
+            FUN_001f9cf8(tmp, &D_L11_00161400, o + 0xC0);
+            FUN_001f9a10(d + 0x120, d + 0x120, tmp);
+        }
+        break;
+    default:
+        break;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D3500), where it is exact; names translated to the US level program. */
 
 struct TgtData {
