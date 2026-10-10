@@ -167,7 +167,106 @@ void FUN_L14_002d7198(struct Moby *moby) {
     FUN_L00_0025d808(*(int *)((idx << 5) + D_L14_0015F70C + 0x10), &moby->pos, data + 0x64,
                      data + 0x68, 0, *(float *)&D_L14_00161A30_d * frame_time);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d71f0.s", FUN_L14_002d71f0);
+#else
+typedef union {
+    u128 q;
+    float f[4];
+} Vec_71f0;
+
+typedef struct {
+    Vec_71f0 positions[4];
+    unsigned int colors[4];
+    float texture_coordinates[8];
+    long reserved;
+    long texture;
+    long texture_state;
+    long primitive;
+} Quad_71f0;
+
+extern char D_L14_001674C0[];
+extern char D_0013F5E0[];
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void scale_vector_xyz(float, void *, void *) __asm__("FUN_001f9a68");
+extern void FUN_001f9d20(void *, void *, void *);
+extern long get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+
+void FUN_L14_002d71f0(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    Quad_71f0 quad;
+    Vec_71f0 basis[4];
+    char *src;
+    char *dst;
+    char *src_second;
+    char *dst_second;
+    float one;
+    int i;
+
+    qcopy(&basis[3], data + 0xE0);
+    one = 1.0f;
+    basis[3].f[3] = one;
+    subtract_vector_xyz(&basis[0], D_L14_001674C0, &basis[3]);
+    normalize_vector_xyz(&basis[0], &basis[0], one);
+    cross_vectors_xyz(&basis[1], &basis[0], D_0013F5E0);
+    normalize_vector_xyz(&basis[1], &basis[1], -1.0f);
+    cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
+
+    quad.texture = get_effect_texture(11);
+    quad.primitive = 0x8000000048L;
+    quad.texture_state = 0xFF9000000260L;
+    quad.reserved = 5;
+    quad.colors[3] = 0x80FFFFFF;
+    quad.colors[2] = 0x80FFFFFF;
+    quad.colors[1] = 0x80FFFFFF;
+    quad.texture_coordinates[0] = 0.0f;
+    quad.texture_coordinates[1] = 0.0f;
+    quad.texture_coordinates[2] = 0.0f;
+    quad.texture_coordinates[3] = one;
+    quad.texture_coordinates[4] = one;
+    quad.colors[0] = 0x80FFFFFF;
+    quad.texture_coordinates[5] = 0.0f;
+    quad.texture_coordinates[6] = one;
+    quad.texture_coordinates[7] = one;
+    src = (char *)0x1DE540;
+    dst = (char *)quad.positions;
+    i = 3;
+    do {
+        i--;
+        scale_vector_xyz(0.4f, dst, src);
+        FUN_001f9d20(dst, dst, basis);
+        dst += 0x10;
+        src += 0x10;
+    } while (i >= 0);
+    draw_geometry_quad(&quad, 0, 0);
+
+    qcopy(&basis[3], data + 0x200);
+    subtract_vector_xyz(&basis[0], D_L14_001674C0, &basis[3]);
+    normalize_vector_xyz(&basis[0], &basis[0], one);
+    cross_vectors_xyz(&basis[1], &basis[0], D_0013F5E0);
+    normalize_vector_xyz(&basis[1], &basis[1], -1.0f);
+    cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
+    quad.colors[0] = 0x202020FF;
+    quad.colors[1] = 0x202020FF;
+    quad.colors[2] = 0x202020FF;
+    quad.colors[3] = 0x202020FF;
+    src_second = (char *)0x1DE540;
+    dst_second = (char *)quad.positions;
+    i = 3;
+    do {
+        i--;
+        scale_vector_xyz(0.2f, dst_second, src_second);
+        FUN_001f9d20(dst_second, dst_second, basis);
+        dst_second += 0x10;
+        src_second += 0x10;
+    } while (i >= 0);
+    draw_geometry_quad(&quad, 0, 0);
+}
+#define FUN_L14_002d71f0(x) FUN_L14_002d71f0(struct Moby *)
+#endif
 
 #define NOT_SDA
 
