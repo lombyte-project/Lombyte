@@ -126,9 +126,8 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
             material_shift = packet->material_shift;
             if (textures != 0) {
                 texture = &textures[material_index];
-                material_base = (s32)((u32)(u16)texture->width << 16);
-                width_units_64 = material_base >> 22;
-                width_units_128 = material_base >> 23;
+                width_units_64 = (s32)((u32)(u16)texture->width << 16) >> 22;
+                width_units_128 = (s32)((u32)(u16)texture->width << 16) >> 23;
                 if (width_units_64 <= 0) {
                     width_units_64 = 1;
                 }

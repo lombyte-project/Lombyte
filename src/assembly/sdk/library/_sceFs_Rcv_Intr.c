@@ -125,7 +125,7 @@ void _sceFs_Rcv_Intr(s32 *arg) {
         break;
     }
     if (h.ret.v < 0) {
-        ret = -(u32)h.ret.v;
+        ret = 0u - (u32)h.ret.v;
         h.ret = (Word){ret};
         for (i = 0; i < 32; i++) {
             if (D_0012FC10[i] == ret) {

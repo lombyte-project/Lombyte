@@ -814,7 +814,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb648.s", FUN_L02_002fb648);
 #else
 extern char *D_L02_0015EF50;
 extern char *D_L02_001674DC;
-extern int *D_L02_001B0AB0[];
 extern float FUN_001f9b48(void *, void *);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_0025fa38(void *, int);
@@ -828,7 +827,7 @@ int FUN_L02_002fb648(char *moby) {
     int *entry;
     int result;
 
-    if (special == target && special != 0) {
+    if (special != 0 && special == target) {
         return 1;
     }
     if (*(short *)(data + 0x3c) == 6) {
@@ -837,23 +836,23 @@ int FUN_L02_002fb648(char *moby) {
     if (*(unsigned char *)(data + 0x22) == 1) {
         return FUN_001f9b48(&hero.motion.pos, target + 0x10) < *(float *)(data + 0x24);
     }
-    if (*(int *)(data + 0xc) < 0) {
-        if (*(int *)(data + 0x10) < 0) {
-            if (*(int *)(data + 8) < 0) {
-                if (*(int *)(data + 0x14) < 0) {
-                    return 0;
-                }
-                entry = D_L02_001B0AB0[*(int *)(data + 0x14)];
-                result = FUN_L00_00259740(&hero.motion.pos, entry + 4, *entry);
-            } else {
-                result = FUN_L00_0025faf0(&hero.motion.pos, *(int *)(data + 8));
-            }
-        } else {
-            result = FUN_L00_0025fa38(&hero.motion.pos, *(int *)(data + 0x10));
-        }
-    } else {
+    if (*(int *)(data + 0xc) >= 0) {
         result = is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0xc));
+        return result != 0;
     }
+    if (*(int *)(data + 0x10) >= 0) {
+        result = FUN_L00_0025fa38(&hero.motion.pos, *(int *)(data + 0x10));
+        return result != 0;
+    }
+    if (*(int *)(data + 8) >= 0) {
+        result = FUN_L00_0025faf0(&hero.motion.pos, *(int *)(data + 8));
+        return result != 0;
+    }
+    if (*(int *)(data + 0x14) < 0) {
+        return 0;
+    }
+    entry = (int *)D_L02_001B0AB0[*(int *)(data + 0x14)];
+    result = FUN_L00_00259740(&hero.motion.pos, entry + 4, *entry);
     return result != 0;
 }
 #endif

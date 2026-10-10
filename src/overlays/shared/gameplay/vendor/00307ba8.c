@@ -211,9 +211,10 @@ struct Moby *FUN_L09_0030a778(struct Moby *owner, Vec4 *pos)
     s16 *data;
     s32 left;
     Vec4 pos_copy;
-    Vec4 *volatile pos_ptr;
+    Vec4 *pos_ptr;
     struct Moby *result;
 
+    pos_ptr = &pos_copy;
     pos_copy.q = pos->q;
 
     if (owner == 0)
@@ -221,10 +222,9 @@ struct Moby *FUN_L09_0030a778(struct Moby *owner, Vec4 *pos)
     owner_vars = owner->pvars;
     m = 0;
     result = 0;
-    pos_ptr = &pos_copy;
     if (FUN_L00_002591d0_30a778(&m, *(s32 *)(owner_vars + 0x94), 1, 1) == 0) {
         owner_vars[0x91] = owner_vars[0x91] + 1;
-        ((Vec4 *)&m->pos)->q = pos_ptr->q;
+        qcopy_nc(&m->pos, pos_ptr);
         m->pos.w = 0.0f;
         m->state = 0;
         m->unkBC = 0;
@@ -258,7 +258,7 @@ struct Moby *FUN_L09_0030a778(struct Moby *owner, Vec4 *pos)
         owner->unkB4 = left;
         if ((s16)left < 0)
             owner->unkB4 = 1;
-        m->unk94 = m->pclass->unk10;
+        m->unk94 = ((struct Moby *volatile *)&m)[0]->pclass->unk10;
         FUN_L00_0025d1b8_30a778(m);
         FUN_L00_00250df8_30a778(m);
         result = m;

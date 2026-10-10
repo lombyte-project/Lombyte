@@ -2212,7 +2212,7 @@ void FUN_L15_002bddb0(struct Moby *moby) {
         union { u32 bits; f32 value; } triple;
         f32 increment;
         travel = vars->travel;
-        increment = (moby->scale * 3.0f / moby->pclass->scale) / 3.0f * D_0015ED6C;
+        increment = (moby->scale * 3.0f / moby->pclass->scale) / 3.0f * frame_time;
         if (reversed)
             increment = -increment;
         vars->travel = travel + increment;
@@ -2252,7 +2252,7 @@ void FUN_L15_002bddb0(struct Moby *moby) {
         f32 old_travel;
         f32 new_travel;
         magnitude = FUN_001f99c0(vars->travel);
-        step = (moby->scale * 3.0f / moby->pclass->scale) / 3.0f * D_0015ED6C;
+        step = (moby->scale * 3.0f / moby->pclass->scale) / 3.0f * frame_time;
         if (step < magnitude) {
             old_travel = vars->travel;
             if (reversed) {

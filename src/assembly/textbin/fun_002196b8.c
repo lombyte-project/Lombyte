@@ -7,6 +7,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002196b8/FUN_002196b8.s", FUN_002196b8);
 #else
+#include "rnc/ui/menus/panel_slots.h"
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "eetypes.h"

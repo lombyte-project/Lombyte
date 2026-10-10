@@ -62,15 +62,15 @@ unsigned char *FUN_L00_002df808(int owner, V_2df808 *position, V_2df808 *vector,
         rotation_copy.q = rotation.q;
         moby[0x20] = 0;
         moby[0x23] = alpha;
-        moby[0x31] = 1;
         moby[0x30] = 0xff;
         *(unsigned short *)(moby + 0x32) = 0xff;
+        moby[0x31] = 1;
         FUN_L00_002502f0_2df808(moby, red, green, blue);
         *(float *)(data + 0x18) = *(float *)(moby + 0x2c) * scale;
         *(int *)(moby + 0x2c) = 0;
         *(int *)(data + 0x10) = owner;
         qcopy(moby + 0x10, position);
-        *(U128_2df808 *)data = *(U128_2df808 *)vector;
+        qcopy(data, vector);
         qcopy(moby + 0x40, &rotation_copy);
         *(unsigned short *)(data + 0x1e) = alpha;
         *(int *)(data + 0x14) = flags;

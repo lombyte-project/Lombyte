@@ -143,7 +143,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L14_00301de8(char *m) {
     char *d = *(char **)(m + 0x78);
     char *dst, *src, *indices;
-    int i, j, k, offset;
+    int i, j, k, offset, copy_i, next_i;
     float t;
 
     if (*(s16 *)(d + 0x12) != 0) {
@@ -159,21 +159,24 @@ void FUN_L14_00301de8(char *m) {
         i = 0;
         offset = 0;
         do {
-            i++;
-            dst = d + offset + 0x460;
-            src = d + offset + 0x560;
+            next_i = i + 1;
+            dst = d + offset;
+            src = dst;
+            dst += 0x460;
+            src += 0x560;
             for (k = 2; k >= 0; k--) {
                 add_vector_xyz(dst, dst, src);
                 dst += 0x40;
                 src += 0x40;
             }
-            offset = i * 0x10;
+            i = next_i;
+            offset = i << 4;
         } while ((float)i < 4.0f);
-        i = 0;
+        copy_i = 0;
         do {
-            *(u128 *)(d + 0x420 + (i << 4)) = *(u128 *)(d + 0x20 + ((u8)indices[i] << 4));
-            i++;
-        } while (i < 4);
+            *(u128 *)(d + 0x420 + (copy_i << 4)) = *(u128 *)(d + 0x20 + ((u8)indices[copy_i] << 4));
+            copy_i++;
+        } while (copy_i < 4);
     }
     if (*(s16 *)(d + 0x12) > D_L14_001620C4) {
         t = ConvertIntegerToFloat(*(s16 *)(d + 0x12) - D_L14_001620C4) /

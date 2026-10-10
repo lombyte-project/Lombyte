@@ -7,6 +7,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/state/transition_d
             "FUN_001eb798.s",
             FUN_001eb798);
 #else
+#include "rnc/globals.h"
 #include "types.h"
 #include "rnc/storage/disc_table.h"
 #include "sda.h"

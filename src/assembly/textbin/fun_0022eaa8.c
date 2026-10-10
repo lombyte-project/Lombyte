@@ -5,6 +5,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022eaa8/FUN_0022eaa8.s", FUN_0022eaa8);
 #else
+#include "rnc/globals.h"
 #include "types.h"
 #include "eetypes.h"
 #include "sda.h"
@@ -123,7 +124,7 @@ extern s16 D_0015EE48 __attribute__((sda));
 extern f32 sequence_fade __asm__("D_0015F43C") MACRO_ADDR;
 extern s32 D_0015F618 MACRO_ADDR;
 extern f32 D_00160404 MACRO_ADDR;
-extern u8 D_00160460[] MACRO_ADDR;
+#include "rnc/rendering/sky_shell.h"
 extern s32 D_001604E0 __attribute__((sda));
 extern s32 D_001604F0 __attribute__((sda));
 extern s32 D_00160500 __attribute__((sda));
@@ -279,7 +280,7 @@ void update_level_gameplay_frame(void) {
         scale_vector(&first_position, &D_00160500, scale);
         add_vectors(&D_001604F0, &D_001604F0, &first_position);
     }
-    scale_vector(D_00160460, &D_001D9AE0[level_render_state.mode],
+    scale_vector(&D_00160460, &D_001D9AE0[level_render_state.mode],
                  (f32)(render_sequence.time - scale_ticks(0x78)) * 20.0f * scale);
     D_00160404 = D_001D9B30[level_render_state.mode];
     for (object_index = 0; object_index < render_sequence.count; object_index++) {

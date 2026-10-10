@@ -5,9 +5,11 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001e9b10/FUN_001e9b10.s", FUN_001e9b10);
 #else
+#include "rnc/globals.h"
 #include "types.h"
 #include "eetypes.h"
 #include "qcopy.h"
+#include "sda.h"
 
 #include "rnc/math/vector.h"
 
@@ -169,7 +171,7 @@ extern f32 D_00160F70;
 extern u8 D_00186F40[];
 extern S18C318 D_0018C318;
 extern Display D_0018CD00;
-extern u8 *D_001940D8;
+extern u8 *D_001940D8 NOT_SDA;
 extern Buf194100 D_00194100;
 extern u8 D_00194180[];
 extern u8 D_001941C0[];

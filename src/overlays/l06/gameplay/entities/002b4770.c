@@ -1016,9 +1016,9 @@ void FUN_L06_002f6dd0(char *m) {
     points = (int *)D_L06_001DB0F0;
     second = D_L06_00161E54;
     fourth = D_L06_00161DF4;
-    seventh = D_L06_00161DF8;
-    sequence = D_L06_00161E40;
     eighth = D_L06_00161DFC;
+    sequence = D_L06_00161E40;
+    seventh = D_L06_00161DF8;
     s[0] = first;
     s[2] = (int)sequence;
     s[1] = second;

@@ -813,11 +813,10 @@ extern short D_L14_00161B3C_2e0170 __asm__("D_L14_00161B3C") __attribute__((sda)
 
 unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
     unsigned char *m = spawn_moby_2e0170(0x193);
+    unsigned char *pos = m + 0x10;
     if (m != 0) {
-        unsigned char *pos = m + 0x10;
         char *d = *(char **)(m + 0x78);
         float vec[8];
-        float *other = vec + 4;
         *(u128 *)pos = *(u128 *)(owner + 0x10);
         *(float *)(m + 0x48) = *(float *)(owner + 0x48);
         m[0x20] = mode;
@@ -843,7 +842,7 @@ unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
             normalize_vector_2e0170(vec, vec,
                 random_scaled_2e0170(*(float *)&D_L14_00161B30_2e0170 * D_0015ED60,
                                        *(float *)&D_L14_00161B34_2e0170 * D_0015ED60));
-            cross_vectors_2e0170(other, &hero.unk290, vec);
+            cross_vectors_2e0170(vec + 4, &hero.unk290, vec);
             build_look_at_2e0170(d + 0x30, vec, &hero.unk290,
                 random_angle_2e0170(0.5759586691856384f, 1.3962633609771729f));
             *(float *)(d + 0x38) = random_scaled_2e0170(*(float *)&D_L14_00161B38_2e0170 * D_0015ED60,

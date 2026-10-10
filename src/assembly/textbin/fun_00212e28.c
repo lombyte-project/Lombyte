@@ -38,10 +38,8 @@ void update_visible_resident_objects(void) {
             } else {
                 if (!(moby->flags & 0x40)) {
                     advance_resident_object_animation(moby);
-                    callback = moby->update_callback;
-                } else {
-                    callback = moby->update_callback;
                 }
+                callback = moby->update_callback;
                 if (callback != 0) {
                     callback(moby);
                 }

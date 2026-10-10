@@ -1,56 +1,26 @@
 #include "types.h"
+#include "rnc/globals.h"
+#include "rnc/rendering/level_render_state.h"
 #include "sda.h"
 #include "asm.h"
-
-extern f32 warp_texture_coordinates[4][2] __asm__("D_001D9A10");
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022e420/FUN_0022e420.s", FUN_0022e420);
 #else
+#include "rnc/globals.h"
+#include "rnc/rendering/level_render_state.h"
 #include "types.h"
 #include "eetypes.h"
 #include "sda.h"
 #include "qcopy.h"
 
-typedef union {
-    u128 quadword;
-    f32 components[4];
-} Vector4;
-
-struct GeometryQuad {
-    Vector4 positions[4];          /* 0x00 */
-    u32 colors[4];                 /* 0x40 */
-    f32 texture_coordinates[4][2]; /* 0x50 */
-    volatile u64 reserved;         /* 0x70 */
-    u64 texture;                   /* 0x78 */
-    u64 texture_state;             /* 0x80 */
-    u64 primitive;                 /* 0x88 */
-};
-
-typedef struct {
-    u8 pad00[0x20];
-    s32 display_mode; /* 0x20 */
-    u8 pad24[2];
-    s16 texture_variant; /* 0x26 */
-    u8 pad28[0x50 - 0x28];
-    s32 history_index; /* 0x50 */
-    s32 history_count; /* 0x54 */
-    s32 mode;          /* 0x58 */
-    s32 state;         /* 0x5C */
-    u8 pad60[0xC0 - 0x60];
-    Vector4 primary_history_positions[32];   /* 0xC0 */
-    Vector4 secondary_history_positions[32]; /* 0x2C0 */
-} LevelRenderState;
+#include "rnc/rendering/geometry_quad.h"
 
 typedef struct {
     u32 w0;
     u32 w1;
 } ColorPair;
 
-extern LevelRenderState level_render_state __asm__("D_0013E030");
-extern Vector4 D_0013E0F0[];
-extern Vector4 D_0013E2F0[];
-extern s32 game_stage __asm__("D_0015F604");
 extern f32 D_001604D0 __attribute__((sda));
 extern u32 D_001D9A30[];
 extern u32 D_001D9A34[];
@@ -64,16 +34,16 @@ extern void normalize_vector(void *, void *, f32) __asm__("func_001F9BF8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern u32 blend_colors(u32, u32, f32) __asm__("func_001FA6E0");
 
-static inline Vector4 *get_primary_history_position(s32 history_index) {
-    return &level_render_state.primary_history_positions[history_index];
+static inline Vec4 *get_primary_history_position(s32 history_index) {
+    return &level_render_state.primary_history[history_index];
 }
 
 void build_resident_indexed_texture_warp_meshes(void) __asm__("FUN_0022e420");
 
 void build_resident_indexed_texture_warp_meshes(void) {
     struct GeometryQuad quad;
-    Vector4 cross_strip_differences[4];
-    Vector4 edge_normals[4];
+    Vec4 cross_strip_differences[4];
+    Vec4 edge_normals[4];
     s32 vertex;
     s32 uv_vertex;
     s32 side_vertex;
@@ -85,20 +55,20 @@ void build_resident_indexed_texture_warp_meshes(void) {
     s32 history_step;
     s32 strip_offset;
     f32 progress;
-    Vector4 *primary_current;
-    Vector4 *primary_next;
-    Vector4 *primary_after_next;
-    Vector4 *secondary_current;
-    Vector4 *secondary_next;
+    Vec4 *primary_current;
+    Vec4 *primary_next;
+    Vec4 *primary_after_next;
+    Vec4 *secondary_current;
+    Vec4 *secondary_next;
 
-    if (game_stage != 6 || level_render_state.display_mode != 4) {
+    if (game_mode != 6 || level_render_state.state != 4) {
         quad.texture = get_effect_texture(0x13);
     } else {
         quad.texture = get_effect_texture(0);
     }
     quad.texture_state = 0xFF9000000260;
     quad.primitive = 0x8000000048;
-    quad.reserved = 0;
+    quad.reserved.ordered = 0;
     for (uv_vertex = 0; uv_vertex < 4; uv_vertex++) {
         quad.texture_coordinates[uv_vertex][0] = warp_texture_coordinates[uv_vertex][0];
         quad.texture_coordinates[uv_vertex][1] = warp_texture_coordinates[uv_vertex][1];
@@ -107,13 +77,13 @@ void build_resident_indexed_texture_warp_meshes(void) {
         history_index = (level_render_state.history_index - page + 0x1F) & 0x1F;
         primary_next = get_primary_history_position((history_index + 1) & 0x1F);
         secondary_next =
-            &level_render_state.secondary_history_positions[(history_index + 1) & 0x1F];
+            &level_render_state.secondary_history[(history_index + 1) & 0x1F];
         primary_current = get_primary_history_position(history_index);
-        secondary_current = &level_render_state.secondary_history_positions[history_index];
+        secondary_current = &level_render_state.secondary_history[history_index];
         primary_after_next = get_primary_history_position((history_index + 2) & 0x1F);
         for (strip = 0; strip < 2; strip++) {
             strip_offset = strip * 32;
-            quad.reserved = 0;
+            quad.reserved.ordered = 0;
             subtract_vectors(&cross_strip_differences[0], secondary_current, primary_current);
             subtract_vectors(&cross_strip_differences[1], primary_current, secondary_current);
             subtract_vectors(&cross_strip_differences[2], secondary_next, primary_next);
@@ -133,11 +103,11 @@ void build_resident_indexed_texture_warp_meshes(void) {
                 history_step = vertex >> 1;
                 progress = convert_integer_to_float(page + 1 - history_step) * 0.03125f;
                 quad.colors[vertex] =
-                    blend_colors(D_001D9A30[level_render_state.texture_variant * 2],
-                                 D_001D9A34[level_render_state.texture_variant * 2], progress);
+                    blend_colors(D_001D9A30[level_render_state.content_variant * 2],
+                                 D_001D9A34[level_render_state.content_variant * 2], progress);
                 normalize_vector(&quad.positions[vertex], &edge_normals[vertex],
                                  (1.0f - progress * progress) *
-                                     (&D_001604D0)[level_render_state.texture_variant]);
+                                     (&D_001604D0)[level_render_state.content_variant]);
                 add_vectors(&quad.positions[vertex], &quad.positions[vertex],
                             get_primary_history_position((history_index + history_step) & 0x1F) +
                                 strip_offset);
@@ -149,7 +119,7 @@ void build_resident_indexed_texture_warp_meshes(void) {
                 normalize_vector(&quad.positions[side_vertex],
                                  &cross_strip_differences[side_vertex],
                                  (1.0f - side_progress * side_progress) *
-                                     (&D_001604D0)[level_render_state.texture_variant]);
+                                     (&D_001604D0)[level_render_state.content_variant]);
                 add_vectors(
                     &quad.positions[side_vertex], &quad.positions[side_vertex],
                     get_primary_history_position((history_index + side_history_step) & 0x1F) +

@@ -269,10 +269,10 @@ extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 
 /* Remove active mobys of the selected classes from this moby's linked group. */
 void FUN_L08_002d6450(struct Moby *moby) {
-    short *list = D_L08_001AC040[*(u8 *)(D_L08_0015FFD8 + (*(s32 *)(moby->pvars + 0x144) << 8) + 0x21)];
+    short *list = D_L08_001AC040[(((struct Moby *)D_L08_0015FFD8) + *(s32 *)(moby->pvars + 0x144))->group];
     struct Moby *other;
     if (list != 0) {
-        other = (struct Moby *)(D_L08_0015FFD8 + ((*list & 0x7fff) << 8));
+        other = ((struct Moby *)D_L08_0015FFD8) + (*list & 0x7fff);
         for (;;) {
             if (other->state < 0x7f && other != moby) {
                 u16 class_id = (u16)other->oclass;
@@ -285,7 +285,7 @@ void FUN_L08_002d6450(struct Moby *moby) {
             if (*list < -1)
                 break;
             list++;
-            other = (struct Moby *)(D_L08_0015FFD8 + ((*list & 0x7fff) << 8));
+            other = ((struct Moby *)D_L08_0015FFD8) + (*list & 0x7fff);
         }
     }
 }
@@ -814,6 +814,8 @@ struct Moby *FUN_L08_002de3e0(void *pos, struct Moby *target, void *velocity, fl
     float *reference;
     float distance;
     float scale;
+    struct Moby *target_copy = target;
+    void *velocity_copy = velocity;
     if (moby != 0) {
         data = (char *)moby->pvars;
         qcopy(&moby->pos, pos);
@@ -833,8 +835,8 @@ struct Moby *FUN_L08_002de3e0(void *pos, struct Moby *target, void *velocity, fl
         *(float *)(data + 0x40) = pitch;
         *(float *)(data + 0x48) = 70.0f;
         *(float *)(data + 0x44) = yaw;
-        *(struct Moby **)(data + 0x4C) = target;
-        qcopy(data + 0x20, velocity);
+        *(struct Moby **)(data + 0x4C) = target_copy;
+        qcopy(data + 0x20, velocity_copy);
         FUN_L00_00250df8(moby);
     }
     return moby;

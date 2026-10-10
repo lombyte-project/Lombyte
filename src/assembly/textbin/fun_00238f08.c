@@ -5,6 +5,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00238f08/FUN_00238f08.s", FUN_00238f08);
 #else
+#include "rnc/globals.h"
 #include "types.h"
 #include "rnc/ui/text/text_region.h"
 #include "rnc/ui/vendor/vendor_capture.h"

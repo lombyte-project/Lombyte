@@ -22,7 +22,7 @@ s64 ftoi(s64 arg) {
     }
     t = (u64)input << 0xC;
     input = (u64)t >> 0xC;
-    input = (u64)input | ((u64)0x8000 << 0x25);
+    input |= (u64)0x8000 << 0x25;
     if (exp < 0) {
         exp = -exp;
         /* The retail dsrlv masks this shift count, including exp == 1. */
@@ -35,8 +35,7 @@ s64 ftoi(s64 arg) {
     } else {
         input = (u64)input << exp;
     }
-    input = (s32)input;
-    return input;
+    return (s32)input;
 }
 
 #endif /* NON_MATCHING */

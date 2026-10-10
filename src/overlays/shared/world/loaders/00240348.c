@@ -56,8 +56,8 @@ void FUN_L00_00241788(s32 *entries, s32 count) {
             if (end == 0)
                 end = entries[16];
             sorted[i].value = convert_integer_to_float(end - entries[0]) * 0.0009765625f;
-            sorted[i + 1].id = -1.0f;
             sorted[i + 1].value = 0.0f;
+            sorted[i + 1].id = -1.0f;
         }
     }
 

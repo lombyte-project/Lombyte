@@ -6,6 +6,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/map/draw_map_overlay/FUN_00205640.s",
             FUN_00205640);
 #else
+#include "rnc/globals.h"
 #include "types.h"
 #include "rnc/ui/text/text_region.h"
 #include "sda.h"

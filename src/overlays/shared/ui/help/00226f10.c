@@ -1138,6 +1138,8 @@ extern void FUN_001f9c48_34358(void *, void *, f32) __asm__("FUN_001f9c48");
 extern f32 vector_length_xy_34358(void *) __asm__("FUN_001f9b20");
 
 void FUN_L01_00234358(float amount) {
+    struct Hero *h = &hero;
+    Vec4 *velocity;
     f32 delta[4];
     Vec4 saved;
     f32 value;
@@ -1148,20 +1150,30 @@ void FUN_L01_00234358(float amount) {
     f32 current_length;
     f32 minimum_factor;
 
-    switch (hero.unk20B3) {
-        case 0:
-            angle = hero.motion.unk180;
-            speed = hero.target_speed;
-            if (hero.state.control_mode == 4 && hero.unk30A == 0 && hero.unk4A4 != 0 && hero.unk257 != 0)
-                speed = D_0015ED6C * 2.1f;
-            if (hero.unk30A != 0 && hero.state.current == 0xE && D_0015ED6C < speed)
-                speed = D_0015ED6C;
+    switch (h->unk20B3) {
+        case 0: break;
+        case 1:
+        case 2: goto nonzero_mode;
+        default: return;
+    }
+            angle = h->motion.unk180;
+            speed = h->target_speed;
+            if (h->state.control_mode == 4) {
+                if (h->unk30A == 0) {
+                    if (h->unk4A4 != 0 && h->unk257 != 0)
+                        speed = frame_time * 2.1f;
+                }
+            }
+            if (h->unk30A != 0) {
+                if (h->state.current == 0xE && frame_time < speed)
+                    speed = frame_time;
+            }
             delta[0] = fast_cos(angle) * speed;
             delta[1] = fast_sin(angle) * speed;
-            delta[2] = hero.motion.velocity.f[2];
-            factor = -(hero.motion.velocity.f[0] * delta[0] + hero.motion.velocity.f[1] * delta[1]);
+            delta[2] = h->motion.velocity.f[2];
+            factor = -(h->motion.velocity.f[0] * delta[0] + h->motion.velocity.f[1] * delta[1]);
             length = vector_length_xy_34358(delta);
-            current_length = vector_length_xy_34358(&hero.motion.velocity);
+            current_length = vector_length_xy_34358(&h->motion.velocity);
             if (length == 0.0f) {
                 factor = 0.0f;
                 goto ratio_done;
@@ -1178,7 +1190,7 @@ void FUN_L01_00234358(float amount) {
             minimum_factor = 1.0f;
             factor += minimum_factor;
             factor *= 1.5f;
-            if (hero.state.current == 0x81) {
+            if (h->state.current == 0x81) {
                 if (factor > 1.7f)
                     factor = 1.7f;
             } else if (factor > 3.0f) {
@@ -1187,22 +1199,20 @@ void FUN_L01_00234358(float amount) {
             if (factor < minimum_factor)
                 factor = minimum_factor;
             amount *= factor;
-            subtract_vector_xyz_34358(delta, delta, &hero.motion.velocity);
+            velocity = &h->motion.velocity;
+            subtract_vector_xyz_34358(delta, delta, velocity);
             length = vector_length_xy_34358(delta);
             if (amount < length)
                 FUN_001f9c48_34358(delta, delta, amount);
-            add_vector_xyz_34358(&hero.motion.velocity, &hero.motion.velocity, delta);
-            saved.q = hero.move_impulse.q;
-            hero.ground_speed = hero.motion.unk168 - FUN_L00_00213350_34358(&saved);
-            break;
-        case 1:
-        case 2:
-            value = FUN_L00_002339d0_34358(&hero.motion.velocity);
-            approach_value_34358(hero.target_speed, amount, &value);
-            FUN_L00_00233ba0_34358(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
-            FUN_L00_00233708_34358(&hero.motion.velocity, &hero.motion.velocity, value);
-            break;
-    }
+            add_vector_xyz_34358(velocity, velocity, delta);
+            saved.q = h->move_impulse.q;
+            h->ground_speed = h->motion.unk168 - FUN_L00_00213350_34358(&saved);
+    return;
+nonzero_mode:
+        value = FUN_L00_002339d0_34358(&h->motion.velocity);
+        approach_value_34358(h->target_speed, amount, &value);
+        FUN_L00_00233ba0_34358(&h->motion.velocity, &h->motion.velocity, 0.0f);
+        FUN_L00_00233708_34358(&h->motion.velocity, &h->motion.velocity, value);
 }
 #endif /* NON_MATCHING */
 #include "eetypes.h"

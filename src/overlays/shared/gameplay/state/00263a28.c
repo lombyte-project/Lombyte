@@ -2,4 +2,81 @@
 #include "types.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00263a28.s", FUN_L01_00263a28);
+#else
+#include "eetypes.h"
+extern void FUN_001fa050(void *, void *) __asm__("FUN_001fa050");
+extern void FUN_001f9a68(float, void *, void *) __asm__("FUN_001f9a68");
+extern void FUN_001f9d20(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void FUN_001f9a10(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f9a80(float, void *, void *) __asm__("FUN_001f9a80");
+extern void FUN_001f9a28(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float FUN_001f9af0(void *) __asm__("FUN_001f9af0");
+extern void FUN_0020fa90(void *, short, int) __asm__("FUN_0020fa90");
+
+int FUN_L01_00263a28(char *state, int index, unsigned int *type, float *result,
+                      float *radius, float *distance)
+{
+    char *entry;
+    float scale;
+    u128 matrix[4];
+    u128 first;
+    u128 second;
+    float separation;
+
+    if (*(char **)(state + 0x94) == 0) {
+        return 0;
+    }
+    entry = *(char **)(state + 0x94) + index * 0x20 + 0x10;
+    *type = *(unsigned char *)entry;
+    scale = *(float *)(state + 0x2c) * 0.0009765625f;
+    FUN_001fa050(matrix, state + 0x40);
+
+    if (*type < 2 || *type == 3) {
+        *(u128 *)result = *(u128 *)(entry + 0x10);
+        FUN_001f9a68(scale, result, result);
+        FUN_001f9d20(result, result, matrix);
+        FUN_001f9a10(result, result, state + 0x10);
+        *radius = result[3] * scale;
+        if (*type < 2) {
+            *distance = 0.0f;
+            return 1;
+        }
+        separation = *(float *)(entry + 4) * scale;
+    } else if (*type == 2) {
+        short joint = *(short *)(*(char **)(state + 0x94) + 2);
+        if (joint != 0) {
+            FUN_0020fa90(state, joint, 0);
+        }
+        *(u128 *)result = *(u128 *)(0x70000000 + *(int *)(entry + 4) * 0x10);
+        FUN_001f9a68(scale, result, result);
+        FUN_001f9d20(result, result, matrix);
+        FUN_001f9a10(result, result, state + 0x10);
+        *radius = *(float *)(entry + 0xc) * scale;
+        *distance = 0.0f;
+        return 1;
+    } else if (*type == 4) {
+        short joint = *(short *)(*(char **)(state + 0x94) + 2);
+        if (joint != 0) {
+            FUN_0020fa90(state, joint, 0);
+        }
+        FUN_001f9a80(scale, &first, (void *)(0x70000000 + *(short *)(entry + 4) * 0x10));
+        FUN_001f9a80(scale, &second, (void *)(0x70000000 + *(short *)(entry + 6) * 0x10));
+        if (((float *)&first)[2] < ((float *)&second)[2]) {
+            *(u128 *)result = first;
+        } else {
+            *(u128 *)result = second;
+        }
+        FUN_001f9d20(result, result, matrix);
+        FUN_001f9a10(result, result, state + 0x10);
+        *radius = *(float *)(entry + 0xc) * scale;
+        FUN_001f9a28(&second, &second, &first);
+        separation = FUN_001f9af0(&second);
+    } else {
+        return 0;
+    }
+    *distance = separation;
+    return 1;
+}
+#endif

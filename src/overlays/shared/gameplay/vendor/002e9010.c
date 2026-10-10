@@ -1209,16 +1209,11 @@ void FUN_L00_002ebbd8(void *arg) {
     int frames;
 
     *(int *)(p + 0x40) = 0;
-    if (current_level_index != 14)
-        goto normal_scale;
-    state = g->state.current;
-    if ((unsigned)(state - 0x2c) >= 2)
-        goto normal_scale;
-    *(float *)(p + 0x4c) = 2.0f;
-    goto scale_done;
-normal_scale:
-    *(float *)(p + 0x4c) = 1.5f;
-scale_done:
+    if (current_level_index == 14 &&
+        (unsigned)(g->state.current - 0x2c) < 2)
+        *(float *)(p + 0x4c) = 2.0f;
+    else
+        *(float *)(p + 0x4c) = 1.5f;
     *(volatile float *)(p + 0x48) = 0.20943952f;
     *(volatile float *)(p + 0x58) = 0.0017453292f;
     *(volatile float *)(p + 0x5c) = -0.004363323f;
@@ -1230,6 +1225,7 @@ scale_done:
     *(volatile int *)(m + 0x18) = 0;
     *(volatile float *)(m + 0x10) = 0.01f;
     *(volatile float *)(m + 0x14) = 0.3f;
+    m = (char *)((volatile O002ebb00 *)o)->m;
     frames = FUN_001fef20_2ebbd8(0x78);
     *(short *)(m + 0x1c) = 0;
     *(short *)(m + 0x1e) = frames;

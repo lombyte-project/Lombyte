@@ -7,6 +7,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00225e70/FUN_00225e70.s", FUN_00225e70);
 #else
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/storage/disc_table.h"
@@ -240,8 +241,7 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
                                      0, 10);
                 (*attachment2)->flags = 0;
                 moby = *attachment2;
-                qcopy(&(*attachment2)->position, &source_moby->position);
-                /* This expression preserves the retail reload of the third attachment. */
+                qcopy(&moby->position, &source_moby->position);
                 qcopy(&(*attachment2)->rotation, &source_moby->rotation);
                 if (moby->oclass == 0x4A) {
                     moby->scale *= 3.0f;

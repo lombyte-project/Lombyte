@@ -10,6 +10,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/world/data/"
             "select_world_object_resource_tables/FUN_00204a40.s",
             FUN_00204a40);
 #else
+#include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 /* Verified against the US retail body at 0x00204a40. */
 #include "sda.h"
