@@ -1769,7 +1769,6 @@ void FUN_L00_0029b680(void) {
     D_L00_00161E38_29b680 = 0;
 }
 #undef P
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ba78.s", FUN_L00_0029ba78);
 
 /* FUN_L00_0029c648 - Level-00 shared: vendor menu update. Dispatches on the
  * menu state vendor_menu.state (0 = opening, 1 = open, 2 = closing, 3 = exit
@@ -1903,6 +1902,8 @@ extern void FUN_L00_00234b38(void *);
 extern void FUN_0022ca50(void);
 
 #define CUR_ITEM (vendor_menu.fD0[vendor_menu.f58])
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ba78.s", FUN_L00_0029ba78);
 
 void FUN_L00_0029c648(void) {
     Vec4 a;
