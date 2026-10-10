@@ -73,7 +73,7 @@ typedef struct {
 
 extern s32 D_001B3580[];
 extern char *D_0015FF18;
-extern void FillTransferWords();
+extern void fill_transfer_words() __asm__("func_001F97E8");
 extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 
 /* InitMobyInstance: clears the 0x100-byte moby, fills its defaults (class
@@ -94,7 +94,7 @@ void init_moby_instance(void *moby_mem, int oClass) {
     int idx;
     MobyIClass *pClass;
 
-    FillTransferWords(m, 0, 0x100);
+    fill_transfer_words(m, 0, 0x100);
     c = resident_class_slot_by_id[oClass];
     m->unk23 = 0x80;
     m->oClass = c;

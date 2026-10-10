@@ -39,7 +39,7 @@ extern unsigned char D_0015EDB5;
 extern T2C_21ED38 D_L17_0017C528[];
 extern char *FUN_L00_0020d460(int);
 extern char D_00141680[];
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L17_0017C6F0[][25];
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9e90(float, float);
@@ -96,7 +96,7 @@ extern void FUN_L00_00262528(char *o, int a, int b);
 extern void FUN_L00_00262840(char *o);
 extern void FUN_L00_002a3ec8(int, int, int, float, float, float, float);
 extern void FUN_L06_00239528(void);
-extern void FillTransferWords(void *, int, int);
+extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
 extern void normalize_vector_xyz(void *, void *, float);
@@ -333,7 +333,7 @@ int hero_set_state(int a, int b) {
                                  p->motion.pos.f[1], 0.4f, 0.3f);
             }
         } else if (p->motion.unk100.f[2] < frame_time * -0.5f) {
-            int n = truncate_float_to_s32(AbsoluteFloat(p->motion.unk100.f[2]) * 300.0f);
+            int n = truncate_float_to_s32(absolute_float(p->motion.unk100.f[2]) * 300.0f);
             FUN_L00_00209ca8(3, n < 0x28 ? n : 0x28, 1);
             if (D_L17_001612D0 != 0) {
                 FUN_L00_002a3ec8(D_L17_001612D0, D_L17_001612D8, 0, p->motion.pos.f[0],
@@ -661,7 +661,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0x10;
         p->unk2284 = 3;
         p->unk20A7 = 1;
-        FillTransferWords(&p->unk9D0, 0, 0x20);
+        fill_transfer_words(&p->unk9D0, 0, 0x20);
         qcopy(&p->motion.unk150, &p->motion.unk100);
         if (b)
             FUN_L00_002323b8(0x64, 0, (float)scale_game_frames(0xF));

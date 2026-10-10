@@ -33,7 +33,7 @@ void FUN_L03_00291918(char *moby) {
 /* update: follow the parent, blend its color, scale by the wind factor */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002BC140), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_001f9770(void *);
 extern int FUN_001fa6e0(int, int, float);
@@ -63,8 +63,8 @@ void FUN_L03_002bae48(char *moby) {
                      *(float *)(moby + 0x44));
     *(float *)(moby + 0x40) =
         fast_add_rotations(*(float *)(moby + 0x40), frame_time * 5.235987663269043f);
-    ratio = ConvertIntegerToFloat(*(short *)(p + 0xE));
-    ratio = ratio / ConvertIntegerToFloat(*(short *)(p + 0xC));
+    ratio = convert_integer_to_float(*(short *)(p + 0xE));
+    ratio = ratio / convert_integer_to_float(*(short *)(p + 0xC));
     c = FUN_001fa6e0(*(int *)(p + 8), *(int *)(p + 4), ratio);
     b = (c >> 16) & 0xFF;
     g = (c >> 8) & 0xFF;
@@ -308,7 +308,7 @@ extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, in
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void FUN_L00_0025d538(void *, void *);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L03_002ce238(char *m) {
     int st;
@@ -335,11 +335,11 @@ void FUN_L03_002ce238(char *m) {
                 b = fast_subtract_rotations(a, *(float *)(m + 0x48));
                 p = fast_cos(b) * 0.08726646f;
                 q = fast_sin(b) * -0.34906584f;
-                if (AbsoluteFloat(*(float *)(m + 0x40)) < AbsoluteFloat(q)) {
+                if (absolute_float(*(float *)(m + 0x40)) < absolute_float(q)) {
                     *(float *)(m + 0x40) = q;
                     *(float *)(d + 0x218) = 0.0f;
                 }
-                if (AbsoluteFloat(*(float *)(m + 0x44)) < AbsoluteFloat(p)) {
+                if (absolute_float(*(float *)(m + 0x44)) < absolute_float(p)) {
                     *(float *)(m + 0x44) = p;
                     *(float *)(d + 0x21C) = 0.0f;
                 }

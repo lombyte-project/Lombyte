@@ -1,9 +1,9 @@
 #include "types.h"
 
 /* Return the aligned byte span of a linked DMA packet chain. */
-s32 GetDmaPacketSpanBytes(const u32 *packet) __asm__("GetDmaPacketSpanBytes");
+s32 get_dma_packet_span_bytes(const u32 *packet) __asm__("GetDmaPacketSpanBytes");
 
-s32 GetDmaPacketSpanBytes(const u32 *packet) {
+s32 get_dma_packet_span_bytes(const u32 *packet) {
     s32 span_bytes = 8;
 
     if (packet[0] != 0) {
@@ -21,5 +21,5 @@ s32 GetDmaPacketSpanBytes(const u32 *packet) {
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(GetDmaPacketSpanBytes) memcard_GetDataSize
+extern __typeof__(get_dma_packet_span_bytes) memcard_GetDataSize
     __attribute__((alias("GetDmaPacketSpanBytes")));

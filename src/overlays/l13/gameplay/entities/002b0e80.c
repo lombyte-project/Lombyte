@@ -205,7 +205,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern int float_to_int(float) __asm__("FUN_001fa6d0");
-extern float AbsoluteFloat(float) __asm__("FUN_001f99c0");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern float FUN_001f9b80(void *, void *);
 extern s32 allocate_voice_2b39e0(s32, s32, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -279,7 +279,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
         }
         advance_accelerated_scalar(&moby->pos.z, &vars->speed, target, D_0015ED70_2b39e0 * 8.0f,
                                    D_0015ED70_2b39e0 * 8.0f, frame_time * 40.0f);
-        if (AbsoluteFloat(moby->pos.z - target) == 0.0f) {
+        if (absolute_float(moby->pos.z - target) == 0.0f) {
             if (moby->state == 2) {
                 moby->state = 6;
             } else {
@@ -342,7 +342,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
         } else if (moby->state == 4) {
             char *p = (char *)&hero.motion.pos;
             float d = FUN_001f9b80(&moby->pos, p);
-            if (AbsoluteFloat(*(float *)(p + 0x258) - vars->bottom) < 2.0f && d < 32.0f && d > 5.0f) {
+            if (absolute_float(*(float *)(p + 0x258) - vars->bottom) < 2.0f && d < 32.0f && d > 5.0f) {
                 moby->unkBC = 0;
                 moby->state = 3;
                 vars->speed = -(frame_time * 5.0f);
@@ -350,7 +350,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
         } else if (moby->state == 5) {
             char *p = (char *)&hero.motion.pos;
             float d = FUN_001f9b80(&moby->pos, p);
-            if (AbsoluteFloat(*(float *)(p + 0x258) - vars->top) < 2.0f && d < 32.0f && d > 5.0f) {
+            if (absolute_float(*(float *)(p + 0x258) - vars->top) < 2.0f && d < 32.0f && d > 5.0f) {
                 moby->unkBC = 0;
                 moby->state = 2;
                 vars->speed = frame_time * 5.0f;
@@ -998,7 +998,7 @@ typedef struct {
     short y;
 } IconEC5D0;
 extern IconEC5D0 D_L13_001CBDB8[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float vector_length_xyz(void *a);
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern unsigned char D_0013E504[];
@@ -1035,7 +1035,7 @@ void FUN_L13_002b89f8(char *rot, char *from, char *moby, int icon, long color, i
         if (len > 38.0f) {
             float f;
             len = 46.0f - len;
-            f = ConvertIntegerToFloat(((unsigned long)color >> 24) & 0xFF) * len;
+            f = convert_integer_to_float(((unsigned long)color >> 24) & 0xFF) * len;
             color &= 0xFFFFFF;
             color = (func_001FA898_r(f * 0.125f) << 24) | color;
         }
@@ -1069,7 +1069,7 @@ typedef struct {
 extern char *D_L13_0015FFE4;
 extern char D_L13_001672D0[];
 extern char D_L13_001CBD40[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -1127,7 +1127,7 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
             FUN_L11_00311210(v, &tx, &ty, 0);
             tx -= sx;
             ty -= sy;
-            r = func_001FA898_r(seg_sqrt(ConvertIntegerToFloat(tx * tx + ty * ty))) + 0x1C;
+            r = func_001FA898_r(seg_sqrt(convert_integer_to_float(tx * tx + ty * ty))) + 0x1C;
             if (dx < r && dy < r) {
                 if (cur != 0) {
                     if (m == cur) {
@@ -1168,13 +1168,13 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L13_0015F5CC) / 20.0f);
+                        float ang = FUN_L00_0025e310(convert_integer_to_float(D_L13_0015F5CC) / 20.0f);
                         FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f, ang);
                     }
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L13_0015F5CC) / 20.0f);
+                        float ang = FUN_L00_0025e310(convert_integer_to_float(D_L13_0015F5CC) / 20.0f);
                         FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
                     }
                 }
@@ -1194,10 +1194,10 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                     u[0] += 256.0f;
                     u[1] += 208.0f;
                     dist = distance_xyz((char *)a + 0x10, np);
-                    h = AbsoluteFloat(fast_subtract_rotations(FUN_001f9e90(*(float *)(m + 0x10) - *(float *)((char *)a + 0x10),
+                    h = absolute_float(fast_subtract_rotations(FUN_001f9e90(*(float *)(m + 0x10) - *(float *)((char *)a + 0x10),
                                                                       *(float *)(m + 0x14) - *(float *)((char *)a + 0x14)),
                                                     *(float *)(p + 0x38)));
-                    k = AbsoluteFloat(fast_subtract_rotations(-FUN_001f9e90(FUN_001f9b80((char *)a + 0x10, np),
+                    k = absolute_float(fast_subtract_rotations(-FUN_001f9e90(FUN_001f9b80((char *)a + 0x10, np),
                                                                        *(float *)(m + 0x18) - *(float *)((char *)a + 0x18)),
                                                     *(float *)(p + 0x34)));
                     s = seg_sqrt(h * h + k * k);
@@ -1208,13 +1208,13 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                         {
                             float x = (v[0] - scr[4]) * 0.0625f;
                             float y = (v[1] - scr[5]) * 0.0625f;
-                            float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L13_0015F5CC) / 20.0f);
+                            float ang = FUN_L00_0025e310(convert_integer_to_float(D_L13_0015F5CC) / 20.0f);
                             FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f, ang);
                         }
                         {
                             float x = (v[0] - scr[4]) * 0.0625f;
                             float y = (v[1] - scr[5]) * 0.0625f;
-                            float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L13_0015F5CC) / 20.0f);
+                            float ang = FUN_L00_0025e310(convert_integer_to_float(D_L13_0015F5CC) / 20.0f);
                             FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
                         }
                     } else {
@@ -1235,7 +1235,7 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L13_0015F5CC) / 20.0f);
+                        float ang = FUN_L00_0025e310(convert_integer_to_float(D_L13_0015F5CC) / 20.0f);
                         FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
                     }
                 }
@@ -1249,7 +1249,7 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L13_0015F5CC) / 20.0f);
+                        float ang = FUN_L00_0025e310(convert_integer_to_float(D_L13_0015F5CC) / 20.0f);
                         FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
                     }
                 }
@@ -1406,18 +1406,18 @@ void FUN_L13_002b97f8(char *moby) {
     if (*(int *)(d + 0x88) != 0) {
         FUN_L11_00311210(*(char **)(d + 0x88) + 0x10, &sp10, &sp14, 0);
         if (*(int *)(d + 0x8C) > scale_game_frames_alt(0x1F4)) {
-            t = ConvertIntegerToFloat(*(int *)(d + 0x8C) - scale_game_frames_alt(0x1F4));
-            t = t / ConvertIntegerToFloat(scale_game_frames_alt(0x4B));
+            t = convert_integer_to_float(*(int *)(d + 0x8C) - scale_game_frames_alt(0x1F4));
+            t = t / convert_integer_to_float(scale_game_frames_alt(0x4B));
             m = 2.0f * (1.0f - t);
             k = t * 5.0f + 1.0f;
             if (m > 1.0f) m = 1.0f;
             c = func_001FA898_r(m * 96.0f);
-            func_L13_002B9590_f(ConvertIntegerToFloat(sp10), ConvertIntegerToFloat(sp14), k, FUN_L00_0025e310(ConvertIntegerToFloat(D_L13_0015F5CC) / 30.0f), 0, 0xFF, 0, c);
+            func_L13_002B9590_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), k, FUN_L00_0025e310(convert_integer_to_float(D_L13_0015F5CC) / 30.0f), 0, 0xFF, 0, c);
             *(int *)(d + 0xEC) = 0;
         } else {
             a = 0xFF;
             if ((*(int *)(d + 0x8C) / scale_game_frames_alt(0x14)) & 1) a = 0;
-            func_L13_002B9590_f(ConvertIntegerToFloat(sp10), ConvertIntegerToFloat(sp14), 1.0f, 0.0f, 0xFF, a, 0, 0x60);
+            func_L13_002B9590_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), 1.0f, 0.0f, 0xFF, a, 0, 0x60);
             *(int *)(d + 0xEC) = *(int *)(d + 0x88);
         }
     }
@@ -1452,7 +1452,7 @@ void FUN_L13_002b97f8(char *moby) {
     h = D_0013F350;
     f = *(float *)(h + 0x15FC) - *(float *)(d + 0xF0);
     f *= 0.2f;
-    q = AbsoluteFloat(f);
+    q = absolute_float(f);
     if (q > 1.0f) f /= q;
     *(float *)(d + 0xF0) += f;
     v = func_001FA898_r(*(float *)(d + 0xF0) * 251.0f / *(float *)(h + 0x1600)) + 2;

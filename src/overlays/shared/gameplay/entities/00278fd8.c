@@ -29,7 +29,7 @@ typedef struct {
 } Sentry98BB8;
 
 extern char *FUN_L15_002e4580(char *, float *, char *, char *);
-extern float ConvertIntegerToFloat(int);
+extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float D_L15_001673C0[4];
 extern float D_L15_001CBFE0[];
 extern float D_L15_001CC060[];
@@ -369,7 +369,7 @@ void FUN_L15_002979d8(unsigned char *moby) {
             } else if (moby[0x52] == moby[0x53] && tbl != 0) {
                 float t = compute_interpolated_record_value(moby);
                 int k = func_001FA898_r(t);
-                t -= ConvertIntegerToFloat(k);
+                t -= convert_integer_to_float(k);
                 *(float *)(moby + 0x48) = fast_add_rotations(
                     *(float *)(data + 0x170), (tbl[k] + (tbl[k + 1] - tbl[k]) * t) * DEG_TO_RAD);
             }
@@ -864,7 +864,7 @@ void FUN_L15_002979d8(unsigned char *moby) {
     } else if (lvl == 1) {
         n = scale_game_frames(0x5A);
     }
-    s = fast_sin((float)(D_L15_0015F5CC % n) / ConvertIntegerToFloat(n) * 2.0f * 3.1415927f +
+    s = fast_sin((float)(D_L15_0015F5CC % n) / convert_integer_to_float(n) * 2.0f * 3.1415927f +
                  -3.1415927f);
     {
         int r0 = func_001FA898_r(s * 20.0f);

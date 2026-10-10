@@ -157,7 +157,7 @@ extern char *FUN_L00_002d7e90(void *, float);
 extern char D_0013E533[];
 extern char D_L00_00173E70[];
 extern char D_L00_001B07B0[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 FUN_001f9b80(void *, void *);
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -231,7 +231,7 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 f32 resolve_camera_surface_height(void *position, s32 optional_output) __asm__("FUN_002135f0");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char D_0013E550[];
@@ -333,7 +333,7 @@ void FUN_L00_002aa670(M910 *m) {
             q.cls = m->cls;
             m->pos.f[2] -= 0.4f;
             q.dir[2] = 1.0f;
-            k = ConvertIntegerToFloat(D_L00_0015F5CC - v->i74);
+            k = convert_integer_to_float(D_L00_0015F5CC - v->i74);
             k = k / FUN_001f96b0(*(float *)&D_L00_001613D4);
             if (1.0f < k) {
                 k = 1.0f;
@@ -432,7 +432,7 @@ void FUN_L00_002aa670(M910 *m) {
                                 if (v->f6C == 0.0f) {
                                     float ph;
 
-                                    v->f6C = AbsoluteFloat(ov[2]) * 2.0f;
+                                    v->f6C = absolute_float(ov[2]) * 2.0f;
                                     ph = -2.3561945f;
                                     if (0.0f < ov[2]) {
                                         ph = 0.7853982f;
@@ -639,7 +639,7 @@ void FUN_L00_002aa670(M910 *m) {
             if (m->state & 2) {
                 if (!(m->state & 4) ||
                     (FUN_001f9b80(&((M910 *)hero.moby)->pos, &m->pos) < 0.75f &&
-                     AbsoluteFloat(m->pos.f[2] - hero.motion.pos.f[2]) < 0.25f && (m->state & 0x10))) {
+                     absolute_float(m->pos.f[2] - hero.motion.pos.f[2]) < 0.25f && (m->state & 0x10))) {
                     m->bBC = 1;
                 } else if (FUN_001f9b48(&((M910 *)hero.moby)->pos, &m->pos) < 0.75f) {
                     V910 t;
@@ -656,7 +656,7 @@ void FUN_L00_002aa670(M910 *m) {
                 } else {
                     M910 *best = 0;
                     float range =
-                        (ConvertIntegerToFloat(*((unsigned char *)&D_E910 + 0x11)) + 1.0f) * 4.0f;
+                        (convert_integer_to_float(*((unsigned char *)&D_E910 + 0x11)) + 1.0f) * 4.0f;
                     int i;
                     M910 *o;
 
@@ -682,12 +682,12 @@ void FUN_L00_002aa670(M910 *m) {
                         rg = range;
                         p = FUN_002141f8((unsigned char *)o);
                         if (p != 0) {
-                            rg = range + ConvertIntegerToFloat(p[0xA]) * 0.125f;
+                            rg = range + convert_integer_to_float(p[0xA]) * 0.125f;
                         }
                         if (!(FUN_001f9b80(&m->pos, &o->pos) < rg)) {
                             goto next;
                         }
-                        if (!(AbsoluteFloat(o->pos.f[2] - m->pos.f[2]) < 2.0f)) {
+                        if (!(absolute_float(o->pos.f[2] - m->pos.f[2]) < 2.0f)) {
                             goto next;
                         }
                         if (v->p54 != 0 && v->p54->state != 0xFE && v->p54->state != 0xFD) {
@@ -735,7 +735,7 @@ void FUN_L00_002aa670(M910 *m) {
                     }
                 }
             }
-            k = ConvertIntegerToFloat(D_L00_0015F5CC - v->i74);
+            k = convert_integer_to_float(D_L00_0015F5CC - v->i74);
             k = k / FUN_001f96b0(*(float *)&D_L00_001613D4);
             if (1.0f < k) {
                 k = 1.0f;
@@ -749,7 +749,7 @@ void FUN_L00_002aa670(M910 *m) {
                 if (v->h50 == 0) {
                     V910 t;
                     {
-                        float s = ConvertIntegerToFloat(D_E910.b11) * 0.5f + 1.0f;
+                        float s = convert_integer_to_float(D_E910.b11) * 0.5f + 1.0f;
                         int hit = FUN_L00_001f2868(&m->pos, 0x10, m, 0, s + s);
 
                         *(OvlQuad *)t = m->pos.q;
@@ -844,7 +844,7 @@ void FUN_L00_002aa670(M910 *m) {
                                          7.0f, 0, 1, -1, D_E910.b11);
                     }
                 } else {
-                    float sc = ConvertIntegerToFloat(D_E910.b11) * 0.5f + 1.0f;
+                    float sc = convert_integer_to_float(D_E910.b11) * 0.5f + 1.0f;
                     int cnt = truncate_float_to_s32(dist * 15.0f);
                     int i;
 

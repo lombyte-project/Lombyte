@@ -53,11 +53,11 @@ int init_block_fn(int value) __asm__("func_00119568");
 
 void no_op_memory_callback(void) __asm__("func_00208810");
 
-int Func00208818(int a0, int a1, int a2, int a3, int t0, int t1) __asm__("func_00208818");
+int fun_00208818(int a0, int a1, int a2, int a3, int t0, int t1) __asm__("func_00208818");
 
 void no_op_graphics_callback(void) __asm__("func_00237A70");
 
-void NoOpMainCallback(void) __asm__("func_001E93E8");
+void no_op_main_callback(void) __asm__("func_001E93E8");
 
 int is_state_field_large(int *state_fields) __asm__("func_0023AEE0");
 
@@ -66,9 +66,9 @@ float scale_time(float input) __asm__("func_001F96B0");
 float multiply_global_scale(float input) __asm__("func_001F96E8");
 float multiply_global_factor_ed70(float input) __asm__("func_001F9730");
 
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
-float ConvertIntegerToFloat(int value) __asm__("func_001FA6C0");
+float convert_integer_to_float(int value) __asm__("func_001FA6C0");
 
 int video_dec_set_state(int *state_fields, int replacement_value) __asm__("func_0023CC88");
 
@@ -90,36 +90,36 @@ void vo_buf_dec_count(volatile int *state_fields) __asm__("func_0023D340");
 
 s64 CheckStateRange(int value) __asm__("CheckStateRange");
 int *get_state_resource_wrapper(void) __asm__("GetStateResourceWrapper");
-int ConvertMultibyteCharacter(void *runtime_state, int *wide_character,
+int convert_multibyte_character(void *runtime_state, int *wide_character,
                               const char *multibyte_string,
                               unsigned int byte_count) __asm__("ConvertMultibyteCharacter");
 void InsertLinkObject(void *link_owner, void *link_object) __asm__("InsertLinkObject");
 void *fun_00115808(void *unused, void *object) __asm__("func_00115808");
-int ClassifyDoubleNaN(f64 value) __asm__("func_001161B0");
+int classify_double_nan(f64 value) __asm__("func_001161B0");
 int fun_00116408(void *resource) __asm__("func_00116408");
 int CallDebugCharacter(int value, int character) __asm__("CallDebugCharacter");
 int EnableInterrupts(void) __asm__("EnableInterrupts");
-void PackRenderCommandFields(u64 *command_words, u64 upper_field, u64 middle_field, u64 low_field,
+void pack_render_command_fields(u64 *command_words, u64 upper_field, u64 middle_field, u64 low_field,
                              u64 tail_field) __asm__("PackRenderCommandFields");
 
-void Func001E93F0(void) __asm__("func_001E93F0");
-void Func001E93F8(void) __asm__("func_001E93F8");
-void Func001E9400(void) __asm__("func_001E9400");
-void Func001E9408(void) __asm__("func_001E9408");
-void Func001E9410(void) __asm__("func_001E9410");
-void Func001E9418(void) __asm__("func_001E9418");
-void Func001E9420(void) __asm__("func_001E9420");
-void Func001E9428(void) __asm__("func_001E9428");
-void Func001E9430(void) __asm__("func_001E9430");
-void Func001E9438(void) __asm__("func_001E9438");
-void Func001E9440(void) __asm__("func_001E9440");
-int Func001E9448(void) __asm__("func_001E9448");
-void Func001E9450(void) __asm__("func_001E9450");
-void Func001E9458(void) __asm__("func_001E9458");
-void Func001E9460(void) __asm__("func_001E9460");
-int Func001E9468(void) __asm__("func_001E9468");
-void Func001E9470(void) __asm__("func_001E9470");
-void Func001E9478(void) __asm__("func_001E9478");
+void fun_001e93f0(void) __asm__("func_001E93F0");
+void fun_001e93f8(void) __asm__("func_001E93F8");
+void fun_001e9400(void) __asm__("func_001E9400");
+void fun_001e9408(void) __asm__("func_001E9408");
+void fun_001e9410(void) __asm__("func_001E9410");
+void fun_001e9418(void) __asm__("func_001E9418");
+void fun_001e9420(void) __asm__("func_001E9420");
+void fun_001e9428(void) __asm__("func_001E9428");
+void fun_001e9430(void) __asm__("func_001E9430");
+void fun_001e9438(void) __asm__("func_001E9438");
+void fun_001e9440(void) __asm__("func_001E9440");
+int fun_001e9448(void) __asm__("func_001E9448");
+void fun_001e9450(void) __asm__("func_001E9450");
+void fun_001e9458(void) __asm__("func_001E9458");
+void fun_001e9460(void) __asm__("func_001E9460");
+int fun_001e9468(void) __asm__("func_001E9468");
+void fun_001e9470(void) __asm__("func_001E9470");
+void fun_001e9478(void) __asm__("func_001E9478");
 void noop_callback_s(void) __asm__("func_001E9480");
 
 #endif

@@ -52,9 +52,9 @@ extern SoundCue D_001862B0[];
 extern TransferState D_0018CB20;
 extern WadHeader *volatile D_001940C8[];
 
-extern void InitializeResourceEntry(void);
+extern void initialize_resource_entry(void) __asm__("InitializeResourceEntry");
 extern void QueueDmaTransfer(s32 index);
-extern void ReadGlobalTableEntry(void);
+extern void read_global_table_entry(void) __asm__("ReadGlobalTableEntry");
 extern s32 rand(void);
 extern void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff);
 extern s32 sceGsSyncV(s32 mode);
@@ -131,7 +131,7 @@ void transition_do_transition(void) {
     p += ((u32)hdr->chunk[5].size + 0xF) & 0xFFFFFFF0;
     hdr->chunk[0].size = load(p, tbl->wad_chunks[0].sector, tbl->wad_chunks[0].size);
     hdr->chunk[0].off = p - (u8 *)hdr;
-    InitializeResourceEntry();
+    initialize_resource_entry();
     initialize_sif_rpc();
     FUN_00232d00();
     init_hud();
@@ -144,7 +144,7 @@ void transition_do_transition(void) {
     }
     wait = 0;
     level = rand() % 4;
-    ReadGlobalTableEntry();
+    read_global_table_entry();
     while (D_0015F5B0 == 0) {
         vu1_send_chain();
         swap_render_buffer_chain();

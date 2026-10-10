@@ -6,7 +6,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00207c28/FUN_00207c28.s
 #else
 #include "types.h"
 
-extern void FillTransferWords(void *, s32, s32) __asm__("func_001F97E8");
+extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
 extern void copy_blocks_16_forward(void *, void *, s32) __asm__("func_001F98D0");
 void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream,
                                      u8 *span_stream) __asm__("FUN_00207c28");
@@ -34,7 +34,7 @@ void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream, u8 *sp
     scratchpad_end = (u8 *)0x70002000;
     control_remaining = *control_stream >> 1;
     control_stream++;
-    FillTransferWords((void *)0x70000000, 0, 0x2400);
+    fill_transfer_words((void *)0x70000000, 0, 0x2400);
     expanded_cursor = (u8 *)0x70000000;
     bit_value = 1;
 
@@ -85,7 +85,7 @@ void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream, u8 *sp
             return;
         }
 
-        FillTransferWords((void *)0x70000000, 0, 0x2000);
+        fill_transfer_words((void *)0x70000000, 0, 0x2000);
         carry_read = (u8 *)0x70002000;
         carry_write = (u8 *)0x70000000;
         if (expanded_cursor > scratchpad_end) {
@@ -94,7 +94,7 @@ void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream, u8 *sp
                 *carry_write++ = value;
             } while (carry_read < expanded_cursor);
         }
-        FillTransferWords((void *)0x70002000, 0, 0x400);
+        fill_transfer_words((void *)0x70002000, 0, 0x400);
         expanded_cursor -= 0x2000;
     }
 }

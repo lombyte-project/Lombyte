@@ -69,7 +69,7 @@ extern short D_L15_00161BF4 __attribute__((sda));
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern float func_001FA888(int) __asm__("FUN_001fa6c0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -93,7 +93,7 @@ void FUN_L15_002d77c0(char *moby) {
     } else if (v < 0.0f) {
         v = 0.0f;
     }
-    col = FastTweenColor(W(D_L15_00161BDC), W(D_L15_00161BE0), v);
+    col = fast_tween_color(W(D_L15_00161BDC), W(D_L15_00161BE0), v);
     buf[0] = 0x30;
     buf[1] = *(short *)(data + 0x12) / scale_ticks(0xE10) + 0x30;
     buf[2] = 0x3A;

@@ -23,7 +23,7 @@ extern void FUN_001f98d0(u8 *, u8 *, s32);
 extern void FUN_001f98f8(u8 *, u8 *, u8 *, s32);
 extern f32 func_001FA6C0(s32);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void FillTransferWords(u8 *, s32, s32);
+extern void fill_transfer_words(u8 *, s32, s32) __asm__("func_001F97E8");
 
 void build_occlusion_visibility(void) __asm__("FUN_001f2820");
 
@@ -74,11 +74,11 @@ void build_occlusion_visibility(void) {
                 if (camera_position_publication_suppressed[0] == 0 && D_0015F650 != 0) {
                     FUN_001f98d0(D_00193FC0, D_0015F650, 0x80);
                 } else {
-                    FillTransferWords(D_00193FC0, -1, 0x80);
+                    fill_transfer_words(D_00193FC0, -1, 0x80);
                 }
                 break;
             case 1:
-                FillTransferWords(D_00193FC0, -1, 0x80);
+                fill_transfer_words(D_00193FC0, -1, 0x80);
                 break;
             case 2:
                 p = D_0015F644;
@@ -91,7 +91,7 @@ void build_occlusion_visibility(void) {
                 } else if (camera_position_publication_suppressed[0] == 0 && D_0015F650 != 0) {
                     FUN_001f98d0(D_00193FC0, D_0015F650, 0x80);
                 } else {
-                    FillTransferWords(D_00193FC0, -1, 0x80);
+                    fill_transfer_words(D_00193FC0, -1, 0x80);
                 }
                 break;
             }

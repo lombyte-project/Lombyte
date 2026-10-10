@@ -89,7 +89,7 @@ unsigned char *FUN_L08_0027b450(int owner, void *pos, void *vec, short ticks, un
 #include "eetypes.h"
 extern unsigned char *p27fe00_alloc(int) __asm__("FUN_L00_002678b8");
 extern int p27fe00_trunc(float) __asm__("FUN_001fa6d0");
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern unsigned char *D_L08_001B29B4 __attribute__((section(".data")));
 
 void FUN_L08_0027fe00(u128 *pos, u128 *dir, int life, float scale) {
@@ -108,6 +108,6 @@ void FUN_L08_0027fe00(u128 *pos, u128 *dir, int life, float scale) {
         *(float *)(p + 0xC) = scale * 210000.0f;
         *(short *)(p + 0xA) = scale_game_frames(life);
         *(u128 *)m = *dir;
-        *(float *)(m + 0xC) = ConvertIntegerToFloat(*(short *)(p + 0xA));
+        *(float *)(m + 0xC) = convert_integer_to_float(*(short *)(p + 0xA));
     }
 }

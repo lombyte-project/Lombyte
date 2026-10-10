@@ -603,7 +603,7 @@ extern T2C_222B80 D_L00_0017BC28[];
 extern char *FUN_L00_0020d460(int);
 extern char D_00141680[];
 extern char D_L00_0017BF60[];
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L00_0017BDF0[][25];
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9e90(float, float);
@@ -660,7 +660,7 @@ extern void FUN_L00_00262500(int a, char *b);
 extern void FUN_L00_00262528(char *o, int a, int b);
 extern void FUN_L00_00262840(char *o);
 extern void FUN_L00_002a3ec8(int, int, int, float, float, float, float);
-extern void FillTransferWords(void *, int, int);
+extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
 extern void normalize_vector_xyz(void *, void *, float);
@@ -898,7 +898,7 @@ int hero_set_state(int a, int b) {
                                  p->motion.pos.f[1], 0.4f, 0.3f);
             }
         } else if (p->motion.unk100.f[2] < frame_time * -0.5f) {
-            int n = truncate_float_to_s32(AbsoluteFloat(p->motion.unk100.f[2]) * 300.0f);
+            int n = truncate_float_to_s32(absolute_float(p->motion.unk100.f[2]) * 300.0f);
             FUN_L00_00209ca8(3, n < 0x28 ? n : 0x28, 1);
             if (D_L00_001612D0 != 0) {
                 FUN_L00_002a3ec8(D_L00_001612D0, D_L00_001612D8, 0, p->motion.pos.f[0],
@@ -1226,7 +1226,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0x10;
         p->unk2284 = 3;
         p->unk20A7 = 1;
-        FillTransferWords(&p->unk9D0, 0, 0x20);
+        fill_transfer_words(&p->unk9D0, 0, 0x20);
         qcopy(&p->motion.unk150, &p->motion.unk100);
         if (b)
             FUN_L00_002323b8(0x64, 0, (float)scale_game_frames(0xF));
@@ -3130,7 +3130,7 @@ extern int FUN_001f0b58(void);
 extern int FUN_L00_00216de8(int a, int b);
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void FUN_L00_002126b8(void *, void *, int, float, float);
-float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
+float absolute_float(float input) __asm__("FUN_001f99c0");
 
 
 int FUN_L00_002279b0(void) {
@@ -3157,10 +3157,10 @@ int FUN_L00_002279b0(void) {
             }
         } else if (p->state.control_mode != 0x12 && p->state.control_mode != 3) {
             t = 0.2f;
-            if (t < AbsoluteFloat(p->motion.velocity.f[2]) + 0.07f) {
-                t = AbsoluteFloat(p->motion.velocity.f[2]) + 0.07f;
+            if (t < absolute_float(p->motion.velocity.f[2]) + 0.07f) {
+                t = absolute_float(p->motion.velocity.f[2]) + 0.07f;
             }
-            if (AbsoluteFloat(p->height_threshold - (p->motion.pos.f[2] + 0.45f)) < t) {
+            if (absolute_float(p->height_threshold - (p->motion.pos.f[2] + 0.45f)) < t) {
                 if (p->state.control_mode != 4 || p->unk41E != 0) {
                     if (0.8f < p->unk22A4 && p->motion.unk100.f[2] < 0.0f) {
                         r = 1;
@@ -3177,8 +3177,8 @@ int FUN_L00_002279b0(void) {
     }
     p = &hero;
     t = 0.27f;
-    if (t < AbsoluteFloat(p->motion.velocity.f[2]) + 0.07f) {
-        t = AbsoluteFloat(p->motion.velocity.f[2]);
+    if (t < absolute_float(p->motion.velocity.f[2]) + 0.07f) {
+        t = absolute_float(p->motion.velocity.f[2]);
     }
     if (p->state.current == 0x12) {
         if (p->unk41E != 0) {

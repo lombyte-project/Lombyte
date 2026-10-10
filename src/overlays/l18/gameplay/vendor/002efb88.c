@@ -650,7 +650,7 @@ extern char *D_L18_001600EC;
 extern char *D_L18_001C6200[];
 extern unsigned char D_L18_001C6500[];
 extern void FUN_001f9cf8(void *, void *, void *);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L18_002f1d08(int a, int b) {
     int i = 0;
@@ -662,7 +662,7 @@ void FUN_L18_002f1d08(int a, int b) {
                          D_L18_001600EC + (b << 7) + 0x30);
             FUN_001f9cf8(v, v, D_L18_001600EC + (b << 7) + 0x40);
             k = i;
-            if (AbsoluteFloat(v[0]) < 1.0f && AbsoluteFloat(v[1]) < 1.0f) {
+            if (absolute_float(v[0]) < 1.0f && absolute_float(v[1]) < 1.0f) {
                 ((Blk *)D_L18_001C6200[D_L18_001C6500[a]])->e[k].w0c = 0;
                 ((Blk *)D_L18_001C6200[D_L18_001C6500[a]])->e[k].w14 = 1.0f;
             }
@@ -1224,7 +1224,7 @@ extern char *FUN_L18_002d6c80(void *pos, int idx);
 extern char *FUN_L18_002dc3e0(void *owner, void *vector, float value);
 extern char *FUN_L18_002ea0f0(void *owner, void *vector, int value);
 extern char D_0013E550[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 aas_c(f32, f32, f32, f32, f32 *, f32 *) __asm__("func_00213F38");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
@@ -1316,7 +1316,7 @@ extern void pause_all_sounds(s32) __asm__("FUN_00218d78");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 s32 is_value_within_interpolated_window(void *arg0, f32 fparg0) __asm__("FUN_00214cc8");
 void FUN_L18_002f1c38(struct Moby *moby);
@@ -1542,7 +1542,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
         if (moby->f53 == 10 && (is_value_within_interpolated_window((char *)moby, 1.0f) != 0 ||
                                 is_value_within_interpolated_window((char *)moby, 16.0f) != 0)) {
             qcopy(v0, hero.motion.unkC0.f);
-            if (AbsoluteFloat(v0[2] - d->f3C0[2]) < 5.0f) {
+            if (absolute_float(v0[2] - d->f3C0[2]) < 5.0f) {
                 if ((float)moby->f50 < 15.0f) {
                     FUN_L00_0024f7c8(moby, 2, v1);
                 } else {
@@ -1902,7 +1902,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
                     moby->f20 = 0xC;
                 }
             } else {
-                float f = 1.0f - ConvertIntegerToFloat(d->f354) / FUN_001f96b0(90.0f);
+                float f = 1.0f - convert_integer_to_float(d->f354) / FUN_001f96b0(90.0f);
 
                 if (f > 1.0f) {
                     f = 1.0f;
@@ -1953,7 +1953,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
                 add_vector_xyz(v0, v0, v1);
             }
             v0[2] = probe_ground_height(v0, 0, 0.5f);
-            if (AbsoluteFloat(v0[2] - d->f3C0[2]) < 5.0f) {
+            if (absolute_float(v0[2] - d->f3C0[2]) < 5.0f) {
                 float a;
                 float c;
                 float e;
@@ -2051,7 +2051,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
             add_vector_xyz(v2, v2, v0);
             v2[2] = v2[2] + 5.0f;
             v2[2] = probe_ground_height(v2, 0, 0.5f);
-            if (AbsoluteFloat(v2[2] - d->f3C0[2]) < 5.0f) {
+            if (absolute_float(v2[2] - d->f3C0[2]) < 5.0f) {
                 float speed = FUN_001f9b80(v2, v1) / (float)scale_game_frames(0x3C);
                 float w = random_float_between_alt(18.0f, 20.0f);
 
@@ -2083,7 +2083,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
             normalize_vector_xyz(v0, moby->fD0, f);
             add_vector_xyz(v0, v0, d->f3C0);
             v0[2] = probe_ground_height(v0, 0, 0.5f);
-            if (AbsoluteFloat(v0[2] - d->f3C0[2]) < 1.0f) {
+            if (absolute_float(v0[2] - d->f3C0[2]) < 1.0f) {
                 /* v1 is not written in this state; retail passes it all the same. */
                 float speed = FUN_001f9b80(v0, v1) / (float)scale_game_frames(0x3C);
 
@@ -2835,7 +2835,7 @@ typedef struct {
     int p3B8;
 } L18Q;
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern int FUN_001fa6e0(int, int, float);
 extern short D_L18_00162450_d __asm__("D_L18_00162450") __attribute__((sda));
 extern short D_L18_00162454_d __asm__("D_L18_00162454") __attribute__((sda));
@@ -2855,10 +2855,10 @@ void FUN_L18_002f7880(struct Moby *moby) {
     char b[16];
     L18Q *q = (L18Q *)moby->pvars;
     int n = FUN_001f96f8(*(int *)&D_L18_00162460_d);
-    float f = ConvertIntegerToFloat(D_L18_0015F5CC % n);
+    float f = convert_integer_to_float(D_L18_0015F5CC % n);
     int h;
     int i;
-    f = f / ConvertIntegerToFloat(n);
+    f = f / convert_integer_to_float(n);
     f = f * 6.18318f;
     f = FUN_001f9de0(f - 3.14159f);
     h = FUN_001fa6e0(*(int *)&D_L18_00162458_d, *(int *)&D_L18_0016245C_d, f * 0.5f + 0.5f);
@@ -2868,9 +2868,9 @@ void FUN_L18_002f7880(struct Moby *moby) {
     FUN_L00_00263618(a, h, *(float *)&D_L18_00162450_d, *(float *)&D_L18_00162454_d);
     if ((unsigned)(moby->prev_seq - 11) < 3) {
         int n2 = FUN_001f96f8(*(int *)&D_L18_00162474_d);
-        float g = ConvertIntegerToFloat(D_L18_0015F5CC % n2);
+        float g = convert_integer_to_float(D_L18_0015F5CC % n2);
         int h2;
-        g = g / ConvertIntegerToFloat(n2);
+        g = g / convert_integer_to_float(n2);
         g = g * 6.18318f;
         g = FUN_001f9de0(g - 3.14159f);
         h2 = FUN_001fa6e0(*(int *)&D_L18_0016246C_d, *(int *)&D_L18_00162470_d, g * 0.5f + 0.5f);

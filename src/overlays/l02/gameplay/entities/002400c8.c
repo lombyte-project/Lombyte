@@ -1798,7 +1798,7 @@ void FUN_L02_002d85b8(void *arg) {
 
 extern float FUN_001f9b80(void *, void *);
 extern void add_vector_xyz(void *, void *, void *);
-extern float AbsoluteFloat(float) __asm__("func_001F99C0");
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern int FUN_L00_0028d8c0(void *, int);
 extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -1888,7 +1888,7 @@ void FUN_L02_002dbd38(L16PlatformMoby *moby) {
                 }
                 transform_vector(motion.v, motion.v, D_L02_001600FC + (d->joint << 7));
                 motion.v[2] = motion.v[2] + *(float *)(D_L02_001600FC + d->joint * 0x80 + 0x38) + D_L02_00161BD0;
-                if (AbsoluteFloat(hero.motion.pos.f[2] - motion.v[2]) < 1.0f) {
+                if (absolute_float(hero.motion.pos.f[2] - motion.v[2]) < 1.0f) {
                     moby->reverse = (moby->reverse + 1) & 1;
                     d->goal = motion.v[2];
                     d->speed = 0.0f;
@@ -1929,7 +1929,7 @@ void FUN_L02_002dbd38(L16PlatformMoby *moby) {
             float speed;
 
             if (!FUN_L00_0025fa38(&hero.motion.unkD0, d->joint)
-                || AbsoluteFloat(moby->position[2] - hero.motion.pos.f[2] - 2.0f) > 1.0f
+                || absolute_float(moby->position[2] - hero.motion.pos.f[2] - 2.0f) > 1.0f
                 || moby->position[2] < d->goal) {
                 speed = advance_accelerated_scalar(&moby->position[2], &d->speed, d->goal,
                                       D_L02_00161BE0 * D_0015ED70, D_L02_00161BE0 * D_0015ED70,
@@ -1988,7 +1988,7 @@ typedef struct {
 } L16RingMatrix;
 
 extern char *D_L02_001600FC;
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_0015ED6C;
 extern float D_L02_001D3F50[][2];
 extern float fast_cos(float);
@@ -2032,7 +2032,7 @@ void FUN_L02_002dc2c8(struct Moby *m) {
     lower += translation;
     color =
         FUN_001fa6e0(D_L02_00161C04, D_L02_00161C08,
-                     AbsoluteFloat((*(float *)((char *)d + 0xB0))) / (D_L02_00161BDC * D_0015ED6C));
+                     absolute_float((*(float *)((char *)d + 0xB0))) / (D_L02_00161BDC * D_0015ED6C));
     FUN_001fa298(&matrix, &m->unkC0);
     qcopy(matrix.position, &m->pos);
     matrix.position[2] = lower;

@@ -946,7 +946,7 @@ extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void vu1_add_gs_register(int, long) __asm__("FUN_00233980");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern unsigned int FastTweenColor(unsigned int, unsigned int, float) __asm__("FUN_001fa6e0");
+extern unsigned int fast_tween_color(unsigned int, unsigned int, float) __asm__("FUN_001fa6e0");
 extern void FUN_L06_00216b88(int *, float *);
 extern float D_L06_00161E0C __attribute__((sda));
 extern int D_L06_00161DD0 __attribute__((sda));
@@ -1011,7 +1011,7 @@ void FUN_L06_002f6dd0(char *m) {
         mp += 16;
         sp += 16;
     }
-    color = FastTweenColor(D_L06_00161DF0 & 0xFFFFFF, D_L06_00161DF0, *(float *)(data + 0x18));
+    color = fast_tween_color(D_L06_00161DF0 & 0xFFFFFF, D_L06_00161DF0, *(float *)(data + 0x18));
     first = D_L06_00161E50;
     points = (int *)D_L06_001DB0F0;
     second = D_L06_00161E54;
@@ -1304,7 +1304,7 @@ extern void FUN_L01_0027a248(int, int);
 extern void FUN_L06_00227cf8(void);
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
-float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
+float absolute_float(float input) __asm__("FUN_001f99c0");
 s32 try_set_help_message(s32 owner, s32 message_id) __asm__("FUN_00215130");
 void FUN_L06_002f5360_c(char *moby) __asm__("FUN_L06_002f5360");
 void FUN_L06_002f53e8_c(char *moby) __asm__("FUN_L06_002f53e8");
@@ -1485,7 +1485,7 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
         }
         t = D_L06_00161F68 * D_0015ED70;
         advance_accelerated_scalar(&moby->pos.z, &d->f8C, target, t, t, D_L06_00161F64 * D_0015ED6C);
-        if (AbsoluteFloat(moby->pos.z - target) < 0.01f) {
+        if (absolute_float(moby->pos.z - target) < 0.01f) {
             if (moby->state == 6) {
                 moby->state = 7;
                 FUN_L06_002f5360_c(D_L06_0015FFD8_c + (d->f64 << 8));

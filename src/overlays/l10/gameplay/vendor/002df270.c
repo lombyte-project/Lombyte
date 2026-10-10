@@ -394,7 +394,7 @@ typedef struct Moby2E30F8 {
 
 extern char D_L10_00167240[];
 extern char D_L10_001742C0[];
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L10_0015F580[] __attribute__((section(".sdata")));
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b48(void *, void *);
@@ -476,7 +476,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
           1021.0f < to[2])) {
         see = FUN_001efa68(from, to, 2, m, 0) == 0;
     }
-    if (!see || (!(AbsoluteFloat(*(float *)(t + 0x18) - m->pos[2]) < 1.0f) &&
+    if (!see || (!(absolute_float(*(float *)(t + 0x18) - m->pos[2]) < 1.0f) &&
                  FUN_L00_0025e3b8(((int)hero.ground_moby)) == 0)) {
         see = 0;
     }
@@ -633,7 +633,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             }
             *(OvlQuad *)old = *(OvlQuad *)m->pos;
             if (see &&
-                AbsoluteFloat(dist - (*(short *)(t + 0xA6) == 0x359 ? 2.0f : 3.57f)) < 0.35f) {
+                absolute_float(dist - (*(short *)(t + 0xA6) == 0x359 ? 2.0f : 3.57f)) < 0.35f) {
                 approach_value(&d->fF4, 0.0f, frame_time_sq * 30.0f);
             } else if (d->i1D8 != 0) {
                 approach_value(&d->fF4, 0.0f, frame_time_sq * 10.0f);
@@ -711,7 +711,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
                     blend_moby_animation(m, 3, 0, scale_game_frames(7));
                 }
             } else {
-                if (AbsoluteFloat(d->f190) > frame_time * 0.08726646f) {
+                if (absolute_float(d->f190) > frame_time * 0.08726646f) {
                     if (m->anim != 3) {
                         blend_moby_animation(m, 3, 0, scale_game_frames(7));
                     }
@@ -1178,7 +1178,7 @@ extern s32 D_L10_00161F04 __attribute__((sda));
 extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_001f96b0");
 extern void scale_vector_xyz(f32 *, f32 *, f32) __asm__("FUN_001f9a68");
 extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
-extern s32 FastTweenColor(f32, s32, s32) __asm__("FUN_001fa6e0");
+extern s32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern unsigned char *FUN_L00_002738e8(f32, f32, f32, void *, void *, s32, s32, s32, s32);
 
 void FUN_L10_002e5be0(struct Moby *moby) {
@@ -1236,9 +1236,9 @@ void FUN_L10_002e5be0(struct Moby *moby) {
             amount = pvars[1] * random_float_between(lower, upper);
             first_color = D_L10_00161EF0;
             second_color = D_L10_00161EF4;
-            color = FastTweenColor(random_float_between(0.5f, 1.0f),
+            color = fast_tween_color(random_float_between(0.5f, 1.0f),
                                      first_color, second_color);
-            fade_color = FastTweenColor(random_float_between(0.25f, 0.5f),
+            fade_color = fast_tween_color(random_float_between(0.25f, 0.5f),
                                           second_color, second_color & 0xff000000);
             life = truncate_float_to_s32(multiply_global_factor_ed64(pvars[2] * 60.0f));
             ++i;
@@ -1283,7 +1283,7 @@ typedef struct {
 
 typedef struct { char pad0[0x454]; unsigned char collected[1]; } L10State_2EAD50;
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float fast_add_rotations_alt(float) __asm__("FUN_001fa580");
 extern float fast_cos_local(float, float) __asm__("FUN_001f9dc8");

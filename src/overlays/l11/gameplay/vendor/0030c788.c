@@ -758,7 +758,7 @@ void FUN_L11_0030e088(struct Moby *m) {
 /* Same routine as FUN_L05_0030d6a0, with this level's table and entry count. */
 
 
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L11_0030e730(int arg) {
     int i;
@@ -776,26 +776,26 @@ void FUN_L11_0030e730(int arg) {
             Ent *e = &t[arg];
             float x = e->x - t[i].x;
             float y = e->y - t[i].y;
-            if (AbsoluteFloat(x) < 0.1f) {
-                if (AbsoluteFloat(y - 16.0f) < 0.1f)
+            if (absolute_float(x) < 0.1f) {
+                if (absolute_float(y - 16.0f) < 0.1f)
                     e->n[0] = i;
-                if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                if (absolute_float(y + 16.0f) < 0.1f)
                     e->n[2] = i;
-            } else if (AbsoluteFloat(y) < 0.1f) {
-                if (AbsoluteFloat(x - 16.0f) < 0.1f)
+            } else if (absolute_float(y) < 0.1f) {
+                if (absolute_float(x - 16.0f) < 0.1f)
                     e->n[1] = i;
-                if (AbsoluteFloat(x + 16.0f) < 0.1f)
+                if (absolute_float(x + 16.0f) < 0.1f)
                     e->n[3] = i;
             } else {
-                if (AbsoluteFloat(x + 16.0f) < 0.1f) {
-                    if (AbsoluteFloat(y - 16.0f) < 0.1f)
+                if (absolute_float(x + 16.0f) < 0.1f) {
+                    if (absolute_float(y - 16.0f) < 0.1f)
                         e->n[5] = i;
-                    if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                    if (absolute_float(y + 16.0f) < 0.1f)
                         e->n[7] = i;
-                } else if (AbsoluteFloat(x - 16.0f) < 0.1f) {
-                    if (AbsoluteFloat(y - 16.0f) < 0.1f)
+                } else if (absolute_float(x - 16.0f) < 0.1f) {
+                    if (absolute_float(y - 16.0f) < 0.1f)
                         e->n[4] = i;
-                    if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                    if (absolute_float(y + 16.0f) < 0.1f)
                         e->n[6] = i;
                 }
             }
@@ -1700,7 +1700,7 @@ typedef struct {
     short y;
 } IconEC5D0;
 extern IconEC5D0 D_L11_001F1058[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float vector_length_xyz(void *a);
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
@@ -1747,7 +1747,7 @@ void FUN_L11_00311710(char *rot, char *from, char *moby, int icon, long color) {
         if (len > 38.0f) {
             float f;
             len = 46.0f - len;
-            f = ConvertIntegerToFloat(((unsigned long)color >> 24) & 0xFF) * len;
+            f = convert_integer_to_float(((unsigned long)color >> 24) & 0xFF) * len;
             color &= 0xFFFFFF;
             color = (func_001FA898_r(f * 0.125f) << 24) | color;
         }
@@ -1800,7 +1800,7 @@ void *FUN_L11_00311948(void *moby, char *a1, float *a2, float *a3, float f0, flo
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00312F50), where it is exact; names translated to the US level program. */
 
 extern char D_L11_001679E0[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_001f9988(float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L11_00311210(void *, void *, void *, int);
@@ -1829,7 +1829,7 @@ float FUN_L11_00311a88(void *moby_v, void *o_v) {
         FUN_L11_00311210(v, &cx, &cy, 0);
         cx = cx - ax;
         cy = cy - ay;
-        t = func_001FA898_r(FUN_001f9988(ConvertIntegerToFloat(cx * cx + cy * cy))) + 0x1C;
+        t = func_001FA898_r(FUN_001f9988(convert_integer_to_float(cx * cx + cy * cy))) + 0x1C;
         if (dx < t && dy < t)
             return (float)(dx * dx + dy * dy);
     }
@@ -2036,22 +2036,22 @@ void FUN_L11_00311d50(struct Moby *moby) {
     if (vars->target != NULL) {
         FUN_L11_00311210(&vars->target->pos, &sx, &sy, 0);
         if (vars->lock_timer > D_L11_00162160) {
-            t = ConvertIntegerToFloat(vars->lock_timer - D_L11_00162160) / ConvertIntegerToFloat(D_L11_00162164);
+            t = convert_integer_to_float(vars->lock_timer - D_L11_00162160) / convert_integer_to_float(D_L11_00162164);
             fade = 2.0f * (1.0f - t);
             grow = t * 5.0f + 1.0f;
             if (fade > 1.0f) {
                 fade = 1.0f;
             }
             alpha = truncate_float_to_s32(fade * 96.0f);
-            FUN_L11_00311048(ConvertIntegerToFloat(sx), ConvertIntegerToFloat(sy), grow,
-                             FUN_L00_0025e310(ConvertIntegerToFloat(D_L11_0015F5CC_t) / 30.0f), 0, 0xFF, 0, alpha);
+            FUN_L11_00311048(convert_integer_to_float(sx), convert_integer_to_float(sy), grow,
+                             FUN_L00_0025e310(convert_integer_to_float(D_L11_0015F5CC_t) / 30.0f), 0, 0xFF, 0, alpha);
             vars->locked = NULL;
         } else {
             blink = 0xFF;
             if ((vars->lock_timer / scale_game_frames(0x14)) & 1) {
                 blink = 0;
             }
-            FUN_L11_00311048(ConvertIntegerToFloat(sx), ConvertIntegerToFloat(sy), 1.0f, 0.0f, 0xFF, blink, 0,
+            FUN_L11_00311048(convert_integer_to_float(sx), convert_integer_to_float(sy), 1.0f, 0.0f, 0xFF, blink, 0,
                              0x60);
             vars->locked = vars->target;
         }
@@ -2095,7 +2095,7 @@ void FUN_L11_00311d50(struct Moby *moby) {
 
     step = hero.ship_hp - vars->shown_hp;
     step *= 0.2f;
-    size = AbsoluteFloat(step);
+    size = absolute_float(step);
     if (size > 1.0f) {
         step /= size;
     }

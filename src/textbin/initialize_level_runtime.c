@@ -113,7 +113,7 @@ extern u8 D_00186350[];
 extern u32 D_0015ED5C;
 
 extern void init_mem_slots(void) __asm__("FUN_002015d8");
-extern void FillTransferWords(void *dst, s32 value, s32 size);
+extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("func_001F97E8");
 extern void init_view_context(void) __asm__("FUN_001f2c60");
 extern void update_view_context(void) __asm__("func_001F2D98");
 extern void vu1_init_chain(void) __asm__("FUN_002335d0");
@@ -176,10 +176,10 @@ void initialize_level_runtime(void) {
     init_mem_slots();
     gs_texture_allocation_cursor = D_0015EE8C;
     gs_texture_allocation_start = D_0015EE8C;
-    FillTransferWords(D_00194180, 0x87654321, 0x10);
-    FillTransferWords(resident_class_slot_by_id, -1, 0x800);
-    FillTransferWords(resident_class_material_maps, -1, 0xE00);
-    FillTransferWords(D_001B6180, 0, 0xE0);
+    fill_transfer_words(D_00194180, 0x87654321, 0x10);
+    fill_transfer_words(resident_class_slot_by_id, -1, 0x800);
+    fill_transfer_words(resident_class_material_maps, -1, 0xE00);
+    fill_transfer_words(D_001B6180, 0, 0xE0);
     init_view_context();
     update_view_context();
     vu1_init_chain();
@@ -245,7 +245,7 @@ void initialize_level_runtime(void) {
     clear_blocks_16(D_0019BDC0, 0x400);
     copy_blocks_16_forward(D_0019BDC0, D_001D9740, 0x40);
     D_0015FF18 = allocation_cursor;
-    FillTransferWords(allocation_cursor, 0, 0x4000);
+    fill_transfer_words(allocation_cursor, 0, 0x4000);
     allocation_cursor += 0x4000;
     D_0015FF1C = D_0015FF18;
     D_0015FF18[0x20] = 0xFF;
@@ -270,9 +270,9 @@ void initialize_level_runtime(void) {
         level_render_state.scene_mode = 4;
         level_render_state.scene_state = 2;
     }
-    FillTransferWords(&D_0018CB20, 0, 0x1C0);
-    FillTransferWords(D_00186310, 0, 0x40);
-    FillTransferWords(D_00186350, 0, 0x40);
+    fill_transfer_words(&D_0018CB20, 0, 0x1C0);
+    fill_transfer_words(D_00186310, 0, 0x40);
+    fill_transfer_words(D_00186350, 0, 0x40);
     scene_offsets = header->scenes;
     workspace_offset = D_00160F0C - 0x60000;
     scene_offset = &scene_offsets[level_render_state.scene_mode];

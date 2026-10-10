@@ -497,7 +497,7 @@ typedef struct {
 
 typedef struct { char pad00[8]; float yaw, phase; float cardinal_angles[4]; } RingData;
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern float D_L16_001D9780[4][2];
 extern float D_L16_001D9A70[4][2];
@@ -557,8 +557,8 @@ void FUN_L16_002e58d8(char *m) {
         }
     }
     angles = data->cardinal_angles;
-    angle_step = 6.2831855f / ConvertIntegerToFloat(*(int *)&D_L16_00161E40);
-    phase_step = 3.0f / ConvertIntegerToFloat(*(int *)&D_L16_00161E40);
+    angle_step = 6.2831855f / convert_integer_to_float(*(int *)&D_L16_00161E40);
+    phase_step = 3.0f / convert_integer_to_float(*(int *)&D_L16_00161E40);
     phase = data->phase;
     while (phase < 0.0f) phase += 1.0f;
     while (phase > 1.0f) phase -= 1.0f;

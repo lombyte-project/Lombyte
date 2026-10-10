@@ -92,7 +92,7 @@ extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa6
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_L00_00267a08(void *);
-float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
+float absolute_float(float input) __asm__("FUN_001f99c0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_002694f8(char *m) {
@@ -135,7 +135,7 @@ after:
     a = fast_subtract_rotations(FUN_001f9e90(*(float *)(m + 0x10) - *(float *)(B + 0x140),
                                              *(float *)(m + 0x14) - *(float *)(B + 0x144)),
                                 *(float *)(B + 0x158));
-    if (AbsoluteFloat(a) > 1.0471976f) {
+    if (absolute_float(a) > 1.0471976f) {
         if ((*(int *)(p + 0x18))++ >= 6)
             goto kill;
         v[0] = FUN_001f9dc8(
@@ -260,7 +260,7 @@ void FUN_L00_00269a70(O00269a70 *o) {
 /* spawns a type-5 particle at pos with packed color and a target */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026AA10), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int D_L00_001B2094 __attribute__((section(".data")));
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void *FUN_L00_002678b8(int);
@@ -282,7 +282,7 @@ void FUN_L00_00269b70(void *pos, unsigned char red, unsigned char green, unsigne
             particle[8] = 0;
             particle[2] = **(unsigned char **)&D_L00_001B2094;
             *(int *)(particle + 0x20) = target;
-            q[1] = a / ConvertIntegerToFloat(target);
+            q[1] = a / convert_integer_to_float(target);
         }
     }
 }
@@ -493,7 +493,7 @@ void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026BB18), where it is exact; names translated to the US level program. */
 
 extern char D_L00_00166DC0[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L00_0015F5D0;
 extern float FUN_001f9988(float);
 extern float FUN_001f9b48(void *, void *);
@@ -539,10 +539,10 @@ void FUN_L00_0026ac78(char *m) {
         }
         if (!(p[0x19] & 4)) {
             float x = *(float *)(p + 0x1C);
-            float A = ConvertIntegerToFloat((unsigned char)p[0x1B]);
+            float A = convert_integer_to_float((unsigned char)p[0x1B]);
             float B = (A * 8.0f - A * 3.0f * x) / (x * 8.0f * x + x * 8.0f);
             float C = (A * 3.0f + B * 8.0f * x) / (x * -8.0f);
-            float F = ConvertIntegerToFloat(*(short *)(m + 0xA));
+            float F = convert_integer_to_float(*(short *)(m + 0xA));
             float s = FUN_001f9988(B * B - C * 4.0f * (A - F));
             float r2 = (-B + s) / (C + C);
             float r1 = (-B - s) / (C + C);

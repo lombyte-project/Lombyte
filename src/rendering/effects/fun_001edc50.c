@@ -28,9 +28,9 @@ extern u8 D_00187080[];
 extern LensFlare D_00187300;
 
 extern f32 FUN_001f9b48(void *, void *);
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern float absolute_float(float input) __asm__("func_001F99C0");
 extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
@@ -63,11 +63,11 @@ void FUN_001edc50(void) {
         return;
     }
     dist = FUN_001f9b48(D_00187080, D_00187300.moby->pos);
-    ctr[0] = ConvertIntegerToFloat(screen_extent.half_width);
-    ctr[1] = ConvertIntegerToFloat(screen_extent.half_height);
+    ctr[0] = convert_integer_to_float(screen_extent.half_width);
+    ctr[1] = convert_integer_to_float(screen_extent.half_height);
     project_to_screen(scr, D_00187300.moby->pos);
-    scr[0] = (scr[0] - ConvertIntegerToFloat(screen_extent.left)) * 0.0625f;
-    scr[1] = (scr[1] - ConvertIntegerToFloat(screen_extent.top)) * 0.0625f;
+    scr[0] = (scr[0] - convert_integer_to_float(screen_extent.left)) * 0.0625f;
+    scr[1] = (scr[1] - convert_integer_to_float(screen_extent.top)) * 0.0625f;
     d[0] = ctr[0] - scr[0];
     d[1] = ctr[1] - scr[1];
     for (i = 0; i < 16; i++) {
@@ -83,13 +83,13 @@ void FUN_001edc50(void) {
         } else if (fade < 0.0f) {
             fade = 0.0f;
         }
-        fx = AbsoluteFloat(d[0]) / ctr[0] * -5.0f + 5.5f;
+        fx = absolute_float(d[0]) / ctr[0] * -5.0f + 5.5f;
         if (fx > 1.0f) {
             fx = 1.0f;
         } else if (fx < 0.0f) {
             fx = 0.0f;
         }
-        fy = AbsoluteFloat(d[1]) / ctr[1] * -5.0f + 5.5f;
+        fy = absolute_float(d[1]) / ctr[1] * -5.0f + 5.5f;
         if (fy > 1.0f) {
             fy = 1.0f;
         } else if (fy < 0.0f) {

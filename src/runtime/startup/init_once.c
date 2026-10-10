@@ -16,7 +16,7 @@ extern s32 DIntr();
 extern s32 DebugPrint();
 extern s32 EnableCache();
 extern s32 EnableInterrupts();
-extern s32 FillTransferWords();
+extern s32 fill_transfer_words() __asm__("func_001F97E8");
 extern void FlushCache();
 extern s32 FUN_001204b8();
 extern s32 FUN_00120558();
@@ -123,7 +123,7 @@ void init_once(void) {
     vu1_init_chain();
     FUN_00121190(0);
     initialize_gameplay_sound_system();
-    FillTransferWords(image_clear_buffer, 0x80808080, 0x100);
+    fill_transfer_words(image_clear_buffer, 0x80808080, 0x100);
     sceGsSetDefLoadImage(buf, 0x3FFB, 1, 0, 0, 0, 8, 8);
     FlushCache(0);
     sceGsExecLoadImage(buf, image_clear_buffer);

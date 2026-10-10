@@ -106,7 +106,7 @@ extern Tex_2C27B0 D_L13_001B2380;
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
 extern char D_0013F350[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern f32 random_angle_radians_c(void) __asm__("func_00213308");
@@ -206,7 +206,7 @@ void FUN_L13_002c1528(Moby_2C27B0 *m) {
     if (scale_game_frames_alt(0x78) < d->timer) {
         build_spherical_offset_c(d, d->speed, m->rot.z, -m->rot.y);
     } else {
-        float k = ConvertIntegerToFloat(d->timer) / ConvertIntegerToFloat(scale_game_frames_alt(0x78));
+        float k = convert_integer_to_float(d->timer) / convert_integer_to_float(scale_game_frames_alt(0x78));
         if (1.0f < k) {
             k = 1.0f;
         } else if (k < 0.0f) {
@@ -362,7 +362,7 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
 extern float FUN_L00_0025e310(float);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L13_002c3988(struct Moby *moby, char *d, float p2, float p3) {
     float t;
@@ -372,7 +372,7 @@ void FUN_L13_002c3988(struct Moby *moby, char *d, float p2, float p3) {
     moby->rot.y =
         FUN_L00_00258110((float *)(d + 0x84), moby->rot.y, p3, frame_time_sq * 25.132742f,
                          frame_time_sq * 6.2831855f, frame_time * 25.132742f);
-    t = (1.5707964f - AbsoluteFloat(moby->rot.x)) / 1.5707964f;
+    t = (1.5707964f - absolute_float(moby->rot.x)) / 1.5707964f;
     v = moby->rot.x + -*(float *)(d + 0x88) * t;
     moby->rot.x = v;
     if (1.5707964f < v)
@@ -384,9 +384,9 @@ void FUN_L13_002c3988(struct Moby *moby, char *d, float p2, float p3) {
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4D50), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_001f9b48(void *, void *);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 int FUN_L13_002c3ac8(char *pt, int *tbl, int start, float ref) {
     int best = start;
@@ -395,14 +395,14 @@ int FUN_L13_002c3ac8(char *pt, int *tbl, int start, float ref) {
     while (i < *tbl / 2) {
         int j = (start + i) % *tbl;
         float d = FUN_001f9b48(tbl + 4 + j * 4, pt);
-        float s = AbsoluteFloat(d - ref) + ConvertIntegerToFloat(i) * 0.4f;
-        if (s < bestd + ConvertIntegerToFloat(i) * 0.1f) {
+        float s = absolute_float(d - ref) + convert_integer_to_float(i) * 0.4f;
+        if (s < bestd + convert_integer_to_float(i) * 0.1f) {
             bestd = d;
             best = j;
         }
         j = (*tbl + start - i) % *tbl;
         d = FUN_001f9b48(tbl + 4 + j * 4, pt);
-        s = AbsoluteFloat(d - ref) + ConvertIntegerToFloat(i) * 0.4f;
+        s = absolute_float(d - ref) + convert_integer_to_float(i) * 0.4f;
         if (s < bestd) {
             bestd = d;
             best = j;
@@ -1549,7 +1549,7 @@ void FUN_L13_002e8d28(struct Moby *m, char *d) {
 /* springs a moby's pitch and yaw toward targets and clamps the pitch */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EA450), where it is exact; names translated to the US level program. */
 
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L13_002e9018(struct Moby *m, char *p, float a, float b) {
     float c;
@@ -1558,7 +1558,7 @@ void FUN_L13_002e9018(struct Moby *m, char *p, float a, float b) {
     m->rot.y =
         FUN_L00_00258110((float *)(p + 0xA4), m->rot.y, b, frame_time_sq * 3.1415927f,
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
-    c = AbsoluteFloat(m->rot.x);
+    c = absolute_float(m->rot.x);
     m->rot.x += -*(float *)(p + 0xA8) * ((1.5707964f - c) / 1.5707964f) * 0.5f;
     if (m->rot.x > 1.5707964f)
         m->rot.x = 1.5707964f;

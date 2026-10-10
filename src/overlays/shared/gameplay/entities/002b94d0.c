@@ -368,7 +368,7 @@ typedef struct {
 
 extern char D_0013E533[];
 extern char D_L00_001DBBA0[];
-extern float ConvertIntegerToFloat(int);
+extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float D_L00_001616D4;
 extern float D_L00_00166DC0[];
 extern float D_L00_0017AEBC __attribute__((section(".data")));
@@ -432,13 +432,13 @@ void FUN_L00_002bb558(char *m) {
             if (6.0f <= f) {
                 flag = 1;
                 if (func_001F9908_r(&D_L00_00161660_e[54]) == 0) {
-                    float a = ConvertIntegerToFloat(D_L00_001616CC);
-                    a = a / ConvertIntegerToFloat(scale_game_frames(*(int *)&D_L00_001616A8));
+                    float a = convert_integer_to_float(D_L00_001616CC);
+                    a = a / convert_integer_to_float(scale_game_frames(*(int *)&D_L00_001616A8));
                     D_L00_001616D4 = 1.0f - a;
                 } else if (12.0f <= f) {
                     if (func_001F9908_r(&D_L00_00161660_e[56]) == 0) {
-                        float a = ConvertIntegerToFloat(D_L00_001616D0);
-                        a = a / ConvertIntegerToFloat(scale_game_frames(*(int *)&D_L00_001616AC));
+                        float a = convert_integer_to_float(D_L00_001616D0);
+                        a = a / convert_integer_to_float(scale_game_frames(*(int *)&D_L00_001616AC));
                         D_L00_001616D4 = a;
                     } else {
                         D_L00_001616D4 = 0.0f;
@@ -797,7 +797,7 @@ void FUN_L00_002bcf98(u8 *m) {
 
     if (D_L00_001617BC_abs != 0) {
         D_L00_001617BC = 0;
-        scale = D_L00_001616DC / ConvertIntegerToFloat(12);
+        scale = D_L00_001616DC / convert_integer_to_float(12);
         D_L00_001617CC = scale;
         scale_vector_2bcf98(-scale, &vec, m + 0xD0);
         D_L00_001DBF50[1] = source[0];
@@ -1110,7 +1110,7 @@ typedef struct {
 } Vx __attribute__((aligned(16)));
 
 extern char D_0013E533[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int D_L00_00173E40[];
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 
@@ -1119,7 +1119,7 @@ int FUN_L00_002beab0(char *a, int b, Vx *c) {
     float s;
     float t;
     int r;
-    s = ConvertIntegerToFloat((unsigned char)D_0013E533[1]) * 0.5f + 1.0f;
+    s = convert_integer_to_float((unsigned char)D_0013E533[1]) * 0.5f + 1.0f;
     if (c != 0) {
         qcopy(&v, c);
     } else {
@@ -1516,7 +1516,7 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
 /* Steps a vector by n repeated additions of the normalised difference. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002C0B18), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
@@ -1526,7 +1526,7 @@ void FUN_L00_002bf810(char *a, char *b, int n) {
     float t[4];
     int i;
     FUN_001f9a28(d, b, a);
-    FUN_001f9a68(d, d, 1.0f / ConvertIntegerToFloat(n));
+    FUN_001f9a68(d, d, 1.0f / convert_integer_to_float(n));
     qcopy(t, a);
     for (i = 0; i < n; i++) {
         FUN_001f9a10(t, t, d);

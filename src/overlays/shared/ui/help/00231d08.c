@@ -1121,7 +1121,7 @@ void FUN_L00_00233ba0(float *dst, float *src, float z) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002344B0), where it is exact; names translated to the US level program. */
 
 extern float FUN_L00_00233a78_c(void *) __asm__("FUN_L00_00233a78");
-extern float ConvertIntegerToFloat(int) __asm__("FUN_001fa6c0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
@@ -1133,8 +1133,8 @@ float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
     switch (hero.unk20B3) {
     case 0:
         n = truncate_float_to_s32(vel[2] / step);
-        a = ConvertIntegerToFloat(n);
-        r = pos[2] + vel[2] * a - ConvertIntegerToFloat((n * n + n) >> 1) * step;
+        a = convert_integer_to_float(n);
+        r = pos[2] + vel[2] * a - convert_integer_to_float((n * n + n) >> 1) * step;
         if (steps != 0) {
             *steps = n;
         }

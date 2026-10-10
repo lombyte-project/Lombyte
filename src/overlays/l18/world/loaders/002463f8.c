@@ -22,7 +22,7 @@ extern short D_L18_00161A3C __attribute__((sda));
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern float func_001FA888(int) __asm__("FUN_001fa6c0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -47,7 +47,7 @@ void FUN_L18_002d8098(struct Moby *moby) {
     } else if (v < 0.0f) {
         v = 0.0f;
     }
-    col = FastTweenColor(W(D_L18_00161A24), W(D_L18_00161A28), v);
+    col = fast_tween_color(W(D_L18_00161A24), W(D_L18_00161A28), v);
     buf[0] = 0x30;
     buf[1] = *(int *)(data + 0x6c) / scale_ticks(0xE10) + 0x30;
     buf[2] = 0x3A;

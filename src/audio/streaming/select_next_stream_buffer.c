@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/rendering/graphics_buffer.h"
-extern void FillTransferWords();
+extern void fill_transfer_words() __asm__("func_001F97E8");
 extern s32 get_stream_buffer_size() __asm__("func_00225D88");
 
 s32 select_next_stream_buffer(s32 arg0) __asm__("FUN_00225c18");
@@ -19,7 +19,7 @@ s32 select_next_stream_buffer(s32 arg0) {
             if (graphics_buffer_descriptors[i].address != 0) {
                 if (!(graphics_buffer_descriptors[i].flags & 2)) {
                     graphics_buffer_descriptors[i].flags |= 2;
-                    FillTransferWords(graphics_buffer_descriptors[i].address, 0xDEADBEEF,
+                    fill_transfer_words(graphics_buffer_descriptors[i].address, 0xDEADBEEF,
                                       get_stream_buffer_size(graphics_buffer_descriptors[i].address));
                     return graphics_buffer_descriptors[i].address;
                 }

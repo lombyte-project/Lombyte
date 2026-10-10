@@ -31,7 +31,7 @@ extern void func_00218F98(void) __asm__("FUN_00218f98");
 extern void update_visible_resident_objects() __asm__("FUN_00212e28");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Ent *) __asm__("func_0022DA68");
 extern void mode_freeze_init(s32, struct MenuPage *) __asm__("func_001FBAB8");
-extern void CalculateDmaTransferAddress(void);
+extern void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
 extern void update_fog(void) __asm__("FUN_001f2588");
 extern void set_moby_animation(struct Ent *, s32, s32) __asm__("FUN_00212ed8");
 extern void func_002191B8(void) __asm__("FUN_002191b8");
@@ -58,7 +58,7 @@ void FUN_002192a8(void) {
             return;
         }
         D_0015F5B8 = 0x1E000;
-        CalculateDmaTransferAddress();
+        calculate_dma_transfer_address();
         update_fog();
         D_0015F618 = 1;
         menu_system.help_text_buffer = 0;

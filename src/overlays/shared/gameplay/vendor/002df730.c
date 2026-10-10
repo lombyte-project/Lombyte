@@ -1297,7 +1297,7 @@ void FUN_L00_002e4930(char *m) {
 /* per-frame state machine that eases a moby's attach pose toward the camera block's vector */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E6498), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float FUN_001f9af0(void *);
 extern int FUN_001f96f8_c2(int) __asm__("FUN_001f96f8");
 extern int FUN_001f9770_c(void *) __asm__("FUN_001f9770");
@@ -1315,7 +1315,7 @@ extern void FUN_001f9a40(float, void *, void *, void *);
 extern void FUN_001f9a68_c2(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_L00_002e4168_c(char *, void *) __asm__("FUN_L00_002e4168");
 extern void FUN_L00_002e42c0_c(void *, int) __asm__("FUN_L00_002e42c0");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_L00_002E5770_r(void *, int) __asm__("FUN_L00_002e42c0");
 
 void FUN_L00_002e4fe8(char *m, float *v2) {
@@ -1361,7 +1361,7 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
             *(unsigned char *)(e + 0xC4) = 1;
             v = *(unsigned short *)&D_L00_00161D3C_d;
             *(short *)(e + 0xC6) = v;
-            *(float *)(e + 0xC8) = 1.0f / ConvertIntegerToFloat((short)v);
+            *(float *)(e + 0xC8) = 1.0f / convert_integer_to_float((short)v);
         }
         padc = &hero;
         flag = 0;
@@ -1378,9 +1378,9 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
             }
         }
         if (flag != 0) {
-            if (AbsoluteFloat(*(float *)(g + 0x30) - *(float *)(g + 0x40)) > 0.001f ||
-                AbsoluteFloat(*(float *)(g + 0x34) - *(float *)(g + 0x44)) > 0.001f ||
-                AbsoluteFloat(*(float *)(g + 0x38) - *(float *)(g + 0x48)) > 0.001f) {
+            if (absolute_float(*(float *)(g + 0x30) - *(float *)(g + 0x40)) > 0.001f ||
+                absolute_float(*(float *)(g + 0x34) - *(float *)(g + 0x44)) > 0.001f ||
+                absolute_float(*(float *)(g + 0x38) - *(float *)(g + 0x48)) > 0.001f) {
                 x = FUN_001f9ab0(cam, g + 0x30);
                 FUN_001f9a68_c2(v2, g + 0x30, x);
                 FUN_001f9a28(e, cam, v2);
@@ -1430,7 +1430,7 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
                 *(unsigned char *)(e + 0xC4) = 4;
                 v = *(unsigned short *)&D_L00_00161D54_d;
                 *(short *)(e + 0xC6) = v;
-                *(float *)(e + 0xC8) = 1.0f / ConvertIntegerToFloat((short)v);
+                *(float *)(e + 0xC8) = 1.0f / convert_integer_to_float((short)v);
             }
         }
         break;
@@ -1717,7 +1717,7 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_L00_00257e20(float a, float b, float c, float d, float t);
 extern void FUN_001f9a68_c4(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 float FUN_L00_002e86b0(char *a0, float *a1, float lim) {
     float b0[4];
@@ -1758,7 +1758,7 @@ float FUN_L00_002e86b0(char *a0, float *a1, float lim) {
         sign = 1.0f;
     }
     r = fast_subtract_rotations(3.1415927f, ang);
-    if (lim != z2 && lim < AbsoluteFloat(r)) {
+    if (lim != z2 && lim < absolute_float(r)) {
         return r;
     }
     t = r / 1.5707964f;

@@ -232,7 +232,7 @@ typedef struct {
 } List;
 
 extern float FUN_001f9b48(void *, void *);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
     int best = 0;
@@ -240,7 +240,7 @@ int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
     float bestDiff = 1e11f;
     for (i = 0; i < arg1->count; i++) {
         float d = FUN_001f9b48(arg1->e[i], arg0);
-        if (AbsoluteFloat(d - target) < bestDiff) {
+        if (absolute_float(d - target) < bestDiff) {
             bestDiff = d;
             best = i;
         }

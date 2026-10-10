@@ -18,7 +18,7 @@ extern int D_L00_00160014;
 extern unsigned char D_0014161B[];
 extern void debug_print_alt() __asm__("FUN_001e93b0");
 extern void FUN_001f9a28(void *, void *, void *);
-extern void PackRenderCommandFields(struct RenderEntry *, s32, s32, s32, s32);
+extern void pack_render_command_fields(struct RenderEntry *, s32, s32, s32, s32) __asm__("PackRenderCommandFields");
 
 void FUN_L00_002500b8(char *o) {
     float vec[4];
@@ -47,7 +47,7 @@ void FUN_L00_002500b8(char *o) {
     }
     off = idx * 0x30;
     e1 = (char *)(off + (int)D_L00_00160040);
-    PackRenderCommandFields(o,
+    pack_render_command_fields(o,
                             *(int *)(o + 0x80) = (*(int *)(e1 + 0x18) << 16) +
                                                  (*(int *)(e1 + 0x14) << 8) + *(int *)(e1 + 0x10),
                             0, 0, 0);

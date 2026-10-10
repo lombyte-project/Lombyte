@@ -58,7 +58,7 @@ void FUN_L14_002d6358(struct Moby *m) {
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D77E0), where it is exact; names translated to the US level program. */
 
-extern float ConvertIntegerToFloat(int);
+extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int *D_L14_001B0BB0[];
 extern int D_L14_0015F70C;
 extern int tick_countdown_32(void *);
@@ -71,7 +71,7 @@ int FUN_L14_002d64d0(struct Moby *m) {
     int ok;
     float t;
     ok = tick_countdown_32(d + 0x6C) != 0;
-    t = ConvertIntegerToFloat(*(int *)(d + 0x6C));
+    t = convert_integer_to_float(*(int *)(d + 0x6C));
     FUN_001f9a40(&m->pos, ent + 0x10, D_L14_001B0F30_a[*(int *)(d + 0x84)] + 0x10,
                  t * *(float *)(d + 0x70));
     return ok;
@@ -181,7 +181,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d71f0.s", FUN_L14_002d71f0);
 extern char *FUN_L00_00274948(void *, void *, int, void *);
 extern char D_L14_001674C0[];
 extern char D_L14_001809C0[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L14_0015F580[] __attribute__((section(".sdata")));
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int FUN_L00_0023e738(float *, float, float, float, float, float);
@@ -238,7 +238,7 @@ void FUN_L14_002d7490(struct Moby *m) {
         }
         t = scale_game_frames(2);
         *(short *)(q + 0xA) = t;
-        *(float *)(e + 0x10) = 1.0f / ConvertIntegerToFloat((short)t);
+        *(float *)(e + 0x10) = 1.0f / convert_integer_to_float((short)t);
         *(int *)(e + 0x18) = 0x7F7F7F;
         *(short *)(e + 0x16) = 3;
     }
@@ -292,7 +292,7 @@ extern float D_L14_00161B04 __attribute__((sda));
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013F350[];
 extern char D_0013F3D0[];
 
@@ -316,8 +316,8 @@ void FUN_L14_002de2b8(char *moby) {
         (*(char **)(g + 0x4F8) == moby && *(int *)(g + 0x208C) == 3)) {
         char *p = (char *)((char *)&D_0013F350);
         *(char *)(moby + 0xBC) = 1;
-        if (AbsoluteFloat(*(float *)(p + 0x80) - *(float *)(moby + 0x10)) < 0.1f &&
-            AbsoluteFloat(*(float *)(p + 0x84) - *(float *)(moby + 0x14)) < 0.1f) {
+        if (absolute_float(*(float *)(p + 0x80) - *(float *)(moby + 0x10)) < 0.1f &&
+            absolute_float(*(float *)(p + 0x84) - *(float *)(moby + 0x14)) < 0.1f) {
             qcopy(v, up);
         } else {
             subtract_vector_xyz(d, (char *)((char *)&D_0013F3D0), moby + 0x10);
@@ -343,9 +343,9 @@ void FUN_L14_002de2b8(char *moby) {
     }
 
     if (fast_dec_timer(data + 0x70)) {
-        if (0.1f < AbsoluteFloat(*(float *)(moby + 0xE0) - v[0]) ||
-            0.1f < AbsoluteFloat(*(float *)(moby + 0xE4) - v[1]) ||
-            0.1f < AbsoluteFloat(*(float *)(moby + 0xE8) - v[2])) {
+        if (0.1f < absolute_float(*(float *)(moby + 0xE0) - v[0]) ||
+            0.1f < absolute_float(*(float *)(moby + 0xE4) - v[1]) ||
+            0.1f < absolute_float(*(float *)(moby + 0xE8) - v[2])) {
             *(int *)(data + 0x70) = scale_game_frames_alt(60);
             *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + 2.0f;
             allocate_voice_slot(*(void **)(*(char **)(moby + 0x24) + 0x28), 8, (int)moby, (int)(moby + 0x10), 0x400);
@@ -430,9 +430,9 @@ void FUN_L14_002dee28(struct Moby *moby) {
                  *(int *)((*(int *)(data + 0x1F8) << 5) + D_L14_0015F7EC + 0x10) &&
              x->unk560 !=
                  *(int *)((*(int *)(data + 0x1FC) << 5) + D_L14_0015F7EC + 0x10))) {
-            if (16.0f < AbsoluteFloat(x->motion.pos.f[0] - moby->pos.x))
+            if (16.0f < absolute_float(x->motion.pos.f[0] - moby->pos.x))
                 goto end;
-            if (16.0f < AbsoluteFloat(x->motion.pos.f[1] - moby->pos.y))
+            if (16.0f < absolute_float(x->motion.pos.f[1] - moby->pos.y))
                 goto end;
         }
         if (FUN_L00_0028d8c0(moby, *(int *)(data + 0x204)) == 0) {

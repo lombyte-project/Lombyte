@@ -117,7 +117,7 @@ void FUN_L18_002f9780(void) {
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FAEF8), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L18_00162454;
 extern float D_L18_00162450;
 extern float fast_sin(float) __asm__("func_001F9DE0");
@@ -142,9 +142,9 @@ void FUN_L18_002f9a98(void *moby) {
     char d[16];
     char e[16];
     int n = scale_game_frames(D_L18_00162460);
-    float f = ConvertIntegerToFloat(D_L18_0015F5CC % n);
+    float f = convert_integer_to_float(D_L18_0015F5CC % n);
     int h;
-    f = f / ConvertIntegerToFloat(n);
+    f = f / convert_integer_to_float(n);
     f = f * 6.18318f;
     f = fast_sin(f - 3.14159f);
     h = FUN_001fa6e0(D_L18_00162458, D_L18_0016245C, f * 0.5f + 0.5f);

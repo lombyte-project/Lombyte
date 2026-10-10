@@ -25,7 +25,7 @@ extern u8 *D_L00_001B04B0_2d0538[] __asm__("D_L00_001B04B0") __attribute__((sect
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00260400_2d0538(u8 *, s32, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-f32 AbsoluteFloat(f32) __asm__("FUN_001f99c0");
+f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void mark_moby_for_removal_cf(u8 *, s32, s32) __asm__("FUN_L00_00257470");
 s32 FUN_L00_00257218_2d0538(u8 *, s32 *) __asm__("FUN_L00_00257218");
 f32 FUN_00213308_2d0538(void) __asm__("FUN_00213308");
@@ -63,8 +63,8 @@ void FUN_L00_002d0538(u8 *a) {
             FUN_L00_00260400_2d0538(a, *(s32 *)(b + 0xF0), a + 0x10, a + 0x40, &v30, &v40);
             subtract_vector_xyz(&v20, &v30, a + 0x10);
         }
-        if (D_0015ED84_2d0538 == 0xF && AbsoluteFloat(*(f32 *)(a + 0x10) - 166.0f) < 6.0f &&
-            AbsoluteFloat(*(f32 *)(a + 0x14) - 193.0f) < 6.0f) {
+        if (D_0015ED84_2d0538 == 0xF && absolute_float(*(f32 *)(a + 0x10) - 166.0f) < 6.0f &&
+            absolute_float(*(f32 *)(a + 0x14) - 193.0f) < 6.0f) {
             s32 save = D_L00_0015F598_2d0538;
             D_L00_0015F598_2d0538 = 0;
             mark_moby_for_removal_cf(a, 0x100, -1);
@@ -1060,7 +1060,7 @@ extern float FUN_001f9dc8_2d5988(f32) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2d5988(f32) __asm__("FUN_001f9de0");
 extern float FUN_001f9e90_2d5988(f32, f32) __asm__("FUN_001f9e90");
 extern float FUN_001fa5c8_2d5988(f32, f32) __asm__("FUN_001fa5c8");
-extern float ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 
 void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
     St_2d5988 *st;
@@ -1079,7 +1079,7 @@ void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
 
     st = o->st;
     FUN_L00_0025df68_2d5988(path, &o->v[0], &w, &idx, &t, 0, 999.0f, 5.0f, 0.0f);
-    d = ConvertIntegerToFloat(idx) * path->a[0].f[3] + t;
+    d = convert_integer_to_float(idx) * path->a[0].f[3] + t;
     w_ = d + 2.0f;
     l = distance_xyz(&o->v[0], (void *)((char *)path + path->n * 16));
     s = D_0015ED70_2d5988 * 16.0f;
@@ -1098,7 +1098,7 @@ void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
             st->v60 = b2;
     }
     idx = truncate_float_to_s32(w_ / path->a[0].f[3]);
-    t = (w_ - ConvertIntegerToFloat(idx) * path->a[0].f[3]) / path->a[0].f[3];
+    t = (w_ - convert_integer_to_float(idx) * path->a[0].f[3]) / path->a[0].f[3];
     if (idx >= path->n - 1) {
         idx = path->n - 2;
         t = 1.0f;
@@ -1186,7 +1186,7 @@ extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float i2f_2d6cd0(int) __asm__("FUN_001fa6c0");
 extern float fabs_2d6cd0(float) __asm__("FUN_001f99c0");
-extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int f2i_2d6cd0(float) __asm__("FUN_001fa6d0");
 extern void spr_2d6cd0(void *, int, int, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 
@@ -1226,7 +1226,7 @@ void FUN_L00_002d6cd0(char *o) {
         }
         f = i2f_2d6cd0(scale_game_frames(0xFF) - p->c[i]);
         f = f / (float)scale_game_frames(0xFF);
-        col = FastTweenColor(0x4040FFFF, 0x1040FFFF, fabs_2d6cd0(0.5f - f));
+        col = fast_tween_color(0x4040FFFF, 0x1040FFFF, fabs_2d6cd0(0.5f - f));
         if (D_15F5C4_2d6cd0 != 2) {
             spr_2d6cd0(d, col, f2i_2d6cd0(p->a[i]) & 0xFF, 0x35, 1, 2, 0, p->d[i]);
         }

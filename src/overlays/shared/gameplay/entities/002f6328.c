@@ -863,7 +863,7 @@ void FUN_L01_00300220(struct Moby *moby) {
     }
 }
 #include "rnc/rendering/screen.h"
-extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64,
@@ -887,8 +887,8 @@ void FUN_L01_00302438(struct Moby *moby) {
     s32 tile_half;
     u64 texture;
 
-    screen_center[0] = ConvertIntegerToFloat(screen_extent.half_width);
-    screen_center[1] = ConvertIntegerToFloat(screen_extent.half_height);
+    screen_center[0] = convert_integer_to_float(screen_extent.half_width);
+    screen_center[1] = convert_integer_to_float(screen_extent.half_height);
     texture = get_effect_texture(30);
     row_count = screen_extent.width / 32 + 1;
     column_count = screen_extent.height / 32 + 1;
@@ -898,8 +898,8 @@ void FUN_L01_00302438(struct Moby *moby) {
             coordinate[0] = (f32)(row * 32);
             coordinate[1] = (f32)(column * 32);
             tile_half = tile_size >> 1;
-            opacity = ConvertIntegerToFloat(vars[0x50]) * 127.5f /
-                      ConvertIntegerToFloat(scale_game_frames(90));
+            opacity = convert_integer_to_float(vars[0x50]) * 127.5f /
+                      convert_integer_to_float(scale_game_frames(90));
             color = (truncate_float_to_s32(opacity) << 24) + base_color;
             texture_x = random_integer_below(32);
             texture_y = random_integer_below(32);
@@ -1217,7 +1217,7 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 extern float func_0020D830_m(void *) __asm__("FUN_0020c9e0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -1261,8 +1261,8 @@ void FUN_L01_00308550(char *m) {
         if (fast_dec_timer((int *)(d + 0x40) + i)) {
             tm[i] = scale_game_frames(0xFF);
         }
-        t = ConvertIntegerToFloat(scale_game_frames(0xFF) - tm[i]) / (float)scale_game_frames(0xFF);
-        c = FUN_001fa6e0(D_L01_00161F3C, D_L01_00161F40, AbsoluteFloat(0.5f - t));
+        t = convert_integer_to_float(scale_game_frames(0xFF) - tm[i]) / (float)scale_game_frames(0xFF);
+        c = FUN_001fa6e0(D_L01_00161F3C, D_L01_00161F40, absolute_float(0.5f - t));
         FUN_L00_00272f68(dir, c, func_001FA898_r(ang[i]), D_L01_00161F4C, D_L01_00161F48, 2, 0,
                          sz[i] * scale);
         add_vector_xyz(dir, dir, step);

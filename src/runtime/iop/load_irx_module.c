@@ -11,7 +11,7 @@ extern s32 sceSifAllocIopHeap(s32 module_id);
 extern s32 sceSifSetDma(struct sceSifDmaData *transfer, s32 priority);
 extern s32 sceSifDmaStat(s32 dma_id);
 extern s32 InvokeIopStatus(s32 module_id, s32 a1, s32 a2);
-extern void InvokeStateInitializer(s32 module_id);
+extern void invoke_state_initializer(s32 module_id) __asm__("InvokeStateInitializer");
 
 s32 load_irx_module(s32 irx_image, s32 arg1) __asm__("FUN_00201520");
 s32 load_irx_module(s32 irx_image, s32 arg1) {
@@ -33,7 +33,7 @@ s32 load_irx_module(s32 irx_image, s32 arg1) {
         if (InvokeIopStatus(module_id, 0, 0) <= -1) {
             result = 0;
         }
-        InvokeStateInitializer(module_id);
+        invoke_state_initializer(module_id);
     }
     return result;
 }

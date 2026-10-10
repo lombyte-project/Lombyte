@@ -21,7 +21,7 @@ extern s32 second_image_buffer_address __asm__("D_0015EE78");
 extern s32 display_buffer_address __asm__("D_0015EE80");
 extern s32 draw_buffer_address __asm__("D_0015EE84");
 extern s32 image_buffer_address __asm__("D_0015EE8C");
-extern void FillTransferWords(u8 *, s32, s32);
+extern void fill_transfer_words(u8 *, s32, s32) __asm__("func_001F97E8");
 extern void FlushCache(s32);
 extern void func_00120558(s32, s32);
 extern void setup_fs_aa_buffer(s32, s32, s32, s32, s32, s32) __asm__("func_001FA978");
@@ -88,7 +88,7 @@ void set_pal_mode(void) {
     FlushCache(0);
     func_00120558(0, 0);
     put_disp_buffer();
-    FillTransferWords(image_clear_buffer, 0, 0x1000);
+    fill_transfer_words(image_clear_buffer, 0, 0x1000);
     tile_count = (fs_aa_buffer.storage_width * fs_aa_buffer.storage_height) >> 10;
     for (tile_index = 0; tile_index < tile_count; tile_index++) {
         sceGsSetDefLoadImage(&image_transfer, tile_index << 4, 1, 0, 0, 0, 32, 32);

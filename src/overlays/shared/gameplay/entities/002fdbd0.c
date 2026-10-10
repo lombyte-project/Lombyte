@@ -412,7 +412,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002feb40.s", FUN_L06_002feb40);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00300530), where it is exact; names translated to the US level program. */
 
 extern char D_L06_00174600_d[] __asm__("D_L06_00174600") __attribute__((section(".data")));
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
@@ -432,7 +432,7 @@ void FUN_L06_002ff100(char *m) {
     add_vector_xyz_cf(m, 0, d + 0x210);
     *(float *)(d + 0x218) = *(float *)(m + 0x18);
     for (i = 0; i < 16; i++) {
-        float f = ConvertIntegerToFloat(i) * 0.0625f - 0.5f;
+        float f = convert_integer_to_float(i) * 0.0625f - 0.5f;
         f = f * (*(float *)&D_L06_00161FD4_d * 0.017453292f);
         v[0] = fast_cos(fast_add_rotations(f, *(float *)(m + 0x48))) * 0.2f;
         v[1] = fast_sin_c(fast_add_rotations(f, *(float *)(m + 0x48))) * 0.2f;
@@ -705,7 +705,7 @@ extern short D_L06_001620E4 __attribute__((sda));
 extern short D_L06_001620E8 __attribute__((sda));
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern float func_001FA888(int) __asm__("FUN_001fa6c0");
-extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color_local(int, int, float) __asm__("FUN_001fa6e0");
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -730,7 +730,7 @@ void FUN_L06_003021d8(char *moby) {
     } else if (v < 0.0f) {
         v = 0.0f;
     }
-    col = FastTweenColor(W(D_L06_001620D0), W(D_L06_001620D4), v);
+    col = fast_tween_color_local(W(D_L06_001620D0), W(D_L06_001620D4), v);
     buf[0] = 0x30;
     buf[1] = *(int *)(data + 0xB4) / scale_ticks(0xE10) + 0x30;
     buf[2] = 0x3A;

@@ -3,9 +3,9 @@
 extern s32 D_001DDFB8[];
 extern s32 D_00160F0C;
 
-void CalculateDmaTransferAddress(void) __asm__("CalculateDmaTransferAddress");
+void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
 
-void CalculateDmaTransferAddress(void) {
+void calculate_dma_transfer_address(void) {
     s32 i;
 
     i = current_level_index;

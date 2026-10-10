@@ -974,7 +974,7 @@ extern float D_L00_001614B8 __attribute__((sda));
 extern unsigned short D_L00_001614BC __attribute__((sda));
 extern int D_L00_001614D8;
 extern int D_L00_001614D0_e[] __asm__("D_L00_001614D0") __attribute__((section(".sdata")));
-extern float ConvertIntegerToFloat(int);
+extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int FUN_001f9770(void *);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32(int *arg0);
@@ -995,7 +995,7 @@ void FUN_L00_002b7398(void *arg) {
         D_L00_001614D0 = 0;
         r = f_to_int(D_L00_001614B4 / (D_L00_001614B8 * frame_time));
         D_L00_001614D8 = r;
-        D_L00_001614DC = 1.0f / ConvertIntegerToFloat(r);
+        D_L00_001614DC = 1.0f / convert_integer_to_float(r);
     }
     if (D_L00_001614D4 == 0) {
         if (tick_countdown_32(&D_L00_001614D0) != 0) {

@@ -431,7 +431,7 @@ typedef struct {
 } T4;
 
 extern T4 D_L15_00162108;
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float FUN_001f96b0(float);
 extern float FUN_001f9988(float);
@@ -466,7 +466,7 @@ void FUN_L15_002eac90(struct Moby *moby) {
     int color;
     int i, j, m, n, q;
 
-    scale = ConvertIntegerToFloat(D_L15_0015F5CC) * (D_L15_00162104 * frame_time);
+    scale = convert_integer_to_float(D_L15_0015F5CC) * (D_L15_00162104 * frame_time);
     vu1_add_gs_register(6, get_effect_texture(D_L15_001620F0));
     vu1_add_gs_register(0x42, ((long)D_L15_001620EC << 32) | 0x44);
     vu1_add_gs_register(8, 0);
@@ -526,7 +526,7 @@ typedef struct {
 } RingVars;
 
 extern Quad4 D_L15_00162170;
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L15_0016216C __attribute__((sda));
 extern float D_L15_001DDBA0[];
 extern float D_L15_001DDED0[][2];
@@ -568,7 +568,7 @@ void FUN_L15_002eb108(struct Moby *moby) {
     float scale;
     Quad4 *p;
     float *o;
-    scale = ConvertIntegerToFloat(D_L15_0015F5CC) * (D_L15_0016216C * frame_time);
+    scale = convert_integer_to_float(D_L15_0015F5CC) * (D_L15_0016216C * frame_time);
     vu1_add_gs_register(6, get_effect_texture(D_L15_00162158));
     vu1_add_gs_register(0x42, ((long)D_L15_00162154 << 32) | 0x44);
     vu1_add_gs_register(8, 0);

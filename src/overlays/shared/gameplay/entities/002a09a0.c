@@ -53,7 +53,7 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
 extern char D_L16_001671C0_c[] __asm__("D_L16_001671C0");
 extern char D_0013E633[];
 extern char D_L16_00167240_c[] __asm__("D_L16_00167240");
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
@@ -95,8 +95,8 @@ void FUN_L16_002a0a98(char *m) {
         pitch = -1.2217305f;
     build_spherical_offset(desired, *(float *)(d + 0x24), yaw, pitch);
     if (tick_countdown_32_alt((int *)(d + 0x20)) == 0) {
-        float a = ConvertIntegerToFloat(*(int *)(d + 0x20));
-        float b = ConvertIntegerToFloat(*(int *)(d + 0x30));
+        float a = convert_integer_to_float(*(int *)(d + 0x20));
+        float b = convert_integer_to_float(*(int *)(d + 0x30));
         FUN_001f9a40(blend, desired, d, a / b);
         add_vector_xyz(next, m + 0x10, blend);
         *(float *)(m + 0x48) = FUN_001f9e90(blend[0], blend[1]);

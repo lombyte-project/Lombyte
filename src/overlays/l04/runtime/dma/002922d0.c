@@ -191,7 +191,7 @@ extern int D_L04_00173FC0; /* no foreign declaration */
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 float FUN_L04_002922d0_c(float *pos) __asm__("FUN_L04_002922d0");
 extern void func_001F9BC0_2939E8(float *) __asm__("FUN_001f99f8");
 extern float func_001F9F90_2939E8(float) __asm__("FUN_001f9dc8");
@@ -237,9 +237,9 @@ int FUN_L04_00292828(StMoby_2939E8 *m, Steer_2939E8 *a)
                 h = FUN_L04_002922d0_c((float *)e);
                 sum += h;
                 if (0.0f < h) {
-                    t = AbsoluteFloat(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.x);
-                    t = t + AbsoluteFloat(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.y);
-                    if (t < AbsoluteFloat(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.z)) {
+                    t = absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.x);
+                    t = t + absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.y);
+                    if (t < absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.z)) {
                         add_vector_xyz(push, push, &((StTab_2939E8 *)D_L04_00174040_2939E8)->v40);
                         n += 4.0f;
                         dz += h - e->z;
@@ -266,12 +266,12 @@ int FUN_L04_00292828(StMoby_2939E8 *m, Steer_2939E8 *a)
         } else {
             a->tilt = 0.0f;
         }
-        if (0.785398f < AbsoluteFloat(a->tilt)) {
+        if (0.785398f < absolute_float(a->tilt)) {
             ret = 2;
         }
         if (a->kind == 0xD && 0.0f < a->ground && (a->mask & 0xF) == 0) {
             t = -angle_atan2(a->f8C[1], a->ground - m->pos.z);
-            if (AbsoluteFloat(t) < 0.5235988f) {
+            if (absolute_float(t) < 0.5235988f) {
                 pinned = 1;
                 dz += a->ground - m->pos.z;
                 a->tilt = t;

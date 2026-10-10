@@ -45,7 +45,7 @@ extern void snd_flush_sound_commands_alt(void) __asm__("FUN_0012dc80");
 extern void transform_vector_by_basis(void *, void *, void *);
 extern void vu_euler_rotation_basis(void *, void *);
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
-void CalculateDmaTransferAddress(void) __asm__("CalculateDmaTransferAddress");
+void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
 void parse_space_scene_chunk(s32 index) __asm__("FUN_002049f0");
 void snd_pause_all_sounds_in_group(s32 arg0) __asm__("FUN_0012e3e8");
 
@@ -84,7 +84,7 @@ void FUN_L01_002aea70(char *m, int lvl) {
     vu_euler_rotation_basis(s + 0x80, s + 0xB0);
     fill_transfer_words_alt(c, 0, 0x1C0);
     fill_transfer_words_alt(D_L01_0017C7C0, 0, 0x40);
-    CalculateDmaTransferAddress();
+    calculate_dma_transfer_address();
     n = D_L01_001611CC + (int)0xFFFC0000;
     *(int *)(c + 0x58) = D_L01_00174280[1] + n;
     r = D_L01_001CA4A0[lvl];

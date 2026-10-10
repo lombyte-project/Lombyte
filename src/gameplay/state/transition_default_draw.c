@@ -21,7 +21,7 @@ extern u8 D_001D8EB0[];
 extern u8 D_001E1300[];
 extern u8 D_001E3200[];
 extern s32 AppendDmaTag();
-extern s32 FillTransferWords();
+extern s32 fill_transfer_words() __asm__("func_001F97E8");
 extern s32 FlushCache();
 extern s32 transition_draw_sky() __asm__("func_001E9AB8");
 extern s32 transition_update_movie_camera() __asm__("func_001EAF88");
@@ -64,7 +64,7 @@ void transition_default_draw(s32 *arg0) {
     if (D_0016045C == 0 || D_0016045C->unk4 != 0) {
         append_gif_transfer_packet();
     }
-    FillTransferWords(D_00193FC0, -1, 0x80);
+    fill_transfer_words(D_00193FC0, -1, 0x80);
     transition_update_movie_camera();
     func_001F2260();
     prune_moby_references();

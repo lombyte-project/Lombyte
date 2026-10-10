@@ -922,7 +922,7 @@ extern int FUN_001efa68(void *, void *, int, void *, int);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void FUN_L00_00259710(void *a);
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
@@ -953,7 +953,7 @@ int FUN_L11_002d25e8(struct Moby *m, float *out) {
             if (FUN_L00_00259740(a, q + 4, *q)) {
                 a[2] += 5.0f;
                 g = func_L00_0025A748_f(a);
-                if (AbsoluteFloat(g - m->pos.z) > 0.5f) {
+                if (absolute_float(g - m->pos.z) > 0.5f) {
                     qcopy(b, pos);
                     b[2] += 0.15f;
                     a[2] = g + 0.15f;

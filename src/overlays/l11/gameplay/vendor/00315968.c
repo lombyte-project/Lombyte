@@ -1535,7 +1535,7 @@ void FUN_L11_0031ae68(struct Moby *m, float *ground, int n1, int n2);
 extern void FUN_L11_0031b098_c(char *) __asm__("FUN_L11_0031b098");
 extern void add_vector_xyz(void *, void *, void *);
 extern void scale_vector_xyz(void *, void *, float);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y);
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char *func_L00_0026FF20_p(void *, float *, float, float) __asm__("FUN_L00_0026f080");
@@ -1574,7 +1574,7 @@ void FUN_L11_0031ab08(struct Moby *m) {
         if ((D_L11_0015F5CC & 3) == 0) {
             FUN_L11_0031ae68((struct Moby *)m, *(float **)(d + 0x24), 0, 1);
             FUN_L00_00257d78(v, 0.0f, D_0015ED6C_n[1]);
-            v[2] = AbsoluteFloat(v[2]);
+            v[2] = absolute_float(v[2]);
             p = func_L00_0026FF20_p(&m->pos, v, *(float *)&D_L11_00162414_d,
                                     **(float **)(d + 0x24));
             if (p != 0) {

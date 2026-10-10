@@ -410,7 +410,7 @@ void FUN_L14_002fe2a0(L16CrateMoby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5408), where it is exact; names translated to the US level program. */
 
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern int FUN_L00_0025d808(char *, float *, float *, float *, int, float);
@@ -444,8 +444,8 @@ int FUN_L14_002fea80(struct Moby *moby) {
     FUN_L00_0025b8c0(&moby->pos.z, (float *)(data + 0xEC), pos[2], D_L14_00161FBC,
                      D_L14_00161FC0, 0.0f);
     subtract_vector_xyz(delta, pos, &moby->pos);
-    if (AbsoluteFloat(delta[0]) > 0.01f) {
-        if (AbsoluteFloat(delta[1]) > 0.01f) {
+    if (absolute_float(delta[0]) > 0.01f) {
+        if (absolute_float(delta[1]) > 0.01f) {
             FUN_L00_00258278(moby, FUN_001f9e90(delta[0], delta[1]), (float *)(data + 0xF0),
                              D_L14_00161FBC, D_L14_00161FC0, 0.0f);
         }

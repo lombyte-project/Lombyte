@@ -39,7 +39,7 @@ extern HeroTableEntry70 D_L06_0017A010[];
 extern struct UsageStats D_00141848;
 extern S17AF00 D_L06_0017AE00;
 extern S17C638 D_L06_0017C538;
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L06_0015F638;
 extern float D_L06_00167558 __attribute__((section(".data")));
 extern float FUN_001f96b0(float);
@@ -1257,7 +1257,7 @@ void FUN_L06_0023b440(void) {
                             break;
                         }
                         if (hero.motion.velocity.f[2] < 0.0f &&
-                            AbsoluteFloat(hero.motion.pos.f[2] - hero.unk500.f[2]) < 0.3f) {
+                            absolute_float(hero.motion.pos.f[2] - hero.unk500.f[2]) < 0.3f) {
                             hero_set_state(0x28, 1);
                         }
                     }
@@ -1925,7 +1925,7 @@ void FUN_L06_0023b440(void) {
                                     scale_game_frames(0xE) < hero.state_timer &&
                                     (hero.unk41E == 0 ||
                                      (hero.ground_distance > 0.7f &&
-                                      AbsoluteFloat(FUN_L00_00233a78(hero.motion.velocity.f)) <
+                                      absolute_float(FUN_L00_00233a78(hero.motion.velocity.f)) <
                                           frame_time * 5.8f))) {
                                     hero_set_state(0xE, 1);
                                 } else if (D_0013D4DC[-0x1A] != 0 && FUN_L00_0020d498(3) != 4 &&

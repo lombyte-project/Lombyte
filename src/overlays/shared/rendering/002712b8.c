@@ -197,7 +197,7 @@ unsigned char *FUN_L00_002718d0(u128 *pos, u128 *dir, int w, float scale, float 
 }
 void FUN_001f9a10_002719f0(void *, void *, void *) __asm__("FUN_001f9a10");
 int FUN_001fa6d0_002719f0(float) __asm__("FUN_001fa6d0");
-float AbsoluteFloat(float) __asm__("FUN_001f99c0");
+float absolute_float(float) __asm__("FUN_001f99c0");
 void FUN_L00_00267a08_002719f0(unsigned char *) __asm__("FUN_L00_00267a08");
 void FUN_L00_002719f0(unsigned char *p) {
     float *v = (float *)(p + 0x20);
@@ -207,7 +207,7 @@ void FUN_L00_002719f0(unsigned char *p) {
     v[4] += v[5];
     p[8] = FUN_001fa6d0_002719f0(v[4]);
     if (*(float **)(v + 6) != 0) {
-        if (AbsoluteFloat(*(float *)(p + 0x18) - **(float **)(v + 6)) < 0.2f) {
+        if (absolute_float(*(float *)(p + 0x18) - **(float **)(v + 6)) < 0.2f) {
             *(float *)(p + 0x18) = **(float **)(v + 6) + 0.02f;
         }
     }
@@ -268,7 +268,7 @@ void FUN_L00_00271be8(char *m) {
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272B28), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int FUN_001f9770(void *);
 extern int FUN_001fa6e0(int, int, float);
 extern void FUN_001f9a10(void *, void *, void *);
@@ -280,7 +280,7 @@ void FUN_L00_00271c88(char *m) {
     FUN_001f9a10(m + 0x10, m + 0x10, v);
     *(int *)(m + 4) = FUN_001fa6e0(
         *(int *)(v + 0x18), *(int *)(v + 0x14),
-        AbsoluteFloat(ConvertIntegerToFloat(*(short *)(m + 0xA)) * *(float *)(v + 0x10) - 1.0f));
+        absolute_float(convert_integer_to_float(*(short *)(m + 0xA)) * *(float *)(v + 0x10) - 1.0f));
     if (FUN_001f9770(m + 0xA)) {
         FUN_L00_00267a08(m);
     }
@@ -383,7 +383,7 @@ void FUN_L00_00271fc0(char *m) {
         FUN_L00_00267a08(m);
     } else {
         v = m + 0x20;
-        f = ConvertIntegerToFloat(*(short *)(m + 0xA)) * *(float *)(v + 0x10);
+        f = convert_integer_to_float(*(short *)(m + 0xA)) * *(float *)(v + 0x10);
         *(int *)(m + 4) = FUN_001fa6e0(*(int *)(v + 0xC), *(int *)(v + 8), f);
         *(float *)(m + 0xC) =
             ((*(float *)(m + 0x20) - *(float *)(v + 4)) * f + *(float *)(v + 4)) * 210000.0f;
@@ -664,7 +664,7 @@ extern unsigned char *D_L00_001B2168_272bc0 __asm__("D_L00_001B2168")
     __attribute__((section(".data")));
 extern unsigned char *D_L00_0016016C_272bc0 __asm__("D_L00_0016016C");
 extern float FUN_001fa6c0_272bc0(int) __asm__("FUN_001fa6c0");
-extern int FastTweenColor(float, int, int) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern void FUN_L00_0025f8e0_272bc0(void *, float) __asm__("FUN_L00_0025f8e0");
 extern int FUN_001f96f8_272bc0(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_002729c8_272bc0(void *, int, int, int, int, int, int, float,
@@ -690,7 +690,7 @@ void FUN_L00_00272bc0(unsigned char *p) {
     case 0: {
         float n = FUN_001fa6c0_272bc0(q[0x11]);
         *(int *)(p + 4) =
-            FastTweenColor((n - FUN_001fa6c0_272bc0(*(short *)(p + 0xA))) / n, 0xFF4080FF, 0);
+            fast_tween_color((n - FUN_001fa6c0_272bc0(*(short *)(p + 0xA))) / n, 0xFF4080FF, 0);
     }
         if (fast_dec_timer(p + 0xA)) {
             if (q[0x10] == 1) {
@@ -734,7 +734,7 @@ void FUN_L00_00272bc0(unsigned char *p) {
         a = FUN_001fa6c0_272bc0(q[0x15]);
         k = a - FUN_001fa6c0_272bc0(*(short *)(p + 0xA));
         k = k / a;
-        *(int *)(p + 4) = FastTweenColor(k, (q[0x16] << 24) | 0x4060, 0x8FAFFF);
+        *(int *)(p + 4) = fast_tween_color(k, (q[0x16] << 24) | 0x4060, 0x8FAFFF);
         if (k < 0.6f) {
             *(float *)(p + 0xC) += D_0015ED60_272bc0 * 0.043f * 210000.0f;
         } else {
@@ -867,8 +867,8 @@ void FUN_L00_00273298(Part_273298 *p) {
         return;
     }
     c = p->w4 & 0xFFFFFF;
-    a = ConvertIntegerToFloat(p->hA - 1);
-    p->w4 = FUN_001fa6e0_273298(c, p->w4, a / ConvertIntegerToFloat(p->hA));
+    a = convert_integer_to_float(p->hA - 1);
+    p->w4 = FUN_001fa6e0_273298(c, p->w4, a / convert_integer_to_float(p->hA));
 }
 typedef struct {
     u8 pad0[0x20];
@@ -977,7 +977,7 @@ unsigned char *FUN_L00_00273708(void *a, int b, int c) {
         if (c >= 2)
             c = 0;
         r[2] = D_L00_001B2178_d[c];
-        *(short *)(r + 0x20) = truncate_float_to_s32(127.0f / ConvertIntegerToFloat(b));
+        *(short *)(r + 0x20) = truncate_float_to_s32(127.0f / convert_integer_to_float(b));
         *(short *)(r + 0xA) = b;
     }
     return r;
@@ -1336,7 +1336,7 @@ void FUN_L00_00274518(M_274518 *m) {
         a.x = m->r.f0;
         a.y = r->f4;
         a.z = r->f8;
-        FUN_001f9a68_274518(&a, &a, ConvertIntegerToFloat(r->h18));
+        FUN_001f9a68_274518(&a, &a, convert_integer_to_float(r->h18));
         FUN_001f9a10_274518(m->v10, r->iC + 0x10, &a);
         return;
     }
@@ -1497,8 +1497,8 @@ void FUN_L00_00274a70(u8 *p) {
         return;
     }
     *(u32 *)(p + 4) =
-        (truncate_float_to_s32(ConvertIntegerToFloat(*(s16 *)(p + 0xA)) * *(f32 *)(q + 0x10) *
-                             ConvertIntegerToFloat(*(s16 *)(q + 0x14)))
+        (truncate_float_to_s32(convert_integer_to_float(*(s16 *)(p + 0xA)) * *(f32 *)(q + 0x10) *
+                             convert_integer_to_float(*(s16 *)(q + 0x14)))
          << 24) |
         *(u32 *)(q + 0x18);
 }
@@ -1604,7 +1604,7 @@ void FUN_L00_00274e48(M_274e48 *m) {
         *(volatile s32 *)0x10000000 = 0;
         load_display_text_resource_entry(&u, r);
         FUN_001f9a10_274e48(&m->v10, &m->v10, &u);
-        d = ConvertIntegerToFloat(m->hA) / ConvertIntegerToFloat(r->h10);
+        d = convert_integer_to_float(m->hA) / convert_integer_to_float(r->h10);
         m->i4 = FUN_001fa6e0_274e48(m->i4 & 0xFFFFFF, m->i4, 1.0f - d);
         if (FUN_001f9770_274e48(&m->hA)) {
             r->h10 = 0;
@@ -1613,7 +1613,7 @@ void FUN_L00_00274e48(M_274e48 *m) {
     } else if (r->h12) {
         load_display_text_resource_entry(&a, r);
         load_display_text_resource_entry(&b, (u8 *)r + 4);
-        lerp_vector(&u, &b, &a, ConvertIntegerToFloat(m->hA) / ConvertIntegerToFloat(r->h12));
+        lerp_vector(&u, &b, &a, convert_integer_to_float(m->hA) / convert_integer_to_float(r->h12));
         FUN_001f9a10_274e48(&m->v10, &m->v10, &u);
         if (FUN_001f9770_274e48(&m->hA)) {
             r->h12 = 0;
@@ -1624,7 +1624,7 @@ void FUN_L00_00274e48(M_274e48 *m) {
         FUN_001f9a10_274e48(&m->v10, &m->v10, &u);
         c = m->i4 & 0xFFFFFF;
         m->i4 =
-            FUN_001fa6e0_274e48(c, m->i4, ConvertIntegerToFloat(m->hA) / ConvertIntegerToFloat(r->h14));
+            FUN_001fa6e0_274e48(c, m->i4, convert_integer_to_float(m->hA) / convert_integer_to_float(r->h14));
         if (FUN_001f9770_274e48(&m->hA))
             free_effect_particle(m);
     }
@@ -1768,7 +1768,7 @@ void FUN_L00_00275320(O_275320 *o) {
 /* Update a particle following a parent moby with a scaled offset. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002763B0), where it is exact; names translated to the US level program. */
 
-extern float ConvertIntegerToFloat(int);
+extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int mine_blend_color(float, int, int) __asm__("FUN_L00_002371e0");
 extern void add_vector_xyz(void *, void *, void *);
 extern void scale_vector_xyz(void *, void *, float);
@@ -1785,7 +1785,7 @@ void FUN_L00_00275510(char *m) {
     float r;
     int k;
     k = *(int *)(d + 0xC) - *(short *)(m + 0xA);
-    r = ConvertIntegerToFloat(*(short *)(d + 8) * k / *(int *)(d + 0xC) + *(short *)(d + 0xA));
+    r = convert_integer_to_float(*(short *)(d + 8) * k / *(int *)(d + 0xC) + *(short *)(d + 0xA));
     q = frame_scale * -0.01999998f + 1.0f;
     *(float *)(m + 0xC) = r * 1000.0f;
     t[0] = *(float *)(m + 0x20);
@@ -1812,7 +1812,7 @@ void FUN_L00_00275510(char *m) {
     }
     m[8] = m[8] + 1;
     *(int *)(m + 4) =
-        mine_blend_color((float)*(short *)(m + 0xA) / ConvertIntegerToFloat(*(int *)(d + 0xC)),
+        mine_blend_color((float)*(short *)(m + 0xA) / convert_integer_to_float(*(int *)(d + 0xC)),
                             *(int *)(d + 4), *(int *)d);
     if (fast_dec_timer(m + 0xA)) {
         free_effect_particle(m);
@@ -2045,12 +2045,12 @@ void FUN_L00_00275eb0(Part_275eb0 *p) {
     }
     if (p->w20) {
         p->fC *= 0.99f;
-        a = ConvertIntegerToFloat(p->hA - 1);
-        p->w4 = FUN_001fa6e0_00275eb0(0x30FFFFFF, p->w4, a / ConvertIntegerToFloat(p->hA));
+        a = convert_integer_to_float(p->hA - 1);
+        p->w4 = FUN_001fa6e0_00275eb0(0x30FFFFFF, p->w4, a / convert_integer_to_float(p->hA));
     } else {
         p->fC *= 0.95f;
-        a = ConvertIntegerToFloat(p->hA - 1);
-        p->w4 = FUN_001fa6e0_00275eb0(0x603F1008, p->w4, a / ConvertIntegerToFloat(p->hA));
+        a = convert_integer_to_float(p->hA - 1);
+        p->w4 = FUN_001fa6e0_00275eb0(0x603F1008, p->w4, a / convert_integer_to_float(p->hA));
     }
 }
 typedef struct {

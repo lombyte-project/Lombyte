@@ -74,7 +74,7 @@ extern void font_print_window(struct TextRegion *, s64, void *, s32, s32, u8 *) 
 extern void font_print_window_regular(struct TextRegion *, s32, char *, s32) __asm__("FUN_001f7580");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 FUN_001f9de0(f32);
-extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 FUN_001fa6e0(s32, s32, f32);
 extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
@@ -327,7 +327,7 @@ void FUN_L00_002018c8(void) {
         f32 f;
 
         pulse = FUN_001fa6e0(D_L00_0015F4E4, D_L00_0015F4E8,
-                             FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / ConvertIntegerToFloat(D_L00_0015F4E0) * 6.28318f - 3.14159f) *
+                             FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / convert_integer_to_float(D_L00_0015F4E0) * 6.28318f - 3.14159f) *
                                      0.5f +
                                  0.5f);
         scale = (f32)D_L00_00173040.unk20 * 0.125f;
@@ -413,7 +413,7 @@ void FUN_L00_002018c8(void) {
     case 2:
         FUN_001f6060(0x64, 0xA0, 0xB0, 0x150,
                      FUN_001fa6e0(D_L00_0015F4E4, D_L00_0015F4E8,
-                                  FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / ConvertIntegerToFloat(D_L00_0015F4E0) * 6.28318f -
+                                  FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / convert_integer_to_float(D_L00_0015F4E0) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
                                       0.5f));
@@ -424,7 +424,7 @@ void FUN_L00_002018c8(void) {
         s32 pulse;
 
         pulse = FUN_001fa6e0(D_L00_0015F4E4, D_L00_0015F4E8,
-                                  FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / ConvertIntegerToFloat(D_L00_0015F4E0) * 6.28318f -
+                                  FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / convert_integer_to_float(D_L00_0015F4E0) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
                                       0.5f);

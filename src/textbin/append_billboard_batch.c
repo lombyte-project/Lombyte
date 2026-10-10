@@ -33,7 +33,7 @@ extern char billboard_quad_header[] __asm__("D_001608E0");
 extern u8 camera_position[] __asm__("D_00187080");
 extern BillboardViewContext view_context __asm__("D_0018CD00");
 extern s32 clip_transform __asm__("D_0018CE80");
-extern void FillTransferWords(void *, s32, s32);
+extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern s32 is_vector_outside_clip(Vec4 *) __asm__("func_001F9958");
 extern void fast_vec_sub(Vec4 *, void *, void *) __asm__("func_001F9A28");
@@ -81,7 +81,7 @@ void append_billboard_batch(void) {
         multiply_vector_components(&clip_position, &projected_position,
                                    (char *)&view_context + 0x180);
         if (is_vector_outside_clip(&clip_position) != 0) {
-            FillTransferWords(record, 0, 0x20);
+            fill_transfer_words(record, 0, 0x20);
             continue;
         }
         fast_vec_scale(&projected_position, &projected_position,

@@ -187,7 +187,7 @@ extern u8 D_001E1A00[];
 extern char D_001E76D8[];
 
 extern void DebugPrint(char *fmt, ...);
-extern void FillTransferWords(void *, s32, s32);
+extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
 extern void PackDmaTag(s32 arg0, u64 arg1, u64 arg2);
 extern void update_fog(void) __asm__("func_001F2588");
 extern void reset_draw_globals(void) __asm__("func_001F37E8");
@@ -252,9 +252,9 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     Shrub *o;
 
     p = D_001940D8;
-    FillTransferWords(D_0013F350, 0, 0x2310);
-    FillTransferWords(D_00186F40, 0, 0x3A0);
-    FillTransferWords(D_001AAA40, 0, 0x180);
+    fill_transfer_words(D_0013F350, 0, 0x2310);
+    fill_transfer_words(D_00186F40, 0, 0x3A0);
+    fill_transfer_words(D_001AAA40, 0, 0x180);
     if (D_0015ED80 != 0) {
         if (frame_scale == 1.0f) {
             set_video_timing(1);
@@ -331,14 +331,14 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     size0 = D_00160F5C << 5;
     p += size0;
     if (D_00160F5C != 0) {
-        FillTransferWords(D_00160F50, 0, size0);
+        fill_transfer_words(D_00160F50, 0, size0);
     }
     size1 = D_00160F5C * 0x1C0;
     p = (u8 *)(((u32)p + 0x3F) & ~0x3F);
     D_00160F58 = (ShrubData *)p;
     p += size1;
     if (D_00160F5C != 0) {
-        FillTransferWords(D_00160F58, 0, size1);
+        fill_transfer_words(D_00160F58, 0, size1);
     }
     last = -1;
     D_00160F54 = &D_00160F50[D_00160F5C];
@@ -394,21 +394,21 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     size2 = D_001603D0 << 5;
     p += size2;
     if (D_001603D0 != 0) {
-        FillTransferWords(D_001603D4, 0, size2);
+        fill_transfer_words(D_001603D4, 0, size2);
     }
     p = (u8 *)(((u32)p + 0x3F) & ~0x3F);
     D_001603DC = (TieData *)p;
     size3 = D_001603D0 << 6;
     p += size3;
     if (D_001603D0 != 0) {
-        FillTransferWords(D_001603DC, 0, size3);
+        fill_transfer_words(D_001603DC, 0, size3);
     }
     size4 = D_001603D0 * 0x60;
     D_001603E0 = p;
     p += size4;
     p = (u8 *)(((u32)p + 0x3F) & ~0x3F);
     if (D_001603D0 != 0) {
-        FillTransferWords(D_001603E0, 0, size4);
+        fill_transfer_words(D_001603E0, 0, size4);
     }
     p2 = p + 0x4000;
     lastTie = -1;
@@ -509,7 +509,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     }
 
     D_0015FF18 = (Ent100 *)p;
-    FillTransferWords(p, 0, 0x4000);
+    fill_transfer_words(p, 0, 0x4000);
     p = p2;
     D_0015FF1C = D_0015FF18;
     *((u8 *)D_0015FF18 + 0x20) = 0xFF;

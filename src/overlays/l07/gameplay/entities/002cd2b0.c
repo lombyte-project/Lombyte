@@ -130,14 +130,14 @@ extern float FUN_001f9b80(void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L00_00259bc8(char *m, float t, int a, int b, void *pos, void *vel);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L07_0030e0e0(char *a, char *b, char *c) {
     float v[4];
     float w[4];
     if (*(float *)(a + 0x18) < *(float *)(b + 0x18) + *(float *)(c + 0x10) * 0.3f) {
         float d = FUN_001f9b80(b + 0x10, a + 0x10);
-        if (AbsoluteFloat(d - *(float *)(c + 8)) < 0.3f) {
+        if (absolute_float(d - *(float *)(c + 8)) < 0.3f) {
             FUN_001f9a28(v, a + 0x10, b + 0x10);
             FUN_001f9bf8(w, v, *(float *)(c + 8) - 0.05f);
             FUN_001f9bf8(v, v, 1.0f);
@@ -330,7 +330,7 @@ void FUN_L07_003120d8(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313530), where it is exact; names translated to the US level program. */
 
 extern char D_L07_00180340[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int FUN_001f9770(void *);
 extern int FUN_001fa6e0(int, int, float);
 extern void FUN_L00_0023e838(int);
@@ -349,18 +349,18 @@ void FUN_L07_00312150(char *a) {
     } else if (*(short *)(a + 0x280) != -1) {
         h = (*(short *)(a + 0x286) * 7) / 8;
         if (h < *(short *)(a + 0x284)) {
-            f = ConvertIntegerToFloat(*(short *)(a + 0x284) - h);
-            f /= ConvertIntegerToFloat(*(short *)(a + 0x286) - h);
+            f = convert_integer_to_float(*(short *)(a + 0x284) - h);
+            f /= convert_integer_to_float(*(short *)(a + 0x286) - h);
             c = FUN_001fa6e0(0, *(int *)(a + 0x288), 1.0f - f);
         } else {
-            f = ConvertIntegerToFloat(*(short *)(a + 0x284));
-            f /= ConvertIntegerToFloat(h);
+            f = convert_integer_to_float(*(short *)(a + 0x284));
+            f /= convert_integer_to_float(h);
             c = FUN_001fa6e0(*(int *)(a + 0x288), *(int *)(a + 0x28C), 1.0f - f);
         }
         p = (float *)(D_L07_00180340 + *(short *)(a + 0x280) * 32);
-        p[0] = ConvertIntegerToFloat(c & 0xFF) * 0.0078125f;
-        p[1] = ConvertIntegerToFloat((c >> 8) & 0xFF) * 0.0078125f;
-        p[2] = ConvertIntegerToFloat((c >> 16) & 0xFF) * 0.0078125f;
+        p[0] = convert_integer_to_float(c & 0xFF) * 0.0078125f;
+        p[1] = convert_integer_to_float((c >> 8) & 0xFF) * 0.0078125f;
+        p[2] = convert_integer_to_float((c >> 16) & 0xFF) * 0.0078125f;
     }
 }
 /* steps a hit-effect emitter: orient, spawn a puff, and reseed the timer */
@@ -413,7 +413,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E550[];
 
 #define F(p, o) (*(float *)((p) + (o)))
@@ -481,7 +481,7 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
         if (*(short *)(data + 0xBA) != 0 ||
             (F(data, 0xBC) < 0.0f &&
              FUN_001f9b80((moby + 0x10), &hero.motion.pos) < 2.0f &&
-             AbsoluteFloat(hero.motion.pos.f[2] - F(moby, 0x18)) < 4.0f &&
+             absolute_float(hero.motion.pos.f[2] - F(moby, 0x18)) < 4.0f &&
              F(moby, 0x18) - hero.motion.pos.f[2] > 1.0f)) {
             int r;
             if (*(short *)(data + 0xBA) == 0) {
@@ -504,11 +504,11 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
                 *(int *)(data + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
             }
             F(data, 0xA8) += F(data, 0xAC) * frame_time;
-            if (AbsoluteFloat(F(data, 0xA8)) > AbsoluteFloat(F(data, 0xAC))) {
+            if (absolute_float(F(data, 0xA8)) > absolute_float(F(data, 0xAC))) {
                 F(data, 0xA8) = F(data, 0xAC);
             }
             F(data, 0xA4) = F(data, 0xA4) + F(data, 0xA8);
-            if (0.5f < AbsoluteFloat(F(data, 0xA4) - 0.5f)) {
+            if (0.5f < absolute_float(F(data, 0xA4) - 0.5f)) {
                 int r;
                 if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
                     FUN_L00_00227638();
@@ -531,10 +531,10 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
                 }
                 *(int *)(data + 0xC4) = -1;
             }
-            f20 = ConvertIntegerToFloat(*(int *)path - 1);
+            f20 = convert_integer_to_float(*(int *)path - 1);
             i = func_001FA898_r(f20 * F(data, 0xA4));
-            f20 = ConvertIntegerToFloat(*(int *)path - 1);
-            t = ConvertIntegerToFloat(i);
+            f20 = convert_integer_to_float(*(int *)path - 1);
+            t = convert_integer_to_float(i);
             f20 *= F(data, 0xA4);
             f20 -= t;
             if (i == *(int *)path - 1) {
@@ -572,7 +572,7 @@ extern void FUN_L00_00227638(void);
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E550[];
 
 void FUN_L07_002cdb28(struct Moby *moby) {
@@ -645,7 +645,7 @@ void FUN_L07_002cdb28(struct Moby *moby) {
         if (*(short *)(data + 0xBA) != 0 ||
             (*(float *)(data + 0xBC) < 0.0f &&
              FUN_001f9b80(&moby->pos, &hero.motion.pos) < 2.0f &&
-             AbsoluteFloat(hero.motion.pos.f[2] - moby->pos.z) < 4.0f &&
+             absolute_float(hero.motion.pos.f[2] - moby->pos.z) < 4.0f &&
              moby->pos.z - hero.motion.pos.f[2] > 1.0f)) {
             int r;
             if (*(short *)(data + 0xBA) == 0) {
@@ -668,11 +668,11 @@ void FUN_L07_002cdb28(struct Moby *moby) {
                 *(int *)(data + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
             }
             *(float *)(data + 0xA8) += *(float *)(data + 0xAC) * frame_time;
-            if (AbsoluteFloat(*(float *)(data + 0xA8)) > AbsoluteFloat(*(float *)(data + 0xAC))) {
+            if (absolute_float(*(float *)(data + 0xA8)) > absolute_float(*(float *)(data + 0xAC))) {
                 *(float *)(data + 0xA8) = *(float *)(data + 0xAC);
             }
             *(float *)(data + 0xA4) = *(float *)(data + 0xA4) + *(float *)(data + 0xA8);
-            if (0.5f < AbsoluteFloat(*(float *)(data + 0xA4) - 0.5f)) {
+            if (0.5f < absolute_float(*(float *)(data + 0xA4) - 0.5f)) {
                 int r;
                 if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
                     FUN_L00_00227638();
@@ -695,10 +695,10 @@ void FUN_L07_002cdb28(struct Moby *moby) {
                 }
                 *(int *)(data + 0xC4) = -1;
             }
-            f20 = ConvertIntegerToFloat(*(int *)path - 1);
+            f20 = convert_integer_to_float(*(int *)path - 1);
             i = func_001FA898_r(f20 * *(float *)(data + 0xA4));
-            f20 = ConvertIntegerToFloat(*(int *)path - 1);
-            t = ConvertIntegerToFloat(i);
+            f20 = convert_integer_to_float(*(int *)path - 1);
+            t = convert_integer_to_float(i);
             f20 *= *(float *)(data + 0xA4);
             f20 -= t;
             if (i == *(int *)path - 1) {
@@ -1239,7 +1239,7 @@ typedef struct {
 } Ent;
 
 extern Ent D_L07_001DCE40[];
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L07_0030cd48(int arg) {
     int i;
@@ -1257,26 +1257,26 @@ void FUN_L07_0030cd48(int arg) {
             Ent *e = &t[arg];
             float x = e->x - t[i].x;
             float y = e->y - t[i].y;
-            if (AbsoluteFloat(x) < 0.1f) {
-                if (AbsoluteFloat(y - 16.0f) < 0.1f)
+            if (absolute_float(x) < 0.1f) {
+                if (absolute_float(y - 16.0f) < 0.1f)
                     e->n[0] = i;
-                if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                if (absolute_float(y + 16.0f) < 0.1f)
                     e->n[2] = i;
-            } else if (AbsoluteFloat(y) < 0.1f) {
-                if (AbsoluteFloat(x - 16.0f) < 0.1f)
+            } else if (absolute_float(y) < 0.1f) {
+                if (absolute_float(x - 16.0f) < 0.1f)
                     e->n[1] = i;
-                if (AbsoluteFloat(x + 16.0f) < 0.1f)
+                if (absolute_float(x + 16.0f) < 0.1f)
                     e->n[3] = i;
             } else {
-                if (AbsoluteFloat(x + 16.0f) < 0.1f) {
-                    if (AbsoluteFloat(y - 16.0f) < 0.1f)
+                if (absolute_float(x + 16.0f) < 0.1f) {
+                    if (absolute_float(y - 16.0f) < 0.1f)
                         e->n[5] = i;
-                    if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                    if (absolute_float(y + 16.0f) < 0.1f)
                         e->n[7] = i;
-                } else if (AbsoluteFloat(x - 16.0f) < 0.1f) {
-                    if (AbsoluteFloat(y - 16.0f) < 0.1f)
+                } else if (absolute_float(x - 16.0f) < 0.1f) {
+                    if (absolute_float(y - 16.0f) < 0.1f)
                         e->n[4] = i;
-                    if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                    if (absolute_float(y + 16.0f) < 0.1f)
                         e->n[6] = i;
                 }
             }
@@ -1781,11 +1781,11 @@ void FUN_L07_00311bc8(char *m) {
         break;
     case 2:
         *(float *)(m + 0x40) =
-            fast_sin(FUN_L00_0025e310(ConvertIntegerToFloat(*(short *)(d + 0xA0)) * 0.75f)) *
+            fast_sin(FUN_L00_0025e310(convert_integer_to_float(*(short *)(d + 0xA0)) * 0.75f)) *
             DEG_TO_RAD;
         {
             float c =
-                fast_cos(FUN_L00_0025e310(ConvertIntegerToFloat(*(short *)(d + 0xA0)) * 0.89f));
+                fast_cos(FUN_L00_0025e310(convert_integer_to_float(*(short *)(d + 0xA0)) * 0.89f));
             float e = frame_scale;
             *(float *)(m + 0x44) = c * DEG_TO_RAD;
             *(float *)(m + 0x18) -= e * 0.002f;

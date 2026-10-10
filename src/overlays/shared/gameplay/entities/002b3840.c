@@ -217,7 +217,7 @@ void FUN_L05_002f8080(char *m) {
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern short D_L05_001618C0 __attribute__((sda));
 extern short D_L05_001618C4 __attribute__((sda));
 extern short D_L05_001618C8 __attribute__((sda));
@@ -248,11 +248,11 @@ void FUN_L05_002f81b8(void *mv) {
         s = fast_add_rotations(*(float *)(data + 0x18), frame_time * 6.2831855f);
         *(float *)(data + 0x18) = s;
         if (((unsigned char *)moby)[0xBC] == 1) {
-            r = FastTweenColor(*(int *)&D_L05_001618C4, *(int *)&D_L05_001618C8, (fast_sin(s) + 1.0f) * 0.5f);
+            r = fast_tween_color(*(int *)&D_L05_001618C4, *(int *)&D_L05_001618C8, (fast_sin(s) + 1.0f) * 0.5f);
         } else {
-            r = FastTweenColor(*(int *)&D_L05_001618CC, *(int *)&D_L05_001618D0, (fast_sin(s) + 1.0f) * 0.5f);
+            r = fast_tween_color(*(int *)&D_L05_001618CC, *(int *)&D_L05_001618D0, (fast_sin(s) + 1.0f) * 0.5f);
         }
-        *(int *)(moby + 0x90) = FastTweenColor(*(int *)&D_L05_001618C0, r, *(float *)(data + 0x1C));
+        *(int *)(moby + 0x90) = fast_tween_color(*(int *)&D_L05_001618C0, r, *(float *)(data + 0x1C));
     } else {
         *(int *)(moby + 0x90) = *(int *)&D_L05_001618C0;
     }
@@ -267,7 +267,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f87a8.s", FUN_L05_002f87a8);
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0FC8), where it is exact; names translated to the US level program. */
 
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float vector_length_xyz(void *);
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
@@ -311,8 +311,8 @@ void FUN_L05_00307010(char *moby) {
                     FUN_001f9fc8(m);
                     FUN_001fa2d8(m, l1 + 0xC0);
                     FUN_001f9d20(v, v, m);
-                    if (AbsoluteFloat(v[0]) < 0.5f && AbsoluteFloat(v[1]) < 2.5f &&
-                        AbsoluteFloat(v[2]) < 2.5f) {
+                    if (absolute_float(v[0]) < 0.5f && absolute_float(v[1]) < 2.5f &&
+                        absolute_float(v[2]) < 2.5f) {
                         *(unsigned short *)(data + 0x25A) += scale_game_frames(0x78);
                         *(int *)(data + 0x264) = scale_game_frames(0x3C);
                     }
@@ -331,8 +331,8 @@ void FUN_L05_00307010(char *moby) {
                     FUN_001f9fc8(m);
                     FUN_001fa2d8(m, l2 + 0xC0);
                     FUN_001f9d20(v, v, m);
-                    if (AbsoluteFloat(v[0]) < 2.8f && AbsoluteFloat(v[1]) < 1.4f &&
-                        AbsoluteFloat(v[2]) < 0.5f) {
+                    if (absolute_float(v[0]) < 2.8f && absolute_float(v[1]) < 1.4f &&
+                        absolute_float(v[2]) < 0.5f) {
                         *(unsigned short *)(data + 0x25A) += scale_game_frames(0x78);
                         *(int *)(data + 0x264) = scale_game_frames(0x3C);
                     }
@@ -448,7 +448,7 @@ void FUN_L05_00318648(char *m, int b, void *v1, void *v2, int a) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_00319C08), where it is exact; names translated to the US level program. */
 
 extern char D_L05_00174240[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED70;
@@ -503,7 +503,7 @@ void FUN_L05_003186f8(char *moby)
             add_vector_xyz(buf + 0x50, buf + 0x50, moby + 0x10);
         }
 
-        if (FUN_L00_001f0d60(ConvertIntegerToFloat(*(int *)(data + 0xC)) * 0.0009765625f, buf + 0x50, 0, moby)) {
+        if (FUN_L00_001f0d60(convert_integer_to_float(*(int *)(data + 0xC)) * 0.0009765625f, buf + 0x50, 0, moby)) {
             hs = D_L05_00174240;
             if (*(int *)(hs + 0x18) == 0 || *(int *)(hs + 0x18) != *(int *)(data + 8)) {
                 *(int *)data = 0;

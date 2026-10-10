@@ -137,8 +137,8 @@ extern int D_L14_001620C4 __attribute__((sda));
 extern int D_L14_001620F0 __attribute__((sda));
 extern int D_L14_001620F4 __attribute__((sda));
 extern int D_L14_001620F8 __attribute__((sda));
-extern float ConvertIntegerToFloat(int);
-extern int FastTweenColor(int, int, float);
+extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L14_00301de8(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -176,13 +176,13 @@ void FUN_L14_00301de8(char *m) {
         } while (i < 4);
     }
     if (*(s16 *)(d + 0x12) > D_L14_001620C4) {
-        t = ConvertIntegerToFloat(*(s16 *)(d + 0x12) - D_L14_001620C4) /
-            ConvertIntegerToFloat(*(int *)(d + 0x620) - D_L14_001620C4);
-        *(int *)(d + 0x14) = FastTweenColor(D_L14_001620F4, D_L14_001620F0, t);
+        t = convert_integer_to_float(*(s16 *)(d + 0x12) - D_L14_001620C4) /
+            convert_integer_to_float(*(int *)(d + 0x620) - D_L14_001620C4);
+        *(int *)(d + 0x14) = fast_tween_color(D_L14_001620F4, D_L14_001620F0, t);
     } else if (*(s16 *)(d + 0x12) > D_L14_001620C8) {
-        t = ConvertIntegerToFloat(*(s16 *)(d + 0x12) - D_L14_001620C8) /
-            ConvertIntegerToFloat(D_L14_001620C4 - D_L14_001620C8);
-        *(int *)(d + 0x14) = FastTweenColor(D_L14_001620F8, D_L14_001620F4, t);
+        t = convert_integer_to_float(*(s16 *)(d + 0x12) - D_L14_001620C8) /
+            convert_integer_to_float(D_L14_001620C4 - D_L14_001620C8);
+        *(int *)(d + 0x14) = fast_tween_color(D_L14_001620F8, D_L14_001620F4, t);
     } else {
         *(int *)(d + 0x14) = 0;
     }

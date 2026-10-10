@@ -452,7 +452,7 @@ extern int FUN_L00_0025a478(void *, void *, void *, int, void *, void *, int, in
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void FUN_L00_0025d538(void *, void *);
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L15_002c6900(struct Moby *m) {
     int st;
@@ -479,11 +479,11 @@ void FUN_L15_002c6900(struct Moby *m) {
                 b = fast_subtract_rotations(a, m->rot.z);
                 p = fast_cos(b) * 0.08726646f;
                 q = fast_sin(b) * -0.34906584f;
-                if (AbsoluteFloat(m->rot.x) < AbsoluteFloat(q)) {
+                if (absolute_float(m->rot.x) < absolute_float(q)) {
                     m->rot.x = q;
                     *(float *)(d + 0x174) = 0.0f;
                 }
-                if (AbsoluteFloat(m->rot.y) < AbsoluteFloat(p)) {
+                if (absolute_float(m->rot.y) < absolute_float(p)) {
                     m->rot.y = p;
                     *(float *)(d + 0x178) = 0.0f;
                 }
@@ -678,7 +678,7 @@ char *FUN_L10_002cc1b8(float scale, void *vel, void *pos, int a, int b, int c);
 extern ULevelState D_L15_001BABD0;
 extern ULevelState D_L15_001BB830;
 extern UPath *D_L15_001B0AB0[];
-extern float ConvertIntegerToFloat(int);
+extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
@@ -734,7 +734,7 @@ extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 extern void FUN_L03_00250ae8(void *, void *, int);
 extern void FUN_L15_002d0fa8(void *);
-extern void NoOpMainCallback(void *, void *);
+extern void no_op_main_callback(void *, void *) __asm__("func_001E93E8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void normalize_vector_xyz(void *, void *, float);
@@ -853,11 +853,11 @@ void FUN_L15_002cf3a8(UMoby *m) {
         float dist;
         float len;
         FUN_L00_0025df68(path, &m->pos, &v20, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
-        dist = ConvertIntegerToFloat(seg) * path->pt[0].f[3];
+        dist = convert_integer_to_float(seg) * path->pt[0].f[3];
         dist += frac;
         dist += 2.0f;
         seg = func_001FA898_r(dist / path->pt[0].f[3]);
-        dist -= ConvertIntegerToFloat(seg) * path->pt[0].f[3];
+        dist -= convert_integer_to_float(seg) * path->pt[0].f[3];
         dist /= path->pt[0].f[3];
         frac = dist;
         if (seg >= path->n - 1) {
@@ -1122,7 +1122,7 @@ void FUN_L15_002cf3a8(UMoby *m) {
                 FUN_L00_001f2868(&v60, 9, m, &v10, 2.5f);
                 FUN_001efa68(&v50, &v60, 0, m, &v10);
                 FUN_L00_00259d08(&v50, &v60, &v50, &d->v1A0, m, &v10, 5);
-                NoOpMainCallback(&v50, &v60);
+                no_op_main_callback(&v50, &v60);
                 qcopy(&d->v1A0, &v60);
             }
         }

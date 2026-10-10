@@ -242,7 +242,7 @@ extern char *D_L10_0015FFD8_p __asm__("D_L10_0015FFD8");
 extern void FUN_L00_002d6bf0_p(void *) __asm__("FUN_L00_002d6bf0");
 extern void FUN_L10_00298940_p(void *) __asm__("FUN_L10_00298940");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float AbsoluteFloat(float) __asm__("FUN_001f99c0");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern void start_scene_p(int) __asm__("FUN_L00_00298840");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_00260860_p(int, int) __asm__("FUN_L00_00260860");
@@ -267,7 +267,7 @@ void FUN_L10_00298668(struct Moby *m) {
         FUN_L10_00298940_p(m);
         if (vector_distance(&m->pos, &hero.motion.pos) < 3.0f) {
             struct Hero *h = &hero;
-            if (AbsoluteFloat(m->pos.z - h->motion.pos.f[2]) < 2.0f && h->health.hp != 0) {
+            if (absolute_float(m->pos.z - h->motion.pos.f[2]) < 2.0f && h->health.hp != 0) {
                 m->flags |= 0x41;
                 start_scene_p(2);
                 m->state = 2;
@@ -749,8 +749,8 @@ int FUN_L10_002d9000(struct Moby *m, float *p) {
     subtract_vector_xyz(t60, a, &m->pos);
     *(OvlQuad *)t50 = *(OvlQuad *)t60;
     FUN_001f9d20(t50, t50, t10);
-    if (AbsoluteFloat(t50[0]) < *(float *)&D_L10_00161C10_d) {
-        return AbsoluteFloat(t50[1]) < *(float *)&D_L10_00161C0C_d;
+    if (absolute_float(t50[0]) < *(float *)&D_L10_00161C10_d) {
+        return absolute_float(t50[1]) < *(float *)&D_L10_00161C0C_d;
     }
     return 0;
 }
@@ -1039,7 +1039,7 @@ unsigned char *FUN_L10_002dd270(int a, void *pos, int b, float x, float y, float
 
 typedef struct { int owner; float phase,speed,size; int source,timer; float growth; } EffectData;
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_0025a9f8(void *,void *,void *,int,int,int,int,int,float,float,float);
@@ -1057,11 +1057,11 @@ void FUN_L10_002dd3d8(char *moby) {
  *(float *)(moby+0x48)=random_angle_radians();
  if(fast_dec_timer((int *)(d+0x14))) {delete_moby(moby);return;}
  if(*(int *)(d+0x14)<truncate_float_to_s32(10.0f/(frame_time*5.0f))/2) {
-  float numerator=ConvertIntegerToFloat(*(int *)(d+0x14));
-  *(float *)(moby+0x2C)=*(float *)(*(char **)(moby+0x24)+0x24)*numerator/ConvertIntegerToFloat(truncate_float_to_s32(10.0f/(frame_time*5.0f))/2)*0.5f;
+  float numerator=convert_integer_to_float(*(int *)(d+0x14));
+  *(float *)(moby+0x2C)=*(float *)(*(char **)(moby+0x24)+0x24)*numerator/convert_integer_to_float(truncate_float_to_s32(10.0f/(frame_time*5.0f))/2)*0.5f;
  } else if((truncate_float_to_s32(10.0f/(frame_time*5.0f))/4)*3<*(int *)(d+0x14)) {
-  float numerator=ConvertIntegerToFloat(truncate_float_to_s32(10.0f/(frame_time*5.0f))-*(int *)(d+0x14));
-  *(float *)(moby+0x2C)=*(float *)(*(char **)(moby+0x24)+0x24)*numerator/ConvertIntegerToFloat(truncate_float_to_s32(10.0f/(frame_time*5.0f))/4)*0.5f;
+  float numerator=convert_integer_to_float(truncate_float_to_s32(10.0f/(frame_time*5.0f))-*(int *)(d+0x14));
+  *(float *)(moby+0x2C)=*(float *)(*(char **)(moby+0x24)+0x24)*numerator/convert_integer_to_float(truncate_float_to_s32(10.0f/(frame_time*5.0f))/4)*0.5f;
  }
  if(*(float *)(*(char **)(moby+0x24)+0x24)*0.25f<*(float *)(moby+0x2C)) {
   int count=FUN_L00_001f2868(moby+0x10,0.15f,16,*(void **)(d+0x10),0);

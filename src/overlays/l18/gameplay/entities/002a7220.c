@@ -452,7 +452,7 @@ typedef struct {
 
 extern char *D_L18_00174858;
 extern char D_001413D4[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float FUN_001f96b0(float);
 extern int D_L18_0015F5C4;
 extern int FUN_001efa68(void *, void *, int, void *, void *);
@@ -482,13 +482,13 @@ void FUN_L18_002d5050(struct Moby *moby) {
         mark_moby_for_removal(moby);
     } else if (moby->state == 0) {
         qcopy(a30, &moby->pos);
-        s = ConvertIntegerToFloat(d->c);
-        s = s / ConvertIntegerToFloat(d->lim);
+        s = convert_integer_to_float(d->c);
+        s = s / convert_integer_to_float(d->lim);
         if (1.0f < s) {
             s = 1.0f;
         }
         FUN_001f9a28(v0, (char *)d + 0x10, &moby->pos);
-        FUN_001f9a68(v0, v0, 1.0f / ConvertIntegerToFloat(d->end - d->c));
+        FUN_001f9a68(v0, v0, 1.0f / convert_integer_to_float(d->end - d->c));
         clear_u64_value(a20);
         a20[2] = FUN_001f9e90(v0[0], v0[1]);
         FUN_001fa030(a40, a20);
@@ -650,7 +650,7 @@ extern float D_L18_001D3630_d5[4][4] __asm__("D_L18_001D3630");
 extern float D_L18_001D3670_d5[8] __asm__("D_L18_001D3670");
 extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern unsigned int FastTweenColor(float, int, int) __asm__("FUN_001fa6e0");
+extern unsigned int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern unsigned long long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
@@ -659,7 +659,7 @@ void FUN_L18_002d5768(struct Moby *m) {
     char *d = (char *)m->pvars;
     unsigned int col;
     int i;
-    col = FastTweenColor((fast_sin(fast_normalize_angle((*(int *)(d + 0x2C) & 0xF) * 0.0625f * 6.28318f)) + 1.0f) * 0.5f,
+    col = fast_tween_color((fast_sin(fast_normalize_angle((*(int *)(d + 0x2C) & 0xF) * 0.0625f * 6.28318f)) + 1.0f) * 0.5f,
                           D_L18_00161980_d5, D_L18_00161984_d5);
     pk.b = get_effect_texture(0xD);
     pk.d = (unsigned long long)D_L18_00161970_d5 | ((unsigned long long)D_L18_00161974_d5 << 2) |
@@ -1627,7 +1627,7 @@ void FUN_L18_002dbe80(struct Moby *moby) {
     FUN_001f9bf8(v, v, frame_time * 4.0f);
     v[2] = frame_time * 4.0f;
     FUN_L00_00259888(hit, (int)moby, 0x10001, v, 3.0f);
-    step = 1.0f / ConvertIntegerToFloat(0x40) * 6.28318f;
+    step = 1.0f / convert_integer_to_float(0x40) * 6.28318f;
     p = -3.14159f;
     q = FUN_001fa580(p, step);
     for (i = 0x3F; i >= 0; i--) {
@@ -2170,7 +2170,7 @@ void FUN_L18_002eaea0(void *moby) {
         float a;
         float b;
         f21 = *(float *)&D_L18_00162000
-              + (*(float *)&D_L18_00162004 - *(float *)&D_L18_00162000) * (ConvertIntegerToFloat(i) * 0.05f);
+              + (*(float *)&D_L18_00162004 - *(float *)&D_L18_00162000) * (convert_integer_to_float(i) * 0.05f);
         f21 = f21 * fast_sin_c(FUN_L00_0025e310(*(float *)&D_L18_00162008 + (float)i * *(float *)&D_L18_00161FFC));
         f21 = f21 + FUN_L00_00257c48(*(float *)&D_L18_00162040, *(float *)&D_L18_00162044);
         D_L18_001D9D00[0][i].f[2] = D_L18_001D9D00[0][i].f[2] - D_L18_001D9F80[i];
@@ -2199,7 +2199,7 @@ void FUN_L18_002eaea0(void *moby) {
                 scale = len;
             } else if (i >= 16) {
                 w = 0.5f;
-                scale = len / ConvertIntegerToFloat(19 - i);
+                scale = len / convert_integer_to_float(19 - i);
             } else {
                 w = 0.1f;
             }
@@ -2285,8 +2285,8 @@ void FUN_L18_002eaea0(void *moby) {
                 } else {
                     x = x - y;
                 }
-                fr = ConvertIntegerToFloat(x);
-                fr = fr / ConvertIntegerToFloat(scale_game_frames_alt(15));
+                fr = convert_integer_to_float(x);
+                fr = fr / convert_integer_to_float(scale_game_frames_alt(15));
                 D_L18_001620C0[k] = func_001FA898_r((1.0f - fr) * 32.0f);
             }
         }

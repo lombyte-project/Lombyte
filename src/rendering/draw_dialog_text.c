@@ -73,7 +73,7 @@ extern void font_print_window(struct TextRegion *, s64, void *, s32, s32, u8 *) 
 extern void font_print_window_regular(struct TextRegion *, s32, char *, s32) __asm__("func_001F7580");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 func_001FA6E0(s32, s32, f32);
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
@@ -328,7 +328,7 @@ void draw_dialog_text(void) {
         f32 f;
 
         pulse = func_001FA6E0(D_0015F524, D_0015F528,
-                             fast_sin((f32)(D_0015F438 % D_0015F520) / ConvertIntegerToFloat(D_0015F520) * 6.28318f - 3.14159f) *
+                             fast_sin((f32)(D_0015F438 % D_0015F520) / convert_integer_to_float(D_0015F520) * 6.28318f - 3.14159f) *
                                      0.5f +
                                  0.5f);
         scale = (f32)D_00193300.unk20 * 0.125f;
@@ -414,7 +414,7 @@ void draw_dialog_text(void) {
     case 2:
         draw_outlined_rect(0x64, 0xA0, 0xB0, 0x150,
                      func_001FA6E0(D_0015F524, D_0015F528,
-                                  fast_sin((f32)(D_0015F438 % D_0015F520) / ConvertIntegerToFloat(D_0015F520) * 6.28318f -
+                                  fast_sin((f32)(D_0015F438 % D_0015F520) / convert_integer_to_float(D_0015F520) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
                                       0.5f));
@@ -425,7 +425,7 @@ void draw_dialog_text(void) {
         s32 pulse;
 
         pulse = func_001FA6E0(D_0015F524, D_0015F528,
-                                  fast_sin((f32)(D_0015F438 % D_0015F520) / ConvertIntegerToFloat(D_0015F520) * 6.28318f -
+                                  fast_sin((f32)(D_0015F438 % D_0015F520) / convert_integer_to_float(D_0015F520) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
                                       0.5f);

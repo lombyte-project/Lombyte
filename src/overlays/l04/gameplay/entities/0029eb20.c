@@ -1310,7 +1310,7 @@ extern G_35F0 D_L04_00173FC0;
 extern I4_35F0 D_L04_001618A0;
 extern I4_35F0 D_L04_00161890;
 extern char *FUN_L00_0025a420(void *, int, int);
-extern float ConvertIntegerToFloat(int);
+extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float D_L04_00166F40[4];
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b48(void *, void *);
@@ -1843,12 +1843,12 @@ void FUN_L04_002c2270(M_35F0 *moby) {
                     q += 6.2831855f;
                 }
                 if (fast_difference_between_rotations(
-                        wrap_angle(wrap_angle(ConvertIntegerToFloat(data->f14C) * 1.5707964f)),
+                        wrap_angle(wrap_angle(convert_integer_to_float(data->f14C) * 1.5707964f)),
                         rel) > 1.7453293f) {
                     data->f14C = truncate_float_to_s32(q * 1.999f / 3.1415927f);
                     anim = tbl.v[data->f14C];
                 }
-                dir = wrap_angle(ConvertIntegerToFloat(data->f14C) * 1.5707964f);
+                dir = wrap_angle(convert_integer_to_float(data->f14C) * 1.5707964f);
                 v[0] = fast_cos(fast_add_rotations(moby->rot, dir)) * (frame_time * 3.0f);
                 v[1] = fast_sin(fast_add_rotations(moby->rot, dir)) * (frame_time * 3.0f);
                 v[2] = 0.0f;
@@ -1958,7 +1958,7 @@ typedef struct {
 
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern f32 FUN_L00_00257c48(f32, f32);
 extern int FUN_L00_00257b90(int, int);
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -1992,7 +1992,7 @@ void FUN_L04_002c41e0(void *owner, void *from, void *to, int count, float a, flo
     vel.f[3] = 1.0f;
     vel.f[2] = 0.01f;
     for (i = 0; i < count; i++) {
-        scale_vector_xyz(&at, &step, ConvertIntegerToFloat(i));
+        scale_vector_xyz(&at, &step, convert_integer_to_float(i));
         add_vector_xyz(&at, from, &at);
         vel.f[0] = FUN_L00_00257c48(0.0f, 0.005f);
         vel.f[1] = FUN_L00_00257c48(0.0f, 0.005f);
@@ -2061,7 +2061,7 @@ extern char *D_L04_00173FD8 __attribute__((section(".data")));
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char D_L04_00166E00[];
 extern char D_L04_001DBC80[];
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L04_00166F40[4];
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b48(void *, void *);
@@ -2365,7 +2365,7 @@ void FUN_L04_002c4850(struct Moby *moby) {
             }
         }
         if (dist < 14.0f && dist >= 2.5f &&
-            AbsoluteFloat(moby->pos.z - st.tgt[2]) < 8.0f) {
+            absolute_float(moby->pos.z - st.tgt[2]) < 8.0f) {
             if (*(short *)(data + 0xF2) == 0) {
                 *(OvlQuad *)st.w.p.v90 = 0;
                 st.w.p.v90[2] = 0.5f;
@@ -2522,7 +2522,7 @@ void FUN_L04_002c4850(struct Moby *moby) {
             break;
         }
         if (*(short *)(data + 0xF2) == 0 && dist < 14.0f &&
-            AbsoluteFloat(moby->pos.z - st.tgt[2]) < 4.0f) {
+            absolute_float(moby->pos.z - st.tgt[2]) < 4.0f) {
             char *g = D_L04_00166E00;
             if (fast_difference_between_rotations(
                     *(float *)(g + 0x158),
@@ -2589,7 +2589,7 @@ void FUN_L04_002c4850(struct Moby *moby) {
                          frame_time * 5.585053443908691f);
     }
         if (moby->seq == moby->prev_seq && alive >= 12.0f &&
-            alive < 13.0f && AbsoluteFloat(moby->pos.z - st.tgt[2]) < 2.0f &&
+            alive < 13.0f && absolute_float(moby->pos.z - st.tgt[2]) < 2.0f &&
             FUN_001f9b80(pos, st.v50) < 1.0f &&
             fast_difference_between_rotations(FUN_001f9e90(st.v50[0] - moby->pos.x,
                                                            st.v50[1] - moby->pos.y),

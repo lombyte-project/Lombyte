@@ -744,11 +744,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00319928.s", FUN_L01_00319928);
 /* reverb box sound update: starts or stops the sound as the listener enters or leaves the box */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0031AD00.c: func_L01_0031B2F0), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void FUN_L01_002a1a90(int a, int b, int c, int d, int e);
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L01_00319f18(char *moby) {
@@ -758,9 +758,9 @@ void FUN_L01_00319f18(char *moby) {
     subtract_vector_xyz(a, &hero.motion.pos, moby + 0x40);
     a[3] = 0;
     transform_vector_by_basis(b, a, moby + 0x50);
-    if (AbsoluteFloat(b[0]) <= 1.0f && AbsoluteFloat(b[1]) <= 1.0f && AbsoluteFloat(b[2]) <= 1.0f) {
+    if (absolute_float(b[0]) <= 1.0f && absolute_float(b[1]) <= 1.0f && absolute_float(b[2]) <= 1.0f) {
         float t = (b[0] + 1.0f) * 0.5f;
-        int v = func_001FA898_r(ConvertIntegerToFloat(*(int *)(data + 4)) * t);
+        int v = func_001FA898_r(convert_integer_to_float(*(int *)(data + 4)) * t);
         int w = *(int *)(data + 4);
         if (!(w < v))
             w = v;
@@ -807,7 +807,7 @@ void FUN_L01_0031a078(int a0) {
 /* sound instance update: fade/stop test against a listener distance */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0031AD00.c: func_L01_0031B500), where it is exact; names translated to the US level program. */
 
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern void FUN_L01_0027a248(int, int);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void transform_vector_by_basis(void *, void *, void *);
@@ -819,8 +819,8 @@ void FUN_L01_0031a128(int *moby) {
         subtract_vector_xyz(v, &hero.motion.pos, (char *)moby + 0x40);
         v[3] = 0;
         transform_vector_by_basis(v + 4, v, (char *)moby + 0x50);
-        if (AbsoluteFloat(v[4]) <= 1.0f && AbsoluteFloat(v[5]) <= 1.0f &&
-            AbsoluteFloat(v[6]) <= 1.0f) {
+        if (absolute_float(v[4]) <= 1.0f && absolute_float(v[5]) <= 1.0f &&
+            absolute_float(v[6]) <= 1.0f) {
             p[2] = 1;
             return;
         }

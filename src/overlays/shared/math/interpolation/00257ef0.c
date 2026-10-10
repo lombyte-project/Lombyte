@@ -648,13 +648,13 @@ int FUN_L00_00259430(int *p, int b) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A4A0), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 float FUN_L00_00259468(float *a, float *b, int *out, float f) {
     int n = truncate_float_to_s32(b[2] / f);
-    float s = ConvertIntegerToFloat(n);
-    float r = a[2] + b[2] * s - ConvertIntegerToFloat((n * n + n) >> 1) * f;
+    float s = convert_integer_to_float(n);
+    float r = a[2] + b[2] * s - convert_integer_to_float((n * n + n) >> 1) * f;
     if (out) {
         *out = n;
     }
@@ -666,14 +666,14 @@ float FUN_L00_00259468(float *a, float *b, int *out, float f) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A540), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
 
 void FUN_L00_00259508(void *a, void *b, void *c, int d, float f) {
     float t[4];
-    FUN_001f9a68(t, c, ConvertIntegerToFloat(d));
-    t[2] -= ConvertIntegerToFloat((d * d + d) >> 1) * f;
+    FUN_001f9a68(t, c, convert_integer_to_float(d));
+    t[2] -= convert_integer_to_float((d * d + d) >> 1) * f;
     FUN_001f9a10(a, b, t);
 }
 float FUN_001f99c0(float);

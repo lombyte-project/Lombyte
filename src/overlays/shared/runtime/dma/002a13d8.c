@@ -150,7 +150,7 @@ typedef struct WalkData {
 } WalkData;
 
 extern char D_L00_001611E0[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
@@ -884,14 +884,14 @@ void FUN_L00_002a1670(WalkMoby *m, WalkData *d, int flags, float speed, float an
         if (m->b52 == d->anim[12]->id) {
             float t = FUN_L00_002a15c8_c((char *)m, (char *)d);
             if (t > 1.0f) {
-                float base = ConvertIntegerToFloat(m->b50) + m->f54;
+                float base = convert_integer_to_float(m->b50) + m->f54;
                 t = d->anim[12]->f44 + 2.0f - t * 0.5f - d->anim[12]->f0C;
                 if (t < base + 0.1f) {
                     t = base + 0.1f;
                 }
                 m->f58 = frame_scale_inv * (t - base);
             } else {
-                float base = ConvertIntegerToFloat(m->b50) + m->f54;
+                float base = convert_integer_to_float(m->b50) + m->f54;
                 t = d->anim[12]->f44 - d->anim[12]->f0C;
                 if (t < base + 0.1f) {
                     t = base + 0.1f;
@@ -911,14 +911,14 @@ void FUN_L00_002a1670(WalkMoby *m, WalkData *d, int flags, float speed, float an
         if (m->b52 == d->anim[10]->id) {
             float t = FUN_L00_002a15c8_c((char *)m, (char *)d);
             if (t > 1.0f) {
-                float base = ConvertIntegerToFloat(m->b50) + m->f54;
+                float base = convert_integer_to_float(m->b50) + m->f54;
                 t = d->anim[10]->f44 + 2.0f - t * 0.5f - d->anim[10]->f0C;
                 if (t < base + 0.1f) {
                     t = base + 0.1f;
                 }
                 m->f58 = frame_scale_inv * (t - base);
             } else {
-                float base = ConvertIntegerToFloat(m->b50) + m->f54;
+                float base = convert_integer_to_float(m->b50) + m->f54;
                 t = d->anim[10]->f44 - d->anim[10]->f0C;
                 if (t < base + 0.1f) {
                     t = base + 0.1f;

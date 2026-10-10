@@ -142,7 +142,7 @@ int FUN_L00_00205110(int a) {
 }
 #include "qcopy.h"
 extern u8 D_001413F4 __attribute__((section(".data")));
-f32 AbsoluteFloat(f32) __asm__("FUN_001f99c0");
+f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void detach_manipulator(s32, void *) __asm__("FUN_0020cb88");
 void attach_manipulator(s32, s32, void *) __asm__("FUN_0020cb10");
@@ -167,10 +167,10 @@ void FUN_L00_00205168(struct HeroEase *e) {
     }
     if (e->rot_target.f[0] == 0.0f && e->rot_target.f[1] == 0.0f && e->rot_target.f[2] == 0.0f &&
         e->pos_target.f[0] == 0.0f && e->pos_target.f[1] == 0.0f && e->pos_target.f[2] == 0.0f &&
-        AbsoluteFloat(e->pos.f[0]) < 0.003f && AbsoluteFloat(e->pos.f[1]) < 0.003f &&
-        AbsoluteFloat(e->pos.f[2]) < 0.003f && e->scale == 1.0f &&
-        AbsoluteFloat(e->rot.f[0]) < 0.005f && AbsoluteFloat(e->rot.f[1]) < 0.005f &&
-        AbsoluteFloat(e->rot.f[2]) < 0.005f) {
+        absolute_float(e->pos.f[0]) < 0.003f && absolute_float(e->pos.f[1]) < 0.003f &&
+        absolute_float(e->pos.f[2]) < 0.003f && e->scale == 1.0f &&
+        absolute_float(e->rot.f[0]) < 0.005f && absolute_float(e->rot.f[1]) < 0.005f &&
+        absolute_float(e->rot.f[2]) < 0.005f) {
         if (e->attached)
             detach_manipulator(moby, e);
     } else {
@@ -622,7 +622,7 @@ typedef struct {
 
 extern char D_L00_001801D0[] __attribute__((section(".data")));
 extern void FUN_0020d510(void *, void *);
-extern void PackRenderCommandFields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
+extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
 extern void FUN_L00_002503c0(void *, void *);
 
 void FUN_L00_00207330(void *a, char *m) {
@@ -631,7 +631,7 @@ void FUN_L00_00207330(void *a, char *m) {
     float s;
     unsigned char *q = m + 0x38;
     int c = q[4] + q[5] + q[6];
-    PackRenderCommandFields(a, c * 4 / 10 + ((c * 3 / 10) << 8), 12, 12, 0);
+    pack_render_command_fields(a, c * 4 / 10 + ((c * 3 / 10) << 8), 12, 12, 0);
     FUN_0020d510(m, D_L00_001801D0);
     FUN_L00_002503c0(m, &v);
     f = (float *)(D_L00_001801D0 - 0x310);
@@ -649,7 +649,7 @@ extern unsigned char D_17C380_207430[] __asm__("D_L00_0017C380") __attribute__((
 extern unsigned char D_17C3C0_207430[] __asm__("D_L00_0017C3C0") __attribute__((section(".data")));
 extern unsigned char D_17C400_207430[] __asm__("D_L00_0017C400") __attribute__((section(".data")));
 extern int fr_207430(int) __asm__("FUN_001f96f8");
-extern float ConvertIntegerToFloat(int) __asm__("FUN_001fa6c0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int f2i_207430(float) __asm__("FUN_001fa6d0");
 extern void f4f7c8_207430(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern float fabs_207430(float) __asm__("FUN_001f99c0");
@@ -667,7 +667,7 @@ void FUN_L00_00207430(char *o) {
 
     *(unsigned short *)(o + 0x34) |= 0x10;
     k = fr_207430(100);
-    f = ConvertIntegerToFloat(k);
+    f = convert_integer_to_float(k);
     c = fast_sin((float)(D_15F5CC_207430 % k) / f * 2.0f * 3.1415927f + -3.1415927f);
     s = c * 24.0f;
     r = f2i_207430(s);
@@ -2026,7 +2026,7 @@ extern int FUN_001efa68_ac98(void *, void *, int, int, int) __asm__("FUN_001efa6
 extern int FUN_002141f8(char *);
 extern unsigned char D_0013E633[] __asm__("D_0013F3D0") NOT_SDA;
 extern void FUN_L00_00233660(float *, float, float, float);
-float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
+float absolute_float(float input) __asm__("FUN_001f99c0");
 void FUN_L00_0020a1e0(float a, float b);
 void FUN_L00_0020a228(float a, float b);
 void FUN_L00_0020a210(float a, float b);
@@ -2069,7 +2069,7 @@ void FUN_L00_0020ac98(void) {
                 if (1.91986215f < a)
                     continue;
                 if (1.04719758f <
-                    AbsoluteFloat(FUN_001f9e90_c(vector_distance(m + 0x10, D_0013E633 + 0x0),
+                    absolute_float(FUN_001f9e90_c(vector_distance(m + 0x10, D_0013E633 + 0x0),
                                                  *(float *)(g3 + 0x88) - *(float *)(m + 0x18))))
                     continue;
                 sc = a * d + d;

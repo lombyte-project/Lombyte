@@ -45,7 +45,7 @@ extern struct UsageStats D_00141848;
 extern S17ABE0 D_L05_0017AAE0;
 extern S17C318 D_L05_0017C218;
 extern char D_0013E550[];
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L05_0015F638;
 extern float D_L05_001671D8 __attribute__((section(".data")));
 extern float FUN_001f96b0(float);
@@ -132,7 +132,7 @@ extern void FUN_L05_0023dc88(int i);
 extern void FUN_L05_00253850(void);
 extern void FUN_L05_00253b48(void);
 extern void FUN_L05_00254058(void);
-extern void FillTransferWords(void *, int, int);
+extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *, void *, float);
@@ -1795,7 +1795,7 @@ void FUN_L05_00255960(void) {
                                     scale_game_frames(0xE) < hero.state_timer &&
                                     (hero.unk41E == 0 ||
                                      (hero.ground_distance > 0.7f &&
-                                      AbsoluteFloat(FUN_L00_00233a78(hero.motion.velocity.f)) <
+                                      absolute_float(FUN_L00_00233a78(hero.motion.velocity.f)) <
                                           frame_time * 5.8f))) {
                                     hero_set_state(0xE, 1);
                                 } else if (D_0013D4C0[2] != 0 && FUN_L00_0020d498(3) != 4 &&
@@ -1905,7 +1905,7 @@ void FUN_L05_00255960(void) {
                                 if (FUN_L00_00266d60(0x40, scale_game_frames(9), 0)) {
                                     hero.unk89C = 1;
                                     hero.unk8BC = 1;
-                                    FillTransferWords(&hero.unk6C0, 0, 0x60);
+                                    fill_transfer_words(&hero.unk6C0, 0, 0x60);
                                     if (hero.unk8AC != 0) {
                                         float z = up + frame_time * 14.7f;
                                         hero.motion.unk110.f[2] = z;

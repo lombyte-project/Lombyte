@@ -8,7 +8,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CD118), where it is exact; names translated to the US level program. */
 
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int D_L15_0015F5CC;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -22,7 +22,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L15_002cbd88(void) {
     int n = scale_game_frames(*(int *)&D_L15_00161AD4_d);
-    float d = ConvertIntegerToFloat(n);
+    float d = convert_integer_to_float(n);
     float s = fast_sin((float)(D_L15_0015F5CC % n) / d * 6.28318f);
     float v = *(float *)&D_L15_00161ABC_d + *(float *)&D_L15_00161AD0_d * s;
     int r;

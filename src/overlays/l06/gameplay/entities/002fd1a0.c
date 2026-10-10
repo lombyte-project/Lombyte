@@ -486,7 +486,7 @@ void FUN_L06_00300720(void) {
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00302248), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_001f9de0(float);
 extern int D_L06_0015F5CC_d __asm__("D_L06_0015F5CC") __attribute__((sda));
 extern short D_L06_00162090_d __asm__("D_L06_00162090") __attribute__((sda));
@@ -513,7 +513,7 @@ void FUN_L06_00300df0(char *moby) {
         if (*(int *)(D_0013E533 + 0x2EA1) == 0x72) {
             *(float *)(moby + 0x18) = *(float *)(data + 0xC);
         } else {
-            float f = ConvertIntegerToFloat(D_L06_0015F5CC_d % 600) / 600.0f;
+            float f = convert_integer_to_float(D_L06_0015F5CC_d % 600) / 600.0f;
             float g = FUN_001f9de0(f * 6.28318f);
             *(float *)(moby + 0x18) = *(float *)(data + 0xC) + *(float *)&D_L06_00162090_d * g;
         }

@@ -27,7 +27,7 @@ extern T2C_21EA88 D_L16_0017C088[];
 extern char *D_L16_0015FFD8;
 extern char *FUN_L00_0020d460(int);
 extern char D_0013E533[];
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L16_0017C250[][25];
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9e90(float, float);
@@ -92,7 +92,7 @@ extern void FUN_L05_00264298(void);
 extern void FUN_L05_002661a0(void);
 extern void FUN_L05_002661e8(void);
 extern void FUN_L05_00266320(void);
-extern void FillTransferWords(void *, int, int);
+extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
 extern void FUN_L05_00266710(void);
@@ -322,7 +322,7 @@ int hero_set_state(int a, int b) {
                                  p->motion.pos.f[1], 0.4f, 0.3f);
             }
         } else if (p->motion.unk100.f[2] < frame_time * -0.5f) {
-            int n = truncate_float_to_s32(AbsoluteFloat(p->motion.unk100.f[2]) * 300.0f);
+            int n = truncate_float_to_s32(absolute_float(p->motion.unk100.f[2]) * 300.0f);
             int v = n;
             if (n > 0x28)
                 v = 0x28;
@@ -520,7 +520,7 @@ int hero_set_state(int a, int b) {
                     q->motion.rot.f[2] = -2.1f;
                 }
                 m = (char *)q->unk86C;
-                FillTransferWords(&q->unk6C0, 0, 0x210);
+                fill_transfer_words(&q->unk6C0, 0, 0x210);
                 q->unk86C = (u8 *)m;
                 q->unk890 = (u8 *)
                     D_L16_0015FFD8 + (*(int *)(*(char **)(m + 0x78) + 0x28) << 8);
@@ -584,7 +584,7 @@ int hero_set_state(int a, int b) {
         p->unk8C4 = 0;
         p->unk8BE = scale_game_frames(0x46);
         p->height_threshold = p->unk8A0;
-        n = truncate_float_to_s32(AbsoluteFloat(p->motion.unk100.f[2]) * 300.0f);
+        n = truncate_float_to_s32(absolute_float(p->motion.unk100.f[2]) * 300.0f);
         v = n;
         if (n > 0x28)
             v = 0x28;
@@ -775,7 +775,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0x10;
         p->unk2284 = 3;
         p->unk20A7 = 1;
-        FillTransferWords((char *)p + 0x9D0, 0, 0x20);
+        fill_transfer_words((char *)p + 0x9D0, 0, 0x20);
         qcopy(&p->motion.unk150, &p->motion.unk100);
         if (b)
             FUN_L00_002323b8(0x64, 0, (float)scale_game_frames(0xF));

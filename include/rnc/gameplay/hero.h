@@ -408,7 +408,7 @@ struct Hero {
     f32 unk6B0;                    /* 0x6B0 */
     f32 unk6B4;                    /* 0x6B4 */
     u8 pad_6B8[0x8];
-    Vec4 unk6C0;                   /* 0x6C0: 0x60 bytes cleared by FillTransferWords */
+    Vec4 unk6C0;                   /* 0x6C0: 0x60 bytes cleared by fill_transfer_words */
     f32 unk6D0;                    /* 0x6D0 */
     f32 unk6D4;                    /* 0x6D4 */
     u8 pad_6D8[0x8];

@@ -522,7 +522,7 @@ extern float D_L00_00161CB8_2e7138 __asm__("D_L00_00161CB8") __attribute__((sda)
 extern float D_L00_00161CC8_2e7138 __asm__("D_L00_00161CC8") __attribute__((sda));
 float FUN_001f9af0_2e7138(void *) __asm__("FUN_001f9af0");
 void FUN_L00_001ff500_2e7138(void *, void *, float) __asm__("FUN_L00_001ff500");
-float AbsoluteFloat(float) __asm__("FUN_001f99c0");
+float absolute_float(float) __asm__("FUN_001f99c0");
 short FUN_001f96f8_2e7138(int) __asm__("FUN_001f96f8");
 
 int FUN_L00_002e7138(unsigned char *m, void *b, int c, int d) {
@@ -539,7 +539,7 @@ int FUN_L00_002e7138(unsigned char *m, void *b, int c, int d) {
         return d;
     }
     dist = FUN_001f9af0_2e7138(A);
-    if (hero.unk20A4 != 2 && AbsoluteFloat(D_0013CA40_2e7138) > 0.05f && d) {
+    if (hero.unk20A4 != 2 && absolute_float(D_0013CA40_2e7138) > 0.05f && d) {
         dist -= D_L00_00161CB8_2e7138 * D_0015ED60_2e7138;
         *(short *)(B + 0x34) = FUN_001f96f8_2e7138(0x884);
     }
@@ -753,10 +753,10 @@ int FUN_L00_002e7a30(unsigned char *a) {
                 qcopy(save, pos);
                 if (FUN_L00_002e7618_2e7a30(a, pos, i, dist, spd)) {
                     found = 1;
-                    if (g->unk20A4 != 2 && AbsoluteFloat(D_0013CA40_2e7a30) > 0.05f) {
+                    if (g->unk20A4 != 2 && absolute_float(D_0013CA40_2e7a30) > 0.05f) {
                         subtract_vector_xyz(d, step, save);
                         FUN_001f9bf8_2e7a30(d, d, 1.0f);
-                        if (AbsoluteFloat(FUN_001f9ab0_2e7a30(D_L00_00166E40_2e7a30, d)) <
+                        if (absolute_float(FUN_001f9ab0_2e7a30(D_L00_00166E40_2e7a30, d)) <
                             0.75f) {
                             float lim;
                             float cf;

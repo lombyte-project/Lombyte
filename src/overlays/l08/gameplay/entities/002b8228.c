@@ -108,7 +108,7 @@ extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L08_002b8228_c(struct Moby *moby) __asm__("FUN_L08_002b8228");
 extern float func_001F9CB8_2B94B0(void *a) __asm__("FUN_001f9af0");
 extern void func_L00_001FF4B0_2B94B0(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -196,7 +196,7 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
             if (vector_distance(((Hero_2B94B0 *)D_0013F450_2B94B0)->v520, m->pos) < 0.5f) hit = 1;
             if (vector_distance(((Hero_2B94B0 *)D_0013F450_2B94B0)->v530, m->pos) < 0.5f) hit = 1;
         } else if (vector_distance(m->pos, ((Hero_2B94B0 *)D_0013F450_2B94B0)->pos) < ((Hero_2B94B0 *)D_0013F450_2B94B0)->f2288) {
-            if (AbsoluteFloat(m->pos[2] - ((Hero_2B94B0 *)D_0013F450_2B94B0)->pos[2]) < ((Hero_2B94B0 *)D_0013F450_2B94B0)->f228C) hit = 1;
+            if (absolute_float(m->pos[2] - ((Hero_2B94B0 *)D_0013F450_2B94B0)->pos[2]) < ((Hero_2B94B0 *)D_0013F450_2B94B0)->f228C) hit = 1;
         }
         if (hit == 0) break;
         if (d->target != 0) d->target->fA = 0;
@@ -367,7 +367,7 @@ extern float D_L08_00161998 __attribute__((sda));
 extern float D_L08_001619A0 __attribute__((sda));
 extern u16 D_L08_001619A8 __attribute__((sda));
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
-extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float FUN_L00_00257c48(float, float);
 extern unsigned char *FUN_L00_0026d000(void *, float, float, float, int, void *, float, int);
 extern char *FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
@@ -392,7 +392,7 @@ void FUN_L08_002da3f0(struct Moby *moby, void *from, void *to, int count, f32 si
     vel.f[3] = 1.0f;
     vel.f[2] = 0.01f;
     for (i = 0; i < count; i++) {
-        scale_vector_xyz(&pos, &step, ConvertIntegerToFloat(i));
+        scale_vector_xyz(&pos, &step, convert_integer_to_float(i));
         add_vector_xyz(&pos, from, &pos);
         vel.f[0] = FUN_L00_00257c48(0.0f, 0.005f);
         vel.f[1] = FUN_L00_00257c48(0.0f, 0.005f);
@@ -736,7 +736,7 @@ int FUN_L08_002dc648(struct Moby *m) {
     sample_camera_path(path, 0, d + 0x60, (float *)(d + 0x70), 0,
                          *(float *)(d + 0xE4) * (float)(*path - 1));
     *(int *)(d + 0x74) = 0;
-    if (AbsoluteFloat(*(float *)(d + 0xE4) - *(float *)(d + 0x104)) < 0.2f) {
+    if (absolute_float(*(float *)(d + 0xE4) - *(float *)(d + 0x104)) < 0.2f) {
         advance_accelerated_scalar((float *)(d + 0x108), (float *)(d + 0x10C), 3.14159f,
                                      D_0015ED70_q * 2.0943952f, D_0015ED70_q * 2.0943952f,
                                      D_0015ED6C_q * 6.2831855f);

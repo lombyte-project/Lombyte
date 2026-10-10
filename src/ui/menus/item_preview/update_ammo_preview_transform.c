@@ -41,7 +41,7 @@ extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void multiply_matrix_basis_columns(void *, void *, void *) __asm__("func_001FA328");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 wrap_angle(f32) __asm__("func_001FA610");
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void advance_moby_animation(void *) __asm__("func_0020D580");
 extern void refresh_moby_spatial_bounds(void *) __asm__("func_0020DEF8");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("func_0020E098");
@@ -79,11 +79,11 @@ void update_ammo_preview_transform(struct AmmoPreviewMoby *moby) {
     } else {
         phase_index = (moby->slot * 2 + 1) % 6;
     }
-    orbit_angle = (((f32)(game_frame % 200) / ConvertIntegerToFloat(200)) * 6.28318f) - 3.14159f;
+    orbit_angle = (((f32)(game_frame % 200) / convert_integer_to_float(200)) * 6.28318f) - 3.14159f;
     phase = (f32)phase_index;
-    phase_angle = ((phase * 6.28318f) / ConvertIntegerToFloat(6)) - 3.14159f;
-    bob_angle = (((f32)(game_frame % 170) / ConvertIntegerToFloat(170)) * 6.28318f) - 3.14159f;
-    double_phase = (phase * 12.56636f) / ConvertIntegerToFloat(6);
+    phase_angle = ((phase * 6.28318f) / convert_integer_to_float(6)) - 3.14159f;
+    bob_angle = (((f32)(game_frame % 170) / convert_integer_to_float(170)) * 6.28318f) - 3.14159f;
+    double_phase = (phase * 12.56636f) / convert_integer_to_float(6);
     wrap_angle(double_phase);
     zero = 0.0f;
     orbit_angle = fast_add_rotations(orbit_angle, phase_angle);

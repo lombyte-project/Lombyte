@@ -22,7 +22,7 @@ struct Amb {
     short h1E;
 };
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_0015ED6C;
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -31,7 +31,7 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f9770(void *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern struct Amb D_L00_001CB7C0;
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_002a4890(void) {
@@ -44,7 +44,7 @@ void FUN_L00_002a4890(void) {
         switch (s->hE) {
         case 0:
             if (FUN_001f9770(&s->h1E)) {
-                a = ConvertIntegerToFloat(s->h1C) * random_float_between_alt(0.5f, 1.5f);
+                a = convert_integer_to_float(s->h1C) * random_float_between_alt(0.5f, 1.5f);
                 c = fast_add_rotations(s->f0, random_float_between_alt(-1.0471976f, 1.0471976f));
                 b = random_float_between_alt(s->f10 * 0.5f, s->f10 * 1.5f);
                 s->f8 = fast_subtract_rotations(c, s->f4) / a;
@@ -55,13 +55,13 @@ void FUN_L00_002a4890(void) {
             break;
         case 1:
             if (FUN_001f9770(&s->h1E)) {
-                s->h1E = func_001FA898_r(ConvertIntegerToFloat(s->h1C) *
+                s->h1E = func_001FA898_r(convert_integer_to_float(s->h1C) *
                                          random_float_between_alt(2.0f, 3.0f));
                 s->hE = 0;
             } else {
                 s->f4 = fast_add_rotations(s->f4, s->f8);
                 s->f14 = s->f14 + s->f18;
-                d = AbsoluteFloat(s->f14);
+                d = absolute_float(s->f14);
                 e = D_0015ED6C * 9.6f;
                 if (e < d) {
                     if (s->f14 < 0.0f)
@@ -87,13 +87,13 @@ void FUN_L00_002a4890(void) {
             break;
         case 1:
             if (FUN_001f9770(&s->h1E)) {
-                s->h1E = func_001FA898_r(ConvertIntegerToFloat(s->h1C) *
+                s->h1E = func_001FA898_r(convert_integer_to_float(s->h1C) *
                                          random_float_between_alt(1.0f, 1.5f));
                 s->hE = 2;
             } else {
                 s->f4 = fast_add_rotations(s->f4, s->f8);
                 s->f14 = s->f14 + s->f18;
-                d = AbsoluteFloat(s->f14);
+                d = absolute_float(s->f14);
                 e = D_0015ED6C * 9.6f;
                 if (e < d) {
                     if (s->f14 < 0.0f)
@@ -115,13 +115,13 @@ void FUN_L00_002a4890(void) {
             break;
         case 3:
             if (FUN_001f9770(&s->h1E)) {
-                s->h1E = func_001FA898_r(ConvertIntegerToFloat(s->h1C) *
+                s->h1E = func_001FA898_r(convert_integer_to_float(s->h1C) *
                                          random_float_between_alt(3.0f, 5.0f));
                 s->hE = 0;
             } else {
                 s->f4 = fast_add_rotations(s->f4, s->f8);
                 s->f14 = s->f14 + s->f18;
-                d = AbsoluteFloat(s->f14);
+                d = absolute_float(s->f14);
                 e = D_0015ED6C * 9.6f;
                 if (e < d) {
                     if (s->f14 < 0.0f)
@@ -230,7 +230,7 @@ void FUN_L00_002a4e48(char *o) {
         f = dot_vectors_xyz(d, P->obj + 0xE0);
         f9a68_2a4e48(e, P->obj + 0xE0, f);
         subtract_vector_xyz(d, d, e);
-        if (AbsoluteFloat(f) < 2.5f) {
+        if (absolute_float(f) < 2.5f) {
             f = 0.1f;
             if (vector_length_xyz(d) < f || fast_difference_between_rotations(P->f98, C->f158) < 2.3561945f ||
                 P->f164 < D_0015ED6C_2a4e48 * f) {

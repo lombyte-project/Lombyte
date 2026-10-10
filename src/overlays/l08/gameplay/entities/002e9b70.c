@@ -498,14 +498,14 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f44c0.s", FUN_L08_002f44c0);
 /* Smooth noise: linearly interpolates between two entries of an 8-float ring at arg+0x90. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F7258), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 float FUN_L08_002f5d98(float x, char *arg) {
     float f = x * 8.0f;
     int i = func_001FA898_r(f);
-    float fr = f - ConvertIntegerToFloat(i);
+    float fr = f - convert_integer_to_float(i);
     char *t;
     int j;
     i = i % 8;
@@ -604,7 +604,7 @@ void FUN_L08_002f70a0(struct Moby *m) {
         m->state = 1;
     }
     m->scale = m->pclass->scale * (d->size_x > d->size_y ? d->size_x : d->size_y) * 0.25f;
-    view = ConvertIntegerToFloat(m->unk32);
+    view = convert_integer_to_float(m->unk32);
     dist = FUN_001f9b48(at, D_L08_001675C0);
     fade = view - d->fade_range;
     if (fade < 0.0f)
@@ -622,21 +622,21 @@ void FUN_L08_002f70a0(struct Moby *m) {
         d->intensity = fade;
     }
     pos.q = *(u128 *)at;
-    pos.f[3] = ConvertIntegerToFloat(d->radius);
+    pos.f[3] = convert_integer_to_float(d->radius);
     if ((m->unk31 != 0 || FUN_001fa728((char *)&pos, 255.0f) != -1) && !hidden) {
         enqueue_callback_list_1(FUN_L08_002f5e58, m);
         if (d->flags & 4) {
             if (d->light == -1) {
                 d->light = FUN_L00_0023e738(d->light_pos.f, (f32)d->radius,
-                                            ConvertIntegerToFloat(d->falloff) / 100.0f,
-                                            d->intensity * ConvertIntegerToFloat(d->red) / 100.0f,
-                                            d->intensity * ConvertIntegerToFloat(d->green) / 100.0f,
-                                            d->intensity * ConvertIntegerToFloat(d->blue) / 100.0f);
+                                            convert_integer_to_float(d->falloff) / 100.0f,
+                                            d->intensity * convert_integer_to_float(d->red) / 100.0f,
+                                            d->intensity * convert_integer_to_float(d->green) / 100.0f,
+                                            d->intensity * convert_integer_to_float(d->blue) / 100.0f);
             } else {
                 l = &D_L08_00180AC0[d->light];
-                l->red = d->intensity * ConvertIntegerToFloat(d->red) / 100.0f;
-                l->green = d->intensity * ConvertIntegerToFloat(d->green) / 100.0f;
-                l->blue = d->intensity * ConvertIntegerToFloat(d->blue) / 100.0f;
+                l->red = d->intensity * convert_integer_to_float(d->red) / 100.0f;
+                l->green = d->intensity * convert_integer_to_float(d->green) / 100.0f;
+                l->blue = d->intensity * convert_integer_to_float(d->blue) / 100.0f;
             }
         }
     } else if (d->light != -1) {

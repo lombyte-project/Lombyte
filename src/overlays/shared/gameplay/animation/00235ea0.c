@@ -10,7 +10,7 @@
 /* Eases a counter's shown value toward its target and animates its two drifting digits. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236830), where it is exact; names translated to the US level program. */
 
-extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float FUN_001f9988(float);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_0023aaa8(char *);
@@ -43,7 +43,7 @@ void FUN_L00_00235ea0(HudElem *e) {
             d = x;
             d = d < 0 ? -d : d;
             if (d != 0) {
-                n = truncate_float_to_s32(FUN_001f9988(ConvertIntegerToFloat(d) / 25.0f) * 5.0f);
+                n = truncate_float_to_s32(FUN_001f9988(convert_integer_to_float(d) / 25.0f) * 5.0f);
                 n = n < d * scale_game_frames(2) / scale_game_frames(10)
                         ? d * scale_game_frames(2) / scale_game_frames(10)
                         : n;

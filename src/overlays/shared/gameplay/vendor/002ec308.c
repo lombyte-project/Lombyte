@@ -118,7 +118,7 @@ extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("f
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 void FUN_L02_002ec3f0_c(char *moby) __asm__("FUN_L02_002ec3f0");
-extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_0022ED80_r(int, int, int) __asm__("FUN_0022da68");
 
 void FUN_L02_002ec4b8(char *moby) {
@@ -245,7 +245,7 @@ void FUN_L02_002ec4b8(char *moby) {
         {
             int res;
             float k;
-            res = FastTweenColor(*(int *)&D_L02_00161F74, *(int *)&D_L02_00161F78, x);
+            res = fast_tween_color(*(int *)&D_L02_00161F74, *(int *)&D_L02_00161F78, x);
             k = *(float *)&D_L02_00161F70 * 0.017453292f * D_0015ED6C;
             *(int *)(moby + 0x90) = res;
             *(float *)(d + 0x68) = fast_add_rotations(*(float *)(d + 0x68), k);
@@ -509,7 +509,7 @@ void FUN_L02_002ece18(char *moby) {
         {
             int res;
             float k;
-            res = FastTweenColor(D_L02_00161FC8, D_L02_00161FCC, x);
+            res = fast_tween_color(D_L02_00161FC8, D_L02_00161FCC, x);
             k = D_L02_00161FC4 * 0.017453292f * D_0015ED6C;
             *(int *)(moby + 0x90) = res;
             *(float *)(d + 0x68) = fast_add_rotations(*(float *)(d + 0x68), k);
@@ -764,7 +764,7 @@ extern f32 dot_vectors_xyz(void *a, void *b) __asm__("FUN_001f9ab0");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern short D_L02_0016238C;
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L02_002fa7c8(char *m) {
     float v[4];
@@ -775,7 +775,7 @@ void FUN_L02_002fa7c8(char *m) {
     float f;
     float ang;
     if (*(short *)(p + 0x86) == 0) {
-        if (!(0.05f < AbsoluteFloat(*(float *)(D_0013CA44)))) {
+        if (!(0.05f < absolute_float(*(float *)(D_0013CA44)))) {
             h = g + 0x380;
             subtract_vector_xyz(v, m + 0x10, &hero.motion.pos);
             d = vector_length_xyz(v);

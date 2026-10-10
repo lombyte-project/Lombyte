@@ -18,7 +18,7 @@ extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern void FUN_001f9810(void *, int);
 extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
-float AbsoluteFloat(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L02_0021b698(void) {
     struct Hero *g = &hero;
@@ -87,7 +87,7 @@ void FUN_L02_0021b698(void) {
         struct Hero *q = &hero;
         struct Hero *h;
         if (q->selector_13 != 0 && q->state.current != 0x7F) {
-            if (AbsoluteFloat(q->height_threshold - (q->motion.pos.f[2] + 0.25f)) < 1.0f) {
+            if (absolute_float(q->height_threshold - (q->motion.pos.f[2] + 0.25f)) < 1.0f) {
                 if (q->height_threshold - q->motion.pos.f[2] > 0.0f) {
                     if (q->motion.unk100.f[2] < 0.0f) {
                         FUN_L00_0020b930();
@@ -100,7 +100,7 @@ void FUN_L02_0021b698(void) {
         h = &hero;
         if (h->selector_3 != 0 && h->state.current != 0x68 &&
             h->state.current != 0x7B) {
-            if (AbsoluteFloat(h->unk2F4 - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
+            if (absolute_float(h->unk2F4 - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
                 if (h->unk2F4 - h->motion.pos.f[2] > 0.0f) {
                     if (h->state.current != 0x69 || h->unk41E != 0) {
                         if (h->motion.unk100.f[2] < 0.0f) {
@@ -117,7 +117,7 @@ void FUN_L02_0021b698(void) {
         }
         h = &hero;
         if (h->selector_11 != 0 && h->state.current != 0x7B) {
-            if (AbsoluteFloat(h->unk2F4 - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
+            if (absolute_float(h->unk2F4 - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
                 if (h->unk2F4 - h->motion.pos.f[2] > 0.0f) {
                     if (h->motion.unk100.f[2] < 0.0f) {
                         FUN_L00_0020b930();
@@ -705,7 +705,7 @@ extern struct UsageStats D_00141848;
 extern S17BEB8 D_L02_0017C3B8;
 extern char D_0013A4E0[];
 extern char D_0013E550[];
-extern float AbsoluteFloat(float);
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L02_001673D8 __attribute__((section(".data")));
 extern float D_L02_001C42B0[];
 extern float FUN_001f9988(float);
@@ -871,7 +871,7 @@ void FUN_L02_00225c20(void) {
                 } else if (hero.state.current == 0x17) {
                     FUN_L00_00211e98();
                 }
-                if (AbsoluteFloat(hero.motion.unk184) > frame_time * 0.34906584f) {
+                if (absolute_float(hero.motion.unk184) > frame_time * 0.34906584f) {
                     int neg;
                     int anim;
 
@@ -883,7 +883,7 @@ void FUN_L02_00225c20(void) {
                     if (((Moby *)hero.moby)->f53 != anim) {
                         FUN_L00_002323b8(anim, 0, scale_game_frames(5));
                     }
-                    hero.unkA90 = AbsoluteFloat(hero.motion.unk184) / (frame_time * 3.3161256f);
+                    hero.unkA90 = absolute_float(hero.motion.unk184) / (frame_time * 3.3161256f);
                     if (hero.unkA90 < 0.55f) {
                         hero.unkA90 = 0.55f;
                     }
@@ -1491,7 +1491,7 @@ void FUN_L02_00225c20(void) {
                 cap = 1.9f;
             }
             e = d - off;
-            if (AbsoluteFloat(e) < range + 3.0f) {
+            if (absolute_float(e) < range + 3.0f) {
                 float q;
 
                 q = e / 0.9f;
@@ -1681,7 +1681,7 @@ void FUN_L02_00225c20(void) {
 
         FUN_L02_00220b80();
         FUN_001f9d20(vec[0], hero.motion.unk170.f, hero.unk40);
-        a = AbsoluteFloat(FUN_001f9e90(vec[0][0], vec[0][1]));
+        a = absolute_float(FUN_001f9e90(vec[0][0], vec[0][1]));
         if (a > slideAngle) {
             fast = 1;
             lim = 1.2217305f;
@@ -1726,12 +1726,12 @@ void FUN_L02_00225c20(void) {
         if (hero.motion.unk164 < frame_time * 0.3f && hero.unk229C > 0.85f) {
             hero.unk3B8 = 1;
         }
-        if (AbsoluteFloat(hero.motion.unk188) < 0.05235988f || hero.unk20A8 != 0 ||
+        if (absolute_float(hero.motion.unk188) < 0.05235988f || hero.unk20A8 != 0 ||
             hero.state.step == 1) {
             hero.unk3B8 = 0;
         }
         if (hero.unk3BE != 0) {
-            if (AbsoluteFloat(hero.motion.unk188) < 0.06981317f || hero.unk20A8 != 0) {
+            if (absolute_float(hero.motion.unk188) < 0.06981317f || hero.unk20A8 != 0) {
                 hero.unk3BE = 0;
             }
         }

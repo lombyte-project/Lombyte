@@ -733,8 +733,8 @@ extern char bolt_count_format[] __asm__("D_L00_0015F850") __attribute__((section
 extern char separator_apostrophe[] __asm__("D_L00_0015F858") __attribute__((section(".data")));
 extern char separator_dot[] __asm__("D_L00_0015F860") __attribute__((section(".data")));
 
-extern f32 ConvertIntegerToFloat(int) __asm__("FUN_001fa6c0");
-extern int FastTweenColor(int, int, f32) __asm__("FUN_001fa6e0");
+extern f32 convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern int fast_tween_color(int, int, f32) __asm__("FUN_001fa6e0");
 extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 extern void draw_hud_icon(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
@@ -763,12 +763,12 @@ int FUN_L00_00239df8(HudElem *m)
     y = pal_mode_reload[0] ? 10 : 18;
     x = m->unk50;
 
-    open = ConvertIntegerToFloat(m->cnt[0]) / ConvertIntegerToFloat(bolt_panel_open_steps);
+    open = convert_integer_to_float(m->cnt[0]) / convert_integer_to_float(bolt_panel_open_steps);
     if (1.0f < open)
         open = 1.0f;
     else if (open < 0.0f)
         open = 0.0f;
-    text = ConvertIntegerToFloat(fade[1]) / ConvertIntegerToFloat(bolt_text_fade_steps);
+    text = convert_integer_to_float(fade[1]) / convert_integer_to_float(bolt_text_fade_steps);
     if (1.0f < text)
         text = 1.0f;
     else if (text < 0.0f)
@@ -792,8 +792,8 @@ int FUN_L00_00239df8(HudElem *m)
     draw_hud_icon(m, get_icon_frame(0x754F, *frame >> 1), icon_x, y, 0, 0x80);
 
     /* the count, shadow first */
-    color = FastTweenColor(bolt_text_color_clear, bolt_text_color_opaque, text);
-    shadow = FastTweenColor(0, 0x80000000, text);
+    color = fast_tween_color(bolt_text_color_clear, bolt_text_color_opaque, text);
+    shadow = fast_tween_color(0, 0x80000000, text);
     sprintf_alt(buf, bolt_count_format, current_bolt_count);
     font_print_right(x + bolt_text_dx + 1, y + bolt_text_dy + 1, shadow, buf, -1);
     font_print_right(x + bolt_text_dx, y + bolt_text_dy, color, buf, -1);
