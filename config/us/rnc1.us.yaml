@@ -573,6 +573,8 @@ segments:
           - [0x26050, textbin, text_gap_00125020_post_sdk_worker]
           - [0x26058, c, sdk/input/sce_vib_get_profile]
           - [0x260d8, textbin, text_gap_001250d8_post_sdk_worker]
+          - [0x26100, c, assembly/sdk/library/sceVu0Normalize]
+          - [0x2613c, textbin, text_gap_001251bc_after_fun_00125180]
           - [0x26198, c, assembly/sdk/library/sce_vu0_unit_matrix]
           - [0x261c0, c, assembly/sdk/library/scevu0ecossin]
           - [0x26234, textbin, text_gap_00125240_post_sdk_worker]
