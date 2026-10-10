@@ -631,7 +631,110 @@ void FUN_L00_002e3ca8(unsigned char *p) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e3d88.s", FUN_L00_002e3d88);
+/* Update of an effect-group moby: state machine over its life, then it steers a sprite along its path and bounces it off surfaces. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5238), where it is exact; names translated to the US level program. */
+
+extern char D_L00_0015F580[] __attribute__((section(".sdata")));
+extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern float D_L00_00173E80[] __attribute__((section(".data")));
+extern float FUN_001f96b0(float);
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern void FUN_001fa4f8(void *, void *);
+extern void FUN_00214598(void *, void *);
+extern void FUN_L00_001ff660(void *, void *, void *);
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, float, int, float, float, int, float, int, float, int, int, int, int);
+extern void FUN_L00_0025f3e8(void *, void *, int, float, float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void build_quaternion_from_axis_angle(void *, void *, f32) __asm__("FUN_00214530");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
+extern void multiply_matrix_basis_columns(void *, void *, void *) __asm__("func_001FA328");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
+extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
+extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern int func_L00_001F10E0_s(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
+
+void FUN_L00_002e3d88(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float a20[4];
+    float a30[12];
+    float a60[4];
+    float a70[4];
+    float a80[4];
+    float a90[16];
+    float aD0[4];
+    float aE0[4];
+    char *s23;
+    float r;
+    float *q;
+
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0:
+        mark_moby_for_removal(m);
+        return;
+    case 1:
+        if (func_001F9908_r((int *)(d + 0x30))) {
+            m[0x20] = (*(int *)(d + 0x34) & 1) ? 3 : 2;
+            *(int *)(d + 0x30) = func_001FA898_r(FUN_001f96b0(10.0f));
+            return;
+        }
+        break;
+    case 2:
+        transform_vector_by_basis(a20, d + 0x20, m + 0xC0);
+        add_vector_xyz(a20, a20, m + 0x10);
+        if (*(int *)(d + 0x34) & 2) {
+            FUN_L00_0025f3e8(m, a20, -1, *(float *)(d + 0x2C) * 0.5f, 0.0f);
+        } else {
+            float h = *(float *)(d + 0x2C) * 0.5f;
+            FUN_L00_0025e450(m, D_L00_0015F580, a20, 0.0f, 0.0f, 5, *(float *)(d + 0x2C), 3, h, 9.0f, 5, h, -1, 0.0f, 0, 0, -1, 0);
+        }
+        mark_moby_for_removal(m);
+        return;
+    case 3:
+        if (func_001F9908_r((int *)(d + 0x30))) {
+            mark_moby_for_removal(m);
+            return;
+        }
+        m[0x23] = func_001FA898_r((float)*(int *)(d + 0x30) / FUN_001f96b0(10.0f) * 128.0f);
+        break;
+    }
+    s23 = d + 0x10;
+    vu_euler_rotation_basis(a30, s23);
+    transform_vector_by_basis(a20, d + 0x20, m + 0xC0);
+    multiply_matrix_basis_columns(m + 0xC0, a30, m + 0xC0);
+    transform_vector_by_basis(a60, d + 0x20, m + 0xC0);
+    subtract_vector_xyz(a70, a60, a20);
+    subtract_vector_xyz((float *)(m + 0x10), (float *)(m + 0x10), a70);
+    add_vector_xyz(m + 0x10, m + 0x10, d);
+    r = *(float *)(d + 0x2C);
+    *(float *)(d + 8) = *(float *)(d + 8) - *(float *)(d + 0x38);
+    transform_vector_by_basis(a80, d + 0x20, m + 0xC0);
+    add_vector_xyz(a80, a80, m + 0x10);
+    if (func_L00_001F10E0_s(a80, r, 0, m)) {
+        float f21, f20;
+        q = D_L00_00173E80;
+        normalize_vector_xyz(q, q, 1.0f);
+        f21 = vector_length_xyz(d);
+        f20 = dot_vectors_xyz(d, q);
+        if (f20 < 0.0f) {
+            FUN_L00_001ff660(d, d, q);
+            normalize_vector_xyz(aD0, q, f20 * 0.5f);
+            add_vector_xyz(d, d, aD0);
+            normalize_vector_xyz(d, d, f21);
+            cross_vectors_xyz(aE0, q, d);
+            normalize_vector_xyz(aE0, aE0, 1.0f);
+            build_quaternion_from_axis_angle(aE0, aE0, vector_length_xyz(s23));
+            FUN_001fa4f8(aE0, a90);
+            FUN_00214598(a90, s23);
+        }
+    }
+}
 extern u8 D_0013F3D0_002e4168[] __asm__("D_0013F3D0");
 /* Copies the vector at D_0013F3D0 into b; a is unused. */
 void FUN_L00_002e4168(int a, void *b) {

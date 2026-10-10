@@ -229,4 +229,53 @@ void FUN_L14_00302538(char *self) {
     vec_sub(&to, &end_b, &off);
     FUN_001efa68(&from, &to, 1, m, &req);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003039e0.s", FUN_L14_003039e0);
+#include "sda.h"
+
+/* Slot update of moby class 1331: state 0 clears the two slot arrays, state 1 services the pending slots and frees a slot whose moby has died. Level 14 relative of func_L00_002E32A0. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00304E68), where it is exact; names translated to the US level program. */
+
+extern int D_L14_00162148[] __attribute__((section(".sdata")));
+extern int D_L14_001621D8[] __attribute__((section(".sdata")));
+extern void FUN_L00_002e20f8(int);
+extern void FUN_L00_002e2250(int, int);
+extern void FUN_L00_002e2af0(void);
+extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
+
+void FUN_L14_003039e0(unsigned char *m) {
+    int i;
+    int j;
+    int n;
+    int st;
+
+    switch (m[0x20]) {
+    case 0:
+        for (j = 0; j < 3; j++) {
+            D_L14_00162148[j] = 0;
+            D_L14_001621D8[j] = 0;
+        }
+        m[0x20] = 1;
+        m[0x30] = 0xFF;
+        break;
+    case 1:
+        n = 0;
+        for (i = 0; i < 3; i++) {
+            st = D_L14_00162148[i];
+            if (st == 1) {
+                if (((signed char *)D_L14_001621D8[i])[0x20] < 0) {
+                    D_L14_00162148[i] = 0;
+                    D_L14_001621D8[i] = 0;
+                }
+            } else if (st == 4) {
+                FUN_L00_002e20f8(i);
+            } else if (st != 0) {
+                n++;
+                FUN_L00_002e2250(D_L14_001621D8[i], i);
+                D_L14_00162148[i] = 4;
+            }
+        }
+        if (n != 0) {
+            enqueue_callback_list_1_alt(FUN_L00_002e2af0, m);
+        }
+        break;
+    }
+}
