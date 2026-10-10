@@ -269,10 +269,10 @@ extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 
 /* Remove active mobys of the selected classes from this moby's linked group. */
 void FUN_L08_002d6450(struct Moby *moby) {
-    short *list = D_L08_001AC040[*(u8 *)(D_L08_0015FFD8 + (*(s32 *)(moby->pvars + 0x144) << 8) + 0x21)];
+    short *list = D_L08_001AC040[(((struct Moby *)D_L08_0015FFD8) + *(s32 *)(moby->pvars + 0x144))->group];
     struct Moby *other;
     if (list != 0) {
-        other = (struct Moby *)(D_L08_0015FFD8 + ((*list & 0x7fff) << 8));
+        other = ((struct Moby *)D_L08_0015FFD8) + (*list & 0x7fff);
         for (;;) {
             if (other->state < 0x7f && other != moby) {
                 u16 class_id = (u16)other->oclass;
@@ -285,7 +285,7 @@ void FUN_L08_002d6450(struct Moby *moby) {
             if (*list < -1)
                 break;
             list++;
-            other = (struct Moby *)(D_L08_0015FFD8 + ((*list & 0x7fff) << 8));
+            other = ((struct Moby *)D_L08_0015FFD8) + (*list & 0x7fff);
         }
     }
 }
