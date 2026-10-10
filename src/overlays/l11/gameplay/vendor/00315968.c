@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/overlay/moby_anim.h"
@@ -115,7 +116,146 @@ void *FUN_L11_00316210(struct Moby *arg) {
     }
     return found;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316320.s", FUN_L11_00316320);
+#include "qcopy.h"
+
+extern float D_L11_00162308 __attribute__((sda));
+extern float D_L11_0016230C __attribute__((sda));
+extern float D_L11_00162310 __attribute__((sda));
+extern struct Moby *spawn_moby_class(s32) __asm__("FUN_0020c4f8");
+extern float FUN_001f9b80(float *, float *);
+extern s32 FUN_00214720(void *, s32);
+extern s32 FUN_0022da68(s32, s32, void *);
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_L00_00250df8(struct Moby *);
+
+/* Private variables of the two-door moby FUN_L11_00316320 runs. */
+struct L11GateVars {
+    struct Moby *left;   /* 0x0 */
+    struct Moby *right;  /* 0x4 */
+    f32 t;               /* 0x8 */
+    f32 speed;           /* 0xC */
+    s32 unk10;           /* 0x10 */
+};
+
+/* Two-door gate: spawns both 0x4DF doors, then once the hero is close lifts, swings and tilts them open. */
+void FUN_L11_00316320(struct Moby *moby) {
+    struct L11GateVars *d = (struct L11GateVars *)moby->pvars;
+    float v[4];
+
+    switch (moby->state) {
+    case 0: {
+        struct Moby *c;
+        struct Moby *r;
+        u8 *pv;
+        moby->scale *= 2.0f;
+        d->left = spawn_moby_class(0x4DF);
+        d->left->unk32 = 0x40;
+        d->left->unk31 = 1;
+        d->left->spawn_frame = hero.moby->spawn_frame;
+        d->left->flags = moby->flags | 0x20;
+        c = d->left;
+        qcopy(&c->pos, &moby->pos);
+        c->pos.z -= 4.0f;
+        r = d->left;
+        qcopy(&r->rot, &moby->rot);
+        r->rot.x = -(D_L11_0016230C * 0.017453292f);
+        d->left->rot.y = D_L11_00162310 * 0.017453292f;
+        pv = d->left->pvars;
+        *(u8 **)(pv + 8) = pv + 0x20;
+        *(u32 *)(pv + 0x5C) |= 1;
+        d->right = spawn_moby_class(0x4DF);
+        d->right->unk32 = 0x40;
+        d->right->unk31 = 1;
+        d->right->spawn_frame = hero.moby->spawn_frame;
+        d->right->flags = moby->flags | 0x8020;
+        c = d->right;
+        qcopy(&c->pos, &moby->pos);
+        c->pos.z -= 4.0f;
+        r = d->right;
+        qcopy(&r->rot, &moby->rot);
+        r->rot.x = D_L11_0016230C * 0.017453292f;
+        d->right->rot.y = D_L11_00162310 * 0.017453292f;
+        pv = d->right->pvars;
+        *(u8 **)(pv + 8) = pv + 0x20;
+        *(u32 *)(pv + 0x5C) |= 1;
+        moby->state = 1;
+        break;
+    }
+    case 1:
+        if (FUN_001f9b80(&moby->pos.x, &hero.motion.pos.f[0]) < 12.0f &&
+            FUN_00214720(&hero.motion.pos, d->unk10) != 0) {
+            d->t = 0.0f;
+            moby->state = 2;
+            FUN_0022da68(0, 4, d->left);
+        }
+        break;
+    case 2:
+        advance_accelerated_scalar(&d->t, &d->speed, 1.0f, frame_time_sq * 8.0f, frame_time_sq * 16.0f,
+                                   frame_time * 8.0f);
+        FUN_001f9bf8(v, &moby->unkC0, 0.5f);
+        FUN_001f9a10(&d->left->pos, &moby->pos, v);
+        d->left->pos.z = moby->pos.z + d->t * 4.0f - 4.0f;
+        FUN_001f9a10(&d->right->pos, &moby->pos, v);
+        d->right->pos.z = moby->pos.z + d->t * 4.0f - 4.0f;
+        FUN_L00_00250df8(d->left);
+        FUN_L00_00250df8(d->right);
+        if (d->t >= 1.0f) {
+            d->t = 0.0f;
+            moby->state = 3;
+        }
+        break;
+    case 3: {
+        float a;
+        advance_accelerated_scalar(&d->t, &d->speed, 1.0f, frame_time_sq * 10.0f, frame_time_sq * 20.0f,
+                                   frame_time * 10.0f);
+        a = (1.0f - d->t) * (D_L11_00162310 * 0.017453292f);
+        d->left->rot.y = a;
+        d->right->rot.y = a;
+        FUN_L00_00250df8(d->left);
+        FUN_L00_00250df8(d->right);
+        if (d->t >= 1.0f) {
+            d->t = 0.0f;
+            moby->state = 4;
+        }
+        break;
+    }
+    case 4: {
+        float a;
+        advance_accelerated_scalar(&d->t, &d->speed, 1.0f, frame_time_sq * 12.0f, frame_time_sq * 24.0f,
+                                   frame_time * 12.0f);
+        d->left->pos.z = moby->pos.z + d->t * 0.25f;
+        d->right->pos.z = moby->pos.z + d->t * 0.25f;
+        a = d->t * 1.5707964f;
+        d->left->rot.x = -a;
+        d->right->rot.x = a;
+        FUN_L00_00250df8(d->left);
+        FUN_L00_00250df8(d->right);
+        if (d->t >= 1.0f) {
+            d->t = 0.0f;
+            moby->state = 5;
+        }
+        break;
+    }
+    case 5:
+        break;
+    case 6:
+        FUN_001f9bf8(v, &moby->unkC0, 0.5f);
+        FUN_001f9a10(&d->left->pos, &moby->pos, v);
+        d->left->pos.z = moby->pos.z + D_L11_00162308;
+        d->left->rot.x = -(D_L11_0016230C * 0.017453292f);
+        d->left->rot.y = D_L11_00162310 * 0.017453292f;
+        FUN_L00_00250df8(d->left);
+        FUN_001f9a10(&d->right->pos, &moby->pos, v);
+        d->right->pos.z = moby->pos.z + D_L11_00162308;
+        d->right->rot.x = D_L11_0016230C * 0.017453292f;
+        d->right->rot.y = D_L11_00162310 * 0.017453292f;
+        FUN_L00_00250df8(d->right);
+        break;
+    }
+}
+
 /* Private variables of the chained moby class 0x527 (FUN_L11_003172c0 and its helpers). */
 struct L11ChainVars {
     u8 pad0[0x60];
@@ -130,14 +270,12 @@ struct L11ChainVars {
     f32 health;              /* 0xE0 */
     s16 group;               /* 0xE4 */
     u8 padE6[6];
-    u8 path_sel;             /* 0xEC */
-    u8 padED[3];
+    s32 path_sel;            /* 0xEC: index into D_L11_001B0EB0 on spawn */
     char *path;              /* 0xF0 */
     s32 sound;               /* 0xF4 */
 };
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003172c0.s", FUN_L11_003172c0);
-#include "qcopy.h"
 
 /* Orients a moby along a path of three points read from its data table. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00318AE8), where it is exact; names translated to the US level program. */
