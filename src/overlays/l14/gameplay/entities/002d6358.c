@@ -246,7 +246,103 @@ void FUN_L14_002d7490(struct Moby *m) {
     enqueue_callback_list_1(FUN_L14_002d71f0, m);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de1f8.s", FUN_L14_002de1f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de2b8.s", FUN_L14_002de2b8);
+/* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002ACCC0.c (func_L14_002DF6B8) */
+#include "eetypes.h"
+
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002DF6B8), where it is exact; names translated to the US level program. */
+
+typedef int u128_s07 __attribute__((mode(TI)));
+
+extern char D_0013E533[];
+extern f32 approximate_arcsine(f32) __asm__("func_001F9DF8");
+extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
+extern int allocate_voice_slot_alt(void *, int, int, int, int) __asm__("FUN_0022d7f0");
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern float D_L14_00161B00 __attribute__((sda));
+extern float D_L14_00161B04 __attribute__((sda));
+extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+float AbsoluteFloat_c(float input) __asm__("func_001F99C0");
+extern char D_0013F350[];
+extern char D_0013F3D0[];
+
+void FUN_L14_002de2b8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *g = (char *)((char *)&D_0013F350);
+    float v[4];
+    float up[4];
+    float d[4];
+    float ax[4];
+    float len;
+    float dt;
+    float ang;
+    float lim;
+
+    *(u128_s07 *)up = 0;
+    up[2] = 1.0f;
+    up[3] = 1.0f;
+
+    if ((*(char **)(g + 0x2FC) == moby && *(short *)(g + 0x30E) == 0) ||
+        (*(char **)(g + 0x4F8) == moby && *(int *)(g + 0x208C) == 3)) {
+        char *p = (char *)((char *)&D_0013F350);
+        *(char *)(moby + 0xBC) = 1;
+        if (AbsoluteFloat_c(*(float *)(p + 0x80) - *(float *)(moby + 0x10)) < 0.1f &&
+            AbsoluteFloat_c(*(float *)(p + 0x84) - *(float *)(moby + 0x14)) < 0.1f) {
+            qcopy(v, up);
+        } else {
+            subtract_vector_xyz_c(d, (char *)((char *)&D_0013F3D0), moby + 0x10);
+            d[2] = d[2] + D_L14_00161B04;
+            len = vector_length_xyz(d);
+            if (len == 0.0f) {
+                qcopy(v, up);
+            } else {
+                dt = dot_vectors_xyz(up, d);
+                ang = 1.5707963705f - approximate_arcsine(dt / len);
+                lim = D_L14_00161B00 * 0.0174532924f;
+                if (lim < ang) {
+                    ang = lim;
+                }
+                cross_vectors_xyz(ax, d, up);
+                build_look_at_matrix(v, up, ax, ang);
+                normalize_vector_xyz_c(v, v, 1.0f);
+            }
+        }
+    } else {
+        qcopy(v, up);
+        *(char *)(moby + 0xBC) = 0;
+    }
+
+    if (tick_countdown_32_alt(data + 0x70)) {
+        if (0.1f < AbsoluteFloat_c(*(float *)(moby + 0xE0) - v[0]) ||
+            0.1f < AbsoluteFloat_c(*(float *)(moby + 0xE4) - v[1]) ||
+            0.1f < AbsoluteFloat_c(*(float *)(moby + 0xE8) - v[2])) {
+            *(int *)(data + 0x70) = scale_game_frames_alt(60);
+            *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + 2.0f;
+            allocate_voice_slot_alt(*(void **)(*(char **)(moby + 0x24) + 0x28), 8, (int)moby, (int)(moby + 0x10), 0x400);
+            *(float *)(moby + 0x18) = *(float *)(moby + 0x18) - 2.0f;
+        }
+    }
+
+    FUN_L00_0025b8c0((float *)(moby + 0xE0), (float *)(data + 0x60), v[0], 0.005f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0((float *)(moby + 0xE4), (float *)(data + 0x64), v[1], 0.005f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0((float *)(moby + 0xE8), (float *)(data + 0x68), v[2], 0.005f, 0.2f, 0.0f);
+
+    normalize_vector_xyz_c(moby + 0xE0, moby + 0xE0, 1.0f);
+    *(u128_s07 *)d = 0;
+    d[0] = 1.0f;
+    d[3] = 1.0f;
+    cross_vectors_xyz(moby + 0xD0, d, moby + 0xE0);
+    normalize_vector_xyz_c(moby + 0xD0, moby + 0xD0, 1.0f);
+    cross_vectors_xyz(moby + 0xC0, moby + 0xE0, moby + 0xD0);
+    *(float *)(moby + 0xCC) = 0.0f;
+    *(float *)(moby + 0xDC) = 0.0f;
+    *(float *)(moby + 0xEC) = 0.0f;
+}
 #include "sda.h"
 
 /* Updates a gem-lock sentry: picks up a sound slot and fires when the player is near. */

@@ -374,7 +374,128 @@ void FUN_L00_002d1e80(M2d1e80 *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2158.s", FUN_L00_002d2158);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2670.s", FUN_L00_002d2670);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2a90.s", FUN_L00_002d2a90);
+/* Ported from rac1-decomp src/overlays/shared/vendor_002D1168.c (func_L00_002D3F40) */
+#include "sda.h"
+
+/* Draws the trail of fading ring sprites for a moby. */
+
+typedef float Vec_2D3F40[4] __attribute__((aligned(16)));
+
+typedef int U128_2D3F40 __attribute__((mode(TI)));
+
+typedef union Vu_2D3F40 {
+    U128_2D3F40 q;
+    Vec_2D3F40 f;
+} Vu_2D3F40;
+
+typedef struct Quad_2D3F40 {
+    Vec_2D3F40 v[4];
+    int c[4];
+    float uv[8];
+    long g[4];
+} Quad_2D3F40;
+
+typedef struct Data_2D3F40 {
+    char pad0[0x10];
+    Vec_2D3F40 pos; /* 0x10 */
+    char pad20[4];
+    float t; /* 0x24 */
+    float tmax; /* 0x28 */
+    char pad2C[4];
+    Vec_2D3F40 dir; /* 0x30 */
+} Data_2D3F40;
+
+typedef struct Moby_2D3F40 {
+    char pad0[0x78];
+    Data_2D3F40 *data; /* 0x78 */
+    char pad7C[0x14];
+    int rgba; /* 0x90 */
+} Moby_2D3F40;
+
+extern float D_0015ED6C;
+extern int D_L00_00161900 __attribute__((sda));
+extern int D_L00_00161904 __attribute__((sda));
+extern int D_L00_00161908 __attribute__((sda));
+extern int D_L00_0016190C __attribute__((sda));
+extern int D_L00_00161910 __attribute__((sda));
+extern int D_L00_00161914 __attribute__((sda));
+extern int D_L00_00161918 __attribute__((sda));
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern int func_001F4868_2D3F40(int) __asm__("FUN_001f44b8");
+extern void func_L00_001FF4B0_2D3F40(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void func_001F9CA0_2D3F40(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void func_001F9BF0_2D3F40(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_001F9BD8_2D3F40(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int func_001FA898_2D3F40(float) __asm__("FUN_001fa6d0");
+extern void func_L00_001FD1D8_2D3F40(void *, void *, int) __asm__("FUN_001f7d30");
+
+void FUN_L00_002d2a90(Moby_2D3F40 *moby) {
+    Quad_2D3F40 q;
+    Vu_2D3F40 tt[6];
+    Data_2D3F40 *d = moby->data;
+    float t, s, k;
+    int col;
+    int tex;
+
+    tex = func_001F4868_2D3F40(D_L00_00161918);
+    q.c[0] = q.c[1] = q.c[2] = q.c[3] = D_L00_00161914;
+    q.g[1] = tex;
+    q.g[2] = 0xFF9000000260L;
+    q.g[0] = 4;
+    q.g[3] = (long)D_L00_00161900 | ((long)D_L00_00161904 << 2) | ((long)D_L00_00161908 << 4) | ((long)D_L00_0016190C << 6) | ((long)D_L00_00161910 << 32);
+    q.uv[4] = q.uv[0] = 0.0f;
+    q.uv[6] = q.uv[2] = 1.0f;
+    q.uv[3] = q.uv[1] = 0.0f;
+    q.uv[7] = q.uv[5] = 1.0f;
+    d->t = d->t + D_0015ED6C;
+    if (1.0f < d->t) {
+        d->t = d->t - 1.0f;
+    }
+    if (d->t > d->tmax) {
+        d->tmax = d->t;
+    }
+    t = d->t;
+    tt[1].q = 0;
+    tt[1].f[0] = 1.0f;
+    func_L00_001FF4B0_2D3F40(tt[0].f, d->dir, 1.0f);
+    func_001F9CA0_2D3F40(tt[2].f, tt[0].f, tt[1].f);
+    func_L00_001FF4B0_2D3F40(tt[2].f, tt[2].f, 1.0f);
+    func_001F9CA0_2D3F40(tt[1].f, tt[0].f, tt[2].f);
+    func_L00_001FF4B0_2D3F40(tt[1].f, tt[1].f, 1.0f);
+    for (s = d->t; d->t - 1.0f < s; s -= 0.1f) {
+        if (t <= d->tmax) {
+            k = t * 0.5f + 0.23f;
+            func_L00_001FF4B0_2D3F40(tt[3].f, tt[0].f, t);
+            func_L00_001FF4B0_2D3F40(tt[4].f, tt[1].f, k);
+            func_L00_001FF4B0_2D3F40(tt[5].f, tt[2].f, k);
+            func_001F9BF0_2D3F40(q.v[0], d->pos, tt[3].f);
+            qcopy(q.v[1], q.v[0]);
+            qcopy(q.v[2], q.v[0]);
+            qcopy(q.v[3], q.v[0]);
+            func_001F9BF0_2D3F40(q.v[0], q.v[0], tt[4].f);
+            func_001F9BD8_2D3F40(q.v[1], q.v[1], tt[4].f);
+            func_001F9BF0_2D3F40(q.v[2], q.v[2], tt[4].f);
+            func_001F9BD8_2D3F40(q.v[3], q.v[3], tt[4].f);
+            func_001F9BF0_2D3F40(q.v[0], q.v[0], tt[5].f);
+            func_001F9BD8_2D3F40(q.v[2], q.v[2], tt[5].f);
+            func_001F9BF0_2D3F40(q.v[1], q.v[1], tt[5].f);
+            func_001F9BD8_2D3F40(q.v[3], q.v[3], tt[5].f);
+            col = (moby->rgba & 0xFFFFFF) | (func_001FA898_2D3F40((1.0f - t) * 255.0f) << 24);
+            q.c[0] = q.c[1] = q.c[2] = q.c[3] = col;
+            func_L00_001FD1D8_2D3F40(&q, 0, 1);
+        }
+        t -= 0.1f;
+        if (t < 0.0f) {
+            t += 1.0f;
+        }
+    }
+}
 #include "sda.h"
 
 /* increments the selected packed nibble, saturating at fifteen */
@@ -482,7 +603,7 @@ extern void FUN_L00_002a7438(void *, void *, void *, s32, s32, s32);
 /* the unit declares mark_moby_for_removal() without a prototype further down */
 extern void remove_moby_2d2ee8(void *) __asm__("FUN_0020c828");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern void FUN_L00_002d2a90(void);
+extern void FUN_L00_002d2a90_u(void) __asm__("FUN_L00_002d2a90");
 extern s32 FUN_001f96f8(s32);
 
 void FUN_L00_002d2ee8(struct Moby *moby) {
@@ -675,7 +796,7 @@ void FUN_L00_002d2ee8(struct Moby *moby) {
                 }
                 vars->voice2 = -1;
             }
-            enqueue_callback_list_1(FUN_L00_002d2a90, moby);
+            enqueue_callback_list_1(FUN_L00_002d2a90_u, moby);
             return;
         }
         moby->unk90 = 0x80808080;

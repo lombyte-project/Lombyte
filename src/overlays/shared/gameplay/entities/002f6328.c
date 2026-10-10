@@ -1384,7 +1384,7 @@ extern void FUN_L01_00309838_u(char *) __asm__("FUN_L01_00309838");
 extern void FUN_L01_003097e8_c(L01Moby *) __asm__("FUN_L01_003097e8");
 extern void FUN_L01_003092d0_c(char *) __asm__("FUN_L01_003092d0");
 extern void FUN_L01_00309430_c(char *) __asm__("FUN_L01_00309430");
-extern void FUN_L01_003094f0(char *);
+extern void FUN_L01_003094f0_u(char *) __asm__("FUN_L01_003094f0");
 extern void FUN_L01_0026e0e0_c(char *, int) __asm__("FUN_L01_0026e0e0");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_00233ee8(float *, int, float);
@@ -1526,7 +1526,7 @@ void FUN_L01_00308bd8(struct Moby *moby) {
     }
     case 3:
         if (*(float *)(data + 0x34) != 0.0f) {
-            enqueue_callback_list_1(FUN_L01_003094f0, moby);
+            enqueue_callback_list_1(FUN_L01_003094f0_u, moby);
             approach_value((float *)(data + 0x34), 0.0f, frame_time * 4.0f);
         } else {
             char *t = D_L01_0015FFD8 + (*(int *)data << 8);
@@ -1558,7 +1558,7 @@ void FUN_L01_00308bd8(struct Moby *moby) {
     case 4:
     case 8:
         if (*(float *)(data + 0x34) < 1.95f) {
-            enqueue_callback_list_1(FUN_L01_003094f0, moby);
+            enqueue_callback_list_1(FUN_L01_003094f0_u, moby);
             approach_value((float *)(data + 0x34), 1.95f, frame_time * 4.0f);
         } else if (0.0f < *(float *)(data + 0x24)) {
             advance_accelerated_scalar((float *)(data + 0x24), (float *)(data + 0x28), 0.0f,
@@ -1647,7 +1647,88 @@ void FUN_L01_00309430(char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003094f0.s", FUN_L01_003094f0);
+/* Ported from rac1-decomp src/overlays/shared/vendor_002F7700.c (func_L01_0030A8C8) */
+
+typedef struct {
+    float v[16];
+    int c[4];
+    float uv[8];
+    long g[4];
+} Quad_30a8c8;
+
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float D_L01_00201630[];
+extern char D_001413F5_c __asm__("D_001413F5") __attribute__((section(".data")));
+extern int D_L01_00161FB8 __attribute__((sda));
+extern int D_L01_00161FBC __attribute__((sda));
+extern int D_L01_00161FC0 __attribute__((sda));
+extern int D_L01_00161FC4 __attribute__((sda));
+extern int D_L01_00161FC8 __attribute__((sda));
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern int D_L01_00161FCC __attribute__((sda));
+extern float D_L01_00161FD0 __attribute__((sda));
+extern void FUN_001fa298(void *, void *);
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+
+void FUN_L01_003094f0(char *moby) {
+    Quad_30a8c8 q;
+    float m[12];
+    float pos[4];
+    char *d;
+    float h;
+    int i, j, nj;
+    d = *(char **)(moby + 0x78);
+    FUN_001fa298(m, moby + 0xC0);
+    qcopy(pos, moby + 0x10);
+    q.g[1] = get_effect_texture(D_L01_00161FC8);
+    q.g[3] = (long)D_L01_00161FB8 | ((long)D_L01_00161FBC << 2) | ((long)D_L01_00161FC0 << 4) | ((long)D_L01_00161FC4 << 6) | (0x8000L << 24);
+    q.g[2] = 0xFF9000000260UL;
+    q.g[0] = 0;
+    for (i = 0; i < 4; i++) {
+        q.uv[i * 2] = D_L01_00201630[i * 2];
+        *(&q.uv[i * 2] + 1) = D_L01_00201630[i * 2 + 1];
+        q.c[i] = D_L01_00161FCC;
+    }
+    h = 0.1f;
+    if (*(float *)(d + 0x34) < 1.15f) {
+        float t = (1.15f - *(float *)(d + 0x34)) * 2.0f;
+        if (1.0f < t) {
+            t = 1.0f;
+        } else if (t < 0.0f) {
+            t = 0.0f;
+        }
+        h = t + 0.1f;
+        if (((unsigned char *)moby)[0x20] != 7 && ((unsigned char *)moby)[0x20] != 8) {
+            if (*(float *)(d + 0x34) < 0.65f) {
+                D_001413F5_c = 1;
+            } else {
+                D_001413F5_c = 0;
+            }
+        }
+    }
+    for (j = 0; j < 32; j = nj) {
+        int k;
+        float *p;
+        k = 0;
+        nj = j + 1;
+        p = q.v;
+        for (; k < 4;) {
+            float a = (float)(j + k / 2) * 6.28318f * 0.03125f - 3.14159f;
+            p[0] = fast_cos(a) * *(float *)(d + 0x34);
+            p[1] = fast_sin(a) * *(float *)(d + 0x34);
+            p[2] = 0.0f;
+            if (k++ & 1) {
+                p[2] = D_L01_00161FD0 + h + p[2];
+            } else {
+                p[2] = D_L01_00161FD0 - h + p[2];
+            }
+            p[3] = 1.0f;
+            p += 4;
+        }
+        draw_geometry_quad(&q, m, 0);
+    }
+}
 /* Mark the parent and its three attached objects active. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030ABC0), where it is exact; names translated to the US level program. */
 
