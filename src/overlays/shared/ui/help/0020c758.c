@@ -1746,9 +1746,6 @@ void FUN_L00_00211380(void) {
                                 D_0015ED64_211380 * 0.3f, D_0015ED6C_211380 * 4.0f);
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211670.s", FUN_L00_00211670);
-#else
 extern u8 FUN_L00_00233440(void);
 extern f32 FUN_L00_00211830(void);
 extern f32 FUN_L00_001ff408(void *);
@@ -1760,6 +1757,8 @@ extern void FUN_L00_00221310(void);
 extern void FUN_L00_002215c8(void);
 extern u8 D_0013C940_211670[] __asm__("D_0013C940");
 
+/* Per-frame hero input: stick (or d-pad) into unk1D20/24, the yaw and position
+   history rings, then the hero basis matrix and the movement updates. */
 void FUN_L00_00211670(void)
 {
     s32 index;
@@ -1778,9 +1777,19 @@ void FUN_L00_00211670(void)
     p->unk1D20 = *(f32 *)(source + 0x108);
     p->unk1D24 = *(f32 *)(source + 0x10C);
     if (FUN_L00_001ff408(&p->unk1D20) < 0.25f) {
+        /* Stick near centre: take the d-pad instead. The differences are
+           written back into left and up, which is how retail allocates them. */
+        s32 up, right, down, left;
+
         buttons = *(s32 *)(source + 0x1B0);
-        p->unk1D20 = (f32)(((buttons >> 13) & 1) - ((buttons >> 15) & 1));
-        p->unk1D24 = (f32)(((buttons >> 14) & 1) - ((buttons >> 12) & 1));
+        right = (buttons >> 13) & 1;
+        left = (buttons >> 15) & 1;
+        down = (buttons >> 14) & 1;
+        up = (buttons >> 12) & 1;
+        left = right - left;
+        up = down - up;
+        p->unk1D20 = (f32)left;
+        p->unk1D24 = (f32)up;
     }
     FUN_L00_00217970();
 
@@ -1805,7 +1814,6 @@ void FUN_L00_00211670(void)
     FUN_L00_00221310();
     FUN_L00_002215c8();
 }
-#endif /* NON_MATCHING */
 #define NOT_SDA
 
 #define MACRO_ADDR
