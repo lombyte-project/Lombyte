@@ -126,8 +126,7 @@ void FUN_L12_00306828(struct Moby *moby) {
     int i;
     int alpha = 0x80000000;
     char *data = (char *)moby->pvars;
-    i = 0;
-    do {
+    for (i = 0; i < 18; i++) {
         struct Moby *other;
         int period;
         float sine;
@@ -135,6 +134,7 @@ void FUN_L12_00306828(struct Moby *moby) {
         int red;
         int green;
         int blue;
+        int packed_color;
         float phase;
         float divisor;
         if (i == 17) {
@@ -142,7 +142,8 @@ void FUN_L12_00306828(struct Moby *moby) {
         } else {
             other = (struct Moby *)(D_L12_0015FFD8_p + (*(int *)(data + i * 0x30 + 0x20) * 0x100));
         }
-        if (other->oclass != 0x4FE) {
+        if (other->oclass == 0x4FE) continue;
+        {
             period = scale_ticks(0xAA);
             divisor = ConvertIntegerToFloat(period);
             phase = (float)(D_L12_0015F5CC % period) / divisor;
@@ -155,11 +156,11 @@ void FUN_L12_00306828(struct Moby *moby) {
             red += 0xB4;
             if (green > 0xFF) green = 0xFF;
             if (red > 0xFF) red = 0xFF;
-            other->unk90 = ((blue + 0x46) << 16) | alpha | (green << 8) | red;
+            packed_color = ((blue + 0x46) << 16) | alpha | (green << 8) | red;
             other->flags |= 0x10;
+            other->unk90 = packed_color;
         }
-        i++;
-    } while (i < 18);
+    }
 }
 #endif /* NON_MATCHING */
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003069d0.s", FUN_L12_003069d0);
