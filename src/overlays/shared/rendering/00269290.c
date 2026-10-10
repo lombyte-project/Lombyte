@@ -700,7 +700,78 @@ unsigned char *FUN_L00_0026b230(void *pos, void *vel, unsigned char flags, float
     return m;
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026b500.s", FUN_L00_0026b500);
+#else
+extern void FUN_001f9a10_26b500(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float FUN_001f9af0_26b500(void *) __asm__("FUN_001f9af0");
+extern void FUN_001f9bf8_26b500(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void advance_accelerated_scalar_26b500(float, float, float, float, float *, float *)
+    __asm__("FUN_00213f38");
+extern float FUN_001fa6c0_26b500(int) __asm__("FUN_001fa6c0");
+extern int FUN_001fa6e0_26b500(int, int, float) __asm__("FUN_001fa6e0");
+extern int FUN_001f96f8_26b500(int) __asm__("FUN_001f96f8");
+extern int FUN_001f9770_26b500(void *) __asm__("FUN_001f9770");
+extern void FUN_L00_00267a08_26b500(void *) __asm__("FUN_L00_00267a08");
+extern unsigned char D_0013E530_26b500 __asm__("D_0013E530") __attribute__((section(".data")));
+extern float D_0015ED6C_26b500 __asm__("D_0015ED6C");
+extern float D_0015ED70_26b500 __asm__("D_0015ED70");
+extern float D_L00_001601B8_26b500 __asm__("D_L00_001601B8") __attribute__((sda));
+extern float D_L00_001601BC_26b500 __asm__("D_L00_001601BC") __attribute__((sda));
+extern float D_L00_001601D8_26b500 __asm__("D_L00_001601D8") __attribute__((sda));
+extern float D_L00_001601DC_26b500 __asm__("D_L00_001601DC") __attribute__((sda));
+extern float D_L00_001601E8_26b500 __asm__("D_L00_001601E8") __attribute__((sda));
+extern float D_L00_001601EC_26b500 __asm__("D_L00_001601EC") __attribute__((sda));
+
+void FUN_L00_0026b500(unsigned char *m) {
+    unsigned char *p = m + 0x20;
+    float rotation;
+    float scale = 1.0f;
+    float life, duration, start, end, t;
+
+    m[8] += p[0x1e];
+    if (p[0x1f] & 4)
+        scale += FUN_001fa6c0_26b500(D_0013E530_26b500) * 0.5f;
+
+    FUN_001f9a10_26b500(m + 0x10, m + 0x10, p);
+    rotation = -FUN_001f9af0_26b500(p);
+    advance_accelerated_scalar_26b500(0.0f, 0.0f,
+                                       D_L00_001601E8_26b500 * D_0015ED70_26b500,
+                                       rotation, (float *)(p + 0x10), &rotation);
+    FUN_001f9bf8_26b500(p, p, -rotation);
+    *(float *)(m + 0x18) += D_L00_001601EC_26b500 * D_0015ED6C_26b500;
+
+    life = FUN_001fa6c0_26b500(*(short *)(m + 0xa));
+    duration = FUN_001fa6c0_26b500(p[0x1d]);
+    t = life / duration;
+    if (p[0x1f] & 1) {
+        start = D_L00_001601DC_26b500;
+        end = D_L00_001601D8_26b500;
+    } else {
+        start = D_L00_001601BC_26b500;
+        end = D_L00_001601B8_26b500;
+    }
+    *(float *)(m + 0xc) = ((end - start * scale) * t + start * scale) * 210000.0f;
+
+    *(int *)(m + 4) = FUN_001fa6e0_26b500(*(int *)(p + 0x18), *(int *)(p + 0x14), t);
+    if (*(short *)(m + 0xa) < FUN_001f96f8_26b500(15)) {
+        int color;
+        life = FUN_001fa6c0_26b500(*(short *)(m + 0xa));
+        duration = FUN_001fa6c0_26b500(FUN_001f96f8_26b500(10));
+        color = *(int *)(m + 4);
+        *(int *)(m + 4) = FUN_001fa6e0_26b500(color & 0xffffff, color, life / duration);
+    }
+
+    if (*(float *)(m + 0x10) < 2.0f || 1021.0f < *(float *)(m + 0x10) ||
+        *(float *)(m + 0x14) < 2.0f || 1021.0f < *(float *)(m + 0x14) ||
+        *(float *)(m + 0x18) < 2.0f || 1021.0f < *(float *)(m + 0x18) ||
+        FUN_001f9770_26b500(m + 0xa)) {
+        FUN_L00_00267a08_26b500(m);
+    } else if (*(float *)(p + 0x10) < 0.01f) {
+        *(short *)(m + 0xa) -= 1;
+    }
+}
+#endif
 extern unsigned char *D_L00_001B20B4_26b790 __asm__("D_L00_001B20B4")
     __attribute__((section(".data")));
 unsigned char *FUN_L00_002678b8_26b790(int) __asm__("FUN_L00_002678b8");
