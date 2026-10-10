@@ -46,7 +46,7 @@ PATCH_ORDER = (
     "0000", "0001", "0015", "0016", "0019", "0020", "0021", "0022", "0025",
     "0026", "0027", "0028", "0029", "0030", "0031", "0032", "0033",
     "0037", "0036", "0044", "0045", "0046", "0047", "0048", "0049", "0050",
-    "0051", "0052", "0053", "0054", "0055", "0056", "0057",
+    "0051", "0052", "0053", "0054", "0055", "0056",
 )
 
 BISON_URLS = (
@@ -66,7 +66,7 @@ HOST_OBJECTS_CFLAGS_MK = "obstack.o gcc.o mkstemp.o: override CFLAGS = -g\n"
 # checkout. Rebuilds on other hosts or paths embed their own build paths and
 # may differ; the full-ELF gate (`make elf`) is the check that matters.
 REFERENCE_HASHES = {
-    "cc1": "d94aca8472a892baca63538a26fe631bbd0746b6d3640643e19b0e4317d09f25",
+    "cc1": "c2b8e013b797f4ffbadc35c8764206523f0c7344edfc6ac72dacb44f02d4ac82",
     "cpp": "147aa9875b47be026a25e1b7859bf545c364862d9f2731cbbbbc4f6af50eb288",
     "xgcc": "693c6e50b74d5cea3ca61a4af4e3a9002f121d1fc240d0b5db6b7bd0f502dc17",
     "as": "5fb49530da24d8621a561596fcb76ebb8183043bee6d37199064b690274f0ab9",
