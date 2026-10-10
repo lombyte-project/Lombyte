@@ -1062,7 +1062,173 @@ void FUN_L14_00314f00(char *moby) {
         identity, 0x72, 0);
 }
 #endif
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315290.s", FUN_L14_00315290);
+#include "rnc/gameplay/camera/update_cam.h"
+/* Runs the vendor camera along its slot path: on the first frame it starts at the path head looking at the
+ * slot target; then it advances along the path, blends the field of view between the path stops, and keeps
+ * looking at the target (a moby offset or the look path). At the end it hands the view back behind the hero. */
+typedef struct {
+    s16 seg[8];   /* 0x00: path segment of each stop (-1 ends the list) */
+    f32 fov[8];   /* 0x10: field of view at each stop, degrees */
+    f32 fov_end;  /* 0x30: field of view handed back at the end */
+} VendorCamStops_5290;
+
+typedef struct {
+    s32 seg;      /* 0x40 */
+    f32 t;        /* 0x44 */
+    f32 len_a;    /* 0x48: length of the camera path */
+    f32 len_b;    /* 0x4C: length of the look path */
+    f32 dist;     /* 0x50: distance travelled */
+    s16 started;  /* 0x54 */
+    s16 timer;    /* 0x56 */
+} VendorCamRun_5290;
+
+extern char *D_L14_0015EF50_5290 __asm__("D_L14_0015EF50");
+extern char *D_L14_001B0BB0_5290[] __asm__("D_L14_001B0BB0");
+extern char *D_L14_0015FFD8_5290 __asm__("D_L14_0015FFD8");
+extern s32 D_L14_0015F404;
+extern char D_L14_001676D0[];
+extern float D_L14_001675D8 __attribute__((section(".data")));
+extern float D_0013F5E0_5290[] __asm__("D_0013F5E0");
+typedef struct {
+    char pad0[0xB0];
+    float fB0; /* tan of half the field of view */
+} VendorView_5290;
+extern VendorView_5290 D_L14_0016D140_5290 __asm__("D_L14_0016D140");
+extern int path_step_5290(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
+extern void update_view_context(void) __asm__("FUN_001f2d98");
+extern float fast_sin_5290(float) __asm__("FUN_001f9de0");
+extern float fast_cos_5290(float) __asm__("FUN_001f9dc8");
+extern void FUN_L14_002d6570(struct Moby *m);
+extern float FUN_001f9b48_5290(void *, void *) __asm__("FUN_001f9b48");
+extern void sub_5290(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_5290(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_5290(void *, void *, float) __asm__("FUN_001f9a68");
+extern void normalize_5290(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void cross_5290(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern s32 tick_countdown_16_5290(s16 *) __asm__("FUN_001f9770");
+
+void FUN_L14_00315290(struct UpdateCam *cam) {
+    float dir[4];
+    float t[4];
+    float u[4];
+    float v[4];
+    s32 seg;
+    f32 tt;
+    s32 seg2;
+    f32 tt2;
+    char *p = (char *)cam->saved_state;
+    char *rec = *(char **)(D_L14_0015EF50_5290 + cam->descriptor_index * 32 + 0x1C);
+    VendorCamRun_5290 *q = (VendorCamRun_5290 *)(p + 0x40);
+    VendorCamStops_5290 *s = (VendorCamStops_5290 *)(p + 0x58);
+    char *path;
+    int done;
+    int i;
+
+    if (q->started == 0) {
+        char *pa = D_L14_001B0BB0_5290[*(int *)(rec + 0x20)];
+        char *pb = D_L14_001B0BB0_5290[*(int *)(rec + 0x24)];
+        D_L14_0015F404 = 1;
+        q->started = 1;
+        qcopy(&cam->pos, pa + 0x10);
+        if (*(int *)(rec + 0x28) >= 0) {
+            struct Moby *o = (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(rec + 0x28) * 256);
+            float *ofs = (float *)(rec + 0x2C);
+            t[0] = ofs[0];
+            t[1] = ofs[1];
+            t[2] = ofs[2];
+            t[3] = 0.0f;
+            transform_vector_by_basis(t, t, D_L14_001676D0);
+            add_5290(u, &o->pos, t);
+            sub_5290(dir, u, &cam->pos);
+        } else {
+            sub_5290(dir, pb + 0x10, &cam->pos);
+        }
+        scale_5290(t, D_0013F5E0_5290, -1.0f);
+        normalize_5290(&cam->m0, dir, 1.0f);
+        cross_5290(&cam->m1, &cam->m0, t);
+        normalize_5290(&cam->m1, &cam->m1, 1.0f);
+        cross_5290(&cam->m2, &cam->m1, &cam->m0);
+        return;
+    }
+    path = D_L14_001B0BB0_5290[*(int *)(rec + 0x20)];
+    qcopy(dir, &cam->pos);
+    done = path_step_5290(path, &cam->pos.x, &q->seg, &q->t, 0, *(float *)(rec + 0x3C) * frame_time);
+    if (q->timer != 0 && tick_countdown_16_5290(&q->timer) != 0)
+        done = 1;
+    if (*(u8 *)(rec + 0x39) != 0)
+        done = 1;
+    if (done) {
+        float ang = s->fov_end * 0.5f;
+        char *hp;
+        char *mb;
+        D_L14_0016D140_5290.fB0 = fast_sin_5290(ang) / fast_cos_5290(ang);
+        update_view_context();
+        D_L14_001675D8 = 0.25f;
+        cam->transition_state = 4;
+        D_L14_0015F404 = 0;
+        mb = D_L14_0015FFD8_5290;
+        FUN_L14_002d6570((struct Moby *)(mb + *(int *)(rec + 0x50) * 256));
+        hp = (char *)hero.unk560;
+        seg = hero.unk564;
+        tt = hero.unk568;
+        path_step_5290(hp, &cam->pos.x, &seg, &tt, 0, 10.0f);
+        cam->pos.z += 2.0f;
+        seg = hero.unk564;
+        tt = hero.unk568;
+        path_step_5290(hp, u, &seg, &tt, 0, 0.0f);
+        u[2] += 1.5f;
+        sub_5290(t, u, &cam->pos);
+        normalize_5290(&cam->m0, t, 1.0f);
+        cross_5290(&cam->m1, &cam->m0, &hero.unk290);
+        normalize_5290(&cam->m1, &cam->m1, -1.0f);
+        cross_5290(&cam->m2, &cam->m1, &cam->m0);
+        return;
+    }
+    for (i = 0; i < 7 && s->seg[i] >= 0 && s->seg[i + 1] >= 0; i++) {
+        int lo = s->seg[i];
+        if (q->seg >= lo && q->seg < s->seg[i + 1]) {
+            float sum = 0.0f;
+            float total;
+            float ang;
+            int m;
+            int n;
+            for (m = lo; m < q->seg; m++)
+                sum += *(float *)(path + (m * 16 + 0x1C));
+            total = sum;
+            sum += q->t;
+            for (n = q->seg; n < s->seg[i + 1]; n++)
+                total += *(float *)(path + (n * 16 + 0x1C));
+            ang = cosine_interpolate(s->fov[i], s->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
+            D_L14_0016D140_5290.fB0 = fast_sin_5290(ang) / fast_cos_5290(ang);
+            update_view_context();
+        }
+    }
+    q->dist += FUN_001f9b48_5290(dir, &cam->pos);
+    if (*(int *)(rec + 0x28) >= 0) {
+        struct Moby *o = (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(rec + 0x28) * 256);
+        float *ofs = (float *)(rec + 0x2C);
+        u[0] = ofs[0];
+        u[1] = ofs[1];
+        u[2] = ofs[2];
+        u[3] = 0.0f;
+        transform_vector_by_basis(u, u, D_L14_001676D0);
+        add_5290(v, &o->pos, u);
+        sub_5290(t, v, &cam->pos);
+    } else {
+        char *look = D_L14_001B0BB0_5290[*(int *)(rec + 0x24)];
+        seg2 = 0;
+        tt2 = 0.0f;
+        path_step_5290(look, u, &seg2, &tt2, 0, q->dist / q->len_a * q->len_b);
+        sub_5290(t, u, &cam->pos);
+    }
+    scale_5290(u, D_0013F5E0_5290, -1.0f);
+    normalize_5290(&cam->m0, t, 1.0f);
+    cross_5290(&cam->m1, &cam->m0, u);
+    normalize_5290(&cam->m1, &cam->m1, 1.0f);
+    cross_5290(&cam->m2, &cam->m1, &cam->m0);
+}
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
 #endif
