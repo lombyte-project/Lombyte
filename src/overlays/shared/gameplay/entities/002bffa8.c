@@ -824,6 +824,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c26c8.s", FUN_L00_002c26c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c35c0.s", FUN_L00_002c35c0);
 #else
 extern u8 D_0013E539;
+extern u8 D_0013E520_2c35c0[] __asm__("D_0013E520");
 extern s32 D_L00_0015FFD8_2c35c0 __asm__("D_L00_0015FFD8");
 extern s16 D_L00_001B0830[] __attribute__((section(".data")));
 extern f32 FUN_002132a8_2c35c0(f32, f32) __asm__("FUN_002132a8");
@@ -832,7 +833,7 @@ extern void FUN_L00_0025d1b8(void *);
 extern void FUN_L00_0025f780(void *, void *, s32);
 
 u8 *FUN_L00_002c35c0(s32 value, u128 *position, u128 *other_position) {
-    u8 *flags = &D_0013E539 - 0x19;
+    u8 *flags = D_0013E520_2c35c0;
     u8 *m;
     u8 *data;
     u8 *candidate;
