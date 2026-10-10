@@ -213,7 +213,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305758.s", FUN_L14_00305758);
 #else
 extern u8 D_0014C050[];
 extern u8 D_0013D4D5 __attribute__((section(".data")));
-extern f32 D_L14_00174568;
+extern f32 D_L14_00174568[];
 extern s32 D_L14_0015F5CC;
 extern s32 D_L14_0015F5C4;
 extern f32 AbsoluteFloat(f32) __asm__("FUN_001f99c0");
@@ -248,9 +248,9 @@ void FUN_L14_00305758(struct Moby *moby) {
         }
         FUN_L14_00305a38((void *)moby);
         probe_ground_height(o + 0x10, 0, 0.5f);
-        *(s32 *)(o + 0x40) = 0;
-        *(f32 *)(o + 0x44) = -1.5707964f;
-        *(f32 *)(o + 0x18) = D_L14_00174568 + D_L14_001621E8;
+        moby->rot.x = 0.0f;
+        moby->rot.y = -1.5707964f;
+        moby->pos.z = D_L14_001621E8 + D_L14_00174568[0];
         qcopy(d, o + 0x10);
         moby->state = 1;
         break;
