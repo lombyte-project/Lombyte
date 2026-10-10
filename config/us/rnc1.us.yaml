@@ -1597,7 +1597,7 @@ segments:
           - [0x114e28, textbin, text_gap_00213ea8_after_fun_00213928]
           - [0x114e58, c, math/interpolation/approach_value]
           - [0x114eac, textbin, text_gap_00213f2c_after_fun_00213ed8]
-          - [0x114eb8, c, assembly/textbin/fun_00213f38]
+          - [0x114eb8, c, textbin/fun_00213f38]
           - [0x115080, textbin, text_gap_00214100_before_fun_00214128]
           - [0x1150a8, c, math/vectors/normalize_vector_triplet]
           - [0x115164, textbin, text_gap_002141e4_after_fun_00214128]
