@@ -70,7 +70,6 @@ void FUN_L00_00221310(void) {
                 distance = FUN_001f9b48_221310(&first, D_L00_00173E60_221310);
             }
             if (hit == 0 || distance > 3.0f) {
-                f32 step = 0.1f;
                 f32 default_distance = 20.0f;
                 offset = -0.4f;
                 do {
@@ -78,7 +77,7 @@ void FUN_L00_00221310(void) {
                     if (!FUN_L00_001f0d60_221310(hero.unk234, &probe, 2, 0)) {
                         break;
                     }
-                    offset += step;
+                    offset += 0.1f;
                     if (offset >= 0.5f) {
                         return;
                     }
