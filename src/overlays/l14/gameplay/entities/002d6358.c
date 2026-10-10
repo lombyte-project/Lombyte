@@ -169,91 +169,74 @@ void FUN_L14_002d7198(struct Moby *moby) {
     FUN_L00_0025d808(*(int *)((idx << 5) + D_L14_0015F70C + 0x10), &moby->pos, data + 0x64,
                      data + 0x68, 0, *(float *)&D_L14_00161A30_d * frame_time);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d71f0.s", FUN_L14_002d71f0);
-#else
-#include "rnc/rendering/geometry_quad.h"
+/* Draws the racer's two glow quads, at its lamp (0xE0) and its tail (0x200), turned to face the camera. */
+typedef struct {
+    float m[4][4];
+    u32 col[4];
+    float uv[8];
+    unsigned long a, b, c, d;
+} Pk_2d71f0;
 
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void scale_vector_xyz(float, void *, void *) __asm__("FUN_001f9a68");
-extern void FUN_001f9d20(void *, void *, void *);
-extern long get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+extern char D_L14_001674C0_g[] __asm__("D_L14_001674C0");
+extern float D_L14_001DE540[4][4];
+extern void scale_g(void *, void *, float) __asm__("FUN_001f9a68");
+extern void sub_g(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void normalize_g(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void cross_g(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern unsigned long tex_g(s32) __asm__("FUN_001f44b8");
+extern void xform_g(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void draw_g(void *, int, int) __asm__("FUN_001f7d30");
 
-void FUN_L14_002d71f0(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    struct GeometryQuad quad;
-    Vec4 basis[4];
-    char *src;
-    char *dst;
-    char *src_second;
-    char *dst_second;
-    float one;
+void FUN_L14_002d71f0(struct Moby *m) {
+    char *d = (char *)m->pvars;
+    Pk_2d71f0 pk;
+    float mat[4][4];
     int i;
-
-    qcopy(&basis[3], data + 0xE0);
-    one = 1.0f;
-    basis[3].f[3] = one;
-    subtract_vector_xyz(&basis[0], D_L14_001674C0, &basis[3]);
-    normalize_vector_xyz(&basis[0], &basis[0], one);
-    cross_vectors_xyz(&basis[1], &basis[0], hero.unk290.f);
-    normalize_vector_xyz(&basis[1], &basis[1], -1.0f);
-    cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
-
-    quad.texture = get_effect_texture(11);
-    quad.primitive = 0x8000000048L;
-    quad.texture_state = 0xFF9000000260L;
-    quad.reserved.value = 5;
-    quad.colors[3] = 0x80FFFFFF;
-    quad.colors[2] = 0x80FFFFFF;
-    quad.colors[1] = 0x80FFFFFF;
-    quad.texture_coordinates[0][0] = 0.0f;
-    quad.texture_coordinates[0][1] = 0.0f;
-    quad.texture_coordinates[1][0] = 0.0f;
-    quad.texture_coordinates[1][1] = one;
-    quad.texture_coordinates[2][0] = one;
-    quad.colors[0] = 0x80FFFFFF;
-    quad.texture_coordinates[2][1] = 0.0f;
-    quad.texture_coordinates[3][0] = one;
-    quad.texture_coordinates[3][1] = one;
-    src = (char *)0x1DE540;
-    dst = (char *)quad.positions;
-    i = 3;
-    do {
-        i--;
-        scale_vector_xyz(0.4f, dst, src);
-        FUN_001f9d20(dst, dst, basis);
-        dst += 0x10;
-        src += 0x10;
-    } while (i >= 0);
-    draw_geometry_quad(&quad, 0, 0);
-
-    qcopy(&basis[3], data + 0x200);
-    subtract_vector_xyz(&basis[0], D_L14_001674C0, &basis[3]);
-    normalize_vector_xyz(&basis[0], &basis[0], one);
-    cross_vectors_xyz(&basis[1], &basis[0], hero.unk290.f);
-    normalize_vector_xyz(&basis[1], &basis[1], -1.0f);
-    cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
-    quad.colors[0] = 0x202020FF;
-    quad.colors[1] = 0x202020FF;
-    quad.colors[2] = 0x202020FF;
-    quad.colors[3] = 0x202020FF;
-    src_second = (char *)0x1DE540;
-    dst_second = (char *)quad.positions;
-    i = 3;
-    do {
-        i--;
-        scale_vector_xyz(0.2f, dst_second, src_second);
-        FUN_001f9d20(dst_second, dst_second, basis);
-        dst_second += 0x10;
-        src_second += 0x10;
-    } while (i >= 0);
-    draw_geometry_quad(&quad, 0, 0);
+    int j;
+    qcopy(mat[3], d + 0xE0);
+    mat[3][3] = 1.0f;
+    sub_g(mat[0], D_L14_001674C0_g, mat[3]);
+    normalize_g(mat[0], mat[0], 1.0f);
+    cross_g(mat[1], mat[0], &hero.unk290);
+    normalize_g(mat[1], mat[1], -1.0f);
+    cross_g(mat[2], mat[1], mat[0]);
+    pk.b = tex_g(0xB);
+    pk.d = 0x8000000048ULL;
+    pk.c = 0x0000FF9000000260ULL;
+    pk.a = 5;
+    pk.col[3] = 0x80FFFFFF;
+    pk.col[2] = 0x80FFFFFF;
+    pk.col[1] = 0x80FFFFFF;
+    pk.col[0] = 0x80FFFFFF;
+    pk.uv[0] = 0.0f;
+    pk.uv[1] = 0.0f;
+    pk.uv[2] = 0.0f;
+    pk.uv[3] = 1.0f;
+    pk.uv[4] = 1.0f;
+    pk.uv[5] = 0.0f;
+    pk.uv[6] = 1.0f;
+    pk.uv[7] = 1.0f;
+    for (i = 0; i < 4; i++) {
+        scale_g(pk.m[i], D_L14_001DE540[i], 0.4f);
+        xform_g(pk.m[i], pk.m[i], mat);
+    }
+    draw_g(&pk, 0, 0);
+    qcopy(mat[3], d + 0x200);
+    sub_g(mat[0], D_L14_001674C0_g, mat[3]);
+    normalize_g(mat[0], mat[0], 1.0f);
+    cross_g(mat[1], mat[0], &hero.unk290);
+    normalize_g(mat[1], mat[1], -1.0f);
+    cross_g(mat[2], mat[1], mat[0]);
+    pk.col[3] = 0x202020FF;
+    pk.col[2] = 0x202020FF;
+    pk.col[1] = 0x202020FF;
+    pk.col[0] = 0x202020FF;
+    for (j = 0; j < 4; j++) {
+        scale_g(pk.m[j], D_L14_001DE540[j], 0.2f);
+        xform_g(pk.m[j], pk.m[j], mat);
+    }
+    draw_g(&pk, 0, 0);
 }
-#define FUN_L14_002d71f0(x) FUN_L14_002d71f0(struct Moby *)
-#endif
 
 #define NOT_SDA
 
@@ -275,7 +258,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern float D_L14_00161A60 __attribute__((sda));
 extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L14_002d71f0(void);
+extern void FUN_L14_002d71f0(struct Moby *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
