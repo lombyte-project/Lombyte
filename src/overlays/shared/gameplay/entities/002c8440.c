@@ -472,6 +472,7 @@ void FUN_L00_002cbcc0(u8 *m, s32 enabled)
     s32 color;
     s32 sign;
     u8 *effect;
+    u8 alpha = 0x44;
 
     handle = (void **)(*(u8 **)(m + 0x78) + 0x2c);
     for (i = 16; i >= 0; i--) {
@@ -510,7 +511,7 @@ void FUN_L00_002cbcc0(u8 *m, s32 enabled)
             effect[0x2a] = color >> 24;
             effect[0x2b] = effect[0xa];
             if (FUN_L00_00257b50_2cbcc0(2))
-                effect[3] = 0x44;
+                effect[3] = alpha;
         }
     }
 }
