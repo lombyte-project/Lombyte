@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/moby_anim.h"
+#include "qcopy.h"
 #define MOBY(p) ((struct Moby *)(p))
 
 /* 0x002DF080, 180 bytes.  Initialises two tables of spaced vectors in the
@@ -183,8 +184,171 @@ void FUN_L14_002dfc58(u8 *moby) {
         FUN_L00_00259a88(*(s32 *)(q + 0x2080), &r);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002e7bd8.s", FUN_L14_002e7bd8);
-#ifndef NON_MATCHING
+/* pvars of the lift that carries a rider moby and pushes the hero off its edge */
+typedef struct {
+    u8 pad0[0x74];
+    s32 path;          /* 0x74: path index into D_L14_001B0BB0 */
+    u8 pad78[0x84];
+    f32 height;        /* 0xFC */
+    u8 pad100[0x50];
+    s32 rider;         /* 0x150: moby index carried along */
+    s32 anchor;        /* 0x154: joint the rider follows, -1 for the moby position */
+    s32 mode;          /* 0x158: 0x3039 when the rider is attached */
+    s32 sound;         /* 0x15C */
+    f32 offset[4];     /* 0x160 */
+    u8 pad170[0x10];
+    u8 spring[0x40];   /* 0x180 */
+    u8 manip[0x10];    /* 0x1C0 */
+    u8 wobble[0x30];   /* 0x1D0 */
+    f32 angle;         /* 0x200 */
+    s16 riding;        /* 0x204 */
+    s16 h206;          /* 0x206 */
+    u8 pad208[4];
+    s16 timer;         /* 0x20C */
+    s16 pad20E;
+    f32 timer_inv;     /* 0x210 */
+    f32 from;          /* 0x214 */
+    f32 to;            /* 0x218 */
+    s32 clip;          /* 0x21C */
+} L14LiftVars;
+
+extern struct Moby *D_L14_0015FFD8_lift __asm__("D_L14_0015FFD8");
+extern char *D_L14_001B0BB0_lift[] __asm__("D_L14_001B0BB0");
+extern char D_L14_001FC840[];
+extern s32 D_L14_00161B8C __attribute__((sda));
+extern s32 D_L14_00161B90 __attribute__((sda));
+extern f32 D_L14_00161B88 __attribute__((sda));
+extern f32 D_0015ED6C_lift __asm__("D_0015ED6C");
+extern int lift_inside(void *, int) __asm__("FUN_00214720");
+extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
+extern void lift_print(const char *, short) __asm__("FUN_001e93b0");
+extern void lift_remove(void *) __asm__("FUN_0020c828");
+extern void FUN_L01_002f5168(void *);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_001fa050(void *, void *);
+extern void lift_xform(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void lift_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void lift_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern int FUN_L00_0028d8c0(void *, int);
+extern int lift_sound(int, int, void *) __asm__("FUN_0022da68");
+extern float lift_add_rot(float, float) __asm__("FUN_001fa580");
+extern void FUN_L00_001fff28(void *, int, float);
+extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern int lift_frames(int) __asm__("FUN_001f96f8");
+extern float lift_itof(int) __asm__("FUN_001fa6c0");
+extern int lift_tick(short *) __asm__("FUN_001f9770");
+extern float lift_length(void *) __asm__("FUN_001f9af0");
+extern void lift_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+
+void FUN_L14_002e7bd8(struct Moby *m) {
+    L14LiftVars *d;
+    Vec4 old;
+    Vec4 rot;
+    Vec4 delta;
+    Vec4 base;
+    Vec4 off;
+    f32 mat[16];
+    struct Moby *rider;
+    f32 len;
+    f32 max;
+
+    if (m == 0)
+        return;
+    d = (L14LiftVars *)m->pvars;
+    if (d == 0)
+        return;
+    if (d->clip >= 0 && lift_inside(&hero.motion.pos, d->clip) != 0) {
+        m->unk94 = 0;
+        m->flags |= 0x41;
+        if (d->rider >= 0) {
+            struct Moby *r = &D_L14_0015FFD8_lift[d->rider];
+            r->unk94 = 0;
+            r->flags = (r->flags | 0x41) & 0xEFFF;
+        }
+        return;
+    }
+    if (m->unk94 == 0) {
+        m->flags &= 0xFFBE;
+        m->unk94 = m->pclass->unk10;
+        if (d->rider >= 0) {
+            struct Moby *r = &D_L14_0015FFD8_lift[d->rider];
+            r->flags &= 0xFFBE;
+            r->unk94 = r->pclass->unk10;
+            r->flags |= 0x1000;
+        }
+    }
+    qcopy(&old, &m->pos);
+    qcopy(&rot, &m->rot);
+    if (m->state == 0) {
+        qcopy(&m->pos, D_L14_001B0BB0_lift[d->path] + 0x10);
+        d->angle = 0.0f;
+        d->sound = -1;
+        d->h206 = 0;
+        attach_manipulator(m, 0, d->manip);
+        if (d->rider == -1) {
+            lift_print(D_L14_001FC840, m->save_id);
+            lift_remove(m);
+            return;
+        }
+        d->riding = 0;
+        d->from = d->height;
+    }
+    FUN_L01_002f5168(m);
+    rider = &D_L14_0015FFD8_lift[d->rider];
+    if (d->mode == 0x3039) {
+        if (d->anchor != -1)
+            FUN_L00_0024f7c8(m, d->anchor, &base);
+        else
+            qcopy(&base, &m->pos);
+        FUN_001fa050(mat, &m->rot);
+        lift_xform(&off, d->offset, mat);
+        lift_add(&rider->pos, &base, &off);
+    }
+    if (d->sound == -1 || (FUN_L00_0028d8c0(m, d->sound) == 0 && d->sound == -1))
+        d->sound = lift_sound(0, 4, m);
+    d->angle = lift_add_rot(d->angle, 0.17453292f);
+    FUN_L00_001fff28(d->wobble, 0, d->angle);
+    lift_sub(&delta, &m->pos, &old);
+    FUN_L00_00260738(d->spring, &delta, &rot, &m->rot);
+    if (hero.state.control_mode == 13 && hero.unk964 == rider) {
+        if (d->riding == 0) {
+            d->riding = 1;
+            d->timer = lift_frames(D_L14_00161B8C);
+            d->timer_inv = 1.0f / lift_itof(d->timer);
+        }
+    } else {
+        if (d->riding == 1) {
+            if (hero.air_frames.s == 0 || hero.motion.pos.f[2] <= m->pos.z - 3.0f) {
+                d->riding = 0;
+                d->timer = lift_frames(D_L14_00161B90);
+                d->timer_inv = 1.0f / lift_itof(d->timer);
+                d->to = d->height;
+            } else {
+                qcopy(&base, &hero.motion.pos);
+                lift_sub(&delta, &rider->pos, &base);
+                delta.f[2] = 0.0f;
+                len = lift_length(&delta);
+                max = D_L14_00161B88 * D_0015ED6C_lift;
+                if (max < len)
+                    len = max;
+                lift_normalize(&hero.motion.unkF0, &delta, len);
+            }
+        }
+        if (d->riding == 0) {
+            lift_tick(&d->timer);
+            {
+                f32 t = lift_itof(d->timer) * d->timer_inv;
+                d->height = d->from + (d->to - d->from) * t;
+            }
+            return;
+        }
+    }
+    lift_tick(&d->timer);
+    {
+        f32 t = lift_itof(d->timer) * d->timer_inv;
+        d->height = (d->from - 0.005f) * t + 0.005f;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eaf88.s", FUN_L14_002eaf88);
 #else
 extern void spark_debug_print(const char *, short) __asm__("FUN_001e93b0");
