@@ -290,139 +290,171 @@ void FUN_L01_002e6518(SplashMoby_u *m, u128 *origin) {
         FUN_L00_0026ced0(&tmp, &vel, *c1, *c2, size, FUN_001f96f8(FUN_L00_00257b90(5, 0xF)));
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e6790.s", FUN_L01_002e6790);
-#else
-typedef union {
-    u128 q;
-    float f[4];
-} PathPoint;
+#include "qcopy.h"
 
 typedef struct {
-    int count;
-    int pad[3];
-    PathPoint pts[1];
-} PathSelection;
+    s32 count;
+    u8 pad4[0xC];
+    struct {
+        f32 x, y, z, w;
+    } pts[1];
+} PathNodes;
 
 typedef struct {
-    PathPoint pos;
-    PathPoint v10;
-    PathPoint v20;
-    PathPoint v30;
+    s32 cur;
+    s8 dir;
+    u8 pad5[0xB];
+    PathNodes *path;
+} PathFollow;
+
+typedef struct {
+    u8 pad0[0x38];
+    s32 w38;
+    u8 pad3C[0x114];
+    PathFollow follow;
+    u8 pad164[0x3C];
+    f32 radius;
+    u8 pad1A4[8];
+    s16 ordered;
+    s16 stops_only;
+    u8 pad1B0[0x32];
+    s16 h1E2;
+} PathPickVars;
+
+typedef struct {
+    u8 pad0[0x10];
+    SplashVec pos;
+    u8 pad20[0x58];
+    PathPickVars *vars;
+} PathPickMoby;
+
+typedef struct {
+    SplashVec pos;
+    SplashVec v10;
+    SplashVec v20;
+    SplashVec v30;
     void *moby;
-    int kind;
-} PathTarget;
+    s32 kind;
+} PathPickTarget;
 
-extern int FUN_L01_00274b78(void *, PathTarget *, float);
+extern void FUN_L01_00274b78(void *, void *, f32);
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
-extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
+extern f32 FUN_001f9e90(f32, f32);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
-int FUN_L01_002e6790(void *self, int *index) {
-    char *m = self;
-    char *v = *(char **)(m + 0x78);
-    PathSelection *path = *(PathSelection **)(v + 0x160);
-    PathPoint point;
-    PathTarget ahead;
-    float radius;
-    float nearest_distance;
-    float best_distance;
-    float best_angle;
-    float angle;
-    float distance;
-    int alert;
-    int previous;
-    int nearest;
-    int next;
-    int last;
-    int selected;
-    int i;
-    int current;
+/* Picks the path node the follower should head for: an ordered path just steps to the next stop; otherwise the
+ * nearest node and its two neighbours are scored (distance, or heading change for slow movers) and the best one
+ * is written to *idx. Returns nonzero when the pick differs from the nearest node. */
+int FUN_L01_002e6790(void *arg, int *idx) {
+    PathPickMoby *m = arg;
+    PathPickTarget target;
+    SplashVec pt;
+    PathPickVars *v;
+    PathFollow *f;
+    s32 fast;
+    s32 prev;
+    s32 next;
+    s32 best;
+    s32 last;
+    s32 i;
+    f32 d;
+    f32 a;
+    f32 best_d;
+    f32 best_a;
+    f32 r;
+    f32 dist;
 
-    alert = (*(int *)(v + 0x38) != 0 || *(short *)(v + 0x1e2) != 0);
-    if (alert)
-        radius = *(float *)(v + 0x1a0) + *(float *)(v + 0x1a0);
-    else
-        radius = *(float *)(v + 0x1a0);
-    FUN_L01_00274b78(m, &ahead, radius);
-    nearest_distance = 10000.0f;
-    best_angle = 0.0f;
-    nearest = 0;
-    previous = 0;
+    v = m->vars;
+    fast = 0;
+    f = &v->follow;
+    if (v->w38 != 0 || v->h1E2 != 0) {
+        fast = 1;
+    }
+    r = fast ? v->radius * 2.0f : v->radius;
+    prev = 0;
     next = 0;
-    last = 0;
-    if (*(short *)(v + 0x1ac) != 0) {
-        for (;;) {
-            if (*index < path->count - 1)
-                *index = (*index + path->count + *(signed char *)(v + 0x154)) % path->count;
-            if (*index == path->count - 1 || path->pts[*index].f[3] == 1.0f)
+    FUN_L01_00274b78(m, &target, r);
+    best_d = 10000.0f;
+    best_a = 0.0f;
+    best = 0;
+    if (v->ordered != 0) {
+        do {
+            if (*idx < f->path->count - 1) {
+                *idx = (*idx + f->path->count + f->dir) % f->path->count;
+            }
+            if (*idx == f->path->count - 1) {
                 break;
-        }
+            }
+        } while (f->path->pts[*idx].w != 1.0f);
         return 1;
     }
-    for (i = 0; i < path->count; i++) {
-        if (*(short *)(v + 0x1ae) == 0 || path->pts[i].f[3] == 1.0f) {
-            distance = FUN_001f9b80(&path->pts[i], m + 0x10);
-            if (distance < nearest_distance) {
-                previous = last;
-                nearest_distance = distance;
-                nearest = i;
-            } else if (last == nearest) {
+    last = 0;
+    for (i = 0; i < f->path->count; i++) {
+        if (v->stops_only == 0 || f->path->pts[i].w == 1.0f) {
+            dist = FUN_001f9b80(&f->path->pts[i], &m->pos);
+            if (dist < best_d) {
+                prev = last;
+                best_d = dist;
+                best = i;
+            } else if (last == best) {
                 next = i;
             }
             last = i;
         }
     }
-    if (nearest == path->count - 1)
+    i = best;
+    if (i == f->path->count - 1) {
         next = 0;
-    else if (nearest == 0)
-        previous = path->count - 1;
-    best_distance = alert ? 10000.0f : 0.0f;
-    selected = 0;
-    *index = 0;
-    do {
-        current = *index;
-        if (current == previous || current == nearest || current == next) {
-            point = path->pts[current];
-            if (alert) {
-                distance = FUN_001f9b48(&ahead.pos, &point);
-                if ((*(short *)(v + 0x1ae) == 0 || point.f[3] == 1.0f) && distance < best_distance) {
-                    best_distance = distance;
-                    selected = current;
+    } else if (i == 0) {
+        prev = f->path->count - 1;
+    }
+    best_d = 0.0f;
+    best = 0;
+    if (fast) {
+        best_d = 10000.0f;
+    }
+    *idx = 0;
+    for (;;) {
+        if (*idx == prev || *idx == i || *idx == next) {
+            if (fast) {
+                qcopy(&pt, &f->path->pts[*idx]);
+                d = FUN_001f9b48(&target, &pt);
+                if ((v->stops_only == 0 || pt.f[3] == 1.0f) && d < best_d) {
+                    best = *idx;
+                    best_d = d;
                 }
             } else {
-                angle = FUN_001fa688(
-                    FUN_001f9e90(point.f[0] - *(float *)(m + 0x10), point.f[1] - *(float *)(m + 0x14)),
-                    FUN_001f9e90(ahead.pos.f[0] - *(float *)(m + 0x10), ahead.pos.f[1] - *(float *)(m + 0x14)));
-                distance = FUN_001f9b48(m + 0x10, &point);
-                if (*(short *)(v + 0x1ae) == 0 || point.f[3] == 1.0f) {
-                    if (angle < 1.5707964f) {
-                        if (best_angle < angle) {
-                            best_distance = distance;
-                            best_angle = angle;
-                            selected = current;
+                qcopy(&pt, &f->path->pts[*idx]);
+                a = fast_difference_between_rotations(FUN_001f9e90(pt.f[0] - m->pos.f[0], pt.f[1] - m->pos.f[1]),
+                                                      FUN_001f9e90(target.pos.f[0] - m->pos.f[0],
+                                                                   target.pos.f[1] - m->pos.f[1]));
+                d = FUN_001f9b48(&m->pos, &pt);
+                if (v->stops_only == 0 || pt.f[3] == 1.0f) {
+                    if (a < 1.5707964f) {
+                        if (best_a < a) {
+                            best = *idx;
+                            best_d = d;
+                            best_a = a;
                         }
-                    } else if (distance >= 12.0f) {
-                        if (distance < best_distance || best_distance < 12.0f) {
-                            best_distance = distance;
-                            best_angle = angle;
-                            selected = current;
-                        }
-                    } else if (best_distance < distance) {
-                        best_distance = distance;
-                        best_angle = angle;
-                        selected = current;
+                    } else if ((d >= 12.0f && (d < best_d || best_d < 12.0f)) || (d < 12.0f && best_d < d)) {
+                        best = *idx;
+                        best_d = d;
+                        best_a = a;
                     }
                 }
             }
         }
-        *index = (current + path->count + *(signed char *)(v + 0x154)) % path->count;
-    } while (*index != 0);
-    *index = selected;
-    return selected != nearest;
+        *idx = (*idx + f->path->count + f->dir) % f->path->count;
+        if (*idx == 0) {
+            *idx = best;
+            break;
+        }
+    }
+    /* i is reused for the result so it outlives best (keeps retail's copy of the nearest node) */
+    i = best != i;
+    return i;
 }
-#endif
 
 #define NOT_SDA
 
