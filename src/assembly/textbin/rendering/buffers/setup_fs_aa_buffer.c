@@ -89,8 +89,8 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     strip_index = 0;
     do {
         *packet_word++ = strip_index * active_fs_aa_buffer->display_width;
-        *packet_word++ = (strip_index * active_fs_aa_buffer->storage_width +
-                          (0x8000 - (active_fs_aa_buffer->storage_width << 3))) |
+        *packet_word++ = (0x8000 + strip_index * active_fs_aa_buffer->storage_width -
+                          (active_fs_aa_buffer->storage_width << 3)) |
                          ((u64)(0x7FF8 - (active_fs_aa_buffer->storage_height << 3)) << 16);
         *packet_word++ = (strip_index + 1) * active_fs_aa_buffer->display_width |
                          ((u64)active_fs_aa_buffer->display_height << 20);
