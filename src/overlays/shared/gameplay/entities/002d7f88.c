@@ -985,7 +985,8 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
         return;
     D_L00_00161B84_002ddcb8 = 1.7f;
     *(int *)((char *)&D_L00_00161B84_002ddcb8 - 0x44) = 0;
-    if ((*(int *)(global + 0x2084) == 30 || *(int *)(global + 0x2084) == 1) &&
+    i = *(int *)(global + 0x2084);
+    if ((i == 30 || i == 1) &&
         (*(u16 *)(*(char **)(global + 0x2080) + 0x34) & 1)) {
         qcopy(&first, D_L00_00166FD0_002ddcb8);
         qcopy(&second, D_L00_00166FD0_002ddcb8 + 0x10);
@@ -1029,8 +1030,11 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
     D_L00_00161B58_002ddcb8 = 0;
     if (*(int *)((char *)&D_L00_00161B84_002ddcb8 - 0x40)) {
         *(int *)((char *)&D_L00_00161B84_002ddcb8 - 0x40) = 0;
-        for (i = 199; i >= 0; --i)
-            *(int *)(D_L00_001E5F30_002ddcb8 - 0xC + i * 0x18) = 0;
+        record = D_L00_001E5F30_002ddcb8 + 0xC;
+        for (i = 199; i >= 0; --i) {
+            *(int *)record = 0;
+            record -= 0x18;
+        }
     }
 }
 #endif
