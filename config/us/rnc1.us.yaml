@@ -1226,7 +1226,7 @@ segments:
           - [0xfff3c, textbin, text_gap_001fefbc_before_fun_001fefc0]
           - [0xfff40, c, ui/hud/link_hud_bank]
           - [0x1000a0, textbin, text_gap_001ff120_before_fun_001ff128]
-          - [0x1000a8, c, assembly/textbin/ui/hud/hud_send_resident_bank]
+          - [0x1000a8, c, ui/hud/hud_send_resident_bank]
           - [0x1001e0, c, ui/hud/hud_heap_reset]
           - [0x100208, c, ui/hud/hud_heap_alloc]
           - [0x10027c, textbin, text_gap_001ff2fc_after_fun_001ff288]

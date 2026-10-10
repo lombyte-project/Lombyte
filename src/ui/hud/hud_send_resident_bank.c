@@ -1,42 +1,49 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/hud/hud_send_resident_bank/FUN_001ff128.s",
-            FUN_001ff128);
-#else
-#include "types.h"
+#include "rnc/globals.h"
 #include "rnc/ui/hud/hud_state.h"
-#define depth_buffer_address (*(s32 *)0x0015EE88)
-extern void link_hud_bank(s32, s32) __asm__("FUN_001fefc0");
-extern void hud_send_texture(u32, s32, s32, s32, s32, s32) __asm__("FUN_00200b10");
+
+extern void link_hud_bank(s32 bank, s32 base) __asm__("FUN_001fefc0");
+extern void hud_send_texture(u32 data, s32 dbp, s32 psm, s32 wlog, s32 hlog,
+                             s32 immediate) __asm__("FUN_00200b10");
+
 void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) __asm__("FUN_001ff128");
 
+/* Uploads the image pages of one HUD bank to GS memory, from the depth buffer
+   address up, and records each page's block offset. Bank 0's pages are
+   linked first when the bank file is not linked yet. */
 void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) {
-    s32 addr;
-    s32 i;
+    struct HudTexCounts *counts;
+    s32 address;
+    s32 bank_offset;
+    s32 first;
     s32 end;
+    s32 i;
     s32 page;
-    s32 w;
-    s32 h;
+    s32 width_log2;
+    s32 height_log2;
     s32 size;
-    struct HudTexCounts *previous_counts;
 
     if (hud_state.header.counts->loaded[bank] == 0) {
         link_hud_bank(0, base);
+        address = depth_buffer_address;
+    } else {
+        address = depth_buffer_address;
     }
-    addr = depth_buffer_address;
-    previous_counts = hud_state.header.counts;
-    i = bank == 0 ? 0 : previous_counts->ends[bank - 1];
-    end = *(s32 *)((u8 *)hud_state.header.counts + 0x34 + (bank << 2));
+    counts = hud_state.header.counts;
+    bank_offset = bank << 2;
+    first = bank == 0 ? 0 : counts->ends[bank - 1];
+    i = first;
+    end = *(s32 *)((u8 *)hud_state.header.counts + bank_offset + 0x34); /* ends[bank] */
     for (; i < end; i++) {
-        page = addr >> 8;
-        w = hud_state.image_pages[i].width_log2;
-        h = hud_state.image_pages[i].height_log2;
-        size = 1 << (w + h);
-        hud_send_texture(hud_state.image_pages[i].source_address, page, 0x1B, w, h, immediate);
-        addr += size * 4;
+        page = address >> 8;
+        width_log2 = hud_state.image_pages[i].width_log2;
+        height_log2 = hud_state.image_pages[i].height_log2;
+        size = 1 << (width_log2 + height_log2);
+        hud_send_texture(hud_state.image_pages[i].source_address, page, 0x1B, width_log2,
+                         height_log2, immediate);
+        address += size * 4;
         hud_state.image_pages[i].gs_block_offset = page;
     }
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(hud_send_resident_bank) func_001FF128 __attribute__((alias("FUN_001ff128")));
