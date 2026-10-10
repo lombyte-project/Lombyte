@@ -914,7 +914,76 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     }
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002997c8.s", FUN_L00_002997c8);
+#else
+extern u8 D_0013E5BB;
+extern s32 D_L00_0015F5D8 __attribute__((section(".sdata")));
+extern volatile s32 D_L00_0015F5C4;
+extern s32 D_L00_00161058;
+extern s32 D_0015EE88;
+extern s32 D_0015EE78_gp __asm__("D_0015EE78_gp") __attribute__((sda));
+extern struct { u8 pad[0x6B]; u8 flags; } D_0013E550_2997c8 __asm__("D_0013E550");
+extern struct { u8 pad[0x38]; s16 value; } D_001516D0_2997c8 __asm__("D_001516D0");
+extern struct { s32 callback, arg; } D_L00_00179108_2997c8 __asm__("D_L00_00179108") __attribute__((section(".data")));
+extern void FUN_00122518(void *, s16, s32, s32, s32, s32, s32, s32);
+extern void FUN_001227d8(void *, s32);
+extern void FUN_00122e68(s32);
+extern void count_vsync(void) __asm__("FUN_0012f1c8");
+extern void FUN_00265418(s32, s32, s32) __asm__("FUN_00215c40");
+extern void FUN_00266970(s32, s32, s32) __asm__("FUN_00216c48");
+
+void FUN_L00_002997c8(void) {
+    u8 buffer[0x70] __attribute__((aligned(16)));
+    s32 source, destination, count, second_count, pal;
+    s32 callback, callback_arg;
+
+    D_L00_0015F5D8 = 1;
+    FUN_00122298(0);
+    FUN_00120558(0, 0);
+    FUN_00122e68((s32)count_vsync);
+    source = D_0015EE88;
+    destination = D_L00_00161058;
+    pal = D_0015ED80;
+    count = pal != 0 ? 14 : 13;
+    second_count = pal != 0 ? 14 : 17;
+    for (; count != 0;) {
+        count--;
+        FUN_00122518(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
+        source += 0x10000;
+        FUN_00118a80(0);
+        FUN_001227d8(buffer, destination);
+        destination += 0xc000;
+        FUN_00120558(0, 0);
+    }
+    source = D_0015EE78_gp;
+    if (second_count != 0) {
+        count = second_count;
+        do {
+            count--;
+            FUN_00122518(buffer, (source << 8) >> 16, 1, 0, 0, 0, 0x40, 0x40);
+            source += 0x4000;
+            FUN_00118a80(0);
+            FUN_001227d8(buffer, destination);
+            destination += 0x4000;
+            FUN_00120558(0, 0);
+        } while (count != 0);
+    }
+    if (D_0015EED8 == 2)
+        D_0015EED8 = 0;
+    FUN_L00_001f9838(4);
+    FUN_00265418(D_001516D0_2997c8.value, 1, 0x400);
+    callback = D_L00_00179108_2997c8.callback;
+    D_L00_0015F5C4 = 0;
+    if (callback != 0) {
+        callback_arg = D_L00_00179108_2997c8.arg;
+        D_L00_00179108_2997c8.arg = 0;
+        D_L00_00179108_2997c8.callback = 0;
+        FUN_00266970(callback, callback_arg, 1);
+    }
+    D_0013E550_2997c8.flags |= 0x10;
+}
+#endif
 /* Stop sound, wait for the loader to go idle, then start the movie load. */
 /* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_0029AD18), where it is exact; names translated to the US level program. */
 
