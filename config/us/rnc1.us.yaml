@@ -1718,7 +1718,7 @@ segments:
           - [0x11a138, c, ui/menus/fun_002191b8]
           - [0x11a228, c, ui/menus/fun_002192a8]
           - [0x11a634, textbin, text_gap_002196b4_after_fun_002192a8]
-          - [0x11a638, c, assembly/textbin/fun_002196b8]
+          - [0x11a638, c, ui/menus/render_level_effects_and_screen_sprites]
           - [0x11acfc, textbin, text_gap_00219d7c_before_fun_00219d80]
           - [0x11ad00, c, ui/menus/handle_menu_screen_buttons]
           - [0x11ad8c, textbin, text_gap_00219e0c_after_fun_00219d80]
