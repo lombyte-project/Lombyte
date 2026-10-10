@@ -36,8 +36,8 @@ int FUN_L00_00237840(char *rec) {
     int x, y;
     int left, top, right, bottom;
     int w, h, bar_height, step, i;
-    x = *(int *)(rec + 0x50);
     y = *(int *)(rec + 0x54);
+    x = *(int *)(rec + 0x50);
     *(int *)(rec + 0x58) = D_L00_0015F760;
     *(int *)(rec + 0x5c) = D_L00_0015F764;
     FUN_L00_00235a70(rec, &x, &y);
@@ -49,14 +49,18 @@ int FUN_L00_00237840(char *rec) {
     right = left + (w * 0x260) / 64;
     bottom = top + (h * 0xea0) / 256;
     FUN_L00_0023caa8(left, top, right, bottom, 0x80000000UL, 1);
-    bar_height = (h * 0xea0) * *(int *)(rec + 0x74) / (*(int *)(rec + 8) << 8);
+    h = D_L00_0015F764;
+    bar_height = (*(int *)(rec + 0x74) * h * 0xea0) / (*(int *)(rec + 8) << 8);
     top = ((y + *(short *)(rec + 0x4a)) << 4) + (h * 0xf40) / 256;
     FUN_L00_0023caa8(left, top, right, top - bar_height, 0x80829e00UL, 1);
-    for (i = 1; i < *(int *)(rec + 0x74); i++) {
+    i = 1;
+    if (i < *(int *)(rec + 0x74)) do {
+        h = D_L00_0015F764;
         step = (h * 0xea0) * i / (*(int *)(rec + 8) << 8);
-        top = ((y + *(short *)(rec + 0x4a)) << 4) + (h * 0xf40) / 256 - step - 16;
-        FUN_L00_0023caa8(left, top, right, top + 32, 0x80000000UL, 1);
-    }
+        top = ((y + *(short *)(rec + 0x4a)) << 4) + (h * 0xf40) / 256 - step;
+        FUN_L00_0023caa8(left, top - 16, right, top + 16, 0x80000000UL, 1);
+        i++;
+    } while (i < *(int *)(rec + 0x74));
     FUN_L00_0023bac0(FUN_L00_0023b208(*(int *)rec, 0),
                        x + *(short *)(rec + 0x48), y + *(short *)(rec + 0x4a),
                        D_L00_0015F760, D_L00_0015F764, 0x80);
