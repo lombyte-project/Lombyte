@@ -321,6 +321,7 @@ s32 sound_update(void) {
             if ((D_0015F604 != 0 && D_0015F604 != 2) || D_0015F5E8 != 0) {
                 continue;
             }
+            occluded_samples = 0;
             if (D_0015F60C != D_0013E550.occlusion_frame) {
                 for (history_offset = 0; history_offset < 6; history_offset++) {
                     clamp_voice_position_to_collision(
@@ -328,7 +329,6 @@ s32 sound_update(void) {
                 }
                 D_0013E550.occlusion_frame = D_0015F60C;
             }
-            occluded_samples = 0;
             for (history_offset = 0, sample_index = 0; history_offset < 36;
                  history_offset += 6, sample_index++) {
                 D_0013E550.voices[slot_index].occlusion_history[history_offset] =
