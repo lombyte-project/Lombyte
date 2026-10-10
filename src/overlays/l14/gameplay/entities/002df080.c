@@ -2473,7 +2473,224 @@ void FUN_L14_002fc9a0(struct Moby *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fcbb0.s", FUN_L14_002fcbb0);
+/* Camera target of the level (D_L14_00167380): position and view angles. */
+struct L14ViewTarget {
+    u8 pad0[0x140];
+    f32 pos[3];      /* 0x140 */
+    u8 pad14C[8];
+    f32 pitch;       /* 0x154 */
+    f32 yaw;         /* 0x158 */
+};
+extern struct L14ViewTarget D_L14_00167380_v __asm__("D_L14_00167380");
+extern struct Moby *D_L14_0015FFD8_t __asm__("D_L14_0015FFD8");
+extern char *D_L14_001B0BB0_t[] __asm__("D_L14_001B0BB0");
+struct L14TramLevel {
+    u8 pad0[0x454];
+    u8 collected[1];
+};
+extern struct L14TramLevel D_L14_001BB930_t __asm__("D_L14_001BB930");
+extern s32 D_0014C190[][64];
+extern unsigned char D_0014C050[];
+extern char D_0013E550[];
+extern int tram_frames(int) __asm__("FUN_001f96f8");
+extern void tram_release(s32) __asm__("FUN_0022d798");
+extern int tram_inside(void *, int) __asm__("FUN_00214720");
+extern int tram_sound(int, int, void *) __asm__("FUN_0022da68");
+extern int FUN_L00_0028d8c0(void *, int);
+extern int D_L14_001BABD0[];
+extern int D_0015EE08;
+extern unsigned char D_0013D408_t[] __asm__("D_0013D408");
+extern char D_L14_001FCE98[];
+extern char D_L14_001FCED0[];
+extern s32 D_L14_00161F8C __attribute__((sda));
+extern void FUN_L14_002fe238(char *moby);
+extern void FUN_L06_00303150(unsigned char *moby);
+extern void FUN_L10_002f5a50(int);
+extern void *tram_hit(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
+extern void FUN_L00_00263d40(int, int);
+extern void FUN_L00_0025f090(void *, void *, int, float, float);
+extern void tram_print(const char *, short) __asm__("FUN_001e93b0");
+extern void tram_remove(void *) __asm__("FUN_0020c828");
+extern float tram_distance(void *, void *) __asm__("FUN_001f9b80");
+extern float tram_atan2(float, float) __asm__("FUN_001f9e90");
+extern float tram_angle_diff(float, float) __asm__("FUN_001fa688");
+extern int tram_coll_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern int tram_tick(void *) __asm__("FUN_001f9740");
+extern void tram_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void tram_add(void *, void *, void *) __asm__("FUN_001f9a10");
+void FUN_L14_002fc890(struct Moby *moby);
+void FUN_L14_002fd310(struct Moby *m);
+int FUN_L14_002fd918(struct Moby *m);
+
+/* pvars of the tram (FUN_L14_002fcbb0 and its helpers fc890/fd918 read the same layout) */
+typedef struct {
+    u8 pad0[0x60];
+    s32 segment;     /* 0x60 */
+    s32 along;       /* 0x64 */
+    s32 path;        /* 0x68 */
+    s32 sound;       /* 0x6C */
+    f32 f70;         /* 0x70 */
+    f32 f74;         /* 0x74 */
+    f32 f78;         /* 0x78 */
+    s32 timer;       /* 0x7C */
+    f32 f80;         /* 0x80 */
+    f32 f84;         /* 0x84 */
+    f32 f88;         /* 0x88 */
+    s32 carrier;     /* 0x8C */
+    s32 i90;         /* 0x90 */
+    s32 stage;       /* 0x94 */
+    s32 item[3];     /* 0x98 */
+    s32 clip;        /* 0xA4 */
+} L14TramVars;
+/* Tram update: carries its rider moby, unlocks once the three items are bought and the camera looks at it. */
+void FUN_L14_002fcbb0(struct Moby *m) {
+    L14TramVars *d = (L14TramVars *)m->pvars;
+    Vec4 b;
+    Vec4 a;
+
+    if (m->state == 0) {
+        u16 id = m->save_id;
+        if (D_L14_001BB930_t.collected[(short)id] != 0 ||
+            (D_0014C190[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
+            FUN_L14_002fe238((char *)&D_L14_0015FFD8_t[d->carrier]);
+            tram_remove(m);
+            return;
+        }
+    }
+    {
+        void *hit = tram_hit(m, 0x800000, 0);
+        m->unkA4 = 0xFF;
+        if (hit != 0 && d->carrier == -1 && m->state != 3) {
+            if (current_level_index == 14) {
+                D_0015EE08 = D_0015EE08 + 1;
+                if (D_0015EE08 >= 3 && D_0013D408_t[0x18] == 0) {
+                    D_0013D408_t[0x18] = 1;
+                    allocate_voice_for_bank_entry(1, 0, 0);
+                    FUN_L00_00263d40(0x53D6, -1);
+                }
+            }
+            m->state = 3;
+            FUN_L00_0025f090(m, &m->pos, -1, 5.0f, 13.0f);
+            m->unk94 = 0;
+            m->flags |= 0x41;
+            if (d->sound != -1) {
+                char *e = D_0013E550 + d->sound * 0x70;
+                if (*(struct Moby **)(e + 0x88) == m && ((u8 *)e)[0x74] != 0)
+                    tram_release(d->sound);
+            }
+            d->sound = -1;
+        }
+    }
+    switch (m->state) {
+    case 0:
+        if (d->path == -1) {
+            tram_print(D_L14_001FCE98, m->save_id);
+            tram_remove(m);
+            return;
+        }
+        if (*(int *)D_L14_001B0BB0_t[d->path] == 0) {
+            tram_print(D_L14_001FCED0, m->save_id);
+            tram_remove(m);
+            return;
+        }
+        if (d->item[0] < 0 || d->item[1] < 0 || d->item[2] < 0) {
+            tram_remove(m);
+            return;
+        }
+        FUN_L14_002fc890(m);
+        if (d->carrier != 0) {
+            struct Moby *c;
+            m->state = 1;
+            m->unk30 = 0xFF;
+            m->flags |= 0x41;
+            m->unk94 = 0;
+            c = &D_L14_0015FFD8_t[d->carrier];
+            c->flags |= 0x41;
+            d->stage = 0;
+        } else {
+            m->state = 2;
+            m->unk30 = 0x80;
+        }
+        m->unk32 = 0x80;
+        d->sound = -1;
+        d->timer = tram_frames(D_L14_00161F8C);
+        break;
+    case 1: {
+        int lvl = current_level_index * 16;
+        u8 v = D_0014C050[d->item[0] + lvl];
+        if (v == 0xFF) {
+            u8 w = D_0014C050[d->item[1] + lvl];
+            if (w == v) {
+                u8 x = D_0014C050[d->item[2] + lvl];
+                if (x == w && hero.unk30C.s == 0 && hero.ground_moby == 0 &&
+                    tram_inside(&hero.motion.pos, d->clip) != 0) {
+                    struct Moby *carrier = &D_L14_0015FFD8_t[d->carrier];
+                    struct Moby *rider = &D_L14_0015FFD8_t[((int *)carrier->pvars)[1]];
+                    float pitch;
+                    qcopy(&b, &rider->pos);
+                    b.f[2] += 4.0f;
+                    pitch = tram_angle_diff(D_L14_00167380_v.pitch,
+                                            -tram_atan2(tram_distance(D_L14_00167380_v.pos, &b), b.f[2] - D_L14_00167380_v.pos[2]));
+                    if (tram_angle_diff(D_L14_00167380_v.yaw, tram_atan2(rider->pos.x - D_L14_00167380_v.pos[0],
+                                                                         rider->pos.y - D_L14_00167380_v.pos[1])) < 0.4886922f &&
+                        pitch < 0.34906584f &&
+                        tram_coll_line(D_L14_00167380_v.pos, &b, 0x12, rider, 0) == 0) {
+                        D_0014C190[current_level_index][(short)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+                        D_L14_001BABD0[(short)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+                        m->flags &= 0xFFBE;
+                        m->unk94 = m->pclass->unk10;
+                        carrier->flags &= 0xFFBE;
+                        m->state = 2;
+                        FUN_L10_002f5a50(d->i90);
+                        rider->unk32 = 0xFF;
+                        rider->unk30 = 0xFF;
+                    }
+                }
+            }
+        }
+        break;
+    }
+    case 2:
+        if (FUN_L14_002fd918(m) != 0)
+            return;
+        if (d->carrier != 0 && d->stage < 2) {
+            struct Moby *c;
+            if (d->stage == 0 && d->segment >= 0x38)
+                d->stage = 1;
+            tram_scale(&a, &m->unkC0, 0.21f);
+            tram_scale(&b, &m->unkE0, -1.24f);
+            tram_add(&a, &a, &b);
+            tram_add(&a, &m->pos, &a);
+            c = &D_L14_0015FFD8_t[d->carrier];
+            qcopy(&c->pos, &a);
+            qcopy(&c->rot, &m->rot);
+            if (d->stage == 1) {
+                FUN_L06_00303150((unsigned char *)c);
+                d->stage = 2;
+            }
+        }
+        break;
+    case 3:
+        if (tram_tick(&d->timer) != 0) {
+            char *path = D_L14_001B0BB0_t[d->path];
+            m->flags &= 0xFFBE;
+            m->unk94 = m->pclass->unk10;
+            d->timer = tram_frames(D_L14_00161F8C);
+            m->state = 2;
+            d->segment = 0;
+            d->along = 0;
+            qcopy(&m->pos, path + 0x10);
+            m->rot.z = tram_atan2(*(float *)(path + 0x20) - *(float *)(path + 0x10),
+                                  *(float *)(path + 0x24) - *(float *)(path + 0x14));
+            d->f80 = d->f84 = d->f88 = d->f70 = d->f74 = d->f78 = 0.0f;
+        }
+        break;
+    }
+    FUN_L14_002fd310(m);
+    if (m->state != 0 && m->state != 3 && m->state != 1 && FUN_L00_0028d8c0(m, d->sound) == 0)
+        d->sound = tram_sound(0, 4, m);
+}
 extern f32 D_L14_00161F60 __attribute__((sda));
 extern f32 D_L14_00161F64 __attribute__((sda));
 extern f32 D_L14_00161F68 __attribute__((sda));
