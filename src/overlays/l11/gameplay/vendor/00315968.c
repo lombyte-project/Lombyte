@@ -275,7 +275,99 @@ struct L11ChainVars {
     s32 sound;               /* 0xF4 */
 };
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003172c0.s", FUN_L11_003172c0);
+extern u8 D_0014C050[];
+extern char *chain_paths[] __asm__("D_L11_001B0EB0");
+extern s32 D_001413D4[];
+extern float D_L11_00162320 __attribute__((sda));
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern s32 FUN_0022da68(s32, s32, void *);
+extern s32 FUN_L00_0028d8c0(void *, s32);
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+void FUN_L11_00317678(struct Moby *);
+void FUN_L11_00317820(struct Moby *);
+void FUN_L11_00317c98(struct Moby *);
+void FUN_L11_003180a0(struct Moby *, int);
+
+/* Chain head update: spawns the eight 0x4F1 links, waits for D_001413D4 to reach 0x32, then moves along its path and runs the link helpers. */
+void FUN_L11_003172c0(struct Moby *moby) {
+    struct L11ChainVars *d = (struct L11ChainVars *)moby->pvars;
+
+    switch (moby->state) {
+    case 0: {
+        int i;
+
+        FUN_L11_003180a0(moby, d->path_index);
+        if (D_0014C050[moby->unkB0 + current_level_index * 0x10] == 0xFF) {
+            mark_moby_for_removal(moby);
+            break;
+        }
+        moby->unk30 = 0xFF;
+        moby->unk32 = 0x200;
+        d->path = chain_paths[d->path_sel];
+        qcopy(&moby->pos, d->path + 0x10);
+        d->health = 80.0f;
+        d->count = 8;
+        d->sound = -1;
+        d->point = 0;
+        d->t = 0.0f;
+        moby->state = 1;
+        for (i = 0; i < 8; i++) {
+            struct Moby *c;
+            d->links[i] = spawn_moby_class(0x4F1);
+            d->links[i]->unk32 = 0x200;
+            d->links[i]->unk30 = 0xFF;
+            d->links[i]->unk31 = 1;
+            d->links[i]->spawn_frame = moby->spawn_frame;
+            d->links[i]->flags = moby->flags & 0xFFDF;
+            d->links[i]->scale = d->links[i]->pclass->scale * 2.0f;
+            c = d->links[i];
+            qcopy(&c->pos, &moby->pos);
+            qcopy(&c->rot, &moby->rot);
+            d->offsets[i] = *(u16 *)d->path - 100;
+            d->glow[i] = 0.0f;
+        }
+        break;
+    }
+    case 1:
+        if (D_001413D4[0] == 0x32) {
+            int i;
+
+            moby->state = 2;
+            d->path = chain_paths[d->path_index];
+            d->point = 0;
+            for (i = 0; i < 8; i++) {
+                d->offsets[i] = *(u16 *)d->path - 100;
+                d->glow[i] = 0.0f;
+            }
+        }
+        /* fallthrough */
+    case 2: {
+        int i;
+
+        d->t += D_L11_00162320;
+        if (d->t > 1.0f) {
+            d->t -= 1.0f;
+            d->point = (d->point + 1) % *(s32 *)d->path;
+        }
+        for (i = 0; i < 8; i++) {
+            float before = d->glow[i];
+            approach_value(&d->glow[i], 0.0f, frame_time * 5.0f);
+            if (before != 0.0f && d->glow[i] == 0.0f && d->links[i] != 0) {
+                FUN_0022da68(0, 0, d->links[i]);
+            }
+        }
+        FUN_L11_00317678(moby);
+        FUN_L11_00317820(moby);
+        if (moby->state == 2) {
+            FUN_L11_00317c98(moby);
+        }
+        if (FUN_L00_0028d8c0(moby, d->sound) == 0) {
+            d->sound = FUN_0022da68(0, 4, moby);
+        }
+        break;
+    }
+    }
+}
 
 /* Orients a moby along a path of three points read from its data table. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00318AE8), where it is exact; names translated to the US level program. */
