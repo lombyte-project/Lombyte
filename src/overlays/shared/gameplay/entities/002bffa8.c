@@ -824,8 +824,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c26c8.s", FUN_L00_002c26c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c35c0.s", FUN_L00_002c35c0);
 #else
 extern u8 D_0013E539;
-extern char D_0013F350_c2[] __asm__("D_0013F350");
-extern u8 D_0013F350_2c35c0[] __asm__("D_0013F350");
 extern s32 D_L00_0015FFD8_2c35c0 __asm__("D_L00_0015FFD8");
 extern s16 D_L00_001B0830[] __attribute__((section(".data")));
 extern f32 FUN_002132a8_2c35c0(f32, f32) __asm__("FUN_002132a8");
@@ -894,7 +892,7 @@ u8 *FUN_L00_002c35c0(s32 value, u128 *position, u128 *other_position) {
         data[7] = 0x80;
         *(u16 *)(data + 0x0e) = 0xf;
         FUN_L00_0025f780(m, D_L00_001B0830, 0x1f);
-        if (D_0013F350_2c35c0[0x20a5] != 0 || D_0013F350_2c35c0[0x20af] != 0)
+        if (hero.unk20A5 != 0 || hero.unk20AF != 0)
             *(u16 *)(m + 0x34) |= 0x41;
     }
     return m;

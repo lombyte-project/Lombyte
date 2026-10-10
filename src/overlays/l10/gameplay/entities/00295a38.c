@@ -671,7 +671,6 @@ extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 extern int FUN_L10_002d9000_c() __asm__("FUN_L10_002d9000");
-extern OvlQuad D_0013F3D0;
 extern OvlQuad D_L10_00167240;
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -716,7 +715,7 @@ void FUN_L10_002d90a8(unsigned char *m) {
         if (flag == 0) {
             v[0] = D_L10_00167240;
             if (FUN_L10_002d9000_c(m, &v[0]) == 0) {
-                v[1] = D_0013F3D0;
+                v[1] = *(OvlQuad *)&hero.motion.pos;
                 if (FUN_L10_002d9000_c(m, &v[1]) == 0)
                     goto done;
             }

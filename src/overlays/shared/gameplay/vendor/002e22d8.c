@@ -25,7 +25,6 @@ extern char *D_L16_0015FFD8;
 extern char *D_L16_001B0930[];
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_0013F3D0[];
 extern float D_L16_0015F580[] __attribute__((section(".sdata")));
 extern float D_L16_001D9680[4];
 extern float FUN_001f9e90(float, float);
@@ -101,7 +100,7 @@ void FUN_L16_002e22d8(char *m) {
 
         if (D_L16_0015F5C4 == 0
             && (*(int *)(d + 0xD4) == -1
-                || FUN_L00_00259740(D_0013F3D0, D_L16_001B0930[*(int *)(d + 0xD4)] + 0x10,
+                || FUN_L00_00259740(hero.motion.pos.f, D_L16_001B0930[*(int *)(d + 0xD4)] + 0x10,
                                      *(int *)D_L16_001B0930[*(int *)(d + 0xD4)]))) {
             m[0x20] = 2;
             *(unsigned short *)(m + 0x34) &= 0xFFFE;
@@ -222,7 +221,7 @@ void FUN_L16_002e22d8(char *m) {
 
         *(float *)(d + 0x194) -= dt + dt;
         *(float *)(m + 0x40) += dt * 0.2617994f;
-        if (tick_countdown_32_alt((int *)(d + 0x160)) || D_001413F4[0] == 2) {
+        if (tick_countdown_32_alt((int *)(d + 0x160)) || hero.unk20A4 == 2) {
             FUN_L00_0025e450(m, D_L16_0015F580, m + 0x10, 0.0f, 0.0f, 20, 12, 8, 4.0f, 2.5f, 9.0f, -1, 2.0f, 0.0f,
                               0, 0, -1, 0);
             FUN_L00_00263fd8(m, 0x634, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
@@ -303,7 +302,7 @@ void FUN_L16_002e2b60(struct Moby *m) {
     response = FUN_L00_0025a478(m, record, d + 0x20, 0, &hit.status, &hit.amount, 0, 4);
     if (hit.status != 1 && m->state != 8) {
         *(float *)(d + 0x20) -= hit.amount;
-        if (*(float *)(d + 0x20) <= zero || (D_001413F4[0] == 2 && hit.amount >= 2.0f))
+        if (*(float *)(d + 0x20) <= zero || (hero.unk20A4 == 2 && hit.amount >= 2.0f))
             response = 1;
         if (response > 0) {
             if (response >= 3) {
@@ -315,7 +314,7 @@ void FUN_L16_002e2b60(struct Moby *m) {
                 }
             } else {
                 FUN_0022da68_i(3, 0, m);
-                if (D_001413F4[0] != 2)
+                if (hero.unk20A4 != 2)
                     FUN_0022da68_i(2, 0, m);
                 {
                     int *child = (int *)(d + 0xC0), count = 3;

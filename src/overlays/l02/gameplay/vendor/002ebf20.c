@@ -135,7 +135,6 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_002147
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013D4C0[];
 extern unsigned char D_0013E533[];
-extern unsigned char D_0014161B[];
 extern unsigned char D_0014C050[][16];
 extern unsigned char D_0015EDDC[4];
 extern unsigned char D_0015EDE0[4];
@@ -146,7 +145,6 @@ extern unsigned short D_001417A2 __attribute__((section(".data")));
 extern unsigned short D_00141888 __attribute__((section(".data")));
 extern unsigned short D_001418E8 __attribute__((section(".data")));
 extern void FUN_L00_00263d40(int arg0, int arg1);
-extern char D_0013F3D0[];
 extern char D_00141968[];
 extern char D_0014EE90[];
 
@@ -154,8 +152,8 @@ void FUN_L02_002ee890(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     moby->unk30 = 0xFF;
 
-    if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data[0x17]) != 0 &&
-        *(unsigned int *)(((char *)&D_0013F3D0) + 0x200C) < 2) {
+    if (is_point_inside_clip_volume(&hero.motion.pos, data[0x17]) != 0 &&
+        ((unsigned int)hero.state.control_mode) < 2) {
         char *b = ((char *)&D_00141968);
         if (*(unsigned short *)(b + 0x278) == 0 && D_001418E8 == 0) {
             int count = 0;
@@ -175,17 +173,17 @@ void FUN_L02_002ee890(struct Moby *moby) {
 
     switch (data[0x15]) {
     case 0:
-        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data[0x12]) != 0) {
-            if (*(int *)(((char *)&D_0013F3D0) + 0x2004) == 0x2C) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[0x12]) != 0) {
+            if (hero.state.current == 0x2C) {
                 data[0x15] = 1;
             }
         }
         break;
     case 1: {
-        char *h = ((char *)&D_0013F3D0) - 0x80;
-        if (*(int *)(h + 0x300) != 0) {
+        struct Hero *h = &hero;
+        if (h->unk300 != 0) {
             data[0x15] = 0;
-        } else if (is_point_inside_clip_volume(h + 0x80, data[0x13]) != 0) {
+        } else if (is_point_inside_clip_volume(&h->motion.pos, data[0x13]) != 0) {
             unsigned char *q = D_0013D408;
             if (q[1] == 0) {
                 q[1] = 1;
@@ -200,7 +198,7 @@ void FUN_L02_002ee890(struct Moby *moby) {
     {
         char *b = ((char *)&D_00141968);
         if (*(unsigned short *)(b + 0x60) == 0) {
-            if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data[4]) != 0) {
+            if (is_point_inside_clip_volume(&hero.motion.pos, data[4]) != 0) {
                 int lvl = data[0];
                 if (D_0014C050[current_level_index][lvl] != 0xFF) {
                     unsigned char *f = D_0013D4C0;
@@ -215,7 +213,7 @@ void FUN_L02_002ee890(struct Moby *moby) {
         }
     }
 
-    if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data[0x10]) != 0) {
+    if (is_point_inside_clip_volume(&hero.motion.pos, data[0x10]) != 0) {
         data[0x16] = 1;
     }
     if (data[0x16] != 0) {
@@ -239,7 +237,7 @@ void FUN_L02_002ee890(struct Moby *moby) {
     {
         char *b = ((char *)&D_00141968);
         if (*(unsigned short *)(b + 0x68) == 0) {
-            if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data[4]) != 0) {
+            if (is_point_inside_clip_volume(&hero.motion.pos, data[4]) != 0) {
                 int lvl = data[0];
                 if (D_0014C050[current_level_index][lvl] != 0xFF) {
                     unsigned char *f = D_0013D4C0;
@@ -254,7 +252,7 @@ void FUN_L02_002ee890(struct Moby *moby) {
     {
         char *b = ((char *)&D_00141968);
         if (*(unsigned short *)(b + 0x80) == 0) {
-            char *g = ((char *)&D_0013F3D0);
+            char *g = (char *)&hero.motion.pos;
             char *h;
             if (is_point_inside_clip_volume(g, data[6]) != 0) {
                 *(unsigned short *)(b + 0x80) = 0xFFFF;
@@ -265,7 +263,7 @@ void FUN_L02_002ee890(struct Moby *moby) {
                 data[0xC]++;
             }
             if (data[0xC] >= 2) {
-                if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data[7]) != 0) {
+                if (is_point_inside_clip_volume(&hero.motion.pos, data[7]) != 0) {
                     FUN_L00_00203908(0x7D6, 0x10);
                 }
             }
@@ -273,7 +271,7 @@ void FUN_L02_002ee890(struct Moby *moby) {
     }
 
     if (((Flags_0013D5C8 *)(D_0013D4C0))->b[0xC] == 0) {
-        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data[5]) != 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[5]) != 0) {
             char *b = ((char *)&D_00141968);
             int t = scale_game_frames(D_0015EEA4) - *(unsigned short *)(b + 0x8A) * 600;
             if ((int)(scale_game_frames(0x12) * 60.0f) < t ||
@@ -288,7 +286,7 @@ void FUN_L02_002ee890(struct Moby *moby) {
         }
     }
     if (((Flags_0013D5C8 *)(D_0013D4C0))->b[0xC] != 0 &&
-        is_point_inside_clip_volume(((char *)&D_0013F3D0), data[5]) != 0) {
+        is_point_inside_clip_volume(&hero.motion.pos, data[5]) != 0) {
         char *b = ((char *)&D_00141968);
         if (*(unsigned short *)(b + 0x90) != 0) {
             int t = scale_game_frames(D_0015EEA4) - *(unsigned short *)(b + 0x92) * 600;
@@ -310,7 +308,7 @@ void FUN_L02_002ee890(struct Moby *moby) {
             }
             *(int *)(b + 0x94) = *(int *)(b + 0x94) | (1 << current_level_index) | 0x80000000;
         }
-    } else if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data[7]) != 0) {
+    } else if (is_point_inside_clip_volume(&hero.motion.pos, data[7]) != 0) {
         char *b = ((char *)&D_00141968);
         *(unsigned short *)(b + 0x90) = 0xFFFF;
     }
@@ -319,9 +317,9 @@ void FUN_L02_002ee890(struct Moby *moby) {
         char *b = ((char *)&D_00141968);
         unsigned short v = *(unsigned short *)(b + 0x230);
         if (v == 0 || *(unsigned short *)(b + 0x238) == 0) {
-            char *h = ((char *)&D_0013F3D0) - 0x80;
-            if (*(int *)(h + 0x2084) == 0x72) {
-                char *p = *(char **)(h + 0x2FC);
+            struct Hero *h = &hero;
+            if (h->state.current == 0x72) {
+                char *p = ((char *)h->ground_moby);
                 if (p != 0 && *(short *)(p + 0xA6) == 0x267) {
                     if (v == 0) {
                         FUN_L00_00203908(0x7DB, 0x46);
@@ -339,12 +337,12 @@ void FUN_L02_002ee890(struct Moby *moby) {
     {
         unsigned char *g = D_0013D388;
         if (g[0x14] == 0) {
-            if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data[0x11]) != 0) {
+            if (is_point_inside_clip_volume(&hero.motion.pos, data[0x11]) != 0) {
                 g[0x14] = 1;
             }
         }
     }
-    qcopy(data + 8, ((char *)&D_0013F3D0));
+    qcopy(data + 8, &hero.motion.pos);
 }
 extern void build_rotation_matrix(void *out, void *rot) __asm__("FUN_001fa030");
 extern s32 sphere_in_view(void *sphere, f32 dist) __asm__("FUN_001fa728");

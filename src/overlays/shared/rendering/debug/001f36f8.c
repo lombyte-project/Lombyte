@@ -116,7 +116,6 @@ typedef struct {
     DebugCameraState camera;
 } DebugCameraBlock;
 extern DebugCameraBlock D_L00_00166C80;
-extern s16 D_0013F658 NOT_SDA;
 extern void update_all_cameras(void) __asm__("FUN_001ec420");
 extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001f9de0(f32);
@@ -158,7 +157,7 @@ void update_debug_camera(void) {
         update_all_cameras();
     if (pad->stick_moved)
         return;
-    free_look = D_0013F658 == 2;
+    free_look = hero.unk308 == 2;
     {
         Vec4 step;
         if ((pad->buttons.held_pressed & 3) != 3) {
@@ -421,8 +420,6 @@ typedef struct {
 extern DebugRowCounts D_L00_001E7920;
 extern u32 D_0013CAE0 NOT_SDA;
 extern u32 D_0013CAE4 NOT_SDA;
-extern f32 D_0013F3D8 NOT_SDA;
-extern f32 D_0013F3E8 NOT_SDA;
 extern u16 D_001518D0 NOT_SDA;
 extern u16 D_001518D2 NOT_SDA;
 extern s32 D_0015ED84 NOT_SDA;
@@ -463,7 +460,6 @@ extern const char D_L00_001E7958[];
 extern const char D_L00_001E7970[];
 extern const char D_L00_001E7990[];
 extern u8 D_L00_0015EFD0[];
-extern f32 D_0013F3D0[];
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void FUN_001fb280(s32, s32, s32);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -585,14 +581,14 @@ void update_debug_menu(void) {
                     }
                 } else if (g_debug_menu.control_mode == 2) {
                     g_debug_menu.update_flags = 0;
-                    FUN_001f9a28(difference, D_0013F3D0, g_debug_camera.position);
+                    FUN_001f9a28(difference, hero.motion.pos.f, g_debug_camera.position);
                     g_debug_menu.target_distance = FUN_001f9b20(difference);
                     angle = FUN_001f9e90(difference[0], difference[1]);
                     g_debug_menu.target_angle =
                         fast_subtract_rotations(angle, g_debug_camera.angles[2]);
-                    g_debug_menu.target_height = D_0013F3D8 - g_debug_camera.position[2];
+                    g_debug_menu.target_height = hero.motion.pos.f[2] - g_debug_camera.position[2];
                     g_debug_menu.target_yaw =
-                        fast_subtract_rotations(D_0013F3E8, g_debug_camera.angles[2]);
+                        fast_subtract_rotations(hero.motion.rot.f[2], g_debug_camera.angles[2]);
                 } else if (g_debug_menu.control_mode == 3) {
                     g_debug_menu.update_flags = 6;
                 }

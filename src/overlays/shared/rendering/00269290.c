@@ -2416,7 +2416,6 @@ typedef struct {
 } V __attribute__((aligned(16)));
 
 extern V D_L00_00173E60;
-extern float D_0013F640 __attribute__((section(".data")));
 extern int D_L00_00173E40[];
 extern int FUN_001f0b58(void);
 extern void FUN_L00_002715e8(void *, int, int, float, float);
@@ -2445,7 +2444,7 @@ void FUN_L00_0026f660(char *m) {
         float lim;
         q = m + 0x10;
         FUN_001f9a10(q, q, b);
-        lim = D_0013F640;
+        lim = hero.height_threshold;
         if (*(float *)(m + 0x18) < lim) {
             *(float *)(m + 0x18) = lim;
             FUN_L00_002715e8(q, 0, -1, 0.2f, 5250.0f);

@@ -84,7 +84,6 @@ extern int FUN_001fa728(char *, float);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern short D_L17_00161498 __attribute__((sda));
 extern unsigned char *FUN_L17_0026fb60(char *parent, void *pos, float *vec);
-extern unsigned char D_0013F3D0[];
 extern void FUN_001f9a40(void *, void *, void *, float);
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void FUN_L17_002a95b8(struct Moby *moby);
@@ -152,7 +151,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
         break;
     case 1:
         if (*(int *)(d + 0x40) == -1 ||
-            is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x40))) {
+            is_point_inside_clip_volume(&hero.motion.pos, *(int *)(d + 0x40))) {
             flag = 1;
         }
         break;
@@ -173,7 +172,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
                          *(float *)(d + 0x50));
         }
         if (*(int *)(d + 0x40) == -1 ||
-            is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x40))) {
+            is_point_inside_clip_volume(&hero.motion.pos, *(int *)(d + 0x40))) {
             *(OvlQuad *)a = 0;
             a[0] = 13.0f;
             transform_vector_by_basis(a, a, &m->unkC0);
@@ -218,7 +217,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
         FUN_001f9a40(b, d + 0x10, d + 0x20, 0.5f);
         b[3] = len * 0.5f;
         if (FUN_001fa728((char *)b, 32.0f) != -1) {
-            subtract_vector_xyz(v30, D_0013F3D0, &m->pos);
+            subtract_vector_xyz(v30, &hero.motion.pos, &m->pos);
             normalize_vector_xyz(v40, &m->unkC0, dot_vectors_xyz(&m->unkC0, v30));
             subtract_vector_xyz(v30, v30, v40);
             func_L00_0025A8C0_alt((char *)v60, (int)m, 0x10001, 1.0f, v30);
@@ -371,7 +370,6 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern char D_L17_00161980[4] __attribute__((sda));
 extern unsigned char D_0013E533[];
-extern unsigned char D_0014161B[];
 extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9,
                               float scale, float *v10, float *v11, float *v12);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
@@ -387,7 +385,6 @@ extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern unsigned char D_0014C050[];
-extern char D_0013F658[];
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L17_002cb310(struct Moby *m) {
@@ -429,7 +426,7 @@ void FUN_L17_002cb310(struct Moby *m) {
         break;
     }
     case 2: {
-        if (*(short *)(((char *)&D_0013F658)) == 0) {
+        if (hero.unk308 == 0) {
             m->state = 1;
         }
         {
@@ -647,7 +644,6 @@ extern short D_L17_00161B90 __attribute__((sda));
 extern short D_L17_00161B94 __attribute__((sda));
 extern unsigned char *FUN_L00_002730e0(float *pos, char *vel, int color, unsigned char life,
                                        unsigned char b, int mode, float scale);
-extern unsigned char D_0013F3D0[];
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa298(void *, void *);
 void FUN_L17_002d7cf0(struct Moby *moby);
@@ -696,7 +692,7 @@ void FUN_L17_002d77f0(char *m) {
             enqueue_callback_list_1(FUN_L17_002d7cf0, m);
             break;
         }
-        subtract_vector_xyz(sp0, D_0013F3D0, (m + 0x10));
+        subtract_vector_xyz(sp0, &hero.motion.pos, (m + 0x10));
         if (dot_vectors_xyz(sp0, (m + 0xC0)) > 0.0f) {
             normalize_vector_xyz(sp10, (m + 0xC0), 1.0f);
         } else {
@@ -732,7 +728,7 @@ void FUN_L17_002d77f0(char *m) {
                             f21));
                     FUN_001f9d20(spC0, spC0, mat2);
                     FUN_L00_001ff290(spD0, spC0, (m + 0x10));
-                    if (FUN_001f9b48((m + 0x10), D_0013F3D0) < 30.0f) {
+                    if (FUN_001f9b48((m + 0x10), &hero.motion.pos) < 30.0f) {
                         FUN_001efa68((m + 0x10), spC0, 9, m, &blk);
                     }
                     spD0[0] = *(OvlQuad *)(m + 0x10);

@@ -6,7 +6,6 @@
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/overlay/quad.h"
-extern char D_0013F350[];
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e5e38.s", FUN_L00_002e5e38);
@@ -39,7 +38,7 @@ extern char D_L00_00173F60_a[] __asm__("D_L00_00173E60");
 void FUN_L00_002e66b8(int snap) {
     char *cams = D_L00_00166C80;
     char *cam = *(char **)(cams + 0x180);
-    char *track = cams + 0x190; /* the followed hero: position at 0, up vector at 0x30 */
+    char *track = cams + 0x190; /* the followed player: position at 0, up vector at 0x30 */
     char *data = *(char **)(cam + 0x70);
     char *orbit = data + 0x130; /* distance at 0x2C, height at 0x30 */
     char *target = data + 0x40; /* point looked at; eye height at 0xB0, moby at 0xC0 */
@@ -49,23 +48,23 @@ void FUN_L00_002e66b8(int snap) {
     if (snap) {
         float offset[4], part[4], basis[12], delta[4], start[4];
         float length;
-        char *hero = D_0013F350;
-        char *hero2, *hero3;
+        struct Hero *player = &hero;
+        struct Hero *hero2, *hero3;
         part[0] = -*(float *)(orbit + 0x2C);
         part[1] = 0.0f;
         part[2] = *(float *)(orbit + 0x30);
         part[3] = 0.0f;
         mask = 0x94;
-        copy_matrix3x4(basis, hero);
+        copy_matrix3x4(basis, player->unk0);
         transform_vector_by_basis(offset, part, *(char **)(target + 0xC0) + 0xC0);
         add_vector_xyz(cam + 0x30, target, offset);
         scale_vector_xyz(rise, *(char **)(target + 0xC0) + 0xE0, *(float *)(target + 0xB0));
         add_vector_xyz(eye, target, rise);
-        if (FUN_001efa68(eye, cam + 0x30, mask, *(int *)(hero + 0x2080), 0)) {
+        if (FUN_001efa68(eye, cam + 0x30, mask, (int)player->moby, 0)) {
             if (FUN_001f9b80(D_L00_00173F60_a, eye) < 0.001f) mask = 0x96;
         }
-        hero2 = D_0013F350;
-        if (FUN_001efa68(eye, cam + 0x30, mask, *(int *)(hero2 + 0x2080), 0)) {
+        hero2 = &hero;
+        if (FUN_001efa68(eye, cam + 0x30, mask, (int)hero2->moby, 0)) {
             subtract_vector_xyz(delta, (float *)D_L00_00173F60_a, eye);
             length = vector_length_xyz(delta);
             if (length == 0.0f) {
@@ -93,8 +92,8 @@ void FUN_L00_002e66b8(int snap) {
                 } else {
                     scale_vector_xyz(delta, delta, *(float *)(orbit + 0x2C) / length);
                     add_vector_xyz(cam + 0x30, start, delta);
-                    hero3 = D_0013F350;
-                    if (FUN_001efa68(start, cam + 0x30, mask, *(int *)(hero3 + 0x2080), 0)) {
+                    hero3 = &hero;
+                    if (FUN_001efa68(start, cam + 0x30, mask, (int)hero3->moby, 0)) {
                         subtract_vector_xyz(delta, (float *)D_L00_00173F60_a, eye);
                         length = vector_length_xyz(delta);
                         if (length == 0.0f) {
@@ -140,7 +139,6 @@ void FUN_L00_002e66b8(int snap) {
     qcopy(cam + 0x40, cam);
 }
 
-extern char D_0013F5E0_2e6bf8[] __asm__("D_0013F5E0");
 extern void vnorm_2e6bf8(void *, void *, float) __asm__("FUN_001f9a68");
 extern float vdot_2e6bf8(void *, void *) __asm__("FUN_001f9ab0");
 extern void vzero_2e6bf8(void *) __asm__("FUN_001f99f8");
@@ -162,8 +160,8 @@ void FUN_L00_002e6bf8(char *m) {
         c = b + 0x130;
         b += 0x40;
         e = b;
-        vnorm_2e6bf8(dn, D_0013F5E0_2e6bf8, -1.0f);
-        qcopy(e, D_0013F5E0_2e6bf8 - 0x210);
+        vnorm_2e6bf8(dn, &hero.unk290, -1.0f);
+        qcopy(e, &hero.motion.pos);
         qcopy(d + 0xA0, b);
         vnorm_2e6bf8(d + 0x50, dn, vdot_2e6bf8(b, dn));
         vzero_2e6bf8(d + 0xB0);

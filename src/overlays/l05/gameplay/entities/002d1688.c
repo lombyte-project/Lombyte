@@ -329,7 +329,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7140.s", FUN_L05_002d7140);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7920.s", FUN_L05_002d7920);
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DBF10), where it is exact; names translated to the US level program. */
 
-extern char D_0013F3D0[];
 extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
 extern float FUN_001f9b80(void *, void *);
@@ -393,7 +392,7 @@ void FUN_L05_002dac80(struct Moby *m) {
         break;
     }
     case 2:
-        if (48.0f < FUN_001f9b80(&m->pos, D_0013F3D0)) {
+        if (48.0f < FUN_001f9b80(&m->pos, &hero.motion.pos)) {
             m->state = 1;
             m->unk31 = 1;
             m->flags &= 0xFFFE;

@@ -10,14 +10,13 @@ extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
 
 #define MACRO_ADDR
 
-/* With both objects at D_0013F450 + 0x1180 and +0x1184 present and the
+/* With both objects at hero +0x1180 and +0x1184 present and the
    first's byte 0x53 equal to 1, asks func_L00_00232850 for a pair of
    sequences and starts one on each object (func_00213DE0). Each
    sequence is read into a local before the func_001F9850 call, as
    retail holds it in a saved register across it. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232560), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_00231ff8(int, int *, int *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -192,7 +191,7 @@ int FUN_L00_00231ff8(int a, int *b, int *c) {
 
 #define MACRO_ADDR
 
-/* Unless the flag at D_0013F450 + 0x20A4 is set, and only while state
+/* Unless the flag at hero +0x20A4 is set, and only while state
    +0x11A4 is 2: asks func_L00_00232850 for a pair of values for the
    current animation's id (+0x2080, byte 0x53), and when it finds one,
    copies the float at +0xA90 to field 0x58 of both objects at +0x1180 and
@@ -200,7 +199,6 @@ int FUN_L00_00231ff8(int a, int *b, int *c) {
    retail's `ori $6, $sp, 4`). */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232980), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern int FUN_L00_00231ff8(int, int *, int *);
 
 /* Copies &hero.unkA90 to +0x58 of the objects at 0x1180/0x1184 when the lookup succeeds. */
@@ -272,12 +270,11 @@ void FUN_L00_00232220(int a0, int a1, float a2) {
 
 #define MACRO_ADDR
 
-/* With the animation at D_0013F450 + 0x2278 set and enabled (+0x227C),
+/* With the animation at hero +0x2278 set and enabled (+0x227C),
    and a sequence ready for the current id (func_L00_00232A18), copies
    the float at +0xA90 to the animation's field 0x58. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232B20), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
 
 /* Copies &hero.unkA90 to +0x58 of the object at +0x2278 when FUN_L00_002321c0 succeeds. */
@@ -294,7 +291,7 @@ void FUN_L00_002322c8(void) {
 
 #define MACRO_ADDR
 
-/* Syncs the animation at D_0013F450 + 0x2278 to the one at +0x2080:
+/* Syncs the animation at hero +0x2278 to the one at +0x2080:
    takes the float at +0xA94 into 0x5C, copies the source's 0x54 and its
    sequence byte 0x51 into both sequence slots, then looks each slot's id
    up in its bank of the model. The typed structs give retail's
@@ -326,7 +323,6 @@ typedef struct {
     int id[2];
 } AnimState;
 
-extern char D_0013F350[];
 
 void FUN_L00_00232320(void) {
     struct Hero *base = &hero;
@@ -398,15 +394,15 @@ extern void FlushCache(s32);
 void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
 
 void FUN_L00_002323b8(int a0, int a1, float t) {
-    char *g2;
-    char *g3;
-    char *g1 = D_0013F350;
-    char *obj = *(char **)(g1 + 0x2080);
+    struct Hero *g2;
+    struct Hero *g3;
+    struct Hero *g1 = &hero;
+    char *obj = ((char *)g1->moby);
     int slot;
     int o;
     char *e;
 
-    if (*(int *)(g1 + 0xA98) & 2) {
+    if (g1->unkA98 & 2) {
         *(int *)(obj + 0x54) = 0;
     }
     if (D_0015EDB4_m[1] != 0) {
@@ -432,32 +428,32 @@ void FUN_L00_002323b8(int a0, int a1, float t) {
     *(unsigned char *)(obj + 0x51) = a1;
     *(unsigned char *)(obj + 0x53) = a0;
     update_moby_animation_state(obj);
-    g2 = D_0013F350;
-    *(float *)(g2 + 0xA90) = 1.0f;
+    g2 = &hero;
+    g2->unkA90 = 1.0f;
     if (t > 0.0f) {
-        *(float *)(g2 + 0xA94) = 1.0f / t;
+        g2->unkA94 = 1.0f / t;
         *(float *)(obj + 0x54) = 0.0f;
-        *(int *)(g2 + 0xAA0) = -1;
+        g2->unkAA0 = -1;
     } else {
-        *(float *)(g2 + 0xA94) = 1.0f;
-        *(int *)(g2 + 0xAA0) = truncate_float_to_s32(-t) - 1;
-        *(int *)(g2 + 0xAA4) = 0;
+        g2->unkA94 = 1.0f;
+        g2->unkAA0 = truncate_float_to_s32(-t) - 1;
+        g2->unkAA4 = 0;
         *(float *)(obj + 0x54) = 0.0f;
     }
     FUN_L00_00232628();
-    g3 = D_0013F350;
+    g3 = &hero;
     o = a0 * 4;
     *(unsigned char *)(obj + 0x7C) =
         *(unsigned char *)(*(int *)(*(int *)(obj + 0x24) + o + 0x48) + 0x11);
-    *(int *)(g3 + 0xA9C) = 1;
+    g3->unkA9C = 1;
     if (t < 0.0f) {
-        t = *(int *)((char *)&D_L00_0015F6E0 + *(int *)(g3 + 0xAA0) * 4);
+        t = *(int *)((char *)&D_L00_0015F6E0 + g3->unkAA0 * 4);
     }
-    if (*(unsigned char *)(g3 + 0x20A4) == 0) {
+    if (g3->unk20A4 == 0) {
         FUN_L00_00231e78_c(a0, a1, t);
     }
     FUN_L00_002321a8();
-    if (*(int *)(g3 + 0x2278) != 0) {
+    if (((int)g3->unk2278) != 0) {
         FUN_L00_00232220_c(a0, a1, t);
     }
 }
@@ -473,7 +469,7 @@ void FUN_L00_002325a0(int a, int b) {
     *(int *)(p + 0x54) = 0;
     FUN_0020c880_2325a0(p);
 }
-/* Queues sequence SEQ of bank BANK (D_0013F450 + 0xAB0 / 0xAB4) when BANK
+/* Queues sequence SEQ of bank BANK (hero +0xAB0 / 0xAB4) when BANK
    is valid and SEQ is below the count of the current animation's bank.
    The base pointer is a local inside the test, as retail forms it only
    there. */
@@ -491,21 +487,19 @@ void FUN_L00_002325e0(int bank, int seq) {
         }
     }
 }
-extern int D_0013F350_00232628[] __asm__("D_0013F350");
-/* Sets the word at 0xAB0 of D_0013F350 to -1 and clears the one at 0xAB8. */
+/* Sets the word at 0xAB0 of hero to -1 and clears the one at 0xAB8. */
 void FUN_L00_00232628(void) {
-    int *p = D_0013F350_00232628;
-    p[0xab0 / 4] = -1;
-    p[0xab8 / 4] = 0;
+    struct Hero *p = &hero;
+    p->unkAB0 = -1;
+    p->unkAB8 = 0;
 }
 #define NOT_SDA
 
 #define MACRO_ADDR
 
-/* Stores ID at D_0013F450 + 0xAB8, or func_001F9850(5) when ID is -1. */
+/* Stores ID at hero +0xAB8, or func_001F9850(5) when ID is -1. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232EC0), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 /* Stores id at &hero.unkAB8; -1 stands for 5 frames. */
@@ -524,10 +518,6 @@ typedef union {
     f32 f[4];
 } V4_32b90;
 
-/* D_0013F350, the shared Level-00 state block. Offsets are taken off the
-   listing: 0x80 is a 16-byte value (lq/sq) whose .f[1] is also read as a
-   scalar, 0xE0 likewise with .f[2], 0x270 is a 16-byte value, and 0x20B3 is
-   the u8 the switch is on. */
 extern u8 D_L00_00173E80_32b90[] __asm__("D_L00_00173E80") __attribute__((section(".data")));
 extern f32 D_L00_00173E60_32b90 __asm__("D_L00_00173E60") __attribute__((section(".data")));
 extern void FUN_001f9a28_32b90(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -623,7 +613,7 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
 
 #define MACRO_ADDR
 
-/* Sets bit 0 of the flags (0x34) of every object the block at D_0013F450
+/* Sets bit 0 of the flags (0x34) of every object the hero
    holds: the one at +0xA88, both of each of the seven pairs at +0x1090,
    the one at +0x118C and, when +0x20A4 is 1, the one at +0x1624. In mode
    8 (+0x10B8) it then clears bits 0 and 6 of the first pair's first
@@ -639,7 +629,6 @@ typedef struct {
     char pad8[0x48];
 } ObjPair;
 
-extern char D_0013F350[];
 extern int D_L00_0015F5C4;
 
 void FUN_L00_00232fe8(void) {
@@ -678,7 +667,7 @@ void FUN_L00_00232fe8(void) {
     }
 }
 /* Undoes func_L00_00233868: clears bit 0 of the flags (0x34) of the
-   objects at D_0013F450 + 0xA88, in the seven pairs at +0x1090, at
+   objects at hero +0xA88, in the seven pairs at +0x1090, at
    +0x118C and (when +0x20A4 is 1) at +0x1624. Then it flags with 0x41
    the objects at +0x1180, +0x1184 and +0x118C while the short at +0x22D8
    is set, and the first pair's first object when +0x20AF is set, or
@@ -744,11 +733,10 @@ void FUN_L00_002330d0(void) {
 
 #define MACRO_ADDR
 
-/* Sets bit 0 of the flags (0x34) of the objects at D_0013F450 + 0x2080
+/* Sets bit 0 of the flags (0x34) of the objects at hero +0x2080
    and, when present, +0x1620. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233A90), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 
 void FUN_L00_00233210(void) {
     struct Hero *base = &hero;
@@ -765,10 +753,9 @@ void FUN_L00_00233210(void) {
 #define MACRO_ADDR
 
 /* Clears what func_L00_00233A90 sets: bit 0 of the flags (0x34) of the
-   objects at D_0013F450 + 0x2080 and, when present, +0x1620. */
+   objects at hero +0x2080 and, when present, +0x1620. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233AC8), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 
 void FUN_L00_00233248(void) {
     struct Hero *base = &hero;
@@ -784,7 +771,6 @@ void FUN_L00_00233248(void) {
  * table (the address is materialised with lui + addiu).
  * Ported from rac1-decomp (shared level code), where it is
  * exact; names translated to the US level program. */
-extern char D_0013F350[];
 /* Stores two floats, an index and a byte, and sets the bits of a byte mask in a flag halfword. */
 void FUN_L00_00233288(float a, float b, short c, unsigned char d, unsigned char e,
                       unsigned char f) {
@@ -856,7 +842,6 @@ int FUN_L00_00233440(void) {
 typedef struct {
     f32 v[4];
 } V002334d0 __attribute__((aligned(16)));
-extern u8 D_0013F5E0_002334d0[] __asm__("D_0013F5E0");
 void FUN_001f9bf8_002334d0(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_002334d0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
@@ -874,7 +859,7 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
         if (b->state.current == 0x3E && b->air_frames.s == 0) {
             FUN_001f9bf8_002334d0(&t, &b->unk270, -k);
         } else {
-            FUN_001f9bf8_002334d0(&t, D_0013F5E0_002334d0, k);
+            FUN_001f9bf8_002334d0(&t, &hero.unk290, k);
         }
         FUN_001f9a10_002334d0(out, in, &t);
         break;
@@ -886,42 +871,41 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
 
 /* The polar form of func_L00_00233EE0: sets OUT to (R cos ANGLE,
    R sin ANGLE, Z) via func_001F9F90 / func_001F9FA8, then transforms it
-   by the matrix at D_0013F450 and adds the vector at D_0013F450 + 0x80. */
+   by the matrix at hero and adds the vector at hero +0x80. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233E48), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9d20(void *, void *, void *);
 
 void FUN_L00_002335c8(float *out, float r, float angle, float z) {
-    char *base;
+    struct Hero *base;
 
     out[0] = FUN_001f9dc8(angle) * r;
     out[1] = FUN_001f9de0(angle) * r;
-    base = D_0013F350;
+    base = &hero;
     out[2] = z;
-    FUN_001f9d20(out, out, base);
-    FUN_001f9a10(out, out, base + 0x80);
+    FUN_001f9d20(out, out, base->unk0);
+    FUN_001f9a10(out, out, &base->motion.pos);
 }
 /* Sets OUT to the point (X, Y, Z, 0) (cleared first by func_001F9BC0),
-   then transforms it by the matrix at D_0013F450 and adds the vector at
-   D_0013F450 + 0x80. */
+   then transforms it by the matrix at hero and adds the vector at
+   hero +0x80. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233EE0), where it is exact; names translated to the US level program. */
 
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 /* Builds (x, y, z), transforms it by the hero matrix at 0 and adds the hero position. */
 void FUN_L00_00233660(float *out, float x, float y, float z) {
-    char *base;
+    struct Hero *base;
 
     clear_u64_value(out);
-    base = D_0013F350;
+    base = &hero;
     out[0] = x;
     out[1] = y;
     out[2] = z;
-    FUN_001f9d20(out, out, base);
-    FUN_001f9a10(out, out, base + 0x80);
+    FUN_001f9d20(out, out, base->unk0);
+    FUN_001f9a10(out, out, &base->motion.pos);
 }
 void FUN_L00_002334d0_002336e8(float) __asm__("FUN_L00_002334d0");
 /* Calls FUN_L00_002334d0 with -x. */
@@ -1033,7 +1017,6 @@ void FUN_L00_002338d0(float *dst, float *src) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234250), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern float FUN_001f9b20(void *);
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa050(void *, void *);
@@ -1063,7 +1046,6 @@ float FUN_L00_002339d0(float *v) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002342F8), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern float FUN_001f9ab0(void *, void *);
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa050(void *, void *);
@@ -1086,21 +1068,20 @@ float FUN_L00_00233a78(float *v) {
     }
     return 0.0f;
 }
-extern u8 D_0013F350_00233b20[] __asm__("D_0013F350");
 void FUN_001f9d20_00233b20(void *, void *, void *) __asm__("FUN_001f9d20");
-/* Copies in to out with z, transformed by the two D_0013F350 matrices in modes 1 and 2. */
+/* Copies in to out with z, transformed by the two hero matrices in modes 1 and 2. */
 void FUN_L00_00233b20(f32 *out, f32 *in, f32 z) {
-    u8 *b = D_0013F350_00233b20;
-    switch (b[0x20B3]) {
+    struct Hero *b = &hero;
+    switch (b->unk20B3) {
     case 0:
         qcopy(out, in);
         out[2] = z;
         break;
     case 1:
     case 2:
-        FUN_001f9d20_00233b20(out, in, b + 0x40);
+        FUN_001f9d20_00233b20(out, in, b->unk40);
         out[2] = z;
-        FUN_001f9d20_00233b20(out, out, b);
+        FUN_001f9d20_00233b20(out, out, b->unk0);
         break;
     }
 }
@@ -1109,27 +1090,26 @@ void FUN_L00_00233b20(f32 *out, f32 *in, f32 z) {
 #define MACRO_ADDR
 
 /* Like func_L00_002343A0, but instead of setting z it scales the point's
-   xy to length Z (func_L00_001FF500): in view mode 0 (D_0013F450 +
+   xy to length Z (func_L00_001FF500): in view mode 0 (hero +
    0x20B3) directly, in modes 1 and 2 between the transforms by the
    matrices at +0x40 and +0x0. The switch gives retail's case tree. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234420), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001f9c48(float *, float *, float);
 
 void FUN_L00_00233ba0(float *dst, float *src, float z) {
-    char *base = D_0013F350;
+    struct Hero *base = &hero;
 
-    switch (*(unsigned char *)(base + 0x20B3)) {
+    switch (base->unk20B3) {
     case 0:
         FUN_001f9c48(dst, src, z);
         break;
     case 1:
     case 2:
-        FUN_001f9d20(dst, src, base + 0x40);
+        FUN_001f9d20(dst, src, base->unk40);
         FUN_001f9c48(dst, dst, z);
-        FUN_001f9d20(dst, dst, base);
+        FUN_001f9d20(dst, dst, base->unk0);
         break;
     }
 }
@@ -1140,7 +1120,6 @@ void FUN_L00_00233ba0(float *dst, float *src, float z) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002344B0), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern float FUN_L00_00233a78_c(void *) __asm__("FUN_L00_00233a78");
 extern float ConvertIntegerToFloat(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -1262,7 +1241,7 @@ s32 FUN_L00_00233e98(s32 idx) {
     return D_0013D428[idx];
 }
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-/* Stores v, f and n in D_0013F350; calls 002223f8(0x65, 1) unless state is 0x65..0x67. */
+/* Stores v, f and n in hero; calls 002223f8(0x65, 1) unless state is 0x65..0x67. */
 void FUN_L00_00233ee8(void *v, float f, int n) {
     qcopy(&hero.unk1640, v);
     hero.unk1640.f[3] = f;
@@ -1293,7 +1272,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233f80.s", FUN_L00_00233f80);
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00235040), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern int FUN_L00_00262030(int, void *, void *, float);
 
 /* Sets the short at &hero.unk1F6 to 4 when FUN_L00_00262030 succeeds. */
@@ -1305,19 +1283,6 @@ void FUN_L00_002347c0(void) {
         base->unk1F6 = 4;
     }
 }
-typedef struct {
-    char p0[0x11D0];
-    char *m11D0, *m11D4;
-    char p11D8[0x1220 - 0x11D8];
-    char *m1220;
-    char p1224[0x1D90 - 0x1224];
-    u8 b1D90, b1D91;
-    char p1D92[0x1DA0 - 0x1D92];
-    char v1DA0[0x10];
-    char p1DB0[0x22E8 - 0x1DB0];
-    f32 f22E8, f22EC, f22F0;
-} P_234808;
-extern P_234808 D_0013F350_234808 __asm__("D_0013F350");
 extern s32 D_L00_0015F5C4_234808 __asm__("D_L00_0015F5C4");
 extern f32 D_0015ED6C_234808 __asm__("D_0015ED6C");
 f32 FUN_001fa580_234808(f32, f32) __asm__("FUN_001fa580");
@@ -1325,7 +1290,6 @@ f32 FUN_001f9de0_234808(f32) __asm__("FUN_001f9de0");
 s32 FUN_001fa6e0_234808(s32, s32, f32) __asm__("FUN_001fa6e0");
 void FUN_0020cb10_234808(void *, s32, void *) __asm__("FUN_0020cb10");
 void FUN_L00_001fff28_234808(void *, s32, f32) __asm__("FUN_L00_001fff28");
-#define G  D_0013F350_234808
 #define X  D_L00_0015F5C4_234808
 #define DD D_0015ED6C_234808
 void FUN_L00_00234808(void) {
@@ -1333,44 +1297,44 @@ void FUN_L00_00234808(void) {
     f32 k;
     s32 a, b;
     f32 t;
-    m0 = G.m11D0;
+    m0 = (char *)hero.items[4].moby;
     if (m0) {
         if (X == 2)
-            G.f22E8 = FUN_001fa580_234808(G.f22E8, DD * 1.2217305f);
+            hero.unk22E8 = FUN_001fa580_234808(hero.unk22E8, DD * 1.2217305f);
         else
-            G.f22E8 = FUN_001fa580_234808(G.f22E8, DD * 2.0943952f);
+            hero.unk22E8 = FUN_001fa580_234808(hero.unk22E8, DD * 2.0943952f);
         *(s32 *)(m0 + 0x90) =
-            FUN_001fa6e0_234808(0xD2D2D2, 0x285050, FUN_001f9de0_234808(G.f22E8) * 0.5f + 0.5f);
+            FUN_001fa6e0_234808(0xD2D2D2, 0x285050, FUN_001f9de0_234808(hero.unk22E8) * 0.5f + 0.5f);
     }
-    m1 = G.m11D4;
+    m1 = (char *)hero.items[4].moby2;
     if (m1) {
         if (X != 2) {
             f32 v;
-            G.f22EC = v = FUN_001fa580_234808(G.f22EC, DD * 2.9670596f);
+            hero.unk22EC = v = FUN_001fa580_234808(hero.unk22EC, DD * 2.9670596f);
             b = 0x1EE628;
             if (0.0f < v && v < 1.9198622f)
                 b = 0x1E1ED2;
             *(s32 *)(m1 + 0x90) = FUN_001fa6e0_234808(*(s32 *)(m1 + 0x90), b, 0.07f);
         } else {
             f32 v;
-            G.f22EC = v = FUN_001fa580_234808(G.f22EC, DD * 1.5707964f);
+            hero.unk22EC = v = FUN_001fa580_234808(hero.unk22EC, DD * 1.5707964f);
             *(s32 *)(m1 + 0x90) =
                 FUN_001fa6e0_234808(0x1E1ED2, 0x1E1E50, FUN_001f9de0_234808(v) * 0.5f + 0.5f);
         }
     }
-    m2 = G.m1220;
+    m2 = (char *)hero.items[5].moby;
     if (m2) {
         if (X == 2)
-            G.f22F0 = FUN_001fa580_234808(G.f22EC, DD * 1.3962634f);
+            hero.unk22F0 = FUN_001fa580_234808(hero.unk22EC, DD * 1.3962634f);
         else
-            G.f22F0 = FUN_001fa580_234808(G.f22EC, DD * 1.9198622f);
+            hero.unk22F0 = FUN_001fa580_234808(hero.unk22EC, DD * 1.9198622f);
         *(s32 *)(m2 + 0x90) =
-            FUN_001fa6e0_234808(0xAAC8AA, 0x965050, FUN_001f9de0_234808(G.f22F0) * 0.5f + 0.5f);
+            FUN_001fa6e0_234808(0xAAC8AA, 0x965050, FUN_001f9de0_234808(hero.unk22F0) * 0.5f + 0.5f);
         if (m2) {
-            if (!G.b1D91)
-                FUN_0020cb10_234808(m2, 0, &G.b1D90);
+            if (!hero.unk1D90.attached)
+                FUN_0020cb10_234808(m2, 0, &hero.unk1D90);
             else
-                FUN_L00_001fff28_234808(G.v1DA0, 0, G.f22F0);
+                FUN_L00_001fff28_234808(&hero.unk1D90.quat, 0, hero.unk22F0);
         }
     }
 }
@@ -1491,14 +1455,6 @@ typedef unsigned int u128_00234d40 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     float x, y, z, w_00234d40;
 } __attribute__((aligned(16))) Vec4_00234d40;
-struct G_00234d40 {
-    Vec4_00234d40 a;
-    char pad[0x80 - 0x10];
-    Vec4_00234d40 pos;
-    char pad2[8];
-    float f98;
-};
-extern struct G_00234d40 D_0013F350_00234d40 __asm__("D_0013F350");
 void FUN_001f9a68_00234d40(Vec4_00234d40 *, void *, float) __asm__("FUN_001f9a68");
 void FUN_001f9a10_00234d40(Vec4_00234d40 *, Vec4_00234d40 *,
                            Vec4_00234d40 *) __asm__("FUN_001f9a10");
@@ -1507,15 +1463,15 @@ float FUN_001f99c0_00234d40(float) __asm__("FUN_001f99c0");
 void FUN_L00_00233ee8_00234d40(void *, float, int) __asm__("FUN_L00_00233ee8");
 void FUN_L00_00234d40(void) {
     Vec4_00234d40 v;
-    struct G_00234d40 *g = &D_0013F350_00234d40;
-    Vec4_00234d40 *pos = &g->pos;
-    FUN_001f9a68_00234d40(&v, g, -0.75f);
+    struct Hero *g = &hero;
+    Vec4_00234d40 *pos = (Vec4_00234d40 *)&g->motion.pos;
+    FUN_001f9a68_00234d40(&v, g->unk0, -0.75f);
     FUN_001f9a10_00234d40(&v, &v, pos);
     v.z += 0.5f;
     v.z = FUN_00213508_00234d40(&v, 0, 0.5f);
-    if (FUN_001f99c0_00234d40(g->pos.z - v.z) > 0.3f)
+    if (FUN_001f99c0_00234d40(g->motion.pos.f[2] - v.z) > 0.3f)
         return;
-    FUN_L00_00233ee8_00234d40(pos, g->f98, 1);
+    FUN_L00_00233ee8_00234d40(pos, g->motion.rot.f[2], 1);
     qcopy(pos, &v);
 }
 void FUN_L00_002395b0();
@@ -1526,5 +1482,5 @@ void queue_animation_update() __asm__("FUN_001ff308");
 /* Queues animation update 0x7535 with three FUN_L00_ callbacks and D_001415F8. */
 void FUN_L00_00234e00(void) {
     queue_animation_update(1, 0x7535, FUN_L00_002395b0, FUN_L00_00239630, FUN_L00_00239810,
-                           D_001415F8, 8);
+                           &hero.health, 8);
 }

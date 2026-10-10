@@ -12,69 +12,68 @@
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_00223630.c: func_L06_00223630), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350_c[] __asm__("D_0013F350");
 extern void FUN_001f9810(void *, int);
 extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
 void FUN_L06_00222fb8(void) {
-    char *g = (D_0013F350_c);
-    char *g1;
-    char *g2;
-    char *g3;
-    int u = *(unsigned char *)(g + 0x12ED);
-    int w = *(short *)(g + 0x12E0);
-    FUN_001f9810(g + 0x12E0, 0x10);
-    *(unsigned char *)(g + 0x12ED) = u;
-    *(short *)(g + 0x12E0) = -1;
-    *(unsigned char *)(g + 0x20A9) = 0;
-    *(short *)(g + 0x308) = 0;
+    struct Hero *g = &hero;
+    struct Hero *g1;
+    struct Hero *g2;
+    struct Hero *g3;
+    int u = g->unk12ED;
+    int w = g->unk12E0;
+    FUN_001f9810(&g->unk12E0, 0x10);
+    g->unk12ED = u;
+    g->unk12E0 = -1;
+    g->unk20A9 = 0;
+    g->unk308 = 0;
     if (w == -1)
         return;
     if (w == 2) {
-        if (*(short *)(g + 0x30C) == 0 || *(float *)(g + 0x2DC) < 0.3f) {
-            *(unsigned char *)(g + 0x12E7) = 1;
-            if (*(unsigned char *)(g + 0x20A4) == 0) {
-                char *m = *(char **)(g + 0x10E0);
+        if (g->unk30C.s == 0 || g->ground_distance < 0.3f) {
+            g->unk12E7 = 1;
+            if (g->unk20A4 == 0) {
+                char *m = ((char *)g->items[1].moby);
                 if (m != 0 && *(short *)(m + 0xA6) == 0xAD)
-                    *(short *)(g + 0x308) = 1;
+                    g->unk308 = 1;
             }
         }
     }
     if (w == 0xD) {
-        char *gx = (D_0013F350_c);
-        *(unsigned char *)(gx + 0x12EC) = 1;
+        struct Hero *gx = &hero;
+        gx->selector_13 = 1;
     }
     if (w == 1) {
-        char *gx = (D_0013F350_c);
-        *(unsigned char *)(gx + 0x12E5) = 1;
+        struct Hero *gx = &hero;
+        gx->selector_1 = 1;
     }
     if (w == 8) {
-        char *gx = (D_0013F350_c);
-        *(unsigned char *)(gx + 0x12EA) = 1;
+        struct Hero *gx = &hero;
+        gx->unk12EA = 1;
     }
     if (w == 9) {
-        char *gx = (D_0013F350_c);
-        *(unsigned char *)(gx + 0x12EE) = 1;
+        struct Hero *gx = &hero;
+        gx->unk12EE = 1;
     }
     if (w == 0xC) {
-        char *gx = (D_0013F350_c);
-        *(unsigned char *)(gx + 0x12EA) = 1;
+        struct Hero *gx = &hero;
+        gx->unk12EA = 1;
     }
-    g1 = (D_0013F350_c);
-    if (*(unsigned char *)(g1 + 0x12E5) != 0) {
-        if (*(int *)(g1 + 0x300) != 0 && *(unsigned char *)(g1 + 0x20A4) == 1 &&
-            *(int *)(g1 + 0x2084) != 0x7D) {
+    g1 = &hero;
+    if (g1->selector_1 != 0) {
+        if (g1->unk300 != 0 && g1->unk20A4 == 1 &&
+            g1->state.current != 0x7D) {
             hero_set_state(0x7D, 1);
             return;
         }
-        g2 = (D_0013F350_c);
-        if (*(unsigned char *)(g2 + 0x12E5) != 0) {
-            if (*(int *)(g2 + 0x300) != 0) {
-                if (*(int *)(g2 + 0x2084) != 0x3C || *(short *)(g2 + 0x41E) != 0) {
+        g2 = &hero;
+        if (g2->selector_1 != 0) {
+            if (g2->unk300 != 0) {
+                if (g2->state.current != 0x3C || g2->unk41E != 0) {
                     FUN_L00_0020b930();
-                    if (*(int *)(g2 + 0x22A8) != 0) {
+                    if (g2->health.hp != 0) {
                         hero_set_state(0x3C, 1);
                     } else {
                         hero_set_state(0x7C, 1);
@@ -84,16 +83,16 @@ void FUN_L06_00222fb8(void) {
             }
         }
     }
-    g3 = (D_0013F350_c);
-    if (*(unsigned char *)(g3 + 0x12EC) == 0)
+    g3 = &hero;
+    if (g3->selector_13 == 0)
         return;
-    if (*(int *)(g3 + 0x2084) == 0x7F)
+    if (g3->state.current == 0x7F)
         return;
-    if (!(AbsoluteFloat(*(float *)(g3 + 0x2F0) - (*(float *)(g3 + 0x88) + 0.25f)) < 1.0f))
+    if (!(AbsoluteFloat(g3->height_threshold - (g3->motion.pos.f[2] + 0.25f)) < 1.0f))
         return;
-    if (!(0.0f < *(float *)(g3 + 0x2F0) - *(float *)(g3 + 0x88)))
+    if (!(0.0f < g3->height_threshold - g3->motion.pos.f[2]))
         return;
-    if (!(*(float *)(g3 + 0x108) < 0.0f))
+    if (!(g3->motion.unk100.f[2] < 0.0f))
         return;
     FUN_L00_0020b930();
     hero_set_state(0x7F, 1);
@@ -107,9 +106,7 @@ extern OvlMobyEntry40 D_L08_00178900_8[] __asm__("D_L06_00178880");
 extern s32 D_0015ED84_8 __asm__("D_0015ED84");
 extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
-extern u8 D_0013F3D0_8[] __asm__("D_0013F3D0");
 extern f32 D_0015ED6C_8 __asm__("D_0015ED6C");
-extern u8 D_0013F430_8[] __asm__("D_0013F430");
 
 void FUN_L00_00206c08_8(void) __asm__("FUN_L00_00206c08");
 void FUN_001f9a28_8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -219,8 +216,8 @@ s32 FUN_L06_00227e78(s32 arg) {
         FUN_L00_00210c80_8(&v, flag, D_0015ED6C_8 * 5.0f, D_0015ED6C_8 * 2.4f);
         break;
     }
-    FUN_001f9a10_8(D_0013F430_8, D_0013F430_8, &v);
-    FUN_001f9a10_8(D_0013F430_8 + 0x20, D_0013F430_8 + 0x20, &v);
+    FUN_001f9a10_8(&hero.motion.velocity, &hero.motion.velocity, &v);
+    FUN_001f9a10_8(&hero.motion.unk100, &hero.motion.unk100, &v);
     return 1;
 }
 #include "qcopy.h"
@@ -300,10 +297,7 @@ typedef union {
     OvlQuad q;
     f32 f[4];
 } V;
-extern u8 D_0013F350_c2[] __asm__("D_0013F350") __attribute__((section(".data")));
-extern u8 D_0013F5E0[] __attribute__((section(".data")));
-extern u8 D_0013F5F0[] __attribute__((section(".data")));
-extern u8 D_0013F610[] __attribute__((section(".data")));
+extern struct Hero hero_data2 __asm__("D_0013F350") __attribute__((section(".data")));
 extern u8 D_L06_001745C0[] __attribute__((section(".data")));
 extern u8 D_L06_001745E0[] __attribute__((section(".data")));
 extern f32 D_L06_001745E8 __attribute__((section(".data")));

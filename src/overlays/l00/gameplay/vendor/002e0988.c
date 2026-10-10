@@ -20,7 +20,6 @@ typedef struct {
 
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 extern void FUN_L00_00203908(s32, s32);
-extern u8 D_0013F3D0[];
 extern u16 D_00141848[];
 extern u16 D_00141850[];
 extern u16 D_00141968[];
@@ -42,22 +41,22 @@ void FUN_L00_002e0988(HelpMoby *m) {
         FUN_L00_00203908(3, 3);
     }
     if (D_00141968[0x3A0 / 2] == 0) {
-        if (is_point_inside_clip_volume((s32)D_0013F3D0, vars[4]) != 0) {
+        if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[4]) != 0) {
             FUN_L00_00203908(0x4E2A, 0x74);
         }
     }
     if (D_00141968[0x48 / 2] == 0) {
-        if (is_point_inside_clip_volume((s32)D_0013F3D0, vars[0]) != 0 && D_00141850[0] == 0) {
+        if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[0]) != 0 && D_00141850[0] == 0) {
             FUN_L00_00203908(5, 9);
         }
     }
     if (D_00141968[0x40 / 2] == 0 && D_00141848[0] == 0) {
-        if (is_point_inside_clip_volume((s32)D_0013F3D0, vars[1]) != 0) {
+        if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[1]) != 0) {
             FUN_L00_00203908(4, 8);
         }
     }
     if (D_00141968[0] == 0) {
-        if (is_point_inside_clip_volume((s32)D_0013F3D0, vars[2]) != 0) {
+        if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[2]) != 0) {
             FUN_L00_00203908(0, 0);
         }
     }
@@ -313,7 +312,7 @@ void FUN_L00_002e0b88(VendMoby *moby) {
             moby, vars,
             FUN_001f9e90(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
             12.566371f);
-        if (FUN_001f9b80(&moby->pos, D_0013F3D0) < 20.0f) {
+        if (FUN_001f9b80(&moby->pos, &hero.motion.pos) < 20.0f) {
             VEND_ANIM(moby, 4, vend_rand(20));
         } else if (moby->unk70 & 2) {
             VEND_ANIM(moby, random_integer_below(2) + 1, vend_rand(20));
@@ -719,7 +718,6 @@ typedef struct {
 } GlowMoby;
 
 extern GlowVec glow_origin __asm__("D_L00_00166DC0");
-extern GlowVec D_0013F5E0;
 extern GlowVec D_L00_001E6CA0[4];
 extern void FUN_001f9a68(f32, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
@@ -740,7 +738,7 @@ void FUN_L00_002e1c78(GlowMoby *m) {
     mat[3].f[3] = one;
     FUN_001f9a28(&mat[0], &glow_origin, &mat[3]);
     FUN_001f9bf8(&mat[0], &mat[0], one);
-    fast_vec_cross(&mat[1], &mat[0], &D_0013F5E0);
+    fast_vec_cross(&mat[1], &mat[0], (GlowVec *)&hero.unk290);
     FUN_001f9bf8(&mat[1], &mat[1], -1.0f);
     fast_vec_cross(&mat[2], &mat[1], &mat[0]);
     quad.tex = get_effect_texture(0xB);

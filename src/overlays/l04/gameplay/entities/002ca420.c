@@ -360,7 +360,6 @@ extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
 void FUN_L04_002d1608(void *m);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
-extern char D_0013F3D0[];
 
 void FUN_L04_002d16b8(WBMoby *m) {
     int excited = 0;
@@ -527,7 +526,7 @@ void FUN_L04_002d16b8(WBMoby *m) {
             s.f14 = 0x10001;
             s.f1C = 1.0f;
             s.m = m;
-            subtract_vector_xyz(&s, ((char *)&D_0013F3D0), pos);
+            subtract_vector_xyz(&s, &hero.motion.pos, pos);
             normalize_vector_xyz(&s, &s, frame_time * 5.0f);
             s.f20 = 1;
             transform_scaled_vertex_batch(m, 6, &joints, pts);
@@ -1125,7 +1124,7 @@ void FUN_L04_002e1a10(struct Moby *moby) {
         break;
     case 1:
         FUN_L04_002e1d00_m(moby);
-        if (FUN_001f9b80(&moby->pos, D_0013F3D0) < 3.0f) {
+        if (FUN_001f9b80(&moby->pos, &hero.motion.pos) < 3.0f) {
             moby->flags |= 0x41;
             FUN_L00_00298840(2);
             moby->state = 2;

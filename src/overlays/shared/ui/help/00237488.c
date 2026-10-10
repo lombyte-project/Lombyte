@@ -342,7 +342,7 @@ void FUN_L05_0023dc88(int i) {
         }
     }
     {
-        struct Hero *s = (struct Hero *)((char *)&hero + i * sizeof(struct HeroItemSlot));
+        struct Hero *s = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
         st = s->items[0].unk1C;
         if (st == 2) {
             changed = 0;
@@ -351,7 +351,7 @@ void FUN_L05_0023dc88(int i) {
             s->items[0].timer = s->items[0].timer_reload;
         }
     }
-    if (FUN_001f9770(((char *)&hero) + 0x10A8 + i * 0x50) == 0) {
+    if (FUN_001f9770(&hero.items[i].timer) == 0) {
         changed = 0;
     }
     if (changed) {
@@ -359,13 +359,13 @@ void FUN_L05_0023dc88(int i) {
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
         FUN_L00_0020a500();
         *(int *)((char *)g + 0x1010) = FUN_L00_00257b90(FUN_001f96f8(0x32), FUN_001f96f8(0x5A));
-        FUN_L00_0020fde0(*((int *)(((char *)&hero) + 0x20D4) + i));
-        FUN_L00_0020fd80(*((int *)(((char *)&hero) + 0x20D4) + i));
+        FUN_L00_0020fde0(*(hero.selected_item + i));
+        FUN_L00_0020fd80(*(hero.selected_item + i));
         if (g->unk20A8 != 0) {
             FUN_L00_0020e698();
         }
         if (i == 0) {
-            if (*(int *)(((char *)&hero) + 0x20D4) == 8) {
+            if (*hero.selected_item == 8) {
                 D_0015ED90 = 1;
             } else {
                 D_0015ED90 = 0;
@@ -398,7 +398,7 @@ void FUN_L05_0023dc88(int i) {
             }
         }
         {
-            struct Hero *e = (struct Hero *)((char *)&hero + i * sizeof(struct HeroItemSlot));
+            struct Hero *e = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
             e->items[0].state = 3;
         }
     }
@@ -411,7 +411,6 @@ extern int D_L05_0015F5CC;
 extern int FUN_001f0b58(void);
 extern int FUN_L00_00216de8_c(int a, int b) __asm__("FUN_L00_00216de8");
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern unsigned char D_0013F350_c[] __asm__("D_0013F350");
 extern void FUN_L00_002126b8(void *, void *, int, float, float);
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
@@ -511,10 +510,6 @@ typedef struct {
     int seq;
 } SndPair_254030;
 
-typedef struct {
-    char pad[0x6E0];
-    int flags[6];
-} Hero6E0_254030;
 
 extern SndPair_254030 D_L05_00179BC0[];
 extern char D_0013CAE0[];
@@ -522,49 +517,48 @@ extern float FUN_L00_00232b90(float a, float b, float c);
 extern int FUN_L05_002551b8_c(void) __asm__("FUN_L05_002551b8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern unsigned char D_0013F350_c2[] __asm__("D_0013F350");
 extern void FUN_L00_002323b8(int, int, float);
 extern void FUN_L00_002325e0(int bank, int seq);
 
 void FUN_L05_00253850(void) {
-    char *g = (char *)D_0013F350_c2;
+    struct Hero *g = &hero;
     int pad;
-    *(short *)(g + 0x888) =
-        truncate_float_to_s32(FUN_L00_00232b90(60.0f, *(float *)(g + 0x860), -1.0f));
-    if (((unsigned char *)g)[0x88D] != 0 && ((pad = *(int *)(D_0013CAE0)) & 0xF) != 0) {
-        g[0x88F] = 0;
+    g->unk888 =
+        truncate_float_to_s32(FUN_L00_00232b90(60.0f, g->unk860, -1.0f));
+    if (g->unk88D != 0 && ((pad = *(int *)(D_0013CAE0)) & 0xF) != 0) {
+        g->unk88F = 0;
         if (pad & 8)
-            g[0x88F] = 1;
+            g->unk88F = 1;
         else if (pad & 1)
-            g[0x88F] = 2;
+            g->unk88F = 2;
         else if (pad & 2)
-            g[0x88F] = 3;
+            g->unk88F = 3;
         {
-            char *h = (char *)D_0013F350_c2;
-            int a = ((unsigned char *)h)[0x88F] + 0x69;
-            if (((unsigned char *)*(char **)(h + 0x2080))[0x53] != a) {
+            struct Hero *h = &hero;
+            int a = h->unk88F + 0x69;
+            if (((unsigned char *)*(char **)&h->moby)[0x53] != a) {
                 FUN_L00_002323b8(a, 2, (float)scale_game_frames(5));
-                FUN_L00_002325e0(D_L05_00179BC0[((unsigned char *)h)[0x88F]].bank,
-                                 D_L05_00179BC0[((unsigned char *)h)[0x88F]].seq);
-            } else if ((float)*(int *)(h + 0xAB0) - 2.0f < *(float *)(h + 0xAA8)) {
-                ((Hero6E0_254030 *)h)->flags[((unsigned char *)h)[0x88F]] = 1;
-                *(int *)(h + 0x6F8) += 1;
+                FUN_L00_002325e0(D_L05_00179BC0[h->unk88F].bank,
+                                 D_L05_00179BC0[h->unk88F].seq);
+            } else if ((float)h->unkAB0 - 2.0f < h->unkAA8) {
+                h->unk6E0[h->unk88F] = 1;
+                h->unk6F8 += 1;
             }
         }
     }
     {
-        char *k = (char *)D_0013F350_c2;
-        if ((*(short *)(k + 0x30E) == 0 || (*(int *)(D_0013CAE0) & 0xF) == 0) &&
-            (unsigned int)(((unsigned char *)*(char **)(k + 0x2080))[0x53] - 0x69) < 4 &&
-            *(int *)(k + 0xA9C) == 0 &&
-            *(int *)(k + 0xAB0) < ((unsigned char *)*(char **)(k + 0x2080))[0x51] &&
-            ((unsigned char *)*(char **)(k + 0x2080))[0x51] < *(int *)(k + 0xAB4)) {
-            int t = *(short *)(k + 0x888);
+        struct Hero *k = &hero;
+        if ((k->air_frames.s == 0 || (*(int *)(D_0013CAE0) & 0xF) == 0) &&
+            (unsigned int)(((unsigned char *)((char *)k->moby))[0x53] - 0x69) < 4 &&
+            k->unkA9C == 0 &&
+            k->unkAB0 < ((unsigned char *)((char *)k->moby))[0x51] &&
+            ((unsigned char *)((char *)k->moby))[0x51] < k->unkAB4) {
+            int t = k->unk888;
             if (t > scale_game_frames(0x1E)) {
                 int x = FUN_L05_002551b8_c();
                 FUN_L00_002323b8(x, 9, (float)scale_game_frames(0x11));
             } else {
-                t = *(short *)(k + 0x888);
+                t = k->unk888;
                 if (t < scale_game_frames(0xA))
                     t = scale_game_frames(0xA);
                 FUN_L00_002323b8(FUN_L05_002551b8_c(), 0xD, (float)t);
@@ -572,9 +566,9 @@ void FUN_L05_00253850(void) {
         }
     }
     {
-        char *h = (char *)D_0013F350_c2;
-        if (*(short *)(h + 0x8BC) != 0) {
-            int a = ((unsigned char *)*(char **)(h + 0x2080))[0x53];
+        struct Hero *h = &hero;
+        if (h->unk8BC != 0) {
+            int a = ((unsigned char *)((char *)h->moby))[0x53];
             if (a == 0x52 || a == 0x7D || a == 0x68 || a == 0x7E) {
                 int x = FUN_L05_002551b8_c();
                 FUN_L00_002323b8(x, 0xB, (float)scale_game_frames(0xA));
@@ -582,8 +576,8 @@ void FUN_L05_00253850(void) {
         }
     }
     {
-        char *h = (char *)D_0013F350_c2;
-        if ((*(int *)(h + 0xA98) & 2) && *(short *)(h + 0x30C) != 0) {
+        struct Hero *h = &hero;
+        if ((h->unkA98 & 2) && h->unk30C.s != 0) {
             int x = FUN_L05_002551b8_c();
             FUN_L00_002323b8(x, 9, (float)scale_game_frames(7));
         }
@@ -740,10 +734,9 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254608.s", FUN_L05_00254608);
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_002559A0), where it is exact; names translated to the US level program. */
 
-extern unsigned char D_0013FC1E __attribute__((section(".data")));
 
 int FUN_L05_002551b8(void) {
-    unsigned char b = D_0013FC1E; // selected help mode
+    unsigned char b = hero.unk8CE; // selected help mode
     int r = 0x7F;
     if (b == 0)
         r = 0x55;

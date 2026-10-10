@@ -1065,11 +1065,11 @@ extern void FUN_L00_00259888(void *, void *, int, float, void *);
 extern void FUN_L00_00259a88(void *, void *);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern Vec4 D_0013F490_v __asm__("D_0013F490");
 extern float D_L03_00161B28 __attribute__((sda));
 extern char D_L03_00173F40[];
 
 /* Homing rocket update: flies on, trails smoke, steers up or down toward a target, explodes on impact or timeout. */
+extern Vec4 D_0013F490_v __asm__("D_0013F490");
 void FUN_L03_002d43c8(struct Moby *m) {
     Vec4 old;
     Vec4 side;

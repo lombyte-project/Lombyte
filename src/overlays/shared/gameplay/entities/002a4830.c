@@ -204,7 +204,6 @@ typedef struct {
     char *c;
 } C_2a4e48;
 extern C_2a4e48 D_166C80_2a4e48 __asm__("D_L00_00166C80") __attribute__((section(".data")));
-extern char D_0013F3D0_2a4e48[] __asm__("D_0013F3D0");
 extern float D_0015ED6C_2a4e48 __asm__("D_0015ED6C");
 extern void f9a28_2a4e48(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float f9ab0_2a4e48(void *, void *) __asm__("FUN_001f9ab0");
@@ -226,7 +225,7 @@ void FUN_L00_002a4e48(char *o) {
     if (C->c != 0) {
         s = o + 0x10;
         qcopy(s, C->c + 0x30);
-        pos = D_0013F3D0_2a4e48;
+        pos = (char *)&hero.motion.pos;
         f9a28_2a4e48(d, s, pos);
         P = (G_2a4e48 *)(pos - 0x80);
         f = f9ab0_2a4e48(d, P->obj + 0xE0);
@@ -1020,7 +1019,6 @@ void FUN_L00_002a82c0(unsigned char *m) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A96B8), where it is exact; names translated to the US level program. */
 
-extern float D_0013F3E8[];
 extern float FastDiffRots(float, float) __asm__("FUN_001fa688");
 extern float FastVecLength(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9e90(float, float);
@@ -1029,7 +1027,7 @@ extern void FUN_001f9bf8(float *, float *, float);
 void FUN_L00_002a8418(float *v) {
     float k = 1.8325957f;
     float a = FUN_001f9e90(v[0], v[1]);
-    float t = FastDiffRots(D_0013F3E8[0], a);
+    float t = FastDiffRots(hero.motion.rot.f[2], a);
     if (t > k)
         t = k;
     FUN_001f9bf8(v, v, FastVecLength(v) * ((k - t) / k * 0.3f + 0.7f));

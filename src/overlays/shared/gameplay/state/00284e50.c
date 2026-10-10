@@ -76,7 +76,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00285008.s", FUN_L00_00285008);
 extern char D_L00_001BA5D0[] __attribute__((section(".data")));
 extern u8 *D_L00_0015FFD8;
 extern u8 *D_L00_0015FFDC;
-extern char D_0013F3D0[];
 extern unsigned short D_00151708;
 extern void FUN_001f97e8(void *, int, int);
 extern void FUN_001f97b0(void);
@@ -97,8 +96,8 @@ void FUN_L00_00285008(void) {
         return;
     }
     FUN_001f9838((int)D_L00_001BA5D0, s, 0xC60);
-    qcopy(D_0013F3D0, s + 0x10);
-    qcopy(D_0013F3D0 + 0x10, s + 0x20);
+    qcopy(&hero.motion.pos, s + 0x10);
+    qcopy(&hero.motion.rot, s + 0x20);
     *(int *)(*(char **)(D_0013F350 + 0x2080) + 0x38) = *(int *)(s + 0x30);
     *(int *)(*(char **)(D_0013F350 + 0x2080) + 0x3C) = *(int *)(s + 0x34);
     *(int *)(*(char **)(D_0013F350 + 0x2080) + 0x80) = *(int *)(s + 0x38);
@@ -127,7 +126,7 @@ void FUN_L00_00285008(void) {
         }
     }
     FUN_L00_00250df8(*(char **)(D_0013F350 + 0x2080));
-    FUN_001fa030(*(char **)(D_0013F350 + 0x2080) + 0xC0, D_0013F3D0 + 0x10);
+    FUN_001fa030(*(char **)(D_0013F350 + 0x2080) + 0xC0, &hero.motion.rot);
     FUN_L00_001ed280();
     FUN_L00_002852c0();
 }

@@ -211,7 +211,6 @@ typedef struct {
     float x, y, z, w_002d8418;
 } __attribute__((aligned(16))) Vec4_002d8418;
 extern char D_L00_00166DC0_002d8418[] __asm__("D_L00_00166DC0");
-extern char D_0013F5E0_002d8418[] __asm__("D_0013F5E0");
 extern float D_0015ED6C_002d8418 __asm__("D_0015ED6C");
 extern float D_L00_00161A60_002d8418 __asm__("D_L00_00161A60") __attribute__((sda));
 extern float D_L00_00161A64_002d8418 __asm__("D_L00_00161A64") __attribute__((sda));
@@ -235,7 +234,7 @@ void FUN_L00_002d8418(char *p) {
     Vec4_002d8418 q;
     char *pos = p + 0x10;
     FUN_001f9a28_002d8418(&d, D_L00_00166DC0_002d8418, pos);
-    FUN_001f9a68_002d8418(&r, D_0013F5E0_002d8418,
+    FUN_001f9a68_002d8418(&r, &hero.unk290,
                           FUN_002132a8_002d8418(D_L00_00161A60_002d8418 * D_0015ED6C_002d8418,
                                                 D_L00_00161A64_002d8418 * D_0015ED6C_002d8418));
     FUN_00214890_002d8418(&q, &r, &d, FUN_00213308_002d8418());

@@ -112,7 +112,6 @@ void FUN_L00_002e01b0(char *m) {
     a = FUN_001f96f8_2e01b0(5);
     *(int *)(d + 4) = FUN_L00_00257b90_2e01b0(a, FUN_001f96f8_2e01b0(15));
 }
-extern char D_0013F350[];
 extern u8 *D_L00_0015FFD8;
 
 /* Tests flag 2 (or 1 when &hero.unk20B0 is set) at 0xBC of the moby selected by +0x2FC. */
@@ -142,7 +141,6 @@ s32 FUN_L00_002e02e0(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E17F0), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 extern int D_L00_0015F404;
 extern short D_L00_0015F3FC;
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -191,7 +189,6 @@ extern u8 D_L00_001EA1B0_2e03a0[] __asm__("D_L00_001EA1B0");
 extern u8 D_L00_001EA1D8_2e03a0[] __asm__("D_L00_001EA1D8");
 extern u8 D_L00_001EA200_2e03a0[] __asm__("D_L00_001EA200");
 extern u8 D_L00_00161BC0_2e03a0[] __asm__("D_L00_00161BC0");
-extern char D_0013F3D0_2e03a0[] __asm__("D_0013F3D0");
 extern s32 D_L00_0015F5C4_2e03a0 __asm__("D_L00_0015F5C4");
 extern s32 D_L00_0015F640_2e03a0 __asm__("D_L00_0015F640");
 extern u16 D_00141B08_2e03a0[] __asm__("D_00141B08");
@@ -244,7 +241,7 @@ void FUN_L00_002e03a0(M_2e03a0_2e03a0 *m) {
         break;
     case 1:
         FUN_L00_002e0788_2e03a0(m);
-        g = D_0013F3D0_2e03a0;
+        g = (char *)&hero.motion.pos;
         if (FUN_001f9b80_2e03a0((char *)m + 0x10, g) < 3.0f) {
             g -= 0x80;
             if (FUN_001f99c0_2e03a0(m->z - *(f32 *)(g + 0x88)) < 2.0f && *(s32 *)(g + 0x22A8)) {
@@ -510,7 +507,6 @@ extern T_e3388 D_L00_001E6D50_e3388[] __asm__("D_L00_001E6D50");
 extern f32 D_L00_001E6E10_e3388[][4] __asm__("D_L00_001E6E10");
 extern f32 D_L00_001E6CE0_e3388[4][4] __asm__("D_L00_001E6CE0");
 extern u8 D_L00_00166DC0_e3388[] __asm__("D_L00_00166DC0");
-extern u8 D_0013F5E0_e3388[] __asm__("D_0013F5E0");
 
 void FUN_001f9a28_e3388(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_001f9bf8_e3388(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -538,7 +534,7 @@ void FUN_L00_002e3388(s32 unused, s32 idx) {
     d[3] = 1.0f;
     FUN_001f9a28_e3388(a, D_L00_00166DC0_e3388, d);
     FUN_001f9bf8_e3388(a, a, 1.0f);
-    FUN_001f9ad8_e3388(b, a, D_0013F5E0_e3388);
+    FUN_001f9ad8_e3388(b, a, &hero.unk290);
     FUN_001f9bf8_e3388(b, b, -1.0f);
     FUN_001f9ad8_e3388(c, b, a);
     q.r78 = FUN_001f44b8_e3388(0xB);
@@ -580,7 +576,7 @@ void FUN_L00_002e3388(s32 unused, s32 idx) {
     qcopy(d, D_L00_001E6E10_e3388[idx]);
     FUN_001f9a28_e3388(a, D_L00_00166DC0_e3388, d);
     FUN_001f9bf8_e3388(a, a, 1.0f);
-    FUN_001f9ad8_e3388(b, a, D_0013F5E0_e3388);
+    FUN_001f9ad8_e3388(b, a, &hero.unk290);
     FUN_001f9bf8_e3388(b, b, -1.0f);
     FUN_001f9ad8_e3388(c, b, a);
     s = FUN_002132a8_e3388(0.2f, 0.225f);
@@ -663,13 +659,12 @@ void FUN_L00_002e3a88(unsigned char *m) {
         break;
     }
 }
-extern char D_0013F3D0[];
 float FUN_001f9b48(void *, void *);
 float FUN_001f9af0(void *);
 int FUN_001f96f8(int);
 void blend_moby_animation(unsigned char *, int, int, int) __asm__("FUN_00212f90");
 void FUN_L00_002e3ca8(unsigned char *p) {
-    char *g = D_0013F3D0;
+    char *g = (char *)&hero.motion.pos;
     if (FUN_001f9b48(g, p + 0x10) < 1.0f) {
         if (FUN_001f9af0(g + 0x80) > frame_time + frame_time && p[0x53] != 1) {
             blend_moby_animation(p, 1, 0, FUN_001f96f8(6));
@@ -682,10 +677,9 @@ void FUN_L00_002e3ca8(unsigned char *p) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e3d88.s", FUN_L00_002e3d88);
-extern u8 D_0013F3D0_002e4168[] __asm__("D_0013F3D0");
 /* Copies the vector at D_0013F3D0 into b; a is unused. */
 void FUN_L00_002e4168(int a, void *b) {
-    qcopy(b, D_0013F3D0_002e4168);
+    qcopy(b, &hero.motion.pos);
 }
 #include "eetypes.h"
 typedef struct {
@@ -973,15 +967,15 @@ void FUN_L00_002e4930(char *m) {
     int t;
 
     if (e->state == 0) {
-        char *p0 = D_0013F350;
-        if (*(int *)(p0 + 0x208C) == 2) {
+        struct Hero *p0 = &hero;
+        if (p0->state.control_mode == 2) {
             e->prev = e->state;
             e->state = 1;
             e->timer = D_L00_00161D3C;
             e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
         } else {
-            char *p1 = D_0013F350;
-            if (*(int *)(p1 + 0x2084) == 0xF && D_L00_00166EEC == 0.0f) {
+            struct Hero *p1 = &hero;
+            if (p1->state.current == 0xF && D_L00_00166EEC == 0.0f) {
                 e->prev = e->state;
                 e->state = 3;
                 e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D4C);
@@ -995,15 +989,15 @@ void FUN_L00_002e4930(char *m) {
                 FUN_L00_002e48a0_c(e->v30, x);
                 qcopy(e->v20, e->v10);
             } else {
-                char *p2 = D_0013F350;
-                if (*(int *)(p2 + 0x2084) == 0xC && D_L00_00166EEC == 0.0f) {
+                struct Hero *p2 = &hero;
+                if (p2->state.current == 0xC && D_L00_00166EEC == 0.0f) {
                     e->prev = e->state;
                     e->state = 8;
                     e->timer = D_L00_00161D60;
                     e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
                 } else {
-                    char *p3 = D_0013F350;
-                    if (*(int *)(p3 + 0x2084) == 0xB && D_L00_00166EEC == 0.0f) {
+                    struct Hero *p3 = &hero;
+                    if (p3->state.current == 0xB && D_L00_00166EEC == 0.0f) {
                         e->prev = e->state;
                         e->state = 6;
                         e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40);
@@ -1017,8 +1011,8 @@ void FUN_L00_002e4930(char *m) {
                         FUN_L00_002e48a0_c(e->v30, x);
                         qcopy(e->v20, e->v10);
                     } else {
-                        char *p4 = D_0013F350;
-                        if ((*(int *)(p4 + 0x2084) == 0xD || *(int *)(p4 + 0x2084) == 0xE) &&
+                        struct Hero *p4 = &hero;
+                        if ((p4->state.current == 0xD || p4->state.current == 0xE) &&
                             D_L00_00166EEC == 0.0f) {
                             e->prev = e->state;
                             e->state = 5;
@@ -1033,8 +1027,8 @@ void FUN_L00_002e4930(char *m) {
                             FUN_L00_002e48a0_c(e->v30, x);
                             qcopy(e->v20, e->v10);
                         } else {
-                            char *p5 = D_0013F350;
-                            if (*(int *)(p5 + 0x208C) == 4 && D_L00_00166EEC == 0.0f) {
+                            struct Hero *p5 = &hero;
+                            if (p5->state.control_mode == 4 && D_L00_00166EEC == 0.0f) {
                                 e->prev = e->state;
                                 e->state = 2;
                                 e->timer = D_L00_00161D38;
@@ -1071,8 +1065,8 @@ void FUN_L00_002e4930(char *m) {
         return;
     }
     if (e->state == 7) {
-        char *p = D_0013F350;
-        if (*(short *)(p + 0x41E) == 0) {
+        struct Hero *p = &hero;
+        if (p->unk41E == 0) {
             e->prev = e->state;
             e->state = 6;
             e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40);
@@ -1087,7 +1081,7 @@ void FUN_L00_002e4930(char *m) {
             qcopy(e->v20, e->v10);
             return;
         }
-        if (*(int *)(p + 0x208C) == 2) {
+        if (p->state.control_mode == 2) {
             e->prev = e->state;
             e->state = 1;
             e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
@@ -1153,14 +1147,14 @@ void FUN_L00_002e4930(char *m) {
         return;
     }
     if (e->state == 9) {
-        char *p = D_0013F350;
-        if (*(int *)(p + 0x208C) == 2 || *(short *)(p + 0x30C) >= scale_game_frames(0x37)) {
+        struct Hero *p = &hero;
+        if (p->state.control_mode == 2 || p->unk30C.s >= scale_game_frames(0x37)) {
             goto to_one;
         }
     }
     if (e->state == 0xA) {
-        char *p = D_0013F350;
-        if (*(int *)(p + 0x208C) == 2 || *(short *)(p + 0x30C) >= scale_game_frames(0x37)) {
+        struct Hero *p = &hero;
+        if (p->state.control_mode == 2 || p->unk30C.s >= scale_game_frames(0x37)) {
             float r;
         to_one:
             e->prev = e->state;
@@ -1226,18 +1220,18 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
     char *d;
     char *e;
     char *g;
-    char *pad;
-    char *padb;
-    char *padc;
+    struct Hero *pad;
+    struct Hero *padb;
+    struct Hero *padc;
     char *q;
     float x, y;
     int flag;
     g = D_L00_00166E10;
     d = *(char **)(m + 0x70);
     FUN_L00_002e4168_c(m, cam);
-    pad = D_0013F350;
+    pad = &hero;
     e = d + 0x40;
-    if (*(int *)(pad + 0x2084) == 0x77) {
+    if (pad->state.current == 0x77) {
         x = FUN_001f9ab0(e, g + 0x30);
         FUN_001f9a68_c2(v2, g + 0x30, x);
         FUN_001f9a28(e, e, v2);
@@ -1254,9 +1248,9 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
     }
     switch (*(unsigned char *)(e + 0xC4)) {
     case 2:
-        padb = D_0013F350;
-        if (*(int *)(padb + 0x2084) == 0x11 ||
-            (*(short *)(padb + 0x41E) != 0 && *(float *)(padb + 0x2DC) > 0.2f &&
+        padb = &hero;
+        if (padb->state.current == 0x11 ||
+            (padb->unk41E != 0 && padb->ground_distance > 0.2f &&
              ((y = FUN_L00_002e4580_u(m, *(float *)(e + 0xB0))) < *(float *)&D_L00_00161D10_d ||
               *(float *)&D_L00_00161D0C_d < y))) {
             int v;
@@ -1265,10 +1259,10 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
             *(short *)(e + 0xC6) = v;
             *(float *)(e + 0xC8) = 1.0f / ConvertIntegerToFloat((short)v);
         }
-        padc = D_0013F350;
+        padc = &hero;
         flag = 0;
-        if (*(short *)(padc + 0x30C) != 0 && *(float *)(g + 0xDC) == 0.0f &&
-            (*(short *)(padc + 0x41E) == 0 || *(int *)(padc + 0x44C) >= 0x10)) {
+        if (padc->unk30C.s != 0 && *(float *)(g + 0xDC) == 0.0f &&
+            (padc->unk41E == 0 || padc->unk44C >= 0x10)) {
             flag = 1;
         } else {
             if (func_L00_002E5770_r(tmp, 1) == 1) {

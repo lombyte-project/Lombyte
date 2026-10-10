@@ -457,7 +457,6 @@ typedef struct {
     float e[1][4];
 } Route_2dd4f8;
 
-extern char D_0013F3D0[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
@@ -468,7 +467,7 @@ extern Route_2dd4f8 *D_L08_001B0FB0_r[] __asm__("D_L08_001B0CB0");
 
 void FUN_L08_002dc180(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    char *pl = D_0013F3D0;
+    char *pl = (char *)&hero.motion.pos;
     Route_2dd4f8 *a = D_L08_001B0FB0_r[*(int *)(data + 0x88)];
     Route_2dd4f8 *b = D_L08_001B0FB0_r[*(int *)(data + 0x80)];
     Route_2dd4f8 *c = D_L08_001B0FB0_r[*(int *)(data + 0x84)];
