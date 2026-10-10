@@ -186,7 +186,7 @@ void FUN_L06_0030bfa8(char *moby) {
     float size;
     float fade;
     s32 y, x, radius;
-    long raw_x;
+    s32 raw_x;
     u64 texture;
     u32 color;
     s32 *screen_center;
@@ -212,11 +212,11 @@ void FUN_L06_0030bfa8(char *moby) {
     color = fast_tween_color(fade, *(s32 *)&d[2], *(s32 *)&d[3]);
     colors[3] = colors[2] = colors[1] = colors[0] = color;
     radius = truncate_float_to_s32((float)(D_L06_00162418 << 4) * size);
+     corners[2] = (s64)(s32)((y + radius) << 16) + 0xfffff080008000LL + (x + radius);
     corners[0] = (s64)(s32)((y - radius) << 16) + 0xfffff080008000LL + (x + radius);
     corners[1] = (s64)(s32)((y - radius) << 16) + 0xfffff080008000LL + (x - radius);
-    corners[2] = (s64)(s32)((y + radius) << 16) + 0xfffff080008000LL + (x + radius);
     corners[3] = (s64)(s32)((y + radius) << 16) + 0xfffff080008000LL + (x - radius);
-    texture = get_effect_texture(D_L06_00162414);
+   texture = get_effect_texture(D_L06_00162414);
     FUN_L02_0020bc88(corners, uvs, colors, texture, 1);
     vu1_add_g_sregister(0x47, 0x5360B);
 }
