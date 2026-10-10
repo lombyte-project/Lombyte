@@ -313,7 +313,115 @@ void FUN_L11_002d0fa8(struct Moby *moby) {
     FUN_L11_002d14b0(moby);
     FUN_L11_002d27b0(moby);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d1030.s", FUN_L11_002d1030);
+extern float FUN_001f9e90(float, float);
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern int FUN_00214cc8(void *, float);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern float FUN_001f9b20(void *);
+extern float FUN_001f9af0(void *);
+extern float FUN_L00_0025abf0(void *, void *, float, int, float);
+extern void FUN_L00_002604f0(void *, void *, void *, void *, void *, void *);
+extern int FUN_001f96f8(int);
+extern void FUN_00212f90(void *, int, int, int);
+extern void FUN_001f99f8(void *);
+extern float D_0015ED70;
+extern float D_0015ED6C;
+extern float D_L11_001613E0 __attribute__((sda));
+extern int D_L11_001613F0 __attribute__((sda));
+extern int D_L11_0016D260[];
+extern int D_L11_0015FFD8;
+
+void FUN_L11_002d1030(void *mp) {
+    struct Moby *moby = mp;
+    char *d = (char *)moby->pvars;
+    float ang;
+    float f0;
+    float f1;
+    float f2;
+    float f3;
+
+    switch (moby->state) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 11:
+    case 12:
+        break;
+    case 4:
+    case 5:
+    case 6:
+    case 8:
+    case 10:
+    {
+        char *m48 = (char *)moby + 0x48;
+        ang = FUN_001f9e90(*(float *)(d + 0x120) - *(float *)((char *)moby + 0x10),
+                           *(float *)(d + 0x124) - *(float *)((char *)moby + 0x14));
+        FUN_L00_0025be00((float *)(m48), ang, (float *)(d + 0x150), D_0015ED70 * 12.566371f,
+                         D_0015ED70 * 25.132742f, D_0015ED6C * 12.566371f);
+        *(float *)(d + 0x130) = FUN_001f9dc8(*(float *)(m48)) * *(float *)(d + 0x154);
+        f0 = FUN_001f9de0(*(float *)(m48));
+        f1 = *(float *)(d + 0x148);
+        f2 = D_0015ED70 * 20.0f;
+        f3 = *(float *)(d + 0x154);
+        *(float *)(d + 0x134) = f0 * f3;
+        f1 = f1 - f2;
+        *(float *)(d + 0x138) = f1;
+        if (0.0f < f1) {
+            *(float *)(d + 0x138) = 0.0f;
+            /* Fakematch: storing the speed back is a no-op that reload
+             * deletes, but it keeps f3 live into this branch, so the
+             * first scheduling pass hoists the 0x154 load and the
+             * allocator gives it $f4 as in retail. */
+            *(float *)(d + 0x154) = f3;
+        }
+        break;
+    }
+    case 7:
+        if (FUN_00214cc8(moby, 9.0f)) {
+            FUN_001f9a28(d + 0x130, d + 0x120, (char *)moby + 0x10);
+            f0 = (float)FUN_001f96f8(0x3C);
+            FUN_001f9a68(d + 0x130, d + 0x130, 1.0f / f0);
+            f0 = FUN_001f9b20(d + 0x130);
+            *(float *)(d + 0x138) = FUN_L00_0025abf0((char *)moby + 0x10, d + 0x120, f0, 0, -(D_0015ED70 * 10.8f));
+            *(float *)((char *)moby + 0x58) = 0.6666667f;
+        }
+        f0 = FUN_001f9af0(d + 0x130);
+        if (0.0f < f0)
+            *(float *)(d + 0x138) = *(float *)(d + 0x138) - D_0015ED70 * 10.8f;
+        if (FUN_00214cc8(moby, 29.0f)) {
+            FUN_001f99f8(d + 0x130);
+            *(float *)((char *)moby + 0x58) = 1.0f;
+        }
+        break;
+    case 9:
+    {
+        int *tbl = (int *)(d + 0xF0);
+        unsigned int idx = 0U < *(unsigned int *)(d + 0x158);
+        char *o;
+        tbl += idx;
+        o = (char *)D_L11_0015FFD8;
+        o += *tbl << 8;
+        FUN_L00_002604f0(moby, o, &D_L11_001613E0, &D_L11_001613F0, (char *)moby + 0x10, (char *)moby + 0x40);
+        if (FUN_L11_0030a480((struct Moby *)o) == 0)
+            break;
+    }
+        if (moby->prev_seq != 5)
+            FUN_00212f90(moby, 5, 0, FUN_001f96f8(0x14));
+        break;
+    case 13:
+        if (D_L11_0016D260[12] != 1)
+            break;
+        if (D_L11_0016D260[13] != FUN_001f96f8(0x7D0))
+            break;
+        FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (*(int *)(d + 0x104) << 8)));
+        break;
+    default:
+        break;
+    }
+}
 #include "qcopy.h"
 
 /* moves the parts' positions and stores the moby's displacement since last frame */
