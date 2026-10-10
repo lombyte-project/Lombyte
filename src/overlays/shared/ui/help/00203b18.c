@@ -2113,6 +2113,8 @@ void FUN_L00_0020a9e8(void) {
     G_a540 *g = &D_0013F350_a540;
     char *base = (char *)g;
     s32 *timers;
+    s32 *check_timer;
+    s32 *store_timer;
     char *record;
     s32 i;
 
@@ -2120,28 +2122,30 @@ void FUN_L00_0020a9e8(void) {
         return;
 
     timers = (s32 *)(base + 0x1060);
+    check_timer = timers;
+    store_timer = timers;
     record = base;
     i = 0;
     do {
         s32 j;
-        f32 x, y;
-        if (FUN_001fef68_a9e8(&timers[i]) != 0) {
+        f32 y, x;
+        if (FUN_001fef68_a9e8(check_timer) != 0) {
             s32 low, high;
             if (i == 0) {
                 *(f32 *)(record + 0x1028) = FUN_L00_00257c48_a540(0.17453292f, 0.5235988f);
                 low = FUN_001fef20_a9e8(0x46);
                 high = FUN_001fef20_a9e8(0x96);
-                timers[i] = FUN_L00_00257b90_a540(low, high);
+                *(s32 *)0x001403b0 = FUN_L00_00257b90_a540(low, high);
             } else if (i == 1) {
                 *(f32 *)(record + 0x1028) = FUN_L00_00257c48_a540(0.17453292f, 0.5235988f);
                 low = FUN_001fef20_a9e8(0x28);
                 high = FUN_001fef20_a9e8(0x5A);
-                timers[i] = FUN_L00_00257b90_a540(low, high);
+                *timers = FUN_L00_00257b90_a540(low, high);
             } else if (i == 2) {
                 *(f32 *)(record + 0x1028) = FUN_L00_00257c48_a540(0.2617994f, 0.87266463f);
                 low = FUN_001fef20_a9e8(0x28);
                 high = FUN_001fef20_a9e8(0x5A);
-                timers[i] = FUN_L00_00257b90_a540(low, high);
+                *timers = FUN_L00_00257b90_a540(low, high);
             } else {
                 f32 old;
                 f32 value;
@@ -2156,19 +2160,22 @@ void FUN_L00_0020a9e8(void) {
                     goto negate_fourth;
                 goto fourth_sign_done;
 negate_fourth:
-                *(f32 *)(record + 0x1028) = -value;
+                *(f32 *)(record + 0x1028) = -*(f32 *)(record + 0x1028);
 fourth_sign_done:
                 low = FUN_001fef20_a9e8(0x23);
                 high = FUN_001fef20_a9e8(0x46);
-                timers[i] = FUN_L00_00257b90_a540(low, high);
+                *store_timer = FUN_L00_00257b90_a540(low, high);
             }
         }
         j = i + 13;
-        x = *(f32 *)(record + 0x1024);
         y = *(f32 *)(record + 0x1028);
-        ((struct HeroEase *)&D_L00_0017A680_a540)[j].rot_target.f[1] = x;
-        ((struct HeroEase *)&D_L00_0017A680_a540)[j].rot_target.f[2] = y;
+        x = *(f32 *)(record + 0x1024);
+        *(f32 *)((char *)&D_L00_0017A680_a540 + j * 0xb0 + 0x64) = x;
+        *(f32 *)((char *)&D_L00_0017A680_a540 + j * 0xb0 + 0x68) = y;
         record += 0x10;
+        timers++;
+        check_timer++;
+        store_timer++;
         i++;
     } while (i < 4);
 }
