@@ -35,7 +35,65 @@ void FUN_L12_003032e8(struct Moby *moby) {
     m[6] = fast_add_rotations(1.5707964f, moby->rot.z);
     FUN_L00_002eaa30(m + 4);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00303370.s", FUN_L12_00303370);
+#else
+#include "qcopy.h"
+extern char *D_L12_0015FFD8_p __asm__("D_L12_0015FFD8");
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+#define L12_VENDOR_REFERENCE ((char *)0x167100)
+
+void FUN_L12_00303370(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    int found = 0;
+    int i;
+    float position[4] __attribute__((aligned(16)));
+
+    i = 0;
+    do {
+        int index = *(int *)(data + 0x40 + i * 4);
+        if (index != -1) {
+            struct Moby *other = (struct Moby *)(D_L12_0015FFD8_p + index * 0x100);
+            float yaw_limit = 0.12217305f;
+            float pitch_limit = 0.12217305f;
+            float yaw;
+            float distance;
+            float pitch;
+
+            qcopy(position, &other->pos);
+            if (other->oclass == 0x146) {
+                position[2] += 1.5f;
+            }
+            if (other->oclass == 0x4fe) {
+                yaw_limit = 0.034906585f;
+                pitch_limit = 0.05235988f;
+                position[2] += 1.5f;
+            }
+            yaw = FUN_001f9e90(position[0] - *(float *)(L12_VENDOR_REFERENCE + 0x140),
+                                   position[1] - *(float *)(L12_VENDOR_REFERENCE + 0x144));
+            distance = FUN_001f9b80(L12_VENDOR_REFERENCE + 0x140, position);
+            pitch = FUN_001f9e90(distance, position[2] - *(float *)(L12_VENDOR_REFERENCE + 0x148));
+            if (fast_difference_between_rotations(yaw, *(float *)(L12_VENDOR_REFERENCE + 0x158)) < yaw_limit &&
+                fast_difference_between_rotations(pitch, -*(float *)(L12_VENDOR_REFERENCE + 0x154)) < pitch_limit) {
+                found = 1;
+            }
+        }
+        i++;
+    } while (i < 10);
+    if (found) {
+        *(int *)(data + 0x88) += 2;
+        if (scale_ticks(0x1e) < *(int *)(data + 0x88)) {
+            *(int *)(data + 0x88) = scale_ticks(0x1e);
+        }
+    } else {
+        tick_countdown_32_alt((int *)(data + 0x88));
+    }
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00303540.s", FUN_L12_00303540);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00304218.s", FUN_L12_00304218);
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
