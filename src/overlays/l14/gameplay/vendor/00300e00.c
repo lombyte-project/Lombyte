@@ -64,7 +64,230 @@ u8 *FUN_L14_00306158(u8 *self) {
     return o;
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00300e00.s", FUN_L14_00300e00);
+/* A bouncing spark: falls under gravity leaving a three-particle trail while its trail timer runs, bounces off
+ * collision (reflected and damped, a click per bounce) and after four bounces rolls on at a decaying speed
+ * while it fades from red to its colour; it bursts when it hits another owner's target or its timer ends.
+ * Its spin follows its speed. */
+typedef struct {
+    char pad0[0x10];
+    Vec4f vel;                  /* w: gravity while bouncing, then the rolling speed */
+    int fade;                   /* 0x20 */
+    int owner;                  /* 0x24 */
+    short trail;                /* 0x28 */
+    short bounces;              /* 0x2A */
+    float fade_rate;            /* 0x2C */
+} Spark_0e00;
+typedef struct {
+    char pad0[0x18];
+    int owner;                  /* 0x18 */
+    int pad1C;
+    Vec4f hit;                  /* 0x20 */
+    Vec4f pad30;
+    Vec4f normal;               /* 0x40 */
+} Coll_0e00;
+typedef struct { float r, g, b; } Rgb_0e00;
+extern Coll_0e00 D_L14_00174540;
+extern int D_L14_00174558 __attribute__((section(".data")));
+extern int D_L14_0016208C_0e00 __asm__("D_L14_0016208C") __attribute__((sda));
+extern float D_L14_00162088 __attribute__((sda));
+extern float D_L14_00162090 __attribute__((sda));
+extern float D_L14_00162094 __attribute__((sda));
+extern float D_L14_001620A0 __attribute__((sda));
+extern float D_L14_001620A4 __attribute__((sda));
+extern Rgb_0e00 D_L14_001620A8;
+extern char D_L14_0015F580[] __attribute__((section(".sdata")));
+extern int on_ground_0e00(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
+extern int timer_done_0e00(int *) __asm__("FUN_001f9740");
+extern int timer_tick_0e00(short *) __asm__("FUN_001f9770");
+extern void add_0e00(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void lerp_0e00(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
+extern int rand_0e00(int) __asm__("FUN_00213260");
+extern int frames_0e00(int) __asm__("FUN_001f96f8");
+extern float itof_0e00(int) __asm__("FUN_001fa6c0");
+extern char *spawn_0e00(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
+extern int collide_0e00(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern void normalize_0e00(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void reflect_0e00(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern int sound_0e00(int, int, void *) __asm__("FUN_0022da68");
+extern void scale_0e00(void *, void *, float) __asm__("FUN_001f9a68");
+extern float length_0e00(void *) __asm__("FUN_001f9b20");
+extern void cap_0e00(void *, void *, float) __asm__("FUN_001f9c48");
+extern int ftoi_0e00(float) __asm__("FUN_001fa6d0");
+extern void burst_0e00(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void remove_0e00(void *) __asm__("FUN_0020c828");
+extern float add_rot_0e00(float, float) __asm__("FUN_001fa580");
+
+void FUN_L14_00300e00(struct Moby *m)
+{
+  Spark_0e00 *d = (Spark_0e00 *) m->pvars;
+  Vec4f next;
+  Vec4f t;
+  Vec4f from;
+  float speed;
+  float lo;
+  float hi;
+  if (((on_ground_0e00(&m->pos, 0, m, 0.65f) != 0) && (D_L14_00174558 != 0)) && (D_L14_00174558 != d->owner))
+  {
+    m->state = 3;
+  }
+  if (timer_done_0e00(&d->fade) != 0)
+  {
+    m->state = 3;
+  }
+  switch (m->state)
+  {
+    case 0:
+
+    case 1:
+    {
+      add_0e00(&next, &m->pos, &d->vel);
+      d->vel.z -= d->vel.w;
+      if ((m->state == 1) && (d->vel.z < 0.0f))
+      {
+        m->state = 0;
+      }
+      timer_tick_0e00(&d->trail);
+      if (d->trail != 0)
+      {
+        int i;
+        for (i = 0; i < 3; i++)
+        {
+          float one = 1.0f;
+          float third = 0.3333f;
+          int spin;
+          char *p;
+          *((u128 *) (&from)) = *((u128 *) (&m->pos));
+          lerp_0e00(&t, &from, &next, ((float) i) * third);
+          spin = rand_0e00(6);
+          if (rand_0e00(2) != 0)
+          {
+            spin = -spin;
+          }
+          p = spawn_0e00(&t, 0.025f, one, one, spin, D_L14_0015F580, ((((float) d->trail) / itof_0e00(frames_0e00(D_L14_0016208C_0e00))) * 45000.0f) + 5000.0f, 0x80808080);
+          if (p != 0)
+          {
+            char *q = p + 0x20;
+            *((short *) (p + 0xA)) = frames_0e00(0x78);
+            *((int *) (q + 4)) = 2;
+            q[0xA] = 0x7F;
+            q[0xB] = p[0xA];
+          }
+        }
+
+      }
+      if ((collide_0e00(&m->pos, &next, 0, m, 0) != 0) && ((D_L14_00174540.owner == 0) || (D_L14_00174540.owner != d->owner)))
+      {
+        qcopy(&m->pos, &D_L14_00174540.hit);
+      }
+      else
+      {
+        qcopy(&m->pos, &next);
+      }
+      if (((on_ground_0e00(&m->pos, 0, m, D_L14_00162088) != 0) && ((m->state == 0) || ((m->pos.z - D_L14_00174540.hit.z) < 0.0f))) && ((D_L14_00174540.owner == 0) || (D_L14_00174540.owner != d->owner)))
+      {
+        normalize_0e00(&t, &D_L14_00174540.normal, D_L14_00162088);
+        add_0e00(&m->pos, &D_L14_00174540.hit, &t);
+        reflect_0e00(&d->vel, &d->vel, &D_L14_00174540.normal);
+        sound_0e00(1, 0, m);
+        if (m->state == 0)
+        {
+          m->state = 1;
+          if ((++d->bounces) == 1)
+          {
+            cap_0e00(&d->vel, &d->vel, D_L14_001620A4 * frame_time);
+            d->vel.z = d->vel.z * D_L14_001620A0;
+          }
+          else
+          {
+            scale_0e00(&from, &d->vel, D_L14_001620A0);
+            if (length_0e00(&from) < (D_L14_00162090 * frame_time))
+            {
+              cap_0e00(&d->vel, &d->vel, D_L14_00162090 * frame_time);
+              d->vel.z *= D_L14_001620A0;
+            }
+            else
+            {
+              qcopy(&d->vel, &from);
+            }
+          }
+        }
+        if (d->bounces >= 4)
+        {
+          float min;
+          m->state = 2;
+          d->vel.z = 0.0f;
+          d->vel.w = length_0e00(&d->vel);
+          d->vel.w *= D_L14_001620A0;
+          min = D_L14_00162090 * frame_time;
+          if (d->vel.w < min)
+          {
+            d->vel.w = min;
+          }
+          normalize_0e00(&d->vel, &d->vel, d->vel.w);
+          d->fade_rate = 1.0f / itof_0e00(d->fade);
+        }
+      }
+      break;
+    }
+
+    case 2:
+    {
+      float f;
+      int r;
+      int g;
+      int b;
+      float min;
+      *((Rgb_0e00 *) (&next)) = D_L14_001620A8;
+      f = ((float) d->fade) * d->fade_rate;
+      r = ftoi_0e00(((((Rgb_0e00 *) (&next))->r - 255.0f) * f) + 255.0f);
+      g = ftoi_0e00(((((Rgb_0e00 *) (&next))->g - 0.0f) * f) + 0.0f);
+      b = ftoi_0e00(((((Rgb_0e00 *) (&next))->b - 0.0f) * f) + 0.0f);
+      m->unk90 = 0xFF000000;
+      m->unk90 = (((b << 16) | m->unk90) | (g << 8)) | r;
+      min = D_L14_00162090 * frame_time;
+      d->vel.w *= ((D_L14_00162094 - 1.0f) * frame_scale) + 1.0f;
+      if (d->vel.w < min)
+      {
+        d->vel.w = min;
+      }
+      normalize_0e00(&d->vel, &d->vel, d->vel.w);
+      add_0e00(&m->pos, &m->pos, &d->vel);
+      break;
+    }
+
+    case 3:
+      burst_0e00(m, &d->vel, &m->pos, 2.0f, 1.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
+      remove_0e00(m);
+      return;
+
+  }
+
+  if (m->state < 2)
+  {
+    speed = length_0e00(&d->vel);
+  }
+  else
+    if (m->state == 2)
+  {
+    speed = d->vel.w;
+  }
+  else
+  {
+    return;
+  }
+  lo = frame_time * 0.2f;
+  hi = frame_time * 6.0f;
+  if (speed < lo)
+  {
+    speed = lo;
+  }
+  if (hi < speed)
+  {
+    speed = hi;
+  }
+  speed -= lo;
+  m->rot.y = add_rot_0e00((((speed / (hi - lo)) * 7.0f) + 1.0f) * 0.017453292f, m->rot.y);
+}
 #include "sda.h"
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00302968), where it is exact; names translated to the US level program. */
 extern char *FUN_0020c4f8_c(int) __asm__("FUN_0020c4f8");
