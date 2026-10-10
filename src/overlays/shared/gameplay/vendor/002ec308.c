@@ -814,7 +814,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb648.s", FUN_L02_002fb648);
 #else
 extern char *D_L02_0015EF50;
 extern char *D_L02_001674DC;
-extern int *D_L02_001B0AB0[];
 extern float FUN_001f9b48(void *, void *);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_0025fa38(void *, int);
@@ -852,7 +851,7 @@ int FUN_L02_002fb648(char *moby) {
     if (*(int *)(data + 0x14) < 0) {
         return 0;
     }
-    entry = D_L02_001B0AB0[*(int *)(data + 0x14)];
+    entry = (int *)D_L02_001B0AB0[*(int *)(data + 0x14)];
     result = FUN_L00_00259740(&hero.motion.pos, entry + 4, *entry);
     return result != 0;
 }
