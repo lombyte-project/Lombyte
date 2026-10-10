@@ -85,7 +85,7 @@ void render_vendor_capture_pass_sequence(void *capture_context) {
             point_indices[2] = point_base + 2;
             transform_attachment_points(capture_context, 3, attachment_point_indices,
                                         attachment_point_buffer);
-            origin_pointer->q = attachment_point_buffer->q;
+            origin_pointer[0] = attachment_point_buffer[0];
         } while (0);
         fast_vec_sub(&first_edge, &attachment_points[1], attachment_point_buffer);
         fast_vec_sub(&second_edge, &attachment_points[2], attachment_point_buffer);
