@@ -814,6 +814,8 @@ struct Moby *FUN_L08_002de3e0(void *pos, struct Moby *target, void *velocity, fl
     float *reference;
     float distance;
     float scale;
+    struct Moby *target_copy = target;
+    void *velocity_copy = velocity;
     if (moby != 0) {
         data = (char *)moby->pvars;
         qcopy(&moby->pos, pos);
@@ -833,8 +835,8 @@ struct Moby *FUN_L08_002de3e0(void *pos, struct Moby *target, void *velocity, fl
         *(float *)(data + 0x40) = pitch;
         *(float *)(data + 0x48) = 70.0f;
         *(float *)(data + 0x44) = yaw;
-        *(struct Moby **)(data + 0x4C) = target;
-        qcopy(data + 0x20, velocity);
+        *(struct Moby **)(data + 0x4C) = target_copy;
+        qcopy(data + 0x20, velocity_copy);
         FUN_L00_00250df8(moby);
     }
     return moby;
