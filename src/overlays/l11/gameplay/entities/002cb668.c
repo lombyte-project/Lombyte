@@ -348,7 +348,286 @@ void FUN_L11_002d1340(void *mp) {
     }
     FUN_001f9a28(d + 0x140, moby + 0x10, A);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d14b0.s", FUN_L11_002d14b0);
+extern int FUN_L11_002d2460(struct Moby *moby);
+extern int FUN_L11_002d2340(struct Moby *moby, char *other);
+extern int FUN_L11_002d25e8(struct Moby *m, float *out);
+extern void set_state_14b0(struct Moby *moby, int state) __asm__("FUN_L11_002d2088");
+extern float ground_height_14b0(void *) __asm__("FUN_L00_00259710");
+extern void scale_vector_14b0(void *out, void *a, f32 s) __asm__("FUN_001f9bf8");
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f99f8(void *);
+extern void FUN_001fa030(void *, void *);
+extern void FUN_L05_0028be78(void *, int, int);
+extern void FUN_L00_002502a0(int);
+extern void FUN_L00_00266858(void *, int);
+extern int FUN_L11_0030a830(struct Moby *arg);
+extern void FUN_L11_0030a840(unsigned char *arg);
+extern unsigned char D_0013D4EE __attribute__((section(".data")));
+extern unsigned char D_0013D3DC __attribute__((section(".data")));
+extern int D_0015ED84;
+extern unsigned char D_0014C050[];
+/* One of the level's path/spawn points (D_L11_001600EC, 0x80 bytes each). */
+struct PokPathPoint {
+    u8 pad00[0x30];
+    Vec4f pos;
+    u8 pad40[0x30];
+    Vec4f rot;
+};
+extern struct PokPathPoint *path_points_14b0 __asm__("D_L11_001600EC");
+extern int D_L11_0015FFD8;
+extern int D_001413D4_14b0 __asm__("D_001413D4") __attribute__((section(".data")));
+extern char D_L11_0016D270[];
+extern float D_L11_00161410 __attribute__((sda));
+extern float D_L11_00161414 __attribute__((sda));
+extern float D_L11_00161418 __attribute__((sda));
+
+/* Pvars of the path-walking NPC run by FUN_L11_002d0fa8. */
+struct PokKeeperVars {
+    u8 pad00[0x20];
+    u8 talk[0xC];                     /* 0x20: talk prompt (FUN_L00_002668a0 / FUN_L00_00266448) */
+    f32 talk_range;                   /* 0x2C */
+    u8 pad30[0x26];
+    s16 unk56;
+    u8 pad58[8];
+    s32 unk60[3];                     /* 0x60: FUN_L05_0028be78 handles, set from unk70[] */
+    u8 pad6C[4];
+    s32 unk70[3];
+    u8 pad7C[0x54];
+    s32 unkD0[4];
+    s32 points[4];                    /* 0xE0: path point of each leg */
+    s32 gates[2];                     /* 0xF0: gate mobys */
+    s32 volumes[2];                   /* 0xF8 */
+    s32 unk100;
+    s32 unk104;
+    s32 unk108;
+    s32 unk10C;
+    s32 unk110;
+    s32 unk114;
+    s32 unk118;
+    u8 pad11C[4];
+    Vec4f target;                     /* 0x120 */
+    Vec4f unk130;
+    Vec4f unk140;
+    u8 pad150[8];
+    s32 leg;                          /* 0x158 */
+    s32 next_state;                   /* 0x15C: state entered once the walk animation ends */
+};
+
+/* NPC that talks to the hero, then walks a chain of level path points ahead of him, opening the
+   gate mobys (FUN_L11_0030a840) and moving path points as it goes. */
+void FUN_L11_002d14b0(void *arg) {
+    struct Moby *moby = arg;
+    struct PokKeeperVars *d = (struct PokKeeperVars *)moby->pvars;
+    int proximity = FUN_L11_002d2460(moby);
+    float v[4];
+    float r[4];
+
+    if (moby->state >= 3 && moby->state <= 5 && proximity == 0) {
+        set_state_14b0(moby, 6);
+        return;
+    }
+    if (moby->state >= 4 && moby->state <= 6) {
+        scale_vector_14b0(v, &moby->unkC0, 3.0f);
+        FUN_001f9a10(v, v, &moby->pos);
+        if (FUN_L11_002d25e8(moby, v)) {
+            qcopy(&d->target, v);
+            d->target.z = ground_height_14b0(&d->target);
+            d->next_state = 3;
+            set_state_14b0(moby, 7);
+        }
+    }
+    switch (moby->state) {
+    case 0:
+        FUN_L00_002668a0(moby, d->talk);
+        moby->unk30 = 0xFF;
+        FUN_L05_0028be78(&d->unk60[0], 1, d->unk70[0]);
+        FUN_L05_0028be78(&d->unk60[1], 1, d->unk70[1]);
+        FUN_L05_0028be78(&d->unk60[2], 1, d->unk70[2]);
+        FUN_001f99f8(&d->unk130);
+        FUN_001f99f8(&d->unk140);
+        if (D_0013D4EE) {
+            if (D_0014C050[d->unk10C + D_0015ED84 * 16] == 0xFF) {
+                FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (d->gates[0] << 8)));
+                FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (d->gates[1] << 8)));
+                FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (d->unk104 << 8)));
+                mark_moby_for_removal(moby);
+                break;
+            }
+        } else {
+            if (D_0014C050[d->unk10C + D_0015ED84 * 16] == 0xFF) {
+                d->leg = 3;
+                qcopy_nc(&moby->pos, &path_points_14b0[d->points[3]].pos);
+                qcopy_nc(&moby->rot, &path_points_14b0[d->points[3]].rot);
+                FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (d->unk104 << 8)));
+                set_state_14b0(moby, 0xE);
+                d->talk_range = 10.0f;
+                FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (d->gates[0] << 8)));
+                FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (d->gates[1] << 8)));
+                break;
+            }
+        }
+        if (D_0014C050[d->unk108 + D_0015ED84 * 16] == 0xFF &&
+            FastVecDist(&hero.motion.pos, &path_points_14b0[d->points[1]].pos) < 12.0f) {
+            d->leg = 1;
+            qcopy_nc(&moby->pos, &path_points_14b0[d->points[1]].pos);
+            qcopy_nc(&moby->rot, &path_points_14b0[d->points[1]].rot);
+            set_state_14b0(moby, 6);
+            path_points_14b0[d->unk114].pos.z -= 500.0f;
+            FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (d->gates[0] << 8)));
+            break;
+        }
+        path_points_14b0[d->unk110].pos.z -= 500.0f;
+        path_points_14b0[d->unk114].pos.z -= 500.0f;
+        d->leg = 0;
+        d->talk_range = 5.0f;
+        set_state_14b0(moby, 1);
+        break;
+    case 1:
+        if (d->unk56 == 0) {
+            if (hero.air_frames.s == 0 && FUN_L00_00266448(moby, d->talk)) {
+                FUN_L01_002783a8(moby, 2.5f);
+                set_state_14b0(moby, 2);
+            }
+        } else if (FUN_001f9b80(&moby->pos, &hero.motion.pos) < 6.0f) {
+            set_state_14b0(moby, 3);
+        }
+        break;
+    case 2:
+        if (D_L11_0015F5C4 != 2)
+            set_state_14b0(moby, 3);
+        break;
+    case 3:
+        if (FUN_001f9b80(&moby->pos, &hero.motion.pos) > 6.0f &&
+            FUN_L11_002d2340(moby, (char *)&hero.motion.pos) && proximity == 1)
+            set_state_14b0(moby, 4);
+        break;
+    case 4:
+        if (FUN_001f9b80(&moby->pos, &hero.motion.pos) < 3.0f ||
+            !FUN_L11_002d2340(moby, (char *)&hero.motion.pos) || proximity == 2)
+            set_state_14b0(moby, 3);
+        else if (FUN_001f9b80(&moby->pos, &hero.motion.pos) > 8.0f)
+            set_state_14b0(moby, 5);
+        break;
+    case 5:
+        if (FUN_001f9b80(&moby->pos, &hero.motion.pos) < 3.0f ||
+            !FUN_L11_002d2340(moby, (char *)&hero.motion.pos) || proximity == 2)
+            set_state_14b0(moby, 3);
+        else if (FUN_001f9b80(&moby->pos, &hero.motion.pos) < 4.0f)
+            set_state_14b0(moby, 4);
+        break;
+    case 6:
+        FUN_L11_002d2340(moby, (char *)&path_points_14b0[d->points[d->leg]].pos);
+        if (FUN_001f9b80(&moby->pos, &d->target) < 1.0f) {
+            switch (d->leg) {
+            case 0: {
+                struct Moby *o = (struct Moby *)(D_L11_0015FFD8 + (d->gates[0] << 8));
+                qcopy(&d->target, &o->pos);
+                scale_vector_14b0(v, &o->unkC0, D_L11_00161418);
+                FUN_001f9a10(&d->target, &d->target, v);
+                scale_vector_14b0(v, &o->unkD0, D_L11_00161414);
+                FUN_001f9a10(&d->target, &d->target, v);
+                scale_vector_14b0(v, &o->unkE0, D_L11_00161410);
+                FUN_001f9a10(&d->target, &d->target, v);
+                d->next_state = 8;
+                set_state_14b0(moby, 7);
+                break;
+            }
+            case 1: {
+                struct Moby *o = (struct Moby *)(D_L11_0015FFD8 + (d->gates[1] << 8));
+                qcopy(&d->target, &o->pos);
+                scale_vector_14b0(v, &o->unkC0, D_L11_00161418);
+                FUN_001f9a10(&d->target, &d->target, v);
+                scale_vector_14b0(v, &o->unkD0, -D_L11_00161414);
+                FUN_001f9a10(&d->target, &d->target, v);
+                scale_vector_14b0(v, &o->unkE0, D_L11_00161410);
+                FUN_001f9a10(&d->target, &d->target, v);
+                path_points_14b0[d->unk110].pos.z += 500.0f;
+                d->next_state = 8;
+                set_state_14b0(moby, 7);
+                break;
+            }
+            case 2:
+                set_state_14b0(moby, 0xB);
+                break;
+            case 3:
+                path_points_14b0[d->unk114].pos.z += 500.0f;
+                set_state_14b0(moby, 0xC);
+                break;
+            }
+        }
+        break;
+    case 12:
+        d->talk_range = 255.0f;
+        if (FUN_L00_00266448(moby, d->talk)) {
+            FUN_L00_002502a0(d->unk10C);
+            D_0013D3DC = 1;
+            FUN_L00_00266858(moby, 2);
+            qcopy_nc(&moby->pos, &path_points_14b0[d->points[d->leg]].pos);
+            qcopy_nc(&moby->rot, &path_points_14b0[d->points[d->leg]].rot);
+            FUN_001fa030(&moby->unkC0, &moby->rot);
+            scale_vector_14b0(v, &moby->unkC0, 2.0f);
+            FUN_001f9a10(v, v, &moby->pos);
+            qcopy(r, &moby->rot);
+            r[2] = fast_add_rotations(r[2], 3.14159f);
+            qcopy(D_L11_0016D270, v);
+            qcopy(D_L11_0016D270 + 0x10, r);
+            *(short *)(D_L11_0016D270 + 0x36) = 1;
+            FUN_L01_002783a8(moby, 2.5f);
+            set_state_14b0(moby, 0xD);
+        }
+        break;
+    case 13:
+        if (D_L11_0015F5C4 != 2) {
+            FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (d->unk104 << 8)));
+            set_state_14b0(moby, 0xE);
+        }
+        break;
+    case 7:
+        if (moby->unk70 & 2)
+            set_state_14b0(moby, d->next_state);
+        break;
+    case 8:
+        if (FUN_001f9b80(&moby->pos, &d->target) < 0.5f)
+            set_state_14b0(moby, 9);
+        break;
+    case 9:
+        {
+            int i = d->leg != 0;
+            if (FUN_L11_0030a830((struct Moby *)(D_L11_0015FFD8 + (d->gates[i] << 8))))
+                set_state_14b0(moby, 0xA);
+        }
+        break;
+    case 10:
+        if (FUN_001f9b80(&moby->pos, &d->target) < 0.5f) {
+            int n = ++d->leg;
+            qcopy(&d->target, &path_points_14b0[d->unkD0[n]].pos);
+            d->next_state = 4;
+            set_state_14b0(moby, 7);
+        }
+        break;
+    case 11:
+        if (FUN_L11_0030a830((struct Moby *)(D_L11_0015FFD8 + (d->unk100 << 8)))) {
+            d->leg += 1;
+            set_state_14b0(moby, 3);
+        }
+        break;
+    case 14:
+        if (D_0014C050[d->unk118 + D_0015ED84 * 16] == 0xFF && D_001413D4_14b0 != 0x32 &&
+            FUN_L00_00266448(moby, d->talk)) {
+            FUN_L01_002783a8(moby, 2.5f);
+            set_state_14b0(moby, 0xF);
+        }
+        break;
+    case 15:
+        if (D_L11_0015F5C4 != 2) {
+            FUN_L00_00260860(6, 1);
+            memcard_save_data(0, -1);
+            FUN_L00_00203908(0x2AF8, 0x3A);
+            mark_moby_for_removal(moby);
+        }
+        break;
+    }
+}
 extern int FUN_001f96f8(int);
 extern void FUN_00212f90(void *, int, int, int);
 extern void FUN_001f99f8(void *);
