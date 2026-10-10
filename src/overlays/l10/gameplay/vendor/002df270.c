@@ -48,30 +48,13 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e01a8.s", FUN_L10_002e01a8);
 
 /* Level 10 moby update: tracks the owner's height and fires a shot, then sets the moby's display state. */
 
-typedef struct Moby_2E2B80 {
-    char pad0[0x10];
-    float pos[4];
-    unsigned char state;
-    char pad21[0x10];
-    unsigned char f31;
-    char pad32[2];
-    unsigned short flags;
-    char pad36[0x1D];
-    unsigned char f53;
-    char pad54[0x24];
-    struct MobyData_2E2B80 *data;
-    char pad7C[0x28];
-    unsigned char fA4;
-    char padA5;
-    short oclass;
-} Moby_2E2B80;
 
 typedef struct Hit_2E2B80 {
     float x;
     float y;
     char pad8[8];
     float f10[4];
-    Moby_2E2B80 *moby;
+    struct Moby *moby;
     char pad24[8];
     float f2C;
     int f30;
@@ -172,9 +155,9 @@ extern char D_0013E633_2E2B80[] __asm__("D_0013F3D0");
 extern int D_001414D0_2E2B80[] __asm__("D_001413D0");
 extern Path_2E2B80 *D_L10_001B0C30_2E2B80[] __asm__("D_L10_001B0930");
 
-void FUN_L10_002e17c0(Moby_2E2B80 *moby)
+void FUN_L10_002e17c0(struct Moby *moby)
 {
-    MobyData_2E2B80 *data = moby->data;
+    MobyData_2E2B80 *data = ((struct MobyData_2E2B80 *)moby->pvars);
     float v[4];
     float w[4];
     int st;
@@ -194,7 +177,7 @@ void FUN_L10_002e17c0(Moby_2E2B80 *moby)
             if (data->f20 <= r->f2C) {
                 data->f20 = 0.0f;
                 moby->flags &= 0xEFFF;
-                if (moby->f53 != 4) blend_moby_animation(moby, 4, 0, scale_game_frames(10));
+                if (moby->prev_seq != 4) blend_moby_animation(moby, 4, 0, scale_game_frames(10));
                 moby->state = 13;
                 data->f70 = D_0015ED70 * 26.0f;
                 data->f9D = 3;
@@ -206,7 +189,7 @@ void FUN_L10_002e17c0(Moby_2E2B80 *moby)
                 if (r->f30 & 1) {
                     ang = FastArcTan(r->f10[0], r->f10[1]);
                 } else {
-                    ang = FastArcTan(moby->pos[0] - r->x, moby->pos[1] - r->y);
+                    ang = FastArcTan(moby->pos.x - r->x, moby->pos.y - r->y);
                 }
                 *(OvlQuad *)v = *(OvlQuad *)r->f10;
                 trooper_knockback_arc(v, &ang, &data->f78, &data->f7C);
@@ -221,7 +204,7 @@ void FUN_L10_002e17c0(Moby_2E2B80 *moby)
                 trooper_anim_update(moby, data->f110);
             }
         }
-        moby->fA4 = 0xFF;
+        moby->unkA4 = 0xFF;
     }
     trooper_anim_finish(moby, data->f110);
     if (data->f174 == 2) {
@@ -254,7 +237,7 @@ void FUN_L10_002e17c0(Moby_2E2B80 *moby)
     if (r19 != 2) {
         if (data->f180 < vector_distance(data->f130, data->fC0)) {
             data->f104 = 2;
-        } else if (moby->f31 == 0) {
+        } else if (moby->unk31 == 0) {
             data->f104 = 2;
         }
     }
@@ -1200,7 +1183,7 @@ extern unsigned char *FUN_L00_002738e8(f32, f32, f32, void *, void *, s32, s32, 
 
 void FUN_L10_002e5be0(struct Moby *moby) {
     f32 *pvars = (f32 *)moby->pvars;
-    Vec4 *moby_position = (Vec4 *)&moby->pos;
+    Vec4 *moby_position = (Vec4 *)&&moby->pos.x;
     s32 i = 0;
 
     moby->unk30 = 0x80;

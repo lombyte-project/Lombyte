@@ -66,10 +66,6 @@ typedef struct {
     GateVars_2A48B0 *vars; /* 0x78 */
 } GateMoby_2A48B0;
 
-typedef struct {
-    char pad00[0x20];
-    unsigned char state; /* 0x20 */
-} OtherMoby_2A48B0;
 
 typedef struct {
     char pad00[0x74];
@@ -116,7 +112,7 @@ void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
             D_L15_00184B28_2A48B0 = 0;
         }
         if (d->trigger != -1) {
-            OtherMoby_2A48B0 *p = (OtherMoby_2A48B0 *)((char *)*(int *)&D_L15_0015FFD8_d + (d->trigger << 8));
+            struct Moby *p = (struct Moby *)((char *)*(int *)&D_L15_0015FFD8_d + (d->trigger << 8));
             if (p == 0 || p->state == 0xFE || p->state == 0xFD) {
                 if (D_L15_00161AC0 == 0) {
                     m->state = 2;

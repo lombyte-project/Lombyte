@@ -1928,7 +1928,6 @@ typedef struct { unsigned char pad[0x454]; unsigned char killed[1]; } KillFlags_
 
 typedef struct { unsigned char pad0[0x74]; unsigned char active; unsigned char pad75[0x13]; char *owner; } Voice_2A3DD0;
 
-typedef struct { u8 pad[0x20]; u8 state; u8 pad21[0xDF]; } MobySlot_2A3DD0;
 extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8");
 extern char D_0013F420[];
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
@@ -1983,7 +1982,7 @@ void FUN_L15_002a2bf0(unsigned char *moby) {
     }
     case 1: {
         int idx = *(int *)(d + 0x10);
-        if ((idx != -1 && (*(MobySlot_2A3DD0 **)&D_L15_0015FFD8_d)[idx].state == 2)
+        if ((idx != -1 && (*(struct Moby **)&D_L15_0015FFD8_d)[idx].state == 2)
             || D_0014C050_c[(unsigned char)moby[0xB0] + (D_0015ED84 << 4)] == 0xFF) {
             func_L15_002A47B8_2A3DD0(moby);
         } else {

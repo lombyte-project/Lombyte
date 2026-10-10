@@ -96,14 +96,10 @@ int FUN_L12_002e16b8(struct Moby *moby) {
 /* Move the vendor moby to state eight unless it is in state nine or eleven. */
 /* Ported from rac1-decomp (src/overlays/l12/vendor_002C0310.c: func_L12_002E2B08), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    char pad0[0x20];
-    unsigned char state;
-} Level12VendorStateMoby;
 
-extern int FUN_L00_002dbe20(Level12VendorStateMoby *);
+extern int FUN_L00_002dbe20(struct Moby *);
 
-int FUN_L12_002e17f8(Level12VendorStateMoby *moby) {
+int FUN_L12_002e17f8(struct Moby *moby) {
     int result = FUN_L00_002dbe20(moby);
     if (moby->state == 9 || moby->state == 11) {
         return 0;
@@ -985,20 +981,14 @@ typedef struct {
     void *child;
 } Level12VendorData;
 
-typedef struct {
-    char pad0[0x78];
-    Level12VendorData *data;
-    char pad7C[0x38];
-    short fieldB4;
-} Level12VendorMoby;
 
-extern void FUN_L00_00257470(Level12VendorMoby *, int, int);
+extern void FUN_L00_00257470(struct Moby *, int, int);
 
-void FUN_L12_002e86d0(Level12VendorMoby *moby) {
-    moby->fieldB4 = 0;
+void FUN_L12_002e86d0(struct Moby *moby) {
+    moby->unkB4 = 0;
     FUN_L00_00257470(moby, 0, -1);
-    if (moby->data->child != 0) {
-        DeleteMoby(moby->data->child);
+    if (((Level12VendorData *)moby->pvars)->child != 0) {
+        DeleteMoby(((Level12VendorData *)moby->pvars)->child);
     }
     DeleteMoby(moby);
 }

@@ -1902,10 +1902,6 @@ typedef struct EffData_313800 {
     float f15C;
 } EffData_313800;
 
-typedef struct Moby_313800 {
-    char pad0[0x78];
-    EffData_313800 *data;
-} Moby_313800;
 
 typedef struct Packet_313800 {
     float a[4];
@@ -1941,12 +1937,12 @@ extern long func_001F4868_313800(int) __asm__("FUN_001f44b8");
 extern char D_L07_001670D0_313800[] __asm__("D_L07_00167050");
 extern char D_L07_00173F60_313800[] __asm__("D_L07_00173EE0");
 
-void FUN_L07_00312420(Moby_313800 *arg)
+void FUN_L07_00312420(struct Moby *arg)
 {
     float v0[4], v10[4], v20[4], v30[4], v40[4], v50[4], m[4], c2[4], h[4], ii[4], jj[4];
     float f20, t;
     int flag = 1;
-    EffData_313800 *p = arg->data;
+    EffData_313800 *p = ((EffData_313800 *)arg->pvars);
     int k;
     Packet_313800 pkt;
 

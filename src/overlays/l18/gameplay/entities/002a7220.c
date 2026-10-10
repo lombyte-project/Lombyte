@@ -16,21 +16,15 @@
 /* Switch to state four while active, then restore the saved state. */
 /* Ported from rac1-decomp (src/overlays/l18/vendor_002A8400.c: func_L18_002D7580), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    char pad0[0x20];
-    unsigned char state;
-    char pad21[0x9B];
-    unsigned char saved_state;
-} Level18VendorMoby;
 
-extern int FUN_L00_002dbb20(Level18VendorMoby *);
+extern int FUN_L00_002dbb20(struct Moby *);
 
-int FUN_L18_002d6190(Level18VendorMoby *moby) {
+int FUN_L18_002d6190(struct Moby *moby) {
     int active = FUN_L00_002dbb20(moby);
     if (active != 0) {
         moby->state = 4;
     } else if (moby->state == 4) {
-        moby->state = moby->saved_state;
+        moby->state = moby->unkBC;
     }
     return active;
 }
