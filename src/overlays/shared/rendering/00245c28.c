@@ -42,10 +42,15 @@ typedef struct {
     s32 first_base;
     s32 second_base;
 } ArchiveMemory;
-#define archive_memory (*(ArchiveMemory *)0x001B9CF0)
+extern ArchiveMemory archive_memory __asm__("D_L00_001B9CF0");
 extern u8 D_0013D4E1;
 extern s32 current_level_index __asm__("D_0015ED84");
 extern struct DiscFile D_00138438[];
+typedef struct {
+    u8 pad[0x8b8];
+    struct DiscFile files[256];
+} ArchiveTable;
+extern ArchiveTable archive_table __asm__("D_00137B80");
 
 void FUN_001e93e8(void);
 void FUN_0020bf90(s32, s32);
@@ -59,21 +64,20 @@ void FUN_L00_002468b8(void) {
     s32 second_base;
     s32 buffer;
     s32 bytes;
-    s32 file_handle;
+    s32 archive_index;
     RenderArchiveState *state = &D_L00_001841F0;
 
     FUN_001e93e8();
     FUN_0020bf90(state->archive_index, 1);
-    first_base = archive_memory.first_base;
     second_base = archive_memory.second_base;
+    first_base = archive_memory.first_base;
     buffer = first_base + 0x9a800;
-    file_handle = state->file_handle;
-    archive_memory.second_base = second_base + 0x48000;
     archive_memory.first_base = buffer + 0x48000;
+    archive_memory.second_base = second_base + 0x48000;
     state->old_base = first_base;
+    state->old_end = second_base;
     state->start = 0;
     state->buffer = buffer;
-    state->old_end = second_base;
     state->zero_284 = 0;
     state->zero_288 = 0;
     state->slot_28c = -1;
@@ -82,11 +86,12 @@ void FUN_L00_002468b8(void) {
     state->slot_298 = -1;
     state->slot_29c = -1;
     state->slot_2a0 = -1;
-    if (file_handle != -1) {
+    if (state->file_handle != -1) {
         if (state->loaded == 0 && D_0013D4E1 != 0) {
-            bytes = D_00138438[state->archive_index].size << 7;
-            FUN_00216788(buffer, D_00138438[state->archive_index].sector,
-                         D_00138438[state->archive_index].size);
+            archive_index = state->archive_index;
+            bytes = archive_table.files[archive_index].size << 7;
+            FUN_00216788(buffer, archive_table.files[archive_index].sector,
+                         archive_table.files[archive_index].size);
             FUN_002168a8(1);
             state->loaded = 1;
             state->transfer_bytes = bytes;
@@ -100,15 +105,12 @@ void FUN_L00_002468b8(void) {
         if (state->file_handle != -1) {
             state->last_transfer_bytes = state->transfer_bytes;
             FUN_00232f20(state->buffer, state->file_handle, 0, state->transfer_bytes, 0);
-            state->level_slot = current_level_index;
-            if (D_0013D4E1 != 0) {
-                state->level_slot = current_level_index + 0x100;
-            }
+            state->level_slot = D_0013D4E1 != 0 ? current_level_index + 0x100 : current_level_index;
             state->active = 1;
             state->load_state = -2;
             return;
         }
     }
-    state->active = 0;
+    D_L00_001841F0.active = 0;
 }
 #endif
