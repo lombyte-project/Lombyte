@@ -20,10 +20,8 @@ GPL. Full text: [`licenses/GPL-2.0.txt`](licenses/GPL-2.0.txt).
 ## rac1-decomp
 
 Some functions in `src/` are C written by the
-[rac1-decomp](https://github.com/OpenRAC/rac1-decomp) project (GPL-3.0 since
-`8753a55`, MIT before). Each such file names its origin in its first line
-(`Ported from rac1-decomp ...`). Code taken while it was MIT keeps its notice:
-[`licenses/MIT-rac1-decomp.txt`](licenses/MIT-rac1-decomp.txt).
+[rac1-decomp](https://github.com/OpenRAC/rac1-decomp) project (GPL-3.0). Each
+such file names its origin in its first line (`Ported from rac1-decomp ...`).
 
 ## newlib
 
