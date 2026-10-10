@@ -26,8 +26,8 @@ void LoadDefaultMpegQuantizerMatrix(struct MpegDecoder *state, s32 command, u32 
     _dispatchMpegCallback(state->mpeg, &callback);
     _waitIpuIdle(state);
     {
-        volatile u32 *ipu_command = (volatile u32 *)0x10000000;
-        ipu_command[0x800] = 0;
+        volatile u8 *ipu_base = (volatile u8 *)0x10000000;
+        *(volatile u32 *)(ipu_base + 0x2000) = 0;
     }
     _waitIpuIdle(state);
     interrupts_enabled = DIntr();
