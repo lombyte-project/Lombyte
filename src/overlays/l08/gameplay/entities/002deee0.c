@@ -1353,9 +1353,8 @@ mark_hit:
     } while (i < 17);
     total = (u16)*(s16 *)(data + 0x17c) + hits;
     *(s16 *)(data + 0x17c) = total;
-    total = (s16)total;
-    if (total >= 12) {
-        *(s16 *)(data + 0x17c) = total % 12;
+    if ((s16)total >= 12) {
+        *(s16 *)(data + 0x17c) = (s16)total % 12;
         if (selected != 0) {
             SwarmPart *chosen = &slots[selected];
             u8 *vector;
