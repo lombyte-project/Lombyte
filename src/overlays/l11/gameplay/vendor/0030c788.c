@@ -1066,9 +1066,6 @@ missing:
     qzero(data + 0x20);
     return 0;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f728.s", FUN_L11_0030f728);
-#else
 extern struct Moby *D_L11_00174858_f728 __asm__("D_L11_00174858") __attribute__((section(".data")));
 extern void FUN_L00_0024f7c8_f728(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int FUN_L00_001f0d60(float, void *, int, void *);
@@ -1089,8 +1086,8 @@ extern void FUN_L00_00259fe8(void *, float);
 
 /* Ship ammo / health pickup: falls and bounces, is pulled toward the hero's ship, and refills it on contact. */
 void FUN_L11_0030f728(struct Moby *m) {
-    char *pv = m->pvars;
     struct Moby *ship = hero.ship_moby;
+    char *pv = m->pvars;
     float dist = 100000.0f;
     float mid = dist;
     int taken = 0;
@@ -1223,7 +1220,6 @@ void FUN_L11_0030f728(struct Moby *m) {
     }
     FUN_L00_00259fe8(m, 0.5f);
 }
-#endif /* NON_MATCHING */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_00311260), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
