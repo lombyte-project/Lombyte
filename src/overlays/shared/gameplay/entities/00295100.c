@@ -900,7 +900,8 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
         FUN_00120558(0, 0);
     }
     source = D_0015EE78_gp;
-    for (; second_count != 0; second_count--) {
+    count = second_count;
+    for (; count != 0; count--) {
         FUN_00122330(buffer, (source << 8) >> 16, 1, 0, 0, 0, 0x40, 0x40);
         source += 0x4000;
         FUN_00118a80(0);
