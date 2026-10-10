@@ -1843,11 +1843,11 @@ int FUN_L00_00211870(float t) {
     }
     return 0;
 }
-/* Clears hero.unk190 and unk194 as words. */
+/* Clears hero.target_speed and unk194 as words. */
 void FUN_L00_002118b0(void) {
     struct Hero *p = &hero;
-    *(int *)&p->unk190 = 0;
-    *(int *)&p->unk194 = 0;
+    *(int *)&p->target_speed = 0;
+    *(int *)&p->ground_speed = 0;
 }
 typedef union {
     OvlQuad q;
@@ -1889,7 +1889,7 @@ void FUN_L00_002118c8(float scale, int mode) {
         FUN_L00_001ff378_2118c8(&v, &v, len);
     }
     if (v.f[0] == 0.0f && v.f[1] == 0.0f) {
-        hero.unk190 = 0.0f;
+        hero.target_speed = 0.0f;
         if (hero.unk20B3) {
             hero.motion.unk180 = FUN_L00_002332d0_2118c8();
         } else {
@@ -1927,7 +1927,7 @@ void FUN_L00_002118c8(float scale, int mode) {
         v.f[1] = x;
     }
     FUN_001f9cf8_2118c8(&hero.motion.unk170, &v, D_L00_00166FD0_2118c8);
-    hero.unk190 = scale * FUN_001f9b20_2118c8(&v);
+    hero.target_speed = scale * FUN_001f9b20_2118c8(&v);
 }
 extern float D_L00_0017BDB8[];
 
@@ -1936,23 +1936,23 @@ void FUN_L00_00211be8(void) {
     FUN_L00_002118c8(1.0f, 0);
     if (hero.state.current == 0x3F) {
         float min = frame_time + frame_time;
-        hero.unk190 = frame_time * 3.5f * hero.unk190;
-        if (hero.unk190 < min)
-            hero.unk190 = min;
+        hero.target_speed = frame_time * 3.5f * hero.target_speed;
+        if (hero.target_speed < min)
+            hero.target_speed = min;
         return;
     }
-    if (0.0f < hero.unk190) {
-        if (hero.unk190 < D_L00_0017BDB8[3])
-            hero.unk190 = D_L00_0017BDB8[2] * frame_time;
+    if (0.0f < hero.target_speed) {
+        if (hero.target_speed < D_L00_0017BDB8[3])
+            hero.target_speed = D_L00_0017BDB8[2] * frame_time;
         else
-            hero.unk190 = D_L00_0017BDB8[6] * frame_time;
+            hero.target_speed = D_L00_0017BDB8[6] * frame_time;
     }
     if (hero.state.current == 0x73) {
-        float v = hero.unk190 * 0.8f;
+        float v = hero.target_speed * 0.8f;
         float m = frame_time * 2.5f;
-        hero.unk190 = v;
+        hero.target_speed = v;
         if (v < m)
-            hero.unk190 = m;
+            hero.target_speed = m;
     }
 }
 #define NOT_SDA
@@ -2068,15 +2068,15 @@ void FUN_00213ed8_00212088(f32 *, f32, f32) __asm__("FUN_00213ed8");
 /* Approaches field b toward a, at rate x while below it and y otherwise. */
 void FUN_L00_00212088(f32 x, f32 y) {
     struct Hero *p = &hero;
-    if (p->unk194 < p->unk190)
-        FUN_00213ed8_00212088(&p->unk194, p->unk190, x);
+    if (p->ground_speed < p->target_speed)
+        FUN_00213ed8_00212088(&p->ground_speed, p->target_speed, x);
     else
-        FUN_00213ed8_00212088(&p->unk194, p->unk190, y);
+        FUN_00213ed8_00212088(&p->ground_speed, p->target_speed, y);
 }
 extern float FastCos(float) __asm__("FUN_001f9dc8");
 
 /* Builds a direction vector into hero.motion.velocity: either func_00215C00's
-   spherical formula from the hero.unk194 radius, the clamped angle arg0
+   spherical formula from the hero.ground_speed radius, the clamped angle arg0
    (falling back to hero.motion.rot.z above pi) and hero +0x2E4, or, when
    hero.unk20B3 is set, a flat vector (r,0,0) rotated by the matrix
    func_001FA218 builds from the hero moby's +0x40 axis. */
@@ -2097,7 +2097,7 @@ void FUN_L00_002120d8(float radians) {
     if (radians <= 3.14159274f) {
         y = radians;
     }
-    r = g->unk194;
+    r = g->ground_speed;
 
     if (g->unk20B3 != 0) {
         float matrix[16];
@@ -2742,7 +2742,7 @@ void FUN_L00_002137a8(void) {
  *   motion.unk120  same, without the gravity-up component
  *   motion.unk130  same, gravity-up part only
  *   motion.unk140  displacement caused by the push
- *   motion.unk160  speed, unk164 horizontal speed, unk168 forward speed
+ *   motion.speed_xy  speed, unk164 horizontal speed, unk168 forward speed
  *   motion.unk16C  slope: vertical / horizontal change, clamped to +-0.5
  */
 
@@ -2819,8 +2819,8 @@ void FUN_L00_00213880(void)
     }
 
     add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.motion.velocity);
-    add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.unk920);
-    clear_vector(&hero.unk920);
+    add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.move_impulse);
+    clear_vector(&hero.move_impulse);
     hero.unk257 = 0;
     hero.coll_hit_moby = 0;
 
@@ -2864,7 +2864,7 @@ void FUN_L00_00213880(void)
     }
     normalize_vector_xyz(&hero.motion.unk120, &tmp2, d);
 
-    hero.motion.unk160 = vector_length_xyz(&hero.motion.unk110);
+    hero.motion.speed_xy = vector_length_xyz(&hero.motion.unk110);
     hero.motion.unk164 = vector_length_xy(&hero.motion.unk110);
     /* read through the address, as retail reloads the base register here */
     tmp.q = (&hero.motion.unk110)->q;
@@ -2906,9 +2906,9 @@ void FUN_L00_00213880(void)
     }
 
     /* cap the step at 52 units per frame-rate unit */
-    if (hero.motion.unk160 > frame_time * 52.0f) {
-        scale_vector_xyz(&hero.motion.unk100, &hero.motion.unk100, frame_time * 52.0f / hero.motion.unk160);
-        hero.motion.unk160 = frame_time * 52.0f;
+    if (hero.motion.speed_xy > frame_time * 52.0f) {
+        scale_vector_xyz(&hero.motion.unk100, &hero.motion.unk100, frame_time * 52.0f / hero.motion.speed_xy);
+        hero.motion.speed_xy = frame_time * 52.0f;
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002144A0), where it is exact; names translated to the US level program. */

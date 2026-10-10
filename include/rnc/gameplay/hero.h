@@ -111,7 +111,7 @@ struct HeroMotion {
     Vec4 unk130;                   /* 0x130 */
     Vec4 unk140;                   /* 0x140 */
     Vec4 unk150;                   /* 0x150: copied from unk110/unk100 on hero_set_state */
-    f32 unk160;                    /* 0x160 */
+    f32 speed_xy;                  /* 0x160: current horizontal speed per frame; eases toward ground_speed, capped at frame_time * 52 */
     f32 unk164;                    /* 0x164 */
     f32 unk168;                    /* 0x168 */
     f32 unk16C;                    /* 0x16C */
@@ -169,8 +169,8 @@ struct Hero {
     f32 unk0[16];                  /* 0x00: matrix */
     f32 unk40[16];                 /* 0x40 */
     struct HeroMotion motion;      /* 0x80 */
-    f32 unk190;                    /* 0x190 */
-    f32 unk194;                    /* 0x194 */
+    f32 target_speed;              /* 0x190: horizontal speed ground_speed eases toward; the stick handler writes it (0 with the stick centred) */
+    f32 ground_speed;              /* 0x194: horizontal speed target this frame (0.095 running, i.e. 5.7 u/s at 60 fps; 0 idle) */
     s32 state_timer;               /* 0x198: frames in the current state */
     s32 unk19C;                    /* 0x19C */
     s32 unk1A0;                    /* 0x1A0 */
@@ -484,7 +484,7 @@ struct Hero {
     s32 unk910;                    /* 0x910 */
     s32 unk914;                    /* 0x914 */
     u8 pad_918[0x8];
-    Vec4 unk920;                   /* 0x920 */
+    Vec4 move_impulse;             /* 0x920: one-frame displacement; the hero update adds it to motion.pos and clears it (some states; zero while running) */
     f32 unk930;                    /* 0x930 */
     u8 pad_934[0xC];
     f32 unk940;                    /* 0x940 */
@@ -539,7 +539,7 @@ struct Hero {
     s32 unkA60;                    /* 0xA60 */
     s32 unkA64;                    /* 0xA64 */
     f32 unkA68;                    /* 0xA68 */
-    f32 unkA6C;                    /* 0xA6C */
+    f32 speed_scale;               /* 0xA6C: multiplier on the run target in some states (target = frame_time * 5.7 * speed_scale); 1.0 normally */
     f32 unkA70;                    /* 0xA70 */
     f32 aim_yaw;                   /* 0xA74: gadget aim yaw (FUN_L00_00217658) */
     f32 aim_pitch;                 /* 0xA78: gadget aim pitch */
