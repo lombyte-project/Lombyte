@@ -9,107 +9,79 @@
 #include "rnc/overlay/quad.h"
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e5e38.s", FUN_L00_002e5e38);
-#else
-extern float D_L00_00161CA0 __attribute__((sda));
-extern float D_L00_00161CDC __attribute__((sda));
-extern float D_L00_00161CE0 __attribute__((sda));
-extern float D_L00_00161CE4 __attribute__((sda));
-extern float D_L00_00161D04 __attribute__((sda));
-extern float D_L00_00161D08 __attribute__((sda));
-extern float D_L00_00161D1C __attribute__((sda));
-extern float FUN_001ebd78_2e5e38(float, float, float, float, float, float *) __asm__("FUN_001ebd78");
+/* Resets the follow camera to its defaults: springs the orbit and target
+   values back toward the defaults table, then clears the pending inputs. */
+extern float D_L00_0015EF44_2e5e38 __asm__("D_L00_0015EF44") __attribute__((section(".sdata")));
+extern unsigned char *D_L00_00168FC0_2e5e38 __asm__("D_L00_00168FC0") __attribute__((section(".data")));
+extern int D_L00_0015EF60_2e5e38 __asm__("D_L00_0015EF60") __attribute__((section(".sdata")));
+extern float D_L00_00161D04_2e5e38 __asm__("D_L00_00161D04") __attribute__((sda));
+extern float D_L00_00161D08_2e5e38 __asm__("D_L00_00161D08") __attribute__((sda));
+extern float D_L00_00161CA0_2e5e38 __asm__("D_L00_00161CA0") __attribute__((sda));
+extern float D_L00_00161CDC_2e5e38 __asm__("D_L00_00161CDC") __attribute__((sda));
+extern float D_L00_00161CE0_2e5e38 __asm__("D_L00_00161CE0") __attribute__((sda));
+extern float D_L00_00161CE4_2e5e38 __asm__("D_L00_00161CE4") __attribute__((sda));
+extern float D_L00_00161D1C_2e5e38 __asm__("D_L00_00161D1C") __attribute__((sda));
+typedef struct { char pad0[0x2C]; float unk2C; char pad30[0xC]; short unk3C; short unk3E; int unk40; char pad44[8]; int unk4C; char pad50[8]; float unk58; } CamOrbit_2e5e38;
+typedef struct { char pad0[0xB4]; int unkB4; char padB8[0x1E]; unsigned char unkD6; char padD7[3]; short unkDA; float unkDC; float unkE0; float unkE4; float unkE8; } CamTarget_2e5e38;
+typedef struct { char pad0[0x10]; short unk10; char pad12[0x10]; short unk22; } Cam_2e5e38;
+typedef struct { char pad0[0x3C]; float unk3C; float unk40; float unk44; int unk48; } CamSpring_2e5e38;
+typedef struct { char pad0[0x6]; short unk6; char pad8[4]; float unkC; } CamEnd_2e5e38;
+float FUN_001ebd78_2e5e38(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
 
-void FUN_L00_002e5e38(char *m) {
-    char *d = *(char **)(m + 0x70);
-    char *orbit;
-    char *target;
-    char *default_orbit;
-    char *default_target;
-    char *init = d + 0x1a8;
-    float goal, current, velocity;
-    float reset_a, reset_b, reset_c;
-    float *spring;
-    char *end;
-    short flag;
-
-    *(volatile float *)(init + 0x14) = D_L00_0015EF44;
-    *(volatile int *)(init + 0x1c) = 0;
-    *(volatile int *)(init + 0x20) = 0;
-    *(volatile int *)(init + 0x10) = 0;
-    *(volatile int *)(init + 0x24) = 0;
-
-    default_orbit = D_L00_00168FC0 + 0x130;
-    default_target = D_L00_00168FC0 + 0x40;
-    d = *(char **)(m + 0x70);
-    orbit = d + 0x130;
-    target = d + 0x40;
-    if (*(short *)(orbit + 0x3c)) {
-        velocity = *(float *)(init + 0x1c);
-        spring = (float *)(d + 0x174);
-        current = *(float *)(orbit + 0x2c);
-        goal = *(float *)(orbit + 0x40);
+void FUN_L00_002e5e38(unsigned char *moby)
+{
+    unsigned char *init, *cam, *defaults, *orbit, *target, *default_target, *default_orbit, *reset;
+    CamSpring_2e5e38 *spring_reset;
+    init = *(unsigned char **)(moby + 0x70) + 0x1A8;
+    *(float *)(init + 0x14) = D_L00_0015EF44_2e5e38;
+    *(int *)(init + 0x1C) = 0;
+    *(int *)(init + 0x20) = 0;
+    *(int *)(init + 0x10) = 0;
+    *(int *)(init + 0x24) = 0;
+    cam = *(unsigned char **)(moby + 0x70);
+    defaults = D_L00_00168FC0_2e5e38;
+    orbit = cam + 0x130;
+    target = cam + 0x40;
+    default_orbit = defaults + 0x130;
+    default_target = defaults + 0x40;
+    if (*(short *)(orbit + 0x3C)) {
+        *(float *)(orbit + 0x2C) = FUN_001ebd78_2e5e38(cam + 0x174, *(float *)(orbit + 0x2C), *(float *)(orbit + 0x40), *(float *)(orbit + 0x48), D_L00_00161D04_2e5e38, *(float *)(init + 0x1C));
     } else {
-        velocity = *(float *)(init + 0x1c);
-        spring = (float *)(d + 0x174);
-        current = *(float *)(orbit + 0x2c);
-        goal = *(float *)(default_orbit + 0x2c);
+        *(float *)(orbit + 0x2C) = FUN_001ebd78_2e5e38(cam + 0x174, *(float *)(orbit + 0x2C), *(float *)(default_orbit + 0x2C), *(float *)(orbit + 0x48), D_L00_00161D04_2e5e38, *(float *)(init + 0x1C));
     }
-    *(float *)(orbit + 0x2c) = FUN_001ebd78_2e5e38(current, goal,
-        *(float *)(orbit + 0x48), D_L00_00161D04, velocity, spring);
-
-    flag = *(short *)(orbit + 0x3e);
-    spring = (float *)(orbit + 0x50);
-    if (flag) {
-        current = *(float *)(orbit + 0x30);
-        goal = *(float *)(orbit + 0x4c);
+    if (*(short *)(orbit + 0x3E)) {
+        *(float *)(orbit + 0x30) = FUN_001ebd78_2e5e38(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(orbit + 0x4C), *(float *)(orbit + 0x54), D_L00_00161D08_2e5e38, 0.0f);
     } else {
-        current = *(float *)(orbit + 0x30);
-        goal = *(float *)(default_orbit + 0x30);
+        *(float *)(orbit + 0x30) = FUN_001ebd78_2e5e38(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(default_orbit + 0x30), *(float *)(orbit + 0x54), D_L00_00161D08_2e5e38, 0.0f);
     }
-    *(float *)(orbit + 0x30) = FUN_001ebd78_2e5e38(current, goal,
-        *(float *)(orbit + 0x54), D_L00_00161D08, 0.0f, spring);
-
-    spring = (float *)(target + 0xbc);
-    if (*(short *)(target + 0xda)) {
-        current = *(float *)(target + 0xb0);
-        goal = *(float *)(target + 0xb4);
+    if (*(short *)(target + 0xDA)) {
+        *(float *)(target + 0xB0) = FUN_001ebd78_2e5e38(target + 0xBC, *(float *)(target + 0xB0), *(float *)(target + 0xB4), *(float *)(target + 0xB8), 0.2f, 0.0f);
     } else {
-        goal = *(float *)(default_target + 0xb0);
-        current = *(float *)(target + 0xb0);
+        *(float *)(target + 0xB0) = FUN_001ebd78_2e5e38(target + 0xBC, *(float *)(target + 0xB0), *(float *)(default_target + 0xB0), *(float *)(target + 0xB8), 0.2f, 0.0f);
     }
-    *(float *)(target + 0xb0) = FUN_001ebd78_2e5e38(current, goal,
-        *(float *)(target + 0xb8), 0.2f, 0.0f, spring);
-
-    *(short *)(orbit + 0x3c) = 0;
-    *(short *)(orbit + 0x3e) = 0;
-    *(int *)(orbit + 0x40) = 0;
-    *(int *)(orbit + 0x4c) = 0;
-    *(float *)(orbit + 0x58) = *(float *)(default_orbit + 0x2c);
-    *(short *)(target + 0xda) = 0;
-    *(int *)(target + 0xb4) = 0;
-    *(short *)(*(char **)(m + 0x70) + 0x10) = 1;
-    *(short *)(*(char **)(m + 0x70) + 0x22) = 0;
-    *(char *)(target + 0xd6) = 0;
-    *(float *)(target + 0xe4) = D_L00_00161CA0;
-    *(int *)(target + 0xe8) = 0x3e4ccccd;
-    *(float *)(target + 0xdc) = D_L00_00161CA0;
-    *(int *)(target + 0xe0) = 0x3e4ccccd;
-    reset_a = D_L00_00161CDC;
-    reset_b = D_L00_00161CE0;
-    reset_c = D_L00_00161CE4;
-    d = *(char **)(m + 0x70);
-    d += 0x1d0;
-    *(volatile float *)(d + 0x44) = reset_a;
-    *(volatile int *)(d + 0x48) = D_L00_0015EF60;
-    *(volatile float *)(d + 0x3c) = reset_c;
-    *(volatile float *)(d + 0x40) = reset_b;
-    end = *(char **)(m + 0x70) + 0x220;
-    *(float *)(end + 0xc) = D_L00_00161D1C;
-    *(short *)(end + 0x6) = 0;
+    ((CamOrbit_2e5e38 *)orbit)->unk3C = 0;
+    ((CamOrbit_2e5e38 *)orbit)->unk3E = 0;
+    ((CamOrbit_2e5e38 *)orbit)->unk40 = 0;
+    ((CamOrbit_2e5e38 *)orbit)->unk4C = 0;
+    ((CamOrbit_2e5e38 *)orbit)->unk58 = ((CamOrbit_2e5e38 *)default_orbit)->unk2C;
+    ((CamTarget_2e5e38 *)target)->unkDA = 0;
+    ((CamTarget_2e5e38 *)target)->unkB4 = 0;
+    (*(Cam_2e5e38 **)(moby + 0x70))->unk10 = 1;
+    (*(Cam_2e5e38 **)(moby + 0x70))->unk22 = 0;
+    ((CamTarget_2e5e38 *)target)->unkDC = D_L00_00161CA0_2e5e38;
+    ((CamTarget_2e5e38 *)target)->unkE4 = D_L00_00161CA0_2e5e38;
+    ((CamTarget_2e5e38 *)target)->unkE0 = 0.2f;
+    ((CamTarget_2e5e38 *)target)->unkE8 = 0.2f;
+    ((CamTarget_2e5e38 *)target)->unkD6 = 0;
+    spring_reset = (CamSpring_2e5e38 *)(*(unsigned char **)(moby + 0x70) + 0x1D0);
+    spring_reset->unk44 = D_L00_00161CDC_2e5e38;
+    spring_reset->unk3C = D_L00_00161CE4_2e5e38;
+    spring_reset->unk40 = D_L00_00161CE0_2e5e38;
+    spring_reset->unk48 = D_L00_0015EF60_2e5e38;
+    reset = *(unsigned char **)(moby + 0x70) + 0x220;
+    ((CamEnd_2e5e38 *)reset)->unkC = D_L00_00161D1C_2e5e38;
+    ((CamEnd_2e5e38 *)reset)->unk6 = 0;
 }
-#endif
 typedef struct { u8 pad[0xB0]; f32 fB0; } S40_2e6000;
 typedef struct { u8 pad[0x3C]; f32 f3C; u8 pad2[4]; f32 f44; } S1D0_2e6000;
 typedef struct { s32 i0; u8 pad[0xC]; s32 i10; } S220_2e6000;
