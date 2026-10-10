@@ -62,9 +62,9 @@ void FUN_L00_00214658(void) {
             approach_value_214658(ED70 * 25.0f, ED70 * 7.0f, &hero.unk4A0);
         }
         if (hero.state_timer < FUN_001f96f8_214658(0x37)) {
-            hero.unk190 = hero.unk3F4;
+            hero.target_speed = hero.unk3F4;
         } else {
-            hero.unk190 = ED6C * 3.5f;
+            hero.target_speed = ED6C * 3.5f;
         }
         FUN_L00_00212088_214658(ED70 * 44.0f, ED70 * 45.0f);
         FUN_L00_00233ba0_214658(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
@@ -145,7 +145,7 @@ void FUN_L00_00214658(void) {
         FUN_L00_002132b8_214658(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
         arg = ED70 * 20.0f;
-        if (hero.unk190 < D_L00_0017BDD0_214658[0] * ED6C * 0.2f) {
+        if (hero.target_speed < D_L00_0017BDD0_214658[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
                 d = hero.unk944;
                 if (hero.unk12E2)
@@ -168,7 +168,7 @@ void FUN_L00_00214658(void) {
                 arg = ED70 * 3.0f;
             }
             if (0.2617994f < hero.unk2E0.f) {
-                hero.unk190 = 0.0f;
+                hero.target_speed = 0.0f;
                 arg = hero.unk2E0.f * (ED70 * 9.0f) / 0.7853982f;
             }
         }
@@ -625,13 +625,13 @@ void FUN_L00_002167d0(void) {
         if (hero.unk229C < f20) {
             hero.motion.unk180 = hero.motion.rot.f[2];
         }
-        hero.unk190 = 0.4f;
+        hero.target_speed = 0.4f;
     } else if (hero.state.current == 0x15) {
-        hero.unk190 = 0.0f;
+        hero.target_speed = 0.0f;
     }
     f20 = 5.9f;
-    v0.f[0] = FUN_001f9dc8(hero.motion.unk180) * hero.unk190 * (frame_time * f20);
-    h = FUN_001f9de0(hero.motion.unk180) * hero.unk190;
+    v0.f[0] = FUN_001f9dc8(hero.motion.unk180) * hero.target_speed * (frame_time * f20);
+    h = FUN_001f9de0(hero.motion.unk180) * hero.target_speed;
     v0.f[2] = 0.0f;
     d = frame_time;
     f20 = d * f20;
@@ -655,7 +655,7 @@ void FUN_L00_002167d0(void) {
     if (f20 < f21) {
         f20 = f21;
     }
-    f21 = frame_time_sq * 2.45f * hero.unk190;
+    f21 = frame_time_sq * 2.45f * hero.target_speed;
     f21 = f21 + (frame_time_sq + frame_time_sq) * f20;
     if (D_0013CB14[0]) {
         f21 = frame_time_sq * 1.1f;

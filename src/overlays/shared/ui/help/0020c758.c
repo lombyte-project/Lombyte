@@ -1843,10 +1843,10 @@ int FUN_L00_00211870(float t) {
     }
     return 0;
 }
-/* Clears hero.unk190 and unk194 as words. */
+/* Clears hero.target_speed and unk194 as words. */
 void FUN_L00_002118b0(void) {
     struct Hero *p = &hero;
-    *(int *)&p->unk190 = 0;
+    *(int *)&p->target_speed = 0;
     *(int *)&p->ground_speed = 0;
 }
 typedef union {
@@ -1889,7 +1889,7 @@ void FUN_L00_002118c8(float scale, int mode) {
         FUN_L00_001ff378_2118c8(&v, &v, len);
     }
     if (v.f[0] == 0.0f && v.f[1] == 0.0f) {
-        hero.unk190 = 0.0f;
+        hero.target_speed = 0.0f;
         if (hero.unk20B3) {
             hero.motion.unk180 = FUN_L00_002332d0_2118c8();
         } else {
@@ -1927,7 +1927,7 @@ void FUN_L00_002118c8(float scale, int mode) {
         v.f[1] = x;
     }
     FUN_001f9cf8_2118c8(&hero.motion.unk170, &v, D_L00_00166FD0_2118c8);
-    hero.unk190 = scale * FUN_001f9b20_2118c8(&v);
+    hero.target_speed = scale * FUN_001f9b20_2118c8(&v);
 }
 extern float D_L00_0017BDB8[];
 
@@ -1936,23 +1936,23 @@ void FUN_L00_00211be8(void) {
     FUN_L00_002118c8(1.0f, 0);
     if (hero.state.current == 0x3F) {
         float min = frame_time + frame_time;
-        hero.unk190 = frame_time * 3.5f * hero.unk190;
-        if (hero.unk190 < min)
-            hero.unk190 = min;
+        hero.target_speed = frame_time * 3.5f * hero.target_speed;
+        if (hero.target_speed < min)
+            hero.target_speed = min;
         return;
     }
-    if (0.0f < hero.unk190) {
-        if (hero.unk190 < D_L00_0017BDB8[3])
-            hero.unk190 = D_L00_0017BDB8[2] * frame_time;
+    if (0.0f < hero.target_speed) {
+        if (hero.target_speed < D_L00_0017BDB8[3])
+            hero.target_speed = D_L00_0017BDB8[2] * frame_time;
         else
-            hero.unk190 = D_L00_0017BDB8[6] * frame_time;
+            hero.target_speed = D_L00_0017BDB8[6] * frame_time;
     }
     if (hero.state.current == 0x73) {
-        float v = hero.unk190 * 0.8f;
+        float v = hero.target_speed * 0.8f;
         float m = frame_time * 2.5f;
-        hero.unk190 = v;
+        hero.target_speed = v;
         if (v < m)
-            hero.unk190 = m;
+            hero.target_speed = m;
     }
 }
 #define NOT_SDA
@@ -2068,10 +2068,10 @@ void FUN_00213ed8_00212088(f32 *, f32, f32) __asm__("FUN_00213ed8");
 /* Approaches field b toward a, at rate x while below it and y otherwise. */
 void FUN_L00_00212088(f32 x, f32 y) {
     struct Hero *p = &hero;
-    if (p->ground_speed < p->unk190)
-        FUN_00213ed8_00212088(&p->ground_speed, p->unk190, x);
+    if (p->ground_speed < p->target_speed)
+        FUN_00213ed8_00212088(&p->ground_speed, p->target_speed, x);
     else
-        FUN_00213ed8_00212088(&p->ground_speed, p->unk190, y);
+        FUN_00213ed8_00212088(&p->ground_speed, p->target_speed, y);
 }
 extern float FastCos(float) __asm__("FUN_001f9dc8");
 

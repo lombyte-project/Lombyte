@@ -254,9 +254,9 @@ void FUN_L02_00223450(void) {
             approach_value_223450(ED70 * 25.0f, ED70 * 7.0f, &hero.unk4A0);
         }
         if (hero.state_timer < FUN_001f96f8_223450(0x37)) {
-            hero.unk190 = hero.unk3F4;
+            hero.target_speed = hero.unk3F4;
         } else {
-            hero.unk190 = ED6C * 3.5f;
+            hero.target_speed = ED6C * 3.5f;
         }
         FUN_L00_00212088_223450(ED70 * 44.0f, ED70 * 45.0f);
         FUN_L00_00233ba0_223450(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
@@ -327,7 +327,7 @@ void FUN_L02_00223450(void) {
         FUN_L00_002132b8_223450(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
         arg = ED70 * 20.0f;
-        if (hero.unk190 < D_L02_0017C3D0_223450[0] * ED6C * 0.2f) {
+        if (hero.target_speed < D_L02_0017C3D0_223450[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
                 d = hero.unk944;
                 speed = FUN_001f9b20_223450(&hero.motion.velocity);

@@ -1301,7 +1301,7 @@ int hero_set_state(int a, int b) {
     case 0x51: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
-        p->unkA6C = 1.0f;
+        p->speed_scale = 1.0f;
         p->unk2284 = 0;
         p->unkA58 = 0;
         *(int *)&p->unkA54 = 0;
@@ -1527,7 +1527,7 @@ int hero_set_state(int a, int b) {
             r->unk2284 = 0;
             FUN_L00_00216de8(9, 0);
             r->rand_timer.range = 0x68;
-            r->unk190 = 0.0f;
+            r->target_speed = 0.0f;
             r->ground_speed = 0.0f;
             if (b)
                 FUN_L00_002323b8(0x71, 0, (float)scale_game_frames(8));

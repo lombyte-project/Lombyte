@@ -1151,7 +1151,7 @@ void FUN_L01_00234358(float amount) {
     switch (hero.unk20B3) {
         case 0:
             angle = hero.motion.unk180;
-            speed = hero.unk190;
+            speed = hero.target_speed;
             if (hero.state.control_mode == 4 && hero.unk30A == 0 && hero.unk4A4 != 0 && hero.unk257 != 0)
                 speed = D_0015ED6C * 2.1f;
             if (hero.unk30A != 0 && hero.state.current == 0xE && D_0015ED6C < speed)
@@ -1198,7 +1198,7 @@ void FUN_L01_00234358(float amount) {
         case 1:
         case 2:
             value = FUN_L00_002339d0_34358(&hero.motion.velocity);
-            approach_value_34358(hero.unk190, amount, &value);
+            approach_value_34358(hero.target_speed, amount, &value);
             FUN_L00_00233ba0_34358(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
             FUN_L00_00233708_34358(&hero.motion.velocity, &hero.motion.velocity, value);
             break;

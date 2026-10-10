@@ -1058,7 +1058,7 @@ int hero_set_state(int a, int b) {
     case 0x51: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
-        p->unkA6C = 1.0f;
+        p->speed_scale = 1.0f;
         p->unk2284 = 0;
         p->unkA58 = 0;
         *(int *)&p->unkA54 = 0;
@@ -1311,7 +1311,7 @@ int hero_set_state(int a, int b) {
             r->unk2284 = 0;
             FUN_L00_00216de8(9, 0);
             r->rand_timer.range = 0x68;
-            r->unk190 = 0.0f;
+            r->target_speed = 0.0f;
             r->ground_speed = 0.0f;
             if (b)
                 FUN_L00_002323b8(0x71, 0, (float)scale_game_frames(8));
@@ -2169,7 +2169,7 @@ void FUN_L02_00230988(void) {
                         break;
                     }
                     FUN_L02_00220b80();
-                    if (hero.unk190 > 0.0f) {
+                    if (hero.target_speed > 0.0f) {
                         hero_set_state(0x41, 1);
                         break;
                     }
@@ -2193,7 +2193,7 @@ void FUN_L02_00230988(void) {
                             break;
                         }
                         FUN_L02_00220b80();
-                        if (hero.unk190 > 0.0f) {
+                        if (hero.target_speed > 0.0f) {
                             hero_set_state(2, 1);
                             break;
                         }
@@ -2390,7 +2390,7 @@ void FUN_L02_00230988(void) {
                                     hero_set_state(7, 1);
                                     break;
                                 }
-                                if (hero.unk190 > D_L02_0017C3B8.fC &&
+                                if (hero.target_speed > D_L02_0017C3B8.fC &&
                                     fast_difference_between_rotations(
                                         hero.motion.unk180, hero.motion.rot.f[2]) < 1.0471976f &&
                                     D_L02_0017C3B8.f18 * frame_time * 0.85f < hero.motion.unk164) {
@@ -3055,7 +3055,7 @@ void FUN_L02_00230988(void) {
                         FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
                     }
-                    if (hero.unk190 > D_L02_0017C3B8.fC &&
+                    if (hero.target_speed > D_L02_0017C3B8.fC &&
                         fast_difference_between_rotations(hero.motion.unk180, hero.motion.rot.f[2]) <
                             1.5707964f) {
                         if (hero.unk12E2 != 0 || hero.unk20A9 != 0) {
@@ -3071,7 +3071,7 @@ void FUN_L02_00230988(void) {
                         FUN_L00_00233288(0.016f, 0.002f, 5, 2, 1, 0);
                         break;
                     }
-                    if (D_L02_0017C3B8.fC < hero.unk190) {
+                    if (D_L02_0017C3B8.fC < hero.target_speed) {
                         if (hero.unk12E2 != 0 || hero.unk20A9 != 0) {
                             hero_set_state(2, 1);
                             break;
@@ -3287,7 +3287,7 @@ void FUN_L02_00230988(void) {
                                 (FUN_L00_002050b8(moby[0x52]) == 8 ||
                                  FUN_L00_002050b8(moby[0x52]) == 9) &&
                                 moby[0x52] == moby[0x53] &&
-                                D_L02_0017C3B8.f18 * frame_time * 0.1f > hero.unk190 &&
+                                D_L02_0017C3B8.f18 * frame_time * 0.1f > hero.target_speed &&
                                 frame_time * 2.5f > hero.motion.unk164) {
                                 float sp = (float)scale_game_frames(9) / hero.unkA90;
                                 if ((float)scale_game_frames(0xA) < sp) {
@@ -3315,7 +3315,7 @@ void FUN_L02_00230988(void) {
                         if (hero.unk12EA == 0 && hero.unk1C4 == 0) {
                             if (FUN_L00_00266d60(0x40, scale_game_frames(8), 0)) {
                                 if (hero.air_frames.s < scale_game_frames(4)) {
-                                    if (hero.unk190 > D_L02_0017C3B8.fC &&
+                                    if (hero.target_speed > D_L02_0017C3B8.fC &&
                                         fast_difference_between_rotations(
                                             hero.motion.unk180, hero.motion.rot.f[2]) < 1.0471976f &&
                                         D_L02_0017C3B8.f18 * frame_time * 0.85f <
@@ -3474,7 +3474,7 @@ void FUN_L02_00230988(void) {
                         break;
                     }
                     FUN_L00_002118c8(1.0f, 0);
-                    if (hero.unk229C > 0.22f && hero.unk190 > 0.0f) {
+                    if (hero.unk229C > 0.22f && hero.target_speed > 0.0f) {
                         hero_set_state(0x54, 1);
                     }
                     break;

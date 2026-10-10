@@ -169,7 +169,7 @@ struct Hero {
     f32 unk0[16];                  /* 0x00: matrix */
     f32 unk40[16];                 /* 0x40 */
     struct HeroMotion motion;      /* 0x80 */
-    f32 unk190;                    /* 0x190 */
+    f32 target_speed;              /* 0x190: horizontal speed ground_speed eases toward; the stick handler writes it (0 with the stick centred) */
     f32 ground_speed;              /* 0x194: horizontal speed target this frame (0.095 running, i.e. 5.7 u/s at 60 fps; 0 idle) */
     s32 state_timer;               /* 0x198: frames in the current state */
     s32 unk19C;                    /* 0x19C */
@@ -539,7 +539,7 @@ struct Hero {
     s32 unkA60;                    /* 0xA60 */
     s32 unkA64;                    /* 0xA64 */
     f32 unkA68;                    /* 0xA68 */
-    f32 unkA6C;                    /* 0xA6C */
+    f32 speed_scale;               /* 0xA6C: multiplier on the run target in some states (target = frame_time * 5.7 * speed_scale); 1.0 normally */
     f32 unkA70;                    /* 0xA70 */
     f32 aim_yaw;                   /* 0xA74: gadget aim yaw (FUN_L00_00217658) */
     f32 aim_pitch;                 /* 0xA78: gadget aim pitch */

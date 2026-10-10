@@ -1330,7 +1330,7 @@ int hero_set_state(int a, int b) {
     case 0x51: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
-        p->unkA6C = 1.0f;
+        p->speed_scale = 1.0f;
         p->unk2284 = 0;
         p->unkA58 = 0;
         *(int *)&p->unkA54 = 0;

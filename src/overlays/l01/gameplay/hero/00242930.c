@@ -411,7 +411,7 @@ void FUN_L01_00242930(void) {
                         break;
                     }
                     FUN_L01_00232290();
-                    if (hero.unk190 > 0.0f) {
+                    if (hero.target_speed > 0.0f) {
                         hero_set_state(0x41, 1);
                         break;
                     }
@@ -435,7 +435,7 @@ void FUN_L01_00242930(void) {
                             break;
                         }
                         FUN_L01_00232290();
-                        if (hero.unk190 > 0.0f) {
+                        if (hero.target_speed > 0.0f) {
                             hero_set_state(2, 1);
                             break;
                         }
@@ -769,7 +769,7 @@ void FUN_L01_00242930(void) {
                                     hero_set_state(7, 1);
                                     break;
                                 }
-                                if (hero.unk190 > D_L01_0017C238.fC &&
+                                if (hero.target_speed > D_L01_0017C238.fC &&
                                     fast_difference_between_rotations(
                                         hero.motion.unk180, hero.motion.rot.f[2]) < 1.0471976f &&
                                     D_L01_0017C238.f18 * frame_time * 0.85f < hero.motion.unk164) {
@@ -1330,7 +1330,7 @@ void FUN_L01_00242930(void) {
                         FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
                     }
-                    if (hero.unk190 > D_L01_0017C238.fC &&
+                    if (hero.target_speed > D_L01_0017C238.fC &&
                         fast_difference_between_rotations(hero.motion.unk180, hero.motion.rot.f[2]) <
                             1.5707964f) {
                         if (hero.unk12E2 != 0 || hero.unk20A9 != 0) {
@@ -1346,7 +1346,7 @@ void FUN_L01_00242930(void) {
                         FUN_L00_00233288(0.016f, 0.002f, 5, 2, 1, 0);
                         break;
                     }
-                    if (D_L01_0017C238.fC < hero.unk190) {
+                    if (D_L01_0017C238.fC < hero.target_speed) {
                         if (hero.unk12E2 != 0 || hero.unk20A9 != 0) {
                             hero_set_state(2, 1);
                             break;
@@ -1559,7 +1559,7 @@ void FUN_L01_00242930(void) {
                                 (FUN_L00_002050b8(moby[0x52]) == 8 ||
                                  FUN_L00_002050b8(moby[0x52]) == 9) &&
                                 moby[0x52] == moby[0x53] &&
-                                D_L01_0017C238.f18 * frame_time * 0.1f > hero.unk190 &&
+                                D_L01_0017C238.f18 * frame_time * 0.1f > hero.target_speed &&
                                 frame_time * 2.5f > hero.motion.unk164) {
                                 float sp = (float)scale_game_frames(9) / hero.unkA90;
                                 if ((float)scale_game_frames(0xA) < sp) {
@@ -1587,7 +1587,7 @@ void FUN_L01_00242930(void) {
                         if (hero.unk12EA == 0 && hero.unk1C4 == 0) {
                             if (FUN_L00_00266d60(0x40, scale_game_frames(8), 0)) {
                                 if (hero.air_frames.s < scale_game_frames(4)) {
-                                    if (hero.unk190 > D_L01_0017C238.fC &&
+                                    if (hero.target_speed > D_L01_0017C238.fC &&
                                         fast_difference_between_rotations(
                                             hero.motion.unk180, hero.motion.rot.f[2]) < 1.0471976f &&
                                         D_L01_0017C238.f18 * frame_time * 0.85f < hero.motion.unk164) {
@@ -1744,7 +1744,7 @@ void FUN_L01_00242930(void) {
                         break;
                     }
                     FUN_L00_002118c8(0, 1.0f);
-                    if (hero.unk229C > 0.22f && hero.unk190 > 0.0f) {
+                    if (hero.unk229C > 0.22f && hero.target_speed > 0.0f) {
                         hero_set_state(0x54, 1);
                     }
                     break;
