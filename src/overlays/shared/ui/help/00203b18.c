@@ -2011,7 +2011,78 @@ void FUN_L00_0020a540(void) {
     P.f118 = P.f278 * 0.52f;
     P.f114 = P.f274 * 0.55f;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020a9e8.s", FUN_L00_0020a9e8);
+#else
+extern s32 FUN_001fef68_a9e8(s32 *) __asm__("FUN_L00_001fef68");
+extern s32 FUN_001fef20_a9e8(s32) __asm__("FUN_L00_001fef20");
+extern f32 FUN_L00_00257be8_a9e8(f32, f32) __asm__("FUN_L00_00257be8");
+typedef struct { char pad[0x64]; f32 x; f32 y; char tail[0x44]; } HelpOutput_a9e8;
+
+void FUN_L00_0020a9e8(void) {
+    G_a540 *g = &D_0013F350_a540;
+    char *base = (char *)g;
+    s32 *timers;
+    char *record;
+    s32 i;
+
+    if (g->i2084 != 0 || *(u8 *)((char *)g->p2080 + 0x53) != 0)
+        return;
+
+    timers = (s32 *)(base + 0x1060);
+    record = base;
+    i = 0;
+    do {
+        s32 j;
+        f32 x, y;
+        if (FUN_001fef68_a9e8(&timers[i]) != 0) {
+            s32 low, high;
+            if (i == 0) {
+                *(f32 *)(record + 0x1028) = FUN_L00_00257c48_a540(0.17453292f, 0.5235988f);
+                low = FUN_001fef20_a9e8(0x46);
+                high = FUN_001fef20_a9e8(0x96);
+                timers[i] = FUN_L00_00257b90_a540(low, high);
+            } else if (i == 1) {
+                *(f32 *)(record + 0x1028) = FUN_L00_00257c48_a540(0.17453292f, 0.5235988f);
+                low = FUN_001fef20_a9e8(0x28);
+                high = FUN_001fef20_a9e8(0x5A);
+                timers[i] = FUN_L00_00257b90_a540(low, high);
+            } else if (i == 2) {
+                *(f32 *)(record + 0x1028) = FUN_L00_00257c48_a540(0.2617994f, 0.87266463f);
+                low = FUN_001fef20_a9e8(0x28);
+                high = FUN_001fef20_a9e8(0x5A);
+                timers[i] = FUN_L00_00257b90_a540(low, high);
+            } else {
+                f32 old;
+                f32 value;
+                f32 first = FUN_L00_00257be8_a9e8(-0.08726646f, 0.5235988f);
+                old = *(f32 *)(record + 0x1028);
+                *(f32 *)(record + 0x1024) = first;
+                value = FUN_L00_00257c48_a540(0.34906584f, 0.9599311f);
+                *(f32 *)(record + 0x1028) = value;
+                if (old <= 0.0f && value <= 0.0f)
+                    goto negate_fourth;
+                if (old >= 0.0f && value >= 0.0f)
+                    goto negate_fourth;
+                goto fourth_sign_done;
+negate_fourth:
+                *(f32 *)(record + 0x1028) = -value;
+fourth_sign_done:
+                low = FUN_001fef20_a9e8(0x23);
+                high = FUN_001fef20_a9e8(0x46);
+                timers[i] = FUN_L00_00257b90_a540(low, high);
+            }
+        }
+        j = i + 13;
+        x = *(f32 *)(record + 0x1024);
+        y = *(f32 *)(record + 0x1028);
+        ((HelpOutput_a9e8 *)&D_L00_0017A680_a540)[j].x = x;
+        ((HelpOutput_a9e8 *)&D_L00_0017A680_a540)[j].y = y;
+        record += 0x10;
+        i++;
+    } while (i < 4);
+}
+#endif
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020B310), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_001ABD80[] __asm__("D_L00_001ABA00");
