@@ -1299,11 +1299,10 @@ void FUN_L14_00314f00(char *moby) {
     *(short *)(motion + 0x56) = scale_game_frames_14f00(*(short *)(rec + 0x3A));
     indices = (short *)(motion + 0x58);
     lengths = (float *)(motion + 0x68);
-    i = 7;
-    do {
-        *lengths++ = 0.0f;
-        *indices++ = -1;
-    } while (--i >= 0);
+    for (i = 0; i < 8; i++) {
+        lengths[i] = 0.0f;
+        indices[i] = -1;
+    }
     *(float *)(motion + 0x88) = FUN_001f9e90_14f00(1.0f, D_L14_0016D1F0) * 2.0f;
 
     if (*(int *)(rec + 0x20) >= 0) {
@@ -1313,15 +1312,16 @@ void FUN_L14_00314f00(char *moby) {
             lengths = (float *)(motion + 0x68);
             i = 0;
             do {
-                length = *(float *)(path + i * 16 + 0x1C);
+                char *p = path + i * 16;
+                length = *(float *)(p + 0x1C);
                 if (length > 0.0f) {
                     *lengths++ = length;
                     *indices++ = i;
                 }
                 count = *(int *)path;
-                length = FUN_001f9b48_14f00(path + i * 16 + 0x10,
+                length = FUN_001f9b48_14f00(p + 0x10,
                     path + ((i + 1) % count) * 16 + 0x10);
-                *(float *)(path + i * 16 + 0x1C) = length;
+                *(float *)(p + 0x1C) = length;
                 if (i < *(int *)path - 1)
                     *(float *)(motion + 0x48) += length;
                 i++;
@@ -1353,10 +1353,11 @@ void FUN_L14_00314f00(char *moby) {
     *(float *)(motion + 0x20) = 0.03f;
     *(float *)(motion + 0x24) = 0.2f;
     clear_u64_value_14f00(motion + 0x30);
-    qcopy(moby + 0x30, D_L14_00167504 + 0x30);
+    { char *copy_source = D_L14_00167504;
+    qcopy(moby + 0x30, copy_source + 0x30);
     qcopy(moby, D_L14_00167504);
     qcopy(moby + 0x10, D_L14_00167504 + 0x10);
-    qcopy(moby + 0x20, D_L14_00167504 + 0x20);
+    qcopy(moby + 0x20, copy_source + 0x20); }
     identity[0] = 0.0f;
     identity[1] = 0.0f;
     identity[2] = 0.0f;
