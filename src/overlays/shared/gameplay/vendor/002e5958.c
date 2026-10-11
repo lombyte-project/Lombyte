@@ -50,7 +50,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
     u8 delta[16];
     u8 matrix[64];
     struct Moby *child;
-    u16 save_id;
+    s16 save_id;
     u32 *bits;
     s32 first;
     s32 second;
@@ -96,11 +96,11 @@ void FUN_L15_002e5958(struct Moby *moby) {
     case 2:
         save_id = moby->save_id;
         if (D_L15_001BB830[0x454 + (s16)save_id] != 0 ||
-            ((((s32)D_0014C190[current_level_index * 64 + ((s16)save_id >> 5)]) >> (save_id & 31)) & 1) != 0) {
+            ((((s32)*(u32 *)((u8 *)D_0014C190 + (current_level_index << 8) + (((s16)save_id >> 5) << 2))) >> (save_id & 31)) & 1) != 0) {
             if (vars->enabled != 0) {
                 FUN_L01_0026e0e0(moby->group, 4);
                 vars->timer = vars->restart_timer;
-                moby->state = 4;
+                *(volatile u8 *)&moby->state = 4;
                 return;
             }
         }
@@ -118,7 +118,13 @@ void FUN_L15_002e5958(struct Moby *moby) {
             vars->triggered = 1;
         }
         if (moby->state == 2) {
-            if (vars->child_count < vars->notified_count) {
+            if (vars->child_count >= vars->notified_count) {
+                FUN_L01_0026e0e0(moby->group, 4);
+                allocate_voice_for_target_entry(1, 0x31, moby);
+                vars->timer = vars->restart_timer;
+                *(volatile u8 *)&moby->state = 4;
+                return;
+            } else {
                 if (FUN_001f9770(&vars->timer) == 0) {
                     if (FUN_001f9770(&vars->delay) != 0) {
                         allocate_voice_for_target_entry(0, 0x31, moby);
@@ -136,11 +142,6 @@ void FUN_L15_002e5958(struct Moby *moby) {
                     allocate_voice_for_target_entry(2, 0x31, moby);
                     FUN_L01_0026e0e0(moby->group, 3);
                 }
-            } else {
-                FUN_L01_0026e0e0(moby->group, 4);
-                allocate_voice_for_target_entry(1, 0x31, moby);
-                vars->timer = vars->restart_timer;
-                moby->state = 4;
             }
         }
         break;
@@ -162,7 +163,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
             }
         }
         save_id = moby->save_id;
-        bits = &D_0014C190[current_level_index * 64 + ((s16)save_id >> 5)];
+        bits = &D_0014C190[(current_level_index << 6) + (save_id >> 5)];
         *bits |= 1U << (save_id & 31);
         save_id = moby->save_id;
         bits = &D_L15_001BAAD0[(s16)save_id >> 5];
