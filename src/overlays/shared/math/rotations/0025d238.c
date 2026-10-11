@@ -478,7 +478,182 @@ s32 FUN_L00_0025e3f8(void *p) {
     }
     return 0;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e450.s", FUN_L00_0025e450);
+#else
+typedef struct { f32 f[4]; } V25e450 __attribute__((aligned(16)));
+typedef struct { f32 f[8]; } V25e450Wide __attribute__((aligned(16)));
+typedef struct { s32 v[6]; } Colors25e450;
+extern f32 FUN_L00_00257be8_25e450(f32, f32) __asm__("FUN_L00_00257be8");
+extern f32 FUN_L00_00257cb0_25e450(void) __asm__("FUN_L00_00257cb0");
+extern s32 FUN_L00_00257b50_25e450(s32) __asm__("FUN_L00_00257b50");
+extern void FUN_L00_00262c50_25e450(void *, f32, f32, f32) __asm__("FUN_L00_00262c50");
+extern s32 FUN_001fef20_25e450(s32) __asm__("FUN_001f96f8");
+extern s32 FUN_L00_00257b90_25e450(s32, s32) __asm__("FUN_L00_00257b90");
+extern s32 FUN_L00_0025c0e8_25e450(s32, s32) __asm__("FUN_L00_0025c0e8");
+extern void FUN_L00_00259858_25e450(void *, void *, s32) __asm__("FUN_L00_00259858");
+extern void FUN_L00_001f2868_25e450(void *, s32, void *, void *, f32) __asm__("FUN_L00_001f2868");
+extern void FUN_L00_0026bb70_25e450(void *, void *, s32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0026bb70");
+extern void FUN_001f9a28_25e450(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 FUN_001f9af0_25e450(void *) __asm__("FUN_001f9af0");
+extern void FUN_001f9bf8_25e450(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void FUN_001f9a10_25e450(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f9c90_25e450(void *, void *, f32) __asm__("FUN_001f9c90");
+extern void FUN_L00_002af450_25e450(void *, void *, s32, s32, s32) __asm__("FUN_L00_002af450");
+extern void FUN_L00_0026a9f0_25e450(void *, void *, s32, s32, f32, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026a9f0");
+extern void FUN_L00_0026a4c8_25e450(void *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0026a4c8");
+extern void FUN_L00_002ac910_25e450(void *, void *, void *, f32, s32, s32, s32, s32, s32) __asm__("FUN_L00_002ac910");
+extern f32 FUN_00200240_25e450(s32) __asm__("FUN_001fa6c0");
+extern s32 FUN_00200250_25e450(f32) __asm__("FUN_001fa6d0");
+extern s32 FUN_002002e0_25e450(void *, f32) __asm__("FUN_001fa728");
+extern void FUN_L00_002d3838_25e450(void *, void *, s32, s32) __asm__("FUN_L00_002d3838");
+extern void FUN_0028dbe8_25e450(s32, s32, void *) __asm__("FUN_0022da68");
+extern f32 frame_time;
+extern f32 D_L00_0015F5D0_25e450 __asm__("D_L00_0015F5D0");
+extern f32 D_L00_0015F5D4_25e450 __asm__("D_L00_0015F5D4");
+extern Colors25e450 D_L00_001E9030_25e450 __asm__("D_L00_001E9030");
+extern Colors25e450 D_L00_001E9048_25e450 __asm__("D_L00_001E9048");
+extern u8 D_L00_00166C80_25e450[] __asm__("D_L00_00166C80");
+extern u8 D_L00_001B0250_25e450[] __asm__("D_L00_001B0250");
+extern u8 D_L00_001B02A0_25e450[] __asm__("D_L00_001B02A0");
+
+void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_effect2,
+                       f32 cutoff, f32 scale, f32 flash, void *owner, s32 unused2,
+                       V25e450 *pos, s32 puff_count, s32 spark_count, s32 shard_count,
+                       s32 sound, s32 shake, s32 spray_count, s32 unused3, s32 tint, u8 alternate)
+{
+    V25e450 base, difference, dir;
+    V25e450Wide vel;
+    Colors25e450 colors0, colors1;
+    f32 distance, speed, gap, size;
+    s32 i, n, a, b, c0, c1, life, life2;
+    s32 tint_color;
+    *(u128 *)&base = 0;
+    base.f[2] = frame_time * 8.0f * scale;
+    if (tint == -1) {
+        tint = 0;
+        if (D_L00_0015F5D0_25e450 + D_L00_0015F5D4_25e450 > 1.7f)
+            tint = 1;
+    }
+    if (pos == 0) {
+        if (owner == 0) return;
+        pos = (V25e450 *)((u8 *)owner + 0x10);
+    }
+    if (burst > 0.0f) {
+        FUN_L00_00259858_25e450(&vel, owner, 0x810001);
+        ((u8 *)&vel)[0x18] = 2;
+        ((u8 *)&vel)[0x19] = 1;
+        *(u16 *)((u8 *)&vel + 0x1a) = *(u16 *)((u8 *)owner + 0xa6);
+        FUN_L00_001f2868_25e450(pos, 0x10, owner, &vel, burst);
+    }
+    difference.f[0] = base.f[0]; difference.f[1] = base.f[1]; difference.f[2] = base.f[2]; difference.f[3] = base.f[3];
+    for (i = 0; i < puff_count; i++) {
+        speed = scale * 40000.0f;
+        size = FUN_L00_00257be8_25e450(0.2617994f, 1.3962634f);
+        gap = FUN_L00_00257cb0_25e450();
+        FUN_L00_00262c50_25e450(&vel, scale * FUN_L00_00257be8_25e450(7.0f, 10.5f) * frame_time, gap, size);
+        vel.f[2] += frame_time * 3.0f;
+        c0 = FUN_L00_0025c0e8_25e450(0x4f007fff, alternate);
+        c1 = FUN_L00_0025c0e8_25e450(0x1f00007f, alternate);
+        life = FUN_L00_00257b90_25e450(FUN_001fef20_25e450(60), FUN_001fef20_25e450(120));
+        FUN_L00_0026bb70_25e450(pos, &vel, c0, c1, speed, life - tint * 10, 1, -1, -1);
+    }
+    FUN_001f9a28_25e450(&difference, (void *)0x166dc0, pos);
+    distance = FUN_001f9af0_25e450(&difference);
+    if (spray_count != 0) {
+        dir.f[0] = FUN_L00_00257be8_25e450(-1.0f, 1.0f);
+        dir.f[1] = FUN_L00_00257be8_25e450(-1.0f, 1.0f);
+        dir.f[2] = FUN_L00_00257be8_25e450(-1.0f, 1.0f);
+        dir.f[3] = 0.0f;
+        *(u128 *)&vel = *(u128 *)&dir;
+        if (distance < 14.0f) {
+            difference.f[2] += distance * 0.5f;
+            FUN_001f9bf8_25e450(&vel, &vel, distance / 5.0f * frame_time);
+            FUN_001f9bf8_25e450(&difference, &difference, (distance + distance) * frame_time);
+            FUN_001f9a10_25e450(&vel, &vel, &difference);
+            FUN_001f9c90_25e450(&vel, &vel, frame_time * 10.0f);
+            life = FUN_L00_00257b90_25e450(FUN_001fef20_25e450(60), FUN_001fef20_25e450(90));
+            FUN_L00_002af450_25e450(pos, &vel, life, 0, 0);
+        }
+        for (i = 0; i < spray_count - 1; i++) {
+            size = FUN_L00_00257be8_25e450(0.2617994f, 1.3089969f);
+            gap = FUN_L00_00257cb0_25e450();
+            FUN_L00_00262c50_25e450(&dir, scale * FUN_L00_00257be8_25e450(7.0f, 10.5f) * frame_time, gap, size);
+            dir.f[2] += frame_time + frame_time;
+            life = FUN_L00_00257b90_25e450(FUN_001fef20_25e450(60), FUN_001fef20_25e450(90));
+            FUN_L00_002af450_25e450(pos, &dir, life, i % 3 == 0, 0);
+        }
+    }
+    n = spark_count;
+    if (distance < FUN_00200240_25e450(spark_count) * 2.0f)
+        n = FUN_00200250_25e450(distance) / 2;
+    gap = 0.0f;
+    if (distance < 7.0f) gap = 7.0f - distance;
+    for (i = 0; i < n; i++) {
+        size = FUN_L00_00257be8_25e450(8.0f, 10.0f) * frame_time;
+        colors0 = D_L00_001E9030_25e450;
+        colors1 = D_L00_001E9048_25e450;
+        speed = (size - gap * frame_time) * scale;
+        c0 = FUN_L00_0025c0e8_25e450(colors0.v[FUN_L00_00257b50_25e450(6)], alternate);
+        c1 = FUN_L00_0025c0e8_25e450(colors1.v[FUN_L00_00257b50_25e450(6)], alternate);
+        size = scale * 400000.0f;
+        life = FUN_L00_00257b90_25e450(FUN_001fef20_25e450(15), FUN_001fef20_25e450(20));
+        life2 = FUN_L00_00257b90_25e450(FUN_001fef20_25e450(30), FUN_001fef20_25e450(45));
+        FUN_L00_0026a9f0_25e450(pos, &base, c0, c1, size, life - tint * 3, life2 - tint * 5, 0, 0, speed);
+        life = FUN_L00_00257b90_25e450(FUN_001fef20_25e450(5), FUN_001fef20_25e450(10));
+        life2 = FUN_L00_00257b90_25e450(FUN_001fef20_25e450(15), FUN_001fef20_25e450(20));
+        FUN_L00_0026a9f0_25e450(pos, &base, 0x7fffffff, 0xffffff, size,
+            life - tint * 2, life2 - tint * 3, 0, 0, speed * 0.5f);
+    }
+    for (i = 0; i < shard_count; i++) {
+        colors0 = D_L00_001E9030_25e450;
+        colors1 = D_L00_001E9048_25e450;
+        dir.f[0] = FUN_L00_00257be8_25e450(-1.0f, 1.0f);
+        dir.f[1] = FUN_L00_00257be8_25e450(-1.0f, 1.0f);
+        dir.f[2] = FUN_L00_00257be8_25e450(-1.0f, 1.0f);
+        dir.f[3] = 0.0f;
+        *(u128 *)&vel = *(u128 *)&dir;
+        FUN_001f9bf8_25e450(&vel, &vel, scale * FUN_L00_00257be8_25e450(0.0f, 3.0f) * frame_time);
+        c0 = FUN_L00_0025c0e8_25e450(colors0.v[FUN_L00_00257b50_25e450(6)], alternate);
+        c1 = FUN_L00_0025c0e8_25e450(colors1.v[FUN_L00_00257b50_25e450(6)], alternate);
+        life = FUN_L00_00257b90_25e450(FUN_001fef20_25e450(30), FUN_001fef20_25e450(45));
+        FUN_L00_0026a4c8_25e450(pos, &vel, c0, c1, life - tint * 5, 200000.0f);
+    }
+    if (owner != 0) {
+        if (owner_effect > 0.0f) {
+            a = b = 0x96; tint_color = 0x7f;
+            if (alternate) { a = b = 0x46; tint_color = 0x3c; }
+            if (D_L00_0015F5D0_25e450 < 0.95f && cutoff < distance) {
+                FUN_L00_002ac910_25e450(owner, pos, &base, owner_effect, FUN_001fef20_25e450(16), a, 0x96, b, 0x20);
+                FUN_L00_002ac910_25e450(owner, pos, &base, owner_effect, FUN_001fef20_25e450(22), tint_color, 0x7f, 0x50, 0x20);
+            }
+            FUN_L00_002ac910_25e450(owner, pos, &base, owner_effect, FUN_001fef20_25e450(30), tint_color, 0x7f, 0, 0x30);
+        }
+        if (owner_effect2 > 0.0f)
+            FUN_L00_002ac910_25e450(owner, pos, &base, owner_effect2, FUN_001fef20_25e450(27), 0xff, 0xff, 0xff, 0x20);
+    }
+    if (shake != 0) {
+        *(u128 *)&vel = *(u128 *)pos;
+        vel.f[3] = 2.0f;
+        if (FUN_002002e0_25e450(&vel, 10.0f) != -1) {
+            *(f32 *)(D_L00_00166C80_25e450 + 0x160) = distance < 20.0f ? 0.4f - distance * 0.0175f : 0.050000012f;
+            *(s32 *)(D_L00_00166C80_25e450 + 0x168) = FUN_001fef20_25e450(25);
+        }
+    }
+    if (owner != 0 && sound != -1) FUN_0028dbe8_25e450(sound, 0, owner);
+    if (flash != 0.0f && tint == 0) {
+        *(u128 *)&vel = *(u128 *)pos;
+        vel.f[3] = flash;
+        if (FUN_002002e0_25e450(&vel, 100.0f) != -1) {
+            f32 value = flash > 0.0f ? flash : 15.0f;
+            *(f32 *)(D_L00_001B0250_25e450 + 0x20) = value;
+            *(f32 *)(D_L00_001B0250_25e450 + 0x24) = value;
+            *(f32 *)(D_L00_001B0250_25e450 + 0x28) = value;
+            FUN_L00_002d3838_25e450(alternate ? D_L00_001B02A0_25e450 : D_L00_001B0250_25e450, pos, 0, 0);
+        }
+    }
+}
+#endif
 typedef struct { float x, y, z, w; } Vy10 __attribute__((aligned(16)));
 
 typedef struct { int v[6]; } S6y10;
