@@ -121,6 +121,7 @@ void FUN_L12_00302c58(struct Moby *moby) {
         int i;
         float *points;
         float *intermediate;
+        int *timers = (int *)(data + 0x2300);
         if (tick_countdown_32_alt((int *)(data + 0x2300 + strip * 4))) {
             int vector_count = *(int *)(data + 0x232c);
             float intermediate_storage[vector_count][4];
@@ -129,8 +130,8 @@ void FUN_L12_00302c58(struct Moby *moby) {
             i = 0;
             if (0 < *(int *)(data + 0x232c)) do {
                 clear_u64_value(points);
-                points[3] = 1.0f;
                 points[0] = (float)i * (*(float *)(data + 0x2324) / (float)*(int *)(data + 0x232c));
+                points[3] = 1.0f;
                 FUN_L00_00257d78(intermediate + i * 4, 0.0f, D_L12_00161E00 * frame_time);
                 points += 4;
                 i++;
@@ -143,7 +144,7 @@ void FUN_L12_00302c58(struct Moby *moby) {
                 scale_vector_xyz(out, out, 0.333f);
                 i++;
             } while (i < *(int *)(data + 0x232c) - 1);
-            *(int *)(data + 0x2300 + strip * 4) = D_L12_00161E04;
+            timers[strip] = D_L12_00161E04;
         } else {
             for (i = 1; i < *(int *)(data + 0x232c) - 1; i++) {
                 float *point = (float *)(data + strip * 0x460 + i * 16);
