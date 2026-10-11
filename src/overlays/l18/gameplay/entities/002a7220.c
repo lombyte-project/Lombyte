@@ -7,6 +7,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/entities.h"
+#include "rnc/gameplay/state/usage_stats.h"
 #define MOBY(p) ((struct Moby *)(p))
 
 #define NOT_SDA
@@ -1314,34 +1315,25 @@ char *FUN_L18_002d6c80(void *pos, int idx) {
             return best;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d7b20.s", FUN_L18_002d7b20);
-#else
 extern float D_L18_00161A10 __asm__("D_L18_00161A10") __attribute__((sda));
 extern float D_L18_00161A14 __asm__("D_L18_00161A14") __attribute__((sda));
 extern float D_L18_00161A18 __asm__("D_L18_00161A18") __attribute__((sda));
 extern unsigned int D_L18_00162390 __asm__("D_L18_00162390") __attribute__((sda));
 extern unsigned int D_0015EEA4 __asm__("D_0015EEA4") __attribute__((sda));
-extern unsigned int D_0015ED84_source __asm__("D_0015ED84") __attribute__((sda));
-extern int D_0015ED84_abs __asm__("D_0015ED84") __attribute__((section(".data")));
-extern short D_0013F65E;
-extern struct Moby *D_0013F64C;
-extern unsigned char D_0013D407;
-extern unsigned int D_0015717C;
-extern short D_00141CF0;
-extern unsigned short D_00141CF2;
-extern unsigned int D_00141CF4;
+extern unsigned char D_0013D407 __attribute__((section(".data")));
+/* Help message records (same layout as the usage counters): count, best play time, level mask. */
+extern struct UsageStat D_00141968_7b20[] __asm__("D_00141968");
 extern void FUN_L18_002d8098(void);
 extern void enqueue_callback_list_1_l18(void (*)(void), void *) __asm__("FUN_L18_002020c8");
 extern char D_0013E550[];
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern int give_reward(int, int) __asm__("FUN_L00_00203908");
+extern int trigger_help_message(int, int) __asm__("FUN_L00_00203908");
+
+extern int allocate_voice_int_7b20(int, int, int) __asm__("FUN_0022da68");
 
 void FUN_L18_002d7b20(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int index;
-    int ticks;
-    unsigned int level;
 
     switch (moby->state) {
     case 0:
@@ -1368,7 +1360,7 @@ void FUN_L18_002d7b20(struct Moby *moby) {
                                    frame_time * 20.0f);
         if (hero.air_frames.s == 0 && hero.ground_moby == moby && hero.state.current == 0x22) {
             moby->state = 3;
-            allocate_voice_for_target_entry(0, 0, (int)moby);
+            allocate_voice_int_7b20(0, 0, (int)moby);
             index = *(int *)(data + 0x70);
             if (index != -1) {
                 unsigned char *entry = (unsigned char *)D_0013E550 + index * 0x70;
@@ -1387,35 +1379,27 @@ void FUN_L18_002d7b20(struct Moby *moby) {
             moby->state = 5;
             moby->unkBC = 1;
             moby->pos.z -= 1.5f;
-            if (D_0015ED84_abs == 0x12)
+            if (current_level_index == 0x12)
                 D_0013D407 = 1;
         }
-        if (vector_distance(&moby->pos, &hero.motion.pos) < 2.5f &&
-            (D_0015717C & (1 << (D_0015ED84_source & 0x1F))) == 0) {
-            if (D_00141CF0 != 0) {
-                ticks = scale_ticks(D_0015EEA4);
-                level = D_00141CF2;
-                index = scale_ticks(0x12);
-                if ((int)((float)index * 60.0f) < (int)(ticks - level * 600) ||
-                    D_00141CF2 == 0) {
-                    give_reward(0x2B02, 0x71);
-                } else {
-                    ticks = scale_ticks(D_0015EEA4);
-                    if ((unsigned int)D_00141CF2 < ticks / 600) {
-                        ticks = scale_ticks(D_0015EEA4);
-                        D_00141CF2 = ticks / 600;
+        if (vector_distance(&moby->pos, &hero.motion.pos) < 2.5f) {
+            struct UsageStat *help = D_00141968_7b20;
+            int one = 1;
+            if ((help[0x2B02].level_mask & (one << current_level_index)) == 0) {
+                if (help[0x71].count != 0) {
+                    if (scale_ticks(D_0015EEA4) - help[0x71].unk2 * 600 > (int)((float)scale_ticks(0x12) * 60.0f) ||
+                        help[0x71].unk2 * 600 == 0) {
+                        trigger_help_message(0x2B02, 0x71);
+                    } else if (scale_ticks(D_0015EEA4) / 600 > help[0x71].unk2) {
+                        help[0x71].unk2 = scale_ticks(D_0015EEA4) / 600;
                     }
+                } else {
+                    help[0x71].count++;
+                    if (scale_ticks(D_0015EEA4) / 600 > help[0x71].unk2) {
+                        help[0x71].unk2 = scale_ticks(D_0015EEA4) / 600;
+                    }
+                    help[0x71].level_mask = help[0x71].level_mask | (one << current_level_index) | 0x80000000;
                 }
-            } else {
-                D_00141CF0++;
-                ticks = scale_ticks(D_0015EEA4);
-                level = D_0015ED84_source;
-                if ((unsigned int)D_00141CF2 < ticks / 600) {
-                    ticks = scale_ticks(D_0015EEA4);
-                    D_00141CF2 = ticks / 600;
-                    level = current_level_index;
-                }
-                D_00141CF4 |= (1 << (level & 0x1F)) | 0x80000000;
             }
         }
         break;
@@ -1427,7 +1411,6 @@ void FUN_L18_002d7b20(struct Moby *moby) {
         break;
     }
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D93C0), where it is exact; names translated to the US level program. */
 
 extern char D_0013E550[];
