@@ -115,7 +115,7 @@ state_one:
         i = 3;
         src = D_0013FA30;
         dst = D_L05_0015FAE0;
-        do { *dst++ = *src++; } while (--i >= 0);
+        for (i = 0; i < 4; i++) dst[i] = src[i];
         if (D_L05_0015FAD4 < D_0013FA5C) {
             D_L05_0015FAD4 = D_0013FA5C;
             counter[1] = D_L05_0015F87C;
