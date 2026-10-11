@@ -90,15 +90,16 @@ void FUN_L00_00285008(void) {
     int i;
     short id;
     u8 *m;
-    struct Hero *p = &hero;
+    struct Hero *p;
 
     if (*(int *)s == 0) {
         FUN_001f97e8(D_L00_001BA5D0, 0, 0xC60);
         return;
     }
     FUN_001f9838((int)D_L00_001BA5D0, s, 0xC60);
-    qcopy(&p->motion.pos, s + 0x10);
-    qcopy(&p->motion.rot, s + 0x20);
+    qcopy(&hero.motion.pos, s + 0x10);
+    qcopy(&hero.motion.rot, s + 0x20);
+    p = &hero;
     *(int *)((char *)p->moby + 0x38) = *(int *)(s + 0x30);
     *(int *)((char *)p->moby + 0x3C) = *(int *)(s + 0x34);
     *(int *)((char *)p->moby + 0x80) = *(int *)(s + 0x38);
