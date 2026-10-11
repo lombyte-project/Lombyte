@@ -2793,14 +2793,18 @@ void FUN_L00_002d73e8(P *p) {
     V position, zero_vector;
     V positive_transform[4], negative_transform[4];
     Quad_2d73e8 quad;
-    V *transform;
     int i, j, row, point, index, alpha;
-    int end = q->start + q->count + q->extra;
     u8 *sprite_data = (u8 *)q;
-    u32 base_color = (u32)sprite_data[0x5f] << 16 | (u32)sprite_data[0x5e] << 8 | sprite_data[0x5d];
     u32 alpha_color = (u32)sprite_data[0x5c] << 24;
+    u32 base_color = (u32)sprite_data[0x5f] << 16 | (u32)sprite_data[0x5e] << 8 | sprite_data[0x5d];
+    int end = q->start + q->count + q->extra;
+    V *transform;
     float x, y, f;
+    float *phase;
     s16 *timer;
+    V *points, *source;
+    float *texcoords, *texcoords_second;
+    u32 *colors;
 
     qcopy(&position, &p->pos);
     position.w = 1.0f;
@@ -2826,14 +2830,34 @@ void FUN_L00_002d73e8(P *p) {
 
     for (i = q->start; i < end; i++) {
         f = D_L00_001D31C0_2d73e8[i] - D_L00_001D4480_2d73e8[i] * D_0015ED60_2d73e8;
-        transform = D_L00_001D2860[i] ? negative_transform : positive_transform;
+        transform = negative_transform;
+        if (D_L00_001D2860[i] == 0)
+            transform = positive_transform;
         D_L00_001D31C0_2d73e8[i] = f;
         if (f <= -8.0f)
             D_L00_001D31C0_2d73e8[i] = f + 8.0f;
         FUN_001ff6f8_2d73e8(&transform[3], &D_L00_001CB7E0[i], t);
         x = D_L00_001D02E0_2d73e8[i];
         y = D_L00_001D15A0_2d73e8[i];
-        if (D_L00_001D2D10_2d73e8[i] == 0) {
+        phase = &D_L00_001D31C0_2d73e8[i];
+        if (D_L00_001D2D10_2d73e8[i] != 0) {
+            quad.texture[3] = 0x8000000044ULL;
+            for (row = 2; row < 4; row++) {
+                for (point = 0, points = quad.points, texcoords = quad.texcoords, texcoords_second = quad.texcoords + 1, colors = quad.colors; point < 4; point++, points++, texcoords += 2, texcoords_second += 2, colors++) {
+                    index = D_L00_001E1380_2d73e8[row][point];
+                    source = &D_L00_001E12C0_2d73e8[index];
+                    points->x = source->x;
+                    points->y = source->y * x;
+                    points->z = source->z * y;
+                    points->w = 1.0f;
+                    FUN_001ff6f8_2d73e8(points, points, transform);
+                    *texcoords = D_L00_001E1440_2d73e8[index][1] + *phase;
+                    *texcoords_second = D_L00_001E1440_2d73e8[index][0];
+                    *colors = alpha_color * D_L00_001DADA8_2d73e8[index] | base_color;
+                }
+                FUN_001fd228_2d73e8(&quad, 0, 0);
+            }
+        } else {
             timer = &D_L00_001D5740[i];
             if (*timer != 0) {
                 FUN_001fef98_2d73e8(timer);
@@ -2857,34 +2881,20 @@ void FUN_L00_002d73e8(P *p) {
                 }
             }
             quad.texture[3] = 0x8000000048ULL;
-            for (point = 0; point < 4; point++) {
-                V *source = (V *)(D_L00_001E11A0_2d73e8 + point * 16);
-                quad.points[point].x = source->x;
-                quad.points[point].y = source->y * x;
-                quad.points[point].z = source->z * y;
-                quad.points[point].w = 1.0f;
-                quad.texcoords[point * 2] = D_L00_001E11E0_2d73e8[point * 2] - D_L00_001D31C0_2d73e8[i];
-                quad.texcoords[point * 2 + 1] = D_L00_001E11E0_2d73e8[point * 2 + 1];
-                quad.colors[point] = (alpha * D_L00_001DADA0_2d73e8[point] << 24) | q->col;
-                FUN_001ff6f8_2d73e8(&quad.points[point], &quad.points[point], transform);
+            alpha = (u32)alpha << 24;
+            for (point = 0, points = quad.points, texcoords = quad.texcoords, texcoords_second = quad.texcoords + 1, colors = quad.colors; point < 4; point++, points++, texcoords += 2, texcoords_second += 2, colors++) {
+                source = (V *)(D_L00_001E11A0_2d73e8 + point * 16);
+                points->x = source->x;
+                points->y = source->y * x;
+                points->z = source->z * y;
+                points->w = 1.0f;
+                *texcoords = D_L00_001E11E0_2d73e8[point * 2] - *phase;
+                *texcoords_second = D_L00_001E11E0_2d73e8[point * 2 + 1];
+                *colors = ((u32)alpha * D_L00_001DADA0_2d73e8[point]) | q->col;
+                FUN_001ff6f8_2d73e8(points, points, transform);
             }
             FUN_001fd228_2d73e8(&quad, 0, 0);
-        } else {
-            quad.texture[3] = 0x8000000044ULL;
-            for (row = 2; row < 4; row++) {
-                for (point = 0; point < 4; point++) {
-                    index = D_L00_001E1380_2d73e8[row][point];
-                    quad.points[point].x = D_L00_001E12C0_2d73e8[index].x;
-                    quad.points[point].y = D_L00_001E12C0_2d73e8[index].y * x;
-                    quad.points[point].z = D_L00_001E12C0_2d73e8[index].z * y;
-                    quad.points[point].w = 1.0f;
-                    FUN_001ff6f8_2d73e8(&quad.points[point], &quad.points[point], transform);
-                    quad.texcoords[point * 2 + 1] = D_L00_001E1440_2d73e8[index][1] + D_L00_001D31C0_2d73e8[i];
-                    quad.texcoords[point * 2] = D_L00_001E1440_2d73e8[index][0];
-                    quad.colors[point] = alpha_color * D_L00_001DADA8_2d73e8[index] | base_color;
-                }
-                FUN_001fd228_2d73e8(&quad, 0, 0);
-            }
+
         }
     }
     quad.texture[1] = FUN_001f9298_2d73e8(*(s32 *)(sprite_data + 0x58) + 0x28);
@@ -2893,16 +2903,17 @@ void FUN_L00_002d73e8(P *p) {
     positive_transform[3].z -= q->f50;
     if (q->flag42 == 0) {
         for (row = 0; row < 6; row++) {
-            for (point = 0; point < 4; point++) {
+            for (point = 0, points = quad.points, texcoords = quad.texcoords, texcoords_second = quad.texcoords + 1, colors = quad.colors; point < 4; point++, points++, texcoords += 2, texcoords_second += 2, colors++) {
                 index = D_L00_001E1380_2d73e8[row][point];
-                quad.points[point].x = D_L00_001E1200_2d73e8[index].x;
-                quad.points[point].y = D_L00_001E1200_2d73e8[index].y * q->f48;
-                quad.points[point].z = D_L00_001E1200_2d73e8[index].z * q->pad4C;
-                quad.points[point].w = 1.0f;
-                FUN_001ff6f8_2d73e8(&quad.points[point], &quad.points[point], positive_transform);
-                quad.texcoords[point * 2 + 1] = D_L00_001E13E0_2d73e8[index][1] + D_L00_00161374_2d73e8;
-                quad.texcoords[point * 2] = D_L00_001E13E0_2d73e8[index][0];
-                quad.colors[point] = (u32)D_L00_001DADA8_2d73e8[index] * 0xff000000 | base_color;
+                source = &D_L00_001E1200_2d73e8[index];
+                points->x = source->x;
+                points->y = source->y * q->f48;
+                points->z = source->z * q->pad4C;
+                points->w = 1.0f;
+                FUN_001ff6f8_2d73e8(points, points, positive_transform);
+                *texcoords = D_L00_001E13E0_2d73e8[index][1] + D_L00_00161374_2d73e8;
+                *texcoords_second = D_L00_001E13E0_2d73e8[index][0];
+                *colors = (u32)D_L00_001DADA8_2d73e8[index] * 0xff000000 | base_color;
             }
             FUN_001fd228_2d73e8(&quad, 0, 0);
         }
