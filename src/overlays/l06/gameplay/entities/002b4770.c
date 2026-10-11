@@ -989,11 +989,12 @@ extern int FUN_L00_00203908(int, int);
 void FUN_L06_002f55a0(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int i;
-    char **left, **right;
-    char *rot;
     float old, t;
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case 0: {
+        int i;
+        char **left, **right;
+        char *rot;
         if (D_0014C050[(unsigned char)moby[0xB0] + D_0015ED84 * 16] == 0xFF) {
             moby[0x20] = 6;
             D_L06_00161D78 = 20.0f;
@@ -1005,7 +1006,7 @@ void FUN_L06_002f55a0(char *moby) {
         left = (char **)(data + 0x70);
         right = (char **)(data + 0xC0);
         rot = moby + 0x40;
-    for (i = 19; i >= 0; i--, left++, right++) {
+        for (i = 19; i >= 0; i--, left++, right++) {
             char *child = *left = create_moby_2f55a0(0x405);
             *(short *)(child + 0x32) = 0x40;
             (*left)[0x31] = 1;
@@ -1041,6 +1042,7 @@ void FUN_L06_002f55a0(char *moby) {
         }
         FUN_L06_002f5d78(moby);
         return;
+    }
     case 1:
         if (D_001413F4 != 1 || D_0013D4D6 == 0 || D_L06_0015F5C4 != 0) return;
         D_L06_0015F3FC = 1.0f;
@@ -1065,19 +1067,21 @@ void FUN_L06_002f55a0(char *moby) {
         }
         return;
     case 4: {
-        Vec4 first, second, third, fourth, result;
-        float rotation[3];
+        Vec4 result;
+        float rotation[4];
+        Vec4 first, third, second, fourth;
         int source, target;
+        char *base;
         FUN_L00_002502a0((unsigned char)moby[0xB0]);
         if (D_L06_00161D78 < 20.0f)
             advance_accelerated_scalar_2f55a0(20.0f, D_L06_00161D90 * D_0015ED70,
                 D_L06_00161D90 * D_0015ED70, D_L06_00161D84 * D_0015ED6C,
                 &D_L06_00161D78, &D_L06_00161D9C);
-        if (D_L06_00161DAC < D_L06_00161D78 && D_L06_00161D7C < 1000.0f)
+        if (D_L06_00161D78 > D_L06_00161DAC && D_L06_00161D7C < 1000.0f)
             advance_accelerated_scalar_2f55a0(1000.0f, D_L06_00161D94 * D_0015ED70,
                 D_L06_00161D94 * D_0015ED70, D_L06_00161D88 * D_0015ED6C,
                 &D_L06_00161D7C, &D_L06_00161DA0);
-        if (D_L06_00161DB0 < D_L06_00161D7C && D_L06_00161D80 < 1000.0f)
+        if (D_L06_00161D7C > D_L06_00161DB0 && D_L06_00161D80 < 1000.0f)
             advance_accelerated_scalar_2f55a0(1000.0f, D_L06_00161D98 * D_0015ED70,
                 D_L06_00161D98 * D_0015ED70, D_L06_00161D8C * D_0015ED6C,
                 &D_L06_00161D80, &D_L06_00161DA4);
@@ -1087,28 +1091,40 @@ void FUN_L06_002f55a0(char *moby) {
         }
         i = (unsigned char)moby[0xBC];
         if (D_L06_00161D78 >= 20.0f && check_voice_target_2f55a0(*(int *)(data + 0x134), i) != 0) {
-            if (i != -1 && *(int *)(D_0013E5D8 + i * 0x70) == *(int *)(data + 0x134) &&
-                D_0013E5C4[i * 0x70] != 0) release_voice_slot_2f55a0(i);
-            moby[0xBC] = -1;
+            if (i != -1) {
+                char *e = D_0013E550 + i * 0x70;
+                if (*(int *)(e + 0x88) == *(int *)(data + 0x134) && ((unsigned char *)e)[0x74] != 0)
+                    release_voice_slot_2f55a0(i);
+            }
+            i = -1;
+            moby[0xBC] = i;
         }
         FUN_L06_002f5d78(moby);
+        base = D_L06_001600EC;
         if (D_L06_00161D78 < 20.0f) {
             t = D_L06_00161D78 / 20.0f;
-            source = *(int *)(data + 0x60);
-            target = *(int *)(data + 0x64);
+            source = *(int *)(data + 0x60) * 0x80;
+            qcopy(&first, base + source + 0x30);
+            target = *(int *)(data + 0x64) * 0x80;
         } else {
             t = D_L06_00161D80 / 1000.0f;
-            source = *(int *)(data + 0x64);
-            target = *(int *)(data + 0x68);
+            source = *(int *)(data + 0x64) * 0x80;
+            qcopy(&first, base + source + 0x30);
+            target = *(int *)(data + 0x68) * 0x80;
         }
-        qcopy(&first, D_L06_001600EC + source * 0x80 + 0x30);
-        qcopy(&second, D_L06_001600EC + target * 0x80 + 0x30);
-        qcopy(&third, D_L06_001600EC + source * 0x80 + 0x70);
-        qcopy(&fourth, D_L06_001600EC + target * 0x80 + 0x70);
+        qcopy(&second, base + target + 0x30);
+        qcopy(&third, base + source + 0x70);
+        qcopy(&fourth, base + target + 0x70);
         FUN_001f9a40(&result, &first, &second, t);
-        rotation[0] = FUN_001fa580(third.f[0], FUN_001fa5c8(fourth.f[0], third.f[0]) * t);
-        rotation[1] = FUN_001fa580(third.f[1], FUN_001fa5c8(fourth.f[1], third.f[1]) * t);
-        rotation[2] = FUN_001fa580(third.f[2], FUN_001fa5c8(fourth.f[2], third.f[2]) * t);
+        rotation[0] = FUN_001fa5c8(fourth.f[0], third.f[0]);
+        rotation[0] *= t;
+        rotation[0] = FUN_001fa580(third.f[0], rotation[0]);
+        rotation[1] = FUN_001fa5c8(fourth.f[1], third.f[1]);
+        rotation[1] *= t;
+        rotation[1] = FUN_001fa580(third.f[1], rotation[1]);
+        rotation[2] = FUN_001fa5c8(fourth.f[2], third.f[2]);
+        rotation[2] *= t;
+        rotation[2] = FUN_001fa580(third.f[2], rotation[2]);
         FUN_L00_002ea9d8(&result);
         FUN_L00_002eaa30(rotation);
         return;
