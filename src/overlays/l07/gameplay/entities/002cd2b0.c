@@ -1307,8 +1307,8 @@ typedef struct {
 void FUN_L07_0030cf90(struct Moby *moby) {
     FUN_L07_0030cf90_Vars *vars = (FUN_L07_0030cf90_Vars *)moby->pvars;
     Vec4 origin;
-    Vec4 step;
     Vec4 rotated;
+    Vec4 step;
     struct Moby *target;
     s16 voice;
     f32 distance;
@@ -1353,21 +1353,22 @@ void FUN_L07_0030cf90(struct Moby *moby) {
             target->state == 0xfe || target->state == 0xfd ||
             target->state != vars->target_state_word) {
             distance = vector_distance(&moby->pos, &origin);
-            if (distance <= vars->radius) {
+            if (vars->radius < distance) {
+                if (vars->arrival_sound != -1)
+                    play_moby_sound(vars->arrival_sound, 0, moby);
+                if (vars->flag_index != -1)
+                    ((s32 *)0x184528)[vars->flag_index] = 1;
+                moby->state = 3;
+            } else {
                 step.q = 0;
                 step.f[1] = -(frame_scale * 0.01f);
-                rotated.q = 0;
-                rotated.f[1] = (moby->oclass == 0x3f5 || moby->oclass == 0x429) ?
-                               -step.f[1] : step.f[1];
+                rotated = step;
+                if (moby->oclass == 0x3f5 || moby->oclass == 0x429)
+                    rotated.f[1] = -rotated.f[1];
                 FUN_001f9cf8(&step, &rotated, &moby->unkC0);
                 add_vector_xyz(&moby->pos, &moby->pos, &step);
                 return;
             }
-            if (vars->arrival_sound != -1)
-                play_moby_sound(vars->arrival_sound, 0, moby);
-            if (vars->flag_index != -1)
-                ((s32 *)0x184528)[vars->flag_index] = 1;
-            moby->state = 3;
         } else {
             play_moby_sound(vars->trigger_sound, 0, moby);
             moby->state = 4;
@@ -1389,7 +1390,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
         target = (struct Moby *)((u32)D_L07_0015FFD8 + (u32)vars->target_index * 0x100);
         if (vars->target_index == -1 || target == 0 ||
             target->state == 0xfe || target->state == 0xfd ||
-            target->state == (u16)vars->target_state) {
+            target->state == vars->target_state) {
             play_moby_sound(vars->trigger_sound, 0, moby);
             moby->state = 2;
             return;
@@ -1403,9 +1404,11 @@ void FUN_L07_0030cf90(struct Moby *moby) {
             position->z = vars->origin_z;
             position->w = 0.0f;
             voice = vars->sound_slot;
-            if (voice != -1 && *(struct Moby **)(D_0013E550 + voice * 0x70 + 0x88) == moby &&
-                D_0013E550[voice * 0x70 + 0x74] != 0)
-                release_voice_slot(voice);
+            if (voice != -1) {
+                u8 *slot = (u8 *)D_0013E550 + voice * 0x70;
+                if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74] != 0)
+                    release_voice_slot(voice);
+            }
             vars->sound_slot = -1;
             if (vars->arrival_sound != -1)
                 play_moby_sound(vars->arrival_sound, 0, moby);
@@ -1417,9 +1420,9 @@ void FUN_L07_0030cf90(struct Moby *moby) {
         }
         step.q = 0;
         step.f[1] = step_size;
-        rotated.q = 0;
-        rotated.f[1] = (moby->oclass == 0x3f5 || moby->oclass == 0x429) ?
-                       -step.f[1] : step.f[1];
+        rotated = step;
+        if (moby->oclass == 0x3f5 || moby->oclass == 0x429)
+            rotated.f[1] = -rotated.f[1];
         FUN_001f9cf8(&step, &rotated, &moby->unkC0);
         add_vector_xyz(position, position, &step);
         break;
