@@ -1015,9 +1015,8 @@ void FUN_L00_00299a68(void) {
     FUN_L00_002660c0(0);
     FUN_L00_001f9838(8);
     D_L00_0015F5D8 = 1;
-    D_L00_0015F5C4 = 7;
     D_L00_0015F3FC_298840 = 1.0f;
-    FUN_L00_001ff040((char *)&D_L00_0015F622 - 2, 0, 0x10);
+    FUN_L00_001ff040((D_L00_0015F5C4 = 7, (char *)&D_L00_0015F622 - 2), 0, 0x10);
     offset = D_L00_001611CC - 0xE0000;
     second_destination = D_L00_00173E00_298840.x8 + offset;
     first_destination = D_L00_00173E00_298840.x4 + offset;
