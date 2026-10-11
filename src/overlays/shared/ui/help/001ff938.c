@@ -37,11 +37,11 @@ extern int D_L15_0015F5CC;
 extern u8 D_0013D4DC[];
 
 void FUN_L15_001ff938(void) {
-    u8 *base = (u8 *)&hero;
     u8 *moby;
     u32 copy[4] __attribute__((aligned(16)));
     int period, red, green, blue, alpha, i;
     u32 color;
+    u8 red_byte, green_byte, blue_byte;
     float pulse;
 
     FUN_L00_00232670();
@@ -57,7 +57,7 @@ void FUN_L15_001ff938(void) {
     FUN_L00_00208a10();
     FUN_L00_00207c48();
     FUN_L00_00207a58();
-    FUN_L00_002484e0(base + 0x80);
+    FUN_L00_002484e0((u8 *)&hero + 0x80);
 
     if (hero.vehicle_mode == 2) {
         if (D_0015EDB3 != 0)
@@ -67,7 +67,7 @@ void FUN_L15_001ff938(void) {
         moby = (u8 *)hero.moby;
         if (((*(u16 *)(moby + 0x34) ^ 1) & 1) != 0) {
             moby_point_position(moby, 6, copy);
-            *(u128 *)(base + 0x1D80) = *(u128 *)copy;
+            *(u128 *)((u8 *)&hero + 0x1D80) = *(u128 *)copy;
             FUN_L00_00207d00();
         }
     }
@@ -75,12 +75,13 @@ void FUN_L15_001ff938(void) {
     if (hero.vehicle_mode == 3) {
         if (D_0015EDB1 != 0)
             *(u32 *)(0x0017C1CC + (((u32)&FUN_L15_001ff938 == 0x0020EFA8) ? 0x400 : 0)) = 0x3ff33333;
+        alpha = 0x80;
         period = FUN_001f96f8(0xAA);
         if (hero.unk22E0 == 2)
             period = FUN_001f96f8(0x32);
         else if (hero.unk22E0 == 1)
             period = FUN_001f96f8(0x5A);
-        pulse = FUN_001f9de0((((float)(D_L15_0015F5CC % period) / FUN_001fa6c0(period)) * 2.0f) * 3.1415927f - 3.1415927f);
+        pulse = FUN_001f9de0((((float)(D_L15_0015F5CC % period) / FUN_001fa6c0(period)) * 2.0f) * 3.1415927f + -3.1415927f);
         red = FUN_001fa6d0(pulse * 20.0f) + 0x32;
         green = FUN_001fa6d0(pulse * 70.0f) + 0xB4;
         blue = FUN_001fa6d0(pulse * 10.0f) + 0x14;
@@ -89,32 +90,37 @@ void FUN_L15_001ff938(void) {
         if (green > 0xFF) green = 0xFF;
         *(u16 *)(moby + 0x34) |= 0x10;
         if (hero.unk22E0 == 2)
-            color = 0x80000000 | (blue << 16) | ((red / 2) << 8) | green;
+            color = (alpha << 24) | (blue << 16) | ((red / 2) << 8) | green;
         else
-            color = 0x80000000 | (blue << 16) | (green << 8) | red;
+            color = (alpha << 24) | (blue << 16) | (green << 8) | red;
         *(u32 *)(moby + 0x90) = FUN_001fa6e0(0.1f, *(u32 *)(moby + 0x90), color);
         for (i = 0; i < 3; i++)
-            moby_point_position(hero.moby, i, base + 0x1D50 + i * 16);
+            moby_point_position(hero.moby, i, (u8 *)&hero + 0x1D50 + i * 16);
         alpha = 0x30;
         moby = (u8 *)hero.moby;
+        red_byte = moby[0x90];
+        green_byte = moby[0x91];
+        blue_byte = moby[0x92];
         if (hero.unk22DE != 0)
-            alpha = FUN_001fa6d0((FUN_001fa6c0_inherited() / FUN_001fa6c0(0x12)) * 48.0f);
-        *(u32 *)(base + 0x22E4) = (alpha << 24) | (moby[0x92] << 16) | (moby[0x91] << 8) | moby[0x90];
+            alpha = FUN_001fa6d0((FUN_001fa6c0_inherited() / FUN_001fa6c0(0x12)) * (float)alpha);
+        *(u32 *)((u8 *)&hero + 0x22E4) = (alpha << 24) | (blue_byte << 16) | (green_byte << 8) | red_byte;
         FUN_L00_00207d00();
         hero.unk22E0 = 0;
         if (hero.vehicle_mode == 3) {
             int pending = hero.pending_item[0];
-            if (pending == 0 || pending == 0x1F) {
-                hero.pending_item[0] = 0;
-                if (hero.unk12E7 != 0 && *(int *)(base + 0x300) != 0 && D_0013D4DC[0] != 0 && hero.unk22DE == 0) {
+            if (pending != 0 && pending != 0x1F) {
+                if (hero.unk22DE == 0) {
                     FUN_L00_00216de8(0x19, 0);
                     hero.unk22DC = 1;
                     hero.unk22DE = 0x12;
                 }
-            } else if (hero.unk22DE == 0) {
-                FUN_L00_00216de8(0x19, 0);
-                hero.unk22DC = 1;
-                hero.unk22DE = 0x12;
+            } else {
+                hero.pending_item[0] = 0;
+                if (hero.unk12E7 != 0 && *(int *)((u8 *)&hero + 0x300) != 0 && D_0013D4DC[0] != 0 && hero.unk22DE == 0) {
+                    FUN_L00_00216de8(0x19, 0);
+                    hero.unk22DC = 1;
+                    hero.unk22DE = 0x12;
+                }
             }
         }
     }
