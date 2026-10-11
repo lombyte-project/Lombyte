@@ -31,10 +31,10 @@ void FUN_L00_00221310(void) {
         FUN_L00_00213880();
     }
     if (D_L00_0015F5CC % 3 == 0) {
-        hero.unk248 = 4.0f;
+        hero.wall_probe_distance = 4.0f;
         hero.unk254 = 0;
         hero.unk255 = 0;
-        if (FUN_L00_0020a240(&hero.unk248, 0.7f, 4.0f)) {
+        if (FUN_L00_0020a240(&hero.wall_probe_distance, 0.7f, 4.0f)) {
             hero.unk250 = atan2_f(coll_hit.normal_z, vector_length_xy(&coll_hit.normal_x));
             if (coll_hit.moby != 0) {
                 hero.unk255 = 1;
@@ -136,7 +136,7 @@ void FUN_L00_002215c8(void) {
     hero.unk1A0++;
     hero.unk1A4++;
     FUN_001f9740_2215c8(&hero.unk1C4);
-    FUN_001f9740_2215c8(&hero.unk1C0);
+    FUN_001f9740_2215c8(&hero.invulnerable_frames);
     fast_dec_timer(&hero.unk1B2);
     FUN_001f9740_2215c8(&hero.unk1B8);
     fast_dec_timer(&hero.unk1D8);
@@ -151,7 +151,7 @@ void FUN_L00_002215c8(void) {
     FUN_001f9740_2215c8(&hero.unk1CC);
     FUN_001f9740_2215c8(&hero.unk1D0);
     FUN_001f9740_2215c8(&hero.unk1D4);
-    fast_dec_timer(&hero.unk1E8);
+    fast_dec_timer(&hero.fidget_cooldown);
     fast_dec_timer(&hero.unk1E0);
     fast_dec_timer(&hero.unk1EE);
     fast_dec_timer(&hero.unk1EA);
@@ -178,7 +178,7 @@ void FUN_L00_002215c8(void) {
     }
     if (hero.unk22DE != 0 && fast_dec_timer(&hero.unk22DE) != 0 &&
         hero.health.hp != 0 && D_L00_0015F5C4_2215c8 == 0) {
-        if (hero.unk20A4 == 3) {
+        if (hero.vehicle_mode == 3) {
             FUN_L00_00210b30_2215c8();
             if (FUN_L00_00266d60_2215c8(0x80, FUN_001f96f8_2215c8(0x12), 0)) {
                 hero.unk20A6 = 1;
@@ -198,7 +198,7 @@ void FUN_L00_002215c8(void) {
             }
         }
     }
-    if (hero.unk20A4 == 2) {
+    if (hero.vehicle_mode == 2) {
         fast_dec_timer(&hero.unk1636);
     }
     for (i = 0; i < 5; i++) {
@@ -227,25 +227,25 @@ void FUN_L00_002215c8(void) {
     hero.unk1E2 = 0;
 skip:
     FUN_L00_00221b68_2215c8();
-    switch (hero.unk20A4) {
+    switch (hero.vehicle_mode) {
     case 1:
         FUN_L00_00233660_2215c8(&hero.motion.unkD0, 0.0f, 0.0f, 0.4f);
-        hero.unk2288 = 2.125f;
-        hero.unk228C = 1.25f;
+        hero.reach_distance = 2.125f;
+        hero.reach_height = 1.25f;
         break;
     case 2:
         FUN_L00_00233660_2215c8(&hero.motion.unkD0, 0.0f, 0.0f, 4.0f);
-        hero.unk2288 = 15.0f;
-        hero.unk228C = 3.0f;
+        hero.reach_distance = 15.0f;
+        hero.reach_height = 3.0f;
         break;
     default:
         FUN_L00_00233660_2215c8(&hero.motion.unkD0, 0.0f, 0.0f, 0.7f);
         if (D_0013D4E2_2215c8) {
-            hero.unk2288 = 12.0f;
-            hero.unk228C = 4.5f;
+            hero.reach_distance = 12.0f;
+            hero.reach_height = 4.5f;
         } else {
-            hero.unk2288 = 3.0f;
-            hero.unk228C = 1.75f;
+            hero.reach_distance = 3.0f;
+            hero.reach_height = 1.75f;
         }
         break;
     }
@@ -348,7 +348,7 @@ int FUN_L00_00221df8(void) {
     FUN_L00_002118c8(0, 1.0f);
     {
         struct Hero *g = &hero;
-        a = fast_subtract_rotations(g->motion.unk180, g->motion.rot.f[2]);
+        a = fast_subtract_rotations(g->motion.move_yaw, g->motion.rot.f[2]);
     }
     if (fast_difference_between_rotations(a, 3.1415927f) < 0.7853982f)
         r = 3;
@@ -697,7 +697,7 @@ int hero_set_state(int a, int b) {
         p->state.step = 0;
         p->unk20A5 = 0;
         p->unk20AC = 0;
-        if (p->unk20A4 == 0) {
+        if (p->vehicle_mode == 0) {
             *(int *)(moby + 0x98) = 0;
             p->unk20AD = 0;
             p->unk20A7 = 0;
@@ -706,7 +706,7 @@ int hero_set_state(int a, int b) {
             p->unk22E0 = 0;
             FUN_L00_00262840(&p->trail.pos[0]);
         }
-        if (p->unk20A4 == 3) {
+        if (p->vehicle_mode == 3) {
             int s = p->state.current;
             if (!(s >= 0x53 && s <= 0x59) && !(s >= 0x65 && s <= 0x67) && s != 0 && s != 1) {
                 FUN_L00_0020b930();
@@ -725,7 +725,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         p->unk1010 = FUN_L00_00257b90(scale_game_frames(0x32), scale_game_frames(0x64));
         FUN_L00_0020a500();
-        if (p->unk20A4 != 0) {
+        if (p->vehicle_mode != 0) {
             FUN_L00_00227638();
             return 1;
         }
@@ -737,7 +737,7 @@ int hero_set_state(int a, int b) {
         }
         {
             struct Hero *r = &hero;
-            if (r->unk12EA != 0 && r->unk30C.s == 0) {
+            if (r->on_slip_ground != 0 && r->frames_off_ground.s == 0) {
                 hero_set_state(0x79, 1);
                 return 0;
             }
@@ -807,7 +807,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         p->health.hp = 0;
         p->unk694 = p->motion.unk100.f[2] * 0.2f;
-        p->unk69C = p->height_threshold - 0.37f;
+        p->unk69C = p->water_surface_z - 0.37f;
         if (p->unk694 < frame_time * -7.0f)
             p->unk694 = frame_time * -7.0f;
         p->unk20A7 = 1;
@@ -922,7 +922,7 @@ int hero_set_state(int a, int b) {
             s->unk694 = s->motion.unk100.f[2] * 0.37f;
             if (s->unk694 < frame_time * -7.0f)
                 s->unk694 = frame_time * -7.0f;
-            s->unk69C = s->height_threshold;
+            s->unk69C = s->water_surface_z;
             s->unk6A0 = 0;
             s->unk690 = s->motion.pos.f[2] - s->unk69C - -0.12f;
             qcopy(&s->motion.unk150, &s->motion.unk110);
@@ -952,7 +952,7 @@ int hero_set_state(int a, int b) {
         {
             int t = scale_game_frames(0x4D);
             struct Hero *q = &hero;
-            q->unk1C0 = t;
+            q->invulnerable_frames = t;
             if (b) {
                 if (q->state.current == 0x75) {
                     FUN_L00_002323b8(0x70, 3, -3.0f);
@@ -1119,7 +1119,7 @@ int hero_set_state(int a, int b) {
             q->unk3BE = 0;
             FUN_L00_002118c8(0, 1.0f);
             if (1.5707964f <
-                fast_difference_between_rotations(q->motion.rot.f[2], q->motion.unk180)) {
+                fast_difference_between_rotations(q->motion.rot.f[2], q->motion.move_yaw)) {
                 if (q->state.prev_control_mode == 7 || q->state.prev == 3 ||
                     q->state.prev2 == 3) {
                     struct Hero *r = &hero;
@@ -1130,7 +1130,7 @@ int hero_set_state(int a, int b) {
         {
             struct Hero *s = &hero;
             s->rand_timer.range = 0x68;
-            if (s->unk12EA != 0 && s->unk30C.s == 0) {
+            if (s->on_slip_ground != 0 && s->frames_off_ground.s == 0) {
                 hero_set_state(0x79, 1);
                 return 0;
             }
@@ -1196,14 +1196,14 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         p->ground_speed = vector_length_xy(&p->motion.unk110);
         p->unk20AC = 1;
-        if (p->unk20A4 == 0)
+        if (p->vehicle_mode == 0)
             FUN_L00_0020e698();
         if (b) {
-            if (p->unk20A4 == 3) {
+            if (p->vehicle_mode == 3) {
                 FUN_L00_002323b8(1, 0, (float)scale_game_frames(8));
-            } else if (p->unk20A4 == 1) {
+            } else if (p->vehicle_mode == 1) {
                 FUN_L00_002323b8(2, 0, (float)scale_game_frames(8));
-            } else if (p->unk20A4 == 0) {
+            } else if (p->vehicle_mode == 0) {
                 FUN_L00_002323b8(p->state.step + 3,
                                  ((int *)&D_L00_0015F6D8)[p->state.step],
                                  (float)scale_game_frames(8));
@@ -1231,7 +1231,7 @@ int hero_set_state(int a, int b) {
             hero_set_state(0x2F, 1);
             return 0;
         }
-        if (p->unk12EA != 0 && p->unk30C.s == 0) {
+        if (p->on_slip_ground != 0 && p->frames_off_ground.s == 0) {
             hero_set_state(0x79, 1);
             return 0;
         }
@@ -1245,7 +1245,7 @@ int hero_set_state(int a, int b) {
         }
         if (b) {
             struct Hero *q = &hero;
-            float d = q->unkAA8;
+            float d = q->anim_frame;
             int id = 6;
             if (FUN_L00_002050b8(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f)
                 id = 5;
@@ -1262,7 +1262,7 @@ int hero_set_state(int a, int b) {
         qcopy(&p->motion.unk150, v);
         if (b) {
             int id = 6;
-            float d = p->unkAA8;
+            float d = p->anim_frame;
             if (FUN_L00_002050b8(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f)
                 id = 5;
             FUN_L00_002323b8(id, 4, (float)scale_game_frames(9));
@@ -1276,7 +1276,7 @@ int hero_set_state(int a, int b) {
         p->ground_speed = vector_length_xy(&p->motion.unk110);
         if (frame_time * 7.0f < p->ground_speed)
             p->ground_speed = frame_time * 7.0f;
-        if (p->unk12EA != 0 && p->unk30C.s == 0) {
+        if (p->on_slip_ground != 0 && p->frames_off_ground.s == 0) {
             hero_set_state(0x79, 1);
             return 0;
         }
@@ -1313,7 +1313,7 @@ int hero_set_state(int a, int b) {
             *(unsigned int *)(h + 0x64) =
                 *(unsigned int *)(h + 0x64) | (1 << current_level_index) | 0x80000000;
         }
-        p->motion.unk180 =
+        p->motion.move_yaw =
             FUN_001f9e90(*(float *)(((char *)p->unk964) + 0x10) - p->motion.pos.f[0],
                          *(float *)(((char *)p->unk964) + 0x14) - p->motion.pos.f[1]);
         if (b) {
@@ -1403,7 +1403,7 @@ int hero_set_state(int a, int b) {
                 FUN_L00_002323b8(0x34, 0, (float)scale_game_frames(0xB));
                 {
                     struct Hero *r = &hero;
-                    r->unkA90 = 0.7f;
+                    r->anim_speed = 0.7f;
                 }
             }
         }
@@ -1576,7 +1576,7 @@ int hero_set_state(int a, int b) {
         p->unk940 = frame_time_sq * 24.0f;
         p->unk944 = frame_time_sq * 7.0f;
         if (p->state.current == 0x77) {
-            if (p->unk20A4 == 0) {
+            if (p->vehicle_mode == 0) {
                 p->health.unk22B2 = FUN_L00_00216de8(0x17, 0x20);
             }
             p->unk950 =
@@ -1590,11 +1590,11 @@ int hero_set_state(int a, int b) {
             q->state.step = 0;
             qcopy(&q->motion.velocity, &q->motion.unk110);
             if (b) {
-                if (q->unk20A4 == 1) {
+                if (q->vehicle_mode == 1) {
                     FUN_L00_002323b8(4, 0, (float)scale_game_frames(8));
                     return 1;
                 }
-                if (q->unk20A4 == 3) {
+                if (q->vehicle_mode == 3) {
                     FUN_L00_002323b8(6, 0, (float)scale_game_frames(8));
                     return 1;
                 }
@@ -2064,7 +2064,7 @@ int hero_set_state(int a, int b) {
                 u->unk494 = 1.0f;
                 u->unk43C = FUN_L00_0020d658(scale_game_frames(0xA));
                 u->unk450 = FUN_L00_00221df8();
-                u->unk438 = u->motion.unk180;
+                u->unk438 = u->motion.move_yaw;
                 if (frame_time * 1.5f < u->motion.unk164) {
                     u->unk454 = u->motion.unk164;
                 } else {
@@ -2105,7 +2105,7 @@ int hero_set_state(int a, int b) {
                     FUN_L00_002323b8(id, 0, (float)scale_game_frames(5));
                 } else if (s == 9) {
                     int id = 8;
-                    int n = truncate_float_to_s32(q->unkAA8);
+                    int n = truncate_float_to_s32(q->anim_frame);
                     if (FUN_L00_002050b8(*(unsigned char *)(moby + 0x52)) == 4)
                         id = D_L00_0017BDD8[n];
                     FUN_L00_002323b8(id, 0, (float)scale_game_frames(5));
@@ -2133,7 +2133,7 @@ int hero_set_state(int a, int b) {
                     FUN_L00_002323b8(0x11, 0, (float)scale_game_frames(5));
                 } else if (s == 0xE) {
                     FUN_L00_002323b8(0x16, 3, (float)scale_game_frames(7));
-                    q->unkA90 = frame_scale * 0.8f;
+                    q->anim_speed = frame_scale * 0.8f;
                 } else if (s == 0xF) {
                     FUN_L00_002323b8(0x15, 0, (float)scale_game_frames(5));
                 } else if (s == 0xB) {
@@ -2188,7 +2188,7 @@ int hero_set_state(int a, int b) {
             *(unsigned int *)(h + 4) = *(unsigned int *)(h + 4) | (1 << current_level_index) | 0x80000000;
             q = &hero;
             q->unk2284 = 0x50;
-            q->unkA60 = 4;
+            q->attack_record = 4;
             q->saved_item[0] = 0;
             FUN_L00_00214ed8(8.0f, 1.0471976f, -1.0f);
             *(int *)&q->unkA70 = 0;
@@ -2227,7 +2227,7 @@ int hero_set_state(int a, int b) {
             *(unsigned int *)(h2 + 0x12C) =
                 *(unsigned int *)(h2 + 0x12C) | (1 << current_level_index) | 0x80000000;
             q = &hero;
-            q->unkA60 = 3;
+            q->attack_record = 3;
             q->saved_item[0] = 0;
             FUN_L00_00214ed8(14.0f, 0.5235988f, -1.0f);
             q->unkA7C = q->unkA7C == 0;
@@ -2267,15 +2267,15 @@ int hero_set_state(int a, int b) {
             q = &hero;
             *(unsigned int *)(h + 0x44) =
                 *(unsigned int *)(h + 0x44) | (1 << current_level_index) | 0x80000000;
-            e = &D_L00_0017BC28[q->unkA60];
+            e = &D_L00_0017BC28[q->attack_record];
             q->saved_item[0] = 0;
             k = 0;
-            if (q->state.prev_control_mode == 6 && e->a == 0 && q->unkAA8 < (float)e->c) {
+            if (q->state.prev_control_mode == 6 && e->a == 0 && q->anim_frame < (float)e->c) {
                 k = (e->b + 1) % 3;
             }
             {
                 struct Hero *r = &hero;
-                r->unkA60 = k;
+                r->attack_record = k;
             }
             FUN_L00_00214ed8(5.0f, 0.7853982f, 0.7853982f);
             if (b) {
@@ -2310,17 +2310,17 @@ int hero_set_state(int a, int b) {
         }
         case 0x51: {
             struct Hero *q = &hero;
-            T2C_222B80 *e = &D_L00_0017BC28[q->unkA60];
+            T2C_222B80 *e = &D_L00_0017BC28[q->attack_record];
             int k = 0;
             if ((q->state.prev_control_mode == 6 ||
                  (q->state.prev2_control_mode == 6 &&
                   (unsigned int)(*(unsigned char *)(((char *)q->moby) + 0x53) - 0xF) < 2)) &&
-                e->a == 0 && q->unkAA8 < (float)e->c) {
+                e->a == 0 && q->anim_frame < (float)e->c) {
                 k = (e->b + 1) % 2;
             }
             {
                 struct Hero *r = &hero;
-                r->unkA60 = k + 7;
+                r->attack_record = k + 7;
             }
             FUN_L00_00214ed8(5.0f, 0.7853982f, 0.7853982f);
             if (b) {
@@ -2356,15 +2356,15 @@ int hero_set_state(int a, int b) {
         p->unkA64 = 0;
         if (p->state.prev == 0x70) {
             int v = 5;
-            if (D_L00_0017BC28[p->unkA60].b == 0)
+            if (D_L00_0017BC28[p->attack_record].b == 0)
                 v = 6;
-            p->unkA60 = v;
+            p->attack_record = v;
         } else {
-            p->unkA60 = 5;
+            p->attack_record = 5;
         }
         {
             struct Hero *q = &hero;
-            int e = D_L00_0017BC28[q->unkA60].b;
+            int e = D_L00_0017BC28[q->attack_record].b;
             if (b) {
                 char *m;
                 int z = e == 0;
@@ -2382,18 +2382,18 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0xF;
         p->unkA64 = 0;
         if (p->state.prev == 0x2B) {
-            p->unkA60 = p->unkA60 == 0;
+            p->attack_record = p->attack_record == 0;
         } else {
-            p->unkA60 = 0;
+            p->attack_record = 0;
         }
         if (b) {
             struct Hero *q = &hero;
             char *m;
             int n = scale_game_frames(4);
-            FUN_L00_002323b8(q->unkA60 + 0x4E, 0, (float)n);
+            FUN_L00_002323b8(q->attack_record + 0x4E, 0, (float)n);
             m = FUN_L00_0020d460(0);
             if (FUN_L00_00211360(m))
-                blend_moby_animation(m, q->unkA60 + 0xC, 0, n);
+                blend_moby_animation(m, q->attack_record + 0xC, 0, n);
         }
         break;
     }
@@ -2404,7 +2404,7 @@ int hero_set_state(int a, int b) {
         p->ground_speed = frame_time * 9.0f;
         if (b) {
             char *m;
-            T2C_222B80 *e = &D_L00_0017BC28[p->unkA60];
+            T2C_222B80 *e = &D_L00_0017BC28[p->attack_record];
             int k = e->b;
             int n;
             if (e->a == 1)
@@ -2444,7 +2444,7 @@ int hero_set_state(int a, int b) {
         }
         {
             struct Hero *q = &hero;
-            q->unk1C0 = scale_game_frames(0x4D);
+            q->invulnerable_frames = scale_game_frames(0x4D);
             if (b) {
                 FUN_L00_002323b8(0x10, 3, -3.0f);
                 *(float *)(((char *)q->moby) + 0x54) =
@@ -2535,7 +2535,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
-        if (p->unk12EA != 0 && p->unk30C.s == 0) {
+        if (p->on_slip_ground != 0 && p->frames_off_ground.s == 0) {
             hero_set_state(0x52, 1);
             return 0;
         }
@@ -2583,7 +2583,7 @@ int hero_set_state(int a, int b) {
         FUN_L00_0025f730(&p->motion.velocity, frame_time * 5.0f);
         FUN_L00_002050c0(1);
         p->unk1EE = scale_game_frames(0x2D);
-        p->unk1C0 = scale_game_frames(0x32);
+        p->invulnerable_frames = scale_game_frames(0x32);
         if (b) {
             FUN_L00_002323b8(6, 3, -3.0f);
             *(float *)(((char *)p->moby) + 0x54) =
@@ -2593,7 +2593,7 @@ int hero_set_state(int a, int b) {
     }
     case 0x44: {
         struct Hero *p = &hero;
-        if (p->unk12EA != 0 && p->unk30C.s == 0) {
+        if (p->on_slip_ground != 0 && p->frames_off_ground.s == 0) {
             hero_set_state(0x52, 1);
             return 0;
         }
@@ -2674,10 +2674,10 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         if (p->state.prev == 0x60 ||
             (p->state.prev2 == 0x60 && scale_game_frames(0xA) > p->state.prev_timer)) {
-            p->unkA60 = (p->unkA60 + 1) % 3;
+            p->attack_record = (p->attack_record + 1) % 3;
         } else {
             struct Hero *q = &hero;
-            q->unkA60 = 0;
+            q->attack_record = 0;
         }
         {
             struct Hero *r = &hero;
@@ -2685,7 +2685,7 @@ int hero_set_state(int a, int b) {
             if (r->state.prev == 0x60)
                 n = scale_game_frames(0xD);
             if (b)
-                FUN_L00_002323b8(r->unkA60 + 9, 1, (float)n);
+                FUN_L00_002323b8(r->attack_record + 9, 1, (float)n);
         }
         break;
     }
@@ -2747,7 +2747,7 @@ int hero_set_state(int a, int b) {
         FUN_L00_00213de8(0.5f);
         qcopy(&p->motion.velocity, &p->motion.unk110);
         FUN_L00_0025f730(&p->motion.velocity, frame_time * 7.0f);
-        p->unk1C0 = scale_game_frames(0x4D);
+        p->invulnerable_frames = scale_game_frames(0x4D);
         if (b) {
             FUN_L00_002323b8(6, 3, -3.0f);
             *(float *)(((char *)p->moby) + 0x54) =
@@ -2828,7 +2828,7 @@ int hero_set_state(int a, int b) {
         qcopy(&p->motion.velocity, &p->motion.unk110);
         FUN_L00_0025f730(&p->motion.velocity, frame_time * 5.0f);
         FUN_L00_002050c0(1);
-        p->unk1C0 = scale_game_frames(0x4D);
+        p->invulnerable_frames = scale_game_frames(0x4D);
         if (b) {
             FUN_L00_002323b8(2, 3, -3.0f);
             *(float *)(((char *)p->moby) + 0x54) =
@@ -2842,7 +2842,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         if (p->unk570 == 0)
             FUN_L00_002050c0(1);
-        p->unk1C0 = scale_game_frames(0x4D);
+        p->invulnerable_frames = scale_game_frames(0x4D);
         p->unk5CC = frame_time * 2.5f;
         if (frame_time * 2.5f < p->unk5B0)
             p->unk5B0 = frame_time * 2.5f;
@@ -3067,7 +3067,7 @@ int FUN_L00_002279b0(void) {
         if (p->state.control_mode == 0x11) {
             if (p->state.step != 1) {
                 if (0.0f < p->motion.unk100.f[2]) {
-                    if (p->height_threshold - 0.4f < p->motion.pos.f[2]) {
+                    if (p->water_surface_z - 0.4f < p->motion.pos.f[2]) {
                         r = 1;
                     }
                 }
@@ -3077,7 +3077,7 @@ int FUN_L00_002279b0(void) {
             if (t < absolute_float(p->motion.velocity.f[2]) + 0.07f) {
                 t = absolute_float(p->motion.velocity.f[2]) + 0.07f;
             }
-            if (absolute_float(p->height_threshold - (p->motion.pos.f[2] + 0.45f)) < t) {
+            if (absolute_float(p->water_surface_z - (p->motion.pos.f[2] + 0.45f)) < t) {
                 if (p->state.control_mode != 4 || p->unk41E != 0) {
                     if (0.8f < p->unk22A4 && p->motion.unk100.f[2] < 0.0f) {
                         r = 1;
@@ -3085,7 +3085,7 @@ int FUN_L00_002279b0(void) {
                 }
             }
             q = &hero;
-            if (q->motion.pos.f[2] < q->height_threshold - 0.8f) {
+            if (q->motion.pos.f[2] < q->water_surface_z - 0.8f) {
                 if (q->state.control_mode != 4 || q->unk41E != 0) {
                     r = 1;
                 }
@@ -3099,7 +3099,7 @@ int FUN_L00_002279b0(void) {
     }
     if (p->state.current == 0x12) {
         if (p->unk41E != 0) {
-            if (p->motion.pos.f[2] < p->height_threshold - 0.7f) {
+            if (p->motion.pos.f[2] < p->water_surface_z - 0.7f) {
                 r = 1;
             }
         }
@@ -3115,7 +3115,7 @@ int FUN_L00_002279b0(void) {
         FUN_L00_002126b8(v1, v2, 0, scale, 1.3f);
         if (func_L00_001EFFF0(v1, v2, 2, *(int *)&u->moby, 0) != 0) {
             int s = FUN_001f0b58();
-            u->unk12E0 = s;
+            u->ground_type = s;
             if ((short)s == 0) {
                 v1[2] = D_L00_00173E68 - 0.01f;
                 if (func_L00_001EFFF0(v1, v2, 2, *(int *)&u->moby, 0) == 0) {
@@ -3662,16 +3662,16 @@ void FUN_L00_00228c18(void) {
     int below_lower;
     float limit;
 
-    if (hero.unk20A4 == 3) {
-        hero.unkA90 = hero.motion.speed_xy * 54.0f;
-        if (hero.unkA90 < 0.7f)
-            hero.unkA90 = 0.7f;
+    if (hero.vehicle_mode == 3) {
+        hero.anim_speed = hero.motion.speed_xy * 54.0f;
+        if (hero.anim_speed < 0.7f)
+            hero.anim_speed = 0.7f;
         return;
     }
-    if (hero.unk20A4 == 1) {
-        hero.unkA90 = hero.motion.speed_xy * 90.0f;
-        if (hero.unkA90 < 0.5f)
-            hero.unkA90 = 0.5f;
+    if (hero.vehicle_mode == 1) {
+        hero.anim_speed = hero.motion.speed_xy * 90.0f;
+        if (hero.anim_speed < 0.5f)
+            hero.anim_speed = 0.5f;
         return;
     }
 
@@ -3712,22 +3712,22 @@ void FUN_L00_00228c18(void) {
     }
     switch (hero.state.step) {
     case 0:
-        hero.unkA90 = hero.ground_speed * 157.0f;
-        if (hero.unkA90 < 0.6f)
-            hero.unkA90 = 0.6f;
+        hero.anim_speed = hero.ground_speed * 157.0f;
+        if (hero.anim_speed < 0.6f)
+            hero.anim_speed = 0.6f;
         limit = 4.0f;
         break;
     case 1:
-        hero.unkA90 = hero.ground_speed * 14.0f;
-        if (hero.unkA90 < 0.6f)
-            hero.unkA90 = 0.6f;
+        hero.anim_speed = hero.ground_speed * 14.0f;
+        if (hero.anim_speed < 0.6f)
+            hero.anim_speed = 0.6f;
         limit = 2.2f;
         break;
     default:
         return;
     }
-    if (limit < hero.unkA90)
-        hero.unkA90 = limit;
+    if (limit < hero.anim_speed)
+        hero.anim_speed = limit;
 }
 #endif
 #define NOT_SDA

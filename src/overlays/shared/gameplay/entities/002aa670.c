@@ -264,7 +264,7 @@ void FUN_L00_002aa670(M910 *m) {
         mark_moby_for_removal(m);
         return;
     }
-    if (hero.unk20A4 != 0 && m->state == 0) {
+    if (hero.vehicle_mode != 0 && m->state == 0) {
         mark_moby_for_removal(m);
         return;
     }

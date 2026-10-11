@@ -16,7 +16,7 @@ void FUN_L00_002377b8(char *p) {
         *(int *)(p + 8) = 10;
     else
         *(int *)(p + 8) = 5;
-    if (hero.items[0].item_id == 9 && hero.unk20A4 == 0) {
+    if (hero.items[0].item_id == 9 && hero.vehicle_mode == 0) {
         *(int *)(p + 0x7C) = FUN_001f96f8(0x78) + 30;
     } else if (*(int *)(p + 0x7C) > 30) {
         *(int *)(p + 0x7C) = 30;
@@ -571,7 +571,7 @@ s32 FUN_L00_00239810(Hud *m) {
     Pt *e;
     u8 *q;
 
-    if (hero.unk20A4 == 2)
+    if (hero.vehicle_mode == 2)
         goto out;
     if (hero.state.current == 0x32)
         goto out;
@@ -601,7 +601,7 @@ s32 FUN_L00_00239810(Hud *m) {
     mode = D_0015EDA0;
     if (cnt == 0)
         sel = 0x1E;
-    if (hero.unk20A4 == 1)
+    if (hero.vehicle_mode == 1)
         mode = hero.health.unk22AC;
     if (mode == 8) {
         tab = D_L00_0017E478;
@@ -870,7 +870,7 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     if (pal_mode_reload[0] == 0)
         y = D_0013E504 - 50;
     x = m->x;
-    if (hero.unk20A4 == 2)
+    if (hero.vehicle_mode == 2)
         goto out;
     if (*(s32 *)((u8 *)&hero + 0x2084) == 50)
         goto out;

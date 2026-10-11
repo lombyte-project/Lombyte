@@ -375,7 +375,7 @@ void FUN_L00_002e9cc0(char *p) {
     struct Hero *g = &hero;
     int m;
     FUN_001f9bf8_002e9cc0(a, ((char *)g->moby) + 0xE0, 1.0f);
-    m = g->unk20A4;
+    m = g->vehicle_mode;
     if (m == 2) {
         FUN_001f9a68_002e9cc0(b, a, 9.5f);
     } else if (m == 1) {
@@ -389,7 +389,7 @@ void FUN_L00_002e9cc0(char *p) {
     }
     p += 0x30;
     FUN_001f9a10_002e9cc0(p, &hero.motion.pos, b);
-    FUN_001f9a10_002e9cc0(p, &hero.motion.unk140, p);
+    FUN_001f9a10_002e9cc0(p, &hero.motion.platform_carry, p);
 }
 #include "eetypes.h"
 #include "qcopy.h"
@@ -406,9 +406,9 @@ void FUN_L00_002e9dd0(char *m) {
     u128 b;
     struct Hero *g = &hero;
     FUN_001f9bf8_2e9dd0(&a, ((char *)g->moby) + 0xE0, 1.0f);
-    if (g->unk20A4 == 2) {
+    if (g->vehicle_mode == 2) {
         FUN_001f9a68_2e9dd0(&b, &a, 9.5f);
-    } else if (g->unk20A4 == 1) {
+    } else if (g->vehicle_mode == 1) {
         FUN_001f9a68_2e9dd0(&b, &a, 0.9f);
     } else {
         FUN_001f9a68_2e9dd0(&b, &a, 1.6f);
@@ -495,8 +495,8 @@ void FUN_L00_002e9f38(u8 *o) {
     st->a = r = FUN_001ebd78(st->a, t, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->va);
     if (r != 0.0f)
         build_look_at_matrix(o, o, &up, k * r);
-    if (hero.motion.unk140.f[3] != 0.0f && hero.unk308 == 0)
-        build_look_at_matrix(o, o, &up, hero.motion.unk140.f[3]);
+    if (hero.motion.platform_carry.f[3] != 0.0f && hero.unk308 == 0)
+        build_look_at_matrix(o, o, &up, hero.motion.platform_carry.f[3]);
     t = -D_0013C940.f10C;
     if (t == 0.0f)
         t = -D_0013C940.f104;
@@ -1575,7 +1575,7 @@ int FUN_L00_002ed230(unsigned char *p) {
         return 0;
     if ((s->v == 1 || s->v == 10) && s->w == 0) {
         struct Hero *g = &hero;
-        if (g->unk30C.s != 0) {
+        if (g->frames_off_ground.s != 0) {
             if (current_level_index != 14)
                 return 0;
             if (g->unk2284 != 13)

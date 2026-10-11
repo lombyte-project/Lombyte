@@ -2453,7 +2453,7 @@ unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y) {
             if (p->state.current == 0x31) {
                 q[4] = p->motion.pos.f[2] + 0.4f;
             } else {
-                q[4] = p->height_threshold;
+                q[4] = p->water_surface_z;
             }
         } else {
             q[4] = y;
@@ -2598,7 +2598,7 @@ void FUN_L00_0026f660(char *m) {
         float lim;
         q = m + 0x10;
         FUN_001f9a10(q, q, b);
-        lim = hero.height_threshold;
+        lim = hero.water_surface_z;
         if (*(float *)(m + 0x18) < lim) {
             *(float *)(m + 0x18) = lim;
             FUN_L00_002715e8(q, 0, -1, 0.2f, 5250.0f);

@@ -109,7 +109,7 @@ void FUN_L16_002a0a98(char *m) {
     remaining = delta;
     if (FUN_001efa68((m + 0x10), next, 0, m, 0) != 0 ||
         vector_length_xyz(remaining) < *(float *)(d + 0x24)) {
-        if (hero.unk20A4 == 2)
+        if (hero.vehicle_mode == 2)
             FUN_L00_002598b0((int)m, 2.0f, (m + 0x10), 3, 2.0f, 1.0f, 0, 1, 0);
         FUN_L00_0028dc90(4, 0, (int)m, 0x54C);
         FUN_L00_0025e450(m, d, (m + 0x10), 4.0f, 4.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f,

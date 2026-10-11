@@ -37,11 +37,11 @@ int FUN_L00_00227778(void) {
         if (hero.unk22A0 < 0)
             hero.unk22A0 = 0;
         if (hero.unk22A0 == 0 &&
-            (!(hero.height_threshold - 2.0f < hero.motion.pos.f[2]) ||
+            (!(hero.water_surface_z - 2.0f < hero.motion.pos.f[2]) ||
              !(hero.motion.rot.f[1] < -0.87266463f) ||
              !(frame_time < hero.motion.unk100.f[2]))) {
             state = 0x6A;
-        } else if (hero.height_threshold + 0.4f < hero.motion.pos.f[2]) {
+        } else if (hero.water_surface_z + 0.4f < hero.motion.pos.f[2]) {
             D_L00_00167014[0] = 0;
             state = 6;
         } else {
@@ -57,7 +57,7 @@ collision_mode:
     if (hero.state.control_mode != 0x12)
         return 0;
     qcopy(&start, &hero.motion.pos);
-    start.f[2] = hero.height_threshold + 0.01f;
+    start.f[2] = hero.water_surface_z + 0.01f;
     qcopy(&end, &start);
     end.f[2] += 0.3f;
     if (ray_hits(&start, &end, 2, hero.moby, 0)) {

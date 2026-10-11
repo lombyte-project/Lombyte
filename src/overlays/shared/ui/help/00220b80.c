@@ -109,7 +109,7 @@ void FUN_L02_002226d8(void)
     add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.motion.velocity);
     add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.move_impulse);
     clear_vector(&hero.move_impulse);
-    hero.unk257 = 0;
+    hero.wall_hit = 0;
     hero.coll_hit_moby = 0;
 
     if (vector_length_xyz(&hero.motion.unkF0) <= 0.0001f) {
@@ -173,13 +173,13 @@ void FUN_L02_002226d8(void)
         subtract_vector_xyz(&hero.motion.unk100, &hero.motion.pos, &old_pos);
         FUN_L00_00212ff0();
     }
-    subtract_vector_xyz(&hero.motion.unk140, &hero.motion.pos, &tmp);
+    subtract_vector_xyz(&hero.motion.platform_carry, &hero.motion.pos, &tmp);
     {
         /* push w moves to unk140.w; a block-local keeps retail's order */
         f32 push_w = hero.motion.unkF0.f[3];
 
         hero.motion.unkF0.f[3] = 0.0f;
-        hero.motion.unk140.f[3] = push_w;
+        hero.motion.platform_carry.f[3] = push_w;
     }
 
     subtract_vector_xyz(&hero.motion.unk100, &hero.motion.pos, &old_pos);
@@ -266,8 +266,8 @@ void FUN_L02_00223450(void) {
             FUN_L00_00211e30_223450(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 15.009831f);
             FUN_L01_00234358_223450(ED70 * 20.0f);
         }
-        if (13.0f <= hero.unkAA8 && hero.unkAA8 <= 30.0f) {
-            if (27.0f < hero.unkAA8) {
+        if (13.0f <= hero.anim_frame && hero.anim_frame <= 30.0f) {
+            if (27.0f < hero.anim_frame) {
                 approach_value_223450(0.0f, ED70 * 8.0f, &hero.unk45C);
             } else {
                 approach_value_223450(ED6C * 2.0f, ED70 * 8.0f, &hero.unk45C);
@@ -276,7 +276,7 @@ void FUN_L02_00223450(void) {
         hero.motion.velocity.f[0] = FUN_001f9dc8_223450(hero.motion.rot.f[2]) * hero.unk45C;
         hero.motion.velocity.f[1] = FUN_001f9de0_223450(hero.motion.rot.f[2]) * hero.unk45C;
     } else if (state == 11 || state == 12) {
-        hero.motion.unk180 = hero.unk43C;
+        hero.motion.move_yaw = hero.unk43C;
         FUN_L00_00211e30_223450(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 6.981317f);
         if (hero.unk450 != 3) {
             hero.ground_speed = hero.unk454;
@@ -298,15 +298,15 @@ void FUN_L02_00223450(void) {
         FUN_L00_002132b8_223450(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
     } else if (state == 0x11) {
-        hero.motion.unk180 = hero.unk470.f[3];
+        hero.motion.move_yaw = hero.unk470.f[3];
         qcopy(&hero.motion.unk170, &hero.unk470);
         if (FUN_001f96f8_223450(9) < hero.state_timer) {
             FUN_L00_00211e30_223450(-1, ED64 * 0.042f, ED64 * 0.2f, ED6C * 11.868238f);
         }
         if (FUN_001f96f8_223450(9) <= hero.state_timer) {
             if (hero.unk308 == 0) {
-                hero.motion.velocity.f[0] = FUN_001f9dc8_223450(hero.motion.unk180) * (ED6C * 4.9f);
-                hero.motion.velocity.f[1] = FUN_001f9de0_223450(hero.motion.unk180) * (ED6C * 4.9f);
+                hero.motion.velocity.f[0] = FUN_001f9dc8_223450(hero.motion.move_yaw) * (ED6C * 4.9f);
+                hero.motion.velocity.f[1] = FUN_001f9de0_223450(hero.motion.move_yaw) * (ED6C * 4.9f);
             } else {
                 FUN_L00_00233ba0_223450(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
                 FUN_001f9bf8_223450(&tmp, &hero.motion.unk170, ED6C * 4.9f);
@@ -317,7 +317,7 @@ void FUN_L02_00223450(void) {
     } else {
         if (state == 0x2D) {
             x = hero.motion.rot.f[2];
-            hero.motion.unk188 = FUN_L00_0025bc98_223450(&x, &hero.motion.unk184, 0, hero.motion.unk180, ED64 * 0.018f, ED64 * 0.2f,
+            hero.motion.unk188 = FUN_L00_0025bc98_223450(&x, &hero.motion.unk184, 0, hero.motion.move_yaw, ED64 * 0.018f, ED64 * 0.2f,
                                              ED6C * 7.330383f);
             a = FUN_001fa5c8_223450(x, hero.motion.rot.f[2]);
             FUN_L00_002091d8_223450(0.0f, 0.0f, a);
@@ -404,7 +404,7 @@ s32 FUN_L02_0022ee00(void)
     if (hero.unk20AC != 0 && (hero.items[0].item_id != 8 || hero.unk308 != 1)) {
         return 0;
     }
-    if (hero.unk20A4 != 0) {
+    if (hero.vehicle_mode != 0) {
         return 0;
     }
     if (hero.items[0].moby == NULL) {
@@ -420,7 +420,7 @@ s32 FUN_L02_0022ee00(void)
     case 8:
         if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
             (hero.state.control_mode == 4 && hero.unk418 != 0)) {
-            if (hero.unk12EA == 0 && FUN_L00_00266d60(buttons, scale_game_frames(7), &out0) != 0) {
+            if (hero.on_slip_ground == 0 && FUN_L00_00266d60(buttons, scale_game_frames(7), &out0) != 0) {
                 moby = hero.items[0].moby;
                 if (moby != NULL && FUN_L00_00211360(moby) != 0 && moby->state == 0) {
                     if ((D_0013C940.held & 0xA) ||
@@ -440,9 +440,9 @@ s32 FUN_L02_0022ee00(void)
                 }
             }
         } else if ((hero.state.current == 7 || hero.state.current == 9 || hero.state.current == 8 ||
-                    hero.state.current == 6 || (hero.state.current == 0xE && hero.unkAA8 > 32.0f) ||
+                    hero.state.current == 6 || (hero.state.current == 0xE && hero.anim_frame > 32.0f) ||
                     (hero.state.current == 0xB &&
-                     (hero.unk450 != 3 && hero.unkAA8 > 18.0f) || (hero.state.current == 0xB && hero.unk450 == 3 && hero.unkAA8 > 20.0f)) ||
+                     (hero.unk450 != 3 && hero.anim_frame > 18.0f) || (hero.state.current == 0xB && hero.unk450 == 3 && hero.anim_frame > 20.0f)) ||
                     hero.state.current == 0x2D || hero.state.current == 0x11) &&
                    scale_game_frames(0xA) < hero.state_timer) {
             window = scale_game_frames(0xA);
@@ -452,25 +452,25 @@ s32 FUN_L02_0022ee00(void)
             if (FUN_L00_00266d60(buttons, window, NULL) != 0) {
                 if ((hero.unk41E == 0 ? 0.1f < hero.ground_distance : 0.57f < hero.ground_distance) || (hero.state.current == 8 && 0.57f < hero.ground_distance)) {
                     hero_set_state(0x14, 1);
-                } else if (hero.unk12EA == 0) {
+                } else if (hero.on_slip_ground == 0) {
                     hero_set_state(0x13, 1);
                 }
             }
         } else if (hero.state.control_mode == 6) {
-            row = &D_L02_0017C228[hero.unkA60];
+            row = &D_L02_0017C228[hero.attack_record];
             if (hero.state.current == 0x15 && scale_game_frames(0x1E) < hero.state_timer &&
-                hero.unkA9C == 0 && (f32)row->f10 <= hero.unkAA8 && (D_0013C940.held & 0xA) &&
+                hero.unkA9C == 0 && (f32)row->f10 <= hero.anim_frame && (D_0013C940.held & 0xA) &&
                 FUN_L00_00266d60(buttons, scale_game_frames(0xF), NULL) != 0) {
                 hero_set_state(0x15, 1);
-            } else if (hero.unkA9C == 0 && (f32)row->f10 <= hero.unkAA8) {
-                frames = (truncate_float_to_s32(hero.unkAA8) - row->fC) * 2;
+            } else if (hero.unkA9C == 0 && (f32)row->f10 <= hero.anim_frame) {
+                frames = (truncate_float_to_s32(hero.anim_frame) - row->fC) * 2;
                 if (frames < 1) {
                     frames = 1;
                 }
                 if (scale_game_frames(0xF) < frames) {
                     frames = scale_game_frames(0xF);
                 }
-                if (hero.unk12EA == 0 && FUN_L00_00266d60(buttons, frames, NULL) != 0) {
+                if (hero.on_slip_ground == 0 && FUN_L00_00266d60(buttons, frames, NULL) != 0) {
                     if (D_0013C940.held & 0xA) {
                         hero_set_state(0x15, 1);
                     } else if (hero.unk308 == 1) {
@@ -514,7 +514,7 @@ s32 FUN_L02_0022ee00(void)
         break;
 
     case 31:
-        if (hero.unk20A4 == 0 && FUN_L00_0020fe30() != 0) {
+        if (hero.vehicle_mode == 0 && FUN_L00_0020fe30() != 0) {
             if (FUN_L00_00266d60(buttons, scale_game_frames(7), NULL) != 0 && D_00141660 == 0x1F &&
                 hero.items[0].moby->oclass == 0x1E3 && hero.unk22DE == 0) {
                 FUN_L00_00216de8(0x18, 0);
@@ -560,7 +560,7 @@ s32 FUN_L02_0022ee00(void)
         if ((hero.state.control_mode == 0 && hero.state.current != 0x1E) || hero.state.control_mode == 1 ||
             hero.state.control_mode == 0xC || hero.state.control_mode == 5 || hero.state.control_mode == 0xF ||
             (hero.state.control_mode == 4 && hero.unk4AC != 0) ||
-            (hero.state.current == 0x23 && hero.unkAA8 > 25.0f)) {
+            (hero.state.current == 0x23 && hero.anim_frame > 25.0f)) {
             if (hero.unk20A8 == 0) {
                 s32 hold;
 

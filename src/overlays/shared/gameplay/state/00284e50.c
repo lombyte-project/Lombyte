@@ -55,7 +55,7 @@ void FUN_L00_00284e50(OvlQuad *a, OvlQuad *b) {
         *(int *)(s + 0x30) = *(int *)(o + 0x38);
         *(int *)(s + 0x34) = *(int *)(o + 0x3C);
         *(int *)(s + 0x38) = *(int *)(o + 0x80);
-        *(int *)(s + 0x44) = p->unk20A4;
+        *(int *)(s + 0x44) = p->vehicle_mode;
         *(char **)(s + 0x48) = o;
         *(int *)(s + 0x4C) = p->unk22CC;
         *(int *)(s + 0x3C) = *(int *)(g + 0x64);

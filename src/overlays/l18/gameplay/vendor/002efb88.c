@@ -1485,7 +1485,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
         break;
     case 1:
         if (is_point_inside_clip_volume(hero.motion.pos.f, d->f274) != 0 &&
-            hero.unk20A4 == 2) {
+            hero.vehicle_mode == 2) {
             moby->f20 = 7;
             moby->f34 |= 0x41;
             FUN_L00_00298840(0);
@@ -1578,7 +1578,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         FUN_L18_002f6aa0((struct Moby *)moby);
         if (d->f38C <= 301.0f) {
-            if (hero.unk20A4 != 0) {
+            if (hero.vehicle_mode != 0) {
                 ((BossMoby *)hero.moby)->f94 = 0;
                 ((BossMoby *)hero.moby)->f34 |= 0x41;
             }

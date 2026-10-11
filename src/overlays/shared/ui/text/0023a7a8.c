@@ -228,7 +228,7 @@ void FUN_L00_0023adb8(void) {
     }
     g = &hero;
     n = g->items[0].item_id;
-    mode = g->unk20A4;
+    mode = g->vehicle_mode;
     n = (&D_L00_001C40B0[0] + n)->h8 ? n : 0;
     n = mode ? 0 : n;
     if (n != 0) {

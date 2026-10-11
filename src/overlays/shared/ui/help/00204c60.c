@@ -75,8 +75,8 @@ void FUN_L00_00204c60(void) {
     for (i = 0; i < 8; i++)
         ((struct { u8 pad[0x2218]; s32 v[8]; } *)&hero)->v[i] = -1;
     hero.health.hp = D_0015EDA0;
-    hero.unk2288 = 2.125f;
-    hero.unk228C = 1.25f;
+    hero.reach_distance = 2.125f;
+    hero.reach_height = 1.25f;
     hero.health.unk22AC = 4;
     hero.health.unk22B0 = hero.health.hp;
     hero.unk1010 = random_int_between(scale_game_frames(0xB4), scale_game_frames(0x12C));

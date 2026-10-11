@@ -15,30 +15,30 @@ void FUN_L00_0020b930_239fc0(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 void FUN_L05_00239fc0(void) {
     u8 save = hero.unk12ED;
-    s16 t = hero.unk12E0;
+    s16 t = hero.ground_type;
     f32 d;
     int s;
-    FUN_001f9810_239fc0(&hero.unk12E0, 0x10);
+    FUN_001f9810_239fc0(&hero.ground_type, 0x10);
     hero.unk12ED = save;
-    hero.unk12E0 = -1;
+    hero.ground_type = -1;
     hero.unk20A9 = 0;
     hero.unk308 = 0;
     if (t == -1)
         return;
     if (t == 2) {
-        if (hero.unk30C.s == 0 || hero.ground_distance < 0.3f) {
+        if (hero.frames_off_ground.s == 0 || hero.ground_distance < 0.3f) {
             hero.unk12E7 = 1;
-            if (hero.unk20A4 == 0 && ((u8 *)hero.items[1].moby) != 0 && *(s16 *)(((u8 *)hero.items[1].moby) + 0xA6) == 0xAD)
+            if (hero.vehicle_mode == 0 && ((u8 *)hero.items[1].moby) != 0 && *(s16 *)(((u8 *)hero.items[1].moby) + 0xA6) == 0xAD)
                 hero.unk308 = 1;
         }
     }
     if (t == 14) {
         hero.base_condition = 1;
         hero.unk22A4 = 0.2f;
-        hero.height_threshold = hero.ground_z.f + 0.2f;
+        hero.water_surface_z = hero.ground_z.f + 0.2f;
     }
     if (t == 0) {
-        d = hero.height_threshold - hero.ground_z.f;
+        d = hero.water_surface_z - hero.ground_z.f;
         hero.unk22A4 = d;
         if (d < 0.85f && 0.25f < d)
             hero.unk20A9 = 1;
@@ -64,11 +64,11 @@ void FUN_L05_00239fc0(void) {
     if (t == 1)
         hero.selector_1 = 1;
     if (t == 8)
-        hero.unk12EA = 1;
+        hero.on_slip_ground = 1;
     if (t == 9)
         hero.unk12EE = 1;
     if (t == 12)
-        hero.unk12EA = 1;
+        hero.on_slip_ground = 1;
     if (hero.unk12E3 && hero.unk300 && hero.state.control_mode != 0x10 && hero.state.control_mode != 0x14 && hero.state.control_mode != 7) {
         s = 0x31;
         goto call;
@@ -80,8 +80,8 @@ void FUN_L05_00239fc0(void) {
         s = 0x7C;
         goto call;
     }
-    if (hero.selector_13 && hero.state.current != 0x7F && FUN_001f99c0_239fc0(hero.height_threshold - (hero.motion.pos.f[2] + 0.25f)) < 1.0f &&
-        0.0f < hero.height_threshold - hero.motion.pos.f[2] && hero.motion.unk100.f[2] < 0.0f) {
+    if (hero.selector_13 && hero.state.current != 0x7F && FUN_001f99c0_239fc0(hero.water_surface_z - (hero.motion.pos.f[2] + 0.25f)) < 1.0f &&
+        0.0f < hero.water_surface_z - hero.motion.pos.f[2] && hero.motion.unk100.f[2] < 0.0f) {
         FUN_L00_0020b930_239fc0();
         s = 0x7F;
         goto call;
@@ -157,10 +157,10 @@ void FUN_L05_002402a8(void) {
 
     hero.unk270.f[2] = 1.0f;
     hero.air_frames.u++;
-    hero.unk30C.u++;
+    hero.frames_off_ground.u++;
     hero.unk270.i[0] = 0;
     hero.unk270.i[1] = 0;
-    hero.unk2E0.i = 0;
+    hero.ground_slope.i = 0;
     hero.ground_z.i = 0;
     FUN_001f99f8_c((u8 *)&hero.ground_point);
     hero.unk30A = 0;
@@ -185,10 +185,10 @@ void FUN_L05_002402a8(void) {
         r = 3;
     }
     hero.unk12ED = r;
-    hero.unk12E0 = FUN_001f0b58();
-    if (hero.unk12E0 == 0) {
-        hero.height_threshold = resolve_camera_surface_height(D_L05_00174260, (u8 *)&hero.unk280);
-        if (hero.motion.pos.f[2] < hero.height_threshold && hero.unk2F8 <= 0) {
+    hero.ground_type = FUN_001f0b58();
+    if (hero.ground_type == 0) {
+        hero.water_surface_z = resolve_camera_surface_height(D_L05_00174260, (u8 *)&hero.unk280);
+        if (hero.motion.pos.f[2] < hero.water_surface_z && hero.unk2F8 <= 0) {
             hero.unk2F8 = 1;
         }
         if (FUN_001efa68(&v10, &v0, 0x24, (s32)hero.moby, 0) == 0) {
@@ -200,25 +200,25 @@ void FUN_L05_002402a8(void) {
         }
         hero.unk12ED = r;
     }
-    if (hero.unk12E0 == 0xD) {
-        hero.height_threshold = D_L05_00174268;
+    if (hero.ground_type == 0xD) {
+        hero.water_surface_z = D_L05_00174268;
         v10.f[2] = D_L05_00174268 - 0.01f;
         if (FUN_001efa68(&v10, &v0, 4, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
     }
-    if (hero.unk12E0 == 3) {
+    if (hero.ground_type == 3) {
         hero.unk2F4 = D_L05_00174268;
         v10.f[2] = D_L05_00174268 - 0.01f;
         if (FUN_001efa68(&v10, &v0, 4, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
     }
-    if (hero.unk12E0 == 0xB) {
+    if (hero.ground_type == 0xB) {
         hero.unk2F4 = D_L05_00174268;
         goto d1;
     }
-    if (hero.unk12E0 == 1 && (u32)(hero.state.current - 0x7C) < 2) {
+    if (hero.ground_type == 1 && (u32)(hero.state.current - 0x7C) < 2) {
         goto d1;
     }
     if (HH.moby != 0) {
@@ -239,15 +239,15 @@ void FUN_L05_002402a8(void) {
         hero.ground_distance = FUN_001f9b48((u8 *)&hero.motion.pos, (u8 *)&hero.ground_point);
         hero.ground_moby = (struct Moby *)HH.moby;
         FUN_00125180((u8 *)&hero.unk270, (u8 *)&HH.normal_x);
-        hero.unk2E0.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
-        hero.unk2EC = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
+        hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
+        hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
         FUN_001f9a28(&v20, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
         if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&hero.unk270)) {
             hero.ground_distance = -hero.ground_distance;
         }
         if (hero.ground_distance < 0.02f) {
-            hero.unk30C.s = 0;
-            if (hero.unk2E0.f <= 0.87266463f || hero.unk20B3 == 1 || hero.state.control_mode == 0x16) {
+            hero.frames_off_ground.s = 0;
+            if (hero.ground_slope.f <= 0.87266463f || hero.unk20B3 == 1 || hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
                 hero.unkA80 = HH.moby;
             }
@@ -260,7 +260,7 @@ tail:
         hero.unk300++;
         qcopy((u8 *)&hero.unk2B0, (u8 *)&hero.ground_point);
     }
-    if (hero.motion.pos.f[2] > hero.height_threshold) {
+    if (hero.motion.pos.f[2] > hero.water_surface_z) {
         hero.unk2F8 = 0;
     }
 d1:
@@ -414,7 +414,7 @@ s32 FUN_L05_00240ed0(s32 mode) {
         qcopy(&hero.motion.pos.q, c);
         qcopy(&hero.unk200.q, c + 1);
         qcopy(&hero.unk210.q, c - 1);
-        hero.unk257 = 1;
+        hero.wall_hit = 1;
         hero.coll_hit_moby = ((u8 **)c)[-6];
     }
     vsub_2133a8(&hero.motion.pos.q, &hero.motion.pos.q, &v);

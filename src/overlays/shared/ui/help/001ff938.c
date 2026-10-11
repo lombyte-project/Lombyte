@@ -48,18 +48,18 @@ void FUN_L15_001ff938(void) {
     FUN_L00_00211670();
     FUN_L15_002044c8();
     FUN_L15_0021d040();
-    if (hero.unk20A4 == 0)
+    if (hero.vehicle_mode == 0)
         return;
     FUN_L00_00216f10();
     FUN_L00_002054e8();
-    if (hero.unk20A4 == 0)
+    if (hero.vehicle_mode == 0)
         return;
     FUN_L00_00208a10();
     FUN_L00_00207c48();
     FUN_L00_00207a58();
     FUN_L00_002484e0(base + 0x80);
 
-    if (hero.unk20A4 == 2) {
+    if (hero.vehicle_mode == 2) {
         if (D_0015EDB3 != 0)
             *(float *)(0x0017C06C + (((u32)&FUN_L15_001ff938 == 0x0020EFA8) ? 0x400 : 0)) = D_0015EE18_001ff938 * 1.4f;
         FUN_L00_002059d8();
@@ -72,7 +72,7 @@ void FUN_L15_001ff938(void) {
         }
     }
 
-    if (hero.unk20A4 == 3) {
+    if (hero.vehicle_mode == 3) {
         if (D_0015EDB1 != 0)
             *(u32 *)(0x0017C1CC + (((u32)&FUN_L15_001ff938 == 0x0020EFA8) ? 0x400 : 0)) = 0x3ff33333;
         period = FUN_001f96f8(0xAA);
@@ -102,7 +102,7 @@ void FUN_L15_001ff938(void) {
         *(u32 *)(base + 0x22E4) = (alpha << 24) | (moby[0x92] << 16) | (moby[0x91] << 8) | moby[0x90];
         FUN_L00_00207d00();
         hero.unk22E0 = 0;
-        if (hero.unk20A4 == 3) {
+        if (hero.vehicle_mode == 3) {
             int pending = hero.pending_item[0];
             if (pending == 0 || pending == 0x1F) {
                 hero.pending_item[0] = 0;
@@ -235,7 +235,7 @@ f32 FUN_001f9b80_209450(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_209450(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_209450(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void FUN_L15_00209450(void) {
-    switch (hero.unk20A4) {
+    switch (hero.vehicle_mode) {
     case 0:
         hero.unk228 = 0.8f;
         hero.unk22C = 0.7f;
@@ -265,7 +265,7 @@ void FUN_L15_00209450(void) {
     } else if (hero.state.current == 0x7F) {
         hero.unk230 = 0.8f;
     }
-    if (!hero.unk257 || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
+    if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
         FUN_001f9b80_209450(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
         f32 *q = D_0013F570_209450;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
@@ -431,7 +431,7 @@ void FUN_L15_00215e58(void) {
     hero.unk1A0++;
     hero.unk1A4++;
     FUN_001f9740_215e58(&hero.unk1C4);
-    FUN_001f9740_215e58(&hero.unk1C0);
+    FUN_001f9740_215e58(&hero.invulnerable_frames);
     FUN_001f9770_215e58(&hero.unk1B2);
     FUN_001f9740_215e58(&hero.unk1B8);
     FUN_001f9770_215e58(&hero.unk1D8);
@@ -446,7 +446,7 @@ void FUN_L15_00215e58(void) {
     FUN_001f9740_215e58(&hero.unk1CC);
     FUN_001f9740_215e58(&hero.unk1D0);
     FUN_001f9740_215e58(&hero.unk1D4);
-    FUN_001f9770_215e58(&hero.unk1E8);
+    FUN_001f9770_215e58(&hero.fidget_cooldown);
     FUN_001f9770_215e58(&hero.unk1E0);
     FUN_001f9770_215e58(&hero.unk1EE);
     FUN_001f9770_215e58(&hero.unk1EA);
@@ -473,7 +473,7 @@ void FUN_L15_00215e58(void) {
     }
     if (hero.unk22DE != 0 && FUN_001f9770_215e58(&hero.unk22DE) != 0 &&
         hero.health.hp != 0 && D_L15_0015F5C4_215e58 == 0) {
-        if (hero.unk20A4 == 3) {
+        if (hero.vehicle_mode == 3) {
             FUN_L15_00208ca8_215e58();
             if (FUN_L00_00266d60_215e58(0x80, FUN_001f96f8_215e58(0x12), 0)) {
                 hero.unk20A6 = 1;
@@ -493,7 +493,7 @@ void FUN_L15_00215e58(void) {
             }
         }
     }
-    if (hero.unk20A4 == 2) {
+    if (hero.vehicle_mode == 2) {
         FUN_001f9770_215e58(&hero.unk1636);
     }
     for (i = 0; i < 5; i++) {
@@ -522,18 +522,18 @@ void FUN_L15_00215e58(void) {
     hero.unk1E2 = 0;
 skip:
     FUN_L00_00221b68_215e58();
-    if (hero.unk20A4 == 2) {
+    if (hero.vehicle_mode == 2) {
         FUN_L00_00233660_215e58(&hero.motion.unkD0, 0.0f, 0.0f, 4.0f);
-        hero.unk2288 = 15.0f;
-        hero.unk228C = 3.0f;
+        hero.reach_distance = 15.0f;
+        hero.reach_height = 3.0f;
     } else {
         FUN_L00_00233660_215e58(&hero.motion.unkD0, 0.0f, 0.0f, 0.7f);
         if (D_0013D4E2_215e58) {
-            hero.unk2288 = 12.0f;
-            hero.unk228C = 4.5f;
+            hero.reach_distance = 12.0f;
+            hero.reach_height = 4.5f;
         } else {
-            hero.unk2288 = 3.0f;
-            hero.unk228C = 1.75f;
+            hero.reach_distance = 3.0f;
+            hero.reach_height = 1.75f;
         }
     }
     {

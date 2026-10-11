@@ -656,7 +656,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             v[1] = fast_sin(aim) * (*(short *)(t + 0xA6) == 0x359 ? 2.0f : 3.57f);
             v[2] = 0.0f;
             add_vector_xyz(v, v, t + 0x10);
-            if (hero.unk20A4 != 1) {
+            if (hero.vehicle_mode != 1) {
                 float rot = m->f48;
                 int r;
                 m->f48 = FUN_001f9e90(v[0] - m->pos[0], v[1] - m->pos[1]);
@@ -726,13 +726,13 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             m->f58 = 1.2f;
             {
                 float home = FUN_001f9b48(m->pos, d->v170);
-                if ((hero.unk20A4 == 1 ? 1.0f : 30.0f) < home ||
+                if ((hero.vehicle_mode == 1 ? 1.0f : 30.0f) < home ||
                     d->i164 == 2) {
                     m->state = 8;
                     blend_moby_animation(m, 4, 0, scale_game_frames(0xC));
                 } else if (FUN_001f9b80(m->pos, t + 0x10) <
                            (*(short *)(t + 0xA6) == 0x359 ? 2.45f : 4.02f)) {
-                    if (hero.unk1C0 < scale_game_frames(10) &&
+                    if (hero.invulnerable_frames < scale_game_frames(10) &&
                         diff < 0.34906584f && see) {
                         int anim = 7;
                         if (random_integer_below(100) & 1) {
@@ -784,13 +784,13 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
         }
         {
             float home = FUN_001f9b48(m->pos, d->v170);
-            if ((hero.unk20A4 == 1 ? 1.0f : 30.0f) < home ||
+            if ((hero.vehicle_mode == 1 ? 1.0f : 30.0f) < home ||
                 d->i164 == 2) {
                 m->state = 8;
                 blend_moby_animation(m, 4, 0, scale_game_frames(0xC));
             } else if (FUN_001f9b80(m->pos, t + 0x10) <
                        (*(short *)(t + 0xA6) == 0x359 ? 2.45f : 4.02f)) {
-                if (hero.unk1C0 < scale_game_frames(10) &&
+                if (hero.invulnerable_frames < scale_game_frames(10) &&
                     diff < *(float *)&D_L10_00161E4C * DEG_TO_RAD && see) {
                     int anim = 7;
                     if (random_integer_below(100) & 1) {
@@ -1145,7 +1145,7 @@ void FUN_L10_002e5968(struct Moby *m) {
     }
     m->unkA4 = 0xFF;
     trooper_anim_finish(m, d + 0xC0);
-    if (hero.unk20A4 == 1) {
+    if (hero.vehicle_mode == 1) {
         seek_5968(101.0f, m, d + 0x110);
         if (*(char **)(d + 0x110) == 0) {
             *(int *)(d + 0x114) = 2;

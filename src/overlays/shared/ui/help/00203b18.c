@@ -74,7 +74,7 @@ extern int FUN_L00_0020d498(int);
 
 int FUN_L00_00205000(int a) {
     struct Hero *g = &hero;
-    int c = g->unk20A4;
+    int c = g->vehicle_mode;
     if (c == 2 || (c < 3 ? c == 1 : c == 3)) {
         return 0;
     }
@@ -537,7 +537,7 @@ void FUN_L00_00206e00(void) {
             if (hero.state.current == 0x14)
                 input = 6;
             else if (hero.state.current == 0x13)
-                input = hero.unkA60 + 12;
+                input = hero.attack_record + 12;
             else if (hero.state.current == 0x15)
                 input = 4;
         } else if (hero.state.current == 0x22)
@@ -636,7 +636,7 @@ void FUN_L00_002070d0(void) {
     }
     g->unk1EB2 = 0;
     g->unk1EB0 = 0;
-    if (g->unk20A4) {
+    if (g->vehicle_mode) {
         FUN_L00_002062b0();
         return;
     }
@@ -647,7 +647,7 @@ void FUN_L00_002070d0(void) {
     FUN_L00_0020cf58();
     FUN_L00_0020d330();
     FUN_L00_00229b70();
-    if (g->unk20A4)
+    if (g->vehicle_mode)
         return;
     FUN_L00_00216f10();
     FUN_L00_0020b1d8_u();
@@ -945,7 +945,7 @@ void FUN_L00_00207a58(void) {
                             ((unsigned char *)G->moby) + 0xC0, s);
         scale_vector_xyz(((unsigned char *)G->moby) + 0xD0,
                             ((unsigned char *)G->moby) + 0xD0, s);
-        if (G->unk20A4 == 0) {
+        if (G->vehicle_mode == 0) {
 
             for (i = 0; i < 7; i++) {
                 for (j = 0; j < 3; j++) {
@@ -954,7 +954,7 @@ void FUN_L00_00207a58(void) {
                     if (j == 1)
                         o = *(unsigned char **)&h->items[i].moby2;
                     f = s;
-                    if (i == 0 && h->unk20A4 == 0 && 1.0f < s)
+                    if (i == 0 && h->vehicle_mode == 0 && 1.0f < s)
                         f = 1.0f;
                     if (o) {
                         scale_vector_xyz(o + 0xC0, o + 0xC0, f);
@@ -1350,7 +1350,7 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
 f32 FUN_L00_00208f20(f32 a, f32 b, f32 c, f32 d) {
     struct Hero *g = &hero;
-    f32 thresh = g->unkAA8;
+    f32 thresh = g->anim_frame;
     f32 step;
     f32 negone = -1.0f;
 
@@ -1389,10 +1389,10 @@ f32 FUN_L00_00208f20(f32 a, f32 b, f32 c, f32 d) {
             f32 result = target / speed;
 
             if (d == negone) {
-                g2->unkA90 = result;
+                g2->anim_speed = result;
                 return negone;
             }
-            return approach_value((f32 *)(&g2->unkA90), result, d);
+            return approach_value((f32 *)(&g2->anim_speed), result, d);
         }
     }
 
@@ -1643,7 +1643,7 @@ void FUN_L00_00209638(int seed, int limit) {
             v[2] = 0.0f;
             pos[0] = p->motion.pos.f[0] + v[0] * 18.0f;
             pos[1] = p->motion.pos.f[1] + v[1] * 18.0f;
-            pos[2] = p->height_threshold;
+            pos[2] = p->water_surface_z;
             v[0] -= fast_cos(p->motion.rot.f[2]) * (D_0015ED6C_209638 * 1.5f);
             v[1] -= fast_sin(p->motion.rot.f[2]) * (D_0015ED6C_209638 * 1.5f);
             {
@@ -1651,7 +1651,7 @@ void FUN_L00_00209638(int seed, int limit) {
                 float d = -2.0f;
                 if (i == 0)
                     d = 2.0f;
-                FUN_L00_002718d0_209638(pos, v, &p->height_threshold, r, d);
+                FUN_L00_002718d0_209638(pos, v, &p->water_surface_z, r, d);
             }
             if (seed) {
                 p->unk908 = FUN_00213260_209638(seed);
@@ -1679,7 +1679,7 @@ void FUN_L00_00209848(int n, int lim) {
         t.x = P->motion.pos.f[0] + FUN_002132a8_209848(-0.15f, 0.15f) + P->motion.unk100.f[0] * 8.0f;
         {
             float y = P->motion.pos.f[1] + FUN_002132a8_209848(-0.15f, 0.15f) + P->motion.unk100.f[1] * 8.0f;
-            t.z = P->height_threshold + 0.1f;
+            t.z = P->water_surface_z + 0.1f;
             t.y = y;
         }
         a = FUN_00213308_209848();
@@ -1757,7 +1757,7 @@ extern void FUN_L00_002d7e90(Vec4 *, f32);
 extern void FUN_L00_002715e8(Vec4 *, f32 *, s32, f32, f32);
 extern void FUN_L00_0026f548(Vec4 *, Vec4 *, s32, s32);
 
-/* Kicks up dust at the hero's feet (hero.height_threshold): with flash set,
+/* Kicks up dust at the hero's feet (hero.water_surface_z): with flash set,
    first a flash at the hero; then `puffs` puffs within 0.3 of the hero and
    `debris` bits thrown out in random directions. The debris start point adds
    the x velocity to both x and y, as in the original. */
@@ -1773,14 +1773,14 @@ void FUN_L00_00209ca8(s32 puffs, s32 debris, s32 flash) {
 
     if (flash) {
         qcopy(&v, &hero.motion.pos);
-        v.f[2] = hero.height_threshold;
+        v.f[2] = hero.water_surface_z;
         FUN_L00_002d7e90(&v, 2.25f);
     }
     for (j = 0; j < puffs; j++) {
         v.f[0] = hero.motion.pos.f[0] + random_float_between(-0.3f, 0.3f);
         v.f[1] = hero.motion.pos.f[1] + random_float_between(-0.3f, 0.3f);
-        v.f[2] = hero.height_threshold;
-        FUN_L00_002715e8(&v, &hero.height_threshold, -1, random_float_between(0.3f, 0.6f), 5250.0f);
+        v.f[2] = hero.water_surface_z;
+        FUN_L00_002715e8(&v, &hero.water_surface_z, -1, random_float_between(0.3f, 0.6f), 5250.0f);
     }
     for (i = 0; i < debris; i++) {
         ang = random_angle_radians();
@@ -1790,7 +1790,7 @@ void FUN_L00_00209ca8(s32 puffs, s32 debris, s32 flash) {
         v.f[2] = random_float_between(D_0015ED6C_c * 3.0f, D_0015ED6C_c * 8.0f);
         start.f[0] = hero.motion.pos.f[0] + v.f[0] * 8.0f;
         start.f[1] = hero.motion.pos.f[1] + v.f[0] * 8.0f;
-        start.f[2] = hero.height_threshold - random_float_between(0.0f, 0.2f);
+        start.f[2] = hero.water_surface_z - random_float_between(0.0f, 0.2f);
         color = random_integer_below(2);
         life = FUN_L00_00257b90(0x5A, 0x78);
         FUN_L00_0026f548(&start, &v, color, life);
@@ -2531,7 +2531,7 @@ extern void FUN_L00_00210b30(void);
 
 /* Calls FUN_L00_00210b30 when the byte at 0x20A4 of ((char *)&hero) is 3. */
 void FUN_L00_0020b930(void) {
-    if (hero.unk20A4 == 3) {
+    if (hero.vehicle_mode == 3) {
         FUN_L00_00210b30();
     }
 }

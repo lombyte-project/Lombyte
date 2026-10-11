@@ -16,19 +16,19 @@ float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L18_00213b40(void) {
     struct Hero *g = &hero;
     int keep = g->unk12ED;
-    int st = g->unk12E0;
+    int st = g->ground_type;
     int v;
-    FUN_001f9810(&g->unk12E0, 0x10);
+    FUN_001f9810(&g->ground_type, 0x10);
     g->unk12ED = keep;
-    g->unk12E0 = -1;
+    g->ground_type = -1;
     g->unk20A9 = 0;
     g->unk308 = 0;
     if (st == -1)
         return;
     if (st == 2) {
-        if (g->unk30C.s == 0 || g->ground_distance < 0.3f) {
+        if (g->frames_off_ground.s == 0 || g->ground_distance < 0.3f) {
             g->unk12E7 = 1;
-            if (g->unk20A4 == 0) {
+            if (g->vehicle_mode == 0) {
                 char *p = ((char *)g->items[1].moby);
                 if (p != 0 && *(short *)(p + 0xA6) == 0xAD)
                     g->unk308 = 1;
@@ -39,11 +39,11 @@ void FUN_L18_00213b40(void) {
         struct Hero *q = &hero;
         *(char *)&q->base_condition = 1;
         q->unk22A4 = 0.2f;
-        q->height_threshold = q->ground_z.f + 0.2f;
+        q->water_surface_z = q->ground_z.f + 0.2f;
     }
     if (st == 0) {
         struct Hero *q = &hero;
-        float d = q->height_threshold - q->ground_z.f;
+        float d = q->water_surface_z - q->ground_z.f;
         q->unk22A4 = d;
         if (d < 0.85f && 0.25f < d)
             *(char *)&q->unk20A9 = 1;
@@ -85,7 +85,7 @@ void FUN_L18_00213b40(void) {
     }
     if (st == 0x8) {
         struct Hero *q = &hero;
-        *(char *)&q->unk12EA = 1;
+        *(char *)&q->on_slip_ground = 1;
     }
     if (st == 0x9) {
         struct Hero *q = &hero;
@@ -93,7 +93,7 @@ void FUN_L18_00213b40(void) {
     }
     if (st == 0xC) {
         struct Hero *q = &hero;
-        *(char *)&q->unk12EA = 1;
+        *(char *)&q->on_slip_ground = 1;
     }
     {
         struct Hero *q = &hero;
@@ -196,7 +196,7 @@ s32 FUN_L18_00218a90(s32 arg) {
     if (hero.state.current == 0x32) {
         return 0;
     }
-    if (hero.unk1C0 != 0) {
+    if (hero.invulnerable_frames != 0) {
         return 0;
     }
     if (D_L18_0015F5C4_210ce8 != 0) {
@@ -211,7 +211,7 @@ s32 FUN_L18_00218a90(s32 arg) {
     if (tbl->p34 != m) {
         return 0;
     }
-    if (hero.unk20A4 == 2) {
+    if (hero.vehicle_mode == 2) {
         if (!(tbl->i24 & 2)) {
             return 0;
         }
@@ -225,7 +225,7 @@ s32 FUN_L18_00218a90(s32 arg) {
         hero.unk5BE = 1;
         return 0;
     }
-    if (hero.unk20A4 == 2) {
+    if (hero.vehicle_mode == 2) {
         hero.unk1630 -= FUN_001fa6d0_210ce8(tbl->f2C);
         if (hero.unk1630 < 0) {
             hero.unk1630 = 0;
@@ -248,7 +248,7 @@ s32 FUN_L18_00218a90(s32 arg) {
         v.f[1] = FUN_001f9de0_210ce8(FUN_001fa580_210ce8(hero.motion.rot.f[2], 3.1415927f));
         v.i[2] = 0;
     }
-    switch (hero.unk20A4) {
+    switch (hero.vehicle_mode) {
     case 0:
         mob = ((u8 *)hero.unk2280);
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {

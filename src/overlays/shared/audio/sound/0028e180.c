@@ -79,7 +79,7 @@ void FUN_L00_0028e180(unsigned char *m) {
         if (*(short *)(d + 0xC) != 0) {
             int r = try_set_help_message(2, 0x53E4) != 0;
             if ((*(int *)(((char *)&D_0013CAE4)) & 0x10) && r) {
-                if (current_level_index == 10 && hero.unk20A4 == 1) {
+                if (current_level_index == 10 && hero.vehicle_mode == 1) {
                     m[0x20] = 0x2A;
                     *(unsigned short *)(m + 0x34) |= 0x41;
                     FUN_L00_00298840(9);

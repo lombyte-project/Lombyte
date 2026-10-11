@@ -853,7 +853,7 @@ s32 FUN_L00_002e42c0(OvlQuad *out, s32 flag) {
     struct Hero *g = &hero_data;
     u8 *q = D_L00_00166E10_002e42c0;
     f32 f;
-    if (g->unk30C.s == 0) {
+    if (g->frames_off_ground.s == 0) {
         FUN_L00_002e4168_002e42c0(*(s32 *)(q - 0x10), out);
         return 1;
     }
@@ -1252,13 +1252,13 @@ void FUN_L00_002e4930(char *m) {
     }
     if (e->state == 9) {
         struct Hero *p = &hero;
-        if (p->state.control_mode == 2 || p->unk30C.s >= scale_game_frames(0x37)) {
+        if (p->state.control_mode == 2 || p->frames_off_ground.s >= scale_game_frames(0x37)) {
             goto to_one;
         }
     }
     if (e->state == 0xA) {
         struct Hero *p = &hero;
-        if (p->state.control_mode == 2 || p->unk30C.s >= scale_game_frames(0x37)) {
+        if (p->state.control_mode == 2 || p->frames_off_ground.s >= scale_game_frames(0x37)) {
             float r;
         to_one:
             e->prev = e->state;
@@ -1365,7 +1365,7 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
         }
         padc = &hero;
         flag = 0;
-        if (padc->unk30C.s != 0 && *(float *)(g + 0xDC) == 0.0f &&
+        if (padc->frames_off_ground.s != 0 && *(float *)(g + 0xDC) == 0.0f &&
             (padc->unk41E == 0 || padc->unk44C >= 0x10)) {
             flag = 1;
         } else {
@@ -1653,9 +1653,9 @@ void FUN_L00_002e5830(void *cam) {
         add_vector_xyz(s->follow.look_target, look, base);
     }
     follow_cam_spring_offset(cam, look);
-    if (hero.unk20A4 == 2) {
+    if (hero.vehicle_mode == 2) {
         scale_vector_xyz(look, view + 0x20, 3.0f);
-    } else if (hero.unk20A4 == 1) {
+    } else if (hero.vehicle_mode == 1) {
         scale_vector_xyz(look, view + 0x20, 0.4f);
     } else {
         scale_vector_xyz(look, view + 0x20, 0.5f);

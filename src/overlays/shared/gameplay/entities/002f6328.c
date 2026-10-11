@@ -1071,7 +1071,7 @@ void FUN_L01_00307ca0(struct Moby *moby) {
         if (hero.health.hp == 0) {
             return;
         }
-        if (hero.unk20A4 != 3 && hero.unk20A4 != 0) {
+        if (hero.vehicle_mode != 3 && hero.vehicle_mode != 0) {
             return;
         }
         if (vars->unkC != 0) {
@@ -1090,7 +1090,7 @@ void FUN_L01_00307ca0(struct Moby *moby) {
         FUN_001f99f8(&look);
         look.z = FUN_001fa580_c(vars->home.w, 3.1415927f);
         FUN_001f4a58(FUN_001f96f8(10));
-        if (hero.unk20A4 == 3) {
+        if (hero.vehicle_mode == 3) {
             FUN_L01_00231450();
         }
         FUN_L00_00216f90(&at, &look, 0x72, 0);
@@ -1500,7 +1500,7 @@ void FUN_L01_00308bd8(struct Moby *moby) {
         if (*(int *)data == -1)
             break;
         g = &hero;
-        if (g->unk20A4 == 2)
+        if (g->vehicle_mode == 2)
             break;
         if (((char *)g->ground_moby) != moby)
             break;

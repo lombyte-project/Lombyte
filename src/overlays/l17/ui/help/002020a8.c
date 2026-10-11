@@ -27,7 +27,7 @@ extern int FUN_L00_0020d498(int);
 
 int FUN_L17_002020a8(int a) {
     struct Hero *g = &hero;
-    switch (g->unk20A4) {
+    switch (g->vehicle_mode) {
     case 1:
         return 0;
     case 3:
@@ -99,7 +99,7 @@ s32 FUN_L17_0020dbe8(s32 arg) {
     if (G.state.current == 0x32) {
         return 0;
     }
-    if (G.unk1C0 != 0) {
+    if (G.invulnerable_frames != 0) {
         return 0;
     }
     if (D_L08_0015F5C4_8 != 0) {
@@ -141,7 +141,7 @@ s32 FUN_L17_0020dbe8(s32 arg) {
         v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
         v.i[2] = 0;
     }
-    switch (G.unk20A4) {
+    switch (G.vehicle_mode) {
     case 0:
         mob = (u8 *)G.unk2280;
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
@@ -226,7 +226,7 @@ f32 FUN_001f9b80_211380(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_211380(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_211380(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void FUN_L17_0020e1c0(void) {
-    switch (hero.unk20A4) {
+    switch (hero.vehicle_mode) {
     case 0:
         hero.unk228 = 0.8f;
         hero.unk22C = 0.7f;
@@ -259,7 +259,7 @@ void FUN_L17_0020e1c0(void) {
     } else if (hero.state.current == 0x7F) {
         hero.unk230 = 0.8f;
     }
-    if (!hero.unk257 || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
+    if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
         FUN_001f9b80_211380(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
         f32 *q = D_0013F570_211380;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);

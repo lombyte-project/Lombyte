@@ -653,7 +653,7 @@ extern void set_moby_animation_c(void *, s32, s32) __asm__("FUN_00212ed8");
 
 void FUN_L14_002d96e0(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    if (hero.unk20A4 == 2) {
+    if (hero.vehicle_mode == 2) {
         moby->unk94 = 0;
     } else {
         moby->unk94 = moby->pclass->unk10;

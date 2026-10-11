@@ -85,7 +85,7 @@ void FUN_L00_00271450(unsigned char *p) {
         v[2] = *(float *)(q + 8);
         *(int *)&v[3] = 0;
         FUN_001f9a10_271450(r, r, v);
-        t[0] = *(OvlQuad *)(&hero.motion.unk140);
+        t[0] = *(OvlQuad *)(&hero.motion.platform_carry);
         FUN_L00_001ff318_271450(m, t, *(float *)(p + 0x1C));
         FUN_L00_001ff290_271450(m, r, t);
         FUN_001f9a68_271450(m, &hero.unk290, *(float *)(q + 0xC));

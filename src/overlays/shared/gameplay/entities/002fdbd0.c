@@ -276,7 +276,7 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
         qcopy(&b, &moby->pos);
         b.f[2] += 0.3f;
         cur_frame = FUN_0020c9e0(moby);
-        if (hero.unk20A4 == 1 && cur_frame < 9.0f) {
+        if (hero.vehicle_mode == 1 && cur_frame < 9.0f) {
             moby->unk58 = D_L06_00161FCC;
         }
         if (cur_frame >= 9.0f && cur_frame <= 15.0f) {
@@ -494,7 +494,7 @@ void FUN_L06_002ff2c8(char *moby) {
     {
         f32 *entry = (f32 *)(data + 0x230);
         do {
-            if (hero.unk20A4 == 1) {
+            if (hero.vehicle_mode == 1) {
                 step = D_L06_00161FD0 * frame_time * 0.5f;
             } else {
                 step = D_L06_00161FD0 * frame_time;

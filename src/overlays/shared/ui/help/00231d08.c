@@ -202,12 +202,12 @@ int FUN_L00_00231ff8(int a, int *b, int *c) {
 
 extern int FUN_L00_00231ff8(int, int *, int *);
 
-/* Copies &hero.unkA90 to +0x58 of the objects at 0x1180/0x1184 when the lookup succeeds. */
+/* Copies &hero.anim_speed to +0x58 of the objects at 0x1180/0x1184 when the lookup succeeds. */
 void FUN_L00_00232128(void) {
     struct Hero *base = &hero;
     int buf[2];
 
-    if (base->unk20A4 != 0) {
+    if (base->vehicle_mode != 0) {
         return;
     }
     if (base->items[3].state != 2) {
@@ -218,10 +218,10 @@ void FUN_L00_00232128(void) {
         return;
     }
     if (((char *)base->items[3].moby) != 0) {
-        *(float *)(((char *)base->items[3].moby) + 0x58) = base->unkA90;
+        *(float *)(((char *)base->items[3].moby) + 0x58) = base->anim_speed;
     }
     if (((char *)base->items[3].moby2) != 0) {
-        *(float *)(((char *)base->items[3].moby2) + 0x58) = base->unkA90;
+        *(float *)(((char *)base->items[3].moby2) + 0x58) = base->anim_speed;
     }
 }
 extern s16 *D_001415CC[];
@@ -278,14 +278,14 @@ void FUN_L00_00232220(int a0, int a1, float a2) {
 
 extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
 
-/* Copies &hero.unkA90 to +0x58 of the object at +0x2278 when FUN_L00_002321c0 succeeds. */
+/* Copies &hero.anim_speed to +0x58 of the object at +0x2278 when FUN_L00_002321c0 succeeds. */
 void FUN_L00_002322c8(void) {
     struct Hero *base = &hero;
     int buf[4];
 
     if (((void *)base->unk2278) != 0 && base->unk227C != 0 &&
         FUN_L00_002321c0_u(*(unsigned char *)(((char *)base->moby) + 0x53), buf) != 0) {
-        *(float *)(((char *)base->unk2278) + 0x58) = base->unkA90;
+        *(float *)(((char *)base->unk2278) + 0x58) = base->anim_speed;
     }
 }
 #define NOT_SDA
@@ -430,7 +430,7 @@ void FUN_L00_002323b8(int a0, int a1, float t) {
     *(unsigned char *)(obj + 0x53) = a0;
     update_moby_animation_state(obj);
     g2 = &hero;
-    g2->unkA90 = 1.0f;
+    g2->anim_speed = 1.0f;
     if (t > 0.0f) {
         g2->unkA94 = 1.0f / t;
         *(float *)(obj + 0x54) = 0.0f;
@@ -450,7 +450,7 @@ void FUN_L00_002323b8(int a0, int a1, float t) {
     if (t < 0.0f) {
         t = *(int *)((char *)&D_L00_0015F6E0 + g3->unkAA0 * 4);
     }
-    if (g3->unk20A4 == 0) {
+    if (g3->vehicle_mode == 0) {
         FUN_L00_00231e78_c(a0, a1, t);
     }
     FUN_L00_002321a8();
@@ -652,7 +652,7 @@ void FUN_L00_00232fe8(void) {
     if (obj != 0) {
         *(unsigned short *)(obj + 0x34) |= 1;
     }
-    if (tail->unk20A4 == 1) {
+    if (tail->vehicle_mode == 1) {
         obj = ((char *)tail->unk1624);
         if (obj != 0) {
             *(unsigned short *)(obj + 0x34) |= 1;
@@ -697,7 +697,7 @@ void FUN_L00_002330d0(void) {
     if (obj != 0) {
         *(unsigned short *)(obj + 0x34) &= ~1;
     }
-    if (blk2->unk20A4 == 1) {
+    if (blk2->vehicle_mode == 1) {
         obj = *(char * *)&blk2->unk1624;
         if (obj != 0) {
             *(unsigned short *)(obj + 0x34) &= ~1;

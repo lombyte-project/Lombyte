@@ -1303,7 +1303,7 @@ void FUN_L15_0029ac30(unsigned char *m) {
     add_y(next, m + 0x10, d);
     scale_y(back, d, -2.0f);
     add_y(back, back, m + 0x10);
-    if (hero.unk20A4 == 2 && randbelow_y(5) != 0)
+    if (hero.vehicle_mode == 2 && randbelow_y(5) != 0)
         s = 0.0f;
     setupcol_y(col, m, 0x10003, s, d);
     *(short *)(col + 0x1A) = *(short *)(m + 0xA6);

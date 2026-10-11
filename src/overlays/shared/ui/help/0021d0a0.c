@@ -23,7 +23,7 @@ extern int FUN_L00_0020d498(int);
 
 int FUN_L06_0021d0a0(int a) {
     struct Hero *g = &hero;
-    switch (g->unk20A4) {
+    switch (g->vehicle_mode) {
     case 1:
         return 0;
     case 3:
@@ -69,7 +69,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 void FUN_L06_00227cf8(void) {
     struct Hero *g = &hero;
     unsigned char *m;
-    if (g->unk20A4 == 1) {
+    if (g->vehicle_mode == 1) {
         g->health.unk22AC = g->health.hp;
         g->health.hp = g->health.unk22B0;
         if (g->unk1620) {
@@ -84,7 +84,7 @@ void FUN_L06_00227cf8(void) {
     {
         struct Hero *g2 = &hero;
         FUN_L00_00205538_227cf8();
-        g2->unk20A4 = 0;
+        g2->vehicle_mode = 0;
         m = g2->unkA84;
         if (m) {
             *(u16 *)(m + 0x34) &= ~6;
@@ -319,7 +319,7 @@ s32 FUN_L06_0022a1d0(s32 mode) {
         qcopy(&hero.motion.pos.q, c);
         qcopy(&hero.unk200.q, c + 1);
         qcopy(&hero.unk210.q, c - 1);
-        hero.unk257 = 1;
+        hero.wall_hit = 1;
         hero.coll_hit_moby = ((s32 *)c)[-6];
     }
     vsub_22a1d0(&hero.motion.pos.q, &hero.motion.pos.q, &v);
@@ -397,7 +397,7 @@ void FUN_L06_002348d0(void) {
     hero.unk1A0++;
     hero.unk1A4++;
     FUN_001f9740_2348d0(&hero.unk1C4);
-    FUN_001f9740_2348d0(&hero.unk1C0);
+    FUN_001f9740_2348d0(&hero.invulnerable_frames);
     FUN_001f9770_2348d0(&hero.unk1B2);
     FUN_001f9740_2348d0(&hero.unk1B8);
     FUN_001f9770_2348d0(&hero.unk1D8);
@@ -412,7 +412,7 @@ void FUN_L06_002348d0(void) {
     FUN_001f9740_2348d0(&hero.unk1CC);
     FUN_001f9740_2348d0(&hero.unk1D0);
     FUN_001f9740_2348d0(&hero.unk1D4);
-    FUN_001f9770_2348d0(&hero.unk1E8);
+    FUN_001f9770_2348d0(&hero.fidget_cooldown);
     FUN_001f9770_2348d0(&hero.unk1E0);
     FUN_001f9770_2348d0(&hero.unk1EE);
     FUN_001f9770_2348d0(&hero.unk1EA);
@@ -439,7 +439,7 @@ void FUN_L06_002348d0(void) {
     }
     if (hero.unk22DE != 0 && FUN_001f9770_2348d0(&hero.unk22DE) != 0 &&
         hero.health.hp != 0 && D_L06_0015F5C4_2348d0 == 0) {
-        if (hero.unk20A4 == 3) {
+        if (hero.vehicle_mode == 3) {
             FUN_L06_00227cf8_2348d0();
             if (FUN_L00_00266d60_2348d0(0x80, FUN_001f96f8_2348d0(0x12), 0)) {
                 hero.unk20A6 = 1;
@@ -485,18 +485,18 @@ void FUN_L06_002348d0(void) {
     hero.unk1E2 = 0;
 skip:
     FUN_L00_00221b68_2348d0();
-    if (hero.unk20A4 == 1) {
+    if (hero.vehicle_mode == 1) {
         FUN_L00_00233660_2348d0(&hero.motion.unkD0, 0.0f, 0.0f, 0.4f);
-        hero.unk2288 = 2.125f;
-        hero.unk228C = 1.25f;
+        hero.reach_distance = 2.125f;
+        hero.reach_height = 1.25f;
     } else {
         FUN_L00_00233660_2348d0(&hero.motion.unkD0, 0.0f, 0.0f, 0.7f);
         if (D_0013D4E2_2348d0) {
-            hero.unk2288 = 12.0f;
-            hero.unk228C = 4.5f;
+            hero.reach_distance = 12.0f;
+            hero.reach_height = 4.5f;
         } else {
-            hero.unk2288 = 3.0f;
-            hero.unk228C = 1.75f;
+            hero.reach_distance = 3.0f;
+            hero.reach_height = 1.75f;
         }
     }
     {

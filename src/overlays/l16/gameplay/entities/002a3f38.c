@@ -1326,7 +1326,7 @@ void FUN_L16_002cddb8(unsigned char *m) {
             FUN_L00_0024f7c8(m, D_L16_001619C8, v1.f);
             func_L00_0025A8E8_2cf180(m, 0.333f, v1.f, 1, 1.0f, 1.0f, 0, 1, 0);
             g = &hero;
-            if (D_L16_00174258 == ((char *)g->moby) && g->unk1C0 == 0) {
+            if (D_L16_00174258 == ((char *)g->moby) && g->invulnerable_frames == 0) {
                 func_0022ED80_i(6, 0, m);
             }
             if (vector_length_xyz(v0.f) < 0.0001f) {

@@ -39,11 +39,11 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern f32 FUN_0020c9e0(struct Moby *);
 
 /* Hero animation frame advance: steps the hero moby's frame position
-   (unk54) by the rate in hero.unkA90/unkA94 or a scripted table, moves to
+   (unk54) by the rate in hero.anim_speed/unkA94 or a scripted table, moves to
    the next frame of the sequence each time it passes 1.0 (wrapping or
    jumping as hero.unkAB0/unkAB4/unkAB8 request), fires the sequence's sound
    triggers crossed this frame, keeps the moby's looping sound in step,
-   and records the distance moved (hero.unkAA8/unkAAC). */
+   and records the distance moved (hero.anim_frame/unkAAC). */
 void FUN_L00_00232670(void) {
     struct Moby *m = hero.moby;
     s32 same;
@@ -58,7 +58,7 @@ void FUN_L00_00232670(void) {
     frame0 = m->frame;
     t0 = m->unk54;
     if (m->seq == m->prev_seq) {
-        m->unk54 = t0 + hero.unkA90 * hero.unkA94;
+        m->unk54 = t0 + hero.anim_speed * hero.unkA94;
     } else if (hero.unkAA0 >= 0) {
         m->unk54 = D_L00_0017BDF0[hero.unkAA0][hero.unkAA4++];
     } else {
@@ -135,10 +135,10 @@ void FUN_L00_00232670(void) {
     }
     FUN_L00_00232128();
     FUN_L00_002322c8();
-    prev = hero.unkAA8;
-    hero.unkAA8 = FUN_0020c9e0(m);
-    if (prev <= hero.unkAA8)
-        hero.unkAAC = hero.unkAA8 - prev;
+    prev = hero.anim_frame;
+    hero.anim_frame = FUN_0020c9e0(m);
+    if (prev <= hero.anim_frame)
+        hero.unkAAC = hero.anim_frame - prev;
     else
         hero.unkAAC = dt;
     hero.unkA9C = m->seq != m->prev_seq;

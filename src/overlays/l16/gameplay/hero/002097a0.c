@@ -23,19 +23,19 @@ float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L16_002097a0(void) {
     struct Hero *g = &hero;
     int keep = g->unk12ED;
-    int st = g->unk12E0;
+    int st = g->ground_type;
     int v;
-    FUN_001f9810(&g->unk12E0, 0x10);
+    FUN_001f9810(&g->ground_type, 0x10);
     g->unk12ED = keep;
-    g->unk12E0 = -1;
+    g->ground_type = -1;
     g->unk20A9 = 0;
     g->unk308 = 0;
     if (st == -1)
         return;
     if (st == 2) {
-        if (g->unk30C.s == 0 || g->ground_distance < 0.3f) {
+        if (g->frames_off_ground.s == 0 || g->ground_distance < 0.3f) {
             g->unk12E7 = 1;
-            if (g->unk20A4 == 0) {
+            if (g->vehicle_mode == 0) {
                 char *p = (char *)g->items[1].moby;
                 if (p != 0 && *(short *)(p + 0xA6) == 0xAD)
                     g->unk308 = 1;
@@ -46,11 +46,11 @@ void FUN_L16_002097a0(void) {
         struct Hero *q = &hero;
         q->base_condition = 1;
         q->unk22A4 = 0.2f;
-        q->height_threshold = q->ground_z.f + 0.2f;
+        q->water_surface_z = q->ground_z.f + 0.2f;
     }
     if (st == 0) {
         struct Hero *q = &hero;
-        float d = q->height_threshold - q->ground_z.f;
+        float d = q->water_surface_z - q->ground_z.f;
         q->unk22A4 = d;
         if (d < 0.85f && 0.25f < d)
             q->unk20A9 = 1;
@@ -99,7 +99,7 @@ void FUN_L16_002097a0(void) {
     }
     if (st == 0x8) {
         struct Hero *q = &hero;
-        q->unk12EA = 1;
+        q->on_slip_ground = 1;
     }
     if (st == 0x9) {
         struct Hero *q = &hero;
@@ -107,7 +107,7 @@ void FUN_L16_002097a0(void) {
     }
     if (st == 0xC) {
         struct Hero *q = &hero;
-        q->unk12EA = 1;
+        q->on_slip_ground = 1;
     }
     {
         struct Hero *q = &hero;
@@ -121,8 +121,8 @@ void FUN_L16_002097a0(void) {
         }
         h = &hero;
         if (h->selector_13 != 0 && h->state.current != 0x7F) {
-            if (absolute_float(h->height_threshold - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
-                if (h->height_threshold - h->motion.pos.f[2] > 0.0f) {
+            if (absolute_float(h->water_surface_z - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
+                if (h->water_surface_z - h->motion.pos.f[2] > 0.0f) {
                     if (h->motion.unk100.f[2] < 0.0f) {
                         FUN_L00_0020b930();
                         hero_set_state(0x7F, 1);
@@ -203,10 +203,10 @@ void FUN_L16_0020ffb0(void) {
 
     hero.unk270.f[2] = 1.0f;
     hero.air_frames.u++;
-    hero.unk30C.u++;
+    hero.frames_off_ground.u++;
     hero.unk270.i[0] = 0;
     hero.unk270.i[1] = 0;
-    hero.unk2E0.i = 0;
+    hero.ground_slope.i = 0;
     hero.ground_z.i = 0;
     FUN_001f99f8_c((u8 *)&hero.ground_point);
     hero.unk30A = 0;
@@ -231,10 +231,10 @@ void FUN_L16_0020ffb0(void) {
         r = 3;
     }
     hero.unk12ED = r;
-    hero.unk12E0 = FUN_001f0b58_c();
-    if (hero.unk12E0 == 0) {
-        hero.height_threshold = resolve_camera_surface_height(D_L16_00174260, (u8 *)&hero.unk280);
-        if (hero.motion.pos.f[2] < hero.height_threshold && hero.unk2F8 <= 0) {
+    hero.ground_type = FUN_001f0b58_c();
+    if (hero.ground_type == 0) {
+        hero.water_surface_z = resolve_camera_surface_height(D_L16_00174260, (u8 *)&hero.unk280);
+        if (hero.motion.pos.f[2] < hero.water_surface_z && hero.unk2F8 <= 0) {
             hero.unk2F8 = 1;
         }
         if (FUN_001efa68(&v10, &v0, 0x24, (s32)hero.moby, 0) == 0) {
@@ -246,14 +246,14 @@ void FUN_L16_0020ffb0(void) {
         }
         hero.unk12ED = r;
     }
-    if (hero.unk12E0 == 0xD) {
-        hero.height_threshold = HH.point.f[2];
+    if (hero.ground_type == 0xD) {
+        hero.water_surface_z = HH.point.f[2];
         v10.f[2] = HH.point.f[2] - 0.01f;
         if (FUN_001efa68(&v10, &v0, 4, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
     }
-    if (hero.unk12E0 == 0xB) {
+    if (hero.ground_type == 0xB) {
         hero.unk2F4 = HH.point.f[2];
         goto d1;
     }
@@ -275,15 +275,15 @@ void FUN_L16_0020ffb0(void) {
         hero.ground_distance = FUN_001f9b48((u8 *)&hero.motion.pos, (u8 *)&hero.ground_point);
         hero.ground_moby = (struct Moby *)HH.moby;
         FUN_00125180((u8 *)&hero.unk270, (u8 *)&HH.normal_x);
-        hero.unk2E0.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
-        hero.unk2EC = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
+        hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
+        hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
         FUN_001f9a28(&v20, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
         if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&hero.unk270)) {
             hero.ground_distance = -hero.ground_distance;
         }
         if (hero.ground_distance < 0.02f) {
-            hero.unk30C.s = 0;
-            if (hero.unk2E0.f <= 0.87266463f || hero.unk20B3 == 1 || hero.state.control_mode == 0x16) {
+            hero.frames_off_ground.s = 0;
+            if (hero.ground_slope.f <= 0.87266463f || hero.unk20B3 == 1 || hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
                 hero.unkA80 = HH.moby;
             }
@@ -296,7 +296,7 @@ tail:
         hero.unk300++;
         qcopy((u8 *)&hero.unk2B0, (u8 *)&hero.ground_point);
     }
-    if (hero.motion.pos.f[2] > hero.height_threshold) {
+    if (hero.motion.pos.f[2] > hero.water_surface_z) {
         hero.unk2F8 = 0;
     }
 d1:
@@ -448,7 +448,7 @@ s32 FUN_L16_00210b60(s32 mode) {
         qcopy(&hero.motion.pos.q, c);
         qcopy(&hero.unk200.q, c + 1);
         qcopy(&hero.unk210.q, c - 1);
-        hero.unk257 = 1;
+        hero.wall_hit = 1;
         hero.coll_hit_moby = ((u8 **)c)[-6];
     }
     vsub_2133a8(&hero.motion.pos.q, &hero.motion.pos.q, &v);

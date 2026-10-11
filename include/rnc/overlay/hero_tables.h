@@ -40,8 +40,8 @@ typedef struct HeroAnimRow {
 } HeroAnimRow;
 
 /*
- * 0x2C-byte row of D_L00_0017BC28, indexed by hero.unkA60. fC..f20 are
- * limits on the float hero.unkAA8 (fC is subtracted from it; f10, f14,
+ * 0x2C-byte row of D_L00_0017BC28, indexed by hero.attack_record. fC..f20 are
+ * limits on the float hero.anim_frame (fC is subtracted from it; f10, f14,
  * f18 and f1C..f20 are compared with it).
  */
 typedef struct HeroTableRow2C {

@@ -998,7 +998,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
             moby->f94 = moby->cls->f10;
             moby->state = 3;
         } else {
-            if (hero.unk20A4 == 0) {
+            if (hero.vehicle_mode == 0) {
                 moby->flags |= 0x41;
                 d->f170->flags |= 0x41;
                 moby->flags &= 0xEFFF;
@@ -2083,7 +2083,7 @@ void FUN_L06_002f7930(char *m) {
     for (i = 0; i < 32; i++) {
         if (list[i] >= 0 && is_point_inside_clip_volume(&hero.motion.pos, list[i])) {
             struct Hero *h = &hero;
-            if (h->unk20A4 != 0) {
+            if (h->vehicle_mode != 0) {
                 fade_to_black(scale_game_frames(10));
                 FUN_L00_00211250();
             } else if (h->state.current != 0x77) {

@@ -30,7 +30,7 @@ s32 FUN_L00_00229010(s32 *index) {
     f32 total, pick;
 
     count = 0;
-    if (hero.unk1E8 != 0) return 0;
+    if (hero.fidget_cooldown != 0) return 0;
     if (hero.health.hp == 1) {
         *index = 4;
         if (D_L00_00179AB0 != 0) return 0;
@@ -183,14 +183,14 @@ int FUN_L00_00229660(void) {
         if (!FUN_L00_00266d60_229660(0x40, a, 0))
             return 0;
         if (FUN_L00_0020d498_229660(3) == 2 && D_0013D4C2_229660 != 0 && hero.unk22D8 == 0) {
-            if ((2.5f < hero.unk248 || hero.unk250 < 0.7853982f) && 0.7f < hero.unk229C &&
+            if ((2.5f < hero.wall_probe_distance || hero.unk250 < 0.7853982f) && 0.7f < hero.unk229C &&
                 D_0015ED6C_229660 * 0.9f < hero.motion.unk168) {
                 m = 0xA;
                 goto found;
             }
         }
         if (FUN_L00_0020d498_229660(3) == 3 && hero.unk22D8 == 0 && 0.7f < hero.unk229C &&
-            (2.5f < hero.unk248 || hero.unk254) && D_0015ED6C_229660 * 0.9f < hero.motion.unk168) {
+            (2.5f < hero.wall_probe_distance || hero.unk254) && D_0015ED6C_229660 * 0.9f < hero.motion.unk168) {
             if (hero.unk1B8)
                 return 1;
             m = 0x10;

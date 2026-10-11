@@ -871,7 +871,7 @@ void FUN_L15_002cf3a8(UMoby *m) {
     d = m->data;
     FUN_L15_002d0fa8(m);
     tgt = d->target;
-    if (m->state != 0 && m->state != 0x40 && hero.unk20A4 != 2) {
+    if (m->state != 0 && m->state != 0x40 && hero.vehicle_mode != 2) {
         m->w94 = 0;
         m->flags |= 0x41;
         idx = d->snd;
@@ -921,14 +921,14 @@ void FUN_L15_002cf3a8(UMoby *m) {
         if (d->w1CC != -1 || is_point_inside_clip_volume(&hero.motion.pos, d->w1DC)) {
             if (d->w1CC != -1 && FUN_L01_0026e008(d->w1CC, 0x40))
                 break;
-            if (hero.unk20A4 == 2) {
+            if (hero.vehicle_mode == 2) {
                 m->w94 = *(int *)(m->cls + 0x10);
                 m->flags = (m->flags & 0xFFBE) | 0x1000;
             }
         }
         if (d->w164 != 2 && d->path != -1) {
             struct Hero *pl = &hero;
-            if (pl->unk20A4 == 2 && (m->flags & 0x1000)) {
+            if (pl->vehicle_mode == 2 && (m->flags & 0x1000)) {
                 if (d->w1D0 != -1 && !FUN_L00_00259740(&pl->motion.pos, D_L15_001B0AB0[d->w1D0]->pt,
                                                        D_L15_001B0AB0[d->w1D0]->n)) {
                     m->w94 = 0;
@@ -1288,7 +1288,7 @@ void FUN_L15_002cf3a8(UMoby *m) {
         *(int *)(((char *)&D_0014C190) + (((short)m->id >> 5) * 4 + (current_level_index << 8))) &=
             ~(1 << (m->id & 0x1F));
         D_L15_001BAAD0[(short)m->id >> 5] &= ~(1 << (m->id & 0x1F));
-        if (hero.unk20A4 != 2)
+        if (hero.vehicle_mode != 2)
             m->state = 0;
         break;
     }

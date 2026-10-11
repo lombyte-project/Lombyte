@@ -413,7 +413,7 @@ void FUN_L00_002a57a8(P_2a57a8 *p) {
             a = 0;
             b = 0;
         }
-        if (hero_data.unk20A4) {
+        if (hero_data.vehicle_mode) {
             a = 0;
             b = 0;
         }
@@ -684,8 +684,8 @@ void FUN_L00_002a5dd8(Bolt *obj) {
         v->rot.f[1] = FUN_001f9e90(D_L00_00173E40.normal_z, FUN_001f9b20(&D_L00_00173E40.normal_x));
         FUN_001f9a28(&a, &obj->pos, &D_L00_00173E40.point);
         FUN_L00_001ff660(&v->vel, &v->vel, &a);
-        if (FUN_001f9b80(&obj->pos, &hero.motion.pos) < hero.unk2288 &&
-            FUN_001f99c0(obj->pos.f[2] - hero.motion.pos.f[2]) < hero.unk228C) {
+        if (FUN_001f9b80(&obj->pos, &hero.motion.pos) < hero.reach_distance &&
+            FUN_001f99c0(obj->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
             if (hero.health.hp == 0) {
                 return;
             }
@@ -731,7 +731,7 @@ void FUN_L00_002a5dd8(Bolt *obj) {
         return;
     case 3:
         dist = FUN_001f9b80(&obj->pos, &hero.motion.pos);
-        if (dist < hero.unk2288 && FUN_001f99c0(obj->pos.f[2] - hero.motion.pos.f[2]) < hero.unk228C) {
+        if (dist < hero.reach_distance && FUN_001f99c0(obj->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
             FUN_L00_002a7210_c(obj, hero.moby, 0.0f, 0.0f);
             return;
         }

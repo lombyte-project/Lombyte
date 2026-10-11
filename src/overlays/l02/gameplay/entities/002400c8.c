@@ -2650,7 +2650,7 @@ void FUN_L02_002ddc88(unsigned char *moby) {
             moby[0xBC] = 0;
             moby[0x20] = 3;
             FUN_0022da68_dc88(1, 0, moby);
-        } else if ((unsigned char *)hero.ground_moby == (struct Moby *)moby && hero.air_frames.s == 0 && hero.unk20A4 == 0) {
+        } else if ((unsigned char *)hero.ground_moby == (struct Moby *)moby && hero.air_frames.s == 0 && hero.vehicle_mode == 0) {
             qcopy(&b, moby + 0x10);
             b.f[2] += 2.0f;
             if (moby[0xBC] == 0) {

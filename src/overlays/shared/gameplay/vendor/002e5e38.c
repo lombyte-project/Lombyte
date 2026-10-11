@@ -172,7 +172,7 @@ void FUN_L00_002e6000(O_2e6000 *o) {
         flag = 1;
         {
             S40_2e6000 *q5 = (S40_2e6000 *)((u8 *)o->m + 0x40);
-            if (hero.unk20A4 == 1) {
+            if (hero.vehicle_mode == 1) {
                 q5->fB0 = 0.25f;
                 FUN_L00_002e84b8(1.5f, 0.003f);
             } else {
@@ -182,7 +182,7 @@ void FUN_L00_002e6000(O_2e6000 *o) {
         }
     }
     if (hero.state.control_mode == 0x10) o->m->fF0 = 0.25f;
-    if (hero.unk20A4 == 1) {
+    if (hero.vehicle_mode == 1) {
         if (s->i0 == 0) {
             q = (S40_2e6000 *)((u8 *)o->m + 0x40);
             FUN_L00_002e8450(1, 3.0f, 0.003f);
@@ -193,7 +193,7 @@ void FUN_L00_002e6000(O_2e6000 *o) {
         }
         *(f32 *)((u8 *)o->m + 0x20C) = 0.6f;
     }
-    if (hero.unk20A4 == 2) {
+    if (hero.vehicle_mode == 2) {
         if (s->i10 < 2) {
             FUN_L00_002e84f0(0, D_L00_00161D98, 0.005f);
             FUN_L00_002e8450(1, D_L00_00161D9C, 0.003f);
@@ -819,7 +819,7 @@ int FUN_L00_002e7138(unsigned char *m, void *b, int c, int d) {
         return d;
     }
     dist = FUN_001f9af0_2e7138(A);
-    if (hero.unk20A4 != 2 && absolute_float(D_0013CA40_2e7138) > 0.05f && d) {
+    if (hero.vehicle_mode != 2 && absolute_float(D_0013CA40_2e7138) > 0.05f && d) {
         dist -= D_L00_00161CB8_2e7138 * D_0015ED60_2e7138;
         *(short *)(B + 0x34) = FUN_001f96f8_2e7138(0x884);
     }
@@ -1106,7 +1106,7 @@ int FUN_L00_002e7a30(unsigned char *a) {
                 qcopy(save, pos);
                 if (FUN_L00_002e7618_2e7a30(a, pos, i, dist, spd)) {
                     found = 1;
-                    if (g->unk20A4 != 2 && absolute_float(D_0013CA40_2e7a30) > 0.05f) {
+                    if (g->vehicle_mode != 2 && absolute_float(D_0013CA40_2e7a30) > 0.05f) {
                         subtract_vector_xyz(d, step, save);
                         FUN_001f9bf8_2e7a30(d, d, 1.0f);
                         if (absolute_float(FUN_001f9ab0_2e7a30(D_L00_00166E40_2e7a30, d)) <
