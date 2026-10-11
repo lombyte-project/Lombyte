@@ -783,7 +783,248 @@ void FUN_L00_002b5d00(char *m, int flag) {
         spawn_glow_particle(m, m + 0x10, n, scale_game_frames(29), 0x20, 0, 0, 0x20, 1.0f);
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b6140.s", FUN_L00_002b6140);
+#else
+typedef union {
+    unsigned int q __attribute__((mode(TI), aligned(16)));
+    float f[4];
+    int i[4];
+} Vec_2b6140;
+
+typedef struct {
+    unsigned char pad0[4];
+    float speed;
+    unsigned char pad8[8];
+    int timer;
+    void *handle;
+    float aim;
+    float turn;
+    int pad20;
+    void *left;
+    void *right;
+    int pad2c;
+    unsigned char pad30[0x14];
+    float lift;
+    float blend;
+} Vars_2b6140;
+
+extern float D_0015ED6C_2b6140 __asm__("D_0015ED6C");
+extern float D_0015ED60_2b6140 __asm__("D_0015ED60");
+extern int D_L00_0015F608_2b6140 __asm__("D_L00_0015F608");
+extern int D_L00_0015F458_2b6140 __asm__("D_L00_0015F458");
+extern int D_L00_0017E508_2b6140 __asm__("D_L00_0017E508") __attribute__((section(".data")));
+extern float D_L00_00161498_2b6140 __asm__("D_L00_00161498") __attribute__((sda));
+extern float D_L00_0016149C_2b6140 __asm__("D_L00_0016149C") __attribute__((sda));
+extern float D_L00_001614A0_2b6140 __asm__("D_L00_001614A0") __attribute__((sda));
+extern float D_L00_001614A4_2b6140 __asm__("D_L00_001614A4") __attribute__((sda));
+extern float D_L00_001614A8_2b6140 __asm__("D_L00_001614A8") __attribute__((sda));
+extern float D_L00_0015ED60_2b6140 __asm__("D_0015ED60");
+extern int D_001413D4_2b6140 __asm__("D_001413D4") __attribute__((section(".data")));
+extern int D_001413DC_2b6140 __asm__("D_001413DC") __attribute__((section(".data")));
+extern int D_001413D0_2b6140 __asm__("D_001413D0") __attribute__((section(".data")));
+extern int D_0013F650_2b6140 __asm__("D_0013F650") __attribute__((section(".data")));
+extern unsigned char *D_0013F64C_2b6140 __asm__("D_0013F64C") __attribute__((section(".data")));
+extern unsigned int D_0013CAE0_2b6140 __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern unsigned int D_0013CAE4_2b6140 __asm__("D_0013CAE4") __attribute__((section(".data")));
+extern float D_00141070_2b6140 __asm__("D_00141070") __attribute__((section(".data")));
+extern float D_00141074_2b6140 __asm__("D_00141074") __attribute__((section(".data")));
+extern int D_L00_00173E58_2b6140 __asm__("D_L00_00173E58") __attribute__((section(".data")));
+extern Vec_2b6140 D_L00_00173E60_2b6140 __asm__("D_L00_00173E60") __attribute__((section(".data")));
+extern Vec_2b6140 D_L00_00173E80_2b6140 __asm__("D_L00_00173E80") __attribute__((section(".data")));
+extern int D_0013E5C4_2b6140[] __asm__("D_0013E5C4");
+extern void *D_0013E5D8_2b6140[] __asm__("D_0013E5D8");
+extern void FUN_L00_00203b18_2b6140(void) __asm__("FUN_L00_00203b18");
+extern void FUN_002151d8_2b6140(int, int) __asm__("FUN_002151d8");
+extern int FUN_001f96f8_2b6140(int) __asm__("FUN_001f96f8");
+extern void FUN_L00_002eb648_2b6140(void *, void *) __asm__("FUN_L00_002eb648");
+extern int FUN_001fa6d0_2b6140(float) __asm__("FUN_001fa6d0");
+extern void FUN_L00_0028df38_2b6140(int, int) __asm__("FUN_L00_0028df38");
+extern float FUN_001fa5c8_2b6140(float, float) __asm__("FUN_001fa5c8");
+extern void FUN_L00_00259fe8_2b6140(float, void *) __asm__("FUN_L00_00259fe8");
+extern void FUN_00214db0_2b6140(Vec_2b6140 *, float, float, float) __asm__("FUN_00214db0");
+extern void FUN_001f9a10_2b6140(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float FUN_00213508_2b6140(float, void *, int) __asm__("FUN_00213508");
+extern float FUN_00213ed8_2b6140(float, float, float *) __asm__("FUN_00213ed8");
+extern float FUN_001f9e90_2b6140(float, float) __asm__("FUN_001f9e90");
+extern float FUN_001f99c0_2b6140(float) __asm__("FUN_001f99c0");
+extern void FUN_L00_001fff28_2b6140(float, void *, int) __asm__("FUN_L00_001fff28");
+extern void FUN_001f9c48_2b6140(void *, void *, float) __asm__("FUN_001f9c48");
+extern int FUN_001efa68_2b6140(void *, void *, int, int, void *) __asm__("FUN_001efa68");
+extern void FUN_001f9a28_2b6140(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001f9bf8_2b6140(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void FUN_L00_001ff660_2b6140(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void FUN_0022d798_2b6140(int) __asm__("FUN_0022d798");
+extern void FUN_L00_0025e450_2b6140(float, float, float, float, float, float, float, void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern int FUN_L00_001f2868_2b6140(float, void *, int, void *, int) __asm__("FUN_L00_001f2868");
+extern void FUN_L00_0025a9f8_2b6140(float, float, float, void *, void *, void *, int, int, int, int, int) __asm__("FUN_L00_0025a9f8");
+extern void FUN_L00_0025f8e0_2b6140(float, void *) __asm__("FUN_L00_0025f8e0");
+
+void FUN_L00_002b6140(unsigned char *m) {
+    volatile float initial_scale = D_0015ED6C_2b6140 * 8.0f;
+    Vars_2b6140 *v = *(Vars_2b6140 **)(m + 0x78);
+    Vec_2b6140 old, offset, axis, normal, hit_vec, hit, saved;
+    unsigned char hit_info[0x40] __attribute__((aligned(16)));
+    float x, y, z, t, f;
+    int owner, i, index;
+    int hit_player = 0;
+
+    offset.q = 0;
+    axis.q = 0;
+    axis.f[2] = 1.0f;
+    D_L00_0015F608_2b6140 = 1;
+    D_L00_0015F458_2b6140 = 1;
+    FUN_L00_00203b18_2b6140();
+    D_L00_0017E508_2b6140 = 1;
+    FUN_002151d8_2b6140(6, 0);
+    v->timer--;
+    if (-FUN_001f96f8_2b6140(100) >= v->timer || D_001413D4_2b6140 == 0x16 ||
+        D_001413D4_2b6140 == 0x3d || D_001413D4_2b6140 == 0x72 ||
+        D_001413DC_2b6140 == 2 || D_001413DC_2b6140 == 4 ||
+        D_001413DC_2b6140 == 3 || D_001413DC_2b6140 > 12 ||
+        D_001413DC_2b6140 == 7 || D_001413DC_2b6140 == 10 ||
+        D_001413DC_2b6140 == 16 || D_001413DC_2b6140 == 5 ||
+        D_001413D4_2b6140 == 0x65 || D_0013F650_2b6140 == 0)
+        goto end;
+    if (D_0013F64C_2b6140 &&
+        (*(short *)(D_0013F64C_2b6140 + 0xa6) == 0x13e ||
+         *(short *)(D_0013F64C_2b6140 + 0xa6) == 0x46f))
+        goto end;
+    if (v->timer < 0) {
+        if (v->handle) FUN_L00_002eb648_2b6140(v->handle, m);
+        FUN_L00_002b57f0((int)m, 0);
+        FUN_L00_002b5ba0(m, (unsigned char *)v);
+        return;
+    }
+    t = D_L00_0016149C_2b6140 * D_0015ED6C_2b6140;
+    if (D_0013CAE0_2b6140 & 0x40)
+        t = D_L00_001614A0_2b6140 * D_0015ED6C_2b6140;
+    v->blend += (t - v->blend) * D_L00_001614A4_2b6140;
+    v->speed += (v->blend - v->speed) * D_L00_001614A8_2b6140;
+    f = D_L00_001614A0_2b6140 * D_0015ED6C_2b6140;
+    if (f < v->speed) v->speed = f;
+    i = FUN_001fa6d0_2b6140((v->blend - D_L00_0016149C_2b6140 * D_0015ED6C_2b6140 /
+        (D_L00_001614A0_2b6140 * D_0015ED6C_2b6140 - D_L00_0016149C_2b6140 * D_0015ED6C_2b6140)) * D_L00_00161498_2b6140);
+    FUN_L00_0028df38_2b6140(v->pad2c, i);
+    if (v->timer > 0 && v->timer < FUN_001f96f8_2b6140(3000) - FUN_001f96f8_2b6140(5)) {
+        f = D_0015ED60_2b6140 * 0.1f;
+        v->turn += (D_00141074_2b6140 - v->turn) * f;
+        v->aim += (D_00141070_2b6140 - v->aim) * f;
+        *(float *)(m + 0x40) += (v->aim - *(float *)(m + 0x40)) * (D_0015ED60_2b6140 * 0.06f);
+        x = FUN_001fa5c8_2b6140(*(float *)(m + 0x44), v->turn * (D_0015ED60_2b6140 * 0.012271847f));
+        *(float *)(m + 0x44) = x;
+        if (1.5707964f <= x) goto upper_angle;
+        if (!(x <= -1.5707964f)) {
+            f = D_0015ED6C_2b6140;
+            goto angle_done;
+        }
+        *(float *)(m + 0x44) = -1.5697963f;
+        goto angle_clamped;
+upper_angle:
+        *(float *)(m + 0x44) = 1.5697963f;
+angle_clamped:
+        f = D_0015ED60_2b6140;
+angle_done:
+        *(float *)(m + 0x48) = FUN_001fa5c8_2b6140(*(float *)(m + 0x48), v->aim * (f * 0.012271847f));
+        FUN_L00_00259fe8_2b6140(0.2f, m);
+    }
+    FUN_00214db0_2b6140(&offset, v->speed, *(float *)(m + 0x48), -*(float *)(m + 0x44));
+    qcopy(&old, m + 0x10);
+    FUN_001f9a10_2b6140(m + 0x10, m + 0x10, &offset);
+    if (FUN_001f96f8_2b6140(3000) - FUN_001f96f8_2b6140(60) < v->timer) {
+        f = FUN_00213508_2b6140(0.5f, m + 0x10, 0) + v->lift;
+        if (f > *(float *)(m + 0x18) &&
+            (D_L00_00173E58_2b6140 == 0 || *(int *)(D_L00_00173E58_2b6140 + 0x24) == 0 ||
+             *(short *)(*(int *)(D_L00_00173E58_2b6140 + 0x24) + 0x46) == 5)) {
+            f = FUN_00213ed8_2b6140(f, D_0015ED6C_2b6140 * 6.0f, (float *)(m + 0x18));
+            f = FUN_001f9e90_2b6140(v->speed, f);
+            if (D_0015ED6C_2b6140 * 1.5707964f < f) f = D_0015ED6C_2b6140 * 1.5707964f;
+            *(float *)(m + 0x44) -= f;
+        }
+    }
+    x = *(float *)(m + 0x10);
+    y = *(float *)(m + 0x14);
+    z = *(float *)(m + 0x18);
+    if (!(4.5f <= x && x <= 1018.5f && 4.5f <= y && y <= 1018.5f &&
+          4.5f <= z && z <= 1018.5f))
+        goto end;
+    FUN_L00_002b5ba0(m, (unsigned char *)v);
+    f = FUN_001f99c0_2b6140(v->aim / 3.0f);
+    FUN_L00_001fff28_2b6140(-((v->turn * 0.5f + f + (v->aim - *(float *)(m + 0x40)) * 1.1f) * 0.7f), (unsigned char *)v->left + 0x10, 1);
+    f = FUN_001f99c0_2b6140(v->aim / 3.0f);
+    FUN_L00_001fff28_2b6140(-((v->turn * 0.5f + f - (v->aim - *(float *)(m + 0x40)) * 1.1f) * 0.7f), (unsigned char *)v->right + 0x10, 1);
+    *(int *)(hit_info + 0x14) = 0x830000;
+    *(float *)(hit_info + 0x1c) = 6.0f;
+    *(int *)(hit_info + 0x10) = (int)m;
+    *(int *)(hit_info + 0x20) = 1;
+    qcopy(hit_info, &axis);
+    FUN_001f9c48_2b6140(hit_info, hit_info, 1.0f);
+    *(short *)(hit_info + 0x1a) = *(short *)(m + 0xa6);
+    hit_info[0x18] = 3;
+    hit_info[0x19] = 2;
+    *(float *)(hit_info + 0xc) = 5627.925f;
+    *(float *)(hit_info + 8) = 1.0f;
+    owner = FUN_001f96f8_2b6140(3000) - 40 < v->timer ? D_001413D0_2b6140 : (int)m;
+    if (FUN_001efa68_2b6140(&old, m + 0x10, 0, owner, hit_info)) {
+        if (D_L00_00173E58_2b6140 == 0) {
+            if (*((int *)&D_L00_00173E60_2b6140 - 1) < 1) goto collision_done;
+            m[0xbc] = 1;
+        } else {
+            m[0xbc] = 2;
+            hit_player = D_L00_00173E58_2b6140 == D_001413D0_2b6140;
+        }
+        qcopy(m + 0x10, &D_L00_00173E60_2b6140);
+        FUN_001f9a28_2b6140(&hit_vec, (unsigned char *)&D_L00_00173E60_2b6140 + 0x30, (unsigned char *)&D_L00_00173E60_2b6140 + 0x40);
+        FUN_001f9bf8_2b6140(&hit_vec, &hit_vec, 1.0f);
+        FUN_L00_001ff660_2b6140(&normal, &offset, &D_L00_00173E80_2b6140);
+        FUN_001f9bf8_2b6140(&normal, &normal, D_0015ED6C_2b6140 + D_0015ED6C_2b6140);
+        FUN_001f9bf8_2b6140(&axis, &D_L00_00173E80_2b6140, 1.0f);
+        index = v->pad2c;
+        if (index != -1 && D_0013E5D8_2b6140[index * 0x70 / 4] == m &&
+            *((unsigned char *)D_0013E5C4_2b6140 + index * 0x70))
+            FUN_0022d798_2b6140(index);
+        v->pad2c = -1;
+    } else if (v->timer == 0) goto end;
+collision_done:
+    if (v->timer < FUN_001f96f8_2b6140(3000) - FUN_001f96f8_2b6140(60) &&
+        (D_0013CAE4_2b6140 & 0x20)) {
+        m[0xbc] = 1;
+        index = v->pad2c;
+        if (index != -1 && D_0013E5D8_2b6140[index * 0x70 / 4] == m &&
+            *((unsigned char *)D_0013E5C4_2b6140 + index * 0x70))
+            FUN_0022d798_2b6140(index);
+        v->pad2c = -1;
+    }
+    if (m[0xbc]) {
+        if (!hit_player) {
+            FUN_L00_0025e450_2b6140(0, 0, 4.0f, 2.0f, 0, 1.0f, 20.0f, m, &normal, 0, 10, 3, 16, 1, 1);
+            i = FUN_L00_001f2868_2b6140(4.0f, m + 0x10, 16, m, 0);
+            qcopy(&saved, m + 0x10);
+            FUN_L00_0025a9f8_2b6140(6.0f, 1.0f, 1.0f, m, &saved, (void *)0x177f00, i, 0, 0x830000, 3, 2);
+        }
+        *(unsigned short *)(m + 0x34) |= 1;
+        v->speed = D_0015ED60_2b6140 * 0.02f;
+        v->aim *= 0.01f;
+        if (FUN_001f96f8_2b6140(3000) - FUN_001f96f8_2b6140(30) < v->timer)
+            v->timer = -FUN_001f96f8_2b6140(100);
+        else v->timer = -1;
+        qcopy(&saved, m + 0x10);
+        i = 4;
+        do {
+            qcopy(m + 0x10, &saved);
+            FUN_L00_0025f8e0_2b6140(1.5f, m + 0x10);
+            FUN_L00_002b5d00((char *)m, 1);
+            qcopy(m + 0x10, &saved);
+        } while (--i >= 0);
+        offset.i[0] = 0;
+        m[0xbc] = 0;
+    }
+    if (v->handle) FUN_L00_002eb648_2b6140(v->handle, m);
+    return;
+end:
+    FUN_L00_002b5b20(m, (char **)v);
+}
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b6bc8.s", FUN_L00_002b6bc8);
 #else
