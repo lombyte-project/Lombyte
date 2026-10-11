@@ -4,7 +4,235 @@
 #include "asm.h"
 
 /* Level load: relocates sky, uploads textures, loads HUD banks, flushes cache; many DebugPrints. */
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00252dd0.s", FUN_L06_00252dd0);
+#else
+#include "eetypes.h"
+#define W(a) (*(int *)(a))
+#define H(a) (*(short *)(a))
+#define UH(a) (*(volatile unsigned short *)(a))
+#define B(a) (*(unsigned char *)(a))
+#define Q(a) (*(unsigned long long *)(a))
+#define P(a) ((int *)(a))
+#define AT(p,n) (*(int *)((char *)(p) + (n)))
+
+extern void FUN_00202a98(void);
+extern void FUN_001f98d0(void *, void *, int);
+extern void FUN_001f9838(void *, void *, int);
+extern void FUN_00203120(void *, int, void *);
+extern void FUN_00118a80(int);
+extern int FUN_L00_0024d8d0(void *, int);
+extern int FUN_001f97a0(int);
+extern void FUN_002040e0(int, void *);
+extern void FUN_002028e0(int);
+extern void FUN_L00_00241728(int);
+extern void FUN_00203640(int, void *, void *, int);
+extern void FUN_L00_00241788(void *, int);
+extern void FUN_002032e0(int, int);
+extern void FUN_00203730(int, void *, void *, int);
+extern void FUN_001e93e8(void *, int);
+extern void FUN_00203b08(int, void *, void *, void *, int);
+extern void FUN_00202800(void *, int);
+extern void FUN_L00_0023f120(int);
+extern void FUN_L00_0023f0d8(int);
+extern void FUN_002026c8(void *, int, void *, int);
+extern void FUN_001e93b0(int, ...);
+extern void FUN_001f97e8(void *, int, int);
+extern int FUN_L00_0023fa00(int, void *);
+extern int FUN_L00_00241940(int);
+extern float FUN_001fa6c0(int);
+extern int FUN_00120478(float);
+extern void FUN_L00_00285008(void);
+extern void FUN_00226f50(void);
+extern void FUN_L00_00264740(void);
+
+int FUN_L06_00252dd0(int param_1, int param_2) {
+    int *level = P(0x174580);
+    int *data = P(level[1]);
+    int *source = P(W(0x15ee4c));
+    int base;
+    int end;
+    int i, j, count, value, *entry;
+    short *sequence, *record;
+    float elapsed;
+
+    if (param_1 != 0) FUN_00202a98();
+    base = level[5];
+    if (param_1 != 0) {
+        FUN_001f98d0(data, (char *)source + source[4], source[5]);
+        W(0x15f40c) = 0;
+        FUN_001f9838(P(0x15fc88), P(0x14c050 + W(0x15ed84) * 16), 16);
+        FUN_00203120((char *)source + source[6], data[0], (char *)data + data[1]);
+        W(0x160004) = W(0x15ed5c);
+        FUN_00118a80(0);
+        end = FUN_L00_0024d8d0((char *)source + source[20], base);
+        Q(0x182f40) = 0x80000005c0000000ULL | 0x1d308000 | ((long long)((W(0x15ee8c) + data[37]) >> 8) << 37) | ((W(0x15ee8c) + data[36]) >> 8);
+        Q(0x182f48) = 0xffa0000000e0ULL;
+        Q(0x182f50) = 0x40000400004000ULL;
+        Q(0x182f68) = 0x40000400004000ULL;
+        Q(0x182f60) = 0xffa0000000e0ULL;
+        Q(0x182f58) = 0x8000000580000000ULL | 0x19304000 | ((long long)((W(0x15ee8c) + data[39]) >> 8) << 37) | ((W(0x15ee8c) + data[38]) >> 8);
+        W(0x15f40c) = base + data[24];
+        Q(0x182f80) = 0x40000400004000ULL;
+        Q(0x182f78) = 0xffa0000000e0ULL;
+        Q(0x182f70) = 0x80000005c0000000ULL | 0x1d308000 | ((long long)((W(0x15ee8c) + data[49]) >> 8) << 37) | ((W(0x15ee8c) + data[48]) >> 8);
+
+        W(0x160f54) = data[12];
+        entry = P((char *)data + data[13]);
+        for (i = 0; i < W(0x160f54); i++, entry += 4)
+            W(0x1c5180 + i * 4) = W(0x15f40c) + entry[0] + (FUN_001f97a0((unsigned short)entry[1]) << 28);
+        W(0x15ffc8) = data[14];
+        entry = P((char *)data + data[15]);
+        for (i = 0; i < W(0x15ffc8); i++, entry += 4)
+            W(0x19a200 + i * 4) = W(0x15f40c) + entry[0] + (FUN_001f97a0((unsigned short)entry[1]) << 28);
+        FUN_001f98d0(P(0x1af340), (char *)data + data[15], W(0x15ffc8) << 4);
+        W(0x160fd4) = data[16];
+        entry = P((char *)data + data[17]);
+        for (i = 0; i < W(0x160fd4); i++, entry += 4)
+            W(0x1c6e80 + i * 4) = W(0x15f40c) + entry[0] + (FUN_001f97a0((unsigned short)entry[1]) << 28);
+        W(0x1604ac) = data[18];
+        entry = P((char *)data + data[19]);
+        for (i = 0; i < W(0x1604ac); i++, entry += 4)
+            W(0x1bcd30 + i * 4) = W(0x15f40c) + entry[0] + (FUN_001f97a0((unsigned short)entry[1]) << 28);
+
+        FUN_002040e0(base + data[2], (char *)data + data[13]);
+        if (data[3]) W(0x15f600) = base + data[3];
+        else W(0x15f600) = 0;
+        if (data[4]) FUN_002028e0(base + data[4]);
+        else W(0x16051c) = 0;
+        FUN_L00_00241728(base + data[5]);
+        entry = P((char *)data + data[7]);
+        for (i = 0; i < data[6]; i++, entry += 8) {
+            value = entry[0] ? base + entry[0] : 0;
+            FUN_00203640(value, (char *)data + data[15], entry + 4, entry[1]);
+        }
+        FUN_L00_00241788((char *)data + data[7], data[7]);
+        entry = P((char *)data + data[30]);
+        for (i = 0; i < B(W(0x197a80) + 12); i++, entry++) {
+            if (*entry) {
+                W(W(0x197a80) + 0x48 + i * 4) = base + *entry;
+                FUN_002032e0(W(0x197a80), i);
+            }
+        }
+        W(0x160008) = data[32];
+        W(0x16000c) = -1;
+        W(0x160010) = 0;
+        entry = P((char *)data + data[33]);
+        for (i = 0; i < W(0x160008); i++, entry += 4) {
+            W(0x1b0340 + i * 4) = entry[1];
+            W(0x1b03a0 + i * 4) = base + entry[0];
+            W(0x1b0400 + i * 4) = entry[2];
+            *(u128 *)(0x1b0460 + i * 16) = *(u128 *)((char *)data + data[7] + 0x10 + B(0x198340 + entry[1]) * 0x20);
+        }
+        entry = P((char *)data + data[9]);
+        for (i = 0; i < data[8]; i++, entry += 8)
+            FUN_00203730(base + entry[0], (char *)data + data[17], entry + 4, entry[1]);
+        FUN_001e93e8((char *)data + data[9], data[8]);
+        entry = P((char *)data + data[11]);
+        for (i = 0; i < data[10]; i++, entry += 12)
+            FUN_00203b08(base + entry[0], (char *)data + data[19], entry + 4, entry + 8, entry[1]);
+        W(0x15f420) = base + data[26];
+        FUN_00202800((char *)data + data[23], data[22]);
+        if (data[40]) FUN_L00_0023f120(base + data[40]);
+        else { W(0x15f438) = 0; W(0x15f43c) = 0; W(0x15f440) = 0; }
+        if (data[41]) FUN_L00_0023f0d8(base + data[41]);
+        else { W(0x15fc98) = 0; W(0x15fc9c) = 0; W(0x15fca4) = 0; W(0x15fca0) = 0; W(0x15fca8) = 0; }
+        if (data[42]) W(0x15f604) = base + data[42];
+        else W(0x15f604) = 0;
+        FUN_002026c8((char *)data + data[27], base + data[25], (char *)data + data[21], data[20]);
+
+        sequence = (short *)((char *)data + data[28]);
+        W(0x15f5f0) = sequence[1];
+        W(0x15f5f4) = (base + end + 63) & ~63;
+        FUN_001f9838(P(W(0x15f5f4)), (char *)sequence + sequence[0], W(0x15f5f0) * 32);
+        for (i = 0; i < W(0x15f5f0); i++) {
+            short index = H(W(0x15f5f4) + i * 32 + 0x1a);
+            if (index < sequence[3]) H(W(0x15f5f4) + i * 32 + 0x1a) = *(short *)((char *)sequence + sequence[2] + index * 4);
+            else { FUN_001e93b0(0x1ffb80); H(W(0x15f5f4) + i * 32 + 0x1a) = -1; }
+            W(W(0x15f5f4) + i * 32 + 0x1c) = W(0x15ed5c);
+        }
+        record = sequence + 4;
+        for (i = 0; i < W(0x15ffc0); i++, record += 2) {
+            int object = W(0x197a80 + i * 4);
+            short *frames = (short *)((char *)sequence + record[0]);
+            if (object == 0) {
+                for (j = 0; j < W(0x160008); j++)
+                    if (W(0x1b0340 + j * 4) == H(0x198180 + i * 2)) break;
+                if (j < W(0x160008)) {
+                    FUN_001f97e8(P(0x1b05e0 + j * 32), -1, 32);
+                    for (count = 0; count < record[1] && count <= 14; count++)
+                        H(0x1b05e0 + j * 32 + count * 2) = frames[count * 2];
+                }
+            } else {
+                if (record[1] != B(object + 13)) FUN_001e93b0(0x1ffba0, UH(0x198180 + i * 2));
+                for (j = 0; j < B(object + 13); j++) {
+                    H(W(object + 0x28) + j * 32 + 0x1a) = frames[j * 2];
+                    W(W(object + 0x28) + j * 32 + 0x1c) = W(0x15ed5c);
+                }
+            }
+        }
+        level[6] = FUN_L00_0023fa00((W(0x15f5f4) + W(0x15f5f0) * 32 + 63) & ~63, data);
+    }
+    level[7] = FUN_L00_00241940(param_1);
+    if (param_1 != 0) {
+        FUN_001e93b0(0x1ffbd0);
+#define PRINT_SIZE(label,expr) do { elapsed = FUN_001fa6c0((expr)); FUN_001e93b0((label), FUN_00120478(elapsed * 0.0009765625f)); } while (0)
+        PRINT_SIZE(0x1ffbe8, 0x100000);
+        PRINT_SIZE(0x1ffc00, 0x219998);
+        PRINT_SIZE(0x1ffc18, level[0] - 0x319998);
+        PRINT_SIZE(0x1ffc30, level[3] - level[0]);
+        PRINT_SIZE(0x1ffc48, level[4] - level[3]);
+        PRINT_SIZE(0x1ffc60, level[5] - level[4]);
+        value = W(0x15f600);
+        if (value == 0) value = W(0x16051c);
+        if (value == 0) FUN_001e93b0(0x1ffc90);
+        else PRINT_SIZE(0x1ffc78, value - level[5]);
+        value = W(0x15f600);
+        if (value != 0) {
+            if (W(0x16051c)) PRINT_SIZE(0x1ffcb0, W(0x16051c) - value);
+            else PRINT_SIZE(0x1ffcb0, W(0x1745c0) - value);
+        }
+        if (data[4]) PRINT_SIZE(0x1ffcc8, W(0x1745c0) - W(0x16051c));
+        PRINT_SIZE(0x1ffce0, W(0x15f40c) - W(0x1745c0));
+        PRINT_SIZE(0x1ffcf8, (W(0x1b2204) >> 4) - W(0x15f40c));
+        PRINT_SIZE(0x1ffd10, W(0x15f420) - (W(0x1b2204) >> 4));
+        PRINT_SIZE(0x1ffd28, W(0x197a80) - W(0x15f420));
+        PRINT_SIZE(0x1ffd40, W(0x1c5f80) - W(0x197a80));
+        PRINT_SIZE(0x1ffd58, (data[10] ? W(0x1bc7b0) : W(0x160fc0)) - W(0x1c5f80));
+        if (data[10]) PRINT_SIZE(0x1ffd70, W(W(0x197a80) + 0x48) - W(0x1bc7b0));
+        PRINT_SIZE(0x1ffd88, W(0x160fc0) - W(W(0x197a80) + 0x48));
+        PRINT_SIZE(0x1ffda0, W(0x160494) - W(0x160fc0));
+        PRINT_SIZE(0x1ffdb8, W(0x15ffd8) - W(0x160494));
+        PRINT_SIZE(0x1ffdd0, W(0x15ffe8) - W(0x15ffd8));
+        PRINT_SIZE(0x1ffde8, W(0x160108) - W(0x15ffe8));
+        PRINT_SIZE(0x1ffe00, W(0x16016c) - W(0x160108));
+        FUN_001e93b0(0x1ffe18, 0x4060000000000000ULL);
+        FUN_001e93b0(0x15fc80);
+        elapsed = FUN_001fa6c0(W(0x16016c) + 0x20000);
+        FUN_001e93b0(0x1ffe30, FUN_00120478(elapsed * 9.5367431640625e-7f));
+        FUN_001e93b0(0x15fc80);
+        elapsed = FUN_001fa6c0(level[7] - (level[0] - 0x2d0000));
+        FUN_001e93b0(0x1ffe48, FUN_00120478(elapsed * 9.5367431640625e-7f));
+        FUN_001e93b0(0x15fc80);
+#undef PRINT_SIZE
+    }
+    if (param_2 == 0) {
+        FUN_00226f50();
+        for (i = 15; i >= 0; i--) W(0x14ee90 + i * 4) = 0;
+    } else FUN_L00_00285008();
+    W(0x179890) = 0;
+    FUN_L00_00264740();
+    W(0x15f5cc)++;
+    return 0;
+}
+#undef W
+#undef H
+#undef UH
+#undef B
+#undef Q
+#undef P
+#undef AT
+#endif
 #include "qcopy.h"
 #include "sda.h"
 
