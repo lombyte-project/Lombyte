@@ -1244,7 +1244,180 @@ void FUN_L14_002ed280(struct Moby *moby) {
         *(int *)&D_L14_00161C58 = 0;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ed530.s", FUN_L14_002ed530);
+/* Arc state shared by FUN_L14_002ed530 and its draw callback FUN_L14_002edc18. */
+extern f32 D_L14_00161C68 __attribute__((sda));
+extern f32 D_L14_00161C6C __attribute__((sda));
+extern s32 D_L14_00161C70_d530 __asm__("D_L14_00161C70") __attribute__((sda));
+extern f32 D_L14_00161C74 __attribute__((sda));
+extern f32 D_L14_00161C8C __attribute__((sda));
+extern f32 D_L14_00161C90 __attribute__((sda));
+extern f32 D_L14_00161C94 __attribute__((sda));
+extern s32 D_L14_00161C98 __attribute__((sda));
+extern s32 D_L14_00161C9C __attribute__((sda));
+extern u8 D_L14_00161CE0_d530 __asm__("D_L14_00161CE0");
+extern s16 D_L14_00161CE2;
+extern f32 D_L14_00161CE4;
+extern char *D_L14_00161CE8;
+extern s32 D_L14_00161CEC;
+extern f32 D_L14_00161CF0;
+extern s32 D_L14_00161CF4;
+extern s32 D_L14_00161CF8_d530[] __asm__("D_L14_00161CF8") __attribute__((section(".sdata")));
+extern f32 D_L14_001DFD80_d530[40][4] __asm__("D_L14_001DFD80");
+extern u16 D_L14_001E0000_d530[40] __asm__("D_L14_001E0000");
+extern f32 D_L14_001E0050_d530[3][16][4] __asm__("D_L14_001E0050");
+extern u16 D_L14_001E0350_d530[3][16] __asm__("D_L14_001E0350");
+extern void arc_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float arc_length(void *) __asm__("FUN_001f9af0");
+extern float arc_itof(int) __asm__("FUN_001fa6c0");
+extern int arc_ftoi(float) __asm__("FUN_001fa6d0");
+extern int arc_frames(int) __asm__("FUN_001f96f8");
+extern void arc_lerp(void *, void *, void *, float) __asm__("FUN_001f9a40");
+extern int FUN_L00_00257b90_d530(int, int) __asm__("FUN_L00_00257b90");
+extern float arc_random(float, float) __asm__("FUN_002132a8");
+extern int arc_rand(int) __asm__("FUN_00213260");
+extern float arc_cos(float) __asm__("FUN_001f9dc8");
+extern float arc_sin(float) __asm__("FUN_001f9de0");
+extern float arc_add_rot(float, float) __asm__("FUN_001fa580");
+extern float arc_fabs(float) __asm__("FUN_001f99c0");
+extern int arc_tick(void *) __asm__("FUN_001f9740");
+extern void FUN_0022dba0(int, int, void *);
+extern void arc_enqueue(void (*)(char *), char *) __asm__("FUN_001f4600");
+void FUN_L14_002ee6b0(float *pos, int n);
+void FUN_L14_002edc18();
+extern float D_L14_001DFFE0_d530[] __asm__("D_L14_001DFFE0");
+extern float D_L14_00161CD0_d530[] __asm__("D_L14_00161CD0") __attribute__((section(".sdata")));
+
+/* Lightning arc between the two camera points: builds the bolt and its three branches once, then ages and fades them. */
+void FUN_L14_002ed530(char *moby) {
+    Vec4 delta;
+    float len;
+    float t;
+    float sign;
+    float ang;
+    float r;
+    int i;
+    int j;
+    int n;
+    float *p;
+    s32 *starts;
+    u16 *e;
+
+    if (*(int *)&D_L14_00161C58 == 0) {
+        *(int *)&D_L14_00161C58 = 1;
+        D_L14_00161CF4 = 1;
+        D_L14_00161CE8 = moby;
+        i = 0;
+        starts = D_L14_00161CF8_d530;
+        *(int *)&D_L14_00161C6C = 0;
+        arc_sub(&delta, D_L14_00161CD0_d530, D_L14_00161CC0);
+        len = arc_length(&delta);
+        D_L14_00161C74 = len / arc_itof(40);
+        D_L14_00161CE0_d530 = 0;
+        for (; i < 40; i++) {
+            e = &D_L14_001E0000_d530[i];
+            p = D_L14_001DFD80_d530[i];
+            p[1] = p[2] = 0.0f;
+            p[3] = 1.0f;
+            p[0] = D_L14_00161C74 * (float)i;
+            if (i < 39) {
+                p[2] = p[-2] + FUN_L00_00257c48(D_L14_00161C8C, D_L14_00161C90);
+                if (D_L14_00161C94 < (*&p)[2]) {
+                    p[2] = D_L14_00161C94;
+                } else if (p[2] < -D_L14_00161C94) {
+                    p[2] = -D_L14_00161C94;
+                }
+            }
+            t = arc_itof(i) / arc_itof(40);
+            *e = arc_ftoi((float)-arc_frames(D_L14_00161C70_d530) * t + 0.0f);
+        }
+        arc_lerp(D_L14_001DFFE0_d530, D_L14_001DFFE0_d530 - 4, D_L14_001DFFE0_d530 + 4, 0.5f);
+        sign = -1.0f;
+        D_L14_00161CB4 = D_L14_00161CEC = arc_frames(FUN_L00_00257b90_d530(D_L14_00161C98, D_L14_00161C9C));
+        D_L14_00161CF0 = 1.0f / arc_itof(D_L14_00161CB4 - arc_frames(D_L14_00161C70_d530));
+        if (arc_rand(2) != 0) {
+            sign = 1.0f;
+        }
+        for (j = 0; j < 3; j++) {
+            int k = FUN_L00_00257b90_d530(5, 22);
+            int m;
+            float (*row)[4] = D_L14_001E0050_d530[j];
+            u16 *sq = D_L14_001E0350_d530[j];
+            starts[j] = k;
+            sq[0] = D_L14_001E0000_d530[k];
+            row[0][0] = 0.0f;
+            row[0][2] = 0.0f;
+            r = arc_random(1.0f, 10.0f);
+            ang = arc_random(0.5235988f, 1.3962634f) * sign;
+            row[0][0] = r * arc_cos(ang);
+            row[0][2] = r * arc_sin(ang);
+            for (m = 1; m < 16; m++) {
+                float d;
+                float na;
+                r = arc_random(1.0f, 10.0f);
+                d = FUN_L00_00257c48(0.0f, 40.0f) * 0.017453292f;
+                na = arc_add_rot(ang, d);
+                if (arc_fabs(na) > 1.3962634f || (ang > 0.0f && na < 0.0f) || (ang < 0.0f && na > 0.0f)) {
+                    ang = arc_add_rot(ang, -d);
+                } else {
+                    ang = na;
+                }
+                D_L14_001E0050_d530[j][m][0] = r * arc_cos(ang);
+                D_L14_001E0050_d530[j][m][2] = r * arc_sin(ang);
+                D_L14_001E0350_d530[j][m] = D_L14_001E0000_d530[starts[j] + m];
+            }
+            sign = -sign;
+        }
+    }
+    if (moby == D_L14_00161CE8) {
+        arc_tick(&D_L14_00161CB4);
+        for (i = 0; i < 40; i++) {
+            s16 v = ++D_L14_001E0000_d530[i];
+            if (arc_frames(D_L14_00161C70_d530) < v) {
+                D_L14_001E0000_d530[i] = arc_frames(D_L14_00161C70_d530);
+            }
+            if (i != 0) {
+                if (i >= 35) {
+                    float k5 = 5.0f;
+                    float *pp = D_L14_001DFD80_d530[i];
+                    pp[2] = pp[2] + (0.0f - pp[2]) * (arc_itof(i - 35) / k5);
+                }
+            }
+        }
+        arc_frames(D_L14_00161C70_d530);
+        for (j = 0; j < 3; j++) {
+            for (n = 0; n < 16; n++) {
+                s16 v = ++D_L14_001E0350_d530[j][n];
+                if (arc_frames(D_L14_00161C70_d530) < v) {
+                    D_L14_001E0350_d530[j][n] = arc_frames(D_L14_00161C70_d530);
+                }
+            }
+        }
+        if (D_L14_00161CB4 < D_L14_00161CEC - arc_frames(D_L14_00161C70_d530)) {
+            if (arc_frames(60) < D_L14_00161CEC) {
+                if (D_L14_00161C6C < 6.2831855f) {
+                    D_L14_00161CE2 = arc_ftoi(arc_sin(D_L14_00161CE4) * 128.0f);
+                    D_L14_00161CE4 = arc_add_rot(D_L14_00161CE4, D_L14_00161C68);
+                    D_L14_00161C6C += D_L14_00161C68 * frame_scale;
+                } else {
+                    D_L14_00161CE2 = 0;
+                }
+            } else {
+                D_L14_00161CE2 = 0;
+            }
+            D_L14_00161CE0_d530 = (u8)D_L14_00161CE2 + arc_ftoi(arc_itof(D_L14_00161CB4) * D_L14_00161CF0 * -255.0f + 255.0f);
+            if (D_L14_00161CF4 != 0) {
+                FUN_0022dba0(0, 0, moby);
+                D_L14_00161CF4 = 0;
+            }
+            if (D_L14_00161CE0_d530 < 50) {
+                FUN_L14_002ee6b0(D_L14_00161CC0, 3);
+            }
+        } else {
+            D_L14_00161CE0_d530 = 0;
+        }
+        arc_enqueue(FUN_L14_002edc18, moby);
+    }
+}
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002EF078), where it is exact; names translated to the US level program. */
