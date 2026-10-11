@@ -322,7 +322,164 @@ void FUN_L14_002b2600(struct Moby *m)
     FUN_001f9a10(&pv->beam_end, &pv->beam_start, &dy);
     FUN_001f4600(FUN_L14_002b2928, m);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2928.s", FUN_L14_002b2928);
+#else
+#include "rnc/rendering/geometry_quad.h"
+
+extern Vec4 D_0013F5E0;
+extern Vec4 D_L14_001D8850[4];
+extern f32 D_L14_001614AC __attribute__((sda));
+extern f32 D_L14_001614BC __attribute__((sda));
+extern f32 D_L14_001614C0 __attribute__((sda));
+extern u64 get_effect_texture_l14(s32) __asm__("FUN_001f44b8");
+extern void draw_geometry_quad_l14(struct GeometryQuad *, s32, s32) __asm__("FUN_001f7d30");
+extern void cross_vectors_l14(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void transform_vector_l14(void *, void *, void *) __asm__("FUN_001f9d20");
+
+void FUN_L14_002b2928(struct Moby *m)
+{
+    struct GeometryQuad quad;
+    Vec4 basis[3];
+    Vec4 pos;
+    Vec4 offset;
+    ShipVars *pv = (ShipVars *)m->pvars;
+    Vec4 *corner;
+    Vec4 *template;
+    Vec4 *beam_start = &pv->beam_start;
+    Vec4 *beam_end = &pv->beam_end;
+    s32 i;
+
+    pos = pv->exhaust;
+    pos.f[3] = 1.0f;
+    FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
+    i = 3;
+    FUN_001f9bf8(&basis[0], &basis[0], 1.0f);
+    cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
+    FUN_001f9bf8(&basis[1], &basis[1], -1.0f);
+    cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
+    quad.texture = get_effect_texture_l14(11);
+    quad.primitive = 0x8000000048LL;
+    quad.texture_state = 0xFF9000000260LL;
+    quad.reserved.value = 5;
+    quad.colors[0] = 0x80FFFFFF;
+    quad.colors[1] = 0x80FFFFFF;
+    quad.colors[2] = 0x80FFFFFF;
+    quad.colors[3] = 0x80FFFFFF;
+    quad.texture_coordinates[0][0] = 0.0f;
+    quad.texture_coordinates[0][1] = 0.0f;
+    quad.texture_coordinates[1][0] = 0.0f;
+    quad.texture_coordinates[1][1] = 1.0f;
+    quad.texture_coordinates[2][0] = 1.0f;
+    quad.texture_coordinates[2][1] = 0.0f;
+    quad.texture_coordinates[3][0] = 1.0f;
+    quad.texture_coordinates[3][1] = 1.0f;
+    corner = &quad.positions[0];
+    template = &D_L14_001D8850[0];
+    do {
+        FUN_001f9a68(corner, template, 0.4f);
+        transform_vector_l14(corner, corner, &basis[0]);
+        corner++;
+        template++;
+        i--;
+    } while (i >= 0);
+    draw_geometry_quad_l14(&quad, 0, 0);
+
+    pos = pv->joint6;
+    FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
+    FUN_001f9bf8(&basis[0], &basis[0], 1.0f);
+    cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
+    FUN_001f9bf8(&basis[1], &basis[1], -1.0f);
+    cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
+    quad.colors[0] = 0x202020FF;
+    quad.colors[1] = 0x202020FF;
+    quad.colors[2] = 0x202020FF;
+    quad.colors[3] = 0x202020FF;
+    i = 3;
+    corner = &quad.positions[0];
+    template = &D_L14_001D8850[0];
+    do {
+        FUN_001f9a68(corner, template, 0.2f);
+        transform_vector_l14(corner, corner, &basis[0]);
+        corner++;
+        template++;
+        i--;
+    } while (i >= 0);
+    draw_geometry_quad_l14(&quad, 0, 0);
+
+    pos = pv->nozzle;
+    FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
+    FUN_001f9bf8(&basis[0], &basis[0], 1.0f);
+    cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
+    FUN_001f9bf8(&basis[1], &basis[1], -1.0f);
+    cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
+    FUN_001f9a68(&offset, &basis[0], D_L14_001614AC);
+    FUN_001f9a10(&pos, &pos, &offset);
+    quad.colors[0] = 0x4020FF20;
+    quad.colors[1] = 0x4020FF20;
+    quad.colors[2] = 0x4020FF20;
+    quad.colors[3] = 0x4020FF20;
+    i = 3;
+    corner = &quad.positions[0];
+    template = &D_L14_001D8850[0];
+    do {
+        FUN_001f9a68(corner, template, 0.2f);
+        transform_vector_l14(corner, corner, &basis[0]);
+        corner++;
+        template++;
+        i--;
+    } while (i >= 0);
+    draw_geometry_quad_l14(&quad, 0, 0);
+
+    pos = *beam_start;
+    FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
+    FUN_001f9bf8(&basis[0], &basis[0], 1.0f);
+    cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
+    FUN_001f9bf8(&basis[1], &basis[1], -1.0f);
+    cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
+    FUN_001f9a68(&offset, &basis[0], D_L14_001614BC);
+    FUN_001f9a10(&pos, &pos, &offset);
+    quad.colors[0] = 0x40FF2020;
+    quad.colors[1] = 0x40FF2020;
+    quad.colors[2] = 0x40FF2020;
+    quad.colors[3] = 0x40FF2020;
+    i = 3;
+    corner = &quad.positions[0];
+    template = &D_L14_001D8850[0];
+    do {
+        FUN_001f9a68(corner, template, D_L14_001614C0);
+        transform_vector_l14(corner, corner, &basis[0]);
+        corner++;
+        template++;
+        i--;
+    } while (i >= 0);
+    draw_geometry_quad_l14(&quad, 0, 0);
+
+    pos = *beam_end;
+    FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
+    FUN_001f9bf8(&basis[0], &basis[0], 1.0f);
+    cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
+    FUN_001f9bf8(&basis[1], &basis[1], -1.0f);
+    cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
+    FUN_001f9a68(&offset, &basis[0], D_L14_001614BC);
+    FUN_001f9a10(&pos, &pos, &offset);
+    quad.colors[0] = 0x40FF2020;
+    quad.colors[1] = 0x40FF2020;
+    quad.colors[2] = 0x40FF2020;
+    quad.colors[3] = 0x40FF2020;
+    i = 3;
+    corner = &quad.positions[0];
+    template = &D_L14_001D8850[0];
+    do {
+        FUN_001f9a68(corner, template, D_L14_001614C0);
+        transform_vector_l14(corner, corner, &basis[0]);
+        corner++;
+        template++;
+        i--;
+    } while (i >= 0);
+    draw_geometry_quad_l14(&quad, 0, 0);
+}
+#endif
 #include "sda.h"
 #include "rnc/gameplay/entities/moby.h"
 
