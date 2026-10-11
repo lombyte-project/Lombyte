@@ -123,19 +123,19 @@ check_lock:
             d->sound = allocate_voice_for_target_entry(0, 4, (int)m);
         if (d->duration < (d->travel = d->travel + (d->duration / 0.6f) * frame_time)) {
             slot = d->sound;
-            if (slot != -1 && ((VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70))->owner == m &&
-                ((VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70))->active != 0)
-                release_voice_slot(slot);
+            if (slot != -1) {
+                voice_slot = (VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70);
+                if (voice_slot->owner == m && voice_slot->active != 0)
+                    release_voice_slot(slot);
+            }
             d->travel = d->duration;
             d->sound = -1;
             if (d->trigger == -1 && d->lock == 0) {
                 m->state = 3;
             } else {
                 mask = 1U << (m->save_id & 31);
-                bits = (u32 *)(D_0014C190 + current_level_index * 0x100 + ((s16)m->save_id >> 5) * 4);
-                *bits |= mask;
-                bits = (u32 *)((char *)D_L15_001BAAD0 + ((s16)m->save_id >> 5) * 4);
-                *bits |= mask;
+                ((u32 *)(D_0014C190 + current_level_index * 0x100))[((s16)m->save_id >> 5)] |= mask;
+                D_L15_001BAAD0[((s16)m->save_id >> 5)] |= mask;
                 m->state = 5;
             }
         }
