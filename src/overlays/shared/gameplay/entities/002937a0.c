@@ -798,11 +798,12 @@ extern float distance_xy_3024d8(void *, void *) __asm__("FUN_001f9b80");
 extern float absolute_float_3024d8(float) __asm__("FUN_001f99c0");
 extern float angle_atan2_3024d8(float, float) __asm__("FUN_001f9e90");
 extern float floor_height_3024d8(float, void *, int) __asm__("FUN_00213508");
-#define D_00162180_3024d8 (*(float *)0x00162180)
-#define D_00162184_3024d8 (*(float *)0x00162184)
-#define D_0016218C_3024d8 (*(float *)0x0016218c)
-#define D_00162190_3024d8 (*(float *)0x00162190)
-#define D_00162194_3024d8 (*(float *)0x00162194)
+extern float D_00162180_3024d8 __asm__("D_L08_00162180") __attribute__((sda));
+extern float D_00162184_3024d8 __asm__("D_L08_00162184") __attribute__((sda));
+extern float D_0016218C_3024d8 __asm__("D_L08_0016218C") __attribute__((sda));
+extern float D_00162190_3024d8 __asm__("D_L08_00162190") __attribute__((sda));
+extern float D_00162194_3024d8 __asm__("D_L08_00162194") __attribute__((sda));
+extern float D_001621B0_3024d8 __asm__("D_L08_001621B0") __attribute__((sda));
 
 void FUN_L08_003024d8(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -818,11 +819,15 @@ void FUN_L08_003024d8(char *m) {
     float pos[4] __attribute__((aligned(16)));
     char matrix[64] __attribute__((aligned(16)));
     float knock_angle;
+    float pose_scale;
+    float timer_scale;
 
     if (((unsigned char *)m)[0x20] == 0)
         return;
-    *(float *)(m + 0x2c) = *(float *)(*(char **)(m + 0x24) + 0x24) * D_00162180_3024d8;
-    *(float *)(d + 0xf4) = (*(float *)0x001621b0) * frame_time;
+    pose_scale = *(float *)(*(char **)(m + 0x24) + 0x24) * D_00162180_3024d8;
+    timer_scale = D_001621B0_3024d8 * frame_time;
+    *(float *)(m + 0x2c) = pose_scale;
+    *(float *)(d + 0xf4) = timer_scale;
     if (*(char **)(d + 0x1f8) == 0) {
         t = create_moby_3024d8(0x401);
         *(char **)(d + 0x1f8) = t;
@@ -857,11 +862,8 @@ void FUN_L08_003024d8(char *m) {
         *(float *)(d + 0x80) = D_00162184_3024d8 * frame_time_sq;
         d[0xad] = 0;
         switch (idx) {
-        case 0:
-        case 11:
-            break;
         case 9: case 10:
-            d[0x67] = (char)0xfa;
+            ((unsigned char *)d)[0x67] = 0xfa;
             break;
         case 3: case 4: case 5: case 6: case 7: case 8:
             *(float *)(d + 0xc0) = 5.0f;
@@ -892,7 +894,7 @@ void FUN_L08_003024d8(char *m) {
             set_knockback_3024d8(pos, &knock_angle, (float *)(d + 0x88), (float *)(d + 0x8c));
             start_knockback_3024d8(knock_angle, m, d + 0x70, 12, 1, 0);
             m[0x20] = 11;
-            d[0x67] = (char)0xf0;
+            ((unsigned char *)d)[0x67] = 0xf0;
             play_reaction_3024d8(m, 2, 3, 0, -1);
             break;
         }
