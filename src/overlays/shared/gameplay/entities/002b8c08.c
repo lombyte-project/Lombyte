@@ -471,7 +471,7 @@ void FUN_L01_002c72c8(void) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002c7530.s", FUN_L01_002c7530);
 #else
-extern int FUN_001f9740(int *);
+extern int FUN_001f9740(void *);
 extern int FUN_001e9448(void *);
 extern int collect_mobies_in_sphere(void *, int, int, void *, float) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_00259bc8(void *, void *, int, void *, void *, float);
