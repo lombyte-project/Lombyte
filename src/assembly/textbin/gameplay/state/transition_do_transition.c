@@ -100,6 +100,7 @@ void transition_do_transition(void) {
     s32 wait;
     s32 i;
     s32 old;
+    s32 first_size;
     u32 alignment_mask = ~0xFu;
     struct DiscTable *tbl;
 
@@ -115,10 +116,10 @@ void transition_do_transition(void) {
     /* Load chunks 1..5 before chunk 0, advancing each destination to 16-byte alignment. */
     p = (u8 *)hdr + 0x60;
     D_0015EE4C = hdr;
-    hdr->chunk[1].size =
-        load(p, ((volatile struct DiscFile *)&tbl->wad_chunks[1])->sector, ((volatile struct DiscFile *)&tbl->wad_chunks[1])->size);
+    first_size = load(p, ((volatile struct DiscFile *)&tbl->wad_chunks[1])->sector, ((volatile struct DiscFile *)&tbl->wad_chunks[1])->size);
+    hdr->chunk[1].size = first_size;
     hdr->chunk[1].off = p - (u8 *)hdr;
-    p += ((u32)hdr->chunk[1].size + 0xF) & alignment_mask;
+    p += ((u32)first_size + 0xF) & alignment_mask;
     hdr->chunk[2].size = load(p, tbl->wad_chunks[2].sector, tbl->wad_chunks[2].size);
     hdr->chunk[2].off = p - (u8 *)hdr;
     p += ((u32)hdr->chunk[2].size + 0xF) & alignment_mask;
