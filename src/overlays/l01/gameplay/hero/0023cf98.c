@@ -1600,4 +1600,210 @@ int hero_set_state(int a, int b) {
     }
     return 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00240ed8.s", FUN_L01_00240ed8);
+#include "rnc/input/pad_state.h"
+#include "rnc/gameplay/entities/moby.h"
+
+struct HeldGadgetVars {
+    unsigned char pad_0[0xc];
+    int voice;
+};
+
+extern int D_00141660 __attribute__((section(".data")));
+extern unsigned char D_0013D4DC[];
+extern int D_L01_0015F674 __attribute__((sda));
+extern int FUN_001f9740(int *) __asm__("FUN_001f9740");
+extern int FUN_0022da68(int, int, struct Moby *) __asm__("FUN_0022da68");
+extern unsigned int FUN_L00_00266d60(unsigned int, int, int *);
+extern int FUN_L00_0020d498(int);
+extern void FUN_L00_0020e4c8(void);
+extern int FUN_L00_0020fe30(void);
+extern int FUN_L00_00216de8(int, int);
+extern void FUN_L00_00217658(void);
+extern int FUN_L00_00233e98(int);
+extern int FUN_L00_0028d8c0(struct Moby *, int);
+extern void FUN_L00_0029a6b0(int);
+
+int FUN_L01_00240ed8(void) {
+    int out0;
+    int out1;
+    int out2;
+    int saved;
+    unsigned int buttons;
+    int frames;
+    int window;
+    struct Moby *moby;
+    T2C_23D688 *row;
+    struct HeldGadgetVars *vars;
+
+    if (hero.unk20AC != 0 && (hero.items[0].item_id != 8 || hero.unk308 != 1)) return 0;
+    if (hero.unk20A4 != 0) return 0;
+    if (hero.items[0].moby == 0) return 0;
+    if (hero.items[0].state != 2) return 0;
+    saved = hero.state_timer;
+    buttons = hero.items[0].button_mask;
+
+    switch (hero.items[0].item_id) {
+    case 8:
+        if ((unsigned int)hero.state.control_mode < 2 ||
+            (hero.state.control_mode == 4 && hero.unk418 != 0)) {
+            if (hero.unk12EA == 0 && FUN_L00_00266d60(buttons, scale_game_frames(7), &out0) != 0) {
+                moby = hero.items[0].moby;
+                if (moby != 0 && FUN_L00_00211360((char *)moby) != 0 && moby->state == 0) {
+                    if ((controller_state.held & 0xa) != 0 ||
+                        ((hero.state.current == 1 || hero.state.current == 0x1e) &&
+                         scale_game_frames(0x14) < hero.state_timer)) {
+                        if ((hero.state.current == 1 || hero.state.current == 0x1e) &&
+                            scale_game_frames(0x14) < hero.state_timer) {
+                            FUN_L00_00217658();
+                        } else {
+                            hero_set_state(0x15, 1);
+                        }
+                    } else if (hero.unk308 == 1) {
+                        hero_set_state(0x70, 1);
+                    } else {
+                        hero_set_state(0x13, 1);
+                    }
+                }
+            }
+        } else if ((hero.state.current == 7 || hero.state.current == 9 || hero.state.current == 8 ||
+                    hero.state.current == 6 || (hero.state.current == 0xe && hero.unkAA8 > 32.0f) ||
+                    (hero.state.current == 0xb &&
+                     (hero.unk450 != 3 && hero.unkAA8 > 18.0f) ||
+                     (hero.state.current == 0xb && hero.unk450 == 3 && hero.unkAA8 > 20.0f)) ||
+                    hero.state.current == 0x2d || hero.state.current == 0x11) &&
+                   scale_game_frames(10) < hero.state_timer) {
+            window = scale_game_frames(10);
+            if (hero.state.current == 0xb || hero.state.current == 0xe)
+                window = scale_game_frames(0x12);
+            if (FUN_L00_00266d60(buttons, window, 0) != 0) {
+                if ((hero.unk41E == 0 ? hero.ground_distance > 0.1f : hero.ground_distance > 0.57f) ||
+                    (hero.state.current == 8 && hero.ground_distance > 0.57f)) {
+                    hero_set_state(0x14, 1);
+                } else if (hero.unk12EA == 0) {
+                    hero_set_state(0x13, 1);
+                }
+            }
+        } else if (hero.state.control_mode == 6) {
+            row = &D_L01_0017C0A8[hero.unkA60];
+            if (hero.state.current == 0x15 && scale_game_frames(0x1e) < hero.state_timer &&
+                hero.unkA9C == 0 && (float)((int *)row)[4] <= hero.unkAA8 &&
+                (controller_state.held & 0xa) != 0 &&
+                FUN_L00_00266d60(buttons, scale_game_frames(0xf), 0) != 0) {
+                hero_set_state(0x15, 1);
+            } else if (hero.unkA9C == 0 && (float)((int *)row)[4] <= hero.unkAA8) {
+                frames = (truncate_float_to_s32(hero.unkAA8) - ((int *)row)[3]) * 2;
+                if (frames < 1) frames = 1;
+                if (scale_game_frames(0xf) < frames) frames = scale_game_frames(0xf);
+                if (hero.unk12EA == 0 && FUN_L00_00266d60(buttons, frames, 0) != 0) {
+                    if ((controller_state.held & 0xa) != 0) hero_set_state(0x15, 1);
+                    else if (hero.unk308 == 1) hero_set_state(0x70, 1);
+                    else hero_set_state(0x13, 1);
+                }
+            }
+        }
+        break;
+    case 0x1f:
+        if (hero.unk20A4 == 0 && FUN_L00_0020fe30() != 0 &&
+            FUN_L00_00266d60(buttons, scale_game_frames(7), 0) != 0 &&
+            D_00141660 == 0x1f && hero.items[0].moby->oclass == 0x1e3 &&
+            hero.unk22DE == 0) {
+            FUN_L00_00216de8(0x18, 0);
+            hero.unk22DE = 0x12;
+            hero.unk22DC = 1;
+        }
+        break;
+    case 0x20:
+        if ((unsigned int)hero.state.control_mode < 3 || hero.state.control_mode == 4 ||
+            hero.state.control_mode == 5) {
+            if (FUN_L00_00266d60(buttons, scale_game_frames(8), 0) != 0)
+                FUN_L00_0029a6b0(0);
+        }
+        break;
+    case 0xf:
+        if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
+            hero.state.control_mode == 0xc || hero.state.control_mode == 2 ||
+            hero.state.control_mode == 4 || hero.state.control_mode == 5 ||
+            hero.state.control_mode == 0xf || hero.state.current == 0x1e) {
+            if (hero.items[0].moby != 0) {
+                vars = (struct HeldGadgetVars *)hero.items[0].moby->pvars;
+                if ((((controller_state.held & buttons) != 0 &&
+                      scale_game_frames(5) < hero.items[0].unk20) ||
+                     (controller_state.pressed & buttons) != 0) &&
+                    FUN_L00_00233e98(-1) != 0) {
+                    if (hero.unk20A8 == 0) FUN_L00_0020e4c8();
+                } else if ((controller_state.held & buttons) != 0 &&
+                           FUN_L00_00233e98(-1) == 0 &&
+                           FUN_L00_0028d8c0(hero.items[0].moby, vars->voice) == 0) {
+                    vars->voice = FUN_0022da68(0, 0, hero.items[0].moby);
+                }
+            }
+        }
+        break;
+    case 10:
+    case 0x11:
+    case 0x14:
+    case 0x18:
+    case 0x19:
+        if ((hero.state.control_mode == 0 && hero.state.current != 0x1e) ||
+            hero.state.control_mode == 1 || hero.state.control_mode == 0xc ||
+            hero.state.control_mode == 5 || hero.state.control_mode == 0xf ||
+            (hero.state.control_mode == 4 && hero.unk4AC != 0) ||
+            (hero.state.current == 0x23 && hero.unkAA8 > 25.0f)) {
+            if (hero.unk20A8 == 0) {
+                int hold;
+                window = scale_game_frames(7);
+                hold = hero.items[0].unk20;
+                if (hold < window) window = hold;
+                if (FUN_L00_00266d60(buttons, window, &out1) != 0 ||
+                    ((controller_state.held & 0x20) != 0 && scale_game_frames(8) < hold &&
+                     hold < scale_game_frames(0x11))) {
+                    if (FUN_L00_00233e98(-1) != 0) {
+                        if (hero.state.control_mode == 0xc || hero.state.control_mode == 0 ||
+                            hero.state.current == 3 ||
+                            (hero.state.control_mode == 1 && hero.unk229C < 0.7f))
+                            hero_set_state(0x23, 1);
+                        else FUN_L00_0020e4c8();
+                    } else if (hero.items[0].moby != 0) {
+                        FUN_0022da68(0, 0, hero.items[0].moby);
+                    }
+                }
+            }
+        }
+        break;
+    case 0x12:
+        if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
+            (hero.state.control_mode == 4 && hero.unk418 != 0)) {
+            if (hero.state.current != 1) {
+                int limit = scale_game_frames(10);
+                int hold = hero.items[0].unk20;
+                if (FUN_L00_00266d60(buttons, hold < limit ? hold : limit, &out2) != 0 &&
+                    hero.items[0].moby != 0) {
+                    hero_set_state(0x20, 1);
+                    if (hero.items[0].moby != 0) FUN_0022da68(0, 0, hero.items[0].moby);
+                }
+            }
+        }
+        break;
+    case 0x15:
+        if (hero.items[0].moby != 0 && (controller_state.pressed & buttons) != 0)
+            FUN_L00_0020e4c8();
+        break;
+    }
+    if (hero.state_timer == saved) {
+        if (FUN_L00_0020d498(3) == 3 && hero.state.current != 0x81 &&
+            (hero.unk308 == 0 || D_0013D4DC[0] == 0) && hero.unk22D8 == 0) {
+            FUN_001f9740(&D_L01_0015F674);
+            if (D_L01_0015F674 != 0 &&
+                ((unsigned int)hero.state.control_mode < 2 || hero.state.control_mode == 0xc ||
+                 ((hero.state.control_mode == 2 || hero.state.control_mode == 4) && hero.unk300 != 0)) &&
+                (controller_state.held & 8) != 0 && (controller_state.pressed & 8) != 0)
+                hero_set_state(0x81, 1);
+            if ((controller_state.pressed & 8) != 0 && hero.state.current != 0x81)
+                D_L01_0015F674 = scale_game_frames(0x1e);
+        } else if (hero.state.current != 0x13 && hero.state.current != 0x81 &&
+                   hero.state.current != 0x15 && hero.state.current != 0x16) {
+            hero.unk22CA = 0;
+        }
+    }
+    return hero.state_timer < saved;
+}
