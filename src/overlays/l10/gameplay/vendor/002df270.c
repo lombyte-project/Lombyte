@@ -1186,11 +1186,11 @@ extern unsigned char *FUN_L00_002738e8(f32, f32, f32, void *, void *, s32, s32, 
 void FUN_L10_002e5be0(struct Moby *moby) {
     f32 *pvars = (f32 *)moby->pvars;
     Vec4 *moby_position = (Vec4 *)&moby->pos.x;
-    s32 i = 0;
+    s32 i;
 
     moby->unk30 = 0x80;
     if (((s32 *)pvars)[3] > 0) {
-        do {
+        for (i = 0; i < ((s32 *)pvars)[3]; ++i) {
             Vec4 position;
             Vec4 velocity;
             Vec4 offset;
@@ -1234,8 +1234,7 @@ void FUN_L10_002e5be0(struct Moby *moby) {
                 lower = 0.8f;
                 upper = 1.2f;
             }
-            ++i;
-            amount = pvars[1] * random_float_between(lower, upper);
+            amount = random_float_between(lower, upper) * pvars[1];
             first_color = D_L10_00161EF0;
             color = fast_tween_color(random_float_between(0.5f, 1.0f),
                                      first_color, D_L10_00161EF4);
@@ -1244,7 +1243,7 @@ void FUN_L10_002e5be0(struct Moby *moby) {
             life = truncate_float_to_s32(multiply_global_factor_ed64(pvars[2] * 60.0f));
             FUN_L00_002738e8(amount, pvars[0], D_L10_00161F00 * frame_time_sq,
                                &position, &velocity, life, color, fade_color, variant);
-        } while (i < ((s32 *)pvars)[3]);
+        }
     }
 }
 #endif
