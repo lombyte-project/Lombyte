@@ -738,7 +738,10 @@ void FUN_L05_00253b48(void) {
         if (hero.unk8BC == 0) {
             FUN_L00_002591d0((void **)&second, *(s32 *)(state + 0x48), 0, 0);
             if (second != 0) {
-                u32 color = (blue << 16) | 0x80000000U | (green << 8) | red;
+                u32 color = blue << 16;
+                color |= 0x80000000U;
+                color |= green << 8;
+                color |= red;
                 do {
                     moby = second;
                     if (*(s16 *)(moby + 0xA6) == 0x474) {
