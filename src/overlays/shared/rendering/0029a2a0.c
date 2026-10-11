@@ -65,7 +65,7 @@ unsigned char *FUN_L07_0029b8d8(void *m, short index, float amount, float factor
         *(int *)(p + 4) = 0x7f7f7f;
         p[9] = func_001FA898_r(4.0f) + 0x40;
         p[3] = 0x48;
-        p[1] = 0;
+        *(unsigned char *)(q - 0x1f) = 0;
         *(float *)(p + 0xc) = amount;
         p[2] = D_L07_001B21F4[*(short *)(q + 0xc)];
         *(float *)(q + 0x10) = D_0015ED60 * 0.015f;
