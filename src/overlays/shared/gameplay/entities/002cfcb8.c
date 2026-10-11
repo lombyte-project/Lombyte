@@ -336,7 +336,129 @@ void FUN_L00_002d1428(M2d1428 *m) {
         }
     } while (p != 0);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d19b0.s", FUN_L00_002d19b0);
+#else
+typedef struct {
+    u128 points[4];
+    u32 colors[4];
+    f32 texcoords[8];
+    u64 texture[4];
+} __attribute__((aligned(16))) Quad_2d19b0;
+typedef struct {
+    f32 x, y, z, w;
+} __attribute__((aligned(16))) Vec_2d19b0;
+extern s32 D_L00_001618DC __attribute__((sda));
+extern s32 D_L00_001618E0 __attribute__((sda));
+extern s32 D_L00_001618E4 __attribute__((sda));
+extern s32 D_L00_001618E8 __attribute__((sda));
+extern s32 D_L00_001618EC __attribute__((sda));
+extern s32 D_L00_001618F0 __attribute__((sda));
+extern s32 D_L00_001618F4 __attribute__((sda));
+extern Vec_2d19b0 D_L00_00166DC0_2d19b0 __asm__("D_L00_00166DC0");
+extern Vec_2d19b0 D_L00_00166DC0_loop_2d19b0 __asm__("D_L00_00166DC0");
+extern Vec_2d19b0 D_L00_001DE7B0_2d19b0[] __asm__("D_L00_001DE7B0");
+extern s16 D_L00_001DEE10_2d19b0[] __asm__("D_L00_001DEE10");
+extern Vec_2d19b0 D_L00_001DF9A0_2d19b0[] __asm__("D_L00_001DF9A0");
+extern Vec_2d19b0 D_L00_001E04A0_2d19b0[] __asm__("D_L00_001E04A0");
+extern f32 D_L00_001E0B00_2d19b0[][2] __asm__("D_L00_001E0B00");
+extern f32 D_L00_001E0E30_2d19b0[][2] __asm__("D_L00_001E0E30");
+extern u64 get_effect_texture_2d19b0(s32) __asm__("FUN_001f44b8");
+extern f32 absolute_float_2d19b0(f32) __asm__("FUN_001f99c0");
+extern s32 scale_game_frames_2d19b0(s32) __asm__("FUN_001f96f8");
+extern s32 check_timer_2d19b0(s32 *) __asm__("FUN_001f9740");
+extern f32 convert_integer_to_float_2d19b0(s32) __asm__("FUN_001fa6c0");
+extern void transform_vector_2d19b0(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void subtract_vector_2d19b0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void normalize_vector_2d19b0(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 dot_vector_2d19b0(void *, void *) __asm__("FUN_001f9ab0");
+extern void scale_vector_2d19b0(void *, void *, f32) __asm__("FUN_001f9a68");
+extern f32 fast_sqrt_2d19b0(f32) __asm__("FUN_001f9988");
+extern void transform_vectors_2d19b0(void *, s32, s32) __asm__("FUN_001f7d30");
+
+void FUN_L00_002d19b0(u8 *m) {
+    Quad_2d19b0 quad;
+    Vec_2d19b0 a, c, b;
+    u8 *vars = *(u8 **)(m + 0x78);
+    s16 *indices = D_L00_001DEE10_2d19b0;
+    f32 (*uv)[2], (*old_uv)[2];
+    s32 i, j, index, active = 0;
+    f32 blend, len, x, y;
+
+    quad.texture[1] = get_effect_texture_2d19b0(D_L00_001618F0);
+    quad.texture[3] = (u64)(s64)D_L00_001618DC | ((u64)(s64)D_L00_001618E0 << 2) |
+                      ((u64)(s64)D_L00_001618E4 << 4) | ((u64)(s64)D_L00_001618E8 << 6) |
+                      ((u64)(s64)D_L00_001618EC << 32);
+    quad.texture[2] = 0xff9000000260ULL;
+    quad.colors[0] = D_L00_001618F4;
+    quad.texture[0] = 0;
+    quad.colors[1] = D_L00_001618F4;
+    quad.colors[2] = D_L00_001618F4;
+    quad.colors[3] = D_L00_001618F4;
+    if (absolute_float_2d19b0(D_L00_00166DC0_2d19b0.x - *(f32 *)(m + 0x10)) < 16.0f &&
+        absolute_float_2d19b0(D_L00_00166DC0_2d19b0.y - *(f32 *)(m + 0x14)) < 16.0f)
+        active = 1;
+    if (active || m[0x20] == 1) {
+        m[0xbc] = 1;
+        check_timer_2d19b0((s32 *)(vars + 0x40));
+        blend = convert_integer_to_float_2d19b0(*(s32 *)(vars + 0x40));
+        blend /= convert_integer_to_float_2d19b0(scale_game_frames_2d19b0(0x3c));
+        uv = D_L00_001E0B00_2d19b0;
+        old_uv = D_L00_001E0E30_2d19b0;
+        for (i = 0; i < 0x66; i++) {
+            transform_vector_2d19b0(&D_L00_001E04A0_2d19b0[i], &D_L00_001DE7B0_2d19b0[i], vars);
+            subtract_vector_2d19b0(&b, &D_L00_001E04A0_2d19b0[i], &D_L00_00166DC0_loop_2d19b0);
+            normalize_vector_2d19b0(&b, &b, 1.0f);
+            transform_vector_2d19b0(&a, &D_L00_001DF9A0_2d19b0[i], vars);
+            normalize_vector_2d19b0(&a, &a, 0.1f);
+            len = dot_vector_2d19b0(&a, &b);
+            scale_vector_2d19b0(&c, &a, len + len);
+            subtract_vector_2d19b0(&c, &b, &c);
+            normalize_vector_2d19b0(&c, &c, 1.0f);
+            c.z += 1.0f;
+            len = fast_sqrt_2d19b0(c.z + c.z);
+            len += len;
+            if (m[0x20] == 1 || *(s32 *)(vars + 0x40) == 0) {
+                y = c.y / len + 0.5f;
+                uv[0][0] = c.x / len + 0.5f;
+            } else {
+                x = c.x / len + 0.5f;
+                y = c.y / len + 0.5f;
+                uv[0][0] = x + (old_uv[0][0] - x) * blend;
+                y = y + (old_uv[0][1] - y) * blend;
+            }
+            uv[0][1] = y;
+            uv++;
+            old_uv++;
+        }
+        if (m[0x20] == 1)
+            m[0x20] = 2;
+    } else {
+        if (m[0xbc] == 1) {
+            m[0xbc] = 0;
+            for (i = 0; i < 0x66; i++) {
+                D_L00_001E0E30_2d19b0[i][0] = D_L00_001E0B00_2d19b0[i][0];
+                D_L00_001E0E30_2d19b0[i][1] = D_L00_001E0B00_2d19b0[i][1];
+                transform_vector_2d19b0(&D_L00_001E04A0_2d19b0[i], &D_L00_001DE7B0_2d19b0[i], vars);
+            }
+        } else {
+            for (i = 0; i < 0x66; i++)
+                transform_vector_2d19b0(&D_L00_001E04A0_2d19b0[i], &D_L00_001DE7B0_2d19b0[i], vars);
+        }
+        *(s32 *)(vars + 0x40) = scale_game_frames_2d19b0(0x3c);
+    }
+    for (i = 0; i < 0x4a; i++) {
+        for (j = 0; j < 4; j++) {
+            index = indices[i * 12 + j * 3];
+            quad.points[j] = *(u128 *)&D_L00_001E04A0_2d19b0[index];
+            quad.texcoords[j * 2] = D_L00_001E0B00_2d19b0[index][0];
+            quad.texcoords[j * 2 + 1] = D_L00_001E0B00_2d19b0[index][1];
+        }
+        transform_vectors_2d19b0(&quad, 0, 0);
+    }
+}
+#define FUN_L00_002d19b0(x) FUN_L00_002d19b0(u8 *m)
+#endif
 typedef struct M2d1e80 {
     u8 p0[0x20];
     u8 state;
