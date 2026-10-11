@@ -1401,7 +1401,121 @@ void FUN_L00_002ebbd8(void *arg) {
     *(int *)(cam + 0x2f4) = FUN_001fef20_2ebbd8(0x3c);
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ebe70.s", FUN_L00_002ebe70);
+#else
+extern void FUN_L00_0025b868(float, float, float *) __asm__("FUN_L00_0025b868");
+extern void FUN_001ff2a8_2ebe70(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001ff500_2ebe70(float, void *, void *) __asm__("FUN_001f9bf8");
+extern float FUN_001ff7e8_2ebe70(float) __asm__("FUN_001f9dc8");
+extern float FUN_001ff800_2ebe70(float) __asm__("FUN_001f9de0");
+extern float FUN_001ff398_2ebe70(void *, void *) __asm__("FUN_001f9ab0");
+extern float FUN_001ff3d8_2ebe70(void *) __asm__("FUN_001f9af0");
+extern float FUN_001ff8b0_2ebe70(float, float) __asm__("FUN_001f9e90");
+extern void FUN_001ff300_2ebe70(float, void *, void *) __asm__("FUN_001f9a68");
+extern void FUN_001ff278_2ebe70(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int FUN_001efc70_2ebe70(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern int FUN_001f0d60_2ebe70(float, void *, int, int) __asm__("FUN_L00_001f0d60");
+extern unsigned short *D_L00_001AB840_2ebe70[] __asm__("D_L00_001AB840");
+extern char *D_0015FFD8_2ebe70 __asm__("D_L00_0015FFD8");
+extern OvlQuad D_L00_00173E60_2ebe70 __asm__("D_L00_00173E60");
+extern float D_L00_00173E70_2ebe70[] __asm__("D_L00_00173E70");
+extern float D_L00_00161DD8_2ebe70 __asm__("D_L00_00161DD8") __attribute__((sda));
+
+void FUN_L00_002ebe70(char *o) {
+    char *m = *(char **)(o + 0x70);
+    char *p = m + 0x40;
+    float *angle = (float *)(m + 0xb8);
+    float *distance = (float *)(m + 0xa0);
+    OvlQuad scaled, diff, next;
+    float target, rate, fraction, score, best;
+    char *candidate, *chosen;
+    unsigned short *list;
+    int i;
+
+    if (hero.unk994 != 0 && hero.state.current == 0x2c) {
+        fraction = ((float *)hero.unk994)[6] - ((float *)&hero.motion.pos)[2];
+        if (fraction > hero.unk9A0) fraction = hero.unk9A0;
+        else if (fraction < 0.0f) fraction = 0.0f;
+        fraction /= hero.unk9A0;
+        target = fraction + 3.65f;
+        rate = fraction + fraction;
+    } else {
+        target = 4.64f;
+        rate = 2.0f;
+    }
+    FUN_L00_0025b868(target, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0xa0));
+    FUN_L00_0025b868(rate, frame_time * 4.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0xb0));
+    if (current_level_index == 14 && hero.state.current == 0x2c)
+        FUN_L00_0025b868(rate + 0.25f, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0x8c));
+    else
+        FUN_L00_0025b868(rate - 0.5f, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0x8c));
+
+    if (hero.state.current == 0x2c) {
+        if ((current_level_index == 14 || current_level_index == 7 || current_level_index == 9) &&
+            (hero.unk994 == 0 || *(signed char *)((char *)hero.unk994 + 0x21) != -1)) {
+            chosen = 0;
+            best = 1000.0f;
+            list = D_L00_001AB840_2ebe70[*(unsigned char *)((char *)hero.unk994 + 0x21)];
+            if (list != 0) {
+                do {
+                    candidate = D_0015FFD8_2ebe70 + (*list & 0x7fff) * 0x100;
+                    if (candidate != (char *)hero.unk994 &&
+                        (*(short *)(candidate + 0xa6) == 0x323 || *(short *)(candidate + 0xa6) == 0x2f6)) {
+                        FUN_001ff2a8_2ebe70(&diff, candidate + 0x10, (char *)hero.unk994 + 0x10);
+                        FUN_001ff500_2ebe70(1.0f, &scaled, &diff);
+                        ((float *)&next)[0] = FUN_001ff7e8_2ebe70(((float *)&hero.motion.rot)[2]);
+                        ((float *)&next)[1] = FUN_001ff800_2ebe70(((float *)&hero.motion.rot)[2]);
+                        ((float *)&next)[2] = 0.0f;
+                        score = FUN_001ff398_2ebe70(&scaled, &next);
+                        if (score > 0.0f) {
+                            score = FUN_001ff3d8_2ebe70(&diff) - score * 10.0f;
+                            if (score < best) {
+                                best = score;
+                                chosen = candidate;
+                            }
+                        }
+                    }
+                } while ((short)*list++ >= 0);
+            }
+            if (chosen != 0) {
+                FUN_001ff2a8_2ebe70(&diff, chosen + 0x10, (char *)hero.unk994 + 0x10);
+                target = FUN_001ff8b0_2ebe70(((float *)&diff)[0], ((float *)&diff)[1]);
+            } else if (*(int *)(m + 0x80) == 1)
+                target = *(float *)(*(char **)(m + 0x84) + 0x48);
+            else
+                target = ((float *)&hero.motion.rot)[2];
+        } else target = ((float *)&hero.motion.rot)[2];
+        *angle = FUN_L00_001eb328(m + 0xbc, *angle, target, 0.00125f, 0.175f, 0.0f);
+    } else if (hero.state.current == 0x25) {
+        target = ((float *)&hero.motion.rot)[2];
+        if (*(int *)(m + 0x80) == 1)
+            target = *(float *)(*(char **)(m + 0x84) + 0x48);
+        *angle = FUN_L00_001eb328(m + 0xbc, *angle, target, D_L00_00161DD8_2ebe70, 0.175f, 0.0f);
+    }
+    *(float *)(p + 0x30) = FUN_001ff7e8_2ebe70(*angle);
+    *(float *)(p + 0x34) = FUN_001ff800_2ebe70(*angle);
+    *(int *)(p + 0x38) = 0;
+    *(int *)(p + 0x3c) = *(int *)(p + 0x38);
+    FUN_001ff500_2ebe70(-*distance, &next, p + 0x30);
+    ((float *)&next)[2] += distance[4];
+    FUN_001ff278_2ebe70(&next, &next, &hero.motion.pos);
+    if (FUN_001efc70_2ebe70(o + 0x30, &next, 0x12, 0, 0) != 0) {
+        FUN_001ff2a8_2ebe70(&diff, &D_L00_00173E60_2ebe70, o + 0x30);
+        score = FUN_001ff3d8_2ebe70(&diff);
+        if (score > 0.5f) {
+            FUN_001ff300_2ebe70((score - 0.5f) / score, &diff, &diff);
+            FUN_001ff278_2ebe70(&next, o + 0x30, &diff);
+            for (i = 0; i < 5 && FUN_001f0d60_2ebe70(0.75f, &next, 0, 0); i++)
+                next = *(OvlQuad *)D_L00_00173E70_2ebe70;
+        }
+        qcopy(o + 0x30, &next);
+        FUN_001ff2a8_2ebe70(&diff, &hero.motion.pos, o + 0x30);
+        *angle = FUN_001ff8b0_2ebe70(((float *)&diff)[0], ((float *)&diff)[1]);
+        *(int *)(m + 0xbc) = 0;
+    } else qcopy(o + 0x30, &next);
+}
+#endif
 typedef union {
     OvlQuad q;
     float f[4];
