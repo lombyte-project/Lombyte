@@ -864,27 +864,26 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     u8 *q;
     s32 x, y, panel_right, panel_left, slide, alpha, text_alpha;
     s32 color, shadow, period;
-    f32 text, open, pulse, scaled_text;
+    f32 open, text, pulse, scaled_text;
 
     y = D_0013E504 - 42;
     if (pal_mode_reload[0] == 0)
         y = D_0013E504 - 50;
     x = m->x;
     if (hero.vehicle_mode == 2)
-        goto out;
+        return m->ret;
     if (*(s32 *)((u8 *)&hero + 0x2084) == 50)
-        goto out;
+        return m->ret;
     q = m->ab;
     if (q[0] == 0)
-        goto out;
+        return m->ret;
 
     open = convert_integer_to_float(q[0]) / convert_integer_to_float(D_L00_0015F7F0);
     if (1.0f < open)
         open = 1.0f;
     else if (open < 0.0f)
         open = 0.0f;
-    text = convert_integer_to_float(q[1]);
-    text /= convert_integer_to_float(D_L00_0015F7F0);
+    text = convert_integer_to_float(q[1]) / convert_integer_to_float(D_L00_0015F7F0);
     if (1.0f < text)
         text = 1.0f;
     else if (text < 0.0f)
