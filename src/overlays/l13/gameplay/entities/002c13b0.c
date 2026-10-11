@@ -1890,14 +1890,16 @@ void FUN_L13_002e4448(char *moby) {
             while (iter[0] != 0) {
                 if (iter[0] != moby && *(short *)(iter[0] + 0xA6) == 0xE7) {
                     char *other_data = *(char **)(iter[0] + 0x78);
-                    *(char **)(other_data + 0x80) = moby;
                     other_data[0x79] = 1;
+                    *(char **)(other_data + 0x80) = moby;
                 }
                 data[0x7B]++;
                 FUN_L00_002592b8(iter, iter[0], 0, 0);
             }
+            *(short *)(data + 0x76) = 0;
+        } else {
+            *(short *)(data + 0x76) = 0;
         }
-        *(short *)(data + 0x76) = 0;
         *(short *)(data + 0x70) = 0;
         *(short *)(data + 0x72) = 0;
         data[0x7A] = 0;
@@ -1925,7 +1927,13 @@ void FUN_L13_002e4448(char *moby) {
             *(short *)(data + 0x74) = 1;
         }
         if ((unsigned char)moby[0x20] == 2) {
-            if ((unsigned char)data[0x7A] < (unsigned char)data[0x7B]) {
+            if ((unsigned char)data[0x7A] >= (unsigned char)data[0x7B]) {
+                FUN_L01_0026e0e0((unsigned char)moby[0x21], 4);
+                FUN_0022da68(1, 0, moby);
+                *(short *)(data + 0x70) = *(short *)(data + 0x84);
+                FUN_001e93b0(D_L13_001F4D90, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), D_L13_0015F5CC);
+                moby[0x20] = 4;
+            } else {
                 if (*(int *)(data + 0x7C) >= 0) {
                     if (FUN_001f9770((short *)(data + 0x70)) != 0) {
                         *(short *)(data + 0x74) = 0;
@@ -1949,12 +1957,6 @@ void FUN_L13_002e4448(char *moby) {
                         }
                     }
                 }
-            } else {
-                FUN_L01_0026e0e0((unsigned char)moby[0x21], 4);
-                FUN_0022da68(1, 0, moby);
-                *(short *)(data + 0x70) = *(short *)(data + 0x84);
-                FUN_001e93b0(D_L13_001F4D90, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), D_L13_0015F5CC);
-                moby[0x20] = 4;
             }
         }
         break;
@@ -1991,12 +1993,12 @@ void FUN_L13_002e4448(char *moby) {
         }
         if (FUN_001f9770((short *)(data + 0x76)) != 0) {
             *(short *)(data + 0x76) = FUN_001f96f8(0x14);
-            if ((unsigned char)data[0x78] == 0) {
-                FUN_L00_002502f0(moby, 0, 0, 0xFF);
-                data[0x78] = 1;
-            } else {
+            if ((unsigned char)data[0x78] != 0) {
                 FUN_L00_002502f0(moby, 0, 0xFF, 0);
                 data[0x78] = 0;
+            } else {
+                FUN_L00_002502f0(moby, 0, 0, 0xFF);
+                data[0x78] = 1;
             }
         }
         break;
