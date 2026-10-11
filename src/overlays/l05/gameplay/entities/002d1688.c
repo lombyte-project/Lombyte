@@ -1579,7 +1579,258 @@ void FUN_L05_0030bf98(char *moby)
         break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030ca80.s", FUN_L05_0030ca80);
+#else
+extern char D_L05_001D6880[];
+extern float D_L05_0013F640;
+extern int D_L05_001413D4;
+extern int D_L05_001413DC;
+extern float D_0013F3D0[];
+extern float D_0013F3D8;
+extern int D_0013F64C;
+extern short D_0013F65E;
+extern int D_0015ED84;
+extern float D_0015ED70;
+extern float D_0015ED6C;
+extern unsigned char D_0014C050[];
+extern int current_level_index;
+extern void FUN_L05_0030d5c0(char *);
+extern void FUN_L05_0030d6a0(int);
+extern void initialize_slots_30ca80(void *, int) __asm__("FUN_L01_002b7a48");
+extern void initialize_slot_data_30ca80(float) __asm__("FUN_L01_002b7ef0");
+extern void copy_slot_30ca80(void *, void *) __asm__("FUN_L01_002b7c68");
+extern void finish_slots_30ca80(void *, int) __asm__("FUN_L01_002b7fe0");
+extern void move_slot_30ca80(float, float, float, float, void *, int, int) __asm__("FUN_L00_002a3ec8");
+extern float angle_30ca80(float, float) __asm__("FUN_001f9e90");
+extern float sine_30ca80(float) __asm__("FUN_001f9dc8");
+extern float cosine_30ca80(float) __asm__("FUN_001f9de0");
+extern int truncate_float_30ca80(float) __asm__("FUN_001fa6d0");
+extern int scale_game_frames_30ca80(int) __asm__("FUN_001f96f8");
+extern int tick_30ca80(float *) __asm__("FUN_001f9740");
+extern int random_integer_below_30ca80(int) __asm__("FUN_00213260");
+extern float random_float_30ca80(float, float) __asm__("FUN_002132a8");
+extern void move_scalar_30ca80(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern void update_group_30ca80(char *) __asm__("FUN_L05_0030d5c0");
+extern void set_action_30ca80(int, int) __asm__("FUN_L01_0026e0e0");
+extern void remove_moby_30ca80(char *) __asm__("FUN_0020c828");
+extern int check_moby_30ca80(float, char *) __asm__("FUN_L01_00275690");
+extern void register_callback_30ca80(void *, char *) __asm__("FUN_001f4600");
+extern void FUN_L05_0030d678(void);
+extern float distance_30ca80(void *, void *) __asm__("FUN_001f9b48");
+extern float distance_point_30ca80(void *, void *) __asm__("FUN_001f9b80");
+
+void FUN_L05_0030ca80(char *moby) {
+    int state = *(unsigned char *)(moby + 0x20);
+    char *data = *(char **)(moby + 0x78);
+    char *slots;
+    int slot;
+    float value;
+    float other;
+    int i;
+    float point[4];
+    switch (state) {
+    case 0:
+        slot = *(int *)(data + 0x14);
+        slots = D_L05_001D6880;
+        if (slot == 0) {
+            *(int *)0xffffb128 = *(int *)(moby + 0x18);
+            *(int *)0xffffb120 = 0;
+            *(int *)0xffffb12c = 0;
+            initialize_slots_30ca80(slots, 0x30);
+            initialize_slot_data_30ca80(1.0f);
+            *(float *)0x001cad00 = 16.0f;
+            *(float *)0x001cad04 = 16.0f;
+            *(float *)0x001cad08 = -8.0f;
+            *(float *)0x001cad0c = -8.0f;
+            *(float *)0x001cad10 = 1.0f;
+            *(float *)0x001cad14 = 1.0f;
+            *(float *)0x001cad18 = 0.9f;
+            *(float *)0x001cad20 = 0.1f;
+            value = angle_30ca80(*(float *)0x00180350, *(float *)0x00180354);
+            *(float *)0x001cad30 = sine_30ca80(value) * 0.57735f;
+            *(float *)0x001cad34 = cosine_30ca80(value) * 0.57735f;
+            *(int *)0x001cad38 = 0xbf13cd36;
+            *(unsigned char *)0x001cad3d = 0x40;
+            *(int *)0x001cad28 = 0x29;
+            *(int *)0x001cad2c = 0x2a;
+            *(unsigned char *)0x001cad3c = 0x1c;
+            *(int *)0x001612d8 = 0x30;
+            *(unsigned char *)0x00161205 = 0xb;
+            *(unsigned char *)0x00161206 = 0x3e;
+            *(float *)0x0016120c = 20480.0f;
+            *(float *)0x00161210 = 255.0f;
+            *(float *)0x00161214 = 26.0f;
+            *(char **)0x001612d0 = slots;
+            *(void **)0x001612d4 = (void *)0x20b440;
+            *(unsigned char *)0x00161204 = 0;
+            *(int *)0x00161208 = 0;
+            for (i = 0; i < 48; i++) {
+                int selected_slot;
+                copy_slot_30ca80(slots + i * 0x1190, (char *)0x20b440 + i * 0x10);
+                selected_slot = *(int *)(data + 0x14);
+                *(unsigned short *)(slots + selected_slot * 0x1190 + 0x1e) =
+                    *(unsigned short *)(0x20b380 + selected_slot * 2);
+            }
+            for (i = 0; i < 48; i++) FUN_L05_0030d6a0(i);
+        }
+        *(short *)(moby + 0x32) = 0;
+        *(unsigned short *)(moby + 0x34) |= 1;
+        if (*(int *)(data + 0xc) == 0) {
+            if (*(int *)(data + 0x10) < 0) {
+                *(float *)(data + 4) = *(float *)(moby + 0x18);
+                *(float *)data = *(float *)(data + 4) + 4.5f;
+                if (*(int *)(data + 8) != 0) {
+                    moby[0x20] = 1;
+                    *(float *)(moby + 0x18) = *(float *)data;
+                    break;
+                }
+            }
+            moby[0x20] = 2;
+            *(float *)(moby + 0x18) = *(float *)(data + 4);
+        } else {
+            int level = D_0015ED84;
+            if (*(int *)(data + 0x10) >= 0) {
+                moby[0x30] = -1;
+                level = current_level_index;
+                if (*(int *)0xffffb11c > 1) {
+                    float scale = (float)(*(int *)0xffffb11c - 1) * 0.014285714f + 1.0f;
+                    if (scale > 1.4f) scale = 1.4f;
+                    for (i = 0; i < 6; i++) {
+                        ((int *)0x20b3e0)[i] = truncate_float_30ca80((float)((int *)0x20b410)[i] * scale);
+                        ((float *)0x20b3f8)[i] = ((float *)0x20b428)[i] / scale;
+                    }
+                }
+            }
+            if ((signed char)D_0014C050[level * 16 + (unsigned char)moby[0xb0]] == -1) {
+                moby[0x20] = 7;
+                *(float *)(moby + 0x18) = 44.0f;
+            } else {
+                moby[0x20] = 3;
+                *(int *)(data + 0x18) = scale_game_frames_30ca80(60);
+                if (*(float *)(moby + 0x18) < *(float *)(data + 4))
+                    *(short *)(slots + slot * 0x1190 + 0x1e) = 0;
+            }
+        }
+        if (slot == 47) *(int *)(moby + 0x94) = 0;
+        break;
+    case 1:
+        if (((unsigned char)moby[0xbc] & 8) == 0) moby[0xbc] = 2;
+        else {
+            *(int *)(data + 0x24) = 1;
+            set_action_30ca80((unsigned char)moby[0x21], 2);
+        }
+        if (*(int *)(data + 0x24) != 0) {
+            move_scalar_30ca80((float *)(moby + 0x18), (float *)(data + 0x20), *(float *)data,
+                                 *(float *)0xffffb130 * D_0015ED70,
+                                 *(float *)0xffffb130 * D_0015ED70,
+                                 *(float *)0xffffb134 * D_0015ED6C);
+            update_group_30ca80(moby);
+        }
+        if (random_integer_below_30ca80(200) == 0) goto random_move;
+        break;
+    case 2:
+        if (((unsigned char)moby[0xbc] & 4) == 0) {
+            if (*(int *)(data + 0x10) >= 0) {
+                if ((signed char)D_0014C050[current_level_index * 16 + (unsigned char)moby[0xb0]] == -1) {
+                    moby[0x20] = 1;
+                    *(float *)(moby + 0x18) = *(float *)data;
+                }
+            }
+        } else {
+            *(int *)(data + 0x24) = 1;
+            set_action_30ca80((unsigned char)moby[0x21], 1);
+        }
+        if (*(int *)(data + 0x24) != 0) {
+            move_scalar_30ca80((float *)(moby + 0x18), (float *)(data + 0x20), *(float *)(data + 4),
+                                 *(float *)0xffffb130 * D_0015ED70,
+                                 *(float *)0xffffb130 * D_0015ED70,
+                                 *(float *)0xffffb134 * D_0015ED6C);
+            update_group_30ca80(moby);
+        }
+        moby[0xbc] = 1;
+        if (random_integer_below_30ca80(200) == 0) goto random_move;
+        break;
+    case 3:
+        value = distance_30ca80(moby + 0x10, D_0013F3D0);
+        if (value < 16.0f && *(float *)(moby + 0x18) > D_0013F3D8 && D_L05_001413DC == 0x11)
+            if (D_L05_0013F640 < *(float *)(moby + 0x18))
+                D_L05_0013F640 = *(float *)(moby + 0x18);
+        if (*(int *)(data + 0x10) >= 0 && distance_30ca80(moby + 0x10, D_0013F3D0) < 10.0f &&
+            D_0013F64C != 0 && D_0013F65E == 0 && *(short *)(D_0013F64C + 0xa6) == 0x33e) {
+            *(float *)(data + 0x1c) = 0.0f;
+            moby[0x20] = 8;
+            *(int *)0xffffb120 = 0;
+            *(int *)(data + 0x18) = scale_game_frames_30ca80(((int *)0x20b3e0)[0]);
+        }
+        if (random_integer_below_30ca80(50) == 0) goto random_move;
+        break;
+    random_move:
+        slot = *(int *)(data + 0x14);
+        slots = D_L05_001D6880;
+        value = *(float *)(slots + slot * 0x1190) + random_float_30ca80(-4.0f, 4.0f);
+        other = *(float *)(slots + slot * 0x1190 + 4) + random_float_30ca80(-4.0f, 4.0f);
+        move_slot_30ca80(value, other, 1.0f, state == 3 ? -0.01f : -0.05f,
+                            slots + slot * 0x1190, 1, 1);
+        break;
+    case 7:
+        slot = *(int *)(data + 0x14);
+        slots = D_L05_001D6880;
+        if (*(int *)(data + 0x10) < 0) {
+            if (*(float *)data < *(float *)(moby + 0x18)) {
+                *(short *)(slots + slot * 0x1190 + 0x1e) = 0;
+                remove_moby_30ca80(moby);
+                return;
+            }
+        } else if (D_L05_001413D4 == 0x6a && *(int *)0x0013f4e8 == 2) {
+            ++*(int *)0xffffb11c;
+        }
+        break;
+    case 8:
+        if (tick_30ca80((float *)(data + 0x18)) && *(int *)0xffffb120 < 5) {
+            i = ++*(int *)0xffffb120;
+            *(int *)(data + 0x18) = scale_game_frames_30ca80(((int *)0x20b3e0)[i]);
+        }
+        *(float *)(moby + 0x18) += ((float *)0x20b3f8)[*(int *)0xffffb120] * D_0015ED6C;
+        update_group_30ca80(moby);
+        *(int *)0xffffb128 = *(int *)(moby + 0x18);
+        point[0] = 211.0f;
+        point[1] = 338.0f;
+        point[2] = 25.0f;
+        point[3] = 0.0f;
+        if (distance_point_30ca80(point, D_0013F3D0) < 6.0f) {
+            if (*(int *)0xffffb12c == 0) {
+                *(int *)0xffffb12c = 1;
+                if (*(float *)0xffffb124 < *(float *)(moby + 0x18)) *(int *)0xffffb120 = 5;
+            }
+        }
+        if (*(int *)(data + 0x10) >= 0 && D_L05_001413D4 == 0x6a && *(int *)0x0013f4e8 == 2)
+            ++*(int *)0xffffb11c;
+        if (*(float *)(moby + 0x18) >= 44.0f)
+            set_action_30ca80((unsigned char)moby[0x21], 7);
+        break;
+    }
+    slots = D_L05_001D6880;
+    slot = *(int *)(data + 0x14);
+    if (slot >= 0) {
+        float visible = 0.0f;
+        *(float *)(slots + slot * 0x1190 + 8) = *(float *)(moby + 0x18);
+        if (check_moby_30ca80(48.0f, moby) != -1 &&
+            ((unsigned)(unsigned char)(moby[0x20] - 3) >= 5 ||
+             (*(float *)(data + 4) < *(float *)(moby + 0x18) &&
+              *(float *)(moby + 0x18) < *(float *)data))) visible = 1.0f;
+        *(unsigned short *)(slots + slot * 0x1190 + 0x1e) = visible == 0.0f ? 0 : *(unsigned short *)(0x20b380 + slot * 2);
+        if (slot == 0) {
+            finish_slots_30ca80(slots, 0x30);
+            register_callback_30ca80(FUN_L05_0030d678, moby);
+        }
+        if (slot == *(int *)0xffffb110) {
+            *(short *)(slots + slot * 0x1190 + 0x1e) = *(short *)0xffffb114;
+            *(short *)(0x20b380 + slot * 2) = *(short *)0xffffb114;
+        }
+    }
+}
+#endif
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_0030EA88), where it is exact; names translated to the US level program. */
 
 extern char D_L05_001D6880[];
