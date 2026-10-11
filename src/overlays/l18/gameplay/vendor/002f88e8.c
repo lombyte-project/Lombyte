@@ -303,10 +303,8 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     for (i = 0; i < 4; i++) {
         *(u128_9c20 *)vertices[i] = *(u128_9c20 *)D_L18_001DFBD0_9eb8[i];
         {
-            float z = vertices[i][2];
-            float x = vertices[i][0];
-            vertices[i][0] = x * D_L18_0016252C_9eb8;
-            vertices[i][2] = z * scale_z;
+            vertices[i][0] *= D_L18_0016252C_9eb8;
+            vertices[i][2] *= scale_z;
         }
     }
     for (i = 0; i < 4; i++) {
@@ -323,10 +321,8 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     for (i = 0; i < 4; i++) {
         *(u128_9c20 *)vertices[i] = *(u128_9c20 *)D_L18_001DFBD0_9eb8[i];
         {
-            float z = vertices[i][2];
-            float x = vertices[i][0];
-            vertices[i][0] = x * D_L18_0016252C_9eb8;
-            vertices[i][2] = z * scale_z;
+            vertices[i][0] *= D_L18_0016252C_9eb8;
+            vertices[i][2] *= scale_z;
         }
     }
     for (i = 0; i < 4; i++) {
@@ -343,10 +339,8 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     for (i = 0; i < 4; i++) {
         *(u128_9c20 *)vertices[i] = *(u128_9c20 *)D_L18_001DFBD0_9eb8[i];
         {
-            float z = vertices[i][2];
-            float x = vertices[i][0];
-            vertices[i][0] = x * D_L18_0016252C_9eb8;
-            vertices[i][2] = z * scale_z;
+            vertices[i][0] *= D_L18_0016252C_9eb8;
+            vertices[i][2] *= scale_z;
         }
     }
     for (i = 0; i < 4; i++) {
