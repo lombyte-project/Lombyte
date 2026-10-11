@@ -1977,7 +1977,7 @@ extern void FUN_L00_00250df8(void *);
 char *FUN_L01_002ef350(char *self) {
     short *list;
     char *entities;
-    unsigned short entry;
+    int entry;
     int type = -1;
     if (*(short *)(self + 0xA6) == 0x23C) {
         type = 0x361;
@@ -1994,16 +1994,21 @@ advance:
 scan:
     {
         char *other;
-        entry = *(unsigned short *)list;
-        other = entities + ((entry & 0x7FFF) << 8);
+        int index = *(unsigned short *)list;
+        entry = index;
+        index &= 0x7FFF;
+        other = entities + (index << 8);
         if ((unsigned char)other[0x20] != 12 || *(short *)(other + 0xA6) != type) goto advance;
         {
             char *other_data = *(char **)(other + 0x78);
             char *self_data = *(char **)(self + 0x78);
-            other[0x31] = 1;
             other[0x30] = self[0x30];
             *(unsigned short *)(other + 0x32) = *(unsigned short *)(self + 0x32);
-            *(unsigned long long *)(other + 0x38) = *(unsigned long long *)(self + 0x38);
+            {
+                unsigned long long spawn_frame = *(unsigned long long *)(self + 0x38);
+                other[0x31] = 1;
+                *(unsigned long long *)(other + 0x38) = spawn_frame;
+            }
             *(int *)(other + 0x94) = *(int *)(*(char **)(other + 0x24) + 0x10);
             *(unsigned short *)(other + 0x34) = *(unsigned short *)(self + 0x34);
             qcopy(other + 0x10, self + 0x10);
