@@ -3379,80 +3379,86 @@ extern s32 FUN_001efc70_20bed0(void *, void *, s32, s32, s32) __asm__("FUN_001ef
 extern s32 FUN_001f35d8_20bed0(void) __asm__("FUN_001f0b58");
 extern s32 FUN_L00_001f19a0_20bed0(f32, void *, s32, s32) __asm__("FUN_L00_001f19a0");
 extern void FUN_L00_00259508_20bed0(f32, void *, void *, void *, s32) __asm__("FUN_L00_00259508");
-extern s32 FUN_L00_0025c338_20bed0(void) __asm__("FUN_L00_0025c338");
+extern s32 FUN_L00_0025c338_20bed0(s32) __asm__("FUN_L00_0025c338");
 extern u8 *FUN_L00_002603d0_20bed0(s32) __asm__("FUN_L00_002603d0");
 extern s32 FUN_001fef20_20bed0(s32) __asm__("FUN_001f96f8");
 
 void FUN_L00_0020bed0(void) {
-    Vec4 pos, top, wall, origin, trial, goal, upper, result;
-    struct Hero *g = &hero;
-    u8 *hit = D_L00_00173E40_20bed0;
+    Vec4 pos, top, wall, origin, trial, upper, goal, result;
+    struct Hero *g;
+    u8 *hit;
     f32 down, step, height, front, back, reach, side, offset;
     f32 angle, distance, delta;
     s32 i, found, material, collision, flags;
     u8 *object;
 
-    if (g->unk308 == 2)
+    if (hero.unk308 == 2)
         return;
-    g->unk4E8 = 0;
-    if (g->unk1B0 != 0) {
-        g->unk4E8 = 0;
+    hero.unk4E8 = 0;
+    if (hero.unk1B0 != 0)
         return;
+    {
+        s32 found = 0;
+        if (hero.vehicle_mode == 0) {
+            if ((hero.state.control_mode == 4 && (hero.unk41E != 0 || hero.motion.velocity.f[2] < D_0015ED6C_20bed0 * 3.5f)) ||
+                hero.state.control_mode == 2 || hero.state.current == 8 || hero.state.current == 0x1a || hero.state.current == 0x1b)
+                found = 1;
+            if (hero.state.current == 0xe && hero.anim_frame < 37.0f)
+                found = 0;
+        }
+        if (hero.vehicle_mode == 1) {
+            if ((hero.state.control_mode == 4 && (hero.unk41E != 0 || hero.motion.velocity.f[2] < D_0015ED6C_20bed0 * 2.5f)) ||
+                hero.state.control_mode == 2 || hero.state.current == 0x4f || hero.state.current == 0x4d || hero.state.current == 0x4e)
+                found = 1;
+        }
+        if (!found)
+            return;
     }
-    found = 0;
-    if (g->unk20A4 == 0) {
-        if ((g->state.control_mode == 4 && (g->unk41E != 0 || g->motion.velocity.f[2] < D_0015ED6C_20bed0 * 3.5f)) ||
-            g->state.control_mode == 2 || g->state.current == 8 || g->state.current == 0x1a || g->state.current == 0x1b)
-            found = 1;
-        if (g->state.current == 0xe && g->unkAA8 < 37.0f)
-            found = 0;
-    }
-    if (g->unk20A4 == 1) {
-        if ((g->state.control_mode == 4 && (g->unk41E != 0 || g->motion.velocity.f[2] < D_0015ED6C_20bed0 * 2.5f)) ||
-            g->state.control_mode == 2 || g->state.current == 0x4f || g->state.current == 0x4d || g->state.current == 0x4e)
-            found = 1;
-    }
-    if (!found)
-        return;
-
+    g = &hero;
     down = -0.7f; step = 0.3f; height = 1.5f; front = 1.15f;
     back = -1.43f; reach = 1.8f; side = 0.45f;
-    if (g->unk20A4 == 1) {
+    if (g->vehicle_mode == 1) {
         front = 0.7f; down = -0.4f; step = 0.25f; reach = 0.7f;
         height = 0.725f; back = -0.71f; side = 0.32f;
     }
-    angle = g->unk940;
-    if (g->state.control_mode == 4)
-        angle = g->unk4A0;
-    FUN_L00_00259508_20bed0(angle, &pos, &g->motion.pos, &g->motion.unk110, FUN_001fef20_20bed0(2));
-    offset = 0.15f;
-    distance = 0.25f;
-    pos.f[0] += FUN_001ff7e8_20bed0(g->motion.rot.f[2]) * g->unk234;
-    pos.f[1] += FUN_001ff800_20bed0(g->motion.rot.f[2]) * g->unk234;
-    found = 0;
-        for (i = 0; i < 4; i++) {
-        pos.f[0] += FUN_001ff7e8_20bed0(g->motion.rot.f[2]) * step * distance;
-        pos.f[1] += FUN_001ff800_20bed0(g->motion.rot.f[2]) * step * distance;
-        top = pos;
-        top.f[2] += height + offset;
-        qcopy(&wall, &pos);
-        wall.f[2] += front;
-        collision = FUN_001efc70_20bed0(&top, &wall, 4, (s32)g->moby, 0);
-        if (collision != 0) {
-            material = FUN_001f35d8_20bed0();
-            if (material != 9 && material != 12 && material != 0 &&
-                FUN_001ff8b0_20bed0(*(f32 *)(hit + 0x48), FUN_001ff408_20bed0(hit + 0x40)) < 0.34906584f)
-                found = 1;
-        }
-        if (found)
-            break;
+    {
+        f32 angle = g->unk940;
+        if (g->state.control_mode == 4)
+            angle = g->unk4A0;
+        FUN_L00_00259508_20bed0(angle, &pos, &g->motion.pos, &g->motion.unk110, FUN_001fef20_20bed0(2));
+        offset = 0.15f;
+        distance = 0.25f;
     }
-    if (!found)
-        return;
-    if (*(s32 *)(hit + 0x18) != 0) {
+    {
+        s32 found = 0;
+        s32 i;
+        pos.f[0] += FUN_001ff7e8_20bed0(g->motion.rot.f[2]) * g->unk234;
+        pos.f[1] += FUN_001ff800_20bed0(g->motion.rot.f[2]) * g->unk234;
+        hit = D_L00_00173E40_20bed0;
+        for (i = 0; i < 4; i++) {
+            pos.f[0] += FUN_001ff7e8_20bed0(hero.motion.rot.f[2]) * step * distance;
+            pos.f[1] += FUN_001ff800_20bed0(hero.motion.rot.f[2]) * step * distance;
+            qcopy(&top, &pos);
+            top.f[2] += height + offset;
+            qcopy(&wall, &pos);
+            wall.f[2] += front;
+            collision = FUN_001efc70_20bed0(&top, &wall, 4, (s32)hero.moby, 0);
+            if (collision != 0) {
+                material = FUN_001f35d8_20bed0();
+                if (material != 9 && material != 12 && material != 0 &&
+                    FUN_001ff8b0_20bed0(*(f32 *)(hit + 0x48), FUN_001ff408_20bed0(hit + 0x40)) < 0.34906584f)
+                    found = 1;
+            }
+            if (found)
+                break;
+        }
+        if (!found)
+            return;
+    }
+    if (*(s32 *)(D_L00_00173E40_20bed0 + 0x18) != 0) {
         flags = 0;
-        collision = FUN_L00_0025c338_20bed0();
-        object = FUN_L00_002603d0_20bed0(*(s32 *)(hit + 0x18));
+        collision = FUN_L00_0025c338_20bed0(*(s32 *)(D_L00_00173E40_20bed0 + 0x18));
+        object = FUN_L00_002603d0_20bed0(*(s32 *)(D_L00_00173E40_20bed0 + 0x18));
         if (collision && (*(u16 *)(collision + 0x1e) & 1))
             flags = 1;
         else if (object)
@@ -3460,64 +3466,71 @@ void FUN_L00_0020bed0(void) {
         if (!flags)
             return;
     }
-    g->unk4F8 = *(s32 *)(hit + 0x18);
-    if (g->motion.pos.f[2] + height < *(f32 *)(hit + 0x28))
+    hero.unk4F8 = *(s32 *)(D_L00_00173E40_20bed0 + 0x18);
+    if (hero.motion.pos.f[2] + height < *(f32 *)(D_L00_00173E40_20bed0 + 0x28))
         return;
-    qcopy(&top, hit + 0x20);
-    qcopy(&wall, hit + 0x20);
+    qcopy(&top, D_L00_00173E40_20bed0 + 0x20);
+    qcopy(&wall, D_L00_00173E40_20bed0 + 0x20);
     wall.f[2] += 0.05f;
-    qcopy(&origin, &g->motion.pos);
+    qcopy_nc(&origin, &hero.motion.pos);
     origin.f[2] = wall.f[2];
-    if (FUN_001efc70_20bed0(&origin, &wall, 4, (s32)g->moby, 0))
+    if (FUN_001efc70_20bed0(&origin, &wall, 4, (s32)hero.moby, 0))
         return;
-    qcopy(&trial, hit + 0x20);
+    qcopy(&trial, D_L00_00173E40_20bed0 + 0x20);
     trial.f[2] += 0.6f;
-    if (FUN_L00_001f19a0_20bed0(0.45f, &trial, 4, (s32)g->moby) == 0)
-        g->unk4F4 &= ~1;
+    if (FUN_L00_001f19a0_20bed0(0.45f, &trial, 4, (s32)hero.moby) == 0)
+        hero.unk4F4 &= ~1;
     else
-        g->unk4F4 |= 1;
-    angle = FUN_001ff8b0_20bed0(top.f[0] - g->motion.pos.f[0], top.f[1] - g->motion.pos.f[1]);
-    g->unk4E0 = top.f[2];
-    if (top.f[2] - g->ground_z.f < reach)
+        hero.unk4F4 |= 1;
+    distance = FUN_001ff8b0_20bed0(top.f[0] - hero.motion.pos.f[0], top.f[1] - hero.motion.pos.f[1]);
+    hero.unk4E0 = top.f[2];
+    if (top.f[2] - hero.ground_z.f < reach)
         return;
+    front = 5.0f;
+    step = 1.0f;
     found = 0;
-        for (i = 0; i < 5; i++) {
-        qcopy(&upper, &g->motion.pos);
-        goal = top;
-        delta = g->unk234 + g->unk234;
-        goal.f[0] += FUN_001ff7e8_20bed0(angle) * delta;
-        goal.f[1] += FUN_001ff800_20bed0(angle) * delta;
-        upper.f[2] = goal.f[2] + down * (1.0f - (f32)i / 5.0f);
+    for (i = 0; i < 5; i++) {
+        qcopy(&upper, &hero.motion.pos);
+        qcopy(&goal, &top);
+        delta = hero.unk234 + hero.unk234;
+        goal.f[0] += FUN_001ff7e8_20bed0(distance) * delta;
+        goal.f[1] += FUN_001ff800_20bed0(distance) * delta;
+        upper.f[2] = goal.f[2] + down * (step - (f32)i / front);
         goal.f[2] = upper.f[2];
         collision = FUN_001efc70_20bed0(&upper, &goal, 2, 0, 0);
         if (collision) {
             found = 1;
-            g->unk4E4 = FUN_001ff8b0_20bed0(*(f32 *)(hit + 0x40), *(f32 *)(hit + 0x44));
+            hero.unk4E4 = FUN_001ff8b0_20bed0(*(f32 *)(D_L00_00173E40_20bed0 + 0x40), *(f32 *)(D_L00_00173E40_20bed0 + 0x44));
             break;
         }
     }
     if (!found)
         return;
-    angle = FUN_002000e8_20bed0(g->unk4E4, 3.1415927f);
-    if (FUN_002001f0_20bed0(g->motion.rot.f[2], angle) >= 1.134464f)
+    angle = FUN_002000e8_20bed0(hero.unk4E4, 3.1415927f);
+    if (!(FUN_002001f0_20bed0(hero.motion.rot.f[2], angle) < 1.134464f))
         return;
-    for (delta = 0.0f; delta < 2.4f; delta += 0.03f) {
+    front = 2.4f;
+    step = 0.03f;
+    distance = 0.5f;
+    for (delta = 0.0f; delta < front; delta += step) {
         qcopy(&goal, &top);
-        goal.f[0] += FUN_001ff7e8_20bed0(g->unk4E4) * delta;
-        goal.f[1] += FUN_001ff800_20bed0(g->unk4E4) * delta;
+        goal.f[2] = top.f[2];
+        goal.f[0] += FUN_001ff7e8_20bed0(hero.unk4E4) * delta;
+        goal.f[1] += FUN_001ff800_20bed0(hero.unk4E4) * delta;
         qcopy(&upper, &goal);
-        upper.f[2] -= 0.5f;
-        goal.f[2] += 0.5f;
-        if (FUN_001efc70_20bed0(&goal, &upper, 4, (s32)g->moby, 0) == 0) {
+        upper.f[2] -= distance;
+        goal.f[2] += distance;
+        if (FUN_001efc70_20bed0(&goal, &upper, 4, (s32)hero.moby, 0) == 0) {
             qcopy(&result, &goal);
+            delta = -(step * distance);
             result.f[2] = top.f[2];
-            result.f[0] += FUN_001ff7e8_20bed0(g->unk4E4) * -(0.5f * 0.03f);
-            result.f[1] += FUN_001ff800_20bed0(g->unk4E4) * -(0.5f * 0.03f);
-            qcopy(&g->unk4D0, &result);
-            g->unk4D0.f[0] += FUN_001ff7e8_20bed0(g->unk4E4) * side;
-            g->unk4D0.f[1] += FUN_001ff800_20bed0(g->unk4E4) * side;
-            g->unk4D0.f[2] += back;
-            g->unk4E8 = 1;
+            result.f[0] += FUN_001ff7e8_20bed0(hero.unk4E4) * delta;
+            result.f[1] += FUN_001ff800_20bed0(hero.unk4E4) * delta;
+            qcopy(&hero.unk4D0, &result);
+            hero.unk4D0.f[0] += FUN_001ff7e8_20bed0(hero.unk4E4) * side;
+            hero.unk4D0.f[1] += FUN_001ff800_20bed0(hero.unk4E4) * side;
+            hero.unk4D0.f[2] += back;
+            hero.unk4E8 = 1;
             return;
         }
     }
