@@ -1636,7 +1636,245 @@ unsigned char *FUN_L00_002d3838(unsigned char *s, void *b, int c, void *d) {
     return m;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d3a10.s", FUN_L00_002d3a10);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d4610.s", FUN_L00_002d4610);
+#else
+extern f32 D_0015ED6C_2d4610 __asm__("D_0015ED6C");
+extern f32 D_0015ED70_2d4610 __asm__("D_0015ED70");
+extern u8 *D_L00_001B04B0_2d4610[] __asm__("D_L00_001B04B0");
+extern u8 *D_0015FFD8_2d4610 __asm__("D_L00_0015FFD8");
+extern void FUN_L00_002d5160_2d4610(u8 *) __asm__("FUN_L00_002d5160");
+extern void FUN_L00_0025a120_2d4610(u8 *) __asm__("FUN_L00_0025a120");
+extern void FUN_L00_00263ac8_2d4610(f32, u8 *, s32, void *) __asm__("FUN_L00_00263ac8");
+extern void FUN_L00_00257880_2d4610(u8 *, s32, s32, s32) __asm__("FUN_L00_00257880");
+extern s32 FUN_001fef20_2d4610(s32) __asm__("FUN_001f96f8");
+extern s16 FUN_00200250_2d4610(f32) __asm__("FUN_001fa6d0");
+extern f32 FUN_001ff450_2d4610(void *, void *) __asm__("FUN_001f9b48");
+extern f32 FUN_001ff488_2d4610(void *, void *) __asm__("FUN_001f9b80");
+extern f32 FUN_001ff8b0_2d4610(f32, f32) __asm__("FUN_001f9e90");
+extern f32 FUN_002001f0_2d4610(f32, f32) __asm__("FUN_001fa688");
+extern f32 FUN_L00_00257be8_2d4610(f32, f32) __asm__("FUN_L00_00257be8");
+extern s32 FUN_L00_00257b50_2d4610(s32) __asm__("FUN_L00_00257b50");
+extern s32 FUN_L00_00257b90_2d4610(s32, s32) __asm__("FUN_L00_00257b90");
+extern f32 FUN_L00_002d54c8(u8 *, f32 *, f32);
+extern void FUN_L00_0025be00_2d4610(void *, f32, void *, f32, f32, f32) __asm__("FUN_L00_0025be00");
+extern void FUN_L00_00261630_2d4610(f32, f32, u8 *, void *) __asm__("FUN_L00_00261630");
+extern s32 FUN_L00_002618d8_2d4610(f32, u8 *) __asm__("FUN_L00_002618d8");
+extern void FUN_L00_002599e8_2d4610(u8 *, f32, f32, f32, s32, s32, s32, s32, s32) __asm__("FUN_L00_002599e8");
+extern s32 FUN_L00_00261968_2d4610(s32, void *, void *) __asm__("FUN_L00_00261968");
+extern s32 FUN_L00_002dc9f0_2d4610(u8 *, void *) __asm__("FUN_L00_002dc9f0");
+extern s32 FUN_L00_0025c698_2d4610(u8 *, void *) __asm__("FUN_L00_0025c698");
+extern void FUN_L00_0025f3e8_2d4610(u8 *, void *, s32, f32, f32) __asm__("FUN_L00_0025f3e8");
+extern void FUN_L00_00261d78_2d4610(f32, s32, void *, void *) __asm__("FUN_L00_00261d78");
+extern f32 FUN_L00_00259698_2d4610(f32, void *, s32) __asm__("FUN_L00_00259698");
+extern void FUN_L00_0025b868_2d4610(f32, f32, void *) __asm__("FUN_L00_0025b868");
+extern void FUN_L00_002d5830_2d4610(u8 *) __asm__("FUN_L00_002d5830");
+extern void FUN_001ff2a8_2d4610(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001ff500_2d4610(f32, void *, void *) __asm__("FUN_001f9bf8");
+extern void FUN_001ff278_2d4610(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_0028dbe8_2d4610(s32, s32, u8 *) __asm__("FUN_0022da68");
+extern void FUN_0024eb68_2d4610(u8 *) __asm__("FUN_00214cc8");
+
+void FUN_L00_002d4610(u8 *m) {
+    u8 *v = *(u8 **)(m + 0x78);
+    u8 *target;
+    u8 *row;
+    f32 vec[4] __attribute__((aligned(16)));
+    f32 angle, distance;
+    s32 animation;
+    s32 effect;
+
+    FUN_L00_002d5160_2d4610(m);
+    target = *(u8 **)(v + 0x1c0);
+    if (m[0x31] && FUN_001ff450_2d4610(m + 0x10, (void *)0x166dc0) < 26.0f) {
+        FUN_L00_0025a120_2d4610(m);
+        m[0x7f] = 0x15;
+    }
+    FUN_L00_00263ac8_2d4610(2.1f, m, 1, v + 0x200);
+    switch (m[0x20]) {
+    case 0:
+        *(f32 *)(m + 0x2c) = *(f32 *)(*(u8 **)(m + 0x24) + 0x24) * (*(f32 *)((u8 *)&D_0015ED6C_2d4610 - 0x4000));
+        *(OvlQuad *)(v + 0x1d0) = *(OvlQuad *)(m + 0x10);
+        if (m[0x53] != 1) FUN_L00_00257880_2d4610(m, 1, 0, 0);
+        v[0x29] = 1;
+        *(f32 **)(v + 0x140) = (f32 *)((u8 *)&D_0015ED6C_2d4610 - 0x400c);
+        *(OvlQuad *)(v + 0x240) = *(OvlQuad *)(m + 0x10);
+        *(f32 *)(v + 0x25c) = 1.5f;
+        *(f32 *)(v + 0x254) = D_0015ED6C_2d4610 + D_0015ED6C_2d4610;
+        *(f32 *)(v + 0x258) = D_0015ED6C_2d4610 * 2.9670596f;
+        vec[0] = 150.0f; vec[1] = 127.0f; vec[2] = 0.0f; vec[3] = 0.0f;
+        if (FUN_001ff488_2d4610(m + 0x10, vec) < 5.0f) *(f32 *)(v + 0x25c) = 0.75f;
+        v[0x58] = FUN_00200250_2d4610(12.0f);
+        v[0x5a] = FUN_00200250_2d4610(2.0f);
+        if (*(s32 *)(v + 0x1e8) < 0) {
+            m[0x20] = 5;
+        } else if (*(s32 *)(v + 0x1e4) < 0) {
+            if (*(s32 *)(v + 0x1ec) < 0) goto remove;
+            *(OvlQuad *)(v + 0x1d0) = *(OvlQuad *)(m + 0x10);
+            m[0x20] = 1;
+            if (m[0x53] != 2) { animation = 2; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+        } else {
+            row = D_L00_001B04B0_2d4610[*(s32 *)(v + 0x1e8)];
+            *(OvlQuad *)(v + 0x1d0) = *(OvlQuad *)(row + *(s32 *)row * 0x10);
+            *(OvlQuad *)(m + 0x10) = *(OvlQuad *)(row + 0x10);
+            m[0x20] = 3;
+        }
+        break;
+    case 1:
+        target = D_0015FFD8_2d4610 + *(s32 *)(v + 0x1ec) * 0x100;
+        if (target && target[0x20] != 0xfe && target[0x20] != 0xfd) {
+            angle = FUN_001ff8b0_2d4610(*(f32 *)(target + 0x10) - *(f32 *)(m + 0x10), *(f32 *)(target + 0x14) - *(f32 *)(m + 0x14));
+            FUN_L00_0025be00_2d4610(m + 0x48, angle, v + 0x1f4, D_0015ED70_2d4610 * 12.566371f, D_0015ED70_2d4610 * 12.566371f, D_0015ED6C_2d4610 * 12.566371f);
+            goto update;
+        }
+        m[0x20] = 8;
+        if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+        break;
+    case 2:
+        row = D_L00_001B04B0_2d4610[*(s32 *)(v + 0x1e8)];
+        if (FUN_L00_002d54c8(m, (f32 *)(row + *(s16 *)(v + 0x274) * 0x10 + 0x10), 0.5f) < 1.0f) {
+            m[0x20] = 1;
+            if (m[0x53] != 2) { animation = 2; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+        }
+        break;
+    case 3:
+        if (*(s32 *)(v + 0x1c4) != 2) {
+            m[0x20] = 4;
+            if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+        }
+        break;
+    case 4:
+        row = D_L00_001B04B0_2d4610[*(s32 *)(v + 0x1e8)];
+        distance = FUN_L00_002d54c8(m, (f32 *)(row + *(s16 *)(v + 0x274) * 0x10 + 0x10), 0.5f);
+        if (distance < 1.0f) {
+            if (*(s32 *)row - 1 <= *(s16 *)(v + 0x274)) goto state_five;
+            ++*(s16 *)(v + 0x274);
+        } else if (*(s32 *)(v + 0x1c4) != 2) {
+            m[0x20] = 6;
+            if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+        }
+        break;
+    case 5:
+        if (m[0x53] != 4) {
+            animation = FUN_L00_00257b90_2d4610(0, 5);
+            if (m[0x53] != 4) FUN_L00_00257880_2d4610(m, 4, animation, FUN_001fef20_2d4610(10));
+            *(f32 *)(m + 0x58) = FUN_L00_00257be8_2d4610(0.92f, 1.08f);
+        }
+        FUN_L00_00261630_2d4610(0.5f, 0.5f, m, v + 0x240);
+        if (*(s32 *)(v + 0x1c4) == 2) goto update;
+        *(f32 *)(v + 0x1fc) = FUN_L00_00257be8_2d4610(-20.0f, 20.0f) * 0.017453292f;
+        m[0x20] = 6;
+        if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+        goto update;
+    case 6:
+        if (FUN_L00_002d54c8(m, (f32 *)(v + 0x180), 0.5f) < (*(f32 *)((u8 *)&D_0015ED6C_2d4610 - 0x3fec))) {
+            angle = FUN_001ff8b0_2d4610(*(f32 *)(target + 0x10) - *(f32 *)(m + 0x10), *(f32 *)(target + 0x14) - *(f32 *)(m + 0x14));
+            if (FUN_002001f0_2d4610(*(f32 *)(m + 0x48), angle) < 0.17453292f) {
+                m[0x20] = 7;
+                if (m[0x53] != 5) FUN_L00_00257880_2d4610(m, 5, (s32)(*(f32 *)((u8 *)&D_0015ED6C_2d4610 - 0x3fe8)), FUN_001fef20_2d4610(10));
+                break;
+            }
+        }
+        if (*(s32 *)(v + 0x1c4) != 2) goto update;
+        m[0x20] = 8;
+        if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+        break;
+    case 7:
+        if (FUN_L00_002618d8_2d4610(34.0f, m)) {
+            FUN_L00_002599e8_2d4610(m, 0.333f, 1.0f, 1.0f, 0, 1, 0, 1, 0);
+            goto update;
+        }
+        if (m[0x70] & 2) {
+            if (*(s32 *)(v + 0x1c4) == 2) {
+                m[0x20] = 8;
+                if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+            } else {
+                distance = FUN_001ff488_2d4610(m + 0x10, target + 0x10);
+                if (distance <= 1.5f) {
+                    angle = FUN_001ff8b0_2d4610(*(f32 *)(target + 0x10) - *(f32 *)(m + 0x10), *(f32 *)(target + 0x14) - *(f32 *)(m + 0x14));
+                    if (FUN_002001f0_2d4610(*(f32 *)(m + 0x48), angle) <= 0.17453292f) break;
+                }
+                m[0x20] = 6;
+                if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+            }
+        }
+        break;
+    case 8:
+        if (FUN_L00_002d54c8(m, (f32 *)(v + 0x1d0), 0.5f) < 1.5f) goto state_five;
+        if (*(s32 *)(v + 0x1c4) != 2) {
+            m[0x20] = 6;
+            if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+        }
+        break;
+    case 9:
+        if (FUN_L00_002dc9f0_2d4610(m, v + 0x70)) {
+            m[0x20] = 5;
+            *(s16 *)(v + 0x138) = 0;
+        }
+        break;
+    case 10:
+        FUN_001ff2a8_2d4610(vec, v + 0x180, m + 0x10);
+        vec[2] = 0.0f;
+        FUN_001ff500_2d4610(2.5f, vec, vec);
+        FUN_001ff278_2d4610(vec, vec, m + 0x10);
+        if (!FUN_L00_00261968_2d4610(*(s32 *)(v + 0x1e0), m + 0x10, vec)) {
+            if (m[0x53] != 4) FUN_L00_00257880_2d4610(m, 4, 0, FUN_001fef20_2d4610(20));
+            FUN_L00_002d54c8(m, (f32 *)(v + 0x180), 0.5f);
+        } else {
+            angle = FUN_001ff8b0_2d4610(*(f32 *)(*(u8 **)(v + 0x1c0) + 0x10) - *(f32 *)(m + 0x10), *(f32 *)(*(u8 **)(v + 0x1c0) + 0x14) - *(f32 *)(m + 0x14));
+            FUN_L00_0025be00_2d4610(m + 0x48, angle, v + 0x1f4, D_0015ED70_2d4610 * 12.566371f, D_0015ED70_2d4610 * 12.566371f, D_0015ED6C_2d4610 * 12.566371f);
+            if (!(m[0x70] & 2)) goto update;
+            animation = FUN_L00_00257b50_2d4610(2);
+            if (m[0x53] != animation + 2) FUN_L00_00257880_2d4610(m, FUN_L00_00257b50_2d4610(2) + 2, 0, FUN_001fef20_2d4610(20));
+        }
+        if (m[0x70] & 2) {
+            if (*(s32 *)(v + 0x1c4) == 2) {
+                if (*(s16 *)(v + 0x276)) goto update;
+                m[0x20] = 8;
+                if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(20); goto play_animation; }
+            } else {
+                m[0x20] = 6;
+                if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+            }
+        }
+        break;
+    case 11:
+        if (FUN_L00_0025c698_2d4610(m, v + 0x70) & 0x140) goto state_five;
+        goto update;
+    case 12:
+        if (FUN_L00_0025c698_2d4610(m, v + 0x70) & 0x140) {
+            FUN_0028dbe8_2d4610(7, 0, m);
+            FUN_L00_0025f3e8_2d4610(m, m + 0x10, -1, 0.75f, 10.0f);
+            goto remove;
+        }
+        break;
+    }
+    goto update;
+state_five:
+    m[0x20] = 5;
+    if (m[0x53] != 1) { animation = 1; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+play_animation:
+    FUN_L00_00257880_2d4610(m, animation, 0, effect);
+update:
+    if (m[0x20] != 11 && m[0x20] != 12) {
+        if (m[0x20] != 9) {
+            FUN_L00_0025b868_2d4610(FUN_L00_00259698_2d4610(0.5f, m + 0x10, 0), D_0015ED6C_2d4610 * 7.0f, m + 0x18);
+            if (m[0x20] != 4) FUN_L00_00261d78_2d4610(0.25f, *(s32 *)(v + 0x1e0), m + 0x10, m + 0x10);
+        }
+    }
+    effect = *(s32 *)(v + 0x1f0);
+    if (effect != -1) {
+        target = (*(u8 **)((u8 *)&D_0015FFD8_2d4610 - 0x6c00)) + effect * 0x100;
+        if (FUN_001ff488_2d4610(m + 0x10, target + 0x10) < 1.0f && *(s16 *)(target + 0xa6) == 0x33e) {
+            FUN_L00_002d5830_2d4610(target);
+            *(s32 *)(v + 0x1f0) = -1;
+        }
+    }
+    return;
+remove:
+    FUN_0024eb68_2d4610(m);
+}
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5160.s", FUN_L00_002d5160);
 #else
