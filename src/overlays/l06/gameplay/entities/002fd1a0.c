@@ -43,37 +43,36 @@ extern void multiply_2fd1a0(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void subtract_2fd1a0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void normalize_2fd1a0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void transform_other_2fd1a0(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void normalize_other_2fd1a0(void *, void *) __asm__("FUN_001f9ab0");
+extern float normalize_other_2fd1a0(void *, void *) __asm__("FUN_001f9ab0");
 extern void draw_2fd1a0(void *, void *, int) __asm__("FUN_001f7d30");
 
 void FUN_L06_002fd1a0(void) {
     Packet_2fd1a0 first, second;
-    float matrix[4][4] __attribute__((aligned(16)));
+    float matrix[5][4] __attribute__((aligned(16)));
     float vec2[4] __attribute__((aligned(16)));
     float vec1[4] __attribute__((aligned(16)));
-    u128 scratch;
     float y_offset = D_L06_00161FA0 * D_L06_00167400[86];
     float x_offset = D_L06_00161FA4 * D_L06_00167400[85];
     long flags;
     int i, j;
 
-    first.tex = texture_2fd1a0(D_L06_00161F90);
+    long tex = texture_2fd1a0(D_L06_00161F90);
     second.tex = texture_2fd1a0(0x2a);
-    flags = (long)D_L06_00161F7C | (long)D_L06_00161F80 << 2 |
-            (long)D_L06_00161F84 << 4 | (long)D_L06_00161F88 << 6 |
-            (long)D_L06_00161F8C << 32;
-    first.unk88 = flags;
+    first.tex = tex;
+    flags = (long)D_L06_00161F7C;
+    flags |= (long)D_L06_00161F80 << 2;
+    flags |= (long)D_L06_00161F84 << 4;
+    flags |= (long)D_L06_00161F88 << 6;
+    flags |= (long)D_L06_00161F8C << 32;
     second.unk88 = flags;
-    first.unk80 = 0xFF9000000260L;
+    first.unk88 = flags;
     second.unk80 = 0xFF9000000260L;
-    first.unk70 = 0;
+    first.unk80 = 0xFF9000000260L;
     second.unk70 = 0;
+    first.unk70 = 0;
     initialize_matrix_2fd1a0(matrix);
     first.color[0] = first.color[1] = first.color[2] = first.color[3] = D_L06_00161F94;
-    second.color[0] = D_L06_00161F98;
-    second.color[1] = D_L06_00161F98;
-    second.color[2] = D_L06_00161F98;
-    second.color[3] = D_L06_00161F98;
+    second.color[0] = second.color[1] = second.color[2] = second.color[3] = D_L06_00161F98;
     i = 0;
     do {
         transform_2fd1a0(vec1, D_L06_001F2610[i], D_L06_00161F9C);
@@ -88,8 +87,7 @@ void FUN_L06_002fd1a0(void) {
             int b = D_L06_001F1220[i][j][1];
             float u, v;
             qcopy(&first.v[j], D_L06_001F0900[a]);
-            qcopy(&scratch, &first.v[j]);
-            qcopy(&second.v[j], &scratch);
+            qcopy(&second.v[j], &first.v[j]);
             u = D_L06_001F1540[b][0];
             v = D_L06_001F1540[b][1];
             first.uv[j][0] = u + y_offset;
