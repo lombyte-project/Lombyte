@@ -6,7 +6,239 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/entities.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d2af0.s", FUN_L08_002d2af0);
+#else
+extern void FUN_L08_002d36e0(char *);
+extern void FUN_L08_002d3d78(char *);
+extern void FUN_L08_002d3878(char *);
+extern void FUN_L08_002d4108(char *);
+extern void FUN_L00_00263ac8(float, void *, int, void *);
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_001f9b80(void *, void *);
+extern void FUN_L00_0025a120(void *);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern void clear_vector_xyz(void *) __asm__("FUN_001f99f8");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern float floor_height(void *, int, float) __asm__("FUN_00213508");
+extern float absolute_float(float) __asm__("func_001F99C0");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
+extern void FUN_L00_00258278(void *, float, float, float, float, void *);
+extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
+extern int is_value_within_interpolated_window(float, void *) __asm__("FUN_00214cc8");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L00_002dc9f0(void *, void *);
+extern void FUN_L00_00259bc8(void *, void *, int, void *, void *, float);
+extern void FUN_L00_0025e450_002e8210(void *, void *, void *, float, float, int, int, int,
+                                         float, float, float, int, float, float, int, int, int, int)
+    __asm__("FUN_L00_0025e450");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void blend_moby_animation(MobyAnim *, int, int, int) __asm__("FUN_00212f90");
+extern int lerp_color(int, int, float) __asm__("FUN_001fa6e0");
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern char D_L08_001675C0[];
+extern char D_L08_00161888 __attribute__((sda));
+
+#include "qcopy.h"
+#define FIELD(type, base, offset) (*(type *)((base) + (offset)))
+/* Updates the path-following states, voice handle, motion, and draw callbacks. */
+void FUN_L08_002d2af0(char *m) {
+    char *d = FIELD(char *, m, 0x78);
+    OvlVec4 target, offset, position;
+    float angle, magnitude, f;
+    unsigned char state;
+    int color;
+    FUN_L00_00263ac8(3.6f, m, 2, d + 0x230);
+    if (FIELD(unsigned char, m, 0x31) && FUN_001f9b48(m + 0x10, D_L08_001675C0) < 28.0f) {
+        FUN_L00_0025a120(m);
+        m[0x7f] = 0x16;
+    }
+    FUN_L08_002d36e0(m);
+    FIELD(char *, d, 0x218) = FIELD(char *, d, 0x1b0);
+    qcopy(&target, d + 0x170);
+    state = FIELD(unsigned char, m, 0x20);
+    switch (state) {
+    case 0:
+        if (FIELD(int, d, 0x21c) == -1) goto remove;
+        FIELD(unsigned short, m, 0x34) |= 0x1000;
+        FIELD(float, m, 0x48) = random_angle_radians();
+        FIELD(float, d, 0x200) = 4.0f;
+        angle = random_angle_radians();
+        FIELD(float, d, 0x208) = 0.5f;
+        FIELD(float, d, 0x204) = angle;
+        clear_vector_xyz(d + 0x40);
+        FIELD(float, d, 0x20c) = frame_time * 2.0943952f;
+        d[0x58] = truncate_float_to_s32(15.0f);
+        d[0x5a] = truncate_float_to_s32(9.6f);
+        FIELD(char *, d, 0xd0) = &D_L08_00161888;
+        if (FIELD(unsigned char, m, 0x53) != 0) blend_moby_animation((MobyAnim *)m, 0, 0, 0);
+        m[0x20] = 1;
+        qcopy(d + 0x1c0, m + 0x10);
+        f = floor_height(m + 0x10, 0, 0.5f);
+        if (FIELD(float, m, 0x18) - 10.0f < f) {
+            FIELD(float, d, 0x1c8) = floor_height(m + 0x10, 0, 0.5f);
+            FIELD(short, d, 0x216) = 1;
+        } else {
+            FIELD(float, d, 0x1c8) = FIELD(float, m, 0x18);
+            FIELD(short, d, 0x216) = 0;
+        }
+        qcopy(d + 0x1f0, d + 0x1c0);
+        d[0x29] = 0;
+        break;
+    case 1: {
+        float angle, magnitude;
+        if (FIELD(int, d, 0x1b4) != 2) {
+            FIELD(float, d, 0x200) = 0.0f;
+            FIELD(float, d, 0x208) = 0.1f;
+            if (FIELD(unsigned char, m, 0x53) != 2) blend_moby_animation((MobyAnim *)m, 2, 0, 6);
+            m[0x20] = 2;
+        } else if (FIELD(unsigned char, m, 0x70) & 2) {
+            angle = random_angle_radians();
+            magnitude = random_float_between(0.0f, 3.0f);
+            offset.f[0] = fast_cos(angle) * magnitude;
+            offset.f[1] = fast_sin(angle) * magnitude;
+            offset.f[2] = 0.0f;
+            add_vector_xyz(d + 0x1f0, d + 0x1c0, &offset);
+            if (FIELD(unsigned char, m, 0x53) != 2) blend_moby_animation((MobyAnim *)m, 2, 0, 6);
+            m[0x20] = 7;
+        }
+        break;
+    }
+    case 7: {
+        float angle;
+        angle = angle_atan2(FIELD(float, d, 0x1f0) - FIELD(float, m, 0x10), FIELD(float, d, 0x1f4) - FIELD(float, m, 0x14));
+        FUN_L00_00258278(m, angle, 0.01f, 0.3f, 0.05f, d + 0x210);
+        if (fast_difference_between_rotations(FIELD(float, m, 0x48), angle) < 0.7853982f) {
+            FIELD(float, d, 0x40) += fast_cos(FIELD(float, m, 0x48)) * (frame_time_sq * 12.0f);
+            FIELD(float, d, 0x44) += fast_sin(FIELD(float, m, 0x48)) * (frame_time_sq * 12.0f);
+        }
+        if (FUN_001f9b80(m + 0x10, d + 0x1f0) < 0.5f) {
+            if (FIELD(unsigned char, m, 0x53) != 0) blend_moby_animation((MobyAnim *)m, 0, 0, 3);
+            m[0x20] = 1;
+        }
+        break;
+    }
+    case 2: {
+        float angle;
+        angle = angle_atan2(target.f[0] - FIELD(float, m, 0x10), target.f[1] - FIELD(float, m, 0x14));
+        FUN_L00_00258278(m, angle, 0.01f, 0.3f, 0.05f, d + 0x210);
+        if (fast_difference_between_rotations(FIELD(float, m, 0x48), angle) < 0.7853982f) {
+            FIELD(float, d, 0x40) += fast_cos(FIELD(float, m, 0x48)) * (frame_time_sq * 12.0f);
+            FIELD(float, d, 0x44) += fast_sin(FIELD(float, m, 0x48)) * (frame_time_sq * 12.0f);
+        }
+        if (FUN_001f9b80(m + 0x10, FIELD(char *, d, 0x218) + 0x10) < 3.0f &&
+            absolute_float(FIELD(float, FIELD(char *, d, 0x218), 0x18) - FIELD(float, m, 0x18)) < 2.0f) {
+            FIELD(short, d, 0x214) = allocate_voice_for_target_entry(0, 0, m);
+            m[0x20] = 6;
+            break;
+        }
+        if (15.0f < FUN_001f9b80(&target, d + 0x1c0) ||
+            4.0f < absolute_float(FIELD(float, d, 0x1c8) - target.f[2])) {
+            FIELD(float, d, 0x200) = 4.0f;
+            FIELD(float, d, 0x208) = 0.5f;
+            if (FIELD(unsigned char, m, 0x53) != 2) blend_moby_animation((MobyAnim *)m, 2, 0, 6);
+            m[0x20] = 3;
+        }
+        break;
+    }
+    case 3: {
+        float angle;
+        angle = angle_atan2(FIELD(float, d, 0x1c0) - FIELD(float, m, 0x10), FIELD(float, d, 0x1c4) - FIELD(float, m, 0x14));
+        FIELD(float, d, 0x200) = 4.0f;
+        FIELD(float, d, 0x208) = 0.5f;
+        FUN_L00_00258278(m, angle, 0.01f, 0.3f, 0.05f, d + 0x210);
+        if (fast_difference_between_rotations(FIELD(float, m, 0x48), angle) < 0.7853982f) {
+            FIELD(float, d, 0x40) += fast_cos(FIELD(float, m, 0x48)) * (frame_time_sq * 12.0f);
+            FIELD(float, d, 0x44) += fast_sin(FIELD(float, m, 0x48)) * (frame_time_sq * 12.0f);
+        }
+        if (FUN_001f9b80(m + 0x10, d + 0x1c0) < 1.0f &&
+            3.9f <= absolute_float(FIELD(float, d, 0x1c8) - FIELD(float, m, 0x18))) {
+            if (FIELD(unsigned char, m, 0x53) != 0) blend_moby_animation((MobyAnim *)m, 0, 0, 3);
+            m[0x20] = 1;
+        }
+        break;
+    }
+    case 4: {
+        float angle, f, t;
+        angle = angle_atan2(target.f[0] - FIELD(float, m, 0x10), target.f[1] - FIELD(float, m, 0x14));
+        FUN_L00_00258278(m, angle, 0.01f, 0.3f, 0.05f, d + 0x210);
+        f = compute_interpolated_record_value(m);
+        if (FIELD(unsigned char, m, 0x52) == FIELD(unsigned char, m, 0x53) && 9.0f <= f && f <= 14.0f) {
+            t = (f - 9.0f) / 5.0f;
+            FIELD(float, d, 0x1dc) = t / 3.0f;
+            FIELD(float, d, 0x1ec) = (t + t) / 3.0f;
+            angle = random_angle_radians();
+            FIELD(float, d, 0x1d4) = fast_sin(angle) * 0.25f * t;
+            FIELD(float, d, 0x1d8) = fast_cos(angle) * 0.25f * t;
+            FIELD(float, d, 0x1e4) = fast_sin(angle) * 0.25f * t;
+            FIELD(float, d, 0x1e8) = fast_cos(angle) * 0.25f * t;
+            enqueue_callback_list_1(FUN_L08_002d3878, m);
+        }
+        if (!is_value_within_interpolated_window(14.0f, m)) break;
+        if (FUN_001f9b80(FIELD(char *, d, 0x1b0) + 0x10, m + 0x10) < 3.0f) {
+            magnitude = 1.0f;
+            if (absolute_float(FIELD(float, FIELD(char *, d, 0x218), 0x18) - FIELD(float, m, 0x18)) < magnitude) {
+                offset.f[0] = fast_cos(FIELD(float, m, 0x48)) * 0.2f;
+                offset.f[1] = fast_sin(FIELD(float, m, 0x48)) * 0.2f;
+                offset.f[2] = 0.0f;
+                qcopy(&position, &target);
+                position.f[2] += 0.75f;
+                FUN_L00_00259bc8(FIELD(char *, d, 0x218), m, 1, &position, &offset, magnitude);
+            }
+        }
+        FIELD(float, d, 0x200) = 4.0f;
+        FIELD(float, d, 0x208) = 0.5f;
+        if (FIELD(unsigned char, m, 0x53) != 2) blend_moby_animation((MobyAnim *)m, 2, 0, 3);
+        m[0x20] = 3;
+        break;
+    }
+    case 6: {
+        float angle;
+        angle = angle_atan2(target.f[0] - FIELD(float, m, 0x10), target.f[1] - FIELD(float, m, 0x14));
+        FUN_L00_00258278(m, angle, 0.01f, 0.3f, 0.05f, d + 0x210);
+        if (FUN_L00_0028d8c0(m, FIELD(short, d, 0x214))) break;
+        if (FIELD(unsigned char, m, 0x53) != 3) blend_moby_animation((MobyAnim *)m, 3, 0, 3);
+        m[0x20] = 4;
+        break;
+    }
+    case 5:
+        if (FUN_L00_002dc9f0(m, d + 0x110)) {
+            FIELD(float, d, 0x200) = 4.0f;
+            FIELD(float, d, 0x208) = 0.5f;
+            if (FIELD(unsigned char, m, 0x53) != 2) blend_moby_animation((MobyAnim *)m, 2, 0, 3);
+            FIELD(short, d, 0xc8) = 0;
+        }
+        break;
+    case 99:
+        qcopy(&offset, m + 0x10);
+        offset.f[2] += 1.0f;
+        allocate_voice_for_target_entry(1, 0, m);
+        FUN_L00_0025e450_002e8210(m, d + 0x40, &offset, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 0.0f, 0, 1, -1, 0);
+remove:
+        mark_moby_for_removal(m);
+        return;
+    }
+    FUN_L08_002d3d78(m);
+    {
+        int state = FIELD(unsigned char, m, 0x20);
+        if ((unsigned char)state != 5 && (int)((unsigned int)state << 24) >= 0) {
+            color = 0x7f20ff20;
+            if ((unsigned char)state == 4 || (unsigned char)state == 6) color = 0x7f2828a0;
+            FIELD(int, m, 0x90) = lerp_color(FIELD(int, m, 0x90), color, 0.1f);
+            FUN_L00_0024f7c8(m, 3, d + 0x220);
+            enqueue_callback_list_1(FUN_L08_002d4108, m);
+        }
+    }
+}
+#undef FIELD
+#endif
 /* Takes hits (dying at 0 health), then follows the moby's path and gives up on it when too far off. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
 
