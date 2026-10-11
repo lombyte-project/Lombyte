@@ -439,8 +439,8 @@ extern s32 D_L00_00161978_2d09b8 __asm__("D_L00_00161978") __attribute__((sda));
 extern s32 D_L00_0015FFBC_2d09b8 __asm__("D_L00_0015FFBC");
 extern f32 D_0015ED6C_2d09b8 __asm__("D_0015ED6C");
 extern f32 D_L00_0015F5D0_2d09b8 __asm__("D_L00_0015F5D0");
-extern s32 D_001413DC_2d09b8 __asm__("D_001413DC");
-extern u8 *D_001413D0_2d09b8 __asm__("D_001413D0");
+extern s32 D_001413DC_2d09b8 __asm__("D_001413DC") __attribute__((section(".data")));
+extern u8 *D_001413D0_2d09b8 __asm__("D_001413D0") __attribute__((section(".data")));
 extern V2d09b8 D_L00_00166DC0_2d09b8 __asm__("D_L00_00166DC0");
 extern V2d09b8 D_L00_001DE6F0_2d09b8[] __asm__("D_L00_001DE6F0");
 extern V2d09b8 D_L00_001DE750_2d09b8[] __asm__("D_L00_001DE750");
@@ -477,12 +477,13 @@ extern void FUN_002ac910_2d09b8(f32, void *, void *, void *, s32, s32, s32, s32,
 
 void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
     u8 *vars = (u8 *)m->vars;
-    V2d09b8 a, b, c, d, e, position, effect, rotation, velocity;
-    s32 close, count, trail_count, particle, i, kind, choice;
+    V2d09b8 position, b, rotation, c[3], a, d, e;
+    s32 kind, close, count, trail_count, particle, i, choice;
     s32 first, second, first_color, second_color;
     f32 angle, distance, height, speed, rise;
     u32 colors[6], other_colors[6];
     void *spawned;
+    u32 *effect, *velocity;
 
     close = 0;
     if (absolute_int_2d09b8(D_L00_0015F5CC - D_L00_001618D4_2d09b8) > 1) {
@@ -497,28 +498,27 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
     else
         close = 1;
     if (*(u8 **)(vars + 0xA0)) {
-        u8 *next_vars = *(u8 **)(*(u8 **)(vars + 0xA0) + 0x78);
-        *(u32 *)(next_vars + 0xA4) = *(u32 *)(vars + 0xA4);
-        *(u32 *)(next_vars + 0xAC) |= 4;
+        *(u8 **)(*(u8 **)(*(u8 **)(vars + 0xA0) + 0x78) + 0xA4) = *(u8 **)(vars + 0xA4);
+        *(u32 *)(*(u8 **)(*(u8 **)(vars + 0xA0) + 0x78) + 0xAC) |= 4;
     }
     if (*(u8 **)(vars + 0xA4)) {
-        u8 *previous_vars = *(u8 **)(*(u8 **)(vars + 0xA4) + 0x78);
-        if (!FUN_0025e3b8_2d09b8(*(void **)(previous_vars + 0xA0)))
+        if (!FUN_0025e3b8_2d09b8(*(void **)(*(u8 **)(*(u8 **)(vars + 0xA4) + 0x78) + 0xA0)))
             FUN_001ff008_2d09b8();
-        *(u32 *)(previous_vars + 0xA0) = *(u32 *)(vars + 0xA0);
-        *(u32 *)(previous_vars + 0xAC) |= 4;
+        *(u8 **)(*(u8 **)(*(u8 **)(vars + 0xA4) + 0x78) + 0xA0) = *(u8 **)(vars + 0xA0);
+        *(u32 *)(*(u8 **)(*(u8 **)(vars + 0xA4) + 0x78) + 0xAC) |= 4;
     }
-    position.q = *(u128 *)&m->pos;
+    qcopy(&position, &m->pos);
     position.f[2] += 0.3f;
     FUN_0026b790_2d09b8(0.3f, 1.01f, 1.075f, 0.05f, 50000.0f, &position, 1, 0x40808080);
     for (i = 4; i >= 0; i--)
         FUN_0026b790_2d09b8(0.3f, 1.01f, 1.07f, 0.05f, 50000.0f, &position, 1, 0x40808080);
     if (source)
-        b.q = *(u128 *)((u8 *)source + 0x10);
+        qcopy(&b, (u8 *)source + 0x10);
     else
         FUN_001ff2a8_2d09b8(&b, &m->pos, D_001413D0_2d09b8 + 0x10);
     switch ((s16)((u16)m->oclass - 500)) {
-    case 0: case 11: kind = 0x165; break;
+    case 0: kind = 0x165; break;
+    case 11: kind = 0x165; break;
     case 1: kind = 0x15C; break;
     case 2: kind = 0x162; break;
     case 3: kind = 0x15F; break;
@@ -528,12 +528,10 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
     case 7: case 8: case 9: case 10: kind = 0x171; break;
     default: kind = 0x95; break;
     }
-    if (D_L00_0015FFBC_2d09b8 < 201) {
-        if (D_L00_0015FFBC_2d09b8 < 151) {
-            if (D_L00_0015FFBC_2d09b8 < 101) { count = 1; trail_count = 0; }
-            else { count = 2; trail_count = 1; }
-        } else { count = 2; trail_count = 2; }
-    } else { count = 4; trail_count = 4; }
+    if (D_L00_0015FFBC_2d09b8 >= 201) { count = 4; trail_count = 4; }
+    else if (D_L00_0015FFBC_2d09b8 >= 151) { count = 2; trail_count = 2; }
+    else if (D_L00_0015FFBC_2d09b8 >= 101) { count = 2; trail_count = 1; }
+    else { trail_count = 0; if (D_L00_0015FFBC_2d09b8 >= 51) count = 1; else count = 1; }
     angle = FUN_001ff8b0_2d09b8(D_L00_00166DC0_2d09b8.f[0] - m->pos.x,
                                    D_L00_00166DC0_2d09b8.f[1] - m->pos.y);
     angle = FUN_00200130_2d09b8(angle, m->v40.z);
@@ -545,8 +543,8 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
     for (i = 0; i < count; i++) {
         FUN_001ff6d0_2d09b8(&d, &D_L00_001DE6F0_2d09b8[i], &c);
         FUN_001ff278_2d09b8(&d, &d, &m->pos);
-        e = D_L00_001DE750_2d09b8[i];
-        e.f[2] = FUN_002000e8_2d09b8(e.f[2], angle);
+        qcopy(&e, &D_L00_001DE750_2d09b8[i]);
+        e.f[2] = FUN_002000e8_2d09b8(e.f[2], rotation.f[2]);
         FUN_001ff2a8_2d09b8(&a, &d, &m->pos);
         a.f[2] = 0.0f;
         speed = FUN_00257be8_2d09b8(1.0f, 5.0f);
@@ -555,8 +553,8 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
         particle = FUN_00257b50_2d09b8(2);
         spawned = FUN_002af8b0_2d09b8(1.0f, 1.0f, m, &a, &d, &e, kind, particle);
         if (spawned) {
-            *(u128 *)((u8 *)spawned + 0x40) = D_L00_001DE750_2d09b8[i].q;
-            *(f32 *)((u8 *)spawned + 0x48) = FUN_002000e8_2d09b8(*(f32 *)((u8 *)spawned + 0x48), angle);
+            qcopy((u8 *)spawned + 0x40, &D_L00_001DE750_2d09b8[i]);
+            *(f32 *)((u8 *)spawned + 0x48) = FUN_002000e8_2d09b8(*(f32 *)((u8 *)spawned + 0x48), rotation.f[2]);
             FUN_00250df8_2d09b8(spawned);
         }
     }
@@ -599,15 +597,15 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
             __builtin_memcpy(colors, D_L00_001E9E80_2d09b8, sizeof(colors));
             __builtin_memcpy(other_colors, D_L00_001E9E98_2d09b8, sizeof(other_colors));
             rise = speed * D_0015ED6C_2d09b8 - height * D_0015ED6C_2d09b8;
-            particle = FUN_00257b50_2d09b8(6);
-            choice = FUN_00257b50_2d09b8(6);
+            effect = colors + FUN_00257b50_2d09b8(6);
+            velocity = other_colors + FUN_00257b50_2d09b8(6);
             first = FUN_001fef20_2d09b8(15);
             second = FUN_001fef20_2d09b8(20);
             first_color = FUN_00257b90_2d09b8(first, second);
             first = FUN_001fef20_2d09b8(25);
             second = FUN_001fef20_2d09b8(30);
             second_color = FUN_00257b90_2d09b8(first, second);
-            FUN_0026a9f0_2d09b8(400000.0f, rise, &a, &e, colors[particle], other_colors[choice], first_color, second_color, 0, 0);
+            FUN_0026a9f0_2d09b8(400000.0f, rise, &a, &e, *effect, *velocity, first_color, second_color, 0, 0);
         }
         if (D_L00_0015F5D0_2d09b8 < 0.95f && distance > 9.0f && !close) {
             FUN_002ac910_2d09b8(4.0f, m, &a, &e, FUN_001fef20_2d09b8(15), 127, 127, 127, 32);
