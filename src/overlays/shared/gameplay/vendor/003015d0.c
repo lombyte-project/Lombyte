@@ -48,7 +48,7 @@ extern int FUN_001fa728(void *, float);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L14_003017f8(char *);
 extern void FUN_L14_00301de8(char *);
-extern void FUN_L14_00301fa8(void);
+extern void FUN_L14_00301fa8(char *);
 extern void FUN_L14_00302538(char *);
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern short D_L14_0016219C_s __asm__("D_L14_001620CC") __attribute__((sda));
@@ -188,7 +188,131 @@ void FUN_L14_00301de8(char *m) {
     }
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00301fa8.s", FUN_L14_00301fa8);
+#else
+typedef struct {
+    u128 vertices[4];
+    int colors[4];
+    float uv[4][2];
+    u64 tag;
+    u64 texture;
+    u64 texture_state;
+    u64 gs_state;
+} VendorBeamStripPacket;
+
+extern void FUN_001fa050(void *, void *) __asm__("FUN_001fa050");
+extern void FUN_001fa2d8(void *, void *) __asm__("FUN_001fa2d8");
+extern void transform_vector_xyz(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
+
+void FUN_L14_00301fa8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    VendorBeamStripPacket packet[3];
+    float base[16] __attribute__((aligned(16)));
+    float matrix[16] __attribute__((aligned(16)));
+    float direction[4] __attribute__((aligned(16)));
+    float work[4] __attribute__((aligned(16)));
+    float side[4] __attribute__((aligned(16)));
+    float start[4] __attribute__((aligned(16)));
+    float end[4] __attribute__((aligned(16)));
+    int i, j, k, strip, point, rounded;
+    int color;
+
+    FUN_001fa050(base, &D_L14_001600EC[*(int *)d].pad40[0x30]);
+    FUN_001fa2d8(matrix, base);
+    *(u128 *)(base + 12) = *(u128 *)&D_L14_001600EC[*(int *)d].origin;
+    subtract_vector_xyz(direction, (void *)0x1674c0, &D_L14_001600EC[*(int *)d].origin);
+    transform_vector_xyz(direction, direction, matrix);
+
+    {
+        u64 texture = get_effect_texture(*(int *)0x001fb4dc);
+        u64 gs_state = (u64)*(int *)0x001fb4e0 | (u64)*(int *)0x001fb4e4 << 2 |
+            (u64)*(int *)0x001fb4e8 << 4 | (u64)*(int *)0x001fb4ec << 6 | 0x8000000000ULL;
+        packet[0].texture_state = packet[1].texture_state = packet[2].texture_state = 0xff9000000260ULL;
+        packet[0].texture = packet[1].texture = packet[2].texture = texture;
+        packet[0].gs_state = packet[1].gs_state = packet[2].gs_state = gs_state;
+    }
+    packet[0].tag = packet[1].tag = packet[2].tag = 0;
+    for (i = 0; i < 4; i++) {
+        float v = ((float *)0x001e5fd0)[i * 2 + 1];
+        color = *(int *)(d + 0x14);
+        for (j = 0; j < 3; j++) {
+            packet[j].uv[i][1] = v;
+            packet[j].colors[i] = color;
+        }
+    }
+
+    clear_u64_value(start);
+    for (point = 0; point < 31; point++) {
+        *(u128 *)end = *(u128 *)start;
+        if (point < 30) {
+            subtract_vector_xyz(side, d + 0x20 + (point << 4), d + 0x40 + (point << 4));
+            subtract_vector_xyz(work, d + 0x30 + (point << 4), direction);
+            cross_vectors_xyz(start, work, side);
+            normalize_vector_xyz(start, start, 0.1f);
+        } else {
+            clear_u64_value(start);
+        }
+        rounded = ((point >= 0) ? point : point + 3) >> 2 << 2;
+        for (i = 0; i < 4; i++) {
+            if (i < 2) {
+                packet[0].vertices[i] = *(u128 *)(d + 0x20 + (point << 4));
+                if (!(i & 1)) subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], end);
+                else add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], end);
+            } else {
+                packet[0].vertices[i] = *(u128 *)(d + 0x30 + (point << 4));
+                if (!(i & 1)) subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], start);
+                else add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], start);
+            }
+            packet[0].uv[i][0] = ((float *)0x001e5fd0)[i * 2] +
+                convert_integer_to_float(point - rounded) * 0.25f;
+        }
+        draw_geometry_quad(&packet[0], base, 0);
+    }
+    for (strip = 0; strip < 4; strip++) {
+        clear_u64_value(start);
+        if ((u8)d[0x18 + strip] < 31) {
+            for (point = 0; point < 3; point++) {
+                *(u128 *)end = *(u128 *)start;
+                if (point < 2) {
+                    subtract_vector_xyz(side, d + (strip << 4) + (point << 6) + 0x420,
+                        d + (strip << 4) + (point << 6) + 0x4a0);
+                    subtract_vector_xyz(work, d + (strip << 4) + (point << 6) + 0x460,
+                        direction);
+                    cross_vectors_xyz(start, work, side);
+                    normalize_vector_xyz(start, start, 0.1f);
+                } else {
+                    clear_u64_value(start);
+                }
+                if (point == 0) *(u128 *)end = *(u128 *)start;
+                rounded = ((point >= 0) ? point : point + 3) >> 2 << 2;
+                for (k = 0; k < 4; k++) {
+                    if (k < 2) {
+                        packet[0].vertices[k] = *(u128 *)(d + (strip << 4) + (point << 6) + 0x420);
+                        if (!(k & 1)) subtract_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], end);
+                        else add_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], end);
+                    } else {
+                        packet[0].vertices[k] = *(u128 *)(d + (strip << 4) + (point << 6) + 0x460);
+                        if (!(k & 1)) subtract_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], start);
+                        else add_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], start);
+                    }
+                    packet[0].uv[k][0] = ((float *)0x001e5fd0)[k * 2] +
+                        convert_integer_to_float(point - rounded) * 0.25f;
+                }
+                draw_geometry_quad(&packet[0], base, 0);
+            }
+        }
+    }
+}
+#endif
 /* Damage request passed to the collision line test (FUN_001efa68). */
 typedef struct {
     f32 v[4];          /* 0x0: push direction xy; w 5627.925 */
