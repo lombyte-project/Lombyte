@@ -994,6 +994,17 @@ void FUN_L07_0030b000(struct Moby *moby) {
         char *limit = (char *)FUN_L00_0025a420(moby, 0x230000, 0);
         s32 result = FUN_00213928(moby, limit, remaining, 0, &count, 0, 0, 4);
         switch ((u32)result) {
+        case 0:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+            break;
         case 1:
         case 2:
             *remaining = 0.0f;
@@ -1039,8 +1050,8 @@ void FUN_L07_0030b000(struct Moby *moby) {
             FUN_001e93b0(D_L07_00211550, *(s32 *)(data + 0x74));
             return;
         }
-        *(s32 *)(data + 0x90) =
-            (first = FUN_L01_0028b510(0.0f, (char *)moby + 0x10, path));
+        *(s32 *)(data + 0x90) = FUN_L01_0028b510(0.0f, (char *)moby + 0x10, path);
+        first = *(s32 *)(data + 0x90);
         i = 0;
         if (0 < *(s32 *)(data + 0x78)) do {
             child = *(s32 *)(current + 0x78);
@@ -1050,15 +1061,17 @@ void FUN_L07_0030b000(struct Moby *moby) {
             *(u128 *)(child + 0x70) = position.q;
             *(s32 *)(child + 0x90) = first;
             *(s32 *)(child + 0x94) = first + 1;
-            if (FUN_L00_002592b8(&current, current, 1, 0)) {
+            if (!FUN_L00_002592b8(&current, current, 1, 0)) {
+                FUN_L00_0025d808(*(f32 *)(data + 0x80), path, &position, &first, &next, 1);
+            } else {
+                s32 updated = i + 1;
                 if (i < *(s32 *)(data + 0x78) - 1)
-                    FUN_001e93b0(D_L07_00211580, i + 1, *(s32 *)(data + 0x74));
+                    FUN_001e93b0(D_L07_00211580, updated, *(s32 *)(data + 0x74));
                 else if (i == *(s32 *)(data + 0x78) - 1)
                     FUN_001e93b0(D_L07_002115D0, *(s32 *)(data + 0x74), *(s32 *)(data + 0x78));
-                *(s32 *)(data + 0x78) = i + 1;
+                *(s32 *)(data + 0x78) = updated;
                 break;
             }
-            FUN_L00_0025d808(*(f32 *)(data + 0x80), path, &position, &first, &next, 1);
             i++;
         } while (i < *(s32 *)(data + 0x78));
         if (!*(u8 *)(data + 0x94)) {
