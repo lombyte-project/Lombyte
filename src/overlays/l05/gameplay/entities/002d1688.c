@@ -670,9 +670,9 @@ tail:
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7920.s", FUN_L05_002d7920);
 #else
 typedef struct {
-    char unused[0x40];
     int color[4];
     float uv[4][2];
+    char unused[0x40];
     u64 zero;
     u64 effect_texture;
     u64 texture;
@@ -703,8 +703,8 @@ extern void clear_glow_matrix_7920(void *, int, int) __asm__("FUN_001153fc");
 
 void FUN_L05_002d7920(char *moby) {
     L05GlowPacket packet[16];
-    float matrix[8] __attribute__((aligned(16)));
-    float center[4];
+    float *matrix = (float *)((char *)packet + 0x8c0);
+    float *center = (float *)((char *)packet + 0x8e0);
     int i, j, k, frame;
     short *list;
     char *member;
@@ -734,7 +734,7 @@ void FUN_L05_002d7920(char *moby) {
         for (j = 0; j < 4; j++) {
             packet[i].uv[j][0] = D_L05_001CDD70[j][0];
             packet[i].uv[j][1] = D_L05_001CDD70[j][1];
-            ratio = integer_to_float_7920(i - ((j >> 1) + -1)) / (D_L05_001613E0 + phase);
+            ratio = integer_to_float_7920(i + 1 - (j >> 1)) / (D_L05_001613E0 + phase);
             ratio = ratio > 1.0f ? 1.0f : (ratio < 0.0f ? 0.0f : ratio);
             packet[i].color[j] = interpolate_color_7920(ratio, D_L05_00161408, D_L05_0016140C);
         }
@@ -754,7 +754,8 @@ void FUN_L05_002d7920(char *moby) {
                     for (i = 0; i < 3; i++) {
                         if (D_L05_001613F4 == 0) {
                             for (k = 0; k < 4; k++) {
-                                j = ((*(short *)(data + 0x322) - frame + 15) & 15) + (k >> 1);
+                                j = (*(short *)(data + 0x322) - frame + 15) & 15;
+                                j += k >> 1;
                                 transform_glow_vertex_7920((char *)packet + frame * 0x90 + k * 0x10,
                                                            data + i * 0x100 + 0x20 + ((j & 15) << 4),
                                                            (char *)matrix + (k & 1) * 0x10);
