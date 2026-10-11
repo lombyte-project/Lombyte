@@ -119,7 +119,7 @@ typedef struct {
 extern S_297f78 D_L00_0016C058;
 extern C_297f78 D_0013C940_c __asm__("D_0013C940");
 extern s32 D_L00_0015F5C0_m[] __asm__("D_L00_0015F5C0") __attribute__((section(".sdata")));
-extern s32 D_L00_0015F5C8;
+extern s32 level_timer __asm__("D_L00_0015F5C8");
 extern s32 game_frame __asm__("D_L00_0015F5CC");
 extern s32 D_L00_001B9DE0 __attribute__((section(".data")));
 extern P_297f78 *D_L00_00166E00 __attribute__((section(".data")));
@@ -180,7 +180,7 @@ void handle_pause_input(void) {
         D_L00_0016C058.wA0 = D_0013C940_c.w1A0 & ~0x200;
     }
     lvl = D_L00_0015F5C0_m[1];
-    if (lvl == 0 && (mode_freeze_flags & 1) && D_L00_0015F5C8 >= 8) {
+    if (lvl == 0 && (mode_freeze_flags & 1) && level_timer >= 8) {
         mode_freeze_init(3, 0);
         return;
     }
@@ -190,7 +190,7 @@ void handle_pause_input(void) {
         return;
     }
     area = current_level_index;
-    if (area == 15 && D_L00_0015F5C8 >= 8 && hero.vehicle_mode == 2 && HELD &&
+    if (area == 15 && level_timer >= 8 && hero.vehicle_mode == 2 && HELD &&
         hero.state.current != 0x72) {
         if (D_L00_00166E00->h86 == 0x13)
             return;
@@ -203,7 +203,7 @@ void handle_pause_input(void) {
         if (k == 0x45 || k == 0x563 || k == 0x4DA)
             special = 1;
     }
-    if (special && D_L00_0015F5C8 >= 8 && HELD && hero.state.current != 0x72 &&
+    if (special && level_timer >= 8 && HELD && hero.state.current != 0x72 &&
         D_L00_00166E00->h86 != 0x13) {
         mode_freeze_init(1, 0);
         return;
@@ -212,24 +212,24 @@ void handle_pause_input(void) {
         mode_freeze_init(1, 0);
         return;
     }
-    if (HELD && D_L00_0015F5C8 >= 8 && hero.state.current != 0x72 && hero.state.control_mode == 0x16) {
+    if (HELD && level_timer >= 8 && hero.state.current != 0x72 && hero.state.control_mode == 0x16) {
         mode_freeze_init(0, 0);
         return;
     }
-    if (HELD && D_L00_0015F5C8 >= 8 && hero.state.current != 0x72 && hero.items[0].unk1C != 2 &&
+    if (HELD && level_timer >= 8 && hero.state.current != 0x72 && hero.items[0].unk1C != 2 &&
         hero.state.current != 0x32 && hero.state.current != 0x1D && !hero.unk20B1 &&
         hero.health.hp && lvl == 0) {
         pause_all_sounds(0);
         return;
     }
-    if (!(D_L00_0016C058.w8 & 0x10) && D_L00_0015F5C8 >= 8 && (D_0013C940_c.w1A4 & 0x500) &&
+    if (!(D_L00_0016C058.w8 & 0x10) && level_timer >= 8 && (D_0013C940_c.w1A4 & 0x500) &&
         hero.state.control_mode != 0x16 && hero.state.current != 0x72 && hero.state.current != 0x32 &&
         hero.state.current != 0x1D && !hero.unk20B1 && hero.health.hp && lvl == 0 &&
         !special && !D_L00_0016C058.wEC) {
         pause_all_sounds(10);
         return;
     }
-    if (D_0013D384 && !D_0013D388.b10 && D_L00_0015F5C8 >= 8 && !D_0015EE20 &&
+    if (D_0013D384 && !D_0013D388.b10 && level_timer >= 8 && !D_0015EE20 &&
         !hero.unk20B1 && hero.health.hp && FUN_001f96f8_c(0x1E) < game_frame &&
         current_level_index) {
         mode_freeze_init(5, 0);

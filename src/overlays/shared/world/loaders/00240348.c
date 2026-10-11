@@ -479,10 +479,10 @@ extern short D_L00_001B07B0[];
 extern short D_L00_001B0830[];
 extern u8 D_00100AE0[];
 extern unsigned char *D_L00_001604A0 MACRO_ADDR;
-extern unsigned char D_L00_0015FC88[] MACRO_ADDR;
+extern unsigned char mission_state[] __asm__("D_L00_0015FC88") MACRO_ADDR;
 extern unsigned char D_L00_001802C0[];
 extern unsigned char D_L00_001804C0[];
-extern unsigned char D_L00_001BB684[];
+extern unsigned char moby_killed[] __asm__("D_L00_001BB684");
 extern unsigned char D_L00_001BC1B0[];
 extern unsigned char D_L00_001C5B00[];
 extern void enable_global_state_flag(void) __asm__("func_001F61E8");
@@ -980,10 +980,10 @@ char *load_level_gameplay(int arg0) {
                 } else {
                     vis = 0xFF;
                 }
-                if (D_L00_001BB684[uid] != 0) {
+                if (moby_killed[uid] != 0) {
                     skip = 1;
                 } else if (flags & 3) {
-                    if (D_L00_0015FC88[mission] == 0xFF) {
+                    if (mission_state[mission] == 0xFF) {
                         if (flags & 2) {
                             b1 = bolts2;
                             if ((D_L00_001BA4D0[uid >> 5] >> (uid & 0x1F)) & 1) {

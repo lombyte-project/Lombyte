@@ -69,7 +69,7 @@ typedef struct {
     char pad2[0x24];
 } Rec;
 
-extern Rec D_L00_00179AC0[];
+extern Rec item_defs[] __asm__("D_L00_00179AC0");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
 int hero_idle_sequence(int a) __asm__("FUN_L00_00205000");
@@ -102,7 +102,7 @@ int hero_idle_sequence(int a) {
     }
     {
         int i = hero_slot_item_id(0);
-        return D_L00_00179AC0[i].v;
+        return item_defs[i].v;
     }
 }
 /* Returns its argument unchanged. */

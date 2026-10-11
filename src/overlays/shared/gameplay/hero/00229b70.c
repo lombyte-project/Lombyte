@@ -47,9 +47,9 @@ typedef struct {
 
 
 extern struct PadState D_0013C940;
-extern HeroTableRow2C D_L00_0017BC28[];
-extern HeroAnimRow D_L00_00179AC0[];
-extern HeroTableEntry70 D_L00_00179890[];
+extern HeroTableRow2C attack_records[] __asm__("D_L00_0017BC28");
+extern HeroAnimRow item_defs[] __asm__("D_L00_00179AC0");
+extern HeroTableEntry70 idle_fidgets[] __asm__("D_L00_00179890");
 extern struct UsageStats D_00141848;
 extern S166D80 D_L00_00166C80;
 extern S17A780 D_L00_0017A680;
@@ -321,7 +321,7 @@ void hero_update_transitions(void) {
                                 HeroTableEntry70 *rec;
 
                                 hero.unk2270 = sp20;
-                                rec = &D_L00_00179890[sp20];
+                                rec = &idle_fidgets[sp20];
                                 hero.fidget_cooldown = scale_game_frames(0x78);
                                 rec->duration_frames = FUN_001f96b0(rec->duration) * 60.0f;
                                 if (rec->use_state_40 != 0) {
@@ -367,7 +367,7 @@ void hero_update_transitions(void) {
                         if (id != hero.unk2298) {
                             FUN_L00_0020e698();
                         } else {
-                            int anim = D_L00_00179AC0[id].anim;
+                            int anim = item_defs[id].anim;
                             if (((unsigned char *)hero.moby)[0x53] != anim) {
                                 if (hero.unkD08[0] != 0) {
                                     hero.unkD14 = 1;
@@ -773,7 +773,7 @@ void hero_update_transitions(void) {
                         }
                     }
                     {
-                        HeroTableRow2C *rec = &D_L00_0017BC28[hero.attack_record];
+                        HeroTableRow2C *rec = &attack_records[hero.attack_record];
                         int t = (truncate_float_to_s32(hero.anim_frame) - rec->fC) * 2;
                         if ((float)rec->f14 < hero.anim_frame && hero.unkA9C == 0 &&
                             !(hero.state.current == 0x15 && hero.unk308 != 0)) {
@@ -1104,7 +1104,7 @@ void hero_update_transitions(void) {
                     }
                     break;
                 case 112:
-                    if (hero.anim_frame > (float)D_L00_0017BC28[hero.attack_record].f18) {
+                    if (hero.anim_frame > (float)attack_records[hero.attack_record].f18) {
                         hero_set_state(0, 1);
                     }
                     break;
@@ -1452,7 +1452,7 @@ void hero_update_transitions(void) {
                         int n;
 
                         if (pad_pressed_within(0x40, scale_game_frames(5), 0) &&
-                            hero.anim_frame >= (float)D_L00_0017BC28[hero.attack_record].f14) {
+                            hero.anim_frame >= (float)attack_records[hero.attack_record].f14) {
                             hero_set_state(0x29, 1);
                             break;
                         }
@@ -1466,7 +1466,7 @@ void hero_update_transitions(void) {
                             }
                             break;
                         }
-                        if (hero.anim_frame > (float)D_L00_0017BC28[hero.attack_record].f18) {
+                        if (hero.anim_frame > (float)attack_records[hero.attack_record].f18) {
                             hero_set_state(0x28, 1);
                             break;
                         }
@@ -2404,7 +2404,7 @@ void hero_update_transitions(void) {
                         break;
                     }
                     {
-                        HeroTableRow2C *rec = &D_L00_0017BC28[hero.attack_record];
+                        HeroTableRow2C *rec = &attack_records[hero.attack_record];
                         int t;
 
                         if (hero.unkA9C == 0 && (float)rec->f18 < hero.anim_frame) {

@@ -101,7 +101,7 @@ extern s32 D_L00_0015F718 __attribute__((sda));
 extern s32 D_L00_0015F71C __attribute__((sda));
 extern s32 D_L00_0015F72C __attribute__((sda));
 extern D00237ae8 D_L00_0017DAC0[];
-extern E00237ae8 D_L00_00179AC0[];
+extern E00237ae8 item_defs[] __asm__("D_L00_00179AC0");
 extern s32 D_00141EA0[];
 s32 FUN_001f96f8(s32);
 void FUN_L00_00237ae8(O00237ae8 *o) {
@@ -120,7 +120,7 @@ void FUN_L00_00237ae8(O00237ae8 *o) {
     o->x70 = 0;
     D_L00_0015F72C = 0;
     d = D_L00_0017DAC0;
-    tab = D_L00_00179AC0;
+    tab = item_defs;
     s = D_00141EA0;
     for (i = 7; i >= 0; i--) {
         d->x18 = *s;

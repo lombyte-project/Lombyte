@@ -1202,7 +1202,7 @@ typedef struct {
 } KeyVars;
 extern KillFlags D_L00_001BA5D0 __attribute__((section(".data")));
 extern KillFlags D_L00_001BB230 __attribute__((section(".data")));
-extern u8 D_L00_0015FC88[8];
+extern u8 mission_state[8] __asm__("D_L00_0015FC88");
 extern u8 D_0014C050[][16] __attribute__((section(".data")));
 
 /* Kills a live moby: marks it in the level's spawn tables, starts its death sound and
@@ -1214,7 +1214,7 @@ void FUN_L00_002d5830(struct Moby *m) {
         return;
     }
     D_L00_001BA5D0.killed[(s16)m->save_id] = m->unkB0 + 2;
-    if (m->unkB0 == 0xFF || (D_L00_0015FC88[m->unkB0] != 0xFF && D_0014C050[current_level_index][m->unkB0] == 0xFF)) {
+    if (m->unkB0 == 0xFF || (mission_state[m->unkB0] != 0xFF && D_0014C050[current_level_index][m->unkB0] == 0xFF)) {
         D_L00_001BB230.killed[(s16)m->save_id] = m->unkB0 + 2;
     }
     m->state = 2;

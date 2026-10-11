@@ -607,7 +607,7 @@ extern s32 FUN_L00_0025d808(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN
 extern s32 FUN_L00_0025d7a0(void *, s32, s32, s32);
 extern f32 FUN_001f96b0(f32);
 extern void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
-extern u8 D_L00_00179AC0[];
+extern u8 item_defs[] __asm__("D_L00_00179AC0");
 extern struct HeroAnimRow D_L00_00179AC0_t[] __asm__("D_L00_00179AC0");
 extern void FUN_L00_00271b18(void *, void *, f32);
 extern void FUN_L00_00215340(void);

@@ -150,7 +150,7 @@ extern B910 D_L00_001E9880;
 extern Cam910 D_L00_00166C80;
 extern E D_0013E520;
 extern M910 *D_L00_00173E58 __attribute__((section(".data")));
-extern char *D_L00_001ABA00[];
+extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char *FUN_L00_0026bed0(char *, char *, int, int, float, int, int);
 extern char *FUN_L00_002d3838(char *a, char *b, int c, char *d);
 extern char *FUN_L00_002d7e90(void *, float);
@@ -665,7 +665,7 @@ void mine_update(M910 *m) {
                         range *= 3.0f;
                     }
                     i = 0;
-                    o = (M910 *)D_L00_001ABA00[i];
+                    o = (M910 *)active_mobies[i];
                     while (o != 0) {
                         float rg;
                         unsigned char *p;
@@ -711,7 +711,7 @@ void mine_update(M910 *m) {
                         v->i48 = scale_game_frames(7);
                     next:
                         i++;
-                        o = (M910 *)D_L00_001ABA00[i];
+                        o = (M910 *)active_mobies[i];
                     }
                     if (best != 0) {
                         v->p54 = best;
@@ -2187,7 +2187,7 @@ typedef struct {
     u8 bB;
 } E_u;
 
-extern char *D_L00_001ABA00[] __attribute__((section(".data")));
+extern char *active_mobies[] __asm__("D_L00_001ABA00") __attribute__((section(".data")));
 extern E_u D_0013E520_u __asm__("D_0013E520");
 extern s32 D_L00_00166DC0[] __attribute__((section(".data")));
 extern s32 D_L00_00173E40[0x1C] __attribute__((section(".data")));
@@ -2221,7 +2221,7 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
     best = 10000.0f;
     yaw = *(f32 *)(self + 0x48);
     pitch = *(f32 *)(self + 0x44);
-    o = D_L00_001ABA00[i];
+    o = active_mobies[i];
     if (o == 0)
         return;
     g = &hero;
@@ -2307,7 +2307,7 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         }
     next:
         i++;
-        o = D_L00_001ABA00[i];
+        o = active_mobies[i];
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b03a0.s", FUN_L00_002b03a0);

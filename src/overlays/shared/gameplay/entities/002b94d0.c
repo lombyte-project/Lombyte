@@ -772,7 +772,7 @@ void FUN_L00_002bc1a0(void *mv) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bc3b0.s", FUN_L00_002bc3b0);
 #else
-extern char *D_L00_001ABA00[];
+extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char D_0013F3D0[];
 extern char *D_001413D0;
 extern float D_0013F634;
@@ -812,7 +812,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
         return 0;
     }
     limit = D_L00_001616D0_2bc3b0;
-    for (i = 0; (candidate = D_L00_001ABA00[i]) != 0; i++) {
+    for (i = 0; (candidate = active_mobies[i]) != 0; i++) {
         if (*(s8 *)(candidate + 0x20) < 0 || *(s16 *)(candidate + 0xA6) == 0x58E ||
             *(s16 *)(candidate + 0xA6) == 0x452)
             continue;
@@ -1347,7 +1347,7 @@ float FUN_L00_002bec80(Vec4_2bec80 *p, void *q) {
     }
     return 0.0f;
 }
-extern char *D_L00_001ABA00[];
+extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char D_0013F3D0[] __attribute__((section(".data")));
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
@@ -1366,7 +1366,7 @@ char *FUN_L00_002bed90(char *self, float *position, float *angles, int unused, i
     int valid;
     int i;
     (void)unused;
-    for (i = 0; (candidate = D_L00_001ABA00[i]) != 0; i++) {
+    for (i = 0; (candidate = active_mobies[i]) != 0; i++) {
         char *classData = *(char **)(candidate + 0x24);
         short classId = classData ? *(short *)(classData + 0x46) : 0;
         if (classId != 5)

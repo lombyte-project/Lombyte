@@ -351,7 +351,7 @@ typedef struct {
     char pad2[0x40];
 } ItemDef;
 
-extern ItemDef D_L00_00179AC0[] __attribute__((section(".data")));
+extern ItemDef item_defs[] __asm__("D_L00_00179AC0") __attribute__((section(".data")));
 extern int D_0013D428[];
 extern int D_00141EA0[];
 extern int D_L00_001B0340[] __attribute__((section(".data")));
@@ -407,7 +407,7 @@ void FUN_L00_00260860(int id, int flag) {
             }
         }
         if (flag != 0) {
-            int t = D_L00_00179AC0[id].t;
+            int t = item_defs[id].t;
             if (t == 0) {
                 D_00141408 = id;
             } else if (t == 3) {
@@ -416,7 +416,7 @@ void FUN_L00_00260860(int id, int flag) {
                 D_00141410 = id;
             }
         }
-        if (D_L00_00179AC0[id].t == 0) {
+        if (item_defs[id].t == 0) {
             for (i = 0; i < 8 && D_00141EA0[i] != 0; i++) {
             }
             if (i < 8) {

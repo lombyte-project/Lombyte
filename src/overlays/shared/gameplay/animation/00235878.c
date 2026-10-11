@@ -24,7 +24,7 @@ typedef struct {
     char pad80[0x10];
 } HudBank;
 
-extern HudBank D_L00_0017DC50[];
+extern HudBank hud_elements[] __asm__("D_L00_0017DC50");
 s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
                            s32 b) __asm__("FUN_001ff308");
 void apply_pending_animation(struct Anim *anim) __asm__("FUN_001ff418");
@@ -34,9 +34,9 @@ void FUN_L00_00235878(void) {
 
     for (i = 0; i < 13; i++) {
         queue_animation_update(i, 0xFFFF, 0, 0, 0, 0, 1);
-        D_L00_0017DC50[i].unk7C = 0;
-        D_L00_0017DC50[i].unk6C = -6;
-        apply_pending_animation(&D_L00_0017DC50[i]);
+        hud_elements[i].unk7C = 0;
+        hud_elements[i].unk6C = -6;
+        apply_pending_animation(&hud_elements[i]);
     }
 }
 #define NOT_SDA

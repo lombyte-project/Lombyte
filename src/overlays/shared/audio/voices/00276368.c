@@ -177,7 +177,7 @@ extern s32 D_0015EED8;
 extern s32 D_L00_0015F5AC;
 extern s32 D_L00_0015F578 __attribute__((sda));
 extern s32 D_L00_0015F5C4;
-extern s32 D_L00_0015F5C8 __attribute__((sda));
+extern s32 level_timer __asm__("D_L00_0015F5C8") __attribute__((sda));
 extern s32 D_L00_0015F5D8;
 extern s32 D_L00_0016000C __attribute__((sda));
 extern f32 D_L00_0016CAF0 __attribute__((section(".data")));
@@ -308,7 +308,7 @@ void FUN_L00_00276bd0(void) {
     if (v == 0 || v == 0xA || v == 0xE || v == 0x11 || v == 0x21 || v == 0x2D || v == 0x23) {
         FUN_L00_00276368();
     }
-    if ((mode_freeze_flags & 1) && !(D_L00_0015F5C8 < 8)) {
+    if ((mode_freeze_flags & 1) && !(level_timer < 8)) {
         mode_freeze_init(3, D_L00_001B9CF0.owner);
         return;
     }

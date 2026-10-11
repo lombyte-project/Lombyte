@@ -8,7 +8,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00264740.s", FUN_L00_00264740);
 #include "rnc/gameplay/entities/moby.h"
 extern struct Moby *D_L00_0015FFD8;
 extern struct Moby *D_L00_0015FFE4;
-extern void *D_L00_001ABA00[];
+extern void *active_mobies[] __asm__("D_L00_001ABA00");
 extern void FUN_L00_00250480(struct Moby *moby);
 extern void FUN_L00_00250df8(struct Moby *moby);
 
@@ -19,7 +19,7 @@ void FUN_L00_00264740(void)
     struct Moby *current;
     void (*update)(struct Moby *);
 
-    D_L00_001ABA00[0] = 0;
+    active_mobies[0] = 0;
     D_L00_0015FFE4 = 0;
     moby = D_L00_0015FFD8;
     last = 0;

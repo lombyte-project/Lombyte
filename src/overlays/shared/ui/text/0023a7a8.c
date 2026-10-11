@@ -165,7 +165,7 @@ typedef struct E_23ac78 {
     int t;
     char pad3[0x90 - 0x80];
 } E_23ac78;
-extern E_23ac78 D_L00_0017DC50[] __attribute__((section(".data")));
+extern E_23ac78 hud_elements[] __asm__("D_L00_0017DC50") __attribute__((section(".data")));
 typedef struct {
     int a;
     int b;
@@ -180,7 +180,7 @@ int FUN_L00_0023ac78(int call) {
     E_23ac78 *e;
     H_23ac78 *h;
     FUN_L00_0023adb8();
-    e = D_L00_0017DC50;
+    e = hud_elements;
     h = &D_L00_0017E4D8;
     do {
         if ((e->flags & 0x10) || h->b != 0) {
@@ -203,7 +203,7 @@ int FUN_L00_0023ac78(int call) {
             e->cb(e);
         }
         e++;
-    } while ((int)e < (int)(D_L00_0017DC50 + 13));
+    } while ((int)e < (int)(hud_elements + 13));
     return n;
 }
 extern int D_L00_0015F968_23adb8 __asm__("D_L00_0015F968") __attribute__((sda));

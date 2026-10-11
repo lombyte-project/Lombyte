@@ -152,18 +152,18 @@ typedef struct {
     int idx;
 } G_259bc8;
 extern G_259bc8 D_L00_00173E40 __attribute__((section(".data")));
-extern T_259bc8 D_L00_00178100[] __attribute__((section(".data")));
+extern T_259bc8 moby_hits[] __asm__("D_L00_00178100") __attribute__((section(".data")));
 extern float FUN_001f9af0(void *);
 
 void FUN_L00_00259bc8(unsigned char *m, int x, int y, u128 *p, u128 *q, float f) {
     int i = D_L00_00173E40.idx;
     T_259bc8 *e;
     if (m[0xA4] != 0xFF) {
-        T_259bc8 *c = &D_L00_00178100[m[0xA4]];
+        T_259bc8 *c = &moby_hits[m[0xA4]];
         if (c->owner == m && f < c->f)
             return;
     }
-    e = &D_L00_00178100[i];
+    e = &moby_hits[i];
     e->x = x;
     e->y = y;
     e->f = f;
@@ -174,8 +174,8 @@ void FUN_L00_00259bc8(unsigned char *m, int x, int y, u128 *p, u128 *q, float f)
     } else {
         e->flag = 0;
     }
-    qcopy(&D_L00_00178100[i].a, p);
-    qcopy(&D_L00_00178100[i].b, q);
+    qcopy(&moby_hits[i].a, p);
+    qcopy(&moby_hits[i].b, q);
     m[0xA4] = i;
     D_L00_00173E40.idx = (i + 1) & 0x3F;
 }
@@ -295,7 +295,7 @@ extern struct Ent_z D_L00_00178100_c[] __asm__("D_L00_00178100") __attribute__((
 static inline u8 load_u8_0025a420(u8 *p) {
     return *p;
 }
-/* Returns the D_L00_00178100 entry linked from p+0xA4 when it matches mask; may unlink it. */
+/* Returns the moby_hits entry linked from p+0xA4 when it matches mask; may unlink it. */
 struct Ent_z *find_moby_hit(u8 *p, s32 mask, s32 flag) __asm__("FUN_L00_0025a420");
 struct Ent_z *find_moby_hit(u8 *p, s32 mask, s32 flag) {
     struct Ent_z *e;

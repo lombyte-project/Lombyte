@@ -7,7 +7,7 @@
 #include "rnc/overlay/hero_tables.h"
 #include "rnc/globals.h"
 
-extern HeroTableEntry70 D_L00_00179890[] __attribute__((section(".data"))); /* idle fidgets */
+extern HeroTableEntry70 idle_fidgets[] __asm__("D_L00_00179890") __attribute__((section(".data")));
 extern s32 D_L00_00179AB0 __attribute__((section(".data")));
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
@@ -15,7 +15,7 @@ extern s32 FUN_L00_001efc70(void *, void *, s32, void *, s32);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 FUN_001f96b0(f32);
 
-/* Idle fidget picker: lists the eligible entries of D_L00_00179890, then
+/* Idle fidget picker: lists the eligible entries of idle_fidgets, then
    picks one weighted by 1 / (interval * 60). Returns 1 and the index in
    *index when one is picked. At 1 hit point it offers only entry 4. */
 s32 pick_idle_fidget(s32 *index) __asm__("FUN_L00_00229010");
@@ -43,7 +43,7 @@ s32 pick_idle_fidget(s32 *index) {
     endp = &end;
     next = choices;
     for (; i < 5; i++) {
-        table = D_L00_00179890;
+        table = idle_fidgets;
         entry = &table[i];
         if (entry->duration_frames != 0) continue;
         if (entry->interval == 0.0f) continue;
@@ -71,7 +71,7 @@ s32 pick_idle_fidget(s32 *index) {
     if (count == 0) return 0;
     total = 0.0f;
     for (i = 0; i < count; i++) {
-        HeroTableEntry70 *choice = &D_L00_00179890[choices[i]];
+        HeroTableEntry70 *choice = &idle_fidgets[choices[i]];
         total += 1.0f / (f32)(s32)(FUN_001f96b0(choice->interval) * 60.0f);
     }
     pick = random_float_between(0.0f, 1.0f);
@@ -80,7 +80,7 @@ s32 pick_idle_fidget(s32 *index) {
             s32 picked = choices[j];
             HeroTableEntry70 *choice;
             *index = picked;
-            choice = &D_L00_00179890[picked];
+            choice = &idle_fidgets[picked];
             total -= 1.0f / (f32)(s32)(FUN_001f96b0(choice->interval) * 60.0f);
             if (total < pick) break;
         }
@@ -253,7 +253,7 @@ typedef struct {
     s32 x24;
     u8 p2[0x24];
 } E00229a98;
-extern E00229a98 D_L00_00179AC0[];
+extern E00229a98 item_defs[] __asm__("D_L00_00179AC0");
 s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 void FUN_L00_0020e698(void);
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -269,7 +269,7 @@ s32 FUN_L00_00229a98(void) {
         FUN_L00_0020e698();
         return 0;
     }
-    k = D_L00_00179AC0[id].x24;
+    k = item_defs[id].x24;
     if (hero_set_state(0, 0) == 0)
         return 0;
     set_hero_animation(k, 0, (f32)scale_game_frames(0xB));

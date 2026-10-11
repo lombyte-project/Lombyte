@@ -5,11 +5,11 @@
 
 /*
  * Per-level data tables the hero code reads (one copy per level overlay,
- * e.g. D_L00_00179890, D_L00_00179AC0, D_L00_0017BC28 in level 0).
+ * e.g. idle_fidgets, item_defs, attack_records in level 0).
  */
 
 /*
- * 0x70-byte idle fidget entry of D_L00_00179890, picked by
+ * 0x70-byte idle fidget entry of idle_fidgets, picked by
  * pick_idle_fidget(&index) with weight 1 / (interval * 60). The hero stores
  * the index, sets duration_frames from duration and then either enters hero
  * state 0x40 or calls set_hero_animation(unk48, 0, ...).
@@ -28,7 +28,7 @@ typedef struct HeroTableEntry70 {
 } HeroTableEntry70;
 
 /*
- * 0x4C-byte row of D_L00_00179AC0, indexed by the id from
+ * 0x4C-byte row of item_defs, indexed by the id from
  * hero_slot_item_id(0); the hero plays anim when its moby is not already in it.
  */
 typedef struct HeroAnimRow {
@@ -40,7 +40,7 @@ typedef struct HeroAnimRow {
 } HeroAnimRow;
 
 /*
- * 0x2C-byte row of D_L00_0017BC28, indexed by hero.attack_record. fC..f20 are
+ * 0x2C-byte row of attack_records, indexed by hero.attack_record. fC..f20 are
  * limits on the float hero.anim_frame (fC is subtracted from it; f10, f14,
  * f18 and f1C..f20 are compared with it).
  */

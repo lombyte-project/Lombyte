@@ -432,7 +432,7 @@ extern f32 D_L00_0015F454 NOT_SDA;
 extern s32 D_L00_0015F5C4 NOT_SDA;
 extern s32 D_L00_0015F600 NOT_SDA;
 extern s32 D_L00_0015F614 NOT_SDA;
-extern s8 D_L00_0015FC88[] NOT_SDA;
+extern s8 mission_state[] __asm__("D_L00_0015FC88") NOT_SDA;
 extern s32 D_L00_0015FFF0 NOT_SDA;
 extern s32 D_L00_0016017C NOT_SDA;
 extern s32 D_L00_001604A4 NOT_SDA;
@@ -715,7 +715,7 @@ void update_debug_menu(void) {
                         byte_value = -1;
                     }
                     *player_setting = byte_value;
-                    D_L00_0015FC88[index] = byte_value;
+                    mission_state[index] = byte_value;
                 }
             } else if ((D_0013CAE4 & 0x40) == 0) {
                 g_debug_menu.segment_index = g_debug_menu.segment_index + -1;

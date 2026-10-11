@@ -590,7 +590,7 @@ extern char D_L00_0015F6E8[4] __attribute__((sda));
 extern char D_L00_0017BF20_e[] __asm__("D_L00_0017BF20");
 extern char D_L00_0017BF60_e[] __asm__("D_L00_0017BF60");
 extern unsigned char D_0015EDB5;
-extern T2C_222B80 D_L00_0017BC28[];
+extern T2C_222B80 attack_records[] __asm__("D_L00_0017BC28");
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern char D_00141680[];
 extern char D_L00_0017BF60[];
@@ -2268,7 +2268,7 @@ int hero_set_state(int a, int b) {
             q = &hero;
             *(unsigned int *)(h + 0x44) =
                 *(unsigned int *)(h + 0x44) | (1 << current_level_index) | 0x80000000;
-            e = &D_L00_0017BC28[q->attack_record];
+            e = &attack_records[q->attack_record];
             q->saved_item[0] = 0;
             k = 0;
             if (q->state.prev_control_mode == 6 && e->a == 0 && q->anim_frame < (float)e->c) {
@@ -2311,7 +2311,7 @@ int hero_set_state(int a, int b) {
         }
         case 0x51: {
             struct Hero *q = &hero;
-            T2C_222B80 *e = &D_L00_0017BC28[q->attack_record];
+            T2C_222B80 *e = &attack_records[q->attack_record];
             int k = 0;
             if ((q->state.prev_control_mode == 6 ||
                  (q->state.prev2_control_mode == 6 &&
@@ -2357,7 +2357,7 @@ int hero_set_state(int a, int b) {
         p->unkA64 = 0;
         if (p->state.prev == 0x70) {
             int v = 5;
-            if (D_L00_0017BC28[p->attack_record].b == 0)
+            if (attack_records[p->attack_record].b == 0)
                 v = 6;
             p->attack_record = v;
         } else {
@@ -2365,7 +2365,7 @@ int hero_set_state(int a, int b) {
         }
         {
             struct Hero *q = &hero;
-            int e = D_L00_0017BC28[q->attack_record].b;
+            int e = attack_records[q->attack_record].b;
             if (b) {
                 char *m;
                 int z = e == 0;
@@ -2405,7 +2405,7 @@ int hero_set_state(int a, int b) {
         p->ground_speed = frame_time * 9.0f;
         if (b) {
             char *m;
-            T2C_222B80 *e = &D_L00_0017BC28[p->attack_record];
+            T2C_222B80 *e = &attack_records[p->attack_record];
             int k = e->b;
             int n;
             if (e->a == 1)

@@ -554,7 +554,7 @@ float FUN_L00_0020d6b0(char *o, float yaw, float range, float ylim, float plim, 
         r += 7.0f;
     return r;
 }
-extern char *D_L00_001ABA00[] __attribute__((section(".data")));
+extern char *active_mobies[] __asm__("D_L00_001ABA00") __attribute__((section(".data")));
 float *FUN_002141f8_20d8f8(char *) __asm__("FUN_002141f8");
 float FUN_L00_0020d6b0(char *, float, float, float, float, int *);
 char *FUN_L00_0020d8f8(float a, float b, float c, float d) {
@@ -562,7 +562,7 @@ char *FUN_L00_0020d8f8(float a, float b, float c, float d) {
     float bd = 1.0e8f;
     int i = 0;
     char *o;
-    while ((o = D_L00_001ABA00[i]) != 0) {
+    while ((o = active_mobies[i]) != 0) {
         float *f = FUN_002141f8_20d8f8(o);
         if (f != 0 && *f != 0.0f && (*(unsigned short *)(o + 0x34) & 0x1000)) {
             int out;
@@ -1327,7 +1327,7 @@ extern unsigned char D_0013D4C0[];
 extern int D_0015ED8C;
 extern int D_0015ED90;
 extern int D_0015ED94;
-extern ItemDef D_L00_00179AC0[];
+extern ItemDef item_defs[] __asm__("D_L00_00179AC0");
 extern int FUN_001f9770(void *);
 extern int FUN_L00_0020d568_c() __asm__("FUN_L00_0020d568");
 extern int FUN_L00_00216de8(int, int);
@@ -1517,7 +1517,7 @@ void hero_switch_item(int i) {
                 ((int *)(D_00141660))[i] = w;
                 g->selected_item[i] = w;
                 if (i == 0) {
-                    D_L00_00179AC0[g->selected_item[0]].f20 = 0x20;
+                    item_defs[g->selected_item[0]].f20 = 0x20;
                 }
                 changed = 1;
             }
@@ -1577,7 +1577,7 @@ void hero_switch_item(int i) {
                     }
                     if (i == 0) {
                         struct Hero *k = &hero;
-                        D_L00_00179AC0[k->selected_item[0]].f20 = 0x20;
+                        item_defs[k->selected_item[0]].f20 = 0x20;
                     }
                 }
                 changed = 1;

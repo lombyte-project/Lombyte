@@ -238,7 +238,7 @@ extern f32 FUN_001f9988(f32);
 extern f32 FUN_L00_00233a78(void *);
 extern f32 FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
 extern f32 FUN_L00_00213350(void *);
-extern struct HeroTableRow2C D_L00_0017BC28[];
+extern struct HeroTableRow2C attack_records[] __asm__("D_L00_0017BC28");
 extern struct LevelTable_QS D_L00_00166C80;
 #define Q D_L00_00166C80
 extern s32 D_0013CAE0[];
@@ -293,7 +293,7 @@ extern s32 FUN_L00_0025d808(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN
 extern s32 FUN_L00_0025d7a0(void *, s32, s32, s32);
 extern f32 FUN_001f96b0(f32);
 extern void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
-extern u8 D_L00_00179AC0[];
+extern u8 item_defs[] __asm__("D_L00_00179AC0");
 extern struct HeroAnimRow D_L00_00179AC0_t[] __asm__("D_L00_00179AC0");
 extern void FUN_L00_00271b18(void *, void *, f32);
 extern void FUN_L00_00215340(void);
@@ -1173,7 +1173,7 @@ void hero_update_movement(void) {
         s32 t2;
         f32 r;
         f32 mx;
-        if (hero.unkA9C != 0 || hero.anim_frame < D_L00_0017BC28[hero.attack_record].f18) {
+        if (hero.unkA9C != 0 || hero.anim_frame < attack_records[hero.attack_record].f18) {
             hero.items[0].timer = 2;
         }
         hero.target_speed = 0.0f;
@@ -1251,7 +1251,7 @@ void hero_update_movement(void) {
     case 0x15: {
         s32 jumping;
         hero.target_speed = 0.0f;
-        if (hero.unkA9C != 0 || hero.anim_frame < D_L00_0017BC28[hero.attack_record].f18) {
+        if (hero.unkA9C != 0 || hero.anim_frame < attack_records[hero.attack_record].f18) {
             hero.items[0].timer = 2;
         }
         jumping = hero.state.prev == 1 && scale_game_frames(20) < hero.state.prev_timer;
@@ -1325,10 +1325,10 @@ void hero_update_movement(void) {
             FUN_L00_002167d0();
             break;
         }
-        if (hero.unkA9C != 0 || hero.anim_frame < D_L00_0017BC28[hero.attack_record].f20) {
+        if (hero.unkA9C != 0 || hero.anim_frame < attack_records[hero.attack_record].f20) {
             hero.items[0].timer = 2;
         }
-        tb = &D_L00_0017BC28[hero.attack_record];
+        tb = &attack_records[hero.attack_record];
         hero.target_speed = 0.0f;
         if ((struct MobyView *)hero.unkA54 != NULL && scale_game_frames(4) > hero.state_timer) {
             f32 d = FUN_001f9b80(&((struct MobyView *)hero.unkA54)->u10.v10, &hero.motion.pos) - 0.5f;
@@ -2614,7 +2614,7 @@ void hero_update_movement(void) {
     case 0x51: {
         struct HeroTableRow2C *tb;
         s32 ok;
-        tb = &D_L00_0017BC28[hero.attack_record];
+        tb = &attack_records[hero.attack_record];
         hero.target_speed = 0.0f;
         if ((tb->kind == 0 ? 1 : tb->kind == 1) && hero.anim_frame < 5.5f) {
             hero.target_speed = frame_time * 3.5f;
