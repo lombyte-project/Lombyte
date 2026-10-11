@@ -234,7 +234,357 @@ void FUN_L08_002e9a18(struct Moby *arg) {
     }
 }
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002deee0.s", FUN_L08_002deee0);
+#else
+extern float D_L08_00161B60 __attribute__((sda));
+extern float D_L08_00161B64 __attribute__((sda));
+extern float D_L08_00161B68 __attribute__((sda));
+extern float D_L08_00161B6C __attribute__((sda));
+extern float D_L08_00161B70 __attribute__((sda));
+extern float D_L08_00161B74 __attribute__((sda));
+extern float D_L08_00161B78 __attribute__((sda));
+extern float D_L08_00161B7C __attribute__((sda));
+extern float D_L08_00161B80 __attribute__((sda));
+extern float D_L08_00161B84 __attribute__((sda));
+extern float D_L08_00161B88 __attribute__((sda));
+extern float D_L08_00161B8C __attribute__((sda));
+extern float D_L08_00161B90 __attribute__((sda));
+extern float D_L08_00161B94 __attribute__((sda));
+extern float D_L08_00161B98 __attribute__((sda));
+extern float D_L08_00161B9C __attribute__((sda));
+extern u32 D_L08_00161BA0 __attribute__((sda));
+extern u32 D_L08_00161BA4 __attribute__((sda));
+extern u32 D_L08_00161BA8 __attribute__((sda));
+extern u32 D_L08_00161BAC __attribute__((sda));
+extern u32 D_L08_00161BB0 __attribute__((sda));
+extern u32 D_L08_00161BB4 __attribute__((sda));
+extern u32 D_L08_00161BB8 __attribute__((sda));
+extern u32 D_L08_00161BBC __attribute__((sda));
+extern u32 D_L08_00161BC0 __attribute__((sda));
+extern u32 D_L08_00161BC4 __attribute__((sda));
+extern u32 D_L08_00161BC8 __attribute__((sda));
+extern u32 D_L08_00161BCC __attribute__((sda));
+extern u32 D_L08_00161BD0 __attribute__((sda));
+extern u32 D_L08_00161BD4 __attribute__((sda));
+extern u32 D_L08_00161BD8 __attribute__((sda));
+extern u32 D_L08_00161BDC __attribute__((sda));
+extern u32 D_L08_00161BE0 __attribute__((sda));
+extern u32 D_L08_00161BE4 __attribute__((sda));
+extern u32 D_L08_00161BE8 __attribute__((sda));
+extern u32 D_L08_00161BEC __attribute__((sda));
+extern float D_L08_00161AC0 __attribute__((sda));
+extern u32 D_L08_00161AC8 __attribute__((sda));
+extern u32 D_L08_00161AD4 __attribute__((sda));
+extern u32 D_L08_00161AD8 __attribute__((sda));
+extern u32 D_L08_00161ADC __attribute__((sda));
+extern u32 D_L08_0015F5CC;
+extern u8 D_L08_0015EDB4;
+extern struct Moby *D_L08_0015FFD8_m __asm__("D_L08_0015FFD8");
+extern float fast_cos_5188(float) __asm__("FUN_001f9dc8");
+extern float fast_sin_5188(float) __asm__("FUN_001f9de0");
+extern float float_from_int_5188(int) __asm__("FUN_001fa6c0");
+extern int truncate_float_to_s32_5188(float) __asm__("FUN_001fa6d0");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
+extern float FUN_001f9e90(float, float);
+extern float FUN_001f9b48(void *, void *);
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern u32 fast_tween_color(u32, u32, float) __asm__("FUN_001fa6e0");
+extern void vu1_add_g_sregister_5188(int, u64) __asm__("FUN_00233980");
+extern u64 get_effect_texture_5188(int) __asm__("FUN_001f44b8");
+extern void draw_geometry_quad_5188(void *, void *, void *, u64, int) __asm__("FUN_L02_0020bc88");
+
+void FUN_L08_002deee0(struct Moby *moby) {
+    s64 quad[4];
+    u32 color[4];
+    u32 uv[4];
+    volatile Vec4f offset;
+    float angle, distance;
+    char *data = (char *)moby->pvars;
+    u64 texture;
+    struct Moby **p;
+    int *indices;
+    int count;
+    u32 c, c0, c1;
+    vu1_add_g_sregister_5188(0x42, 0x8000000044ULL);
+    texture = get_effect_texture_5188(D_L08_00161BA0 + 0x28);
+    uv[0] = D_L08_00161BB0;
+    uv[1] = D_L08_00161BB4;
+    uv[2] = D_L08_00161BB8;
+    uv[3] = D_L08_00161BBC;
+    color[0] = D_L08_00161AC8;
+    color[3] = D_L08_00161AC8;
+    color[2] = D_L08_00161AC8;
+    color[1] = D_L08_00161AC8;
+    {
+        int i = 0;
+        int sign;
+        float sign_x, sign_y;
+        do {
+            sign = i & 1;
+            sign_x = 1.0f;
+            if (sign) sign_x = -1.0f;
+            sign_y = 1.0f;
+            if (i > 1) sign_y = -1.0f;
+            i++;
+            quad[3] = 0x00fffff000000000LL;
+            quad[2] = 0x00fffff000000000LL;
+            quad[1] = 0x00fffff000000000LL;
+            quad[0] = 0x00fffff000000000LL;
+            quad[0] += (u64)(u32)((truncate_float_to_s32_5188((D_L08_00161B84 + D_L08_00161B8C * sign_y) * 16.0f) << 16) + 0x80000000u);
+            quad[0] += (s32)((truncate_float_to_s32_5188(D_L08_00161B80 + D_L08_00161B88 * sign_x) << 4) + 0x8000);
+            quad[1] += (u64)(u32)((truncate_float_to_s32_5188(D_L08_00161B84 * 16.0f) << 16) + 0x80000000u);
+            quad[1] += (s32)((truncate_float_to_s32_5188(D_L08_00161B80 + D_L08_00161B88 * sign_x) << 4) + 0x8000);
+            quad[2] += (u64)(u32)((truncate_float_to_s32_5188((D_L08_00161B84 + D_L08_00161B8C * sign_y) * 16.0f) << 16) + 0x80000000u);
+            quad[2] += (s32)((truncate_float_to_s32_5188(D_L08_00161B80) << 4) + 0x8000);
+            quad[3] += (u64)(u32)((truncate_float_to_s32_5188(D_L08_00161B84 * 16.0f) << 16) + 0x80000000u);
+            quad[3] += (s32)((truncate_float_to_s32_5188(D_L08_00161B80) << 4) + 0x8000);
+            draw_geometry_quad_5188(quad, uv, color, texture, 1);
+        } while (i < 4);
+    }
+    indices = (int *)(data + 0x80);
+    texture = get_effect_texture_5188(D_L08_00161BA4);
+    uv[0] = D_L08_00161BC0;
+    uv[1] = D_L08_00161BC4;
+    uv[2] = D_L08_00161BC8;
+    uv[3] = D_L08_00161BCC;
+    {
+        int i, sign;
+        float angle, distance;
+        u32 c;
+        p = (struct Moby **)(data + 0x60);
+        i = 7;
+        do {
+            if (*p != 0) {
+                if ((s8)(*p)->state < 0) {
+                    *p = 0;
+                } else {
+                    c = D_L08_00161ADC;
+                    if ((*p)->state == 2) {
+                        c = D_L08_00161AD4;
+                        if ((D_L08_0015F5CC & 0x10) == 0) {
+                            color[0] = 0x60000000;
+                            color[3] = 0x60000000;
+                            color[2] = 0x60000000;
+                            color[1] = 0x60000000;
+                            goto marker_color_ready;
+                        }
+                    }
+                    color[0] = c;
+                    color[3] = c;
+                    color[2] = c;
+                    color[1] = c;
+                marker_color_ready:
+                    sign = 1;
+                    angle = FUN_001f9e90((*p)->pos.x - moby->pos.x, (*p)->pos.y - moby->pos.y);
+                    angle = fast_subtract_rotations(angle, moby->rot.z);
+                    distance = FUN_001f9b48(&(*p)->pos, &moby->pos);
+                    if (D_L08_0015EDB4 != 0) sign = -1;
+                    distance *= D_L08_00161AC0;
+                    offset.x = (float)-sign * fast_sin_5188(angle) * distance;
+                    offset.y = -fast_cos_5188(angle) * distance;
+                    quad[3] = 0x00fffff000000000LL;
+                    quad[2] = 0x00fffff000000000LL;
+                    quad[1] = 0x00fffff000000000LL;
+                    quad[0] = 0x00fffff000000000LL;
+                    quad[0] += (u64)(u32)((truncate_float_to_s32_5188((D_L08_00161B84 + D_L08_00161B94) * 16.0f + offset.y) << 16) + 0x80000000u);
+                    quad[0] += (s32)((truncate_float_to_s32_5188((D_L08_00161B80 + D_L08_00161B90) * 16.0f + offset.x)) + 0x8000);
+                    quad[1] += (u64)(u32)((truncate_float_to_s32_5188((D_L08_00161B84 - D_L08_00161B94) * 16.0f + offset.y) << 16) + 0x80000000u);
+                    quad[1] += (s32)((truncate_float_to_s32_5188((D_L08_00161B80 + D_L08_00161B90) * 16.0f + offset.x)) + 0x8000);
+                    quad[2] += (u64)(u32)((truncate_float_to_s32_5188((D_L08_00161B84 + D_L08_00161B94) * 16.0f + offset.y) << 16) + 0x80000000u);
+                    quad[2] += (s32)((truncate_float_to_s32_5188((D_L08_00161B80 - D_L08_00161B90) * 16.0f + offset.x)) + 0x8000);
+                    quad[3] += (u64)(u32)((truncate_float_to_s32_5188((D_L08_00161B84 - D_L08_00161B94) * 16.0f + offset.y) << 16) + 0x80000000u);
+                    quad[3] += (s32)((truncate_float_to_s32_5188((D_L08_00161B80 - D_L08_00161B90) * 16.0f + offset.x)) + 0x8000);
+                    draw_geometry_quad_5188(quad, uv, color, texture, 1);
+                }
+            }
+            p++;
+            i--;
+        } while (i >= 0);
+    }
+    {
+        int i = 3;
+        float angle, distance;
+        do {
+            if (D_L08_0015FFD8_m[*indices].state < 0x7f) {
+                color[0] = D_L08_00161AD8;
+                color[3] = D_L08_00161AD8;
+                color[2] = D_L08_00161AD8;
+                color[1] = D_L08_00161AD8;
+                angle = FUN_001f9e90(D_L08_0015FFD8_m[*indices].pos.x - moby->pos.x,
+                D_L08_0015FFD8_m[*indices].pos.y - moby->pos.y);
+                angle = fast_subtract_rotations(angle, moby->rot.z);
+                distance = FUN_001f9b48(&D_L08_0015FFD8_m[*indices].pos, &moby->pos);
+                distance *= D_L08_00161AC0;
+                offset.x = -fast_sin_5188(angle) * distance;
+                offset.y = -fast_cos_5188(angle) * distance;
+                quad[3] = 0x00fffff000000000LL;
+                quad[2] = 0x00fffff000000000LL;
+                quad[1] = 0x00fffff000000000LL;
+                quad[0] = 0x00fffff000000000LL;
+                quad[0] += (u64)(u32)((truncate_float_to_s32_5188((D_L08_00161B84 + D_L08_00161B9C) * 16.0f + offset.y) << 16) + 0x80000000u);
+                quad[0] += (s32)((truncate_float_to_s32_5188((D_L08_00161B80 + D_L08_00161B98) * 16.0f + offset.x)) + 0x8000);
+                quad[1] += (u64)(u32)((truncate_float_to_s32_5188((D_L08_00161B84 - D_L08_00161B9C) * 16.0f + offset.y) << 16) + 0x80000000u);
+                quad[1] += (s32)((truncate_float_to_s32_5188((D_L08_00161B80 + D_L08_00161B98) * 16.0f + offset.x)) + 0x8000);
+                quad[2] += (u64)(u32)((truncate_float_to_s32_5188((D_L08_00161B84 + D_L08_00161B9C) * 16.0f + offset.y) << 16) + 0x80000000u);
+                quad[2] += (s32)((truncate_float_to_s32_5188((D_L08_00161B80 - D_L08_00161B98) * 16.0f + offset.x)) + 0x8000);
+                quad[3] += (u64)(u32)((truncate_float_to_s32_5188((D_L08_00161B84 - D_L08_00161B9C) * 16.0f + offset.y) << 16) + 0x80000000u);
+                quad[3] += (s32)((truncate_float_to_s32_5188((D_L08_00161B80 - D_L08_00161B98) * 16.0f + offset.x)) + 0x8000);
+                draw_geometry_quad_5188(quad, uv, color, texture, 1);
+            }
+            i--;
+            indices++;
+        } while (i >= 0);
+    }
+    uv[0] = D_L08_00161BB0;
+    uv[1] = D_L08_00161BB4;
+    uv[2] = D_L08_00161BB8;
+    uv[3] = D_L08_00161BBC;
+    color[0] = D_L08_00161AC8;
+    color[3] = D_L08_00161AC8;
+    color[2] = D_L08_00161AC8;
+    color[1] = D_L08_00161AC8;
+    texture = get_effect_texture_5188(D_L08_00161BA0 + 0x28);
+    {
+        int i = 0;
+        int sign;
+        float sign_x, sign_y;
+        do {
+            sign = i & 1;
+            sign_x = 1.0f;
+            if (sign) sign_x = -1.0f;
+            sign_y = 1.0f;
+            if (i > 1) sign_y = -1.0f;
+            i++;
+            quad[3] = 0x00fffff000000000LL;
+            quad[2] = 0x00fffff000000000LL;
+            quad[1] = 0x00fffff000000000LL;
+            quad[0] = 0x00fffff000000000LL;
+            quad[0] += (u64)(u32)((truncate_float_to_s32_5188((D_L08_00161B64 + D_L08_00161B6C * sign_y) * 16.0f) << 16) + 0x80000000u);
+            quad[0] += (s32)((truncate_float_to_s32_5188(D_L08_00161B60 + D_L08_00161B68 * sign_x) << 4) + 0x8000);
+            quad[1] += (u64)(u32)((truncate_float_to_s32_5188(D_L08_00161B64 * 16.0f) << 16) + 0x80000000u);
+            quad[1] += (s32)((truncate_float_to_s32_5188(D_L08_00161B60 + D_L08_00161B68 * sign_x) << 4) + 0x8000);
+            quad[2] += (u64)(u32)((truncate_float_to_s32_5188((D_L08_00161B64 + D_L08_00161B6C * sign_y) * 16.0f) << 16) + 0x80000000u);
+            quad[2] += (s32)((truncate_float_to_s32_5188(D_L08_00161B60) << 4) + 0x8000);
+            quad[3] += (u64)(u32)((truncate_float_to_s32_5188(D_L08_00161B64 * 16.0f) << 16) + 0x80000000u);
+            quad[3] += (s32)((truncate_float_to_s32_5188(D_L08_00161B60) << 4) + 0x8000);
+            draw_geometry_quad_5188(quad, uv, color, texture, 1);
+        } while (i < 4);
+    }
+    texture = get_effect_texture_5188(D_L08_00161BA4);
+    uv[0] = D_L08_00161BD0;
+    uv[1] = D_L08_00161BD4;
+    uv[2] = D_L08_00161BD8;
+    uv[3] = D_L08_00161BDC;
+    distance = (float)*(int *)(data + 0x58);
+    if (distance > 100.0f) {
+        distance -= 100.0f;
+        c = fast_tween_color(0x6000ffff, 0x6000ff00, distance / 100.0f);
+    } else {
+        c = fast_tween_color(0x600000ff, 0x6000ffff, distance / 100.0f);
+    }
+    count = truncate_float_to_s32_5188((1.0f - (float)*(int *)(data + 0x58) / 200.0f) * 32.0f);
+    {
+        int i = 0;
+        int x0, y0, x1, y1;
+        float angle, distance;
+        do {
+            c0 = c;
+            if (i < count) c0 = (c & 0xffffff) + 0x20000000;
+            color[0] = c0;
+            color[3] = c0;
+            color[2] = c0;
+            color[1] = c0;
+            angle = fast_normalize_angle((float)i * 0.19634955f);
+            i++;
+            distance = fast_add_rotations(angle, 0.19634955f);
+            x0 = truncate_float_to_s32_5188(D_L08_00161B70 * fast_sin_5188(angle));
+            y0 = truncate_float_to_s32_5188(D_L08_00161B74 * -fast_cos_5188(angle));
+            x1 = truncate_float_to_s32_5188(D_L08_00161B70 * fast_sin_5188(distance));
+            y1 = truncate_float_to_s32_5188(D_L08_00161B74 * -fast_cos_5188(distance));
+            quad[3] = 0x00fffff000000000LL;
+            quad[2] = 0x00fffff000000000LL;
+            quad[1] = 0x00fffff000000000LL;
+            quad[0] = 0x00fffff000000000LL;
+            quad[0] += (u64)(u32)((truncate_float_to_s32_5188((D_L08_00161B64 + (float)y1) * 16.0f) << 16) + 0x80000000u);
+            quad[0] += (s32)((truncate_float_to_s32_5188(D_L08_00161B60 + (float)x1) << 4) + 0x8000);
+            quad[1] += (u64)(u32)((truncate_float_to_s32_5188(D_L08_00161B64 * 16.0f) << 16) + 0x80000000u);
+            quad[1] += (s32)((truncate_float_to_s32_5188(D_L08_00161B60) << 4) + 0x8000);
+            quad[2] += (u64)(u32)((truncate_float_to_s32_5188((D_L08_00161B64 + (float)y0) * 16.0f) << 16) + 0x80000000u);
+            quad[2] += (s32)((truncate_float_to_s32_5188(D_L08_00161B60 + (float)x0) << 4) + 0x8000);
+            quad[3] += (u64)(u32)((truncate_float_to_s32_5188(D_L08_00161B64 * 16.0f) << 16) + 0x80000000u);
+            quad[3] += (s32)((truncate_float_to_s32_5188(D_L08_00161B60) << 4) + 0x8000);
+            draw_geometry_quad_5188(quad, uv, color, texture, 1);
+        } while (i < 32);
+    }
+    if (scale_game_frames_alt(15) < *(int *)(data + 0xa0)) {
+        distance = float_from_int_5188(*(int *)(data + 0xa0) - scale_game_frames_alt(15));
+        count = scale_game_frames_alt(15);
+        c0 = 0x5000ffff;
+        c1 = 0x500000ff;
+    } else {
+        /* Retail passes the a0 value reloaded before the branch. */
+        distance = float_from_int_5188(*(int *)(data + 0xa0));
+        count = scale_game_frames_alt(15);
+        c0 = 0x5000ff00;
+        c1 = 0x5000ffff;
+    }
+    c = fast_tween_color(c0, c1, distance / (float)count);
+    uv[0] = D_L08_00161BE0;
+    uv[1] = D_L08_00161BE4;
+    uv[2] = D_L08_00161BE8;
+    uv[3] = D_L08_00161BEC;
+    color[0] = c;
+    color[3] = c;
+    color[2] = c;
+    color[1] = c;
+    quad[3] = 0x00fffff000000000LL;
+    quad[2] = 0x00fffff000000000LL;
+    quad[1] = 0x00fffff000000000LL;
+    quad[0] = 0x00fffff000000000LL;
+    angle = fast_add_rotations(moby->rot.z * 4.0f, 0.0f);
+    angle = fast_normalize_angle(angle);
+    quad[0] += (u64)(u32)((truncate_float_to_s32_5188(fast_sin_5188(angle) * D_L08_00161B7C * 16.0f) << 16) + 0x80000000u);
+    quad[0] += (s32)((truncate_float_to_s32_5188(fast_cos_5188(angle) * D_L08_00161B78 * 16.0f)) + 0x8000);
+    angle = fast_add_rotations(moby->rot.z * 4.0f, 1.5707964f);
+    angle = fast_normalize_angle(angle);
+    quad[1] += (u64)(u32)((truncate_float_to_s32_5188(fast_sin_5188(angle) * D_L08_00161B7C * 16.0f) << 16) + 0x80000000u);
+    quad[1] += (s32)((truncate_float_to_s32_5188(fast_cos_5188(angle) * D_L08_00161B78 * 16.0f)) + 0x8000);
+    angle = fast_add_rotations(moby->rot.z * 4.0f, -1.5707964f);
+    angle = fast_normalize_angle(angle);
+    quad[2] += (u64)(u32)((truncate_float_to_s32_5188(fast_sin_5188(angle) * D_L08_00161B7C * 16.0f) << 16) + 0x80000000u);
+    quad[2] += (s32)((truncate_float_to_s32_5188(fast_cos_5188(angle) * D_L08_00161B78 * 16.0f)) + 0x8000);
+    angle = fast_add_rotations(moby->rot.z * 4.0f, 3.1415927f);
+    angle = fast_normalize_angle(angle);
+    quad[3] += (u64)(u32)((truncate_float_to_s32_5188(fast_sin_5188(angle) * D_L08_00161B7C * 16.0f) << 16) + 0x80000000u);
+    quad[3] += (s32)((truncate_float_to_s32_5188(fast_cos_5188(angle) * D_L08_00161B78 * 16.0f)) + 0x8000);
+    texture = get_effect_texture_5188(D_L08_00161BA8);
+    draw_geometry_quad_5188(quad, uv, color, texture, 1);
+    quad[3] = 0x00fffff000000000LL;
+    quad[2] = 0x00fffff000000000LL;
+    quad[1] = 0x00fffff000000000LL;
+    quad[0] = 0x00fffff000000000LL;
+    angle = fast_add_rotations(moby->rot.y * 8.0f, 0.0f);
+    angle = fast_normalize_angle(angle);
+    quad[0] += (u64)(u32)((truncate_float_to_s32_5188(fast_sin_5188(angle) * D_L08_00161B7C * 16.0f) << 16) + 0x80000000u);
+    quad[0] += (s32)((truncate_float_to_s32_5188(fast_cos_5188(angle) * D_L08_00161B78 * 16.0f)) + 0x8000);
+    angle = fast_add_rotations(moby->rot.y * 8.0f, 1.5707964f);
+    angle = fast_normalize_angle(angle);
+    quad[1] += (u64)(u32)((truncate_float_to_s32_5188(fast_sin_5188(angle) * D_L08_00161B7C * 16.0f) << 16) + 0x80000000u);
+    quad[1] += (s32)((truncate_float_to_s32_5188(fast_cos_5188(angle) * D_L08_00161B78 * 16.0f)) + 0x8000);
+    angle = fast_add_rotations(moby->rot.y * 8.0f, -1.5707964f);
+    angle = fast_normalize_angle(angle);
+    quad[2] += (u64)(u32)((truncate_float_to_s32_5188(fast_sin_5188(angle) * D_L08_00161B7C * 16.0f) << 16) + 0x80000000u);
+    quad[2] += (s32)((truncate_float_to_s32_5188(fast_cos_5188(angle) * D_L08_00161B78 * 16.0f)) + 0x8000);
+    angle = fast_add_rotations(moby->rot.y * 8.0f, 3.1415927f);
+    angle = fast_normalize_angle(angle);
+    quad[3] += (u64)(u32)((truncate_float_to_s32_5188(fast_sin_5188(angle) * D_L08_00161B7C * 16.0f) << 16) + 0x80000000u);
+    quad[3] += (s32)((truncate_float_to_s32_5188(fast_cos_5188(angle) * D_L08_00161B78 * 16.0f)) + 0x8000);
+    texture = get_effect_texture_5188(D_L08_00161BAC);
+    draw_geometry_quad_5188(quad, uv, color, texture, 1);
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e0328.s", FUN_L08_002e0328);
 #include "sda.h"
 
