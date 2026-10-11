@@ -64,9 +64,10 @@ int FUN_L00_00284d90(int groupIndex, int itemIndex) {
         } while (current != 0);
         if (slotIndex >= 0) goto store;
     }
-    return slotIndex;
+    goto done;
 store:
     *writeSlot = value;
+done:
     return slotIndex;
 }
 #endif /* NON_MATCHING */
