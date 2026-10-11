@@ -579,10 +579,10 @@ typedef struct {
 void FUN_L08_00307540(struct Moby *moby) {
     VendorEventData *data = *(VendorEventData **)((char *)moby + 0x78);
     s32 elapsed;
-    volatile s32 limit;
+    VendorEventRecord *record = &D_00141968[49];
     s32 time;
     s32 level;
-    s32 volume[4];
+    f32 volume[4];
 
     switch (data->state) {
     case 0:
@@ -602,8 +602,7 @@ void FUN_L08_00307540(struct Moby *moby) {
     if (D_0013D4DD == 0) {
         if (FUN_00269ee0(D_0013F3D0, data->first)) {
             elapsed = FUN_00211a30(D_0015EEA4) - D_00141968[48].best * 600;
-            limit = FUN_00211a30(18);
-            if ((s32)((f32)limit * 60.0f) < elapsed || D_00141968[48].best * 600 == 0) {
+            if ((s32)((f32)FUN_00211a30(18) * 60.0f) < elapsed || D_00141968[48].best * 600 == 0) {
                 FUN_00216488(8000, 0x30);
             } else {
                 time = FUN_00211a30(D_0015EEA4) / 600;
@@ -614,24 +613,23 @@ void FUN_L08_00307540(struct Moby *moby) {
     }
     if (D_0013D4DD != 0) {
         if (FUN_00269ee0(D_0013F3D0, data->first) && D_0013D3B7 == 0) {
-            if (D_00141968[49].count == 0) {
-                D_00141968[49].count = 1;
+            if (record->count == 0) {
+                record->count = 1;
                 level = D_0015ED84;
                 time = FUN_00211a30(D_0015EEA4) / 600;
-                if (D_00141968[49].best < time) {
-                    D_00141968[49].best = FUN_00211a30(D_0015EEA4) / 600;
+                if (record->best < time) {
+                    record->best = FUN_00211a30(D_0015EEA4) / 600;
                     level = D_0015ED84;
                 }
-                D_00141968[49].flags |= (1 << level) | 0x80000000;
+                record->flags |= (1 << level) | 0x80000000;
             } else {
-                elapsed = FUN_00211a30(D_0015EEA4) - D_00141968[49].best * 600;
-                limit = FUN_00211a30(18);
-                if ((s32)((f32)limit * 60.0f) < elapsed || D_00141968[49].best * 600 == 0) {
+                elapsed = FUN_00211a30(D_0015EEA4) - record->best * 600;
+                if ((s32)((f32)FUN_00211a30(18) * 60.0f) < elapsed || record->best * 600 == 0) {
                     FUN_00216488(8001, 0x31);
                 } else {
                     time = FUN_00211a30(D_0015EEA4) / 600;
-                    if (D_00141968[49].best < time)
-                        D_00141968[49].best = FUN_00211a30(D_0015EEA4) / 600;
+                    if (record->best < time)
+                        record->best = FUN_00211a30(D_0015EEA4) / 600;
                 }
             }
         }
@@ -639,8 +637,7 @@ void FUN_L08_00307540(struct Moby *moby) {
     if (D_0013D4DC == 0) {
         if (FUN_00269ee0(D_0013F3D0, data->second) && D_0013DD4A != 0) {
             elapsed = FUN_00211a30(D_0015EEA4) - D_00141968[51].best * 600;
-            limit = FUN_00211a30(18);
-            if ((s32)((f32)limit * 60.0f) < elapsed || D_00141968[51].best * 600 == 0) {
+            if ((s32)((f32)FUN_00211a30(18) * 60.0f) < elapsed || D_00141968[51].best * 600 == 0) {
                 FUN_00216488(8002, 0x32);
             } else {
                 time = FUN_00211a30(D_0015EEA4) / 600;
@@ -662,8 +659,7 @@ void FUN_L08_00307540(struct Moby *moby) {
                 D_00141968[112].flags |= (1 << level) | 0x80000000;
             } else {
                 elapsed = FUN_00211a30(D_0015EEA4) - D_00141968[112].best * 600;
-                limit = FUN_00211a30(18);
-                if ((s32)((f32)limit * 60.0f) < elapsed || D_00141968[112].best * 600 == 0) {
+                if ((s32)((f32)FUN_00211a30(18) * 60.0f) < elapsed || D_00141968[112].best * 600 == 0) {
                     FUN_00216488(8005, 0x70);
                 } else {
                     time = FUN_00211a30(D_0015EEA4) / 600;
@@ -673,10 +669,8 @@ void FUN_L08_00307540(struct Moby *moby) {
             }
         }
     }
-    volume[0] = 0;
-    volume[1] = 0;
-    volume[2] = 0xbf800000;
-    volume[3] = 0;
+    *(u128 *)volume = 0;
+    volume[2] = -1.0f;
     if (FUN_00211f18(D_0013F5E0, volume) < 0.1f)
         D_00141968[112].count = -1;
     if (D_0013D3B7 == 0 && D_001413DC == 15)
