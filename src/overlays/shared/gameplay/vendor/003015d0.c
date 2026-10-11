@@ -129,7 +129,123 @@ void FUN_L14_003015d0(unsigned char *m) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003017f8.s", FUN_L14_003017f8);
+#else
+extern int random_integer_between(int, int) __asm__("FUN_L00_00257b90");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void set_vector_xyz(void *, float, float) __asm__("FUN_L00_00257d78");
+extern void FUN_001f9d20(void *, void *, void *);
+extern float FUN_001f9b80(void *, void *);
+extern void FUN_001fa050(void *, void *) __asm__("FUN_001fa050");
+extern void FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern float D_0015ED6C;
+extern int D_L14_001620BC __attribute__((sda));
+extern int D_L14_001620C0 __attribute__((sda));
+extern float D_L14_001620FC __attribute__((sda));
+extern float D_L14_00162100 __attribute__((sda));
+extern float D_L14_00162104 __attribute__((sda));
+extern int D_L14_00162108 __attribute__((sda));
+extern int D_L14_0016210C __attribute__((sda));
+extern float D_L14_00162114 __attribute__((sda));
+extern int D_L14_0016211C __attribute__((sda));
+extern int D_L14_00162120 __attribute__((sda));
+
+void FUN_L14_003017f8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float path_a[32][4] __attribute__((aligned(16)));
+    float path_b[32][4] __attribute__((aligned(16)));
+    float work[4] __attribute__((aligned(16)));
+    float delta_a[4] __attribute__((aligned(16)));
+    float matrix[12] __attribute__((aligned(16)));
+    float origin[4] __attribute__((aligned(16)));
+    int i, j, index, next, color;
+    float length, t;
+
+    D_L14_001600EC[*(int *)d].origin.f[3] = 1.0f;
+    {
+        short duration = random_integer_between(scale_game_frames(D_L14_001620BC),
+                                                scale_game_frames(D_L14_001620C0));
+        *(int *)(d + 0x620) = duration;
+        *(short *)(d + 0x12) = duration;
+    }
+    length = vector_length_xyz(&D_L14_001600EC[*(int *)d].axis[1]);
+    for (i = 0; i < 32; i++) {
+        t = 0.5f - convert_integer_to_float(i) / convert_integer_to_float(31);
+        if ((unsigned)(i - 3) < 26) {
+            set_vector_xyz(path_a[i], 0.0f, D_L14_001620FC);
+            set_vector_xyz(path_b[i], 0.0f, D_L14_00162100 * D_0015ED6C);
+        } else {
+            clear_u64_value(path_a[i]);
+            clear_u64_value(path_b[i]);
+        }
+        path_a[i][3] = 1.0f;
+        path_a[i][1] += t * (length + length);
+    }
+    for (i = 0; i < 32; i++) {
+        if (i == 0 || i == 31) {
+            qcopy(d + 0x20 + (i << 4), path_a[i]);
+            qcopy(d + 0x220 + (i << 4), path_b[i]);
+        } else {
+            add_vector_xyz(work, path_a[i - 1], path_a[i]);
+            add_vector_xyz(work, work, path_a[i + 1]);
+            scale_vector_xyz(d + 0x20 + (i << 4), work, 0.333f);
+            add_vector_xyz(work, path_b[i - 1], path_b[i]);
+            add_vector_xyz(work, work, path_b[i + 1]);
+            scale_vector_xyz(d + 0x220 + (i << 4), work, 0.333f);
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        next = i + 1;
+        set_vector_xyz(work, D_L14_001620FC, D_L14_001620FC);
+        index = truncate_float_to_s32(random_float_between((float)i * 6.0f,
+                                                            (float)next * 6.0f));
+        index += 4;
+        d[0x18 + i] = index;
+        *(u128 *)(d + 0x420 + (i << 4)) = *(u128 *)(d + 0x20 + (index << 4));
+        *(u128 *)(d + 0x520 + (i << 4)) = *(u128 *)(d + 0x220 + (index << 4));
+        for (j = 2; j >= 0; j--) {
+            set_vector_xyz(work, 0.1f, 0.1f);
+            set_vector_xyz(d + 0x560 + (i << 4) + ((2 - j) << 6), 0.0f,
+                           D_L14_00162100 * D_0015ED6C);
+            add_vector_xyz(d + 0x460 + (i << 4) + ((2 - j) << 6),
+                           d + 0x420 + (i << 4) + ((2 - j) << 6), work);
+            add_vector_xyz(d + 0x460 + (i << 4) + ((2 - j) << 6),
+                           d + 0x460 + (i << 4) + ((2 - j) << 6), work);
+        }
+    }
+    if (FUN_001f9b80(&D_L14_001600EC[*(int *)d].origin, (void *)0x001674c0) >= 4.0f) {
+        FUN_001fa050(matrix, &D_L14_001600EC[*(int *)d].pad40[0x30]);
+        *(u128 *)origin = *(u128 *)&D_L14_001600EC[*(int *)d].origin;
+        for (i = 0; i < 4; i++) {
+            FUN_001f9d20(work, d + 0x20 + (i << 7), matrix);
+            *(u128 *)delta_a = *(u128 *)(d + 0x220 + (i << 7));
+            delta_a[3] = D_L14_00162114;
+            index = random_integer_below(2);
+            color = index ? D_L14_0016211C : D_L14_00162120;
+            index = random_integer_below(10);
+            FUN_00218888(work, delta_a, delta_a, D_L14_00162108,
+                           D_L14_0016210C, i * 4, 15, scale_game_frames(index + 20), color);
+        }
+        for (i = 0; i < 2; i++) {
+            FUN_001f9d20(work, d + 0x4e0 + (i << 4), matrix);
+            *(u128 *)delta_a = *(u128 *)(d + 0x5e0 + (i << 4));
+            delta_a[3] = D_L14_00162114;
+            random_integer_below(2);
+            index = random_integer_below(10);
+            FUN_00218888(work, delta_a, delta_a, D_L14_00162108,
+                           D_L14_0016210C, (unsigned char)d[0x18 + i] >> 1, 15,
+                           scale_game_frames(index + 20), D_L14_00162120);
+        }
+    }
+}
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00301de8.s", FUN_L14_00301de8);
 #else
