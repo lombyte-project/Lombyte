@@ -889,7 +889,98 @@ unsigned char *FUN_L14_002dea98(char *owner, char *pos) {
     }
     return m;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002dfd10.s", FUN_L14_002dfd10);
+#else
+extern void FUN_L14_002e03b8(struct Moby *);
+extern f32 D_L14_00161B40_dfd10 __asm__("D_L14_00161B40") __attribute__((sda));
+extern f32 D_L14_00161B44_dfd10 __asm__("D_L14_00161B44") __attribute__((sda));
+extern f32 D_L14_00161B48_dfd10 __asm__("D_L14_00161B48") __attribute__((sda));
+extern s32 D_001413D0;
+extern s32 FUN_001f9740(void *);
+extern f32 FUN_001f99c0(f32);
+extern void FUN_001f9a10(void *, void *, void *);
+extern f32 fast_add_rotations(f32, f32);
+extern s32 FUN_L00_001f0d60(f32, void *, s32, void *);
+extern void FUN_L00_0025e450(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32, s32);
+extern void FUN_0020c828(struct Moby *);
+extern int random_integer_below_de670(int) __asm__("FUN_00213260");
+extern int FUN_L00_0028dc90(int, int, void *, int);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern void normalize_vector_xyz(void *, void *, float);
+extern char *race_paths_2e0170 __asm__("D_L14_0015F70C");
+
+void FUN_L14_002dfd10(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    float *velocity;
+    float *position;
+    float pos[4];
+    float vec[4];
+    float absolute_velocity;
+    float zero;
+    void *path;
+
+    if (moby->state == 0) {
+        float one;
+        position = (float *)&moby->pos;
+        path = *(char **)(race_paths_2e0170 + *(int *)(data + 0xc) * 0x20 + 0x10);
+        *(u128 *)pos = *(u128 *)position;
+        FUN_L00_0025d808(path, position, data + 0x10, data + 0x14, 0, *(float *)(data + 8));
+        subtract_vector_xyz(vec, position, pos);
+        *(float *)(data + 0x18) = vec[0];
+        *(float *)(data + 0x1c) = vec[1];
+        FUN_L14_002e03b8(moby);
+        if (FUN_001f9740(data + 4) == 0) return;
+        normalize_vector_xyz(vec, vec, 0.5f);
+        *(u128 *)pos = *(u128 *)position;
+        pos[2] += 0.25f;
+        one = 1.0f;
+        zero = 0.0f;
+        FUN_L00_0028dc90(1, 0, moby, *(short *)(*(char **)data + 0xa6));
+        FUN_L00_0025e450(moby, vec, pos, zero, zero, 5, 2, 4,
+                            one, 0.5f, 9.0f, one, -1, 15.0f, 0, 3, -1, 0);
+    } else {
+        float one;
+        position = (float *)&moby->pos;
+        velocity = (float *)(data + 0x30);
+        FUN_001f9a10(position, position, velocity);
+        absolute_velocity = FUN_001f99c0(velocity[0]);
+        if (D_L14_00161B48_dfd10 * frame_scale < absolute_velocity) {
+            velocity[0] *= (D_L14_00161B44_dfd10 - 1.0f) * frame_scale + 1.0f;
+        }
+        absolute_velocity = FUN_001f99c0(velocity[1]);
+        if (D_L14_00161B48_dfd10 * frame_scale < absolute_velocity) {
+            velocity[1] *= (D_L14_00161B44_dfd10 - 1.0f) * frame_scale + 1.0f;
+        }
+        zero = 0.0f;
+        if (velocity[2] > zero) {
+            velocity[2] *= (D_L14_00161B44_dfd10 - 1.0f) * frame_scale + 1.0f;
+        }
+        velocity[2] -= D_L14_00161B40_dfd10 * frame_scale_sq;
+        moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(data + 0x20));
+        moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(data + 0x24));
+        moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(data + 0x28));
+        if (!(moby->pos.x < 2.0f || 1021.0f < moby->pos.x ||
+              moby->pos.y < 2.0f || 1021.0f < moby->pos.y ||
+              moby->pos.z < 2.0f || 1021.0f < moby->pos.z)) {
+            normalize_vector_xyz(vec, &moby->unkE0, 0.51999998f);
+            FUN_001f9a10(pos, position, vec);
+            if (FUN_001f9740(data + 4) == 0) {
+                if (FUN_L00_001f0d60(0.5f, pos, 0, *(void **)data) == 0) {
+                    if (random_integer_below_de670(2) != 0) FUN_L14_002e03b8(moby);
+                    return;
+                }
+            }
+            one = 1.0f;
+            FUN_L00_0028dc90(0, 0, moby, *(short *)(*(char **)data + 0xa6));
+            FUN_L00_0025e450(moby, velocity, position, zero, zero, 5, 2, 4,
+                                one, 0.5f, 9.0f, one, -1, 15.0f, 0, 3, -1, 0);
+            FUN_L00_001f0d60(one, position, 0, (void *)D_001413D0);
+        }
+    }
+    FUN_0020c828(moby);
+}
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002e0170.s", FUN_L14_002e0170);
 #else
