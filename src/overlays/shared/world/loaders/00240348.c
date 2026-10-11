@@ -63,24 +63,24 @@ void FUN_L00_00241788(s32 *entries, s32 count) {
     }
 
     do {
-        changed = 0;
+        changed = 1;
         for (i = 0; i < count; i++) {
-            if (sorted[i].value < sorted[i + 1].value) {
+            entry = &sorted[i];
+            if (entry->value < (entry + 1)->value) {
                 id = sorted[i].id;
                 value = sorted[i].value;
                 sorted[i].id = sorted[i + 1].id;
                 sorted[i].value = sorted[i + 1].value;
                 sorted[i + 1].id = id;
                 sorted[i + 1].value = value;
-                changed = 1;
+                changed = 0;
             }
         }
-    } while (changed);
+    } while (!changed);
 
     entry = sorted;
     i = count;
-    while (i > 0) {
-        i--;
+    while (i-- > 0) {
         stub_printf((const char *)0x001e8640, truncate_float_to_s32(entry->id),
                     fptodp(entry->value));
         entry++;
