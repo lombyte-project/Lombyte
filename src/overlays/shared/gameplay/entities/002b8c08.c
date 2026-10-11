@@ -831,7 +831,136 @@ void FUN_L01_002e35a8(char *moby, char *state) {
         *(int *)(state + 0x68) = 0;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e3830.s", FUN_L01_002e3830);
+#else
+extern f32 D_L01_001DEB4C __attribute__((section(".data")));
+extern f32 D_L01_00161944 __attribute__((sda));
+extern f32 D_L01_00161948 __attribute__((sda));
+extern f32 D_L01_0016194C __attribute__((sda));
+extern f32 D_L01_00161920 __attribute__((sda));
+extern void FUN_L00_00258278(struct Moby *, f32 *, f32, f32, f32, f32);
+extern f32 FUN_001f9b80(void *, void *);
+extern f32 FUN_001f9af0(void *);
+extern f32 FUN_001f9dc8(f32);
+extern f32 FUN_001f9de0(f32);
+extern void FUN_001f9c90(void *, void *, f32);
+extern f32 probe_ground_height(void *, int, float) __asm__("FUN_00213508");
+extern void blend_moby_animation_3830(void *, int, int, int) __asm__("FUN_00212f90");
+extern int random_integer_3830(void) __asm__("FUN_001160d8");
+
+void FUN_L01_002e3830(struct Moby *m, char *p) {
+    Vec4 v;
+    f32 d, ang, len, ground, near;
+    s32 hit;
+    s16 n;
+    struct Moby *target;
+
+    subtract_vector_xyz(&v, p, &m->pos);
+    if (m->state == 6)
+        d = FUN_001f9b80(&m->pos, p + 0x30);
+    else
+        d = FUN_001f9b80(&m->pos, &hero.motion.pos);
+    FUN_001f9b80(&m->pos, p);
+
+    switch (m->unkBC) {
+    case 0:
+        ang = FUN_001f9e90(*(f32 *)(p + 0) - m->pos.x, *(f32 *)(p + 4) - m->pos.y);
+        FUN_L00_00258278(m, &D_L01_001DEB4C, ang, frame_time_sq * 11.519173f,
+                         frame_time_sq * 3.1415927f, frame_time * 11.519173f);
+        if (m->unk70 & 2) {
+            m->unk58 = 1.0f;
+            if (m->prev_seq != random_integer_3830() % 3) {
+                int seq = random_integer_3830() % 3;
+                blend_moby_animation_3830(m, seq, 0, scale_game_frames(20));
+            }
+        }
+        if (1.3f < d) {
+            if (m->prev_seq != 5)
+                blend_moby_animation_3830(m, 5, 0, scale_game_frames(10));
+            m->unkBC = 2;
+        }
+        return;
+    case 2:
+    case 3:
+        break;
+    default:
+        goto inactive;
+    }
+
+    target = *(struct Moby **)(p + 0x68);
+    if (target == 0) {
+        ang = FUN_001f9e90(*(f32 *)(p + 0) - m->pos.x, *(f32 *)(p + 4) - m->pos.y);
+        FUN_L00_00258278(m, &D_L01_001DEB4C, ang, frame_time_sq * 11.519173f,
+                         frame_time_sq * 3.1415927f, frame_time * 11.519173f);
+    } else {
+        ang = FUN_001f9e90(target->pos.x - m->pos.x, target->pos.y - m->pos.y);
+        FUN_L00_00258278(m, &D_L01_001DEB4C, ang,
+                         D_L01_00161944 * DEG_TO_RAD * frame_time_sq,
+                         D_L01_00161948 * DEG_TO_RAD * frame_time_sq,
+                         D_L01_0016194C * DEG_TO_RAD * frame_time);
+    }
+    scale_vector_xyz(&v, &v, frame_scale * 0.04f);
+    subtract_vector_xyz(&v, &v, ((f32 *)(p + 0x10)));
+    if (1.3f < d) {
+        scale_vector_xyz(&v, &v, frame_scale_sq * 0.13f);
+    } else {
+        FUN_001f9a68(&v, &v, frame_scale_sq * 0.25f);
+    }
+    v.f[2] *= frame_scale * -0.100000024f + 1.0f;
+    add_vector_xyz(((f32 *)(p + 0x10)), ((f32 *)(p + 0x10)), &v);
+    if (m->state == 6)
+        FUN_001f9c90(((f32 *)(p + 0x10)), ((f32 *)(p + 0x10)), frame_time * 2.7f);
+    hit = FUN_L00_00258ad0(m, ((f32 *)(p + 0x10)), D_L01_001DEB38.count, 0,
+                            1.0f, D_L01_001DEB38.spread);
+    len = FUN_001f9af0(((f32 *)(p + 0x10)));
+    if (hit != 0) {
+        if (len < 0.005f) {
+            n = ++*(s16 *)(p + 0x4a);
+            if (scale_game_frames(20) < n && m->unk31 == 0) {
+                qcopy(&m->pos, p);
+                *(s16 *)(p + 0x4a) = 0;
+            }
+        }
+        ground = probe_ground_height(&m->pos, 0, 0.5f);
+        if ((hit & 2) || m->pos.z - ground < D_L01_00161920) {
+            if (len < 0.005f) {
+                if (m->prev_seq >= 3 && m->prev_seq != random_integer_3830() % 3) {
+                    int seq = random_integer_3830() % 3;
+                    blend_moby_animation_3830(m, seq, 0, scale_game_frames(10));
+                }
+            } else {
+                goto animation3;
+            }
+        } else if (m->prev_seq != 5) {
+            blend_moby_animation_3830(m, 5, 0, scale_game_frames(7));
+        }
+    } else {
+        ground = probe_ground_height(&m->pos, 0, 0.5f);
+        if (!(m->pos.z - ground < D_L01_00161920)) {
+            if (m->prev_seq != 5)
+                blend_moby_animation_3830(m, 5, 0, scale_game_frames(7));
+            *(s16 *)(p + 0x4a) = 0;
+        } else if (m->prev_seq != 3) {
+            blend_moby_animation_3830(m, 3, 0, scale_game_frames(11));
+        }
+    }
+    goto collision_done;
+animation3:
+    if (m->prev_seq != 3)
+        blend_moby_animation_3830(m, 3, 0, scale_game_frames(11));
+collision_done:
+    if (m->state == 6 || !(d < 1.1f)) return;
+    near = 1.1f - d;
+    ang = FUN_001f9e90(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y);
+    ((f32 *)(p + 0x10))[0] -= near * FUN_001f9dc8(ang) * (frame_scale_sq * 0.1f);
+    ((f32 *)(p + 0x10))[1] -= near * FUN_001f9de0(ang) * (frame_scale_sq * 0.1f);
+    return;
+inactive:
+    m->unkBC = 0;
+    if (1.3f < d) m->unkBC = 2;
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e3f20.s", FUN_L01_002e3f20);
 /* Burning debris: flies along its velocity leaving two smoke trails, sticks to the ground, and hurts what it hits. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002EEDD8), where it is exact; names translated to the US level program. */
