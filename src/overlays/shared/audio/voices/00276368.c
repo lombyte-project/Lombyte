@@ -615,7 +615,209 @@ L2:
         FUN_L00_00276908();
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002772c0.s", FUN_L00_002772c0);
+#else
+typedef struct {
+    u8 pad0[0x10];
+    u32 flags;
+    u8 pad14[0x64];
+    s32 *image;
+} VoiceRenderObject;
+
+typedef struct {
+    s32 unk0;
+    u32 (*draw)(void);
+    u8 pad8[8];
+    u32 flags;
+    u8 pad14[4];
+    s32 left;
+    s32 top;
+    s32 width;
+    s32 height;
+} VoiceRenderEntry;
+
+extern s32 D_0013E504;
+extern s32 D_L00_0015EE84 __asm__("D_0015EE84");
+extern s32 D_L00_001B9E90_init[] __asm__("D_L00_001B9E90");
+extern s32 D_L00_001B23C0[] __asm__("D_L00_001B23C0");
+#define D_L00_001B9DC8 (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0xd8))
+extern u64 D_L00_0015EED0 __asm__("D_0015EED0");
+extern s32 D_L00_0015F578 __attribute__((sda));
+extern void emit_fixed_dma_packet_if_cursor(void) __asm__("FUN_001fb368");
+extern void FUN_L00_002a0fc8_772c0(s32, s32, s32) __asm__("FUN_L00_002a0fc8");
+extern void FUN_L00_001f8450(void) __asm__("FUN_001f3868");
+extern void FUN_L00_001fa050_772c0(s32, s32, s32, s32) __asm__("FUN_001f5210");
+extern void FUN_L00_002a0ba8(s32, u64) __asm__("FUN_L00_002a0ba8");
+extern void FUN_L00_0024fe50(void) __asm__("FUN_L00_0024fe50");
+extern void FUN_L00_0024fdc8(void) __asm__("FUN_L00_0024fdc8");
+extern void FUN_L00_0024fdf0(void) __asm__("FUN_L00_0024fdf0");
+extern void FUN_L00_0024ff08(s32, s32) __asm__("FUN_L00_0024ff08");
+extern void FUN_L00_00299f40(void *, void *, s32 *, s32 *, s32 *, s32 *) __asm__("FUN_L00_00299f40");
+extern void FUN_L00_0023caa8_772c0(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
+extern void FUN_L00_001fc928(f32, s32, s32, s32) __asm__("FUN_001f7888");
+extern void FUN_L00_0023cc30(s32, s32, s32, s32, u64, s32, s32) __asm__("FUN_00200f90");
+extern void FUN_L00_001fca18(void) __asm__("FUN_001f7978");
+extern void FUN_L00_001fa290(s32, s32, s32, s32, s32, s32, s32, s32, u64, u64) __asm__("FUN_001f5450");
+extern void FUN_L00_0024fe20(void) __asm__("FUN_L00_0024fe20");
+extern void FUN_L00_0024ff88(void) __asm__("FUN_L00_0024ff88");
+extern void FUN_L00_002a09d8_772c0(s32) __asm__("FUN_L00_002a09d8");
+extern void FUN_L00_0024fad0(void) __asm__("FUN_L00_0024fad0");
+extern void FUN_L00_001f9060(s32) __asm__("FUN_001f4280");
+extern void FUN_L00_00281a70(s32) __asm__("FUN_L00_00281a70");
+extern void FUN_L00_001f9178(void) __asm__("FUN_001f4398");
+
+void FUN_L00_002772c0(s32 param_1) {
+    s32 i, pass, width, height, left, top, right, bottom;
+    s32 texture_width, texture_height, width_shift, height_shift;
+    s32 out_left, out_top, out_right, out_bottom;
+    s32 *handles = 0;
+    VoiceRenderObject *object;
+    VoiceRenderEntry *entry;
+    u32 flags;
+    struct { u128d image_copy[4]; u128d unused[5]; u128d first, last; } copies;
+
+    emit_fixed_dma_packet_if_cursor();
+    FUN_L00_002a0fc8_772c0(D_L00_001B9CF0.unk10, D_L00_0015EE84, D_0013E504 << 11);
+    if (param_1 != 0) {
+        return;
+    }
+    FUN_L00_001f8450();
+    FUN_L00_001fa050_772c0(0, 0, 0, 0x30);
+    if (D_L00_001B9CF0.state == 0x14) {
+        return;
+    }
+    FUN_L00_002a0ba8(0x47, 0x5360b);
+    FUN_L00_0024fe50();
+    FUN_L00_0024fdc8();
+    FUN_L00_0024fdf0();
+    for (i = 0; i < 14; i++) {
+        if (D_L00_001B23C0[i] != 0 && D_L00_001B9E90_init[i] != 0 &&
+            (i != 6 || D_L00_001B9DC8 != 0)) {
+            FUN_L00_0024ff08(D_L00_001B9E90_init[i], 1);
+        }
+    }
+    if (D_L00_001B9CF0.owner != 0) {
+        handles = (s32 *)((u8 *)D_L00_001B9CF0.owner + 0x44);
+    }
+    for (i = 0; i < 14; i++) {
+        if (D_L00_001B9E90_init[i] != 0 && D_L00_001B23C0[i] != 0 &&
+            (i != 6 || D_L00_001B9DC8 != 0)) {
+            object = (VoiceRenderObject *)D_L00_001B9E90_init[i];
+            qcopy(&copies.image_copy[0], object->image);
+            qcopy(&copies.image_copy[1], object->image + 4);
+            qcopy(&copies.image_copy[2], object->image + 8);
+            qcopy(&copies.image_copy[3], object->image + 12);
+            copies.first = copies.image_copy[0];
+            copies.last = copies.image_copy[3];
+            FUN_L00_00299f40(&copies.first, &copies.last, &left, &top, &width, &height);
+            width++;
+            height++;
+            if (handles != 0 && handles[i] != 0) {
+                *(s32 *)(handles[i] + 0x20) = left;
+                *(s32 *)(handles[i] + 0x24) = top;
+                *(s32 *)(handles[i] + 0x18) = width;
+                *(s32 *)(handles[i] + 0x1c) = height;
+            }
+            object->image[20] = width;
+            object->image[21] = height;
+            object->image[22] = left;
+            object->image[23] = top;
+            FUN_L00_0023caa8_772c0(width + 1, height + 1, width + left - 1,
+                                     height + top - 1, *(s32 *)0x00160270, 0);
+        }
+    }
+    for (pass = 0; pass < 2; pass++) {
+        for (i = 0; i < 14; i++) {
+            if (D_L00_001B9E90_init[i] == 0 || handles == 0 || handles[i] == 0) {
+                continue;
+            }
+            entry = (VoiceRenderEntry *)handles[i];
+            flags = entry->flags;
+            if ((flags & 4) != 0 || D_L00_001B23C0[i] == 0 || entry->draw == 0 ||
+                (i == 6 && D_L00_001B9DC8 == 0) ||
+                (pass == 0 && (flags & 2) == 0) ||
+                (pass == 1 && (flags & 2) != 0)) {
+                continue;
+            }
+            if ((flags & 1) != 0) {
+                entry->draw();
+                continue;
+            }
+            object = (VoiceRenderObject *)D_L00_001B9E90_init[i];
+            texture_width = object->image[22];
+            texture_height = object->image[23];
+            left = object->image[20];
+            top = object->image[21];
+            width_shift = 7;
+            if (texture_width > 0x80) {
+                for (width_shift = 8; (1 << (width_shift & 31)) < texture_width; width_shift++) {}
+            }
+            height_shift = 7;
+            if (texture_height > 0x80) {
+                for (height_shift = 8; (1 << (height_shift & 31)) < texture_height; height_shift++) {}
+            }
+            while (width_shift + height_shift > 17) {
+                height_shift--;
+            }
+            FUN_L00_001fc928(1.0f, width_shift, height_shift, pass != 0);
+            width = 1 << (width_shift & 31);
+            height = 1 << (height_shift & 31);
+            FUN_L00_0023cc30(0, 0, width, height, *(s32 *)0x00160270, 0, 0);
+            flags = entry->draw();
+            FUN_L00_001fca18();
+            FUN_L00_002a0ba8(0x42, 0x8000000064ULL);
+            FUN_L00_002a0ba8(0x47, 0x43);
+            if ((flags & 1) != 0) {
+                continue;
+            }
+            out_left = 0;
+            out_top = 0;
+            out_right = width;
+            out_bottom = height;
+            if ((flags & 2) != 0) {
+                out_right = texture_width;
+                out_bottom = texture_height;
+            } else if ((flags & 8) != 0) {
+                out_left = (width - texture_width) / 2;
+                out_top = (height - texture_height) / 2;
+                out_right = width - out_left;
+                if (width < out_right) out_right = width;
+                out_bottom = height - out_top;
+                if (height < out_bottom) out_bottom = height;
+                if (out_left < 0) out_left = 0;
+                if (out_top < 0) out_top = 0;
+            } else if ((flags & 4) != 0) {
+                if (texture_width < texture_height) {
+                    out_left = width / 2 - (texture_width * width) / (texture_height << 1);
+                    out_right = width - out_left;
+                } else {
+                    out_top = height / 2 - (texture_height * height) / (texture_width << 1);
+                    out_bottom = height - out_top;
+                }
+            } else if ((flags & 0x10) == 0) {
+                continue;
+            }
+            FUN_L00_001fa290(left, top, texture_width, texture_height,
+                              out_left, out_top, out_right - out_left, out_bottom - out_top,
+                              0x80808080ULL, D_L00_0015EED0);
+        }
+        if (pass == 0) {
+            FUN_L00_0024fe20();
+            FUN_L00_0024ff88();
+            FUN_L00_002a09d8_772c0(0x10);
+            FUN_L00_0024fad0();
+        }
+    }
+    FUN_L00_001f9060(0);
+    for (i = 0; i < 14; i++) {
+        if (D_L00_001B23C0[i] != 0 && (i != 6 || D_L00_001B9DC8 != 0)) {
+            FUN_L00_00281a70(D_L00_001B9E90_init[i]);
+        }
+    }
+    FUN_L00_001f9178();
+}
+#endif
 
 #include "sda.h"
 
