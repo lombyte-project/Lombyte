@@ -458,6 +458,33 @@ class Placer:
             raise Unresolved(f"section {secname or sym['st_shndx']}")
         return resolve_symbol(sym.name, self.level, near) + addend
 
+    LITERAL_SECTIONS = (".sdata", ".lit4", ".lit8")
+
+    def literal_section(self, sym):
+        """The candidate's own literal pool (a float constant the compiler
+        could not build with lui/ori), or None."""
+        if not (sym["st_info"]["type"] == "STT_SECTION"
+                or (isinstance(sym["st_shndx"], int) and not _is_named(sym))):
+            return None
+        secname = section_name(self.elf, sym["st_shndx"])
+        return self.elf.get_section(sym["st_shndx"]) if secname in self.LITERAL_SECTIONS else None
+
+    def place_literal(self, sec, offset: int, hi_off: int, lo_rel, orig: bytes) -> int:
+        """A literal has no name to resolve, so it is placed where retail's
+        lui/load pair points, but only after checking that the level holds
+        the same bytes there as the candidate's literal."""
+        if lo_rel is None or self.retail is None:
+            raise Unresolved(f"literal {sec.name}+0x{offset:x} (unpaired)")
+        lo_off = lo_rel["r_offset"]
+        r_hi = self.word_at(self.retail, hi_off - self.off) & 0xFFFF
+        r_lo = self.word_at(self.retail, lo_off - self.off) & 0xFFFF
+        theirs = ((r_hi << 16) + sign16(r_lo)) & 0xFFFFFFFF
+        width = {0x37: 8, 0x3F: 8, 0x1E: 16, 0x1F: 16}.get(self.word_at(orig, lo_off) >> 26, 4)
+        mine = bytes(sec.data()[offset:offset + width])
+        if len(mine) != width or ov.level_data_bytes(self.level, theirs, width) != mine:
+            raise Unresolved(f"literal {sec.name}+0x{offset:x} differs from level data at 0x{theirs:x}")
+        return theirs
+
     def apply(self, ours: bytearray, orig: bytes):
         for hi_rel, lo_rel, hi_imm, lo_imm in self.hi_los(orig):
             if hi_rel is None:
@@ -471,8 +498,13 @@ class Placer:
                 continue
             hi_off = hi_rel["r_offset"]
             ahl = (hi_imm << 16) + sign16(lo_imm)
+            literal = self.literal_section(self.sym_of(hi_rel))
             try:
-                value = self.resolve_address(self.sym_of(hi_rel), self.base_text + hi_off, ahl) & 0xFFFFFFFF
+                if literal is not None:
+                    value = self.place_literal(literal, self.sym_of(hi_rel)["st_value"] + ahl,
+                                               hi_off, lo_rel, orig)
+                else:
+                    value = self.resolve_address(self.sym_of(hi_rel), self.base_text + hi_off, ahl) & 0xFFFFFFFF
             except Unresolved as e:
                 self.note_unresolved(str(e.what))
                 continue

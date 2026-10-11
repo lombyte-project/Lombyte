@@ -510,7 +510,6 @@ void FUN_L00_00232640(int id) {
     }
     hero.unkAB8 = id;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00232670.s", FUN_L00_00232670);
 #include "eetypes.h"
 
 typedef int V4q_32b90 __attribute__((mode(TI), aligned(16)));

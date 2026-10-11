@@ -347,6 +347,7 @@ OVERLAY_SN_UNITS = {
     "shared/ui/help/0020c758.c",
     "shared/ui/help/0021d0a0.c",
     "shared/ui/help/00231d08.c",
+    "shared/ui/help/00232670.c",
     "shared/ui/help/00237488.c",
     "shared/ui/menus/002497f8.c",
     "shared/ui/menus/0027f448.c",

@@ -63,7 +63,7 @@ struct Moby {
     void (*update)(struct Moby *moby);
     u8 *pvars;
     u8 unk7C;
-    u8 pad7D;
+    u8 sound_slot;                    /* 0x7D: D_0013E550 slot of its looping sound, 0xFF: none (FUN_L00_00232670) */
     u8 unk7E;
     u8 unk7F;                         /* set to 0x17 by FUN_L09_002c5990 near D_L09_00166F40 */
     u8 pad80[0x10];

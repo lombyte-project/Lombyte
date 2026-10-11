@@ -69,6 +69,24 @@ def level_text_bytes(level: int, address: int, size: int) -> bytes:
     return data[address - base:address - base + size]
 
 
+def level_data_bytes(level: int, address: int, size: int) -> bytes | None:
+    """SIZE bytes at ADDRESS from whichever loaded record of LEVEL holds them
+    (None when no record does, or the address is in bss)."""
+    for row in manifest(level)["records"]:
+        if row["type"] == 8:
+            continue
+        base = row["address"]
+        if base <= address and address + size <= base + row["bytes"]:
+            data = record_bytes(level, row["name"])
+            return data[address - base:address - base + size]
+    return None
+
+
+@lru_cache(maxsize=None)
+def record_bytes(level: int, name: str) -> bytes:
+    return (RECORDS_DIR / f"level_{level:02d}/{name}.bin").read_bytes()
+
+
 # ---------------------------------------------------------------- catalogue
 
 class Row:
