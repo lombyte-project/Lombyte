@@ -410,7 +410,119 @@ void FUN_L00_00236458(void) {
     }
 }
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002365a8.s", FUN_L00_002365a8);
+#else
+extern int D_L00_0015F760 __attribute__((sda));
+extern int D_L00_0015F764 __attribute__((sda));
+extern float D_L00_0015F768 __attribute__((sda));
+extern float D_L00_0015F76C __attribute__((sda));
+extern void FUN_L00_0023caa8(int, int, int, int, unsigned long, int) __asm__("FUN_00200e08");
+extern int FUN_001fef20(int) __asm__("FUN_001f96f8");
+extern float FUN_001fef10(float) __asm__("FUN_001f96b0");
+extern void FUN_L00_00216de8(int, int);
+extern void *FUN_0023b208(int, int) __asm__("FUN_001ff960");
+extern void FUN_L00_0023bac0(void *, int, int, int, int, int);
+extern void FUN_L00_0023bd20(void *, int, int, int, int, int) __asm__("FUN_00200080");
+extern void FUN_L00_001ff348(void *, void *, void *);
+extern void FUN_001ff260(void *) __asm__("FUN_001f99f8");
+extern void FUN_001ff2a8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001ff278(void *, void *, void *) __asm__("FUN_001f9a10");
+
+typedef struct { float x, y, z, w; } HudStarVec;
+
+int FUN_L00_002365a8(HudElem *e) {
+    int x = e->unk50, y = e->unk54;
+    int w, h, left, top, right, bottom, xbase, ybase;
+    int previous, current, period, threshold;
+    int size, i, star_width;
+    float fade, half_w, half_h, offset;
+    HudStarVec origin, direction, first_step, second_step, third_step, star_position;
+    void *image;
+
+    e->w = D_L00_0015F760;
+    e->h = D_L00_0015F764;
+    FUN_L00_00235a70(e, &x, &y);
+    FUN_L00_00235ad8(e, &x, &y, e->unk6C, 0);
+    w = D_L00_0015F760;
+    h = D_L00_0015F764;
+    xbase = (x + e->unk48) << 4;
+    ybase = (y + e->unk4A) << 4;
+    left = xbase + (w * 0xd0) / 64;
+    top = ybase + (h * 0xa0) / 256;
+    right = left + (w * 0x260) / 64;
+    bottom = top + (h * 0xea0) / 256;
+    FUN_L00_0023caa8(left, top, right, bottom, 0x80684c2fUL, 1);
+
+    if (e->unk74 * 3 < 10001) {
+        size = FUN_001fef20(1);
+        half_w = FUN_001fef10(0.75f);
+        period = (int)((float)size * 60.0f);
+        threshold = (int)(half_w * 60.0f);
+        previous = (D_L00_0015F3F8 - 1) % period < threshold;
+    } else {
+        previous = 0;
+    }
+    if (e->unk74 * 3 < 10001) {
+        size = FUN_001fef20(1);
+        half_w = FUN_001fef10(0.75f);
+        period = (int)((float)size * 60.0f);
+        threshold = (int)(half_w * 60.0f);
+        current = D_L00_0015F3F8 % period < threshold;
+    } else {
+        current = 0;
+    }
+    if (!previous && current == 1) FUN_L00_00216de8(11, 0);
+    image = FUN_0023b208(*(int *)e, current);
+    FUN_L00_0023bac0(image, x + e->unk48, y + e->unk4A,
+                       D_L00_0015F760, D_L00_0015F764, 0x80);
+
+    half_h = (float)D_L00_0015F764 * D_L00_0015F76C * 0.5f;
+    fade = (float)(10000 - e->unk74) / 10000.0f;
+    half_w = (float)D_L00_0015F760 * D_L00_0015F768 * 0.5f;
+    origin.x = (half_w / 17.0f) * 16.0f;
+    origin.y = (-half_h / 116.0f) * 16.0f;
+    origin.z = 1.0f;
+    origin.w = 1.0f;
+    direction.x = (half_w + (float)(x + e->unk48) +
+                   (1.0f - D_L00_0015F768) * 0.5f * (float)D_L00_0015F760) * 16.0f;
+    direction.y = (half_h + (float)(y + e->unk4A) +
+                   (1.0f - D_L00_0015F76C) * 0.5f * (float)D_L00_0015F764) * 16.0f;
+    direction.z = 0.0f;
+    direction.w = 0.0f;
+    offset = 116.0f - (fade + fade) * 116.0f;
+    image = FUN_0023b208(*(int *)e, 2);
+    FUN_001ff260(&first_step);
+    FUN_001ff260(&second_step);
+    FUN_001ff260(&third_step);
+    first_step.x = first_step.y = D_L00_0015F750 * 16.0f;
+    second_step.x = second_step.y = (D_L00_0015F754 - D_L00_0015F750) * 16.0f;
+    third_step.x = third_step.y = (D_L00_0015F758 - D_L00_0015F754) * 16.0f;
+    star_width = 0;
+    for (i = 0; i < 100; i++) {
+        if (i == 0) {
+            FUN_001ff2a8(&direction, &direction, &first_step);
+            offset += D_L00_0015F750;
+            star_width = (int)(D_L00_0015F750 * 32.0f);
+        } else if (i == 10) {
+            FUN_001ff2a8(&direction, &direction, &second_step);
+            star_width = (int)(D_L00_0015F754 * 32.0f);
+            offset += D_L00_0015F754 - D_L00_0015F750;
+        } else if (i == 30) {
+            FUN_001ff2a8(&direction, &direction, &third_step);
+            star_width = (int)(D_L00_0015F758 * 32.0f);
+            offset += D_L00_0015F758 - D_L00_0015F754;
+        }
+        if (!(offset < D_L00_0017E660[i].y)) {
+            FUN_L00_001ff348(&star_position, &D_L00_0017E660[i], &origin);
+            FUN_001ff278(&star_position, &star_position, &direction);
+            FUN_L00_0023bd20(image, (int)star_position.x, (int)star_position.y,
+                              star_width, star_width, 0x80);
+        }
+    }
+    return e->w;
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236e50.s", FUN_L00_00236e50);
 void FUN_L00_00235ea0();
 /* Calls FUN_L00_00235ea0. */
