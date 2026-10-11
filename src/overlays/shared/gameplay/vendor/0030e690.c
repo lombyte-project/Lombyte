@@ -280,8 +280,8 @@ int FUN_L11_003192c8(char *moby) {
         *(long long *)(packet + 0x30) = 0;
         phase = integer_to_float((D_L11_0015F5CC + 3) & 3) / (*(float *)&D_L11_001623F0_d * 4.0f);
         source = D_L11_001F1490;
-        position = (float *)(packet + 0x10);
-        colors = (int *)packet;
+        position = (float *)(stack_data + 0x50 + i * 0x90);
+        colors = (int *)(stack_data + 0x40 + i * 0x90);
         for (j = 0; j < 4; j++) {
             float t;
             position[0] = source[0];
@@ -302,7 +302,7 @@ int FUN_L11_003192c8(char *moby) {
     do {
         unsigned short entry = *(unsigned short *)list;
         char *linked = (char *)(D_L11_0015FFD8 + ((entry & 0x7fff) << 8));
-        if (linked[0x31] != 0 && *(short *)(linked + 0xa6) == *(short *)(moby + 0xa6)) {
+        if (*(unsigned char *)(linked + 0x31) != 0 && *(short *)(linked + 0xa6) == *(short *)(moby + 0xa6)) {
             char *trail = *(char **)(linked + 0x78);
             for (i = 0; i < *(int *)(trail + 0x2c0); i++) {
                 int next = *(int *)(trail + 0x2c4) - i;
