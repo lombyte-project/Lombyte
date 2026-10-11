@@ -35,7 +35,125 @@ void FUN_L06_00307c48(unsigned char *a, unsigned char *m) {
         break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307d30.s", FUN_L06_00307d30);
+#else
+extern float frame_time __asm__("D_0015ED6C");
+extern float D_L06_001622DC __attribute__((sda));
+extern float D_L06_001622E0 __attribute__((sda));
+extern float D_L06_001622E4 __attribute__((sda));
+extern float D_L06_001622E8 __attribute__((sda));
+extern float D_L06_001622EC __attribute__((sda));
+extern unsigned char D_001413F4;
+extern unsigned char D_0015EDB4;
+extern unsigned char D_0014C050[];
+extern int current_level_index __asm__("D_0015ED84");
+extern int D_L06_0015FFD8 __attribute__((sda));
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern unsigned int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern float FUN_001f9b48(void *, void *);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern void enqueue_callback_list_1(int, int) __asm__("FUN_001f4600");
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
+extern void draw_number(float, void *, void *, int, unsigned int, int, int, int) __asm__("FUN_L01_00285768");
+
+void FUN_L06_00307d30(char *moby) {
+    float *data = *(float **)(moby + 0x78);
+    int *idata = (int *)data;
+    float pos[4];
+    float offset[3];
+    float result[4];
+    float angle;
+    int value;
+    unsigned int color;
+    int i;
+
+    if (*(int *)data == -1) return;
+    data[10] = fast_add_rotations(data[10], (360.0f / D_L06_001622E4) * 0.017453292f * frame_time);
+    *(unsigned int *)(moby + 0x90) = fast_tween_color((fast_cos(data[10]) + 1.0f) * 0.5f, 0x80464646, 0x80828282);
+    switch ((unsigned char)moby[0x20]) {
+    case 0:
+        idata[5] = idata[4];
+        data[6] = random_angle_radians();
+        data[10] = random_angle_radians();
+        moby[0x20] = 1;
+        data[9] = D_L06_001622EC;
+        return;
+    case 2:
+        data[9] -= frame_time + frame_time;
+        if (data[9] < 0.0f) data[9] = 0.0f;
+        if (0.0f < data[9]) enqueue_callback_list_1(0x307578, (int)moby);
+        return;
+    case 1:
+        break;
+    default:
+        return;
+    }
+    *(long long *)pos = *(long long *)(moby + 0x10);
+    pos[2] = *(float *)(moby + 0x18) + 2.75f;
+    pos[3] = *(float *)(moby + 0x1c);
+    if (FUN_001f9b48((void *)0x167540, moby + 0x10) < 32.0f) {
+        data[9] += frame_time + frame_time;
+        if (D_L06_001622EC < data[9]) data[9] = D_L06_001622EC;
+    } else if (36.0f < FUN_001f9b48((void *)0x167540, moby + 0x10)) {
+        data[9] -= frame_time + frame_time;
+        if (data[9] < 0.0f) data[9] = 0.0f;
+    }
+    if (0.0f < data[9]) {
+        enqueue_callback_list_1(0x307578, (int)moby);
+        data[6] = fast_add_rotations(data[6], (360.0f / D_L06_001622E0) * 0.017453292f * frame_time);
+        pos[2] += D_L06_001622DC * fast_cos(data[6]);
+        value = truncate_float_to_s32(D_L06_001622E8 * fast_cos(data[10]));
+        color = 0x20000000 | ((value / 3 + 13) << 16) | ((value / 2 + 120) << 8) | (value + 150);
+        if (D_001413F4 == 1) {
+            if (idata[5] < 10) {
+                draw_number(0.5f, pos, moby, idata[5] + 2, color, 0x7f, 4, 0xff);
+            } else {
+                if (D_0015EDB4) {
+                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                    offset[0] = fast_cos(angle) * 0.15f;
+                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                    offset[1] = fast_sin(angle) * 0.15f;
+                    offset[2] = 0.0f;
+                    add_vectors(result, offset, pos);
+                    draw_number(0.5f, offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff);
+                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                    offset[0] = fast_cos(angle) * -0.4f;
+                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                    offset[1] = fast_sin(angle) * -0.4f;
+                    offset[2] = 0.0f;
+                    add_vectors(result, offset, pos);
+                    draw_number(0.5f, offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff);
+                }                 else {
+                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                    offset[0] = fast_cos(angle) * -0.4f;
+                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                    offset[1] = fast_sin(angle) * -0.4f;
+                    offset[2] = 0.0f;
+                    add_vectors(result, offset, pos);
+                    draw_number(0.5f, offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff);
+                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                    offset[0] = fast_cos(angle) * 0.15f;
+                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                    offset[1] = fast_sin(angle) * 0.15f;
+                    offset[2] = 0.0f;
+                    add_vectors(result, offset, pos);
+                    draw_number(0.5f, offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff);
+                }
+            }
+        }
+    }
+    if (idata[5] < 1 || D_0014C050[(unsigned char)moby[0xb0] + current_level_index * 16] == 0xff) {
+        for (i = 0; i < 4; i++) {
+            if (idata[i] != -1) FUN_L06_00307c48((unsigned char *)moby, (unsigned char *)(D_L06_0015FFD8 + idata[i] * 0x100));
+        }
+        moby[0x20] = 2;
+    }
+}
+#endif
 #include "sda.h"
 #include "rnc/overlay/entities.h"
 
