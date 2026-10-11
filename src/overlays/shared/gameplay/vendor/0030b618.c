@@ -137,7 +137,96 @@ void FUN_L01_0030b618(u8 *m) {
     }
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030bfa8.s", FUN_L01_0030bfa8);
+#else
+#include "rnc/overlay/quad.h"
+typedef union {
+    OvlQuad q;
+    f32 f[4];
+} GlowVec_bfa8;
+typedef struct { GlowVec_bfa8 v[4]; } GlowCorners_bfa8;
+
+typedef struct {
+    GlowVec_bfa8 corner[4];
+    u32 color[4];
+    s32 unk50, unk54, unk58;
+    f32 unk5C, unk60;
+    s32 unk64;
+    f32 unk68, unk6C;
+    s64 unk70, tex, unk80, unk88;
+} GlowQuad_bfa8;
+
+extern GlowVec_bfa8 D_L01_0020B9D0[4];
+extern char D_L01_00167240[];
+extern GlowVec_bfa8 D_0013F5E0[];
+extern f32 D_L01_00162064 __attribute__((sda));
+extern f32 D_L01_0016206C __attribute__((sda));
+extern s64 get_effect_texture_bfa8(s32) __asm__("FUN_001f44b8");
+extern void add_vector_xyz_bfa8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz_bfa8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz_bfa8(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void cross_vectors_xyz_bfa8(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void normalize_vector_xyz_bfa8(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void transform_vector_bfa8(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void draw_geometry_quad_bfa8(void *, void *, s32) __asm__("FUN_001f7d30");
+
+void FUN_L01_0030bfa8(char *m) {
+    struct {
+        GlowQuad_bfa8 quad;
+        GlowVec_bfa8 src_corner[4];
+        struct { GlowVec_bfa8 mat0, mat1, mat2, point, partial, offset; } basis;
+    } local;
+    GlowVec_bfa8 *dst;
+    s32 i;
+    f32 one;
+    OvlQuad q0, q1, q2, q3;
+
+    i = 3;
+    one = 1.0f;
+    q0 = D_L01_0020B9D0[0].q;
+    q1 = D_L01_0020B9D0[1].q;
+    q2 = D_L01_0020B9D0[2].q;
+    q3 = D_L01_0020B9D0[3].q;
+    local.src_corner[0].q = q0;
+    local.src_corner[1].q = q1;
+    local.src_corner[2].q = q2;
+    local.src_corner[3].q = q3;
+    local.quad.tex = get_effect_texture_bfa8(0xB);
+    local.quad.unk88 = 0x8000000048L;
+    local.quad.unk80 = 0xFF9000000260L;
+    local.quad.unk70 = 5;
+    local.quad.unk50 = 0;
+    local.quad.unk54 = 0;
+    local.quad.unk58 = 0;
+    local.quad.unk5C = one;
+    local.quad.unk60 = one;
+    local.quad.unk64 = 0;
+    local.quad.unk68 = one;
+    local.quad.unk6C = one;
+
+    scale_vector_xyz_bfa8(&local.basis.offset, m + 0xc0, D_L01_00162064);
+    scale_vector_xyz_bfa8(&local.basis.partial, m + 0xe0, D_L01_0016206C);
+    add_vector_xyz_bfa8(&local.basis.offset, &local.basis.offset, &local.basis.partial);
+    add_vector_xyz_bfa8(&local.basis.point, &local.basis.offset, m + 0x10);
+    subtract_vector_xyz_bfa8(&local.basis.mat0, D_L01_00167240, &local.basis.point);
+    normalize_vector_xyz_bfa8(&local.basis.mat0, &local.basis.mat0, one);
+    cross_vectors_xyz_bfa8(&local.basis.mat1, &local.basis.mat0, D_0013F5E0);
+    normalize_vector_xyz_bfa8(&local.basis.mat1, &local.basis.mat1, -1.0f);
+    cross_vectors_xyz_bfa8(&local.basis.mat2, &local.basis.mat1, &local.basis.mat0);
+
+    local.quad.color[0] = local.quad.color[3] =
+        local.quad.color[2] = local.quad.color[1] = 0x202020FF;
+    dst = local.quad.corner;
+    do {
+        scale_vector_xyz_bfa8(dst, &local.src_corner[3 - i], 0.4f);
+        transform_vector_bfa8(dst, dst, &local.basis.mat0);
+        dst++;
+        i--;
+    } while (i >= 0);
+    draw_geometry_quad_bfa8(&local.quad, &local.basis.mat0, 0);
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
