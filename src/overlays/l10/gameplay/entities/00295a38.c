@@ -293,7 +293,135 @@ void FUN_L10_00298668(struct Moby *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298b68.s", FUN_L10_00298b68);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002be858.s", FUN_L10_002be858);
+#else
+extern int D_L10_0015F5CC;
+extern struct Moby *D_L10_0015FFD8;
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern unsigned char D_001413F4[];
+extern float D_0013F3D0[];
+#define D_001618A8 (*(int *)0x001618a8)
+#define D_00167280 (*(char **)0x00167280)
+#define D_001618A0 (*(int *)0x001618a0)
+#define D_001618A4 (*(int *)0x001618a4)
+extern int FUN_001f96f8(int);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern int FUN_L00_00257b90(int, int);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
+extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void FUN_L00_00272060(void *, int, float, float, int, int, int, float *, float);
+extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void *FUN_L00_002715e8(void *, int, int, float, float);
+extern float convert_integer_to_float() __asm__("FUN_001fa6c0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern unsigned int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
+extern void FUN_L00_002e8590(float, float);
+extern void FUN_L00_002e8648(void);
+extern void FUN_L00_002e8680(void);
+extern void FUN_L00_002e8568(int);
+
+void FUN_L10_002be858(unsigned char *moby) {
+    int *data = *(int **)(moby + 0x78);
+    float position[4];
+    float velocity[4];
+    float offset[4];
+    float angle;
+    float size;
+    int red, green, blue, color, life, spin;
+    int i;
+    char *effect;
+    if ((unsigned char)moby[0x20] == 0) {
+        D_001618A8 = 0;
+        D_001618A4 = FUN_001f96f8(D_001618A4);
+        D_001618A0 = FUN_001f96f8(D_001618A0);
+        moby[0x20] = 1;
+    }
+    if (D_001413F4[0] == 1 && *data != -1 && vector_distance(moby + 0x10, D_0013F3D0) < 0.5f) {
+        for (i = 9; i >= 0; i--) {
+            size = random_float_between_alt(0.1f, 1.0f);
+            red = FUN_L00_00257b90(0x40, 0xff);
+            green = FUN_L00_00257b90(0x40, 0xff);
+            blue = FUN_L00_00257b90(0x40, 0xff);
+            velocity[0] = fast_cos(random_angle_radians()) * random_float_between_alt(0.0f, 0.5f);
+            velocity[1] = fast_sin(random_angle_radians()) * random_float_between_alt(0.0f, 0.5f);
+            velocity[2] = 0.0f;
+            velocity[2] += random_float_between_alt(0.0f, 0.5f);
+            add_vectors(offset, velocity, D_0013F3D0);
+            normalize_vector_xyz(position, position, random_float_between_alt(0.0f, D_0015ED6C));
+            position[2] = random_float_between_alt(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
+            life = FUN_001f96f8(FUN_L00_00257b90(15, 30));
+            color = red | ((blue << 16) | ((green << 8) | 0x7f000000));
+            spin = random_integer_below(2) == 0 ? -1 : 1;
+            FUN_L00_00272060(velocity, life, size * 0.07f, size * 0.7f, color, 0, spin, position, D_0015ED70 * 15.0f);
+        }
+        allocate_voice_for_target_entry(0, 0, (int)moby);
+        effect = (char *)D_L10_0015FFD8 + (*data << 8);
+        FUN_L00_00216f90(effect + 0x10, effect + 0x40, 0x43, 0);
+        D_001618A8 = D_001618A0;
+        if (*(short *)(D_00167280 + 0x86) == 0) {
+            *(short *)(*(char **)(D_00167280 + 0x70) + 0x20) = FUN_001f96f8(0x5a);
+            *(OvlQuad *)(D_00167280 + 0x40) = *(OvlQuad *)D_00167280;
+        }
+        for (i = 9; i >= 0; i--) {
+            velocity[0] = 0.0f;
+            velocity[1] = 0.0f;
+            velocity[2] = 0.0f;
+            velocity[3] = 0.0f;
+            velocity[0] = random_float_between_alt(-1.0f, 1.0f);
+            velocity[1] = random_float_between_alt(-1.0f, 1.0f);
+            *(OvlQuad *)position = *(OvlQuad *)velocity;
+            size = random_float_between_alt(0.1f, 1.0f);
+            red = FUN_L00_00257b90(0x40, 0xff);
+            green = FUN_L00_00257b90(0x40, 0xff);
+            blue = FUN_L00_00257b90(0x40, 0xff);
+            velocity[0] = fast_cos(random_angle_radians()) * random_float_between_alt(0.0f, 0.5f);
+            velocity[1] = fast_sin(random_angle_radians()) * random_float_between_alt(0.0f, 0.5f);
+            velocity[2] = 0.0f;
+            velocity[2] += random_float_between_alt(0.0f, 0.5f);
+            add_vectors(offset, velocity, (char *)D_L10_0015FFD8 + (*data << 8) + 0x10);
+            normalize_vector_xyz(position, position, random_float_between_alt(0.0f, D_0015ED6C));
+            position[2] = random_float_between_alt(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
+            life = FUN_001f96f8(FUN_L00_00257b90(15, 30));
+            color = red | ((blue << 16) | ((green << 8) | 0x7f000000));
+            spin = random_integer_below(2) == 0 ? -1 : 1;
+            FUN_L00_00272060(velocity, life, size * 0.07f, size * 0.7f, color, 0, spin, position, D_0015ED70 * 15.0f);
+        }
+    }
+    life = FUN_001f96f8(0x3c);
+    if (D_L10_0015F5CC % life == 0 && *data != -1) {
+        for (i = 0; i < truncate_float_to_s32(16.0f); i++) {
+            qcopy(position, moby + 0x10);
+            position[2] += convert_integer_to_float(i) * 0.1f * 0.0625f + 1.8f;
+            effect = (char *)FUN_L00_002715e8(position, 0, 0x1eff7f40, 0.0f, D_0015ED6C * 315000.0f);
+            if (effect != 0) {
+                *(int *)(effect + 0x20) = 0;
+                *(int *)(effect + 0x24) = 0;
+                *(float *)(effect + 0x28) = D_0015ED6C * -1.5f;
+            }
+        }
+    }
+    angle = (float)(D_L10_0015F5CC % 150) / 150.0f;
+    angle = (angle + angle) * 3.1415927f;
+    if (3.1415927f < angle) angle -= 6.2831855f;
+    *(unsigned int *)(moby + 0x90) = fast_tween_color((fast_sin(angle) + 1.0f) * 0.5f, 0x80464646, 0x80828282);
+    fast_dec_timer(&D_001618A8);
+    if (D_001618A8 != 0) {
+        if (D_001618A4 < D_001618A8) angle = 0.002f;
+        else angle = convert_integer_to_float() / convert_integer_to_float(D_001618A4) * 0.007999999f + 0.002f;
+        FUN_L00_002e8590(angle, 0.2f);
+        FUN_L00_002e8680();
+        FUN_L00_002e8648();
+        FUN_L00_002e8568(0);
+    }
+}
+#endif
 /* Collectible drop: waits until it is taken, then sinks below its rest height and records the pickup. */
 typedef struct {
     char pad0[0x454];
