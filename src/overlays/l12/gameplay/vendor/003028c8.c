@@ -364,8 +364,8 @@ extern void set_moby_animation(struct Moby *, int, int) __asm__("FUN_00212ed8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void build_spherical_offset(float *, float, float, float) __asm__("FUN_00214db0");
-extern float random_float_between(float, float) __asm__("FUN_L00_00257c48");
-extern float random_float_between_textbin(int, float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern float random_float_between_textbin(float, float) __asm__("FUN_L00_00257c48");
 extern int random_integer_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
@@ -394,6 +394,22 @@ extern char D_0013E550[];
 #define VENDOR_WORD(address) (*(int *)(address))
 #define VENDOR_FLOAT(address) (*(float *)(address))
 
+extern int D_L12_00161F00 __attribute__((sda));
+extern int D_L12_00161F04 __attribute__((sda));
+extern float D_L12_00161ED0 __attribute__((sda));
+extern float D_L12_00161ED4 __attribute__((sda));
+extern float D_L12_00161ED8 __attribute__((sda));
+extern float D_L12_00161EDC __attribute__((sda));
+extern float D_L12_00161EE0 __attribute__((sda));
+extern float D_L12_00161EE4 __attribute__((sda));
+extern float D_L12_00161EE8 __attribute__((sda));
+extern float D_L12_00161EAC __attribute__((sda));
+extern float D_L12_00161EA8 __attribute__((sda));
+extern float D_L12_00161E60 __attribute__((sda));
+extern float D_L12_00161E64 __attribute__((sda));
+
+extern unsigned char D_0014C050[];
+
 void FUN_L12_00303540(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float position[4] __attribute__((aligned(16)));
@@ -408,9 +424,9 @@ void FUN_L12_00303540(struct Moby *moby) {
     HERO_WORD(0x0013e5bc) = (int)moby;
     switch (moby->state) {
     case 0:
-        VENDOR_WORD(0x00161f00) = 0;
-        VENDOR_WORD(0x00161f04) = 0;
-        if (*(u8 *)(0x0014c050 + VENDOR_WORD(0x0015ed84) * 16 + moby->unkB0) == 0xff) {
+        D_L12_00161F00 = 0;
+        D_L12_00161F04 = 0;
+        if (D_0014C050[current_level_index * 16 + moby->unkB0] == 0xff) {
             moby->state = 6;
         } else {
             attach_manipulator(moby, 0, data);
@@ -433,7 +449,7 @@ void FUN_L12_00303540(struct Moby *moby) {
             HERO_WORD(0x0013f64c) == (int)moby) {
             moby->pos.z += ((*(float *)(data + 0xa0) - 1.2f) - moby->pos.z) * 0.11f;
             *(float *)(data + 0xa4) = fast_add_rotations(*(float *)(data + 0xa4),
-                fast_subtract_rotations(fast_subtract_rotations(fast_arc_tan(HERO_FLOAT(0x0013f3d0) - moby->pos.x,
+                fast_add_rotations(fast_subtract_rotations(fast_arc_tan(HERO_FLOAT(0x0013f3d0) - moby->pos.x,
                                                        HERO_FLOAT(0x0013f3d4) - moby->pos.y), moby->rot.z), 1.5707964f) * 0.01f) * 0.9f;
             moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(data + 0xa4));
         } else {
@@ -456,7 +472,7 @@ void FUN_L12_00303540(struct Moby *moby) {
         break;
     case 4:
         *(u8 *)0x001413f5 = 1;
-        VENDOR_WORD(0x00161f00) = 1;
+        D_L12_00161F00 = 1;
         HERO_WORD(0x0013f51c) = scale_game_frames(120);
         HERO_WORD(0x0013f510) = scale_game_frames(120);
         if (VENDOR_WORD(0x0015f5c4) != 2 && VENDOR_WORD(0x001619a0) == 0)
@@ -477,7 +493,7 @@ void FUN_L12_00303540(struct Moby *moby) {
                 FUN_L00_00211250();
             }
             if (*(float *)(data + 0x8c) <= 0.0f) {
-                VENDOR_WORD(0x00161f04) = 1;
+                D_L12_00161F04 = 1;
                 *(short *)(data + 0xac) = scale_game_frames(120);
                 moby->state = 7;
                 break;
@@ -486,7 +502,7 @@ void FUN_L12_00303540(struct Moby *moby) {
         if (*(int *)(data + 0x94) != -1 &&
             ((struct Moby *)(D_L12_0015FFD8_p + *(int *)(data + 0x94) * 0x100))->state >= 0x80) {
             if (VENDOR_WORD(0x0015f5c4) == 2) {
-                if (*(char *)(data + 1)) detach_manipulator(moby, data);
+                if (*(u8 *)(data + 1)) detach_manipulator(moby, data);
                 if (moby->prev_seq != 0) set_moby_animation(moby, 0, 0);
                 moby->pos.z = *(float *)(data + 0xa0);
                 moby->rot.z = 3.1415927f;
@@ -496,7 +512,7 @@ void FUN_L12_00303540(struct Moby *moby) {
                 FUN_L00_002607d0(13);
                 position[0] = 328.4f; position[1] = 338.7f; position[2] = 60.98f; position[3] = 0.0f;
                 direction[0] = 0.0f; direction[1] = 0.0f; direction[2] = -1.7f; direction[3] = 0.0f;
-                VENDOR_WORD(0x00161f00) = 0;
+                D_L12_00161F00 = 0;
                 FUN_L00_00216f90(position, direction, 0, 1);
                 moby->state = 5;
                 break;
@@ -506,29 +522,29 @@ void FUN_L12_00303540(struct Moby *moby) {
         position[0] = HERO_FLOAT(0x00141070);
         position[1] = HERO_FLOAT(0x00141074);
         if (VENDOR_WORD(0x0015eddc) == 0) position[1] = -position[1];
-        target = VENDOR_FLOAT(0x00161ed0) * 0.017453292f * frame_time * -position[0];
+        target = D_L12_00161ED0 * 0.017453292f * frame_time * -position[0];
         if ((*(float *)(data + 0x7c) >= 0.0f && *(float *)(data + 0x7c) < target) ||
             (*(float *)(data + 0x7c) <= 0.0f && target < *(float *)(data + 0x7c)))
-            approach_value((float *)(data + 0x7c), target, VENDOR_FLOAT(0x00161ed8) * 0.017453292f * VENDOR_FLOAT(0x0015ed70));
+            approach_value((float *)(data + 0x7c), target, D_L12_00161ED8 * 0.017453292f * VENDOR_FLOAT(0x0015ed70));
         else
-            approach_value((float *)(data + 0x7c), target, VENDOR_FLOAT(0x00161ee0) * 0.017453292f * VENDOR_FLOAT(0x0015ed70));
+            approach_value((float *)(data + 0x7c), target, D_L12_00161EE0 * 0.017453292f * VENDOR_FLOAT(0x0015ed70));
         moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(data + 0x7c));
-        target = -(VENDOR_FLOAT(0x00161ed4) * 0.017453292f * frame_time) * -position[1];
+        target = -(D_L12_00161ED4 * 0.017453292f * frame_time) * -position[1];
         if ((*(float *)(data + 0x78) >= 0.0f && *(float *)(data + 0x78) < target) ||
             (*(float *)(data + 0x78) <= 0.0f && target < *(float *)(data + 0x78)))
-            approach_value((float *)(data + 0x78), target, VENDOR_FLOAT(0x00161edc) * 0.017453292f * VENDOR_FLOAT(0x0015ed70));
+            approach_value((float *)(data + 0x78), target, D_L12_00161EDC * 0.017453292f * VENDOR_FLOAT(0x0015ed70));
         else
-            approach_value((float *)(data + 0x78), target, VENDOR_FLOAT(0x00161ee4) * 0.017453292f * VENDOR_FLOAT(0x0015ed70));
+            approach_value((float *)(data + 0x78), target, D_L12_00161EE4 * 0.017453292f * VENDOR_FLOAT(0x0015ed70));
         *(float *)(data + 0x74) = fast_add_rotations(*(float *)(data + 0x74), *(float *)(data + 0x78));
-        if (*(float *)(data + 0x74) > VENDOR_FLOAT(0x00161eac)) *(float *)(data + 0x74) = VENDOR_FLOAT(0x00161eac);
-        if (*(float *)(data + 0x74) < VENDOR_FLOAT(0x00161ea8)) *(float *)(data + 0x74) = VENDOR_FLOAT(0x00161ea8);
+        if (*(float *)(data + 0x74) > D_L12_00161EAC) *(float *)(data + 0x74) = D_L12_00161EAC;
+        if (*(float *)(data + 0x74) < D_L12_00161EA8) *(float *)(data + 0x74) = D_L12_00161EA8;
         FUN_L00_001fff28(data + 0x10, 1, -*(float *)(data + 0x74));
         if (moby->unk70 & 2) blend_moby_animation(moby, 5, 0, 1);
         fast_dec_timer_s16((short *)(data + 0x70));
         if ((VENDOR_WORD(0x0013cae0) & 0xa0) && *(short *)(data + 0x70) == 0) {
             blend_moby_animation(moby, *(int *)(data + 0x80) == 1 ? 4 : 3, 0, 1);
             angle = fast_add_rotations(moby->rot.z, 1.5707964f);
-            build_spherical_offset(direction, VENDOR_FLOAT(0x00161ee8) * frame_time, angle, *(float *)(data + 0x74));
+            build_spherical_offset(direction, D_L12_00161EE8 * frame_time, angle, *(float *)(data + 0x74));
             if (*(int *)(data + 0x80) == 1) {
                 *(int *)(data + 0x80) = 0;
                 FUN_L00_0024f7c8(moby, 2, position);
@@ -546,7 +562,7 @@ void FUN_L12_00303540(struct Moby *moby) {
             VENDOR_FLOAT(0x00167270) = 0.03f;
             VENDOR_WORD(0x00167278) = scale_game_frames(7);
             *(short *)(data + 0x70) = scale_game_frames(20);
-            for (i = 0; i < 5; i++) {
+            for (i = 4; i >= 0; i--) {
                 *(u128 *)random = 0;
                 random[0] = random_float_between(-1.0f, 1.0f);
                 random[1] = random_float_between(-1.0f, 1.0f);
@@ -562,21 +578,12 @@ void FUN_L12_00303540(struct Moby *moby) {
         }
         if (VENDOR_WORD(0x001619a0) == 0) FUN_L12_003032e8(moby);
         break;
-    case 5:
-        if (VENDOR_WORD(0x0015f5c4) != 2) {
-            FUN_L00_00298840(1);
-            moby->state = 8;
-        }
-        break;
-    case 6:
-        if (moby->prev_seq != 0) set_moby_animation(moby, 0, 0);
-        break;
     case 7:
         enqueue_callback_list_1(FUN_L12_00304d98, moby);
         if (fast_dec_timer_s16((short *)(data + 0xae))) {
-            float a = random_float_between(VENDOR_FLOAT(0x00161e60), VENDOR_FLOAT(0x00161e64));
-            float b = fast_add_rotations(VENDOR_FLOAT(0x00167258), random_float_between_textbin(0, 0.0f, 0.5235988f));
-            float c = fast_add_rotations(VENDOR_FLOAT(0x00167254), random_float_between_textbin(0, 0.0f, 0.5235988f));
+            float a = random_float_between(D_L12_00161E60, D_L12_00161E64);
+            float b = fast_add_rotations(VENDOR_FLOAT(0x00167258), random_float_between_textbin(0.0f, 0.5235988f));
+            float c = fast_add_rotations(VENDOR_FLOAT(0x00167254), random_float_between_textbin(0.0f, 0.5235988f));
             *(u128 *)position = *(u128 *)0x00167240;
             FUN_L00_00262cf0(position, position, a, b, c);
             angle = random_float_between(0.5f, 1.3f);
@@ -585,6 +592,15 @@ void FUN_L12_00303540(struct Moby *moby) {
             *(short *)(data + 0xae) = scale_game_frames(random_integer_between(5, 13));
         }
         if (fast_dec_timer_s16((short *)(data + 0xac))) FUN_L00_00211250();
+        break;
+    case 5:
+        if (VENDOR_WORD(0x0015f5c4) != 2) {
+            FUN_L00_00298840(1);
+            moby->state = 8;
+        }
+        break;
+    case 6:
+        if (moby->prev_seq != 0) set_moby_animation(moby, 0, 0);
         break;
     case 8:
         if (VENDOR_WORD(0x0015f5c4) != 2) {
