@@ -728,7 +728,176 @@ void FUN_L07_002cdb28(struct Moby *moby) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002f5ba0.s", FUN_L07_002f5ba0);
+#else
+extern u8 D_0013D388[];
+extern s32 D_L07_0015F5C4;
+extern char *D_L07_0015FFD8;
+extern char *D_L07_001600EC;
+extern char D_0013F3D0[];
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern void FUN_L00_00298840(int);
+extern void FUN_L00_002607d0(int);
+extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void FUN_L01_0027a248(int, int);
+extern void FUN_L07_00270248(int, int, int, int);
+extern void FUN_L00_00299460(int);
+extern void FUN_0022e188(int);
+extern void FUN_0020b178(int, int);
+extern void FUN_001f9c90(void *, void *, float);
+
+void FUN_L07_002f5ba0(struct Moby *moby) {
+    int *data = (int *)moby->pvars;
+    char *other;
+    char *entry;
+    float delta[4];
+    switch (moby->state) {
+    case 0:
+        if (D_0013D388[0x29] && data[2] != -1)
+            delete_moby((struct Moby *)(D_L07_0015FFD8 + data[2] * 0x100));
+        if (D_L07_0015F5C4 == 0) moby->state = 1;
+        break;
+    case 1:
+        if (!D_0013D388[0x28]) {
+            D_0013D388[0x28] = 1;
+            moby->state = 2;
+            FUN_L00_00298840(0);
+            return;
+        }
+        moby->state = 3;
+        break;
+    case 2:
+        if (D_L07_0015F5C4 != 2) moby->state = 3;
+        break;
+    case 3:
+        moby->state = 4;
+        break;
+    case 4:
+        if (!D_0013D388[0x29]) {
+            if (data[0] != -1) {
+                if (is_point_inside_clip_volume(D_0013F3D0, data[0])) {
+                    D_0013D388[0x29] = 1;
+                    if (data[3] != -1) {
+                        *(u16 *)(D_L07_0015FFD8 + data[3] * 0x100 + 0x34) |= 0x41;
+                    }
+                    if (data[5] != -1) {
+                        *(u16 *)(D_L07_0015FFD8 + data[5] * 0x100 + 0x34) |= 0x41;
+                    }
+                    moby->state = 5;
+                    FUN_L00_00298840(1);
+                }
+            } else {
+                moby->state = 8;
+            }
+        } else {
+            moby->state = 7;
+        }
+        if (moby->state != 4 && data[2] != -1)
+            delete_moby((struct Moby *)(D_L07_0015FFD8 + data[2] * 0x100));
+        break;
+    case 5:
+        if (D_L07_0015F5C4 != 2) {
+            if (data[3] != -1) {
+                *(u16 *)(D_L07_0015FFD8 + data[3] * 0x100 + 0x34) |= 0x41;
+            }
+            moby->state = 6;
+            FUN_L00_00298840(2);
+        }
+        break;
+    case 6:
+        if (D_L07_0015F5C4 != 2) {
+            if (data[6] != -1) {
+                entry = D_L07_001600EC + data[6] * 0x80;
+                FUN_L00_00216f90(entry + 0x30, entry + 0x70, 0, 1);
+            }
+            moby->state = 7;
+        }
+        break;
+    case 7:
+        if (data[3] != -1) {
+            *(u16 *)(D_L07_0015FFD8 + data[3] * 0x100 + 0x34) &= ~0x41;
+        }
+        if (data[5] != -1) {
+            *(u16 *)(D_L07_0015FFD8 + data[5] * 0x100 + 0x34) &= ~0x41;
+        }
+        FUN_L01_0027a248(2, 4);
+        moby->state = 8;
+        break;
+    case 8: {
+        char *other;
+        if (!D_0013D388[0x2a]) {
+            if (data[3] == -1 ||
+                (other = D_L07_0015FFD8 + data[3] * 0x100) == 0 ||
+                ((u8 *)other)[0x20] == 0xfe || ((u8 *)other)[0x20] == 0xfd) {
+                if (data[1] == -1) {
+                    moby->state = 13;
+                } else if (is_point_inside_clip_volume(D_0013F3D0, data[1])) {
+                    entry = D_L07_001600EC + data[7] * 0x80;
+                    FUN_L00_00216f90(entry + 0x30, entry + 0x70, 0x72, 1);
+                    D_0013D388[0x2a] = 1;
+                    moby->state = 9;
+                    FUN_L00_00298840(3);
+                }
+            }
+        } else {
+            moby->state = 12;
+        }
+        if (moby->state != 8 && data[4] != -1) {
+            other = D_L07_0015FFD8 + data[4] * 0x100;
+            *(u16 *)(other + 0x34) |= 0x41;
+        }
+        break;
+    }
+    case 9:
+        if (D_L07_0015F5C4 != 2) {
+            moby->state = 10;
+            FUN_L00_00299460(8);
+        }
+        break;
+    case 10:
+        if (D_L07_0015F5C4 == 2) return;
+        moby->state = 11;
+        FUN_L00_00298840(4);
+    case 11: {
+        char *other;
+        if (D_L07_0015F5C4 != 2) {
+            if (data[7] != -1) {
+                entry = D_L07_001600EC + data[7] * 0x80;
+                FUN_L00_00216f90(entry + 0x30, entry + 0x70, 0, 1);
+            }
+            if (data[4] != -1) {
+                other = D_L07_0015FFD8 + data[4] * 0x100;
+                subtract_vector_xyz(delta, D_0013F3D0, other + 0x10);
+                FUN_001f9c90(delta, delta, 0.9f);
+                add_vector_xyz(other + 0x10, D_0013F3D0, delta);
+                delete_moby((struct Moby *)other);
+            }
+            FUN_L07_00270248(0x87, 0xc, 0x56, 0x3c);
+            FUN_L00_002607d0(8);
+            FUN_0020b178(0, 8);
+            FUN_0022e188(8);
+            FUN_L00_00299460(8);
+            moby->state = 12;
+        }
+        break;
+    }
+    case 12: {
+        char *other;
+        if (data[4] != -1) {
+            other = D_L07_0015FFD8 + data[4] * 0x100;
+            if (other && ((u8 *)other)[0x20] != 0xfe && ((u8 *)other)[0x20] != 0xfd)
+                delete_moby((struct Moby *)other);
+        }
+        moby->state = 13;
+        break;
+    }
+    case 13:
+        delete_moby(moby);
+        break;
+    }
+}
+#endif
 #include "rnc/gameplay/entities/moby.h"
 
 struct SpawnClassView {
