@@ -523,8 +523,8 @@ void FUN_L07_00317910(void) {
                 }
             }
             if (row == 1) {
-                packet.color[2] = 0x20404040;
                 packet.color[3] = 0x20404040;
+                packet.color[2] = 0x20404040;
             } else if (row == 9) {
                 packet.color[0] = 0x404040;
                 packet.color[1] = 0x404040;
