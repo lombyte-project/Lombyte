@@ -1338,7 +1338,8 @@ void FUN_L00_002ebbd8(void *arg) {
     char *m = (char *)o->m;
     char *p = m + 0x40;
     struct Hero *g = &hero;
-    char *cam = D_00166C80_c;
+    char *cam;
+    char *tail;
     char *source;
     int state;
     int frames;
@@ -1371,8 +1372,10 @@ void FUN_L00_002ebbd8(void *arg) {
     *(float *)(m + 0x38) = 0.2f;
     *(int *)(m + 0x3c) = 0;
     *(int *)(m + 0x30) = 0;
-    *(int *)(m + 0xbc) = 0;
+    tail = m + 0xb8;
+    *(int *)(tail + 4) = 0;
     m = (char *)((volatile O002ebb00 *)o)->m;
+    cam = D_00166C80_c;
     source = *(char **)(cam + 0x184);
     qcopy((char *)o + 0x30, source + 0x30);
     qcopy(o, source);
@@ -1395,7 +1398,7 @@ void FUN_L00_002ebbd8(void *arg) {
             FUN_001ff8b0_2ebbd8(*(float *)(p + 0x30), *(float *)(p + 0x34));
         next = (int)g->unk964;
     }
-    *(int *)(m + 0xc0) = next;
+    *(int *)(tail + 8) = next;
     *(volatile short *)(cam + 0x270) = 1;
     *(volatile char *)(cam + 0x273) = 2;
     *(int *)(cam + 0x2f4) = FUN_001fef20_2ebbd8(0x3c);
