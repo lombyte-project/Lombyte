@@ -827,8 +827,11 @@ void FUN_L08_002d6450(struct Moby *moby) {
     short *list = D_L08_001AC040[(((struct Moby *)D_L08_0015FFD8) + *(s32 *)(moby->pvars + 0x144))->group];
     struct Moby *other;
     if (list != 0) {
-        other = ((struct Moby *)D_L08_0015FFD8) + (*list & 0x7fff);
-        for (;;) {
+        u16 index;
+        other = (struct Moby *)D_L08_0015FFD8;
+        index = (u16)*list & 0x7fff;
+        other += index;
+        while (1) {
             if (other->state < 0x7f && other != moby) {
                 u16 class_id = (u16)other->oclass;
                 if ((u32)(class_id - 0x24c) < 0xb) {
@@ -837,10 +840,11 @@ void FUN_L08_002d6450(struct Moby *moby) {
                     mark_moby_for_removal(other);
                 }
             }
-            if (*list < -1)
+            if (*list++ < -1)
                 break;
-            list++;
-            other = ((struct Moby *)D_L08_0015FFD8) + (*list & 0x7fff);
+            other = (struct Moby *)D_L08_0015FFD8;
+            index = (u16)*list;
+            other += (u32)(index & 0x7fff);
         }
     }
 }
