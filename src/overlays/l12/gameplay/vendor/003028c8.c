@@ -367,7 +367,131 @@ void FUN_L12_00304d98(Level12VendorCounterMoby *moby) {
         emit_rgba_draw_packet(0xAA, 0, 0, (count - value) * 0x50 / count);
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00304e00.s", FUN_L12_00304e00);
+#else
+extern void ahead_f(char *, float *, float) __asm__("FUN_L01_00274b78");
+extern char *FUN_L00_0025a420(struct Moby *, int, int);
+extern int FUN_00213928(struct Moby *, char *, float *, int, int *, int, int, int);
+extern float FUN_001f9b80(void *, void *);
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+extern float FUN_001f9de0(float);
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9e90(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern void FUN_001f9a10(void *, void *, void *);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
+extern void FUN_L00_00259888(void *, struct Moby *, int, float, void *);
+extern int FUN_L00_001f2868(void *, int, struct Moby *, void *);
+extern int FUN_L00_001f0d60(void *, int, struct Moby *);
+extern float FUN_L00_0025b8c0(float *, float *, float, float, float, float);
+extern void FUN_L00_0025e450(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
+extern void FUN_L00_00257470(struct Moby *, int, int);
+extern void FUN_L00_00259fe8(float, struct Moby *);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern float D_0015ED6C __asm__("D_0015ED6C");
+
+void FUN_L12_00304e00(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    float point[20];
+    float *health = (float *)(data + 0x20);
+    int hit;
+    char *source;
+    float velocity[3];
+    char hit_info[0x30] __attribute__((aligned(16)));
+    float direction[4];
+    float position[4] __attribute__((aligned(16)));
+    float angle;
+    float turn;
+    float height;
+    float difference;
+
+    ahead_f((char *)moby, point, 8.0f);
+    source = FUN_L00_0025a420(moby, 0x230000, 0);
+    FUN_00213928(moby, source, health, 0, &hit, 0, 0, 4);
+    if (FUN_001f9b80(&moby->pos, point) < 0.25f ||
+        (hit >= 2 && source && ((struct Moby *)*(int *)(source + 0x20))->oclass != 0x4f5)) {
+        FUN_L00_0025e450(moby, (void *)0x15f580, 0, 0.0f, 0.0f, 3, 3, 5,
+            1.0f, 0.5f, 4.0f, 0.7f, 2, 7.0f, 0, 0, -1, 0);
+        FUN_L00_00257470(moby, 0, -1);
+        mark_moby_for_removal(moby);
+        return;
+    }
+    switch (moby->state) {
+    case 0: {
+        moby->flags |= 0x1000;
+        *(u128 *)(data + 0x60) = *(u128 *)&moby->pos;
+        moby->state = 1;
+        *(float *)(data + 0x80) = 0.6981317f;
+        if (*(int *)((char *)moby + 0xb8) && *(u8 *)(*(int *)((char *)moby + 0xb8) + 0xbc))
+            *(float *)(data + 0x80) = -0.6981317f;
+        *(int *)(data + 0x84) = 0;
+    } break;
+    case 1: {
+        ++*(int *)(data + 0x84);
+        if (*(int *)(data + 0x84) < scale_ticks(30)) {
+            angle = FUN_001f9de0(((float)*(int *)(data + 0x84) * 3.1415927f) / (float)scale_ticks(30));
+            moby->pos.z += angle * 0.07f;
+        }
+        if (scale_ticks(15) < *(int *)(data + 0x84))
+            *(float *)(data + 0x70) += frame_time_sq * 30.0f;
+        if (scale_ticks(30) < *(int *)(data + 0x84)) {
+            if (moby->prev_seq == 0) blend_moby_animation(moby, 1, 0, 2);
+            if (moby->prev_seq == 1 && (moby->unk70 & 2)) blend_moby_animation(moby, 2, 0, 2);
+        }
+        if (frame_time * 5.75f < *(float *)(data + 0x70))
+            *(float *)(data + 0x70) = frame_time * 5.75f;
+        angle = FUN_001f9e90(point[0] - moby->pos.x, point[1] - moby->pos.y);
+        turn = angle;
+        if (FUN_001f9b80(&moby->pos, point) < 7.0f)
+            turn = fast_add_rotations(angle, *(float *)(data + 0x80));
+        velocity[0] = FUN_001f9dc8(turn) * *(float *)(data + 0x70);
+        velocity[1] = FUN_001f9de0(turn) * *(float *)(data + 0x70);
+        velocity[2] = 0.0f;
+        FUN_001f9a10(&moby->pos, &moby->pos, velocity);
+        if (scale_ticks(30) < *(int *)(data + 0x84)) {
+            *(float *)(data + 0x78) = fast_add_rotations(*(float *)(data + 0x78), frame_time * 5.2359877f);
+            moby->pos.z -= *(float *)(data + 0x74);
+            *(float *)(data + 0x74) = FUN_001f9de0(*(float *)(data + 0x78)) * 0.1f;
+            moby->pos.z += *(float *)(data + 0x74);
+        }
+        if (scale_ticks(30) < *(int *)(data + 0x84)) {
+            height = probe_ground_height(&moby->pos, 0, 0.5f);
+            if (height < *(float *)0x0013f628) height = *(float *)0x0013f628;
+            difference = height - moby->pos.z;
+            if (difference < 0.5f && -3.0f < difference)
+                FUN_L00_0025b8c0(&moby->pos.z, (float *)(data + 0x7c),
+                    height + 0.58f, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f, D_0015ED6C * 4.0f);
+        }
+        if (scale_ticks(30) < *(int *)(data + 0x84)) {
+            direction[0] = FUN_001f9dc8(angle) * 0.3f;
+            direction[1] = FUN_001f9de0(angle) * 0.3f;
+            direction[3] = 5627.925f;
+            direction[2] = 1.2f;
+            FUN_L00_00259888(hit_info, moby, 0x10001, 1.0f, direction);
+            *(u128 *)position = *(u128 *)&moby->pos;
+            position[2] += 0.4f;
+            if (!FUN_L00_001f2868(position, 0x10, moby, hit_info) ||
+                !*(int *)0x001742d8 || *(short *)(*(int *)0x001742d8 + 0xa6) == 0x4f5 ||
+                *(int *)0x001742d8 == *(int *)((char *)moby + 0xb8)) {
+                *(u128 *)position = *(u128 *)&moby->pos;
+                position[2] += 0.35f;
+                if (FUN_L00_001f0d60(position, 0, moby)) moby->state = 2;
+            } else moby->state = 2;
+        }
+    } break;
+    case 2: {
+        FUN_L00_0025e450(moby, (void *)0x15f580, 0, 0.0f, 0.0f, 5, 15, 25,
+            2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 2, 2, -1, 0);
+        mark_moby_for_removal(moby);
+        return;
+    }
+    default: break;
+    }
+    FUN_L00_00259fe8(1.0f, moby);
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003054b0.s", FUN_L12_003054b0);
 extern int D_L12_001FB688[];
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
