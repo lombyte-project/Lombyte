@@ -963,7 +963,7 @@ void FUN_L09_00309c08(struct Moby *moby) {
         }
         break;
     case 3:
-        if ((D_L09_0015F5CC & 7) == (((u32)moby >> 8) & 7)) {
+        if ((D_L09_0015F5CC & 7) == (((s32)moby >> 8) & 7)) {
             if (*(s32 *)((u8 *)vars + 0xC4) == -1 ||
                 (!check_voice_target_00309c08(moby, *(s32 *)((u8 *)vars + 0xC4), &moby->pos) &&
                  *(s32 *)((u8 *)vars + 0xC4) == -1)) {
@@ -1005,7 +1005,7 @@ void FUN_L09_00309c08(struct Moby *moby) {
         }
         break;
     }
-    subtract_vector_xyz(&original, &original, &moby->pos);
+    add_vector_xyz(&original, &original, &moby->pos);
     FUN_L00_00260738((u8 *)vars + 0x20, &original, &rotation, &moby->rot);
 }
 #endif
