@@ -6,7 +6,171 @@
 #include "asm.h"
 #include "rnc/overlay/entities.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e5958.s", FUN_L15_002e5958);
+#else
+typedef struct {
+    s16 timer;
+    s16 delay;
+    s16 triggered;
+    s16 flash_timer;
+    u8 flash_color;
+    u8 initialized;
+    u8 child_count;
+    u8 notified_count;
+    s32 frame_count;
+    struct Moby *parent;
+    f32 distance;
+    s16 restart_timer;
+    s16 pad26;
+    s32 enabled;
+} VendorVars_2e5958;
+
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern void FUN_001fa2d8(void *, void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern f32 FUN_001f9b48(void *, void *);
+extern s16 FUN_001f9770(s16 *);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern void FUN_L00_0024f7c8(struct Moby *, int, void *);
+extern void FUN_L00_002502f0(void *, int, int, int);
+extern int FUN_L00_002591d0(struct Moby **, int, int, int);
+extern int FUN_L00_002592b8(struct Moby **, struct Moby *, int, int);
+extern void FUN_L01_0026e0e0(int, int);
+extern void allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
+extern u8 D_0013F3D0[];
+extern s32 current_level_index __asm__("D_0015ED84");
+extern u8 D_L15_001BB830[];
+extern u32 D_0014C190[];
+extern u32 D_L15_001BAAD0[];
+
+void FUN_L15_002e5958(struct Moby *moby) {
+    VendorVars_2e5958 *vars = (VendorVars_2e5958 *)moby->pvars;
+    u8 delta[16];
+    u8 matrix[64];
+    struct Moby *child;
+    u16 save_id;
+    u32 *bits;
+    s32 first;
+    s32 second;
+    s32 divisor;
+    s32 near_parent = 0;
+
+    if ((u8)(moby->state - 1) < 2) {
+        subtract_vector_xyz(delta, &moby->pos, D_0013F3D0);
+        if (vector_length_xyz(delta) < vars->distance) {
+            FUN_001fa2d8(matrix, &moby->unkC0);
+            FUN_001f9d20(delta, delta, matrix);
+            if (*(f32 *)(delta + 4) < 0.2f) near_parent = 1;
+        }
+    }
+    switch (moby->state) {
+    case 0:
+        if (vars->initialized == 0) {
+            FUN_L00_0024f7c8(moby, 0, delta);
+            vars->distance = FUN_001f9b48(&moby->pos, delta);
+            vars->notified_count = 0;
+            vars->parent = moby;
+            FUN_L00_002591d0(&child, moby->group, 0, 0);
+            while (child != 0) {
+                if (child != moby && child->oclass == 0x4b9) {
+                    VendorVars_2e5958 *other = (VendorVars_2e5958 *)child->pvars;
+                    other->parent = moby;
+                    other->initialized = 1;
+                    other->distance = vars->distance;
+                }
+                vars->notified_count++;
+                FUN_L00_002592b8(&child, child, 0, 0);
+            }
+        }
+        vars->flash_timer = 0;
+        vars->timer = 0;
+        vars->delay = 0;
+        vars->child_count = 0;
+        FUN_L00_002502f0(moby, 0, 0, 0);
+        vars->triggered = 0;
+        moby->state = 1;
+        break;
+    case 1:
+    case 2:
+        save_id = moby->save_id;
+        if (D_L15_001BB830[0x454 + (s16)save_id] != 0 ||
+            ((((s32)D_0014C190[current_level_index * 64 + ((s16)save_id >> 5)]) >> (save_id & 31)) & 1) != 0) {
+            if (vars->enabled != 0) {
+                FUN_L01_0026e0e0(moby->group, 4);
+                vars->timer = vars->restart_timer;
+                moby->state = 4;
+                return;
+            }
+        }
+        if (vars->triggered == 0 && near_parent) {
+            struct Moby *parent = vars->parent;
+            VendorVars_2e5958 *parent_vars = (VendorVars_2e5958 *)parent->pvars;
+            if (parent->state == 1) {
+                vars->child_count = 0;
+                parent->state = 2;
+                parent_vars->timer = parent_vars->frame_count < 1 ? 900 : scale_game_frames(vars->frame_count);
+            }
+            parent_vars->child_count++;
+            allocate_voice_for_target_entry(3, 0x31, moby);
+            FUN_L00_002502f0(moby, 0, 0xff, 0);
+            vars->triggered = 1;
+        }
+        if (moby->state == 2) {
+            if (vars->child_count < vars->notified_count) {
+                if (FUN_001f9770(&vars->timer) == 0) {
+                    if (FUN_001f9770(&vars->delay) != 0) {
+                        allocate_voice_for_target_entry(0, 0x31, moby);
+                        first = scale_game_frames(0x2d);
+                        second = scale_game_frames(5);
+                        divisor = scale_game_frames(0x28);
+                        if (first < second + vars->timer / divisor)
+                            vars->delay = scale_game_frames(0x2d);
+                        else
+                            vars->delay = scale_game_frames(5) + vars->timer / scale_game_frames(0x28);
+                    }
+                } else {
+                    vars->triggered = 0;
+                    vars->child_count = 0;
+                    allocate_voice_for_target_entry(2, 0x31, moby);
+                    FUN_L01_0026e0e0(moby->group, 3);
+                }
+            } else {
+                FUN_L01_0026e0e0(moby->group, 4);
+                allocate_voice_for_target_entry(1, 0x31, moby);
+                vars->timer = vars->restart_timer;
+                moby->state = 4;
+            }
+        }
+        break;
+    case 3:
+        FUN_L00_002502f0(moby, 0, 0, 0);
+        vars->triggered = 0;
+        vars->child_count = 0;
+        moby->state = 1;
+        break;
+    case 4:
+        if (FUN_001f9770(&vars->flash_timer) != 0) {
+            vars->flash_timer = scale_game_frames(0x14);
+            if ((s8)vars->flash_color != 0) {
+                FUN_L00_002502f0(moby, 0, 0xff, 0);
+                vars->flash_color = 0;
+            } else {
+                FUN_L00_002502f0(moby, 0xff, 0xff, 0xff);
+                vars->flash_color = 1;
+            }
+        }
+        save_id = moby->save_id;
+        bits = &D_0014C190[current_level_index * 64 + ((s16)save_id >> 5)];
+        *bits |= 1U << (save_id & 31);
+        save_id = moby->save_id;
+        bits = &D_L15_001BAAD0[(s16)save_id >> 5];
+        *bits |= 1U << (save_id & 31);
+        break;
+    }
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
