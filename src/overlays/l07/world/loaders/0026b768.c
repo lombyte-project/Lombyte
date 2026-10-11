@@ -3,4 +3,269 @@
 #include "asm.h"
 
 /* Level load: relocates sky, uploads textures, loads HUD banks, flushes cache; many DebugPrints. */
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0026b768.s", FUN_L07_0026b768);
+#else
+#define W(a) (*(s32 *)(a))
+#define H(a) (*(s16 *)(a))
+#define UH(a) (*(u16 *)(a))
+#define B(a) (*(u8 *)(a))
+#define Q(a) (*(u64 *)(a))
+#define PRINT_SIZE(label,bytes,scale) debug_print((const char *)(label), FUN_00120478(FUN_001fa6c0(bytes) * (scale)))
+extern void load_hud_banks(void) __asm__("FUN_00202a98");
+extern void copy_words(void *, const void *, s32) __asm__("FUN_001f98d0");
+extern void copy_bytes(void *, const void *, s32) __asm__("FUN_001f9838");
+extern void fill_bytes(void *, s32, s32) __asm__("FUN_001f97e8");
+extern s32 decode_page(u16) __asm__("FUN_001f97a0");
+extern void load_header(s32, s32, s32) __asm__("FUN_L07_00267af0");
+extern void FUN_00118a80(s32);
+extern s32 FUN_L00_0024d8d0(s32, s32);
+extern void FUN_002040e0(s32, s32);
+extern void FUN_002028e0(s32);
+extern void FUN_L00_00241728(s32);
+extern void FUN_00203640(s32, s32, s32 *, s32);
+extern void FUN_L00_00241788(s32, s32);
+extern void FUN_002032e0(s32, s32);
+extern void FUN_00203730(s32, s32, s32 *, s32);
+extern void FUN_001e93e8(s32, s32);
+extern void FUN_00203b08(s32, s32, s32 *, s32 *, s32);
+extern void FUN_00202800(s32, s32);
+extern void FUN_L00_0023f120(s32);
+extern void FUN_L00_0023f0d8(s32);
+extern void FUN_002026c8(s32, s32, s32, s32);
+extern s32 FUN_L00_0023fa00(s32, s32 *);
+extern s32 FUN_L00_00241940(s32);
+extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
+extern f32 FUN_001fa6c0(s32);
+extern s32 FUN_00120478(f32);
+extern void FUN_00226f50(void);
+extern void FUN_L00_00285008(void);
+extern void FUN_L00_00264740(void);
+
+s32 FUN_L07_0026b768(s32 load, s32 mode)
+{
+    s32 *header = (s32 *)W(0x00173e84);
+    s32 file = W(0x0015ee4c);
+    s32 base, end, i, j, offset, value, alloc_size, aligned_base;
+    s32 *entry, *out;
+    s16 *table, *record;
+    s32 entity;
+    if (load != 0) load_hud_banks();
+    base = W(0x00173e94);
+    if (load != 0) {
+        copy_words((void *)header, (void *)(file + W(file + 0x10)), W(file + 0x14));
+        W(0x0015880c) = 0;
+        copy_bytes((void *)0x0015fc88, (void *)(0x0014c050 + (W(0x0015ed84) << 4)), 0x10);
+        load_header(file + W(file + 0x18), header[0], (s32)header + header[1]);
+        W(0x00159404) = W(0x0015ed5c);
+        FUN_00118a80(0);
+        end = FUN_L00_0024d8d0(file + W(file + 0x50), base);
+        Q(0x00182840) = 0x80000005c0000000ULL | ((u64)((W(0x0015ee8c) + header[0x25]) >> 8) << 37) | 0x1d308000ULL | (u64)((W(0x0015ee8c) + header[0x24]) >> 8);
+        Q(0x00182848) = 0x0000ffa0000000e0ULL;
+        Q(0x00182850) = 0x0040000400004000ULL;
+        Q(0x00182868) = 0x0040000400004000ULL;
+        Q(0x00182860) = 0x0000ffa0000000e0ULL;
+        Q(0x00182858) = 0x8000000580000000ULL | ((u64)((W(0x0015ee8c) + header[0x27]) >> 8) << 37) | 0x19304000ULL | (u64)((W(0x0015ee8c) + header[0x26]) >> 8);
+        W(0x0015f40c) = base + header[0x18];
+        Q(0x00182880) = 0x0040000400004000ULL;
+        Q(0x00182878) = 0x0000ffa0000000e0ULL;
+        Q(0x00182870) = 0x80000005c0000000ULL | ((u64)((W(0x0015ee8c) + header[0x31]) >> 8) << 37) | 0x1d308000ULL | (u64)((W(0x0015ee8c) + header[0x30]) >> 8);
+        W(0x0015a354) = header[0xc];
+        entry = (s32 *)((s32)header + header[0xd]);
+        out = (s32 *)0x001c4a80;
+        i = 0;
+        if (W(0x0015a354) > 0) do {
+            s32 page = decode_page((u16)entry[1]);
+            out[i] = W(0x0015f40c) + entry[0] + (page << 28);
+            entry += 4;
+            i++;
+        } while (i < W(0x00160f54));
+        offset = header[0xf];
+        W(0x001593c8) = header[0xe];
+        entry = (s32 *)((s32)header + offset);
+        out = (s32 *)0x00199b00;
+        i = 0;
+        if (W(0x001593c8) > 0) do {
+            s32 page = decode_page((u16)entry[1]);
+            out[i] = W(0x0015f40c) + entry[0] + (page << 28);
+            entry += 4;
+            i++;
+        } while (i < W(0x0015ffc8));
+        copy_words((void *)0x001aec40, (void *)((s32)header + offset), W(0x0015ffc8) << 4);
+        W(0x0015a3d4) = header[0x10];
+        entry = (s32 *)((s32)header + header[0x11]);
+        out = (s32 *)0x001c6780;
+        i = 0;
+        if (W(0x0015a3d4) > 0) do {
+            s32 page = decode_page((u16)entry[1]);
+            out[i] = W(0x0015f40c) + entry[0] + (page << 28);
+            entry += 4;
+            i++;
+        } while (i < W(0x00160fd4));
+        W(0x001598ac) = header[0x12];
+        entry = (s32 *)((s32)header + header[0x13]);
+        out = (s32 *)0x001bc630;
+        i = 0;
+        if (W(0x001598ac) > 0) do {
+            s32 page = decode_page((u16)entry[1]);
+            out[i] = W(0x0015f40c) + entry[0] + (page << 28);
+            entry += 4;
+            i++;
+        } while (i < W(0x001604ac));
+        FUN_002040e0(base + header[2], (s32)header + header[0xd]);
+        if (header[3] == 0) W(0x0015f600) = 0;
+        else W(0x00158a00) = base + header[3];
+        if (header[4] == 0) W(0x0015991c) = 0;
+        else FUN_002028e0(base + header[4]);
+        FUN_L00_00241728(base + header[5]);
+        entry = (s32 *)((s32)header + header[7]);
+        for (i = 0; i < header[6]; i++) {
+            value = entry[0] ? base + entry[0] : 0;
+            FUN_00203640(value, (s32)header + header[0xf], entry + 4, entry[1]);
+            entry += 8;
+        }
+        FUN_L00_00241788((s32)header + header[7], header[7]);
+        entry = (s32 *)((s32)header + header[0x1e]);
+        entity = W(0x00197380);
+        for (i = 0; i < B(W(0x00197380) + 0xc); i++, entry++) {
+            if (*entry != 0) {
+                W(W(0x00197380) + i * 4 + 0x48) = base + *entry;
+                FUN_002032e0(W(0x00197380), i);
+            }
+        }
+        W(0x00159408) = header[0x20];
+        W(0x0016000c) = -1;
+        W(0x00160010) = 0;
+        entry = (s32 *)((s32)header + header[0x21]);
+        for (i = 0; i < W(0x00159408); i++, entry += 4) {
+            s32 source;
+            W(0x001afc40 + i * 4) = entry[1];
+            W(0x001afca0 + i * 4) = base + entry[0];
+            W(0x001afd00 + i * 4) = entry[2];
+            source = (s32)header + header[7] + 0x10 + B(0x00197c40 + entry[1]) * 0x20;
+            Q(0x001afd60 + i * 0x10) = Q(source);
+            Q(0x001afd68 + i * 0x10) = Q(source + 8);
+        }
+        entry = (s32 *)((s32)header + header[9]);
+        for (i = 0; i < header[8]; i++, entry += 8)
+            FUN_00203730(base + entry[0], (s32)header + header[0x11], entry + 4, entry[1]);
+        FUN_001e93e8((s32)header + header[9], header[8]);
+        entry = (s32 *)((s32)header + header[0xb]);
+        for (i = 0; i < header[10]; i++, entry += 12)
+            FUN_00203b08(base + entry[0], (s32)header + header[0x13], entry + 4, entry + 8, entry[1]);
+        W(0x0015f420) = base + header[0x1a];
+        FUN_00202800((s32)header + header[0x17], header[0x16]);
+        if (header[0x28] == 0) {
+            W(0x00158838) = 0; W(0x0015f43c) = 0; W(0x0015f440) = 0;
+        } else FUN_L00_0023f120(base + header[0x28]);
+        if (header[0x29] == 0) {
+            W(0x00159098) = 0; W(0x0015fc9c) = 0; W(0x0015fca4) = 0;
+            W(0x0015fca0) = 0; W(0x0015fca8) = 0;
+        } else FUN_L00_0023f0d8(base + header[0x29]);
+        if (header[0x2a] == 0) W(0x0015f604) = 0;
+        else W(0x00158a04) = base + header[0x2a];
+        FUN_002026c8((s32)header + header[0x1b], base + header[0x19], (s32)header + header[0x15], header[0x14]);
+        table = (s16 *)((s32)header + header[0x1c]);
+        W(0x0015f5f0) = table[1];
+        alloc_size = W(0x0015f5f0) * 0x20;
+        aligned_base = (base + end + 0x3f) & ~0x3f;
+        W(0x0015f5f4) = aligned_base;
+        copy_bytes((void *)aligned_base, (void *)((s32)table + table[0]), alloc_size);
+        for (i = 0; i < W(0x0015f5f0); i++) {
+            s32 slot = W(0x0015f5f4) + i * 0x20;
+            s16 index = H(slot + 0x1a);
+            if (index < table[3]) UH(slot + 0x1a) = UH((s32)table + table[2] + index * 4);
+            else { debug_print((const char *)0x0020fa20); H(slot + 0x1a) = -1; }
+            W(slot + 0x1c) = W(0x0015ed5c);
+        }
+        record = table + 4;
+        value = W(0x0015ffc0);
+        for (i = 0; i < value; i++, record += 2) {
+            s32 copy_index;
+            s32 *object_slot = (s32 *)(0x00197380 + i * 4);
+            s16 *ids = (s16 *)((s32)table + record[0]);
+            value = W(0x0015ffc0);
+            if (*object_slot == 0) {
+                for (j = 0; j < W(0x00160008); j++) {
+                    if (W(0x001afc40 + j * 4) == H(0x00197a80 + i * 2)) {
+                        if (j < W(0x00160008)) {
+                            fill_bytes((void *)(0x001afee0 + j * 0x20), -1, 0x20);
+                            for (copy_index = 0; copy_index < record[1]; copy_index++) {
+                                UH(0x001afee0 + j * 0x20 + copy_index * 2) = ids[copy_index * 2];
+                                if (copy_index >= 14) {
+                                    value = W(0x001593c0);
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            } else {
+                s32 stamp = W(0x0015ed5c);
+                if (record[1] != B(*object_slot + 0xd))
+                    debug_print((const char *)0x0020fa40, H(0x00197a80 + i * 2));
+                for (j = 0; j < B(*object_slot + 0xd); j++) {
+                    s32 object = W(*object_slot + 0x28) + j * 0x20;
+                    UH(object + 0x1a) = ids[j * 2];
+                    W(object + 0x1c) = stamp;
+                }
+            }
+        }
+        W(0x00173e98) = FUN_L00_0023fa00((((base + end + 0x3f) & ~0x3f) + alloc_size + 0x3f) & ~0x3f, header);
+    }
+    W(0x00173e9c) = FUN_L00_00241940(load);
+    if (load != 0) {
+        f32 scale = 0.0009765625f;
+        debug_print((const char *)0x0020fa70);
+        PRINT_SIZE(0x0020fa88, 0x100000, scale);
+        PRINT_SIZE(0x0020faa0, 0x22c980, scale);
+        PRINT_SIZE(0x0020fab8, W(0x00173e80) - 0x32c980, scale);
+        PRINT_SIZE(0x0020fad0, W(0x00173e8c) - W(0x00173e80), scale);
+        PRINT_SIZE(0x0020fae8, W(0x00173e90) - W(0x00173e8c), scale);
+        PRINT_SIZE(0x0020fb00, W(0x00173e94) - W(0x00173e90), scale);
+        value = W(0x0015f600);
+        if (value == 0) value = W(0x0016051c);
+        if (value == 0) {
+            debug_print((const char *)0x0020fb30);
+            value = W(0x0015f600);
+        } else {
+            PRINT_SIZE(0x0020fb18, value - W(0x00173e94), scale);
+            value = W(0x00158a00);
+        }
+        if (value != 0) {
+            if (W(0x0016051c) == 0) PRINT_SIZE(0x0020fb50, W(0x00173ec0) - value, scale);
+            else PRINT_SIZE(0x0020fb50, W(0x0016051c) - value, scale);
+        }
+        if (header[4] != 0) PRINT_SIZE(0x0020fb68, W(0x00173ec0) - W(0x0016051c), scale);
+        PRINT_SIZE(0x0020fb80, W(0x0015f40c) - W(0x00173ec0), scale);
+        PRINT_SIZE(0x0020fb98, (W(0x001b1b04) >> 4) - W(0x0015f40c), scale);
+        PRINT_SIZE(0x0020fbb0, W(0x0015f420) - (W(0x001b1b04) >> 4), scale);
+        PRINT_SIZE(0x0020fbc8, W(0x00197380) - W(0x0015f420), scale);
+        PRINT_SIZE(0x0020fbe0, W(0x001c5880) - W(0x00197380), scale);
+        if (header[10] == 0) PRINT_SIZE(0x0020fbf8, W(0x00160fc0) - W(0x001c5880), scale);
+        else PRINT_SIZE(0x0020fbf8, W(0x001bc0b0) - W(0x001c5880), scale);
+        if (header[10] != 0) PRINT_SIZE(0x0020fc10, W(W(0x00197380) + 0x48) - W(0x001bc0b0), scale);
+        PRINT_SIZE(0x0020fc28, W(0x00160fc0) - W(W(0x00197380) + 0x48), scale);
+        PRINT_SIZE(0x0020fc40, W(0x00160494) - W(0x00160fc0), scale);
+        PRINT_SIZE(0x0020fc58, W(0x0015ffd8) - W(0x00160494), scale);
+        PRINT_SIZE(0x0020fc70, W(0x0015ffe8) - W(0x0015ffd8), scale);
+        PRINT_SIZE(0x0020fc88, W(0x00160108) - W(0x0015ffe8), scale);
+        PRINT_SIZE(0x0020fca0, W(0x0016016c) - W(0x00160108), scale);
+        debug_print((const char *)0x0020fcb8, 3.5);
+        debug_print((const char *)0x0015fc80);
+        PRINT_SIZE(0x0020fcd0, W(0x0016016c) + 0x20000, 0.00000095367431640625f);
+        debug_print((const char *)0x0015fc80);
+        PRINT_SIZE(0x0020fce8, W(0x00173e9c) - (W(0x00173e80) - 0x2d0000), 0.00000095367431640625f);
+        debug_print((const char *)0x0015fc80);
+    }
+    if (mode == 0) {
+        FUN_00226f50();
+        for (i = 15; i >= 0; i--) W(0x0014ee90 + i * 4) = 0;
+    } else FUN_L00_00285008();
+    W(0x00179190) = 0;
+    FUN_L00_00264740();
+    W(0x0015f5cc)++;
+    return 0;
+}
+#endif
