@@ -1676,13 +1676,13 @@ void FUN_L00_002ed498(void *arg) {
     char *g;
     char *m;
     char *m130;
-    char *m40;
     char *m20;
     char *m1d0;
     float pos[4] __attribute__((aligned(16)));
     float v[4] __attribute__((aligned(16)));
     float w[4] __attribute__((aligned(16)));
     float x[4] __attribute__((aligned(16)));
+    char * volatile m40;
     float distance;
     float angle;
     int frames;
@@ -1716,8 +1716,8 @@ void FUN_L00_002ed498(void *arg) {
         *(float *)&pos[2] = *(float *)(entry + 8);
         pos[3] = 0.0f;
         FUN_001f9a28_002ed498(v, pos, &D_0013F3D0_002ed498);
-        distance = FUN_001f9ab0_002ed498(v, &D_0013F5E0_002ed498);
-        FUN_001f9a68_002ed498(w, &D_0013F5E0_002ed498, distance);
+        distance = FUN_001f9ab0_002ed498(v, ((char *)&D_0013F3D0_002ed498 + 0x210));
+        FUN_001f9a68_002ed498(w, ((char *)&D_0013F3D0_002ed498 + 0x210), distance);
         FUN_001f9a28_002ed498(x, v, w);
         *(float *)(p + 0x38) = FUN_001f9af0_002ed498(x);
         *(float *)(p + 0x3c) = -distance;
@@ -1730,19 +1730,19 @@ void FUN_L00_002ed498(void *arg) {
 
         g = D_L00_00166E00_002ed498;
         m = *(char **)(g + 0x70);
-        m130 = m + 0x130;
         m40 = m + 0x40;
+        m130 = m + 0x130;
         m20 = m + 0x20;
         m1d0 = m + 0x1d0;
         qcopy(g + 0x30, pos);
         *(float *)(m130 + 0x2c) = *(float *)(p + 0x38);
         *(float *)(m130 + 0x30) = *(float *)(p + 0x3c);
         *(float *)(m40 + 0xb0) = *(float *)(p + 0x40);
-        FUN_001f9a68_002ed498(w, &D_0013F5E0_002ed498, -*(float *)(m130 + 0x30));
+        FUN_001f9a68_002ed498(w, ((char *)&D_0013F3D0_002ed498 + 0x210), -*(float *)(m130 + 0x30));
         FUN_001f9a10_002ed498(m + 0x90, &D_0013F3D0_002ed498, w);
         FUN_001f9a28_002ed498(m130, pos, m + 0x90);
         qcopy(m130 + 0x10, m130);
-        FUN_001f9a68_002ed498(w, &D_0013F5E0_002ed498, -*(float *)(m40 + 0xb0));
+        FUN_001f9a68_002ed498(w, ((char *)&D_0013F3D0_002ed498 + 0x210), -*(float *)(m40 + 0xb0));
         FUN_001f9a10_002ed498(m + 0x80, &D_0013F3D0_002ed498, w);
         qcopy(m + 0xd0, m + 0x80);
         qcopy(m40, &D_0013F3D0_002ed498);
