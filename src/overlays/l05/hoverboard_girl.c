@@ -172,7 +172,7 @@ void FUN_L05_00316810(HoverboardGirlMoby *moby, HoverboardGirlState *state) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316ab8.s", FUN_L05_00316ab8);
 #else
-void update_hoverboard_girl(HoverboardGirlMoby *moby) {
+void FUN_L05_00316ab8(HoverboardGirlMoby *moby) {
     HoverboardGirlState *state = moby->data;
     HoverboardGirlVector target_position;
     HoverboardGirlVector head_position;
@@ -210,8 +210,8 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
         }
         if (state->dialogue_state == 3) {
             state->previous_dialogue_state = state->dialogue_state;
-            state->dialogue_state_frame = frame_number_absolute;
             state->dialogue_state = 2;
+            state->dialogue_state_frame = frame_number_absolute;
             moby->dialogue_event = 0;
             set_race_camera(&race_camera_vectors[0], &race_camera_vectors[1], 0, 1);
             qcopy(&saved_camera_vectors[0], &race_camera_vectors[2]);
@@ -279,8 +279,8 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
         if (vector_distance(&moby->position, &hero.motion.pos) < 8.0f &&
             absolute_angle_difference(
                 moby->yaw,
-                angle_from_xy(hero.motion.unkD0.component[0] - moby->position.component[0],
-                              hero.motion.unkD0.component[1] -
+                angle_from_xy(hero.motion.unkD0.f[0] - moby->position.component[0],
+                              hero.motion.unkD0.f[1] -
                                   moby->position.component[1])) < 1.5707964f) {
             if (vector_length(&hero.motion.unk100) > 0.01f) {
                 state->player_look_timer = scale_frame_count(120);
@@ -331,8 +331,8 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
     if (vector_distance(&moby->position, &hero.motion.pos) < 15.0f &&
         absolute_angle_difference(
             moby->yaw,
-            angle_from_xy(hero.motion.pos.component[0] - moby->position.component[0],
-                          hero.motion.pos.component[1] - moby->position.component[1])) <
+            angle_from_xy(hero.motion.pos.f[0] - moby->position.component[0],
+                          hero.motion.pos.f[1] - moby->position.component[1])) <
             1.2217305f) {
         if (hero.state.current == HERO_STATE_HIGH_JUMP && hero.state_timer == 15) {
             state->breast_growth_count++;
