@@ -934,7 +934,109 @@ void FUN_L06_002f54a0(char *a) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f55a0.s", FUN_L06_002f55a0);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f5d78.s", FUN_L06_002f5d78);
+#else
+extern void FUN_001f9cf8(void *, void *, void *);
+extern float D_L06_00161D70 __attribute__((sda));
+extern float D_L06_00161D74 __attribute__((sda));
+extern float D_L06_00161D78 __attribute__((sda));
+extern float D_L06_00161D7C __attribute__((sda));
+extern float D_L06_00161D80 __attribute__((sda));
+extern float D_L06_00161DA0 __attribute__((sda));
+extern float D_L06_00161DA4 __attribute__((sda));
+extern Vec4 D_L06_00161D50 __attribute__((sda));
+extern Vec4 D_L06_00161D60 __attribute__((sda));
+
+void FUN_L06_002f5d78(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    Vec4 result, first, second;
+    int i, offset;
+    float angle, other, upper, lower, base, threshold;
+    char **left, **right;
+
+    for (i = 0, offset = 0; i < 20; i++, offset += 4) {
+        float length = D_L06_00161D78 - (float)i;
+        if (length < 0.0f) length = 0.0f;
+        normalize_vector_xyz(&first, moby + 0xc0, length);
+        FUN_001f9cf8(&result, &D_L06_00161D50, moby + 0xc0);
+        add_vector_xyz(&result, &result, moby + 0x10);
+        add_vector_xyz(&result, &result, &first);
+        *(u128 *)(*(char **)(data + 0x70 + offset) + 0x10) = result.q;
+        FUN_001f9cf8(&result, &D_L06_00161D60, moby + 0xc0);
+        add_vector_xyz(&result, &result, moby + 0x10);
+        add_vector_xyz(&result, &result, &first);
+        *(u128 *)(*(char **)(data + 0xc0 + offset) + 0x10) = result.q;
+        angle = D_L06_00161D7C * DEG_TO_RAD - (float)(i * 45) * DEG_TO_RAD;
+        if (1.5707964f < angle) angle = 1.5707964f;
+        else if (angle < 0.0f) angle = 0.0f;
+        left = (char **)(data + 0x70 + offset);
+        right = (char **)(data + 0xc0 + offset);
+        *(float *)(*left + 0x40) = -angle;
+        *(float *)(*right + 0x40) = angle;
+        FUN_L00_00250df8(*left);
+        FUN_L00_00250df8(*right);
+    }
+    left = (char **)(data + 0x110);
+    right = (char **)(data + 0x138);
+    for (i = 0, offset = 0; i < 10; i++, offset += 2, left++, right++) {
+        float length = D_L06_00161D78 - ((float)i + (float)i);
+        threshold = D_L06_00161D70 + (float)(4 - i) * D_L06_00161D74;
+        upper = length;
+        if (length < threshold) upper = threshold;
+        lower = length - 1.0f;
+        if (lower < threshold) lower = threshold;
+        normalize_vector_xyz(&first, moby + 0xc0, upper);
+        normalize_vector_xyz(&second, moby + 0xc0, lower);
+        FUN_001f9cf8(&result, &D_L06_00161D50, moby + 0xc0);
+        add_vector_xyz(&result, &result, moby + 0x10);
+        add_vector_xyz(&result, &result, &first);
+        *(u128 *)(*left + 0x10) = result.q;
+        FUN_001f9cf8(&result, &D_L06_00161D60, moby + 0xc0);
+        add_vector_xyz(&result, &result, moby + 0x10);
+        add_vector_xyz(&result, &result, &second);
+        *(u128 *)(*right + 0x10) = result.q;
+        base = D_L06_00161D7C * DEG_TO_RAD - (float)offset * 0.7853982f;
+        other = base - D_L06_00161DA0 * DEG_TO_RAD;
+        angle = base;
+        if (1.5707964f < angle) angle = 1.5707964f;
+        else if (angle < 0.0f) angle = 0.0f;
+        if (1.5707964f < other) other = 1.5707964f;
+        else if (other < 0.0f) other = 0.0f;
+        if (angle != 0.0f && other == 0.0f) allocate_voice_for_target_entry(1, 0, (int)*left);
+        base = (D_L06_00161D7C * DEG_TO_RAD - (float)(i + i) * 0.7853982f) - 0.7853982f;
+        other = base - D_L06_00161DA0 * DEG_TO_RAD;
+        upper = base;
+        if (1.5707964f < upper) upper = 1.5707964f;
+        else if (upper < 0.0f) upper = 0.0f;
+        if (1.5707964f < other) other = 1.5707964f;
+        else if (other < 0.0f) other = 0.0f;
+        if (upper != 0.0f && other == 0.0f) allocate_voice_for_target_entry(1, 0, (int)*right);
+        *(float *)(*left + 0x40) = -angle;
+        base = D_L06_00161D80 * DEG_TO_RAD - (float)(i + i) * 0.7853982f;
+        *(float *)(*right + 0x40) = upper;
+        other = base - D_L06_00161DA4 * DEG_TO_RAD;
+        angle = base;
+        if (1.5707964f < angle) angle = 1.5707964f;
+        else if (angle < 0.0f) angle = 0.0f;
+        if (1.5707964f < other) other = 1.5707964f;
+        else if (other < 0.0f) other = 0.0f;
+        if (angle != 0.0f && other == 0.0f) allocate_voice_for_target_entry(2, 0, (int)*left);
+        base = (D_L06_00161D80 * DEG_TO_RAD - (float)(i + i) * 0.7853982f) - 0.7853982f;
+        other = angle - D_L06_00161DA4 * DEG_TO_RAD;
+        lower = base;
+        if (1.5707964f < lower) lower = 1.5707964f;
+        else if (lower < 0.0f) lower = 0.0f;
+        if (1.5707964f < other) other = 1.5707964f;
+        else if (other < 0.0f) other = 0.0f;
+        if (lower != 0.0f && other == 0.0f) allocate_voice_for_target_entry(2, 0, (int)*right);
+        *(float *)(*left + 0x44) = -angle;
+        *(float *)(*right + 0x44) = -lower;
+        FUN_L00_00250df8(*left);
+        FUN_L00_00250df8(*right);
+    }
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f6470.s", FUN_L06_002f6470);
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f6dd0.s", FUN_L06_002f6dd0);
