@@ -1690,6 +1690,7 @@ int FUN_L00_002bf9f0(char *m, char *o, VU *target, int check) {
     float halfLength;
     int canRecurse;
     char *position = m + 0x10;
+    volatile int *savedCheck = &check;
 
     FUN_001ff2a8_bf9f0(&direction, target, position);
     FUN_001ff600_bf9f0(*(float *)(m + 0x2c) * 5.2f / *(float *)(*(char **)(m + 0x24) + 0x24),
@@ -1702,10 +1703,11 @@ int FUN_L00_002bf9f0(char *m, char *o, VU *target, int check) {
     if (!(0.5f < halfLength)) canRecurse = 0;
     destination.f[2] = FUN_L00_002bec80_c(&destination, m);
     direction.f[2] = destination.f[2] - *(float *)(m + 0x18);
-    if (destination.f[2] == 0.0f) {
-        if (canRecurse) return FUN_L00_002bf9f0(m, o, &midpoint, 1);
-        return 0;
-    }
+    if (destination.f[2] != 0.0f) goto continue_check;
+fail:
+    if (canRecurse) goto recurse;
+    return 0;
+continue_check:
     if (*(float *)(m + 0x2c) * 3.0f / *(float *)(*(char **)(m + 0x24) + 0x24) < direction.f[2]) goto fail;
     qcopy(&plane, &D_L00_00173E80_bf9f0);
     FUN_001ff500_bf9f0(&plane, &plane, 1.0f);
@@ -1713,12 +1715,19 @@ int FUN_L00_002bf9f0(char *m, char *o, VU *target, int check) {
         FUN_001ff218_bf9f0(plane.f[2])) goto fail;
     destination.f[2] += *(float *)(m + 0x2c) * 0.025f / *(float *)(*(char **)(m + 0x24) + 0x24);
     if (FUN_L00_002beab0_bf9f0(m, 6, &destination) != 0) goto fail;
-    destination.f[2] -= *(float *)(m + 0x2c) * 0.025f / *(float *)(*(char **)(m + 0x24) + 0x24);
-    qcopy(&first, position);
-    first.f[2] += *(float *)(m + 0x2c) * 0.2f / *(float *)(*(char **)(m + 0x24) + 0x24);
-    qcopy(&second, &destination);
-    second.f[2] += *(float *)(m + 0x2c) * 0.2f / *(float *)(*(char **)(m + 0x24) + 0x24);
-    if (check != 0 && FUN_001efa68_bf9f0(&first, &second, 6, m, 0) == 0) goto fail;
+    {
+        float speed = *(float *)(m + 0x2c);
+        char *speedOwner = *(char **)(m + 0x24);
+        destination.f[2] -= speed * 0.025f / *(float *)(speedOwner + 0x24);
+        qcopy(&first, position);
+        {
+            float stepScale = speed * 0.2f;
+            first.f[2] += stepScale / *(float *)(speedOwner + 0x24);
+            qcopy(&second, &destination);
+            second.f[2] += stepScale / *(float *)(speedOwner + 0x24);
+        }
+    }
+    if (*savedCheck != 0 && FUN_001efa68_bf9f0(&first, &second, 6, m, 0) == 0) goto fail;
     FUN_L00_002bec00_bf9f0(o);
     FUN_L00_002bf8b0_bf9f0(m, (void *)0x141260, &destination);
     FUN_L00_002bec48_bf9f0(o);
@@ -1735,9 +1744,8 @@ int FUN_L00_002bf9f0(char *m, char *o, VU *target, int check) {
         D_L00_00173E58_bf != *(Hit **)(o + 0x38)) goto fail;
     m[0xbc] = 0xd;
     return 1;
-fail:
-    if (canRecurse) return FUN_L00_002bf9f0(m, o, &midpoint, 1);
-    return 0;
+recurse:
+    return FUN_L00_002bf9f0(m, o, &midpoint, 1);
 }
 #endif
 #include "eetypes.h"
