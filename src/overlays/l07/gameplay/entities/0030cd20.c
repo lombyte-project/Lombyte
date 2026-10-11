@@ -15,7 +15,157 @@ extern void FUN_L01_002b91c8(char *, int);
 void FUN_L07_0030cd20(void) {
     FUN_L01_002b91c8(D_L07_001DCE40, 0x24);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031a9e8.s", FUN_L07_0031a9e8);
+#else
+struct L07MovingVars {
+    Vec4f home;
+    int target;
+    int openState;
+    int shutState;
+    Vec4f destination;
+    float speed;
+    int startSound;
+    int endSound;
+    int indicator;
+    int forceReturn;
+};
+
+extern u8 D_0014C050[];
+extern u8 D_L07_0015FC88[];
+extern struct Moby *D_L07_0015FFD8;
+extern float vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void transform_vector_xyz(void *, void *, void *) __asm__("FUN_001f9cf8");
+
+void FUN_L07_0031a9e8(struct Moby *moby) {
+    struct L07MovingVars *vars = (struct L07MovingVars *)moby->pvars;
+    struct Moby *target;
+    Vec4 next;
+    Vec4 start;
+    float distance;
+    float time;
+    int forceEnd;
+    int forceStart;
+
+    if (moby->unkB0 == 0xff)
+        goto checked_spawn;
+    if (D_0014C050[moby->unkB0 + current_level_index * 16] != 0xff)
+        goto checked_spawn;
+    vars->target = -1;
+checked_spawn:
+    forceEnd = 0;
+    forceStart = 0;
+    if (D_L07_0015FC88[moby->unkB0] == 0xff) {
+        if (vars->forceReturn == 0)
+            forceStart = 1;
+        else
+            forceEnd = 1;
+    }
+
+    switch (moby->state) {
+    case 0:
+        qcopy(&vars->home, &moby->pos);
+        if (vars->indicator != -1)
+            ((s32 *)0x184528)[vars->indicator] = 0;
+        moby->state = 1;
+        vars->home.w = 0;
+        return;
+    case 1:
+        if (forceStart)
+            return;
+        if (!forceEnd && vars->target != -1 &&
+            (target = &D_L07_0015FFD8[vars->target]) != 0 &&
+            target->state != 0xfe && target->state != 0xfd &&
+            target->state != vars->openState)
+            return;
+        start.q = 0;
+        start.f[0] = vars->destination.x;
+        start.f[1] = vars->destination.y;
+        start.f[2] = vars->destination.z;
+        next.q = start.q;
+        vars->home.w = vector_length_xyz(&next);
+        if (vars->startSound != -1)
+            FUN_0022da68(vars->startSound, 0, moby);
+        moby->state = 2;
+        break;
+    case 2:
+        if (forceStart || (!forceEnd && vars->target != -1 &&
+            (target = &D_L07_0015FFD8[vars->target]) != 0 &&
+            target->state != 0xfe && target->state != 0xfd &&
+            target->state == vars->shutState)) {
+            if (vars->startSound != -1)
+                FUN_0022da68(vars->startSound, 0, moby);
+            moby->state = 4;
+            break;
+        }
+        start.q = 0;
+        start.f[0] = vars->destination.x;
+        start.f[1] = vars->destination.y;
+        start.f[2] = vars->destination.z;
+        next.q = start.q;
+        transform_vector_xyz(&next, &next, &moby->unkC0);
+        scale_vector_xyz(&start, &next, vars->destination.w * frame_time);
+        add_vector_xyz(&moby->pos, &moby->pos, &start);
+        time = vars->home.w - vars->destination.w * frame_time;
+        vars->home.w = time;
+        if (!(time < 0.0f))
+            return;
+        add_vector_xyz(&moby->pos, &vars->home, &next);
+        vars->home.w = 0;
+        if (vars->indicator != -1)
+            ((s32 *)0x184528)[vars->indicator] = 1;
+        moby->state = 3;
+        if (vars->endSound != -1)
+            FUN_0022da68(vars->startSound, 0, moby);
+        return;
+    case 3:
+        if (!forceStart && (forceEnd || vars->target == -1 ||
+            (target = &D_L07_0015FFD8[vars->target]) == 0 ||
+            target->state == 0xfe || target->state == 0xfd ||
+            target->state != vars->shutState))
+            return;
+        vars->home.w = 0;
+        if (vars->startSound != -1)
+            FUN_0022da68(vars->startSound, 0, moby);
+        moby->state = 4;
+        break;
+    case 4:
+        if (!forceStart && (forceEnd || vars->target == -1 ||
+            (target = &D_L07_0015FFD8[vars->target]) == 0 ||
+            target->state == 0xfe || target->state == 0xfd ||
+            target->state == vars->openState)) {
+            if (vars->startSound != -1)
+                FUN_0022da68(vars->startSound, 0, moby);
+            moby->state = 2;
+            break;
+        }
+        start.q = 0;
+        start.f[0] = vars->destination.x;
+        start.f[1] = vars->destination.y;
+        start.f[2] = vars->destination.z;
+        next.q = start.q;
+        distance = vector_length_xyz(&next);
+        scale_vector_xyz(&next, &next, -(vars->speed * frame_time));
+        transform_vector_xyz(&start, &next, &moby->unkC0);
+        add_vector_xyz(&moby->pos, &moby->pos, &start);
+        time = vars->home.w + vars->speed * frame_time;
+        vars->home.w = time;
+        if (!(distance < time))
+            return;
+        qcopy(&moby->pos, &vars->home);
+        if (vars->startSound != -1)
+            FUN_0022da68(vars->endSound, 0, moby);
+        if (vars->indicator != -1)
+            ((s32 *)0x184528)[vars->indicator] = 0;
+        moby->state = 1;
+        break;
+    case 5:
+        break;
+    }
+}
+#endif
 struct SwingGateVars {
     int target;     /* 0x00: moby index, -1 for none */
     int openState;  /* 0x04 */
