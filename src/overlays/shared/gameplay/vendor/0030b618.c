@@ -36,6 +36,7 @@ void FUN_L01_0030b618(u8 *m) {
     f32 elapsed;
     f32 active;
     f32 phase;
+    f32 sine;
     f32 cutoff;
     OvlQuad first;
     OvlQuad second;
@@ -71,7 +72,7 @@ void FUN_L01_0030b618(u8 *m) {
             active = 0.0f;
     }
     i = *(s32 *)(e + 0x84);
-    if (i != -1 && *(s8 *)(D_L01_0015FFD8_b618 + (i << 8) + 0x20) < 0) {
+    if (i != -1 && *(s8 *)((D_L01_0015FFD8_b618 + 0x20) + i * 0x100) < 0) {
         slot = *(s32 *)(e + 0x68);
         if (slot != -1)
             FUN_L00_0023e838(slot);
@@ -83,34 +84,34 @@ void FUN_L01_0030b618(u8 *m) {
         if (is_timer_active_b618(e + 0x6c)) {
             current = random_integer_between_b618(*(s32 *)(e + 0x50), *(s32 *)(e + 0x54));
             *(s32 *)(e + 0x74) = *(s32 *)(e + 0x78);
-            *(s32 *)(e + 0x6c) = current;
             *(s32 *)(e + 0x70) = current;
-            count = *(s32 *)(e + 0x58);
-            next = random_integer_between_b618(1, count - 1);
-            i = (*(s32 *)(e + 0x78) + next) % count;
+            *(s32 *)(e + 0x6c) = current;
+            next = random_integer_between_b618(1, *(s32 *)(e + 0x58) - 1);
+            i = (*(s32 *)(e + 0x78) + next) % *(s32 *)(e + 0x58);
             *(s32 *)(e + 0x7c) = *(s32 *)(e + 0x7c) == 0;
             *(s32 *)(e + 0x78) = i;
         }
         phase = itof_s_b618(*(s32 *)(e + 0x70) - *(s32 *)(e + 0x6c));
         phase = phase / itof_s_b618(*(s32 *)(e + 0x70));
-        phase = phase * 3.1415927f * 0.5f;
+        phase *= 3.1415927f;
+        phase *= 0.5f;
         if (*(s32 *)(e + 0x7c) != 0)
             phase += 1.5707964f;
-        phase = fast_sin_b618(phase);
+        sine = fast_sin_b618(phase);
 
-        if (*(s32 *)(e + 0x7c) == 0) {
-            first = ((OvlQuad *)e)[*(s32 *)(e + 0x74)];
-            next = *(s32 *)(e + 0x78);
-        } else {
+        if (*(s32 *)(e + 0x7c) != 0) {
             first = ((OvlQuad *)e)[*(s32 *)(e + 0x78)];
-            next = *(s32 *)(e + 0x74);
+            second = ((OvlQuad *)e)[*(s32 *)(e + 0x74)];
+            interpolate_vector_b618(e + 0x40, &first, &second, sine);
+        } else {
+            first = ((OvlQuad *)e)[*(s32 *)(e + 0x74)];
+            second = ((OvlQuad *)e)[*(s32 *)(e + 0x78)];
+            interpolate_vector_b618(e + 0x40, &first, &second, phase);
         }
-        second = ((OvlQuad *)e)[next];
-        interpolate_vector_b618(e + 0x40, &first, &second, phase);
         cutoff = *(f32 *)(e + 0x5c) * 0.75f;
         if (cutoff < elapsed) {
-            second = *(OvlQuad *)(e + 0x40);
             first = 0;
+            second = *(OvlQuad *)(e + 0x40);
             interpolate_vector_b618(e + 0x40, &second, &first,
                                     (elapsed - cutoff) / (*(f32 *)(e + 0x5c) - cutoff));
         }
