@@ -1060,9 +1060,6 @@ void FUN_L01_00316e88(float a, float b) {
     *(float *)(d + 0x44) = a;
     *(float *)(d + 0x48) = b;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00319928.s", FUN_L01_00319928);
-#else
 extern char *D_L00_0015F5F4;
 extern char D_0013E550[];
 extern char D_0013E5E0[];
@@ -1086,7 +1083,6 @@ void FUN_L01_00319928(char *moby) {
     int volume;
     int flags;
     float box_length, listener_length;
-    char *slot;
 
     radius.f[2] = radius.f[1] = radius.f[0] = *(float *)(moby + 0xc);
     subtract_vector_xyz(&delta, D_L01_00167240, moby + 0x40);
@@ -1112,16 +1108,18 @@ void FUN_L01_00319928(char *moby) {
                                                      listener_length, D_L00_0015F5F4 + sound_data[0] * 0x20);
         }
         if (*(u8 *)(D_L00_0015F5F4 + sound_data[0] * 0x20 + 0x18)) flags = 0x14;
-        slot = D_0013E550 + sound_data[4] * 0x70;
-        if (*(char **)(slot + 0x8c) != moby || *(u8 *)(slot + 0x74) == 0) {
-            if (is_timer_active_319928(&sound_data[3])) {
-                sound_data[4] = play_voice_319928(sound_data[0], flags, moby, volume);
-                if (sound_data[2] > 0) {
-                    sound_data[3] = (int)((float)scale_game_frames(sound_data[1] +
-                        random_integer_below_319928(sound_data[2] - sound_data[1])) * 60.0f);
+        {
+            char *slot = D_0013E550 + sound_data[4] * 0x70;
+            if (*(char **)(slot + 0x8c) != moby || *(u8 *)(slot + 0x74) == 0) {
+                if (is_timer_active_319928(&sound_data[3])) {
+                    sound_data[4] = play_voice_319928(sound_data[0], flags, moby, volume);
+                    if (sound_data[2] > 0) {
+                        sound_data[3] = (int)((float)scale_game_frames(sound_data[1] +
+                            random_integer_below_319928(sound_data[2] - sound_data[1])) * 60.0f);
+                    }
+                } else {
+                    sound_data[4] = -1;
                 }
-            } else {
-                sound_data[4] = -1;
             }
         }
         if (sound_data[4] != -1) {
@@ -1132,14 +1130,13 @@ void FUN_L01_00319928(char *moby) {
         }
     } else {
         if (sound_data[4] != -1) {
-            slot = D_0013E550 + sound_data[4] * 0x70;
+            char *slot = D_0013E550 + sound_data[4] * 0x70;
             if (*(char **)(slot + 0x8c) == moby && *(u8 *)(slot + 0x74) != 0)
                 release_voice_slot(sound_data[4]);
         }
         sound_data[4] = -1;
     }
 }
-#endif
 /* reverb box sound update: starts or stops the sound as the listener enters or leaves the box */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0031AD00.c: func_L01_0031B2F0), where it is exact; names translated to the US level program. */
 
