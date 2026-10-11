@@ -350,14 +350,17 @@ extern s32 FUN_L00_00235a70(char *, s32 *, s32 *);
 
 s32 FUN_L00_002382a0(char *rec) {
     s32 x, y, half_w, half_h, alpha;
-    volatile s32 marker_alpha;
-    s32 i, icon_x, icon_y, selected, entry_offset, marker_offset, normal_offset;
+    s32 marker_alpha;
+    s32 i, icon_x, icon_y, selected;
+    s32 entry_offset;
+    s32 marker_offset;
+    s32 normal_offset;
     s32 color, shadow, text_y, id, item, prefix_length, text_length, j;
     f32 open, fade, phase, angle, radius;
     const char *text, *suffix;
     Ent *entry;
     u8 *q = (u8 *)rec + 0x70;
-    char formatted[64];
+    char formatted[80];
 
     open = convert_integer_to_float(q[0]) / convert_integer_to_float(D_L00_0015F780);
     if (1.0f < open) open = 1.0f;
@@ -369,8 +372,10 @@ s32 FUN_L00_002382a0(char *rec) {
     phase = convert_integer_to_float(D_L00_0015F5CC % D_L00_0015F7B0) /
             convert_integer_to_float(D_L00_0015F7B0);
     angle = fast_sin(phase * 6.28318f - 3.14159f);
-    alpha = truncate_float_to_s32(open * 128.0f);
-    marker_alpha = truncate_float_to_s32((open * 128.0f) * (angle * 0.125f + 0.875f));
+    radius = open * 128.0f;
+    alpha = truncate_float_to_s32(radius);
+    angle = angle * 0.125f + 0.875f;
+    marker_alpha = truncate_float_to_s32(radius * angle);
     x = *(s32 *)(rec + 0x50);
     y = *(s32 *)(rec + 0x54);
     FUN_L00_00235a70(rec, &x, &y);
@@ -395,17 +400,18 @@ s32 FUN_L00_002382a0(char *rec) {
             icon_y = y + D_L00_0015F724 +
                      (s32)(D_L00_0015F78C * fast_sin(angle));
             entry = D_L00_0015FAC0_c[D_L00_0015F72C];
-            if (*(s32 *)(rec + 0x74) == i && entry[i].f0 != 0)
+            if (*(s32 *)(rec + 0x74) == i && ((Ent *)((char *)entry + marker_offset))->f0 != 0)
                 draw_hud_sprite(get_icon_frame(0xe99c, 0), icon_x - 0x13,
                                 icon_y - 0x13, 0x26, 0x26, marker_alpha);
             entry = D_L00_0015FAC0_c[D_L00_0015F72C];
-            if (entry[i].f0 != 0) {
+            if (((Ent *)((char *)entry + normal_offset))->f0 != 0) {
                 s32 icon_alpha = alpha;
                 if (i != *(s32 *)(rec + 0x74))
                     icon_alpha = truncate_float_to_s32((f32)alpha * D_L00_0015F7C0);
                 entry = D_L00_0015FAC0_c[D_L00_0015F72C];
-                item = entry[i].f18;
-                draw_hud_icon(rec, get_icon_frame(entry[i].f0,
+                entry = (Ent *)((char *)entry + entry_offset);
+                item = entry->f18;
+                draw_hud_icon(rec, get_icon_frame(entry->f0,
                               D_0013E520[item] ? 4 : 0), icon_x, icon_y, 1, icon_alpha);
             }
             entry_offset += 0x1c;
@@ -439,13 +445,14 @@ s32 FUN_L00_002382a0(char *rec) {
         suffix = text;
         if (text_length > 0) {
             suffix = text + 1;
-            if (text[1] == '-') {
+            if ((u8)text[1] == '-') {
                 suffix = text + 2;
                 prefix_length = 2;
             } else {
-                for (j = 1; j < text_length; j++) {
+                j = 0;
+                while (++j < text_length) {
                     suffix++;
-                    if (*suffix == '-') {
+                    if (*(const u8 *)suffix == '-') {
                         prefix_length = j + 2;
                         suffix++;
                         break;
@@ -457,13 +464,14 @@ s32 FUN_L00_002382a0(char *rec) {
             suffix = text;
             if (text_length > 0) {
                 suffix = text + 1;
-                if (text[1] == ' ') {
+                if ((u8)text[1] == ' ') {
                     suffix = text + 2;
                     prefix_length = 1;
                 } else {
-                    for (j = 1; j < text_length; j++) {
+                    j = 0;
+                    while (++j < text_length) {
                         suffix++;
-                        if (*suffix == ' ') {
+                        if (*(const u8 *)suffix == ' ') {
                             prefix_length = j + 1;
                             suffix++;
                             break;
