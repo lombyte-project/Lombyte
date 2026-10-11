@@ -114,6 +114,7 @@ void FUN_L13_00305a58(struct Moby *moby) {
         L13Vector_5a58 random_direction;
     } work;
     int i;
+    int stationary;
     float length;
     float distance;
     float other_distance;
@@ -127,7 +128,7 @@ void FUN_L13_00305a58(struct Moby *moby) {
         *(OvlQuad *)&moby->unkC0 = *(OvlQuad *)&source->unkC0;
         *(OvlQuad *)&moby->unkD0 = *(OvlQuad *)&source->unkD0;
         *(OvlQuad *)&moby->unkE0 = *(OvlQuad *)&source->unkE0;
-        FUN_L00_0024f7c8(source, *(short *)(data + 0x26), &moby->pos);
+        FUN_L00_0024f7c8(*(struct Moby **)(data + 0x20), *(short *)(data + 0x26), &moby->pos);
         qcopy(data + 0x10, &moby->pos);
         source = *(struct Moby **)(data + 0x20);
         if (source != 0 && source->state != 0xfe && source->state != 0xfd && (source->flags & 1))
@@ -151,11 +152,12 @@ void FUN_L13_00305a58(struct Moby *moby) {
         if (target != 0)
             *((char *)target + 9) = FUN_001fa6d0(4.0f) - 0x80;
     }
-    *(OvlQuad *)&work.velocity = *(OvlQuad *)data;
+    qcopy(&work.velocity, data);
     work.velocity.z = 0.0f;
     FUN_001f9c48(&work.velocity, &work.velocity, 1.0f);
     work.velocity.z = 1.0f;
     FUN_L00_00259888(work.hit, moby, 0x10001, &work.velocity, 1.0f);
+    stationary = *(short *)(data + 0x24) == 0;
     distance = FUN_001f9b80(&moby->pos, data + 0x10);
     other_distance = FUN_001f9b80(*(char **)(data + 0x2c) + 0x10, data + 0x10);
     if (*(float *)(data + 0x28) < distance || other_distance < distance) {
@@ -177,7 +179,7 @@ void FUN_L13_00305a58(struct Moby *moby) {
         FUN_L13_003060b8(moby);
         goto remove;
     }
-    if (FUN_001efa68(&work.old_pos, &moby->pos, *(short *)(data + 0x24) == 0,
+    if (FUN_001efa68(&work.old_pos, &moby->pos, stationary,
                      moby, work.hit) == 0)
         goto bounds;
     target = *(struct Moby **)0x174158;
