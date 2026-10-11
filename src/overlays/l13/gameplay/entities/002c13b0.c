@@ -986,7 +986,7 @@ typedef struct Data_2C7F38 {
     int inactive_state;
     float angle[3];
     int unknown_28;
-    int duration;
+    float duration;
     int start_sound;
     int end_sound;
     float initial_scale;
@@ -997,8 +997,7 @@ void FUN_L13_002c7f38(struct Moby *moby) {
     Data_2C7F38 *data = (Data_2C7F38 *)moby->pvars;
     struct Moby *linked;
     float step;
-    float angle;
-    float frames;
+    float radians;
 
     if (moby->unkB0 != 0xFF &&
         D_0014C050[moby->unkB0 + current_level_index * 16] == 0xFF) {
@@ -1027,33 +1026,32 @@ void FUN_L13_002c7f38(struct Moby *moby) {
         moby->state = 2;
         break;
     case 2:
-        if (data->linked_index == -1 ||
-            (linked = (struct Moby *)(D_L13_0015FFD8 + data->linked_index * 0x100)) == 0 ||
-            linked->state == 0xFE || linked->state == 0xFD || linked->state != data->inactive_state) {
-            frames = (float)data->duration * 60.0f;
-            step = 1.0f / frames;
+        if (data->linked_index != -1 &&
+            (linked = (struct Moby *)(D_L13_0015FFD8 + data->linked_index * 0x100)) != 0 &&
+            linked->state != 0xFE && linked->state != 0xFD && linked->state == data->inactive_state) {
+            if (data->start_sound != -1) {
+                allocate_voice_for_target_entry_7f38(data->start_sound, 0, moby);
+            }
+            moby->state = 4;
+            break;
+        }
+        {
+            step = 1.0f / (data->duration * 60.0f);
+            radians = 0.017453292f;
             data->progress += step;
-            angle = data->angle[0] * 0.017453292f * step;
-            moby->rot.x = fast_add_rotations(moby->rot.x, angle);
-            angle = data->angle[1] * 0.017453292f * step;
-            moby->rot.y = fast_add_rotations(moby->rot.y, angle);
-            angle = data->angle[2] * 0.017453292f * step;
-            moby->rot.z = fast_add_rotations(moby->rot.z, angle);
+            moby->rot.x = fast_add_rotations(moby->rot.x, data->angle[0] * radians * step);
+            moby->rot.y = fast_add_rotations(moby->rot.y, data->angle[1] * radians * step);
+            moby->rot.z = fast_add_rotations(moby->rot.z, data->angle[2] * radians * step);
             if (!(1.0f <= data->progress)) return;
-            moby->rot.x = fast_add_rotations(data->initial_rot[0], data->angle[0] * 0.017453292f);
-            moby->rot.y = fast_add_rotations(data->initial_rot[1], data->angle[1] * 0.017453292f);
-            moby->rot.z = fast_add_rotations(data->initial_rot[2], data->angle[2] * 0.017453292f);
+            moby->rot.x = fast_add_rotations(data->initial_rot[0], data->angle[0] * radians);
+            moby->rot.y = fast_add_rotations(data->initial_rot[1], data->angle[1] * radians);
+            moby->rot.z = fast_add_rotations(data->initial_rot[2], data->angle[2] * radians);
             data->progress = 1.0f;
             moby->state = 3;
             if (data->end_sound != -1) {
                 allocate_voice_for_target_entry_7f38(data->start_sound, 0, moby);
             }
             return;
-        } else {
-            if (data->start_sound != -1) {
-                allocate_voice_for_target_entry_7f38(data->start_sound, 0, moby);
-            }
-            moby->state = 4;
         }
         break;
     case 3:
@@ -1076,15 +1074,13 @@ void FUN_L13_002c7f38(struct Moby *moby) {
             moby->state = 2;
         } else {
             int invalid_index = -1;
-            frames = (float)data->duration * 60.0f;
-            step = 1.0f / frames;
+            radians = 0.017453292f;
+            step = 1.0f;
+            step /= data->duration * 60.0f;
             data->progress -= step;
-            angle = data->angle[0] * 0.017453292f * step;
-            moby->rot.x = fast_subtract_rotations(moby->rot.x, angle);
-            angle = data->angle[1] * 0.017453292f * step;
-            moby->rot.y = fast_subtract_rotations(moby->rot.y, angle);
-            angle = data->angle[2] * 0.017453292f * step;
-            moby->rot.z = fast_subtract_rotations(moby->rot.z, angle);
+            moby->rot.x = fast_subtract_rotations(moby->rot.x, data->angle[0] * radians * step);
+            moby->rot.y = fast_subtract_rotations(moby->rot.y, data->angle[1] * radians * step);
+            moby->rot.z = fast_subtract_rotations(moby->rot.z, data->angle[2] * radians * step);
             if (!(data->progress <= 0.0f)) return;
             moby->rot.x = data->initial_rot[0];
             moby->rot.y = data->initial_rot[1];
