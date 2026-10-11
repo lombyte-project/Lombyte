@@ -1434,4 +1434,132 @@ void FUN_L01_002f5040(char *moby, float *out) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f5168.s", FUN_L01_002f5168);
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b91c8.s", FUN_L01_002b91c8);
+#else
+#include "rnc/rendering/dma_tag.h"
+#define D_0015F620 (*(s32 *)0x0015F620)
+#define D_0015F628 (*(u32 *)0x0015F628)
+#define D_0015F62C (*(u32 *)0x0015F62C)
+#define D_0015F630 (*(u32 *)0x0015F630)
+#define D_0015F634 (*(u32 *)0x0015F634)
+extern union PacketCursor l01_packet __asm__("D_L01_001611C0") __attribute__((section(".sdata")));
+extern void FUN_L01_00261c10(void *, void *) __asm__("FUN_L01_00261c10");
+extern void FUN_L01_00261df8(f32 *) __asm__("FUN_L01_00261df8");
+extern void FUN_L01_002b80d0(f32 *) __asm__("FUN_L01_002b80d0");
+extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
+
+void FUN_L01_002b91c8(f32 *pos, s32 count) {
+    f32 corners[4][4];
+    f32 near_clip[4];
+    f32 far_clip[4];
+    f32 x_offset, y_offset, x_end, y_end;
+    u32 near_bits, far_bits;
+    u32 mask;
+    s32 i, j, mode;
+    f32 *height;
+    u32 *packet;
+    u64 *data;
+
+    FUN_L01_002b8f98();
+    for (i = 0; i < count; i++) {
+        u16 active = *(u16 *)((u8 *)pos + 0x1e);
+        if (active == 0) goto next_entity;
+        x_offset = pos[0] + D_L01_001CAD00[2];
+        x_end = pos[0] - D_L01_001CAD00[2];
+        corners[0][0] = x_offset;
+        y_offset = pos[1] + D_L01_001CAD00[3];
+        y_end = pos[1] - D_L01_001CAD00[3];
+        corners[0][1] = y_offset;
+        corners[0][2] = pos[2];
+        corners[0][3] = 1.0f;
+        corners[1][0] = x_end;
+        corners[1][1] = y_offset;
+        corners[1][2] = pos[2];
+        corners[1][3] = 1.0f;
+        corners[2][0] = x_offset;
+        corners[2][1] = y_end;
+        corners[2][2] = pos[2];
+        corners[2][3] = 1.0f;
+        corners[3][0] = x_end;
+        corners[3][1] = y_end;
+        corners[3][2] = pos[2];
+        corners[3][3] = 1.0f;
+        near_bits = 0;
+        far_bits = 0;
+        for (j = 0; j < 4; j++) {
+            subtract_vector_xyz(near_clip, corners[j], D_L01_00167240);
+            scale_vector_xyz(far_clip, near_clip, 1024.0f);
+            scale_vector_xyz(near_clip, near_clip, 1024.0f);
+            FUN_001f9d20(far_clip, far_clip, D_L01_00167240 - 0x80);
+            FUN_001f9d20(near_clip, near_clip, D_L01_00167240 - 0x40);
+            far_bits = (far_bits << 8) | FUN_001f9958(far_clip);
+            near_bits = (near_bits << 8) | FUN_001f9958(near_clip);
+        }
+        if ((near_bits & 0x01010101) == 0x01010101) goto next_entity;
+        if ((near_bits & 0x02020202) == 0x02020202) goto next_entity;
+        if ((near_bits & 0x04040404) == 0x04040404) goto next_entity;
+        if ((near_bits & 0x08080808) == 0x08080808) goto next_entity;
+        if ((near_bits & 0x20202020) == 0x20202020) goto next_entity;
+
+        FUN_L01_00261c10((void *)0x70000000, pos + D_0015F620 * 0x170 + 0x14);
+        FUN_L01_00261df8(pos);
+        FUN_L01_002b8c08(pos);
+        FUN_L01_002b80d0(pos);
+        if (*(u32 *)(pos + 0x11) & 1) {
+            height = (f32 *)0x70002008;
+            for (j = 0x10; j >= 0; j--, height += 3) *height = pos[2];
+        }
+        if (*(u32 *)(pos + 0x11) & 2) {
+            height = (f32 *)0x700020c8;
+            for (j = 0x10; j >= 0; j--, height += 0x33) *height = pos[2];
+        }
+        if (*(u32 *)(pos + 0x11) & 4) {
+            height = (f32 *)0x70002cc8;
+            for (j = 0x10; j >= 0; j--, height += 3) *height = pos[2];
+        }
+        if (*(u32 *)(pos + 0x11) & 8) {
+            height = (f32 *)0x70002008;
+            for (j = 0x10; j >= 0; j--, height += 0x33) *height = pos[2];
+        }
+        mode = (far_bits & 0x2f2f2f2f) != 0;
+        if (mode == 0 && (near_bits & 0x2f2f2f2f) != 0) mode = 2;
+        mask = *(u16 *)((u8 *)pos + 0x1e);
+        if (*(u32 *)(pos + 5) != D_0015F628 || *(u32 *)(pos + 6) != D_0015F62C ||
+            *(u8 *)(pos + 7) != D_0015F630 || *(u8 *)((u8 *)pos + 0x1d) != D_0015F634) {
+            l01_packet.words[0] = 0x10000005;
+            l01_packet.words[1] = 0;
+            l01_packet.words[2] = 0x11000000;
+            l01_packet.words[3] = 0x50000005;
+            packet = l01_packet.words;
+            l01_packet.words += 4;
+            data = (u64 *)(packet + 4);
+            data[0] = 0x4000000000008001ULL;
+            data[1] = 0xeeee;
+            data[2] = ((u64)*(u8 *)((u8 *)pos + 0x1d) << 32) | 100;
+            data[3] = 0x42;
+            data[4] = ((u64)*(u8 *)(pos + 7) << 32) | 100;
+            data[5] = 0x43;
+            data[6] = get_effect_texture(*(s32 *)(pos + 6));
+            data[7] = 6;
+            data[8] = get_effect_texture(*(s32 *)(pos + 5));
+            data[9] = 7;
+            l01_packet.words = packet + 0x18;
+            D_0015F628 = *(u32 *)(pos + 5);
+            D_0015F62C = *(u32 *)(pos + 6);
+            D_0015F630 = *(u8 *)(pos + 7);
+            D_0015F634 = *(u8 *)((u8 *)pos + 0x1d);
+        }
+        for (j = 0; j < 16; j++, mask = (s32)mask >> 1) {
+            if (mask & 1) FUN_L01_002b8cb0(pos, j, mode);
+        }
+next_entity:
+        pos += 0x464;
+    }
+    l01_packet.words[0] = 0x10000000;
+    l01_packet.words[1] = 0;
+    l01_packet.words[2] = 0x13000000;
+    l01_packet.words[3] = 0;
+    l01_packet.words += 4;
+}
+#endif
