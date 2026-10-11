@@ -174,7 +174,7 @@ extern void FUN_001f9bf8(void *, void *, float);
 extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
 extern void FUN_L00_002598b0(int, float, void *, int, float, float, int, int, int);
 extern void FUN_L00_00259a88(int, void *);
-extern void FUN_L18_002dc4b8(void);
+extern void FUN_L18_002dc4b8();
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -1588,7 +1588,7 @@ extern short D_L18_00161C3C __attribute__((sda));
 extern short D_L18_00161C40 __attribute__((sda));
 extern short D_L18_00161C44 __attribute__((sda));
 extern void FUN_L00_00259fe8(unsigned char *m, float s);
-extern void FUN_L18_002dba20(void);
+extern void FUN_L18_002dba20();
 extern void FUN_L18_002dbe80_c(char *moby) __asm__("FUN_L18_002dbe80");
 extern void add_vector_xyz(void *, void *, void *);
 extern void clear_vector(void *);
@@ -1720,7 +1720,117 @@ void FUN_L18_002db938(char *pos, float *vec, int arg, float fa, float fb) {
         c->f30 = 0;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dba20.s", FUN_L18_002dba20);
+/* Ported from rac1-decomp nonmatching/l18_veldin2/func_L18_002DCE10.c (func_L18_002DCE10) */
+typedef struct { float f[4]; } __attribute__((aligned(16))) V_dba20;
+typedef struct { float u, v; } UV_dba20;
+typedef struct {
+    V_dba20 corner[4];
+    unsigned int color[4];
+    UV_dba20 uv[4];
+    long unk70, tex, unk80, unk88;
+} Q_dba20;
+typedef struct {
+    char pad0[0x20];
+    float f20, f24, f28;
+} D_dba20;
+typedef struct {
+    char pad0[0x10];
+    V_dba20 pos;
+    char pad20[0x58];
+    D_dba20 *data;
+} M_dba20;
+
+extern void unit_matrix_dba20(void *) __asm__("FUN_001f9fc8");
+extern int get_effect_texture_dba20(int) __asm__("FUN_001f44b8");
+extern int truncate_dba20(float) __asm__("FUN_001fa6d0");
+extern int tween_color_dba20(int, int, float) __asm__("FUN_001fa6e0");
+extern float scale_time_dba20(float) __asm__("FUN_001f96b0");
+extern float add_rotations_dba20(float, float) __asm__("FUN_001fa580");
+extern float cos_dba20(float) __asm__("FUN_001f9dc8");
+extern float sin_dba20(float) __asm__("FUN_001f9de0");
+extern void clear_vector_dba20(void *) __asm__("FUN_001f99f8");
+extern void euler_basis_dba20(void *, void *) __asm__("FUN_001fa030");
+extern void draw_quad_dba20(void *, void *, int) __asm__("FUN_001f7d30");
+extern void matrix_mul_dba20(void *, void *, void *) __asm__("FUN_001fa328");
+
+extern int D_L18_00161C48_v __asm__("D_L18_00161C48") __attribute__((sda));
+extern int D_L18_00161C4C_v __asm__("D_L18_00161C4C") __attribute__((sda));
+extern int D_L18_00161C50_v __asm__("D_L18_00161C50") __attribute__((sda));
+extern int D_L18_00161C54_v __asm__("D_L18_00161C54") __attribute__((sda));
+extern int D_L18_00161C5C_v __asm__("D_L18_00161C5C") __attribute__((sda));
+extern int D_L18_00161C60_v __asm__("D_L18_00161C60") __attribute__((sda));
+extern float D_L18_00161C64_v __asm__("D_L18_00161C64") __attribute__((sda));
+extern float D_L18_00161C68_v __asm__("D_L18_00161C68") __attribute__((sda));
+extern float D_L18_00161C6C_v __asm__("D_L18_00161C6C") __attribute__((sda));
+extern float D_L18_00161C70_v __asm__("D_L18_00161C70") __attribute__((sda));
+extern float D_L18_00161C74_v __asm__("D_L18_00161C74") __attribute__((sda));
+extern float D_L18_00161C78_v __asm__("D_L18_00161C78") __attribute__((sda));
+extern float D_L18_00161C7C_v __asm__("D_L18_00161C7C") __attribute__((sda));
+extern float D_L18_001D4310[];
+
+void FUN_L18_002dba20(M_dba20 *moby) {
+    Q_dba20 q[4];
+    V_dba20 m[4];
+    V_dba20 rot[3];
+    V_dba20 rv;
+    D_dba20 *d = moby->data;
+    int j, k, n;
+    int col;
+
+    unit_matrix_dba20(m);
+    qcopy(&m[3], &moby->pos);
+    m[3].f[2] += D_L18_00161C68_v;
+    m[3].f[3] = 1.0f;
+    for (j = 0; j < 4; j++) {
+        float fj;
+        float t, ang, rad;
+        q[j].tex = get_effect_texture_dba20(0xE);
+        q[j].unk70 = 0;
+        q[j].unk80 = 0xFF9000000260L;
+        q[j].unk88 = (long)D_L18_00161C48_v | ((long)D_L18_00161C4C_v << 2) | ((long)D_L18_00161C50_v << 4) | ((long)D_L18_00161C54_v << 6) | 0x8000000000L;
+        t = d->f24 * D_L18_00161C74_v + (float)j * 0.25f;
+        rad = d->f24 + D_L18_00161C70_v * (float)j;
+        t = t - (float)truncate_dba20(t);
+        col = tween_color_dba20(D_L18_00161C5C_v, D_L18_00161C60_v, t);
+        ang = t * D_L18_00161C78_v;
+        if (ang > 1.0f) ang = 1.0f;
+        col = tween_color_dba20(col & 0xFFFFFF, col, ang);
+        ang = (d->f28 - d->f24) / (d->f20 * scale_time_dba20(D_L18_00161C7C_v));
+        if (ang > 1.0f) {
+            ang = 1.0f;
+        } else if (ang < 0.0f) {
+            ang = 0.0f;
+        }
+        col = tween_color_dba20(col & 0xFFFFFF, col, ang);
+        fj = (float)j;
+        for (k = 0; k < 4; k++) {
+            float a;
+            q[j].uv[k].u = D_L18_001D4310[2 * k];
+            q[j].uv[k].v = D_L18_001D4310[2 * k + 1];
+            if (k & 1) {
+                q[j].corner[k].f[2] = t * D_L18_00161C6C_v;
+            } else {
+                q[j].corner[k].f[2] = -t * D_L18_00161C6C_v;
+            }
+            a = add_rotations_dba20((float)(k >> 1) * (D_L18_00161C64_v * 0.017453292f) - 3.14159f,
+                              D_L18_00161C64_v * 0.25f * fj * 0.017453292f);
+            q[j].corner[k].f[0] = cos_dba20(a) * rad;
+            q[j].corner[k].f[1] = sin_dba20(a) * rad;
+            q[j].corner[k].f[3] = 1.0f;
+            q[j].color[k] = col;
+        }
+    }
+    clear_vector_dba20(&rv);
+    rv.f[2] = D_L18_00161C64_v * 0.017453292f;
+    euler_basis_dba20(rot, &rv);
+    for (n = 0; (float)n < 360.0f / D_L18_00161C64_v; n++) {
+        draw_quad_dba20(&q[0], m, 0);
+        draw_quad_dba20(&q[1], m, 0);
+        draw_quad_dba20(&q[2], m, 0);
+        draw_quad_dba20(&q[3], m, 0);
+        matrix_mul_dba20(m, m, rot);
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD270), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9dc8(float);
