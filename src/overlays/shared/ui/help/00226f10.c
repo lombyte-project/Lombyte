@@ -341,13 +341,13 @@ void FUN_L01_0022d090(void)
     if (hero.unk1B0 != 0)
         return;
     allowed = 0;
-    if (hero.unk20A4 == 0) {
+    if (hero.vehicle_mode == 0) {
         if ((hero.state.control_mode == 4 &&
              (hero.unk41E != 0 || hero.motion.velocity.f[2] < frame_time * 3.5f)) ||
             hero.state.control_mode == 2 || hero.state.current == 8 ||
             hero.state.current == 0x1A || hero.state.current == 0x1B)
             allowed = 1;
-        if (hero.state.current == 0xE && hero.unkAA8 < 37.0f)
+        if (hero.state.current == 0xE && hero.anim_frame < 37.0f)
             allowed = 0;
     }
     if (!allowed)

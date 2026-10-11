@@ -1636,7 +1636,7 @@ int FUN_L01_00240ed8(void) {
     struct HeldGadgetVars *vars;
 
     if (hero.unk20AC != 0 && (hero.items[0].item_id != 8 || hero.unk308 != 1)) return 0;
-    if (hero.unk20A4 != 0) return 0;
+    if (hero.vehicle_mode != 0) return 0;
     if (hero.items[0].moby == 0) return 0;
     if (hero.items[0].state != 2) return 0;
     saved = hero.state_timer;
@@ -1646,7 +1646,7 @@ int FUN_L01_00240ed8(void) {
     case 8:
         if ((unsigned int)hero.state.control_mode < 2 ||
             (hero.state.control_mode == 4 && hero.unk418 != 0)) {
-            if (hero.unk12EA == 0 && FUN_L00_00266d60(buttons, scale_game_frames(7), &out0) != 0) {
+            if (hero.on_slip_ground == 0 && FUN_L00_00266d60(buttons, scale_game_frames(7), &out0) != 0) {
                 moby = hero.items[0].moby;
                 if (moby != 0 && FUN_L00_00211360((char *)moby) != 0 && moby->state == 0) {
                     if ((controller_state.held & 0xa) != 0 ||
@@ -1666,10 +1666,10 @@ int FUN_L01_00240ed8(void) {
                 }
             }
         } else if ((hero.state.current == 7 || hero.state.current == 9 || hero.state.current == 8 ||
-                    hero.state.current == 6 || (hero.state.current == 0xe && hero.unkAA8 > 32.0f) ||
+                    hero.state.current == 6 || (hero.state.current == 0xe && hero.anim_frame > 32.0f) ||
                     (hero.state.current == 0xb &&
-                     (hero.unk450 != 3 && hero.unkAA8 > 18.0f) ||
-                     (hero.state.current == 0xb && hero.unk450 == 3 && hero.unkAA8 > 20.0f)) ||
+                     (hero.unk450 != 3 && hero.anim_frame > 18.0f) ||
+                     (hero.state.current == 0xb && hero.unk450 == 3 && hero.anim_frame > 20.0f)) ||
                     hero.state.current == 0x2d || hero.state.current == 0x11) &&
                    scale_game_frames(10) < hero.state_timer) {
             window = scale_game_frames(10);
@@ -1679,22 +1679,22 @@ int FUN_L01_00240ed8(void) {
                 if ((hero.unk41E == 0 ? hero.ground_distance > 0.1f : hero.ground_distance > 0.57f) ||
                     (hero.state.current == 8 && hero.ground_distance > 0.57f)) {
                     hero_set_state(0x14, 1);
-                } else if (hero.unk12EA == 0) {
+                } else if (hero.on_slip_ground == 0) {
                     hero_set_state(0x13, 1);
                 }
             }
         } else if (hero.state.control_mode == 6) {
-            row = &D_L01_0017C0A8[hero.unkA60];
+            row = &D_L01_0017C0A8[hero.attack_record];
             if (hero.state.current == 0x15 && scale_game_frames(0x1e) < hero.state_timer &&
-                hero.unkA9C == 0 && (float)((int *)row)[4] <= hero.unkAA8 &&
+                hero.unkA9C == 0 && (float)((int *)row)[4] <= hero.anim_frame &&
                 (controller_state.held & 0xa) != 0 &&
                 FUN_L00_00266d60(buttons, scale_game_frames(0xf), 0) != 0) {
                 hero_set_state(0x15, 1);
-            } else if (hero.unkA9C == 0 && (float)((int *)row)[4] <= hero.unkAA8) {
-                frames = (truncate_float_to_s32(hero.unkAA8) - ((int *)row)[3]) * 2;
+            } else if (hero.unkA9C == 0 && (float)((int *)row)[4] <= hero.anim_frame) {
+                frames = (truncate_float_to_s32(hero.anim_frame) - ((int *)row)[3]) * 2;
                 if (frames < 1) frames = 1;
                 if (scale_game_frames(0xf) < frames) frames = scale_game_frames(0xf);
-                if (hero.unk12EA == 0 && FUN_L00_00266d60(buttons, frames, 0) != 0) {
+                if (hero.on_slip_ground == 0 && FUN_L00_00266d60(buttons, frames, 0) != 0) {
                     if ((controller_state.held & 0xa) != 0) hero_set_state(0x15, 1);
                     else if (hero.unk308 == 1) hero_set_state(0x70, 1);
                     else hero_set_state(0x13, 1);
@@ -1703,7 +1703,7 @@ int FUN_L01_00240ed8(void) {
         }
         break;
     case 0x1f:
-        if (hero.unk20A4 == 0 && FUN_L00_0020fe30() != 0 &&
+        if (hero.vehicle_mode == 0 && FUN_L00_0020fe30() != 0 &&
             FUN_L00_00266d60(buttons, scale_game_frames(7), 0) != 0 &&
             D_00141660 == 0x1f && hero.items[0].moby->oclass == 0x1e3 &&
             hero.unk22DE == 0) {
@@ -1748,7 +1748,7 @@ int FUN_L01_00240ed8(void) {
             hero.state.control_mode == 1 || hero.state.control_mode == 0xc ||
             hero.state.control_mode == 5 || hero.state.control_mode == 0xf ||
             (hero.state.control_mode == 4 && hero.unk4AC != 0) ||
-            (hero.state.current == 0x23 && hero.unkAA8 > 25.0f)) {
+            (hero.state.current == 0x23 && hero.anim_frame > 25.0f)) {
             if (hero.unk20A8 == 0) {
                 int hold;
                 window = scale_game_frames(7);

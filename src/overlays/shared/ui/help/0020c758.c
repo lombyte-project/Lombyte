@@ -682,7 +682,7 @@ extern s32 D_L00_00197300_20dd20[] __asm__("D_L00_00197300") __attribute__((sect
 extern u8 D_L00_0017CA80_20dd20[] __asm__("D_L00_0017CA80") __attribute__((section(".data")));
 extern u8 D_L00_0017A680_20dd20[] __asm__("D_L00_0017A680") __attribute__((section(".data")));
 #define ANGLE_FIELD_20DD20(offset) (*(f32 *)(D_L00_0017A680_20dd20 + (offset)))
-extern f32 D_0015ED64_20dd20 __asm__("D_0015ED64") __attribute__((sda));
+extern f32 D_0015ED64_20dd20 __asm__("D_0015ED64");
 extern u8 *FUN_L00_0024f028_20dd20(u8 *, s32) __asm__("FUN_L00_0024f028");
 extern void FUN_L00_0024f0e8_20dd20(u8 *, u8 **) __asm__("FUN_L00_0024f0e8");
 extern void FUN_L00_0024f190_20dd20(u8 *, u8 *) __asm__("FUN_L00_0024f190");
@@ -2022,7 +2022,7 @@ extern s32 D_L00_0015F3F8;
 void FUN_L00_00210748(void) {
     int i = 0;
     do {
-        struct Hero *slot_hero = (struct Hero *)(&hero.items[i]);
+        struct Hero *slot_hero = (struct Hero *)(((char *)&hero) + i * 0x50);
         struct Moby *moby = slot_hero->items[0].moby;
         if (moby == 0) {
             hero_switch_item(i);
@@ -2050,11 +2050,9 @@ void FUN_L00_00210748(void) {
                 if ((moby->unk70 & 2) || i == 1 || i == 0)
                     FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
             }
-            if (moby->state == 0xfe) goto next_slot;
-            if (moby->state == 0xfd) goto next_slot;
-            if (i != 6 && moby->update) moby->update(moby);
+            if (moby->state != 0xfe && moby->state != 0xfd && i != 6 && moby->update)
+                moby->update(moby);
         }
-next_slot:
         i++;
     } while (i < 7);
 }
