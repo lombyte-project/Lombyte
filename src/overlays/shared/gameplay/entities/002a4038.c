@@ -41,7 +41,158 @@ extern void FUN_L02_002a4058_u(char *arg, int val) __asm__("FUN_L02_002a4058");
 void FUN_L02_002a40d0(char *arg) {
     FUN_L02_002a4058_u(arg, 0x80);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a40f0.s", FUN_L02_002a40f0);
+#else
+extern char D_L02_0016D040[];
+extern float D_L02_001612F8;
+extern float D_L02_001612FC;
+extern float D_L02_00161300;
+extern float D_L02_00161304;
+extern int *D_L02_001611C0;
+extern void update_view_context(void) __asm__("FUN_001f2d98");
+extern void FUN_001f2260(void) __asm__("FUN_001f2260");
+extern void FUN_001f9ff8(float, void *);
+extern void setup_offset_vector(float, void *, void *) __asm__("FUN_001f9a68");
+extern void FUN_00233830(void *, int);
+extern void FUN_001fa378(void *, void *, void *) __asm__("FUN_001fa378");
+extern void FUN_L02_0024fca0(float, void *, void *, void *, void *, void *, int);
+extern int D_L02_0015F458;
+extern int D_L02_0015F5CC;
+extern int D_L02_0015F420;
+extern u64 D_L02_001612F0;
+extern int D_L02_001CB8F0;
+
+void FUN_L02_002a40f0(char *data) {
+    int *packet;
+    u64 *words;
+    float matrix[12];
+    float offset[4];
+    char *context = D_L02_0016D040;
+    char *base = (char *)0x001673c0;
+    int frame;
+    float frame_time;
+    int index;
+    int next;
+    int color;
+    int first;
+    int second;
+
+    D_L02_001612F8 = *(float *)(context + 0x218);
+    D_L02_001612FC = *(float *)(context + 0x21c);
+    D_L02_00161300 = *(float *)(context + 0x228);
+    D_L02_00161304 = *(float *)(context + 0x22c);
+    if (D_L02_0015F458 != 1) {
+        *(float *)(context + 0x218) = *(float *)(data + 0x20);
+        *(float *)(context + 0x21c) = *(float *)(data + 0x24);
+        *(float *)(context + 0x228) = *(float *)(data + 0x28);
+        *(float *)(context + 0x22c) = *(float *)(data + 0x2c);
+    }
+    update_view_context();
+    FUN_001f2260();
+    FUN_001f9ff8(1024.0f, matrix);
+    setup_offset_vector(-1024.0f, offset, base);
+    offset[3] = 1.0f;
+    FUN_00233830(&(*(int *)0x0010e810), (*(unsigned short *)0x0010e800));
+    D_L02_001611C0[0] = 0x10000000;
+    D_L02_001611C0[1] = 0;
+    D_L02_001611C0[2] = 0x11000000;
+    D_L02_001611C0[3] = 0x01000404;
+    packet = D_L02_001611C0;
+    packet[4] = 0;
+    packet[5] = 0;
+    packet[6] = 0;
+    packet[7] = 0x6c0c43a4;
+    FUN_001fa378(packet + 8, base - 0x100, matrix);
+    FUN_001fa378(packet + 24, base - 0x80, matrix);
+    packet[40] = 0x8000;
+    packet[41] = 0x303ec000;
+    packet[42] = 0x412;
+    packet[43] = *(int *)(context + 0x210);
+    *(u128 *)(packet + 44) = *(u128 *)(context + 0x190);
+    qcopy(packet + 48, context + 0x1a0);
+    packet[52] = *(int *)(context + 0x22c);
+    packet[57] = 0x020001d2;
+    packet[53] = *(int *)(context + 0x228);
+    packet[56] = 0x03000000;
+    packet[58] = 0x15000000;
+    packet[54] = 0;
+    packet[55] = 0;
+    packet[59] = 0;
+    *D_L02_001611C0 |= (((packet + 60) - D_L02_001611C0) >> 2) - 1;
+    D_L02_001611C0 = packet + 60;
+    packet[60] = 0x30000003;
+    D_L02_001611C0[1] = (int)&D_L02_001CB8F0;
+    D_L02_001611C0[2] = 0;
+    D_L02_001611C0[3] = 0x50000003;
+    packet = D_L02_001611C0 + 4;
+    D_L02_001611C0 += 4;
+    packet[0] = 0x10000009;
+    D_L02_001611C0[1] = 0;
+    D_L02_001611C0[2] = 0;
+    D_L02_001611C0[3] = 0x50000009;
+    D_L02_001611C0 += 4;
+
+    frame_time = (float)D_L02_0015F5CC;
+    frame = D_L02_0015F5CC / (unsigned char)data[0x33];
+    index = ((unsigned short)*(short *)(data + 0x3c) + frame % (unsigned char)data[0x3e]) * 16;
+    next = ((unsigned short)*(short *)(data + 0x3c) + (frame + 1) % (unsigned char)data[0x3e]) * 16;
+    first = (unsigned short)*(short *)(((char *)0x0016d788) + index + 8) * 16;
+    second = (unsigned short)*(short *)(((char *)0x0016d788) + index + 10) * 16;
+    *(u64 *)(*(int *)(data + 0x1c)) = 0x0800000000000400ULL;
+    *(u64 *)(*(int *)(data + 0x1c) + 8) = 0;
+    FUN_L02_0024fca0(frame_time / (float)(unsigned char)data[0x33] - (float)frame,
+                       (void *)(*(int *)(data + 0x1c) + 16),
+                       (void *)(D_L02_0015F420 + first),
+                       (void *)(D_L02_0015F420 + second),
+                       (void *)(D_L02_0015F420 + (unsigned short)*(short *)(((char *)0x0016d788) + next + 8) * 16),
+                       (void *)(D_L02_0015F420 + (unsigned short)*(short *)(((char *)0x0016d788) + next + 10) * 16), 0x1000);
+
+    D_L02_001612F0 = ((long)((*(int *)0x0015ee74) >> 8)) | 0x598100000ULL;
+    color = (unsigned char)data[0x30] | ((unsigned char)data[0x31] << 8) |
+            ((unsigned char)data[0x32] << 16);
+    if (D_L02_0015F458 == 1)
+        color = *(int *)(context + 0x230) | (*(int *)(context + 0x234) << 8) |
+                (*(int *)(context + 0x238) << 16);
+    words = (u64 *)D_L02_001611C0;
+    words[0] = 0x8000000000008001ULL;
+    words[1] = 0xeeeeeeeeULL;
+    words[2] = ((u64)(unsigned char)data[0x3f] << 32) | 100;
+    words[3] = 0x42;
+    words[4] = D_L02_001612F0;
+    words[5] = 6;
+    words[6] = (long)color;
+    words[7] = 0x3d;
+    words[8] = ((long)((*(int *)0x0015ee74) >> 8) << 32) | 0x1000000000000ULL;
+    words[9] = 0x50;
+    words[10] = 0;
+    words[11] = 0x51;
+    words[12] = 0x4000000040ULL;
+    words[13] = 0x52;
+    words[14] = 0;
+    words[15] = 0x53;
+    words[16] = (unsigned char)data[0x3f] > 0x60 ? 0x5360a : 0x5370b;
+    words[17] = 0x47;
+    D_L02_001611C0 += 36;
+    D_L02_001611C0[0] = 0x30000401;
+    D_L02_001611C0[1] = *(int *)(data + 0x1c);
+    D_L02_001611C0[2] = 0;
+    D_L02_001611C0[3] = 0x50000401;
+    packet = D_L02_001611C0 + 4;
+    D_L02_001611C0 += 4;
+    packet[0] = 0x10000002;
+    D_L02_001611C0[1] = 0;
+    D_L02_001611C0[2] = 0;
+    D_L02_001611C0[3] = 0x50000002;
+    words = (u64 *)(D_L02_001611C0 + 4);
+    words[0] = 0x1000000000008001ULL;
+    words[1] = 0xE;
+    words[2] = 0;
+    words[3] = 0x3F;
+    D_L02_001611C0 += 12;
+    (*(int *)0x0015ee74) += 0x4000;
+}
+#endif
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002A58C0), where it is exact; names translated to the US level program. */
