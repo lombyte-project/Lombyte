@@ -1133,16 +1133,21 @@ void FUN_L12_00308350(struct Moby *m) {
         float x_offset;
         float jitter = 0.0f;
         int row;
+        u128 *first_vertex = first.vertices;
+        u128 *second_vertex = second.vertices;
         i++;
         x_offset = random_float_between(-0.5f, 0.5f);
         for (j = 0; j < 4; j++) {
-            ((float *)&first.vertices[j])[2] += 1.0f;
-            ((float *)&second.vertices[j])[2] += 1.0f;
+            ((float *)first_vertex)[2] += 1.0f;
+            ((float *)second_vertex)[2] += 1.0f;
+            first_vertex++;
+            second_vertex++;
             first.uv[j][0] = D_L12_001FB6D0[j][0] + x_offset;
             first.uv[j][1] = D_L12_001FB6D0[j][1];
         }
         for (row = -3; row != 3; row++) {
             float x = (float)row + jitter;
+            jitter = 0.0f;
             ((float *)&first.vertices[0])[1] = x;
             ((float *)&first.vertices[1])[1] = x;
             if (row < 4) jitter = random_float_between(-0.2f, 0.2f);
