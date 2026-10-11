@@ -1828,6 +1828,8 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
         phase = wrap_effect_phase_l07(convert_integer_to_float_l07(D_L07_0015F5CC) /
                                       (band * 40.0f + 40.0f), phase_work);
         if ((index & 1) == 0) phase = -phase;
+        *(float *)(packet + 0x50) = phase;
+        *(float *)(packet + 0x60) = phase;
         width = convert_integer_to_float_l07(index + 1 > 5 ? 5 : index + 1);
         index++;
         green = green - green_step;
@@ -1838,25 +1840,15 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
         *(float *)(packet + 0x10) = center - radius * (0.96f - band * 0.03f);
         *(float *)(packet + 0x14) = *(float *)(moby + 0x14);
         *(float *)(packet + 0x18) = side + *(float *)(moby + 0x18);
-        *(float *)(packet + 0x50) = phase;
+        *(float *)(packet + 0x08) = side + *(float *)(moby + 0x18);
+        *(float *)(packet + 0x28) = *(float *)(moby + 0x18);
         *(float *)(packet + 0x58) = phase + width;
-        *(float *)(packet + 0x60) = phase;
         *(float *)(packet + 0x68) = phase + width;
         *(float *)(packet + 0x54) = 0.0f;
         *(float *)(packet + 0x5c) = 0.0f;
         *(float *)(packet + 0x64) = 1.0f;
         *(float *)(packet + 0x6c) = 1.0f;
-        {
-            u128 *source = (u128 *)packet;
-            u128 *destination = (u128 *)second;
-            do {
-                destination[0] = source[0];
-                destination[1] = source[1];
-                source += 2;
-                destination += 2;
-            } while (source != (u128 *)(packet + 0x80));
-            destination[0] = source[0];
-        }
+        __builtin_memcpy(second, packet, 0x90);
         *(float *)(second + 8) = *(float *)(moby + 0x18) - 5.0f;
         *(float *)(second + 0x18) = *(float *)(moby + 0x18) - 5.0f;
         angle = -2.8274336f;
