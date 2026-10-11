@@ -39,7 +39,145 @@ void FUN_L15_002e46b0(struct Moby *moby) {
     }
 }
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029aff0.s", FUN_L15_0029aff0);
+#else
+typedef struct {
+    Vec4 home;
+    s32 open_volume;
+    s32 close_volume;
+    f32 travel;
+    s32 trigger;
+    s32 sound;
+    f32 duration;
+    s32 lock;
+} MovingVars_29aff0;
+
+typedef struct {
+    char pad00[0x74];
+    u8 active;
+    char pad75[0x13];
+    struct Moby *owner;
+} VoiceSlot_29aff0;
+
+extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern u8 D_0013F3D0[];
+extern char D_L15_001673C0[];
+extern char D_0013E550[];
+extern char D_0014C190[];
+extern int D_L15_001BAAD0[];
+extern s32 current_level_index __asm__("D_0015ED84");
+extern f32 frame_time __asm__("D_0015ED6C");
+
+void FUN_L15_0029aff0(struct Moby *m)
+{
+    MovingVars_29aff0 *d = (MovingVars_29aff0 *)m->pvars;
+    Vec4 offset;
+    Vec4 pos;
+    s32 slot;
+    VoiceSlot_29aff0 *voice_slot;
+    s32 trigger_active;
+    u32 mask;
+    u32 *bits;
+
+    switch (m->state) {
+    case 0:
+        d->home.q = *(u128 *)&m->pos;
+        m->state = 1;
+        return;
+    case 1:
+        trigger_active = 0;
+        d->travel = 0;
+        if (d->trigger != -1) {
+            struct Moby *other = (struct Moby *)((char *)*(s32 *)&D_L15_0015FFD8_d + d->trigger * 0x100);
+            if (other->oclass == 0x4b9) {
+                if (other->state == 4) {
+                    trigger_active = 1;
+                    goto check_lock;
+                }
+            }
+            if (other->oclass == 0x596) {
+                trigger_active = other->state == 4;
+            }
+        }
+check_lock:
+        if (d->lock != 0) {
+            if (((u8 *)D_L15_001BAAD0)[0x11b4 + (s16)m->save_id] != 0 ||
+                ((*(s32 *)(D_0014C190 + current_level_index * 0x100 + ((s16)m->save_id >> 5) * 4) >> (m->save_id & 31)) & 1) != 0)
+                trigger_active = 1;
+        }
+        if (is_point_inside_clip_volume(D_0013F3D0, d->open_volume)) {
+            m->state = 2;
+        } else if (trigger_active) {
+            m->state = 2;
+        }
+        return;
+    case 2:
+        voice_slot = (VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70);
+        if (voice_slot->owner != m || voice_slot->active == 0)
+            d->sound = allocate_voice_for_target_entry(0, 4, (int)m);
+        if (d->duration < (d->travel = d->travel + (d->duration / 0.6f) * frame_time)) {
+            slot = d->sound;
+            if (slot != -1 && ((VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70))->owner == m &&
+                ((VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70))->active != 0)
+                release_voice_slot(slot);
+            d->travel = d->duration;
+            d->sound = -1;
+            if (d->trigger == -1 && d->lock == 0) {
+                m->state = 3;
+            } else {
+                mask = 1U << (m->save_id & 31);
+                bits = (u32 *)(D_0014C190 + current_level_index * 0x100 + ((s16)m->save_id >> 5) * 4);
+                *bits |= mask;
+                bits = (u32 *)((char *)D_L15_001BAAD0 + ((s16)m->save_id >> 5) * 4);
+                *bits |= mask;
+                m->state = 5;
+            }
+        }
+        offset.f[0] = fast_cos(m->rot.z) * -d->travel;
+        offset.f[1] = fast_sin(m->rot.z) * -d->travel;
+        offset.f[2] = 0.0f;
+        add_vector_xyz(&pos, &d->home, &offset);
+        *(u128 *)&m->pos = pos.q;
+        return;
+    case 3:
+        if (is_point_inside_clip_volume(D_0013F3D0, d->close_volume) ||
+            is_point_inside_clip_volume(D_L15_001673C0, d->close_volume))
+            return;
+        m->state = 4;
+        return;
+    case 4:
+        voice_slot = (VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70);
+        if (voice_slot->owner != m || voice_slot->active == 0)
+            d->sound = allocate_voice_for_target_entry(0, 4, (int)m);
+        if ((d->travel = d->travel - (d->duration / 0.6f) * frame_time) < 0.0f) {
+            slot = d->sound;
+            if (slot != -1 && ((VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70))->owner == m &&
+                ((VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70))->active != 0)
+                release_voice_slot(slot);
+            d->travel = 0;
+            d->sound = -1;
+            m->state = 1;
+        }
+        offset.f[0] = fast_cos(m->rot.z) * -d->travel;
+        offset.f[1] = fast_sin(m->rot.z) * -d->travel;
+        offset.f[2] = 0.0f;
+        add_vector_xyz(&pos, &d->home, &offset);
+        *(u128 *)&m->pos = pos.q;
+        if (is_point_inside_clip_volume(D_0013F3D0, d->open_volume) ||
+            is_point_inside_clip_volume(D_L15_001673C0, d->open_volume))
+            m->state = 2;
+        return;
+    default:
+        return;
+    }
+}
+#endif
 /* Ported from rac1-decomp src/overlays/l15_quartu/vendor_0029C1D0.c (func_L15_002A48B0) */
 #include "eetypes.h"
 
