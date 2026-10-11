@@ -961,7 +961,361 @@ inactive:
     if (1.3f < d) m->unkBC = 2;
 }
 #endif
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e3f20.s", FUN_L01_002e3f20);
+/* State for the parented moby.  The parent index is -1 when unattached. */
+typedef int u128_2e3f20 __attribute__((mode(TI)));
+extern unsigned char D_0013D4C5_2e3f20 __asm__("D_0013D4C5") __attribute__((section(".data")));
+typedef struct {
+    float target[4], vel[4], start[4], home[4];
+    int vol;
+    char pad44[4];
+    unsigned char b48;
+    char pad49;
+    short s4A, timer, s4E;
+    int parent;
+    char pad54[0xC];
+    int t60, count;
+    void *tgt;
+} Data_2e3f20;
+typedef struct {
+    int i0;
+    float f4, f8, fC, f10, f14, f18, f1C, f20, f24, f28, f2C, f30;
+    int i34, i38;
+    float f3C, f40, f44;
+    int i48, i4C;
+    void *p50;
+} Mover_2e3f20;
+typedef struct {
+    char pad0[0x80];
+    float pos[4];
+    char pad90[0x10A0];
+    struct Moby *helper;
+    char pad1134[0x24];
+    int i1158;
+    char pad115C[0xF24];
+    void *p2080;
+    char pad2084[8];
+    int i208C;
+    char pad2090[0x14];
+    unsigned char b20A4;
+} Hero_2e3f20;
+#define hero_2e3f20 ((Hero_2e3f20 *)&hero)
+#define mover_2e3f20 (*(Mover_2e3f20 *)&D_L01_001DEB38)
+extern struct Moby *ents_2e3f20 __asm__("D_L01_0015FFD8");
+extern int D_0015ED84;
+extern void *D_L01_001742D8_2e3f20 __asm__("D_L01_001742D8") __attribute__((section(".data")));
+extern int D_L01_00161918 __attribute__((sda));
+extern int D_L01_0016191C __attribute__((sda));
+extern int D_L01_00161924 __attribute__((sda));
+extern int D_L01_00161928 __attribute__((sda));
+extern int D_L01_0016192C __attribute__((sda));
+extern float D_L01_00161930 __attribute__((sda));
+extern float D_L01_00161934 __attribute__((sda));
+extern float D_L01_00161938 __attribute__((sda));
+extern int D_L01_0016193C __attribute__((sda));
+extern float D_L01_00161940 __attribute__((sda));
+extern char D_L01_0020AE80[];
+extern char D_L01_0020AEA0[];
+extern void debug_print_2e3f20(char *) __asm__("FUN_001e93b0");
+extern void initialize_mover_2e3f20(void *) __asm__("FUN_L01_0026d930");
+extern void FUN_L01_00263a28(void *, int, int *, float *, float *, int *);
+extern void face_target_2e3f20(struct Moby *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
+extern int FUN_L01_0023cf98(int, int);
+extern void play_sound_2e3f20(int, int, float) __asm__("FUN_L00_002323b8");
+extern int step_mover_2e3f20(void *, void *, float *, float *) __asm__("FUN_L00_00259028");
+extern void FUN_L00_0025f8e0(void *, float);
+extern void spawn_particle_2e3f20(float *, int, int, int, int, float *, float, float, float) __asm__("FUN_L00_00272060");
+extern void finish_moby_2e3f20(void *, float) __asm__("FUN_L00_00259fe8");
+extern int random_integer_3830(void) __asm__("FUN_001160d8");
+extern void blend_moby_animation_3830(void *, int, int, int) __asm__("FUN_00212f90");
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern int FUN_001f9740(void *);
+extern float FUN_001f9b80(void *, void *);
+extern int FUN_001f96f8(int);
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern int FUN_L00_00257b90(int, int);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern void FUN_L01_002e30b8(int, void *);
+extern void FUN_L01_002e3110(char *, char *);
+extern s32 FUN_L01_002e3208(void *, struct Moby *);
+extern void FUN_L01_002e35a8(char *, char *);
+extern void FUN_L01_002e3830(struct Moby *, char *);
+void FUN_L01_002e3f20(struct Moby *moby) {
+    Data_2e3f20 *d;
+    float va[4];
+    float vb[4];
+    float ang;
+
+    if (moby == 0) {
+        return;
+    }
+    d = *(Data_2e3f20 **)&moby->pvars;
+    if (d == 0) {
+        return;
+    }
+    if (d->parent != -1) {
+        if (moby->state >= 5) {
+            ((Data_2e3f20 *)ents_2e3f20[d->parent].pvars)->target[0] =
+                FUN_001f9e90(moby->pos.x - ents_2e3f20[d->parent].pos.x,
+                                  moby->pos.y - ents_2e3f20[d->parent].pos.y);
+        } else {
+            ((Data_2e3f20 *)ents_2e3f20[d->parent].pvars)->target[0] =
+                FUN_001f9e90(hero_2e3f20->pos[0] - ents_2e3f20[d->parent].pos.x,
+                                  hero_2e3f20->pos[1] - ents_2e3f20[d->parent].pos.y);
+        }
+        if (d->parent != -1) {
+            *(int *)&ents_2e3f20[d->parent].unk94 = 0;
+        }
+    }
+    switch (moby->state) {
+    case 0:
+        qzero(d->target);
+        qzero(d->vel);
+        d->s4A = 0;
+        d->timer = 0;
+        if (moby->prev_seq != 0) {
+            blend_moby_animation_3830(moby, 0, 0, FUN_001f96f8(10));
+        }
+        moby->unk30 = 0xFF;
+        moby->unk32 = 0xFF;
+        if (d->parent != -1) {
+            unsigned short id;
+            qcopy(((float *)&moby->pos), ((float *)&ents_2e3f20[d->parent].pos));
+            moby->pos.z = moby->pos.z + 0.02f;
+            if (D_L01_001BB6B0.collected[(short)(id = moby->save_id)] != 0
+                || (*(int *)((char *)D_0014C190 + (((short)id >> 5) * 4 + (D_0015ED84 << 8))) >> (id & 0x1F)) & 1) {
+                debug_print_2e3f20(D_L01_0020AE80);
+                mark_moby_for_removal(moby);
+                return;
+            }
+        } else {
+            debug_print_2e3f20(D_L01_0020AEA0);
+            mark_moby_for_removal(moby);
+            return;
+        }
+        qcopy(d->start, ((float *)&moby->pos));
+        qcopy(d->home, ((float *)&moby->pos));
+        initialize_mover_2e3f20((char *)&mover_2e3f20);
+        {
+            int kind;
+            float len;
+            int flag;
+            FUN_L01_00263a28(moby, 0, &kind, va, &len, &flag);
+            mover_2e3f20.f14 = frame_scale * 0.4f;
+            mover_2e3f20.f8 = 0.15f;
+            mover_2e3f20.fC = 0.15f;
+            mover_2e3f20.f10 = frame_scale * 0.01f;
+            mover_2e3f20.f24 = frame_time * 2.7f;
+            mover_2e3f20.f1C = frame_scale * 0.01f;
+            mover_2e3f20.i0 = truncate_float_to_s32(len * 1024.0f) + 1;
+            mover_2e3f20.i38 |= 8;
+            mover_2e3f20.f4 = 0.3f;
+            mover_2e3f20.f30 = 0.005f;
+            mover_2e3f20.f3C = frame_time_sq * 11.519173f;
+            mover_2e3f20.f40 = frame_time_sq * 3.1415927f;
+            mover_2e3f20.f44 = frame_time * 11.519173f;
+            mover_2e3f20.i48 = FUN_001f96f8(4);
+            mover_2e3f20.f28 = 3.1415927f;
+        }
+        moby->state = 1;
+        moby->unk32 = 0;
+        break;
+    case 1:
+        if (D_0013D4C5_2e3f20 != 0 && hero_2e3f20->i1158 == 5) {
+            d->count = 0;
+            d->t60 = FUN_001f96f8(D_L01_00161918);
+            if (moby->unk31 != 0 && (moby->unk70 & 2)) {
+                if (moby->prev_seq != random_integer_3830() % 3) {
+                    blend_moby_animation_3830(moby, random_integer_3830() % 3, 0, FUN_001f96f8(10));
+                }
+            }
+            if (d->parent != -1) {
+                if (is_point_inside_clip_volume(hero_2e3f20->pos, d->vol)) {
+                    ents_2e3f20[d->parent].unkBC = 3;
+                } else {
+                    ents_2e3f20[d->parent].unkBC = 1;
+                }
+            }
+            if (hero_2e3f20->helper != 0 && hero_2e3f20->i1158 == 5) {
+                ang = FUN_001f9e90(hero_2e3f20->pos[0] - moby->pos.x,
+                                        hero_2e3f20->pos[1] - moby->pos.y);
+                face_target_2e3f20(moby, ang, &mover_2e3f20.f14,
+                                        frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
+                qcopy(va, ((float *)&ents_2e3f20[d->parent].pos));
+                va[2] = va[2] + 0.5f;
+                qcopy(vb, hero_2e3f20->pos);
+                vb[2] = vb[2] + 0.2f;
+                if (is_point_inside_clip_volume(hero_2e3f20->pos, d->vol)) {
+                    if (!FUN_001efa68(va, vb, 0, moby, 0)
+                        || D_L01_001742D8_2e3f20 == hero_2e3f20->p2080) {
+                        FUN_L01_002e30b8((int)moby, d);
+                        if (hero_2e3f20->helper != 0
+                            && hero_2e3f20->helper->oclass == 0x1B1
+                            && hero_2e3f20->helper->state != 0xFE
+                            && hero_2e3f20->helper->state != 0xFD) {
+                            hero_2e3f20->helper->state = 1;
+                        }
+                        *(void **)((char *)&mover_2e3f20 + 0x50) = moby;
+                        FUN_L01_0023cf98(0x1F, 0);
+                        play_sound_2e3f20(0, 0, (float)FUN_001f96f8(6));
+                        if (d->parent != -1) {
+                            ents_2e3f20[d->parent].unkBC = 5;
+                            moby->state = 2;
+                        } else {
+                            moby->unk32 = 0xFF;
+                            moby->state = 3;
+                        }
+                    }
+                }
+            }
+        }
+        break;
+    case 2:
+        if (d->parent != -1) {
+            if (ents_2e3f20[d->parent].state == 5) {
+                moby->state = 3;
+                d->timer = 0;
+                moby->unk32 = 0xFF;
+            }
+        } else {
+            d->timer = 0;
+            moby->unk32 = 0xFF;
+            moby->state = 3;
+        }
+        break;
+    case 3:
+        FUN_L01_002e30b8((int)moby, d);
+        ang = FUN_001f9e90(d->target[0] - moby->pos.x, d->target[1] - moby->pos.y);
+        face_target_2e3f20(moby, ang, &mover_2e3f20.f14,
+                                frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
+        if ((step_mover_2e3f20(moby, &mover_2e3f20, d->target, d->vel) & 6)
+            || FUN_001f9b80(((float *)&moby->pos), hero_2e3f20->pos) < 1.0f) {
+            qzero(d->vel);
+            moby->state = 4;
+            d->timer = FUN_001f96f8(0x78);
+        }
+        if (FUN_001f9b80(((float *)&moby->pos), d->home) > 0.4f && d->timer == 0) {
+            *(float *)((char *)&mover_2e3f20 + 4) = 0.7f;
+            if (moby->prev_seq != 3) {
+                blend_moby_animation_3830(moby, 3, 0, FUN_001f96f8(3));
+            }
+        }
+        break;
+    case 4:
+        FUN_L01_0023cf98(0, 1);
+        moby->flags &= 0xFFBE;
+        if (d->parent != -1) {
+            ents_2e3f20[d->parent].flags &= 0xFFBE;
+        }
+        moby->state = 5;
+        if (hero_2e3f20->helper != 0
+            && hero_2e3f20->helper->oclass == 0x1B1
+            && hero_2e3f20->helper->state != 0xFE
+            && hero_2e3f20->helper->state != 0xFD) {
+            d->b48 = 0xFF;
+            hero_2e3f20->helper->state = 2;
+        }
+        break;
+    case 5:
+        if (hero_2e3f20->helper != 0
+            && hero_2e3f20->i1158 == 5
+            && hero_2e3f20->i208C != 0x16
+            && hero_2e3f20->i208C != 0x14
+            && hero_2e3f20->b20A4 == 0
+            && !FUN_001f9740(&d->t60)
+            && d->count < D_L01_0016191C) {
+            FUN_L01_002e3110((char *)moby, (char *)d);
+            FUN_L01_002e3830(moby, d);
+        } else {
+            if (moby->prev_seq != 5) {
+                blend_moby_animation_3830(moby, 5, 0, FUN_001f96f8(10));
+            }
+            qzero(d->vel);
+            d->timer = D_L01_00161924;
+            moby->state = 6;
+            if (d->parent != -1) {
+                ents_2e3f20[d->parent].unkBC = 5;
+            }
+        }
+        FUN_L01_002e35a8((char *)moby, (char *)d);
+        break;
+    case 6:
+        if (FUN_001f9770(&d->timer)) {
+            moby->unk23 = 0x80;
+            qcopy(((float *)&moby->pos), d->home);
+            qcopy(d->target, d->home);
+            qzero(d->vel);
+            moby->state = 0x13;
+            moby->flags &= 0xFDFF;
+        } else {
+            int cr;
+            int cg;
+            int cb;
+            int col;
+            int dir;
+            int n;
+            float f;
+            *(u128_2e3f20 *)vb = 0;
+            qcopy(va, ((float *)&moby->pos));
+            FUN_L00_0025f8e0(va, D_L01_00161930);
+            cr = (random_integer_3830() + 0x30) & 0x3F;
+            cg = (random_integer_3830() + 0x20) & 0x3F;
+            cb = random_integer_3830() & 0x2F;
+            col = cr | (cg << 8) | (cb << 16) | (D_L01_0016193C << 24);
+            dir = random_integer_3830() % 2;
+            if (d->timer & 1) {
+                dir = -dir;
+            }
+            n = FUN_L00_00257b90(D_L01_00161928, D_L01_0016192C);
+            f = random_float_between_alt(D_L01_00161934, D_L01_00161938);
+            spawn_particle_2e3f20(va, n, col, 2, dir, vb, f, 0.001f, D_L01_00161940 * frame_time_sq);
+            moby->flags |= 0x200;
+            moby->unk23 -= 0x80 / D_L01_00161924;
+            moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 25.132742f);
+        }
+        break;
+    case 19:
+        {
+            float t = frame_scale * -0.050000012f + 1.0f;
+            d->vel[0] = d->vel[0] * t;
+            d->vel[1] = d->vel[1] * t;
+        }
+        if (FUN_L01_002e3208(moby, d) & 2) {
+            qzero(d->vel);
+            qcopy(d->target, ((float *)&ents_2e3f20[d->parent].pos));
+            moby->state = 0x14;
+        }
+        break;
+    case 20:
+        {
+            float z;
+            int r;
+            mover_2e3f20.p50 = 0;
+            ang = FUN_001f9e90(d->target[0] - moby->pos.x, d->target[1] - moby->pos.y);
+            face_target_2e3f20(moby, ang, &mover_2e3f20.f14,
+                                    frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
+            z = moby->pos.z;
+            r = step_mover_2e3f20(moby, &mover_2e3f20, d->target, d->vel);
+            moby->pos.z = z;
+            if (r & 4) {
+                if (moby->prev_seq != 0) {
+                    blend_moby_animation_3830(moby, 0, 0, FUN_001f96f8(6));
+                }
+                ents_2e3f20[d->parent].unkBC = 1;
+                moby->state = 1;
+                moby->unk32 = 0;
+            }
+        }
+        break;
+    case 21:
+        break;
+    }
+    finish_moby_2e3f20(moby, 0.3f);
+    if (d->parent != -1) {
+        *(int *)&ents_2e3f20[d->parent].unk94 = ents_2e3f20[d->parent].pclass->unk10;
+    }
+}
 /* Burning debris: flies along its velocity leaving two smoke trails, sticks to the ground, and hurts what it hits. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002EEDD8), where it is exact; names translated to the US level program. */
 
