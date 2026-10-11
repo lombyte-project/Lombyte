@@ -2121,6 +2121,8 @@ extern volatile s32 D_001413D0_002092c8 __asm__("D_001413D0");
 
 void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32 context) {
     s32 *index;
+    s32 *first_index;
+    s32 *comparison_index;
     u64 *out;
     s32 first_count;
     s32 second_count;
@@ -2136,12 +2138,12 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
     *(u64 *)(header + 8) = 0x7fff000000000000ULL;
     first_count = 1;
     if (indices[1] >= 0) {
-        index = indices + 1;
+        first_index = indices + 1;
         do {
             first_count++;
-            *out = FUN_001ff768_002092c8(0x70000000 + (*index++ << 6), 32768.0f);
+            *out = FUN_001ff768_002092c8(0x70000000 + (*first_index++ << 6), 32768.0f);
             out++;
-        } while (*index >= 0);
+        } while (*first_index >= 0);
     }
     if (padding > 0) {
         s32 remaining = padding;
@@ -2171,9 +2173,9 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
     third_count = 0;
     third_index = 1;
     if (indices[1] >= 0) {
-        index = indices + 1;
+        comparison_index = indices + 1;
         do {
-            value = FUN_001ff768_002092c8(0x70000020 + (*index << 6), 1.0f);
+            value = FUN_001ff768_002092c8(0x70000020 + (*comparison_index << 6), 1.0f);
             if ((value & 0xffffffffffffULL) !=
                 (FUN_001ff768_002092c8(*(s32 *)(reference + 0x18) + (third_index << 4), 1.0f) &
                  0xffffffffffffULL)) {
@@ -2182,17 +2184,17 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
                 *(u16 *)((u8 *)out + 6) = third_index;
                 out++;
             }
-            index++;
+            comparison_index++;
             third_index++;
-        } while (*index >= 0);
+        } while (*comparison_index >= 0);
     }
     if ((u32)out & 0xf)
         *out++ = 0;
     header[7] = third_count;
-    header[5] = second_count;
     header[6] = (first_count + second_count) << 3;
     header[4] = first_count << 3;
-    header[3] = ((u8 *)out - (u8 *)header - 0x10) >> 4;
+    header[3] = ((u8 *)out - ((u8 *)header + 0x10)) >> 4;
+    header[5] = second_count;
     header[0] = 0;
     header[1] = 0;
     header[2] = 0;
