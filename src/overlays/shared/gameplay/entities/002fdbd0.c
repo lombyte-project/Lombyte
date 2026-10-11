@@ -92,11 +92,11 @@ extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern f32 FUN_0020c9e0(struct Moby *);
 extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
-extern void FUN_L00_0024f7c8(struct Moby *, s32, void *);
+extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern s32 FUN_L00_00258b50(struct Moby *, MoveCtl *, void *, void *, f32);
-extern void FUN_L00_00259888(ShotInfo *, struct Moby *, s32, void *, f32);
-extern void FUN_L00_00259d08(void *, void *, void *, void *, struct Moby *, ShotInfo *, s32);
+extern void make_hit_descriptor(ShotInfo *, struct Moby *, s32, void *, f32) __asm__("FUN_L00_00259888");
+extern void sweep_hit_segment(void *, void *, void *, void *, struct Moby *, ShotInfo *, s32) __asm__("FUN_L00_00259d08");
 extern void FUN_L00_0025a120(struct Moby *);
 extern void FUN_L00_0025be00(f32 *, f32, f32 *, f32, f32, f32);
 extern s32 FUN_L00_0025c698(struct Moby *, Vec4 *);
@@ -272,7 +272,7 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
         FUN_L00_0025be00(&moby->rot.z, FUN_001f9e90(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                          &vars->turn_speed, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                          frame_time * 3.1415927f);
-        FUN_L00_0024f7c8(moby, 0, &a);
+        moby_point_position(moby, 0, &a);
         qcopy(&b, &moby->pos);
         b.f[2] += 0.3f;
         cur_frame = FUN_0020c9e0(moby);
@@ -284,11 +284,11 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
             c.f[1] = FUN_001f9de0(moby->rot.z);
             c.f[2] = 1.0f;
             c.f[3] = 5627.925f;
-            FUN_L00_00259888(&shot, moby, 1, &c, 1.0f);
+            make_hit_descriptor(&shot, moby, 1, &c, 1.0f);
             shot.unk18 = 0;
             shot.unk19 = 1;
             shot.oclass = moby->oclass;
-            FUN_L00_00259d08(&a, &b, &vars->unk200, &b, moby, &shot, 5);
+            sweep_hit_segment(&a, &b, &vars->unk200, &b, moby, &shot, 5);
         }
         qcopy(&vars->unk200, &a);
         if (moby->unk70 & 2) {
@@ -335,7 +335,7 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
         }
         break;
     case 12:
-        FUN_L00_0024f7c8(moby, 0, &a);
+        moby_point_position(moby, 0, &a);
         qcopy(&b, &moby->pos);
         b.f[2] += 1.5f;
         frame = FUN_0020c9e0(moby);
@@ -344,11 +344,11 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
             c.f[1] = FUN_001f9de0(moby->rot.z);
             c.f[2] = 1.0f;
             c.f[3] = 5627.925f;
-            FUN_L00_00259888(&shot, moby, 1, &c, 1.0f);
+            make_hit_descriptor(&shot, moby, 1, &c, 1.0f);
             shot.unk18 = 0;
             shot.unk19 = 1;
             shot.oclass = moby->oclass;
-            FUN_L00_00259d08(&a, &b, &vars->unk200, &b, moby, &shot, 5);
+            sweep_hit_segment(&a, &b, &vars->unk200, &b, moby, &shot, 5);
         }
         qcopy(&vars->unk200, &a);
         if (moby->unk70 & 2) {
@@ -531,7 +531,7 @@ void FUN_L06_002ff2c8(char *moby) {
             point[1] = fast_sin_c(*(f32 *)(moby + 0x48));
             point[2] = 1.0f;
             point[3] = 5627.925f;
-            FUN_L00_00259888(&shot, (struct Moby *)moby,
+            make_hit_descriptor(&shot, (struct Moby *)moby,
                              entry[3] >= 1.0f && entry[7] >= 1.0f ? 0x10001 : 0x10000, point, 1.0f);
             shot.unk18 = 0;
             shot.unk19 = 1;

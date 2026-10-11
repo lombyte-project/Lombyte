@@ -69,7 +69,7 @@ extern s32 FUN_L00_002667d0_c2(struct Moby *) __asm__("FUN_L00_002667d0");
 extern void FUN_L00_00299460(s32);
 extern void remove_hud_item(s32) __asm__("FUN_001ff480");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
-extern s32 FUN_L00_00235e18(s32, s32);
+extern s32 hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern void FUN_L00_00237190(void);
 extern void FUN_L00_002371e0(void);
@@ -153,7 +153,7 @@ s32 FUN_L00_00266448(struct Moby *moby, struct SceneTrigger *trigger)
         return 1;
     }
 
-    if (FUN_L00_00235e18(bolt_hud_item, 10)) {
+    if (hud_keep_visible(bolt_hud_item, 10)) {
         bolt_hud_item = queue_animation_update(12, 0, FUN_L00_00237190, FUN_L00_002371e0,
                                                FUN_L00_00237200, 0, 0);
     }
@@ -164,7 +164,7 @@ s32 FUN_L00_00266448(struct Moby *moby, struct SceneTrigger *trigger)
         if (unpaid->cost_kind == 1 || unpaid->cost_kind == 6) {
             handle = queue_animation_update(2, 0x754E, FUN_L00_00239cc8, FUN_L00_00239d00,
                                             FUN_L00_00239df8, &current_bolt_count, 9999999);
-            FUN_L00_00235e18(handle, scale_game_frames(60));
+            hud_keep_visible(handle, scale_game_frames(60));
         }
     }
     return 0;

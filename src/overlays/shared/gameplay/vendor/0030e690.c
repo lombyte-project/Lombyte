@@ -161,7 +161,7 @@ extern short D_L11_001621D8_d __asm__("D_L11_001621D8") __attribute__((sda));
 extern short D_L11_001621E8_d __asm__("D_L11_001621E8") __attribute__((sda));
 extern short D_L11_001621F8_d __asm__("D_L11_001621F8") __attribute__((sda));
 extern short D_L11_00162208_d __asm__("D_L11_00162208") __attribute__((sda));
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_0025f8e0(float *v, float s);
 extern void FUN_L01_0028a7a8(void *, float *, float *, void *, int);
 
@@ -182,7 +182,7 @@ void FUN_L11_003112b8(void *m, char *t) {
         } else if (scale < 0.35f) {
             scale = 0.35f;
         }
-        FUN_L00_0024f7c8(m, i, pos);
+        moby_point_position(m, i, pos);
         pos[3] = 0.0f;
         qcopy(a, pos);
         qcopy(b, pos);
@@ -380,7 +380,7 @@ void FUN_L11_00319670(char *moby) {
 /* Collectable crate: when hit, updates the totals (count, best time, levels mask, a level-11 bonus) and breaks open. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031B630), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int D_0015EE00;
 extern int D_0015EEA4;
 extern int FUN_L00_001f0d60(float, void *, int, void *);
@@ -393,7 +393,7 @@ s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_002
 
 void FUN_L11_0031a1c0(char *m) {
     char *d = *(char **)(m + 0x78);
-    char *info = FUN_L00_0025a420(m, 0x330000, 0);
+    char *info = find_moby_hit(m, 0x330000, 0);
     struct Hero *g;
     ((unsigned char *)m)[0xA4] = 0xFF;
     g = &hero;

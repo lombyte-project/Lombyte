@@ -152,7 +152,7 @@ extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f99c0(f32);
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 
-int FUN_L00_0020cd08(void *from, void *outOwner, void *to, void *outI, void *outF,
+int nearest_rail_point(void *from, void *outOwner, void *to, void *outI, void *outF,
                      void *outKind, int skip, int only)
 {
     Vec4 pos;
@@ -216,7 +216,8 @@ typedef struct {
 extern u8 D_0013D4DD_cf58 __asm__("D_0013D4DD") __attribute__((section(".data")));
 f32 FUN_001f9b48_c(void *, V_cf58 *) __asm__("FUN_001f9b48");
 #include "rnc/overlay/path.h"
-void FUN_L00_0020cf58(void) {
+void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
+void find_grind_rail(void) {
     V_cf58 v0, v1, v2;
 
     s32 a, b, e;
@@ -280,7 +281,7 @@ void FUN_L00_0020cf58(void) {
         }
     }
     *(OvlQuad *)&v1 = *(OvlQuad *)&hero.motion.pos;
-    if (!FUN_L00_0020cd08((OvlQuad *)&v1, &a, &v0, &b, &c, &e, 0, 0))
+    if (!nearest_rail_point((OvlQuad *)&v1, &a, &v0, &b, &c, &e, 0, 0))
         return;
     if (hero.state.current == 41 && hero.unk5C4 != 0 && a == hero.unk560)
         return;
@@ -330,7 +331,7 @@ void FUN_L00_0020d330(void) {
     FUN_L00_0020d2f8_0020d330(&a);
     if ((P->state.control_mode == 4 && P->unk41E == 0) || P->state.control_mode == 2) {
         pb = &b;
-        if (FUN_L00_0020cd08(&a, &i20, pb, &i24, &f28, &i2C, 0, 0)) {
+        if (nearest_rail_point(&a, &i20, pb, &i24, &f28, &i2C, 0, 0)) {
             float bz, az;
             int fl;
             az = a.f[2];
@@ -352,7 +353,8 @@ void FUN_L00_0020d330(void) {
     }
 }
 /* Returns the moby of item slot i when the slot is ready (state 2), else 0. */
-s32 FUN_L00_0020d460(s32 i) {
+s32 hero_slot_moby(s32 i) __asm__("FUN_L00_0020d460");
+s32 hero_slot_moby(s32 i) {
     /* hero shifted by i slots, so items[0] is slot i */
     struct Hero *p = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
     if (p->items[0].state == 2) {
@@ -361,7 +363,8 @@ s32 FUN_L00_0020d460(s32 i) {
     return 0;
 }
 /* Returns the item id of slot i when the slot is ready (state 2), else -1. */
-int FUN_L00_0020d498(int i) {
+int hero_slot_item_id(int i) __asm__("FUN_L00_0020d498");
+int hero_slot_item_id(int i) {
     /* hero shifted by i slots, so items[0] is slot i */
     struct Hero *p = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
     switch (p->items[0].state) {
@@ -379,7 +382,7 @@ int FUN_L00_0020d498(int i) {
 
 extern int FUN_L00_0020d498_u(int) __asm__("FUN_L00_0020d498");
 
-/* True when FUN_L00_0020d498(arg) is 0x11, 10, 0x14 or 0x19. */
+/* True when hero_slot_item_id(arg) is 0x11, 10, 0x14 or 0x19. */
 int FUN_L00_0020d4d0(int arg) {
     int v = FUN_L00_0020d498_u(arg);
 
@@ -388,12 +391,12 @@ int FUN_L00_0020d4d0(int arg) {
     }
     return 0;
 }
-/* True when FUN_L00_0020d498(a) is 5, 6 or 7. */
+/* True when hero_slot_item_id(a) is 5, 6 or 7. */
 s32 FUN_L00_0020d518(int a) {
     return (u32)(FUN_L00_0020d498_u(a) - 5) < 3;
 }
 int FUN_L00_0020d498_0020d540() __asm__("FUN_L00_0020d498");
-/* True when FUN_L00_0020d498 returns 0x1C or 0x1D. */
+/* True when hero_slot_item_id returns 0x1C or 0x1D. */
 int FUN_L00_0020d540(void) {
     return (unsigned)(FUN_L00_0020d498_0020d540() - 0x1c) < 2;
 }
@@ -787,8 +790,8 @@ void FUN_L00_0020e4c8(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020ED30), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_00205000(int);
-extern void FUN_L00_002323b8(int, int, float);
+extern int hero_idle_sequence(int) __asm__("FUN_L00_00205000");
+extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 
 void FUN_L00_0020e698(void) {
     struct Hero *g = &hero;
@@ -798,8 +801,8 @@ void FUN_L00_0020e698(void) {
         } else if (g->state.current == 0) {
             unsigned char *m = (unsigned char *)g->moby;
             if (m[0x53] == g->unk2294) {
-                int r = FUN_L00_00205000(0);
-                FUN_L00_002323b8(r, 0, -2.0f);
+                int r = hero_idle_sequence(0);
+                set_hero_animation(r, 0, -2.0f);
             }
         }
         hero.unk20A8 = 0;
@@ -809,7 +812,7 @@ void FUN_L00_0020e698(void) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020e728.s", FUN_L00_0020e728);
 #else
-extern int FUN_L00_00233e98(s32);
+extern int get_ammo(s32) __asm__("FUN_L00_00233e98");
 extern s32 FUN_001f96f8_e728(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_0024f190(u8 *, u8 *);
 extern f32 FUN_00213ed8_e728(f32 *, f32, f32) __asm__("FUN_00213ed8");
@@ -824,7 +827,7 @@ void FUN_L00_0020e728(void) {
     struct Hero *g = &hero;
     u8 **slot;
     int i;
-    if (g->unk20A8 && g->unk20AA && FUN_L00_00233e98(-1) == 0)
+    if (g->unk20A8 && g->unk20AA && get_ammo(-1) == 0)
         FUN_L00_0020e698();
     i = 0;
     slot = g->unkD08;
@@ -895,7 +898,7 @@ void FUN_L00_0020e728(void) {
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 
-/* FUN_L00_0020ea80: spawns the hero item mobies (wrench into items[0] /
+/* spawn_hero_item_mobies: spawns the hero item mobies (wrench into items[0] /
  * its own slot, items[3] and its second moby, items[2], items[1], and the
  * items[4]/[5] gadgets) when their slots are empty.
  *
@@ -923,7 +926,8 @@ extern void memset_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern void blend_moby_animation_ea80(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void FUN_L00_002b4138_ea80(s32) __asm__("FUN_L00_002b4138");
 
-void FUN_L00_0020ea80(void) {
+void spawn_hero_item_mobies(void) __asm__("FUN_L00_0020ea80");
+void spawn_hero_item_mobies(void) {
     struct Moby *m;
     s32 id;
     s32 slot;
@@ -1336,7 +1340,8 @@ void FUN_L00_0020fd80_c(int id) __asm__("FUN_L00_0020fd80");
 void FUN_L00_0020fde0_c(int id) __asm__("FUN_L00_0020fde0");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L00_0020fea0(int i) {
+void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
+void hero_switch_item(int i) {
     int changed;
     int flag6;
     int flag4;
@@ -1649,7 +1654,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00210748.s", FUN_L00_00210748);
 #else
 #include "rnc/gameplay/entities/moby.h"
 extern void FUN_L00_00205168(void *);
-extern void FUN_L00_00257880(void *, int, int, int);
+extern void set_moby_sequence(void *, int, int, int) __asm__("FUN_L00_00257880");
 extern s32 D_L00_0015F3F8;
 
 void FUN_L00_00210748(void) {
@@ -1658,11 +1663,11 @@ void FUN_L00_00210748(void) {
         struct Hero *slot_hero = (struct Hero *)(((char *)&hero) + i * 0x50);
         struct Moby *moby = slot_hero->items[0].moby;
         if (moby == 0) {
-            FUN_L00_0020fea0(i);
+            hero_switch_item(i);
         } else {
             if (slot_hero->items[0].state == 2) {
                 slot_hero->items[0].unk20++;
-                FUN_L00_0020fea0(i);
+                hero_switch_item(i);
                 if (i == 0) {
                     char *p = (char *)&hero;
                     struct HeroEase *e = &hero.unk18F0[0];
@@ -1677,7 +1682,7 @@ void FUN_L00_00210748(void) {
                     } while (p < end);
                 }
                 if ((moby->unk70 & 2) && moby->prev_seq == 0)
-                    FUN_L00_00257880(moby, 1, 0, 2);
+                    set_moby_sequence(moby, 1, 0, 2);
             } else if (slot_hero->items[0].state == 3) {
                 slot_hero->items[0].unk1B++;
                 if ((moby->unk70 & 2) || i == 1 || i == 0)
@@ -1691,7 +1696,7 @@ void FUN_L00_00210748(void) {
 }
 #endif /* NON_MATCHING */
 s32 FUN_L00_0020d568_u() __asm__("FUN_L00_0020d568");
-void FUN_L00_0020ea80();
+void spawn_hero_item_mobies() __asm__("FUN_L00_0020ea80");
 void FUN_L00_0020f580();
 void FUN_L00_00234808();
 void FUN_L00_002080b0();
@@ -1709,7 +1714,7 @@ void FUN_L00_00210928(void) {
     } else {
         hero.unk20AE = 0;
     }
-    FUN_L00_0020ea80();
+    spawn_hero_item_mobies();
     FUN_L00_0020f580();
     FUN_L00_00234808();
     FUN_L00_002080b0();
@@ -1829,7 +1834,8 @@ void FUN_L00_00210b30(void) {
 extern void FUN_001f9c48(float *, float *, float);
 
 /* Scales x/y by s and sets or scales z, per component or through FUN_001f9c48. */
-void FUN_L00_00210c80(float *v, int each, float s, float z) {
+void hero_knockback(float *v, int each, float s, float z) __asm__("FUN_L00_00210c80");
+void hero_knockback(float *v, int each, float s, float z) {
     if (each) {
         v[0] *= s;
         v[1] *= s;
@@ -1879,7 +1885,8 @@ void FUN_L00_002a9be0_210ce8(void) __asm__("FUN_L00_002a9be0");
 void FUN_001f99f8_210ce8(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
-s32 FUN_L00_00210ce8(s32 arg) {
+s32 hero_check_damage(s32 arg) __asm__("FUN_L00_00210ce8");
+s32 hero_check_damage(s32 arg) {
     u8 *m;
     T_210ce8 *tbl;
     u8 *mob;
@@ -2043,7 +2050,8 @@ extern void FUN_L00_00203a28_211250(void) __asm__("FUN_L00_00203a28");
 extern int FUN_001f96f8_211250(int) __asm__("FUN_001f96f8");
 extern void fade_to_black(int) __asm__("FUN_001f4a58");
 
-void FUN_L00_00211250(void) {
+void hero_respawn(void) __asm__("FUN_L00_00211250");
+void hero_respawn(void) {
     s32 lvl = D_0015ED84_211250;
     char *m;
     u32 t;
@@ -2134,7 +2142,7 @@ void FUN_L00_00211380(void) {
 extern u8 FUN_L00_00233440(void);
 extern f32 FUN_L00_00211830(void);
 extern f32 FUN_L00_001ff408(void *);
-extern void FUN_L00_00217970(void);
+extern void hero_update_movement(void) __asm__("FUN_L00_00217970");
 extern void FUN_L00_001ffa70(void *, void *);
 extern void FUN_L00_001ff9e8(void *);
 extern void matrix_from_basis_rows(void *, void *) __asm__("FUN_L00_001ffcf8");
@@ -2144,7 +2152,8 @@ extern u8 controller_state[] __asm__("D_0013C940");
 
 /* Per-frame hero input: stick (or d-pad) into unk1D20/24, the yaw and position
    history rings, then the hero basis matrix and the movement updates. */
-void FUN_L00_00211670(void)
+void hero_update(void) __asm__("FUN_L00_00211670");
+void hero_update(void)
 {
     s32 index;
     s32 buttons;
@@ -2177,7 +2186,7 @@ void FUN_L00_00211670(void)
         p->unk1D20 = (f32)left;
         p->unk1D24 = (f32)up;
     }
-    FUN_L00_00217970();
+    hero_update_movement();
 
     p->unk2128[p->unk21A8] = p->motion.rot.f[2];
     p->unk21A8 = (p->unk21A8 + 1) % 32;
@@ -3322,6 +3331,7 @@ void FUN_L00_00213de8(float s) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213e68.s", FUN_L00_00213e68);
 #include "types.h"
 #include "rnc/gameplay/hero.h"
+extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 
 extern Vec4 hero_velocity __asm__("D_0013F430");
 extern char hero_pos[] __asm__("D_0013F3D0");
@@ -3330,7 +3340,7 @@ extern f32 D_0015ED70;
 extern u8 D_0013D4C2 __attribute__((section(".data")));
 extern s32 D_0013CAE0 __attribute__((section(".data")));
 
-extern s32 FUN_L00_0020d498(s32);
+extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
@@ -3350,7 +3360,8 @@ struct Curve {
     f32 value;
 };
 
-void FUN_L00_00214108(void) {
+void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
+void hero_integrate_velocity(void) {
     struct Curve *c;
     f32 z;
     Vec4 offset;
@@ -3366,7 +3377,7 @@ void FUN_L00_00214108(void) {
         max_speed = D_0015ED6C * 7.0f;
         boost = 0;
         if (D_0013D4C2 != 0 && hero.unk22D8 == 0) {
-            boost = FUN_L00_0020d498(3) == 3;
+            boost = hero_slot_item_id(3) == 3;
         }
         subtract_vector_xyz(&offset, hero_pos, hero_pos + 0x380);
         d = gravity_z(&offset);
@@ -3383,7 +3394,7 @@ void FUN_L00_00214108(void) {
                 max_speed *= 0.7f;
             }
         }
-        if (FUN_L00_0020d498(3) == 3 && hero.unk22D8 == 0) {
+        if (hero_slot_item_id(3) == 3 && hero.unk22D8 == 0) {
             max_speed *= 1.25f;
         }
         if (hero.state_timer < scale_game_frames(8)) {

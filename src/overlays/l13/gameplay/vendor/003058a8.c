@@ -14,7 +14,7 @@
 
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L13_003058a8(struct Moby *src, short cls) {
@@ -31,7 +31,7 @@ char *FUN_L13_003058a8(struct Moby *src, short cls) {
         *(short *)(d + 0x26) = cls;
         *(short *)(d + 0x24) = 1;
         pos = m + 0x10;
-        FUN_L00_0024f7c8(src, cls, pos);
+        moby_point_position(src, cls, pos);
         qcopy(m + 0x40, &src->rot);
         *(OvlQuad *)(m + 0xC0) = *(OvlQuad *)&src->unkC0;
         *(OvlQuad *)(m + 0xD0) = *(OvlQuad *)&src->unkD0;
@@ -52,7 +52,7 @@ char *FUN_L13_003058a8(struct Moby *src, short cls) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00306E20), where it is exact; names translated to the US level program. */
 
 
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8(void *);
 
 void FUN_L13_00305988(struct Moby *moby, char *pos, int arg2, float arg3) {
@@ -65,7 +65,7 @@ void FUN_L13_00305988(struct Moby *moby, char *pos, int arg2, float arg3) {
     *(OvlQuad *)&moby->unkC0 = *(OvlQuad *)(s + 0xC0);
     *(OvlQuad *)&moby->unkD0 = *(OvlQuad *)(s + 0xD0);
     *(OvlQuad *)&moby->unkE0 = *(OvlQuad *)(s + 0xE0);
-    FUN_L00_0024f7c8(*(void **)(d + 0x20), *(short *)(d + 0x26), mp);
+    moby_point_position(*(void **)(d + 0x20), *(short *)(d + 0x26), mp);
     qcopy(d + 0x10, mp);
     qcopy(d, pos);
     *(int *)(d + 0x2C) = arg2;
@@ -167,7 +167,7 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L13_00161E80 __attribute__((sda));
 extern short D_L13_00161E84;
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 
@@ -177,7 +177,7 @@ void FUN_L13_00309370(struct Moby *m) {
     int i;
     probe_ground_height(&m->pos, 0, 0.5f);
     normalize_vector_xyz(d + 0x200, D_L13_00174180, 1.0f);
-    FUN_L00_0024f7c8(m, 0, d + 0x1F0);
+    moby_point_position(m, 0, d + 0x1F0);
     for (i = 0; i < 16; i++) {
         float a = (convert_integer_to_float(i) * 0.0625f - 0.5f) *
                   (*(float *)&D_L13_00161E80 * DEG_TO_RAD);
@@ -201,7 +201,7 @@ extern int FUN_001f9740(int *);
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float dot_vector_xyz(void *, void *) __asm__("FUN_001f9ab0");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern void FUN_L00_00259888(void *, struct Moby *, int, void *, float);
+extern void make_hit_descriptor(void *, struct Moby *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L13_00309bc8(struct Moby *);
 extern float D_L13_00161E7C __attribute__((sda));
@@ -281,7 +281,7 @@ void FUN_L13_003094f8(struct Moby *moby) {
             next.y = fast_sin(moby->rot.z);
             next.z = 1.0f;
             next.w = 5627.925f;
-            FUN_L00_00259888(&work.hit, moby, 0x10001, &next, 1.0f);
+            make_hit_descriptor(&work.hit, moby, 0x10001, &next, 1.0f);
             work.hit.c = (unsigned short)moby->oclass;
             work.hit.a = 0;
             work.hit.b = 1;
@@ -796,7 +796,7 @@ char *FUN_L13_0030bfb0(char *owner, void *position, float scale) {
 /* updates the moby: deletes it when its owner is gone, else copies the owner's effect data and marks it */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D528), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_00259a88(void *, void *);
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -810,7 +810,7 @@ void FUN_L13_0030c060(struct Moby *moby) {
         mark_moby_for_removal_u(moby);
         return;
     }
-    p = FUN_L00_0025a420(moby, -1, 0);
+    p = find_moby_hit(moby, -1, 0);
     if (p != 0) {
         qcopy(buf, p + 0x10);
         *(int *)(buf + 0x10) = *(int *)(p + 0x20);
@@ -892,7 +892,7 @@ void FUN_L13_0030cdb8(struct Moby *moby) {
     int i, j;
     if ((D_0014C190_257218[current_level_index][(short)moby->save_id >> 5] >>
          (moby->save_id & 31) & 1) == 0) {
-    hit = FUN_L00_0025a420(moby, 0x10000, 0);
+    hit = find_moby_hit(moby, 0x10000, 0);
     FUN_00213928(moby, hit, data + 0x20, 0, hit_buffer, 0, 0, 4);
     switch (moby->state) {
     case 0:

@@ -18,7 +18,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002274A8), where it is exact; names translated to the US level program. */
 
 extern char D_L01_00179F40[];
-extern int FUN_L00_0020d498(int);
+extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern unsigned char D_0013E533[];
 
 int FUN_L01_00226f10(int a) {
@@ -37,7 +37,7 @@ int FUN_L01_00226f10(int a) {
         return 0;
     if (*(short *)(g + 0x22C8) != 0)
         return 0;
-    n = FUN_L00_0020d498(0);
+    n = hero_slot_item_id(0);
     r = D_L01_00179F40 - (-(n * 0x4C));
     return *(int *)(r + 0x24);
 }
@@ -84,7 +84,7 @@ extern void FUN_L00_0020a9e8(void);
 extern void FUN_L00_0020ac98(void);
 extern void FUN_L00_0020b1d8(void);
 extern void FUN_L00_00210928(void);
-extern void FUN_L00_00211670(void);
+extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void FUN_L00_00214fe8(void);
 extern void FUN_L00_00216f10(void);
 extern void FUN_L00_00232670(void);
@@ -116,7 +116,7 @@ void FUN_L01_00228870(void) {
         return;
     }
     FUN_L00_00232670();
-    FUN_L00_00211670();
+    hero_update();
     FUN_L01_0022cd48_u();
     FUN_L01_0022d090();
     FUN_L01_00242930();

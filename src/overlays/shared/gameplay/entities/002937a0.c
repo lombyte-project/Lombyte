@@ -11,9 +11,9 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d2af0.s", FUN_L08_002d2af0);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
 
 extern char *D_L08_001B0CB0[];
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float FUN_001f9b80(void *, void *);
-extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int FUN_L00_0025ff38();
 extern void FUN_L00_00257470(void *, int, int);
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -26,7 +26,7 @@ void FUN_L08_002d36e0(char *m) {
     float dmg;
     int idx;
     dmg = 0.0f;
-    idx = FUN_L00_0025a478(m, FUN_L00_0025a420(m, 0x330000, 0), d + 0x20, 0, &hit, &dmg, 0, 4);
+    idx = hit_reaction(m, find_moby_hit(m, 0x330000, 0), d + 0x20, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)m)[0x20] != 0x63) {
         *(float *)(d + 0x20) -= dmg;
         if (*(float *)(d + 0x20) <= 0.0f)

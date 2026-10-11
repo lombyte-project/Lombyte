@@ -416,7 +416,7 @@ extern struct Moby *D_L10_00178380[];
 extern void FUN_001fa030(void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
 extern void FUN_001fa2d8(void *, void *);
-extern int FUN_L00_001f2868(void *, float, int, void *, void *);
+extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void *memcpy(void *, const void *, u32);
 extern void FUN_L10_0024c7f0(unsigned char *m, int x, int y, void *p, float f);
 
@@ -446,7 +446,7 @@ void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
     center.f[2] = radius;
     FUN_001f9cf8(&center, &center, mat);
     FUN_001f9a10(&center, &center, &moby->pos);
-    count = FUN_L00_001f2868(&center, radius, 0x10, moby, 0);
+    count = collect_mobies_in_sphere(&center, radius, 0x10, moby, 0);
     if (count != 0) {
         struct Moby *found[count];
 
@@ -474,7 +474,7 @@ void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
             point.f[1] = 0.0f;
             FUN_001f9cf8(&point, &point, mat);
             FUN_001f9a10(&point, &point, &moby->pos);
-            n = FUN_L00_001f2868(&point, box->margin_x, 0x10, moby, 0);
+            n = collect_mobies_in_sphere(&point, box->margin_x, 0x10, moby, 0);
             for (j = 0; j < n; j++) {
                 if (D_L10_00178380[j] == other) {
                     FUN_L10_0024c7f0((unsigned char *)other, (int)moby, 0x10001, &point, box->strength);
@@ -634,7 +634,7 @@ extern int FUN_001efa68(void *, void *, int, int, int);
 extern void FUN_001f9c48(void *, void *, float);
 extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L00_001ff660(void *, void *, void *);
-extern void FUN_L00_00259888(void *, void *, int, float, void *);
+extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int FUN_001f9770(void *);
 extern int FUN_L01_00274b78(float, void *, void *);
 extern float FUN_001f9b80(void *, void *);
@@ -689,7 +689,7 @@ void FUN_L10_002d7b80(struct Moby *moby) {
     check[2] = 0.0f;
     FUN_001f9c48(check, check, 1.0f);
     check[2] = 1.0f;
-    FUN_L00_00259888(hit, moby, 0x10001, *(float *)(data + 0x18), check);
+    make_hit_descriptor(hit, moby, 0x10001, *(float *)(data + 0x18), check);
     if (FUN_001f9770(data + 0x10)) {
         mark_moby_for_removal_d7b80(moby);
         return;
@@ -1113,7 +1113,7 @@ void FUN_L10_002d92b8(struct Moby *m) {
         return;
     }
     door = &D_L10_0015FFD8[v->door];
-    n = FUN_L00_001f2868(&m->pos, 1.0f, 0, m, NULL);
+    n = collect_mobies_in_sphere(&m->pos, 1.0f, 0, m, NULL);
     if (n != 0) {
         for (i = 0; i < n; i++) {
             other = nearby_mobys[i];
@@ -1165,7 +1165,7 @@ typedef struct { char pad0[0x454]; unsigned char collected[1]; } L10State;
 typedef union { u128 q; float f[4]; } UVec;
 
 extern L10State D_L10_001BB6B0;
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L10_002dd848_c(char *owner) __asm__("FUN_L10_002dd848");
 extern char *FUN_L10_002eb8c0(char *owner);
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
@@ -1194,7 +1194,7 @@ void FUN_L10_002d9eb8(char *moby) {
         delete_moby(moby);
         return;
     }
-    if (FUN_L00_0025a420(moby, 0x40000, 0)) {
+    if (find_moby_hit(moby, 0x40000, 0)) {
         char *c0 = moby + 0xC0;
         v20.q = 0;
         FUN_L00_0025e450(moby, &v20, moby + 0x10, 0.0f, 0.0f, 5, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, -1, 15.0f, 1, 1, -1, 0);
@@ -1452,7 +1452,7 @@ typedef struct { int owner; float phase,speed,size; int source,timer; float grow
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void FUN_L00_0025a9f8(void *,void *,void *,int,int,int,int,int,float,float,float);
+extern void send_blast_hits(void *,void *,void *,int,int,int,int,int,float,float,float) __asm__("FUN_L00_0025a9f8");
 extern void FUN_L00_00262360_c(int,float *,float *,void *,float,float) __asm__("FUN_L00_00262360");
 
 void FUN_L10_002dd3d8(char *moby) {
@@ -1474,9 +1474,9 @@ void FUN_L10_002dd3d8(char *moby) {
   *(float *)(moby+0x2C)=*(float *)(*(char **)(moby+0x24)+0x24)*numerator/convert_integer_to_float(truncate_float_to_s32(10.0f/(frame_time*5.0f))/4)*0.5f;
  }
  if(*(float *)(*(char **)(moby+0x24)+0x24)*0.25f<*(float *)(moby+0x2C)) {
-  int count=FUN_L00_001f2868(moby+0x10,0.15f,16,*(void **)(d+0x10),0);
+  int count=collect_mobies_in_sphere(moby+0x10,0.15f,16,*(void **)(d+0x10),0);
   *(OvlQuad *)pos=*(OvlQuad *)(moby+0x10);
-  FUN_L00_0025a9f8(*(void **)(d+0x10),pos,D_L10_00178380,count,0,0x810001,2,1,2.0f,1.0f,1.0f);
+  send_blast_hits(*(void **)(d+0x10),pos,D_L10_00178380,count,0,0x810001,2,1,2.0f,1.0f,1.0f);
  }
 }
 #include "sda.h"

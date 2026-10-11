@@ -12,7 +12,7 @@
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L13_001B2490_x __asm__("D_L13_001B2490") __attribute__((section(".data")));
 extern unsigned char *FUN_L00_002678b8(int);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 unsigned char *FUN_L13_00280400(char *moby, unsigned char a, int b, int c, unsigned char d, float x,
@@ -31,7 +31,7 @@ unsigned char *FUN_L13_00280400(char *moby, unsigned char a, int b, int c, unsig
         e[3] = 0x48;
         e[1] = 3;
         e[2] = *D_L13_001B2490_x;
-        FUN_L00_0024f7c8(moby, a, p);
+        moby_point_position(moby, a, p);
         qcopy(e + 0x20, p);
         *(float *)(e + 0x2C) = y;
         *(float *)(e + 0x1C) = x;

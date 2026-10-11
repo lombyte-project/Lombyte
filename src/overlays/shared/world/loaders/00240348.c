@@ -491,7 +491,7 @@ extern void FUN_001f9a80(void *, void *, float);
 extern void FUN_0022a5e0(void *);
 extern void FUN_00234f98(void *);
 extern void FUN_00237370(void *);
-extern void FUN_L00_001ed358(void);
+extern void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
 extern void FUN_L00_00204c60(void);
 extern void FUN_L00_00204f80(void);
 extern void FUN_L00_0024a798(int, int);
@@ -519,7 +519,8 @@ void init_moby_instance(void *moby_mem, int oClass) __asm__("FUN_0020c5f0");
 extern void load(void *, int, int) __asm__("FUN_00216828");
 extern GameState137B80 D_00137B80;
 
-char *FUN_L00_00241940(int arg0) {
+char *load_level_gameplay(int arg0) __asm__("FUN_L00_00241940");
+char *load_level_gameplay(int arg0) {
     LevelHeader *hdr;
     char *mem;
     float *ship;
@@ -1651,7 +1652,7 @@ char *FUN_L00_00241940(int arg0) {
     reset_draw_globals();
     FUN_L00_00204c60();
     FUN_L00_00204f80();
-    FUN_L00_001ed358();
+    setup_level_cameras();
     update_camera();
     reset_global_state_fields();
     enable_global_state_flag();

@@ -13,7 +13,8 @@ void FUN_L00_00259710(void *a) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A778), where it is exact; names translated to the US level program. */
 
-int FUN_L00_00259740(float *p, float *v, int n) {
+int point_in_path_xy(float *p, float *v, int n) __asm__("FUN_L00_00259740");
+int point_in_path_xy(float *p, float *v, int n) {
     int r = 0;
     int i = 0;
     int k;
@@ -57,7 +58,8 @@ void FUN_L00_00259858(char *a, int b, int c, float d) {
 }
 #include "qcopy.h"
 /* Fills a record with b, c, d and flag 1, and copies the vector q into its start. */
-void FUN_L00_00259888(char *a, int b, int c, float d, void *q) {
+void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
+void make_hit_descriptor(char *a, int b, int c, float d, void *q) {
     *(int *)(a + 0x10) = b;
     *(int *)(a + 0x14) = c;
     *(float *)(a + 0x1C) = d;
@@ -68,11 +70,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002598b0.s", FUN_L00_002598b0);
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002599e8.s", FUN_L00_002599e8);
 #else
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_002598b0(void *, void *, int, float, float, float, int, int, int);
 void FUN_L00_002599e8(void *a, int b, int c, float d, float e, float f, int g, int h, int i) {
     float position[4] __attribute__((aligned(16)));
-    FUN_L00_0024f7c8(a, b, position);
+    moby_point_position(a, b, position);
     FUN_L00_002598b0(a, position, c, d, (float)c, f, g, h, i);
 }
 #endif
@@ -183,7 +185,8 @@ void FUN_001f9a68_00259d08(void *, void *, float) __asm__("FUN_001f9a68");
 void FUN_001f9a10_00259d08(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a28_00259d08(void *, void *, void *) __asm__("FUN_001f9a28");
 int FUN_001efa68_00259d08(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-int FUN_L00_00259d08(void *a, void *b, void *c, void *d, void *e, int f, int n) {
+int sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, int f, int n) __asm__("FUN_L00_00259d08");
+int sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, int f, int n) {
     V4_259d08 da, db, va, vb;
     float k, t;
     int i = 0;
@@ -293,7 +296,8 @@ static inline u8 load_u8_0025a420(u8 *p) {
     return *p;
 }
 /* Returns the D_L00_00178100 entry linked from p+0xA4 when it matches mask; may unlink it. */
-struct Ent_z *FUN_L00_0025a420(u8 *p, s32 mask, s32 flag) {
+struct Ent_z *find_moby_hit(u8 *p, s32 mask, s32 flag) __asm__("FUN_L00_0025a420");
+struct Ent_z *find_moby_hit(u8 *p, s32 mask, s32 flag) {
     struct Ent_z *e;
     u8 *a = p + 0xA4;
     u8 i = load_u8_0025a420(a);
@@ -367,7 +371,7 @@ extern void FUN_001f9bf8(void *, void *, f32);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9c48(void *, void *, f32);
 
-/* FUN_L00_0025a478 is the executable function of the same bytes (src/gameplay). */
+/* hit_reaction is the executable function of the same bytes (src/gameplay). */
 
 typedef struct {
     f32 x, y, z, w;
@@ -383,7 +387,9 @@ f32 FUN_001f9e90_0025a9f8(f32, f32) __asm__("FUN_001f9e90");
 f32 FUN_001f9dc8_0025a9f8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_0025a9f8(f32) __asm__("FUN_001f9de0");
 void FUN_L00_00259a88_0025a9f8(u8 *, M_0025a9f8 *) __asm__("FUN_L00_00259a88");
-void FUN_L00_0025a9f8(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, s32 c0,
+void send_blast_hits(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, s32 c0,
+                      s32 c1, f32 f, f32 spd, f32 z) __asm__("FUN_L00_0025a9f8");
+void send_blast_hits(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, s32 c0,
                       s32 c1, f32 f, f32 spd, f32 z) {
     struct {
         OvlQuad p;

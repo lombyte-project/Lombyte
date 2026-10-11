@@ -1108,7 +1108,7 @@ extern int FUN_L02_002d5658(void *argp);
 extern void FUN_L02_002d5728(char *arg);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int hit_85b8(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void FUN_L00_0025d538(void *, void *);
@@ -1155,7 +1155,7 @@ void FUN_L02_002d5c88(unsigned char *moby) {
         d->f250 = d->f24C + 5.0f;
     }
     dmg = 0.0f;
-    h = FUN_L00_0025a420(moby, 0x330000, 0);
+    h = find_moby_hit(moby, 0x330000, 0);
     hit_85b8(moby, h, &d->hp, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && moby[0x20] != 0x18) {
         FUN_L02_002d5728((char *)moby);
@@ -1279,13 +1279,13 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D77F8), where it is exact; names translated to the US level program. */
 
 extern char *D_L02_001B0AB0[];
-extern int FUN_L00_00259740(void *, void *, int);
+extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void FUN_L02_002d63c0(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *entry = D_L02_001B0AB0[*(int *)(data + 0x290)];
-    if (FUN_L00_00259740(&moby->pos, entry + 0x10, *(int *)entry) == 0) {
+    if (point_in_path_xy(&moby->pos, entry + 0x10, *(int *)entry) == 0) {
         moby->state = 0x12;
         if (moby->prev_seq) {
             blend_moby_animation(moby, 0, 0, scale_ticks(20));
@@ -1368,10 +1368,10 @@ extern s32 rand(void);
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float scale, float *v10, float *v11, float *v12);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);
-extern void FUN_L00_00259888(char *arg, int a, int b, void *src, float scale);
+extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int);
 extern void FUN_L00_0025f730(void *a, float x);
@@ -1558,7 +1558,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             direction[0] = fast_cos_c(spray_heading) * spray_radius;
             direction[1] = fast_sin_c(spray_heading) * spray_radius;
             direction[2] = 0.0f;
-            FUN_L00_0024f7c8(moby, 0, position);
+            moby_point_position(moby, 0, position);
             FUN_L00_0026cbb0(position, direction, D_L02_00161A88, D_L02_00161A88,
                               FUN_L00_00257b90(scale_game_frames(D_L02_00161A90), scale_game_frames(D_L02_00161A94)), 1, 40000.0f);
         }
@@ -1604,14 +1604,14 @@ void FUN_L02_002d7748(struct Moby *moby) {
         break;
     case 12:
         moby->unk58 = 0.5f;
-        FUN_L00_0024f7c8(moby, 0, position);
+        moby_point_position(moby, 0, position);
         direction[0] = fast_cos_c(FUN_001f9e90(position[0] - moby->pos.x, position[1] - moby->pos.y));
         direction[1] = fast_sin_c(FUN_001f9e90(position[0] - moby->pos.x, position[1] - moby->pos.y));
         direction[2] = -0.1f;
         FUN_L02_00264e70(data->shots, position, direction, D_L02_00161A80);
         direction[3] = 5627.925f;
         direction[2] = 1.0f;
-        FUN_L00_00259888(shot, (int)moby, 0x10001, direction, 1.0f);
+        make_hit_descriptor(shot, (int)moby, 0x10001, direction, 1.0f);
         shot[0x18] = 5;
         shot[0x19] = 1;
         *(short *)(shot + 0x1A) = (u16)moby->oclass;
@@ -1687,7 +1687,7 @@ extern int hit_85b8(void *, void *, void *, int, int *, float *, int, int) __asm
 extern float FUN_001f9e90(float, float);
 extern int trunc_d57f8(float) __asm__("FUN_001fa6d0");
 extern int FUN_L02_00261c80(char *a, char *o, float best);
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void FUN_L00_0025d538(void *, void *);
@@ -1732,7 +1732,7 @@ void FUN_L02_002d85b8(void *arg) {
     float dmg;
 
     dmg = 0.0f;
-    h = FUN_L00_0025a420(moby, 0x330000, 0);
+    h = find_moby_hit(moby, 0x330000, 0);
     if (h != 0 && *(short *)(*(char **)(h + 0x20) + 0xA6) == 0x264) {
         h = 0;
     }
@@ -2273,8 +2273,8 @@ void FUN_L02_002dcb38(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DE418), where it is exact; names translated to the US level program. */
 
 
-extern char *FUN_L00_0025a420(void *, int, int);
-extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025ab48(void *, float *, void *, void *);
 extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
@@ -2301,8 +2301,8 @@ void FUN_L02_002dcfe0(struct Moby *m) {
         mark_moby_for_removal(m);
         return;
     }
-    h = FUN_L00_0025a420(m, 0x330000, 0);
-    FUN_L00_0025a478(m, h, d + 0x20, 0, &hit, &dmg, 0, 4);
+    h = find_moby_hit(m, 0x330000, 0);
+    hit_reaction(m, h, d + 0x20, 0, &hit, &dmg, 0, 4);
     if (h != 0 && hit != 1 && m->state != 4) {
         if (hit == 3) {
             *(float *)(d + 0x20) = 0.0f;
@@ -3357,7 +3357,7 @@ extern unsigned char D_0013D39D __attribute__((section(".data")));
 extern int D_L02_00161CC4 __attribute__((sda));
 extern int D_L02_00161CC8 __attribute__((sda));
 extern Colors0720 D_L02_00161CD0;
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
 extern int FUN_L00_00257b90(int, int);
@@ -3375,7 +3375,7 @@ void FUN_L02_002e0720(struct Moby *moby) {
     int i;
     int j;
 
-    h = FUN_L00_0025a420(moby, 0x800000, 0);
+    h = find_moby_hit(moby, 0x800000, 0);
     switch (moby->state) {
     case 0:
         if (D_0013D39D) {

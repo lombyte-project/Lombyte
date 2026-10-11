@@ -171,7 +171,7 @@ extern int FUN_001f9740(int *);
 extern short D_L18_00161CA0_d __asm__("D_L18_00161CA0") __attribute__((sda));
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
-extern void FUN_L00_00259888(char *arg, int a, int b, void *src, float scale);
+extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
 extern void FUN_L00_002598b0(int, float, void *, int, float, float, int, int, int);
 extern void FUN_L00_00259a88(int, void *);
 extern void FUN_L18_002dc4b8(void);
@@ -197,7 +197,7 @@ void FUN_L18_002dc260(struct Moby *moby) {
         v[2] = 0.0f;
         FUN_001f9bf8(v, v, frame_time * 4.0f);
         v[2] = frame_time * 4.0f;
-        FUN_L00_00259888(buf, (int)moby, 0x10001, v, 1.0f);
+        make_hit_descriptor(buf, (int)moby, 0x10001, v, 1.0f);
         FUN_L00_00259a88(*(int *)(tgt + 0x2000), buf);
     }
     flag = D_L18_0015F5CC & 4;
@@ -385,7 +385,7 @@ void FUN_L18_002a7220(char *moby) {
     } else {
         normalize_vector_xyz(b, data, 2.0f);
     }
-    FUN_L00_00259888(c, (int)moby, 1, b, 2.0f);
+    make_hit_descriptor(c, (int)moby, 1, b, 2.0f);
     *(short *)(c + 0x1A) = *(unsigned short *)(moby + 0xA6);
     if (FUN_001efa68(moby + 0x10, a, 0, *(void **)(data + 0x14), c) != 0 ||
         FUN_001f9770(data + 0x10) != 0) {
@@ -1739,7 +1739,7 @@ void FUN_L18_002dbe80(struct Moby *moby) {
     v[2] = 0.0f;
     FUN_001f9bf8(v, v, frame_time * 4.0f);
     v[2] = frame_time * 4.0f;
-    FUN_L00_00259888(hit, (int)moby, 0x10001, v, 3.0f);
+    make_hit_descriptor(hit, (int)moby, 0x10001, v, 3.0f);
     step = 1.0f / convert_integer_to_float(0x40) * 6.28318f;
     p = -3.14159f;
     q = FUN_001fa580(p, step);

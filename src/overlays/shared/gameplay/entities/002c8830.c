@@ -177,7 +177,7 @@ extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_00257d78(float *, float, float);
-extern void FUN_L00_00259888(void *, void *, int, float, void *);
+extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -206,7 +206,7 @@ void FUN_L11_00309098(char *moby) {
     scale_vector_xyz(v, data, D_L11_00161DD0);
     FUN_L00_0026dd20((char *)p, (char *)v, c, scale_game_frames(D_L11_00161DC8), (float)D_L11_00161DCC);
     add_vector_xyz(pos, pos, data);
-    FUN_L00_00259888(hit, moby, 0x10000, *(float *)(data + 0x20), data);
+    make_hit_descriptor(hit, moby, 0x10000, *(float *)(data + 0x20), data);
     if (FUN_001efa68(old, pos, 0, *(void **)(data + 0x1C), hit)) {
         int i;
         for (i = 0; i < 5; i++) {

@@ -6,7 +6,7 @@
 #include "sda.h"
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
@@ -15,7 +15,7 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L03_002e2948(struct Moby *m) {
     int hit = 0;
-    char *r = FUN_L00_0025a420(m, 0x10000, 0);
+    char *r = find_moby_hit(m, 0x10000, 0);
     switch (m->state) {
     case 0:
         m->state = 1;

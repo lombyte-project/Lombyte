@@ -141,7 +141,7 @@ extern int D_L07_0015F5C4;
 extern int FUN_L00_00257b90(int, int);
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_002637f8(int);
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi,
                                 float size);
@@ -184,7 +184,7 @@ void FUN_L07_0031eba8(char *m) {
         if (k != 0) {
             mob = (char *)((L07SparkState *)S)->arr[k];
             for (i = 0; i < 4; i++) {
-                FUN_L00_0024f7c8(mob, i, buf);
+                moby_point_position(mob, i, buf);
                 for (j = 9; j >= 0; j--) {
                     float d = random_float_between(20000.0f, 200000.0f);
                     int col = (FUN_L00_00257b90(0x20, 0x80) << 24) | 0x7F7F7F;
@@ -216,7 +216,7 @@ extern int D_L07_0015F5C4;
 extern short D_L07_00161CD8_d __asm__("D_L07_00161CD8") __attribute__((sda));
 extern short D_L07_00161CDC_d __asm__("D_L07_00161CDC") __attribute__((sda));
 extern short D_L07_00161CE0_d __asm__("D_L07_00161CE0") __attribute__((sda));
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00263b70(void *, void *, void *, float, float);
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -240,20 +240,20 @@ void FUN_L07_0031f900(unsigned char *moby) {
                 if (s == 2)
                     idx = 4;
                 o = *(char **)(g - (-(idx * 4)) + 0x178);
-                FUN_L00_0024f7c8(o, 0, a0);
-                FUN_L00_0024f7c8(o, 3, b0);
+                moby_point_position(o, 0, a0);
+                moby_point_position(o, 3, b0);
                 subtract_vector_xyz(c0, a0, b0);
                 normalize_vector_xyz(c0, c0, *(float *)&D_L07_00161CD8_d);
                 FUN_L00_00263b70(a0, a0, c0, *(float *)&D_L07_00161CDC_d,
                                  *(float *)&D_L07_00161CE0_d);
-                FUN_L00_0024f7c8(o, 1, a1);
-                FUN_L00_0024f7c8(o, 4, b1);
+                moby_point_position(o, 1, a1);
+                moby_point_position(o, 4, b1);
                 subtract_vector_xyz(c1, a1, b1);
                 normalize_vector_xyz(c1, c1, *(float *)&D_L07_00161CD8_d);
                 FUN_L00_00263b70(a1, a1, c1, *(float *)&D_L07_00161CDC_d,
                                  *(float *)&D_L07_00161CE0_d);
-                FUN_L00_0024f7c8(o, 2, a2);
-                FUN_L00_0024f7c8(o, 5, b2);
+                moby_point_position(o, 2, a2);
+                moby_point_position(o, 5, b2);
                 subtract_vector_xyz(c2, a2, b2);
                 normalize_vector_xyz(c2, c2, *(float *)&D_L07_00161CD8_d);
                 FUN_L00_00263b70(a2, a2, c2, *(float *)&D_L07_00161CDC_d,

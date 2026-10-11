@@ -13,7 +13,7 @@ typedef struct {
 } Rec;
 
 extern Rec D_L15_0017A0C0[];
-extern int FUN_L00_0020d498(int);
+extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
 /* Same routine as FUN_L06_0021d0a0, with case 2 in place of case 1. */
 int FUN_L15_001fe778(int a) {
@@ -43,7 +43,7 @@ int FUN_L15_001fe778(int a) {
         }
     }
     {
-        int i = FUN_L00_0020d498(0);
+        int i = hero_slot_item_id(0);
         return D_L15_0017A0C0[i].v;
     }
 }

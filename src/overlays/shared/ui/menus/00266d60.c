@@ -10,7 +10,8 @@ typedef struct {
     u32 t[30];
 } S_266d60;
 extern S_266d60 D_0013C940_266d60 __asm__("D_0013C940");
-u32 FUN_L00_00266d60(u32 mask, s32 n, s32 *out) {
+u32 pad_pressed_within(u32 mask, s32 n, s32 *out) __asm__("FUN_L00_00266d60");
+u32 pad_pressed_within(u32 mask, s32 n, s32 *out) {
     s32 lim = D_0013C940_266d60.n;
     s32 i;
     if (lim >= n)

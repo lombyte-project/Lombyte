@@ -28,7 +28,8 @@ void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 
 /* Follow-camera orientation update: rebuilds the basis vectors at p from the
  * target moby, eases pitch/yaw and renormalises. */
-void FUN_L00_002e9010(u8 *p) {
+void follow_camera_build_view(u8 *p) __asm__("FUN_L00_002e9010");
+void follow_camera_build_view(u8 *p) {
     u8 *q40;
     u8 *q;
     u8 *q2;
@@ -158,7 +159,8 @@ extern float fabs_2e9518(float) __asm__("FUN_001f99c0");
 extern int fr_2e9518(int) __asm__("FUN_001f96f8");
 extern void pitch_s(int, float, float) __asm__("FUN_L00_002e8450");
 
-void FUN_L00_002e9518(char *o, float *x, float *y) {
+void follow_camera_pull_back(char *o, float *x, float *y) __asm__("FUN_L00_002e9518");
+void follow_camera_pull_back(char *o, float *x, float *y) {
     C_2e9518 *C = &D_166E10_2e9518;
     char *v = *(char **)(o + 0x70);
     S_2e9518 *s = (S_2e9518 *)(v + 0x220);
@@ -221,7 +223,8 @@ f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 vel) __asm__("FUN_001ebd78");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L00_002e9720(int arg) {
+void follow_camera_orbit(int arg) __asm__("FUN_L00_002e9720");
+void follow_camera_orbit(int arg) {
     char *m = (char *)arg;
     char *d = *(char **)(m + 0x70);
     float t0[4];
@@ -322,11 +325,11 @@ void FUN_L00_002e9aa0(int a) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EB060), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_002e7d20(int);
+extern void follow_camera_avoid_mobies(int) __asm__("FUN_L00_002e7d20");
 extern void FUN_L00_002e8378(int);
-extern void FUN_L00_002e89b0(int, float *, float *);
-extern void FUN_L00_002e8bb8(int, float, float);
-extern void FUN_L00_002e8f40(int);
+extern void follow_camera_read_stick(int, float *, float *) __asm__("FUN_L00_002e89b0");
+extern void follow_camera_turn_and_pitch(int, float, float) __asm__("FUN_L00_002e8bb8");
+extern void follow_camera_auto_turn(int) __asm__("FUN_L00_002e8f40");
 extern void FUN_L00_002e9010_u(int) __asm__("FUN_L00_002e9010");
 extern void FUN_L00_002e9720_u(int) __asm__("FUN_L00_002e9720");
 extern void FUN_L00_002e9aa0(int);
@@ -335,10 +338,10 @@ extern void FUN_L00_002e9aa0(int);
 void FUN_L00_002e9bb0(int a) {
     float v[2];
     FUN_L00_002e9aa0(a);
-    FUN_L00_002e8f40(a);
-    FUN_L00_002e89b0(a, &v[0], &v[1]);
-    FUN_L00_002e8bb8(a, v[0], v[1]);
-    FUN_L00_002e7d20(a);
+    follow_camera_auto_turn(a);
+    follow_camera_read_stick(a, &v[0], &v[1]);
+    follow_camera_turn_and_pitch(a, v[0], v[1]);
+    follow_camera_avoid_mobies(a);
     FUN_L00_002e9720_u(a);
     FUN_L00_002e8378(a);
     FUN_L00_002e9010_u(a);
@@ -347,22 +350,23 @@ extern s32 D_0015EDE4;
 extern f32 D_L00_0015EF44 __attribute__((sda));
 extern f32 D_L00_00161DB0[2] __attribute__((sda));
 void FUN_L00_002e46b8();
-void FUN_L00_002e6000();
+void follow_camera_apply_overrides() __asm__("FUN_L00_002e6000");
 void FUN_001e93e8();
-void FUN_L00_002e5830();
+void follow_camera_springs() __asm__("FUN_L00_002e5830");
 void FUN_L00_002e9bb0();
-void FUN_L00_002e5e38();
-void FUN_L00_002e9c28(u8 *m) {
+void follow_camera_approach() __asm__("FUN_L00_002e5e38");
+void follow_camera_update(u8 *m) __asm__("FUN_L00_002e9c28");
+void follow_camera_update(u8 *m) {
     u8 *p = *(u8 **)(m + 0x70) + 0x1D0;
     D_L00_0015EF44 = D_L00_00161DB0[D_0015EDE4];
     FUN_L00_002e46b8();
-    FUN_L00_002e6000(m);
+    follow_camera_apply_overrides(m);
     FUN_001e93e8(m);
-    FUN_L00_002e5830(m);
+    follow_camera_springs(m);
     FUN_001e93e8(m, p);
     FUN_L00_002e9bb0(m);
     FUN_001e93e8(m);
-    FUN_L00_002e5e38(m);
+    follow_camera_approach(m);
 }
 extern unsigned char D_0015EDB3_002e9cc0 __asm__("D_0015EDB3");
 extern void FUN_001f9bf8_002e9cc0(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -1524,7 +1528,7 @@ extern s32 D_001415D4[];
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern s32 FUN_L00_0025fa38(void *, s32);
 extern s32 FUN_L00_0025faf0(void *, s32);
-extern s32 FUN_L00_00259740(void *, void *, s32);
+extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
 
 s32 FUN_L00_002ec7e8(A_2ec7e8 *a) {
     O_2ec7e8 *o;
@@ -1549,7 +1553,7 @@ s32 FUN_L00_002ec7e8(A_2ec7e8 *a) {
         return 1;
     if (o->f08 >= 0 && (v17 || FUN_L00_0025faf0(&hero.motion.pos, o->f08)))
         return 1;
-    if (o->f14 >= 0 && (v17 || FUN_L00_00259740(&hero.motion.pos, D_L00_001B04B0[o->f14] + 0x10,
+    if (o->f14 >= 0 && (v17 || point_in_path_xy(&hero.motion.pos, D_L00_001B04B0[o->f14] + 0x10,
                                                 *(s32 *)D_L00_001B04B0[o->f14])))
         return 1;
     return 0;
@@ -1650,9 +1654,9 @@ extern char *D_L00_00166E00_002ed498 __asm__("D_L00_00166E00") __attribute__((se
 extern int FUN_L00_002ed348(void *);
 extern int FUN_L00_002e83c0(void *);
 extern void FUN_L00_002e8388(void *);
-extern void FUN_L00_002e8450(int, float, float);
-extern void FUN_L00_002e84b8(float, float);
-extern void FUN_L00_002e84f0(int, float, float);
+extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
+extern void follow_camera_set_height(float, float) __asm__("FUN_L00_002e84b8");
+extern void follow_camera_set_offset_scale(int, float, float) __asm__("FUN_L00_002e84f0");
 extern void FUN_L00_002e8540(float);
 extern void FUN_L00_002e8568(int);
 extern void FUN_L00_002e8620(void);
@@ -1760,13 +1764,13 @@ void FUN_L00_002ed498(void *arg) {
     if (frames < *(int *)(p + 0x20))
         *(int *)(p + 0x20) = FUN_001f96f8_002ed498(200);
     if (*(float *)(p + 0x38) != 0.0f) {
-        FUN_L00_002e8450(0, *(float *)(p + 0x38), 0.003f);
+        follow_camera_set_distance(0, *(float *)(p + 0x38), 0.003f);
         FUN_L00_002e8620();
     }
     if (*(float *)(p + 0x3c) != 0.0f)
-        FUN_L00_002e84b8(*(float *)(p + 0x3c), 0.003f);
+        follow_camera_set_height(*(float *)(p + 0x3c), 0.003f);
     if (*(float *)(p + 0x40) != 0.0f)
-        FUN_L00_002e84f0(0, *(float *)(p + 0x40), 0.005f);
+        follow_camera_set_offset_scale(0, *(float *)(p + 0x40), 0.005f);
     if (*(float *)(p + 0x28) != 0.0f)
         FUN_L00_002e8540(*(float *)(p + 0x28) * 0.017453292f);
     if (*(short *)(p + 0x24) == 0)
@@ -1785,7 +1789,8 @@ extern int D_L00_0015F5C4;
 extern int FUN_L00_002ed348(void *);
 extern void FUN_L00_002ed498(void *);
 
-int FUN_L00_002ed8b0(char *a) {
+int volume_camera_check(char *a) __asm__("FUN_L00_002ed8b0");
+int volume_camera_check(char *a) {
     char *p = *(char **)(D_L00_0015EF50 + *(short *)(a + 0x84) * 32 + 0x1C);
     if (*(short *)(p + 0x26) != 0)
         return 0;

@@ -250,7 +250,7 @@ extern f32 D_L14_001614B8 __attribute__((sda));
 extern void FUN_L14_002b3a20_c(struct Moby *) __asm__("FUN_L14_002b3a20");
 extern void FUN_L14_002b2928(struct Moby *);
 extern void FUN_001f4600(void (*)(struct Moby *), struct Moby *);
-extern void FUN_L00_0024f7c8(struct Moby *, s32, void *);
+extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_0020cca8(struct Moby *, s32, void *);
 extern void FUN_00213358(void *, f32, f32);
 extern Particle *FUN_L00_00274948(void *, void *, s32, struct Moby *);
@@ -281,7 +281,7 @@ void FUN_L14_002b2600(struct Moby *m)
 
     pv = (ShipVars *)m->pvars;
     FUN_001f4600(FUN_L14_002b3a20_c, m);
-    FUN_L00_0024f7c8(m, 1, &pos);
+    moby_point_position(m, 1, &pos);
     FUN_001f9a28(&dir, &pos, &D_L14_001674C0);
     FUN_001f9bf8(&dir, &dir, -0.5f);
     FUN_001f9a10(&pv->exhaust, &pos, &dir);
@@ -307,7 +307,7 @@ void FUN_L14_002b2600(struct Moby *m)
         fade->color = 0x7F7F7F;
         fade->scale = f;
     }
-    FUN_L00_0024f7c8(m, 6, &pv->joint6);
+    moby_point_position(m, 6, &pv->joint6);
     FUN_0020cca8(m, 7, mat);
     FUN_001f9a68(&dx, &mat[0], D_L14_001614A8);
     FUN_001f9a10(&pv->nozzle, &mat[3], &dx);
@@ -362,10 +362,10 @@ void FUN_L14_002b2ed8(struct Moby *m) {
 /* Enemy hit reaction: takes damage from attacks (not from its own kind), staggers or is knocked away and dies. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B41B0), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_0013E533[];
 extern float FUN_001f9e90(float, float);
-extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int FUN_L00_002e2040(char *);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -390,12 +390,12 @@ void FUN_L14_002b2f60(char *moby) {
         return;
     }
     damage = 0.0f;
-    hit_info = FUN_L00_0025a420(moby, 0x330000, 0);
+    hit_info = find_moby_hit(moby, 0x330000, 0);
     if (hit_info != 0 && *(char **)(hit_info + 0x20) != 0
         && (*(short *)(*(char **)(hit_info + 0x20) + 0xA6) == *(short *)(moby + 0xA6) || *(short *)(*(char **)(hit_info + 0x20) + 0xA6) == 0x370)) {
         hit_info = 0;
     }
-    result = FUN_L00_0025a478(moby, hit_info, state + 0x20, 0, &hit_kind, &damage, 0, 4);
+    result = hit_reaction(moby, hit_info, state + 0x20, 0, &hit_kind, &damage, 0, 4);
     if (hit_kind != 1 && ((unsigned char *)moby)[0x20] != 0xB) {
         *(float *)(state + 0x20) -= damage;
         if (*(float *)(state + 0x20) <= 0.0f) result = 1;

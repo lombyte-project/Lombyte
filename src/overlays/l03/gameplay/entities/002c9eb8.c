@@ -12,10 +12,10 @@
 
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002CDBF0), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 
 void FUN_L03_002cc828(unsigned char *arg) {
-    char *item = FUN_L00_0025a420(arg, 0x130000, 0);
+    char *item = find_moby_hit(arg, 0x130000, 0);
     if (item != 0) {
         char *other = *(char **)(item + 0x20);
         if (other != 0 && *(short *)(other + 0xA6) != *(short *)(arg + 0xA6)) {
@@ -1059,9 +1059,9 @@ extern float FUN_001f9de0(float);
 extern int FUN_L00_00257b90(int, int);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
-extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern int FUN_L00_001f0d60(float, void *, int, void *);
-extern void FUN_L00_00259888(void *, void *, int, float, void *);
+extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_00259a88(void *, void *);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -1112,7 +1112,7 @@ void FUN_L03_002d43c8(struct Moby *m) {
                          0x28, FUN_L00_00257b90(0x32, 0x4B), 0);
         if (target.found != 0) {
             pitch = -FUN_001f9e90(vector_distance(pos, &target.pos), target.pos.f[2] - m->pos.z);
-            m->rot.y = FUN_L00_00258110(&v->turn_vel, m->rot.y, pitch, D_0015ED70 * 0.7853982f,
+            m->rot.y = spring_turn(&v->turn_vel, m->rot.y, pitch, D_0015ED70 * 0.7853982f,
                                         D_0015ED70 * 3.1415927f, frame_time * 0.5235988f);
             m->pos.z += FUN_001f9de0(-m->rot.y) * v->speed;
         }
@@ -1120,7 +1120,7 @@ void FUN_L03_002d43c8(struct Moby *m) {
             FUN_L00_001f0d60(0.2f, pos, 0, v->ignore) != 0) {
             level = (void **)D_L03_00173F40;
             if (level[6] != NULL) {
-                FUN_L00_00259888(&hit, m, 0x10001, 1.0f, v);
+                make_hit_descriptor(&hit, m, 0x10001, 1.0f, v);
                 hit.dir.f[0] = FUN_001f9dc8(v->heading);
                 hit.dir.f[1] = FUN_001f9de0(v->heading);
                 hit.dir.f[2] = 1.0f;
@@ -1964,7 +1964,7 @@ int FUN_L03_002dcb30(struct Moby *moby) {
 
 extern void FUN_L00_00235dc0(void);
 extern void FUN_L00_00237190(void);
-extern void FUN_L00_00235e18(int, int);
+extern void hud_keep_visible(int, int) __asm__("FUN_L00_00235e18");
 extern void FUN_L00_002371e0(void);
 extern void FUN_L00_00237200(void);
 s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
@@ -1996,7 +1996,7 @@ void FUN_L03_002dcbc8(struct Moby *m, int mode) {
         *(int *)(d + 0xA4) = queue_animation_update(
             0xC, 0, (int)FUN_L00_00237190, (int)FUN_L00_002371e0, (int)FUN_L00_00237200, 0, 0);
     } else {
-        FUN_L00_00235e18(h, 0xA);
+        hud_keep_visible(h, 0xA);
     }
 }
 /* Pvars of a rail lift that carries the hero between the ends of two rail paths. */

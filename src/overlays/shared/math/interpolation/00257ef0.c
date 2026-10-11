@@ -65,7 +65,8 @@ void FUN_L00_00258050(float *out, float *a, float *b, float ang) {
 float FUN_001fa5c8_00258110(float, float) __asm__("FUN_001fa5c8");
 float FUN_001f99c0_00258110(float) __asm__("FUN_001f99c0");
 float FUN_001fa580_00258110(float, float) __asm__("FUN_001fa580");
-float FUN_L00_00258110(float *p, float a, float b, float c, float d, float lim) {
+float spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_00258110");
+float spring_turn(float *p, float a, float b, float c, float d, float lim) {
     float t = FUN_001fa5c8_00258110(b, a);
     float k = t / 0.15707964f;
     if (k > 1.0f)

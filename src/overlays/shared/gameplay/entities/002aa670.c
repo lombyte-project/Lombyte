@@ -179,7 +179,7 @@ extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_001f0b58(void);
 extern int FUN_001f9770(void *);
 extern int FUN_L00_001f0d60(float, void *, int, void *);
-extern int FUN_L00_001f2868(void *, int, void *, void *, float);
+extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern int FUN_L00_002371e0(int, int, float);
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00258490(void *, void *, void *, float, float, float, float, int);
@@ -204,15 +204,15 @@ extern unsigned char *D_L00_001B2080[];
 extern unsigned char *FUN_002141f8_cf(unsigned char *) __asm__("FUN_L00_002603d0");
 extern int D_L00_0015F5CC;
 extern unsigned char *FUN_002141f8(unsigned char *);
-extern void *FUN_L00_0025a420(void *, int, int);
+extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void *FUN_L00_0026bb70(void *, void *, int, int, float, int, int, int, int);
 extern void FUN_001f9c48(void *, void *, float);
 extern void FUN_001fa050(void *, void *);
 extern void FUN_001fa378(void *, void *, void *);
 extern void FUN_L00_001ff660(void *, void *, void *);
-extern void FUN_L00_00259888(void *, void *, int, void *, float);
+extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void FUN_L00_00259fe8(unsigned char *, float);
-extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
+extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
@@ -238,7 +238,8 @@ extern char D_0013E550[];
 extern E910 D_E910 __asm__("D_0013E520");
 extern H910 coll_hit __asm__("D_L00_00173E40");
 
-void FUN_L00_002aa670(M910 *m) {
+void mine_update(M910 *m) __asm__("FUN_L00_002aa670");
+void mine_update(M910 *m) {
     B910 a = D_L00_001E9830;
     B910 b = D_L00_001E9880;
     U910 c;
@@ -593,10 +594,10 @@ void FUN_L00_002aa670(M910 *m) {
                         subtract_vector_xyz(t, &v->p54->pos, &m->pos);
                         normalize_vector_xyz(t, t, v->f40);
                         add_vector_xyz(&m->pos, &m->pos, t);
-                        FUN_L00_00259888(&q2, m, 0x10000, t, 1.0f);
+                        make_hit_descriptor(&q2, m, 0x10000, t, 1.0f);
                         qcopy(&probe, &m->pos);
                         probe.f[2] += 0.35f;
-                        if (FUN_L00_001f2868(&probe, 0x10, m, &q2, 0.35f) != 0 &&
+                        if (collect_mobies_in_sphere(&probe, 0x10, m, &q2, 0.35f) != 0 &&
                             D_L00_00173E58 != 0 && D_L00_00173E58->cls != 0x363 &&
                             D_L00_00173E58->cls != 0x4A && D_L00_00173E58->cls != 0x458 &&
                             D_L00_00173E58->cls != 0x365 && D_L00_00173E58->cls != 0x367) {
@@ -628,7 +629,7 @@ void FUN_L00_002aa670(M910 *m) {
                 v->p54 = 0;
             }
             {
-                char *res = FUN_L00_0025a420(m, 0x830000, 0);
+                char *res = find_moby_hit(m, 0x830000, 0);
 
                 if (res != 0 && *(M910 **)(res + 0x20) != 0 &&
                     (*(M910 **)(res + 0x20))->cls != m->cls) {
@@ -750,10 +751,10 @@ void FUN_L00_002aa670(M910 *m) {
                     V910 t;
                     {
                         float s = convert_integer_to_float(D_E910.b11) * 0.5f + 1.0f;
-                        int hit = FUN_L00_001f2868(&m->pos, 0x10, m, 0, s + s);
+                        int hit = collect_mobies_in_sphere(&m->pos, 0x10, m, 0, s + s);
 
                         *(OvlQuad *)t = m->pos.q;
-                        FUN_L00_0025a9f8(m, t, D_L00_00177F00, hit, 0, 0x810000, 4, 1, 3.0f, 0.25f,
+                        send_blast_hits(m, t, D_L00_00177F00, hit, 0, 0x810000, 4, 1, 3.0f, 0.25f,
                                          1.5f);
                     }
                 }
@@ -962,7 +963,8 @@ float FUN_001fa6c0_2ac910(int) __asm__("FUN_001fa6c0");
 void FUN_L00_00250df8_2ac910(void *) __asm__("FUN_L00_00250df8");
 /* Spawns a particle moby with a random rotation, owned by `owner`, at `pos` with velocity `vel`, tinted red/green/blue
    and living `lifetime` frames; returns the new moby or NULL. */
-unsigned char *FUN_L00_002ac910(void *owner, void *pos, void *vel, int lifetime, int red, int green, int blue, int alpha, float scale) {
+unsigned char *spawn_glow_particle(void *owner, void *pos, void *vel, int lifetime, int red, int green, int blue, int alpha, float scale) __asm__("FUN_L00_002ac910");
+unsigned char *spawn_glow_particle(void *owner, void *pos, void *vel, int lifetime, int red, int green, int blue, int alpha, float scale) {
     unsigned char *moby;
     red &= 0xFF; green &= 0xFF; blue &= 0xFF; alpha &= 0xFF;
     moby = FUN_0020c4f8_2ac910(0x70);
@@ -1159,7 +1161,8 @@ float FUN_002132a8_2ace70(float, float) __asm__("FUN_002132a8");
 float FUN_001f9e90_2ace70(float, float) __asm__("FUN_001f9e90");
 void FUN_001f99f8_2ace70(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00250df8_2ace70(void *) __asm__("FUN_L00_00250df8");
-unsigned char *FUN_L00_002ace70(int owner, void *pos) {
+unsigned char *spawn_bomb(int owner, void *pos) __asm__("FUN_L00_002ace70");
+unsigned char *spawn_bomb(int owner, void *pos) {
     unsigned char *m = FUN_0020c4f8_2ace70(0x79);
     if (m) {
         V_2ace70 u, t;
@@ -1217,7 +1220,8 @@ extern float fast_difference_between_rotations_2acfd8(float, float) __asm__("FUN
 extern float convert_integer_to_float_2acfd8(int) __asm__("FUN_001fa6c0");
 extern int FUN_001efa68_2acfd8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void FUN_L00_002c2488_2acfd8(void *, void *, void *, float, float, float) __asm__("FUN_L00_002c2488");
-void FUN_L00_002acfd8(float *pos, unsigned char *moby, float *velocity) {
+void launch_bomb(float *pos, unsigned char *moby, float *velocity) __asm__("FUN_L00_002acfd8");
+void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
     float *v = *(float **)(moby + 0x78);
     float difference[4] __attribute__((aligned(16)));
     float direction[4] __attribute__((aligned(16)));
@@ -1428,7 +1432,8 @@ extern char *FUN_L00_002af450_2adb30(char *, char *, int, int, int) __asm__("FUN
 extern char *mine_camera_blast(char *a, char *b, int c, char *d) __asm__("FUN_L00_002d3838");
 extern char *FUN_L00_002d7e90_2adb30(void *, float) __asm__("FUN_L00_002d7e90");
 extern char *FUN_L00_002df808_2adb30(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, int) __asm__("FUN_L00_002df808");
-void FUN_L00_002adb30(BombMoby_2adb30 *m) {
+void bomb_update(BombMoby_2adb30 *m) __asm__("FUN_L00_002adb30");
+void bomb_update(BombMoby_2adb30 *m) {
     B910 rec = D_L00_001E98D0_2adb30;
     Vec_2adb30 delta;
     Vec_2adb30 old;
@@ -1827,7 +1832,8 @@ unsigned char *FUN_0020c4f8_2af450(int) __asm__("FUN_0020c4f8");
 void FUN_L00_002502f0_2af450(void *, int, int, int) __asm__("FUN_L00_002502f0");
 float FUN_002132a8_2af450(float, float) __asm__("FUN_002132a8");
 void FUN_L00_00250df8_2af450(void *) __asm__("FUN_L00_00250df8");
-unsigned char *FUN_L00_002af450(void *pos, void *vel, int n, int flag, int g) {
+unsigned char *spawn_debris(void *pos, void *vel, int n, int flag, int g) __asm__("FUN_L00_002af450");
+unsigned char *spawn_debris(void *pos, void *vel, int n, int flag, int g) {
     unsigned char *m = FUN_0020c4f8_2af450(0x7A);
     if (m) {
         unsigned char *v;
@@ -1881,7 +1887,8 @@ void add_2af5b8(void *, void *, void *) __asm__("FUN_001f9a10");
 void kill_2af5b8(void *) __asm__("FUN_0020c828");
 float itof_2af5b8(int) __asm__("FUN_001fa6c0");
 int tick_2af5b8(void *) __asm__("FUN_001f9770");
-void FUN_L00_002af5b8(unsigned char *m) {
+void debris_update(unsigned char *m) __asm__("FUN_L00_002af5b8");
+void debris_update(unsigned char *m) {
     W_2af5b8 *w = *(W_2af5b8 **)(m + 0x78);
     C_2af5b8 c;
     V_2af5b8 v;
@@ -1939,7 +1946,9 @@ int FUN_001f96f8_2af8b0(int) __asm__("FUN_001f96f8");
 float FUN_L00_00257c48_2af8b0(float, float) __asm__("FUN_L00_00257c48");
 float FUN_002132a8_2af8b0(float, float) __asm__("FUN_002132a8");
 void FUN_L00_00250df8_2af8b0(void *) __asm__("FUN_L00_00250df8");
-unsigned char *FUN_L00_002af8b0(unsigned char *owner, void *vel, void *pos, void *rot, int type,
+unsigned char *spawn_crate_debris(unsigned char *owner, void *vel, void *pos, void *rot, int type,
+                                int n, float lo, float hi) __asm__("FUN_L00_002af8b0");
+unsigned char *spawn_crate_debris(unsigned char *owner, void *vel, void *pos, void *rot, int type,
                                 int n, float lo, float hi) {
     unsigned char *m = FUN_0020c4f8_2af8b0(type);
     if (m) {

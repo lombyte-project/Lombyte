@@ -231,7 +231,7 @@ typedef struct {
 } TriggerMoby;
 
 extern s32 D_L01_0015F580;
-void *FUN_L00_0025a420(void *, s32, s32);
+void *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_L01_002787a0();
 extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
@@ -243,7 +243,7 @@ void FUN_L01_0030d0f0(TriggerMoby *obj) {
     s32 flag;
 
     flag = 0;
-    hit = FUN_L00_0025a420(obj, 0x10000, 0);
+    hit = find_moby_hit(obj, 0x10000, 0);
     switch (obj->state) {
     case 0:
         obj->state = 1;

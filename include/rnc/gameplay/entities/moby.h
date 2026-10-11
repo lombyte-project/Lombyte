@@ -34,7 +34,7 @@ struct Moby {
     Vec4f pos;
     u8 state;                         /* >= 0xFE: dead, waiting to respawn */
     u8 group;                         /* linked group: index into the level moby-list table D_Lxx_001ABCC0 (0xFF: none) */
-    u8 unk22;                         /* class slot: pclass = D_L00_00197300[unk22] (FUN_L00_002cf218) */
+    u8 unk22;                         /* class slot: pclass = D_L00_00197300[unk22] (crate_update) */
     u8 unk23;                         /* 0x40 for the smoke trail FUN_L09_00307ba8 spawns */
     struct MobyClass *pclass;
     struct Moby *next;

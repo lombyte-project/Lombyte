@@ -10,16 +10,16 @@
 
 /*
  * 0x70-byte idle fidget entry of D_L00_00179890, picked by
- * FUN_L00_00229010(&index) with weight 1 / (interval * 60). The hero stores
+ * pick_idle_fidget(&index) with weight 1 / (interval * 60). The hero stores
  * the index, sets duration_frames from duration and then either enters hero
- * state 0x40 or calls FUN_L00_002323b8(unk48, 0, ...).
+ * state 0x40 or calls set_hero_animation(unk48, 0, ...).
  */
 typedef struct HeroTableEntry70 {
     u8 pad_0[0x44];
-    s32 use_state_40;    /* nonzero: hero_set_state(0x40, 1) instead of FUN_L00_002323b8 */
-    s32 unk48;           /* first argument of FUN_L00_002323b8 */
+    s32 use_state_40;    /* nonzero: hero_set_state(0x40, 1) instead of set_hero_animation */
+    s32 unk48;           /* first argument of set_hero_animation */
     u8 pad_4C[0x4];
-    s32 item_id;         /* only while FUN_L00_0020d498(0) returns it; -1: any */
+    s32 item_id;         /* only while hero_slot_item_id(0) returns it; -1: any */
     u8 pad_54[0x4];
     f32 interval;        /* seconds; 0 = never picked */
     f32 duration;        /* seconds */
@@ -29,7 +29,7 @@ typedef struct HeroTableEntry70 {
 
 /*
  * 0x4C-byte row of D_L00_00179AC0, indexed by the id from
- * FUN_L00_0020d498(0); the hero plays anim when its moby is not already in it.
+ * hero_slot_item_id(0); the hero plays anim when its moby is not already in it.
  */
 typedef struct HeroAnimRow {
     u8 pad_0[0x18];

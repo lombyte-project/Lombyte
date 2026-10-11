@@ -10,7 +10,7 @@
 extern HeroTableEntry70 D_L00_00179890[] __attribute__((section(".data"))); /* idle fidgets */
 extern s32 D_L00_00179AB0 __attribute__((section(".data")));
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern s32 FUN_L00_0020d498(s32);
+extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern s32 FUN_L00_001efc70(void *, void *, s32, void *, s32);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 FUN_001f96b0(f32);
@@ -18,7 +18,8 @@ extern f32 FUN_001f96b0(f32);
 /* Idle fidget picker: lists the eligible entries of D_L00_00179890, then
    picks one weighted by 1 / (interval * 60). Returns 1 and the index in
    *index when one is picked. At 1 hit point it offers only entry 4. */
-s32 FUN_L00_00229010(s32 *index) {
+s32 pick_idle_fidget(s32 *index) __asm__("FUN_L00_00229010");
+s32 pick_idle_fidget(s32 *index) {
     s32 choices[20];
     Vec4 end;
     Vec4 start;
@@ -46,12 +47,12 @@ s32 FUN_L00_00229010(s32 *index) {
         entry = &table[i];
         if (entry->duration_frames != 0) continue;
         if (entry->interval == 0.0f) continue;
-        item = FUN_L00_0020d498(0);
+        item = hero_slot_item_id(0);
         if (entry->item_id != -1 && entry->item_id != item) continue;
         if (entry->use_state_40 != 0 && hero.ground_moby != 0) continue;
         if (i == 3) {
             if (current_level_index != 12) continue;
-            if (FUN_L00_0020d498(0) == 23) continue;
+            if (hero_slot_item_id(0) == 23) continue;
             /* Room for it: nothing in the 8 units above the hero. */
             qcopy(startp, &hero.motion.unkD0);
             qcopy(endp, startp);
@@ -163,7 +164,8 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 /* A second C name for hero_set_state: retail keeps the two calls apart. */
 extern void hero_set_state_2(int, int) __asm__("FUN_L00_002223f8");
 
-int FUN_L00_00229660(void) {
+int hero_handle_jump_press(void) __asm__("FUN_L00_00229660");
+int hero_handle_jump_press(void) {
     int n, t, a;
     int m;
 
@@ -252,17 +254,17 @@ typedef struct {
     u8 p2[0x24];
 } E00229a98;
 extern E00229a98 D_L00_00179AC0[];
-s32 FUN_L00_0020d498(s32);
+s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 void FUN_L00_0020e698(void);
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-void FUN_L00_002323b8(s32, s32, f32);
+void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
 s32 FUN_L00_00229a98(void) {
     struct Hero *b = &hero;
     s32 id, k;
     if (b->unk20A8 == 0 || b->unk20AA == 0 || b->unk22C8 != 0)
         return 0;
-    id = FUN_L00_0020d498(0);
+    id = hero_slot_item_id(0);
     if (id != b->unk2298) {
         FUN_L00_0020e698();
         return 0;
@@ -270,7 +272,7 @@ s32 FUN_L00_00229a98(void) {
     k = D_L00_00179AC0[id].x24;
     if (hero_set_state(0, 0) == 0)
         return 0;
-    FUN_L00_002323b8(k, 0, (f32)scale_game_frames(0xB));
+    set_hero_animation(k, 0, (f32)scale_game_frames(0xB));
     if (((s32)b->unkD08[0]) != 0)
         b->unkD14 = 1;
     b->unk2294 = k;

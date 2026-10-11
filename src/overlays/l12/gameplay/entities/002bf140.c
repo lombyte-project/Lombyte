@@ -1084,7 +1084,7 @@ void FUN_L12_002e86d0(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9AA0), where it is exact; names translated to the US level program. */
 
 extern void *FUN_L04_002ce080(void *, void *);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L12_0027b9c0(void *, void *, int);
 
 void FUN_L12_002e8720(struct Moby *moby) {
@@ -1101,7 +1101,7 @@ void FUN_L12_002e8720(struct Moby *moby) {
         }
     } else {
         char vector[16];
-        FUN_L00_0024f7c8(moby, 1, vector);
+        moby_point_position(moby, 1, vector);
         *(void **)(data + 0x248) = FUN_L04_002ce080(moby, vector);
     }
 }
@@ -1202,7 +1202,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e9f68.s", FUN_L12_002e9f68);
 
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
-extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 
 void FUN_L12_002eae00(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -1214,13 +1214,13 @@ void FUN_L12_002eae00(struct Moby *moby) {
     k0 = frame_time_sq * 0.5235988f;
     d0 = frame_time_sq * 1.0471976f;
     m0 = frame_time * 0.7853982f;
-    r0 = FUN_L00_00258110((float *)(data + 0x9C), moby->rot.y, a, k0, d0, m0);
+    r0 = spring_turn((float *)(data + 0x9C), moby->rot.y, a, k0, d0, m0);
     k1 = frame_time_sq * 1.0471976f;
     d1 = frame_time_sq * 2.0943952f;
     m1 = frame_time * 1.2217305f;
     moby->rot.y = r0;
     moby->rot.x =
-        FUN_L00_00258110((float *)(data + 0x98), moby->rot.x, b, k1, d1, m1);
+        spring_turn((float *)(data + 0x98), moby->rot.x, b, k1, d1, m1);
 }
 extern char *D_L12_001B0930_f[] __asm__("D_L12_001B0930");
 extern float D_0015ED6C_f __asm__("D_0015ED6C");
@@ -1274,9 +1274,9 @@ int FUN_L12_002eaf68(struct Moby *m, int idx) {
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002EC5A0), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_0025d458(void *m, short *p);
@@ -1292,8 +1292,8 @@ void FUN_L12_002eb220(struct Moby *m) {
     float a, b, p, q;
     d = (char *)m->pvars;
     fv = 0.0f;
-    r = FUN_L00_0025a420(m, 0x330000, 0);
-    res = FUN_L00_0025a478(m, r, d + 0x20, 0, &st, &fv, 0, 4);
+    r = find_moby_hit(m, 0x330000, 0);
+    res = hit_reaction(m, r, d + 0x20, 0, &st, &fv, 0, 4);
     if (st != 1 && m->state != 6 &&
         *(short *)(*(char **)(r + 0x20) + 0xA6) != 0xB8 &&
         *(short *)(*(char **)(r + 0x20) + 0xA6) != 0x199) {
@@ -1558,7 +1558,7 @@ void FUN_L12_002ebca8(struct Moby *m, int flag) {
     float a[4];
     float b[4];
     unsigned char *q;
-    if (FUN_L00_0025a420(m, 0xA30000, 0) != 0) {
+    if (find_moby_hit(m, 0xA30000, 0) != 0) {
         if (hero.state.current != 0x32) {
             *(int *)&D_0015EE04 += 1;
             if (*(int *)&D_0015EE04 >= 5) {

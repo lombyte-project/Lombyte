@@ -11,7 +11,7 @@
 
 extern char D_0013E533[];
 extern char D_L12_00179F40[];
-extern int FUN_L00_0020d498(int);
+extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
 int FUN_L12_00227f10(int a) {
     char *base = D_0013E533 + 0xE1D;
@@ -38,7 +38,7 @@ int FUN_L12_00227f10(int a) {
     if (*(short *)(base + 0x22C8) != 0) {
         return 0;
     }
-    i = FUN_L00_0020d498(0) * 0x4C;
+    i = hero_slot_item_id(0) * 0x4C;
     p = D_L12_00179F40 - (-i);
     return *(int *)(p + 0x24);
 }

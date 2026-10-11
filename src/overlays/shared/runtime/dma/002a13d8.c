@@ -3,7 +3,8 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-int FUN_L00_002a13f0(float *a, float v) {
+int walker_gait_mask(float *a, float v) __asm__("FUN_L00_002a13f0");
+int walker_gait_mask(float *a, float v) {
     int bit = 1;
     int r = 0;
     int i;
@@ -170,7 +171,8 @@ float FUN_L00_002a15c8_c(char *a, char *b) __asm__("FUN_L00_002a15c8");
 void FUN_L00_002a1538_c(u8 *a0) __asm__("FUN_L00_002a1538");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L00_002a1670(WalkMoby *m, WalkData *d, int flags, float speed, float ang, float accel) {
+void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float ang, float accel) __asm__("FUN_L00_002a1670");
+void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float ang, float accel) {
     float vec[4];
 
     switch (d->bB7) {

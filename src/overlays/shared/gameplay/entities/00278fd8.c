@@ -66,7 +66,7 @@ extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern short D_L15_001613E8 __attribute__((sda));
 extern short D_L15_00161410 __attribute__((sda));
 extern short D_L15_00161414 __attribute__((sda));
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_0024f8f0(void *, int, void *, void *);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025a120(void *);
@@ -888,7 +888,7 @@ void FUN_L15_002979d8(unsigned char *moby) {
         unsigned char *p = data + 0x2A0;
         int i;
         for (i = 0; i < 3; i++) {
-            FUN_L00_0024f7c8(moby, i + 4, p);
+            moby_point_position(moby, i + 4, p);
             p += 0x10;
         }
     }
@@ -1382,12 +1382,12 @@ extern unsigned char D_L15_00161460_d __asm__("D_L15_00161460") __attribute__((s
 extern unsigned char D_L15_00161464_d __asm__("D_L15_00161464") __attribute__((sda));
 extern unsigned char D_L15_00161468_d __asm__("D_L15_00161468") __attribute__((sda));
 extern unsigned char D_L15_0016146C_d __asm__("D_L15_0016146C") __attribute__((sda));
-extern void FUN_L00_002ac910(char *, char *, int, int, float, int, int, int, int);
+extern void spawn_glow_particle(char *, char *, int, int, float, int, int, int, int) __asm__("FUN_L00_002ac910");
 
 void FUN_L15_0029af88(char *moby) {
     char *pos = moby + 0x10;
     int t = scale_game_frames(*(int *)&D_L15_0016145C_d);
-    FUN_L00_002ac910(moby, pos, (int)&D_L15_0015F580, t, *(float *)&D_L15_00161458_d,
+    spawn_glow_particle(moby, pos, (int)&D_L15_0015F580, t, *(float *)&D_L15_00161458_d,
                      D_L15_00161464_d, D_L15_00161468_d, D_L15_0016146C_d, D_L15_00161460_d);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029d6c0.s", FUN_L15_0029d6c0);
@@ -1494,7 +1494,7 @@ extern float D_0015ED60 __attribute__((section(".sdata")));
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern int D_L15_0015F5CC_c2 __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
 extern int D_L15_00161484; /* no foreign declaration */
-extern int FUN_L00_001f2868();
+extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int FUN_L00_0023e5e0(float *pos, float radius, float intensity, int color);
 extern int FUN_L00_00257b90(int, int);
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -1503,7 +1503,7 @@ extern s32 truncate_float_to_s32_c3(f32) __asm__("func_001FA6D0");
 extern unsigned char *D_L15_001B26AC __attribute__((section(".data")));
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void FUN_L00_0023e838(int);
-extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
+extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern void FUN_L15_0025e2c0(int a0, void *a1, char *a2);
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -1623,7 +1623,7 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
         }
         n = func_L00_001F2BE8_29FF90(moby->pos, r, 0x10, moby, 0);
         *(u128_29FF90 *)v2 = *(u128_29FF90 *)moby->pos;
-        FUN_L00_0025a9f8(moby, v2, D_L15_00178500, n, 0, 0x8B0000, 2, 1, 20.0f, 1.0f, 1.0f);
+        send_blast_hits(moby, v2, D_L15_00178500, n, 0, 0x8B0000, 2, 1, 20.0f, 1.0f, 1.0f);
         cnt = scale_game_frames_alt(0x3C) - d->f14 < scale_game_frames_alt(5) ? scale_game_frames_alt(0x3C) - d->f14 : scale_game_frames_alt(5);
         func_L00_0026E940_29FF90(r * 0.5f * 210000.0f, (char *)moby,
                                  (0x4F << 24) | (FUN_L00_00257b90(0x3F, 0x7F) << 16) | (FUN_L00_00257b90(0x2F, 0x3F) << 8) | FUN_L00_00257b90(0xF, 0x2F),
@@ -1676,7 +1676,7 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
 /* Shared level 15/17 moby update (class 77): steers the moby toward its target and runs its state machine. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3668), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_0013E533[];
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
@@ -1721,7 +1721,7 @@ void FUN_L15_002a2488(char *moby) {
     unsigned char life;
 
     data = *(char **)(moby + 0x78);
-    if (FUN_L00_0025a420(moby, 0x330000, 0) != 0) {
+    if (find_moby_hit(moby, 0x330000, 0) != 0) {
         ((unsigned char *)moby)[0x20] = 4;
         ((unsigned char *)moby)[0xA4] = 0xFF;
     }

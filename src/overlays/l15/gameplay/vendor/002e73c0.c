@@ -114,7 +114,7 @@ struct Moby_A4D88 {
     Vec4f_A4D88 pos;
     u8 state; /* >= 0xFE: dead, waiting to respawn */
     u8 group; /* linked group: index into the level moby-list table D_Lxx_001ABCC0 (0xFF: none) */
-    u8 unk22; /* class slot: pclass = D_L00_00197300[unk22] (FUN_L00_002cf218) */
+    u8 unk22; /* class slot: pclass = D_L00_00197300[unk22] (crate_update) */
     u8 unk23; /* 0x40 for the smoke trail FUN_L09_00307ba8 spawns */
     struct MobyClass_A4D88 *pclass;
     struct Moby_A4D88 *next;
@@ -214,7 +214,7 @@ typedef struct Tb_2E9358 {
     OvlQuad v40;
 } Tb_2E9358;
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_001413D0; /* no foreign declaration */
 extern float D_0015ED6C;
@@ -228,14 +228,14 @@ extern int FUN_L00_001f0d60();
 extern int FUN_L00_001ff660();
 extern int FUN_L00_0025e450();
 extern void *FUN_002141f8(struct Moby_A4D88 *);
-extern void FUN_L00_001f2868(void *, int, void *, void *, float);
+extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out);
 int FUN_L00_0028dc90(int i, int a1, int v, int k);
-void FUN_L00_0025a9f8(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, s32 c0, s32 c1, f32 f, f32 spd, f32 z);
+void send_blast_hits(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, s32 c0, s32 c1, f32 f, f32 spd, f32 z) __asm__("FUN_L00_0025a9f8");
 extern char D_L15_001744C0_2E9358[] __asm__("D_L15_00174440");
 extern int D_L15_001744D8_2E9358 __asm__("D_L15_00174458") __attribute__((section(".data")));
 extern int D_001414D0_2E9358 __asm__("D_001413D0") __attribute__((section(".data")));
@@ -1090,7 +1090,7 @@ int FUN_L15_002f78e0(int slot) {
 extern char *D_L15_ef48_e[] __asm__("D_L15_0015EF48") __attribute__((section(".sdata")));
 extern char D_0013E533[];
 extern int *D_L15_001B0AB0[];
-extern int FUN_L00_00259740(float *p, float *v, int n);
+extern int point_in_path_xy(float *p, float *v, int n) __asm__("FUN_L00_00259740");
 extern int FUN_L00_0025fa38(void *p, int i);
 extern int FUN_L00_0025faf0(float *p, int idx);
 
@@ -1115,7 +1115,7 @@ int FUN_L15_002f85a8(char *moby) {
         }
     } else if (e[5] >= 0) {
         i = e[5];
-        if (FUN_L00_00259740((float *)(D_0013E533 + 0xE9D), (float *)(D_L15_001B0AB0[i] + 4),
+        if (point_in_path_xy((float *)(D_0013E533 + 0xE9D), (float *)(D_L15_001B0AB0[i] + 4),
                              D_L15_001B0AB0[i][0])) {
             return 1;
         }

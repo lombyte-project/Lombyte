@@ -138,7 +138,7 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 extern void FUN_L00_0023db30();
 extern void FUN_L00_002935b8();
 extern void FUN_L00_0023e008(VeldinMoby *);
-void FUN_L00_0024f7c8(char *arg0, int arg1, void *arg2);
+void moby_point_position(char *arg0, int arg1, void *arg2) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257024(void *);
 extern int FUN_L00_00257b90(int, int);
 extern void FUN_L00_0026ced0(void *, void *, s32, s32, s32, f32);
@@ -180,7 +180,7 @@ void FUN_L00_0023e268(void) {
         if (src != 0) {
             for (n = 0; n < 4; n++) {
                 clear_u64_value(&v);
-                FUN_L00_0024f7c8(src, n % 2, &buf);
+                moby_point_position(src, n % 2, &buf);
                 a = veldin_random_angle();
                 b = veldin_random_angle();
                 build_spherical_offset(

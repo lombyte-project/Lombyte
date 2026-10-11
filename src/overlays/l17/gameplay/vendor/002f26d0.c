@@ -819,7 +819,7 @@ char *FUN_L17_002f4fb8(int list) {
 /* UpdateMoby 1873: wait for a target, then play two effects and delete itself. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6DA0), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_0022da68(int, int, int);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
@@ -829,7 +829,7 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L17_002f5260(struct Moby *m) {
     int flag = 0;
-    char *p = FUN_L00_0025a420(m, 0x10000, 0);
+    char *p = find_moby_hit(m, 0x10000, 0);
     switch (m->state) {
     case 0:
         m->state = 1;
@@ -862,7 +862,7 @@ void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
 void FUN_L17_002f5390(struct Moby *m) {
     int flag = 0;
-    char *r = FUN_L00_0025a420(m, 0x10000, 0);
+    char *r = find_moby_hit(m, 0x10000, 0);
     switch (m->state) {
     case 0:
         m->state = 1;

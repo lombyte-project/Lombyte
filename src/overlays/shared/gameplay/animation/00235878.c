@@ -182,7 +182,8 @@ typedef struct {
     u8 pad3[0x90 - 0x80];
 } T_235e18;
 extern T_235e18 D_L00_0017DC50_235e18[] __asm__("D_L00_0017DC50") __attribute__((section(".data")));
-s32 FUN_L00_00235e18(s32 key, s32 val) {
+s32 hud_keep_visible(s32 key, s32 val) __asm__("FUN_L00_00235e18");
+s32 hud_keep_visible(s32 key, s32 val) {
     s32 i;
     s32 r;
     T_235e18 *e;

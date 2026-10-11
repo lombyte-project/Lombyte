@@ -13,8 +13,8 @@
 /* Steps a moby's countdown from a helper's output and retires it when it runs out. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002CD088), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
-extern int FUN_L00_0025a478(void *, void *, void *, int, void *, void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void FUN_L00_0025d538(void *, void *);
 
@@ -28,7 +28,7 @@ void FUN_L17_002cbc10(char *m) {
     d = *(char **)(m + 0x78);
     if (*(unsigned char *)(m + 0x20) != 0) {
         fv = 0.0f;
-        r = FUN_L00_0025a420(m, 0x330000, 0);
+        r = find_moby_hit(m, 0x330000, 0);
         if (r != 0) {
             if (*(int *)(r + 0x20) != 0) {
                 int h = *(short *)(*(char **)(r + 0x20) + 0xA6);
@@ -39,7 +39,7 @@ void FUN_L17_002cbc10(char *m) {
             }
         }
         e = d + 0x60;
-        FUN_L00_0025a478(m, r, d + 0x20, 0, &st, &fv, 0, 4);
+        hit_reaction(m, r, d + 0x20, 0, &st, &fv, 0, 4);
         if (st != 1 && *(unsigned char *)(m + 0x20) != 4) {
             float t = *(float *)(d + 0x20) - fv;
             *(float *)(d + 0x20) = t;
@@ -93,7 +93,7 @@ extern void normalize_vector_xyz(void *, void *, float);
 extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void transform_vector_by_basis(void *, void *, void *);
-void FUN_L00_00259888(char *a, int b, int c, float d, void *q);
+void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
 extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
                                   void *src) __asm__("FUN_L00_00259888");
 
@@ -886,7 +886,7 @@ extern char *D_L17_00174758;
 extern char *FUN_L00_0026f080(char *vec, float *pos, float sc, float vy);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int FUN_L00_001f2868();
+extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
@@ -897,7 +897,7 @@ extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 f32 resolve_camera_surface_height(struct CameraProbePosition *position,
                                   s32 optional_output) __asm__("FUN_002135f0");
-void FUN_L00_00259888(char *a, int b, int c, float d, void *q);
+void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
                                   void *src) __asm__("FUN_L00_00259888");
@@ -917,8 +917,8 @@ void FUN_L17_002dc3f8(struct Moby *m) {
     float yy;
     int i;
     clear_vector(v);
-    r = FUN_L00_0025a420(m, 0x230000, 0);
-    FUN_L00_0025a478(m, r, data + 0x20, 0, &out, 0, 0, 4);
+    r = find_moby_hit(m, 0x230000, 0);
+    hit_reaction(m, r, data + 0x20, 0, &out, 0, 0, 4);
     if (out >= 2 && r != 0 && *(short *)(*(char **)(r + 0x20) + 0xA6) != 0x343) {
         func_L00_0025F4A8_alt(m, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f, 0, 1,
                               -1, 0);

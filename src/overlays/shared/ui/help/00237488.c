@@ -54,7 +54,7 @@ int FUN_L05_0023b378(int id, float *out) {
 /* Applies the wrench/item selection for slot i: resolves pending, queued and requested items and refreshes the slot when it changes. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210558), where it is exact; names translated to the US level program. */
 
-/* L05 adds to FUN_L00_0020fea0 the state.control_mode / unk8CE test that guards the second
+/* L05 adds to hero_switch_item the state.control_mode / unk8CE test that guards the second
    unk20A6 set, and a new unguarded statement (the prologue's i!=0 branch lands
    on it, so it runs for every slot) that sets unk20A6 for items[0].item_id == 0x24 with
    state.control_mode != 0x16. The second condition is negated: retail's `beq` skips the
@@ -601,7 +601,7 @@ extern float FUN_L00_00232b90(float a, float b, float c);
 extern int FUN_L05_002551b8_c(void) __asm__("FUN_L05_002551b8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void FUN_L00_002323b8(int, int, float);
+extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_002325e0(int bank, int seq);
 
 void FUN_L05_00253850(void) {
@@ -621,7 +621,7 @@ void FUN_L05_00253850(void) {
             struct Hero *h = &hero;
             int a = h->unk88F + 0x69;
             if (((unsigned char *)*(char **)&h->moby)[0x53] != a) {
-                FUN_L00_002323b8(a, 2, (float)scale_game_frames(5));
+                set_hero_animation(a, 2, (float)scale_game_frames(5));
                 FUN_L00_002325e0(D_L05_00179BC0[h->unk88F].bank,
                                  D_L05_00179BC0[h->unk88F].seq);
             } else if ((float)h->unkAB0 - 2.0f < h->anim_frame) {
@@ -640,12 +640,12 @@ void FUN_L05_00253850(void) {
             int t = k->unk888;
             if (t > scale_game_frames(0x1E)) {
                 int x = FUN_L05_002551b8_c();
-                FUN_L00_002323b8(x, 9, (float)scale_game_frames(0x11));
+                set_hero_animation(x, 9, (float)scale_game_frames(0x11));
             } else {
                 t = k->unk888;
                 if (t < scale_game_frames(0xA))
                     t = scale_game_frames(0xA);
-                FUN_L00_002323b8(FUN_L05_002551b8_c(), 0xD, (float)t);
+                set_hero_animation(FUN_L05_002551b8_c(), 0xD, (float)t);
             }
         }
     }
@@ -655,7 +655,7 @@ void FUN_L05_00253850(void) {
             int a = ((unsigned char *)((char *)h->moby))[0x53];
             if (a == 0x52 || a == 0x7D || a == 0x68 || a == 0x7E) {
                 int x = FUN_L05_002551b8_c();
-                FUN_L00_002323b8(x, 0xB, (float)scale_game_frames(0xA));
+                set_hero_animation(x, 0xB, (float)scale_game_frames(0xA));
             }
         }
     }
@@ -663,7 +663,7 @@ void FUN_L05_00253850(void) {
         struct Hero *h = &hero;
         if ((h->unkA98 & 2) && h->frames_off_ground.s != 0) {
             int x = FUN_L05_002551b8_c();
-            FUN_L00_002323b8(x, 9, (float)scale_game_frames(7));
+            set_hero_animation(x, 9, (float)scale_game_frames(7));
         }
     }
 }

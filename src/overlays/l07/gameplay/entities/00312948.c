@@ -47,7 +47,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern s32 probe_world_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
-extern void FUN_L00_00259888(void *, void *, s32, f32, void *);
+extern void make_hit_descriptor(void *, void *, s32, f32, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_00258278(struct Moby *, f32, void *, f32, f32, f32);
 extern void FUN_L07_00312e70(char *, float, int, float, int);
 
@@ -71,7 +71,7 @@ void FUN_L07_003131b0(char *moby) {
     FUN_L07_00312e70(moby, 0.4f, 20, 3.0f, 0x30B0FFFF);
     subtract_vector_xyz(d, data + 0x120, data + 0x110);
     normalize_vector_xyz(d, d, one);
-    FUN_L00_00259888(blk, moby, 0x30000, 1.00012302f, d);
+    make_hit_descriptor(blk, moby, 0x30000, 1.00012302f, d);
     if (collision_line(data + 0x110, data + 0x120, 0, moby, blk) == 0) {
         probe_world_sphere(0.5f, data + 0x120, 0, moby, blk);
     }
@@ -601,7 +601,7 @@ typedef struct {
     s32 found; /* 0x40 */
 } SwooperSight;
 
-/* Hit record returned by the hit lookup FUN_L00_0025a420. */
+/* Hit record returned by the hit lookup find_moby_hit. */
 typedef struct {
     u8 pad0[0x10];
     Vec4f pos;          /* 0x10 */
@@ -631,13 +631,13 @@ extern f32 FUN_001f9b48(void *, void *);
 extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f99c0(f32);
 extern void FUN_L00_0025a120(struct Moby *);
-extern MobyHit *FUN_L00_0025a420(struct Moby *, s32, s32);
+extern MobyHit *find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 FUN_00213928(struct Moby *, MobyHit *, void *, s32, s32 *, s32, s32, s32);
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_001f9c90(void *, void *, f32);
-extern f32 FUN_L00_00258110(f32 *, f32, f32, f32, f32, f32);
+extern f32 spring_turn(f32 *, f32, f32, f32, f32, f32) __asm__("FUN_L00_00258110");
 extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
 extern s32 FUN_L00_001f0d60(f32, void *, s32, struct Moby *);
 extern void FUN_L00_00259fe8(struct Moby *, f32);
@@ -670,7 +670,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
         FUN_L00_0025a120(moby);
         moby->unk7F = 0x15;
     }
-    hit = FUN_L00_0025a420(moby, 0x230000, 0);
+    hit = find_moby_hit(moby, 0x230000, 0);
     FUN_00213928(moby, hit, collision, 0, &touching, 0, 0, 4);
     if (touching >= 2 && hit != NULL && hit->moby->oclass != 0x363 && hit->moby->oclass != 0x458 &&
         hit->moby->oclass != 0x367) {
@@ -735,7 +735,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
                          &vars->turn_speed, frame_time_sq * 3.1415927f, D_0015ED6C * 3.1415927f,
                          D_0015ED6C * 6.2831855f);
         pitch = FUN_001f9e90(FUN_001f9b80(&moby->pos, &sight.pos), sight.pos.f[2] - moby->pos.z);
-        moby->rot.y = FUN_L00_00258110(&vars->pitch_speed, moby->rot.y, pitch,
+        moby->rot.y = spring_turn(&vars->pitch_speed, moby->rot.y, pitch,
                                        frame_time_sq * 3.1415927f, D_0015ED6C * 3.1415927f, D_0015ED6C * 6.2831855f);
         subtract_vector_xyz(&dir, &sight.pos, &moby->pos);
         if (moby->unkBC != 0) {
@@ -748,7 +748,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
         if (FUN_001f9b48(&moby->pos, &vars->home) > 64.0f) {
             FUN_L07_00319698(moby, spawner_vars);
         }
-        FUN_L00_00259888(contact, moby, 0x10001, 1.0f, &vars->velocity);
+        make_hit_descriptor(contact, moby, 0x10001, 1.0f, &vars->velocity);
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.75f;
         if (probe_world_sphere(0.75f, &probe, 0x10, moby, contact) && D_L07_00173ED8 != NULL &&
@@ -798,7 +798,7 @@ void FUN_L07_00319f48(struct Moby *m) {
     s32 cls;
     s32 i;
 
-    h = FUN_L00_0025a420(m, 0x30000, 0);
+    h = find_moby_hit(m, 0x30000, 0);
     if (h != NULL && h->moby != NULL
         && ((h->moby->oclass == 0x415 && h->moby->state == 8)
             || (h->moby->oclass == 0x452 && h->moby->state == 9))

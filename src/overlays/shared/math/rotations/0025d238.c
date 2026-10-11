@@ -487,7 +487,7 @@ extern S6y10 D_L00_001E9048;
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_L00_001B02F0[];
 extern int FUN_L00_00257b90(int, int);
-extern int FUN_L00_002ac910(void *, void *, void *, float, int, int, int, int, int);
+extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned FUN_L00_0025c0e8(unsigned, int);
@@ -527,8 +527,8 @@ void FUN_L00_0025f090(u8 *owner, u128 *pos, int sound, float scale, float flash)
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
     if (owner != 0) {
-        FUN_L00_002ac910(owner, pos, &vel, scale * 4.0f, scale_game_frames_c(0x14), 0x7F, 0x40, 0, 0x30);
-        FUN_L00_002ac910(owner, pos, &vel, scale * 3.0f, scale_game_frames_c(0x1D), 0x60, 0x20, 0, 0x20);
+        spawn_glow_particle(owner, pos, &vel, scale * 4.0f, scale_game_frames_c(0x14), 0x7F, 0x40, 0, 0x30);
+        spawn_glow_particle(owner, pos, &vel, scale * 3.0f, scale_game_frames_c(0x1D), 0x60, 0x20, 0, 0x20);
     }
     {
         Vy10 at;
@@ -581,11 +581,11 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
         rgb[0] = 0x7F; rgb[1] = 0x40; rgb[2] = 0;
         FUN_L00_0025c088(&rgb[0], &rgb[1], &rgb[2], 1);
         t1 = scale * 4.0f;
-        FUN_L00_002ac910(owner, pos, &zero_vec, t1, scale_game_frames_c(0x14), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x30);
+        spawn_glow_particle(owner, pos, &zero_vec, t1, scale_game_frames_c(0x14), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x30);
         rgb[0] = 0x60; rgb[1] = 0x20; rgb[2] = 0;
         FUN_L00_0025c088(&rgb[0], &rgb[1], &rgb[2], 1);
         t2 = scale * 3.0f;
-        FUN_L00_002ac910(owner, pos, &zero_vec, t2, scale_game_frames_c(0x1D), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x20);
+        spawn_glow_particle(owner, pos, &zero_vec, t2, scale_game_frames_c(0x1D), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x20);
     }
     if (flash != 0.0f) {
         if (flash > 0.0f) {

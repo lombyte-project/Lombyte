@@ -47,7 +47,7 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 tick_countdown(s32 *) __asm__("FUN_001f9740");
 extern f32 FUN_001f9b80(void *, void *);
 extern s32 FUN_L00_00203908(s32, s32);
-extern s32 FUN_L00_00233e98(s32);
+extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
 extern s32 allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
 extern void FUN_L00_00263d40(s32, s32);
 
@@ -127,7 +127,7 @@ void FUN_L03_002df520(u8 *moby) {
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[15]) && count == 0 &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && hero.state.current != 0x1E &&
-            D_0013D4C0[0xF] != 0 && FUN_L00_00233e98(0xF) >= 0x15 && D_L03_00179510.state == 0 &&
+            D_0013D4C0[0xF] != 0 && get_ammo(0xF) >= 0x15 && D_L03_00179510.state == 0 &&
             D_L03_00179510.cur == -1 && help_records[0x4A].id == 0 && D_00141848.stat[19].count == 0) {
             FUN_L00_00203908(0x4E20, 0x4A);
         } else if (hero.state.current == 0x1E) {
@@ -233,7 +233,7 @@ struct L03Cutscene {
 extern int D_L03_0015F5C4;
 extern struct L03Cutscene D_L03_0016C960;
 extern void FUN_L00_002637f8(void *);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int FUN_L00_00257b90(int, int);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -274,8 +274,8 @@ void FUN_L03_002e01d0(char *m) {
         if (moby == 0)
             break;
         zero.q = 0;
-        FUN_L00_0024f7c8(moby, 0, from);
-        FUN_L00_0024f7c8(moby, 1, to);
+        moby_point_position(moby, 0, from);
+        moby_point_position(moby, 1, to);
         FUN_L00_0026ced0(from, &zero, 0x7F7F7F7F, 0x7F7F7F, random_float_between(0.25f, 0.5f) * 210000.0f,
                          scale_game_frames(FUN_L00_00257b90(45, 60)));
         FUN_L00_0026ced0(to, &zero, 0x407F7F7F, 0x7F7F7F, random_float_between(0.25f, 0.5f) * 210000.0f,

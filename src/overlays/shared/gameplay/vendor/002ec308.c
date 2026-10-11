@@ -40,7 +40,7 @@ void FUN_L02_002ec308(char *self) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED828), where it is exact; names translated to the US level program. */
 
 extern int D_L02_0015F5CC;
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 void FUN_L02_002ec308(char *self);
 
@@ -58,7 +58,7 @@ void FUN_L02_002ec3f0(char *moby) {
     data = *(char **)(moby + 0x78);
     p = data + 0x80;
     for (i = 0; i < 3; i++) {
-        FUN_L00_0024f7c8(moby, i + 3, p);
+        moby_point_position(moby, i + 3, p);
         p += 0x10;
     }
     v = D_L02_0015F5CC;
@@ -83,7 +83,7 @@ void FUN_L02_002ec3f0(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED8F0), where it is exact; names translated to the US level program. */
 
 extern char *D_L02_001B0AB0[];
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_001413D4[];
 extern char D_L02_001FAD60[];
 extern char D_L02_001FAD80[];
@@ -135,7 +135,7 @@ void FUN_L02_002ec4b8(char *moby) {
     int r3;
     d = *(char **)(moby + 0x78);
     t = D_L02_001B0AB0[*(int *)(d + 0x60)];
-    r = (int)FUN_L00_0025a420(moby, 0x10000, 0);
+    r = (int)find_moby_hit(moby, 0x10000, 0);
     switch (*(unsigned char *)(moby + 0x20)) {
     case 0: {
         int m1;
@@ -289,7 +289,7 @@ void FUN_L02_002eca30(char *m, void *arg1) {
     for (i = 0; i < 3; i++) {
         int a, b, c, d, e;
         char *p;
-        FUN_L00_0024f7c8(m, i, v50);
+        moby_point_position(m, i, v50);
         FUN_001f9a68(v10, v30, *(float *)&D_L02_00161F84);
         FUN_001f9a68(v20, v30, *(float *)&D_L02_00161F88);
         FUN_L00_00257d78(v40, 0.0f, *(float *)&D_L02_00161F8C * frame_time);
@@ -332,7 +332,7 @@ void FUN_L02_002ecd50(char *moby) {
     data = *(char **)(moby + 0x78);
     p = data + 0x80;
     for (i = 0; i < 6; i++) {
-        FUN_L00_0024f7c8(moby, i + 2, p);
+        moby_point_position(moby, i + 2, p);
         p += 0x10;
     }
     v = D_L02_0015F5CC;
@@ -385,7 +385,7 @@ void FUN_L02_002ece18(char *moby) {
     int r3;
     d = *(char **)(moby + 0x78);
     t = D_L02_001B0AB0[*(int *)(d + 0x60)];
-    r = (int)FUN_L00_0025a420(moby, 0x10000, 0);
+    r = (int)find_moby_hit(moby, 0x10000, 0);
     switch (*(unsigned char *)(moby + 0x20)) {
     case 0: {
         int m1;
@@ -542,7 +542,7 @@ void FUN_L02_002ed420(char *m, void *arg1) {
         int a, b, c, d, e;
         char *p;
 
-        FUN_L00_0024f7c8(m, i, v50);
+        moby_point_position(m, i, v50);
         FUN_001f9a68(v10, v30, *(float *)&D_L02_00161FD8);
         FUN_001f9a68(v20, v30, *(float *)&D_L02_00161FDC);
         FUN_L00_00257d78(v40, 0.0f, *(float *)&D_L02_00161FE0 * frame_time);
@@ -586,7 +586,7 @@ void FUN_L02_002ed658(char *m, void *arg1) {
         int a, b, c, d, e;
         char *p;
 
-        FUN_L00_0024f7c8(m, i, v50);
+        moby_point_position(m, i, v50);
         FUN_001f9a68(v10, v30, *(float *)&D_L02_00162014);
         FUN_001f9a68(v20, v30, *(float *)&D_L02_00162018);
         FUN_L00_00257d78(v40, 0.0f, *(float *)&D_L02_0016201C * frame_time);
@@ -618,7 +618,7 @@ void FUN_L02_002ed658(char *m, void *arg1) {
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
 extern void FUN_L01_00278e20(void *, int);
@@ -626,7 +626,7 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L02_002f1f60(char *m) {
     int hit = 0;
-    char *r = FUN_L00_0025a420(m, 0x10000, 0);
+    char *r = find_moby_hit(m, 0x10000, 0);
     switch (*(unsigned char *)(m + 0x20)) {
     case 0:
         m[0x20] = 1;
@@ -719,13 +719,13 @@ void FUN_L02_002fa6d8(void) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FBB48), where it is exact; names translated to the US level program. */
 
 extern float D_L02_0016760C __attribute__((section(".data")));
-extern void FUN_L00_002e84f0(int, float, float);
+extern void follow_camera_set_offset_scale(int, float, float) __asm__("FUN_L00_002e84f0");
 extern void FUN_L02_001fc008(void (*)(void));
 extern void FUN_L02_002fa770(void);
 
 void FUN_L02_002fa710(void) {
     if (D_L02_0016760C != 0.0f) {
-        FUN_L00_002e84f0(1, D_L02_0016760C * 0.35f + 0.0f, 0.005f);
+        follow_camera_set_offset_scale(1, D_L02_0016760C * 0.35f + 0.0f, 0.005f);
         FUN_L02_001fc008(FUN_L02_002fa770);
     }
 }
@@ -818,7 +818,7 @@ extern float FUN_001f9b48(void *, void *);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_0025fa38(void *, int);
 extern int FUN_L00_0025faf0(void *, int);
-extern int FUN_L00_00259740(void *, void *, int);
+extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 
 int FUN_L02_002fb648(char *moby) {
     char *special = D_L02_001674DC;
@@ -852,7 +852,7 @@ int FUN_L02_002fb648(char *moby) {
         return 0;
     }
     entry = (int *)D_L02_001B0AB0[*(int *)(data + 0x14)];
-    result = FUN_L00_00259740(&hero.motion.pos, entry + 4, *entry);
+    result = point_in_path_xy(&hero.motion.pos, entry + 4, *entry);
     return result != 0;
 }
 #endif

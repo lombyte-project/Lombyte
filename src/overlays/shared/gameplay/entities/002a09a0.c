@@ -191,7 +191,7 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern int truncate_float_to_s32(float);
 extern int D_001413DC __attribute__((section(".data")));
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L16_002d38b0(struct Moby *);
 extern void FUN_L16_002d4070(char *);
@@ -370,7 +370,7 @@ void FUN_L16_002d2cf0(char *m) {
         if (is_value_within_interpolated_window(m, 2.0f) ||
             is_value_within_interpolated_window(m, 17.0f) ||
             is_value_within_interpolated_window(m, 32.0f)) {
-            FUN_L00_0024f7c8(m, 0, temp);
+            moby_point_position(m, 0, temp);
             subtract_vector_xyz(delta, target, temp);
             normalize_vector_xyz(delta, delta, frame_time * 20.0f);
             FUN_L16_002a09a0(m, delta, (char *)temp);
@@ -526,13 +526,13 @@ typedef struct {
 } L16DamageReward;
 
 extern char *D_L16_001B0930[];
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern unsigned char D_0013D408[];
 extern char D_0013F350[];
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
 extern int D_0015EE10 __attribute__((sda));
-extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int FUN_L00_0025fcb8(float, char *, void *);
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -555,14 +555,14 @@ void FUN_L16_002d38b0(struct Moby *m) {
     float time_scale;
     m->scale = m->pclass->scale;
     scratch.amount = 0.0f;
-    hit = FUN_L00_0025a420(m, 0x330000, 0);
+    hit = find_moby_hit(m, 0x330000, 0);
     if (hit) {
         if (*(char **)(hit + 0x20)) {
             char *source = *(char **)(hit + 0x20);
             hit = *(short *)(source + 0xA6) != 0x31 ? hit : 0;
         }
     }
-    response = FUN_L00_0025a478(m, hit, &d->health, 0, &scratch.status, &scratch.amount, 0, 4);
+    response = hit_reaction(m, hit, &d->health, 0, &scratch.status, &scratch.amount, 0, 4);
     if (scratch.status != 1 && m->state != 9) {
         FUN_L16_002d3f78_u(m, 0x12C, 0x168);
         if (hit && *(char **)(hit + 0x20) && *(short *)(*(char **)(hit + 0x20) + 0xA6) != 0x47) {
@@ -828,9 +828,9 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L16_0015F5D0;
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float, float);
-extern void FUN_L00_002ac910(void *, void *, void *, float, int, int, int, int, int);
+extern void spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 void FUN_L16_002d41f8(void *m) {
@@ -841,7 +841,7 @@ void FUN_L16_002d41f8(void *m) {
     void *origin;
     float *joint = position;
     void *movement;
-    FUN_L00_0024f7c8(m, 2, joint);
+    moby_point_position(m, 2, joint);
     subtract_vector_xyz(delta, D_L16_001671C0, joint);
     clear_u64_value(velocity);
     distance = vector_length_xyz(delta);
@@ -879,12 +879,12 @@ void FUN_L16_002d41f8(void *m) {
         } while (remaining != 0);
     }
     if (*(float *)&D_L16_0015F5D0 < 0.95f && distance > 9.0f) {
-        FUN_L00_002ac910(m, origin, movement, 4.0f, scale_game_frames(15), 127, 127, 127, 32);
-        FUN_L00_002ac910(m, origin, movement, 4.0f, scale_game_frames(24), 127, 32, 0, 32);
+        spawn_glow_particle(m, origin, movement, 4.0f, scale_game_frames(15), 127, 127, 127, 32);
+        spawn_glow_particle(m, origin, movement, 4.0f, scale_game_frames(24), 127, 32, 0, 32);
     }
-    FUN_L00_002ac910(m, origin, movement, 4.0f, scale_game_frames(20), 127, 64, 0, 48);
-    FUN_L00_002ac910(m, origin, movement, 3.5f, scale_game_frames(27), 96, 16, 0, 64);
-    FUN_L00_002ac910(m, origin, movement, 3.0f, scale_game_frames(29), 32, 0, 0, 32);
+    spawn_glow_particle(m, origin, movement, 4.0f, scale_game_frames(20), 127, 64, 0, 48);
+    spawn_glow_particle(m, origin, movement, 3.5f, scale_game_frames(27), 96, 16, 0, 64);
+    spawn_glow_particle(m, origin, movement, 3.0f, scale_game_frames(29), 32, 0, 0, 32);
 }
 /* Aim paired joints toward the owner or player, then smooth their rotations. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5958), where it is exact; names translated to the US level program. */

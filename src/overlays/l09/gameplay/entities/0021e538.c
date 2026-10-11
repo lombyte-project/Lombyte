@@ -174,7 +174,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c1978.s", FUN_L09_002c1978);
 
 extern char *func_0020D348_m(int);
 extern void FUN_001f9cf8(void *, void *, void *);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8(void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -195,7 +195,7 @@ char *FUN_L09_002c2500(struct Moby *src, char *pos, int cls) {
         qcopy(d + 0x10, pos);
         *(char **)(d + 0x2C) = src;
         FUN_L00_00250df8(m);
-        FUN_L00_0024f7c8(m, 0, &v0);
+        moby_point_position(m, 0, &v0);
         subtract_vector_xyz(&v1, pos, &v0);
         FUN_001f9cf8(&v1, &v1, &src->unkC0);
         add_vector_xyz(p, pos, &v1);
@@ -933,7 +933,7 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) Vx;
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern char *FUN_L09_002ee380(char *owner, void *position, float angle);
 extern float fast_cos(float);
@@ -947,7 +947,7 @@ extern void normalize_vector_xyz(void *, void *, float);
 
 void FUN_L09_002ee110(struct Moby *m) {
     char *d = (char *)m->pvars;
-    char *r = FUN_L00_0025a420(m, 0x10000, 0);
+    char *r = find_moby_hit(m, 0x10000, 0);
     Vx v;
     Vx b;
     int i;

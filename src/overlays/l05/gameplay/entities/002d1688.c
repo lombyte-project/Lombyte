@@ -53,14 +53,14 @@ void FUN_L05_002d7890(char *moby, int *path) {
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DC1E8), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_0013E533[];
 extern int FUN_001f96f8(int);
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L05_002db238_u(void *, void *) __asm__("FUN_L05_002db238");
 
 void FUN_L05_002daf58(unsigned char *m) {
-    char *r = FUN_L00_0025a420(m, 0x330000, 0);
+    char *r = find_moby_hit(m, 0x330000, 0);
     if (r != 0) {
         char *b = D_0013E533 + 0xF1D;
         char *o;
@@ -286,7 +286,7 @@ void FUN_L05_002d1fd8(int unused, char *p) {
     }
 }
 
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern float rot_2d7020(float, float) __asm__("FUN_001fa580");
 extern float sin_2d7020(float) __asm__("FUN_001f9de0");
 extern int lerp_2d7020(float, int, int) __asm__("FUN_001fa6e0");
@@ -307,7 +307,7 @@ void FUN_L05_002d7020(char *m) {
     if (*(unsigned char *)(m + 0x21) != 0xFF && *(unsigned char *)(m + 0x31) != 0) {
         v = *(char **)(m + 0x78);
         for (i = 0; i < 3; i++) {
-            FUN_L00_0024f7c8(m, i, v + 0x330 + i * 16);
+            moby_point_position(m, i, v + 0x330 + i * 16);
         }
         *(float *)(v + 0x368) = rot_2d7020(*(float *)(v + 0x368), frame_time * 1.9198622f);
         c = lerp_2d7020(sin_2d7020(*(float *)(v + 0x368)) * 0.5f + 0.5f, 0x1E1EB4, 0x1EB41E);
@@ -806,7 +806,7 @@ typedef struct {
 } Hit_306CF0;
 
 extern void FUN_001f9c48(void *, void *, float);
-extern void FUN_L00_001f2868(void *, int, void *, void *, float);
+extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 
 void FUN_L05_00305898(char *m) {
@@ -840,7 +840,7 @@ void FUN_L05_00305898(char *m) {
     h.x18 = 0;
     for (j = 0; j < 8; j++) {
         if (slots[j] != 0) {
-            FUN_L00_001f2868(slots[j] + 0x10, 0, m, &h, 0.75f);
+            collect_mobies_in_sphere(slots[j] + 0x10, 0, m, &h, 0.75f);
         }
     }
 }

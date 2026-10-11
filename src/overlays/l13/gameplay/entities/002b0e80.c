@@ -584,7 +584,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int D_L13_0015F5CC;
 extern short D_L13_00161388_d __asm__("D_L13_00161388") __attribute__((sda));
 extern short D_L13_0016138C_d __asm__("D_L13_0016138C") __attribute__((sda));
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 void FUN_L13_002b47a0(struct Moby *moby) {
     float v[4];
@@ -593,7 +593,7 @@ void FUN_L13_002b47a0(struct Moby *moby) {
     float d, x, ang;
     data = (char *)moby->pvars;
     if (D_L13_0015F5CC % *(int *)&D_L13_0016138C_d == 0) {
-        FUN_L00_0024f7c8(moby, 0, v);
+        moby_point_position(moby, 0, v);
         d = FUN_001f9b80(&moby->pos, *(char **)(data + 0x40) + 0x10);
         x = (20.0f - d) / 20.0f * 5.0f + 2.5f;
         ang = fast_add_rotations(random_float_between(-x, x) * DEG_TO_RAD,
@@ -682,8 +682,8 @@ struct Moby *FUN_L13_002b4958(struct Moby *parent) {
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5C08), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
-extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025d458(void *m, short *p);
@@ -696,8 +696,8 @@ void FUN_L13_002b4a58(struct Moby *m, char *p) {
     int k;
     int r;
     if (m->state != 2) {
-        q = FUN_L00_0025a420(m, 0x330000, 0);
-        r = FUN_L00_0025a478(m, q, tm, 0, &k, 0, 0, 4);
+        q = find_moby_hit(m, 0x330000, 0);
+        r = hit_reaction(m, q, tm, 0, &k, 0, 0, 4);
         if (q != 0) {
             if (*(int *)(q + 0x24) & 0x800000) {
                 char *t = *(char **)(q + 0x20);
@@ -834,7 +834,7 @@ void FUN_L13_002b4c80(struct Moby *moby) {
     case 2:
         if (moby->unk70 & 2) {
             subtract_vector_xyz(a, D_L13_001670C0, &moby->pos);
-            FUN_L00_0024f7c8(moby, 0, b);
+            moby_point_position(moby, 0, b);
             FUN_L00_0025e450(moby, a, b, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, -1, 2.0f,
                              40.0f, 0, 1, -1, 0);
             mark_moby_for_removal(moby);
@@ -938,7 +938,7 @@ void FUN_L13_002b8590(void *moby, char *obj) {
             s = 1.0f;
         else if (s < 0.35f)
             s = 0.35f;
-        FUN_L00_0024f7c8(moby, i, pos);
+        moby_point_position(moby, i, pos);
         pos[3] = 0;
         qcopy(a, pos);
         qcopy(b, pos);
@@ -1494,7 +1494,7 @@ void FUN_L13_002b9df8(struct Moby *moby, char *obj, float p2, float p3) {
     if (fast_dec_timer(obj + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
         allocate_voice_for_target_entry(3, 0, (int)moby);
         FUN_001f9bf8(c, a, 2.2f);
-        FUN_L00_0024f7c8(moby, 3 + (obj[0x61] & 1), b);
+        moby_point_position(moby, 3 + (obj[0x61] & 1), b);
         FUN_001f9a10(b, b, c);
         FUN_L11_00308848(moby, a, b, 200.0f, -1.0f);
         *(int *)(obj + 0x80) = FUN_001f96f8(4);
@@ -1520,7 +1520,7 @@ void FUN_L13_002b9f58(struct Moby *moby, char *obj) {
             char *pos = &moby->rot;
             short t = (*(unsigned short *)(obj + 0x6A) + 1) & 3;
             *(short *)(obj + 0x6A) = t;
-            FUN_L00_0024f7c8(moby, t + 7, a);
+            moby_point_position(moby, t + 7, a);
             FUN_001f9bf8(b, obj, 0.3f);
             FUN_001f9a10(a, a, b);
             s = frame_time * 100.0f;

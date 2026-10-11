@@ -1051,7 +1051,7 @@ typedef struct {
     s32 frameFC;
 } CrateVars;
 
-/* FUN_L00_0025a420 result: hit moby in the low word of 0x20, flags in the high word. */
+/* find_moby_hit result: hit moby in the low word of 0x20, flags in the high word. */
 typedef struct {
     u8 pad00[0x20];
     union {
@@ -1065,7 +1065,7 @@ typedef struct {
     f32 unk2C;
 } Contact;
 
-/* Fourth argument of FUN_L00_001f2868. */
+/* Fourth argument of collect_mobies_in_sphere. */
 typedef struct {
     Vec4f pos;
     struct Moby *moby;
@@ -1088,23 +1088,24 @@ extern s32 D_001413DC __attribute__((section(".data")));
 
 extern s32 FUN_L00_0025e3b8(void *);
 extern void FUN_L00_002d1428(struct Moby *);
-extern Contact *FUN_L00_0025a420(void *, int, int);
+extern Contact *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_00213928(void *, void *, void *, int, int *, int *, int *, int);
 extern void FUN_L00_002cfcb8(struct Moby *);
 extern void FUN_L00_002d8138(struct Moby *);
 extern float FUN_001f96b0(float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_0020c880(struct Moby *);
-extern void FUN_L00_002d09b8(struct Moby *, int, Contact *);
-extern void FUN_L00_002d0538(struct Moby *);
-extern s32 FUN_L00_001f2868(f32, void *, s32, void *, void *);
+extern void break_crate(struct Moby *, int, Contact *) __asm__("FUN_L00_002d09b8");
+extern void crate_drop_bolts(struct Moby *) __asm__("FUN_L00_002d0538");
+extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_001fa728(void *, float);
 extern int FUN_L00_001fefc8(void *);
 extern int FUN_L00_002591d0(struct Moby **, int, int, int);
 extern int FUN_L00_002592b8(struct Moby **, struct Moby *, int, int);
 extern float FUN_001f9b80(void *, void *);
 
-void FUN_L00_002cf218(struct Moby *moby) {
+void crate_update(struct Moby *moby) __asm__("FUN_L00_002cf218");
+void crate_update(struct Moby *moby) {
     Burst burst;
     Vec4f at;
     s32 hitKind;
@@ -1139,7 +1140,7 @@ void FUN_L00_002cf218(struct Moby *moby) {
         FUN_L00_002d1428(moby);
     }
     touched = 0;
-    other = FUN_L00_0025a420(moby, 0x1830000, 0);
+    other = find_moby_hit(moby, 0x1830000, 0);
     if (other != NULL && other->hit.s.flags == 0x1000000) {
         other = NULL;
         touched = 1;
@@ -1226,7 +1227,7 @@ void FUN_L00_002cf218(struct Moby *moby) {
         if (doHit == 0) {
             break;
         }
-        FUN_L00_002d09b8(moby, moby->oclass == 0x1F9, other);
+        break_crate(moby, moby->oclass == 0x1F9, other);
         if (pv->unkC8 != 0 && other != NULL && other->hit.s.moby != NULL) {
             s16 cls = other->hit.s.moby->oclass;
 
@@ -1234,12 +1235,12 @@ void FUN_L00_002cf218(struct Moby *moby) {
                 s16 saved = moby->unkB4;
 
                 moby->unkB4 = 0;
-                FUN_L00_002d0538(moby);
+                crate_drop_bolts(moby);
                 moby->unkB4 = saved;
                 break;
             }
         }
-        FUN_L00_002d0538(moby);
+        crate_drop_bolts(moby);
         break;
 
     case 2:
@@ -1261,9 +1262,9 @@ void FUN_L00_002cf218(struct Moby *moby) {
             add_vector_xyz(&at, &at, &moby->pos);
             r = FUN_001fa6c0(pv->unkCA) / FUN_001f96b0(20.0f);
             burst.unk14 = 1;
-            FUN_L00_001f2868(r + r, &at, 0x10, moby, &burst);
+            collect_mobies_in_sphere(r + r, &at, 0x10, moby, &burst);
             burst.unk14 = 0x30000;
-            FUN_L00_001f2868(r * 3.0f, &at, 0x10, D_001413D0, &burst);
+            collect_mobies_in_sphere(r * 3.0f, &at, 0x10, D_001413D0, &burst);
             pv->unkCA++;
             break;
         }
@@ -1384,8 +1385,8 @@ void FUN_L00_002cf218(struct Moby *moby) {
         }
         if (moby->unkBC == 1 || D_001413DC == 0x16) {
             moby->spawn_frame = pv->unkB8;
-            FUN_L00_002d09b8(moby, 1, NULL);
-            FUN_L00_002d0538(moby);
+            break_crate(moby, 1, NULL);
+            crate_drop_bolts(moby);
         }
         moby->unkBC--;
         break;

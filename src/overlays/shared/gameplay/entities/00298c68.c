@@ -16,7 +16,7 @@ typedef struct {
 extern Tab_00298c68 D_00137B80_00298c68 __asm__("D_00137B80");
 extern s32 D_0015ED80;
 void FUN_L00_002995d0(s32, s32, s32);
-void FUN_L00_00211250();
+void hero_respawn() __asm__("FUN_L00_00211250");
 /* Picks a disc table entry pair by D_0015ED80 and passes it with the language to FUN_L00_002995d0. */
 void FUN_L02_00298c68(s32 i) {
     s32 a, b;
@@ -32,7 +32,7 @@ void FUN_L02_00298c68(s32 i) {
     }
     s = &hero;
     if (s->health.hp == 0) {
-        FUN_L00_00211250();
+        hero_respawn();
     } else if (s->unk20B1 == 0) {
         FUN_L00_002995d0(a, b, game_language);
     }

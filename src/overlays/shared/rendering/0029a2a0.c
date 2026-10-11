@@ -38,7 +38,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int rand(void);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -71,7 +71,7 @@ unsigned char *FUN_L07_0029b8d8(void *m, short index, float amount, float factor
         *(float *)(q + 0x10) = D_0015ED60 * 0.015f;
         *(short *)(q + 0xe) = index;
         p[8] = func_001FA898_r(*(float *)(q + 8) * 255.0f);
-        FUN_L00_0024f7c8(*(void **)q, *(short *)(q + 0xe), v);
+        moby_point_position(*(void **)q, *(short *)(q + 0xe), v);
         subtract_vector_xyz(t, D_L07_00166E40, v);
         normalize_vector_xyz(t, t, *(float *)(q + 0x14));
         add_vector_xyz(p + 0x10, v, t);

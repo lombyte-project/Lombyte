@@ -391,7 +391,7 @@ void FUN_L00_002c5dc8(char *m) {
 #include "eetypes.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_002502f0(unsigned char *, int, int, int);
-void FUN_L00_0024f7c8(unsigned char *, int, void *);
+void moby_point_position(unsigned char *, int, void *) __asm__("FUN_L00_0024f7c8");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void blend_moby_animation(unsigned char *, int, int, int) __asm__("FUN_00212f90");
 void FUN_L00_00250df8(unsigned char *);
@@ -405,7 +405,7 @@ unsigned char *FUN_L00_002c6f88(unsigned char *src, float f) {
         *(short *)(m + 0x32) = 0xff;
         m[0x31] = 1;
         FUN_L00_002502f0(m, 0x80, 0x80, 0x80);
-        FUN_L00_0024f7c8(src, 0, m + 0x10);
+        moby_point_position(src, 0, m + 0x10);
         *(u128 *)(m + 0xc0) = *(u128 *)(src + 0xc0);
         *(u128 *)(m + 0xd0) = *(u128 *)(src + 0xd0);
         *(u128 *)(m + 0xe0) = *(u128 *)(src + 0xe0);
@@ -772,7 +772,8 @@ extern f32 sin_2c(f32) __asm__("FUN_001f9de0");
 extern f32 scale_ticks(s32) __asm__("FUN_001fa6c0");
 extern f32 fn_2c2488(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025abf0");
 
-void FUN_L00_002c2488(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, f32 range) {
+void aim_throw_arc(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, f32 range) __asm__("FUN_L00_002c2488");
+void aim_throw_arc(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, f32 range) {
     V2c2488 t;
     V2c2488 u;
     f32 ang;
@@ -1121,13 +1122,13 @@ extern void FUN_0020cca8(void *, int, void *);
 extern void FUN_001f9d20(void *, void *, void *);
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern int FUN_L00_00216de8(int, int);
-extern int FUN_L00_00233db8(int, int);
-extern int FUN_L00_00233e98(int);
+extern int use_ammo(int, int) __asm__("FUN_L00_00233db8");
+extern int get_ammo(int) __asm__("FUN_L00_00233e98");
 extern void FUN_L00_002c7548(struct Moby *, CarrierVars *, OvlVec4 *);
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 /* Carrier: keeps its grip point in front of it, hands the held moby over when the hero asks, and
-   picks a new one up when FUN_L00_00233e98 allows. */
+   picks a new one up when get_ammo allows. */
 void FUN_L00_002c7a58(struct Moby *moby) {
     OvlVec4 pos;
     OvlVec4 offset;
@@ -1140,7 +1141,7 @@ void FUN_L00_002c7a58(struct Moby *moby) {
     offset.f[0] = 0.01f;
     offset.f[1] = -0.14f;
     offset.f[2] = -0.05f;
-    FUN_L00_0024f7c8((u8 *)moby, 0, &pos);
+    moby_point_position((u8 *)moby, 0, &pos);
     FUN_0020cca8(moby, 0, mat);
     FUN_001f9d20(&local, &offset, mat);
     add_vector_xyz(&vars->grip, &pos, &local);
@@ -1155,10 +1156,10 @@ void FUN_L00_002c7a58(struct Moby *moby) {
     }
     if (tick_countdown(&vars->timer) && !hero.unk20AC) {
         if ((hero.unk20A8 && hero.unk1BC == scale_game_frames(0x11)) ||
-            ((D_0013CAE4 & hero.items[0].button_mask) && hero.state.current == 0x1E && FUN_L00_00233e98(-1)) ||
+            ((D_0013CAE4 & hero.items[0].button_mask) && hero.state.current == 0x1E && get_ammo(-1)) ||
             (hero.state.current == 0x23 && hero.state_timer == scale_game_frames(0x10))) {
             FUN_L00_00216de8(0x1A, 0);
-            FUN_L00_00233db8(-1, 1);
+            use_ammo(-1, 1);
             moby->state = 3;
         }
     }
@@ -1209,7 +1210,7 @@ void FUN_L00_002c7a58(struct Moby *moby) {
     }
     if (vars->held != 0) {
         qcopy(&vars->held->pos, &vars->grip);
-    } else if (FUN_L00_00233e98(-1)) {
+    } else if (get_ammo(-1)) {
         qzero(&grip);
         vars->held = (struct Moby *)FUN_L00_002c8218((int)moby, (void *)&vars->grip, (void *)&grip);
     }

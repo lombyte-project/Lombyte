@@ -732,7 +732,7 @@ extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void FUN_001fa050(void *, void *);
 extern void FUN_L00_001ff660(void *, void *, void *);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
@@ -757,13 +757,13 @@ void FUN_L05_003186f8(char *moby)
     case 1:
         n = *(int *)(data + 4);
         if (n > 0) {
-            FUN_L00_0024f7c8(moby, n, buf + 0x40);
+            moby_point_position(moby, n, buf + 0x40);
             *(float *)(moby + 0x40) = fast_add_rotations_c(*(float *)(moby + 0x40), *(float *)(data + 0x20));
             *(float *)(moby + 0x44) = fast_add_rotations_c(*(float *)(moby + 0x44), *(float *)(data + 0x24));
             *(float *)(moby + 0x48) = fast_add_rotations_c(*(float *)(moby + 0x48), *(float *)(data + 0x28));
             FUN_001fa050(buf, moby + 0x40);
             copy_matrix3x4(moby + 0xC0, buf);
-            FUN_L00_0024f7c8(moby, *(int *)(data + 4), buf + 0x50);
+            moby_point_position(moby, *(int *)(data + 4), buf + 0x50);
             subtract_vector_xyz(buf + 0x60, buf + 0x40, buf + 0x50);
         } else {
             transform_vector_by_basis(buf + 0x40, data + 0x10, moby + 0xC0);

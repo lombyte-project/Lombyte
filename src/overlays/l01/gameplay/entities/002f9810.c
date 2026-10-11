@@ -136,7 +136,7 @@ extern void FUN_L00_0025d1b8();
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 FUN_001160d8(void);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void FUN_L00_001f2868(void *, s32, void *, void *, f32);
+extern void collect_mobies_in_sphere(void *, s32, void *, void *, f32) __asm__("FUN_L00_001f2868");
 extern s32 FUN_001f9740(void *);
 extern s32 FUN_001f96f8(s32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -157,7 +157,7 @@ void FUN_L01_002f9bf0(SwayMoby *m) {
     q.x1c = 0;
     clear_u64_value(&q);
     q.x20 = 0;
-    FUN_L00_001f2868(m->pos, 0x10, m, &q, 1.2f);
+    collect_mobies_in_sphere(m->pos, 0x10, m, &q, 1.2f);
     if (v->dir == v->sway) {
         if (FUN_001f9740(&v->timer)) {
             v->dir = -v->dir;
@@ -324,7 +324,7 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
 
 /*
  * Explosion burst at `where` (uses the unit's BurstVec): three particles in
- * random colours from two six-colour palettes, two FUN_L00_002ac910 effects
+ * random colours from two six-colour palettes, two spawn_glow_particle effects
  * on `moby`, its sound unless the moby is dying (state 0xFD/0xFE), and a
  * light flash of brightness `light` (negative: 13).
  */
@@ -347,7 +347,7 @@ extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0026a9f0(void *, void *, u32, u32, f32, s32, s32, f32, s32, s32);
 /* s32 return is load-bearing: a void prototype changes the code */
-extern s32 FUN_L00_002ac910(void *, void *, void *, f32, s32, s32, s32, s32, s32);
+extern s32 spawn_glow_particle(void *, void *, void *, f32, s32, s32, s32, s32, s32) __asm__("FUN_L00_002ac910");
 /* allocate_voice_for_target_entry; the unit declares it under this name */
 extern s32 FUN_0022da68(s32, s32, void *);
 extern void FUN_L00_002d3838(void *, void *, s32, s32);
@@ -383,8 +383,8 @@ void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 
     }
 
     if (moby != 0) {
-        FUN_L00_002ac910(moby, pos_p, &vel, scale + scale, FUN_001f96f8(0x14), 0x7F, 0, 0x40, 0x30);
-        FUN_L00_002ac910(moby, pos_p, &vel, scale * 1.5f, FUN_001f96f8(0x1D), 0x20, 0, 0x20, 0);
+        spawn_glow_particle(moby, pos_p, &vel, scale + scale, FUN_001f96f8(0x14), 0x7F, 0, 0x40, 0x30);
+        spawn_glow_particle(moby, pos_p, &vel, scale * 1.5f, FUN_001f96f8(0x1D), 0x20, 0, 0x20, 0);
         if (moby->state != 0xFE) {
             if (moby->state != 0xFD && sound != -1) {
                 FUN_0022da68(sound, 0, moby);
@@ -1225,7 +1225,7 @@ void FUN_L01_002fed68(HoverMoby *m) {
 /* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002FABE8.c: func_L01_00300C38), where it is exact; names translated to the US level program. */
 
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L01_002ffa90_c(void *owner) __asm__("FUN_L01_002ffa90");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern float fast_cos(float);
@@ -1241,7 +1241,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void FUN_L01_002ff860(struct Moby *m) {
     char *d = (char *)m->pvars;
-    char *t = FUN_L00_0025a420(m, 0x10000, 0);
+    char *t = find_moby_hit(m, 0x10000, 0);
     m->unkA4 = 0xFF;
     if (t != 0 && 0.0f < *(float *)(t + 0x2C)) {
         float v[4];

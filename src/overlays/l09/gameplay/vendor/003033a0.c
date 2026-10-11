@@ -209,7 +209,7 @@ void FUN_L09_003033a0(unsigned char *moby) {
 }
 #include "rnc/gameplay/entities/moby.h"
 
-/* Damage source returned by FUN_L00_0025a420. */
+/* Damage source returned by find_moby_hit. */
 typedef struct {
     u8 pad0[0x2C];
     f32 damage;
@@ -227,7 +227,7 @@ typedef struct {
 extern struct Moby *moby_list __asm__("D_L09_0015FFD8");
 extern char D_L09_00208F90[];
 extern char D_L09_00208FF0[];
-extern VendorHitSource *FUN_L00_0025a420(struct Moby *, s32, s32);
+extern VendorHitSource *find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 FUN_00120478(f32);
 extern void FUN_001e93b0(char *, s32, s32);
 extern s32 FUN_00213928(struct Moby *, VendorHitSource *, f32 *, s32, s32 *, s32, s32, s32);
@@ -242,7 +242,7 @@ void FUN_L09_00303b30(struct Moby *moby, VendorVars *vars, f32 *health) {
     s32 hit;
 
     if (moby->state != 3) {
-        src = FUN_L00_0025a420(moby, 0x330000, 0);
+        src = find_moby_hit(moby, 0x330000, 0);
         if (src != 0) {
             FUN_001e93b0(D_L09_00208F90, moby->oclass, FUN_00120478(src->damage));
         }
@@ -383,7 +383,7 @@ void FUN_L09_00303fc8(struct Moby *moby, VendorVars2 *vars, f32 *health) {
     s32 hit;
 
     if (moby->state != 3) {
-        src = FUN_L00_0025a420(moby, 0x330000, 0);
+        src = find_moby_hit(moby, 0x330000, 0);
         if (src != 0) {
             FUN_001e93b0(D_L09_00208FF0, moby->oclass, FUN_00120478(src->damage));
         }
@@ -442,7 +442,7 @@ void FUN_L09_00303fc8(struct Moby *moby, VendorVars2 *vars, f32 *health) {
 
 extern char *D_L09_0015FFE4;
 extern float FUN_001f9b48(void *, void *);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 char *FUN_L09_003041d0(char *self, char *pos, int bone) {
     char *best = 0;
@@ -461,7 +461,7 @@ char *FUN_L09_003041d0(char *self, char *pos, int bone) {
                 *(short *)(m + 0xA6) == 0x4A0) {
                 float d;
                 if (bone != -1) {
-                    FUN_L00_0024f7c8(m, bone, vec);
+                    moby_point_position(m, bone, vec);
                     d = FUN_001f9b48(tp, vec);
                 } else {
                     d = FUN_001f9b48(tp, m + 0x10);
@@ -490,7 +490,7 @@ extern void FUN_001f9cf8(void *, void *, void *);
 extern void FUN_001f9bf8(f32, void *, void *);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_L00_00259858(f32, void *, void *, s32);
-extern s32 FUN_L00_001f2868(f32, void *, s32, void *, void *);
+extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 extern void print_vendor_contact(void *, s16, s16, s16, s32) __asm__("FUN_001e93b0");
 extern char D_L09_002090B0[];
 
@@ -530,7 +530,7 @@ void FUN_L09_00305a28(struct Moby *moby) {
     FUN_L00_00259858(context_float, work + 12, moby, context_arg);
     i = 0;
     if (*(s32 *)(data + 8) > 0) do {
-        if (FUN_L00_001f2868(F(data, 0), work + 4, 1, moby, work + 12) != 0) {
+        if (collect_mobies_in_sphere(F(data, 0), work + 4, 1, moby, work + 12) != 0) {
             char *hit = *(char **)(collision_state + 0x18);
             s16 hit_index = *(s16 *)(hit + 0xb2);
             s16 hit_class = *(s16 *)(hit + 0xa6);

@@ -106,7 +106,7 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
 #endif
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_002661E8), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_001f2868(float, void *, int, int, int);
+extern int collect_mobies_in_sphere(float, void *, int, int, int) __asm__("FUN_L00_001f2868");
 
 void FUN_L02_002651d0(char **slots, int a, int b) {
     int i;
@@ -121,7 +121,7 @@ void FUN_L02_002651d0(char **slots, int a, int b) {
         if (m[1] < 0) {
             *slots = 0;
         } else {
-            FUN_L00_001f2868(*(float *)(m + 0xC) / 210000.0f * 0.25f, m + 0x10, 0, a, b);
+            collect_mobies_in_sphere(*(float *)(m + 0xC) / 210000.0f * 0.25f, m + 0x10, 0, a, b);
             if (*(short *)(m + 0xA) < 5)
                 *slots = 0;
         }

@@ -298,13 +298,13 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cca00.s", FUN_L03_002cca00);
 /* Moby update: advance a timer from a collision query, switch state, aim head angles. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002CF600), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float FUN_001f9e90(float, float);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void FUN_L00_0025d538(void *, void *);
@@ -319,8 +319,8 @@ void FUN_L03_002ce238(char *m) {
     float a, b, p, q;
     d = *(char **)(m + 0x78);
     fv = 0.0f;
-    r = FUN_L00_0025a420(m, 0x330000, 0);
-    res = FUN_L00_0025a478(m, r, d + 0x20, 0, &st, &fv, 0, 4);
+    r = find_moby_hit(m, 0x330000, 0);
+    res = hit_reaction(m, r, d + 0x20, 0, &st, &fv, 0, 4);
     if (st != 1 && *(unsigned char *)(m + 0x20) != 5) {
         float t = *(float *)(d + 0x20) - fv;
         *(float *)(d + 0x20) = t;
@@ -385,7 +385,7 @@ void FUN_L03_002d3cd8(unsigned char *m) {
     int flag = 0;
     float z;
     char *p, *pos, *vel;
-    char *x = FUN_L00_0025a420(m, 0x10000, 0);
+    char *x = find_moby_hit(m, 0x10000, 0);
     switch (m[0x20]) {
     case 0:
         m[0x20] = 1;

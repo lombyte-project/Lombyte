@@ -727,7 +727,7 @@ extern unsigned char *FUN_L00_0026b790(void *pos, int spin, int col, float range
                                        float f2, float f3, float scale);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float, float);
-extern void FUN_L00_002ac910(void *, void *, void *, int, int, int, int, int, float);
+extern void spawn_glow_particle(void *, void *, void *, int, int, int, int, int, float) __asm__("FUN_L00_002ac910");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -775,12 +775,12 @@ void FUN_L00_002b5d00(char *m, int flag) {
             } while (--i);
         }
         if (D_L00_0015F5D0 < 0.95f) {
-            FUN_L00_002ac910(m, m + 0x10, n, scale_game_frames(15), 0x7F, 0x7F, 0x7F, 0x20, 3.0f);
-            FUN_L00_002ac910(m, m + 0x10, n, scale_game_frames(24), 0x7F, 0x20, 0, 0x20, 2.0f);
+            spawn_glow_particle(m, m + 0x10, n, scale_game_frames(15), 0x7F, 0x7F, 0x7F, 0x20, 3.0f);
+            spawn_glow_particle(m, m + 0x10, n, scale_game_frames(24), 0x7F, 0x20, 0, 0x20, 2.0f);
         }
-        FUN_L00_002ac910(m, m + 0x10, n, scale_game_frames(20), 0x7F, 0x40, 0, 0x30, 3.0f);
-        FUN_L00_002ac910(m, m + 0x10, n, scale_game_frames(27), 0x60, 0x10, 0, 0x40, 2.0f);
-        FUN_L00_002ac910(m, m + 0x10, n, scale_game_frames(29), 0x20, 0, 0, 0x20, 1.0f);
+        spawn_glow_particle(m, m + 0x10, n, scale_game_frames(20), 0x7F, 0x40, 0, 0x30, 3.0f);
+        spawn_glow_particle(m, m + 0x10, n, scale_game_frames(27), 0x60, 0x10, 0, 0x40, 2.0f);
+        spawn_glow_particle(m, m + 0x10, n, scale_game_frames(29), 0x20, 0, 0, 0x20, 1.0f);
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b6140.s", FUN_L00_002b6140);
@@ -978,7 +978,7 @@ extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int FUN_001f9770(void *);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32(int *arg0);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int f_to_int(float) __asm__("FUN_001fa6d0");
 void FUN_L00_002b7568_c(void) __asm__("FUN_L00_002b7568");
@@ -1023,7 +1023,7 @@ void FUN_L00_002b7398(void *arg) {
                 p->f += D_L00_001614B8 * frame_time;
         }
     }
-    FUN_L00_0024f7c8(arg, 0, D_L00_001614E0);
+    moby_point_position(arg, 0, D_L00_001614E0);
     enqueue_callback_list_1(FUN_L00_002b7568_c, arg);
 }
 typedef union {
@@ -1200,9 +1200,9 @@ extern short D_L00_00161558_d __asm__("D_L00_00161558") __attribute__((sda));
 extern short D_L00_0016155C_d __asm__("D_L00_0016155C") __attribute__((sda));
 extern unsigned FUN_L00_0025c0e8(unsigned c, int mask);
 extern void FUN_001f9c48(void *, void *, float);
-extern void FUN_L00_001f2868(void *, float, int, void *, void *);
+extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_00257d78(float *, float, float);
-extern void FUN_L00_00259888(char *arg, int a, int b, void *src, float scale);
+extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
 /* Walks the 15 entry pointers in the moby's data; for each live type-0xC entry builds a hit record and, for sub-type 10,
@@ -1229,11 +1229,11 @@ void FUN_L00_002b8438(char *moby) {
             FUN_001f9c48(vec, src, 1.0f);
             vec[2] = 1.0f;
             vec[3] = 5627.9248046875f;
-            FUN_L00_00259888(buf, (int)moby, 0x10000, vec, convert_integer_to_float_c(q[0x10]) + 1.0f);
+            make_hit_descriptor(buf, (int)moby, 0x10000, vec, convert_integer_to_float_c(q[0x10]) + 1.0f);
             *(unsigned char *)(buf + 0x18) = 5;
             *(unsigned char *)(buf + 0x19) = 1;
             *(unsigned short *)(buf + 0x1A) = *(unsigned short *)(moby + 0xA6);
-            FUN_L00_001f2868((entry + 0x10), f20, 0, moby, buf);
+            collect_mobies_in_sphere((entry + 0x10), f20, 0, moby, buf);
             sub_type = *(short *)(entry + 0xA);
             if (sub_type == 10) {
                 int j;

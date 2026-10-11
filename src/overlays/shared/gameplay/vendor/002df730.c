@@ -782,7 +782,8 @@ void FUN_L00_002e3d88(char *m) {
 }
 extern u8 D_0013F3D0_002e4168[] __asm__("D_0013F3D0");
 /* Copies the vector at D_0013F3D0 into b; a is unused. */
-void FUN_L00_002e4168(int a, void *b) {
+void follow_camera_hero_target(int a, void *b) __asm__("FUN_L00_002e4168");
+void follow_camera_hero_target(int a, void *b) {
     qcopy(b, &hero.motion.pos);
 }
 #include "eetypes.h"
@@ -884,7 +885,8 @@ void FUN_001f9a28_002e4430(void *, void *, void *) __asm__("FUN_001f9a28");
 float FUN_001f9ab0_002e4430(void *, void *) __asm__("FUN_001f9ab0");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_L00_002e42c0_002e4430(void *, int) __asm__("FUN_L00_002e42c0");
-void FUN_L00_002e4430(char *o) {
+void follow_camera_reset(char *o) __asm__("FUN_L00_002e4430");
+void follow_camera_reset(char *o) {
     V4_2e4430 m, a, b;
     char *g = D_L00_00166E10_002e4430;
     char *g30 = g + 0x30;
@@ -1010,12 +1012,12 @@ void FUN_001f9a68(void *, void *, float);
 extern void vcopy_2e48a0(void *, void *) __asm__("FUN_001f9a68");
 void FUN_001f9a10(void *, void *, void *);
 float FUN_001f9ab0(void *, void *);
-void FUN_L00_002e4168(int, void *);
+void follow_camera_hero_target(int, void *) __asm__("FUN_L00_002e4168");
 void FUN_L00_002e48a0(void *out) {
     V4 a, b;
     char *g = D_L00_00166E10;
     vcopy_2e48a0(a, g + 0x20);
-    FUN_L00_002e4168(*(int *)(g - 0x10), b);
+    follow_camera_hero_target(*(int *)(g - 0x10), b);
     FUN_001f9a10(a, a, b);
     FUN_001f9a68(out, g + 0x30, FUN_001f9ab0(g + 0x30, a));
 }
@@ -1483,7 +1485,7 @@ s32 FUN_L00_002e5678(void *mm, void *a, void *b, s32 k) {
         r = 0;
         break;
     case 1:
-        FUN_L00_002e4168((int)m, t);
+        follow_camera_hero_target((int)m, t);
         FUN_001f9a10(b, a, t);
         break;
     case 2:
@@ -1515,7 +1517,8 @@ extern f32 D_L00_00161D34 __attribute__((sda));
 s32 FUN_001f9770(void *);
 s32 FUN_L00_002e5678(void *, void *, void *, s32);
 void FUN_L00_002e55b8(void *, void *, void *, f32, f32, f32);
-void FUN_L00_002e5730(O002e5730 *o, void *a) {
+void follow_camera_transition(O002e5730 *o, void *a) __asm__("FUN_L00_002e5730");
+void follow_camera_transition(O002e5730 *o, void *a) {
     V002e5730 t;
     u8 *m = o->m;
     A002e5730 *s = (A002e5730 *)(m + 0x40);
@@ -1539,7 +1542,7 @@ void FUN_L00_002e5730(O002e5730 *o, void *a) {
 
 /*
  * State of the follow camera, at UpdateCam +0x70 (the record's saved state).
- * FUN_L00_002e4fe8 writes `velocity`, FUN_L00_002e5730 reads the same block
+ * FUN_L00_002e4fe8 writes `velocity`, follow_camera_transition reads the same block
  * for its spring constants, and FUN_001f9770 (fast_dec_timer) counts
  * `blend_timer` down.
  */
@@ -1613,7 +1616,8 @@ extern void follow_cam_turn_towards(f32 amount, f32 rate) __asm__("FUN_L00_002e8
 
 /* Updates the follow camera: eases its focus and offset vectors, then places
    the eye behind the hero, pulled in where collision lines hit. */
-void FUN_L00_002e5830(void *cam) {
+void follow_camera_springs(void *cam) __asm__("FUN_L00_002e5830");
+void follow_camera_springs(void *cam) {
     f32 velocity[4], hero_pos[4], focus[4], up[4], lateral[4], look[4], base[4], probe[4], left[4], diff[4], mid[4];
     u8 *view = camera_view;
     FollowCamState *s = ((FollowCam *)cam)->state;
@@ -1777,7 +1781,8 @@ int FUN_L00_002e83c0(int arg1, int arg2) {
 }
 extern u8 *vd_2e8450 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 /* Sets a flag and floats a/b at +0x130 of D_L00_00166E00+0x70; f also stores a at +0x58. */
-void FUN_L00_002e8450(s32 f, f32 a, f32 b) {
+void follow_camera_set_distance(s32 f, f32 a, f32 b) __asm__("FUN_L00_002e8450");
+void follow_camera_set_distance(s32 f, f32 a, f32 b) {
     u8 *p = vd_2e8450;
     if (*(s16 *)(p + 0x86) == 0) {
         u8 *q = *(u8 **)(p + 0x70) + 0x130;
@@ -1797,7 +1802,8 @@ void FUN_L00_002e8490(float f) {
 }
 extern char *D_L00_00166E00_002e84b8 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 /* Sets a flag and two floats at +0x130 of D_L00_00166E00+0x70 while its short at 0x86 is 0. */
-void FUN_L00_002e84b8(float a, float b) {
+void follow_camera_set_height(float a, float b) __asm__("FUN_L00_002e84b8");
+void follow_camera_set_height(float a, float b) {
     char *p = D_L00_00166E00_002e84b8;
     if (*(short *)(p + 0x86) == 0) {
         char *q = *(char **)(p + 0x70) + 0x130;
@@ -1809,7 +1815,8 @@ void FUN_L00_002e84b8(float a, float b) {
 extern char *D_L00_00166E00_c3 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 extern char *D_L00_00168FC0 __attribute__((section(".data")));
 /* Sets a flag and floats +0xF4/+0xF8 of D_L00_00166E00+0x70; add offsets a by 00168FC0+0xF0. */
-void FUN_L00_002e84f0(int add, float a, float b) {
+void follow_camera_set_offset_scale(int add, float a, float b) __asm__("FUN_L00_002e84f0");
+void follow_camera_set_offset_scale(int add, float a, float b) {
     char *p = D_L00_00166E00_c3;
     if (*(short *)(p + 0x86) == 0) {
         char *q = *(char **)(p + 0x70) + 0x40;
@@ -1864,7 +1871,8 @@ void FUN_L00_002e8620(void) {
 }
 extern u8 *vd_2e8648 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 /* Sets the byte at +0x116 of D_L00_00166E00+0x70 while the short at 0x86 is 0. */
-void FUN_L00_002e8648(void) {
+void follow_camera_start_slide(void) __asm__("FUN_L00_002e8648");
+void follow_camera_start_slide(void) {
     u8 *p = vd_2e8648;
     if (*(s16 *)(p + 0x86) == 0) {
         *(u8 *)(*(u8 **)(p + 0x70) + 0x116) = 1;

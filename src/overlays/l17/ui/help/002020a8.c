@@ -23,7 +23,7 @@ typedef struct {
 } Rec;
 
 extern Rec D_L17_0017A3C0[];
-extern int FUN_L00_0020d498(int);
+extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
 int FUN_L17_002020a8(int a) {
     struct Hero *g = &hero;
@@ -55,7 +55,7 @@ int FUN_L17_002020a8(int a) {
         }
     }
     {
-        int i = FUN_L00_0020d498(0);
+        int i = hero_slot_item_id(0);
         return D_L17_0017A3C0[i].v;
     }
 }

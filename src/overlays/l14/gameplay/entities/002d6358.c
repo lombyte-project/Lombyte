@@ -274,7 +274,7 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern float D_L14_00161A60 __attribute__((sda));
 extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L14_002d71f0(void);
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
@@ -288,7 +288,7 @@ void FUN_L14_002d7490(struct Moby *m) {
     float w[4];
     char *q;
     int i;
-    FUN_L00_0024f7c8(m, 1, p);
+    moby_point_position(m, 1, p);
     subtract_vector_xyz(v, p, D_L14_001674C0);
     normalize_vector_xyz(v, v, -0.5f);
     add_vector_xyz(d + 0xE0, p, v);
@@ -327,7 +327,7 @@ void FUN_L14_002d7490(struct Moby *m) {
         *(int *)(e + 0x18) = 0x7F7F7F;
         *(short *)(e + 0x16) = 3;
     }
-    FUN_L00_0024f7c8(m, 6, d + 0x200);
+    moby_point_position(m, 6, d + 0x200);
     enqueue_callback_list_1(FUN_L14_002d71f0, m);
 }
 #include "qzero.h"

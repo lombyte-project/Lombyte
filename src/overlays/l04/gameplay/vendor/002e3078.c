@@ -45,7 +45,7 @@ extern void FUN_L02_002e0cd8(struct Moby *);
 extern void FUN_L00_002668a0(struct Moby *, struct VendorVars *);
 extern int FUN_00214720(char *, s32);
 extern int FUN_L00_00266448(struct Moby *, struct VendorVars *);
-extern void FUN_L00_002607d0(int);
+extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void FUN_L00_002502a0(int);
 extern void FUN_001f9bf8(Vec4 *, Vec4 *, float);
 extern void FUN_001f9a10(Vec4 *, Vec4 *, void *);
@@ -84,7 +84,7 @@ void FUN_L04_002e3078(struct Moby *moby) {
         break;
     case 2:
         if (vars->phase == 2) {
-            FUN_L00_002607d0(6);
+            unlock_planet(6);
             FUN_L00_002502a0(((struct VendorMobyView *)moby)->slot);
             FUN_001f9bf8(&pos, &((struct VendorMobyView *)moby)->facing, 2.0f);
             FUN_001f9a10(&pos, &pos, &moby->pos);

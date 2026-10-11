@@ -500,8 +500,8 @@ extern f32 FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern void FUN_L00_00257470(TrollMoby *, s32, s32);
 extern int FUN_L00_00257b90(int, int);
-extern TrollColl *FUN_L00_0025a420(TrollMoby *, s32, s32);
-extern void FUN_L00_0025a478(TrollMoby *, TrollColl *, void *, s32, s32 *, f32 *, s32, s32);
+extern TrollColl *find_moby_hit(TrollMoby *, s32, s32) __asm__("FUN_L00_0025a420");
+extern void hit_reaction(TrollMoby *, TrollColl *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_L00_0025a478");
 extern void FUN_L00_0025ab48(TrollVec *, f32 *, f32 *, f32 *);
 extern void FUN_L00_0025c558(TrollMoby *, void *, s32, s32, s32, f32);
 extern void FUN_L00_0025d458(TrollMoby *, void *);
@@ -541,8 +541,8 @@ void FUN_L00_002e1678(TrollMoby *m) {
     FUN_001f9770(&vars->unk1DA);
     anim = vars->unk60;
     dmg = 0.0f;
-    coll = FUN_L00_0025a420(m, 0x330000, 0);
-    FUN_L00_0025a478(m, coll, &vars->health, 0, &hit, &dmg, 0, 4);
+    coll = find_moby_hit(m, 0x330000, 0);
+    hit_reaction(m, coll, &vars->health, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && m->state != 8 && dmg != 0.0f) {
         vars->health -= dmg;
         vars->unk90 = 0x200;
@@ -641,7 +641,7 @@ typedef struct {
     SparkVars *vars;
 } SparkMoby;
 
-extern void FUN_L00_0024f7c8(void *, s32, void *);
+extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern SparkPart *FUN_L00_00274948(void *, void *, s32, void *);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -660,7 +660,7 @@ void FUN_L00_002e1aa8(SparkMoby *m) {
 
     vars = m->vars;
     pos = vars->pos;
-    FUN_L00_0024f7c8(m, 1, pos);
+    moby_point_position(m, 1, pos);
     vars->pos[2] -= 0.333f;
     random_spherical_offset(vel, 0.005f, 0.03f);
     p = FUN_L00_00274948(pos, vel, 0x7F, m);
@@ -850,7 +850,7 @@ extern s32 D_L00_0015F5C4;
 extern FlockGame D_L00_0016C860;
 
 extern void FUN_L00_002637f8(void *);
-extern void FUN_L00_0024f7c8(void *, s32, void *);
+extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00263b70(void *, void *, void *, f32, f32);
 extern FlockPart *FUN_L00_0026d000(void *, s32, void *, s32, f32, f32, f32, f32);
 
@@ -887,7 +887,7 @@ void FUN_L00_002e3800(FlockMoby *moby) {
             src = D_L00_0016C860.mobys[3];
             if (src != 0 && vend_rand(150) <= D_L00_0016C860.level &&
                 D_L00_0016C860.level <= vend_rand(220)) {
-                FUN_L00_0024f7c8(src, 0, pos);
+                moby_point_position(src, 0, pos);
                 FUN_L00_00263b70(pos, pos, D_L00_0015F580, 120000.0f, 50000.0f);
                 for (i = 0; i < 10; i++) {
                     color = (FUN_L00_00257b90(0x40, 0x80) << 24) | 0x787878;

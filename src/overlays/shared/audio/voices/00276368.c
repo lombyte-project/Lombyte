@@ -28,8 +28,8 @@ extern void FUN_L00_002a08c8(void);
 extern void hud_send_resident_bank(s32, s32, s32) __asm__("FUN_001ff128");
 extern void FUN_L00_00235310(s32);
 extern struct Ent *delete_moby(struct Ent *) __asm__("FUN_00225530");
-extern s32 FUN_L00_00234e00(void);
-extern void FUN_L00_00235e18(s32, s32);
+extern s32 show_health_hud(void) __asm__("FUN_L00_00234e00");
+extern void hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 
 void FUN_L00_00276908(void) {
@@ -87,11 +87,11 @@ void FUN_L00_00276908(void) {
     for (i = 13; i >= 0; i--) {
         D_L00_001B9E90[13 - i] = delete_moby(D_L00_001B9E90[13 - i]);
     }
-    handle = FUN_L00_00234e00();
-    FUN_L00_00235e18(handle, scale_game_frames(0xb4));
+    handle = show_health_hud();
+    hud_keep_visible(handle, scale_game_frames(0xb4));
     handle = queue_animation_update(2, 0x754e, FUN_L00_00239cc8, FUN_L00_00239d00,
                                 FUN_L00_00239df8, &current_bolt_count, 9999999);
-    FUN_L00_00235e18(handle, scale_game_frames(0xb4));
+    hud_keep_visible(handle, scale_game_frames(0xb4));
     D_L00_001B9CF0.state = 0x14;
     D_L00_001B9CF0.unk14 = 2;
     table = (u8 *)*(void * volatile *)&D_L00_00197300[0];

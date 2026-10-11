@@ -74,7 +74,7 @@ extern float vector_length_xyz(void *);
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *);
-extern void FUN_L00_0024f7c8(void *, s32, void *);
+extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
 extern struct Moby *FUN_L08_002de3e0(void *, struct Moby *, void *, f32, f32);
@@ -149,7 +149,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
             break;
         }
         moby->unkBC = 0;
-        FUN_L00_0024f7c8(vars->parts[3].moby, 1, &muzzle);
+        moby_point_position(vars->parts[3].moby, 1, &muzzle);
         pitch = random_float_between(0.17453292f, 0.5235988f);
         yaw = fast_add_rotations(FUN_001f9e90(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                                  3.1415927f);
@@ -197,7 +197,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
             break;
         }
         vars->fire_timer = truncate_float_to_s32(FUN_001f96b0(random_float_between(300.0f, 600.0f)));
-        FUN_L00_0024f7c8(vars->parts[3].moby, 1, &muzzle);
+        moby_point_position(vars->parts[3].moby, 1, &muzzle);
         pitch = random_float_between(-0.5235988f, -0.2617994f);
         yaw = random_angle_radians();
         normalize_vector_xyz(&velocity, &step, (D_L08_00161D34 + D_L08_00161D34) * frame_time);
@@ -751,7 +751,7 @@ extern void FUN_L08_00305138_c(void *) __asm__("FUN_L02_002e0cd8");
 extern void FUN_L00_0025a120(void *);
 extern float FUN_001f9b48(void *, void *);
 extern void FUN_L00_002502a0(int);
-extern void FUN_L00_002607d0(int);
+extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
@@ -815,7 +815,7 @@ void FUN_L08_00302ce8(WM *m) {
         if (D_L08_0015F5C4 != 2) {
             d->b28 = 1;
             if (d->h24 == 3) {
-                FUN_L00_002607d0(10);
+                unlock_planet(10);
                 FUN_L00_00262d38(10);
                 FUN_L00_002502a0(((unsigned char *)m)[0xB0]);
                 FUN_L00_00284e50((char *)&D_0013E633_watch + 0xE9D, (char *)&D_0013E633_watch + 0xEAD);

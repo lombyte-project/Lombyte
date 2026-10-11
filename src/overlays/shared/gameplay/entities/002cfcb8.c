@@ -39,7 +39,8 @@ void path_e50(s32, void *, void *, void *) __asm__("FUN_L00_00261b48");
 void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 u8 *FUN_L00_002c52a8_2d0538(u8 *, s32, s32, s32) __asm__("FUN_L00_002c52a8");
 
-void FUN_L00_002d0538(u8 *a) {
+void crate_drop_bolts(u8 *a) __asm__("FUN_L00_002d0538");
+void crate_drop_bolts(u8 *a) {
     T_2d0538 tmp;
     V_2d0538 v20, v30, v40;
     s32 n;
@@ -222,7 +223,7 @@ f32 FUN_001f99c0(f32);
 f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 s32 FUN_001efa68(void *, void *, s32, s32, s32);
-void FUN_L00_002d09b8(M2d1428 *, s32, s32);
+void break_crate(M2d1428 *, s32, s32) __asm__("FUN_L00_002d09b8");
 void FUN_L00_002d0538_c(M2d1428 *) __asm__("FUN_L00_002d0538");
 void FUN_L00_002604f0(M2d1428 *, void *, void *, void *, void *, void *);
 P2d1428 *FUN_L00_002603d0(void *);
@@ -265,7 +266,7 @@ void FUN_L00_002d1428(M2d1428 *m) {
             switch (m->state) {
             case 1:
             case 5:
-                FUN_L00_002d09b8(m, m->oclass == 0x1F9, 0);
+                break_crate(m, m->oclass == 0x1F9, 0);
                 FUN_L00_002d0538_c(m);
                 break;
             }
@@ -394,9 +395,9 @@ extern u8 *FUN_L00_002c35c0(s32, void *, void *);
 extern void FUN_L00_002223f8(s32, s32);
 extern s32 FUN_001fef68_2d2670(s32 *) __asm__("FUN_001f9740");
 extern s32 FUN_001fef20_2d2670(s32) __asm__("FUN_001f96f8");
-extern s32 FUN_L00_00233e98(s32);
+extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
 extern void FUN_L00_00216de8(s32, s32);
-extern void FUN_L00_00233db8(s32, s32);
+extern void use_ammo(s32, s32) __asm__("FUN_L00_00233db8");
 extern void FUN_L00_002d2158(void *, void *, void *);
 extern void FUN_0022da68_2d2670(s32, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_002c3888(void *, void *, void *);
@@ -436,10 +437,10 @@ target_valid:
     if (D_001413D4 == 1) FUN_L00_002223f8(0x1e, 1);
     if (FUN_001fef68_2d2670((s32 *)(vars + 0x54)) && D_001413FC == 0) {
         if ((D_001413F8 && D_0013F50C == FUN_001fef20_2d2670(0x11)) ||
-            ((D_0013CAE4 & D_001403F0) && D_001413D4 == 0x1e && FUN_L00_00233e98(-1)) ||
+            ((D_0013CAE4 & D_001403F0) && D_001413D4 == 0x1e && get_ammo(-1)) ||
             (D_001413D4 == 0x23 && D_0013F4E8 == FUN_001fef20_2d2670(0x10))) {
             FUN_L00_00216de8(0x1a, 0);
-            FUN_L00_00233db8(-1, 1);
+            use_ammo(-1, 1);
             moby[0x20] = 3;
         }
     }
@@ -483,7 +484,7 @@ target_valid:
     target = *(u8 **)(vars + 0x50);
     if (target != 0) {
         qcopy(target + 0x10, vars + 0x40);
-    } else if (FUN_L00_00233e98(-1) || D_001413F8) {
+    } else if (get_ammo(-1) || D_001413F8) {
         velocity.word[0] = velocity.word[1] = velocity.word[2] = velocity.word[3] = 0;
         *(u8 **)(vars + 0x50) = FUN_L00_002c35c0((s32)moby, vars + 0x40, &velocity);
     }
@@ -687,7 +688,7 @@ extern s32 D_L00_0016192C __attribute__((sda));
 extern s32 D_L00_00161930 __attribute__((sda));
 extern f32 D_L00_00161940 __attribute__((sda));
 
-extern void FUN_L00_0024f7c8(struct Moby *, s32, void *);
+extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f9e90(f32, f32);
@@ -740,7 +741,7 @@ void FUN_L00_002d2ee8(struct Moby *moby) {
     if (vars == 0) {
         return;
     }
-    FUN_L00_0024f7c8(moby, 0, &vars->pos);
+    moby_point_position(moby, 0, &vars->pos);
     switch (moby->state) {
     case 0:
         hero.unk2044 = 100000.0f;
@@ -1122,7 +1123,7 @@ void FUN_L00_002d5160(unsigned char *m) {
 }
 #endif
 extern float D_0015ED6C_2d54c8 __asm__("D_0015ED6C");
-/* D_0015ED70 is declared sda above (FUN_L00_002d0538), but here retail loads it
+/* D_0015ED70 is declared sda above (crate_drop_bolts), but here retail loads it
    absolute: reach it as D_0015ED6C + 4, past whose size the assembler skips $gp. */
 #define D_0015ED70_2d54c8 (((float *)&D_0015ED6C_2d54c8)[1])
 float angle_atan2(float, float) __asm__("FUN_001f9e90");

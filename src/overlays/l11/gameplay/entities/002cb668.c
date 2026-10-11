@@ -839,7 +839,7 @@ struct TgtData {
 };
 
 extern int *D_L11_001B0EB0[];
-extern int FUN_L00_00259740(void *, void *, int);
+extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int FUN_L01_00276fe8(int *, int, int, void *, void *, void *, float);
 
 int FUN_L11_002d2340(struct Moby *moby, char *other) {
@@ -848,7 +848,7 @@ int FUN_L11_002d2340(struct Moby *moby, char *other) {
     int *ent = D_L11_001B0EB0[*(int *)((char *)p - (-(d->idx * 4)))];
     int buf[8];
     int n;
-    if (FUN_L00_00259740(other, ent + 4, *ent) == 0)
+    if (point_in_path_xy(other, ent + 4, *ent) == 0)
         return 0;
     buf[0] = *(int *)((char *)p - (-(d->idx * 4)));
     n = 1;
@@ -950,7 +950,7 @@ int FUN_L11_002d25e8(struct Moby *m, float *out) {
         add_vector_xyz(a, a, pos);
         {
             int *q = D_L11_001B0EB0[*(int *)(s - (-(*(int *)(s + 0x158) * 4)) + 0x60)];
-            if (FUN_L00_00259740(a, q + 4, *q)) {
+            if (point_in_path_xy(a, q + 4, *q)) {
                 a[2] += 5.0f;
                 g = func_L00_0025A748_f(a);
                 if (absolute_float(g - m->pos.z) > 0.5f) {
@@ -1874,7 +1874,7 @@ int FUN_L11_0030a480(struct Moby *moby) {
 }
 extern void FUN_0020cb10(struct Moby *, int, void *);
 extern void FUN_L00_001fff28(void *, int, float);
-extern void FUN_L00_0024f7c8(struct Moby *, int, float *);
+extern void moby_point_position(struct Moby *, int, float *) __asm__("FUN_L00_0024f7c8");
 extern float FUN_L00_00257c48(float, float);
 extern void FUN_L00_0026f080(float *, float *, float, float);
 extern float fast_cos_a500(float) __asm__("FUN_001f9dc8");
@@ -1926,7 +1926,7 @@ void FUN_L11_0030a500(struct Moby *moby) {
     if (!(moby->pos.z < 224.5f))
         return;
     for (j = 0; j < 4; j++) {
-        FUN_L00_0024f7c8(moby, j, base);
+        moby_point_position(moby, j, base);
         n = moby->state == 1 ? 1 : 2;
         for (k = 0; k < n; k++) {
             pos[0] = base[0] + FUN_L00_00257c48(0.0f, 0.3f);

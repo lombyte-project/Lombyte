@@ -620,7 +620,7 @@ extern int FUN_L00_00266448(void *, void *);
 extern void FUN_L01_002783a8(void *, float);
 extern void FUN_L00_002502a0(int);
 extern void FUN_L00_00284e50(void *, void *);
-extern void FUN_L00_002607d0(int);
+extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void FUN_L00_00262d38(int);
 extern void FUN_L01_0029b0a0(void *, int, void *, int, void *);
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
@@ -679,7 +679,7 @@ void FUN_L01_002ff118(L01WatchMoby *m) {
         }
         m->state = 1;
         if (d->sub == 4) {
-            FUN_L00_002607d0(2);
+            unlock_planet(2);
             FUN_L00_00262d38(2);
             m->state = 3;
             FUN_L01_0029b0a0((char *)m + 0x20, 1, m, 1, D_L01_001BAAA0);
@@ -1016,7 +1016,7 @@ extern void FUN_001f4a58(s32);
 extern void FUN_L01_00231450(void);
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_00212f90(struct Moby *, s32, s32, s32);
-extern void FUN_L00_002323b8(f32, s32, s32);
+extern void set_hero_animation(f32, s32, s32) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_00263d40(s32, s32);
 extern void FUN_L01_00308470(struct Moby *);
 /* the unit defines these with a char * parameter further down */
@@ -1112,7 +1112,7 @@ void FUN_L01_00307ca0(struct Moby *moby) {
         if (moby->prev_seq != 1) {
             FUN_00212f90(moby, 1, 0, 0);
         }
-        FUN_L00_002323b8(0.0f, 0x82, 0);
+        set_hero_animation(0.0f, 0x82, 0);
         if (D_0015EDB5) {
             moby->flags |= 0x8000;
         }
@@ -1143,7 +1143,7 @@ void FUN_L01_00307ca0(struct Moby *moby) {
         }
         h = &hero;
         if (h->unkA98 & 2) {
-            FUN_L00_002323b8(FUN_001f96f8(30), 0, 0);
+            set_hero_animation(FUN_001f96f8(30), 0, 0);
         }
         if (moby->seq != 0 || !FUN_001f9740(&vars->timer)) {
             return;
@@ -1212,7 +1212,7 @@ extern int D_L01_00161F40 __attribute__((sda));
 extern int D_L01_00161F48 __attribute__((sda));
 extern int D_L01_00161F4C __attribute__((sda));
 extern unsigned char *FUN_L00_00272f68(void *, int, unsigned char, int, int, int, int, float);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void scale_vector_xyz(void *, void *, float);
@@ -1235,7 +1235,7 @@ void FUN_L01_00308550(char *m) {
     if (((unsigned char *)m)[0x20] == 1) {
         scale_vector_xyz(pos, m, 0.0009765625f);
     } else {
-        FUN_L00_0024f7c8(m, 0, pos);
+        moby_point_position(m, 0, pos);
         scale = (160.0f - func_0020D830_m(m)) / 160.0f * 16.0f;
         if (1.0f < scale)
             scale = 1.0f;
@@ -1342,7 +1342,7 @@ extern short D_L01_00161F68_d __asm__("D_L01_00161F68") __attribute__((sda));
 extern short D_L01_00161F6C_d __asm__("D_L01_00161F6C") __attribute__((sda));
 extern short D_L01_00161F70_d __asm__("D_L01_00161F70") __attribute__((sda));
 extern short D_L01_00161F74_d __asm__("D_L01_00161F74") __attribute__((sda));
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257d78(float *, float, float);
 extern void FUN_L00_002730e0(void *, void *, int, int, int, int, float);
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
@@ -1358,7 +1358,7 @@ void FUN_L01_003089f0(char *m) {
     if (*(unsigned char *)(m + 0x20) == 1) {
         scale_vector_xyz(v, m, 0.0009765625f);
     } else {
-        FUN_L00_0024f7c8(m, 0, v);
+        moby_point_position(m, 0, v);
     }
     t = frame_time;
     FUN_L00_00257d78(w, *(float *)&D_L01_00161F54_d * t, *(float *)&D_L01_00161F58_d * t);

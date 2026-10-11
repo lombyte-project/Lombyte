@@ -1277,7 +1277,7 @@ extern unsigned char D_0013DD47_d __asm__("D_0013DD47") __attribute__((section("
 extern char D_L05_00161EF0[];
 extern void FUN_L05_00317398(void *);
 extern void FUN_L02_0025c758(void *);
-extern void FUN_L00_002607d0(int);
+extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
 /* Watcher moby update (variant of FUN_L05_003180a0): turns its head toward the hero or a random target. */
@@ -1306,7 +1306,7 @@ void FUN_L05_00317470(WM_c *m) {
         if (FUN_L00_00266448_c(m, d))
             FUN_L01_002783a8_c(m, 2.5f);
         if (d->sub == 5) {
-            FUN_L00_002607d0(7);
+            unlock_planet(7);
             FUN_0020b178_c(0, -1);
             FUN_0020c828_c(m);
             return;

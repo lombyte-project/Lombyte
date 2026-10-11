@@ -114,7 +114,7 @@ typedef struct Path_2E2B80 {
     float pts[4];
 } Path_2E2B80;
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_0013F3D0[];
 extern float FUN_001f96b0(float);
 extern float FUN_001f9e90(float, float);
@@ -432,9 +432,9 @@ extern unsigned char D_0013E533[];
 extern unsigned char D_0014C050[];
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *,
                               float *);
-extern void FUN_L00_001f2868(void *, float, int, void *, void *);
+extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_001ff290(void *, void *, void *);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void FUN_L00_0025a120(void *);
@@ -827,16 +827,16 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             hit.b1 = 1;
             hit.id = m->cls;
             if (m->anim == 6) {
-                FUN_L00_0024f7c8(m, 0, v);
-                FUN_L00_001f2868(v, 0.75f, 0, m, &hit);
+                moby_point_position(m, 0, v);
+                collect_mobies_in_sphere(v, 0.75f, 0, m, &hit);
                 v[2] += 0.5f;
-                FUN_L00_001f2868(v, 0.75f, 0, m, &hit);
+                collect_mobies_in_sphere(v, 0.75f, 0, m, &hit);
                 FUN_001efa68(pos, v, 9, m, &hit);
             } else {
-                FUN_L00_0024f7c8(m, 1, v);
-                FUN_L00_001f2868(v, 0.75f, 0, m, &hit);
+                moby_point_position(m, 1, v);
+                collect_mobies_in_sphere(v, 0.75f, 0, m, &hit);
                 v[2] += 0.5f;
-                FUN_L00_001f2868(v, 0.75f, 0, m, &hit);
+                collect_mobies_in_sphere(v, 0.75f, 0, m, &hit);
                 FUN_001efa68(pos, v, 9, m, &hit);
             }
         } else if (m->anim >= 6 && m->anim <= 7 && (m->b70 & 2)) {

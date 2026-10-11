@@ -33,7 +33,7 @@ extern float FUN_001f9e90(float, float);
 extern int FUN_001f96f8(int);
 extern void FUN_001f9c48(void *, void *, float);
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_00259888(char *arg, int a, int b, void *src, float scale);
+extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
 void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 unsigned char *FUN_L07_0030b538(void *pos, float *dir, int a, int b) {
@@ -55,7 +55,7 @@ unsigned char *FUN_L07_0030b538(void *pos, float *dir, int a, int b) {
         V[2] = 0.0f;
         FUN_001f9c48(V, V, 1.0f);
         V[2] = 1.0f;
-        FUN_L00_00259888(d, (int)m, 0x10001, V, 1.0f);
+        make_hit_descriptor(d, (int)m, 0x10001, V, 1.0f);
         d[0x18] = 1;
         d[0x19] = 1;
         blend_moby_animation_u(m, 1, 0, FUN_001f96f8(5));
@@ -304,11 +304,11 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003108B0), where it is exact; names translated to the US level program. */
 
 extern int D_L07_00173ED8 __attribute__((section(".data")));
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 int FUN_L07_0030f4d0(void *moby, int id, float scale) {
     char temp[16];
-    FUN_L00_0024f7c8(moby, 0, temp);
+    moby_point_position(moby, 0, temp);
     if (coll_sphere(scale, temp, 0x21, moby) && D_L07_00173ED8 == id) {
         return 1;
     }
@@ -377,7 +377,7 @@ int FUN_L07_003122b0(void *mp, char *obj, float *vec) {
     float A[4];
     float B[4];
     if (FUN_001f9740((int *)(obj + 0x160))) {
-        FUN_L00_0024f7c8(moby, *(int *)(obj + 0x164) & 1, A);
+        moby_point_position(moby, *(int *)(obj + 0x164) & 1, A);
         FUN_001f9a28(B, vec, A);
         FUN_L00_001ff600(10.7f, B, B);
         B[2] += 0.5f;
@@ -1712,8 +1712,8 @@ void FUN_L07_0030e858(struct Moby *moby, LaunchParams *l, Vec4f *dir) {
 /* Hit handler: reacts to the hit type, then takes damage and dies (state 0xE) when health runs out. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030FD78), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
-extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025d458(void *, short *);
@@ -1725,8 +1725,8 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
     int r;
     if (((unsigned char *)m)[0x20] == 0xE)
         return;
-    info = FUN_L00_0025a420(m, 0x330000, 0);
-    r = FUN_L00_0025a478(m, info, hp, 0, &hit, 0, 0, 4);
+    info = find_moby_hit(m, 0x330000, 0);
+    r = hit_reaction(m, info, hp, 0, &hit, 0, 0, 4);
     if (((unsigned char *)m)[0xBC] != 0) {
         switch (r) {
         case 0:
@@ -1865,7 +1865,7 @@ extern float FUN_001f9de0(float);
 extern float FUN_001f9e90(float, float);
 extern float FUN_001f99c0(float);
 extern float FUN_001fa580(float, float);
-extern int FUN_L00_00259740(void *, void *, int);
+extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int line_blocked_30eee8(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 
@@ -1884,7 +1884,7 @@ void FUN_L07_0030eee8(struct Moby *moby, struct WalkerData *data) {
         probe[1] = FUN_001f9de0(moby->rot.z) * 5.2f;
         *(s32 *)&probe[2] = 0;
         add_vector_xyz(probe, probe, &moby->pos);
-        if (FUN_L00_00259740(probe, data->path->pts, data->path->count) &&
+        if (point_in_path_xy(probe, data->path->pts, data->path->count) &&
             !line_blocked_30eee8(&moby->pos, probe, 0x24, moby, 0) &&
             !FUN_L00_001f0d60(1.5f, probe, 0x24, moby))
             return;
@@ -1896,7 +1896,7 @@ void FUN_L07_0030eee8(struct Moby *moby, struct WalkerData *data) {
             probe[1] = FUN_001f9de0(angle) * 5.2f;
             *(s32 *)&probe[2] = 0;
             add_vector_xyz(probe, probe, &moby->pos);
-            if (FUN_L00_00259740(probe, data->path->pts, data->path->count) &&
+            if (point_in_path_xy(probe, data->path->pts, data->path->count) &&
                 !line_blocked_30eee8(&moby->pos, probe, 0x24, moby, 0) &&
                 !FUN_L00_001f0d60(1.5f, probe, 0x24, moby)) {
                 data->heading = angle;
@@ -1936,8 +1936,8 @@ void FUN_L07_0030f308(char *moby, char *obj, int state, int anim, int seq, int f
     vel = obj + 0xD0;
     FUN_001f9bf8(v, vel, len);
     v[2] = 1.0f;
-    FUN_L00_00259888((char *)m, (int)moby, 1, v, scale);
-    FUN_L00_0024f7c8(moby, 0, p);
+    make_hit_descriptor((char *)m, (int)moby, 1, v, scale);
+    moby_point_position(moby, 0, p);
     if (probe_world_sphere(p, radius, 0x21, moby, m) == 0) {
         return;
     }

@@ -569,7 +569,7 @@ extern short D_L18_00162578_d __asm__("D_L18_00162578") __attribute__((sda));
 extern short D_L18_0016257C_d __asm__("D_L18_0016257C") __attribute__((sda));
 extern short D_L18_00162580_d __asm__("D_L18_00162580") __attribute__((sda));
 extern void FUN_001f9bf8(void *, void *, float);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00263b70(void *, void *, void *, float, float);
 
 void FUN_L18_002fad28(M2 *m) {
@@ -593,8 +593,8 @@ void FUN_L18_002fad28(M2 *m) {
                 if (D_L18_0016D260.n == 1)
                     idx = 4;
                 p = D_L18_0016D260.arr[idx];
-                FUN_L00_0024f7c8(p, 8, buf);
-                FUN_L00_0024f7c8(p, 9, buf2);
+                moby_point_position(p, 8, buf);
+                moby_point_position(p, 9, buf2);
                 FUN_001f9a28(buf3, buf, buf2);
                 FUN_001f9bf8(buf3, buf3, *(float *)&D_L18_00162578_d);
                 FUN_L00_00263b70(buf, buf, buf3, *(float *)&D_L18_0016257C_d,
@@ -993,7 +993,7 @@ void FUN_L18_002fca98(struct Moby *moby) {
                 int col = (*(int *)(obj + 0x90) & 0xFFFFFF) + (*(int *)&D_L18_00162654 << 24);
                 float v[4];
                 for (i = 2; i < 5; i++) {
-                    FUN_L00_0024f7c8(obj, i, v);
+                    moby_point_position(obj, i, v);
                     FUN_L00_00263618(v, col, 0.175f, 0.08f);
                 }
             }

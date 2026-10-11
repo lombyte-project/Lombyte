@@ -116,7 +116,7 @@ extern void lerp_vector(void *out, void *a, void *b, f32 t) __asm__("FUN_001f9a4
 extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void FUN_L00_002eac18(int);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_0020cca8(void *, int, void *);
 extern void copy_matrix(void *, void *) __asm__("FUN_001fa2b8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -267,7 +267,7 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
         float mtx[16];
         Vec4 offset;
         if (*(struct Moby **)(data + 0x178) != 0) {
-            FUN_L00_0024f7c8(moby, 2, &(*(struct Moby **)(data + 0x178))->pos);
+            moby_point_position(moby, 2, &(*(struct Moby **)(data + 0x178))->pos);
             FUN_0020cca8(moby, 2, mtx);
             copy_matrix(&(*(struct Moby **)(data + 0x178))->unkC0, mtx);
             transform_vector_by_basis(&offset, D_L02_00161CE0, &(*(struct Moby **)(data + 0x178))->unkC0);
@@ -555,7 +555,7 @@ extern void scale_vector(void *out, void *in, float s) __asm__("FUN_001f9a68");
 extern void add_vectors(void *out, void *a, void *b) __asm__("FUN_001f9a10");
 extern float distance_xyz(void *a, void *b) __asm__("FUN_001f9b80");
 extern float atan2_e2228(float, float) __asm__("FUN_001f9e90");
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_0020cca8(void *, int, void *);
 extern void FUN_00212ed8(void *, int, int);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -577,7 +577,7 @@ void FUN_L02_002e2228(struct Moby *moby) {
 
     scale_vector(&delta, &moby->pos, -1.0f);
     qcopy(&old_rot, &moby->rot);
-    FUN_L00_0024f7c8(driver, 0, &pos);
+    moby_point_position(driver, 0, &pos);
     qcopy(&moby->pos, &pos);
     switch (moby->state) {
     case 0:

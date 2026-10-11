@@ -26,7 +26,7 @@ typedef struct {
     int f90;
 } Obj;
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *func_0020D348_m(int);
 extern float D_L07_0015F580[] __attribute__((section(".sdata")));
 extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
@@ -39,7 +39,7 @@ extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 
 void FUN_L07_0031f3d8(char *self) {
     int flag = 0;
-    char *o = FUN_L00_0025a420(self, 0x10000, 0);
+    char *o = find_moby_hit(self, 0x10000, 0);
     switch (((unsigned char *)self)[0x20]) {
     case 0:
         self[0x20] = 1;
@@ -82,7 +82,7 @@ void mark_moby_for_removal_c_c(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L07_0031f5b0(char *self) {
     int flag = 0;
-    char *o = FUN_L00_0025a420(self, 0x10000, 0);
+    char *o = find_moby_hit(self, 0x10000, 0);
     switch (((unsigned char *)self)[0x20]) {
     case 0:
         self[0x20] = 1;
@@ -128,7 +128,7 @@ void FUN_L07_0031f780(unsigned char *m) {
     int flag = 0;
     float z;
     char *p, *pos, *vel;
-    char *x = FUN_L00_0025a420(m, 0x10000, 0);
+    char *x = find_moby_hit(m, 0x10000, 0);
     switch (m[0x20]) {
     case 0:
         m[0x20] = 1;

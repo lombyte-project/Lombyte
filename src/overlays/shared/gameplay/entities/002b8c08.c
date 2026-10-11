@@ -474,9 +474,9 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002c7530.s", FUN_L01_002c7530);
 #else
 extern int FUN_001f9740(int *);
 extern int FUN_001e9448(void *);
-extern int FUN_L00_001f2868(void *, int, int, void *, float);
+extern int collect_mobies_in_sphere(void *, int, int, void *, float) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_00259bc8(void *, void *, int, void *, void *, float);
-extern void FUN_L00_00259888(void *, void *, int, float, void *);
+extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void FUN_001f9bf8(void *, void *, float);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
@@ -507,8 +507,8 @@ void FUN_L01_002c7530(char *moby) {
     case 1:
         FUN_L01_00280970(*(int *)((char *)&D_L01_001742C0_sda + 0x18), moby);
         FUN_001f9bf8(normal, data + 8, 1.0f);
-        FUN_L00_00259888(hit, moby, 0, 0.0f, normal);
-        if (FUN_L00_001f2868(moby + 0x10, 0x10, data[6], hit, *(float *)((char *)&D_L01_001742C0_sda + 0x20)) &&
+        make_hit_descriptor(hit, moby, 0, 0.0f, normal);
+        if (collect_mobies_in_sphere(moby + 0x10, 0x10, data[6], hit, *(float *)((char *)&D_L01_001742C0_sda + 0x20)) &&
             !FUN_001e9448(moby)) {
             if (*(int *)((char *)&D_L01_001742C0_sda + 0x18) != 0)
                 FUN_L00_00259bc8(*(void **)((char *)&D_L01_001742C0_sda + 0x18), moby, 0x10001,
@@ -853,7 +853,7 @@ extern int FUN_001efa68(void *, void *, int, int, int);
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern void FUN_001f9c48(void *, void *, float);
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
-extern void FUN_L00_00259888(void *, void *, int, float, void *);
+extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_00259a88(void *, void *);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void clear_vector(void *) __asm__("func_001F99F8");
@@ -890,7 +890,7 @@ void FUN_L01_002eda00(char *m) {
         if (FUN_001efa68(m + 0x10, prev, 0, *(int *)(d + 0x10), 0) != 0) {
             char *p = D_L01_00174340_c;
             if (*(int *)(p + 0x18) != 0) {
-                FUN_L00_00259888(&h, m, 0x10001, 1.0f, d);
+                make_hit_descriptor(&h, m, 0x10001, 1.0f, d);
                 FUN_001f9c48(&h, &h, 1.0f);
                 h.f8 = 1.0f;
                 h.fC = 5627.9248f;

@@ -30,7 +30,7 @@ extern void FUN_L00_0020ac98(void);
 extern void FUN_L00_0020b1d8(void);
 extern void FUN_L00_0020d330(void);
 extern void FUN_L00_00210928(void);
-extern void FUN_L00_00211670(void);
+extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void FUN_L00_00214fe8(void);
 extern void FUN_L00_00216f10(void);
 extern void FUN_L00_00232670(void);
@@ -62,7 +62,7 @@ void FUN_L03_002002f8(void) {
         return;
     }
     FUN_L00_00232670();
-    FUN_L00_00211670();
+    hero_update();
     FUN_L01_0022cd48();
     FUN_L01_0022d090();
     FUN_L00_0020d330();

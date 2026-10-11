@@ -328,7 +328,7 @@ typedef struct {
 } L16CratePlayer;
 
 extern char *D_L16_001B0930[];
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L14_002ffaf8(void *, void *);
 extern char D_0013E533[];
 extern char D_L16_001E86A0[], D_L16_001E89D8[], D_L16_001E8A20[], D_L16_001E8A58[], D_L16_001E8AA0[];
@@ -370,9 +370,9 @@ void FUN_L16_002e37a0(L16CrateMoby *moby) {
         blend_moby_animation(moby, 4, 0, scale_game_frames(5));
     if (hero.coll_hit_moby == moby && moby->animation != 1 && moby->frame != 1)
         blend_moby_animation(moby, 1, 0, scale_game_frames(5));
-    hit = FUN_L00_0025a420(moby, 0x210000, 0);
+    hit = find_moby_hit(moby, 0x210000, 0);
     if (!hit && d->child)
-        hit = FUN_L00_0025a420(d->child, 0x210000, 0);
+        hit = find_moby_hit(d->child, 0x210000, 0);
     if (hit && moby->state != 6) {
         struct Hero *player = &hero;
 
@@ -960,7 +960,7 @@ typedef struct {
     unsigned char active;
 } Level16VendorTurnMoby;
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9de0(float);
 extern float FUN_001fa580(float, float);
@@ -1008,7 +1008,7 @@ void FUN_L16_002e54a0(struct Moby *m) {
                 }
             }
         }
-        if (FUN_L00_0025a420(m, 0x330000, 0)) {
+        if (find_moby_hit(m, 0x330000, 0)) {
             func_L16_002E6B48_6908(m);
             func_0022ED80_6908(0, 0, m);
             m->unkA4 = 0xFF;
@@ -1220,7 +1220,7 @@ typedef struct {
 } L16PursuitMoby;
 
 extern char *D_L16_001B0930[];
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float D_0015EE6C_c __asm__("D_0015EE6C");
 extern float D_L16_00161E58 __attribute__((sda));
 extern float D_0015EE70;
@@ -1247,7 +1247,7 @@ void FUN_L16_002e6208(void *arg) {
     if (m->state == 0) {
         return;
     }
-    hit = FUN_L00_0025a420(m, 0x330000, 0);
+    hit = find_moby_hit(m, 0x330000, 0);
     if (hit) {
         b = 0x200;
         d->flags = b;
@@ -2015,7 +2015,7 @@ typedef float W[4] __attribute__((aligned(16)));
 
 extern char D_L16_0016CC60[];
 extern int D_L16_0015F5C4;
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00263b70(void *, void *, void *, float, float);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
@@ -2034,13 +2034,13 @@ void FUN_L16_002e7e00(struct Moby *moby) {
             char *g = D_L16_0016CC60;
             if (*(int *)(g + 0x30) == 0) {
                 char *p = *(char **)(g + 0x184);
-                FUN_L00_0024f7c8(p, 6, a);
-                FUN_L00_0024f7c8(p, 4, c);
+                moby_point_position(p, 6, a);
+                moby_point_position(p, 4, c);
                 subtract_vector_xyz(e, a, c);
                 normalize_vector_xyz(e, e, k1);
                 FUN_L00_00263b70(a, a, e, k2, k3);
-                FUN_L00_0024f7c8(p, 7, b);
-                FUN_L00_0024f7c8(p, 5, d);
+                moby_point_position(p, 7, b);
+                moby_point_position(p, 5, d);
                 subtract_vector_xyz(f, b, d);
                 normalize_vector_xyz(f, f, j1);
                 FUN_L00_00263b70(b, b, f, j2, j3);

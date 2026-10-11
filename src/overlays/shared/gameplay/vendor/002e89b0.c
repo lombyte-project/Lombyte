@@ -28,7 +28,8 @@ extern int D_L00_00161D90_2e89b0 __asm__("D_L00_00161D90") __attribute__((sda));
 extern G_2e89b0 D_00141848_2e89b0 __asm__("D_00141848");
 extern int FUN_001f96f8_2e89b0(int) __asm__("FUN_001f96f8");
 
-void FUN_L00_002e89b0(char *o, float *a, float *b) {
+void follow_camera_read_stick(char *o, float *a, float *b) __asm__("FUN_L00_002e89b0");
+void follow_camera_read_stick(char *o, float *a, float *b) {
     S_2e89b0 *s = (S_2e89b0 *)(*(char **)(o + 0x70) + 0x1A8);
     G_2e89b0 *g;
 
@@ -96,7 +97,8 @@ extern float FUN_001f9e90_2e8bb8(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001fa580_2e8bb8(float, float) __asm__("FUN_001fa580");
 extern float FUN_001fa5c8_2e8bb8(float, float) __asm__("FUN_001fa5c8");
 
-void FUN_L00_002e8bb8(unsigned char *o, float k, float in) {
+void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) __asm__("FUN_L00_002e8bb8");
+void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) {
     V_2e8bb8 axis;
     unsigned char *e;
     unsigned char *base;
@@ -187,7 +189,8 @@ extern void FUN_001f9a28(float *, float *, float *);
 extern void FUN_001f9a40(float, void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
 
-void FUN_L00_002e8f40(int m) {
+void follow_camera_auto_turn(int m) __asm__("FUN_L00_002e8f40");
+void follow_camera_auto_turn(int m) {
     char *p = *(char **)(m + 0x70);
     char *r = p + 0x1D0;
     char *q = p + 0x130;

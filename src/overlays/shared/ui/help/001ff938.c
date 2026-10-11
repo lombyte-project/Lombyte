@@ -8,7 +8,7 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_001ff938.s", FUN_L15_001ff938);
 #else
 extern void FUN_L00_00232670(void);
-extern void FUN_L00_00211670(void);
+extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void FUN_L15_002044c8(void);
 extern void FUN_L15_0021d040(void);
 extern void FUN_L00_00216f10(void);
@@ -19,7 +19,7 @@ extern void FUN_L00_00207a58(void);
 extern void FUN_L00_002484e0(void *);
 extern void FUN_L00_002059d8(void);
 extern void FUN_L00_002061f0(void);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00207d00(void);
 extern int FUN_001f96f8(int);
 extern float FUN_001fa6c0(int);
@@ -45,7 +45,7 @@ void FUN_L15_001ff938(void) {
     float pulse;
 
     FUN_L00_00232670();
-    FUN_L00_00211670();
+    hero_update();
     FUN_L15_002044c8();
     FUN_L15_0021d040();
     if (hero.vehicle_mode == 0)
@@ -66,7 +66,7 @@ void FUN_L15_001ff938(void) {
         FUN_L00_002061f0();
         moby = (u8 *)hero.moby;
         if (((*(u16 *)(moby + 0x34) ^ 1) & 1) != 0) {
-            FUN_L00_0024f7c8(moby, 6, copy);
+            moby_point_position(moby, 6, copy);
             *(u128 *)(base + 0x1D80) = *(u128 *)copy;
             FUN_L00_00207d00();
         }
@@ -94,7 +94,7 @@ void FUN_L15_001ff938(void) {
             color = 0x80000000 | (blue << 16) | (green << 8) | red;
         *(u32 *)(moby + 0x90) = FUN_001fa6e0(0.1f, *(u32 *)(moby + 0x90), color);
         for (i = 0; i < 3; i++)
-            FUN_L00_0024f7c8(hero.moby, i, base + 0x1D50 + i * 16);
+            moby_point_position(hero.moby, i, base + 0x1D50 + i * 16);
         alpha = 0x30;
         moby = (u8 *)hero.moby;
         if (hero.unk22DE != 0)

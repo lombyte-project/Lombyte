@@ -15,7 +15,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int FUN_L00_00257b90(int, int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 extern void clear_vector(void *);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -41,7 +41,7 @@ void FUN_L03_0022c728(void) {
     for (i = 0; i < 4; i++) {
         float a, b;
         clear_vector(v);
-        FUN_L00_0024f7c8(m, i % 2, w);
+        moby_point_position(m, i % 2, w);
         a = random_angle_radians();
         b = random_angle_radians();
         build_spherical_offset(v, random_float_between(frame_time * 0.7f, frame_time * 2.2f), a, b);

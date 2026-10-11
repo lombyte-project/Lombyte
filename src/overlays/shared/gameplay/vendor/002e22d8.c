@@ -32,7 +32,7 @@ extern float distance_xyz(void *) __asm__("FUN_001f9b48");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_L16_0015F5C4;
-extern int FUN_L00_00259740(void *, void *, int);
+extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int FUN_L16_002e2e88(char *, char *);
 extern int fast_dec_timer(int*) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -42,7 +42,7 @@ extern short D_L16_00161D80;
 extern short D_L16_00161D88 __attribute__((sda));
 extern short D_L16_00161D8C __attribute__((sda));
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025e450(void*,void*,void*,float,float,int,int,int,float,float,float,int,float,float,int,int,int,int);
 extern void FUN_L16_002e2b60(struct Moby *);
@@ -100,7 +100,7 @@ void FUN_L16_002e22d8(char *m) {
 
         if (D_L16_0015F5C4 == 0
             && (*(int *)(d + 0xD4) == -1
-                || FUN_L00_00259740(hero.motion.pos.f, D_L16_001B0930[*(int *)(d + 0xD4)] + 0x10,
+                || point_in_path_xy(hero.motion.pos.f, D_L16_001B0930[*(int *)(d + 0xD4)] + 0x10,
                                      *(int *)D_L16_001B0930[*(int *)(d + 0xD4)]))) {
             m[0x20] = 2;
             *(unsigned short *)(m + 0x34) &= 0xFFFE;
@@ -208,7 +208,7 @@ void FUN_L16_002e22d8(char *m) {
         break;
     }
     case 7:
-        FUN_L00_0024f7c8(m, 1, vector.f);
+        moby_point_position(m, 1, vector.f);
         subtract_vector_xyz(rotation.f, d + 0x70, vector.f);
         normalize_vector_xyz(rotation.f, rotation.f, *(float *)&D_L16_00161D7C * frame_time);
         func_0022ED80_update(1, 0, m);
@@ -262,8 +262,8 @@ typedef struct {
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_0022da68_i(int, int, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern char *FUN_L00_0025a420(void *, int, int);
-extern int FUN_L00_0025a478(void *, char *, void *, int, int *, float *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int hit_reaction(void *, char *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern float FUN_L00_00257c48(float, float);
 extern void mark_moby_for_removal_u(char *) __asm__("FUN_0020c828");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -298,8 +298,8 @@ void FUN_L16_002e2b60(struct Moby *m) {
         *(int *)(d + 0x190) = -1;
     }
     hit.amount = zero = 0.0f;
-    record = FUN_L00_0025a420(m, 0x330000, 0);
-    response = FUN_L00_0025a478(m, record, d + 0x20, 0, &hit.status, &hit.amount, 0, 4);
+    record = find_moby_hit(m, 0x330000, 0);
+    response = hit_reaction(m, record, d + 0x20, 0, &hit.status, &hit.amount, 0, 4);
     if (hit.status != 1 && m->state != 8) {
         *(float *)(d + 0x20) -= hit.amount;
         if (*(float *)(d + 0x20) <= zero || (hero.vehicle_mode == 2 && hit.amount >= 2.0f))

@@ -309,7 +309,7 @@ void FUN_L16_002d5cb8(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D7B08), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
@@ -317,7 +317,7 @@ void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L16_002d6740(struct Moby *moby) {
     int flag = 0;
-    char *p = FUN_L00_0025a420(moby, 0x10000, 0);
+    char *p = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
     case 0:
         moby->state = 1;
@@ -1163,9 +1163,9 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 void *FUN_L16_002d5db0(int index, void *position);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
-extern void FUN_L00_00259888(void *, void *, int, float, void *);
+extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_002598b0(int, float, void *, int, float, float, int, int, int);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void FUN_L00_0025f730(void *, float);
@@ -1287,7 +1287,7 @@ void FUN_L16_002cddb8(unsigned char *m) {
             float speed = D_L16_001619CC * D_0015ED6C;
             float gravity = D_0015ED70 * 10.0f;
             v0.f[2] = probe_ground_height(v0.f, 0, 0.5f);
-            FUN_L00_0024f7c8(d->child, 0, v1.f);
+            moby_point_position(d->child, 0, v1.f);
             subtract_vector_xyz(v2.f, v0.f, v1.f);
             v2.f[2] = 0.0f;
             normalize_vector_xyz(v2.f, v2.f, speed);
@@ -1323,7 +1323,7 @@ void FUN_L16_002cddb8(unsigned char *m) {
             subtract_vector_xyz(v0.f, path + (d->node * 16 + 16), position);
             FUN_L00_0025f730(v0.f, D_L16_001619D0 * D_0015ED6C);
             add_vector_xyz(position, position, v0.f);
-            FUN_L00_0024f7c8(m, D_L16_001619C8, v1.f);
+            moby_point_position(m, D_L16_001619C8, v1.f);
             func_L00_0025A8E8_2cf180(m, 0.333f, v1.f, 1, 1.0f, 1.0f, 0, 1, 0);
             g = &hero;
             if (D_L16_00174258 == ((char *)g->moby) && g->invulnerable_frames == 0) {
@@ -1386,7 +1386,7 @@ void FUN_L16_002cddb8(unsigned char *m) {
         }
         if (d->child) {
             char *slots;
-            FUN_L00_0024f7c8(d->child, 0, v0.f);
+            moby_point_position(d->child, 0, v0.f);
             slots = d->slots;
             v1.f[0] =
                 fast_cos(FUN_001f9e90(v0.f[0] - *(float *)(m + 16), v0.f[1] - *(float *)(m + 20)));
@@ -1396,7 +1396,7 @@ void FUN_L16_002cddb8(unsigned char *m) {
             FUN_L02_00264e70(slots, v0.f, v1.f, D_L16_001619D4);
             v1.f[3] = 5627.925f;
             v1.f[2] = 1.0f;
-            FUN_L00_00259888(&fx, m, 0x10001, 1.0f, v1.f);
+            make_hit_descriptor(&fx, m, 0x10001, 1.0f, v1.f);
             fx.kind = 5;
             fx.enabled = 1;
             fx.cls = *(unsigned short *)(m + 0xA6);
@@ -1514,7 +1514,7 @@ typedef struct L16HitMoby {
 
 extern float FUN_001f9e90_c2(float,float) __asm__("FUN_001f9e90");
 extern int D_L16_001619C8_d __asm__("D_L16_001619C8") __attribute__((sda)); /* no foreign declaration */
-extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern void FUN_L16_002cee70_c(char *) __asm__("FUN_L16_002cee70");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
@@ -1558,8 +1558,8 @@ void FUN_L16_002ce9f0(void *moby) {
         FUN_L16_002cee70_c((char *)m);
     }
     amount = 0.0f;
-    record = FUN_L00_0025a420(m, 0x330000, 0);
-    FUN_L00_0025a478(m, record, &d->health, 0, &status, &amount, 0, 4);
+    record = find_moby_hit(m, 0x330000, 0);
+    hit_reaction(m, record, &d->health, 0, &status, &amount, 0, 4);
     if (status != 1 && m->state != 10 && m->state != 11) {
         d->health -= amount;
         if (d->health <= 0.0f) {
@@ -1593,7 +1593,7 @@ void FUN_L16_002ce9f0(void *moby) {
     m->opacity = 255;
     FUN_L00_0025d538(m, d->reaction);
     if (d->child) {
-        FUN_L00_0024f7c8(m, D_L16_001619C8_d, d->child->position);
+        moby_point_position(m, D_L16_001619C8_d, d->child->position);
         build_moby_bone_transform((char *)m, D_L16_001619C8_d, (char *)matrix);
         copy_matrix3x4(d->child->matrix[0], matrix);
         normalize_vector_xyz_c2(d->child->matrix[0], d->child->matrix[0], 1.0f);
@@ -1748,7 +1748,7 @@ void FUN_L16_002cef60(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0560), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_0015FFD8;
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float D_0015ED6C, D_0015EE70;
 extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
@@ -1790,7 +1790,7 @@ void FUN_L16_002cf198(struct Moby *m) {
         else if (color < 32)
             color = 32;
         (*(int *)((char *)(m) + (0x90))) = 0x80000000 | (color << 16) | (color << 8) | color;
-        if (FUN_L00_0025a420(m, 0x330000, 0)) {
+        if (find_moby_hit(m, 0x330000, 0)) {
             (*(unsigned char *)((char *)(m) + (0x20))) = 2;
             (*(int *)((char *)(m) + (0x90))) = 0x80208020;
             (*(unsigned char *)((char *)(m) + (0xBC))) = 1;
@@ -2244,7 +2244,7 @@ extern L16RacePlayer D_L16_0015F580 __attribute__((section(".sdata")));
 extern int D_L16_0015F5CC;
 extern L16RacePlayer D_L16_00167080;
 extern int *D_L16_00178300[];
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_0013E533[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -2264,14 +2264,14 @@ extern int D_L16_00161A0C __attribute__((sda));
 extern int D_0015EE3C __attribute__((sda));
 extern char *D_L16_001B0930[];
 extern int FUN_001f9770(void *);
-extern int FUN_L00_001f2868(float, void *, int, void *, void *);
+extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_0025d7a0(char *, int, int, int);
 extern int FUN_L00_0025e3b8(int);
 extern int FUN_L05_00307010();
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D4DF __attribute__((section(".data")));
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int);
@@ -2391,7 +2391,7 @@ void FUN_L16_002d04a0(unsigned char *m) {
             m[0x20] = 0;
             break;
         }
-        if (FUN_L00_0025a420(m, mask, 0)) {
+        if (find_moby_hit(m, mask, 0)) {
             qcopy(pos, m + 0x10);
             pos[2] += 0.5f;
             FUN_L00_0025e450(m, &D_L16_0015F580, pos, 0.0f, 0.0f, 5, 15, 25, 2.5f, 1.5f, 4.0f, -1,
@@ -2453,7 +2453,7 @@ void FUN_L16_002d04a0(unsigned char *m) {
         scale_vector_xyz(ahead, delta, 3.0f);
         add_vector_xyz(ahead, ahead, d + 0x260);
         ahead[2] += 0.7f;
-        n = FUN_L00_001f2868(0.7f, ahead, 0, m, 0);
+        n = collect_mobies_in_sphere(0.7f, ahead, 0, m, 0);
         if (n) {
             scale_vector_xyz(impact, delta, 7.0f);
             for (i = 0; i < n; i++) {
@@ -2530,7 +2530,7 @@ void FUN_L16_002d04a0(unsigned char *m) {
         *(float *)(m + 0x18) += fast_sin(*(float *)(d + 0x2E8)) * 0.08f;
         subtract_vector_xyz(ahead, m + 0x10, d + 0x280);
         qcopy(d + 0x280, m + 0x10);
-        FUN_L00_0024f7c8(m, (D_L16_0015F5CC & 1) | 4, impact);
+        moby_point_position(m, (D_L16_0015F5CC & 1) | 4, impact);
         angle = random_angle_radians();
         scale = D_0015ED6C * 0.25f;
         normalize_vector_xyz(spray, m + 0xE0, scale * fast_cos(angle));

@@ -170,7 +170,7 @@ extern void scale_vector_xyz_cf(float, void *, void *) __asm__("FUN_001f9a68");
 extern void FUN_L00_0025b6b8(float, void *, void *, void *);
 extern int FUN_001fa728(float, void *);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void FUN_L00_00259888(void *, struct Moby *, int, float, void *);
+extern void make_hit_descriptor(void *, struct Moby *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int FUN_001efa68(void *, void *, int, int, void *);
 extern char D_L12_0013F3D0[];
 
@@ -250,7 +250,7 @@ void FUN_L12_00302f30(struct Moby *moby) {
     *(u128 *)&points[0] = *(u128 *)&moby->pos;
     other = (struct Moby *)(D_L12_0015FFD8_p + *(int *)(data + 0x2314) * 0x100);
     *(u128 *)&points[4] = *(u128 *)&other->pos;
-    FUN_L00_00259888(hit, moby, 0x10001, 1.0f, (void *)0x0015f580);
+    make_hit_descriptor(hit, moby, 0x10001, 1.0f, (void *)0x0015f580);
     FUN_001efa68(points, points + 4, 0, 0, hit);
 }
 #endif

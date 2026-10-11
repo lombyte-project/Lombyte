@@ -25,7 +25,7 @@ extern u8 D_0013D4E8[];
 extern u8 D_0013D4C0[];
 extern u8 D_0013D388[];
 extern u8 D_0013D408[];
-extern void FUN_L00_002607d0(s32);
+extern void unlock_planet(s32) __asm__("FUN_L00_002607d0");
 extern void FUN_L00_0028dd40(s32, s32, s32) __asm__("FUN_0022db10");
 extern void FUN_L00_00263d40(s32, s32);
 
@@ -74,7 +74,7 @@ void FUN_L00_002831c0(void) {
         D_0013D4E8[code] = 1;
         D_0013D4C0[code] = 1;
     } else if (code < 0x37) {
-        FUN_L00_002607d0(code - 0x24);
+        unlock_planet(code - 0x24);
     } else if (code < 0x3d) {
         D_0013D388[code - 0x37] = 1;
     } else if (code < 0x5b) {

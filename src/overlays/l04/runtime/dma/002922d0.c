@@ -142,7 +142,7 @@ void FUN_L04_002923b8(char *arg0, char *arg1) {
 #endif
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293990), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_002a13f0(int *a, char *b);
+extern int walker_gait_mask(int *a, char *b) __asm__("FUN_L00_002a13f0");
 
 int FUN_L04_002927d0(char *arg0, char *arg1) {
     int **p = (int **)(arg1 + 0x70);
@@ -155,7 +155,7 @@ int FUN_L04_002927d0(char *arg0, char *arg1) {
     }
     if (found == 0)
         return (unsigned char)arg1[0xB6];
-    return FUN_L00_002a13f0(found, arg1);
+    return walker_gait_mask(found, arg1);
 }
 /* Ported from rac1-decomp src/overlays/l04_eudora/vuchain_00293490.c (func_L04_002939E8) */
 

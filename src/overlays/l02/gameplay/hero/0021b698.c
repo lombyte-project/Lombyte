@@ -722,8 +722,8 @@ extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float vector_length_xyz(void *);
 extern int D_0015EEA4;
-extern int FUN_L00_001f2868(float, void *, int, void *, void *);
-extern int FUN_L00_0020d498(int);
+extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
+extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int FUN_L00_00211870(float);
 extern int FUN_L00_00227d40_cf(float, void *, void *) __asm__("FUN_L00_001ff600");
 extern int FUN_L00_00229a98(void);
@@ -763,7 +763,7 @@ extern void FUN_L00_00216e48(int, int, int);
 extern void FUN_L00_00217118(float, float);
 extern void FUN_L00_00217368(int, int);
 extern void FUN_L00_00217658(void);
-extern void FUN_L00_002323b8(int, int, float);
+extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_002334d0(float *dst, float *src, float h);
 extern void FUN_L00_002336e8(float *, float *, float);
 extern void FUN_L00_00233708_cf(int, int) __asm__("FUN_L00_00216de8");
@@ -771,7 +771,7 @@ extern void FUN_L00_00233810_cf(void *, void *, float) __asm__("FUN_L00_00233708
 extern void FUN_L00_002338d0(float *, float *);
 extern void FUN_L00_00233b20(float *, float *, float);
 extern void FUN_L00_00233ba0(float *, float *, float);
-extern void FUN_L00_00259888(void *, void *, int, float, void *);
+extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_0025e3b8_cf(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern void FUN_L00_0025f730(void *, float);
 extern void FUN_L00_00262500(int, void *);
@@ -881,7 +881,7 @@ void FUN_L02_00225c20(void) {
                     }
                     anim = neg + 0xE;
                     if (((Moby *)hero.moby)->f53 != anim) {
-                        FUN_L00_002323b8(anim, 0, scale_game_frames(5));
+                        set_hero_animation(anim, 0, scale_game_frames(5));
                     }
                     hero.anim_speed = absolute_float(hero.motion.unk184) / (frame_time * 3.3161256f);
                     if (hero.anim_speed < 0.55f) {
@@ -898,7 +898,7 @@ void FUN_L02_00225c20(void) {
                         anim = FUN_L01_00226f10(0);
                     }
                     if (((Moby *)hero.moby)->f53 != anim) {
-                        FUN_L00_002323b8(anim, 0, scale_game_frames(7));
+                        set_hero_animation(anim, 0, scale_game_frames(7));
                     }
                 }
             }
@@ -1022,9 +1022,9 @@ void FUN_L02_00225c20(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
         if (anim != -1 && ((Moby *)hero.moby)->f52 != 0x36) {
-            FUN_L00_002323b8(anim, 0, frames);
+            set_hero_animation(anim, 0, frames);
         } else if ((((Moby *)hero.moby)->f70 & 2) && ((Moby *)hero.moby)->f52 == 0x36) {
-            FUN_L00_002323b8(FUN_L01_00226f10(0), 0, scale_game_frames(5));
+            set_hero_animation(FUN_L01_00226f10(0), 0, scale_game_frames(5));
         }
     } break;
     case 0x24:
@@ -1115,7 +1115,7 @@ void FUN_L02_00225c20(void) {
         int below;
 
         if ((hero.unkA98 & 2) && moby->f53 == 0x34) {
-            FUN_L00_002323b8(0x35, 0xA, scale_game_frames(0xC));
+            set_hero_animation(0x35, 0xA, scale_game_frames(0xC));
             hero.anim_speed = 0.3f;
         }
         oldz = hero.motion.velocity.f[2];
@@ -1259,7 +1259,7 @@ void FUN_L02_00225c20(void) {
             }
             if (up) {
                 if (moby->f53 != 0x35) {
-                    FUN_L00_002323b8(0x35, 6, scale_game_frames(0x11));
+                    set_hero_animation(0x35, 6, scale_game_frames(0x11));
                     hero.unk9BC = 1;
                 } else if (((Moby *)hero.moby)->f52 == ((Moby *)hero.moby)->f53) {
                     FUN_L00_00208f20(42.0f, a, 0.5f, -1.0f);
@@ -1267,7 +1267,7 @@ void FUN_L02_00225c20(void) {
                 }
             } else {
                 if (moby->f53 != 0x35) {
-                    FUN_L00_002323b8(0x35, 0x15, scale_game_frames(9));
+                    set_hero_animation(0x35, 0x15, scale_game_frames(9));
                     hero.unk9BC = 2;
                 } else if (((Moby *)hero.moby)->f52 == ((Moby *)hero.moby)->f53) {
                     FUN_L00_00208f20(12.0f, a, 0.5f, -1.0f);
@@ -1309,8 +1309,8 @@ void FUN_L02_00225c20(void) {
                 vec[4][0] = fast_cos(hero.motion.rot.f[2]);
                 vec[4][1] = fast_sin(hero.motion.rot.f[2]);
                 vec[4][2] = 0.0f;
-                FUN_L00_00259888(vec[1], ((Moby *)hero.moby), 0x30000, 1.0f, vec[4]);
-                FUN_L00_001f2868(0.8f, vec[0], 0x10, ((Moby *)hero.moby), vec[1]);
+                make_hit_descriptor(vec[1], ((Moby *)hero.moby), 0x30000, 1.0f, vec[4]);
+                collect_mobies_in_sphere(0.8f, vec[0], 0x10, ((Moby *)hero.moby), vec[1]);
             }
         }
         if (hero.unk4B8 != 0.0f) {
@@ -1370,12 +1370,12 @@ void FUN_L02_00225c20(void) {
             vec[4][0] = fast_cos(hero.motion.rot.f[2]) * 2.0f;
             vec[4][1] = fast_sin(hero.motion.rot.f[2]) * 2.0f;
             vec[4][2] = 0.0f;
-            FUN_L00_00259888(vec[1], ((Moby *)hero.moby), 0x10000, 2.0f, vec[4]);
+            make_hit_descriptor(vec[1], ((Moby *)hero.moby), 0x10000, 2.0f, vec[4]);
             ((HitC *)vec[1])->fC = 5627.925f;
             ((HitC *)vec[1])->f19 = 1;
             ((HitC *)vec[1])->f1A = 0x47;
             ((HitC *)vec[1])->f18 = 0;
-            FUN_L00_001f2868(0.4f, vec[0], 0x10, ((Moby *)hero.moby), vec[1]);
+            collect_mobies_in_sphere(0.4f, vec[0], 0x10, ((Moby *)hero.moby), vec[1]);
         }
         FUN_L00_00211870(27.0f);
         if (hero.state_timer < t0) {
@@ -1619,7 +1619,7 @@ void FUN_L02_00225c20(void) {
                     vec[3][0] = fast_cos(hero.motion.rot.f[2]) * 2.0f;
                     vec[3][1] = fast_sin(hero.motion.rot.f[2]) * 2.0f;
                     vec[3][2] = 1.3f;
-                    FUN_L00_00259888(vec[0], ((Moby *)hero.moby), 0x30000, 3.0f, vec[3]);
+                    make_hit_descriptor(vec[0], ((Moby *)hero.moby), 0x30000, 3.0f, vec[3]);
                     ((HitC *)vec[0])->f19 = 3;
                     ((HitC *)vec[0])->fC = 5627.925f;
                     ((HitC *)vec[0])->f18 = 0;
@@ -1629,20 +1629,20 @@ void FUN_L02_00225c20(void) {
                     vec[4][1] = fast_sin(yaw) * 0.8f;
                     vec[4][2] = 0.55f;
                     add_vector_xyz(vec[4], vec[4], hero.motion.pos.f);
-                    FUN_L00_00217368((int)w, FUN_L00_001f2868(0.8f, vec[4], 0, w, vec[0]));
+                    FUN_L00_00217368((int)w, collect_mobies_in_sphere(0.8f, vec[4], 0, w, vec[0]));
                     yaw = FUN_001f9b80_cf(hero.motion.rot.f[2], -0.87266463f);
                     vec[4][0] = fast_cos(yaw) * 0.8f;
                     vec[4][1] = fast_sin(yaw) * 0.8f;
                     vec[4][2] = 0.55f;
                     add_vector_xyz(vec[4], vec[4], hero.motion.pos.f);
                     FUN_L00_00217368((int)w,
-                                     FUN_L00_001f2868(0.8f, vec[4], 0, ((Moby *)hero.moby), vec[0]));
+                                     collect_mobies_in_sphere(0.8f, vec[4], 0, ((Moby *)hero.moby), vec[0]));
                     yaw = FUN_001f9b80_cf(hero.motion.rot.f[2], 0.87266463f);
                     vec[4][0] = fast_cos(yaw) * 0.8f;
                     vec[4][1] = fast_sin(yaw) * 0.8f;
                     vec[4][2] = 0.55f;
                     add_vector_xyz(vec[4], vec[4], hero.motion.pos.f);
-                    FUN_L00_00217368((int)w, FUN_L00_001f2868(0.8f, vec[4], 0, w, vec[0]));
+                    FUN_L00_00217368((int)w, collect_mobies_in_sphere(0.8f, vec[4], 0, w, vec[0]));
                 }
             }
         }
@@ -1966,7 +1966,7 @@ void FUN_L02_00225c20(void) {
     case 0x8: {
         float v;
 
-        if (FUN_L00_0020d498(3) == 2) {
+        if (hero_slot_item_id(3) == 2) {
             if (hero.unk2228 != -1) {
                 Row13E650 *e = (Row13E650 *)(D_0013E550 + hero.unk2228 * 0x70);
 
@@ -2129,7 +2129,7 @@ void FUN_L02_00225c20(void) {
                 int n;
 
                 FUN_L00_0025e3b8_cf(vec[0], 0.8f, 0.0f, 0.3f);
-                n = FUN_L00_001f2868(0.9f, vec[0], 0, ((Moby *)hero.moby), 0);
+                n = collect_mobies_in_sphere(0.9f, vec[0], 0, ((Moby *)hero.moby), 0);
                 if (n != 0) {
                     int i;
 

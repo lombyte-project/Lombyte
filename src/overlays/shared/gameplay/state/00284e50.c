@@ -82,7 +82,7 @@ extern void FUN_001f97b0(void);
 extern void FUN_L00_00210a08(s32, s32);
 extern void FUN_L00_00250df8(void *);
 extern void FUN_001fa030(void *, void *);
-extern void FUN_L00_001ed280(void);
+extern void init_camera_system(void) __asm__("FUN_L00_001ed280");
 extern void FUN_L00_002852c0(void);
 
 void FUN_L00_00285008(void) {
@@ -128,7 +128,7 @@ void FUN_L00_00285008(void) {
     }
     FUN_L00_00250df8(p->moby);
     FUN_001fa030((char *)p->moby + 0xC0, &hero.motion.rot);
-    FUN_L00_001ed280();
+    init_camera_system();
     FUN_L00_002852c0();
 }
 #endif /* NON_MATCHING */

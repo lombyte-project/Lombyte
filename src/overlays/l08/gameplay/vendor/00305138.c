@@ -154,7 +154,7 @@ extern void FUN_L08_00305138_c(void *) __asm__("FUN_L08_00305138");
 extern void FUN_L00_0025a120(void *);
 extern float FUN_001f9b48(void *, void *);
 extern void FUN_L00_002502a0(int);
-extern void FUN_L00_002607d0(int);
+extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern struct {
@@ -207,7 +207,7 @@ void FUN_L08_00305270(WM *m) {
             FUN_L01_002783a8(m, 2.2f);
         }
         if (d->h24 == 4) {
-            FUN_L00_002607d0(9);
+            unlock_planet(9);
             memcard_save_data(0, -1);
             mark_moby_for_removal(m);
             return;
@@ -406,7 +406,7 @@ extern void FUN_L08_003063f0_c(void *) __asm__("FUN_L08_003063f0");
 extern void FUN_L08_002e1698(void *);
 extern void FUN_L00_00299460(int);
 extern void FUN_L08_002a1880(int);
-extern void FUN_L00_00211250(void);
+extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void FUN_L00_00260860(int, int);
 
 /* Watcher moby update with a scripted reveal, then turns its head toward the hero or a random target. */
@@ -442,7 +442,7 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
             m->state = 5;
         }
         if (d->sub == 4) {
-            FUN_L00_00211250();
+            hero_respawn();
             d->sub = -1;
         }
         break;
@@ -517,7 +517,7 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
 }
-extern void FUN_L00_00211250(void);
+extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 
 /* Set the object state, then apply the requested payload mode. */
 void FUN_L08_00306b30(u8 *object, s32 mode)
@@ -536,7 +536,7 @@ void FUN_L08_00306b30(u8 *object, s32 mode)
         *(s16 *)(payload + 0x36) = 4;
         break;
     case -1:
-        FUN_L00_00211250();
+        hero_respawn();
         break;
     }
 }

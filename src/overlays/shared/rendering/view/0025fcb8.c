@@ -326,7 +326,8 @@ void FUN_L00_00260738(char *out, OvlQuad *pos, void *m1, void *m2) {
 extern u8 D_0013DD40_2607d0[] __asm__("D_0013DD40");
 extern s32 D_0013D510_2607d0[] __asm__("D_0013D510");
 void FUN_L00_00262d38(s32);
-void FUN_L00_002607d0(s32 id) {
+void unlock_planet(s32 id) __asm__("FUN_L00_002607d0");
+void unlock_planet(s32 id) {
     s32 n, i;
     n = 0;
     if (D_0013DD40_2607d0[id] == 0) {

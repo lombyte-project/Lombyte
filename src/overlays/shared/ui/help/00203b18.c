@@ -70,9 +70,10 @@ typedef struct {
 } Rec;
 
 extern Rec D_L00_00179AC0[];
-extern int FUN_L00_0020d498(int);
+extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
-int FUN_L00_00205000(int a) {
+int hero_idle_sequence(int a) __asm__("FUN_L00_00205000");
+int hero_idle_sequence(int a) {
     struct Hero *g = &hero;
     int c = g->vehicle_mode;
     if (c == 2 || (c < 3 ? c == 1 : c == 3)) {
@@ -100,7 +101,7 @@ int FUN_L00_00205000(int a) {
         }
     }
     {
-        int i = FUN_L00_0020d498(0);
+        int i = hero_slot_item_id(0);
         return D_L00_00179AC0[i].v;
     }
 }
@@ -108,9 +109,10 @@ int FUN_L00_00205000(int a) {
 s32 FUN_L00_002050b8(s32 a) {
     return a;
 }
-void FUN_L00_00234e00(void);
+void show_health_hud(void) __asm__("FUN_L00_00234e00");
 /* Lowers hero.health.hp by one (not below 0) and calls 00234e00. */
-void FUN_L00_002050c0(s32 n) {
+void hero_change_health(s32 n) __asm__("FUN_L00_002050c0");
+void hero_change_health(s32 n) {
     if (n) {
         struct Hero *g = &hero;
         int v;
@@ -120,7 +122,7 @@ void FUN_L00_002050c0(s32 n) {
         g->health.hp = v;
         if (v < 0)
             g->health.hp = 0;
-        FUN_L00_00234e00();
+        show_health_hud();
     }
 }
 extern s32 D_001413D0[];
@@ -592,12 +594,12 @@ int FUN_001f96f8(int);
 void fade_to_black(int) __asm__("FUN_001f4a58");
 void FUN_L00_002062b0(void);
 void FUN_L00_00232670(void);
-void FUN_L00_00211670(void);
+void hero_update(void) __asm__("FUN_L00_00211670");
 void FUN_L00_0020b960(void);
 void FUN_L00_0020bed0(void);
-void FUN_L00_0020cf58(void);
+void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
 void FUN_L00_0020d330(void);
-void FUN_L00_00229b70(void);
+void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
 void FUN_L00_00216f10(void);
 void FUN_L00_0020b1d8_u(void) __asm__("FUN_L00_0020b1d8");
 void FUN_L00_0020a318(void);
@@ -641,12 +643,12 @@ void FUN_L00_002070d0(void) {
         return;
     }
     FUN_L00_00232670();
-    FUN_L00_00211670();
+    hero_update();
     FUN_L00_0020b960();
     FUN_L00_0020bed0();
-    FUN_L00_0020cf58();
+    find_grind_rail();
     FUN_L00_0020d330();
-    FUN_L00_00229b70();
+    hero_update_transitions();
     if (g->vehicle_mode)
         return;
     FUN_L00_00216f10();
@@ -1920,7 +1922,7 @@ void FUN_L00_0020a318(void) {
     *(short *)(g + 0x22C8) = 0;
     if (*(unsigned char *)(g + 0x20AB) == 0)
         return;
-    if (FUN_L00_0020d498(0) == 0x1A)
+    if (hero_slot_item_id(0) == 0x1A)
         return;
     if (*(int *)(g + 0x2084) == 0x81) {
         p = D_L00_0017A680_d;
@@ -2335,7 +2337,7 @@ extern s32 FUN_L00_0020d568(void);
 extern f32 FUN_001f99c0(f32);
 extern f32 FUN_001f9e90(f32, f32);
 extern void FUN_L00_00233288(s32, s32, s32, s32, f32, f32);
-extern void FUN_L00_0024f7c8(void *, s32, void *);
+extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_0026de90(void *, void *, f32);
 void FUN_L00_0020b1d8(void) {
     u8 buf[0x10] __attribute__((aligned(16)));
@@ -2383,10 +2385,10 @@ void FUN_L00_0020b1d8(void) {
         if (P.h12AE & 1)
             q = P.p2080 + 0xC0;
         P.i12A8--;
-        FUN_L00_0024f7c8(P.p2080, 0x16, buf);
+        moby_point_position(P.p2080, 0x16, buf);
         for (i = 0; i < P.h12AC; i++)
             FUN_L00_0026de90(buf, q, P.f12A0 + random_float_between(-P.f12A4, P.f12A4));
-        FUN_L00_0024f7c8(P.p2080, 0x17, buf);
+        moby_point_position(P.p2080, 0x17, buf);
         for (i = 0; i < P.h12AC; i++)
             FUN_L00_0026de90(buf, q, P.f12A0 + random_float_between(-P.f12A4, P.f12A4));
     } else

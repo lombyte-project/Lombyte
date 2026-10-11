@@ -356,7 +356,7 @@ void FUN_L08_002d55c8(struct Moby *moby, int path_id) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5950.s", FUN_L08_002d5950);
 #else
 extern void FUN_0020cca8(void *, int, void *);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -393,7 +393,7 @@ void FUN_L08_002d5950(struct Moby *moby, int joint, int count) {
     float * volatile pos_ptr;
 
     i = 0;
-    FUN_L00_0024f7c8(moby, joint, base);
+    moby_point_position(moby, joint, base);
     FUN_0020cca8(moby, joint, basis);
     if (count <= 0)
         return;
@@ -1093,7 +1093,7 @@ extern int D_001413D4 __attribute__((section(".data")));
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern float D_L08_00161A44 __attribute__((sda));
 extern unsigned char D_0013D408[];
-extern void *FUN_L00_0025a420(void*,int,int);
+extern void *find_moby_hit(void*,int,int) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_0025e450(void *,void *,void *,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int);
 extern void FUN_L00_00263d40(int, int);
 extern void FUN_L08_002dec90_c(char *m, char *pos) __asm__("FUN_L08_002dec90");
@@ -1165,7 +1165,7 @@ void FUN_L08_002de848(char *m) {
     } else {
         *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
     }
-    if (FUN_L00_0025a420(m, 0x10000, 0) != 0 && *(unsigned char *)(m + 0x20) != 2) {
+    if (find_moby_hit(m, 0x10000, 0) != 0 && *(unsigned char *)(m + 0x20) != 2) {
         if (D_001413D4 == 0x32 && D_0013D408[0xC] == 0) {
             D_0013D408[0xC] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);

@@ -30,7 +30,7 @@ struct MobyTrail {
  * holds the equipped gadget (load_hand_gadget). FUN_L00_0020fca8(i, v) releases
  * slot i: stores v at +0x14, sets state 3 (calling the moby's +0x74 callback
  * once), clears state and item and removes both mobys (slot 3 keeps moby2).
- * FUN_L00_0020d460 / FUN_L00_0020d498 return a ready slot's moby / item id.
+ * hero_slot_moby / hero_slot_item_id return a ready slot's moby / item id.
  * A slot change clears +0x1A, sets +0x20 to 3 and blends the moby (2, 0, 2).
  */
 /* A 0xB0-byte record FUN_L00_00205168 eases toward its targets; the
@@ -85,7 +85,7 @@ struct HeroItemSlot {
 
 /*
  * One key of the hero's per-state vertical velocity curve (hero.unk3E4[i]),
- * run by FUN_L00_00214108 between state frames unk3D0 and unk3D4. Entering a
+ * run by hero_integrate_velocity between state frames unk3D0 and unk3D4. Entering a
  * key sets hero.unk3F0 to value * D_0015ED70 (-1000000 keeps it); each later
  * frame adds delta * D_0015ED70. A key lasts scale_game_frames(frames).
  */
@@ -159,7 +159,7 @@ struct HeroHealth {
  *   unk458 / unk45C - speeds eased in and scaled into velocity (FUN_L02_00223450)
  *   unk22D2         - set on a pad bit-0x10 press (no C reader yet)
  *   unk22DA         - nonzero makes FUN_L00_002133a8 call FUN_L00_002347c0
- * Item switching (FUN_L00_0020fea0): a nonzero pending_item[i] that differs
+ * Item switching (hero_switch_item): a nonzero pending_item[i] that differs
  * moves into selected_item[i] and changes slot i; saved_item[i] keeps the
  * slot's item while 0x1C, 0x1D, 6 or 4 is forced in (0x26 when it was empty).
  * hero_set_state copies state.current/control_mode/state_timer into the prev
@@ -274,7 +274,7 @@ struct Hero {
     f32 unk3D8;                    /* 0x3D8 */
     f32 unk3DC;                    /* 0x3DC */
     s32 unk3E0;                    /* 0x3E0 */
-    struct HeroVelocityKey *unk3E4; /* 0x3E4: keys run by FUN_L00_00214108 while unk41C is set */
+    struct HeroVelocityKey *unk3E4; /* 0x3E4: keys run by hero_integrate_velocity while unk41C is set */
     s32 unk3E8;                    /* 0x3E8: current key in unk3E4, -1 before the first */
     s32 unk3EC;                    /* 0x3EC: frames spent in the current key */
     f32 unk3F0;                    /* 0x3F0: value added to velocity.z each frame */

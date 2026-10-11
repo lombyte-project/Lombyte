@@ -219,7 +219,7 @@ typedef struct {
 } L16CratePlayer;
 
 extern char *D_L14_001B0BB0[];
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L14_002ffaf8(void *, void *);
 extern char D_L14_001FCF20[], D_L14_001FCF58[], D_L14_001FCFA0[], D_L14_001FCFD8[], D_L14_001FD020[];
 extern float FUN_001f9e90(float,float);
@@ -250,7 +250,7 @@ void FUN_L14_002fe2a0(L16CrateMoby *moby) {
         blend_moby_animation(moby, 4, 0, scale_game_frames(5));
     if (hero.coll_hit_moby == moby && moby->animation != 1 && moby->frame != 1)
         blend_moby_animation(moby, 1, 0, scale_game_frames(5));
-    hit = FUN_L00_0025a420(moby, 0x210000, 0);
+    hit = find_moby_hit(moby, 0x210000, 0);
     if (hit && moby->state != 6) {
         struct Hero *player = &hero;
 
@@ -458,6 +458,7 @@ extern float FUN_001f9e90(float, float);
 #include "sda.h"
 extern unsigned char D_0015EDB0;
 #include "qcopy.h"
+extern int unlock_planet() __asm__("FUN_L00_002607d0");
 typedef struct {
     float target[4];
     float eye[4];
@@ -614,7 +615,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
         if (D_L14_0015F5C4 != 2) {
             m->state = 1;
             if ((short)d->sub == 4) {
-                FUN_L00_002607d0(0xF);
+                unlock_planet(0xF);
                 FUN_L00_00262d38(0xF);
                 D_0014C190[D_0015ED84_m][(short)m->hB2 >> 5] |= 1 << (m->hB2 & 0x1F);
                 D_L14_001BABD0[(short)m->hB2 >> 5] |= 1 << (m->hB2 & 0x1F);

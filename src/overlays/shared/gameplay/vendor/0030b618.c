@@ -196,7 +196,7 @@ typedef struct {
     s32 count;
 } DropProbe_30c9a8;
 
-extern f32 FUN_L00_00258110(f32 *, f32, f32, f32, f32, f32);
+extern f32 spring_turn(f32 *, f32, f32, f32, f32, f32) __asm__("FUN_L00_00258110");
 extern void build_spherical_offset_30c9a8(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void add_vector_xyz_30c9a8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 distance_xyz_30c9a8(void *, void *) __asm__("FUN_001f9b80");
@@ -231,7 +231,7 @@ void FUN_L01_0030c9a8(char *m) {
         desired_pitch = *(f32 *)(m + 0x44);
     }
     pos = (f32 *)(m + 0x10);
-    desired_yaw = FUN_L00_00258110((f32 *)e, *(f32 *)(m + 0x48), desired_yaw,
+    desired_yaw = spring_turn((f32 *)e, *(f32 *)(m + 0x48), desired_yaw,
                                             frame_time_sq * 4.712389f,
                                             frame_time_sq * 3.1415927f,
                                             frame_time * 3.1415927f);
@@ -239,7 +239,7 @@ void FUN_L01_0030c9a8(char *m) {
     pitch_k = frame_time_sq * 4.712389f;
     pitch_max = frame_time * 3.1415927f;
     *(f32 *)(m + 0x48) = desired_yaw;
-    *(f32 *)(m + 0x44) = FUN_L00_00258110((f32 *)(e + 4), *(f32 *)(m + 0x44), desired_pitch,
+    *(f32 *)(m + 0x44) = spring_turn((f32 *)(e + 4), *(f32 *)(m + 0x44), desired_pitch,
                                             pitch_k, pitch_d, pitch_max);
     build_spherical_offset_30c9a8(offset.f, frame_time * 40.0f,
                                    *(f32 *)(m + 0x48), -*(f32 *)(m + 0x44));
@@ -375,7 +375,7 @@ struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax
 
 
 extern int FUN_001f9770(void *);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_001f9a28(void *, void *, void *);
 extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -411,7 +411,7 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
 
     if (FUN_001f9770(state + 0x54) == 0)
         return;
-    FUN_L00_0024f7c8(moby, (state[0x56] & 1) + 1, &v);
+    moby_point_position(moby, (state[0x56] & 1) + 1, &v);
     state[0x56] = state[0x56] ^ 1;
     e = FUN_L01_0030d308(moby, &v, moby + 0x40, D_L01_00162088 * DEG_TO_RAD,
                          D_L01_0016208C * DEG_TO_RAD, D_L01_00162084, 2.0f, 3.1415927f,
@@ -577,7 +577,7 @@ extern char D_L01_001620E0 __attribute__((sda));
 extern char D_L01_001620F0 __attribute__((sda));
 extern char D_L01_00162100 __attribute__((sda));
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L01_0028a7a8(void *, void *, void *, void *, int);
 
 void FUN_L01_0030dda0(char *m) {
@@ -588,7 +588,7 @@ void FUN_L01_0030dda0(char *m) {
         *(OvlQuad *)z = 0;
         z[2] = -(random_float_between_alt(1.0f, 2.0f) * frame_time);
         *(OvlQuad *)v = *(OvlQuad *)z;
-        FUN_L00_0024f7c8(m, 0, buf);
+        moby_point_position(m, 0, buf);
         FUN_L01_0028a7a8(m, buf, v, &D_L01_001620E0, 1);
         FUN_L01_0028a7a8(m, buf, v, &D_L01_001620F0, 1);
         FUN_L01_0028a7a8(m, buf, v, &D_L01_00162100, 1);
@@ -616,7 +616,7 @@ void FUN_L01_0030de68(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F2A8), where it is exact; names translated to the US level program. */
 
 void FUN_L01_0030de68(char *moby);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void enqueue_callback_list_1_alt(void (*)(char *), char *) __asm__("FUN_001f4600");
 
 void FUN_L01_0030ded0(char *moby) {
@@ -624,7 +624,7 @@ void FUN_L01_0030ded0(char *moby) {
     char *entry = data + 0x70;
     int i;
     for (i = 0; i < 2; i++) {
-        FUN_L00_0024f7c8(moby, i + 3, entry);
+        moby_point_position(moby, i + 3, entry);
         entry += 0x10;
     }
     enqueue_callback_list_1_alt(FUN_L01_0030de68, moby);

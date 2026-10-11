@@ -102,7 +102,8 @@ extern void FUN_001ed470(void);
 void backup_current_cam(void) __asm__("FUN_001ebc90");
 void camera_run_setup_to_new_cam(struct Moby *cam) __asm__("FUN_001ebec8");
 
-void FUN_L00_001ed280(void) {
+void init_camera_system(void) __asm__("FUN_L00_001ed280");
+void init_camera_system(void) {
     char *g = (char *)&D_L00_00166C80_c;
     float *s, *d, *t, *u;
     char *a;
@@ -177,9 +178,10 @@ extern float D_L00_0015EF40 __attribute__((sda));
 extern void clear_vector(void *);
 extern void normalize_vector_xyz(void *, void *, float);
 s32 FUN_L00_001ed230(s32 id);
-void FUN_L00_001ed280(void);
+void init_camera_system(void) __asm__("FUN_L00_001ed280");
 
-void FUN_L00_001ed358(void) {
+void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
+void setup_level_cameras(void) {
     char *g = (char *)&D_L00_00166C80;
     char *g1;
     char *q;
@@ -254,7 +256,7 @@ void FUN_L00_001ed358(void) {
             i++;
         } while (i < D_L00_0015EF54);
     }
-    FUN_L00_001ed280();
+    init_camera_system();
     *(short *)D_L00_00166EF0 = 0;
     {
         int *q = (int *)(D_L00_00166EF0 + 0x110);

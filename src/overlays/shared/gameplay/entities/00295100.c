@@ -135,8 +135,8 @@ extern void mode_freeze_init(s32, s32) __asm__("FUN_001fbab8");
 extern void pause_all_sounds(s32) __asm__("FUN_00218d78");
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_00264328(void);
-extern s32 FUN_L00_00234e00(void);
-extern void FUN_L00_00235e18(s32, s32);
+extern s32 show_health_hud(void) __asm__("FUN_L00_00234e00");
+extern void hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *,
                                   s32) __asm__("FUN_001ff308");
 extern void FUN_L00_00239cc8(void);
@@ -167,7 +167,8 @@ extern void FUN_L00_00297e70_c(void) __asm__("FUN_L00_00297e70");
     ((D_L00_0016C058.w8 & (b)) || ((D_L00_0016C058.w8 & 0x10) && (D_0013C940_c.w1A4 & 0x200)))
 #define HELD ((D_0013C940_c.w1A4 & 0x800) || noctl)
 
-void FUN_L00_00297f78(void) {
+void handle_pause_input(void) __asm__("FUN_L00_00297f78");
+void handle_pause_input(void) {
     s32 lvl, area, noctl, special;
     if (D_L00_0016C058.wEC) {
         if (--D_L00_0016C058.wEC == 0)
@@ -239,11 +240,11 @@ void FUN_L00_00297f78(void) {
         FUN_L00_00264328();
     if ((D_0013C940_c.w1A4 & 0x200) && hero.state.current != 0x1D && hero.state.current != 0x32) {
         s32 x;
-        x = FUN_L00_00234e00();
-        FUN_L00_00235e18(x, FUN_001f96f8_c(0xB4));
+        x = show_health_hud();
+        hud_keep_visible(x, FUN_001f96f8_c(0xB4));
         x = queue_animation_update(2, 0x754E, FUN_L00_00239cc8, FUN_L00_00239d00, FUN_L00_00239df8,
                                    &current_bolt_count, 9999999);
-        FUN_L00_00235e18(x, FUN_001f96f8_c(0xB4));
+        hud_keep_visible(x, FUN_001f96f8_c(0xB4));
     }
     if (D_L00_00184214) {
         H_297f78 *h = &D_00141848;
@@ -779,7 +780,7 @@ typedef struct {
 extern s32 D_0015ED80;
 extern Tab D_00137B80;
 void FUN_L00_002995d0(s32, s32, s32);
-void FUN_L00_00211250();
+void hero_respawn() __asm__("FUN_L00_00211250");
 void FUN_L00_00299460(s32 i) {
     s32 a, b;
     struct Hero *s;
@@ -794,7 +795,7 @@ void FUN_L00_00299460(s32 i) {
     }
     s = &hero;
     if (s->health.hp == 0) {
-        FUN_L00_00211250();
+        hero_respawn();
     } else if (s->unk20B1 == 0) {
         FUN_L00_002995d0(a, b, game_language);
     }

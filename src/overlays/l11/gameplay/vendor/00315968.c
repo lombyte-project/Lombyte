@@ -63,7 +63,7 @@ struct L11PatrolVars {
     s32 carrier;            /* 0x254: listed moby index, -1: none */
 };
 
-/* What FUN_L00_0025a420 reports about the moby's last hit. */
+/* What find_moby_hit reports about the moby's last hit. */
 struct L11HitInfo {
     u8 pad0[0x10];
     Vec4 pos;           /* 0x10 */
@@ -727,7 +727,7 @@ void FUN_L11_00317820(struct Moby *moby) {
 extern char D_00141C18[];
 extern float D_L11_0015F580[] __attribute__((section(".sdata")));
 extern float D_L11_00162330 __attribute__((sda));
-extern struct Moby *FUN_L00_0025a420(void *, s32, s32);
+extern struct Moby *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void FUN_001f9a68(void *, void *, float);
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
@@ -747,7 +747,7 @@ void FUN_L11_00317c98(struct Moby *moby) {
     float vec[4];
 
     for (i = 0; i < d->count; i++) {
-        struct Moby *hit = FUN_L00_0025a420(d->links[i], -1, 0);
+        struct Moby *hit = find_moby_hit(d->links[i], -1, 0);
         if (hit != 0) {
             idx = i;
             total += hit->scale;
@@ -948,7 +948,7 @@ void FUN_L11_00318488(struct Moby *m) {
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern int FUN_001efa68(void *, void *, int, void *, void *);
-extern int FUN_L00_001f2868(float, void *, int, void *, void *);
+extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L11_00162388_d __asm__("D_L11_00162388") __attribute__((sda));
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
@@ -988,7 +988,7 @@ void FUN_L11_00318b30(unsigned char *moby) {
         qcopy(vp, pos);
         add_vector_xyz(pos, pos, data);
         if (func_001F9908_i(data + 0x20) || FUN_001efa68(vp, (char *)moby + 0x10, 0, moby, 0) ||
-            FUN_L00_001f2868(0.333f, (char *)moby + 0x10, 0, *(void **)(data + 0x24), 0)) {
+            collect_mobies_in_sphere(0.333f, (char *)moby + 0x10, 0, *(void **)(data + 0x24), 0)) {
             FUN_L00_0025e450(moby, data, (char *)moby + 0x10, 1.5f, 2.0f, 10, 3, 16, 4.0f, 2.0f,
                              9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
             mark_moby_for_removal(moby);
