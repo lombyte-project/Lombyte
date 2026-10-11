@@ -1097,7 +1097,178 @@ void FUN_L06_002f7000(struct Moby *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7d78.s", FUN_L06_002f7d78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f91e8.s", FUN_L06_002f91e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f9a28.s", FUN_L06_002f9a28);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fa9c0.s", FUN_L06_002fa9c0);
+#else
+extern int FUN_001fa6d0(float);
+extern char *FUN_L00_0025a420(void *, int, int);
+extern int FUN_00213928(void *, void *, void *, int, int *, float *, int, int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_L00_00284e50(void *, void *);
+extern void FUN_00212f90(void *, int, int, int);
+extern void FUN_L00_0025d458(void *, void *);
+extern void FUN_L00_0025d538(void *, void *);
+extern float FUN_001fa6c0(int);
+extern float FUN_001f96b0(float);
+extern float FUN_001f9e90(float, float);
+extern void FUN_001fa030(void *, void *);
+extern float fast_add_rotations(float, float);
+extern float fast_sin(float);
+extern int FUN_001fa6e0(int, int, float);
+extern int FUN_L00_0025ff38(void *, void *, int, int, void *, int, float);
+extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void FUN_L06_002fb148(char *);
+extern short D_L06_0014162A;
+extern int D_L06_00140408;
+extern int D_0013CAE0;
+extern float D_L06_0015F3FC;
+extern int D_L06_001413D0;
+extern float D_L06_00161F0C __attribute__((sda));
+extern int D_L06_00161F10 __attribute__((sda));
+extern int D_L06_00161F14 __attribute__((sda));
+extern char *D_L06_001600EC __asm__("D_L06_001600EC");
+extern int *D_L06_001B0C30[];
+
+/* Updates the object's health, hit response, recovery timer and path motion. */
+void FUN_L06_002fa9c0(char *moby) {
+    char *data;
+    char *hit;
+    int out;
+    float dmg;
+    int kind;
+    int timer;
+    float hp;
+    int *path;
+    if ((unsigned char)moby[0x20] == 0) return;
+    data = *(char **)(moby + 0x78);
+    if ((unsigned char)(moby[0x20] - 4) < 10 && *(int *)(data + 0x108) != -1)
+        D_L06_0014162A = *(short *)(data + 0x108);
+    *(int *)(data + 0x110) = FUN_001fa6d0(*(float *)(data + 0x20) * 16.0f);
+    hit = FUN_L00_0025a420(moby, 0x330000, 0);
+    dmg = 0.0f;
+    kind = FUN_00213928(moby, hit, data + 0x20, 0, &out, &dmg, 0, 4);
+    if (out != 1 && (unsigned char)moby[0x20] != 14 &&
+        (unsigned char)moby[0x20] != 3 && (unsigned char)moby[0x20] != 5) {
+        if (*(char **)(hit + 0x20) != 0) {
+            int oclass = *(short *)(*(char **)(hit + 0x20) + 0xA6);
+            switch (oclass) {
+            case 0xB0: case 0x79: case 0x33B:
+                dmg *= 1.5f;
+                break;
+            case 0x131:
+                dmg *= 0.666f;
+                break;
+            }
+        }
+        hp = *(float *)(data + 0x20) - dmg;
+        *(float *)(data + 0x20) = hp;
+        if (*(int *)(data + 0x170) == 0) {
+            if (scale_game_frames(10) <= *(int *)(data + 0x12C) &&
+                hp <= 20.0f && hp + dmg > 20.0f) {
+                hp = 20.0f;
+                goto start_recovery;
+            }
+            if (scale_game_frames(10) <= *(int *)(data + 0x12C) &&
+                hp <= 10.0f && hp + dmg > 10.0f) {
+                hp = 10.0f;
+start_recovery:
+                *(float *)(data + 0x20) = hp;
+                *(float *)(data + 0x174) = hp;
+                *(int *)(data + 0x170) = 1;
+                *(int *)(data + 0x12C) = scale_game_frames(30);
+            }
+        } else if (hp < *(float *)(data + 0x174)) {
+            *(float *)(data + 0x20) = *(float *)(data + 0x174);
+        }
+        if (*(float *)(data + 0x20) <= 0.0f) kind = 1;
+        else if (kind == 1) kind = 5;
+        switch (kind) {
+        case 1:
+        case 2: {
+            char *base;
+            if (*(int *)(data + 0x10C) != -1) {
+                set_animation_parameter(*(int *)(data + 0x10C), 0);
+                *(int *)(data + 0x10C) = -1;
+            }
+            moby[0x20] = 14;
+            FUN_L00_00257470(moby, 0, -1);
+            base = D_L06_001600EC + (*(int *)(data + 0xF8) << 7);
+            FUN_L00_00284e50(base + 0x30, base + 0x70);
+            *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+            if ((unsigned char)moby[0x53] != 10)
+                FUN_00212f90(moby, 10, 0, scale_game_frames(10));
+            data[0x67] = (char)0xFA;
+            break;
+        }
+        case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+            data[0x67] = (char)200;
+            break;
+        }
+        FUN_L00_0025d458(moby, data + 0x60);
+    }
+    moby[0xA4] = (char)0xFF;
+    FUN_L00_0025d538(moby, data + 0x60);
+    if ((data[0x2E] & 2) && (unsigned char)moby[0x20] != 15) {
+        if (*(int *)(data + 0x10C) != -1) {
+            set_animation_parameter(*(int *)(data + 0x10C), 0);
+            *(int *)(data + 0x10C) = -1;
+        }
+        moby[0x20] = 14;
+        return;
+    }
+    if ((unsigned char)moby[0x20] >= 2 && D_L06_00140408 != 8 && (D_0013CAE0 & 0x20))
+        *(int *)(data + 0x178) = 1;
+    timer = *(int *)(data + 0x12C);
+    if (timer != 0 && *(int *)(data + 0x170) != 0) {
+        *(int *)(data + 0x12C) = --timer;
+        if (timer < scale_game_frames(10))
+            D_L06_0015F3FC = 1.0f - FUN_001fa6c0(timer) / FUN_001f96b0(10.0f);
+        if (timer == 0 && (unsigned char)moby[0x20] != 1) {
+            if (*(float *)(data + 0x20) > 10.0f) {
+                *(float *)(data + 0x20) = 19.9f;
+                moby[0x20] = 3;
+                *(int *)(data + 0x170) = 0;
+                qcopy(moby + 0x10, data + 0xC0);
+                *(float *)(moby + 0x48) = FUN_001f9e90(hero.motion.pos.f[0] - *(float *)(moby + 0x10),
+                                                         hero.motion.pos.f[1] - *(float *)(moby + 0x14));
+                FUN_001fa030(moby + 0xC0, moby + 0x40);
+                if ((unsigned char)moby[0x53] != 6)
+                    FUN_00212f90(moby, 6, 0, scale_game_frames(5));
+                FUN_L06_002fb148(moby);
+            } else {
+                char *base;
+                *(float *)(data + 0x20) = 9.9f;
+                moby[0x20] = 5;
+                *(int *)(data + 0x170) = 0;
+                base = D_L06_001600EC + (*(int *)(data + 0xF8) << 7);
+                FUN_L00_00216f90(base + 0x30, base + 0x70, 0x72, 1);
+                qcopy(moby + 0x10, data + 0xC0);
+                *(float *)(moby + 0x48) = FUN_001f9e90(hero.motion.pos.f[0] - *(float *)(moby + 0x10),
+                                                         hero.motion.pos.f[1] - *(float *)(moby + 0x14));
+                FUN_001fa030(moby + 0xC0, moby + 0x40);
+                if ((unsigned char)moby[0x53] != 6)
+                    FUN_00212f90(moby, 6, 0, scale_game_frames(5));
+                FUN_L06_002fb148(moby);
+            }
+        }
+    } else if (timer != 0 && *(int *)(data + 0x170) == 0) {
+        if (timer < scale_game_frames(10)) {
+            ++timer;
+            *(int *)(data + 0x12C) = timer;
+            D_L06_0015F3FC = 1.0f - FUN_001fa6c0(timer) / 10.0f;
+        }
+    }
+    *(float *)(data + 0x128) = fast_add_rotations(*(float *)(data + 0x128),
+        D_L06_00161F0C * 0.017453292f * frame_time);
+    *(int *)(moby + 0x90) = FUN_001fa6e0(D_L06_00161F10, D_L06_00161F14,
+        (fast_sin(*(float *)(data + 0x128)) + 1.0f) * 0.5f);
+    path = D_L06_001B0C30[*(int *)(data + 0xEC)];
+    FUN_L00_0025ff38(moby, data + 0x70, 0, 0, path + 4, *path, 255.0f);
+    if (*(int *)(data + 0xB0) == 0) *(int *)(data + 0xB0) = D_L06_001413D0;
+}
+#endif
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC578), where it is exact; names translated to the US level program. */
