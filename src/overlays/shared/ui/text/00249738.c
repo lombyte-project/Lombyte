@@ -49,8 +49,8 @@ s32 FUN_L06_00249738(u8 *p) {
             x += 32;
             tile_count--;
         } while (tile_count != 0);
-        color = 0x800000ff;
         x = 0;
+        color = 0x800000ff;
         if (*(s32 *)(p + 0x74) != 0) {
             fill = (f32)*(s32 *)(p + 0x74) /
                    convert_integer_to_float(*(s32 *)(p + 8));
