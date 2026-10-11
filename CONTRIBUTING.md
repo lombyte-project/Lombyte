@@ -87,7 +87,7 @@ next to the C and the surrounding units.
 - Declare variables at the start of blocks and use the project typedefs
   (`u32`, `s32`, `f32`, …) — this is GCC 2.9 era, not modern C.
 - Keep it descriptive C: no inline assembly or copied disassembly in the body.
-- Follow [docs/cleanup.md](docs/cleanup.md) for names, structs, globals and
+- Follow [docs/code-cleanup.md](docs/code-cleanup.md) for names, structs, globals and
   data placement.
 
 ### 5. Check your work
@@ -226,7 +226,7 @@ acceptance discipline and the recovery ladder.
   suite fails if any of it is tracked.
 - Do not edit `tools/`; it is local toolchain setup.
 - Readability work on matching code follows
-  [docs/cleanup.md](docs/cleanup.md) and must stay byte-exact.
+  [docs/code-cleanup.md](docs/code-cleanup.md) and must stay byte-exact.
 - Run `python3 scripts/test_public_tools.py` before changing anything under
   `scripts/`.
 - The tracked [`.pre-commit-config.yaml`](.pre-commit-config.yaml) runs the
