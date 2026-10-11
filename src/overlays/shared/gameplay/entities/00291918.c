@@ -279,7 +279,161 @@ char *FUN_L03_002c45d8(char *owner, float *pos, float *dir, short ang, int arg) 
     }
     return m;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c4718.s", FUN_L03_002c4718);
+#else
+#include "rnc/overlay/collision.h"
+extern int FUN_001f9740(int *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L00_001ff660(void *, void *, void *);
+extern float FUN_001f9b20(void *);
+extern float FUN_001f9e90(float, float);
+extern int FUN_001f0b58(void);
+extern void FUN_001f9a68(void *, void *, float);
+extern float FUN_001f9af0(void *);
+extern int FUN_001efa68(void *, void *, int, void *, int);
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern void FUN_0022da68(int, int, void *);
+extern int FUN_001f9770(void *);
+extern float FUN_L00_0025e310(float);
+extern float FUN_00213508(void *, int, float);
+extern float FUN_002132a8(float, float);
+extern void FUN_L00_00259fe8(void *, float);
+extern void FUN_0020c828(void *);
+extern CollisionHit D_L00_00173E40 __attribute__((section(".data")));
+
+void FUN_L03_002c4718(struct Moby *m)
+{
+    float *d;
+    struct Moby *owner;
+    struct Moby *other;
+    Vec4 old_pos;
+    Vec4 next_pos;
+    Vec4 delta;
+    int old_m98, old_m94, old_owner98, old_owner94;
+    float angle;
+    float distance;
+
+    if (m == NULL) return;
+    d = (float *)m->pvars;
+    if (d == NULL) return;
+    FUN_001f9740(d + 8);
+    old_pos.q = *(u128 *)&m->pos;
+    if (m->state == 0) {
+        m->scale += (m->pclass->scale - m->scale) * (frame_scale * 0.05f);
+        FUN_001f9a10(&m->pos, &m->pos, d);
+        FUN_001f9bf8(&next_pos, d, 0.2f);
+        FUN_001f9a10(&next_pos, &next_pos, &m->pos);
+        owner = *(struct Moby **)(d + 4);
+        old_m98 = m->unk98;
+        old_m94 = m->unk94;
+        old_owner98 = owner->unk98;
+        old_owner94 = owner->unk94;
+        m->unk98 = owner->unk98 = -1;
+        m->unk94 = owner->unk94 = 0;
+        if (FUN_001efa68(&old_pos, &next_pos, 4, m, 0)) {
+            FUN_001f9a28(&next_pos, &D_L00_00173E40.point, &next_pos);
+            FUN_001f9bf8(&next_pos, &next_pos, 0.215f);
+            FUN_001f9a10(&m->pos, &m->pos, &next_pos);
+            if (D_L00_00173E40.moby == 0) {
+                FUN_L00_001ff660(d, d, &D_L00_00173E40.normal_x);
+                angle = FUN_001f9b20(&D_L00_00173E40.normal_x);
+                if (FUN_001f9e90(D_L00_00173E40.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1) {
+                    FUN_001f9a68(d, d, 0.5f);
+                    if (FUN_001f9af0(d) < 0.025f) m->state = 1;
+                }
+            } else if (((struct Moby *)D_L00_00173E40.moby)->oclass == 0x221) {
+                d[2] *= FUN_002132a8(0.9f, 1.1f);
+            } else {
+                FUN_L00_001ff660(d, d, &D_L00_00173E40.normal_x);
+                angle = FUN_001f9b20(&D_L00_00173E40.normal_x);
+                if (FUN_001f9e90(D_L00_00173E40.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1)
+                    FUN_001f9a68(d, d, 1.2f);
+            }
+            if (*(int *)(d + 8) == 0) {
+                FUN_0022da68(0, 0, m);
+                *(int *)(d + 8) = 12;
+            }
+        }
+        if (FUN_L00_001f0d60(0.2f, &m->pos, 4, m)) {
+            FUN_001f9a28(&next_pos, &D_L00_00173E40.point, &D_L00_00173E40.pad30);
+            FUN_001f9bf8(&next_pos, &next_pos, 0.015f);
+            FUN_001f9a10(&m->pos, &D_L00_00173E40.pad30, &next_pos);
+            if (D_L00_00173E40.moby == 0) {
+                FUN_L00_001ff660(d, d, &D_L00_00173E40.normal_x);
+                angle = FUN_001f9b20(&D_L00_00173E40.normal_x);
+                if (FUN_001f9e90(D_L00_00173E40.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1) {
+                    FUN_001f9a68(d, d, 0.5f);
+                    if (FUN_001f9af0(d) < 0.025f) m->state = 1;
+                }
+            } else if (((struct Moby *)D_L00_00173E40.moby)->oclass == 0x221) {
+                d[2] *= FUN_002132a8(0.9f, 1.1f);
+            } else {
+                FUN_L00_001ff660(d, d, &D_L00_00173E40.normal_x);
+                angle = FUN_001f9b20(&D_L00_00173E40.normal_x);
+                if (FUN_001f9e90(D_L00_00173E40.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1)
+                    FUN_001f9a68(d, d, 1.2f);
+            }
+            if (*(int *)(d + 8) == 0) {
+                FUN_0022da68(0, 0, m);
+                *(int *)(d + 8) = 12;
+            }
+        }
+        for (other = D_L03_0015FFE4; other != NULL; other = other->next) {
+            if (other == m || other->state == 0xfe || other->state == 0xfd) continue;
+            FUN_001f9a28(&delta, &m->pos, &other->pos);
+            delta.f[2] = 0.0f;
+            distance = FUN_001f9af0(&delta);
+            if (distance < 1.8f) {
+                FUN_001f9a68(&delta, &delta, (1.8f - distance) * (frame_scale * -0.5f + 1.0f));
+                FUN_001f9a10(&m->pos, &m->pos, &delta);
+            }
+        }
+        if (FUN_001f9770(d + 5)) m->state = 2;
+        m->rot.x = FUN_L00_0025e310(d[0]);
+        m->rot.y = FUN_L00_0025e310(d[1]);
+        m->unk98 = old_m98;
+        owner->unk98 = old_owner98;
+        m->unk94 = old_m94;
+        owner->unk94 = old_owner94;
+        d[2] -= frame_time_sq * 9.8f;
+        m->rot.x += frame_scale * 0.01f;
+        m->rot.y += frame_scale * 0.02f;
+    } else if (m->state == 1) {
+        float height = FUN_00213508(&m->pos, 0, 0.5f);
+        m->pos.w = 0.0f;
+        m->pos.z = height + 0.2f;
+        next_pos.q = *(u128 *)&m->pos;
+        *(struct Moby **)(d + 6) = FUN_L03_002bec60(*(struct Moby **)(d + 4), &next_pos, -1);
+        m->state = 2;
+    } else if (m->state == 2) {
+        float rate = frame_scale * 0.05f;
+        m->scale -= m->scale * rate;
+        other = *(struct Moby **)(d + 6);
+        if (other != NULL && (*(int *)(d + 7) & 4))
+            other->scale += (other->pclass->scale - other->scale) * rate;
+        if (m->scale < m->pclass->scale * frame_scale * 0.05f) {
+            m->scale = 0.0001f;
+            other = *(struct Moby **)(d + 6);
+            if (other == NULL || other->state == 0xfe || other->state == 0xfd ||
+                !(*(int *)(d + 7) & 4) || other->pclass->scale - 0.01f <= other->scale)
+                goto remove_moby;
+        }
+    }
+    FUN_L00_00259fe8(m, m->scale * 0.3f / m->pclass->scale);
+    if (m->pos.z < 5.0f || m->pos.z > 500.0f) goto remove_moby;
+    if (m->pos.x < 5.0f) { m->pos.x = 5.0f; } else if (m->pos.x > 1018.0f) { m->pos.x = 1018.0f; }
+    if (m->pos.y < 5.0f) m->pos.y = 5.0f;
+    if (m->pos.y > 1018.0f) m->pos.y = 1018.0f;
+    if (m->pos.z < 5.0f) m->pos.z = 5.0f;
+    if (m->pos.z > 1018.0f) m->pos.z = 1018.0f;
+    return;
+remove_moby:
+    FUN_0020c828(m);
+}
+#endif
 /* Recognize the active vendor object state. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00310738), where it is exact; names translated to the US level program. */
 
