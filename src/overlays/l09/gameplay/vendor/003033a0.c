@@ -577,7 +577,110 @@ char *FUN_L09_00308220(struct Moby *owner, int cls) {
     }
     return moby;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_003082d8.s", FUN_L09_003082d8);
+#else
+extern u8 D_0014C050[];
+extern f32 D_L09_0015F5D0;
+extern f32 D_L09_0015F5D4;
+extern f32 random_float_between(float, float) __asm__("FUN_002132a8");
+extern f32 FUN_001f9dc8(f32);
+extern f32 FUN_001f9de0(f32);
+extern f32 FUN_001f9af0(void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern int FUN_L00_001fefc8(void *);
+extern struct Moby *FUN_L09_002ef868(struct Moby *, void *, void *, s32, f32);
+extern void mark_moby_for_removal_3082d8(void *) __asm__("FUN_0020c828");
+extern void scale_vector_3082d8(f32, void *, void *) __asm__("FUN_001f9bf8");
+extern void scale_vector_3082d8_b(f32, void *, void *) __asm__("FUN_001f9a68");
+extern void FUN_L00_0025f090(f32, f32, struct Moby *, void *, s32);
+extern void FUN_0022da68(s32, s32, struct Moby *);
+
+void FUN_L09_003082d8(struct Moby *moby) {
+    int *data = (int *)moby->pvars;
+    void *hit;
+    int spawned;
+    int count;
+    int i;
+    float angle;
+    float radius;
+    float distance;
+    float speed;
+    float origin[4];
+    float origin2[4];
+    float pos[4];
+    float vel[4];
+    float rotation[4];
+
+    if (moby->state == 0) {
+        if (*data != -1) D_0013D388[*data + 0x43] = 0;
+        moby->state = 1;
+    }
+    if (moby->unkB0 != 0xFF &&
+        D_0014C050[moby->unkB0 + current_level_index * 16] == 0xFF) {
+        if (*data != -1) D_0013D388[*data + 0x43] = 1;
+        mark_moby_for_removal_3082d8(moby);
+        return;
+    }
+    hit = FUN_L00_0025a420(moby, 0x40000, 0);
+    spawned = 0;
+    if (!FUN_L00_001fefc8((char *)moby + 0xBC) || hit == 0) return;
+    if (moby->oclass < 0x508) {
+        spawned = FUN_L09_00308220(moby, moby->oclass + 1) != 0;
+    }
+    moby->unkBC = FUN_001f96f8(10);
+    qcopy(origin, (char *)moby + 0x10);
+    qcopy(origin2, (char *)moby + 0x10);
+    if (moby->oclass < 0x508) {
+        FUN_0022da68(0, 0, moby);
+    } else {
+        FUN_0022da68(0, 0, moby);
+    }
+    moby->unkA4 = 0xFF;
+    count = 40;
+    if (D_L09_0015F5D0 > 0.85f || D_L09_0015F5D4 > 0.85f) count = 30;
+    angle = -3.1415927f;
+    i = 0;
+    if (count != 0) do {
+        *(OvlQuad *)vel = 0;
+        vel[0] = random_float_between(-0.4f, 0.4f);
+        vel[1] = random_float_between(-0.6f, 0.6f);
+        vel[2] = random_float_between(-0.4f, 0.4f);
+        *(OvlQuad *)pos = *(OvlQuad *)vel;
+        radius = random_float_between(0.3f, 2.6f);
+        pos[0] += radius * FUN_001f9dc8(angle);
+        pos[2] += radius * FUN_001f9de0(angle);
+        FUN_001f9cf8(pos, pos, (char *)moby + 0xC0);
+        add_vector_xyz(pos, pos, origin2);
+        subtract_vector_xyz(vel, pos, origin);
+        distance = FUN_001f9af0(vel);
+        distance = absolute_float(6.0f - distance) / 6.0f;
+        scale_vector_3082d8(distance * distance * 8.0f, rotation, (char *)hit + 0x10);
+        add_vector_xyz(vel, vel, rotation);
+        speed = random_float_between(5.0f, 8.0f);
+        scale_vector_3082d8(distance * (speed * frame_time), vel, vel);
+        if (moby->oclass == 0x508) {
+            FUN_L09_002ef868(moby, pos, vel, i & 1, random_float_between(1.0f, 1.3f));
+        }
+        if (i % 3 == 0) {
+            FUN_L00_0025f090(random_float_between(0.3f, 0.6f), 0.0f, moby, pos, -1);
+        }
+        i++;
+        angle += 6.2831855f / convert_integer_to_float(count);
+    } while (i < count);
+    scale_vector_3082d8_b(0.5f, pos, (char *)hit + 0x10);
+    func_L00_0025F4A8_alt(moby, (char *)hit + 0x10, origin, 0.0f, 0.0f, 10, 3, 16,
+                           3.0f, 2.0f, 1.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+    if (moby->oclass == 0x508) {
+        s16 oclass = moby->oclass;
+        if (*data != -1) D_0013D388[*data + 0x43] = 1;
+        if (moby->oclass == oclass) goto remove;
+    }
+    if (!spawned) return;
+remove:
+    mark_moby_for_removal(moby);
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_003091b0.s", FUN_L09_003091b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00309c08.s", FUN_L09_00309c08);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
