@@ -1106,8 +1106,10 @@ void FUN_L00_00299c48(void) {
     } else if (stage == active) {
         FUN_L00_002a09d8(1);
         if (D_L00_0015F624 < 0x20) {
-            source = (s32 *)(D_L00_0015F62C + D_L00_0015F624 * 4);
-            destination = (s32 *)(D_L00_0015F628 + D_L00_0015F624 * 4);
+            source = (s32 *)D_L00_0015F62C;
+            destination = (s32 *)D_L00_0015F628;
+            source += D_L00_0015F624;
+            destination += D_L00_0015F624;
             for (offset = 0; offset < 0x38000; offset += 0x20) {
                 *destination = *source;
                 source += 0x20;
