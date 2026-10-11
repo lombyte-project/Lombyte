@@ -1592,7 +1592,159 @@ float FUN_L06_002f2148(char *a, char *b, int c) {
     }
     return r;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2250.s", FUN_L06_002f2250);
+#else
+extern float absolute_float_2f2250(float) __asm__("FUN_001f99c0");
+extern float vector_distance_2f2250(void *, void *) __asm__("FUN_001f9b80");
+extern int collision_line_2f2250(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern GbClass *FUN_002141f8_2f2250(GbMoby *) __asm__("FUN_002141f8");
+extern float fast_add_rotations_2f2250(float, float) __asm__("FUN_001fa580");
+extern GbMoby *D_L06_001AC180_2f2250[] __asm__("D_L06_001AC180");
+
+void FUN_L06_002f2250(void) {
+    GbMoby *mobys[52];
+    GbMoby *targets[52];
+    char weights[64];
+    GbMoby *selected[16];
+    GbMoby *moby;
+    GbMoby *target;
+    GbVars *vars;
+    GbMoby *best_moby;
+    float start[4] __attribute__((aligned(16)));
+    float end[4] __attribute__((aligned(16)));
+    float score, best_score, angle, step;
+    int moby_count = 0;
+    int target_count = 0;
+    int i, j, k, n, index, last, count, weight;
+    GbClass *cls;
+
+    for (i = 0; (moby = D_L06_001AC180_2f2250[i]) != 0; i++) {
+        if (moby->cls_id == 0x359 && moby->state == 5 && moby->sub != 2 && moby_count != 50) {
+            vars = moby->vars;
+            target = vars->target;
+            if (target == 0 || target->state == 0xfe || target->state == 0xfd) {
+                mobys[moby_count++] = moby;
+            }
+        }
+    }
+    for (i = 0; i < moby_count; i++) {
+        moby = mobys[i];
+        vars = moby->vars;
+        *(short *)((char *)vars + 0x192) = 0;
+        for (j = 0; (target = D_L06_001AC180_2f2250[j]) != 0; j++) {
+            cls = target->cls;
+            if ((cls != 0 && *(short *)((char *)cls + 0x46) == 5) &&
+                !((vars->f198 ? 5.0f : 12.0f) < vector_distance_2f2250(moby->pos, target->pos)) &&
+                !(1.0f < absolute_float_2f2250(moby->pos[2] - target->pos[2]))) {
+                *(OvlQuad *)start = *(OvlQuad *)moby->pos;
+                *(OvlQuad *)end = *(OvlQuad *)target->pos;
+                start[2] += 0.25f;
+                end[2] += 0.25f;
+                if (collision_line_2f2250(start, end, 2, moby, 0) == 0 || D_L06_001745D8 == target) {
+                    score = FUN_L06_002f2148((char *)moby, (char *)target, 5);
+                    count = *(short *)((char *)vars + 0x192);
+                    for (k = 0; k < count; k++) {
+                        if (score < ((float *)((char *)vars + 0x1c0))[k]) {
+                            last = count - 1;
+                            if (last >= 7) last = 6;
+                            for (; last >= k; last--) {
+                                ((GbMoby **)((char *)vars + 0x1a0))[last + 1] =
+                                    ((GbMoby **)((char *)vars + 0x1a0))[last];
+                                ((float *)((char *)vars + 0x1c0))[last + 1] =
+                                    ((float *)((char *)vars + 0x1c0))[last];
+                            }
+                            break;
+                        }
+                    }
+                    if (k < 8) {
+                        ((GbMoby **)((char *)vars + 0x1a0))[k] = target;
+                        ((float *)((char *)vars + 0x1c0))[k] = score;
+                        count = *(unsigned short *)((char *)vars + 0x192) + 1;
+                        *(short *)((char *)vars + 0x192) = count;
+                        if ((short)count > 8) *(short *)((char *)vars + 0x192) = 8;
+                    }
+                }
+            }
+        }
+    }
+    for (i = 0; i < moby_count; i++) {
+        vars = mobys[i]->vars;
+        for (j = 0; j < *(short *)((char *)vars + 0x192); j++) {
+            if (target_count != 50) {
+                weight = 8 - j;
+                for (k = 0; k < target_count; k++) {
+                    if (targets[k] == ((GbMoby **)((char *)vars + 0x1a0))[j]) {
+                        weights[k] += weight;
+                        break;
+                    }
+                }
+                if (k == target_count) {
+                    targets[target_count] = ((GbMoby **)((char *)vars + 0x1a0))[j];
+                    weights[target_count] = weight;
+                    target_count++;
+                }
+            }
+        }
+    }
+    for (i = 0; i < moby_count; i++) {
+        *(int *)((char *)mobys[i]->vars + 0x178) = 0;
+    }
+    for (i = 0; i < target_count; i++) {
+        index = 0;
+        weight = 0;
+        for (j = 0; j < target_count; j++) {
+            if (weights[j] > weight) {
+                weight = weights[j];
+                index = j;
+            }
+        }
+        weights[index] = -1;
+        target = targets[index];
+        cls = FUN_002141f8_2f2250(target);
+        n = cls != 0 ? *(short *)((char *)cls + 4) : 1;
+        count = 0;
+        for (j = 0; j < n; j++) {
+            best_score = 9999999.0f;
+            best_moby = 0;
+            for (k = 0; k < moby_count; k++) {
+                moby = mobys[k];
+                vars = moby->vars;
+                if (*(int *)((char *)vars + 0x178) == 0) {
+                    last = *(short *)((char *)vars + 0x192);
+                    for (index = 0; index < last; index++) {
+                        if (((GbMoby **)((char *)vars + 0x1a0))[index] == target &&
+                            ((float *)((char *)vars + 0x1c0))[index] < best_score) {
+                            best_score = ((float *)((char *)vars + 0x1c0))[index];
+                            best_moby = moby;
+                        }
+                    }
+                }
+            }
+            if (best_moby == 0) break;
+            *(GbMoby **)((char *)best_moby->vars + 0x178) = target;
+            selected[count++] = best_moby;
+        }
+        if (count != 0) {
+            angle = (float)(count - 1) * 0.5235988f;
+            if (angle > 1.7453293f) angle = 1.7453293f;
+            step = 0.0f;
+            if (count > 1) step = angle / (float)(count - 1);
+            for (j = 0; j < count; j++) {
+                vars = selected[j]->vars;
+                vars->f17C = fast_add_rotations_2f2250(angle * -0.5f, (float)j * step);
+            }
+        }
+    }
+    for (i = 0; i < moby_count; i++) {
+        vars = mobys[i]->vars;
+        vars->f18C = GB_FRAME;
+        vars->target = *(GbMoby **)((char *)vars + 0x178);
+        vars->target_searched = 1;
+        if (*(int *)((char *)vars + 0x178) != 0) vars->f198 = 1;
+    }
+}
+#endif
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
