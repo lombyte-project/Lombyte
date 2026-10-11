@@ -254,7 +254,190 @@ char *FUN_L08_002d22e0(int arg, char *pos, char *vec) {
     }
     return m;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d23f0.s", FUN_L08_002d23f0);
+#else
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern void FUN_L00_001f2868(float, void *, int, void *, void *);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern int FUN_001f9740(int *) __asm__("FUN_001f9740");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void FUN_001f9ad8(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern float vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern void rotate_vector_2d23f0(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern void FUN_L00_00259fe8(float, void *);
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
+extern void FUN_L00_0025d458(void *, void *);
+extern void FUN_L00_0025d538(void *, void *);
+extern void effect_2d23f0(float, float, float, float, float, float, float,
+                          void *, void *, int, int, int, int, int, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void FUN_L00_0025f090(void *, void *, int, float, float);
+extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern void FUN_0022da68(void *, void *);
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float D_L08_00161868[4];
+extern char D_L08_00161868_bytes[] __asm__("D_L08_00161868");
+extern int D_L08_00174658;
+extern int D_L08_00174658_data __asm__("D_L08_00174658") __attribute__((section(".data")));
+extern float D_L08_00174660[4];
+extern float D_L08_00174680_vec[4] __asm__("D_L08_00174680");
+extern char D_L08_0015F580[];
+extern float D_L08_0016144C;
+
+void FUN_L08_002d23f0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *position = moby + 0x10;
+    char *velocity = data + 0x10;
+    float from[4];
+    union {
+        struct {
+            float position[4];
+            float velocity[4];
+            char *owner;
+            int flags;
+            int pad;
+            float scale;
+            int state;
+        } collision;
+        struct {
+            float vector[4];
+            char *owner;
+            int flags;
+            int pad;
+            float scale;
+            int other;
+        } effect;
+    } record;
+    float direction[4];
+    float particle[4];
+    float impulse[4];
+    int state = *(unsigned char *)(moby + 0x20);
+    int time;
+    int index;
+
+    if (state != 0x37 && FUN_L00_001f0d60(0.5f, position, 0x11, moby)) {
+        if (D_L08_00174658_data != 0 &&
+            (D_L08_00174658_data != *(int *)(data + 0x30) || *(int *)(data + 0x24) != 0)) {
+            moby[0x20] = (*(unsigned char *)(moby + 0xbc) & 2) ? 0x63 : 0x62;
+            qcopy(position, D_L08_00174660);
+            rotate_vector_2d23f0(velocity, velocity, D_L08_00174680_vec);
+            scale_vector_xyz(velocity, velocity, D_0015ED6C + D_0015ED6C);
+        }
+        state = *(unsigned char *)(moby + 0x20);
+    }
+
+    switch (state) {
+    case 1: {
+        *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), vector_length_xyz(velocity) * 0.5f);
+        if (*(int *)(data + 0x24) == 0) {
+            __builtin_memcpy(direction, D_L08_00161868_bytes, 16);
+            __builtin_memset(impulse, 0, 16);
+            impulse[0] = random_float_between(-1.0f, 1.0f);
+            impulse[1] = random_float_between(-1.0f, 1.0f);
+            impulse[2] = random_float_between(-1.0f, 1.0f);
+            qcopy(particle, impulse);
+            scale_vector_xyz(particle, particle, D_0015ED6C);
+            index = random_integer_below(4);
+            time = scale_game_frames(0x2d);
+            FUN_L00_00269958(position, particle, ((int *)direction)[index], 0x4fff, time, 0x32, 0x78, 1);
+        }
+        __builtin_memcpy(from, position, 16);
+        from[2] -= 0.16f;
+        add_vector_xyz(position, position, velocity);
+        ((float *)velocity)[2] -= D_0015ED70 * D_0015ED6C;
+        qcopy(record.collision.position, position);
+        record.collision.position[2] -= 0.16f;
+        qcopy(record.collision.velocity, velocity);
+        record.collision.owner = moby;
+        record.collision.flags = 0x810000;
+        record.collision.scale = 1.0f;
+        record.collision.state = state;
+        if (FUN_001efa68(from, &record.collision, 0, moby, 0)) {
+            if (D_L08_00174658_data == 0) {
+                if (*(int *)((char *)&D_L08_00174658 + 4) <= 0) goto finish;
+                if (*(unsigned char *)(moby + 0xbc) & 1) {
+                    allocate_voice_for_target_entry(1, 0, moby);
+                    qcopy(position, D_L08_00174660);
+                    ((float *)position)[2] += 0.16f;
+                    rotate_vector_2d23f0(velocity, velocity, D_L08_00174680_vec);
+                    FUN_001f9ad8(impulse, velocity, D_L08_00174680_vec);
+                    scale_vector_xyz(impulse, impulse, random_float_between(-(D_0015ED6C * 1.5f), D_0015ED6C * 1.5f));
+                    add_vector_xyz(velocity, velocity, impulse);
+                    normalize_vector_xyz(velocity, velocity, 0.4f);
+                    ++*(int *)(data + 0x24);
+                    *(int *)(data + 0x20) = scale_game_frames(0xb4);
+                    if (vector_length_xyz(velocity) < D_0015ED6C) {
+                        moby[0x20] = 2;
+                        time = scale_game_frames(0x78);
+                        *(int *)(data + 0x20) = time;
+                        *(float *)(data + 0x28) = 254.0f / (float)time;
+                        clear_u64_value(velocity);
+                    }
+                    goto finish;
+                }
+                moby[0x20] = 0x62;
+            } else {
+                if (D_L08_00174658_data == *(int *)(data + 0x30) && *(int *)(data + 0x24) == 0) goto finish;
+                moby[0x20] = (*(unsigned char *)(moby + 0xbc) & 2) ? 0x63 : 0x62;
+            }
+            qcopy(position, D_L08_00174660);
+            rotate_vector_2d23f0(velocity, velocity, D_L08_00174680_vec);
+            scale_vector_xyz(velocity, velocity, D_0015ED6C + D_0015ED6C);
+        } else if (FUN_001f9740((int *)(data + 0x20))) {
+            moby[0x20] = (*(unsigned char *)(moby + 0xbc) & 2) ? 0x63 : 0x62;
+        }
+        } break;
+    case 2: {
+        if (FUN_001f9740((int *)(data + 0x20))) {
+            moby[0x20] = 0x63;
+        } else if (*(int *)(data + 0x20) == scale_game_frames(0x3c) ||
+                   *(int *)(data + 0x20) == scale_game_frames(0x28) ||
+                   *(int *)(data + 0x20) == scale_game_frames(0x14)) {
+            data[7] = (char)0xfa;
+            FUN_L00_0025d458(moby, data);
+        }
+        FUN_L00_0025d538(moby, data);
+        } break;
+    case 0x62: {
+        allocate_voice_for_target_entry(0, 0, moby);
+        record.effect.owner = moby;
+        record.effect.flags = 0x810001;
+        record.effect.scale = 1.0f;
+        clear_u64_value(&record.effect.vector);
+        record.effect.other = 0;
+        FUN_L00_001f2868(1.0f, position, 0x10, moby, &record.effect);
+        effect_2d23f0(0.0f, 0.0f, 3.0f, 1.7f, 4.0f, 1.0f, 7.0f,
+                        moby, D_L08_0015F580, 0, 7, 10, 0x14, -1, 0, 7, -1, 0);
+        mark_moby_for_removal(moby);
+        return;
+    }
+    case 0x63: {
+        allocate_voice_for_target_entry(0, 0, moby);
+        record.effect.owner = moby;
+        record.effect.flags = 0x810001;
+        record.effect.scale = 1.0f;
+        clear_u64_value(&record.effect.vector);
+        record.effect.other = 0;
+        FUN_L00_001f2868(1.0f, position, 0x10, moby, &record.effect);
+        FUN_L00_0025f090(moby, position, -1, 0.5f, 13.0f);
+        mark_moby_for_removal(moby);
+        return;
+    }
+    default: break;
+    }
+finish:
+    FUN_L00_00259fe8(0.2f, moby);
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d42d8.s", FUN_L08_002d42d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d4ca0.s", FUN_L08_002d4ca0);
 #ifndef NON_MATCHING
