@@ -147,7 +147,172 @@ void FUN_L08_00307b90(int arg) {
     t = FUN_001f9b20(D_L08_00162360) / FUN_001f9af0(v);
     D_L08_00162374 = (int)(t * (c - d) + d);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00307cf0.s", FUN_L08_00307cf0);
+#else
+extern char D_L08_001675C0[];
+extern char D_L08_00160250[] __attribute__((section(".sdata")));
+extern float D_L08_00162360[2];
+extern float D_L08_00162364;
+extern int D_L08_00162374 __attribute__((sda));
+extern float D_L08_00162340 __attribute__((sda));
+extern float D_L08_00162344 __attribute__((sda));
+extern float D_L08_00162348 __attribute__((sda));
+extern float D_L08_00162354 __attribute__((sda));
+extern int D_L08_00162358 __attribute__((sda));
+extern float D_L08_0016235C __attribute__((sda));
+extern float D_L08_00160260 __attribute__((sda));
+extern int update_float_countdown(float *) __asm__("FUN_L08_00211b08");
+extern void FUN_L00_00262cf0(void *, void *, float, float, float);
+extern float ground_height_at(void *) __asm__("FUN_L00_00263468");
+extern void FUN_L00_002634f8(void *);
+extern void FUN_L08_0027f5f0(void *, int, void *, float);
+extern void FUN_L08_00272cb8(void *, void *, void *, float);
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+
+void FUN_L08_00307cf0(char *moby) {
+    OvlVec4 pos, initial_delta, base, delta, velocity;
+    char *data;
+    int kind = current_level_index == 0xC || current_level_index == 0x200;
+    int extra;
+    int count, i;
+    unsigned char state = moby[0x20];
+    float radius, falloff, speed, minimum;
+    float angle, distance, height, magnitude;
+
+    if (kind == 1) {
+        extra = 0;
+        radius = frame_time;
+        falloff = 0.2f;
+        speed = 5.0f;
+        minimum = 0.5f;
+    } else {
+        extra = 1;
+        radius = frame_time + frame_time;
+        falloff = 0.15f;
+        speed = 18.0f;
+        minimum = D_L08_00162340;
+    }
+    if (D_L08_00162354 >= 0.0f)
+        minimum = D_L08_00162354;
+
+    data = *(char **)(moby + 0x78);
+    if (state == 0) {
+        moby[0x30] = -1;
+        moby[0x20] = 2;
+        FUN_L08_00307b90(kind);
+    } else if (state == 2) {
+        if (update_float_countdown(&D_L08_00162370))
+            FUN_L08_00307b90(kind);
+        subtract_vector_xyz(&initial_delta, D_L08_001675C0, data + 0x30);
+        *(OvlQuad *)D_L08_00160250 = initial_delta.q;
+        base.q = *(OvlQuad *)D_L08_001675C0;
+        FUN_L00_00262cf0(&base, &base, 16.0f,
+                          *(float *)(D_L08_001675C0 + 0x18),
+                          *(float *)(D_L08_001675C0 + 0x14));
+        base.f[2] = *(float *)(D_L08_001675C0 + 8) + D_L08_00162344;
+        count = D_L08_00162374;
+        for (i = count; i > 0; i--) {
+            pos = base;
+            angle = random_float_between_alt(0.0f, 6.2831855f);
+            magnitude = fast_cos(angle);
+            pos.f[0] += magnitude * random_float_between_alt(0.0f, D_L08_00162348);
+            angle = random_float_between_alt(0.0f, 6.2831855f);
+            magnitude = fast_sin(angle);
+            pos.f[1] += magnitude * random_float_between_alt(0.0f, D_L08_00162348);
+            subtract_vector_xyz(&delta, &pos, D_L08_001675C0);
+            distance = vector_length_xy(&delta);
+            if (distance <= 8.0f) {
+                velocity.f[0] = D_L08_00162360[0] + random_float_between_alt(-radius, radius);
+                velocity.f[1] = D_L08_00162364 + random_float_between_alt(-radius, radius);
+                magnitude = speed * frame_time;
+            } else {
+                magnitude = speed - (distance - 8.0f) * falloff;
+                if (magnitude < minimum)
+                    magnitude = minimum;
+                velocity.f[0] = D_L08_00162360[0] + random_float_between_alt(-radius, radius);
+                velocity.f[1] = D_L08_00162364 + random_float_between_alt(-radius, radius);
+                magnitude *= frame_time;
+            }
+            velocity.f[2] = -magnitude;
+            velocity.i[3] = 0;
+            D_L08_00160260 = *(float *)(D_L08_001675C0 + 8) - D_L08_0016235C;
+            height = ground_height_at(&pos);
+            if (height < *(float *)(D_L08_001675C0 + 8) + D_L08_00162344) {
+                if (height < D_L08_00160260)
+                    height = D_L08_00160260;
+                if (kind == 0)
+                    FUN_L08_00272cb8(&pos, distance <= 8.0f ? 0 : (void *)D_L08_00162358, &velocity, height);
+                if (kind == 1)
+                    FUN_L08_0027f5f0(&pos, distance <= 8.0f ? 0 : D_L08_00162358, &velocity, height);
+            }
+        }
+        base.q = *(OvlQuad *)D_L08_001675C0;
+        base.f[2] = *(float *)(D_L08_001675C0 + 8) + D_L08_00162344;
+        count = (int)((float)count * 1.4f);
+        for (i = count; i > 0; i--) {
+            velocity.f[0] = D_L08_00162360[0] + random_float_between_alt(-radius, radius);
+            velocity.f[1] = D_L08_00162364 + random_float_between_alt(-radius, radius);
+            velocity.f[2] = -(speed * frame_time);
+            velocity.i[3] = 0;
+            pos = base;
+            angle = random_float_between_alt(0.0f, 6.2831855f);
+            magnitude = fast_cos(angle);
+            pos.f[0] += magnitude * random_float_between_alt(0.0f, 8.0f);
+            angle = random_float_between_alt(0.0f, 6.2831855f);
+            magnitude = fast_sin(angle);
+            pos.f[1] += magnitude * random_float_between_alt(0.0f, 8.0f);
+            D_L08_00160260 = *(float *)(D_L08_001675C0 + 8) - D_L08_0016235C;
+            height = ground_height_at(&pos);
+            if (height < *(float *)(D_L08_001675C0 + 8) + D_L08_00162344) {
+                if (height < D_L08_00160260)
+                    height = D_L08_00160260;
+                if (kind == 0)
+                    FUN_L08_00272cb8(&pos, 0, &velocity, height);
+                if (kind == 1)
+                    FUN_L08_0027f5f0(&pos, 0, &velocity, height);
+            }
+        }
+        if (extra) {
+            base.q = *(OvlQuad *)D_L08_001675C0;
+            FUN_L00_00262cf0(&base, &base, 30.0f,
+                              *(float *)(D_L08_001675C0 + 0x18),
+                              *(float *)(D_L08_001675C0 + 0x14));
+            base.f[2] = *(float *)(D_L08_001675C0 + 8) + D_L08_00162344;
+            for (i = count; i > 0; i--) {
+                pos = base;
+                angle = random_float_between_alt(0.0f, 6.2831855f);
+            magnitude = fast_cos(angle);
+            pos.f[0] += magnitude * random_float_between_alt(0.0f, 30.0f);
+                angle = random_float_between_alt(0.0f, 6.2831855f);
+            magnitude = fast_sin(angle);
+            pos.f[1] += magnitude * random_float_between_alt(0.0f, 30.0f);
+                FUN_L00_002634f8(&pos);
+            }
+            base.q = *(OvlQuad *)D_L08_001675C0;
+            FUN_L00_00262cf0(&base, &base, 4.0f,
+                              *(float *)(D_L08_001675C0 + 0x18),
+                              *(float *)(D_L08_001675C0 + 0x14));
+            base.f[2] = *(float *)(D_L08_001675C0 + 8) + D_L08_00162344;
+            for (i = count / 2; i > 0; i--) {
+                pos = base;
+                angle = random_float_between_alt(0.0f, 6.2831855f);
+            magnitude = fast_cos(angle);
+            pos.f[0] += magnitude * random_float_between_alt(0.0f, 8.0f);
+                angle = random_float_between_alt(0.0f, 6.2831855f);
+            magnitude = fast_sin(angle);
+            pos.f[1] += magnitude * random_float_between_alt(0.0f, 8.0f);
+                FUN_L00_002634f8(&pos);
+            }
+        }
+    }
+    *(OvlQuad *)(data + 0x30) = *(OvlQuad *)D_L08_001675C0;
+}
+#endif
 /* While the player is within range, scatters spawned particles around the moby on a random disc. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00309AB0), where it is exact; names translated to the US level program. */
 
