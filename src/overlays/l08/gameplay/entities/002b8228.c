@@ -757,7 +757,7 @@ void FUN_L08_002d5950(struct Moby *moby, int joint, int count) {
     if (count <= 0)
         return;
     pos_ptr = pos;
-    do {
+    for (; i < count; i++) {
         angle = random_angle_radians();
         qcopy(pos_ptr, base);
         pos[0] += random_float_between(-0.05f, 0.05f);
@@ -782,15 +782,14 @@ void FUN_L08_002d5950(struct Moby *moby, int joint, int count) {
             spread = D_L08_001618E8 * 0.25f;
         }
         offset[1] += sine * (random_float_between(0.0f, spread) * D_0015ED6C);
-        offset[2] = D_L08_001618E0 * D_0015ED6C;
+        offset[2] = D_0015ED6C * D_L08_001618E0;
         offset[3] = D_L08_001618FC;
         velocity[3] = D_L08_001618F8;
         a = truncate_float_to_s32(frame_scale_inv * random_float_between((float)D_L08_001618EC, (float)D_L08_001618EC * 1.2f));
         b = truncate_float_to_s32(frame_scale_inv * random_float_between((float)D_L08_001618F0, (float)D_L08_001618F0 * 1.2f));
         c = truncate_float_to_s32(frame_scale_inv * random_float_between((float)D_L08_001618F4, (float)D_L08_001618F4 * 1.5f));
         FUN_00218888(pos, velocity, offset, D_L08_001618D4, D_L08_001618D8, a, b, c, -1);
-        i++;
-    } while (i < count);
+    }
 }
 #endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5d08.s", FUN_L08_002d5d08);
