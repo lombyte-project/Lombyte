@@ -216,8 +216,10 @@ void FUN_L01_0030bfa8(char *m) {
     normalize_vector_xyz_bfa8(&local.basis.mat1, &local.basis.mat1, -1.0f);
     cross_vectors_xyz_bfa8(&local.basis.mat2, &local.basis.mat1, &local.basis.mat0);
 
-    local.quad.color[0] = local.quad.color[3] =
-        local.quad.color[2] = local.quad.color[1] = 0x202020FF;
+    local.quad.color[3] = 0x202020FF;
+    local.quad.color[2] = 0x202020FF;
+    local.quad.color[1] = 0x202020FF;
+    local.quad.color[0] = 0x202020FF;
     dst = local.quad.corner;
     do {
         scale_vector_xyz_bfa8(dst, &local.src_corner[3 - i], 0.4f);
