@@ -1271,21 +1271,24 @@ extern void FUN_001f9a28_2b6140(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9bf8_2b6140(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_001ff660_2b6140(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_0022d798_2b6140(int) __asm__("FUN_0022d798");
-extern void FUN_L00_0025e450_2b6140(float, float, float, float, float, float, float, void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void FUN_L00_0025e450_2b6140(float, float, float, float, float, float, float, void *, void *, int, int, int, int, int, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int FUN_L00_001f2868_2b6140(float, void *, int, void *, int) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_0025a9f8_2b6140(float, float, float, void *, void *, void *, int, int, int, int, int) __asm__("FUN_L00_0025a9f8");
 extern void FUN_L00_0025f8e0_2b6140(float, void *) __asm__("FUN_L00_0025f8e0");
 
 void FUN_L00_002b6140(unsigned char *m) {
-    volatile float initial_scale = D_0015ED6C_2b6140 * 8.0f;
     Vars_2b6140 *v = *(Vars_2b6140 **)(m + 0x78);
-    Vec_2b6140 old, offset, axis, normal, hit_vec, hit, saved;
-    unsigned char hit_info[0x40] __attribute__((aligned(16)));
+    Vec_2b6140 old, normal, axis, offset, hit_vec;
+    unsigned char hit_info[0x30] __attribute__((aligned(16)));
+    Vec_2b6140 saved;
     float x, y, z, t, f;
     int owner, i, index;
     int hit_player = 0;
+    struct Hero *g;
 
-    offset.q = 0;
+    axis.q = 0;
+    axis.f[2] = D_0015ED6C_2b6140 * 8.0f;
+    normal.q = axis.q;
     axis.q = 0;
     axis.f[2] = 1.0f;
     D_L00_0015F608_2b6140 = 1;
@@ -1294,17 +1297,19 @@ void FUN_L00_002b6140(unsigned char *m) {
     D_L00_0017E508_2b6140 = 1;
     FUN_002151d8_2b6140(6, 0);
     v->timer--;
-    if (-FUN_001f96f8_2b6140(100) >= v->timer || D_001413D4_2b6140 == 0x16 ||
-        D_001413D4_2b6140 == 0x3d || D_001413D4_2b6140 == 0x72 ||
-        D_001413DC_2b6140 == 2 || D_001413DC_2b6140 == 4 ||
-        D_001413DC_2b6140 == 3 || D_001413DC_2b6140 > 12 ||
-        D_001413DC_2b6140 == 7 || D_001413DC_2b6140 == 10 ||
-        D_001413DC_2b6140 == 16 || D_001413DC_2b6140 == 5 ||
-        D_001413D4_2b6140 == 0x65 || D_0013F650_2b6140 == 0)
+    if (-FUN_001f96f8_2b6140(100) >= v->timer) goto end;
+    g = &hero;
+    if (g->state.current == 0x16 ||
+        g->state.current == 0x3d || g->state.current == 0x72 ||
+        g->state.control_mode == 2 || g->state.control_mode == 4 ||
+        g->state.control_mode == 3 || g->state.control_mode > 12 ||
+        g->state.control_mode == 7 || g->state.control_mode == 10 ||
+        g->state.control_mode == 16 || g->state.control_mode == 5 ||
+        g->state.current == 0x65 || g->unk300 == 0)
         goto end;
-    if (D_0013F64C_2b6140 &&
-        (*(short *)(D_0013F64C_2b6140 + 0xa6) == 0x13e ||
-         *(short *)(D_0013F64C_2b6140 + 0xa6) == 0x46f))
+    if (((unsigned char *)g->ground_moby) &&
+        (*(short *)(((unsigned char *)g->ground_moby) + 0xa6) == 0x13e ||
+         *(short *)(((unsigned char *)g->ground_moby) + 0xa6) == 0x46f))
         goto end;
     if (v->timer < 0) {
         if (v->handle) FUN_L00_002eb648_2b6140(v->handle, m);
@@ -1324,14 +1329,14 @@ void FUN_L00_002b6140(unsigned char *m) {
     FUN_L00_0028df38_2b6140(v->pad2c, i);
     if (v->timer > 0 && v->timer < FUN_001f96f8_2b6140(3000) - FUN_001f96f8_2b6140(5)) {
         f = D_0015ED60_2b6140 * 0.1f;
-        v->turn += (D_00141074_2b6140 - v->turn) * f;
-        v->aim += (D_00141070_2b6140 - v->aim) * f;
+        v->turn += (g->unk1D24 - v->turn) * f;
+        v->aim += (g->unk1D20 - v->aim) * f;
         *(float *)(m + 0x40) += (v->aim - *(float *)(m + 0x40)) * (D_0015ED60_2b6140 * 0.06f);
         x = FUN_001fa5c8_2b6140(*(float *)(m + 0x44), v->turn * (D_0015ED60_2b6140 * 0.012271847f));
         *(float *)(m + 0x44) = x;
         if (1.5707964f <= x) goto upper_angle;
         if (!(x <= -1.5707964f)) {
-            f = D_0015ED6C_2b6140;
+            f = D_0015ED60_2b6140;
             goto angle_done;
         }
         *(float *)(m + 0x44) = -1.5697963f;
@@ -1350,8 +1355,8 @@ angle_done:
     if (FUN_001f96f8_2b6140(3000) - FUN_001f96f8_2b6140(60) < v->timer) {
         f = FUN_00213508_2b6140(0.5f, m + 0x10, 0) + v->lift;
         if (f > *(float *)(m + 0x18) &&
-            (D_L00_00173E58_2b6140 == 0 || *(int *)(D_L00_00173E58_2b6140 + 0x24) == 0 ||
-             *(short *)(*(int *)(D_L00_00173E58_2b6140 + 0x24) + 0x46) == 5)) {
+            (D_L00_00173E58_2b6140 == 0 || (*(int *)(D_L00_00173E58_2b6140 + 0x24) != 0 &&
+             *(short *)(*(int *)(D_L00_00173E58_2b6140 + 0x24) + 0x46) == 5))) {
             f = FUN_00213ed8_2b6140(f, D_0015ED6C_2b6140 * 6.0f, (float *)(m + 0x18));
             f = FUN_001f9e90_2b6140(v->speed, f);
             if (D_0015ED6C_2b6140 * 1.5707964f < f) f = D_0015ED6C_2b6140 * 1.5707964f;
@@ -1361,35 +1366,35 @@ angle_done:
     x = *(float *)(m + 0x10);
     y = *(float *)(m + 0x14);
     z = *(float *)(m + 0x18);
-    if (!(4.5f <= x && x <= 1018.5f && 4.5f <= y && y <= 1018.5f &&
-          4.5f <= z && z <= 1018.5f))
+    if (x < 4.5f || 1018.5f < x || y < 4.5f || 1018.5f < y ||
+        z < 4.5f || 1018.5f < z)
         goto end;
     FUN_L00_002b5ba0(m, (unsigned char *)v);
     f = FUN_001f99c0_2b6140(v->aim / 3.0f);
-    FUN_L00_001fff28_2b6140(-((v->turn * 0.5f + f + (v->aim - *(float *)(m + 0x40)) * 1.1f) * 0.7f), (unsigned char *)v->left + 0x10, 1);
+    FUN_L00_001fff28_2b6140(-(v->turn * 0.5f + f + (v->aim - *(float *)(m + 0x40)) * 1.1f) * 0.7f, (unsigned char *)v->left + 0x10, 1);
     f = FUN_001f99c0_2b6140(v->aim / 3.0f);
-    FUN_L00_001fff28_2b6140(-((v->turn * 0.5f + f - (v->aim - *(float *)(m + 0x40)) * 1.1f) * 0.7f), (unsigned char *)v->right + 0x10, 1);
+    FUN_L00_001fff28_2b6140(-(v->turn * 0.5f + f - (v->aim - *(float *)(m + 0x40)) * 1.1f) * 0.7f, (unsigned char *)v->right + 0x10, 1);
     *(int *)(hit_info + 0x14) = 0x830000;
     *(float *)(hit_info + 0x1c) = 6.0f;
     *(int *)(hit_info + 0x10) = (int)m;
     *(int *)(hit_info + 0x20) = 1;
-    qcopy(hit_info, &axis);
+    *(Vec_2b6140 *)hit_info = offset;
     FUN_001f9c48_2b6140(hit_info, hit_info, 1.0f);
     *(short *)(hit_info + 0x1a) = *(short *)(m + 0xa6);
     hit_info[0x18] = 3;
     hit_info[0x19] = 2;
     *(float *)(hit_info + 0xc) = 5627.925f;
     *(float *)(hit_info + 8) = 1.0f;
-    owner = FUN_001f96f8_2b6140(3000) - 40 < v->timer ? D_001413D0_2b6140 : (int)m;
+    owner = FUN_001f96f8_2b6140(3000) - 40 < v->timer ? (int)g->moby : (int)m;
     if (FUN_001efa68_2b6140(&old, m + 0x10, 0, owner, hit_info)) {
         if (D_L00_00173E58_2b6140 == 0) {
             if (*((int *)&D_L00_00173E60_2b6140 - 1) < 1) goto collision_done;
             m[0xbc] = 1;
         } else {
             m[0xbc] = 2;
-            hit_player = D_L00_00173E58_2b6140 == D_001413D0_2b6140;
+            hit_player = D_L00_00173E58_2b6140 == (int)g->moby;
         }
-        qcopy(m + 0x10, &D_L00_00173E60_2b6140);
+        ((Vec_2b6140 *)(m + 0x10))->q = D_L00_00173E60_2b6140.q;
         FUN_001f9a28_2b6140(&hit_vec, (unsigned char *)&D_L00_00173E60_2b6140 + 0x30, (unsigned char *)&D_L00_00173E60_2b6140 + 0x40);
         FUN_001f9bf8_2b6140(&hit_vec, &hit_vec, 1.0f);
         FUN_L00_001ff660_2b6140(&normal, &offset, &D_L00_00173E80_2b6140);
@@ -1401,6 +1406,10 @@ angle_done:
             FUN_0022d798_2b6140(index);
         v->pad2c = -1;
     } else if (v->timer == 0) goto end;
+    goto collision_done;
+end:
+    FUN_L00_002b5b20(m, (char **)v);
+    return;
 collision_done:
     if (v->timer < FUN_001f96f8_2b6140(3000) - FUN_001f96f8_2b6140(60) &&
         (D_0013CAE4_2b6140 & 0x20)) {
@@ -1413,9 +1422,9 @@ collision_done:
     }
     if (m[0xbc]) {
         if (!hit_player) {
-            FUN_L00_0025e450_2b6140(0, 0, 4.0f, 2.0f, 0, 1.0f, 20.0f, m, &normal, 0, 10, 3, 16, 1, 1);
+            FUN_L00_0025e450_2b6140(0, 0, 4.0f, 2.0f, 0, 1.0f, 20.0f, m, &normal, 0, 10, 3, 16, 1, 1, 1, -1, 0);
             i = FUN_L00_001f2868_2b6140(4.0f, m + 0x10, 16, m, 0);
-            qcopy(&saved, m + 0x10);
+            saved.q = ((Vec_2b6140 *)(m + 0x10))->q;
             FUN_L00_0025a9f8_2b6140(6.0f, 1.0f, 1.0f, m, &saved, (void *)0x177f00, i, 0, 0x830000, 3, 2);
         }
         *(unsigned short *)(m + 0x34) |= 1;
@@ -1424,7 +1433,7 @@ collision_done:
         if (FUN_001f96f8_2b6140(3000) - FUN_001f96f8_2b6140(30) < v->timer)
             v->timer = -FUN_001f96f8_2b6140(100);
         else v->timer = -1;
-        qcopy(&saved, m + 0x10);
+        saved.q = ((Vec_2b6140 *)(m + 0x10))->q;
         i = 4;
         do {
             qcopy(m + 0x10, &saved);
@@ -1437,8 +1446,6 @@ collision_done:
     }
     if (v->handle) FUN_L00_002eb648_2b6140(v->handle, m);
     return;
-end:
-    FUN_L00_002b5b20(m, (char **)v);
 }
 #endif
 #ifndef NON_MATCHING
