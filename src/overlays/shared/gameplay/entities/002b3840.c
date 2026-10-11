@@ -559,7 +559,7 @@ void FUN_L05_0030c220(struct Moby *m) {
         do {
             qcopy(a.vertex[j], D_L05_001D67D0[j]);
             qcopy(b.vertex[j], D_L05_001D6810[j]);
-            phase = ((float)i + (float)(j & 1)) * 0.1f;
+            { float parity = (float)(j & 1); phase = (pass + parity) * 0.1f; }
             sign = j < 2 ? 1.0f : -1.0f;
             color = fast_tween_color(D_L05_00161D04, D_L05_00161D08, phase);
             a.color[j] = b.color[j] = color;
