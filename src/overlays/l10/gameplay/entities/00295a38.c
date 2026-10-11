@@ -500,16 +500,14 @@ void FUN_L10_002c9c70(struct Moby *moby) {
     int differences = 0;
     int i;
     int *slot = (int *)(d + 0x18);
-    unsigned char group;
     unsigned char state;
 
     if (*(int *)(d + 0x10) != -1) {
         target = &D_L10_0015FFD8[*(int *)(d + 0x10)];
     }
-    group = moby->unkB0;
     state = moby->state;
-    if ((group == 0xff ||
-         D_0014C050_2c9c70[(D_0015ED84_2c9c70 << 4) + group] != 0xff) &&
+    if ((moby->unkB0 == 0xff ||
+         D_0014C050_2c9c70[(D_0015ED84_2c9c70 << 4) + moby->unkB0] != 0xff) &&
         state != 0) {
         i = 4;
         do {
@@ -521,8 +519,9 @@ void FUN_L10_002c9c70(struct Moby *moby) {
                     unsigned short id = other->save_id;
                     if ((((*(int *)(D_0014C190_2c9c70 + (((short)id >> 5) * 4) +
                               (D_0015ED84_2c9c70 << 8)) >> (id & 31)) ^ 1) & 1) != 0) {
-                        if (*(signed char *)((char *)slot + 6) == -1) differences++;
-                        else if (other->state != *(signed char *)((char *)slot + 6)) differences++;
+                        if (*(signed char *)((char *)slot + 6) == -1 ||
+                            other->state != *(signed char *)((char *)slot + 6))
+                            differences++;
                     }
                 }
             }
@@ -549,37 +548,34 @@ void FUN_L10_002c9c70(struct Moby *moby) {
                 }
                 if ((*(int *)(d + 8) & 0x50) != 0) *position_destination = *position_source;
             }
-            {
-                OvlQuad *rotation_source;
-                OvlQuad *rotation_destination;
-                if ((*(int *)(d + 8) & 0x20) != 0) {
-                    rotation_source = (OvlQuad *)&target->rot;
-                    rotation_destination = (OvlQuad *)&moby->rot;
-                } else if ((*(int *)(d + 8) & 0x80) != 0) {
-                    rotation_source = (OvlQuad *)&moby->rot;
-                    rotation_destination = (OvlQuad *)&target->rot;
-                } else {
-                    rotation_source = 0;
-                    rotation_destination = 0;
-                }
-                if (rotation_source != 0) *rotation_destination = *rotation_source;
+            if ((*(int *)(d + 8) & 0x20) != 0) {
+                *(OvlQuad *)&moby->rot = *(OvlQuad *)&target->rot;
+            } else if ((*(int *)(d + 8) & 0x80) != 0) {
+                *(OvlQuad *)&target->rot = *(OvlQuad *)&moby->rot;
+            } else {
+                stub_printf((char *)0x001dcda0);
             }
         }
-        for (i = 0; i < 5; i++) {
-            int index = *(int *)(d + 0x18 + i * 8);
+        {
+        int *entry = (int *)(d + 0x18);
+        for (i = 0; i < 5; i++, entry += 2) {
+            int index = *entry;
             if (index == -1) {
                 stub_printf((char *)0x001dce00, ((char *)moby - (char *)D_L10_0015FFD8) >> 8, i);
             } else {
                 short oclass = D_L10_0015FFD8[index].oclass;
-                *(short *)(d + 0x1c + i * 8) = oclass;
+                *(short *)(entry + 1) = oclass;
                 stub_printf((char *)0x001dcdd0, ((char *)moby - (char *)D_L10_0015FFD8) >> 8,
                             i, index, oclass);
             }
         }
+        }
         {
-            float duration = *(float *)d;
-            if (duration < *(float *)(d + 4)) duration = *(float *)(d + 4);
-            moby->scale = duration * moby->pclass->scale;
+            if (*(float *)d < *(float *)(d + 4)) {
+                moby->scale = *(float *)(d + 4) * moby->pclass->scale;
+            } else {
+                moby->scale = *(float *)d * moby->pclass->scale;
+            }
         }
         moby->state = 1;
         break;
