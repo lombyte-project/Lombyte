@@ -955,28 +955,7 @@ play_sound:
         allocate_voice_for_target_entry(sound, 0, moby);
 }
 #endif /* NON_MATCHING */
-/* A looping waypoint path: count points, 16 bytes apart. */
-typedef struct {
-    s32 count;
-    u8 pad4[0xC];
-    Vec4 points[1];
-} SwarmPath;
-
-/* Position on a path: the current point, the step direction and the path. */
-typedef struct {
-    s32 point;
-    s8 direction;
-    u8 pad5[0xB];
-    SwarmPath *path;
-    s32 path_id; /* index into D_L08_001B0CB0 */
-    u8 pad18[0x18];
-} SwarmPathFollower;
-
-/* pvars of the target: the projectiles fired at it. */
-typedef struct {
-    u8 pad0[0x60];
-    struct Moby *shots[8];
-} SwarmTargetVars;
+#include "rnc/overlay/swarm_path.h"
 
 /* Gun turret on a gunship: cruises one path firing at its target, or circles a second path firing at random. */
 typedef struct {
@@ -1503,8 +1482,6 @@ void FUN_L08_002e2df0(struct Moby *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e3870.s", FUN_L08_002e3870);
 
-
-
 #include "qcopy.h"
 
 /* aims a turret: builds its barrel frame from the base rotation, yaw and pitch, writes the barrel rotation
@@ -1756,13 +1733,6 @@ void FUN_L08_002e88d8(char *m) {
     if (r >= 0) func_0022ED80_2E9CB0(r, 0, (int)m);
 }
 /* Flying gunship: cruises one path and fires at its target, or circles a second path and fires at random. */
-/* Child moby slot, as FUN_L08_002e8788 fills them. */
-typedef struct {
-    struct Moby *moby;
-    struct Moby *parent;
-    s32 joint;
-    s32 parent_joint;
-} SwarmPart;
 
 typedef struct {
     SwarmPathFollower follow[2]; /* 0x00: [0] cruising (state 1), [1] circling (state 2) */

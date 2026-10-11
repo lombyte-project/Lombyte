@@ -9,31 +9,7 @@
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
 
-
-/* A looping waypoint path: count points, 16 bytes apart. */
-typedef struct {
-    s32 count;
-    u8 pad4[0xC];
-    Vec4 points[1];
-} SwarmPath;
-
-/* Position on a path: the current point, the step direction and the path. */
-typedef struct {
-    s32 point;
-    s8 direction;
-    u8 pad5[0xB];
-    SwarmPath *path;
-    s32 path_id; /* index into D_L08_001B0CB0 */
-    u8 pad18[0x18];
-} SwarmPathFollower;
-
-/* Child moby slot, as FUN_L08_002e9558 fills them. */
-typedef struct {
-    struct Moby *moby;
-    struct Moby *parent;
-    s32 joint;
-    s32 parent_joint;
-} SwarmPart;
+#include "rnc/overlay/swarm_path.h"
 
 typedef struct {
     SwarmPathFollower follow[2]; /* 0x00: [0] cruising (state 1), [1] circling (state 2) */
@@ -45,12 +21,6 @@ typedef struct {
     s16 pad17C;
     s16 sound;                   /* 0x17E */
 } SwarmVars;
-
-/* pvars of the target: the projectiles fired at it. */
-typedef struct {
-    u8 pad0[0x60];
-    struct Moby *shots[8];
-} SwarmTargetVars;
 
 extern s32 D_L08_00161D40 __attribute__((sda));
 extern f32 D_L08_00161D34 __attribute__((sda));
