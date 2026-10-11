@@ -314,8 +314,8 @@ void FUN_L00_00269c70(char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269d20.s", FUN_L00_00269d20);
 #else
 extern int particle_collision_269d20(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern void particle_step_269d20(float, void *, void *, int) __asm__("FUN_L00_0025c2b0");
-extern void particle_matrix_269d20(float, void *, int) __asm__("FUN_001f9bf8");
+extern void particle_step_269d20(float, void *, void *, void *) __asm__("FUN_L00_0025c2b0");
+extern void particle_matrix_269d20(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void particle_transform_269d20(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float particle_color_float_269d20(int) __asm__("FUN_001fa6c0");
 extern int particle_color_int_269d20(float) __asm__("FUN_001fa6d0");
@@ -325,118 +325,123 @@ extern void particle_scale_269d20(float, void *, void *) __asm__("FUN_001f9c90")
 extern int particle_expired_269d20(void *) __asm__("FUN_001f9770");
 extern float D_0015ED60_269d20 __asm__("D_0015ED60");
 
+extern f32 D_L00_00173E80_26ff10[] __asm__("D_L00_00173E80");
+
 void FUN_L00_00269d20(unsigned char *m) {
-    unsigned char *e = *(unsigned char **)(m + 0x2c);
+    unsigned char *p = m + 0x20;
+    unsigned char *e = *(unsigned char **)(p + 0xc);
     float next[4] __attribute__((aligned(16)));
     float matrix[4] __attribute__((aligned(16)));
+    float velocity[4] __attribute__((aligned(16)));
+    float collision[4] __attribute__((aligned(16)));
     float rotation[16] __attribute__((aligned(16)));
     float red, green, blue, limit;
     int color;
-    next[0] = *(float *)(m + 0x10) + *(float *)(m + 0x20);
-    next[1] = *(float *)(m + 0x14) + *(float *)(m + 0x24);
-    next[2] = *(float *)(m + 0x18) + *(float *)(m + 0x28);
+    next[0] = *(float *)(m + 0x10) + *(float *)(p + 0x0);
+    next[1] = *(float *)(m + 0x14) + *(float *)(p + 0x4);
+    next[2] = *(float *)(m + 0x18) + *(float *)(p + 0x8);
     if ((*(unsigned int *)(e + 0x70) & 1) &&
         particle_collision_269d20(m + 0x10, next, 4, m, 0)) {
-        next[0] = *(float *)(m + 0x20);
-        next[1] = *(float *)(m + 0x24);
-        next[2] = *(float *)(m + 0x28);
-        particle_step_269d20(*(float *)(e + 0x3c), matrix, next, 0x173e80);
-        *(float *)(m + 0x20) = matrix[0];
-        *(float *)(m + 0x24) = matrix[1];
-        *(float *)(m + 0x28) = matrix[2];
-        particle_matrix_269d20(0.055f, rotation, 0x173e80);
-        particle_transform_269d20(m + 0x10, (void *)0x173e60, rotation);
+        velocity[0] = *(float *)(p + 0x0);
+        velocity[1] = *(float *)(p + 0x4);
+        velocity[2] = *(float *)(p + 0x8);
+        particle_step_269d20(*(float *)(e + 0x3c), matrix, velocity, D_L00_00173E80_26ff10);
+        *(float *)(p + 0x0) = matrix[0];
+        *(float *)(p + 0x4) = matrix[1];
+        *(float *)(p + 0x8) = matrix[2];
+        particle_matrix_269d20(0.055f, collision, D_L00_00173E80_26ff10);
+        particle_transform_269d20(m + 0x10, D_L00_00173E80_26ff10 - 8, collision);
     } else {
-        qcopy(m + 0x10, next);
+        *(u128 *)(m + 0x10) = *(u128 *)next;
     }
     if (*(unsigned int *)(e + 0x70) & 2) {
-        red = particle_color_float_269d20((m[4] << 8) | m[0x38]) / 65535.0f;
-        green = (float)particle_color_int_269d20((int)((*(unsigned int *)(m + 4) & 0xff00) | m[0x39])) / 65535.0f;
-        blue = (float)particle_color_int_269d20((int)(((*(unsigned int *)(m + 4) >> 8) & 0xff00) | m[0x3a])) / 65535.0f;
-        if (m[0x3b] & 0x10) red -= *(float *)(e + 0x4c) * D_0015ED60_269d20;
+        red = particle_color_float_269d20((m[4] << 8) | p[0x18]) / 65535.0f;
+        green = (float)particle_color_int_269d20((int)((*(unsigned int *)(m + 4) & 0xff00) | p[0x19])) / 65535.0f;
+        blue = (float)particle_color_int_269d20((int)(((*(unsigned int *)(m + 4) >> 8) & 0xff00) | p[0x1a])) / 65535.0f;
+        if (p[0x1b] & 0x10) red -= *(float *)(e + 0x4c) * D_0015ED60_269d20;
         else red += *(float *)(e + 0x4c) * D_0015ED60_269d20;
-        if (m[0x3b] & 0x20) green -= *(float *)(e + 0x50) * D_0015ED60_269d20;
+        if (p[0x1b] & 0x20) green -= *(float *)(e + 0x50) * D_0015ED60_269d20;
         else green += *(float *)(e + 0x50) * D_0015ED60_269d20;
-        if (m[0x3b] & 0x40) blue -= *(float *)(e + 0x54) * frame_time;
-        else blue += *(float *)(e + 0x54) * frame_time;
+        if (p[0x1b] & 0x40) blue -= *(float *)(e + 0x54) * frame_scale;
+        else blue += *(float *)(e + 0x54) * frame_scale;
         limit = *(float *)(e + 0x64);
         if (limit < red) {
             red = limit;
-            if (*(unsigned int *)(e + 0x70) & 0x100) m[0x3b] ^= 0x10;
+            if (*(unsigned int *)(e + 0x70) & 0x100) p[0x1b] ^= 0x10;
         }
         limit = *(float *)(e + 0x58);
         if (red < limit) {
             red = limit;
-            if (*(unsigned int *)(e + 0x70) & 0x10) m[0x3b] ^= 0x10;
+            if (*(unsigned int *)(e + 0x70) & 0x10) p[0x1b] ^= 0x10;
         }
         limit = *(float *)(e + 0x68);
         if (limit < green) {
             green = limit;
-            if (*(unsigned int *)(e + 0x70) & 0x200) m[0x3b] ^= 0x20;
+            if (*(unsigned int *)(e + 0x70) & 0x200) p[0x1b] ^= 0x20;
         }
         limit = *(float *)(e + 0x5c);
         if (green < limit) {
             green = limit;
-            if (*(unsigned int *)(e + 0x70) & 0x20) m[0x3b] ^= 0x20;
+            if (*(unsigned int *)(e + 0x70) & 0x20) p[0x1b] ^= 0x20;
         }
         limit = *(float *)(e + 0x6c);
         if (limit < blue) {
             blue = limit;
-            if (*(unsigned int *)(e + 0x70) & 0x400) m[0x3b] ^= 0x40;
+            if (*(unsigned int *)(e + 0x70) & 0x400) p[0x1b] ^= 0x40;
         }
         limit = *(float *)(e + 0x60);
         if (blue < limit) {
             blue = limit;
-            if (*(unsigned int *)(e + 0x70) & 0x40) m[0x3b] ^= 0x40;
+            if (*(unsigned int *)(e + 0x70) & 0x40) p[0x1b] ^= 0x40;
         }
-        m[0x38] = particle_color_int_269d20(red * 65535.0f);
-        m[0x39] = particle_color_int_269d20(green * 65535.0f);
-        m[0x3a] = particle_color_int_269d20(blue * 65535.0f);
+        p[0x18] = particle_color_int_269d20(red * 65535.0f);
+        p[0x19] = particle_color_int_269d20(green * 65535.0f);
+        p[0x1a] = particle_color_int_269d20(blue * 65535.0f);
         color = (particle_color_int_269d20(red * 255.0f) & 0xff) |
                 ((particle_color_int_269d20(green * 255.0f) & 0xff) << 8) |
                 ((particle_color_int_269d20(blue * 255.0f) & 0xff) << 16) |
-                (particle_color_int_269d20(*(float *)(m + 0x30) * 255.0f) << 24);
+                (particle_color_int_269d20(*(float *)(p + 0x10) * 255.0f) << 24);
         *(int *)(m + 4) = color;
     } else if (*(unsigned int *)(e + 0x70) & 4) {
-        color = particle_color_int_269d20(*(float *)(m + 0x30) * 255.0f);
+        color = particle_color_int_269d20(*(float *)(p + 0x10) * 255.0f);
         *(unsigned int *)(m + 4) = (*(unsigned int *)(m + 4) & 0xffffff) | (color << 24);
     }
     if (*(unsigned int *)(e + 0x70) & 4) {
-        if (m[0x3b] & 0x80)
-            *(float *)(m + 0x30) -= *(float *)(e + 0x38) * frame_time;
+        if (p[0x1b] & 0x80)
+            *(float *)(p + 0x10) -= *(float *)(e + 0x38) * frame_scale;
         else
-            *(float *)(m + 0x30) += *(float *)(e + 0x38) * frame_time;
-        if (*(float *)(e + 0x48) < *(float *)(m + 0x30)) {
-            *(float *)(m + 0x30) = *(float *)(e + 0x48);
-            if (*(unsigned int *)(e + 0x70) & 0x800) m[0x3b] ^= 0x80;
+            *(float *)(p + 0x10) += *(float *)(e + 0x38) * frame_scale;
+        if (*(float *)(p + 0x10) > *(float *)(e + 0x48)) {
+            *(float *)(p + 0x10) = *(float *)(e + 0x48);
+            if (*(unsigned int *)(e + 0x70) & 0x800) p[0x1b] ^= 0x80;
         }
-        if (*(float *)(m + 0x30) < *(float *)(e + 0x44)) {
-            *(float *)(m + 0x30) = *(float *)(e + 0x44);
-            if (*(unsigned int *)(e + 0x70) & 0x80) m[0x3b] ^= 0x80;
+        if (*(float *)(p + 0x10) < *(float *)(e + 0x44)) {
+            *(float *)(p + 0x10) = *(float *)(e + 0x44);
+            if (*(unsigned int *)(e + 0x70) & 0x80) p[0x1b] ^= 0x80;
         }
     }
-    m[8] = particle_color_int_269d20(*(float *)(m + 0x34) * 255.0f);
+    m[8] = particle_color_int_269d20(*(float *)(p + 0x14) * 255.0f);
     if (*(unsigned int *)(e + 0x70) & 8) {
-        next[0] = *(float *)(m + 0x20);
-        next[1] = *(float *)(m + 0x24);
-        next[2] = *(float *)(m + 0x28);
+        next[0] = *(float *)(p + 0x0);
+        next[1] = *(float *)(p + 0x4);
+        next[2] = *(float *)(p + 0x8);
         if (*(unsigned int *)(e + 0x70) & 0x8000) {
             particle_make_matrix_269d20(rotation, *(void **)(e + 0x7c) + 0x40);
             particle_combine_matrix_269d20(matrix, e, rotation);
         } else {
-            qcopy(matrix, e);
+            *(u128 *)matrix = *(u128 *)e;
         }
         particle_transform_269d20(next, next, matrix);
         particle_scale_269d20(*(float *)(e + 0x40), next, next);
-        *(float *)(m + 0x20) = next[0];
-        *(float *)(m + 0x24) = next[1];
-        *(float *)(m + 0x28) = next[2];
+        *(float *)(p + 0x0) = next[0];
+        *(float *)(p + 0x4) = next[1];
+        *(float *)(p + 0x8) = next[2];
     }
     *(float *)(m + 0xc) += *(float *)(e + 0x30) * D_0015ED60_269d20;
     if (*(float *)(m + 0xc) < *(float *)(e + 0x74)) *(float *)(m + 0xc) = *(float *)(e + 0x74);
-    if (*(float *)(e + 0x78) < *(float *)(m + 0xc)) *(float *)(m + 0xc) = *(float *)(e + 0x78);
-    *(float *)(m + 0x34) += *(float *)(e + 0x34) * D_0015ED60_269d20;
-    if (*(float *)(m + 0x30) <= 0.0f || particle_expired_269d20(m + 0xa) ||
+    if (*(float *)(m + 0xc) > *(float *)(e + 0x78)) *(float *)(m + 0xc) = *(float *)(e + 0x78);
+    *(float *)(p + 0x14) += *(float *)(e + 0x34) * D_0015ED60_269d20;
+    if (*(float *)(p + 0x10) <= 0.0f || particle_expired_269d20(m + 0xa) ||
         *(float *)(m + 0x10) < *(float *)(e + 0x10) ||
         *(float *)(m + 0x14) < *(float *)(e + 0x14) ||
         *(float *)(m + 0x18) < *(float *)(e + 0x18) ||
