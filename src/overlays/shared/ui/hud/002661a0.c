@@ -32,7 +32,10 @@ void FUN_L05_002661e8(char *moby) {
         *(int *)(moby + 0x6C) = -6;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00266320.s", FUN_L05_00266320);
+#else
+#endif
 extern int D_0013E500[];
 extern int D_0015ED80;
 extern u8 D_0013D388[];
@@ -58,6 +61,76 @@ extern char *FUN_001fdd10(int);
 extern int FUN_00116248(char *, const char *, ...);
 extern int FUN_001f6250(char *, int);
 extern void FUN_L00_001fb470(int x, int y, u64 color, char *text, int len);
+#ifdef NON_MATCHING
+extern int D_0015ED84;
+extern char D_L05_0015F860[];
+extern char D_L05_0015F9E0[];
+extern char D_L05_0015F9E8[];
+extern char D_L05_0015F9F0[];
+extern char D_L05_0015F9F8[];
+extern char D_L05_0015FA00[];
+extern char D_L05_0015FA08[];
+extern int FUN_001ff960(int, int);
+extern void FUN_001ffc30(int, int, int, int, int, int);
+
+int FUN_L05_00266320(HudElem *e) {
+    char buf[64];
+    char small_buf[16];
+    int x, y, x2, y2, count;
+
+    if (e->unk6C <= 0) {
+        return 0;
+    }
+    x = -(D_0015ED80 ? D_L05_0015FA18 + 10 : D_L05_0015FA18 + 18) + D_0013E500[1];
+    y = -(D_0015ED80 ? D_L05_0015FA34 + 10 : D_L05_0015FA34 + 18) + D_0013E500[1];
+    FUN_00201128(D_L05_0015FA14, x, D_L05_0015FA1C, D_L05_0015FA20, D_L05_0015FA24);
+    x = D_L05_0015FA30;
+    FUN_00116248(buf, D_L05_0015F9D8, FUN_001fdd10(0x523F));
+    FUN_L00_001fb470(x - 1, y + 1, 0x80000000, buf, -1);
+    FUN_L00_001fb470(x, y, D_L05_0015FA28, buf, -1);
+    x += FUN_001f6250(buf, -1);
+    count = hero.unk89A + 1;
+    if (count > 3) count = 3;
+    FUN_00116248(buf, D_L05_0015F9E0, count);
+    FUN_L00_001fb470(x - 1, y + 2, 0x80000000, buf, -1);
+    FUN_L00_001fb470(x, y, D_L05_0015FA2C, buf, -1);
+    x = *(&D_L05_0015FA30 + 4);
+    if (hero.unk8C0 == 1) {
+        FUN_00116248(buf, D_L05_0015F9E8, 1);
+    } else if (hero.unk8C0 == 2) {
+        FUN_00116248(buf, D_L05_0015F9F0, 2);
+    } else if (hero.unk8C0 == 3) {
+        FUN_00116248(buf, D_L05_0015F9F8, 3);
+    } else {
+        FUN_00116248(buf, D_L05_0015FA00);
+    }
+    x -= FUN_001f6250(buf, -1);
+    FUN_L00_001fb470(x + 1, y + 1, 0x80000000, buf, -1);
+    FUN_L00_001fb470(x, y, D_L05_0015FA2C, buf, -1);
+    FUN_00116248(buf, D_L05_0015FA08, FUN_001fdd10(0x5240));
+    x -= FUN_001f6250(buf, -1);
+    FUN_L00_001fb470(x + 1, y + 1, 0x80000000, buf, -1);
+    FUN_L00_001fb470(x, y, D_L05_0015FA28, buf, -1);
+    if (D_0015ED84 == 0x10) {
+        FUN_00116248(small_buf, D_L05_0015F860, hero.unk8CE);
+        x2 = *(int *)D_L05_0015FA50;
+        y2 = *(int *)(D_L05_0015FA50 + 4);
+        if (D_0013D388[0] == 0) {
+            x2 = e->unk50;
+            y2 = D_0015ED80 ? 10 : 18;
+        }
+        FUN_00201128(x2 - 0x18, y2, *(int *)D_L05_0015FA58, 0x20, 0x60);
+        FUN_001ffc30(FUN_001ff960(0x7558, 2), x2, y2, 0x20, 0x20, 0x80);
+        FUN_L00_001fb470(x2 + 0x29, y2 + 8, 0x80000000, small_buf, -1);
+        if (hero.unk8CE == 0) {
+            FUN_L00_001fb470(x2 + 0x28, y2 + 7, 0x80202080, small_buf, -1);
+        } else {
+            FUN_L00_001fb470(x2 + 0x28, y2 + 7, 0x80e08060, small_buf, -1);
+        }
+    }
+    return e->w;
+}
+#endif
 
 int FUN_L05_00266710(HudElem *e) {
     char buf[64];
