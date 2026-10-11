@@ -1999,12 +1999,13 @@ void FUN_L00_00275aa0(unsigned char *m) {
     float f;
     float alpha;
     int h;
+    float *velocity;
 
     m[8] += q[0xa];
     h = *(short *)(q + 8);
     h -= *(short *)(m + 0xa);
     if (h < 6) {
-        f = (float)(*(short *)(q + 8) - *(short *)(m + 0xa)) / 5.0f;
+        f = (float)h / 5.0f;
         *(float *)(m + 0xc) = *(float *)(q + 4) +
             ((*(float *)q + *(float *)(q + 4)) * 0.5f - *(float *)(q + 4)) * f;
         alpha = (float)q[0xb] + (float)((q[0xb] >> 1) - q[0xb]) * f;
@@ -2015,9 +2016,10 @@ void FUN_L00_00275aa0(unsigned char *m) {
         alpha = (float)(q[0xb] >> 1) * f + 0.0f;
     }
     *(int *)(m + 4) = (FUN_001fa6d0_275aa0(alpha) << 24) | (*(int *)(m + 4) & 0xffffff);
+    velocity = (float *)(q + 0xc);
     v[0] = *(float *)(q + 0xc);
-    v[1] = *(float *)(q + 0x10);
-    v[2] = *(float *)(q + 0x14);
+    v[1] = velocity[1];
+    v[2] = velocity[2];
     *(int *)&v[3] = 0;
     FUN_001f9a10_275aa0(m + 0x10, m + 0x10, v);
     if (*(int *)(q + 0x18)) {
@@ -2032,8 +2034,8 @@ void FUN_L00_00275aa0(unsigned char *m) {
                 normalize_vector_xyz(v, d, FUN_001f9af0_275aa0(v));
             v[2] += 0.02f;
             *(float *)(q + 0xc) = v[0];
-            *(float *)(q + 0x10) = v[1];
-            *(float *)(q + 0x14) = v[2];
+            velocity[1] = v[1];
+            velocity[2] = v[2];
         }
     }
     if (fast_dec_timer(m + 0xa))
