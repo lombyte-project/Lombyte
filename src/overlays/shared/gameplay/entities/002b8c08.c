@@ -2850,7 +2850,8 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
     u64 *data;
 
     FUN_L01_002b8f98();
-    for (i = 0; i < count; i++) {
+    i = 0;
+    if (count > 0) do {
         u16 active = *(u16 *)((u8 *)pos + 0x1e);
         if (active == 0) goto next_entity;
         x_offset = pos[0] + D_L01_001CAD00[2];
@@ -2910,8 +2911,7 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
             height = (f32 *)0x70002008;
             for (j = 0x10; j >= 0; j--, height += 0x33) *height = pos[2];
         }
-        mode = (far_bits & 0x2f2f2f2f) != 0;
-        if (mode == 0 && (near_bits & 0x2f2f2f2f) != 0) mode = 2;
+        mode = (far_bits & 0x2f2f2f2f) ? 1 : ((near_bits & 0x2f2f2f2f) ? 2 : 0);
         mask = *(u16 *)((u8 *)pos + 0x1e);
         if (*(u32 *)(pos + 5) != D_0015F628 || *(u32 *)(pos + 6) != D_0015F62C ||
             *(u8 *)(pos + 7) != D_0015F630 || *(u8 *)((u8 *)pos + 0x1d) != D_0015F634) {
@@ -2942,8 +2942,9 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
             if (mask & 1) FUN_L01_002b8cb0(pos, j, mode);
         }
 next_entity:
+        i++;
         pos += 0x464;
-    }
+    } while (i < count);
     l01_packet.words[0] = 0x10000000;
     l01_packet.words[1] = 0;
     l01_packet.words[2] = 0x13000000;
