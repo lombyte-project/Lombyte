@@ -1924,6 +1924,8 @@ void FUN_L06_002fbfb0(char *moby) {
     char *child;
     float v[4];
     float a, b;
+    float phase_a, phase_b;
+    float target_delta;
     float target_a, target_b, target_rot_a, target_rot_b;
     float acceleration, max_speed, damping, rotation_acceleration, rotation_speed, rotation_damping;
     int next_timer;
@@ -1982,62 +1984,70 @@ void FUN_L06_002fbfb0(char *moby) {
         if (absolute_float(a - D_L06_00161F1C) < 0.01f && absolute_float(b - D_L06_00161F20) < 0.01f) moby[0x20] = 5;
         return;
     case 4:
-        a = FUN_001f9b48(moby + 0x10, data + 0x10);
-        b = FUN_001f9b48(*(char **)(data + 0x40) + 0x10, data + 0x10);
-        if ((unsigned char)moby[0xbc] == 1) {
-            target_rot_a = *(float *)(moby + 0x44);
-            target_rot_b = *(float *)(*(char **)(data + 0x40) + 0x44);
-            target_a = a;
-            target_b = b;
-            acceleration = D_L06_00161F34;
-            max_speed = D_L06_00161F38;
-            damping = D_L06_00161F3C;
-            rotation_acceleration = D_L06_00161F40;
-            rotation_speed = D_L06_00161F44;
-            rotation_damping = D_L06_00161F48;
-            next_phase = 2;
-            next_timer = func_001FA898_r(random_float_between_alt((float)D_L06_00161F54, (float)D_L06_00161F58));
-        } else if ((unsigned char)moby[0xbc] == 2) {
-            target_rot_a = D_L06_00161F2C;
-            target_rot_b = D_L06_00161F30;
-            target_a = D_L06_00161F24;
-            target_b = D_L06_00161F28;
-            acceleration = D_L06_00161F34;
-            max_speed = D_L06_00161F38;
-            damping = D_L06_00161F3C;
-            rotation_acceleration = D_L06_00161F40;
-            rotation_speed = D_L06_00161F44;
-            rotation_damping = D_L06_00161F48;
-            next_phase = 1;
-            next_timer = func_001FA898_r(random_float_between_alt((float)D_L06_00161F4C, (float)D_L06_00161F50));
-        } else {
-            target_rot_a = *(float *)(moby + 0x44);
-            target_rot_b = target_rot_a;
-            target_a = D_L06_00161F24;
-            target_b = D_L06_00161F28;
-            acceleration = 10.0f;
-            max_speed = 20.0f;
-            damping = 5.0f;
-            rotation_acceleration = 10.0f;
-            rotation_speed = 10.0f;
-            rotation_damping = 5.0f;
-            next_phase = 1;
-            next_timer = 30;
-        }
-        FUN_00213f38(&a, &((float *)data)[2], target_a, acceleration * frame_time_sq, max_speed * frame_time_sq, damping * frame_time);
-        FUN_00213f38(&b, &((float *)data)[0x11], target_b, acceleration * frame_time_sq, max_speed * frame_time_sq, damping * frame_time);
+        phase_a = FUN_001f9b48(moby + 0x10, data + 0x10);
+        phase_b = FUN_001f9b48(*(char **)(data + 0x40) + 0x10, data + 0x10);
+        if ((unsigned char)moby[0xbc] == 1) goto phase_one;
+        if ((unsigned char)moby[0xbc] < 2) goto phase_default;
+        if ((unsigned char)moby[0xbc] == 2) goto phase_two;
+
+        phase_default:
+        target_rot_a = *(float *)(moby + 0x44);
+        target_rot_b = target_rot_a;
+        target_a = D_L06_00161F24;
+        target_b = D_L06_00161F28;
+        acceleration = 10.0f;
+        max_speed = 20.0f;
+        damping = 5.0f;
+        rotation_acceleration = 10.0f;
+        rotation_speed = 10.0f;
+        rotation_damping = 5.0f;
+        next_phase = 1;
+        next_timer = 30;
+        goto phase_join;
+        phase_one:
+        target_rot_a = *(float *)(moby + 0x44);
+        target_rot_b = *(float *)(*(char **)(data + 0x40) + 0x44);
+        target_a = phase_a;
+        target_b = phase_b;
+        acceleration = D_L06_00161F34;
+        max_speed = D_L06_00161F38;
+        damping = D_L06_00161F3C;
+        rotation_acceleration = D_L06_00161F40;
+        rotation_speed = D_L06_00161F44;
+        rotation_damping = D_L06_00161F48;
+        next_phase = 2;
+        next_timer = func_001FA898_r(random_float_between_alt((float)D_L06_00161F54, (float)D_L06_00161F58));
+        goto phase_join;
+        phase_two:
+        target_rot_a = D_L06_00161F2C;
+        target_rot_b = D_L06_00161F30;
+        target_a = D_L06_00161F24;
+        target_b = D_L06_00161F28;
+        acceleration = D_L06_00161F34;
+        max_speed = D_L06_00161F38;
+        damping = D_L06_00161F3C;
+        rotation_acceleration = D_L06_00161F40;
+        rotation_speed = D_L06_00161F44;
+        rotation_damping = D_L06_00161F48;
+        next_phase = 1;
+        next_timer = func_001FA898_r(random_float_between_alt((float)D_L06_00161F4C, (float)D_L06_00161F50));
+        phase_join:
+        FUN_00213f38(&phase_a, &((float *)data)[2], target_a, acceleration * frame_time_sq, max_speed * frame_time_sq, damping * frame_time);
+        FUN_00213f38(&phase_b, &((float *)data)[0x11], target_b, acceleration * frame_time_sq, max_speed * frame_time_sq, damping * frame_time);
         FUN_00213f38((float *)(moby + 0x44), &((float *)data)[3], target_rot_a, rotation_acceleration * DEG_TO_RAD * frame_time_sq, rotation_speed * DEG_TO_RAD * frame_time_sq, rotation_damping * DEG_TO_RAD * frame_time);
         FUN_00213f38((float *)(*(char **)(data + 0x40) + 0x44), &((float *)data)[0x12], target_rot_b, rotation_acceleration * DEG_TO_RAD * frame_time_sq, rotation_speed * DEG_TO_RAD * frame_time_sq, rotation_damping * DEG_TO_RAD * frame_time);
-        FUN_001f9bf8(v, data + 0x30, a);
+        FUN_001f9bf8(v, data + 0x30, phase_a);
         FUN_001f9a10(moby + 0x10, data + 0x10, v);
-        FUN_001f9bf8(v, data + 0x30, -b);
+        FUN_001f9bf8(v, data + 0x30, -phase_b);
         FUN_001f9a10(*(char **)(data + 0x40) + 0x10, data + 0x10, v);
         FUN_L00_00250df8(*(char **)(data + 0x40));
         if (!fast_dec_timer(data + 0x4c)) return;
         moby[0xbc] = next_phase;
         *(int *)(data + 0x4c) = scale_game_frames_alt(next_timer);
-        if (absolute_float(a - D_L06_00161F24) >= 0.01f) return;
-        if (absolute_float(b - D_L06_00161F28) < 0.01f) moby[0x20] = 5;
+        target_delta = D_L06_00161F24;
+        if (absolute_float(phase_a - target_delta) < 0.01f) {
+            if (absolute_float(phase_b - D_L06_00161F28) < 0.01f) moby[0x20] = 5;
+        }
         return;
     case 5:
         if (D_L06_00161F5C == 0.0f) return;
@@ -2048,10 +2058,10 @@ void FUN_L06_002fbfb0(char *moby) {
         child = *(char **)(data + 0x40);
         qcopy(child + 0x10, moby + 0x10);
         qcopy(child + 0x40, moby + 0x40);
-        *(float *)(data + 0x48) = 0.0f;
-        *(float *)(data + 8) = 0.0f;
-        *(float *)(data + 0xc) = 0.0f;
-        *(float *)(data + 0x44) = 0.0f;
+        *(volatile float *)(data + 0x48) = 0.0f;
+        *(volatile float *)(data + 8) = 0.0f;
+        *(volatile float *)(data + 0xc) = 0.0f;
+        *(volatile float *)(data + 0x44) = 0.0f;
         return;
     }
 }
