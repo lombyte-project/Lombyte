@@ -278,6 +278,7 @@ extern void set_event_value_l08(int, int) __asm__("FUN_L01_002a1968");
 extern void end_event_l08(int) __asm__("FUN_0022d798");
 extern int scale_game_frames_l08(int) __asm__("FUN_001f96f8");
 extern char D_0013E550[];
+typedef struct { char pad[0x80]; int value; } VoiceEntryL08;
 extern float D_L08_0014ED6C __attribute__((sda));
 extern float D_L08_001518A0 __attribute__((sda));
 
@@ -293,7 +294,7 @@ void FUN_L08_002d55c8(struct Moby *moby, int path_id) {
     int increment;
     char *linked;
 
-    *(u128 *)point = *(u128 *)(path + 4 + *(int *)(vars + 0x168) * 4);
+    qcopy(point, path + 4 + *(int *)(vars + 0x168) * 4);
     approach_angle_l08(&moby->rot.z,
         fast_atan2_l08(point[0] - moby->pos.x, point[1] - moby->pos.y),
         (float *)(vars + 0x158),
@@ -313,41 +314,38 @@ void FUN_L08_002d55c8(struct Moby *moby, int path_id) {
         size = D_L08_0014ED6C;
     }
     size = *(float *)(vars + 0x180) / (D_L08_001518A0 * size);
-    size = size > 2.0f ? 2.0f : size;
-    size = size < 0.0f ? 0.0f : size;
-    linked = *(char **)(vars + 0x160);
-    if (linked != 0) {
-        *(float *)(linked + 0x58) = size;
-        *(u128 *)(linked + 0x40) = *(u128 *)((char *)moby + 0x40);
-        *(u128 *)(linked + 0x10) = *(u128 *)&moby->pos;
+    if (size > 2.0f) { size = 2.0f; } else if (size < 0.0f) { size = 0.0f; }
+    if (*(char **)(vars + 0x160) != 0) {
+        *(float *)(*(char **)(vars + 0x160) + 0x58) = size;
+        linked = *(char **)(vars + 0x160);
+        qcopy(linked + 0x40, (char *)moby + 0x40);
+        qcopy(linked + 0x10, &moby->pos);
     }
-    linked = *(char **)(vars + 0x164);
-    if (linked != 0) {
-        *(float *)(linked + 0x58) = size;
-        *(u128 *)(linked + 0x40) = *(u128 *)((char *)moby + 0x40);
-        *(u128 *)(linked + 0x10) = *(u128 *)&moby->pos;
+    if (*(char **)(vars + 0x164) != 0) {
+        *(float *)(*(char **)(vars + 0x164) + 0x58) = size;
+        linked = *(char **)(vars + 0x164);
+        qcopy(linked + 0x40, (char *)moby + 0x40);
+        qcopy(linked + 0x10, &moby->pos);
     }
-    event = *(int *)(vars + 0x15c);
-    if (D_0015ED6C * 0.1f < length_vector_l08(vars + 0x40)) {
-        if (!event_valid_l08(moby, event)) {
+    dist = length_vector_l08(vars + 0x40);
+    if (D_0015ED6C * 0.1f < dist) {
+        if (event_valid_l08(moby, *(int *)(vars + 0x15c)) == 0) {
             event = create_event_l08(1, 4, moby);
             *(int *)(vars + 0x15c) = event;
             set_event_value_l08(event, 1);
-        } else {
-            value = *(int *)(D_0013E550 + event * 0x70 + 0x80);
-            if (value < 0x400) {
-                increment = 0x400 / scale_game_frames_l08(60);
-                set_event_value_l08(event, value + increment);
-            }
+        } else if (((VoiceEntryL08 *)(D_0013E550 + *(int *)(vars + 0x15c) * 0x70))->value < 0x400) {
+            set_event_value_l08(*(int *)(vars + 0x15c),
+                ((VoiceEntryL08 *)(D_0013E550 + *(int *)(vars + 0x15c) * 0x70))->value + 0x400 / scale_game_frames_l08(60));
         }
-    } else if (event_valid_l08(moby, event)) {
-        value = *(int *)(D_0013E550 + event * 0x70 + 0x80);
-        if (value < 0x100) {
-            end_event_l08(event);
-            *(int *)(vars + 0x15c) = -1;
-        } else {
-            increment = 0x400 / scale_game_frames_l08(60);
-            set_event_value_l08(event, value - increment);
+    } else {
+        if (event_valid_l08(moby, *(int *)(vars + 0x15c)) != 0) {
+            if (((VoiceEntryL08 *)(D_0013E550 + *(int *)(vars + 0x15c) * 0x70))->value < 0x100) {
+                end_event_l08(*(int *)(vars + 0x15c));
+                *(int *)(vars + 0x15c) = -1;
+            } else {
+                set_event_value_l08(*(int *)(vars + 0x15c),
+                    ((VoiceEntryL08 *)(D_0013E550 + *(int *)(vars + 0x15c) * 0x70))->value - 0x400 / scale_game_frames_l08(60));
+            }
         }
     }
 }
