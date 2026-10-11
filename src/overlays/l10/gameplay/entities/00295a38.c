@@ -1683,12 +1683,15 @@ void FUN_L10_002dcc58(struct Moby *moby) {
                         FUN_001f28e0(dst, dst, other + row * 0x140);
                     }
                 } else {
+                    char *dst = base;
+                    char *out = buffer;
                     for (row = 0; row < 20; row++) {
-                        char *dst = base + row * 0x140;
                         FUN_001f28c8(dst);
                         *(float *)(dst + 0xc) = 1.0f;
                         *(float *)(dst + 4) = (float)row * (D_L10_00161D58 / 20.0f) - D_L10_00161D58 * 0.5f;
-                        FUN_L10_0024a7f0(0.0f, D_L10_00161D54 * frame_time, buffer + row * 0xa0);
+                        FUN_L10_0024a7f0(0.0f, D_L10_00161D54 * frame_time, out);
+                        dst += 0x140;
+                        out += 0xa0;
                     }
                     for (row = 0; row < 18; row++) {
                         char *dst = other + (row + 1) * 0x140;
