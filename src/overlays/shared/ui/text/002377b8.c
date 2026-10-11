@@ -66,8 +66,9 @@ int FUN_L00_00237840(char *rec) {
         FUN_L00_0023caa8(left, top - 16, right, top + 16, 0x80000000UL, 1);
         i++;
     } while (i < *(int *)(rec + 0x74));
-    FUN_L00_0023bac0(FUN_L00_0023b208(*(int *)rec, 0),
-                       x + *(short *)(rec + 0x48), y + *(short *)(rec + 0x4a),
+    x += *(short *)(rec + 0x48);
+    y += *(short *)(rec + 0x4a);
+    FUN_L00_0023bac0(FUN_L00_0023b208(*(int *)rec, 0), x, y,
                        D_L00_0015F760, D_L00_0015F764, 0x80);
     return *(int *)(rec + 0x58);
 }
