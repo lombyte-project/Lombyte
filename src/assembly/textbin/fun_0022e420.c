@@ -105,8 +105,9 @@ void build_resident_indexed_texture_warp_meshes(void) {
                 quad.colors[vertex] =
                     blend_colors(D_001D9A30[level_render_state.content_variant * 2],
                                  D_001D9A34[level_render_state.content_variant * 2], progress);
+                progress = 1.0f - progress * progress;
                 normalize_vector(&quad.positions[vertex], &edge_normals[vertex],
-                                 (1.0f - progress * progress) *
+                                 progress *
                                      (&D_001604D0)[level_render_state.content_variant]);
                 add_vectors(&quad.positions[vertex], &quad.positions[vertex],
                             get_primary_history_position((history_index + history_step) & 0x1F) +
