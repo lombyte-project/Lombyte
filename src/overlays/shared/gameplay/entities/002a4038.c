@@ -504,7 +504,226 @@ void FUN_L02_002d92f0(char *moby) {
     p = &hero;
     p->motion.rot.f[2] = func_001FA748_d92f0(f, p->motion.rot.f[2]);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d93e8.s", FUN_L02_002d93e8);
+#else
+extern void vu1_add_g_sregister_2d93e8(int, u64) __asm__("FUN_00233980");
+extern u64 get_effect_texture_2d93e8(int) __asm__("FUN_001f44b8");
+extern float add_rotation_2d93e8(float, float) __asm__("FUN_001fa580");
+extern float fast_sin_2d93e8(float) __asm__("FUN_001f9de0");
+extern int fast_tween_color_2d93e8(int, int, float) __asm__("FUN_001fa6e0");
+extern int D_L02_00161B30 __attribute__((sda));
+extern int D_L02_00161B34 __attribute__((sda));
+extern int D_L02_00161B38 __attribute__((sda));
+extern int D_L02_00161B3C __attribute__((sda));
+extern int D_L02_00161B40 __attribute__((sda));
+extern int D_L02_00161B44 __attribute__((sda));
+extern int D_L02_00161B48 __attribute__((sda));
+extern int D_L02_00161B4C __attribute__((sda));
+extern int D_L02_00161B50 __attribute__((sda));
+extern int D_L02_00161B54 __attribute__((sda));
+extern int D_L02_00161B58 __attribute__((sda));
+extern int D_L02_00161B5C __attribute__((sda));
+extern int D_L02_00161BA0 __attribute__((sda));
+extern int D_L02_00161BA4 __attribute__((sda));
+extern int D_L02_00161BA8 __attribute__((sda));
+extern int D_L02_00161BAC __attribute__((sda));
+extern int D_L02_00161BB0 __attribute__((sda));
+extern int D_L02_00161BB4 __attribute__((sda));
+extern int D_L02_00161BB8 __attribute__((sda));
+extern int D_L02_00161BBC __attribute__((sda));
+extern int D_L02_00161BC0 __attribute__((sda));
+extern int D_L02_00161BC4 __attribute__((sda));
+extern int D_L02_0015F5CC;
+extern void FUN_L02_002dae88(void);
+extern void draw_arc_2d93e8(u64, u32, float, float, float, float) __asm__("FUN_L02_002da3d8");
+extern void draw_arrow_2d93e8(u64, int, int, float, float) __asm__("FUN_L02_002da6c0");
+extern void draw_bar_2d93e8(u64, f32, f32, f32, s32) __asm__("FUN_L02_002da938");
+
+void FUN_L02_002d93e8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    int *markers = (int *)(data + 0xb0);
+    int *first;
+    int *second;
+    int *third;
+    u64 texture;
+    int i, state, first_step = 0, second_step = 0, third_step = 0;
+    int index, other, slot, draw_second, color, degrees;
+    float angle, distance, phase;
+
+    vu1_add_g_sregister_2d93e8(0x47, 0x5380b);
+    texture = get_effect_texture_2d93e8(0x10);
+    FUN_L02_002dae88();
+    for (i = 11; i >= 0; --i, ++markers) {
+        if (*markers != 0) *markers = 1;
+    }
+    markers = (int *)(data + 0xb0);
+    if (*(float *)(data + 0xe4) > 0.31415927f) {
+        state = *(int *)(data + 0xe0);
+        if (state == 1) first_step = 1;
+        else if (state == 2) second_step = 1;
+        else third_step = 1;
+    } else if (*(float *)(data + 0xe4) < -0.31415927f) {
+        state = *(int *)(data + 0xe0);
+        if (state == 1) first_step = -1;
+        else if (state == 2) second_step = -1;
+        else third_step = -1;
+    }
+
+    first = (int *)(data + 0x20);
+    second = (int *)(data + 0x50);
+    third = (int *)(data + 0x80);
+    for (i = 0; i < 12; ++i) {
+        angle = -0.31415927f;
+        if (*(int *)(data + 0xe0) == 1) angle = add_rotation_2d93e8(angle, *(float *)(data + 0xe4));
+        angle = add_rotation_2d93e8(angle, (float)(i * 30) * 0.017453292f);
+        index = i + *(int *)(data + 0x14);
+        slot = index % 12;
+        if (first[slot] == 2) {
+            other = i + *(int *)(data + 0x18) + first_step - second_step;
+            draw_second = 1;
+            color = D_L02_00161BAC;
+            if (second[other % 12] != 0) distance = (float)D_L02_00161B44;
+            else {
+                int third_index = i + *(int *)(data + 0x1c) + first_step - third_step;
+                if (third[third_index % 12] != 0) distance = (float)D_L02_00161B38;
+                else {
+                    int extent = D_L02_00161B38;
+                    if (third[(third_index + 6) % 12] == 0 &&
+                        (extent = D_L02_00161B44, second[(other + 6) % 12] == 0) &&
+                        (extent = D_L02_00161B50, first[(index + 6) % 12] == 0)) {
+                        distance = (float)-D_L02_00161B5C;
+                        draw_second = 0;
+                        if (markers[(i + first_step + 6) % 12] != 0) {
+                            first[slot] = 3;
+                            markers[(i + first_step + 6) % 12] = 2;
+                            color = D_L02_00161BB0;
+                        }
+                    } else distance = (float)-extent;
+                }
+            }
+            phase = add_rotation_2d93e8(angle, 0.31415927f);
+            draw_bar_2d93e8(texture, phase, (float)D_L02_00161B50, distance, color);
+            if (draw_second) {
+                phase = add_rotation_2d93e8(angle, 0.31415927f);
+                draw_bar_2d93e8(texture, phase, distance, (float)D_L02_00161B50, D_L02_00161BB4);
+            }
+        }
+    }
+    for (i = 0; i < 12; ++i) {
+        angle = -0.31415927f;
+        if (*(int *)(data + 0xe0) == 2) angle = add_rotation_2d93e8(angle, *(float *)(data + 0xe4));
+        angle = add_rotation_2d93e8(angle, (float)(i * 30) * 0.017453292f);
+        index = i + *(int *)(data + 0x18);
+        slot = index % 12;
+        if (second[slot] == 2) {
+            other = i + *(int *)(data + 0x1c) + second_step - third_step;
+            draw_second = 1;
+            color = D_L02_00161BAC;
+            if (third[other % 12] != 0) distance = (float)D_L02_00161B38;
+            else {
+                int extent = D_L02_00161B38;
+                if (third[(other + 6) % 12] == 0 &&
+                    (extent = D_L02_00161B44, second[(index + 6) % 12] == 0) &&
+                    (extent = D_L02_00161B50,
+                     first[(i + *(int *)(data + 0x14) + second_step - first_step + 6) % 12] == 0)) {
+                    distance = (float)-D_L02_00161B5C;
+                    draw_second = 0;
+                    if (markers[(i + second_step + 6) % 12] != 0) {
+                        second[slot] = 3;
+                        markers[(i + second_step + 6) % 12] = 2;
+                        color = D_L02_00161BB0;
+                    }
+                } else distance = (float)-extent;
+            }
+            phase = add_rotation_2d93e8(angle, 0.31415927f);
+            draw_bar_2d93e8(texture, phase, (float)D_L02_00161B44, distance, color);
+            if (draw_second) {
+                phase = add_rotation_2d93e8(angle, 0.31415927f);
+                draw_bar_2d93e8(texture, phase, distance, (float)D_L02_00161B44, D_L02_00161BB4);
+            }
+        }
+    }
+    for (i = 0; i < 12; ++i) {
+        angle = -0.31415927f;
+        if (*(int *)(data + 0xe0) == 3) angle = add_rotation_2d93e8(angle, *(float *)(data + 0xe4));
+        angle = add_rotation_2d93e8(angle, (float)(i * 30) * 0.017453292f);
+        index = i + *(int *)(data + 0x1c);
+        slot = index % 12;
+        if (third[slot] == 2) {
+            int extent = D_L02_00161B38;
+            draw_second = 1;
+            color = D_L02_00161BAC;
+            if (third[(index + 6) % 12] == 0 &&
+                (extent = D_L02_00161B44,
+                 second[(i + *(int *)(data + 0x18) + third_step - second_step + 6) % 12] == 0) &&
+                (extent = D_L02_00161B50,
+                 first[(i + *(int *)(data + 0x14) + third_step - first_step + 6) % 12] == 0)) {
+                distance = (float)-D_L02_00161B5C;
+                draw_second = 0;
+                if (markers[(i + third_step + 6) % 12] != 0) {
+                    third[slot] = 3;
+                    markers[(i + third_step + 6) % 12] = 2;
+                    color = D_L02_00161BB0;
+                }
+            } else distance = (float)-extent;
+            phase = add_rotation_2d93e8(angle, 0.31415927f);
+            draw_bar_2d93e8(texture, phase, (float)D_L02_00161B38, distance, color);
+            if (draw_second) {
+                phase = add_rotation_2d93e8(angle, 0.31415927f);
+                draw_bar_2d93e8(texture, phase, distance, (float)D_L02_00161B38, D_L02_00161BB4);
+            }
+        }
+    }
+
+#define DRAW_RING(active, slots, offset, outer_start, outer_end, radius) \
+    for (i = 0; i < 12; ++i) { \
+        int value; \
+        int ring_index; \
+        angle = -0.2617994f; \
+        color = D_L02_00161BA4; \
+        if (*(int *)(data + 0xe0) == (active)) { \
+            float wave = fast_sin_2d93e8((float)((D_L02_0015F5CC % 60) * 6) * 0.017453292f); \
+            color = fast_tween_color_2d93e8(D_L02_00161BA0, D_L02_00161BA0 & 0xffffff, wave * 0.5f + 0.5f); \
+            if (*(float *)(data + 0xe4) != 0.0f) angle = add_rotation_2d93e8(angle, *(float *)(data + 0xe4)); \
+        } \
+        angle = add_rotation_2d93e8(angle, (float)(i * 30) * 0.017453292f); \
+        phase = add_rotation_2d93e8(angle, 0.5235988f); \
+        draw_arc_2d93e8(texture, color, angle, phase, (float)(outer_start), (float)(outer_end)); \
+        ring_index = (i + *(int *)(data + (offset))) % 12; \
+        value = (slots)[ring_index]; \
+        if (value != 0) { \
+            if (value < 3) { \
+                phase = add_rotation_2d93e8(angle, 0.2617994f); \
+                draw_arrow_2d93e8(texture, D_L02_00161BA8, value == 2 ? 1 : 2, phase, (float)(radius)); \
+            } else { \
+                phase = add_rotation_2d93e8(angle, 0.2617994f); \
+                draw_arrow_2d93e8(texture, D_L02_00161BA8, 0, phase, (float)(radius)); \
+                (slots)[(i + *(int *)(data + (offset))) % 12] = 2; \
+            } \
+        } \
+    }
+    DRAW_RING(1, first, 0x14, D_L02_00161B4C, D_L02_00161B48, D_L02_00161B50);
+    DRAW_RING(2, second, 0x18, D_L02_00161B40, D_L02_00161B3C, D_L02_00161B44);
+    DRAW_RING(3, third, 0x1c, D_L02_00161B34, D_L02_00161B30, D_L02_00161B38);
+#undef DRAW_RING
+
+    degrees = 0;
+    for (i = 0; i < 12; ++i, degrees += 30) {
+        angle = add_rotation_2d93e8(-0.08726646f, (float)degrees * 0.017453292f);
+        phase = add_rotation_2d93e8(angle, 0.17453295f);
+        if (markers[i] != 0) {
+            color = D_L02_00161BC4;
+            if (markers[i] != 2) {
+                color = D_L02_00161BC0;
+                if ((*(int *)0x0013cae4 & 0x20) == 0) color = D_L02_00161BBC;
+            }
+            draw_arc_2d93e8(texture, color, angle, phase, (float)D_L02_00161B58, (float)D_L02_00161B54);
+        }
+    }
+    vu1_add_g_sregister_2d93e8(0x47, 0x5360b);
+}
+#endif
 
 /* Draws an elliptical arc from start_angle to end_angle (radii radius_x, radius_y, around the screen centre) as five sprite
  * segments in the given colour. */
