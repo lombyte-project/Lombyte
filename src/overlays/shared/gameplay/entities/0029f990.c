@@ -167,7 +167,7 @@ typedef struct {
     long extra[4];
 } L00Quad29ff58;
 
-extern float D_L00_00161184 __attribute__((section(".sdata")));
+extern float D_L00_00161184 __attribute__((sda));
 extern int D_L00_001CA480[4][4];
 extern float D_L00_001CA380[16][4];
 extern float D_L00_001CA410[8][2];
@@ -182,22 +182,26 @@ void FUN_L00_0029ff58(void) {
     float transformed[4][4];
     float *position;
     int i, index0, index1, index2, index3;
-    int *indices;
+    int *indices, *second, *third;
     D_L00_00161184 = D_L00_00161184 + 0.01f;
     if (1.0f < D_L00_00161184) {
         D_L00_00161184 = D_L00_00161184 - 1.0f;
     }
     q.extra[0] = 0;
-    q.extra[1] = FUN_001f44b8_29ff58(0x18);
     q.extra[2] = 1;
     q.extra[3] = 0x4000000044L;
-    for (i = 0; i < 4; i++) {
+    q.extra[1] = FUN_001f44b8_29ff58(0x18);
+    i = 0;
+    while (1) {
         indices = D_L00_001CA480[i];
         index0 = indices[0];
+        i++;
+        second = (int *)((char *)D_L00_001CA480 + (i - 1) * 16 + 4);
         FUN_001f9cf8_29ff58(transformed[0], D_L00_001CA380[index0], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
-        index1 = indices[1];
+        index1 = *second;
         FUN_001f9cf8_29ff58(transformed[1], D_L00_001CA380[index1], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
-        index2 = indices[2];
+        third = (int *)((char *)D_L00_001CA480 + (i - 1) * 16 + 8);
+        index2 = *third;
         FUN_001f9cf8_29ff58(transformed[2], D_L00_001CA380[index2], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
         index3 = indices[3];
         FUN_001f9cf8_29ff58(transformed[3], D_L00_001CA380[index3], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
@@ -212,8 +216,8 @@ void FUN_L00_0029ff58(void) {
         SET_POSITION(3);
 #undef SET_POSITION
         index0 = indices[0];
-        index1 = indices[1];
-        index2 = indices[2];
+        index1 = *second;
+        index2 = *third;
         index3 = indices[3];
 #define SET_COLOR_UV(n, index) \
         q.color[n] = D_L00_001CA458[index]; \
@@ -225,6 +229,7 @@ void FUN_L00_0029ff58(void) {
         SET_COLOR_UV(3, index3);
 #undef SET_COLOR_UV
         FUN_001f7d30_29ff58(&q, 0, 1);
+        if (i >= 4) break;
     }
 }
 #endif
