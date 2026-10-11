@@ -212,6 +212,7 @@ void FUN_L06_002d8738(char *moby) {
         near = 1;
     }
     if (near) {
+        float *uv = &D_L06_001D4360[0][0];
         for (i = 0; i < 57; i++) {
             FUN_001f9d20(D_L06_001D4530[i], D_L06_001D3290[i], matrix);
             FUN_001f9a28(direction, D_L06_001D4530[i], D_L06_00167540);
@@ -224,8 +225,9 @@ void FUN_L06_002d8738(char *moby) {
             FUN_001f9bf8(projected, projected, 1.0f);
             projected[2] += 1.0f;
             scale = FUN_001f9988(projected[2] + projected[2]);
-            D_L06_001D4360[i][1] = projected[1] / (scale + scale) + 0.5f;
-            D_L06_001D4360[i][0] = projected[0] / (scale + scale) + 0.5f;
+            uv[1] = projected[1] / (scale + scale) + 0.5f;
+            uv[0] = projected[0] / (scale + scale) + 0.5f;
+            uv += 2;
         }
     } else {
         for (i = 0; i < 57; i++) {
