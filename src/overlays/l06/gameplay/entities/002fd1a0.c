@@ -1237,7 +1237,206 @@ void FUN_L06_00304028(char *moby) {
         mark_moby_for_removal_c(D_L06_0015FFD8_u + ((*p & 0x7FFF) << 8));
     } while (*p++ >= 0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304098.s", FUN_L06_00304098);
+#include "rnc/gameplay/entities/moby.h"
+typedef struct {
+    float x, y, z, w;
+} __attribute__((aligned(16))) Vector_304098;
+
+typedef struct Data_304098 {
+    int cut;
+    int cut2;
+    int list[9];
+    float t;
+    float vel;
+    int moby3;
+    int moby1;
+    int moby2;
+    int timer;
+    int timer2;
+    int f48;
+} Data_304098;
+
+typedef struct {
+    char pad0[0x30];
+    Vector_304098 a;
+    char pad40[0x30];
+    Vector_304098 b;
+} Cut_304098;
+
+extern Cut_304098 *D_L06_001600EC_304098 __asm__("D_L06_001600EC");
+extern struct Moby *D_L06_0015FFD8_304098 __asm__("D_L06_0015FFD8");
+extern char D_0013A5E0_304098[] __asm__("D_0013A5E0") __attribute__((section(".data")));
+extern char D_0013D3AA_304098 __asm__("D_0013D3AA") __attribute__((section(".data")));
+extern char D_0013E633_304098[] __asm__("D_0013E633") __attribute__((section(".data")));
+extern char D_0013F3D0_304098[] __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern float D_0015ED70_304098 __asm__("D_0015ED70");
+extern float D_0015ED6C_304098 __asm__("D_0015ED6C");
+extern int D_L06_0015F404_304098 __asm__("D_L06_0015F404");
+extern float D_L06_0015F3FC_304098 __asm__("D_L06_0015F3FC");
+typedef struct { char pad0[0x160]; float f160; int pad164; int f168; } Fx_304098;
+extern Fx_304098 D_L06_00167400_304098 __asm__("D_L06_00167400") __attribute__((section(".data")));
+extern float D_L06_00162198_304098 __asm__("D_L06_00162198") __attribute__((sda));
+extern float D_L06_0016219C_304098 __asm__("D_L06_0016219C") __attribute__((sda));
+extern float D_L06_001621A0_304098 __asm__("D_L06_001621A0") __attribute__((sda));
+extern float D_L06_001621A4_304098 __asm__("D_L06_001621A4") __attribute__((sda));
+extern float D_L06_001621A8_304098 __asm__("D_L06_001621A8") __attribute__((sda));
+extern float D_L06_001621B0_304098 __asm__("D_L06_001621B0") __attribute__((sda));
+
+extern float fast_subtract_rotations_304098(float, float) __asm__("FUN_001fa5c8");
+extern float fast_add_rotations_304098(float, float) __asm__("FUN_001fa580");
+extern void approach_two_stage_304098(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern void allocate_voice_for_target_entry_304098(int, int, void *) __asm__("FUN_0022da68");
+extern void event_304098(int, int, void *) __asm__("FUN_0022dba0");
+extern float vector_distance_304098(void *, void *) __asm__("FUN_001f9b80");
+extern int try_set_help_message_304098(int, int) __asm__("FUN_00215130");
+extern int scale_game_frames_304098(int) __asm__("FUN_001f96f8");
+extern int dismiss_help_message_304098(int) __asm__("FUN_L00_002644e0");
+extern int tick_countdown_304098(int *) __asm__("FUN_001f9740");
+extern void fade_to_black_304098(int) __asm__("FUN_001f4a58");
+extern void start_camera_move_304098(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
+extern void set_camera_position_304098(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_rotation_304098(void *) __asm__("FUN_L00_002eaa30");
+extern void set_camera_effect_304098(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
+extern void copy_camera_304098(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void finish_camera_move_304098(int) __asm__("FUN_L00_002eac18");
+extern void clear_vector_304098(void *) __asm__("FUN_001f99f8");
+extern float float_from_int_304098(int) __asm__("FUN_001fa6c0");
+extern void update_moby_304098(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L06_00304818(int, void *);
+extern void FUN_L06_00303150(unsigned char *);
+
+void FUN_L06_00304098(struct Moby *moby) {
+    Data_304098 *data = *(struct Data_304098 **)&moby->pvars;
+    Vector_304098 camera_position;
+    Vector_304098 camera_rotation;
+    Vector_304098 next_position;
+    float previous_value;
+    float current_angle;
+    int i;
+    int help_message_available;
+    int *entry;
+    int duration;
+    int timer;
+
+    switch (moby->state) {
+    case 0:
+        moby->unk30 = 0xFF;
+        moby->rot.x = fast_subtract_rotations_304098(moby->rot.x, 0.78539819f);
+        moby->state = 1;
+        data->f48 = -1;
+        break;
+    case 1:
+        break;
+    case 2: {
+        float angle;
+        approach_two_stage_304098(&data->t, &data->vel, 1.0f, D_0015ED70_304098, D_0015ED70_304098, D_0015ED6C_304098);
+        angle = data->vel * 0.78539819f;
+        moby->rot.x = fast_add_rotations_304098(moby->rot.x, angle);
+        D_L06_0015FFD8_304098[data->moby1].rot.x = fast_subtract_rotations_304098(D_L06_0015FFD8_304098[data->moby1].rot.x, angle);
+        D_L06_0015FFD8_304098[data->moby2].rot.x = fast_subtract_rotations_304098(D_L06_0015FFD8_304098[data->moby2].rot.x, angle);
+        update_moby_304098(&D_L06_0015FFD8_304098[data->moby1]);
+        update_moby_304098(&D_L06_0015FFD8_304098[data->moby2]);
+        if (1.0f <= data->t) {
+            moby->state = 3;
+            allocate_voice_for_target_entry_304098(1, 0, moby);
+            D_0013D3AA_304098 = 1;
+        }
+        break;
+    }
+    case 3:
+        if (vector_distance_304098(D_0013F3D0_304098, &moby->pos) < 3.7f) {
+            help_message_available = try_set_help_message_304098(4, 0x1783) != 0;
+            if ((*(int *)(D_0013A5E0_304098 + 0x2504) & 0x10) && help_message_available) {
+                allocate_voice_for_target_entry_304098(2, 0, moby);
+                dismiss_help_message_304098(4);
+                moby->state = 4;
+                data->timer = scale_game_frames_304098(0x1E);
+            }
+        }
+        break;
+    case 4:
+        if (tick_countdown_304098(&data->timer)) {
+            qcopy_nc(&camera_position, &D_L06_001600EC_304098[data->cut].a);
+            qcopy(&camera_rotation, &D_L06_001600EC_304098[data->cut].b);
+            moby->state = 5;
+            data->t = 0.0f;
+            data->vel = 0.0f;
+            fade_to_black_304098(scale_game_frames_304098(0xF));
+            start_camera_move_304098(&camera_position, &camera_rotation, 2, scale_game_frames_304098(0x12C), 0);
+            set_camera_effect_304098(D_L06_00162198_304098, D_L06_0016219C_304098, D_L06_001621A0_304098,
+                                     D_L06_001621A4_304098, D_L06_001621A8_304098, D_L06_001621B0_304098);
+            set_camera_position_304098(&camera_position);
+            set_camera_rotation_304098(&camera_rotation);
+            D_L06_0015F404_304098 = 1;
+        }
+        if (data->timer < scale_game_frames_304098(10)) {
+            previous_value = float_from_int_304098(data->timer);
+            previous_value = previous_value / (float)scale_game_frames_304098(10);
+            D_L06_0015F3FC_304098 = 1.0f - previous_value;
+        }
+        break;
+    case 5:
+        duration = scale_game_frames_304098(10);
+        timer = data->timer;
+        if (timer < duration) {
+            data->timer = timer + 1;
+            previous_value = float_from_int_304098(timer + 1);
+            previous_value = previous_value / (float)scale_game_frames_304098(10);
+            D_L06_0015F3FC_304098 = 1.0f - previous_value;
+        }
+        previous_value = data->t;
+        approach_two_stage_304098(&data->t, &data->vel, 2.0f, D_0015ED70_304098, D_0015ED70_304098, D_0015ED6C_304098 * 0.5f);
+        qcopy(&camera_position, &D_L06_001600EC_304098[data->cut].a);
+        camera_position.z = camera_position.z + data->t * 18.0f;
+        set_camera_position_304098(&camera_position);
+        set_camera_rotation_304098(&D_L06_001600EC_304098[data->cut].b);
+        previous_value = previous_value * 100.0f;
+        current_angle = data->t * 100.0f * 0.0174532925f;
+        previous_value = previous_value * 0.0174532925f;
+        entry = data->list;
+        for (i = 8; i >= 0; i--, entry++) {
+            if (previous_value < D_L06_001600EC_304098[*entry].b.z && D_L06_001600EC_304098[*entry].b.z < current_angle) {
+                FUN_L06_00304818((int)moby, &D_L06_001600EC_304098[*entry].a);
+                event_304098(0, 0, moby);
+            }
+        }
+        if (1.075f <= data->t) {
+            copy_camera_304098(&D_L06_001600EC_304098[data->cut2].a, &D_L06_001600EC_304098[data->cut2].b, 0x72, 0);
+            fade_to_black_304098(scale_game_frames_304098(10));
+            moby->state = 6;
+            finish_camera_move_304098(3);
+            qcopy(&next_position, &D_L06_001600EC_304098[data->cut2].a);
+            next_position.z = next_position.z + 1.0f;
+            next_position.y = next_position.y - 2.5f;
+            clear_vector_304098(&camera_rotation);
+            camera_rotation.y = -0.2617993878f;
+            camera_rotation.z = *(float *)(D_0013E633_304098 + 0xDB5);
+            start_camera_move_304098(&next_position, &camera_rotation, 2, scale_game_frames_304098(0x12C), 0);
+            D_L06_00167400_304098.f160 = 0.3f;
+            D_L06_00167400_304098.f168 = scale_game_frames_304098(0x2D);
+            event_304098(0, 0, moby);
+        }
+        break;
+    case 6:
+        approach_two_stage_304098(&data->t, &data->vel, 2.0f, D_0015ED70_304098, D_0015ED70_304098, D_0015ED6C_304098 + D_0015ED6C_304098);
+        qcopy(&camera_rotation, &D_L06_001600EC_304098[data->cut2].a);
+        camera_rotation.z = camera_rotation.z + 1.0f;
+        camera_rotation.y = camera_rotation.y - 2.5f;
+        clear_vector_304098(&camera_position);
+        camera_position.y = -0.2617993878f;
+        camera_position.z = *(float *)(D_0013E633_304098 + 0xDB5);
+        set_camera_position_304098(&camera_rotation);
+        set_camera_rotation_304098(&camera_position);
+        if (2.0f <= data->t) {
+            moby->state = 7;
+            data->timer2 = scale_game_frames_304098(0xE10);
+            copy_camera_304098(&D_L06_001600EC_304098[data->cut2].a, &D_L06_001600EC_304098[data->cut2].b, 0, 0);
+            finish_camera_move_304098(3);
+            FUN_L06_00303150((unsigned char *)&D_L06_0015FFD8_304098[data->moby3]);
+        }
+        break;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
