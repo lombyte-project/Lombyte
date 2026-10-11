@@ -266,13 +266,7 @@ typedef struct {
     u8 pad44[0xC];
 } CameraView;
 
-typedef struct {
-    f32 dist;           /* 0x00 */
-    f32 unk4;           /* 0x04 */
-    u8 pad8[8];
-    f32 height;         /* 0x10 */
-    u8 pad14[0xC];
-} CameraSpring;
+#include "rnc/gameplay/camera/camera_spring.h"
 
 typedef struct {
     Vec4 vel;           /* 0x00 */
