@@ -47,10 +47,9 @@ int FUN_L00_00284d90(int groupIndex, int itemIndex) {
     short *slot, *writeSlot;
     if (itemIndex >= 0) {
         value = itemIndex + 1;
-        writeSlot = &bolt_source_stats[groupIndex][0][0];
+        slot = &bolt_source_stats[groupIndex][0][0];
         slotIndex = 63;
-        current = writeSlot[126];
-        writeSlot += 126;
+        current = *(writeSlot = slot + 126);
         slot = writeSlot;
         if (current == value) goto store;
         if (current == 0) goto store;
