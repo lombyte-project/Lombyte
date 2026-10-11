@@ -1681,7 +1681,7 @@ extern s32 D_0013FCC8_2c6158 __asm__("D_0013FCC8");
 extern s32 D_0013FCD8_2c6158 __asm__("D_0013FCD8");
 extern s32 D_0013FCEC_2c6158 __asm__("D_0013FCEC");
 extern s16 D_0013F65E_2c6158 __asm__("D_0013F65E");
-extern u32 D_0013CAE0_2c6158 __asm__("D_0013CAE0");
+extern u32 D_0013CAE0_2c6158 __asm__("D_0013CAE0") __attribute__((section(".data")));
 extern u32 D_001403F0_2c6158 __asm__("D_001403F0");
 extern float D_0015ED6C_2c6158 __asm__("D_0015ED6C");
 extern float D_0015ED60_2c6158 __asm__("D_0015ED60");
@@ -1689,7 +1689,7 @@ extern float D_0013F8C4_2c6158 __asm__("D_0013F8C4");
 extern float D_0013F62C_2c6158 __asm__("D_0013F62C");
 extern OvlVec4 D_0013F3D0_2c6158 __asm__("D_0013F3D0");
 extern void FUN_002223f8_2c6158(s32, s32) __asm__("FUN_L00_002223f8");
-extern void FUN_001edf60_2c6158(float, float, float, void *, u32, void *, s32, s32, s32) __asm__("FUN_L00_001edf60");
+extern void FUN_001edf60_2c6158(void *, float, u32, void *, s32, float, s32, float, s32) __asm__("FUN_L00_001edf60");
 extern s32 FUN_001fef20_2c6158(s32) __asm__("FUN_001f96f8");
 extern void FUN_00257880_2c6158(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void FUN_0028dbe8_2c6158(s32, s32, void *) __asm__("FUN_0022da68");
@@ -1708,29 +1708,29 @@ void FUN_L00_002c6158(u8 *m) {
     u8 *child;
     u8 *motion;
     OvlVec4 a, b;
-    float speed, distance, factor;
+    float speed, distance;
     s32 frames;
     void *effect;
 
     if (m == 0) return;
-    if (*(s32 *)((u8 *)&D_0013F3D0_2c6158 + 0x2004) == 1) FUN_002223f8_2c6158(30, 1);
+    if (hero.state.current == 1) FUN_002223f8_2c6158(30, 1);
     vars = *(u8 **)(m + 0x78);
     if (vars == 0) return;
-    child = *(u8 **)(vars + 0x14);
     motion = 0;
-    if (child == 0) {
-        child = FUN_L00_002c6f88(m, D_0015ED6C_2c6158 * 24.0f);
-        *(u8 **)(vars + 0x14) = child;
+    if (*(u8 **)(vars + 0x14) == 0) {
+        if ((*(u8 **)(vars + 0x14) = FUN_L00_002c6f88(m, D_0015ED6C_2c6158 * 24.0f)) == 0)
+        goto child_ready;
     }
-    if (child != 0) motion = *(u8 **)(child + 0x78);
+    motion = *(u8 **)(*(u8 **)(vars + 0x14) + 0x78);
+child_ready:;
 
-    if (D_001413D4_2c6158 == 1 || D_001413D4_2c6158 == 30) {
-        if (D_0013F4E8_2c6158 >= 2) {
-            FUN_001edf60_2c6158(1.0f, 0.0f, 90.0f, m, 0xff0000ff, 0, 36, -1, 4);
-            if (D_0013FCB8_2c6158 && D_0013FCB4_2c6158) {
-                FUN_001edf60_2c6158(0.5f, 0.0f, 90.0f, m, 0xff00ff00, D_0013FCB4_2c6158 + 0x10, 36, -1, 4);
-            } else if (D_0013FCE0_2c6158) {
-                FUN_001edf60_2c6158(0.5f, 0.0f, 90.0f, m, 0xff00ff00, D_0013FCE0_2c6158 + 0x10, 36, -1, 4);
+    if (hero.state.current == 1 || hero.state.current == 30) {
+        if (hero.state_timer >= 2) {
+            FUN_001edf60_2c6158(m, 1.0f, 0xff0000ff, 0, 36, 0.0f, -1, 90.0f, 4);
+            if (hero.unk968 && ((u8 *)hero.unk964)) {
+                FUN_001edf60_2c6158(m, 0.5f, 0xff00ff00, ((u8 *)hero.unk964) + 0x10, 36, 0.0f, -1, 90.0f, 4);
+            } else if (((u8 *)hero.unk990)) {
+                FUN_001edf60_2c6158(m, 0.5f, 0xff00ff00, ((u8 *)hero.unk990) + 0x10, 36, 0.0f, -1, 90.0f, 4);
             }
         }
     }
@@ -1748,7 +1748,7 @@ void FUN_L00_002c6158(u8 *m) {
             *(u128 *)(child + 0xd0) = *(u128 *)(m + 0xd0);
             *(u128 *)(child + 0xe0) = *(u128 *)(m + 0xe0);
         }
-        if ((D_001413D4_2c6158 == 36 || (D_001413DC_2c6158 == 15 && D_0013F904_2c6158)) && motion) {
+        if ((hero.state.current == 36 || (hero.state.control_mode == 15 && hero.unk5B4)) && motion) {
             *(float *)(vars + 0x18) = 0.0f;
             *(float *)(vars + 0x1c) = 1.0f;
             *(float *)(vars + 0x20) = 0.28f;
@@ -1757,11 +1757,11 @@ void FUN_L00_002c6158(u8 *m) {
             FUN_0028dbe8_2c6158(0, 0, m);
             m[0x20] = 2;
         }
-        if (D_001413D4_2c6158 == 44) {
+        if (hero.state.current == 44) {
             if (motion == 0) return;
-            distance = FUN_001ff450_2c6158(D_0013FCE4_2c6158 + 0x10, child + 0x10);
+            distance = FUN_001ff450_2c6158(((u8 *)hero.unk994) + 0x10, (*(u8 **)(vars + 0x14)) + 0x10);
             frames = scale_game_frames(7);
-            if (D_00140400_2c6158 < scale_game_frames(30)) frames = scale_game_frames(5);
+            if (hero.items[0].unk20 < scale_game_frames(30)) frames = scale_game_frames(5);
             *(float *)(motion + 4) = distance / (float)frames;
             *(float *)(vars + 0x18) = 0.0f;
             *(float *)(vars + 0x1c) = 1.0f;
@@ -1774,14 +1774,14 @@ void FUN_L00_002c6158(u8 *m) {
     case 2:
         FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
         if ((m[0x70] & 2) && m[0x53] != 4) blend_moby_animation(m, 4, 0, scale_game_frames(10));
-        FUN_001ff2a8_2c6158(&a, D_0013FCB4_2c6158 + 0x10, (*(u8 **)(vars + 0x14)) + 0x10);
+        FUN_001ff2a8_2c6158(&a, ((u8 *)hero.unk964) + 0x10, (*(u8 **)(vars + 0x14)) + 0x10);
         speed = *(float *)(motion + 4);
-        if (D_001413DC_2c6158 == 15) speed += D_0013F8C4_2c6158;
-        else if ((D_001413E4_2c6158 == 4 || D_001413E4_2c6158 == 2) && D_0013F62C_2c6158 > 2.0f) speed = D_0015ED6C_2c6158 * 48.0f;
-        b = D_0013F3D0_2c6158;
+        if (hero.state.control_mode == 15) speed += hero.unk574;
+        else if ((hero.state.prev_control_mode == 4 || hero.state.prev_control_mode == 2) && hero.ground_distance > 2.0f) speed = D_0015ED6C_2c6158 * 48.0f;
+        qcopy(&b, &hero.motion.pos);
         b.f[2] += 0.5f;
-        if (FUN_001efc70_2c6158(&b, D_0013FCB4_2c6158 + 0x10, 2, 0, 0)) {
-            if (D_0013F62C_2c6158 > 0.5f) FUN_002223f8_2c6158(6, 1);
+        if (FUN_001efc70_2c6158(&b, ((u8 *)hero.unk964) + 0x10, 2, 0, 0)) {
+            if (hero.ground_distance > 0.5f) FUN_002223f8_2c6158(6, 1);
             else {
                 FUN_002223f8_2c6158(0, 0);
                 effect = FUN_00205000_2c6158(0);
@@ -1791,66 +1791,76 @@ void FUN_L00_002c6158(u8 *m) {
             m[0x20] = 6;
             return;
         }
-        distance = FUN_001ff450_2c6158((*(u8 **)(vars + 0x14)) + 0x10, D_0013FCB4_2c6158 + 0x10);
-        if (distance <= speed) {
-            qcopy((*(u8 **)(vars + 0x14)) + 0x10, D_0013FCB4_2c6158 + 0x10);
-            m[0x20] = 3;
+        distance = FUN_001ff450_2c6158((*(u8 **)(vars + 0x14)) + 0x10, ((u8 *)hero.unk964) + 0x10);
+        if (speed < distance) {
+            FUN_001ff500_2c6158(speed, &a, &a);
+            FUN_001ff278_2c6158((*(u8 **)(vars + 0x14)) + 0x10, (*(u8 **)(vars + 0x14)) + 0x10, &a);
             return;
         }
-        goto move_child;
+        qcopy((*(u8 **)(vars + 0x14)) + 0x10, ((u8 *)hero.unk964) + 0x10);
+        m[0x20] = 3;
+        return;
     case 3:
         FUN_0028dbe8_2c6158(1, 0, m);
         FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
-        qcopy((*(u8 **)(vars + 0x14)) + 0x10, D_0013FCB4_2c6158 + 0x10);
+        qcopy((*(u8 **)(vars + 0x14)) + 0x10, ((u8 *)hero.unk964) + 0x10);
         m[0x20] = 4;
         return;
-    case 4:
-        FUN_L00_0024f7c8(m, 0, &a);
-        a = D_0013F3D0_2c6158;
-        a.f[2] += 0.5f;
-        if (FUN_001efc70_2c6158(&a, D_0013FCB4_2c6158 + 0x10, 2, 0, 0) == 0) {
+    case 4: {
+            float factor;
+            /* Retail tests ordered comparisons; an unordered fade value returns here. */
+            FUN_L00_0024f7c8(m, 0, &a);
+            qcopy(&a, &hero.motion.pos);
+            a.f[2] += 0.5f;
+            if (FUN_001efc70_2c6158(&a, ((u8 *)hero.unk964) + 0x10, 2, 0, 0) != 0) {
+                if (hero.air_frames.s != 0) FUN_002223f8_2c6158(6, 1);
+                else FUN_002223f8_2c6158(0, 1);
+                m[0x20] = 6;
+                return;
+            }
             if ((m[0x70] & 2) && m[0x53] != 4) blend_moby_animation(m, 4, 0, scale_game_frames(10));
             FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
             factor = *(float *)(vars + 0x20) * (D_0015ED60_2c6158 * -0.100000024f + 1.0f);
             *(float *)(vars + 0x18) += 0.6981317f;
             *(float *)(vars + 0x20) = factor;
-            if (factor >= 0.16800001f) return;
-            D_0013F904_2c6158 = 0;
-            if ((*(u8 **)(vars + 0x14)) == 0 || FUN_001ff450_2c6158((*(u8 **)(vars + 0x14)) + 0x10, &D_0013F3D0_2c6158) <= 3.5f) {
+            if (!(factor < 0.16800001f)) return;
+            hero.unk5B4 = 0;
+            if ((*(u8 **)(vars + 0x14)) != 0 && 3.5f < FUN_001ff450_2c6158((*(u8 **)(vars + 0x14)) + 0x10, &hero.motion.pos)) {
+                if ((D_0013CAE0_2c6158 & hero.items[0].button_mask) == 0) {
+                    hero.unk988 = 1;
+                    FUN_002223f8_2c6158(0, 0);
+                    effect = FUN_00205000_2c6158(0);
+                    frames = scale_game_frames(14);
+                    FUN_002323b8_2c6158((float)frames, effect, 0);
+                    m[0x20] = 6;
+                } else {
+                    FUN_0028dbe8_2c6158(2, 0, m);
+                    if (hero.unk978 == 0) FUN_002223f8_2c6158(37, 1);
+                    else FUN_002223f8_2c6158(38, 1);
+                    m[0x20] = 5;
+                }
+            } else {
                 FUN_002223f8_2c6158(0, 1);
                 m[0x20] = 6;
                 return;
             }
-            if ((D_0013CAE0_2c6158 & D_001403F0_2c6158) == 0) {
-                D_0013FCD8_2c6158 = 1;
-                FUN_002223f8_2c6158(0, 0);
-                effect = FUN_00205000_2c6158(0);
-                frames = scale_game_frames(14);
-                FUN_002323b8_2c6158((float)frames, effect, 0);
-                m[0x20] = 6;
-            } else {
-                FUN_0028dbe8_2c6158(2, 0, m);
-                FUN_002223f8_2c6158(D_0013FCC8_2c6158 == 0 ? 37 : 38, 1);
-                m[0x20] = 5;
+            return;
+        }
+    case 5: {
+            float fade_scale;
+            qcopy((*(u8 **)(vars + 0x14)) + 0x10, ((u8 *)hero.unk964) + 0x10);
+            fade_scale = D_0015ED60_2c6158;
+            if ((m[0x70] & 2) && m[0x53] != 4) {
+                blend_moby_animation(m, 4, 0, scale_game_frames(10));
+                fade_scale = D_0015ED60_2c6158;
             }
-        } else {
-            FUN_002223f8_2c6158(D_0013F65E_2c6158 == 0 ? 0 : 6, 1);
+            *(float *)(vars + 0x18) += 0.6981317f;
+            *(float *)(vars + 0x20) *= fade_scale * -0.100000024f + 1.0f;
+            FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+            if ((u32)(hero.state.current - 37) < 2) return;
             m[0x20] = 6;
+            return;
         }
-        return;
-    case 5:
-        qcopy((*(u8 **)(vars + 0x14)) + 0x10, D_0013FCB4_2c6158 + 0x10);
-        speed = D_0015ED60_2c6158;
-        if ((m[0x70] & 2) && m[0x53] != 4) {
-            blend_moby_animation(m, 4, 0, scale_game_frames(10));
-            speed = D_0015ED60_2c6158;
-        }
-        *(float *)(vars + 0x18) += 0.6981317f;
-        *(float *)(vars + 0x20) *= speed * -0.100000024f + 1.0f;
-        FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
-        if ((u32)(D_001413D4_2c6158 - 37) < 2) return;
-        m[0x20] = 6;
-        return;
     case 6:
         FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
         *(float *)(motion + 4) = D_0015ED6C_2c6158 * 80.0f;
@@ -1866,52 +1876,57 @@ void FUN_L00_002c6158(u8 *m) {
             FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
             return;
         }
-        *(u128 *)((*(u8 **)(vars + 0x14)) + 0x10) = b.q;
+        qcopy((*(u8 **)(vars + 0x14)) + 0x10, &b);
         if (m[0x53] != 1) blend_moby_animation(m, 1, 0, scale_game_frames(10));
         m[0x20] = 1;
         return;
-    case 9:
-        FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
-        if ((m[0x70] & 2) && m[0x53] != 4) blend_moby_animation(m, 4, 0, scale_game_frames(10));
-        FUN_001ff2a8_2c6158(&a, D_0013FCE4_2c6158 + 0x10, (*(u8 **)(vars + 0x14)) + 0x10);
-        distance = FUN_001ff3d8_2c6158(&a);
-        speed = *(float *)(motion + 4);
-        if (distance <= speed) {
-            *(u128 *)((*(u8 **)(vars + 0x14)) + 0x10) = *(u128 *)(D_0013FCE4_2c6158 + 0x10);
+    case 9: {
+            float step;
+            FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+            if ((m[0x70] & 2) && m[0x53] != 4) blend_moby_animation(m, 4, 0, scale_game_frames(10));
+            FUN_001ff2a8_2c6158(&a, ((u8 *)hero.unk994) + 0x10, (*(u8 **)(vars + 0x14)) + 0x10);
+            distance = FUN_001ff3d8_2c6158(&a);
+            step = *(float *)(motion + 4);
+            if (step < distance) {
+                FUN_001ff500_2c6158(step, &a, &a);
+                FUN_001ff278_2c6158((*(u8 **)(vars + 0x14)) + 0x10, (*(u8 **)(vars + 0x14)) + 0x10, &a);
+                return;
+            }
+            qcopy((*(u8 **)(vars + 0x14)) + 0x10, ((u8 *)hero.unk994) + 0x10);
             m[0x20] = 11;
             FUN_0028dbe8_2c6158(1, 0, m);
             return;
         }
-move_child:
-        FUN_001ff500_2c6158(speed, &a, &a);
-        FUN_001ff278_2c6158((*(u8 **)(vars + 0x14)) + 0x10, (*(u8 **)(vars + 0x14)) + 0x10, &a);
-        return;
     case 10:
         FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
         m[0x20] = 11;
         return;
-    case 11:
-        if ((m[0x70] & 2) && m[0x53] != 4) blend_moby_animation(m, 4, 0, scale_game_frames(10));
-        FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
-        factor = *(float *)(vars + 0x20) * (D_0015ED60_2c6158 * -0.6f + 1.0f);
-        *(float *)(vars + 0x18) += 0.6981317f;
-        *(float *)(vars + 0x20) = factor;
-        if (factor >= 0.16800001f) return;
-        D_0013FCEC_2c6158 = 1;
-        m[0x20] = 12;
-        return;
-    case 12:
-        if (D_0013FCE4_2c6158) *(u128 *)((*(u8 **)(vars + 0x14)) + 0x10) = *(u128 *)(D_0013FCE4_2c6158 + 0x10);
-        speed = D_0015ED60_2c6158;
-        if ((m[0x70] & 2) && m[0x53] != 4) {
-            blend_moby_animation(m, 4, 0, scale_game_frames(10));
-            speed = D_0015ED60_2c6158;
+    case 11: {
+            float factor;
+            if ((m[0x70] & 2) && m[0x53] != 4) blend_moby_animation(m, 4, 0, scale_game_frames(10));
+            FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+            factor = *(float *)(vars + 0x20) * (D_0015ED60_2c6158 * -0.6f + 1.0f);
+            *(float *)(vars + 0x18) += 0.6981317f;
+            *(float *)(vars + 0x20) = factor;
+            if (!(factor < 0.16800001f)) return;
+            hero.unk99C = 1;
+            m[0x20] = 12;
+            return;
         }
-        *(float *)(vars + 0x18) += 0.6981317f;
-        *(float *)(vars + 0x20) *= speed * -0.6f + 1.0f;
-        FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
-        if (D_001413D4_2c6158 != 44) m[0x20] = 13;
-        return;
+    case 12: {
+            float fade_scale;
+            if (((u8 *)hero.unk994)) qcopy((*(u8 **)(vars + 0x14)) + 0x10, ((u8 *)hero.unk994) + 0x10);
+            fade_scale = D_0015ED60_2c6158;
+            if ((m[0x70] & 2) && m[0x53] != 4) {
+                blend_moby_animation(m, 4, 0, scale_game_frames(10));
+                fade_scale = D_0015ED60_2c6158;
+            }
+            *(float *)(vars + 0x18) += 0.6981317f;
+            *(float *)(vars + 0x20) *= fade_scale * -0.6f + 1.0f;
+            FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+            if (hero.state.current != 44) m[0x20] = 13;
+            return;
+        }
     case 13:
         if ((m[0x70] & 2) && m[0x53] != 4) blend_moby_animation(m, 4, 0, scale_game_frames(10));
         FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
@@ -1928,12 +1943,12 @@ move_child:
             FUN_001ff278_2c6158((*(u8 **)(vars + 0x14)) + 0x10, (*(u8 **)(vars + 0x14)) + 0x10, &a);
             FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
         } else {
-            *(u128 *)((*(u8 **)(vars + 0x14)) + 0x10) = b.q;
+            qcopy((*(u8 **)(vars + 0x14)) + 0x10, &b);
             if (m[0x53] != 1) blend_moby_animation(m, 1, 0, scale_game_frames(10));
             m[0x20] = 1;
         }
-        if (D_001413D4_2c6158 != 44 || motion == 0) return;
-        distance = FUN_001ff450_2c6158(D_0013FCE4_2c6158 + 0x10, (*(u8 **)(vars + 0x14)) + 0x10);
+        if (hero.state.current != 44 || motion == 0) return;
+        distance = FUN_001ff450_2c6158(((u8 *)hero.unk994) + 0x10, (*(u8 **)(vars + 0x14)) + 0x10);
         *(float *)(motion + 4) = distance / 10.0f;
         *(float *)(vars + 0x1c) = 1.0f;
         *(float *)(vars + 0x18) = 0.0f;
@@ -1941,6 +1956,7 @@ move_child:
         if (m[0x53] != 3) blend_moby_animation(m, 3, 0, scale_game_frames(10));
         m[0x20] = 9;
         return;
+    case 15:
     default:
         return;
     }
