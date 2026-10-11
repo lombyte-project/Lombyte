@@ -667,7 +667,124 @@ void FUN_L05_00253850(void) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00253b48.s", FUN_L05_00253b48);
+#else
+extern s32 FUN_001f96f8(s32);
+extern s32 FUN_L00_001fefc8(u8 *, void *) __asm__("FUN_L00_001fefc8");
+extern void FUN_001f9a28(void *, void *, void *);
+extern f32 FUN_001f99c0(f32);
+extern void FUN_001f9fc8(void *);
+extern void FUN_001fa2d8(void *, void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern f32 FUN_001fa6c0(s32);
+extern f32 FUN_001f9de0(f32);
+extern s32 FUN_001fa6d0(f32);
+extern f32 FUN_001f9b48(void *, void *);
+extern void FUN_L00_002591d0(void **, s32, s32, s32);
+extern void FUN_L00_002592b8(void **, void *, s32, s32);
+extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
+extern s32 D_L00_0015F5CC __asm__("D_L00_0015F5CC");
+extern s32 D_0013D4B8;
+extern f32 D_0013F420[];
+extern f32 D_0013F3D0[];
+
+void FUN_L05_00253b48(void) {
+    u8 *state;
+    u8 *moby;
+    u8 *first;
+    u8 *second;
+    u8 *third;
+    f32 delta[4];
+    f32 matrix[16];
+    s32 count, red, green, blue;
+    f32 period, wave, ratio;
+
+    if (hero.unk86C == 0)
+        return;
+    state = *(u8 **)(hero.unk86C + 0x78);
+    if (*(s32 *)(state + 0x44) != -1) {
+        FUN_L00_002591d0((void **)&first, *(s32 *)(state + 0x44), 0, 0);
+        if (first != 0) {
+            do {
+
+                if (*(s16 *)(first + 0xA6) == 0x473 && FUN_L00_001fefc8(first + 0xBC, first) != 0) {
+                    FUN_001f9a28(delta, first + 0x10, D_0013F420);
+                    FUN_001f9fc8(matrix);
+                    FUN_001fa2d8(matrix, first + 0xC0);
+                    FUN_001f9d20(delta, delta, matrix);
+                    if (FUN_001f99c0(delta[0]) < 0.5f && FUN_001f99c0(delta[1]) < 2.9f && FUN_001f99c0(delta[2]) < 2.9f) {
+                        hero.unk8C4 += **(s32 **)(first + 0x78);
+                        first[0xBC] = FUN_001f96f8(0x3C);
+                        if (hero.unk86C != 0)
+                            allocate_voice_for_target_entry(1, 0, hero.unk86C);
+                    }
+                }
+                FUN_L00_002592b8((void **)&first, first, 0, 0);
+            } while (first != 0);
+        }
+    }
+    count = FUN_001f96f8(0x32);
+    period = FUN_001fa6c0(count);
+    ratio = (f32)(D_L00_0015F5CC % count) / period;
+    ratio += ratio;
+    wave = FUN_001f9de0(ratio * 3.1415927f + -3.1415927f);
+    red = FUN_001fa6d0(wave * 48.0f) + 0x68;
+    green = FUN_001fa6d0(wave * 64.0f) + 0xD0;
+    blue = FUN_001fa6d0(wave * 24.0f) + 0x3C;
+    if (green > 0xFF)
+        green = 0xFF;
+    if (*(s32 *)(state + 0x48) != -1) {
+        if (hero.unk8BC == 0) {
+            FUN_L00_002591d0((void **)&second, *(s32 *)(state + 0x48), 0, 0);
+            if (second != 0) {
+                u32 color = (blue << 16) | 0x80000000U | (green << 8) | red;
+                do {
+                    moby = second;
+                    if (*(s16 *)(moby + 0xA6) == 0x474) {
+                        *(u16 *)(moby + 0x34) |= 0x10;
+                        *(u32 *)(moby + 0x90) = color;
+                        if (FUN_L00_001fefc8(moby + 0xBC, moby) != 0) {
+                            FUN_001f9a28(delta, moby + 0x10, D_0013F3D0);
+                            FUN_001f9fc8(matrix);
+                            FUN_001fa2d8(matrix, moby + 0xC0);
+                            FUN_001f9d20(delta, delta, matrix);
+                            if (FUN_001f99c0(delta[0]) < 2.8f && FUN_001f99c0(delta[1]) < 1.25f && FUN_001f99c0(delta[2]) < 1.5f) {
+                                hero.unk8C4 += **(s32 **)(moby + 0x78);
+                                moby[0xBC] = FUN_001f96f8(0x3C);
+                                if (hero.unk86C != 0)
+                                    allocate_voice_for_target_entry(1, 0, hero.unk86C);
+                            }
+                        }
+                    }
+                    FUN_L00_002592b8((void **)&second, second, 0, 0);
+                } while (second != 0);
+            }
+        }
+    }
+    if (*(s32 *)(state + 0x4C) != -1) {
+        FUN_L00_002591d0((void **)&third, *(s32 *)(state + 0x4C), 0, 0);
+        while (third != 0) {
+
+            if (*(s16 *)(third + 0xA6) == 0x1D6 && FUN_L00_001fefc8(third + 0xBC, third) != 0 && FUN_001f9b48(D_0013F420, third + 0x10) < 1.5f) {
+                third[0xBC] = FUN_001f96f8(300);
+                if (*(s32 *)((u8 *)&hero + 0x10B8) != 0x24) {
+                    *(s32 *)((u8 *)&hero + 0x20B8) = 0x24;
+                    hero.unk20AC = 0;
+                    FUN_L05_0023dc88(0);
+                    hero.unk20AC = 1;
+                }
+                hero.unk8CE++;
+                if (hero.unk8CE > 3)
+                    hero.unk8CE = 3;
+                *(s32 *)((u8 *)&hero + 0x20B8) = 0x24;
+                D_0013D4B8++;
+            }
+            FUN_L00_002592b8((void **)&third, third, 0, 0);
+        }
+    }
+}
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254058.s", FUN_L05_00254058);
 #else
