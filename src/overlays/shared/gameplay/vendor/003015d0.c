@@ -189,16 +189,16 @@ void FUN_L14_003017f8(char *m) {
         path_a[i][1] += t * (length + length);
     }
     for (i = 0; i < 32; i++) {
-        if (i == 0 || i == 31) {
-            qcopy(d + 0x20 + (i << 4), path_a[i]);
-            qcopy(d + 0x220 + (i << 4), path_b[i]);
-        } else {
+        if (i != 0 && i != 31) {
             add_vector_xyz(work, path_a[i - 1], path_a[i]);
             add_vector_xyz(work, work, path_a[i + 1]);
             scale_vector_xyz(d + 0x20 + (i << 4), work, 0.333f);
             add_vector_xyz(work, path_b[i - 1], path_b[i]);
             add_vector_xyz(work, work, path_b[i + 1]);
             scale_vector_xyz(d + 0x220 + (i << 4), work, 0.333f);
+        } else {
+            qcopy(d + 0x20 + (i << 4), path_a[i]);
+            qcopy(d + 0x220 + (i << 4), path_b[i]);
         }
     }
     for (i = 0; i < 4; i++) {
