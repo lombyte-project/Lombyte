@@ -455,7 +455,282 @@ unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitc
     }
     return best;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b49a8.s", FUN_L00_002b49a8);
+#else
+extern u8 *D_001413D0_2b49a8 __asm__("D_001413D0");
+extern s16 D_001416F8_2b49a8 __asm__("D_001416F8");
+extern u16 D_001416FA_2b49a8 __asm__("D_001416FA");
+extern u32 D_001416FC_2b49a8 __asm__("D_001416FC");
+extern s32 D_00140600_2b49a8 __asm__("D_00140600");
+extern f32 D_0014060C_2b49a8 __asm__("D_0014060C");
+extern u8 D_0013E52F_2b49a8 __asm__("D_0013E52F");
+extern u32 D_0013CAE0_2b49a8 __asm__("D_0013CAE0");
+extern u32 D_001403F0_2b49a8 __asm__("D_001403F0");
+extern u8 *D_L00_00173E58_2b49a8 __asm__("D_L00_00173E58");
+extern f32 D_0015ED6C_2b49a8 __asm__("D_0015ED6C");
+extern s32 D_0015EEA4_2b49a8 __asm__("D_0015EEA4");
+extern s32 D_0015ED84_2b49a8 __asm__("D_0015ED84");
+extern f32 D_0017ACF4_2b49a8 __asm__("D_L00_0017ACF4");
+extern u8 D_001802C0_2b49a8[] __asm__("D_L00_001802C0");
+extern u8 D_L00_00166DC0_2b49a8[] __asm__("D_L00_00166DC0");
+extern u8 D_0013F990_2b49a8[] __asm__("D_0013F990");
+extern s32 D_L00_0015F5C4_2b49a8 __asm__("D_L00_0015F5C4");
+
+extern void FUN_001f9770_2b49a8(void *) __asm__("FUN_001f9770");
+extern void FUN_001f9740_2b49a8(void *) __asm__("FUN_001f9740");
+extern s32 FUN_001f96f8_2b49a8(s32) __asm__("FUN_001f96f8");
+extern void FUN_L00_002223f8_2b49a8(s32, s32) __asm__("FUN_L00_002223f8");
+extern void FUN_001fa2b8_2b49a8(void *) __asm__("FUN_001fa2b8");
+extern void FUN_001fa2d8_2b49a8(void *, void *) __asm__("FUN_001fa2d8");
+extern void FUN_001f9d20_2b49a8(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void FUN_001f99f8_2b49a8(void *) __asm__("FUN_001f99f8");
+extern void FUN_001f9a10_2b49a8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f9cf8_2b49a8(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void FUN_001f9bf8_2b49a8(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 FUN_001f9e90_2b49a8(f32, f32) __asm__("FUN_001f9e90");
+extern f32 FUN_001f9b20_2b49a8(void *) __asm__("FUN_001f9b20");
+extern f32 FUN_001f9b48_2b49a8(void *, void *) __asm__("FUN_001f9b48");
+extern f32 FUN_001f9b80_2b49a8(void *, void *) __asm__("FUN_001f9b80");
+extern f32 FUN_001f9af0_2b49a8(void *) __asm__("FUN_001f9af0");
+extern f32 FUN_001f9dc8_2b49a8(f32) __asm__("FUN_001f9dc8");
+extern f32 FUN_001f9de0_2b49a8(f32) __asm__("FUN_001f9de0");
+extern f32 FUN_001f99c0_2b49a8(f32) __asm__("FUN_001f99c0");
+extern f32 FUN_001fa580_2b49a8(f32, f32) __asm__("FUN_001fa580");
+extern f32 FUN_001fa688_2b49a8(f32, f32) __asm__("FUN_001fa688");
+extern f32 FUN_001fa6c0_2b49a8(s32) __asm__("FUN_001fa6c0");
+extern void FUN_L00_001edf60_2b49a8(f32, f32, f32, void *, u32, void *, s32, s32, s32) __asm__("FUN_L00_001edf60");
+extern s32 FUN_001efa68_2b49a8(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
+extern s32 FUN_L00_00233e98_2b49a8(s32) __asm__("FUN_L00_00233e98");
+extern s32 FUN_L00_00233db8_2b49a8(s32, s32) __asm__("FUN_L00_00233db8");
+extern u8 *FUN_002141f8_2b49a8(u8 *) __asm__("FUN_002141f8");
+extern void FUN_L00_0024f7c8_2b49a8(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
+extern void FUN_L00_00262c50_2b49a8(void *, f32, f32, f32) __asm__("FUN_L00_00262c50");
+extern f32 FUN_L00_00257be8_2b49a8(f32, f32) __asm__("FUN_L00_00257be8");
+extern s32 FUN_L00_00257b90_2b49a8(s32, s32) __asm__("FUN_L00_00257b90");
+extern void FUN_L00_0026dd20_2b49a8(void *, void *, u32, s32, f32) __asm__("FUN_L00_0026dd20");
+extern void FUN_L00_00233660_2b49a8(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
+extern void FUN_L00_001f2868_2b49a8(void *, s32, u8 *, void *, f32) __asm__("FUN_L00_001f2868");
+extern void FUN_L00_002caf70_2b49a8(void *, void *, void *, f32, f32, f32, f32) __asm__("FUN_L00_002caf70");
+extern void FUN_L00_00257880_2b49a8(void *, s32, s32, s32) __asm__("FUN_L00_00257880");
+extern void FUN_L00_002577c8_2b49a8(void *, s32, s32) __asm__("FUN_L00_002577c8");
+extern void FUN_L00_00250480_2b49a8(void *) __asm__("FUN_L00_00250480");
+extern void FUN_L00_0020e698_2b49a8(void) __asm__("FUN_L00_0020e698");
+extern s32 FUN_L00_0023e738_2b49a8(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_0023e738");
+extern void FUN_L00_0023e838_2b49a8(s32) __asm__("FUN_L00_0023e838");
+
+void FUN_L00_002b49a8(u8 *m) {
+    s32 *v = *(s32 **)(m + 0x78);
+    struct {
+        V_2b46a8 velocity;
+        V_2b46a8 target_copy;
+        V_2b46a8 position;
+        struct {
+            V_2b46a8 target;
+            union {
+                struct { u8 *owner; u32 flags; u8 b8, b9; u16 oclass; f32 value; s32 enabled; } collision;
+                V_2b46a8 vec;
+            } options;
+        } work;
+        V_2b46a8 matrix[4];
+        V_2b46a8 tmp;
+        V_2b46a8 tmp2;
+        f32 yaw, pitch;
+    } scratch;
+    f32 base_yaw, base_pitch, dist, adjusted_yaw, angle, limit;
+    s32 i, n, index, state;
+    u8 *other, *part;
+
+    scratch.velocity.q = 0;
+    other = 0;
+    if (m[0x20] == 0) {
+        m[0x20] = 1;
+        v[4] = -1;
+        v[5] = 0;
+    }
+    FUN_001f9770_2b49a8(v + 1);
+    FUN_001f9740_2b49a8(v);
+    if (hero.state.current == 1) FUN_L00_002223f8_2b49a8(30, 1);
+    if (m[0x53] == 0 && m[0x51] < 3) v[0] = FUN_001f96f8_2b49a8(7);
+
+    state = hero.state.current;
+    if (state == 30 && (*(u16 *)(D_001413D0_2b49a8 + 0x34) & 1)) {
+        u8 *origin = D_L00_00166DC0_2b49a8;
+        FUN_001fa2b8_2b49a8(&scratch.work.target);
+        FUN_001fa2d8_2b49a8(scratch.matrix, &scratch.work.target);
+        scratch.velocity.f[2] = D_0015ED6C_2b49a8 * 40.0f;
+        FUN_001f9d20_2b49a8(&scratch.velocity, &scratch.velocity, scratch.matrix);
+        FUN_001f99f8_2b49a8(&scratch.position);
+        scratch.position.f[0] += 0.15f;
+        scratch.position.f[1] += 0.15f;
+        scratch.position.f[2] += 0.75f;
+        FUN_001f9d20_2b49a8(&scratch.position, &scratch.position, scratch.matrix);
+        FUN_001f9a10_2b49a8(&scratch.position, &scratch.position, origin);
+        if (hero.state.current == state && (*(u16 *)(D_001413D0_2b49a8 + 0x34) & 1) && !hero.unk20AC) {
+            FUN_L00_001edf60_2b49a8(1.0f, 0.0f, 90.0f, m, 0xff0f0fff, 0, 0x26, -1, 4);
+            FUN_001f9bf8_2b49a8(&scratch.tmp, &scratch.velocity, 20.0f);
+            FUN_001f9a10_2b49a8(&scratch.work.options, &scratch.tmp, &scratch.position);
+            scratch.tmp.q = scratch.work.options.vec.q;
+            if (FUN_001efa68_2b49a8(origin, &scratch.tmp, 0, m, 0) &&
+                D_L00_00173E58_2b49a8 && (*(u16 *)(D_L00_00173E58_2b49a8 + 0x34) & 0x1000))
+                other = D_L00_00173E58_2b49a8;
+        }
+    } else {
+        scratch.velocity.f[0] = D_0015ED6C_2b49a8 * 40.0f;
+        FUN_001f9cf8_2b49a8(&scratch.velocity, &scratch.velocity, D_0013F990_2b49a8);
+        FUN_L00_0024f7c8_2b49a8(m, 0, &scratch.position);
+    }
+    scratch.yaw = D_00140600_2b49a8 ? D_0014060C_2b49a8 : FUN_001f9e90_2b49a8(scratch.velocity.f[0], scratch.velocity.f[1]);
+    scratch.pitch = -FUN_001f9e90_2b49a8(FUN_001f9b20_2b49a8(&scratch.velocity), scratch.velocity.f[2]);
+    base_yaw = scratch.yaw;
+    base_pitch = scratch.pitch;
+    if (hero.state.current != 30) {
+        if (hero.unk22C8 == 1) {
+            scratch.yaw = *(f32 *)(m + 0x48);
+            scratch.pitch = D_0017ACF4_2b49a8;
+            base_yaw = scratch.yaw;
+            base_pitch = scratch.pitch;
+        }
+        other = FUN_L00_002b46a8((s32)m, &scratch.position, &scratch.yaw, &scratch.pitch);
+    }
+    if (other && *(s16 *)(v + 1) == 0 && FUN_L00_00233e98_2b49a8(-1)) {
+        part = FUN_002141f8_2b49a8(other);
+        dist = FUN_001f9b48_2b49a8(D_L00_00166DC0_2b49a8, other + 0x10);
+        qcopy(&scratch.work.target, other + 0x10);
+        scratch.work.target.f[2] += part ? *(f32 *)(part + 0x10) : 0.5f;
+        angle = FUN_001f99c0_2b49a8(0.9f - (dist / 50.0f) * 0.65f);
+        FUN_L00_001edf60_2b49a8(angle, 0.0f, 90.0f, m, 0xff0fff0f, &scratch.work.target, 0x26, -1, 4);
+    }
+    if (hero.unk20A8 && hero.state.current != 0x72 && D_L00_0015F5C4_2b49a8 != 2 &&
+        FUN_001f96f8_2b49a8(5 - D_0013E52F_2b49a8) < hero.unk1BC && v[0] == 0) {
+        if (FUN_L00_00233db8_2b49a8(-1, 1) && !hero.unk20AC) {
+            v[0] = FUN_001f96f8_2b49a8(6);
+            if (other) {
+                qcopy(&scratch.work.target, other + 0x10);
+                part = FUN_002141f8_2b49a8(other);
+                scratch.work.target.f[2] += part ? *(f32 *)(part + 0x10) : 0.5f;
+                dist = D_0015ED6C_2b49a8 * 40.0f;
+                scratch.pitch = -FUN_001f9e90_2b49a8(FUN_001f9b80_2b49a8(&scratch.position, &scratch.work.target), scratch.work.target.f[2] - scratch.position.f[2]);
+                adjusted_yaw = base_pitch - hero.unk2E4.f * 0.5f;
+                angle = FUN_001fa688_2b49a8(adjusted_yaw, scratch.pitch);
+                base_pitch = scratch.pitch;
+                if (angle >= 0.17453292f) {
+                    limit = FUN_001fa580_2b49a8(adjusted_yaw, 0.17453292f);
+                    if (scratch.pitch <= limit) {
+                        limit = FUN_001fa580_2b49a8(adjusted_yaw, -0.17453292f);
+                        if (scratch.pitch >= limit) limit = adjusted_yaw;
+                    }
+                    base_pitch = limit;
+                }
+                FUN_L00_00262c50_2b49a8(&scratch.tmp, dist, base_yaw, -base_pitch);
+                FUN_001f9a10_2b49a8(&scratch.tmp, &scratch.tmp, &scratch.position);
+                scratch.yaw = FUN_001f9e90_2b49a8(scratch.work.target.f[0] - scratch.tmp.f[0], scratch.work.target.f[1] - scratch.tmp.f[1]);
+                scratch.pitch = -FUN_001f9e90_2b49a8(FUN_001f9b80_2b49a8(&scratch.tmp, &scratch.work.target), scratch.work.target.f[2] - scratch.tmp.f[2]);
+            } else if (hero.state.current != 30) {
+                scratch.pitch -= hero.unk2E4.f * 0.5f;
+                base_pitch -= hero.unk2E4.f * 0.5f;
+            }
+            scratch.work.options.collision.owner = m;
+            scratch.work.options.collision.flags = 0x10000;
+            scratch.work.options.collision.b8 = 1;
+            scratch.work.options.collision.b9 = 1;
+            scratch.work.options.collision.oclass = *(u16 *)(m + 0xa6);
+            scratch.work.options.collision.value = 0.25f;
+            scratch.work.options.collision.enabled = 1;
+            scratch.work.target.f[0] = FUN_001f9dc8_2b49a8(FUN_001f9e90_2b49a8(hero.unk670, hero.unk674));
+            scratch.work.target.f[1] = FUN_001f9de0_2b49a8(FUN_001f9e90_2b49a8(hero.unk670, hero.unk674));
+            scratch.work.target.f[2] = 1.0f;
+            *(u32 *)&scratch.work.target.f[3] = 0x45afdf66;
+            FUN_L00_00233660_2b49a8(scratch.matrix, 0.7f, -0.15f, 0.5f);
+            FUN_L00_001f2868_2b49a8(scratch.matrix, 5, D_001413D0_2b49a8, &scratch.work.target, 0.42f);
+            FUN_L00_002caf70_2b49a8(D_001413D0_2b49a8, &scratch.position, other, scratch.yaw, scratch.pitch, base_yaw, base_pitch);
+            v[5] = FUN_001f96f8_2b49a8(15);
+            for (i = 4; i >= 0; --i) {
+                scratch.work.options.vec.q = 0;
+                scratch.work.options.vec.f[0] = FUN_L00_00257be8_2b49a8(-1.0f, 1.0f);
+                scratch.work.options.vec.f[1] = FUN_L00_00257be8_2b49a8(-1.0f, 1.0f);
+                scratch.work.options.vec.f[2] = FUN_L00_00257be8_2b49a8(-1.0f, 1.0f);
+                scratch.work.target.q = scratch.work.options.vec.q;
+                FUN_001f9bf8_2b49a8(&scratch.work.target, &scratch.work.target, FUN_001f9af0_2b49a8(&scratch.velocity) * 0.65f);
+                FUN_001f9a10_2b49a8(&scratch.work.target, &scratch.velocity, &scratch.work.target);
+                FUN_001f9bf8_2b49a8(&scratch.work.target, &scratch.work.target, FUN_L00_00257be8_2b49a8(D_0015ED6C_2b49a8 * 3.0f, D_0015ED6C_2b49a8 * 6.0f));
+                FUN_L00_0026dd20_2b49a8(&scratch.position, &scratch.work.target, 0x5f2f4f6f,
+                    FUN_L00_00257b90_2b49a8(FUN_001f96f8_2b49a8(5), FUN_001f96f8_2b49a8(10)), 10000.0f);
+            }
+            FUN_001f9bf8_2b49a8(&scratch.velocity, &scratch.velocity, D_0015ED6C_2b49a8 * 0.5f);
+            FUN_L00_0026dd20_2b49a8(&scratch.position, &scratch.velocity, 0x2f4f7f7f,
+                FUN_L00_00257b90_2b49a8(FUN_001f96f8_2b49a8(4), FUN_001f96f8_2b49a8(7)), 200000.0f);
+        }
+        if (m[0x53] != 4) FUN_L00_00257880_2b49a8(m, 4, 0, FUN_001f96f8_2b49a8(7));
+        n = D_0015EEA4_2b49a8;
+        if (D_001416F8_2b49a8 != -1) {
+            D_001416F8_2b49a8++;
+            n = D_0015EEA4_2b49a8;
+        }
+        if (D_001416FA_2b49a8 < FUN_001f96f8_2b49a8(n) / 600) {
+            D_001416FA_2b49a8 = FUN_001f96f8_2b49a8(D_0015EEA4_2b49a8) / 600;
+            index = D_0015ED84_2b49a8;
+        } else index = D_0015ED84_2b49a8;
+        D_001416FC_2b49a8 |= (1 << index) | 0x80000000;
+    }
+    if (((D_0013CAE0_2b49a8 & D_001403F0_2b49a8) && FUN_L00_00233e98_2b49a8(-1)) ||
+        FUN_001f96f8_2b49a8(9) >= hero.unk1BC && hero.unk20A8) {
+        if (hero.state.current != 0x72 && D_L00_0015F5C4_2b49a8 != 2) goto finish;
+    }
+    if (m[0x53] == 0 && !(m[0x70] & 2)) {
+        if (hero.state.current == 0x72 || D_L00_0015F5C4_2b49a8 == 2) goto clear;
+    } else {
+        if (hero.state.current == 0x72) goto clear;
+        if (D_L00_0015F5C4_2b49a8 == 2) goto skip;
+        if (m[0x53] != 1) FUN_L00_00257880_2b49a8(m, 1, 0, FUN_001f96f8_2b49a8(7));
+        goto skip;
+    }
+    goto skip;
+clear:
+    FUN_L00_002577c8_2b49a8(m, 1, 0);
+    FUN_L00_00250480_2b49a8(m);
+skip:
+    FUN_L00_0020e698_2b49a8();
+    v[0] = 0;
+finish:
+    if (m[0x52] != 2 && v[5] > 0) {
+        f32 red, green, blue;
+        n = FUN_001f96f8_2b49a8(9);
+        if (v[5] < n) n = v[5];
+        else n = FUN_001f96f8_2b49a8(9);
+        red = FUN_001fa6c0_2b49a8(n) * 0.7f / (f32)FUN_001f96f8_2b49a8(9);
+        n = FUN_001f96f8_2b49a8(9);
+        if (v[5] < n) n = v[5];
+        else n = FUN_001f96f8_2b49a8(9);
+        green = FUN_001fa6c0_2b49a8(n) * 0.7f / (f32)FUN_001f96f8_2b49a8(9);
+        n = FUN_001f96f8_2b49a8(9);
+        if (v[5] < n) n = v[5];
+        else n = FUN_001f96f8_2b49a8(9);
+        blue = FUN_001fa6c0_2b49a8(n) * 0.7f / (f32)FUN_001f96f8_2b49a8(9);
+        angle = FUN_001f9dc8_2b49a8(FUN_001f9e90_2b49a8(hero.unk670, hero.unk674));
+        scratch.position.f[0] = hero.motion.pos.f[0] + angle + angle;
+        angle = FUN_001f9de0_2b49a8(FUN_001f9e90_2b49a8(hero.unk670, hero.unk674));
+        scratch.position.f[1] = hero.motion.pos.f[1] + angle + angle;
+        scratch.position.f[2] = hero.motion.pos.f[2] + 1.0f;
+        if (v[4] == -1) v[4] = FUN_L00_0023e738_2b49a8(&scratch.position, 6.0f, 0.0f, red, green, blue);
+        else {
+            u8 *light = D_001802C0_2b49a8 + v[4] * 0x20;
+            qcopy(light + 0x10, &scratch.position);
+            *(f32 *)(light + 8) = blue;
+            *(f32 *)(light + 0x1c) = 6.0f;
+            *(f32 *)(light + 0) = red;
+            *(f32 *)(light + 4) = green;
+        }
+        FUN_001f9740_2b49a8(v + 5);
+        return;
+    }
+    if (v[4] != -1) {
+        FUN_L00_0023e838_2b49a8(v[4]);
+        v[4] = -1;
+        v[5] = 0;
+    }
+}
+#endif
 
 #define NOT_SDA
 
