@@ -72,10 +72,10 @@ block_13:
     if (mpeg->mb_buf[sp0].unk13C == 0) {
         goto block_16;
     }
-    func_001271D8(*(s32 *)(var30 + sp0 * 0x140), mpeg->mc_work);
+    func_001271D8(mpeg->mb_buf[sp0].unk128, mpeg->mc_work);
     return;
 block_16:
-    func_00127178(*(s32 *)(var30 + sp0 * 0x140), mpeg->mc_work,
+    func_00127178(mpeg->mb_buf[sp0].unk128, mpeg->mc_work,
                   mpeg->mb_buf[sp0].ipu_out);
     return;
 }
