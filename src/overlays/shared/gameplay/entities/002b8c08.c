@@ -1089,21 +1089,24 @@ extern f32 D_0015ED70;
 extern void FUN_L00_0025f8e0(void *, f32);
 extern int FUN_001fa6e0(f32, s32, s32);
 extern f32 D_0015ED68;
+extern f32 FUN_00220e20(f32) __asm__("FUN_001f96b0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 
 void FUN_L01_002ef770(unsigned char *moby, f32 *mode) {
     char *data = (char *)MOBY(moby)->pvars;
+    f32 origin[4], pos[4], velocity[4];
     u128 *source;
-    f32 velocity[4], origin[4], pos[4];
+    u128 * volatile dest;
     f32 angle, radius, vertical, lateral, scale, scaled_radius, scaled_vertical;
     s32 i, next, j, lower, upper, first, second, duration;
 
     i = 0;
     if (D_L01_001619EC > 0) {
       source = (u128 *)(moby + 0x10);
+      dest = (u128 *)pos;
       do {
-        *(u128 *)pos = *source;
+        *dest = *source;
         FUN_L00_0025f8e0(pos, D_L01_001619F4 * *(f32 *)(data + 0x250));
         pos[2] += 1.0f;
         angle = random_angle_radians();
@@ -1111,9 +1114,11 @@ void FUN_L01_002ef770(unsigned char *moby, f32 *mode) {
         lateral = random_float_between_alt(D_L01_00161A08, D_L01_00161A0C);
         vertical = random_float_between_alt(0.0f, D_L01_00161A38);
         scale_vector_xyz(origin, mode, vertical * D_0015ED6C);
+        scale = fast_cos(angle);
+        origin[0] += scale * (radius * D_0015ED6C);
+        scale = fast_sin(angle);
         scaled_radius = radius * D_0015ED6C;
-        origin[0] += fast_cos(angle) * scaled_radius;
-        origin[1] += fast_sin(angle) * scaled_radius;
+        origin[1] += scale * scaled_radius;
         scaled_vertical = lateral * D_0015ED6C;
         origin[2] += scaled_vertical;
         *(u128 *)velocity = *(u128 *)origin;
@@ -1131,7 +1136,7 @@ void FUN_L01_002ef770(unsigned char *moby, f32 *mode) {
             upper = FUN_001fa6e0(random_float_between_alt(0.0f, 1.0f), D_L01_00161A20, D_L01_00161A28);
             first = scale_game_frames(D_L01_00161A2C);
             second = scale_game_frames(D_L01_00161A30);
-            duration = truncate_float_to_s32(D_0015ED68 * random_float_between_alt((f32)D_L01_00161A34 * 0.5f, (f32)D_L01_00161A34 * 2.5f));
+            duration = truncate_float_to_s32(FUN_00220e20(random_float_between_alt((f32)D_L01_00161A34 * 0.5f, (f32)D_L01_00161A34 * 2.5f)));
             FUN_00218888(pos, origin, velocity, lower, upper, first, second, duration, -1);
         } while (j < D_L01_001619F0);
         i = next;
