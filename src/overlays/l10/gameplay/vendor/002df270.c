@@ -9,9 +9,6 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002df270.s", FUN_L10_002df270);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dfc38.s", FUN_L10_002dfc38);
-#else
 typedef struct Hit_2DFC38 { float x, y; char pad8[8]; float f10[4]; struct Moby *moby; char pad24[8]; float f2C; int f30; } Hit_2DFC38;
 typedef struct MobyData_2DFC38 { char pad0[0x20]; float f20; char pad24[2]; short f26; char pad28[0x10]; int f38; char pad3C[0x24]; char f60[0x10]; float f70, f74, f78, f7C; char pad80[4]; int f84; char pad88[0x15]; unsigned char f9D; char pad9E[0x22]; char fC0[0x40]; int f100, f104; char pad108[8]; char f110[7]; unsigned char f117; char pad118[0x18]; char f130[0x44]; int f174; float f178; int f17C; float f180; int f184; float f188; int f18C; char pad190[4]; int f194; } MobyData_2DFC38;
 typedef struct Anim_2DFC38 { char pad0[0x30]; float f30[4], f40[4]; char pad50[0x30]; } Anim_2DFC38;
@@ -33,6 +30,8 @@ extern int ahead_f(float, void *, void *) __asm__("FUN_L01_00274b78");
 extern int func_L00_00260FB0_2E2B80(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char D_0013D418 __attribute__((section(".data")));
+typedef struct EventRecord_2DFC38 { unsigned char pad[0x10]; unsigned char flag; } EventRecord_2DFC38;
+extern EventRecord_2DFC38 D_0013D408_2DFC38 __asm__("D_0013D408");
 extern int D_00151F38 __attribute__((sda));
 extern float random_float_between_2DFC38(float, float) __asm__("FUN_002132a8");
 extern float scale_time_2DFC38(float) __asm__("FUN_001f96b0");
@@ -63,30 +62,30 @@ void FUN_L10_002dfc38(struct Moby *moby) {
         hit_update_2DFC38(moby, r, &data->f20, 5, &st, 0, 0, 4);
         if (r != 0) {
             if (data->f20 <= r->f2C) {
-                if (D_00151F38 != 0 && D_0013D418 == 0) {
-                    D_0013D418 = 1;
-                    allocate_voice_for_bank_entry_2DFC38(1, (int)(&D_0013D418 - 0x10), 0);
+                if (D_00151F38 != 0 && D_0013D408_2DFC38.flag == 0) {
+                    D_0013D408_2DFC38.flag = 1;
+                    allocate_voice_for_bank_entry_2DFC38(1, 0, 0);
                     play_sound_2DFC38(0x53d6, -1);
                 }
                 data->f20 = 0.0f;
                 moby->flags &= 0xEFFF;
                 if (moby->prev_seq != 5) blend_moby_animation(moby, 5, 0, game_frames_2DFC38(10));
                 moby->state = 11;
-                data->f9D = 3;
                 data->f70 = D_0015ED70 * 26.0f;
+                data->f9D = 3;
                 data->f74 = 0.0005f;
                 data->f84 = 9;
                 data->f78 = D_0015ED6C * 7.0f;
                 data->f7C = D_0015ED6C * 10.0f;
-                if ((r->f30 & 1) == 0) ang = angle_atan2(moby->pos.x - r->x, moby->pos.y - r->y);
-                else ang = angle_atan2(r->f10[0], r->f10[1]);
+                if (r->f30 & 1) ang = angle_atan2(r->f10[0], r->f10[1]);
+                else ang = angle_atan2(moby->pos.x - r->x, moby->pos.y - r->y);
                 trooper_start_knockback(moby, data->f60, ang, 5, 1, 0);
                 data->f117 = 0x78;
                 trooper_anim_update(moby, data->f110);
                 func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
             } else {
-                data->f117 = 0xfa;
                 data->f20 = data->f20 - r->f2C;
+                data->f117 = 0xfa;
                 data->f26 = game_frames_2DFC38(60);
                 trooper_anim_update(moby, data->f110);
             }
@@ -123,7 +122,6 @@ void FUN_L10_002dfc38(struct Moby *moby) {
     }
     if (data->f100 == 0) data->f100 = D_001414D0_2DFC38[0];
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
