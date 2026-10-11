@@ -801,7 +801,212 @@ void FUN_L00_0020e698(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020e728.s", FUN_L00_0020e728);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020ea80.s", FUN_L00_0020ea80);
+#include "types.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/entities/moby.h"
+
+/* FUN_L00_0020ea80: spawns the hero item mobies (wrench into items[0] /
+ * its own slot, items[3] and its second moby, items[2], items[1], and the
+ * items[4]/[5] gadgets) when their slots are empty.
+ *
+ * Item definition table (0x4C bytes per item id). */
+typedef struct {
+    u8 pad0[0x8];
+    s32 slot;      /* 0x08: hero item slot the item goes into */
+    u8 padC[0x4];
+    s32 cls;       /* 0x10: moby class of the item */
+    s32 cls2;      /* 0x14: moby class of its second moby */
+    s32 unk18;     /* 0x18: read as a word and stored as a byte; the codegen
+                    * (address formed base + offset first) needs a word field */
+    u8 pad1C[0x30];
+} ItemDef_ea80;
+
+extern ItemDef_ea80 item_defs_ea80[] __asm__("D_L00_00179AC0") __attribute__((section(".data")));
+extern s32 D_L00_0015F3F8_ea80 __asm__("D_L00_0015F3F8");
+extern s32 D_0015ED90_ea80 __asm__("D_0015ED90");
+extern s32 D_0015ED94_ea80 __asm__("D_0015ED94");
+extern s32 D_00141660_ea80[4] __asm__("D_00141660") __attribute__((section(".data")));
+extern u8 item_available_ea80[] __asm__("D_0013D4C0") __attribute__((section(".data")));
+extern struct Moby *create_moby_ea80(s32) __asm__("FUN_0020c4f8");
+extern void FUN_00204a40_ea80(s32, s32) __asm__("FUN_00204a40");
+extern void memset_words_ea80(void *, s32, s32) __asm__("FUN_001f97e8");
+extern void blend_moby_animation_ea80(void *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void FUN_L00_002b4138_ea80(s32) __asm__("FUN_L00_002b4138");
+
+void FUN_L00_0020ea80(void) {
+    struct Moby *m;
+    s32 id;
+    s32 slot;
+    struct Hero *h;
+    s32 i;
+    struct Moby *m2;
+    struct Moby *m4;
+    struct Moby *m5;
+    struct Moby *m6;
+    s32 id3;
+    s32 t;
+
+    if (hero.items[0].moby == 0 && D_L00_0015F3F8_ea80 > hero.items[0].unk14 &&
+        (hero.pending_item[0] == 0 || hero.pending_item[0] == 0x24)) {
+        id = hero.selected_item[0];
+        if (id == 0) {
+            if (D_0015ED90_ea80 != 0 || (t = D_00141660_ea80[0]) == 0)
+                id = 8;
+            else
+                id = t;
+        }
+        FUN_00204a40_ea80(item_defs_ea80[id].cls, -1);
+        for (i = 0; i < 3; i++) {
+            memset_words_ea80(&hero.unk18F0[i], 0, sizeof(struct HeroEase));
+            hero.unk18F0[i].unkA0 = -1;
+        }
+        hero.items[0].item_id = id;
+        slot = item_defs_ea80[id].slot;
+        h = (struct Hero *)((char *)&hero + slot * sizeof(struct HeroItemSlot));
+        m = create_moby_ea80(item_defs_ea80[h->items[0].item_id].cls);
+        if (m != 0) {
+            m->unk32 = 0x20;
+            m->unk31 = 1;
+            m->spawn_frame = hero.moby->spawn_frame;
+            if (((u8 *)m->pclass)[6] != 0)
+                m->unk73 = 0x18;
+            h->items[0].moby = m;
+            h->items[0].state = 2;
+            if (id == 8) {
+                h->items[0].button_mask = 0x80;
+                blend_moby_animation_ea80(m, 1, 0, 1);
+            } else {
+                h->items[0].button_mask = 0x20;
+            }
+            /* The slot address is rebuilt here instead of reusing h; using h
+             * changes the register allocation away from retail. */
+            hero.unk20AB = item_defs_ea80[((struct Hero *)((char *)&hero + slot * sizeof(struct HeroItemSlot)))->items[0].item_id].unk18;
+        }
+    }
+
+    if (hero.items[3].moby == 0) {
+        id3 = hero.selected_item[3];
+        if (id3 == 0) {
+            id3 = D_00141660_ea80[3];
+            if (id3 == 0)
+                id3 = D_0015ED94_ea80 != 0 ? 3 : 2;
+        }
+        hero.items[3].item_id = id3;
+        m = create_moby_ea80(item_defs_ea80[id3].cls);
+        if (m != 0) {
+            m->unk32 = 0x20;
+            m->unk31 = 1;
+            m->spawn_frame = hero.moby->spawn_frame;
+            if (((u8 *)m->pclass)[6] != 0)
+                m->unk73 = 0x18;
+            hero.items[3].state = 2;
+            hero.items[3].moby = m;
+            if (hero.unk22D8 != 0)
+                m->flags |= 0x41;
+            if (hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
+                FUN_L00_002b4138_ea80(0);
+                FUN_L00_002b4138_ea80(1);
+            }
+        }
+    }
+
+    if (hero.items[3].moby2 == 0) {
+        m = create_moby_ea80(item_defs_ea80[1].cls);
+        if (m != 0) {
+            m->unk32 = 0x20;
+            m->unk31 = 1;
+            m->spawn_frame = hero.moby->spawn_frame;
+            if (((u8 *)m->pclass)[6] != 0)
+                m->unk73 = 0x18;
+            hero.items[3].state = 2;
+            hero.items[3].moby2 = m;
+            if (hero.unk22D8 != 0)
+                m->flags |= 0x41;
+        }
+    }
+
+    if (hero.items[2].moby == 0 && (D_00141660_ea80[2] != 0 || hero.selected_item[2] != 0)) {
+        if (hero.selected_item[2] != 0)
+            hero.items[2].item_id = hero.selected_item[2];
+        else
+            hero.items[2].item_id = D_00141660_ea80[2];
+        m2 = create_moby_ea80(item_defs_ea80[hero.items[2].item_id].cls);
+        if (m2 != 0) {
+            m2->unk32 = 0x20;
+            m2->unk31 = 1;
+            m2->spawn_frame = hero.moby->spawn_frame;
+            m2->flags |= 2;
+            m2->update = 0;
+            if (((u8 *)m2->pclass)[6] != 0)
+                m2->unk73 = 0x18;
+            m2->flags |= 0x800;
+            hero.items[2].moby = m2;
+            hero.items[2].state = 2;
+        }
+    }
+
+    if (hero.items[1].moby == 0 && D_00141660_ea80[1] != 0) {
+        hero.items[1].item_id = D_00141660_ea80[1];
+        m = create_moby_ea80(item_defs_ea80[D_00141660_ea80[1]].cls);
+        if (m != 0) {
+            m->unk32 = 0x20;
+            m->unk31 = 1;
+            m->spawn_frame = hero.moby->spawn_frame;
+            if (((u8 *)m->pclass)[6] != 0)
+                m->unk73 = 0x18;
+            hero.items[1].moby = m;
+            hero.items[1].state = 2;
+        }
+        m = create_moby_ea80(item_defs_ea80[D_00141660_ea80[1]].cls2);
+        if (m != 0) {
+            m->unk32 = 0x20;
+            m->unk31 = 1;
+            m->spawn_frame = hero.moby->spawn_frame;
+            if (((u8 *)m->pclass)[6] != 0)
+                m->unk73 = 0x18;
+            hero.items[1].moby2 = m;
+            hero.items[1].state = 2;
+        }
+    }
+
+    if (hero.items[4].moby == 0 && item_available_ea80[0x21] != 0) {
+        m4 = create_moby_ea80(item_defs_ea80[0x21].cls);
+        hero.items[4].item_id = 0x21;
+        if (m4 != 0) {
+            m4->unk32 = 0x20;
+            m4->unk31 = 1;
+            m4->spawn_frame = hero.moby->spawn_frame;
+            if (((u8 *)m4->pclass)[6] != 0)
+                m4->unk73 = 0x18;
+            hero.items[4].moby = m4;
+            hero.items[4].state = 2;
+        }
+    }
+
+    if (hero.items[4].moby2 == 0 && item_available_ea80[0x22] != 0) {
+        m5 = create_moby_ea80(item_defs_ea80[0x22].cls);
+        hero.items[4].item_id = 0x22;
+        if (m5 != 0) {
+            m5->unk32 = 0x20;
+            m5->unk31 = 1;
+            m5->spawn_frame = hero.moby->spawn_frame;
+            hero.items[4].moby2 = m5;
+            hero.items[4].state = 2;
+        }
+    }
+
+    if (hero.items[5].moby == 0 && item_available_ea80[0x23] != 0) {
+        m6 = create_moby_ea80(item_defs_ea80[0x23].cls);
+        hero.items[5].item_id = 0x23;
+        if (m6 != 0) {
+            m6->unk32 = 0x20;
+            m6->unk31 = 1;
+            m6->spawn_frame = hero.moby->spawn_frame;
+            hero.items[5].moby = m6;
+            hero.items[5].state = 2;
+        }
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
