@@ -49,12 +49,12 @@ void _doMC(struct MpegDecoder *mpeg, s32 arg1) {
     }
     goto block_7;
 block_5:
-    sp8 = (u8 *)mpeg + 0x6C0;
     var30 = (u8 *)mpeg + 0x6B8;
+    sp8 = (u8 *)mpeg + 0x6C0;
     goto block_7;
 block_6:
-    sp8 = (u8 *)mpeg + 0x6C0;
     var30 = (u8 *)mpeg + 0x6B8;
+    sp8 = (u8 *)mpeg + 0x6C0;
 block_7:
     if (*(s32 *)((u8 *)sp8 + sp0 * 0x140) == 0) {
         goto block_10;
