@@ -1709,7 +1709,7 @@ void FUN_L13_0030cdb8(struct Moby *moby) {
         D_0014C190_257218[current_level_index][(short)moby->save_id >> 5] |=
             1 << (moby->save_id & 31);
         ((int *)0x001c0000)[((short)moby->save_id >> 5) - 0x160c] |= 1 << (moby->save_id & 31);
-        j = 0;
+        j = 1;
         do {
             i = 0x709;
             do {
@@ -1721,7 +1721,7 @@ void FUN_L13_0030cdb8(struct Moby *moby) {
                 i++;
             } while (i < 0x70d);
             j++;
-        } while (j < 2);
+        } while (j <= 2);
         FUN_L00_0025e450(moby, pos, 0, 0.0f, 0.0f, 10, 3, 0x10,
                          6.0f, 3.0f, 9.0f, 1.1f, 0, 15.0f, 1, 3, -1, 0);
         FUN_0020c828(moby);
