@@ -1,84 +1,113 @@
-# Cleaning up exact code
+# Code cleanup
 
-How to make matching C easier to read. Decompiling itself is covered in
+This guide is for C that already matches the original game. It explains how
+to make that code easier to read. To decompile new code, see
 [CONTRIBUTING.md](../CONTRIBUTING.md).
 
-**Rule: the build stays byte-exact after every step.** Cleanup never changes
-behaviour.
+> **The one rule:** after every change, the build must still produce exactly
+> the same bytes. Cleanup never changes what the game does.
 
-## What can change
+## Quick start
 
-| Change | Risk | Check |
+1. Make a branch from the latest `main`.
+2. Pick one area, such as a folder or a struct.
+3. Make the safe changes (see the table below) across the whole area.
+4. After each risky change, run `python3 scripts/check-unit.py <unit>`. It
+   must still say the unit matches.
+5. Run `make elf` and `make overlays`. Both must end with `PASS`. If one
+   fails, find the change that broke it and undo it.
+6. Commit each area on its own and say what became easier to read.
+
+## What you can change
+
+| Change | Risk | When to check |
 |---|---|---|
-| Comments, formatting, local and parameter names | none | per batch |
-| Function and global names (C name + `__asm__` label) | none | per batch |
-| Moving a unit to a better directory | none if config follows | per batch |
-| `#define` / `enum` for magic numbers (same type) | none | per batch |
-| Offset access → struct field | low: width and signedness must match | per function |
-| Shared prototypes instead of local `extern` | low: wrong types change promotion | per function |
-| Casts and integer types | medium | per function |
-| Logic shape (expression order, temporaries, loops, `if`/`switch`) | high | per function, expect to revert |
+| Comments, formatting, names of locals and parameters | none | once per batch |
+| Names of functions and globals (C name + `__asm__` label) | none | once per batch |
+| Moving a file to a better folder (update config too) | none | once per batch |
+| `#define` / `enum` for magic numbers (keep the same type) | none | once per batch |
+| Offset access → struct field | low: same size and sign needed | after each function |
+| Shared prototypes in a header instead of a local `extern` | low: wrong types change the code | after each function |
+| Casts and integer types | medium | after each function |
+| Code shape: order of expressions, temporary variables, loops, `if`/`switch` | high | after each function; expect to undo it |
 
-Do the safe changes everywhere. Touch logic only where code is unreadable,
-and revert as soon as it stops matching; a comment explaining the odd shape
-is the fallback.
+Make the safe changes everywhere. Change the code shape only when the code is
+really hard to read, and undo it as soon as it stops matching. If you can't
+make it clearer, add a comment that explains why it looks odd.
 
-Never: inline assembly beyond the name label, `#ifdef` tricks, changing a
-unit's compiler, editing `asm/`, or fixing bugs in the original.
+**Never:**
 
-## Naming
+- add inline assembly (other than the name label);
+- use `#ifdef` tricks;
+- change which compiler a unit uses;
+- edit files in `asm/`;
+- fix bugs from the original game.
 
-- Names need evidence: recovered symbols
-  ([recovered-names.md](recovered-names.md)), strings, call sites, tables,
-  neighbours. No evidence, no name; a wrong name is worse than `fun_<addr>`.
-- Functions: `lower_snake_case`, verb-object, subsystem prefix where it helps
-  (`hud_`, `save_card_`). Recovered CamelCase symbols become descriptive
-  snake_case; Sony SDK names stay. Keep `FUN_<addr>` only in the asm label.
-- Rename with the tool, one entry at a time, so overlay call sites follow:
-  `python3 scripts/rename-function-proposals.py --address 0x... --apply`.
-- Globals: `D_<addr>` gets a C name plus `__asm__("D_<addr>")` label, spelled
-  one way and declared once in a header.
-- Locals and fields: name by use (`count`, `next`), not by register or offset
-  (`v1`, `unk_70`). Keep `unkXXX` only while nothing shows the meaning.
+## Names
 
-## Types and data
+- **Only name what you can prove.** Good evidence: recovered symbols
+  ([recovered-names.md](recovered-names.md)), strings, callers, tables and
+  nearby functions. A wrong name is worse than `fun_<addr>`.
+- **Functions:** `lower_snake_case`, verb first (`draw_hud`), with a
+  subsystem prefix when it helps (`hud_`, `save_card_`). Recovered CamelCase
+  names become clear snake_case. Sony SDK names stay as they are. Keep
+  `FUN_<addr>` only in the asm label.
+- **Renaming:** use the tool, one function at a time, so callers in level
+  code are updated too:
+  `python3 scripts/rename-function-proposals.py --address 0x... --apply`
+- **Globals:** `D_<addr>` gets a C name plus a `__asm__("D_<addr>")` label.
+  Use one spelling and declare it once, in a header.
+- **Locals and fields:** name them by what they hold (`count`, `next`), not by
+  register or offset (`v1`, `unk_70`). Keep `unkXXX` only until the meaning is
+  clear.
 
-- Placeholder types become one named struct. A layout shared by several files
-  lives in `include/`; a layout used by one file stays in that file. Extend
-  existing headers instead of adding local copies.
-- To add a struct: collect every offset used on that base across `src/`, add
-  fields with padding that keeps exact offsets, convert one function, check,
-  then the rest. If a field breaks the match, try the width and signedness the
-  assembly loads (`lw`/`lwu`, `lh`/`lhu`).
-- Group fields by purpose, name unused ones `pad_XXX[n]`, and put offset
-  checks in `src/check/*_layout_check.c` (run by `make check`).
-- Data: one definition per variable, one `extern` in a header. Data only one
-  unit reads is defined in that file and listed in `DATA_OVERLAYS` in
-  `configure.py` (`python3 scripts/data-refs.py --emit ADDR --into FILE`).
-  Shared data and raw bytes stay in assembly, typed in a header. A variable
-  defined in C leaves `config/us/symbol_addrs.txt`.
+## Structs and data
+
+**Structs**
+
+- Replace placeholder types with one named struct.
+- A struct used by several files goes in `include/`. A struct used by one file
+  stays in that file.
+- Extend an existing header instead of copying a struct.
+
+**Adding a struct, step by step**
+
+1. Find every offset used on that pointer across `src/`.
+2. Add the fields, with padding so every offset stays the same.
+3. Convert one function and check it. Then convert the rest.
+4. If a field breaks the match, use the size and sign the assembly loads
+   (`lw` or `lwu`, `lh` or `lhu`).
+
+**Making headers easy to read**
+
+- Group fields by what they are for.
+- Name unused fields `pad_XXX[n]`.
+- Put offset checks in `src/check/*_layout_check.c`. `make check` runs them.
+
+**Data**
+
+- Each variable has one definition and one `extern` in a header.
+- Data that only one file reads is defined in that file and listed in
+  `DATA_OVERLAYS` in `configure.py`. This command writes it for you:
+  `python3 scripts/data-refs.py --emit ADDR --into FILE`
+- Shared data and raw bytes stay in assembly, with their type in a header.
+- A variable defined in C is removed from `config/us/symbol_addrs.txt`.
 
 ## Moving files
 
-Directories follow the subsystem (`ui/menus/<screen>`, `gameplay/...`). One
-commit updates the unit path in `config/us/rnc1.us.yaml` (or
-`config/overlays/us/functions.tsv` for level code). Link order comes from
-config, so a correct move cannot change the output.
+- Folders follow the subsystem, for example `ui/menus/<screen>` or
+  `gameplay/...`.
+- In the same commit, update the unit path in `config/us/rnc1.us.yaml`, or in
+  `config/overlays/us/functions.tsv` for level code.
+- The config decides the link order, so a correct move can't change the
+  output.
 
-## Workflow
+## Common traps
 
-1. Pick one area (a directory or a struct) and branch from latest `main`.
-2. Apply the safe changes to the whole area.
-3. After each risky change, `python3 scripts/check-unit.py <unit>` must still
-   match.
-4. `make elf` and `make overlays` must both end with `PASS`. If not, bisect
-   and revert.
-5. Commit per area, saying what became clearer.
-
-## Pitfalls
-
-- Two C names for one symbol in a file can matter: the compiler may reload
-  through the second one. Merge aliases only if the unit still matches.
-- `char *p = (char *)&g; *(T *)(p + 0x10)` becomes `struct X *p = &g; p->field`,
-  not `g.field`, which changes the address calculation.
-- Splitting a large file by screen or subsystem is a move, not a rewrite.
+- **Two names for one symbol** in a file can matter: the compiler may load it
+  again through the second name. Merge them only if the unit still matches.
+- **Pointer to a global:** turn `char *p = (char *)&g; *(T *)(p + 0x10)` into
+  `struct X *p = &g; p->field`, not `g.field`. Writing `g.field` changes how
+  the address is computed.
+- **Splitting a big file** by screen or subsystem counts as a move, not a
+  rewrite.
