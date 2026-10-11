@@ -32,7 +32,7 @@ STUB_RE = re.compile(r'INCLUDE_ASM\s*\(\s*"[^"]*"\s*,\s*(FUN_L\d{2}_[0-9a-f]{8})
 DEF_RE = re.compile(r"^(?!extern\b)[A-Za-z_][\w\s\*]*?\b(FUN_L\d{2}_[0-9a-f]{8})\s*\([^;{}\n]*(?:\{|$)", re.M)
 # a C name bound to an overlay label (`int name(...) __asm__("FUN_L..");`) and
 # a definition under any name, so a named function counts as its label
-LABEL_RE = re.compile(r'\b([A-Za-z_]\w*)\s*\([^;{}]*\)\s*__asm__\s*\(\s*"(FUN_L\d{2}_[0-9a-f]{8})"\s*\)')
+LABEL_RE = re.compile(r'\b([A-Za-z_]\w*)\s*\([^;{}()]*(?:\([^;{}()]*\)[^;{}()]*)*\)\s*__asm__\s*\(\s*"(FUN_L\d{2}_[0-9a-f]{8})"\s*\)')
 NAMED_DEF_RE = re.compile(r"^(?!extern\b)[A-Za-z_][\w\s\*]*?\b([A-Za-z_]\w*)\s*\([^;{}\n]*(?:\{|$)", re.M)
 
 
