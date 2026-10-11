@@ -860,7 +860,150 @@ remove:
     mark_moby_for_removal(moby);
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_003091b0.s", FUN_L09_003091b0);
+#else
+extern void scale_vector_3091b0(f32, void *, void *) __asm__("FUN_001f9a68");
+extern void subtract_vector_3091b0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 dot_vector_3091b0(void *, void *) __asm__("FUN_001f9ab0");
+extern void add_vector_3091b0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void decrement_timer_3091b0(s32 *) __asm__("FUN_001f9740");
+extern f32 random_float_3091b0(f32, f32) __asm__("FUN_002132a8");
+extern void move_angle_3091b0(f32, f32, f32, f32, void *, void *, s32) __asm__("FUN_L00_0025bc98");
+extern void transform_motion_3091b0(void *, void *, void *, void *, void *) __asm__("FUN_L07_00288968");
+extern void update_motion_3091b0(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
+extern void update_wobble_3091b0(f32, f32, void *, void *, void *) __asm__("FUN_L00_00262b00");
+extern void update_wobble_pair_3091b0(f32, f32, f32, void *, void *, void *) __asm__("FUN_L00_00262b80");
+extern f32 fast_add_rotations_3091b0(f32, f32) __asm__("FUN_001fa580");
+extern void play_vendor_sound_3091b0(s32, s16, s16) __asm__("FUN_001e93b0");
+extern void play_vendor_event_3091b0(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern s32 scale_frames_3091b0(s32) __asm__("FUN_001f96f8");
+extern u8 D_0013F3D0[];
+extern u8 D_0013F440[];
+extern f32 D_0013F448;
+extern struct Moby *D_0013F64C __attribute__((section(".data")));
+extern s16 D_0013F65E __attribute__((section(".data")));
+
+#define VF(p, o) (*(f32 *)((u8 *)(p) + (o)))
+#define VI(p, o) (*(s32 *)((u8 *)(p) + (o)))
+#define VEC(p, o) ((u8 *)(p) + (o))
+extern f32 D_L09_0013F1C4;
+extern f32 D_L09_0013F1C8;
+extern f32 D_L09_0013F1CC;
+extern f32 D_L09_0013F1D4;
+extern f32 D_L09_0013F1D8;
+extern f32 D_L09_0013F1DC;
+extern f32 D_L09_0013F1E0;
+extern f32 D_L09_0013F1E4;
+extern f32 D_L09_0013F1E8;
+
+void FUN_L09_003091b0(struct Moby *moby) {
+    u8 *vars = (u8 *)moby->pvars;
+    f32 original[4];
+    f32 original_rotation[4];
+    f32 motion[4];
+    f32 saved_motion[4];
+    f32 saved_position[4];
+    f32 transformed[4];
+    f32 initial_height;
+    f32 target_height;
+    f32 height;
+    f32 angle;
+    f32 angle2;
+    s32 timer;
+
+    scale_vector_3091b0(-1.0f, original, VEC(moby, 0x10));
+    qcopy(original_rotation, VEC(moby, 0x40));
+    initial_height = VF(moby, 0x18);
+    target_height = VF(vars, 0x84) - 0.3f;
+    if (moby->state == 0) {
+        VI(vars, 0x80) = 1;
+        *(OvlQuad *)VEC(vars, 0x60) = *(OvlQuad *)VEC(moby, 0x40);
+        *(OvlQuad *)VEC(vars, 0x70) = 0;
+        VF(vars, 0x84) = VF(moby, 0x18);
+        if (VI(vars, 0x8c) != -1) {
+            VF(moby, 0x18) -= 5.0f;
+            VF(moby, 0x40) = random_float_3091b0(-1.5707964f, 1.5707964f);
+            VF(moby, 0x44) = random_float_3091b0(-1.5707964f, 1.5707964f);
+            moby->state = 1;
+            return;
+        }
+        play_vendor_sound_3091b0(0x209228, *(s16 *)VEC(moby, 0xb2), *(s16 *)VEC(moby, 0xa6));
+        moby->state = 2;
+        return;
+    }
+    if (moby->state == 1) {
+        u8 *entry = (u8 *)D_L09_0015FFD8 + VI(vars, 0x8c) * 0x100;
+        if (entry != 0 && entry[0x20] != 0xfe && entry[0x20] != 0xfd) return;
+        moby->state = 2;
+        return;
+    }
+    if (moby->state != 2) return;
+    timer = VI(vars, 0x88);
+    if (D_0013F65E == 0 && D_0013F64C == moby) {
+        if (timer == 0) play_vendor_event_3091b0(0, 0, moby);
+        if (timer < scale_frames_3091b0(30)) {
+            VI(vars, 0x88) = scale_frames_3091b0(30);
+        }
+        timer = VI(vars, 0x88);
+    }
+    if (timer != 0) {
+        decrement_timer_3091b0((s32 *)VEC(vars, 0x88));
+        subtract_vector_3091b0(motion, D_0013F3D0, VEC(moby, 0x10));
+        angle = dot_vector_3091b0(motion, VEC(moby, 0xc0));
+        angle2 = dot_vector_3091b0(motion, VEC(moby, 0xd0));
+        qcopy(saved_motion, VEC(vars, 0x60));
+        qcopy(saved_position, VEC(moby, 0x10));
+        height = VF(moby, 0x18);
+        move_angle_3091b0(-D_L09_0013F1C4 * angle2, D_L09_0013F1D4 * 0.017453292f * frame_time_sq,
+                          D_L09_0013F1D8 * frame_scale_sq, D_L09_0013F1DC * 0.017453292f * frame_time,
+                          VEC(vars, 0x60), VEC(vars, 0x70), 0);
+        move_angle_3091b0(D_L09_0013F1C4 * angle, D_L09_0013F1D4 * 0.017453292f * frame_time_sq,
+                          D_L09_0013F1D8 * frame_scale_sq, D_L09_0013F1DC * 0.017453292f * frame_time,
+                          VEC(vars, 0x64), VEC(vars, 0x74), 0);
+        VF(moby, 0x18) -= D_L09_0013F1C8 * frame_time;
+        if (target_height < initial_height && VF(moby, 0x18) <= target_height)
+            play_vendor_event_3091b0(1, 0, moby);
+        transform_motion_3091b0(D_0013F3D0, transformed, VEC(moby, 0x10), saved_motion, VEC(vars, 0x60));
+        subtract_vector_3091b0(D_0013F440, transformed, D_0013F3D0);
+        D_0013F448 += VF(moby, 0x18) - height;
+    } else {
+        f32 step = D_L09_0013F1CC * frame_time;
+        height = VF(moby, 0x18) + step * (VF(vars, 0x84) - VF(moby, 0x18));
+        VF(moby, 0x18) = height;
+        if (height < VF(vars, 0x84) - 2.0f) {
+            VF(moby, 0x18) = height + step;
+            move_angle_3091b0(0.0f, D_L09_0013F1E0 * 0.017453292f * frame_time_sq * 3.0f,
+                              D_L09_0013F1E4 * frame_scale_sq, frame_time * 1.5707964f,
+                              VEC(vars, 0x60), VEC(vars, 0x70), 0);
+            move_angle_3091b0(0.0f, D_L09_0013F1E0 * 0.017453292f * frame_time_sq * 3.0f,
+                              D_L09_0013F1E4 * frame_scale_sq, frame_time * 1.5707964f,
+                              VEC(vars, 0x64), VEC(vars, 0x74), 0);
+        } else {
+            move_angle_3091b0(0.0f, D_L09_0013F1E0 * 0.017453292f * frame_time_sq,
+                              D_L09_0013F1E4 * frame_scale_sq, D_L09_0013F1E8 * 0.017453292f * frame_time,
+                              VEC(vars, 0x60), VEC(vars, 0x70), 0);
+            move_angle_3091b0(0.0f, D_L09_0013F1E0 * 0.017453292f * frame_time_sq,
+                              D_L09_0013F1E4 * frame_scale_sq, D_L09_0013F1E8 * 0.017453292f * frame_time,
+                              VEC(vars, 0x64), VEC(vars, 0x74), 0);
+        }
+        if (VF(vars, 0x84) < VF(moby, 0x18)) VF(moby, 0x18) = VF(vars, 0x84);
+        if (initial_height < target_height && target_height <= VF(moby, 0x18))
+            play_vendor_event_3091b0(2, 0, moby);
+    }
+    update_wobble_3091b0(0.14f, frame_time * 0.5235988f, moby, VEC(vars, 0x98), VEC(vars, 0x9c));
+    update_wobble_pair_3091b0(0.08726646f, frame_time * 0.43633232f, frame_time * 0.54105204f,
+                              moby, VEC(vars, 0x90), VEC(vars, 0x94));
+    VF(moby, 0x40) = fast_add_rotations_3091b0(VF(vars, 0x60), VF(moby, 0x40));
+    VF(moby, 0x44) = fast_add_rotations_3091b0(VF(vars, 0x64), VF(moby, 0x44));
+    add_vector_3091b0(original, original, VEC(moby, 0x10));
+    update_motion_3091b0(VEC(vars, 0x20), original, original_rotation, VEC(moby, 0x40));
+}
+#undef VF
+#undef VI
+#undef VEC
+#undef VC
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00309c08.s", FUN_L09_00309c08);
 #else
