@@ -37,7 +37,7 @@ void FUN_L00_001fc558(u32 source) {
         words[3] = 0x50;
         words[4] = 0;
         words[5] = 0x51;
-        words[6] = ((u64)(u32)count << 32) | 0x200;
+        words[6] = ((u64)count << 32) | 0x200;
         words[7] = 0x52;
         words[8] = 0;
         words[9] = 0x53;
@@ -45,7 +45,7 @@ void FUN_L00_001fc558(u32 source) {
         words[11] = 0;
         destination += (s32)((count << 35) >> 32);
         D_L00_001611C0 = packet + 0x70;
-        *(u32 *)(packet + 0x70) = (u32)transfer | 0x30000000;
+        *(u32 *)(packet + 0x70) = (u32)(s64)(s32)(transfer | 0x30000000);
         *(u32 *)(D_L00_001611C0 + 4) = source;
         source += (s32)(count * 0x800);
         *(u32 *)(D_L00_001611C0 + 8) = 0;
