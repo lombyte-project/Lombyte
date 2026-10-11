@@ -603,7 +603,7 @@ void FUN_L02_002d93e8(char *moby) {
     vu1_add_g_sregister_2d93e8(0x47, 0x5380b);
     texture = get_effect_texture_2d93e8(0x10);
     FUN_L02_002dae88();
-    for (i = 11; i >= 0; --i, ++markers) {
+    for (state = 11; state >= 0; --state, ++markers) {
         if (*markers != 0) *markers = 1;
     }
     markers = (int *)(data + 0xb0);
@@ -623,9 +623,9 @@ void FUN_L02_002d93e8(char *moby) {
     second = (int *)(data + 0x50);
     third = (int *)(data + 0x80);
     for (i = 0; i < 12; ++i) {
-        angle = -0.31415927f;
-        if (*(int *)(data + 0xe0) == 1) angle = add_rotation_2d93e8(angle, *(float *)(data + 0xe4));
-        angle = add_rotation_2d93e8(angle, (float)(i * 30) * 0.017453292f);
+        phase = -0.31415927f;
+        if (*(int *)(data + 0xe0) == 1) phase = add_rotation_2d93e8(phase, *(float *)(data + 0xe4));
+        angle = add_rotation_2d93e8(phase, (float)(i * 30) * 0.017453292f);
         index = i + *(int *)(data + 0x14);
         slot = index % 12;
         if (first[slot] == 2) {
@@ -660,9 +660,9 @@ void FUN_L02_002d93e8(char *moby) {
         }
     }
     for (i = 0; i < 12; ++i) {
-        angle = -0.31415927f;
-        if (*(int *)(data + 0xe0) == 2) angle = add_rotation_2d93e8(angle, *(float *)(data + 0xe4));
-        angle = add_rotation_2d93e8(angle, (float)(i * 30) * 0.017453292f);
+        phase = -0.31415927f;
+        if (*(int *)(data + 0xe0) == 2) phase = add_rotation_2d93e8(phase, *(float *)(data + 0xe4));
+        angle = add_rotation_2d93e8(phase, (float)(i * 30) * 0.017453292f);
         index = i + *(int *)(data + 0x18);
         slot = index % 12;
         if (second[slot] == 2) {
@@ -694,9 +694,9 @@ void FUN_L02_002d93e8(char *moby) {
         }
     }
     for (i = 0; i < 12; ++i) {
-        angle = -0.31415927f;
-        if (*(int *)(data + 0xe0) == 3) angle = add_rotation_2d93e8(angle, *(float *)(data + 0xe4));
-        angle = add_rotation_2d93e8(angle, (float)(i * 30) * 0.017453292f);
+        phase = -0.31415927f;
+        if (*(int *)(data + 0xe0) == 3) phase = add_rotation_2d93e8(phase, *(float *)(data + 0xe4));
+        angle = add_rotation_2d93e8(phase, (float)(i * 30) * 0.017453292f);
         index = i + *(int *)(data + 0x1c);
         slot = index % 12;
         if (third[slot] == 2) {
@@ -760,7 +760,7 @@ void FUN_L02_002d93e8(char *moby) {
     degrees = 0;
     for (i = 0; i < 12; ++i, degrees += 30) {
         angle = add_rotation_2d93e8(-0.08726646f, (float)degrees * 0.017453292f);
-        phase = add_rotation_2d93e8(angle, 0.17453295f);
+        phase = add_rotation_2d93e8(angle, 0.17453292f);
         if (markers[i] != 0) {
             color = D_L02_00161BC4;
             if (markers[i] != 2) {
