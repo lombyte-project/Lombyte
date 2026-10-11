@@ -52,19 +52,24 @@ void FUN_L14_002df458(struct Moby *);
 
 void FUN_L14_002df138(u8 *moby) {
     f32 *d = *(f32 **)(moby + 0x78);
-    f32 *p = d;
+    f32 *p;
     f32 *mirror;
     f32 *tail;
     f32 step;
     f32 angle;
     f32 height;
+    f32 wave_height;
+    f32 mirror_height;
     f32 index;
+    f32 mirror_index;
     s32 i;
+    s32 j;
 
     d[0x78] = fast_add_rotations(d[0x78], 0.17453292f);
     d[0x79] = fast_subtract_rotations(d[0x79], 0.80285144f);
     d[0x7a] = fast_add_rotations(d[0x7a], 0.05236f);
     step = 360.0f / (integer_to_float_l14(10) * 0.5f) * 0.017453292f;
+    p = d;
     i = 0;
     do {
         integer_to_float_l14(i);
@@ -87,37 +92,40 @@ void FUN_L14_002df138(u8 *moby) {
         p += 4;
     } while (i < 5);
 
-    mirror = d + 0x12;
+    mirror = d + ((i - 1) * 4 + 2);
+    j = 5;
     tail = d + 0x14;
-    i = 5;
     do {
-        height = *mirror;
-        index = (f32)i;
+        mirror_height = *mirror;
+        mirror_index = (f32)j;
         tail[1] = 0.0f;
-        i++;
-        tail[2] = height;
+        j++;
+        tail[2] = mirror_height;
         mirror -= 4;
+        tail[0] = d[0x7c] * mirror_index + 1.6f;
         tail[3] = 1.0f;
-        tail[0] = d[0x7c] * index + 1.6f;
         tail += 4;
-    } while (i < 10);
+    } while (j < 10);
 
-    p = d;
     i = 0;
+    p = d;
     do {
         f32 index2 = (f32)i;
         f32 yaw;
         f32 pitch;
+        f32 spread;
+        f32 yaw_sine;
         p[0x2a] = 0.0f;
         i++;
         yaw = normalize_rotation_l14(d[0x79] + index2 * 0.99483764f);
         pitch = normalize_rotation_l14(d[0x7a] + index2 * 0.20944f);
-        height = fast_sin(pitch) * 0.75f;
-        height *= fast_sin(yaw);
-        p[0x2a] = p[0x2a] + height + spread_l14(0.0f, 0.2f);
-        p[0x2b] = 1.0f;
+        wave_height = fast_sin(pitch) * 0.75f;
+        yaw_sine = fast_sin(yaw);
+        spread = spread_l14(0.0f, 0.2f);
+        p[0x2a] = p[0x2a] + wave_height * yaw_sine + spread;
         p[0x29] = fast_cos(yaw) * 0.5f;
         p[0x28] = index2 * 0.39f;
+        p[0x2b] = 1.0f;
         p += 4;
     } while (i < 19);
     enqueue_callback_l14(FUN_L14_002df458, moby);
