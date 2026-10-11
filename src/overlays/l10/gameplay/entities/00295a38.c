@@ -1014,6 +1014,7 @@ extern void spawn_projectile_effect(float, float, float, char *, void *, int, in
 extern void spawn_projectile_particles(float, float, char *, void *, int) __asm__("FUN_L00_0025f090");
 extern float D_0015ED6C_d85c8 __asm__("D_0015ED6C");
 extern float D_0015ED70_d85c8 __asm__("D_0015ED70");
+extern void scale_collision_vector(float, void *, void *) __asm__("FUN_001f9c48");
 
 void FUN_L10_002d85c8(char *m) {
     char *c = *(char **)(m + 0x78);
@@ -1032,10 +1033,10 @@ void FUN_L10_002d85c8(char *m) {
     struct {
         float velocity[4];
         char *owner;
+        int color;
         unsigned char state;
         unsigned char active;
         unsigned short id;
-        int color;
         float scale;
         int one;
     } collision __attribute__((aligned(16)));
@@ -1139,13 +1140,13 @@ state2:
         collision.scale = 1.0f;
         collision.one = 1;
         qcopy(collision.velocity, c);
-        FUN_001f9c48(collision.velocity, collision.velocity, 1.0f);
+        scale_collision_vector(1.0f, collision.velocity, collision.velocity);
         done = 0;
-        collision.id = *(unsigned short *)(m + 0xa6);
         collision.velocity[2] = 1.0f;
         collision.velocity[3] = 5627.925f;
         collision.state = state;
         collision.active = 1;
+        collision.id = *(unsigned short *)(m + 0xa6);
         add_vector_xyz(m + 0x10, m + 0x10, c);
         *(float *)(c + 8) -= D_0015ED70_d85c8 * 9.8f;
         if (FUN_001f9770(c + 0x14)) {
@@ -1158,7 +1159,7 @@ state2:
 state3:
 
         effect = check_projectile_collision(1.5f, m + 0x10, 0x10, m, 0);
-        qcopy(hit_pos, m + 0x10);
+        *(OvlQuad *)hit_pos = *(OvlQuad *)(m + 0x10);
         spawn_projectile_effect(1.0f, 1.0f, 1.0f, m, hit_pos, 0x178380, effect,
                                 0, 0x810001, 2, 1);
         spawn_projectile_particles(0.5f, 13.0f, m, m + 0x10, 0);
