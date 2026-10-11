@@ -600,7 +600,6 @@ extern KillFlags_30c5b0 D_L05_001BAA50;
 void FUN_L05_0030c5b0(struct Moby *m) {
     KeyVars_30c5b0 *v = (KeyVars_30c5b0 *)m->pvars;
     KeyRow_30c5b0 *row;
-    int i;
     int intensity;
 
     switch (m->state) {
@@ -621,7 +620,7 @@ void FUN_L05_0030c5b0(struct Moby *m) {
             m->state = 2;
             m->unk90 = 0x80208020;
             if (v->table != -1) {
-                i = 0;
+                int i = 0;
                 while (i < *(int *)D_L05_001B0930[v->table]) {
                     row = (KeyRow_30c5b0 *)(D_L05_001B0930[v->table] + i * 16);
                     if (row[1].key == v->key) {
@@ -647,12 +646,12 @@ void FUN_L05_0030c5b0(struct Moby *m) {
                 (D_L05_0015FC88[m->unkB0] != 0xFF && D_0014C050[current_level_index][m->unkB0] == 0xFF)) {
                 D_L05_001BB6B0.killed[(short)m->save_id] = m->unkB0 + 2;
             }
-            m->unkBC = 1;
             m->state = 2;
+            m->unkBC = 1;
             m->unk90 = 0x80208020;
             allocate_voice_for_target_entry(0, 0, m);
             if (v->table != -1) {
-                i = 0;
+                int i = 0;
                 while (i < *(int *)D_L05_001B0930[v->table]) {
                     row = (KeyRow_30c5b0 *)(D_L05_001B0930[v->table] + i * 16);
                     if (row[1].key == v->key) {
