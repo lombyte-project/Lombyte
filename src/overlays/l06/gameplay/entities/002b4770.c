@@ -1321,12 +1321,7 @@ extern void play_sound_2f6470(int, int) __asm__("FUN_L00_00203908");
 extern void set_update_2f6470(void *, char *) __asm__("FUN_L06_00210fc8");
 
 #include "rnc/audio/voice_pool.h"
-typedef struct {
-    u16 count;
-    u16 best;
-    u32 flags;
-} HelpRecord;
-extern HelpRecord D_00141968[];
+#include "rnc/ui/help/help_record.h"
 extern float frame_time_2f6470 __asm__("D_L06_0015ED6C") __attribute__((sda));
 void FUN_L06_002f6470(char *moby) {
     char *data = *(char **)(moby + 0x78);

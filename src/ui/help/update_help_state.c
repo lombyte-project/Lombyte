@@ -26,14 +26,9 @@ typedef struct {
     s32 pad0C;
 } TextEntry;
 
-typedef struct {
-    u16 count;
-    u16 best;
-    u32 flags;
-} HelpRecord;
+#include "rnc/ui/help/help_record.h"
 
 
-extern HelpRecord D_00141968[];
 extern u8 D_0015EE1D;
 extern s32 D_0015EEA4;
 extern TextEntry *D_0015F6A0;
