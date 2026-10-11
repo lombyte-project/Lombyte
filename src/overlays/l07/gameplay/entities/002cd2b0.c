@@ -1483,7 +1483,7 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
     unsigned int green = 0x80;
     unsigned int alpha = moby[0x23] / 5;
     unsigned int green_step = (green / 11) & 0xff;
-    int index = 0;
+    unsigned char index = 0;
     *(unsigned long long *)(packet + 0x78) = get_effect_texture_l07(*(int *)(data + 0x18));
     *(unsigned long long *)(packet + 0x80) = 0xff9000000260ULL;
     *(unsigned long long *)(packet + 0x70) = 4;
@@ -1555,10 +1555,10 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
             draw_effect_quad_l07(packet, 0, 1);
             *(u128 *)(second + 0) = *(u128 *)(second + 0x10);
             *(u128 *)(second + 0x20) = *(u128 *)(second + 0x30);
-            *(float *)(second + 0x10) = *(float *)(packet + 0x30);
-            *(float *)(second + 0x14) = *(float *)(packet + 0x34);
-            *(float *)(second + 0x30) = *(float *)(packet + 0x10);
-            *(float *)(second + 0x34) = *(float *)(packet + 0x14);
+            *(float *)(second + 0x30) = *(float *)(packet + 0x30);
+            *(float *)(second + 0x34) = *(float *)(packet + 0x34);
+            *(float *)(second + 0x10) = *(float *)(packet + 0x10);
+            *(float *)(second + 0x14) = *(float *)(packet + 0x14);
             draw_effect_quad_l07(second, 0, 1);
             angle = angle + 0.31415927f;
         } while (angle < 3.1415927f);
