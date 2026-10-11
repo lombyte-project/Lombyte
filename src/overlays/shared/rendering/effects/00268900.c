@@ -102,7 +102,13 @@ void FUN_L00_00268900(void)
     handlers[3] = (u32)FUN_L00_002694f8;
     handlers[4] = (u32)FUN_L00_00269a70;
     handlers[5] = (u32)FUN_L00_00269c70;
+    handlers[6] = (u32)FUN_L00_00269d20;
     handlers[7] = (u32)FUN_L00_0026a418;
+    handlers[8] = (u32)FUN_L00_0026a5b8;
+    handlers[9] = (u32)FUN_L00_0026a6f0;
+    handlers[10] = (u32)FUN_L00_0026a880;
+    handlers[11] = (u32)FUN_L00_0026ac78;
+    handlers[12] = (u32)FUN_L00_0026b500;
     handlers[13] = (u32)FUN_L00_0026b910;
     handlers[14] = (u32)FUN_L00_0026ba68;
     handlers[15] = (u32)FUN_L00_0026bca8;
@@ -111,14 +117,8 @@ void FUN_L00_00268900(void)
     handlers[18] = (u32)FUN_L00_0026c558;
     handlers[19] = (u32)FUN_L00_0026c7f0;
     handlers[20] = (u32)FUN_L00_0026c860;
-    handlers[22] = (u32)FUN_L00_00267b10;
-    handlers[6] = (u32)FUN_L00_00269d20;
-    handlers[8] = (u32)FUN_L00_0026a5b8;
-    handlers[9] = (u32)FUN_L00_0026a6f0;
-    handlers[10] = (u32)FUN_L00_0026a880;
-    handlers[11] = (u32)FUN_L00_0026ac78;
-    handlers[12] = (u32)FUN_L00_0026b500;
     handlers[21] = (u32)FUN_L00_0026ccb0;
+    handlers[22] = (u32)FUN_L00_00267b10;
     handlers[23] = (u32)FUN_L00_0026d1b0;
     handlers[24] = (u32)FUN_L00_0026d470;
     handlers[25] = (u32)FUN_L00_0026d700;
@@ -132,9 +132,17 @@ void FUN_L00_00268900(void)
     handlers[33] = (u32)FUN_L00_0026f048;
     handlers[34] = (u32)FUN_L00_0026f280;
     handlers[35] = (u32)FUN_L00_0026f660;
+    handlers[36] = (u32)FUN_L00_0026f898;
+    handlers[37] = (u32)FUN_L00_0026fa00;
+    handlers[38] = (u32)FUN_L00_0026fb00;
+    handlers[39] = (u32)FUN_L00_0026fc38;
+    handlers[40] = (u32)FUN_L00_0026ff10;
+    handlers[41] = (u32)FUN_L00_00270710;
     handlers[42] = (u32)FUN_L00_00270948;
+    handlers[43] = (u32)FUN_L00_002710a0;
     handlers[44] = (u32)FUN_L00_00271450;
     handlers[45] = (u32)FUN_L00_00271748;
+    handlers[46] = (u32)FUN_L00_002719f0;
     handlers[47] = (u32)FUN_L00_00271be8;
     handlers[48] = (u32)FUN_L00_00271c88;
     handlers[49] = (u32)FUN_L00_00271d20;
@@ -144,23 +152,15 @@ void FUN_L00_00268900(void)
     handlers[53] = (u32)FUN_L00_002721f0;
     handlers[54] = (u32)FUN_L00_00272438;
     handlers[55] = (u32)FUN_L00_002726d8;
-    handlers[36] = (u32)FUN_L00_0026f898;
-    handlers[37] = (u32)FUN_L00_0026fa00;
-    handlers[38] = (u32)FUN_L00_0026fb00;
-    handlers[39] = (u32)FUN_L00_0026fc38;
-    handlers[40] = (u32)FUN_L00_0026ff10;
-    handlers[41] = (u32)FUN_L00_00270710;
-    handlers[43] = (u32)FUN_L00_002710a0;
-    handlers[46] = (u32)FUN_L00_002719f0;
     handlers[56] = (u32)FUN_L00_00272838;
     handlers[57] = (u32)FUN_L00_002728e8;
     handlers[58] = (u32)FUN_L00_00272bc0;
+    handlers[59] = (u32)FUN_L00_00273088;
     handlers[60] = (u32)FUN_L00_00273298;
     handlers[61] = (u32)FUN_L00_00273448;
     handlers[62] = (u32)FUN_L00_00273800;
     handlers[63] = (u32)FUN_L00_002738b0;
     handlers[64] = (u32)FUN_L00_00273a68;
-    handlers[59] = (u32)FUN_L00_00273088;
     handlers[65] = (u32)FUN_L00_00273ee0;
     handlers[66] = (u32)FUN_L00_00274308;
     handlers[67] = (u32)FUN_L00_00274518;
@@ -175,8 +175,8 @@ void FUN_L00_00268900(void)
     handlers[76] = (u32)FUN_L00_00275810;
     handlers[77] = (u32)FUN_L00_00275860;
     handlers[78] = (u32)FUN_L00_00275aa0;
-    handlers[80] = (u32)FUN_L00_00275eb0;
     handlers[79] = (u32)FUN_L00_00275d68;
+    handlers[80] = (u32)FUN_L00_00275eb0;
 }
 #endif
 /*
