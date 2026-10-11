@@ -110,7 +110,121 @@ void *FUN_L07_00313350(void *unused, void *dp, void *op) {
     }
     return (void *)n;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313420.s", FUN_L07_00313420);
+#else
+extern char *hit_lookup_13420(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int hit_test_13420(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_L00_0025d458(void *, void *);
+extern void FUN_L00_0025d538(void *, void *);
+extern int FUN_L00_00257b90(int, int);
+extern void FUN_00212f90(void *, int, int, int);
+extern void FUN_L00_002223f8(int, int);
+extern void FUN_L00_00266858(void *, int);
+extern void FUN_L00_002502a0(int);
+extern void FUN_L00_00284e50(void *, void *);
+extern void FUN_L00_00200228(float, void *);
+extern int FUN_001f96f8(int);
+extern void FUN_0022d798(int);
+extern int FUN_0022da68(int, int, void *);
+extern int D_001413D4;
+extern char *D_L07_001600EC;
+extern char D_0013E5C4[];
+
+void FUN_L07_00313420(char *moby, char *data, float *health) {
+    char *hit;
+    char *owner;
+    struct { int contact; float threshold; } scratch;
+    int slot;
+    int voice;
+    float damage;
+    float frame;
+    float wide;
+    float narrow;
+    float remaining;
+    float output;
+    float original_health;
+
+    if ((u8)moby[0x20] != 10) {
+        hit = hit_lookup_13420(moby, 0x330000, 0);
+        hit_test_13420(moby, hit, health, 0, &scratch.contact, 0, 0, 4);
+        if (hit != 0) {
+            if (0.0f < *(float *)(hit + 0x2c)) {
+                unsigned short kind = *(unsigned short *)(hit + 0x2a);
+                if (kind == 0xba || kind == 0x79) *(float *)(hit + 0x2c) = 1.0f;
+                else if (kind == 0x131) *(float *)(hit + 0x2c) = 0.2f;
+            }
+            owner = *(char **)(hit + 0x20);
+            if (owner == 0 || *(short *)(owner + 0xa6) == 0x419 || *(short *)(owner + 0xa6) == 0x416)
+                scratch.contact = 1;
+        }
+        if (*(float *)(data + 0x1c8) > 0.0f || data[0x1c5] != 0) {
+            if (scratch.contact >= 2) data[0x1c6] = -1;
+        } else if (scratch.contact >= 2) {
+            damage = *(float *)(hit + 0x2c);
+            original_health = *health;
+            if (original_health <= damage) {
+                *health = 0.0f;
+                *(unsigned short *)(moby + 0x34) &= 0xefff;
+                FUN_L00_00257470(moby, 0, -1);
+                data[0x67] = 0x78;
+                FUN_L00_0025d458(moby, data + 0x60);
+                if ((u8)moby[0x53] != 2) FUN_00212f90(moby, 2, 0, FUN_L00_00257b90(10, 13));
+                if (D_001413D4 == 0x78) FUN_L00_002223f8(0, 1);
+                if (*(int *)(data + 0x1f0) != -1) {
+                    FUN_L00_00266858(moby, 1);
+                    FUN_L00_00257470(moby, 0, -1);
+                    FUN_L00_002502a0((u8)moby[0xb0]);
+                    owner = D_L07_001600EC + (*(int *)(data + 0x1f0) << 7);
+                    FUN_L00_00284e50(owner + 0x30, owner + 0x70);
+                }
+                moby[0x20] = 10;
+            } else {
+                frame = (float)*(short *)(health + 1) / 6.0f;
+                wide = frame * 1.75f;
+                narrow = frame * 1.25f;
+                remaining = damage + damage;
+                if (2.0f < remaining) remaining = 2.0f;
+                *(float *)(data + 0x1fc) = -remaining;
+                FUN_L00_00200228(*health / frame, (void *)((unsigned)&scratch | 4));
+                if ((float)*(short *)(data + 0x24) - 1.0f < *health) scratch.threshold = 5.0f;
+                scratch.threshold *= frame;
+                *health -= *(float *)(hit + 0x2c);
+                data[0x67] = 0xfa;
+                *(short *)(data + 0x26) = FUN_001f96f8(0);
+                FUN_L00_0025d458(moby, data + 0x60);
+                if ((u8)moby[0x20] < 10 && *health < scratch.threshold) {
+                    if (D_001413D4 == 0x78) FUN_L00_002223f8(0, 1);
+                    if ((u8)moby[0x53] != 2) {
+                        int first = FUN_L00_00257b90(0, 2);
+                        FUN_00212f90(moby, 2, first, FUN_L00_00257b90(20, 22));
+                    }
+                    slot = *(int *)(data + 0x1f8);
+                    *(float *)(data + 0x1c8) = 0.0f;
+                    data[0x1c5] = 1;
+                    if (slot != -1 && *(char **)(D_0013E5C4 + slot * 0x70 + 0x14) == moby && D_0013E5C4[slot * 0x70] != 0)
+                        FUN_0022d798(slot);
+                    *(int *)(data + 0x1f8) = -1;
+                    voice = FUN_0022da68(15, 4, moby);
+                    *(int *)(data + 0x1f8) = voice;
+                    moby[0x20] = 11;
+                    moby[0xbc]++;
+                }
+                if ((original_health <= wide || wide < *health) && (original_health > narrow && *health <= narrow))
+                    data[0x1c7] = 1;
+            }
+        }
+        if ((u8)data[0x1c6] < 21) data[0x1c6] = 0;
+        else data[0x1c6] -= 20;
+        moby[0xa4] = -1;
+    }
+    FUN_L00_0025d538(moby, data + 0x60);
+    output = *(float *)(data + 0x1fc) + 0.3f;
+    *(float *)(data + 0x1fc) = output;
+    if (output > 0.0f) *(float *)(data + 0x1fc) = 0.0f;
+}
+#endif
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 #define NOT_SDA
