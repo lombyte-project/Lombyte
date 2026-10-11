@@ -36,6 +36,7 @@ void FUN_L01_0030b618(u8 *m) {
     f32 elapsed;
     f32 active;
     f32 phase;
+    f32 sine_input;
     f32 sine;
     f32 cutoff;
     OvlQuad first;
@@ -94,10 +95,10 @@ void FUN_L01_0030b618(u8 *m) {
         phase = itof_s_b618(*(s32 *)(e + 0x70) - *(s32 *)(e + 0x6c));
         phase = phase / itof_s_b618(*(s32 *)(e + 0x70));
         phase *= 3.1415927f;
-        phase *= 0.5f;
+        sine_input = phase * 0.5f;
         if (*(s32 *)(e + 0x7c) != 0)
-            phase += 1.5707964f;
-        sine = fast_sin_b618(phase);
+            sine_input += 1.5707964f;
+        sine = fast_sin_b618(sine_input);
 
         if (*(s32 *)(e + 0x7c) != 0) {
             first = ((OvlQuad *)e)[*(s32 *)(e + 0x78)];
@@ -106,14 +107,15 @@ void FUN_L01_0030b618(u8 *m) {
         } else {
             first = ((OvlQuad *)e)[*(s32 *)(e + 0x74)];
             second = ((OvlQuad *)e)[*(s32 *)(e + 0x78)];
-            interpolate_vector_b618(e + 0x40, &first, &second, phase);
+            interpolate_vector_b618(e + 0x40, &first, &second, sine);
         }
         cutoff = *(f32 *)(e + 0x5c) * 0.75f;
         if (cutoff < elapsed) {
+            f32 numerator = elapsed - cutoff;
+            f32 denominator = *(f32 *)(e + 0x5c) - cutoff;
             first = 0;
             second = *(OvlQuad *)(e + 0x40);
-            interpolate_vector_b618(e + 0x40, &second, &first,
-                                    (elapsed - cutoff) / (*(f32 *)(e + 0x5c) - cutoff));
+            interpolate_vector_b618(e + 0x40, &second, &first, numerator / denominator);
         }
         slot = *(s32 *)(e + 0x68);
         if (slot == -1) {
