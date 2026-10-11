@@ -39,8 +39,8 @@ extern float D_L12_001FB5B0[2][4];
 void FUN_L12_003028c8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float base[16] __attribute__((aligned(16)));
-    float matrices[2][16] __attribute__((aligned(16)));
     VendorStripPacket packet;
+    float matrices[2][16] __attribute__((aligned(16)));
     u128 position;
     int i, j, strip;
 
@@ -58,8 +58,8 @@ void FUN_L12_003028c8(struct Moby *moby) {
         matrices[i][15] = 1.0f;
     }
     packet.texture = get_effect_texture_l12(14);
-    packet.gs_state = (long)L12_WORD(0x001fb1cc) | (long)L12_WORD(0x001fb1d0) << 2 |
-        (long)L12_WORD(0x001fb1d4) << 4 | (long)L12_WORD(0x001fb1d8) << 6 | 0x8000000000L;
+    packet.gs_state = (long)L12_WORD(0x001f1dcc) | (long)L12_WORD(0x001f1dd0) << 2 |
+        (long)L12_WORD(0x001f1dd4) << 4 | (long)L12_WORD(0x001f1dd8) << 6 | 0x8000000000L;
     packet.texture_state = 0xff9000000260L;
     packet.tag = 0;
     for (i = 0; i < 4; i++) packet.uv[i][1] = D_L12_001FB510[i][1];
@@ -76,13 +76,13 @@ void FUN_L12_003028c8(struct Moby *moby) {
                 convert_integer_to_float(L12_WORD(0x00161e08));
         }
         packet.color[0] = packet.color[1] = packet.color[2] = packet.color[3] =
-            FUN_001fa6e0(fade, L12_WORD(0x001fb1ec), L12_WORD(0x001fb1f0));
+            FUN_001fa6e0(fade, L12_WORD(0x001f1dec), L12_WORD(0x001f1df0));
         count = *(int *)(data + 0x232c) - 1;
         for (i = 0; i < count; i++) {
-            phase += L12_FLOAT(0x001fb1f4);
+            phase += L12_FLOAT(0x001f1df4);
             if (phase > 1.0f) phase -= 1.0f;
             for (j = 0; j < 4; j++)
-                packet.uv[j][0] = D_L12_001FB510[j][0] + phase + L12_FLOAT(0x001fb1f8);
+                packet.uv[j][0] = D_L12_001FB510[j][0] + phase + L12_FLOAT(0x001f1df8);
             for (j = 0; j < 4; j++) {
                 int point = i + (j >> 1);
                 FUN_001f9a10(&packet.vertices[j], &D_L12_001FB530[j],
