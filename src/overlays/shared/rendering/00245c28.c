@@ -4,7 +4,268 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00245c28.s", FUN_L00_00245c28);
+#else
+#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/gameplay/state/level_state.h"
+#include "rnc/overlay/level_globals.h"
+
+extern s32 D_L00_0015F5C8 __asm__("D_L00_0015F5C8");
+extern s32 D_L00_0015F570 __asm__("D_L00_0015F570");
+extern s32 D_L00_0015F3F8 __asm__("D_L00_0015F3F8");
+extern s32 D_L00_0015F5AC __asm__("D_L00_0015F5AC");
+extern f32 D_L00_0015F5D0 __asm__("D_L00_0015F5D0");
+#define D_L00_0016C060 (*(s32 *)0x0016C060)
+#define D_L00_0016C070 (*(s32 *)0x0016C070)
+#define D_L00_0016C088 (*(s32 *)0x0016C088)
+#define D_L00_0016C090 (*(s32 *)0x0016C090)
+#define D_L00_0016C14C (*(s32 *)0x0016C14C)
+#define D_L00_0016C064 (*(s32 *)0x0016C064)
+extern s16 D_L00_0016C8B0 __asm__("D_L00_0016C8B0");
+extern s16 D_00151708;
+extern s32 D_0015EEA4;
+#define D_00141680 ((u8 *)0x141680)
+#define D_0013DD43 (*(u8 *)0x13dd43)
+#define D_0013D390 (*(u8 *)0x13d390)
+#define D_0013D364 (*(s32 *)0x13d364)
+#define D_0013D36C (*(s32 *)0x13d36c)
+#define D_00141401 (*(u8 *)0x141401)
+#define D_L00_001B9E2C (*(s32 *)0x001B9E2C)
+extern u64 D_0015ED40;
+extern s32 D_0015F3F8;
+extern s32 D_0015F570;
+extern s32 D_0015F5D8;
+
+void FUN_001ff068(void *, s32) __asm__("FUN_001f9810");
+void FUN_001eb078(void *) __asm__("FUN_L00_001eb078");
+void FUN_00293b18(void) __asm__("FUN_L00_00293b18");
+void FUN_0023d028(void) __asm__("FUN_L00_0023d028");
+void FUN_00244110(s32, s32) __asm__("FUN_L00_00244110");
+void FUN_001f3638(void) __asm__("FUN_L00_001f3638");
+void FUN_00234e98(void) __asm__("FUN_L00_00234e98");
+void FUN_00276078(void) __asm__("FUN_L00_00276078");
+void FUN_0028eed0(void) __asm__("FUN_L00_0028eed0");
+void FUN_00122298(s32) __asm__("FUN_00122298");
+void FUN_00200f18(void) __asm__("FUN_L00_00200f18");
+void FUN_00265418(s32,s32,s32) __asm__("FUN_00215c40");
+void FUN_00265860(void) __asm__("FUN_00216088");
+void FUN_00265828(s32) __asm__("FUN_00216050");
+s32 FUN_001fef20(s32) __asm__("FUN_001f96f8");
+void FUN_0012eaf0(void) __asm__("FUN_0012eaf0");
+void FUN_001f6d70(void) __asm__("FUN_L00_001f6d70");
+void FUN_002a08c8(void) __asm__("FUN_L00_002a08c8");
+void FUN_002a0858(void) __asm__("FUN_L00_002a0858");
+void FUN_00201040(void) __asm__("FUN_L00_00201040");
+void FUN_00201350(void) __asm__("FUN_L00_00201350");
+void FUN_00200f40(void) __asm__("FUN_L00_00200f40");
+void FUN_0012dc80(void) __asm__("FUN_0012dc80");
+void FUN_00267898(void) __asm__("FUN_L00_00267898");
+void FUN_00297f78(void) __asm__("FUN_L00_00297f78");
+void FUN_001f8e30(void) __asm__("FUN_L00_001f8e30");
+void FUN_002999a8(void) __asm__("FUN_L00_002999a8");
+void FUN_00298f90(void) __asm__("FUN_L00_00298f90");
+void FUN_001f8e90(void) __asm__("FUN_L00_001f8e90");
+void FUN_00276bd0(void) __asm__("FUN_L00_00276bd0");
+void FUN_001f8f50(void) __asm__("FUN_L00_001f8f50");
+void FUN_00202aa0(void) __asm__("FUN_L00_00202aa0");
+void FUN_001f8ec8(void) __asm__("FUN_L00_001f8ec8");
+void FUN_0029c648(void) __asm__("FUN_L00_0029c648");
+void FUN_002a02b0(void) __asm__("FUN_L00_002a02b0");
+void FUN_00290590(void) __asm__("FUN_L00_00290590");
+void FUN_00291d00(void) __asm__("FUN_L00_00291d00");
+void FUN_00299c48(void) __asm__("FUN_L00_00299c48");
+void FUN_001f8f78(void) __asm__("FUN_L00_001f8f78");
+void FUN_001f4598(void) __asm__("FUN_L00_001f4598");
+void FUN_001f58e0(void) __asm__("FUN_L00_001f58e0");
+void FUN_002a09d8(s32) __asm__("FUN_L00_002a09d8");
+void FUN_002a07f8(void) __asm__("FUN_L00_002a07f8");
+void FUN_0024b690(void) __asm__("FUN_L00_0024b690");
+void FUN_0024ac20(void) __asm__("FUN_L00_0024ac20");
+void FUN_001f9060(s32) __asm__("FUN_L00_001f9060");
+void FUN_002a0ba8(s32,s32) __asm__("FUN_L00_002a0ba8");
+void *FUN_0023b208(s32,s32) __asm__("FUN_001ff960");
+void FUN_0023b4d8(void *,s32,s32,s32,s32,s32) __asm__("FUN_001ffc30");
+void *FUN_0023b2b8(void *) __asm__("FUN_001ffa10");
+void FUN_0023c2a0(f32,f32,f32,f32,f32,s32,s32,void *) __asm__("FUN_001fee88");
+void FUN_001f9178(void) __asm__("FUN_L00_001f9178");
+void FUN_001f36f8(void) __asm__("FUN_L00_001f36f8");
+void FUN_001f6d98(void *,s32) __asm__("FUN_L00_001f6d98");
+void FUN_001f6da0(void *,s32) __asm__("FUN_L00_001f6da0");
+f32 FUN_00200240(u32) __asm__("FUN_001fa6c0");
+void FUN_001f6d90(void) __asm__("FUN_L00_001f6d90");
+void FUN_00284c50(void) __asm__("FUN_L00_00284c50");
+void FUN_001f8540(void) __asm__("FUN_L00_001f8540");
+void FUN_0012eb00(void) __asm__("FUN_0012eb00");
+void FUN_0028e048(void) __asm__("FUN_L00_0028e048");
+void FUN_002656c0(void) __asm__("FUN_L00_002656c0");
+void FUN_00292e08(void) __asm__("FUN_L00_00292e08");
+
+void FUN_L00_00245c28(void) {
+    s32 old_mode, mode, frames, value, index, i;
+    s32 restart = 0;
+    s32 restart_arg = 0;
+    struct UsageStat *stat;
+    f32 frame_ratio;
+    volatile u32 *timer = (volatile u32 *)0x10000800;
+    u8 *bss_start = (u8 *)&D_L00_0015F5C4 + 0x283c;
+    u8 *bss_end = (u8 *)&pal_mode + 0x7230;
+    s32 bss_size = bss_end - bss_start;
+
+    if (((bss_size & 15) == 0) && (((u32)bss_start & 15) == 0)) {
+        FUN_001ff068(bss_start, bss_size);
+    } else {
+        FUN_001eb078((void *)0x15fcb0);
+        i = 0;
+        while (i < bss_size) {
+            *(bss_start + i) = 0;
+            i++;
+        }
+    }
+    FUN_00293b18();
+    D_L00_0015F5C8 = 0;
+    D_L00_0015F5C4 = 6;
+    FUN_0023d028();
+    D_00151708 = 0;
+    FUN_00244110(1, 0);
+    D_L00_0016C060 = 15;
+    D_L00_0016C088 = pal_mode;
+    D_L00_0016C090 = -1;
+    D_L00_0016C14C = 1;
+    D_L00_0016C064 = 1;
+    FUN_001f3638();
+    FUN_L00_002464a8();
+    FUN_00234e98();
+    FUN_00276078();
+    FUN_0028eed0();
+    D_L00_0015F3F8 = 0;
+    FUN_00122298(0);
+    FUN_00200f18();
+    FUN_00265418(D_00151708, 1, 0x400);
+    if ((current_level_index == 1 && D_0013DD43 == 0) ||
+        (current_level_index == 0 && D_0013D390 != 0)) {
+        FUN_00265860();
+        index = current_level_index;
+    } else {
+        FUN_00265828(0);
+        index = current_level_index;
+    }
+    if (level_visit_state[index] == 0) {
+        level_visit_state[index] = 1;
+    }
+    stat = (struct UsageStat *)(D_00141680 + current_level_index * 8);
+    if (stat->count != 0xffff) {
+        stat->count++;
+    }
+    frames = FUN_001fef20(D_0015EEA4) / 600;
+    if (stat->unk2 < frames) {
+        stat->unk2 = FUN_001fef20(D_0015EEA4) / 600;
+    }
+    stat->level_mask |= (1 << current_level_index) | 0x80000000;
+    FUN_0012eaf0();
+
+    while (D_L00_0015F570 == 0) {
+        restart = 0;
+        restart_arg = 0;
+        D_0015ED40 += *timer;
+        *timer = 0;
+        FUN_001f6d70();
+        D_L00_0015F5D8 = 0;
+        FUN_002a08c8();
+        FUN_002a0858();
+        FUN_00201040();
+        FUN_00201350();
+        FUN_00200f40();
+        FUN_0012dc80();
+        old_mode = D_L00_0015F5C4;
+        switch (old_mode) {
+        case 0: FUN_00267898(); FUN_00297f78(); FUN_001f8e30(); break;
+        case 1: FUN_002999a8(); break;
+        case 2: FUN_00267898(); FUN_00298f90(); FUN_001f8e90(); break;
+        case 3: FUN_00267898(); FUN_00276bd0(); FUN_001f8f50(); break;
+        case 4: FUN_00267898(); FUN_00202aa0(); FUN_001f8ec8(); break;
+        case 5: FUN_00267898(); FUN_0029c648(); FUN_002a02b0(); break;
+        case 6: FUN_00267898(); FUN_00290590(); FUN_00291d00(); break;
+        case 7: FUN_00267898(); FUN_00299c48(); FUN_001f8f78(); break;
+        case -1: FUN_00267898(); FUN_001f4598(); FUN_001f58e0(); break;
+        }
+        mode = D_L00_0015F5C4;
+        if (mode == old_mode) {
+            D_L00_0015F5C8 = D_L00_0015F5C8 + 1;
+        } else {
+            D_L00_0015F5C8 = 0;
+        }
+        if (D_L00_0015F5D8 != 0) {
+            FUN_002a09d8(1);
+            FUN_002a07f8();
+            continue;
+        }
+        FUN_0024b690();
+        FUN_0024ac20();
+        if ((D_0013D364 > 2 || D_0013D36C >= 0) && D_L00_001B9E2C == 0) {
+            FUN_001f9060(0);
+            FUN_002a0ba8(0x47, 0x3004b);
+            FUN_0023b4d8(FUN_0023b208(0x755d, 0), 0x32, 300, 0x40, 0x40, 0x80);
+            frames = D_L00_0015F3F8 % 55;
+            FUN_0023c2a0(1312.0f, 5312.0f, 272.0f, 272.0f,
+                          ((f32)frames * -6.2831855f) / 55.0f, 0x40, 0x40,
+                          FUN_0023b2b8(FUN_0023b208(0x755d, 1)));
+            FUN_001f9178();
+        }
+        D_L00_001B9E2C = 0;
+        FUN_001f36f8();
+        FUN_001f6d98((void *)0x15fcb8, 0x10);
+        FUN_001f6da0((void *)0x15fcb8, 0x10);
+        FUN_002a09d8(1);
+        frame_ratio = FUN_00200240(*timer);
+        if (pal_mode) D_L00_0015F5D0 = frame_ratio / 11520.0f; else D_L00_0015F5D0 = frame_ratio / 9600.0f;
+        if (D_L00_0015F5C4 == 0 && D_L00_0016C070 != 0) FUN_001f6d90();
+        if (D_00141401 == 0) {
+            if (D_L00_0015F5C4 == 0 || D_L00_0015F5C4 == 2) {
+                value = pal_mode ? 0x2d00 : 0x2580;
+                if (value < (s32)*timer) {
+                    if (D_L00_0015F5C4 == 0) {
+                        FUN_00267898(); FUN_00297f78();
+                    } else if (D_L00_0015F5C4 == 2 && D_L00_0016C8B0 == 0) {
+                        FUN_00267898(); FUN_00298f90();
+                    }
+                }
+                FUN_00122298(0);
+                D_L00_0015F3F8 = D_L00_0015F3F8 + 1;
+                FUN_00284c50();
+                D_L00_0015F5AC = 0;
+            } else {
+                FUN_00122298(0);
+                D_L00_0015F3F8 = D_L00_0015F3F8 + 1;
+                FUN_00284c50();
+                D_L00_0015F5AC = 0;
+            }
+        }
+        FUN_001f8540();
+        if (D_L00_0015F5C4 == 0 && D_00141401 != 0) {
+            restart = 1;
+            restart_arg = 1;
+        }
+        if (restart) {
+            FUN_002a07f8();
+            FUN_0012eb00();
+            FUN_0012dc80();
+            FUN_0028e048();
+            FUN_002656c0();
+            FUN_00244110(0, restart_arg);
+            D_L00_0015F5C4 = 0;
+            FUN_00265418(D_00151708, 1, 0x400);
+            FUN_00234e98();
+        }
+        frames = FUN_001fef20(D_0015EEA4) / 600;
+        stat = (struct UsageStat *)(D_00141680 + current_level_index * 8);
+        if (stat->unk2 < frames) {
+            stat->unk2 = FUN_001fef20(D_0015EEA4) / 600;
+        }
+    }
+    FUN_00292e08();
+}
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002464a8.s", FUN_L00_002464a8);
 #else
