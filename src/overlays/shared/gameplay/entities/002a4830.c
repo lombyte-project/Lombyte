@@ -1192,7 +1192,135 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a7780.s", FUN_L00_002a7780);
+#include "qcopy.h"
+typedef int q_2a7780 __attribute__((mode(TI)));
+typedef struct {
+    s16 sel[4];
+    u32 col[4][4];
+    f32 f48;
+    q_2a7780 *verts;
+    s16 (*idx)[4][2];
+    f32 *uv;
+    s16 n;
+    f32 f5C;
+} E_2a7780;
+typedef struct {
+    q_2a7780 m[3];
+    q_2a7780 m30;
+    u8 pad[0x30];
+    f32 f70;
+    u8 pad2[4];
+    s16 h78;
+} R_2a7780;
+typedef struct { u8 pad[0x78]; R_2a7780 *r; } O_2a7780;
+typedef struct {
+    u8 pad[0x2080];
+    u8 *p2080;
+} P_2a7780;
+typedef struct {
+    q_2a7780 pos[4];
+    u32 col[4];
+    f32 uv[4][2];
+    u64 tag[4];
+} V_2a7780;
+extern P_2a7780 D_0013F350_2a7780 __asm__("D_0013F350");
+extern E_2a7780 effects_2a7780[] __asm__("D_L00_001D92E8");
+extern int frame_2a7780 __asm__("D_L00_0015F5CC");
+extern int last_frame_2a7780 __asm__("D_L00_001613C0");
+extern f32 uv_scale_2a7780 __asm__("D_L00_001613BC") __attribute__((sda));
+extern int FUN_001f44b8_2a7780(int) __asm__("FUN_001f44b8");
+extern s32 FUN_001fa6d0_2a7780(f32) __asm__("FUN_001fa6d0");
+extern void FUN_001f9a68_2a7780(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void FUN_001f7d30_2a7780(void *, void *, int) __asm__("FUN_001f7d30");
+#define P_2a7780_G D_0013F350_2a7780
+
+/* Draws the animated quad-strip effect attached to o; the effect set is chosen by state 0x17..0x19 / 0x2B. */
+void FUN_L00_002a7780(O_2a7780 *o) {
+    R_2a7780 *r;
+    E_2a7780 *e;
+    V_2a7780 v;
+    s32 sel0, sel1, sel2, sel3;
+    u32 color;
+    f32 scale, alpha;
+    s32 tex, idx, nv; s32 k;
+    s32 i, j, d, cur;
+    f32 t, w;
+
+    r = o->r;
+    if (r == 0) return;
+    if (r->f70 == 0.0f) return;
+    if (r->f70 == 1.0f) {
+        if (P_2a7780_G.p2080[0x52] != P_2a7780_G.p2080[0x53]) { r->f70 = 0.0f; return; }
+        if (P_2a7780_G.p2080[0x52] == 0xFF) { r->f70 = 0.0f; return; }
+    }
+    scale = 1.0f;
+    tex = 0x14;
+    nv = 1;
+    color = 0x808080;
+    alpha = scale;
+    if (!((u32)(P_2a7780_G.p2080[0x52] - 0x17) < 3 || P_2a7780_G.p2080[0x52] == 0x2B)) k = r->h78;
+    else k = P_2a7780_G.p2080[0x52];
+    if (k == 0x17) { r->h78 = k; idx = 0; }
+    else if (k == 0x18) { r->h78 = k; idx = 1; }
+    else if (k == 0x19) { r->h78 = k; idx = 2; }
+    else {
+        r->h78 = 0x2B;
+        alpha = 0.7f;
+        idx = 3;
+        scale = 1.25f;
+        tex = 0xC;
+        nv = 2;
+        color = 0x408080;
+    }
+    t = r->f70;
+    e = &effects_2a7780[idx];
+    sel0 = e->sel[0];
+    sel1 = e->sel[1];
+    sel2 = e->sel[2];
+    sel3 = e->sel[3];
+    if (t == 1.0f) {
+        u8 *g = P_2a7780_G.p2080;
+        qcopy(&r->m[0], g + 0xC0);
+        qcopy(&r->m[1], g + 0xD0);
+        qcopy(&r->m[2], g + 0xE0);
+        last_frame_2a7780 = frame_2a7780;
+    }
+    cur = frame_2a7780;
+    d = cur - last_frame_2a7780;
+    if (d <= 0) d = 1;
+    r->f70 = t + (f32)d * e->f48;
+    last_frame_2a7780 = cur;
+    if ((f32)(e->n * 2) <= r->f70) {
+        s32 k2 = P_2a7780_G.p2080[0x52];
+        if ((u32)(k2 - 0x17) < 3) return;
+        if (k2 != 0x2B) r->f70 = 0.0f;
+        return;
+    }
+    v.tag[1] = FUN_001f44b8_2a7780(tex);
+    v.tag[2] = 0xFF9000000260LL;
+    v.tag[0] = 5;
+    v.tag[3] = (nv << 2) | 0x8000000040LL;
+    qcopy(&r->m30, P_2a7780_G.p2080 + 0x10);
+    for (i = 0; i < e->n; i++) {
+        for (j = 0; j < 4; j++) {
+            s32 vi = e->idx[i][j][0];
+            f32 *uv;
+            if (i == sel0) v.col[j] = e->col[0][j];
+            else if (i == sel1) v.col[j] = e->col[1][j];
+            else if (i == sel2) v.col[j] = e->col[2][j];
+            else if (i == sel3) v.col[j] = e->col[3][j];
+            else v.col[j] = 0x50808080;
+            v.col[j] = (FUN_001fa6d0_2a7780(((s32)v.col[j] >> 24) * alpha) << 24) | color;
+            FUN_001f9a68_2a7780(&v.pos[j], &e->verts[vi], scale);
+            uv = (f32 *)(e->idx[i][j][1] * 8 + (s32)e->uv);
+            w = 1.0f - r->f70 * e->f5C;
+            v.uv[j][0] = (uv[0] - 0.5f) * uv_scale_2a7780 + 0.5f;
+            v.uv[j][1] = (uv[1] - 0.5f) * uv_scale_2a7780 + 0.5f + w;
+        }
+        FUN_001f7d30_2a7780(&v, r, 0);
+    }
+}
+#undef P_2a7780_G
 typedef struct {
     char p0[0x50];
     u8 b50;
@@ -1498,7 +1626,7 @@ extern void FUN_L00_0025b6b8(void*,void*,void*,float);
 extern void FUN_L00_00262480(char*,float,float,float);
 extern void FUN_L00_00262608(void*,int);
 extern void FUN_L00_00262840(char*);
-extern void FUN_L00_002a7780(void);
+extern void FUN_L00_002a7780_cb(void) __asm__("FUN_L00_002a7780");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
@@ -1560,7 +1688,7 @@ void FUN_L00_002a84c8(WrenchMoby *m) {
                 d->aim_hit=player_state; qcopy(d->target,collision_hit.position);
             }
         }
-        enqueue_callback_list_1_alt(FUN_L00_002a7780,m);
+        enqueue_callback_list_1_alt(FUN_L00_002a7780_cb,m);
         anim=m->current_animation;
         if ((unsigned char)anim!=0) {
             if ((unsigned char)anim==14) {
