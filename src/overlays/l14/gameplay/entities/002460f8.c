@@ -2848,7 +2848,127 @@ void FUN_L14_002b5dd8(struct Moby *m) {
         size -= 20000.0f;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002bac78.s", FUN_L14_002bac78);
+/* Flying debris: moves by its velocity under drag and gravity; while it is airborne it tumbles and trails
+ * smoke, sparks and a light. When it hits the world or reaches the hero it explodes; once its timer runs out
+ * or it leaves the level box it is removed. */
+extern f32 D_L14_001615D0 __attribute__((sda));
+extern f32 D_L14_001615D4 __attribute__((sda));
+extern f32 D_L14_001615D8 __attribute__((sda));
+extern char D_L14_001809C0[];
+extern float D_L14_0015F580_d[] __asm__("D_L14_0015F580");
+extern int tick_countdown_16_d(void *) __asm__("FUN_001f9770");
+extern void add_d(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void sub_d(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_d(void *, void *, float) __asm__("FUN_001f9a68");
+extern void normalize_d(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void clear_d(void *) __asm__("FUN_001f99f8");
+extern float abs_d(float) __asm__("FUN_001f99c0");
+extern float add_rot_d(float, float) __asm__("FUN_001fa580");
+extern int frames_d(int) __asm__("FUN_001f96f8");
+extern int rand_below_d(int) __asm__("FUN_00213260");
+extern float rand_between_d(float, float) __asm__("FUN_002132a8");
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int FUN_L00_0028dc90(int, int, void *, int);
+extern void e450_b78(void *, void *, void *, float, float, int, int, int, float, float,
+                             float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern char *FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
+extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern PuffParticle *spawn_puff_d(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
+
+void FUN_L14_002bac78(struct Moby *m) {
+    char *d = (char *)m->pvars;
+    float joint[4];
+    float ofs[4];
+    float at[4];
+    float dir[4];
+    float push[4];
+    int i;
+    int n;
+    int c;
+    float size;
+    float bright;
+    u8 *p;
+    u8 *q;
+    float *l;
+    float range = 3.0f;
+    float green = 0.8f;
+    float blue = 0.2f;
+
+    if (tick_countdown_16_d(d + 0x10) != 0)
+        { FUN_L14_002bb4d8((u8 *)m); return; }
+    add_d(&m->pos, &m->pos, d);
+    if (abs_d(*(float *)(d + 0x0)) > D_L14_001615D8 * frame_scale)
+        *(float *)(d + 0x0) *= (D_L14_001615D4 - 1.0f) * frame_scale + 1.0f;
+    if (abs_d(*(float *)(d + 0x4)) > D_L14_001615D8 * frame_scale)
+        *(float *)(d + 0x4) *= (D_L14_001615D4 - 1.0f) * frame_scale + 1.0f;
+    if (*(float *)(d + 0x8) > 0.0f)
+        *(float *)(d + 0x8) *= (D_L14_001615D4 - 1.0f) * frame_scale + 1.0f;
+    *(float *)(d + 0x8) -= D_L14_001615D0 * frame_scale_sq;
+    if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f || m->pos.z < 2.0f ||
+        m->pos.z > 1021.0f)
+        { FUN_L14_002bb4d8((u8 *)m); return; }
+    if (FUN_L00_001f0d60(0.75f, &m->pos, 0, 0) != 0 ||
+        (abs_d(m->pos.x - hero.motion.pos.f[0]) < 10.0f && abs_d(m->pos.y - hero.motion.pos.f[1]) < 10.0f)) {
+        clear_d(joint);
+        FUN_L00_0028dc90(1, 0, m, (*(struct Moby **)(d + 0x20))->oclass);
+        e450_b78(m, joint, &m->pos, 2.0f, 4.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 1.0f, -1, 5.0f, 0, 2,
+                         -1, 0);
+        FUN_L14_002bb4d8((u8 *)m);
+        return;
+    }
+    m->rot.x = add_rot_d(m->rot.x, *(float *)(d + 0x14));
+    m->rot.y = add_rot_d(m->rot.y, *(float *)(d + 0x18));
+    m->rot.z = add_rot_d(m->rot.z, *(float *)(d + 0x1C));
+    FUN_L00_0024f7c8(m, 0, joint);
+    size = FUN_L00_00257c48(0.01f, 0.5f);
+    scale_d(ofs, (char *)m + 0xC0, size);
+    add_d(at, joint, ofs);
+    sub_d(dir, joint, &m->pos);
+    normalize_d(dir, dir, 0.05f);
+    FUN_L00_0026cbb0(at, dir, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(frames_d(10), frames_d(20)), 1, 40000.0f);
+    for (i = 0; i < 3; i++) {
+        if (i != 2) {
+            scale_d(ofs, (char *)m + 0xC0, FUN_L00_00257c48(0.01f, 0.5f));
+            add_d(at, &m->pos, ofs);
+            scale_d(ofs, (char *)m + 0xD0, FUN_L00_00257c48(0.01f, 0.5f));
+            add_d(at, &m->pos, ofs);
+        }
+        n = rand_below_d(6);
+        if (rand_below_d(2) != 0)
+            n = -n;
+        size = rand_between_d(20000.0f, 100000.0f);
+        c = FUN_L00_00257b90(0x10, 0xFF);
+        p = (u8 *)spawn_puff_d(at, 0.025f, 1.0f, 1.0f, n, D_L14_0015F580, size,
+                         c | (0x60000000 | (c << 16) | (c << 8)));
+        if (p != NULL) {
+            p[3] = 0x44;
+            q = p + 0x20;
+            *(s16 *)(p + 0xA) = frames_d(60);
+            q[0xA] = 0x60;
+            *(s32 *)(q + 4) = 2;
+            q[0xB] = p[0xA];
+        }
+    }
+    bright = 1.0f;
+    sub_d(push, joint, &m->pos);
+    scale_d(push, push, 2.5f);
+    add_d(at, &m->pos, push);
+    if (rand_below_d(2) != 0)
+        scale_d(push, (char *)m + 0xE0, -1.0f);
+    else
+        qcopy(push, (char *)m + 0xE0);
+    add_d(at, at, push);
+    if (*(short *)(d + 0x12) == -1) {
+        *(short *)(d + 0x12) = FUN_L00_0023e738(at, range, 0.0f, bright, green, blue);
+    } else {
+        l = (float *)(D_L14_001809C0 + *(short *)(d + 0x12) * 32);
+        qcopy(l + 4, at);
+        l[7] = range;
+        l[0] = bright;
+        l[1] = green;
+        l[2] = blue;
+    }
+}
 
 #define NOT_SDA
 
