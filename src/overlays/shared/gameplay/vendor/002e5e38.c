@@ -1068,4 +1068,224 @@ int FUN_L00_002e7a30(unsigned char *a) {
     }
     return found;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7d20.s", FUN_L00_002e7d20);
+typedef int Q_2e7d20 __attribute__((mode(TI)));
+typedef union { Q_2e7d20 q; f32 f[4]; s32 i[4]; } V_2e7d20;
+typedef struct {
+    u8 pad0[0x18];
+    u8 b18;
+    u8 b19;
+    u16 h1A;
+    u8 pad1C[0x14];
+} W_2e7d20;
+
+typedef struct {
+    u8 pad0[0x80];
+    u8 pad80[0x2080 - 0x80];
+    u8 *p2080;
+    s32 i2084;
+    u8 pad2088[0x20A4 - 0x2088];
+    u8 b20A4;
+} GS_2e7d20;
+extern GS_2e7d20 D_0013F350_2e7d20  __asm__("D_0013F350")__attribute__((section(".data")));
+extern s32 D_0015ED84 __attribute__((section(".sdata")));
+extern u8 D_L00_00166E10_2e7d20[] __asm__("D_L00_00166E10") __attribute__((section(".data")));
+extern u8 D_L00_00166DC0[] __attribute__((section(".data")));
+extern u8 *D_L00_00177F00_2e7d20[] __asm__("D_L00_00177F00") __attribute__((section(".data")));
+extern u8 *D_L00_001E75C0[] __attribute__((section(".data")));
+extern f32 D_L00_00161CD0 __attribute__((sda));
+extern s32 D_L00_0015EF58 __attribute__((sda));
+typedef struct { u8 pad[0x100]; f32 x; f32 y; } C940_2e7d20_t;
+extern C940_2e7d20_t D_0013C940_2e7d20  __asm__("D_0013C940")__attribute__((section(".data")));
+typedef struct { u8 pad[0x18]; s32 p18; s32 p1C; u8 v20[0x10]; } E40_2e7d20_t;
+extern E40_2e7d20_t D_L00_00173E40 __attribute__((section(".data")));
+
+void FUN_001f9a40(void *, void *, void *, f32);
+extern s32 FUN_L00_001f2868_2e7d20(void *, s32, void *, s32, f32) __asm__("FUN_L00_001f2868");
+s32 FUN_L00_00259830(void *);
+extern void FUN_001f9a28_2e7d20(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 FUN_001f9ab0_2e7d20(void *, void *) __asm__("FUN_001f9ab0");
+extern void FUN_001f9a68_2e7d20(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void FUN_001f9bf8_2e7d20(void *, void *, f32) __asm__("FUN_001f9bf8");
+f32 FUN_001f9df8(f32);
+extern f32 FUN_001f99c0_2e7d20(f32) __asm__("FUN_001f99c0");
+void FUN_001f9ad8(void *, void *, void *);
+void FUN_00214890(void *, void *, void *, f32);
+extern s32 FUN_L00_002e7a30_2e7d20(void *) __asm__("FUN_L00_002e7a30");
+extern s32 FUN_L00_002e7520_2e7d20(void *) __asm__("FUN_L00_002e7520");
+extern s32 FUN_L00_002e7318_2e7d20(void *) __asm__("FUN_L00_002e7318");
+extern s32 FUN_001f96f8_2e7d20(s32) __asm__("FUN_001f96f8");
+extern s32 FUN_001f9770_2e7d20(void *) __asm__("FUN_001f9770");
+extern f32 FUN_001fa6c0_2e7d20(s32) __asm__("FUN_001fa6c0");
+f32 FUN_002133d0(f32, f32, f32);
+extern void FUN_001f9a10_2e7d20(void *, void *, void *) __asm__("FUN_001f9a10");
+extern s32 FUN_001efa68_2e7d20(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
+extern s32 FUN_L00_002e4290_2e7d20(void *) __asm__("FUN_L00_002e4290");
+s32 FUN_L00_0025e3b8(s32);
+void FUN_L00_00259888(void *, void *, s32, void *, f32);
+void FUN_L00_00259a88(s32, void *);
+void FUN_L00_001ed280(void);
+
+#define AF_2e7d20(o) (*(f32 *)(a + (o)))
+#define BF_2e7d20(o) (*(f32 *)(b + (o)))
+#define BH_2e7d20(o) (*(s16 *)(b + (o)))
+#define BI_2e7d20(o) (*(s32 *)(b + (o)))
+
+/* Follow-camera leaf, called from FUN_L00_002e9010. */
+void FUN_L00_002e7d20(u8 *m) {
+    V_2e7d20 v0, v10, v20, v30, v40;
+    W_2e7d20 w;
+    u8 *x;
+    u8 *a;
+    u8 *b;
+    s32 hit, cnt, any;
+    s32 j;
+    u8 *o;
+    s32 n;
+    s32 i;
+    s32 t;
+    s32 s;
+    f32 h;
+    f32 f;
+    u8 *base;
+    f32 g;
+    u8 *q;
+
+    base = D_L00_00166E10_2e7d20;
+    x = *(u8 **)(m + 0x70);
+    a = x + 0x130;
+    b = x + 0x1D0;
+    hit = 0;
+    cnt = 0;
+    any = 0;
+    h = AF_2e7d20(0x2C) - BF_2e7d20(0x30) + 1.5f;
+    if (D_0015ED84 == 0xF) {
+        any = D_0013F350_2e7d20.b20A4 == 2;
+    }
+    FUN_001f9a40(&v0, x + 0x90, base - 0x50, 0.5f);
+    n = FUN_L00_001f2868_2e7d20(&v0, 1, D_0013F350_2e7d20.p2080, 0, h * 0.5f);
+    if (n > 0) {
+        i = n;
+        j = 0;
+        do {
+            o = D_L00_00177F00_2e7d20[j];
+            if (*(s32 *)(o + 0x94) == 0) {
+                goto next;
+            }
+            if (FUN_L00_00259830(o) && !any) {
+                goto next;
+            }
+            t = *(s16 *)(o + 0xA6);
+            if (t != 0x72 && t != 0xB && t != 0x2C && t != 0x9A && t != 0xFF && t != 0x392 && t != 0x452 && t != 0x353) {
+                D_L00_001E75C0[cnt] = o;
+                cnt++;
+                *(s32 *)(o + 0x94) = 0;
+                goto next;
+            }
+            FUN_001f9a28_2e7d20(&v10, o + 0x10, (x + 0x90));
+            FUN_001f9a68_2e7d20(&v20, base + 0x30, FUN_001f9ab0_2e7d20(base + 0x30, &v10));
+            FUN_001f9a28_2e7d20(&v30, &v10, &v20);
+            FUN_001f9bf8_2e7d20(&v30, &v30, 1.0f);
+            f = FUN_001f9ab0_2e7d20(&v30, a);
+            f = FUN_001f9df8(f / (AF_2e7d20(0x2C) - BF_2e7d20(0x30)));
+            if (FUN_001f99c0_2e7d20(1.5707964f - f) < 0.43633232f) {
+                FUN_001f9ad8(&v40, a, base + 0x30);
+                FUN_001f9bf8_2e7d20(&v40, &v40, 1.0f);
+                if (0.0f < FUN_001f9ab0_2e7d20(&v40, &v10)) {
+                    FUN_00214890(a, a, base + 0x20, -0.017453292f);
+                } else {
+                    FUN_00214890(a, a, base + 0x20, 0.017453292f);
+                }
+            }
+        next:
+            j++;
+        } while (--i != 0);
+    }
+    if (D_0013F350_2e7d20.i2084 != 0x7F && (D_0015ED84 != 0xD || D_0013F350_2e7d20.i2084 != 0x7B)) {
+        hit = FUN_L00_002e7a30_2e7d20(m) != 0;
+    }
+    hit = FUN_L00_002e7520_2e7d20(m) == 0 ? hit : 1;
+    hit = FUN_L00_002e7318_2e7d20(m) == 0 ? hit : 1;
+    g = AF_2e7d20(0x2C);
+    if (g - BF_2e7d20(0x30) < D_L00_00161CD0) {
+        BF_2e7d20(0x30) = g - D_L00_00161CD0;
+        BH_2e7d20(0x34) = FUN_001f96f8_2e7d20(2000);
+    }
+    if (BH_2e7d20(0x3A) != 0) {
+        goto dec;
+    }
+    if (hit) {
+        goto slow;
+    }
+    s = BH_2e7d20(0x34);
+    s = s < FUN_001f96f8_2e7d20(2000);
+    if (s && BH_2e7d20(0x34) > 0) {
+        goto dec;
+    }
+    if (!(D_0013C940_2e7d20.x < 0.3f)) {
+        goto slow;
+    }
+    if (!(D_0013C940_2e7d20.y < 0.3f)) {
+        goto slow;
+    }
+dec:
+    if (FUN_001f9770_2e7d20(b + 0x34)) {
+        BH_2e7d20(0x3A) = 0;
+    }
+    if (BH_2e7d20(0x3A) != 0) {
+        if (FUN_001f9770_2e7d20(b + 0x34)) {
+            BH_2e7d20(0x3A) = 0;
+        }
+    }
+    f = FUN_001fa6c0_2e7d20(BH_2e7d20(0x34));
+    BF_2e7d20(0x30) = FUN_002133d0(0.0f, BF_2e7d20(0x30), f / FUN_001fa6c0_2e7d20(FUN_001f96f8_2e7d20(2000)));
+    goto move;
+slow:
+    s = BH_2e7d20(0x34);
+    if (FUN_001f96f8_2e7d20(2000) < s) {
+        FUN_001f9770_2e7d20(b + 0x34);
+    } else {
+        BH_2e7d20(0x34) = FUN_001f96f8_2e7d20(2000);
+    }
+move:
+    FUN_001f9bf8_2e7d20(a, a, AF_2e7d20(0x2C) - BF_2e7d20(0x30));
+    FUN_001f9a10_2e7d20(&v10, a, (x + 0x90));
+    if (D_0013F350_2e7d20.i2084 == 0x7F) {
+        goto clear;
+    }
+    if (D_0015ED84 == 0xD && D_0013F350_2e7d20.i2084 == 0x7B) {
+        goto clear;
+    }
+    if (!FUN_001efa68_2e7d20((x + 0x90), &v10, D_L00_0015EF58, D_0013F350_2e7d20.p2080, 0)) {
+        goto clear;
+    }
+    if (FUN_L00_002e4290_2e7d20(D_L00_00173E40.v20)) {
+        goto clear;
+    }
+    if (D_L00_00173E40.p18 != 0 && FUN_L00_0025e3b8(D_L00_00173E40.p18)) {
+        FUN_001f9a28_2e7d20(&v20, (u8 *)D_L00_00173E40.p18 + 0x10, D_L00_00166DC0);
+        v20.i[2] = 0;
+        FUN_001f9bf8_2e7d20(&v20, &v20, 1.0f);
+        v20.f[3] = 5627.9248046875f;
+        FUN_L00_00259888(&w, D_0013F350_2e7d20.p2080, 0x800000, &v20, 20.0f);
+        w.b18 = 3;
+        w.b19 = 3;
+        w.h1A = *(u16 *)(D_0013F350_2e7d20.p2080 + 0xA6);
+        FUN_L00_00259a88(D_L00_00173E40.p18, &w);
+    }
+    BI_2e7d20(0x4C)++;
+    if (BI_2e7d20(0x4C) >= FUN_001f96f8_2e7d20(0x1E)) {
+        FUN_L00_001ed280();
+    }
+    goto fin;
+clear:
+    BI_2e7d20(0x4C) = 0;
+fin:
+    if (cnt > 0) {
+        u8 **op = D_L00_001E75C0;
+        s32 k = cnt;
+        do {
+            q = *op++;
+            *(s32 *)(q + 0x94) = *(s32 *)(*(u8 **)(q + 0x24) + 0x10);
+        } while (--k != 0);
+    }
+}
