@@ -528,8 +528,8 @@ extern float D_0015ED6C;
 void FUN_L08_002e2250(struct Moby *moby) {
     u8 mark = 0xff;
     int selected = 0;
+    TargetSlot *slots = ((TargetBoardVars *)moby->pvars)->slots;
     TargetBoardVars *vars = (TargetBoardVars *)moby->pvars;
-    TargetSlot *slots = vars->slots;
     TargetSlot *slot = slots;
     int i = 0;
     int hits = 0;
