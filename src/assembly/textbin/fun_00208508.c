@@ -49,29 +49,31 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
         offset_y = (s32)((f32)(bottom - top) * normalized_y);
         screen_x = left + offset_x;
         screen_y = top + offset_y;
-        if (screen_x >= -0x199 && screen_y >= -0x199 && screen_x < 0x219A && screen_y < 0x1B9A) {
-            if (marker->texture_group == -1) {
-                append_screen_sprite(screen_x - marker_half_size, screen_y - marker_half_size,
-                                     screen_x + marker_half_size, screen_y + marker_half_size,
-                                     (u32)marker->texture_variant_or_color, 1);
-            } else {
-                f32 scale;
-                f32 full_width_scaled;
+        if (screen_x < -0x199 || screen_y < -0x199 || screen_x >= 0x219A || screen_y >= 0x1B9A) {
+            marker++;
+            continue;
+        }
+        if (marker->texture_group == -1) {
+            append_screen_sprite(screen_x - marker_half_size, screen_y - marker_half_size,
+                                 screen_x + marker_half_size, screen_y + marker_half_size,
+                                 (u32)marker->texture_variant_or_color, 1);
+        } else {
+            f32 scale;
+            f32 full_width_scaled;
 
-                texture_index = resolve_indexed_texture_variant(marker->texture_group,
-                                                                marker->texture_variant_or_color);
-                references = (s16 *)hud_state.frame_refs;
-                texture = (u8 *)hud_state.image_pages + references[texture_index * 2 + 1] * 8;
-                width_log2 = texture[6];
-                height_log2 = texture[7];
-                scale = (2.0f * marker_scale_by_level[selected_map_state.level] + 5.0f) /
-                        13.0f;
-                full_width_scaled = scale * (f32)(one << (width_log2 + 4));
-                append_indexed_screen_sprite(
-                    texture_index, screen_x - (s32)(scale * (f32)(one << (width_log2 + 3))),
-                    screen_y - (s32)(scale * (f32)(one << (height_log2 + 3))),
-                    (s32)full_width_scaled, (s32)(scale * (f32)(one << (height_log2 + 4))), 0x80);
-            }
+            texture_index = resolve_indexed_texture_variant(marker->texture_group,
+                                                            marker->texture_variant_or_color);
+            references = (s16 *)hud_state.frame_refs;
+            texture = (u8 *)hud_state.image_pages + references[texture_index * 2 + 1] * 8;
+            width_log2 = texture[6];
+            height_log2 = texture[7];
+            scale = (2.0f * marker_scale_by_level[selected_map_state.level] + 5.0f) /
+                    13.0f;
+            full_width_scaled = scale * (f32)(one << (width_log2 + 4));
+            append_indexed_screen_sprite(
+                texture_index, screen_x - (s32)(scale * (f32)(one << (width_log2 + 3))),
+                screen_y - (s32)(scale * (f32)(one << (height_log2 + 3))),
+                (s32)full_width_scaled, (s32)(scale * (f32)(one << (height_log2 + 4))), 0x80);
         }
         marker++;
     }
