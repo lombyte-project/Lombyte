@@ -85,6 +85,7 @@ void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream, u8 *sp
             return;
         }
 
+        chunk_end = expanded_cursor - 0x2000;
         fill_transfer_words((void *)0x70000000, 0, 0x2000);
         carry_read = (u8 *)0x70002000;
         carry_write = (u8 *)0x70000000;
@@ -95,7 +96,7 @@ void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream, u8 *sp
             } while (carry_read < expanded_cursor);
         }
         fill_transfer_words((void *)0x70002000, 0, 0x400);
-        expanded_cursor -= 0x2000;
+        expanded_cursor = chunk_end;
     }
 }
 
