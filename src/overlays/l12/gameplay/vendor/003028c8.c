@@ -245,9 +245,10 @@ void FUN_L12_00302f30(struct Moby *moby) {
         is_point_inside_clip_volume(D_L12_00167240, *(int *)(data + 0x2330))) return;
     if (*(int *)(data + 0x2320) == 0) return;
     FUN_L12_00302c58(moby);
-    if (*(int *)(data + 0x2314) == -1) return;
-    *(u128 *)&points[0] = *(u128 *)&moby->pos;
-    other = (struct Moby *)(D_L12_0015FFD8_p + *(int *)(data + 0x2314) * 0x100);
+    target_index = *(int *)(data + 0x2314);
+    if (target_index == -1) return;
+    *(u128 *)&points[0] = *(u128 *)((char *)moby + 0x18);
+    other = (struct Moby *)((u32)D_L12_0015FFD8_p + ((u32)target_index << 8));
     *(u128 *)&points[4] = *(u128 *)&other->pos;
     make_hit_descriptor(hit, moby, 0x10001, 1.0f, (void *)0x0015f580);
     FUN_001efa68(points, points + 4, 0, 0, hit);
