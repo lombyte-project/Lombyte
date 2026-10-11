@@ -755,7 +755,6 @@ int FUN_L13_002c3fc0(struct Moby *m, char *d, int aim) {
     int index;
     int step;
     int scans;
-    int direction;
     int direct_distance;
     int wrap_distance;
     float forward_distance;
@@ -824,34 +823,33 @@ int FUN_L13_002c3fc0(struct Moby *m, char *d, int aim) {
     if (*(short *)(d + 0xB4) < index) {
         direct_distance = index - *(short *)(d + 0xB4);
         wrap_distance = *(int *)path - index + *(short *)(d + 0xB4);
-        direction = direct_distance < wrap_distance ? 1 : -1;
+        step = direct_distance < wrap_distance ? 1 : -1;
     } else {
         direct_distance = *(short *)(d + 0xB4) - index;
         wrap_distance = *(int *)path - *(short *)(d + 0xB4) + index;
-        direction = direct_distance < wrap_distance ? -1 : 1;
+        step = direct_distance < wrap_distance ? -1 : 1;
     }
     target_distance = FUN_001f9b48(&m->pos, path + 0x10 + index * 16);
-    if (direction != *(signed char *)(d + 0xD0)) {
+    if (step != *(signed char *)(d + 0xD0)) {
         if (FUN_001f9770((short *)(d + 0xD2)) != 0) {
             *(short *)(d + 0xD2) = 10;
-            speed = *(float *)(d + 0xCC) * (1.0f + D_0015ED60 * -0.04000002f);
-            *(float *)(d + 0xCC) = speed;
+            *(float *)(d + 0xCC) = *(float *)(d + 0xCC) * (D_0015ED60 * -0.04000002f + 1.0f);
             distance = FUN_001f9b80(&m->pos, D_0013F3D0);
-            if ((speed < D_0015ED60 * 0.1f) | (m->unk31 == 0) | (distance < 40.0f)) {
+            if ((*(float *)(d + 0xCC) < D_0015ED60 * 0.1f) | (m->unk31 == 0) | (distance < 40.0f)) {
                 short old = *(short *)(d + 0xB4);
-                *(signed char *)(d + 0xD0) = direction;
+                *(signed char *)(d + 0xD0) = step;
                 *(short *)(d + 0xB4) = *(short *)(d + 0xB6);
                 *(short *)(d + 0xB6) = old;
             }
             goto update_path;
         }
     }
-    if (direction != *(signed char *)(d + 0xD0)) {
+    if (step != *(signed char *)(d + 0xD0)) {
         goto update_path;
     }
     maximum = D_0015ED6C * 100.0f;
     speed = *(float *)(d + 0xCC);
-    speed = speed + (target_distance / 60.0f - speed) * D_0015ED60 * 0.07f;
+    speed = speed + (target_distance / 60.0f - speed) * (D_0015ED60 * 0.07f);
     *(float *)(d + 0xCC) = speed;
     if (maximum < speed) {
         *(float *)(d + 0xCC) = maximum;
