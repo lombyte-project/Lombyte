@@ -155,6 +155,9 @@ void FUN_L10_002f5b58(char *moby) {
     short *index_cursor;
     float *angle_cursor;
     char *acc;
+    char *moby_pos;
+    char *moby_rot;
+    char *moby_scale;
 
     data[0x38] = 1;
     work = *(char **)(moby + 0x70);
@@ -179,6 +182,9 @@ void FUN_L10_002f5b58(char *moby) {
         index_cursor++;
         i--;
     } while (i >= 0);
+    moby_scale = moby + 0x30;
+    moby_pos = moby + 0x10;
+    moby_rot = moby + 0x20;
     angle = angle_atan2(1.0f, D_L10_0016CF70);
     *(float *)(acc + 0x48) = angle + angle;
 
@@ -232,10 +238,10 @@ void FUN_L10_002f5b58(char *moby) {
     FUN_001f99f8(work + 0x30);
     {
         char *source = *(char **)(D_L10_00167100 + 0x184);
-        *(u128 *)(moby + 0x30) = *(u128 *)(source + 0x30);
+        *(u128 *)moby_scale = *(u128 *)(source + 0x30);
         *(u128 *)(moby + 0x00) = *(u128 *)(source + 0x00);
-        *(u128 *)(moby + 0x10) = *(u128 *)(source + 0x10);
-        *(u128 *)(moby + 0x20) = *(u128 *)(source + 0x20);
+        *(u128 *)moby_pos = *(u128 *)(source + 0x10);
+        *(u128 *)moby_rot = *(u128 *)(source + 0x20);
     }
     if (*(int *)(data + 0x4c) == 0)
         hero_set_state(0x72, 1);
