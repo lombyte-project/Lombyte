@@ -497,9 +497,9 @@ struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Mob
     if (m != 0) {
     vars = m->pvars;
     *(struct Moby **)(vars + 0x20) = source;
-    m->unk32 = 0x7f;
-    m->unk30 = 0x7f;
     m->unk31 = 1;
+    m->unk30 = 0x7f;
+    m->unk32 = 0x7f;
     m->spawn_frame = source->spawn_frame;
     *(f32 *)((u8 *)m + 0x40) = D_L00_00161890_2caf70;
     *(f32 *)((u8 *)m + 0x44) = FUN_002000e8_2caf70(speed, D_L00_00161894_2caf70);
@@ -508,7 +508,12 @@ struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Mob
     if (other != 0) {
         qcopy(vars, &other->pos);
         other = FUN_0025c338_2caf70(other);
-        *(f32 *)(vars + 8) += other ? *(f32 *)((u8 *)other + 0x10) : 0.5f;
+        initial_value = *(f32 *)(vars + 8);
+        if (other != 0)
+            blend = *(f32 *)((u8 *)other + 0x10);
+        else
+            blend = 0.5f;
+        *(f32 *)(vars + 8) = initial_value + blend;
     } else {
         FUN_001ff260_2caf70(vars);
     }
@@ -522,27 +527,12 @@ struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Mob
     *(s16 *)(vars + 0x24) = lifetime;
     qcopy(&probe, &source->pos);
     probe.f[2] = start->f[2];
-    if (FUN_001efc70_2caf70(&probe, start, 0, source, 0) == 0) {
-        FUN_L00_0026daa0_2caf70(m, 0x2f4f7f7f, *(s16 *)(vars + 0x24), -1, D_L00_00161888_2caf70);
-        handle = (void **)(vars + 0x2c);
-        for (i = 0; i < 17; i++, handle++) {
-            u8 *effect = FUN_L00_00275158_2caf70(0.0f, &m->pos, D_L00_0015F580_2caf70, 1);
-            if (effect != 0) {
-                *(f32 *)(effect + 0xc) = FUN_L00_00257be8_2caf70(D_L00_00161870_2caf70, D_L00_00161874_2caf70);
-                blend = cubic_hermite_scalar_2caf70(-1.5f, 0.0f, 1.0f, 0.0f,
-                    FUN_00200240_2caf70(i) / FUN_00200240_2caf70(16));
-                initial_value = *(f32 *)(effect + 0xc);
-                target = D_L00_00161878_2caf70;
-                *(f32 *)(effect + 0xc) = initial_value + (target - initial_value) * blend;
-                *(u32 *)(effect + 4) = (FUN_00200250_2caf70(128.0f + blend * -64.0f) << 24) | 0xffffff;
-            }
-            *handle = effect;
-        }
-    } else {
+    if (FUN_001efc70_2caf70(&probe, start, 0, source, 0) != 0) {
         FUN_00262c50_2caf70(&offset, D_0015ED6C_2c8440 * 40.0f,
             *(f32 *)((u8 *)m + 0x48), -*(f32 *)((u8 *)m + 0x44));
         qcopy(&m->pos, &coll_hit_2c8440.point);
-        for (i = 4; i >= 0; i--) {
+        i = 4;
+        do {
             direction.q = 0;
             direction.f[0] = FUN_L00_00257be8_2caf70(-1.0f, 1.0f);
             direction.f[1] = FUN_L00_00257be8_2caf70(-1.0f, 1.0f);
@@ -555,8 +545,11 @@ struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Mob
                 FUN_L00_00257be8_2caf70(D_0015ED6C_2c8440 * 3.0f, D_0015ED6C_2c8440 * 6.0f));
             lifetime = FUN_L00_00257b90_2caf70(FUN_001fef20_2caf70(10), FUN_001fef20_2caf70(15));
             FUN_L00_0026dd20_2caf70(&m->pos, &direction, 0x7f2f4f6f, lifetime, 30000.0f);
-        }
-        if (D_0013E52F_2caf70 != 0) {
+            i--;
+        } while (i >= 0);
+        if (D_0013E52F_2caf70 == 0) {
+            FUN_L00_002cbcc0(m, 0);
+        } else {
             i = *(s32 *)(vars + 0x28);
             *(s32 *)(vars + 0x28) = i + 1;
             if (i + 1 <= D_0013E52F_2caf70 + 5) {
@@ -565,10 +558,29 @@ struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Mob
                 *(f32 *)((u8 *)m + 0x44) = -FUN_001ff8b0_2caf70(FUN_001ff408_2caf70(&offset), offset.f[2]);
                 return m;
             }
+            FUN_L00_002cbcc0(m, 1);
         }
-        FUN_L00_002cbcc0(m, D_0013E52F_2caf70 != 0);
         FUN_0024eb68_2caf70(m);
         return 0;
+    }
+    {
+        FUN_L00_0026daa0_2caf70(m, 0x2f4f7f7f, *(s16 *)(vars + 0x24), -1, D_L00_00161888_2caf70);
+        handle = (void **)(vars + 0x2c);
+        for (i = 0; i < 17; i++, handle++) {
+            u8 *effect = FUN_L00_00275158_2caf70(0.0f, &m->pos, D_L00_0015F580_2caf70, 1);
+            if (effect != 0) {
+                *(f32 *)(effect + 0xc) = FUN_L00_00257be8_2caf70(D_L00_00161870_2caf70, D_L00_00161874_2caf70);
+                blend = cubic_hermite_scalar_2caf70(-1.5f, 0.0f, 1.0f, 0.0f,
+                    FUN_00200240_2caf70(i) / FUN_00200240_2caf70(16));
+                initial_value = *(f32 *)(effect + 0xc);
+                target = D_L00_00161878_2caf70;
+                *(f32 *)(effect + 0xc) = initial_value + (target - initial_value) * blend;
+                *(u32 *)(effect + 4) = (FUN_00200250_2caf70(128.0f + blend * -64.0f) << 24) | 0xffffff;
+                *handle = effect;
+            } else {
+                *handle = 0;
+            }
+        }
     }
     }
     return m;
