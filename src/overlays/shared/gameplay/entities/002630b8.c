@@ -271,8 +271,8 @@ void FUN_L00_002637f8(u8 *m) {
         lifetime = fraction * 25000.0f + 5000.0f;
         size = fraction * 0.015000001f + 0.01f;
         FUN_001f9bf8_2637f8(&scaled, &vectors[2], scale);
-        FUN_001f9a10_2637f8(&pos, &vectors[3], &scaled);
         count = 4;
+        FUN_001f9a10_2637f8(&pos, &vectors[3], &scaled);
         do {
             effect = FUN_L00_0026d000_2637f8(&pos, size, 1.0f, 1.0f, lifetime, 0x10,
                                                D_L00_0015F580_2637f8, 0x7fffffff);
