@@ -1436,7 +1436,125 @@ void FUN_L09_002f0040(struct Moby *moby) {
         delete_moby(moby);
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002f86a0.s", FUN_L09_002f86a0);
+#else
+extern void scale_vector_2f86a0(float, void *, void *) __asm__("FUN_001f9a68");
+extern void timer_event_2f86a0(int, int, struct Moby *) __asm__("FUN_0022da68");
+extern int elapsed_frames_2f86a0(int) __asm__("FUN_001f96f8");
+extern void decrement_timer_2f86a0(int *) __asm__("FUN_001f9740");
+extern void subtract_vector_2f86a0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float vector_measure_2f86a0(void *, void *) __asm__("FUN_001f9ab0");
+extern void update_rotation_2f86a0(float *, float *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
+extern void update_position_2f86a0(void *, void *, void *, void *, void *) __asm__("FUN_L07_00288968");
+extern void copy_vector_2f86a0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void update_oscillation_2f86a0(float, float, struct Moby *, float *, float *) __asm__("FUN_L00_00262b00");
+extern void update_oscillation_pair_2f86a0(struct Moby *, float *, float *, float, float, float) __asm__("FUN_L00_00262b80");
+extern float approach_rotation_2f86a0(float, float) __asm__("FUN_001fa580");
+extern void finish_motion_2f86a0(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
+extern short D_0013F65E_2f86a0 __asm__("D_0013F65E");
+extern struct Moby *D_0013F64C_2f86a0 __asm__("D_0013F64C");
+extern float D_0013F3D0_2f86a0[] __asm__("D_0013F3D0");
+extern float D_0013F440_2f86a0[] __asm__("D_0013F440");
+extern float D_2f86a0_adf4 __asm__("D_0015ADF4") __attribute__((section(".sdata")));
+extern float D_2f86a0_adf8 __asm__("D_0015ADF8") __attribute__((section(".sdata")));
+extern float D_2f86a0_adfc __asm__("D_0015ADFC") __attribute__((section(".sdata")));
+extern float D_2f86a0_ae04 __asm__("D_0015AE04") __attribute__((section(".sdata")));
+extern float D_2f86a0_ae08 __asm__("D_0015AE08") __attribute__((section(".sdata")));
+extern float D_2f86a0_ae0c __asm__("D_0015AE0C") __attribute__((section(".sdata")));
+extern float D_2f86a0_ae10 __asm__("D_0015AE10") __attribute__((section(".sdata")));
+extern float D_2f86a0_ae14 __asm__("D_0015AE14") __attribute__((section(".sdata")));
+extern float D_2f86a0_ae18 __asm__("D_0015AE18") __attribute__((section(".sdata")));
+
+struct MotionState_2f86a0 {
+    char pad[0x20];
+    float output[4];
+    char pad30[0x30];
+    float rotations[4];
+    float previous[4];
+    int active;
+    float target_height;
+    int timer;
+    int pad8c;
+    float oscillation_pair[2];
+    float oscillation[2];
+};
+
+void FUN_L09_002f86a0(struct Moby *moby) {
+    struct MotionState_2f86a0 *state = (struct MotionState_2f86a0 *)moby->pvars;
+    float old_position[4];
+    float old_rotation[4];
+    float direction[4];
+    float saved_position[8];
+    float result[4];
+    float previous_height;
+    float threshold;
+    float angle;
+    float left;
+    float right;
+    int timer;
+
+    scale_vector_2f86a0(-1.0f, old_position, &moby->pos);
+    *(u128_ee380 *)old_rotation = *(u128_ee380 *)&moby->rot;
+    previous_height = moby->pos.z;
+    threshold = state->target_height - 0.25f;
+    if (state->active == 0) {
+        *(u128_ee380 *)state->rotations = *(u128_ee380 *)&moby->rot;
+        *(u128_ee380 *)state->previous = 0;
+        moby->pos.z -= 0.3f;
+        state->active = 1;
+        state->target_height = moby->pos.z;
+    }
+    timer = state->timer;
+    if (D_0013F65E_2f86a0 == 0 && D_0013F64C_2f86a0 == moby) {
+        if (timer == 0) timer_event_2f86a0(0, 0, moby);
+        if (state->timer < elapsed_frames_2f86a0(30)) {
+            state->timer = elapsed_frames_2f86a0(30);
+        }
+        timer = state->timer;
+    }
+    angle = 0.017453292f;
+    if (timer != 0) {
+        decrement_timer_2f86a0(&state->timer);
+        subtract_vector_2f86a0(direction, D_0013F3D0_2f86a0, &moby->pos);
+        left = vector_measure_2f86a0(direction, &moby->unkC0);
+        right = vector_measure_2f86a0(direction, &moby->unkD0);
+        *(u128_ee380 *)saved_position = *(u128_ee380 *)state->rotations;
+        *(u128_ee380 *)(&saved_position[4]) = *(u128_ee380 *)&moby->pos;
+        update_rotation_2f86a0(&state->rotations[0], &state->previous[0], 0,
+            -D_2f86a0_adf4 * right, D_2f86a0_ae04 * angle * frame_time_sq,
+            D_2f86a0_ae08 * frame_scale_sq, D_2f86a0_ae0c * angle * frame_time);
+        update_rotation_2f86a0(&state->rotations[1], &state->previous[1], 0,
+            D_2f86a0_adf4 * left, D_2f86a0_ae04 * angle * frame_time_sq,
+            D_2f86a0_ae08 * frame_scale_sq, D_2f86a0_ae0c * angle * frame_time);
+        moby->pos.z -= D_2f86a0_adf8 * frame_time;
+        if (threshold < previous_height && moby->pos.z <= threshold)
+            timer_event_2f86a0(1, 0, moby);
+        update_position_2f86a0(D_0013F3D0_2f86a0, result, &moby->pos, saved_position, state->rotations);
+        subtract_vector_2f86a0(D_0013F440_2f86a0, result, D_0013F3D0_2f86a0);
+        D_0013F440_2f86a0[2] += moby->pos.z - saved_position[6];
+    } else {
+        update_rotation_2f86a0(&state->rotations[0], &state->previous[0], 0,
+            0.0f, D_2f86a0_ae10 * angle * frame_time_sq,
+            D_2f86a0_ae14 * frame_scale_sq, D_2f86a0_ae18 * angle * frame_time);
+        update_rotation_2f86a0(&state->rotations[1], &state->previous[1], 0,
+            0.0f, D_2f86a0_ae10 * angle * frame_time_sq,
+            D_2f86a0_ae14 * frame_scale_sq, D_2f86a0_ae18 * angle * frame_time);
+        moby->pos.z += D_2f86a0_adfc * frame_time * (state->target_height - moby->pos.z);
+        if (state->target_height < moby->pos.z) moby->pos.z = state->target_height;
+        if (previous_height < threshold && threshold <= moby->pos.z)
+            timer_event_2f86a0(2, 0, moby);
+    }
+    update_oscillation_2f86a0(0.140000f, frame_time * 0.5235988f, moby,
+                              &state->oscillation[0], &state->oscillation[1]);
+    update_oscillation_pair_2f86a0(moby, &state->oscillation_pair[0], &state->oscillation_pair[1],
+        0.08726646f, frame_time * 0.31415927f, frame_time * 0.4886922f);
+    moby->rot.x = approach_rotation_2f86a0(state->rotations[0], moby->rot.x);
+    moby->rot.y = approach_rotation_2f86a0(state->rotations[1], moby->rot.y);
+    copy_vector_2f86a0(old_position, old_position, &moby->pos);
+    finish_motion_2f86a0(state->output, old_position, old_rotation, &moby->rot);
+}
+#endif
 /* UpdateMoby_1000: timer and sound bookkeeping */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00301C38), where it is exact; names translated to the US level program. */
 
