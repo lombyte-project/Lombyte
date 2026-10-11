@@ -481,8 +481,8 @@ s32 FUN_L00_0025e3f8(void *p) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e450.s", FUN_L00_0025e450);
 #else
-typedef struct { f32 f[4]; } V25e450 __attribute__((aligned(16)));
-typedef struct { f32 f[8]; } V25e450Wide __attribute__((aligned(16)));
+typedef union { f32 f[4]; u128 q; } V25e450 __attribute__((aligned(16)));
+typedef struct { f32 f[12]; } V25e450Wide __attribute__((aligned(16)));
 typedef struct { s32 v[6]; } Colors25e450;
 extern f32 FUN_L00_00257be8_25e450(f32, f32) __asm__("FUN_L00_00257be8");
 extern f32 FUN_L00_00257cb0_25e450(void) __asm__("FUN_L00_00257cb0");
@@ -491,7 +491,7 @@ extern void FUN_L00_00262c50_25e450(void *, f32, f32, f32) __asm__("FUN_L00_0026
 extern s32 FUN_001fef20_25e450(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_00257b90_25e450(s32, s32) __asm__("FUN_L00_00257b90");
 extern s32 FUN_L00_0025c0e8_25e450(s32, s32) __asm__("FUN_L00_0025c0e8");
-extern void FUN_L00_00259858_25e450(void *, void *, s32) __asm__("FUN_L00_00259858");
+extern void FUN_L00_00259858_25e450(void *, void *, s32, f32) __asm__("FUN_L00_00259858");
 extern void FUN_L00_001f2868_25e450(void *, s32, void *, void *, f32) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_0026bb70_25e450(void *, void *, s32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0026bb70");
 extern void FUN_001f9a28_25e450(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -520,19 +520,23 @@ extern u8 D_L00_001B02A0_25e450[] __asm__("D_L00_001B02A0");
 void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_effect2,
                        f32 cutoff, f32 scale, f32 flash, void *owner, s32 unused2,
                        V25e450 *pos, s32 puff_count, s32 spark_count, s32 shard_count,
-                       s32 sound, s32 shake, s32 spray_count, s32 unused3, s32 tint, u8 alternate)
+                       s32 sound, s32 shake, s32 spray_count, s32 tint, u8 alternate)
 {
-    V25e450 base, difference, dir;
+    V25e450 base, difference;
     V25e450Wide vel;
     Colors25e450 colors0, colors1;
+    V25e450 dir;
     f32 distance, speed, gap, size;
     s32 i, n, a, b, c0, c1, life, life2;
     s32 tint_color;
     *(u128 *)&base = 0;
-    base.f[2] = frame_time * 8.0f * scale;
+    difference = base;
+    difference.f[2] = frame_time * 8.0f * scale;
+    base = difference;
+    size = D_L00_0015F5D4_25e450 + D_L00_0015F5D0_25e450;
     if (tint == -1) {
         tint = 0;
-        if (D_L00_0015F5D0_25e450 + D_L00_0015F5D4_25e450 > 1.7f)
+        if (size > 1.7f)
             tint = 1;
     }
     if (pos == 0) {
@@ -540,18 +544,17 @@ void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_e
         pos = (V25e450 *)((u8 *)owner + 0x10);
     }
     if (burst > 0.0f) {
-        FUN_L00_00259858_25e450(&vel, owner, 0x810001);
+        FUN_L00_00259858_25e450(&vel, owner, 0x810001, unused_float);
         ((u8 *)&vel)[0x18] = 2;
         ((u8 *)&vel)[0x19] = 1;
         *(u16 *)((u8 *)&vel + 0x1a) = *(u16 *)((u8 *)owner + 0xa6);
         FUN_L00_001f2868_25e450(pos, 0x10, owner, &vel, burst);
     }
-    difference.f[0] = base.f[0]; difference.f[1] = base.f[1]; difference.f[2] = base.f[2]; difference.f[3] = base.f[3];
     for (i = 0; i < puff_count; i++) {
         speed = scale * 40000.0f;
         size = FUN_L00_00257be8_25e450(0.2617994f, 1.3962634f);
         gap = FUN_L00_00257cb0_25e450();
-        FUN_L00_00262c50_25e450(&vel, scale * FUN_L00_00257be8_25e450(7.0f, 10.5f) * frame_time, gap, size);
+        FUN_L00_00262c50_25e450(&vel, scale * (FUN_L00_00257be8_25e450(7.0f, 10.5f) * frame_time), gap, size);
         vel.f[2] += frame_time * 3.0f;
         c0 = FUN_L00_0025c0e8_25e450(0x4f007fff, alternate);
         c1 = FUN_L00_0025c0e8_25e450(0x1f00007f, alternate);
@@ -561,10 +564,10 @@ void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_e
     FUN_001f9a28_25e450(&difference, (void *)0x166dc0, pos);
     distance = FUN_001f9af0_25e450(&difference);
     if (spray_count != 0) {
+        *(u128 *)&dir = 0;
         dir.f[0] = FUN_L00_00257be8_25e450(-1.0f, 1.0f);
         dir.f[1] = FUN_L00_00257be8_25e450(-1.0f, 1.0f);
         dir.f[2] = FUN_L00_00257be8_25e450(-1.0f, 1.0f);
-        dir.f[3] = 0.0f;
         *(u128 *)&vel = *(u128 *)&dir;
         if (distance < 14.0f) {
             difference.f[2] += distance * 0.5f;
@@ -578,10 +581,12 @@ void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_e
         for (i = 0; i < spray_count - 1; i++) {
             size = FUN_L00_00257be8_25e450(0.2617994f, 1.3089969f);
             gap = FUN_L00_00257cb0_25e450();
-            FUN_L00_00262c50_25e450(&dir, scale * FUN_L00_00257be8_25e450(7.0f, 10.5f) * frame_time, gap, size);
+            FUN_L00_00262c50_25e450(&dir, scale * (FUN_L00_00257be8_25e450(7.0f, 10.5f) * frame_time), gap, size);
             dir.f[2] += frame_time + frame_time;
+            a = 1;
+            if (i % 3 != 0) a = 0;
             life = FUN_L00_00257b90_25e450(FUN_001fef20_25e450(60), FUN_001fef20_25e450(90));
-            FUN_L00_002af450_25e450(pos, &dir, life, i % 3 == 0, 0);
+            FUN_L00_002af450_25e450(pos, &dir, life, a, 0);
         }
     }
     n = spark_count;
@@ -598,22 +603,24 @@ void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_e
         c1 = FUN_L00_0025c0e8_25e450(colors1.v[FUN_L00_00257b50_25e450(6)], alternate);
         size = scale * 400000.0f;
         life = FUN_L00_00257b90_25e450(FUN_001fef20_25e450(15), FUN_001fef20_25e450(20));
+        life -= tint * 3;
         life2 = FUN_L00_00257b90_25e450(FUN_001fef20_25e450(30), FUN_001fef20_25e450(45));
-        FUN_L00_0026a9f0_25e450(pos, &base, c0, c1, size, life - tint * 3, life2 - tint * 5, 0, 0, speed);
+        FUN_L00_0026a9f0_25e450(pos, &base, c0, c1, size, life, life2 - tint * 5, 0, 0, speed);
         life = FUN_L00_00257b90_25e450(FUN_001fef20_25e450(5), FUN_001fef20_25e450(10));
+        life -= tint * 2;
         life2 = FUN_L00_00257b90_25e450(FUN_001fef20_25e450(15), FUN_001fef20_25e450(20));
         FUN_L00_0026a9f0_25e450(pos, &base, 0x7fffffff, 0xffffff, size,
-            life - tint * 2, life2 - tint * 3, 0, 0, speed * 0.5f);
+            life, life2 - tint * 3, 0, 0, speed * 0.5f);
     }
     for (i = 0; i < shard_count; i++) {
         colors0 = D_L00_001E9030_25e450;
         colors1 = D_L00_001E9048_25e450;
+        *(u128 *)&dir = 0;
         dir.f[0] = FUN_L00_00257be8_25e450(-1.0f, 1.0f);
         dir.f[1] = FUN_L00_00257be8_25e450(-1.0f, 1.0f);
         dir.f[2] = FUN_L00_00257be8_25e450(-1.0f, 1.0f);
-        dir.f[3] = 0.0f;
         *(u128 *)&vel = *(u128 *)&dir;
-        FUN_001f9bf8_25e450(&vel, &vel, scale * FUN_L00_00257be8_25e450(0.0f, 3.0f) * frame_time);
+        FUN_001f9bf8_25e450(&vel, &vel, scale * (FUN_L00_00257be8_25e450(0.0f, 3.0f) * frame_time));
         c0 = FUN_L00_0025c0e8_25e450(colors0.v[FUN_L00_00257b50_25e450(6)], alternate);
         c1 = FUN_L00_0025c0e8_25e450(colors1.v[FUN_L00_00257b50_25e450(6)], alternate);
         life = FUN_L00_00257b90_25e450(FUN_001fef20_25e450(30), FUN_001fef20_25e450(45));
