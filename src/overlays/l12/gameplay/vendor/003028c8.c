@@ -295,20 +295,24 @@ void FUN_L12_00303370(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int found = 0;
     int i;
+    int offset;
     float position[4] __attribute__((aligned(16)));
 
     i = 0;
+    offset = 0;
     do {
-        int index = *(int *)(data + 0x40 + i * 4);
+        int index = *(int *)(data + 0x40 + offset);
         if (index != -1) {
             struct Moby *other = (struct Moby *)(D_L12_0015FFD8_p + index * 0x100);
-            float yaw_limit = 0.12217305f;
-            float pitch_limit = 0.12217305f;
+            float yaw_limit;
+            float pitch_limit;
             float yaw;
             float distance;
             float pitch;
 
             qcopy(position, &other->pos);
+            yaw_limit = 0.12217305f;
+            pitch_limit = yaw_limit;
             if (other->oclass == 0x146) {
                 position[2] += 1.5f;
             }
@@ -327,6 +331,7 @@ void FUN_L12_00303370(struct Moby *moby) {
             }
         }
         i++;
+        offset += 4;
     } while (i < 10);
     if (found) {
         *(int *)(data + 0x88) += 2;
