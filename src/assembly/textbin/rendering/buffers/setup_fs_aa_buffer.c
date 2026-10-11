@@ -121,7 +121,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     packet_word = &fs_aa_resample_packet[10];
     left_x = 0x6FF8;
     next_x = 0x71F8;
-    for (strip_index = 0; strip_index < 16; strip_index++) {
+    for (strip_index = 0; strip_index != 16; strip_index++) {
         *packet_word++ = strip_index * active_fs_aa_buffer->display_width;
         *packet_word++ =
             left_x | ((u64)(0x7FF8 - (active_fs_aa_buffer->storage_height << 3)) << 16);
