@@ -30,6 +30,10 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030ee00.s", FUN_L11_0030ee00);
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310cf8.s", FUN_L11_00310cf8);
 #else
+#define FUN_L11_00310cf8 FUN_L11_00310cf8_c
+void FUN_L11_00310cf8_c(float, float, float, float, float, int, int, long long, int,
+                          unsigned char, unsigned char, unsigned char, unsigned char)
+    __asm__("FUN_L11_00310cf8");
 typedef unsigned int u128_quad __attribute__((mode(TI)));
 extern int D_L11_001611C0_g __asm__("D_L11_001611C0");
 extern int D_0013E500_g[] __asm__("D_0013E500");
@@ -40,8 +44,8 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 
 void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, int texture_width,
-                       int texture_height, int texture, int z_and_fog, int red, int green,
-                       int blue, int alpha) {
+                       int texture_height, long long texture, int z_and_fog, unsigned char red,
+                       unsigned char green, unsigned char blue, unsigned char alpha) {
     float vertical[4];
     float horizontal[4];
     float center[4];
@@ -63,7 +67,10 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     subtract_vector_xyz(top_left, top_left, horizontal);
     add_vector_xyz(bottom_left, center, vertical);
     subtract_vector_xyz(top_right, center, horizontal);
-    *(u128_quad *)bottom_right = *(u128_quad *)center;
+    bottom_right[0] = center[0];
+    bottom_right[1] = center[1];
+    bottom_right[2] = center[2];
+    bottom_right[3] = center[3];
 
     tag = (int *)D_L11_001611C0_g;
     tag[0] = 0x10000007;
@@ -105,6 +112,7 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
             ((unsigned long long)z_and_fog << 32);
     D_L11_001611C0_g += 0x70;
 }
+#undef FUN_L11_00310cf8
 #endif
 #define NOT_SDA
 
