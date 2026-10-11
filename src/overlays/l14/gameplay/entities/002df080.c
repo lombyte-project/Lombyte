@@ -82,8 +82,8 @@ void FUN_L14_002df138(u8 *moby) {
         p[2] = height;
         i++;
         p[1] = 0.0f;
-        p[3] = 1.0f;
         p[0] = d[0x7c] * index + 1.6f;
+        p[3] = 1.0f;
         p += 4;
     } while (i < 5);
 
@@ -114,7 +114,7 @@ void FUN_L14_002df138(u8 *moby) {
         pitch = normalize_rotation_l14(d[0x7a] + index2 * 0.20944f);
         height = fast_sin(pitch) * 0.75f;
         height *= fast_sin(yaw);
-        p[0x2a] += height + spread_l14(0.0f, 0.2f);
+        p[0x2a] = p[0x2a] + height + spread_l14(0.0f, 0.2f);
         p[0x2b] = 1.0f;
         p[0x29] = fast_cos(yaw) * 0.5f;
         p[0x28] = index2 * 0.39f;
