@@ -227,6 +227,7 @@ typedef struct {
 } SegmentPath_262030;
 
 extern SegmentPath_262030 *D_L00_001B04B0_262030[] __asm__("D_L00_001B04B0");
+extern OvlVec4 D_0013F5E0_262030 __asm__("D_0013F5E0");
 extern f32 FUN_001ff218_262030(f32) __asm__("FUN_001f99c0");
 extern void FUN_001ff278_262030(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
 extern void FUN_001ff2a8_262030(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
@@ -244,10 +245,11 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
     OvlVec4 cross;
     OvlVec4 scaled_cross;
     SegmentPath_262030 *entry;
-    OvlVec4 *height_axis = (OvlVec4 *)0x13f5e0;
+    OvlVec4 *height_axis = &D_0013F5E0_262030;
     OvlVec4 *current;
     OvlVec4 *next;
     s32 i;
+    s32 offset;
     volatile s32 found;
     f32 original_height;
     f32 segment_length;
@@ -258,10 +260,11 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
     entry = D_L00_001B04B0_262030[path_index];
     original_height = FUN_001ff398_262030(&working, height_axis);
     i = 0;
-    current = &entry->points[0];
+    offset = 0;
     if (i < entry->count - 1) {
         do {
-            next = current + 1;
+            current = (OvlVec4 *)((u8 *)entry + offset + 0x10);
+            next = (OvlVec4 *)((u8 *)entry + offset + 0x20);
             if (current->f[3] != 0.0f || next->f[3] != 0.0f) {
                 FUN_001ff2a8_262030(&difference, &working, current);
                 FUN_001ff2a8_262030(&segment, next, current);
@@ -294,7 +297,7 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
             }
 next_segment_262030:
             i++;
-            current++;
+            offset = i << 4;
         } while (i < entry->count - 1);
     }
     if (found) {
