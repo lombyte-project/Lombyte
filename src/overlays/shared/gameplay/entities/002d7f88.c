@@ -1392,8 +1392,8 @@ s32 FUN_L00_002dbe20(u8 *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002dbf28.s", FUN_L00_002dbf28);
 #else
 extern u128 D_L00_001EA0B0_002dbf28[] __asm__("D_L00_001EA0B0");
-extern u64 D_L00_001EA100_002dbf28[] __asm__("D_L00_001EA100");
-extern u64 D_L00_001EA118_002dbf28[] __asm__("D_L00_001EA118");
+extern u8 D_L00_001EA100_002dbf28[] __asm__("D_L00_001EA100");
+extern u8 D_L00_001EA118_002dbf28[] __asm__("D_L00_001EA118");
 extern char D_L00_00166DC0_002dbf28[] __asm__("D_L00_00166DC0");
 extern char D_L00_00177F00_002dbf28[] __asm__("D_L00_00177F00");
 extern float FUN_001fa6c0_002dbf28(int) __asm__("FUN_001fa6c0");
@@ -1420,30 +1420,29 @@ extern void FUN_L00_0025a9f8_002dbf28(float, float, float, void *, void *, void 
 
 void FUN_L00_002dbf28(char *moby) {
     u128 matrix[5];
-    u128 position, origin, axis, displacement, scaled, temporary;
-    u8 first_colors[24], second_colors[24];
+    Q_WORDDATA origin, position, axis, temporary, scaled, displacement;
+    u8 first_colors[32], second_colors[32];
     float magnitude, range, deficit, speed;
     int multiplier, count, i, a, b, red, green, blue;
     char *center = moby + 0x10;
 
-    matrix[0] = D_L00_001EA0B0_002dbf28[0];
-    matrix[1] = D_L00_001EA0B0_002dbf28[1];
-    matrix[2] = D_L00_001EA0B0_002dbf28[2];
-    matrix[3] = D_L00_001EA0B0_002dbf28[3];
-    matrix[4] = D_L00_001EA0B0_002dbf28[4];
-    axis = 0;
-    ((float *)&axis)[2] = 1.0f;
+    __builtin_memcpy(matrix, D_L00_001EA0B0_002dbf28, 80);
+    axis.ul128 = 0;
+    axis.fl32[2] = frame_time + frame_time;
     position = axis;
+    axis.ul128 = 0;
+    axis.fl32[2] = 1.0f;
     magnitude = FUN_001fa6c0_002dbf28(D_0013E529) + 1.0f;
-    multiplier = D_0013E529 ? 1 : 2;
+    multiplier = 1;
+    if (!D_0013E529) multiplier = 2;
     FUN_001f9a68_002dbf28(magnitude, &position, &position);
     FUN_001f9a28_002dbf28(&origin, D_L00_00166DC0_002dbf28, center);
     range = FUN_001f9af0_002dbf28(&origin);
 
     for (i = 0; i < 10 / multiplier; i++) {
-        displacement = 0;
-        ((float *)&displacement)[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
-        ((float *)&displacement)[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
+        displacement.ul128 = 0;
+        displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
+        displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
         scaled = displacement;
         FUN_001f9bf8_002dbf28(FUN_001f9ab0_002dbf28(&scaled, &axis), &temporary, &axis);
         FUN_001f9a28_002dbf28(&scaled, &scaled, &temporary);
@@ -1458,9 +1457,9 @@ void FUN_L00_002dbf28(char *moby) {
         FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 0, D_0013E529);
     }
     for (i = 0; i < 4 / multiplier; i++) {
-        displacement = 0;
-        ((float *)&displacement)[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
-        ((float *)&displacement)[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
+        displacement.ul128 = 0;
+        displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
+        displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
         scaled = displacement;
         FUN_001f9bf8_002dbf28(FUN_001f9ab0_002dbf28(&scaled, &axis), &temporary, &axis);
         FUN_001f9a28_002dbf28(&scaled, &scaled, &temporary);
@@ -1474,11 +1473,11 @@ void FUN_L00_002dbf28(char *moby) {
         b = FUN_001f96f8_002dbf28(90);
         FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 1, D_0013E529);
     }
-    displacement = 0;
-    ((float *)&displacement)[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
-    ((float *)&displacement)[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
-    ((float *)&displacement)[2] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
-    ((float *)&origin)[2] += range * 0.5f;
+    displacement.ul128 = 0;
+    displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
+    displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
+    displacement.fl32[2] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
+    origin.fl32[2] += range * 0.5f;
     scaled = displacement;
     FUN_001f9bf8_002dbf28((range / 5.0f) * frame_time, &scaled, &scaled);
     FUN_001f9bf8_002dbf28((range + range) * frame_time, &origin, &origin);
@@ -1510,12 +1509,13 @@ void FUN_L00_002dbf28(char *moby) {
                                    red, green, blue, FUN_L00_00257b90_002dbf28(a, b), 0, 0);
     }
     if (range > 9.0f) {
+        int effect_red, effect_green, effect_blue;
         a = FUN_001f96f8_002dbf28(15);
         FUN_L00_002df808_002dbf28(magnitude * 4.0f, moby, center, &position, a, 127, 127, 127, 32);
-        red = 127; green = 32; blue = 0;
-        FUN_L00_0025c088_002dbf28(&red, &green, &blue, D_0013E529);
+        effect_red = 127; effect_green = 32; effect_blue = 0;
+        FUN_L00_0025c088_002dbf28(&effect_red, &effect_green, &effect_blue, D_0013E529);
         a = FUN_001f96f8_002dbf28(24);
-        FUN_L00_002df808_002dbf28(magnitude * 4.0f, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 32);
+        FUN_L00_002df808_002dbf28(magnitude * 4.0f, moby, center, &position, a, (u8)effect_red, (u8)effect_green, (u8)effect_blue, 32);
     }
     red = 127; green = 63; blue = 0;
     FUN_L00_0025c088_002dbf28(&red, &green, &blue, D_0013E529);
@@ -1535,7 +1535,7 @@ void FUN_L00_002dbf28(char *moby) {
     FUN_L00_002d3838_002dbf28(matrix, center, 0, 0);
     if (D_0013E529) {
         a = FUN_L00_001f2868_002dbf28(3.0f, center, 16, moby, 0);
-        scaled = *(u128 *)(moby + 0x10);
+        scaled.ul128 = *(u128 *)(moby + 0x10);
         FUN_L00_0025a9f8_002dbf28(2.0f, 1.0f, 1.0f, moby, &scaled,
                                    D_L00_00177F00_002dbf28, a, 0, 0x830000, 2, 1);
     }
