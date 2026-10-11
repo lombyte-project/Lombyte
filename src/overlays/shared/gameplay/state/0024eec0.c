@@ -104,34 +104,38 @@ Slot *FUN_L00_0024f028(char *o, int id) {
     *(Slot **)(o + 0x60) = s;
     return s;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f0e8.s", FUN_L00_0024f0e8);
-#else
-void FUN_001f97e8(void *, int, int);
+/* FUN_L00_0024f0e8: unlinks *slot from its owner's singly linked list
+ * (head at owner+0x60, link at node+0x1C), frees the 0x40-byte node and
+ * clears *slot. */
+typedef struct ListNode_24f0e8 ListNode_24f0e8;
+struct ListNode_24f0e8 {
+    u8 pad0[0x1C];
+    ListNode_24f0e8 *next; /* 0x1C */
+};
+typedef struct {
+    u8 pad0[0x60];
+    ListNode_24f0e8 *head; /* 0x60 */
+} ListOwner_24f0e8;
 
-void FUN_L00_0024f0e8(char *o, Slot **slot) {
-    Slot *s = *slot;
-    Slot **head;
-    Slot *p;
-    Slot *next;
-    if (s == 0) return;
-    head = (Slot **)(o + 0x60);
-    p = *head;
-    if (p == s) {
-        *head = s->p1C;
+extern void memset_words_24f0e8(void *, s32, s32) __asm__("FUN_001f97e8");
+
+void FUN_L00_0024f0e8(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot) {
+    ListNode_24f0e8 *p;
+
+    if (*slot == 0)
+        return;
+    if (owner->head == *slot) {
+        owner->head = (*slot)->next;
     } else {
-        next = p->p1C;
-        while (next != 0 && next != s) {
-            p = next;
-            next = p->p1C;
-        }
-        if (next == s)
-            p->p1C = s->p1C;
+        p = owner->head;
+        while (p->next != 0 && p->next != *slot)
+            p = p->next;
+        if (p->next == *slot)
+            p->next = (*slot)->next;
     }
-    FUN_001f97e8(*slot, 0, 0x40);
+    memset_words_24f0e8(*slot, 0, 0x40);
     *slot = 0;
 }
-#endif
 
 #define NOT_SDA
 
