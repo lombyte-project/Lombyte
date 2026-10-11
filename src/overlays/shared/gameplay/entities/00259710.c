@@ -462,7 +462,156 @@ float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g) {
     }
     return -((a[2] - b[2]) + g * (t * t) * 0.5f) / t;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025aca0.s", FUN_L00_0025aca0);
+#else
+typedef union {
+    u128 q;
+    float f[4];
+} Vec4_25aca0 __attribute__((aligned(16)));
+
+extern void FUN_002531e0_25aca0(void *, int, int) __asm__("FUN_0020fa90");
+extern void FUN_001f9a10_25aca0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f9a28_25aca0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001f9a68_25aca0(float, void *, void *) __asm__("FUN_001f9a68");
+extern void FUN_001f9a80_25aca0(float, void *, void *) __asm__("FUN_001f9a80");
+extern void FUN_001251e8_25aca0(float, void *, void *) __asm__("FUN_001251e8");
+extern float FUN_001f9af0_25aca0(void *) __asm__("FUN_001f9af0");
+extern float FUN_001f9988_25aca0(float) __asm__("FUN_001f9988");
+extern void FUN_001f9cf8_25aca0(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void FUN_L00_001ff378_25aca0(float, void *, void *) __asm__("FUN_L00_001ff378");
+extern float FUN_001f9dc8_25aca0(float) __asm__("FUN_001f9dc8");
+extern float FUN_001f9de0_25aca0(float) __asm__("FUN_001f9de0");
+extern float FUN_002132a8_25aca0(float, float) __asm__("FUN_002132a8");
+extern float FUN_00213308_25aca0(void) __asm__("FUN_00213308");
+
+int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25aca0 *out, int mask) {
+    float weights[20];
+    unsigned char *entries[20];
+    Vec4_25aca0 first, second, third, fourth, fifth;
+    unsigned char *list;
+    unsigned char *entry;
+    int count, index, chosen, emitted, limit;
+    unsigned int flags;
+    float total, weight, radius, extent, random;
+
+    list = *(unsigned char **)(*(unsigned char **)(entity + 0x24) + 0x10);
+    if (!list) return 0;
+    if (*(short *)(list + 2)) FUN_002531e0_25aca0(entity, *(short *)(list + 2), 0);
+    if (*(int *)(list + 4) <= 0) return 0;
+    count = 0;
+    index = 0;
+    total = 0.0f;
+    entry = list + 0x10;
+    do {
+        flags = *(unsigned int *)entry;
+        if (!((mask >> (index & 31) ^ 1) & 1) && (flags & 0x20000)) {
+            entries[count] = entry;
+            if ((flags & 0xff) == 3) {
+                first.q = *(u128 *)(entry + 0x10);
+                FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
+                radius = first.f[3] * *(float *)(entity + 0x2c) * 0.0009765625f;
+                extent = *(float *)(entry + 4) * *(float *)(entity + 0x2c) * 0.0009765625f;
+                weights[count] = radius * 4.187743f * radius * radius + radius * 1.5707964f * radius * extent;
+            } else if ((flags & 0xff) < 4) {
+              if ((flags & 0xff) < 2) {
+                first.q = *(u128 *)(entry + 0x10);
+                FUN_001f9a80_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &first, &first);
+                radius = first.f[3];
+                weights[count] = radius * 4.1887903f * radius * radius;
+              } else {
+                first.q = *(u128 *)(0x70000000 + (*(int *)(entry + 4) << 4));
+                second.q = *(u128 *)(entry + 0x10);
+                FUN_001f9a10_25aca0(&first, &first, &second);
+                FUN_001f9a68_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &first, &first);
+                radius = *(float *)(entry + 0xc) * *(float *)(entity + 0x2c) * 0.0009765625f;
+                weights[count] = radius * 4.1887903f * radius * radius;
+              }
+            } else if ((flags & 0xff) == 4) {
+                FUN_001251e8_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &first, (void *)(0x70000000 + (*(short *)(entry + 4) << 4)));
+                FUN_001251e8_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &second, (void *)(0x70000000 + (*(short *)(entry + 6) << 4)));
+                FUN_001f9a28_25aca0(&third, &first, &second);
+                radius = FUN_001f9af0_25aca0(&third);
+                extent = *(float *)(entry + 0xc) * *(float *)(entity + 0x2c) * 0.0009765625f;
+                weights[count] = extent * 1.5707964f * extent * radius;
+            }
+            total += weights[count];
+            count++;
+        }
+        index++;
+        entry = list + 0x10 + (index << 5);
+    } while (!(flags & 0x80000000));
+    limit = (int)(density * total + 0.5f);
+    if (maximum < limit) limit = maximum;
+    if (limit < 1) return limit;
+    for (emitted = 0; emitted < limit; emitted++) {
+        random = FUN_002132a8_25aca0(0.0f, total);
+        chosen = 0;
+        if (count > 0 && !(random < weights[0])) {
+            do {
+                random -= weights[chosen++];
+            } while (chosen < count && !(random < weights[chosen]));
+        }
+        entry = entries[chosen];
+        if (*entry < 3) {
+            if (*entry < 2) {
+                first.q = *(u128 *)(entry + 0x10);
+                FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
+                radius = first.f[3];
+            } else {
+                first.q = *(u128 *)(0x70000000 + (*(int *)(entry + 4) << 4));
+                second.q = *(u128 *)(entry + 0x10);
+                FUN_001f9a10_25aca0(&first, &first, &second);
+                FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
+                radius = *(float *)(entry + 0xc);
+            }
+            extent = radius * *(float *)(entity + 0x2c) * 0.0009765625f;
+            FUN_L00_001ff378_25aca0(1024.0f, &first, &first);
+            do {
+                second.f[0] = FUN_002132a8_25aca0(-extent, extent);
+                second.f[1] = FUN_002132a8_25aca0(-extent, extent);
+                second.f[2] = FUN_002132a8_25aca0(-extent, extent);
+            } while (extent < FUN_001f9af0_25aca0(&second));
+            FUN_001f9a10_25aca0(&second, &second, &first);
+            FUN_001f9cf8_25aca0(&second, &second, entity + 0xc0);
+            FUN_001f9a10_25aca0(&out[emitted], &second, entity + 0x10);
+        } else if (*entry == 3) {
+            first.q = *(u128 *)(entry + 0x10);
+            FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
+            radius = first.f[3] * *(float *)(entity + 0x2c) * 0.0009765625f;
+            extent = *(float *)(entry + 4) * *(float *)(entity + 0x2c) * 0.0009765625f;
+            FUN_L00_001ff378_25aca0(1024.0f, &first, &first);
+            weight = FUN_002132a8_25aca0(0.0f, radius * radius);
+            weight = FUN_001f9988_25aca0(weight);
+            random = FUN_002132a8_25aca0(0.0f, extent);
+            radius = FUN_00213308_25aca0();
+            second.f[0] = FUN_001f9dc8_25aca0(radius) * weight;
+            second.f[1] = FUN_001f9de0_25aca0(radius) * weight;
+            second.f[2] = random;
+            FUN_001f9a10_25aca0(&second, &second, entity + 0x10);
+            FUN_001f9a10_25aca0(&out[emitted], &first, &second);
+        } else if (*entry == 4) {
+            FUN_001251e8_25aca0(*(float *)(entity + 0x2c), &first, (void *)(0x70000000 + (*(short *)(entry + 4) << 4)));
+            FUN_001251e8_25aca0(*(float *)(entity + 0x2c), &second, (void *)(0x70000000 + (*(short *)(entry + 6) << 4)));
+            FUN_001f9a28_25aca0(&third, &second, &first);
+            weight = FUN_002132a8_25aca0(0.0f, 1.0f);
+            FUN_001f9a68_25aca0(weight, &third, &third);
+            FUN_001f9a10_25aca0(&fourth, &third, &first);
+            FUN_L00_001ff378_25aca0(1024.0f, &fourth, &fourth);
+            extent = *(float *)(entry + 0xc) * *(float *)(entity + 0x2c) * 0.0009765625f;
+            do {
+                fifth.f[0] = FUN_002132a8_25aca0(-extent, extent);
+                fifth.f[1] = FUN_002132a8_25aca0(-extent, extent);
+                fifth.f[2] = FUN_002132a8_25aca0(-extent, extent);
+            } while (extent < FUN_001f9af0_25aca0(&fifth));
+            FUN_001f9a10_25aca0(&fifth, &fifth, &fourth);
+            FUN_001f9cf8_25aca0(&fifth, &fifth, entity + 0xc0);
+            FUN_001f9a10_25aca0(&out[emitted], &fifth, entity + 0x10);
+        }
+    }
+    return limit;
+}
+#endif
 typedef struct {
     unsigned char pad0[8];
     float f8;
