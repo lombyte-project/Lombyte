@@ -2022,13 +2022,13 @@ extern s32 D_L00_0015F3F8;
 void FUN_L00_00210748(void) {
     int i = 0;
     do {
-        struct Hero *slot_hero = (struct Hero *)(((char *)&hero) + i * 0x50);
-        struct Moby *moby = slot_hero->items[0].moby;
+        struct HeroItemSlot *slot_hero = &hero.items[i];
+        struct Moby *moby = slot_hero->moby;
         if (moby == 0) {
             hero_switch_item(i);
         } else {
-            if (slot_hero->items[0].state == 2) {
-                slot_hero->items[0].unk20++;
+            if (slot_hero->state == 2) {
+                slot_hero->unk20++;
                 hero_switch_item(i);
                 if (i == 0) {
                     char *p = (char *)&hero;
@@ -2045,9 +2045,11 @@ void FUN_L00_00210748(void) {
                 }
                 if ((moby->unk70 & 2) && moby->prev_seq == 0)
                     set_moby_sequence(moby, 1, 0, 2);
-            } else if (slot_hero->items[0].state == 3) {
-                slot_hero->items[0].unk1B++;
-                if ((moby->unk70 & 2) || i == 1 || i == 0)
+            } else if (slot_hero->state == 3) {
+                slot_hero->unk1B++;
+                if (moby->unk70 & 2)
+                    FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
+                else if (i == 1 || i == 0)
                     FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
             }
             if (moby->state != 0xfe && moby->state != 0xfd && i != 6 && moby->update)
