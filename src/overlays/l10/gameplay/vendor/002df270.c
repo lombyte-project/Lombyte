@@ -1610,8 +1610,8 @@ void FUN_L10_002e8358(struct Moby *moby) {
                 if (!(D_0013CAE4 & 0x10) || !accepted) return;
                 alternate_item_available[4] = 1;
                 hero.health.hp = 5;
-                current_bolt_count = D_0013ED98 - 4000;
                 D_0013EDA0 = 5;
+                current_bolt_count = D_0013ED98 - 4000;
                 purchase = 0;
             } else {
                 if (alternate_item_available[5] != 0 || timer[1] != 0) return;
@@ -1623,8 +1623,8 @@ void FUN_L10_002e8358(struct Moby *moby) {
                 if (!(D_0013CAE4 & 0x10) || !accepted) return;
                 alternate_item_available[5] = 1;
                 hero.health.hp = 8;
-                current_bolt_count = D_0013ED98 - 30000;
                 D_0013EDA0 = 8;
+                current_bolt_count = D_0013ED98 - 30000;
                 purchase = 1;
             }
             FUN_L00_00298840_vendor(purchase);
