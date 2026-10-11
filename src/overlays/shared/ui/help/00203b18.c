@@ -2788,8 +2788,8 @@ fourth_sign_done:
         *(f32 *)((char *)&D_L00_0017A680_a540 + j * 0xb0 + 0x64) = x;
         *(f32 *)((char *)&D_L00_0017A680_a540 + j * 0xb0 + 0x68) = y;
         record += 0x10;
-        check_timer++;
         store_timer++;
+        check_timer++;
         i++;
     } while (i < 4);
 }
