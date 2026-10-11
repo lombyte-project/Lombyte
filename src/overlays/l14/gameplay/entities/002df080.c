@@ -618,7 +618,7 @@ void FUN_L14_002eaf88(struct Moby *m) {
         }
         FUN_L14_002eb568(m);
         h = (struct Hero *)(pos - 0x80);
-        if (h->unk308 == 0 && h->unk2284 != 13 && (h->unk12E2 != 0 || h->unk30C.s != 0) &&
+        if (h->unk308 == 0 && h->unk2284 != 13 && (h->unk12E2 != 0 || h->frames_off_ground.s != 0) &&
             wind_inside(pos, d->clip_push) != 0) {
             float t;
             float k;
@@ -1817,7 +1817,7 @@ void FUN_L14_002ee8d8(struct Moby *m) {
             d->along = *(float *)(*e + (d->segment << 4) + 0x1C);
             d->dir = 1.0f;
         }
-        if (hero.ground_moby == m && hero.unk30C.s == 0 &&
+        if (hero.ground_moby == m && hero.frames_off_ground.s == 0 &&
             vendor_distance(&hero.motion.pos, &m->pos) < 1.0f) {
             int voice = vendor_sound(1, 0, m);
             if (voice >= 0) {
@@ -3256,7 +3256,7 @@ void FUN_L14_002fcbb0(struct Moby *m) {
             u8 w = D_0014C050[d->item[1] + lvl];
             if (w == v) {
                 u8 x = D_0014C050[d->item[2] + lvl];
-                if (x == w && hero.unk30C.s == 0 && hero.ground_moby == 0 &&
+                if (x == w && hero.frames_off_ground.s == 0 && hero.ground_moby == 0 &&
                     tram_inside(&hero.motion.pos, d->clip) != 0) {
                     struct Moby *carrier = &D_L14_0015FFD8_t[d->carrier];
                     struct Moby *rider = &D_L14_0015FFD8_t[((int *)carrier->pvars)[1]];
