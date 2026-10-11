@@ -1779,7 +1779,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void FUN_L10_002e8ab0(struct Moby *moby) {
     Vars_2E8AB0 *vars = (Vars_2E8AB0 *)moby->pvars;
-    struct Moby *target = 0;
+    struct Moby *target;
     struct Moby *candidate;
     int *bits;
     float rotation[4];
@@ -1792,7 +1792,15 @@ void FUN_L10_002e8ab0(struct Moby *moby) {
 
     state = moby->state;
     if (state == 1) return;
-    if (state == 0) {
+    if (state < 2) {
+        if (state == 0) goto state_zero;
+        return;
+    }
+    if (state == 2) goto state_two;
+    if (state == 3) goto state_three;
+    return;
+state_zero:
+    {
         save_id = moby->save_id;
         signed_save_id = (short)save_id;
         bits = (int *)((char *)D_0014C190_8ab0 + (current_level_index << 8) + (signed_save_id >> 5) * 4);
@@ -1811,7 +1819,9 @@ void FUN_L10_002e8ab0(struct Moby *moby) {
             return;
         }
     }
-    if (state == 2) {
+state_two:
+    {
+        target = 0;
         save_id = moby->save_id;
         signed_save_id = (short)save_id;
         bits = (int *)((char *)D_0014C190_8ab0 + (current_level_index << 8) + (signed_save_id >> 5) * 4);
@@ -1824,7 +1834,6 @@ void FUN_L10_002e8ab0(struct Moby *moby) {
             candidate = (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8));
             target = (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd) ? candidate : 0;
           }
-        }
         if (target == 0) {
           if (vars->targets[1] != -1) {
             candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8));
@@ -1837,6 +1846,7 @@ void FUN_L10_002e8ab0(struct Moby *moby) {
             candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[2] << 8));
             if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
                 target = candidate;
+          }
         }
         if (target == 0) {
             moby->state = 3;
@@ -1875,7 +1885,8 @@ void FUN_L10_002e8ab0(struct Moby *moby) {
         }
         return;
     }
-    if (state == 3) {
+state_three:
+    {
         target = 0;
         if (vars->targets[0] != -1) {
             candidate = (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8));
@@ -1884,18 +1895,20 @@ void FUN_L10_002e8ab0(struct Moby *moby) {
         }
         if (target != 0)
             mark_moby_for_removal(target);
-        else if (vars->targets[1] != -1) {
+        candidate = target;
+        if (target == 0 && vars->targets[1] != -1) {
             candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8));
-            if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
-                target = candidate;
+            if (candidate == 0 || candidate->state == 0xfe || candidate->state == 0xfd)
+                candidate = target;
         }
-        if (target != 0)
-            mark_moby_for_removal(target);
+        if (candidate != 0)
+            mark_moby_for_removal(candidate);
         save_id = moby->save_id;
         signed_save_id = (short)save_id;
         bits = (int *)((char *)D_0014C190_8ab0 + (current_level_index << 8) + (signed_save_id >> 5) * 4);
         *bits |= 1 << (save_id & 31);
-        D_L10_001BA950_8ab0[(short)save_id >> 5] |= 1 << (save_id & 31);
+        signed_save_id = *(volatile short *)&moby->save_id;
+        D_L10_001BA950_8ab0[(short)signed_save_id >> 5] |= 1 << (signed_save_id & 31);
         return;
     }
 }
