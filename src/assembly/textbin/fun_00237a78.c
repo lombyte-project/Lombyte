@@ -24,6 +24,7 @@ void project_graphics_bounds(f32 *first, f32 *opposite, s32 *width, s32 *height,
     f32 *opposite_pointer = opposite_projected;
     f32 scale_x;
     f32 scale_y;
+    f32 projected_coordinate;
 
     *(u128 *)first_projected = *(u128 *)first;
     *(u128 *)opposite_projected = *(u128 *)opposite;
@@ -44,8 +45,10 @@ void project_graphics_bounds(f32 *first, f32 *opposite, s32 *width, s32 *height,
     first_projected[0] *= scale_x;
     first_projected[1] *= scale_y;
     opposite_pointer[0] *= scale_x;
-    opposite_pointer[1] *= scale_y;
-    *x = convert_float_to_integer(first_projected[0] * 0.25f + (f32)screen_extent.half_width);
+    projected_coordinate = opposite_pointer[1] * scale_y;
+    opposite_pointer[1] = projected_coordinate;
+    projected_coordinate = (f32)screen_extent.half_width;
+    *x = convert_float_to_integer(first_projected[0] * 0.25f + projected_coordinate);
     *y = convert_float_to_integer(first_projected[1] * 0.25f + (f32)screen_extent.half_height);
     *(volatile s32 *)width =
         convert_float_to_integer((opposite_pointer[0] - first_projected[0]) * 0.25f);
