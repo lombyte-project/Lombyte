@@ -15,8 +15,8 @@ extern s32 D_L00_00160564, D_L00_00160568, D_L00_0016056C;
 extern u8 D_L00_00197BC0[];
 extern s32 D_L00_00199A80[];
 extern u128_copy D_L00_001AEBC0[];
-extern u128_copy D_00156800, D_00156810;
-extern u8 D_00156820;
+extern u128_copy D_00156800 __attribute__((sda)), D_00156810 __attribute__((sda));
+extern u8 D_00156820 __attribute__((sda));
 extern s32 D_00156BC8 __attribute__((sda));
 extern s32 D_00138E4C[];
 extern void hud_send_resident_bank(s32, s32, s32) __asm__("FUN_001f98d0");
@@ -29,7 +29,7 @@ extern void FUN_L00_002409b8(void *, void *, void *);
 void *FUN_L00_0023fa00(u8 *bank, u8 *header) {
     u8 buffer[0x60] __attribute__((aligned(16)));
     s32 first_offset, second_offset, third_offset, fourth_offset;
-    s16 index;
+    s32 index;
     s32 allocation;
     u8 *destination, *texture;
 
