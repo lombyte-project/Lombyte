@@ -2527,7 +2527,7 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
     L18FlareVector basis[4][4];
     float *data = (float *)moby->pvars;
     int i, j;
-    float size;
+    volatile float size;
     clear_flare_vector(&axis);
     axis.z = flare_length(D_L18_001677C0_flare[0] - moby->pos.x,
                           D_L18_001677C0_flare[1] - moby->pos.y);
@@ -2562,7 +2562,8 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
         packet[i].zero = 0;
         j = 0;
         do {
-            packet[i].uv[j] = D_L18_001D9B50_flare[j];
+            packet[i].uv[j].u = D_L18_001D9B50_flare[j].u;
+            packet[i].uv[j].v = D_L18_001D9B50_flare[j].v;
             if (i == 0) {
                 packet[i].color[j] = tween_flare_color(size,
                     D_L18_00161EF8_flare[i] & 0xffffff, D_L18_00161EF8_flare[i]);
