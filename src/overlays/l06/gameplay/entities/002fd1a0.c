@@ -490,7 +490,7 @@ void FUN_L06_002ffcb0(char *moby) {
         if ((float)data[6] < 0.99999f) {
             if ((float)data[6] >= 0.05f && data[3] >= 0) {
                 base = D_L06_001600EC_ffcb0 + (data[3] << 7);
-                *(u128 *)(base + 0x30) = *(u128 *)hero;
+                qcopy(base + 0x30, hero);
                 *(float *)(base + 0x38) -= 0.5f;
                 data[3] = -1;
             }
