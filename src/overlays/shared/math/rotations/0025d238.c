@@ -74,26 +74,26 @@ typedef struct {
     s16 d0;
     s16 d1;
 } S_25d538;
-f32 FUN_001fa6c0_25d538(s32) __asm__("FUN_001fa6c0");
+f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 s32 FUN_001fa6d0_25d538(f32) __asm__("FUN_001fa6d0");
-s32 FUN_001f9770_25d538(void *) __asm__("FUN_001f9770");
+s32 fast_dec_timer(void *) __asm__("FUN_001f9770");
 s32 FUN_001f96f8_25d538(s32) __asm__("FUN_001f96f8");
-void FUN_L00_002502f0_25d538(s32, s32, s32, s32) __asm__("FUN_L00_002502f0");
+void glow_n(s32, s32, s32, s32) __asm__("FUN_L00_002502f0");
 void FUN_L00_0025d538(s32 id, S_25d538 *s) {
     f32 d, f;
     s32 r, g, b;
     if (s->t == 0)
         return;
-    if (FUN_001f9770_25d538(s)) {
+    if (fast_dec_timer(s)) {
         if (s->phase != 0) {
-            FUN_L00_002502f0_25d538(id, s->r0, s->g0, s->b0);
+            glow_n(id, s->r0, s->g0, s->b0);
             return;
         }
         s->phase = 1;
         s->t = FUN_001f96f8_25d538(s->d1);
     }
     if (s->phase == 0) {
-        d = FUN_001fa6c0_25d538(FUN_001f96f8_25d538(s->d0));
+        d = convert_integer_to_float(FUN_001f96f8_25d538(s->d0));
         f = (d - s->t) / d;
         if (s->r1 != 0)
             r = FUN_001fa6d0_25d538(s->r0 + (s->r1 - s->r0) * f);
@@ -108,7 +108,7 @@ void FUN_L00_0025d538(s32 id, S_25d538 *s) {
         else
             b = s->b0;
     } else {
-        d = FUN_001fa6c0_25d538(FUN_001f96f8_25d538(s->d1));
+        d = convert_integer_to_float(FUN_001f96f8_25d538(s->d1));
         f = (d - s->t) / d;
         if (s->r1 != 0)
             r = FUN_001fa6d0_25d538(s->r1 + (s->r0 - s->r1) * f);
@@ -123,7 +123,7 @@ void FUN_L00_0025d538(s32 id, S_25d538 *s) {
         else
             b = s->b0;
     }
-    FUN_L00_002502f0_25d538(id, r, g, b);
+    glow_n(id, r, g, b);
 }
 s32 FUN_L00_0025d7a0(s32 *tab, s32 i, s32 d, s32 wrap) {
     if (wrap) {
@@ -239,7 +239,7 @@ void FUN_L00_0025da70(u128_0025da70 *a, u128_0025da70 *b, float lim) {
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 void FUN_001f9a28_25db00(void *, void *, void *) __asm__("FUN_001f9a28");
-void FUN_001f9c48_25db00(void *, void *, float) __asm__("FUN_001f9c48");
+void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
 float FUN_001f9ab0_25db00(void *, void *) __asm__("FUN_001f9ab0");
 float FUN_001f9b80_25db00(void *, void *) __asm__("FUN_001f9b80");
 float FUN_L00_0025db00(float *out, float *p, OvlQuad *a, OvlQuad *b) {
@@ -256,7 +256,7 @@ float FUN_L00_0025db00(float *out, float *p, OvlQuad *a, OvlQuad *b) {
     *(int *)&n[2] = 0;
     qcopy(c, a);
     *(int *)&((float *)c)[2] = 0;
-    FUN_001f9c48_25db00(n, n, 1.0f);
+    trooper_scale(n, n, 1.0f);
     k = -FUN_001f9ab0_25db00(n, c) + (n[0] * p[0] + n[1] * p[1]);
     out[0] = p[0] - k * n[0];
     out[1] = p[1] - k * n[1];
@@ -287,7 +287,7 @@ extern void b6b8_25dcd8(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8
 extern void vsub_25dcd8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vadd_25dcd8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vscl_25dcd8(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void vmul_25dcd8(void *, void *, float) __asm__("FUN_001f9a68");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern float dot_25dcd8(void *, void *) __asm__("FUN_001f9ab0");
 extern float da70_25dcd8(void *, void *, float) __asm__("FUN_L00_0025da70");
 float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r) {
@@ -314,7 +314,7 @@ float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r
     qcopy(c, d);
     t = -dot_25dcd8(p, d);
     u = dot_25dcd8(&d[1], c);
-    vmul_25dcd8(out, d, -(t + u) / dot_25dcd8(d, c));
+    scale_vector_xyz(out, d, -(t + u) / dot_25dcd8(d, c));
     vadd_25dcd8(out, out, &d[1]);
     i = 0;
     fb = (float *)b;
@@ -346,7 +346,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025df68.s", FUN_L00_0025df68);
 #else
 extern f32 path_distance_25df68(void *, void *, f32) __asm__("FUN_L00_0025da70");
 extern void clear_vector_25df68(void *) __asm__("FUN_001f99f8");
-extern s32 path_step_25df68(s32 *, OvlQuad *, s32 *, f32 *, s32, f32)
+extern s32 sample_path(s32 *, OvlQuad *, s32 *, f32 *, s32, f32)
     __asm__("FUN_L00_0025d808");
 
 s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
@@ -371,7 +371,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
 
     limit += step;
     do {
-        crossed = path_step_25df68(path, &work[0], &current,
+        crossed = sample_path(path, &work[0], &current,
                                    &current_fraction, wrap, step);
         work[1] = *point;
         next_distance = path_distance_25df68(&work[0], &work[1], height_tolerance);
@@ -386,10 +386,10 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
 
     current_fraction = best_fraction;
     start = best_segment;
-    path_step_25df68(path, &work[0], &start, &current_fraction, wrap, -step);
+    sample_path(path, &work[0], &start, &current_fraction, wrap, -step);
     current_fraction = best_fraction;
     end = best_segment;
-    path_step_25df68(path, &work[0], &end, &current_fraction, wrap, step);
+    sample_path(path, &work[0], &end, &current_fraction, wrap, step);
     end = FUN_L00_0025d7a0(path, end, 1, wrap);
     current = start;
     distance = 1000000000.0f;

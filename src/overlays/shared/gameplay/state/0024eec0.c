@@ -117,7 +117,7 @@ typedef struct {
     ListNode_24f0e8 *head; /* 0x60 */
 } ListOwner_24f0e8;
 
-extern void memset_words_24f0e8(void *, s32, s32) __asm__("FUN_001f97e8");
+extern void memset_words(void *, s32, s32) __asm__("FUN_001f97e8");
 
 void FUN_L00_0024f0e8(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot) {
     ListNode_24f0e8 *p;
@@ -133,7 +133,7 @@ void FUN_L00_0024f0e8(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot) {
         if (p->next == *slot)
             p->next = (*slot)->next;
     }
-    memset_words_24f0e8(*slot, 0, 0x40);
+    memset_words(*slot, 0, 0x40);
     *slot = 0;
 }
 
@@ -258,7 +258,7 @@ typedef struct {
     u64_24f440 q[1];  /* 0x10 */
 } Packet_24f440;
 
-extern void FUN_001f9810_24f440(void *, int) __asm__("FUN_001f9810");
+extern void section(void *, int) __asm__("FUN_001f9810");
 extern void FUN_001f9838_24f440(void *, void *, int) __asm__("FUN_001f9838");
 extern void FUN_00118a80_24f440(int) __asm__("FUN_00118a80");
 
@@ -284,7 +284,7 @@ void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) {
         Frame_24f440 **ss = (Frame_24f440 **)(r + 0x1C);
         s = ss[j];
     }
-    FUN_001f9810_24f440(out, ((na + 3) * 8) & 0xFF0);
+    section(out, ((na + 3) * 8) & 0xFF0);
     k = na + s->hA;
     k += s->hE;
     out->h8 = na * 8;

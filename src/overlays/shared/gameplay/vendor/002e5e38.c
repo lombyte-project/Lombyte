@@ -26,7 +26,7 @@ typedef struct { char pad0[0xB4]; int unkB4; char padB8[0x1E]; unsigned char unk
 typedef struct { char pad0[0x10]; short unk10; char pad12[0x10]; short unk22; } Cam_2e5e38;
 typedef struct { char pad0[0x3C]; float unk3C; float unk40; float unk44; int unk48; } CamSpring_2e5e38;
 typedef struct { char pad0[0x6]; short unk6; char pad8[4]; float unkC; } CamEnd_2e5e38;
-float FUN_001ebd78_2e5e38(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
+float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
 
 void FUN_L00_002e5e38(unsigned char *moby)
 {
@@ -45,19 +45,19 @@ void FUN_L00_002e5e38(unsigned char *moby)
     default_orbit = defaults + 0x130;
     default_target = defaults + 0x40;
     if (*(short *)(orbit + 0x3C)) {
-        *(float *)(orbit + 0x2C) = FUN_001ebd78_2e5e38(cam + 0x174, *(float *)(orbit + 0x2C), *(float *)(orbit + 0x40), *(float *)(orbit + 0x48), D_L00_00161D04_2e5e38, *(float *)(init + 0x1C));
+        *(float *)(orbit + 0x2C) = cam_interp_values(cam + 0x174, *(float *)(orbit + 0x2C), *(float *)(orbit + 0x40), *(float *)(orbit + 0x48), D_L00_00161D04_2e5e38, *(float *)(init + 0x1C));
     } else {
-        *(float *)(orbit + 0x2C) = FUN_001ebd78_2e5e38(cam + 0x174, *(float *)(orbit + 0x2C), *(float *)(default_orbit + 0x2C), *(float *)(orbit + 0x48), D_L00_00161D04_2e5e38, *(float *)(init + 0x1C));
+        *(float *)(orbit + 0x2C) = cam_interp_values(cam + 0x174, *(float *)(orbit + 0x2C), *(float *)(default_orbit + 0x2C), *(float *)(orbit + 0x48), D_L00_00161D04_2e5e38, *(float *)(init + 0x1C));
     }
     if (*(short *)(orbit + 0x3E)) {
-        *(float *)(orbit + 0x30) = FUN_001ebd78_2e5e38(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(orbit + 0x4C), *(float *)(orbit + 0x54), D_L00_00161D08_2e5e38, 0.0f);
+        *(float *)(orbit + 0x30) = cam_interp_values(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(orbit + 0x4C), *(float *)(orbit + 0x54), D_L00_00161D08_2e5e38, 0.0f);
     } else {
-        *(float *)(orbit + 0x30) = FUN_001ebd78_2e5e38(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(default_orbit + 0x30), *(float *)(orbit + 0x54), D_L00_00161D08_2e5e38, 0.0f);
+        *(float *)(orbit + 0x30) = cam_interp_values(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(default_orbit + 0x30), *(float *)(orbit + 0x54), D_L00_00161D08_2e5e38, 0.0f);
     }
     if (*(short *)(target + 0xDA)) {
-        *(float *)(target + 0xB0) = FUN_001ebd78_2e5e38(target + 0xBC, *(float *)(target + 0xB0), *(float *)(target + 0xB4), *(float *)(target + 0xB8), 0.2f, 0.0f);
+        *(float *)(target + 0xB0) = cam_interp_values(target + 0xBC, *(float *)(target + 0xB0), *(float *)(target + 0xB4), *(float *)(target + 0xB8), 0.2f, 0.0f);
     } else {
-        *(float *)(target + 0xB0) = FUN_001ebd78_2e5e38(target + 0xBC, *(float *)(target + 0xB0), *(float *)(default_target + 0xB0), *(float *)(target + 0xB8), 0.2f, 0.0f);
+        *(float *)(target + 0xB0) = cam_interp_values(target + 0xBC, *(float *)(target + 0xB0), *(float *)(default_target + 0xB0), *(float *)(target + 0xB8), 0.2f, 0.0f);
     }
     ((CamOrbit_2e5e38 *)orbit)->unk3C = 0;
     ((CamOrbit_2e5e38 *)orbit)->unk3E = 0;
@@ -104,7 +104,7 @@ typedef struct {
 } A_2e6000;
 typedef struct { u8 pad[0x100]; f32 f100; f32 f104; } C_2e6000;
 typedef struct { u8 pad[0x2000]; s32 i2000; } L_2e6000;
-extern A_2e6000 D_L00_00166C80_c[] __asm__("D_L00_00166C80");
+extern A_2e6000 player_camera[] __asm__("D_L00_00166C80");
 extern C_2e6000 D_0013C940_2e6000 __asm__("D_0013C940");
 extern L_2e6000 D_0013F3D0_2e6000 __asm__("D_0013F3D0");
 extern s32 D_L00_00177F00[];
@@ -209,9 +209,9 @@ void FUN_L00_002e6000(O_2e6000 *o) {
         FUN_L00_002e8648();
         FUN_L00_002e8590(0.04f, 0.2f);
     }
-    x = &D_L00_00166C80_c[1];
+    x = &player_camera[1];
     if (x->fn != 0) x->fn();
-    a = &D_L00_00166C80_c[0];
+    a = &player_camera[0];
     if (a->p25C != 0 && s->i10 < 2) {
         if ((s8)a->p25C[0x20] < 0) {
             a->p25C = 0;
@@ -219,7 +219,7 @@ void FUN_L00_002e6000(O_2e6000 *o) {
             if (0.3f <= FUN_001f99c0(D_0013C940_2e6000.f100) || 0.3f <= FUN_001f99c0(D_0013C940_2e6000.f104)) {
                 a->i260 = 0;
             }
-            x = &D_L00_00166C80_c[0];
+            x = &player_camera[0];
             x->i260++;
             if (FUN_001f96f8(400) < x->i260) x->i260 = FUN_001f96f8(400);
             f = FUN_001fa6c0(x->i260) / FUN_001fa6c0(FUN_001f96f8(400));
@@ -954,14 +954,14 @@ void FUN_L00_002e7530(O002e7530 *o, V002e7530 *a, V002e7530 *b, V002e7530 *c, V0
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7618.s", FUN_L00_002e7618);
 #else
-extern char *D_L00_00166E00_2e7618 __asm__("D_L00_00166E00");
+extern char *current_follow_cam __asm__("D_L00_00166E00");
 extern int D_L00_0015EF5C_2e7618 __asm__("D_L00_0015EF5C");
 extern int D_001413D0_2e7618 __asm__("D_001413D0") __attribute__((section(".data")));
 extern struct { u8 pad[0x2080]; int value; } D_0013F350_2e7618 __asm__("D_0013F350") __attribute__((section(".data")));
 extern void clear_u64_value_2e7618(void *) __asm__("FUN_001f99f8");
 extern void add_vector_xyz_2e7618(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz_2e7618(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float squared_distance_xyz_2e7618(void *, void *) __asm__("FUN_001f9b48");
+extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern float resolve_level_path_segment_point_2e7618(V002e7530 *, V002e7530 *, V002e7530 *, V002e7530 *, float) __asm__("FUN_L00_0025dcd8");
 extern int coll_sphere_2e7618(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 
@@ -976,7 +976,7 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
     int found;
 
     m = o->m;
-    g = *(u8 **)(D_L00_00166E00_2e7618 + 0x70);
+    g = *(u8 **)(current_follow_cam + 0x70);
     orbit = (V002e7530 *)(m + 0x130);
     path = (V002e7530 *)(m + 0x90);
     range = m + 0x1d0;
@@ -989,7 +989,7 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
     add_vector_xyz_2e7618(&pos, path, orbit);
     measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
     radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) *
-              (squared_distance_xyz_2e7618(path, &temp) /
+              (distance_xyz(path, &temp) /
                (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30)))) * 0.75f;
     if (measure < radius) {
         found = 1;
@@ -1000,7 +1000,7 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
             add_vector_xyz_2e7618(&hit, &D_L00_00173E60, &diff);
             measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
             radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) *
-                      (squared_distance_xyz_2e7618(path, &temp) /
+                      (distance_xyz(path, &temp) /
                        (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30)))) * 0.75f;
             if (measure < radius) {
                 FUN_L00_002e7530(o, &next, &temp, &hit, &start, radius - measure, dist);
@@ -1011,7 +1011,7 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
                     add_vector_xyz_2e7618(&hit, &D_L00_00173E60, &diff);
                     measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
                     radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) *
-                              (squared_distance_xyz_2e7618(path, &temp) /
+                              (distance_xyz(path, &temp) /
                                (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30)))) * 0.75f;
                     if (measure < radius) {
                         FUN_L00_002e7530(o, &next, &temp, &hit, &start, radius - measure, dist);
@@ -1052,7 +1052,7 @@ int FUN_L00_002e79c8(void *arg0, int arg1, float *arg2) {
     return 0;
 }
 typedef float V_2e7a30[4] __attribute__((aligned(16)));
-extern float D_L00_00161CD8_2e7a30 __asm__("D_L00_00161CD8") __attribute__((sda));
+extern float follow_cam_min_distance __asm__("D_L00_00161CD8") __attribute__((sda));
 extern float D_L00_00161CB8_2e7a30 __asm__("D_L00_00161CB8") __attribute__((sda));
 extern float D_L00_00161CC8_2e7a30 __asm__("D_L00_00161CC8") __attribute__((sda));
 extern float D_0015ED60_2e7a30 __asm__("D_0015ED60");
@@ -1095,7 +1095,7 @@ int FUN_L00_002e7a30(unsigned char *a) {
     qcopy(dir, c);
     dist = 0.0f;
     qcopy(pos, base + 0x90);
-    spd = D_L00_00161CD8_2e7a30;
+    spd = follow_cam_min_distance;
     FUN_001f9bf8_2e7a30(ndir, dir, 1.0f);
     for (i = 0; i < truncate_float_to_s32(*(float *)(e + 0x40) - 1.0f); i++) {
         if (i > 0 && FUN_L00_002e4290_2e7a30(pos) == 0) {
@@ -1173,7 +1173,7 @@ typedef struct { u8 pad[0x18]; s32 p18; s32 p1C; u8 v20[0x10]; } E40_2e7d20_t;
 extern E40_2e7d20_t D_L00_00173E40 __attribute__((section(".data")));
 
 void FUN_001f9a40(void *, void *, void *, f32);
-extern s32 FUN_L00_001f2868_2e7d20(void *, s32, void *, s32, f32) __asm__("FUN_L00_001f2868");
+extern s32 probe_world_sphere(void *, s32, void *, s32, f32) __asm__("FUN_L00_001f2868");
 s32 FUN_L00_00259830(void *);
 extern void FUN_001f9a28_2e7d20(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 FUN_001f9ab0_2e7d20(void *, void *) __asm__("FUN_001f9ab0");
@@ -1187,11 +1187,11 @@ extern s32 FUN_L00_002e7a30_2e7d20(void *) __asm__("FUN_L00_002e7a30");
 extern s32 FUN_L00_002e7520_2e7d20(void *) __asm__("FUN_L00_002e7520");
 extern s32 FUN_L00_002e7318_2e7d20(void *) __asm__("FUN_L00_002e7318");
 extern s32 FUN_001f96f8_2e7d20(s32) __asm__("FUN_001f96f8");
-extern s32 FUN_001f9770_2e7d20(void *) __asm__("FUN_001f9770");
-extern f32 FUN_001fa6c0_2e7d20(s32) __asm__("FUN_001fa6c0");
+extern s32 fast_dec_timer(void *) __asm__("FUN_001f9770");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 f32 FUN_002133d0(f32, f32, f32);
 extern void FUN_001f9a10_2e7d20(void *, void *, void *) __asm__("FUN_001f9a10");
-extern s32 FUN_001efa68_2e7d20(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
+extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern s32 FUN_L00_002e4290_2e7d20(void *) __asm__("FUN_L00_002e4290");
 s32 FUN_L00_0025e3b8(s32);
 void FUN_L00_00259888(void *, void *, s32, void *, f32);
@@ -1235,7 +1235,7 @@ void FUN_L00_002e7d20(u8 *m) {
         any = D_0013F350_2e7d20.b20A4 == 2;
     }
     FUN_001f9a40(&v0, x + 0x90, base - 0x50, 0.5f);
-    n = FUN_L00_001f2868_2e7d20(&v0, 1, D_0013F350_2e7d20.p2080, 0, h * 0.5f);
+    n = probe_world_sphere(&v0, 1, D_0013F350_2e7d20.p2080, 0, h * 0.5f);
     if (n > 0) {
         i = n;
         j = 0;
@@ -1301,21 +1301,21 @@ void FUN_L00_002e7d20(u8 *m) {
         goto slow;
     }
 dec:
-    if (FUN_001f9770_2e7d20(b + 0x34)) {
+    if (fast_dec_timer(b + 0x34)) {
         BH_2e7d20(0x3A) = 0;
     }
     if (BH_2e7d20(0x3A) != 0) {
-        if (FUN_001f9770_2e7d20(b + 0x34)) {
+        if (fast_dec_timer(b + 0x34)) {
             BH_2e7d20(0x3A) = 0;
         }
     }
-    f = FUN_001fa6c0_2e7d20(BH_2e7d20(0x34));
-    BF_2e7d20(0x30) = FUN_002133d0(0.0f, BF_2e7d20(0x30), f / FUN_001fa6c0_2e7d20(FUN_001f96f8_2e7d20(2000)));
+    f = convert_integer_to_float(BH_2e7d20(0x34));
+    BF_2e7d20(0x30) = FUN_002133d0(0.0f, BF_2e7d20(0x30), f / convert_integer_to_float(FUN_001f96f8_2e7d20(2000)));
     goto move;
 slow:
     s = BH_2e7d20(0x34);
     if (FUN_001f96f8_2e7d20(2000) < s) {
-        FUN_001f9770_2e7d20(b + 0x34);
+        fast_dec_timer(b + 0x34);
     } else {
         BH_2e7d20(0x34) = FUN_001f96f8_2e7d20(2000);
     }
@@ -1328,7 +1328,7 @@ move:
     if (D_0015ED84 == 0xD && D_0013F350_2e7d20.i2084 == 0x7B) {
         goto clear;
     }
-    if (!FUN_001efa68_2e7d20((x + 0x90), &v10, D_L00_0015EF58, D_0013F350_2e7d20.p2080, 0)) {
+    if (!collision_line((x + 0x90), &v10, D_L00_0015EF58, D_0013F350_2e7d20.p2080, 0)) {
         goto clear;
     }
     if (FUN_L00_002e4290_2e7d20(D_L00_00173E40.v20)) {

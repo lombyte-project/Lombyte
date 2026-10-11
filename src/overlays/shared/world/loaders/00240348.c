@@ -1723,7 +1723,7 @@ extern Load244110 D_L00_00173E00_244110 __asm__("D_L00_00173E00");
 extern char *D_L00_00173E40_244110[] __asm__("D_L00_00173E40");
 typedef struct { s16 a; s16 b; s32 *file; } Ldg244110;
 extern Ldg244110 D_0015EE48;
-extern s32 D_0015ED84_244110 __asm__("D_0015ED84");
+extern s32 current_level_index __asm__("D_0015ED84");
 extern u8 D_0014C050[];
 extern u8 D_L00_0015FC88_244110[] __asm__("D_L00_0015FC88") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F40C;
@@ -1791,7 +1791,7 @@ extern char *D_L00_0016016C_244110 __asm__("D_L00_0016016C");
 extern s32 D_0014EE90[16];
 typedef struct { u8 pad[0x10]; u32 v __attribute__((packed, aligned(1))); } Una244110;
 extern u8 D_L00_00179100[];
-extern s32 D_L00_0015F5CC_244110 __asm__("D_L00_0015F5CC");
+extern s32 game_frame __asm__("D_L00_0015F5CC");
 
 extern void FUN_00202a98(void);
 extern void FUN_001f98d0(void *, void *, s32);
@@ -1877,7 +1877,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
     if (full) {
         FUN_001f98d0(h, (char *)(src[4] + (s32)src), src[5]);
         D_L00_0015F40C = 0;
-        FUN_001f9838_244110(D_L00_0015FC88_244110, D_0014C050 + D_0015ED84_244110 * 16, 0x10);
+        FUN_001f9838_244110(D_L00_0015FC88_244110, D_0014C050 + current_level_index * 16, 0x10);
         FUN_00203120((char *)(src[6] + (s32)src), h[0], (char *)h + h[1]);
         D_L00_00160004 = D_0015ED5C;
         FUN_00118a80(0);
@@ -2084,7 +2084,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
     }
     ((Una244110 *)D_L00_00179100)->v = 0;
     FUN_L00_00264740();
-    D_L00_0015F5CC_244110++;
+    game_frame++;
     return 0;
 }
 struct SectorListPair {
@@ -2102,7 +2102,7 @@ struct StreamLoader {
     u8 *buf;                    /* 0x5C */
 };
 extern s32 D_0015ED80;
-extern struct SectorListTable D_00137B80_u __asm__("D_00137B80");
+extern struct SectorListTable disc_table __asm__("D_00137B80");
 extern struct StreamLoader D_L00_0016C860;
 extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
@@ -2114,11 +2114,11 @@ s32 FUN_L00_002451b8(s32 i) {
     s32 size;
 
     if (D_0015ED80 != 0) {
-        size = D_00137B80_u.lists[D_L00_0016C860.list].y[i + 1] - D_00137B80_u.lists[D_L00_0016C860.list].y[i];
-        start = D_00137B80_u.lists[D_L00_0016C860.list].y[i];
+        size = disc_table.lists[D_L00_0016C860.list].y[i + 1] - disc_table.lists[D_L00_0016C860.list].y[i];
+        start = disc_table.lists[D_L00_0016C860.list].y[i];
     } else {
-        size = D_00137B80_u.lists[D_L00_0016C860.list].x[i + 1] - D_00137B80_u.lists[D_L00_0016C860.list].x[i];
-        start = D_00137B80_u.lists[D_L00_0016C860.list].x[i];
+        size = disc_table.lists[D_L00_0016C860.list].x[i + 1] - disc_table.lists[D_L00_0016C860.list].x[i];
+        start = disc_table.lists[D_L00_0016C860.list].x[i];
     }
     if (size > 0) {
         start_audio_stream_read(buf, start, size);

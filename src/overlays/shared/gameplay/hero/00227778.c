@@ -7,7 +7,7 @@
 extern unsigned char D_0013D4C0[];
 extern unsigned int D_0013CAE0 __attribute__((section(".data")));
 extern int D_L00_00167014[];
-extern f32 D_0015ED6C_227778 __asm__("D_0015ED6C") __attribute__((sda));
+extern f32 frame_time __asm__("D_0015ED6C") __attribute__((sda));
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void FUN_L00_00236268(void);
@@ -39,7 +39,7 @@ int FUN_L00_00227778(void) {
         if (hero.unk22A0 == 0 &&
             (!(hero.height_threshold - 2.0f < hero.motion.pos.f[2]) ||
              !(hero.motion.rot.f[1] < -0.87266463f) ||
-             !(D_0015ED6C_227778 < hero.motion.unk100.f[2]))) {
+             !(frame_time < hero.motion.unk100.f[2]))) {
             state = 0x6A;
         } else if (hero.height_threshold + 0.4f < hero.motion.pos.f[2]) {
             D_L00_00167014[0] = 0;

@@ -313,7 +313,7 @@ typedef struct {
     u8 b20A4;
 } G_2a57a8;
 extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
-extern V_2a57a8 D_0013F3D0_2a57a8 __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern V_2a57a8 hero_pos __asm__("D_0013F3D0") __attribute__((section(".data")));
 extern s32 D_0013CAE4_2a57a8 __asm__("D_0013CAE4") __attribute__((section(".data")));
 extern s32 D_L00_0015F5CC_2a57a8 __asm__("D_L00_0015F5CC");
 extern f32 D_L00_001613A4_2a57a8 __asm__("D_L00_001613A4") __attribute__((sda));
@@ -370,8 +370,8 @@ void FUN_L00_002a57a8(P_2a57a8 *p) {
         if (q->f90 <= 0.0f)
             q->mC->h34 |= 1;
         if (!(D_L00_0015F5CC_2a57a8 & 7) &&
-            vector_distance(&p->f10, &D_0013F3D0_2a57a8) <= 16.0f &&
-            FUN_001f99c0_2a57a8(p->f18 - D_0013F3D0_2a57a8.f[2]) <= 8.0f) {
+            vector_distance(&p->f10, &hero_pos) <= 16.0f &&
+            FUN_001f99c0_2a57a8(p->f18 - hero_pos.f[2]) <= 8.0f) {
             p->b20 = 2;
             if (p->b53 != 1)
                 blend_moby_animation_u(p, 1, 0, 10);
@@ -388,8 +388,8 @@ void FUN_L00_002a57a8(P_2a57a8 *p) {
     case 2:
         if (q->f90 < 1.0f)
             q->f90 += 0.1f;
-        d = vector_distance(&p->f10, &D_0013F3D0_2a57a8);
-        z = FUN_001f99c0_2a57a8(p->f18 - D_0013F3D0_2a57a8.f[2]);
+        d = vector_distance(&p->f10, &hero_pos);
+        z = FUN_001f99c0_2a57a8(p->f18 - hero_pos.f[2]);
         if (!(D_L00_0015F5CC_2a57a8 & 7) && (d > 18.0f || z > 10.0f)) {
             p->b20 = 1;
             if (p->b53)
@@ -921,7 +921,7 @@ void FUN_L00_002a6b70(struct Moby *bolt)
 
 extern char *c338_p(void *) __asm__("FUN_L00_002603d0");
 extern float D_0015ED6C;
-extern int FUN_L00_001f0d60_u(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_L00_002604f0(int x, char *o, float *p, float *q, float *r, float *s);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a10(void *, void *, void *);
@@ -1008,7 +1008,7 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
                 (*(unsigned char **)(data + 0x5C))[0x20] == 0xFD) {
                 r = 1;
             } else {
-                r = FUN_L00_001f0d60_u(c5, moby + 0x10, 0x22, moby) == 0;
+                r = coll_sphere(c5, moby + 0x10, 0x22, moby) == 0;
             }
             if (r) {
                 moby[0x20] = 1;
@@ -1430,7 +1430,7 @@ typedef union {
     u128 q;
     f32 f[4];
 } V2a8028;
-extern V2a8028 D_L00_00166DC0_2a8028 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern V2a8028 g_debug_camera __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern V2a8028 D_L00_00173E60_2a8028 __asm__("D_L00_00173E60") __attribute__((section(".data")));
 extern f32 D_L00_00173E40_2a8028[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
@@ -1441,7 +1441,7 @@ extern f32 rndf_2a8028(f32, f32) __asm__("FUN_002132a8");
 extern void spawn_2a8028(void *, void *) __asm__("FUN_L00_0026c6e8");
 extern s32 fr_2a8028(s32) __asm__("FUN_001f96f8");
 extern s32 rndi_2a8028(s32, s32) __asm__("FUN_L00_00257b90");
-extern void spark_cbb0(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
+extern void spawn_burst(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
 extern void fin_2a8028(void *, s32) __asm__("FUN_L00_002a7e20");
 void FUN_L00_002a8028(u8 *o) {
     V2a8028 v;
@@ -1450,7 +1450,7 @@ void FUN_L00_002a8028(u8 *o) {
     f32 a;
     s32 i;
     s32 n;
-    subtract_vector_xyz(&v, &D_L00_00166DC0_2a8028, &D_L00_00173E60_2a8028);
+    subtract_vector_xyz(&v, &g_debug_camera, &D_L00_00173E60_2a8028);
     pitch = -angle_atan2(vector_length_xy(&v), v.f[2]);
     angle_atan2(v.f[0], v.f[1]);
     for (i = 19; i >= 0; i--) {
@@ -1467,7 +1467,7 @@ void FUN_L00_002a8028(u8 *o) {
         a = ang_2a8028(rnd_2a8028(0.0f, 3.1415927f), pitch);
         dir_2a8028(&v, 0.05f, ang_2a8028(rnd_2a8028(0.0f, 3.1415927f), pitch), a);
         n = fr_2a8028(10);
-        spark_cbb0(&w, &v, 0x4F007FFF, 0x1FFFFFFF, rndi_2a8028(n, fr_2a8028(20)), 1, 20000.0f);
+        spawn_burst(&w, &v, 0x4F007FFF, 0x1FFFFFFF, rndi_2a8028(n, fr_2a8028(20)), 1, 20000.0f);
     }
     if (*(s16 *)(*(u8 **)(o + 0x78) + 0x78) == 0x2B) {
         fin_2a8028(&D_L00_00173E60_2a8028, 10);
@@ -2192,7 +2192,7 @@ typedef struct {
     V_2aa008 v10;
 } Q_2aa008;
 extern f32 D_0015ED6C_2aa008 __asm__("D_0015ED6C");
-extern f32 D_0015ED70_2aa008 __asm__("D_0015ED70");
+extern f32 frame_time_sq __asm__("D_0015ED70");
 extern N_2aa008 *D_L00_0015FFE4_2aa008 __asm__("D_L00_0015FFE4");
 extern V_2aa008 D_L00_00173E60_2aa008[] __asm__("D_L00_00173E60") __attribute__((section(".data")));
 f32 FUN_002132a8_2aa008(f32, f32) __asm__("FUN_002132a8");
@@ -2251,7 +2251,7 @@ void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
     if (collision_line(&t, pos, 0, hero.moby, 0)) {
         k = D_L00_00173E60_2aa008;
         qcopy(&self->v10, &k[0]);
-        FUN_001f9bf8_2aa008(&e, &k[2], D_0015ED70_2aa008 * 9.7f);
+        FUN_001f9bf8_2aa008(&e, &k[2], frame_time_sq * 9.7f);
         add_vector_xyz(&self->v10, &self->v10, &e);
         FUN_L00_001ff660_2aa008(m, m, &k[2]);
         scale_vector_xyz(m, m, 0.6f);
