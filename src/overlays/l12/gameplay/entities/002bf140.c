@@ -1120,9 +1120,6 @@ void FUN_L12_002e87b0(char *moby) {
     float value = probe_ground_height(moby + 0x10, 0, 0.5f);
     approach_value(moby + 0x18, value, 27.0f * frame_time_sq);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e8808.s", FUN_L12_002e8808);
-#else
 extern float angle_8808(float, float) __asm__("FUN_001f9e90");
 extern float limit_angle_8808(float, float) __asm__("FUN_001fa580");
 extern float angle_difference_8808(float, float) __asm__("FUN_001fa688");
@@ -1188,9 +1185,8 @@ void FUN_L12_002e8808(struct Moby *moby, float *target, float max_angle, float a
             if (!inside_8808(&moby->pos, path + 0x10, *(int *)path))
                 *(OvlQuad *)&moby->pos = *(OvlQuad *)result;
             if (moved_distance_8808(&moby->pos, old) < frame_time * 0.5f) {
-                count = *(unsigned char *)(data + 0x243) + 1;
-                *(unsigned char *)(data + 0x243) = count;
-                count &= 0xff;
+                ++*(unsigned char *)(data + 0x243);
+                count = *(unsigned char *)(data + 0x243);
                 if (frames_8808(15) < count)
                     *(unsigned char *)(data + 0x242) = 1;
             } else {
@@ -1199,7 +1195,6 @@ void FUN_L12_002e8808(struct Moby *moby, float *target, float max_angle, float a
         }
     }
 }
-#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e9f68.s", FUN_L12_002e9f68);
 /* Springs the moby's two rotation angles toward a heading taken from its data's direction vector. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002EC180), where it is exact; names translated to the US level program. */
