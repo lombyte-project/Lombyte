@@ -859,9 +859,6 @@ void FUN_L08_002e2da0(struct Moby *moby) {
         ++ids;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2df0.s", FUN_L08_002e2df0);
-#else
 extern float D_0013F3D0;
 extern float D_0013F3D4;
 extern float D_0015ED6C;
@@ -935,13 +932,13 @@ void FUN_L08_002e2df0(struct Moby *moby) {
             float speed8 = D_0015ED6C * 8.0f;
             float speed10 = D_0015ED6C * 10.0f;
             data->f80 = 0.008f;
-            data->w94 = 1;
-            data->f8C = speed10;
             data->f84 = 0.0005f;
+            data->w94 = 1;
             data->f88 = speed8;
+            data->f8C = speed10;
             data->bAD = 0;
         }
-        FUN_L00_0025c558(moby, data->x70, FUN_001f9e90(moby->pos.x - D_0013F3D0, moby->pos.y - D_0013F3D4), 4, 1, 0);
+        FUN_L00_0025c558(moby, data->x70, FUN_001f9e90(moby->pos.x - hero.motion.pos.f[0], moby->pos.y - hero.motion.pos.f[1]), 4, 1, 0);
         data->b67 = 0x78;
         FUN_L00_00257470(moby, 0, -1);
         moby->state = 8;
@@ -967,7 +964,7 @@ void FUN_L08_002e2df0(struct Moby *moby) {
         break;
     case 1:
         qcopy(&point, &D_L08_001B0CB0[data->w220]->points[0]);
-        if (FUN_001f9b48(&D_0013F3D0, &point) < 24.0f) {
+        if (FUN_001f9b48(hero.motion.pos.f, &point) < 24.0f) {
             FUN_L08_002e2da0((char *)moby);
             moby->state = 5;
             if (moby->prev_seq != 3) {
@@ -1113,7 +1110,7 @@ void FUN_L08_002e2df0(struct Moby *moby) {
         if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
             follower->point = next;
         }
-        if (FUN_001f9b48(&D_0013F3D0, &moby->pos) > 19.0f) {
+        if (FUN_001f9b48(hero.motion.pos.f, &moby->pos) > 19.0f) {
             moby->state = 7;
         }
         break;
@@ -1123,8 +1120,8 @@ void FUN_L08_002e2df0(struct Moby *moby) {
         float distance;
         float heading;
 
-        hero_position = &D_0013F3D0;
-        heading = FUN_001f9e90(hero_position[0] - moby->pos.x, hero_position[1] - moby->pos.y);
+        heading = FUN_001f9e90(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y);
+        hero_position = hero.motion.pos.f;
         FUN_L00_00258278(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
         distance = FUN_001f9b48(hero_position, &moby->pos);
         if (distance < 17.0f || FUN_L00_0025f878(moby) != 0) {
@@ -1154,7 +1151,6 @@ void FUN_L08_002e2df0(struct Moby *moby) {
     }
     FUN_L00_0025d538(moby, data->x60);
 }
-#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e3870.s", FUN_L08_002e3870);
 
 
