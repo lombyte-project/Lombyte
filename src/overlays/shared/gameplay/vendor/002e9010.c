@@ -1430,7 +1430,7 @@ void FUN_L00_002ebe70(char *o) {
     char *p = m + 0x40;
     float *angle = (float *)(m + 0xb8);
     float *distance = (float *)(m + 0xa0);
-    OvlQuad scaled, diff, next;
+    OvlQuad next, diff, scaled, aim;
     float target, rate, fraction, score, best;
     char *candidate, *chosen;
     unsigned short *list;
@@ -1449,7 +1449,7 @@ void FUN_L00_002ebe70(char *o) {
     }
     FUN_L00_0025b868(target, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0xa0));
     FUN_L00_0025b868(rate, frame_time * 4.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0xb0));
-    if (current_level_index == 14 && hero.state.current == 0x2c)
+    if (hero.state.current == 0x2c && current_level_index == 14)
         FUN_L00_0025b868(rate + 0.25f, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0x8c));
     else
         FUN_L00_0025b868(rate - 0.5f, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0x8c));
@@ -1467,10 +1467,10 @@ void FUN_L00_002ebe70(char *o) {
                         (*(short *)(candidate + 0xa6) == 0x323 || *(short *)(candidate + 0xa6) == 0x2f6)) {
                         FUN_001ff2a8_2ebe70(&diff, candidate + 0x10, (char *)hero.unk994 + 0x10);
                         FUN_001ff500_2ebe70(1.0f, &scaled, &diff);
-                        ((float *)&next)[0] = FUN_001ff7e8_2ebe70(((float *)&hero.motion.rot)[2]);
-                        ((float *)&next)[1] = FUN_001ff800_2ebe70(((float *)&hero.motion.rot)[2]);
-                        ((float *)&next)[2] = 0.0f;
-                        score = FUN_001ff398_2ebe70(&scaled, &next);
+                        ((float *)&aim)[0] = FUN_001ff7e8_2ebe70(((float *)&hero.motion.rot)[2]);
+                        ((float *)&aim)[1] = FUN_001ff800_2ebe70(((float *)&hero.motion.rot)[2]);
+                        ((float *)&aim)[2] = 0.0f;
+                        score = FUN_001ff398_2ebe70(&scaled, &aim);
                         if (score > 0.0f) {
                             score = FUN_001ff3d8_2ebe70(&diff) - score * 10.0f;
                             if (score < best) {
