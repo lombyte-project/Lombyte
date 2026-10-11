@@ -377,7 +377,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2158.s", FUN_L00_002d2158);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2670.s", FUN_L00_002d2670);
 #else
 #include "rnc/gameplay/state/usage_stats.h"
-typedef union { u32 word[4]; f32 f[4]; } __attribute__((aligned(16))) V2d2670;
+typedef union { u32 word[4]; f32 f[4]; int q __attribute__((mode(TI))); } __attribute__((aligned(16))) V2d2670;
 extern u8 D_0013E539;
 extern s32 D_001413D4;
 extern u8 D_001413F8, D_001413FC;
@@ -405,7 +405,8 @@ extern s16 D_L00_001B0830[];
 
 void FUN_L00_002d2670(u8 *moby) {
     u8 *vars, *target;
-    V2d2670 position, offset, difference, velocity, start;
+    V2d2670 position, offset, difference, velocity;
+    u8 start[64] __attribute__((aligned(16)));
     s32 value;
     struct UsageStat *stat;
 
@@ -423,7 +424,7 @@ void FUN_L00_002d2670(u8 *moby) {
     if (target != 0) {
         *(s32 *)(target + 0x98) = 1;
         if (D_0013E539 && *(s16 *)(target + 0xa6) != 0x76c) {
-            velocity.word[0] = velocity.word[1] = velocity.word[2] = velocity.word[3] = 0;
+            velocity.q = 0;
             FUN_L00_0025f800(target, D_L00_001B0830);
             FUN_0020c828_2d2670(target);
             target = FUN_L00_002c35c0((s32)moby, vars + 0x40, &velocity);
@@ -444,7 +445,7 @@ target_valid:
             moby[0x20] = 3;
         }
     }
-    position = *(V2d2670 *)(vars + 0x40);
+    position.q = ((V2d2670 *)(vars + 0x40))->q;
     FUN_L00_002d2158(moby, vars, &position);
     switch (moby[0x20]) {
     case 0:
@@ -485,7 +486,7 @@ target_valid:
     if (target != 0) {
         qcopy(target + 0x10, vars + 0x40);
     } else if (get_ammo(-1) || D_001413F8) {
-        velocity.word[0] = velocity.word[1] = velocity.word[2] = velocity.word[3] = 0;
+        velocity.q = 0;
         *(u8 **)(vars + 0x50) = FUN_L00_002c35c0((s32)moby, vars + 0x40, &velocity);
     }
 }
