@@ -135,8 +135,8 @@ void FUN_L00_00235668(int state) {
         oldDC = D_L00_0015FFDC;
         D_L00_0015FA74 = oldDC;
         oldE0 = D_L00_0015FFE0;
-        old78 = D_L00_0015FA78;
         old7C = D_L00_0015FA7C;
+        old78 = D_L00_0015FA78;
         oldE8 = D_L00_0015FFE8;
         D_L00_0015F728 = oldState;
         D_L00_0015FFD8 = old70;
