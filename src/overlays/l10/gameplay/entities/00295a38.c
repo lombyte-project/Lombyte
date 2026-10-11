@@ -686,14 +686,18 @@ void FUN_L10_002c9c70(struct Moby *moby) {
         }
         {
         int *entry = (int *)(d + 0x18);
+        struct Moby *base = D_L10_0015FFD8;
+        char *present_message = (char *)0x001dcdd0;
+        char *missing_message = (char *)0x001dce00;
+        int moby_index = ((char *)moby - (char *)D_L10_0015FFD8) >> 8;
         for (i = 0; i < 5; i++, entry += 2) {
             int index = *entry;
             if (index == -1) {
-                stub_printf((char *)0x001dce00, ((char *)moby - (char *)D_L10_0015FFD8) >> 8, i);
+                stub_printf(missing_message, moby_index, i);
             } else {
-                short oclass = D_L10_0015FFD8[index].oclass;
+                short oclass = base[index].oclass;
                 *(short *)(entry + 1) = oclass;
-                stub_printf((char *)0x001dcdd0, ((char *)moby - (char *)D_L10_0015FFD8) >> 8,
+                stub_printf(present_message, moby_index,
                             i, index, oclass);
             }
         }
