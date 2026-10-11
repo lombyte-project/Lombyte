@@ -143,7 +143,7 @@ extern s32 D_L01_0015F5E0 __attribute__((section(".sdata")));
 #define D_0015F5C0 (*(u8 **)0x0015F5C0)
 extern union PacketCursor l01_packet __asm__("D_L01_001611C0") __attribute__((section(".sdata")));
 extern char D_L01_00167240[];
-#define D_0016CEC0 (*(L01Camera *)0x0016CEC0)
+extern L01Camera D_0016CEC0 __asm__("D_L01_0016CEC0");
 extern u8 D_L01_001CAC80[];
 extern void FUN_001f9ff8(f32 (*)[4], f32);
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -156,6 +156,7 @@ void FUN_L01_002b8f98(void) {
     f32 m[4][4];
     struct DmaTag *base;
     u8 *p;
+    L01Camera *camera;
 
     FUN_001f9ff8(m, 1024.0f);
     scale_vector_xyz(m[3], D_L01_00167240, -1024.0f);
@@ -175,21 +176,22 @@ void FUN_L01_002b8f98(void) {
     base[1].vif1 = 0x6C0C43A4;
     FUN_001fa378(base + 2, D_L01_00167240 - 0x100, m);
     FUN_001fa378(base + 6, D_L01_00167240 - 0x80, m);
-    base[10].vif0 = 0x412;
     base[10].tag = 0x8000;
     base[10].addr = 0x303EC000;
-    *(f32 *)&base[10].vif1 = D_0016CEC0.f210;
+    base[10].vif0 = 0x412;
+    camera = &D_0016CEC0;
+    *(f32 *)&base[10].vif1 = camera->f210;
     p = (u8 *)(base + 11);
-    *(u128 *)p = *(u128 *)D_0016CEC0.v190;
+    qcopy(p, camera->v190);
     p = (u8 *)(base + 12);
-    *(u128 *)p = *(u128 *)D_0016CEC0.v1A0;
-    *(f32 *)&base[13].tag = D_0016CEC0.f22C;
-    *(f32 *)&base[13].addr = D_0016CEC0.f228;
+    qcopy(p, camera->v1A0);
+    *(f32 *)&base[13].tag = camera->f22C;
+    *(f32 *)&base[13].addr = camera->f228;
     base[13].vif0 = 0;
     base[13].vif1 = 0;
     base[14].addr = 0x20001D2;
-    base[14].tag = 0x3000000;
     base[14].vif0 = 0x15000000;
+    base[14].tag = 0x3000000;
     base[14].vif1 = 0;
     p = (u8 *)(base + 15);
     l01_packet.tag->tag |= ((p - (u8 *)l01_packet.tag) >> 4) - 1;
