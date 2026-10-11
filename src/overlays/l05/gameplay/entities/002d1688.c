@@ -325,7 +325,158 @@ void FUN_L05_002d7020(char *m) {
     }
 }
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7140.s", FUN_L05_002d7140);
+#else
+extern char *find_collision_part_2d7140(void *, int, int) __asm__("FUN_L00_0025a420");
+extern float random_angle_2d7140(void) __asm__("FUN_00213308");
+extern float fast_arc_tan_2d7140(float, float) __asm__("FUN_001f9e90");
+extern float add_rotation_2d7140(float, float) __asm__("FUN_001fa580");
+extern float subtract_rotation_2d7140(float, float) __asm__("FUN_001fa5c8");
+extern float absolute_float_2d7140(float) __asm__("FUN_001f99c0");
+extern float vector_distance_2d7140(void *, void *) __asm__("FUN_001f9b48");
+extern float fast_sin_2d7140(float) __asm__("FUN_001f9de0");
+extern int interpolate_color_2d7140(float, int, int) __asm__("FUN_001fa6e0");
+extern int sound_is_playing_2d7140(void *, int) __asm__("FUN_L00_0028d8c0");
+extern int allocate_voice_2d7140(int, int, void *) __asm__("FUN_0022da68");
+extern void transform_vector_2d7140(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void add_vector_2d7140(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_2d7140(void *, void *, float) __asm__("FUN_001f9a68");
+extern void queue_2d7140(void *, void *) __asm__("FUN_001f4600");
+extern int frames_2d7140(int) __asm__("FUN_001f96f8");
+extern void spawn_particle_2d7140(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
+extern void mark_moby_for_removal_2d7140(void *) __asm__("FUN_0020c828");
+extern float D_L05_001671C8_2d7140 __asm__("D_L05_001671C8");
+extern float D_L05_0015ED60_2d7140 __asm__("D_L05_0015ED60");
+extern float D_L05_001613D4_2d7140 __asm__("D_L05_001613D4") __attribute__((sda));
+extern int D_L05_001613D8_2d7140 __asm__("D_L05_001613D8") __attribute__((sda));
+extern int D_L05_001613DC_2d7140 __asm__("D_L05_001613DC") __attribute__((sda));
+extern float D_L05_001613E0_2d7140 __asm__("D_L05_001613E0") __attribute__((sda));
+extern int D_L05_001613E4_2d7140 __asm__("D_L05_001613E4") __attribute__((sda));
+extern float D_L05_001613E8_2d7140 __asm__("D_L05_001613E8") __attribute__((sda));
+extern float D_L05_001613EC_2d7140 __asm__("D_L05_001613EC") __attribute__((sda));
+extern int D_L05_0015F5CC_2d7140 __asm__("D_L05_0015F5CC");
+extern char D_L05_0015F580_2d7140[] __asm__("D_L05_0015F580") __attribute__((section(".sdata")));
+extern void FUN_L05_002d7920(char *);
+
+typedef unsigned int u128_2d7140 __attribute__((mode(TI)));
+void FUN_L05_002d7140(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *hit;
+    int transition;
+    char *path;
+    int i;
+    int count;
+    float angle;
+    float next_angle;
+    float max_angle;
+    float v[4] __attribute__((aligned(16)));
+    float w[4] __attribute__((aligned(16)));
+    float z[4] __attribute__((aligned(16)));
+
+    if (55.0f > D_L05_001671C8_2d7140) return;
+    hit = find_collision_part_2d7140(moby, 0x10000, 0);
+    transition = 0;
+    if (*(unsigned char *)(moby + 0x20) == 1) goto update;
+    if (*(unsigned char *)(moby + 0x20) == 0) {
+        if (*(unsigned char *)(moby + 0x20) == 0) {
+        moby[0x30] = -1;
+        *(short *)(moby + 0x32) = 0xff;
+        *(float *)(moby + 0x2c) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L05_001613D4_2d7140;
+        *(float *)(data + 0x1c) = random_angle_2d7140();
+        *(int *)(data + 0x328) = -1;
+        *(float *)(data + 0x368) = random_angle_2d7140();
+        path = D_L05_001B0930[*(int *)data];
+        count = *(int *)path;
+        if (*(float *)(path + 0x1c) == -1.0f) {
+            max_angle = 0.0f;
+            angle = fast_arc_tan_2d7140(*(float *)(path + 0x10) - *(float *)(path + 0x10 + (count - 1) * 16),
+                                         *(float *)(path + 0x14) - *(float *)(path + 0x14 + (count - 1) * 16));
+            next_angle = fast_arc_tan_2d7140(*(float *)(path + 0x20) - *(float *)(path + 0x10),
+                                              *(float *)(path + 0x24) - *(float *)(path + 0x14));
+            *(float *)(path + 0x1c) = subtract_rotation_2d7140(next_angle, angle);
+            for (i = 1; i < *(int *)path - 1; i++) {
+                char *node = path + i * 16;
+                angle = fast_arc_tan_2d7140(*(float *)(node + 0x10) - *(float *)(node),
+                                             *(float *)(node + 0x14) - *(float *)(node + 4));
+                next_angle = fast_arc_tan_2d7140(*(float *)(node + 0x20) - *(float *)(node + 0x10),
+                                                  *(float *)(node + 0x24) - *(float *)(node + 0x14));
+                *(float *)(node + 0x1c) = subtract_rotation_2d7140(next_angle, angle);
+                if (max_angle < absolute_float_2d7140(*(float *)(node + 0x1c)))
+                    max_angle = absolute_float_2d7140(*(float *)(node + 0x1c));
+            }
+            count = *(int *)path;
+            angle = fast_arc_tan_2d7140(*(float *)(path + 0x10 + (count - 1) * 16) - *(float *)(path + 0x10 + (count - 2) * 16),
+                                         *(float *)(path + 0x14 + (count - 1) * 16) - *(float *)(path + 0x14 + (count - 2) * 16));
+            next_angle = fast_arc_tan_2d7140(*(float *)(path + 0x10) - *(float *)(path + 0x10 + (count - 1) * 16),
+                                              *(float *)(path + 0x14) - *(float *)(path + 0x14 + (count - 1) * 16));
+            *(float *)(path + 0x1c + (count - 1) * 16) = subtract_rotation_2d7140(next_angle, angle);
+            for (i = 0; i < *(int *)path; i++)
+                *(float *)(path + 0x1c + i * 16) *= 1.0471976f / max_angle;
+        }
+        *(float *)(data + 0xc) = vector_distance_2d7140(path + 0x10, path + 0x20);
+        moby[0x20] = 1;
+        *(float *)(data + 8) = (float)*(int *)path * *(float *)(data + 4);
+        }
+    } else if (*(unsigned char *)(moby + 0x20) == 2) goto finish;
+    goto tail;
+update:
+        *(float *)(data + 0x1c) = add_rotation_2d7140(*(float *)(data + 0x1c), frame_time * 12.566371f);
+        *(int *)(moby + 0x90) = interpolate_color_2d7140((fast_sin_2d7140(*(float *)(data + 0x1c)) + 1.0f) * 0.5f,
+                                                              D_L05_001613D8_2d7140, D_L05_001613DC_2d7140);
+        FUN_L05_002d7890(moby, D_L05_001B0930[*(int *)data]);
+        if (!sound_is_playing_2d7140(moby, *(int *)(data + 0x328)))
+            *(int *)(data + 0x328) = allocate_voice_2d7140(1, 4, moby);
+        if ((D_L05_0015F5CC_2d7140 & 3) == 0) {
+            *(unsigned short *)(data + 0x322) = (*(unsigned short *)(data + 0x322) + 1) & 15;
+            if ((float)*(short *)(data + 0x320) < D_L05_001613E0_2d7140)
+                *(unsigned short *)(data + 0x320) = (unsigned short)(*(unsigned short *)(data + 0x320) + 1);
+        }
+        *(u128_2d7140 *)v = 0;
+        v[0] = -1.2f; v[1] = 0.4f; v[2] = 0.45f; v[3] = 0.0f;
+        transform_vector_2d7140(v, v, moby + 0xc0);
+        add_vector_2d7140(data + 0x20 + *(short *)(data + 0x322) * 16, v, moby + 0x10);
+        *(float *)(data + 0x2c + *(short *)(data + 0x322) * 16) = 1.0f;
+        *(u128_2d7140 *)w = 0;
+        w[0] = -1.5f; w[1] = 0.0f; w[2] = -0.3f; w[3] = 0.0f;
+        transform_vector_2d7140(w, w, moby + 0xc0);
+        add_vector_2d7140(data + 0x120 + *(short *)(data + 0x322) * 16, w, moby + 0x10);
+        *(float *)(data + 0x12c + *(short *)(data + 0x322) * 16) = 1.0f;
+        *(u128_2d7140 *)z = 0;
+        z[0] = -1.2f; z[1] = -0.4f; z[2] = 0.45f; z[3] = 0.0f;
+        transform_vector_2d7140(z, z, moby + 0xc0);
+        add_vector_2d7140(data + 0x220 + *(short *)(data + 0x322) * 16, z, moby + 0x10);
+        *(float *)(data + 0x22c + *(short *)(data + 0x322) * 16) = 1.0f;
+        if (D_L05_0015F5CC_2d7140 != **(int **)(data + 0x324)) {
+            **(int **)(data + 0x324) = D_L05_0015F5CC_2d7140;
+            queue_2d7140(FUN_L05_002d7920, moby);
+        }
+        if (*(float *)(moby + 0x10) < 8.0f) {
+            *(int *)(moby + 0x94) = 0;
+        } else if (*(float *)(moby + 0x14) < 8.0f) {
+            *(int *)(moby + 0x94) = 0;
+        } else {
+            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+        }
+        if (hit && *(float *)(hit + 0x2c) > 0.0f) transition = 1;
+        if (transition) moby[0x20] = 2;
+    goto tail;
+finish:
+        allocate_voice_2d7140(0, 0, moby);
+        scale_vector_2d7140(v, moby + 0xc0, D_L05_001613E8_2d7140 * D_L05_0015ED60_2d7140);
+        v[2] += D_L05_001613EC_2d7140 * D_L05_0015ED60_2d7140;
+        spawn_particle_2d7140(moby, 0x72e, moby + 0x10, moby + 0x40, frames_2d7140(90), 0,
+                               frame_time_sq * 12.0f, v, D_L05_0015F580_2d7140, D_L05_0015F580_2d7140);
+        spawn_particle_2d7140(moby, 0x72e, moby + 0x10, moby + 0x40, frames_2d7140(90), 0,
+                               frame_time_sq * 12.0f, v, D_L05_0015F580_2d7140, D_L05_0015F580_2d7140);
+        spawn_particle_2d7140(moby, 0x72e, moby + 0x10, moby + 0x40, frames_2d7140(90), 0,
+                               frame_time_sq * 12.0f, v, D_L05_0015F580_2d7140, D_L05_0015F580_2d7140);
+        mark_moby_for_removal_2d7140(moby);
+        return;
+tail:
+    if (D_L05_001613E4_2d7140) FUN_L05_002d7020(moby);
+}
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7920.s", FUN_L05_002d7920);
 #else
