@@ -1105,7 +1105,178 @@ void FUN_L06_00304818(int unused, void *obj) {
         } while (i < *(int *)&D_L06_001621B8_d);
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003049f8.s", FUN_L06_003049f8);
+#else
+
+extern float D_L06_001621F8_3049f8 __asm__("D_L06_001621F8") __attribute__((sda));
+extern float D_L06_001621FC __attribute__((sda));
+extern float D_L06_00162200 __attribute__((sda));
+extern float D_L06_00162204 __attribute__((sda));
+extern float D_L06_00162208_3049f8 __asm__("D_L06_00162208") __attribute__((sda));
+extern float D_L06_00162210 __attribute__((sda));
+extern int D_L06_00162214 __attribute__((sda));
+extern int D_L06_00162218 __attribute__((sda));
+extern float D_L06_0016221C __attribute__((sda));
+extern float D_L06_00162220 __attribute__((sda));
+extern int D_L06_00162224 __attribute__((sda));
+extern int D_L06_00162228 __attribute__((sda));
+extern float D_L06_0016222C __attribute__((sda));
+extern float D_L06_00162230 __attribute__((sda));
+extern int D_L06_00162234;
+extern int D_L06_00162238;
+extern float D_L06_001FE890[];
+extern float D_L06_00167540[];
+extern char *D_L06_0015FFD8_u __asm__("D_L06_0015FFD8");
+extern void FUN_L06_00217300(void *);
+extern void normalize_vector_3049f8(void *, void *, float) __asm__("FUN_001f9bf8");
+extern int voice_active_3049f8(char *, int) __asm__("FUN_L00_0028d8c0");
+extern int allocate_voice_3049f8(int, int, char *) __asm__("FUN_0022da68");
+extern void release_voice_3049f8(int) __asm__("FUN_0022d798");
+extern void FUN_L06_00305000(char *);
+extern void FUN_001f9ff8(float *, float);
+extern void FUN_001fa378(void *, void *, void *);
+extern void FUN_001fa050(float *, float *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void random_vector_3049f8(float *, float, float) __asm__("FUN_L00_00257d78");
+extern void scale_vector_3049f8(void *, void *, float) __asm__("FUN_001f9a68");
+extern float distance_3049f8(void *, void *) __asm__("FUN_001f9b48");
+extern void enqueue_callback_3049f8(int, char *) __asm__("FUN_L06_00210fc8");
+extern float random_float_3049f8(float, float) __asm__("FUN_L00_00257c48");
+extern int random_byte_3049f8(int) __asm__("FUN_00213260");
+extern int fast_tween_color_3049f8(float, int, int) __asm__("FUN_001fa6e0");
+extern int truncate_float_to_s32_3049f8(float) __asm__("FUN_001fa6d0");
+extern unsigned char scale_game_frames_3049f8(int) __asm__("FUN_001f96f8");
+extern void spawn_particle_3049f8(float, void *, void *, int, int, int, int) __asm__("FUN_L00_002730e0");
+
+void FUN_L06_003049f8(char *m) {
+    char *data = *(char **)(m + 0x78);
+    unsigned char state = m[0x20];
+    switch (state) {
+    case 0: {
+        *(float *)(m + 0x2c) = *(float *)(*(char **)(m + 0x24) + 0x24) * D_L06_00162210;
+        D_L06_00162238 = 0x16;
+        D_L06_00162234 = 0x2d;
+        *(int *)(data + 0xf04) = 0xb;
+        *(int *)(data + 0xf08) = 0x17;
+        *(int *)(data + 0xf0c) = 0x22;
+        *(int *)(data + 0xf00) = 0;
+        *(int *)(data + 0xf18) = -1;
+        if (*(int *)(data + 0xf10) != -1) {
+            m[0x20] = 1;
+            *(int *)(m + 0x94) = 0;
+            return;
+        }
+        m[0x20] = 2;
+        return;
+    }
+    case 1: {
+        char *target = D_L06_0015FFD8_u + (*(int *)(data + 0xf10) << 8);
+        if (*(short *)(target + 0xa6) == 0x463 && (unsigned char)target[0x20] < 3) return;
+        m[0x20] = 2;
+        *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+        return;
+    }
+    case 2: {
+        int *timers = (int *)(data + 0xf00);
+        float increment;
+        float position;
+        int i;
+        if (voice_active_3049f8(m, *(int *)(data + 0xf18)) == 0)
+            *(int *)(data + 0xf18) = allocate_voice_3049f8(0, 4, m);
+        FUN_L06_00305000(m);
+        D_L06_001621F8_3049f8 += D_L06_001621FC * frame_time;
+        if (D_L06_001621F8_3049f8 > 1.0f) D_L06_001621F8_3049f8 -= 1.0f;
+        increment = D_L06_00162204 / 30.0f;
+        position = -(D_L06_00162204 * 0.5f);
+        for (i = 0; i < 4; i++) {
+            float *points = (float *)(data + i * 0x1e0);
+            float *paths = (float *)(data + i * 0x1e0 + 0x790);
+            if (timers[i] == 0) {
+                float scratch[120];
+                float *first = scratch, *second = scratch + 4;
+                float *p = points;
+                float *q = first;
+                int j;
+                for (j = 29; j >= 0; j--) {
+                    FUN_L06_00217300(p);
+                    p += 4;
+                    *points = position;
+                    points += 4;
+                    position += increment;
+                    random_vector_3049f8(q, 0.0f, D_L06_00162200 * frame_time);
+                    q += 4;
+                }
+                q = first;
+                for (j = 27; j >= 0; j--) {
+                    FUN_001f9a10(paths, q, second);
+                    q += 4;
+                    FUN_001f9a10(paths, paths, scratch + 8);
+                    scale_vector_3049f8(paths, paths, 0.333f);
+                    paths += 4;
+                }
+                timers[i] = D_L06_00162234;
+            } else {
+                int j;
+                points += 4;
+                for (j = 27; j >= 0; j--) {
+                    FUN_001f9a10(points, points, paths);
+                    points += 4;
+                    paths += 4;
+                }
+                timers[i]--;
+            }
+        }
+        if (distance_3049f8(m + 0x10, D_L06_00167540) < 48.0f)
+            enqueue_callback_3049f8(0x305170, m);
+        if (*(int *)(data + 0xf14) < 0) return;
+        if (D_L06_0015FFD8_u[(*(int *)(data + 0xf14) << 8) + 0xbc] == 0) return;
+        *(int *)(m + 0x94) = 0;
+        m[0x20] = 3;
+        {
+            int index = *(int *)(data + 0xf18);
+            if (index != -1 && *(char **)(0x13e5d8 + index * 0x70) == m &&
+                *(unsigned char *)(0x13e5c4 + index * 0x70) != 0)
+                release_voice_3049f8(index);
+        }
+        *(int *)(data + 0xf18) = -1;
+        allocate_voice_3049f8(1, 0, m);
+        return;
+    }
+    case 3: {
+        float scratch[120];
+        float *a = scratch, *b = scratch + 16, *c = scratch + 28, *d = scratch + 32, *e = scratch + 36;
+        int i;
+        FUN_001fa050(a, (float *)(m + 0x40));
+        FUN_001f9ff8(b, D_L06_00162208_3049f8);
+        FUN_001fa378(a, a, b);
+        for (i = 0; i < 4; i++) {
+            int j;
+            FUN_001fa050(b, D_L06_001FE890 + i * 4);
+            FUN_001fa378(b, a, b);
+            FUN_001f9a10(c, c, m + 0x10);
+            c[2] += (float)i * 1.7f + 0.6f;
+            c[3] = 1.0f;
+            for (j = 49; j >= 0; j--) {
+                float angle = random_float_3049f8(0.0f, D_L06_00162204 * 0.75f);
+                normalize_vector_3049f8(d, b, angle);
+                FUN_001f9a10(d, d, c);
+                {
+                    int v = fast_tween_color_3049f8(random_float_3049f8(0.0f, 1.0f), D_L06_00162214, D_L06_00162218);
+                    float f = random_float_3049f8(D_L06_0016221C, D_L06_00162220);
+                    int n = truncate_float_to_s32_3049f8(random_float_3049f8((float)D_L06_00162224, (float)D_L06_00162228));
+                    random_vector_3049f8(e, D_L06_0016222C * frame_time, D_L06_00162230 * frame_time);
+                    spawn_particle_3049f8(f, d, e, v, scale_game_frames_3049f8(n) & 0xff, random_byte_3049f8(0xff) & 0xff, 0);
+                }
+            }
+        }
+        m[0x20] = 4;
+
+        break;
+    }
+    }
+}
+#endif
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00306440), where it is exact; names translated to the US level program. */
 
 extern int FUN_001efa68(void *, void *, int, int, int);
