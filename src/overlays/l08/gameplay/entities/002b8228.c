@@ -293,21 +293,25 @@ extern float D_L08_00174680_vec[4] __asm__("D_L08_00174680");
 extern char D_L08_0015F580[];
 extern float D_L08_0016144C;
 
+extern float D_L08_00161860 __attribute__((sda));
+
 void FUN_L08_002d23f0(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    char *position = moby + 0x10;
-    char *velocity = data + 0x10;
-    float from[4];
+    char *position;
+    char *velocity;
     union {
         struct {
-            float position[4];
-            float velocity[4];
-            char *owner;
-            int flags;
-            int pad;
-            float scale;
-            int state;
-        } collision;
+            float from[4];
+            struct {
+                float position[4];
+                float velocity[4];
+                char *owner;
+                int flags;
+                int pad;
+                float scale;
+                int state;
+            } collision;
+        } motion;
         struct {
             float vector[4];
             char *owner;
@@ -320,27 +324,31 @@ void FUN_L08_002d23f0(char *moby) {
     float direction[4];
     float particle[4];
     float impulse[4];
-    int state = *(unsigned char *)(moby + 0x20);
+    int state;
     int time;
     int index;
 
-    if (state != 0x37 && FUN_L00_001f0d60(0.5f, position, 0x11, moby)) {
+    if (*(unsigned char *)(moby + 0x20) != 0x37 && FUN_L00_001f0d60(0.5f, position = moby + 0x10, 0x11, moby)) {
         if (D_L08_00174658_data != 0 &&
             (D_L08_00174658_data != *(int *)(data + 0x30) || *(int *)(data + 0x24) != 0)) {
-            moby[0x20] = (*(unsigned char *)(moby + 0xbc) & 2) ? 0x63 : 0x62;
+            if (*(unsigned char *)(moby + 0xbc) & 2) moby[0x20] = 0x63;
+            else moby[0x20] = 0x62;
             qcopy(position, D_L08_00174660);
+            velocity = data + 0x10;
             rotate_vector_2d23f0(velocity, velocity, D_L08_00174680_vec);
             scale_vector_xyz(velocity, velocity, D_0015ED6C + D_0015ED6C);
         }
-        state = *(unsigned char *)(moby + 0x20);
     }
+    state = *(unsigned char *)(moby + 0x20);
 
     switch (state) {
     case 1: {
+        position = moby + 0x10;
+        velocity = data + 0x10;
         *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), vector_length_xyz(velocity) * 0.5f);
         if (*(int *)(data + 0x24) == 0) {
             __builtin_memcpy(direction, D_L08_00161868_bytes, 16);
-            __builtin_memset(impulse, 0, 16);
+            *(u128 *)impulse = 0;
             impulse[0] = random_float_between(-1.0f, 1.0f);
             impulse[1] = random_float_between(-1.0f, 1.0f);
             impulse[2] = random_float_between(-1.0f, 1.0f);
@@ -350,26 +358,35 @@ void FUN_L08_002d23f0(char *moby) {
             time = scale_game_frames(0x2d);
             FUN_L00_00269958(position, particle, ((int *)direction)[index], 0x4fff, time, 0x32, 0x78, 1);
         }
-        __builtin_memcpy(from, position, 16);
-        from[2] -= 0.16f;
+        qcopy(record.motion.from, position);
+        record.motion.from[2] -= 0.16f;
         add_vector_xyz(position, position, velocity);
-        ((float *)velocity)[2] -= D_0015ED70 * D_0015ED6C;
-        qcopy(record.collision.position, position);
-        record.collision.position[2] -= 0.16f;
-        qcopy(record.collision.velocity, velocity);
-        record.collision.owner = moby;
-        record.collision.flags = 0x810000;
-        record.collision.scale = 1.0f;
-        record.collision.state = state;
-        if (FUN_001efa68(from, &record.collision, 0, moby, 0)) {
-            if (D_L08_00174658_data == 0) {
-                if (*(int *)((char *)&D_L08_00174658 + 4) <= 0) goto finish;
+        ((float *)velocity)[2] -= D_L08_00161860 * D_0015ED70;
+        qcopy(record.motion.collision.position, position);
+        record.motion.collision.position[2] -= 0.16f;
+        record.motion.collision.flags = 0x810000;
+        record.motion.collision.state = state;
+        record.motion.collision.scale = 1.0f;
+        record.motion.collision.owner = moby;
+        qcopy(record.motion.collision.velocity, velocity);
+        if (FUN_001efa68(record.motion.from, &record.motion.collision, 0, moby, 0)) {
+            char *collision_result = (char *)&D_L08_00174658 - 0x18;
+            if (*(int *)(collision_result + 0x18) != 0) {
+                if (*(int *)(collision_result + 0x18) == *(int *)(data + 0x30) && *(int *)(data + 0x24) == 0) goto finish;
+                if (*(unsigned char *)(moby + 0xbc) & 2) moby[0x20] = 0x63;
+                else moby[0x20] = 0x62;
+                qcopy(position, collision_result + 0x20);
+                rotate_vector_2d23f0(velocity, velocity, collision_result + 0x40);
+                scale_vector_xyz(velocity, velocity, D_0015ED6C + D_0015ED6C);
+                goto finish;
+            } else {
+                if (*(int *)(collision_result + 0x1c) <= 0) goto finish;
                 if (*(unsigned char *)(moby + 0xbc) & 1) {
                     allocate_voice_for_target_entry(1, 0, moby);
-                    qcopy(position, D_L08_00174660);
+                    qcopy(position, collision_result + 0x20);
                     ((float *)position)[2] += 0.16f;
-                    rotate_vector_2d23f0(velocity, velocity, D_L08_00174680_vec);
-                    FUN_001f9ad8(impulse, velocity, D_L08_00174680_vec);
+                    rotate_vector_2d23f0(velocity, velocity, collision_result + 0x40);
+                    FUN_001f9ad8(impulse, velocity, collision_result + 0x40);
                     scale_vector_xyz(impulse, impulse, random_float_between(-(D_0015ED6C * 1.5f), D_0015ED6C * 1.5f));
                     add_vector_xyz(velocity, velocity, impulse);
                     normalize_vector_xyz(velocity, velocity, 0.4f);
@@ -385,15 +402,13 @@ void FUN_L08_002d23f0(char *moby) {
                     goto finish;
                 }
                 moby[0x20] = 0x62;
-            } else {
-                if (D_L08_00174658_data == *(int *)(data + 0x30) && *(int *)(data + 0x24) == 0) goto finish;
-                moby[0x20] = (*(unsigned char *)(moby + 0xbc) & 2) ? 0x63 : 0x62;
             }
-            qcopy(position, D_L08_00174660);
-            rotate_vector_2d23f0(velocity, velocity, D_L08_00174680_vec);
+            qcopy(position, collision_result + 0x20);
+            rotate_vector_2d23f0(velocity, velocity, collision_result + 0x40);
             scale_vector_xyz(velocity, velocity, D_0015ED6C + D_0015ED6C);
         } else if (FUN_001f9740((int *)(data + 0x20))) {
-            moby[0x20] = (*(unsigned char *)(moby + 0xbc) & 2) ? 0x63 : 0x62;
+            if (*(unsigned char *)(moby + 0xbc) & 2) moby[0x20] = 0x63;
+            else moby[0x20] = 0x62;
         }
         } break;
     case 2: {
@@ -402,7 +417,7 @@ void FUN_L08_002d23f0(char *moby) {
         } else if (*(int *)(data + 0x20) == scale_game_frames(0x3c) ||
                    *(int *)(data + 0x20) == scale_game_frames(0x28) ||
                    *(int *)(data + 0x20) == scale_game_frames(0x14)) {
-            data[7] = (char)0xfa;
+            *(unsigned char *)(data + 7) = 0xfa;
             FUN_L00_0025d458(moby, data);
         }
         FUN_L00_0025d538(moby, data);
@@ -414,7 +429,7 @@ void FUN_L08_002d23f0(char *moby) {
         record.effect.scale = 1.0f;
         clear_u64_value(&record.effect.vector);
         record.effect.other = 0;
-        FUN_L00_001f2868(1.0f, position, 0x10, moby, &record.effect);
+        FUN_L00_001f2868(1.0f, moby + 0x10, 0x10, moby, &record.effect);
         effect_2d23f0(0.0f, 0.0f, 3.0f, 1.7f, 4.0f, 1.0f, 7.0f,
                         moby, D_L08_0015F580, 0, 7, 10, 0x14, -1, 0, 7, -1, 0);
         mark_moby_for_removal(moby);
@@ -427,8 +442,8 @@ void FUN_L08_002d23f0(char *moby) {
         record.effect.scale = 1.0f;
         clear_u64_value(&record.effect.vector);
         record.effect.other = 0;
-        FUN_L00_001f2868(1.0f, position, 0x10, moby, &record.effect);
-        FUN_L00_0025f090(moby, position, -1, 0.5f, 13.0f);
+        FUN_L00_001f2868(1.0f, moby + 0x10, 0x10, moby, &record.effect);
+        FUN_L00_0025f090(moby, moby + 0x10, -1, 0.5f, 13.0f);
         mark_moby_for_removal(moby);
         return;
     }
