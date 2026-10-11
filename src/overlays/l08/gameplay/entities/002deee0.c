@@ -1737,7 +1737,7 @@ mark_hit:
         i++;
         slot++;
     } while (i < 17);
-    total = (u16)*(s16 *)(data + 0x17c) + hits;
+    total = *(u16 *)(data + 0x17c) + hits;
     *(s16 *)(data + 0x17c) = total;
     if ((s16)total >= 12) {
         *(s16 *)(data + 0x17c) = (s16)total % 12;
