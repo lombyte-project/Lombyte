@@ -2,9 +2,6 @@
 #include "asm.h"
 #include "rnc/globals.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00231878/FUN_00231878.s", FUN_00231878);
-#else
 #include "rnc/globals.h"
 #include "types.h"
 #include "rnc/sdk/libgraph.h"
@@ -55,8 +52,8 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
     decompress_wad(archive_memory->archive_base + 0x100000, archive_memory->archive_base);
     FlushCache(0);
     archive_base = archive_memory->archive_base;
-    gs_texture_allocation_start = gs_texture_allocation_base;
     gs_texture_allocation_cursor = gs_texture_allocation_base;
+    gs_texture_allocation_start = gs_texture_allocation_base;
     texture_base_output = texture_bases;
     for (upload_index = 0; upload_index < 6; upload_index++) {
         if (upload_index == 0) {
@@ -125,4 +122,3 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
 
 extern __typeof__(prepare_loading_slide_textures) func_00231878
     __attribute__((alias("FUN_00231878")));
-#endif /* NON_MATCHING */
