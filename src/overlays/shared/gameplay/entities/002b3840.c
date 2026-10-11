@@ -510,8 +510,8 @@ void FUN_L05_0030c220(struct Moby *m) {
     Quad_30c220 a, b;
     float rotation[4];
     float position[4];
-    float direction[4];
     float side[4];
+    float direction[4];
     float up[4];
     float matrix[4];
     u64 texture;
@@ -545,9 +545,11 @@ void FUN_L05_0030c220(struct Moby *m) {
     a.control[3] = b.control[3] = flags;
     j = 0;
     do {
-        a.texcoord[j] = D_L05_001D67B0[j];
-        b.texcoord[j] = D_L05_001D67B0[j];
-    } while (++j < 8);
+        float u = D_L05_001D67B0[j * 2];
+        float v = D_L05_001D67B0[j * 2 + 1];
+        a.texcoord[j * 2] = b.texcoord[j * 2] = u;
+        a.texcoord[j * 2 + 1] = b.texcoord[j * 2 + 1] = v;
+    } while (++j < 4);
     i = 0;
     do {
         pass = (float)i;
@@ -555,7 +557,7 @@ void FUN_L05_0030c220(struct Moby *m) {
         do {
             qcopy(a.vertex[j], D_L05_001D67D0[j]);
             qcopy(b.vertex[j], D_L05_001D6810[j]);
-            phase = (float)(i + (j & 1)) * 0.1f;
+            phase = ((float)i + (float)(j & 1)) * 0.1f;
             sign = j < 2 ? 1.0f : -1.0f;
             color = fast_tween_color(D_L05_00161D04, D_L05_00161D08, phase);
             a.color[j] = b.color[j] = color;
