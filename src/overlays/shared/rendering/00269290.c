@@ -693,10 +693,11 @@ unsigned char *FUN_L00_0026b230(void *pos, void *vel, unsigned char flags, float
         q[0x1F] = flags;
         if (flags & 4) {
             unsigned char *shade = (unsigned char *)&D_0013E530_26b230 - 0x10;
-            int color = *(int *)(m + 4);
             int life = *(short *)(m + 0xA);
+            int color = *(int *)(m + 4);
             int factor = shade[0x10] + 2;
-            *(short *)(m + 0xA) = factor * life / 2;
+            life = (life * factor) / 2;
+            *(short *)(m + 0xA) = life;
             FUN_L00_0025c0e8_26b230(color, shade[0x10]);
             FUN_L00_0025c0e8_26b230(*(unsigned *)(q + 0x14), shade[0x10]);
             FUN_L00_0025c0e8_26b230(*(unsigned *)(q + 0x18), shade[0x10]);
