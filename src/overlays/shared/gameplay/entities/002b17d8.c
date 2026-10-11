@@ -1074,22 +1074,23 @@ void FUN_L14_002dfd10(struct Moby *moby) {
     float pos[4];
     float vec[4];
     float absolute_velocity;
-    float zero;
     void *path;
 
     if (moby->state == 0) {
         float one;
+        float zero;
         position = (float *)&moby->pos;
         path = *(char **)(race_paths_2e0170 + *(int *)(data + 0xc) * 0x20 + 0x10);
-        *(u128 *)pos = *(u128 *)position;
+        qcopy(pos, position);
         FUN_L00_0025d808(path, position, data + 0x10, data + 0x14, 0, *(float *)(data + 8));
         subtract_vector_xyz(vec, position, pos);
         *(float *)(data + 0x18) = vec[0];
         *(float *)(data + 0x1c) = vec[1];
         FUN_L14_002e03b8(moby);
         if (FUN_001f9740(data + 4) == 0) return;
-        normalize_vector_xyz(vec, vec, 0.5f);
-        *(u128 *)pos = *(u128 *)position;
+        zero = 0.5f;
+        normalize_vector_xyz(vec, vec, zero);
+        qcopy(pos, position);
         pos[2] += 0.25f;
         one = 1.0f;
         zero = 0.0f;
@@ -1098,6 +1099,7 @@ void FUN_L14_002dfd10(struct Moby *moby) {
                             one, 0.5f, 9.0f, one, -1, 15.0f, 0, 3, -1, 0);
     } else {
         float one;
+        float zero;
         position = (float *)&moby->pos;
         velocity = (float *)(data + 0x30);
         FUN_001f9a10(position, position, velocity);
@@ -1124,8 +1126,7 @@ void FUN_L14_002dfd10(struct Moby *moby) {
             FUN_001f9a10(pos, position, vec);
             if (FUN_001f9740(data + 4) == 0) {
                 if (FUN_L00_001f0d60(0.5f, pos, 0, *(void **)data) == 0) {
-                    if (random_integer_below_de670(2) != 0) FUN_L14_002e03b8(moby);
-                    return;
+                    goto random_check;
                 }
             }
             one = 1.0f;
@@ -1136,6 +1137,9 @@ void FUN_L14_002dfd10(struct Moby *moby) {
         }
     }
     FUN_0020c828(moby);
+    return;
+random_check:
+    if (random_integer_below_de670(2) != 0) FUN_L14_002e03b8(moby);
 }
 #endif
 #ifndef NON_MATCHING
