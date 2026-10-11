@@ -1026,12 +1026,11 @@ void FUN_L00_00299a68(void) {
     D_L00_0015F62C = second_destination;
     D_L00_001611CC = offset;
     D_L00_0015F628 = first_destination;
+    index = (s16)D_L00_0015F622;
     if (pal_mode != 0) {
-        index = (s16)D_L00_0015F622;
         FUN_L00_00265fa0(D_L00_0015F628, disc_table.music_60000[index + 38].sector,
                            disc_table.music_60000[index + 38].size);
     } else {
-        index = (s16)D_L00_0015F622;
         FUN_L00_00265fa0(D_L00_0015F628, disc_table.music_60000[index + 18].sector,
                            disc_table.music_60000[index + 18].size);
     }
