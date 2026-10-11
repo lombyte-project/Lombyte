@@ -516,6 +516,7 @@ int FUN_L13_002c3fc0(struct Moby *m, char *d, int aim) {
     float forward_distance;
     float backward_distance;
     float target_distance;
+    float distance;
     float speed;
     float maximum;
     float point[4] __attribute__((aligned(16)));
@@ -527,24 +528,20 @@ int FUN_L13_002c3fc0(struct Moby *m, char *d, int aim) {
     }
     veh = *(char **)D_00140940;
     if (veh != 0 && *(short *)(veh + 0xA6) == 0x45) {
-    linked = 0;
-    if (*(int *)(d + 0xBC) != -1) {
-        linked = D_L13_0015FFD8 + (*(int *)(d + 0xBC) * 0x100);
-    }
-        if (linked == 0 || (unsigned char)linked[0x20] == 0xFE || (unsigned char)linked[0x20] == 0xFD) {
-            FUN_L13_002c3f08((char *)point, 140.0f);
-        } else {
+        if (*(int *)(d + 0xBC) != -1 &&
+            (linked = D_L13_0015FFD8 + (*(int *)(d + 0xBC) << 8)) != 0 &&
+            (unsigned char)linked[0x20] != 0xFE && (unsigned char)linked[0x20] != 0xFD) {
             subtract_vector_xyz(point, veh + 0x10, linked + 0x10);
             scale_vector_xyz(point, point, 0.5f);
             FUN_001f9c90(point, point, 100.0f);
             add_vector_xyz(point, point, linked + 0x10);
+        } else {
+            FUN_L13_002c3f08((char *)point, 140.0f);
         }
     } else {
-    linked = 0;
-    if (*(int *)(d + 0xBC) != -1) {
-        linked = D_L13_0015FFD8 + (*(int *)(d + 0xBC) * 0x100);
-    }
-        if (linked == 0 || (unsigned char)linked[0x20] == 0xFE || (unsigned char)linked[0x20] == 0xFD) {
+        if (*(int *)(d + 0xBC) == -1 ||
+            (linked = D_L13_0015FFD8 + (*(int *)(d + 0xBC) << 8)) == 0 ||
+            (unsigned char)linked[0x20] == 0xFE || (unsigned char)linked[0x20] == 0xFD) {
             qcopy(point, D_0013F3D0);
         } else {
             qcopy(point, linked + 0x10);
@@ -563,14 +560,17 @@ int FUN_L13_002c3fc0(struct Moby *m, char *d, int aim) {
     }
     qcopy(behind, path + 0x10 + backward * 16);
     backward_distance = FUN_001f9b48(behind, D_0013F3D0);
-    if (backward_distance < forward_distance ||
-        (backward_distance <= forward_distance && *(signed char *)(d + 0xD0) == 1)) {
-        index = forward;
+    if (backward_distance < forward_distance) {
+        backward = forward;
         step = 1;
     } else {
-        index = backward;
         step = -1;
+        if (!(forward_distance < backward_distance) && *(signed char *)(d + 0xD0) == 1) {
+            backward = forward;
+            step = 1;
+        }
     }
+    index = backward;
     scans = 0;
     while (FUN_001f9b48(point, path + 0x10 + index * 16) < 30.0f && scans < *(int *)path) {
         index = (index + step) % *(int *)path;
@@ -589,10 +589,10 @@ int FUN_L13_002c3fc0(struct Moby *m, char *d, int aim) {
     if (direction != *(signed char *)(d + 0xD0)) {
         if (FUN_001f9770((short *)(d + 0xD2)) != 0) {
             *(short *)(d + 0xD2) = 10;
-            speed = *(float *)(d + 0xCC) * (1.0f + frame_time * -0.04000002f);
+            speed = *(float *)(d + 0xCC) * (1.0f + D_0015ED60 * -0.04000002f);
             *(float *)(d + 0xCC) = speed;
-            if (speed < D_0015ED60 * 0.1f || m->unk31 == 0 ||
-                FUN_001f9b80(&m->pos, D_0013F3D0) < 40.0f) {
+            distance = FUN_001f9b80(&m->pos, D_0013F3D0);
+            if ((speed < D_0015ED60 * 0.1f) | (m->unk31 == 0) | (distance < 40.0f)) {
                 short old = *(short *)(d + 0xB4);
                 *(signed char *)(d + 0xD0) = direction;
                 *(short *)(d + 0xB4) = *(short *)(d + 0xB6);
@@ -600,6 +600,8 @@ int FUN_L13_002c3fc0(struct Moby *m, char *d, int aim) {
             }
             goto update_path;
         }
+    }
+    if (direction != *(signed char *)(d + 0xD0)) {
         goto update_path;
     }
     maximum = D_0015ED6C * 100.0f;
