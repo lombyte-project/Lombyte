@@ -579,6 +579,7 @@ extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 
 void FUN_L00_00206e00(void) {
     struct Hero *g;
+    u8 *hero_base;
     s32 input;
     s32 level;
     s32 i, j, length, position;
@@ -587,7 +588,8 @@ void FUN_L00_00206e00(void) {
     s32 *history_count;
     if (D_0015EEA0 == 0 && D_0015EE20 == 0)
         return;
-    g = &hero;
+    hero_base = (u8 *)&hero + 0xCB0;
+    g = (struct Hero *)(hero_base - 0xCB0);
     level = FUN_001f96f8(15);
     input = 0;
     if (g->state_timer == level) {
@@ -615,9 +617,7 @@ void FUN_L00_00206e00(void) {
                 input = 10;
                 goto append;
             } else {
-                input = 5;
-                if (g->state.current != 0xE)
-                    input = 0;
+                input = (g->state.current == 0xE) ? 5 : 0;
             }
         } else if (g->state.control_mode == 6) {
             if (g->state.current == HERO_STATE_WRENCH_SLAM) {
@@ -628,9 +628,7 @@ void FUN_L00_00206e00(void) {
                 input = g->attack_record + 12;
                 goto append;
             }
-            input = 4;
-            if (g->state.current != HERO_STATE_CROUCH_SWING)
-                input = 0;
+            input = (g->state.current == HERO_STATE_CROUCH_SWING) ? 4 : 0;
         } else {
             input = 11;
             if (g->state.current != 0x22)
@@ -652,7 +650,7 @@ append:
     if (input == 0)
         return;
     history_count = (s32 *)((u8 *)g + 0x21D4);
-    history = (u8 *)g + 0x21C4;
+    history = hero_base + 0x1514;
     history[*history_count] = input;
     (*history_count)++;
     sequence = D_L00_00179700;
@@ -666,16 +664,20 @@ append:
             if (position < 0)
                 position += 16;
             j = 0;
-            if (history[position] == sequence[0]) {
-                do {
-                    position++;
-                    j++;
-                    if (position > 15)
-                        position -= 16;
-                    if (j >= length)
-                        break;
-                } while (history[position] == sequence[j]);
+            if (length > 0) {
+                if (history[position] == sequence[0]) {
+                    do {
+                        position++;
+                        j++;
+                        if (position > 15)
+                            position -= 16;
+                        if (j >= length)
+                            goto scan_result;
+                    } while (history[position] == sequence[j]);
+                }
+                j = -1;
             }
+scan_result:
             if (j == length) {
                 selector_available[i] = 1;
                 big_head_cheat_enabled[i] = !big_head_cheat_enabled[i];
