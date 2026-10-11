@@ -774,11 +774,14 @@ extern int hero_set_state_2c1ad0(int, int) __asm__("FUN_L00_002223f8");
 extern int FUN_L00_00216de8_2c1ad0(int, int) __asm__("FUN_L00_00216de8");
 extern int FUN_L00_00233db8_2c1ad0(int, int) __asm__("FUN_L00_00233db8");
 extern int FUN_L00_00233e98_2c1ad0(int) __asm__("FUN_L00_00233e98");
+#include "rnc/input/pad_state.h"
 /* Level 00 carrier: updates its grip, tosses a held moby, then looks for another. */
 void FUN_L00_002c1ad0(struct Moby *moby) {
     CarrierVars_2c1ad0 *vars;
-    OvlVec4 offset, rotatedOffset, basis[3], matrix[4], pos, local[4];
-    OvlVec4 launch, direction, target, arc, saved, probe, grip;
+    OvlVec4 saved, offset, rotatedOffset, local[4], pos, target, basis[3], matrix[4];
+    OvlVec4 direction;
+    union { OvlVec4 launch; OvlVec4 arc; } temporary;
+    OvlVec4 probe;
     f32 angle, slope, distance, horizontal, vertical, radius, speed;
     s32 hit = 0;
 
@@ -796,17 +799,17 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     matrix_from_basis_rows_2c1ad0(matrix, basis);
     if (vars == 0)
         return;
-    FUN_L00_0024f7c8((u8 *)moby, 0, &pos);
+    FUN_L00_0024f7c8((u8 *)moby, 0, &saved);
     FUN_0020cca8(moby, 0, local);
     rotate_vector_2c1ad0(&rotatedOffset, &offset, local);
-    add_vector_xyz(&vars->grip, &pos, &rotatedOffset);
+    add_vector_xyz(&vars->grip, &saved, &rotatedOffset);
     if (vars->held != 0)
         vars->held->unk98 = 1;
     if (vars->held == 0 || vars->held->state == 0xFE || vars->held->state == 0xFD)
         vars->held = 0;
     if (hero.state.current == 1)
         hero_set_state_2c1ad0(0x1E, 1);
-    if (tick_countdown(&vars->timer) && !hero.unk20AC) {
+    if (tick_countdown((s32 *)((u8 *)vars + 0x58)) && !hero.unk20AC) {
         if ((hero.unk20A8 && hero.unk1BC == scale_game_frames(0x11)) ||
             ((D_0013CAE4 & hero.items[0].button_mask) &&
              hero.state.current == 0x1E && FUN_L00_00233e98_2c1ad0(-1)) ||
@@ -818,10 +821,29 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     }
     if (vars->held != 0 && !hero.unk20AC) {
         f32 *out = (f32 *)vars->held->pvars;
-        launch.q = 0;
-        speed = (D_0013CAE0_2c7320[0] & 5) ? (D_0013E531 ? 12.0f : 6.0f) : 4.0f;
-        launch.f[0] = D_0015ED6C * speed;
-        qcopy(&direction, &launch);
+        {
+            f32 speed;
+            temporary.launch.q = 0;
+            if (item_text_variant[0x11]) {
+                if (controller_state.held & 5) {
+                    speed = 12.0f;
+                    distance = D_0015ED6C;
+                } else {
+                    speed = 4.0f;
+                    distance = frame_time;
+                }
+            } else {
+                if (controller_state.held & 5) {
+                    speed = 6.0f;
+                    distance = D_0015ED6C;
+                } else {
+                    speed = 4.0f;
+                    distance = frame_time;
+                }
+            }
+            temporary.launch.f[0] = distance * speed;
+            qcopy(&direction, &temporary.launch);
+        }
         adjust_direction_2c1ad0(&direction, &direction, (u8 *)&hero + 0x640);
         angle = fast_add_rotations(-0.361968f,
                                    atan2_f(hero.unk670, hero.unk674));
@@ -835,11 +857,11 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
         atan2_f(direction.f[0], direction.f[1]);
         scale_vector_xyz(&target, &direction, D_0015ED68 * 60.0f);
         add_vector_xyz(&target, &target, &pos);
-        if (D_0013CAE0_2c7320[0] & 5) {
-            arc.q = 0;
-            arc.f[2] = D_0013E531 ? 12.0f : 6.0f;
+        if (controller_state.held & 5) {
+            temporary.arc.q = 0;
+            temporary.arc.f[2] = item_text_variant[0x11] ? 12.0f : 6.0f;
             hit = 0;
-            direction.q = arc.q;
+            direction.q = temporary.arc.q;
             rotate_vector_2c1ad0(&direction, &direction, matrix);
             angle = atan2_f(direction.f[0], direction.f[1]);
             fast_subtract_rotations_2c1ad0(*(f32 *)((u8 *)hero.moby + 0x48), angle);
@@ -849,16 +871,26 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
                 slope = 0.5934119f;
             if (slope < -1.3962634f)
                 slope = -1.3962634f;
-            speed = D_0013E531 ? 12.0f : 6.0f;
+            speed = 4.0f;
+            if (item_text_variant[0x11]) {
+                if (controller_state.held & 5) speed = 12.0f;
+            } else {
+                if (controller_state.held & 5) speed = 6.0f;
+            }
             build_spherical_offset_2c1ad0(&direction, speed, angle, slope);
             distance = vector_length_xy_2c1ad0(&direction);
             if (distance == 0.0f)
                 horizontal = direction.f[2] / 0.01f;
             else
                 horizontal = direction.f[2] / distance;
-            speed = D_0013E531 ? 12.0f : 6.0f;
-            radius = FUN_001f9988(D_0015ED70 * 9.8f * speed * 0.5f);
-            radius = ((radius + radius) * radius * (1.0f - horizontal)) / (D_0015ED70 * 9.8f);
+            speed = 4.0f;
+            if (item_text_variant[0x11]) {
+                if (controller_state.held & 5) speed = 12.0f;
+            } else {
+                if (controller_state.held & 5) speed = 6.0f;
+            }
+            distance = FUN_001f9988(frame_time_sq * 9.8f * speed * 0.5f);
+            radius = ((distance + distance) * distance * (1.0f - horizontal)) / (frame_time_sq * 9.8f);
             vertical = horizontal * radius;
             if (radius > 0.0f) {
                 direction.f[0] = FUN_001f9dc8(angle) * radius;
@@ -879,8 +911,12 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
                 }
             }
         }
-        speed = D_0013E531 ? ((D_0013CAE0_2c7320[0] & 5) ? 12.0f : 4.0f) :
-                              ((D_0013CAE0_2c7320[0] & 5) ? 6.0f : 4.0f);
+        speed = 4.0f;
+        if (item_text_variant[0x11]) {
+            if (controller_state.held & 5) speed = 12.0f;
+        } else {
+            if (controller_state.held & 5) speed = 6.0f;
+        }
         FUN_L00_002c1928((f32 *)&pos, (OvlQuad *)&target, out,
                           D_0015ED70 * 9.8f, 1.0f, speed);
     }
@@ -925,8 +961,8 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     if (vars->held != 0)
         qcopy(&vars->held->pos, &vars->grip);
     else if (vars->timer == 0 && FUN_L00_00233e98_2c1ad0(-1)) {
-        grip.q = 0;
-        vars->held = FUN_L00_002a9ed0(moby, &vars->grip, &grip);
+        direction.q = 0;
+        vars->held = FUN_L00_002a9ed0(moby, &vars->grip, &direction);
     }
 }
 #endif
