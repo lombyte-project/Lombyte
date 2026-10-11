@@ -326,9 +326,9 @@ void FUN_L00_002056a8(void) {
             u8 *dst_a = g + 0xd40;
             u8 *dst_b = g + 0xd50;
             u8 *dst_c = g + 0xd60;
-            Quad_56a8 *src_a = (Quad_56a8 *)0x17c040;
-            Quad_56a8 *src_b = (Quad_56a8 *)0x17c0b0;
-            Quad_56a8 *src_c = (Quad_56a8 *)0x17c120;
+            Quad_56a8 *src_a = (Quad_56a8 *)(e + 0x19c0);
+            Quad_56a8 *src_b = (Quad_56a8 *)(e + 0x1a30);
+            Quad_56a8 *src_c = (Quad_56a8 *)(e + 0x1aa0);
             s32 *kind = (s32 *)0x17c1c0;
             for (i = 0; i < 7; i++, active += 0x40, slot += 0x40, dst_a += 0x40, dst_b += 0x40, dst_c += 0x40, src_a++, src_b++, src_c++, kind++) {
                 if (active[0xd31] == 0) {
