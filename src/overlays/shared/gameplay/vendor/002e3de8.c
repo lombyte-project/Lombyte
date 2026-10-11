@@ -348,7 +348,180 @@ void FUN_L10_002f5b58(char *moby) {
         hero_set_state(0x72, 1);
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5f18.s", FUN_L10_002f5f18);
+#else
+extern float D_L10_0015F3FC __attribute__((section(".data")));
+extern float D_L10_0015F3FC_sda __asm__("D_L10_0015F3FC") __attribute__((sda));
+extern int D_L10_0015F404;
+extern float D_0015ED6C;
+extern char *D_L10_0015FFD8 __attribute__((sda));
+extern char *D_L10_0015FFD8_far __asm__("D_L10_0015FFD8");
+extern float D_L10_00167358;
+extern float D_L10_0016CF70;
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void scale_vector_xyz(float, void *, void *) __asm__("FUN_001f9bf8");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void FUN_001f9a68(float, void *, void *);
+extern float FUN_001f9b48(void *, void *);
+extern int FUN_001f9770(short *);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern void update_view_context(void) __asm__("FUN_001f2d98");
+extern void hero_set_state_5f18(int, int) __asm__("FUN_L00_002223f8");
+extern int FUN_L00_0025d808(void *, void *, int *, float *, float, int);
+extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
+extern void FUN_001e93e8(float, void *);
+extern void FUN_001e93e8_part(void *, void *) __asm__("FUN_001e93e8");
+extern float D_L10_00167450[];
+extern float D_0013F5E0[];
+
+void FUN_L10_002f5f18(char *moby) {
+    char *work = *(char **)(moby + 0x70);
+    char *acc = work + 0x40;
+    int slot = *(short *)(moby + 0x84);
+    char *data = *(char **)(D_L10_0015EF50 + slot * 0x20 + 0x1c);
+    char *path;
+    float old_pos[4] __attribute__((aligned(16)));
+    float target[4] __attribute__((aligned(16)));
+    float transformed[4] __attribute__((aligned(16)));
+    float direction[4] __attribute__((aligned(16)));
+    float point[4] __attribute__((aligned(16)));
+    float *scale = (float *)(moby + 0x30);
+    int i, segment, count, next, index;
+    int reached;
+    float angle, first, total, distance, fade;
+    short *indices = (short *)(acc + 0x18);
+
+    if (*(short *)(acc + 0x14) == 0) {
+        fade = D_L10_0015F3FC + 0.05f;
+        D_L10_0015F3FC_sda = fade;
+        if (!(1.0f <= fade)) return;
+        path = D_L10_001B0930_5a78[*(int *)(data + 0x20)];
+        D_L10_0015F3FC = 1.0f;
+        D_L10_0015F404 = 1;
+        *(short *)(acc + 0x14) = 1;
+        *(u128 *)scale = *(u128 *)(path + 0x10);
+        if (*(int *)(data + 0x28) < 0) {
+            subtract_vector_xyz(old_pos, D_L10_001B0930_5a78[*(int *)(data + 0x24)] + 0x10, scale);
+        } else {
+            target[0] = *(float *)(data + 0x2c);
+            target[1] = *(float *)(data + 0x30);
+            target[2] = *(float *)(data + 0x34);
+            target[3] = 0.0f;
+            transform_vector_by_basis(target, target, D_L10_00167450);
+            path = D_L10_0015FFD8 + *(int *)(data + 0x28) * 0x100;
+            add_vector_xyz(transformed, path + 0x10, target);
+            subtract_vector_xyz(old_pos, transformed, scale);
+        }
+        FUN_001f9a68(-1.0f, target, D_0013F5E0);
+        scale_vector_xyz(1.0f, moby, old_pos);
+        cross_vectors_xyz(moby + 0x10, moby, target);
+        scale_vector_xyz(1.0f, moby + 0x10, moby + 0x10);
+        cross_vectors_xyz(moby + 0x20, moby + 0x10, moby);
+        return;
+    }
+    if (*(short *)(acc + 0x14) == 2) {
+        fade = D_L10_0015F3FC + 0.05f;
+        D_L10_0015F3FC_sda = fade;
+        if (fade >= 1.0f) {
+            *(short *)(acc + 0x14) = 3;
+            D_L10_0015F3FC = 1.0f;
+            angle = *(float *)(work + 0x88) * 0.5f;
+            D_L10_0016CF70 = FUN_001f9de0(angle) / FUN_001f9dc8(angle);
+            update_view_context();
+            data[0x39] = 1;
+            D_L10_00167358 = 0.05f;
+            *(short *)(moby + 0x7e) = 4;
+            D_L10_0015F404 = 0;
+            if (*(int *)(data + 0x4c) == 0) hero_set_state_5f18(0, 1);
+        }
+        if (*(int *)(data + 0x40) == 0) return;
+    } else {
+        if (*(short *)(acc + 0x14) == 3) return;
+        fade = D_L10_0015F3FC_sda - 0.05f;
+        D_L10_0015F3FC_sda = fade;
+        if (fade < 0.0f) D_L10_0015F3FC = 0.0f;
+    }
+    path = D_L10_001B0930_5a78[*(int *)(data + 0x20)];
+    *(u128 *)old_pos = *(u128 *)scale;
+    reached = FUN_L00_0025d808(path, scale, (int *)(acc + 0x00),
+                                (float *)(acc + 0x04), *(float *)(data + 0x3c) * D_0015ED6C, 0);
+    if (*(short *)(acc + 0x16) != 0) {
+        if (FUN_001f9770((short *)(acc + 0x16))) {
+            reached = 1;
+        } else if (*(int *)(data + 0x40) != 0) {
+            if (*(short *)(acc + 0x16) < scale_game_frames(truncate_float_to_s32(20.0f)))
+                reached = 1;
+        }
+    }
+    if (data[0x39] != 0) reached = 1;
+    if (reached) {
+        *(short *)(acc + 0x14) = 2;
+        if (*(int *)(data + 0x40) == 0) return;
+    }
+    if (indices[0] >= 0 && indices[1] >= 0) {
+        for (i = 0; i < 7 && indices[i] >= 0 && indices[i + 1] >= 0; i++) {
+            segment = *(int *)(acc + 0x00);
+            if (indices[i] <= segment && segment < indices[i + 1]) {
+                total = 0.0f;
+                if (indices[i] < segment) {
+                    count = segment - indices[i];
+                    index = indices[i];
+                    do {
+                        total += *(float *)(path + index * 0x10 + 0x1c);
+                        index++;
+                        count--;
+                    } while (count != 0);
+                }
+                first = total + *(float *)(acc + 0x04);
+                if (segment < indices[i + 1]) {
+                    count = indices[i + 1] - segment;
+                    index = segment;
+                    do {
+                        total += *(float *)(path + index * 0x10 + 0x1c);
+                        index++;
+                        count--;
+                    } while (count != 0);
+                }
+                angle = cosine_interpolate(((float *)(acc + 0x28))[i],
+                                            ((float *)(acc + 0x28))[i + 1], first / total);
+                angle = angle * 0.017453292f * 0.5f;
+                D_L10_0016CF70 = FUN_001f9de0(angle) / FUN_001f9dc8(angle);
+                update_view_context();
+            }
+        }
+    }
+    distance = FUN_001f9b48(old_pos, scale);
+    *(float *)(acc + 0x10) += distance;
+    if (*(int *)(data + 0x28) < 0) {
+        float zero_a = 0.0f, zero_b = 0.0f;
+        char *other = D_L10_001B0930_5a78[*(int *)(data + 0x24)];
+        FUN_L00_0025d808(other, transformed, (int *)&zero_a, &zero_b,
+            (*(float *)(acc + 0x10) / *(float *)(acc + 0x08)) * *(float *)(acc + 0x0c), 0);
+        FUN_001e93e8(0.2f, transformed);
+        FUN_001e93e8_part(other + 0x10, other + *(int *)other * 0x10);
+        subtract_vector_xyz(direction, transformed, scale);
+    } else {
+        transformed[0] = *(float *)(data + 0x2c);
+        transformed[1] = *(float *)(data + 0x30);
+        transformed[2] = *(float *)(data + 0x34);
+        transformed[3] = 0.0f;
+        transform_vector_by_basis(transformed, transformed, D_L10_00167450);
+        add_vector_xyz(point, D_L10_0015FFD8_far + *(int *)(data + 0x28) * 0x100 + 0x10, transformed);
+        subtract_vector_xyz(direction, point, scale);
+    }
+    FUN_001f9a68(-1.0f, transformed, D_0013F5E0);
+    scale_vector_xyz(1.0f, moby, direction);
+    cross_vectors_xyz(moby + 0x10, moby, transformed);
+    scale_vector_xyz(1.0f, moby + 0x10, moby + 0x10);
+    cross_vectors_xyz(moby + 0x20, moby + 0x10, moby);
+}
+#endif
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002F79B8), where it is exact; names translated to the US level program. */
