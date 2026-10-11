@@ -1927,7 +1927,103 @@ void FUN_L18_002dc458(struct Moby *moby, void *pos, float f) {
         d[2] = FUN_001f96f8(*(int *)&D_L18_00161C9C_d);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc4b8.s", FUN_L18_002dc4b8);
+/* Ported from rac1-decomp nonmatching/l18_veldin2/func_L18_002DD8A8.c (func_L18_002DD8A8) */
+typedef struct { float f[4]; } __attribute__((aligned(16))) V_dc4b8;
+typedef struct { float u, v; } UV_dc4b8;
+typedef struct {
+    V_dc4b8 corner[4];
+    unsigned int color[4];
+    UV_dc4b8 uv[4];
+    long unk70, tex, unk80, unk88;
+} Q_dc4b8;
+extern void unit_matrix_dc4b8(void *) __asm__("FUN_001f9fc8");
+extern int get_effect_texture_dc4b8(int) __asm__("FUN_001f44b8");
+extern void draw_quad_dc4b8(void *, void *, int) __asm__("FUN_001f7d30");
+extern void matrix_mul_dc4b8(void *, void *, void *) __asm__("FUN_001fa328");
+extern float itof_dc4b8(int) __asm__("FUN_001fa6c0");
+extern int scale_ticks_dc4b8(int) __asm__("FUN_001f96f8");
+extern float add_rotations_dc4b8(float, float) __asm__("FUN_001fa580");
+extern float cos_dc4b8(float) __asm__("FUN_001f9dc8");
+extern float sin_dc4b8(float) __asm__("FUN_001f9de0");
+extern int tween_color_dc4b8(int, int, float) __asm__("FUN_001fa6e0");
+extern int truncate_dc4b8(float) __asm__("FUN_001fa6d0");
+extern void clear_vector_dc4b8(void *) __asm__("FUN_001f99f8");
+extern void euler_basis_dc4b8(void *, void *) __asm__("FUN_001fa030");
+extern float D_L18_001D4330[];
+extern int D_L18_00161C9C_v __asm__("D_L18_00161C9C") __attribute__((sda));
+extern int D_L18_00161CA4_v __asm__("D_L18_00161CA4") __attribute__((sda));
+extern int D_L18_00161CA8_v __asm__("D_L18_00161CA8") __attribute__((sda));
+extern int D_L18_00161CAC_v __asm__("D_L18_00161CAC") __attribute__((sda));
+extern int D_L18_00161CB0_v __asm__("D_L18_00161CB0") __attribute__((sda));
+extern int D_L18_00161CB8_v __asm__("D_L18_00161CB8") __attribute__((sda));
+extern int D_L18_00161CBC_v __asm__("D_L18_00161CBC") __attribute__((sda));
+extern float D_L18_00161CC0_v __asm__("D_L18_00161CC0") __attribute__((sda));
+extern float D_L18_00161CC4_v __asm__("D_L18_00161CC4") __attribute__((sda));
+extern float D_L18_00161CC8_v __asm__("D_L18_00161CC8") __attribute__((sda));
+extern float D_L18_00161CCC_v __asm__("D_L18_00161CCC") __attribute__((sda));
+extern float D_L18_00161CD4_v __asm__("D_L18_00161CD4") __attribute__((sda));
+
+void FUN_L18_002dc4b8(char *moby) {
+    Q_dc4b8 quad[4];
+    V_dc4b8 mat[4];
+    V_dc4b8 rot[3];
+    V_dc4b8 ang;
+    float *p;
+    int i, j, k;
+    int c;
+    float t, r, d, s, gi;
+
+    p = *(float **)(moby + 0x78);
+    unit_matrix_dc4b8(mat);
+    qcopy(&mat[3], moby + 0x10);
+    mat[3].f[2] = mat[3].f[2] + D_L18_00161CC4_v;
+    mat[3].f[3] = 1.0f;
+    for (i = 0; i < 4; i++) {
+        quad[i].tex = get_effect_texture_dc4b8(14);
+        gi = D_L18_00161CCC_v * (float)i;
+        quad[i].unk70 = 0;
+        quad[i].unk80 = 0xFF9000000260L;
+        quad[i].unk88 = (long)D_L18_00161CA4_v | ((long)D_L18_00161CA8_v << 2) |
+                        ((long)D_L18_00161CAC_v << 4) | ((long)D_L18_00161CB0_v << 6) | 0x8000000000L;
+        t = p[1] + (float)i * 0.25f;
+        r = p[0] + gi;
+        t = t - (float)truncate_dc4b8(t);
+        c = tween_color_dc4b8(D_L18_00161CB8_v, D_L18_00161CBC_v, t);
+        s = t * D_L18_00161CD4_v;
+        if (s > 1.0f) s = 1.0f;
+        c = tween_color_dc4b8(c & 0xFFFFFF, c, s);
+        d = itof_dc4b8(((int *)p)[2]);
+        s = d / (float)scale_ticks_dc4b8(D_L18_00161C9C_v);
+        if (s > 1.0f) {
+            s = 1.0f;
+        } else if (s < 0.0f) {
+            s = 0.0f;
+        }
+        c = tween_color_dc4b8(c & 0xFFFFFF, c, s);
+        for (j = 0; j < 4; j++) {
+            float a;
+            quad[i].uv[j].u = D_L18_001D4330[j * 2];
+            quad[i].uv[j].v = D_L18_001D4330[j * 2 + 1];
+            quad[i].corner[j].f[2] = (j & 1) ? t * D_L18_00161CC8_v : -t * D_L18_00161CC8_v;
+            a = add_rotations_dc4b8((float)(j >> 1) * (D_L18_00161CC0_v * 0.017453292f) - 3.14159f,
+                              D_L18_00161CC0_v * 0.25f * (float)i * 0.017453292f);
+            quad[i].corner[j].f[0] = cos_dc4b8(a) * r;
+            quad[i].corner[j].f[1] = sin_dc4b8(a) * r;
+            quad[i].corner[j].f[3] = 1.0f;
+            quad[i].color[j] = c;
+        }
+    }
+    clear_vector_dc4b8(&ang);
+    ang.f[2] = D_L18_00161CC0_v * 0.017453292f;
+    euler_basis_dc4b8(&rot[0], &ang);
+    for (k = 0; (float)k < 360.0f / D_L18_00161CC0_v; k++) {
+        draw_quad_dc4b8(&quad[0], mat, 0);
+        draw_quad_dc4b8(&quad[1], mat, 0);
+        draw_quad_dc4b8(&quad[2], mat, 0);
+        draw_quad_dc4b8(&quad[3], mat, 0);
+        matrix_mul_dc4b8(mat, mat, &rot[0]);
+    }
+}
 /* UpdateMoby state machine for the vendor moby (state at +0x20). */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002E09F8), where it is exact; names translated to the US level program. */
 
