@@ -950,7 +950,156 @@ void FUN_L07_0030af40(struct Moby *m) {
     if (t != 0)
         t->frames = t->length;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b000.s", FUN_L07_0030b000);
+#else
+extern char *D_L07_001B0530[] __asm__("D_L07_001B0530");
+extern char *FUN_L00_0025a420(void *, int, int);
+extern s32 FUN_00213928(struct Moby *, char *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
+extern void FUN_L01_0026e0e0(s32, s32) __asm__("FUN_L01_0026e0e0");
+extern void FUN_001f99f8(void *) __asm__("FUN_001f99f8");
+extern void FUN_L00_0025e450_l07(f32, f32, f32, f32, f32, f32, f32, struct Moby *, void *, s32, s32, s32, s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
+extern f32 FUN_001f9b48(void *, void *) __asm__("FUN_001f9b48");
+extern s32 FUN_L00_002591d0(s32 *, s32, s32, s32) __asm__("FUN_L00_002591d0");
+extern s32 FUN_L00_002592b8(s32 *, s32, s32, s32) __asm__("FUN_L00_002592b8");
+extern void FUN_001e93b0(char *, ...) __asm__("FUN_001e93b0");
+extern s32 FUN_L01_0028b510(f32, void *, void *) __asm__("FUN_L01_0028b510");
+extern void FUN_L00_0025d458(void *, short *);
+extern void FUN_L00_0025d538(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void FUN_L00_0025d808(f32, void *, void *, void *, void *, s32) __asm__("FUN_L00_0025d808");
+extern void FUN_001f9a28(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_L00_00259fe8(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
+extern char D_L07_00211550[] __asm__("D_L07_00211550");
+extern char D_L07_00211580[] __asm__("D_L07_00211580");
+extern char D_L07_002115D0[] __asm__("D_L07_002115D0");
+
+void FUN_L07_0030b000(struct Moby *moby) {
+    char *data;
+    char *path;
+    f32 *remaining;
+    s32 count;
+    s32 current;
+    s32 child;
+    s32 i;
+    s32 first;
+    s32 next;
+    f32 distance;
+    union { u128 q; f32 f[4]; } position;
+
+    if (!moby) return;
+    data = (char *)moby->pvars;
+    if (!data) return;
+    remaining = (f32 *)(data + 0x20);
+    if (*(u8 *)(data + 0x94)) {
+        char *limit = (char *)FUN_L00_0025a420(moby, 0x230000, 0);
+        s32 result = FUN_00213928(moby, limit, remaining, 0, &count, 0, 0, 4);
+        switch ((u32)result) {
+        case 1:
+        case 2:
+            *remaining = 0.0f;
+            break;
+        }
+        if (count > 1) {
+            f32 step = *(f32 *)(limit + 0x2c);
+            if (*remaining <= step) {
+                *remaining = 0.0f;
+                FUN_L01_0026e0e0(*(s32 *)(data + 0x74), 3);
+                FUN_001f99f8(&position);
+                FUN_L00_0025e450_l07(0.0f, 0.0f, 4.0f, 2.0f, 9.0f, 1.0f, 15.0f,
+                                    moby, &position, 0, 10, 3, 16, -1, 1, 1, -1, 0);
+                delete_moby((struct Obj *)moby);
+                return;
+            }
+            *remaining -= step;
+            *(u8 *)(data + 0x67) = 0xfa;
+            *(s16 *)(data + 0x26) = FUN_001f96f8(0x3c);
+            FUN_L00_0025d458(moby, (short *)(data + 0x60));
+        }
+        moby->unkA4 = 0xff;
+    }
+    FUN_L00_0025d538(moby, data + 0x60);
+    if (*(s32 *)(data + 0x70) == -1) return;
+    path = D_L07_001B0530[*(s32 *)(data + 0x70)];
+    switch (moby->state) {
+    case 0: {
+        current = 0;
+        next = 0;
+        position.q = *(u128 *)(path + 0x10);
+        if (*(s32 *)path > 0) {
+            s32 j = 0;
+            s32 k = 1;
+            do {
+                *(f32 *)(path + 0x1c + j * 16) =
+                    FUN_001f9b48(path + 0x10 + j * 16,
+                                  path + 0x10 + (k % *(s32 *)path) * 16);
+                j = k++;
+            } while (j < *(s32 *)path);
+        }
+        if (FUN_L00_002591d0(&current, *(s32 *)(data + 0x74), 1, 0)) {
+            FUN_001e93b0(D_L07_00211550, *(s32 *)(data + 0x74));
+            return;
+        }
+        *(s32 *)(data + 0x90) =
+            (first = FUN_L01_0028b510(0.0f, (char *)moby + 0x10, path));
+        i = 0;
+        if (0 < *(s32 *)(data + 0x78)) do {
+            child = *(s32 *)(current + 0x78);
+            *(s32 *)(child + 0xa0) = (s32)moby;
+            *(u128 *)(current + 0x10) = position.q;
+            *(u128 *)(child + 0x80) = position.q;
+            *(u128 *)(child + 0x70) = position.q;
+            *(s32 *)(child + 0x90) = first;
+            *(s32 *)(child + 0x94) = first + 1;
+            if (FUN_L00_002592b8(&current, current, 1, 0)) {
+                if (i < *(s32 *)(data + 0x78) - 1)
+                    FUN_001e93b0(D_L07_00211580, i + 1, *(s32 *)(data + 0x74));
+                else if (i == *(s32 *)(data + 0x78) - 1)
+                    FUN_001e93b0(D_L07_002115D0, *(s32 *)(data + 0x74), *(s32 *)(data + 0x78));
+                *(s32 *)(data + 0x78) = i + 1;
+                break;
+            }
+            FUN_L00_0025d808(*(f32 *)(data + 0x80), path, &position, &first, &next, 1);
+            i++;
+        } while (i < *(s32 *)(data + 0x78));
+        if (!*(u8 *)(data + 0x94)) {
+            moby->unk94 = 0;
+            moby->flags &= 0xefff;
+        }
+        if (!*(u8 *)(data + 0x95)) moby->flags |= 1;
+        moby->state = 1;
+        break;
+    }
+    case 1: {
+        s32 cursor = 0;
+        FUN_L00_002591d0(&cursor, *(s32 *)(data + 0x74), 1, 0);
+        i = 0;
+        if (0 < *(s32 *)(data + 0x78)) do {
+            child = *(s32 *)(cursor + 0x78);
+            distance = FUN_001f9b48((char *)child + 0x80,
+                              path + 0x10 + *(s32 *)(child + 0x90) * 16);
+            FUN_L00_0025d808(*(f32 *)(data + 0x7c) * frame_time, path,
+                         (char *)child + 0x80, (char *)child + 0x90, &distance, 1);
+            *(s32 *)(child + 0x94) = *(s32 *)(child + 0x90) + 1;
+            if (cursor == 0 || *(u8 *)(cursor + 0x20) == 0xfe ||
+                *(u8 *)(cursor + 0x20) == 0xfd) {
+                if (*(s32 *)(data + 0x84) != -1) {
+                    FUN_001f9a28((char *)child + 0x60, (char *)child + 0x80,
+                                  (char *)cursor + 0x10);
+                    *(u128 *)(cursor + 0x10) = *(u128 *)(child + 0x80);
+                    if (FUN_001f9740((int *)(child + 0x98)) &&
+                        *(s32 *)(child + 0x90) == *(s32 *)(data + 0x90))
+                        FUN_L07_0030af40((struct Moby *)cursor);
+                }
+            }
+            FUN_L00_002592b8(&cursor, cursor, 1, 0);
+            i++;
+        } while (i < *(s32 *)(data + 0x78));
+        break;
+    }
+    }
+    FUN_L00_00259fe8(moby, 1.5f);
+}
+#endif
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
 
