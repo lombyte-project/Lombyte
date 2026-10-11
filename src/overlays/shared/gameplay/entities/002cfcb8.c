@@ -1046,8 +1046,8 @@ void FUN_L00_002d2670(u8 *moby) {
             velocity.q = 0;
             FUN_L00_0025f800(target, D_L00_001B0830);
             FUN_0020c828_2d2670(target);
-            target = FUN_L00_002c35c0((s32)moby, vars + 0x40, &velocity);
-            *(u8 **)(vars + 0x50) = target;
+            *(u8 **)(vars + 0x50) = FUN_L00_002c35c0((s32)moby, vars + 0x40, &velocity);
+            target = *(u8 **)(vars + 0x50);
         }
         if (target != 0 && target[0x20] != 0xfe && target[0x20] != 0xfd)
             goto target_valid;
