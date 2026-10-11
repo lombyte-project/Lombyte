@@ -1762,7 +1762,146 @@ void FUN_L07_0030cf90(struct Moby *moby) {
     }
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030d4d8.s", FUN_L07_0030d4d8);
+#else
+#include "qzero.h"
+extern void FUN_L00_0025e450_l07(f32, f32, f32, f32, f32, f32, f32, struct Moby *, void *, s32, s32, s32, s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
+extern float D_0015ED6C __attribute__((section(".data")));
+extern int D_L07_0015F5CC __attribute__((section(".sdata")));
+extern float D_L07_0015F580[] __attribute__((section(".data")));
+extern void FUN_0020cb10(void *, int, void *);
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_L00_0025a120(void *);
+extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
+extern int FUN_L07_002886d8(void *, void *, float);
+extern void FUN_001fa050(void *, void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+extern void FUN_L00_001fff28(void *, int, float);
+
+void FUN_L07_0030d4d8(struct Moby *moby) {
+    char *data;
+    char *src;
+    float *health;
+    Vec4 offset;
+    /* The target helper writes four vectors, a moby pointer and a result kind. */
+    float target[18] __attribute__((aligned(16)));
+    Vec4 rotation, velocity, position;
+    float matrix[16] __attribute__((aligned(16)));
+    Vec4 best, point;
+    int hit;
+    Vec4 *position_ptr;
+    int i, frames, delay;
+    float angle, turn, best_difference;
+    if (moby == 0) return;
+    data = moby->pvars;
+    if (moby->unk31 && distance_xyz(&moby->pos, D_L07_00166E40) < 27.0f) {
+        FUN_L00_0025a120(moby);
+        *((u8 *)moby + 0x7f) = 0x15;
+    }
+    if (data == 0) return;
+    health = (float *)(data + 0x20);
+    src = FUN_L00_0025a420(moby, 0x230000, 0);
+    switch (FUN_00213928(moby, src, health, 0, &hit, 0, 0, 4)) {
+    case 1: case 2: *health = 0.0f; break;
+    case 0: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11: break;
+    }
+    if (hit > 1) {
+        if (src && *(char **)(src + 0x20) && *(short *)(*(char **)(src + 0x20) + 0xa6) == 0x372) goto animate;
+        /* Retail still reads damage at address 0x2c when src is null. */
+        if (*health <= *(float *)(src + 0x2c)) {
+            FUN_L00_00257470(moby, 0, -1);
+            *health = 0.0f;
+            FUN_001f99f8(&offset);
+            FUN_L00_0025e450_l07(0.0f, 0.0f, 4.0f, 2.0f, 9.0f, 1.0f, 15.0f, moby, &offset, 0, 10, 3, 16, 1, 1, 1, -1, 0);
+            FUN_L00_00263fd8(moby, 0x621, &moby->pos, &moby->rot, 0, 0, 0.0f, D_L07_0015F580, D_L07_0015F580, D_L07_0015F580);
+            FUN_L00_00263fd8(moby, 0x622, &moby->pos, &moby->rot, 0, 0, 0.0f, D_L07_0015F580, D_L07_0015F580, D_L07_0015F580);
+            mark_moby_for_removal(moby);
+            return;
+        }
+        *health -= *(float *)(src + 0x2c);
+        ((u8 *)data)[0x67] = 0xfa;
+        *(short *)(data + 0x26) = scale_game_frames(60);
+        FUN_L00_0025d458(moby, (short *)(data + 0x60));
+    }
+animate:
+    moby->unkA4 = 0xff;
+    FUN_L00_0025d538(moby, data + 0x60);
+    FUN_L07_002886d8(moby, target, 20.0f);
+    switch (moby->state) {
+    case 0:
+        frames = scale_game_frames(*(int *)(data + 0xb0));
+        delay = scale_game_frames(FUN_L00_00257b90(0, 10));
+        *(int *)(data + 0xb4) = D_L07_0015F5CC + frames + delay;
+        FUN_0020cb10(moby, 0, data + 0x70);
+        *(float *)(data + 0xc0) = 0.0f;
+        FUN_0022da68(0, 4, (int)moby);
+        moby->state = 1;
+        *(int *)(data + 0xc4) = 0;
+        break;
+    case 1:
+        if (*(int *)(data + 0xb4) <= D_L07_0015F5CC) {
+            frames = scale_game_frames(180);
+            delay = D_L07_0015F5CC + frames;
+            *(short *)(data + 0xb8) = 0;
+            *(int *)(data + 0xb4) = delay;
+            *(float *)(data + 0xbc) = random_angle_radians();
+            *(short *)(data + 0xba) = 0;
+            moby->state = 2;
+        }
+        break;
+    case 2:
+        if (FUN_001f9770(data + 0xb8)) {
+            *(short *)(data + 0xb8) = scale_game_frames(7);
+            if (moby->unk31 || (vector_distance(&moby->pos, D_L07_00166E40) < 90.0f && (*(u32 *)(data + 0xc4) & 1)) || vector_distance(&moby->pos, D_L07_00166E40) < 40.0f) {
+                *(u32 *)(data + 0xc4) ^= 1;
+                if (vector_distance(&moby->pos, target) < 20.0f)
+                    *(float *)(data + 0xbc) = FUN_001f9e90(target[0] - moby->pos.x, target[1] - moby->pos.y);
+                best_difference = 3.1415927f;
+                offset.f[0] = random_float_between(3.0f, 11.0f);
+                offset.f[1] = random_float_between(-2.0f, 2.0f);
+                position_ptr = &position;
+                /* Retail initializes only w before selecting a point. */
+                best.f[3] = -1.0f;
+                offset.f[2] = 0.0f;
+                for (i = 1; i < 4; i++) {
+                    moby_point_position(moby, i, &point);
+                    angle = FUN_001f9e90(point.f[0] - moby->pos.x, point.f[1] - moby->pos.y);
+                    turn = fast_subtract_rotations(*(float *)(data + 0xbc), D_0015ED6C * 17.802359f);
+                    angle = fast_difference_between_rotations(angle, turn);
+                    if (angle < best_difference) {
+                        qcopy(&best, &point);
+                        best_difference = angle;
+                    }
+                }
+                qcopy(position_ptr, &best);
+                qzero(&rotation);
+                rotation.f[2] = *(float *)(data + 0xbc);
+                FUN_001fa050(matrix, &rotation);
+                FUN_001f9d20(&offset, &offset, matrix);
+                normalize_vector_xyz(&velocity, &offset, D_0015ED6C * 7.0f);
+                add_vector_xyz(&offset, &offset, &moby->pos);
+                velocity.f[2] = FUN_L00_0025abf0(&position, &offset, 0, D_0015ED6C * 7.0f, -(frame_time_sq * 9.8f));
+                add_vector_xyz(&position, &position, &velocity);
+                FUN_L07_0030ba90((char *)&position, (char *)&velocity, (int)moby, *(short *)(data + 0xba));
+                *(short *)(data + 0xba) += 1;
+            }
+        }
+        if (*(int *)(data + 0xb4) <= D_L07_0015F5CC) {
+            frames = scale_game_frames(120);
+            *(int *)(data + 0xb4) = D_L07_0015F5CC + frames;
+            moby->state = 1;
+        }
+        break;
+    }
+    if (moby->state) {
+        *(float *)(data + 0xc0) = fast_add_rotations(*(float *)(data + 0xc0), frame_time * 17.802359f);
+        FUN_L00_001fff28(data + 0x80, 2, *(float *)(data + 0xc0));
+    }
+}
+#endif
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030EF90), where it is exact; names translated to the US level program. */
 
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
