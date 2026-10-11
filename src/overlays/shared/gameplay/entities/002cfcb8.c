@@ -355,7 +355,10 @@ void crate_drop_bolts(u8 *a) {
         *(s16 *)(a + 0xB4) = 0;
     mark_moby_for_removal_cf(a, 0x100, -1);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d09b8.s", FUN_L00_002d09b8);
+#else
+#endif
 #include "qcopy.h"
 typedef struct V2d1428 {
     f32 x, y, z, w;
@@ -424,6 +427,199 @@ void FUN_L00_002604f0(M2d1428 *, void *, void *, void *, void *, void *);
 P2d1428 *FUN_L00_002603d0(void *);
 void FUN_L00_00260738(void *, void *, void *, void *);
 
+#ifdef NON_MATCHING
+typedef union {
+    f32 f[4];
+    u128 q;
+} __attribute__((aligned(16))) V2d09b8;
+extern s32 D_L00_0015F5CC;
+extern s32 D_L00_001618D4_2d09b8 __asm__("D_L00_001618D4");
+extern s32 D_L00_001618D8_2d09b8 __asm__("D_L00_001618D8");
+extern s32 D_L00_00161970_2d09b8 __asm__("D_L00_00161970") __attribute__((sda));
+extern s32 D_L00_00161978_2d09b8 __asm__("D_L00_00161978") __attribute__((sda));
+extern s32 D_L00_0015FFBC_2d09b8 __asm__("D_L00_0015FFBC");
+extern f32 D_0015ED6C_2d09b8 __asm__("D_0015ED6C");
+extern f32 D_L00_0015F5D0_2d09b8 __asm__("D_L00_0015F5D0");
+extern s32 D_001413DC_2d09b8 __asm__("D_001413DC");
+extern u8 *D_001413D0_2d09b8 __asm__("D_001413D0");
+extern V2d09b8 D_L00_00166DC0_2d09b8 __asm__("D_L00_00166DC0");
+extern V2d09b8 D_L00_001DE6F0_2d09b8[] __asm__("D_L00_001DE6F0");
+extern V2d09b8 D_L00_001DE750_2d09b8[] __asm__("D_L00_001DE750");
+extern u32 D_L00_001E9E80_2d09b8[] __asm__("D_L00_001E9E80");
+extern u32 D_L00_001E9E98_2d09b8[] __asm__("D_L00_001E9E98");
+extern s32 absolute_int_2d09b8(s32) __asm__("FUN_001f99a8");
+extern void FUN_0028dc90_2d09b8(s32, s32, void *, s32) __asm__("FUN_L00_0028dc90");
+extern void FUN_0028dbe8_2d09b8(s32, s32, void *) __asm__("FUN_L00_0028dbe8");
+extern s32 FUN_0025e3b8_2d09b8(void *) __asm__("FUN_L00_0025e3b8");
+extern void FUN_001ff008_2d09b8(void) __asm__("FUN_001f97b0");
+extern void FUN_0026b790_2d09b8(f32, f32, f32, f32, f32, void *, s32, s32) __asm__("FUN_L00_0026b790");
+extern void FUN_001ff2a8_2d09b8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 FUN_001ff8b0_2d09b8(f32, f32) __asm__("FUN_001f9e90");
+extern f32 FUN_00200130_2d09b8(f32, f32) __asm__("FUN_001fa5c8");
+extern s32 FUN_00200250_2d09b8(f32) __asm__("FUN_001fa6d0");
+extern f32 FUN_00200178_2d09b8(f32) __asm__("FUN_001fa610");
+extern void FUN_001ff260_2d09b8(void *) __asm__("FUN_001f99f8");
+extern void FUN_001ffa50_2d09b8(void *, void *) __asm__("FUN_001fa030");
+extern void FUN_001ff6d0_2d09b8(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void FUN_001ff278_2d09b8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern f32 FUN_002000e8_2d09b8(f32, f32) __asm__("FUN_001fa580");
+extern f32 FUN_00257be8_2d09b8(f32, f32) __asm__("FUN_002132a8");
+extern void FUN_001ff500_2d09b8(f32, void *, void *) __asm__("FUN_001f9bf8");
+extern s32 FUN_00257b50_2d09b8(s32) __asm__("FUN_00213260");
+extern void *FUN_002af8b0_2d09b8(f32, f32, void *, void *, void *, void *, s32, s32) __asm__("FUN_L00_002af8b0");
+extern void FUN_00250df8_2d09b8(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_00257d78_2d09b8(f32, f32, void *) __asm__("FUN_L00_00257d78");
+extern f32 FUN_00257cb0_2d09b8(void) __asm__("FUN_00213308");
+extern u8 FUN_001fef20_2d09b8(s32) __asm__("FUN_001f96f8");
+extern f32 FUN_001ff3d8_2d09b8(void *) __asm__("FUN_001f9af0");
+extern s32 FUN_00257b90_2d09b8(s32, s32) __asm__("FUN_L00_00257b90");
+extern void FUN_0026a9f0_2d09b8(f32, f32, void *, void *, s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_0026a9f0");
+extern void FUN_002ac910_2d09b8(f32, void *, void *, void *, s32, s32, s32, s32, s32) __asm__("FUN_L00_002ac910");
+
+void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
+    u8 *vars = (u8 *)m->vars;
+    V2d09b8 a, b, c, d, e, position, effect, rotation, velocity;
+    s32 close, count, trail_count, particle, i, kind, choice;
+    s32 first, second, first_color, second_color;
+    f32 angle, distance, height, speed, rise;
+    u32 colors[6], other_colors[6];
+    void *spawned;
+
+    close = 0;
+    if (absolute_int_2d09b8(D_L00_0015F5CC - D_L00_001618D4_2d09b8) > 1) {
+        if (m->oclass == 0x1FA)
+            FUN_0028dc90_2d09b8(0, 0, m, 500);
+        else
+            FUN_0028dbe8_2d09b8(0, 0, m);
+        D_L00_001618D4_2d09b8 = D_L00_0015F5CC;
+    }
+    if (absolute_int_2d09b8(D_L00_0015F5CC - D_L00_001618D8_2d09b8) >= 2)
+        D_L00_001618D8_2d09b8 = D_L00_0015F5CC;
+    else
+        close = 1;
+    if (*(u8 **)(vars + 0xA0)) {
+        u8 *next_vars = *(u8 **)(*(u8 **)(vars + 0xA0) + 0x78);
+        *(u32 *)(next_vars + 0xA4) = *(u32 *)(vars + 0xA4);
+        *(u32 *)(next_vars + 0xAC) |= 4;
+    }
+    if (*(u8 **)(vars + 0xA4)) {
+        u8 *previous_vars = *(u8 **)(*(u8 **)(vars + 0xA4) + 0x78);
+        if (!FUN_0025e3b8_2d09b8(*(void **)(previous_vars + 0xA0)))
+            FUN_001ff008_2d09b8();
+        *(u32 *)(previous_vars + 0xA0) = *(u32 *)(vars + 0xA0);
+        *(u32 *)(previous_vars + 0xAC) |= 4;
+    }
+    position.q = *(u128 *)&m->pos;
+    position.f[2] += 0.3f;
+    FUN_0026b790_2d09b8(0.3f, 1.01f, 1.075f, 0.05f, 50000.0f, &position, 1, 0x40808080);
+    for (i = 4; i >= 0; i--)
+        FUN_0026b790_2d09b8(0.3f, 1.01f, 1.07f, 0.05f, 50000.0f, &position, 1, 0x40808080);
+    if (source)
+        b.q = *(u128 *)((u8 *)source + 0x10);
+    else
+        FUN_001ff2a8_2d09b8(&b, &m->pos, D_001413D0_2d09b8 + 0x10);
+    switch ((s16)((u16)m->oclass - 500)) {
+    case 0: case 11: kind = 0x165; break;
+    case 1: kind = 0x15C; break;
+    case 2: kind = 0x162; break;
+    case 3: kind = 0x15F; break;
+    case 4: kind = 0x168; break;
+    case 5: kind = 0x16B; break;
+    case 6: kind = 0x16E; break;
+    case 7: case 8: case 9: case 10: kind = 0x171; break;
+    default: kind = 0x95; break;
+    }
+    if (D_L00_0015FFBC_2d09b8 < 201) {
+        if (D_L00_0015FFBC_2d09b8 < 151) {
+            if (D_L00_0015FFBC_2d09b8 < 101) { count = 1; trail_count = 0; }
+            else { count = 2; trail_count = 1; }
+        } else { count = 2; trail_count = 2; }
+    } else { count = 4; trail_count = 4; }
+    angle = FUN_001ff8b0_2d09b8(D_L00_00166DC0_2d09b8.f[0] - m->pos.x,
+                                   D_L00_00166DC0_2d09b8.f[1] - m->pos.y);
+    angle = FUN_00200130_2d09b8(angle, m->v40.z);
+    choice = FUN_00200250_2d09b8((angle + 3.1415925f) / 1.57f);
+    angle = FUN_00200178_2d09b8((f32)choice * 1.57f);
+    FUN_001ff260_2d09b8(&rotation);
+    rotation.f[2] = angle;
+    FUN_001ffa50_2d09b8(&c, &rotation);
+    for (i = 0; i < count; i++) {
+        FUN_001ff6d0_2d09b8(&d, &D_L00_001DE6F0_2d09b8[i], &c);
+        FUN_001ff278_2d09b8(&d, &d, &m->pos);
+        e = D_L00_001DE750_2d09b8[i];
+        e.f[2] = FUN_002000e8_2d09b8(e.f[2], angle);
+        FUN_001ff2a8_2d09b8(&a, &d, &m->pos);
+        a.f[2] = 0.0f;
+        speed = FUN_00257be8_2d09b8(1.0f, 5.0f);
+        FUN_001ff500_2d09b8(speed * D_0015ED6C_2d09b8, &a, &a);
+        a.f[2] = FUN_00257be8_2d09b8(4.0f, 9.0f) * D_0015ED6C_2d09b8;
+        particle = FUN_00257b50_2d09b8(2);
+        spawned = FUN_002af8b0_2d09b8(1.0f, 1.0f, m, &a, &d, &e, kind, particle);
+        if (spawned) {
+            *(u128 *)((u8 *)spawned + 0x40) = D_L00_001DE750_2d09b8[i].q;
+            *(f32 *)((u8 *)spawned + 0x48) = FUN_002000e8_2d09b8(*(f32 *)((u8 *)spawned + 0x48), angle);
+            FUN_00250df8_2d09b8(spawned);
+        }
+    }
+    for (i = 0; i < trail_count; i++) {
+        d.f[0] = FUN_00257be8_2d09b8(-0.5f, 0.5f);
+        d.f[1] = FUN_00257be8_2d09b8(-0.5f, 0.5f);
+        d.f[2] = FUN_00257be8_2d09b8(0.0f, 1.0f);
+        FUN_001ff278_2d09b8(&d, &d, &m->pos);
+        speed = FUN_00257be8_2d09b8(6.0f, 12.0f) * D_0015ED6C_2d09b8;
+        FUN_00257d78_2d09b8(speed, speed, &a);
+        if (a.f[2] < 0.0f) a.f[2] = -a.f[2];
+        e.f[0] = FUN_00257cb0_2d09b8();
+        e.f[2] = FUN_00257cb0_2d09b8();
+        particle = 1;
+        if (FUN_00257b50_2d09b8(6) == 0)
+            particle = FUN_00200250_2d09b8(FUN_00257be8_2d09b8(3.0f, 6.0f));
+        FUN_002af8b0_2d09b8(0.25f, 0.5f, m, &a, &d, &e, kind + 1, particle);
+    }
+    *(u32 *)((u8 *)m + 0x94) = 0;
+    m->state = 3;
+    *(u16 *)((u8 *)m + 0x34) |= 1;
+    m->bBC = FUN_001fef20_2d09b8(15);
+    if (hit) {
+        if (D_001413DC_2d09b8 == 22)
+            vars[0xCA] = FUN_001fef20_2d09b8(5);
+        else
+            vars[0xCA] = 1;
+        FUN_001ff500_2d09b8(0.5f, &a, (u8 *)m + 0xE0);
+        FUN_001ff278_2d09b8(&a, &a, &m->pos);
+        FUN_001ff2a8_2d09b8(&d, &D_L00_00166DC0_2d09b8, &m->pos);
+        FUN_001ff260_2d09b8(&e);
+        distance = FUN_001ff3d8_2d09b8(&d);
+        count = 10;
+        if (distance < 8.0f) count = FUN_00200250_2d09b8(distance) + 2;
+        height = 0.0f;
+        if (distance < 7.0f) height = 7.0f - distance;
+        if (close && count > 6) count = 6;
+        for (i = 0; i < count; i++) {
+            speed = FUN_00257be8_2d09b8(8.0f, 10.0f);
+            __builtin_memcpy(colors, D_L00_001E9E80_2d09b8, sizeof(colors));
+            __builtin_memcpy(other_colors, D_L00_001E9E98_2d09b8, sizeof(other_colors));
+            rise = speed * D_0015ED6C_2d09b8 - height * D_0015ED6C_2d09b8;
+            particle = FUN_00257b50_2d09b8(6);
+            choice = FUN_00257b50_2d09b8(6);
+            first = FUN_001fef20_2d09b8(15);
+            second = FUN_001fef20_2d09b8(20);
+            first_color = FUN_00257b90_2d09b8(first, second);
+            first = FUN_001fef20_2d09b8(25);
+            second = FUN_001fef20_2d09b8(30);
+            second_color = FUN_00257b90_2d09b8(first, second);
+            FUN_0026a9f0_2d09b8(400000.0f, rise, &a, &e, colors[particle], other_colors[choice], first_color, second_color, 0, 0);
+        }
+        if (D_L00_0015F5D0_2d09b8 < 0.95f && distance > 9.0f && !close) {
+            FUN_002ac910_2d09b8(4.0f, m, &a, &e, FUN_001fef20_2d09b8(15), 127, 127, 127, 32);
+            FUN_002ac910_2d09b8(4.0f, m, &a, &e, FUN_001fef20_2d09b8(24), 127, 32, 0, 32);
+            FUN_002ac910_2d09b8(4.0f, m, &a, &e, FUN_001fef20_2d09b8(20), 127, 64, 0, 48);
+        }
+        FUN_002ac910_2d09b8(3.5f, m, &a, &e, FUN_001fef20_2d09b8(27), 96, 16, 0, 64);
+        FUN_002ac910_2d09b8(3.0f, m, &a, &e, FUN_001fef20_2d09b8(29), 32, 0, 0, 32);
+    }
+}
+#endif
 void FUN_L00_002d1428(M2d1428 *m) {
     O2d1428 *o;
     M2d1428 *p, *n, *next;
