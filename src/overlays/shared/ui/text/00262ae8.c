@@ -172,4 +172,129 @@ tail:
     counter[0]--;
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00262f50.s", FUN_L05_00262f50);
+#else
+extern s32 D_001413DC;
+extern u8 D_0013FBFE;
+extern s32 D_L05_0015F5CC;
+extern s32 D_L05_0015FAD4, D_L05_0015FAD8;
+extern s32 D_L05_0015FAE0[4], D_L05_0015FAF0, D_L05_0015FAF4, D_L05_0015FAF8, D_L05_0015FB00;
+extern s32 D_L05_0015FAFC;
+extern s32 D_L05_0017E918[15];
+extern char D_L05_0015F860[], D_L05_0015F8D0[], D_L05_0015F8E0[], D_L05_0015F8E8[];
+extern char D_L05_00216C50[];
+extern u8 D_L05_0015F87C __attribute__((sda));
+extern s32 D_L05_0015F894 __attribute__((sda)), D_L05_0015F898 __attribute__((sda));
+extern s32 D_L05_0015F8A0 __attribute__((sda));
+extern s32 D_L05_0015F8A4 __attribute__((sda)), D_L05_0015F8A8 __attribute__((sda));
+extern s32 D_L05_0015F8AC __attribute__((sda)), D_L05_0015F8B0 __attribute__((sda));
+extern s32 D_L05_0015F8B4 __attribute__((sda)), D_L05_0015F8B8 __attribute__((sda));
+extern s32 D_L05_0015F8BC __attribute__((sda)), D_L05_0015F8C0 __attribute__((sda));
+extern s32 D_L05_0015F8C4 __attribute__((sda)), D_L05_0015F8C8 __attribute__((sda));
+extern int sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");
+extern s32 scale_game_frames(s32);
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
+extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
+extern void font_print_center_large(s32, s32, s32, char *, s32) __asm__("FUN_001f6c20");
+extern void draw_framed_text(s32, s32, s32, char *) __asm__("FUN_00201200");
+extern s32 FUN_L00_00235a70(char *, s32 *, s32 *);
+extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
+extern void FUN_L00_0023b6c0(s32, s32, s32, s32, s32, s32);
+extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
+
+/* Draws the counter text and its icon, then the optional pulsing label. */
+s32 FUN_L05_00262f50(char *e) {
+    char buf[136];
+    s32 indices[4];
+    s32 x, y, color, shadow, value, group, i, count, period;
+    f32 fade, pulse;
+    volatile f32 ratio;
+    u8 *q = (u8 *)e + 0x70;
+    u8 *base14 = (u8 *)0x0013f350;
+
+    fade = (f32)q[0] / 10.0f;
+    if (fade > 1.0f) fade = 1.0f;
+    if (*(s32 *)(base14 + 0x208c) != 0x16) return *(s32 *)((u8 *)e + 0x58);
+    if (q[2] != 0) {
+        sprintf_alt(buf, D_L05_0015F860, D_L05_0015FAD4 * 0x168);
+        pulse = convert_integer_to_float(q[1]);
+        period = scale_game_frames(D_L05_0015F87C);
+        ratio = pulse / (f32)period;
+        color = D_L05_0015F8A0;
+        if (q[2] == 1 || q[2] == 3)
+            color = fast_tween_color(D_L05_0015F894, D_L05_0015F898, ratio);
+        shadow = truncate_float_to_s32(fade * 128.0f) << 24;
+        color += shadow;
+        if ((u32)(q[2] - 1) < 2) {
+            font_print_center_large(D_L05_0015F8B4 + 1, D_L05_0015F8B8 + 1, shadow, buf, -1);
+            font_print_center_large(D_L05_0015F8B4, D_L05_0015F8B8, color, buf, -1);
+            sprintf_alt(buf, D_L05_0015F8D0, D_L05_0015FAD8);
+            font_print_center_large(D_L05_0015F8BC + 1, D_L05_0015F8C0 + 1, shadow, buf, -1);
+            font_print_center_large(D_L05_0015F8BC, D_L05_0015F8C0, color, buf, -1);
+        } else if (q[2] == 3) {
+            group = -1;
+            if (D_L05_0015FAD8 == 3) {
+                group = 0;
+                if (D_L05_0015FAE0[3] != 0) {
+                    group = 2;
+                    if (D_L05_0015FAE0[2] == 0) group = 1;
+                    else if (D_L05_0015FAE0[1] != 0) group = 3;
+                }
+            } else if (D_L05_0015FAD8 == 4) group = 4;
+            if (group >= 0) {
+                if (D_L05_0015FAD4 < 4) i = (D_L05_0015FAD4 < 2) ^ 1;
+                else i = 2;
+                group += i * 5;
+                D_L05_0015FAF0 = group;
+                D_L05_0015FB00 = D_L05_0017E918[group];
+                count = 1;
+                for (i = 0; i < 3; i++) if ((&D_L05_0015FAF4)[i] == group) count++;
+                D_L05_0015FB00 = D_L05_0015FB00 / count;
+                sprintf_alt(buf, D_L05_0015F860, D_L05_0015FB00);
+                draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, color, buf);
+                sprintf_alt(buf, D_L05_0015F8E0, get_help_message_text(group + 0x5092));
+                draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8, color, buf);
+            } else if (D_L05_0015FAD8 > 0) {
+                count = 0;
+                for (i = 0; i < 4 && count < D_L05_0015FAD8; i++)
+                    if (D_L05_0015FAE0[i] != 0) indices[count++] = i;
+                if (D_L05_0015FAD8 == 1) {
+                    D_L05_0015FB00 = D_L05_0015FAD4 * 10;
+                    sprintf_alt(buf, D_L05_0015F860, D_L05_0015FB00);
+                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, color, buf);
+                    sprintf_alt(buf, D_L05_0015F8E8, get_help_message_text(indices[0] + 0x517e), D_L05_0015FAD4);
+                } else {
+                    D_L05_0015FB00 = D_L05_0015FAD4 * 20;
+                    sprintf_alt(buf, D_L05_0015F860, D_L05_0015FB00);
+                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, color, buf);
+                    sprintf_alt(buf, D_L05_00216C50, get_help_message_text(indices[0] + 0x517e),
+                                get_help_message_text(indices[1] + 0x517e), D_L05_0015FAD4);
+                }
+                draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8, color, buf);
+            }
+        }
+    }
+    x = *(s32 *)((u8 *)e + 0x50);
+    y = *(s32 *)((u8 *)e + 0x54);
+    *(s32 *)((u8 *)e + 0x58) = 0x100;
+    *(s32 *)((u8 *)e + 0x5c) = 0x40;
+    FUN_L00_00235a70((char *)e, &x, &y);
+    value = *(s32 *)((u8 *)e + 0x74) * 0xdd / *(s32 *)((u8 *)e + 8) + 0x1b;
+    FUN_L00_0023b6c0(get_icon_frame(0x7558, 1), x, y, value, 0x40, 0x80);
+    draw_hud_sprite(get_icon_frame(0x7558, 0), x, y, 0x100, 0x40, 0x80);
+    if (scale_game_frames(0x78) < *(u8 *)(base14 + 0x8ae)) {
+        period = scale_game_frames(0x3c);
+        pulse = fast_sin(convert_integer_to_float(D_L05_0015F5CC % period) / (f32)period *
+                         6.28318f - 3.14159f);
+        color = fast_tween_color(D_L05_0015F8AC, D_L05_0015F8B0, pulse * 0.5f + 0.5f);
+        sprintf_alt(buf, get_help_message_text(0x531a));
+        draw_framed_text(D_L05_0015F8A4 + 1, D_L05_0015F8A8 + 1, 0x80000000, buf);
+        draw_framed_text(D_L05_0015F8A4, D_L05_0015F8A8, color, buf);
+    }
+    return *(s32 *)((u8 *)e + 0x58);
+}
+#endif
