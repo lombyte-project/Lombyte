@@ -1093,7 +1093,10 @@ ret0:
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c4380.s", FUN_L00_002c4380);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c53c0.s", FUN_L00_002c53c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c6158.s", FUN_L00_002c6158);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c7548.s", FUN_L00_002c7548);
+#else
+#endif
 
 /* Vars of the carrier moby that picks up and holds another moby. */
 typedef struct {
@@ -1103,6 +1106,88 @@ typedef struct {
     s32 timer;              /* 0x54 */
 } CarrierVars;
 
+#ifdef NON_MATCHING
+extern OvlVec4 D_L00_00166C80_2c7548[3] __asm__("D_L00_00166C80") __attribute__((section(".data")));
+extern s32 D_0013FDA0_2c7548 __asm__("D_0013FDA0");
+extern void matrix_from_basis_rows_2c7548(void *, void *) __asm__("FUN_001fa2d8");
+extern void setup_matrix_2c7548(void *, void *) __asm__("FUN_001fa2b8");
+extern void rotate_vector_2c7548(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void adjust_direction_2c7548(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern f32 vector_length_xy_2c7548(void *) __asm__("FUN_001f9b20");
+extern f32 fast_subtract_rotations_2c7548(f32, f32) __asm__("FUN_001fa5c8");
+extern void build_spherical_offset_2c7548(void *, f32, f32, f32) __asm__("FUN_00214db0");
+
+void FUN_L00_002c7548(struct Moby *moby, CarrierVars *vars, OvlVec4 *grip) {
+    OvlVec4 pos, basis[3], matrix[4], direction, target, arc, saved, probe;
+    f32 angle, slope, distance, horizontal, vertical, radius, speed;
+    s32 hit = 0;
+    pos.q = grip->q;
+    setup_matrix_2c7548(basis, D_L00_00166C80_2c7548);
+    matrix_from_basis_rows_2c7548(matrix, basis);
+    if (vars->held != 0) {
+        f32 *out = (f32 *)vars->held->pvars;
+        direction.q = 0;
+        direction.i[0] = 0x3f800000;
+        adjust_direction_2c7548(&direction, &direction, (u8 *)&hero + 0x640);
+        angle = fast_add_rotations(-0.361968f,
+                                   atan2_f(*(f32 *)((u8 *)&hero + 0x670), *(f32 *)((u8 *)&hero + 0x674)));
+        pos.f[0] = FUN_001f9dc8(angle) * 0.859039f;
+        angle = fast_add_rotations(-0.361968f,
+                                   atan2_f(*(f32 *)((u8 *)&hero + 0x670), *(f32 *)((u8 *)&hero + 0x674)));
+        pos.f[1] = FUN_001f9de0(angle) * 0.859039f;
+        pos.i[2] = 0;
+        add_vector_xyz(&pos, &pos, &hero.motion.pos);
+        pos.f[2] += 0.39082f;
+        angle = atan2_f(direction.f[0], direction.f[1]);
+        speed = (D_0013CAE0_2c7320[0] & 5) ? 3.5f : 2.5f;
+        scale_vector_xyz(&target, &direction, speed);
+        add_vector_xyz(&target, &target, &pos);
+        if ((D_0013CAE0_2c7320[0] & 5) && !hero.unk20AC) {
+            arc.q = 0;
+            arc.i[2] = 0x3f800000;
+            rotate_vector_2c7548(&arc, &arc, matrix);
+            angle = atan2_f(arc.f[0], arc.f[1]);
+            fast_subtract_rotations_2c7548(*(f32 *)((u8 *)hero.moby + 0x48), angle);
+            angle = atan2_f(arc.f[0], arc.f[1]);
+            slope = atan2_f(vector_length_xy_2c7548(&arc), arc.f[2]);
+            slope = slope > 0.5934119f ? 0.5934119f : slope;
+            if (slope < -1.3962634f) slope = -1.3962634f;
+            speed = (D_0013CAE0_2c7320[0] & 5) ? 3.5f : 2.5f;
+            build_spherical_offset_2c7548(&arc, speed, angle, slope);
+            saved.q = D_L00_00166DC0.q;
+            distance = vector_length_xy_2c7548(&arc);
+            if (distance == 0.0f) horizontal = arc.f[2] / 0.01f;
+            else horizontal = arc.f[2] / distance;
+            speed = (D_0013CAE0_2c7320[0] & 5) ? 3.5f : 2.5f;
+            radius = FUN_001f9988(D_0015ED70 * 9.0f * speed * 0.5f);
+            radius = ((radius + radius) * radius * (1.0f - horizontal)) / (D_0015ED70 * 9.0f);
+            vertical = horizontal * radius;
+            if (radius > 0.0f) {
+                arc.f[0] = FUN_001f9dc8(angle) * radius;
+                arc.f[1] = FUN_001f9de0(angle) * radius;
+                arc.f[2] = vertical;
+                add_vector_xyz(&probe, &D_L00_00166DC0, &arc);
+                if (collision_line(&D_L00_00166DC0, &probe, 2, moby, 0) && coll_hit.moby != (s32)hero.moby) {
+                    target.q = coll_hit.point.q;
+                    hit = 1;
+                    angle = atan2_f(target.f[0] - pos.f[0], target.f[1] - pos.f[1]);
+                }
+                if (!hit) {
+                    target.f[0] = FUN_001f9dc8(angle) * radius * 5.0f;
+                    target.f[1] = FUN_001f9de0(angle) * radius * 5.0f;
+                    target.f[2] = vertical * 5.0f;
+                    add_vector_xyz(&target, &target, &D_L00_00166DC0);
+                }
+            }
+        } else {
+            D_0013FDA0_2c7548 = 0;
+        }
+        speed = (D_0013CAE0_2c7320[0] & 5) ? 3.5f : 2.5f;
+        FUN_L00_002c7320((V2c7320 *)&pos, (V2c7320 *)&target, out,
+                          D_0015ED70 * 9.0f, 0.00001f, speed);
+    }
+}
+#endif
 /* Counters kept at D_00141680 for the carrier's deliveries. */
 typedef struct {
     u8 pad0[0xA0];
