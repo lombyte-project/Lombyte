@@ -1549,6 +1549,7 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
 
+extern float D_L10_00161C98 __attribute__((sda));
 void FUN_L10_002da2c8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     union { unsigned char order[10]; float position2[4]; } scratch;
@@ -1585,17 +1586,17 @@ void FUN_L10_002da2c8(struct Moby *moby) {
         }
         {
             float new_rotation = fast_add_rotations(moby->rot.z, 1.5707964f);
-            moby->state = 1;
-            moby->unk30 = 0x60;
+            *(volatile unsigned char *)&moby->state = 1;
+            *(volatile unsigned char *)&moby->unk30 = 0x60;
             moby->rot.z = new_rotation;
         }
         *(int *)(data + 0x30) = -1;
-        *(int *)(data + 0x34) = FUN_001f96f8(FUN_001fa6d0(frame_time * 60.0f));
+        *(int *)(data + 0x34) = FUN_001f96f8(FUN_001fa6d0(D_L10_00161C98 * 60.0f));
         moby->flags |= 0x41;
         break;
     case 1:
-        *(OvlQuad *)position1 = *(OvlQuad *)&moby->pos;
         half_height = (float)*(int *)(data + 4) * *(float *)(data + 8) * 0.5f;
+        *(OvlQuad *)position1 = *(OvlQuad *)&moby->pos;
         position1[2] += half_height;
         position1[3] = FUN_001f9988(half_height * half_height + (*(float *)data * 0.5f) * (*(float *)data * 0.5f));
         if (FUN_001f9b48(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)FUN_001fa728(position1))
@@ -1613,8 +1614,8 @@ void FUN_L10_002da2c8(struct Moby *moby) {
                 release_voice_slot(voice);
         }
         *(int *)(data + 0x30) = -1;
-        *(OvlQuad *)scratch.position2 = *(OvlQuad *)&moby->pos;
         half_height = (float)*(int *)(data + 4) * *(float *)(data + 8) * 0.5f;
+        *(OvlQuad *)scratch.position2 = *(OvlQuad *)&moby->pos;
         scratch.position2[2] += half_height;
         scratch.position2[3] = FUN_001f9988(half_height * half_height + (*(float *)data * 0.5f) * (*(float *)data * 0.5f));
         if (FUN_001f9b48(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)FUN_001fa728(scratch.position2))
