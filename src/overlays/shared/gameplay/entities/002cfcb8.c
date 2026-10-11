@@ -1762,7 +1762,7 @@ int FUN_L00_00257b90(int, int);
 E *FUN_L00_0026d000(V *, int, float, float, V *, float, int, float);
 s16 FUN_001f96f8_c(int) __asm__("FUN_001f96f8");
 void FUN_001f4600_c(void *, P *) __asm__("FUN_001f4600");
-void FUN_L00_002d73e8(void);
+void FUN_L00_002d73e8(P *);
 
 void FUN_L00_002d6f28(P *p) {
     Q *q = p->q;
@@ -1847,7 +1847,174 @@ void FUN_L00_002d6f28(P *p) {
         return;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d73e8.s", FUN_L00_002d73e8);
+#else
+typedef struct {
+    V points[4];
+    u32 colors[4];
+    float texcoords[8];
+    u64 texture[4];
+} __attribute__((aligned(16))) Quad_2d73e8;
+extern float D_L00_001D02E0_2d73e8[] __asm__("D_L00_001D02E0");
+extern float D_L00_001D15A0_2d73e8[] __asm__("D_L00_001D15A0");
+extern float D_L00_001D31C0_2d73e8[] __asm__("D_L00_001D31C0");
+extern float D_L00_001D4480_2d73e8[] __asm__("D_L00_001D4480");
+extern u8 D_L00_001D2D10_2d73e8[] __asm__("D_L00_001D2D10");
+extern s16 D_L00_001D60A0_2d73e8[] __asm__("D_L00_001D60A0");
+extern s16 D_L00_001D6A00_2d73e8[] __asm__("D_L00_001D6A00");
+extern u8 D_L00_001E11A0_2d73e8[] __asm__("D_L00_001E11A0");
+extern float D_L00_001E11E0_2d73e8[] __asm__("D_L00_001E11E0");
+extern V D_L00_001E1200_2d73e8[] __asm__("D_L00_001E1200");
+extern V D_L00_001E12C0_2d73e8[] __asm__("D_L00_001E12C0");
+extern s32 D_L00_001E1380_2d73e8[][4] __asm__("D_L00_001E1380");
+extern float D_L00_001E13E0_2d73e8[][2] __asm__("D_L00_001E13E0");
+extern float D_L00_001E1440_2d73e8[][2] __asm__("D_L00_001E1440");
+#define D_L00_001DADA0_2d73e8 (D_L00_001D2860 + 0x8540)
+#define D_L00_001DADA8_2d73e8 (D_L00_001D2860 + 0x8548)
+#define D_L00_001DA788_2d73e8 (*(s16 *)(D_L00_001D2860 + 0x7F28))
+#define D_L00_001DAD98_2d73e8 (*(s32 *)(D_L00_001D2860 + 0x8538))
+#define D_L00_001DAD9C_2d73e8 (*(float *)(D_L00_001D2860 + 0x853C))
+extern float D_L00_00161374_2d73e8 __asm__("D_L00_00161374");
+extern float D_L00_00161384_2d73e8 __asm__("D_L00_00161384");
+extern float D_L00_0016138C_2d73e8 __asm__("D_L00_0016138C");
+extern float D_0015ED60_2d73e8 __asm__("D_0015ED60");
+extern V D_L00_00166DC0_2d73e8 __asm__("D_L00_00166DC0");
+u64 FUN_001f9298_2d73e8(s32) __asm__("FUN_L00_001f9298");
+void FUN_001ff2a8_2d73e8(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_001ff500_2d73e8(float, void *, void *) __asm__("FUN_001f9bf8");
+void FUN_001ff3c0_2d73e8(void *, void *, void *) __asm__("FUN_001f9ad8");
+void FUN_001ff300_2d73e8(float, void *, void *) __asm__("FUN_001f9a68");
+void FUN_001ff6f8_2d73e8(void *, void *, void *) __asm__("FUN_001f9d20");
+void FUN_001fd228_2d73e8(void *, int, int) __asm__("FUN_001f7d30");
+void FUN_002a0ba8_2d73e8(int, int) __asm__("FUN_00233980");
+s32 FUN_001fef98_2d73e8(void *) __asm__("FUN_001f9770");
+float FUN_00200240_2d73e8(s32) __asm__("FUN_001fa6c0");
+s32 FUN_00200250_2d73e8(float) __asm__("FUN_001fa6d0");
+s32 FUN_00257b50_2d73e8(s32) __asm__("FUN_00213260");
+
+void FUN_L00_002d73e8(P *p) {
+    Q *q = p->q;
+    T *t = &D_L00_001600EC[q->idx];
+    V position, zero_vector;
+    V positive_transform[4], negative_transform[4];
+    Quad_2d73e8 quad;
+    V *transform;
+    int i, j, row, point, index, alpha;
+    int end = q->start + q->count + q->extra;
+    u8 *sprite_data = (u8 *)q;
+    u32 base_color = (u32)sprite_data[0x5f] << 16 | (u32)sprite_data[0x5e] << 8 | sprite_data[0x5d];
+    u32 alpha_color = (u32)sprite_data[0x5c] << 24;
+    float x, y, f;
+    s16 *timer;
+
+    qcopy(&position, &p->pos);
+    position.w = 1.0f;
+    *(u128 *)&zero_vector = 0;
+    zero_vector.z = 1.0f;
+    FUN_001ff2a8_2d73e8(&positive_transform[0], &D_L00_00166DC0_2d73e8, &position);
+    FUN_001ff500_2d73e8(1.0f, &positive_transform[0], &positive_transform[0]);
+    FUN_001ff3c0_2d73e8(&positive_transform[1], &positive_transform[0], &zero_vector);
+    FUN_001ff500_2d73e8(1.0f, &positive_transform[1], &positive_transform[1]);
+    FUN_001ff3c0_2d73e8(&positive_transform[2], &positive_transform[1], &positive_transform[0]);
+    qcopy(&positive_transform[3], &position);
+    FUN_001ff300_2d73e8(-1.0f, &negative_transform[0], &positive_transform[0]);
+    FUN_001ff3c0_2d73e8(&negative_transform[1], &negative_transform[0], &zero_vector);
+    FUN_001ff500_2d73e8(1.0f, &negative_transform[1], &negative_transform[1]);
+    FUN_001ff3c0_2d73e8(&negative_transform[2], &negative_transform[1], &negative_transform[0]);
+    qcopy(&negative_transform[3], &positive_transform[3]);
+    quad.texture[1] = FUN_001f9298_2d73e8(*(s32 *)(sprite_data + 0x54) + 0x28);
+    quad.texture[2] = 0xff9000000260ULL;
+    quad.texture[3] = 0x8000000048ULL;
+    quad.texture[0] = 0;
+    FUN_002a0ba8_2d73e8(0x4a, 0);
+    FUN_002a0ba8_2d73e8(0x47, 0x51001);
+
+    for (i = q->start; i < end; i++) {
+        f = D_L00_001D31C0_2d73e8[i] - D_L00_001D4480_2d73e8[i] * D_0015ED60_2d73e8;
+        transform = D_L00_001D2860[i] ? negative_transform : positive_transform;
+        D_L00_001D31C0_2d73e8[i] = f;
+        if (f <= -8.0f)
+            D_L00_001D31C0_2d73e8[i] = f + 8.0f;
+        FUN_001ff6f8_2d73e8(&transform[3], &D_L00_001CB7E0[i], t);
+        x = D_L00_001D02E0_2d73e8[i];
+        y = D_L00_001D15A0_2d73e8[i];
+        if (D_L00_001D2D10_2d73e8[i] == 0) {
+            timer = &D_L00_001D5740[i];
+            if (*timer != 0) {
+                FUN_001fef98_2d73e8(timer);
+                f = (1.0f - FUN_00200240_2d73e8(*timer) * D_L00_00161384_2d73e8) * D_L00_001DAD9C_2d73e8;
+                alpha = FUN_00200250_2d73e8(f);
+            } else {
+                timer = &D_L00_001D60A0_2d73e8[i];
+                if (*timer != 0) {
+                    if (FUN_001fef98_2d73e8(timer)) {
+                        FUN_L00_002d7bf0(p, i);
+                        D_L00_001D2860[i] = FUN_00257b50_2d73e8(2);
+                        alpha = 0;
+                    } else {
+                        f = FUN_00200240_2d73e8(*timer) * D_L00_0016138C_2d73e8 * D_L00_001DAD9C_2d73e8;
+                        alpha = FUN_00200250_2d73e8(f);
+                    }
+                } else {
+                    if (FUN_001fef98_2d73e8(&D_L00_001D6A00_2d73e8[i]))
+                        *timer = D_L00_001DA788_2d73e8;
+                    alpha = D_L00_001DAD98_2d73e8;
+                }
+            }
+            quad.texture[3] = 0x8000000048ULL;
+            for (point = 0; point < 4; point++) {
+                V *source = (V *)(D_L00_001E11A0_2d73e8 + point * 16);
+                quad.points[point].x = source->x;
+                quad.points[point].y = source->y * x;
+                quad.points[point].z = source->z * y;
+                quad.points[point].w = 1.0f;
+                quad.texcoords[point * 2] = D_L00_001E11E0_2d73e8[point * 2] - D_L00_001D31C0_2d73e8[i];
+                quad.texcoords[point * 2 + 1] = D_L00_001E11E0_2d73e8[point * 2 + 1];
+                quad.colors[point] = (alpha * D_L00_001DADA0_2d73e8[point] << 24) | q->col;
+                FUN_001ff6f8_2d73e8(&quad.points[point], &quad.points[point], transform);
+            }
+            FUN_001fd228_2d73e8(&quad, 0, 0);
+        } else {
+            quad.texture[3] = 0x8000000044ULL;
+            for (row = 2; row < 4; row++) {
+                for (point = 0; point < 4; point++) {
+                    index = D_L00_001E1380_2d73e8[row][point];
+                    quad.points[point].x = D_L00_001E12C0_2d73e8[index].x;
+                    quad.points[point].y = D_L00_001E12C0_2d73e8[index].y * x;
+                    quad.points[point].z = D_L00_001E12C0_2d73e8[index].z * y;
+                    quad.points[point].w = 1.0f;
+                    FUN_001ff6f8_2d73e8(&quad.points[point], &quad.points[point], transform);
+                    quad.texcoords[point * 2 + 1] = D_L00_001E1440_2d73e8[index][1] + D_L00_001D31C0_2d73e8[i];
+                    quad.texcoords[point * 2] = D_L00_001E1440_2d73e8[index][0];
+                    quad.colors[point] = alpha_color * D_L00_001DADA8_2d73e8[index] | base_color;
+                }
+                FUN_001fd228_2d73e8(&quad, 0, 0);
+            }
+        }
+    }
+    quad.texture[1] = FUN_001f9298_2d73e8(*(s32 *)(sprite_data + 0x58) + 0x28);
+    quad.texture[3] = 0x8000000044ULL;
+    qcopy(&positive_transform[3], (u8 *)t + 0x30);
+    positive_transform[3].z -= q->f50;
+    if (q->flag42 == 0) {
+        for (row = 0; row < 6; row++) {
+            for (point = 0; point < 4; point++) {
+                index = D_L00_001E1380_2d73e8[row][point];
+                quad.points[point].x = D_L00_001E1200_2d73e8[index].x;
+                quad.points[point].y = D_L00_001E1200_2d73e8[index].y * q->f48;
+                quad.points[point].z = D_L00_001E1200_2d73e8[index].z * q->pad4C;
+                quad.points[point].w = 1.0f;
+                FUN_001ff6f8_2d73e8(&quad.points[point], &quad.points[point], positive_transform);
+                quad.texcoords[point * 2 + 1] = D_L00_001E13E0_2d73e8[index][1] + D_L00_00161374_2d73e8;
+                quad.texcoords[point * 2] = D_L00_001E13E0_2d73e8[index][0];
+                quad.colors[point] = (u32)D_L00_001DADA8_2d73e8[index] * 0xff000000 | base_color;
+            }
+            FUN_001fd228_2d73e8(&quad, 0, 0);
+        }
+    }
+}
+#endif
 
 extern float D_L00_001D02E0_2d7bf0[] __asm__("D_L00_001D02E0");
 extern float D_L00_001D15A0_2d7bf0[] __asm__("D_L00_001D15A0");
