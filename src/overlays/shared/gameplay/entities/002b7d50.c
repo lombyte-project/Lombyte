@@ -183,7 +183,7 @@ void FUN_L13_002e1cc8(char *moby) {
     case 2: {
         int target_index = vars[0];
         int target_base = (int)D_0015FFD8;
-        struct Moby *target = (struct Moby *)(target_base + target_index * 0x100);
+        struct Moby *target = (struct Moby *)(target_index * 0x100 + target_base);
         if (target != 0 && target->state != 0xfe && target->state != 0xfd &&
             vars[1] != -1 && target->state != vars[1]) {
             goto frame_tail;
@@ -270,11 +270,8 @@ collected:
         moby[0x20] = 1;
         break;
     }
-    speed = D_0015ED6C;
-    goto shared_tail;
 frame_tail:
     speed = D_0015ED6C;
-shared_tail:
     FUN_0026e788(0.7f, speed * 1.2217305f, moby, vars + 6, vars + 5);
     if (*(float *)(moby + 0x10) < 20.0f) *(float *)(moby + 0x10) = 20.0f;
     if (1003.0f < *(float *)(moby + 0x10)) *(float *)(moby + 0x10) = 1003.0f;
