@@ -163,7 +163,144 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c1978.s", FUN_L09_002c1978);
+#else
+extern void setup_first_context(void) __asm__("FUN_001f2d98");
+extern void setup_second_context(void) __asm__("FUN_001f2260");
+extern void FUN_001f9ff8(float, void *);
+extern void setup_offset_vector(float, void *, void *) __asm__("FUN_001f9a68");
+extern void FUN_00233830(void *, int);
+extern void transform_packet_data(void *, void *, void *) __asm__("FUN_001fa378");
+extern int FUN_001fa728(char *, float);
+extern void FUN_L00_001fde98(int, int, int, void *, int);
+extern void FUN_L02_002a46e0(void *);
+extern int D_L09_0015F458;
+extern int D_L09_0016CDD0;
+extern int D_L09_0016CDD8[];
+extern int D_L09_0016CD50[];
+extern int D_L09_0016CD60[];
+extern int D_L09_0016CDF0[];
+extern u64 D_L09_001612F0;
+extern unsigned short D_L09_0010E800;
+extern int D_L09_0010E810;
+extern int D_L09_001CB470;
+extern char D_L09_00166E40[];
+extern char D_L09_00166EC0[];
+
+void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
+    char *data = data_ptr;
+    char *list = list_ptr;
+    int i;
+    int j;
+    int *packet;
+    u64 *words;
+    float matrix[16];
+    float offset[4];
+    int color;
+    int *scratch = (int *)0x700003fc;
+    float *old = (float *)0x001612f8;
+    float *current = (float *)0x0016cbc0;
+    old[0] = current[0x218 / 4];
+    old[1] = current[0x21c / 4];
+    old[2] = current[0x228 / 4];
+    *(float *)0x00161304 = current[0x22c / 4];
+    if (D_L09_0015F458 != 1) {
+        current[0x218 / 4] = *(float *)(data + 0x20);
+        current[0x21c / 4] = *(float *)(data + 0x24);
+        current[0x228 / 4] = *(float *)(data + 0x28);
+        current[0x22c / 4] = *(float *)(data + 0x2c);
+    }
+    setup_first_context();
+    setup_second_context();
+    FUN_001f9ff8(1024.0f, matrix);
+    setup_offset_vector(-1024.0f, offset, (void *)0x00166f40);
+    offset[3] = 1.0f;
+    FUN_00233830(&D_L09_0010E810, D_L09_0010E800);
+    D_L09_001611C0[0] = 0x10000000;
+    D_L09_001611C0[1] = 0;
+    D_L09_001611C0[2] = 0x11000000;
+    D_L09_001611C0[3] = 0x01000404;
+    packet = D_L09_001611C0;
+    packet[4] = 0;
+    packet[5] = 0;
+    packet[6] = 0;
+    packet[7] = 0x6c0c43a4;
+    transform_packet_data(packet + 8, D_L09_00166E40, matrix);
+    transform_packet_data(packet + 24, D_L09_00166EC0, matrix);
+    packet[40] = 0x8000;
+    packet[41] = 0x303ec000;
+    packet[42] = 0x412;
+    packet[43] = *(int *)0x0016cdd0;
+    *(u64 *)(packet + 44) = *(u64 *)0x0016cd50;
+    packet[46] = *(int *)0x0016cd58;
+    packet[47] = *(int *)0x0016cd5c;
+    *(u64 *)(packet + 48) = *(u64 *)0x0016cd60;
+    packet[50] = *(int *)0x0016cd68;
+    packet[51] = *(int *)0x0016cd6c;
+    packet[52] = *(int *)0x0016cdec;
+    packet[57] = 0x020001d2;
+    packet[56] = 0x03000000;
+    packet[53] = *(int *)0x0016cde8;
+    packet[58] = 0x15000000;
+    packet[54] = 0;
+    packet[55] = 0;
+    packet[59] = 0;
+    *D_L09_001611C0 |= (((packet + 60) - D_L09_001611C0) >> 2) - 1;
+    D_L09_001611C0 = packet + 60;
+    packet[60] = 0x30000003;
+    D_L09_001611C0[1] = (int)&D_L09_001CB470;
+    D_L09_001611C0[2] = 0;
+    D_L09_001611C0[3] = 0x50000003;
+    packet = D_L09_001611C0 + 4;
+    D_L09_001611C0 += 4;
+    packet[0] = 0x10000008;
+    D_L09_001611C0[1] = 0;
+    D_L09_001611C0[2] = 0;
+    D_L09_001611C0[3] = 0x50000008;
+    color = (unsigned char)data[0x30] | ((unsigned char)data[0x31] << 8) |
+            ((unsigned char)data[0x32] << 16);
+    if (D_L09_0015F458 == 1)
+        color = *(int *)0x0016cdf0 | (*(int *)0x0016cdf4 << 8) |
+                (*(int *)0x0016cdf8 << 16);
+    words = (u64 *)(D_L09_001611C0 + 4);
+    *(u64 *)(D_L09_001611C0 + 4) = 0x7000000000008001ULL;
+    words[1] = 0xeeeeeeeeULL;
+    words[2] = ((u64)(unsigned char)data[0x3f] << 32) | 100;
+    words[3] = 0x42;
+    words[4] = D_L09_001612F0;
+    words[5] = 6;
+    words[6] = (long)color;
+    words[7] = 0x3d;
+    words[8] = 0;
+    words[9] = 8;
+    words[10] = 0x50000;
+    words[11] = 0x47;
+    words[12] = 0xff9000000260ULL;
+    words[13] = 0x14;
+    words[14] = (unsigned char)data[0x3f] > 0x60 ? 0x5360a : 0x5370b;
+    words[15] = 0x47;
+    D_L09_001611C0 += 36;
+    for (i = 255; i >= 0; i--)
+        *scratch-- = 0x757c8e;
+    for (i = 0; i < count; i++) {
+        char *entry = list + i * 32;
+        int visible = FUN_001fa728(entry, 256.0f);
+        if (visible != -1) {
+            int n = *(int *)(entry + 0x1c);
+            float *source = *(float **)(entry + 0x14);
+            float *destination = (float *)0x70001000;
+            for (j = 0; j < n; j++) {
+                *destination++ = *source++ * 0.5f;
+                *destination++ = *source++ * 0.5f;
+            }
+            FUN_L00_001fde98(n, *(int *)(entry + 0x10), 0x70000000,
+                              (void *)0x70001000, visible == 0);
+        }
+    }
+    FUN_L02_002a46e0(data);
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
