@@ -147,8 +147,8 @@ int FUN_L06_00252dd0(int param_1, int param_2) {
         FUN_001f9838(P(W(0x15f5f4)), (char *)sequence + sequence[0], W(0x15f5f0) * 32);
         for (i = 0; i < W(0x15f5f0); i++) {
             short index = H(W(0x15f5f4) + i * 32 + 0x1a);
-            if (index < sequence[3]) H(W(0x15f5f4) + i * 32 + 0x1a) = *(short *)((char *)sequence + sequence[2] + index * 4);
-            else { FUN_001e93b0(0x1ffb80); H(W(0x15f5f4) + i * 32 + 0x1a) = -1; }
+            if (index >= sequence[3]) { FUN_001e93b0(0x1ffb80); H(W(0x15f5f4) + i * 32 + 0x1a) = -1; }
+            else H(W(0x15f5f4) + i * 32 + 0x1a) = *(short *)((char *)sequence + sequence[2] + index * 4);
             W(W(0x15f5f4) + i * 32 + 0x1c) = W(0x15ed5c);
         }
         record = sequence + 4;
