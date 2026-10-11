@@ -1533,7 +1533,10 @@ void FUN_L13_002b9f58(struct Moby *moby, char *obj) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ba178.s", FUN_L13_002ba178);
+#else
+#endif
 
 /* Level 13 fighter state. Offsets come from the checked level 13 retail instructions. */
 typedef float JetVec[4] __attribute__((aligned(16)));
@@ -1850,3 +1853,215 @@ void FUN_L13_002bb068(Jet *m) {
     if ((unsigned char)state==4) { qcopy_nc((char *)&jet_player47+0x80,m->position); qcopy_nc((char *)&jet_player47+0x90,d->angles); }
     if ((unsigned int)(state-3)<2 || (unsigned char)state==8) FUN_L13_002b8590(m,(char*)d);
 }
+#ifdef NON_MATCHING
+extern float FUN_L00_0025b8c0(float *, float *, float, float, float, float);
+extern float FUN_L00_0025bc98(float *, float, float *, int, float, float, float);
+extern float FUN_L13_002ba088(int, int, float, float, float, float, float);
+extern float FUN_001f9af0(void *);
+extern void FUN_001fa030(void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern void update_view_context(void) __asm__("FUN_001f2d98");
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_L13_00204dc8");
+extern float D_00141070_2b6140 __asm__("D_00141070") __attribute__((section(".data")));
+extern float D_00141074_2b6140 __asm__("D_00141074") __attribute__((section(".data")));
+extern u64 D_L13_00161430;
+extern char *D_L13_00167100 __attribute__((section(".data")));
+extern char D_L13_00174140[];
+extern char D_L13_001F4450[];
+#define F(p,o) (*(float *)((char *)(p)+(o)))
+
+/* Flight motion, steering, camera and collision response for the mounted fighter. */
+void FUN_L13_002ba178(void *moby, void *obj) {
+    Jet *m = moby;
+    JetData *d = obj;
+    JetVec old_position;
+    JetVec impulse;
+    JetVec velocity;
+    JetVec cross;
+    JetVec vertical;
+    JetVec rotation;
+    JetVec target;
+    JetVec offset;
+    JetVec offsets[2];
+    JetVec camera_position;
+    JetVec camera_rotation;
+    JetVec matrix[3];
+    float pitch_limit, yaw_limit;
+    float distance, angle, height, speed_fraction;
+    float x, y, turn_rate, pitch_rate;
+    int id;
+    short cls;
+    *(u128 *)velocity = 0;
+    *(u128 *)vertical = 0;
+    vertical[2] = 1.0f;
+    velocity[2] = frame_time * 8.0f;
+    m->flags &= 0xFEFF;
+    *(u128 *)impulse = *(u128 *)velocity;
+    if (B(m,0xBC) != 0) {
+        d->speed = 0.0001f;
+    } else if (d->missile_index > FUN_001f96f8(120)) {
+        if (W(D_0013C940,0x1B4) & 0x40) {
+            id = d->weapon_sound;
+            if (id != -1 && *(Jet **)(D_0013E550+id*0x70+0x88)==m && B(D_0013E550+id*0x70,0x74))
+                release_voice_slot(id);
+            d->weapon_sound = -1;
+            d->weapon_sound = allocate_voice_for_target_entry(1,4,(int)m);
+        } else if (W(D_0013C940,0x1B8) & 0x40) {
+            id = d->weapon_sound;
+            if (id != -1 && *(Jet **)(D_0013E550+id*0x70+0x88)==m && B(D_0013E550+id*0x70,0x74))
+                release_voice_slot(id);
+            d->weapon_sound = -1;
+        }
+        if (W(D_0013C940,0x1B0)&0x40) {
+            d->speed += frame_scale*0.035f;
+            if (frame_time*30.0f < d->speed) d->speed = frame_time*30.0f;
+        } else {
+            float speed = frame_time*24.0f;
+            float step = frame_scale*0.025f;
+            if (d->speed < speed-step) d->speed += step;
+            else if (speed < d->speed) d->speed += (speed-d->speed)*(frame_scale*0.1f);
+            else d->speed = speed;
+        }
+    } else {
+        float step = frame_scale*0.003f;
+        d->missile_index++;
+        d->speed += step;
+    }
+    if (d->missile_index > FUN_001f96f8(5)) {
+        turn_rate = frame_scale*0.1f;
+        pitch_rate = frame_scale*0.25f;
+        x = D_00141070_2b6140;
+        y = D_00141074_2b6140;
+        if (W(D_0013A4E0,0x2600)&0x200) {
+            float divisor = frame_scale*0.012271847f;
+            float multiplier = frame_scale*0.015707964f;
+            turn_rate = pitch_rate = frame_scale*0.08f;
+            y = (y/divisor)*multiplier;
+            x = (x/divisor)*multiplier;
+        }
+        FUN_L00_0025b8c0(&F(d,0x6C),&F(d,0x90),x,frame_scale_sq*0.03f,frame_scale_sq,turn_rate);
+        FUN_L00_0025b8c0(&F(d,0x70),&F(d,0x94),y,frame_scale_sq*0.03f,frame_scale_sq,pitch_rate);
+        FUN_L00_0025bc98(&d->angles[0],F(d,0x6C),&F(d,0x98),0,frame_scale_sq*0.05f,frame_scale_sq,frame_scale);
+        d->angles[1] = fast_subtract_rotations(d->angles[1],F(d,0x70)*(frame_scale*0.012271847f));
+        d->angles[2] = fast_subtract_rotations(d->angles[2],F(d,0x6C)*(frame_scale*0.012271847f));
+        if (d->angles[1] > 1.3962634f) d->angles[1] = 1.3962634f;
+        else if (d->angles[1] < -1.3962634f) d->angles[1] = -1.3962634f;
+        if (m->rotation[1] > 1.3962634f) m->rotation[1] = 1.3962634f;
+        else if (m->rotation[1] < -1.3962634f) m->rotation[1] = -1.3962634f;
+    }
+    pitch_limit = 310.0f; yaw_limit = 500.0f;
+    id = W(d,0x110);
+    if (id != -1) {
+        qcopy(target,D_L13_001600EC[id].position);
+        pitch_limit = FUN_001f9af0((char *)&D_L13_001600EC[id]+0x20);
+        add_vector_xyz(offset,&D_L13_001600EC[W(d,0x110)],(char *)&D_L13_001600EC[W(d,0x110)]+0x10);
+        yaw_limit = FUN_001f9af0(offset);
+    } else qcopy(target,&D_L13_00161430);
+    distance = vector_distance(m->position,&D_L13_00161430);
+    angle = angle_atan2(target[0]-m->position[0],target[1]-m->position[1]);
+    d->angles[2] = FUN_L13_002ba088(1,5,distance,d->angles[2],angle,50.0f,yaw_limit);
+    angle = angle_atan2(target[0]-m->position[0],target[1]-m->position[1]);
+    m->rotation[2] = FUN_L13_002ba088(1,5,distance,m->rotation[2],angle,50.0f,yaw_limit);
+    height = absolute_float(target[2]-m->position[2]);
+    distance = vector_distance(m->position,target);
+    angle = angle_atan2(distance,target[2]-m->position[2]);
+    d->angles[1] = FUN_L13_002ba088(1,5,height,d->angles[1],-angle,50.0f,pitch_limit);
+    height = absolute_float(target[2]-m->position[2]);
+    distance = vector_distance(m->position,target);
+    angle = angle_atan2(distance,target[2]-m->position[2]);
+    m->rotation[1] = FUN_L13_002ba088(1,5,height,m->rotation[1],-angle,50.0f,pitch_limit);
+    build_spherical_offset(velocity,d->speed,d->angles[2],-d->angles[1]);
+    normalize_vector_xyz(d->pad10,velocity,1.0f);
+    qcopy(old_position,m->position);
+    if (!B(m,0xBC)) add_vector_xyz(m->position,m->position,velocity);
+    speed_fraction = d->speed-frame_time*24.0f;
+    distance = frame_time*30.0f-frame_time*24.0f;
+    if (speed_fraction < 0.0f) speed_fraction = 0.0f/distance;
+    else speed_fraction = speed_fraction/distance;
+    *(u128 *)camera_position = 0;
+    *(u128 *)camera_rotation = 0;
+    camera_position[0] = ((-15.0f-F(d,0x70))-speed_fraction*4.0f)*0.25f;
+    camera_position[1] = F(d,0x6C)*-3.0f*0.25f;
+    camera_position[2] = (F(d,0x70)+F(d,0x70)+4.0f)*0.25f;
+    camera_rotation[0] = -1.275f;
+    camera_rotation[2] = 0.65f;
+    F(d,0xC4) = speed_fraction;
+    *(u128 *)offsets[0] = *(u128 *)camera_position;
+    *(u128 *)offsets[1] = *(u128 *)camera_rotation;
+    if (m->state == 2) {
+        x = offsets[d->animation_frame][1]; y = offsets[d->animation_frame][2];
+        F(d,0xB4)=offsets[d->animation_frame][0]; F(d,0xB8)=x; F(d,0xBC)=y;
+    } else {
+        FUN_L00_0025b8c0(&F(d,0xB4),&F(d,0xC8),offsets[d->animation_frame][0],frame_scale_sq*0.15f,frame_scale_sq*0.8f,frame_scale);
+        FUN_L00_0025b8c0(&F(d,0xB8),&F(d,0xCC),offsets[d->animation_frame][1],frame_scale_sq*0.15f,frame_scale_sq*0.8f,frame_scale);
+        FUN_L00_0025b8c0(&F(d,0xBC),&F(d,0xD0),offsets[d->animation_frame][2],frame_scale_sq*0.15f,frame_scale_sq*0.8f,frame_scale);
+    }
+    offset[0]=F(d,0xB4); offset[1]=F(d,0xB8); offset[2]=F(d,0xBC); offset[3]=0;
+    FUN_001fa030(matrix,d->angles);
+    FUN_001f9cf8(target,offset,matrix);
+    add_vector_xyz(camera_position,m->position,target);
+    FUN_L00_002ea9d8(camera_position);
+    camera_rotation[0]=fast_add_rotations(d->angles[0]*0.5f,F(d,0x6C)*0.03125f);
+    angle=fast_add_rotations(d->angles[1],0.09817477f);
+    camera_rotation[1]=fast_subtract_rotations(angle,F(d,0x70)*(frame_scale*0.012271847f));
+    camera_rotation[2]=d->angles[2];
+    if (m->state==2) qcopy(d->previous_rotation,camera_rotation);
+    else {
+        FUN_L00_0025bc98(&d->previous_rotation[0],camera_rotation[0],&F(d,0xA0),0,frame_scale_sq*0.15f,frame_scale_sq*0.8f,frame_scale);
+        FUN_L00_0025bc98(&d->previous_rotation[1],camera_rotation[1],&F(d,0xA4),0,frame_scale_sq*0.15f,frame_scale_sq*0.8f,frame_scale);
+        FUN_L00_0025bc98(&d->previous_rotation[2],camera_rotation[2],&F(d,0xA8),0,frame_scale_sq*0.15f,frame_scale_sq*0.8f,frame_scale);
+    }
+    rotation[0]=d->previous_rotation[0]; rotation[2]=d->previous_rotation[2]; rotation[1]=d->previous_rotation[1];
+    FUN_L00_002eaa30(rotation);
+    if (H(D_L13_00167100,0x86)!=5) {
+        stub_printf(D_L13_001F4450);
+        FUN_L00_002eaaa0(camera_position,rotation,0,0,0);
+    }
+    FUN_L00_0025b8c0(&F(d,0xB0),&F(d,0xC0),speed_fraction*0.34906578f+1.134464f,0.05f,1.0f,1.0f);
+    angle=F(d,0xB0)*0.5f;
+    x=fast_sin(angle);
+    D_L13_0016CDF0=x/FUN_001f9dc8(angle);
+    update_view_context();
+    m->rotation[0]=fast_add_rotations(d->angles[0],F(d,0x6C)*0.5f);
+    m->rotation[1]=fast_add_rotations(d->angles[1],-F(d,0x70)*0.5f);
+    m->rotation[2]=fast_add_rotations(d->angles[2],-F(d,0x6C)*0.0f);
+    if (FUN_L00_001f0d60(1.2f,m->position,0,m)) {
+        char *hit=P(D_L13_00174140,0x18);
+        if (!hit || ((cls=H(hit,0xA6))!=0 && cls!=0x192 && cls!=0x4C2 && cls!=0x4C3 && cls!=0x52 && cls!=0x53)) {
+            qcopy(m->position,D_L13_00174140+0x30);
+            jet_reflect_vector(velocity,velocity,D_L13_00174140+0x40);
+            angle=fast_subtract_rotations(angle_atan2(velocity[0],velocity[1]),d->angles[2]);
+            d->angles[2]=fast_add_rotations(d->angles[2],angle*(frame_scale*0.1f));
+            angle=angle_atan2(jet_length_xy(velocity),velocity[2]);
+            angle=fast_subtract_rotations(-angle,d->angles[1]);
+            d->angles[1]=fast_add_rotations(d->angles[1],angle*(frame_scale*0.1f));
+            d->speed*=0.7f;
+            if (!P(D_L13_00174140,0x18)) {
+                F(D_0013F350,0x15FC)=0.0f;
+                jet_explosion(m,impulse,0,8.0f,100.0f,30,10,24,16.0f,8.0f,9.0f,6,1.0f,50.0f,1,1,-1,0);
+                m->flags|=0x41;
+                d->death_timer=FUN_001f96f8(240); m->state=6;
+            } else if (!d->timer) {
+                F(D_0013F350,0x15FC)-=5.0f;
+                if (F(D_0013F350,0x15FC)<0.0f) {
+                    subtract_vector_xyz(cross,D_L13_00174140+0x50,D_L13_00174140+0x60);
+                    normalize_vector_xyz(cross,cross,1.0f);
+                    jet_reflect_vector(impulse,velocity,D_L13_00174140+0x40);
+                    normalize_vector_xyz(impulse,impulse,frame_time+frame_time);
+                    normalize_vector_xyz(vertical,D_L13_00174140+0x40,1.0f);
+                    jet_explosion(m,impulse,0,8.0f,100.0f,30,10,24,16.0f,8.0f,9.0f,6,1.0f,50.0f,1,1,-1,0);
+                    d->death_timer=FUN_001f96f8(240); m->state=6;
+                }
+                d->timer=FUN_001f96f8(10);
+            }
+        }
+    }
+    enqueue_callback_list_1(FUN_L13_002b97f8,m);
+    FUN_L13_002b9f58((struct Moby *)m,(char *)d);
+    x=fast_add_rotations(d->previous_rotation[2],-F(d,0x6C)/7.0f);
+    y=fast_add_rotations(d->previous_rotation[1],-(F(d,0x70)/7.0f)-0.1f);
+    FUN_L13_002b9df8((struct Moby *)m,(char *)d,x,-y);
+}
+#undef F
+#endif
