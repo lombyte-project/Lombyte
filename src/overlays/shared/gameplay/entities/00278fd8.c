@@ -2305,8 +2305,7 @@ void FUN_L15_002bddb0(struct Moby *moby) {
         f32 increment;
         travel = vars->travel;
         increment = (moby->scale * 3.0f / moby->pclass->scale) / 3.0f * frame_time;
-        if (reversed)
-            increment = -increment;
+        increment = reversed ? -increment : increment;
         vars->travel = travel + increment;
         offset.f[0] = fast_cos_door(moby->rot.z) * vars->travel;
         offset.f[1] = fast_sin_door(moby->rot.z) * vars->travel;
