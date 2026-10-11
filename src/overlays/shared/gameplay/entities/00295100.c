@@ -859,7 +859,7 @@ extern void FUN_L00_001ff008(void);
 
 void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     u8 buffer[0x60] __attribute__((aligned(16)));
-    s32 source, destination, count, pal;
+    s32 source, destination, count, second_count, pal, initial_count;
 
     voice_pool.header[0x6B] |= 8;
     FUN_00118a80(0);
@@ -867,18 +867,23 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     FUN_L00_002656c0();
     D_L00_0015F5D8 = 1;
     D_L00_00161048 = sector;
-    D_L00_0016104C = size;
     D_L00_00161050 = language;
+    D_L00_0016104C = size;
     FUN_L00_001f9838(4);
     FUN_L00_002039a0();
+    destination = *(volatile s32 *)&D_L00_0015F40C;
     D_L00_0015F5C4 = 1;
     D_L00_00161054 = D_L00_00173E00_298840.x4;
-    destination = D_L00_0015F40C;
     D_L00_00161058 = destination;
-    source = depth_buffer_address;
+    initial_count = 13;
+    second_count = 17;
     pal = D_0015ED80;
-    count = pal != 0 ? 14 : 13;
-    for (; count != 0; count--) {
+    source = *(volatile s32 *)&depth_buffer_address;
+    initial_count = pal ? 14 : initial_count;
+    second_count = pal ? 14 : second_count;
+    count = initial_count;
+    for (; count != 0;) {
+        count--;
         FUN_00122330(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
         source += 0x10000;
         FUN_00118a80(0);
@@ -887,14 +892,17 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
         FUN_00120558(0, 0);
     }
     source = D_0015EE78_gp;
-    count = pal != 0 ? 14 : 17;
-    for (; count != 0; count--) {
-        FUN_00122330(buffer, (source << 8) >> 16, 1, 0, 0, 0, 0x40, 0x40);
-        source += 0x4000;
-        FUN_00118a80(0);
-        FUN_00122658(buffer, destination);
-        destination += 0x4000;
-        FUN_00120558(0, 0);
+    if (second_count != 0) {
+        count = second_count;
+        do {
+            count--;
+            FUN_00122330(buffer, (source << 8) >> 16, 1, 0, 0, 0, 0x40, 0x40);
+            source += 0x4000;
+            FUN_00118a80(0);
+            FUN_00122658(buffer, destination);
+            destination += 0x4000;
+            FUN_00120558(0, 0);
+        } while (count != 0);
     }
     if (source > 0x400000) {
         FUN_L00_001eb078(0x1e9480, source - 0x400000);
