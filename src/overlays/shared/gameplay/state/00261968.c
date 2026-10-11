@@ -267,7 +267,7 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
         do {
             current = (OvlVec4 *)((u8 *)entry + offset + 0x10);
             next = (OvlVec4 *)((u8 *)entry + offset + 0x20);
-            if (current->f[3] != 0.0f || next->f[3] != 0.0f) {
+            if (entry->points[i].f[3] != 0.0f || entry->points[i + 1].f[3] != 0.0f) {
                 FUN_001ff2a8_262030(&difference, &working, current);
                 FUN_001ff2a8_262030(&segment, next, current);
                 FUN_001ff500_262030(&scaled_cross, height_axis, FUN_001ff398_262030(&difference, height_axis));
