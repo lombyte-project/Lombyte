@@ -2806,9 +2806,6 @@ void FUN_L18_002f7220(struct Moby *source, char *dest, L18Vector *from, L18Vecto
     *(float *)(dest + 0x68) =
         fast_subtract_rotations(FUN_001f9e90(b.f[0] - a.f[0], b.f[1] - a.f[1]), source->rot.z);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7288.s", FUN_L18_002f7288);
-#else
 extern char *D_L18_0015EF50;
 extern int D_L18_001623A0_target __asm__("D_L18_001623A0") __attribute__((sda));
 extern float D_L18_001623B0 __attribute__((sda));
@@ -2837,9 +2834,10 @@ extern char D_L18_00167680[];
 extern void FUN_L00_00235d80(void);
 extern void FUN_L00_00235ea0(void);
 extern void FUN_L06_00249738(void);
-extern void advance_accelerated_scalar_7288(float *, float, float *, float, float, float)
+extern float advance_accelerated_scalar_7288(float *, float, float *, float, float, float)
     __asm__("FUN_00213f38");
 
+/* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F86E8) */
 void FUN_L18_002f7288(char *moby) {
     char *d = *(char **)(moby + 0x78);
     char *t = *(char **)(D_L18_0015EF50 + *(int *)(d + 0x224) * 32 + 0x1c);
@@ -2943,12 +2941,11 @@ void FUN_L18_002f7288(char *moby) {
                      d + 0x36c, 0x15e);
         }
     }
-    advance_accelerated_scalar_7288(p0, x, p2, D_0015ED6C_e[1] * *(float *)&D_L18_001623B4,
-                     D_0015ED6C_e[1] * *(float *)&D_L18_001623B4, D_L18_001623B0 * D_0015ED6C_e[0]);
-    advance_accelerated_scalar_7288(p1, y, p3, D_0015ED6C_e[1] * *(float *)&D_L18_001623B4,
-                     D_0015ED6C_e[1] * *(float *)&D_L18_001623B4, D_L18_001623B0 * D_0015ED6C_e[0]);
+    advance_accelerated_scalar_7288(p0, x, p2, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
+                     *(float *)&D_L18_001623B4 * D_0015ED6C_e[1], D_L18_001623B0 * D_0015ED6C_e[0]);
+    advance_accelerated_scalar_7288(p1, y, p3, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
+                     *(float *)&D_L18_001623B4 * D_0015ED6C_e[1], D_L18_001623B0 * D_0015ED6C_e[0]);
 }
-#endif
 
 #define NOT_SDA
 
