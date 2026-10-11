@@ -922,11 +922,12 @@ extern f32 vector_length_xy_2d2158(void *) __asm__("FUN_001f9b20");
 extern void build_spherical_offset_2d2158(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern f32 fast_sqrt_2d2158(f32) __asm__("FUN_001f9988");
 extern s32 trace_segment_2d2158(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
-extern void FUN_L00_002c7320_2d2158(void *, void *, f32, f32, f32, void *) __asm__("FUN_L00_002c7320");
+extern void FUN_L00_002d1f30(void *, void *, void *, f32, f32, f32);
 
 void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
+    void *volatile saved_moby = moby;
     Vec_2d2158 target = *position;
-    Vec_2d2158 basis[4], matrix[4], direction, offset, trace_start, trace_end, velocity;
+    Vec_2d2158 basis[3], matrix[4], direction, offset, trace_start, trace_end, velocity;
     void *tracked;
     f32 angle, length, ratio, amount, vertical;
     s32 hit = 0;
@@ -951,7 +952,7 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
     angle_atan2_2d2158(direction.f[0], direction.f[1]);
     scale_vector_2d2158(&offset, &direction, (D_0013CAE0_2d2158 & 5) ? 3.5f : 2.5f);
     add_vector_2d2158(&offset, &offset, &target);
-    if (D_001413FC_2d2158 != 0 || (D_0013CAE0_2d2158 & 5) == 0) {
+    if ((D_0013CAE0_2d2158 & 5) == 0 || D_001413FC_2d2158 != 0) {
         D_0013FDA0_2d2158 = 0;
     } else {
         velocity.q = 0;
@@ -964,7 +965,8 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
         vertical = angle_atan2_2d2158(length, velocity.f[2]);
         if (vertical > 0.5934119f) vertical = 0.5934119f;
         if (vertical < -1.3962634f) vertical = -1.3962634f;
-        build_spherical_offset_2d2158(&velocity, 3.5f, angle, vertical);
+        build_spherical_offset_2d2158(&velocity,
+            (D_0013CAE0_2d2158 & 5) ? 3.5f : 2.5f, angle, vertical);
         trace_start.q = D_L00_00166DC0_2d2158.q;
         length = vector_length_xy_2d2158(&velocity);
         ratio = velocity.f[2] / (length == 0.0f ? 0.01f : length);
@@ -976,7 +978,7 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
             velocity.f[1] = fast_sin_2d2158(angle) * amount;
             velocity.f[2] = vertical;
             add_vector_2d2158(&trace_end, &D_L00_00166DC0_2d2158, &velocity);
-            if (trace_segment_2d2158(&D_L00_00166DC0_2d2158, &trace_end, 2, moby, 0) &&
+            if (trace_segment_2d2158(&D_L00_00166DC0_2d2158, &trace_end, 2, saved_moby, 0) &&
                 D_L00_00173E58_2d2158 != D_001413D0_2d2158) {
                 offset.q = D_L00_00173E60_2d2158.q;
                 hit = 1;
@@ -990,9 +992,9 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
             }
         }
     }
-    FUN_L00_002c7320_2d2158(&target, &offset, D_0015ED70_2d2158 * 9.0f,
-                              0.00001f, (D_0013CAE0_2d2158 & 5) ? 3.5f : 2.5f,
-                              (u8 *)tracked + 0x10);
+    FUN_L00_002d1f30(&target, &offset, (u8 *)tracked + 0x10,
+                      D_0015ED70_2d2158 * 9.0f, 0.00001f,
+                      (D_0013CAE0_2d2158 & 5) ? 3.5f : 2.5f);
 }
 #endif
 #ifndef NON_MATCHING
