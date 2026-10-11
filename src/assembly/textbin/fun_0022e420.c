@@ -55,11 +55,11 @@ void build_resident_indexed_texture_warp_meshes(void) {
     s32 history_step;
     s32 strip_offset;
     f32 progress;
+    Vec4 *secondary_current;
     Vec4 *primary_current;
+    Vec4 *secondary_next;
     Vec4 *primary_next;
     Vec4 *primary_after_next;
-    Vec4 *secondary_current;
-    Vec4 *secondary_next;
 
     if (game_mode != 6 || level_render_state.state != 4) {
         quad.texture = get_effect_texture(0x13);
