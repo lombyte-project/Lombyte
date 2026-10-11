@@ -465,8 +465,8 @@ extern short scale_frames_l08(int) __asm__("FUN_001f96f8");
 extern void set_moby_animation_l08(void *, int, int, int) __asm__("FUN_00212f90");
 extern void update_motion_l08(void *, void *) __asm__("FUN_L00_0025d458");
 extern void stop_animation_l08(void *, int, int) __asm__("FUN_L00_00257470");
-extern void spawn_effects_l08(float, float, float, float, float, float, float, void *, void *, void *, int, int, int, int, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void spawn_particle_l08(float, void *, int, void *, void *, int, int, void *, void *, void *) __asm__("FUN_L00_00263fd8");
+extern void spawn_effects_l08(void *, void *, void *, float, float, float, float, float, float, float, int, int, int, int, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void spawn_particle_l08(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void play_event_l08(int, int, int) __asm__("FUN_0022db10");
 extern void play_sound_l08(int, int) __asm__("FUN_L00_00263d40");
@@ -482,6 +482,9 @@ extern void compose_rotation_l08(void *, void *, void *) __asm__("FUN_001fa3c0")
 extern void update_linked_l08(void *, void *) __asm__("FUN_L00_0025d538");
 extern int D_L08_001B0CB0[];
 extern int D_001413D0;
+extern int D_L08_0015F5B4 __attribute__((sda));
+extern int D_L08_0015F5B8 __attribute__((sda));
+extern int D_L08_0015F5BC __attribute__((sda));
 extern int D_L08_0015F5B0 __asm__("D_L08_0015F5B0");
 extern int D_L08_0015ED84 __asm__("D_0015ED84");
 extern int D_L08_0015F5B0_flag __asm__("D_L08_0015F5B0");
@@ -490,7 +493,7 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern char D_L08_0015F580[];
 
-void FUN_L08_002d4ca0(char *moby) {
+void FUN_L08_002d4ca0(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *first;
     char *second;
@@ -501,7 +504,6 @@ void FUN_L08_002d4ca0(char *moby) {
         int result;
         float remaining;
     } scratch __attribute__((aligned(16)));
-    char *effect_source;
     float angle;
     float pitch;
     short x, y;
@@ -523,75 +525,81 @@ void FUN_L08_002d4ca0(char *moby) {
         if (owner != 0 && (*(short *)(owner + 0xa6) == 0x1a9 || *(short *)(owner + 0xa6) == 0x47)) hit = 0;
     }
     update_collision_l08(moby, hit, data + 0x20, 0, &scratch.result, &scratch.remaining, 0, 4);
-    effect_source = D_L08_0015F580;
     if (scratch.result != 1 && (unsigned char)moby[0x20] != 0) {
         *(float *)(data + 0x20) -= scratch.remaining;
         if (scratch.remaining != 0.0f) allocate_voice_l08(4, 0, moby);
         if (*(float *)(data + 0x20) > 0.0f) {
-            int frames;
             if (scratch.remaining < 4.0f) {
                 ((unsigned char *)data)[0xa7] = 0x78;
-                frames = (unsigned)(*(unsigned short *)(*(char **)(hit + 0x20) + 0xa6) - 0xb0) < 2 ? 0x3c : 0x1e;
+                /* Retail dereferences hit here even when the collision filter cleared it. */
+                if ((unsigned)(*(unsigned short *)(*(char **)(hit + 0x20) + 0xa6) - 0xb0) < 2) {
+                    *(short *)(data + 0x26) = scale_frames_l08(0x3c);
+                } else {
+                    *(short *)(data + 0x26) = scale_frames_l08(0x1e);
+                }
             } else {
                 ((unsigned char *)data)[0xa7] = scratch.remaining < 6.0f ? 0xc8 : 0xe6;
-                frames = 0x1e;
+                *(short *)(data + 0x26) = scale_frames_l08(0x1e);
             }
-            *(short *)(data + 0x26) = scale_frames_l08(frames);
             if ((unsigned char)moby[0x20] == 0xc && (unsigned char)moby[0x53] != 1)
                 set_moby_animation_l08(moby, 1, 0, 0);
-        } else if ((unsigned char)moby[0x20] == 0x63) {
-            if (D_L08_0015ED84 == 8 && *(int *)(data + 0x184) != 0 && hit != 0 &&
-                *(char **)(hit + 0x20) != 0 && *(short *)(*(char **)(hit + 0x20) + 0xa6) == 0x661) {
-                int index = *(int *)(data + 0x184);
-                if (index == 1) ((int *)&D_L08_0015F5B0)[0] = 1;
-                if (index == 2) ((int *)&D_L08_0015F5B0)[1] = 1;
-                if (index == 3) ((int *)&D_L08_0015F5B0)[2] = 1;
-                if (index == 4) ((int *)&D_L08_0015F5B0)[3] = 1;
-                if (D_L08_0015F5B0_flag && ((int *)&D_L08_0015F5B0)[1] && D_0013D408[13] == 0) {
-                    D_0013D408[13] = 1;
-                    play_event_l08(1, 0, 0);
-                    play_sound_l08(0x53d6, -1);
-                }
-            }
-            qcopy(scratch.position, moby + 0x10);
-            scratch.position[2] += 1.0f;
-            stop_animation_l08(moby, 0, -1);
-            allocate_voice_l08(2, 0, moby);
-            spawn_effects_l08(0.0f, 0.0f, 4.0f, 2.0f, 9.0f, 1.0f, 15.0f,
-                moby, data + 0x40, scratch.position, 0x14, 8, 0x14, -1, 1, 1, -1, 0);
-            spawn_particle_l08(0.0f, moby, 0x6fe, moby + 0x10, moby + 0x40, 0, 0, effect_source, effect_source, effect_source);
-            spawn_particle_l08(0.0f, moby, 0x6fe, moby + 0x10, moby + 0x40, 0, 0, effect_source, effect_source, effect_source);
-            spawn_particle_l08(0.0f, moby, 0x6ff, moby + 0x10, moby + 0x40, 0, 0, effect_source, effect_source, effect_source);
-            spawn_particle_l08(0.0f, moby, 0x6ff, moby + 0x10, moby + 0x40, 0, 0, effect_source, effect_source, effect_source);
-            spawn_particle_l08(0.0f, moby, 0x6ff, moby + 0x10, moby + 0x40, 0, 0, effect_source, effect_source, effect_source);
-            if (*(char **)(data + 0x160)) mark_moby_for_removal(*(char **)(data + 0x160));
-            if (*(char **)(data + 0x164)) mark_moby_for_removal(*(char **)(data + 0x164));
-            mark_moby_for_removal(moby);
-            return;
         } else {
-            qcopy(scratch.position, moby + 0x10);
-            scratch.position[2] += 3.0f;
-            ((unsigned char *)data)[0xa7] = 0xfa;
-            clear_vector_l08(data + 0x120);
-            spawn_effects_l08(0.0f, 0.0f, 4.0f, 2.0f, 9.0f, 1.0f, 15.0f,
-                moby, data + 0x40, scratch.position, 0x14, 8, 0x14, -1, 1, 1, -1, 0);
-            spawn_particle_l08(0.0f, moby, 0x6c0, moby + 0x10, moby + 0x40, 0, 0, effect_source, effect_source, effect_source);
-            spawn_particle_l08(0.0f, moby, 0x6c1, moby + 0x10, moby + 0x40, 0, 0, effect_source, effect_source, effect_source);
-            spawn_particle_l08(0.0f, moby, 0x6c2, moby + 0x10, moby + 0x40, 0, 0, effect_source, effect_source, effect_source);
-            spawn_particle_l08(0.0f, moby, 0x6c3, moby + 0x10, moby + 0x40, 0, 0, effect_source, effect_source, effect_source);
-            spawn_particle_l08(0.0f, moby, 0x6c4, moby + 0x10, moby + 0x40, 0, 0, effect_source, effect_source, effect_source);
-            if ((unsigned char)moby[0x53] != 1) set_moby_animation_l08(moby, 1, 0, 3);
-            moby[0x20] = 0x63;
-            *(float *)(data + 0x20) = 6.0f;
-            *(unsigned short *)(data + 0x3e) &= ~2;
+            if ((unsigned char)moby[0x20] != 0x63) {
+                char *effect_source;
+                qcopy(scratch.position, moby + 0x10);
+                scratch.position[2] += 3.0f;
+                ((unsigned char *)data)[0xa7] = 0xfa;
+                effect_source = D_L08_0015F580;
+                clear_vector_l08(data + 0x120);
+                spawn_effects_l08(moby, data + 0x40, scratch.position,
+                    0.0f, 0.0f, 4.0f, 2.0f, 9.0f, 1.0f, 15.0f, 0x14, 8, 0x14, -1, 1, 1, -1, 0);
+                spawn_particle_l08(moby, 0x6c0, moby + 0x10, moby + 0x40, 0, 0, 0.0f, effect_source, effect_source, effect_source);
+                spawn_particle_l08(moby, 0x6c1, moby + 0x10, moby + 0x40, 0, 0, 0.0f, effect_source, effect_source, effect_source);
+                spawn_particle_l08(moby, 0x6c2, moby + 0x10, moby + 0x40, 0, 0, 0.0f, effect_source, effect_source, effect_source);
+                spawn_particle_l08(moby, 0x6c3, moby + 0x10, moby + 0x40, 0, 0, 0.0f, effect_source, effect_source, effect_source);
+                spawn_particle_l08(moby, 0x6c4, moby + 0x10, moby + 0x40, 0, 0, 0.0f, effect_source, effect_source, effect_source);
+                if ((unsigned char)moby[0x53] != 1) set_moby_animation_l08(moby, 1, 0, 3);
+                moby[0x20] = 0x63;
+                *(float *)(data + 0x20) = 6.0f;
+                *(unsigned short *)(data + 0x3e) &= ~2;
+            } else {
+                char *effect_source;
+                if (D_L08_0015ED84 == 8 && *(int *)(data + 0x184) != 0 && hit != 0 &&
+                    *(char **)(hit + 0x20) != 0 && *(short *)(*(char **)(hit + 0x20) + 0xa6) == 0x661) {
+                    int index = *(int *)(data + 0x184);
+                    if (index == 1) ((int *)&D_L08_0015F5B0)[0] = 1;
+                    if (index == 2) D_L08_0015F5B4 = 1;
+                    if (index == 3) D_L08_0015F5B8 = 1;
+                    if (index == 4) D_L08_0015F5BC = 1;
+                    if (D_L08_0015F5B0_flag && D_L08_0015F5B4 && D_0013D408[13] == 0) {
+                        D_0013D408[13] = 1;
+                        play_event_l08(1, 0, 0);
+                        play_sound_l08(0x53d6, -1);
+                    }
+                }
+                qcopy(scratch.position, moby + 0x10);
+                scratch.position[2] += 1.0f;
+                effect_source = D_L08_0015F580;
+                stop_animation_l08(moby, 0, -1);
+                allocate_voice_l08(2, 0, moby);
+                spawn_effects_l08(moby, data + 0x40, scratch.position,
+                    0.0f, 0.0f, 4.0f, 2.0f, 9.0f, 1.0f, 15.0f, 0x14, 8, 0x14, -1, 1, 1, -1, 0);
+                spawn_particle_l08(moby, 0x6fe, moby + 0x10, moby + 0x40, 0, 0, 0.0f, effect_source, effect_source, effect_source);
+                spawn_particle_l08(moby, 0x6fe, moby + 0x10, moby + 0x40, 0, 0, 0.0f, effect_source, effect_source, effect_source);
+                spawn_particle_l08(moby, 0x6ff, moby + 0x10, moby + 0x40, 0, 0, 0.0f, effect_source, effect_source, effect_source);
+                spawn_particle_l08(moby, 0x6ff, moby + 0x10, moby + 0x40, 0, 0, 0.0f, effect_source, effect_source, effect_source);
+                spawn_particle_l08(moby, 0x6ff, moby + 0x10, moby + 0x40, 0, 0, 0.0f, effect_source, effect_source, effect_source);
+                if (*(char **)(data + 0x160)) mark_moby_for_removal(*(char **)(data + 0x160));
+                if (*(char **)(data + 0x164)) mark_moby_for_removal(*(char **)(data + 0x164));
+                mark_moby_for_removal(moby);
+                return;
+            }
         }
         update_motion_l08(moby, data + 0xa0);
     }
     ((unsigned char *)moby)[0xa4] = 0xff;
-    first = *(char **)(data + 0x160);
-    if (first) ((unsigned char *)first)[0xa4] = 0xff;
-    second = *(char **)(data + 0x164);
-    if (second) ((unsigned char *)second)[0xa4] = 0xff;
+    if (*(char **)(data + 0x160)) ((unsigned char *)*(char **)(data + 0x160))[0xa4] = 0xff;
+    if (*(char **)(data + 0x164)) ((unsigned char *)*(char **)(data + 0x164))[0xa4] = 0xff;
     path = (int *)D_L08_001B0CB0[*(int *)(data + 0x154)];
     activate_effect_l08(100.0f, moby, data + 0xb0, 0, 0, path + 4, *path);
     if (*(int *)(data + 0xf0) == 0) *(int *)(data + 0xf0) = D_001413D0;
