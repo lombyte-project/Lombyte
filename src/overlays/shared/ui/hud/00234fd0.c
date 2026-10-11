@@ -126,19 +126,18 @@ extern int D_L00_0015F728 __attribute__((sda));
 
 void FUN_L00_00235668(int state) {
     int oldState = D_L00_0015F728;
-    int incoming = D_L00_0015FFD8;
     if (state != oldState) {
         int old70, old74, old78, old7C, oldDC, oldE0, oldE8;
         oldState ^= 1;
         old70 = D_L00_0015FA70;
-        D_L00_0015FA70 = incoming;
-        oldDC = D_L00_0015FFDC;
+        D_L00_0015FA70 = D_L00_0015FFD8;
         old74 = D_L00_0015FA74;
+        oldDC = D_L00_0015FFDC;
         D_L00_0015FA74 = oldDC;
         oldE0 = D_L00_0015FFE0;
         old78 = D_L00_0015FA78;
-        oldE8 = D_L00_0015FFE8;
         old7C = D_L00_0015FA7C;
+        oldE8 = D_L00_0015FFE8;
         D_L00_0015F728 = oldState;
         D_L00_0015FFD8 = old70;
         D_L00_0015FFDC = old74;

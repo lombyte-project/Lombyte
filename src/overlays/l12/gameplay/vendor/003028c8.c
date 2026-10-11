@@ -7,7 +7,94 @@
 #include "asm.h"
 #include "rnc/overlay/entities.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003028c8.s", FUN_L12_003028c8);
+#else
+#include "eetypes.h"
+
+typedef struct {
+    u128 vertices[4];
+    int color[4];
+    float uv[4][2];
+    long tag;
+    long texture;
+    long texture_state;
+    long gs_state;
+    char unused[0x150];
+} VendorStripPacket;
+
+extern void FUN_001fa050(void *, void *) __asm__("FUN_001fa050");
+extern void FUN_001fa378(void *, void *, void *) __asm__("FUN_001fa378");
+extern void FUN_001f9a10(void *, void *, void *) __asm__("FUN_001f9a10");
+extern long get_effect_texture_l12(int) __asm__("FUN_001f44b8");
+extern void draw_geometry_quad_l12(void *, void *, int) __asm__("FUN_001f7d30");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern int FUN_001fa6e0(float, int, int) __asm__("FUN_001fa6e0");
+extern float D_L12_001FB510[4][2];
+extern u128 D_L12_001FB530[4];
+extern float D_L12_001FB5B0[2][4];
+#define L12_WORD(address) (*(int *)(address))
+#define L12_FLOAT(address) (*(float *)(address))
+
+void FUN_L12_003028c8(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    float base[16] __attribute__((aligned(16)));
+    float matrices[2][16] __attribute__((aligned(16)));
+    VendorStripPacket packet;
+    u128 position;
+    int i, j, strip;
+
+    FUN_001fa050(base, &moby->rot);
+    for (i = 0; i < 2; i++) {
+        FUN_001fa050(matrices[i], D_L12_001FB5B0[i]);
+        FUN_001fa378(matrices[i], base, matrices[i]);
+        if (!(i & 1) && *(int *)(data + 0x2314) != -1) {
+            struct Moby *other = (struct Moby *)(D_L12_0015FFD8_p + *(int *)(data + 0x2314) * 0x100);
+            position = *(u128 *)&other->pos;
+        } else {
+            position = *(u128 *)&moby->pos;
+        }
+        FUN_001f9a10(&matrices[i][12], &matrices[i][12], &position);
+        matrices[i][15] = 1.0f;
+    }
+    packet.texture = get_effect_texture_l12(14);
+    packet.gs_state = (long)L12_WORD(0x001fb1cc) | (long)L12_WORD(0x001fb1d0) << 2 |
+        (long)L12_WORD(0x001fb1d4) << 4 | (long)L12_WORD(0x001fb1d8) << 6 | 0x8000000000L;
+    packet.texture_state = 0xff9000000260L;
+    packet.tag = 0;
+    for (i = 0; i < 4; i++) packet.uv[i][1] = D_L12_001FB510[i][1];
+    for (strip = 0; strip < 4; strip++) {
+        float fade;
+        float phase = 0.0f;
+        int count;
+        int timer = *(int *)(data + 0x2300 + strip * 4);
+        if (L12_WORD(0x00161e08) < timer) {
+            fade = convert_integer_to_float(timer - L12_WORD(0x00161e08)) /
+                convert_integer_to_float(L12_WORD(0x00161e04) - L12_WORD(0x00161e08));
+        } else {
+            fade = 1.0f - convert_integer_to_float(timer) /
+                convert_integer_to_float(L12_WORD(0x00161e08));
+        }
+        packet.color[0] = packet.color[1] = packet.color[2] = packet.color[3] =
+            FUN_001fa6e0(fade, L12_WORD(0x001fb1ec), L12_WORD(0x001fb1f0));
+        count = *(int *)(data + 0x232c) - 1;
+        for (i = 0; i < count; i++) {
+            phase += L12_FLOAT(0x001fb1f4);
+            if (phase > 1.0f) phase -= 1.0f;
+            for (j = 0; j < 4; j++)
+                packet.uv[j][0] = D_L12_001FB510[j][0] + phase + L12_FLOAT(0x001fb1f8);
+            for (j = 0; j < 4; j++) {
+                int point = i + (j >> 1);
+                FUN_001f9a10(&packet.vertices[j], &D_L12_001FB530[j],
+                    data + strip * 0x460 + point * 0x10);
+            }
+            draw_geometry_quad_l12(&packet, matrices[0], 0);
+            draw_geometry_quad_l12(&packet, matrices[1], 0);
+            count = *(int *)(data + 0x232c) - 1;
+        }
+    }
+}
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00302c58.s", FUN_L12_00302c58);
 #else
@@ -36,16 +123,19 @@ void FUN_L12_00302c58(struct Moby *moby) {
         float *points;
         float *intermediate;
         if (tick_countdown_32_alt((int *)(data + 0x2300 + strip * 4))) {
-            count = *(int *)(data + 0x232c);
-            intermediate = (float *)__builtin_alloca((count & 0x1ffffff) * 16);
+            int vector_count = *(int *)(data + 0x232c);
+            float intermediate_storage[vector_count][4];
+            intermediate = &intermediate_storage[0][0];
             points = (float *)(data + strip * 0x460);
-            for (i = 0; i < *(int *)(data + 0x232c); i++) {
+            i = 0;
+            if (0 < *(int *)(data + 0x232c)) do {
                 clear_u64_value(points);
                 points[3] = 1.0f;
                 points[0] = (float)i * (*(float *)(data + 0x2324) / (float)*(int *)(data + 0x232c));
                 FUN_L00_00257d78(intermediate + i * 4, 0.0f, D_L12_00161E00 * frame_time);
                 points += 4;
-            }
+                i++;
+            } while (i < *(int *)(data + 0x232c));
             i = 1;
             if (1 < *(int *)(data + 0x232c) - 1) do {
                 float *out = (float *)(data + strip * 0x460 + 0x1190 + i * 16 - 16);
@@ -67,7 +157,103 @@ void FUN_L12_00302c58(struct Moby *moby) {
         enqueue_callback_list_1(FUN_L12_003028c8, moby);
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00302f30.s", FUN_L12_00302f30);
+#else
+extern float FUN_001f9e90(float, float);
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9de0(float);
+extern float FUN_001f99c0(float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern void scale_vector_xyz_cf(float, void *, void *) __asm__("FUN_001f9a68");
+extern void FUN_L00_0025b6b8(float, void *, void *, void *);
+extern int FUN_001fa728(float, void *);
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern void FUN_L00_00259888(void *, struct Moby *, int, float, void *);
+extern int FUN_001efa68(void *, void *, int, int, void *);
+extern char D_L12_0013F3D0[];
+
+void FUN_L12_00302f30(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    struct Moby *other;
+    float angle;
+    float phase;
+    float step;
+    float distance;
+    float points[8] __attribute__((aligned(16)));
+    u128 hit[3];
+    int index;
+    int target_index = *(int *)(data + 0x2314);
+
+    if (target_index == -1) return;
+    switch (moby->state) {
+    case 0:
+        {
+            int initial_duration = 0x2d;
+            int final_duration = 0x16;
+            *(int *)0x00161e08 = final_duration;
+            *(int *)0x00161e04 = initial_duration;
+        }
+        *(int *)(data + 0x231c) = -1;
+        *(int *)(data + 0x2304) = 0xb;
+        *(int *)(data + 0x2308) = 0x17;
+        *(int *)(data + 0x230c) = 0x22;
+        *(int *)(data + 0x2300) = 0;
+        moby->state = 1;
+        return;
+    case 1:
+        break;
+    default:
+        return;
+    }
+    other = (struct Moby *)(((u32)target_index << 8) + (u32)D_L12_0015FFD8_p);
+    moby->rot.z = FUN_001f9e90(other->pos.x - moby->pos.x,
+                                other->pos.y - moby->pos.y);
+    other = (struct Moby *)(D_L12_0015FFD8_p + *(int *)(data + 0x2314) * 0x100);
+    distance = FUN_001f9b48(&moby->pos, &other->pos);
+    step = *(float *)(data + 0x2328) * 0.017453292f;
+    step = step * frame_time;
+    *(float *)(data + 0x2324) = distance;
+    angle = fast_add_rotations(*(float *)(data + 0x2318), step);
+    index = *(int *)(data + 0x2310);
+    *(float *)(data + 0x2318) = angle;
+    phase = FUN_001f9de0(angle);
+    if (1.5707964f < angle && angle < 3.1415927f) {
+        phase = 2.0f - phase;
+    }
+    if (-3.1415927f < angle && angle < -1.5707964f) {
+        phase = 2.0f - phase;
+    }
+    phase = phase * 0.5f + 0.5f;
+    if (1.0f < phase) phase -= 2.0f;
+    phase = FUN_001f99c0(phase);
+    *(u128 *)&points[0] = *(u128 *)(*(int *)(0x001b0930 + index * 4) + 0x10);
+    *(u128 *)&points[4] = *(u128 *)(*(int *)(0x001b0930 + index * 4) + 0x20);
+    FUN_L00_0025b6b8(phase, &moby->pos, points, points + 4);
+    if (FUN_001f9b80(&moby->pos, D_L12_0013F3D0) > 64.0f) return;
+
+    if (moby->unk31 == 0) {
+        other = (struct Moby *)(D_L12_0015FFD8_p + *(int *)(data + 0x2314) * 0x100);
+        if (other->unk31 == 0) {
+            FUN_001f9a10(points, &moby->pos, &other->pos);
+            scale_vector_xyz_cf(0.5f, points, points);
+            points[3] = 16.0f;
+            if (FUN_001fa728(32.0f, points) == -1) return;
+        }
+    }
+    if (*(int *)(data + 0x2330) != -1 &&
+        is_point_inside_clip_volume(D_L12_00167240, *(int *)(data + 0x2330))) return;
+    if (*(int *)(data + 0x2320) == 0) return;
+    FUN_L12_00302c58(moby);
+    if (*(int *)(data + 0x2314) == -1) return;
+    *(u128 *)&points[0] = *(u128 *)&moby->pos;
+    other = (struct Moby *)(D_L12_0015FFD8_p + *(int *)(data + 0x2314) * 0x100);
+    *(u128 *)&points[4] = *(u128 *)&other->pos;
+    FUN_L00_00259888(hit, moby, 0x10001, 1.0f, (void *)0x0015f580);
+    FUN_001efa68(points, points + 4, 0, 0, hit);
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -448,7 +634,7 @@ extern unsigned char *moby_bytes __asm__("D_L12_0015FFD8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L00_002502a0(int);
-extern void FUN_L12_00308350(void);
+extern void FUN_L12_00308350(struct Moby *);
 
 /* Pvars: d[0] is the moby to watch, d[1] the voice slot held for this moby. */
 void FUN_L12_003081b0(struct Moby *m) {
@@ -496,7 +682,96 @@ void FUN_L12_003081b0(struct Moby *m) {
         break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308350.s", FUN_L12_00308350);
+#else
+#include "eetypes.h"
+
+typedef struct {
+    u128 vertices[4];
+    int color[4];
+    float uv[4][2];
+    long tag;
+    long texture;
+    long texture_state;
+    long gs_state;
+} VendorDrawPacket;
+
+extern int D_L12_00161FBC __attribute__((sda));
+extern int D_L12_00161FC0 __attribute__((sda));
+extern int D_L12_00161FC4 __attribute__((sda));
+extern int D_L12_00161FC8 __attribute__((sda));
+extern int D_L12_00161FCC __attribute__((sda));
+extern int D_L12_00161FD0 __attribute__((sda));
+extern int D_L12_00161FD4 __attribute__((sda));
+extern int D_L12_00161FD8 __attribute__((sda));
+extern unsigned int D_L12_00161F90 __attribute__((sda));
+extern unsigned int D_L12_00161F94 __attribute__((sda));
+extern float D_L12_001FB6D0[4][2];
+extern u128 D_L12_001FB6F0[4];
+extern u128 D_L12_001FB730[4];
+extern void copy_moby_matrix(void *, void *) __asm__("FUN_001fa298");
+extern long get_effect_texture_l12(int) __asm__("FUN_001f44b8");
+extern void draw_geometry_quad_l12(void *, void *, int) __asm__("FUN_001f7d30");
+
+void FUN_L12_00308350(struct Moby *m) {
+    VendorDrawPacket first, second;
+    float matrix[4][4] __attribute__((aligned(16)));
+    int i, j;
+    long flags;
+
+    copy_moby_matrix(matrix, &m->unkC0);
+    *(u128 *)&matrix[3] = *(u128 *)&m->pos;
+    matrix[3][3] = 1.0f;
+    first.texture = get_effect_texture_l12(0xe);
+    flags = (long)D_L12_00161FBC | (long)D_L12_00161FC0 << 2 |
+            (long)D_L12_00161FC4 << 4 | (long)D_L12_00161FC8 << 6 |
+            0x8000000000L;
+    first.gs_state = flags;
+    flags = (long)D_L12_00161FCC | (long)D_L12_00161FD0 << 2 |
+            (long)D_L12_00161FD4 << 4 | (long)D_L12_00161FD8 << 6 |
+            0x8000000000L;
+    second.gs_state = flags;
+    first.texture_state = 0xFF9000000260L;
+    second.texture_state = 0xFF9000000260L;
+    second.texture = first.texture;
+    first.tag = second.tag = 0;
+    first.color[0] = first.color[1] = first.color[2] = first.color[3] = D_L12_00161F90;
+    second.color[0] = second.color[1] = second.color[2] = second.color[3] = D_L12_00161F94;
+    j = 0;
+    do {
+        first.vertices[j] = D_L12_001FB730[j];
+        second.vertices[j] = D_L12_001FB6F0[j];
+        first.uv[j][0] = second.uv[j][0] = D_L12_001FB6D0[j][0];
+        first.uv[j][1] = second.uv[j][1] = D_L12_001FB6D0[j][1];
+        j++;
+    } while (j < 4);
+    i = 0;
+    do {
+        float x_offset;
+        float jitter = 0.0f;
+        int row;
+        i++;
+        x_offset = random_float_between(-0.5f, 0.5f);
+        for (j = 0; j < 4; j++) {
+            ((float *)&first.vertices[j])[2] += 1.0f;
+            ((float *)&second.vertices[j])[2] += 1.0f;
+            first.uv[j][0] = D_L12_001FB6D0[j][0] + x_offset;
+            first.uv[j][1] = D_L12_001FB6D0[j][1];
+        }
+        for (row = -3; row < 3; row++) {
+            float x = (float)row + jitter;
+            ((float *)&first.vertices[0])[1] = x;
+            ((float *)&first.vertices[1])[1] = x;
+            if (row < 4) jitter = random_float_between(-0.2f, 0.2f);
+            x = (float)(row + 1) + jitter;
+            ((float *)&first.vertices[2])[1] = x;
+            ((float *)&first.vertices[3])[1] = x;
+            draw_geometry_quad_l12(&first, matrix, 0);
+        }
+    } while (i < 5);
+}
+#endif
 #include "sda.h"
 
 /* Vendor-counter moby update: once the shared block is ready, latch its data and copy two vectors. */
@@ -577,8 +852,8 @@ void FUN_L12_003094a0(struct Moby *moby) {
 
         phase = D_L12_0016CCE0.phase;
         switch (phase) {
-        case 1: index = 2; break;
         case 7: index = 0; break;
+        case 1: index = 2; break;
         default: return;
         }
         FUN_L00_002637f8(D_L12_0016CCE0.mobys[index]);

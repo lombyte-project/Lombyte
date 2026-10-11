@@ -62,16 +62,13 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     active_fs_aa_buffer->giftag0.REGS0 = 0xE;
     sceGsSetDefDrawEnv(&active_fs_aa_buffer->draw1, fs_aa_buffer.storage_psm,
                        fs_aa_buffer.storage_width, fs_aa_buffer.storage_height, 0, 0);
-    active_fs_aa_buffer->draw1.zbuf1 = (u64)1 << 32;
+    *(volatile u64 *)&active_fs_aa_buffer->draw1.zbuf1 = (u64)1 << 32;
     active_fs_aa_buffer->draw1.frame1.FBP = fs_aa_buffer.fbp1;
     *(volatile u128 *)&active_fs_aa_buffer->giftag1 = 0;
     active_fs_aa_buffer->giftag1.NLOOP = 8;
     active_fs_aa_buffer->giftag1.EOP = 1;
     active_fs_aa_buffer->giftag1.NREG = 1;
     active_fs_aa_buffer->giftag1.REGS0 = 0xE;
-    packet_base = fs_aa_transfer_packet;
-    packet_word = packet_base + 12;
-
     fs_aa_transfer_packet[0] = 0x408B400000000001;
     fs_aa_transfer_packet[1] = 0xEEEE;
     fs_aa_transfer_packet[2] = 0x30000;
@@ -86,11 +83,13 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     fs_aa_transfer_packet[9] = 6;
     fs_aa_transfer_packet[10] = 0x4400000000008010;
     fs_aa_transfer_packet[11] = 0x5353;
+    packet_base = fs_aa_transfer_packet;
+    packet_word = packet_base + 12;
     strip_index = 0;
     do {
         *packet_word++ = strip_index * active_fs_aa_buffer->display_width;
-        *packet_word++ = (0x8000 + strip_index * active_fs_aa_buffer->storage_width -
-                          (active_fs_aa_buffer->storage_width << 3)) |
+        *packet_word++ = (strip_index * active_fs_aa_buffer->storage_width +
+                          (0x8000 - (active_fs_aa_buffer->storage_width << 3))) |
                          ((u64)(0x7FF8 - (active_fs_aa_buffer->storage_height << 3)) << 16);
         *packet_word++ = (strip_index + 1) * active_fs_aa_buffer->display_width |
                          ((u64)active_fs_aa_buffer->display_height << 20);
@@ -109,7 +108,6 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
 
     fs_aa_resample_packet[0] = 0x308B400000000001;
     fs_aa_resample_packet[1] = 0xEEE;
-    packet_word = &fs_aa_resample_packet[10];
     fs_aa_resample_packet[2] = 0x30000;
     fs_aa_resample_packet[3] = 0x47;
     fs_aa_resample_packet[4] = 0x100000261;
@@ -120,6 +118,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     fs_aa_resample_packet[7] = 6;
     fs_aa_resample_packet[8] = 0x4400000000008010;
     fs_aa_resample_packet[9] = 0x5353;
+    packet_word = &fs_aa_resample_packet[10];
     left_x = 0x6FF8;
     next_x = 0x71F8;
     for (strip_index = 0; strip_index < 16; strip_index++) {

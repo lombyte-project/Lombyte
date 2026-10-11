@@ -1172,7 +1172,7 @@ void FUN_L10_002e5968(struct Moby *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e5be0.s", FUN_L10_002e5be0);
 #else
 extern s32 D_L10_00161EF0 __attribute__((sda));
-extern s32 D_L10_00161EF4 __attribute__((sda));
+extern volatile s32 D_L10_00161EF4 __attribute__((sda));
 extern f32 D_L10_00161EF8 __attribute__((sda));
 extern f32 D_L10_00161EFC __attribute__((sda));
 extern f32 D_L10_00161F00 __attribute__((sda));
@@ -1204,12 +1204,11 @@ void FUN_L10_002e5be0(struct Moby *moby) {
             s32 color;
             s32 fade_color;
             s32 first_color;
-            s32 second_color;
             s32 life;
             s32 variant;
 
             variant = random_integer_below(100) < D_L10_00161F04;
-            position.q = moby_position->q;
+            position = *moby_position;
             offset.f[0] = fast_cos(fast_add_rotations(moby->rot.z, 1.5707964f)) *
                             random_float_between(-pvars[4], pvars[4]);
             offset.f[1] = fast_sin(fast_add_rotations(moby->rot.z, 1.5707964f)) *
@@ -1235,15 +1234,14 @@ void FUN_L10_002e5be0(struct Moby *moby) {
                 lower = 0.8f;
                 upper = 1.2f;
             }
+            ++i;
             amount = pvars[1] * random_float_between(lower, upper);
             first_color = D_L10_00161EF0;
-            second_color = D_L10_00161EF4;
             color = fast_tween_color(random_float_between(0.5f, 1.0f),
-                                     first_color, second_color);
+                                     first_color, D_L10_00161EF4);
             fade_color = fast_tween_color(random_float_between(0.25f, 0.5f),
-                                          second_color, second_color & 0xff000000);
+                                          D_L10_00161EF4, D_L10_00161EF4 & 0xff000000);
             life = truncate_float_to_s32(multiply_global_factor_ed64(pvars[2] * 60.0f));
-            ++i;
             FUN_L00_002738e8(amount, pvars[0], D_L10_00161F00 * frame_time_sq,
                                &position, &velocity, life, color, fade_color, variant);
         } while (i < ((s32 *)pvars)[3]);

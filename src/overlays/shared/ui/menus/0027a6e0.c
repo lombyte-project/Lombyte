@@ -18,7 +18,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002831c0.s", FUN_L00_002831c0);
 #include "rnc/input/pad_state.h"
 
 extern struct PadState D_0013C940;
-#define D_0015EF78 (*(volatile s32 *)0x0015ef78)
+#define D_0015EF78 (*(s32 *)0x0015ef78)
 extern s16 D_L00_001BA4A8[];
 extern u8 D_L00_001B9BA0[];
 extern u8 D_0013D4E8[];
@@ -37,10 +37,7 @@ void FUN_L00_002831c0(void) {
     s32 index;
     s32 matched;
 
-    if ((D_0013C940.held_unmasked & 15) != 6) {
-        D_0015EF78 = 0;
-        return;
-    }
+    if (((*(u64 *)&D_0013C940.held_unmasked) & 15) == 6) {
     pressed = D_0013C940.pressed_unmasked;
     if (!(pressed & 0xF0A0)) return;
     count = D_0015EF78;
@@ -58,12 +55,14 @@ void FUN_L00_002831c0(void) {
     for (index = 2; index < 0x93; index++) {
         if (D_L00_001BA4A8[0] == D_L00_001B9BA0[index & 0xff]) {
             matched = 1;
-            for (count = 1; count < 20; count++) {
+            count = 1;
+            do {
                 if (D_L00_001BA4A8[count] != D_L00_001B9BA0[(index * count + index) & 0xff]) {
                     matched = 0;
                     break;
                 }
-            }
+                count++;
+            } while (count < 20);
             if (matched) {
                 code = index - 2;
                 break;
@@ -74,11 +73,11 @@ void FUN_L00_002831c0(void) {
     if (code < 0x25) {
         D_0013D4E8[code] = 1;
         D_0013D4C0[code] = 1;
-    } else if ((u32)(code - 0x25) < 0x12) {
+    } else if (code < 0x37) {
         FUN_L00_002607d0(code - 0x24);
-    } else if ((u32)(code - 0x37) < 6) {
+    } else if (code < 0x3d) {
         D_0013D388[code - 0x37] = 1;
-    } else if ((u32)(code - 0x3d) < 0x1e) {
+    } else if (code < 0x5b) {
         u8 *flag = &D_0013D408[code - 0x3d];
         if (!*flag) {
             *flag = 1;
@@ -86,5 +85,6 @@ void FUN_L00_002831c0(void) {
             FUN_L00_00263d40(0x53d6, -1);
         }
     }
+    } else D_0015EF78 = 0;
 }
 #endif

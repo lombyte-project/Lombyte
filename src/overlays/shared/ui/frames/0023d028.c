@@ -65,10 +65,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023d198.s", FUN_L00_0023d198);
 void FUN_L00_00260860_23d028(int, int) __asm__("FUN_L00_00260860");
 void FUN_L00_0023d3d8(int i) __asm__("FUN_L00_0023d3d8");
 void FUN_L00_0023d198(void) {
-    int i, j;
+    int j;
     int item;
     unsigned char entry;
     if (current_level_index >= 19) {
+        int i;
         for (i = 0; i < 37; i++) {
             item_available[i] = 1;
             D_0013D4E8[i] = 1;
@@ -86,14 +87,15 @@ void FUN_L00_0023d198(void) {
         D_0015EDD0[9] = 0x59;
         D_0015EDD0[10] = 0x58;
         D_0015EDD0[11] = 0x53;
-        D_00141EA0[7] = 19;
         D_00141EA0[1] = 12;
         D_00141EA0[2] = 13;
         D_00141EA0[3] = 11;
         D_00141EA0[4] = 17;
         D_00141EA0[5] = 10;
         D_00141EA0[6] = 16;
+        D_00141EA0[7] = 19;
     } else {
+        int i;
         if (item_available[10] == 0) {
             FUN_L00_00260860_23d028(10, 1);
             D_0015EDD0[0] = 0x4A;

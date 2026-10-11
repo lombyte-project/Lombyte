@@ -418,12 +418,10 @@ float FUN_L01_0028bb90(T_28b828 *path, int particles, void *moby, float a, float
     int savedIndex = *(int *)path;
     int index;
     float total = 0.0f;
-    int emitParticles;
 
     *(int *)path = 0;
     nextNode.q = *(OvlQuad *)((char *)path->f10 + 0x10);
-    emitParticles = particles;
-    if (emitParticles) {
+    if (particles) {
         FUN_L01_00285768(0.666f, &nextNode, (int)moby, 0, 0x80101080, 0x7f, -1, 0xff);
     }
     FUN_L01_0028b8c8(&nextTangent, (int *)path, 0, a, b);
@@ -436,7 +434,7 @@ float FUN_L01_0028bb90(T_28b828 *path, int particles, void *moby, float a, float
         int nextIndex;
         currentNode.q = nextNode.q;
         previousTangent.q = nextTangent.q;
-        if (emitParticles) {
+        if (particles) {
             FUN_L01_00285768(1.0f, &currentNode, (int)moby, index % 15 + 2, 0x80108010, 0x7f, -1, 0xff);
         }
         t = 0.05f;
@@ -448,7 +446,7 @@ float FUN_L01_0028bb90(T_28b828 *path, int particles, void *moby, float a, float
         previousPoint.q = currentNode.q;
         step = t;
         do {
-            if (emitParticles) {
+            if (particles) {
                 FUN_L01_00285768(0.2f, &previousPoint, (int)moby, 0, 0x80404080, 0x7f, -1, 0xff);
             }
             FUN_L01_0028ba80(t, &point, &currentNode, &nextNode, &previousTangent, &nextTangent);
@@ -457,7 +455,10 @@ float FUN_L01_0028bb90(T_28b828 *path, int particles, void *moby, float a, float
             previousPoint.q = point.q;
         } while (t <= 1.0f);
         total += segmentLength;
-        *(float *)((char *)path->f10 + index * 16 + 0x1c) = segmentLength;
+        {
+            char *nodeData = (char *)path->f10;
+            *(float *)(nodeData + (index << 4) + 0x1c) = segmentLength;
+        }
         index++;
     }
     *(int *)path = savedIndex;

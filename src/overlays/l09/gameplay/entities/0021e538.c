@@ -4,7 +4,96 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0021e560.s", FUN_L09_0021e560);
+#else
+extern int *D_L09_001611C0;
+extern int D_L09_0015F420;
+extern unsigned char D_L09_0016D300[];
+extern u64 FUN_001f44b8(int);
+extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int);
+extern void FUN_00233980(int, u64);
+typedef struct {
+    char unused[8];
+    unsigned short first;
+    unsigned short second;
+    char tail[4];
+} TextureEntry;
+
+void FUN_L09_0021e560(int tex0, int tex1) {
+    int *packet;
+    u64 *words;
+    if (tex0 == tex1) {
+        packet = D_L09_001611C0;
+        D_L09_001611C0[0] = 0x10000002;
+        D_L09_001611C0[1] = 0;
+        D_L09_001611C0[2] = 0;
+        D_L09_001611C0[3] = 0x50000002;
+        words = (u64 *)(packet + 4);
+        D_L09_001611C0 = packet + 4;
+        words[0] = 0x1000000000008001ULL;
+        words[1] = 0x0eeeeeeeULL;
+        words[2] = FUN_001f44b8(tex1);
+        words[3] = 6;
+        D_L09_001611C0 = packet + 12;
+    } else {
+        TextureEntry *a = (TextureEntry *)D_L09_0016D300 + tex0;
+        TextureEntry *b = (TextureEntry *)D_L09_0016D300 + tex1;
+        int base = D_L09_0015F420;
+        u64 texture_address;
+        u64 *data;
+        *(u64 *)0x161fc0 = 0x0800000000000400ULL;
+        *(u64 *)0x161fc8 = 0;
+        FUN_L02_0024fca0((void *)0x161fd0,
+                          (char *)(base + a->first * 16),
+                          (char *)(base + a->second * 16),
+                          (char *)(base + b->first * 16),
+                          (char *)(base + b->second * 16),
+                          0x1000);
+        packet = D_L09_001611C0;
+        D_L09_001611C0[0] = 0x10000006;
+        D_L09_001611C0[1] = 0;
+        D_L09_001611C0[2] = 0;
+        D_L09_001611C0[3] = 0x50000006;
+        data = (u64 *)(packet + 4);
+        D_L09_001611C0 = packet + 4;
+        data[0] = 0x5000000000008001ULL;
+        data[1] = 0x0eeeeeeeULL;
+        texture_address = (u64)(long)(gs_texture_allocation_cursor >> 8) | 0x598100000ULL;
+        data[2] = texture_address;
+        data[3] = 6;
+        data[4] = ((u64)((long)gs_texture_allocation_cursor >> 8) << 32) | 0x1000000000000ULL;
+        data[5] = 0x50;
+        data[6] = 0;
+        data[7] = 0x51;
+        data[8] = 0x4000000040ULL;
+        data[9] = 0x52;
+        data[10] = 0;
+        data[11] = 0x53;
+        D_L09_001611C0 = packet + 28;
+        packet = D_L09_001611C0;
+        packet[0] = 0x30000401;
+        packet[1] = 0x161fc0;
+        packet[2] = 0;
+        packet[3] = 0x50000401;
+        D_L09_001611C0 = packet + 4;
+        packet = D_L09_001611C0;
+        packet[0] = 0x10000002;
+        packet[1] = 0;
+        packet[2] = 0;
+        packet[3] = 0x50000002;
+        D_L09_001611C0 = packet + 4;
+        data = (u64 *)(packet + 4);
+        data[0] = 0x1000000000008001ULL;
+        data[1] = 0xe;
+        data[2] = 0;
+        data[3] = 0x3f;
+        D_L09_001611C0 = packet + 12;
+        FUN_00233980(7, texture_address);
+        gs_texture_allocation_cursor += 0x4000;
+    }
+}
+#endif
 
 #define NOT_SDA
 

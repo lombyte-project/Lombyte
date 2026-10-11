@@ -46,5 +46,130 @@ void FUN_L05_00262ae8(HudElemX *e) {
     }
     FUN_L00_00235c80(e);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00262b58.s", FUN_L05_00262b58);
+#else
+extern void approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 D_001413D4;
+extern s16 D_0013F65E;
+extern s32 D_0013F650;
+extern s32 D_0013FA30[4];
+extern s32 D_0013FA40;
+extern s32 D_0013FA5C;
+extern s32 D_0013FBB4;
+extern s32 D_0013FBF8;
+extern s32 D_L05_0015FAD4;
+extern s32 D_L05_0015FAD8;
+extern s32 D_L05_0015FAE0[4];
+extern s32 D_L05_0015FAEC;
+extern s32 D_L05_0015FAF0;
+extern s32 D_L05_0015FAF4;
+extern s32 D_L05_0015FAF8;
+extern s32 D_L05_0015FB00;
+extern u8 D_L05_0015F87C __attribute__((sda));
+
+typedef struct {
+    u8 pad0[0xC];
+    s32 *value;
+    u8 pad1[0x70 - 0x10];
+    u8 timer;
+    u8 delay;
+    u8 state;
+    u8 pad2;
+    s32 smoothed;
+} HudCounter;
+
+void FUN_L05_00262b58(HudCounter *e) {
+    f32 value;
+    s32 i;
+    s32 *src;
+    s32 *dst;
+    s32 limit;
+    u8 *counter = &e->timer;
+
+    value = (f32)e->smoothed;
+    approach_value(&value, (f32)*e->value, 6.0f);
+    e->smoothed = truncate_float_to_s32(value);
+
+    if (counter[2] == 1) goto state_one;
+    if (counter[2] < 2) {
+        if (counter[2] != 0) return;
+        if (D_0013F65E < 6 || (f32)D_0013FA5C < 1.0f) return;
+        D_L05_0015FAD4 = D_0013FA5C;
+        D_L05_0015FAD8 = 0;
+        i = 3;
+        dst = &D_L05_0015FAEC;
+        do { *dst-- = 0; } while (--i >= 0);
+        counter[2] = 1;
+        counter[0] = 0;
+        counter[1] = D_L05_0015F87C;
+        return;
+    }
+    if (counter[2] > 3) return;
+    goto tail;
+state_one:
+        if (counter[0] < 10) counter[0]++;
+        if (counter[1] != 0) counter[1]--;
+        D_L05_0015FAD8 = D_0013FA40;
+        i = 3;
+        src = D_0013FA30;
+        dst = D_L05_0015FAE0;
+        do { *dst++ = *src++; } while (--i >= 0);
+        if (D_L05_0015FAD4 < D_0013FA5C) {
+            D_L05_0015FAD4 = D_0013FA5C;
+            counter[1] = D_L05_0015F87C;
+        }
+        if (D_0013F650 == 0) {
+            if ((u32)(D_001413D4 - 0x6d) > 2) return;
+            D_L05_0015FB00 = 0;
+        } else {
+            D_L05_0015FB00 = 0;
+        }
+        D_0013FA5C = 0;
+        D_0013FA40 = 0;
+        i = 3;
+        dst = &D_0013FA30[3];
+        do { *dst-- = 0; } while (--i >= 0);
+        i = 2;
+        dst = (s32 *)&D_0013FA5C - 1;
+        do { *dst-- = 0; } while (--i >= 0);
+        if (D_001413D4 == 0x6b) {
+            if (D_L05_0015FAD8 > 2) {
+                D_L05_0015FAFC = D_L05_0015FAF8;
+                D_L05_0015FAF8 = D_L05_0015FAF4;
+                D_L05_0015FAF4 = D_L05_0015FAF0;
+                D_L05_0015FAF0 = -1;
+            }
+            counter[2] = 3;
+            counter[1] = D_L05_0015F87C;
+            counter[0] = scale_game_frames(0x78);
+        } else {
+            counter[2] = 2;
+            counter[1] = D_L05_0015F87C;
+            counter[0] = scale_game_frames(0x3c);
+        }
+        return;
+tail:
+
+    if (counter[0] == 0) {
+        D_L05_0015FB00 = 0;
+        D_L05_0015FAD4 = 0;
+        D_L05_0015FAD8 = 0;
+        i = 3;
+        dst = &D_L05_0015FAEC;
+        do { *dst-- = 0; } while (--i >= 0);
+        counter[2] = 0;
+        counter[0] = 0;
+    } else if (counter[2] == 3 && counter[0] == scale_game_frames(0x6e)) {
+        D_0013FBF8 += D_L05_0015FB00;
+        D_0013FBB4 += D_L05_0015FB00 * 5;
+        limit = (s32)((f32)scale_game_frames(0x11) * 60.0f);
+        if (D_0013FBB4 > limit) {
+            D_0013FBB4 = (s32)((f32)scale_game_frames(0x11) * 60.0f);
+        }
+    }
+    counter[0]--;
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00262f50.s", FUN_L05_00262f50);

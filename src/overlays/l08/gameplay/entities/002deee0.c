@@ -516,7 +516,7 @@ void FUN_L08_002e2078(struct Moby *m) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2250.s", FUN_L08_002e2250);
 #else
-extern int FUN_L00_0025a420(struct Moby *, int, int);
+extern int target_board_check_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -526,19 +526,19 @@ extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN
 extern float D_0015ED6C;
 
 void FUN_L08_002e2250(struct Moby *moby) {
+    u8 mark = 0xff;
+    int selected = 0;
     TargetBoardVars *vars = (TargetBoardVars *)moby->pvars;
     TargetSlot *slots = vars->slots;
     TargetSlot *slot = slots;
     int i = 0;
     int hits = 0;
-    int selected = 0;
     int sound = -1;
     int total;
-    u8 mark = 0xff;
 
     do {
         if (slot->moby != 0) {
-            if (FUN_L00_0025a420(slot->moby, 0x10000, 0) != 0) {
+            if (target_board_check_hit(slot->moby, 0x10000, 0) != 0) {
                 if (i < 7) {
                     if (hits < 1) {
                         hits = 1;
@@ -564,9 +564,8 @@ mark_hit:
         i++;
         slot++;
     } while (i < 34);
-    total = (u16)vars->points + hits;
-    vars->points = total;
-    total = (s16)total;
+    vars->points = (u16)vars->points + hits;
+    total = vars->points;
     if (total >= 8) {
         vars->points = total - (total / 8) * 8;
         sound = 0;
@@ -950,7 +949,97 @@ void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
     normalize_vector_xyz(v, dir, sz);
     add_vector_xyz(out, out, v);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e5188.s", FUN_L08_002e5188);
+#else
+typedef struct {
+    s64 vertices[4];
+    u32 colors[4];
+    u32 texture_coordinates[4];
+} Quad_5188;
+
+extern void add_vector_xyz_5188(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz_5188(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz_5188(void *, void *, float) __asm__("FUN_001f9a68");
+extern void normalize_vector_xyz_5188(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float vector_length_5188(void *) __asm__("FUN_001f9af0");
+extern void FUN_001f9d20_5188(void *, void *, void *) __asm__("FUN_001f9d20");
+extern float fast_cos_5188(float) __asm__("FUN_001f9dc8");
+extern float fast_sin_5188(float) __asm__("FUN_001f9de0");
+extern float float_from_int_5188(int) __asm__("FUN_001fa6c0");
+extern int truncate_float_to_s32_5188(float) __asm__("FUN_001fa6d0");
+extern float add_angle_5188(float, float) __asm__("FUN_001fa580");
+extern void vu1_add_g_sregister_5188(int, u64) __asm__("FUN_00233980");
+extern u64 get_effect_texture_5188(int) __asm__("FUN_001f44b8");
+extern void draw_geometry_quad_5188(void *, void *, void *, u64, int) __asm__("FUN_L02_0020bc88");
+extern float D_L08_00161C5C __attribute__((sda));
+extern float D_L08_00161C60 __attribute__((sda));
+
+void FUN_L08_002e5188(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    Quad_5188 quad;
+    float pos[4];
+    float direction[4];
+    float length;
+    float radius;
+    float x0, x1, x2, x3, y0, y1, y2, y3;
+    int base_x, base_y;
+    s64 base_z;
+
+    if (*(short *)(data + 0x6c) == 0) return;
+
+    qcopy(pos, &moby->pos);
+    normalize_vector_xyz_5188(direction, (char *)moby + 0xe0, D_L08_00161C5C);
+    add_vector_xyz_5188(pos, pos, direction);
+    normalize_vector_xyz_5188(direction, (char *)moby + 0xc0, D_L08_00161C60);
+    add_vector_xyz_5188(pos, pos, direction);
+    subtract_vector_xyz_5188(pos, pos, D_L08_001675C0);
+    length = vector_length_5188(pos);
+    pos[3] = 1.0f;
+    scale_vector_xyz_5188(pos, pos, 1024.0f);
+    FUN_001f9d20_5188(pos, pos, D_L08_001675C0 - 0x100);
+    scale_vector_xyz_5188(pos, pos, *(float *)0x0016d450 / pos[3]);
+
+    base_x = truncate_float_to_s32_5188(pos[0] * 16.0f) + 0x8000;
+    base_y = (truncate_float_to_s32_5188(pos[1] * 16.0f) + 0x8000) << 16;
+    base_z = (s64)truncate_float_to_s32_5188(pos[2] * 0.9997f + *(float *)0x0016d3e8) << 32;
+    if (length > 16.0f) length = 16.0f;
+    else if (length < 4.0f) length = 4.0f;
+    radius = float_from_int_5188(*(signed char *)(data + 0x7b) + 16) * 0.015625f * (50.0f - length * 2.5f);
+    x0 = radius * fast_sin_5188(*(float *)(data + 0x74));
+    y0 = radius * fast_cos_5188(*(float *)(data + 0x74));
+    x1 = radius * fast_sin_5188(add_angle_5188(*(float *)(data + 0x74), 1.57079637f));
+    y1 = radius * fast_cos_5188(add_angle_5188(*(float *)(data + 0x74), 1.57079637f));
+    x2 = radius * fast_sin_5188(add_angle_5188(*(float *)(data + 0x74), 4.71238899f));
+    y2 = radius * fast_cos_5188(add_angle_5188(*(float *)(data + 0x74), 4.71238899f));
+    x3 = radius * fast_sin_5188(add_angle_5188(*(float *)(data + 0x74), 3.14159274f));
+    y3 = radius * fast_cos_5188(add_angle_5188(*(float *)(data + 0x74), 3.14159274f));
+
+    quad.texture_coordinates[0] = 0;
+    quad.texture_coordinates[1] = 0x200;
+    quad.texture_coordinates[2] = 0x2000000;
+    quad.texture_coordinates[3] = 0x2000200;
+    quad.colors[0] = *(u32 *)(data + 0x78);
+    quad.colors[3] = quad.colors[0];
+    quad.colors[2] = quad.colors[0];
+    quad.colors[1] = quad.colors[0];
+    quad.vertices[0] = base_z;
+    quad.vertices[3] = base_z;
+    quad.vertices[2] = base_z;
+    quad.vertices[1] = base_z;
+    quad.vertices[0] += (truncate_float_to_s32_5188(y0) << 20) + base_y;
+    quad.vertices[0] += (truncate_float_to_s32_5188(x0) << 4) + base_x;
+    quad.vertices[1] += (truncate_float_to_s32_5188(y1) << 20) + base_y;
+    quad.vertices[1] += (truncate_float_to_s32_5188(x1) << 4) + base_x;
+    quad.vertices[2] += (truncate_float_to_s32_5188(y2) << 20) + base_y;
+    quad.vertices[2] += (truncate_float_to_s32_5188(x2) << 4) + base_x;
+    quad.vertices[3] += (truncate_float_to_s32_5188(y3) << 20) + base_y;
+    quad.vertices[3] += (truncate_float_to_s32_5188(x3) << 4) + base_x;
+    vu1_add_g_sregister_5188(0x42, 0x8000000048LL);
+    draw_geometry_quad_5188(quad.vertices, quad.texture_coordinates, quad.colors, get_effect_texture_5188(0x13), 1);
+    vu1_add_g_sregister_5188(0x42, 0x8000000044LL);
+}
+#endif
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9CB0), where it is exact; names translated to the US level program. */
 
 typedef struct Moby Moby;
@@ -1303,7 +1392,6 @@ void FUN_L08_002e9558(char *moby) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9758.s", FUN_L08_002e9758);
 #else
-extern int FUN_L00_0025a420(struct Moby *, int, int);
 extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");

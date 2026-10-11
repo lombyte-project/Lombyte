@@ -290,7 +290,139 @@ void FUN_L01_002e6518(SplashMoby_u *m, u128 *origin) {
         FUN_L00_0026ced0(&tmp, &vel, *c1, *c2, size, FUN_001f96f8(FUN_L00_00257b90(5, 0xF)));
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e6790.s", FUN_L01_002e6790);
+#else
+typedef union {
+    u128 q;
+    float f[4];
+} PathPoint;
+
+typedef struct {
+    int count;
+    int pad[3];
+    PathPoint pts[1];
+} PathSelection;
+
+typedef struct {
+    PathPoint pos;
+    PathPoint v10;
+    PathPoint v20;
+    PathPoint v30;
+    void *moby;
+    int kind;
+} PathTarget;
+
+extern int FUN_L01_00274b78(void *, PathTarget *, float);
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern float FUN_001fa688(float, float);
+
+int FUN_L01_002e6790(void *self, int *index) {
+    char *m = self;
+    char *v = *(char **)(m + 0x78);
+    PathSelection *path = *(PathSelection **)(v + 0x160);
+    PathPoint point;
+    PathTarget ahead;
+    float radius;
+    float nearest_distance;
+    float best_distance;
+    float best_angle;
+    float angle;
+    float distance;
+    int alert;
+    int previous;
+    int nearest;
+    int next;
+    int last;
+    int selected;
+    int i;
+    int current;
+
+    alert = (*(int *)(v + 0x38) != 0 || *(short *)(v + 0x1e2) != 0);
+    if (alert)
+        radius = *(float *)(v + 0x1a0) + *(float *)(v + 0x1a0);
+    else
+        radius = *(float *)(v + 0x1a0);
+    FUN_L01_00274b78(m, &ahead, radius);
+    nearest_distance = 10000.0f;
+    best_angle = 0.0f;
+    nearest = 0;
+    previous = 0;
+    next = 0;
+    last = 0;
+    if (*(short *)(v + 0x1ac) != 0) {
+        for (;;) {
+            if (*index < path->count - 1)
+                *index = (*index + path->count + *(signed char *)(v + 0x154)) % path->count;
+            if (*index == path->count - 1 || path->pts[*index].f[3] == 1.0f)
+                break;
+        }
+        return 1;
+    }
+    for (i = 0; i < path->count; i++) {
+        if (*(short *)(v + 0x1ae) == 0 || path->pts[i].f[3] == 1.0f) {
+            distance = FUN_001f9b80(&path->pts[i], m + 0x10);
+            if (distance < nearest_distance) {
+                previous = last;
+                nearest_distance = distance;
+                nearest = i;
+            } else if (last == nearest) {
+                next = i;
+            }
+            last = i;
+        }
+    }
+    if (nearest == path->count - 1)
+        next = 0;
+    else if (nearest == 0)
+        previous = path->count - 1;
+    best_distance = alert ? 10000.0f : 0.0f;
+    selected = 0;
+    *index = 0;
+    do {
+        current = *index;
+        if (current == previous || current == nearest || current == next) {
+            point = path->pts[current];
+            if (alert) {
+                distance = FUN_001f9b48(&ahead.pos, &point);
+                if ((*(short *)(v + 0x1ae) == 0 || point.f[3] == 1.0f) && distance < best_distance) {
+                    best_distance = distance;
+                    selected = current;
+                }
+            } else {
+                angle = FUN_001fa688(
+                    FUN_001f9e90(point.f[0] - *(float *)(m + 0x10), point.f[1] - *(float *)(m + 0x14)),
+                    FUN_001f9e90(ahead.pos.f[0] - *(float *)(m + 0x10), ahead.pos.f[1] - *(float *)(m + 0x14)));
+                distance = FUN_001f9b48(m + 0x10, &point);
+                if (*(short *)(v + 0x1ae) == 0 || point.f[3] == 1.0f) {
+                    if (angle < 1.5707964f) {
+                        if (best_angle < angle) {
+                            best_distance = distance;
+                            best_angle = angle;
+                            selected = current;
+                        }
+                    } else if (distance >= 12.0f) {
+                        if (distance < best_distance || best_distance < 12.0f) {
+                            best_distance = distance;
+                            best_angle = angle;
+                            selected = current;
+                        }
+                    } else if (best_distance < distance) {
+                        best_distance = distance;
+                        best_angle = angle;
+                        selected = current;
+                    }
+                }
+            }
+        }
+        *index = (current + path->count + *(signed char *)(v + 0x154)) % path->count;
+    } while (*index != 0);
+    *index = selected;
+    return selected != nearest;
+}
+#endif
 
 #define NOT_SDA
 

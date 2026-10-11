@@ -326,7 +326,105 @@ void FUN_L05_002d7020(char *m) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7140.s", FUN_L05_002d7140);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7920.s", FUN_L05_002d7920);
+#else
+typedef struct {
+    char unused[0x40];
+    int color[4];
+    float uv[4][2];
+    u64 zero;
+    u64 texture;
+    u64 flags;
+    u64 padding;
+} L05GlowPacket;
+
+extern int D_L05_001613F0 __attribute__((sda));
+extern float D_L05_001613E0 __attribute__((sda));
+extern int D_L05_001613F4 __attribute__((sda));
+extern int D_L05_001613F8 __attribute__((sda));
+extern int D_L05_001613FC __attribute__((sda));
+extern int D_L05_00161400 __attribute__((sda));
+extern int D_L05_00161404 __attribute__((sda));
+extern int D_L05_00161408 __attribute__((sda));
+extern int D_L05_0016140C __attribute__((sda));
+extern unsigned char D_L05_0015EDB2;
+extern int D_L05_0015F5CC_7920 __asm__("D_L05_0015F5CC");
+extern char *D_L05_0015FFD8_7920 __asm__("D_L05_0015FFD8");
+extern short *D_L05_001ABCC0_7920[] __asm__("D_L05_001ABCC0");
+extern float D_L05_001CDD70[4][2];
+extern u64 get_effect_texture_7920(int) __asm__("FUN_001f44b8");
+extern float integer_to_float_7920(int) __asm__("FUN_001fa6c0");
+extern int interpolate_color_7920(float, int, int) __asm__("FUN_001fa6e0");
+extern int sphere_in_view_7920(void *, float) __asm__("FUN_001fa728");
+extern void transform_glow_vertex_7920(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void draw_geometry_quad_7920(void *, int, int) __asm__("FUN_001f7d30");
+extern void clear_glow_matrix_7920(void *, int, int) __asm__("FUN_001153fc");
+
+void FUN_L05_002d7920(char *moby) {
+    L05GlowPacket packet[16];
+    float matrix[8] __attribute__((aligned(16)));
+    float center[4];
+    int i, j, k, frame;
+    short *list;
+    char *member;
+    char *data;
+    float phase;
+    float ratio;
+    u64 texture;
+
+    if (D_L05_001613F0 != 0)
+        return;
+    if (D_L05_0015EDB2 != 0)
+        D_L05_001613E0 = 16.0f;
+    else
+        D_L05_001613E0 = 5.0f;
+    for (i = 0; i < 16; i++) {
+        texture = get_effect_texture_7920(0x13);
+        packet[i].flags = (u64)D_L05_001613F8 | ((u64)D_L05_001613FC << 2) |
+                          ((u64)D_L05_00161400 << 4) | ((u64)D_L05_00161404 << 6) |
+                          0x8000000000ULL;
+        packet[i].texture = texture;
+        packet[i].zero = 0;
+        phase = integer_to_float_7920((D_L05_0015F5CC_7920 + 3) & 3) /
+                (D_L05_001613E0 * 4.0f);
+        for (j = 0; j < 4; j++) {
+            packet[i].uv[j][0] = D_L05_001CDD70[j][0];
+            packet[i].uv[j][1] = D_L05_001CDD70[j][1];
+            ratio = integer_to_float_7920(i - ((j >> 1) - 1)) / (D_L05_001613E0 + phase);
+            ratio = ratio > 1.0f ? 1.0f : (ratio < 0.0f ? 0.0f : ratio);
+            packet[i].color[j] = interpolate_color_7920(ratio, D_L05_00161408, D_L05_0016140C);
+        }
+    }
+    clear_glow_matrix_7920(matrix, 0, 0x20);
+    matrix[2] = 0.15f;
+    matrix[6] = -0.15f;
+    list = D_L05_001ABCC0_7920[(unsigned char)moby[0x21]];
+    do {
+        member = D_L05_0015FFD8_7920 + ((*list & 0x7fff) << 8);
+        if (*(short *)(member + 0xa6) == 0x4f && member[0x20] == 1) {
+            data = *(char **)(member + 0x78);
+            *(u128 *)center = *(u128 *)(member + 0x10);
+            center[3] = 20.0f;
+            if (sphere_in_view_7920(center, 512.0f) != -1) {
+                for (frame = 0; frame < *(short *)(data + 0x320); frame++) {
+                    for (i = 0; i < 3; i++) {
+                        if (D_L05_001613F4 == 0) {
+                            for (k = 0; k < 4; k++) {
+                                j = ((*(short *)(data + 0x322) - frame + 15) & 15) + (k >> 1);
+                                transform_glow_vertex_7920((char *)packet + frame * 0x90 + k * 0x10,
+                                                           data + i * 0x100 + 0x20 + ((j & 15) << 4),
+                                                           (char *)matrix + (k & 1) * 0x10);
+                            }
+                            draw_geometry_quad_7920((char *)packet + frame * 0x90, 0, 0);
+                        }
+                    }
+                }
+            }
+        }
+    } while (*list++ >= 0);
+}
+#endif
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DBF10), where it is exact; names translated to the US level program. */
 
 extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
@@ -687,7 +785,7 @@ float FUN_L05_00304058(volatile s32 path_index, void *position, void *out, float
         path = D_L05_001B0930[path_index];
     }
     if (changed)
-        *(u128 *)out = *(u128 *)&from_point;
+        *(Vec4 *)out = from_point;
     return best;
 }
 #endif

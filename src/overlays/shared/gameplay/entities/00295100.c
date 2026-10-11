@@ -858,7 +858,7 @@ extern void FUN_L00_001ff008(void);
 
 void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     u8 buffer[0x60] __attribute__((aligned(16)));
-    s32 source, destination, count, second_count, pal;
+    s32 source, destination, count, pal;
 
     voice_pool.header[0x6B] |= 8;
     FUN_00118a80(0);
@@ -866,8 +866,8 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     FUN_L00_002656c0();
     D_L00_0015F5D8 = 1;
     D_L00_00161048 = sector;
-    D_L00_00161050 = language;
     D_L00_0016104C = size;
+    D_L00_00161050 = language;
     FUN_L00_001f9838(4);
     FUN_L00_002039a0();
     D_L00_0015F5C4 = 1;
@@ -876,7 +876,6 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     D_L00_00161058 = destination;
     source = depth_buffer_address;
     pal = D_0015ED80;
-    second_count = pal != 0 ? 14 : 17;
     count = pal != 0 ? 14 : 13;
     for (; count != 0; count--) {
         FUN_00122330(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
@@ -887,7 +886,7 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
         FUN_00120558(0, 0);
     }
     source = D_0015EE78_gp;
-    count = second_count;
+    count = pal != 0 ? 14 : 17;
     for (; count != 0; count--) {
         FUN_00122330(buffer, (source << 8) >> 16, 1, 0, 0, 0, 0x40, 0x40);
         source += 0x4000;
@@ -923,11 +922,15 @@ void FUN_L00_002997c8(void) {
     FUN_00122298(0);
     FUN_00120558(0, 0);
     FUN_00122e68((s32)count_vsync);
-    source = depth_buffer_address;
-    destination = D_L00_00161058;
+    second_count = 17;
+    count = 13;
     pal = D_0015ED80;
-    count = pal != 0 ? 14 : 13;
-    second_count = pal != 0 ? 14 : 17;
+    destination = D_L00_00161058;
+    source = depth_buffer_address;
+    if (pal != 0) {
+        count = 14;
+        second_count = 14;
+    }
     for (; count != 0;) {
         count--;
         FUN_00122518(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
@@ -954,12 +957,12 @@ void FUN_L00_002997c8(void) {
         D_0015EED8 = 0;
     FUN_L00_001f9838(4);
     FUN_00265418(music_stream_state.primary.track, 1, 0x400);
-    callback = *(s32 *)&active_scene_trigger.moby;
     *(volatile s32 *)&D_L00_0015F5C4 = 0;
+    callback = (s32)active_scene_trigger.moby;
     if (callback != 0) {
-        callback_arg = ((s32 *)&active_scene_trigger.moby)[1];
-        ((s32 *)&active_scene_trigger.moby)[1] = 0;
-        *(s32 *)&active_scene_trigger.moby = 0;
+        callback_arg = (s32)active_scene_trigger.trigger;
+        active_scene_trigger.trigger = 0;
+        active_scene_trigger.moby = 0;
         FUN_00266970(callback, callback_arg, 1);
     }
     voice_pool.header[0x6B] |= 0x10;
@@ -1007,7 +1010,7 @@ extern void FUN_L00_00265fa0(s32, s32, s32);
 
 void FUN_L00_00299a68(void) {
     s32 offset;
-    char *table;
+    s32 first_destination, second_destination;
     s32 index;
 
     FUN_L00_002660c0(0);
@@ -1017,28 +1020,29 @@ void FUN_L00_00299a68(void) {
     D_L00_0015F3FC_298840 = 1.0f;
     FUN_L00_001ff040((char *)&D_L00_0015F622 - 2, 0, 0x10);
     offset = D_L00_001611CC - 0xE0000;
+    second_destination = D_L00_00173E00_298840.x8 + offset;
+    first_destination = D_L00_00173E00_298840.x4 + offset;
+    D_L00_0015F62C = second_destination;
     D_L00_001611CC = offset;
-    D_L00_0015F62C = D_L00_00173E00_298840.x8 + offset;
-    D_L00_0015F628 = D_L00_00173E00_298840.x4 + offset;
-    table = (char *)&disc_table;
+    D_L00_0015F628 = first_destination;
     if (pal_mode != 0) {
-        index = *(volatile s16 *)&D_L00_0015F622 * 8;
-        FUN_L00_00265fa0(D_L00_0015F628, *(s32 *)(table + index + 0x1748),
-                           *(s32 *)(table + index + 0x174C));
+        index = (s16)D_L00_0015F622;
+        FUN_L00_00265fa0(D_L00_0015F628, disc_table.music_60000[index + 38].sector,
+                           disc_table.music_60000[index + 38].size);
     } else {
-        index = *(volatile s16 *)&D_L00_0015F622 * 8;
-        FUN_L00_00265fa0(D_L00_0015F628, *(s32 *)(table + index + 0x16A8),
-                           *(s32 *)(table + index + 0x16AC));
+        index = (s16)D_L00_0015F622;
+        FUN_L00_00265fa0(D_L00_0015F628, disc_table.music_60000[index + 18].sector,
+                           disc_table.music_60000[index + 18].size);
     }
     FUN_L00_002660c0(1);
     D_L00_0015F622++;
-    index = (s16)D_L00_0015F622 * 8;
+    index = (s16)D_L00_0015F622;
     if (pal_mode != 0) {
-        FUN_L00_00265fa0(D_L00_0015F62C, *(s32 *)(table + index + 0x1748),
-                           *(s32 *)(table + index + 0x174C));
+        FUN_L00_00265fa0(D_L00_0015F62C, disc_table.music_60000[index + 38].sector,
+                           disc_table.music_60000[index + 38].size);
     } else {
-        FUN_L00_00265fa0(D_L00_0015F62C, *(s32 *)(table + index + 0x16A8),
-                           *(s32 *)(table + index + 0x16AC));
+        FUN_L00_00265fa0(D_L00_0015F62C, disc_table.music_60000[index + 18].sector,
+                           disc_table.music_60000[index + 18].size);
     }
 }
 #endif
@@ -1057,7 +1061,95 @@ void FUN_L00_00299c00(void) {
     D_L00_0015F3FC = 0;
     FUN_002335a0();
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00299c48.s", FUN_L00_00299c48);
+#else
+extern s16 D_L00_0015F620;
+extern s16 D_L00_0015F624;
+extern s16 D_L00_0015F626;
+extern s16 D_001516D8[];
+extern u8 D_0013D1D2;
+extern s32 D_L00_00173BF0[];
+extern void FUN_L00_0028cc08(void);
+
+void FUN_L00_00299c48(void) {
+    s32 index;
+    s32 offset;
+    s32 *source;
+    s32 *destination;
+    s32 pal;
+    s32 active;
+    s16 stage;
+
+    FUN_L00_002660c0(0);
+    fade_level -= 0.05f;
+    if (fade_level < 0.0f) {
+        fade_level = 0.0f;
+    }
+    stage = D_L00_0015F620;
+    active = 1;
+    pal = D_0013D1D2 == 'A';
+    if (stage == 0) {
+        if (D_L00_0015F626 >= D_L00_00173BF0[(s16)D_L00_0015F622] - 0x24) {
+            if (D_001516D8[0] != 0) {
+                FUN_L00_002660c0(1);
+            }
+            if (!pal && (s16)D_L00_0015F622 == 0x27) {
+                FUN_L00_00299c00();
+                return;
+            }
+            if ((s16)D_L00_0015F622 >= 0x2b) {
+                FUN_L00_00299c00();
+                return;
+            }
+            D_L00_0015F624 = -1;
+            D_L00_0015F620 = 1;
+        }
+    } else if (stage == active) {
+        FUN_L00_002a09d8(1);
+        if (D_L00_0015F624 < 0x20) {
+            source = (s32 *)(D_L00_0015F62C + D_L00_0015F624 * 4);
+            destination = (s32 *)(D_L00_0015F628 + D_L00_0015F624 * 4);
+            for (offset = 0; offset < 0x38000; offset += 0x20) {
+                *destination = *source;
+                source += 0x20;
+                destination += 0x20;
+            }
+        } else if (D_L00_0015F624 >= 0x24) {
+            if (pal) {
+                if ((s16)D_L00_0015F622 == 0x11) {
+                    D_L00_0015F622 = 0x1b;
+                    D_L00_0015F626 = 0x2238;
+                }
+                if ((s16)D_L00_0015F622 == 0x25) {
+                    D_L00_0015F622 = 0x27;
+                    D_L00_0015F626 = 0x32b4;
+                }
+            } else if ((s16)D_L00_0015F622 == 8) {
+                D_L00_0015F622 = 0x11;
+                D_L00_0015F626 = 0x1590;
+            }
+            D_L00_0015F620 = 0;
+            D_L00_0015F622++;
+            D_L00_0015F624 = -1;
+            index = (s16)D_L00_0015F622 % 0x14;
+            if (pal_mode == 0) {
+                FUN_L00_00265fa0(D_L00_0015F62C, disc_table.music_60000[index + 18].sector,
+                                   disc_table.music_60000[index + 18].size);
+            } else {
+                FUN_L00_00265fa0(D_L00_0015F62C, disc_table.music_60000[index + 38].sector,
+                                   disc_table.music_60000[index + 38].size);
+            }
+        }
+    }
+    D_L00_0015F624++;
+    D_L00_0015F626++;
+    if (D_0013CAE4 & 0x800) {
+        FUN_L00_00299c00();
+    }
+    FUN_L00_0028cc08();
+}
+#endif
 /* Ported from rac1-decomp (src/overlays/shared/update_0029B6A0.c: func_L00_0029B6A0), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_00197300_d[] __asm__("D_L00_00197300") __attribute__((section(".data")));
@@ -1497,13 +1589,14 @@ void FUN_L00_0029ad08(void) {
     char *moby;
     s32 index, item, offset;
     f32 *vec;
-    struct S16_29ab70 *state;
+    volatile struct S16_29ab70 *state;
+    volatile s32 *selected;
 
     f2eac18_29ad08(2);
     state = &D_001516D0_29ad08;
-    g = D_L00_001CA4C0_29ad08;
     if ((u16)(state->mode - 6) >= 2)
         state->mode = 5;
+    g = D_L00_001CA4C0_29ad08;
     D_L00_0015F5D8 = 1;
     moby = *(char * volatile *)(g + 0x1C);
     moby[0x20] = 1;
@@ -1523,7 +1616,8 @@ void FUN_L00_0029ad08(void) {
     f1f97e8_29ad08(D_L00_0017C340_298840, 0, 0x40);
     FUN_L00_002a09d8(1);
     FUN_002335a0();
-    index = *(s32 *)(g + 0x48);
+    selected = (volatile s32 *)(g + 0x48);
+    index = *selected;
     offset = D_L00_001611CC - 0x40000;
     D_L00_001611CC = offset;
     D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + offset;
@@ -1533,9 +1627,11 @@ void FUN_L00_0029ad08(void) {
     D_L00_0015F400_29ad08 = 0;
     if (D_00140408 != 0 && index != D_00140408)
         FUN_L00_0020fca8(0, 0);
+    index = *selected;
     D_00141408 = index;
     if (index == 0x18)
         D_00141408 = 0;
+    index = *selected;
     f204a40_29ad08(*(s32 *)(D_L00_00179AC0_29ad08 + index * 0x4C + 0x10), -1);
     f2454c8_29ad08(item);
     *(s32 *)&state->pad[0x1C] = 0x2734;

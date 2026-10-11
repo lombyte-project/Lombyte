@@ -2,5 +2,105 @@
 #include "types.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ead8.s", FUN_L00_0029ead8);
+#else
+#include "rnc/ui/vendor/vendor_item_info.h"
+#include "rnc/gameplay/state/item_state.h"
+#include "rnc/globals.h"
+typedef struct {
+    s16 unused0, y, unused4, x, half_x, half_y, left, top, width, style;
+    u8 rest[4];
+} VendorTextBox;
+
+typedef struct {
+    s32 fD0;
+    s32 fD4;
+    u8 pad[12];
+} VendorDisplayItem;
+
+typedef struct {
+    u8 pad0[0x20];
+    s32 f20;
+    u8 pad24[0x1c];
+    s32 f40;
+    u8 pad44[0x14];
+    s32 f58;
+    u8 pad5c[0x74];
+    VendorDisplayItem rows[16];
+} VendorDisplayMenu;
+
+extern VendorDisplayMenu vendor_menu __asm__("D_L00_001CA4C0");
+extern s32 D_L00_00161E34;
+extern char D_L00_00161160[];
+extern char D_L00_00161168[];
+extern char D_L00_00161170[];
+extern void FUN_00201560(s32, s32, s32, s32, s32, s32, s32) __asm__("FUN_001fb8f0");
+extern void *FUN_001153fc(void *, s32, s32);
+extern char *FUN_00203ad8(s32) __asm__("FUN_001fdd10");
+extern void FUN_001fc4a8(void *, u64, char *, s32) __asm__("FUN_001f75f0");
+extern void FUN_001fb3f0(s32, s32, u64, char *, s32) __asm__("FUN_001f65b0");
+extern void FUN_001fb888(s32, s32, u64, char *, s32) __asm__("FUN_001f69d0");
+extern void FUN_0024ff08(s32, s32) __asm__("FUN_0020d330");
+extern s32 FUN_00116248(char *, const char *, ...);
+
+void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
+    VendorTextBox box;
+    char text[256];
+    VendorItemInfo *price_table;
+    s32 cost;
+
+    FUN_00201560(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
+    price_table = D_L00_001C40B0;
+    FUN_001153fc(&box, 0, 0x18);
+    box.half_x = x / 2;
+    box.left = x - 8;
+    box.half_y = y / 2;
+    box.top = y - 8;
+    box.width = 0x10;
+    box.style = 3;
+    box.y = (s16)y;
+    box.x = (s16)x;
+
+    if (vendor_menu.rows[vendor_menu.f58].fD4 == 1 && weapon_ammo_counts[vendor_menu.rows[vendor_menu.f58].fD0] >= price_table[vendor_menu.rows[vendor_menu.f58].fD0].hE) {
+        FUN_001fc4a8(&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5236), -1);
+        return;
+    }
+    if (vendor_menu.rows[vendor_menu.f58].fD4 != 1) {
+        cost = discount_purchase_pricing[0] ? price_table[vendor_menu.rows[vendor_menu.f58].fD0].f4 : price_table[vendor_menu.rows[vendor_menu.f58].fD0].f0;
+        if (current_bolt_count >= cost) {
+            FUN_001fb3f0(6, 6, 0x80f0f0f0ULL, FUN_00203ad8(0x5239), -1);
+            FUN_001fb3f0(2, 0x20, 0x80f0f0f0ULL, FUN_00203ad8(0x524e), -1);
+            FUN_001fb3f0(2, 0x3e, 0x80f0f0f0ULL, FUN_00203ad8(0x524b), -1);
+        } else {
+            FUN_001fc4a8(&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5238), -1);
+        }
+        return;
+    }
+    cost = vendor_menu.f40 ? price_table[vendor_menu.rows[vendor_menu.f58].fD0].hA : price_table[vendor_menu.rows[vendor_menu.f58].fD0].h8;
+    if (current_bolt_count < cost) {
+        FUN_001fc4a8(&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5238), -1);
+        return;
+    }
+    FUN_0024ff08(vendor_menu.f20 + 0x500, 1);
+    box.style = 1;
+    box.half_y = 6;
+    FUN_001fc4a8(&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5237), -1);
+    FUN_00116248(text, D_L00_00161160, D_L00_00161E34);
+    if (D_L00_00161E34 < 100) {
+        if (D_L00_00161E34 < 10)
+            cost = 0x25;
+        else
+            cost = 0x1e;
+    } else {
+        cost = 0x17;
+    }
+    FUN_001fb3f0(cost, 0x32, 0x80f0f0f0ULL, text, -1);
+    FUN_001fb3f0(0xc, 0x32, 0x80f0f0f0ULL, D_L00_00161168, -1);
+    FUN_001fb3f0(0x40, 0x32, 0x80f0f0f0ULL, D_L00_00161170, -1);
+    cost = vendor_menu.f40 ? price_table[vendor_menu.rows[vendor_menu.f58].fD0].hA : price_table[vendor_menu.rows[vendor_menu.f58].fD0].h8;
+    FUN_00116248(text, D_L00_00161160, D_L00_00161E34 * cost);
+    FUN_001fb888(0x40, 0x4c, 0x80f0f0f0ULL, text, -1);
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a3ec8.s", FUN_L00_002a3ec8);

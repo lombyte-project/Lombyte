@@ -158,45 +158,51 @@ int FUN_L00_0020cd08(void *from, void *outOwner, void *to, void *outI, void *out
     Vec4 pos;
     s32 gotI;
     f32 gotF;
-    s32 i;
+    s32 i, spot_offset, only_offset, active_offset;
     s32 count = D_L00_0015F710;
     Vec4 *p = &pos;
     f32 distance_limit, height_limit, distance, height;
 
     *(u128 *)p = *(u128 *)from;
     i = 0;
-    if (count > 0) do {
-        if (skip != 0 && (int)D_L00_0015F70C[i].owner == skip)
-            goto next_spot;
-        if (only != 0 && (int)D_L00_0015F70C[i].owner != only)
-            goto next_spot;
-        if (*D_L00_0015F70C[i].owner == 0)
-            goto next_spot;
-        if (FUN_001f9b48(&D_L00_0015F70C[i], p) > D_L00_0015F70C[i].sphere.f[3])
-            goto next_spot;
-        if (!FUN_L00_0025df68(D_L00_0015F70C[i].owner, p, to, &gotI, &gotF,
-                              D_L00_0015F70C[i].kind, 12.0f, 10.0f, 0.0f))
-            goto next_spot;
-        distance_limit = 0.9f;
-        height_limit = 1.5f;
-        if ((u32)D_001413DC < 2)
-            distance_limit = 0.3f;
-        if (hero.unk1CA != 0) {
-            height_limit = 10.0f;
-            distance_limit += 0.5f;
-        }
-        distance = FUN_001f9b80(p, to);
-        height = FUN_001f99c0(p->f[2] - ((Vec4 *)to)->f[2]);
-        if (!(distance < distance_limit && height < height_limit))
-            goto next_spot;
-        *(s32 **)outOwner = D_L00_0015F70C[i].owner;
-        *(s32 *)outI = gotI;
-        *(f32 *)outF = gotF;
-        *(s32 *)outKind = D_L00_0015F70C[i].kind;
-        return 1;
+    if (count > 0) {
+        active_offset = 0;
+        only_offset = 0;
+        do {
+            spot_offset = i * 0x20;
+            if (!((skip == 0 || (int)D_L00_0015F70C[i].owner != skip) &&
+                  (only == 0 || (int)((struct LedgeSpot_20cd08 *)((u8 *)D_L00_0015F70C + only_offset))->owner == only) &&
+                  *((struct LedgeSpot_20cd08 *)((u8 *)D_L00_0015F70C + active_offset))->owner != 0))
+                goto next_spot;
+            if (FUN_001f9b48((u8 *)D_L00_0015F70C + spot_offset, p) >
+                ((struct LedgeSpot_20cd08 *)((u8 *)D_L00_0015F70C + spot_offset))->sphere.f[3])
+                goto next_spot;
+            if (!FUN_L00_0025df68(D_L00_0015F70C[i].owner, p, to, &gotI, &gotF,
+                                  D_L00_0015F70C[i].kind, 12.0f, 10.0f, 0.0f))
+                goto next_spot;
+            distance_limit = 0.9f;
+            height_limit = 1.5f;
+            if ((u32)D_001413DC < 2)
+                distance_limit = 0.3f;
+            if (hero.unk1CA != 0) {
+                height_limit = 10.0f;
+                distance_limit += 0.5f;
+            }
+            distance = FUN_001f9b80(p, to);
+            height = FUN_001f99c0(p->f[2] - ((Vec4 *)to)->f[2]);
+            if (!(distance < distance_limit && height < height_limit))
+                goto next_spot;
+            *(s32 **)outOwner = D_L00_0015F70C[i].owner;
+            *(s32 *)outI = gotI;
+            *(f32 *)outF = gotF;
+            *(s32 *)outKind = D_L00_0015F70C[i].kind;
+            return 1;
 next_spot:
-        i++;
-    } while (i < D_L00_0015F710);
+            i++;
+            active_offset += 0x20;
+            only_offset += 0x20;
+        } while (i < D_L00_0015F710);
+    }
     return 0;
 }
 #endif /* NON_MATCHING */
@@ -800,7 +806,91 @@ void FUN_L00_0020e698(void) {
         hero.unk20AA = 0;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020e728.s", FUN_L00_0020e728);
+#else
+extern int FUN_L00_00233e98(s32);
+extern s32 FUN_001f96f8_e728(s32) __asm__("FUN_001f96f8");
+extern void FUN_L00_0024f190(u8 *, u8 *);
+extern f32 FUN_00213ed8_e728(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern f32 FUN_002000e8_e728(f32, f32) __asm__("FUN_001fa580");
+extern f32 FUN_001ff8b0_e728(f32, f32) __asm__("FUN_001f9e90");
+extern void FUN_001ffa50_e728(void *, void *) __asm__("FUN_001fa030");
+extern void FUN_001ff260_e728(void *) __asm__("FUN_001f99f8");
+extern void FUN_001ff6d0_e728(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern f32 D_0015ED60_e728 __asm__("D_0015ED60");
+
+void FUN_L00_0020e728(void) {
+    struct Hero *g = &hero;
+    u8 **slot;
+    int i;
+    if (g->unk20A8 && g->unk20AA && FUN_L00_00233e98(-1) == 0)
+        FUN_L00_0020e698();
+    i = 0;
+    slot = g->unkD08;
+    do {
+        u8 *o = *slot;
+        if (o != 0) {
+            int id = FUN_L00_0020d498_c(0);
+            if (id == g->unk2298) {
+                s32 anim;
+                if (g->state.control_mode == 12)
+                    anim = D_L00_00179AC0_c[id].f2C;
+                else
+                    anim = D_L00_00179AC0_c[id].f28;
+                if (anim != -1 && o[0x23] != anim) {
+                    g->unk2294 = anim;
+                    FUN_L00_0024f3e0((u8 *)g->moby, o, g->unk2294, 0,
+                                      FUN_001f96f8_e728(8), 1);
+                }
+            }
+            FUN_L00_0024f190((u8 *)g->moby, o);
+            if (g->unkD14 == 0) {
+                FUN_00213ed8_e728((f32 *)(o + 8), 1.0f, D_0015ED60_e728 * 0.2f);
+                if ((o[5] & 2) && g->unk20AA == 0) {
+                    g->unkD14 = 1;
+                    *(s32 *)(o + 0x28) = 0;
+                    g->unk20A8 = 0;
+                    return;
+                }
+            } else {
+                if (g->unkD14 == 2)
+                    FUN_00213ed8_e728((f32 *)(o + 8), 0.0f, frame_scale * 0.25f);
+                else
+                    FUN_00213ed8_e728((f32 *)(o + 8), 0.0f, frame_scale * 0.07f);
+                if (*(f32 *)(o + 8) == 0.0f) {
+                    FUN_L00_0024f0e8((u8 *)g->moby, slot);
+                    return;
+                }
+            }
+        }
+        i++;
+        slot++;
+    } while (i < 2);
+    if (g->state.control_mode == 15) {
+        *(u128 *)((u8 *)g + 0x680) = *(u128 *)((u8 *)g + 0x90);
+        if (g->unk5D8 == 0)
+            *(f32 *)((u8 *)g + 0x688) = FUN_002000e8_e728(g->unk57C, g->unk5D0);
+        else
+            *(f32 *)((u8 *)g + 0x688) = FUN_001ff8b0_e728(
+                *(f32 *)((u8 *)g->unk5D8 + 0x10) - *(f32 *)((u8 *)g + 0x80),
+                *(f32 *)((u8 *)g->unk5D8 + 0x14) - *(f32 *)((u8 *)g + 0x84));
+        g->unk684 = -g->unk580;
+        FUN_001ffa50_e728((u8 *)g + 0x640, (u8 *)g + 0x680);
+        FUN_001ff260_e728((u8 *)g + 0x670);
+        g->unk670 = 1.0f;
+        FUN_001ff6d0_e728((u8 *)g + 0x670, (u8 *)g + 0x670, (u8 *)g + 0x640);
+    } else {
+        *(u128 *)((u8 *)g + 0x640) = *(u128 *)((u8 *)g->moby + 0xc0);
+        *(u128 *)((u8 *)g + 0x650) = *(u128 *)((u8 *)g->moby + 0xd0);
+        *(u128 *)((u8 *)g + 0x660) = *(u128 *)((u8 *)g->moby + 0xe0);
+        FUN_001ff260_e728((u8 *)g + 0x670);
+        g->unk670 = 1.0f;
+        FUN_001ff6d0_e728((u8 *)g + 0x670, (u8 *)g + 0x670, (u8 *)g + 0x640);
+        *(u128 *)((u8 *)g + 0x680) = *(u128 *)((u8 *)g + 0x90);
+    }
+}
+#endif
 #include "types.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -1027,7 +1117,95 @@ float FUN_L00_0020f0b8(float *a, float *b) {
     }
     return s;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020f160.s", FUN_L00_0020f160);
+#else
+extern s32 D_00141508 __attribute__((section(".data")));
+extern s32 D_0014150C __attribute__((section(".data")));
+extern s32 D_00141510 __attribute__((section(".data")));
+extern s32 D_001413D4 __attribute__((section(".data")));
+extern s32 D_001413DC __attribute__((section(".data")));
+extern s32 D_00141514 __attribute__((sda));
+extern u8 D_00140640[] __asm__("D_00140640") __attribute__((section(".data")));
+extern void FUN_001ffcd8_f160(void *, void *) __asm__("FUN_001fa2b8");
+extern void FUN_0025c170_f160(void *) __asm__("FUN_00214128");
+extern void FUN_001ff260_f160(void *) __asm__("FUN_001f99f8");
+extern void FUN_001ff278_f160(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001ff300_f160(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void FUN_0025d330_f160(void *, void *) __asm__("FUN_00214598");
+
+void FUN_L00_0020f160(void *moby, void *matrix)
+{
+    u8 sum[0x40] __attribute__((aligned(16)));
+    f32 scores[16];
+    s32 i, j, n, count, chosen, ring, limit;
+    f32 maximum;
+    u8 *record;
+
+    record = D_00140640 + D_00141508 * 0x30;
+    FUN_001ffcd8_f160(record, matrix);
+    FUN_0025c170_f160(record);
+    ring = D_00141508 + 1;
+    D_00141508 = ring % 16;
+    D_0014150C++;
+    if (D_0014150C > 16)
+        D_0014150C = 16;
+    for (i = 0; i < 3; i++)
+        FUN_001ff260_f160(sum + i * 16);
+
+    if (D_001413DC == 22)
+        limit = 14;
+    else if (D_001413D4 == 2)
+        limit = 5;
+    else
+        limit = 11;
+    D_00141514 = limit;
+    if (D_00141510 < limit)
+        D_00141510++;
+    else if (D_00141510 > limit)
+        D_00141510--;
+    n = D_00141510;
+    if (n < 2)
+        n = 2;
+    if (D_0014150C < n)
+        return;
+
+    for (i = 0; i < n; i++) {
+        s32 a = D_00141508 - (i - 15);
+        a -= ((a < 0 ? a + 15 : a) >> 4) * 16;
+        for (j = 0; j < n; j++) {
+            if (i != j) {
+                s32 b = D_00141508 - (j - 15);
+                b -= ((b < 0 ? b + 15 : b) >> 4) * 16;
+                scores[i] += FUN_L00_0020f0b8((f32 *)(D_00140640 + a * 0x30),
+                                                  (f32 *)(D_00140640 + b * 0x30));
+            }
+        }
+    }
+    maximum = 0.0f;
+    for (i = 0; i < n; i++)
+        if (maximum < scores[i])
+            maximum = scores[i];
+    count = 0;
+    for (i = 0; i < n; i++)
+        if (maximum * 0.2f < scores[i])
+            count++;
+    chosen = 0;
+    for (i = 0; i < n; i++) {
+        if (scores[i] <= maximum * 0.2f || count < 1 || count > 2) {
+            s32 a = D_00141508 - (i - 15);
+            a -= ((a < 0 ? a + 15 : a) >> 4) * 16;
+            record = D_00140640 + a * 0x30;
+            chosen++;
+            for (j = 0; j < 3; j++)
+                FUN_001ff278_f160(sum + j * 16, sum + j * 16, record + j * 16);
+        }
+    }
+    for (i = 0; i < 3; i++)
+        FUN_001ff300_f160(sum + i * 16, sum + i * 16, 1.0f / (f32)chosen);
+    FUN_0025d330_f160(sum, (u8 *)moby + 0x40);
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020f580.s", FUN_L00_0020f580);
 typedef struct {
     char pad[0x20];
@@ -1486,20 +1664,22 @@ void FUN_L00_00210748(void) {
                 slot_hero->items[0].unk20++;
                 FUN_L00_0020fea0(i);
                 if (i == 0) {
-                    int j = 0;
+                    char *p = (char *)&hero;
+                    struct HeroEase *e = &hero.unk18F0[0];
+                    char *end = p + 0x210;
                     do {
-                        struct HeroEase *e = &hero.unk18F0[j];
-                        if (e->unkA0 != -1) {
-                            e->kind = 5;
+                        if (((struct HeroEase *)(p + 0x18F0))->unkA0 != -1) {
+                            ((struct HeroEase *)(p + 0x18F0))->kind = 5;
                             FUN_L00_00205168(e);
                         }
-                        j++;
-                    } while (j < 3);
+                        p += 0xB0;
+                        e++;
+                    } while (p < end);
                 }
                 if ((moby->unk70 & 2) && moby->prev_seq == 0)
                     FUN_L00_00257880(moby, 1, 0, 2);
             } else if (slot_hero->items[0].state == 3) {
-                (*(u8 *)((char *)&slot_hero->items[0] + 0x1b))++;
+                slot_hero->items[0].unk1B++;
                 if ((moby->unk70 & 2) || i == 1 || i == 0)
                     FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
             }
@@ -1968,6 +2148,7 @@ void FUN_L00_00211670(void)
 {
     s32 index;
     s32 buttons;
+    s32 negative_x;
     u8 mode;
     struct Hero *p;
     u8 *source;

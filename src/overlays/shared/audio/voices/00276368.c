@@ -52,7 +52,7 @@ void FUN_L00_00276908(void) {
     FUN_L00_002a07f8();
     if (*(void **)(state + 4) != 0) {
         for (i = 0; i < 14; i++) {
-            obj = *(void **)((u8 *)*(void **)(state + 4) + 0x44 + i * 4);
+            obj = D_L00_001B9CF0.owner->objs[i];
             if (obj != 0) {
                 callback = *(void (**)(void *, s32))((u8 *)obj + 0xc);
                 if (callback != 0) {
@@ -92,8 +92,8 @@ void FUN_L00_00276908(void) {
     handle = queue_animation_update(2, 0x754e, FUN_L00_00239cc8, FUN_L00_00239d00,
                                 FUN_L00_00239df8, &current_bolt_count, 9999999);
     FUN_L00_00235e18(handle, scale_game_frames(0xb4));
-    *(s32 *)(state + 0) = 0x14;
-    *(s32 *)(state + 0x14) = 2;
+    D_L00_001B9CF0.state = 0x14;
+    D_L00_001B9CF0.unk14 = 2;
     table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
     value = *(s32 *)(state + 0xcc);
     if (value < table[0xc]) {

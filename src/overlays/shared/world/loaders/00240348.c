@@ -46,6 +46,7 @@ void FUN_L00_00241788(s32 *entries, s32 count) {
     s32 changed;
     f32 id;
     f32 value;
+    struct MobySortEntry *entry;
 
     for (i = 0; i < count; i++, entries += 8) {
         sorted[i].id = (f32)entries[1];
@@ -76,9 +77,13 @@ void FUN_L00_00241788(s32 *entries, s32 count) {
         }
     } while (changed);
 
-    for (i = 0; i < count; i++) {
-        stub_printf((const char *)0x001e8640, truncate_float_to_s32(sorted[i].id),
-                    fptodp(sorted[i].value));
+    entry = sorted;
+    i = count;
+    while (i > 0) {
+        i--;
+        stub_printf((const char *)0x001e8640, truncate_float_to_s32(entry->id),
+                    fptodp(entry->value));
+        entry++;
     }
 }
 #endif

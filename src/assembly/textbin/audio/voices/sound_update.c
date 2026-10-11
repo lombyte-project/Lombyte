@@ -305,10 +305,13 @@ s32 sound_update(void) {
             voice_flags[slot_index] = 0x20;
             continue;
         }
-        if ((D_0013E550.voices[slot_index].flags & 1) != 1) {
-            voice_flags[slot_index] |= 2;
-            if (!(D_0013E550.voices[slot_index].flags & 0x20)) {
-                voice_flags[slot_index] |= 4;
+        {
+            u8 slot_flags = D_0013E550.voices[slot_index].flags;
+            if (((slot_flags ^ 1) & 1) != 0) {
+                voice_flags[slot_index] |= 2;
+                if (!(D_0013E550.voices[slot_index].flags & 0x20)) {
+                    voice_flags[slot_index] |= 4;
+                }
             }
         }
     }
@@ -329,7 +332,8 @@ s32 sound_update(void) {
                 }
                 D_0013E550.occlusion_frame = D_0015F60C;
             }
-            for (history_offset = 0, sample_index = 0; history_offset < 36;
+            sample_index = 0;
+            for (history_offset = 0; sample_index < 6;
                  history_offset += 6, sample_index++) {
                 D_0013E550.voices[slot_index].occlusion_history[history_offset] =
                     test_voice_occlusion(&D_0013E550.voices[slot_index],

@@ -66,7 +66,7 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
     s32 dialogue_column;
     u8 *animation_table;
     s32 animation_index;
-    u8 class_slot;
+    u16 class_slot;
 
     switch (stream->state) {
     case 0:

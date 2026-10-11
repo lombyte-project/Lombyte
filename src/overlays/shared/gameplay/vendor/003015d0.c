@@ -137,7 +137,7 @@ extern int D_L14_001620C4 __attribute__((sda));
 extern int D_L14_001620F0 __attribute__((sda));
 extern int D_L14_001620F4 __attribute__((sda));
 extern int D_L14_001620F8 __attribute__((sda));
-extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L14_00301de8(char *m) {
@@ -157,20 +157,17 @@ void FUN_L14_00301de8(char *m) {
             src += 0x10;
         }
         i = 0;
-        offset = 0;
         do {
             next_i = i + 1;
-            dst = d + offset;
-            src = dst;
-            dst += 0x460;
-            src += 0x560;
+            offset = i << 4;
+            dst = d + offset + 0x460;
+            src = d + offset + 0x560;
             for (k = 2; k >= 0; k--) {
                 add_vector_xyz(dst, dst, src);
                 dst += 0x40;
                 src += 0x40;
             }
             i = next_i;
-            offset = i << 4;
         } while ((float)i < 4.0f);
         copy_i = 0;
         do {

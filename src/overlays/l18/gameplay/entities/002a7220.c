@@ -1314,7 +1314,120 @@ char *FUN_L18_002d6c80(void *pos, int idx) {
             return best;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d7b20.s", FUN_L18_002d7b20);
+#else
+extern float D_L18_00161A10 __asm__("D_L18_00161A10") __attribute__((sda));
+extern float D_L18_00161A14 __asm__("D_L18_00161A14") __attribute__((sda));
+extern float D_L18_00161A18 __asm__("D_L18_00161A18") __attribute__((sda));
+extern unsigned int D_L18_00162390 __asm__("D_L18_00162390") __attribute__((sda));
+extern unsigned int D_0015EEA4 __asm__("D_0015EEA4") __attribute__((sda));
+extern unsigned int D_0015ED84_source __asm__("D_0015ED84") __attribute__((sda));
+extern int D_0015ED84_abs __asm__("D_0015ED84") __attribute__((section(".data")));
+extern short D_0013F65E;
+extern struct Moby *D_0013F64C;
+extern unsigned char D_0013D407;
+extern unsigned int D_0015717C;
+extern short D_00141CF0;
+extern unsigned short D_00141CF2;
+extern unsigned int D_00141CF4;
+extern void FUN_L18_002d8098(void);
+extern void enqueue_callback_list_1_l18(void (*)(void), void *) __asm__("FUN_L18_002020c8");
+extern char D_0013E550[];
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern int give_reward(int, int) __asm__("FUN_L00_00203908");
+
+void FUN_L18_002d7b20(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    int index;
+    int ticks;
+    unsigned int level;
+
+    switch (moby->state) {
+    case 0:
+        *(float *)(data + 0x64) = moby->pos.z;
+        *(unsigned short *)(data + 0x3E) |= 8;
+        if (*(int *)(data + 0x60) != 0) {
+            moby->state = 1;
+            moby->scale = *(float *)((char *)moby->pclass + 0x24) * D_L18_00161A10;
+            return;
+        }
+        moby->state = 4;
+        return;
+    case 1:
+    case 3:
+        advance_accelerated_scalar(&moby->pos.z, (float *)(data + 0x68),
+                                   *(float *)(data + 0x64) + D_L18_00161A18,
+                                   frame_time_sq * 20.0f, frame_time_sq * 40.0f,
+                                   frame_time * 20.0f);
+        break;
+    case 2:
+        advance_accelerated_scalar(&moby->pos.z, (float *)(data + 0x68),
+                                   *(float *)(data + 0x64) + D_L18_00161A14,
+                                   frame_time_sq * 5.0f, frame_time_sq * 10.0f,
+                                   frame_time * 20.0f);
+        if (hero.air_frames.s == 0 && hero.ground_moby == moby && hero.state.current == 0x22) {
+            moby->state = 3;
+            allocate_voice_for_target_entry(0, 0, (int)moby);
+            index = *(int *)(data + 0x70);
+            if (index != -1) {
+                unsigned char *entry = (unsigned char *)D_0013E550 + index * 0x70;
+                if (*(struct Moby **)(entry + 0x88) == moby && entry[0x74] != 0)
+                    release_voice_slot(index);
+            }
+            *(int *)(data + 0x70) = -1;
+        } else if (hero.state.current != 0x72) {
+            enqueue_callback_list_1_l18(FUN_L18_002d8098, moby);
+            if (FUN_001f9740((int *)(data + 0x6C)) != 0)
+                D_L18_00162390 = 1;
+        }
+        break;
+    case 4:
+        if (hero.air_frames.s == 0 && hero.ground_moby == moby && hero.state.current == 0x22) {
+            moby->state = 5;
+            moby->unkBC = 1;
+            moby->pos.z -= 1.5f;
+            if (D_0015ED84_abs == 0x12)
+                D_0013D407 = 1;
+        }
+        if (vector_distance(&moby->pos, &hero.motion.pos) < 2.5f &&
+            (D_0015717C & (1 << (D_0015ED84_source & 0x1F))) == 0) {
+            if (D_00141CF0 != 0) {
+                ticks = scale_ticks(D_0015EEA4);
+                level = D_00141CF2;
+                index = scale_ticks(0x12);
+                if ((int)((float)index * 60.0f) < (int)(ticks - level * 600) ||
+                    D_00141CF2 == 0) {
+                    give_reward(0x2B02, 0x71);
+                } else {
+                    ticks = scale_ticks(D_0015EEA4);
+                    if ((unsigned int)D_00141CF2 < ticks / 600) {
+                        ticks = scale_ticks(D_0015EEA4);
+                        D_00141CF2 = ticks / 600;
+                    }
+                }
+            } else {
+                D_00141CF0++;
+                ticks = scale_ticks(D_0015EEA4);
+                level = D_0015ED84_source;
+                if ((unsigned int)D_00141CF2 < ticks / 600) {
+                    ticks = scale_ticks(D_0015EEA4);
+                    D_00141CF2 = ticks / 600;
+                    level = current_level_index;
+                }
+                D_00141CF4 |= (1 << (level & 0x1F)) | 0x80000000;
+            }
+        }
+        break;
+    case 5:
+        if (approach_value((float *)&moby->pos.z, *(float *)(data + 0x64) - 1.5f,
+                           0.15f) != 0.0f)
+            return;
+        moby->state = 6;
+        break;
+    }
+}
+#endif
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D93C0), where it is exact; names translated to the US level program. */
 
 extern char D_0013E550[];
@@ -1890,7 +2003,7 @@ extern short D_L18_00161ED4_d __asm__("D_L18_00161ED4") __attribute__((sda));
 extern short D_L18_00161ED8_d __asm__("D_L18_00161ED8") __attribute__((sda));
 extern short D_L18_00161EE0_d __asm__("D_L18_00161EE0") __attribute__((sda));
 extern void FUN_L15_002d8710(char *);
-extern void FUN_L18_002ea1f8(void);
+extern void FUN_L18_002ea1f8(struct Moby *);
 extern void FUN_L18_002ea800(void *);
 void FUN_L18_002eacd8(struct Moby *m);
 extern void FUN_L18_002eaea0_u(void *) __asm__("FUN_L18_002eaea0");
@@ -1949,7 +2062,91 @@ void FUN_L18_002e9e70(struct Moby *moby) {
     }
     enqueue_callback_list_1(FUN_L18_002ea1f8, moby);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea1f8.s", FUN_L18_002ea1f8);
+#else
+typedef struct {
+    float x, y, z, w;
+} __attribute__((aligned(16))) L18FlareVector;
+typedef struct {
+    float u, v;
+} L18FlareUV;
+typedef struct {
+    L18FlareVector corner[4];
+    unsigned int color[4];
+    L18FlareUV uv[4];
+    unsigned long long zero, texture, state, flags;
+} L18FlarePacket;
+extern float D_L18_001677C0_flare[] __asm__("D_L18_001677C0");
+extern L18FlareUV D_L18_001D9B50_flare[] __asm__("D_L18_001D9B50");
+extern L18FlareVector D_L18_001D9B70_flare[] __asm__("D_L18_001D9B70");
+extern int D_L18_00161EE4_flare __asm__("D_L18_00161EE4") __attribute__((sda));
+extern int D_L18_00161EE8_flare __asm__("D_L18_00161EE8") __attribute__((sda));
+extern int D_L18_00161EEC_flare __asm__("D_L18_00161EEC") __attribute__((sda));
+extern int D_L18_00161EF0_flare __asm__("D_L18_00161EF0") __attribute__((sda));
+extern int D_L18_00161EF8_flare[] __asm__("D_L18_00161EF8") __attribute__((sda));
+extern int D_L18_00161F08_flare[] __asm__("D_L18_00161F08") __attribute__((sda));
+extern void clear_flare_vector(void *) __asm__("FUN_001f99f8");
+extern float flare_length(float, float) __asm__("FUN_001f9e90");
+extern float flare_dot(void *, void *) __asm__("FUN_001f9b80");
+extern void copy_flare_vector(void *, void *) __asm__("FUN_001fa050");
+extern int tween_flare_color(float, int, int) __asm__("FUN_001fa6e0");
+extern void draw_flare_packet(void *, void *, int) __asm__("FUN_001f7d30");
+
+void FUN_L18_002ea1f8(struct Moby *moby) {
+    L18FlarePacket packet[4];
+    L18FlareVector axis;
+    L18FlareVector basis[4][4];
+    char *data = (char *)moby->pvars;
+    int i, j;
+    unsigned int mask = 0xffffff;
+    float size;
+    clear_flare_vector(&axis);
+    axis.z = flare_length(D_L18_001677C0_flare[0] - moby->pos.x,
+                          D_L18_001677C0_flare[1] - moby->pos.y);
+    axis.y = -flare_length(flare_dot(&moby->pos, D_L18_001677C0_flare),
+                            D_L18_001677C0_flare[2] - moby->pos.z);
+    copy_flare_vector(&basis[0][0], &axis);
+    copy_flare_vector(&basis[1][0], &axis);
+    size = *(float *)(data + 0x24);
+    scale_vector_xyz(&basis[1][1], &basis[1][1], size);
+    scale_vector_xyz(&basis[1][2], &basis[1][2], size);
+    basis[0][3] = *(L18FlareVector *)&moby->pos;
+    basis[1][3] = *(L18FlareVector *)&moby->pos;
+    axis.x = *(float *)(data + 0x2c);
+    copy_flare_vector(&basis[2][0], &axis);
+    scale_vector_xyz(&basis[2][1], &basis[2][1], size);
+    scale_vector_xyz(&basis[2][2], &basis[2][2], size);
+    basis[2][3] = *(L18FlareVector *)&moby->pos;
+    axis.x = *(float *)(data + 0x30);
+    copy_flare_vector(&basis[3][0], &axis);
+    scale_vector_xyz(&basis[3][1], &basis[3][1], size);
+    scale_vector_xyz(&basis[3][2], &basis[3][2], size);
+    basis[3][3] = *(L18FlareVector *)&moby->pos;
+    for (i = 0; i < 4; i++) {
+        packet[i].texture = get_effect_texture(D_L18_00161F08_flare[i]);
+        packet[i].state = 0xff9000000260ULL;
+        packet[i].flags = 0x8000000000ULL | D_L18_00161EE4_flare |
+                          ((unsigned long long)D_L18_00161EE8_flare << 2) |
+                          ((unsigned long long)D_L18_00161EEC_flare << 4) |
+                          ((unsigned long long)D_L18_00161EF0_flare << 6);
+        packet[i].zero = 0;
+        for (j = 0; j < 4; j++) {
+            packet[i].uv[j] = D_L18_001D9B50_flare[j];
+            if (i == 0) {
+                packet[i].color[j] = tween_flare_color(size,
+                    D_L18_00161EF8_flare[i] & mask, D_L18_00161EF8_flare[i]);
+            } else {
+                packet[i].color[j] = D_L18_00161EF8_flare[i];
+            }
+            qcopy(&packet[i].corner[j], &D_L18_001D9B70_flare[i * 4 + j]);
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        draw_flare_packet(&packet[i], &basis[i][0], 0);
+    }
+}
+#endif
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB988), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);

@@ -76,11 +76,8 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
     column = column_index;
 
     /* Process every pressed direction in order; a page change can also adjust
-       column before the following direction checks. Retail's UP-clear branch
-       reaches a redundant controller address calculation before DOWN. */
-    if (!(controller_state.pressed_buttons & 0x1000)) {
-        goto check_down;
-    } else {
+       column before the following direction checks. */
+    if (controller_state.pressed_buttons & 0x1000) {
         if (row != 0) {
             grid->data.grid.selected_cell -= column_count;
         } else if (grid->data.grid.up != NULL) {
@@ -116,7 +113,6 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
         }
     }
 
-check_down:
     if (controller_state.pressed_buttons & 0x4000) {
         if (row + 1 < row_count) {
             grid->data.grid.selected_cell = grid->data.grid.selected_cell + column_count;

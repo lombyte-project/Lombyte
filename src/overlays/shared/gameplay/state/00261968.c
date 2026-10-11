@@ -88,7 +88,6 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
     OvlVec4 origin;
     OvlVec4 first;
     OvlVec4 next;
-    OvlVec4 *previous;
     OvlVec4 *current;
     SegmentPath_261b48 **entry;
     s32 i;
@@ -107,28 +106,26 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
     FUN_001ff260_261b48(&origin);
     origin.f[2] = 1.0f;
     entry = &D_L00_001B04B0_261b48[path_index];
-    previous = &first;
-    FUN_001ff2a8_261b48(previous, &(*entry)->points[0], start);
-    FUN_001ff6d0_261b48(previous, previous, &direction);
     found = 0;
     i = 1;
+    FUN_001ff2a8_261b48(&first, &(*entry)->points[0], start);
+    FUN_001ff6d0_261b48(&first, &first, &direction);
     current = &next;
     if (i < (*entry)->count) {
         offset = 0x20;
         do {
             FUN_001ff2a8_261b48(current, (OvlVec4 *)((u8 *)*entry + offset), start);
             FUN_001ff6d0_261b48(current, &next, &direction);
-            if (previous->f[3] == 0.0f && current->f[3] == 0.0f)
-                goto next_point_261b48;
-            if (!(current->f[1] * previous->f[1] < 0.0f))
-                goto next_point_261b48;
-            crossing = (previous->f[0] - current->f[0]) / (previous->f[1] - current->f[1]) * -current->f[1] + current->f[0];
-            if (crossing > 0.0f && crossing < nearest) {
-                nearest = crossing;
-                found = 1;
+            if (first.f[3] != 0.0f || current->f[3] != 0.0f) {
+                if (current->f[1] * first.f[1] < 0.0f) {
+                    crossing = (first.f[0] - current->f[0]) / (first.f[1] - current->f[1]) * -current->f[1] + current->f[0];
+                    if (crossing > 0.0f && crossing < nearest) {
+                        nearest = crossing;
+                        found = 1;
+                    }
+                }
             }
-next_point_261b48:
-            previous->q = current->q;
+            first.q = current->q;
             i++;
             offset += 0x10;
         } while (i < (*entry)->count);
@@ -218,7 +215,95 @@ next_segment:
     return found;
 }
 #endif /* NON_MATCHING */
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262030.s", FUN_L00_00262030);
+#else
+#include "rnc/overlay/quad.h"
+
+typedef struct {
+    s32 count;
+    u8 pad[12];
+    OvlVec4 points[1];
+} SegmentPath_262030;
+
+extern SegmentPath_262030 *D_L00_001B04B0_262030[] __asm__("D_L00_001B04B0");
+extern f32 FUN_001ff218_262030(f32) __asm__("FUN_001f99c0");
+extern void FUN_001ff278_262030(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
+extern void FUN_001ff2a8_262030(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
+extern f32 FUN_001ff398_262030(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ab0");
+extern void FUN_001ff3c0_262030(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ad8");
+extern f32 FUN_001ff3d8_262030(OvlVec4 *) __asm__("FUN_001f9af0");
+extern void FUN_001ff500_262030(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
+
+s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) {
+    OvlVec4 difference;
+    OvlVec4 scaled_difference;
+    OvlVec4 working;
+    OvlVec4 segment;
+    OvlVec4 scaled_segment;
+    OvlVec4 cross;
+    OvlVec4 scaled_cross;
+    SegmentPath_262030 *entry;
+    OvlVec4 *height_axis = (OvlVec4 *)0x13f5e0;
+    OvlVec4 *current;
+    OvlVec4 *next;
+    s32 i;
+    volatile s32 found;
+    f32 original_height;
+    f32 segment_length;
+    f32 projection;
+
+    working.q = point->q;
+    found = 0;
+    entry = D_L00_001B04B0_262030[path_index];
+    original_height = FUN_001ff398_262030(&working, height_axis);
+    i = 0;
+    current = &entry->points[0];
+    if (i < entry->count - 1) {
+        do {
+            next = current + 1;
+            if (current->f[3] != 0.0f || next->f[3] != 0.0f) {
+                FUN_001ff2a8_262030(&difference, &working, current);
+                FUN_001ff2a8_262030(&segment, next, current);
+                FUN_001ff500_262030(&scaled_cross, height_axis, FUN_001ff398_262030(&difference, height_axis));
+                FUN_001ff2a8_262030(&difference, &difference, &scaled_cross);
+                FUN_001ff500_262030(&scaled_cross, height_axis, FUN_001ff398_262030(&segment, height_axis));
+                FUN_001ff2a8_262030(&segment, &segment, &scaled_cross);
+                FUN_001ff500_262030(&scaled_segment, &segment, 1.0f);
+                FUN_001ff3c0_262030(&cross, &difference, &scaled_segment);
+                segment_length = FUN_001ff218_262030(FUN_001ff398_262030(&cross, height_axis));
+                if (distance < segment_length)
+                    goto next_segment_262030;
+                segment_length = FUN_001ff3d8_262030(&segment);
+                projection = FUN_001ff398_262030(&difference, &scaled_segment);
+                if (segment_length < projection || projection < 0.0f) {
+                    segment_length = FUN_001ff3d8_262030(&difference);
+                    if (!(segment_length < distance))
+                        goto next_segment_262030;
+                    found = 1;
+                    FUN_001ff500_262030(&scaled_difference, &difference, distance);
+                    FUN_001ff278_262030(&working, &scaled_difference, current);
+                } else {
+                    found = 1;
+                    FUN_001ff500_262030(&scaled_cross, &scaled_segment, projection);
+                    FUN_001ff2a8_262030(&scaled_difference, &difference, &scaled_cross);
+                    FUN_001ff500_262030(&scaled_difference, &scaled_difference, distance);
+                    FUN_001ff278_262030(&scaled_difference, &scaled_difference, &scaled_cross);
+                    FUN_001ff278_262030(&working, &scaled_difference, current);
+                }
+            }
+next_segment_262030:
+            i++;
+            current++;
+        } while (i < entry->count - 1);
+    }
+    if (found) {
+        FUN_001ff500_262030(&segment, height_axis, original_height - FUN_001ff398_262030(&working, height_axis));
+        FUN_001ff278_262030(out, &working, &segment);
+    }
+    return found;
+}
+#endif /* NON_MATCHING */
 #include "rnc/math/vector.h"
 
 /* A polyline of evenly spaced points. */

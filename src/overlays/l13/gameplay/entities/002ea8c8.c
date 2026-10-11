@@ -280,7 +280,78 @@ char *FUN_L13_002ecd10(char *src, int arg, int id) {
     return moby;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ece00.s", FUN_L13_002ece00);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ed158.s", FUN_L13_002ed158);
+#else
+extern void FUN_001fa2d8(void *, void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001fa030(void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern int FUN_L00_001f2868(float, void *, int, void *, void *);
+extern void FUN_L10_0024c7f0(float, void *, void *, int, void *);
+extern void *memcpy(void *, const void *, unsigned int);
+
+void FUN_L13_002ed158(void *moby, void *data) {
+    float matrix[12];
+    float query[4];
+    float candidate_pos[4];
+    float rotation_matrix[16];
+    float local_pos[4];
+    float probe[4];
+    void **candidates;
+    void **hit;
+    int count, hit_count, i;
+    char *candidate;
+    short half_width, half_height, max_size;
+    float limit, tolerance;
+
+    FUN_001fa030(matrix, moby + 0x40);
+    max_size = *(short *)(data + 10) < *(short *)(data + 8) ?
+        *(short *)(data + 8) : *(short *)(data + 10);
+    *(OvlQuad *)query = 0;
+    query[2] = (float)max_size * 0.5f;
+    FUN_001f9cf8(query, query, matrix);
+    FUN_001f9a10(query, query, moby + 0x10);
+    count = FUN_L00_001f2868((float)max_size * 0.5f, query, 0x10, moby, 0);
+    if (count == 0) return;
+    candidates = __builtin_alloca(((unsigned)count << 5) >> 3);
+    memcpy(candidates, (void *)0x178200, count * 4);
+    for (i = 0; i < count; i++) {
+        candidate = candidates[i];
+        if (candidate == 0 || (unsigned char)candidate[0x20] == 0xfe ||
+            (unsigned char)candidate[0x20] == 0xfd) continue;
+        FUN_001f9a28(candidate_pos, candidate + 0x10, moby + 0x10);
+        FUN_001fa2d8(rotation_matrix, matrix);
+        FUN_001f9d20(local_pos, candidate_pos, rotation_matrix);
+        qcopy(probe, local_pos);
+        half_width = *(short *)(data + 8);
+        limit = (float)half_width * 0.5f;
+        tolerance = limit + 0.7f;
+        if (probe[0] < -tolerance) probe[0] = (float)-half_width * 0.5f;
+        else if (tolerance < probe[0]) probe[0] = limit;
+        half_height = *(short *)(data + 10);
+        limit = (float)half_height * 0.5f;
+        tolerance = limit + 1.5f;
+        if (probe[2] < -tolerance) probe[2] = (float)-half_height * 0.5f;
+        else if (tolerance < probe[2]) probe[2] = limit;
+        probe[1] = 0.0f;
+        FUN_001f9cf8(probe, probe, matrix);
+        FUN_001f9a10(probe, probe, moby + 0x10);
+        hit_count = FUN_L00_001f2868(0.7f, probe, 0x10, moby, 0);
+        if (hit_count > 0) {
+            hit = (void **)0x178200;
+            do {
+                if (*hit == candidate)
+                    FUN_L10_0024c7f0(1.0f, candidate, moby, 0x10001, probe);
+                hit_count--;
+                hit++;
+            } while (hit_count != 0);
+        }
+    }
+}
+#endif
 /* Fades the moby in, waits for its linked moby to be collected or gone, fades out and kills it; spins it all the while. */
 extern int D_L13_0015FFD8_n __asm__("D_L13_0015FFD8");
 extern int D_0014C190_n[][64] __asm__("D_0014C190");

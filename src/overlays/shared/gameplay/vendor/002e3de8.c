@@ -131,7 +131,116 @@ int FUN_L10_002f5a78(char *moby) {
     }
     return 0;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5b58.s", FUN_L10_002f5b58);
+#else
+#include "eetypes.h"
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
+extern float FUN_001f9b48(void *, void *);
+extern void FUN_001f99f8(void *);
+extern float s32_to_float(int) __asm__("FUN_001fa6c0");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
+extern float D_L10_0016CF70;
+extern char D_L10_00167100[];
+
+void FUN_L10_002f5b58(char *moby) {
+    char *data = *(char **)(D_L10_0015EF50 + *(short *)(moby + 0x84) * 0x20 + 0x1c);
+    char *work;
+    char *path;
+    int i, count, next;
+    float distance, angle;
+    short *indices;
+    float *angles;
+    short *index_cursor;
+    float *angle_cursor;
+    char *acc;
+
+    data[0x38] = 1;
+    work = *(char **)(moby + 0x70);
+    acc = work + 0x40;
+    *(int *)(acc + 0x00) = 0;
+    *(int *)(acc + 0x04) = 0;
+    *(int *)(acc + 0x08) = 0;
+    *(int *)(acc + 0x0c) = 0;
+    *(int *)(acc + 0x10) = 0;
+    *(short *)(acc + 0x14) = 0;
+    *(short *)(acc + 0x16) = scale_game_frames(*(short *)(data + 0x3a));
+
+    indices = (short *)(acc + 0x18);
+    angles = (float *)(acc + 0x28);
+    index_cursor = indices;
+    angle_cursor = angles;
+    i = 7;
+    do {
+        *angle_cursor = 0.0f;
+        *index_cursor = -1;
+        angle_cursor++;
+        index_cursor++;
+        i--;
+    } while (i >= 0);
+    angle = angle_atan2(1.0f, D_L10_0016CF70);
+    *(float *)(acc + 0x48) = angle + angle;
+
+    if (*(int *)(data + 0x20) >= 0) {
+        path = D_L10_001B0930_5a78[*(int *)(data + 0x20)];
+        count = *(int *)path;
+        if (count > 0) {
+            indices = (short *)(acc + 0x18);
+            angles = (float *)(acc + 0x28);
+            for (i = 0; i < *(int *)path; i++) {
+                angle = *(float *)(path + i * 0x10 + 0x1c);
+                if (angle > 0.0f) {
+                    *angles = angle;
+                    if (angle > 180.0f)
+                        *angles = *(float *)(acc + 0x48) * 57.295776f;
+                    *indices = i;
+                    angles++;
+                    indices++;
+                }
+                next = (i + 1) % *(int *)path;
+                distance = FUN_001f9b48(path + i * 0x10 + 0x10, path + next * 0x10 + 0x10);
+                *(float *)(path + i * 0x10 + 0x1c) = distance;
+                if (i < *(int *)path - 1)
+                    *(float *)(acc + 0x08) += distance;
+            }
+        }
+    }
+    if (*(short *)(data + 0x3a) > 0) {
+        *(float *)(data + 0x3c) = (*(float *)(acc + 0x08) /
+                                    s32_to_float(scale_game_frames(*(short *)(data + 0x3a)))) * 60.0f;
+    }
+    if (*(int *)(data + 0x24) >= 0) {
+        path = D_L10_001B0930_5a78[*(int *)(data + 0x24)];
+        count = *(int *)path;
+        if (count > 0) {
+            for (i = 0; i < *(int *)path; i++) {
+                next = (i + 1) % *(int *)path;
+                distance = FUN_001f9b48(path + i * 0x10 + 0x10, path + next * 0x10 + 0x10);
+                *(float *)(path + i * 0x10 + 0x1c) = distance;
+                if (i < *(int *)path - 1)
+                    *(float *)(acc + 0x0c) += distance;
+            }
+        }
+    }
+
+    *(float *)(work + 0x00) = 0.03f;
+    *(float *)(work + 0x04) = 0.2f;
+    FUN_001f99f8(work + 0x10);
+    *(float *)(work + 0x20) = 0.03f;
+    *(float *)(work + 0x24) = 0.2f;
+    FUN_001f99f8(work + 0x30);
+    {
+        char *source = *(char **)(D_L10_00167100 + 0x184);
+        *(u128 *)(moby + 0x30) = *(u128 *)(source + 0x30);
+        *(u128 *)(moby + 0x00) = *(u128 *)(source + 0x00);
+        *(u128 *)(moby + 0x10) = *(u128 *)(source + 0x10);
+        *(u128 *)(moby + 0x20) = *(u128 *)(source + 0x20);
+    }
+    if (*(int *)(data + 0x4c) == 0)
+        hero_set_state(0x72, 1);
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5f18.s", FUN_L10_002f5f18);
 #include "sda.h"
 

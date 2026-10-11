@@ -2,7 +2,126 @@
 #include "types.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031d2e0.s", FUN_L07_0031d2e0);
+#else
+extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern int sample_path(float, int *, float *, int *, float *, int) __asm__("FUN_L00_0025d808");
+extern void spawn_on_path(float *, int, int, int) __asm__("FUN_L00_002c52a8");
+extern int FUN_00120478(float);
+extern char *D_L07_001B0530[];
+extern int D_L07_0015B0A0[] __attribute__((sda));
+
+void FUN_L07_0031d2e0(char *moby) {
+    int *data = *(int **)(moby + 0x78);
+    int state = *(unsigned char *)(moby + 0x20);
+    if (state == 0) {
+        int bad = 0;
+        int path_index;
+        int i;
+        int count;
+        char *path;
+        if (data[0] == -1) {
+            debug_print((char *)0x211af0);
+            bad = 1;
+        }
+        if (data[1] == -1) {
+            debug_print((char *)0x211af0);
+            bad = 1;
+        }
+        if (bad) {
+            debug_print((char *)0x211b30, *(short *)(moby + 0xb2));
+            mark_moby_for_removal(moby);
+            return;
+        }
+        path_index = data[1];
+        data[8] = 0;
+        path = D_L07_001B0530[path_index];
+        count = *(int *)path;
+        for (i = 0; i < count; i++) {
+            int next = (i + 1) % *(int *)D_L07_001B0530[data[1]];
+            float length = fast_vec_dist(path + 0x10 + i * 0x10,
+                                         path + 0x10 + next * 0x10);
+            *(float *)(D_L07_001B0530[data[1]] + 0x1c + i * 0x10) = length;
+            *(float *)(data + 8) += *(float *)(D_L07_001B0530[data[1]] + 0x1c + i * 0x10);
+            count = *(int *)D_L07_001B0530[data[1]];
+        }
+        moby[0x20] = 1;
+    } else if (state == 1) {
+        int i;
+        if (is_point_inside_clip_volume((void *)0x13f3d0, data[0]) == 0)
+            return;
+        for (i = 0; D_L07_0015B0A0[i] != -1; i++) {
+            int id = D_L07_0015B0A0[i];
+            float value = convert_integer_to_float(*(int *)(0x13d428 + id * 4));
+            float scale = convert_integer_to_float(*(unsigned short *)(0x1c4130 + id * 0x18 + 0xe));
+            float ratio = value / scale;
+            float step = random_float_between(0.0f, *(float *)(data + 8));
+            float min_ratio = *(float *)(data + 2) / 100.0f;
+            float max_ratio = *(float *)(data + 3) / 100.0f;
+            if (min_ratio <= ratio && ratio < max_ratio) {
+                float lower = scale * (*(float *)(data + 4) / 100.0f) - value;
+                float upper = scale * (*(float *)(data + 5) / 100.0f);
+                float chosen;
+                int total;
+                int batch;
+                int remaining;
+                int path_index;
+                float position[4];
+                float fraction = 0.0f;
+                int segment = 0;
+                char *path;
+                if (data[6] == 0)
+                    chosen = lower < upper ? lower : upper;
+                else
+                    chosen = upper < lower ? lower : upper;
+                total = truncate_float_to_s32(chosen + 0.5f);
+                batch = total / data[7];
+                if (batch == 0)
+                    batch = total;
+                path_index = data[1];
+                path = D_L07_001B0530[path_index];
+                debug_print((char *)0x211b50, total, batch);
+                remaining = total - batch;
+                if (total > 0) {
+                    do {
+                        do {
+                            sample_path(step, (int *)path, position, &segment, &fraction, 1);
+                            if (data[9] == -1 ||
+                                12.0f < vector_distance(*(char **)0x1593d8 + data[9] * 0x100 + 0x10, position))
+                                break;
+                            step += 10.0f;
+                        } while (1);
+                        {
+                            int x = FUN_00120478(position[0]);
+                            int y = FUN_00120478(position[1]);
+                            int z = FUN_00120478(position[2]);
+                            int path_step = FUN_00120478(step);
+                            debug_print((char *)0x211b78, id, batch, x, y, z, path_step);
+                        }
+                        spawn_on_path(position, id, batch, 0);
+                        step += random_float_between(*(float *)(data + 8) / 10.0f, 2.0f);
+                        if (remaining < batch) {
+                            debug_print((char *)0x211ba8, remaining);
+                            batch = remaining;
+                        }
+                        total = remaining;
+                        remaining = total - batch;
+                    } while (total > 0);
+                }
+            }
+        }
+        moby[0x20] = 2;
+    }
+}
+#endif
 
 #define NOT_SDA
 

@@ -233,4 +233,82 @@ void FUN_L11_00309098(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003094f8.s", FUN_L11_003094f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a908.s", FUN_L11_0030a908);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030b358.s", FUN_L11_0030b358);
+#else
+extern float D_L11_001677C0[];
+extern float D_L11_00161E08[];
+extern float D_L11_00161E18;
+extern float D_L11_00161E1C;
+extern float D_L11_001D9AF0[];
+extern int D_L11_0015F5CC;
+extern float D_0015ED7C;
+#define D_L11_00167800 ((float *)((char *)D_L11_001677C0 + 0x40))
+#define D_L11_00166DB8 ((float *)((char *)D_L11_001677C0 - 0xa08))
+#define D_L11_00166DDC (*(float *)((char *)D_L11_001677C0 - 0x9e4))
+extern void subtract_vector_xyz_b358(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz_b358(float, float *, void *) __asm__("FUN_001f9a68");
+extern int random_int_b358(void) __asm__("FUN_001fa6d0");
+extern float convert_integer_to_float_b358(int) __asm__("FUN_001fa6c0");
+extern float fast_sin_b358(float) __asm__("FUN_001f9de0");
+extern void enqueue_callback_list_1_b358(void *, void *) __asm__("FUN_001f4600");
+extern void FUN_L11_0030a908(void);
+
+void FUN_L11_0030b358(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    int i;
+    if (moby[0x20] == 0) {
+        moby[0x30] = 0xff;
+        moby[0x20] = 1;
+        {
+            float *a = D_L11_00161E08;
+            float *b = D_L11_00161E08 + 1;
+            i = 1;
+            do {
+                *a = 0.0f;
+                i--;
+                *b = 0.0f;
+                a += 2;
+                b += 2;
+            } while (i >= 0);
+        }
+        qcopy(D_L11_00167800, D_L11_001677C0);
+        D_L11_00166DDC = *(float *)(data + 0x14);
+    } else {
+        float difference[4];
+        subtract_vector_xyz_b358(difference, D_L11_001677C0, D_L11_00167800);
+        qcopy(D_L11_00167800, D_L11_001677C0);
+        if (*(float *)(data + 0x20) < D_L11_001677C0[2]) {
+            float scaled[2];
+            float *phase_x = D_L11_00161E08;
+            float *phase_y = D_L11_00161E08 + 1;
+            float *velocity = D_L11_00166DB8;
+            for (i = 0; i < 2; i++) {
+                scale_vector_xyz_b358((*velocity + *velocity) / (*(float *)(data + 0x18) * 5.0f), scaled, difference);
+                if (scaled[0] > 1.0f || scaled[0] < 1.0f) scaled[0] -= convert_integer_to_float_b358(random_int_b358());
+                if (scaled[1] > 1.0f || scaled[1] < 1.0f) scaled[1] -= convert_integer_to_float_b358(random_int_b358());
+                *phase_x += scaled[0];
+                *phase_y += scaled[1];
+                if (*phase_x > 1.0f) *phase_x -= 1.0f;
+                if (*phase_x < -1.0f) *phase_x += 1.0f;
+                if (*phase_y > 1.0f) *phase_y -= 1.0f;
+                if (*phase_y < -1.0f) *phase_y += 1.0f;
+                phase_y += 2;
+                phase_x += 2;
+                velocity++;
+            }
+            D_L11_00161E18 = D_L11_00161E1C + fast_sin_b358(convert_integer_to_float_b358(D_L11_0015F5CC % 0x168) * 0.017444445f - 3.14f) * 0.25f;
+            for (i = 0; i < 2; i++) {
+                float *phase = &D_L11_00161E08[i * 2];
+                phase[0] += D_L11_001D9AF0[i * 2] * D_0015ED7C;
+                if (phase[0] > 1.0f) phase[0] -= 1.0f;
+                if (phase[0] < -1.0f) phase[0] += 1.0f;
+                phase[1] += D_L11_001D9AF0[i * 2 + 1] * D_0015ED7C;
+                if (phase[1] > 1.0f) phase[1] -= 1.0f;
+                if (phase[1] < -1.0f) phase[1] += 1.0f;
+            }
+            enqueue_callback_list_1_b358((void *)FUN_L11_0030a908, moby);
+        }
+    }
+}
+#endif

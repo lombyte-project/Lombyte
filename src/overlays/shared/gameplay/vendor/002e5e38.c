@@ -951,7 +951,80 @@ void FUN_L00_002e7530(O002e7530 *o, V002e7530 *a, V002e7530 *b, V002e7530 *c, V0
     add_vector_xyz(&t3, m, &t2);
     subtract_vector_xyz(a, &t3, out);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7618.s", FUN_L00_002e7618);
+#else
+extern char *D_L00_00166E00_2e7618 __asm__("D_L00_00166E00");
+extern int D_L00_0015EF5C_2e7618 __asm__("D_L00_0015EF5C");
+extern int D_001413D0_2e7618 __asm__("D_001413D0") __attribute__((section(".data")));
+extern struct { u8 pad[0x2080]; int value; } D_0013F350_2e7618 __asm__("D_0013F350") __attribute__((section(".data")));
+extern void clear_u64_value_2e7618(void *) __asm__("FUN_001f99f8");
+extern void add_vector_xyz_2e7618(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz_2e7618(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float squared_distance_xyz_2e7618(void *, void *) __asm__("FUN_001f9b48");
+extern float resolve_level_path_segment_point_2e7618(V002e7530 *, V002e7530 *, V002e7530 *, V002e7530 *, float) __asm__("FUN_L00_0025dcd8");
+extern int coll_sphere_2e7618(void *, int, int, float) __asm__("FUN_L00_001f0d60");
+
+int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float spd) {
+    V002e7530 delta, diff, start, hit, near, pos, temp, next;
+    V002e7530 *path;
+    V002e7530 *orbit;
+    u8 *range;
+    u8 *m;
+    u8 *g;
+    float lim, measure, radius;
+    int found;
+
+    m = o->m;
+    g = *(u8 **)(D_L00_00166E00_2e7618 + 0x70);
+    orbit = (V002e7530 *)(m + 0x130);
+    path = (V002e7530 *)(m + 0x90);
+    range = m + 0x1d0;
+    found = 0;
+    lim = D_L00_00161CD8 + *(float *)(g + 0x214) * *(float *)(g + 0x20c) * (*(float *)(g + 0x210) - 1.0f);
+    clear_u64_value_2e7618(&delta);
+    qcopy(&start, out);
+    qcopy(&hit, &D_L00_00173E60);
+    qcopy(&near, &D_L00_00173E70);
+    add_vector_xyz_2e7618(&pos, path, orbit);
+    measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
+    radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) *
+              (squared_distance_xyz_2e7618(path, &temp) /
+               (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30)))) * 0.75f;
+    if (measure < radius) {
+        found = 1;
+        FUN_L00_002e7530(o, &delta, &temp, &hit, &start, radius - measure, dist);
+        qcopy(out, &near);
+        if (coll_sphere_2e7618(out, D_L00_0015EF5C_2e7618, D_0013F350_2e7618.value, spd)) {
+            subtract_vector_xyz_2e7618(&diff, &start, out);
+            add_vector_xyz_2e7618(&hit, &D_L00_00173E60, &diff);
+            measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
+            radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) *
+                      (squared_distance_xyz_2e7618(path, &temp) /
+                       (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30)))) * 0.75f;
+            if (measure < radius) {
+                FUN_L00_002e7530(o, &next, &temp, &hit, &start, radius - measure, dist);
+                add_vector_xyz_2e7618(&delta, &delta, &next);
+                qcopy(out, &D_L00_00173E70);
+                if (coll_sphere_2e7618(out, D_L00_0015EF5C_2e7618, D_0013F350_2e7618.value, spd)) {
+                    subtract_vector_xyz_2e7618(&diff, &start, out);
+                    add_vector_xyz_2e7618(&hit, &D_L00_00173E60, &diff);
+                    measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
+                    radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) *
+                              (squared_distance_xyz_2e7618(path, &temp) /
+                               (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30)))) * 0.75f;
+                    if (measure < radius) {
+                        FUN_L00_002e7530(o, &next, &temp, &hit, &start, radius - measure, dist);
+                        add_vector_xyz_2e7618(&delta, &delta, &next);
+                    }
+                }
+            }
+        }
+    }
+    add_vector_xyz_2e7618(out, &start, &delta);
+    return found;
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

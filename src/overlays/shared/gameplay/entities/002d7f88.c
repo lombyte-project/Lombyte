@@ -937,7 +937,91 @@ void FUN_L00_002dc938(char *p, char *q, int flag) {
         FUN_0020c828_002dc938(p);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002dc9f0.s", FUN_L00_002dc9f0);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002dd8e8.s", FUN_L00_002dd8e8);
+#else
+typedef struct {
+    u128 points[4];
+    u32 colors[4];
+    float texcoords[8];
+    u64 texture[4];
+} __attribute__((aligned(16))) Quad_002dd8e8;
+extern float D_L00_00161B48_002dd8e8 __asm__("D_L00_00161B48") __attribute__((sda));
+extern char D_L00_001E6020_002dd8e8[] __asm__("D_L00_001E6020") __attribute__((section(".data")));
+extern char D_L00_001E5EE0_002dd8e8[] __asm__("D_L00_001E5EE0") __attribute__((section(".data")));
+u64 FUN_001f9298_002dd8e8(int) __asm__("FUN_L00_001f9298");
+void FUN_001ff2a8_002dd8e8(void *, void *, void *) __asm__("FUN_L00_001ff2a8");
+void FUN_001ff3c0_002dd8e8(void *, void *, void *) __asm__("FUN_L00_001ff3c0");
+float FUN_001ff398_002dd8e8(void *, void *) __asm__("FUN_L00_001ff398");
+void FUN_001fd228_002dd8e8(void *, int, int) __asm__("FUN_L00_001fd228");
+void FUN_002a0ba8_002dd8e8(int, int) __asm__("FUN_L00_002a0ba8");
+
+void FUN_L00_002dd8e8(void) {
+    Quad_002dd8e8 quad;
+    u128 following, edge, outward, normal;
+    float phase, next_phase, offset, step, dot;
+    int row, segment, next_segment, value, previous_value;
+    char *current, *prior;
+
+    quad.texture[1] = FUN_001f9298_002dd8e8(0x15);
+    quad.texture[2] = 0xff9000000260ULL;
+    quad.texture[3] = 0x8000000048ULL;
+    quad.texture[0] = 0;
+    phase = ((float *)&D_L00_00161B48_002dd8e8)[-2];
+    ((float *)&D_L00_00161B48_002dd8e8)[-2] += 0.001f;
+    if (((float *)&D_L00_00161B48_002dd8e8)[-2] > 7.0f)
+        ((float *)&D_L00_00161B48_002dd8e8)[-2] -= 7.0f;
+    phase += 0.3f;
+    step = 0.05f;
+    for (row = 1; row < 10; row++) {
+        offset = ((float *)&D_L00_00161B48_002dd8e8)[-1];
+        next_phase = phase + 0.3f;
+        ((float *)&D_L00_00161B48_002dd8e8)[-1] += D_L00_00161B48_002dd8e8;
+        if (((float *)&D_L00_00161B48_002dd8e8)[-1] > 7.0f)
+            ((float *)&D_L00_00161B48_002dd8e8)[-1] -= 7.0f;
+        current = D_L00_001E6020_002dd8e8 + row * 0x140;
+        prior = D_L00_001E5EE0_002dd8e8 + row * 0x140;
+        for (segment = 0; segment < 20; segment++) {
+            next_segment = (segment + 1) % 20;
+            qcopy(&quad.points[0], current + segment * 16);
+            qcopy(&quad.points[1], current + next_segment * 16);
+            qcopy(&quad.points[2], prior + segment * 16);
+            qcopy(&quad.points[3], prior + next_segment * 16);
+            FUN_001ff2a8_002dd8e8(&edge, &quad.points[0], &quad.points[1]);
+            FUN_001ff2a8_002dd8e8(&outward, &quad.points[2], &quad.points[1]);
+            FUN_001ff3c0_002dd8e8(&normal, &outward, &edge);
+            FUN_001ff2a8_002dd8e8(&following, &quad.points[1], D_L00_00166DC0_002d8418);
+            dot = FUN_001ff398_002dd8e8(&normal, &following);
+            if (!(0.0f <= dot)) {
+                value = ((short *)(D_L00_001E6020_002dd8e8 - 0x18))[row];
+                previous_value = ((short *)(D_L00_001E6020_002dd8e8 - 0x18))[row - 1];
+                if (value < 0) value = 0;
+                if (value > 0x40) value = 0x40;
+                if (previous_value < 0) previous_value = 0;
+                if (previous_value > 0x40) previous_value = 0x40;
+                quad.colors[0] = quad.colors[1] = (value << 24) | 0x404040;
+                quad.colors[2] = quad.colors[3] = (previous_value << 24) | 0x404040;
+                if (row == 1)
+                    quad.colors[2] = quad.colors[3] = 0x20404040;
+                else if (row == 9)
+                    quad.colors[0] = quad.colors[1] = 0x00404040;
+                quad.texcoords[0] = phase;
+                quad.texcoords[1] = offset;
+                quad.texcoords[2] = phase;
+                quad.texcoords[3] = offset + step;
+                quad.texcoords[4] = phase - 0.3f;
+                quad.texcoords[5] = offset;
+                quad.texcoords[6] = phase - 0.3f;
+                quad.texcoords[7] = offset + step;
+                FUN_001fd228_002dd8e8(&quad, 0, 0);
+            }
+            offset += step;
+        }
+        phase = next_phase;
+    }
+    FUN_002a0ba8_002dd8e8(0x47, 0x5360b);
+}
+#endif
 extern int D_L00_00161B44_002ddca0 __asm__("D_L00_00161B44") __attribute__((sda));
 extern int D_L00_00161B40_002ddca0 __asm__("D_L00_00161B40") __attribute__((sda));
 extern short D_L00_001E6008_002ddca0 __asm__("D_L00_001E6008") __attribute__((section(".data")));

@@ -5,7 +5,79 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8178.s", FUN_L06_002d8178);
+#include "qcopy.h"
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
+extern unsigned char *FUN_L00_0026b790(void *, int, int, float, float, float, float, float);
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float FUN_L00_00257c48(float, float);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float FUN_001f9e90(float, float);
+extern int FUN_001f96f8(int);
+extern char *D_001413D0 __attribute__((section(".data")));
+extern float D_0015ED6C;
+extern unsigned char *FUN_L06_00300c60(char *, float *, float *);
+
+void FUN_L06_002d8178(void *moby_ptr, void *target_ptr) {
+    int i;
+    int j;
+    char *moby = moby_ptr;
+    char *target = target_ptr;
+    float origin[4];
+    float displacement[4];
+    float pos[4];
+    float vel[4];
+    float angle;
+    float direction_angle;
+    float speed;
+    unsigned char *fragment;
+
+    allocate_voice_for_target_entry(0, 0, (int)moby);
+    qcopy(origin, moby + 0x10);
+    origin[2] += 0.3f;
+    FUN_L00_0026b790(origin, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
+    for (i = 4; i >= 0; i--) {
+        FUN_L00_0026b790(origin, 1, 0x40808080, 0.3f, 1.01f, 1.07f, 0.05f, 50000.0f);
+    }
+    if (target != 0) {
+        qcopy(displacement, target + 0x10);
+    } else {
+        subtract_vector_xyz(displacement, moby + 0x10, D_001413D0 + 0x10);
+    }
+    for (j = 9; j >= 0; j--) {
+        qcopy(pos, moby + 0x10);
+        pos[0] += FUN_L00_00257c48(0.0f, 0.2f);
+        pos[1] += FUN_L00_00257c48(0.0f, 0.2f);
+        pos[2] += random_float_between(0.15f, 0.55f);
+        angle = random_angle_radians();
+        speed = random_float_between(2.0f, 4.5f) * D_0015ED6C;
+        vel[0] = fast_cos(angle) * speed;
+        vel[1] = fast_sin(angle) * speed;
+        vel[2] = 0.0f;
+        speed = random_float_between(D_0015ED6C * 0.7f, D_0015ED6C * 1.5f);
+        if (target != 0) {
+            direction_angle = FUN_001f9e90(*(float *)(target + 0x10), *(float *)(target + 0x14));
+            vel[0] += fast_cos(direction_angle) * speed;
+            vel[1] += fast_sin(FUN_001f9e90(*(float *)(target + 0x10), *(float *)(target + 0x14))) * speed;
+        } else {
+            direction_angle = FUN_001f9e90(*(float *)(moby + 0x10) - hero.motion.pos.f[0],
+                                  *(float *)(moby + 0x14) - hero.motion.pos.f[1]);
+            vel[0] += fast_cos(direction_angle) * speed;
+            vel[1] += fast_sin(direction_angle) * speed;
+        }
+        vel[2] = random_float_between(2.0f, 7.0f) * D_0015ED6C;
+        fragment = FUN_L06_00300c60(moby, pos, vel);
+        if (fragment != 0) {
+            *(float *)(fragment + 0x2c) *= 0.3f;
+        }
+    }
+    *(int *)(moby + 0x94) = 0;
+    moby[0x20] = 2;
+    *(unsigned short *)(moby + 0x34) |= 1;
+    moby[0xbc] = (unsigned char)FUN_001f96f8(15);
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -42,7 +114,7 @@ extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_L00_001fefc8(void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L06_002d8178(void *, void *);
-extern void FUN_L06_002d8738(void);
+extern void FUN_L06_002d8738(char *);
 extern void enqueue_callback_list_1(int, int) __asm__("FUN_001f4600");
 
 void FUN_L06_002d85a0(unsigned char *moby) {
@@ -80,7 +152,120 @@ void FUN_L06_002d85a0(unsigned char *moby) {
         break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8738.s", FUN_L06_002d8738);
+#else
+extern float FUN_001f99c0(float);
+extern float FUN_001f9988(float);
+extern long FUN_001f44b8(int);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern float FUN_001f9ab0(void *, void *);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_001f7d30(void *, int, int);
+extern char D_L06_00167540[];
+extern float D_L06_001D3290[][4] __attribute__((section(".data")));
+extern short D_L06_001D3620[][8] __attribute__((section(".data")));
+extern float D_L06_001D38C0[][2] __attribute__((section(".data")));
+extern float D_L06_001D3A90[][4] __attribute__((section(".data")));
+extern float D_L06_001D3D30[][4] __attribute__((section(".data")));
+extern float D_L06_001D40C0[][4] __attribute__((section(".data")));
+extern float D_L06_001D4360[][2] __attribute__((section(".data")));
+extern float D_L06_001D4530[][4] __attribute__((section(".data")));
+extern float D_L06_00161C64 __attribute__((sda));
+#define L06_BACKDROP_WORD(offset) (*(int *)((char *)&D_L06_00161C64 + (offset)))
+#define L06_BACKDROP_FLOAT(offset) (*(float *)((char *)&D_L06_00161C64 + (offset)))
+
+typedef struct {
+    float corner[4][4];
+    int color[4];
+    float uv[4][2];
+    long unk70;
+    long tex;
+    long unk80;
+    long unk88;
+} L06BackdropQuad;
+
+void FUN_L06_002d8738(char *moby) {
+    L06BackdropQuad quad;
+    float matrix[3][4] __attribute__((aligned(16)));
+    float pos[4] __attribute__((aligned(16)));
+    float direction[4] __attribute__((aligned(16)));
+    float facePos[4] __attribute__((aligned(16)));
+    float normal[4] __attribute__((aligned(16)));
+    float projected[4] __attribute__((aligned(16)));
+    int near;
+    int i, j;
+    float scale;
+    qcopy(matrix[0], moby + 0xc0);
+    qcopy(matrix[1], moby + 0xd0);
+    qcopy(matrix[2], moby + 0xe0);
+    pos[0] = *(float *)(moby + 0x10);
+    pos[1] = *(float *)(moby + 0x14);
+    pos[2] = *(float *)(moby + 0x18);
+    pos[3] = 1.0f;
+    near = 0;
+    if (FUN_001f99c0(((float *)D_L06_00167540)[0] - pos[0]) < 16.0f &&
+        FUN_001f99c0(((float *)D_L06_00167540)[1] - *(float *)(moby + 0x14)) < 16.0f) {
+        near = 1;
+    }
+    if (near) {
+        for (i = 0; i < 57; i++) {
+            FUN_001f9d20(D_L06_001D4530[i], D_L06_001D3290[i], matrix);
+            FUN_001f9a28(direction, D_L06_001D4530[i], D_L06_00167540);
+            FUN_001f9bf8(direction, direction, 1.0f);
+            FUN_001f9d20(normal, D_L06_001D3D30[i], matrix);
+            FUN_001f9bf8(normal, normal, L06_BACKDROP_FLOAT(0x28));
+            scale = FUN_001f9ab0(normal, direction);
+            FUN_001f9a68(projected, normal, scale + scale);
+            FUN_001f9a28(projected, direction, projected);
+            FUN_001f9bf8(projected, projected, 1.0f);
+            projected[2] += 1.0f;
+            scale = FUN_001f9988(projected[2] + projected[2]);
+            D_L06_001D4360[i][1] = projected[1] / (scale + scale) + 0.5f;
+            D_L06_001D4360[i][0] = projected[0] / (scale + scale) + 0.5f;
+        }
+    } else {
+        for (i = 0; i < 57; i++) {
+            FUN_001f9d20(D_L06_001D4530[i], D_L06_001D3290[i], matrix);
+        }
+    }
+    quad.tex = FUN_001f44b8(L06_BACKDROP_WORD(0x20));
+    quad.unk80 = 0xff9000000260L;
+    quad.unk88 = (long)L06_BACKDROP_WORD(0xc) | (long)L06_BACKDROP_WORD(0x10) << 2 |
+                 (long)L06_BACKDROP_WORD(0x14) << 4 | (long)L06_BACKDROP_WORD(0x18) << 6 |
+                 (long)L06_BACKDROP_WORD(0x1c) << 32;
+    quad.unk70 = 0;
+    quad.color[0] = L06_BACKDROP_WORD(0x24);
+    quad.color[1] = L06_BACKDROP_WORD(0x24);
+    quad.color[2] = L06_BACKDROP_WORD(0x24);
+    quad.color[3] = L06_BACKDROP_WORD(0x24);
+    for (i = 0; i < 42; i++) {
+        FUN_001f9d20(facePos, D_L06_001D40C0[i], matrix);
+        FUN_001f9a28(direction, facePos, D_L06_00167540);
+        FUN_001f9bf8(direction, direction, 1.0f);
+        FUN_001f9cf8(facePos, D_L06_001D3A90[i], matrix);
+        if (!(0.0f < FUN_001f9ab0(direction, facePos))) {
+            for (j = 0; j < 4; j++) {
+                short *indices = D_L06_001D3620[i];
+                short vertex = indices[j * 2];
+                qcopy(quad.corner[j], D_L06_001D4530[vertex]);
+                if (near) {
+                    quad.uv[j][0] = D_L06_001D4360[vertex][0];
+                    quad.uv[j][1] = D_L06_001D4360[vertex][1];
+                } else {
+                    short uv = indices[j * 2 + 1];
+                    quad.uv[j][0] = D_L06_001D38C0[uv][0];
+                    quad.uv[j][1] = D_L06_001D38C0[uv][1];
+                }
+            }
+            FUN_001f7d30(&quad, 0, 0);
+        }
+    }
+}
+#endif
 /* Spawns a moby of type 0x12F at the owner's position and links it to the owner. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002D9F68), where it is exact; names translated to the US level program. */
 

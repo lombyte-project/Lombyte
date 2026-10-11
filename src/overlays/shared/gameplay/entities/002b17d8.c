@@ -740,7 +740,97 @@ int FUN_L14_002d9870(int i) {
     data[2] = FUN_001f96f8(0x3C);
     return r;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de670.s", FUN_L14_002de670);
+#else
+extern f32 D_L14_00161B18_de670 __asm__("D_L14_00161B18") __attribute__((sda));
+extern f32 D_L14_00161B1C_de670 __asm__("D_L14_00161B1C") __attribute__((sda));
+extern f32 D_L14_00161B20_de670 __asm__("D_L14_00161B20") __attribute__((sda));
+extern f32 D_0015ED60_de670 __asm__("D_0015ED60") __attribute__((section(".data")));
+extern f32 D_0015ED64_de670 __asm__("D_0015ED64") __attribute__((section(".data")));
+#define DE670_THRESHOLD D_L14_00161B20_de670
+#define DE670_DAMPING D_L14_00161B1C_de670
+#define DE670_GRAVITY D_L14_00161B18_de670
+extern s32 D_001413D0;
+extern void FUN_L14_002dec40(struct Moby *);
+extern void FUN_001f4600(void (*)(struct Moby *), struct Moby *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern f32 FUN_001f99c0(f32);
+extern f32 fast_add_rotations(f32, f32);
+extern s32 FUN_001f9740(void *);
+extern s32 FUN_001f96f8(s32);
+extern s32 random_integer_below_de670(s32) __asm__("FUN_00213260");
+extern s32 FUN_L00_00257b90(s32, s32);
+extern f32 random_float_between_de670(f32, f32) __asm__("FUN_002132a8");
+extern s32 FUN_L00_001f0d60(f32, void *, s32, void *);
+extern void FUN_L00_0025e450(void *, void *, void *, f32, f32, s32, s32, s32,
+                              f32, f32, f32, f32, s32, f32, s32, s32, s32, s32);
+extern void FUN_L00_0026cbb0_de670(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
+extern u8 *FUN_L00_0026d000_de670(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
+extern void FUN_0020c828(struct Moby *);
+
+void FUN_L14_002de670(struct Moby *moby) {
+    f32 *velocity = (f32 *)moby->pvars;
+    f32 *position;
+    s32 i;
+    s32 n;
+    s32 color;
+    f32 size;
+    u8 *particle;
+    u8 *fade;
+
+    if (random_integer_below_de670(2) != 0) {
+        FUN_001f4600(FUN_L14_002dec40, moby);
+    }
+    position = (f32 *)&moby->pos;
+    FUN_001f9a10(position, position, velocity);
+    if (DE670_THRESHOLD * D_0015ED60_de670 < FUN_001f99c0(velocity[0])) {
+        velocity[0] *= (DE670_DAMPING - 1.0f) * D_0015ED60_de670 + 1.0f;
+    }
+    if (DE670_THRESHOLD * D_0015ED60_de670 < FUN_001f99c0(velocity[1])) {
+        velocity[1] *= (DE670_DAMPING - 1.0f) * D_0015ED60_de670 + 1.0f;
+    }
+    if (velocity[2] > 0.0f) {
+        velocity[2] *= (DE670_DAMPING - 1.0f) * D_0015ED60_de670 + 1.0f;
+    }
+    velocity[2] -= DE670_GRAVITY * D_0015ED64_de670;
+    moby->rot.x = fast_add_rotations(moby->rot.x, velocity[4]);
+    moby->rot.y = fast_add_rotations(moby->rot.y, velocity[5]);
+    moby->rot.z = fast_add_rotations(moby->rot.z, velocity[6]);
+
+    if (!(position[0] < 2.0f || 1021.0f < position[0] ||
+          position[1] < 2.0f || 1021.0f < position[1] ||
+          position[2] < 2.0f || 1021.0f < position[2])) {
+        if (FUN_001f9740(velocity + 8) == 0 &&
+            FUN_L00_001f0d60(0.5f, position, 0, *(void **)(velocity + 9)) == 0) {
+            FUN_L00_0026cbb0_de670(position, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
+                             FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(20)), 1, 60000.0f);
+            for (i = 1; i >= 0; --i) {
+                n = random_integer_below_de670(6);
+                if (random_integer_below_de670(2) != 0) n = -n;
+                size = random_float_between_de670(40000.0f, 100000.0f);
+                color = FUN_L00_00257b90(0x30, 0xFF);
+                particle = FUN_L00_0026d000_de670(position, 0.025f, 1.0f, 1.0f, n,
+                                               D_L14_0015F580, size,
+                                               0x60000000 | color | color << 8 | color << 16);
+                if (particle != 0) {
+                    particle[3] = 0x44;
+                    fade = particle + 0x20;
+                    *(s16 *)(particle + 0xA) = FUN_001f96f8(0x3C);
+                    *(s32 *)(fade + 4) = 2;
+                    fade[0xA] = 0x60;
+                    fade[0xB] = particle[0xA];
+                }
+            }
+            return;
+        }
+        FUN_L00_0025e450(moby, velocity, position, 0.0f, 0.0f, 5, 2, 4,
+                            1.0f, 0.5f, 9.0f, 1.0f, 0, 15.0f, 1, 5, -1, 0);
+        FUN_L00_001f0d60(1.0f, position, 0, (void *)D_001413D0);
+    }
+    FUN_0020c828(moby);
+}
+#endif
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002DFE98), where it is exact; names translated to the US level program. */

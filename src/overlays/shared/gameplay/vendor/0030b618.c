@@ -5,7 +5,138 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030b618.s", FUN_L01_0030b618);
+#else
+#include "rnc/overlay/quad.h"
+#include "qcopy.h"
+extern s32 truncate_float_to_s32_b618(f32) __asm__("FUN_001fa6d0");
+extern f32 distance_xyz_b618(void *, void *) __asm__("FUN_001f9b80");
+extern s32 is_point_inside_clip_volume_b618(void *, s32) __asm__("FUN_00214720");
+extern s32 is_timer_active_b618(void *) __asm__("FUN_001f9740");
+extern s32 random_integer_between_b618(s32, s32) __asm__("FUN_L00_00257b90");
+extern f32 itof_s_b618(s32) __asm__("FUN_001fa6c0");
+extern f32 fast_sin_b618(f32) __asm__("FUN_001f9de0");
+extern void interpolate_vector_b618(void *, void *, void *, f32) __asm__("FUN_L00_0025b6b8");
+extern s32 FUN_L00_0023e738(void *, f32, f32, f32, f32, f32);
+extern void FUN_L00_0023e838(s32);
+extern void mark_moby_for_removal_b618(void *) __asm__("FUN_0020c828");
+extern char D_L01_00167240_b618[] __asm__("D_L01_00167240");
+extern char *D_L01_0015FFD8_b618 __asm__("D_L01_0015FFD8") __attribute__((sda));
+extern char D_L01_00180740_b618[] __asm__("D_L01_00180740");
+
+void FUN_L01_0030b618(u8 *m) {
+    s32 state = m[0x20];
+    char *e = *(char **)(m + 0x78);
+    s32 i;
+    s32 count;
+    s32 current;
+    s32 next;
+    s32 slot;
+    f32 elapsed;
+    f32 active;
+    f32 phase;
+    f32 cutoff;
+    OvlQuad first;
+    OvlQuad second;
+
+    switch (state) {
+    case 0:
+        if (*(s32 *)(e + 0x58) < 2) {
+            mark_moby_for_removal_b618(m);
+            return;
+        }
+        for (i = 0; i < *(s32 *)(e + 0x58); i++) {
+            f32 *point = ((f32 *)e) + i * 4;
+            point[0] *= 0.00390625f;
+            point[1] *= 0.00390625f;
+            point[2] *= 0.00390625f;
+            point[3] *= 0.00390625f;
+        }
+        *(s32 *)(e + 0x68) = -1;
+        if (m[0x30] < truncate_float_to_s32_b618(*(f32 *)(e + 0x5c)) + 4)
+            m[0x30] = truncate_float_to_s32_b618(*(f32 *)(e + 0x5c)) + 4;
+        m[0x20] = 1;
+        return;
+    case 1:
+        break;
+    default:
+        return;
+    }
+
+    elapsed = distance_xyz_b618(m + 0x10, D_L01_00167240_b618);
+    active = elapsed < *(f32 *)(e + 0x5c) ? 1.0f : 0.0f;
+    if (active != 0.0f && *(s32 *)(e + 0x80) != -1) {
+        if (!is_point_inside_clip_volume_b618(D_L01_00167240_b618, *(s32 *)(e + 0x80)))
+            active = 0.0f;
+    }
+    i = *(s32 *)(e + 0x84);
+    if (i != -1 && *(s8 *)(D_L01_0015FFD8_b618 + (i << 8) + 0x20) < 0) {
+        slot = *(s32 *)(e + 0x68);
+        if (slot != -1)
+            FUN_L00_0023e838(slot);
+        mark_moby_for_removal_b618(m);
+        return;
+    }
+    if (active != 0.0f) {
+
+        if (is_timer_active_b618(e + 0x6c)) {
+            current = random_integer_between_b618(*(s32 *)(e + 0x50), *(s32 *)(e + 0x54));
+            *(s32 *)(e + 0x74) = *(s32 *)(e + 0x78);
+            *(s32 *)(e + 0x6c) = current;
+            *(s32 *)(e + 0x70) = current;
+            count = *(s32 *)(e + 0x58);
+            next = random_integer_between_b618(1, count - 1);
+            i = (*(s32 *)(e + 0x78) + next) % count;
+            *(s32 *)(e + 0x7c) = *(s32 *)(e + 0x7c) == 0;
+            *(s32 *)(e + 0x78) = i;
+        }
+        phase = itof_s_b618(*(s32 *)(e + 0x70) - *(s32 *)(e + 0x6c));
+        phase = phase / itof_s_b618(*(s32 *)(e + 0x70));
+        phase = phase * 3.1415927f * 0.5f;
+        if (*(s32 *)(e + 0x7c) != 0)
+            phase += 1.5707964f;
+        phase = fast_sin_b618(phase);
+
+        if (*(s32 *)(e + 0x7c) == 0) {
+            first = ((OvlQuad *)e)[*(s32 *)(e + 0x74)];
+            next = *(s32 *)(e + 0x78);
+        } else {
+            first = ((OvlQuad *)e)[*(s32 *)(e + 0x78)];
+            next = *(s32 *)(e + 0x74);
+        }
+        second = ((OvlQuad *)e)[next];
+        interpolate_vector_b618(e + 0x40, &first, &second, phase);
+        cutoff = *(f32 *)(e + 0x5c) * 0.75f;
+        if (cutoff < elapsed) {
+            second = *(OvlQuad *)(e + 0x40);
+            first = 0;
+            interpolate_vector_b618(e + 0x40, &second, &first,
+                                    (elapsed - cutoff) / (*(f32 *)(e + 0x5c) - cutoff));
+        }
+        slot = *(s32 *)(e + 0x68);
+        if (slot == -1) {
+            slot = FUN_L00_0023e738(m + 0x10, *(f32 *)(e + 0x60), *(f32 *)(e + 0x4c),
+                                  *(f32 *)(e + 0x40), *(f32 *)(e + 0x44),
+                                  *(f32 *)(e + 0x48));
+            *(s32 *)(e + 0x68) = slot;
+            return;
+        }
+        {
+            char *p = D_L01_00180740_b618 + slot * 0x20;
+            qcopy(p + 0x10, m + 0x10);
+            *(f32 *)(p + 0x1c) = *(f32 *)(e + 0x60);
+            qcopy(p, e + 0x40);
+        }
+    } else {
+        slot = *(s32 *)(e + 0x68);
+        if (slot != -1) {
+            FUN_L00_0023e838(slot);
+            *(s32 *)(e + 0x68) = -1;
+        }
+    }
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030bfa8.s", FUN_L01_0030bfa8);
 #define NOT_SDA
 
@@ -51,7 +182,105 @@ char *FUN_L01_0030c898(char *owner, char *pos, float a, float b, float c, float 
     }
     return m;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c9a8.s", FUN_L01_0030c9a8);
+#else
+typedef struct {
+    OvlQuad dir;
+    void *owner;
+    s32 flags;
+    u8 b28;
+    u8 b29;
+    u16 id;
+    f32 scale;
+    s32 count;
+} DropProbe_30c9a8;
+
+extern f32 FUN_L00_00258110(f32 *, f32, f32, f32, f32, f32);
+extern void build_spherical_offset_30c9a8(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
+extern void add_vector_xyz_30c9a8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern f32 distance_xyz_30c9a8(void *, void *) __asm__("FUN_001f9b80");
+extern void subtract_vector_xyz_30c9a8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz_30c9a8(void *, void *, f32) __asm__("FUN_001f9c48");
+extern s32 is_timer_active_30c9a8(void *) __asm__("FUN_001f9770");
+extern s32 collision_line_30c9a8(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
+extern s32 FUN_001f0b58(void);
+extern void mark_moby_for_removal_30c9a8(void *) __asm__("FUN_0020c828");
+extern f32 D_L01_00167240_30c9a8[] __asm__("D_L01_00167240");
+extern OvlQuad D_L01_001742E0_30c9a8 __asm__("D_L01_001742E0");
+extern OvlQuad D_0013F3D0_30c9a8 __asm__("D_0013F3D0");
+
+void FUN_L01_0030c9a8(char *m) {
+    char *e = *(char **)(m + 0x78);
+    f32 *pos;
+    OvlVec4 old_pos;
+    OvlVec4 offset;
+    DropProbe_30c9a8 probe;
+    f32 desired_yaw, desired_pitch;
+    f32 pitch_k, pitch_d, pitch_max;
+    f32 height = *(f32 *)(*(char **)(m + 0x24) + 0x24);
+
+    if (*(f32 *)(m + 0x2c) < height)
+        *(f32 *)(m + 0x2c) += frame_scale * 0.21f * height;
+
+    if (*(s16 *)(e + 0x14) < scale_game_frames(0x23) - scale_game_frames(1)) {
+        desired_yaw = *(f32 *)(e + 8);
+        desired_pitch = *(f32 *)(e + 0xc);
+    } else {
+        desired_yaw = *(f32 *)(m + 0x48);
+        desired_pitch = *(f32 *)(m + 0x44);
+    }
+    pos = (f32 *)(m + 0x10);
+    desired_yaw = FUN_L00_00258110((f32 *)e, *(f32 *)(m + 0x48), desired_yaw,
+                                            frame_time_sq * 4.712389f,
+                                            frame_time_sq * 3.1415927f,
+                                            frame_time * 3.1415927f);
+    pitch_d = frame_time_sq * 3.1415927f;
+    pitch_k = frame_time_sq * 4.712389f;
+    pitch_max = frame_time * 3.1415927f;
+    *(f32 *)(m + 0x48) = desired_yaw;
+    *(f32 *)(m + 0x44) = FUN_L00_00258110((f32 *)(e + 4), *(f32 *)(m + 0x44), desired_pitch,
+                                            pitch_k, pitch_d, pitch_max);
+    build_spherical_offset_30c9a8(offset.f, frame_time * 40.0f,
+                                   *(f32 *)(m + 0x48), -*(f32 *)(m + 0x44));
+    old_pos.q = *(OvlQuad *)pos;
+    add_vector_xyz_30c9a8(pos, pos, &offset);
+    if (pos[0] < 2.0f || pos[0] > 1021.0f ||
+        pos[1] < 2.0f || pos[1] > 1021.0f ||
+        pos[2] < 2.0f || pos[2] > 1021.0f ||
+        pos[0] < 0.0f || pos[1] < 0.0f || pos[2] < 0.0f ||
+        distance_xyz_30c9a8(pos, D_L01_00167240_30c9a8) > 64.0f) {
+        mark_moby_for_removal_30c9a8(m);
+        return;
+    }
+    probe.owner = m;
+    probe.flags = 0x10001;
+    probe.scale = 0.5f;
+    probe.count = 1;
+    subtract_vector_xyz_30c9a8(&probe.dir, pos, &D_0013F3D0_30c9a8);
+    scale_vector_xyz_30c9a8(&probe.dir, &probe.dir, 1.0f);
+    ((f32 *)&probe.dir)[2] = 1.0f;
+    ((f32 *)&probe.dir)[3] = 5627.9248f;
+    probe.b28 = 1;
+    probe.b29 = 1;
+    probe.id = *(u16 *)(m + 0xa6);
+    if (is_timer_active_30c9a8(e + 0x14)) {
+        mark_moby_for_removal_30c9a8(m);
+        return;
+    }
+    {
+        if (!collision_line_30c9a8(&old_pos, pos, 0, *(void **)(e + 0x10), &probe))
+            return;
+        if (!FUN_001f0b58()) {
+            if (*(s16 *)(e + 0x14) > scale_game_frames(3))
+                *(s16 *)(e + 0x14) = scale_game_frames(3);
+            return;
+        }
+        *(OvlQuad *)pos = D_L01_001742E0_30c9a8;
+    }
+    mark_moby_for_removal_30c9a8(m);
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -620,9 +849,6 @@ void FUN_L01_00314e98(Camera *cam) {
     control->mode = 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315358.s", FUN_L01_00315358);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315de0.s", FUN_L01_00315de0);
-#else
 extern Camera *D_L01_00167284 __attribute__((section(".data")));
 extern OvlVec4 D_0013F3D0_315de0 __asm__("D_0013F3D0");
 extern f32 FUN_001f9b48(void *, void *);
@@ -632,9 +858,8 @@ void FUN_L01_00315de0(Camera *cam) {
     CameraPresetRow *rows = D_L01_0015EF50;
     Camera *src = D_L01_00167284;
     CameraPreset *s = rows[cam->preset].preset;
-    CameraPath *path;
     OvlVec4 at, delta, to_camera;
-    s32 seg, next;
+    s32 seg;
     f32 t;
 
     qcopy((char *)cam + 0x30, (char *)src + 0x30);
@@ -644,7 +869,9 @@ void FUN_L01_00315de0(Camera *cam) {
     qcopy((char *)cam + 0x40, cam);
 
     if (s->track_path >= 0) {
+        CameraPath *path;
         s32 i;
+        s32 next;
         path = D_L01_001B0930[s->track_path];
         for (i = 0; i < path->count; i++) {
             next = (i + 1) % path->count;
@@ -654,6 +881,8 @@ void FUN_L01_00315de0(Camera *cam) {
 
     *(s16 *)((char *)s + 0x36) = 0;
     if (s->kind == 3) {
+        CameraPath *path;
+        s32 next;
         path = D_L01_001B0930[s->track_path];
         seg = 0;
         t = 0.0f;
@@ -673,7 +902,6 @@ void FUN_L01_00315de0(Camera *cam) {
     }
     FUN_L01_00314e98(cam);
 }
-#endif
 #include "sda.h"
 
 /* Camera data reached through D_L01_0015EF50 */
@@ -743,7 +971,86 @@ void FUN_L01_00316e88(float a, float b) {
     *(float *)(d + 0x44) = a;
     *(float *)(d + 0x48) = b;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00319928.s", FUN_L01_00319928);
+#else
+extern char *D_L00_0015F5F4;
+extern char D_0013E550[];
+extern char D_0013E5E0[];
+extern char D_L01_00167240[];
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float vector_length_319928(void *) __asm__("FUN_001f9af0");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
+extern int calculate_spatial_volume_319928(float, float, float, void *) __asm__("FUN_0022c6f8");
+extern int is_timer_active_319928(void *) __asm__("FUN_001f9740");
+extern int play_voice_319928(int, int, void *, int) __asm__("FUN_L00_0028ddd8");
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
+extern int random_integer_below_319928(int) __asm__("FUN_00213260");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern int set_voice_volume_319928(int, int) __asm__("FUN_L01_002a1968");
+
+void FUN_L01_00319928(char *moby) {
+    OvlVec4 delta, radius, box_size, listener;
+    int *sound_data = *(int **)(moby + 8);
+    int volume;
+    int flags;
+    float box_length, listener_length;
+    char *slot;
+
+    radius.f[2] = radius.f[1] = radius.f[0] = *(float *)(moby + 0xc);
+    subtract_vector_xyz(&delta, D_L01_00167240, moby + 0x40);
+    delta.f[3] = 0.0f;
+    transform_vector_by_basis(&box_size, &delta, moby + 0x50);
+    transform_vector_by_basis(&listener, &radius, moby + 0x50);
+    listener_length = vector_length_319928(&listener);
+    box_length = vector_length_319928(&box_size);
+    if (box_length < listener_length) {
+        flags = 0x10;
+        if (absolute_float(box_size.f[0]) <= 1.0f &&
+            absolute_float(box_size.f[1]) <= 1.0f &&
+            absolute_float(box_size.f[2]) <= 1.0f) {
+            volume = *(int *)(D_L00_0015F5F4 + sound_data[0] * 0x20 + 0xc);
+        } else {
+            if (box_size.f[0] > 1.0f) box_size.f[0] = 1.0f;
+            else if (box_size.f[0] < -1.0f) box_size.f[0] = -1.0f;
+            if (box_size.f[1] > 1.0f) box_size.f[1] = 1.0f;
+            else if (box_size.f[1] < -1.0f) box_size.f[1] = -1.0f;
+            if (box_size.f[2] > 1.0f) box_size.f[2] = 1.0f;
+            else if (box_size.f[2] < -1.0f) box_size.f[2] = -1.0f;
+            volume = calculate_spatial_volume_319928(box_length, vector_length_319928(&box_size),
+                                                     listener_length, D_L00_0015F5F4 + sound_data[0] * 0x20);
+        }
+        if (*(u8 *)(D_L00_0015F5F4 + sound_data[0] * 0x20 + 0x18)) flags = 0x14;
+        slot = D_0013E550 + sound_data[4] * 0x70;
+        if (*(char **)(slot + 0x8c) != moby || *(u8 *)(slot + 0x74) == 0) {
+            if (is_timer_active_319928(&sound_data[3])) {
+                sound_data[4] = play_voice_319928(sound_data[0], flags, moby, volume);
+                if (sound_data[2] > 0) {
+                    sound_data[3] = (int)((float)scale_game_frames(sound_data[1] +
+                        random_integer_below_319928(sound_data[2] - sound_data[1])) * 60.0f);
+                }
+            } else {
+                sound_data[4] = -1;
+            }
+        }
+        if (sound_data[4] != -1) {
+            set_voice_volume_319928(sound_data[4], volume);
+            transform_vector_by_basis(&delta, &box_size, moby + 0x10);
+            add_vector_xyz(&delta, &delta, moby + 0x40);
+            qcopy(D_0013E5E0 + sound_data[4] * 0x70, &delta);
+        }
+    } else {
+        if (sound_data[4] != -1) {
+            slot = D_0013E550 + sound_data[4] * 0x70;
+            if (*(char **)(slot + 0x8c) == moby && *(u8 *)(slot + 0x74) != 0)
+                release_voice_slot(sound_data[4]);
+        }
+        sound_data[4] = -1;
+    }
+}
+#endif
 /* reverb box sound update: starts or stops the sound as the listener enters or leaves the box */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0031AD00.c: func_L01_0031B2F0), where it is exact; names translated to the US level program. */
 

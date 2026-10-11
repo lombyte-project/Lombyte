@@ -330,19 +330,16 @@ void FUN_L14_002d7490(struct Moby *m) {
     FUN_L00_0024f7c8(m, 6, d + 0x200);
     enqueue_callback_list_1(FUN_L14_002d71f0, m);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de1f8.s", FUN_L14_002de1f8);
-#else
 #include "qzero.h"
-extern void FUN_L14_002de2b8(char *, f32, f32);
+extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002de2b8");
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 extern float D_L14_00161AFC __attribute__((sda));
 
 void FUN_L14_002de1f8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    u128 *rotation = (u128 *)&moby->rot;
+    void *rotation;
     u128 old_rotation;
-    qcopy(&old_rotation, rotation);
+    qcopy(&old_rotation, &moby->rot);
 
     if (moby->state == 0) {
         moby->state = 1;
@@ -353,11 +350,13 @@ void FUN_L14_002de1f8(struct Moby *moby) {
         *(int *)(data + 0x70) = 0;
         qzero(data + 0x60);
         qzero(&moby->rot);
+        rotation = &moby->rot;
+    } else {
+        rotation = &moby->rot;
     }
-    FUN_L14_002de2b8((char *)moby, D_L14_00161AFC, 8.0f);
+    FUN_L14_002de2b8_call(moby, D_L14_00161AFC, 8.0f);
     FUN_L00_00260738(data + 0x20, D_L14_0015F580, &old_rotation, rotation);
 }
-#endif
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002ACCC0.c (func_L14_002DF6B8) */
 #include "eetypes.h"
 

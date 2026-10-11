@@ -5,7 +5,110 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ec720.s", FUN_L12_002ec720);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern int scale_game_frames_72(int) __asm__("FUN_001f96f8");
+extern int fast_dec_timer_72(int *) __asm__("FUN_001f9740");
+extern float fast_add_rotations_72(float, float) __asm__("FUN_001fa580");
+extern float convert_integer_to_float_72(int) __asm__("FUN_001fa6c0");
+extern float random_float_between_72(float, float) __asm__("FUN_002132a8");
+extern void random_vector_72(float *, float, float) __asm__("FUN_L00_00257d78");
+extern void subtract_vector_72(float *, float *, float *) __asm__("FUN_001f9a28");
+extern void scale_vector_72(float *, float *, float) __asm__("FUN_001f9a68");
+extern void add_vector_72(float *, float *, float *) __asm__("FUN_001f9a10");
+extern void *FUN_00218888_72(void *, float *, float *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern float approach_value_72(float, float, float *) __asm__("FUN_00213ed8");
+extern void enqueue_callback_list_1_72(void *, void *) __asm__("FUN_001f4600");
+extern void FUN_L12_002ecac0(struct Moby *);
+extern float D_0015ED6C_72 __asm__("D_0015ED6C");
+extern float D_L12_0015F3FC;
+extern float D_L12_001619CC __attribute__((sda));
+extern int D_L12_001619D0 __attribute__((sda));
+extern float D_L12_001619D4 __attribute__((sda));
+extern float D_L12_001619D8 __attribute__((sda));
+extern int D_L12_001619DC __attribute__((sda));
+extern float D_L12_001619E0 __attribute__((sda));
+extern float D_L12_001619E4 __attribute__((sda));
+extern int D_L12_001619E8 __attribute__((sda));
+extern int D_L12_001619EC __attribute__((sda));
+extern int D_L12_001619F0 __attribute__((sda));
+extern int D_L12_001619F4 __attribute__((sda));
+extern int D_L12_001619F8 __attribute__((sda));
+extern float D_L12_001619FC __attribute__((sda));
+extern float D_L12_00161A00 __attribute__((sda));
+extern float D_L12_00161A04 __attribute__((sda));
+extern float D_L12_00161A08 __attribute__((sda));
+
+void FUN_L12_002ec720(struct Moby *moby) {
+    float *data = (float *)moby->pvars;
+    float pos[4], offset0[4], offset1[4], diff0[4], diff1[4];
+    float fraction, frame_scale;
+    int scaled;
+    if (moby->state != 0) {
+        extern float D_L12_0015F3FC __attribute__((sda));
+        frame_scale = D_L12_0015F3FC;
+        if (moby->state == 1) goto active;
+        goto update;
+    }
+    moby->state = 1;
+    moby->unkBC = 2;
+    data[0] = random_angle_radians();
+    data[2] = 5.0f;
+    goto frame_active;
+active:
+    if (moby->unkBC & 8) {
+        moby->unkBC = 1;
+        *(int *)&data[1] = scale_game_frames_72(D_L12_001619D0);
+    } else if (moby->unkBC & 4) {
+        moby->unkBC = 2;
+        *(int *)&data[1] = scale_game_frames_72(D_L12_001619D0);
+    }
+    data[0] = fast_add_rotations_72(data[0], D_L12_001619CC * 0.017453292f * D_0015ED6C_72);
+frame_active:
+    frame_scale = D_L12_0015F3FC;
+update:
+    if (frame_scale == 0.0f) {
+        if (fast_dec_timer_72((int *)&data[1]) == 0) {
+            if (moby->unkBC & 1) {
+                fraction = 1.0f - convert_integer_to_float_72(*(int *)&data[1]) /
+                                  convert_integer_to_float_72(D_L12_001619D0);
+            } else {
+                fraction = convert_integer_to_float_72(*(int *)&data[1]) /
+                           convert_integer_to_float_72(D_L12_001619D0);
+            }
+            if (random_float_between_72(0.0f, 1.0f) < fraction) {
+                random_vector_72(pos, 0.0f, D_L12_001619D4);
+                random_vector_72(offset0, 0.0f, D_L12_001619D4);
+                random_vector_72(offset1, 0.0f, D_L12_001619D4);
+                subtract_vector_72(diff0, pos, offset0);
+                diff0[2] += D_L12_00161A00 - D_L12_001619FC;
+                subtract_vector_72(diff1, offset0, offset1);
+                diff1[2] += D_L12_00161A04 - D_L12_00161A00;
+                scaled = D_L12_001619EC;
+                scale_vector_72(diff0, diff0, 2.0f / (float)scaled);
+                scale_vector_72(diff1, diff1, 2.0f / (float)scaled);
+                add_vector_72(pos, pos, (float *)&moby->pos);
+                if (moby->unkBC & 1) {
+                    pos[2] += D_L12_00161A04;
+                    diff0[2] = -diff0[2];
+                    diff1[2] = -diff1[2];
+                } else {
+                    pos[2] += D_L12_001619FC;
+                }
+                diff0[3] = random_float_between_72(D_L12_001619E0, D_L12_001619E4);
+                diff1[3] = random_float_between_72(D_L12_001619E0, D_L12_001619E4);
+                FUN_00218888_72(pos, diff0, diff1, D_L12_001619F4, D_L12_001619F4,
+                                  D_L12_001619E8, scale_game_frames_72(D_L12_001619EC),
+                                  D_L12_001619F0, D_L12_001619F8);
+            }
+        }
+        if ((moby->unkBC & 1) && *(int *)&data[1] == 0) {
+            approach_value_72(-1.0f, D_L12_00161A08 * D_0015ED6C_72, &data[2]);
+        } else if (moby->unkBC & 2) {
+            approach_value_72(3.0f, D_L12_00161A08 * D_0015ED6C_72, &data[2]);
+        }
+    }
+    enqueue_callback_list_1_72(FUN_L12_002ecac0, moby);
+}
 
 #define NOT_SDA
 

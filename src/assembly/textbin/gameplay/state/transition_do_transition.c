@@ -100,6 +100,7 @@ void transition_do_transition(void) {
     s32 wait;
     s32 i;
     s32 old;
+    u32 alignment_mask = ~0xFu;
     struct DiscTable *tbl;
 
     current_level_index = 0;
@@ -117,19 +118,19 @@ void transition_do_transition(void) {
     hdr->chunk[1].size =
         load(p, ((volatile struct DiscFile *)&tbl->wad_chunks[1])->sector, ((volatile struct DiscFile *)&tbl->wad_chunks[1])->size);
     hdr->chunk[1].off = p - (u8 *)hdr;
-    p += ((u32)hdr->chunk[1].size + 0xF) & 0xFFFFFFF0;
+    p += ((u32)hdr->chunk[1].size + 0xF) & alignment_mask;
     hdr->chunk[2].size = load(p, tbl->wad_chunks[2].sector, tbl->wad_chunks[2].size);
     hdr->chunk[2].off = p - (u8 *)hdr;
-    p += ((u32)hdr->chunk[2].size + 0xF) & 0xFFFFFFF0;
+    p += ((u32)hdr->chunk[2].size + 0xF) & alignment_mask;
     hdr->chunk[3].size = load(p, tbl->wad_chunks[3].sector, tbl->wad_chunks[3].size);
     hdr->chunk[3].off = p - (u8 *)hdr;
-    p += ((u32)hdr->chunk[3].size + 0xF) & 0xFFFFFFF0;
+    p += ((u32)hdr->chunk[3].size + 0xF) & alignment_mask;
     hdr->chunk[4].size = load(p, tbl->wad_chunks[4].sector, tbl->wad_chunks[4].size);
     hdr->chunk[4].off = p - (u8 *)hdr;
-    p += ((u32)hdr->chunk[4].size + 0xF) & 0xFFFFFFF0;
+    p += ((u32)hdr->chunk[4].size + 0xF) & alignment_mask;
     hdr->chunk[5].size = load(p, tbl->wad_chunks[5].sector, tbl->wad_chunks[5].size);
     hdr->chunk[5].off = p - (u8 *)hdr;
-    p += ((u32)hdr->chunk[5].size + 0xF) & 0xFFFFFFF0;
+    p += ((u32)hdr->chunk[5].size + 0xF) & alignment_mask;
     hdr->chunk[0].size = load(p, tbl->wad_chunks[0].sector, tbl->wad_chunks[0].size);
     hdr->chunk[0].off = p - (u8 *)hdr;
     initialize_resource_entry();

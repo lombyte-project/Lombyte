@@ -193,7 +193,105 @@ void FUN_L13_00309370(struct Moby *m) {
     }
     *(float *)(d + 0x1FC) = scale_game_frames(*(int *)&D_L13_00161E84);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003094f8.s", FUN_L13_003094f8);
+#else
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int FUN_001f9740(int *);
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float dot_vector_xyz(void *, void *) __asm__("FUN_001f9ab0");
+extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
+extern void FUN_L00_00259888(void *, struct Moby *, int, void *, float);
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern void FUN_L13_00309bc8(struct Moby *);
+extern float D_L13_00161E7C __attribute__((sda));
+extern char D_L13_00174140[];
+typedef struct {
+    float x, y, z, w;
+} __attribute__((aligned(16))) TrailPoint_94f8;
+typedef struct {
+    TrailPoint_94f8 vector;
+    float p, q;
+    unsigned char a, b;
+    unsigned short c;
+} __attribute__((aligned(16))) TrailHit_94f8;
+typedef struct {
+    char pad[0x1f0];
+    TrailPoint_94f8 anchor;
+    TrailPoint_94f8 direction;
+    TrailPoint_94f8 point[17];
+} TrailVars_94f8;
+
+void FUN_L13_003094f8(struct Moby *moby) {
+    TrailVars_94f8 *data = *(TrailVars_94f8 **)&moby->pvars;
+    TrailPoint_94f8 next;
+    union {
+        struct {
+            TrailPoint_94f8 delta;
+            TrailPoint_94f8 scaled;
+        } vectors;
+        TrailHit_94f8 hit;
+    } work;
+    TrailPoint_94f8 upper, lower;
+    int timer, i, j;
+    float prior_height, dot;
+
+    timer = func_001FA898_r(data->anchor.w);
+    FUN_001f9740(&timer);
+    data->anchor.w = (float)timer;
+    if (!timer) return;
+
+    if (timer == 20) {
+        for (i = 0; i < 16; i++) {
+            if (data->point[i].w >= 1.0f) data->point[i].w = 0.98f;
+        }
+    }
+
+    for (i = 0; i != 16; i++) {
+        subtract_vector_xyz(&next, &data->point[i], &data->anchor);
+        next.z = 0.0f;
+        normalize_vector_xyz(&next, &next, D_L13_00161E7C * frame_time);
+        add_vector_xyz(&next, &data->point[i], &next);
+        subtract_vector_xyz(&work.vectors.delta, &next, &moby->pos);
+        dot = dot_vector_xyz(&work.vectors.delta, &data->direction);
+        normalize_vector_xyz(&work.vectors.scaled, &data->direction, -dot + 0.35f);
+        add_vector_xyz(&work.vectors.delta, &work.vectors.delta, &work.vectors.scaled);
+        prior_height = work.vectors.scaled.z;
+        qcopy(&upper, &data->point[i]);
+        upper.z = upper.z + 1.0f;
+        qcopy(&lower, &data->point[i]);
+        lower.z = lower.z - 3.0f;
+        if (FUN_001efa68(&upper, &lower, 2, 0, 0) != 0 && prior_height < next.z) {
+            approach_value(&next.z, *(float *)(D_L13_00174140 + 0x28) + 0.35f,
+                           frame_time * 4.0f);
+        }
+        if (1.0f <= data->point[i].w &&
+            FUN_001efa68(&data->point[i], &next, 2, 0, 0)) {
+            next.w = 0.98f;
+        } else {
+            if (next.w < 1.0f)
+                approach_value(&next.w, 0.0f, frame_time + frame_time);
+        }
+        qcopy(&data->point[i], &next);
+    }
+
+    for (j = 0; j < 15; j++) {
+        if (data->point[j].w >= 0.98f && data->point[j + 1].w >= 0.98f) {
+            next.x = fast_cos(moby->rot.z);
+            next.y = fast_sin(moby->rot.z);
+            next.z = 1.0f;
+            next.w = 5627.925f;
+            FUN_L00_00259888(&work.hit, moby, 0x10001, &next, 1.0f);
+            work.hit.c = (unsigned short)moby->oclass;
+            work.hit.a = 0;
+            work.hit.b = 1;
+            FUN_001efa68(&data->point[j], &data->point[j + 1], 0, moby, &work.hit);
+        }
+    }
+    enqueue_callback_list_1((void *)0x3098d0, moby);
+    FUN_L13_00309bc8(moby);
+}
+#endif
 /* Drives the grid of 22 tiles: sets them up on the first frame, then moves the bobbing platform. */
 
 typedef struct {
@@ -764,4 +862,87 @@ char *FUN_L13_0030c138(void *a, void *b, int c, int d) {
     return (char *)m;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030c3b8.s", FUN_L13_0030c3b8);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030cdb8.s", FUN_L13_0030cdb8);
+#else
+#include "rnc/gameplay/state/item_state.h"
+extern unsigned char D_0013D408[];
+extern float D_L13_0015F580[];
+extern void FUN_00213928(void *, void *, void *, int, void *, int, int, int);
+extern void FUN_L00_0025d458(void *, void *);
+extern void FUN_L00_0025d538(void *, void *);
+extern int FUN_L01_0026e008(int, int);
+extern void FUN_0022db10(int, int, int);
+extern void FUN_L00_00263d40(int, int);
+extern void FUN_0022da68(int, int, void *);
+extern void FUN_L01_002787a0(void *);
+extern void FUN_L00_0025f8e0(void *, float);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
+extern void FUN_0020c828(void *);
+
+void FUN_L13_0030cdb8(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    void *hit;
+    char hit_buffer[16];
+    OvlVec4 vector;
+    void *pos = &moby->pos;
+    void *rot = &moby->rot;
+    void *zero_vector = D_L13_0015F580;
+    int i, j;
+    if ((D_0014C190_257218[current_level_index][(short)moby->save_id >> 5] >>
+         (moby->save_id & 31) & 1) == 0) {
+    hit = FUN_L00_0025a420(moby, 0x10000, 0);
+    FUN_00213928(moby, hit, data + 0x20, 0, hit_buffer, 0, 0, 4);
+    switch (moby->state) {
+    case 0:
+        moby->state = 1;
+        break;
+    case 1:
+        if (hit != 0) {
+            float cost = *(float *)((char *)hit + 0x2c);
+            if (*(float *)(data + 0x20) < cost) {
+                moby->state = 2;
+            } else {
+                data[0x67] = (char)0xfa;
+                *(float *)(data + 0x20) -= cost;
+                FUN_L00_0025d458(moby, data + 0x60);
+            }
+            moby->unkA4 = 0xff;
+        }
+        FUN_L00_0025d538(moby, data + 0x60);
+        break;
+    case 2:
+        if (moby->group != 0xff && FUN_L01_0026e008(moby->group, -1) == 1 && D_0013D408[0x16] == 0) {
+            D_0013D408[0x16] = 1;
+            FUN_0022db10(1, 0, 0);
+            FUN_L00_00263d40(0x53d6, -1);
+        }
+        FUN_0022da68(0, 0, moby);
+        FUN_L01_002787a0(moby);
+        D_0014C190_257218[current_level_index][(short)moby->save_id >> 5] |=
+            1 << (moby->save_id & 31);
+        ((int *)0x001c0000)[((short)moby->save_id >> 5) - 0x160c] |= 1 << (moby->save_id & 31);
+        j = 0;
+        do {
+            i = 0x709;
+            do {
+                vector.q = 0;
+                FUN_L00_0025f8e0(&vector, 1.5f);
+                vector.f[2] += 1.7f;
+                FUN_001f9a10(&vector, &vector, pos);
+                FUN_L00_00263fd8(moby, i, &vector, rot, 0, 0, 0.0f, zero_vector, zero_vector, zero_vector);
+                i++;
+            } while (i < 0x70d);
+            j++;
+        } while (j < 2);
+        FUN_L00_0025e450(moby, pos, 0, 0.0f, 0.0f, 10, 3, 0x10,
+                         6.0f, 3.0f, 9.0f, 1.1f, 0, 15.0f, 1, 3, -1, 0);
+        FUN_0020c828(moby);
+        break;
+    }
+    } else {
+        FUN_0020c828(moby);
+    }
+}
+#endif

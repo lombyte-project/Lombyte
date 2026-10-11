@@ -2,4 +2,87 @@
 #include "types.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00249738.s", FUN_L06_00249738);
+#else
+#include "rnc/globals.h"
+extern s32 D_0013E504;
+extern s32 D_L06_0015F8E8 __attribute__((sda));
+extern f32 D_L06_0015F8F0 __attribute__((sda));
+extern f32 D_L06_0015F8F4 __attribute__((sda));
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
+extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
+extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
+extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
+extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
+
+s32 FUN_L06_00249738(u8 *p) {
+    s32 screen_y = D_0013E504;
+    s32 y = screen_y - 42;
+    s32 segments = 3;
+    s32 x, start_x, inner, i, color, remaining, tile_count;
+    s32 center_x = D_L06_0015F8E8;
+    f32 alpha, scaled_alpha, fill, step, limit;
+
+    if (pal_mode == 0) y = screen_y - 50;
+    if (current_level_index == 7 || current_level_index == 13) segments = 6;
+    if (current_level_index == 18) segments = 7;
+    if (p[0x70] != 0) {
+        if (current_level_index == 13) {
+            y = 18;
+            if (pal_mode != 0) y = 10;
+        }
+        alpha = convert_integer_to_float(p[0x70]) * 0.125f;
+        if (alpha > 1.0f) alpha = 1.0f;
+        else if (alpha < 0.0f) alpha = 0.0f;
+        remaining = segments - 1;
+        scaled_alpha = alpha * 128.0f;
+        i = truncate_float_to_s32(scaled_alpha);
+        inner = truncate_float_to_s32(scaled_alpha);
+        start_x = center_x - segments * 16;
+        x = start_x;
+        tile_count = segments;
+        if (tile_count > 0) do {
+            draw_hud_sprite_flipped(get_icon_frame(0x7562, 3), x, y + 6, 32, 18, i);
+            x += 32;
+            tile_count--;
+        } while (tile_count != 0);
+        color = 0x800000ff;
+        x = 0;
+        if (*(s32 *)(p + 0x74) != 0) {
+            fill = (f32)*(s32 *)(p + 0x74) /
+                   convert_integer_to_float(*(s32 *)(p + 8));
+            step = 1.0f / convert_integer_to_float(segments);
+            limit = remaining * step;
+            if (limit < fill) {
+                fill -= limit;
+                fill *= D_L06_0015F8F0;
+                fill += limit;
+            } else if (fill < step) {
+                fill -= step;
+                fill *= D_L06_0015F8F4;
+                fill += step;
+            }
+            x = truncate_float_to_s32((f32)(segments << 5) * fill);
+            if (0.5f < fill) {
+                color = fast_tween_color(0x8000ffff, 0x8000ff00, (fill + fill) - 1.0f);
+            } else {
+                color = fast_tween_color(0x800000ff, 0x8000ffff, fill + fill);
+            }
+        }
+        append_screen_rect_packet(start_x, y + 8, start_x + x, y + 26, color, 0);
+        x = start_x;
+        if (remaining > 0) do {
+            draw_hud_sprite(get_icon_frame(0x7562, 1), x, y, 32, 32, inner);
+            x += 32;
+            remaining--;
+        } while (remaining != 0);
+        draw_hud_sprite(get_icon_frame(0x7562, 2), x, y, 32, 32, inner);
+        draw_hud_sprite(get_icon_frame(0x7562, 4), start_x - 40, y - 8, 48, 48, i);
+        draw_hud_sprite(get_icon_frame(0x7562, 0), start_x - 40, y - 8, 48, 48, i);
+    }
+    return *(s32 *)(p + 0x58);
+}
+#endif

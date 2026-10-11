@@ -21,7 +21,7 @@ int FUN_L01_00263a28(char *state, int index, unsigned int *type, float *result,
     char *entry;
     float scale;
     u128 matrix[4];
-    u128 first;
+    u128 first[1];
     u128 second;
     float separation;
 
@@ -61,17 +61,17 @@ int FUN_L01_00263a28(char *state, int index, unsigned int *type, float *result,
         if (joint != 0) {
             FUN_0020fa90(state, joint, 0);
         }
-        FUN_001f9a80(scale, &first, (void *)(0x70000000 + *(short *)(entry + 4) * 0x10));
+        FUN_001f9a80(scale, first, (void *)(0x70000000 + *(short *)(entry + 4) * 0x10));
         FUN_001f9a80(scale, &second, (void *)(0x70000000 + *(short *)(entry + 6) * 0x10));
-        if (((float *)&first)[2] < ((float *)&second)[2]) {
-            *(u128 *)result = first;
+        if (((float *)first)[2] < ((float *)&second)[2]) {
+            *(u128 *)result = first[0];
         } else {
             *(u128 *)result = second;
         }
         FUN_001f9d20(result, result, matrix);
         FUN_001f9a10(result, result, state + 0x10);
         *radius = *(float *)(entry + 0xc) * scale;
-        FUN_001f9a28(&second, &second, &first);
+        FUN_001f9a28(&second, &second, first);
         separation = FUN_001f9af0(&second);
     } else {
         return 0;

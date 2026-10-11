@@ -4,7 +4,124 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_001ff938.s", FUN_L15_001ff938);
+#else
+extern void FUN_L00_00232670(void);
+extern void FUN_L00_00211670(void);
+extern void FUN_L15_002044c8(void);
+extern void FUN_L15_0021d040(void);
+extern void FUN_L00_00216f10(void);
+extern void FUN_L00_002054e8(void);
+extern void FUN_L00_00208a10(void);
+extern void FUN_L00_00207c48(void);
+extern void FUN_L00_00207a58(void);
+extern void FUN_L00_002484e0(void *);
+extern void FUN_L00_002059d8(void);
+extern void FUN_L00_002061f0(void);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00207d00(void);
+extern int FUN_001f96f8(int);
+extern float FUN_001fa6c0(int);
+extern float FUN_001fa6c0_inherited(void) __asm__("FUN_001fa6c0");
+extern float FUN_001f9de0(float);
+extern int FUN_001fa6d0(float);
+extern u32 FUN_001fa6e0(f32, u32, u32);
+extern void FUN_L00_00216de8(int, int);
+extern void FUN_L00_00208b60(void);
+extern void FUN_L00_00257024(void *);
+extern u8 D_0015EDB3;
+extern u8 D_0015EDB1;
+extern float D_0015EE18_001ff938 __asm__("D_0015EE18_gp") __attribute__((sda));
+extern int D_L15_0015F5CC;
+extern u8 D_0013D4DC[];
+
+void FUN_L15_001ff938(void) {
+    u8 *base = (u8 *)&hero;
+    u8 *moby;
+    u32 copy[4] __attribute__((aligned(16)));
+    int period, red, green, blue, alpha, i;
+    u32 color;
+    float pulse;
+
+    FUN_L00_00232670();
+    FUN_L00_00211670();
+    FUN_L15_002044c8();
+    FUN_L15_0021d040();
+    if (hero.unk20A4 == 0)
+        return;
+    FUN_L00_00216f10();
+    FUN_L00_002054e8();
+    if (hero.unk20A4 == 0)
+        return;
+    FUN_L00_00208a10();
+    FUN_L00_00207c48();
+    FUN_L00_00207a58();
+    FUN_L00_002484e0(base + 0x80);
+
+    if (hero.unk20A4 == 2) {
+        if (D_0015EDB3 != 0)
+            *(float *)(0x0017C06C + (((u32)&FUN_L15_001ff938 == 0x0020EFA8) ? 0x400 : 0)) = D_0015EE18_001ff938 * 1.4f;
+        FUN_L00_002059d8();
+        FUN_L00_002061f0();
+        moby = (u8 *)hero.moby;
+        if (((*(u16 *)(moby + 0x34) ^ 1) & 1) != 0) {
+            FUN_L00_0024f7c8(moby, 6, copy);
+            *(u128 *)(base + 0x1D80) = *(u128 *)copy;
+            FUN_L00_00207d00();
+        }
+    }
+
+    if (hero.unk20A4 == 3) {
+        if (D_0015EDB1 != 0)
+            *(u32 *)(0x0017C1CC + (((u32)&FUN_L15_001ff938 == 0x0020EFA8) ? 0x400 : 0)) = 0x3ff33333;
+        period = FUN_001f96f8(0xAA);
+        if (hero.unk22E0 == 2)
+            period = FUN_001f96f8(0x32);
+        else if (hero.unk22E0 == 1)
+            period = FUN_001f96f8(0x5A);
+        pulse = FUN_001f9de0((((float)(D_L15_0015F5CC % period) / FUN_001fa6c0(period)) * 2.0f) * 3.1415927f - 3.1415927f);
+        red = FUN_001fa6d0(pulse * 20.0f) + 0x32;
+        green = FUN_001fa6d0(pulse * 70.0f) + 0xB4;
+        blue = FUN_001fa6d0(pulse * 10.0f) + 0x14;
+        moby = (u8 *)hero.moby;
+        if (red > 0xFF) red = 0xFF;
+        if (green > 0xFF) green = 0xFF;
+        *(u16 *)(moby + 0x34) |= 0x10;
+        if (hero.unk22E0 == 2)
+            color = 0x80000000 | (blue << 16) | ((red / 2) << 8) | green;
+        else
+            color = 0x80000000 | (blue << 16) | (green << 8) | red;
+        *(u32 *)(moby + 0x90) = FUN_001fa6e0(0.1f, *(u32 *)(moby + 0x90), color);
+        for (i = 0; i < 3; i++)
+            FUN_L00_0024f7c8(hero.moby, i, base + 0x1D50 + i * 16);
+        alpha = 0x30;
+        moby = (u8 *)hero.moby;
+        if (hero.unk22DE != 0)
+            alpha = FUN_001fa6d0((FUN_001fa6c0_inherited() / FUN_001fa6c0(0x12)) * 48.0f);
+        *(u32 *)(base + 0x22E4) = (alpha << 24) | (moby[0x92] << 16) | (moby[0x91] << 8) | moby[0x90];
+        FUN_L00_00207d00();
+        hero.unk22E0 = 0;
+        if (hero.unk20A4 == 3) {
+            int pending = hero.pending_item[0];
+            if (pending == 0 || pending == 0x1F) {
+                hero.pending_item[0] = 0;
+                if (hero.unk12E7 != 0 && *(int *)(base + 0x300) != 0 && D_0013D4DC[0] != 0 && hero.unk22DE == 0) {
+                    FUN_L00_00216de8(0x19, 0);
+                    hero.unk22DC = 1;
+                    hero.unk22DE = 0x12;
+                }
+            } else if (hero.unk22DE == 0) {
+                FUN_L00_00216de8(0x19, 0);
+                hero.unk22DC = 1;
+                hero.unk22DE = 0x12;
+            }
+        }
+    }
+    FUN_L00_00208b60();
+    FUN_L00_00257024(hero.moby);
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

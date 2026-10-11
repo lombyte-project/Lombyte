@@ -90,19 +90,18 @@ void FUN_L00_00285008(void) {
     int i;
     short id;
     u8 *m;
-    char *o;
+    struct Hero *p = &hero;
 
     if (*(int *)s == 0) {
         FUN_001f97e8(D_L00_001BA5D0, 0, 0xC60);
         return;
     }
     FUN_001f9838((int)D_L00_001BA5D0, s, 0xC60);
-    qcopy(&hero.motion.pos, s + 0x10);
-    qcopy(&hero.motion.rot, s + 0x20);
-    o = (char *)hero.moby;
-    *(int *)(o + 0x38) = *(int *)(s + 0x30);
-    *(int *)(o + 0x3C) = *(int *)(s + 0x34);
-    *(int *)(o + 0x80) = *(int *)(s + 0x38);
+    qcopy(&p->motion.pos, s + 0x10);
+    qcopy(&p->motion.rot, s + 0x20);
+    *(int *)((char *)p->moby + 0x38) = *(int *)(s + 0x30);
+    *(int *)((char *)p->moby + 0x3C) = *(int *)(s + 0x34);
+    *(int *)((char *)p->moby + 0x80) = *(int *)(s + 0x38);
     D_0013E550[0x6B] |= 7;
     D_00151708 = *(unsigned short *)(s + 0xC54);
     *(int *)(D_0013E550 + 0x64) = *(int *)(s + 0x3C);
@@ -127,8 +126,8 @@ void FUN_L00_00285008(void) {
             }
         }
     }
-    FUN_L00_00250df8(hero.moby);
-    FUN_001fa030((char *)hero.moby + 0xC0, &hero.motion.rot);
+    FUN_L00_00250df8(p->moby);
+    FUN_001fa030((char *)p->moby + 0xC0, &hero.motion.rot);
     FUN_L00_001ed280();
     FUN_L00_002852c0();
 }

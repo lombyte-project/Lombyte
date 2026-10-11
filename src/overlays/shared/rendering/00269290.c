@@ -632,7 +632,7 @@ extern int D_L00_001601D4_26b230 __asm__("D_L00_001601D4") __attribute__((sda));
 extern float D_L00_001601D8_26b230 __asm__("D_L00_001601D8") __attribute__((sda));
 extern int D_L00_001601E0_26b230 __asm__("D_L00_001601E0") __attribute__((sda));
 extern int D_L00_001601E4_26b230 __asm__("D_L00_001601E4") __attribute__((sda));
-extern unsigned char D_0013E530_26b230 __asm__("D_0013E530");
+extern unsigned char D_0013E530_26b230 __asm__("D_0013E530") __attribute__((section(".data")));
 extern unsigned char *D_L00_001B20B0_26b230 __asm__("D_L00_001B20B0") __attribute__((section(".data")));
 extern unsigned char *D_L00_001B20E0_26b230 __asm__("D_L00_001B20E0") __attribute__((section(".data")));
 
@@ -677,8 +677,11 @@ unsigned char *FUN_L00_0026b230(void *pos, void *vel, unsigned char flags, float
             *(int *)(q + 0x18) = FUN_001fa6e0_26b230(D_L00_001601B0_26b230,
                                                           D_L00_001601B4_26b230,
                                                           FUN_002132a8_26b230(zero, one));
-            if ((flags & 4) && D_0013E530_26b230)
+            if (flags & 4) {
                 offset = 8;
+                if (!D_0013E530_26b230)
+                    offset = 0;
+            }
             m[2] = D_L00_001B20B0_26b230[FUN_00213260_26b230(8) + offset];
             m[3] = 0x44;
         }
@@ -690,8 +693,11 @@ unsigned char *FUN_L00_0026b230(void *pos, void *vel, unsigned char flags, float
         q[0x1F] = flags;
         if (flags & 4) {
             unsigned char *shade = (unsigned char *)&D_0013E530_26b230 - 0x10;
-            *(short *)(m + 0xA) = *(short *)(m + 0xA) * (shade[0x10] + 2) / 2;
-            FUN_L00_0025c0e8_26b230(*(unsigned *)(m + 4), shade[0x10]);
+            int color = *(int *)(m + 4);
+            int life = *(short *)(m + 0xA);
+            int factor = shade[0x10] + 2;
+            *(short *)(m + 0xA) = factor * life / 2;
+            FUN_L00_0025c0e8_26b230(color, shade[0x10]);
             FUN_L00_0025c0e8_26b230(*(unsigned *)(q + 0x14), shade[0x10]);
             FUN_L00_0025c0e8_26b230(*(unsigned *)(q + 0x18), shade[0x10]);
         }
@@ -741,7 +747,6 @@ void FUN_L00_0026b500(unsigned char *m) {
 
     life = FUN_001fa6c0_26b500(*(short *)(m + 0xa));
     duration = FUN_001fa6c0_26b500(p[0x1d]);
-    t = life / duration;
     if (p[0x1f] & 1) {
         start = D_L00_001601DC_26b500;
         end = D_L00_001601D8_26b500;
@@ -749,6 +754,7 @@ void FUN_L00_0026b500(unsigned char *m) {
         start = D_L00_001601BC_26b500;
         end = D_L00_001601B8_26b500;
     }
+    t = life / duration;
     *(float *)(m + 0xc) = ((end - start * scale) * t + start * scale) * 210000.0f;
 
     *(int *)(m + 4) = FUN_001fa6e0_26b500(*(int *)(p + 0x18), *(int *)(p + 0x14), t);

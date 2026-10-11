@@ -27,7 +27,85 @@ void FUN_L11_0030e690(char *moby) {
     } while (*p++ >= 0);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030ee00.s", FUN_L11_0030ee00);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310cf8.s", FUN_L11_00310cf8);
+#else
+typedef unsigned int u128_quad __attribute__((mode(TI)));
+extern int D_L11_001611C0_g __asm__("D_L11_001611C0");
+extern int D_0013E500_g[] __asm__("D_0013E500");
+extern int ftoi_g(float) __asm__("FUN_001fa6d0");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+
+void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, int texture_width,
+                       int texture_height, int texture, int z_and_fog, int red, int green,
+                       int blue, int alpha) {
+    float vertical[4];
+    float horizontal[4];
+    float center[4];
+    float top_left[4];
+    float bottom_left[4];
+    float top_right[4];
+    float bottom_right[4];
+    int *tag;
+    unsigned long long *q;
+    int sx, sy;
+
+    center[0] = x;
+    center[1] = y;
+    vertical[0] = height * fast_sin(angle);
+    vertical[1] = height * fast_cos(angle);
+    horizontal[0] = width * fast_cos(angle);
+    horizontal[1] = -width * fast_sin(angle);
+    add_vector_xyz(top_left, center, vertical);
+    subtract_vector_xyz(top_left, top_left, horizontal);
+    add_vector_xyz(bottom_left, center, vertical);
+    subtract_vector_xyz(top_right, center, horizontal);
+    *(u128_quad *)bottom_right = *(u128_quad *)center;
+
+    tag = (int *)D_L11_001611C0_g;
+    tag[0] = 0x10000007;
+    tag[1] = 0;
+    tag[2] = 0;
+    tag[3] = 0x50000007;
+    q = (unsigned long long *)(tag + 4);
+    D_L11_001611C0_g = (int)q;
+    q[0] = 0xB400000000008001ULL;
+    q[1] = 0x53535353106ULL;
+    q[2] = (unsigned long long)texture;
+    q[3] = 0x154;
+    q[4] = ((unsigned long long)(alpha & 0xff) << 24) | ((blue & 0xff) << 16) |
+           ((green & 0xff) << 8) | (red & 0xff);
+    q[5] = 0x100010;
+    sx = ftoi_g(top_left[0] * 16.0f);
+    sy = ftoi_g(top_left[1] * 16.0f);
+    q[7] = texture_width << 4;
+    q[6] = (unsigned long long)(sx + D_0013E500_g[4] - 8) |
+           ((unsigned long long)(sy + D_0013E500_g[5] - 8) << 16) |
+           ((unsigned long long)z_and_fog << 32);
+    sx = ftoi_g(bottom_left[0] * 16.0f);
+    sy = ftoi_g(bottom_left[1] * 16.0f);
+    q[9] = texture_height << 20;
+    q[8] = (unsigned long long)(sx + D_0013E500_g[4] - 8) |
+           ((unsigned long long)(sy + D_0013E500_g[5] - 8) << 16) |
+           ((unsigned long long)z_and_fog << 32);
+    sx = ftoi_g(top_right[0] * 16.0f);
+    sy = ftoi_g(top_right[1] * 16.0f);
+    q[11] = (texture_height << 20) + (texture_width << 4);
+    q[10] = (unsigned long long)(sx + D_0013E500_g[4] - 8) |
+            ((unsigned long long)(sy + D_0013E500_g[5] - 8) << 16) |
+            ((unsigned long long)z_and_fog << 32);
+    sx = ftoi_g(bottom_right[0] * 16.0f);
+    sy = ftoi_g(bottom_right[1] * 16.0f);
+    q[13] = 0;
+    q[12] = (unsigned long long)(sx + D_0013E500_g[4] - 8) |
+            ((unsigned long long)(sy + D_0013E500_g[5] - 8) << 16) |
+            ((unsigned long long)z_and_fog << 32);
+    D_L11_001611C0_g += 0x70;
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -151,7 +229,99 @@ void FUN_L11_003112b8(void *m, char *t) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003192c8.s", FUN_L11_003192c8);
+#else
+extern unsigned char D_0015EDB2[];
+extern float D_L11_001F1490[];
+extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
+extern long long trail_effect_texture(int) __asm__("FUN_001f44b8");
+extern float integer_to_float(int) __asm__("FUN_001fa6c0");
+extern int tween_color(float, int, int) __asm__("FUN_001fa6e0");
+extern void FUN_001153fc(void *, int, int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void draw_packet(void *, int, int) __asm__("FUN_001f7d30");
+extern int D_L11_0015F5CC;
+extern int D_L11_0015FFD8;
+extern short *D_L11_001AC240[];
+
+int FUN_L11_003192c8(char *moby) {
+    char stack_data[0x900] __attribute__((aligned(16)));
+    float offset[16] __attribute__((aligned(16)));
+    short *list;
+    int i, j;
+    float phase;
+
+    if ((unsigned char)moby[0x21] == 0xff) {
+        return;
+    }
+    if (D_0015EDB2[0] != 0) {
+        *(float *)&D_L11_001623F0_d = 16.0f;
+    } else {
+        *(float *)&D_L11_001623F0_d = 5.0f;
+    }
+    for (i = 0; i < 16; i++) {
+        char *packet = stack_data + 0x40 + i * 0x90;
+        float *source;
+        float *position;
+        int *colors;
+        *(long long *)(packet + 0x30) = 0;
+        *(long long *)(packet + 0x38) = trail_effect_texture(0x13);
+        *(long long *)(packet + 0x40) = 0xff9000000260LL;
+        *(long long *)(packet + 0x48) = 0x8000000048LL;
+        phase = integer_to_float((D_L11_0015F5CC + 3) & 3) / (*(float *)&D_L11_001623F0_d * 4.0f);
+        source = D_L11_001F1490;
+        position = (float *)(packet + 0x10);
+        colors = (int *)packet;
+        for (j = 0; j < 4; j++) {
+            float t;
+            position[0] = source[0];
+            position[1] = source[1];
+            t = integer_to_float(i - ((j >> 1) - 1)) / *(float *)&D_L11_001623F0_d + phase;
+            if (t > 1.0f) t = 1.0f;
+            else if (t < 0.0f) t = 0.0f;
+            *colors = tween_color(t, 0x8c28aa28, 0x144646);
+            position += 2;
+            source += 2;
+            colors++;
+        }
+    }
+    FUN_001153fc(offset, 0, 0x20);
+    offset[2] = 0.25f;
+    offset[6] = -0.25f;
+    list = D_L11_001AC240[(unsigned char)moby[0x21]];
+    do {
+        unsigned short entry = *(unsigned short *)list;
+        char *linked = (char *)(D_L11_0015FFD8 + ((entry & 0x7fff) << 8));
+        if (linked[0x31] != 0 && *(short *)(linked + 0xa6) == *(short *)(moby + 0xa6)) {
+            char *trail = *(char **)(linked + 0x78);
+            for (i = 0; i < *(int *)(trail + 0x2c0); i++) {
+                int next = *(int *)(trail + 0x2c4) - i;
+                int a = next + 15;
+                int b = next + 30;
+                int start;
+                if (a > -1) b = a;
+                start = a - ((b >> 4) << 4);
+                for (j = 0; j < 2; j++) {
+                    int k;
+                    char *packet = stack_data + i * 0x90;
+                    char *points = trail + 0xc0 + j * 0x100;
+                    for (k = 0; k < 4; k++) {
+                        int n = start + k / 2;
+                        int q = n + 15;
+                        if (n > -1) q = n;
+                        n -= (q >> 4) << 4;
+                        add_vector_xyz(packet + 0x54 + k * 16, points + n * 16,
+                                       (char *)offset + (k & 1) * 16);
+                    }
+                    draw_packet(packet, 0, 0);
+                }
+            }
+        }
+        if (*list++ < 0) break;
+    } while (1);
+}
+#endif
 /* Advances a trail ring buffer and records two offset points each fourth frame. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031AAE0), where it is exact; names translated to the US level program. */
 

@@ -981,7 +981,117 @@ void FUN_L05_00316110(char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316258.s", FUN_L05_00316258);
+extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
+extern void FUN_L00_001fff28(void *, int, float);
+extern float vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern float FUN_001f9b48(void *, void *);
+extern char *D_001413D0_316258 __asm__("D_001413D0") __attribute__((section(".data")));
+
+void FUN_L05_00316258(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float target[4];
+    float delta[4];
+    float stopped;
+
+    switch (*(u8 *)(moby + 0x20)) {
+    case 0:
+        if (*(int *)(data + 0x50) != 0) {
+            *(float *)(moby + 0x40) = 3.1415927f;
+            *(float *)(moby + 0x18) += 4.0f;
+        }
+        qcopy(data, moby + 0x10);
+        attach_manipulator(moby, 0, data + 0x10);
+        if (*(int *)(data + 0x54) != 0) {
+            *(float *)(data + 0x60) = 0.0f;
+            *(u8 *)(moby + 0x20) = 2;
+            if (*(int *)(data + 0x50) != 0)
+                FUN_001f9a68(target, moby + 0xD0, 2.0f);
+            else
+                FUN_001f9a68(target, moby + 0xD0, -2.0f);
+            add_vector_xyz(moby + 0x10, moby + 0x10, target);
+        } else {
+            *(u8 *)(moby + 0x20) = 1;
+            *(float *)(data + 0x60) = 0.5934119f;
+            FUN_L00_001fff28(data + 0x20, 0, 0.5934119f);
+        }
+        *(long long *)(moby + 0x38) = *(long long *)(D_001413D0_316258 + 0x38);
+        break;
+    case 1:
+    case 2:
+        {
+            u8 trigger = ((u8 *)*(int *)&D_L05_0015FFD8_d)[*(int *)(data + 0x58) * 256 + 0xBC];
+            if (trigger == 0)
+                return;
+            if (*(u8 *)(moby + 0x20) == 2 && trigger != 2) {
+                *(u8 *)(moby + 0x20) = 4;
+                break;
+            }
+            if (*(u8 *)(moby + 0x20) != 1)
+                return;
+            allocate_voice_for_target_entry(0, 0, moby);
+            *(u8 *)(moby + 0x20) = 6;
+            return;
+        }
+    case 5:
+    case 6:
+        {
+            float end;
+            float approach;
+            if (*(u8 *)(moby + 0x20) == 5) {
+                end = 0.5934119f;
+                approach = 1.1868238f;
+            } else {
+                end = 0.0f;
+                approach = -0.5934119f;
+            }
+            FUN_L00_0025be00((float *)(data + 0x60), (float *)(data + 0x64), approach,
+                              frame_time_sq * 4.1887903f, frame_time_sq * 4.1887903f,
+                              frame_time * 12.566371f);
+            if (*(float *)(data + 0x60) > 0.5934119f || *(float *)(data + 0x60) < 0.0f) {
+                if (*(float *)(data + 0x60) > 0.5934119f)
+                    *(float *)(data + 0x60) = 0.5934119f;
+                else if (*(float *)(data + 0x60) < 0.0f)
+                    *(float *)(data + 0x60) = 0.0f;
+                if (*(u8 *)(moby + 0xBC) == 0) {
+                    *(u8 *)(moby + 0xBC) = 1;
+                    *(float *)(data + 0x64) *= -0.33f;
+                } else if (*(float *)(data + 0x60) == end) {
+                    if (*(u8 *)(moby + 0x20) == 5)
+                        *(u8 *)(moby + 0x20) = 7;
+                    else
+                        *(u8 *)(moby + 0x20) = 3;
+                }
+            }
+            FUN_L00_001fff28(data + 0x20, 0, *(float *)(data + 0x60));
+        }
+        break;
+    case 3:
+    case 4:
+        if (*(u8 *)(moby + 0x20) == 3) {
+            FUN_001f9a68(target, moby + 0xD0, -1.9f);
+            add_vector_xyz(target, data, target);
+        } else {
+            qcopy(target, data);
+        }
+        subtract_vector_xyz(delta, target, moby + 0x10);
+        stopped = 0.0f;
+        advance_accelerated_scalar(vector_length_xyz(delta), frame_time_sq * 6.0f,
+                                   frame_time_sq * 12.0f, frame_time * 10.0f,
+                                   &stopped, (float *)(data + 0x5C));
+        subtract_vector_xyz(delta, target, moby + 0x10);
+        FUN_001f9bf8(delta, delta, *(float *)(data + 0x5C));
+        add_vector_xyz(moby + 0x10, moby + 0x10, delta);
+        if (!(FUN_001f9b48(moby + 0x10, target) < 0.0001f))
+            return;
+        if (*(u8 *)(moby + 0x20) == 3) {
+            allocate_voice_for_target_entry(1, 0, moby);
+            *(u8 *)(moby + 0x20) = 7;
+            return;
+        }
+        *(u8 *)(moby + 0x20) = 5;
+        break;
+    }
+}
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003166a0.s", FUN_L05_003166a0);
 #else

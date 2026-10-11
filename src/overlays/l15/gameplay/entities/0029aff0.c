@@ -351,7 +351,113 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a7880.s", FUN_L15_002a7880);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002aa280.s", FUN_L15_002aa280);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c2938.s", FUN_L15_002c2938);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c4f88.s", FUN_L15_002c4f88);
+#else
+typedef union { u128 q; float f[4]; } SteeringVec_4f88;
+typedef struct {
+    char pad[0x150];
+    SteeringVec_4f88 delta;
+    char pad160[0x10];
+    float speed;
+    float pitch_velocity;
+    float yaw_velocity;
+    float facing_velocity;
+    char pad180[0x28];
+    float height;
+} SteeringVars_4f88;
+
+extern float FUN_001f9b48(void *, void *);
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001f9bf8_4f88(float, void *, void *) __asm__("FUN_001f9bf8");
+extern void FUN_001f9a68_4f88(float, void *, void *) __asm__("FUN_001f9a68");
+extern void FUN_L00_001ff290(void *, void *, void *);
+extern void FUN_L15_00247e90(float, float, struct Moby *, void *, int);
+extern float FUN_001f9e90(float, float);
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float FUN_L00_00258110(float *, float, float, float, float, float);
+
+void FUN_L15_002c4f88(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f88 *look) {
+    SteeringVec_4f88 target = *goal;
+    SteeringVec_4f88 look_copy = *look;
+    SteeringVec_4f88 scaled;
+    SteeringVec_4f88 origin = *(SteeringVec_4f88 *)&moby->pos;
+    SteeringVec_4f88 delta;
+    SteeringVec_4f88 *look_at = &look_copy;
+    SteeringVec_4f88 *target_at = &target;
+    SteeringVars_4f88 *vars = (SteeringVars_4f88 *)moby->pvars;
+    float distance = FUN_001f9b48(&moby->pos, target_at);
+    float step = frame_time_sq * 10.0f;
+    float old_speed = vars->speed;
+    float limit;
+    float facing;
+    float angle;
+    float c;
+    float s;
+    float yaw_target;
+    float pitch_target;
+    float dx;
+    float dy;
+    float threshold;
+    float speed_sq;
+    float twice_step;
+    float height;
+    float pos_x;
+    float pos_y;
+
+
+    speed_sq = old_speed * old_speed;
+    twice_step = step + step;
+    threshold = speed_sq / twice_step;
+    if (distance <= threshold) {
+        vars->speed = old_speed - step;
+        if (vars->speed < 0.0f) {
+            vars->speed = 0.0f;
+        }
+    } else {
+        vars->speed = old_speed + step;
+        limit = frame_time * 10.0f;
+        if (limit < vars->speed) {
+            vars->speed = limit;
+        }
+    }
+
+    subtract_vector_xyz(&delta, target_at, &moby->pos);
+    scaled.q = delta.q;
+    FUN_001f9bf8_4f88(vars->speed * 0.1f, &scaled, &scaled);
+    FUN_001f9a68_4f88(0.9f, &delta, &vars->delta);
+    vars->delta.q = delta.q;
+    FUN_L00_001ff290(&delta, &vars->delta, &scaled);
+    FUN_L15_00247e90(1.0f, 2.0f, moby, &vars->delta, 0);
+    height = vars->height;
+    moby->pos.z = height;
+    pos_x = moby->pos.x;
+    pos_y = moby->pos.y;
+    dx = look_at->f[0] - pos_x;
+    dy = look_at->f[1] - pos_y;
+    facing = FUN_001f9e90(dx, dy);
+    moby->rot.z = FUN_L00_00258110(&vars->facing_velocity, moby->rot.z, facing,
+                                   0.01f, 0.3f, 0.1f);
+    subtract_vector_xyz(&delta, &moby->pos, &origin);
+    vars->delta.q = delta.q;
+    angle = FUN_001f9e90(vars->delta.f[0], vars->delta.f[1]);
+    angle = fast_subtract_rotations(angle, moby->rot.z);
+    c = fast_cos(angle);
+    yaw_target = (vars->speed * 0.34906584f * c) / (frame_time * 10.0f);
+    s = fast_sin(angle);
+    pitch_target = (vars->speed * -0.34906584f * s) / (frame_time * 10.0f);
+    moby->rot.y = FUN_L00_00258110(&vars->yaw_velocity, moby->rot.y,
+        yaw_target,
+        frame_time_sq * 0.5235988f, frame_time_sq * 1.0471976f,
+        frame_time * 0.7853982f);
+    moby->rot.x = FUN_L00_00258110(&vars->pitch_velocity, moby->rot.x,
+        pitch_target,
+        frame_time_sq * 1.0471976f, frame_time_sq * 2.0943952f,
+        frame_time * 1.5707964f);
+}
+#endif
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 
@@ -1237,4 +1343,147 @@ void FUN_L15_002cf3a8(UMoby *m) {
         FUN_L00_002598b0((int)m, 2.5f, &m->pos, 0x10000, 40.0f, 1.0f, 0, 1, 0);
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d0fa8.s", FUN_L15_002d0fa8);
+#else
+extern float D_L15_00161B00 __attribute__((sda));
+extern float D_L15_00161B04 __attribute__((sda));
+extern float D_L15_00161B08 __attribute__((sda));
+extern float D_L15_00161B2C __attribute__((sda));
+extern float D_L15_00161B30 __attribute__((sda));
+extern float D_0015ED70;
+extern int D_001413D0 __attribute__((section(".data")));
+extern char D_00178700[] __asm__("D_L15_00178700");
+extern int FUN_00249d60(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
+extern int FUN_001f99c8_f(float) __asm__("FUN_001fa6d0");
+extern void FUN_0023ee30(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void FUN_0024dcf8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int) __asm__("FUN_L00_0025e450");
+extern void FUN_0027bb68(int, int, void *, int) __asm__("FUN_L00_0028dc90");
+extern void FUN_00246ad8(void *, int, long long) __asm__("FUN_L00_00257470");
+extern float FUN_001f9028(float, float) __asm__("FUN_001f9e90");
+extern void FUN_0024a430(void *, void *, void *, void *) __asm__("FUN_L00_0025ab48");
+extern void FUN_0024be00(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
+extern void FUN_00251c90(void *, float, float) __asm__("FUN_L03_00250a78");
+extern void FUN_0024cd00(void *, void *) __asm__("FUN_L00_0025d458");
+extern void FUN_0024cde0(void *, void *) __asm__("FUN_L00_0025d538");
+extern void FUN_0024f560(float, void *, void *) __asm__("FUN_L02_00261c80");
+extern void FUN_0024f7e0(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern float FUN_001f8bc8(void *, void *) __asm__("FUN_001f9b48");
+
+void FUN_L15_002d0fa8(void *arg) {
+    UMoby *m = arg;
+    UData *d = m->data;
+    char *slot = 0;
+    int kind;
+    float impact = 0.0f;
+    int i;
+    int hit;
+    int code;
+    float angle;
+    UVec origin;
+    UVec effect;
+    float direction;
+
+    *(float *)((char *)m + 0x2C) = D_L15_00161B2C * *(float *)(m->cls + 0x24);
+    d->w1C8 = 0;
+    for (i = 0; i < 64; i++) {
+        char *entry = D_00178700 + i * 0x40;
+        if (*(UMoby **)(entry + 0x34) == m) {
+            unsigned int flags = *(unsigned int *)(entry + 0x24);
+            if (flags & 0xA0000) {
+                if (*(int *)(entry + 0x20) != D_001413D0 || (flags & 0x80000)) {
+                    slot = entry;
+                    break;
+                }
+                *(int *)(entry + 0x34) = 0;
+            }
+        }
+    }
+    hit = FUN_00249d60(m, slot, &d->f20, 0, &kind, &impact, 0, 4);
+    if (slot != 0) {
+        if (kind != 1 && m->state != 10 && m->state != 0x40 &&
+            *(short *)(*(char **)(slot + 0x20) + 0xA6) != 0x350) {
+            d->f20 -= impact;
+            code = 9;
+            if (*(unsigned short *)(slot + 0x2A) != 0x100)
+                code = hit;
+            if (m->state == 2)
+                code = 9;
+            if (d->f20 <= 0.0f)
+                code = 1;
+            *(int *)((char *)d + 0x90) = FUN_001f99c8_f(2560.0f);
+            *(float *)((char *)d + 0x98) = 2.5f;
+            *(float *)((char *)d + 0x80) = D_L15_00161B00 * D_0015ED70;
+            *(float *)((char *)d + 0x84) = 0.0005f;
+            *(int *)((char *)d + 0x94) = 9;
+            *(unsigned char *)((char *)d + 0xAD) = 0;
+            switch (code) {
+            case 0:
+            case 11:
+                break;
+            case 9:
+            case 10:
+                d->w1C8 = 1;
+                *(unsigned char *)((char *)d + 0x67) = 0xFA;
+                break;
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+                d->w1C8 = 1;
+                *(float *)((char *)d + 0x88) = D_L15_00161B08 * D_0015ED6C;
+                *(float *)((char *)d + 0x8C) = D_L15_00161B04 * D_0015ED6C;
+                FUN_00251c90((char *)d + 0x70, 4.0f, 1.0f);
+                *(float *)((char *)d + 0xC0) = 12.0f;
+                *(float *)((char *)d + 0xC4) = 16.0f;
+                direction = FUN_001f9028(m->pos.f[0] - *(float *)(*(char **)(slot + 0x20) + 0x10),
+                                          m->pos.f[1] - *(float *)(*(char **)(slot + 0x20) + 0x14));
+                origin.q = *(u128 *)(slot + 0x10);
+                FUN_0024a430(&origin, &direction, (char *)d + 0x88, (char *)d + 0x8C);
+                FUN_0024be00(direction, m, (char *)d + 0x70, 8, 1, 0);
+                FUN_0027bb68(0, 0, m, 0x79);
+                m->state = 9;
+                *(unsigned char *)((char *)d + 0x67) = 0x78;
+                break;
+            case 1:
+            case 2:
+                origin.q = 0;
+                m->flags &= 0xEFFF;
+                FUN_0023ee30(m, 7, &effect);
+                FUN_0024dcf8(m, &origin, &effect, 0.0f, 0.0f, 0x14, 6, 0x20,
+                              16.0f, 8.0f, 9.0f, -1, 4.0f, 32.0f, 1, 16, -1);
+                FUN_0027bb68(0, 0, m, 0x79);
+                m->state = 10;
+                *(unsigned char *)((char *)d + 0x67) = 0xF0;
+                FUN_00246ad8(m, 0x200, -1);
+                break;
+            }
+            FUN_0024cd00(m, (char *)d + 0x60);
+        }
+        *(int *)(slot + 0x34) = 0;
+    }
+    *(unsigned char *)((char *)m + 0xA4) = 0xFF;
+    FUN_0024cde0(m, (char *)d + 0x60);
+    *(float *)((char *)m + 0x2C) = *(float *)(m->cls + 0x24) * D_L15_00161B30;
+    d->w164 = 0;
+    if (m->state == 1) {
+        angle = d->f174;
+    } else if (d->w1D0 != -1) {
+        UPath *path = D_L15_001B0AB0[d->w1D0];
+        d->f1B8 = *(float *)((char *)d + 0x178);
+        FUN_0024f7e0(d->f1B8, m, (char *)d + 0x120, 0, 0, &path->pt[0], path->n);
+        goto check_path;
+    } else {
+        angle = *(float *)((char *)d + 0x178);
+    }
+    d->f1B8 = angle;
+    FUN_0024f560(d->f1B8, m, (char *)d + 0x120);
+check_path:
+    if (d->f1B8 < FUN_001f8bc8(&m->pos, (char *)d + 0x120))
+        d->w164 = 2;
+    if (d->target == 0)
+        d->target = (UMoby *)D_001413D0;
+}
+#endif

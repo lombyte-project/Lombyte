@@ -47,7 +47,7 @@ void FUN_L00_001fc558(u32 source) {
         D_L00_001611C0 = packet + 0x70;
         *(u32 *)(packet + 0x70) = (u32)transfer | 0x30000000;
         *(u32 *)(D_L00_001611C0 + 4) = source;
-        source += (s32)((count << 43) >> 32);
+        source += (s32)(count * 0x800);
         *(u32 *)(D_L00_001611C0 + 8) = 0;
         *(u32 *)(D_L00_001611C0 + 12) = (u32)transfer | 0x50000000;
         D_L00_001611C0 += 0x10;

@@ -16,13 +16,18 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00257218.s", FUN_L00_00257218);
 #else
 #include "rnc/gameplay/state/item_state.h"
 
-#include "rnc/ui/vendor/vendor_item_info.h"
+typedef struct {
+    u8 pad[0xE];
+    u16 count;
+    u8 tail[8];
+} ItemCount_257218;
+extern ItemCount_257218 D_L00_001C40B0[] __asm__("D_L00_001C40B0");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 
 int FUN_L00_00257218(u8 *m, s32 *item) {
-    s32 shortfall = 0;
     s32 available = 0;
     s32 stocked = 0;
+    s32 shortfall = 0;
     s32 i;
     s32 choice;
     u32 id;
@@ -37,11 +42,12 @@ int FUN_L00_00257218(u8 *m, s32 *item) {
             while (1) {
                 id = *entry & 0x3F;
                 if (item_available[id]) {
+                    ItemCount_257218 *count = &D_L00_001C40B0[id];
                     available++;
-                    if (D_L00_001C40B0[id].hE != 0) {
+                    if (count->count != 0) {
                         stocked++;
                     }
-                    shortfall += weapon_ammo_counts[id] < D_L00_001C40B0[id].hE;
+                    shortfall += weapon_ammo_counts[id] < count->count;
                 }
                 i++;
                 entry++;
@@ -60,7 +66,7 @@ int FUN_L00_00257218(u8 *m, s32 *item) {
                         i++;
                         id = D_0015EDD0_257218[i] & 0x3F;
                         if (item_available[id]) {
-                            if (D_L00_001C40B0[id].hE != 0) choice--;
+                            if (D_L00_001C40B0[id].count != 0) choice--;
                         }
                         if (choice < 0) break;
                     }
@@ -74,7 +80,7 @@ int FUN_L00_00257218(u8 *m, s32 *item) {
                 while (1) {
                     id = D_0015EDD0_257218[i] & 0x3F;
                     if (item_available[id]) {
-                        choice -= weapon_ammo_counts[id] < D_L00_001C40B0[id].hE;
+                        choice -= weapon_ammo_counts[id] < D_L00_001C40B0[id].count;
                     }
                     if (choice < 0) break;
                     ++i;
@@ -84,7 +90,10 @@ int FUN_L00_00257218(u8 *m, s32 *item) {
         }
         *item = id;
     }
-    return random_integer_below(5) != 0 ? 1 : 2;
+    choice = random_integer_below(5);
+    id = 1;
+    if (choice == 0) id = 2;
+    return id;
 }
 #endif
 extern int D_0015ED84_257470 __asm__("D_0015ED84");

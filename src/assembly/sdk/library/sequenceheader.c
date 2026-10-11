@@ -123,7 +123,8 @@ void func_0012C4C8(struct sceMpeg *arg0) {
         }
         var_2_53 = ((u8 *)mpeg + 0x528);
     }
-    var_2_53 = ((u8 *)mpeg + 0x528);
+    sp40 = ((u8 *)mpeg + (0x4C0));
+    var_2_53 = sp40 + 0x68;
     {
         arg0->width = temp_23_51;
         arg0->height = temp_22_48;
@@ -137,7 +138,6 @@ void func_0012C4C8(struct sceMpeg *arg0) {
         temp_18_75 = temp_22_48 >> 1;
         temp_16_77 = (u32)((0x180 * temp_23_51) * temp_22_48) >> 8;
         sp3C = ((u8 *)mpeg + (0x458));
-        sp40 = ((u8 *)mpeg + (0x4C0));
         width = temp_23_51;
         height = temp_22_48;
         chroma_height = temp_18_75;

@@ -488,7 +488,133 @@ void FUN_L13_002c3f08(char *out, float scale) {
         FUN_001f9a10(out, out, *(char **)(x + 0x15F0) + 0x10);
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c3fc0.s", FUN_L13_002c3fc0);
+#else
+extern char *D_L13_0015FFD8;
+extern char D_0013F3D0[];
+extern float D_0015ED60;
+extern float D_0015ED6C;
+extern char D_00140940[];
+extern int FUN_001f9770(short *);
+extern void FUN_001f9c90(void *, void *, float);
+
+int FUN_L13_002c3fc0(struct Moby *m, char *d, int aim) {
+    char *path = D_L13_001B07B0[*(int *)(d + 0xA0)];
+    char *linked;
+    char *veh;
+    int result = 0;
+    int nearest;
+    int forward;
+    int backward;
+    int index;
+    int step;
+    int scans;
+    int direction;
+    int direct_distance;
+    int wrap_distance;
+    float forward_distance;
+    float backward_distance;
+    float target_distance;
+    float speed;
+    float maximum;
+    float point[4] __attribute__((aligned(16)));
+    float ahead[4] __attribute__((aligned(16)));
+    float behind[4] __attribute__((aligned(16)));
+
+    if (path == 0) {
+        goto done;
+    }
+    veh = *(char **)D_00140940;
+    if (veh != 0 && *(short *)(veh + 0xA6) == 0x45) {
+    linked = 0;
+    if (*(int *)(d + 0xBC) != -1) {
+        linked = D_L13_0015FFD8 + (*(int *)(d + 0xBC) * 0x100);
+    }
+        if (linked == 0 || (unsigned char)linked[0x20] == 0xFE || (unsigned char)linked[0x20] == 0xFD) {
+            FUN_L13_002c3f08((char *)point, 140.0f);
+        } else {
+            subtract_vector_xyz(point, veh + 0x10, linked + 0x10);
+            scale_vector_xyz(point, point, 0.5f);
+            FUN_001f9c90(point, point, 100.0f);
+            add_vector_xyz(point, point, linked + 0x10);
+        }
+    } else {
+    linked = 0;
+    if (*(int *)(d + 0xBC) != -1) {
+        linked = D_L13_0015FFD8 + (*(int *)(d + 0xBC) * 0x100);
+    }
+        if (linked == 0 || (unsigned char)linked[0x20] == 0xFE || (unsigned char)linked[0x20] == 0xFD) {
+            qcopy(point, D_0013F3D0);
+        } else {
+            qcopy(point, linked + 0x10);
+        }
+    }
+    nearest = FUN_L13_002c3ac8((char *)point, (int *)path, *(short *)(d + 0xB4), 0.0f);
+    forward = nearest + 5;
+    if (forward >= *(int *)path) {
+        forward -= *(int *)path;
+    }
+    qcopy(ahead, path + 0x10 + forward * 16);
+    forward_distance = FUN_001f9b48(ahead, D_0013F3D0);
+    backward = nearest - 5;
+    if (backward < 0) {
+        backward += *(int *)path;
+    }
+    qcopy(behind, path + 0x10 + backward * 16);
+    backward_distance = FUN_001f9b48(behind, D_0013F3D0);
+    if (backward_distance < forward_distance ||
+        (backward_distance <= forward_distance && *(signed char *)(d + 0xD0) == 1)) {
+        index = forward;
+        step = 1;
+    } else {
+        index = backward;
+        step = -1;
+    }
+    scans = 0;
+    while (FUN_001f9b48(point, path + 0x10 + index * 16) < 30.0f && scans < *(int *)path) {
+        index = (index + step) % *(int *)path;
+        scans++;
+    }
+    if (*(short *)(d + 0xB4) < index) {
+        direct_distance = index - *(short *)(d + 0xB4);
+        wrap_distance = *(int *)path - index + *(short *)(d + 0xB4);
+        direction = direct_distance < wrap_distance ? 1 : -1;
+    } else {
+        direct_distance = *(short *)(d + 0xB4) - index;
+        wrap_distance = *(int *)path - *(short *)(d + 0xB4) + index;
+        direction = direct_distance < wrap_distance ? -1 : 1;
+    }
+    target_distance = FUN_001f9b48(&m->pos, path + 0x10 + index * 16);
+    if (direction != *(signed char *)(d + 0xD0)) {
+        if (FUN_001f9770((short *)(d + 0xD2)) != 0) {
+            *(short *)(d + 0xD2) = 10;
+            speed = *(float *)(d + 0xCC) * (1.0f + frame_time * -0.04000002f);
+            *(float *)(d + 0xCC) = speed;
+            if (speed < D_0015ED60 * 0.1f || m->unk31 == 0 ||
+                FUN_001f9b80(&m->pos, D_0013F3D0) < 40.0f) {
+                short old = *(short *)(d + 0xB4);
+                *(signed char *)(d + 0xD0) = direction;
+                *(short *)(d + 0xB4) = *(short *)(d + 0xB6);
+                *(short *)(d + 0xB6) = old;
+            }
+            goto update_path;
+        }
+        goto update_path;
+    }
+    maximum = D_0015ED6C * 100.0f;
+    speed = *(float *)(d + 0xCC);
+    speed = speed + (target_distance / 60.0f - speed) * D_0015ED60 * 0.07f;
+    *(float *)(d + 0xCC) = speed;
+    if (maximum < speed) {
+        *(float *)(d + 0xCC) = maximum;
+    }
+update_path:
+    result = FUN_L13_002c3c88(m, d, aim);
+done:
+    return result;
+}
+#endif
 /* Ported from rac1-decomp src/overlays/l13_gemlik/vendor_002C2638.c (func_L13_002C56B0) */
 #include "eetypes.h"
 
@@ -845,7 +971,136 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         moby->pos.z = 1003.0f;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c7f38.s", FUN_L13_002c7f38);
+#else
+extern unsigned char D_0014C050[];
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+extern void allocate_voice_for_target_entry_7f38(int, int, struct Moby *) __asm__("FUN_0022da68");
+
+typedef struct Data_2C7F38 {
+    float initial_rot[3];
+    float progress;
+    int linked_index;
+    int active_state;
+    int inactive_state;
+    float angle[3];
+    int unknown_28;
+    int duration;
+    int start_sound;
+    int end_sound;
+    float initial_scale;
+    int start_active;
+} Data_2C7F38;
+
+void FUN_L13_002c7f38(struct Moby *moby) {
+    Data_2C7F38 *data = (Data_2C7F38 *)moby->pvars;
+    struct Moby *linked;
+    float step;
+    float angle;
+    float frames;
+
+    if (moby->unkB0 != 0xFF &&
+        D_0014C050[moby->unkB0 + current_level_index * 16] == 0xFF) {
+        data->linked_index = -1;
+    }
+
+    switch (moby->state) {
+    case 0:
+        qcopy(data, &moby->rot);
+        moby->state = data->start_active == 0 ? 1 : 2;
+        data->progress = 0.0f;
+        if (data->progress < data->initial_scale) {
+            moby->scale = moby->pclass->scale * data->initial_scale;
+        }
+        return;
+    case 1:
+        if (data->linked_index != -1 &&
+            (linked = (struct Moby *)(D_L13_0015FFD8 + data->linked_index * 0x100)) != 0 &&
+            linked->state != 0xFE && linked->state != 0xFD && linked->state != data->active_state) {
+            return;
+        }
+        if (data->start_sound != -1) {
+            allocate_voice_for_target_entry_7f38(data->start_sound, 0, moby);
+        }
+        data->progress = 0.0f;
+        moby->state = 2;
+        break;
+    case 2:
+        if (data->linked_index == -1 ||
+            (linked = (struct Moby *)(D_L13_0015FFD8 + data->linked_index * 0x100)) == 0 ||
+            linked->state == 0xFE || linked->state == 0xFD || linked->state != data->inactive_state) {
+            frames = (float)data->duration * 60.0f;
+            step = 1.0f / frames;
+            data->progress += step;
+            angle = data->angle[0] * 0.017453292f * step;
+            moby->rot.x = fast_add_rotations(moby->rot.x, angle);
+            angle = data->angle[1] * 0.017453292f * step;
+            moby->rot.y = fast_add_rotations(moby->rot.y, angle);
+            angle = data->angle[2] * 0.017453292f * step;
+            moby->rot.z = fast_add_rotations(moby->rot.z, angle);
+            if (!(1.0f <= data->progress)) return;
+            moby->rot.x = fast_add_rotations(data->initial_rot[0], data->angle[0] * 0.017453292f);
+            moby->rot.y = fast_add_rotations(data->initial_rot[1], data->angle[1] * 0.017453292f);
+            moby->rot.z = fast_add_rotations(data->initial_rot[2], data->angle[2] * 0.017453292f);
+            data->progress = 1.0f;
+            moby->state = 3;
+            if (data->end_sound != -1) {
+                allocate_voice_for_target_entry_7f38(data->start_sound, 0, moby);
+            }
+            return;
+        } else {
+            if (data->start_sound != -1) {
+                allocate_voice_for_target_entry_7f38(data->start_sound, 0, moby);
+            }
+            moby->state = 4;
+        }
+        break;
+    case 3:
+        if (data->linked_index == -1) return;
+        linked = (struct Moby *)(D_L13_0015FFD8 + data->linked_index * 0x100);
+        if (linked == 0 || linked->state == 0xFE || linked->state == 0xFD || linked->state != data->inactive_state) return;
+        data->progress = 1.0f;
+        if (data->start_sound != -1) {
+            allocate_voice_for_target_entry_7f38(data->start_sound, 0, moby);
+        }
+        moby->state = 4;
+        break;
+    case 4:
+        if (data->linked_index == -1 ||
+            (linked = (struct Moby *)(D_L13_0015FFD8 + data->linked_index * 0x100)) == 0 ||
+            linked->state == 0xFE || linked->state == 0xFD || linked->state == data->active_state) {
+            if (data->start_sound != -1) {
+                allocate_voice_for_target_entry_7f38(data->start_sound, 0, moby);
+            }
+            moby->state = 2;
+        } else {
+            int invalid_index = -1;
+            frames = (float)data->duration * 60.0f;
+            step = 1.0f / frames;
+            data->progress -= step;
+            angle = data->angle[0] * 0.017453292f * step;
+            moby->rot.x = fast_subtract_rotations(moby->rot.x, angle);
+            angle = data->angle[1] * 0.017453292f * step;
+            moby->rot.y = fast_subtract_rotations(moby->rot.y, angle);
+            angle = data->angle[2] * 0.017453292f * step;
+            moby->rot.z = fast_subtract_rotations(moby->rot.z, angle);
+            if (!(data->progress <= 0.0f)) return;
+            moby->rot.x = data->initial_rot[0];
+            moby->rot.y = data->initial_rot[1];
+            moby->rot.z = data->initial_rot[2];
+            data->progress = 0.0f;
+            if (data->start_sound != invalid_index) {
+                allocate_voice_for_target_entry_7f38(data->end_sound, 0, moby);
+            }
+            moby->state = 1;
+        }
+        break;
+    case 5:
+        break;
+    }
+}
+#endif
 /* Ported from rac1-decomp src/overlays/l13_gemlik/vendor_002C2638.c (func_L13_002CF960) */
 
 /* Gemlik spark emitter: builds a spark frame from a1, runs two burst loops of effect calls, and with a2 set, the extra burst set. */

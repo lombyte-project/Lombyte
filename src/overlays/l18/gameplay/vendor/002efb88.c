@@ -266,7 +266,77 @@ void FUN_L18_002f02e8(char *moby, void *out) {
     FUN_001f9a10(out, v, data + 0x120);
     *(int *)(data + 0x160) = FUN_001f96f8(180);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0390.s", FUN_L18_002f0390);
+#else
+extern int D_L18_00162238 __attribute__((sda));
+extern int D_L18_0016223C __attribute__((sda));
+extern int D_L18_00162240 __attribute__((sda));
+extern int D_L18_00162244 __attribute__((sda));
+extern int D_L18_00162248 __attribute__((sda));
+extern int D_L18_0016224C __attribute__((sda));
+extern int D_L18_00162250 __attribute__((sda));
+extern int D_L18_00162254 __attribute__((sda));
+extern int D_L18_0015F5CC;
+extern long get_effect_texture(int) __asm__("FUN_001f44b8");
+extern float convert_integer_to_float_group_quad(int) __asm__("FUN_001fa6c0");
+extern int interpolate_color(int, int, float) __asm__("FUN_001fa6e0");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
+extern void clear_memory(void *, int, int) __asm__("FUN_001153fc");
+
+void FUN_L18_002f0390(struct Moby *moby) {
+    char quads[16][0x90];
+    float extra[8];
+    struct Moby * volatile saved_moby = moby;
+    short *p;
+    int i, j, k;
+    if (D_L18_00162238 != 0) return;
+    for (i = 0; i < 16; i++) {
+        char *quad = quads[i];
+        float offset;
+        *(long *)(quad + 0x70) = 0;
+        *(long *)(quad + 0x78) = get_effect_texture(19);
+        *(long *)(quad + 0x80) = 0xff9000000260LL;
+        *(long *)(quad + 0x88) = ((long)D_L18_00162240 | ((long)D_L18_00162244 << 2) |
+                                   ((long)D_L18_00162248 << 4) | ((long)D_L18_0016224C << 6) |
+                                   0x8000000000LL);
+        offset = convert_integer_to_float_group_quad((D_L18_0015F5CC + 3) & 3) * 0.0625f;
+        for (j = 0; j < 4; j++) {
+            float t;
+            float *src = (float *)(0x1da2f0 + j * 8);
+            *(float *)(quad + 0x50 + j * 8) = src[0];
+            *(float *)(quad + 0x54 + j * 8) = src[1];
+            t = convert_integer_to_float_group_quad(i - ((j >> 1) - 1)) * 0.25f + offset;
+            if (t > 1.0f) t = 1.0f;
+            else if (t < 0.0f) t = 0.0f;
+            *(int *)(quad + 0x40 + j * 4) = interpolate_color(D_L18_00162250, D_L18_00162254, t);
+        }
+    }
+    clear_memory(extra, 0, 0x20);
+    extra[2] = 0.15f;
+    extra[6] = -0.15f;
+    p = D_L18_001AC240[saved_moby->group];
+    do {
+        unsigned char *m;
+        char *data;
+        do {
+            m = D_L18_0015FFD8 + ((*p & 0x7fff) << 8);
+        } while (*(short *)(m + 0xa6) != 0x54b);
+        data = *(char **)(m + 0x78);
+        for (i = 0; i < *(short *)(data + 0x164); i++) {
+            if (D_L18_0016223C == 0) {
+                int base = (*(short *)(data + 0x166) - i + 15) & 15;
+                for (k = 0; k < 4; k++) {
+                    add_vector_xyz(quads[i] + k * 16, data + 0x10 + (((base + k / 2) & 15) << 4),
+                                   extra + ((k & 1) << 2));
+                }
+                draw_geometry_quad(quads[i], 0, 0);
+            }
+        }
+    } while (*p++ >= 0);
+}
+#endif
 /* Per-frame callback: swings every class 0x54B moby in the group around its base point by its state. */
 extern int D_L18_00162238_c7 __asm__("D_L18_00162238") __attribute__((sda));
 extern float D_L18_00162258_c7 __asm__("D_L18_00162258") __attribute__((sda));
@@ -328,7 +398,7 @@ void FUN_L18_002f06c0(struct Moby *m) {
 
 extern int D_L18_0015F5CC;
 extern short D_L18_00162230_d __asm__("D_L18_00162230") __attribute__((sda));
-extern void FUN_L18_002f0390(void);
+extern void FUN_L18_002f0390(struct Moby *moby);
 void FUN_L18_002f06c0(struct Moby *m);
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
@@ -2736,7 +2806,149 @@ void FUN_L18_002f7220(struct Moby *source, char *dest, L18Vector *from, L18Vecto
     *(float *)(dest + 0x68) =
         fast_subtract_rotations(FUN_001f9e90(b.f[0] - a.f[0], b.f[1] - a.f[1]), source->rot.z);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7288.s", FUN_L18_002f7288);
+#else
+extern char *D_L18_0015EF50;
+extern int D_L18_001623A0_target __asm__("D_L18_001623A0") __attribute__((sda));
+extern float D_L18_001623B0 __attribute__((sda));
+extern short D_L18_001623B4 __attribute__((sda));
+extern float D_L18_001623B8 __attribute__((sda));
+extern float D_L18_001623BC __attribute__((sda));
+extern float D_L18_001623C0 __attribute__((sda));
+extern float D_L18_001623C4 __attribute__((sda));
+extern float D_L18_001623C8 __attribute__((sda));
+extern float D_L18_001623CC_f __asm__("D_L18_001623CC") __attribute__((sda));
+extern float D_L18_001623D0 __attribute__((sda));
+extern float D_L18_001623D4 __attribute__((sda));
+extern float D_L18_001623D8 __attribute__((sda));
+extern float D_L18_001623DC_target __asm__("D_L18_001623DC") __attribute__((sda));
+extern float D_L18_001623E0 __attribute__((sda));
+extern float D_L18_001623E4_f __asm__("D_L18_001623E4") __attribute__((sda));
+extern void fast_dec_timer(int *) __asm__("FUN_001f9740");
+extern int queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
+extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
+extern void FUN_L00_002e8450(float, float, int);
+extern void FUN_L00_002e84b8(float, float);
+extern void FUN_L06_00316330(void *);
+extern int D_L18_0016A290[];
+extern char D_L18_00167B50[];
+extern char D_L18_00167680[];
+extern void FUN_L00_00235d80(void);
+extern void FUN_L00_00235ea0(void);
+extern void FUN_L06_00249738(void);
+extern void advance_accelerated_scalar_7288(float *, float, float *, float, float, float)
+    __asm__("FUN_00213f38");
+
+void FUN_L18_002f7288(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    char *t = *(char **)(D_L18_0015EF50 + *(int *)(d + 0x224) * 32 + 0x1c);
+    float f;
+    float x;
+    float y;
+    float *p0;
+    float *p1;
+    float *p2;
+    float *p3;
+    unsigned char st;
+
+    fast_dec_timer((int *)(d + 0x360));
+    f = FUN_001f9b80(hero.motion.pos.f, d + 0x3c0);
+    if (f > D_L18_001623BC) {
+        f = D_L18_001623BC;
+    } else if (f < D_L18_001623B8) {
+        f = D_L18_001623B8;
+    }
+    f = f - D_L18_001623B8;
+    f = f / (D_L18_001623BC - D_L18_001623B8);
+    x = (D_L18_001623C0 - D_L18_001623C8) * f + D_L18_001623C8;
+    y = (D_L18_001623C4 - D_L18_001623CC_f) * f + D_L18_001623CC_f;
+    st = *(unsigned char *)(moby + 0x20);
+    if (st == 0x13) {
+        char *g = D_0013E533 + 0xe1d;
+        if ((*(int *)(g + 0x208c) == 0xf || *(int *)(g + 0x2084) == 0x42) &&
+            *(int *)(d + 0x364) == 0 && *(float *)(d + 0x390) <= 25.0f &&
+            *(int *)(d + 0x360) == 0) {
+            x = D_L18_001623D0;
+            y = D_L18_001623D4;
+            p0 = (float *)(t + 0x34);
+            p1 = (float *)(t + 0x38);
+            p2 = (float *)(d + 0x378);
+            p3 = (float *)(d + 0x37c);
+        } else {
+            p0 = (float *)(t + 0x34);
+            p1 = (float *)(t + 0x38);
+            p3 = (float *)(d + 0x37c);
+            p2 = (float *)(d + 0x378);
+            if (FUN_001f9b80(hero.motion.pos.f,
+                             D_L18_001600EC + (*(int *)(d + 0x344) << 7) + 0x30) < 28.0f) {
+                x = D_L18_001623D8;
+                y = D_L18_001623DC_target;
+            }
+        }
+    } else if (st == 9 || st == 6) {
+        x = D_L18_001623E0;
+        y = D_L18_001623E4_f;
+        p0 = (float *)(t + 0x34);
+        p1 = (float *)(t + 0x38);
+        p2 = (float *)(d + 0x378);
+        p3 = (float *)(d + 0x37c);
+    } else if (st == 0 || st == 10 || st == 11 || st == 1 || st == 0x1b) {
+        int i;
+        char *g;
+        char *q;
+        p0 = (float *)(t + 0x34);
+        p1 = (float *)(t + 0x38);
+        for (i = 0, p2 = (float *)(d + 0x378), p3 = (float *)(d + 0x37c); i < 0x30; i++) {
+            char *m;
+            if (*(int *)(d + 0x3ec) == 0) {
+                char *pl;
+                g = D_0013E533 + 0xe1d;
+                pl = *(char **)(g + 0x2fc);
+                if (pl != 0 && *(short *)(pl + 0xa6) == 0x24b) {
+                    *(int *)(d + 0x3ec) = 1;
+                }
+            }
+            if (D_L18_0016A290[i] != 0) {
+                m = D_L18_00167B50 + i * 0xa0;
+                if (*(short *)(m + 0x86) == 0x12) {
+                    FUN_L06_00316330(m);
+                    if (*(int *)(d + 0x368) != -1) {
+                        set_animation_parameter(*(int *)(d + 0x368), 0);
+                        *(int *)(d + 0x368) = -1;
+                    }
+                    if (*(unsigned char *)(moby + 0x20) >= 2) {
+                        if (*(int *)(d + 0x3ec) != 0 || D_L18_001623A0_target != 0) {
+                            char *w;
+                            q = D_L18_00167680;
+                            w = *(char **)(q + 0x180);
+                            if (w != 0 && *(short *)(w + 0x86) == 0) {
+                                FUN_L00_002e8450(D_L18_001623E0, 0.003f, 0);
+                                FUN_L00_002e84b8(D_L18_001623E4_f, 0.003f);
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    } else {
+        p0 = (float *)(t + 0x34);
+        p1 = (float *)(t + 0x38);
+        p2 = (float *)(d + 0x378);
+        p3 = (float *)(d + 0x37c);
+        if (*(float *)(d + 0x38c) > 0.0f) {
+            *(int *)(d + 0x368) = queue_animation_update(0x16, 0xffff,
+                     FUN_L00_00235d80, FUN_L00_00235ea0, FUN_L06_00249738,
+                     d + 0x36c, 0x15e);
+        }
+    }
+    advance_accelerated_scalar_7288(p0, x, p2, D_0015ED6C_e[1] * *(float *)&D_L18_001623B4,
+                     D_0015ED6C_e[1] * *(float *)&D_L18_001623B4, D_L18_001623B0 * D_0015ED6C_e[0]);
+    advance_accelerated_scalar_7288(p1, y, p3, D_0015ED6C_e[1] * *(float *)&D_L18_001623B4,
+                     D_0015ED6C_e[1] * *(float *)&D_L18_001623B4, D_L18_001623B0 * D_0015ED6C_e[0]);
+}
+#endif
 
 #define NOT_SDA
 

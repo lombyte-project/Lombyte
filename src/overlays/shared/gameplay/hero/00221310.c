@@ -3641,7 +3641,95 @@ int FUN_L00_00228b78(void *a0, int a1) {
     hero_set_state(0x7, 1);
     return 1;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00228c18.s", FUN_L00_00228c18);
+#else
+typedef struct {
+    f32 lower;
+    f32 upper;
+    u8 pad8[8];
+} SpeedStepThreshold_228c18;
+
+extern SpeedStepThreshold_228c18 D_L00_0017BDB8_228c18[] __asm__("D_L00_0017BDB8");
+extern u8 *D_001413D0_228c18 __asm__("D_001413D0");
+extern u8 D_L00_0015F638_228c18[] __asm__("D_L00_0015F638");
+extern void FUN_L00_002323b8(int, int, float);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+
+void FUN_L00_00228c18(void) {
+    int previous_step;
+    int next_step;
+    int below_lower;
+    float limit;
+
+    if (hero.unk20A4 == 3) {
+        hero.unkA90 = hero.motion.speed_xy * 54.0f;
+        if (hero.unkA90 < 0.7f)
+            hero.unkA90 = 0.7f;
+        return;
+    }
+    if (hero.unk20A4 == 1) {
+        hero.unkA90 = hero.motion.speed_xy * 90.0f;
+        if (hero.unkA90 < 0.5f)
+            hero.unkA90 = 0.5f;
+        return;
+    }
+
+    if (scale_game_frames(4) < hero.unk1A0 && hero.unk3BC == 0) {
+        below_lower = hero.ground_speed < D_L00_0017BDB8_228c18[hero.state.step].lower * frame_time;
+        if (below_lower ||
+            D_L00_0017BDB8_228c18[hero.state.step].upper * frame_time < hero.ground_speed) {
+            if (scale_game_frames(4) < hero.unk1A0 && hero.unk3BC == 0) {
+                previous_step = hero.state.step;
+                if (below_lower) {
+                    while (hero.ground_speed < D_L00_0017BDB8_228c18[hero.state.step].lower * frame_time) {
+                        hero.state.step--;
+                    }
+                } else {
+                    while (D_L00_0017BDB8_228c18[hero.state.step].upper * frame_time < hero.ground_speed) {
+                        hero.state.step++;
+                    }
+                }
+                if (hero.state.step < 0)
+                    hero.state.step = 0;
+                if (hero.state.step > 1)
+                    hero.state.step = 1;
+                next_step = hero.state.step + 3;
+                if (previous_step != hero.state.step) {
+                    u8 *moby = D_001413D0_228c18;
+                    u8 old_length;
+                    u8 new_length;
+                    int offset;
+                    int frame;
+                    old_length = *(u8 *)(*(u32 *)(*(u32 *)(moby + 0x24) + 0x48 + (previous_step + 3) * 4) + 0x10);
+                    new_length = *(u8 *)(*(u32 *)(*(u32 *)(moby + 0x24) + 0x48 + next_step * 4) + 0x10);
+                    offset = ((s32 *)(D_L00_0015F638_228c18 + 0x90))[previous_step * 2 + hero.state.step];
+                    frame = ((moby[0x51] * new_length) / old_length + offset) % new_length;
+                    FUN_L00_002323b8(next_step, frame, (float)scale_game_frames(8));
+                }
+            }
+        }
+    }
+    switch (hero.state.step) {
+    case 0:
+        hero.unkA90 = hero.ground_speed * 157.0f;
+        if (hero.unkA90 < 0.6f)
+            hero.unkA90 = 0.6f;
+        limit = 4.0f;
+        break;
+    case 1:
+        hero.unkA90 = hero.ground_speed * 14.0f;
+        if (hero.unkA90 < 0.6f)
+            hero.unkA90 = 0.6f;
+        limit = 2.2f;
+        break;
+    default:
+        return;
+    }
+    if (limit < hero.unkA90)
+        hero.unkA90 = limit;
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

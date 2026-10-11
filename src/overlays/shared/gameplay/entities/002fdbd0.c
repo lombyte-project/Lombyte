@@ -447,7 +447,102 @@ void FUN_L06_002ff100(char *m) {
     }
     *(float *)(d + 0x21C) = (float)scale_game_frames(*(int *)&D_L06_00161FD8_d);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff2c8.s", FUN_L06_002ff2c8);
+#else
+extern f32 D_L06_00161FD0 __attribute__((sda));
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
+extern s32 FUN_001efa68(void *, void *, s32, void *, void *);
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern void enqueue_callback_list_1(void (*)(char *), char *) __asm__("FUN_001f4600");
+void FUN_L06_002ff680(char *);
+void FUN_L06_002ff978(char *);
+
+void FUN_L06_002ff2c8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    s32 frames;
+    s32 i;
+    s32 next;
+    s32 offset;
+    f32 step;
+    f32 alignment;
+    f32 point[4];
+    f32 relative[4];
+    ShotInfo shot;
+
+    frames = truncate_float_to_s32(*(f32 *)(data + 0x21C));
+    FUN_001f9740(&frames);
+    *(f32 *)(data + 0x21C) = (f32)frames;
+    if (frames == 0) {
+        return;
+    }
+    if (frames == 20) {
+        f32 *weight = (f32 *)data;
+        s32 remaining = 15;
+        do {
+            f32 *value = (f32 *)((char *)weight + 0x23C);
+            if (*value >= 1.0f) {
+                *value = 0.98f;
+            }
+            remaining--;
+            weight += 4;
+        } while (remaining >= 0);
+    }
+    i = 0;
+    offset = 0;
+    {
+        f32 *entry = (f32 *)(data + 0x230);
+        do {
+            if (hero.unk20A4 == 1) {
+                step = D_L06_00161FD0 * frame_time * 0.5f;
+            } else {
+                step = D_L06_00161FD0 * frame_time;
+            }
+            subtract_vector_xyz(point, entry, data + 0x210);
+            point[2] = 0.0f;
+            normalize_vector_xyz(point, point, step);
+            add_vector_xyz(point, entry, point);
+            subtract_vector_xyz(relative, point, moby + 0x10);
+            alignment = dot_vectors_xyz(relative, data + 0x220);
+            if (alignment > 0.4f) {
+                point[2] -= frame_time + frame_time;
+            } else if (alignment < 0.3f) {
+                point[2] += *(f32 *)&D_L06_00161FD8_d + *(f32 *)&D_L06_00161FD8_d;
+            }
+            if (entry[3] < 1.0f || FUN_001efa68(data + offset + 0x230, point, 2, 0, 0) == 0) {
+                if (point[3] < 1.0f) {
+                    approach_value(&point[3], 0.0f, frame_time + frame_time);
+                }
+            } else {
+                point[3] = 0.98f;
+            }
+            qcopy(entry, point);
+            i++;
+            entry += 4;
+            offset = i * 16;
+        } while (i < 16);
+    }
+    for (i = 0; i < 15; i = next) {
+        f32 *entry = (f32 *)(data + 0x230 + i * 16);
+        next = i + 1;
+        if (entry[3] >= 0.6f && entry[7] >= 0.6f) {
+            point[0] = fast_cos(*(f32 *)(moby + 0x48));
+            point[1] = fast_sin_c(*(f32 *)(moby + 0x48));
+            point[2] = 1.0f;
+            point[3] = 5627.925f;
+            FUN_L00_00259888(&shot, (struct Moby *)moby,
+                             entry[3] >= 1.0f && entry[7] >= 1.0f ? 0x10001 : 0x10000, point, 1.0f);
+            shot.unk18 = 0;
+            shot.unk19 = 1;
+            shot.oclass = *(s16 *)(moby + 0xA6);
+            FUN_001efa68(entry, entry + 4, 0, moby, &shot);
+        }
+    }
+    enqueue_callback_list_1(FUN_L06_002ff680, moby);
+    FUN_L06_002ff978(moby);
+}
+#endif
 
 /* GS quad packet for draw_geometry_quad: four corners, their colours and
    texture coordinates, then the giftag and register words. */

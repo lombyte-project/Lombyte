@@ -2053,7 +2053,99 @@ void FUN_L15_002a2bf0(unsigned char *moby) {
         break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a3138.s", FUN_L15_002a3138);
+#else
+extern void copy_rotation_2a3138(void *, void *) __asm__("FUN_001fa298");
+extern int interpolate_color_2a3138(float, int, int) __asm__("FUN_001fa6e0");
+extern int truncate_float_2a3138(float) __asm__("FUN_001fa6d0");
+extern float integer_to_float_2a3138(int) __asm__("FUN_001fa6c0");
+extern float fast_cos_2a3138(float) __asm__("FUN_001f9dc8");
+extern float fast_sin_2a3138(float) __asm__("FUN_001f9de0");
+extern int D_L15_001CE230[];
+extern float D_L15_001CE250[][2];
+extern int D_L15_001CE290[][2];
+extern float D_L15_001CE2D0[][2];
+extern float D_L15_001CE2F0[4][4];
+extern float D_L15_001CE330[4][4];
+
+int FUN_L15_002a3138(unsigned char *moby) {
+    EffectQuad first, second;
+    float transform[12];
+    float position[4];
+    int *data = *(int **)(moby + 0x78);
+    int pass, corner, axis, component;
+
+    copy_rotation_2a3138(transform, moby + 0xc0);
+    qcopy(position, moby + 0x10);
+    position[3] = 1.0f;
+    first.texture = get_effect_texture(0x2c);
+    first.r80 = 0xff9000000260ULL;
+    first.r70 = 0;
+    second.texture = get_effect_texture(0x2c);
+    second.r70 = 0;
+    second.r80 = 0xff9000000260ULL;
+    second.col[3] = 0;
+    second.col[1] = 0;
+    for (corner = 0; corner < 4; corner++) {
+        qcopy(first.v[corner], D_L15_001CE330[corner]);
+        qcopy(second.v[corner], D_L15_001CE2F0[corner]);
+    }
+    for (pass = 0; pass < 6; pass++) {
+        int parity = pass & 1;
+        unsigned long long colors =
+            (unsigned long long)(&D_L15_001614C8)[4 + parity] |
+            ((unsigned long long)(&D_L15_001614C8)[6 + parity] << 2) |
+            ((unsigned long long)(&D_L15_001614C8)[8 + parity] << 4) |
+            ((unsigned long long)(&D_L15_001614C8)[10 + parity] << 6) |
+            0x8000000000ULL;
+        int level;
+        first.alpha = colors;
+        second.alpha = colors;
+        if (data[5] == 0) {
+            level = D_L15_001CE230[pass];
+        } else {
+            level = interpolate_color_2a3138((float)data[5] / 60.0f,
+                                          D_L15_001CE230[pass], 0);
+        }
+        for (corner = 3; corner >= 0; corner--) {
+            first.col[corner] = level;
+            if (corner == 0 || corner == 2) {
+                second.col[corner] = level;
+            }
+        }
+        second.col[0] = level;
+        second.col[2] = level;
+        for (corner = 0; corner < 4; corner++) {
+            for (axis = 0; axis < 2; axis++) {
+                int limit = truncate_float_2a3138(D_L15_001CE250[pass][axis] * 360.0f);
+                float angle = integer_to_float_2a3138(*(volatile int *)0x0015f3f8 % limit)
+                    / D_L15_001CE250[pass][axis] - 180.0f;
+                float delta;
+                if (D_L15_001CE290[pass][axis] == 0) {
+                    delta = fast_sin_2a3138(angle * 0.017453292f) * 0.125f;
+                } else {
+                    delta = fast_cos_2a3138(angle * 0.017453292f) * 0.125f;
+                }
+                first.uv[corner][axis] = D_L15_001CE2D0[corner][axis] + delta;
+            }
+        }
+        for (component = 0; component < 2; component++) {
+            float step = (float)component * 0.125f;
+            second.uv[1][component] = first.uv[0][component];
+            second.uv[2][component] = first.uv[0][component] + step;
+            second.uv[3][component] = first.uv[1][component];
+            first.uv[3][component] = first.uv[1][component] + step;
+        }
+        draw_geometry_quad(&first, transform, 0);
+        draw_geometry_quad(&second, transform, 0);
+        for (corner = 0; corner < 4; corner++) {
+            first.v[corner][0] += 0.1f;
+            second.v[corner][0] += 0.1f;
+        }
+    }
+}
+#endif
 #include "rnc/gameplay/entities/moby.h"
 
 typedef struct {

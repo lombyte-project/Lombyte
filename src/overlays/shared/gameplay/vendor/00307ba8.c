@@ -190,9 +190,6 @@ void FUN_L09_00307d68(struct Moby *m)
     FUN_L00_001f2868_307d68(1.1f, &m->pos, 0x10, m, probe);
     mark_moby_for_removal_307d68(m);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030a778.s", FUN_L09_0030a778);
-#else
 extern s32 FUN_L00_002591d0_30a778(struct Moby **, s32, s32, s32) __asm__("FUN_L00_002591d0");
 extern void FUN_00212ed8_30a778(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
 extern struct Moby *FUN_L00_002db890_30a778(struct Moby *) __asm__("FUN_L00_002db890");
@@ -258,7 +255,10 @@ struct Moby *FUN_L09_0030a778(struct Moby *owner, Vec4 *pos)
         owner->unkB4 = left;
         if ((s16)left < 0)
             owner->unkB4 = 1;
-        m->unk94 = ((struct Moby *volatile *)&m)[0]->pclass->unk10;
+        {
+            struct Moby *target = ((struct Moby *volatile *)&m)[0];
+            target->unk94 = target->pclass->unk10;
+        }
         FUN_L00_0025d1b8_30a778(m);
         FUN_L00_00250df8_30a778(m);
         result = m;
@@ -273,7 +273,6 @@ struct Moby *FUN_L09_0030a778(struct Moby *owner, Vec4 *pos)
     }
     return result;
 }
-#endif
 extern char *FUN_L00_0025a420_c(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int,
                               int) __asm__("FUN_L00_0025a478");

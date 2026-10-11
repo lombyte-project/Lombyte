@@ -77,18 +77,23 @@ void FUN_L04_002923b8(char *arg0, char *arg1) {
             j = 0;
             do {
                 int offset = j * 4;
+                float difference;
                 char *item = (char *)*slot;
                 float start = *(float *)(item + 0x40 + offset);
                 float end = *(float *)(item + 0x48 + offset);
-                if (!(start <= end))
-                    end += *(float *)(item + 0x10);
-                *(float *)(item + 0x38 + offset) = end - start;
+                if (start <= end)
+                    difference = end - start;
+                else
+                    difference = (end + *(float *)(item + 0x10)) - start;
+                *(float *)(item + 0x38 + offset) = difference;
                 item = (char *)*slot;
                 start = *(float *)(item + 0x28 + offset);
                 end = *(float *)(item + 0x30 + offset);
-                if (!(start <= end))
-                    end += *(float *)(item + 0x10);
-                *(float *)(item + 0x20 + offset) = end - start;
+                if (start <= end)
+                    difference = end - start;
+                else
+                    difference = (end + *(float *)(item + 0x10)) - start;
+                *(float *)(item + 0x20 + offset) = difference;
                 j++;
             } while (j < 2);
             *(float *)((char *)*slot + 8) = *(float *)((char *)*slot + 4) /

@@ -2,4 +2,97 @@
 #include "types.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023fa00.s", FUN_L00_0023fa00);
+#else
+typedef unsigned int u128_copy __attribute__((mode(TI), aligned(16)));
+extern s16 D_0013E056;
+extern s32 D_0015EE54, D_0015EE8C;
+#define D_L00_0015FFC8 (*(s32 *)0x0015ffc8)
+extern s16 D_L00_0015FC0A, D_L00_0015FC0C, D_L00_0015FC0E, D_L00_0015FC1A;
+extern s32 D_L00_00160548[], D_L00_00160558[];
+extern s32 D_L00_00160564, D_L00_00160568, D_L00_0016056C;
+extern u8 D_L00_00197BC0[];
+extern s32 D_L00_00199A80[];
+extern u128_copy D_L00_001AEBC0[];
+extern u128_copy D_00156800, D_00156810;
+extern u8 D_00156820;
+extern s32 D_00156BC8 __attribute__((sda));
+extern s32 D_00138E4C[];
+extern void hud_send_resident_bank(s32, s32, s32) __asm__("FUN_001f98d0");
+extern void FUN_00122330(void *, s16, s32, s32, s32, s32, s32, s32);
+extern void FUN_00118a80(s32);
+extern void FUN_00122658(void *, void *);
+extern void FUN_00120558(s32, s32);
+extern void FUN_L00_002409b8(void *, void *, void *);
+
+void *FUN_L00_0023fa00(u8 *bank, u8 *header) {
+    u8 buffer[0x60] __attribute__((aligned(16)));
+    s32 first_offset, second_offset, third_offset, fourth_offset;
+    s16 index;
+    s32 allocation;
+    u8 *destination, *texture;
+
+    hud_send_resident_bank((s32)bank, D_0015EE54,
+                           D_00138E4C[(D_0013E056 + 1) * 2] << 11);
+    first_offset = *(s32 *)bank;
+    second_offset = *(s32 *)(bank + 4);
+    third_offset = *(s32 *)(bank + 8);
+    fourth_offset = *(s32 *)(bank + 12);
+    destination = bank + second_offset;
+    index = 0;
+    do {
+        if (index == 0) {
+            FUN_00122330(buffer, ((D_0015EE8C + *(s32 *)(header + 0xac)) << 8) >> 16,
+                         1, 0x13, 0, 0, 0x40, 0x40);
+            texture = destination + 0x14430;
+        } else if (index == 1) {
+            FUN_00122330(buffer, ((D_0015EE8C + *(s32 *)(header + 0xb0)) << 8) >> 16,
+                         1, 0x13, 0, 0, 0x20, 0x20);
+            texture = destination + 0x15430;
+        } else if (index == 2) {
+            FUN_00122330(buffer, ((D_0015EE8C + *(s32 *)(header + 0xb4)) << 8) >> 16,
+                         1, 0, 0, 0, 0x10, 0x10);
+            texture = destination + 0x30;
+        } else {
+            FUN_00122330(buffer, ((D_0015EE8C + *(s32 *)(header + 0xb8)) << 8) >> 16,
+                         1, 0, 0, 0, 0x10, 0x10);
+            texture = bank + fourth_offset + 0x30;
+        }
+        FUN_00118a80(0);
+        FUN_00122658(buffer, texture);
+        FUN_00120558(0, 0);
+        index++;
+    } while (index < 4);
+    D_L00_0015FC0A = *(s32 *)(header + 0xb4) >> 8;
+    D_L00_0015FC0C = *(s32 *)(header + 0xac) >> 8;
+    D_L00_0015FC0E = *(s32 *)(header + 0xb0) >> 8;
+    allocation = D_L00_0015FFC8;
+    D_L00_001AEBC0[allocation] = D_00156800;
+    D_L00_00199A80[allocation] = (s32)destination + 0x80000000;
+    hud_send_resident_bank((s32)destination, (s32)(bank + second_offset + 0x430), 0x14000);
+    D_00156820 = D_L00_0015FFC8;
+    allocation = D_00156BC8;
+    if (D_L00_00197BC0[D_L00_00160548[D_0013E056]] == 0xff) {
+        FUN_L00_002409b8(bank + first_offset, (u8 *)&D_00156800 - D_L00_0015FFC8 * 16, &D_00156820);
+        allocation = D_L00_0015FFC8;
+    }
+    allocation++;
+    D_L00_0015FC1A = *(s32 *)(header + 0xb8) >> 8;
+    D_L00_0015FFC8 = allocation;
+    D_L00_001AEBC0[allocation] = D_00156810;
+    D_L00_00199A80[allocation] = (s32)destination + 0x70014000;
+    hud_send_resident_bank((s32)(destination + 0x14000), (s32)(bank + fourth_offset + 0x430), 0x4000);
+    D_00156820 = D_L00_0015FFC8;
+    allocation = D_00156BC8;
+    if (D_L00_00197BC0[D_L00_00160558[D_0013E056]] == 0xff) {
+        FUN_L00_002409b8(bank + third_offset, (u8 *)&D_00156810 - D_L00_0015FFC8 * 16, &D_00156820);
+        allocation = D_L00_0015FFC8;
+    }
+    D_L00_00160568 = 1;
+    D_L00_00160564 = 1;
+    D_L00_0015FFC8 = allocation + 1;
+    D_L00_0016056C = 0;
+    return destination + 0x18000;
+}
+#endif

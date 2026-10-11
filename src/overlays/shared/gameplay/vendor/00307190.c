@@ -251,7 +251,8 @@ void FUN_L08_00316fa8(char *moby) {
     D_L08_001625D8 = smoothed;
     if (D_L08_001625D8 > 1.0f) {
         D_L08_001625D8 = 1.0f;
-    } else if (D_L08_001625D8 < 0.0f) {
+    }
+    if (D_L08_001625D8 < 0.0f) {
         D_L08_001625D8 = 0.0f;
     }
 

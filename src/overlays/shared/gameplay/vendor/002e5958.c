@@ -110,4 +110,101 @@ void FUN_L15_002ebd78(struct Moby *moby) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ed068.s", FUN_L15_002ed068);
+#else
+extern struct Moby *D_L15_0015FFD8 __attribute__((sda));
+extern int D_L15_0015F594 __attribute__((sda));
+extern struct Moby *D_0013F64C;
+extern short D_0013F65E;
+extern int D_001413D4;
+extern u8 D_001413F4 __attribute__((section(".data")));
+extern int D_L15_0015F5C4;
+extern u8 D_0014C170[];
+extern u8 D_0013F3D0[];
+extern u8 D_00141050[];
+extern u32 D_0013CAE4;
+extern void mark_moby_for_removal_002ed068(struct Moby *) __asm__("FUN_0020c828");
+extern void try_set_help_message(int, int) __asm__("FUN_00215130");
+extern void FUN_L15_00208ca8(void);
+extern void set_moby_animation(struct Moby *, int, int) __asm__("FUN_00212ed8");
+extern void start_scene(int) __asm__("FUN_L00_00298840");
+extern void FUN_L01_0027a248(int, int);
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
+extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void FUN_L00_00210a08(int, int, struct Moby *);
+
+void FUN_L15_002ed068(struct Moby *moby) {
+    char *linked = (char *)moby->pvars;
+    struct Moby *entry;
+    u8 state = moby->state;
+    u8 position[16] __attribute__((aligned(16)));
+
+    if (state == 1) {
+        moby->state = 2;
+        return;
+    }
+    if (state < 2) {
+        if (state != 0) return;
+        if (*(int *)(linked + 0x60) == -1) {
+            mark_moby_for_removal_002ed068(moby);
+            return;
+        }
+        entry = (struct Moby *)((char *)D_L15_0015FFD8 + (*(int *)(linked + 0x60) << 8));
+        entry->unk31 = 0;
+        entry->unk94 = 0;
+        entry->flags |= 1;
+        if (current_level_index == 0x12 && D_0014C170[moby->unkB0] == 0xff) {
+            moby->state = 3;
+        } else {
+            moby->state = 1;
+        }
+    } else {
+        if (state != 2) return;
+        if (D_0013F64C == moby && D_0013F65E == 0 && D_L15_0015F5C4 != 2 && D_001413D4 != 0x1d) {
+            if (D_001413F4 == 0) {
+                try_set_help_message(4, 0x3aa4);
+            } else if (D_001413F4 == 2 && current_level_index != 0x12) {
+                try_set_help_message(4, 0x3aa5);
+            }
+            if (!(D_0013CAE4 & 0x10)) return;
+            if (D_L15_0015F594 != 4) return;
+            if (D_001413F4 == 2 && current_level_index == 0xf) {
+                entry = (struct Moby *)((char *)D_L15_0015FFD8 + (*(int *)(linked + 0x60) << 8));
+                entry->unk94 = 0;
+                entry->unk31 = 0;
+                entry->flags |= 1;
+                FUN_L15_00208ca8();
+                set_moby_animation(entry, 0, 0);
+                if (current_level_index != 0xf) return;
+                start_scene(9);
+                FUN_L01_0027a248(0, 5);
+                return;
+            }
+            if (D_001413F4 != 0) return;
+            entry = (struct Moby *)((char *)D_L15_0015FFD8 + (*(int *)(linked + 0x60) << 8));
+            *(u128 *)position = *(u128 *)&moby->pos;
+            *(float *)(position + 8) = probe_ground_height(position, 0, 0.5f) + 0.1f;
+            FUN_L00_00216f90(position, &moby->rot, 0, 1);
+            entry->unk31 = 1;
+            entry->unk94 = entry->pclass->unk10;
+            entry->flags &= ~1;
+            FUN_L00_00210a08(2, 0x5a, entry);
+            if (current_level_index == 0xf) {
+                start_scene(8);
+                *(u128 *)D_00141050 = *(u128 *)D_0013F3D0;
+                *(u128 *)(D_00141050 + 16) = *(u128 *)(D_0013F3D0 + 16);
+                FUN_L01_0027a248(2, 4);
+                return;
+            }
+            if (current_level_index != 0x12) return;
+            start_scene(6);
+            *(u128 *)D_00141050 = *(u128 *)D_0013F3D0;
+            *(u128 *)(D_00141050 + 16) = *(u128 *)(D_0013F3D0 + 16);
+            moby->state = 3;
+            return;
+        }
+    }
+    *(int *)(linked + 0x68) = -1;
+}
+#endif

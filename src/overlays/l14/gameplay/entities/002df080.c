@@ -36,7 +36,92 @@ void FUN_L14_002df080(u8 *moby) {
     d[0x1E8 / 4] = 0.0f;
     d[0x1EC / 4] = 0.0f;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002df138.s", FUN_L14_002df138);
+#else
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float integer_to_float_l14(int) __asm__("FUN_001fa6c0");
+extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float spread_l14(float, float) __asm__("FUN_L00_00257c48");
+extern void enqueue_callback_l14(void *, void *) __asm__("FUN_001f4600");
+void FUN_L14_002df458(struct Moby *);
+
+void FUN_L14_002df138(u8 *moby) {
+    f32 *d = *(f32 **)(moby + 0x78);
+    f32 *p = d;
+    f32 *mirror;
+    f32 *tail;
+    f32 step;
+    f32 angle;
+    f32 height;
+    f32 index;
+    s32 i;
+
+    d[0x78] = fast_add_rotations(d[0x78], 0.17453292f);
+    d[0x79] = fast_subtract_rotations(d[0x79], 0.80285144f);
+    d[0x7a] = fast_add_rotations(d[0x7a], 0.05236f);
+    step = 360.0f / (integer_to_float_l14(10) * 0.5f) * 0.017453292f;
+    i = 0;
+    do {
+        integer_to_float_l14(i);
+        integer_to_float_l14(10);
+        if (i == 0) {
+            index = 0.0f;
+            height = 0.0f;
+        } else {
+            index = (f32)i;
+            angle = normalize_rotation_l14(d[0x78] + index * step);
+            height = fast_sin(angle);
+            height *= 0.1f;
+            height += spread_l14(0.0f, 0.2f);
+        }
+        p[2] = height;
+        i++;
+        p[1] = 0.0f;
+        p[3] = 1.0f;
+        p[0] = d[0x7c] * index + 1.6f;
+        p += 4;
+    } while (i < 5);
+
+    mirror = d + 0x12;
+    tail = d + 0x14;
+    i = 5;
+    do {
+        height = *mirror;
+        index = (f32)i;
+        tail[1] = 0.0f;
+        i++;
+        tail[2] = height;
+        mirror -= 4;
+        tail[3] = 1.0f;
+        tail[0] = d[0x7c] * index + 1.6f;
+        tail += 4;
+    } while (i < 10);
+
+    p = d;
+    i = 0;
+    do {
+        f32 index2 = (f32)i;
+        f32 yaw;
+        f32 pitch;
+        p[0x2a] = 0.0f;
+        i++;
+        yaw = normalize_rotation_l14(d[0x79] + index2 * 0.99483764f);
+        pitch = normalize_rotation_l14(d[0x7a] + index2 * 0.20944f);
+        height = fast_sin(pitch) * 0.75f;
+        height *= fast_sin(yaw);
+        p[0x2a] += height + spread_l14(0.0f, 0.2f);
+        p[0x2b] = 1.0f;
+        p[0x29] = fast_cos(yaw) * 0.5f;
+        p[0x28] = index2 * 0.39f;
+        p += 4;
+    } while (i < 19);
+    enqueue_callback_l14(FUN_L14_002df458, moby);
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -99,7 +184,108 @@ void FUN_L14_002dfc58(u8 *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002e7bd8.s", FUN_L14_002e7bd8);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eaf88.s", FUN_L14_002eaf88);
+#else
+extern void spark_debug_print(const char *, short) __asm__("FUN_001e93b0");
+extern void spark_remove_moby(struct Moby *) __asm__("FUN_0020c828");
+extern float spark_vector_length(void *) __asm__("FUN_001f9af0");
+extern int spark_frames(int) __asm__("FUN_001f96f8");
+extern float spark_float_frames(short) __asm__("FUN_001fa6c0");
+extern int spark_tick(short *) __asm__("FUN_001f9770");
+extern float spark_cos(float) __asm__("FUN_001f9dc8");
+extern float spark_sin(float) __asm__("FUN_001f9de0");
+extern void spark_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int spark_in_clip(void *, int) __asm__("FUN_00214720");
+extern char *D_L14_001600EC_af __asm__("D_L14_001600EC");
+extern int D_L14_00161C04_af __asm__("D_L14_00161C04") __attribute__((sda));
+extern float D_L14_00161C08_af __asm__("D_L14_00161C08") __attribute__((sda));
+extern float D_0015ED6C_af __asm__("D_0015ED6C");
+extern float D_L14_00162230_af[5] __asm__("D_L14_00162230");
+void FUN_L14_002eb388(struct Moby *, int, void *);
+void FUN_L14_002eb568(struct Moby *);
+
+void FUN_L14_002eaf88(struct Moby *m) {
+    char *d = (char *)m->pvars;
+float dir[3];
+    float scale;
+short time;
+
+    if (m->state == 0) {
+        int i;
+        m->state = 1;
+        if (*(int *)(d + 0) < 0) {
+            spark_debug_print((const char *)0x001fc980, *(short *)((char *)m + 0xb2));
+            spark_remove_moby(m);
+            return;
+        }
+        if (*(int *)(d + 0x504) < 0) {
+            spark_debug_print((const char *)0x001fc9e0, *(short *)((char *)m + 0xb2));
+            spark_remove_moby(m);
+            return;
+        }
+        if (*(int *)(d + 0x500) < 0) {
+            spark_debug_print((const char *)0x001fca38, *(short *)((char *)m + 0xb2));
+            spark_remove_moby(m);
+            return;
+        }
+        *(short *)(d + 0xe) = 0;
+*(float *)(d + 0x14) = spark_vector_length(D_L14_001600EC_af + *(int *)(d + 0x504) * 0x80) * 2.0f;
+        *(float *)(d + 0x18) = spark_vector_length(D_L14_001600EC_af + *(int *)(d + 0x504) * 0x80 + 0x10);
+        *(float *)(d + 0x1c) = spark_vector_length(D_L14_001600EC_af + *(int *)(d + 0x504) * 0x80 + 0x20);
+        time = spark_frames(*(short *)(d + 0x508));
+        *(short *)(d + 0x50a) = time;
+        *(float *)(d + 0x50c) = 1.0f / spark_float_frames(time);
+        dir[0] = spark_cos(m->rot.z);
+        dir[1] = spark_sin(m->rot.z);
+dir[2] = 0.0f;
+for (i = 0; i < 48; i++) FUN_L14_002eb388(m, i, dir);
+    }
+    if (spark_in_clip(&hero.motion.pos, *(int *)(d + 0x500))) {
+        D_L14_00162230_af[0] = spark_cos(m->rot.z) * (D_L14_00161C08_af * D_0015ED6C_af);
+        D_L14_00162230_af[1] = spark_sin(m->rot.z) * (D_L14_00161C08_af * D_0015ED6C_af);
+        D_L14_00162230_af[2] = 0.0f;
+        D_L14_00162230_af[4] = 1.0f;
+        FUN_L14_002eb568(m);
+        if (*(short *)((char *)&hero + 0x308) == 0 && *(int *)((char *)&hero + 0x2284) != 13 &&
+            (*(u8 *)((char *)&hero + 0x12e2) != 0 || *(short *)((char *)&hero + 0x30c) != 0) &&
+            spark_in_clip(&hero.motion.pos, *(int *)d)) {
+            spark_tick((short *)(d + 0x50a));
+            scale = (1.0f - spark_float_frames(*(short *)(d + 0x50a)) * *(float *)(d + 0x50c)) *
+                    *(float *)(d + 8) * D_0015ED6C_af;
+            *(short *)(d + 0xe) = 1;
+            dir[0] = spark_cos(m->rot.z) * scale;
+            dir[1] = spark_sin(m->rot.z) * scale;
+            dir[2] = 0.0f;
+            spark_add((char *)&hero.motion.pos + 0x70, (char *)&hero.motion.pos + 0x70, dir);
+            time = spark_frames(D_L14_00161C04_af);
+            *(short *)(d + 0xc) = time;
+            *(float *)(d + 0x10) = 1.0f / spark_float_frames(time);
+            return;
+        }
+    }
+if (*(short *)(d + 0xe) == 0 || *(short *)(d + 0xc) == 0) return;
+if (spark_tick((short *)(d + 0xc))) {
+        *(short *)(d + 0xe) = 0;
+        time = spark_frames(*(short *)(d + 0x508));
+        *(short *)(d + 0x50a) = time;
+        *(float *)(d + 0x50c) = 1.0f / spark_float_frames(time);
+    }
+    if (*(short *)((char *)&hero + 0x308) != 0 || *(u8 *)((char *)&hero + 0x12e2) == 0) {
+        if (*(short *)(d + 0xc) > spark_frames(15)) {
+            time = spark_frames(15);
+            *(short *)(d + 0xc) = time;
+            *(float *)(d + 0x10) = 1.0f / (float)time;
+        }
+    }
+scale = (*(float *)(d + 8) * D_0015ED6C_af - 0.0f) *
+            spark_float_frames(*(short *)(d + 0xc)) * *(float *)(d + 0x10) + 0.0f;
+    dir[0] = spark_cos(m->rot.z) * scale;
+    dir[1] = spark_sin(m->rot.z) * scale;
+    dir[2] = 0.0f;
+    spark_add((char *)&hero.motion.pos + 0x70, (char *)&hero.motion.pos + 0x70, dir);
+}
+#endif
 /* Starts one spark: places it at a random spot around the emitter, picks its speed and its life. */
 #include "qcopy.h"
 extern struct { char pad[0x30]; float v[4]; char rest[0x40]; } *D_L14_001600EC_k __asm__("D_L14_001600EC");
@@ -214,12 +400,12 @@ void FUN_L14_002eb568(struct Moby *m) {
             opacity = D_L14_00161C10_spark;
             age = d->n380[i];
             count = d->n320[i];
-            if (age - D_L14_00161C2C_spark < count) {
-                first = spark_integer_to_float(age - count);
-                age = D_L14_00161C2C_spark;
-            } else {
+            if (age - D_L14_00161C2C_spark >= count) {
                 first = spark_integer_to_float(count);
                 age -= D_L14_00161C2C_spark;
+            } else {
+                first = spark_integer_to_float(age - count);
+                age = D_L14_00161C2C_spark;
             }
             second = spark_integer_to_float(age);
             ratio = first / second;
@@ -756,11 +942,12 @@ void FUN_L14_002eef60(struct Moby *m) {
 
     *(float *)(d + 0xB4) = 0.0f;
     i = 0;
-    first = path + 4;
-    point = path + 4;
-    if (0 < *path - 1) {
-        next = path + 8;
-        length_out = (float *)(path + 7);
+    point = path;
+    first = point + 4;
+    if (0 < *point - 1) {
+        length_out = (float *)(point + 7);
+        next = point + 8;
+        point = first;
         do {
             length = FUN_001f9b48(point, next);
             i++;
@@ -792,8 +979,8 @@ void FUN_L14_002eef60(struct Moby *m) {
     }
     *(float *)(second_path + i * 4 + 7) = FUN_001f9b48(second_path + i * 4 + 4, second_path + 4);
     *(float *)(d + 0xAC) = -1.0f;
-    *(int *)(d + 0xA4) = 0;
     *(int *)(d + 0xA8) = 0;
+    *(int *)(d + 0xA4) = 0;
 }
 #endif
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F05D8), where it is exact; names translated to the US level program. */
@@ -1030,7 +1217,8 @@ void FUN_L14_002f1040(struct Moby *moby) {
 selected:
     moby->state = 1;
     {
-        int offset = entries[*(short *)(data + 0xB4)] << 7;
+        int *selected_entry = entries + *(short *)(data + 0xB4);
+        int offset = *selected_entry << 7;
         char *base = D_L14_001600EC_2f1040;
         qcopy(data + 0x60, base + offset + 0x30);
         qcopy(data + 0x70, base + offset + 0x70);
@@ -1398,6 +1586,8 @@ extern struct { char pad[0x18]; unsigned char flag; } D_0013D408;
 extern void *D_L14_00161F5C __attribute__((sda));
 extern char D_0013E550[];
 extern char *D_L14_001B0BB0_c[] __asm__("D_L14_001B0BB0");
+extern char D_L14_001FCE10[];
+extern char D_L14_001FCE48[];
 
 void FUN_L14_002fc0f0(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -1431,19 +1621,19 @@ void FUN_L14_002fc0f0(struct Moby *moby) {
     case 0:
         path_index = *(int *)(data + 0x68);
         if (path_index == -1) {
-            FUN_L00_001fe1f8((const char *)0x1fce10, moby->save_id);
+            FUN_L00_001fe1f8(D_L14_001FCE10, moby->save_id);
             FUN_L00_00257068(moby);
             return;
         }
         if (*(int *)D_L14_001B0BB0_c[path_index] == 0) {
-            FUN_L00_001fe1f8((const char *)0x1fce48, moby->save_id);
+            FUN_L00_001fe1f8(D_L14_001FCE48, moby->save_id);
             FUN_L00_00257068(moby);
             return;
         }
         FUN_L14_002fc890(moby);
-        moby->unk30 = 0xff;
-        moby->state = 1;
-        moby->unk32 = 0xff;
+        ((volatile struct Moby *)moby)->state = 1;
+        ((volatile struct Moby *)moby)->unk30 = 0xff;
+        ((volatile struct Moby *)moby)->unk32 = 0xff;
         *(int *)(data + 0x6c) = -1;
         *(int *)(data + 0x7c) = FUN_L00_002124c0(D_L14_00161F5C);
         break;

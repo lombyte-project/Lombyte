@@ -508,11 +508,12 @@ void FUN_L00_002cbcc0(u8 *m, s32 enabled)
             0.2f, 1.0f, 1.02f, 140000.0f);
         if (effect != 0) {
             *(s16 *)(effect + 0xa) = FUN_001fef20_2cbcc0(FUN_L00_00257b90_2cbcc0(50, 80));
-            *(s32 *)(effect + 0x24) = 2;
-            effect[0x2a] = color >> 24;
-            effect[0x2b] = effect[0xa];
+            effect += 0x20;
+            *(s32 *)(effect + 4) = 2;
+            effect[0xa] = color >> 24;
+            effect[0xb] = effect[-0x16];
             if (FUN_L00_00257b50_2cbcc0(2))
-                effect[3] = alpha;
+                effect[-0x1d] = alpha;
         }
     }
 }

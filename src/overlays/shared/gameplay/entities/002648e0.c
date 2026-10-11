@@ -76,7 +76,7 @@ void FUN_L00_002648e0(void) {
 
     total_ticks = 0.0f;
     profile = (MobyProfile *)0x11004000;
-    for (i = 0xdf; i-- > 0; profile++) {
+    for (i = 0xdf; i-- >= 0; profile++) {
         if (profile->count != 0) {
             total_ticks += (f32)profile->ticks;
         }

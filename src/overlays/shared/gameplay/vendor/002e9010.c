@@ -1338,6 +1338,7 @@ void FUN_L00_002ebbd8(void *arg) {
     char *source;
     int state;
     int frames;
+    int next;
 
     *(int *)(p + 0x40) = 0;
     if (current_level_index == 14 &&
@@ -1361,11 +1362,13 @@ void FUN_L00_002ebbd8(void *arg) {
     *(short *)(m + 0x1c) = 0;
     *(short *)(m + 0x1e) = frames;
     FUN_001ff260_2ebbd8(m);
+    m = (char *)((volatile O002ebb00 *)o)->m;
     *(float *)(m + 0x34) = 0.02f;
     *(float *)(m + 0x38) = 0.2f;
     *(int *)(m + 0x3c) = 0;
     *(int *)(m + 0x30) = 0;
     *(int *)(m + 0xbc) = 0;
+    m = (char *)((volatile O002ebb00 *)o)->m;
     source = *(char **)(cam + 0x184);
     qcopy((char *)o + 0x30, source + 0x30);
     qcopy(o, source);
@@ -1378,7 +1381,7 @@ void FUN_L00_002ebbd8(void *arg) {
         *(float *)(p + 0x34) = FUN_001ff800_2ebbd8(g->unk9AC);
         *(int *)(p + 0x38) = 0;
         *(float *)(m + 0xb8) = g->unk9AC;
-        *(int *)(m + 0xc0) = ((int)g->unk994);
+        next = (int)g->unk994;
     } else {
         FUN_001ff2a8_2ebbd8(p + 0x30, ((char *)g->unk964) + 0x10, (char *)o + 0x30);
         *(int *)(p + 0x38) = 0;
@@ -1386,10 +1389,11 @@ void FUN_L00_002ebbd8(void *arg) {
         FUN_001ff500_2ebbd8(p + 0x30, p + 0x30, 1.0f);
         *(float *)(m + 0xb8) =
             FUN_001ff8b0_2ebbd8(*(float *)(p + 0x30), *(float *)(p + 0x34));
-        *(int *)(m + 0xc0) = ((int)g->unk964);
+        next = (int)g->unk964;
     }
-    *(short *)(cam + 0x270) = 1;
-    *(char *)(cam + 0x273) = 2;
+    *(int *)(m + 0xc0) = next;
+    *(volatile short *)(cam + 0x270) = 1;
+    *(volatile char *)(cam + 0x273) = 2;
     *(int *)(cam + 0x2f4) = FUN_001fef20_2ebbd8(0x3c);
 }
 #endif
@@ -1635,7 +1639,141 @@ int FUN_L00_002ed348(void *pv) {
     s->done = 1;
     return 0;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ed498.s", FUN_L00_002ed498);
+#else
+extern int D_0013CAE0_002ed498 __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern u128 D_0013F3D0_002ed498 __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern u128 D_0013F5E0_002ed498 __asm__("D_0013F5E0") __attribute__((section(".data")));
+extern char *D_L00_0015EF50_002ed498 __asm__("D_L00_0015EF50");
+extern char *D_L00_00166E00_002ed498 __asm__("D_L00_00166E00") __attribute__((section(".data")));
+extern int FUN_L00_002ed348(void *);
+extern int FUN_L00_002e83c0(void *);
+extern void FUN_L00_002e8388(void *);
+extern void FUN_L00_002e8450(int, float, float);
+extern void FUN_L00_002e84b8(float, float);
+extern void FUN_L00_002e84f0(int, float, float);
+extern void FUN_L00_002e8540(float);
+extern void FUN_L00_002e8568(int);
+extern void FUN_L00_002e8620(void);
+extern int FUN_001f96f8_002ed498(int) __asm__("FUN_001f96f8");
+extern float FUN_001f99c0_002ed498(float) __asm__("FUN_001f99c0");
+extern void FUN_001f9a28_002ed498(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001f9a68_002ed498(void *, void *, float) __asm__("FUN_001f9a68");
+extern void FUN_001f9a10_002ed498(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float FUN_001f9ab0_002ed498(void *, void *) __asm__("FUN_001f9ab0");
+extern float FUN_001f9af0_002ed498(void *) __asm__("FUN_001f9af0");
+extern float FUN_001f9dc8_002ed498(float) __asm__("FUN_001f9dc8");
+extern float FUN_001f9de0_002ed498(float) __asm__("FUN_001f9de0");
+
+void FUN_L00_002ed498(void *arg) {
+    char *a = arg;
+    char *p = *(char **)(D_L00_0015EF50_002ed498 + *(short *)(a + 0x84) * 32 + 0x1c);
+    char *g;
+    char *m;
+    char *m130;
+    char *m40;
+    char *m20;
+    char *m1d0;
+    float pos[4] __attribute__((aligned(16)));
+    float v[4] __attribute__((aligned(16)));
+    float w[4] __attribute__((aligned(16)));
+    float x[4] __attribute__((aligned(16)));
+    float distance;
+    float angle;
+    int frames;
+    float zero;
+
+    if (FUN_L00_002ed348(a) == 0) {
+        if (*(int *)(p + 0x20) != 0)
+            *(short *)(p + 0x26) = 1;
+        *(int *)(p + 0x20) = 0;
+        FUN_L00_002e8388(a);
+        return;
+    }
+    if (FUN_L00_002e83c0(a) <= 0) {
+        if (*(int *)(p + 0x20) != 0)
+            *(short *)(p + 0x26) = 1;
+        *(int *)(p + 0x20) = 0;
+        return;
+    }
+    if ((D_0013CAE0_002ed498 & 5) != 0) {
+        if (*(int *)(p + 0x20) != 0)
+            *(short *)(p + 0x26) = 1;
+        *(int *)(p + 0x20) = 0;
+        FUN_L00_002e8388(a);
+        return;
+    }
+
+    if (*(int *)(p + 0x20) < 2) {
+        char *entry = D_L00_0015EF50_002ed498 + *(short *)(a + 0x84) * 32;
+        *(float *)&pos[0] = *(float *)(entry + 0);
+        *(float *)&pos[1] = *(float *)(entry + 4);
+        *(float *)&pos[2] = *(float *)(entry + 8);
+        pos[3] = 0.0f;
+        FUN_001f9a28_002ed498(v, pos, &D_0013F3D0_002ed498);
+        distance = FUN_001f9ab0_002ed498(v, &D_0013F5E0_002ed498);
+        FUN_001f9a68_002ed498(w, &D_0013F5E0_002ed498, distance);
+        FUN_001f9a28_002ed498(x, v, w);
+        *(float *)(p + 0x38) = FUN_001f9af0_002ed498(x);
+        *(float *)(p + 0x3c) = -distance;
+        angle = *(float *)(p + 0x2c);
+        if (FUN_001f99c0_002ed498(angle) == 1.5707964f)
+            *(float *)(p + 0x40) = 0.0f;
+        else
+            *(float *)(p + 0x40) = *(float *)(p + 0x3c) - *(float *)(p + 0x38) *
+                (FUN_001f9de0_002ed498(angle) / FUN_001f9dc8_002ed498(angle));
+
+        g = D_L00_00166E00_002ed498;
+        m = *(char **)(g + 0x70);
+        m130 = m + 0x130;
+        m40 = m + 0x40;
+        m20 = m + 0x20;
+        m1d0 = m + 0x1d0;
+        qcopy(g + 0x30, pos);
+        *(float *)(m130 + 0x2c) = *(float *)(p + 0x38);
+        *(float *)(m130 + 0x30) = *(float *)(p + 0x3c);
+        *(float *)(m40 + 0xb0) = *(float *)(p + 0x40);
+        FUN_001f9a68_002ed498(w, &D_0013F5E0_002ed498, -*(float *)(m130 + 0x30));
+        FUN_001f9a10_002ed498(m + 0x90, &D_0013F3D0_002ed498, w);
+        FUN_001f9a28_002ed498(m130, pos, m + 0x90);
+        qcopy(m130 + 0x10, m130);
+        FUN_001f9a68_002ed498(w, &D_0013F5E0_002ed498, -*(float *)(m40 + 0xb0));
+        FUN_001f9a10_002ed498(m + 0x80, &D_0013F3D0_002ed498, w);
+        qcopy(m + 0xd0, m + 0x80);
+        qcopy(m40, &D_0013F3D0_002ed498);
+        qcopy(m + 0xa0, m40);
+        qcopy(m, g + 0x30);
+        qcopy(m1d0 + 0x20, g + 0x30);
+        *(int *)(m1d0 + 0x30) = 0;
+        *(int *)(m20 + 0x14) = 0;
+        zero = *(volatile float *)(m20 + 0x14);
+        *(float *)(m20 + 4) = *(float *)(m40 + 0xb0);
+        *(float *)(m20 + 0xc) = zero;
+        *(float *)(m20 + 8) = *(float *)(m130 + 0x30);
+        *(short *)(m20 + 2) = 0;
+        *(float *)(m20 + 0x18) = zero;
+        *(float *)(m20 + 0x10) = zero;
+    }
+    *(int *)(p + 0x20) += 1;
+    frames = FUN_001f96f8_002ed498(200);
+    if (frames < *(int *)(p + 0x20))
+        *(int *)(p + 0x20) = FUN_001f96f8_002ed498(200);
+    if (*(float *)(p + 0x38) != 0.0f) {
+        FUN_L00_002e8450(0, *(float *)(p + 0x38), 0.003f);
+        FUN_L00_002e8620();
+    }
+    if (*(float *)(p + 0x3c) != 0.0f)
+        FUN_L00_002e84b8(*(float *)(p + 0x3c), 0.003f);
+    if (*(float *)(p + 0x40) != 0.0f)
+        FUN_L00_002e84f0(0, *(float *)(p + 0x40), 0.005f);
+    if (*(float *)(p + 0x28) != 0.0f)
+        FUN_L00_002e8540(*(float *)(p + 0x28) * 0.017453292f);
+    if (*(short *)(p + 0x24) == 0)
+        FUN_L00_002e8568(0);
+    return;
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

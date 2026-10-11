@@ -157,7 +157,77 @@ void FUN_L00_0029fcd0(void *m) {
     FUN_0020d330_29fcd0(m, 1);
     FUN_001f5450_29fcd0(w, h, x, y, 0, 0, x, y, 0x80808080L, D_0015EED0_29fcd0);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ff58.s", FUN_L00_0029ff58);
+#else
+typedef struct {
+    float position[4][4];
+    int color[4];
+    float uv[4][2];
+    long extra[4];
+} L00Quad29ff58;
+
+extern float D_L00_00161184 __attribute__((section(".sdata")));
+extern int D_L00_001CA480[4][4];
+extern float D_L00_001CA380[16][4];
+extern float D_L00_001CA410[8][2];
+extern int D_L00_001CA458[];
+extern char D_L00_001CA4C0_29ff58[] __asm__("D_L00_001CA4C0");
+extern long FUN_001f44b8_29ff58(int) __asm__("FUN_001f44b8");
+extern void FUN_001f9cf8_29ff58(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void FUN_001f7d30_29ff58(void *, int, int) __asm__("FUN_001f7d30");
+
+void FUN_L00_0029ff58(void) {
+    L00Quad29ff58 q;
+    float transformed[4][4];
+    float *position;
+    int i, index0, index1, index2, index3;
+    int *indices;
+    D_L00_00161184 = D_L00_00161184 + 0.01f;
+    if (1.0f < D_L00_00161184) {
+        D_L00_00161184 = D_L00_00161184 - 1.0f;
+    }
+    q.extra[0] = 0;
+    q.extra[1] = FUN_001f44b8_29ff58(0x18);
+    q.extra[2] = 1;
+    q.extra[3] = 0x4000000044L;
+    for (i = 0; i < 4; i++) {
+        indices = D_L00_001CA480[i];
+        index0 = indices[0];
+        FUN_001f9cf8_29ff58(transformed[0], D_L00_001CA380[index0], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
+        index1 = indices[1];
+        FUN_001f9cf8_29ff58(transformed[1], D_L00_001CA380[index1], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
+        index2 = indices[2];
+        FUN_001f9cf8_29ff58(transformed[2], D_L00_001CA380[index2], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
+        index3 = indices[3];
+        FUN_001f9cf8_29ff58(transformed[3], D_L00_001CA380[index3], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
+        position = (float *)(*(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0x10);
+#define SET_POSITION(n) \
+        q.position[n][0] = position[0] + transformed[n][0]; \
+        q.position[n][1] = position[1] + transformed[n][1]; \
+        q.position[n][2] = position[2] + transformed[n][2]
+        SET_POSITION(0);
+        SET_POSITION(1);
+        SET_POSITION(2);
+        SET_POSITION(3);
+#undef SET_POSITION
+        index0 = indices[0];
+        index1 = indices[1];
+        index2 = indices[2];
+        index3 = indices[3];
+#define SET_COLOR_UV(n, index) \
+        q.color[n] = D_L00_001CA458[index]; \
+        q.uv[n][0] = D_L00_001CA410[index][0]; \
+        q.uv[n][1] = D_L00_001CA410[index][1] + D_L00_00161184
+        SET_COLOR_UV(0, index0);
+        SET_COLOR_UV(1, index1);
+        SET_COLOR_UV(2, index2);
+        SET_COLOR_UV(3, index3);
+#undef SET_COLOR_UV
+        FUN_001f7d30_29ff58(&q, 0, 1);
+    }
+}
+#endif
 #include "eetypes.h"
 #include "qzero.h"
 typedef struct {
