@@ -330,7 +330,100 @@ void FUN_L08_002d4108(char *arg) {
     }
     FUN_001f7d30_002d4108(&pk, 0, 0);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e7eb0.s", FUN_L08_002e7eb0);
+#else
+extern char *create_moby_002e7eb0(int) __asm__("FUN_0020c4f8");
+extern void set_moby_color_002e7eb0(void *, int, int, int) __asm__("FUN_L00_002502f0");
+extern void update_moby_002e7eb0(void *) __asm__("FUN_L00_00250df8");
+extern float vector_length_xy_002e7eb0(void *) __asm__("FUN_001f9b20");
+extern float angle_atan2_002e7eb0(float, float) __asm__("FUN_001f9e90");
+extern void make_matrix_002e7eb0(void *, void *) __asm__("FUN_001fa050");
+extern float random_angle_002e7eb0(void) __asm__("FUN_00213308");
+extern float random_float_between_002e7eb0(float, float) __asm__("FUN_002132a8");
+extern float fast_cos_002e7eb0(float) __asm__("FUN_001f9dc8");
+extern float fast_sin_002e7eb0(float) __asm__("FUN_001f9de0");
+extern void normalize_vector_xyz_002e7eb0(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void add_vector_xyz_002e7eb0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int random_integer_002e7eb0(int, int) __asm__("FUN_L00_00257b90");
+extern void *spawn_particle_002e7eb0(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
+extern int truncate_float_to_s32_002e7eb0(float) __asm__("FUN_001fa6d0");
+extern float scale_game_frames_002e7eb0(float) __asm__("FUN_001f96b0");
+extern int scale_game_frames_int_002e7eb0(int) __asm__("FUN_001f96f8");
+extern void FUN_00218888_002e7eb0(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern int D_L08_0015F5CC_002e7eb0 __asm__("D_L08_0015F5CC");
+extern int D_0015ED84_002e7eb0 __asm__("D_0015ED84");
+extern float D_L08_001618D8_002e7eb0 __asm__("D_L00_001618D8") __attribute__((sda));
+
+#define DATA_002e7eb0(type, offset) (*(type *)((char *)&D_L08_001618D8_002e7eb0 + (offset) - 0x47c))
+typedef struct { unsigned int words[4]; } Vec_002e7eb0 __attribute__((aligned(16)));
+
+char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
+    float position_copy[4] __attribute__((aligned(16)));
+    float rotation_copy[4] __attribute__((aligned(16)));
+    float matrix[4][4] __attribute__((aligned(16)));
+    float velocity[4] __attribute__((aligned(16)));
+    float offset[4] __attribute__((aligned(16)));
+    float angle, magnitude;
+    int i, a, b, c;
+    char *moby;
+    char *data;
+    float * volatile particle_position_ptr;
+
+    *(Vec_002e7eb0 *)position_copy = *(Vec_002e7eb0 *)position;
+    *(Vec_002e7eb0 *)rotation_copy = *(Vec_002e7eb0 *)rotation;
+    moby = create_moby_002e7eb0(0x1ca);
+    if (moby != 0) {
+        data = *(char **)(moby + 0x78);
+        *(int *)(data + 0x14) = owner;
+        *(int *)(data + 0x10) = value;
+        set_moby_color_002e7eb0(moby, 0xa0, 0xa0, 0xa0);
+        *(int *)(moby + 0x40) = 0;
+        *(short *)(moby + 0x32) = 0xff;
+        *(unsigned char *)(moby + 0x30) = 0xff;
+        *(unsigned char *)(moby + 0x31) = 1;
+        *(float *)(moby + 0x44) = -angle_atan2_002e7eb0(vector_length_xy_002e7eb0(rotation_copy), rotation_copy[2]);
+        *(float *)(moby + 0x48) = angle_atan2_002e7eb0(rotation_copy[0], rotation_copy[1]);
+        *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)position_copy;
+        *(OvlQuad *)data = *(OvlQuad *)rotation_copy;
+        if (D_L08_0015F5CC_002e7eb0 & 1)
+            *(volatile int *)(data + 0x1c) = 1;
+        else
+            *(volatile int *)(data + 0x1c) = -1;
+        make_matrix_002e7eb0(matrix, moby + 0x40);
+        i = 0;
+        if (0.0f < DATA_002e7eb0(float, 8)) {
+            particle_position_ptr = matrix[2];
+            do {
+                angle = random_angle_002e7eb0();
+                {
+                    float spread = DATA_002e7eb0(float, 44);
+                    magnitude = random_float_between_002e7eb0(spread, spread + spread) * frame_time;
+                }
+                normalize_vector_xyz_002e7eb0(velocity, particle_position_ptr, magnitude * fast_cos_002e7eb0(angle));
+                normalize_vector_xyz_002e7eb0(offset, matrix[1], magnitude * fast_sin_002e7eb0(angle));
+                add_vector_xyz_002e7eb0(velocity, velocity, offset);
+                *(Vec_002e7eb0 *)offset = *(Vec_002e7eb0 *)velocity;
+                velocity[3] = DATA_002e7eb0(float, 60);
+                offset[3] = DATA_002e7eb0(float, 64);
+                i++;
+                spawn_particle_002e7eb0(moby + 0x10, velocity, DATA_002e7eb0(int, 32), DATA_002e7eb0(int, 36),
+                    random_integer_002e7eb0(scale_game_frames_int_002e7eb0(10), scale_game_frames_int_002e7eb0(20)), 1, 20000.0f);
+                a = truncate_float_to_s32_002e7eb0(frame_scale_inv * random_float_between_002e7eb0((float)DATA_002e7eb0(int, 48), (float)DATA_002e7eb0(int, 48) * 1.2f));
+                b = truncate_float_to_s32_002e7eb0(frame_scale_inv * random_float_between_002e7eb0((float)DATA_002e7eb0(int, 52), (float)DATA_002e7eb0(int, 52) * 1.2f));
+                c = truncate_float_to_s32_002e7eb0(frame_scale_inv * random_float_between_002e7eb0((float)DATA_002e7eb0(int, 56), (float)DATA_002e7eb0(int, 56) * 1.5f));
+                FUN_00218888_002e7eb0(moby + 0x10, velocity, offset, DATA_002e7eb0(int, 24), DATA_002e7eb0(int, 28), a, b, c, -1);
+            } while ((float)i < DATA_002e7eb0(float, 8));
+        }
+        if (D_0015ED84_002e7eb0 == 12)
+            *(int *)(data + 0x18) = scale_game_frames_int_002e7eb0(120);
+        else
+            *(int *)(data + 0x18) = truncate_float_to_s32_002e7eb0(frame_scale_inv * DATA_002e7eb0(float, 0));
+        update_moby_002e7eb0(moby);
+    }
+    return moby;
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8210.s", FUN_L08_002e8210);
 #define NOT_SDA
 
