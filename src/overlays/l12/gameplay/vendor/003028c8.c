@@ -648,6 +648,8 @@ extern void FUN_L00_00259fe8(float, struct Moby *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float D_0015ED6C __asm__("D_0015ED6C");
 
+extern char D_L12_0015F580[];
+
 void FUN_L12_00304e00(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float point[20];
@@ -668,7 +670,7 @@ void FUN_L12_00304e00(struct Moby *moby) {
     FUN_00213928(moby, source, health, 0, &hit, 0, 0, 4);
     if (FUN_001f9b80(&moby->pos, point) < 0.25f ||
         (hit >= 2 && source && ((struct Moby *)*(int *)(source + 0x20))->oclass != 0x4f5)) {
-        FUN_L00_0025e450(moby, (void *)0x15f580, 0, 0.0f, 0.0f, 3, 3, 5,
+        FUN_L00_0025e450(moby, D_L12_0015F580, 0, 0.0f, 0.0f, 3, 3, 5,
             1.0f, 0.5f, 4.0f, 0.7f, 2, 7.0f, 0, 0, -1, 0);
         FUN_L00_00257470(moby, 0, -1);
         mark_moby_for_removal(moby);
@@ -677,11 +679,11 @@ void FUN_L12_00304e00(struct Moby *moby) {
     switch (moby->state) {
     case 0: {
         moby->flags |= 0x1000;
-        *(u128 *)(data + 0x60) = *(u128 *)&moby->pos;
+        qcopy(data + 0x60, &moby->pos);
         moby->state = 1;
         *(float *)(data + 0x80) = 0.6981317f;
         if (*(int *)((char *)moby + 0xb8) && *(u8 *)(*(int *)((char *)moby + 0xb8) + 0xbc))
-            *(float *)(data + 0x80) = -0.6981317f;
+            *(float *)(data + 0x80) = -*(float *)(data + 0x80);
         *(int *)(data + 0x84) = 0;
     } break;
     case 1: {
@@ -726,20 +728,20 @@ void FUN_L12_00304e00(struct Moby *moby) {
             direction[3] = 5627.925f;
             direction[2] = 1.2f;
             FUN_L00_00259888(hit_info, moby, 0x10001, 1.0f, direction);
-            *(u128 *)position = *(u128 *)&moby->pos;
+            qcopy(position, &moby->pos);
             position[2] += 0.4f;
             if (!FUN_L00_001f2868(position, 0x10, moby, hit_info) ||
                 !*(int *)0x001742d8 || *(short *)(*(int *)0x001742d8 + 0xa6) == 0x4f5 ||
                 *(int *)0x001742d8 == *(int *)((char *)moby + 0xb8)) {
-                *(u128 *)position = *(u128 *)&moby->pos;
+                qcopy(position, &moby->pos);
                 position[2] += 0.35f;
                 if (FUN_L00_001f0d60(position, 0, moby)) moby->state = 2;
             } else moby->state = 2;
         }
     } break;
     case 2: {
-        FUN_L00_0025e450(moby, (void *)0x15f580, 0, 0.0f, 0.0f, 5, 15, 25,
-            2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 2, 2, -1, 0);
+        FUN_L00_0025e450(moby, D_L12_0015F580, 0, 0.0f, 0.0f, 5, 15, 25,
+            2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 9, -1, 0);
         mark_moby_for_removal(moby);
         return;
     }
