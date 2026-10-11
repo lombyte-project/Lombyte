@@ -40,20 +40,20 @@ s32 FUN_L00_00261968(s32 path_index, OvlVec4 *start, OvlVec4 *end) {
     axis.f[0] = direction.f[1];
     axis.f[1] = -direction.f[0];
     FUN_001ff260_261968(&origin);
-    origin.f[2] = 1.0f;
     entry = &D_L00_001B04B0_261968[path_index];
     FUN_001ff2a8_261968(&first, &(*entry)->points[0], start);
+    origin.f[2] = 1.0f;
+    current = &next;
     FUN_001ff6d0_261968(&first, &first, &direction);
     previous = &first;
-    current = &next;
     i = 1;
     if (i < (*entry)->count) {
     offset = 0x20;
     for (; i < (*entry)->count; i++, offset += 0x10) {
         FUN_001ff2a8_261968(current, (OvlVec4 *)((u8 *)*entry + offset), start);
         FUN_001ff6d0_261968(current, current, &direction);
-        if ((previous->f[3] != 0.0f || current->f[3] != 0.0f) && current->f[1] * previous->f[1] < 0.0f) {
-            crossing = (previous->f[0] - current->f[0]) / (previous->f[1] - current->f[1]) * -current->f[1] + current->f[0];
+        if ((first.f[3] != 0.0f || current->f[3] != 0.0f) && next.f[1] * first.f[1] < 0.0f) {
+            crossing = (previous->f[0] - current->f[0]) / (first.f[1] - next.f[1]) * -next.f[1] + current->f[0];
             if (crossing > 0.0f && crossing < 1.0f)
                 return 1;
         }
