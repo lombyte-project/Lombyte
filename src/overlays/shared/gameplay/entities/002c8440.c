@@ -1393,7 +1393,192 @@ unsigned char *FUN_L00_002ccee0(int a, V_2ccee0 *pos, unsigned char *tgt, float 
     }
     return m;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cd1f0.s", FUN_L00_002cd1f0);
+#else
+typedef struct {
+    V_2ccee0 position;
+    V_2ccee0 offset;
+    struct Moby *owner;
+    s32 timer;
+    struct Moby *target;
+    f32 height;
+    f32 radius;
+    f32 yaw_velocity;
+    f32 pitch_velocity;
+    u8 pad3c[8];
+    f32 strength;
+    f32 yaw;
+    f32 pitch;
+    f32 yaw_step;
+    f32 pitch_step;
+    s32 target_oclass;
+} Vars_2cd1f0;
+extern void FUN_001ff500_2cd1f0(void *, void *, f32) __asm__("FUN_L00_001ff500");
+extern void FUN_00262c50_2cd1f0(void *, f32, f32, f32) __asm__("FUN_L00_00262c50");
+extern f32 FUN_002000e8_2cd1f0(f32, f32) __asm__("FUN_L00_002000e8");
+extern f32 FUN_001ff430_2cd1f0(void *) __asm__("FUN_L00_001ff430");
+extern f32 FUN_001ff1e0_2cd1f0(f32) __asm__("FUN_L00_001ff1e0");
+extern void FUN_001ff300_2cd1f0(f32, void *, void *) __asm__("FUN_L00_001ff300");
+extern f32 FUN_001ff8b0_2cd1f0(f32, f32) __asm__("FUN_L00_001ff8b0");
+extern f32 FUN_001ff408_2cd1f0(void *) __asm__("FUN_L00_001ff408");
+extern f32 FUN_001ff488_2cd1f0(void *, void *) __asm__("FUN_L00_001ff488");
+extern f32 FUN_001ff3d8_2cd1f0(void *) __asm__("FUN_L00_001ff3d8");
+extern f32 FUN_001ff800_2cd1f0(f32) __asm__("FUN_L00_001ff800");
+extern f32 FUN_001ff7e8_2cd1f0(f32) __asm__("FUN_L00_001ff7e8");
+extern void FUN_001ffa70_2cd1f0(void *, void *) __asm__("FUN_L00_001ffa70");
+extern void FUN_001ff6f8_2cd1f0(void *, void *, void *) __asm__("FUN_L00_001ff6f8");
+extern void FUN_001ff550_2cd1f0(void *, void *, f32) __asm__("FUN_L00_001ff550");
+extern f32 FUN_00257be8_2cd1f0(f32, f32) __asm__("FUN_L00_00257be8");
+extern s32 FUN_00257b90_2cd1f0(s32, s32) __asm__("FUN_L00_00257b90");
+extern void FUN_00269958_2cd1f0(void *, void *, u32, u32, s32, s32, s32, s32) __asm__("FUN_L00_00269958");
+extern f32 FUN_00258110_2cd1f0(f32 *, f32, f32, f32, f32, f32) __asm__("FUN_L00_00258110");
+extern s32 FUN_001fef20_2cd1f0(s32) __asm__("FUN_001f96f8");
+extern s32 FUN_001fef68_2cd1f0(void *) __asm__("FUN_001f9740");
+extern s32 FUN_001160d8_2cd1f0(void) __asm__("FUN_001160d8");
+extern void FUN_001ff660_2cd1f0(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void FUN_0025e450_2cd1f0(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
+extern void FUN_0024eb68_2cd1f0(void *) __asm__("FUN_L00_0024eb68");
+
+void FUN_L00_002cd1f0(struct Moby *m)
+{
+    Vars_2cd1f0 *v;
+    V_2ccee0 velocity, direction, start, end, target, delta, rotation;
+    V_2ccee0 matrix[4];
+    V_2ccee0 query;
+    u8 collision_data[0x30] __attribute__((aligned(16)));
+    f32 a, b, c, root, radius, f;
+    s32 hit = 0;
+
+    if (m == 0 || (v = (Vars_2cd1f0 *)m->pvars) == 0)
+        return;
+    velocity.q = 0;
+    velocity.f[2] = frame_time * 8.0f;
+    direction.q = velocity.q;
+    m->scale += (m->pclass->scale - m->scale) * (frame_scale * 0.05f);
+    v->radius += (frame_time * 20.0f - v->radius) * (frame_scale * 0.1f) * frame_scale_sq;
+
+    if (v->timer < FUN_001fef20_2cd1f0(250) - FUN_001fef20_2cd1f0(5)) {
+        struct Moby *t = v->target;
+        f32 rate = *(volatile f32 *)&frame_scale;
+        if (t == 0 || t->oclass != v->target_oclass || t->state == 0xfe || (rate = frame_scale, t->state == 0xfd)) {
+            v->target = 0;
+            v->strength += rate * 0.1f;
+            if (v->timer < FUN_001fef20_2cd1f0(250) - FUN_001fef20_2cd1f0(100))
+                m->rot.y = FUN_002000e8_2cd1f0(m->rot.y, FUN_001ff800_2cd1f0(v->yaw) * frame_scale * 0.04f);
+            m->rot.z = FUN_002000e8_2cd1f0(m->rot.z, FUN_001ff7e8_2cd1f0(v->yaw) * frame_scale * 0.05f);
+        } else {
+            qcopy(&target, &t->pos);
+            target.f[2] += v->height;
+            subtract_vector_xyz_2c8440(&delta, &target, &v->position);
+            subtract_vector_xyz_2c8440(&rotation, &target, &v->offset);
+            qcopy(&v->position, &target);
+            a = v->radius * v->radius - FUN_001ff430_2cd1f0(&delta);
+            b = (delta.f[0] * rotation.f[0] + delta.f[1] * rotation.f[1] + delta.f[2] * rotation.f[2]) * -2.0f;
+            c = -FUN_001ff430_2cd1f0(&rotation);
+            root = FUN_001ff1e0_2cd1f0(b * b - a * 4.0f * c);
+            f = (-b + root) / (a + a);
+            radius = (-b - root) / (a + a);
+            if (f > 0.0f && radius > 0.0f)
+                f = f < radius ? radius : f;
+            else if (f <= 0.0f)
+                f = radius > 0.0f ? radius : -1.0f;
+            if (f > 0.0f) {
+                FUN_001ff300_2cd1f0(f, &end, &delta);
+                add_vector_xyz_2c8440(&end, &end, &rotation);
+                m->rot.z = FUN_00258110_2cd1f0(&v->yaw_velocity, m->rot.z, FUN_001ff8b0_2cd1f0(end.f[0], end.f[1]), frame_time_sq * 188.49556f, 0.0f, 0.0f);
+                m->rot.y = FUN_00258110_2cd1f0(&v->pitch_velocity, m->rot.y, -FUN_001ff8b0_2cd1f0(FUN_001ff408_2cd1f0(&end), end.f[2]), frame_time_sq * 188.49556f, 0.0f, 0.0f);
+            }
+            f = FUN_001ff3d8_2cd1f0(&rotation);
+            if (f < 6.0f)
+                v->strength *= f / 6.0f;
+            else
+                v->strength += frame_scale * 0.1f;
+        }
+    }
+    FUN_00262c50_2cd1f0(&query, v->radius, m->rot.z, -m->rot.y);
+    direction.q = 0;
+    direction.f[0] = FUN_00257be8_2cd1f0(-1.0f, 1.0f);
+    direction.f[1] = FUN_00257be8_2cd1f0(-1.0f, 1.0f);
+    direction.f[2] = FUN_00257be8_2cd1f0(-1.0f, 1.0f);
+    rotation.q = direction.q;
+    FUN_001ff500_2cd1f0(&rotation, &rotation, FUN_00257be8_2cd1f0(0.1f, 0.2f) * frame_time);
+    FUN_001ff500_2cd1f0(&velocity, &query, -FUN_00257be8_2cd1f0(frame_time * 0.1f, frame_time));
+    add_vector_xyz_2c8440(&rotation, &rotation, &velocity);
+    FUN_001ff500_2cd1f0(&velocity, &query, FUN_00257be8_2cd1f0(0.0f, 1.0f) * v->radius);
+    add_vector_xyz_2c8440(&velocity, &velocity, &m->pos);
+    FUN_00269958_2cd1f0(&velocity, &rotation, 0x6f00afff, 0x100000ff,
+                          FUN_001fef20_2cd1f0(FUN_00257b90_2cd1f0(28, 40)), 40,
+                          FUN_00257b90_2cd1f0(40, 70), 1);
+    qcopy(&start, &m->pos);
+    add_vector_xyz_2c8440(&v->offset, &v->offset, &query);
+    v->yaw = FUN_002000e8_2cd1f0(v->yaw, v->yaw_step);
+    v->pitch = FUN_002000e8_2cd1f0(v->pitch, v->pitch_step);
+    v->yaw = FUN_002000e8_2cd1f0(v->yaw, FUN_001ff800_2cd1f0(v->pitch) * 0.15f);
+    if (v->strength > 0.9f)
+        v->strength = 0.9f;
+    do {
+        direction.f[1] = v->strength * FUN_001ff800_2cd1f0(v->yaw) * FUN_001ff7e8_2cd1f0(v->pitch);
+        direction.f[2] = v->strength * FUN_001ff7e8_2cd1f0(v->yaw) * FUN_001ff7e8_2cd1f0(v->pitch);
+        direction.f[0] = 0.0f;
+        direction.f[3] = 0.0f;
+        FUN_001ffa70_2cd1f0(matrix, &m->rot);
+        FUN_001ff6f8_2cd1f0(&direction, &direction, matrix);
+        add_vector_xyz_2c8440(&m->pos, &v->offset, &direction);
+        if (!collision_line_2c8440(&start, &m->pos, 6, m, 0))
+            break;
+        hit = 1;
+        v->strength *= 0.7f;
+    } while (v->strength > 0.1f);
+    if (hit) {
+        m->rot.z = FUN_001ff8b0_2cd1f0(m->pos.x - start.f[0], m->pos.y - start.f[1]);
+        m->rot.y = -FUN_001ff8b0_2cd1f0(FUN_001ff488_2cd1f0(&start, &m->pos), m->pos.z - start.f[2]);
+        v->yaw_velocity = 0.0f;
+        v->pitch_velocity = 0.0f;
+    }
+    if (!(m->pos.x < 0.0f) && !(m->pos.y < 0.0f) && !(m->pos.z < 0.0f)) {
+        u8 *player = D_001413D0_2ccee0;
+        V_2ccee0 bounce;
+        *(struct Moby **)(collision_data + 0x10) = m;
+        *(u32 *)(collision_data + 0x14) = 0x00830000;
+        *(f32 *)(collision_data + 0x1c) = 3.0f;
+        *(s32 *)(collision_data + 0x20) = 1;
+        qcopy(collision_data, &query);
+        FUN_001ff550_2cd1f0(collision_data, collision_data, 1.0f);
+        collision_data[0x18] = 3;
+        collision_data[0x19] = 3;
+        *(u16 *)(collision_data + 0x1a) = m->oclass;
+        *(f32 *)(collision_data + 8) = 1.0f;
+        *(u32 *)(collision_data + 12) = 0x45afdf66;
+        if (collision_line_2c8440(&start, &m->pos, 0, m, collision_data)) {
+            if (coll_hit_2c8440.moby == 0) {
+                if (coll_hit_2c8440.unk1C <= 0)
+                    goto bounce_only;
+                m->unkBC = 1;
+            } else {
+                struct Moby *other = (struct Moby *)coll_hit_2c8440.moby;
+                if (other == (struct Moby *)player || other == (struct Moby *)(*(u8 **)(m->pvars + 0x20)) || other->oclass == 0x1c9 || other->oclass == 0)
+                    goto bounce_only;
+                m->unkBC = 2;
+            }
+            qcopy(&m->pos, &coll_hit_2c8440.point);
+            FUN_001ff660_2cd1f0(&bounce, &query, &coll_hit_normal_2c8440);
+            FUN_001ff500_2cd1f0(&bounce, &bounce, frame_time + frame_time);
+            FUN_0025e450_2cd1f0(m, &bounce, 0, 0.0f, 0.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
+        } else if (!FUN_001fef68_2cd1f0(&v->timer) && !(200.0f < FUN_001ff488_2cd1f0(&m->pos, player + 0x10))) {
+bounce_only:
+            if (v->timer % FUN_001fef20_2cd1f0(32) != 0)
+                return;
+            if (FUN_001160d8_2cd1f0() & 1)
+                v->yaw_step *= FUN_00257be8_2cd1f0(-0.7f, -1.5f);
+            if (FUN_001160d8_2cd1f0() & 1)
+                v->pitch_step *= FUN_00257be8_2cd1f0(-0.6f, -1.6f);
+            return;
+        }
+    }
+    FUN_0024eb68_2cd1f0(m);
+}
+#endif
 #include "qcopy.h"
 typedef unsigned int u128_2cdcc0 __attribute__((mode(TI), aligned(16)));
 typedef struct {
