@@ -233,60 +233,86 @@ void FUN_L00_0024f3e0(A *a0, S *a1, s32 a2, s32 a3, s32 a4, s32 a5) {
     if (a5)
         FUN_L00_0024f190();
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f440.s", FUN_L00_0024f440);
-#else
-extern void FUN_001f9810(void *, int);
-extern void FUN_001f9838(void *, void *, int);
-extern void FUN_00118a80(int);
+/* FUN_L00_0024f440: builds an animation frame packet in out from frame
+ * (table i, frame j) of the moby's animation set: header halfwords, the
+ * frame's packet body, then the per-joint quadwords scattered by the
+ * index table, and makes sure the terminating quad is non-zero.
+ * (Field roles are inferred from the code, not confirmed.) */
+typedef unsigned long u64_24f440;
+typedef struct {
+    char pad0[6];
+    short qwc;        /* 0x06: size in quadwords */
+    char pad8[2];
+    short hA;         /* 0x0A */
+    char padC[2];
+    short hE;         /* 0x0E */
+    u64_24f440 q[1];  /* 0x10 */
+} Frame_24f440;
+typedef struct {
+    char pad0[6];
+    short h6;         /* 0x06 */
+    short h8;         /* 0x08 */
+    short hA;         /* 0x0A */
+    short hC;         /* 0x0C */
+    short hE;         /* 0x0E */
+    u64_24f440 q[1];  /* 0x10 */
+} Packet_24f440;
 
-void FUN_L00_0024f440(void *statePointer, int tableIndex, int frameIndex, int outputAddress) {
-    int table;
-    int baseTable;
-    unsigned char count;
-    unsigned char baseCount;
-    unsigned char *frame;
-    unsigned char *indices;
-    unsigned long long *values;
-    unsigned int remainingCount;
-    unsigned short frameStart;
-    int baseBytes;
-    int countBytes;
-    int copyBytes;
-    unsigned char *copySource;
-    unsigned long long *sentinel;
+extern void FUN_001f9810_24f440(void *, int) __asm__("FUN_001f9810");
+extern void FUN_001f9838_24f440(void *, void *, int) __asm__("FUN_001f9838");
+extern void FUN_00118a80_24f440(int) __asm__("FUN_00118a80");
 
-    table = *(int *)((char *)statePointer + 0x18);
-    baseTable = *(int *)((char *)statePointer + 0x14);
-    baseCount = *(unsigned char *)(baseTable + 8);
-    count = *(unsigned char *)(table + 8);
-    frame = *(unsigned char **)(*(int *)(table + tableIndex * 4 + 0x48) + frameIndex * 4 + 0x1c);
-    FUN_001f9810((void *)outputAddress, ((baseCount + 3) * 8) & 0xff0);
-    baseBytes = baseCount * 8;
-    countBytes = count * 8;
-    *(short *)(outputAddress + 6) = (baseCount + *(short *)(frame + 10) + *(short *)(frame + 14) + 1) >> 1;
-    *(short *)(outputAddress + 8) = baseBytes;
-    frameStart = *(unsigned short *)(frame + 10);
-    *(short *)(outputAddress + 10) = frameStart;
-    *(unsigned short *)(outputAddress + 12) = (frameStart + baseCount) * 8;
-    *(unsigned short *)(outputAddress + 14) = *(unsigned short *)(frame + 14);
-    copySource = frame + countBytes + 16;
-    copyBytes = *(short *)(frame + 6) * 16 - countBytes;
-    if (copyBytes != 0) {
-        FUN_001f9838((void *)(outputAddress + baseBytes + 16), copySource, copyBytes);
+/* Defined under a local name: this unit already declares FUN_L00_0024f440
+ * with a generic prototype for its callers. */
+void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) __asm__("FUN_L00_0024f440");
+void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) {
+    char *t = *(char **)(obj + 0x18);
+    char *u = *(char **)(obj + 0x14);
+    int nb = (unsigned char)t[8];
+    int na = (unsigned char)u[8];
+    Frame_24f440 *s;
+    unsigned short a;
+    int n;
+    int k;
+    unsigned char *ix;
+    u64_24f440 *src;
+    u64_24f440 *q;
+
+    {
+        char **tt = (char **)(t + 0x48);
+        char *r = tt[i];
+        Frame_24f440 **ss = (Frame_24f440 **)(r + 0x1C);
+        s = ss[j];
     }
-    indices = (unsigned char *)(*(int *)(*(int *)((char *)statePointer + 0x18) + 0x1c) + 4);
-    values = (unsigned long long *)(frame + 16);
-    remainingCount = count;
-    for (; remainingCount != 0; remainingCount--) {
-        unsigned char index = *indices++;
-        unsigned long long value = *values++;
-        *(unsigned long long *)(outputAddress + index * 8 + 16) = value;
+    FUN_001f9810_24f440(out, ((na + 3) * 8) & 0xFF0);
+    k = na + s->hA;
+    k += s->hE;
+    out->h8 = na * 8;
+    {
+        void *from = &((u64_24f440 *)s)[nb + 2];
+
+        out->h6 = (k + 1) >> 1;
+        a = s->hA;
+        out->hA = a;
+        out->hC = (a + na) * 8;
+        out->hE = s->hE;
+        n = s->qwc * 16 - nb * 8;
+        if (n != 0)
+            FUN_001f9838_24f440(&((u64_24f440 *)out)[na + 2], from, n);
     }
-    sentinel = (unsigned long long *)(outputAddress + *(short *)(outputAddress + 6) * 16);
-    if (*sentinel == 0) {
-        *sentinel = 1;
+    ix = (unsigned char *)(*(char **)(*(char **)(obj + 0x18) + 0x1C) + 4);
+    src = s->q;
+    if (nb != 0) {
+        int c = nb;
+        do {
+            c--;
+            ((u64_24f440 *)out)[*ix + 2] = *src;
+            ix++;
+            src++;
+        } while (c != 0);
     }
-    FUN_00118a80(0);
+    q = (u64_24f440 *)((char *)out + out->h6 * 16);
+    if (*q == 0)
+        *q = 1;
+    FUN_00118a80_24f440(0);
 }
-#endif
