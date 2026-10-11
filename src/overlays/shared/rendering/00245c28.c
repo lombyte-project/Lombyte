@@ -156,7 +156,7 @@ void FUN_L00_002464a8(void) {
     RenderArchiveLoad *state = &D_L00_001841F0_load;
 
     state->initialized = 1;
-    source = (s32 *)((u8 *)state - 0x300);
+    source = (s32 *)0x183ef0;
     destination = (s32 *)((u8 *)state + 0x154);
     for (i = 0x13; i >= 0; i--) {
         word0 = source[0];
