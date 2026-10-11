@@ -816,9 +816,6 @@ void aim_throw_arc(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, 
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c26c8.s", FUN_L00_002c26c8);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c35c0.s", FUN_L00_002c35c0);
-#else
 extern u8 D_0013E539;
 extern s32 D_L00_0015FFD8_2c35c0 __asm__("D_L00_0015FFD8");
 extern s16 D_L00_001B0830[] __attribute__((section(".data")));
@@ -881,11 +878,11 @@ u8 *FUN_L00_002c35c0(s32 value, u128 *position, u128 *other_position) {
         }
         FUN_L00_00250df8(m);
         FUN_L00_0025d1b8(m);
-        *(u16 *)(data + 0x0c) = 4;
         *(u16 *)data = 0;
         data[8] = 0;
         data[9] = 0;
         data[7] = 0x80;
+        *(u16 *)(data + 0x0c) = 4;
         *(u16 *)(data + 0x0e) = 0xf;
         FUN_L00_0025f780(m, D_L00_001B0830, 0x1f);
         if (hero.unk20A5 != 0 || hero.unk20AF != 0)
@@ -893,7 +890,6 @@ u8 *FUN_L00_002c35c0(s32 value, u128 *position, u128 *other_position) {
     }
     return m;
 }
-#endif
 #include "qzero.h"
 
 /* Tests a movement vector against the player and turns a colliding moby. */
