@@ -345,7 +345,133 @@ void FUN_L00_002056a8(void) {
     }
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002059d8.s", FUN_L00_002059d8);
+#else
+typedef u32 Quad_59d8 __attribute__((mode(TI), aligned(16)));
+extern u8 D_0015EDB3_2059d8 __asm__("D_0015EDB3");
+extern f32 D_0015EE18_2059d8 __asm__("D_0015EE18");
+extern u8 D_0013F350_2059d8[] __asm__("D_0013F350");
+extern s32 D_0015F5CC_2059d8 __asm__("D_L00_0015F5CC");
+extern u8 D_L00_0017C1E0_2059d8[] __asm__("D_L00_0017C1E0");
+extern u8 D_L00_0017C220_2059d8[] __asm__("D_L00_0017C220");
+extern u8 D_L00_0017C260_2059d8[] __asm__("D_L00_0017C260");
+extern f32 D_L00_0017C2A0_2059d8[] __asm__("D_L00_0017C2A0");
+extern void set_help_color_2059d8(f32, f32, void *) __asm__("FUN_L00_0025b868");
+extern s32 scale_game_frames_2059d8(s32) __asm__("FUN_L00_001fef20");
+extern f32 convert_integer_to_float_2059d8(s32) __asm__("FUN_L00_00200240");
+extern s32 truncate_float_to_s32_2059d8(f32) __asm__("FUN_L00_00200250");
+extern f32 fast_sin_2059d8(f32) __asm__("FUN_L00_001ff800");
+extern s32 help_active_2059d8(void *) __asm__("FUN_L00_001fef98");
+extern s32 random_int_between_2059d8(s32, s32) __asm__("FUN_L00_00257b90");
+extern void attach_manipulator_2059d8(s32, s32, void *) __asm__("FUN_L00_0024f590");
+extern void detach_manipulator_2059d8(s32, void *) __asm__("FUN_L00_0024f608");
+extern void transform_help_quad_2059d8(f32, void *, void *) __asm__("FUN_L00_001ff300");
+
+void FUN_L00_002059d8(void) {
+    u8 *g;
+    u8 *moby;
+    s32 i, k, r, a, b, low, high;
+    f32 f, c, t;
+
+    if (D_0015EDB3_2059d8 != 0)
+        set_help_color_2059d8(1.8f, 0.05f, &D_0015EE18_2059d8);
+    else
+        set_help_color_2059d8(1.0f, 0.05f, &D_0015EE18_2059d8);
+
+    if ((u8)(D_0013F350_2059d8[0x20A4] - 1) < 2)
+        moby = *(u8 **)(D_0013F350_2059d8 + 0x2080);
+    else {
+        if (*(s16 *)(D_0013F350_2059d8 + 0x22D8) != 0)
+            return;
+        moby = *(u8 **)(D_0013F350_2059d8 + 0x1184);
+    }
+    if (moby == 0)
+        return;
+    g = (u8 *)&hero;
+    *(u16 *)(moby + 0x34) |= 0x10;
+    a = 0x38;
+    if (*(s32 *)(g + 0x22A8) == 1)
+        a = 0x88;
+    k = scale_game_frames_2059d8(0x6E);
+    f = convert_integer_to_float_2059d8(k);
+    c = fast_sin_2059d8(((f32)(D_0015F5CC_2059d8 % k) / f * 2.0f) * 3.1415927f + -3.1415927f);
+    t = c * 24.0f;
+    r = truncate_float_to_s32_2059d8(t);
+    b = truncate_float_to_s32_2059d8(c * 48.0f);
+    low = a + r + 0xC;
+    high = b + 0xA0;
+    a = truncate_float_to_s32_2059d8(t);
+    i = a + 0x4C;
+    if (*(s16 *)(g + 0x1EE) != 0) {
+        s32 five, twenty, forty_five;
+        f = 1.0f;
+        five = scale_game_frames_2059d8(5);
+        twenty = scale_game_frames_2059d8(20);
+        forty_five = scale_game_frames_2059d8(45);
+        if (forty_five - five < *(s16 *)(g + 0x1EE)) {
+            forty_five = scale_game_frames_2059d8(45);
+            f = convert_integer_to_float_2059d8(forty_five - *(s16 *)(g + 0x1EE)) /
+                convert_integer_to_float_2059d8(five);
+        }
+        if (*(s16 *)(g + 0x1EE) < twenty) {
+            f = convert_integer_to_float_2059d8(*(s16 *)(g + 0x1EE)) /
+                convert_integer_to_float_2059d8(twenty);
+        }
+        low -= truncate_float_to_s32_2059d8((f32)(r + 0xC) * f);
+        high -= truncate_float_to_s32_2059d8((f32)(b + 0x18) * f);
+        i -= truncate_float_to_s32_2059d8((f32)(a + 0xC) * f);
+        low += truncate_float_to_s32_2059d8(f * 112.0f);
+        high -= truncate_float_to_s32_2059d8(f * 72.0f);
+    }
+    *(u32 *)(moby + 0x90) = (i << 16) | 0x80000000U | (high << 8) | low;
+    if (g[0x20A4] != 0)
+        return;
+    if (help_active_2059d8(g + 0xFFC) && moby[0x53] == 1) {
+        low = scale_game_frames_2059d8(50);
+        high = scale_game_frames_2059d8(200);
+        a = random_int_between_2059d8(low, high);
+        *(s16 *)(g + 0xFFE) = 1;
+        *(s16 *)(g + 0xFFC) = a;
+    }
+    if (*(s16 *)(g + 0xFFE) != 0) {
+        *(s16 *)(g + 0xFFE) += 1;
+        if (*(s16 *)(g + 0xFFE) > 21)
+            *(s16 *)(g + 0xFFE) = 0;
+        if (*(s16 *)(g + 0xFFE) == 0) {
+            u8 *slot = g + 0xEF0;
+            u8 *active = g + 0xEF1;
+            for (i = 3; i >= 0; i--, slot += 0x40, active += 0x40)
+                if (*active)
+                    detach_manipulator_2059d8((s32)moby, slot);
+        } else {
+            u8 *slot = g + 0xEF0;
+            u8 *active = g + 0xEF1;
+            u8 *dst_a = g + 0xF00;
+            u8 *dst_b = g + 0xF10;
+            u8 *dst_c = g + 0xF20;
+            Quad_59d8 *src_a = (Quad_59d8 *)D_L00_0017C1E0_2059d8;
+            Quad_59d8 *src_b = (Quad_59d8 *)D_L00_0017C220_2059d8;
+            Quad_59d8 *src_c = (Quad_59d8 *)D_L00_0017C260_2059d8;
+            s32 *kind = (s32 *)0x140AF8;
+            for (i = 0; i < 4; i++, slot += 0x40, active += 0x40,
+                 dst_a += 0x40, dst_b += 0x40, dst_c += 0x40,
+                 src_a++, src_b++, src_c++, kind++) {
+                if (*active == 0) {
+                    attach_manipulator_2059d8((s32)moby, *kind, slot);
+                    active[2] = 1;
+                    *(Quad_59d8 *)dst_a = *src_a;
+                    *(Quad_59d8 *)dst_b = *src_b;
+                    *(Quad_59d8 *)dst_c = *src_c;
+                    transform_help_quad_2059d8(*(f32 *)(moby + 0x2C), dst_c, dst_c);
+                }
+            }
+            for (i = 3; i >= 0; i--)
+                *(f32 *)(g + 0xEFC + i * 0x40) = D_L00_0017C2A0_2059d8[*(s16 *)(g + 0xFFE)];
+        }
+    }
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
