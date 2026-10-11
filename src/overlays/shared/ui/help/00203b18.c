@@ -948,9 +948,9 @@ void FUN_L00_002076a8(void) {
             green = 0;
             blue = 0;
         } else {
+            red = 0x90;
             green = 0x90;
             blue = 0xf0;
-            red = 0x90;
         }
         glow_n(((void *)g->moby), red, green, blue);
         FUN_L00_002072c8();
