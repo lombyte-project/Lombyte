@@ -674,7 +674,151 @@ void FUN_L07_00318e98(int target_entry) {
     }
     FUN_L00_002defe0(target_entry);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00319040.s", FUN_L07_00319040);
+#else
+extern Vec4 D_L07_00166E40;
+extern struct Moby *D_L07_00173ED8 __attribute__((section(".data")));
+extern Vec4 D_L07_00173EF0;
+extern f32 D_0015ED6C;
+extern s32 sight_19040(struct Moby *, void *, f32) __asm__("FUN_L07_002886d8");
+extern char *hit_lookup_19040(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
+extern s32 hit_test_19040(struct Moby *, char *, void *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
+extern f32 FUN_001f9b48(void *, void *);
+extern f32 FUN_001f9b80(void *, void *);
+extern f32 FUN_001f99c0(f32);
+extern void FUN_L00_0025a120(struct Moby *);
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
+                             float, float, int, float, int, int, int, int);
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_L00_00259fe8(struct Moby *, f32);
+extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
+extern s32 FUN_L00_001f0d60(f32, void *, s32, struct Moby *);
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern void FUN_00212f90(void *, int, int, int);
+extern f32 FUN_001fa580(f32, f32);
+extern void FUN_L01_0026e0e0(s32, s32);
+
+void FUN_L07_00319040(struct Moby *moby) {
+    u8 *vars;
+    u8 *collision;
+    char sight[0x50];
+    char *hit;
+    Vec4 dir;
+    u8 contact[0x30];
+    Vec4 probe;
+    Vec4 push;
+    s32 touching;
+    f32 speed;
+    volatile f32 one;
+    f32 stable_one;
+    f32 turn;
+    f32 new_speed;
+    f32 max_speed;
+    s32 timer;
+
+    if (moby == NULL) return;
+    vars = moby->pvars;
+    if (vars == NULL) return;
+
+    sight_19040(moby, sight, 8.0f);
+    if (moby->unk31 && FUN_001f9b48(&moby->pos, &D_L07_00166E40) < 27.0f) {
+        FUN_L00_0025a120(moby);
+        moby->unk7F = 0x15;
+    }
+    collision = vars + 0x20;
+    hit = hit_lookup_19040(moby, 0x230000, 0);
+    hit_test_19040(moby, hit, collision, 0, &touching, 0, 0, 4);
+    if (touching >= 2 && hit != NULL && *(s16 *)(*(char **)(hit + 0x20) + 0xa6) != 0x456 &&
+        *(s16 *)(*(char **)(hit + 0x20) + 0xa6) != 0x365 && *(s16 *)(*(char **)(hit + 0x20) + 0xa6) != 0x367) {
+        clear_u64_value(dir.f);
+        FUN_L00_0025e450(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
+        FUN_L00_00257470(moby, 0, -1);
+        mark_moby_for_removal(moby);
+        return;
+    }
+
+    switch (moby->state) {
+    case 0:
+        moby->flags |= 0x1000;
+        qcopy(vars + 0x60, &moby->pos);
+        moby->unk94 = moby->pclass->unk10;
+        moby->state = 1;
+        break;
+    case 1:
+        timer = scale_ticks(600);
+        turn = D_0015ED6C * 6.2831855f;
+        *(s32 *)(vars + 0x78) = timer;
+        moby->rot.z = FUN_001fa580(moby->rot.z, turn);
+        if ((*(struct Moby **)(vars + 0x38) != NULL &&
+             FUN_001f9b80(&moby->pos, &(*(struct Moby **)(vars + 0x38))->pos) < 20.0f &&
+             FUN_001f99c0(moby->pos.z - (*(struct Moby **)(vars + 0x38))->pos.z) < 3.0f) ||
+            (*(s32 *)(sight + 0x40) != 0 && FUN_001f9b48(&moby->pos, sight) < 8.0f)) {
+            *(f32 *)(vars + 0x70) = 0.0f;
+            *(s32 *)(vars + 0x78) = scale_ticks(600);
+            moby->unkBC = 1;
+            *(s32 *)(vars + 0x7c) = scale_ticks(7);
+            moby->state = 3;
+            if (*(s32 *)(vars + 0x74) != -1) FUN_L01_0026e0e0(*(s32 *)(vars + 0x74), 2);
+            moby->state = 2;
+        }
+        break;
+    case 2:
+        if (moby->prev_seq != 1) FUN_00212f90(moby, 1, 0, 10);
+        moby->state = 3;
+    case 3:
+        speed = frame_time_sq;
+        if ((moby->unk70 & 2) && moby->seq == 1 && moby->prev_seq != 2) {
+            FUN_00212f90(moby, 2, 0, 10);
+            speed = frame_time_sq;
+        }
+        new_speed = *(f32 *)(vars + 0x70) + speed * 30.0f;
+        max_speed = D_0015ED6C * 6.0f;
+        *(f32 *)(vars + 0x70) = new_speed;
+        if (max_speed < new_speed)
+            *(f32 *)(vars + 0x70) = max_speed;
+        if (moby->unkBC == 1) {
+            moby->pos.z += frame_scale * 0.1f;
+            if (tick_countdown_32_alt((s32 *)(vars + 0x7c))) {
+                *(s32 *)(vars + 0x7c) = scale_ticks(7);
+                moby->unkBC = 2;
+            }
+        } else if (moby->unkBC == 2) {
+            moby->pos.z -= frame_scale * 0.1f;
+            if (tick_countdown_32_alt((s32 *)(vars + 0x7c))) moby->unkBC = 0;
+        }
+        subtract_vector_xyz(&dir, sight, &moby->pos);
+        normalize_vector_xyz(&dir, &dir, *(f32 *)(vars + 0x70));
+        add_vector_xyz(&moby->pos, &moby->pos, &dir);
+        if (!(FUN_001f9b48(&moby->pos, vars + 0x60) > 64.0f)) {
+            one = 1.0f;
+            stable_one = one;
+            FUN_L00_00259888(contact, moby, 0x10001, stable_one, &dir);
+            qcopy(&probe, &moby->pos);
+            probe.f[2] += 0.75f;
+            if (!probe_world_sphere(0.75f, &probe, 0x10, moby, contact) ||
+                D_L07_00173ED8 == NULL || D_L07_00173ED8->oclass == 0x363 ||
+                D_L07_00173ED8->oclass == 0x456 || D_L07_00173ED8->oclass == 0x458 ||
+                D_L07_00173ED8->oclass == 0x365 || D_L07_00173ED8->oclass == 0x367) {
+                probe.q = *(u128 *)&moby->pos;
+                probe.f[2] = moby->pos.z + 0.55f;
+                if (FUN_L00_001f0d60(0.0f, &probe, 0, moby)) {
+                    subtract_vector_xyz(&push, &D_L07_00173EF0, &probe);
+                    add_vector_xyz(&moby->pos, &moby->pos, &push);
+                }
+                if (!tick_countdown_32_alt((s32 *)(vars + 0x78))) break;
+            }
+            FUN_L00_0025e450(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, stable_one, 4.0f, stable_one, 2, 7.0f, 0, 1, -1, 0);
+        }
+        mark_moby_for_removal(moby);
+        return;
+    case 4:
+        break;
+    }
+    FUN_L00_00259fe8(moby, 0.7f);
+}
+#endif
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
