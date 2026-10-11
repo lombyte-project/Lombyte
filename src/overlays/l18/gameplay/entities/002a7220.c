@@ -2286,9 +2286,8 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
     L18FlarePacket packet[4];
     L18FlareVector axis;
     L18FlareVector basis[4][4];
-    char *data = (char *)moby->pvars;
+    float *data = (float *)moby->pvars;
     int i, j;
-    unsigned int mask = 0xffffff;
     float size;
     clear_flare_vector(&axis);
     axis.z = flare_length(D_L18_001677C0_flare[0] - moby->pos.x,
@@ -2297,42 +2296,49 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
                             D_L18_001677C0_flare[2] - moby->pos.z);
     copy_flare_vector(&basis[0][0], &axis);
     copy_flare_vector(&basis[1][0], &axis);
-    size = *(float *)(data + 0x24);
+    size = data[9];
     scale_vector_xyz(&basis[1][1], &basis[1][1], size);
     scale_vector_xyz(&basis[1][2], &basis[1][2], size);
     basis[0][3] = *(L18FlareVector *)&moby->pos;
     basis[1][3] = *(L18FlareVector *)&moby->pos;
-    axis.x = *(float *)(data + 0x2c);
+    axis.x = data[11];
     copy_flare_vector(&basis[2][0], &axis);
     scale_vector_xyz(&basis[2][1], &basis[2][1], size);
     scale_vector_xyz(&basis[2][2], &basis[2][2], size);
     basis[2][3] = *(L18FlareVector *)&moby->pos;
-    axis.x = *(float *)(data + 0x30);
+    axis.x = data[12];
     copy_flare_vector(&basis[3][0], &axis);
     scale_vector_xyz(&basis[3][1], &basis[3][1], size);
     scale_vector_xyz(&basis[3][2], &basis[3][2], size);
     basis[3][3] = *(L18FlareVector *)&moby->pos;
-    for (i = 0; i < 4; i++) {
+    i = 0;
+    do {
         packet[i].texture = get_effect_texture(D_L18_00161F08_flare[i]);
         packet[i].state = 0xff9000000260ULL;
-        packet[i].flags = 0x8000000000ULL | D_L18_00161EE4_flare |
+        packet[i].flags = D_L18_00161EE4_flare |
                           ((unsigned long long)D_L18_00161EE8_flare << 2) |
                           ((unsigned long long)D_L18_00161EEC_flare << 4) |
-                          ((unsigned long long)D_L18_00161EF0_flare << 6);
+                          ((unsigned long long)D_L18_00161EF0_flare << 6) |
+                          0x8000000000ULL;
         packet[i].zero = 0;
-        for (j = 0; j < 4; j++) {
+        j = 0;
+        do {
             packet[i].uv[j] = D_L18_001D9B50_flare[j];
             if (i == 0) {
                 packet[i].color[j] = tween_flare_color(size,
-                    D_L18_00161EF8_flare[i] & mask, D_L18_00161EF8_flare[i]);
+                    D_L18_00161EF8_flare[i] & 0xffffff, D_L18_00161EF8_flare[i]);
             } else {
                 packet[i].color[j] = D_L18_00161EF8_flare[i];
             }
-            qcopy(&packet[i].corner[j], &D_L18_001D9B70_flare[i * 4 + j]);
-        }
-    }
-    for (i = 0; i < 4; i++) {
+            packet[i].corner[j] = D_L18_001D9B70_flare[i * 4 + j];
+            j++;
+        } while (j < 4);
+        i++;
+    } while (i < 4);
+    i = 0;
+    while (i != 4) {
         draw_flare_packet(&packet[i], &basis[i][0], 0);
+        ++i;
     }
 }
 #endif
