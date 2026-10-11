@@ -216,13 +216,14 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
     f32 effect[8];
 
     if (D_L04_001513C0 == 0) {
+        f32 *effect_dest = D_L04_00166130;
         FUN_001153fc(effect, 0, 0x20);
         effect[1] = int_to_float_29ecf8(data->child_count) * 2.073f;
         effect[3] = 2.0f;
         effect[4] = 1.0f;
         effect[5] = 1.0f;
         D_L04_001513C0 = 1;
-        __builtin_memcpy(D_L04_00166130, effect, 0x20);
+        __builtin_memcpy(effect_dest, effect, 0x20);
     }
     if (data->initialized == 0) {
         *(u128 *)&data->origin = *(u128 *)&moby->pos;
@@ -235,7 +236,6 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
         }
         D_L04_00166130[1] = int_to_float_29ecf8(data->child_count) * 2.073f;
     }
-    children = data->children;
     if (data->path_index == -1) {
         data->angle = fast_add_rotations_29ecf8(data->angle, frame_scale * 0.0034906587f);
         moby->pos.x = data->origin.x + data->radius * fast_cos_29ecf8(data->angle);
@@ -244,27 +244,18 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
         if (data->initialized == 0) goto initialize;
         distance = 10000.0f;
         for (i = 0; i < data->count; i++) {
-            f32 d = vector_distance_29ecf8(&moby->pos, &children[i]->pos);
-            if (d < distance) distance = d;
+            f32 d = vector_distance_29ecf8(&moby->pos, &data->children[i]->pos);
+            distance = d < distance ? d : distance;
         }
         speed = 0.0f;
         if (distance < 3.0f) speed = 3.0f - distance;
         data->direction = FUN_L04_0029eb20(moby, D_L04_001b0630[data->path_index], data->direction, 1, speed);
     }
-    if (data->initialized != 0) {
-        for (i = 0; i < data->count; i++) {
-            child = children[i];
-            average = (child->unk58 + 1.0f) * 0.5f;
-            D_L04_00166130[6] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * average * 0.05f * frame_scale_sq * average;
-            D_L04_00166130[7] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * (child->unk58 + 1.0f) * 0.5f;
-            FUN_L04_001f30e0(children, data->count, child, child->pvars, D_L04_00166130);
-            apply_child_motion_29ecf8(0.0f, child, child->pvars, D_L04_00166130);
-        }
-        return;
-    }
+    if (data->initialized != 0) goto update;
 initialize:
     {
     Vec4f *moby_pos = &moby->pos;
+    children = data->children;
     data->initialized = 1;
     data->child_count = 0;
     for (i = 0; i < data->count; i++) {
@@ -304,6 +295,17 @@ initialize:
             update_spawned_moby_29ecf8(child);
         }
     }
+    }
+    return;
+update:
+    children = data->children;
+    for (i = 0; i < data->count; i++) {
+        child = children[i];
+        average = (child->unk58 + 1.0f) * 0.5f;
+        D_L04_00166130[6] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * average * 0.05f * frame_scale_sq * average;
+        D_L04_00166130[7] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * (child->unk58 + 1.0f) * 0.5f;
+        FUN_L04_001f30e0(children, data->count, child, child->pvars, D_L04_00166130);
+        apply_child_motion_29ecf8(0.0f, child, child->pvars, D_L04_00166130);
     }
 }
 #endif
