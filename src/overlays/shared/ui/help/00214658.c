@@ -218,7 +218,6 @@ void FUN_L00_00214ed8(float a, float b, float c) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00214fe8.s", FUN_L00_00214fe8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00215340.s", FUN_L00_00215340);
 typedef struct {
     u8 p0[0x10E0];
     f32 f10E0;
