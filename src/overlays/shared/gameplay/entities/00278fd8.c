@@ -2139,10 +2139,11 @@ int FUN_L15_002a3138(unsigned char *moby) {
         }
         draw_geometry_quad(&first, transform, 0);
         draw_geometry_quad(&second, transform, 0);
-        for (corner = 0; corner < 4; corner++) {
-            first.v[corner][0] += 0.1f;
-            second.v[corner][0] += 0.1f;
-        }
+        corner = 3;
+        do {
+            first.v[3 - corner][0] += 0.1f;
+            second.v[3 - corner][0] += 0.1f;
+        } while (--corner >= 0);
     }
 }
 #endif
