@@ -1443,7 +1443,118 @@ int FUN_L18_002d8050(struct Moby *arg) {
     }
     return 0;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d82c0.s", FUN_L18_002d82c0);
+#else
+extern float D_L18_00161A40 __attribute__((sda));
+extern float D_L18_00161A44 __attribute__((sda));
+extern float D_L18_00161A50 __attribute__((sda));
+extern float D_L18_00161A58 __attribute__((sda));
+extern float D_L18_00161A5C __attribute__((sda));
+extern float D_L18_00161A60 __attribute__((sda));
+extern float D_L18_00161A64 __attribute__((sda));
+extern int D_L18_001623A8 __attribute__((sda));
+extern float D_0013F3D0[];
+extern struct Moby *D_0013F64C;
+extern short D_0013F65E;
+extern char D_001413D4[];
+extern void FUN_L18_002d88b8(struct Moby *);
+extern void FUN_L18_00227dd0(int, int);
+extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern int FUN_L00_00257b90(int, int);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern short allocate_voice_for_target_entry_short(int, int, struct Moby *) __asm__("FUN_0022da68");
+
+void FUN_L18_002d82c0(struct Moby *moby) {
+    float delta[4] __attribute__((aligned(16)));
+    float old_rotation[4] __attribute__((aligned(16)));
+    float *old_rotation_ptr;
+    char *data = (char *)moby->pvars;
+    float ratio;
+    float speed;
+    float gravity;
+
+    scale_vector_xyz(delta, &moby->pos, -1.0f);
+    qcopy_nc(old_rotation, &moby->rot);
+    old_rotation_ptr = old_rotation;
+    switch (moby->state) {
+    case 0:
+        *(float *)(data + 0x60) = moby->pos.z;
+        *(float *)(data + 0x64) = moby->pos.z;
+        *(int *)(data + 0x70) = 0;
+        *(int *)(data + 0x68) = 0;
+        *(int *)(data + 0x6C) = 0;
+        *(float *)(data + 0x74) = random_angle_radians();
+        *(int *)(data + 0x5C) |= 1;
+        moby->state = *(int *)(data + 0x88) == 0 ? 1 : 2;
+        break;
+    case 3:
+        if (FUN_001f9740((int *)(data + 0x7C))) {
+            ratio = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) /
+                    (D_L18_00161A64 - D_L18_00161A60);
+            ratio = ratio > 1.0f ? 1.0f : (ratio < 0.0f ? 0.0f : ratio);
+            speed = *(int *)(data + 0x84) ? D_L18_00161A50 : D_L18_00161A58;
+            *(float *)(data + 0x6C) = speed * (1.0f - ratio * 0.333f) * DEG_TO_RAD * frame_time;
+            moby->state = 4;
+        }
+        break;
+    case 4:
+        if (moby->unk31 && FUN_001f9740((int *)(data + 0x8C))) {
+            FUN_L18_002d88b8(moby);
+            *(int *)(data + 0x8C) = scale_ticks(FUN_L00_00257b90(0x5A, 0x78));
+        }
+        if (D_0013F64C == moby && D_0013F65E == 0) {
+            *(int *)(data + 0x8C) = 0;
+            moby->state = 5;
+            *(short *)(data + 0x92) = allocate_voice_for_target_entry_short(1, 0, moby);
+        }
+        if (*(int *)(data + 0x80) && FUN_001f9b80(&moby->pos, D_0013F3D0) < D_L18_00161A5C) {
+            moby->state = 5;
+            *(short *)(data + 0x92) = allocate_voice_for_target_entry_short(1, 0, moby);
+        }
+        break;
+    case 5:
+        if (moby->unk31 && FUN_001f9740((int *)(data + 0x8C))) {
+            FUN_L18_002d88b8(moby);
+            *(int *)(data + 0x8C) = scale_ticks(FUN_L00_00257b90(0xF, 0x1E));
+        }
+        ratio = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) /
+                (D_L18_00161A64 - D_L18_00161A60);
+        ratio = ratio > 1.0f ? 1.0f : (ratio < 0.0f ? 0.0f : ratio);
+        if (*(int *)(data + 0x80) == 0 &&
+            (*(int *)(data + 0x88) == 0 || *(int *)(data + 0x84) != 0)) {
+            gravity = *(int *)(data + 0x88) == 0 && *(int *)(data + 0x84) == 0 ?
+                D_L18_00161A44 : D_L18_00161A40;
+            gravity = gravity * (1.0f - ratio * 0.333f);
+            speed = frame_time_sq;
+        } else {
+            gravity = frame_time;
+            speed = 15.0f;
+        }
+        *(float *)(data + 0x70) -= speed * gravity;
+        *(float *)(data + 0x64) += *(float *)(data + 0x70);
+        if (moby->pos.z < *(float *)(data + 0x60) - 10.0f) {
+            speed = frame_time;
+            if (D_0013F64C == moby && D_0013F65E == 0 &&
+                D_0013F3D0[2] < *(float *)0x0015F634 && *(int *)D_001413D4 != 0x77) {
+                FUN_L18_00227dd0(0x77, 1);
+                speed = frame_time_sq;
+            } else if (D_0013F64C == moby && D_0013F65E == 0) {
+                speed = frame_time_sq;
+            }
+            *(float *)(data + 0x70) -= speed * 13.7f;
+            if (moby->pos.z < 15.0f) {
+                mark_moby_for_removal((struct Obj *)moby);
+                return;
+            }
+        }
+        break;
+    }
+    FUN_L18_002d8710(moby);
+    add_vector_xyz(delta, delta, &moby->pos);
+    FUN_L00_00260738(data + 0x20, delta, old_rotation_ptr, &moby->rot);
+}
+#endif
 /* Starts the moby's next phase with the given pair if it is waiting. */
 int FUN_L18_002d8888(struct Moby *arg, int a, int b) {
     int *data = (int *)arg->pvars;
