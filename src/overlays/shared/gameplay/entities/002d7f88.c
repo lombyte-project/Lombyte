@@ -712,32 +712,28 @@ f32 FUN_001f9b80_002db8f8(void *, void *) __asm__("FUN_001f9b80");
 s32 FUN_L00_002db8f8(u8 *m, u8 *v, u8 *target) {
     u8 *o = FUN_L00_002db890_002db8f8(m);
     s32 c;
-    s32 state;
+    s16 state;
     if (o == 0)
         goto missing;
     if (m == 0 || m[0x20] == 0xFE || m[0x20] == 0xFD || *(s16 *)(o + 0x68) == 8)
         goto fail;
+    state = (s16)(*(u16 *)(o + 0x68) - 1);
     *(u128 *)o = *(u128 *)v;
     *(u8 **)(o + 0x60) = target;
     *(f32 *)(o + 0xC) = 1.0f;
-    state = (s16)(*(u16 *)(o + 0x68) - 1);
     switch (state) {
     case 0:
         if (1.0f <= *(f32 *)(o + 0x6C)) {
             c = (*(u8 **)(o + 0x70))[2];
-            if (m[0x53] == c)
-                goto state_two;
-            FUN_00212f90_002db8f8(m, c, 0, FUN_001f96f8_002db8f8(10));
-        state_two:
+            if (m[0x53] != c)
+                FUN_00212f90_002db8f8(m, c, 0, FUN_001f96f8_002db8f8(10));
             *(s32 *)(o + 0x6C) = 0;
             *(s16 *)(o + 0x68) = 2;
             return 1;
         }
         c = (*(u8 **)(o + 0x70))[1];
-        if (m[0x53] == c)
-            goto return_one;
-        FUN_00212f90_002db8f8(m, c, 0, FUN_001f96f8_002db8f8(10));
-    return_one:
+        if (m[0x53] != c)
+            FUN_00212f90_002db8f8(m, c, 0, FUN_001f96f8_002db8f8(10));
         return 1;
     case 1:
         if (!(1.0f <= *(f32 *)(o + 0x6C)))
