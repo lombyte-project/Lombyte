@@ -857,7 +857,90 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
     moby->unkA4 = 0xFF;
     FUN_L00_0025d538(moby, data + 0x60);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ada18.s", FUN_L14_002ada18);
+/* Draws the moby's ring of lights: builds a matrix facing the camera from the moby's axis, transforms the ring
+ * vertices through it and draws them, then flips the matrix and draws the back face. */
+extern s32 D_L14_00161418 __attribute__((sda));
+extern float D_L14_001D7A60[][3];
+extern s32 D_L14_001D80C8[];
+extern char D_L14_001D7E38[];
+extern char D_L14_001674C0_r[] __asm__("D_L14_001674C0");
+extern void FUN_L14_002ae0a8(struct Moby *m);
+extern void FUN_L00_001fde98(int, void *, void *, void *, int);
+extern void cross_r(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void normalize_r(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void scale_r(void *, void *, float) __asm__("FUN_001f9a68");
+extern void sub_r(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void xform_r(void *, void *, void *) __asm__("FUN_001f9d20");
+extern s64 tex_r(s32) __asm__("FUN_001f44b8");
+extern void sreg_r(s32, s64) __asm__("FUN_00233980");
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+
+void FUN_L14_002ada18(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    struct {
+        float mat[4][4];    /* camera-facing frame */
+        float verts[82][3]; /* ring vertices transformed by mat */
+    } f;
+    u32 cols[84];
+    float v[4];
+    int i;
+    int j;
+
+    FUN_L14_002ae0a8((struct Moby *)moby);
+    qcopy(f.mat[0], d + 0xA0);
+    sub_r(f.mat[2], d + 0xD0, D_L14_001674C0_r);
+    cross_r(f.mat[1], f.mat[0], f.mat[2]);
+    normalize_r(f.mat[1], f.mat[1], 1.0f);
+    cross_r(f.mat[2], f.mat[1], f.mat[0]);
+    qcopy(f.mat[3], d + 0xD0);
+    f.mat[3][3] = 1.0f;
+    sreg_r(6, tex_r(0x16));
+    sreg_r(0x42, 0x8000000048);
+    sreg_r(8, 5);
+    sreg_r(0x14, 0xFF9000000260);
+    sreg_r(0x47, 0x50000);
+    sreg_r(0x4A, 0);
+    font_queue_vu_state();
+    for (i = 0; i < D_L14_00161418; i++) {
+        float *s = D_L14_001D7A60[i];
+        float *o = f.verts[i];
+        v[0] = s[0];
+        v[1] = s[1];
+        v[2] = s[2];
+        v[3] = 1.0f;
+        xform_r(v, v, f.mat);
+        o[0] = v[0];
+        o[1] = v[1];
+        o[2] = v[2];
+        if (*(short *)(d + 0x202) != 0) {
+            cols[i] = D_L14_001D80C8[i] & 0xFF0000FF;
+        }
+    }
+    if (*(short *)(d + 0x202) != 0) {
+        FUN_L00_001fde98(D_L14_00161418, f.verts, cols, D_L14_001D7E38, 1);
+    } else {
+        FUN_L00_001fde98(D_L14_00161418, f.verts, D_L14_001D80C8, D_L14_001D7E38, 1);
+    }
+    scale_r(f.mat[1], f.mat[1], -1.0f);
+    scale_r(f.mat[2], f.mat[2], -1.0f);
+    for (j = 0; j < D_L14_00161418; j++) {
+        float *o = f.verts[j];
+        float *s = D_L14_001D7A60[j];
+        v[0] = s[0];
+        v[1] = s[1];
+        v[2] = s[2];
+        v[3] = 1.0f;
+        xform_r(v, v, f.mat);
+        o[0] = v[0];
+        o[1] = v[1];
+        o[2] = v[2];
+    }
+    if (*(short *)(d + 0x202) != 0) {
+        FUN_L00_001fde98(D_L14_00161418, f.verts, cols, D_L14_001D7E38, 1);
+    } else {
+        FUN_L00_001fde98(D_L14_00161418, f.verts, D_L14_001D80C8, D_L14_001D7E38, 1);
+    }
+}
 /* Draws the moby's spinning beam: sixteen camera-facing quads stepped out along its heading, each pair
  * fainter and larger than the last. */
 typedef struct {
