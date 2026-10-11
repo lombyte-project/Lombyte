@@ -831,15 +831,12 @@ void FUN_L01_002e35a8(char *moby, char *state) {
         *(int *)(state + 0x68) = 0;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e3830.s", FUN_L01_002e3830);
-#else
 extern f32 D_L01_001DEB4C __attribute__((section(".data")));
 extern f32 D_L01_00161944 __attribute__((sda));
 extern f32 D_L01_00161948 __attribute__((sda));
 extern f32 D_L01_0016194C __attribute__((sda));
 extern f32 D_L01_00161920 __attribute__((sda));
-extern void FUN_L00_00258278(struct Moby *, f32 *, f32, f32, f32, f32);
+extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f9af0(void *);
 extern f32 FUN_001f9dc8(f32);
@@ -866,7 +863,7 @@ void FUN_L01_002e3830(struct Moby *m, char *p) {
     switch (m->unkBC) {
     case 0:
         ang = FUN_001f9e90(*(f32 *)(p + 0) - m->pos.x, *(f32 *)(p + 4) - m->pos.y);
-        FUN_L00_00258278(m, &D_L01_001DEB4C, ang, frame_time_sq * 11.519173f,
+        FUN_L00_00258278(m, ang, &D_L01_001DEB4C, frame_time_sq * 11.519173f,
                          frame_time_sq * 3.1415927f, frame_time * 11.519173f);
         if (m->unk70 & 2) {
             m->unk58 = 1.0f;
@@ -891,11 +888,11 @@ void FUN_L01_002e3830(struct Moby *m, char *p) {
     target = *(struct Moby **)(p + 0x68);
     if (target == 0) {
         ang = FUN_001f9e90(*(f32 *)(p + 0) - m->pos.x, *(f32 *)(p + 4) - m->pos.y);
-        FUN_L00_00258278(m, &D_L01_001DEB4C, ang, frame_time_sq * 11.519173f,
+        FUN_L00_00258278(m, ang, &D_L01_001DEB4C, frame_time_sq * 11.519173f,
                          frame_time_sq * 3.1415927f, frame_time * 11.519173f);
     } else {
         ang = FUN_001f9e90(target->pos.x - m->pos.x, target->pos.y - m->pos.y);
-        FUN_L00_00258278(m, &D_L01_001DEB4C, ang,
+        FUN_L00_00258278(m, ang, &D_L01_001DEB4C,
                          D_L01_00161944 * DEG_TO_RAD * frame_time_sq,
                          D_L01_00161948 * DEG_TO_RAD * frame_time_sq,
                          D_L01_0016194C * DEG_TO_RAD * frame_time);
@@ -932,23 +929,22 @@ void FUN_L01_002e3830(struct Moby *m, char *p) {
             } else {
                 goto animation3;
             }
-        } else if (m->prev_seq != 5) {
-            blend_moby_animation_3830(m, 5, 0, scale_game_frames(7));
+        } else {
+            if (m->prev_seq != 5)
+                blend_moby_animation_3830(m, 5, 0, scale_game_frames(7));
         }
     } else {
         ground = probe_ground_height(&m->pos, 0, 0.5f);
-        if (!(m->pos.z - ground < D_L01_00161920)) {
+        if (m->pos.z - ground < D_L01_00161920) {
+ animation3:
+            if (m->prev_seq != 3)
+                blend_moby_animation_3830(m, 3, 0, scale_game_frames(11));
+        } else {
             if (m->prev_seq != 5)
                 blend_moby_animation_3830(m, 5, 0, scale_game_frames(7));
             *(s16 *)(p + 0x4a) = 0;
-        } else if (m->prev_seq != 3) {
-            blend_moby_animation_3830(m, 3, 0, scale_game_frames(11));
         }
     }
-    goto collision_done;
-animation3:
-    if (m->prev_seq != 3)
-        blend_moby_animation_3830(m, 3, 0, scale_game_frames(11));
 collision_done:
     if (m->state == 6 || !(d < 1.1f)) return;
     near = 1.1f - d;
@@ -960,7 +956,6 @@ inactive:
     m->unkBC = 0;
     if (1.3f < d) m->unkBC = 2;
 }
-#endif
 /* State for the parented moby.  The parent index is -1 when unattached. */
 typedef int u128_2e3f20 __attribute__((mode(TI)));
 extern unsigned char D_0013D4C5_2e3f20 __asm__("D_0013D4C5") __attribute__((section(".data")));
