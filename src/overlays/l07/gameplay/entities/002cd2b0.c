@@ -779,7 +779,8 @@ void FUN_L07_002f5ba0(struct Moby *moby) {
                 if (is_point_inside_clip_volume(D_0013F3D0, data[0])) {
                     D_0013D388[0x29] = 1;
                     if (data[3] != -1) {
-                        *(u16 *)(D_L07_0015FFD8 + data[3] * 0x100 + 0x34) |= 0x41;
+                        other = D_L07_0015FFD8 + data[3] * 0x100;
+                        *(u16 *)(other + 0x34) |= 0x41;
                     }
                     if (data[5] != -1) {
                         *(u16 *)(D_L07_0015FFD8 + data[5] * 0x100 + 0x34) |= 0x41;
@@ -877,7 +878,6 @@ void FUN_L07_002f5ba0(struct Moby *moby) {
             FUN_L00_002607d0(8);
             FUN_0020b178(0, 8);
             FUN_0022e188(8);
-            FUN_L00_00299460(8);
             moby->state = 12;
         }
         break;
