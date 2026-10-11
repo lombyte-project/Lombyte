@@ -262,15 +262,13 @@ void FUN_L11_0030b358(unsigned char *moby) {
         moby[0x20] = 1;
         {
             float *a = D_L11_00161E08;
-            float *b = D_L11_00161E08 + 1;
-            i = 1;
-            do {
+            float *b = &D_L11_00161E08[1];
+            for (i = 1; i >= 0; i--) {
                 *a = 0.0f;
-                i--;
                 *b = 0.0f;
                 a += 2;
                 b += 2;
-            } while (i >= 0);
+            }
         }
         qcopy(D_L11_00167800, D_L11_001677C0);
         D_L11_00166DDC = *(float *)(data + 0x14);
@@ -278,15 +276,18 @@ void FUN_L11_0030b358(unsigned char *moby) {
         float difference[4];
         subtract_vector_xyz_b358(difference, D_L11_001677C0, D_L11_00167800);
         qcopy(D_L11_00167800, D_L11_001677C0);
-        if (*(float *)(data + 0x20) < D_L11_001677C0[2]) {
+        {
+        float current_z = D_L11_001677C0[2];
+        if (*(float *)(data + 0x20) < current_z) {
             float scaled[2];
             float *phase_x = D_L11_00161E08;
             float *phase_y = D_L11_00161E08 + 1;
             float *velocity = D_L11_00166DB8;
-            for (i = 0; i < 2; i++) {
+            i = 0;
+            do {
                 scale_vector_xyz_b358((*velocity + *velocity) / (*(float *)(data + 0x18) * 5.0f), scaled, difference);
-                if (scaled[0] > 1.0f || scaled[0] < 1.0f) scaled[0] -= convert_integer_to_float_b358(random_int_b358());
-                if (scaled[1] > 1.0f || scaled[1] < 1.0f) scaled[1] -= convert_integer_to_float_b358(random_int_b358());
+                if (1.0f < scaled[0] || scaled[0] < 1.0f) scaled[0] -= convert_integer_to_float_b358(random_int_b358());
+                if (1.0f < scaled[1] || scaled[1] < 1.0f) scaled[1] -= convert_integer_to_float_b358(random_int_b358());
                 *phase_x += scaled[0];
                 *phase_y += scaled[1];
                 if (*phase_x > 1.0f) *phase_x -= 1.0f;
@@ -296,7 +297,8 @@ void FUN_L11_0030b358(unsigned char *moby) {
                 phase_y += 2;
                 phase_x += 2;
                 velocity++;
-            }
+                i++;
+            } while (i < 2);
             D_L11_00161E18 = D_L11_00161E1C + fast_sin_b358(convert_integer_to_float_b358(D_L11_0015F5CC % 0x168) * 0.017444445f - 3.14f) * 0.25f;
             for (i = 0; i < 2; i++) {
                 float *phase = &D_L11_00161E08[i * 2];
@@ -308,6 +310,7 @@ void FUN_L11_0030b358(unsigned char *moby) {
                 if (phase[1] < -1.0f) phase[1] += 1.0f;
             }
             enqueue_callback_list_1_b358((void *)FUN_L11_0030a908, moby);
+        }
         }
     }
 }
