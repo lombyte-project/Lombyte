@@ -296,7 +296,115 @@ unsigned char *FUN_L13_002c1f28(char *owner, char *pos, char *vec) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c2048.s", FUN_L13_002c2048);
+extern float D_0015ED60;
+extern float D_0015ED6C;
+extern char D_00140940[];
+extern Moby_2C27B0 *D_L13_00174158;
+extern struct { char pad[0x18]; Moby_2C27B0 *moby; } D_L13_00174140;
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
+extern void blend_moby_animation_c13(void *, int, int, int) __asm__("FUN_00212f90");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern void FUN_L00_00259888(float, void *, void *, int, void *);
+extern int FUN_L00_001f0d60_2048(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
+extern int FUN_L00_001f2868(float, void *, int, void *, void *);
+extern char *FUN_L00_0025a420(void *, int, int);
+extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+
+void FUN_L13_002c2048(Moby_2C27B0 *m) {
+    char *d = (char *)m->data;
+    V4_2C27B0 vec;
+    float hitpos[12];
+    V4_2C27B0 *pos;
+    V4_2C27B0 *velocity;
+    Hero_2C27B0 *h;
+    Moby_2C27B0 *target;
+    Moby_2C27B0 *hit;
+    int flags;
+    float distance;
+    float factor;
+    float magnitude;
+    short cls_id;
+
+    m->scale += ((m->cls->scale + m->cls->scale) - m->scale) * (D_0015ED60 * 0.1f);
+    if ((m->pad50[0x20] & 2) != 0 && (unsigned char)m->pad50[2] != 2 && (unsigned char)m->pad50[3] != 2) {
+        blend_moby_animation_c13(m, 2, 0, 10);
+    }
+    pos = &m->pos;
+    velocity = (V4_2C27B0 *)(d + 0x60);
+    h = (Hero_2C27B0 *)D_0013F350;
+    if (h->veh != 0 &&
+        (distance = distance_xyz(pos, &h->veh->pos)) < 60.0f && m->b31 != 0) {
+        factor = 1.0f - distance / 60.0f;
+        if (factor > 1.0f) factor = 1.0f;
+        magnitude = D_0015ED6C * 1.5f;
+        factor *= magnitude;
+        subtract_vector_xyz(&vec, &h->veh->pos, pos);
+        normalize_vector_xyz(&vec, &vec, factor);
+        add_vector_xyz(velocity, velocity, &vec);
+    }
+    if (*(int *)(d + 0x70) < scale_game_frames_alt(0x168) - 9) {
+        add_vector_xyz(pos, pos, velocity);
+        scale_vector_xyz(velocity, velocity, 0.945f);
+    } else {
+        subtract_vector_xyz(&vec, pos, &(*(Moby_2C27B0 **)(d + 0x74))->pos);
+        normalize_vector_xyz(&vec, &vec, D_0015ED6C * 20.0f);
+        add_vector_xyz(pos, pos, velocity);
+    }
+    if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f ||
+        m->pos.z < 2.0f || m->pos.z > 1021.0f) {
+        mark_moby_for_removal(m);
+        return;
+    }
+    target = *(Moby_2C27B0 **)(d + 0x74);
+    if (target != 0 && target->state != 0xFE && target->state != 0xFD &&
+        distance_xyz(pos, &target->pos) > 8.0f) {
+        FUN_L00_00259888(16.0f, &hitpos, m, 0x30000, velocity);
+        qcopy(&vec, pos);
+        vec.z += 0.75f;
+        flags = FUN_L00_001f2868(1.7f, &vec, 0x10, m, &hitpos);
+        flags = flags | FUN_L00_001f0d60_2048(&vec, 1.7f, 4, m);
+        hit = (Moby_2C27B0 *)FUN_L00_0025a420(m, -1, 0);
+        if (hit != 0) {
+            float health = *(float *)(d + 0x20) - *(float *)((char *)hit + 0x2C);
+            *(float *)(d + 0x20) = health;
+            if (health <= 0.0f) {
+                flags |= 0x2000;
+                D_L13_00174140.moby = 0;
+            }
+        }
+        if (D_L13_00174140.moby != 0) {
+            cls_id = D_L13_00174140.moby->cls_id;
+            if (cls_id == 0x504 || cls_id == 0x534 || cls_id == 0x535 || cls_id == 0x536 ||
+                cls_id == 0x537 || cls_id == 0x538 || cls_id == 0x52 || cls_id == 0x53 ||
+                cls_id == 0x539 || cls_id == 0x53A || cls_id == 0x191 || cls_id == 0x184 ||
+                cls_id == 0x185 || cls_id == 0x186 || cls_id == 0x187 || cls_id == 0x188 ||
+                cls_id == 0x189 || cls_id == 0x18A || cls_id == 0x18B || cls_id == 0x18C ||
+                cls_id == 0x18F || cls_id == 0x190) flags = 0;
+        }
+        if (flags != 0) {
+            if (m->b31 != 0) {
+                if ((flags & 0x2000) != 0) {
+                    func_L00_0025F4A8_alt(m, velocity, 0, 0.0f, 0.0f, 5, 2, 7,
+                                            0.0f, 0.0f, 0.0f, 1.0f, 3, 0.0f, 1, 1, -1, 0);
+                } else {
+                    func_L00_0025F4A8_alt(m, velocity, 0, 4.0f, 16.0f, 0x14, 5, 0x10,
+                                            7.0f, 4.0f, 1.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
+                }
+            }
+            mark_moby_for_removal(m);
+            return;
+        }
+    }
+    if (tick_countdown_32_alt(d + 0x70) != 0 && m->b31 == 0) {
+        mark_moby_for_removal(m);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c25b8.s", FUN_L13_002c25b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c2d30.s", FUN_L13_002c2d30);
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4A68), where it is exact; names translated to the US level program. */
