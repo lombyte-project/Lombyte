@@ -838,22 +838,36 @@ int FUN_L02_002fb648(char *moby) {
     }
     if (*(int *)(data + 0xc) >= 0) {
         result = is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0xc));
-        return result != 0;
+        if (result == 0) {
+            goto rejected;
+        }
+        return 1;
     }
     if (*(int *)(data + 0x10) >= 0) {
         result = FUN_L00_0025fa38(&hero.motion.pos, *(int *)(data + 0x10));
-        return result != 0;
+        if (result == 0) {
+            goto rejected;
+        }
+        return 1;
     }
     if (*(int *)(data + 8) >= 0) {
         result = FUN_L00_0025faf0(&hero.motion.pos, *(int *)(data + 8));
-        return result != 0;
+        if (result == 0) {
+            goto rejected;
+        }
+        return 1;
     }
     if (*(int *)(data + 0x14) < 0) {
-        return 0;
+        goto rejected;
     }
     entry = (int *)D_L02_001B0AB0[*(int *)(data + 0x14)];
     result = point_in_path_xy(&hero.motion.pos, entry + 4, *entry);
-    return result != 0;
+    if (result == 0) {
+        goto rejected;
+    }
+    return 1;
+rejected:
+    return 0;
 }
 #endif
 /* Checks whether the target's direction is within a and b degrees of the reference axis. */
