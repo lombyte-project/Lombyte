@@ -396,13 +396,13 @@ void FUN_L06_002e9b60(float scale, float threshold, char *moby, float *out, int 
         qcopy(end, &D_L06_001745E0);
         FUN_001f9a28(moby + 0x10, end, forward);
     }
-    i = 0;
-retry:
-    if (i < 6 && FUN_L00_001f0d60(threshold, end, 4, moby) != 0) {
+    for (i = 0; i < 6; i++) {
+        if (FUN_L00_001f0d60(threshold, end, 4, moby) != 0) {
         qcopy(end, &D_L06_001745F0);
         FUN_001f9a28(moby + 0x10, end, forward);
-        i++;
-        goto retry;
+        } else {
+            break;
+        }
     }
     if (follow_path != 0) {
         FUN_L00_00261d78(0.5f, *(int *)(*(char **)(moby + 0x78) + 0x1EC), moby + 0x10, moby + 0x10);
