@@ -2234,17 +2234,17 @@ void FUN_L00_0020a9e8(void) {
                 *(f32 *)(record + 0x1028) = FUN_L00_00257c48_a540(0.17453292f, 0.5235988f);
                 low = FUN_001fef20_a9e8(0x46);
                 high = FUN_001fef20_a9e8(0x96);
-                *(s32 *)0x001403b0 = FUN_L00_00257b90_a540(low, high);
+                *(s32 *)(base + 0x1060) = FUN_L00_00257b90_a540(low, high);
             } else if (i == 1) {
-                *(f32 *)(record + 0x1028) = FUN_L00_00257c48_a540(0.17453292f, 0.5235988f);
+                *(f32 *)((char *)timers - 0x28) = FUN_L00_00257c48_a540(0.17453292f, 0.5235988f);
                 low = FUN_001fef20_a9e8(0x28);
                 high = FUN_001fef20_a9e8(0x5A);
-                *timers = FUN_L00_00257b90_a540(low, high);
+                timers[1] = FUN_L00_00257b90_a540(low, high);
             } else if (i == 2) {
-                *(f32 *)(record + 0x1028) = FUN_L00_00257c48_a540(0.2617994f, 0.87266463f);
+                *(f32 *)((char *)timers - 0x18) = FUN_L00_00257c48_a540(0.2617994f, 0.87266463f);
                 low = FUN_001fef20_a9e8(0x28);
                 high = FUN_001fef20_a9e8(0x5A);
-                *timers = FUN_L00_00257b90_a540(low, high);
+                timers[2] = FUN_L00_00257b90_a540(low, high);
             } else {
                 f32 old;
                 f32 value;
@@ -2272,7 +2272,6 @@ fourth_sign_done:
         *(f32 *)((char *)&D_L00_0017A680_a540 + j * 0xb0 + 0x64) = x;
         *(f32 *)((char *)&D_L00_0017A680_a540 + j * 0xb0 + 0x68) = y;
         record += 0x10;
-        timers++;
         check_timer++;
         store_timer++;
         i++;
