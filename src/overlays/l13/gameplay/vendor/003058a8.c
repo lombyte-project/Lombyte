@@ -74,7 +74,150 @@ void FUN_L13_00305988(struct Moby *moby, char *pos, int arg2, float arg3) {
     moby->unk94 = moby->pclass->unk10;
     FUN_L00_00250df8(moby);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00305a58.s", FUN_L13_00305a58);
+#else
+extern char *FUN_L00_0025a420(void *, int, int);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_001f9c48(void *, void *, float);
+extern float FUN_001f9af0(void *);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001fa6c0(int);
+extern int FUN_001f96f8(int);
+extern int FUN_001fa6d0(float);
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int FUN_L00_00257b90(int, int);
+extern float FUN_002132a8(float, float);
+extern int FUN_L00_002712b8(float, float, float, float, float, void *, int, int, int, int, int);
+extern void FUN_L00_00259888(void *, struct Moby *, int, void *, float);
+extern void FUN_L00_001ff660(void *, void *, void *);
+extern void FUN_L00_0026dd20(void *, void *, int, int, float);
+extern void FUN_L07_0029a2a0(void *, void *);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern float D_0015ED6C;
+
+typedef struct {
+    float x, y, z, w;
+} __attribute__((aligned(16))) L13Vector_5a58;
+
+void FUN_L13_00305a58(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    struct Moby *source;
+    struct Moby *target;
+    struct {
+        L13Vector_5a58 old_pos;
+        L13Vector_5a58 velocity;
+        L13Vector_5a58 direction;
+        char hit[48];
+        L13Vector_5a58 random_direction;
+    } work;
+    int i;
+    float length;
+    float distance;
+    float other_distance;
+
+    qcopy(&work.old_pos, &moby->pos);
+    if (moby->state == 1) {
+        source = *(struct Moby **)(data + 0x20);
+        if (source == 0 || source->oclass != 0x65 || source->state == 0xfe || source->state == 0xfd)
+            goto remove;
+        *(OvlQuad *)&moby->rot = *(OvlQuad *)&source->rot;
+        *(OvlQuad *)&moby->unkC0 = *(OvlQuad *)&source->unkC0;
+        *(OvlQuad *)&moby->unkD0 = *(OvlQuad *)&source->unkD0;
+        *(OvlQuad *)&moby->unkE0 = *(OvlQuad *)&source->unkE0;
+        FUN_L00_0024f7c8(source, *(short *)(data + 0x26), &moby->pos);
+        qcopy(data + 0x10, &moby->pos);
+        source = *(struct Moby **)(data + 0x20);
+        if (source != 0 && source->state != 0xfe && source->state != 0xfd && (source->flags & 1))
+            moby->flags |= 1;
+        else
+            moby->flags &= 0xfffe;
+        goto bounds;
+    }
+
+    target = FUN_L00_0025a420(moby, 0x230000, 0);
+    if (target != 0 && *(struct Moby **)((char *)target + 0x20) != 0 &&
+        (*(struct Moby **)((char *)target + 0x20))->oclass == 0x1df)
+        goto special;
+    FUN_001f9a10(&moby->pos, &moby->pos, data);
+    for (i = 0; i < 4; i++) {
+        FUN_001f9a68(&work.direction, data, -FUN_001fa6c0(i) * 0.25f);
+        FUN_001f9a10(&work.velocity, &moby->pos, &work.direction);
+        target = (struct Moby *)FUN_L00_002712b8(
+            FUN_002132a8(25000.0f, 35000.0f), 500.0f, 1.0f, -0.0004f, 0.0f,
+            &work.velocity, 0x15f580, FUN_001f96f8(15), 0x60, 0x4040ff, 3);
+        if (target != 0)
+            *((char *)target + 9) = FUN_001fa6d0(4.0f) - 0x80;
+    }
+    *(OvlQuad *)&work.velocity = *(OvlQuad *)data;
+    work.velocity.z = 0.0f;
+    FUN_001f9c48(&work.velocity, &work.velocity, 1.0f);
+    work.velocity.z = 1.0f;
+    FUN_L00_00259888(work.hit, moby, 0x10001, &work.velocity, 1.0f);
+    distance = FUN_001f9b80(&moby->pos, data + 0x10);
+    other_distance = FUN_001f9b80(*(char **)(data + 0x2c) + 0x10, data + 0x10);
+    if (*(float *)(data + 0x28) < distance || other_distance < distance) {
+        if (moby->unk31 != 0) {
+            for (i = 2; i >= 0; i--) {
+                *(OvlQuad *)&work.random_direction = 0;
+                work.random_direction.x = FUN_002132a8(-1.0f, 1.0f);
+                work.random_direction.y = FUN_002132a8(-1.0f, 1.0f);
+                work.random_direction.z = FUN_002132a8(-1.0f, 1.0f);
+                work.direction = work.random_direction;
+                length = FUN_001f9af0(&work.random_direction);
+                FUN_001f9bf8(&work.direction, &work.direction, length * 0.1f);
+                FUN_001f9a10(&work.direction, &work.random_direction, &work.direction);
+                FUN_001f9bf8(&work.direction, &work.direction,
+                    FUN_002132a8(D_0015ED6C + D_0015ED6C, D_0015ED6C * 4.0f));
+                FUN_L07_0029a2a0(&moby->pos, &work.direction);
+            }
+        }
+        FUN_L13_003060b8(moby);
+        goto remove;
+    }
+    if (FUN_001efa68(&work.old_pos, &moby->pos, *(short *)(data + 0x24) == 0,
+                     moby, work.hit) == 0)
+        goto bounds;
+    target = *(struct Moby **)0x174158;
+    if (target != 0 && target == *(struct Moby **)(data + 0x20))
+        goto bounds;
+    *(OvlQuad *)&moby->pos = *(OvlQuad *)0x174160;
+    if (moby->unk31 != 0) {
+        for (i = 4; i >= 0; i--) {
+            *(OvlQuad *)&work.random_direction = 0;
+            work.random_direction.x = FUN_002132a8(-1.0f, 1.0f);
+            work.random_direction.y = FUN_002132a8(-1.0f, 1.0f);
+            work.random_direction.z = FUN_002132a8(-1.0f, 1.0f);
+            work.direction = work.random_direction;
+            FUN_L00_001ff660(&work.direction, data, (void *)0x174180);
+            length = FUN_001f9af0(&work.direction);
+            FUN_001f9bf8(&work.random_direction, &work.random_direction, length * 0.5f);
+            FUN_001f9a10(&work.random_direction, &work.direction, &work.random_direction);
+            FUN_001f9bf8(&work.random_direction, &work.random_direction,
+                FUN_002132a8(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
+            FUN_L00_0026dd20(&moby->pos, &work.random_direction, 0x7f2f4f6f,
+                FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(15)), 30000.0f);
+        }
+    }
+    target = *(struct Moby **)0x174158;
+    if (target != 0 && target->oclass == 0x1df) {
+special:
+        FUN_L13_00306148(moby);
+    } else {
+        FUN_L13_003060b8(moby);
+    }
+remove:
+    mark_moby_for_removal(moby);
+    return;
+bounds:
+    if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f ||
+        moby->pos.y < 2.0f || moby->pos.y > 1021.0f ||
+        moby->pos.z < 2.0f || moby->pos.z > 1021.0f)
+        mark_moby_for_removal(moby);
+}
+#endif
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
