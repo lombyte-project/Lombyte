@@ -39,19 +39,19 @@ void FUN_L00_002cfcb8(u8 *moby) {
 
     *(u32 *)(vars + 0xAC) |= 4;
     if (group == 0xFF) {
-        if (*(s16 *)(moby + 0xA6) == 0x1F4 && FUN_L00_00257b50_2cfcb8(2) &&
-            *(f32 *)(moby + 0x40) == 0.0f && *(f32 *)(moby + 0x44) == 0.0f)
-            *(f32 *)(moby + 0x48) = FUN_L00_002000e8_2cfcb8(*(f32 *)(moby + 0x48), 1.57079637f);
-        if (*(s16 *)(moby + 0xA6) == 0x1F5 && *(u8 *)(moby + 0xB0) != 0xFF &&
-            D_0014EE90_2cfcb8[*(u8 *)(moby + 0xB0)] < *(s32 *)(vars + 0xF8)) {
-            FUN_L00_0024eb68_2cfcb8(moby);
+        if (*(s16 *)(first + 0xA6) == 0x1F4 && FUN_L00_00257b50_2cfcb8(2) &&
+            *(f32 *)(first + 0x40) == 0.0f && *(f32 *)(first + 0x44) == 0.0f)
+            *(f32 *)(first + 0x48) = FUN_L00_002000e8_2cfcb8(*(f32 *)(first + 0x48), 1.57079637f);
+        if (*(s16 *)(first + 0xA6) == 0x1F5 && *(u8 *)(first + 0xB0) != 0xFF &&
+            D_0014EE90_2cfcb8[*(u8 *)(first + 0xB0)] < *(s32 *)(vars + 0xF8)) {
+            FUN_L00_0024eb68_2cfcb8(first);
             return;
         }
-        *(u16 *)(vars + 0xC4) = *(u16 *)(moby + 0xA8);
+        *(u16 *)(vars + 0xC4) = *(u16 *)(first + 0xA8);
         *(f32 *)(vars + 0xB0) = 1.0f;
         *(u32 *)(vars + 0xAC) |= 1;
-        probe = *(Vec_2cfcb8 *)(moby + 0x10);
-        start = *(Vec_2cfcb8 *)(moby + 0x10);
+        qcopy(&probe, first + 0x10);
+        qcopy(&start, first + 0x10);
         probe.z += 0.5f;
         start.z = 0.1f;
         if (FUN_L00_001efc70_2cfcb8(&probe, &start, 2, 0, 0)) {
@@ -60,9 +60,9 @@ void FUN_L00_002cfcb8(u8 *moby) {
                     *(u8 **)(vars + 0xA4) = 0;
                     *(u32 *)(vars + 0xAC) |= 8;
                     if (FUN_L00_002603d0_2cfcb8(D_L00_00173E58_2cfcb8)) {
-                        if (moby) *(u16 *)(moby + 0x36) = 0x7F80;
+                        if (first) *(u16 *)(first + 0x36) = 0x7F80;
                         FUN_L00_00260668_2cfcb8(second, D_L00_00173E58_2cfcb8,
-                            moby + 0x10, moby + 0x40, vars + 0xD0, vars + 0xE0);
+                            first + 0x10, first + 0x40, vars + 0xD0, vars + 0xE0);
                         *(s32 *)(vars + 0xF4) = 0;
                         *(u8 **)(vars + 0xF0) = D_L00_00173E58_2cfcb8;
                     }
@@ -70,7 +70,7 @@ void FUN_L00_002cfcb8(u8 *moby) {
                 }
                 return;
             }
-            *(f32 *)(moby + 0x18) = D_L00_00173E68_2cfcb8;
+            *(f32 *)(first + 0x18) = D_L00_00173E68_2cfcb8;
         }
         *(u8 **)(vars + 0xA4) = 0;
         return;
@@ -90,8 +90,8 @@ void FUN_L00_002cfcb8(u8 *moby) {
                 *(u16 *)(vars + 0xC4) = *(u16 *)(first + 0xA8);
                 *(f32 *)(vars + 0xB0) = 1.0f;
                 *(u32 *)(vars + 0xAC) |= 1;
-                probe = *(Vec_2cfcb8 *)(first + 0x10);
-                start = *(Vec_2cfcb8 *)(first + 0x10);
+                qcopy(&probe, first + 0x10);
+                qcopy(&start, first + 0x10);
                 probe.z += 0.5f;
                 start.z = 0.1f;
                 if (FUN_L00_001efc70_2cfcb8(&probe, &start, 2, 0, 0)) {
@@ -165,9 +165,8 @@ void FUN_L00_002cfcb8(u8 *moby) {
                         *(f32 *)(vars + 0xF4) = *(f32 *)(other_vars + 0xF4) + 1.0f;
                     }
                 }
-                if (*(s16 *)(vars + 0xC6) != 0 || *(s16 *)(first + 0xA6) == 0x1F5) {
-                    next = *(u8 **)(vars + 0xA0);
-                    if (!next) break;
+                if ((*(s16 *)(vars + 0xC6) != 0 || *(s16 *)(first + 0xA6) == 0x1F5) &&
+                    *(u8 **)(vars + 0xA0)) {
                     if (*(s32 *)(vars + 0xC0) != -1) {
                     row = D_L00_001B04B0_2cfcb8[*(s32 *)(vars + 0xC0)];
                     if (*(s32 *)row == 0 || (state = *(s32 *)(row + 0x1C)) == 1 || state == 3 || state == 0x111) {
