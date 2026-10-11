@@ -645,12 +645,13 @@ void FUN_L05_0030c5b0(struct Moby *m) {
         else if (intensity < 0x20) intensity = 0x20;
         m->unk90 = 0x80000000 | intensity << 16 | intensity << 8 | intensity;
         if (hero.ground_moby == m && hero.air_frames.s == 0) {
+            int next_state = 2;
             D_L05_001BAA50.killed[(short)m->save_id] = m->unkB0 + 2;
             if (m->unkB0 == 0xFF ||
                 (D_L05_0015FC88[m->unkB0] != 0xFF && D_0014C050[current_level_index][m->unkB0] == 0xFF)) {
                 D_L05_001BB6B0.killed[(short)m->save_id] = m->unkB0 + 2;
             }
-            m->state = 2;
+            m->state = next_state;
             m->unkBC = 1;
             m->unk90 = 0x80208020;
             allocate_voice_for_target_entry(0, 0, m);
