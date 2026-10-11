@@ -287,5 +287,156 @@ void FUN_L09_002c5990(struct Moby *moby) {
     }
 }
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c6230.s", FUN_L09_002c6230);
+#else
+extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
+extern s32 FUN_L00_00257b50(s32);
+extern s32 FUN_L00_0025a478(struct Moby *, void *, void *, s32, s32 *, f32 *, s32, s32);
+extern void *FUN_L00_0025a420(struct Moby *, s32, s32);
+extern void FUN_L00_0025ab48(void *, f32 *, f32 *, f32 *);
+extern void FUN_L00_0025c558(f32, struct Moby *, void *, s32, s32, s32);
+extern void FUN_L00_0025d458(struct Moby *, void *);
+extern void FUN_L00_0025d538(struct Moby *, void *);
+extern s32 FUN_L00_0025fcb8(f32, struct Moby *, void *);
+extern s32 FUN_L00_0025ff38(f32, struct Moby *, void *, s32, s32, void *, s32);
+extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
+extern f32 FUN_001f96b0(f32);
+extern s32 D_001413D0;
+extern u8 *D_L09_001B0630[];
+extern f32 D_L09_001613F8 __attribute__((sda));
+extern f32 D_L09_00161400 __attribute__((sda));
+extern f32 D_L09_00161404 __attribute__((sda));
+extern f32 D_L09_00161408 __attribute__((sda));
+extern f32 D_L09_0016140C __attribute__((sda));
+
+void FUN_L09_002c6230(struct Moby *moby) {
+    Moby52Vars *vars = (Moby52Vars *)moby->pvars;
+    u8 *data = (u8 *)vars;
+    void *hit;
+    s32 response;
+    struct {
+        u128 hit_vector;
+        s32 status;
+        f32 damage;
+        f32 angle;
+        f32 fatal_angle;
+    } scratch;
+    s32 result;
+    s32 damage_timer;
+    f32 impulse_time;
+    f32 impulse_decay;
+    f32 impulse_lateral;
+    f32 zero;
+    struct Moby *target;
+    u8 *row;
+
+    if (moby->state == 0) return;
+    moby->scale += (moby->pclass->scale * D_L09_0016140C - moby->scale) * 0.1f;
+    if (tick_countdown_32(&vars->timer) == 2) {
+        moby->state = 7;
+        return;
+    }
+    if (vars->timer == FUN_001f96f8(10) || vars->timer == FUN_001f96f8(20) ||
+        vars->timer == FUN_001f96f8(40) || vars->timer == FUN_001f96f8(60) ||
+        vars->timer == FUN_001f96f8(120) || vars->timer == FUN_001f96f8(179)) {
+        data[0x67] = 0xf0;
+        FUN_L00_0025d458(moby, data + 0x60);
+    }
+    zero = 0.0f;
+    scratch.damage = zero;
+    hit = FUN_L00_0025a420(moby, 0x330000, 0);
+    response = FUN_L00_0025a478(moby, hit, &vars->unk20, 0, &scratch.status, &scratch.damage, 0, 4);
+    if (scratch.status != 1 && moby->state != 6) {
+        vars->unk20 -= scratch.damage;
+        if (vars->unk20 <= zero) response = 1;
+        damage_timer = truncate_float_to_s32(512.0f);
+        impulse_time = frame_time_sq * D_L09_001613F8;
+        impulse_decay = frame_time_sq * 30.0f;
+        *(f32 *)(data + 0x98) = zero;
+        *(s32 *)(data + 0x94) = 1;
+        data[0xad] = 0;
+        *(s32 *)(data + 0x90) = damage_timer;
+        *(f32 *)(data + 0x80) = impulse_time;
+        *(f32 *)(data + 0x84) = impulse_decay;
+        allocate_voice_for_target_entry(8, 0, moby);
+        switch (response) {
+        case 9: case 10:
+            data[0x67] = 0xfa;
+            break;
+        case 3: case 4: case 5: case 6: case 7: case 8:
+            impulse_time = frame_time * D_L09_00161400;
+            *(f32 *)(data + 0xc0) = 3.0f;
+            *(f32 *)(data + 0xc4) = 6.0f;
+            *(f32 *)(data + 0x88) = impulse_time;
+            *(f32 *)(data + 0x8c) = 0.0f;
+            scratch.angle = FUN_001f9e90(moby->pos.x - ((struct Moby *)*(void **)((u8 *)hit + 0x20))->pos.x,
+                                  moby->pos.y - ((struct Moby *)*(void **)((u8 *)hit + 0x20))->pos.y);
+            scratch.hit_vector = *(u128 *)((u8 *)hit + 0x10);
+            FUN_L00_0025ab48(&scratch.hit_vector, &scratch.angle, (f32 *)(data + 0x88), (f32 *)(data + 0x8c));
+            FUN_L00_0025c558(scratch.angle, moby, data + 0x70, 4, 1, 0);
+            moby->state = 5;
+            if (moby->group != 0xff) FUN_L01_0026e090(moby->group, 1);
+            data[0x67] = 0x78;
+            break;
+        case 1:
+        case 2:
+            impulse_time = D_L09_001613F8 * frame_time_sq;
+            impulse_decay = D_L09_00161408 * frame_time;
+            impulse_lateral = D_L09_00161404 * frame_time;
+            moby->flags &= 0xefff;
+            *(f32 *)(data + 0x80) = impulse_time;
+            *(f32 *)(data + 0x88) = impulse_decay;
+            *(f32 *)(data + 0x8c) = impulse_lateral;
+            *(f32 *)(data + 0xc0) = 14.0f;
+            *(f32 *)(data + 0xc4) = 28.0f;
+            scratch.fatal_angle = FUN_001f9e90(moby->pos.x - ((struct Moby *)*(void **)((u8 *)hit + 0x20))->pos.x,
+                                  moby->pos.y - ((struct Moby *)*(void **)((u8 *)hit + 0x20))->pos.y);
+            scratch.hit_vector = *(u128 *)((u8 *)hit + 0x10);
+            FUN_L00_0025ab48(&scratch.hit_vector, &scratch.fatal_angle, (f32 *)(data + 0x88), (f32 *)(data + 0x8c));
+            FUN_L00_0025c558(scratch.fatal_angle, moby, data + 0x70, 4, 1, 0);
+            FUN_L00_00257470(moby, 0, -1);
+            moby->state = 6;
+            data[0x67] = 0xf0;
+            break;
+        case 0: case 11: default:
+            break;
+        }
+        FUN_L00_0025d458(moby, data + 0x60);
+    }
+    moby->unkA4 = 0xff;
+    FUN_L00_0025d538(moby, data + 0x60);
+    if (*(s32 *)(data + 0x38) != 0 || moby->unkBC == 1) {
+        *(s32 *)(data + 0x190) = truncate_float_to_s32(FUN_001f96b0(random_float_between(180.0f, 240.0f)));
+        *(s32 *)(data + 0x38) = 0;
+        moby->unkBC = 0;
+    }
+    tick_countdown_32((s32 *)(data + 0x190));
+    if (FUN_L00_00257b50(4) == 0) {
+        if (*(s32 *)(data + 0x190) != 0) {
+            *(f32 *)(data + 0x188) = 24.0f;
+            result = FUN_L00_0025fcb8(24.0f, moby, data + 0x120);
+        } else {
+            *(f32 *)(data + 0x188) = 12.0f;
+            row = D_L09_001B0630[vars->unk180];
+            result = FUN_L00_0025ff38(12.0f, moby, data + 0x120, 0, 0, row + 0x10, *(s32 *)row);
+        }
+        if (result != 2 && *(s32 *)(data + 0x190) == 0) {
+            if (FUN_001f9b80(&moby->pos, data + 0x120) > *(f32 *)(data + 0x188) ||
+                absolute_float(moby->pos.z - *(f32 *)(data + 0x128)) > 3.0f) {
+                vars->unk164 = 2;
+            }
+        }
+    } else {
+        target = vars->target;
+        if (target != 0 && target->state != 0xfe && target->state != 0xfd) {
+            *(volatile u128 *)(data + 0x120) = *(volatile u128 *)&target->pos;
+        } else {
+            vars->target = 0;
+            vars->unk164 = 2;
+        }
+    }
+    if (vars->target == 0) vars->target = (struct Moby *)D_001413D0;
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002e27d8.s", FUN_L09_002e27d8);
