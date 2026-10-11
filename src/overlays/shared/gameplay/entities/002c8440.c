@@ -574,7 +574,219 @@ struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Mob
     return m;
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cb418.s", FUN_L00_002cb418);
+#else
+extern f32 FUN_002000e8_2cb418(f32, f32) __asm__("FUN_L00_002000e8");
+extern f32 FUN_001ff3d8_2cb418(void *) __asm__("FUN_L00_001ff3d8");
+extern s32 FUN_001fef20_2cb418(s32) __asm__("FUN_L00_001fef20");
+extern f32 FUN_001ff8b0_2cb418(f32, f32) __asm__("FUN_L00_001ff8b0");
+extern f32 FUN_001ff488_2cb418(void *, void *) __asm__("FUN_L00_001ff488");
+extern f32 FUN_L00_00258110_2cb418(f32 *, f32, f32, f32, f32, f32) __asm__("FUN_L00_00258110");
+extern void FUN_00262c50_2cb418(void *, f32, f32, f32) __asm__("FUN_L00_00262c50");
+extern void FUN_001ff278_2cb418(void *, void *, void *) __asm__("FUN_L00_001ff278");
+extern void FUN_001ff2a8_2cb418(void *, void *, void *) __asm__("FUN_L00_001ff2a8");
+extern void FUN_001ff550_2cb418(void *, void *, f32) __asm__("FUN_L00_001ff550");
+extern s32 FUN_001fef98_2cb418(void *) __asm__("FUN_L00_001fef98");
+extern s32 FUN_001efc70_2cb418(void *, void *, s32, s32, void *) __asm__("FUN_L00_001efc70");
+extern s32 FUN_001f35d8_2cb418(void) __asm__("FUN_L00_001f35d8");
+extern f32 FUN_L00_00257be8_2cb418(f32, f32) __asm__("FUN_L00_00257be8");
+extern void FUN_001ff660_2cb418(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void FUN_001ff500_2cb418(void *, void *, f32) __asm__("FUN_L00_001ff500");
+extern s32 FUN_L00_00257b90_2cb418(s32, s32) __asm__("FUN_L00_00257b90");
+extern void FUN_L00_0026dd20_2cb418(void *, void *, u32, s32, f32) __asm__("FUN_L00_0026dd20");
+extern f32 FUN_001ff408_2cb418(void *) __asm__("FUN_L00_001ff408");
+extern f32 FUN_00200240_2cb418(s32) __asm__("FUN_L00_00200240");
+extern f32 FUN_L00_00257c48_2cb418(f32, f32) __asm__("FUN_L00_00257c48");
+extern s32 FUN_L00_00257b50_2cb418(s32) __asm__("FUN_L00_00257b50");
+extern void FUN_001ff3c0_2cb418(void *, void *, void *) __asm__("FUN_L00_001ff3c0");
+extern void FUN_L00_0025fc08_2cb418(void *, void *, f32, void *) __asm__("FUN_L00_0025fc08");
+extern void FUN_001ff300_2cb418(void *, void *, f32) __asm__("FUN_L00_001ff300");
+extern void FUN_L00_002cbcc0(u8 *, s32);
+extern void FUN_0024eb68_2cb418(void *) __asm__("FUN_L00_0024eb68");
+extern void FUN_0028dbe8_2cb418(s32, s32) __asm__("FUN_L00_0028dbe8");
+extern f32 D_L00_00161894_2cb418 __asm__("D_L00_00161894");
+extern f32 D_0015ED70_2cb418 __asm__("D_0015ED70");
+extern f32 D_0015ED6C_2cb418 __asm__("D_0015ED6C");
+extern f32 D_L00_00161880_2cb418 __asm__("D_L00_00161880") __attribute__((sda));
+extern f32 D_L00_0016187C_2cb418 __asm__("D_L00_0016187C") __attribute__((sda));
+extern f32 D_L00_00161884_2cb418 __asm__("D_L00_00161884") __attribute__((sda));
+extern u8 D_0013E52F_2cb418 __asm__("D_0013E52F");
+extern u8 *D_001403E0_2cb418 __asm__("D_001403E0");
+extern V4 D_L00_00166FF0_2cb418 __asm__("D_L00_00166FF0");
+extern V4 D_0013F3D0_2cb418 __asm__("D_0013F3D0");
+
+void FUN_L00_002cb418(u8 *m)
+{
+    u8 *vars = *(u8 **)(m + 0x78);
+    V4 old_pos, offset, direction, scaled, velocity;
+    u8 *pos;
+    f32 pitch, yaw, length, spread;
+    f32 jitter;
+    s32 i, j, lifetime, time_elapsed;
+    u8 **handle;
+    u8 *effect;
+
+    *(f32 *)(m + 0x44) = FUN_002000e8_2cb418(*(f32 *)(m + 0x44), -D_L00_00161894_2cb418);
+    if (FUN_001ff3d8_2cb418(vars) < 0.1f) {
+        if (*(s16 *)(vars + 0x24) < FUN_001fef20_2cb418(0x23) - FUN_001fef20_2cb418(1)
+            && *(s32 *)(vars + 0x28) == 0) {
+            pitch = *(f32 *)(vars + 0x18);
+            yaw = *(f32 *)(vars + 0x1c);
+            pos = m + 0x10;
+        } else {
+            pitch = *(f32 *)(m + 0x48);
+            yaw = *(f32 *)(m + 0x44);
+            pos = m + 0x10;
+        }
+    } else {
+        pos = m + 0x10;
+        pitch = FUN_001ff8b0_2cb418(*(f32 *)vars - *(f32 *)(m + 0x10),
+                                        *(f32 *)(vars + 4) - *(f32 *)(m + 0x14));
+        yaw = -FUN_001ff8b0_2cb418(FUN_001ff488_2cb418(pos, vars),
+                                       *(f32 *)(vars + 8) - *(f32 *)(m + 0x18));
+    }
+    if (FUN_001ff3d8_2cb418(vars) < 0.1f) {
+        *(f32 *)(m + 0x48) = FUN_L00_00258110_2cb418((f32 *)(vars + 0x10), *(f32 *)(m + 0x48), pitch,
+            D_0015ED70_2cb418 * 6.2831855f, D_0015ED70_2cb418 * 3.1415927f,
+            D_0015ED6C_2cb418 * 6.2831855f);
+        *(f32 *)(m + 0x44) = FUN_L00_00258110_2cb418((f32 *)(vars + 0x14), *(f32 *)(m + 0x44), yaw,
+            D_0015ED70_2cb418 * 6.2831855f, D_0015ED70_2cb418 * 3.1415927f,
+            D_0015ED6C_2cb418 * 6.2831855f);
+    } else {
+        *(f32 *)(m + 0x48) = FUN_L00_00258110_2cb418((f32 *)(vars + 0x10), *(f32 *)(m + 0x48), pitch,
+            D_0015ED70_2cb418 * 6.2831855f, D_0015ED70_2cb418 * 3.1415927f,
+            D_0015ED6C_2cb418 * 4.712389f);
+        *(f32 *)(m + 0x44) = FUN_L00_00258110_2cb418((f32 *)(vars + 0x14), *(f32 *)(m + 0x44), yaw,
+            D_0015ED70_2cb418 * 6.2831855f, D_0015ED70_2cb418 * 3.1415927f,
+            D_0015ED6C_2cb418 * 4.712389f);
+    }
+    FUN_00262c50_2cb418(&offset, D_0015ED6C_2cb418 * 40.0f,
+                          *(f32 *)(m + 0x48), -*(f32 *)(m + 0x44));
+    qcopy(&old_pos, pos);
+    FUN_001ff278_2cb418(pos, pos, &offset);
+    if (*(f32 *)(m + 0x10) < 0.0f)
+        goto cleanup;
+    if (*(f32 *)(m + 0x14) < 0.0f)
+        goto cleanup;
+    if (*(f32 *)(m + 0x18) < 0.0f)
+        goto cleanup;
+    if (FUN_001ff488_2cb418(pos, &D_L00_00166DC0_2c8440) > 64.0f)
+        goto cleanup;
+    {
+        struct {
+            V4 direction;
+            s32 moby, flags;
+            u8 active, small;
+            u16 type;
+            f32 scale;
+            s32 one;
+        } hit;
+        hit.flags = 0x10001;
+        hit.scale = 0.25f;
+        hit.one = 1;
+        hit.moby = (s32)m;
+        FUN_001ff2a8_2cb418(&hit.direction, pos, &D_0013F3D0_2cb418);
+        FUN_001ff550_2cb418(&hit.direction, &hit.direction, 1.0f);
+        hit.type = *(u16 *)(m + 0xa6);
+        hit.small = 1;
+        hit.direction.f[3] = 5627.9248046875f;
+        hit.direction.f[2] = 1.0f;
+        hit.active = 1;
+        if (FUN_001fef98_2cb418(vars + 0x24))
+            goto cleanup;
+        if (!FUN_001efc70_2cb418(&old_pos, pos, 0, *(s32 *)(vars + 0x20), &hit))
+            goto update_effects;
+    }
+    if (FUN_001f35d8_2cb418()) {
+        *(u128 *)pos = coll_hit_2c8440.point.q;
+        for (i = 4; i >= 0; i--) {
+            direction.q = 0;
+            direction.f[0] = FUN_L00_00257be8_2cb418(-1.0f, 1.0f);
+            direction.f[1] = FUN_L00_00257be8_2cb418(-1.0f, 1.0f);
+            direction.f[2] = FUN_L00_00257be8_2cb418(-1.0f, 1.0f);
+            scaled.q = direction.q;
+            FUN_001ff660_2cb418(&direction, &offset, &coll_hit_normal_2c8440);
+            FUN_001ff500_2cb418(&scaled, &scaled, FUN_001ff3d8_2cb418(&direction) * 0.5f);
+            FUN_001ff278_2cb418(&direction, &direction, &scaled);
+            FUN_001ff500_2cb418(&direction, &direction,
+                FUN_L00_00257be8_2cb418(D_0015ED6C_2cb418 * 3.0f, D_0015ED6C_2cb418 * 6.0f));
+            lifetime = FUN_L00_00257b90_2cb418(FUN_001fef20_2cb418(10), FUN_001fef20_2cb418(15));
+            FUN_L00_0026dd20_2cb418(pos, &direction, 0x7f2f4f6f, lifetime, 30000.0f);
+        }
+        if (D_0013E52F_2cb418 == 0)
+            goto cleanup;
+        ++*(s32 *)(vars + 0x28);
+        switch (FUN_001f35d8_2cb418()) {
+        case 0: case 1: case 3: case 4: case 7: case 11: case 13:
+            *(s32 *)(vars + 0x28) = 1000;
+        }
+        if (*(s32 *)(vars + 0x28) > D_0013E52F_2cb418 + 5)
+            goto cleanup_enabled;
+        FUN_001ff660_2cb418(&scaled, &offset, &coll_hit_normal_2c8440);
+        *(f32 *)(m + 0x48) = FUN_001ff8b0_2cb418(scaled.f[0], scaled.f[1]);
+        *(f32 *)(m + 0x44) = -FUN_001ff8b0_2cb418(FUN_001ff408_2cb418(&scaled), scaled.f[2]);
+        *(s32 *)(vars + 0x10) = 0;
+        *(s32 *)(vars + 0x14) = 0;
+        FUN_001ff500_2cb418(&direction, &coll_hit_normal_2c8440, 0.05f);
+        FUN_001ff278_2cb418(pos, &coll_hit_2c8440.point, &direction);
+        if (D_001403E0_2cb418 && *(s16 *)(D_001403E0_2cb418 + 0xa6) == 0xa8
+            && D_001403E0_2cb418[0x20] != 0xfe && D_001403E0_2cb418[0x20] != 0xfd)
+            FUN_0028dbe8_2cb418(4, 0);
+    } else {
+        if (FUN_001fef20_2cb418(3) < *(s16 *)(vars + 0x24))
+            *(s16 *)(vars + 0x24) = FUN_001fef20_2cb418(3);
+    }
+update_effects:
+    *(f32 *)(m + 0x44) = FUN_002000e8_2cb418(*(f32 *)(m + 0x44), D_L00_00161894_2cb418);
+    time_elapsed = *(s16 *)(vars + 0x26) - *(s16 *)(vars + 0x24);
+    spread = D_L00_00161880_2cb418;
+    if (time_elapsed < FUN_001fef20_2cb418(13))
+        spread = FUN_00200240_2cb418(time_elapsed) / FUN_00200240_2cb418(FUN_001fef20_2cb418(13)) * D_L00_00161880_2cb418;
+    FUN_001ff2a8_2cb418(&offset, &old_pos, pos);
+    FUN_001ff500_2cb418(&offset, &offset, spread);
+    scaled.q = *(u128 *)pos;
+    effect = *(u8 **)(vars + 0x2c);
+    if (effect)
+        *(u128 *)(effect + 0x10) = scaled.q;
+    handle = (u8 **)(vars + 0x30);
+    for (j = 15; j >= 0; j--) {
+        effect = *handle++;
+        if (effect) {
+            FUN_001ff278_2cb418(effect + 0x10, &scaled, &offset);
+            scaled.q = *(u128 *)(effect + 0x10);
+            jitter = FUN_L00_00257c48_2cb418(0.0f, D_L00_0016187C_2cb418);
+            *(f32 *)(effect + 0x10) += jitter;
+            jitter = FUN_L00_00257c48_2cb418(0.0f, D_L00_0016187C_2cb418);
+            *(f32 *)(effect + 0x14) += jitter;
+            jitter = FUN_L00_00257c48_2cb418(0.0f, D_L00_0016187C_2cb418);
+            *(f32 *)(effect + 0x18) += jitter;
+            FUN_001ff300_2cb418(&offset, &offset, D_L00_00161884_2cb418);
+        }
+    }
+    if (FUN_L00_00257b50_2cb418(5))
+        return;
+    FUN_001ff3c0_2cb418(&direction, &offset, &D_L00_00166FF0_2cb418);
+    FUN_L00_0025fc08_2cb418(&direction, &direction,
+        FUN_L00_00257c48_2cb418(0.0f, 3.1415927f), &offset);
+    length = FUN_001ff3d8_2cb418(&direction);
+    if (length == 0.0f)
+        return;
+    FUN_001ff300_2cb418(&velocity, &direction,
+        FUN_L00_00257be8_2cb418(D_0015ED6C_2cb418 * 0.5f,
+                                  D_0015ED6C_2cb418 + D_0015ED6C_2cb418) / length);
+    lifetime = FUN_L00_00257b90_2cb418(FUN_001fef20_2cb418(10), FUN_001fef20_2cb418(15));
+    FUN_L00_0026dd20_2cb418(pos, &velocity, 0x7f2f4f6f, lifetime, 30000.0f);
+    return;
+cleanup:
+    FUN_L00_002cbcc0(m, 0);
+    FUN_0024eb68_2cb418(m);
+    return;
+cleanup_enabled:
+    FUN_L00_002cbcc0(m, 1);
+    FUN_0024eb68_2cb418(m);
+}
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cbcc0.s", FUN_L00_002cbcc0);
 #else
