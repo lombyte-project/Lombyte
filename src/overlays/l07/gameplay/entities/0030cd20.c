@@ -48,20 +48,21 @@ void FUN_L07_0031a9e8(struct Moby *moby) {
     float time;
     int forceEnd;
     int forceStart;
+    u8 spawnId;
 
     if (moby->unkB0 == 0xff)
         goto checked_spawn;
-    if (D_0014C050[moby->unkB0 + current_level_index * 16] != 0xff)
-        goto checked_spawn;
-    vars->target = -1;
+    if (D_0014C050[moby->unkB0 + current_level_index * 16] == 0xff)
+        vars->target = -1;
 checked_spawn:
+    spawnId = moby->unkB0;
     forceEnd = 0;
     forceStart = 0;
-    if (D_L07_0015FC88[moby->unkB0] == 0xff) {
-        if (vars->forceReturn == 0)
-            forceStart = 1;
-        else
+    if (D_L07_0015FC88[spawnId] == 0xff) {
+        if (vars->forceReturn != 0)
             forceEnd = 1;
+        else
+            forceStart = 1;
     }
 
     switch (moby->state) {
