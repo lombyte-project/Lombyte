@@ -1111,12 +1111,15 @@ void FUN_L15_002ec760(struct Moby *moby) {
     case 2:
         if (D_L15_0015F5C4 != 2) {
             moby->unk58 = 1.0f;
-            if (*(short *)(data + 4) != 0) { moby->state = 9; break; }
-            if (*(int *)(data + 0x150) != -1) {
-                other = D_L15_001600EC + *(int *)(data + 0x150) * 0x80;
-                FUN_L00_00284e50_v(other + 0x30, other + 0x70);
+            if (*(short *)(data + 4) == 0) {
+                if (*(int *)(data + 0x150) != -1) {
+                    other = D_L15_001600EC + *(int *)(data + 0x150) * 0x80;
+                    FUN_L00_00284e50_v(other + 0x30, other + 0x70);
+                }
+                moby->state = 3;
+            } else {
+                moby->state = 9;
             }
-            moby->state = 3;
         }
         break;
     case 3:
