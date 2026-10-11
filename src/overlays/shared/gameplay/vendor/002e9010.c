@@ -4,7 +4,138 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e9010.s", FUN_L00_002e9010);
+extern u8 D_L00_00166E10_2e9010[] __asm__("D_L00_00166E10");
+extern u8 D_L00_00166E30_2e9010[] __asm__("D_L00_00166E30");
+extern u8 D_0013F3D0_2e9010[] __asm__("D_0013F3D0");
+extern s32 D_L00_00161D24_2e9010 __asm__("D_L00_00161D24") __attribute__((sda));
+
+void FUN_001f9a28_2e9010(void *, void *, void *) __asm__("FUN_001f9a28");
+f32 FUN_001f9ab0_2e9010(void *, void *) __asm__("FUN_001f9ab0");
+void FUN_001f9a68_2e9010(void *, void *, f32) __asm__("FUN_001f9a68");
+void FUN_001f9ad8_2e9010(void *, void *, void *) __asm__("FUN_001f9ad8");
+void FUN_001f9bf8_2e9010(void *, void *, f32) __asm__("FUN_001f9bf8");
+f32 FUN_001f9af0_2e9010(void *) __asm__("FUN_001f9af0");
+f32 FUN_001f9df8_2e9010(f32) __asm__("FUN_001f9df8");
+f32 FUN_001f9e90_2e9010(f32, f32) __asm__("FUN_001f9e90");
+f32 FUN_001ebd78_2e9010(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
+f32 FUN_L00_001eb328_2e9010(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_001eb328");
+f32 FUN_001fa5c8_2e9010(f32, f32) __asm__("FUN_001fa5c8");
+f32 FUN_001fa6c0_2e9010(s32) __asm__("FUN_001fa6c0");
+s32 FUN_001f96f8_2e9010(s32) __asm__("FUN_001f96f8");
+s32 FUN_001f9770_2e9010(void *) __asm__("FUN_001f9770");
+void FUN_00214890_2e9010(void *, void *, void *, f32) __asm__("FUN_00214890");
+void FUN_001f9a40_2e9010(void *, void *, void *, f32) __asm__("FUN_001f9a40");
+
+/* Follow-camera orientation update: rebuilds the basis vectors at p from the
+ * target moby, eases pitch/yaw and renormalises. */
+void FUN_L00_002e9010(u8 *p) {
+    u8 *q40;
+    u8 *q;
+    u8 *q2;
+    u8 *q20;
+    u8 *q130;
+    u8 *tb;
+    u8 *base;
+    u8 *p10;
+    u8 *p20;
+    u8 *w;     /* scratch vector pointer: p + 0x10, later v4 */
+    u8 *up;    /* up vector (D_L00_00166E30), set on both paths */
+    f32 r0;
+    f32 g2, g3, e2, h2;
+    f32 g, r, d, e, t, x, h;
+    f32 v0[4];
+    f32 v1[4];
+    f32 v2[4];
+    f32 v3[4];
+    f32 v4[4];
+
+    base = D_L00_00166E10_2e9010;
+    q = *(u8 **)(p + 0x70);
+    q40 = q + 0x40;
+    q20 = q + 0x20;
+    if (q40[0xC4] == 0xB) {
+        FUN_001f9a28_2e9010(p, D_0013F3D0_2e9010, p + 0x30);
+        p10 = p + 0x10;
+        FUN_001f9bf8_2e9010(p, p, 1.0f);
+        p20 = p + 0x20;
+        FUN_001f9770_2e9010(q20);
+        up = D_L00_00166E30_2e9010;
+    } else {
+        up = D_L00_00166E30_2e9010;
+        tb = base + 0x20;
+        g = FUN_001f9ab0_2e9010(q + 0x80, tb);
+        FUN_001f9a68_2e9010(v0, tb, g);
+        FUN_001f9a28_2e9010(v1, q + 0x80, v0);
+        q2 = *(u8 **)(p + 0x70);
+        q130 = q2 + 0x130;
+        g = FUN_001f9ab0_2e9010(p + 0x30, tb);
+        FUN_001f9a68_2e9010(v0, tb, g);
+        FUN_001f9a28_2e9010(v2, p + 0x30, v0);
+        FUN_001f9a28_2e9010(v3, v1, v2);
+        r0 = FUN_001f9af0_2e9010(v3);
+        if (0.05f <= r0) {
+            FUN_001f9a68_2e9010(p, v3, 1.0f / r0);
+        }
+        w = p + 0x10;
+        FUN_001f9ad8_2e9010(w, p, up);
+        FUN_001f9bf8_2e9010(w, w, 1.0f);
+        p10 = w;
+        *(f32 *)(q20 + 0x8) = FUN_001ebd78_2e9010(q + 0x30, *(f32 *)(q20 + 0x8), *(f32 *)(q130 + 0x30),
+                               0.004f, 0.2f, 0.0f);
+        p20 = p + 0x20;
+        g2 = FUN_001ebd78_2e9010(q + 0x2C, *(f32 *)(q20 + 0x4), *(f32 *)(q40 + 0xB0),
+                               0.004f, 0.2f, 0.0f);
+        d = *(f32 *)(q20 + 0x8) - g2;
+        *(f32 *)(q20 + 0x4) = g2;
+        FUN_001f9a68_2e9010(v0, up, -FUN_001f9ab0_2e9010(q2 + 0x140, up));
+        FUN_001f9a28_2e9010(v0, v0, v3);
+        w = (u8 *)v4;
+        FUN_001f9a28_2e9010(w, p + 0x30, v0);
+        FUN_001f9a68_2e9010(v0, up, -d);
+        FUN_001f9a28_2e9010(w, w, v0);
+        FUN_001f9a28_2e9010(v3, w, p + 0x30);
+        r = FUN_001f9af0_2e9010(v3);
+        if (r != 0.0f) {
+            e = 1.5707964f - FUN_001f9df8_2e9010(FUN_001f9ab0_2e9010(p, v3) / r);
+            FUN_001f9ad8_2e9010(p20, p10, p);
+            if (FUN_001f9ab0_2e9010(p20, v3) < 0.0f) {
+                e = -e;
+            }
+            g3 = FUN_001f9ab0_2e9010(q130, up);
+            x = FUN_001f9e90_2e9010(FUN_001f9af0_2e9010(q130), g3) / 0.6981317f;
+            t = 0.0f;
+            if (x < -0.1f) {
+                x = -x;
+                if (0.5f < x) {
+                    x = 1.0f - x;
+                }
+                x = x + x;
+                t = x * 0.2617994f + t;
+            }
+            h = FUN_L00_001eb328_2e9010(q20 + 0x18, *(f32 *)(q20 + 0x14), t, 0.005f, 0.2f, 0.0f);
+            *(f32 *)(q20 + 0x14) = h;
+            e = FUN_001fa5c8_2e9010(e, h);
+            if (1.2217305f < e) {
+                e = 1.2217305f;
+            } else if (e < -1.2217305f) {
+                e = -1.2217305f;
+            }
+            FUN_00214890_2e9010(p, p, p10, e);
+            FUN_001f9bf8_2e9010(p, p, 1.0f);
+        }
+    }
+    if (*(s16 *)q20 != 0) {
+        FUN_001f9770_2e9010(q20);
+        e2 = FUN_001fa6c0_2e9010(*(s16 *)q20);
+        h2 = e2 / FUN_001fa6c0_2e9010(FUN_001f96f8_2e9010(D_L00_00161D24_2e9010));
+        FUN_001f9a40_2e9010(p, p, p + 0x40, h2);
+        FUN_001f9bf8_2e9010(p, p, 1.0f);
+    }
+    FUN_001f9ad8_2e9010(p10, p, up);
+    FUN_001f9bf8_2e9010(p10, p10, 1.0f);
+    FUN_001f9ad8_2e9010(p20, p10, p);
+}
+
 typedef struct {
     char p0[0x80];
     float v80[4];
@@ -196,7 +327,7 @@ extern void FUN_L00_002e8378(int);
 extern void FUN_L00_002e89b0(int, float *, float *);
 extern void FUN_L00_002e8bb8(int, float, float);
 extern void FUN_L00_002e8f40(int);
-extern void FUN_L00_002e9010(int);
+extern void FUN_L00_002e9010_u(int) __asm__("FUN_L00_002e9010");
 extern void FUN_L00_002e9720_u(int) __asm__("FUN_L00_002e9720");
 extern void FUN_L00_002e9aa0(int);
 
@@ -210,7 +341,7 @@ void FUN_L00_002e9bb0(int a) {
     FUN_L00_002e7d20(a);
     FUN_L00_002e9720_u(a);
     FUN_L00_002e8378(a);
-    FUN_L00_002e9010(a);
+    FUN_L00_002e9010_u(a);
 }
 extern s32 D_0015EDE4;
 extern f32 D_L00_0015EF44 __attribute__((sda));
