@@ -2,7 +2,146 @@
 #include "types.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023db30.s", FUN_L00_0023db30);
+#else
+#include "rnc/overlay/quad.h"
+typedef struct {
+    OvlVec4 points[4];
+    u32 colors[4];
+    float texcoords[8];
+    u64 texture[4];
+} __attribute__((aligned(16))) Quad_0023db30;
+extern u64 get_texture_0023db30(int) __asm__("FUN_L00_001f9298");
+extern void getpos_0023db30(void *, int, void *) __asm__("FUN_L00_0024f728");
+extern void rotate_0023db30(float, void *, void *, void *) __asm__("FUN_L00_0025fc08");
+extern void cross_0023db30(void *, void *, void *) __asm__("FUN_L00_001ff3c0");
+extern void scale_0023db30(float, void *, void *) __asm__("FUN_L00_001ff500");
+extern void scale_to_0023db30(float, void *, void *) __asm__("FUN_L00_001ff300");
+extern void add_0023db30(void *, void *, void *) __asm__("FUN_L00_001ff278");
+extern void clear_0023db30(void *) __asm__("FUN_L00_001ff260");
+extern void draw_0023db30(void *, void *, int) __asm__("FUN_L00_001fd228");
+extern char D_L00_0015FC0A;
+
+void FUN_L00_0023db30(void *m) {
+    Quad_0023db30 quad;
+    OvlVec4 pos, rot, normal, scaled, offset, base, copied, other;
+    float quarter = 0.25f;
+    float minus_quarter = -0.25f;
+    int i;
+    OvlVec4 *p;
+
+    quad.texture[1] = get_texture_0023db30(14);
+    quad.texture[2] = 0xff9000000260ULL;
+    quad.texture[0] = 5;
+    quad.texture[3] = 0x8000000048ULL;
+    quad.colors[0] = quad.colors[1] = 0x3ff08080;
+    quad.colors[2] = quad.colors[3] = 0x3ff08030;
+    quad.texcoords[0] = quad.texcoords[1] = 0.0f;
+    quad.texcoords[2] = 1.0f;
+    quad.texcoords[3] = quad.texcoords[4] = 0.0f;
+    quad.texcoords[5] = quad.texcoords[6] = quad.texcoords[7] = 1.0f;
+    getpos_0023db30(m, 0, &pos);
+    rotate_0023db30(-0.34906584f, &pos, &pos, &rot);
+    cross_0023db30(&rot, &pos, &normal);
+    scale_0023db30(1.0f, &rot, &rot);
+    cross_0023db30(&normal, &rot, &pos);
+    scaled.f[3] = 1.0f;
+    scale_to_0023db30(4.0f, &scaled, &pos);
+    offset.f[3] = 1.0f;
+    add_0023db30(&offset, &scaled, &base);
+    copied.q = pos.q;
+    add_0023db30(&other, &copied, &pos);
+    copied.f[3] = 0.25f;
+    other.f[3] = 0.5f;
+
+    clear_0023db30(&quad.points[0]);
+    quad.points[0].f[2] = 0.0f;
+    quad.points[0].f[3] = 1.0f;
+    quad.points[1] = copied;
+    quad.points[1].f[2] += minus_quarter;
+    quad.points[1].f[0] = copied.f[3] * 4.0f;
+    quad.points[1].f[3] = 1.0f;
+    clear_0023db30(&quad.points[2]);
+    quad.points[2].f[2] = 0.0f;
+    quad.points[2].f[3] = 1.0f;
+    quad.points[3].q = copied.q;
+    quad.points[3].f[2] += quarter;
+    quad.points[3].f[0] = copied.f[3] * 4.0f;
+    quad.points[3].f[3] = 1.0f;
+    draw_0023db30(&quad, &pos, 1);
+
+    p = &quad.points[1];
+    for (i = 1; i < 4; i += 2, p += 2) {
+        if (i < 2) {
+            p->f[1] += minus_quarter;
+            p->f[2] += quarter;
+        } else {
+            p->f[1] += quarter;
+            p->f[2] += minus_quarter;
+        }
+    }
+    draw_0023db30(&quad, &pos, 1);
+
+    quad.points[0].q = copied.q;
+    quad.points[0].f[0] = copied.f[3] * 4.0f;
+    quad.points[0].f[2] += minus_quarter;
+    quad.points[0].f[3] = 1.0f;
+    quad.points[1].q = other.q;
+    quad.points[1].f[0] = other.f[3] * 4.0f;
+    quad.points[1].f[2] += minus_quarter;
+    quad.points[1].f[3] = 1.0f;
+    quad.points[2].q = copied.q;
+    quad.points[2].f[0] = quad.points[0].f[0];
+    quad.points[2].f[2] += quarter;
+    quad.points[2].f[3] = 1.0f;
+    quad.points[3].q = other.q;
+    quad.points[3].f[0] = quad.points[1].f[0];
+    quad.points[3].f[2] += quarter;
+    quad.points[3].f[3] = 1.0f;
+    draw_0023db30(&quad, &pos, 1);
+    p = quad.points;
+    for (i = 0; i < 4; i++, p++) {
+        if (i < 2) {
+            p->f[1] += minus_quarter;
+            p->f[2] += quarter;
+        } else {
+            p->f[1] += quarter;
+            p->f[2] += minus_quarter;
+        }
+    }
+    draw_0023db30(&quad, &pos, 1);
+
+    quad.points[0].q = other.q;
+    quad.points[0].f[0] = other.f[3] * 4.0f;
+    quad.points[0].f[2] += minus_quarter;
+    quad.points[0].f[3] = 1.0f;
+    clear_0023db30(&quad.points[1]);
+quad.points[1].f[0] = copied.f[3] * 4.0f * 3.0f;
+    quad.points[1].f[2] += *(float *)(&D_L00_0015FC0A - 0x102);
+    quad.points[1].f[3] = 1.0f;
+    quad.points[2].q = other.q;
+    quad.points[2].f[0] = other.f[3] * 4.0f;
+    quad.points[2].f[2] += quarter;
+    quad.points[2].f[3] = 1.0f;
+    clear_0023db30(&quad.points[3]);
+    quad.points[3].f[0] = copied.f[3] * 4.0f * 3.0f;
+quad.points[3].f[2] = 0.0f;
+    quad.points[3].f[3] = 1.0f;
+    draw_0023db30(&quad, &pos, 1);
+    p = quad.points;
+    for (i = 0; i < 4; i += 2, p += 2) {
+        if (i < 2) {
+            p->f[1] += minus_quarter;
+            p->f[2] += quarter;
+        } else {
+            p->f[1] += quarter;
+            p->f[2] += minus_quarter;
+        }
+    }
+    draw_0023db30(&quad, &pos, 1);
+}
+#endif
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 extern float D_0015ED60_23e008 __asm__("D_0015ED60");
