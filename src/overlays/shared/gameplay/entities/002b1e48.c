@@ -473,9 +473,9 @@ void FUN_L07_0031aee0(u8 *moby)
             moby[0x20] = 2;
         } else {
             *(quadword *)(vectors + 4) = 0;
-            vectors[0] = vectors[4] = *(f32 *)(data + 0xbc);
-            vectors[1] = vectors[5] = *(f32 *)(data + 0xc0);
-            vectors[2] = vectors[6] = *(f32 *)(data + 0xc4);
+            vectors[4] = *(f32 *)(data + 0xbc);
+            vectors[5] = *(f32 *)(data + 0xc0);
+            vectors[6] = *(f32 *)(data + 0xc4);
             *(quadword *)vectors = *(quadword *)(vectors + 4);
             position = moby + 0x10;
             distance = vector_length_xyz_31aee0(vectors);
