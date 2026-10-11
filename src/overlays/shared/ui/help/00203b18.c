@@ -954,8 +954,8 @@ void FUN_L00_00206e00(void) {
     s32 *history_count;
     if (D_0015EEA0 == 0 && D_0015EE20 == 0)
         return;
-    hero_base = (u8 *)&hero + 0xCB0;
-    g = (struct Hero *)(hero_base - 0xCB0);
+    g = &hero;
+    hero_base = (u8 *)g + 0xCB0;
     level = FUN_001f96f8(15);
     input = 0;
     if (g->state_timer == level) {
