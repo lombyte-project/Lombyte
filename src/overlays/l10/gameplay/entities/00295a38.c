@@ -1375,9 +1375,11 @@ void FUN_L10_002dcc58(struct Moby *moby) {
         phase = *(float *)(data + 0x12de0) + D_L10_00161D5C * frame_time;
         *(float *)(data + 0x12de0) = phase;
         if (phase > 1.0f) *(float *)(data + 0x12de0) = phase - 1.0f;
+        {
+        char *group_table = data + 0x12c00;
         for (group = 0; group < 4; group++) {
             for (item = 0; item < 10; item++) {
-                char *entry = data + 0x12c00 + group * 0x78 + item * 4;
+                char *entry = group_table + item * 4;
                 char *base = data + group * 0x2580 + item * 0x10;
                 char *other = base + 0x9600;
                 char *buffer = (char *)scratch + item * 0x10;
@@ -1404,6 +1406,8 @@ void FUN_L10_002dcc58(struct Moby *moby) {
                     *(int *)entry = D_L10_00161D64;
                 }
             }
+            group_table += 0x78;
+        }
         }
         break;
     }
