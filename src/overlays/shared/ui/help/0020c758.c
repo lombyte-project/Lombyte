@@ -1008,36 +1008,36 @@ void FUN_L00_0020e728(void) {
     i = 0;
     slot = hero.unkD08;
     do {
-        u8 *o = *slot;
-        if (o != 0) {
+        if (*slot != 0) {
             int id = FUN_L00_0020d498_c(0);
             if (id == hero.unk2298) {
                 s32 anim;
+                ID_20e4c8 *definition = &D_L00_00179AC0_c[id];
                 if (hero.state.control_mode == 12)
-                    anim = D_L00_00179AC0_c[id].f2C;
+                    anim = definition->f2C;
                 else
-                    anim = D_L00_00179AC0_c[id].f28;
-                if (anim != -1 && o[0x23] != anim) {
+                    anim = definition->f28;
+                if (anim != -1 && (*slot)[0x23] != anim) {
                     hero.unk2294 = anim;
-                    FUN_L00_0024f3e0((u8 *)hero.moby, o, hero.unk2294, 0,
+                    FUN_L00_0024f3e0((u8 *)hero.moby, *slot, hero.unk2294, 0,
                                       FUN_001f96f8_e728(8), 1);
                 }
             }
-            FUN_L00_0024f190((u8 *)hero.moby, o);
+            FUN_L00_0024f190((u8 *)hero.moby, *slot);
             if (hero.unkD14 == 0) {
-                FUN_00213ed8_e728((f32 *)(o + 8), 1.0f, D_0015ED60_e728 * 0.2f);
-                if ((o[5] & 2) && hero.unk20AA == 0) {
+                FUN_00213ed8_e728((f32 *)(*slot + 8), 1.0f, D_0015ED60_e728 * 0.2f);
+                if (((*slot)[5] & 2) && hero.unk20AA == 0) {
                     hero.unkD14 = 1;
-                    *(s32 *)(o + 0x28) = 0;
+                    *(s32 *)(*slot + 0x28) = 0;
                     hero.unk20A8 = 0;
                     return;
                 }
             } else {
                 if (hero.unkD14 == 2)
-                    FUN_00213ed8_e728((f32 *)(o + 8), 0.0f, frame_scale * 0.25f);
+                    FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, frame_scale * 0.25f);
                 else
-                    FUN_00213ed8_e728((f32 *)(o + 8), 0.0f, frame_scale * 0.07f);
-                if (*(f32 *)(o + 8) == 0.0f) {
+                    FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, frame_scale * 0.07f);
+                if (*(f32 *)(*slot + 8) == 0.0f) {
                     FUN_L00_0024f0e8((u8 *)hero.moby, slot);
                     return;
                 }
