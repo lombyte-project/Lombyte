@@ -832,9 +832,6 @@ void FUN_L13_0030a488(int arg) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030a6d8.s", FUN_L13_0030a6d8);
-#else
 typedef struct {
     u8 pad0[0x20];
     u8 path[0x40];
@@ -886,7 +883,7 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
     float c[4];
 
     scale_vector_xyz(delta, &moby->pos, -1.0f);
-    __builtin_memcpy(rot, &moby->rot, 16);
+    qcopy(rot, &moby->rot);
     moby->rot.y = fast_add_rotations((1.0f - (moby->pos.z - vars->bottom) / (vars->top - vars->bottom)) * 3.1415927f, vars->angle * DEG_TO_RAD);
     switch (moby->state) {
     case 0:
@@ -900,12 +897,14 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
         advance_accelerated_scalar(&vars->blend, &vars->blend_speed, 1.0f, D_0015ED70 * 4.0f, D_0015ED70 * 4.0f, D_0015ED6C * 4.0f);
         if (vars->blend < 1.0f) {
             float t = (1.0f - vars->blend) / (1.0f - old);
+            char *base;
             FUN_L13_0030ad38(moby, b, c);
             subtract_vector_xyz(a, D_L13_001670C0, b);
+            base = D_L13_001670C0 - 0x140;
             scale_vector_xyz(a, a, t);
             add_vector_xyz(b, b, a);
-            c[1] = fast_add_rotations(fast_subtract_rotations(*(float *)(D_L13_001670C0 + 0x14), c[1]) * t, c[1]);
-            c[2] = fast_add_rotations(fast_subtract_rotations(*(float *)(D_L13_001670C0 + 0x18), c[2]) * t, c[2]);
+            c[1] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x154), c[1]) * t, c[1]);
+            c[2] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x158), c[2]) * t, c[2]);
             FUN_L00_002ea9d8(b);
             FUN_L00_002eaa30(c);
         } else {
@@ -932,12 +931,30 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
         advance_accelerated_scalar(&moby->pos.z, &vars->speed, target, D_0015ED70 * 8.0f, D_0015ED70 * 8.0f, D_0015ED6C * 40.0f);
         if (absolute_float(moby->pos.z - target) == 0.0f) {
             vars->timer = scale_game_frames(0x46);
-            moby->state = moby->state == 2 ? 6 : 7;
+            if (moby->state == 2)
+                moby->state = 6;
+            else
+                moby->state = 7;
             if (moby->unkBC != 0)
                 FUN_L00_002eac18(2);
         }
         break;
     }
+    case 6:
+    case 7:
+        if (vars->timer != 0 && tick_timer(&vars->timer))
+            hero_set_state(0, 0);
+        if (FUN_L00_0028d8c0(moby, vars->voice)) {
+            release_voice_slot(vars->voice);
+            vars->voice = -1;
+        }
+        if (hero.ground_moby != moby) {
+            if (moby->state == 7)
+                moby->state = 5;
+            else
+                moby->state = 4;
+        }
+        break;
     case 4:
     case 5: {
         int i;
@@ -945,11 +962,14 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
         i = float_to_int((fast_sin(vars->pulse) * 4.0f - 3.0f) * 128.0f);
         if (i > 0x80) i = 0x80;
         else if (i < 0x20) i = 0x20;
-        moby->unk90 = (i << 16) | (i << 8) | 0x80000000 | i;
+        moby->unk90 = ((i << 16) | 0x80000000) | (i << 8) | i;
         if (hero.ground_moby == moby && hero.air_frames.s == 0 &&
             vector_distance(&hero.motion.pos, &moby->pos) < 0.5f) {
             moby->unk90 = 0x80208020;
-            moby->unkBC = moby->state == 5 ? 2 : 3;
+            if (moby->state == 5)
+                moby->unkBC = 2;
+            else
+                moby->unkBC = 3;
             moby->state = 1;
             hero_set_state(0x72, 1);
             FUN_L00_002eaaa0(D_L13_001670C0, D_L13_001670C0 + 0x10, 1, 0, 0);
@@ -973,22 +993,10 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
         }
         break;
     }
-    case 6:
-    case 7:
-        if (vars->timer != 0 && tick_timer(&vars->timer))
-            hero_set_state(0, 0);
-        if (FUN_L00_0028d8c0(moby, vars->voice)) {
-            release_voice_slot(vars->voice);
-            vars->voice = -1;
-        }
-        if (hero.ground_moby != moby)
-            moby->state = moby->state == 7 ? 5 : 4;
-        break;
     }
     add_vector_xyz(delta, delta, &moby->pos);
     FUN_L00_00260738(vars->path, delta, rot, &moby->rot);
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C1F0), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
