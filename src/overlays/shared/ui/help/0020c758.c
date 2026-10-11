@@ -1300,12 +1300,12 @@ float FUN_L00_0020f0b8(float *a, float *b) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020f160.s", FUN_L00_0020f160);
 #else
-extern s32 D_00141508 __attribute__((section(".data")));
+extern volatile s32 D_00141508 __attribute__((section(".data")));
 extern s32 D_0014150C __attribute__((section(".data")));
 extern s32 D_00141510 __attribute__((section(".data")));
 extern s32 D_001413D4 __attribute__((section(".data")));
 extern s32 D_001413DC __attribute__((section(".data")));
-extern s32 D_00141514 __attribute__((sda));
+extern volatile s32 D_0013F694 __attribute__((sda));
 extern u8 D_00140640[] __asm__("D_00140640") __attribute__((section(".data")));
 extern void copy_matrix(void *, void *) __asm__("FUN_001fa2b8");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
@@ -1318,12 +1318,17 @@ void FUN_L00_0020f160(void *moby, void *matrix)
 {
     u8 sum[0x40] __attribute__((aligned(16)));
     f32 scores[16];
-    s32 i, j, n, count, chosen, ring, limit;
+    s32 i, j, n, chosen, ring, limit;
+    volatile s32 count;
     f32 maximum;
+    s64 negative_one = -1;
     u8 *record;
+    f32 * volatile score_ptr;
+    void * volatile output;
 
     record = D_00140640 + D_00141508 * 0x30;
     copy_matrix(record, matrix);
+    record = D_00140640 + D_00141508 * 0x30;
     normalize_vector_triplet(record);
     ring = D_00141508 + 1;
     D_00141508 = ring % 16;
@@ -1339,10 +1344,10 @@ void FUN_L00_0020f160(void *moby, void *matrix)
         limit = 5;
     else
         limit = 11;
-    D_00141514 = limit;
-    if (D_00141510 < limit)
+    D_0013F694 = limit;
+    if (D_00141510 < D_0013F694)
         D_00141510++;
-    else if (D_00141510 > limit)
+    else if (D_00141510 > D_0013F694)
         D_00141510--;
     n = D_00141510;
     if (n < 2)
@@ -1350,14 +1355,16 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     if (D_0014150C < n)
         return;
 
+    output = (u8 *)moby + 0x40;
+    score_ptr = scores;
     for (i = 0; i < n; i++) {
         s32 a = D_00141508 - (i - 15);
         a -= ((a < 0 ? a + 15 : a) >> 4) * 16;
         for (j = 0; j < n; j++) {
             if (i != j) {
                 s32 b = D_00141508 - (j - 15);
-                b -= ((b < 0 ? b + 15 : b) >> 4) * 16;
-                scores[i] += FUN_L00_0020f0b8((f32 *)(D_00140640 + a * 0x30),
+                b -= ((negative_one < b ? b : b + 15) >> 4) * 16;
+                score_ptr[i] += FUN_L00_0020f0b8((f32 *)(D_00140640 + a * 0x30),
                                                   (f32 *)(D_00140640 + b * 0x30));
             }
         }
@@ -1372,7 +1379,7 @@ void FUN_L00_0020f160(void *moby, void *matrix)
             count++;
     chosen = 0;
     for (i = 0; i < n; i++) {
-        if (scores[i] <= maximum * 0.2f || count < 1 || count > 2) {
+        if (!(maximum * 0.2f < scores[i]) || count < 1 || count > 2) {
             s32 a = D_00141508 - (i - 15);
             a -= ((a < 0 ? a + 15 : a) >> 4) * 16;
             record = D_00140640 + a * 0x30;
@@ -1383,7 +1390,7 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     }
     for (i = 0; i < 3; i++)
         FUN_001ff300_f160(sum + i * 16, sum + i * 16, 1.0f / (f32)chosen);
-    FUN_0025d330_f160(sum, (u8 *)moby + 0x40);
+    FUN_0025d330_f160(sum, output);
 }
 #endif
 #ifndef NON_MATCHING
