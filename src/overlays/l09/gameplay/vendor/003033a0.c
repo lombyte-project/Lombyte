@@ -496,7 +496,7 @@ extern void effect_00304360(f32, f32, f32, f32, f32, f32, f32,
                              void *, void *, int, int, int, int, int, int, int, int, int) __asm__("FUN_L00_0025e450");
 
 void FUN_L09_00304360(unsigned char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    unsigned char *data = *(unsigned char **)(moby + 0x78);
     unsigned char *link;
     unsigned char *link2;
     float work[4], work2[4], work3[4];
@@ -505,17 +505,11 @@ void FUN_L09_00304360(unsigned char *moby) {
     int tick;
     short oclass;
 
-    if (moby[0x20] == 1) goto state1;
-    if (moby[0x20] < 2) {
-        if (moby[0x20] == 0) goto state0;
-        return;
-    }
-    if (moby[0x20] == 2) goto state2;
-    if (moby[0x20] == 3) goto state3;
-    return;
-state0:
+    switch ((int)moby[0x20]) {
+case 0:
     {
-        if ((signed char)data[0x69] != -1 && ((unsigned char *)D_0013D388)[(signed char)data[0x69] + 0x39] != 0) {
+        unsigned char *link;
+        if ((signed char)data[0x69] != -1 && ((unsigned char *)D_0013D388 + (signed char)data[0x69])[0x39] != 0) {
             mark_moby_for_removal(moby);
             return;
         }
@@ -540,12 +534,14 @@ state0:
         moby[0x20] = 1;
         return;
     }
-state1:
+case 1:
     {
+        float rotation_scale;
+        float height;
         if (moby[0x31] == 0 || FUN_001f9b48(moby + 0x10, D_L09_00166F40) > 32.0f) {
             int a = *(short *)(moby + 0xb2);
             int b = D_L09_0015F5CC;
-            if ((short)(a % 8) != b % 8) return;
+            if (b % 8 != (short)(a % 8)) return;
         }
         link = 0;
         link2 = 0;
@@ -564,11 +560,15 @@ state1:
                 data[0x68] = 0;
             }
         }
-        if ((signed char)data[0x68] == 0) {
+        if (*(unsigned char *)(data + 0x68) == 0) {
             if (link == 0) {
                 data[0x68] = 1;
             } else if (link2 != 0 && *(short *)(link2 + 0xa6) == 0x49d) {
-                if (*(unsigned char *)(*(char **)(link2 + 0x78) + 0x68) == 0) {
+                if (*(unsigned char *)(*(char **)(link2 + 0x78) + 0x68) != 0) {
+                    angle = FUN_001f9b80(moby + 0x10, link + 0x10);
+                    height = F(link, 0x18);
+                    rotation_scale = 0.1f;
+                } else {
                     subtract_vector_xyz(work, link + 0x10, moby + 0x10);
                     scale_vector_00304360((FUN_001f9af0(work) - 1.3f) * 0.7f, work, work);
                     if (*(short *)(link2 + 0xa6) == 0x49d && link2[0x20] != 0xfe && link2[0x20] != 0xfd) {
@@ -576,16 +576,18 @@ state1:
                         scale_vector_00304360((FUN_001f9af0(work2) - 1.3f) * 0.7f, work2, work2);
                         add_vector_xyz(work3, work, work2);
                     } else {
-                        *(OvlQuad *)work3 = *(OvlQuad *)work;
+                        qcopy(work3, work);
                     }
-                    work3[2] -= frame_time_sq * 9.8f;
+                    work3[2] = work3[2] - frame_time_sq * 9.8f;
+                    rotation_scale = 0.1f;
                     add_vector_xyz(moby + 0x10, moby + 0x10, work3);
+                    angle = FUN_001f9b80(moby + 0x10, link + 0x10);
+                    height = F(link, 0x18);
                 }
-                angle = FUN_001f9b80(moby + 0x10, link + 0x10);
-                angle = atan2_f(angle, F(link, 0x18) - F(moby, 0x18));
-                F(moby, 0x44) = fast_add_rotations(F(moby, 0x44), fast_subtract_rotations(-angle, F(moby, 0x44)) * 0.1f);
+                angle = atan2_f(angle, height - F(moby, 0x18));
+                F(moby, 0x44) = fast_add_rotations(F(moby, 0x44), fast_subtract_rotations(-angle, F(moby, 0x44)) * rotation_scale);
                 angle = atan2_f(F(link, 0x10) - F(moby, 0x10), F(link, 0x14) - F(moby, 0x14));
-                F(moby, 0x48) = fast_add_rotations(F(moby, 0x48), fast_subtract_rotations(angle, F(moby, 0x48)) * 0.1f);
+                F(moby, 0x48) = fast_add_rotations(F(moby, 0x48), fast_subtract_rotations(angle, F(moby, 0x48)) * rotation_scale);
             } else {
                 data[0x68] = 1;
             }
@@ -595,16 +597,17 @@ state1:
         if (moby[0xbc] != 1) return;
         index = *(int *)(data + 0x6c);
         if (index != -1) {
-            link2 = (unsigned char *)((char *)moby_list + (index << 8));
+            unsigned char *link2 = (unsigned char *)((char *)moby_list + (index << 8));
             if (link2[0x20] == 1) link2[0xbc] = 1;
         }
         *(short *)(data + 0x6a) = FUN_001f96f8(10);
-        moby[0x20] = 2;
         moby[0x30] = 0xff;
+        moby[0x20] = 2;
         return;
     }
-state2:
+case 2:
     {
+        unsigned char *link;
         link = 0;
         moby[0x30] = 0xff;
         index = *(int *)(data + 0x60);
@@ -615,7 +618,7 @@ state2:
         if (link != 0) {
             subtract_vector_xyz(work, link + 0x10, moby + 0x10);
             scale_vector_00304360(FUN_001f9af0(work) - 1.3f, work, work);
-            *(OvlQuad *)work2 = *(OvlQuad *)work;
+            qcopy(work2, work);
             tick = FUN_001f96f8(10);
             work2[2] -= (frame_time_sq * 9.8f + frame_time_sq * 9.8f) *
                         convert_integer_to_float(tick - (*(short *)(data + 0x6a) - 3));
@@ -629,35 +632,38 @@ state2:
         if (FUN_001f9770(data + 0x6a) == 0) return;
         index = *(int *)(data + 0x60);
         if (index != -1) {
+            unsigned char *link;
             link = (unsigned char *)((char *)moby_list + (index << 8));
             if (link != 0 && link[0x20] != 0xfe && link[0x20] != 0xfd) {
                 oclass = *(short *)(link + 0xa6);
                 if (oclass == 0x494 || oclass == 0x49d || oclass == 0x4a0) {
-                    link[0xbc] = 1;
                     link[0x30] = 0xff;
+                    link[0xbc] = 1;
                 }
             }
         }
         index = *(int *)(data + 0x64);
         if (index != -1) {
+            unsigned char *link2;
             link2 = (unsigned char *)((char *)moby_list + (index << 8));
             if (link2 != 0 && link2[0x20] != 0xfe && link2[0x20] != 0xfd) {
                 oclass = *(short *)(link2 + 0xa6);
                 if (oclass == 0x494 || oclass == 0x49d || oclass == 0x4a0) {
-                    link2[0xbc] = 1;
                     link2[0x30] = 0xff;
+                    link2[0xbc] = 1;
                 }
             }
         }
         moby[0x20] = 3;
         return;
     }
-state3:
+case 3:
     {
         subtract_vector_xyz(work, D_L09_00166F40, moby + 0x10);
         effect_00304360(0.0f, 0.0f, 2.0f, 1.0f, 10.0f, 1.0f, 10.0f,
                           moby, work, 0, 10, 5, 8, 0, 0, 1, -1, 0);
         mark_moby_for_removal(moby);
+    }
     }
 }
 #endif
