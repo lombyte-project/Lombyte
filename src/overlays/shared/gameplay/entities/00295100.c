@@ -1086,9 +1086,7 @@ void FUN_L00_0029a330(void) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029a400.s", FUN_L00_0029a400);
-#else
+#include "sda.h"
 typedef struct {
     s32 item;
     s32 selected;
@@ -1099,68 +1097,68 @@ typedef struct {
 typedef struct {
     u8 pad[0xD0];
     VendorListEntry_29a400 entries[16];
-    u8 padAfterEntries[0x210 - 0xD0 - 16 * 0x14];
     s32 count;
 } VendorList_29a400;
-extern u8 D_0015EDD0[];
-extern u8 D_0013D4C0[];
-extern VendorList_29a400 vendor_list_29a400 __asm__("D_L00_001CA4C0");
-extern u8 vendor_sound_29a400[] __asm__("D_L00_001C2108");
-
-void FUN_L00_0029a400(s32 param_1) {
-    s32 listLength = 0;
-    s32 i;
-    s32 j;
+typedef struct {
     s32 sound;
-    u8 value;
-    s32 item;
+    s32 pad[4];
+} VendorSound_29a400;
+extern VendorList_29a400 vendor_list_29a400 __asm__("D_L00_001CA4C0") NOT_SDA;
+extern VendorSound_29a400 vendor_sound_29a400[] __asm__("D_L00_001C2108") NOT_SDA;
+/* Stocked item ids (low 6 bits; bit 0x40 = listed as selected), 0xFF-terminated. */
+extern u8 vendor_stock_29a400[] __asm__("D_0015EDD0") MACRO_ADDR;
+extern u8 D_0013D4C0[];
 
-    if (D_0015EDD0[0] != 0xFF) {
-        listLength = 1;
-        while (listLength < 12 && D_0015EDD0[listLength] != 0xFF)
-            listLength++;
+/* Builds the vendor list: the stocked items (up to 12, 0xFF-terminated), then
+   every other available item (D_0013D4C0 set, h8 non-zero) not already listed. */
+void FUN_L00_0029a400(s32 skip_unflagged) {
+    s32 count, i, j, value, item, k;
+
+    count = 0;
+    if (vendor_stock_29a400[0] != 0xFF) {
+        do count++; while (count < 12 && vendor_stock_29a400[count] != 0xFF);
     }
     vendor_list_29a400.count = 0;
-    for (i = 0; i < listLength; i++) {
-        value = D_0015EDD0[i];
+    for (i = 0; i < count; i++) {
+        value = vendor_stock_29a400[i];
+        if (value == 0xFF) continue;
         item = value & 0x3F;
-        if (value == 0xFF)
-            continue;
         if (value & 0x40) {
-            if (*(u16 *)((u8 *)&D_L00_001C40B0[0].h8 + item * sizeof(D_L00_001C40B0[0])) == 0)
-                continue;
-            sound = *(s32 *)(vendor_sound_29a400 + item * 0x14);
+            s32 sound;
+            if (D_L00_001C40B0[item].h8 == 0) continue;
+            sound = vendor_sound_29a400[item].sound;
             vendor_list_29a400.entries[vendor_list_29a400.count].item = item;
             vendor_list_29a400.entries[vendor_list_29a400.count].selected = 1;
+            vendor_list_29a400.entries[vendor_list_29a400.count].state = 0;
+            vendor_list_29a400.entries[vendor_list_29a400.count].sound = sound;
+            vendor_list_29a400.count++;
         } else {
-            if (param_1 != 0)
-                continue;
-            sound = *(s32 *)(vendor_sound_29a400 + item * 0x14);
+            s32 sound;
+            if (skip_unflagged) continue;
+            sound = vendor_sound_29a400[item].sound;
             vendor_list_29a400.entries[vendor_list_29a400.count].item = item;
             vendor_list_29a400.entries[vendor_list_29a400.count].selected = 0;
+            vendor_list_29a400.entries[vendor_list_29a400.count].state = 0;
+            vendor_list_29a400.entries[vendor_list_29a400.count].sound = sound;
+            vendor_list_29a400.count++;
         }
-        vendor_list_29a400.entries[vendor_list_29a400.count].state = 0;
-        vendor_list_29a400.entries[vendor_list_29a400.count].sound = sound;
-        vendor_list_29a400.count++;
     }
-    for (i = 0; i < 37; i++) {
-        if (D_0013D4C0[i] == 0 || *(u16 *)((u8 *)&D_L00_001C40B0[0].h8 + i * sizeof(D_L00_001C40B0[0])) == 0)
-            continue;
+    for (k = 0; k < 37; k++) {
+        s32 sound;
+        if (!D_0013D4C0[k]) continue;
+        if (!D_L00_001C40B0[k].h8) continue;
         for (j = 0; j < vendor_list_29a400.count; j++) {
-            if (vendor_list_29a400.entries[j].item == i)
-                break;
+            if (vendor_list_29a400.entries[j].item == k) break;
         }
-        if (j < vendor_list_29a400.count)
-            continue;
-        sound = *(s32 *)(vendor_sound_29a400 + i * 0x14);
-        vendor_list_29a400.entries[vendor_list_29a400.count].item = i;
+        if (j < vendor_list_29a400.count) continue;
+        sound = vendor_sound_29a400[k].sound;
+        vendor_list_29a400.entries[vendor_list_29a400.count].item = k;
         vendor_list_29a400.entries[vendor_list_29a400.count].selected = 1;
         vendor_list_29a400.entries[vendor_list_29a400.count].state = 0;
         vendor_list_29a400.entries[vendor_list_29a400.count].sound = sound;
         vendor_list_29a400.count++;
     }
 }
-#endif
 #include "qzero.h"
 typedef struct {
     s32 item;
