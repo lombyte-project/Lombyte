@@ -1614,8 +1614,8 @@ void FUN_L00_0029ad08(void) {
     f1f9cf8_29ad08(vec, &D_L00_001610F0, moby + 0xC0);
     moby = *(char * volatile *)(g + 0x1C);
     f1f9a10_29ad08(vec, vec, moby + 0x10);
-    vec[2] += 2.0f;
-    vec[2] = f213508_29ad08(0.5f, vec, 0);
+    *(f32 *)(g + 0xC8) += 2.0f;
+    *(f32 *)(g + 0xC8) = f213508_29ad08(0.5f, vec, 0);
     f1f99f8_29ad08(g + 0xB0);
     moby = *(char * volatile *)(g + 0x1C);
     *(f32 *)(g + 0xB8) = f1fa580_29ad08(*(f32 *)(moby + 0x48), 3.1415927f);
@@ -1626,11 +1626,11 @@ void FUN_L00_0029ad08(void) {
     FUN_002335a0();
     selected = (volatile s32 *)(g + 0x48);
     index = *selected;
+    item = D_L00_001CA020[index];
     offset = D_L00_001611CC - 0x40000;
     D_L00_001611CC = offset;
     D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + offset;
     D_L00_0016C860_298840.x58 = D_L00_00173E00_298840.x4 + offset;
-    item = D_L00_001CA020[index];
     D_L00_0015F3FC = 0;
     D_L00_0015F400_29ad08 = 0;
     if (D_00140408 != 0 && index != D_00140408)
