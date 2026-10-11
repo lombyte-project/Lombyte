@@ -210,9 +210,9 @@ int FUN_L00_0025ff38(float best, char *a, char *o, int *excluded,
     } else {
         *(char **)(o + 0x40) = 0;
         qzero(o);
-        qzero(o + 0x10);
         qzero(o + 0x30);
         qzero(o + 0x20);
+        qzero(o + 0x10);
     }
     *(int *)(o + 0x44) = res;
     return res;
