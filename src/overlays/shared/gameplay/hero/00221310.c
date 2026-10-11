@@ -3653,7 +3653,7 @@ typedef struct {
 
 extern SpeedStepThreshold_228c18 D_L00_0017BDB8_228c18[] __asm__("D_L00_0017BDB8");
 extern u8 *D_001413D0_228c18 __asm__("D_001413D0");
-extern u8 D_L00_0015F638_228c18[] __asm__("D_L00_0015F638");
+extern s32 D_L00_0015F6C8_228c18 __asm__("D_L00_0015F6C8") __attribute__((sda));
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
@@ -3697,15 +3697,19 @@ void FUN_L00_00228c18(void) {
                     hero.state.step = 1;
                 next_step = hero.state.step + 3;
                 if (previous_step != hero.state.step) {
-                    u8 *moby = D_001413D0_228c18;
+                    struct Moby *moby = hero.moby;
                     u8 old_length;
                     u8 new_length;
                     int offset;
                     int frame;
-                    old_length = *(u8 *)(*(u32 *)(*(u32 *)(moby + 0x24) + 0x48 + (previous_step + 3) * 4) + 0x10);
-                    new_length = *(u8 *)(*(u32 *)(*(u32 *)(moby + 0x24) + 0x48 + next_step * 4) + 0x10);
-                    offset = ((s32 *)(D_L00_0015F638_228c18 + 0x90))[previous_step * 2 + hero.state.step];
-                    frame = ((moby[0x51] * new_length) / old_length + offset) % new_length;
+                    new_length = *((u8 *)moby->pclass->seqs[next_step] + 0x10);
+                    old_length = *((u8 *)moby->pclass->seqs[previous_step + 3] + 0x10);
+                    {
+                        int step = hero.state.step;
+                        int old_offset = previous_step * 8;
+                        offset = *(s32 *)((u8 *)&D_L00_0015F6C8_228c18 + old_offset + step * 4);
+                    }
+                    frame = ((moby->prev_frame * new_length) / old_length + offset) % new_length;
                     set_hero_animation(next_step, frame, (float)scale_game_frames(8));
                 }
             }
