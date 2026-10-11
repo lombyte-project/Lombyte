@@ -120,6 +120,8 @@ void FUN_L00_00276368(void) {
     }
     FUN_L00_001ff300(D_L00_00180250, (u8 *)0x00160280, 1.0f);
     qcopy((void *)D_L00_00180240, (u8 *)0x00160290);
+    *(volatile u128_init *)D_L00_00180260 = 0;
+    *(volatile u128_init *)(D_L00_00180260 + 4) = 0;
     qcopy((void *)D_L00_001B9D30, (void *)D_L00_00166DC0_init);
     qcopy((void *)(D_L00_001B9D30 + 4), (void *)(D_L00_00166DC0_init + 4));
     D_L00_001B9DD8 = *(s32 *)D_L00_0016CAF0_raw;
@@ -128,8 +130,6 @@ void FUN_L00_00276368(void) {
     D_L00_0016CC68 = 255.0f;
     D_L00_0016CC58 = 0;
     D_L00_0016CC6C = 0;
-    *(volatile u128_init *)D_L00_00180260 = 0;
-    *(volatile u128_init *)(D_L00_00180260 + 4) = 0;
     FUN_L00_001f7980();
     FUN_L00_00276128();
     FUN_L00_001f6e48();
