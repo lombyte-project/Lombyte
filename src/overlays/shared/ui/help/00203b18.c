@@ -1612,12 +1612,13 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
     s32 second_count;
     s32 third_count;
     s32 i;
+    s32 third_index;
     u64 value;
 
     if (context == 0)
         context = D_001413D0_002092c8;
+    out = (u64 *)((u8 *)header + 0x18);
     FUN_00254b58_002092c8(context);
-    out = (u64 *)(header + 12);
     *(u64 *)(header + 8) = 0x7fff000000000000ULL;
     first_count = 1;
     if (indices[1] >= 0) {
@@ -1654,21 +1655,21 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
         } while (*index >= 0);
     }
     third_count = 0;
-    i = 1;
+    third_index = 1;
     if (indices[1] >= 0) {
         index = indices + 1;
         do {
             value = FUN_001ff768_002092c8(0x70000020 + (*index << 6), 1.0f);
             if ((value & 0xffffffffffffULL) !=
-                (FUN_001ff768_002092c8(*(s32 *)(reference + 0x18) + (i << 4), 1.0f) &
+                (FUN_001ff768_002092c8(*(s32 *)(reference + 0x18) + (third_index << 4), 1.0f) &
                  0xffffffffffffULL)) {
                 *out = value & 0xffffffffffffULL;
                 third_count++;
-                *(u16 *)((u8 *)out + 6) = i;
+                *(u16 *)((u8 *)out + 6) = third_index;
                 out++;
             }
             index++;
-            i++;
+            third_index++;
         } while (*index >= 0);
     }
     if ((u32)out & 0xf)
