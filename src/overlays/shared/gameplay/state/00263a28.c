@@ -25,10 +25,12 @@ int FUN_L01_00263a28(char *state, int index, unsigned int *type, float *result,
     u128 second;
     float separation;
 
-    if (*(char **)(state + 0x94) == 0) {
+    entry = *(char **)(state + 0x94);
+    if (entry == 0) {
         return 0;
     }
-    entry = *(char **)(state + 0x94) + index * 0x20 + 0x10;
+    entry += index * 0x20;
+    entry += 0x10;
     *type = *(unsigned char *)entry;
     scale = *(float *)(state + 0x2c) * 0.0009765625f;
     FUN_001fa050(matrix, state + 0x40);
