@@ -1622,9 +1622,6 @@ void FUN_L06_002f7000(struct Moby *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7d78.s", FUN_L06_002f7d78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f91e8.s", FUN_L06_002f91e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f9a28.s", FUN_L06_002f9a28);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fa9c0.s", FUN_L06_002fa9c0);
-#else
 extern int FUN_001fa6d0(float);
 extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_00213928(void *, void *, void *, int, int *, float *, int, int);
@@ -1636,7 +1633,7 @@ extern void FUN_00212f90(void *, int, int, int);
 extern void FUN_L00_0025d458(void *, void *);
 extern void FUN_L00_0025d538(void *, void *);
 extern float FUN_001fa6c0(int);
-extern float FUN_001f96b0(float);
+extern float scale_recovery_time(float) __asm__("FUN_L06_00216fa8");
 extern float FUN_001f9e90(float, float);
 extern void FUN_001fa030(void *, void *);
 extern float fast_add_rotations(float, float);
@@ -1644,12 +1641,13 @@ extern float fast_sin(float);
 extern int FUN_001fa6e0(int, int, float);
 extern int FUN_L00_0025ff38(void *, void *, int, int, void *, int, float);
 extern void FUN_L00_00216f90(void *, void *, int, int);
-extern void FUN_L06_002fb148(char *);
-extern short D_L06_0014162A;
-extern int D_L06_00140408;
-extern int D_0013CAE0;
+extern void FUN_L06_002fb148_recovery_high(char *) __asm__("FUN_L06_002fb508");
+extern void FUN_L06_002fb148_recovery_low(char *) __asm__("FUN_L06_002fb8c8");
+extern short D_L06_0014162A __attribute__((section(".data")));
+extern int D_L06_00140408 __attribute__((section(".data")));
+extern int D_0013CAE0 __attribute__((section(".data")));
 extern float D_L06_0015F3FC;
-extern int D_L06_001413D0;
+extern int D_L06_001413D0 __attribute__((section(".data")));
 extern float D_L06_00161F0C __attribute__((sda));
 extern int D_L06_00161F10 __attribute__((sda));
 extern int D_L06_00161F14 __attribute__((sda));
@@ -1665,51 +1663,59 @@ void FUN_L06_002fa9c0(char *moby) {
     int kind;
     int timer;
     float hp;
+    float recovery_hp;
     int *path;
-    if ((unsigned char)moby[0x20] == 0) return;
     data = *(char **)(moby + 0x78);
-    if ((unsigned char)(moby[0x20] - 4) < 10 && *(int *)(data + 0x108) != -1)
+    if (*(unsigned char *)(moby + 0x20) == 0) return;
+    if ((unsigned int)(*(unsigned char *)(moby + 0x20) - 4) < 10 && *(int *)(data + 0x108) != -1)
         D_L06_0014162A = *(short *)(data + 0x108);
     *(int *)(data + 0x110) = FUN_001fa6d0(*(float *)(data + 0x20) * 16.0f);
-    hit = FUN_L00_0025a420(moby, 0x330000, 0);
     dmg = 0.0f;
+    hit = FUN_L00_0025a420(moby, 0x330000, 0);
     kind = FUN_00213928(moby, hit, data + 0x20, 0, &out, &dmg, 0, 4);
     if (out != 1 && (unsigned char)moby[0x20] != 14 &&
         (unsigned char)moby[0x20] != 3 && (unsigned char)moby[0x20] != 5) {
         if (*(char **)(hit + 0x20) != 0) {
             int oclass = *(short *)(*(char **)(hit + 0x20) + 0xA6);
             switch (oclass) {
-            case 0xB0: case 0x79: case 0x33B:
-                dmg *= 1.5f;
-                break;
             case 0x131:
                 dmg *= 0.666f;
                 break;
+            case 0xB0: case 0x79: case 0x33B:
+                dmg *= 1.5f;
+                break;
             }
         }
-        hp = *(float *)(data + 0x20) - dmg;
-        *(float *)(data + 0x20) = hp;
+        *(float *)(data + 0x20) -= dmg;
         if (*(int *)(data + 0x170) == 0) {
-            if (scale_game_frames(10) <= *(int *)(data + 0x12C) &&
-                hp <= 20.0f && hp + dmg > 20.0f) {
-                hp = 20.0f;
-                goto start_recovery;
+            if (scale_game_frames(10) <= *(int *)(data + 0x12C)) {
+                hp = *(float *)(data + 0x20);
+                recovery_hp = 20.0f;
+                if (hp <= recovery_hp && hp + dmg > recovery_hp)
+                    goto start_recovery;
             }
-            if (scale_game_frames(10) <= *(int *)(data + 0x12C) &&
-                hp <= 10.0f && hp + dmg > 10.0f) {
-                hp = 10.0f;
+            if (scale_game_frames(10) <= *(int *)(data + 0x12C)) {
+                hp = *(float *)(data + 0x20);
+                recovery_hp = 10.0f;
+                if (hp <= recovery_hp && hp + dmg > recovery_hp) {
 start_recovery:
-                *(float *)(data + 0x20) = hp;
-                *(float *)(data + 0x174) = hp;
-                *(int *)(data + 0x170) = 1;
-                *(int *)(data + 0x12C) = scale_game_frames(30);
+                    *(float *)(data + 0x20) = recovery_hp;
+                    *(int *)(data + 0x170) = 1;
+                    *(float *)(data + 0x174) = recovery_hp;
+                    *(int *)(data + 0x12C) = scale_game_frames(30);
+                }
             }
-        } else if (hp < *(float *)(data + 0x174)) {
+        } else if (*(float *)(data + 0x20) < *(float *)(data + 0x174)) {
             *(float *)(data + 0x20) = *(float *)(data + 0x174);
         }
         if (*(float *)(data + 0x20) <= 0.0f) kind = 1;
         else if (kind == 1) kind = 5;
         switch (kind) {
+        case 0: case 11: default:
+            goto hit_response_done;
+        case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+            *(unsigned char *)(data + 0x67) = 200;
+            break;
         case 1:
         case 2: {
             char *base;
@@ -1724,16 +1730,14 @@ start_recovery:
             *(unsigned short *)(moby + 0x34) &= 0xEFFF;
             if ((unsigned char)moby[0x53] != 10)
                 FUN_00212f90(moby, 10, 0, scale_game_frames(10));
-            data[0x67] = (char)0xFA;
+            *(unsigned char *)(data + 0x67) = 0xFA;
             break;
         }
-        case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
-            data[0x67] = (char)200;
-            break;
         }
+hit_response_done:
         FUN_L00_0025d458(moby, data + 0x60);
     }
-    moby[0xA4] = (char)0xFF;
+    *(unsigned char *)(moby + 0xA4) = 0xFF;
     FUN_L00_0025d538(moby, data + 0x60);
     if ((data[0x2E] & 2) && (unsigned char)moby[0x20] != 15) {
         if (*(int *)(data + 0x10C) != -1) {
@@ -1747,10 +1751,10 @@ start_recovery:
         *(int *)(data + 0x178) = 1;
     timer = *(int *)(data + 0x12C);
     if (timer != 0 && *(int *)(data + 0x170) != 0) {
-        *(int *)(data + 0x12C) = --timer;
-        if (timer < scale_game_frames(10))
-            D_L06_0015F3FC = 1.0f - FUN_001fa6c0(timer) / FUN_001f96b0(10.0f);
-        if (timer == 0 && (unsigned char)moby[0x20] != 1) {
+        --*(int *)(data + 0x12C);
+        if (*(int *)(data + 0x12C) < scale_game_frames(10))
+            D_L06_0015F3FC = 1.0f - FUN_001fa6c0(*(int *)(data + 0x12C)) / scale_recovery_time(10.0f);
+        if (*(int *)(data + 0x12C) == 0 && (unsigned char)moby[0x20] != 1) {
             if (*(float *)(data + 0x20) > 10.0f) {
                 *(float *)(data + 0x20) = 19.9f;
                 moby[0x20] = 3;
@@ -1761,7 +1765,7 @@ start_recovery:
                 FUN_001fa030(moby + 0xC0, moby + 0x40);
                 if ((unsigned char)moby[0x53] != 6)
                     FUN_00212f90(moby, 6, 0, scale_game_frames(5));
-                FUN_L06_002fb148(moby);
+                FUN_L06_002fb148_recovery_high(moby);
             } else {
                 char *base;
                 *(float *)(data + 0x20) = 9.9f;
@@ -1775,14 +1779,12 @@ start_recovery:
                 FUN_001fa030(moby + 0xC0, moby + 0x40);
                 if ((unsigned char)moby[0x53] != 6)
                     FUN_00212f90(moby, 6, 0, scale_game_frames(5));
-                FUN_L06_002fb148(moby);
+                FUN_L06_002fb148_recovery_low(moby);
             }
         }
-    } else if (timer != 0 && *(int *)(data + 0x170) == 0) {
-        if (timer < scale_game_frames(10)) {
-            ++timer;
-            *(int *)(data + 0x12C) = timer;
-            D_L06_0015F3FC = 1.0f - FUN_001fa6c0(timer) / 10.0f;
+    } else if (*(int *)(data + 0x170) == 0) {
+        if (*(int *)(data + 0x12C) < scale_game_frames(10)) {
+            D_L06_0015F3FC = 1.0f - FUN_001fa6c0(++*(int *)(data + 0x12C)) / 10.0f;
         }
     }
     *(float *)(data + 0x128) = fast_add_rotations(*(float *)(data + 0x128),
@@ -1793,7 +1795,6 @@ start_recovery:
     FUN_L00_0025ff38(moby, data + 0x70, 0, 0, path + 4, *path, 255.0f);
     if (*(int *)(data + 0xB0) == 0) *(int *)(data + 0xB0) = D_L06_001413D0;
 }
-#endif
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC578), where it is exact; names translated to the US level program. */
