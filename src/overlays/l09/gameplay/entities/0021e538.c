@@ -40,16 +40,15 @@ void FUN_L09_0021e560(int tex0, int tex1) {
     } else {
         TextureEntry *a = (TextureEntry *)D_L09_0016D300 + tex0;
         TextureEntry *b = (TextureEntry *)D_L09_0016D300 + tex1;
-        int base = D_L09_0015F420;
         u64 texture_address;
         u64 *data;
         *(u64 *)0x161fc0 = 0x0800000000000400ULL;
         *(u64 *)0x161fc8 = 0;
         FUN_L02_0024fca0((void *)0x161fd0,
-                          (char *)(base + a->first * 16),
-                          (char *)(base + a->second * 16),
-                          (char *)(base + b->first * 16),
-                          (char *)(base + b->second * 16),
+                          (char *)(D_L09_0015F420 + a->first * 16),
+                          (char *)(D_L09_0015F420 + a->second * 16),
+                          (char *)(D_L09_0015F420 + b->first * 16),
+                          (char *)(D_L09_0015F420 + b->second * 16),
                           0x1000);
         PACKET_CURSOR[0] = 0x10000006;
         PACKET_CURSOR[1] = 0;
