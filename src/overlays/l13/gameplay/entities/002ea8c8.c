@@ -297,15 +297,15 @@ void FUN_L13_002ed158(void *moby, void *data) {
     float matrix[12];
     float query[4];
     float candidate_pos[4];
-    float rotation_matrix[16];
     float local_pos[4];
+    float rotation_matrix[16];
     float probe[4];
     void **candidates;
     void **hit;
     int count, hit_count, i;
     char *candidate;
     short half_width, half_height, max_size;
-    float limit, tolerance;
+    float limit, tolerance, height_limit, height_tolerance;
 
     FUN_001fa030(matrix, moby + 0x40);
     max_size = *(short *)(data + 10) < *(short *)(data + 8) ?
@@ -332,10 +332,10 @@ void FUN_L13_002ed158(void *moby, void *data) {
         if (probe[0] < -tolerance) probe[0] = (float)-half_width * 0.5f;
         else if (tolerance < probe[0]) probe[0] = limit;
         half_height = *(short *)(data + 10);
-        limit = (float)half_height * 0.5f;
-        tolerance = limit + 1.5f;
-        if (probe[2] < -tolerance) probe[2] = (float)-half_height * 0.5f;
-        else if (tolerance < probe[2]) probe[2] = limit;
+        height_limit = (float)half_height * 0.5f;
+        height_tolerance = height_limit + 1.5f;
+        if (probe[2] < -height_tolerance) probe[2] = (float)-half_height * 0.5f;
+        else if (height_tolerance < probe[2]) probe[2] = height_limit;
         probe[1] = 0.0f;
         FUN_001f9cf8(probe, probe, matrix);
         FUN_001f9a10(probe, probe, moby + 0x10);
