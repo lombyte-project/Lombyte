@@ -102,13 +102,10 @@ s32 FUN_L01_00276fe8(s32 *ids, s32 n, s32 path_index, f32 radius,
     s32 i;
     f32 nearest;
     f32 x;
+    s32 *id = ids;
 
-    for (i = 0; i < n; i++) {
-        if (radius == 0.0f) {
-            if (FUN_L00_00261968_276a48(ids[i], pos, target)) {
-                hit = 1;
-            }
-        } else {
+    for (i = 0; i < n && !hit; i++) {
+        if (radius != 0.0f) {
             vec_sub_276a48(&side, pos, target);
             vec_normalize_276a48(&side, &side, radius);
             x = side.f[0];
@@ -117,37 +114,41 @@ s32 FUN_L01_00276fe8(s32 *ids, s32 n, s32 path_index, f32 radius,
             side.f[1] = -x;
             vec_sub_276a48(&left, pos, &side);
             vec_add_276a48(&right, pos, &side);
-            if (FUN_L00_00261968_276a48(ids[i], &left, target) ||
-                FUN_L00_00261968_276a48(ids[i], &right, target)) {
+            if (FUN_L00_00261968_276a48(*id, &left, target)) {
+                hit = 1;
+            } else if (FUN_L00_00261968_276a48(*id, &right, target)) {
                 hit = 1;
             }
+        } else if (FUN_L00_00261968_276a48(*id, pos, target)) {
+            hit = 1;
         }
-        if (hit) {
-            path = D_L01_001B0930_276a48[path_index];
-            mask = FUN_L01_00276c40(path_index,
-                       FUN_L01_00276a48(ids, n, path_index, radius, pos),
-                       FUN_L01_00276a48(ids, n, path_index, radius, target));
-            if (mask != 0) {
-                nearest = 10000.0f;
-                best = -1;
-                for (i = 0; i < path->count; i++) {
-                    if ((mask >> i) & 1) {
-                        f32 distance = vec_distance_276fe8(&path->pts[i], target);
-                        if (distance < nearest) {
-                            nearest = distance;
-                            best = i;
-                        }
+        id++;
+    }
+    if (hit) {
+        path = D_L01_001B0930_276a48[path_index];
+        mask = FUN_L01_00276c40(path_index,
+                   FUN_L01_00276a48(ids, n, path_index, radius, pos),
+                   FUN_L01_00276a48(ids, n, path_index, radius, target));
+        if (mask != 0) {
+            nearest = 10000.0f;
+            best = -1;
+            for (i = 0; i < path->count; i++) {
+                if ((mask >> i) & 1) {
+                    f32 distance = vec_distance_276fe8(&path->pts[i], target);
+                    if (distance < nearest) {
+                        nearest = distance;
+                        best = i;
                     }
                 }
-                if (best >= 0) {
-                    out->q = path->pts[best].q;
-                    return 1;
-                }
             }
-            return 0;
+            if (best >= 0) {
+                out->q = ((OvlQuad *)(&path->pts[0]))[best];
+                return 1;
+            }
         }
+        return 0;
     }
-    out->q = target->q;
+    *out = *target;
     return 1;
 }
 #endif
