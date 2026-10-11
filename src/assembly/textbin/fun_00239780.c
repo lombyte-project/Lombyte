@@ -21,7 +21,7 @@ extern struct CaptureTransitionFlag capture_primary_transition __asm__("D_001612
 extern s32 capture_secondary_transition_active __asm__("D_001612A0");
 extern s32 capture_secondary_transition_step __asm__("D_0016129C");
 extern s32 capture_primary_transition_step __asm__("D_00161294");
-extern s32 pal_display_mode[] __asm__("D_0015ED80");
+extern s32 pal_display_mode __asm__("D_0015ED80");
 extern s64 capture_texture_tex0 __asm__("D_0015EED0");
 
 extern void transform_attachment_points() __asm__("func_0020CD48");
@@ -169,7 +169,7 @@ void render_vendor_capture_pass_sequence(void *capture_context) {
         vu1_add_g_sregister(8, 5);
         append_capture_texture_reference();
         texture_tex0 = capture_texture_tex0;
-        if (pal_display_mode[0] != 0) {
+        if (pal_display_mode != 0) {
             f32 screen_x, screen_y, screen_width, screen_height;
             screen_x = inner_x;
             screen_y = inner_y;
