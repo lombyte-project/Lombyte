@@ -909,7 +909,118 @@ void FUN_L06_00302fd8(char *m) {
         break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303160.s", FUN_L06_00303160);
+#else
+extern void *D_L06_001B0C30_303160[] __asm__("D_L06_001B0C30");
+extern float D_0015ED70_303160 __asm__("D_0015ED70");
+extern float D_0015ED6C_303160 __asm__("D_0015ED6C");
+extern char *D_L06_001600EC_303160 __asm__("D_L06_001600EC");
+extern int scale_frames_303160(int) __asm__("FUN_001f96f8");
+extern float approach_value_303160(float, float, float *) __asm__("FUN_00213ed8");
+extern int truncate_float_303160(float) __asm__("FUN_001fa6d0");
+extern void lerp_vector_303160(float *, float *, float *, float) __asm__("FUN_001f9a40");
+extern void set_position_303160(float *) __asm__("FUN_L00_002ea9d8");
+extern void set_rotation_303160(float *) __asm__("FUN_L00_002eaa30");
+extern float angle_atan2_303160(float, float) __asm__("FUN_001f9e90");
+extern float fast_subtract_rotations_303160(float, float) __asm__("FUN_001fa5c8");
+extern float fast_add_rotations_303160(float, float) __asm__("FUN_001fa580");
+extern float vector_distance_303160(float *, float *) __asm__("FUN_001f9b80");
+extern float fast_cos_303160(float) __asm__("FUN_001f9dc8");
+extern void clear_vector_303160(float *) __asm__("FUN_001f99f8");
+extern void approach_angle_303160(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
+extern void event_303160(int, int, char *) __asm__("FUN_0022dba0");
+extern void FUN_L06_00303748(float, char *, char *, char *, int);
+extern void FUN_L06_00303b68(char *);
+
+int FUN_L06_00303160(char *moby, int path) {
+    char *data = *(char **)(moby + 0x78);
+    int *ids = (int *)(data + path * 4);
+    float *first = D_L06_001B0C30_303160[ids[0x60 / 4]];
+    float *middle = D_L06_001B0C30_303160[ids[0x74 / 4]];
+    float *third = D_L06_001B0C30_303160[ids[0x88 / 4]];
+    float rot[4], from[4];
+    float first_time, third_time, first_fraction, third_fraction, first_index_float;
+    float a, b, c, d, heading;
+    float *prev, *cur, *next, *first_current;
+    int first_index, middle_index, third_index, event, previous_event;
+    int next_index;
+
+    approach_value_303160(1.0f, 1.0f / (float)scale_frames_303160(0x4b0), (float *)(data + 0xf4));
+    first_time = *(float *)(data + 0xf4) * (float)(*(int *)first - 1);
+    first_index = truncate_float_303160(first_time);
+    first_index_float = (float)first_index;
+    first_current = first + first_index * 4;
+    middle_index = truncate_float_303160(*(float *)(data + 0xf4) * (float)(*(int *)middle - 1));
+    third_time = *(float *)(data + 0xf4) * (float)(*(int *)third - 1);
+    third_fraction = third_time - first_index_float;
+    third_index = truncate_float_303160(third_time);
+    first_fraction = first_time - first_index_float;
+    lerp_vector_303160(from, first_current + 4, first_current + 8, first_fraction);
+    lerp_vector_303160((float *)(moby + 0x10), third + third_index * 4 + 4,
+                       third + third_index * 4 + 8, third_fraction);
+    set_position_303160(from);
+
+    if (third_index > 0) {
+        prev = third + (third_index - 1) * 4;
+        cur = third + third_index * 4;
+        next = third + (third_index + 1) * 4;
+        a = angle_atan2_303160(cur[4] - prev[4], cur[5] - prev[5]);
+        b = angle_atan2_303160(next[4] - cur[4], next[5] - cur[5]);
+        *(float *)(moby + 0x48) = fast_add_rotations_303160(
+            fast_subtract_rotations_303160(b, a) * third_fraction, a);
+        a = angle_atan2_303160(vector_distance_303160(cur, cur + 4), cur[6] - prev[6]);
+        b = angle_atan2_303160(vector_distance_303160(cur + 4, cur + 8), next[6] - cur[6]);
+        *(float *)(moby + 0x44) = fast_add_rotations_303160(
+            fast_subtract_rotations_303160(-b, -a) * third_fraction, -a);
+        *(float *)(moby + 0x44) *= fast_cos_303160(*(float *)(data + 0xb0));
+        *(float *)(moby + 0x48) = fast_add_rotations_303160(*(float *)(moby + 0x48), *(float *)(data + 0xb0));
+    } else {
+        a = vector_distance_303160(third + 4, third + 8);
+        *(float *)(moby + 0x44) = -angle_atan2_303160(a, third[10] - third[6]);
+        *(float *)(moby + 0x48) = angle_atan2_303160(third[8] - third[4], third[9] - third[5]);
+    }
+    if (first_index > 0 && middle_index > 0) {
+        clear_vector_303160(rot);
+        cur = middle + middle_index * 4;
+        next = middle + (middle_index + 1) * 4;
+        a = angle_atan2_303160(cur[4] - from[0], cur[5] - from[1]);
+        b = angle_atan2_303160(next[4] - from[0], next[5] - from[1]);
+        rot[2] = fast_add_rotations_303160(fast_subtract_rotations_303160(b, a) * third_fraction, a);
+        a = angle_atan2_303160(vector_distance_303160(from, cur + 4), cur[6] - from[2]);
+        b = angle_atan2_303160(vector_distance_303160(from, next + 4), next[6] - from[2]);
+        rot[1] = fast_add_rotations_303160(fast_subtract_rotations_303160(-b, -a) * third_fraction, -a);
+        set_rotation_303160(rot);
+    }
+    *(float *)(moby + 0x2c) = *(float *)(*(char **)(moby + 0x24) + 0x24) *
+        (*(float *)(data + 0xc4) - (*(float *)(data + 0xc4) - *(float *)(data + 0xc8)) * *(float *)(data + 0xf4));
+    if (*(float *)(data + 0xf4) > 0.8f) {
+        approach_angle_303160((float *)(data + 0xb0), (float *)(data + 0xb4), 3.1415927f,
+            D_0015ED70_303160 * 12.566371f, D_0015ED70_303160 * 12.566371f,
+            D_0015ED6C_303160 * 6.2831855f);
+    }
+    event = truncate_float_303160(first_current[7]);
+    previous_event = -1;
+    if (first_index != 0) {
+        float *previous = first + (first_index - 1) * 4;
+        previous_event = truncate_float_303160(previous[7]);
+    }
+    if (event >= 0 || previous_event >= 0) {
+        first_current[7] = -1.0f;
+        first[(first_index - 1) * 4 + 7] = -1.0f;
+        if (event < 8 && previous_event < 8) {
+            event_303160(0, 0, moby);
+            next_index = *(int *)(data + event * 4 + 0xd0);
+            FUN_L06_00303748(6.0f, moby, D_L06_001600EC_303160 + next_index * 0x80 + 0x30,
+                             D_L06_001600EC_303160 + next_index * 0x80, 6);
+        } else if (event == 10 || previous_event == 10) {
+            event_303160(1, 0, moby);
+            FUN_L06_00303b68(moby);
+        }
+    }
+    return *(float *)(data + 0xf4) == 1.0f;
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303748.s", FUN_L06_00303748);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303b68.s", FUN_L06_00303b68);
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305468), where it is exact; names translated to the US level program. */
