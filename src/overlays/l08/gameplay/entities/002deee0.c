@@ -985,6 +985,8 @@ void FUN_L08_002e5188(struct Moby *moby) {
     float x0, x1, x2, x3, y0, y1, y2, y3;
     int base_x, base_y;
     s64 base_z;
+    u32 color;
+    char *projection_constants = (char *)0x0016d240;
 
     if (*(short *)(data + 0x6c) == 0) return;
 
@@ -998,11 +1000,11 @@ void FUN_L08_002e5188(struct Moby *moby) {
     pos[3] = 1.0f;
     scale_vector_xyz_5188(pos, pos, 1024.0f);
     FUN_001f9d20_5188(pos, pos, D_L08_001675C0 - 0x100);
-    scale_vector_xyz_5188(pos, pos, *(float *)0x0016d450 / pos[3]);
+    scale_vector_xyz_5188(pos, pos, *(float *)(projection_constants + 0x210) / pos[3]);
 
     base_x = truncate_float_to_s32_5188(pos[0] * 16.0f) + 0x8000;
     base_y = (truncate_float_to_s32_5188(pos[1] * 16.0f) + 0x8000) << 16;
-    base_z = (s64)truncate_float_to_s32_5188(pos[2] * 0.9997f + *(float *)0x0016d3e8) << 32;
+    base_z = (s64)truncate_float_to_s32_5188(pos[2] * 0.9997f + *(float *)(projection_constants + 0x1a8)) << 32;
     if (length > 16.0f) length = 16.0f;
     else if (length < 4.0f) length = 4.0f;
     radius = float_from_int_5188(*(signed char *)(data + 0x7b) + 16) * 0.015625f * (50.0f - length * 2.5f);
@@ -1019,14 +1021,15 @@ void FUN_L08_002e5188(struct Moby *moby) {
     quad.texture_coordinates[1] = 0x200;
     quad.texture_coordinates[2] = 0x2000000;
     quad.texture_coordinates[3] = 0x2000200;
-    quad.colors[0] = *(u32 *)(data + 0x78);
-    quad.colors[3] = quad.colors[0];
-    quad.colors[2] = quad.colors[0];
-    quad.colors[1] = quad.colors[0];
-    quad.vertices[0] = base_z;
+    color = *(u32 *)(data + 0x78);
+    quad.colors[3] = color;
+    quad.colors[2] = color;
+    quad.colors[1] = color;
+    quad.colors[0] = color;
     quad.vertices[3] = base_z;
     quad.vertices[2] = base_z;
     quad.vertices[1] = base_z;
+    quad.vertices[0] = base_z;
     quad.vertices[0] += (truncate_float_to_s32_5188(y0) << 20) + base_y;
     quad.vertices[0] += (truncate_float_to_s32_5188(x0) << 4) + base_x;
     quad.vertices[1] += (truncate_float_to_s32_5188(y1) << 20) + base_y;
