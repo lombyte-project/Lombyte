@@ -29,7 +29,7 @@ void FUN_L00_0023db30(void *m) {
     float quarter = 0.25f;
     float minus_quarter = -0.25f;
     int i;
-    OvlVec4 *p;
+    OvlVec4 *p; OvlVec4 *point1 = &quad.points[1]; OvlVec4 *copied_ptr = &copied; OvlVec4 *other_ptr = &other;
 
     quad.texture[1] = get_texture_0023db30(14);
     quad.texture[2] = 0xff9000000260ULL;
@@ -50,28 +50,28 @@ void FUN_L00_0023db30(void *m) {
     scale_to_0023db30(4.0f, &scaled, &pos);
     offset.f[3] = 1.0f;
     add_0023db30(&offset, &scaled, &base);
-    copied.q = pos.q;
+    copied_ptr->q = pos.q;
     add_0023db30(&other, &copied, &pos);
-    copied.f[3] = 0.25f;
-    other.f[3] = 0.5f;
+    copied_ptr->f[3] = 0.25f;
+    other_ptr->f[3] = 0.5f;
 
     clear_0023db30(&quad.points[0]);
     quad.points[0].f[2] = 0.0f;
     quad.points[0].f[3] = 1.0f;
-    quad.points[1] = copied;
-    quad.points[1].f[2] += minus_quarter;
-    quad.points[1].f[0] = copied.f[3] * 4.0f;
-    quad.points[1].f[3] = 1.0f;
+    *point1 = copied;
+    point1->f[2] += minus_quarter;
+    point1->f[0] = copied_ptr->f[3] * 4.0f;
+    point1->f[3] = 1.0f;
     clear_0023db30(&quad.points[2]);
     quad.points[2].f[2] = 0.0f;
     quad.points[2].f[3] = 1.0f;
-    quad.points[3].q = copied.q;
+    quad.points[3].q = copied_ptr->q;
     quad.points[3].f[2] += quarter;
-    quad.points[3].f[0] = copied.f[3] * 4.0f;
+    quad.points[3].f[0] = copied_ptr->f[3] * 4.0f;
     quad.points[3].f[3] = 1.0f;
     draw_0023db30(&quad, &pos, 1);
 
-    p = &quad.points[1];
+    p = point1;
     for (i = 1; i < 4; i += 2, p += 2) {
         if (i < 2) {
             p->f[1] += minus_quarter;
@@ -83,20 +83,20 @@ void FUN_L00_0023db30(void *m) {
     }
     draw_0023db30(&quad, &pos, 1);
 
-    quad.points[0].q = copied.q;
-    quad.points[0].f[0] = copied.f[3] * 4.0f;
+    quad.points[0].q = copied_ptr->q;
+    quad.points[0].f[0] = copied_ptr->f[3] * 4.0f;
     quad.points[0].f[2] += minus_quarter;
     quad.points[0].f[3] = 1.0f;
-    quad.points[1].q = other.q;
-    quad.points[1].f[0] = other.f[3] * 4.0f;
-    quad.points[1].f[2] += minus_quarter;
-    quad.points[1].f[3] = 1.0f;
-    quad.points[2].q = copied.q;
+    point1->q = other_ptr->q;
+    point1->f[0] = other_ptr->f[3] * 4.0f;
+    point1->f[2] += minus_quarter;
+    point1->f[3] = 1.0f;
+    quad.points[2].q = copied_ptr->q;
     quad.points[2].f[0] = quad.points[0].f[0];
     quad.points[2].f[2] += quarter;
     quad.points[2].f[3] = 1.0f;
-    quad.points[3].q = other.q;
-    quad.points[3].f[0] = quad.points[1].f[0];
+    quad.points[3].q = other_ptr->q;
+    quad.points[3].f[0] = point1->f[0];
     quad.points[3].f[2] += quarter;
     quad.points[3].f[3] = 1.0f;
     draw_0023db30(&quad, &pos, 1);
@@ -112,20 +112,20 @@ void FUN_L00_0023db30(void *m) {
     }
     draw_0023db30(&quad, &pos, 1);
 
-    quad.points[0].q = other.q;
-    quad.points[0].f[0] = other.f[3] * 4.0f;
+    quad.points[0].q = other_ptr->q;
+    quad.points[0].f[0] = other_ptr->f[3] * 4.0f;
     quad.points[0].f[2] += minus_quarter;
     quad.points[0].f[3] = 1.0f;
-    clear_0023db30(&quad.points[1]);
-quad.points[1].f[0] = copied.f[3] * 4.0f * 3.0f;
-    quad.points[1].f[2] += *(float *)(&D_L00_0015FC0A - 0x102);
-    quad.points[1].f[3] = 1.0f;
-    quad.points[2].q = other.q;
-    quad.points[2].f[0] = other.f[3] * 4.0f;
+    clear_0023db30(point1);
+point1->f[0] = copied_ptr->f[3] * 4.0f * 3.0f;
+    point1->f[2] += *(float *)(&D_L00_0015FC0A - 0x102);
+    point1->f[3] = 1.0f;
+    quad.points[2].q = other_ptr->q;
+    quad.points[2].f[0] = other_ptr->f[3] * 4.0f;
     quad.points[2].f[2] += quarter;
     quad.points[2].f[3] = 1.0f;
     clear_0023db30(&quad.points[3]);
-    quad.points[3].f[0] = copied.f[3] * 4.0f * 3.0f;
+    quad.points[3].f[0] = copied_ptr->f[3] * 4.0f * 3.0f;
 quad.points[3].f[2] = 0.0f;
     quad.points[3].f[3] = 1.0f;
     draw_0023db30(&quad, &pos, 1);
