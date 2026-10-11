@@ -169,7 +169,144 @@ s32 FUN_L04_0029eb20(struct Moby *m, PathPoints_eb20 *path, s32 i, s32 dir, f32 
     FUN_001f9a10(&m->pos, &seg, &path->point[i]);
     return i;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0029ecf8.s", FUN_L04_0029ecf8);
+#else
+extern void *FUN_001153fc(void *, int, int);
+extern f32 int_to_float_29ecf8(s32) __asm__("FUN_001fa6c0");
+extern f32 fast_add_rotations_29ecf8(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_cos_29ecf8(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin_29ecf8(f32) __asm__("FUN_001f9de0");
+extern f32 vector_distance_29ecf8(void *, void *) __asm__("FUN_001f9b80");
+extern void clear_vector_29ecf8(void *) __asm__("FUN_001f99f8");
+extern struct Moby *spawn_moby_29ecf8(s32) __asm__("FUN_0020c4f8");
+extern f32 random_float_between_29ecf8(f32, f32) __asm__("FUN_002132a8");
+extern f32 random_angle_29ecf8(void) __asm__("FUN_00213308");
+extern void update_spawned_moby_29ecf8(struct Moby *) __asm__("FUN_L00_00250df8");
+extern void FUN_L04_001f30e0(void *, s32, struct Moby *, void *, void *);
+extern void apply_child_motion_29ecf8(f32, struct Moby *, void *, void *) __asm__("FUN_L04_001f3a80");
+extern PathPoints_eb20 *D_L04_001b0630[];
+extern f32 D_L04_00166130[8];
+extern s32 D_L04_001513C0 __attribute__((sda));
+
+typedef struct PVars_29ecf8 {
+    Vec4f origin;
+    struct Moby *children[32];
+    s32 count;
+    s32 initialized;
+    f32 angle;
+    f32 radius;
+    s32 path_index;
+    s32 direction;
+    s32 child_count;
+} PVars_29ecf8;
+
+void FUN_L04_0029ecf8(struct Moby *moby) {
+    PVars_29ecf8 *data = (PVars_29ecf8 *)moby->pvars;
+    struct Moby **children;
+    struct Moby *child;
+    struct Moby *other;
+    s32 i;
+    f32 distance;
+    f32 angle;
+    f32 angle2;
+    f32 speed;
+    f32 size;
+    f32 average;
+    f32 effect[8];
+
+    if (D_L04_001513C0 == 0) {
+        FUN_001153fc(effect, 0, 0x20);
+        effect[1] = int_to_float_29ecf8(data->child_count) * 2.073f;
+        effect[3] = 2.0f;
+        effect[4] = 1.0f;
+        effect[5] = 1.0f;
+        D_L04_001513C0 = 1;
+        __builtin_memcpy(D_L04_00166130, effect, 0x20);
+    }
+    if (data->initialized == 0) {
+        *(u128 *)&data->origin = *(u128 *)&moby->pos;
+        data->angle = 0.0f;
+    } else if (data->child_count == 0) {
+        for (other = (struct Moby *)D_L04_0015FFE4; other != 0; other = other->next) {
+            if ((s8)other->state >= 0 && other->oclass == 0x55) {
+                data->child_count++;
+            }
+        }
+        D_L04_00166130[1] = int_to_float_29ecf8(data->child_count) * 2.073f;
+    }
+    children = data->children;
+    if (data->path_index == -1) {
+        data->angle = fast_add_rotations_29ecf8(data->angle, frame_scale * 0.0034906587f);
+        moby->pos.x = data->origin.x + data->radius * fast_cos_29ecf8(data->angle);
+        moby->pos.y = data->origin.y + data->radius * fast_sin_29ecf8(data->angle);
+    } else {
+        if (data->initialized == 0) goto initialize;
+        distance = 10000.0f;
+        for (i = 0; i < data->count; i++) {
+            f32 d = vector_distance_29ecf8(&moby->pos, &children[i]->pos);
+            if (d < distance) distance = d;
+        }
+        speed = 0.0f;
+        if (distance < 3.0f) speed = 3.0f - distance;
+        data->direction = FUN_L04_0029eb20(moby, D_L04_001b0630[data->path_index], data->direction, 1, speed);
+    }
+    if (data->initialized != 0) {
+        for (i = 0; i < data->count; i++) {
+            child = children[i];
+            average = (child->unk58 + 1.0f) * 0.5f;
+            D_L04_00166130[6] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * average * 0.05f * frame_scale_sq * average;
+            D_L04_00166130[7] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * (child->unk58 + 1.0f) * 0.5f;
+            FUN_L04_001f30e0(children, data->count, child, child->pvars, D_L04_00166130);
+            apply_child_motion_29ecf8(0.0f, child, child->pvars, D_L04_00166130);
+        }
+        return;
+    }
+initialize:
+    {
+    Vec4f *moby_pos = &moby->pos;
+    data->initialized = 1;
+    data->child_count = 0;
+    for (i = 0; i < data->count; i++) {
+        children[i] = 0;
+        child = spawn_moby_29ecf8(0x55);
+        if (child != 0) {
+            struct Moby *part = (struct Moby *)child->pvars;
+            children[i] = child;
+            child->unk30 = 0x7f;
+            child->unk32 = 0x7f;
+            child->scale *= random_float_between_29ecf8(0.7f, 1.3f);
+            child->rot.z = random_angle_29ecf8();
+            child->unk58 = random_float_between_29ecf8(0.6f, 1.2f);
+            clear_vector_29ecf8(&part->pos);
+            *(s16 *)((char *)part + 0x44) = 0;
+            *(f32 *)((char *)part + 0x4c) = 10.0f;
+            *(u128 *)&child->pos = *(u128 *)moby_pos;
+            angle = random_angle_29ecf8();
+            angle2 = random_angle_29ecf8();
+            size = random_float_between_29ecf8(0.6f, 0.9f);
+            child->pos.x += fast_cos_29ecf8(angle) * fast_sin_29ecf8(angle2) * size;
+            child->pos.y += fast_sin_29ecf8(angle) * fast_sin_29ecf8(angle2) * size;
+            child->pos.z += fast_cos_29ecf8(angle2) * size;
+            *(s32 *)((char *)part + 0x50) = 0;
+            *(void **)((char *)part + 0x54) = moby_pos;
+            *(s32 *)((char *)part + 0x58) = 0;
+            *(f32 *)((char *)part + 0x70) = 1.694f;
+            *(f32 *)((char *)part + 0x74) = 1.694f;
+            *(f32 *)((char *)part + 0x94) = 5.0f;
+            *(f32 *)((char *)part + 0x48) = 1.056f;
+            *(s16 *)((char *)part + 0x5c) = -1;
+            *(f32 *)((char *)part + 0x40) = 0.003f;
+            *(s16 *)((char *)part + 0x5e) = 2;
+            *(s16 *)((char *)part + 0x60) = 0x55;
+            *(f32 *)((char *)part + 0x90) = 1.0f;
+            *(s16 *)((char *)part + 0x62) = 0x1ee;
+            update_spawned_moby_29ecf8(child);
+        }
+    }
+    }
+}
+#endif
 /* Sets the float at 0x58 on the moby and on the linked moby at data+0x424, if any. */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB6D8), where it is exact; names translated to the US level program. */
 
