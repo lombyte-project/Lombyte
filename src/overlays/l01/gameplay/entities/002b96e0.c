@@ -2817,45 +2817,40 @@ BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 k
     }
     return m;
 }
-typedef union {
-    u128 q;
-    f32 f[4];
-} GunshipVec;
-
 typedef struct {
     s32 v[4];
-} GunshipQuad;
+} GunshipTargets;
 
 typedef struct {
     s32 cur;
     u8 pad4[0x10];
     s32 path;
-} GunshipPathFollow;
+} GunshipFollow;
 
 typedef struct {
     u8 pad0[0x2B];
     u8 b2B;
     u8 b2C;
     u8 pad2D[0x33];
-    GunshipPathFollow sub;
+    GunshipFollow sub;
     u8 pad78[0x58];
     f32 vD0[4];
     f32 vE0[4];
     u8 padF0[0xC];
-    f32 fFC;
+    f32 speed;
     u8 pad100[0x40];
     s32 tethers[4];
     u8 pad150[0x1C];
-    s32 last;
-    s32 flag170;
-    s32 cam174;
-    f32 scale178;
-    f32 f17C;
-    u8 slots[4];
-    s16 side;
-    s16 timer;
-    s32 flag188;
-    s32 flag18C;
+    s32 last_fire_node;
+    s32 trigger_volume;
+    s32 cutscene_camera;
+    f32 base_scale;
+    f32 base_speed;
+    u8 stop_nodes[4];
+    s16 gun_side;
+    s16 cutscene_timer;
+    s32 camera_block_volume;
+    s32 beam_volume;
     s32 targets[4][4];
     s32 guards[8];
     s32 turrets[4];
@@ -2880,16 +2875,16 @@ typedef struct {
     u8 pad98[0xC];
     u8 bA4;
     u8 padA5;
-    s16 cls;
+    s16 oclass;
     u8 padA8[0xA];
-    u16 id;
+    u16 uid;
     u8 padB4[0x4C];
 } GunshipMoby;
 
 typedef struct {
     u8 pad0[0x1E8];
-    s32 f1E8;
-    s16 f1EC;
+    s32 activated;
+    s16 activate_delay;
 } GunshipTurretVars;
 
 typedef struct {
@@ -2910,197 +2905,197 @@ typedef struct {
     GunshipMoby *moby;
 } GunshipHit;
 
-extern f32 D_L01_00161BD0 __attribute__((sda));
-extern f32 D_L01_00161BD4 __attribute__((sda));
-extern f32 D_L01_00161BD8 __attribute__((sda));
-extern GunshipQuad gs_quad_init __asm__("D_L01_00161BE0");
-extern char gs_cam_pos[] __asm__("D_L01_00167240");
-extern u8 gs_banner_shown __asm__("D_0013D408") NOT_SDA;
-extern char gs_fmt[] __asm__("D_L01_0020B4A0");
-extern u8 gs_collected[] __asm__("D_L01_001BBB04");
-extern GunshipHit gs_hit __asm__("D_L01_001742C0");
-extern s32 gs_save_bits[][64] __asm__("D_0014C190");
-extern s32 gs_killed_bits[] __asm__("D_L01_001BA950");
-extern s32 gs_level __asm__("D_0015ED84") MACRO_ADDR;
-extern f32 gs_frame_scale __asm__("D_0015ED6C") MACRO_ADDR;
-extern s32 gs_mobys __asm__("D_L01_0015FFD8") MACRO_ADDR;
-extern char *gs_cams __asm__("D_L01_001600EC") MACRO_ADDR;
-extern char *gs_paths[] __asm__("D_L01_001B0930");
-extern s32 gs_cutscene __asm__("D_L01_0015F404") MACRO_ADDR;
+extern f32 gunship_min_scale __asm__("D_L01_00161BD0") __attribute__((sda));
+extern f32 gunship_far_dist __asm__("D_L01_00161BD4") __attribute__((sda));
+extern f32 gunship_near_dist __asm__("D_L01_00161BD8") __attribute__((sda));
+extern GunshipTargets gunship_no_targets __asm__("D_L01_00161BE0");
+extern char camera_pos[] __asm__("D_L01_00167240");
+extern u8 gunship_banner_shown __asm__("D_0013D408") NOT_SDA;
+extern char gunship_no_path_fmt[] __asm__("D_L01_0020B4A0");
+extern u8 moby_collected[] __asm__("D_L01_001BBB04");
+extern GunshipHit collision_hit __asm__("D_L01_001742C0");
+extern s32 level_moby_killed[][64] __asm__("D_0014C190");
+extern s32 moby_killed[] __asm__("D_L01_001BA950");
+extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
+extern f32 frame_time __asm__("D_0015ED6C") MACRO_ADDR;
+extern s32 moby_array __asm__("D_L01_0015FFD8") MACRO_ADDR;
+extern char *camera_points __asm__("D_L01_001600EC") MACRO_ADDR;
+extern char *paths[] __asm__("D_L01_001B0930");
+extern s32 cutscene_active __asm__("D_L01_0015F404") MACRO_ADDR;
 
-extern f32 gs_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern void *gs_hit_check(void *, s32, s32) __asm__("FUN_L00_0025a420");
-extern void gs_voice(s32, s32, s32) __asm__("FUN_0022db10");
-extern void gs_banner(s32, s32) __asm__("FUN_L00_00263d40");
-extern void gs_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void gs_explode(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
-extern void gs_debris(char *, void *, f32) __asm__("FUN_L01_0030be70");
-extern void gs_delete(void *) __asm__("FUN_0020c828");
-extern int gs_printf() __asm__("FUN_001e93b0");
-extern s32 gs_ftoi(f32) __asm__("FUN_001fa6d0");
-extern void gs_follow(char *) __asm__("FUN_L01_002f5168");
-extern s32 gs_ticks(s32) __asm__("FUN_001f96f8");
-extern s32 gs_in_volume(void *, s32) __asm__("FUN_00214720");
-extern s32 gs_hero_state(s32, s32) __asm__("FUN_L01_0023cf98");
-extern void gs_cam_start(void *, void *, s32, s32, s32) __asm__("FUN_L00_002eaaa0");
-extern void gs_cam_stop(s32) __asm__("FUN_L00_002eac18");
-extern s32 gs_dec_timer(void *) __asm__("FUN_001f9770");
-extern s32 gs_los(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
-extern s32 gs_rand(s32) __asm__("FUN_00213260");
-extern void gs_gun_pos(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
-extern void gs_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern GunshipMoby *gs_spawn_beam(void *, void *, void *, void *, s32, s32) __asm__("FUN_L01_002f68a0");
+extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
+extern void *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
+extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
+extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
+extern void spawn_debris(char *, void *, f32) __asm__("FUN_L01_0030be70");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern int stub_printf() __asm__("FUN_001e93b0");
+extern s32 truncate_float_to_s32_f(f32) __asm__("FUN_001fa6d0");
+extern void gunship_follow_path(char *) __asm__("FUN_L01_002f5168");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
+extern s32 hero_set_state(s32, s32) __asm__("FUN_L01_0023cf98");
+extern void cutscene_camera_start(void *, void *, s32, s32, s32) __asm__("FUN_L00_002eaaa0");
+extern void cutscene_camera_stop(s32) __asm__("FUN_L00_002eac18");
+extern s32 fast_dec_timer(void *) __asm__("FUN_001f9770");
+extern s32 collision_line(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern GunshipMoby *spawn_beam(void *, void *, void *, void *, s32, s32) __asm__("FUN_L01_002f68a0");
 
 /* Ported from rac1-decomp src/overlays/l01_novalis/vendor_002BA898.c (func_L01_002F8B00) */
 void FUN_L01_002f7728(GunshipMoby *m) {
     GunshipVars *d = m->vars;
-    GunshipPathFollow *sub = &d->sub;
+    GunshipFollow *sub = &d->sub;
     float s;
     void *hit;
     int i;
     int j;
-    GunshipQuad a;
-    GunshipQuad b;
-    GunshipVec dir;
-    GunshipVec pos;
-    GunshipVec col;
+    GunshipTargets a;
+    GunshipTargets b;
+    SplashVec dir;
+    SplashVec pos;
+    SplashVec col;
     {
-        float dist = gs_vec_dist(m->pos, gs_cam_pos);
-        float x0 = D_L01_00161BD8;
-        float k = -((1.0f - D_L01_00161BD0) / (D_L01_00161BD4 - x0));
+        float dist = distance_xyz(m->pos, camera_pos);
+        float x0 = gunship_near_dist;
+        float k = -((1.0f - gunship_min_scale) / (gunship_far_dist - x0));
         s = k * dist + (1.0f - k * x0);
     }
-    hit = gs_hit_check(m, 0x800000, 0);
+    hit = find_moby_hit(m, 0x800000, 0);
     m->bA4 = 0xFF;
     if (hit != 0) {
-        if (gs_banner_shown == 0) {
-            gs_banner_shown = 1;
-            gs_voice(1, 0, 0);
-            gs_banner(0x53D6, -1);
+        if (gunship_banner_shown == 0) {
+            gunship_banner_shown = 1;
+            allocate_voice_for_bank_entry(1, 0, 0);
+            queue_dialogue_message(0x53D6, -1);
         }
-        gs_vec_sub(&b, d->vD0, d->vE0);
+        subtract_vector_xyz(&b, d->vD0, d->vE0);
         *(u128 *)&a = *(u128 *)&b;
-        gs_explode(m, &a, m->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, 1, 15.0f, 1, 1, -1, 0);
-        gs_debris((char *)m, &a, s * 2.0f);
+        spawn_explosion(m, &a, m->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, 1, 15.0f, 1, 1, -1, 0);
+        spawn_debris((char *)m, &a, s * 2.0f);
         for (i = 0; i < 4; i++) {
             if (d->tethers[i] != -1) {
-                gs_delete((GunshipMoby *)(gs_mobys + (d->tethers[i] << 8)));
+                mark_moby_for_removal((GunshipMoby *)(moby_array + (d->tethers[i] << 8)));
             }
         }
-        gs_delete(m);
+        mark_moby_for_removal(m);
         return;
     }
     do {
         if (m->state == 0) {
             if (sub->path != -1) {
-                GunshipPath *path = (GunshipPath *)gs_paths[sub->path];
+                GunshipPath *path = (GunshipPath *)paths[sub->path];
                 j = 0;
-                d->fFC = d->fFC * 2.0f;
-                if (gs_vec_dist((char *)path + 0x10, (char *)path + (path->count << 4)) < 0.5f) {
+                d->speed = d->speed * 2.0f;
+                if (distance_xyz((char *)path + 0x10, (char *)path + (path->count << 4)) < 0.5f) {
                     path->count--;
                 }
                 for (i = 0; i < path->count; i++) {
                     if (((GunshipPath *)((char *)path + (i << 4)))->w == 1.0f) {
-                        d->slots[j] = i;
+                        d->stop_nodes[j] = i;
                         j++;
                         if (j >= 4) break;
                     }
                 }
-                d->side = 0;
-                d->last = -1;
-                d->timer = -1;
-                d->scale178 = m->scale;
-                d->f17C = d->fFC;
+                d->gun_side = 0;
+                d->last_fire_node = -1;
+                d->cutscene_timer = -1;
+                d->base_scale = m->scale;
+                d->base_speed = d->speed;
             } else {
-                gs_printf(gs_fmt, m->cls, gs_ftoi((float)(((int)m - gs_mobys) >> 8)));
+                stub_printf(gunship_no_path_fmt, m->oclass, truncate_float_to_s32_f((float)(((int)m - moby_array) >> 8)));
             }
             m->b30 = 0xFF;
             m->h32 = 0xFF;
         }
         if (1.0f < s) s = 1.0f;
-        if (s < D_L01_00161BD0) s = D_L01_00161BD0;
-        m->scale = d->scale178 * s;
-        d->fFC = d->f17C * s;
+        if (s < gunship_min_scale) s = gunship_min_scale;
+        m->scale = d->base_scale * s;
+        d->speed = d->base_speed * s;
         if (175.0f <= m->pos[2]) {
             m->alpha = 0;
         } else if (125.0f < m->pos[2] && m->pos[2] < 175.0f) {
-            m->alpha = gs_ftoi((175.0f - m->pos[2]) * 128.0f / 50.0f);
+            m->alpha = truncate_float_to_s32_f((175.0f - m->pos[2]) * 128.0f / 50.0f);
         } else if (m->pos[2] <= 125.0f) {
             m->alpha = 0x80;
         }
-        if (d->flag170 != -1) {
+        if (d->trigger_volume != -1) {
             if (m->state == 0) {
-                gs_follow((char *)m);
+                gunship_follow_path((char *)m);
             }
-            if (d->timer == -1 && gs_in_volume(&hero.motion.pos, d->flag170)) {
-                if (gs_collected[(short)m->id] != 0
-                    || (gs_save_bits[gs_level][(short)m->id >> 5] >> (m->id & 0x1F)) & 1) {
+            if (d->cutscene_timer == -1 && is_point_inside_clip_volume(&hero.motion.pos, d->trigger_volume)) {
+                if (moby_collected[(short)m->uid] != 0
+                    || (level_moby_killed[current_level_index][(short)m->uid >> 5] >> (m->uid & 0x1F)) & 1) {
                     for (j = 0; j < 4; j++) {
                         if (d->turrets[j] != -1) {
-                            GunshipMoby *o = (GunshipMoby *)(gs_mobys + (d->turrets[j] << 8));
-                            if (o != 0 && o->cls == 0x1CB && o->state != 0xFE && o->state != 0xFD) {
+                            GunshipMoby *o = (GunshipMoby *)(moby_array + (d->turrets[j] << 8));
+                            if (o != 0 && o->oclass == 0x1CB && o->state != 0xFE && o->state != 0xFD) {
                                 GunshipTurretVars *t = o->vars;
-                                t->f1E8 = 1;
-                                t->f1EC = gs_ticks(2);
+                                t->activated = 1;
+                                t->activate_delay = scale_game_frames(2);
                             }
                         }
                     }
-                    gs_delete(m);
+                    mark_moby_for_removal(m);
                     return;
                 }
                 m->flags &= 0xFFBE;
-                if (d->cam174 != -1) {
-                    gs_hero_state(0x72, 0);
-                    gs_cam_start(gs_cams + (d->cam174 << 7) + 0x30, gs_cams + (d->cam174 << 7) + 0x70, 0, 0, 0);
-                    gs_cutscene = 1;
+                if (d->cutscene_camera != -1) {
+                    hero_set_state(0x72, 0);
+                    cutscene_camera_start(camera_points + (d->cutscene_camera << 7) + 0x30, camera_points + (d->cutscene_camera << 7) + 0x70, 0, 0, 0);
+                    cutscene_active = 1;
                     m->w94 = 0;
                     m->flags &= 0xEFFF;
-                    d->timer = gs_ticks(0x1FE);
+                    d->cutscene_timer = scale_game_frames(0x1FE);
                 }
-            } else if (d->timer != -1) {
-                if (gs_dec_timer(&d->timer)) {
-                    gs_cam_stop(0);
-                    gs_hero_state(0, 1);
-                    gs_cutscene = 0;
-                    gs_save_bits[gs_level][(short)m->id >> 5] |= 1 << (m->id & 0x1F);
-                    gs_killed_bits[(short)m->id >> 5] |= 1 << (m->id & 0x1F);
-                    gs_delete(m);
+            } else if (d->cutscene_timer != -1) {
+                if (fast_dec_timer(&d->cutscene_timer)) {
+                    cutscene_camera_stop(0);
+                    hero_set_state(0, 1);
+                    cutscene_active = 0;
+                    level_moby_killed[current_level_index][(short)m->uid >> 5] |= 1 << (m->uid & 0x1F);
+                    moby_killed[(short)m->uid >> 5] |= 1 << (m->uid & 0x1F);
+                    mark_moby_for_removal(m);
                     return;
                 }
-                if (d->timer == gs_ticks(0x3C)) {
+                if (d->cutscene_timer == scale_game_frames(0x3C)) {
                     for (j = 0; j < 4; j++) {
                         if (d->turrets[j] != -1) {
-                            GunshipMoby *o = (GunshipMoby *)((d->turrets[j] << 8) + gs_mobys);
-                            if (o->cls == 0x1CB) {
+                            GunshipMoby *o = (GunshipMoby *)((d->turrets[j] << 8) + moby_array);
+                            if (o->oclass == 0x1CB) {
                                 GunshipTurretVars *t = o->vars;
-                                t->f1E8 = 1;
-                                t->f1EC = gs_ticks(2);
+                                t->activated = 1;
+                                t->activate_delay = scale_game_frames(2);
                             }
                         }
                     }
                 }
-                gs_follow((char *)m);
+                gunship_follow_path((char *)m);
             } else {
                 m->flags |= 0x41;
                 break;
             }
         } else {
-            gs_follow((char *)m);
+            gunship_follow_path((char *)m);
         }
         m->flags |= 0x1000;
         d->b2B = 1;
         d->b2C = 0x2F;
-        if (d->last != d->sub.cur) {
+        if (d->last_fire_node != d->sub.cur) {
             int found = -1;
             for (i = 0; i < 4; i++) {
-                unsigned char *t = d->slots;
+                unsigned char *t = d->stop_nodes;
                 if (d->sub.cur == t[i]) found = i;
             }
             if (found != -1) {
                 int cnt;
-                a = gs_quad_init;
+                a = gunship_no_targets;
                 j = 0;
-                b = gs_quad_init;
+                b = gunship_no_targets;
                 cnt = 0;
                 for (i = 0; i < 4; i++) {
                     if (d->targets[found][i] != -1) {
@@ -3111,10 +3106,10 @@ void FUN_L01_002f7728(GunshipMoby *m) {
                     }
                 }
                 if (j == 0) break;
-                if (gs_in_volume(gs_cam_pos, d->flag188)) break;
+                if (is_point_inside_clip_volume(camera_pos, d->camera_block_volume)) break;
                 for (i = j - 1; i >= 0; i--) {
-                    if (gs_los(gs_cam_pos, gs_cams + (a.v[i] << 7) + 0x30, 0x86, m, 0)) {
-                        if (gs_hit.moby == 0 || gs_hit.moby != m) {
+                    if (collision_line(camera_pos, camera_points + (a.v[i] << 7) + 0x30, 0x86, m, 0)) {
+                        if (collision_hit.moby == 0 || collision_hit.moby != m) {
                             b.v[i] = -1;
                             cnt--;
                             break;
@@ -3133,28 +3128,28 @@ void FUN_L01_002f7728(GunshipMoby *m) {
                 }
                 if (j != 0) {
                     GunshipMoby *bm;
-                    i = a.v[gs_rand(j)];
-                    d->side ^= 1;
-                    gs_gun_pos(m, d->side, &pos);
-                    gs_vec_sub(&dir, gs_cams + (i << 7) + 0x30, &pos);
-                    gs_normalize(&dir, &dir, gs_frame_scale * 160.0f);
-                    col.q = *(u128 *)((i << 7) + (int)gs_cams + 0x30);
-                    bm = gs_spawn_beam(m, &pos, &dir, &col, gs_in_volume(&hero.motion.pos, d->flag18C), d->flag170 != -1);
+                    i = a.v[random_integer_below(j)];
+                    d->gun_side ^= 1;
+                    moby_point_position(m, d->gun_side, &pos);
+                    subtract_vector_xyz(&dir, camera_points + (i << 7) + 0x30, &pos);
+                    normalize_vector_xyz(&dir, &dir, frame_time * 160.0f);
+                    col.q = *(u128 *)((i << 7) + (int)camera_points + 0x30);
+                    bm = spawn_beam(m, &pos, &dir, &col, is_point_inside_clip_volume(&hero.motion.pos, d->beam_volume), d->trigger_volume != -1);
                     if (bm != 0) {
                         int k = 0;
                         int *out = (int *)((char *)bm->vars + 0x20);
                         {
-                            unsigned char *t = d->slots;
-                            d->last = t[found];
+                            unsigned char *t = d->stop_nodes;
+                            d->last_fire_node = t[found];
                         }
                         for (i = 0; i < 8; i++) {
                             if (d->guards[i] != -1) {
-                                GunshipMoby *o = (GunshipMoby *)((d->guards[i] << 8) + gs_mobys);
-                                if (o->cls == 0x2BC) {
+                                GunshipMoby *o = (GunshipMoby *)((d->guards[i] << 8) + moby_array);
+                                if (o->oclass == 0x2BC) {
                                     GunshipGuardVars *g = o->vars;
-                                    if (g->f4 == 0 && g->f0 == 0 && gs_rand(0x64) < 0x64
-                                        && gs_in_volume(&hero.motion.pos, g->f8)
-                                        && gs_in_volume(gs_cam_pos, g->f8)) {
+                                    if (g->f4 == 0 && g->f0 == 0 && random_integer_below(0x64) < 0x64
+                                        && is_point_inside_clip_volume(&hero.motion.pos, g->f8)
+                                        && is_point_inside_clip_volume(camera_pos, g->f8)) {
                                         out[k] = d->guards[i];
                                         k++;
                                     }
@@ -3166,7 +3161,7 @@ void FUN_L01_002f7728(GunshipMoby *m) {
                 }
             }
         }
-    } while (d->timer > gs_ticks(0x1FE) - gs_ticks(0x78));
+    } while (d->cutscene_timer > scale_game_frames(0x1FE) - scale_game_frames(0x78));
 }
 f32 FUN_001f99c0(f32);
 
