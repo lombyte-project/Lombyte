@@ -176,38 +176,36 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     fs_aa_clear_packet[7] = 0x80008000;
     fs_aa_clear_packet[8] = 0x2400000000008010;
     fs_aa_clear_packet[9] = 0x44;
-    left_x = 0x6FF8;
     next_x = 0x71F8;
     for (strip_index = 0; strip_index < 16; strip_index++) {
         *packet_word++ =
-            left_x | ((u64)(0x7FF8 - (active_fs_aa_buffer->display_height << 3)) << 16);
-        left_x += 0x200;
+            (0x6FF8 + strip_index * 0x200) |
+            ((u64)(0x7FF8 - (active_fs_aa_buffer->display_height << 3)) << 16);
         *packet_word++ =
             next_x | ((u64)((active_fs_aa_buffer->display_height << 3) + 0x7FF8) << 16);
         next_x += 0x200;
     }
 
     packet_word = &first_clear_packet[8];
-    left_x = 0x6FF8;
     next_x = 0x71F8;
     for (strip_index = 0; strip_index < 16; strip_index++) {
         *packet_word++ =
-            left_x | ((u64)(0x7FF8 - (active_fs_aa_buffer->display_height << 3)) << 16);
-        left_x += 0x200;
+            (0x6FF8 + strip_index * 0x200) |
+            ((u64)(0x7FF8 - (active_fs_aa_buffer->display_height << 3)) << 16);
         *packet_word++ =
             next_x | ((u64)((active_fs_aa_buffer->display_height << 3) + 0x7FF8) << 16);
         next_x += 0x200;
     }
 
     packet_word = &second_clear_packet[8];
-    left_x = 0x6FF8;
     next_x = 0x71F8;
     for (strip_index = 0; strip_index < 16; strip_index++) {
         *packet_word++ =
-            left_x | ((u64)(0x7FF8 - (active_fs_aa_buffer->storage_height << 3)) << 16);
-        left_x += 0x200;
+            (0x6FF8 + strip_index * 0x200) |
+            ((u64)(0x7FF8 - (active_fs_aa_buffer->storage_height << 3)) << 16);
         *packet_word++ =
-            next_x | ((u64)((active_fs_aa_buffer->storage_height << 3) + 0x7FF8) << 16);
+            next_x |
+            ((u64)((active_fs_aa_buffer->storage_height << 3) + 0x7FF8) << 16);
         next_x += 0x200;
     }
 }
