@@ -15,6 +15,9 @@ extern void FUN_L00_00236458(void);
 extern void FUN_L00_002365a8(void);
 extern int ray_hits(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
+/* The same function under a void-returning prototype, as an older
+   declaration of it would have read; see the 0x33 call below. */
+extern void hero_set_state_v(int, int) __asm__("FUN_L00_002223f8");
 
 int FUN_L00_00227778(void) {
     Vec4 start;
@@ -62,12 +65,12 @@ collision_mode:
             state = 0x35;
             goto change_state;
         }
-        /* Retail keeps this as its own call site. Called with its int
-           result type, jump2 cross-jumping merges it into the shared
-           change_state call above; calling it through a void-returning
-           type (the result is unused) keeps it separate. That the original
-           source spelled the call this way is a hypothesis. */
-        ((void (*)(int, int))hero_set_state)(0x33, 1);
+        /* Retail keeps this as its own call site. Through the int-returning
+           prototype, jump2 cross-jumping merges it into the shared
+           change_state call above; the void-returning declaration keeps it
+           separate. That the original source declared it this way is a
+           hypothesis. */
+        hero_set_state_v(0x33, 1);
         return 1;
     }
     return 0;
