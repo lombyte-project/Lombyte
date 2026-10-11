@@ -1629,7 +1629,102 @@ void FUN_L10_002da2c8(struct Moby *moby) {
     }
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da690.s", FUN_L10_002da690);
+#else
+extern u64 get_effect_texture_da690(int) __asm__("FUN_001f44b8");
+extern float vector_distance_da690(void *, void *) __asm__("FUN_001f9b48");
+extern void rotation_matrix_da690(void *, void *) __asm__("FUN_001fa050");
+extern void rotation_matrix_y_da690(void *, float) __asm__("FUN_001f9ff8");
+extern void multiply_matrix_da690(void *, void *, void *) __asm__("FUN_001fa378");
+extern float convert_integer_to_float_da690(int) __asm__("FUN_001fa6c0");
+extern int truncate_float_to_s32_da690(float) __asm__("FUN_001fa6d0");
+extern unsigned int fast_tween_color_da690(float, int, int) __asm__("FUN_001fa6e0");
+extern float scale_time_da690(float) __asm__("FUN_001f96b0");
+extern void add_vector_xyz_da690(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void draw_geometry_quad_da690(void *, void *, int) __asm__("FUN_001f7d30");
+extern float D_L10_00161D60;
+extern int D_L10_00161D64;
+extern int D_L10_00161D68;
+
+void FUN_L10_002da690(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    char *base = *(char **)((char *)D_L10_0015FFD8 + *(int *)(data + 0xc) * 0x100 + 0x78);
+    char scratch[(unsigned int)*(int *)(data + 4) * 0x40];
+    float rotation[16];
+    float matrix1[16], matrix2[16];
+    unsigned char quad[0xa0];
+    u64 *words1 = (u64 *)matrix1;
+    u64 *words2 = (u64 *)matrix2;
+    int i, group, row, vertex;
+    float fade, phase;
+    char *transform;
+
+    fade = vector_distance_da690(&moby->pos, &D_L10_00167240);
+    if (fade > 48.0f) fade = (80.0f - fade) * 0.03125f;
+    else fade = 1.0f;
+    rotation_matrix_y_da690(rotation, *(float *)data * 0.5f);
+    for (i = 0, transform = scratch; i < *(int *)(data + 4); i++, transform += 0x40) {
+        rotation_matrix_da690(transform, &moby->rot);
+        multiply_matrix_da690(transform, transform, rotation);
+        *(OvlQuad *)(transform + 0x30) = *(OvlQuad *)&moby->pos;
+        *(float *)(transform + 0x38) += convert_integer_to_float_da690(i + 1) * *(float *)(data + 8);
+    }
+    words1[5] = get_effect_texture_da690(14);
+    words1[6] = 0xff9000000260ULL;
+    words1[7] = ((u64)*(int *)0x0015b070) | ((u64)*(int *)0x0015b074 << 2) |
+                ((u64)*(int *)0x0015b078 << 4) | ((u64)*(int *)0x0015b07c << 6) | 0x8000000000ULL;
+    words1[4] = 0;
+    words2[4] = 0;
+    words2[5] = words1[5];
+    words2[6] = words1[6];
+    words2[7] = words1[7];
+    for (i = 0; i < 4; i++) {
+        matrix1[i * 2 + 1] = ((float *)0x001d9ff4)[i * 2];
+        matrix2[i * 2 + 1] = ((float *)0x001d9ff4)[i * 2];
+    }
+    for (group = 0; group < 4; group++) {
+        phase = 0.0f;
+        for (row = 0; row < 19; row++) {
+            phase += D_L10_00161D60;
+            if (phase > 1.0f) phase -= 1.0f;
+            for (i = 0; i < 4; i++) {
+                float value = ((float *)0x001d9ff0)[i * 2] + phase + *(float *)(base + 0x12de0);
+                matrix1[i * 2] = value;
+                matrix2[i * 2] = value;
+            }
+            for (i = 0; i < *(int *)(data + 4); i++) {
+                unsigned char *order = (unsigned char *)(data + 0x10);
+                int age = *(int *)(base + 0x10000 + 0x2c00 + group * 0x78 + order[i] * 4);
+                float progress;
+                unsigned int color;
+                if (age > D_L10_00161D68) {
+                    progress = convert_integer_to_float_da690(age - D_L10_00161D68) /
+                               convert_integer_to_float_da690(D_L10_00161D64 - D_L10_00161D68);
+                } else {
+                    progress = 1.0f - convert_integer_to_float_da690(age) /
+                               convert_integer_to_float_da690(D_L10_00161D68);
+                }
+                color = fast_tween_color_da690(progress, *(int *)0x0015b090, *(int *)0x0015b094);
+                color = (color & 0xffffff) +
+                        (truncate_float_to_s32_da690(fade * fade *
+                         convert_integer_to_float_da690((int)color >> 24)) << 24);
+                if (moby->state == 2) {
+                    float alpha = convert_integer_to_float_da690(*(int *)(data + 0x34));
+                    float duration = scale_time_da690(*(float *)0x0015b098 * 60.0f);
+                    color = (truncate_float_to_s32_da690(alpha * 255.0f / duration) << 24) | 0xffffff;
+                }
+                for (vertex = 0; vertex < 4; vertex++) *(unsigned int *)(quad + 0x40 + vertex * 4) = color;
+                for (vertex = 0; vertex < 4; vertex++) {
+                    add_vector_xyz_da690(quad + vertex * 0x10, (char *)0x001da010 + vertex * 0x10,
+                        base + group * 0x2580 + (row + (vertex >> 1)) * 0x140 + order[i] * 0x10);
+                }
+                draw_geometry_quad_da690(quad, scratch + i * 0x40, 0);
+            }
+        }
+    }
+}
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dcc58.s", FUN_L10_002dcc58);
 #else
