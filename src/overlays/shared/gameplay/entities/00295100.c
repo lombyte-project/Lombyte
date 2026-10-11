@@ -1140,7 +1140,8 @@ void FUN_L00_00299c48(void) {
             D_L00_0015F620 = 0;
             D_L00_0015F622++;
             D_L00_0015F624 = -1;
-            index = (s16)D_L00_0015F622 % 0x14;
+            index = (s16)D_L00_0015F622;
+            index = index % 0x14;
             if (pal_mode == 0) {
                 FUN_L00_00265fa0(D_L00_0015F62C, disc_table.music_60000[index + 18].sector,
                                    disc_table.music_60000[index + 18].size);
