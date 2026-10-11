@@ -923,7 +923,240 @@ void FUN_L00_002bcf98(u8 *m) {
     }
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bd0a0.s", FUN_L00_002bd0a0);
+#else
+typedef u128 Vec_2bd0a0;
+extern f32 D_L00_001617D0_f __asm__("D_L00_001617D0") __attribute__((section(".data")));
+extern f32 D_L00_00161763_f __asm__("D_L00_00161763") __attribute__((section(".data")));
+extern f32 D_L00_0015ED60 __asm__("D_0015ED60");
+extern f32 D_L00_0015ED6C __asm__("D_0015ED6C");
+extern u128 D_L00_001DBF50[] __attribute__((section(".data")));
+extern s32 D_L00_00161824 __attribute__((section(".data")));
+extern u128 D_L00_001DD0D0[] __attribute__((section(".data")));
+extern Vec_2bd0a0 D_L00_001DBF60[] __attribute__((section(".data")));
+extern Vec_2bd0a0 D_L00_001DC020_2bd0a0[] __asm__("D_L00_001DC020") __attribute__((section(".data")));
+extern Vec_2bd0a0 D_L00_001DC0E0_2bd0a0[] __asm__("D_L00_001DC0E0") __attribute__((section(".data")));
+extern Vec_2bd0a0 D_L00_001DC1A0_2bd0a0[][20] __asm__("D_L00_001DC1A0") __attribute__((section(".data")));
+extern Vec_2bd0a0 D_L00_001DD0A0[] __attribute__((section(".data")));
+extern Vec_2bd0a0 D_0013F5E0_2bd0a0 __asm__("D_0013F5E0");
+extern Vec_2bd0a0 D_L00_00173E60_2bd0a0 __asm__("D_L00_00173E60");
+extern u32 D_L00_001E9AB0_2bd0a0[] __asm__("D_L00_001E9AB0");
+extern void *D_001413D0_2bd0a0 __asm__("D_001413D0");
+extern f32 D_L00_001616DC __attribute__((sda));
+extern f32 D_L00_001617CC __attribute__((sda));
+extern f32 D_L00_00161708 __attribute__((sda));
+extern f32 D_L00_001616F0_2bd0a0 __asm__("D_L00_001616F0") __attribute__((sda));
+extern s32 D_L00_001616F4_2bd0a0 __asm__("D_L00_001616F4") __attribute__((sda));
+extern f32 D_L00_001616F8_2bd0a0 __asm__("D_L00_001616F8") __attribute__((sda));
+extern f32 D_L00_001616FC_2bd0a0 __asm__("D_L00_001616FC") __attribute__((sda));
+extern f32 D_L00_00161700_2bd0a0 __asm__("D_L00_00161700") __attribute__((sda));
+extern f32 D_L00_0016170C __attribute__((sda));
+extern f32 D_L00_00161704 __attribute__((sda));
+extern f32 D_L00_00161730 __attribute__((sda));
+extern f32 D_L00_0016172C __attribute__((sda));
+extern f32 D_L00_00161734 __attribute__((sda));
+extern f32 D_L00_0016173C __attribute__((sda));
+extern f32 D_L00_00161740 __attribute__((sda));
+extern f32 D_L00_00161748 __attribute__((sda));
+extern f32 D_L00_00161758 __attribute__((sda));
+extern f32 D_L00_0016175C __attribute__((sda));
+extern f32 D_L00_00161768 __attribute__((sda));
+extern s32 D_L00_00161744 __attribute__((sda));
+extern s32 D_L00_00161750 __attribute__((sda));
+extern s32 D_L00_0016174C __attribute__((sda));
+extern s32 D_L00_00161754 __attribute__((sda));
+extern s32 D_L00_00161760 __attribute__((sda));
+extern s32 D_L00_00161764 __attribute__((sda));
+extern s32 D_L00_00161818[] __attribute__((section(".data")));
+extern s32 D_L00_001617D8[] __attribute__((section(".data")));
+extern f32 D_L00_001617E8[] __attribute__((section(".data")));
+extern f32 D_L00_001617F8[] __attribute__((section(".data")));
+extern f32 D_L00_00161808[] __attribute__((section(".data")));
+extern void FUN_L00_002bcf98(u8 *);
+extern f32 FUN_L00_0025e310_2bd0a0(f32) __asm__("FUN_L00_0025e310");
+extern void build_spherical_offset_2bd0a0(void *, f32, f32, f32) __asm__("FUN_00214db0");
+extern void *FUN_0025c338_2bd0a0(void *) __asm__("FUN_002141f8");
+extern s32 FUN_001efc70_2bd0a0(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
+extern f32 FUN_001ff488_2bd0a0(void *, void *) __asm__("FUN_001f9b80");
+extern void FUN_001ff2a8_2bd0a0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001ff278_2bd0a0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001ff2d8_2bd0a0(f32, void *, void *, void *) __asm__("FUN_001f9a40");
+extern f32 FUN_001ff3d8_2bd0a0(void *) __asm__("FUN_001f9af0");
+extern void FUN_001ff300_2bd0a0(f32, void *, void *) __asm__("FUN_001f9a68");
+extern void FUN_001ff300_unset_2bd0a0(void *, void *) __asm__("FUN_001f9a68");
+extern void FUN_001ff500_2bd0a0(f32, void *, void *) __asm__("FUN_001f9bf8");
+extern void FUN_001ff3c0_2bd0a0(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void FUN_0025fc08_2bd0a0(f32, void *, void *, void *) __asm__("FUN_L00_0025fc08");
+extern void FUN_001ff6f8_2bd0a0(void *, void *, void *) __asm__("FUN_001f9d20");
+extern f32 FUN_001ff800_2bd0a0(f32) __asm__("FUN_001f9dc8");
+extern f32 FUN_001ff7e8_2bd0a0(f32) __asm__("FUN_001f9de0");
+extern f32 FUN_00200240_2bd0a0(s32) __asm__("FUN_001fa6c0");
+extern s32 FUN_00200250_2bd0a0(f32) __asm__("FUN_001fa6d0");
+extern void FUN_001f9598_2bd0a0(void *, void *) __asm__("FUN_001f4600");
+extern f32 FUN_00257be8_2bd0a0(f32, f32) __asm__("FUN_002132a8");
+extern s32 FUN_00257b50_2bd0a0(s32) __asm__("FUN_00213260");
+extern s32 FUN_001fef20_2bd0a0(s32) __asm__("FUN_001f96f8");
+extern s32 FUN_001fef68_2bd0a0(s32 *) __asm__("FUN_001f9740");
+extern void FUN_00272060_2bd0a0(f32, f32, f32, void *, s32, s32, s32, s32, void *) __asm__("FUN_L00_00272060");
+extern void FUN_00275910_2bd0a0(f32, f32, void *, s32, s32, s32, s32, void *, void *) __asm__("FUN_L00_00275910");
+extern void FUN_00275910_eight_2bd0a0(f32, f32, void *, s32, s32, s32, s32, void *) __asm__("FUN_L00_00275910");
+extern f32 SampleSignedInterpolatedFloat_2bd0a0(f32, f32) __asm__("FUN_L00_00257c48");
+extern void FUN_L00_002bdc50(void *);
+
+void FUN_L00_002bd0a0(u8 *m) {
+    u8 *source = *(u8 **)(m + 0x78);
+    Vec_2bd0a0 point, initial, direction, offset, axis, rotated, cross, tmp;
+    Vec_2bd0a0 end, side, matrix[2];
+    Vec_2bd0a0 origin;
+    f32 angle[4];
+    f32 radius, step, length, size, phase, remaining, traveled;
+    s32 i, j, index, sign, duration;
+    u32 colors[5];
+    u8 *path;
+    FUN_L00_002bcf98(m);
+    angle[0] = 0.0f;
+    angle[3] = 1.0f;
+    D_L00_001617D0_f = FUN_L00_0025e310_2bd0a0(D_L00_001617D0_f + D_L00_001616F8_2bd0a0);
+    build_spherical_offset_2bd0a0(&initial, D_L00_001617CC, *(f32 *)(source + 0x48), *(f32 *)(source + 0x4c));
+    path = *(u8 **)(source + 0x10);
+    if (path == 0 || (path = FUN_0025c338_2bd0a0(path)) == 0) {
+        build_spherical_offset_2bd0a0(&origin, D_L00_001616DC, *(f32 *)(source + 0x48), *(f32 *)(source + 0x4c));
+        FUN_001ff278_2bd0a0(&origin, &origin, source);
+    } else {
+        origin = *(Vec_2bd0a0 *)(*(u8 **)(source + 0x10) + 0x10);
+        ((f32 *)&origin)[2] += *(f32 *)(path + 0x10);
+    }
+    radius = D_L00_001616DC;
+    if (*(u8 **)(source + 0x10) == 0) {
+        if (FUN_001efc70_2bd0a0(source, &origin, 0x14, D_001413D0_2bd0a0, 0))
+            radius = FUN_001ff488_2bd0a0(&D_L00_00173E60_2bd0a0, source);
+    } else {
+        radius = FUN_001ff488_2bd0a0(*(u8 **)(source + 0x10) + 0x10, source);
+    }
+    D_L00_001617CC = radius * D_L00_001616F0_2bd0a0;
+    D_L00_001DBF60[0] = *(Vec_2bd0a0 *)source;
+    D_L00_001DC020_2bd0a0[0] = *(Vec_2bd0a0 *)source;
+    D_L00_001DC0E0_2bd0a0[0] = *(Vec_2bd0a0 *)source;
+    for (i = 1; i < 12; i++) {
+        FUN_001ff2a8_2bd0a0(&point, &D_L00_001DBF60[i], &D_L00_001DBF50[i]);
+        step = FUN_00200240_2bd0a0(i) * D_L00_001616F0_2bd0a0;
+        if (D_L00_001616F4_2bd0a0 < i && *(u8 **)(source + 0x10) != 0) {
+            FUN_001ff2a8_2bd0a0(&direction, *(u8 **)(source + 0x10) + 0x10, &D_L00_001DBF60[i]);
+            FUN_001ff500_2bd0a0(D_L00_001617CC, &direction, &direction);
+            FUN_001ff2d8_2bd0a0(0.2f, &initial, &initial, &direction);
+        }
+        FUN_001ff2d8_2bd0a0(step * -0.49999997f + 0.9f, &direction, &point, &initial);
+        length = FUN_001ff3d8_2bd0a0(&direction);
+        if (length == 0.0f) D_L00_001DBF60[i] = D_L00_001DBF50[i];
+        else {
+            FUN_001ff300_2bd0a0(D_L00_001617CC / length, &direction, &direction);
+            FUN_001ff278_2bd0a0(&D_L00_001DBF60[i], &D_L00_001DBF50[i], &direction);
+        }
+        FUN_001ff2a8_2bd0a0(&offset, &D_L00_001DBF60[i], &D_L00_001DBF50[i]);
+        FUN_001ff3c0_2bd0a0(&axis, &offset, &D_0013F5E0_2bd0a0);
+        FUN_001ff500_2bd0a0(D_L00_00161708 + (D_L00_0016170C - D_L00_00161708) * step, &axis, &axis);
+        for (j = 0; j < 20; j++) {
+            FUN_0025fc08_2bd0a0((f32)j * D_L00_00161704, &rotated, &axis, &offset);
+            FUN_001ff278_2bd0a0(&D_L00_001DC1A0_2bd0a0[i][j], &rotated, &D_L00_001DBF60[i]);
+        }
+        tmp = D_L00_001DBF60[i];
+        FUN_001ff500_2bd0a0(1.0f, &end, &offset);
+        FUN_001ff500_2bd0a0(1.0f, &side, &axis);
+        FUN_001ff3c0_2bd0a0(&cross, &side, &end);
+        size = D_L00_0016172C + (D_L00_00161730 - D_L00_0016172C) * step;
+        phase = FUN_L00_0025e310_2bd0a0(D_L00_001617D0_f + D_L00_001616FC_2bd0a0 * FUN_00200240_2bd0a0(i));
+        angle[1] = size * FUN_001ff800_2bd0a0(phase);
+        angle[2] = size * FUN_001ff7e8_2bd0a0(phase);
+        FUN_001ff6f8_2bd0a0(&D_L00_001DC020_2bd0a0[i], angle, &end);
+        angle[2] = -angle[2];
+        FUN_001ff6f8_2bd0a0(&D_L00_001DC0E0_2bd0a0[i], angle, &end);
+    }
+    FUN_001f9598_2bd0a0(FUN_L00_002bdc50, m);
+    size = FUN_00257be8_2bd0a0(0.1f, 2.0f);
+    sign = FUN_00257b50_2bd0a0(2);
+    if (!sign) sign = -1;
+    if (!FUN_00257b50_2bd0a0(2)) {
+        direction = D_L00_001DC020_2bd0a0[11];
+        FUN_00272060_2bd0a0(size * 0.1f, size, 0.003f, &direction, FUN_001fef20_2bd0a0(30), 0x7f7f2020, 0, sign, (void *)0x15f580);
+        sign = -sign;
+        FUN_00272060_2bd0a0(size * 0.07f, size * 0.7f, 0.003f, &direction, FUN_001fef20_2bd0a0(30), 0x7f7f7f7f, 1, sign, (void *)0x15f580);
+    }
+    if (!FUN_00257b50_2bd0a0(2)) {
+        direction = D_L00_001DC0E0_2bd0a0[11];
+        FUN_00272060_2bd0a0(size * 0.1f, size, 0.003f, &direction, FUN_001fef20_2bd0a0(30), 0x7f20207f, 0, sign, (void *)0x15f580);
+        sign = -sign;
+        FUN_00272060_2bd0a0(size * 0.07f, size * 0.7f, 0.003f, &direction, FUN_001fef20_2bd0a0(30), 0x7f7f7f7f, 1, sign, (void *)0x15f580);
+    }
+    FUN_001ff2a8_2bd0a0(&offset, &D_L00_001DBF50[2], &D_L00_001DBF60[0]);
+    FUN_001ff500_2bd0a0(D_L00_00161734 * D_L00_0015ED60, &offset, &offset);
+    if (!FUN_00257b50_2bd0a0(2)) {
+        FUN_001ff500_2bd0a0(D_L00_00161740, &axis, m + 0xd0);
+        FUN_001ff278_2bd0a0(&direction, &D_L00_001DBF60[0], &axis);
+        colors[0] = D_L00_001E9AB0_2bd0a0[0];
+        colors[1] = D_L00_001E9AB0_2bd0a0[1];
+        colors[2] = D_L00_001E9AB0_2bd0a0[2];
+        colors[3] = D_L00_001E9AB0_2bd0a0[3];
+        colors[4] = D_L00_001E9AB0_2bd0a0[4];
+        index = FUN_00257b50_2bd0a0(5);
+        phase = SampleSignedInterpolatedFloat_2bd0a0(0.0f, D_L00_0016173C);
+        step = SampleSignedInterpolatedFloat_2bd0a0(0.0f, D_L00_0016173C);
+        FUN_0025fc08_2bd0a0(step, &cross, &offset, &D_0013F5E0_2bd0a0);
+        FUN_001ff3c0_2bd0a0(&side, &offset, &D_0013F5E0_2bd0a0);
+        FUN_0025fc08_2bd0a0(phase, &cross, &cross, &side);
+        duration = FUN_00200250_2bd0a0((radius * 1.2f) / (D_L00_00161734 * D_L00_0015ED60));
+        if (*(u8 **)(source + 0x10)) duration *= 3;
+        FUN_00275910_eight_2bd0a0(size * 0.1f, size, &direction, duration, colors[index], 0, sign, &cross);
+        FUN_00275910_2bd0a0(size * 0.07f, size * 0.7f, &direction, duration, 0x7f7f7f7f, 1, -sign, &cross, *(void **)(source + 0x10));
+    }
+    if (FUN_001fef68_2bd0a0(&D_L00_00161824)) {
+        D_L00_00161824 = FUN_001fef20_2bd0a0(D_L00_00161744);
+        for (i = 0; i < 3; i++) {
+            if (!D_L00_00161818[i]) {
+                D_L00_00161818[i] = 1;
+                D_L00_001617D8[i] = FUN_001fef20_2bd0a0(D_L00_0016174C);
+                D_L00_00161808[i] = D_L00_0016175C;
+                D_L00_001617F8[i] = 0;
+                D_L00_001617E8[i] = FUN_00200240_2bd0a0(*(s8 *)&D_L00_00161763_f);
+                D_L00_001DD0A0[i] = *(Vec_2bd0a0 *)source;
+                FUN_001ff2a8_2bd0a0(&axis, &D_L00_001DBF50[2], &D_L00_001DBF60[0]);
+                FUN_001ff500_2bd0a0(1.0f, &D_L00_001DD0D0[i], &axis);
+                break;
+            }
+        }
+    }
+    for (i = 0; i < 3; i++) {
+        if (!D_L00_00161818[i]) continue;
+        if (FUN_001fef68_2bd0a0(&D_L00_001617D8[i])) {
+            if (D_L00_001617D8[i] < D_L00_00161750)
+                D_L00_001617E8[i] -= D_L00_00161768;
+            traveled = D_L00_001617F8[i] + D_L00_00161748 * D_L00_0015ED6C;
+            remaining = traveled / D_L00_001616DC;
+            D_L00_001617F8[i] = traveled;
+            if (remaining > 1.0f) remaining = 1.0f;
+            D_L00_00161808[i] = D_L00_0016175C + (D_L00_00161758 - D_L00_0016175C) * remaining;
+            if (D_L00_001616DC <= traveled) {
+                FUN_001ff300_unset_2bd0a0(&axis, &D_L00_001DD0D0[i]);
+                FUN_001ff278_2bd0a0(&D_L00_001DD0A0[i], &D_L00_001DD0A0[i], &axis);
+            } else {
+                index = FUN_00200250_2bd0a0(traveled / D_L00_001617CC);
+                remaining = traveled - FUN_00200240_2bd0a0(index) * D_L00_001617CC;
+                D_L00_001DD0A0[i] = D_L00_001DBF60[index];
+                if (index == 11) FUN_001ff2a8_2bd0a0(&axis, &D_L00_001DBF60[11], &D_L00_001DBF60[10]);
+                else FUN_001ff2a8_2bd0a0(&axis, &D_L00_001DBF60[index + 1], &D_L00_001DBF60[index]);
+                length = FUN_001ff3d8_2bd0a0(&axis);
+                if (length != 0.0f) {
+                    FUN_001ff300_2bd0a0(remaining * (1.0f / length), &cross, &axis);
+                    FUN_001ff278_2bd0a0(&D_L00_001DD0A0[i], &D_L00_001DD0A0[i], &cross);
+                    FUN_001ff500_2bd0a0(1.0f / length, &cross, &axis);
+                    FUN_001ff2d8_2bd0a0(0.1f, &D_L00_001DD0D0[i], &D_L00_001DD0D0[i], &cross);
+                    FUN_001ff500_2bd0a0(1.0f, &D_L00_001DD0D0[i], &D_L00_001DD0D0[i]);
+                }
+            }
+        } else D_L00_00161818[i] = 0;
+    }
+}
+#endif
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 typedef struct {
