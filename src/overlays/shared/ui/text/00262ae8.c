@@ -93,21 +93,21 @@ void FUN_L05_00262b58(HudCounter *e) {
     e->smoothed = truncate_float_to_s32(value);
 
     if (counter[2] == 1) goto state_one;
-    if (counter[2] < 2) {
-        if (counter[2] != 0) return;
-        if (D_0013F65E < 6 || (f32)D_0013FA5C < 1.0f) return;
-        D_L05_0015FAD4 = D_0013FA5C;
-        D_L05_0015FAD8 = 0;
-        i = 3;
-        dst = &D_L05_0015FAEC;
-        do { *dst-- = 0; } while (--i >= 0);
-        counter[2] = 1;
-        counter[0] = 0;
-        counter[1] = D_L05_0015F87C;
-        return;
+    if (counter[2] >= 2) {
+        if (counter[2] > 3) return;
+        goto tail;
     }
-    if (counter[2] > 3) return;
-    goto tail;
+    if (counter[2] != 0) return;
+    if (D_0013F65E < 6 || (f32)D_0013FA5C < 1.0f) return;
+    D_L05_0015FAD4 = D_0013FA5C;
+    D_L05_0015FAD8 = 0;
+    i = 3;
+    dst = &D_L05_0015FAEC;
+    do { *dst-- = 0; } while (--i >= 0);
+    counter[2] = 1;
+    counter[0] = 0;
+    counter[1] = D_L05_0015F87C;
+    return;
 state_one:
         if (counter[0] < 10) counter[0]++;
         if (counter[1] != 0) counter[1]--;
