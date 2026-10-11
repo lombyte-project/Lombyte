@@ -287,7 +287,21 @@ void FUN_L05_002f87a8(char *moby) {
     float angle, distance_scale, delta_length;
     int state = (u8)moby[0x20];
 
-    if (state == 1) {
+    if (state != 1) {
+        if (state < 2 && state == 0) {
+        if (distance_xyz_87a8((void *)0x13f3d0, moby + 0x10) < 5.5f &&
+            D_0014F5CC_87a8 > 3 && *(int *)0x1413dc != 0x15 &&
+            *(int *)0x1413dc != 0x16) {
+            *(char **)0x13fbbc = moby;
+            FUN_L05_0024cee8_87a8(0x6b, 1);
+            if (*(int *)(data + 0x50) == 0) {
+                qcopy(data + 0x10, moby + 0x10);
+            }
+            moby[0x20] = 1;
+            *(unsigned char *)(moby + 0x30) = 0xff;
+        }
+        }
+    } else {
         if (*(int *)(data + 0x50) == 0 && *(unsigned char *)0x13d388 != 0 &&
             *(unsigned short *)0x141938 == 0 && *(int *)0x15f6a8 != 0 &&
             scale_game_frames_87a8(0x4b0) < *(int *)0x13f4ec &&
@@ -300,18 +314,6 @@ void FUN_L05_002f87a8(char *moby) {
                 qcopy(moby + 0x10, data + 0x10);
             }
             moby[0x20] = 0;
-        }
-    } else if (state < 2 && state == 0) {
-        if (distance_xyz_87a8((void *)0x13f3d0, moby + 0x10) < 5.5f &&
-            D_0014F5CC_87a8 > 3 && *(int *)0x1413dc != 0x15 &&
-            *(int *)0x1413dc != 0x16) {
-            *(char **)0x13fbbc = moby;
-            FUN_L05_0024cee8_87a8(0x6b, 1);
-            if (*(int *)(data + 0x50) == 0) {
-                qcopy(data + 0x10, moby + 0x10);
-            }
-            moby[0x20] = 1;
-            moby[0x30] = -1;
         }
     }
     subtract_vector_xyz_87a8(delta, moby + 0x10, data);
