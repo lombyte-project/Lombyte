@@ -1272,25 +1272,29 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002076a8.s", FUN_L00_002076a8);
 extern void glow_n(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
 extern int current_level_index_2076a8 __asm__("D_0015ED84") __attribute__((sda));
-extern int current_level_index_abs_2076a8 __asm__("D_0015ED84");
+extern int current_level_index_abs_2076a8 __asm__("D_0015ED84") __attribute__((section(".data")));
 extern u8 item_text_variant[] __asm__("D_0013E520");
 
 void FUN_L00_002076a8(void) {
     struct Hero *g = &hero;
-    int blink = 0;
+    int blink;
     int level;
 
     if (g->unk22F4 != 0) {
         int color = g->unk22F8;
-        int red = (color & 0xff) - 7;
-        int blue = ((color >> 16) & 0xff) - 7;
-        int green = ((color >> 8) & 0xff) - 7;
+        int red = color & 0xff;
+        int blue = (color >> 16) & 0xff;
+        int green = (color >> 8) & 0xff;
+        red -= 7;
+        green -= 7;
+        blue -= 7;
         if (red < 0) red = 0;
         if (green < 0) green = 0;
         if (blue < 0) blue = 0;
-        glow_n(((void *)g->moby), red, green, blue);
         {
-            int packed = ((unsigned int)color >> 24) << 24;
+            int packed = (unsigned int)color >> 24;
+            glow_n(((void *)g->moby), red, green, blue);
+            packed <<= 24;
             packed |= blue << 16;
             packed |= green << 8;
             packed |= red;
@@ -1298,20 +1302,24 @@ void FUN_L00_002076a8(void) {
         }
     }
 
-    if (g->state.current == 0x80 || g->state.current == 0x82) {
-        blink = g->state_timer < FUN_001f96f8(0x1e);
-        level = current_level_index_abs_2076a8;
+    blink = 0;
+    if (hero.state.current == 0x80 || hero.state.current == 0x82) {
+        blink = hero.state_timer < FUN_001f96f8(0x1e);
+        if (blink)
+            level = current_level_index_abs_2076a8;
+        else
+            level = current_level_index_abs_2076a8;
     } else {
         level = current_level_index_2076a8;
     }
-    if ((level == 0xf || level == 0x11) && g->state.current == 0x76 &&
-        g->state_timer < FUN_001f96f8(0x14)) {
+    if ((level == 0xf || level == 0x11) && hero.state.current == 0x76 &&
+        hero.state_timer < FUN_001f96f8(0x14)) {
         blink = 1;
     }
     if (blink) {
         int red, green, blue;
-        get_moby_color(((void *)g->moby), &red, &green, &blue);
-        if (g->state_timer % 4 < 3) {
+        get_moby_color(((void *)hero.moby), &red, &green, &blue);
+        if (hero.state_timer % 4 < 3) {
             red = 0;
             green = 0;
             blue = 0;
@@ -1320,13 +1328,13 @@ void FUN_L00_002076a8(void) {
             green = 0x90;
             blue = 0xf0;
         }
-        glow_n(((void *)g->moby), red, green, blue);
+        glow_n(((void *)hero.moby), red, green, blue);
         FUN_L00_002072c8();
     }
-    if (g->items[0].item_id >= 0 &&
-        item_text_variant[g->items[0].item_id] != 0 &&
-        ((int)g->items[0].moby) != 0) {
-        FUN_L00_00207330(((void *)g->items[0].moby), ((char *)g->moby));
+    if (hero.items[0].item_id >= 0 &&
+        item_text_variant[hero.items[0].item_id] != 0 &&
+        ((int)hero.items[0].moby) != 0) {
+        FUN_L00_00207330(((void *)hero.items[0].moby), ((char *)hero.moby));
     }
 }
 #endif
