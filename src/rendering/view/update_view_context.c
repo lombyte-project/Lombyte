@@ -1,12 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM(
-    "config/us/expected/asm/assembly/textbin/rendering/view/update_view_context/FUN_001f2d98.s",
-    FUN_001f2d98);
-#else
-#include "types.h"
 #include "eetypes.h"
 #include "qcopy.h"
 #include "qzero.h"
@@ -49,15 +41,20 @@ extern struct {
 
 extern f32 func_001F9E90(f32, f32);
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern void func_001F9838(void *, void *, s32);
+extern void FUN_001f9838(void *, void *, s32);
 extern void set_tfrag_dists(void) __asm__("func_00233068");
 
 void update_view_context(void) __asm__("FUN_001f2d98");
 
+/* Rebuilds the view state from the field of view, screen size and fog
+   endpoints: the clip constants at D_0018CFC0, the fog multiplier and the
+   fog packet registers, the projection matrices and the screen scale and
+   bias vectors that the renderers copy into their packets. */
 void update_view_context(void) {
     struct View *view;
     struct View *packet_view;
     f32 depth_scale;
+    f32 depth_bias;
     f32 horizontal_clip_scale;
     f32 vertical_clip_scale;
     f32 fog_distance_range;
@@ -77,6 +74,7 @@ void update_view_context(void) {
     s32 mul_bits;
 
     depth_scale = -8388080.0f;
+    depth_bias = 8388112.0f;
     if (D_0015ED80 != 0) {
         view_context.fov.f[1] = view_context.fov.f[0] * 0.756f;
     } else {
@@ -126,14 +124,14 @@ void update_view_context(void) {
     D_001DE740.mul = mul_bits;
     D_001DE740.far_int = far_bits;
     D_001DE740.near_int = near_bits;
-    D_001DEA00.mul = mul_bits;
     D_001DE9B0.mul = mul_bits;
-    D_001DEA00.far_int = far_bits;
-    D_001DEA00.near_int = near_bits;
+    D_001DEA00.mul = mul_bits;
     D_001DE9B0.far_int = far_bits;
     D_001DE9B0.near_int = near_bits;
-    D_001DEA00.max = 0x437EFFFF;
+    D_001DEA00.far_int = far_bits;
+    D_001DEA00.near_int = near_bits;
     D_001DE9B0.max = 0x437EFFFF;
+    D_001DEA00.max = 0x437EFFFF;
     set_tfrag_dists();
 
     projection_near_clip = view->near_clip;
@@ -165,17 +163,17 @@ void update_view_context(void) {
     view->proj[14] = -2.0f * projection_near_clip * far_clip /
                      (projection_near_clip * (far_clip - projection_near_clip)) * depth_scale;
     view->proj[15] = 0;
-    func_001F9838(view->proj2, view->proj, 0x40);
+    FUN_001f9838(view->proj2, view->proj, 0x40);
     view->proj2[11] = 1.0f / view->near_clip;
-    func_001F9838(view->proj3, view->proj2, 0x40);
+    FUN_001f9838(view->proj3, view->proj2, 0x40);
     view->proj3[0] /= view->scr_x;
     view->proj3[5] /= view->scr_y;
     view->proj3[10] /= depth_scale;
-    view->inverse_screen_scale.f[0] = 1.0f / view->scr_x;
     view->proj3[14] /= depth_scale;
-    view->inverse_screen_scale.f[3] = 1.0f / view->fog_mul;
+    view->inverse_screen_scale.f[0] = 1.0f / view->scr_x;
     view->inverse_screen_scale.f[1] = 1.0f / view->scr_y;
     view->inverse_screen_scale.f[2] = 1.0f / depth_scale;
+    view->inverse_screen_scale.f[3] = 1.0f / view->fog_mul;
     view->screen_scale.f[0] = view->scr_x;
     view->screen_scale.f[1] = view->scr_y;
     view->screen_scale.f[2] = depth_scale;
@@ -186,8 +184,8 @@ void update_view_context(void) {
     view->inverse_projection_scale.f[3] = view->fog_mul;
     view->screen_bias.f[0] = 2048.0f;
     view->screen_bias.f[1] = 2048.0f;
+    view->screen_bias.f[2] = depth_bias;
     view->screen_bias.f[3] = view->fog_add;
-    view->screen_bias.f[2] = 8388112.0f;
     view->viewport_aspect.f[0] = view->scr_x / view->half_width;
     view->viewport_aspect.f[1] = view->scr_y / view->half_height;
     view->viewport_aspect.f[2] = 1.0f;
@@ -232,5 +230,3 @@ void update_view_context(void) {
     qcopy(&D_001DEA40[1], &packet_view->screen_bias);
 }
 extern __typeof__(update_view_context) func_001F2D98 __attribute__((alias("FUN_001f2d98")));
-
-#endif /* NON_MATCHING */

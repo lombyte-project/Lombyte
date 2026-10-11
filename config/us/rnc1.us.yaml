@@ -998,7 +998,7 @@ segments:
           - [0xf3b90, c, rendering/update_occlusion]
           - [0xf3be0, c, rendering/view/init_view_context]
           - [0xf3d14, textbin, text_gap_001f2d94_after_fun_001f2c60]
-          - [0xf3d18, c, assembly/textbin/rendering/view/update_view_context]
+          - [0xf3d18, c, rendering/view/update_view_context]
           - [0xf4334, textbin, text_gap_001f33b4_before_fun_001f33b8]
           - [0xf4338, c, assembly/textbin/fun_001f33b8]
           - [0xf4468, c, assembly/textbin/video/display/set_pal_mode]
