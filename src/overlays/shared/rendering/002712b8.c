@@ -442,17 +442,20 @@ extern void FUN_L00_00267a08_2721f0(void *) __asm__("FUN_L00_00267a08");
 void FUN_L00_002721f0(unsigned char *p) {
     unsigned char *q = p + 0x20;
     float *r;
-    Vec4f v;
+    float v[4];
     float t;
     float a;
-    unsigned char alpha;
+    int alpha;
+    int originalAlpha;
     p[8] += q[0xA];
     if (*(short *)(q + 8) - *(short *)(p + 0xA) < 6) {
         t = (float)(*(short *)(q + 8) - *(short *)(p + 0xA)) / 5.0f;
         *(float *)(p + 0xC) = *(float *)(q + 4) +
             ((*(float *)q + *(float *)(q + 4)) * 0.5f - *(float *)(q + 4)) * t;
         alpha = q[0xB];
-        a = (float)alpha + (float)((alpha >> 1) - alpha) * t;
+        originalAlpha = alpha;
+        alpha = (unsigned int)alpha >> 1;
+        a = (float)originalAlpha + (float)(alpha - originalAlpha) * t;
     } else {
         t = (float)*(short *)(p + 0xA) / FUN_001fa6c0_2721f0(*(short *)(q + 8) - 6);
         *(float *)(p + 0xC) = *(float *)q +
@@ -462,10 +465,10 @@ void FUN_L00_002721f0(unsigned char *p) {
     *(unsigned int *)(p + 4) = (FUN_001fa6d0_2721f0(a) << 24) |
                                 (*(unsigned int *)(p + 4) & 0xFFFFFF);
     r = (float *)(q + 0xC);
-    v.x = r[0];
-    v.y = r[1];
-    v.z = r[2];
-    v.w = 0.0f;
+    v[0] = *(float *)(q + 0xC);
+    v[1] = *(float *)(q + 0x10);
+    v[2] = *(float *)(q + 0x14);
+    v[3] = 0.0f;
     FUN_001f9a10_2721f0(p + 0x10, p + 0x10, &v);
     *(float *)(q + 0x14) -= *(float *)(q + 0x18);
     if (*(float *)(p + 0x10) < 2.0f || 1021.0f < *(float *)(p + 0x10) ||
