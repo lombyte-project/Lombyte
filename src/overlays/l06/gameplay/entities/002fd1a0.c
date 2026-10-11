@@ -788,7 +788,207 @@ void FUN_L06_00300f70(char *arg, void *a, void *b) {
     qcopy(dst + 0x10, b);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00301070.s", FUN_L06_00301070);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00301b90.s", FUN_L06_00301b90);
+#else
+extern unsigned char D_0014C050[];
+extern int D_0015ED84 __asm__("D_0015ED84");
+extern char *D_L06_0015FFD8_301b90 __asm__("D_L06_0015FFD8");
+extern char *D_L06_001600EC_301b90 __asm__("D_L06_001600EC");
+extern int *D_L06_001B0C30_301b90[] __asm__("D_L06_001B0C30");
+extern char D_0015172A[] __asm__("D_0015172A");
+extern int D_L06_0015F5C4 __asm__("D_L06_0015F5C4");
+extern int D_001413D4 __asm__("D_001413D4");
+extern int D_L06_0015F404_301b90 __asm__("D_L06_0015F404");
+extern float D_L06_0015F400_301b90 __asm__("D_L06_0015F400");
+extern float D_L06_00167560 __asm__("D_L06_00167560");
+extern int D_L06_00167568 __asm__("D_L06_00167568");
+extern int D_001413D0 __asm__("D_001413D0");
+extern char D_0013F3D0_301b90[] __asm__("D_0013F3D0");
+extern float D_L06_00162098 __asm__("D_L06_00162098") __attribute__((sda));
+extern float D_L06_0016209C __asm__("D_L06_0016209C") __attribute__((sda));
+extern float D_L06_001620A0 __asm__("D_L06_001620A0") __attribute__((sda));
+extern float D_L06_001620A4 __asm__("D_L06_001620A4") __attribute__((sda));
+extern float D_L06_001620A8 __asm__("D_L06_001620A8") __attribute__((sda));
+extern float D_L06_001620B0 __asm__("D_L06_001620B0") __attribute__((sda));
+extern float D_L06_001620C4 __asm__("D_L06_001620C4") __attribute__((sda));
+extern int D_L06_0015F880 __asm__("D_L06_0015F880");
+extern float D_0015ED6C_301b90 __asm__("D_0015ED6C");
+extern void FUN_L06_002f45f0(int);
+extern void FUN_L06_002f9948(int);
+extern int FUN_L01_0026e008(int, int);
+extern void FUN_L06_003047b8(char *);
+extern int FUN_L06_003047f8(const u8 *);
+extern void FUN_L06_00302400(struct Moby *, int);
+extern void FUN_L06_002ffc38(int);
+extern void FUN_L06_002e9e30(int);
+extern void FUN_L06_002f45a0(int);
+extern void FUN_L06_002f99b0(int);
+extern void FUN_L06_002fc630(char *);
+extern void FUN_L06_00309240(int);
+extern void FUN_L06_00312a78(void *);
+extern void FUN_L06_00312ad0(void *);
+extern void FUN_L06_00312ce8(int);
+extern void FUN_L06_00312b40(float, float, float, float, float, float);
+extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
+extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaa30(void *);
+extern void FUN_L06_002356a0(int, int);
+extern void FUN_L06_00304088(char *);
+extern void FUN_001f99f8(void *);
+extern float FUN_001f9e90(float, float);
+extern float FUN_001f9b80(void *, void *);
+extern int FUN_001f96f8(int);
+extern float FUN_001f96b0(float);
+extern int FUN_001fa6d0(float);
+extern int FUN_001f9740(void *);
+extern float FUN_002132a8(float, float);
+extern int FUN_L01_0027a248(int, int);
+extern void FUN_00215b10(void);
+extern void FUN_00215b10_state4(void *) __asm__("FUN_00215b10");
+extern int FUN_L00_00211250(void);
+extern void FUN_001f4600(int, char *);
+extern void FUN_0022dba0(int, int, int);
+extern void FUN_L06_002f45f0(int);
+extern void FUN_L00_002eac18(int);
+extern float FUN_00213ed8(float *, float, float);
+extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
+extern float D_0015ED70_301b90 __asm__("D_0015ED70");
+
+void FUN_L06_00301b90(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    float va[4] __attribute__((aligned(16)));
+    float vc[4] __attribute__((aligned(16)));
+    float vb[4] __attribute__((aligned(16)));
+    switch (m[0x20]) {
+    case 0:
+        if (D_0014C050[m[0xB0] + (D_0015ED84 << 4)] != 0) {
+            mark_moby_for_removal((struct Obj *)m);
+            return;
+        }
+        FUN_L06_002f45f0(*(int *)(d + 0));
+        FUN_L06_002f9948(*(int *)(d + 4));
+        FUN_L06_002f9948(*(int *)(d + 8));
+        m[0x20] = 1;
+        m[0x30] = 0xFF;
+        return;
+    case 1:
+        if (FUN_L01_0026e008(*(int *)(d + 0x1C), -1) != 0) return;
+        FUN_L06_003047b8(D_L06_0015FFD8_301b90 + (*(int *)(d + 0x2C) << 8));
+        if (FUN_L06_003047f8((const u8 *)D_L06_0015FFD8_301b90 + (*(int *)(d + 0x2C) << 8)) != 1) return;
+        m[0x20] = 2;
+        FUN_L06_00302400((struct Moby *)m, 0);
+        return;
+    case 2: {
+        int *p;
+        float r;
+        if (FUN_L06_003047f8((const u8 *)D_L06_0015FFD8_301b90 + (*(int *)(d + 0x2C) << 8)) != 2) return;
+        m[0x20] = 3;
+        *(int *)(d + 0xB0) = 1;
+        FUN_L01_0027a248(6, 9);
+        if (*(short *)D_0015172A == 3) FUN_00215b10();
+        FUN_L06_002ffc38(*(int *)(d + 0x10));
+        FUN_L06_002e9e30(*(int *)(d + 0x14));
+        FUN_L06_002e9e30(*(int *)(d + 0x18));
+        FUN_L06_002f45a0(*(int *)(d + 0));
+        FUN_L06_002f99b0(*(int *)(d + 4));
+        FUN_L06_002f99b0(*(int *)(d + 8));
+        FUN_L06_002fc630(D_L06_0015FFD8_301b90 + (*(int *)(d + 0x20) << 8));
+        {
+            *(float *)(D_L06_001600EC_301b90 + (*(int *)(d + 0xC) << 7) + 0x38) += 10.0f;
+            p = D_L06_001B0C30_301b90[*(int *)(d + 0x24)];
+            qcopy(va, (char *)p + 0x20);
+            qcopy(vb, (char *)p + 0x10);
+            FUN_001f99f8(vc);
+            vc[2] = FUN_001f9e90(vb[0] - va[0], vb[1] - va[1]);
+            r = FUN_001f9b80(va, vb);
+            vc[1] = -FUN_001f9e90(r, vb[2] - va[2]);
+            FUN_L00_002eaaa0(va, vc, 2, FUN_001f96f8(300), 0);
+            FUN_L06_00312b40(D_L06_00162098, D_L06_0016209C,
+                               D_L06_001620A0, D_L06_001620A4,
+                               D_L06_001620A8, D_L06_001620B0);
+            FUN_L06_00312a78(va);
+            FUN_L06_00312ad0(vc);
+            {
+                char *q = D_L06_001600EC_301b90 + (*(int *)(d + 0x28) << 7);
+                FUN_L00_00216f90(q + 0x30, q + 0x70, 0x72, 0);
+            }
+        }
+        return;
+    }
+    case 3: {
+        int *p;
+        int x, nb;
+        float r;
+        p = D_L06_001B0C30_301b90[*(int *)(d + 0x24)];
+        qcopy(vb, (char *)p + 0x10 + (*(int *)(d + 0xB0) << 4));
+        nb = *(int *)(d + 0xB0) + 1;
+        *(int *)(d + 0xB0) = nb;
+        if (nb == *p - 1) {
+            m[0x20] = 4;
+            FUN_L06_00302400((struct Moby *)m, 1);
+            *(int *)(d + 0xB4) = FUN_001fa6d0(FUN_001f96b0(D_L06_001620C4));
+            FUN_L06_00312ce8(2);
+            FUN_L06_002356a0(0, 1);
+            D_L06_0015F404_301b90 = 0;
+            return;
+        }
+        FUN_L06_00309240(*(int *)(d + 0x34));
+        x = *(int *)(d + 0xB0) - 30;
+        if (x < 0) x = 0;
+        qcopy(va, (char *)D_L06_001B0C30_301b90[*(int *)(d + 0x24)] + 0x10 + (x << 4));
+        FUN_001f99f8(vc);
+        vc[2] = FUN_001f9e90(va[0] - vb[0], va[1] - vb[1]);
+        r = FUN_001f9b80(vb, va);
+        vc[1] = -FUN_001f9e90(r, va[2] - vb[2]);
+        FUN_L06_00312a78(vb);
+        FUN_L06_00312ad0(vc);
+        return;
+    }
+    case 4: {
+        int x;
+        x = FUN_001f96f8(0x708);
+        if (*(int *)(d + 0xB4) == x) {
+            if (*(short *)D_0015172A == 3) FUN_00215b10_state4((int *)d + 0x30);
+        } else {
+            x = FUN_001f96f8(900);
+            if (*(int *)(d + 0xB4) == x) FUN_L06_00302400((struct Moby *)m, 2);
+            else {
+                x = FUN_001f96f8(300);
+                if (*(int *)(d + 0xB4) == x && *(short *)D_0015172A == 3) FUN_00215b10_state4((int *)d + 0x30);
+            }
+        }
+        if (FUN_001f9740(d + 0xC0) != 0) {
+            FUN_0022dba0(0, 0, *(int *)(D_0013F3D0_301b90 + 0x2000));
+            *(int *)(d + 0xC0) = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8(480.0f, 600.0f)));
+            D_L06_00167560 = 0.4f;
+            D_L06_00167568 = FUN_001f96f8(60);
+        }
+        if (D_L06_0015F5C4 == 0) FUN_001f4600(0x3021d8, (char *)m);
+        if (D_001413D4 == 0x72) { m[0x20] = 6; return; }
+        if (D_L06_0015F5C4 != 0) return;
+        if (FUN_001f9740(d + 0xB4) == 0) return;
+        m[0x20] = 5;
+        *(float *)(d + 0xB8) = 0.0f;
+        *(int *)(d + 0xBC) = FUN_001f96f8(15);
+        FUN_L06_00304088(D_L06_0015FFD8_301b90 + (*(int *)(d + 0x30) << 8));
+        FUN_0022dba0(1, 0, *(int *)(D_0013F3D0_301b90 + 0x2000));
+        return;
+    }
+    case 5:
+        if (*(float *)(d + 0xB8) == 1.0f) {
+            FUN_L00_00211250();
+            D_L06_0015F400_301b90 = 0.0f;
+            return;
+        }
+        if (FUN_001f9740(d + 0xBC) == 0) return;
+        FUN_00213ed8((float *)(d + 0xB8), 1.0f, D_0015ED6C_301b90 * 6.0f);
+        D_L06_0015F400_301b90 = *(float *)(d + 0xB8);
+        return;
+    }
+}
+#endif
 #include "rnc/gameplay/entities/moby.h"
 
 struct TauntVoiceVars {
