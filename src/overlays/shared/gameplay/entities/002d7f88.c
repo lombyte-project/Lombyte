@@ -1606,7 +1606,8 @@ void FUN_L00_002dd8e8(void) {
     step = 0.05f;
     for (row = 1; row < 10; row++) {
         offset = ((float *)&D_L00_00161B48_002dd8e8)[-1];
-        phase += 0.3f;
+        next_phase = phase + 0.3f;
+        phase = next_phase;
         next_phase = phase + 0.3f;
         ((float *)&D_L00_00161B48_002dd8e8)[-1] += D_L00_00161B48_002dd8e8;
         if (((float *)&D_L00_00161B48_002dd8e8)[-1] > 7.0f)
