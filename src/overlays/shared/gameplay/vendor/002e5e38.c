@@ -981,7 +981,6 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
     m = o->m;
     g = *(u8 **)(current_follow_cam + 0x70);
     orbit = (V002e7530 *)(m + 0x130);
-    path = (V002e7530 *)(m + 0x90);
     range = m + 0x1d0;
     found = 0;
     lim = D_L00_00161CD8 + *(float *)(g + 0x214) * *(float *)(g + 0x20c) * (*(float *)(g + 0x210) - 1.0f);
@@ -989,6 +988,7 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
     qcopy(&start, out);
     qcopy(&hit, &D_L00_00173E60);
     qcopy(&near, &D_L00_00173E70);
+    path = (V002e7530 *)(m + 0x90);
     add_vector_xyz_2e7618(&pos, path, orbit);
     measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
     radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) *
