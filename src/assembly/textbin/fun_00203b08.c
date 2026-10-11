@@ -94,8 +94,8 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
                                   (((u64)mip_width_units[1]) << 14) |
                                   (((u64)(mip_texture->mip_block_offset_1 + gs_block_base)) << 20) |
                                   ((u64)(mip_texture->mip_block_offset_0 + gs_block_base)) |
-                                  (((u64)mip_width_units[2]) << 34) |
-                                  (((u64)mip_width_units[3]) << 54);
+                                  (((u64)mip_width_units[3]) << 54) |
+                                  (((u64)mip_width_units[2]) << 34);
         } else {
             for (template_index = 0; resident_material_templates[(template_index + 1) * 3] != 0;
                  template_index++) {
