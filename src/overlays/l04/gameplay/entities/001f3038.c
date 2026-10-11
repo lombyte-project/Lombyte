@@ -24,7 +24,286 @@ int FUN_L04_001f3038(char *a, char *b, int n) {
     }
     return best;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_001f30e0.s", FUN_L04_001f30e0);
+#else
+typedef u32 u128 __attribute__((mode(TI), aligned(16)));
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_30e0;
+typedef union { Vec_30e0 v; int count; } PathEl_30e0;
+typedef struct Moby_30e0 {
+    char pad0[0x10];
+    Vec_30e0 pos;
+    signed char state;
+    char pad21[0x85];
+    short oclass;
+} Moby_30e0;
+typedef struct {
+    Vec_30e0 vel;
+    Vec_30e0 pos;
+    Vec_30e0 dir;
+    Vec_30e0 drift;
+    float range;
+    short timer;
+    short pad46;
+    float f48;
+    float near;
+    Moby_30e0 *target;
+    Vec_30e0 *point;
+    int pad58;
+    short path;
+    short count;
+    short classes[8];
+    float weight[8];
+    float scale[8];
+} Steer_30e0;
+typedef struct {
+    char pad0[0x2080];
+    Moby_30e0 *moby;
+} Hero_30e0;
+typedef struct {
+    char pad0[0x1C];
+    int hit;
+    char pad20[8];
+    float z;
+    char pad2C[0x14];
+    Vec_30e0 normal;
+} Coll_30e0;
+
+extern PathEl_30e0 *D_L04_001b0630_30e0[] __asm__("D_L04_001b0630");
+extern Coll_30e0 D_L04_00173FC0_30e0 __asm__("D_L04_00173FC0");
+extern char D_L04_00173FF0_30e0[] __asm__("D_L04_00173FF0");
+extern char D_0013F350_30e0[] __asm__("D_0013F350");
+extern void clear_vector_xyz_30e0(void *) __asm__("FUN_001f99f8");
+extern float vector_distance_30e0(void *, void *) __asm__("FUN_001f9b48");
+extern void subtract_vector_xyz_30e0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float vector_length_xy_30e0(void *) __asm__("FUN_001f9af0");
+extern void normalize_vector_xyz_30e0(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void add_vector_xyz_30e0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz_30e0(void *, void *, float) __asm__("FUN_001f9a68");
+extern int FUN_001efa68_30e0(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern float vector_length_30e0(void *) __asm__("FUN_001f9b20");
+extern float vector_angle_30e0(float, float) __asm__("FUN_001f9e90");
+extern void set_vector_length_30e0(void *, void *, float) __asm__("FUN_001f9c48");
+extern int collision_check_30e0(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern int timer_elapsed_30e0(void *) __asm__("FUN_001f9770");
+extern float random_float_between_30e0(float, float) __asm__("FUN_002132a8");
+extern int angle_to_short_30e0(float) __asm__("FUN_001fa6d0");
+extern int nearest_point_30e0(Moby_30e0 *, void *, int) __asm__("FUN_L04_001f3038");
+extern int FUN_L04_0024c7d8_30e0(void *, void *, void *, int) __asm__("FUN_L04_0024c7d8");
+
+/* Steering for a moby: pulls it along its path (data->path) and toward its target, pushes it away from the
+ * listed mobys (and the hero's), and keeps it off the ground; effect holds the gains. */
+void FUN_L04_001f30e0(Moby_30e0 **children, int count, Moby_30e0 *child, Steer_30e0 *data, float *effect) {
+    Vec_30e0 path_hit;
+    Vec_30e0 force;
+    Vec_30e0 scratch;
+    Vec_30e0 ray_start;
+    Vec_30e0 ray_end;
+    Vec_30e0 surface_normal;
+    PathEl_30e0 *path;
+    Moby_30e0 *other;
+    int hit;
+    Moby_30e0 *neighbor;
+    int path_index;
+    int i;
+    int best_index;
+    int class_index;
+    int next_index;
+    int previous_index;
+    float distance;
+    float strength;
+    float next_distance;
+    float repulsion;
+
+    clear_vector_xyz_30e0(data);
+    distance = vector_distance_30e0(&child->pos, &scratch);
+    path_index = 0;
+    path = 0;
+    hit = 0;
+    neighbor = 0;
+    if (data->path != -1) {
+        path = D_L04_001b0630_30e0[data->path];
+        path_index = nearest_point_30e0(child, &path[1], path[0].count);
+        hit = FUN_L04_0024c7d8_30e0(&path_hit, &child->pos, &path[1], path[0].count);
+        if (hit == 0) {
+            subtract_vector_xyz_30e0(&force, &path_hit, &child->pos);
+            strength = vector_length_xy_30e0(&force);
+            if (strength != 0.0f) {
+                strength = -effect[2] / (strength * strength);
+            } else {
+                strength = -1000.0f;
+            }
+        } else {
+            subtract_vector_xyz_30e0(&force, &path_hit, &child->pos);
+            strength = vector_length_xy_30e0(&force) + 3.0f;
+            if (distance < strength) {
+                strength = strength * (effect[2] * strength);
+            } else {
+                strength = 10000.0f;
+            }
+        }
+        normalize_vector_xyz_30e0(&force, &force, strength);
+        add_vector_xyz_30e0(data, data, &force);
+    }
+    if (effect[0] != 0.0f) {
+        normalize_vector_xyz_30e0(&force, &data->dir, effect[0]);
+        add_vector_xyz_30e0(data, data, &force);
+    }
+    if (data->target == child) {
+        *(u128 *)&force = *(u128 *)&data->pos;
+        normalize_vector_xyz_30e0(&force, &force, effect[1]);
+        add_vector_xyz_30e0(data, data, &force);
+    } else {
+        if (data->path != -1) {
+            best_index = path_index;
+            strength = vector_distance_30e0(&path[path_index + 1], &scratch);
+            next_index = 0;
+            if (path_index + 1 < path[0].count) {
+                next_index = path_index + 1;
+            }
+            next_distance = vector_distance_30e0(&path[next_index + 1], &scratch);
+            if (strength < next_distance) {
+                best_index = next_index;
+                strength = next_distance;
+            }
+            next_index = path_index - 1;
+            if (next_index < 0) {
+                next_index = path[0].count - 1;
+            }
+            if (strength < vector_distance_30e0(&path[next_index + 1], &scratch)) {
+                best_index = next_index;
+            }
+            next_index = 0;
+            if (best_index + 1 < path[0].count) {
+                next_index = best_index + 1;
+            }
+            previous_index = best_index - 1;
+            if (previous_index <= -1) {
+                previous_index = path[0].count - 1;
+            }
+            add_vector_xyz_30e0(&force, &path[next_index + 1], &path[previous_index + 1]);
+            add_vector_xyz_30e0(&force, &force, &path[best_index + 1]);
+            scale_vector_xyz_30e0(&force, &force, 0.33333334f);
+            if (hit == 0) {
+                subtract_vector_xyz_30e0(&force, &force, &child->pos);
+                strength = vector_length_xy_30e0(&force);
+                normalize_vector_xyz_30e0(&force, &force, strength * (strength * strength * effect[2]));
+                add_vector_xyz_30e0(data, data, &force);
+            }
+        }
+        if (data->target != 0) {
+            subtract_vector_xyz_30e0(&force, &data->target->pos, &child->pos);
+            if (vector_length_xy_30e0(&force) < distance) {
+                strength = vector_length_xy_30e0(&force);
+                normalize_vector_xyz_30e0(&force, &force, strength * (strength * strength * effect[1]));
+                add_vector_xyz_30e0(data, data, &force);
+            }
+        }
+        if (data->point != 0) {
+            force.x = data->point->x - child->pos.x;
+            force.y = data->point->y - child->pos.y;
+            force.z = data->point->z - child->pos.z;
+            if (vector_length_xy_30e0(&force) < distance) {
+                strength = vector_length_xy_30e0(&force);
+                normalize_vector_xyz_30e0(&force, &force, strength * (strength * strength * effect[1]));
+                add_vector_xyz_30e0(data, data, &force);
+            }
+        }
+        for (i = 0; i < count + 1; i++) {
+            if (i < count) {
+                other = children[i];
+            } else {
+                other = ((Hero_30e0 *)D_0013F350_30e0)->moby;
+            }
+            class_index = 0;
+            if (other->state < 0 || child == other) {
+                continue;
+            }
+            strength = vector_distance_30e0(&child->pos, &other->pos);
+            if (data->near < strength) {
+                continue;
+            }
+            do {
+                if (other->oclass == data->classes[class_index]) {
+                    break;
+                }
+                class_index++;
+            } while (class_index < data->count);
+            if (class_index < data->count) {
+                if (strength < effect[4]) {
+                    neighbor = other;
+                    break;
+                }
+                repulsion = strength / data->scale[class_index];
+                if (repulsion != 0.0f) {
+                    repulsion = data->weight[class_index] / (repulsion * repulsion);
+                } else {
+                    repulsion = 1000.0f;
+                }
+                subtract_vector_xyz_30e0(&force, &child->pos, &other->pos);
+                normalize_vector_xyz_30e0(&force, &force, repulsion);
+                add_vector_xyz_30e0(data, data, &force);
+            }
+        }
+    }
+    if (data->f48 == 0.0f) {
+        add_vector_xyz_30e0(&ray_start, &child->pos, &data->pos);
+        add_vector_xyz_30e0(&ray_end, &child->pos, &data->pos);
+        ray_start.z = ray_start.z + 1.5f;
+        ray_end.z = 0.01f;
+        if (FUN_001efa68_30e0(&ray_start, &ray_end, 2, child, 0) != 0) {
+            if (D_L04_00173FC0_30e0.hit > 0 && D_L04_00173FC0_30e0.z > child->pos.z) {
+                *(volatile Vec_30e0 *)&surface_normal = *(volatile Vec_30e0 *)&D_L04_00173FC0_30e0.normal;
+                strength = vector_angle_30e0(D_L04_00173FC0_30e0.normal.z, vector_length_30e0(&D_L04_00173FC0_30e0.normal));
+                set_vector_length_30e0(&surface_normal, &surface_normal, 1.0f);
+                scale_vector_xyz_30e0(&surface_normal, &surface_normal, effect[3]);
+                add_vector_xyz_30e0(data, data, &surface_normal);
+                if (0.4f < strength) {
+                    scale_vector_xyz_30e0(&surface_normal, &surface_normal, effect[3] * (strength * 10000.0f));
+                    add_vector_xyz_30e0(data, data, &surface_normal);
+                }
+                if (0.2f < child->pos.z - D_L04_00173FC0_30e0.z) {
+                    set_vector_length_30e0(&surface_normal, &data->pos, -(effect[3] * 1000.0f));
+                    add_vector_xyz_30e0(data, data, &surface_normal);
+                }
+            }
+        }
+    } else {
+        if (collision_check_30e0(effect[4], &child->pos, 4, child) != 0) {
+            subtract_vector_xyz_30e0(&force, D_L04_00173FF0_30e0, &child->pos);
+            force.z = force.z + effect[3];
+            normalize_vector_xyz_30e0(&force, &force, effect[3]);
+            add_vector_xyz_30e0(data, data, &force);
+        }
+    }
+    if (data->f48 == 0.0f) {
+        set_vector_length_30e0(data, data, effect[6]);
+        data->vel.z = 0.0f;
+    } else {
+        normalize_vector_xyz_30e0(data, data, effect[6]);
+        data->vel.z = data->vel.z / data->f48;
+    }
+    if (timer_elapsed_30e0(&data->timer) != 0) {
+        data->timer = angle_to_short_30e0(random_float_between_30e0(45.0f, 90.0f));
+        data->drift.x = random_float_between_30e0(0.0f, data->range) - data->range * 0.5f;
+        data->drift.y = random_float_between_30e0(0.0f, data->range) - data->range * 0.5f;
+        if (data->f48 != 0.0f) {
+            data->drift.z = random_float_between_30e0(0.0f, data->range) - data->range * 0.5f;
+        } else {
+            data->drift.z = 0.0f;
+        }
+    }
+    add_vector_xyz_30e0(data, data, &data->drift);
+    if (neighbor != 0) {
+        subtract_vector_xyz_30e0(&force, &child->pos, &neighbor->pos);
+        if (data->f48 != 0.0f) {
+            normalize_vector_xyz_30e0(data, &force, effect[6]);
+        } else {
+            set_vector_length_30e0(data, &force, effect[6]);
+        }
+    }
+}
+#endif
 
 #define NOT_SDA
 
