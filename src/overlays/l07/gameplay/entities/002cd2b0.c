@@ -1644,11 +1644,11 @@ void FUN_L07_0030cf90(struct Moby *moby) {
     case 0:
     {
         Vec4f *position = &moby->pos;
-        voice = vars->flag_index;
         vars->origin_x = position->x;
         vars->origin_y = position->y;
         vars->origin_z = position->z;
         vars->sound_slot = -1;
+        voice = vars->flag_index;
         if (voice != -1)
             ((s32 *)0x184528)[voice] = 0;
         moby->state = 1;
@@ -1680,7 +1680,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
             } else {
                 step.q = 0;
                 step.f[1] = -(frame_scale * 0.01f);
-                rotated = step;
+                rotated.q = step.q;
                 if (moby->oclass == 0x3f5 || moby->oclass == 0x429)
                     rotated.f[1] = -rotated.f[1];
                 FUN_001f9cf8(&step, &rotated, &moby->unkC0);
@@ -1738,7 +1738,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
         }
         step.q = 0;
         step.f[1] = step_size;
-        rotated = step;
+        rotated.q = step.q;
         if (moby->oclass == 0x3f5 || moby->oclass == 0x429)
             rotated.f[1] = -rotated.f[1];
         FUN_001f9cf8(&step, &rotated, &moby->unkC0);
