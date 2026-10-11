@@ -1660,7 +1660,7 @@ extern s32 D_L00_0015F3F8;
 void FUN_L00_00210748(void) {
     int i = 0;
     do {
-        struct Hero *slot_hero = (struct Hero *)(((char *)&hero) + i * 0x50);
+        struct Hero *slot_hero = (struct Hero *)(&hero.items[i]);
         struct Moby *moby = slot_hero->items[0].moby;
         if (moby == 0) {
             hero_switch_item(i);
@@ -1688,9 +1688,11 @@ void FUN_L00_00210748(void) {
                 if ((moby->unk70 & 2) || i == 1 || i == 0)
                     FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
             }
-            if (moby->state != 0xfe && moby->state != 0xfd && i != 6 && moby->update)
-                moby->update(moby);
+            if (moby->state == 0xfe) goto next_slot;
+            if (moby->state == 0xfd) goto next_slot;
+            if (i != 6 && moby->update) moby->update(moby);
         }
+next_slot:
         i++;
     } while (i < 7);
 }
