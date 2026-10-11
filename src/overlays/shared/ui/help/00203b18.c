@@ -607,7 +607,242 @@ void FUN_L00_002061f0(void) {
         *(unsigned short *)(o + 0x34) |= 0x41;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002062b0.s", FUN_L00_002062b0);
+#else
+#include "rnc/overlay/quad.h"
+extern char D_0013F350_002062b0[] __asm__("D_0013F350");
+extern f32 D_0015EE18_002062b0 __asm__("D_0015EE18") __attribute__((section(".data")));
+extern f32 D_0015ED6C_002062b0 __asm__("D_0015ED6C") __attribute__((section(".data")));
+extern f32 D_0015ED60_002062b0 __asm__("D_0015ED60") __attribute__((section(".data")));
+extern f32 D_0015ED60_gp_002062b0 __asm__("D_0015ED60_gp") __attribute__((sda));
+extern f32 D_0015EE18_gp_002062b0 __asm__("D_0015EE18_gp") __attribute__((sda));
+extern u8 D_0015EDB3_002062b0 __asm__("D_0015EDB3") __attribute__((section(".data")));
+extern u8 D_0015EDB1_002062b0 __asm__("D_0015EDB1") __attribute__((section(".data")));
+extern s32 D_L00_0015F5CC_002062b0 __asm__("D_L00_0015F5CC") __attribute__((section(".data")));
+extern f32 D_L00_0017B85C_002062b0 __asm__("D_L00_0017B85C") __attribute__((section(".data")));
+extern void FUN_L00_00232670(void);
+extern void FUN_L00_00211670(void);
+extern void FUN_L00_0020b960(void);
+extern void FUN_L00_0020bed0(void);
+extern void FUN_L00_00215b68(void);
+extern void FUN_L00_00229b70(void);
+extern void FUN_L00_00216f10(void);
+extern void FUN_L00_002054e8(void);
+extern void FUN_L00_00208a10(void);
+extern void FUN_L00_00207c48(void);
+extern void FUN_L00_00207a58(void);
+extern void FUN_L00_002059d8(void);
+extern void FUN_L00_00207d00(void);
+extern void FUN_L00_00208b60(void);
+extern void FUN_L00_002484e0(void *);
+extern void FUN_L00_00257024(int);
+extern void FUN_L00_00250df8(void *);
+extern void FUN_L00_0024f7c8(void *, s32, void *);
+extern void FUN_0020cca8_002062b0(void *, s32, void *) __asm__("FUN_0020cca8");
+extern void *FUN_0020c4f8_002062b0(s32) __asm__("FUN_0020c4f8");
+extern void FUN_001fa2b8_002062b0(void *, void *) __asm__("FUN_001fa2b8");
+extern void FUN_001f99f8_002062b0(void *) __asm__("FUN_001f99f8");
+extern void FUN_001f9cf8_002062b0(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void FUN_001fa378_002062b0(void *, void *, void *) __asm__("FUN_001fa378");
+extern void FUN_001fa050_002062b0(void *, void *) __asm__("FUN_001fa050");
+extern void FUN_L00_00257880_002062b0(void *, s32, s32, s32) __asm__("FUN_L00_00257880");
+extern void FUN_L00_0028dbe8_002062b0(void *, s32, void *) __asm__("FUN_L00_0028dbe8");
+extern void FUN_L00_00216de8(s32, s32);
+extern s32 FUN_001f96f8_002062b0(s32) __asm__("FUN_001f96f8");
+extern s32 FUN_001f9770_002062b0(void *) __asm__("FUN_001f9770");
+extern f32 FUN_001fa580_002062b0(f32, f32) __asm__("FUN_001fa580");
+extern f32 FUN_001fa6c0_002062b0(s32) __asm__("FUN_001fa6c0");
+extern s32 FUN_001fa6d0_002062b0(f32) __asm__("FUN_001fa6d0");
+extern f32 FUN_001fa6e0_002062b0(f32) __asm__("FUN_001fa6e0");
+extern u32 FUN_L00_00200298_002062b0(f32, u32, u32) __asm__("FUN_L00_00200298");
+extern f32 FUN_L00_001ff800_002062b0(f32) __asm__("FUN_L00_001ff800");
+extern f32 FUN_L00_002000e8_002062b0(f32, f32) __asm__("FUN_L00_002000e8");
+extern s32 FUN_L00_00200250_002062b0(f32) __asm__("FUN_L00_00200250");
+extern f32 FUN_L00_00200240_002062b0(s32) __asm__("FUN_L00_00200240");
+extern s32 FUN_L00_001fef20_002062b0(s32) __asm__("FUN_L00_001fef20");
+extern s32 FUN_L00_001fef98_002062b0(void *) __asm__("FUN_L00_001fef98");
+extern void FUN_L00_0025b868_002062b0(f32, f32, void *) __asm__("FUN_L00_0025b868");
+
+void FUN_L00_002062b0(void) {
+    char *g = D_0013F350_002062b0;
+    char *moby;
+    OvlQuad rotation[4], transform[4], inverse[4];
+    OvlQuad offset;
+    f32 phase, scale, wave;
+    s32 i, span, red, green, blue, alpha;
+    u32 color, color2;
+
+    FUN_L00_00232670();
+    FUN_L00_00211670();
+    FUN_L00_0020b960();
+    if (*(u8 *)(g + 0x20a4) == 1) {
+        FUN_L00_0020bed0();
+        FUN_L00_00215b68();
+    }
+    FUN_L00_00229b70();
+    if (*(u8 *)(g + 0x20a4) == 0) return;
+    FUN_L00_00216f10();
+    FUN_L00_002054e8();
+    if (*(u8 *)(g + 0x20a4) == 0) return;
+    FUN_L00_00208a10();
+    FUN_L00_00207c48();
+    FUN_L00_00207a58();
+    if (*(u8 *)(g + 0x20a4) == 1) {
+        D_L00_0017B85C_002062b0 = D_0015EE18_002062b0;
+        FUN_L00_002059d8();
+        if (*(char **)(g + 0x1624) == 0) {
+            moby = FUN_0020c4f8_002062b0(0x4b4);
+            *(char **)(g + 0x1624) = moby;
+            if (moby != 0) {
+                *(u32 *)(moby + 0x90) = 0x801432d7;
+                *(u32 *)(g + 0x2300) = 0x301432d7;
+                *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(g + 0x80);
+                *(OvlQuad *)(moby + 0x40) = *(OvlQuad *)(g + 0x90);
+                *(u16 *)(moby + 0x32) = 0x40;
+                (*(char **)(g + 0x1624))[0x31] = 1;
+                (*(char **)(g + 0x1624))[0x30] = 0;
+                *(u16 *)(*(char **)(g + 0x1624) + 0x34) = 0;
+                *(f32 *)(*(char **)(g + 0x1624) + 0x2c) *= 1.7f;
+                *(u16 *)(*(char **)(g + 0x1624) + 0x34) |= 0x10;
+                FUN_L00_00250df8(*(char **)(g + 0x1624));
+            }
+        }
+        moby = *(char **)(g + 0x2080);
+        if ((*(u16 *)(moby + 0x34) ^ 1) & 1) {
+            FUN_L00_0024f7c8(moby, 7, rotation);
+            *(OvlQuad *)(g + 0x1d80) = rotation[0];
+            FUN_L00_00207d00();
+            if (*(char **)(g + 0x1624) != 0) {
+                FUN_0020cca8_002062b0(moby, 7, transform);
+                moby = *(char **)(g + 0x1624);
+                *(OvlQuad *)(moby + 0x10) = transform[3];
+                FUN_001fa2b8_002062b0(moby + 0xc0, transform);
+                offset = 0;
+                ((f32 *)&offset)[2] = 0.0257f;
+                FUN_001f9cf8_002062b0(&offset, &offset, moby + 0xc0);
+                *(f32 *)(moby + 0x18) -= ((f32 *)&offset)[2];
+                FUN_L00_00250df8(moby);
+                scale = 1.7f;
+                if (D_0015EDB3_002062b0) scale = 3.1f;
+                if (*(s16 *)(g + 0x22fc)) scale *= 1.4f;
+                FUN_L00_0025b868_002062b0(*(f32 *)(*(char **)(moby + 0x24) + 0x24) * scale, 0.02f, moby + 0x2c);
+            }
+        }
+        color = 0x281414c8;
+        color2 = 0x1e00004b;
+        *(f32 *)(g + 0x1628) = FUN_L00_002000e8_002062b0(*(f32 *)(g + 0x1628), D_0015ED6C_002062b0 * 2.9670596f);
+        if (FUN_L00_001fef98_002062b0(g + 0x22fc) == 0) {
+            *(f32 *)(g + 0x1628) = FUN_L00_002000e8_002062b0(*(f32 *)(g + 0x1628), D_0015ED6C_002062b0 * 12.217304f);
+            switch (*(s16 *)(g + 0x22fe)) {
+            case 1: color = 0x2814c814; color2 = 0x1e004b00; break;
+            case 2: color = 0x2814c8c8; color2 = 0x1e004b4b; break;
+            case 3: color = 0x323232fa; color2 = 0x1e000078; break;
+            case 4: color = 0x28f01414; color2 = 0x1e4b0000; break;
+            }
+        }
+        wave = FUN_L00_001ff800_002062b0(*(f32 *)(g + 0x1628));
+        color = FUN_L00_00200298_002062b0(wave * 0.5f + 0.5f, color, color2);
+        moby = *(char **)(g + 0x1624);
+        if (moby) *(u32 *)(moby + 0x90) = FUN_L00_00200298_002062b0(D_0015ED60_gp_002062b0 * 0.1f, *(u32 *)(moby + 0x90), color);
+        *(u32 *)(g + 0x2300) = FUN_L00_00200298_002062b0(D_0015ED60_002062b0 * 0.1f, *(u32 *)(g + 0x2300), color);
+        moby = *(char **)(g + 0x1620);
+        if (moby == 0) {
+            moby = FUN_0020c4f8_002062b0(0x47a);
+            *(char **)(g + 0x1620) = moby;
+            if (moby) {
+                *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(g + 0x80);
+                *(OvlQuad *)(moby + 0x40) = *(OvlQuad *)(g + 0x90);
+                *(u16 *)(moby + 0x32) = 0x40;
+                (*(char **)(g + 0x1620))[0x31] = 1;
+                (*(char **)(g + 0x1620))[0x30] = 0;
+                *(u16 *)(*(char **)(g + 0x1620) + 0x34) = 0;
+                FUN_L00_00250df8(*(char **)(g + 0x1620));
+            }
+        }
+        if (*(char **)(g + 0x1620)) {
+            FUN_0020cca8_002062b0(*(char **)(g + 0x2080), 5, rotation);
+            moby = *(char **)(g + 0x1620);
+            *(OvlQuad *)(moby + 0x10) = rotation[3];
+            FUN_L00_00250df8(moby);
+            FUN_001f99f8_002062b0(transform);
+            ((f32 *)transform)[2] = -*(f32 *)(g + 0x98);
+            FUN_001fa050_002062b0(inverse, transform);
+            FUN_001fa378_002062b0(rotation, rotation, inverse);
+            FUN_001fa2b8_002062b0(moby + 0xc0, rotation);
+            *(u64 *)(moby + 0x38) = *(u64 *)(*(char **)(g + 0x2080) + 0x38);
+            if (*(s32 *)(g + 0x2084) == 0x4f) {
+                if (*(u8 *)(moby + 0x53) != 1)
+                    FUN_L00_00257880_002062b0(moby, 1, 0, FUN_L00_001fef20_002062b0(10));
+            } else if (*(u8 *)(moby + 0x53) != 0) {
+                FUN_L00_00257880_002062b0(moby, 0, 0, FUN_L00_001fef20_002062b0(0x11));
+            }
+        }
+        if (*(char **)(g + 0x22c0)) {
+            FUN_L00_0028dbe8_002062b0(*(char **)(g + 0x22c0) + 0x10, 0, *(char **)(g + 0x2080));
+            *(s16 *)(g + 0x22fe) = *(u16 *)(g + 0x22c0);
+            *(s16 *)(g + 0x22fc) = FUN_L00_001fef20_002062b0(0x39);
+        }
+        *(u32 *)(g + 0x22c0) = 0;
+    }
+    FUN_L00_002484e0(g + 0x80);
+    if (*(u8 *)(g + 0x20a4) == 2) {
+        if (D_0015EDB3_002062b0) *(f32 *)0x17ba6c = 1.4f * D_0015EE18_gp_002062b0;
+        FUN_L00_002059d8();
+        FUN_L00_002061f0();
+        moby = *(char **)(g + 0x2080);
+        if ((*(u16 *)(moby + 0x34) ^ 1) & 1) {
+            FUN_L00_0024f7c8(moby, 6, rotation);
+            *(OvlQuad *)(g + 0x1d00) = rotation[0];
+            FUN_L00_00207d00();
+        }
+    }
+    if (*(u8 *)(g + 0x20a4) == 3) {
+        if (D_0015EDB1_002062b0) *(f32 *)0x17bbcc = 1.9f;
+        span = FUN_L00_001fef20_002062b0(0xaa);
+        if (*(s16 *)(g + 0x22e0) == 2) span = FUN_L00_001fef20_002062b0(0x32);
+        else if (*(s16 *)(g + 0x22e0) == 1) span = FUN_L00_001fef20_002062b0(0x5a);
+        phase = FUN_L00_00200240_002062b0(span);
+        wave = FUN_L00_001ff800_002062b0((((f32)(D_L00_0015F5CC_002062b0 % span) / phase) * 2.0f) * 3.1415927f - 3.1415927f);
+        red = FUN_L00_00200250_002062b0(wave * 20.0f) + 0x32;
+        green = FUN_L00_00200250_002062b0(wave * 70.0f) + 0xb4;
+        blue = FUN_L00_00200250_002062b0(wave * 10.0f) + 0x14;
+        if (red >= 0x100) red = 0xff;
+        if (green >= 0x100) green = 0xff;
+        moby = *(char **)(g + 0x2080);
+        *(u16 *)(moby + 0x34) |= 0x10;
+        if (*(s16 *)(g + 0x22e0) == 2)
+            color = 0x80000000 | (blue << 16) | ((red / 2) << 8) | green;
+        else
+            color = 0x80000000 | (blue << 16) | (green << 8) | red;
+        *(u32 *)(moby + 0x90) = FUN_L00_00200298_002062b0(0.1f, *(u32 *)(moby + 0x90), color);
+        for (i = 0; i < 3; i++)
+            FUN_L00_0024f7c8(moby, i, g + 0x1d50 + i * 0x10);
+        alpha = 0x30;
+        if (*(s16 *)(g + 0x22de))
+            alpha = FUN_L00_00200250_002062b0(FUN_L00_00200240_002062b0(*(s16 *)(g + 0x22de)) / FUN_L00_00200240_002062b0(0x12) * (f32)alpha);
+        *(u32 *)(g + 0x22e4) = (alpha << 24) | ((u32)*(u8 *)(moby + 0x92) << 16) | ((u32)*(u8 *)(moby + 0x91) << 8) | *(u8 *)(moby + 0x90);
+        FUN_L00_00207d00();
+        *(s16 *)(g + 0x22e0) = 0;
+        if (*(u8 *)(g + 0x20a4) == 3) {
+            if (*(s32 *)(g + 0x20b8) == 0 || *(s32 *)(g + 0x20b8) == 0x1f) {
+                *(s32 *)(g + 0x20b8) = 0;
+                if (*(u8 *)(g + 0x12e7) && *(s32 *)(g + 0x300) && *(u8 *)0x13d4dc && *(s16 *)(g + 0x22de) == 0) {
+                    FUN_L00_00216de8(0x19, 0);
+                    *(s16 *)(g + 0x22dc) = 1;
+                    *(s16 *)(g + 0x22de) = 0x12;
+                }
+            } else if (*(s16 *)(g + 0x22de) == 0) {
+                FUN_L00_00216de8(0x19, 0);
+                *(s16 *)(g + 0x22dc) = 1;
+                *(s16 *)(g + 0x22de) = 0x12;
+            }
+        }
+    }
+    FUN_L00_00208b60();
+    FUN_L00_00257024(*(s32 *)(g + 0x2080));
+}
+#endif
 #include "rnc/audio/voice_pool.h"
 
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
