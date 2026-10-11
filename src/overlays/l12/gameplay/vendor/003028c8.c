@@ -88,8 +88,7 @@ void FUN_L12_003028c8(struct Moby *moby) {
                 FUN_001f9a10(&packet.vertices[j], &D_L12_001FB530[j],
                     data + strip * 0x460 + point * 0x10);
             }
-            draw_geometry_quad_l12(&packet, matrices[0], 0);
-            draw_geometry_quad_l12(&packet, matrices[1], 0);
+            for (j = 0; j < 2; j++) draw_geometry_quad_l12(&packet, matrices[j], 0);
             count = *(int *)(data + 0x232c) - 1;
         }
     }
