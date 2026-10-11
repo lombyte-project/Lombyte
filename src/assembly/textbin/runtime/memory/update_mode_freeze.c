@@ -224,7 +224,8 @@ void update_mode_freeze(void) {
             } else if (st->unk20 != 0) {
                 st->unk20--;
             } else {
-                if (st->unk1C == 2) {
+                /* Retail reloads unk1C after both countdown checks (0x001fd1d0). */
+                if (*(volatile s32 *)&st->unk1C == 2) {
                     if (D_0013F350.unk880 != (-1)) {
                         set_animation_parameter(D_0013F350.unk880, 0);
                         D_0013F350.unk880 = -1;
