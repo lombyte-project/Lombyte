@@ -1096,8 +1096,8 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
         record += 0x10;
     }
     FUN_001ff260_002ddcb8(D_L00_00161B60_002ddcb8);
-    temp1.bits = 0;
     temp2.bits = 0;
+    temp1.bits = 0;
     temp2.f[3] = 1.0f;
     temp1.f[2] = 0.1f;
     temp1.f[3] = 1.0f;
