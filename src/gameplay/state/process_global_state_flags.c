@@ -26,7 +26,7 @@ s32 process_global_state_flags(void) {
     s32 i;
     s32 result;
 
-    if ((controller_state.pressed & 0x20) != 0) {
+    if ((controller_state.pressed & PAD_CIRCLE) != 0) {
         if (mode_freeze_state == 1 || mode_freeze_state == 0x10) {
             menu_system.next = (struct MenuPage *)D_001D4EC0;
         } else {
@@ -34,7 +34,7 @@ s32 process_global_state_flags(void) {
             InitializeGlobalStateEntry(0);
             *(u16 *)D_0013E05A = 1;
         }
-    } else if ((controller_state.pressed & 0x40) != 0) {
+    } else if ((controller_state.pressed & PAD_CROSS) != 0) {
         old_value = item_unlocked[0x1D];
         for (i = 0; i < 4; i++) {
             backup[i] = D_0014BF08[i];

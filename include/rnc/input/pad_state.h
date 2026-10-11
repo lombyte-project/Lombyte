@@ -13,6 +13,24 @@
  * mirror flag D_0015EDB4 is set. The *_unmasked copies are taken before the
  * `mode` 1/2 masks and have that swap undone; menus read them.
  */
+/* Button bits of held / pressed (DualShock order). */
+#define PAD_L2       0x0001
+#define PAD_R2       0x0002
+#define PAD_L1       0x0004
+#define PAD_R1       0x0008
+#define PAD_TRIANGLE 0x0010
+#define PAD_CIRCLE   0x0020
+#define PAD_CROSS    0x0040
+#define PAD_SQUARE   0x0080
+#define PAD_SELECT   0x0100
+#define PAD_L3       0x0200
+#define PAD_R3       0x0400
+#define PAD_START    0x0800
+#define PAD_UP       0x1000
+#define PAD_RIGHT    0x2000
+#define PAD_DOWN     0x4000
+#define PAD_LEFT     0x8000
+
 struct PadState {
     u8 pad_0[0x100] __attribute__((aligned(16)));
     f32 analog[16];                     /* 0x100: [0..3] stick axes (-1..1), [4..15] pressure (0..1) */

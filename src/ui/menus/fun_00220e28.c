@@ -27,10 +27,10 @@ s32 FUN_00220e28(struct MenuScreen *m) {
     if (!active) {
         return 0;
     }
-    if ((controller_state.pressed_unmasked & 0xD00) && menu_system.close_locked == 0) {
+    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) && menu_system.close_locked == 0) {
         return 1;
     }
-    if (controller_state.pressed_unmasked & 0x10) {
+    if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
         } else if (menu_system.close_locked == 0) {
@@ -38,13 +38,13 @@ s32 FUN_00220e28(struct MenuScreen *m) {
         }
     }
     old = m->data.options.selection;
-    if ((controller_state.pressed_unmasked & 0x1000) && old != 0) {
+    if ((controller_state.pressed_unmasked & PAD_UP) && old != 0) {
         m->data.options.selection = old - 1;
     }
-    if ((controller_state.pressed_unmasked & 0x4000) && m->data.options.list[m->data.options.selection + 1].unk0 != 0) {
+    if ((controller_state.pressed_unmasked & PAD_DOWN) && m->data.options.list[m->data.options.selection + 1].unk0 != 0) {
         m->data.options.selection = m->data.options.selection + 1;
     }
-    if (controller_state.pressed_unmasked & 0x40) {
+    if (controller_state.pressed_unmasked & PAD_CROSS) {
         allocate_voice_for_target_entry(0, 0x11, m->moby);
         if (m->data.options.list[m->data.options.selection].flags & 1) {
             if (D_0016034C != 0) {

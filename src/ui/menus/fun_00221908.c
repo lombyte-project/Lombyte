@@ -5,7 +5,7 @@
 extern int D_001D22F8[];
 
 int FUN_00221908(void) {
-    if (controller_state.pressed_unmasked & 0x40) {
+    if (controller_state.pressed_unmasked & PAD_CROSS) {
         menu_system.next = (struct MenuPage *)D_001D22F8;
     }
     return 0;

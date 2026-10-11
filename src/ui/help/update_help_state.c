@@ -67,7 +67,7 @@ void update_help_state(void) __asm__("FUN_001fde90");
 void update_help_state(void) {
 
     if (D_001996D0.started == 0) {
-        if (D_001996D0.delay == 0 && (controller_state.held & 0xF000)) {
+        if (D_001996D0.delay == 0 && (controller_state.held & (PAD_UP | PAD_RIGHT | PAD_DOWN | PAD_LEFT))) {
             D_001996D0.delay = 1;
         }
         if (D_001996D0.delay != 0) {
@@ -125,7 +125,7 @@ void update_help_state(void) {
         if (id >= 0 && music_stream_state.secondary.handle == 0 && music_stream_state.queued_secondary_track == -1) {
             music_stream_state.queued_secondary_track = id + 0x7530;
         }
-        if (controller_state.pressed & 0x10) {
+        if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();
             RECORD_BEST();
             RECORD_FLAGS();
@@ -142,7 +142,7 @@ void update_help_state(void) {
         s32 id;
 
         force_help_message(5, 0);
-        if (controller_state.pressed & 0x10) {
+        if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();
             RECORD_BEST();
             D_001996D0.state = 7;
@@ -160,7 +160,7 @@ void update_help_state(void) {
 
     case 3:
         force_help_message(5, 0);
-        if (controller_state.pressed & 0x10) {
+        if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();
             RECORD_BEST();
             D_001996D0.state = 7;
@@ -176,7 +176,7 @@ void update_help_state(void) {
         s32 id;
 
         force_help_message(5, 0);
-        if (controller_state.pressed & 0x10) {
+        if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();
             RECORD_BEST();
             D_001996D0.state = 6;
@@ -200,7 +200,7 @@ void update_help_state(void) {
         if ((D_001996D0.timer >= scale_game_frames(0x1A4) &&
              ((id = D_0015F6A0[D_001996D0.msg].id) == -1 || id != music_stream_state.secondary.track - 0x7530 ||
               (music_stream_state.secondary.handle == 0 && music_stream_state.queued_secondary_track == -1))) ||
-            (controller_state.pressed & 0x10)) {
+            (controller_state.pressed & PAD_TRIANGLE)) {
             RECORD_COUNT();
             RECORD_BEST();
             D_001996D0.state = 6;
@@ -211,7 +211,7 @@ void update_help_state(void) {
     }
 
     case 6:
-        if (D_0015EE1D == 0 || D_001996D0.timer >= 4 || (controller_state.pressed & 0x10)) {
+        if (D_0015EE1D == 0 || D_001996D0.timer >= 4 || (controller_state.pressed & PAD_TRIANGLE)) {
             D_001996D0.state = 7;
             D_001996D0.timer = 0;
         }

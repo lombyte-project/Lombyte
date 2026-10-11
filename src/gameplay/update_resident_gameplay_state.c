@@ -242,7 +242,7 @@ void update_resident_gameplay_state(void) {
         }
         ticks_per_bank = pal_mode ? 0x50 : 0x60;
         skip = level_render_state.skip;
-        if ((controller_state.pressed & 0x50) && scale_ticks(30) < render_sequence.time &&
+        if ((controller_state.pressed & (PAD_TRIANGLE | PAD_CROSS)) && scale_ticks(30) < render_sequence.time &&
             sequence_fade == 0.0f) {
             if (level_render_state.state == 0 &&
                 render_sequence.time <
@@ -695,7 +695,7 @@ void update_resident_gameplay_state(void) {
                 if (level_render_state.speed > 100.0f) {
                     level_render_state.speed = 100.0f;
                 }
-                if ((controller_state.pressed & 0x50) && sequence_fade < 0.0625f) {
+                if ((controller_state.pressed & (PAD_TRIANGLE | PAD_CROSS)) && sequence_fade < 0.0625f) {
                     sequence_fade = 0.0625f;
                 }
                 if ((f32)(active_path->point_count - 6) < level_render_state.path_progress &&

@@ -30,7 +30,7 @@ s32 FUN_0021c4c0(struct MenuScreen *m) {
             return 0;
         }
     }
-    if ((controller_state.pressed_unmasked & 0xD00) && menu_system.close_locked == 0) {
+    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) && menu_system.close_locked == 0) {
         return 1;
     }
     if (controller_state.pressed_unmasked & 8) {
@@ -73,7 +73,7 @@ s32 FUN_0021c4c0(struct MenuScreen *m) {
             D_001CF758[0] = ((u32 *)0x70000100)[*p];
         }
     }
-    if (controller_state.pressed_unmasked & 0x10) {
+    if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
         } else if (menu_system.close_locked == 0) {

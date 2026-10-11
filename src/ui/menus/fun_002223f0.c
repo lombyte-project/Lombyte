@@ -25,10 +25,10 @@ s32 FUN_002223f0(struct Menu *menu) {
 
     flag = (((struct PadStateWords *)&controller_state)->buttons.held_pressed & 0xF) == 0xF;
     if ((menu_system.unkDC == 0) || (flag && (((s32)((struct PadStateWords *)&controller_state)->buttons.held_pressed) & 0x10))) {
-        if ((controller_state.pressed_unmasked & 0xD00) && (menu_system.close_locked == 0)) {
+        if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) && (menu_system.close_locked == 0)) {
             return 1;
         }
-        if (controller_state.pressed_unmasked & 0x10) {
+        if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
             if (menu_system.current->back != 0) {
                 menu_system.next = menu_system.current->back;
             } else if (menu_system.close_locked == 0) {

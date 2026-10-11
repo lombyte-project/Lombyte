@@ -2373,7 +2373,7 @@ void FUN_L11_00312838(struct Moby *m, ShipVars_2838 *o) {
     *(Q_2838 *)vel = up.q;
     up.q = 0;
     up.v[2] = 1.0f;
-    if (controller_state.raw_pressed & 0x8000) {
+    if (controller_state.raw_pressed & PAD_LEFT) {
         if (++o->sel >= 2) {
             o->sel = 0;
         }
@@ -2422,7 +2422,7 @@ void FUN_L11_00312838(struct Moby *m, ShipVars_2838 *o) {
         kb = D_L11_001620B4;
         a = x;
         b = y;
-        if (controller_state.held & 0x200) {
+        if (controller_state.held & PAD_L3) {
             a = x / D_L11_00162018 * D_L11_00162020;
             b = y / D_L11_00162014 * D_L11_0016201C;
             ka = D_L11_001620A8;
@@ -2500,7 +2500,7 @@ void FUN_L11_00312838(struct Moby *m, ShipVars_2838 *o) {
     ang[2] = fast_sub_rot_2838(o->f28, o->fD4);
     ang[1] = fast_sub_rot_2838(o->f24, o->fD8);
     FUN_L00_002eaa30(ang);
-    if (controller_state.raw_held & 0x40) {
+    if (controller_state.raw_held & PAD_CROSS) {
         fov = D_L11_00162138;
     } else {
         fov = D_L11_00162134;

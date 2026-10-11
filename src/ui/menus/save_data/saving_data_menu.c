@@ -70,7 +70,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
         }
 
     block_17:
-        if (controller_state.pressed_unmasked & 0x10) {
+        if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
             temp_2_126 = menu_system.current->back;
             if (temp_2_126 != 0) {
                 menu_system.next = temp_2_126;

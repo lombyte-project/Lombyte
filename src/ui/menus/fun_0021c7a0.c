@@ -38,7 +38,7 @@ s32 FUN_0021c7a0(struct MenuScreen *menu) {
         allocate_voice_for_target_entry(1, 0x11, menu->moby);
     }
     if (id != 0) {
-        if (item_available[id] != 0 && (controller_state.pressed_unmasked & 0x40)) {
+        if (item_available[id] != 0 && (controller_state.pressed_unmasked & PAD_CROSS)) {
             if ((u16)D_00141848.stat[21].count <= 0xFFFEU) {
                 D_00141848.stat[21].count = (u16)(D_00141848.stat[21].count + 1);
             }

@@ -16,10 +16,10 @@ s32 FUN_002212b8(struct MenuScreen *menu) {
     if (menu_system.current->focus != menu) {
         return 0;
     }
-    if ((controller_state.pressed_unmasked & 0xD00) && menu_system.close_locked == 0) {
+    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) && menu_system.close_locked == 0) {
         return 1;
     }
-    if (controller_state.pressed_unmasked & 0x10) {
+    if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
         } else if (menu_system.close_locked == 0) {
@@ -27,10 +27,10 @@ s32 FUN_002212b8(struct MenuScreen *menu) {
         }
     }
     prev = menu->data.choices.selection;
-    if ((controller_state.pressed_unmasked & 0x1000) && prev != 0) {
+    if ((controller_state.pressed_unmasked & PAD_UP) && prev != 0) {
         menu->data.choices.selection = prev - 1;
     }
-    if (controller_state.pressed_unmasked & 0x4000) {
+    if (controller_state.pressed_unmasked & PAD_DOWN) {
         cur = menu->data.choices.selection;
         if (menu->data.choices.list[cur + 1].unk0 != 0) {
             menu->data.choices.selection = cur + 1;
@@ -52,7 +52,7 @@ s32 FUN_002212b8(struct MenuScreen *menu) {
             }
         } while (n < 4);
     }
-    if (controller_state.pressed_unmasked & 0x40) {
+    if (controller_state.pressed_unmasked & PAD_CROSS) {
         if (item->value != NULL) {
             *item->value = (*item->value + 1) % n;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);

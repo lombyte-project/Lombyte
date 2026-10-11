@@ -12,7 +12,7 @@ int update_map_zoom_and_pan(void) {
     int *ys;
 
     func_00208810();
-    if (controller_state.pressed & 0x500) {
+    if (controller_state.pressed & (PAD_SELECT | PAD_R3)) {
         return 1;
     }
     if (level_map_selection.unk24 == 0) {

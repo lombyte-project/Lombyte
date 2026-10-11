@@ -81,22 +81,22 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     update_map_zoom_and_pan();
     if (!(screen->data.raw.unk34 & 0x40)) {
         prev = level_map_selection.level;
-        if (controller_state.pressed_unmasked & 0xD00) {
+        if (controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) {
             if (menu_system.close_locked == 0) {
                 return 1;
             }
         }
-        if (controller_state.pressed_unmasked & 0x10) {
+        if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
             if (menu_system.current->back != 0) {
                 menu_system.next = menu_system.current->back;
             } else if (menu_system.close_locked == 0) {
                 return -1;
             }
         }
-        if (controller_state.pressed_unmasked & 0x40) {
+        if (controller_state.pressed_unmasked & PAD_CROSS) {
             menu_system.next = (struct MenuPage *)D_001CF678;
         }
-        if ((controller_state.pressed_unmasked & 0x20) && level_map_selection.level != 0) {
+        if ((controller_state.pressed_unmasked & PAD_CIRCLE) && level_map_selection.level != 0) {
             menu_system.unkF0 = (struct MenuPage *)D_001CF418;
             menu_system.unkF4 = 0xB;
             menu_system.close_request = 3;

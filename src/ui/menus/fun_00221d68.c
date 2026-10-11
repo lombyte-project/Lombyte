@@ -7,10 +7,10 @@ extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 s32 FUN_00221d68(struct MenuScreen *menu) {
     s32 prev;
 
-    if ((controller_state.pressed_unmasked & 0xD00) && menu_system.close_locked == 0) {
+    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) && menu_system.close_locked == 0) {
         return 1;
     }
-    if (controller_state.pressed_unmasked & 0x10) {
+    if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
         } else if (menu_system.close_locked == 0) {
@@ -18,9 +18,9 @@ s32 FUN_00221d68(struct MenuScreen *menu) {
         }
     }
     prev = menu->data.list.selected;
-    if (controller_state.pressed & 0x40) {
+    if (controller_state.pressed & PAD_CROSS) {
         menu->data.list.selected = (prev + 1) % 30;
-    } else if (controller_state.pressed & 0x20) {
+    } else if (controller_state.pressed & PAD_CIRCLE) {
         menu->data.list.selected = (prev + 29) % 30;
     }
     if (menu->data.list.selected != prev) {

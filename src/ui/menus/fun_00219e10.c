@@ -16,14 +16,14 @@ extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA6
 
 int FUN_00219e10(char *menu) {
     {
-        if (controller_state.pressed_unmasked & 0xD00) {
+        if (controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) {
             if (menu_system.close_locked == 0) {
                 return 1;
             }
         }
     }
     {
-        if (controller_state.pressed_unmasked & 0x10) {
+        if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
             struct MenuSystem *g = &menu_system;
             struct MenuPage *t = g->current->back;
             if (t != 0) {

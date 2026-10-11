@@ -132,7 +132,7 @@ void update_gameplay_frame(void) {
                       32.0f) +
                 0x60;
         }
-        if (controller_state.pressed & 0x840) {
+        if (controller_state.pressed & (PAD_CROSS | PAD_START)) {
             InitializeTransferCommand();
         }
         sound_update();

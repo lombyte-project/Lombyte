@@ -74,10 +74,10 @@ s32 saving_data_menu2(struct MenuScreen *w) {
         D_0013E05A[0] = 1;
     }
 
-    if ((controller_state.pressed_unmasked & 0xD00) && menu_system.close_locked == 0) {
+    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) && menu_system.close_locked == 0) {
         return 1;
     }
-    if (controller_state.pressed_unmasked & 0x10) {
+    if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
         back = menu_system.current->back;
         if (back != NULL) {
             menu_system.next = back;

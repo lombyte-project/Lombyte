@@ -56,13 +56,13 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
     if (!focused) {
         return 0;
     }
-    if (controller_state.pressed_unmasked & 0xD00) {
+    if (controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) {
         if (menu->data.list.flags & 0x20) {
             selected_level_index[0] = current_level_index;
         }
         return -1;
     }
-    if (controller_state.pressed_unmasked & 0x10) {
+    if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
         if (menu->data.list.flags & 0x20) {
             selected_level_index[0] = current_level_index;
         }
@@ -72,7 +72,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             return -1;
         }
     }
-    if (controller_state.pressed_unmasked & 0x40) {
+    if (controller_state.pressed_unmasked & PAD_CROSS) {
         /* Index through menu-> directly: locals for items/selected change
            which register keeps the copy of selected that actions 6 and 9 reuse. */
         switch (menu->data.list.items[menu->data.list.selected].action) {
