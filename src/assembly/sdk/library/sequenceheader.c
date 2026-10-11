@@ -135,12 +135,10 @@ void func_0012C4C8(struct sceMpeg *arg0) {
         temp_20_71 = ((u8 *)mpeg + (0x250));
         temp_21_73 = ((u8 *)mpeg + (0x2B8));
         sp38 = ((u8 *)mpeg + (0x3F0));
-        temp_18_75 = temp_22_48 >> 1;
         temp_16_77 = (u32)((0x180 * temp_23_51) * temp_22_48) >> 8;
         sp3C = ((u8 *)mpeg + (0x458));
         width = temp_23_51;
         height = temp_22_48;
-        chroma_height = temp_18_75;
         func_0012BC10(temp_17_63);
         mpeg->frame_buffers[0] = reserve_aligned_buffer_space(mpeg, temp_17_63, temp_16_77, 0x40);
         mpeg->frame_buffers[1] = reserve_aligned_buffer_space(mpeg, temp_17_63, temp_16_77, 0x40);
@@ -151,6 +149,8 @@ void func_0012C4C8(struct sceMpeg *arg0) {
         InitializeReferenceImage(temp_19_67, width, height);
         InitializeReferenceImage(temp_20_71, width, height);
         InitializeReferenceImage(temp_21_73, width, height);
+        temp_18_75 = height >> 1;
+        chroma_height = temp_18_75;
         InitializeReferenceImage(sp30, width, chroma_height);
         InitializeReferenceImage(sp34, width, chroma_height);
         InitializeReferenceImage(sp38, width, chroma_height);
