@@ -451,9 +451,9 @@ void FUN_L08_002d6450(struct Moby *moby) {
             if (other->state < 0x7f && other != moby) {
                 u16 class_id = (u16)other->oclass;
                 if ((u32)(class_id - 0x24c) < 0xb) {
-                    DeleteMoby(other);
+                    mark_moby_for_removal(other);
                 } else if ((s16)class_id == 0x1d8) {
-                    DeleteMoby(other);
+                    mark_moby_for_removal(other);
                 }
             }
             if (*list < -1)
