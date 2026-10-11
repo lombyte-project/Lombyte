@@ -323,7 +323,244 @@ void FUN_L05_0030e508(char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e7f8.s", FUN_L05_0030e7f8);
+void FUN_L05_0030f218(char *, float, float);
+void FUN_L05_0030f408(char *, float, float);
+extern int is_target_entry_for_moby(void *, int) __asm__("FUN_L00_0028d8c0");
+extern void release_target_entry(int) __asm__("FUN_0022d798");
+extern int allocate_target_entry(int, int, void *) __asm__("FUN_0022da68");
+extern int scale_game_frames_30e7f8(int) __asm__("FUN_001f96f8");
+extern float random_angle_radians_30e7f8(void) __asm__("FUN_00213308");
+extern float random_float_between_30e7f8_init(float, float) __asm__("FUN_L00_00257c48");
+extern int timer_finished(void *) __asm__("FUN_001f9740");
+extern float vector_distance_xyz(void *, void *) __asm__("FUN_001f9b80");
+extern float scale_game_frames_float_30e7f8(float) __asm__("FUN_001f96b0");
+extern int convert_effect_value(float) __asm__("FUN_001fa6d0");
+extern float angle_cos(float) __asm__("FUN_001f9dc8");
+extern float angle_sin(float) __asm__("FUN_001f9de0");
+extern float vector_heading(float, float) __asm__("FUN_001f9e90");
+extern void rotate_vector(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void transform_vector(void *, void *, float) __asm__("FUN_001f9c48");
+extern void add_vector(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void emit_particle(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern void clear_vector_30e7f8(void *) __asm__("FUN_001f99f8");
+extern float random_float_between_30e7f8(float, float) __asm__("FUN_002132a8");
+extern float sqrt_30e7f8(float) __asm__("FUN_001f9988");
+extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
+extern void approach_position(float, float, float, float, void *, void *) __asm__("FUN_00213f38");
+extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
+extern void subtract_vector_30e7f8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
+extern void *allocate_entity(int) __asm__("FUN_0020c4f8");
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
+extern float D_L05_00161DAC __asm__("D_L05_00161DAC") __attribute__((sda));
+extern float D_L05_00161DB0 __asm__("D_L05_00161DB0") __attribute__((sda));
+extern int D_L05_00161DB8 __asm__("D_L05_00161DB8") __attribute__((sda));
+extern float D_L05_00161DE8 __asm__("D_L05_00161DE8") __attribute__((sda));
+extern float D_L05_00161DEC __asm__("D_L05_00161DEC") __attribute__((sda));
+extern float D_L05_00161DF0 __asm__("D_L05_00161DF0") __attribute__((sda));
+extern int D_L05_00161DF4 __asm__("D_L05_00161DF4") __attribute__((sda));
+extern int D_L05_00161DF8 __asm__("D_L05_00161DF8") __attribute__((sda));
+extern float D_L05_00161DFC __asm__("D_L05_00161DFC") __attribute__((sda));
+extern float D_L05_00161E00 __asm__("D_L05_00161E00") __attribute__((sda));
+extern float D_L05_00161DD4 __asm__("D_L05_00161DD4") __attribute__((sda));
+extern float D_0013F3D0[];
+extern int D_L05_0015F5C4;
+extern int D_L05_0015F5CC;
+
+typedef struct {
+    char pad00[0x10];
+    float pos[4];
+    char pad20[0x10];
+    unsigned char f30;
+    unsigned char f31;
+    short f32;
+    unsigned short flags;
+} DrainCoverLid;
+typedef struct {
+    char pad00[0x20];
+    char f20[0x40];
+    float vel[4];
+    float home[4];
+    float f80;
+    float f84;
+    float f88;
+    int timer;
+    char pad90[8];
+    float f98;
+    float f9C;
+    float fA0;
+    float fA4;
+    int sound;
+    DrainCoverLid *lid;
+} DrainCoverData;
+typedef struct {
+    char pad00[0x10];
+    float pos[4];
+    unsigned char state;
+    char pad21[0x1F];
+    float rot[4];
+    char pad50[0x28];
+    DrainCoverData *d;
+} DrainCoverMoby;
+typedef struct {
+    char pad00[0x80];
+    float pos[4];
+    char pad90[0x1FF0];
+    int f2080;
+} DrainCoverHero;
+void FUN_L05_0030e7f8(DrainCoverMoby *moby) {
+    DrainCoverData *data = moby->d;
+    float old_position[4];
+    float old_rotation[4];
+    float difference[4];
+    float effect_velocity[4];
+    float effect_position[4];
+    float particle_position[4];
+    int r, g, bl, a, b;
+    int i;
+    int index;
+    char *entry;
+    DrainCoverHero *hero;
+    DrainCoverLid *lid;
+    float t;
+    float ang;
+
+    qcopy(old_position, moby->pos);
+    qcopy(old_rotation, moby->rot);
+    if (moby->state >= 2) {
+        if (is_target_entry_for_moby(moby, data->sound) == 0) {
+            data->sound = allocate_target_entry(0, 4, moby);
+        }
+    } else if (is_target_entry_for_moby(moby, data->sound) != 0) {
+        index = data->sound;
+        if (index != -1) {
+            entry = D_0013E550 + index * 0x70;
+            if (*(DrainCoverMoby **)(entry + 0x88) == moby && *(unsigned char *)(entry + 0x74) != 0) {
+                release_target_entry(index);
+            }
+        }
+        data->sound = -1;
+    }
+    switch (moby->state) {
+    case 0:
+        moby->state = 1;
+        data->timer = scale_game_frames_30e7f8(0x78);
+        data->sound = 0xFF;
+        qcopy(data->home, moby->pos);
+        data->f98 = random_angle_radians_30e7f8();
+        data->f9C = random_angle_radians_30e7f8();
+        data->fA0 = random_float_between_30e7f8_init(70.0f, 120.0f) * 0.017453292f * frame_time;
+        data->fA4 = random_float_between_30e7f8_init(70.0f, 120.0f) * 0.017453292f * frame_time;
+        t = data->f84 + 1.0f;
+        if (data->f80 <= t) {
+            data->f80 = t;
+        }
+        break;
+    case 1:
+        FUN_L05_0030f408((char *)moby, 0.0f, 8.0f);
+        if (D_L05_0015F5C4 == 0 && vector_distance_xyz(moby->pos, D_0013F3D0) < 24.0f && timer_finished(&data->timer) != 0) {
+            moby->state = 2;
+            clear_vector_30e7f8(data->vel);
+            data->vel[2] = sqrt_30e7f8(data->f80 * 2.0f * (D_L05_00161DAC * frame_time_sq));
+        } else if ((float)data->timer < (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) * 0.5f) {
+            FUN_L05_0030f218((char *)moby, data->home[2], D_L05_00161DE8 + data->home[2]);
+            FUN_L05_0030f218((char *)moby, data->home[2], D_L05_00161DE8 + data->home[2]);
+            if ((float)data->timer < (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) * 0.2f) {
+                a = D_L05_00161DF4;
+                b = D_L05_00161DF8;
+                r = convert_effect_value(scale_game_frames_float_30e7f8(random_float_between_30e7f8(10.0f, 20.0f)));
+                g = convert_effect_value(scale_game_frames_float_30e7f8(random_float_between_30e7f8(10.0f, 20.0f)));
+                bl = convert_effect_value(scale_game_frames_float_30e7f8(random_float_between_30e7f8(10.0f, 40.0f)));
+                for (i = 0; i < 20; i++) {
+                    ang = random_angle_radians_30e7f8();
+                    particle_position[0] = angle_cos(ang) * 0.75f;
+                    particle_position[1] = angle_sin(ang) * 0.75f;
+                    particle_position[2] = 0.0f;
+                    rotate_vector(effect_velocity, particle_position, random_float_between_30e7f8(D_L05_00161DEC, D_L05_00161DF0) * frame_time);
+                    effect_velocity[2] = random_float_between_30e7f8(0.0f, D_L05_00161DFC) * frame_time;
+                    transform_vector(effect_position, effect_velocity, 0.0f);
+                    add_vector(particle_position, moby->pos, particle_position);
+                    particle_position[2] = random_float_between_30e7f8(moby->pos[2] - 0.25f, moby->pos[2] + 0.5f);
+                    effect_velocity[3] = effect_position[3] = random_float_between_30e7f8(0.5f, 1.0f);
+                    emit_particle(particle_position, effect_velocity, effect_position, a, b, r, g, bl, 0x30);
+                }
+            }
+        }
+        break;
+    case 2:
+        if ((D_L05_0015F5CC & 3) == 0) {
+            play_entity_sound((int)moby, 1.0f, moby->pos, 0x10000, 2.0f, 1.0f, 0, 1, 0);
+        }
+        FUN_L05_0030f218((char *)moby, data->home[2], data->vel[2] * (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) * 0.5f + moby->pos[2]);
+        FUN_L05_0030f408((char *)moby, D_L05_00161DD4, 1.0f);
+        add_vector(moby->pos, moby->pos, data->vel);
+        data->vel[2] = data->vel[2] - D_L05_00161DAC * frame_time_sq;
+        if (data->vel[2] <= 0.0f) {
+            moby->state = 3;
+            data->home[3] = data->f84 - 0.5f;
+            data->timer = convert_effect_value(scale_game_frames_float_30e7f8(data->f88));
+        }
+        break;
+    case 3:
+        FUN_L05_0030f218((char *)moby, data->home[2], moby->pos[2]);
+        FUN_L05_0030f408((char *)moby, D_L05_00161DD4, 1.0f);
+        approach_position(data->home[2] + data->home[3], D_L05_00161DB0 * frame_time_sq, D_L05_00161DB0 * frame_time_sq, frame_time * 20.0f, &moby->pos[2], &data->vel[2]);
+        if (data->vel[2] == 0.0f) {
+            if (data->home[3] > data->f84) {
+                data->home[3] = data->f84 - 0.5f;
+            } else {
+                data->home[3] = data->f84 + 0.5f;
+            }
+        }
+        if (timer_finished(&data->timer) != 0) {
+            moby->state = 4;
+        }
+        break;
+    case 4:
+        FUN_L05_0030f218((char *)moby, data->home[2], data->vel[2] * (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) + moby->pos[2]);
+        FUN_L05_0030f408((char *)moby, data->home[2] + 1.0f < moby->pos[2] ? D_L05_00161DD4 : 0.0f, data->home[2] + 1.0f < moby->pos[2] ? 1.0f : 10.0f);
+        add_vector(moby->pos, moby->pos, data->vel);
+        data->vel[2] = data->vel[2] - D_L05_00161DAC * frame_time_sq;
+        if (moby->pos[2] < data->home[2]) {
+            allocate_target_entry(1, 0, moby);
+            moby->state = 1;
+            data->timer = scale_game_frames_30e7f8(0x78);
+            qcopy(moby->pos, data->home);
+            data->f98 = random_angle_radians_30e7f8();
+            data->f9C = random_angle_radians_30e7f8();
+            data->fA0 = random_float_between_30e7f8_init(70.0f, 120.0f) * 0.017453292f * frame_time;
+            data->fA4 = random_float_between_30e7f8_init(70.0f, 120.0f) * 0.017453292f * frame_time;
+        }
+        break;
+    }
+    hero = (DrainCoverHero *)(D_0013E550 + 0xE00);
+    if (moby->pos[2] - 2.0f > hero->pos[2] && vector_distance_xyz(moby->pos, hero->pos) < D_L05_00161E00) {
+        effect_velocity[0] = angle_cos(vector_heading(hero->pos[0] - moby->pos[0], hero->pos[1] - moby->pos[1])) * 0.2f;
+        effect_velocity[1] = angle_sin(vector_heading(hero->pos[0] - moby->pos[0], hero->pos[1] - moby->pos[1])) * 0.2f;
+        effect_velocity[2] = 0.0f;
+        qcopy(effect_position, hero->pos);
+        effect_position[2] += 0.75f;
+        spawn_nearby_effect((void *)hero->f2080, (int)moby, 1, effect_position, effect_velocity, effect_velocity[2]);
+    }
+    subtract_vector_30e7f8(difference, moby->pos, old_position);
+    update_entity_matrix(data->f20, difference, old_rotation, moby->rot);
+    if (data->lid == 0) {
+        data->lid = allocate_entity(0x388);
+        if (data->lid != 0) {
+            data->lid->f30 = 0;
+            data->lid->flags |= 1;
+            data->lid->f32 = 0;
+            data->lid->f31 = 0;
+            lid = data->lid;
+            qcopy(lid->pos, moby->pos);
+            update_entity(lid);
+        }
+    } else {
+        lid = data->lid;
+        qcopy(lid->pos, moby->pos);
+        update_entity(lid);
+    }
+}
 /* Scatters points along a range, placing each one with a heading and radius. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003106E0), where it is exact; names translated to the US level program. */
 
