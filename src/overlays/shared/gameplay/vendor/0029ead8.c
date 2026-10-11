@@ -49,6 +49,7 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     char text[256];
     VendorItemInfo *price_table;
     s32 cost;
+    u16 ammo_cost;
 
     FUN_00201560(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     price_table = D_L00_001C40B0;
@@ -77,8 +78,11 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
         }
         return;
     }
-    cost = vendor_menu.f40 ? price_table[vendor_menu.rows[vendor_menu.f58].fD0].hA : price_table[vendor_menu.rows[vendor_menu.f58].fD0].h8;
-    if (current_bolt_count < cost) {
+    if (vendor_menu.f40)
+        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].hA;
+    else
+        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].h8;
+    if (current_bolt_count < ammo_cost) {
         FUN_001fc4a8(&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5238), -1);
         return;
     }
@@ -98,8 +102,11 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     FUN_001fb3f0(cost, 0x32, 0x80f0f0f0ULL, text, -1);
     FUN_001fb3f0(0xc, 0x32, 0x80f0f0f0ULL, D_L00_00161168, -1);
     FUN_001fb3f0(0x40, 0x32, 0x80f0f0f0ULL, D_L00_00161170, -1);
-    cost = vendor_menu.f40 ? price_table[vendor_menu.rows[vendor_menu.f58].fD0].hA : price_table[vendor_menu.rows[vendor_menu.f58].fD0].h8;
-    FUN_00116248(text, D_L00_00161160, D_L00_00161E34 * cost);
+    if (vendor_menu.f40)
+        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].hA;
+    else
+        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].h8;
+    FUN_00116248(text, D_L00_00161160, D_L00_00161E34 * ammo_cost);
     FUN_001fb888(0x40, 0x4c, 0x80f0f0f0ULL, text, -1);
 }
 #endif
