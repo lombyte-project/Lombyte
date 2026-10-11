@@ -701,19 +701,20 @@ void FUN_L00_0020dd20(void) {
     f32 tenth = 0.1f;
     f32 one = 1.0f;
 
+    struct Hero *hero_ptr = &hero;
     i = 0;
     do {
-        slot = (u8 **)&hero.unkD00 + i;
+        slot = (u8 **)&hero_ptr->unkD00 + i;
         obj = *slot;
         if (obj && *(s32 *)(obj + 0x34)) {
             next = i + 1;
             if (FUN_00213ed8_20dd20((f32 *)(obj + 8), zero, frame_scale * tenth) == zero)
-                FUN_L00_0024f0e8_20dd20((u8 *)hero.moby, slot);
+                FUN_L00_0024f0e8_20dd20((u8 *)hero_ptr->moby, slot);
         } else {
             active = 0;
-            if (hero.unk20AB && (i == 0 || hero.unk20AB == 2))
+            if (hero_ptr->unk20AB && (i == 0 || hero_ptr->unk20AB == 2))
                 active = 1;
-            if (hero.unk20AF) {
+            if (hero_ptr->unk20AF) {
                 active = 0;
                 if (*slot)
                     *(s32 *)(*slot + 0x34) = 1;
@@ -721,7 +722,7 @@ void FUN_L00_0020dd20(void) {
             if (active) {
                 next = i + 1;
                 if (*slot == 0) {
-                    obj = FUN_L00_0024f028_20dd20((u8 *)hero.moby, D_L00_0015F6A0_20dd20[i]);
+                    obj = FUN_L00_0024f028_20dd20((u8 *)hero_ptr->moby, D_L00_0015F6A0_20dd20[i]);
                     *slot = obj;
                     *(s32 *)(obj + 8) = 0;
                     *(s32 *)(*slot + 0x18) = D_L00_00197300_20dd20[D_L00_00197BC0_20dd20[next]];
@@ -731,20 +732,20 @@ void FUN_L00_0020dd20(void) {
                 if (*slot == 0)
                     goto next_slot;
                 if (FUN_00213ed8_20dd20((f32 *)(*slot + 8), zero, frame_scale * tenth) == zero)
-                    FUN_L00_0024f0e8_20dd20((u8 *)hero.moby, slot);
+                    FUN_L00_0024f0e8_20dd20((u8 *)hero_ptr->moby, slot);
             }
         }
         obj = *slot;
         if (obj) {
-            moby = (u8 *)hero.moby;
+            moby = (u8 *)hero_ptr->moby;
             same = moby[0x52] == moby[0x53];
-            if (hero.unkD08[0] && !hero.unkD14) {
+            if (hero_ptr->unkD08[0] && !hero_ptr->unkD14) {
                 FUN_00213ed8_20dd20((f32 *)(obj + 8), zero, frame_scale * tenth);
             } else if (*(s32 *)(obj + 0x34) == 0) {
                 FUN_00213ed8_20dd20((f32 *)(obj + 8), one, frame_scale * tenth);
             }
             change = 0;
-            if (!same && hero.unkA9C) {
+            if (!same && hero_ptr->unkA9C) {
                 if (FUN_L00_002050b8_20dd20(obj[0x23]) != FUN_L00_002050b8_20dd20(moby[0x53]))
                     change = obj[0x22] != obj[0x23];
             }
