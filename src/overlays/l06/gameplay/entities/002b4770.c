@@ -1192,7 +1192,174 @@ void FUN_L06_002fbc88(struct Moby *m) {
     add_vector_xyz(&m->pos, &m->pos, &step);
     FUN_L00_00261d78(1.0f, v->ground, &m->pos, &m->pos);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fbfb0.s", FUN_L06_002fbfb0);
+#else
+extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern void FUN_L01_0026e0e0(int, int);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_001f9a10(void *, void *, void *);
+extern float FUN_001f9b48(void *, void *);
+extern float D_L06_00161F1C __attribute__((sda));
+extern float D_L06_00161F20 __attribute__((sda));
+extern float D_L06_00161F24 __attribute__((sda));
+extern float D_L06_00161F28 __attribute__((sda));
+extern float D_L06_00161F2C __attribute__((sda));
+extern float D_L06_00161F30 __attribute__((sda));
+extern float D_L06_00161F34 __attribute__((sda));
+extern float D_L06_00161F38 __attribute__((sda));
+extern float D_L06_00161F3C __attribute__((sda));
+extern float D_L06_00161F40 __attribute__((sda));
+extern float D_L06_00161F44 __attribute__((sda));
+extern float D_L06_00161F48 __attribute__((sda));
+extern int D_L06_00161F4C __attribute__((sda));
+extern int D_L06_00161F50 __attribute__((sda));
+extern int D_L06_00161F54 __attribute__((sda));
+extern int D_L06_00161F58 __attribute__((sda));
+extern float D_L06_00161F5C __attribute__((sda));
+
+void FUN_L06_002fbfb0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *child;
+    float v[4];
+    float a, b;
+    float target_a, target_b, target_rot_a, target_rot_b;
+    float acceleration, max_speed, damping, rotation_acceleration, rotation_speed, rotation_damping;
+    int next_timer;
+    unsigned char next_phase;
+
+    switch ((unsigned char)moby[0x20]) {
+    case 0:
+        qcopy(data + 0x10, moby + 0x10);
+        qcopy(data + 0x20, moby + 0x40);
+        qcopy(data + 0x30, moby + 0xe0);
+        *(char **)(data + 0x40) = (char *)create_moby(0x41f);
+        *(unsigned short *)(*(char **)(data + 0x40) + 0x32) = 0x40;
+        (*(char **)(data + 0x40))[0x31] = 1;
+        *(long *)(*(char **)(data + 0x40) + 0x38) = *(long *)(moby + 0x38);
+        *(unsigned short *)(*(char **)(data + 0x40) + 0x34) = *(unsigned short *)(moby + 0x34);
+        child = *(char **)(data + 0x40);
+        qcopy(child + 0x10, moby + 0x10);
+        qcopy(child + 0x40, moby + 0x40);
+        if (*(int *)data >= 0) {
+            moby[0x20] = 1;
+            return;
+        }
+        if (*(int *)(data + 4) == 2) {
+            moby[0x20] = 2;
+            return;
+        }
+        FUN_001f9bf8(v, data + 0x30, D_L06_00161F1C);
+        FUN_001f9a10(moby + 0x10, data + 0x10, v);
+        FUN_001f9bf8(v, data + 0x30, -D_L06_00161F20);
+        FUN_001f9a10(*(char **)(data + 0x40) + 0x10, data + 0x10, v);
+        FUN_L00_00250df8(*(char **)(data + 0x40));
+        moby[0x20] = 5;
+        return;
+    case 1:
+        if (!is_point_inside_clip_volume((void *)0x13f3d0, *(int *)data)) return;
+        if (*(int *)(data + 4) == 1) {
+            moby[0x20] = 4;
+            *(int *)(data + 0x4c) = scale_game_frames_alt(0x14);
+        } else if ((unsigned char)moby[0x21] != 0xff) {
+            FUN_L01_0026e0e0((unsigned char)moby[0x21], 3);
+        } else {
+            moby[0x20] = 3;
+        }
+        allocate_voice_for_target_entry(0, 0, (int)*(char **)(data + 0x40));
+        return;
+    case 3:
+        a = FUN_001f9b48(moby + 0x10, data + 0x10);
+        b = FUN_001f9b48(*(char **)(data + 0x40) + 0x10, data + 0x10);
+        FUN_00213f38(&a, &((float *)data)[2], D_L06_00161F1C, frame_time_sq * 10.0f, frame_time_sq * 20.0f, frame_time * 5.0f);
+        FUN_00213f38(&b, &((float *)data)[0x11], D_L06_00161F20, frame_time_sq * 10.0f, frame_time_sq * 20.0f, frame_time * 5.0f);
+        FUN_001f9bf8(v, data + 0x30, a);
+        FUN_001f9a10(moby + 0x10, data + 0x10, v);
+        FUN_001f9bf8(v, data + 0x30, -b);
+        FUN_001f9a10(*(char **)(data + 0x40) + 0x10, data + 0x10, v);
+        FUN_L00_00250df8(*(char **)(data + 0x40));
+        if (absolute_float(a - D_L06_00161F1C) < 0.01f && absolute_float(b - D_L06_00161F20) < 0.01f) moby[0x20] = 5;
+        return;
+    case 4:
+        a = FUN_001f9b48(moby + 0x10, data + 0x10);
+        b = FUN_001f9b48(*(char **)(data + 0x40) + 0x10, data + 0x10);
+        if ((unsigned char)moby[0xbc] == 1) {
+            target_rot_a = *(float *)(moby + 0x44);
+            target_rot_b = *(float *)(*(char **)(data + 0x40) + 0x44);
+            target_a = a;
+            target_b = b;
+            acceleration = D_L06_00161F34;
+            max_speed = D_L06_00161F38;
+            damping = D_L06_00161F3C;
+            rotation_acceleration = D_L06_00161F40;
+            rotation_speed = D_L06_00161F44;
+            rotation_damping = D_L06_00161F48;
+            next_phase = 2;
+            next_timer = func_001FA898_r(random_float_between_alt((float)D_L06_00161F54, (float)D_L06_00161F58));
+        } else if ((unsigned char)moby[0xbc] == 2) {
+            target_rot_a = D_L06_00161F2C;
+            target_rot_b = D_L06_00161F30;
+            target_a = D_L06_00161F24;
+            target_b = D_L06_00161F28;
+            acceleration = D_L06_00161F34;
+            max_speed = D_L06_00161F38;
+            damping = D_L06_00161F3C;
+            rotation_acceleration = D_L06_00161F40;
+            rotation_speed = D_L06_00161F44;
+            rotation_damping = D_L06_00161F48;
+            next_phase = 1;
+            next_timer = func_001FA898_r(random_float_between_alt((float)D_L06_00161F4C, (float)D_L06_00161F50));
+        } else {
+            target_rot_a = *(float *)(moby + 0x44);
+            target_rot_b = target_rot_a;
+            target_a = D_L06_00161F24;
+            target_b = D_L06_00161F28;
+            acceleration = 10.0f;
+            max_speed = 20.0f;
+            damping = 5.0f;
+            rotation_acceleration = 10.0f;
+            rotation_speed = 10.0f;
+            rotation_damping = 5.0f;
+            next_phase = 1;
+            next_timer = 30;
+        }
+        FUN_00213f38(&a, &((float *)data)[2], target_a, acceleration * frame_time_sq, max_speed * frame_time_sq, damping * frame_time);
+        FUN_00213f38(&b, &((float *)data)[0x11], target_b, acceleration * frame_time_sq, max_speed * frame_time_sq, damping * frame_time);
+        FUN_00213f38((float *)(moby + 0x44), &((float *)data)[3], target_rot_a, rotation_acceleration * DEG_TO_RAD * frame_time_sq, rotation_speed * DEG_TO_RAD * frame_time_sq, rotation_damping * DEG_TO_RAD * frame_time);
+        FUN_00213f38((float *)(*(char **)(data + 0x40) + 0x44), &((float *)data)[0x12], target_rot_b, rotation_acceleration * DEG_TO_RAD * frame_time_sq, rotation_speed * DEG_TO_RAD * frame_time_sq, rotation_damping * DEG_TO_RAD * frame_time);
+        FUN_001f9bf8(v, data + 0x30, a);
+        FUN_001f9a10(moby + 0x10, data + 0x10, v);
+        FUN_001f9bf8(v, data + 0x30, -b);
+        FUN_001f9a10(*(char **)(data + 0x40) + 0x10, data + 0x10, v);
+        FUN_L00_00250df8(*(char **)(data + 0x40));
+        if (!fast_dec_timer(data + 0x4c)) return;
+        moby[0xbc] = next_phase;
+        *(int *)(data + 0x4c) = scale_game_frames_alt(next_timer);
+        if (absolute_float(a - D_L06_00161F24) >= 0.01f) return;
+        if (absolute_float(b - D_L06_00161F28) < 0.01f) moby[0x20] = 5;
+        return;
+    case 5:
+        if (D_L06_00161F5C == 0.0f) return;
+        moby[0xbc] = 0;
+        moby[0x20] = 1;
+        qcopy(moby + 0x10, data + 0x10);
+        qcopy(moby + 0x40, data + 0x20);
+        child = *(char **)(data + 0x40);
+        qcopy(child + 0x10, moby + 0x10);
+        qcopy(child + 0x40, moby + 0x40);
+        *(float *)(data + 0x48) = 0.0f;
+        *(float *)(data + 8) = 0.0f;
+        *(float *)(data + 0xc) = 0.0f;
+        *(float *)(data + 0x44) = 0.0f;
+        return;
+    }
+}
+#endif /* NON_MATCHING */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FDA70), where it is exact; names translated to the US level program. */
 
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2FDA70;
