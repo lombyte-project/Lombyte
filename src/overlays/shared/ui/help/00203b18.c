@@ -280,32 +280,33 @@ typedef u32 Quad_56a8 __attribute__((mode(TI), aligned(16)));
 extern u8 D_L00_0017A680_56a8[] __asm__("D_L00_0017A680");
 
 void FUN_L00_002056a8(void) {
-    u8 *g = (u8 *)&hero;
     u8 *e = D_L00_0017A680_56a8;
+    u8 *g;
     s32 i;
-    s32 *timer = (s32 *)(g + 0xff0);
-    f32 *pitch = (f32 *)(e + 0x8a4);
     f32 *yaw = (f32 *)(e + 0x8a8);
+    s32 *timer;
 
     *yaw = *(f32 *)(e + 0x278) * 0.25f;
     if (*yaw > 0.14835298f)
         *yaw = 0.14835298f;
     else if (*yaw < -0.14835298f)
         *yaw = -0.14835298f;
-    *pitch = *(f32 *)(e + 0x274) / 2.8f;
-    if (*pitch > 0.29670596f)
-        *pitch = 0.29670596f;
-    if (*pitch < -0.17453292f)
-        *pitch = -0.17453292f;
+    *(f32 *)(e + 0x8a4) = *(f32 *)(e + 0x274) / 2.8f;
+    if (*(f32 *)(e + 0x8a4) > 0.29670596f)
+        *(f32 *)(e + 0x8a4) = 0.29670596f;
+    if (*(f32 *)(e + 0x8a4) < -0.17453292f)
+        *(f32 *)(e + 0x8a4) = -0.17453292f;
+    g = (u8 *)&hero;
+    timer = (s32 *)(g + 0xff0);
     if ((u8)(*(u8 *)(*(u32 *)(g + 0x2080) + 0x53) - 1) < 2) {
         if (*yaw > 0.034906585f)
             *yaw = 0.034906585f;
         if (*yaw < -0.034906585f)
             *yaw = -0.034906585f;
-        if (*pitch > 0.12217305f)
-            *pitch = 0.12217305f;
-        if (*pitch < -0.12217305f)
-            *pitch = -0.12217305f;
+        if (*(f32 *)(e + 0x8a4) > 0.12217305f)
+            *(f32 *)(e + 0x8a4) = 0.12217305f;
+        if (*(f32 *)(e + 0x8a4) < -0.12217305f)
+            *(f32 *)(e + 0x8a4) = -0.12217305f;
     }
     FUN_L00_00205600();
     if (*timer != 0) {
@@ -321,17 +322,21 @@ void FUN_L00_002056a8(void) {
             }
         } else {
             u8 *slot = g + 0xd30;
+            u8 *active = g;
+            u8 *dst_a = g + 0xd40;
+            u8 *dst_b = g + 0xd50;
+            u8 *dst_c = g + 0xd60;
             Quad_56a8 *src_a = (Quad_56a8 *)0x17c040;
             Quad_56a8 *src_b = (Quad_56a8 *)0x17c0b0;
             Quad_56a8 *src_c = (Quad_56a8 *)0x17c120;
             s32 *kind = (s32 *)0x17c1c0;
-            for (i = 0; i < 7; i++, slot += 0x40, src_a++, src_b++, src_c++, kind++) {
-                if (slot[1] == 0) {
+            for (i = 0; i < 7; i++, active += 0x40, slot += 0x40, dst_a += 0x40, dst_b += 0x40, dst_c += 0x40, src_a++, src_b++, src_c++, kind++) {
+                if (active[0xd31] == 0) {
                     attach_manipulator(*(s32 *)(g + 0x2080), *kind, slot);
-                    slot[3] = 1;
-                    *(Quad_56a8 *)(slot + 0x10) = *src_a;
-                    *(Quad_56a8 *)(slot + 0x20) = *src_b;
-                    *(Quad_56a8 *)(slot + 0x30) = *src_c;
+                    active[0xd33] = 1;
+                    *(Quad_56a8 *)dst_a = *src_a;
+                    *(Quad_56a8 *)dst_b = *src_b;
+                    *(Quad_56a8 *)dst_c = *src_c;
                 }
             }
             for (i = 0; i < 7; i++)
