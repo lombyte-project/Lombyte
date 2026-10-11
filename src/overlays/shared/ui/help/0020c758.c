@@ -152,7 +152,8 @@ extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f99c0(f32);
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 
-int nearest_rail_point(void *from, void *outOwner, void *to, void *outI, void *outF,
+int nearest_rail_point() __asm__("FUN_L00_0020cd08");
+int FUN_L00_0020cd08(void *from, void *outOwner, void *to, void *outI, void *outF,
                      void *outKind, int skip, int only)
 {
     Vec4 pos;
@@ -160,31 +161,36 @@ int nearest_rail_point(void *from, void *outOwner, void *to, void *outI, void *o
     f32 gotF;
     s32 i, spot_offset, only_offset, active_offset;
     s32 count = D_L00_0015F710;
-    Vec4 *p = &pos;
+    Vec4 *p;
     f32 distance_limit, height_limit, distance, height;
+    struct Hero *hero_state;
+    struct LedgeSpot_20cd08 *spots;
 
-    *(u128 *)p = *(u128 *)from;
     i = 0;
+    p = &pos;
+    *(u128 *)p = *(u128 *)from;
     if (count > 0) {
         active_offset = 0;
         only_offset = 0;
         do {
+            spots = D_L00_0015F70C;
             spot_offset = i * 0x20;
-            if (!((skip == 0 || (int)D_L00_0015F70C[i].owner != skip) &&
-                  (only == 0 || (int)((struct LedgeSpot_20cd08 *)((u8 *)D_L00_0015F70C + only_offset))->owner == only) &&
-                  *((struct LedgeSpot_20cd08 *)((u8 *)D_L00_0015F70C + active_offset))->owner != 0))
+            if (!((skip == 0 || (int)spots[i].owner != skip) &&
+                  (only == 0 || (int)((struct LedgeSpot_20cd08 *)(only_offset + (u32)spots))->owner == only) &&
+                  *((struct LedgeSpot_20cd08 *)(active_offset + (u32)spots))->owner != 0))
                 goto next_spot;
-            if (FUN_001f9b48((u8 *)D_L00_0015F70C + spot_offset, p) >
-                ((struct LedgeSpot_20cd08 *)((u8 *)D_L00_0015F70C + spot_offset))->sphere.f[3])
+            if (FUN_001f9b48((void *)(active_offset + (u32)D_L00_0015F70C), p) >
+                ((struct LedgeSpot_20cd08 *)(spot_offset + (u32)D_L00_0015F70C))->sphere.f[3])
                 goto next_spot;
             if (!FUN_L00_0025df68(D_L00_0015F70C[i].owner, p, to, &gotI, &gotF,
                                   D_L00_0015F70C[i].kind, 12.0f, 10.0f, 0.0f))
                 goto next_spot;
+            hero_state = &hero;
             distance_limit = 0.9f;
             height_limit = 1.5f;
-            if ((u32)D_001413DC < 2)
+            if ((u32)hero_state->state.control_mode < 2)
                 distance_limit = 0.3f;
-            if (hero.unk1CA != 0) {
+            if (hero_state->unk1CA != 0) {
                 height_limit = 10.0f;
                 distance_limit += 0.5f;
             }
