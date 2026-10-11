@@ -696,7 +696,8 @@ void FUN_L05_00254058(void) {
         }
         if (D_00141848.stat[30].unk2 < scale_game_frames(duration) / 600)
             D_00141848.stat[30].unk2 = scale_game_frames(D_0015EEA4_sda) / 600;
-        D_00141848.stat[30].level_mask |= (1 << D_0015ED84) | 0x80000000;
+        D_00141848.stat[30].level_mask |= 1 << D_0015ED84;
+        D_00141848.stat[30].level_mask |= 0x80000000;
     }
     {
         s32 *counter = (s32 *)((char *)&hero + 0x700);
