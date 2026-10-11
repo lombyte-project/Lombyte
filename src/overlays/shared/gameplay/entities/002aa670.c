@@ -1297,7 +1297,178 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
     }
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ad410.s", FUN_L00_002ad410);
+#else
+typedef struct {
+    U910 vel;
+    U910 landing;
+    U910 normal;
+    U910 previous_hit;
+    U910 difference;
+    M910 *holder;
+    short timer;
+    short holder_flag;
+    char pad58[8];
+    M910 *last_hit;
+    int hit_count;
+} LandingVars_2ad410;
+
+extern float D_0015ED70_2ad410 __asm__("D_0015ED70");
+extern U910 D_L00_00173E60_2ad410 __asm__("D_L00_00173E60");
+extern U910 D_L00_00173E80_2ad410 __asm__("D_L00_00173E80");
+extern void *D_001413D0_2ad410 __asm__("D_001413D0") __attribute__((section(".data")));
+extern int FUN_001f0b58_2ad410(void) __asm__("FUN_001f0b58");
+extern float fast_cos_2ad410(float) __asm__("FUN_001f9dc8");
+extern float fast_sin_2ad410(float) __asm__("FUN_001f9de0");
+extern float fast_add_rotations_2ad410(float, float) __asm__("FUN_001fa580");
+extern float atan2_2ad410(float, float) __asm__("FUN_001f9e90");
+extern int FUN_001efa68_2ad410(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern int FUN_001fef20_2ad410(int) __asm__("FUN_001f96f8");
+extern int FUN_001fef68_2ad410(int *) __asm__("FUN_001f9740");
+extern int FUN_L00_002603d0_2ad410(M910 *) __asm__("FUN_L00_002603d0");
+extern void FUN_001f93e0_2ad410(void *, void *) __asm__("FUN_001f4600");
+extern void FUN_001ff2a8_2ad410(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001ff278_2ad410(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001ff300_2ad410(float, void *, void *) __asm__("FUN_001f9a68");
+extern void FUN_00259698_2ad410(void *, int, float) __asm__("FUN_00213508");
+
+int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
+    U910 position, velocity, previous, hero_position, offset, start;
+    int timer, found = 0, object_hit = 0, i;
+
+    if (hero.state.current == 0x72)
+        return 0;
+    if (D_L00_0015F5C4_002acbf0 != 0)
+        return 0;
+    qcopy(&previous, &m->pos);
+    if (m->state == 0) {
+        position.f[0] = fast_cos_2ad410(fast_add_rotations_2ad410(-0.361968f,
+                             atan2_2ad410(hero.unk670, hero.unk674))) * 0.859039f;
+        position.f[1] = fast_sin_2ad410(fast_add_rotations_2ad410(-0.361968f,
+                             atan2_2ad410(hero.unk670, hero.unk674))) * 0.859039f;
+        position.f[2] = 0.0f;
+        FUN_001ff278_2ad410(&position, &position, &hero.motion.pos);
+        position.f[2] += 0.49082f;
+        qcopy(&velocity, &v->vel);
+        if (hero.state.control_mode == 15)
+            FUN_001ff278_2ad410(&velocity, &velocity, &hero.motion.unk100);
+        if (hero.ground_moby && FUN_L00_002603d0_2ad410((M910 *)hero.ground_moby) && mode)
+            FUN_001ff278_2ad410(&velocity, &velocity, &hero.motion.unk100);
+        timer = FUN_001fef20_2ad410(300);
+    } else {
+        W910 *holder_vars = v->holder->v;
+        qcopy(&position, &m->pos);
+        qcopy(&velocity, &v->vel);
+        timer = v->timer;
+        if (*(int *)((char *)holder_vars + 0x50))
+            v->holder_flag = 1;
+    }
+    {
+        float z = position.f[2];
+        hero_position.q = ((M910 *)hero.moby)->pos.q;
+        hero_position.f[2] = z;
+    }
+    if (FUN_001efa68_2ad410(&hero_position, &position, 0x10, hero.moby, 0) &&
+        (FUN_001f0b58_2ad410() || 0.0f < velocity.f[2])) {
+        if (D_H910.moby && D_H910.i1C <= 0) {
+            if ((D_H910.moby != hero.moby && D_H910.moby != v->holder) ||
+                timer < FUN_001fef20_2ad410(300) - FUN_001fef20_2ad410(10)) {
+                offset.q = 0;
+                offset.f[2] = 0.5f;
+                if (v->last_hit != D_H910.moby) {
+                    v->hit_count = 0;
+                    v->last_hit = D_H910.moby;
+                } else {
+                    v->hit_count++;
+                    FUN_001ff2a8_2ad410(&start, (char *)D_H910.moby + 0x10, &v->previous_hit);
+                    v->difference.q = start.q;
+                }
+                v->previous_hit.q = D_H910.moby->pos.q;
+                found = 1;
+                object_hit = 1;
+                qcopy(&v->landing, (char *)D_H910.moby + 0x10);
+                FUN_001ff278_2ad410(&offset, &offset, &v->landing);
+                FUN_00259698_2ad410(&offset, 0, 0.5f);
+            }
+        } else if (D_H910.i1C > 0) {
+            qcopy(&v->landing, &D_H910.pos);
+            found = 1;
+        }
+    }
+    if (*(unsigned char *)((char *)&D_E910 + 0xa) && hero.state.current == 1) {
+        float z = velocity.f[2];
+        FUN_001ff300_2ad410(1.5f, &velocity, &velocity);
+        velocity.f[2] = z / 1.5f;
+    }
+    hero_position.q = position.q;
+    while (!FUN_001fef68_2ad410(&timer) && !found) {
+        qcopy(&previous, &position);
+        for (i = 9; i >= 0; i--) {
+            FUN_001ff278_2ad410(&position, &position, &velocity);
+            velocity.f[2] -= D_0015ED70_2ad410 * 11.0f;
+        }
+        if (!FUN_001efa68_2ad410(&previous, &position, 0x10, m, 0))
+            continue;
+        if (!FUN_001f0b58_2ad410() && 0.0f < velocity.f[2])
+            continue;
+        if (D_H910.moby && D_H910.i1C <= 0) {
+            if (!(position.f[2] - hero_position.f[2] < 2.0f))
+                goto check_surface_2ad410;
+            if ((D_H910.moby == hero.moby || D_H910.moby == v->holder) &&
+                timer >= FUN_001fef20_2ad410(300) - FUN_001fef20_2ad410(10))
+                continue;
+            offset.q = 0;
+            offset.f[2] = 0.5f;
+            if (v->last_hit != D_H910.moby) {
+                v->hit_count = 0;
+                v->last_hit = D_H910.moby;
+            } else {
+                v->hit_count++;
+                FUN_001ff2a8_2ad410(&start, (char *)D_H910.moby + 0x10, &v->previous_hit);
+                v->difference.q = start.q;
+            }
+            v->previous_hit.q = D_H910.moby->pos.q;
+            qcopy(&v->landing, (char *)D_H910.moby + 0x10);
+            FUN_001ff278_2ad410(&offset, &offset, &v->landing);
+            FUN_00259698_2ad410(&offset, 0, 0.5f);
+            object_hit = 1;
+            break;
+        }
+check_surface_2ad410:
+        if (D_H910.i1C > 0) {
+            qcopy(&v->landing, &D_H910.pos);
+            break;
+        }
+    }
+landing_done_2ad410:
+    if (!timer)
+        goto return_zero_2ad410;
+    if (!mode) {
+        if (!D_H910.moby)
+            goto return_zero_2ad410;
+        if (!FUN_L00_002603d0_2ad410(D_H910.moby))
+            goto return_zero_2ad410;
+    }
+    if (mode != 2 || !D_H910.moby || !FUN_L00_002603d0_2ad410(D_H910.moby))
+        FUN_001f93e0_2ad410(FUN_L00_002acbf0, m);
+    if (!object_hit && v->last_hit) {
+        if (v->last_hit->state == 0xfe || v->last_hit->state == 0xfd ||
+            !(v->last_hit->flags & 0x1000) ||
+            v->hit_count > FUN_001fef20_2ad410(30)) {
+            v->hit_count = 0;
+            v->last_hit = 0;
+        }
+    }
+    qcopy(&v->normal, &D_L00_00173E80_2ad410);
+    FUN_001ff2a8_2ad410(&previous, &v->landing, D_L00_00166DC0);
+    FUN_001ff300_2ad410(0.95f, &previous, &previous);
+    FUN_001ff278_2ad410(&v->landing, &previous, D_L00_00166DC0);
+    return 1;
+return_zero_2ad410:
+    return 0;
+}
+#endif
 /* Update of moby class 121, a thrown bomb: it flies and spins, bounces once on the ground, explodes on a hit or when its timer runs out, then its blast ring grows for 15 frames. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002AB910.c: func_L00_002AEDD0), where it is exact; names translated to the US level program. */
 typedef union {
