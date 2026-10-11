@@ -346,8 +346,8 @@ void FUN_L14_002b2928(struct Moby *m)
     ShipVars *pv = (ShipVars *)m->pvars;
     Vec4 *corner;
     Vec4 *template;
-    Vec4 *beam_start = &pv->beam_start;
-    Vec4 *beam_end = &pv->beam_end;
+    Vec4 *beam_start;
+    Vec4 *beam_end;
     s32 i;
 
     pos = pv->exhaust;
@@ -362,10 +362,10 @@ void FUN_L14_002b2928(struct Moby *m)
     quad.primitive = 0x8000000048LL;
     quad.texture_state = 0xFF9000000260LL;
     quad.reserved.value = 5;
-    quad.colors[0] = 0x80FFFFFF;
-    quad.colors[1] = 0x80FFFFFF;
-    quad.colors[2] = 0x80FFFFFF;
     quad.colors[3] = 0x80FFFFFF;
+    quad.colors[2] = 0x80FFFFFF;
+    quad.colors[1] = 0x80FFFFFF;
+    quad.colors[0] = 0x80FFFFFF;
     quad.texture_coordinates[0][0] = 0.0f;
     quad.texture_coordinates[0][1] = 0.0f;
     quad.texture_coordinates[1][0] = 0.0f;
@@ -385,16 +385,18 @@ void FUN_L14_002b2928(struct Moby *m)
     } while (i >= 0);
     draw_geometry_quad_l14(&quad, 0, 0);
 
+    beam_end = &pv->beam_end;
+    beam_start = &pv->beam_start;
     pos = pv->joint6;
     FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
     FUN_001f9bf8(&basis[0], &basis[0], 1.0f);
     cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
     FUN_001f9bf8(&basis[1], &basis[1], -1.0f);
     cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
-    quad.colors[0] = 0x202020FF;
-    quad.colors[1] = 0x202020FF;
-    quad.colors[2] = 0x202020FF;
     quad.colors[3] = 0x202020FF;
+    quad.colors[2] = 0x202020FF;
+    quad.colors[1] = 0x202020FF;
+    quad.colors[0] = 0x202020FF;
     i = 3;
     corner = &quad.positions[0];
     template = &D_L14_001D8850[0];
@@ -415,10 +417,10 @@ void FUN_L14_002b2928(struct Moby *m)
     cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
     FUN_001f9a68(&offset, &basis[0], D_L14_001614AC);
     FUN_001f9a10(&pos, &pos, &offset);
-    quad.colors[0] = 0x4020FF20;
-    quad.colors[1] = 0x4020FF20;
-    quad.colors[2] = 0x4020FF20;
     quad.colors[3] = 0x4020FF20;
+    quad.colors[2] = 0x4020FF20;
+    quad.colors[1] = 0x4020FF20;
+    quad.colors[0] = 0x4020FF20;
     i = 3;
     corner = &quad.positions[0];
     template = &D_L14_001D8850[0];
@@ -439,10 +441,10 @@ void FUN_L14_002b2928(struct Moby *m)
     cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
     FUN_001f9a68(&offset, &basis[0], D_L14_001614BC);
     FUN_001f9a10(&pos, &pos, &offset);
-    quad.colors[0] = 0x40FF2020;
-    quad.colors[1] = 0x40FF2020;
-    quad.colors[2] = 0x40FF2020;
     quad.colors[3] = 0x40FF2020;
+    quad.colors[2] = 0x40FF2020;
+    quad.colors[1] = 0x40FF2020;
+    quad.colors[0] = 0x40FF2020;
     i = 3;
     corner = &quad.positions[0];
     template = &D_L14_001D8850[0];
@@ -463,10 +465,10 @@ void FUN_L14_002b2928(struct Moby *m)
     cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
     FUN_001f9a68(&offset, &basis[0], D_L14_001614BC);
     FUN_001f9a10(&pos, &pos, &offset);
-    quad.colors[0] = 0x40FF2020;
-    quad.colors[1] = 0x40FF2020;
-    quad.colors[2] = 0x40FF2020;
     quad.colors[3] = 0x40FF2020;
+    quad.colors[2] = 0x40FF2020;
+    quad.colors[1] = 0x40FF2020;
+    quad.colors[0] = 0x40FF2020;
     i = 3;
     corner = &quad.positions[0];
     template = &D_L14_001D8850[0];
