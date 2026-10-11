@@ -2007,7 +2007,7 @@ extern void FUN_001ff570(int, int);
 extern char *D_L13_001B07B0[];
 extern float D_0015ED6C;
 
-void FUN_L13_002e97e0(struct Moby *m, char *d, int *result) {
+int FUN_L13_002e97e0(struct Moby *m, char *d, int *result) {
     char *path;
     char *node;
     char *other;
