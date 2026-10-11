@@ -2,7 +2,171 @@
 #include "types.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031bf40.s", FUN_L05_0031bf40);
+#else
+extern char D_0013F3D0[];
+extern int D_001413D4, D_001413DC, D_0013F64C, D_0013D464;
+extern unsigned char D_0013D395, D_0013D4D6, D_0013D388, D_0013D4CF;
+extern unsigned short D_001418A8, D_001418A0, D_00141930;
+extern short D_00141A88, D_00141A90, D_0013F65E;
+extern unsigned short D_00141A78, D_00141C58;
+extern unsigned short D_001418D8, D_00141BB8;
+extern unsigned short D_00141892, D_00141A82, D_00141A8A, D_00141A92;
+extern unsigned short D_001417A2, D_0014179A, D_001417C2, D_00141772, D_001417AA;
+extern unsigned short D_00141A98, D_00141C5A;
+extern unsigned int D_00141B8C, D_00141BAC, D_00141A8C, D_00141A94, D_00141C5C;
+extern int D_00141BF4, D_00141CFC, D_00141A9C, D_L05_0015F5CC, D_L05_0015FFD8;
+extern unsigned short D_00141B88;
+extern int D_L05_0015ED84, D_L05_0015EEA4;
+extern int D_001417E0[];
+extern int D_0014EE90[];
+extern unsigned char D_0014C050[];
+extern int D_0013F3D8, D_0013F3DC;
+extern int D_L05_0015F5C4;
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern void FUN_L00_00203908(int, int) __asm__("FUN_L00_00203908");
+extern void FUN_L00_002d5830(void *) __asm__("FUN_L00_002d5830");
+extern void FUN_001f99f8(void *) __asm__("FUN_001f99f8");
+typedef struct { unsigned long long lo, hi; } L05Vector;
+
+void FUN_L05_0031bf40(unsigned char *moby) {
+    int *data = *(int **)(moby + 0x78);
+    int value, elapsed, limit, index;
+    unsigned int player;
+    moby[0x30] = 0xff;
+
+    if (is_point_inside_clip_volume(D_0013F3D0, data[20])) {
+        if (D_001413DC == 0x12) {
+            int timer = data[26];
+            data[26] = timer + 1;
+            if (timer > scale_game_frames(0x168)) {
+                if (!(D_00141B8C & (1u << D_L05_0015ED84)))
+                    FUN_L00_00203908(0x3f0, 0x44);
+            } else if (D_001413DC == 0x11 || D_0013D395)
+                D_00141B88 = 0xffff;
+        } else if (D_001413DC == 0x11 || D_0013D395)
+            D_00141B88 = 0xffff;
+    }
+    if (is_point_inside_clip_volume(D_0013F3D0, data[16])) {
+        elapsed = scale_game_frames(D_L05_0015EEA4) - D_00141892 * 600;
+        limit = (int)((float)scale_game_frames(0xe10) * 60.0f);
+        if (limit < elapsed && !(D_00141BAC & (1u << D_L05_0015ED84)))
+            FUN_L00_00203908(0x7dd, 0x48);
+    }
+    if (D_L05_0015F5CC < scale_game_frames(60) && D_001418A8 && !D_001418A0 && D_00141BF4 >= 0)
+        FUN_L00_00203908(0x4e27, 0x51);
+    if (D_L05_0015F5CC < scale_game_frames(60) && D_00141930) {
+        if (D_00141CFC >= 0) FUN_L00_00203908(0x4e28, 0x72);
+        D_00141930 = 0;
+    }
+    if (!D_0013D4D6) {
+        if (is_point_inside_clip_volume(D_0013F3D0, data[9]) && !D_0013F64C) {
+            elapsed = scale_game_frames(D_L05_0015EEA4) - D_00141A82 * 600;
+            limit = (int)((float)scale_game_frames(18) * 60.0f);
+            if (limit < elapsed || D_00141A82 * 600 == 0)
+                FUN_L00_00203908(0x138a, 0x23);
+            else if (D_00141A82 < scale_game_frames(D_L05_0015EEA4) / 600)
+                D_00141A82 = scale_game_frames(D_L05_0015EEA4) / 600;
+        }
+    }
+    if (D_0013D4D6) {
+        if (is_point_inside_clip_volume(D_0013F3D0, data[9]) && !D_0013F64C) {
+            if (D_00141A88 == 0) {
+                D_00141A88 = 1;
+                value = scale_game_frames(D_L05_0015EEA4);
+                player = D_L05_0015ED84;
+                if (D_00141A8A < value / 600) {
+                    D_00141A8A = scale_game_frames(D_L05_0015EEA4) / 600;
+                    player = D_L05_0015ED84;
+                }
+                D_00141A8C |= (1u << player) | 0x80000000u;
+            } else {
+                elapsed = scale_game_frames(D_L05_0015EEA4) - D_00141A8A * 600;
+                limit = (int)((float)scale_game_frames(18) * 60.0f);
+                if (limit < elapsed || D_00141A8A * 600 == 0)
+                    FUN_L00_00203908(0x138b, 0x24);
+                else if (D_00141A8A < scale_game_frames(D_L05_0015EEA4) / 600)
+                    D_00141A8A = scale_game_frames(D_L05_0015EEA4) / 600;
+            }
+        }
+        if (D_001413DC == 0x13) D_00141A88 = -1;
+    }
+    if (D_00141A98 < 2) {
+        if (D_0014C050[data[8] + D_L05_0015ED84 * 16] == 0xff) {
+            value = D_L05_0015EEA4;
+            if (D_00141A90 != -1) {
+                D_00141A90++;
+                value = D_L05_0015EEA4;
+            }
+            elapsed = scale_game_frames(value);
+            player = D_L05_0015ED84;
+            if (D_00141A92 < elapsed / 600) {
+                D_00141A92 = scale_game_frames(D_L05_0015EEA4) / 600;
+                player = D_L05_0015ED84;
+            }
+            D_00141A94 |= (1u << player) | 0x80000000u;
+        } else if (D_0014EE90[data[8]] > 2 && is_point_inside_clip_volume(D_0013F3D0, data[11])) {
+            elapsed = scale_game_frames(D_L05_0015EEA4) - D_001417A2 * 600;
+            if (scale_game_frames(18000) < elapsed) {
+                elapsed = scale_game_frames(D_L05_0015EEA4) - D_0014179A * 600;
+                if (scale_game_frames(18000) < elapsed) {
+                    elapsed = scale_game_frames(D_L05_0015EEA4) - D_001417C2 * 600;
+                    if (scale_game_frames(18000) < elapsed) {
+                        elapsed = scale_game_frames(D_L05_0015EEA4) - D_00141772 * 600;
+                        if (scale_game_frames(18000) < elapsed) {
+                            elapsed = scale_game_frames(D_L05_0015EEA4) - D_001417AA * 600;
+                            if (scale_game_frames(18000) < elapsed && D_00141A9C >= 0)
+                                FUN_L00_00203908(0x138d, 0x26);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (D_0013D388 && D_00141A78 == 0 && D_001413DC == 0x16)
+        FUN_L00_00203908(0x1389, 0x22);
+    if (D_00141C58 == 0) {
+        if (D_001413D4 == 10 &&
+            (is_point_inside_clip_volume(D_0013F3D0, data[13]) || is_point_inside_clip_volume(D_0013F3D0, data[14]))) {
+            value = D_L05_0015EEA4;
+            if (D_00141C58 != -1) {
+                D_00141C58++;
+                value = D_L05_0015EEA4;
+            }
+            elapsed = scale_game_frames(value);
+            player = D_L05_0015ED84;
+            if (D_00141C5A < elapsed / 600) {
+                D_00141C5A = scale_game_frames(D_L05_0015EEA4) / 600;
+                player = D_L05_0015ED84;
+            }
+            D_00141C5C |= (1u << player) | 0x80000000u;
+        }
+        if (D_001413DC == 0x12) {
+            if (is_point_inside_clip_volume(data + 4, data[13]) || is_point_inside_clip_volume(data + 4, data[14])) {
+                FUN_001f99f8(data + 4);
+                data[24]++;
+            }
+        } else if (data[24] > 1 &&
+                   (is_point_inside_clip_volume(D_0013F3D0, data[13]) || is_point_inside_clip_volume(D_0013F3D0, data[14])))
+            FUN_L00_00203908(0x138e, 0x5e);
+    }
+    if (!D_001418D8 && !D_00141BB8 && D_0013D4CF &&
+        is_point_inside_clip_volume(D_0013F3D0, data[18]) && D_0013D464 >= 20)
+        FUN_L00_00203908(20000, 0x4a);
+    value = data[21];
+    if (value != -1 && D_0014C050[data[22] + D_L05_0015ED84 * 16] == 0xff &&
+        D_0014C050[data[8] + D_L05_0015ED84 * 16] == 0xff &&
+        (D_L05_0015F5CC < 5 || (D_0013F64C &&
+          (*(short *)(D_0013F64C + 0xa6) == 0x3e6 || *(short *)(D_0013F64C + 0xa6) == 0x33e)))) {
+        FUN_L00_002d5830((void *)(D_L05_0015FFD8 + value * 256));
+        data[21] = -1;
+    }
+    *(L05Vector *)data = *(L05Vector *)D_0013F3D0;
+    if (!D_0013F65E) *(L05Vector *)(data + 4) = *(L05Vector *)D_0013F3D0;
+}
+#endif
 /* UpdateMoby_1550 (names.tsv role). State 0 arms it: state 1 and byte 0x30 = 0xFF. In state 1,
  * while the level flag is 2 and the word at +0x30 of D_L05_0016CD60 is 10 or 11, passes one
  * entry of that table to func_L00_00264870. The index select `s < t ? 0 : 3` is kept as retail
