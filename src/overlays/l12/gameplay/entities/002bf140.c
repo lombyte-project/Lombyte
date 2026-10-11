@@ -641,7 +641,239 @@ void FUN_L12_002e3e28(struct Moby *moby, float *out, int on) {
         out[1] = 0;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3ed8.s", FUN_L12_002e3ed8);
+#else
+extern char *D_L12_0015FFD8_e3ed8 __asm__("D_L12_0015FFD8");
+extern float D_0015ED6C_e3ed8 __asm__("D_0015ED6C");
+extern float D_L12_00161914_e3ed8 __asm__("D_L12_00161914") __attribute__((sda));
+extern float fast_add_rotations_e3ed8(float, float) __asm__("FUN_001fa580");
+extern float fast_sin_e3ed8(float) __asm__("FUN_001f9de0");
+extern float absolute_float_e3ed8(float) __asm__("FUN_001f99c0");
+extern float random_angle_radians_e3ed8(void) __asm__("FUN_00213308");
+extern int count_group_e3ed8(int, int) __asm__("FUN_L01_0026e008");
+extern int target_active_e3ed8(struct Moby *) __asm__("FUN_L01_00277fb8");
+extern int tick_countdown_e3ed8(int *) __asm__("FUN_001f9740");
+extern void clear_u64_value_e3ed8(void *) __asm__("FUN_001f99f8");
+extern float vector_length_e3ed8(void *) __asm__("FUN_001f9af0");
+extern float vector_distance_e3ed8(void *, void *) __asm__("FUN_001f9b48");
+extern float vector_distance_other_e3ed8(void *, void *) __asm__("FUN_001f9b80");
+extern float fast_arc_tan_e3ed8(float, float) __asm__("FUN_001f9e90");
+extern void vector_add_e3ed8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vector_sub_e3ed8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void rotate_path_e3ed8(float, void *, void *, void *) __asm__("FUN_L00_0025b6b8");
+extern int collision_e3ed8(void *, int, int, void *, int) __asm__("FUN_L08_002025d0");
+extern void spawn_effect_e3ed8(float, float, float, float, float, float, float, struct Moby *, void *, int, int, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void remove_moby_e3ed8(struct Moby *) __asm__("FUN_0020c828");
+extern void update_path_e3ed8(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
+
+void FUN_L12_002e3ed8(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    float old_pos[4] __attribute__((aligned(16)));
+    float old_rot[4] __attribute__((aligned(16)));
+    float delta[4];
+    float angles[4];
+    float target[4] __attribute__((aligned(16)));
+    float path_point[4] __attribute__((aligned(16)));
+    float path_delta[4] __attribute__((aligned(16)));
+    float idle_angles[4] __attribute__((aligned(16)));
+    float angle, phase, sine, distance;
+    int path_index, *path, active;
+    *(OvlQuad *)old_pos = *(OvlQuad *)&moby->pos;
+    *(OvlQuad *)old_rot = *(OvlQuad *)&moby->rot;
+
+    if (moby->state != 0) {
+        int group = *(int *)(data + 0xfc);
+        if (group != -1 && D_L12_0015FFD8_e3ed8[group * 0x100 + 0x20] >= 0) {
+            FUN_L12_002e3948(moby);
+            return;
+        }
+        if (moby->state != 0 && *(int *)(data + 0xdc) != -1 &&
+            count_group_e3ed8(*(int *)(data + 0xdc), -1) != 0) {
+            FUN_L12_002e3948(moby);
+            return;
+        }
+    }
+
+    switch (moby->state) {
+    case 0:
+        switch (*(int *)(data + 0xe4)) {
+        case 0:
+            moby->unk94 = moby->pclass->unk10;
+            *(char **)(data + 0xb0) = D_L12_001B0930_w[*(int *)(data + 0xb4)];
+            *(char *)(data + 0xa4) = 1;
+            *(int *)(data + 0xa0) = 0;
+            if (*(float *)(data + 0xd0) == 0.0f) *(float *)(data + 0xd0) = 6.0f;
+            if (*(float *)(data + 0xd4) == 0.0f) *(float *)(data + 0xd4) = 6.0f;
+            *(u16 *)(data + 0x3e) |= 9;
+            clear_u64_value_e3ed8(data + 0x40);
+            moby->state = 7;
+            break;
+        case 1:
+            moby->unk94 = moby->pclass->unk10;
+            *(char **)(data + 0xb0) = D_L12_001B0930_w[*(int *)(data + 0xb4)];
+            *(char *)(data + 0xa4) = 1;
+            *(int *)(data + 0xa0) = 0;
+            if (*(float *)(data + 0xd4) == 0.0f) *(float *)(data + 0xd4) = 2.0f;
+            if (*(float *)(data + 0xd0) == 0.0f) *(float *)(data + 0xd0) = 4.0f;
+            *(float *)(data + 0xd8) = random_angle_radians_e3ed8();
+            *(u16 *)(data + 0x3e) |= 9;
+            clear_u64_value_e3ed8(data + 0x40);
+            moby->state = 2;
+            break;
+        case 2:
+            *(int *)&moby->rot.y = 0xbfc90fdb;
+            moby->rot.z += 3.1415927f;
+            moby->unk94 = moby->pclass->unk10;
+            *(char **)(data + 0xb0) = D_L12_001B0930_w[*(int *)(data + 0xb4)];
+            *(char *)(data + 0xa4) = 1;
+            *(int *)(data + 0xa0) = 0;
+            if (*(float *)(data + 0xd4) == 0.0f) *(float *)(data + 0xd4) = 8.0f;
+            if (*(float *)(data + 0xd0) == 0.0f) *(float *)(data + 0xd0) = 8.0f;
+            clear_u64_value_e3ed8(data + 0x40);
+            moby->state = 4;
+            break;
+        case 3:
+            moby->unk32 = 0;
+            moby->state = 1;
+            moby->unk94 = 0;
+            break;
+        case 4:
+            moby->state = 9;
+            *(float *)(data + 0xd0) = 4.0f;
+            *(float *)(data + 0xd4) = 4.0f;
+            *(u16 *)(data + 0x3e) &= ~1;
+            break;
+        }
+        break;
+    case 2:
+        *(int *)(data + 0xd4) = 0;
+        path = *(int **)(data + 0xb0);
+        angle = D_0015ED6C_e3ed8 * 1.2217305f;
+        *(float *)(data + 0xd8) = fast_add_rotations_e3ed8(*(float *)(data + 0xd8), angle);
+        sine = fast_sin_e3ed8(*(float *)(data + 0xd8));
+        phase = *(float *)(data + 0xd8);
+        if (phase > 1.5707964f && phase < 3.1415927f) sine = 2.0f - sine;
+        if (phase > -3.1415927f && phase < -1.5707964f) sine = 2.0f - sine;
+        phase = sine * 0.5f + 0.5f;
+        if (phase > 1.0f) phase -= 2.0f;
+        angle = absolute_float_e3ed8(phase);
+        *(OvlQuad *)angles = *(OvlQuad *)(path + 4);
+        *(OvlQuad *)target = *(OvlQuad *)(path + 8);
+        rotate_path_e3ed8(angle, &moby->pos, angles, target);
+        angles[2] = moby->rot.z;
+        active = target_active_e3ed8(moby);
+        if (active == 0) {
+            FUN_L12_002e3e28(moby, angles, 0);
+        } else {
+            FUN_L12_002e3e28(moby, angles, 1);
+        }
+        FUN_L12_002e3c08((char *)moby, angles, &moby->pos, active != 0, 1);
+        break;
+    case 4:
+        path = *(int **)(data + 0xb0);
+        angle = D_0015ED6C_e3ed8 * 1.2217305f;
+        *(float *)(data + 0xd8) = fast_add_rotations_e3ed8(*(float *)(data + 0xd8), angle);
+        sine = fast_sin_e3ed8(*(float *)(data + 0xd8));
+        phase = *(float *)(data + 0xd8);
+        if (phase > 1.5707964f && phase < 3.1415927f) sine = 2.0f - sine;
+        if (phase > -3.1415927f && phase < -1.5707964f) sine = 2.0f - sine;
+        phase = sine * 0.5f + 0.5f;
+        if (phase > 1.0f) phase -= 2.0f;
+        angle = absolute_float_e3ed8(phase);
+        *(OvlQuad *)angles = *(OvlQuad *)(path + 4);
+        *(OvlQuad *)target = *(OvlQuad *)(path + 8);
+        rotate_path_e3ed8(angle, &moby->pos, angles, target);
+        *(int *)&moby->rot.y = 0xbfc90fdb;
+        break;
+    case 3:
+        angles[2] = moby->rot.z;
+        if (tick_countdown_e3ed8((int *)(data + 0xe0))) {
+            *(char *)(data + 0xa4) = *(char *)(data + 0xa4) == 1 ? 2 : 1;
+            moby->state = 2;
+        }
+        active = target_active_e3ed8(moby);
+        if (active == 0) {
+            FUN_L12_002e3e28(moby, angles, 0);
+        } else {
+            FUN_L12_002e3e28(moby, angles, 1);
+        }
+        FUN_L12_002e3c08((char *)moby, angles, &moby->pos, active != 0, 1);
+        break;
+    case 5:
+        if (tick_countdown_e3ed8((int *)(data + 0xe0))) {
+            *(char *)(data + 0xa4) = *(char *)(data + 0xa4) == 1 ? 2 : 1;
+            moby->state = 4;
+        }
+        if (*(char *)(data + 0xa4) == 2) FUN_L12_002e3948(moby);
+        *(OvlQuad *)angles = *(OvlQuad *)&moby->rot;
+        FUN_L12_002e3c08((char *)moby, angles, &moby->pos, 0, 1);
+        break;
+    case 6:
+        if (vector_length_e3ed8(data + 0x40) < D_0015ED6C_e3ed8 * 6.0f)
+            *(float *)(data + 0x48) += frame_time * 6.0f;
+        vector_add_e3ed8(&moby->pos, &moby->pos, data + 0x40);
+        if (moby->unk31 == 0) remove_moby_e3ed8(moby);
+        break;
+    case 7:
+        FUN_L12_002e3948(moby);
+        path = *(int **)(data + 0xb0);
+        path_index = (*(int *)(data + 0xa0) + path[0] + *(char *)(data + 0xa4)) % path[0];
+        *(OvlQuad *)path_point = *(OvlQuad *)(path + path_index * 4 + 4);
+        distance = vector_distance_e3ed8(&moby->pos, path + path_index * 4 + 4);
+        if (distance < 0.5f) {
+            *(int *)(data + 0xa0) = path_index;
+            angle = *(float *)(path + path_index * 4 + 7);
+            if (angle != -1.0f) *(float *)(data + 0xd0) = angle;
+        }
+        vector_sub_e3ed8(path_delta, path_point, &moby->pos);
+        angles[2] = fast_arc_tan_e3ed8(path_delta[0], path_delta[1]);
+        active = target_active_e3ed8(moby);
+        if (active == 0) {
+            FUN_L12_002e3e28(moby, angles, 0);
+        } else {
+            FUN_L12_002e3e28(moby, angles, 1);
+        }
+        FUN_L12_002e3c08((char *)moby, angles, path_point, active != 0, 0);
+        break;
+    case 8:
+        vector_add_e3ed8(&moby->pos, &moby->pos, data + 0x40);
+        active = collision_e3ed8(&moby->pos, 0x600, 0, moby, 0);
+        if (active && *(int *)(data + 0xb0) == 0) {
+            spawn_effect_e3ed8(2.0f, 0.0f, 4.0f, 2.0f, 9.0f, 1.0f, 15.0f,
+                               moby, data + 0x40, 0, 10, 3, 16, -1, 1);
+            remove_moby_e3ed8(moby);
+            return;
+        }
+        *(float *)(data + 0x48) -= frame_time * 7.0f;
+        moby->rot.x = fast_add_rotations_e3ed8(*(float *)(data + 0xe8), moby->rot.x);
+        moby->rot.y = fast_add_rotations_e3ed8(*(float *)(data + 0xec), moby->rot.y);
+        if (*(int *)(data + 0xb0) != 0 &&
+            vector_distance_other_e3ed8(&moby->pos, *(char **)(data + 0xb0) + 0x10) < 0.5f)
+            moby->state = 0;
+        if (moby->pos.z < 0.0f) remove_moby_e3ed8(moby);
+        break;
+    case 9:
+        *(OvlQuad *)angles = *(OvlQuad *)&moby->pos;
+        angles[2] = ((struct Moby *)(D_L12_0015FFD8_e3ed8 + *(int *)(data + 0xf0) * 0x100))->pos.z;
+        clear_u64_value_e3ed8(idle_angles);
+        idle_angles[2] = moby->rot.z;
+        active = target_active_e3ed8(moby);
+        if (active != 0) {
+            angles[2] += 0.2f;
+            FUN_L12_002e3e28(moby, idle_angles, 1);
+            FUN_L12_002e3c08((char *)moby, idle_angles, angles, 1, 1);
+        } else {
+            angles[2] += 0.4f;
+            FUN_L12_002e3e28(moby, idle_angles, 0);
+            FUN_L12_002e3c08((char *)moby, idle_angles, angles, 0, 1);
+        }
+        break;
+    }
+    vector_sub_e3ed8(delta, &moby->pos, old_pos);
+    update_path_e3ed8(data + 0x60, delta, old_rot, &moby->rot);
+}
+#endif
 /* Level overlay code after gameplay/vendor; generated by `decomp overlays stubs`, stubs replaced by C as functions are matched. */
 
 #include "qcopy.h"
