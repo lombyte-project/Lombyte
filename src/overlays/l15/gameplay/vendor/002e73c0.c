@@ -1570,11 +1570,11 @@ void FUN_L15_002edfc0(struct Moby *moby) {
     FUN_L00_00250320(moby, &r, &g, &b);
     p = (Quad4 *)&t.q.f[1];
     color = (D_L15_0016225C << 24) | (b << 16) | (g << 8) | r;
+    end = D_L15_001DF940 + 0x428 / 4;
+    zout = D_L15_001DF940 + 2;
     o = D_L15_001DF940;
     s = D_L15_001DF100;
     colors = D_L15_001E0020;
-    zout = D_L15_001DF940 + 2;
-    end = D_L15_001DF940 + 0x428 / 4;
     do {
         float x = s[0];
         float y = s[1];
