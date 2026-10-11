@@ -211,7 +211,7 @@ void FUN_L07_00313420(char *moby, char *data, float *health) {
                     moby[0x20] = 11;
                     moby[0xbc]++;
                 }
-                if ((original_health <= wide || wide < *health) && (original_health > narrow && *health <= narrow))
+                if ((wide < original_health && *health <= wide) || (narrow < original_health && *health <= narrow))
                     data[0x1c7] = 1;
             }
         }
