@@ -1162,7 +1162,7 @@ after_state_4:
             if (data[2] != -1 && data[4] != -1) {
                 object = D_L13_001600EC + data[2] * 0x80;
                 entity = (char *)(D_L13_0015FFD8_m + data[4] * 0x100);
-                *(OvlQuad *)(entity + 0x10) = *(OvlQuad *)(object + 0x30);
+                qcopy(entity + 0x10, object + 0x30);
                 FUN_L00_00216f90(object + 0x30, object + 0x70, 0, 1);
                 D_001413F5 = 1;
                 *(float *)(*(char **)(entity + 0x78) + 0x7c) = 0.99f;
