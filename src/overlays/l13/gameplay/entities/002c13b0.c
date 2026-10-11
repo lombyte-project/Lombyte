@@ -1218,9 +1218,6 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         moby->pos.z = 1003.0f;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c7f38.s", FUN_L13_002c7f38);
-#else
 extern unsigned char D_0014C050[];
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern void allocate_voice_for_target_entry_7f38(int, int, struct Moby *) __asm__("FUN_0022da68");
@@ -1283,7 +1280,9 @@ void FUN_L13_002c7f38(struct Moby *moby) {
             break;
         }
         {
-            step = 1.0f / (data->duration * 60.0f);
+            step = data->duration;
+            step *= 60.0f;
+            step = 1.0f / step;
             radians = 0.017453292f;
             data->progress += step;
             moby->rot.x = fast_add_rotations(moby->rot.x, data->angle[0] * radians * step);
@@ -1343,7 +1342,6 @@ void FUN_L13_002c7f38(struct Moby *moby) {
         break;
     }
 }
-#endif
 /* Ported from rac1-decomp src/overlays/l13_gemlik/vendor_002C2638.c (func_L13_002CF960) */
 
 /* Gemlik spark emitter: builds a spark frame from a1, runs two burst loops of effect calls, and with a2 set, the extra burst set. */
