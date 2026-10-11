@@ -1453,7 +1453,8 @@ void FUN_L00_0020f580(void)
         if ((D_L00_0015F5C4_f580 != 2 && D_L00_0015F5C4_f580 != 6) || i == 4 || i == 5) {
             offset = i * 0x50;
             slot = (u8 *)&hero + offset;
-            for (j = 0; j < 2 && (j < 1 || i == 1 || i == 3 || i == 4); j++) {
+            j = 0;
+            do {
                 moby = *(u8 **)(slot + 0x1090);
                 if (j == 1) moby = *(u8 **)(slot + 0x1094);
                 if (moby != 0) {
@@ -1462,7 +1463,13 @@ void FUN_L00_0020f580(void)
                     if (i == 1 && j == 1) index = 3;
                     index *= 0x40;
                     source = D_0013FE10_f580 + index;
-                    if (*(u8 *)(slot + 0x10aa) == 0) {
+                    if (*(u8 *)(slot + 0x10aa) != 0) {
+                        *(u128 *)((u8 *)&hero + offset + 0x1070) = *(u128 *)(D_0013FE40_f580 + index);
+                        FUN_0025d330_f580(source, (u8 *)&hero + offset + 0x1080);
+                        FUN_00250480_f580(moby);
+                        FUN_00250df8_f580(moby);
+                        *(u16 *)(moby + 0x34) &= 0xfffb;
+                    } else {
                         *(u128 *)(moby + 0x10) = *(u128 *)(D_0013FE40_f580 + index);
                         if (large_font_height == 0 || *(s32 *)(D_00179AC0_f580 + *(s32 *)(slot + 0x10b8) * 0x4c + 0x18) == 0) {
                             first = FUN_L00_0020d4d0(i);
@@ -1529,12 +1536,6 @@ void FUN_L00_0020f580(void)
                         if (D_0015EDB5_f580) FUN_001ff3c0_f580(moby + 0xe0, moby + 0xc0, moby + 0xd0);
                         FUN_00250f98_f580(moby);
                         *(u16 *)(moby + 0x34) |= 6;
-                    } else {
-                        *(u128 *)((u8 *)&hero + offset + 0x1070) = *(u128 *)(D_0013FE40_f580 + index);
-                        FUN_0025d330_f580(source, (u8 *)&hero + offset + 0x1080);
-                        FUN_00250480_f580(moby);
-                        FUN_00250df8_f580(moby);
-                        *(u16 *)(moby + 0x34) &= 0xfffb;
                     }
                 }
 after_moby:
@@ -1565,17 +1566,20 @@ after_moby:
                             FUN_00250df8_f580(effect);
                             *(u64 *)(effect + 0x38) = *(u64 *)(*(u8 **)((u8 *)&hero + 0x2080) + 0x38);
                             random_range = FUN_001fef20_f580(0x78);
-                            angle = FUN_001ff800_f580(((f32)(D_L00_0015F5CC_f580 % random_range) / FUN_00200240_f580(random_range) * 2.0f) * 3.1415927f - 3.1415927f);
-                            color_red = FUN_00200250_f580(angle * 90.0f) + 0xd7;
-                            color_green = FUN_00200250_f580(angle * 50.0f) + 0x32;
+                            angle = FUN_001ff800_f580(((f32)(D_L00_0015F5CC_f580 % random_range) / FUN_00200240_f580(random_range) * 2.0f) * 3.1415927f + -3.1415927f);
+                            color_red = FUN_00200250_f580(angle * 90.0f);
+                            color_green = FUN_00200250_f580(angle * 50.0f);
                             color_blue = FUN_00200250_f580(angle * 10.0f) + 0x14;
+                            color_red += 0xd7;
+                            color_green += 0x32;
                             if (color_red > 0xff) color_red = 0xff;
-                            *(u32 *)(effect + 0x90) = 0x80000000 | (color_blue << 16) | (color_green << 8) | color_red;
+                            *(u32 *)(effect + 0x90) = (color_blue << 16) | 0x80000000 | (color_green << 8) | color_red;
                             *(u16 *)(effect + 0x34) |= 0x10;
                         }
                     }
                 }
-            }
+                j++;
+            } while (j < 2 && (j < 1 || i == 1 || i == 3 || i == 4));
         }
         i++;
     } while (i < 7);
