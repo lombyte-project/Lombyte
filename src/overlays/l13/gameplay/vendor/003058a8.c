@@ -1209,7 +1209,142 @@ char *FUN_L13_0030c138(void *a, void *b, int c, int d) {
     }
     return (char *)m;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030c3b8.s", FUN_L13_0030c3b8);
+#else
+extern float FUN_001f9e90(float, float);
+extern float FUN_001fa580(float, float);
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_001f96b0_c3b8(float) __asm__("FUN_L13_0020a9f8");
+extern int FUN_001fa6d0(float);
+extern float FUN_001fa6c0(int);
+extern int FUN_001f9770(void *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_0020c828(void *);
+extern void FUN_L13_0030c2b0(void *);
+extern void FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern float D_0015ED70;
+extern int D_001413D0;
+extern float D_L13_00161F18 __attribute__((sda));
+extern float D_L13_00161F1C __attribute__((sda));
+extern float D_L13_00161F20 __attribute__((sda));
+extern float D_L13_00161F24 __attribute__((sda));
+extern float D_L13_00161F28 __attribute__((sda));
+extern float D_L13_00161F2C __attribute__((sda));
+extern float D_L13_00161F30 __attribute__((sda));
+extern float D_L13_00161F34 __attribute__((sda));
+extern float D_L13_00161F38 __attribute__((sda));
+extern float D_L13_00161F3C __attribute__((sda));
+extern float D_L13_00161F40 __attribute__((sda));
+extern float D_L13_00161F44 __attribute__((sda));
+extern float D_L13_00161F48 __attribute__((sda));
+extern float D_L13_00161F4C __attribute__((sda));
+extern float D_L13_00161F50 __attribute__((sda));
+extern float D_L13_00161F54 __attribute__((sda));
+extern float D_L13_00161F58 __attribute__((sda));
+extern float D_L13_00161F5C __attribute__((sda));
+extern float D_L13_00161F60 __attribute__((sda));
+extern float D_L13_00161F64 __attribute__((sda));
+extern float D_L13_00161F68 __attribute__((sda));
+extern int D_L13_00161F08 __attribute__((sda));
+extern int D_L13_00161F0C __attribute__((sda));
+extern int D_L13_00161F10 __attribute__((sda));
+extern int D_L13_00161F14 __attribute__((sda));
+
+typedef union {
+    OvlQuad quad;
+    float f[4];
+} L13EffectVector;
+
+void FUN_L13_0030c3b8(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    L13EffectVector old_pos, position, velocity, acceleration, second_pos;
+    float angle, direction, amount;
+    int a, b, c;
+    int i;
+    qcopy(&old_pos, &moby->pos);
+    if (moby->unkBC == 1) {
+        velocity.f[3] = D_L13_00161F5C;
+        acceleration.f[3] = D_L13_00161F60;
+        i = 1;
+        do {
+            qcopy_nc(&position, &moby->pos);
+            position.f[0] += random_float_between_alt(-0.065f, 0.065f);
+            position.f[1] += random_float_between_alt(-0.065f, 0.065f);
+            position.f[2] += random_float_between_alt(-0.065f, 0.065f);
+            *(OvlQuad *)&velocity = 0;
+            velocity.f[2] = random_float_between_alt(D_L13_00161F30 * frame_time * 0.9f,
+                                                       D_L13_00161F30 * frame_time * 1.1f);
+            angle = random_float_between_alt(-D_L13_00161F50, D_L13_00161F50) * 0.017453292f;
+            direction = FUN_001fa580(FUN_001f9e90(*(float *)data, *(float *)(data + 4)), angle);
+            acceleration.f[0] = FUN_001f9dc8(direction) * (D_L13_00161F24 * frame_time);
+            direction = FUN_001fa580(FUN_001f9e90(*(float *)data, *(float *)(data + 4)), angle);
+            acceleration.f[1] = FUN_001f9de0(direction) * (D_L13_00161F24 * frame_time);
+            acceleration.f[2] = random_float_between_alt(D_L13_00161F28 * frame_time * 0.9f,
+                                                          D_L13_00161F28 * frame_time * 1.1f);
+            a = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F18,
+                                                                     D_L13_00161F18 + D_L13_00161F18)));
+            b = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F1C,
+                                                                     D_L13_00161F1C * 1.2f)));
+            c = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F20,
+                                                                     D_L13_00161F20 * 1.2f)));
+            FUN_00218888(&position, &velocity, &acceleration, D_L13_00161F08,
+                           D_L13_00161F0C, a, b, c, -1);
+        } while (--i >= 0);
+        velocity.f[3] = D_L13_00161F64;
+        acceleration.f[3] = D_L13_00161F68;
+        i = 1;
+        do {
+            qcopy_nc(&second_pos, &moby->pos);
+            second_pos.f[0] += random_float_between_alt(-0.1f, 0.1f);
+            second_pos.f[1] += random_float_between_alt(-0.1f, 0.1f);
+            second_pos.f[2] += random_float_between_alt(-0.1f, 0.1f);
+            random_float_between_alt(-D_L13_00161F58, D_L13_00161F58);
+            *(OvlQuad *)&velocity = 0;
+            velocity.f[2] = random_float_between_alt(D_L13_00161F44 * frame_time * 0.7f,
+                                                       D_L13_00161F44 * frame_time * 1.5f);
+            angle = random_float_between_alt(-D_L13_00161F54, D_L13_00161F54);
+            direction = FUN_001fa580(FUN_001f9e90(*(float *)data, *(float *)(data + 4)),
+                                      angle * 0.017453292f);
+            acceleration.f[0] = FUN_001f9dc8(direction) * (D_L13_00161F4C * frame_time);
+            direction = FUN_001fa580(FUN_001f9e90(*(float *)data, *(float *)(data + 4)),
+                                      angle * 0.017453292f);
+            acceleration.f[1] = FUN_001f9de0(direction) * (D_L13_00161F4C * frame_time);
+            acceleration.f[2] = random_float_between_alt(D_L13_00161F48 * frame_time * 0.7f,
+                                                          D_L13_00161F48 * frame_time * 1.5f);
+            a = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F34,
+                                                                     D_L13_00161F34 + D_L13_00161F34)));
+            b = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F38,
+                                                                     D_L13_00161F38 * 1.2f)));
+            c = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F3C,
+                                                                     D_L13_00161F3C * 1.2f)));
+            FUN_00218888(&second_pos, &velocity, &acceleration, D_L13_00161F10,
+                           D_L13_00161F14, a, b, c, -1);
+        } while (--i >= 0);
+    }
+    moby->rot.x = FUN_001fa580(moby->rot.x, *(float *)(data + 0x10));
+    moby->rot.y = FUN_001fa580(moby->rot.y, *(float *)(data + 0x14));
+    FUN_001f9a10(&moby->pos, &moby->pos, data);
+    *(float *)(data + 8) -= D_0015ED70 * 14.6f;
+    if (!(moby->pos.x < 0.0f) && !(moby->pos.y < 0.0f) && !(moby->pos.z < 0.0f)) {
+        short life = *(short *)(data + 0x18);
+        short duration = *(short *)(data + 0x1a);
+        if (life < duration / 4) {
+            *(float *)((char *)moby + 0x2c) = *(float *)(data + 0x1c) * FUN_001fa6c0(life) /
+                                               FUN_001fa6c0(duration / 4);
+        }
+        if (FUN_001f9770(data + 0x18) == 0) {
+            if (moby->unkBC != 1) return;
+            if (FUN_001efa68(&old_pos, &moby->pos, 2, (void *)D_001413D0, 0) == 0) return;
+            FUN_L13_0030c2b0(moby);
+            FUN_0020c828(moby);
+            return;
+        }
+    }
+    FUN_0020c828(moby);
+}
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030cdb8.s", FUN_L13_0030cdb8);
 #else
