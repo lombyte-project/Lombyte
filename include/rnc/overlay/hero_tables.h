@@ -9,15 +9,19 @@
  */
 
 /*
- * 0x70-byte entry of D_L00_00179890, picked by FUN_L00_00229010(&index).
- * The hero stores the index, sets duration_frames from duration and then
- * either enters hero state 0x40 or calls FUN_L00_002323b8(unk48, 0, ...).
+ * 0x70-byte idle fidget entry of D_L00_00179890, picked by
+ * FUN_L00_00229010(&index) with weight 1 / (interval * 60). The hero stores
+ * the index, sets duration_frames from duration and then either enters hero
+ * state 0x40 or calls FUN_L00_002323b8(unk48, 0, ...).
  */
 typedef struct HeroTableEntry70 {
     u8 pad_0[0x44];
     s32 use_state_40;    /* nonzero: hero_set_state(0x40, 1) instead of FUN_L00_002323b8 */
     s32 unk48;           /* first argument of FUN_L00_002323b8 */
-    u8 pad_4C[0x10];
+    u8 pad_4C[0x4];
+    s32 item_id;         /* only while FUN_L00_0020d498(0) returns it; -1: any */
+    u8 pad_54[0x4];
+    f32 interval;        /* seconds; 0 = never picked */
     f32 duration;        /* seconds */
     s32 duration_frames; /* FUN_001f96b0(duration) * 60 */
     u8 pad_64[0xC];

@@ -4,92 +4,89 @@
 #include "asm.h"
 #include "qcopy.h"
 
-/* Idle fidget picker: builds the list of eligible fidget entries, then picks one
-   weighted by 1 / frames. */
-typedef struct { f32 f[4]; } V_229010;
-typedef struct { u8 p0[0xD0]; V_229010 vD0; u8 p1[0x198 - 0xE0]; s32 i198; u8 p2[0x1E8 - 0x19C]; s16 h1E8; u8 p3[0x2FC - 0x1EA]; s32 i2FC;
-    u8 p4[0xA98 - 0x300]; s32 iA98; u8 p5[0x2080 - 0xA9C]; void *p2080; u8 p6[0x2094 - 0x2084]; s32 i2094; u8 p7[0x22A8 - 0x2098]; s32 i22A8; } P_229010;
-typedef struct { u8 p0[0x44]; s32 i44; u8 p1[0x50 - 0x48]; s32 i50; u8 p2[4]; f32 f58; u8 p3[4]; s32 i60; u8 p4[0x70 - 0x64]; } E_229010;
-extern P_229010 D_0013F350_229010 __asm__("D_0013F350") __attribute__((section(".data")));
-extern E_229010 D_L00_00179890_229010[] __asm__("D_L00_00179890") __attribute__((section(".data")));
-extern s32 D_L00_00179AB0_229010 __asm__("D_L00_00179AB0") __attribute__((section(".data")));
-extern s32 D_0015ED84_229010 __asm__("D_0015ED84");
-extern f32 FUN_002132a8_229010(f32, f32) __asm__("FUN_002132a8");
-extern int FUN_L00_0020d498_229010(int) __asm__("FUN_L00_0020d498");
-extern int FUN_L00_001efc70_229010(void *, void *, int, void *, int) __asm__("FUN_L00_001efc70");
-extern int FUN_001f96f8_229010(int) __asm__("FUN_001f96f8");
-extern f32 FUN_001f96b0_229010(f32) __asm__("FUN_001f96b0");
-#define P D_0013F350_229010
+#include "rnc/overlay/hero_tables.h"
+#include "rnc/globals.h"
 
-int FUN_L00_00229010(s32 *out) {
-    s32 list[20];
-    V_229010 b;
-    V_229010 a;
-    E_229010 *e;
-    V_229010 *pa, *pb;
-    int i, k, cnt, j;
-    s32 *lp;
-    E_229010 *tb;
-    f32 sum, r;
+extern HeroTableEntry70 D_L00_00179890[] __attribute__((section(".data"))); /* idle fidgets */
+extern s32 D_L00_00179AB0 __attribute__((section(".data")));
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern s32 FUN_L00_0020d498(s32);
+extern s32 FUN_L00_001efc70(void *, void *, s32, void *, s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern f32 FUN_001f96b0(f32);
 
-    cnt = 0;
-    if (P.h1E8 != 0) return 0;
-    if (P.i22A8 == 1) {
-        *out = 4;
-        if (D_L00_00179AB0_229010 != 0) return 0;
-        if (!(P.iA98 & 2)) return 0;
-        return FUN_002132a8_229010(0.0f, 1.0f) < 0.33f;
+/* Idle fidget picker: lists the eligible entries of D_L00_00179890, then
+   picks one weighted by 1 / (interval * 60). Returns 1 and the index in
+   *index when one is picked. At 1 hit point it offers only entry 4. */
+s32 FUN_L00_00229010(s32 *index) {
+    s32 choices[20];
+    Vec4 end;
+    Vec4 start;
+    HeroTableEntry70 *entry;
+    Vec4 *startp, *endp;
+    s32 i, item, count, j;
+    s32 *next;
+    HeroTableEntry70 *table;
+    f32 total, pick;
+
+    count = 0;
+    if (hero.unk1E8 != 0) return 0;
+    if (hero.health.hp == 1) {
+        *index = 4;
+        if (D_L00_00179AB0 != 0) return 0;
+        if (!(hero.unkA98 & 2)) return 0;
+        return random_float_between(0.0f, 1.0f) < 0.33f;
     }
     i = 0;
-    pa = &a;
-    pb = &b;
-    lp = list;
+    startp = &start;
+    endp = &end;
+    next = choices;
     for (; i < 5; i++) {
-        tb = D_L00_00179890_229010;
-        e = &tb[i];
-        if (e->i60 != 0) continue;
-        if (e->f58 == 0.0f) continue;
-        k = FUN_L00_0020d498_229010(0);
-        if (e->i50 != -1 && e->i50 != k) continue;
-        if (e->i44 != 0 && P.i2FC != 0) continue;
+        table = D_L00_00179890;
+        entry = &table[i];
+        if (entry->duration_frames != 0) continue;
+        if (entry->interval == 0.0f) continue;
+        item = FUN_L00_0020d498(0);
+        if (entry->item_id != -1 && entry->item_id != item) continue;
+        if (entry->use_state_40 != 0 && hero.ground_moby != 0) continue;
         if (i == 3) {
-            if (D_0015ED84_229010 != 12) continue;
-            if (FUN_L00_0020d498_229010(0) == 23) continue;
-            qcopy(pa, &P.vD0);
-            qcopy(pb, pa);
-            b.f[2] += 8.0f;
-            if (FUN_L00_001efc70_229010(pa, pb, 2, P.p2080, 0)) continue;
+            if (current_level_index != 12) continue;
+            if (FUN_L00_0020d498(0) == 23) continue;
+            /* Room for it: nothing in the 8 units above the hero. */
+            qcopy(startp, &hero.motion.unkD0);
+            qcopy(endp, startp);
+            end.f[2] += 8.0f;
+            if (FUN_L00_001efc70(startp, endp, 2, hero.moby, 0)) continue;
         }
         if (i == 4) {
-            if (P.i2094 != 1) continue;
-            if (FUN_001f96f8_229010(50) < P.i198) continue;
-            if (P.i22A8 >= 2) continue;
+            if (hero.state.prev_control_mode != 1) continue;
+            if (scale_game_frames(50) < hero.state_timer) continue;
+            if (hero.health.hp >= 2) continue;
         }
-        *lp = i;
-        cnt++;
-        lp++;
+        *next = i;
+        count++;
+        next++;
     }
-    if (cnt == 0) return 0;
-    sum = 0.0f;
-    for (i = 0; i < cnt; i++) {
-        E_229010 *e2 = &D_L00_00179890_229010[list[i]];
-        sum += 1.0f / (f32)(s32)(FUN_001f96b0_229010(e2->f58) * 60.0f);
+    if (count == 0) return 0;
+    total = 0.0f;
+    for (i = 0; i < count; i++) {
+        HeroTableEntry70 *choice = &D_L00_00179890[choices[i]];
+        total += 1.0f / (f32)(s32)(FUN_001f96b0(choice->interval) * 60.0f);
     }
-    r = FUN_002132a8_229010(0.0f, 1.0f);
-    if (r < sum) {
-        for (j = 0; j < cnt; j++) {
-            int k3 = list[j];
-            E_229010 *e3;
-            *out = k3;
-            e3 = &D_L00_00179890_229010[k3];
-            sum -= 1.0f / (f32)(s32)(FUN_001f96b0_229010(e3->f58) * 60.0f);
-            if (sum < r) break;
+    pick = random_float_between(0.0f, 1.0f);
+    if (pick < total) {
+        for (j = 0; j < count; j++) {
+            s32 picked = choices[j];
+            HeroTableEntry70 *choice;
+            *index = picked;
+            choice = &D_L00_00179890[picked];
+            total -= 1.0f / (f32)(s32)(FUN_001f96b0(choice->interval) * 60.0f);
+            if (total < pick) break;
         }
         return 1;
     }
     return 0;
 }
-#undef P
 extern u8 D_0013F350_002293a8[] __asm__("D_0013F350");
 extern f32 D_0015ED6C_002293a8 __asm__("D_0015ED6C");
 extern s32 D_0013CAE0_002293a8 __asm__("D_0013CAE0") __attribute__((section(".data")));
