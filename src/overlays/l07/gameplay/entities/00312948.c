@@ -363,6 +363,9 @@ void FUN_L07_00317910(void) {
     int next_column;
     int color;
     int alpha;
+    int row_offset;
+    float phase_step;
+    float column_step;
 
     packet.header[1] = get_effect_texture_l07(0x15);
     packet.header[2] = 0xff9000000260ULL;
@@ -372,32 +375,36 @@ void FUN_L07_00317910(void) {
     D_L07_00161B74 += 0.001f;
     if (D_L07_00161B74 > 7.0f) D_L07_00161B74 -= 7.0f;
     vu1_add_g_sregister_l07(0x47, 0x5301b);
-    phase += 0.3f;
-    vu1_add_g_sregister_l07(0x4e, (s64)(s32)(depth_buffer_address >> 13) | 0x101000000LL);
+    phase_step = 0.3f;
+    phase += phase_step;
+    column_step = 0.05f;
+    vu1_add_g_sregister_l07(0x4e, (depth_buffer_address >> 13) | 0x1000000 | ((u64)0x8000 << 17));
 
     for (row = 1; row < 10; row++) {
         row_phase = D_L07_00161B78;
         D_L07_00161B78 += D_L07_00161B7C;
         if (D_L07_00161B78 > 7.0f) D_L07_00161B78 -= 7.0f;
+        row_offset = row * 0x140;
         for (column = 0; column < 20; column++) {
-            float end_phase = row_phase + 0.05f;
+            float end_phase = row_phase + column_step;
+            qcopy(packet.pos[0], (char *)&D_L07_0020DB00_c[14] + row_offset + (column << 4));
             next_column = (column + 1) % 20;
-            qcopy(packet.pos[0], D_L07_0020DB00_c[row * 20 + 14 + column]);
-            qcopy(packet.pos[1], D_L07_0020DB00_c[row * 20 + 14 + next_column]);
-            qcopy(packet.pos[2], D_L07_0020DAF0_c[row * 20 - 5 + column]);
-            qcopy(packet.pos[3], D_L07_0020DAF0_c[row * 20 - 5 + next_column]);
+            qcopy(packet.pos[1], (char *)&D_L07_0020DB00_c[14] + row_offset + (next_column << 4));
+            qcopy(packet.pos[2], (char *)&D_L07_0020DAF0_c[-5] + row_offset + (column << 4));
+            qcopy(packet.pos[3], (char *)&D_L07_0020DAF0_c[-5] + row_offset + (next_column << 4));
             {
-                s32 previous = ((s32)((u32)(u16)D_L07_0020DBC8[row - 1] << 16)) >> 16;
+                u32 previous = (u32)(u16)D_L07_0020DBC8[row - 1] << 16;
                 s32 current = D_L07_0020DBC8[row];
                 s32 j;
                 u32 *color_out = packet.color;
-                for (j = 0; j < 2; j++) {
-                    alpha = j == 0 ? current : previous;
+                for (j = 1; j >= 0; j--) {
+                    alpha = current;
                     if (alpha < 0) alpha = 0;
                     if (alpha > 64) alpha = 64;
                     color = ((u32)alpha << 24) | 0x404040;
                     color_out[0] = color;
                     color_out[1] = color;
+                    current = (s32)previous >> 16;
                     color_out += 2;
                 }
             }
@@ -412,14 +419,14 @@ void FUN_L07_00317910(void) {
             packet.uv[1] = row_phase;
             packet.uv[2] = phase;
             packet.uv[3] = end_phase;
-            packet.uv[4] = phase - 0.3f;
+            packet.uv[4] = phase - phase_step;
             packet.uv[5] = row_phase;
-            packet.uv[6] = phase - 0.3f;
+            packet.uv[6] = phase - phase_step;
             packet.uv[7] = end_phase;
-            draw_geometry_quad_l07(&packet, 0, 0);
             row_phase = end_phase;
+            draw_geometry_quad_l07(&packet, 0, 0);
         }
-        phase += 0.3f;
+        phase += phase_step;
     }
     vu1_add_g_sregister_l07(0x4e, (s64)(depth_buffer_address >> 13) | 0x1000000);
     vu1_add_g_sregister_l07(0x47, 0x5360b);
