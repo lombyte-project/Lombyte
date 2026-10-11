@@ -240,10 +240,10 @@ struct Hero {
     f32 unk22C;                    /* 0x22C */
     f32 unk230;                    /* 0x230 */
     f32 unk234;                    /* 0x234 */
-    u8 pad_238[0x4];
+    f32 unk238;                    /* 0x238: velocity of the unk234 spring (FUN_L00_00211380) */
     u8 *coll_hit_moby;             /* 0x23C: moby of the last push-out collision hit */
     s32 unk240;                    /* 0x240 */
-    u8 pad_244[0x4];
+    union { f32 f; s32 i; } unk244; /* 0x244: written as a float and zeroed as an int */
     f32 wall_probe_distance;                    /* 0x248 */
     u8 pad_24C[0x4];
     f32 unk250;                    /* 0x250 */
@@ -518,7 +518,9 @@ struct Hero {
     u8 pad_918[0x8];
     Vec4 move_impulse;             /* 0x920: one-frame displacement; the hero update adds it to motion.pos and clears it (some states; zero while running) */
     f32 unk930;                    /* 0x930 */
-    u8 pad_934[0xC];
+    f32 unk934;                    /* 0x934 */
+    f32 unk938;                    /* 0x938 */
+    u8 pad_93C[0x4];
     f32 unk940;                    /* 0x940 */
     f32 unk944;                    /* 0x944 */
     f32 unk948;                    /* 0x948 */
@@ -608,7 +610,19 @@ struct Hero {
     s32 unk1010;                   /* 0x1010 */
     f32 unk1014;                   /* 0x1014 */
     f32 unk1018;                   /* 0x1018 */
-    u8 pad_101C[0x74];
+    u8 pad_101C[0x8];
+    s32 unk1024;                    /* 0x1024: cleared by FUN_L00_0020a500 */
+    s32 unk1028;                    /* 0x1028: cleared by FUN_L00_0020a500 */
+    u8 pad_102C[0x8];
+    s32 unk1034;                    /* 0x1034: cleared by FUN_L00_0020a500 */
+    s32 unk1038;                    /* 0x1038: cleared by FUN_L00_0020a500 */
+    u8 pad_103C[0x8];
+    s32 unk1044;                    /* 0x1044: cleared by FUN_L00_0020a500 */
+    s32 unk1048;                    /* 0x1048: cleared by FUN_L00_0020a500 */
+    u8 pad_104C[0x8];
+    s32 unk1054;                    /* 0x1054: cleared by FUN_L00_0020a500 */
+    s32 unk1058;                    /* 0x1058: cleared by FUN_L00_0020a500 */
+    u8 pad_105C[0x34];
     struct HeroItemSlot items[7];  /* 0x1090: item slots; slot 0 is the equipped gadget */
     u8 pad_12C0[0x20];
     s16 ground_type;                   /* 0x12E0 */
@@ -731,7 +745,7 @@ struct Hero {
     u8 pad_21B8[0x20];
     s16 unk21D8[8][4];             /* 0x21D8: 8 slots of four s16 */
     s32 unk2218;                   /* 0x2218: voice of sound slot 0, -1 = none (slots 0-7 run to 0x2234, FUN_L00_00206c08) */
-    u8 pad_221C[0x4];
+    s32 unk221C;                   /* 0x221C: voice of sound slot 1 */
     s32 unk2220;                   /* 0x2220 */
     s32 unk2224;                   /* 0x2224 */
     s32 unk2228;                   /* 0x2228 */
