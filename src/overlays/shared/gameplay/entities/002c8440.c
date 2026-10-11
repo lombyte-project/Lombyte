@@ -631,9 +631,19 @@ extern V4 D_0013F3D0_2cb418 __asm__("D_0013F3D0");
 void FUN_L00_002cb418(u8 *m)
 {
     u8 *vars = *(u8 **)(m + 0x78);
-    V4 old_pos, offset, direction, scaled, velocity;
+    V4 old_pos, offset;
+    struct {
+        V4 direction;
+        s32 moby, flags;
+        u8 active, small;
+        u16 type;
+        f32 scale;
+        s32 one;
+    } hit;
+    V4 scaled, direction, velocity;
     u8 *pos;
     f32 pitch, yaw, length, spread;
+    f32 turn, turn_rate, turn_limit;
     f32 jitter;
     s32 i, j, lifetime, time_elapsed;
     u8 **handle;
@@ -652,26 +662,33 @@ void FUN_L00_002cb418(u8 *m)
             pos = m + 0x10;
         }
     } else {
-        pos = m + 0x10;
+        effect = m + 0x10;
         pitch = FUN_001ff8b0_2cb418(*(f32 *)vars - *(f32 *)(m + 0x10),
                                         *(f32 *)(vars + 4) - *(f32 *)(m + 0x14));
-        yaw = -FUN_001ff8b0_2cb418(FUN_001ff488_2cb418(pos, vars),
+        yaw = -FUN_001ff8b0_2cb418(FUN_001ff488_2cb418(effect, vars),
                                        *(f32 *)(vars + 8) - *(f32 *)(m + 0x18));
+        pos = effect;
     }
     if (FUN_001ff3d8_2cb418(vars) < 0.1f) {
-        *(f32 *)(m + 0x48) = FUN_L00_00258110_2cb418((f32 *)(vars + 0x10), *(f32 *)(m + 0x48), pitch,
+        turn = FUN_L00_00258110_2cb418((f32 *)(vars + 0x10), *(f32 *)(m + 0x48), pitch,
             D_0015ED70_2cb418 * 6.2831855f, D_0015ED70_2cb418 * 3.1415927f,
             D_0015ED6C_2cb418 * 6.2831855f);
-        *(f32 *)(m + 0x44) = FUN_L00_00258110_2cb418((f32 *)(vars + 0x14), *(f32 *)(m + 0x44), yaw,
-            D_0015ED70_2cb418 * 6.2831855f, D_0015ED70_2cb418 * 3.1415927f,
-            D_0015ED6C_2cb418 * 6.2831855f);
+        turn_rate = D_0015ED70_2cb418;
+        turn_limit = D_0015ED6C_2cb418 * 6.2831855f;
+        length = *(f32 *)(m + 0x44);
+        *(f32 *)(m + 0x48) = turn;
+        *(f32 *)(m + 0x44) = FUN_L00_00258110_2cb418((f32 *)(vars + 0x14), length, yaw,
+            turn_rate * 6.2831855f, turn_rate * 3.1415927f, turn_limit);
     } else {
-        *(f32 *)(m + 0x48) = FUN_L00_00258110_2cb418((f32 *)(vars + 0x10), *(f32 *)(m + 0x48), pitch,
+        turn = FUN_L00_00258110_2cb418((f32 *)(vars + 0x10), *(f32 *)(m + 0x48), pitch,
             D_0015ED70_2cb418 * 6.2831855f, D_0015ED70_2cb418 * 3.1415927f,
             D_0015ED6C_2cb418 * 4.712389f);
-        *(f32 *)(m + 0x44) = FUN_L00_00258110_2cb418((f32 *)(vars + 0x14), *(f32 *)(m + 0x44), yaw,
-            D_0015ED70_2cb418 * 6.2831855f, D_0015ED70_2cb418 * 3.1415927f,
-            D_0015ED6C_2cb418 * 4.712389f);
+        turn_rate = D_0015ED70_2cb418;
+        turn_limit = D_0015ED6C_2cb418 * 4.712389f;
+        length = *(f32 *)(m + 0x44);
+        *(f32 *)(m + 0x48) = turn;
+        *(f32 *)(m + 0x44) = FUN_L00_00258110_2cb418((f32 *)(vars + 0x14), length, yaw,
+            turn_rate * 6.2831855f, turn_rate * 3.1415927f, turn_limit);
     }
     FUN_00262c50_2cb418(&offset, D_0015ED6C_2cb418 * 40.0f,
                           *(f32 *)(m + 0x48), -*(f32 *)(m + 0x44));
@@ -686,14 +703,6 @@ void FUN_L00_002cb418(u8 *m)
     if (FUN_001ff488_2cb418(pos, &D_L00_00166DC0_2c8440) > 64.0f)
         goto cleanup;
     {
-        struct {
-            V4 direction;
-            s32 moby, flags;
-            u8 active, small;
-            u16 type;
-            f32 scale;
-            s32 one;
-        } hit;
         hit.flags = 0x10001;
         hit.scale = 0.25f;
         hit.one = 1;
@@ -710,8 +719,13 @@ void FUN_L00_002cb418(u8 *m)
         if (!FUN_001efc70_2cb418(&old_pos, pos, 0, *(s32 *)(vars + 0x20), &hit))
             goto update_effects;
     }
-    if (FUN_001f35d8_2cb418()) {
-        *(u128 *)pos = coll_hit_2c8440.point.q;
+    if (!FUN_001f35d8_2cb418()) {
+        if (*(s16 *)(vars + 0x24) > FUN_001fef20_2cb418(3))
+            *(s16 *)(vars + 0x24) = FUN_001fef20_2cb418(3);
+        goto update_effects;
+    }
+    {
+        qcopy(pos, &coll_hit_2c8440.point);
         for (i = 4; i >= 0; i--) {
             direction.q = 0;
             direction.f[0] = FUN_L00_00257be8_2cb418(-1.0f, 1.0f);
@@ -735,6 +749,16 @@ void FUN_L00_002cb418(u8 *m)
         }
         if (*(s32 *)(vars + 0x28) > D_0013E52F_2cb418 + 5)
             goto cleanup_enabled;
+        goto bounce;
+cleanup:
+    FUN_L00_002cbcc0(m, 0);
+    FUN_0024eb68_2cb418(m);
+    return;
+cleanup_enabled:
+    FUN_L00_002cbcc0(m, 1);
+    FUN_0024eb68_2cb418(m);
+    return;
+bounce:
         FUN_001ff660_2cb418(&scaled, &offset, &coll_hit_normal_2c8440);
         *(f32 *)(m + 0x48) = FUN_001ff8b0_2cb418(scaled.f[0], scaled.f[1]);
         *(f32 *)(m + 0x44) = -FUN_001ff8b0_2cb418(FUN_001ff408_2cb418(&scaled), scaled.f[2]);
@@ -745,9 +769,6 @@ void FUN_L00_002cb418(u8 *m)
         if (D_001403E0_2cb418 && *(s16 *)(D_001403E0_2cb418 + 0xa6) == 0xa8
             && D_001403E0_2cb418[0x20] != 0xfe && D_001403E0_2cb418[0x20] != 0xfd)
             FUN_0028dbe8_2cb418(4, 0);
-    } else {
-        if (FUN_001fef20_2cb418(3) < *(s16 *)(vars + 0x24))
-            *(s16 *)(vars + 0x24) = FUN_001fef20_2cb418(3);
     }
 update_effects:
     *(f32 *)(m + 0x44) = FUN_002000e8_2cb418(*(f32 *)(m + 0x44), D_L00_00161894_2cb418);
@@ -760,13 +781,13 @@ update_effects:
     scaled.q = *(u128 *)pos;
     effect = *(u8 **)(vars + 0x2c);
     if (effect)
-        *(u128 *)(effect + 0x10) = scaled.q;
+        qcopy(effect + 0x10, &scaled);
     handle = (u8 **)(vars + 0x30);
-    for (j = 15; j >= 0; j--) {
-        effect = *handle++;
+    for (j = 15; j >= 0; j--, handle++) {
+        effect = *handle;
         if (effect) {
             FUN_001ff278_2cb418(effect + 0x10, &scaled, &offset);
-            scaled.q = *(u128 *)(effect + 0x10);
+            qcopy(&scaled, effect + 0x10);
             jitter = FUN_L00_00257c48_2cb418(0.0f, D_L00_0016187C_2cb418);
             *(f32 *)(effect + 0x10) += jitter;
             jitter = FUN_L00_00257c48_2cb418(0.0f, D_L00_0016187C_2cb418);
@@ -790,13 +811,7 @@ update_effects:
     lifetime = FUN_L00_00257b90_2cb418(FUN_001fef20_2cb418(10), FUN_001fef20_2cb418(15));
     FUN_L00_0026dd20_2cb418(pos, &velocity, 0x7f2f4f6f, lifetime, 30000.0f);
     return;
-cleanup:
-    FUN_L00_002cbcc0(m, 0);
-    FUN_0024eb68_2cb418(m);
-    return;
-cleanup_enabled:
-    FUN_L00_002cbcc0(m, 1);
-    FUN_0024eb68_2cb418(m);
+
 }
 #endif
 #ifndef NON_MATCHING
