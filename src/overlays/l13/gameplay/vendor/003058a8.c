@@ -193,9 +193,6 @@ void FUN_L13_00309370(struct Moby *m) {
     }
     *(float *)(d + 0x1FC) = scale_game_frames(*(int *)&D_L13_00161E84);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003094f8.s", FUN_L13_003094f8);
-#else
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern int FUN_001f9740(int *);
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -204,8 +201,9 @@ extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void make_hit_descriptor(void *, struct Moby *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L13_00309bc8(struct Moby *);
+extern void FUN_L13_003098d0(struct Moby *);
 extern float D_L13_00161E7C __attribute__((sda));
-extern char D_L13_00174140[];
+extern struct { char pad[0x28]; float height; } D_L13_00174140;
 typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) TrailPoint_94f8;
@@ -233,7 +231,8 @@ void FUN_L13_003094f8(struct Moby *moby) {
         TrailHit_94f8 hit;
     } work;
     TrailPoint_94f8 upper, lower;
-    int timer, i, j;
+    int timer, i, j, clamp_count;
+    char *clamp_cursor;
     float prior_height, dot;
 
     timer = func_001FA898_r(data->anchor.w);
@@ -242,40 +241,45 @@ void FUN_L13_003094f8(struct Moby *moby) {
     if (!timer) return;
 
     if (timer == 20) {
-        for (i = 0; i < 16; i++) {
-            if (data->point[i].w >= 1.0f) data->point[i].w = 0.98f;
+        for (clamp_cursor = (char *)data, clamp_count = 15; clamp_count >= 0;
+             clamp_count--, clamp_cursor += 16) {
+            if (*(float *)(clamp_cursor + 0x21c) >= 1.0f)
+                *(float *)(clamp_cursor + 0x21c) = 0.98f;
         }
     }
 
-    for (i = 0; i != 16; i++) {
-        subtract_vector_xyz(&next, &data->point[i], &data->anchor);
+    i = 15;
+    do {
+        subtract_vector_xyz(&next, &data->point[15 - i], &data->anchor);
         next.z = 0.0f;
         normalize_vector_xyz(&next, &next, D_L13_00161E7C * frame_time);
-        add_vector_xyz(&next, &data->point[i], &next);
+        add_vector_xyz(&next, &data->point[15 - i], &next);
         subtract_vector_xyz(&work.vectors.delta, &next, &moby->pos);
         dot = dot_vector_xyz(&work.vectors.delta, &data->direction);
         normalize_vector_xyz(&work.vectors.scaled, &data->direction, -dot + 0.35f);
         add_vector_xyz(&work.vectors.delta, &work.vectors.delta, &work.vectors.scaled);
         prior_height = work.vectors.scaled.z;
-        qcopy(&upper, &data->point[i]);
+        qcopy(&upper, &data->point[15 - i]);
         upper.z = upper.z + 1.0f;
-        qcopy(&lower, &data->point[i]);
+        qcopy(&lower, &data->point[15 - i]);
         lower.z = lower.z - 3.0f;
         if (FUN_001efa68(&upper, &lower, 2, 0, 0) != 0 && prior_height < next.z) {
-            approach_value(&next.z, *(float *)(D_L13_00174140 + 0x28) + 0.35f,
+            approach_value(&next.z, D_L13_00174140.height + 0.35f,
                            frame_time * 4.0f);
         }
-        if (1.0f <= data->point[i].w &&
-            FUN_001efa68(&data->point[i], &next, 2, 0, 0)) {
+        if (1.0f <= data->point[15 - i].w &&
+            FUN_001efa68(&data->point[15 - i], &next, 2, 0, 0)) {
             next.w = 0.98f;
         } else {
             if (next.w < 1.0f)
                 approach_value(&next.w, 0.0f, frame_time + frame_time);
         }
-        qcopy(&data->point[i], &next);
-    }
+        qcopy(&data->point[15 - i], &next);
+        i--;
+    } while (i >= 0);
 
-    for (j = 0; j < 15; j++) {
+    j = 0;
+    do {
         if (data->point[j].w >= 0.98f && data->point[j + 1].w >= 0.98f) {
             next.x = fast_cos(moby->rot.z);
             next.y = fast_sin(moby->rot.z);
@@ -287,11 +291,11 @@ void FUN_L13_003094f8(struct Moby *moby) {
             work.hit.b = 1;
             FUN_001efa68(&data->point[j], &data->point[j + 1], 0, moby, &work.hit);
         }
-    }
-    enqueue_callback_list_1((void *)0x3098d0, moby);
+        j++;
+    } while (j < 15);
+    enqueue_callback_list_1((void *)FUN_L13_003098d0, moby);
     FUN_L13_00309bc8(moby);
 }
-#endif
 /* Drives the grid of 22 tiles: sets them up on the first frame, then moves the bobbing platform. */
 
 typedef struct {
