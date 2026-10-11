@@ -1718,59 +1718,10 @@ void follow_camera_transition(O002e5730 *o, void *a) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E6CE0); names and data translated to the US level program. */
 
-/*
- * State of the follow camera, at UpdateCam +0x70 (the record's saved state).
- * FUN_L00_002e4fe8 writes `velocity`, follow_camera_transition reads the same block
- * for its spring constants, and FUN_001f9770 (fast_dec_timer) counts
- * `blend_timer` down.
- */
-typedef struct {
-    f32 focus[4];          /* 0x40: point the camera looks at, moved by velocity each frame */
-    f32 velocity[4];       /* 0x50: focus displacement for this frame */
-    u8 pad60[0x20];
-    f32 look_target[4];    /* 0x80: focus offset blended towards the hero */
-    f32 eye[4];            /* 0x90: resulting camera position */
-    f32 offset[4];         /* 0xA0: eased offset, split into a lateral and an up part */
-    f32 lateral_ease[4];   /* 0xB0: cam_interp_values state of the lateral part */
-    f32 up_ease[4];        /* 0xC0: cam_interp_values state of the up part */
-    u8 padD0[0x20];
-    f32 look_height;       /* 0xF0: height of look_target above the hero */
-    u8 padF4[0x22];
-    u8 blending_in;        /* 0x116: nonzero while blend_timer counts up */
-    u8 pad117;
-    s16 blend_timer;       /* 0x118: frames into the focus blend */
-    u8 pad11A[2];
-    f32 lateral_stiffness; /* 0x11C */
-    f32 lateral_damping;   /* 0x120 */
-    f32 up_stiffness;      /* 0x124 */
-    f32 up_damping;        /* 0x128 */
-    u8 pad12C[4];
-} FollowCamBlock;
-
-typedef struct {
-    u8 pad130[0x30];
-    f32 distance;          /* 0x160: distance of the eye behind the hero */
-    u8 pad164[0xA8];
-    f32 zoom_scale;        /* 0x20C */
-    f32 zoom;              /* 0x210: 1.0 is no zoom */
-    f32 zoom_range;        /* 0x214 */
-} FollowCamTail;
-
-typedef struct {
-    u8 pad0[0x40];
-    FollowCamBlock follow; /* 0x40 */
-    FollowCamTail tail;    /* 0x130 */
-} FollowCamState;
-
-/* The camera record (UpdateCam); its saved state holds the follow camera. */
-typedef struct {
-    u8 pad0[0x70];
-    FollowCamState *state;
-} FollowCam;
+#include "rnc/gameplay/camera/follow_cam.h"
 
 /* The camera view: +0x20 its forward axis, +0x30 its up axis. */
 extern u8 camera_view[] __asm__("D_L00_00166E10");
-extern FollowCam *current_follow_cam __asm__("D_L00_00166E00") __attribute__((section(".data")));
 extern f32 follow_cam_min_distance __asm__("D_L00_00161CD8") __attribute__((sda));
 extern s32 follow_cam_blend_frames __asm__("D_L00_00161D20");
 extern s32 camera_collision_mask __asm__("D_L00_0015EF58");
@@ -1798,7 +1749,7 @@ void follow_camera_springs(void *cam) __asm__("FUN_L00_002e5830");
 void follow_camera_springs(void *cam) {
     f32 velocity[4], hero_pos[4], focus[4], up[4], lateral[4], look[4], base[4], probe[4], left[4], diff[4], mid[4];
     u8 *view = camera_view;
-    FollowCamState *s = ((FollowCam *)cam)->state;
+    FollowCamState *s = FOLLOW_CAM_STATE((struct UpdateCam *)cam);
     FollowCamTail *t = &s->tail;
     FollowCamBlock *q = &s->follow;
     f32 len, back;
@@ -1845,7 +1796,7 @@ void follow_camera_springs(void *cam) {
     add_vector_xyz(base, hero_pos, look);
     scale_vector_xyz(look, view + 0x20, t->distance);
     add_vector_xyz(q->eye, look, q);
-    len = follow_cam_min_distance + current_follow_cam->state->tail.zoom_range * current_follow_cam->state->tail.zoom_scale * (current_follow_cam->state->tail.zoom - 1.0f);
+    len = follow_cam_min_distance + FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_range * FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_scale * (FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom - 1.0f);
     scale_vector_xyz(probe, view + 0x20, 20.0f);
     add_vector_xyz(probe, base, probe);
     if (collision_line(base, probe, camera_collision_mask, (s32)hero.moby, 0)) {
