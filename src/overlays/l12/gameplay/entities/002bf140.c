@@ -328,7 +328,7 @@ void FUN_L12_002e3098(struct Moby *moby) {
     float direction[4] __attribute__((aligned(16)));
     float angle, horizontal, vertical, radius;
     int i, j, count, a, b, c, d, life;
-    float *position = pos;
+    float *position;
 
     void *vars = moby->pvars;
 
@@ -336,6 +336,7 @@ void FUN_L12_002e3098(struct Moby *moby) {
     if (moby->state == 15)
         count = truncate_float_to_s32_e3098((float)count * 1.5f);
     if (count > 0) {
+        position = pos;
         i = 0;
         do {
         qcopy(pos, &moby->pos);
