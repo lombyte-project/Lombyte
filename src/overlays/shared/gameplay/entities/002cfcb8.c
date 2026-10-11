@@ -1056,6 +1056,7 @@ void FUN_L00_002d5160(unsigned char *m) {
     f32 vec[4] __attribute__((aligned(16)));
     f32 forceX, forceY, forceZ, forceW, health, duration;
     unsigned char *row;
+    unsigned char *effect;
 
     if (m[0x20] == 0)
         return;
@@ -1075,14 +1076,14 @@ void FUN_L00_002d5160(unsigned char *m) {
         forceZ = D_L00_00161978_2d5160 * D_0015ED6C_2d5160;
         forceW = D_L00_0016197C_2d5160 * D_0015ED6C_2d5160;
         health = *(f32 *)(v + 0x20) - damage;
-        duration = D_0015ED6C_2d5160 + D_0015ED6C_2d5160;
+        *(f32 *)(v + 0x20) = health;
         v[0xAD] = 0;
         *(f32 *)(v + 0x80) = forceX;
         *(f32 *)(v + 0x84) = forceY;
         *(f32 *)(v + 0x88) = forceZ;
         *(f32 *)(v + 0x8C) = forceW;
-        *(f32 *)(v + 0x20) = health;
         *(f32 *)(v + 0x98) = 0.75f;
+        duration = D_0015ED6C_2d5160 + D_0015ED6C_2d5160;
         *(f32 *)(v + 0xBC) = duration;
         *(s32 *)(v + 0x94) = 0x29;
         *(s32 *)(v + 0x90) = 0x200;
@@ -1101,14 +1102,16 @@ void FUN_L00_002d5160(unsigned char *m) {
     FUN_L00_0025d538_2d5160(m, v + 0x60);
     if (m[0x20] == 3) {
         row = D_L00_001B04B0_2d5160[*(s32 *)(v + 0x1E4)];
-        FUN_L00_0025ff38_2d5160(64.0f, m, v + 0x180, 0, 0, row + 0x10, *(s32 *)row);
+        effect = v + 0x180;
+        FUN_L00_0025ff38_2d5160(64.0f, m, effect, 0, 0, row + 0x10, *(s32 *)row);
     } else {
         row = D_L00_001B04B0_2d5160[*(s32 *)(v + 0x1E0)];
-        FUN_L00_0025ff38_2d5160(24.0f, m, v + 0x180, 0, 0, row + 0x10, *(s32 *)row);
+        effect = v + 0x180;
+        FUN_L00_0025ff38_2d5160(24.0f, m, effect, 0, 0, row + 0x10, *(s32 *)row);
     }
     if (*(s32 *)(v + 0x1C0) == 0) {
         *(s32 *)(v + 0x1C0) = D_001413D0_2d5160;
-        *(OvlQuad *)(v + 0x180) = *(OvlQuad *)D_0013F3D0_2d5160;
+        *(OvlQuad *)effect = *(OvlQuad *)D_0013F3D0_2d5160;
     }
     FUN_001fef98_2d5160(v + 0x276);
     if (*(s32 *)(v + 0x38) != 0) {
