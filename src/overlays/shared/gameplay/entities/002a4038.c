@@ -1296,8 +1296,8 @@ void FUN_L02_002ea210(char *moby) {
     int which;
     int frames;
     float angle;
-    frames = scale_game_frames(60);
     data = *(char **)(moby + 0x78);
+    frames = scale_game_frames(60);
     angle = 3.14159274f / (float)frames;
     which = *(short *)(moby + 0xA6) == 0x3ED ? 0x1A : 0x16;
     switch (*(unsigned char *)(moby + 0x20)) {
@@ -1356,7 +1356,7 @@ void FUN_L02_002ea210(char *moby) {
         float output[4];
         a[0] = 91.2f; a[1] = 270.21f; a[2] = 64.85f; a[3] = 0.0f;
         b[0] = 106.98f; b[1] = 273.46f; b[2] = 62.65f; b[3] = 0.0f;
-        c[0] = 0.33f; c[1] = 0.55f; c[2] = 0.07f; c[3] = 0.0f;
+        c[0] = 0.07f; c[1] = 0.33f; c[2] = 0.55f; c[3] = 0.0f;
         d[0] = 0.07f; d[1] = 0.43f; d[2] = 0.72f; d[3] = 0.0f;
         ea210_approach(1.0f, D_0015ED70 * 0.15f, D_0015ED70 * 0.15f,
                        D_0015ED6C * 0.15f, data + 0x40, data + 0x44);
