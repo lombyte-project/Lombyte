@@ -540,7 +540,149 @@ void FUN_L08_00306b30(u8 *object, s32 mode)
         break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00307540.s", FUN_L08_00307540);
+#else
+typedef struct {
+    u16 count;
+    u16 best;
+    u32 flags;
+} VendorEventRecord;
+
+extern VendorEventRecord D_00141968[];
+extern s32 D_0015EEA4;
+extern s32 D_001413DC NOT_SDA;
+extern s32 D_001413D4 NOT_SDA;
+extern u8 D_0013D413 NOT_SDA;
+extern u8 D_0013D4DD NOT_SDA;
+extern u8 D_0013D4DC NOT_SDA;
+extern u8 D_0013D3B7 NOT_SDA;
+extern u8 D_0013DD4A NOT_SDA;
+extern s32 D_0015ED84;
+extern s32 D_0013F5E0[];
+extern char D_0013F3D0[];
+extern s32 FUN_00269ee0(void *, s32) __asm__("FUN_00214720");
+extern s32 FUN_00211a30(s32) __asm__("FUN_001f96f8");
+extern void FUN_00216488(s32, s32) __asm__("FUN_L00_00203908");
+extern void FUN_00296038(s32, s32, s32) __asm__("FUN_0022db10");
+extern void FUN_0026dbd0(s32, s32) __asm__("FUN_L00_00263d40");
+extern f32 FUN_00211f18(void *, void *) __asm__("FUN_001f9ab0");
+
+typedef struct {
+    s32 first;
+    s32 second;
+    s32 third;
+    s32 fourth;
+    s32 state;
+} VendorEventData;
+
+void FUN_L08_00307540(struct Moby *moby) {
+    VendorEventData *data = *(VendorEventData **)((char *)moby + 0x78);
+    s32 elapsed;
+    volatile s32 limit;
+    s32 time;
+    s32 level;
+    s32 volume[4];
+
+    switch (data->state) {
+    case 0:
+        if (FUN_00269ee0(D_0013F3D0, data->third) && D_001413DC == 15)
+            data->state = 1;
+        break;
+    case 1:
+        if (D_001413D4 == 0x42) {
+            data->state = 0;
+        } else if (FUN_00269ee0(D_0013F3D0, data->fourth) && D_0013D413 == 0) {
+            D_0013D413 = 1;
+            FUN_00296038(1, 0, 0);
+            FUN_0026dbd0(0x53d6, -1);
+        }
+        break;
+    }
+    if (D_0013D4DD == 0) {
+        if (FUN_00269ee0(D_0013F3D0, data->first)) {
+            elapsed = FUN_00211a30(D_0015EEA4) - D_00141968[48].best * 600;
+            limit = FUN_00211a30(18);
+            if ((s32)((f32)limit * 60.0f) < elapsed || D_00141968[48].best * 600 == 0) {
+                FUN_00216488(8000, 0x30);
+            } else {
+                time = FUN_00211a30(D_0015EEA4) / 600;
+                if (D_00141968[48].best < time)
+                    D_00141968[48].best = FUN_00211a30(D_0015EEA4) / 600;
+            }
+        }
+    }
+    if (D_0013D4DD != 0) {
+        if (FUN_00269ee0(D_0013F3D0, data->first) && D_0013D3B7 == 0) {
+            if (D_00141968[49].count == 0) {
+                D_00141968[49].count = 1;
+                level = D_0015ED84;
+                time = FUN_00211a30(D_0015EEA4) / 600;
+                if (D_00141968[49].best < time) {
+                    D_00141968[49].best = FUN_00211a30(D_0015EEA4) / 600;
+                    level = D_0015ED84;
+                }
+                D_00141968[49].flags |= (1 << level) | 0x80000000;
+            } else {
+                elapsed = FUN_00211a30(D_0015EEA4) - D_00141968[49].best * 600;
+                limit = FUN_00211a30(18);
+                if ((s32)((f32)limit * 60.0f) < elapsed || D_00141968[49].best * 600 == 0) {
+                    FUN_00216488(8001, 0x31);
+                } else {
+                    time = FUN_00211a30(D_0015EEA4) / 600;
+                    if (D_00141968[49].best < time)
+                        D_00141968[49].best = FUN_00211a30(D_0015EEA4) / 600;
+                }
+            }
+        }
+    }
+    if (D_0013D4DC == 0) {
+        if (FUN_00269ee0(D_0013F3D0, data->second) && D_0013DD4A != 0) {
+            elapsed = FUN_00211a30(D_0015EEA4) - D_00141968[51].best * 600;
+            limit = FUN_00211a30(18);
+            if ((s32)((f32)limit * 60.0f) < elapsed || D_00141968[51].best * 600 == 0) {
+                FUN_00216488(8002, 0x32);
+            } else {
+                time = FUN_00211a30(D_0015EEA4) / 600;
+                if (D_00141968[51].best < time)
+                    D_00141968[51].best = FUN_00211a30(D_0015EEA4) / 600;
+            }
+        }
+    }
+    if (D_0013D4DC != 0) {
+        if (FUN_00269ee0(D_0013F3D0, data->second) && D_0013DD4A != 0) {
+            if (D_00141968[112].count == 0) {
+                D_00141968[112].count = 1;
+                level = D_0015ED84;
+                time = FUN_00211a30(D_0015EEA4) / 600;
+                if (D_00141968[112].best < time) {
+                    D_00141968[112].best = FUN_00211a30(D_0015EEA4) / 600;
+                    level = D_0015ED84;
+                }
+                D_00141968[112].flags |= (1 << level) | 0x80000000;
+            } else {
+                elapsed = FUN_00211a30(D_0015EEA4) - D_00141968[112].best * 600;
+                limit = FUN_00211a30(18);
+                if ((s32)((f32)limit * 60.0f) < elapsed || D_00141968[112].best * 600 == 0) {
+                    FUN_00216488(8005, 0x70);
+                } else {
+                    time = FUN_00211a30(D_0015EEA4) / 600;
+                    if (D_00141968[112].best < time)
+                        D_00141968[112].best = FUN_00211a30(D_0015EEA4) / 600;
+                }
+            }
+        }
+    }
+    volume[0] = 0;
+    volume[1] = 0;
+    volume[2] = 0xbf800000;
+    volume[3] = 0;
+    if (FUN_00211f18(D_0013F5E0, volume) < 0.1f)
+        D_00141968[112].count = -1;
+    if (D_0013D3B7 == 0 && D_001413DC == 15)
+        D_0013D3B7 = 1;
+}
+#endif
 
 /* per-frame update of a moby that fires a sound event when the game state allows */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_00309998), where it is exact; names translated to the US level program. */
