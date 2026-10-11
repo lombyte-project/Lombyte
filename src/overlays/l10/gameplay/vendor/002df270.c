@@ -1321,7 +1321,114 @@ state_one:
     }
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e85b8.s", FUN_L10_002e85b8);
+#else
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern int FUN_L00_00203908(int, int);
+extern u32 D_001413DC __attribute__((section(".data")));
+extern u8 D_0013D38C __attribute__((section(".data")));
+extern u8 D_0013D38D __attribute__((section(".data")));
+extern u8 D_0013D504 __attribute__((section(".data")));
+extern u8 D_0013D4CB __attribute__((section(".data")));
+extern u16 D_00141B10 __attribute__((section(".data")));
+extern u16 D_00141B18 __attribute__((section(".data")));
+extern u16 D_00141B20 __attribute__((section(".data")));
+extern u16 D_00141B28 __attribute__((section(".data")));
+extern u16 D_00141C48 __attribute__((section(".data")));
+extern u16 D_00141CB8 __attribute__((section(".data")));
+extern u16 D_00141CC0 __attribute__((section(".data")));
+extern u16 D_00141CC2 __attribute__((section(".data")));
+extern u32 D_00141CC4 __attribute__((section(".data")));
+#define D_00179890 (*(volatile s32 *)(0x00180000 - 0x6770))
+#define D_001798B4 (*(volatile s32 *)(0x00180000 - 0x674c))
+extern s32 D_L10_0015FFE4 __attribute__((section(".data")));
+extern s32 D_L10_0015F5C4 __attribute__((section(".data")));
+extern s32 D_L10_0015ED84 __attribute__((section(".data")));
+extern s32 D_L10_00161F38 __attribute__((sda));
+extern s32 D_L10_0015EEA4 __attribute__((sda));
+extern s32 D_L10_0015ED84_sda __asm__("D_L10_0015ED84") __attribute__((sda));
+
+void FUN_L10_002e85b8(struct Moby *moby) {
+    int *data = (int *)moby->pvars;
+    struct Moby *other;
+    int found = 0;
+    int frame;
+    int elapsed;
+
+    if (is_point_inside_clip_volume(D_0013F3D0, data[7]))
+        D_L10_00161F38 = 1;
+    else
+        D_L10_00161F38 = 0;
+    if (moby->state == 0) {
+        moby->state = 1;
+        moby->unk30 = 0xff;
+        return;
+    }
+    if (moby->state != 1) return;
+
+    if (is_point_inside_clip_volume(D_0013F3D0, data[0]) &&
+        (D_001413DC < 2 || D_001413DC == 9) &&
+        D_00179890 == 0 && D_001798B4 == -1 && D_00141B10 == 0)
+        FUN_L00_00203908(0x2710, 0x35);
+
+    if (is_point_inside_clip_volume(D_0013F3D0, data[1]) &&
+        (D_001413DC < 2 || D_001413DC == 9) &&
+        D_00179890 == 0 && D_001798B4 == -1) {
+        if (D_0013D38C == 0) {
+            if (D_00141B20 == 0) FUN_L00_00203908(0x2712, 0x37);
+        } else if (D_0013D38D == 0 && D_00141B28 == 0) {
+            FUN_L00_00203908(0x2713, 0x38);
+        }
+    }
+    if (D_L10_0015F5C4 == 0 && D_0013D504 && D_00179890 == 0 &&
+        D_001798B4 == -1 && D_00141B18 == 0)
+        FUN_L00_00203908(0x2711, 0x36);
+
+    if (is_point_inside_clip_volume(D_0013F3D0, data[2]) &&
+        (D_001413DC < 2 || D_001413DC == 9) && D_0013D4CB == 0 &&
+        D_00179890 == 0 && D_001798B4 == -1 && D_00141C48 == 0)
+        FUN_L00_00203908(0x2715, 0x5c);
+
+    other = (struct Moby *)D_L10_0015FFE4;
+    while (other != 0) {
+        if (other->oclass == 0x359) found |= (other->state != 1);
+        other = other->next;
+    }
+    if (!found) return;
+
+    if (data[4] != -1 && vector_distance(D_0013F3D0,
+            (char *)D_L10_0015FFD8 + data[4] * 256 + 0x10) < 15.0f &&
+        data[5] != -1 && vector_distance(D_0013F3D0,
+            (char *)D_L10_0015FFD8 + data[5] * 256 + 0x10) < 15.0f &&
+        D_00141CB8 == 0)
+        FUN_L00_00203908(0x2717, 0x6a);
+
+    if (is_point_inside_clip_volume(D_0013F3D0, data[6]) && data[8] != -1) {
+        other = (struct Moby *)((char *)D_L10_0015FFD8 + data[8] * 256);
+        if (other->oclass == 0x3f7 && other->state != 4) {
+            if (D_00141CC0 == 0) {
+                D_00141CC0 = 1;
+                frame = scale_game_frames(D_L10_0015EEA4);
+                if (D_00141CC2 < frame / 600) {
+                    D_00141CC2 = scale_game_frames(D_L10_0015EEA4) / 600;
+                    D_L10_0015ED84_sda = D_L10_0015ED84;
+                }
+                D_00141CC4 |= (1 << (D_L10_0015ED84_sda & 31)) | 0x80000000;
+            } else {
+                frame = scale_game_frames(D_L10_0015EEA4);
+                elapsed = frame - D_00141CC2 * 600;
+                if ((int)((float)scale_game_frames(0x12) * 60.0f) < elapsed ||
+                    D_00141CC2 * 600 == 0) {
+                    FUN_L00_00203908(0x2718, 0x6b);
+                } else if (D_00141CC2 < scale_game_frames(D_L10_0015EEA4) / 600) {
+                    D_00141CC2 = scale_game_frames(D_L10_0015EEA4) / 600;
+                }
+            }
+        }
+    }
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e8ab0.s", FUN_L10_002e8ab0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e9648.s", FUN_L10_002e9648);
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EAD50), where it is exact; names translated to the US level program. */
