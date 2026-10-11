@@ -642,8 +642,8 @@ extern s32 FUN_L00_00235a70(char *, s32 *, s32 *);
 
 s32 FUN_L00_00238f88(char *rec) {
     s32 x, y, half_w, half_h, alpha;
-    volatile s32 marker_alpha;
-    s32 i, icon_x, icon_y, selected, entry_offset, marker_offset, normal_offset;
+    s32 marker_alpha;
+    s32 i, icon_x, icon_y, selected, entry_offset, marker_offset, normal_offset, count, extra_offset;
     s32 color, shadow, text_y;
     f32 open, fade, phase, angle, radius;
     const char *text;
@@ -658,6 +658,7 @@ s32 FUN_L00_00238f88(char *rec) {
     if (1.0f < fade) fade = 1.0f;
     else if (fade < 0.0f) fade = 0.0f;
 
+    i = 0;
     phase = convert_integer_to_float(D_L00_0015F5CC % D_L00_0015F7B0) /
             convert_integer_to_float(D_L00_0015F7B0);
     angle = fast_sin(phase * 6.28318f - 3.14159f);
@@ -677,39 +678,49 @@ s32 FUN_L00_00238f88(char *rec) {
     draw_hud_sprite(get_icon_frame(0xe934, 1), x,
                     y + D_L00_0015F71C, half_w, -half_h, alpha);
 
-    if (D_L00_0015FA90 > 0) {
-        entry_offset = 0;
-        marker_offset = 0;
+    count = D_L00_0015FA90;
+    if (count > 0) {
+        extra_offset = 0;
         normal_offset = 0;
-        for (i = 0; i < D_L00_0015FA90; i++) {
+        marker_offset = 0;
+        entry_offset = 0;
+        do {
             angle = fast_add_rotations(((f32)i + (f32)i) * 3.1415927f /
-                                       (f32)D_L00_0015FA90 - 3.1415927f, 1.5707964f);
+                                       (f32)count - 3.1415927f, 1.5707964f);
             icon_x = x + D_L00_0015F720 +
                      (s32)(D_L00_0015F78C * fast_cos(angle) * D_L00_0015F7C4);
             icon_y = y + D_L00_0015F724 +
                      (s32)(D_L00_0015F78C * fast_sin(angle));
-            entry = D_L00_0015FAC0_c[D_L00_0015F72C];
-            if (*(s32 *)(rec + 0x74) == i && *(s32 *)((char *)entry + marker_offset) != 0)
-                draw_hud_sprite(get_icon_frame(0xe99c, 0), icon_x - 0x13,
-                                icon_y - 0x13, 0x26, 0x26, marker_alpha);
+            if (*(s32 *)(rec + 0x74) == i) {
+                entry = D_L00_0015FAC0_c[D_L00_0015F72C];
+                if (*(s32 *)((char *)entry + marker_offset) != 0)
+                    draw_hud_sprite(get_icon_frame(0xe99c, 0), icon_x - 0x13,
+                                    icon_y - 0x13, 0x26, 0x26, marker_alpha);
+            }
             entry = D_L00_0015FAC0_c[D_L00_0015F72C];
             if (*(s32 *)((char *)entry + entry_offset) != 0) {
-                s32 icon_alpha = alpha;
+                s32 icon_alpha;
                 if (i != *(s32 *)(rec + 0x74))
                     icon_alpha = truncate_float_to_s32((f32)alpha * D_L00_0015F7C0);
-                entry = D_L00_0015FAC0_c[D_L00_0015F72C];
+                else
+                    icon_alpha = alpha;
                 if (D_L00_0017E504 == 0) {
+                    entry = D_L00_0015FAC0_c[D_L00_0015F72C];
                     draw_hud_icon(rec, get_icon_frame(*(s32 *)((char *)entry + entry_offset), *(s32 *)((char *)entry + entry_offset + 4) + 4),
                                   icon_x, icon_y, 1, alpha);
                 } else {
-                    draw_hud_icon(rec, get_icon_frame(*(s32 *)((char *)entry + normal_offset), *(s32 *)((char *)entry + normal_offset + 4)),
+                    entry = D_L00_0015FAC0_c[D_L00_0015F72C];
+                    draw_hud_icon(rec, get_icon_frame(*(s32 *)((char *)entry + extra_offset), *(s32 *)((char *)entry + normal_offset + 4)),
                                   icon_x, icon_y, 1, icon_alpha);
                 }
             }
-            entry_offset += 0x1c;
-            marker_offset += 0x1c;
+            extra_offset += 0x1c;
             normal_offset += 0x1c;
-        }
+            marker_offset += 0x1c;
+            entry_offset += 0x1c;
+            i++;
+            count = D_L00_0015FA90;
+        } while (i < count);
     }
     selected = *(s32 *)(rec + 0x74);
     if (selected >= 0 && D_L00_0015FAC0_c[D_L00_0015F72C][selected].f0 != 0) {
