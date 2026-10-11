@@ -1004,7 +1004,170 @@ void FUN_L15_002ec030(struct Moby *moby) {
 }
 #endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ec760.s", FUN_L15_002ec760);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ed398.s", FUN_L15_002ed398);
+#else
+extern int D_L15_0015F5A4;
+extern int D_L15_0015FFD8;
+extern unsigned int D_001413DC;
+extern float D_0013F3D0[];
+extern int D_001413D4;
+extern int D_001413D0;
+extern unsigned char D_001413F4;
+extern unsigned char D_0013D4DF;
+extern unsigned char D_0013D4C4;
+extern unsigned char D_0013D3F6;
+extern unsigned char D_0013D3F7;
+extern int D_L15_00179A10;
+extern int D_L15_00179A34;
+extern unsigned short D_00141D42;
+extern unsigned short D_00141D48;
+extern unsigned short D_00141DA8;
+extern unsigned short D_00141D4A;
+extern unsigned int D_00141D4C;
+extern int D_00141D54;
+extern int D_00141D6C;
+extern unsigned int D_00141D7C;
+extern unsigned short D_00141DB0;
+extern unsigned short D_00141630;
+extern int D_L15_00161AC0;
+extern int D_L15_0015EEA4;
+extern int D_L15_0015ED84;
+extern int FUN_001f96f8(int) __asm__("FUN_001f96f8");
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern void FUN_L00_00203908(int, int) __asm__("FUN_L00_00203908");
+extern int FUN_L00_0020d568(void) __asm__("FUN_L00_0020d568");
+
+void FUN_L15_002ed398(struct Moby *moby) {
+    int *data = (int *)moby->pvars;
+    int i, found, target, index, *p;
+    unsigned char *m;
+    unsigned char state = moby->state;
+    unsigned char *flags;
+    int v;
+    switch (state) {
+    case 0:
+        moby->unk30 = 0xFF;
+        data[13] = FUN_001f96f8(0x4B0);
+        moby->state = 1;
+        break;
+    case 1:
+        v = D_L15_0015F5A4;
+        index = data[4];
+        if (index != -1 &&
+            (m = (unsigned char *)(D_L15_0015FFD8 + (index << 8))) != 0 &&
+            *(short *)(m + 0xA6) == 0x4E &&
+            m[0x20] != 0xFE && m[0x20] != 0xFD && m[0x20] != 3 &&
+            is_point_inside_clip_volume(D_0013F3D0, data[3]) &&
+            (D_001413DC < 2 || D_001413DC == 9) &&
+            D_L15_00179A10 == 0 && D_L15_00179A34 == -1) {
+            if (D_0013D4DF == 0) {
+                int elapsed = FUN_001f96f8(D_L15_0015EEA4) - D_00141D42 * 600;
+                if ((int)((float)FUN_001f96f8(0x12) * 60.0f) < elapsed ||
+                    D_00141D42 * 600 == 0) {
+                    FUN_L00_00203908(0x3A98, 0x7B);
+                } else if (D_00141D42 < FUN_001f96f8(D_L15_0015EEA4) / 600) {
+                    D_00141D42 = FUN_001f96f8(D_L15_0015EEA4) / 600;
+                }
+            } else if (D_00141D48 == 0) {
+                D_00141D48 = 1;
+                if (D_00141D4A < FUN_001f96f8(D_L15_0015EEA4) / 600)
+                    D_00141D4A = FUN_001f96f8(D_L15_0015EEA4) / 600;
+                D_00141D4C = D_00141D4C | (600u << (D_L15_0015ED84 & 31)) | 0x80000000u;
+            } else {
+                int elapsed = FUN_001f96f8(D_L15_0015EEA4) - D_00141D4A * 600;
+                if ((int)((float)FUN_001f96f8(0x12) * 60.0f) < elapsed ||
+                    D_00141D4A * 600 == 0) {
+                    FUN_L00_00203908(0x3A99, 0x7C);
+                } else if (D_00141D4A < FUN_001f96f8(D_L15_0015EEA4) / 600) {
+                    D_00141D4A = FUN_001f96f8(D_L15_0015EEA4) / 600;
+                }
+            }
+        }
+        v = D_L15_0015F5A4;
+        if (v && D_L15_00179A10 == 0 &&
+            D_L15_00179A34 == -1 && D_00141DB0 == 0) {
+            FUN_L00_00203908(0x3A9F, 0x89);
+            D_L15_0015F5A4 = 0;
+        }
+        if (is_point_inside_clip_volume(D_0013F3D0, data[21]) &&
+            D_001413F4 == 3 && D_00141630 == 0 &&
+            D_L15_00161AC0 == 0 && D_00141DA8 == 0) {
+            FUN_L00_00203908(0x3A9E, 0x88);
+        }
+        flags = &D_0013D3F6;
+        target = -1;
+        index = -1;
+        found = 0;
+        for (i = 0; i < 1; i++) {
+            p = data + i;
+            if (is_point_inside_clip_volume(D_0013F3D0, *p)) {
+                target = *p;
+                index = p[4];
+                found = 1;
+                break;
+            }
+        }
+        if (found)
+            data[15]++;
+        else {
+            data[15] = 0;
+            data[16] = -1;
+        }
+        if (index != -1 &&
+            (m = (unsigned char *)(D_L15_0015FFD8 + (index << 8))) != 0 &&
+            *(short *)(m + 0xA6) == 0x4E &&
+            m[0x20] != 0xFE && m[0x20] != 0xFD && m[0x20] != 3 &&
+            data[13] < data[15] && target != -1 && target != data[16] &&
+            (D_001413DC < 2 || D_001413DC == 9) &&
+            D_L15_00179A10 == 0 && D_L15_00179A34 == -1 && D_0013D4DF) {
+            data[13] = FUN_001f96f8(0x708);
+            if (D_00141D54 >= 0)
+                FUN_L00_00203908(0x3A9A, 0x7D);
+            data[16] = target;
+            data[15] = 0;
+        }
+        if (*(unsigned char *)(D_001413D0 + 0x52) == 12 && D_001413F4 == 2)
+            flags[1] = 1;
+        if (is_point_inside_clip_volume(D_0013F3D0, data[7]) &&
+            D_001413F4 == 2 && flags[1] == 0 &&
+            D_L15_00179A10 == 0 && D_L15_00179A34 == -1 && D_00141D6C >= 0)
+            FUN_L00_00203908(0x3A9C, 0x80);
+        if (is_point_inside_clip_volume(D_0013F3D0, data[8]) &&
+            D_L15_00179A10 == 0 && D_L15_00179A34 == -1 &&
+            D_0013D4C4 == 0 &&
+            (D_00141D7C & (1 << (D_L15_0015ED84 & 31))) == 0)
+            FUN_L00_00203908(0x3A9D, 0x82);
+        target = -1;
+        found = 0;
+        p = data + 8;
+        for (i = 0; i < 3; i++, p++) {
+            if (is_point_inside_clip_volume(D_0013F3D0, *p)) {
+                found = 1;
+                if (data[16] != *p)
+                    target = *p;
+                break;
+            }
+        }
+        if (!found || (++data[14], D_001413D4 == 0x35)) {
+            data[14] = 0;
+            data[16] = -1;
+        }
+        v = FUN_001f96f8(0xE10);
+        if (v < data[14] && target != -1 &&
+            FUN_L00_0020d568() && D_L15_00179A10 == 0 &&
+            D_L15_00179A34 == -1 && D_0013D4C4) {
+            FUN_L00_00203908(0x4E2E, 0x78);
+            data[16] = target;
+            data[14] = 0;
+        }
+        if (flags[0] == 0 &&
+            is_point_inside_clip_volume(D_0013F3D0, data[11]))
+            flags[0] = 1;
+        break;
+    }
+}
+#endif
 /* Waits for state 1, then passes the slot for the level's current mode to FUN_L00_002637f8. */
 struct L15MissionState {
     char pad0[0x30];
