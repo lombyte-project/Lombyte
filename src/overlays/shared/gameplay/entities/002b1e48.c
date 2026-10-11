@@ -205,5 +205,152 @@ void FUN_L07_0030bf90(unsigned char *moby)
         break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00310df0.s", FUN_L07_00310df0);
+#else
+extern u8 *D_L07_0015FFD8_310df0 __asm__("D_L07_0015FFD8") __attribute__((sda));
+extern f32 D_0015ED6C_310df0 __asm__("D_0015ED6C");
+extern void add_vector_xyz_310df0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern f32 vector_length_xyz_310df0(void *) __asm__("FUN_001f9af0");
+extern void scale_vector_xyz_310df0(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz_310df0(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void play_sound_310df0(s32, s32, void *) __asm__("FUN_0022da68");
+
+void FUN_L07_00310df0(u8 *moby)
+{
+    u8 *data = *(u8 **)(moby + 0x78);
+    u8 *other;
+    u8 *position;
+    f32 vectors[8];
+    f32 distance;
+    s32 index;
+    u8 state;
+    typedef u32 quadword __attribute__((mode(TI), aligned(16)));
+
+    if (moby[0xb0] != 0xff &&
+        D_0014C150_30D370[moby[0xb0] + D_0015ED84 * 16] == 0xff)
+        *(s32 *)(data + 0x10) = -1;
+
+    state = moby[0x20];
+    switch (state) {
+    case 0:
+        *(quadword *)data = *(quadword *)(moby + 0x10);
+        index = *(s32 *)(data + 0x38);
+        if (index != -1)
+            *(s32 *)(0x184528 + (index << 2)) = 0;
+        moby[0x20] = 1;
+        *(s32 *)(data + 0x0c) = 0;
+        return;
+    case 1:
+        index = *(s32 *)(data + 0x38);
+        if (index != -1)
+            *(s32 *)(0x184528 + (index << 2)) = 0;
+        index = *(s32 *)(data + 0x10);
+        if (index != -1) {
+            other = D_L07_0015FFD8_310df0 + index * 0x100;
+            if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
+                other[0x20] != *(u32 *)(data + 0x14))
+                return;
+        }
+        *(quadword *)(vectors + 4) = 0;
+        vectors[4] = *(f32 *)(data + 0x1c);
+        vectors[5] = *(f32 *)(data + 0x20);
+        vectors[6] = *(f32 *)(data + 0x24);
+        vectors[0] = vectors[4]; vectors[1] = vectors[5]; vectors[2] = vectors[6]; vectors[3] = vectors[7];
+        *(f32 *)(data + 0x0c) = vector_length_xyz_310df0(vectors);
+        if (*(s32 *)(data + 0x30) != -1)
+            play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
+        state = 2;
+        break;
+    case 2:
+        index = *(s32 *)(data + 0x38);
+        if (index != -1)
+            *(s32 *)(0x184528 + (index << 2)) = 1;
+        index = *(s32 *)(data + 0x10);
+        if (index != -1) {
+            other = D_L07_0015FFD8_310df0 + index * 0x100;
+            if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
+                other[0x20] == *(u32 *)(data + 0x18)) {
+                if (*(s32 *)(data + 0x30) != -1)
+                    play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
+                state = 4;
+                break;
+            }
+        }
+        *(quadword *)(vectors + 4) = 0;
+        vectors[4] = *(f32 *)(data + 0x1c);
+        vectors[5] = *(f32 *)(data + 0x20);
+        vectors[6] = *(f32 *)(data + 0x24);
+        vectors[0] = vectors[4]; vectors[1] = vectors[5]; vectors[2] = vectors[6]; vectors[3] = vectors[7];
+        position = moby + 0x10;
+        subtract_vector_xyz_310df0(vectors, vectors, moby + 0xc0);
+        scale_vector_xyz_310df0(vectors + 4, vectors, *(f32 *)(data + 0x28) * D_0015ED6C_310df0);
+        add_vector_xyz_310df0(position, position, vectors + 4);
+        *(f32 *)(data + 0x0c) -= *(f32 *)(data + 0x28) * D_0015ED6C_310df0;
+        if (!(*(f32 *)(data + 0x0c) < 0.0f))
+            return;
+        add_vector_xyz_310df0(position, data, vectors);
+        *(s32 *)(data + 0x0c) = 0;
+        moby[0x20] = 3;
+        if (*(s32 *)(data + 0x34) != -1)
+            play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
+        return;
+    case 3:
+        index = *(s32 *)(data + 0x38);
+        if (index != -1)
+            *(s32 *)(0x184528 + (index << 2)) = 1;
+        index = *(s32 *)(data + 0x10);
+        if (index == -1)
+            return;
+        other = D_L07_0015FFD8_310df0 + index * 0x100;
+        if (other == 0 || other[0x20] == 0xfe || other[0x20] == 0xfd ||
+            other[0x20] != *(u32 *)(data + 0x18))
+            return;
+        *(s32 *)(data + 0x0c) = 0;
+        if (*(s32 *)(data + 0x30) != -1)
+            play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
+        state = 4;
+        break;
+    case 4:
+        index = *(s32 *)(data + 0x38);
+        if (index != -1)
+            *(s32 *)(0x184528 + (index << 2)) = 0;
+        index = *(s32 *)(data + 0x10);
+        if (index == -1 ||
+            (other = D_L07_0015FFD8_310df0 + index * 0x100) == 0 ||
+            other[0x20] == 0xfe || other[0x20] == 0xfd ||
+            other[0x20] == *(u32 *)(data + 0x14)) {
+            if (*(s32 *)(data + 0x30) != -1)
+                play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
+            state = 2;
+        } else {
+            *(quadword *)(vectors + 4) = 0;
+            vectors[4] = *(f32 *)(data + 0x1c);
+            vectors[5] = *(f32 *)(data + 0x20);
+            vectors[6] = *(f32 *)(data + 0x24);
+            vectors[0] = vectors[4]; vectors[1] = vectors[5]; vectors[2] = vectors[6]; vectors[3] = vectors[7];
+            position = moby + 0x10;
+            distance = vector_length_xyz_310df0(vectors);
+            scale_vector_xyz_310df0(vectors, vectors, -(*(f32 *)(data + 0x2c) * D_0015ED6C_310df0));
+            subtract_vector_xyz_310df0(vectors + 4, vectors, moby + 0xc0);
+            add_vector_xyz_310df0(position, position, vectors + 4);
+            *(f32 *)(data + 0x0c) += *(f32 *)(data + 0x2c) * D_0015ED6C_310df0;
+            if (!(distance < *(f32 *)(data + 0x0c)))
+                return;
+            __builtin_memcpy(position, data, 16);
+            if (*(s32 *)(data + 0x30) != -1)
+                play_sound_310df0(*(s32 *)(data + 0x34), 0, moby);
+            index = *(s32 *)(data + 0x38);
+            if (index != -1)
+                *(s32 *)(0x184528 + (index << 2)) = 0;
+            state = 1;
+        }
+        break;
+    case 5:
+    default:
+        return;
+    }
+    moby[0x20] = state;
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031aee0.s", FUN_L07_0031aee0);
