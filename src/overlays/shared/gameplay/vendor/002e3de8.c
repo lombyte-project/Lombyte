@@ -56,7 +56,7 @@ void FUN_L10_002e3de8(char *moby) {
 extern float FUN_001f9b48(void *, void *);
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa2d8(void *, void *);
-extern void FUN_L10_002e91b8(void);
+extern void FUN_L10_002e91b8(unsigned char *m);
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
 
@@ -91,7 +91,108 @@ void FUN_L10_002e9028(unsigned char *m) {
         break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e91b8.s", FUN_L10_002e91b8);
+#else
+extern void copy_matrix(void *, void *) __asm__("FUN_001fa298");
+extern long long trail_effect_texture(int) __asm__("FUN_001f44b8");
+extern int float_to_integer(float) __asm__("FUN_001fa6d0");
+extern float integer_to_float(int) __asm__("FUN_001fa6c0");
+extern void transform_vectors(float *, void *, int) __asm__("FUN_001f7d30");
+typedef struct { float v[4]; } aligned_vector __attribute__((aligned(16)));
+
+void FUN_L10_002e91b8(unsigned char *m) {
+    unsigned char first[0x90] __attribute__((aligned(16)));
+    unsigned char second[0x90] __attribute__((aligned(16)));
+    float matrix[12] __attribute__((aligned(16)));
+    float position[4] __attribute__((aligned(16)));
+    float *scale = *(float **)(m + 0x78);
+    float *first_source = (float *)0x001da350;
+    float *second_source = (float *)0x001da310;
+    float *first_vectors = (float *)first;
+    float *second_vectors = (float *)second;
+    int i, j, k;
+
+    copy_matrix(matrix, m + 0xc0);
+    *(aligned_vector *)position = *(aligned_vector *)(m + 0x10);
+    position[3] = 1.0f;
+    *(long long *)(first + 0x70) = 0;
+    *(long long *)(first + 0x78) = trail_effect_texture(0x2c);
+    *(long long *)(first + 0x80) = 0xff9000000260LL;
+    *(long long *)(second + 0x70) = 0;
+    *(long long *)(second + 0x78) = trail_effect_texture(0x2c);
+    *(long long *)(second + 0x80) = 0xff9000000260LL;
+    *(int *)(second + 0x44) = 0;
+    *(int *)(second + 0x4c) = 0;
+    i = 3;
+    do {
+        first_vectors[0] = first_source[0]; first_vectors[1] = first_source[1];
+        first_vectors[2] = first_source[2]; first_vectors[3] = first_source[3];
+        second_vectors[0] = second_source[0]; second_vectors[1] = second_source[1];
+        second_vectors[2] = second_source[2]; second_vectors[3] = second_source[3];
+        first_source += 4;
+        second_source += 4;
+        first_vectors[0] *= scale[0];
+        second_vectors[0] *= scale[0];
+        first_vectors[2] *= scale[1];
+        second_vectors[2] *= scale[1];
+        first_vectors += 4;
+        second_vectors += 4;
+        i--;
+    } while (i >= 0);
+
+    for (i = 0; i < *(int *)0x0015b340; i++) {
+        int parity = i & 1;
+        int *colors = (int *)0x0015b348;
+        unsigned long long color = (long long)colors[parity] |
+            ((long long)colors[parity + 2] << 2) |
+            ((long long)colors[parity + 4] << 4) |
+            ((long long)colors[parity + 6] << 6) | 0x8000000000ULL;
+        int shade = ((int *)0x001da250)[i];
+        float *angles = (float *)(first + 0x58);
+        float *offsets = (float *)(first + 0x68);
+        float *first_angles = (float *)(second + 0x50);
+        float *second_angles = (float *)(second + 0x60);
+        float *first_offsets = (float *)(second + 0x58);
+        float *second_offsets = (float *)(second + 0x68);
+        *(unsigned long long *)(first + 0x88) = color;
+        *(unsigned long long *)(second + 0x88) = color;
+        ((int *)(first + 0x40))[0] = shade;
+        ((int *)(second + 0x40))[2] = shade;
+        ((int *)(second + 0x40))[0] = shade;
+        ((int *)(first + 0x40))[3] = shade;
+        ((int *)(first + 0x40))[2] = shade;
+        ((int *)(first + 0x40))[1] = shade;
+        for (j = 0; j < 4; j++) {
+            for (k = 0; k != 2; k++) {
+                int index = i * 2 + k;
+                float frequency = ((float *)0x001da270)[index];
+                int limit = float_to_integer(frequency * 360.0f);
+                float angle = integer_to_float(*(int *)0x0015f3f8 % limit) / frequency - 180.0f;
+                float wave;
+                if (((int *)0x001da2b0)[index] == 0)
+                    wave = FUN_001f9de0(angle * 0.017453292f);
+                else
+                    wave = FUN_001f9dc8(angle * 0.017453292f);
+                ((float *)(first + 0x50))[j * 2 + k] = ((float *)0x001da2f0)[j * 2 + k] + wave * 0.125f;
+            }
+        }
+        for (j = 0; j < 2; j++) {
+            float step = (float)j * 0.125f;
+            first_angles[j] = angles[j];
+            first_offsets[j] = angles[j] + step;
+            second_angles[j] = offsets[j];
+            second_offsets[j] = offsets[j] + step;
+        }
+        transform_vectors((float *)first, matrix, 0);
+        transform_vectors((float *)second, matrix, 0);
+        for (j = 3; j >= 0; j--) {
+            ((float *)(first + j * 16))[1] += 0.1f;
+            ((float *)(second + j * 16))[1] += 0.1f;
+        }
+    }
+}
+#endif
 extern char *D_L10_0015EF50;
 
 void FUN_L10_002f5a50(int i) {
