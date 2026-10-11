@@ -746,8 +746,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de670.s", FUN_L14_002de670);
 extern f32 D_L14_00161B18_de670 __asm__("D_L14_00161B18") __attribute__((sda));
 extern f32 D_L14_00161B1C_de670 __asm__("D_L14_00161B1C") __attribute__((sda));
 extern f32 D_L14_00161B20_de670 __asm__("D_L14_00161B20") __attribute__((sda));
-extern f32 D_0015ED60_de670 __asm__("D_0015ED60") __attribute__((section(".data")));
-extern f32 D_0015ED64_de670 __asm__("D_0015ED64") __attribute__((section(".data")));
+extern f32 D_0015ED60_de670 __asm__("D_0015ED60");
+extern f32 D_0015ED64_de670 __asm__("D_0015ED64");
 #define DE670_THRESHOLD D_L14_00161B20_de670
 #define DE670_DAMPING D_L14_00161B1C_de670
 #define DE670_GRAVITY D_L14_00161B18_de670
@@ -776,6 +776,7 @@ void FUN_L14_002de670(struct Moby *moby) {
     s32 n;
     s32 color;
     f32 size;
+    f32 absolute_velocity;
     u8 *particle;
     u8 *fade;
 
@@ -784,10 +785,12 @@ void FUN_L14_002de670(struct Moby *moby) {
     }
     position = (f32 *)&moby->pos;
     FUN_001f9a10(position, position, velocity);
-    if (DE670_THRESHOLD * D_0015ED60_de670 < FUN_001f99c0(velocity[0])) {
+    absolute_velocity = FUN_001f99c0(velocity[0]);
+    if (DE670_THRESHOLD * D_0015ED60_de670 < absolute_velocity) {
         velocity[0] *= (DE670_DAMPING - 1.0f) * D_0015ED60_de670 + 1.0f;
     }
-    if (DE670_THRESHOLD * D_0015ED60_de670 < FUN_001f99c0(velocity[1])) {
+    absolute_velocity = FUN_001f99c0(velocity[1]);
+    if (DE670_THRESHOLD * D_0015ED60_de670 < absolute_velocity) {
         velocity[1] *= (DE670_DAMPING - 1.0f) * D_0015ED60_de670 + 1.0f;
     }
     if (velocity[2] > 0.0f) {
@@ -798,37 +801,43 @@ void FUN_L14_002de670(struct Moby *moby) {
     moby->rot.y = fast_add_rotations(moby->rot.y, velocity[5]);
     moby->rot.z = fast_add_rotations(moby->rot.z, velocity[6]);
 
-    if (!(position[0] < 2.0f || 1021.0f < position[0] ||
-          position[1] < 2.0f || 1021.0f < position[1] ||
-          position[2] < 2.0f || 1021.0f < position[2])) {
-        if (FUN_001f9740(velocity + 8) == 0 &&
-            FUN_L00_001f0d60(0.5f, position, 0, *(void **)(velocity + 9)) == 0) {
-            FUN_L00_0026cbb0_de670(position, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
-                             FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(20)), 1, 60000.0f);
-            for (i = 1; i >= 0; --i) {
-                n = random_integer_below_de670(6);
-                if (random_integer_below_de670(2) != 0) n = -n;
-                size = random_float_between_de670(40000.0f, 100000.0f);
-                color = FUN_L00_00257b90(0x30, 0xFF);
-                particle = FUN_L00_0026d000_de670(position, 0.025f, 1.0f, 1.0f, n,
-                                               D_L14_0015F580, size,
-                                               0x60000000 | color | color << 8 | color << 16);
-                if (particle != 0) {
-                    particle[3] = 0x44;
-                    fade = particle + 0x20;
-                    *(s16 *)(particle + 0xA) = FUN_001f96f8(0x3C);
-                    *(s32 *)(fade + 4) = 2;
-                    fade[0xA] = 0x60;
-                    fade[0xB] = particle[0xA];
-                }
-            }
-            return;
+    if (!(moby->pos.x < 2.0f || 1021.0f < moby->pos.x ||
+          moby->pos.y < 2.0f || 1021.0f < moby->pos.y ||
+          moby->pos.z < 2.0f || 1021.0f < moby->pos.z)) {
+        if (FUN_001f9740(velocity + 8) != 0) {
+            goto effect;
         }
+        if (FUN_L00_001f0d60(0.5f, position, 0, *(void **)(velocity + 9)) == 0) {
+            goto particles;
+        }
+effect:
         FUN_L00_0025e450(moby, velocity, position, 0.0f, 0.0f, 5, 2, 4,
                             1.0f, 0.5f, 9.0f, 1.0f, 0, 15.0f, 1, 5, -1, 0);
         FUN_L00_001f0d60(1.0f, position, 0, (void *)D_001413D0);
     }
     FUN_0020c828(moby);
+    return;
+particles:
+    FUN_L00_0026cbb0_de670(position, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
+                         FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(20)), 1, 60000.0f);
+    for (i = 1; i >= 0; --i) {
+        n = random_integer_below_de670(6);
+        if (random_integer_below_de670(2) != 0) n = -n;
+        size = random_float_between_de670(40000.0f, 100000.0f);
+        color = FUN_L00_00257b90(0x30, 0xFF);
+        particle = FUN_L00_0026d000_de670(position, 0.025f, 1.0f, 1.0f, n,
+                                       D_L14_0015F580, size,
+                                       0x60000000 | color | color << 8 | color << 16);
+        if (particle != 0) {
+            particle[3] = 0x44;
+            fade = particle + 0x20;
+            *(s16 *)(particle + 0xA) = FUN_001f96f8(0x3C);
+            *(s32 *)(fade + 4) = 2;
+            fade[0xA] = 0x60;
+            fade[0xB] = particle[0xA];
+        }
+    }
+    return;
 }
 #endif
 #include "sda.h"
