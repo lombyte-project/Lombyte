@@ -882,16 +882,17 @@ extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void 
 extern void FUN_0020c828(void *);
 
 void FUN_L13_0030cdb8(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *data;
     void *hit;
     char hit_buffer[16];
     OvlVec4 vector;
-    void *pos = &moby->pos;
-    void *rot = &moby->rot;
-    void *zero_vector = D_L13_0015F580;
     int i, j;
     if ((D_0014C190_257218[current_level_index][(short)moby->save_id >> 5] >>
-         (moby->save_id & 31) & 1) == 0) {
+         (moby->save_id & 31) & 1) != 0) {
+        FUN_0020c828(moby);
+        return;
+    }
+    data = (char *)moby->pvars;
     hit = find_moby_hit(moby, 0x10000, 0);
     FUN_00213928(moby, hit, data + 0x20, 0, hit_buffer, 0, 0, 4);
     switch (moby->state) {
@@ -904,7 +905,7 @@ void FUN_L13_0030cdb8(struct Moby *moby) {
             if (*(float *)(data + 0x20) < cost) {
                 moby->state = 2;
             } else {
-                data[0x67] = (char)0xfa;
+                ((unsigned char *)data)[0x67] = 0xfa;
                 *(float *)(data + 0x20) -= cost;
                 FUN_L00_0025d458(moby, data + 0x60);
             }
@@ -912,7 +913,10 @@ void FUN_L13_0030cdb8(struct Moby *moby) {
         }
         FUN_L00_0025d538(moby, data + 0x60);
         break;
-    case 2:
+    case 2: {
+            void *pos = &moby->pos;
+            void *rot = &moby->rot;
+            void *zero_vector = D_L13_0015F580;
         if (moby->group != 0xff && FUN_L01_0026e008(moby->group, -1) == 1 && D_0013D408[0x16] == 0) {
             D_0013D408[0x16] = 1;
             FUN_0022db10(1, 0, 0);
@@ -941,8 +945,6 @@ void FUN_L13_0030cdb8(struct Moby *moby) {
         FUN_0020c828(moby);
         break;
     }
-    } else {
-        FUN_0020c828(moby);
     }
 }
 #endif
