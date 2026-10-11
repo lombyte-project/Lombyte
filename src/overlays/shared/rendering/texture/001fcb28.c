@@ -81,16 +81,17 @@ void FUN_L00_001fcca0(LevelTextEntry *entry, s32 frame) {
             alpha = 0.0f;
     }
     if (frame > end - 16) {
-        alpha = (f32)((end - frame) - 8) * 0.125f;
+        s32 frame_plus_8 = frame + 8;
+        alpha = (f32)(end - frame_plus_8) * 0.125f;
         if (alpha < 0.0f)
             alpha = 0.0f;
     }
 
     source = get_help_message_text(entry->text_id);
-    ch = *source;
     if (entry->separator_mode == 1) {
         out = buffer;
         next = out;
+        ch = (u8)*source;
         while (ch != 0) {
             out = next;
             if (ch != 1) {
@@ -121,6 +122,7 @@ void FUN_L00_001fcca0(LevelTextEntry *entry, s32 frame) {
     } else {
         y = entry->y;
         out = buffer;
+        ch = *source;
         while (*source != 0) {
             if (*source == 1) {
                 *out = 0;
