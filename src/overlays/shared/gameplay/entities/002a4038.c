@@ -712,7 +712,147 @@ void FUN_L02_002e0cd8(char *moby) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea210.s", FUN_L02_002ea210);
+#else
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern void ea210_init(char *) __asm__("FUN_L02_002ea7d0");
+extern void ea210_update(char *) __asm__("FUN_L02_002ea8b0");
+extern float ea210_vec(float, void *, int) __asm__("FUN_00213508");
+extern float ea210_addrot(float, float) __asm__("FUN_001fa580");
+extern float ea210_dist(void *, void *) __asm__("FUN_001f9b80");
+extern float ea210_abs(float) __asm__("FUN_001f99c0");
+extern void ea210_sound(int) __asm__("FUN_L00_00298840");
+extern void ea210_switch(int, int) __asm__("FUN_L00_00260860");
+extern void ea210_play(int, int) __asm__("FUN_L00_00263d40");
+extern void ea210_stop(void) __asm__("FUN_L00_002039a0");
+extern void ea210_timing(int, int) __asm__("FUN_L00_00203908");
+extern void ea210_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void ea210_approach(float, float, float, float, void *, void *) __asm__("FUN_00213f38");
+extern void ea210_transform(float, void *, void *, void *) __asm__("FUN_001f9a40");
+extern float ea210_interp(float, float) __asm__("FUN_001fa5c8");
+extern float ea210_clamp(float, float) __asm__("FUN_001fa580");
+extern void ea210_draw(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
+extern void ea210_drawend(void *) __asm__("FUN_L00_002ea9d8");
+extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
+extern void ea210_fade(float, float, void *) __asm__("FUN_00213ed8");
+extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
+extern void ea210_audio(int, int) __asm__("FUN_0020b178");
+extern void ea210_destroy(char *) __asm__("FUN_0020c828");
+extern int D_L02_0015F5CC;
+extern int D_L02_0015F5C4;
+extern unsigned char D_001413F4;
+extern unsigned char D_0013D4E8[];
+extern char D_0013F3D0[];
+extern float D_0013F3D8;
+extern float D_L02_00174468;
+extern int D_L02_00167400;
+extern int D_L02_00179A10;
+extern float D_0015ED70;
+extern float D_0015ED6C;
+extern float D_L02_0015F3FC;
+extern char D_0013F3E0[];
+
+void FUN_L02_002ea210(char *moby) {
+    char *data;
+    int which;
+    int frames;
+    float angle;
+    frames = scale_game_frames(60);
+    data = *(char **)(moby + 0x78);
+    angle = 3.14159274f / (float)frames;
+    which = *(short *)(moby + 0xA6) == 0x3ED ? 0x1A : 0x16;
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0:
+        ea210_init(moby);
+        if (D_0013D4E8[which] == 0) {
+        ea210_vec(0.5f, moby + 0x10, 0);
+            *(float *)(moby + 0x44) = 3.14159274f;
+            *(float *)(moby + 0x40) = 1.57079637f;
+            *(unsigned char *)(moby + 0x20) = 1;
+            *(float *)(moby + 0x18) = D_L02_00174468 + 0.2f;
+            return;
+        }
+        ea210_destroy(moby);
+        return;
+    case 1:
+        *(float *)(moby + 0x48) = ea210_clamp(*(float *)(moby + 0x48), angle);
+        ea210_update(moby);
+        if (D_L02_0015F5CC % 10 != 0) return;
+        if (!(ea210_dist(moby + 0x10, D_0013F3D0) < 1.0f)) return;
+        if (ea210_abs(*(float *)(moby + 0x18) - D_0013F3D8) < 2.0f) {
+            *(unsigned char *)(moby + 0x20) = 3;
+            *(unsigned short *)(moby + 0x34) |= 1;
+            moby[0x31] = 0;
+            *(int *)(moby + 0x94) = 0;
+            if (*(short *)(moby + 0xA6) == 0x3ED) {
+                ea210_sound(4);
+            } else {
+                ea210_sound(2);
+            }
+        }
+        return;
+    case 3:
+        if (D_L02_0015F5C4 == 2) return;
+        if (D_001413F4 == 0) {
+            ea210_switch(which, 1);
+        } else {
+            ea210_switch(which, 0);
+            if (which == 0x16) *(int *)0x0015F918 = 0;
+        }
+        if (*(short *)(moby + 0xA6) == 0x3ED) {
+            ea210_play(0x7DF, -1);
+            ea210_stop();
+            ea210_timing(0x7D9, 0x13);
+            D_L02_0015F3FC = 1.0f;
+            *(unsigned char *)(moby + 0x20) = 4;
+            ea210_camera(D_0013F3D0, D_0013F3E0, 0x72, 1);
+            return;
+        }
+        ea210_audio(0, -1);
+        ea210_destroy(moby);
+        return;
+    case 4: {
+        volatile float a[4], b[4], c[4], d[4];
+        float position[4] __attribute__((aligned(16)));
+        float output[4];
+        a[0] = 91.2f; a[1] = 270.21f; a[2] = 64.85f; a[3] = 0.0f;
+        b[0] = 106.98f; b[1] = 273.46f; b[2] = 62.65f; b[3] = 0.0f;
+        c[0] = 0.33f; c[1] = 0.55f; c[2] = 0.07f; c[3] = 0.0f;
+        d[0] = 0.07f; d[1] = 0.43f; d[2] = 0.72f; d[3] = 0.0f;
+        ea210_approach(1.0f, D_0015ED70 * 0.15f, D_0015ED70 * 0.15f,
+                       D_0015ED6C * 0.15f, data + 0x40, data + 0x44);
+        ea210_transform(*(float *)(data + 0x40), position, (void *)a, (void *)b);
+        output[2] = ea210_clamp(ea210_interp(d[2], c[2]) * *(float *)(data + 0x40), c[2]);
+        output[1] = ea210_clamp(ea210_interp(d[1], c[1]) * *(float *)(data + 0x40), c[1]);
+        output[0] = ea210_clamp(ea210_interp(d[0], c[0]) * *(float *)(data + 0x40), c[0]);
+        if (D_L02_00167400 && *(short *)(D_L02_00167400 + 0x86) != 5)
+            ea210_draw(position, output, 1, 0, 0);
+        ea210_drawend(position);
+        ea210_drawflush(output);
+        if (D_L02_00179A10 != 0 || *(int *)0x00179A34 != -1 ||
+            !(0.2f < *(float *)(data + 0x40))) {
+            ea210_fade(0.0f, D_0015ED6C * 4.0f, &D_L02_0015F3FC);
+            if (D_L02_0015F3FC != 1.0f) return;
+        } else {
+            ea210_fade(1.0f, D_0015ED6C * 4.0f, &D_L02_0015F3FC);
+            if (*(float *)0x0015F6D4 != 1.0f) return;
+        }
+        ea210_camera(D_0013F3D0, D_0013F3E0, 0, 0);
+        ea210_hide(0);
+        *(unsigned char *)(moby + 0x20) = 5;
+        return;
+    }
+    case 5:
+        ea210_fade(0.0f, D_0015ED6C * 4.0f, &D_L02_0015F3FC);
+        if (D_L02_0015F3FC == 0.0f) {
+            ea210_audio(0, -1);
+            ea210_destroy(moby);
+        }
+        return;
+    }
+}
+#endif
 /* Initialises a moby's data block: four random floats, fixed constants, four random ints. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002EBC08), where it is exact; names translated to the US level program. */
 
