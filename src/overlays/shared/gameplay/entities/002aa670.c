@@ -1220,8 +1220,7 @@ extern float fast_difference_between_rotations_2acfd8(float, float) __asm__("FUN
 extern float convert_integer_to_float_2acfd8(int) __asm__("FUN_001fa6c0");
 extern int FUN_001efa68_2acfd8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void FUN_L00_002c2488_2acfd8(void *, void *, void *, float, float, float) __asm__("FUN_L00_002c2488");
-void launch_bomb(float *pos, unsigned char *moby, float *velocity) __asm__("FUN_L00_002acfd8");
-void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
+void FUN_L00_002acfd8(float *pos, unsigned char *moby, float *velocity) {
     float *v = *(float **)(moby + 0x78);
     float difference[4] __attribute__((aligned(16)));
     float direction[4] __attribute__((aligned(16)));
@@ -1233,8 +1232,9 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
     *(short *)((char *)v + 0x6a) = scale_game_frames_2acfd8(30);
     moby[0x20] = 1;
     qcopy(v, velocity);
-    if (hero.state.control_mode == 15 ||
-        (hero.ground_moby != 0 && FUN_L00_002603d0_2acfd8() != 0)) {
+    if (hero.state.control_mode == 15) {
+        add_vector_xyz_2acfd8(v, v, (char *)&hero + 0x100);
+    } else if (hero.ground_moby != 0 && FUN_L00_002603d0_2acfd8() != 0) {
         add_vector_xyz_2acfd8(v, v, (char *)&hero + 0x100);
     } else if (*(float **)((char *)v + 0x60) != 0) {
         short cls = *(short *)(*(char **)((char *)v + 0x60) + 0xa6);
