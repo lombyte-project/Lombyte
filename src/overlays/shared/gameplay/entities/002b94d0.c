@@ -1275,7 +1275,136 @@ void FUN_L00_002bdc50(void *o) {
         y += D_L00_00161710;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002be078.s", FUN_L00_002be078);
+#else
+extern int D_L00_00161780 __attribute__((sda));
+extern int D_L00_001617A4 __attribute__((sda));
+extern int D_L00_001617A8 __attribute__((sda));
+void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sz, float sy, int color1) {
+    char *m = mv;
+    RW_2baae0 *v = mv;
+    RW_2baae0 q[4];
+    RT_2baae0 t;
+    RW_2baae0 q2[4];
+    RT_2baae0 u;
+    RW_2baae0 w120, w130, w140, w150, r160, r170, a180, b190, s1A0, s1B0;
+    int i, col0, col1;
+    float len, len0, l0, l1, l2;
+    t.q0 = tex_2baae0(D_L00_001617A4);
+    col0 = D_L00_00161780 | (a << 24);
+    t.q2 = 0x8000000048L;
+    t.q1 = 0xFF9000000260L;
+    t.z4 = 0;
+    t.c[3] = col0;
+    t.c[2] = col0;
+    t.c[1] = col0;
+    t.c[0] = col0;
+    u.q0 = tex_2baae0(D_L00_001617A8);
+    col1 = color1 | (b << 24);
+    u.q2 = t.q2;
+    u.q1 = t.q1;
+    u.z4 = t.z4;
+    u.c[3] = u.c[2] = u.c[1] = u.c[0] = col1;
+    u.f[0] = 0;
+    u.f[1] = 0;
+    u.f[2] = 0;
+    u.f[3] = 1.0f;
+    u.f[4] = 1.0f;
+    u.f[5] = 0;
+    u.f[6] = 1.0f;
+    u.f[7] = 1.0f;
+    t.f[0] = D_L00_0016178C + 0;
+    t.f[1] = 0;
+    t.f[2] = D_L00_0016178C + 0;
+    t.f[3] = 1.0f;
+    t.f[4] = D_L00_0016178C + 1.0f;
+    t.f[5] = 0;
+    t.f[6] = D_L00_0016178C + 1.0f;
+    t.f[7] = 1.0f;
+    vsub_2baae0(w140, m, D_L00_00166DC0_2baae0);
+    vsub_2baae0(w150, m + 0x10, m);
+    cross_2baae0(w120, w150, w140);
+    len0 = vlen_2baae0(w120);
+    len0 = len0 != 0.0f ? 1.0f / len0 : len0;
+    vmul_2baae0(D_L00_00161774 * len0, w120, w120);
+    vadd_2baae0(q[0], m, w120);
+    vsub_2baae0(q[1], m, w120);
+    i = 1;
+    if (i < n - 1) do {
+        vsub_2baae0(w140, v[i], D_L00_00166DC0_2baae0);
+        vsub_2baae0(w150, v[i + 1], v[i]);
+        cross_2baae0(w120, w150, w140);
+        len = vlen_2baae0(w120);
+        if (len != 0)
+            len = 1.0f / len;
+        vmul_2baae0(D_L00_00161774 * len, w120, w120);
+        vadd_2baae0(q[2], v[i], w120);
+        vsub_2baae0(q[3], v[i], w120);
+        if (i == 1) {
+            t.c[1] = D_L00_00161780;
+            t.c[0] = D_L00_00161780;
+        } else if (i == n - 2) {
+            t.c[3] = D_L00_00161780;
+            t.c[2] = D_L00_00161780;
+        } else if (i == 2) {
+            t.c[1] = col0;
+            t.c[0] = col0;
+        }
+        draw_2baae0(q, 0, 0);
+        qcopy(q[0], q[2]);
+        qcopy(q[1], q[3]);
+        i++;
+    } while (i < n - 1);
+    i = 0;
+    if (i < n - 1) do {
+        vsub_2baae0(a180, m + i * 16, D_L00_00166DC0_2baae0);
+        vsub_2baae0(b190, m + i * 16 + 16, D_L00_00166DC0_2baae0);
+        l0 = vlen_2baae0(a180);
+        l1 = vlen_2baae0(b190);
+        if (l1 < l0) {
+            if (l1 == 0)
+                qcopy(b190, a180);
+            else
+                vmul_2baae0(l0 / l1, b190, b190);
+        } else {
+            if (l0 == 0)
+                qcopy(a180, b190);
+            else
+                vmul_2baae0(l1 / l0, a180, a180);
+        }
+        vadd_2baae0(r160, D_L00_00166DC0_2baae0, a180);
+        vadd_2baae0(r170, D_L00_00166DC0_2baae0, b190);
+        vsub_2baae0(w150, r170, r160);
+        vmul_2baae0(sy, s1B0, w150);
+        vsub_2baae0(r160, r160, s1B0);
+        vadd_2baae0(r170, r170, s1B0);
+        vsub_2baae0(s1A0, D_L00_00166DC0_2baae0, r160);
+        cross_2baae0(w120, s1A0, w150);
+        l2 = vlen_2baae0(w120);
+        if (l2 != 0)
+            l2 = 1.0f / l2;
+        vmul_2baae0(sz * l2, w130, w120);
+        vadd_2baae0(q2[0], r160, w130);
+        vsub_2baae0(q2[1], r160, w130);
+        vadd_2baae0(q2[2], r170, w130);
+        vsub_2baae0(q2[3], r170, w130);
+        if (i == 0) {
+            u.c[1] = color1;
+            u.c[0] = color1;
+        } else if (i == n - 2) {
+            u.c[3] = color1;
+            u.c[2] = color1;
+        } else if (i == 1) {
+            u.c[1] = col1;
+            u.c[0] = col1;
+        }
+        draw_2baae0(q2, 0, 0);
+        i++;
+    } while (i < n - 1);
+    gsreg_2baae0(0x47, 0x5360B);
+}
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002be650.s", FUN_L00_002be650);
 #else
