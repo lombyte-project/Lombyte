@@ -110,7 +110,7 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
         texture_base_output++;
     }
     /* Each TEX0 combines an image base with its paired palette base. */
-    texture_bits = ((u64)texture_bases[0] << 37) | (0xB000ULL << 19);
+    texture_bits = ((u64)texture_bases[0] << 37) + (0xB000ULL << 19);
     image_bits = (u64)(texture_bases[1] | 0x19304000);
     *shared_texture = (image_bits | texture_bits) | (1ULL << 63);
     texture_bits = ((u64)texture_bases[2] << 37) | (0xB000ULL << 19);
