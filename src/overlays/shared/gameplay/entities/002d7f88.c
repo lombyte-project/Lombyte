@@ -373,7 +373,175 @@ void FUN_L00_002d8908(void) {
 #include "rnc/math/vector.h"
 extern char *D_001413D0 __attribute__((section(".data")));
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d89f0.s", FUN_L00_002d89f0);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d9810.s", FUN_L00_002d9810);
+#else
+typedef struct {
+    u128 points[4];
+    u32 colors[4];
+    float texcoords[8];
+    u64 texture[4];
+} __attribute__((aligned(16))) Quad_002d9810;
+extern float D_L00_00161A10_002d9810 __asm__("D_L00_00161A10") __attribute__((sda));
+extern int D_L00_00161AD0_002d9810 __asm__("D_L00_00161AD0") __attribute__((sda));
+extern u32 D_L00_00161AE0_002d9810 __asm__("D_L00_00161AE0") __attribute__((sda));
+extern int D_L00_00161AC0_002d9810 __asm__("D_L00_00161AC0") __attribute__((sda));
+extern int D_L00_00161AC4_002d9810 __asm__("D_L00_00161AC4") __attribute__((sda));
+extern int D_L00_00161AC8_002d9810 __asm__("D_L00_00161AC8") __attribute__((sda));
+extern int D_L00_00161ACC_002d9810 __asm__("D_L00_00161ACC") __attribute__((sda));
+extern int D_L00_00161AD4_002d9810 __asm__("D_L00_00161AD4") __attribute__((sda));
+extern u32 D_L00_00161AD8_002d9810 __asm__("D_L00_00161AD8") __attribute__((sda));
+extern float D_L00_00161ADC_002d9810 __asm__("D_L00_00161ADC") __attribute__((sda));
+extern int D_L00_00161AE4_002d9810 __asm__("D_L00_00161AE4") __attribute__((sda));
+extern float D_L00_00161AE8_002d9810 __asm__("D_L00_00161AE8") __attribute__((sda));
+extern float D_L00_00161AEC_002d9810 __asm__("D_L00_00161AEC") __attribute__((sda));
+extern char D_L00_00161AF0_002d9810[] __asm__("D_L00_00161AF0") __attribute__((section(".data")));
+extern char D_L00_00166DC0_002d9810[] __asm__("D_L00_00166DC0");
+extern char D_L00_001E14C0_002d9810[] __asm__("D_L00_001E14C0");
+extern char D_L00_001E3DA0_002d9810[] __asm__("D_L00_001E3DA0");
+extern char D_L00_001E2FF0_002d9810[] __asm__("D_L00_001E2FF0");
+extern char D_L00_001E26E0_002d9810[] __asm__("D_L00_001E26E0");
+extern char D_L00_001E3A80_002d9810[] __asm__("D_L00_001E3A80");
+extern char D_L00_001E3480_002d9810[] __asm__("D_L00_001E3480");
+extern char D_L00_001E3B80_002d9810[] __asm__("D_L00_001E3B80");
+extern char D_L00_001E3C80_002d9810[] __asm__("D_L00_001E3C80");
+u64 FUN_001f44b8_002d9810(int) __asm__("FUN_001f44b8");
+void FUN_00233980_002d9810(int, u64) __asm__("FUN_00233980");
+void FUN_001f9a10_002d9810(void *, void *, void *) __asm__("FUN_001f9a10");
+void FUN_001f9a28_002d9810(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_001f9bf8_002d9810(float, void *, void *) __asm__("FUN_001f9bf8");
+void FUN_001f9ad8_002d9810(void *, void *, void *) __asm__("FUN_001f9ad8");
+void FUN_001f76a0_002d9810(void) __asm__("FUN_001f76a0");
+void FUN_001f9d20_002d9810(void *, void *, void *) __asm__("FUN_001f9d20");
+void FUN_L00_001fde98_002d9810(int, void *, void *, void *, int) __asm__("FUN_L00_001fde98");
+int FUN_001fa6d0_002d9810(float) __asm__("FUN_001fa6d0");
+void FUN_001f9a68_002d9810(float, void *, void *) __asm__("FUN_001f9a68");
+void FUN_001f7d30_002d9810(void *, void *, int) __asm__("FUN_001f7d30");
+void FUN_001f9c48_002d9810(float, void *, void *) __asm__("FUN_001f9c48");
+float FUN_L00_00200260_002d9810(float, float) __asm__("FUN_L00_00200260");
+
+void FUN_L00_002d9810(u8 *m) {
+    Quad_002d9810 quad;
+    u128 rotated, shifted, cross, normal, position;
+    float transformed[4];
+    float projection[8];
+    float *data = *(float **)(m + 0x78);
+    float ratio = data[0] / D_L00_00161A10_002d9810;
+    int i, j, color;
+    short *indices;
+    char *source;
+    char *destination = (char *)0x1e3da0;
+    char *pointA, *pointB;
+    float *u, *v;
+
+    quad.texture[1] = FUN_001f44b8_002d9810(D_L00_00161AD4_002d9810);
+    quad.texture[2] = 0xff9000000260ULL;
+    quad.texture[3] = (u64)D_L00_00161AC0_002d9810 |
+                      ((u64)D_L00_00161AC4_002d9810 << 2) |
+                      ((u64)D_L00_00161AC8_002d9810 << 4) |
+                      ((u64)D_L00_00161ACC_002d9810 << 6) |
+                      ((u64)D_L00_00161AD0_002d9810 << 32);
+    quad.texture[0] = 0;
+    FUN_00233980_002d9810(0x47, 0x53001);
+    ((float *)&position)[0] = *(float *)(m + 0x10);
+    ((float *)&position)[1] = *(float *)(m + 0x14);
+    ((float *)&position)[2] = *(float *)(m + 0x18) + 0.5f + data[0];
+    ((float *)&position)[3] = 1.0f;
+    FUN_001f9a10_002d9810(&position, &position, D_L00_00161AF0_002d9810);
+    FUN_001f9a28_002d9810(&rotated, D_L00_00166DC0_002d9810, &position);
+    FUN_001f9bf8_002d9810(1.0f, &shifted, &rotated);
+    FUN_001f9ad8_002d9810(&cross, &shifted, (char *)data + 0xe0);
+    FUN_001f9bf8_002d9810(1.0f, &cross, &cross);
+    FUN_001f9ad8_002d9810(&normal, &cross, &shifted);
+    quad.colors[0] = D_L00_00161AD8_002d9810;
+    quad.colors[3] = D_L00_00161AD8_002d9810;
+    quad.colors[2] = D_L00_00161AD8_002d9810;
+    quad.colors[1] = D_L00_00161AD8_002d9810;
+    FUN_00233980_002d9810(6, FUN_001f44b8_002d9810(D_L00_00161AD4_002d9810));
+    FUN_00233980_002d9810(0x42, 0x8000000044ULL);
+    FUN_00233980_002d9810(8, 0);
+    FUN_00233980_002d9810(0x14, 0xff9000000260ULL);
+    FUN_00233980_002d9810(0x4a, 0);
+    FUN_001f76a0_002d9810();
+    source = D_L00_001E14C0_002d9810;
+    i = 0x121;
+    do {
+        FUN_001f9d20_002d9810(&transformed, source, &shifted);
+        i--;
+        ((float *)destination)[0] = transformed[0];
+        ((float *)destination)[1] = transformed[1];
+        ((float *)destination)[2] = transformed[2];
+        destination += 12;
+        source += 16;
+    } while (i >= 0);
+    FUN_L00_001fde98_002d9810(0x94, D_L00_001E3DA0_002d9810,
+                                D_L00_001E2FF0_002d9810, D_L00_001E26E0_002d9810, 1);
+    FUN_L00_001fde98_002d9810(0x6d, D_L00_001E3DA0_002d9810 + 0x6d8,
+                                D_L00_001E2FF0_002d9810 + 0x248,
+                                D_L00_001E26E0_002d9810 + 0x490, 1);
+    FUN_L00_001fde98_002d9810(0x24, D_L00_001E3DA0_002d9810 + 0xbe8,
+                                D_L00_001E2FF0_002d9810 + 0x3f8,
+                                D_L00_001E26E0_002d9810 + 0x7f0, 1);
+    quad.texture[1] = FUN_001f44b8_002d9810(0xb);
+    quad.texture[3] = 0x8000000048ULL;
+    color = FUN_001fa6d0_002d9810(ratio * 64.0f + 128.0f);
+    quad.colors[3] = 0;
+    quad.colors[0] = ((color + D_L00_00161AD0_002d9810) << 24) | D_L00_00161AE0_002d9810;
+    quad.colors[2] = 0;
+    quad.colors[1] = quad.colors[0];
+    for (i = 0; i < 32; i++) {
+        indices = (short *)(D_L00_001E3A80_002d9810 + i * 8);
+        pointA = (char *)quad.points;
+        pointB = (char *)quad.points;
+        for (j = 0; j < 4; j++) {
+            if (j >= 2)
+                FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810 * D_L00_00161AEC_002d9810,
+                                        pointB, D_L00_001E3480_002d9810 + indices[j] * 16);
+            else
+                FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810, pointA,
+                                        D_L00_001E3480_002d9810 + indices[j] * 16);
+            pointA += 16;
+            pointB += 16;
+        }
+        quad.texcoords[0] = quad.texcoords[1] = quad.texcoords[2] = quad.texcoords[3] =
+            quad.texcoords[4] = 0.5f;
+        quad.texcoords[5] = quad.texcoords[7] = 1.0f;
+        quad.texcoords[6] = 0.5f;
+        FUN_001f7d30_002d9810(&quad, &shifted, 0);
+    }
+    if (FUN_L00_002d8128(m)) {
+        quad.texture[1] = FUN_001f44b8_002d9810(D_L00_00161AE4_002d9810);
+        quad.colors[0] = quad.colors[3] = quad.colors[2] = quad.colors[1] = 0x107f7f7f;
+        quad.texture[3] = 0x8000000044ULL;
+        qcopy(&shifted, (char *)data + 0xc0);
+        qcopy(&cross, (char *)data + 0xd0);
+        qcopy(&normal, (char *)data + 0xe0);
+        u = &quad.texcoords[1];
+        v = &quad.texcoords[0];
+        ((float *)&position)[2] = *(float *)(m + 0x18);
+        for (i = 0; i < 4; i++) {
+            indices = (short *)(D_L00_001E3C80_002d9810 + i * 8);
+            source = (char *)quad.points;
+            for (j = 3; j >= 0; j--) {
+                FUN_001f9d20_002d9810(source, D_L00_001E3B80_002d9810 + (*indices++) * 16,
+                                       &shifted);
+                FUN_001f9a28_002d9810(projection, source, D_L00_00166DC0_002d9810);
+                source += 16;
+                projection[1] = projection[2];
+                FUN_001f9c48_002d9810(D_L00_00161AE8_002d9810, projection, projection);
+                *v = projection[0] * 0.5f + 0.5f;
+                *v = FUN_L00_00200260_002d9810(*v, 8.0f);
+                v += 2;
+                *u = projection[1] * 0.5f + 0.5f;
+                *u = FUN_L00_00200260_002d9810(*u, 8.0f);
+                u += 2;
+            }
+            FUN_001f7d30_002d9810(&quad, 0, 0);
+        }
+    }
+    FUN_00233980_002d9810(0x47, 0x5360b);
+}
+#endif
 int FUN_001efa68(Vec4 *, Vec4 *, int, int, int);
 /* True when FUN_001efa68 returns 0 for the moby and D_001413D0 positions, both raised by 0.5. */
 int FUN_L00_002d8980(char *a) {
