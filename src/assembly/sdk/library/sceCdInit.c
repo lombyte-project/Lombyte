@@ -126,11 +126,12 @@ int sceCdInit(int init_mode) {
         cdvd_exit();
         *(volatile s32 *)D_001312E8 = -1;
         *(volatile s32 *)D_001312EC = -1;
-        D_001312E0[0] = -1;
-        return ret;
+        *(volatile s32 *)D_001312E0 = -1;
+        goto done;
     }
     cmd_sem_init();
     PowerOffCB();
+done:
     return ret;
 }
 #endif /* NON_MATCHING */
