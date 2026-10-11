@@ -3,7 +3,156 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003083b0.s", FUN_L06_003083b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00308c68.s", FUN_L06_00308c68);
+#include "rnc/gameplay/entities/moby.h"
+#include "qcopy.h"
+extern int FUN_001fa728(char *, float);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern float FUN_001f96b0(float);
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) SparkVector;
+typedef struct SparkData { int f0; int f4; char pad8[0x18]; int f20; int f24; int f28; } SparkData;
+
+extern void copy_moby_rotation(void *, void *) __asm__("FUN_001fa030");
+extern int timer_step(void *) __asm__("FUN_001f9740");
+extern void spark_action(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
+
+
+
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern void emit_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
+extern float D_0015ED6C __attribute__((section(".sdata")));
+extern float D_L06_001622F0 __attribute__((sda));
+extern float D_L06_001622F4 __attribute__((sda));
+extern float D_L06_001622F8 __attribute__((sda));
+extern float D_L06_001622FC __attribute__((sda));
+extern int D_L06_00162300 __attribute__((sda));
+extern int D_L06_00162304 __attribute__((sda));
+extern int D_L06_00162308 __attribute__((sda));
+extern float D_L06_0016230C __attribute__((sda));
+extern float D_L06_00162310 __attribute__((sda));
+extern float D_L06_00162314 __attribute__((sda));
+extern float D_L06_00162318 __attribute__((sda));
+extern float D_L06_0016231C __attribute__((sda));
+extern int D_L06_00162320 __attribute__((sda));
+extern int D_L06_00162324 __attribute__((sda));
+extern int D_L06_00162328 __attribute__((sda));
+extern int D_L06_0016232C __attribute__((sda));
+extern float D_L06_00162330 __attribute__((sda));
+extern float D_L06_00162334 __attribute__((sda));
+extern float D_L06_00162338 __attribute__((sda));
+extern float D_L06_0016233C __attribute__((sda));
+extern float D_L06_00162340 __attribute__((sda));
+extern int D_L06_00162344 __attribute__((sda));
+extern int D_L06_00162348 __attribute__((sda));
+extern int D_L06_0016234C __attribute__((sda));
+extern float D_L06_00162350 __attribute__((sda));
+extern float D_L06_00162354 __attribute__((sda));
+extern float D_L06_00162358 __attribute__((sda));
+extern float D_L06_0016235C __attribute__((sda));
+extern float D_L06_00162360 __attribute__((sda));
+extern int D_L06_00162364 __attribute__((sda));
+extern int D_L06_00162368 __attribute__((sda));
+extern int D_L06_0016236C __attribute__((sda));
+extern int D_L06_00162370 __attribute__((sda));
+extern int D_L06_00162374 __attribute__((sda));
+extern int D_L06_00162378 __attribute__((sda));
+extern int D_L06_0016237C __attribute__((sda));
+
+/* Level 06 moby update: a spark emitter; state 4 bursts on a random timer, state 3 sprays continuously. */
+void FUN_L06_00308c68(struct Moby *m) {
+    SparkData *d = *(void **)&m->pvars;
+    SparkVector v1;
+    SparkVector v2;
+    SparkVector v3;
+    SparkVector v4;
+
+    qcopy(&v1, &*(SparkVector *)&m->pos);
+    v1.w = 3.0f;
+    if (FUN_001fa728(&v1, 64.0f) == -1) {
+        return;
+    }
+    switch (m->state) {
+    case 0:
+        copy_moby_rotation(&*(SparkVector *)&m->unkC0, &*(SparkVector *)&m->rot);
+        if (d->f4 != 0) {
+            m->state = 1;
+        } else if (d->f0 != 0) {
+            m->state = 4;
+        } else {
+            m->state = 3;
+        }
+        break;
+    case 2:
+        if (timer_step(&d->f28)) {
+            spark_action(m, &*(SparkVector *)&m->pos, -1, 0.333f, 13.0f);
+            if (d->f0 != 0) {
+                m->state = 4;
+            } else {
+                m->state = 3;
+            }
+        }
+        break;
+    case 4: {
+        int n = 1;
+        int k;
+        if (timer_step(&d->f24)) {
+            n = 5;
+            d->f24 = truncate_float_to_s32(FUN_001f96b0(random_float_between_alt(60.0f, 120.0f)));
+        }
+        if (random_integer_below(4) != 0 && n < 2) {
+            return;
+        }
+        for (k = 0; k < n; k++) {
+                int c19, c18, c17, c16, c2;
+                float z;
+                normalize_vector_xyz(&v2, &*(SparkVector *)&m->unkC0, D_L06_001622F0 * (random_float_between_alt(-D_L06_001622FC, D_L06_001622FC) + 1.0f) * D_0015ED6C);
+                z = D_L06_001622F4 * (random_float_between_alt(-D_L06_001622FC, D_L06_001622FC) + 1.0f) * D_0015ED6C;
+                clear_u64_value(&v3);
+                v3.z = z;
+                normalize_vector_xyz(&v4, &*(SparkVector *)&m->unkD0, random_float_between_alt(-D_L06_001622F8, D_L06_001622F8) * D_0015ED6C);
+                add_vector_xyz(&v3, &v3, &v4);
+                v2.w = random_float_between_alt(D_L06_00162310, D_L06_00162314);
+                v3.w = random_float_between_alt(D_L06_00162318, D_L06_0016231C);
+                c19 = fast_tween_color(D_L06_00162320, D_L06_00162324, random_float_between_alt(0.0f, 1.0f));
+                c18 = fast_tween_color(D_L06_00162328, D_L06_0016232C, random_float_between_alt(0.0f, 1.0f));
+                c17 = truncate_float_to_s32(FUN_001f96b0((float)D_L06_00162300 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+                c16 = truncate_float_to_s32(FUN_001f96b0((float)D_L06_00162304 * (random_float_between_alt(-D_L06_0016230C, D_L06_0016230C) + 1.0f)));
+                c2 = truncate_float_to_s32(FUN_001f96b0((float)D_L06_00162308 * (random_float_between_alt(-D_L06_0016230C, D_L06_0016230C) + 1.0f)));
+                emit_spark(&*(SparkVector *)&m->pos, &v2, &v3, c19, c18, c17, c16, c2, -1);
+        }
+        break;
+    }
+    case 3:
+        if (timer_step(&d->f20)) {
+            int cnt;
+            int k;
+            d->f20 = truncate_float_to_s32(FUN_001f96b0(random_float_between_alt((float)D_L06_00162374, (float)D_L06_00162378)));
+            cnt = random_integer_below(7) ? 1 : random_integer_below(5) + 5;
+            for (k = 0; k < cnt; k++) {
+                    int c19, c18, c17, c16, c2;
+                    random_vector(&v4, 0.0f, D_L06_00162340 * D_0015ED6C);
+                    normalize_vector_xyz(&v2, &*(SparkVector *)&m->unkC0, D_L06_00162330 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * D_0015ED6C);
+                    add_vector_xyz(&v2, &v2, &v4);
+                    normalize_vector_xyz(&v3, &v2, D_L06_00162334 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * D_0015ED6C);
+                    v3.z = v3.z - D_L06_00162338 * D_0015ED6C;
+                    v2.w = random_float_between_alt(D_L06_00162354, D_L06_00162358);
+                    v3.w = random_float_between_alt(D_L06_0016235C, D_L06_00162360);
+                    c19 = fast_tween_color(D_L06_00162364, D_L06_00162368, random_float_between_alt(0.0f, 1.0f));
+                    c18 = fast_tween_color(D_L06_0016236C, D_L06_00162370, random_float_between_alt(0.0f, 1.0f));
+                    c17 = truncate_float_to_s32(FUN_001f96b0((float)D_L06_00162344 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+                    c16 = truncate_float_to_s32(FUN_001f96b0((float)D_L06_00162348 * (random_float_between_alt(-D_L06_00162350, D_L06_00162350) + 1.0f)));
+                    c2 = truncate_float_to_s32(FUN_001f96b0((float)D_L06_0016234C * (random_float_between_alt(-D_L06_00162350, D_L06_00162350) + 1.0f)));
+                    emit_spark(&*(SparkVector *)&m->pos, &v2, &v3, c19, c18, c17, c16, c2, D_L06_0016237C);
+            }
+        }
+        break;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
