@@ -605,10 +605,10 @@ extern u16 D_001416FA_2b49a8 __asm__("D_001416FA");
 extern u32 D_001416FC_2b49a8 __asm__("D_001416FC");
 extern s32 D_00140600_2b49a8 __asm__("D_00140600");
 extern f32 D_0014060C_2b49a8 __asm__("D_0014060C");
-extern u8 D_0013E52F_2b49a8 __asm__("D_0013E52F");
+extern u8 D_0013E52F_2b49a8 __asm__("D_0013E52F") __attribute__((section(".data")));
 extern u32 D_0013CAE0_2b49a8 __asm__("D_0013CAE0");
 extern u32 D_001403F0_2b49a8 __asm__("D_001403F0");
-extern u8 *D_L00_00173E58_2b49a8 __asm__("D_L00_00173E58");
+extern u8 *D_L00_00173E58_2b49a8 __asm__("D_L00_00173E58") __attribute__((section(".data")));
 extern f32 D_0015ED6C_2b49a8 __asm__("D_0015ED6C");
 extern s32 D_0015EEA4_2b49a8 __asm__("D_0015EEA4");
 extern s32 D_0015ED84_2b49a8 __asm__("D_0015ED84");
@@ -622,7 +622,7 @@ extern void FUN_001f9770_2b49a8(void *) __asm__("FUN_001f9770");
 extern void FUN_001f9740_2b49a8(void *) __asm__("FUN_001f9740");
 extern s32 FUN_001f96f8_2b49a8(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_002223f8_2b49a8(s32, s32) __asm__("FUN_L00_002223f8");
-extern void FUN_001fa2b8_2b49a8(void *) __asm__("FUN_001fa2b8");
+extern void FUN_001fa2b8_2b49a8(void *, void *) __asm__("FUN_001fa2b8");
 extern void FUN_001fa2d8_2b49a8(void *, void *) __asm__("FUN_001fa2d8");
 extern void FUN_001f9d20_2b49a8(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_001f99f8_2b49a8(void *) __asm__("FUN_001f99f8");
@@ -683,6 +683,7 @@ void FUN_L00_002b49a8(u8 *m) {
     u8 *other, *part;
 
     scratch.velocity.q = 0;
+    scratch.pitch = 0.0f;
     other = 0;
     if (m[0x20] == 0) {
         m[0x20] = 1;
@@ -696,15 +697,15 @@ void FUN_L00_002b49a8(u8 *m) {
 
     state = hero.state.current;
     if (state == 30 && (*(u16 *)(D_001413D0_2b49a8 + 0x34) & 1)) {
-        u8 *origin = D_L00_00166DC0_2b49a8;
-        FUN_001fa2b8_2b49a8(&scratch.work.target);
+        u8 *origin = (u8 *)D_L00_00166C80_b3058.v140;
+        FUN_001fa2b8_2b49a8(&scratch.work.target, &D_L00_00166C80_b3058);
         FUN_001fa2d8_2b49a8(scratch.matrix, &scratch.work.target);
         scratch.velocity.f[2] = D_0015ED6C_2b49a8 * 40.0f;
         FUN_001f9d20_2b49a8(&scratch.velocity, &scratch.velocity, scratch.matrix);
         FUN_001f99f8_2b49a8(&scratch.position);
-        scratch.position.f[0] += 0.15f;
         scratch.position.f[1] += 0.15f;
         scratch.position.f[2] += 0.75f;
+        scratch.position.f[0] += 0.15f;
         FUN_001f9d20_2b49a8(&scratch.position, &scratch.position, scratch.matrix);
         FUN_001f9a10_2b49a8(&scratch.position, &scratch.position, origin);
         if (hero.state.current == state && (*(u16 *)(D_001413D0_2b49a8 + 0x34) & 1) && !hero.unk20AC) {
@@ -747,41 +748,46 @@ void FUN_L00_002b49a8(u8 *m) {
         if (FUN_L00_00233db8_2b49a8(-1, 1) && !hero.unk20AC) {
             v[0] = FUN_001f96f8_2b49a8(6);
             if (other) {
-                qcopy(&scratch.work.target, other + 0x10);
+                qcopy(&scratch.target_copy, other + 0x10);
                 part = FUN_002141f8_2b49a8(other);
-                scratch.work.target.f[2] += part ? *(f32 *)(part + 0x10) : 0.5f;
+                scratch.target_copy.f[2] += part ? *(f32 *)(part + 0x10) : 0.5f;
                 dist = D_0015ED6C_2b49a8 * 40.0f;
-                scratch.pitch = -FUN_001f9e90_2b49a8(FUN_001f9b80_2b49a8(&scratch.position, &scratch.work.target), scratch.work.target.f[2] - scratch.position.f[2]);
+                scratch.pitch = -FUN_001f9e90_2b49a8(FUN_001f9b80_2b49a8(&scratch.position, &scratch.target_copy), scratch.target_copy.f[2] - scratch.position.f[2]);
                 adjusted_yaw = base_pitch - hero.unk2E4.f * 0.5f;
                 angle = FUN_001fa688_2b49a8(adjusted_yaw, scratch.pitch);
-                base_pitch = scratch.pitch;
-                if (angle >= 0.17453292f) {
-                    limit = FUN_001fa580_2b49a8(adjusted_yaw, 0.17453292f);
-                    if (scratch.pitch <= limit) {
-                        limit = FUN_001fa580_2b49a8(adjusted_yaw, -0.17453292f);
-                        if (scratch.pitch >= limit) limit = adjusted_yaw;
+                limit = 0.17453292f;
+                if (angle < limit) {
+                    base_pitch = scratch.pitch;
+                } else {
+                    if (!(FUN_001fa580_2b49a8(adjusted_yaw, limit) < scratch.pitch)) {
+                        limit = -0.17453292f;
+                        if (!(scratch.pitch < FUN_001fa580_2b49a8(adjusted_yaw, limit))) {
+                            base_pitch = adjusted_yaw;
+                            goto pitch_ready;
+                        }
                     }
-                    base_pitch = limit;
+                    base_pitch = FUN_001fa580_2b49a8(adjusted_yaw, limit);
                 }
-                FUN_L00_00262c50_2b49a8(&scratch.tmp, dist, base_yaw, -base_pitch);
-                FUN_001f9a10_2b49a8(&scratch.tmp, &scratch.tmp, &scratch.position);
-                scratch.yaw = FUN_001f9e90_2b49a8(scratch.work.target.f[0] - scratch.tmp.f[0], scratch.work.target.f[1] - scratch.tmp.f[1]);
-                scratch.pitch = -FUN_001f9e90_2b49a8(FUN_001f9b80_2b49a8(&scratch.tmp, &scratch.work.target), scratch.work.target.f[2] - scratch.tmp.f[2]);
+pitch_ready:
+                FUN_L00_00262c50_2b49a8(&scratch.work.target, dist, base_yaw, -base_pitch);
+                FUN_001f9a10_2b49a8(&scratch.work.target, &scratch.work.target, &scratch.position);
+                scratch.yaw = FUN_001f9e90_2b49a8(scratch.target_copy.f[0] - scratch.work.target.f[0], scratch.target_copy.f[1] - scratch.work.target.f[1]);
+                scratch.pitch = -FUN_001f9e90_2b49a8(FUN_001f9b80_2b49a8(&scratch.work.target, &scratch.target_copy), scratch.target_copy.f[2] - scratch.work.target.f[2]);
             } else if (hero.state.current != 30) {
                 scratch.pitch -= hero.unk2E4.f * 0.5f;
                 base_pitch -= hero.unk2E4.f * 0.5f;
             }
             scratch.work.options.collision.owner = m;
             scratch.work.options.collision.flags = 0x10000;
-            scratch.work.options.collision.b8 = 1;
-            scratch.work.options.collision.b9 = 1;
-            scratch.work.options.collision.oclass = *(u16 *)(m + 0xa6);
             scratch.work.options.collision.value = 0.25f;
             scratch.work.options.collision.enabled = 1;
             scratch.work.target.f[0] = FUN_001f9dc8_2b49a8(FUN_001f9e90_2b49a8(hero.unk670, hero.unk674));
             scratch.work.target.f[1] = FUN_001f9de0_2b49a8(FUN_001f9e90_2b49a8(hero.unk670, hero.unk674));
             scratch.work.target.f[2] = 1.0f;
             *(u32 *)&scratch.work.target.f[3] = 0x45afdf66;
+            scratch.work.options.collision.b8 = 1;
+            scratch.work.options.collision.b9 = 1;
+            scratch.work.options.collision.oclass = *(u16 *)(m + 0xa6);
             FUN_L00_00233660_2b49a8(scratch.matrix, 0.7f, -0.15f, 0.5f);
             FUN_L00_001f2868_2b49a8(scratch.matrix, 5, D_001413D0_2b49a8, &scratch.work.target, 0.42f);
             FUN_L00_002caf70_2b49a8(D_001413D0_2b49a8, &scratch.position, other, scratch.yaw, scratch.pitch, base_yaw, base_pitch);
@@ -822,7 +828,7 @@ void FUN_L00_002b49a8(u8 *m) {
         if (hero.state.current == 0x72 || D_L00_0015F5C4_2b49a8 == 2) goto clear;
     } else {
         if (hero.state.current == 0x72) goto clear;
-        if (D_L00_0015F5C4_2b49a8 == 2) goto skip;
+        if (D_L00_0015F5C4_2b49a8 == 2) goto clear;
         if (m[0x53] != 1) FUN_L00_00257880_2b49a8(m, 1, 0, FUN_001f96f8_2b49a8(7));
         goto skip;
     }
@@ -836,27 +842,27 @@ skip:
 finish:
     if (m[0x52] != 2 && v[5] > 0) {
         f32 red, green, blue;
-        n = FUN_001f96f8_2b49a8(9);
-        if (v[5] < n) n = v[5];
-        else n = FUN_001f96f8_2b49a8(9);
+        index = FUN_001f96f8_2b49a8(9);
+        n = v[5];
+        if (index <= n) n = FUN_001f96f8_2b49a8(9);
         red = FUN_001fa6c0_2b49a8(n) * 0.7f / (f32)FUN_001f96f8_2b49a8(9);
-        n = FUN_001f96f8_2b49a8(9);
-        if (v[5] < n) n = v[5];
-        else n = FUN_001f96f8_2b49a8(9);
+        index = FUN_001f96f8_2b49a8(9);
+        n = v[5];
+        if (index <= n) n = FUN_001f96f8_2b49a8(9);
         green = FUN_001fa6c0_2b49a8(n) * 0.7f / (f32)FUN_001f96f8_2b49a8(9);
-        n = FUN_001f96f8_2b49a8(9);
-        if (v[5] < n) n = v[5];
-        else n = FUN_001f96f8_2b49a8(9);
+        index = FUN_001f96f8_2b49a8(9);
+        n = v[5];
+        if (index <= n) n = FUN_001f96f8_2b49a8(9);
         blue = FUN_001fa6c0_2b49a8(n) * 0.7f / (f32)FUN_001f96f8_2b49a8(9);
         angle = FUN_001f9dc8_2b49a8(FUN_001f9e90_2b49a8(hero.unk670, hero.unk674));
-        scratch.position.f[0] = hero.motion.pos.f[0] + angle + angle;
+        scratch.work.target.f[0] = hero.motion.pos.f[0] + (angle + angle);
         angle = FUN_001f9de0_2b49a8(FUN_001f9e90_2b49a8(hero.unk670, hero.unk674));
-        scratch.position.f[1] = hero.motion.pos.f[1] + angle + angle;
-        scratch.position.f[2] = hero.motion.pos.f[2] + 1.0f;
-        if (v[4] == -1) v[4] = FUN_L00_0023e738_2b49a8(&scratch.position, 6.0f, 0.0f, red, green, blue);
+        scratch.work.target.f[1] = hero.motion.pos.f[1] + (angle + angle);
+        scratch.work.target.f[2] = hero.motion.pos.f[2] + 1.0f;
+        if (v[4] == -1) v[4] = FUN_L00_0023e738_2b49a8(&scratch.work.target, 6.0f, 0.0f, red, green, blue);
         else {
             u8 *light = D_001802C0_2b49a8 + v[4] * 0x20;
-            qcopy(light + 0x10, &scratch.position);
+            qcopy(light + 0x10, &scratch.work.target);
             *(f32 *)(light + 8) = blue;
             *(f32 *)(light + 0x1c) = 6.0f;
             *(f32 *)(light + 0) = red;
