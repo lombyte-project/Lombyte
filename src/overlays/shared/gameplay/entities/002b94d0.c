@@ -804,7 +804,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
     float distance, angle, elevation, headingError, limit, apparentAngle, radius, reduction;
     int i;
 
-    qcopy(start, position);
+    *(u128 *)start = *(u128 *)position;
     qcopy(end, D_001413D0 + 0x10);
     end[2] = start[2];
     if (FUN_001efa68_2bc3b0(end, start, 6, D_001413D0, 0)) {
