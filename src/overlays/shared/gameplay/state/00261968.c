@@ -104,11 +104,11 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
     axis.f[0] = direction.f[1];
     axis.f[1] = -direction.f[0];
     FUN_001ff260_261b48(&origin);
-    origin.f[2] = 1.0f;
     entry = &D_L00_001B04B0_261b48[path_index];
     found = 0;
     i = 1;
     FUN_001ff2a8_261b48(&first, &(*entry)->points[0], start);
+    origin.f[2] = 1.0f;
     FUN_001ff6d0_261b48(&first, &first, &direction);
     current = &next;
     if (i < (*entry)->count) {
@@ -117,7 +117,7 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
             FUN_001ff2a8_261b48(current, (OvlVec4 *)((u8 *)*entry + offset), start);
             FUN_001ff6d0_261b48(current, &next, &direction);
             if (first.f[3] != 0.0f || current->f[3] != 0.0f) {
-                if (current->f[1] * first.f[1] < 0.0f) {
+                if (first.f[1] * current->f[1] < 0.0f) {
                     crossing = (first.f[0] - current->f[0]) / (first.f[1] - current->f[1]) * -current->f[1] + current->f[0];
                     if (crossing > 0.0f && crossing < nearest) {
                         nearest = crossing;
