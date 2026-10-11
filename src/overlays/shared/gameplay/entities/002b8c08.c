@@ -26,9 +26,6 @@ void FUN_L01_002b8c08(f32 *pos) {
         y += D_L01_001CAD00[5];
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b8cb0.s", FUN_L01_002b8cb0);
-#else
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9d20(void *, void *, void *);
@@ -50,36 +47,36 @@ void FUN_L01_002b8cb0(f32 *pos, s32 index, s32 mode) {
     if (mode != 0) {
         row = index >> 2;
         column = index & 3;
-        half_y = 0.5f * -D_L01_001CAD00[3];
         half_x = 0.5f * -D_L01_001CAD00[2];
-        y_offset = half_y * (f32)row;
+        half_y = 0.5f * -D_L01_001CAD00[3];
         x_offset = half_x * (f32)column;
+        y_offset = half_y * (f32)row;
         y_end = y_offset + half_y;
         x_end = x_offset + half_x;
         offsets[0][1] = y_offset;
         offsets[0][0] = x_offset;
         offsets[1][1] = y_offset;
         offsets[1][0] = x_end;
-        offsets[2][1] = y_end;
         offsets[2][0] = x_offset;
-        offsets[3][1] = y_end;
+        offsets[2][1] = y_end;
         offsets[3][0] = x_end;
-        y = pos[1] + D_L01_001CAD00[3];
+        offsets[3][1] = y_end;
         x = pos[0] + D_L01_001CAD00[2];
-        corners[0][1] = y + offsets[2][1];
+        y = pos[1] + D_L01_001CAD00[3];
         corners[0][0] = x + offsets[2][0];
+        corners[0][1] = y + offsets[0][1];
         corners[0][2] = pos[2];
         corners[0][3] = 1.0f;
-        corners[1][1] = y + offsets[1][1];
         corners[1][0] = x + offsets[1][0];
+        corners[1][1] = y + offsets[1][1];
         corners[1][2] = pos[2];
         corners[1][3] = 1.0f;
         corners[2][0] = corners[0][0];
-        corners[2][1] = corners[1][1];
+        corners[2][1] = y + offsets[2][1];
         corners[2][2] = pos[2];
         corners[2][3] = 1.0f;
         corners[3][0] = corners[1][0];
-        corners[3][1] = corners[0][1];
+        corners[3][1] = corners[2][1];
         corners[3][2] = pos[2];
         corners[3][3] = 1.0f;
         near_bits = 0;
@@ -109,14 +106,14 @@ void FUN_L01_002b8cb0(f32 *pos, s32 index, s32 mode) {
             mode = 0;
         }
     }
-    if (mode == 0) {
-        value = 0xc;
+    value = (index & 3) * 4 + (index >> 2) * 0x44;
+    if (mode != 0) {
+        mode = 0xe;
     } else {
-        value = 0xe;
+        mode = 0xc;
     }
-    FUN_L01_00262388(value, (index & 3) * 4 + (index >> 2) * 0x44);
+    FUN_L01_00262388(mode, value);
 }
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b8f98.s", FUN_L01_002b8f98);
 #else
