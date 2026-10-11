@@ -269,14 +269,15 @@ int FUN_L11_003192c8(char *moby) {
         *(float *)&D_L11_001623F0_d = 5.0f;
     }
     for (i = 0; i < 16; i++) {
+        long long texture = trail_effect_texture(0x13);
         char *packet = stack_data + 0x40 + i * 0x90;
         float *source;
         float *position;
         int *colors;
-        *(long long *)(packet + 0x30) = 0;
-        *(long long *)(packet + 0x38) = trail_effect_texture(0x13);
+        *(long long *)(packet + 0x38) = texture;
         *(long long *)(packet + 0x40) = 0xff9000000260LL;
         *(long long *)(packet + 0x48) = 0x8000000048LL;
+        *(long long *)(packet + 0x30) = 0;
         phase = integer_to_float((D_L11_0015F5CC + 3) & 3) / (*(float *)&D_L11_001623F0_d * 4.0f);
         source = D_L11_001F1490;
         position = (float *)(packet + 0x10);
