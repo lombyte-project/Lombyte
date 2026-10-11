@@ -1033,6 +1033,7 @@ extern void *D_L08_001600EC;
 void FUN_L08_002de528(char *moby, int index, int count, int variant) {
     int i;
     int class_id;
+    int table_offset;
     char *spawned;
     float position[4];
     float axis[4];
@@ -1050,11 +1051,14 @@ void FUN_L08_002de528(char *moby, int index, int count, int variant) {
                        moby, data + 0x20, moby + 0x10, 0x2d, 0x1e, 0x1e, -1, 1, 1, -1, 0);
     }
     origin = moby + 0x10;
-    for (i = 0; i < count; i++) {
-        if (variant == 0) {
-            class_id = random_integer_below(0xff) & 1 ? 0x310 : 0x311;
+    table_offset = index << 7;
+    while (count-- > 0) {
+        if (variant != 0) {
+            if ((random_integer_below(0xff) & 1) != 0) class_id = 0x30e;
+            else class_id = 0x30f;
         } else {
-            class_id = random_integer_below(0xff) & 1 ? 0x30e : 0x30f;
+            if ((random_integer_below(0xff) & 1) != 0) class_id = 0x310;
+            else class_id = 0x311;
         }
         spawned = (char *)create_moby(class_id);
         *(short *)(spawned + 0x32) = 0x40;
@@ -1068,7 +1072,7 @@ void FUN_L08_002de528(char *moby, int index, int count, int variant) {
         position[1] = random_float_between(-1.0f, 1.0f);
         position[2] = random_float_between(-1.0f, 1.0f);
         position[3] = 1.0f;
-        FUN_001f9d20(position, position, (char *)D_L08_001600EC + (index << 7));
+        FUN_001f9d20(position, position, (char *)D_L08_001600EC + table_offset);
         qcopy(spawned + 0x10, position);
         FUN_001f99f8(axis);
         FUN_001f9a28(velocity, position, origin);
