@@ -17,27 +17,41 @@ extern int sample_path(float, int *, float *, int *, float *, int) __asm__("FUN_
 extern void spawn_on_path(float *, int, int, int) __asm__("FUN_L00_002c52a8");
 extern int FUN_00120478(float);
 extern char *D_L07_001B0530[];
-extern int D_L07_0015B0A0[] __attribute__((sda));
+extern char D_L07_00211AF0[];
+extern char D_L07_00211B30[];
+extern char D_L07_00211B50[];
+extern char D_L07_00211B78[];
+extern char D_L07_00211BA8[];
+extern int D_L07_00161CA0[] __attribute__((section(".sdata")));
+extern char *D_L07_0015FFD8 __attribute__((sda));
+extern char D_0013F3D0[];
+extern int D_0013D428[];
+
+typedef struct { char pad[0xe]; unsigned short scale; char tail[8]; } L07ScaleRow;
+extern L07ScaleRow D_L07_001C4130[];
 
 void FUN_L07_0031d2e0(char *moby) {
     int *data = *(int **)(moby + 0x78);
     int state = *(unsigned char *)(moby + 0x20);
-    if (state == 0) {
+    if (state == 1) goto state_one;
+    if (state >= 2) return;
+    if (state != 0) return;
+    {
         int bad = 0;
         int path_index;
         int i;
         int count;
         char *path;
         if (data[0] == -1) {
-            debug_print((char *)0x211af0);
+            debug_print(D_L07_00211AF0);
             bad = 1;
         }
         if (data[1] == -1) {
-            debug_print((char *)0x211af0);
+            debug_print(D_L07_00211AF0);
             bad = 1;
         }
         if (bad) {
-            debug_print((char *)0x211b30, *(short *)(moby + 0xb2));
+            debug_print(D_L07_00211B30, *(short *)(moby + 0xb2));
             mark_moby_for_removal(moby);
             return;
         }
@@ -45,28 +59,35 @@ void FUN_L07_0031d2e0(char *moby) {
         data[8] = 0;
         path = D_L07_001B0530[path_index];
         count = *(int *)path;
-        for (i = 0; i < count; i++) {
-            int next = (i + 1) % *(int *)D_L07_001B0530[data[1]];
-            float length = fast_vec_dist(path + 0x10 + i * 0x10,
-                                         path + 0x10 + next * 0x10);
+        i = 0;
+        if (count > 0) do {
+            char *current_path = D_L07_001B0530[data[1]];
+            int next = (i + 1) % *(int *)current_path;
+            float length = fast_vec_dist(current_path + 0x10 + i * 0x10,
+                                         current_path + 0x10 + next * 0x10);
             *(float *)(D_L07_001B0530[data[1]] + 0x1c + i * 0x10) = length;
             *(float *)(data + 8) += *(float *)(D_L07_001B0530[data[1]] + 0x1c + i * 0x10);
             count = *(int *)D_L07_001B0530[data[1]];
-        }
+            i++;
+        } while (i < count);
         moby[0x20] = 1;
-    } else if (state == 1) {
+
+    }
+    return;
+state_one:
+    {
         int i;
-        if (is_point_inside_clip_volume((void *)0x13f3d0, data[0]) == 0)
+        int *list = D_L07_00161CA0;
+        if (is_point_inside_clip_volume(D_0013F3D0, data[0]) == 0)
             return;
-        for (i = 0; D_L07_0015B0A0[i] != -1; i++) {
-            int id = D_L07_0015B0A0[i];
-            float value = convert_integer_to_float(*(int *)(0x13d428 + id * 4));
-            float scale = convert_integer_to_float(*(unsigned short *)(0x1c4130 + id * 0x18 + 0xe));
+        for (i = 0; list[i] != -1; i++) {
+            int id = list[i];
+            float value = convert_integer_to_float(D_0013D428[id]);
+            float scale = convert_integer_to_float(D_L07_001C4130[id].scale);
             float ratio = value / scale;
             float step = random_float_between(0.0f, *(float *)(data + 8));
             float min_ratio = *(float *)(data + 2) / 100.0f;
-            float max_ratio = *(float *)(data + 3) / 100.0f;
-            if (min_ratio <= ratio && ratio < max_ratio) {
+            if (min_ratio <= ratio && ratio < *(float *)(data + 3) / 100.0f) {
                 float lower = scale * (*(float *)(data + 4) / 100.0f) - value;
                 float upper = scale * (*(float *)(data + 5) / 100.0f);
                 float chosen;
@@ -75,8 +96,8 @@ void FUN_L07_0031d2e0(char *moby) {
                 int remaining;
                 int path_index;
                 float position[4];
-                float fraction = 0.0f;
-                int segment = 0;
+                float fraction;
+                int segment;
                 char *path;
                 if (data[6] == 0)
                     chosen = lower < upper ? lower : upper;
@@ -88,14 +109,16 @@ void FUN_L07_0031d2e0(char *moby) {
                     batch = total;
                 path_index = data[1];
                 path = D_L07_001B0530[path_index];
-                debug_print((char *)0x211b50, total, batch);
-                remaining = total - batch;
+                fraction = 0.0f;
+                segment = 0;
+                debug_print(D_L07_00211B50, total, batch);
                 if (total > 0) {
+                    remaining = total - batch;
                     do {
                         do {
                             sample_path(step, (int *)path, position, &segment, &fraction, 1);
                             if (data[9] == -1 ||
-                                12.0f < vector_distance(*(char **)0x1593d8 + data[9] * 0x100 + 0x10, position))
+                                12.0f < vector_distance((*(char **)0x15ffd8) + data[9] * 0x100 + 0x10, position))
                                 break;
                             step += 10.0f;
                         } while (1);
@@ -104,12 +127,12 @@ void FUN_L07_0031d2e0(char *moby) {
                             int y = FUN_00120478(position[1]);
                             int z = FUN_00120478(position[2]);
                             int path_step = FUN_00120478(step);
-                            debug_print((char *)0x211b78, id, batch, x, y, z, path_step);
+                            debug_print(D_L07_00211B78, id, batch, x, y, z, path_step);
                         }
                         spawn_on_path(position, id, batch, 0);
                         step += random_float_between(*(float *)(data + 8) / 10.0f, 2.0f);
                         if (remaining < batch) {
-                            debug_print((char *)0x211ba8, remaining);
+                            debug_print(D_L07_00211BA8, remaining);
                             batch = remaining;
                         }
                         total = remaining;
@@ -119,6 +142,7 @@ void FUN_L07_0031d2e0(char *moby) {
             }
         }
         moby[0x20] = 2;
+
     }
 }
 #endif
