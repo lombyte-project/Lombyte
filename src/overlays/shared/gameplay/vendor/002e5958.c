@@ -299,17 +299,13 @@ extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_00210a08(int, int, struct Moby *);
 
 void FUN_L15_002ed068(struct Moby *moby) {
-    char *linked = (char *)moby->pvars;
+    u8 *linked = moby->pvars;
     struct Moby *entry;
     u8 state = moby->state;
     u8 position[16] __attribute__((aligned(16)));
 
-    if (state == 1) {
-        moby->state = 2;
-        return;
-    }
-    if (state < 2) {
-        if (state != 0) return;
+    switch (state) {
+    case 0:
         if (*(int *)(linked + 0x60) == -1) {
             mark_moby_for_removal_002ed068(moby);
             return;
@@ -323,8 +319,11 @@ void FUN_L15_002ed068(struct Moby *moby) {
         } else {
             moby->state = 1;
         }
-    } else {
-        if (state != 2) return;
+        break;
+    case 1:
+        moby->state = 2;
+        return;
+    case 2:
         if (D_0013F64C == moby && D_0013F65E == 0 && D_L15_0015F5C4 != 2 && D_001413D4 != 0x1d) {
             if (D_001413F4 == 0) {
                 try_set_help_message(4, 0x3aa4);
@@ -350,8 +349,8 @@ void FUN_L15_002ed068(struct Moby *moby) {
             *(u128 *)position = *(u128 *)&moby->pos;
             *(float *)(position + 8) = probe_ground_height(position, 0, 0.5f) + 0.1f;
             FUN_L00_00216f90(position, &moby->rot, 0, 1);
-            entry->unk31 = 1;
             entry->unk94 = entry->pclass->unk10;
+            entry->unk31 = 1;
             entry->flags &= ~1;
             FUN_L00_00210a08(2, 0x5a, entry);
             if (current_level_index == 0xf) {
@@ -368,6 +367,9 @@ void FUN_L15_002ed068(struct Moby *moby) {
             moby->state = 3;
             return;
         }
+        break;
+    default:
+        return;
     }
     *(int *)(linked + 0x68) = -1;
 }
