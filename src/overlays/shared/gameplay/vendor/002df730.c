@@ -154,7 +154,7 @@ void FUN_L00_002e0340(char *a) {
         FUN_L00_002eac18(3);
     }
     if (hero.state.control_mode == 0x13) {
-        hero_set_state(0, 1);
+        hero_set_state(HERO_STATE_IDLE, 1);
     }
 }
 typedef struct {

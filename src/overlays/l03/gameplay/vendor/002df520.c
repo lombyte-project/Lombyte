@@ -146,7 +146,7 @@ void FUN_L03_002df520(u8 *moby) {
             FUN_L00_00203908(0x3EC, 0x40);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[14]) &&
-            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && hero.state.current == 1 &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && hero.state.current == HERO_STATE_LOOK &&
             D_L03_0015F688 == -1 && D_L03_00179510.state == 0 && D_L03_00179510.cur == -1 &&
             help_records[0x40].id != 0 && help_records[0x41].id == 0) {
             FUN_L00_00203908(0x3ED, 0x41);

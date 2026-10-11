@@ -224,7 +224,7 @@ void FUN_L15_00208ca8(void) {
     *(float *)(b + 0xA94) = 1.0f;
     FUN_L00_00232628();
     if (*(int *)(b + 0x2084) != 100 || (D_L15_0015F5C4 != 2 && D_L15_0015F5C4 != 6)) {
-        hero_set_state(0, 1);
+        hero_set_state(HERO_STATE_IDLE, 1);
     }
 }
 extern f32 D_0013F570_209450[] __asm__("D_0013F570");
@@ -255,14 +255,14 @@ void FUN_L15_00209450(void) {
     if (hero.state.control_mode == 4) {
         if (hero.state_timer > hero.unk420 && hero.unk41E == 0)
             hero.unk22C = hero.unk434;
-    } else if (hero.state.current == 6) {
+    } else if (hero.state.current == HERO_STATE_FALL) {
         hero.unk22C = 0.5f;
-    } else if (hero.state.current == 4) {
+    } else if (hero.state.current == HERO_STATE_CROUCH) {
         hero.unk228 = 0.35000002f;
     } else if ((u32)(hero.state.control_mode - 0x11) < 2) {
         hero.unk228 = 0.0f;
         hero.unk22C = 0.0f;
-    } else if (hero.state.current == 0x7F) {
+    } else if (hero.state.current == HERO_STATE_SINK) {
         hero.unk230 = 0.8f;
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
@@ -557,7 +557,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 void FUN_L15_0021ab60(void) {
     switch (D_0013E533[0x2EC1]) {
     case 0:
-        hero_set_state(0, 1);
+        hero_set_state(HERO_STATE_IDLE, 1);
         break;
     case 2:
         hero_set_state(0x5A, 1);

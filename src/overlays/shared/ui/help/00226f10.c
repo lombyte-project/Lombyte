@@ -302,7 +302,7 @@ void FUN_L01_0022cd48(void) {
                     if (r->water_surface_z - r->motion.pos.f[2] > 0.0f) {
                         if (r->motion.unk100.f[2] < 0.0f) {
                             func_L00_0020BFA8_2cd48();
-                            hero_set_state(0x7F, 1);
+                            hero_set_state(HERO_STATE_SINK, 1);
                         }
                     }
                 }
@@ -513,7 +513,7 @@ void FUN_L01_00231450(void) {
         if (D_L01_0015F5C4 == 6)
             return;
     }
-    hero_set_state(0, 1);
+    hero_set_state(HERO_STATE_IDLE, 1);
 }
 extern s32 D_L01_0015F5C4_8 __asm__("D_L01_0015F5C4");
 extern OvlMobyEntry40 D_L01_00178580_8[] __asm__("D_L01_00178580");
@@ -633,9 +633,9 @@ s32 FUN_L01_00231580(s32 arg) {
                     goto call_ret;
                 }
             }
-            hero_set_state(0x16, 1);
+            hero_set_state(HERO_STATE_HURT, 1);
         } else {
-            hero_set_state(0x16, 1);
+            hero_set_state(HERO_STATE_HURT, 1);
         }
         e = D_0015ED6C_8;
         a = e * 5.7f;
@@ -684,14 +684,14 @@ void FUN_L01_00231ae0(void) {
     if (hero.state.control_mode == 4) {
         if (hero.state_timer > hero.unk420 && hero.unk41E == 0)
             hero.unk22C = hero.unk434;
-    } else if (hero.state.current == 6) {
+    } else if (hero.state.current == HERO_STATE_FALL) {
         hero.unk22C = 0.5f;
-    } else if (hero.state.current == 4) {
+    } else if (hero.state.current == HERO_STATE_CROUCH) {
         hero.unk228 = 0.35000002f;
     } else if ((u32)(hero.state.control_mode - 0x11) < 2) {
         hero.unk228 = 0.0f;
         hero.unk22C = 0.0f;
-    } else if (hero.state.current == 0x7F) {
+    } else if (hero.state.current == HERO_STATE_SINK) {
         hero.unk230 = 0.8f;
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
@@ -1073,7 +1073,7 @@ s32 FUN_L01_00233940(s32 mode) {
     }
     vadd_233940(&hero.motion.pos.q, &hero.motion.pos.q, &v);
     mask = 0x24;
-    if (hero.state.current == 0x7F) {
+    if (hero.state.current == HERO_STATE_SINK) {
         mask = 0xD24;
     }
     for (i = 0; i < 8; i++) {
@@ -1376,7 +1376,7 @@ skip:
 void FUN_L01_002405a0(void) {
     switch ((unsigned char)D_0013E533[0x2EC1]) {
     case 0:
-        hero_set_state(0, 1);
+        hero_set_state(HERO_STATE_IDLE, 1);
         break;
     case 3:
         hero_set_state(0x53, 1);
@@ -1400,7 +1400,7 @@ void FUN_L01_00242198(void) {
     b->unk2284 = 0;
     FUN_L00_002118c8_242198(0, 1.0f);
     if (D_0013CAE0_242198 & 0xA) {
-        hero_set_state(4, 0);
+        hero_set_state(HERO_STATE_CROUCH, 0);
         FUN_L00_002323b8_242198(0xD, 2, -2.0f);
         FUN_L00_002325e0_242198(3, 0x12);
         return;
@@ -1408,10 +1408,10 @@ void FUN_L01_00242198(void) {
     c = &hero;
     if (0.3f < c->unk229C && c->unk1C4 == 0) {
         if (c->unk12E2 != 0 || c->unk20A9 != 0) {
-            hero_set_state(2, 1);
+            hero_set_state(HERO_STATE_RUN, 1);
             return;
         }
-        if (hero_set_state(2, 0)) {
+        if (hero_set_state(HERO_STATE_RUN, 0)) {
             c->state.step = 1;
             n = FUN_001f96f8_242198(8);
             if (FUN_001f96f8_242198(5) < c->unk418)
@@ -1425,14 +1425,14 @@ void FUN_L01_00242198(void) {
     if ((D_0015ED6C_242198 * 3.0f < d->motion.unk168 &&
          FUN_001f96f8_242198(3) < d->unk418) ||
         d->state.current == 0x10) {
-        if (hero_set_state(3, 0)) {
+        if (hero_set_state(HERO_STATE_STOP, 0)) {
             FUN_L00_002323b8_242198(5, 0, -1.0f);
             FUN_L00_0025f730_242198(&hero.motion.unk150, D_0015ED6C_242198 * 5.0f);
         }
         return;
     }
     if (FUN_001f96f8_242198(12) < d->unk418 || (d->unkA98 & 2)) {
-        if (hero_set_state(0, 0)) {
+        if (hero_set_state(HERO_STATE_IDLE, 0)) {
             if (FUN_L01_00226f10_242198(0) == 0x54) {
                 n = FUN_L01_00226f10_242198(0);
                 FUN_L00_002323b8_242198(n, 0, (f32)FUN_001f96f8_242198(15));

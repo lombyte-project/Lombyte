@@ -25,7 +25,7 @@ void FUN_L00_00215340(void) {
     f32 b, c1, c2, c3;
     f32 x;
 
-    if (hero.state.current == 2) {
+    if (hero.state.current == HERO_STATE_RUN) {
         FUN_L00_0020a1e0(0.04f, 0.2f);
         FUN_L00_0020a1f8(0.04f, 0.2f);
         FUN_L00_0020a210(0.04f, 0.2f);
@@ -66,7 +66,7 @@ void FUN_L00_00215340(void) {
             TF(0xAB8) = nw * 0.3f;
             TF(0xB68) = nw * 0.3f;
         }
-    } else if (hero.state.current == 8 || hero.state.current == 0x81) {
+    } else if (hero.state.current == HERO_STATE_LAND || hero.state.current == 0x81) {
         FUN_L00_0020a1e0(0.008f, 0.08f);
         FUN_L00_0020a1f8(0.015f, 0.08f);
         FUN_L00_0020a210(0.015f, 0.08f);

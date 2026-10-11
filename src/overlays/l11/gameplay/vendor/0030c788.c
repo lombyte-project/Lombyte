@@ -948,7 +948,7 @@ void FUN_L11_0030eb90(struct Moby *m) {
         d->spin = d->spin + change;
         if (absolute_float_eb90(m->rot.y) > D_L11_00161F84 * 0.017453292f &&
             (u32)hero.state.control_mode < 2) {
-            hero_set_state(6, 1);
+            hero_set_state(HERO_STATE_FALL, 1);
         }
     }
     m->rot.y = fast_add_rotations(m->rot.y, d->spin);

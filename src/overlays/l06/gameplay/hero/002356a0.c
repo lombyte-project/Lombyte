@@ -157,7 +157,7 @@ int hero_set_state(int a, int b) {
         }
         qcopy(&p->motion.unk150, &p->motion.unk110);
         if (p->on_slip_ground != 0 && p->frames_off_ground.s == 0) {
-            hero_set_state(0x79, 1);
+            hero_set_state(HERO_STATE_SLIP, 1);
             return 0;
         }
         {
@@ -306,7 +306,7 @@ int hero_set_state(int a, int b) {
             struct Hero *s = &hero;
             s->rand_timer.range = 0x68;
             if (s->on_slip_ground != 0 && s->frames_off_ground.s == 0) {
-                hero_set_state(0x79, 1);
+                hero_set_state(HERO_STATE_SLIP, 1);
                 return 0;
             }
         }
@@ -363,13 +363,13 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         qcopy(&p->motion.unk150, &p->motion.unk110);
         if (p->on_slip_ground != 0 && p->frames_off_ground.s == 0) {
-            hero_set_state(0x79, 1);
+            hero_set_state(HERO_STATE_SLIP, 1);
             return 0;
         }
         if (FUN_L00_00229a98())
             return 0;
         if (FUN_L06_0021d0a0(0) == 0x54) {
-            if (hero_set_state(0, 0)) {
+            if (hero_set_state(HERO_STATE_IDLE, 0)) {
                 set_hero_animation(FUN_L06_0021d0a0(0), 0, (float)scale_game_frames(0x12));
             }
             return 0;
@@ -408,7 +408,7 @@ int hero_set_state(int a, int b) {
         if (frame_time * 7.0f < p->ground_speed)
             p->ground_speed = frame_time * 7.0f;
         if (p->on_slip_ground != 0 && p->frames_off_ground.s == 0) {
-            hero_set_state(0x79, 1);
+            hero_set_state(HERO_STATE_SLIP, 1);
             return 0;
         }
         {
@@ -1466,7 +1466,7 @@ int hero_set_state(int a, int b) {
             int c0;
             int c1;
             int c2;
-            hero_set_state(0x3D, 1);
+            hero_set_state(HERO_STATE_DYING, 1);
             {
                 struct Hero *q = &hero;
                 q->unk22F4 = 1;

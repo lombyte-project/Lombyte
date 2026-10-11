@@ -305,7 +305,7 @@ void FUN_L00_002b3c50(X *x) {
     l0.f[1] = 0.0f;
     FUN_001f9cf8(&l0, &l0, &x->vC0);
     l0.f[2] = 0.025f;
-    if (hero.state.current == 8) {
+    if (hero.state.current == HERO_STATE_LAND) {
         col = 0xA0A0A0;
         q = 1.0165f;
         l0.f[2] -= D_0015ED6C_c * 5.0f;
@@ -660,7 +660,7 @@ void FUN_L00_002b5b20(void *a, char **b) {
     D_00141330[0] = 0;
     FUN_L00_002eba18(*(int *)((char *)b + 0x14));
     *(int *)((char *)b + 0x14) = 0;
-    hero_set_state(0, 1);
+    hero_set_state(HERO_STATE_IDLE, 1);
     FUN_L00_002b57f0_u(a, 1);
     FUN_L00_00203b78();
     mark_moby_for_removal(a);
@@ -1422,7 +1422,7 @@ void FUN_L00_002b4198(void *p) {
                 if (!hero.unk41E)
                     flag = 1;
             }
-            if (hero.state.current == 0x10) {
+            if (hero.state.current == HERO_STATE_PACK_LONG_JUMP) {
                 if (hero.state_timer < FUN_001f96f8_4198(0x2C)) {
                     flag = 1;
                 }
@@ -1433,7 +1433,7 @@ void FUN_L00_002b4198(void *p) {
                     flag = 1;
                 }
             }
-            if (hero.state.current == 8 || hero.state.current == 0x81) {
+            if (hero.state.current == HERO_STATE_LAND || hero.state.current == 0x81) {
                 flag = 1;
             }
         }

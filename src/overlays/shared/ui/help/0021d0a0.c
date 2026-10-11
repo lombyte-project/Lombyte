@@ -105,7 +105,7 @@ void FUN_L06_00227cf8(void) {
         FUN_L00_00232628_227cf8();
         if (g2->state.current != 100 ||
             (D_L06_0015F5C4_227cf8 != 2 && D_L06_0015F5C4_227cf8 != 6)) {
-            hero_set_state(0, 1);
+            hero_set_state(HERO_STATE_IDLE, 1);
         }
     }
 }
@@ -296,7 +296,7 @@ s32 FUN_L06_0022a1d0(s32 mode) {
     }
     vadd_22a1d0(&hero.motion.pos.q, &hero.motion.pos.q, &v);
     mask = 0xD24;
-    if (hero.state.current == 0x7F)
+    if (hero.state.current == HERO_STATE_SINK)
         mask = 0xD24;
     for (i = 0; i < 8; i++) {
         if (hero.unk20B3 != 0) {
@@ -524,7 +524,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 void FUN_L06_00239528(void) {
     switch (D_0013E533[0x2EC1]) {
     case 0:
-        hero_set_state(0, 1);
+        hero_set_state(HERO_STATE_IDLE, 1);
         break;
     case 1:
         hero_set_state(0x43, 1);

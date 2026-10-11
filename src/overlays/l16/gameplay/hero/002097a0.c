@@ -125,7 +125,7 @@ void FUN_L16_002097a0(void) {
                 if (h->water_surface_z - h->motion.pos.f[2] > 0.0f) {
                     if (h->motion.unk100.f[2] < 0.0f) {
                         FUN_L00_0020b930();
-                        hero_set_state(0x7F, 1);
+                        hero_set_state(HERO_STATE_SINK, 1);
                     }
                 }
             }
@@ -418,7 +418,7 @@ s32 FUN_L16_00210b60(s32 mode) {
     }
     vadd_2133a8(&hero.motion.pos.q, &hero.motion.pos.q, &v);
     mask = 0x24;
-    if (hero.state.current == 0x7F) {
+    if (hero.state.current == HERO_STATE_SINK) {
         mask = 0xD24;
     }
     for (i = 0; i < 8; i++) {

@@ -55,7 +55,7 @@ void FUN_L00_00204f80(void) {
     *(int *)(D_0014161B + 0x4D) = 0;
     g->unkA94 = 1.0f;
     FUN_L00_00232628();
-    hero_set_state(0, 1);
+    hero_set_state(HERO_STATE_IDLE, 1);
 }
 #define NOT_SDA
 
@@ -522,7 +522,7 @@ void FUN_L00_00206e00(void) {
     level = FUN_001f96f8(15);
     if (hero.state_timer == level) {
         if (hero.state.control_mode == 4) {
-            if (hero.state.current == 0xB) {
+            if (hero.state.current == HERO_STATE_HIGH_JUMP) {
                 if (hero.unk450 == 0)
                     input = D_0015EDB4 ? 2 : 1;
                 else if (hero.unk450 == 1)
@@ -531,23 +531,23 @@ void FUN_L00_00206e00(void) {
                     input = 3;
             } else if (hero.state.current == 0x11)
                 input = 9;
-            else if (hero.state.current == 0xA)
+            else if (hero.state.current == HERO_STATE_PACK_JUMP)
                 input = 10;
             else if (hero.state.current == 0xE)
                 input = 5;
         } else if (hero.state.control_mode == 6) {
-            if (hero.state.current == 0x14)
+            if (hero.state.current == HERO_STATE_WRENCH_SLAM)
                 input = 6;
-            else if (hero.state.current == 0x13)
+            else if (hero.state.current == HERO_STATE_WRENCH_COMBO)
                 input = hero.attack_record + 12;
-            else if (hero.state.current == 0x15)
+            else if (hero.state.current == HERO_STATE_CROUCH_SWING)
                 input = 4;
         } else if (hero.state.current == 0x22)
             input = 11;
     } else if (hero.state_timer == FUN_001f96f8(0x3C)) {
-        if (hero.state.current == 4)
+        if (hero.state.current == HERO_STATE_CROUCH)
             input = 7;
-        else if (hero.state.current == 8)
+        else if (hero.state.current == HERO_STATE_LAND)
             input = 8;
     }
     if (input == 0)

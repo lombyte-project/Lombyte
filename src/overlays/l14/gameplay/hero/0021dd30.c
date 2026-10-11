@@ -93,7 +93,7 @@ void FUN_L14_0021dd30(void) {
             if (h->water_surface_z - h->motion.pos.f[2] > 0.0f) {
                 if (h->motion.unk100.f[2] < 0.0f) {
                     FUN_L00_0020b930();
-                    hero_set_state(0x7F, 1);
+                    hero_set_state(HERO_STATE_SINK, 1);
                 }
             }
         }
@@ -196,7 +196,7 @@ s32 FUN_L14_00222aa8(s32 arg) {
             G.motion.unk120.f[2] = D_0015ED6C_8 * 7.0f;
             return 1;
         }
-        hero_set_state(0x16, 1);
+        hero_set_state(HERO_STATE_HURT, 1);
         e = D_0015ED6C_8;
         a = e * 5.7f;
         b = e * 2.4f;
@@ -244,14 +244,14 @@ void FUN_L14_00222f38(void) {
     if (hero.state.control_mode == 4) {
         if (hero.state_timer > hero.unk420 && hero.unk41E == 0)
             hero.unk22C = hero.unk434;
-    } else if (hero.state.current == 6) {
+    } else if (hero.state.current == HERO_STATE_FALL) {
         hero.unk22C = 0.5f;
-    } else if (hero.state.current == 4) {
+    } else if (hero.state.current == HERO_STATE_CROUCH) {
         hero.unk228 = 0.35000002f;
     } else if (hero.unk12E2 && hero.unk300) {
         hero.unk228 = 0.8f;
         hero.unk22C = 0.9f;
-    } else if (hero.state.current == 0x7F) {
+    } else if (hero.state.current == HERO_STATE_SINK) {
         hero.unk230 = 0.8f;
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
@@ -598,7 +598,7 @@ void FUN_L14_00228cd0(void) {
         }
         FUN_L00_00217118(3.7f, 0.0f);
         FUN_L00_002118c8(1.0f, 0);
-        if (hero.state.current == 1 || hero.state.current == 0x1E) {
+        if (hero.state.current == HERO_STATE_LOOK || hero.state.current == 0x1E) {
             if (hero.unk20A5 != 0) {
                 v0.q = 0;
                 v0.f[0] = 1.0f;
@@ -620,14 +620,14 @@ void FUN_L14_00228cd0(void) {
                 }
             }
         }
-        if (hero.state.current == 3) {
+        if (hero.state.current == HERO_STATE_STOP) {
             if (FUN_L00_00229a98() != 0) {
                 break;
             }
         }
-        if (hero.state.current == 4 || hero.state.current == 0x17) {
+        if (hero.state.current == HERO_STATE_CROUCH || hero.state.current == 0x17) {
             if (hero.unk229C > 0.2f || MV(hero.moby)->b53 == 0xE || MV(hero.moby)->b53 == 0xF) {
-                if (hero.state.current == 4) {
+                if (hero.state.current == HERO_STATE_CROUCH) {
                     FUN_L00_00211e30(0, frame_scale_sq * 0.002f, frame_scale_sq * 0.07f,
                                      frame_time * 6.981317f);
                 } else if (hero.state.current == 0x17) {
@@ -658,7 +658,7 @@ void FUN_L14_00228cd0(void) {
             }
         }
         hero.target_speed = 0.0f;
-        if (hero.state.current == 3) {
+        if (hero.state.current == HERO_STATE_STOP) {
             f32 s = hero.motion.unk16C + 1.0f;
             if (s > 1.0f) {
                 s = 1.0f;
@@ -676,7 +676,7 @@ void FUN_L14_00228cd0(void) {
                     hero.anim_speed = 1.0f;
                 }
             }
-        } else if (hero.state.current == 4) {
+        } else if (hero.state.current == HERO_STATE_CROUCH) {
             if (hero.unk12E2 != 0) {
                 speed = frame_time_sq * 1.7f;
             } else {
@@ -1581,7 +1581,7 @@ void FUN_L14_00228cd0(void) {
             }
             hero.unk2218 = -1;
         }
-        if (hero.state.current == 0x28 || hero.state.current == 0x2B) {
+        if (hero.state.current == HERO_STATE_GRIND || hero.state.current == 0x2B) {
             f32 ang;
             f32 rr;
             qcopy(&v0, &hero.motion.pos);
@@ -2094,11 +2094,11 @@ void FUN_L14_00228cd0(void) {
         if (t198 == t420) {
             qcopy(&hero.unk400, &hero.motion.pos);
         }
-        if (hero.unk418 != 0 || (t198 < t420 && hero.state.current != 0xB && hero.state.current != 0x10 && hero.state.current != 0xC &&
+        if (hero.unk418 != 0 || (t198 < t420 && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
                             hero.state.current != 0x11 && hero.state.current != 0x1C && hero.state.current != 0x4C)) {
             if (hero.unk4A8 != 0) {
                 FUN_L00_002167d0();
-                if (hero.state.current == 0xA && hero.state_timer < scale_game_frames(10) &&
+                if (hero.state.current == HERO_STATE_PACK_JUMP && hero.state_timer < scale_game_frames(10) &&
                     hero.motion.unk168 < frame_time * 7.0f) {
                     hero.motion.velocity.f[0] += FUN_001f9dc8(hero.motion.rot.f[2]) * (frame_time * 0.7f);
                     hero.motion.velocity.f[1] += FUN_001f9de0(hero.motion.rot.f[2]) * (frame_time * 0.7f);
@@ -2129,10 +2129,10 @@ void FUN_L14_00228cd0(void) {
                     }
                 }
                 FUN_L00_002132b8(0.5f, frame_time * 2.0f);
-                if (hero.state.current == 9 && hero.state_timer < hero.unk420 + scale_game_frames(4)) {
+                if (hero.state.current == HERO_STATE_RUN_JUMP && hero.state_timer < hero.unk420 + scale_game_frames(4)) {
                     FUN_L00_00233708(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 16.0f * (f32)hero.state_timer);
                 }
-                if (hero.state.current == 0xA && hero.state_timer < scale_game_frames(34)) {
+                if (hero.state.current == HERO_STATE_PACK_JUMP && hero.state_timer < scale_game_frames(34)) {
                     FUN_L00_00233708(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 53.0f * (f32)hero.state_timer);
                 }
                 if (hero.state_timer < scale_game_frames(10) && hero.unk229C > 0.2f) {
@@ -2168,11 +2168,11 @@ void FUN_L14_00228cd0(void) {
         if (hero.vehicle_mode == 0) {
             FUN_L00_00215340();
         }
-        if (hero.state.current == 0x10 || hero.state.current == 0xD) {
+        if (hero.state.current == HERO_STATE_PACK_LONG_JUMP || hero.state.current == 0xD) {
             t198 = (scale_game_frames(12) < hero.state_timer) * 2;
             FUN_L00_00262608(&hero.trail.pos[0], t198);
         }
-        if (hero.state.current == 0x10 && scale_game_frames(8) < hero.state_timer && hero.anim_frame < 28.0f) {
+        if (hero.state.current == HERO_STATE_PACK_LONG_JUMP && scale_game_frames(8) < hero.state_timer && hero.anim_frame < 28.0f) {
             s32 n;
             FUN_L00_00233660(&v0, 0.8f, 0.0f, 0.3f);
             n = collect_mobies_in_sphere(0.9f, &v0, 0, MV(hero.moby), NULL);

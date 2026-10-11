@@ -334,7 +334,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
             angle_from_xy(hero.motion.pos.component[0] - moby->position.component[0],
                           hero.motion.pos.component[1] - moby->position.component[1])) <
             1.2217305f) {
-        if (hero.state.current == 11 && hero.state_timer == 15) {
+        if (hero.state.current == HERO_STATE_HIGH_JUMP && hero.state_timer == 15) {
             state->breast_growth_count++;
             if (state->breast_growth_count > 20)
                 state->breast_growth_count = 20;
@@ -342,7 +342,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
         }
         /* Action 4 eventually reduces the effect, one step
          * every tenth game frame. Keep the scaled-frame threshold. */
-        if (hero.state.current == 4 && scale_frame_count(20) < hero.state_timer &&
+        if (hero.state.current == HERO_STATE_CROUCH && scale_frame_count(20) < hero.state_timer &&
             frame_number % 10 == 0) {
             state->breast_growth_count--;
             if (state->breast_growth_count < 0)

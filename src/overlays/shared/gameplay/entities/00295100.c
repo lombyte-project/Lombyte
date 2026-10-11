@@ -501,7 +501,7 @@ void FUN_L00_00298b18(void) {
         if (!(o->st & 0x80) && (o->type == 0x4A || o->type == 0xCB))
             o->flags &= ~0x80;
     }
-    hero_set_state(0, 1);
+    hero_set_state(HERO_STATE_IDLE, 1);
     g = f213508_298b18(&hero.motion.pos, 0, 0.5f);
     if (2.0f < g && absolute_float(hero.motion.pos.f[2] - g) < 4.5f)
         hero.motion.pos.f[2] = g;
@@ -1524,7 +1524,7 @@ void FUN_L00_0029ab70(int a) {
     f1ff768_29ab70();
     D_L00_0015F5D8_29ab70 = 1;
     D_L00_0015F5C4_29ab70 = 0;
-    hero_set_state(0, 1);
+    hero_set_state(HERO_STATE_IDLE, 1);
     hero.unk20A5 = 0;
     f2330d0_29ab70();
     if (*(int *)(g + 0x40) == 0) {
@@ -1668,7 +1668,7 @@ void FUN_L00_0029af80(void) {
     char *g;
     D_L00_0015F5D8 = 1;
     D_L00_0015F5C4 = 0;
-    hero_set_state(0, 1);
+    hero_set_state(HERO_STATE_IDLE, 1);
     hero.unk20A5 = 0;
     FUN_L00_002330d0();
     g = D_L00_001CA4C0_u;

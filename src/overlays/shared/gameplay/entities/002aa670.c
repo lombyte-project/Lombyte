@@ -1290,7 +1290,7 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
         moby[0xbc] = 1;
         qcopy(moby + 0x10, D_L00_00173E60_2acfd8);
     }
-    if (*((unsigned char *)&D_0013E520 + 0xa) != 0 && hero.state.current == 1) {
+    if (*((unsigned char *)&D_0013E520 + 0xa) != 0 && hero.state.current == HERO_STATE_LOOK) {
         float z = v[2];
         scale_vector_xyz_2acfd8(v, v, 1.5f);
         v[2] = z / 1.5f;

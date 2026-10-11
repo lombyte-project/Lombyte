@@ -2178,7 +2178,7 @@ void FUN_L17_002ee2b0(struct Moby *moby) {
                 B(moby, 0x20) = 9;
             }
             if (B(moby, 0xBC) != 0) {
-                hero_set_state(0, 0);
+                hero_set_state(HERO_STATE_IDLE, 0);
             }
             if (FUN_L00_0028d8c0(moby, W(state, 0x6C))) {
                 release_voice_slot(W(state, 0x6C));

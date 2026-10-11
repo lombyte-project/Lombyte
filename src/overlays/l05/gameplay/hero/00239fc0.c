@@ -80,7 +80,7 @@ void FUN_L05_00239fc0(void) {
         s = 0x7C;
         goto call;
     }
-    if (hero.selector_13 && hero.state.current != 0x7F && FUN_001f99c0_239fc0(hero.water_surface_z - (hero.motion.pos.f[2] + 0.25f)) < 1.0f &&
+    if (hero.selector_13 && hero.state.current != HERO_STATE_SINK && FUN_001f99c0_239fc0(hero.water_surface_z - (hero.motion.pos.f[2] + 0.25f)) < 1.0f &&
         0.0f < hero.water_surface_z - hero.motion.pos.f[2] && hero.motion.unk100.f[2] < 0.0f) {
         FUN_L00_0020b930_239fc0();
         s = 0x7F;
@@ -387,7 +387,7 @@ s32 FUN_L05_00240ed0(s32 mode) {
     }
     vadd_2133a8(&hero.motion.pos.q, &hero.motion.pos.q, &v);
     mask = 0x24;
-    if (hero.state.current == 0x7F) {
+    if (hero.state.current == HERO_STATE_SINK) {
         mask = 0xD24;
     }
     for (i = 0; i < 8; i++) {

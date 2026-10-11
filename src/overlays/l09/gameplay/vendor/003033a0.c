@@ -158,7 +158,7 @@ void FUN_L09_003033a0(unsigned char *moby) {
             if (0.5f < absolute_float(F(data, 0xA4) - 0.5f)) {
                 int r;
                 if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
-                    hero_set_state(0, 1);
+                    hero_set_state(HERO_STATE_IDLE, 1);
                 }
                 if (0.0f < F(data, 0xAC)) {
                     moby[0xBC] = 0;

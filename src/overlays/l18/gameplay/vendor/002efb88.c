@@ -2203,7 +2203,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
                 fire = 1;
             }
         }
-        if (hero.state.current == 0x16 && FUN_001f9b80(moby->f10, hero.motion.pos.f) < 12.0f) {
+        if (hero.state.current == HERO_STATE_HURT && FUN_001f9b80(moby->f10, hero.motion.pos.f) < 12.0f) {
             fire = 1;
         }
         if (FUN_001f9b80(hero.motion.pos.f, D_L18_001600EC + d->f250[2] * 0x80 + 0x30) >

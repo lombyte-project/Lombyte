@@ -101,7 +101,7 @@ void FUN_L00_00214658(void) {
         } else {
             hero.ground_speed = 0.0f;
         }
-        if (hero.state.current == 11) {
+        if (hero.state.current == HERO_STATE_HIGH_JUMP) {
             if (hero.unk41E != 0 && hero.unk44C < FUN_001f96f8_214658(0xC)) {
                 approach_value(0.0f, ED70 * 8.0f, &hero.unk458);
             } else {
@@ -680,12 +680,12 @@ void FUN_L00_002167d0(void) {
     FUN_L00_002118c8_c(0, 1.0f);
     f20 = 0.2f;
     FUN_L00_00211e30(0, frame_scale_sq * 0.02f, frame_scale_sq * f20, frame_time * 3.66519141f);
-    if (hero.state.current == 0x13) {
+    if (hero.state.current == HERO_STATE_WRENCH_COMBO) {
         if (hero.unk229C < f20) {
             hero.motion.move_yaw = hero.motion.rot.f[2];
         }
         hero.target_speed = 0.4f;
-    } else if (hero.state.current == 0x15) {
+    } else if (hero.state.current == HERO_STATE_CROUCH_SWING) {
         hero.target_speed = 0.0f;
     }
     f20 = 5.9f;
@@ -719,7 +719,7 @@ void FUN_L00_002167d0(void) {
     if (D_0013CB14[0]) {
         f21 = frame_time_sq * 1.1f;
     }
-    if (hero.state.current == 0x13 && hero.state_timer < scale_game_frames(0xF) &&
+    if (hero.state.current == HERO_STATE_WRENCH_COMBO && hero.state_timer < scale_game_frames(0xF) &&
         hero.motion.speed_xy < frame_time * 3.0f) {
         f21 = frame_time_sq * 11.0f;
     }

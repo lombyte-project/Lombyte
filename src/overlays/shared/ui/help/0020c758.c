@@ -1493,7 +1493,7 @@ void hero_switch_item(int i) {
         } else if (hero.items[3].item_id == 4 && hero.saved_item[3] != 0) {
             hero.restore_item[3] = 1;
         }
-        if (hero.state.current == 8 && ((int *)(D_00141660))[i] == 4) {
+        if (hero.state.current == HERO_STATE_LAND && ((int *)(D_00141660))[i] == 4) {
             hero.pending_item[i] = 2;
         }
     }
@@ -1821,7 +1821,7 @@ void FUN_L00_00210b30(void) {
         FUN_L00_00232628_210b30();
         if (g3->state.current != 100 ||
             (D_L00_0015F5C4_210b30 != 2 && D_L00_0015F5C4_210b30 != 6)) {
-            hero_set_state(0, 1);
+            hero_set_state(HERO_STATE_IDLE, 1);
         }
     }
 }
@@ -1999,9 +1999,9 @@ s32 hero_check_damage(s32 arg) {
                     goto call_ret;
                 }
             }
-            hero_set_state(0x16, 1);
+            hero_set_state(HERO_STATE_HURT, 1);
         } else {
-            hero_set_state(0x16, 1);
+            hero_set_state(HERO_STATE_HURT, 1);
         }
         e = D_0015ED6C_210ce8;
         a = e * 5.7f;
@@ -2116,9 +2116,9 @@ void FUN_L00_00211380(void) {
     if (hero.state.control_mode == 4) {
         if (hero.state_timer > hero.unk420 && hero.unk41E == 0)
             hero.unk22C = hero.unk434;
-    } else if (hero.state.current == 6) {
+    } else if (hero.state.current == HERO_STATE_FALL) {
         hero.unk22C = 0.5f;
-    } else if (hero.state.current == 4) {
+    } else if (hero.state.current == HERO_STATE_CROUCH) {
         hero.unk228 = 0.35000002f;
     } else if ((u32)(hero.state.control_mode - 0x11) < 2) {
         hero.unk228 = 0.0f;
@@ -2126,7 +2126,7 @@ void FUN_L00_00211380(void) {
     } else if (hero.unk12E2 && hero.unk300) {
         hero.unk228 = 0.8f;
         hero.unk22C = 0.9f;
-    } else if (hero.state.current == 0x7F) {
+    } else if (hero.state.current == HERO_STATE_SINK) {
         hero.unk230 = 0.8f;
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
@@ -3052,7 +3052,7 @@ s32 FUN_L00_002133a8(s32 mode) {
     }
     vadd_2133a8(&hero.motion.pos.q, &hero.motion.pos.q, &v);
     mask = 0x24;
-    if (hero.state.current == 0x7F) {
+    if (hero.state.current == HERO_STATE_SINK) {
         mask = 0xD24;
     }
     for (i = 0; i < 8; i++) {
@@ -3187,7 +3187,7 @@ void FUN_L00_00213880(void)
     FUN_L00_00233f80(hero.unk4F8, &hero.motion.unkF0, &hero.motion.rot);
 
     /* cap the speed; states 0x22 and 0x14 cap the horizontal part and the fall speed */
-    if (hero.state.current == 0x22 || hero.state.current == 0x14) {
+    if (hero.state.current == 0x22 || hero.state.current == HERO_STATE_WRENCH_SLAM) {
         if (hero.unk1CC == 0) {
             d = gravity_length_xy(&hero.motion.velocity);
             limit = hero.unk234 - 0.02f;

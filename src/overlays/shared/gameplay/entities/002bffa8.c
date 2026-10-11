@@ -1151,7 +1151,7 @@ void FUN_L00_002c7a58(struct Moby *moby) {
     if (vars->held == 0 || vars->held->state == 0xFE || vars->held->state == 0xFD) {
         vars->held = 0;
     }
-    if (hero.state.current == 1) {
+    if (hero.state.current == HERO_STATE_LOOK) {
         hero_set_state(0x1E, 1);
     }
     if (tick_countdown(&vars->timer) && !hero.unk20AC) {

@@ -739,7 +739,7 @@ int hero_set_state(int a, int b) {
         {
             struct Hero *r = &hero;
             if (r->on_slip_ground != 0 && r->frames_off_ground.s == 0) {
-                hero_set_state(0x79, 1);
+                hero_set_state(HERO_STATE_SLIP, 1);
                 return 0;
             }
         }
@@ -1132,7 +1132,7 @@ int hero_set_state(int a, int b) {
             struct Hero *s = &hero;
             s->rand_timer.range = 0x68;
             if (s->on_slip_ground != 0 && s->frames_off_ground.s == 0) {
-                hero_set_state(0x79, 1);
+                hero_set_state(HERO_STATE_SLIP, 1);
                 return 0;
             }
         }
@@ -1233,13 +1233,13 @@ int hero_set_state(int a, int b) {
             return 0;
         }
         if (p->on_slip_ground != 0 && p->frames_off_ground.s == 0) {
-            hero_set_state(0x79, 1);
+            hero_set_state(HERO_STATE_SLIP, 1);
             return 0;
         }
         if (FUN_L00_00229a98())
             return 0;
         if (hero_idle_sequence(0) == 0x54) {
-            if (hero_set_state(0, 0)) {
+            if (hero_set_state(HERO_STATE_IDLE, 0)) {
                 set_hero_animation(hero_idle_sequence(0), 0, (float)scale_game_frames(0x12));
             }
             return 0;
@@ -1278,7 +1278,7 @@ int hero_set_state(int a, int b) {
         if (frame_time * 7.0f < p->ground_speed)
             p->ground_speed = frame_time * 7.0f;
         if (p->on_slip_ground != 0 && p->frames_off_ground.s == 0) {
-            hero_set_state(0x79, 1);
+            hero_set_state(HERO_STATE_SLIP, 1);
             return 0;
         }
         {
@@ -2495,7 +2495,7 @@ int hero_set_state(int a, int b) {
             int c0;
             int c1;
             int c2;
-            hero_set_state(0x3D, 1);
+            hero_set_state(HERO_STATE_DYING, 1);
             {
                 struct Hero *q = &hero;
                 q->unk22F4 = 1;
@@ -2998,7 +2998,7 @@ extern unsigned char D_0013E533[];
 void FUN_L00_00227638(void) {
     switch (D_0013E533[0x2EC1]) {
     case 0:
-        hero_set_state(0, 1);
+        hero_set_state(HERO_STATE_IDLE, 1);
         break;
     case 1:
         hero_set_state(0x43, 1);
@@ -3631,7 +3631,7 @@ int FUN_L00_00228b78(void *a0, int a1) {
 
     if ((*(int *)((char *)D_0013A4E0 + 0x2600) & 0xA) != 0) {
         if (len > 0 && FUN_L00_00266e00(0x40, (void *)0x1F000, (char *)a0 + len, len)) {
-            hero_set_state(0xB, 1);
+            hero_set_state(HERO_STATE_HIGH_JUMP, 1);
             return 1;
         }
     }
@@ -3639,7 +3639,7 @@ int FUN_L00_00228b78(void *a0, int a1) {
     if (a1 != 0)
         return 0;
 
-    hero_set_state(0x7, 1);
+    hero_set_state(HERO_STATE_JUMP, 1);
     return 1;
 }
 #ifndef NON_MATCHING

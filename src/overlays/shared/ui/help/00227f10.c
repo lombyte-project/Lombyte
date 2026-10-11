@@ -127,7 +127,7 @@ void FUN_L12_00235c08(void) {
         } else {
             hero.ground_speed = 0.0f;
         }
-        if (hero.state.current == 11) {
+        if (hero.state.current == HERO_STATE_HIGH_JUMP) {
             if (hero.unk41E != 0 && hero.unk44C < FUN_001f96f8_235c08(0xC)) {
                 approach_value_235c08(0.0f, ED70 * 8.0f, &hero.unk458);
             } else {

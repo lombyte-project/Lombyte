@@ -286,7 +286,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
                 moby->state = 7;
             }
             if (moby->unkBC != 0) {
-                hero_set_state(0, 0);
+                hero_set_state(HERO_STATE_IDLE, 0);
                 FUN_L00_002eac18(1);
             }
         }

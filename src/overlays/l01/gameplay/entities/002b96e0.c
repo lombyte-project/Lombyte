@@ -907,7 +907,7 @@ void FUN_L01_002e6bf0(PeMoby *m) {
         }
         if (v->w1C8 == 0 && v->w1C4 != -1) {
             FUN_L00_002eac18(0);
-            hero_set_state(0, 1);
+            hero_set_state(HERO_STATE_IDLE, 1);
             D_L01_0015F404 = 0;
             v->w1C4 = -1;
         }
@@ -3199,7 +3199,7 @@ void FUN_L01_002f9080(CapMoby *m) {
     case 4:
         if (v->wait == 0 && v->music != -1) {
             FUN_L00_002eac18(0);
-            hero_set_state(0, 1);
+            hero_set_state(HERO_STATE_IDLE, 1);
             D_L01_0015F404 = 0;
             v->music = -1;
         }
