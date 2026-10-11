@@ -1599,6 +1599,7 @@ void FUN_L00_00208038(u128 *v, int b, float x, float y) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002080b0.s", FUN_L00_002080b0);
 #else
 extern char D_0013F350_002080b0[] __asm__("D_0013F350");
+extern f32 D_0015ED60_gp_002062b0 __asm__("D_0015ED60_gp") __attribute__((sda));
 extern f32 D_0015ED60_002080b0 __asm__("D_0015ED60");
 extern f32 D_0015ED6C_002080b0 __asm__("D_0015ED6C");
 extern f32 D_0015ED6C_gp_002080b0 __asm__("D_0015ED6C_gp") __attribute__((sda));
@@ -1612,58 +1613,78 @@ extern void FUN_001ff6d0_002080b0(void *, void *, void *) __asm__("FUN_L00_001ff
 extern void FUN_001ff278_002080b0(void *, void *, void *) __asm__("FUN_L00_001ff278");
 
 void FUN_L00_002080b0(void) {
-    char *g = D_0013F350_002080b0;
+    char *g;
     char *moby;
     u128 v;
-    f32 phase, speed, amount;
-    u32 color, red, green, blue;
-    s32 i, alpha;
-    u8 channel;
+    f32 speed;
 
     speed = D_0015ED6C_gp_002080b0;
-    if (*(s32 *)(g + 0x1158) == 5) {
-        moby = *(char **)(g + 0x1130);
-        if (moby != 0 && ((*(u16 *)(moby + 0x34) ^ 1) & 1)) {
-            i = 0;
-            do {
-                FUN_L00_0024f7c8_002080b0(moby, i, &v);
-                FUN_L00_00208038(&v, 0x301eaa1e, 0.057f, 0.15f);
-                i++;
-            } while (i < 2);
-            speed = D_0015ED6C_002080b0;
+    {
+        char *g = D_0013F350_002080b0;
+        char *moby;
+        s32 i;
+        if (*(s32 *)(g + 0x1158) == 5) {
+            moby = *(char **)(g + 0x1130);
+            if (moby != 0 && ((*(u16 *)(moby + 0x34) ^ 1) & 1)) {
+                i = 0;
+                do {
+                    FUN_L00_0024f7c8_002080b0(moby, i, &v);
+                    FUN_L00_00208038(&v, 0x301eaa1e, 0.057f, 0.15f);
+                    i++;
+                } while (i < 2);
+                speed = D_0015ED6C_002080b0;
+            }
         }
     }
-    phase = FUN_002000e8_002080b0(*(f32 *)(g + 0x1628), speed * 2.268928f);
-    *(f32 *)(g + 0x1628) = phase;
-    *(u32 *)(*(char **)(g + 0x2080) + 0x90) = FUN_00200298_002080b0(FUN_001ff800_002080b0(phase) * 0.5f + 0.5f, 0x806e8c6e, 0x805a3232);
+    g = D_0013F350_002080b0;
+    {
+        f32 phase;
+        phase = FUN_002000e8_002080b0(*(f32 *)(g + 0x1628), speed * 2.268928f);
+        *(f32 *)(g + 0x1628) = phase;
+        *(u32 *)(*(char **)(g + 0x2080) + 0x90) = FUN_00200298_002080b0(FUN_001ff800_002080b0(phase) * 0.5f + 0.5f, 0x806e8c6e, 0x805a3232);
+    }
 
     moby = *(char **)(g + 0x1090);
     if (moby == 0 || !((*(u16 *)(moby + 0x34) ^ 1) & 1))
         return;
-    switch (*(u32 *)(D_0013F350_002080b0 + 0x10b8)) {
-    case 0x11:
-        phase = FUN_002000e8_002080b0(*(f32 *)(D_0013F350_002080b0 + 0x10bc), D_0015ED6C_002080b0 * 4.363323f);
-        *(f32 *)(D_0013F350_002080b0 + 0x10bc) = phase;
+    switch (*(u32 *)(g + 0x10b8)) {
+    case 0x11: {
+        char *g = D_0013F350_002080b0;
+        f32 phase;
+        u32 color, red;
+        s32 blue;
+        u8 channel;
+        phase = FUN_002000e8_002080b0(*(f32 *)(g + 0x10bc), D_0015ED6C_002080b0 * 4.363323f);
+        *(f32 *)(g + 0x10bc) = phase;
         color = 0x28c8c8c8;
         if (0.0f < phase && phase < 2.268928f) color = 0x280a0a0a;
         *(u32 *)(moby + 0x90) = FUN_00200298_002080b0(0.07f, *(u32 *)(moby + 0x90), color);
         v = 0;
-        ((u32 *)&v)[0] = 0x3c8e17a0;
-        ((u32 *)&v)[1] = 0xbd20785e;
-        ((u32 *)&v)[2] = 0x3dc51698;
+        ((f32 *)&v)[0] = 0.0173452497f;
+        ((f32 *)&v)[1] = -0.0391772911f;
+        ((f32 *)&v)[2] = 0.0962345004f;
         FUN_001ff6d0_002080b0(&v, &v, moby + 0xc0);
         FUN_001ff278_002080b0(&v, &v, moby + 0x10);
-        channel = *(u8 *)(moby + 0x91);
-        red = FUN_00200250_002080b0((f32)*(u8 *)(moby + 0x90) * 0.2f);
-        blue = FUN_00200250_002080b0((f32)*(u8 *)(moby + 0x92) * 0.2f);
-        color = ((channel << 5) / 200 << 24) | (blue << 16) | ((u32)channel << 8) | red;
+        {
+            u8 blue_channel;
+            channel = *(u8 *)(moby + 0x91);
+            blue_channel = *(u8 *)(moby + 0x92);
+            red = FUN_00200250_002080b0((f32)*(u8 *)(moby + 0x90) * 0.2f);
+            blue = FUN_00200250_002080b0((f32)blue_channel * 0.2f);
+        }
+        color = ((((channel << 5) / 200 << 24) | (blue << 16)) | ((u32)channel << 8)) | red;
         FUN_L00_00208038(&v, color, 0.15f, 0.1f);
         break;
-    case 0x10:
+    }
+    case 0x10: {
+        char *g = D_0013F350_002080b0;
+        f32 phase, amount;
+        u32 color, red;
+        s32 green, blue, alpha;
         if (FUN_001fef20_002080b0(0x32) < *(s32 *)(g + 0x10b0)) {
-            amount = 3.1415927f;
-            if (*(u8 *)(g + 0x20a8)) amount = 4.712389f;
-            phase = FUN_002000e8_002080b0(*(f32 *)(g + 0x10bc), D_0015ED6C_gp_002080b0 * amount);
+            amount = D_0015ED6C_gp_002080b0 * 3.1415927f;
+            if (*(u8 *)(g + 0x20a8)) amount = D_0015ED6C_gp_002080b0 * 4.712389f;
+            phase = FUN_002000e8_002080b0(*(f32 *)(g + 0x10bc), amount);
             *(f32 *)(g + 0x10bc) = phase;
             red = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 20.0f) + 0x1e;
             green = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 90.0f) + 0x96;
@@ -1675,20 +1696,26 @@ void FUN_L00_002080b0(void) {
             }
             blue <<= 16;
             green <<= 8;
-            *(u32 *)(moby + 0x90) = FUN_00200298_002080b0(0.13f, *(u32 *)(moby + 0x90), blue | 0x20000000 | green | red);
+            *(u32 *)(moby + 0x90) = FUN_00200298_002080b0(0.13f, *(u32 *)(moby + 0x90), ((blue | 0x20000000) | green) | red);
             alpha = *(s32 *)(g + 0x10b0) - FUN_001fef20_002080b0(0x32);
             alpha = alpha > 0x20 ? 0x20 : alpha;
+            color = (((alpha << 24) | blue) | green) | red;
             FUN_L00_0024f7c8_002080b0(moby, 1, &v);
-            FUN_L00_00208038(&v, (alpha << 24) | blue | green | red, 0.15f, 0.04f);
+            FUN_L00_00208038(&v, color, 0.15f, 0.04f);
             return;
         }
         break;
-    case 0x13:
-        amount = 2.268928f;
-        if (*(u8 *)(D_0013F350_002080b0 + 0x20a8)) amount = 7.330383f;
-        phase = FUN_002000e8_002080b0(*(f32 *)(D_0013F350_002080b0 + 0x10bc), D_0015ED6C_002080b0 * amount);
-        *(f32 *)(D_0013F350_002080b0 + 0x10bc) = phase;
-        if (*(u8 *)(D_0013F350_002080b0 + 0x20a8)) {
+    }
+    case 0x13: {
+        char *g = D_0013F350_002080b0;
+        f32 phase, amount;
+        u32 color, red;
+        s32 green, blue;
+        amount = D_0015ED6C_002080b0 * 2.268928f;
+        if (*(u8 *)(g + 0x20a8)) amount = D_0015ED6C_002080b0 * 7.330383f;
+        phase = FUN_002000e8_002080b0(*(f32 *)(g + 0x10bc), amount);
+        *(f32 *)(g + 0x10bc) = phase;
+        if (*(u8 *)(g + 0x20a8)) {
             red = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 30.0f) + 0x32;
             green = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 30.0f) + 0x32;
             blue = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 90.0f) + 0xaa;
@@ -1697,40 +1724,58 @@ void FUN_L00_002080b0(void) {
             green = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 40.0f) + 0x46;
             blue = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 40.0f) + 0x46;
         }
-        color = (blue << 16) | 0x80000000 | (green << 8) | red;
+        color = (((blue << 16) | 0x80000000) | (green << 8)) | red;
         *(u32 *)(moby + 0x90) = FUN_00200298_002080b0(0.15f, *(u32 *)(moby + 0x90), color);
         break;
-    case 0x14:
-        phase = FUN_002000e8_002080b0(*(f32 *)(D_0013F350_002080b0 + 0x10bc), D_0015ED6C_002080b0 * 4.363323f);
-        *(f32 *)(D_0013F350_002080b0 + 0x10bc) = phase;
+    }
+    case 0x14: {
+        char *g = D_0013F350_002080b0;
+        f32 phase;
+        u32 color, red;
+        s32 blue;
+        u8 channel;
+        phase = FUN_002000e8_002080b0(*(f32 *)(g + 0x10bc), D_0015ED6C_002080b0 * 4.363323f);
+        *(f32 *)(g + 0x10bc) = phase;
         color = 0x00dcdcdc;
         if (0.0f < phase && phase < 2.443461f) color = 0x000a0a0a;
         *(u32 *)(moby + 0x90) = FUN_00200298_002080b0(0.07f, *(u32 *)(moby + 0x90), color);
         v = 0;
-        ((u32 *)&v)[0] = 0x3c8c1e21;
-        ((u32 *)&v)[1] = 0xbdc058d3;
-        ((u32 *)&v)[2] = 0x3e105647;
+        ((f32 *)&v)[0] = 0.0171042103f;
+        ((f32 *)&v)[1] = -0.0939194188f;
+        ((f32 *)&v)[2] = 0.140954122f;
         FUN_001ff6d0_002080b0(&v, &v, moby + 0xc0);
         FUN_001ff278_002080b0(&v, &v, moby + 0x10);
-        channel = *(u8 *)(moby + 0x91);
-        red = FUN_00200250_002080b0((f32)*(u8 *)(moby + 0x90) * 0.2f);
-        blue = FUN_00200250_002080b0((f32)*(u8 *)(moby + 0x92) * 0.2f);
-        color = ((channel << 5) / 200 << 24) | (blue << 16) | ((u32)channel << 8) | red;
+        {
+            u8 blue_channel;
+            channel = *(u8 *)(moby + 0x91);
+            blue_channel = *(u8 *)(moby + 0x92);
+            red = FUN_00200250_002080b0((f32)*(u8 *)(moby + 0x90) * 0.2f);
+            blue = FUN_00200250_002080b0((f32)blue_channel * 0.2f);
+        }
+        color = ((((channel << 5) / 200 << 24) | (blue << 16)) | ((u32)channel << 8)) | red;
         FUN_L00_00208038(&v, color, 0.17f, 0.1f);
         break;
-    case 0xD:
-        phase = FUN_002000e8_002080b0(*(f32 *)(D_0013F350_002080b0 + 0x10bc), D_0015ED6C_002080b0 * 4.712389f);
-        *(f32 *)(D_0013F350_002080b0 + 0x10bc) = phase;
+    }
+    case 0xD: {
+        char *g = D_0013F350_002080b0;
+        f32 phase, amount;
+        u32 color;
+        phase = FUN_002000e8_002080b0(*(f32 *)(g + 0x10bc), D_0015ED6C_002080b0 * 4.712389f);
+        *(f32 *)(g + 0x10bc) = phase;
         color = 0x2814d214;
-        amount = D_0015ED60_002080b0;
-        if (0.0f < phase && phase < 2.0943952f) {
+        if (0.0f < phase) {
+            amount = D_0015ED60_gp_002062b0;
+            if (!(phase < 2.0943952f))
+                goto update_color;
             color = 0x281414d2;
-            amount = D_0015ED60_002080b0;
         }
+        amount = D_0015ED60_002080b0;
+update_color:
         *(u32 *)(moby + 0x90) = FUN_00200298_002080b0(amount * 0.05f, *(u32 *)(moby + 0x90), color);
         FUN_L00_0024f7c8_002080b0(moby, 0, &v);
         FUN_L00_00208038(&v, *(u32 *)(moby + 0x90), 0.1f, 0.03f);
         break;
+    }
     }
 }
 #endif
