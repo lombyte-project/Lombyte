@@ -353,4 +353,150 @@ void FUN_L07_00310df0(u8 *moby)
     moby[0x20] = state;
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031aee0.s", FUN_L07_0031aee0);
+#else
+extern void scale_vector_xyz_31aee0(f32, void *, void *) __asm__("FUN_001f9a68");
+extern void add_vector_xyz_31aee0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern f32 vector_length_xyz_31aee0(void *) __asm__("FUN_001f9af0");
+extern void scale_vector_xyz_alt_31aee0(f32, void *, void *) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz_31aee0(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void play_sound_31aee0(s32, s32, void *) __asm__("FUN_0022da68");
+extern void update_moby_motion_31aee0(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
+extern u8 *D_L07_0015FFD8_31aee0 __asm__("D_L07_0015FFD8") __attribute__((sda));
+extern f32 D_0015ED6C_31aee0 __asm__("D_0015ED6C");
+
+void FUN_L07_0031aee0(u8 *moby)
+{
+    u8 *data = *(u8 **)(moby + 0x78);
+    u8 *other;
+    u8 *position;
+    f32 delta[4];
+    f32 old_rotation[8];
+    f32 vectors[8];
+    f32 distance;
+    s32 index;
+    u8 state;
+    typedef u32 quadword __attribute__((mode(TI), aligned(16)));
+
+    scale_vector_xyz_31aee0(-1.0f, delta, moby + 0x10);
+    *(quadword *)(old_rotation + 4) = *(quadword *)(moby + 0x40);
+
+    if (moby[0xb0] != 0xff &&
+        D_0014C150_30D370[moby[0xb0] + D_0015ED84 * 16] == 0xff)
+        *(s32 *)(data + 0xb0) = -1;
+
+    state = moby[0x20];
+    switch (state) {
+    case 0:
+        position = moby + 0x10;
+        *(quadword *)(data + 0xa0) = *(quadword *)position;
+        index = *(s32 *)(data + 0xd8);
+        if (index != -1)
+            ((s32 *)0x184528)[index] = 0;
+        moby[0x20] = 1;
+        *(s32 *)(data + 0xac) = 0;
+        break;
+    case 1:
+        index = *(s32 *)(data + 0xb0);
+        if (index != -1) {
+            other = D_L07_0015FFD8_31aee0 + index * 0x100;
+            if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
+                other[0x20] != *(u32 *)(data + 0xb4))
+                break;
+        }
+        *(quadword *)(vectors + 4) = 0;
+        vectors[0] = vectors[4] = *(f32 *)(data + 0xbc);
+        vectors[1] = vectors[5] = *(f32 *)(data + 0xc0);
+        vectors[2] = vectors[6] = *(f32 *)(data + 0xc4);
+        *(quadword *)vectors = *(quadword *)(vectors + 4);
+        *(f32 *)(data + 0xac) = vector_length_xyz_31aee0(vectors);
+        if (*(s32 *)(data + 0xd0) != -1)
+            play_sound_31aee0(*(s32 *)(data + 0xd0), 0, moby);
+        moby[0x20] = 2;
+        break;
+    case 2:
+        index = *(s32 *)(data + 0xb0);
+        if (index != -1) {
+            other = D_L07_0015FFD8_31aee0 + index * 0x100;
+            if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
+                other[0x20] == *(u32 *)(data + 0xb8)) {
+                if (*(s32 *)(data + 0xd0) != -1)
+                    play_sound_31aee0(*(s32 *)(data + 0xd0), 0, moby);
+                moby[0x20] = 4;
+                break;
+            }
+        }
+        *(quadword *)(vectors + 4) = 0;
+        vectors[0] = vectors[4] = *(f32 *)(data + 0xbc);
+        vectors[1] = vectors[5] = *(f32 *)(data + 0xc0);
+        vectors[2] = vectors[6] = *(f32 *)(data + 0xc4);
+        *(quadword *)vectors = *(quadword *)(vectors + 4);
+        position = moby + 0x10;
+        subtract_vector_xyz_31aee0(vectors, vectors, moby + 0xc0);
+        scale_vector_xyz_alt_31aee0(*(f32 *)(data + 0xc8) * D_0015ED6C_31aee0, vectors + 4, vectors);
+        add_vector_xyz_31aee0(position, position, vectors + 4);
+        *(f32 *)(data + 0xac) -= *(f32 *)(data + 0xc8) * D_0015ED6C_31aee0;
+        if (*(f32 *)(data + 0xac) < 0.0f) {
+            add_vector_xyz_31aee0(position, data + 0xa0, vectors);
+            *(s32 *)(data + 0xac) = 0;
+            index = *(s32 *)(data + 0xd8);
+            if (index != -1)
+                ((s32 *)0x184528)[index] = 1;
+            moby[0x20] = 3;
+            if (*(s32 *)(data + 0xd4) != -1)
+                play_sound_31aee0(*(s32 *)(data + 0xd0), 0, moby);
+        }
+        break;
+    case 3:
+        index = *(s32 *)(data + 0xb0);
+        if (index != -1) {
+            other = D_L07_0015FFD8_31aee0 + index * 0x100;
+            if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
+                other[0x20] == *(u32 *)(data + 0xb8)) {
+                *(s32 *)(data + 0xac) = 0;
+                if (*(s32 *)(data + 0xd0) != -1)
+                    play_sound_31aee0(*(s32 *)(data + 0xd0), 0, moby);
+                moby[0x20] = 4;
+            }
+        }
+        break;
+    case 4:
+        index = *(s32 *)(data + 0xb0);
+        if (index == -1 ||
+            (other = D_L07_0015FFD8_31aee0 + index * 0x100) == 0 ||
+            other[0x20] == 0xfe || other[0x20] == 0xfd ||
+            other[0x20] == *(u32 *)(data + 0xb4)) {
+            if (*(s32 *)(data + 0xd0) != -1)
+                play_sound_31aee0(*(s32 *)(data + 0xd0), 0, moby);
+            moby[0x20] = 2;
+        } else {
+            *(quadword *)(vectors + 4) = 0;
+            vectors[0] = vectors[4] = *(f32 *)(data + 0xbc);
+            vectors[1] = vectors[5] = *(f32 *)(data + 0xc0);
+            vectors[2] = vectors[6] = *(f32 *)(data + 0xc4);
+            *(quadword *)vectors = *(quadword *)(vectors + 4);
+            position = moby + 0x10;
+            distance = vector_length_xyz_31aee0(vectors);
+            scale_vector_xyz_alt_31aee0(-(*(f32 *)(data + 0xcc) * D_0015ED6C_31aee0), vectors, vectors);
+            subtract_vector_xyz_31aee0(vectors + 4, vectors, moby + 0xc0);
+            add_vector_xyz_31aee0(position, position, vectors + 4);
+            *(f32 *)(data + 0xac) += *(f32 *)(data + 0xcc) * D_0015ED6C_31aee0;
+            if (distance < *(f32 *)(data + 0xac)) {
+                *(quadword *)position = *(quadword *)(data + 0xa0);
+                if (*(s32 *)(data + 0xd0) != -1)
+                    play_sound_31aee0(*(s32 *)(data + 0xd4), 0, moby);
+                index = *(s32 *)(data + 0xd8);
+                if (index != -1)
+                    ((s32 *)0x184528)[index] = 0;
+                moby[0x20] = 1;
+            }
+        }
+        break;
+    case 5:
+        break;
+    }
+    add_vector_xyz_31aee0(delta, delta, moby + 0x10);
+    update_moby_motion_31aee0(data + 0x60, delta, old_rotation + 4, moby + 0x40);
+}
+#endif
