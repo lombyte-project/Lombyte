@@ -1661,8 +1661,8 @@ extern u16 D_00141CB8 __attribute__((section(".data")));
 extern u16 D_00141CC0 __attribute__((section(".data")));
 extern u16 D_00141CC2 __attribute__((section(".data")));
 extern u32 D_00141CC4 __attribute__((section(".data")));
-#define D_00179890 (*(volatile s32 *)(0x00180000 - 0x6770))
-#define D_001798B4 (*(volatile s32 *)(0x00180000 - 0x674c))
+#define D_00179890 (((volatile s32 *)0x00180000)[-0x6770 / 4])
+#define D_001798B4 (((volatile s32 *)0x00180000)[-0x674c / 4])
 extern s32 D_L10_0015FFE4 __attribute__((section(".data")));
 extern s32 D_L10_0015F5C4 __attribute__((section(".data")));
 extern s32 D_L10_0015ED84 __attribute__((section(".data")));
@@ -1673,7 +1673,7 @@ extern s32 D_L10_0015ED84_sda __asm__("D_L10_0015ED84") __attribute__((sda));
 void FUN_L10_002e85b8(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     struct Moby *other;
-    int found = 0;
+    int found;
     int frame;
     int elapsed;
 
@@ -1681,13 +1681,16 @@ void FUN_L10_002e85b8(struct Moby *moby) {
         D_L10_00161F38 = 1;
     else
         D_L10_00161F38 = 0;
-    if (moby->state == 0) {
+    if (moby->state == 0) goto initialize;
+    if (moby->state != 1) return;
+    goto active;
+initialize:
+    {
         moby->state = 1;
         moby->unk30 = 0xff;
         return;
     }
-    if (moby->state != 1) return;
-
+active:
     if (is_point_inside_clip_volume(D_0013F3D0, data[0]) &&
         (D_001413DC < 2 || D_001413DC == 9) &&
         D_00179890 == 0 && D_001798B4 == -1 && D_00141B10 == 0)
@@ -1711,21 +1714,20 @@ void FUN_L10_002e85b8(struct Moby *moby) {
         D_00179890 == 0 && D_001798B4 == -1 && D_00141C48 == 0)
         FUN_L00_00203908(0x2715, 0x5c);
 
+    found = 0;
     other = (struct Moby *)D_L10_0015FFE4;
     while (other != 0) {
-        if (other->oclass == 0x359) found |= (other->state != 1);
+        if (other->oclass == 0x359 && other->state != 1) found = 1;
         other = other->next;
     }
-    if (!found) return;
-
-    if (data[4] != -1 && vector_distance(D_0013F3D0,
-            (char *)D_L10_0015FFD8 + data[4] * 256 + 0x10) < 15.0f &&
+    if (found && data[4] != -1 && vector_distance(D_0013F3D0,
+            (char *)D_L10_0015FFD0_e[2] + data[4] * 256 + 0x10) < 15.0f &&
         data[5] != -1 && vector_distance(D_0013F3D0,
-            (char *)D_L10_0015FFD8 + data[5] * 256 + 0x10) < 15.0f &&
+            (char *)D_L10_0015FFD0_e[2] + data[5] * 256 + 0x10) < 15.0f &&
         D_00141CB8 == 0)
         FUN_L00_00203908(0x2717, 0x6a);
 
-    if (is_point_inside_clip_volume(D_0013F3D0, data[6]) && data[8] != -1) {
+    if (found && is_point_inside_clip_volume(D_0013F3D0, data[6]) && data[8] != -1) {
         other = (struct Moby *)((char *)D_L10_0015FFD8 + data[8] * 256);
         if (other->oclass == 0x3f7 && other->state != 4) {
             if (D_00141CC0 == 0) {
