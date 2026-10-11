@@ -9,7 +9,121 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002df270.s", FUN_L10_002df270);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dfc38.s", FUN_L10_002dfc38);
+#else
+typedef struct Hit_2DFC38 { float x, y; char pad8[8]; float f10[4]; struct Moby *moby; char pad24[8]; float f2C; int f30; } Hit_2DFC38;
+typedef struct MobyData_2DFC38 { char pad0[0x20]; float f20; char pad24[2]; short f26; char pad28[0x10]; int f38; char pad3C[0x24]; char f60[0x10]; float f70, f74, f78, f7C; char pad80[4]; int f84; char pad88[0x15]; unsigned char f9D; char pad9E[0x22]; char fC0[0x40]; int f100, f104; char pad108[8]; char f110[7]; unsigned char f117; char pad118[0x18]; char f130[0x44]; int f174; float f178; int f17C; float f180; int f184; float f188; int f18C; char pad190[4]; int f194; } MobyData_2DFC38;
+typedef struct Anim_2DFC38 { char pad0[0x30]; float f30[4], f40[4]; char pad50[0x30]; } Anim_2DFC38;
+typedef struct Path_2DFC38 { int count; char pad4[0xC]; float pts[4]; } Path_2DFC38;
+extern Anim_2DFC38 *D_L10_001600EC_2DFC38 __asm__("D_L10_001600EC");
+extern Path_2DFC38 *D_L10_001B0C30_2DFC38[] __asm__("D_L10_001B0930");
+extern char D_0013E633_2DFC38[] __asm__("D_0013F3D0");
+extern int D_001414D0_2DFC38[] __asm__("D_001413D0");
+extern float D_0015ED6C, D_0015ED70;
+extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
+extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
+extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void func_L00_00261B00_2E2B80(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern int ahead_f(float, void *, void *) __asm__("FUN_L01_00274b78");
+extern int func_L00_00260FB0_2E2B80(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern unsigned char D_0013D418 __attribute__((section(".data")));
+extern int D_00151F38 __attribute__((sda));
+extern float random_float_between_2DFC38(float, float) __asm__("FUN_002132a8");
+extern float scale_time_2DFC38(float) __asm__("FUN_001f96b0");
+extern int truncate_float_2DFC38(float) __asm__("FUN_001fa6d0");
+extern void tick_timer_2DFC38(void *) __asm__("FUN_001f9740");
+extern int game_frames_2DFC38(int) __asm__("FUN_001f96f8");
+extern int hit_search_2DFC38(void *, int, int) __asm__("FUN_L00_0025a420");
+extern void hit_update_2DFC38(void *, void *, void *, int, void *, int, int, int) __asm__("FUN_00213928");
+extern void play_sound_2DFC38(int, int) __asm__("FUN_L00_00263d40");
+extern void allocate_voice_for_bank_entry_2DFC38(int, int, int) __asm__("FUN_0022db10");
+
+void FUN_L10_002dfc38(struct Moby *moby) {
+    MobyData_2DFC38 *data = (MobyData_2DFC38 *)moby->pvars;
+    Hit_2DFC38 *r;
+    float v[4];
+    float w[4];
+    int st;
+    int r19;
+    float ang;
+
+    if (data->f38 != 0) {
+        data->f184 = truncate_float_2DFC38(scale_time_2DFC38(random_float_between_2DFC38(180.0f, 240.0f)));
+        data->f38 = 0;
+    }
+    tick_timer_2DFC38(&data->f184);
+    if (moby->state != 11) {
+        r = (Hit_2DFC38 *)hit_search_2DFC38(moby, 0x330000, 0);
+        hit_update_2DFC38(moby, r, &data->f20, 5, &st, 0, 0, 4);
+        if (r != 0) {
+            if (data->f20 <= r->f2C) {
+                if (D_00151F38 != 0 && D_0013D418 == 0) {
+                    D_0013D418 = 1;
+                    allocate_voice_for_bank_entry_2DFC38(1, (int)(&D_0013D418 - 0x10), 0);
+                    play_sound_2DFC38(0x53d6, -1);
+                }
+                data->f20 = 0.0f;
+                moby->flags &= 0xEFFF;
+                if (moby->prev_seq != 5) blend_moby_animation(moby, 5, 0, game_frames_2DFC38(10));
+                moby->state = 11;
+                data->f9D = 3;
+                data->f70 = D_0015ED70 * 26.0f;
+                data->f74 = 0.0005f;
+                data->f84 = 9;
+                data->f78 = D_0015ED6C * 7.0f;
+                data->f7C = D_0015ED6C * 10.0f;
+                if ((r->f30 & 1) == 0) ang = angle_atan2(moby->pos.x - r->x, moby->pos.y - r->y);
+                else ang = angle_atan2(r->f10[0], r->f10[1]);
+                trooper_start_knockback(moby, data->f60, ang, 5, 1, 0);
+                data->f117 = 0x78;
+                trooper_anim_update(moby, data->f110);
+                func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
+            } else {
+                data->f117 = 0xfa;
+                data->f20 = data->f20 - r->f2C;
+                data->f26 = game_frames_2DFC38(60);
+                trooper_anim_update(moby, data->f110);
+            }
+            moby->unkA4 = 0xff;
+        }
+    }
+    trooper_anim_finish(moby, data->f110);
+    if (data->f174 == 2) data->f180 = 42.0f;
+    else if (data->f184 != 0) data->f180 = data->f178 + 6.0f;
+    else if (moby->state == 1) data->f180 = data->f188;
+    else data->f180 = data->f178;
+
+    if (data->f174 == 2) {
+        r19 = ahead_f(data->f180, moby, data->fC0);
+        if (r19 != 2) {
+            Anim_2DFC38 *bp = &D_L10_001600EC_2DFC38[data->f194];
+            subtract_vector_xyz(v, D_0013E633_2DFC38, bp->f30);
+            v[3] = 0.0f;
+            transform_vector_by_basis(w, v, bp->f40);
+            if (w[0] <= -1.0f || 0.0f <= w[0] || w[1] <= -1.0f || 1.0f <= w[1] || w[2] <= -1.0f || 1.0f <= w[2]) data->f104 = 2;
+        }
+    } else if (moby->state == 1 && data->f18C >= 0) {
+        Path_2DFC38 *path = D_L10_001B0C30_2DFC38[data->f18C];
+        r19 = func_L00_00260FB0_2E2B80(data->f180, moby, data->fC0, 0, 0, path->pts, path->count);
+    } else if (moby->state != 1 && data->f17C >= 0) {
+        Path_2DFC38 *path = D_L10_001B0C30_2DFC38[data->f17C];
+        r19 = func_L00_00260FB0_2E2B80(data->f180, moby, data->fC0, 0, 0, path->pts, path->count);
+    } else {
+        r19 = ahead_f(data->f180, moby, data->fC0);
+    }
+    if (r19 != 2) {
+        if (data->f180 < vector_distance(data->f130, data->fC0)) data->f104 = 2;
+        else if (moby->unk31 == 0) data->f104 = 2;
+    }
+    if (data->f100 == 0) data->f100 = D_001414D0_2DFC38[0];
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
