@@ -3690,7 +3690,103 @@ void FUN_L00_00213de8(float s) {
     f = (float *)(p - 0x100);
     f[0x194 / 4] = f[0x194 / 4] * s;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213e68.s", FUN_L00_00213e68);
+#else
+/* Steers the velocity's xy toward the move yaw at the target speed. Three
+   instructions off retail: a v0 / v1 swap at 0x213FD0..0x213FF4. */
+#define HERO_OF(v) ((struct Hero *)((char *)(v) - 0xE0))
+extern Vec4 hero_velocity_34358 __asm__("D_0013F430");
+extern f32 FUN_L00_00213350_34358(void *) __asm__("FUN_L00_00213350");
+extern f32 FUN_L00_002339d0_34358(void *) __asm__("FUN_L00_002339d0");
+extern f32 approach_value_34358(f32, f32, f32 *) __asm__("FUN_00213ed8");
+extern void FUN_L00_00233ba0_34358(void *, void *, f32) __asm__("FUN_L00_00233ba0");
+extern void FUN_L00_00233708_34358(void *, void *, f32) __asm__("FUN_L00_00233708");
+extern void subtract_vector_xyz_34358(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_vector_xyz_34358(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f9c48_34358(void *, void *, f32) __asm__("FUN_001f9c48");
+extern f32 vector_length_xy_34358(void *) __asm__("FUN_001f9b20");
+
+void FUN_L00_00213e68(float amount) {
+    f32 delta[4];
+
+    Vec4 saved;
+    f32 value;
+    f32 angle;
+    f32 speed;
+    f32 factor;
+    f32 length;
+    f32 current_length;
+    f32 max;
+    Vec4 *velocity;
+    struct Hero *h;
+
+    switch (hero.unk20B3) {
+    case 0:
+            angle = hero.motion.move_yaw;
+            speed = hero.target_speed;
+            if (hero.state.control_mode == 4) {
+                if (hero.unk30A == 0) {
+                    if (hero.unk4A4 != 0 && hero.wall_hit != 0)
+                        speed = frame_time * 2.1f;
+                }
+            }
+            if (hero.unk30A != 0) {
+                if (hero.state.current == 0xE && frame_time < speed)
+                    speed = frame_time;
+            }
+            delta[0] = fast_cos(angle) * speed;
+            delta[1] = fast_sin(angle) * speed;
+            delta[2] = hero.motion.velocity.f[2];
+            factor = -(hero.motion.velocity.f[0] * delta[0] + hero.motion.velocity.f[1] * delta[1]);
+            length = vector_length_xy_34358(delta);
+            current_length = vector_length_xy_34358(&hero.motion.velocity);
+            if (length == 0.0f) {
+                factor = 0.0f;
+                goto ratio_done;
+            }
+            if (current_length != 0.0f) {
+                factor /= length;
+                goto divide_current;
+            }
+            factor = 0.0f;
+            goto ratio_done;
+        divide_current:
+            factor /= current_length;
+        ratio_done:
+            factor += 1.0f;
+            max = 1.5f;
+            factor *= max;
+            max = 3.0f;
+            if (hero.state.current == 0x81)
+                max = 1.7f;
+            if (max < factor)
+                factor = max;
+            if (factor < 1.0f)
+                factor = 1.0f;
+            amount *= factor;
+            velocity = &hero_velocity_34358;
+            subtract_vector_xyz_34358(delta, delta, velocity);
+            length = vector_length_xy_34358(delta);
+            if (amount < length)
+                FUN_001f9c48_34358(delta, delta, amount);
+            add_vector_xyz_34358(velocity, velocity, delta);
+            qcopy(&HERO_OF(velocity)->motion.unk130, velocity);
+            saved.q = HERO_OF(velocity)->move_impulse.q;
+            length = FUN_L00_00213350_34358(&saved);
+            h = HERO_OF(velocity);
+            h->ground_speed = h->motion.unk168 - length;
+        break;
+    case 1:
+    case 2:
+        value = FUN_L00_002339d0_34358(&hero_velocity_34358);
+        approach_value_34358(HERO_OF(&hero_velocity_34358)->target_speed, amount, &value);
+        FUN_L00_00233ba0_34358(&hero_velocity_34358, &hero_velocity_34358, 0.0f);
+        FUN_L00_00233708_34358(&hero_velocity_34358, &hero_velocity_34358, value);
+        break;
+    }
+}
+#endif
 #include "types.h"
 #include "rnc/gameplay/hero.h"
 extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
