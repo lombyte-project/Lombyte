@@ -313,7 +313,183 @@ int FUN_L04_00292828(StMoby_2939E8 *m, Steer_2939E8 *a)
     return ret;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00292d48.s", FUN_L04_00292d48);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00295778.s", FUN_L04_00295778);
+#else
+extern float FUN_0020c9e0(struct Moby *) __asm__("FUN_0020c9e0");
+extern float FUN_001fa6c0(int) __asm__("FUN_001fa6c0");
+extern float FUN_L04_002418b0(int, int) __asm__("FUN_L04_002418b0");
+extern float rig_turn(float, float, float *, float, float, float) __asm__("FUN_L00_00258110");
+extern int rig_pick_mode(struct Moby *, LegRig *, float) __asm__("FUN_L04_002927d0");
+extern void rig_animate(struct Moby *, LegRig *, int, float) __asm__("FUN_L04_00292d48");
+extern void transform_joint_points(struct Moby *, int, int *, void *) __asm__("FUN_0020cd48");
+extern void rig_zero_vector(float *) __asm__("FUN_001f99f8");
+extern void rig_sub_vector(float *, float *, float *) __asm__("FUN_001f9a28");
+extern void rig_divide_vector(float, float *, float *) __asm__("FUN_L00_001ff378");
+extern float rig_cos(float) __asm__("FUN_001f9dc8");
+extern float rig_sin(float) __asm__("FUN_001f9de0");
+extern void rig_probe_setup(struct Moby *, int, float *, int *, float *, float *) __asm__("FUN_L01_00263a28");
+extern int rig_probe(float *, float, float, int, struct Moby *) __asm__("FUN_L00_001f19a0");
+extern void rig_step(struct Moby *, LegRig *, float, float, float, int) __asm__("FUN_L00_002a1670");
+extern float rig_angle_difference(float, float) __asm__("FUN_001fa688");
+extern float FUN_001f99c0(float);
+extern float D_L04_0015ED60 __asm__("D_L04_0015ED60");
+extern float D_L04_0015ED68 __asm__("D_L04_0015ED68");
+extern float D_L04_0015ED6C __asm__("D_L04_0015ED6C");
+extern float D_L04_0015816C __asm__("D_L04_0015816C");
+extern float D_L04_00173FF8 __asm__("D_L04_00173FF8");
+extern int D_L04_00173FF0[] __asm__("D_L04_00173FF0");
+
+int FUN_L04_00295778(struct Moby *m, LegRig *rig, float amount, float target, float step)
+{
+    union { int joints[8]; struct { int pad[4]; float offset[4]; } v; } local;
+    float transformed[6][4];
+    float position[4];
+    float result;
+    float probe_start;
+    float probe_end;
+    float time;
+    float height;
+    float count;
+    int mode;
+    int changed;
+    int flags;
+    int active_mask;
+    int i;
+    int bit;
+    LegRigAnim **entry;
+    LegRigAnim **first;
+
+    if (m->seq != 0xff)
+        time = FUN_0020c9e0(m);
+    else
+        time = FUN_001fa6c0(m->prev_frame) + FUN_L04_002418b0(m->unk22, m->prev_seq);
+    mode = rig_pick_mode(m, rig, time);
+    if (rig->unkEE & 4) {
+        m->rot.z = rig_turn(m->rot.z, *(float *)((char *)rig + 0x6c), (float *)&rig->unkC8, rig->unkCC, rig->unkD0, rig->unkD4);
+    } else if (mode & 15) {
+        m->rot.z = rig_turn(m->rot.z, target, (float *)&rig->unkC8, rig->unkCC, rig->unkD0, rig->unkD4);
+    } else {
+        m->rot.z = rig_turn(m->rot.z, target, (float *)&rig->unkC8, 0.0f, rig->unkD0 + rig->unkD0, rig->unkD4);
+    }
+    rig_animate(m, rig, mode, target);
+    m->rot.y = rig_turn(m->rot.y, *(float *)&rig->unkB8, (float *)&rig->unkBC, 0.005f, 0.01f,
+                        D_L04_0015ED60 * 0.017453292f);
+
+    local.joints[0] = rig->legs[0].joint;
+    local.joints[1] = rig->legs[0].joint2;
+    local.joints[2] = ((u8 *)rig)[0x1a0];
+    local.joints[3] = ((u8 *)rig)[0x1a1];
+    local.joints[4] = rig->jointB4;
+    local.joints[5] = rig->jointB5;
+    transform_joint_points(m, 6, local.joints, transformed);
+    if ((rig->unkEE & 4) == 0) {
+        count = 0.0f;
+        bit = 1;
+        active_mask = mode | (rig->mode & 0x30);
+        rig_zero_vector(position);
+        for (i = 0; i < 6; i++) {
+            if (active_mask & bit) {
+                count += 1.0f;
+                add_vector_xyz(position, position, rig->pts[i]);
+                rig_sub_vector(position, position, transformed[i]);
+            }
+            bit <<= 1;
+        }
+        rig_divide_vector(count, position, position);
+    } else {
+        position[0] = rig_cos(*(float *)((char *)rig + 0x6c)) * rig->speed;
+        position[1] = rig_sin(*(float *)((char *)rig + 0x6c)) * rig->speed;
+        position[2] = 0.0f;
+    }
+    for (i = 0; i < 6; i++)
+        add_vector_xyz(rig->pts[i], transformed[i], position);
+    add_vector_xyz((float *)&m->pos, (float *)&m->pos, position);
+    changed = (mode ^ rig->mode) & mode;
+    rig->mode = mode;
+    if (rig->unkC4 < step)
+        step = rig->unkC4;
+    if (rig->speed < amount) {
+        rig->speed += step;
+        if (amount < rig->speed)
+            rig->speed = amount;
+    } else if (amount < rig->speed) {
+        rig->speed -= step;
+        if (rig->speed < amount)
+            rig->speed = amount;
+    }
+    flags = FUN_L04_00292828((StMoby_2939E8 *)m, (Steer_2939E8 *)rig);
+    rig_step(m, rig, amount, target, step, changed);
+    if ((rig->unkEE & 4) == 0) {
+        rig_probe_setup(m, 0, &result, local.joints, &probe_start, &probe_end);
+        if (m->prev_seq == rig->anims[3]->id)
+            goto double_height;
+        if (m->prev_seq == rig->anims[1]->id)
+            goto double_height;
+        if (m->prev_seq == rig->anims[2]->id) {
+double_height:
+            height = rig->unkE0;
+            height += height;
+            goto store_height;
+        }
+        if (m->prev_seq == rig->anims[7]->id) {
+            if ((rig->mode & 15) == 0)
+                goto decay_height;
+            height = rig->unkE0 + rig->unkE0;
+            goto store_height;
+        }
+decay_height:
+        if (m->prev_seq == m->seq)
+            *(float *)&rig->unkE8 = *(float *)&rig->unkE8 * 0.9f;
+        height = *(float *)&rig->unkE8;
+        goto have_height;
+store_height:
+        *(float *)&rig->unkE8 = height;
+        height = *(float *)&rig->unkE8;
+have_height:
+        *(float *)&local.joints[2] += height;
+        probe_end -= height;
+        rig_sub_vector(local.v.offset, (float *)&m->pos, (float *)local.joints);
+        for (i = 0; i < 8 && rig_probe((float *)local.joints, probe_start, probe_end, 4, m); i++) {
+            ((int *)local.joints)[0] = D_L04_00173FF0[0];
+            ((int *)local.joints)[1] = D_L04_00173FF0[1];
+            ((int *)local.joints)[2] = D_L04_00173FF0[2];
+            ((int *)local.joints)[3] = D_L04_00173FF0[3];
+            flags |= 1;
+        }
+        rig_sub_vector((float *)transformed, (float *)local.joints, (float *)&m->pos);
+        add_vector_xyz((float *)&m->pos, (float *)local.joints, local.v.offset);
+        if (vector_length_xy((float *)transformed) < rig->speed * 0.5f)
+            flags |= 2;
+    }
+    local.joints[0] = rig->legs[0].joint;
+    local.joints[1] = rig->legs[0].joint2;
+    local.joints[2] = ((u8 *)rig)[0x1a0];
+    local.joints[3] = ((u8 *)rig)[0x1a1];
+    local.joints[4] = rig->jointB4;
+    local.joints[5] = rig->jointB5;
+    transform_joint_points(m, 6, local.joints, rig);
+    if (rig->unkB7 != 0x12 || m->seq != rig->anims[12]->id) {
+        m->unk58 = 1.0f;
+        first = rig->anims;
+        if (rig->unkB7 != 0) {
+            entry = first;
+            for (i = 0; i < 13; i++, entry++, first++) {
+                if ((*entry)->id == m->seq) {
+                    if (rig->speed < D_L04_0015ED6C * 0.19f) {
+                        height = rig_angle_difference(m->rot.z, target);
+                        if (0.09239978f < height && amount < D_L04_0015816C * 0.19f)
+                            entry = first;
+                    }
+                    m->unk58 = D_L04_0015ED68 * FUN_001f99c0(rig->speed / (*entry)->rate);
+                    return flags;
+                }
+            }
+        }
+    }
+    return flags;
+}
+#endif
 extern u8 D_L04_001CA938[13][4];
 extern void transform_joint_points(struct Moby *m, int count, int *joints, void *out) __asm__("FUN_0020cd48");
 extern void get_joint_matrix(struct Moby *m, int joint, float *mtx) __asm__("FUN_0020cca8");
