@@ -417,4 +417,126 @@ void FUN_L00_00235ea0();
 void FUN_L00_002371e0(void) {
     FUN_L00_00235ea0();
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00237200.s", FUN_L00_00237200);
+#else
+extern int pal_mode __asm__("D_0015ED80");
+extern int current_level_index __asm__("D_0015ED84");
+extern int current_level_index_sda __asm__("D_0015ED84") __attribute__((sda));
+extern int D_L00_0015F770 __attribute__((sda));
+extern unsigned char D_L00_0017E530[];
+extern int D_0015EE58[];
+extern int D_0015EE68[];
+extern float D_0013F3D0[];
+
+extern float FUN_00200240(unsigned int) __asm__("FUN_001fa6c0");
+extern float FUN_001fef10(float) __asm__("FUN_001f96b0");
+extern int FUN_00200250(float) __asm__("FUN_001fa6d0");
+extern int FUN_001fb090(const char *, int) __asm__("FUN_001f6250");
+extern void *FUN_0023b208(int, int) __asm__("FUN_001ff960");
+extern void FUN_0023b4d8(void *, int, int, int, int, int) __asm__("FUN_001ffc30");
+extern void FUN_0023b860(void *, int, int, int, int, int) __asm__("FUN_001ffe18");
+extern void FUN_001fb9a8(int, int, int, const char *, int) __asm__("FUN_001f6af0");
+extern float FUN_001ff450(float *, float *) __asm__("FUN_001f9b48");
+extern char *FUN_00203ad8(int) __asm__("FUN_001fdd10");
+extern int FUN_00116248(char *, const char *, ...);
+extern void FUN_0023cf80(int, int, int, char *) __asm__("FUN_00201200");
+
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) HudPoint_237200;
+int FUN_L00_00237200(HudElem *e) {
+    int y, i, width, left, other_width, other_left;
+    int alpha, color, level, elapsed, extra, interval, minute_scale, remainder, seconds;
+    float fade;
+    HudPoint_237200 points[2];
+    HudPoint_237200 point;
+    char text[64];
+    const char *line;
+    unsigned char *opacity = (unsigned char *)e + 0x70;
+    int text_y;
+
+    if (pal_mode != 0) {
+        y = D_L00_0015F770 + 0xa;
+    } else {
+        y = D_L00_0015F770 + 0x12;
+    }
+    fade = FUN_00200240(*opacity);
+    fade /= FUN_001fef10(8.0f);
+    if (fade < 0.0f) fade = 0.0f;
+    if (fade > 1.0f) fade = 1.0f;
+    text_y = y + 8;
+    alpha = FUN_00200250(fade * 128.0f);
+    color = (alpha << 24) | 0x40f040;
+    line = (const char *)D_L00_0017E530;
+    i = 0;
+    if (D_L00_0017E530[0] > 1) {
+        i = 1;
+        do {
+            if (D_L00_0017E530[i] <= 1 || i >= 0x80) break;
+            i++;
+        } while (1);
+    }
+    if (D_L00_0017E530[i] == 1) {
+        D_L00_0017E530[i] = 0;
+        width = FUN_001fb090(line, -1);
+        left = 0xe0 - (width >> 1);
+        other_width = FUN_001fb090(line + i + 1, -1);
+        other_left = 0xe0 - (other_width >> 1);
+        if (other_left <= left) {
+            left = other_left;
+            width = other_width;
+        }
+        FUN_0023b4d8(FUN_0023b208(0x7580, 0), left + 0x20, y, width, 0x36, alpha);
+        FUN_0023b4d8(FUN_0023b208(0x7580, 1), left, y, 0x20, 0x36, alpha);
+        FUN_0023b860(FUN_0023b208(0x7580, 1), left + width + 0x20, y, 0x20, 0x36, alpha);
+        FUN_001fb9a8(0x100, text_y, color, line, -1);
+        FUN_001fb9a8(0x100, y + 0x1b, color, line + i + 1, -1);
+        level = current_level_index_sda;
+    } else {
+        width = FUN_001fb090(line, -1);
+        left = 0xe0 - (width >> 1);
+        FUN_0023b4d8(FUN_0023b208(0x7580, 1), left, y, 0x20, 0x20, alpha);
+        FUN_0023b4d8(FUN_0023b208(0x7580, 0), left + 0x20, y, width, 0x20, alpha);
+        FUN_0023b860(FUN_0023b208(0x7580, 1), left + width + 0x20, y, 0x20, 0x20, alpha);
+        FUN_001fb9a8(0x100, text_y, color, line, -1);
+        level = current_level_index;
+    }
+    if (level == 5 || level == 0x10) {
+        typedef unsigned int quadword __attribute__((mode(TI), aligned(16)));
+        *(quadword *)&points[0] = 0;
+        *(quadword *)&points[1] = 0;
+        points[0].x = 294.5f;
+        points[0].y = 225.4f;
+        points[0].z = 100.0f;
+        points[1].x = 115.7f;
+        points[1].y = 287.0f;
+        points[1].z = 119.5f;
+        if (level == 5) {
+            point = points[0];
+        } else {
+            point = points[1];
+        }
+        if (FUN_001ff450(D_0013F3D0, &point.x) < 5.0f) {
+            *(int *)0x15f648 = y + 100;
+            extra = 4;
+            if (current_level_index_sda != 0x10) extra = 0;
+            elapsed = *(int *)((char *)D_0015EE58 + extra);
+            extra = *(int *)((char *)D_0015EE68 + extra);
+            if (elapsed != 0) {
+                interval = pal_mode != 0 ? 3000 : 3600;
+                minute_scale = interval / 60;
+                seconds = elapsed / interval;
+                remainder = elapsed - seconds * interval;
+                width = remainder / minute_scale;
+                FUN_00116248(text, (const char *)0x1e84c0, FUN_00203ad8(0x531b), seconds, width,
+                             (remainder - width * minute_scale) * 100 / minute_scale);
+                FUN_0023cf80(0x100, y + 0x28, color, text);
+                if (extra != 0) {
+                    FUN_00116248(text, (const char *)0x15f778, FUN_00203ad8(0x531c), extra);
+                    FUN_0023cf80(0x100, y + 0x48, color, text);
+                }
+            }
+        }
+    }
+    return *(int *)((char *)e + 0x58);
+}
+#endif
