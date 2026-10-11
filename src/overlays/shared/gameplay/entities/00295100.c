@@ -916,20 +916,21 @@ extern void FUN_00266970(s32, s32, s32) __asm__("FUN_00216c48");
 
 void FUN_L00_002997c8(void) {
     u8 buffer[0x70] __attribute__((aligned(16)));
-    s32 source, destination, count, second_count, pal;
+    s32 source, destination, count, second_count, pal, initial_count;
     s32 callback, callback_arg;
 
     D_L00_0015F5D8 = 1;
     FUN_00122298(0);
     FUN_00120558(0, 0);
     FUN_00122e68((s32)count_vsync);
+    initial_count = 13;
     second_count = 17;
-    count = 13;
     pal = D_0015ED80;
-    destination = *(s32 *)0x00161058; /* D_L00_00161058 */
-    source = *(s32 *)0x0015EE88;      /* depth_buffer_address */
-    count = pal ? 14 : count;
+    source = depth_buffer_address;
+    destination = D_L00_00161058;
+    initial_count = pal ? 14 : initial_count;
     second_count = pal ? 14 : second_count;
+    count = initial_count;
     for (; count != 0;) {
         count--;
         FUN_00122518(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
