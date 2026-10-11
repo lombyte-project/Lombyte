@@ -1727,17 +1727,18 @@ extern void FUN_L00_002e8680_2ec988(void) __asm__("FUN_L00_002e8680");
 extern void FUN_L00_002e8620_2ec988(void) __asm__("FUN_L00_002e8620");
 extern void FUN_L00_002e8648_2ec988(void) __asm__("FUN_L00_002e8648");
 extern void FUN_L00_002e8918_2ec988(void *, float, float) __asm__("FUN_L00_002e8918");
-extern void FUN_L00_002e8450_2ec988(int, float, float) __asm__("FUN_L00_002e8450");
+extern void follow_camera_set_distance_2ec988(int, float, float) __asm__("FUN_L00_002e8450");
 extern void FUN_L00_002e8490_2ec988(float) __asm__("FUN_L00_002e8490");
-extern void FUN_L00_002e84b8_2ec988(float, float) __asm__("FUN_L00_002e84b8");
-extern void FUN_L00_002e84f0_2ec988(int, float, float) __asm__("FUN_L00_002e84f0");
+extern void follow_camera_set_height_2ec988(float, float) __asm__("FUN_L00_002e84b8");
+extern void follow_camera_set_lift_2ec988(int, float, float) __asm__("FUN_L00_002e84f0");
 extern void FUN_L00_002e8540_2ec988(float) __asm__("FUN_L00_002e8540");
 extern void FUN_L00_002e8568_2ec988(int) __asm__("FUN_L00_002e8568");
 extern void FUN_L00_002e8590_2ec988(float, float) __asm__("FUN_L00_002e8590");
 extern void FUN_L00_002e85d8_2ec988(float, float) __asm__("FUN_L00_002e85d8");
 
 /* Shot camera of check type 0x11 (FUN_L00_002ed230): by the shot's type, sets the follow camera's distance, height, lift, roll and side offset, and swings it around the shot's yaw over a timer. */
-void FUN_L00_002ec988(u8 *m) {
+void volume_camera_swing(u8 *m) __asm__("FUN_L00_002ec988");
+void volume_camera_swing(u8 *m) {
     V_2ec988 v;
     Shot_2ec988 *s;
     u8 *o;
@@ -1877,25 +1878,25 @@ stop:
     }
     if (s->dist != 0.0f) {
         if (s->type == 6 || s->type == 8) {
-            FUN_L00_002e8450_2ec988(0, s->dist, 0.002f);
+            follow_camera_set_distance_2ec988(0, s->dist, 0.002f);
             FUN_L00_002e8490_2ec988(s->dist + 1.36f);
         } else {
-            FUN_L00_002e8450_2ec988(0, s->dist, 0.003f);
+            follow_camera_set_distance_2ec988(0, s->dist, 0.003f);
             FUN_L00_002e8620_2ec988();
         }
     }
     if (s->height != 0.0f) {
         if (s->type == 6 || s->type == 8) {
-            FUN_L00_002e84b8_2ec988(s->height, 0.002f);
+            follow_camera_set_height_2ec988(s->height, 0.002f);
         } else {
-            FUN_L00_002e84b8_2ec988(s->height, 0.003f);
+            follow_camera_set_height_2ec988(s->height, 0.003f);
         }
     }
     if (s->lift != 0.0f) {
         if (s->type == 6 || s->type == 8) {
-            FUN_L00_002e84f0_2ec988(0, s->lift, 0.002f);
+            follow_camera_set_lift_2ec988(0, s->lift, 0.002f);
         } else {
-            FUN_L00_002e84f0_2ec988(0, s->lift, 0.005f);
+            follow_camera_set_lift_2ec988(0, s->lift, 0.005f);
         }
     }
     if (s->tilt != 0.0f) {
@@ -2009,11 +2010,23 @@ int FUN_L00_002ed348(void *pv) {
     return 0;
 }
 typedef float V_2ed498[4] __attribute__((aligned(16)));
-typedef struct { float x, y, z; char pad[0x1C - 0xC]; unsigned char *c; } S_2ed498;
+/* Shot record of check type 0x17, read by FUN_L00_002ed348 and volume_camera_aim. */
+typedef struct {
+    u8 pad00[0x20];
+    int timer;          /* 0x20: frames live, capped at 200 */
+    s16 hold;           /* 0x24 */
+    s16 done;           /* 0x26 */
+    float tilt;         /* 0x28: degrees */
+    float angle;        /* 0x2C */
+    u8 pad30[8];
+    float dist;         /* 0x38 */
+    float height;       /* 0x3C */
+    float lift;         /* 0x40 */
+} AimShot_2ed498;
+
+typedef struct { float x, y, z; char pad[0x1C - 0xC]; AimShot_2ed498 *shot; } S_2ed498;
 extern S_2ed498 *D_L00_0015EF50_2ed498 __asm__("D_L00_0015EF50");
 extern int D_0013CAE0_2ed498 __asm__("D_0013CAE0") __attribute__((section(".data")));
-extern unsigned char D_0013F3D0_2ed498[] __asm__("D_0013F3D0") __attribute__((section(".data")));
-extern unsigned char D_0013F5E0_2ed498[] __asm__("D_0013F5E0") __attribute__((section(".data")));
 extern unsigned char *D_L00_00166E00_2ed498 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 extern int FUN_L00_002ed348_2ed498(void *) __asm__("FUN_L00_002ed348");
 extern int FUN_L00_002e83c0_2ed498(void *) __asm__("FUN_L00_002e83c0");
@@ -2027,20 +2040,21 @@ extern float FUN_001f99c0_2ed498(float) __asm__("FUN_001f99c0");
 extern float FUN_001f9de0_2ed498(float) __asm__("FUN_001f9de0");
 extern float FUN_001f9dc8_2ed498(float) __asm__("FUN_001f9dc8");
 extern int FUN_001f96f8_2ed498(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_002e8450_2ed498(int, float, float) __asm__("FUN_L00_002e8450");
+extern void follow_camera_set_distance_2ed498(int, float, float) __asm__("FUN_L00_002e8450");
 extern void FUN_L00_002e8620_2ed498(void) __asm__("FUN_L00_002e8620");
-extern void FUN_L00_002e84b8_2ed498(float, float) __asm__("FUN_L00_002e84b8");
-extern void FUN_L00_002e84f0_2ed498(int, float, float) __asm__("FUN_L00_002e84f0");
+extern void follow_camera_set_height_2ed498(float, float) __asm__("FUN_L00_002e84b8");
+extern void follow_camera_set_lift_2ed498(int, float, float) __asm__("FUN_L00_002e84f0");
 extern void FUN_L00_002e8540_2ed498(float) __asm__("FUN_L00_002e8540");
 extern void FUN_L00_002e8568_2ed498(int) __asm__("FUN_L00_002e8568");
 
 /* Shot camera of check type 0x17 (FUN_L00_002ed8b0): while the shot is live, on its first two frames places the follow camera at the shot's point and fits distance, height and lift to the hero; then eases them each frame. */
-void FUN_L00_002ed498(unsigned char *m) {
+void volume_camera_aim(unsigned char *m) __asm__("FUN_L00_002ed498");
+void volume_camera_aim(unsigned char *m) {
     V_2ed498 p;
     V_2ed498 d;
     V_2ed498 t;
     V_2ed498 u;
-    unsigned char *c;
+    AimShot_2ed498 *c;
     unsigned char *s;
     unsigned char *o;
     unsigned char *e;
@@ -2052,44 +2066,44 @@ void FUN_L00_002ed498(unsigned char *m) {
     float a;
     float k;
 
-    c = D_L00_0015EF50_2ed498[*(short *)(m + 0x84)].c;
+    c = D_L00_0015EF50_2ed498[*(short *)(m + 0x84)].shot;
     if (FUN_L00_002ed348_2ed498(m)) {
         if (FUN_L00_002e83c0_2ed498(m) <= 0) {
-            if (*(int *)(c + 0x20)) {
-                *(short *)(c + 0x26) = 1;
+            if (c->timer) {
+                c->done = 1;
             }
-            *(int *)(c + 0x20) = 0;
+            c->timer = 0;
             return;
         }
         if (!(D_0013CAE0_2ed498 & 5)) {
             goto run;
         }
     }
-    if (*(int *)(c + 0x20)) {
-        *(short *)(c + 0x26) = 1;
+    if (c->timer) {
+        c->done = 1;
     }
-    *(int *)(c + 0x20) = 0;
+    c->timer = 0;
     FUN_L00_002e8388_2ed498(m);
     return;
 run:
-    if (*(int *)(c + 0x20) < 2) {
+    if (c->timer < 2) {
         {
             p[0] = D_L00_0015EF50_2ed498[*(short *)(m + 0x84)].x;
             p[1] = D_L00_0015EF50_2ed498[*(short *)(m + 0x84)].y;
             p[2] = D_L00_0015EF50_2ed498[*(short *)(m + 0x84)].z;
         }
         *(int *)&p[3] = 0;
-        FUN_001f9a28_2ed498(d, p, D_0013F3D0_2ed498);
-        a = FUN_001f9ab0_2ed498(d, D_0013F3D0_2ed498 + 0x210);
-        FUN_001f9a68_2ed498(t, D_0013F3D0_2ed498 + 0x210, a);
+        FUN_001f9a28_2ed498(d, p, &hero.motion.pos);
+        a = FUN_001f9ab0_2ed498(d, &hero.unk290);
+        FUN_001f9a68_2ed498(t, &hero.unk290, a);
         FUN_001f9a28_2ed498(u, d, t);
-        *(float *)(c + 0x38) = FUN_001f9af0_2ed498(u);
-        *(float *)(c + 0x3C) = -a;
-        k = *(float *)(c + 0x2C);
+        c->dist = FUN_001f9af0_2ed498(u);
+        c->height = -a;
+        k = c->angle;
         if (FUN_001f99c0_2ed498(k) == 1.5707964f) {
-            *(int *)(c + 0x40) = 0;
+            *(int *)&c->lift = 0;
         } else {
-            *(float *)(c + 0x40) = *(float *)(c + 0x3C) - *(float *)(c + 0x38) * (FUN_001f9de0_2ed498(k) / FUN_001f9dc8_2ed498(k));
+            c->lift = c->height - c->dist * (FUN_001f9de0_2ed498(k) / FUN_001f9dc8_2ed498(k));
         }
         o = D_L00_00166E00_2ed498;
         rig = *(unsigned char **)(o + 0x70);
@@ -2100,17 +2114,17 @@ run:
         e = rig;
         st = e + 0x20;
         qcopy(o, p);
-        *(float *)(cam + 0x2C) = *(float *)(c + 0x38);
-        *(float *)(cam + 0x30) = *(float *)(c + 0x3C);
-        *(float *)(q + 0xB0) = *(float *)(c + 0x40);
-        FUN_001f9a68_2ed498(t, D_0013F5E0_2ed498, -*(float *)(cam + 0x30));
-        FUN_001f9a10_2ed498(e + 0x90, D_0013F5E0_2ed498 - 0x210, t);
+        *(float *)(cam + 0x2C) = c->dist;
+        *(float *)(cam + 0x30) = c->height;
+        *(float *)(q + 0xB0) = c->lift;
+        FUN_001f9a68_2ed498(t, &hero.unk290, -*(float *)(cam + 0x30));
+        FUN_001f9a10_2ed498(e + 0x90, &hero.motion.pos, t);
         FUN_001f9a28_2ed498(cam, p, e + 0x90);
         qcopy(e + 0x140, cam);
-        FUN_001f9a68_2ed498(t, D_0013F5E0_2ed498, -*(float *)(q + 0xB0));
-        FUN_001f9a10_2ed498(e + 0x80, D_0013F5E0_2ed498 - 0x210, t);
+        FUN_001f9a68_2ed498(t, &hero.unk290, -*(float *)(q + 0xB0));
+        FUN_001f9a10_2ed498(e + 0x80, &hero.motion.pos, t);
         qcopy(e + 0xD0, e + 0x80);
-        qcopy(q, D_0013F5E0_2ed498 - 0x210);
+        qcopy(q, &hero.motion.pos);
         qcopy(e + 0xA0, q);
         qcopy(e, o);
         qcopy(e + 0x1F0, o);
@@ -2125,24 +2139,24 @@ run:
         *(float *)(st + 0x10) = z;
         *(float *)(st + 0xC) = z; }
     }
-    *(int *)(c + 0x20) += 1;
-    if (FUN_001f96f8_2ed498(200) < *(int *)(c + 0x20)) {
-        *(int *)(c + 0x20) = FUN_001f96f8_2ed498(200);
+    c->timer += 1;
+    if (FUN_001f96f8_2ed498(200) < c->timer) {
+        c->timer = FUN_001f96f8_2ed498(200);
     }
-    if (*(float *)(c + 0x38) != 0.0f) {
-        FUN_L00_002e8450_2ed498(0, *(float *)(c + 0x38), 0.003f);
+    if (c->dist != 0.0f) {
+        follow_camera_set_distance_2ed498(0, c->dist, 0.003f);
         FUN_L00_002e8620_2ed498();
     }
-    if (*(float *)(c + 0x3C) != 0.0f) {
-        FUN_L00_002e84b8_2ed498(*(float *)(c + 0x3C), 0.003f);
+    if (c->height != 0.0f) {
+        follow_camera_set_height_2ed498(c->height, 0.003f);
     }
-    if (*(float *)(c + 0x40) != 0.0f) {
-        FUN_L00_002e84f0_2ed498(0, *(float *)(c + 0x40), 0.005f);
+    if (c->lift != 0.0f) {
+        follow_camera_set_lift_2ed498(0, c->lift, 0.005f);
     }
-    if (*(float *)(c + 0x28) != 0.0f) {
-        FUN_L00_002e8540_2ed498(*(float *)(c + 0x28) * 0.017453292f);
+    if (c->tilt != 0.0f) {
+        FUN_L00_002e8540_2ed498(c->tilt * 0.017453292f);
     }
-    if (*(short *)(c + 0x24) == 0) {
+    if (c->hold == 0) {
         FUN_L00_002e8568_2ed498(0);
     }
 }
@@ -2155,7 +2169,6 @@ run:
 extern char *D_L00_0015EF50;
 extern int D_L00_0015F5C4;
 extern int FUN_L00_002ed348(void *);
-extern void FUN_L00_002ed498_002ed8b0(void *) __asm__("FUN_L00_002ed498");
 
 int volume_camera_check(char *a) __asm__("FUN_L00_002ed8b0");
 int volume_camera_check(char *a) {
@@ -2169,7 +2182,7 @@ int volume_camera_check(char *a) {
             return 0;
         }
     }
-    FUN_L00_002ed498_002ed8b0(a);
+    volume_camera_aim(a);
     return 0;
 }
 typedef struct {
