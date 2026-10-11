@@ -738,10 +738,12 @@ float FUN_L00_00200260_002d9810(float, float) __asm__("FUN_L00_00200260");
 
 void FUN_L00_002d9810(u8 *m) {
     Quad_002d9810 quad;
-    u128 rotated, shifted, cross, normal, position;
+    u128 rotated, shifted, cross, normal;
+    u128 position;
     float transformed[4];
     float projection[8];
     float *data = *(float **)(m + 0x78);
+    char *shape = *(char **)((char *)data + 0xc);
     float ratio = data[0] / D_L00_00161A10_002d9810;
     int i, j, color;
     short *indices;
@@ -766,7 +768,7 @@ void FUN_L00_002d9810(u8 *m) {
     FUN_001f9a10_002d9810(&position, &position, D_L00_00161AF0_002d9810);
     FUN_001f9a28_002d9810(&rotated, D_L00_00166DC0_002d9810, &position);
     FUN_001f9bf8_002d9810(1.0f, &shifted, &rotated);
-    FUN_001f9ad8_002d9810(&cross, &shifted, (char *)data + 0xe0);
+    FUN_001f9ad8_002d9810(&cross, &shifted, shape + 0xe0);
     FUN_001f9bf8_002d9810(1.0f, &cross, &cross);
     FUN_001f9ad8_002d9810(&normal, &cross, &shifted);
     quad.colors[0] = D_L00_00161AD8_002d9810;
@@ -829,9 +831,9 @@ void FUN_L00_002d9810(u8 *m) {
         quad.texture[1] = FUN_001f44b8_002d9810(D_L00_00161AE4_002d9810);
         quad.colors[0] = quad.colors[3] = quad.colors[2] = quad.colors[1] = 0x107f7f7f;
         quad.texture[3] = 0x8000000044ULL;
-        qcopy(&shifted, (char *)data + 0xc0);
-        qcopy(&cross, (char *)data + 0xd0);
-        qcopy(&normal, (char *)data + 0xe0);
+        qcopy(&shifted, shape + 0xc0);
+        qcopy(&cross, shape + 0xd0);
+        qcopy(&normal, shape + 0xe0);
         u = &quad.texcoords[1];
         v = &quad.texcoords[0];
         ((float *)&position)[2] = *(float *)(m + 0x18);
