@@ -310,7 +310,169 @@ void FUN_L01_0022cd48(void) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d090.s", FUN_L01_0022d090);
+#else
+extern CollisionHit coll_hit __asm__("D_L01_001742C0") __attribute__((section(".data")));
+extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern int collision_hit_material(void) __asm__("FUN_001f0b58");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
+extern void FUN_L00_00259508(void *, void *, void *, int, float);
+extern char *FUN_L00_002603d0(char *);
+extern u8 *FUN_002141f8(s32);
+extern s32 coll2_2d090(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
+
+/* Probes for a reachable ledge ahead of the hero and records its edge. */
+void FUN_L01_0022d090(void)
+{
+    Vec4 probe, top, low, from, head, wall, to, edge;
+    f32 drop, fwd, up, reach, step, top_margin, max_slope, edge_offset;
+    f32 wall_yaw, launch_scale, ang, five, one, limit, inc, d, half;
+    int found, hit, i, j, material, allowed, moby_allowed, frames;
+    u8 *moby_record;
+    char *moby_data;
+
+    if (hero.unk308 == 2)
+        return;
+    hero.unk4E8 = 0;
+    if (hero.unk1B0 != 0)
+        return;
+    allowed = 0;
+    if (hero.unk20A4 == 0) {
+        if ((hero.state.control_mode == 4 &&
+             (hero.unk41E != 0 || hero.motion.velocity.f[2] < frame_time * 3.5f)) ||
+            hero.state.control_mode == 2 || hero.state.current == 8 ||
+            hero.state.current == 0x1A || hero.state.current == 0x1B)
+            allowed = 1;
+        if (hero.state.current == 0xE && hero.unkAA8 < 37.0f)
+            allowed = 0;
+    }
+    if (!allowed)
+        return;
+
+    drop = -0.7f;
+    fwd = 0.3f;
+    up = 1.5f;
+    reach = 1.15f;
+    edge_offset = 0.45f;
+    if (hero.state.control_mode == 4)
+        launch_scale = hero.unk4A0;
+    else
+        launch_scale = hero.unk940;
+    frames = scale_game_frames(2);
+    step = 0.25f;
+    top_margin = 0.15f;
+    max_slope = 0.34906584f;
+    FUN_L00_00259508(&probe, &hero.motion.pos, &hero.motion.unk110, frames, launch_scale);
+    found = 0;
+    i = 0;
+    probe.f[0] += fast_cos(hero.motion.rot.f[2]) * hero.unk234;
+    probe.f[1] += fast_sin(hero.motion.rot.f[2]) * hero.unk234;
+    do {
+        probe.f[0] += fast_cos(hero.motion.rot.f[2]) * fwd * step;
+        probe.f[1] += fast_sin(hero.motion.rot.f[2]) * fwd * step;
+        qcopy(&top, &probe);
+        top.f[2] += up + top_margin;
+        qcopy(&low, &probe);
+        low.f[2] += reach;
+        if (collision_line(&top, &low, 4, hero.moby, 0)) {
+            material = collision_hit_material();
+            if (material != 9 && material != 12 && material != 0) {
+                if (atan2_f(coll_hit.normal_z, vector_length_xy(&coll_hit.normal_x)) < max_slope)
+                    found = 1;
+            }
+        }
+        i++;
+        if (found)
+            break;
+    } while (i < 4);
+    if (!found)
+        return;
+
+    if (coll_hit.moby != 0) {
+        moby_allowed = 0;
+        moby_record = FUN_002141f8(coll_hit.moby);
+        moby_data = FUN_L00_002603d0((char *)coll_hit.moby);
+        if (moby_record && (*(u16 *)(moby_record + 0x1E) & 1))
+            moby_allowed = 1;
+        else if (moby_data)
+            moby_allowed = *(u32 *)(moby_data + 0x3C) & 1;
+        if (!moby_allowed)
+            return;
+    }
+    hero.unk4F8 = coll_hit.moby;
+    if (hero.motion.pos.f[2] + up < coll_hit.point.f[2])
+        return;
+    qcopy(&top, &coll_hit.point);
+    qcopy(&low, &coll_hit.point);
+    low.f[2] += 0.05f;
+    qcopy(&from, &hero.motion.pos);
+    from.f[2] = low.f[2];
+    if (collision_line(&from, &low, 4, hero.moby, 0))
+        return;
+    qcopy(&head, &coll_hit.point);
+    head.f[2] += 0.6f;
+    if (coll2_2d090(&head, 4, edge_offset, (s32)hero.moby, 0.6f))
+        hero.unk4F4 |= 1;
+    else
+        hero.unk4F4 &= ~1;
+    ang = atan2_f(top.f[0] - hero.motion.pos.f[0], top.f[1] - hero.motion.pos.f[1]);
+    hero.unk4E0 = top.f[2];
+    if (top.f[2] - hero.ground_z.f < 1.8f)
+        return;
+
+    five = 5.0f;
+    one = 1.0f;
+    hit = 0;
+    for (j = 0; j < 5; j++) {
+        qcopy(&from, &hero.motion.pos);
+        qcopy(&to, &top);
+        circle_offset(&to, ang, hero.unk234);
+        to.f[2] += drop * (one - (f32)j / five);
+        from.f[2] = to.f[2];
+        if (collision_line(&from, &to, 2, 0, 0)) {
+            hit = 1;
+            hero.unk4E4 = atan2_f(coll_hit.normal_x, coll_hit.normal_y);
+            break;
+        }
+    }
+    if (!hit)
+        return;
+    wall_yaw = hero.unk4E4;
+    if (fast_difference_between_rotations(hero.motion.rot.f[2],
+            fast_add_rotations(wall_yaw, 3.14159274f)) < 1.13446403f) {
+        limit = 2.4f;
+        inc = 0.03f;
+        d = 0.0f;
+        half = 0.5f;
+        do {
+            qcopy(&wall, &top);
+            wall.f[0] += fast_cos(wall_yaw) * d;
+            wall.f[1] += fast_sin(wall_yaw) * d;
+            qcopy(&edge, &wall);
+            wall.f[2] += half;
+            edge.f[2] -= half;
+            if (!collision_line(&wall, &edge, 4, hero.moby, 0)) {
+                qcopy(&probe, &wall);
+                probe.f[2] = top.f[2];
+                d = -(half * 0.03f);
+                probe.f[0] += fast_cos(wall_yaw) * d;
+                probe.f[1] += fast_sin(wall_yaw) * d;
+                qcopy(&hero.unk4D0, &probe);
+                hero.unk4D0.f[0] += fast_cos(wall_yaw) * edge_offset;
+                hero.unk4D0.f[1] += fast_sin(wall_yaw) * edge_offset;
+                hero.unk4D0.f[2] += -1.43f;
+                hero.unk4E8 = 1;
+                return;
+            }
+            d += inc;
+        } while (d < limit);
+    }
+}
+#endif
 extern CollisionHit coll_hit __asm__("D_L01_001742C0") __attribute__((section(".data")));
 /* line query from -> to; fills the collision hit record, nonzero on a hit */
 extern int collision_line(void *from, void *to, int mask, void *ignore, int) __asm__("FUN_001efa68");
