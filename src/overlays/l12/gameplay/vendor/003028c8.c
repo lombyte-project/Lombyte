@@ -717,10 +717,12 @@ extern void draw_geometry_quad_l12(void *, void *, int) __asm__("FUN_001f7d30");
 void FUN_L12_00308350(struct Moby *m) {
     VendorDrawPacket first, second;
     float matrix[4][4] __attribute__((aligned(16)));
+    void *matrix_ptr;
     int i, j;
     long flags;
 
-    copy_moby_matrix(matrix, &m->unkC0);
+    matrix_ptr = matrix;
+    copy_moby_matrix(matrix_ptr, &m->unkC0);
     *(u128 *)&matrix[3] = *(u128 *)&m->pos;
     matrix[3][3] = 1.0f;
     first.texture = get_effect_texture_l12(0xe);
@@ -759,7 +761,7 @@ void FUN_L12_00308350(struct Moby *m) {
             first.uv[j][0] = D_L12_001FB6D0[j][0] + x_offset;
             first.uv[j][1] = D_L12_001FB6D0[j][1];
         }
-        for (row = -3; row < 3; row++) {
+        for (row = -3; row != 3; row++) {
             float x = (float)row + jitter;
             ((float *)&first.vertices[0])[1] = x;
             ((float *)&first.vertices[1])[1] = x;
@@ -767,7 +769,7 @@ void FUN_L12_00308350(struct Moby *m) {
             x = (float)(row + 1) + jitter;
             ((float *)&first.vertices[2])[1] = x;
             ((float *)&first.vertices[3])[1] = x;
-            draw_geometry_quad_l12(&first, matrix, 0);
+            draw_geometry_quad_l12(&first, matrix_ptr, 0);
         }
     } while (i < 5);
 }
