@@ -870,7 +870,177 @@ int FUN_L10_002d8170(char *m, char *c, float *a2) {
     }
     return 0;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d85c8.s", FUN_L10_002d85c8);
+#else
+extern void get_moby_color(char *, void *, int *, int *) __asm__("FUN_L00_00250320");
+extern void set_moby_color(char *, int, int, int) __asm__("FUN_L00_002502f0");
+extern char *find_hit_moby(char *, int, int) __asm__("FUN_L00_0025a420");
+extern void bounce_vector(void *, float *, float *, float *) __asm__("FUN_L00_0025ab48");
+extern int check_projectile_collision(float, void *, int, char *, int) __asm__("FUN_L00_001f2868");
+extern void spawn_projectile_effect(float, float, float, char *, void *, int, int, int, int, int, int) __asm__("FUN_L00_0025a9f8");
+extern void spawn_projectile_particles(float, float, char *, void *, int) __asm__("FUN_L00_0025f090");
+extern float D_0015ED6C_d85c8 __asm__("D_0015ED6C");
+extern float D_0015ED70_d85c8 __asm__("D_0015ED70");
+
+void FUN_L10_002d85c8(char *m) {
+    char *c = *(char **)(m + 0x78);
+    float prev[4] __attribute__((aligned(16)));
+    float hit_pos[4] __attribute__((aligned(16)));
+    float angle;
+    float speed;
+    float height;
+    float sine;
+    int color0, color1, color2;
+    char *hit;
+    int state;
+    int first;
+    int second;
+    int effect;
+    struct {
+        float velocity[4];
+        char *owner;
+        unsigned char state;
+        unsigned char active;
+        unsigned short id;
+        int color;
+        float scale;
+        int one;
+    } collision __attribute__((aligned(16)));
+
+    if (*(float *)(m + 0x10) < 1.0f || *(float *)(m + 0x10) > 511.0f ||
+        *(float *)(m + 0x14) < 1.0f || *(float *)(m + 0x14) > 511.0f ||
+        *(float *)(m + 0x18) < 1.0f || *(float *)(m + 0x18) > 511.0f) {
+        delete_moby(m);
+        return;
+    }
+    *(float *)(m + 0x18) -= *(float *)&D_L10_00161C6C_d8058;
+    qcopy(prev, m + 0x10);
+    state = *(unsigned char *)(m + 0x20);
+    if (state == 1) goto state1;
+    if (state < 2) {
+        if (state == 0) goto state0;
+        goto finish;
+    }
+    if (state == 2) goto state2;
+    if (state == 3) goto state3;
+    goto finish;
+state0:
+
+        add_vector_xyz(m + 0x10, m + 0x10, c);
+        *(float *)(c + 8) -= D_0015ED70_d85c8 * 9.8f;
+        hit = find_hit_moby(m, 0x830000, 0);
+        if (hit != 0 && *(char **)(hit + 0x20) != 0 &&
+            *(short *)(*(char **)(hit + 0x20) + 0xa6) != *(short *)(m + 0xa6)) {
+            if (*(unsigned char *)(hit + 0x28) == 0) {
+                angle = FUN_001f9e90(*(float *)(m + 0x10) - hero.motion.pos.f[0],
+                                       *(float *)(m + 0x14) - hero.motion.pos.f[1]);
+                *(OvlQuad *)hit_pos = *(OvlQuad *)(hit + 0x10);
+                speed = D_0015ED6C_d85c8 * 10.0f;
+                height = speed;
+                bounce_vector(hit_pos, &angle, &speed, &height);
+                *(float *)c = fast_cos(angle) * speed;
+                sine = fast_sin(angle);
+                *(float *)(c + 8) = 0.0f;
+                *(float *)(c + 4) = sine * speed;
+                *(float *)(c + 8) = height;
+                *(short *)(c + 0x14) = FUN_001f96f8(0xf);
+                *(unsigned char *)(m + 0x20) = 2;
+            } else {
+                *(unsigned char *)(m + 0x20) = 3;
+            }
+        }
+        *(unsigned char *)(m + 0xa4) = 0xff;
+        if (FUN_001f9770(c + 0x14)) {
+            if (FUN_L10_002d8170(m, c, prev) == 3) {
+                *(short *)(c + 0x14) = FUN_001f96f8(0xf0);
+                *(unsigned char *)(m + 0x20) = 1;
+                goto finish;
+            }
+        }
+        if (*(float *)(m + 0x18) < 2.0f) *(unsigned char *)(m + 0x20) = 3;
+        goto finish;
+state1:
+    {
+    float angle1, speed1, height1;
+
+        get_moby_color(m, &color0, &color1, &color2);
+        first = FUN_001f96f8(0xf0);
+        second = FUN_001f96f8(0xf0);
+        set_moby_color(m, ((first - *(short *)(c + 0x14)) * 0x7f) / second, color1, color2);
+        if (FUN_001f9770(c + 0x14)) {
+            *(unsigned char *)(m + 0x20) = 3;
+        } else {
+            hit = find_hit_moby(m, 0x830000, 0);
+            if (hit != 0 && *(char **)(hit + 0x20) != 0 &&
+                *(short *)(*(char **)(hit + 0x20) + 0xa6) != *(short *)(m + 0xa6)) {
+                if (*(unsigned char *)(hit + 0x28) == 0) {
+                    angle1 = FUN_001f9e90(*(float *)(m + 0x10) - hero.motion.pos.f[0],
+                                           *(float *)(m + 0x14) - hero.motion.pos.f[1]);
+                    *(OvlQuad *)hit_pos = *(OvlQuad *)(hit + 0x10);
+                    speed1 = D_0015ED6C_d85c8 * 10.0f;
+                    height1 = speed1;
+                    bounce_vector(hit_pos, &angle1, &speed1, &height1);
+                    *(float *)c = fast_cos(angle1) * speed1;
+                    sine = fast_sin(angle1);
+                    *(float *)(c + 8) = 0.0f;
+                    *(float *)(c + 4) = sine * speed1;
+                    *(float *)(c + 8) = height1;
+                    *(short *)(c + 0x14) = FUN_001f96f8(0xf);
+                    *(unsigned char *)(m + 0x20) = 2;
+                } else {
+                    *(unsigned char *)(m + 0x20) = 3;
+                }
+            }
+            *(unsigned char *)(m + 0xa4) = 0xff;
+        }
+        }
+    goto finish;
+state2:
+    {
+    int done;
+
+        get_moby_color(m, &color0, &color1, &color2);
+        set_moby_color(m, 0xff, color1, color2);
+        collision.owner = m;
+        collision.color = 0x830000;
+        collision.scale = 1.0f;
+        collision.one = 1;
+        qcopy(collision.velocity, c);
+        FUN_001f9c48(collision.velocity, collision.velocity, 1.0f);
+        done = 0;
+        collision.id = *(unsigned short *)(m + 0xa6);
+        collision.velocity[2] = 1.0f;
+        collision.velocity[3] = 5627.925f;
+        collision.state = state;
+        collision.active = 1;
+        add_vector_xyz(m + 0x10, m + 0x10, c);
+        *(float *)(c + 8) -= D_0015ED70_d85c8 * 9.8f;
+        if (FUN_001f9770(c + 0x14)) {
+            if (FUN_L10_002d8170(m, c, prev) != 0) done = 1;
+            else if (*(float *)(m + 0x18) < 2.0f) done = 1;
+        } else if (*(float *)(m + 0x18) < 2.0f) done = 1;
+        if (done) *(unsigned char *)(m + 0x20) = 3;
+    }
+        goto finish;
+state3:
+
+        effect = check_projectile_collision(1.5f, m + 0x10, 0x10, m, 0);
+        qcopy(hit_pos, m + 0x10);
+        spawn_projectile_effect(1.0f, 1.0f, 1.0f, m, hit_pos, 0x178380, effect,
+                                0, 0x810001, 2, 1);
+        spawn_projectile_particles(0.5f, 13.0f, m, m + 0x10, 0);
+        delete_moby(m);
+        return;
+
+finish:
+    *(float *)(m + 0x18) += *(float *)&D_L10_00161C6C_d8058;
+    if (*(float *)(m + 0x10) < 1.0f || *(float *)(m + 0x10) > 511.0f ||
+        *(float *)(m + 0x14) < 1.0f || *(float *)(m + 0x14) > 511.0f ||
+        *(float *)(m + 0x18) < 1.0f || *(float *)(m + 0x18) > 511.0f)
+        delete_moby(m);
+}
+#endif
 /* Electric spark: runs along its wire path with a light and a buzzing sound, then rests for a random time. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA0F0), where it is exact; names translated to the US level program. */
 
