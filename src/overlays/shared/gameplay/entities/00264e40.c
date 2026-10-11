@@ -22,6 +22,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_00264e70.s", FUN_L02_00264e70);
 #include "qcopy.h"
 extern int D_L00_0015F5CC;
 extern float D_0015ED6C;
+extern float D_0015ED68;
 extern float D_0015ED70;
 extern float D_L02_00174460[] __attribute__((section(".data")));
 extern float D_L02_001600D0 __attribute__((sda));
@@ -66,11 +67,10 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
     if (FUN_001efa68(origin, end, 2, 0, 0)) {
         travel = FUN_001f9b48(origin, D_L02_00174460) - 0.75f;
         if (travel < 0.0f) travel = 0.0f;
-        acceleration = D_0015ED70;
     } else {
         travel = distance;
-        acceleration = D_0015ED70;
     }
+    acceleration = D_0015ED70;
     FUN_00213f38(&speed, &travel_step, travel, 1.0f, acceleration * 48.0f,
                   D_L02_001600D0 * D_0015ED6C);
     FUN_001f9bf8(adjusted, adjusted, travel_step);
@@ -83,7 +83,7 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
         FUN_001f9a10(offset, offset, adjusted);
         FUN_001f9a68(velocity, adjusted, FUN_002132a8(0.0f, 1.0f));
         FUN_001f9a10(velocity, velocity, origin);
-        shot = FUN_L00_0026b230(velocity, offset, i < first_count, travel);
+        shot = FUN_L00_0026b230(velocity, offset, i >= first_count, travel);
         if (i == 2 && *(volatile int *)&save_shot) {
             int j;
             for (j = 0; j < 7; j++) {
@@ -95,7 +95,7 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
         }
     }
     if (FUN_001f9770(slots + 0x1c)) {
-        *(short *)(slots + 0x1c) = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8(10.0f, 30.0f)));
+        *(short *)(slots + 0x1c) = FUN_001fa6d0((D_0015ED68 * FUN_002132a8(10.0f, 30.0f)));
         FUN_L00_00257d78(offset, 0.0f, D_0015ED6C + D_0015ED6C);
         FUN_001f9a68(velocity, adjusted, FUN_002132a8(0.5f, 0.1f));
         FUN_001f9a10(velocity, velocity, offset);
