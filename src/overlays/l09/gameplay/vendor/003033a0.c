@@ -481,7 +481,186 @@ char *FUN_L09_003041d0(char *self, char *pos, int bone) {
         return best;
     return 0;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00304360.s", FUN_L09_00304360);
+#else
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float atan2_f(float, float) __asm__("FUN_001f9e90");
+extern void scale_vector_00304360(float, void *, void *) __asm__("FUN_001f9bf8");
+extern float FUN_001f9af0(void *);
+extern char D_L09_00209050[];
+extern char D_L09_00209080[];
+extern void print_missing_link(char *, short) __asm__("FUN_001e93b0");
+extern void effect_00304360(f32, f32, f32, f32, f32, f32, f32,
+                             void *, void *, int, int, int, int, int, int, int, int, int) __asm__("FUN_L00_0025e450");
+
+void FUN_L09_00304360(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    unsigned char *link;
+    unsigned char *link2;
+    float work[4], work2[4], work3[4];
+    float angle;
+    int index;
+    int tick;
+    short oclass;
+
+    if (moby[0x20] == 1) goto state1;
+    if (moby[0x20] < 2) {
+        if (moby[0x20] == 0) goto state0;
+        return;
+    }
+    if (moby[0x20] == 2) goto state2;
+    if (moby[0x20] == 3) goto state3;
+    return;
+state0:
+    {
+        if ((signed char)data[0x69] != -1 && ((unsigned char *)D_0013D388)[(signed char)data[0x69] + 0x39] != 0) {
+            mark_moby_for_removal(moby);
+            return;
+        }
+        if (*(int *)(data + 0x60) == -1) {
+            FUN_L00_0024f7c8(moby, 0, work);
+            link = (unsigned char *)FUN_L09_003041d0((char *)moby, (char *)work, -1);
+            if (link != 0) {
+                *(int *)(data + 0x60) = ((char *)link - (char *)moby_list) >> 8;
+            } else {
+                print_missing_link(D_L09_00209050, *(short *)(moby + 0xb2));
+            }
+        }
+        if (*(int *)(data + 0x64) == -1) {
+            *(OvlQuad *)work = *(OvlQuad *)(moby + 0x10);
+            link = (unsigned char *)FUN_L09_003041d0((char *)moby, (char *)work, 0);
+            if (link != 0) {
+                *(int *)(data + 0x64) = ((char *)link - (char *)moby_list) >> 8;
+            } else {
+                print_missing_link(D_L09_00209080, *(short *)(moby + 0xb2));
+            }
+        }
+        moby[0x20] = 1;
+        return;
+    }
+state1:
+    {
+        if (moby[0x31] == 0 || FUN_001f9b48(moby + 0x10, D_L09_00166F40) > 32.0f) {
+            int a = *(short *)(moby + 0xb2);
+            int b = D_L09_0015F5CC;
+            if ((short)(a % 8) != b % 8) return;
+        }
+        link = 0;
+        link2 = 0;
+        index = *(int *)(data + 0x60);
+        if (index != -1) {
+            link = (unsigned char *)((char *)D_L09_0015FFD8 + (index << 8));
+            if (link == 0 || link[0x20] == 0xfe || link[0x20] == 0xfd) link = 0;
+        }
+        index = *(int *)(data + 0x64);
+        if (index != -1) {
+            link2 = (unsigned char *)((char *)moby_list + (index << 8));
+            if (link2 == 0 || link2[0x20] == 0xfe || link2[0x20] == 0xfd) {
+                data[0x68] = 0;
+                link2 = 0;
+            } else if (*(unsigned char *)(*(char **)(link2 + 0x78) + 0x68) == 0) {
+                data[0x68] = 0;
+            }
+        }
+        if ((signed char)data[0x68] == 0) {
+            if (link == 0) {
+                data[0x68] = 1;
+            } else if (link2 != 0 && *(short *)(link2 + 0xa6) == 0x49d) {
+                if (*(unsigned char *)(*(char **)(link2 + 0x78) + 0x68) == 0) {
+                    subtract_vector_xyz(work, link + 0x10, moby + 0x10);
+                    scale_vector_00304360((FUN_001f9af0(work) - 1.3f) * 0.7f, work, work);
+                    if (*(short *)(link2 + 0xa6) == 0x49d && link2[0x20] != 0xfe && link2[0x20] != 0xfd) {
+                        subtract_vector_xyz(work2, link2 + 0x10, moby + 0x10);
+                        scale_vector_00304360((FUN_001f9af0(work2) - 1.3f) * 0.7f, work2, work2);
+                        add_vector_xyz(work3, work, work2);
+                    } else {
+                        *(OvlQuad *)work3 = *(OvlQuad *)work;
+                    }
+                    work3[2] -= frame_time_sq * 9.8f;
+                    add_vector_xyz(moby + 0x10, moby + 0x10, work3);
+                }
+                angle = FUN_001f9b80(moby + 0x10, link + 0x10);
+                angle = atan2_f(angle, F(link, 0x18) - F(moby, 0x18));
+                F(moby, 0x44) = fast_add_rotations(F(moby, 0x44), fast_subtract_rotations(-angle, F(moby, 0x44)) * 0.1f);
+                angle = atan2_f(F(link, 0x10) - F(moby, 0x10), F(link, 0x14) - F(moby, 0x14));
+                F(moby, 0x48) = fast_add_rotations(F(moby, 0x48), fast_subtract_rotations(angle, F(moby, 0x48)) * 0.1f);
+            } else {
+                data[0x68] = 1;
+            }
+        } else {
+            data[0x68] = 1;
+        }
+        if (moby[0xbc] != 1) return;
+        index = *(int *)(data + 0x6c);
+        if (index != -1) {
+            link2 = (unsigned char *)((char *)moby_list + (index << 8));
+            if (link2[0x20] == 1) link2[0xbc] = 1;
+        }
+        *(short *)(data + 0x6a) = FUN_001f96f8(10);
+        moby[0x20] = 2;
+        moby[0x30] = 0xff;
+        return;
+    }
+state2:
+    {
+        link = 0;
+        moby[0x30] = 0xff;
+        index = *(int *)(data + 0x60);
+        if (index != -1) {
+            link = (unsigned char *)((char *)D_L09_0015FFD8 + (index << 8));
+            if (link == 0 || link[0x20] == 0xfe || link[0x20] == 0xfd) link = 0;
+        }
+        if (link != 0) {
+            subtract_vector_xyz(work, link + 0x10, moby + 0x10);
+            scale_vector_00304360(FUN_001f9af0(work) - 1.3f, work, work);
+            *(OvlQuad *)work2 = *(OvlQuad *)work;
+            tick = FUN_001f96f8(10);
+            work2[2] -= (frame_time_sq * 9.8f + frame_time_sq * 9.8f) *
+                        convert_integer_to_float(tick - (*(short *)(data + 0x6a) - 3));
+            add_vector_xyz(moby + 0x10, moby + 0x10, work2);
+            angle = FUN_001f9b80(moby + 0x10, link + 0x10);
+            angle = atan2_f(angle, F(link, 0x18) - F(moby, 0x18));
+            F(moby, 0x44) = fast_add_rotations(F(moby, 0x44), fast_subtract_rotations(-angle, F(moby, 0x44)) * 0.5f);
+            angle = atan2_f(F(link, 0x10) - F(moby, 0x10), F(link, 0x14) - F(moby, 0x14));
+            F(moby, 0x48) = fast_add_rotations(F(moby, 0x48), fast_subtract_rotations(angle, F(moby, 0x48)) * 0.5f);
+        }
+        if (FUN_001f9770(data + 0x6a) == 0) return;
+        index = *(int *)(data + 0x60);
+        if (index != -1) {
+            link = (unsigned char *)((char *)moby_list + (index << 8));
+            if (link != 0 && link[0x20] != 0xfe && link[0x20] != 0xfd) {
+                oclass = *(short *)(link + 0xa6);
+                if (oclass == 0x494 || oclass == 0x49d || oclass == 0x4a0) {
+                    link[0xbc] = 1;
+                    link[0x30] = 0xff;
+                }
+            }
+        }
+        index = *(int *)(data + 0x64);
+        if (index != -1) {
+            link2 = (unsigned char *)((char *)moby_list + (index << 8));
+            if (link2 != 0 && link2[0x20] != 0xfe && link2[0x20] != 0xfd) {
+                oclass = *(short *)(link2 + 0xa6);
+                if (oclass == 0x494 || oclass == 0x49d || oclass == 0x4a0) {
+                    link2[0xbc] = 1;
+                    link2[0x30] = 0xff;
+                }
+            }
+        }
+        moby[0x20] = 3;
+        return;
+    }
+state3:
+    {
+        subtract_vector_xyz(work, D_L09_00166F40, moby + 0x10);
+        effect_00304360(0.0f, 0.0f, 2.0f, 1.0f, 10.0f, 1.0f, 10.0f,
+                          moby, work, 0, 10, 5, 8, 0, 0, 1, -1, 0);
+        mark_moby_for_removal(moby);
+    }
+}
+#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00304c80.s", FUN_L09_00304c80);
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00305a28.s", FUN_L09_00305a28);
