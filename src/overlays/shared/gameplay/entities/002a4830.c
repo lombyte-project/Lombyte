@@ -302,9 +302,11 @@ void FUN_L00_002a5040(u8 *moby) {
     s32 *indices = (s32 *)0x1d7460;
     f32 *points = (f32 *)0x1d7360;
     f32 *uvs = (f32 *)0x1d73f0;
+    f32 *uvs_y = (f32 *)0x1d73f4;
     u32 *colors = (u32 *)0x1d7438;
     f32 x, y, z, phase, angle;
     s32 i, index;
+    f32 zero;
     s32 *indices1, *indices2;
     s32 index1, index2, index3;
     u32 color;
@@ -349,10 +351,10 @@ void FUN_L00_002a5040(u8 *moby) {
         index = indices[0];
         index3 = indices[3];
         quad.color[0] = colors[index];
-        quad.uv[7] = uvs[index3 * 2 + 1] + D_L00_00161394_2a5040;
-        quad.uv[1] = uvs[index * 2 + 1] + D_L00_00161394_2a5040;
-        quad.uv[3] = uvs[index1 * 2 + 1] + D_L00_00161394_2a5040;
-        quad.uv[5] = uvs[index2 * 2 + 1] + D_L00_00161394_2a5040;
+        quad.uv[7] = uvs_y[index3 * 2] + D_L00_00161394_2a5040;
+        quad.uv[1] = uvs_y[index * 2] + D_L00_00161394_2a5040;
+        quad.uv[3] = uvs_y[index1 * 2] + D_L00_00161394_2a5040;
+        quad.uv[5] = uvs_y[index2 * 2] + D_L00_00161394_2a5040;
         quad.color[2] = colors[index2];
         quad.color[3] = colors[index3];
         quad.color[1] = colors[index1];
@@ -372,22 +374,26 @@ void FUN_L00_002a5040(u8 *moby) {
     orbit[0].x = -phase * 1.2f * vars->scale;
     orbit[0].y = -phase * 1.2f * vars->scale;
     orbit[0].z = phase * 1.4f + 1.1f;
-    orbit_copy[0] = orbit[0];
+
     *(OvlQuad *)&orbit[1] = 0;
     orbit[1].x = phase * 1.2f * vars->scale;
     orbit[1].y = -phase * 1.2f * vars->scale;
     orbit[1].z = orbit[0].z - 0.2f;
-    orbit_copy[1] = orbit[1];
+
     *(OvlQuad *)&orbit[2] = 0;
     orbit[2].x = -phase * 1.2f * vars->scale;
     orbit[2].y = phase * 1.2f * vars->scale;
     orbit[2].z = orbit[0].z;
-    orbit_copy[2] = orbit[2];
+
     *(OvlQuad *)&orbit[3] = 0;
     orbit[3].x = phase * 1.2f * vars->scale;
     orbit[3].y = phase * 1.2f * vars->scale;
     orbit[3].z = orbit[1].z;
+    orbit_copy[2] = orbit[2];
+    orbit_copy[0] = orbit[0];
+    orbit_copy[1] = orbit[1];
     orbit_copy[3] = orbit[3];
+    zero = orbit[0].w;
     rotation[0] = 0.0f;
     rotation[1] = 0.0f;
     rotation[2] = D_L00_00166C80_2a5040.f158;
@@ -416,12 +422,12 @@ void FUN_L00_002a5040(u8 *moby) {
     quad.color[0] = color;
     quad.color[1] = color;
     quad.color[2] = color;
-    quad.uv[0] = 0.0f;
-    quad.uv[1] = 0.0f;
+    quad.uv[0] = zero;
+    quad.uv[1] = zero;
     quad.uv[7] = 1.0f;
     quad.uv[2] = 1.0f;
-    quad.uv[3] = 0.0f;
-    quad.uv[4] = 0.0f;
+    quad.uv[3] = zero;
+    quad.uv[4] = zero;
     quad.uv[5] = 1.0f;
     quad.uv[6] = 1.0f;
     draw_geometry_quad(&quad, 0, 1);
@@ -432,7 +438,7 @@ void FUN_L00_002a5040(u8 *moby) {
         orbit[0].z = 0.59f;
         transform_point_2a5040(&orbit[0], &orbit[0], moby + 0xc0);
         add_vector_xyz(&orbit[0], &orbit[0], moby + 0x10);
-        FUN_L00_00263618(&orbit[0], *(u32 *)(moby + 0x90) & 0xffff0000, 0.1333f, 0.0f);
+        FUN_L00_00263618(&orbit[0], *(u32 *)(moby + 0x90) & 0xffff0000, 0.1333f, zero);
     }
 }
 #endif
