@@ -115,9 +115,6 @@ void FUN_L04_002ce060(void *moby) {
     remove_moby_2ce060(moby);
 }
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d1418.s", FUN_L04_002d1418);
-#else
 extern void FUN_L04_00292370(void *, char *);
 extern void FUN_L04_002923b8(void *, char *);
 
@@ -152,9 +149,9 @@ void FUN_L04_002d1418(void *m) {
     speed = frameScale * 9.8f;
     angleHalf = frameScale * 3.1415927f;
     amount = frameScale * 10.0f;
+    *(unsigned char *)(d + 0x214) = 7;
     *(unsigned char *)(d + 0x210) = 0;
     *(unsigned char *)(d + 0x211) = 0;
-    *(float *)(d + 0x240) = 0.5f;
     *(float *)(d + 0x23c) = speed;
     *(float *)(d + 0x22c) = angleHalf;
     *(float *)(d + 0x230) = angleFull;
@@ -162,7 +159,7 @@ void FUN_L04_002d1418(void *m) {
     *(float *)(d + 0x224) = amount;
     *(unsigned char *)(d + 0x212) = 0xff;
     *(unsigned char *)(d + 0x213) = 0x10;
-    *(unsigned char *)(d + 0x214) = 7;
+    *(unsigned char *)(d + 0x215) = 7;
     *(unsigned char *)(d + 0x250) = 10;
     *(unsigned char *)(d + 0x251) = 8;
     *(unsigned char *)(d + 0x253) = 12;
@@ -171,10 +168,9 @@ void FUN_L04_002d1418(void *m) {
     *(unsigned char *)(d + 0x301) = 9;
     *(unsigned char *)(d + 0x303) = 13;
     *(unsigned char *)(d + 0x302) = 15;
-    *(unsigned char *)(d + 0x215) = 7;
+    *(float *)(d + 0x240) = 0.5f;
     FUN_L04_002923b8(m, p);
 }
-#endif /* NON_MATCHING */
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D29E8), where it is exact; names translated to the US level program. */
