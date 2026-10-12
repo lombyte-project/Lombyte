@@ -1307,8 +1307,8 @@ extern float D_0015ED6C;
 void FUN_L08_002e2250(struct Moby *moby) {
     u8 mark = 0xff;
     int selected = 0;
-    TargetSlot *slots = ((TargetBoardVars *)moby->pvars)->slots;
     TargetBoardVars *vars = (TargetBoardVars *)moby->pvars;
+    TargetSlot *slots = vars->slots;
     TargetSlot *slot = slots;
     int i = 0;
     int hits = 0;
@@ -1350,7 +1350,7 @@ mark_hit:
         sound = 0;
         if (selected != 0) {
             u8 *vector;
-            slot = (TargetSlot *)((char *)vars + 0x60 + selected * 16);
+            slot = &slots[selected];
             vector = slot->moby->pvars;
             FUN_L00_0025f090(moby, &slot->moby->pos, -1, 2.0f, 13.0f);
             FUN_001f9a28(vector, &slot->moby->pos, &(*(struct Moby **)((char *)vars + 0x64 + selected * 16))->pos);
@@ -1369,7 +1369,7 @@ mark_hit:
                 if (slot->moby != 0) {
                     u8 *vector = slot->moby->pvars;
                     FUN_L00_0025f090(moby, &slot->moby->pos, -1, 2.0f, 13.0f);
-                    FUN_001f9a28(vector, &slot->moby->pos, &slot->anchor->pos);
+                    FUN_001f9a28(vector, &slot->moby->pos, &(*(struct Moby **)((char *)vars + 0x64 + index * 16))->pos);
                     normalize_vector_xyz(vector, vector, D_0015ED6C * 10.0f);
                     slot->moby->state = 1;
                     slot->moby = 0;
