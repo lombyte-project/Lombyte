@@ -505,165 +505,233 @@ void FUN_L05_003298d8(Camera *cam) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00329ce8.s", FUN_L05_00329ce8);
-#else
-extern float absolute_float(float) __asm__("FUN_001f99c0");
-extern float dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern long FUN_L00_001f0d60(float, void *, int, int);
-extern short D_0013F65E __attribute__((section(".data")));
-extern float D_0013F62C __attribute__((section(".data")));
-extern unsigned char D_0013FBDD;
-extern float D_0013B5A8 __asm__("D_0013B5A8");
+/* Camera follow: springs the position toward the focus, keeps clear of walls, eases distance and height, then rebuilds the basis. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032B1F8), where it is exact; names translated to the US level program. */
 
-void FUN_L05_00329ce8(Camera *cam) {
-    CameraOrbit *o = cam->orbit;
-    CameraPreset *preset;
-    Vec4 up, pos, relative, lateral, radial, initialTarget, desiredPos, projected, collisionPoint, collisionStep;
-    Vec4 *focusPos = &o->focus.pos;
-    Vec4 *base;
-    CameraSpring *spring = &o->spring;
-    CameraTrack *track = &o->track;
-    Vec4 *target;
-    Vec4 *next;
-    Vec4 *working;
-    Vec4 *direction;
-    Vec4 *velocity;
-    int i;
-    u8 moving = 0;
-    float dist = o->dist;
-    float value;
-    float dot;
+typedef struct Hero Hero;
 
-    preset = D_L05_0015EF50[cam->preset].preset;
-    normalize_vector_xyz(&up, &hero.unk290, -1.0f);
-    qcopy(&pos, focusPos);
-    if (o->mode == 0) {
-        subtract_vector_xyz(&relative, &cam->pos, &pos);
-        base = (Vec4 *)((char *)o + 0xA0);
-        i = 0;
-        dot = dot_vectors_xyz(&relative, base);
-        normalize_vector_xyz(&projected, base, dot);
-        subtract_vector_xyz(&lateral, &relative, &projected);
-        normalize_vector_xyz(&radial, &lateral, spring->dist);
-        add_vector_xyz(&initialTarget, &pos, &radial);
-        normalize_vector_xyz(&projected, base, spring->height);
-        add_vector_xyz(&desiredPos, &initialTarget, &projected);
-        add_vector_xyz(&desiredPos, &desiredPos, &o->unk1B0);
-        ((float *)&cam->pos)[0] = FUN_001ebd78(o, ((float *)&cam->pos)[0], ((float *)&desiredPos)[0], o->unk10, o->unk14, *(float *)&o->unk18);
-        ((float *)&cam->pos)[1] = FUN_001ebd78((char *)o + 4, ((float *)&cam->pos)[1], ((float *)&desiredPos)[1], o->unk10, o->unk14, *(float *)&o->unk18);
-        ((float *)&cam->pos)[2] = FUN_001ebd78((char *)o + 8, ((float *)&cam->pos)[2], ((float *)&desiredPos)[2], o->unk10, o->unk14, *(float *)&o->unk18);
-        ((float *)&collisionPoint)[0] = ((float *)&cam->pos)[13];
-        ((float *)&collisionPoint)[1] = ((float *)&cam->pos)[14];
-        ((float *)&collisionPoint)[2] = ((float *)&cam->pos)[15];
-        ((float *)&collisionPoint)[3] = 0.0f;
-        subtract_vector_xyz(&collisionStep, &cam->pos, &collisionPoint);
-        scale_vector_xyz(&collisionStep, &collisionStep, 0.16666667f);
-        next = (Vec4 *)((char *)o + 0x1D0);
-        working = &desiredPos;
-        direction = &projected;
-        while (i < 6) {
-            if (FUN_L00_001f0d60(0.5f, &collisionPoint, 0x12, 0) != 0) {
-                spring->height = FUN_001ebd78((char *)preset + 0x48, spring->height,
-                    (*(float *)0x00174278) - ((float *)&pos)[2], 0.05f, 0.2f, 0.0f);
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V_32B1F8;
+
+typedef struct {
+    V_32B1F8 pos;
+    char pad10[0x10];
+    V_32B1F8 axis;
+    char pad30[0x1C];
+    float dist;
+} Focus_32B1F8;
+
+typedef struct {
+    float dist;
+    char pad4[0xC];
+    float height;
+} Spring_32B1F8;
+
+typedef struct {
+    V_32B1F8 vel;
+    char pad10[0x10];
+    float state[4];
+    char pad30[4];
+    float k34, k38, k3C;
+    float blend;
+} Track_32B1F8;
+
+typedef struct {
+    float vel[4];
+    float k10, k14, k18;
+    short mode;
+    char pad1E[0x62];
+    Focus_32B1F8 focus;
+    char padD0[0x10];
+    Spring_32B1F8 spring;
+    char padF4[0xC];
+    Track_32B1F8 track;
+    char pad150[0x30];
+    float dist;
+    float spring_dist;
+    float spring_height;
+    float focus_dist;
+    float spring_dist2;
+    float spring_height2;
+    char pad198[8];
+    V_32B1F8 aim;
+    V_32B1F8 bias;
+    float bias_vel[4];
+    V_32B1F8 next;
+} Orbit_32B1F8;
+
+typedef struct {
+    V_32B1F8 fwd;
+    V_32B1F8 up;
+    V_32B1F8 side;
+    V_32B1F8 pos;
+    char pad40[0x24];
+    float vel[3];
+    Orbit_32B1F8 *orbit;
+    char pad74[0x10];
+    short preset;
+} Camera_32B1F8;
+
+typedef struct { char pad0[0x48]; float vel; } Preset_32B1F8;
+
+typedef struct { char pad0[0x1C]; Preset_32B1F8 *preset; } Row_32B1F8;
+
+extern char D_0013F5E0[];
+extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
+extern int D_L05_0015EF50_c __asm__("D_L05_0015EF50") ; /* no foreign declaration */
+extern int D_L05_001621A8 __attribute__((sda)); /* no foreign declaration */
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
+f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
+float absolute_float(float input) __asm__("func_001F99C0");
+extern char D_0013E633_32B1F8[] __asm__("D_0013F5E0");
+extern Row_32B1F8 *D_L05_0015F050_32B1F8 __asm__("D_L05_0015EF50") __attribute__((section(".sdata")));
+extern float D_L05_00174378_32B1F8 __asm__("D_L05_00174278") __attribute__((section(".data")));
+extern float D_L05_00162268_32B1F8 __asm__("D_L05_001621A8") __attribute__((sda));
+extern void vec_scale_32B1F8(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void vec_sub_32B1F8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float vec_dot_32B1F8(void *, void *) __asm__("FUN_001f9ab0");
+extern void vec_add_32B1F8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float spring_32B1F8(float, float, float *, float, float, float) __asm__("FUN_001ebd78");
+extern void vec_mul_32B1F8(void *, void *, float) __asm__("FUN_001f9a68");
+extern int collide_32B1F8(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern float fabs_32B1F8(float) __asm__("FUN_001f99c0");
+extern void vec_cross_32B1F8(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void orbit_32B1F8(Camera_32B1F8 *) __asm__("FUN_L05_003298d8");
+
+void FUN_L05_00329ce8(Camera_32B1F8 *m) {
+    V_32B1F8 down;
+    V_32B1F8 focus;
+    V_32B1F8 rel;
+    V_32B1F8 lat;
+    V_32B1F8 off;
+    V_32B1F8 base;
+    V_32B1F8 goal;
+    V_32B1F8 tmp;
+    V_32B1F8 probe;
+    V_32B1F8 step;
+    Orbit_32B1F8 *d = m->orbit;
+    char *g = D_0013E633_32B1F8;
+    Preset_32B1F8 *cur;
+    Focus_32B1F8 *q;
+    Track_32B1F8 *tr;
+    float dist;
+    Spring_32B1F8 *e;
+    float *v;
+    float dd;
+    V_32B1F8 *pos;
+    int n;
+    int fl = 0;
+
+    cur = D_L05_0015F050_32B1F8[m->preset].preset;
+    tr = &d->track;
+    dist = d->dist;
+    q = &d->focus;
+    e = &d->spring;
+    vec_scale_32B1F8(&down, g, -1.0f);
+    qcopy(&focus, &q->pos);
+    if (d->mode == 0) {
+        vec_sub_32B1F8(&rel, pos = &m->pos, &focus);
+        n = 0;
+        dd = vec_dot_32B1F8(&rel, &q->axis);
+        vec_scale_32B1F8(&tmp, &q->axis, dd);
+        vec_sub_32B1F8(&lat, &rel, &tmp);
+        vec_scale_32B1F8(&off, &lat, e->dist);
+        vec_add_32B1F8(&base, &focus, &off);
+        vec_scale_32B1F8(&tmp, &q->axis, e->height);
+        vec_add_32B1F8(&goal, &base, &tmp);
+        vec_add_32B1F8(&goal, &goal, &d->bias);
+        m->pos.x = spring_32B1F8(m->pos.x, goal.x, &d->vel[0], d->k10, d->k14, d->k18);
+        m->pos.y = spring_32B1F8(m->pos.y, goal.y, &d->vel[1], d->k10, d->k14, d->k18);
+        m->pos.z = spring_32B1F8(m->pos.z, goal.z, &d->vel[2], d->k10, d->k14, d->k18);
+        v = m->vel;
+        probe.x = v[0];
+        probe.y = v[1];
+        probe.z = v[2];
+        *(int *)&probe.w = 0;
+        vec_sub_32B1F8(&step, pos, &probe);
+        vec_mul_32B1F8(&step, &step, 0.16666667f);
+        while (n < 6) {
+            if (collide_32B1F8(0.5f, &probe, 18, 0) != 0) {
+                e->height = spring_32B1F8(e->height, D_L05_00174378_32B1F8 - focus.z, &cur->vel, 0.05f, 0.2f, 0.0f);
                 break;
             }
-            i++;
-            add_vector_xyz(&collisionPoint, &collisionPoint, &collisionStep);
+            n++;
+            vec_add_32B1F8(&probe, &probe, &step);
         }
-        if (i == 6) {
-            target = &o->unk1B0;
-            ((float *)target)[0] = FUN_001ebd78((float *)&o->unk1C0 + 0, ((float *)target)[0], 0.0f, 0.02f, 0.2f, 0.05f);
-            ((float *)target)[1] = FUN_001ebd78((float *)&o->unk1C0 + 1, ((float *)target)[1], 0.0f, 0.02f, 0.2f, 0.05f);
-            ((float *)target)[2] = FUN_001ebd78((float *)&o->unk1C0 + 2, ((float *)target)[2], 0.0f, 0.02f, 0.2f, 0.05f);
-            spring->height = FUN_001ebd78((char *)preset + 0x48, spring->height,
-                o->spring_height, 0.005f, 0.2f, 0.0f);
+        if (n == 6) {
+            d->bias.x = spring_32B1F8(d->bias.x, 0.0f, &d->bias_vel[0], 0.02f, 0.2f, 0.05f);
+            d->bias.y = spring_32B1F8(d->bias.y, 0.0f, &d->bias_vel[1], 0.02f, 0.2f, 0.05f);
+            d->bias.z = spring_32B1F8(d->bias.z, 0.0f, &d->bias_vel[2], 0.02f, 0.2f, 0.05f);
+            e->height = spring_32B1F8(e->height, d->spring_height, &cur->vel, 0.005f, 0.2f, 0.0f);
         }
-        if (D_0013F65E != 0 && D_0013F62C > 2.0f) {
-            value = absolute_float(spring->dist - o->unk190);
-            if (value < 0.015f) spring->dist = o->unk190;
-            else if (spring->dist < o->unk190) spring->dist += 0.015f;
-            else spring->dist -= 0.015f;
-            if (i == 6) {
-                value = absolute_float(spring->height - o->unk194);
-                if (value < 0.05f) spring->height = o->unk194;
-                else if (spring->height < o->unk194) spring->height += 0.05f;
-                else spring->height -= 0.05f;
+        if (((Hero *)(D_0013E633_32B1F8 - 0x290))->air_frames.s != 0 && 2.0f < ((Hero *)(D_0013E633_32B1F8 - 0x290))->ground_distance) {
+            if (fabs_32B1F8(e->dist - d->spring_dist2) < 0.015f) e->dist = d->spring_dist2;
+            else if (e->dist < d->spring_dist2) e->dist = e->dist + 0.015f;
+            else e->dist = e->dist - 0.015f;
+            if (n == 6) {
+                if (fabs_32B1F8(e->height - d->spring_height2) < 0.05f) e->height = d->spring_height2;
+                else if (e->height < d->spring_height2) e->height = e->height + 0.05f;
+                else e->height = e->height - 0.05f;
             }
-            value = absolute_float(((CameraFocus *)focusPos)->dist - o->unk18C);
-            if (value < 0.02f) ((CameraFocus *)focusPos)->dist = o->unk18C;
-            else if (((CameraFocus *)focusPos)->dist < o->unk18C) ((CameraFocus *)focusPos)->dist += 0.02f;
-            else ((CameraFocus *)focusPos)->dist -= 0.02f;
+            if (fabs_32B1F8(q->dist - d->focus_dist) < 0.02f) q->dist = d->focus_dist;
+            else if (q->dist < d->focus_dist) q->dist = q->dist + 0.02f;
+            else q->dist = q->dist - 0.02f;
         } else {
-            value = absolute_float(spring->dist - o->spring_dist);
-            if (value < 0.03f) spring->dist = o->spring_dist;
-            else if (spring->dist < o->spring_dist) spring->dist += 0.03f;
-            else spring->dist -= 0.03f;
-            value = absolute_float(spring->height - o->spring_height);
-            if (value < 0.1f) spring->height = o->spring_height;
-            else if (spring->height < o->spring_height) spring->height += 0.1f;
-            else spring->height -= 0.1f;
-            value = absolute_float(((CameraFocus *)focusPos)->dist - dist);
-            if (value < 0.04f) ((CameraFocus *)focusPos)->dist = dist;
-            else if (((CameraFocus *)focusPos)->dist < dist) ((CameraFocus *)focusPos)->dist += 0.04f;
-            else ((CameraFocus *)focusPos)->dist -= 0.04f;
+            if (fabs_32B1F8(e->dist - d->spring_dist) < 0.03f) e->dist = d->spring_dist;
+            else if (e->dist < d->spring_dist) e->dist = e->dist + 0.03f;
+            else e->dist = e->dist - 0.03f;
+            if (fabs_32B1F8(e->height - d->spring_height) < 0.1f) e->height = d->spring_height;
+            else if (e->height < d->spring_height) e->height = e->height + 0.1f;
+            else e->height = e->height - 0.1f;
+            if (fabs_32B1F8(q->dist - dist) < 0.04f) q->dist = dist;
+            else if (q->dist < dist) q->dist = q->dist + 0.04f;
+            else q->dist = q->dist - 0.04f;
         }
-        moving = 1;
+        fl = 1;
     } else {
-        qcopy((char *)o + 0x1A0, (char *)hero.moby + 0xE0);
-        value = absolute_float(spring->dist - o->spring_dist);
-        if (value < 0.015f) spring->dist = o->spring_dist;
-        else if (spring->dist < o->spring_dist) spring->dist += 0.015f;
-        else spring->dist -= 0.015f;
-        value = absolute_float(spring->height - o->spring_height);
-        if (value < 0.05f) spring->height = o->spring_height;
-        else if (spring->height < o->spring_height) spring->height += 0.05f;
-        else spring->height -= 0.05f;
-        value = absolute_float(((CameraFocus *)focusPos)->dist - dist);
-        if (value < 0.02f) ((CameraFocus *)focusPos)->dist = dist;
-        else if (((CameraFocus *)focusPos)->dist < dist) ((CameraFocus *)focusPos)->dist += 0.02f;
-        else ((CameraFocus *)focusPos)->dist -= 0.02f;
-        next = (Vec4 *)((char *)o + 0x1D0);
-        base = (Vec4 *)((char *)focusPos + 0x20);
-        working = &desiredPos;
-        direction = &projected;
+        qcopy(&d->aim, *(char **)(g + 0x1DF0) + 0xE0);
+        if (fabs_32B1F8(e->dist - d->spring_dist) < 0.015f) e->dist = d->spring_dist;
+        else if (e->dist < d->spring_dist) e->dist = e->dist + 0.015f;
+        else e->dist = e->dist - 0.015f;
+        if (fabs_32B1F8(e->height - d->spring_height) < 0.05f) e->height = d->spring_height;
+        else if (e->height < d->spring_height) e->height = e->height + 0.05f;
+        else e->height = e->height - 0.05f;
+        if (fabs_32B1F8(q->dist - dist) < 0.02f) q->dist = dist;
+        else if (q->dist < dist) q->dist = q->dist + 0.02f;
+        else q->dist = q->dist - 0.02f;
     }
-
-    FUN_L05_003298d8(cam);
-    qcopy(focusPos, next);
-    qcopy(&pos, focusPos);
-    velocity = &collisionPoint;
-    normalize_vector_xyz(direction, base, ((CameraFocus *)focusPos)->dist);
-    add_vector_xyz(working, &pos, direction);
-    subtract_vector_xyz(&relative, working, &cam->pos);
-    normalize_vector_xyz(&relative, &relative, 1.0f);
-    dot = dot_vectors_xyz(cam, &relative);
-    cross_vectors_xyz((char *)cam + 0x10, &relative, &up);
-    normalize_vector_xyz((char *)cam + 0x10, (char *)cam + 0x10, 1.0f);
-    cross_vectors_xyz((char *)cam + 0x20, (char *)cam + 0x10, &relative);
-    if (!moving || absolute_float(dot) < 0.5f || D_0013FBDD != 0) {
-        value = 0.0f;
+    orbit_32B1F8(m);
+    qcopy(&q->pos, &d->next);
+    qcopy(&focus, &q->pos);
+    vec_scale_32B1F8(&tmp, &q->axis, q->dist);
+    vec_add_32B1F8(&goal, &focus, &tmp);
+    vec_sub_32B1F8(&rel, &goal, &m->pos);
+    vec_scale_32B1F8(&rel, &rel, 1.0f);
+    dd = vec_dot_32B1F8(&m->fwd, &rel);
+    vec_cross_32B1F8(&m->up, &rel, &down);
+    vec_scale_32B1F8(&m->up, &m->up, 1.0f);
+    vec_cross_32B1F8(&m->side, &m->up, &rel);
+    if (fl == 0 || fabs_32B1F8(dd) < 0.5f || (v = (float *)(D_0013E633_32B1F8 - 0x290), ((Hero *)v)->unk88D != 0)) {
+        tr->blend = spring_32B1F8(tr->blend, 0.0f, tr->state, tr->k34, tr->k38, tr->k3C);
     } else {
-        normalize_vector_xyz(velocity, (char *)hero.moby + 0xC0, 1.0f);
-        dot = dot_vectors_xyz(velocity, (char *)cam + 0x20);
-        normalize_vector_xyz(&collisionStep, (char *)cam + 0x20, dot);
-        subtract_vector_xyz(velocity, velocity, &collisionStep);
-        value = dot_vectors_xyz(velocity, (char *)cam + 0x10) * D_0013B5A8;
+        float t;
+        vec_scale_32B1F8(&probe, ((char *)((Hero *)v)->moby) + 0xC0, 1.0f);
+        t = vec_dot_32B1F8(&probe, &m->side);
+        vec_scale_32B1F8(&step, &m->side, t);
+        vec_sub_32B1F8(&probe, &probe, &step);
+        t = vec_dot_32B1F8(&probe, &m->up);
+        tr->blend = spring_32B1F8(tr->blend, t * D_L05_00162268_32B1F8, tr->state, tr->k34, tr->k38, tr->k3C);
     }
-    *(float *)&track->unk40 = FUN_001ebd78(&track->accel, *(float *)&track->unk40, value,
-                                 track->unk34, track->unk38, *(float *)&track->unk3C);
-    if (absolute_float(*(float *)&track->unk40) > 0.00001f) {
-        normalize_vector_xyz(velocity, (char *)cam + 0x10, *(float *)&track->unk40);
-        add_vector_xyz(working, working, velocity);
+    if (0.00001f < fabs_32B1F8(tr->blend)) {
+        vec_scale_32B1F8(&probe, &m->up, tr->blend);
+        vec_add_32B1F8(&goal, &goal, &probe);
     }
-    subtract_vector_xyz(&relative, working, &cam->pos);
-    normalize_vector_xyz(cam, &relative, 1.0f);
-    cross_vectors_xyz((char *)cam + 0x10, cam, &up);
-    normalize_vector_xyz((char *)cam + 0x10, (char *)cam + 0x10, 1.0f);
-    cross_vectors_xyz((char *)cam + 0x20, (char *)cam + 0x10, cam);
+    vec_sub_32B1F8(&rel, &goal, &m->pos);
+    vec_scale_32B1F8(&m->fwd, &rel, 1.0f);
+    vec_cross_32B1F8(&m->up, &m->fwd, &down);
+    vec_scale_32B1F8(&m->up, &m->up, 1.0f);
+    vec_cross_32B1F8(&m->side, &m->up, &m->fwd);
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
