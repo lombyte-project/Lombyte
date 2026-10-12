@@ -921,7 +921,11 @@ def hoist_sda_externs(assembly, source):
     known.  The source says which globals retail reads through $gp: those
     declared `__attribute__((sda))` (the game compiler's spelling, ignored by
     SN cc1); their directives go first, the others stay where cc1 put them.
+    A NON_MATCHING `#else` draft is not compiled, so its declarations do not
+    count.
     """
+    source = re.sub(r"^(#ifndef NON_MATCHING\n(?:INCLUDE_ASM[^\n]*\n)*)#else\n.*?^#endif",
+                    r"\1#endif", source, flags=re.M | re.S)
     sda = set()
     for decl in re.findall(r"^extern[^;]*__attribute__\(\(sda\)\)[^;]*;", source, re.M):
         label = re.search(r'__asm__\s*\(\s*"([\w.$]+)"', decl)
