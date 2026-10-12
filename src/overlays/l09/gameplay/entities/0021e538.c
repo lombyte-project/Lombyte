@@ -1094,7 +1094,118 @@ char *FUN_L09_002edb60(char *src, int cls) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002edc30.s", FUN_L09_002edc30);
+extern u8 D_0014C050_edc30[] __asm__("D_0014C050");
+extern float D_L09_00166F40_edc30[] __asm__("D_L09_00166F40");
+extern float frame_time_edc30 __asm__("D_0015ED6C");
+extern void mark_moby_for_removal_edc30(struct Moby *) __asm__("FUN_0020c828");
+extern char *find_moby_hit_edc30(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
+extern int dec_byte_timer_edc30(u8 *) __asm__("FUN_L00_001fefc8");
+extern void FUN_L00_00257470_edc30(struct Moby *, int, int) __asm__("FUN_L00_00257470");
+extern void FUN_L00_0025f8e0_edc30(void *, float) __asm__("FUN_L00_0025f8e0");
+extern int allocate_target_entry_edc30(int, int, struct Moby *) __asm__("FUN_0022da68");
+extern void subtract_vector_edc30(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_vector_edc30(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void set_vector_length_edc30(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void scale_vector_edc30(void *, void *, float) __asm__("FUN_001f9a68");
+extern void transform_vector_edc30(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern float vector_length_edc30(void *) __asm__("FUN_001f9af0");
+extern float FUN_001f99c0_edc30(float) __asm__("FUN_001f99c0");
+extern float random_float_between_edc30(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below_edc30(int) __asm__("FUN_00213260");
+extern int scale_game_frames_edc30(int) __asm__("FUN_001f96f8");
+extern struct Moby *FUN_L09_002ef868(struct Moby *, Vec4 *, Vec4 *, s32, f32);
+extern void FUN_L00_0025f090_edc30(struct Moby *, void *, int, float, float) __asm__("FUN_L00_0025f090");
+extern void FUN_L00_0025e450_edc30(struct Moby *, void *, void *, float, float, int, int, int, float, float, float,
+                                   float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+
+/* Level 9 breakable stack: when hit, swaps in the next damaged class (0x512 -> 0x513 -> 0x514), bursts debris and smoke and removes itself once gone. */
+void FUN_L09_002edc30(struct Moby *moby) {
+    float center[4];
+    float top[4];
+    float push[4];
+    float pos[4];
+    float vel[4];
+    float pull[4];
+    char *hit;
+    int replaced;
+    int next;
+    int i;
+    float spread;
+    float falloff;
+    if (moby->mission != 0xFF && D_0014C050_edc30[moby->mission + current_level_index * 16] == 0xFF) {
+        mark_moby_for_removal_edc30(moby);
+        return;
+    }
+    replaced = 0;
+    hit = find_moby_hit_edc30(moby, 0x40000, 0);
+    if (moby->state == 0) {
+        moby->state = 1;
+    }
+    if (dec_byte_timer_edc30(&moby->command) == 0 || hit == 0) {
+        return;
+    }
+    if (moby->oclass < 0x514) {
+        next = 0x512;
+        switch (moby->oclass) {
+        case 0x512:
+            next = 0x513;
+            break;
+        case 0x513:
+            qcopy(center, &moby->pos);
+            moby->pos.z += 4.0f;
+            FUN_L00_00257470_edc30(moby, 0, -1);
+            qcopy(&moby->pos, center);
+            next = 0x514;
+            break;
+        }
+        replaced = FUN_L09_002edb60((char *)moby, next) != 0;
+    }
+    moby->command = scale_game_frames_edc30(10);
+    qcopy(top, &moby->pos);
+    top[2] += 1.25f;
+    qcopy(center, top);
+    FUN_L00_0025f8e0_edc30(center, 0.4f);
+    if (moby->oclass < 0x513) {
+        allocate_target_entry_edc30(0, 0, moby);
+    } else {
+        allocate_target_entry_edc30(0, 0, moby);
+    }
+    moby->hit_slot = 0xFF;
+    subtract_vector_edc30(push, D_L09_00166F40_edc30, center);
+    set_vector_length_edc30(push, push, 2.0f);
+    spread = 4.0f;
+    if (moby->oclass != 0x114) {
+        spread = 2.0f;
+    }
+    for (i = 0; i < 20; i++) {
+        *(u128 *)vel = 0;
+        vel[0] = random_float_between_edc30(-0.5f, 0.5f);
+        vel[1] = random_float_between_edc30(-2.0f, 2.0f);
+        vel[2] = random_float_between_edc30(-spread, spread);
+        *(u128 *)pos = *(u128 *)vel;
+        transform_vector_edc30(pos, pos, &moby->rot_row0);
+        add_vector_edc30(pos, pos, top);
+        subtract_vector_edc30(vel, pos, center);
+        falloff = FUN_001f99c0_edc30(3.0f - vector_length_edc30(vel)) / 3.0f;
+        set_vector_length_edc30(pull, hit + 0x10, falloff * falloff * 8.0f);
+        add_vector_edc30(vel, vel, pull);
+        set_vector_length_edc30(vel, vel, falloff * (random_float_between_edc30(6.0f, 10.0f) * frame_time_edc30));
+        add_vector_edc30(pos, pos, push);
+        if (moby->oclass == 0x514 || random_integer_below_edc30(4) == 0) {
+            FUN_L09_002ef868(moby, (Vec4 *)pos, (Vec4 *)vel, i & 1, random_float_between_edc30(1.0f, 2.0f));
+        }
+        if (i % 3 == 0) {
+            FUN_L00_0025f090_edc30(moby, pos, -1, random_float_between_edc30(1.0f, 1.6f), 0.0f);
+        }
+    }
+    scale_vector_edc30(pos, hit + 0x10, 0.5f);
+    add_vector_edc30(center, center, push);
+    FUN_L00_0025e450_edc30(moby, hit + 0x10, center, 0.0f, 0.0f, 10, 3, 16, 3.0f, 2.0f, 1.0f, 1.0f, -1, 15.0f, 1, 1,
+                           -1, 0);
+    if (moby->oclass == 0x514 || replaced) {
+        mark_moby_for_removal_edc30(moby);
+    }
+}
 
 #define NOT_SDA
 
