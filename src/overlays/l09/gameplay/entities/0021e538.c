@@ -4,16 +4,18 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0021e560.s", FUN_L09_0021e560);
-#else
-extern int *D_L09_001611C0;
-#define PACKET_CURSOR (*(int * volatile *)&D_L09_001611C0)
-extern int D_L09_0015F420;
-extern unsigned char D_L09_0016D300[];
-extern u64 FUN_001f44b8(int);
+/* Fakematch: both cursors are read as one-element arrays, so every packet store reloads them like retail. */
+extern int *packet_cursor_ref[] __asm__("D_L09_001611C0") __attribute__((section(".sdata")));
+extern s32 texture_cursor_ref[] __asm__("D_0015EE74") __attribute__((section(".sdata")));
+#define PACKET_CURSOR (packet_cursor_ref[0])
+#define TEXTURE_CURSOR (texture_cursor_ref[0])
+extern char *texture_vertices __asm__("D_L09_0015F420") __attribute__((section(".sdata")));
+extern char D_L09_0016D300[];
+extern long D_L09_00161FC0[];
+extern long FUN_001f44b8(int);
 extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int);
-extern void FUN_00233980(int, u64);
+extern void FUN_00233980(int, long);
+
 typedef struct {
     char unused[8];
     unsigned short first;
@@ -21,80 +23,79 @@ typedef struct {
     char tail[4];
 } TextureEntry;
 
+/* Queues the GS packet for one texture (tex0 == tex1), or builds the strip between two texture entries and queues it. */
 void FUN_L09_0021e560(int tex0, int tex1) {
-    int *packet;
-    u64 *words;
     if (tex0 == tex1) {
+        int *packet;
+        long *words;
+
         PACKET_CURSOR[0] = 0x10000002;
         PACKET_CURSOR[1] = 0;
         PACKET_CURSOR[2] = 0;
         PACKET_CURSOR[3] = 0x50000002;
         packet = PACKET_CURSOR;
-        words = (u64 *)(packet + 4);
         PACKET_CURSOR = packet + 4;
-        words[0] = 0x1000000000008001ULL;
-        words[1] = 0x0eeeeeeeULL;
+        words = (long *)(packet + 4);
+        words[0] = 0x1000000000008001L;
+        words[1] = 0xEEEEEEE;
         words[2] = FUN_001f44b8(tex1);
         words[3] = 6;
         PACKET_CURSOR = packet + 12;
     } else {
-        TextureEntry *a = (TextureEntry *)D_L09_0016D300 + tex0;
-        TextureEntry *b = (TextureEntry *)D_L09_0016D300 + tex1;
-        u64 texture_address;
-        u64 *data;
-        *(u64 *)0x161fc0 = 0x0800000000000400ULL;
-        *(u64 *)0x161fc8 = 0;
-        FUN_L02_0024fca0((void *)0x161fd0,
-                          (char *)(D_L09_0015F420 + a->first * 16),
-                          (char *)(D_L09_0015F420 + a->second * 16),
-                          (char *)(D_L09_0015F420 + b->first * 16),
-                          (char *)(D_L09_0015F420 + b->second * 16),
-                          0x1000);
+        int *packet;
+        long *words;
+        int a_second = ((TextureEntry *)D_L09_0016D300)[tex0].second;
+        int a_first = ((TextureEntry *)D_L09_0016D300)[tex0].first;
+        int b_second = ((TextureEntry *)D_L09_0016D300)[tex1].second;
+        int b_first = ((TextureEntry *)D_L09_0016D300)[tex1].first;
+
+        D_L09_00161FC0[0] = 0x0800000000000400L;
+        D_L09_00161FC0[1] = 0;
+        FUN_L02_0024fca0(&D_L09_00161FC0[2], texture_vertices + (a_first << 4), texture_vertices + (a_second << 4),
+                         texture_vertices + (b_first << 4), texture_vertices + (b_second << 4), 0x1000);
         PACKET_CURSOR[0] = 0x10000006;
         PACKET_CURSOR[1] = 0;
         PACKET_CURSOR[2] = 0;
         PACKET_CURSOR[3] = 0x50000006;
         packet = PACKET_CURSOR;
-        data = (u64 *)(packet + 4);
         PACKET_CURSOR = packet + 4;
-        data[0] = 0x5000000000008001ULL;
-        data[1] = 0x0eeeeeeeULL;
-        texture_address = (u64)(long)(gs_texture_allocation_cursor >> 8) | 0x598100000ULL;
-        data[2] = texture_address;
-        data[3] = 6;
-        data[4] = ((u64)((long)gs_texture_allocation_cursor >> 8) << 32) | 0x1000000000000ULL;
-        data[5] = 0x50;
-        data[6] = 0;
-        data[7] = 0x51;
-        data[8] = 0x4000000040ULL;
-        data[9] = 0x52;
-        data[10] = 0;
-        data[11] = 0x53;
+        words = (long *)(packet + 4);
+        words[0] = 0x5000000000008001L;
+        words[1] = 0xEEEEEEE;
+        words[2] = (long)(TEXTURE_CURSOR >> 8) | 0x18100000 | (0xB000L << 19);
+        words[3] = 6;
+        words[4] = (long)(TEXTURE_CURSOR >> 8) << 32 | 0x1000000000000L;
+        words[5] = 0x50;
+        words[6] = 0;
+        words[7] = 0x51;
+        words[8] = 0x4000000040L;
+        words[9] = 0x52;
+        words[10] = 0;
+        words[11] = 0x53;
         PACKET_CURSOR = packet + 28;
         PACKET_CURSOR[0] = 0x30000401;
-        PACKET_CURSOR[1] = 0x161fc0;
+        PACKET_CURSOR[1] = (int)D_L09_00161FC0;
         PACKET_CURSOR[2] = 0;
         PACKET_CURSOR[3] = 0x50000401;
-        packet = PACKET_CURSOR;
-        PACKET_CURSOR = packet + 4;
+        PACKET_CURSOR += 4;
         PACKET_CURSOR[0] = 0x10000002;
         PACKET_CURSOR[1] = 0;
         PACKET_CURSOR[2] = 0;
         PACKET_CURSOR[3] = 0x50000002;
+        PACKET_CURSOR += 4;
         packet = PACKET_CURSOR;
-        PACKET_CURSOR = packet + 4;
-        data = (u64 *)(packet + 4);
-        data[0] = 0x1000000000008001ULL;
-        data[1] = 0xe;
-        data[2] = 0;
-        data[3] = 0x3f;
-        PACKET_CURSOR = packet + 12;
-        FUN_00233980(7, (u64)(int)(gs_texture_allocation_cursor >> 8) | 0x598100000ULL);
-        gs_texture_allocation_cursor += 0x4000;
+        words = (long *)packet;
+        words[0] = 0x1000000000008001L;
+        words[1] = 0xE;
+        words[2] = 0;
+        words[3] = 0x3F;
+        PACKET_CURSOR = packet + 8;
+        FUN_00233980(7, (long)(TEXTURE_CURSOR >> 8) | 0x18100000 | (0xB000L << 19));
+        TEXTURE_CURSOR += 0x4000;
     }
 }
 #undef PACKET_CURSOR
-#endif
+#undef TEXTURE_CURSOR
 
 #define NOT_SDA
 
@@ -114,7 +115,7 @@ extern int *D_L09_001611C0_x[] __asm__("D_L09_001611B8") __attribute__((section(
 extern int D_L09_0015F5CC;
 extern int FUN_001fa728(char *, float);
 extern void FUN_L01_0021fa98(int, int, int, int, int, int);
-extern void FUN_L09_0021e560(int, int);
+extern void FUN_L09_0021e560_u(int, int) __asm__("FUN_L09_0021e560");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1) {
@@ -125,7 +126,7 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
     int idx;
     float s0;
     float s1;
-    FUN_L09_0021e560(tex0, tex1);
+    FUN_L09_0021e560_u(tex0, tex1);
     D_L09_001611C0_x[2][0] = 0x30000009;
     D_L09_001611C0_x[2][1] = (int)D_L09_0016EAA0;
     D_L09_001611C0_x[2][2] = 0;
