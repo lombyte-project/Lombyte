@@ -664,14 +664,15 @@ extern void add_vector_xyz_002e7eb0(void *, void *, void *) __asm__("FUN_001f9a1
 extern int random_integer_002e7eb0(int, int) __asm__("FUN_L00_00257b90");
 extern void *spawn_particle_002e7eb0(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern int truncate_float_to_s32_002e7eb0(float) __asm__("FUN_001fa6d0");
-extern float scale_game_frames_002e7eb0(float) __asm__("FUN_001f96b0");
+extern float scale_game_frames_002e7eb0(float) __asm__("FUN_L08_00211a20");
 extern int scale_game_frames_int_002e7eb0(int) __asm__("FUN_001f96f8");
 extern void FUN_00218888_002e7eb0(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern int D_L08_0015F5CC_002e7eb0 __asm__("D_L08_0015F5CC");
 extern int D_0015ED84_002e7eb0 __asm__("D_0015ED84");
-extern float D_L08_001618D8_002e7eb0 __asm__("D_L00_001618D8") __attribute__((sda));
+typedef union { float float_value; int int_value; } Data_002e7eb0;
+extern Data_002e7eb0 D_L08_001618D8_002e7eb0[] __asm__("D_L00_001618D8") __attribute__((sda));
 
-#define DATA_002e7eb0(type, offset) (*(type *)((char *)&D_L08_001618D8_002e7eb0 + (offset) - 0x47c))
+#define DATA_002e7eb0(type, offset) (D_L08_001618D8_002e7eb0[((offset) - 0x47c) / 4].type##_value)
 typedef struct { unsigned int words[4]; } Vec_002e7eb0 __attribute__((aligned(16)));
 
 char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
@@ -686,22 +687,22 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
     char *data;
     float * volatile particle_position_ptr;
 
-    *(Vec_002e7eb0 *)position_copy = *(Vec_002e7eb0 *)position;
-    *(Vec_002e7eb0 *)rotation_copy = *(Vec_002e7eb0 *)rotation;
+    qcopy_nc(position_copy, position);
+    qcopy_nc(rotation_copy, rotation);
     moby = create_moby_002e7eb0(0x1ca);
     if (moby != 0) {
         data = *(char **)(moby + 0x78);
         *(int *)(data + 0x14) = owner;
         *(int *)(data + 0x10) = value;
         set_moby_color_002e7eb0(moby, 0xa0, 0xa0, 0xa0);
-        *(int *)(moby + 0x40) = 0;
-        *(short *)(moby + 0x32) = 0xff;
-        *(unsigned char *)(moby + 0x30) = 0xff;
-        *(unsigned char *)(moby + 0x31) = 1;
+        *(volatile int *)(moby + 0x40) = 0;
+        *(volatile short *)(moby + 0x32) = 0xff;
+        *(volatile unsigned char *)(moby + 0x30) = 0xff;
+        *(volatile unsigned char *)(moby + 0x31) = 1;
         *(float *)(moby + 0x44) = -angle_atan2_002e7eb0(vector_length_xy_002e7eb0(rotation_copy), rotation_copy[2]);
         *(float *)(moby + 0x48) = angle_atan2_002e7eb0(rotation_copy[0], rotation_copy[1]);
-        *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)position_copy;
-        *(OvlQuad *)data = *(OvlQuad *)rotation_copy;
+        qcopy((moby + 0x10), position_copy);
+        qcopy(data, rotation_copy);
         if (D_L08_0015F5CC_002e7eb0 & 1)
             *(volatile int *)(data + 0x1c) = 1;
         else
@@ -719,22 +720,22 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
                 normalize_vector_xyz_002e7eb0(velocity, particle_position_ptr, magnitude * fast_cos_002e7eb0(angle));
                 normalize_vector_xyz_002e7eb0(offset, matrix[1], magnitude * fast_sin_002e7eb0(angle));
                 add_vector_xyz_002e7eb0(velocity, velocity, offset);
-                *(Vec_002e7eb0 *)offset = *(Vec_002e7eb0 *)velocity;
+                qcopy(offset, velocity);
                 velocity[3] = DATA_002e7eb0(float, 60);
                 offset[3] = DATA_002e7eb0(float, 64);
                 i++;
                 spawn_particle_002e7eb0(moby + 0x10, velocity, DATA_002e7eb0(int, 32), DATA_002e7eb0(int, 36),
                     random_integer_002e7eb0(scale_game_frames_int_002e7eb0(10), scale_game_frames_int_002e7eb0(20)), 1, 20000.0f);
-                a = truncate_float_to_s32_002e7eb0(frame_scale_inv * random_float_between_002e7eb0((float)DATA_002e7eb0(int, 48), (float)DATA_002e7eb0(int, 48) * 1.2f));
-                b = truncate_float_to_s32_002e7eb0(frame_scale_inv * random_float_between_002e7eb0((float)DATA_002e7eb0(int, 52), (float)DATA_002e7eb0(int, 52) * 1.2f));
-                c = truncate_float_to_s32_002e7eb0(frame_scale_inv * random_float_between_002e7eb0((float)DATA_002e7eb0(int, 56), (float)DATA_002e7eb0(int, 56) * 1.5f));
+                a = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)DATA_002e7eb0(int, 48), (float)DATA_002e7eb0(int, 48) * 1.2f)));
+                b = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)DATA_002e7eb0(int, 52), (float)DATA_002e7eb0(int, 52) * 1.2f)));
+                c = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)DATA_002e7eb0(int, 56), (float)DATA_002e7eb0(int, 56) * 1.5f)));
                 FUN_00218888_002e7eb0(moby + 0x10, velocity, offset, DATA_002e7eb0(int, 24), DATA_002e7eb0(int, 28), a, b, c, -1);
             } while ((float)i < DATA_002e7eb0(float, 8));
         }
         if (D_0015ED84_002e7eb0 == 12)
             *(int *)(data + 0x18) = scale_game_frames_int_002e7eb0(120);
         else
-            *(int *)(data + 0x18) = truncate_float_to_s32_002e7eb0(frame_scale_inv * DATA_002e7eb0(float, 0));
+            *(int *)(data + 0x18) = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(DATA_002e7eb0(float, 0)));
         update_moby_002e7eb0(moby);
     }
     return moby;
