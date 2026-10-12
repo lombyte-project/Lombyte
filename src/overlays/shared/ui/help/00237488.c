@@ -422,7 +422,7 @@ extern int FUN_L00_0021f9c8(float, void *, int, int) __asm__("FUN_L00_001f0d60")
 extern void FUN_L00_0022e3b8(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void FUN_L00_0022e758(void *, void *) __asm__("FUN_001fa050");
 extern void FUN_L00_0022e3e0(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void FUN_L00_0022df60(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_0022e9a0(void *, void *) __asm__("FUN_001fa298");
 extern void FUN_L00_0022eac0(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L00_0022e9c0(void *, void *) __asm__("FUN_001fa2b8");
@@ -481,7 +481,7 @@ void FUN_L05_0024bdc0(void) {
         FUN_L00_0022e3b8(start, start, (char *)hero.moby + 0xc0);
         FUN_L00_0022e758(rotation, D_L05_0017AB20);
         FUN_L00_0022e3e0(start, start, rotation);
-        FUN_L00_0022df60(hero.unk86C + 0x10, hero.unk86C + 0x10, start);
+        fast_vec_add(hero.unk86C + 0x10, hero.unk86C + 0x10, start);
         FUN_L00_0022e9a0(moby_rotation, (char *)hero.moby + 0xc0);
         FUN_L00_0022eac0(combined, moby_rotation, rotation);
         FUN_L00_0022e9c0(hero.unk86C + 0xc0, combined);

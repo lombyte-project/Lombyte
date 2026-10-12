@@ -212,9 +212,9 @@ extern void mark_moby_2d1688(char *) __asm__("FUN_0020c828");
 extern void set_action_2d1688(char *, int, int, int) __asm__("FUN_00212f90");
 extern float angle_2d1688(float, float) __asm__("FUN_001f9e90");
 extern void steer_2d1688(float, float, float, float, void *, void *) __asm__("FUN_L00_0025be00");
-extern void normalize_vector_2d1688(float, void *, void *) __asm__("FUN_001f9bf8");
-extern void add_vector_2d1688(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void subtract_vector_2d1688(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_normalize(float, void *, void *) __asm__("FUN_001f9bf8");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float distance_2d1688(void *, void *) __asm__("FUN_001f9b48");
 extern int tick_2d1688(void *) __asm__("FUN_001f9740");
 extern float absolute_2d1688(float) __asm__("FUN_001f99c0");
@@ -288,8 +288,8 @@ state_one:
         height = angle_2d1688(v[0] - *(float *)(moby + 0x10), v[1] - *(float *)(moby + 0x14));
         steer_2d1688(height, frame_time_sq * 3.1415927f, frame_time_sq * 3.1415927f,
                       frame_time * 3.1415927f, point, data + 0x70);
-        normalize_vector_2d1688(frame_time * 3.0f, w, moby + 0xc0);
-        add_vector_2d1688(moby + 0x10, moby + 0x10, w);
+        fast_vec_normalize(frame_time * 3.0f, w, moby + 0xc0);
+        fast_vec_add(moby + 0x10, moby + 0x10, w);
         height = distance_2d1688(moby + 0x10, v);
         if (height < 3.0f || tick_2d1688(data + 0x6c) != 0) {
             path = D_L05_001B0930[*(int *)(data + 0x60)];
@@ -320,8 +320,8 @@ state_two:
             *(float *)(moby + 0x48) = angle_from_2d1688(D_L05_001671D8, 1.5707964f);
             copy_direction_2d1688(moby + 0xc0, moby + 0x40);
             qcopy(moby + 0x10, &hero.motion.pos);
-            normalize_vector_2d1688((*(float *)&D_L05_00161388), v, moby + 0xe0);
-            subtract_vector_2d1688(moby + 0x10, moby + 0x10, v);
+            fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
+            fast_vec_sub(moby + 0x10, moby + 0x10, v);
             *(float *)(moby + 0x18) -= 2.0f;
             *(float *)(data + 0x78) = frame_time * 10.0f;
             *(unsigned short *)(moby + 0x34) &= 0xfffe;
@@ -362,21 +362,21 @@ state_three:
     speed = *(float *)(data + 0x78) - speed;
     *(float *)(data + 0x78) = speed;
     if (speed < height) {
-        normalize_vector_2d1688((*(float *)&D_L05_00161388), v, moby + 0xe0);
+        fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
         steer_2d1688(1.5533431f, frame_time_sq * 12.566371f,
                       frame_time_sq * 12.566371f, frame_time * 25.132742f,
                       moby + 0x44, data + 0x70);
         copy_direction_2d1688(moby + 0xc0, moby + 0x40);
-        normalize_vector_2d1688((*(float *)&D_L05_00161388), w, moby + 0xe0);
-        subtract_vector_2d1688(z, w, v);
-        subtract_vector_2d1688(moby + 0x10, moby + 0x10, z);
+        fast_vec_normalize((*(float *)&D_L05_00161388), w, moby + 0xe0);
+        fast_vec_sub(z, w, v);
+        fast_vec_sub(moby + 0x10, moby + 0x10, z);
     }
     if (*(float *)(data + 0x78) < 0.0f) {
         if (*(float *)(moby + 0x18) < hero.water_surface_z && *(unsigned char *)(moby + 0xbc) == 0) {
             *(unsigned char *)(moby + 0xbc) = 1;
             effect_2d1688(0, 0, moby);
-            normalize_vector_2d1688((*(float *)&D_L05_00161388), v, moby + 0xe0);
-            add_vector_2d1688(v, v, moby + 0x10);
+            fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
+            fast_vec_add(v, v, moby + 0x10);
             v[2] = hero.water_surface_z;
             FUN_L05_002d1fd8((int)moby, (char *)v);
         }
@@ -392,7 +392,7 @@ typedef float V2d1e30[4] __attribute__((aligned(16)));
 extern int tick_2d1e30(void *) __asm__("FUN_001f9740");
 extern float addrot_2d1e30(float, float) __asm__("FUN_001fa580");
 extern float rand_2d1e30(float, float) __asm__("FUN_002132a8");
-extern void scale_2d1e30(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void vadd_2d1e30(void *, void *, void *) __asm__("FUN_001f9a10");
 extern char *spawn_2d1e30(void *, void *, void *, float, float) __asm__("FUN_L00_002718d0");
 extern int frames_2d1e30(int) __asm__("FUN_001f96f8");
@@ -416,7 +416,7 @@ void FUN_L05_002d1e30(char *moby) {
     for (i = 0; i < 2; i++) {
         a = addrot_2d1e30(*(float *)(moby + 0x48), 3.14159274f);
         addrot_2d1e30(a, rand_2d1e30(-0.785398006f, 0.785398006f));
-        scale_2d1e30(v, moby + 0xD0, rand_2d1e30(-0.5f, 0.5f));
+        fast_vec_scale(v, moby + 0xD0, rand_2d1e30(-0.5f, 0.5f));
         vadd_2d1e30(v, v, moby + 0x10);
         v[2] = D_L05_001612E8_2d1e30 + 0.05f;
         h = &D_L05_001612E8_2d1e30;
@@ -773,7 +773,7 @@ extern char *D_L05_0015FFD8_7920 __asm__("D_L05_0015FFD8");
 extern short *D_L05_001ABCC0_7920[] __asm__("D_L05_001ABCC0");
 extern float D_L05_001CDD70[4][2];
 extern u64 get_effect_texture_7920(int) __asm__("FUN_001f44b8");
-extern float integer_to_float_7920(int) __asm__("FUN_001fa6c0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int interpolate_color_7920(float, int, int) __asm__("FUN_001fa6e0");
 extern int sphere_in_view_7920(void *, float) __asm__("FUN_001fa728");
 extern void transform_glow_vertex_7920(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -808,12 +808,12 @@ void FUN_L05_002d7920(char *moby) {
                           ((u64)D_L05_00161400 << 4) | ((u64)D_L05_00161404 << 6) |
                           0x8000000000ULL;
         p->zero = 0;
-        phase = integer_to_float_7920((D_L05_0015F5CC_7920 + 3) & 3) /
+        phase = convert_integer_to_float((D_L05_0015F5CC_7920 + 3) & 3) /
                 (D_L05_001613E0 * 4.0f);
         for (j = 0; j < 4; j++) {
             packet[i].uv[j][0] = D_L05_001CDD70[j][0];
             packet[i].uv[j][1] = D_L05_001CDD70[j][1];
-            ratio = integer_to_float_7920(i + 1 - (j >> 1)) / (D_L05_001613E0 + phase);
+            ratio = convert_integer_to_float(i + 1 - (j >> 1)) / (D_L05_001613E0 + phase);
             ratio = ratio > 1.0f ? 1.0f : (ratio < 0.0f ? 0.0f : ratio);
             packet[i].color[j] = interpolate_color_7920(ratio, D_L05_00161408, D_L05_0016140C);
         }
@@ -1445,9 +1445,9 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304058.s", FUN_L05_00304058);
 extern float absolute_float_304058(float) __asm__("FUN_001f99c0");
 extern void subtract_vector_304058(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_304058(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void cross_vector_304058(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern float dot_vector_304058(void *, void *) __asm__("FUN_001f9ab0");
-extern float length_vector_304058(void *) __asm__("FUN_001f9af0");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void scale_vector_304058(void *, void *, float) __asm__("FUN_001f9bf8");
 
 float FUN_L05_00304058(volatile s32 path_index, void *position, void *out, float reach) {
@@ -1474,16 +1474,16 @@ float FUN_L05_00304058(volatile s32 path_index, void *position, void *out, float
         subtract_vector_304058(&normal, path + i * 16 + 0x20, next);
         normal.f[2] = 0.0f;
         scale_vector_304058(&projection, &normal, 1.0f);
-        cross_vector_304058(&cross, &segment, &projection);
+        fast_vec_cross(&cross, &segment, &projection);
         separation = absolute_float_304058(cross.f[2]);
         if (separation < best)
             best = separation;
         if (reach < separation)
             continue;
-        segment_length = length_vector_304058(&normal);
-        along = dot_vector_304058(&segment, &projection);
+        segment_length = fast_vec_length(&normal);
+        along = fast_vec_dot(&segment, &projection);
         if (segment_length < along || along < 0.0f) {
-            if (!(length_vector_304058(&segment) < reach))
+            if (!(fast_vec_length(&segment) < reach))
                 continue;
             changed = 1;
             scale_vector_304058(&result, &segment, reach);

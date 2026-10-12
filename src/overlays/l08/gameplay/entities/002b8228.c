@@ -501,7 +501,7 @@ extern char D_001413D0[];
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C;
-extern int D_0013D408_c __asm__("D_0013D408");
+extern int item_unlocked __asm__("D_0013D408");
 extern int D_0015ED84_c __asm__("D_0015ED84");
 extern int D_L08_0015F580_c __asm__("D_L08_0015F580");
 extern int D_L08_0015F5B0; /* no foreign declaration */
@@ -551,7 +551,7 @@ extern void delete_2D5FA8(Moby *) __asm__("FUN_0020c828");
 extern int event_2D5FA8(int, int, Moby *) __asm__("FUN_0022da68");
 extern void effects_start_2D5FA8(Moby *, short *) __asm__("FUN_L00_0025d458");
 extern int follow_2D5FA8(float, Moby *, float *, int, int, char *, int) __asm__("FUN_L00_0025ff38");
-extern void subtract_2D5FA8(float *, float *, float *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(float *, float *, float *) __asm__("FUN_001f9a28");
 extern float angle_2D5FA8(float, float) __asm__("FUN_001f9e90");
 extern float length_2D5FA8(float *) __asm__("FUN_001f9b20");
 extern float angle_delta_2D5FA8(float, float) __asm__("FUN_001fa5c8");
@@ -671,7 +671,7 @@ void FUN_L08_002d4ca0(Moby *m) {
     if (d->fF0 == 0) d->fF0 = *(int *)D_0013E633_2D5FA8;
     if (d->mode != 2) {
         float yaw, len, pitch;
-        subtract_2D5FA8(vec, d->target, (float *)&m->pos);
+        fast_vec_sub(vec, d->target, (float *)&m->pos);
         vec[2] -= 3.0f;
         yaw = angle_2D5FA8(vec[0], vec[1]);
         len = length_2D5FA8(vec);

@@ -587,15 +587,15 @@ extern char D_0013E633_32B1F8[] __asm__("D_0013F5E0");
 extern Row_32B1F8 *D_L05_0015F050_32B1F8 __asm__("D_L05_0015EF50") __attribute__((section(".sdata")));
 extern float D_L05_00174378_32B1F8 __asm__("D_L05_00174278") __attribute__((section(".data")));
 extern float D_L05_00162268_32B1F8 __asm__("D_L05_001621A8") __attribute__((sda));
-extern void vec_scale_32B1F8(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void vec_sub_32B1F8(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float vec_dot_32B1F8(void *, void *) __asm__("FUN_001f9ab0");
-extern void vec_add_32B1F8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float spring_32B1F8(float, float, float *, float, float, float) __asm__("FUN_001ebd78");
-extern void vec_mul_32B1F8(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern int collide_32B1F8(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern float fabs_32B1F8(float) __asm__("FUN_001f99c0");
-extern void vec_cross_32B1F8(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void orbit_32B1F8(Camera_32B1F8 *) __asm__("FUN_L05_003298d8");
 
 void FUN_L05_00329ce8(Camera_32B1F8 *m) {
@@ -627,19 +627,19 @@ void FUN_L05_00329ce8(Camera_32B1F8 *m) {
     dist = d->dist;
     q = &d->focus;
     e = &d->spring;
-    vec_scale_32B1F8(&down, g, -1.0f);
+    fast_vec_normalize(&down, g, -1.0f);
     qcopy(&focus, &q->pos);
     if (d->mode == 0) {
-        vec_sub_32B1F8(&rel, pos = &m->pos, &focus);
+        fast_vec_sub(&rel, pos = &m->pos, &focus);
         n = 0;
-        dd = vec_dot_32B1F8(&rel, &q->axis);
-        vec_scale_32B1F8(&tmp, &q->axis, dd);
-        vec_sub_32B1F8(&lat, &rel, &tmp);
-        vec_scale_32B1F8(&off, &lat, e->dist);
-        vec_add_32B1F8(&base, &focus, &off);
-        vec_scale_32B1F8(&tmp, &q->axis, e->height);
-        vec_add_32B1F8(&goal, &base, &tmp);
-        vec_add_32B1F8(&goal, &goal, &d->bias);
+        dd = fast_vec_dot(&rel, &q->axis);
+        fast_vec_normalize(&tmp, &q->axis, dd);
+        fast_vec_sub(&lat, &rel, &tmp);
+        fast_vec_normalize(&off, &lat, e->dist);
+        fast_vec_add(&base, &focus, &off);
+        fast_vec_normalize(&tmp, &q->axis, e->height);
+        fast_vec_add(&goal, &base, &tmp);
+        fast_vec_add(&goal, &goal, &d->bias);
         m->pos.x = spring_32B1F8(m->pos.x, goal.x, &d->vel[0], d->k10, d->k14, d->k18);
         m->pos.y = spring_32B1F8(m->pos.y, goal.y, &d->vel[1], d->k10, d->k14, d->k18);
         m->pos.z = spring_32B1F8(m->pos.z, goal.z, &d->vel[2], d->k10, d->k14, d->k18);
@@ -648,15 +648,15 @@ void FUN_L05_00329ce8(Camera_32B1F8 *m) {
         probe.y = v[1];
         probe.z = v[2];
         *(int *)&probe.w = 0;
-        vec_sub_32B1F8(&step, pos, &probe);
-        vec_mul_32B1F8(&step, &step, 0.16666667f);
+        fast_vec_sub(&step, pos, &probe);
+        fast_vec_scale(&step, &step, 0.16666667f);
         while (n < 6) {
             if (collide_32B1F8(0.5f, &probe, 18, 0) != 0) {
                 e->height = spring_32B1F8(e->height, D_L05_00174378_32B1F8 - focus.z, &cur->vel, 0.05f, 0.2f, 0.0f);
                 break;
             }
             n++;
-            vec_add_32B1F8(&probe, &probe, &step);
+            fast_vec_add(&probe, &probe, &step);
         }
         if (n == 6) {
             d->bias.x = spring_32B1F8(d->bias.x, 0.0f, &d->bias_vel[0], 0.02f, 0.2f, 0.05f);
@@ -703,34 +703,34 @@ void FUN_L05_00329ce8(Camera_32B1F8 *m) {
     orbit_32B1F8(m);
     qcopy(&q->pos, &d->next);
     qcopy(&focus, &q->pos);
-    vec_scale_32B1F8(&tmp, &q->axis, q->dist);
-    vec_add_32B1F8(&goal, &focus, &tmp);
-    vec_sub_32B1F8(&rel, &goal, &m->pos);
-    vec_scale_32B1F8(&rel, &rel, 1.0f);
-    dd = vec_dot_32B1F8(&m->fwd, &rel);
-    vec_cross_32B1F8(&m->up, &rel, &down);
-    vec_scale_32B1F8(&m->up, &m->up, 1.0f);
-    vec_cross_32B1F8(&m->side, &m->up, &rel);
+    fast_vec_normalize(&tmp, &q->axis, q->dist);
+    fast_vec_add(&goal, &focus, &tmp);
+    fast_vec_sub(&rel, &goal, &m->pos);
+    fast_vec_normalize(&rel, &rel, 1.0f);
+    dd = fast_vec_dot(&m->fwd, &rel);
+    fast_vec_cross(&m->up, &rel, &down);
+    fast_vec_normalize(&m->up, &m->up, 1.0f);
+    fast_vec_cross(&m->side, &m->up, &rel);
     if (fl == 0 || fabs_32B1F8(dd) < 0.5f || (v = (float *)(D_0013E633_32B1F8 - 0x290), ((Hero *)v)->unk88D != 0)) {
         tr->blend = spring_32B1F8(tr->blend, 0.0f, tr->state, tr->k34, tr->k38, tr->k3C);
     } else {
         float t;
-        vec_scale_32B1F8(&probe, ((char *)((Hero *)v)->moby) + 0xC0, 1.0f);
-        t = vec_dot_32B1F8(&probe, &m->side);
-        vec_scale_32B1F8(&step, &m->side, t);
-        vec_sub_32B1F8(&probe, &probe, &step);
-        t = vec_dot_32B1F8(&probe, &m->up);
+        fast_vec_normalize(&probe, ((char *)((Hero *)v)->moby) + 0xC0, 1.0f);
+        t = fast_vec_dot(&probe, &m->side);
+        fast_vec_normalize(&step, &m->side, t);
+        fast_vec_sub(&probe, &probe, &step);
+        t = fast_vec_dot(&probe, &m->up);
         tr->blend = spring_32B1F8(tr->blend, t * D_L05_00162268_32B1F8, tr->state, tr->k34, tr->k38, tr->k3C);
     }
     if (0.00001f < fabs_32B1F8(tr->blend)) {
-        vec_scale_32B1F8(&probe, &m->up, tr->blend);
-        vec_add_32B1F8(&goal, &goal, &probe);
+        fast_vec_normalize(&probe, &m->up, tr->blend);
+        fast_vec_add(&goal, &goal, &probe);
     }
-    vec_sub_32B1F8(&rel, &goal, &m->pos);
-    vec_scale_32B1F8(&m->fwd, &rel, 1.0f);
-    vec_cross_32B1F8(&m->up, &m->fwd, &down);
-    vec_scale_32B1F8(&m->up, &m->up, 1.0f);
-    vec_cross_32B1F8(&m->side, &m->up, &m->fwd);
+    fast_vec_sub(&rel, &goal, &m->pos);
+    fast_vec_normalize(&m->fwd, &rel, 1.0f);
+    fast_vec_cross(&m->up, &m->fwd, &down);
+    fast_vec_normalize(&m->up, &m->up, 1.0f);
+    fast_vec_cross(&m->side, &m->up, &m->fwd);
 }
 #define NOT_SDA
 

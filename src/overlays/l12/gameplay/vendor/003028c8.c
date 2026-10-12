@@ -496,7 +496,7 @@ typedef struct {
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char *FUN_L00_0026dd20(void *, void *, int, int, float);
-extern char D_0013E550_c[] __asm__("D_0013E550") __attribute__((section(".data")));
+extern char voice_pool[] __asm__("D_0013E550") __attribute__((section(".data")));
 extern f32 fast_add_rotations_c3(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");

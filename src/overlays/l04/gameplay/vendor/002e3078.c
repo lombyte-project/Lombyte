@@ -439,13 +439,13 @@ typedef struct {
 extern f32 g48_2e5178 __asm__("D_L04_00161D78") __attribute__((sda));
 extern f32 g4c_2e5178 __asm__("D_L04_00161D7C") __attribute__((sda));
 extern u128 tgt_2e5178[] __asm__("D_L04_00174000") __attribute__((section(".data")));
-extern void vadd_2e5178(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 appr_2e5178(f32, f32) __asm__("FUN_001fa580");
 extern s32 tick_2e5178(void *) __asm__("FUN_001f9770");
 extern s32 coll_2e5178(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
-extern f32 dot_2e5178(void *, void *) __asm__("FUN_001f9ab0");
+extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void refl_2e5178(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void vscl_2e5178(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 rnd_2e5178(f32, f32) __asm__("FUN_L00_00257c48");
 extern void kill_2e5178(void *) __asm__("FUN_0020c828");
 void FUN_L04_002e5178(M2e5178 *m) {
@@ -454,7 +454,7 @@ void FUN_L04_002e5178(M2e5178 *m) {
     u128 *t;
     qcopy(&old, m->pos);
     pv->vel[2] -= frame_time_sq * 20.0f;
-    vadd_2e5178(m->pos, m->pos, pv->vel);
+    fast_vec_add(m->pos, m->pos, pv->vel);
     m->f40 = appr_2e5178(m->f40, pv->f20);
     m->f44 = appr_2e5178(m->f44, pv->f24);
     m->f48 = appr_2e5178(m->f48, pv->f28);
@@ -464,11 +464,11 @@ void FUN_L04_002e5178(M2e5178 *m) {
             m->b20 = 1;
         } else if (tick_2e5178(&pv->hE) && pv->hC != 0 && coll_2e5178(m->pos, 2, 0, pv->f8)) {
             t = tgt_2e5178;
-            if (dot_2e5178(pv->vel, t) < 0.0f) {
+            if (fast_vec_dot(pv->vel, t) < 0.0f) {
                 qcopy(m->pos, t - 1);
                 pv->hC--;
                 refl_2e5178(pv->vel, pv->vel, t);
-                vscl_2e5178(pv->vel, pv->vel, 0.75f);
+                fast_vec_scale(pv->vel, pv->vel, 0.75f);
                 pv->f20 = 0.0f;
                 pv->f24 = rnd_2e5178(g48_2e5178, g4c_2e5178) * DEG_TO_RAD * frame_time;
                 pv->f28 = rnd_2e5178(g48_2e5178, g4c_2e5178) * DEG_TO_RAD * frame_time;

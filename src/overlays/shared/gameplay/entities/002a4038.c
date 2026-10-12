@@ -315,8 +315,8 @@ extern float diffrot_2d8910(float, float) __asm__("FUN_001fa688");
 extern float atan2_2d8910(float, float) __asm__("FUN_001f9e90");
 extern float cos_2d8910(float) __asm__("FUN_001f9dc8");
 extern float sin_2d8910(float) __asm__("FUN_001f9de0");
-extern void vadd_2d8910(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void scale_2d8910(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 /* Spawn point for the moby: its slot's stored position and rotation, or, with no slot, a point beside it on the side facing the hero. */
 void FUN_L02_002d8910(float *pos, float *rot, char *moby) {
@@ -337,8 +337,8 @@ void FUN_L02_002d8910(float *pos, float *rot, char *moby) {
                           D_L02_00167280_2d8910.y - *(float *)(moby + 0x14));
         dl = diffrot_2d8910(to, left);
         pick = dl < diffrot_2d8910(to, right) ? left : right;
-        vadd_2d8910(v, &hero.motion.pos, moby + 0x10);
-        scale_2d8910(v, v, 0.5f);
+        fast_vec_add(v, &hero.motion.pos, moby + 0x10);
+        fast_vec_scale(v, v, 0.5f);
         qcopy(pos, v);
         pos[0] += cos_2d8910(pick) * 2.0f;
         pos[1] += sin_2d8910(pick) * 2.0f;
@@ -676,7 +676,7 @@ void FUN_L02_002d8ad0(Moby *moby) {
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 extern void func_L00_00250800_d92f0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void func_001F9BF0_d92f0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_002607A8_d92f0(void *a, float x) __asm__("FUN_L00_0025f730");
 extern void func_001F9BD8_d92f0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float func_001FA748_d92f0(float, float) __asm__("FUN_001fa580");
@@ -690,7 +690,7 @@ void FUN_L02_002d92f0(char *moby) {
     struct Hero *p;
     func_L00_00250800_d92f0(moby, 0, v);
     g = (char *)&hero.motion.pos;
-    func_001F9BF0_d92f0(v, v, g);
+    fast_vec_sub(v, v, g);
     func_L00_002607A8_d92f0(v, D_0015EE6C_d92f0 * 4.0f);
     func_001F9BD8_d92f0(g, g, v);
     f = func_001FA748_d92f0(*(float *)(moby + 0x48), 3.14159f);
@@ -1234,8 +1234,8 @@ extern float D_0015ED70_2dc6b0 __asm__("D_0015ED70");
 extern void vec_clear_2dc6b0(void *) __asm__("FUN_001f99f8");
 extern int scale_game_frames_2dc6b0(int) __asm__("FUN_001f96f8");
 extern int count_down_2dc6b0(int *) __asm__("FUN_001f9740");
-extern float vector_length_xyz_2dc6b0(void *) __asm__("FUN_001f9af0");
-extern float absolute_float_2dc6b0(float) __asm__("FUN_001f99c0");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern float fast_cos_2dc6b0(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2dc6b0(float) __asm__("FUN_001f9de0");
 extern void FUN_L00_00260738_2dc6b0(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
@@ -1268,7 +1268,7 @@ state1: {
 
         *(float *)(moby + 0x58) = 1.0f;
         if (count_down_2dc6b0((int *)(data + 0xa0))) {
-            speed = vector_length_xyz_2dc6b0(data + 0x40) - D_L02_00161C1C * D_0015ED70_2dc6b0;
+            speed = fast_vec_length(data + 0x40) - D_L02_00161C1C * D_0015ED70_2dc6b0;
             if (speed <= 0.0f) {
                 *(int *)(data + 0xa0) = scale_game_frames_2dc6b0(D_L02_00161C18);
                 *(u8 *)(moby + 0x20) = 2;
@@ -1279,8 +1279,8 @@ state1: {
                 *(float *)(data + 0x44) = y;
             }
         } else {
-            speed = vector_length_xyz_2dc6b0(data + 0x40);
-            limit = absolute_float_2dc6b0(D_L02_00161C14 * frame_time);
+            speed = fast_vec_length(data + 0x40);
+            limit = absolute_float(D_L02_00161C14 * frame_time);
             /* Retail loads frame_time_sq through its absolute EE address here. */
             if (speed < limit) speed += D_L02_00161C1C * (*(float *)0x0015ED70);
             *(float *)(data + 0x40) = fast_cos_2dc6b0(*(float *)(moby + 0x48)) * -speed;
@@ -1295,7 +1295,7 @@ state2: {
 
         *(float *)(moby + 0x58) = -1.0f;
         if (count_down_2dc6b0((int *)(data + 0xa0))) {
-            speed = vector_length_xyz_2dc6b0(data + 0x40) - D_L02_00161C1C * D_0015ED70_2dc6b0;
+            speed = fast_vec_length(data + 0x40) - D_L02_00161C1C * D_0015ED70_2dc6b0;
             if (speed <= 0.0f) {
                 *(int *)(data + 0xa0) = scale_game_frames_2dc6b0(D_L02_00161C18);
                 *(u8 *)(moby + 0x20) = 1;
@@ -1305,8 +1305,8 @@ state2: {
                 *(float *)(data + 0x48) = 0.0f;
             }
         } else {
-            speed = vector_length_xyz_2dc6b0(data + 0x40);
-            limit = absolute_float_2dc6b0(D_L02_00161C14 * frame_time);
+            speed = fast_vec_length(data + 0x40);
+            limit = absolute_float(D_L02_00161C14 * frame_time);
             if (speed < limit) speed += D_L02_00161C1C * (*(float *)0x0015ED70);
             *(float *)(data + 0x40) = fast_cos_2dc6b0(*(float *)(moby + 0x48)) * speed;
             *(float *)(data + 0x44) = fast_sin_2dc6b0(*(float *)(moby + 0x48)) * speed;
@@ -1626,11 +1626,11 @@ typedef struct {
     float d[4];
 } L02SpriteData_ea8b0;
 extern void func_001F9BF0_ea8b0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void func_L00_001FF4B0_ea8b0(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_ea8b0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001F9908_ea8b0(int *) __asm__("FUN_001f9740");
 extern int func_001F9850_ea8b0(int) __asm__("FUN_001f96f8");
-extern float func_001FA888_ea8b0(int) __asm__("FUN_001fa6c0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int func_001FA8A8_2ebce8_ea8b0(int, int, float) __asm__("FUN_001fa6e0");
 extern float func_001F9B88_ea8b0(float) __asm__("FUN_001f99c0");
 extern unsigned char *func_L00_00273E08_ea8b0(void *, int, unsigned char, int, int, int, int,
@@ -1646,8 +1646,8 @@ void FUN_L02_002ea8b0(char *m) {
 
     *(float *)(m + 0x18) += 0.5f;
     func_001F9BF0_ea8b0(d, D_L02_00167440_ea8b0, m + 0x10);
-    func_L00_001FF4B0_ea8b0(d, d, -0.3f);
-    func_L00_001FF4B0_ea8b0(e, d, 0.1f);
+    fast_vec_normalize(d, d, -0.3f);
+    fast_vec_normalize(e, d, 0.1f);
     func_001F9BD8_ea8b0(d, d, m + 0x10);
     *(float *)(m + 0x18) -= 0.5f;
     for (i = 0; i < 4; i++) {
@@ -1661,7 +1661,7 @@ void FUN_L02_002ea8b0(char *m) {
         if (func_001F9908_ea8b0(&p->c[i])) {
             p->c[i] = func_001F9850_ea8b0(0xFF);
         }
-        f = func_001FA888_ea8b0(func_001F9850_ea8b0(0xFF) - p->c[i]);
+        f = convert_integer_to_float(func_001F9850_ea8b0(0xFF) - p->c[i]);
         f = f / (float)func_001F9850_ea8b0(0xFF);
         col = func_001FA8A8_2ebce8_ea8b0(0x4040FFFF, 0x1040FFFF, func_001F9B88_ea8b0(0.5f - f));
         func_L00_00273E08_ea8b0(d, col, func_001FA898_2ebce8_ea8b0(p->a[i]) & 0xFF, 0x35, 1, 2, 0,

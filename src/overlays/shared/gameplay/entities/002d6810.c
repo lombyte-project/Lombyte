@@ -130,9 +130,9 @@ extern int D_L15_001D39D0_r[] __asm__("D_L15_001D39D0");
 extern float D_L15_001D3A20_r[][4] __asm__("D_L15_001D3A20");
 extern int D_L15_001D3B60_r[] __asm__("D_L15_001D3B60");
 extern int scale_frames_r(int) __asm__("FUN_001f96f8");
-extern void sub_r(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void norm_r(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void add_r(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void zero_r(void *) __asm__("FUN_001f99f8");
 
 void FUN_L15_002d79e8(char *m) {
@@ -146,11 +146,11 @@ void FUN_L15_002d79e8(char *m) {
         D_L15_00161CE4_r = 0;
         D_L15_00161CE0_r = scale_frames_r(D_L15_00161C8C_r);
         D_L15_00161C60_r = 0x7F2020;
-        sub_r(v, d + 0x100, d + 0xF0);
-        norm_r(step, v, D_L15_00161BFC_r / 20.0f);
+        fast_vec_sub(v, d + 0x100, d + 0xF0);
+        fast_vec_normalize(step, v, D_L15_00161BFC_r / 20.0f);
         qcopy(D_L15_001D3750_r, d + 0xF0);
         for (i = 1; i < 20; i++) {
-            add_r(D_L15_001D3750_r[i], D_L15_001D3740_r[i], step);
+            fast_vec_add(D_L15_001D3750_r[i], D_L15_001D3740_r[i], step);
             D_L15_001D39D0_r[i] = 0;
             zero_r(D_L15_001D3A20_r[i]);
             D_L15_001D3B60_r[i] = 0;
@@ -423,7 +423,7 @@ void FUN_L15_002d7bb0(Moby *moby) {
     f20 = random_float_between(0.15f, 3.0f);
     spawn_2d8fa0(&data->c, scale_game_frames_alt(12), f20 * 0.1f, f20, *(int *)&D_L15_00161CE0_2d8fa0 | 0x7F000000, 0, r, D_L15_0015F580, 0.0f);
 }
-extern float D_0015ED60_8710 __asm__("D_0015ED60");
+extern float frame_scale __asm__("D_0015ED60");
 extern char D_L15_001D3750_8710[] __asm__("D_L15_001D3750");
 extern char D_L15_001D3BB0_8710[] __asm__("D_L15_001D3BB0");
 extern int D_L15_00161CC8_8710 __asm__("D_L15_00161CC8");
@@ -447,7 +447,7 @@ extern void FUN_L00_002baae0_8710(char *, int, int, int, float, float,
 extern void FUN_L15_002d8e48_8710(char *) __asm__("FUN_L15_002d8e48");
 #define F(x) (*(float *)&(x))
 void FUN_L15_002d8710(char *moby) {
-    float v = F(D_L15_00161C54_8710) - F(D_L15_00161C58_8710) * D_0015ED60_8710;
+    float v = F(D_L15_00161C54_8710) - F(D_L15_00161C58_8710) * frame_scale;
     F(D_L15_00161C54_8710) = v;
     if (v <= -8.0f) {
         F(D_L15_00161C54_8710) = v + 8.0f;
@@ -490,8 +490,8 @@ extern UV2d8e48 D_L15_001D3730[] __asm__("D_L15_001D3730") __attribute__((sectio
 extern void vsub_2d8e48(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vadd_2d8e48(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vscl_2d8e48(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void cross_2d8e48(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void vmul_2d8e48(float, void *, void *) __asm__("FUN_001f9a68");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 extern void xform_2d8e48(void *, void *, void *) __asm__("FUN_001f9d20");
 extern long tex_2d8e48(int) __asm__("FUN_001f44b8");
 extern float rnd_2d8e48(float, float) __asm__("FUN_L00_00257c48");
@@ -516,9 +516,9 @@ void FUN_L15_002d8e48(void *mv) {
     mat[3].f[3] = 1.0f;
     vsub_2d8e48(&mat[0], &D_L15_001673C0, &mat[3]);
     vscl_2d8e48(&mat[0], &mat[0], 1.0f);
-    cross_2d8e48(&mat[1], &mat[0], (V2d8e48 *)&hero.unk290);
+    fast_vec_cross(&mat[1], &mat[0], (V2d8e48 *)&hero.unk290);
     vscl_2d8e48(&mat[1], &mat[1], -1.0f);
-    cross_2d8e48(&mat[2], &mat[1], &mat[0]);
+    fast_vec_cross(&mat[2], &mat[1], &mat[0]);
     c = D_L15_00161CAC;
     quad.color[3] = c;
     quad.color[2] = c;
@@ -526,7 +526,7 @@ void FUN_L15_002d8e48(void *mv) {
     quad.color[0] = c;
     s = D_L15_00161CB4 + rnd_2d8e48(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
-        vmul_2d8e48(s, &quad.corner[i], &D_L15_001D36F0[i]);
+        fast_vec_scale(s, &quad.corner[i], &D_L15_001D36F0[i]);
         xform_2d8e48(&quad.corner[i], &quad.corner[i], &mat[0]);
         quad.uv[i].u = D_L15_001D3730[i].u;
         quad.uv[i].v = D_L15_001D3730[i].v;
@@ -539,7 +539,7 @@ void FUN_L15_002d8e48(void *mv) {
     quad.color[0] = c;
     s = D_L15_00161CB8 + rnd_2d8e48(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
-        vmul_2d8e48(s, &quad.corner[i], &D_L15_001D36F0[i]);
+        fast_vec_scale(s, &quad.corner[i], &D_L15_001D36F0[i]);
         xform_2d8e48(&quad.corner[i], &quad.corner[i], &mat[0]);
         quad.uv[i].u = D_L15_001D3730[i].u;
         quad.uv[i].v = D_L15_001D3730[i].v;

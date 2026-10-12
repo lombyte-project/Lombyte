@@ -16,7 +16,7 @@ extern s32 is_point_inside_clip_volume_b618(void *, s32) __asm__("FUN_00214720")
 extern s32 is_timer_active_b618(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_between_b618(s32, s32) __asm__("FUN_L00_00257b90");
 extern f32 itof_s_b618(s32) __asm__("FUN_001fa6c0");
-extern f32 fast_sin_b618(f32) __asm__("FUN_001f9de0");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void interpolate_vector_b618(void *, void *, void *, f32) __asm__("FUN_L00_0025b6b8");
 extern s32 FUN_L00_0023e738(void *, f32, f32, f32, f32, f32);
 extern void FUN_L00_0023e838(s32);
@@ -98,7 +98,7 @@ void FUN_L01_0030b618(u8 *m) {
         sine_input = phase * 0.5f;
         if (*(s32 *)(e + 0x7c) != 0)
             sine_input += 1.5707964f;
-        sine = fast_sin_b618(sine_input);
+        sine = fast_sin(sine_input);
 
         if (*(s32 *)(e + 0x7c) != 0) {
             first = ((OvlQuad *)e)[*(s32 *)(e + 0x78)];
@@ -292,9 +292,9 @@ typedef struct {
 
 extern f32 spring_turn(f32 *, f32, f32, f32, f32, f32) __asm__("FUN_L00_00258110");
 extern void build_spherical_offset_30c9a8(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
-extern void add_vector_xyz_30c9a8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 distance_xyz_30c9a8(void *, void *) __asm__("FUN_001f9b80");
-extern void subtract_vector_xyz_30c9a8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void scale_vector_xyz_30c9a8(void *, void *, f32) __asm__("FUN_001f9c48");
 extern s32 is_timer_active_30c9a8(void *) __asm__("FUN_001f9770");
 extern s32 collision_line_30c9a8(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
@@ -338,7 +338,7 @@ void FUN_L01_0030c9a8(char *m) {
     build_spherical_offset_30c9a8(offset.f, frame_time * 40.0f,
                                    *(f32 *)(m + 0x48), -*(f32 *)(m + 0x44));
     old_pos.q = *(OvlQuad *)pos;
-    add_vector_xyz_30c9a8(pos, pos, &offset);
+    fast_vec_add(pos, pos, &offset);
     if (pos[0] < 2.0f || pos[0] > 1021.0f ||
         pos[1] < 2.0f || pos[1] > 1021.0f ||
         pos[2] < 2.0f || pos[2] > 1021.0f ||
@@ -351,7 +351,7 @@ void FUN_L01_0030c9a8(char *m) {
     probe.flags = 0x10001;
     probe.scale = 0.5f;
     probe.count = 1;
-    subtract_vector_xyz_30c9a8(&probe.dir, pos, &D_0013F3D0_30c9a8);
+    fast_vec_sub(&probe.dir, pos, &D_0013F3D0_30c9a8);
     scale_vector_xyz_30c9a8(&probe.dir, &probe.dir, 1.0f);
     ((f32 *)&probe.dir)[2] = 1.0f;
     ((f32 *)&probe.dir)[3] = 5627.9248f;
@@ -1365,7 +1365,7 @@ extern char D_L01_00167240[];
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern float vector_length_319928(void *) __asm__("FUN_001f9af0");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern int calculate_spatial_volume_319928(float, float, float, void *) __asm__("FUN_0022c6f8");
 extern int is_timer_active_319928(void *) __asm__("FUN_001f9740");
@@ -1387,8 +1387,8 @@ void FUN_L01_00319928(char *moby) {
     delta.f[3] = 0.0f;
     transform_vector_by_basis(&box_size, &delta, moby + 0x50);
     transform_vector_by_basis(&listener, &radius, moby + 0x50);
-    listener_length = vector_length_319928(&listener);
-    box_length = vector_length_319928(&box_size);
+    listener_length = fast_vec_length(&listener);
+    box_length = fast_vec_length(&box_size);
     if (box_length < listener_length) {
         flags = 0x10;
         if (absolute_float(box_size.f[0]) <= 1.0f &&
@@ -1402,7 +1402,7 @@ void FUN_L01_00319928(char *moby) {
             else if (box_size.f[1] < -1.0f) box_size.f[1] = -1.0f;
             if (box_size.f[2] > 1.0f) box_size.f[2] = 1.0f;
             else if (box_size.f[2] < -1.0f) box_size.f[2] = -1.0f;
-            volume = calculate_spatial_volume_319928(box_length, vector_length_319928(&box_size),
+            volume = calculate_spatial_volume_319928(box_length, fast_vec_length(&box_size),
                                                      listener_length, D_L00_0015F5F4 + sound_data[0] * 0x20);
         }
         if (*(u8 *)(D_L00_0015F5F4 + sound_data[0] * 0x20 + 0x18)) flags = 0x14;
