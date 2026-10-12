@@ -892,9 +892,6 @@ void FUN_L08_002d5950(char *moby, int joint, int count) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5d08.s", FUN_L08_002d5d08);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d6450.s", FUN_L08_002d6450);
-#else
 extern char *D_L08_0015FFD8;
 extern short *D_L08_001AC040[];
 
@@ -902,14 +899,14 @@ extern short *D_L08_001AC040[];
 void FUN_L08_002d6450(struct Moby *moby) {
     short *list = D_L08_001AC040[(((struct Moby *)D_L08_0015FFD8) + *(s32 *)(moby->pvars + 0x144))->group];
     struct Moby *other;
+    u16 index;
+
     if (list != 0) {
-        u16 index;
-        other = (struct Moby *)D_L08_0015FFD8;
-        index = (u16)*list & 0x7fff;
-        other += index;
+        index = *list & 0x7fff;
+        other = (struct Moby *)D_L08_0015FFD8 + index;
         while (1) {
             if (other->state < 0x7f && other != moby) {
-                u16 class_id = (u16)other->oclass;
+                u16 class_id = other->oclass;
                 if ((u32)(class_id - 0x24c) < 0xb) {
                     mark_moby_for_removal(other);
                 } else if ((s16)class_id == 0x1d8) {
@@ -918,13 +915,11 @@ void FUN_L08_002d6450(struct Moby *moby) {
             }
             if (*list++ < -1)
                 break;
-            other = (struct Moby *)D_L08_0015FFD8;
-            index = (u16)*list;
-            other += (u32)(index & 0x7fff);
+            index = *list & 0x7fff;
+            other = (struct Moby *)D_L08_0015FFD8 + index;
         }
     }
 }
-#endif
 
 /* Splashes the hero into the water: once inits the water plane, queues the
  * surface draw, and when the hero breaks the surface spawns spray and ripples. */

@@ -15,9 +15,6 @@ extern void FUN_L01_002b91c8(char *, int);
 void FUN_L07_0030cd20(void) {
     FUN_L01_002b91c8(D_L07_001DCE40, 0x24);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031a9e8.s", FUN_L07_0031a9e8);
-#else
 struct L07MovingVars {
     Vec4f home;
     int target;
@@ -39,6 +36,8 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void transform_vector_xyz(void *, void *, void *) __asm__("FUN_001f9cf8");
 
+extern s32 D_L07_00184528[];
+
 void FUN_L07_0031a9e8(struct Moby *moby) {
     struct L07MovingVars *vars = (struct L07MovingVars *)moby->pvars;
     struct Moby *target;
@@ -49,16 +48,16 @@ void FUN_L07_0031a9e8(struct Moby *moby) {
     int forceEnd;
     int forceStart;
     u8 spawnId;
+    int no_spawn;
 
-    if (moby->unkB0 == 0xff)
-        goto checked_spawn;
-    if (D_0014C050[moby->unkB0 + current_level_index * 16] == 0xff)
+    if (moby->unkB0 != 0xff && D_0014C050[moby->unkB0 + current_level_index * 16] == 0xff)
         vars->target = -1;
-checked_spawn:
     spawnId = moby->unkB0;
     forceEnd = 0;
+    /* Fakematch: the 0xFF compare needs its own variable for retail register order. */
+    no_spawn = 0xff;
     forceStart = 0;
-    if (D_L07_0015FC88[spawnId] == 0xff) {
+    if (D_L07_0015FC88[spawnId] == no_spawn) {
         if (vars->forceReturn != 0)
             forceEnd = 1;
         else
@@ -69,7 +68,7 @@ checked_spawn:
     case 0:
         qcopy(&vars->home, &moby->pos);
         if (vars->indicator != -1)
-            ((s32 *)0x184528)[vars->indicator] = 0;
+            D_L07_00184528[vars->indicator] = 0;
         moby->state = 1;
         vars->home.w = 0;
         return;
@@ -116,7 +115,7 @@ checked_spawn:
         add_vector_xyz(&moby->pos, &vars->home, &next);
         vars->home.w = 0;
         if (vars->indicator != -1)
-            ((s32 *)0x184528)[vars->indicator] = 1;
+            D_L07_00184528[vars->indicator] = 1;
         moby->state = 3;
         if (vars->endSound != -1)
             FUN_0022da68(vars->startSound, 0, moby);
@@ -159,14 +158,13 @@ checked_spawn:
         if (vars->startSound != -1)
             FUN_0022da68(vars->endSound, 0, moby);
         if (vars->indicator != -1)
-            ((s32 *)0x184528)[vars->indicator] = 0;
+            D_L07_00184528[vars->indicator] = 0;
         moby->state = 1;
         break;
     case 5:
         break;
     }
 }
-#endif
 struct SwingGateVars {
     int target;     /* 0x00: moby index, -1 for none */
     int openState;  /* 0x04 */

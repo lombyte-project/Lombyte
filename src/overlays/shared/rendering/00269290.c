@@ -747,9 +747,6 @@ void FUN_L00_0026ac78(char *m) {
             FUN_L00_00267a08(m);
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026b230.s", FUN_L00_0026b230);
-#else
 extern unsigned char *FUN_L00_002678c0_26b230(int, int) __asm__("FUN_L00_002678c0");
 extern float FUN_L00_00257c48_26b230(float, float) __asm__("FUN_L00_00257c48");
 extern float FUN_001f96b0_26b230(float) __asm__("FUN_001f96b0");
@@ -772,9 +769,10 @@ extern int D_L00_001601D4_26b230 __asm__("D_L00_001601D4") __attribute__((sda));
 extern float D_L00_001601D8_26b230 __asm__("D_L00_001601D8") __attribute__((sda));
 extern int D_L00_001601E0_26b230 __asm__("D_L00_001601E0") __attribute__((sda));
 extern int D_L00_001601E4_26b230 __asm__("D_L00_001601E4") __attribute__((sda));
-extern unsigned char D_0013E530_26b230 __asm__("D_0013E530") __attribute__((section(".data")));
 extern unsigned char *D_L00_001B20B0_26b230 __asm__("D_L00_001B20B0") __attribute__((section(".data")));
 extern unsigned char *D_L00_001B20E0_26b230 __asm__("D_L00_001B20E0") __attribute__((section(".data")));
+
+extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
 
 unsigned char *FUN_L00_0026b230(void *pos, void *vel, unsigned char flags, float size) {
     void *source = pos;
@@ -819,7 +817,7 @@ unsigned char *FUN_L00_0026b230(void *pos, void *vel, unsigned char flags, float
                                                           FUN_002132a8_26b230(zero, one));
             if (flags & 4) {
                 offset = 8;
-                if (!D_0013E530_26b230)
+                if (!gold_weapon_purchased[0x10])
                     offset = 0;
             }
             m[2] = D_L00_001B20B0_26b230[FUN_00213260_26b230(8) + offset];
@@ -832,21 +830,15 @@ unsigned char *FUN_L00_0026b230(void *pos, void *vel, unsigned char flags, float
         *(float *)(q + 0x10) = size;
         q[0x1F] = flags;
         if (flags & 4) {
-            unsigned char *shade = (unsigned char *)&D_0013E530_26b230 - 0x10;
-            int life = *(short *)(m + 0xA);
-            int color = *(int *)(m + 4);
-            int factor = shade[0x10] + 2;
-            life = (life * factor) / 2;
-            *(short *)(m + 0xA) = life;
-            FUN_L00_0025c0e8_26b230(color, shade[0x10]);
-            FUN_L00_0025c0e8_26b230(*(unsigned *)(q + 0x14), shade[0x10]);
-            FUN_L00_0025c0e8_26b230(*(unsigned *)(q + 0x18), shade[0x10]);
+            *(short *)(m + 0xA) = *(short *)(m + 0xA) * (gold_weapon_purchased[0x10] + 2) / 2;
+            FUN_L00_0025c0e8_26b230(*(int *)(m + 4), gold_weapon_purchased[0x10]);
+            FUN_L00_0025c0e8_26b230(*(unsigned *)(q + 0x14), gold_weapon_purchased[0x10]);
+            FUN_L00_0025c0e8_26b230(*(unsigned *)(q + 0x18), gold_weapon_purchased[0x10]);
         }
         q[0x1D] = m[0xA];
     }
     return m;
 }
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026b500.s", FUN_L00_0026b500);
 #else
