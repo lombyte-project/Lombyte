@@ -1479,13 +1479,14 @@ extern void ea210_audio(int, int) __asm__("FUN_0020b178");
 extern void ea210_destroy(char *) __asm__("FUN_0020c828");
 extern int D_L02_0015F5CC;
 extern int D_L02_0015F5C4;
-extern unsigned char D_001413F4;
+extern unsigned char D_001413F4 __attribute__((section(".data")));
+extern int D_L02_0015F640 __attribute__((sda));
 extern unsigned char D_0013D4E8[];
 extern char D_0013F3D0[];
 extern float D_0013F3D8;
-extern float D_L02_00174468;
+extern float D_L02_00174468 __attribute__((section(".data")));
 extern int D_L02_00167400;
-extern int D_L02_00179A10;
+extern int D_L02_00179A10 __attribute__((section(".data")));
 extern float D_0015ED70;
 extern float D_0015ED6C;
 extern float D_L02_0015F3FC;
@@ -1504,11 +1505,13 @@ void FUN_L02_002ea210(char *moby) {
     case 0:
         ea210_init(moby);
         if (D_0013D4E8[which] == 0) {
-        ea210_vec(0.5f, moby + 0x10, 0);
+            float height;
+            ea210_vec(0.5f, moby + 0x10, 0);
             *(float *)(moby + 0x44) = 3.14159274f;
             *(float *)(moby + 0x40) = 1.57079637f;
+            height = D_L02_00174468;
             *(unsigned char *)(moby + 0x20) = 1;
-            *(float *)(moby + 0x18) = D_L02_00174468 + 0.2f;
+            *(float *)(moby + 0x18) = height + 0.2f;
             return;
         }
         ea210_destroy(moby);
@@ -1518,7 +1521,7 @@ void FUN_L02_002ea210(char *moby) {
         ea210_update(moby);
         if (D_L02_0015F5CC % 10 != 0) return;
         if (!(ea210_dist(moby + 0x10, D_0013F3D0) < 1.0f)) return;
-        if (ea210_abs(*(float *)(moby + 0x18) - D_0013F3D8) < 2.0f) {
+        if (ea210_abs(*(float *)(moby + 0x18) - *(float *)(D_0013F3D0 + 8)) < 2.0f) {
             *(unsigned char *)(moby + 0x20) = 3;
             *(unsigned short *)(moby + 0x34) |= 1;
             moby[0x31] = 0;
@@ -1532,11 +1535,15 @@ void FUN_L02_002ea210(char *moby) {
         return;
     case 3:
         if (D_L02_0015F5C4 == 2) return;
-        if (D_001413F4 == 0) {
-            ea210_switch(which, 1);
+        if (D_001413F4 != 0) {
+            if (which == 0x16) {
+                ea210_switch(0x16, 0);
+                D_L02_0015F640 = 0;
+            } else {
+                ea210_switch(which, 0);
+            }
         } else {
-            ea210_switch(which, 0);
-            if (which == 0x16) *(int *)0x0015F918 = 0;
+            ea210_switch(which, 1);
         }
         if (*(short *)(moby + 0xA6) == 0x3ED) {
             ea210_play(0x7DF, -1);
@@ -1544,20 +1551,25 @@ void FUN_L02_002ea210(char *moby) {
             ea210_timing(0x7D9, 0x13);
             D_L02_0015F3FC = 1.0f;
             *(unsigned char *)(moby + 0x20) = 4;
-            ea210_camera(D_0013F3D0, D_0013F3E0, 0x72, 1);
+            ea210_camera(D_0013F3D0, D_0013F3D0 + 16, 0x72, 1);
             return;
         }
         ea210_audio(0, -1);
         ea210_destroy(moby);
         return;
     case 4: {
-        volatile float a[4], b[4], c[4], d[4];
+        float a[4] __attribute__((aligned(16))), b[4] __attribute__((aligned(16))), c[4] __attribute__((aligned(16))), d[4] __attribute__((aligned(16)));
         float position[4] __attribute__((aligned(16)));
         float output[4];
-        a[0] = 91.2f; a[1] = 270.21f; a[2] = 64.85f; a[3] = 0.0f;
-        b[0] = 106.98f; b[1] = 273.46f; b[2] = 62.65f; b[3] = 0.0f;
-        c[0] = 0.07f; c[1] = 0.33f; c[2] = 0.55f; c[3] = 0.0f;
-        d[0] = 0.07f; d[1] = 0.43f; d[2] = 0.72f; d[3] = 0.0f;
+        /* Retail clears all four lanes before assigning the XYZ components. */
+        *(u128 *)a = 0;
+        *(u128 *)b = 0;
+        *(u128 *)c = 0;
+        *(u128 *)d = 0;
+        a[0] = 91.2f; a[1] = 270.21f; a[2] = 64.85f;
+        b[0] = 106.98f; b[1] = 273.46f; b[2] = 62.65f;
+        c[0] = 0.07f; c[1] = 0.33f; c[2] = 0.55f;
+        d[0] = 0.07f; d[1] = 0.43f; d[2] = 0.72f;
         ea210_approach(1.0f, D_0015ED70 * 0.15f, D_0015ED70 * 0.15f,
                        D_0015ED6C * 0.15f, data + 0x40, data + 0x44);
         ea210_transform(*(float *)(data + 0x40), position, (void *)a, (void *)b);
@@ -1568,15 +1580,14 @@ void FUN_L02_002ea210(char *moby) {
             ea210_draw(position, output, 1, 0, 0);
         ea210_drawend(position);
         ea210_drawflush(output);
-        if (D_L02_00179A10 != 0 || *(int *)0x00179A34 != -1 ||
-            !(0.2f < *(float *)(data + 0x40))) {
-            ea210_fade(0.0f, D_0015ED6C * 4.0f, &D_L02_0015F3FC);
-            if (D_L02_0015F3FC != 1.0f) return;
+        if (D_L02_00179A10 == 0 && *(int *)((char *)&D_L02_00179A10 + 0x24) == -1 &&
+            0.2f < *(float *)(data + 0x40)) {
+            ea210_fade(1.0f, frame_time * 4.0f, &D_L02_0015F3FC);
         } else {
-            ea210_fade(1.0f, D_0015ED6C * 4.0f, &D_L02_0015F3FC);
-            if (*(float *)0x0015F6D4 != 1.0f) return;
+            ea210_fade(0.0f, D_0015ED6C * 4.0f, &D_L02_0015F3FC);
         }
-        ea210_camera(D_0013F3D0, D_0013F3E0, 0, 0);
+        if (D_L02_0015F3FC != 1.0f) return;
+        ea210_camera(D_0013F3D0, D_0013F3D0 + 16, 0, 0);
         ea210_hide(0);
         *(unsigned char *)(moby + 0x20) = 5;
         return;
