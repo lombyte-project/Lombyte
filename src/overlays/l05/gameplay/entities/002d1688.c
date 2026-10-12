@@ -748,10 +748,11 @@ void FUN_L05_002d7140(char *moby) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7920.s", FUN_L05_002d7920);
 #else
+/* Retail quad packet: vertices +0x00, colors +0x40, UVs +0x50, commands +0x70. */
 typedef struct {
+    char vertices[0x40];
     int color[4];
     float uv[4][2];
-    char unused[0x40];
     u64 zero;
     u64 effect_texture;
     u64 texture;
@@ -782,9 +783,9 @@ extern void clear_glow_matrix_7920(void *, int, int) __asm__("FUN_001153fc");
 
 void FUN_L05_002d7920(char *moby) {
     L05GlowPacket packet[16];
-    float *matrix = (float *)((char *)packet + 0x8c0);
-    float *center = (float *)((char *)packet + 0x8e0);
-    int i, j, k, frame;
+    float matrix[8];
+    float center[4];
+    int i, j, frame;
     short *list;
     char *member;
     char *data;
@@ -826,20 +827,24 @@ void FUN_L05_002d7920(char *moby) {
         member = D_L05_0015FFD8_7920 + ((*list & 0x7fff) << 8);
         if (*(short *)(member + 0xa6) == 0x4f && (unsigned char)member[0x20] == 1) {
             data = *(char **)(member + 0x78);
-            *(u128 *)center = *(u128 *)(member + 0x10);
+            qcopy_nc(center, member + 0x10);
             center[3] = 20.0f;
             if (sphere_in_view_7920(center, 512.0f) != -1) {
                 for (frame = 0; frame < *(short *)(data + 0x320); frame++) {
+                    int i;
+                    int vertex_index;
+                    char *vertices = (char *)packet + frame * 0x90;
+                    vertex_index = (*(short *)(data + 0x322) - frame + 15) & 15;
                     for (i = 0; i < 3; i++) {
                         if (D_L05_001613F4 == 0) {
+                            int k;
+                            char *vertex_source = data + (i * 0x100 + 0x20);
                             for (k = 0; k < 4; k++) {
-                                j = (*(short *)(data + 0x322) - frame + 15) & 15;
-                                j += k >> 1;
-                                transform_glow_vertex_7920((char *)packet + frame * 0x90 + k * 0x10,
-                                                           data + i * 0x100 + 0x20 + ((j & 15) << 4),
+                                transform_glow_vertex_7920(vertices + k * 0x10,
+                                                           vertex_source + (((vertex_index + (k >> 1)) & 15) << 4),
                                                            (char *)matrix + (k & 1) * 0x10);
                             }
-                            draw_geometry_quad_7920((char *)packet + frame * 0x90, 0, 0);
+                            draw_geometry_quad_7920(vertices, 0, 0);
                         }
                     }
                 }
