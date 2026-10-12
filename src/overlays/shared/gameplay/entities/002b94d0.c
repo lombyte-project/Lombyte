@@ -2343,94 +2343,171 @@ void FUN_L00_002bf8b0(unsigned char *m, unsigned char *o, u128 *src) {
     F2BF(o, 0x14) = F2BF(o, 0x14) * (r / F2BF(o, 0x10));
 }
 #undef F2BF
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bf9f0.s", FUN_L00_002bf9f0);
-#else
-extern void FUN_001ff2a8_bf9f0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_001ff600_bf9f0(float, void *, void *) __asm__("FUN_L00_001ff600");
-extern void FUN_001ff278_bf9f0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_001ff300_bf9f0(float, void *, void *) __asm__("FUN_001f9a68");
-extern float FUN_001ff408_bf9f0(void *) __asm__("FUN_001f9b20");
-extern void FUN_001ff500_bf9f0(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float FUN_001ff218_bf9f0(float) __asm__("FUN_001f99c0");
-extern int FUN_001efa68_bf9f0(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern int FUN_L00_002beab0_bf9f0(void *, int, void *) __asm__("FUN_L00_002beab0");
-extern void FUN_L00_002bec00_bf9f0(void *) __asm__("FUN_L00_002bec00");
-extern void FUN_L00_002bec48_bf9f0(void *) __asm__("FUN_L00_002bec48");
-extern void FUN_L00_002bf8b0_bf9f0(void *, void *, void *) __asm__("FUN_L00_002bf8b0");
-extern void FUN_L00_002bf810_bf9f0(void *, void *, int, int, int, int, int, float) __asm__("FUN_L00_002bf810");
-extern float FUN_L00_00259468_bf9f0(void *, void *, void *, float) __asm__("FUN_L00_00259468");
-extern VU D_L00_00173E80_bf9f0 __asm__("D_L00_00173E80");
+#include "qzero.h"
 
-int FUN_L00_002bf9f0(char *m, char *o, VU *target, int check) {
-    VU direction;
-    VU destination;
-    VU first;
-    VU second;
-    VU midpoint;
-    VU plane;
-    VU key;
-    float halfLength;
-    int canRecurse;
-    char *position = m + 0x10;
-    volatile int *savedCheck = &check;
+/* Tries a hop of the moby toward q: probes the ground at the landing point and the path to it, and sets the jump
+ * state on success. When blocked and the hop is long enough it tries again with half the distance. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002C0CF8), where it is exact; names translated to the US level program. */
 
-    FUN_001ff2a8_bf9f0(&direction, target, position);
-    FUN_001ff600_bf9f0(*(float *)(m + 0x2c) * 5.2f / *(float *)(*(char **)(m + 0x24) + 0x24),
-                        &direction, &direction);
-    FUN_001ff278_bf9f0(&destination, position, &direction);
-    FUN_001ff300_bf9f0(0.5f, &midpoint, &direction);
-    halfLength = FUN_001ff408_bf9f0(&midpoint);
-    FUN_001ff278_bf9f0(&midpoint, position, &midpoint);
-    canRecurse = 1;
-    if (!(0.5f < halfLength)) canRecurse = 0;
-    destination.f[2] = FUN_L00_002bec80_c(&destination, m);
-    direction.f[2] = destination.f[2] - *(float *)(m + 0x18);
-    if (destination.f[2] != 0.0f) goto continue_check;
-fail:
-    if (canRecurse) goto recurse;
-    return 0;
-continue_check:
-    if (*(float *)(m + 0x2c) * 3.0f / *(float *)(*(char **)(m + 0x24) + 0x24) < direction.f[2]) goto fail;
-    qcopy(&plane, &D_L00_00173E80_bf9f0);
-    FUN_001ff500_bf9f0(&plane, &plane, 1.0f);
-    if (FUN_001ff218_bf9f0(plane.f[0]) + FUN_001ff218_bf9f0(plane.f[1]) >
-        FUN_001ff218_bf9f0(plane.f[2])) goto fail;
-    destination.f[2] += *(float *)(m + 0x2c) * 0.025f / *(float *)(*(char **)(m + 0x24) + 0x24);
-    if (FUN_L00_002beab0_bf9f0(m, 6, &destination) != 0) goto fail;
-    {
-        float speed = *(float *)(m + 0x2c);
-        char *speedOwner = *(char **)(m + 0x24);
-        destination.f[2] -= speed * 0.025f / *(float *)(speedOwner + 0x24);
-        qcopy(&first, position);
-        {
-            float stepScale = speed * 0.2f;
-            first.f[2] += stepScale / *(float *)(speedOwner + 0x24);
-            qcopy(&second, &destination);
-            second.f[2] += stepScale / *(float *)(speedOwner + 0x24);
+typedef struct Cls_2C0CF8 {
+    char pad0[0x24];
+    float f24;                    /* 0x24 */
+} Cls_2C0CF8;
+
+typedef struct Mob_2C0CF8 {
+    char pad0[0x10];
+    float pos[4];                 /* 0x10 */
+    char pad20[4];
+    Cls_2C0CF8 *p24;              /* 0x24 */
+    char pad28[4];
+    float f2C;                    /* 0x2C */
+    char pad30[0x8C];
+    unsigned char bBC;            /* 0xBC */
+} Mob_2C0CF8;
+
+typedef struct Blk_2C0CF8 {
+    char pad0[0x38];
+    void *p38;                    /* 0x38 */
+    char pad3C[0x14];
+    float f50;                    /* 0x50 */
+} Blk_2C0CF8;
+
+typedef struct {
+    char pad[0x46];
+    s16 field46;
+} SubStruct;
+
+typedef struct {
+    char pad[0x24];
+    SubStruct *sub;
+} TopStruct;
+
+extern TopStruct *D_L00_00173E58_c __asm__("D_L00_00173E58");
+extern char D_00141260[];
+extern int D_L00_00173E80; /* no foreign declaration */
+extern int FUN_001efa68_c2(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
+extern int FUN_L00_001ff600();
+extern void add_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+float FUN_L00_00259468(float *a, float *b, int *out, float f);
+float FUN_L00_002bec80_c2(void *p, void *q) __asm__("FUN_L00_002bec80");
+float absolute_float(float input) __asm__("func_001F99C0");
+int FUN_L00_002beab0_c(char *a, int b, void *c) __asm__("FUN_L00_002beab0");
+void FUN_L00_002bec00_c(char *a) __asm__("FUN_L00_002bec00");
+void FUN_L00_002bec48_c(char *a) __asm__("FUN_L00_002bec48");
+void FUN_L00_002bf810_c(char *a, char *b, int n) __asm__("FUN_L00_002bf810");
+void FUN_L00_002bf8b0_c(unsigned char *m, unsigned char *o, void *src) __asm__("FUN_L00_002bf8b0");
+extern void func_001F9BF0_2C0CF8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern int func_L00_001FF5B0_2C0CF8(float, void *, void *) __asm__("FUN_L00_001ff600");
+extern void func_001F9BD8_2C0CF8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void func_001F9C30_2C0CF8(void *, void *, float) __asm__("FUN_001f9a68");
+extern float func_001F9CE8_2C0CF8(void *) __asm__("FUN_001f9b20");
+extern float func_L00_002BFF88_2C0CF8(void *, void *) __asm__("FUN_L00_002bec80");
+extern void func_L00_001FF4B0_2C0CF8(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float func_001F9B88_2C0CF8(float) __asm__("FUN_001f99c0");
+extern int func_L00_002BFDB8_2C0CF8(void *, int, void *) __asm__("FUN_L00_002beab0");
+extern void func_L00_002BFF08_2C0CF8(void *a) __asm__("FUN_L00_002bec00");
+extern void func_L00_002BFF50_2C0CF8(void *a) __asm__("FUN_L00_002bec48");
+extern void func_L00_002C0BB8_2C0CF8(void *m, void *o, void *src) __asm__("FUN_L00_002bf8b0");
+extern float func_L00_0025A4A0_2C0CF8(void *a, void *b, int *out, float f) __asm__("FUN_L00_00259468");
+extern void func_L00_002C0B18_2C0CF8(void *a, void *b, int n, int c, int d, int e, float g, int f) __asm__("FUN_L00_002bf810");
+extern int func_L00_001EFFF0_2C0CF8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern char D_L00_00173F80_2C0CF8[] __asm__("D_L00_00173E80");
+extern void *D_L00_00173F58_2C0CF8[] __asm__("D_L00_00173E58");
+extern char D_0013E633_2C0CF8[] __asm__("D_00141260");
+
+int FUN_L00_002bf9f0(Mob_2C0CF8 *m, Blk_2C0CF8 *p, void *q, int flag) {
+    float d[4];
+    float land[4];
+    float from[4];
+    float to[4];
+    float half[4];
+    float mid[4];
+    float z[4];
+    int ok;
+    float len;
+    float sum;
+
+    ok = 1;
+    func_001F9BF0_2C0CF8(d, q, m->pos);
+    func_L00_001FF5B0_2C0CF8(m->f2C * 5.2f / m->p24->f24, d, d);
+    func_001F9BD8_2C0CF8(land, m->pos, d);
+    func_001F9C30_2C0CF8(half, d, 0.5f);
+    len = func_001F9CE8_2C0CF8(half);
+    func_001F9BD8_2C0CF8(half, m->pos, half);
+    if (!(0.5f < len)) {
+        ok = 0;
+    }
+    land[2] = func_L00_002BFF88_2C0CF8(land, m);
+    d[2] = land[2] - m->pos[2];
+    if (land[2] == 0.0f) {
+        if (ok) {
+            return FUN_L00_002bf9f0(m, p, half, 1);
+        }
+        return 0;
+    }
+    if (m->f2C * 3.0f / m->p24->f24 < d[2]) {
+        if (ok) {
+            return FUN_L00_002bf9f0(m, p, half, 1);
+        }
+        return 0;
+    }
+    qcopy(mid, D_L00_00173F80_2C0CF8);
+    func_L00_001FF4B0_2C0CF8(mid, mid, 1.0f);
+    sum = func_001F9B88_2C0CF8(mid[0]);
+    sum = sum + func_001F9B88_2C0CF8(mid[1]);
+    if (func_001F9B88_2C0CF8(mid[2]) < sum) {
+        if (ok) {
+            return FUN_L00_002bf9f0(m, p, half, 1);
+        }
+        return 0;
+    }
+    land[2] = land[2] + m->f2C * 0.025f / m->p24->f24;
+    if (func_L00_002BFDB8_2C0CF8(m, 6, land)) {
+        if (ok) {
+            return FUN_L00_002bf9f0(m, p, half, 1);
+        }
+        return 0;
+    }
+    land[2] = land[2] - m->f2C * 0.025f / m->p24->f24;
+    qcopy_nc(from, m->pos);
+    from[2] = from[2] + m->f2C * 0.2f / m->p24->f24;
+    qcopy_nc(to, land);
+    to[2] = to[2] + m->f2C * 0.2f / m->p24->f24;
+    if (flag) {
+        if (func_L00_001EFFF0_2C0CF8(from, to, 6, m, 0) == 0) {
+            if (ok) {
+                return FUN_L00_002bf9f0(m, p, half, 1);
+            }
+            return 0;
         }
     }
-    if (*savedCheck != 0 && FUN_001efa68_bf9f0(&first, &second, 6, m, 0) == 0) goto fail;
-    FUN_L00_002bec00_bf9f0(o);
-    FUN_L00_002bf8b0_bf9f0(m, (void *)0x141260, &destination);
-    FUN_L00_002bec48_bf9f0(o);
-    FUN_001ff300_bf9f0(0.5f, &plane, &direction);
-    FUN_001ff278_bf9f0(&plane, &plane, position);
-    key.q = 0;
-    key.f[2] = *(float *)(o + 0x50);
-    plane.f[2] = FUN_L00_00259468_bf9f0(position, &key, 0, *(float *)0x14127c);
-    FUN_L00_002bf810_bf9f0(&first, &plane, 10, 0, 0x20, 0x20, 0x3c, 40000.0f);
-    FUN_L00_002bf810_bf9f0(&second, &plane, 10, 0, 0x20, 0x20, 0x3c, 40000.0f);
-    if (FUN_001efa68_bf9f0(&first, &plane, 6, m, 0) != 0 &&
-        D_L00_00173E58_bf != *(Hit **)(o + 0x38)) goto fail;
-    if (FUN_001efa68_bf9f0(&plane, &second, 6, m, 0) != 0 &&
-        D_L00_00173E58_bf != *(Hit **)(o + 0x38)) goto fail;
-    m[0xbc] = 0xd;
+    func_L00_002BFF08_2C0CF8(p);
+    func_L00_002C0BB8_2C0CF8(m, D_0013E633_2C0CF8, land);
+    func_L00_002BFF50_2C0CF8(p);
+    func_001F9C30_2C0CF8(mid, d, 0.5f);
+    func_001F9BD8_2C0CF8(mid, mid, m->pos);
+    qzero(z);
+    z[2] = p->f50;
+    mid[2] = func_L00_0025A4A0_2C0CF8(m->pos, z, 0, *(float *)(D_0013E633_2C0CF8 + 0x1C));
+    func_L00_002C0B18_2C0CF8(from, mid, 10, 0, 32, 32, 40000.0f, 60);
+    func_L00_002C0B18_2C0CF8(to, mid, 10, 0, 32, 32, 40000.0f, 60);
+    if (func_L00_001EFFF0_2C0CF8(from, mid, 6, m, 0) != 0 && D_L00_00173F58_2C0CF8[0] != p->p38) {
+        if (ok) {
+            return FUN_L00_002bf9f0(m, p, half, 1);
+        }
+        return 0;
+    }
+    if (func_L00_001EFFF0_2C0CF8(mid, to, 6, m, 0) != 0 && D_L00_00173F58_2C0CF8[0] != p->p38) {
+        if (ok) {
+            return FUN_L00_002bf9f0(m, p, half, 1);
+        }
+        return 0;
+    }
+    m->bBC = 0xD;
     return 1;
-recurse:
-    return FUN_L00_002bf9f0(m, o, &midpoint, 1);
 }
-#endif
 #include "eetypes.h"
 #include "qcopy.h"
 unsigned char *FUN_0020c4f8(int);
