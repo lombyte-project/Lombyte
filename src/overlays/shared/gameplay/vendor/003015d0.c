@@ -339,12 +339,13 @@ void FUN_L14_00301fa8(char *m) {
     float base[16] __attribute__((aligned(16)));
     float matrix[16] __attribute__((aligned(16)));
     float direction[4] __attribute__((aligned(16)));
+    float end[4] __attribute__((aligned(16)));
+    float start[4] __attribute__((aligned(16)));
     float work[4] __attribute__((aligned(16)));
     float side[4] __attribute__((aligned(16)));
-    float start[4] __attribute__((aligned(16)));
-    float end[4] __attribute__((aligned(16)));
     int i, j, k, strip, point, rounded;
     int color;
+    void *src;
 
     FUN_001fa050(base, &frame->pad40[0x30]);
     FUN_001fa2d8(matrix, base);
@@ -383,16 +384,25 @@ void FUN_L14_00301fa8(char *m) {
         } else {
             clear_u64_value(start);
         }
-        rounded = ((point >= 0) ? point : point + 3) >> 2 << 2;
+        rounded = point + 3;
+        if (point > -1) rounded = point;
+        rounded = (rounded >> 2) << 2;
         for (i = 0; i < 4; i++) {
             if (i < 2) {
                 packet[0].vertices[i] = *(u128 *)(d + 0x20 + (point << 4));
                 if (!(i & 1)) subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], end);
-                else add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], end);
+                else {
+                    src = end;
+                    goto add_main;
+                }
             } else {
                 packet[0].vertices[i] = *(u128 *)(d + 0x30 + (point << 4));
                 if (!(i & 1)) subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], start);
-                else add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], start);
+                else {
+                    src = start;
+add_main:
+                    add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], src);
+                }
             }
             packet[0].uv[i][0] = ((float *)0x001e5fd0)[i * 2] +
                 convert_integer_to_float(point - rounded) * 0.25f;
@@ -415,16 +425,25 @@ void FUN_L14_00301fa8(char *m) {
                     clear_u64_value(start);
                 }
                 if (point == 0) qcopy(end, start);
-                rounded = ((point >= 0) ? point : point + 3) >> 2 << 2;
+                rounded = point + 3;
+                if (point > -1) rounded = point;
+                rounded = (rounded >> 2) << 2;
                 for (k = 0; k < 4; k++) {
                     if (k < 2) {
                         packet[0].vertices[k] = *(u128 *)(d + (strip << 4) + (point << 6) + 0x420);
                         if (!(k & 1)) subtract_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], end);
-                        else add_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], end);
+                        else {
+                            src = end;
+                            goto add_branch;
+                        }
                     } else {
                         packet[0].vertices[k] = *(u128 *)(d + (strip << 4) + (point << 6) + 0x460);
                         if (!(k & 1)) subtract_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], start);
-                        else add_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], start);
+                        else {
+                            src = start;
+add_branch:
+                            add_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], src);
+                        }
                     }
                     packet[0].uv[k][0] = ((float *)0x001e5fd0)[k * 2] +
                         convert_integer_to_float(point - rounded) * 0.25f;
