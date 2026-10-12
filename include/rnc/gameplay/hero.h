@@ -415,7 +415,8 @@ struct Hero {
     f32 unk610;                    /* 0x610 */
     f32 unk614;                    /* 0x614 */
     union { f32 f; s32 i; } unk618; /* 0x618: float distance clamp, zeroed as an int */
-    u8 pad_61C[0x54];
+    u8 pad_61C[0x24];
+    Vec4 basis[3];                 /* 0x640: rotation rows (transform_vector_by_basis) */
     f32 unk670;                    /* 0x670 */
     f32 unk674;                    /* 0x674 */
     u8 pad_678[0xC];
