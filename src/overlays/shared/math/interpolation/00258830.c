@@ -2,4 +2,87 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258830.s", FUN_L00_00258830);
+#include "rnc/math/vector.h"
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259868), where it is exact; names translated to the US level program. */
+
+typedef struct { float a[4]; } Vs __attribute__((aligned(16)));
+
+extern Vec4 D_L00_00173E70;
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern f32 angle_atan2(f32, f32) __asm__("FUN_001f9e90");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern int D_L00_00173E40[];
+extern int D_L00_00173E60;
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern int FUN_L00_001f0d60();
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern Vec4 D_94C8_60 __asm__("D_L00_00173E60");
+extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
+
+int FUN_L00_00258830(char *m, char *v, int flags, float a, float b, float c) {
+    Vs t0;
+    Vs t1;
+    Vs t2;
+    Vs t3;
+    int r = 0;
+    int fl = (flags * 2) & 0x20;
+    char *p = m + 0x10;
+    int i;
+    char *q;
+
+    qcopy(&t0, p);
+    add_vector_xyz(p, p, v);
+    if (b < vector_length_xyz(v)) {
+        qcopy(&t1, &t0);
+        t1.a[2] += a;
+        normalize_vector_xyz(&t3, v, b);
+        add_vector_xyz(&t2, &t3, p);
+        t2.a[2] += a;
+        if (FUN_001efa68(&t1, &t2, fl, (int)m, 0)) {
+            subtract_vector_xyz(p, (char *)&D_94C8_60, &t3);
+            r = 1;
+            *(float *)(m + 0x18) -= a;
+        }
+    }
+    for (i = 0, q = m + 0x10; i < 6; i++) {
+        qcopy(&t1, q);
+        t1.a[2] += a;
+        if (func_L00_001F10E0_l(&t1, b, fl | 4, m)) {
+            qcopy(q, &D_L00_00173E70);
+            r |= 1;
+            *(float *)(m + 0x18) -= a;
+        } else {
+            break;
+        }
+    }
+    b = *(float *)(m + 0x18) - c;
+    qcopy(&t1, q);
+    qcopy(&t2, q);
+    t1.a[2] += a;
+    t2.a[2] = b - 0.05f;
+    if (FUN_001efa68(&t1, &t2, fl | 2, (int)m, 0)) {
+        if (D_L00_00173E40[7] > 0) {
+            float g;
+            r |= 2;
+            g = angle_atan2(*(float *)((char *)D_L00_00173E40 + 0x48), vector_length_xy((char *)D_L00_00173E40 + 0x40));
+            if (g > 0.5f) {
+                r |= 4;
+            }
+            g = *(float *)((char *)D_L00_00173E40 + 0x28);
+            if (b < g) {
+                *(float *)(m + 0x18) += (g - b) * 0.3f;
+            }
+        }
+    }
+    subtract_vector_xyz(v, q, &t0);
+    return r;
+}
