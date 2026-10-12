@@ -1338,60 +1338,67 @@ typedef struct {
 } HelpPath;
 
 void FUN_L05_00254358(f32 *position, f32 *direction) {
-    char *g = (char *)&hero;
+    struct Hero *g = &hero;
     HelpPath *path;
+    f32 height_limit;
     f32 best;
-    s32 index = 0;
-    s32 selected = 0;
+    s32 index;
+    s32 selected;
     HelpPathPoint point;
     HelpPathPoint *p;
-    char *origin = g + 0x80;
+    HelpPath *cursor;
+    char *origin = (char *)g + 0x80;
 
-    if (*(void **)(g + 0x86C) == 0) {
+    if (g->unk86C == 0) {
         *(HelpPathPoint *)position = *(HelpPathPoint *)origin;
         *(HelpPathPoint *)direction = *(HelpPathPoint *)(origin + 0x10);
         return;
     }
-    path = (HelpPath *)D_L05_001B0930[*(s32 *)(*(char **)(*(char **)(g + 0x86C) + 0x78) + 0x24)];
+    path = (HelpPath *)D_L05_001B0930[*(s32 *)(*(char **)(g->unk86C + 0x78) + 0x24)];
+    height_limit = 4.0f;
     best = 9999999.0f;
-    if (path->count > 0) do {
-        f32 a;
-        s32 next;
-        f32 b;
-        p = &path->points[index];
-        a = FUN_001f9e90(p->x - *(f32 *)(origin + 0), p->y - *(f32 *)(origin + 4));
-        next = (index + (path->count + 2)) % path->count;
-        b = FUN_001f9e90(path->points[next].x - p->x, path->points[next].y - p->y);
-        if (fast_difference_between_rotations(a, b) > 1.5707964f) {
-            if (current_level_index == 0x10 && *(void **)(g + 0x8B4) != 0) {
-                f32 a = *(f32 *)(origin + *(s16 *)(g + 0x8C8) * 16 + 0x18);
-                f32 b = *(f32 *)(origin + *(s16 *)(g + 0x898) * 16 + 0x18);
-                f32 high = b;
-                if (!(a < b)) high = a;
-                if (absolute_float(high - p->z) > 4.0f) {
-                    goto next_point;
+    index = 0;
+    selected = 0;
+    p = path->points;
+    if (path->count > 0) {
+        cursor = path;
+        do {
+            f32 a;
+            s32 next;
+            f32 b;
+            a = FUN_001f9e90(cursor->points[0].x - *(f32 *)origin, cursor->points[0].y - *(f32 *)(origin + 4));
+            next = (s32)((u32)index + ((u32)path->count + 2U)) % path->count;
+            b = FUN_001f9e90(path->points[next].x - cursor->points[0].x, path->points[next].y - cursor->points[0].y);
+            if (fast_difference_between_rotations(a, b) > 1.5707964f) {
+                if (current_level_index == 0x10 && g->unk8B4 != 0) {
+                    f32 a = *(f32 *)((char *)g->unk8B4 + *(s16 *)((char *)g + 0x8C8) * 16 + 0x18);
+                    f32 b = *(f32 *)((char *)g->unk8B4 + g->unk898 * 16 + 0x18);
+                    f32 high = (a < b ? b : a) - cursor->points[0].z;
+                    if (absolute_float(high) > height_limit) {
+                        goto next_point;
+                    }
+                }
+                {
+                    f32 distance = FUN_001f9b80(origin, p);
+                    if (distance < best) {
+                        best = distance;
+                        selected = index;
+                    }
                 }
             }
-            {
-                f32 distance = FUN_001f9b80(origin, p);
-                if (distance < best) {
-                    best = distance;
-                    selected = index;
-                }
-            }
-        } else {
-            selected = index;
-        }
 next_point:
-        index += 2;
-    } while (index < path->count);
+            index += 2;
+            p += 2;
+            cursor = (HelpPath *)((char *)cursor + 0x20);
+        } while (index < path->count);
+    }
     p = &path->points[selected];
     *(HelpPathPoint *)position = *p;
     point = *(HelpPathPoint *)position;
     point.z += 2.0f;
     position[2] = find_ground_height(0.5f, &point, 0);
     clear_u64_value(direction);
-    direction[2] = FUN_001f9e90(p[1].x - p->x, p[1].y - p->y);
+    direction[2] = FUN_001f9e90(path->points[selected + 1].x - path->points[selected].x, path->points[selected + 1].y - path->points[selected].y);
 }
 #endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254608.s", FUN_L05_00254608);
