@@ -776,10 +776,16 @@ extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char D_0013F3D0[];
 extern char *D_001413D0;
 extern float D_0013F634;
+extern float D_L00_001616D8 __attribute__((sda));
+extern float D_L00_001616DC __attribute__((sda));
 extern float D_L00_001616CC_2bc3b0 __asm__("D_L00_001616CC") __attribute__((sda));
 extern float D_L00_001616D0_2bc3b0 __asm__("D_L00_001616D0") __attribute__((sda));
 extern u128 D_L00_00173E60_2bc3b0 __asm__("D_L00_00173E60") __attribute__((section(".data")));
 extern char *D_L00_00173E58;
+extern struct {
+    char pad[0x18];
+    char *moby;
+} D_L00_00173E40_2bc3b0 __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern float D_L00_00161660_f[];
 extern float FUN_001f9e90(float, float);
 extern float FUN_001f9b80(void *, void *);
@@ -800,52 +806,61 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
     float offset[4] __attribute__((aligned(16)));
     char *candidate;
     char *data;
-    char *best = 0;
+    char *moby;
+    int collision;
+    char *best;
     float distance, angle, elevation, headingError, limit, apparentAngle, radius, reduction;
-    int i;
+    char **i;
 
+    limit = D_L00_001616DC;
     *(u128 *)start = *(u128 *)position;
-    qcopy(end, D_001413D0 + 0x10);
-    end[2] = start[2];
-    if (FUN_001efa68_2bc3b0(end, start, 6, D_001413D0, 0)) {
-        qcopy(start, &D_L00_00173E60_2bc3b0);
+    *(u128 *)end = *(u128 *)((char *)hero.moby + 0x10);
+    position = start;
+    end[2] = position[2];
+    collision = FUN_001efa68_2bc3b0(end, position, 6, hero.moby, 0);
+    best = 0;
+    if (collision) {
+        qcopy(position, &D_L00_00173E60_2bc3b0);
         return 0;
     }
-    limit = D_L00_001616D0_2bc3b0;
-    for (i = 0; (candidate = active_mobies[i]) != 0; i++) {
+    for (i = active_mobies; (candidate = *i) != 0; i++) {
         if (*(s8 *)(candidate + 0x20) < 0 || *(s16 *)(candidate + 0xA6) == 0x58E ||
             *(s16 *)(candidate + 0xA6) == 0x452)
             continue;
-        *(u128 *)target = *(u128 *)(candidate + 0x10);
+        qcopy(target, candidate + 0x10);
         data = FUN_002141f8(candidate);
         if (!data)
             continue;
         target[2] += *(float *)(data + 0x10);
-        if (!*(char **)(candidate + 0x24) || *(s16 *)(*(char **)(candidate + 0x24) + 0x46) != 5)
+        if (!candidate || !*(char **)(candidate + 0x24) ||
+            *(s16 *)(*(char **)(candidate + 0x24) + 0x46) != 5)
             continue;
-        angle = FUN_001f9e90(target[0] - start[0], target[1] - start[1]);
-        distance = FUN_001f9b80(start, target);
-        elevation = FUN_001f9e90(distance, target[2] - start[2]);
+        angle = FUN_001f9e90(target[0] - position[0], target[1] - position[1]);
+        distance = FUN_001f9b80(position, target);
+        elevation = FUN_001f9e90(distance, target[2] - position[2]);
         headingError = FUN_001fa688(*heading, angle);
-        distance = FUN_001f9b48(start, target);
+        distance = FUN_001f9b48(position, target);
         if (distance < 2.5f) {
-            float toward = FUN_001f9e90(*(float *)(candidate + 0x10) - *(float *)(D_0013F3D0 + 0),
-                                          *(float *)(candidate + 0x14) - *(float *)(D_0013F3D0 + 4));
-            if (FUN_001fa688(*(float *)(D_001413D0 + 0x48), toward) < 1.0471976f &&
-                FUN_001f99c0(start[2] - target[2]) < 2.0f &&
-                !FUN_001efa68_2bc3b0(start, target, 6, D_001413D0, 0)) {
+            float toward;
+            moby = (char *)hero.moby;
+            toward = FUN_001f9e90(*(float *)(candidate + 0x10) - hero.motion.pos.f[0],
+                                   *(float *)(candidate + 0x14) - hero.motion.pos.f[1]);
+            if (FUN_001fa688(*(float *)(moby + 0x48), toward) < 1.0471976f &&
+                FUN_001f99c0(position[2] - target[2]) < 2.0f &&
+                !FUN_001efa68_2bc3b0(position, target, 6, hero.moby, 0)) {
+                best = candidate;
                 *pitch = -elevation;
                 *heading = angle;
-                return candidate;
+                goto done;
             }
         }
         if (distance > limit)
             continue;
-        build_spherical_offset(offset, distance, *heading, *pitch + D_0013F634 * 0.5f);
-        FUN_001f9a10(offset, offset, start);
+        build_spherical_offset(offset, distance, *heading, *pitch + hero.unk2E4.f * 0.5f);
+        FUN_001f9a10(offset, offset, position);
         apparentAngle = FUN_001f9df8(FUN_001f9b48(offset, target) / (distance + distance));
         apparentAngle += apparentAngle;
-        if (D_L00_001616CC_2bc3b0 * 0.017453292f < apparentAngle) {
+        if (D_L00_001616D8 * 0.017453292f < apparentAngle) {
             data = FUN_002141f8(candidate);
             if (data) {
                 radius = FUN_001fa6c0(*(u8 *)(data + 10)) * 0.125f;
@@ -857,19 +872,25 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
                 }
             }
         }
-        if (apparentAngle < D_L00_001616CC_2bc3b0 * 0.017453292f) {
+        if (apparentAngle < D_L00_001616D8 * 0.017453292f) {
             int valid = 1;
-            if (FUN_001efa68_2bc3b0(start, target, 6, self, 0) && D_L00_00173E58 != candidate)
-                valid = 0;
+            if (FUN_001efa68_2bc3b0(position, target, 6, self, 0)) {
+                if (D_L00_00173E40_2bc3b0.moby == 0)
+                    valid = 0;
+                if (D_L00_00173E40_2bc3b0.moby &&
+                    D_L00_00173E40_2bc3b0.moby != candidate)
+                    valid = 0;
+            }
             if (valid) {
                 *pitch = -elevation;
                 limit = distance;
-                best = candidate;
                 if (headingError < 0.17453292f)
                     *heading = angle;
+                best = candidate;
             }
         }
     }
+done:
     return best;
 }
 #endif
