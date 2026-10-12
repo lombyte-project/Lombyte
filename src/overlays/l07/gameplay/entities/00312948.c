@@ -28,7 +28,91 @@ void FUN_L07_00312dc8(char *moby) {
     }
     FUN_L07_00312948(moby, 0, 1.0f, 5.8f, ang, 1.0f, *(float *)(data + 0x1C8));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312e70.s", FUN_L07_00312e70);
+#include "qcopy.h"
+#include "rnc/rendering/geometry_quad.h"
+
+extern s32 frame_count_l07 __asm__("D_L07_0015F5CC");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
+extern float FUN_L00_0025e310(float);
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+
+void FUN_L07_00312e70(char *moby, float radius, int phase, float speed, int color) {
+    char *vars = *(char **)(moby + 0x78);
+    struct GeometryQuad quad;
+    struct GeometryQuad inner;
+    float offset[4];
+    float spin;
+    float step;
+    float angle;
+    float wrapped;
+    u64 texture;
+
+    spin = convert_integer_to_float(frame_count_l07 + phase) * speed;
+    if (*(int *)(vars + 0x164) == 4) {
+        float alpha = convert_integer_to_float(color >> 24);
+        float fade = convert_integer_to_float(*(int *)(vars + 0x160));
+        fade = fade / scale_game_frames(20);
+        alpha = alpha * fade;
+        if (alpha < 0.0f)
+            alpha = 0.0f;
+        color &= 0xFFFFFF;
+        color |= truncate_float_to_s32(alpha) << 24;
+    } else if (*(int *)(vars + 0x164) > 4) {
+        return;
+    }
+    step = 0.5235988f;
+    texture = get_effect_texture(0x3D);
+    {
+        float zero = 0.0f;
+        float one = 1.0f;
+        float half = 0.5f;
+
+        quad.colors[3] = color;
+        quad.colors[2] = color;
+        quad.colors[1] = color;
+        quad.colors[0] = color;
+        quad.texture = texture;
+        quad.texture_state = 0xFF9000000260LL;
+        quad.reserved.value = 4;
+        quad.primitive = 0x8000000048LL;
+        quad.texture_coordinates[0][0] = zero;
+        quad.texture_coordinates[2][0] = zero;
+        quad.texture_coordinates[1][0] = one;
+        quad.texture_coordinates[3][0] = one;
+        quad.texture_coordinates[0][1] = zero;
+        quad.texture_coordinates[1][1] = zero;
+        quad.texture_coordinates[2][1] = half;
+        quad.texture_coordinates[3][1] = half;
+    }
+    qcopy(&quad.positions[1], vars + 0x110);
+    qcopy(&quad.positions[3], vars + 0x140);
+    inner = quad;
+    qcopy(&inner.positions[0], vars + 0x120);
+    qcopy(&inner.positions[1], vars + 0x120);
+    for (angle = -3.1415927f; angle < step + 3.1415927f; angle += step) {
+        qcopy(&quad.positions[0], &quad.positions[1]);
+        qcopy(&quad.positions[2], &quad.positions[3]);
+        wrapped = FUN_L00_0025e310(angle + spin * 0.02f);
+        offset[1] = radius * fast_cos(wrapped);
+        offset[2] = radius * fast_sin(wrapped);
+        offset[0] = 0.0f;
+        transform_vector_by_basis(offset, offset, moby + 0xC0);
+        add_vector_xyz(&quad.positions[3], vars + 0x140, offset);
+        if (angle != -3.1415927f) {
+            draw_geometry_quad(&quad, 0, 1);
+            qcopy(&inner.positions[2], &quad.positions[2]);
+            qcopy(&inner.positions[3], &quad.positions[3]);
+            draw_geometry_quad(&inner, 0, 0);
+        }
+    }
+}
 
 #include "qzero.h"
 #include "rnc/overlay/moby_anim.h"
