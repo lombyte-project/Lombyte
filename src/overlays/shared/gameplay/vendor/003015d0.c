@@ -258,13 +258,15 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L14_00301de8(char *m) {
     char *d = *(char **)(m + 0x78);
-    char *dst, *src, *indices;
-    int i, j, k, offset, copy_i, next_i;
+    char *dst, *src;
+    u8 *indices;
+    int i, j, k, copy_i, next_i;
+    long offset;
     float t;
 
     if (*(s16 *)(d + 0x12) != 0) {
         *(s16 *)(d + 0x12) = *(u16 *)(d + 0x12) - 1;
-        indices = d + 0x18;
+        indices = (u8 *)(d + 0x18);
         src = d + 0x260;
         dst = d + 0x60;
         for (j = 22; j >= 0; j--) {
@@ -275,9 +277,9 @@ void FUN_L14_00301de8(char *m) {
         i = 0;
         do {
             next_i = i + 1;
-            offset = i << 4;
-            dst = d + offset + 0x460;
-            src = d + offset + 0x560;
+            offset = (i << 4) + (int)d;
+            dst = (char *)offset + 0x460;
+            src = (char *)offset + 0x560;
             for (k = 2; k >= 0; k--) {
                 add_vector_xyz(dst, dst, src);
                 dst += 0x40;
@@ -285,9 +287,10 @@ void FUN_L14_00301de8(char *m) {
             }
             i = next_i;
         } while ((float)i < 4.0f);
+        src = (char *)indices;
         copy_i = 0;
         do {
-            *(u128 *)(d + 0x420 + (copy_i << 4)) = *(u128 *)(d + 0x20 + ((u8)indices[copy_i] << 4));
+            qcopy(d + 0x420 + (copy_i << 4), (char *)(((u8)src[copy_i] << 4) + (int)d) + 0x20);
             copy_i++;
         } while (copy_i < 4);
     }
