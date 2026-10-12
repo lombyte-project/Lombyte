@@ -290,9 +290,6 @@ void FUN_L00_00245c28(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002464a8.s", FUN_L00_002464a8);
 #else
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002468b8.s", FUN_L00_002468b8);
-#else
 #include "rnc/storage/disc_table.h"
 
 typedef struct {
@@ -323,7 +320,7 @@ typedef struct {
 } RenderArchiveState;
 
 extern RenderArchiveState D_L00_001841F0 __asm__("D_L00_001841F0");
-extern u8 D_0013D4E1;
+extern u8 D_0013D4E1 __attribute__((section(".data")));
 extern struct DiscFile D_00138438[];
 
 void FUN_001e93e8(void);
@@ -347,11 +344,11 @@ void FUN_L00_002468b8(void) {
     second_base = D_L00_001B9CF0.second_base;
     buffer = first_base + 0x9a800;
     D_L00_001B9CF0.first_base = buffer + 0x48000;
-    D_L00_001B9CF0.second_base = second_base + 0x48000;
     D_L00_001841F0.old_base = first_base;
     D_L00_001841F0.start = 0;
     D_L00_001841F0.buffer = buffer;
     D_L00_001841F0.old_end = second_base;
+    D_L00_001B9CF0.second_base = second_base + 0x48000;
     state->zero_284 = 0;
     state->zero_288 = 0;
     state->slot_28c = -1;
@@ -379,15 +376,14 @@ void FUN_L00_002468b8(void) {
         if (D_L00_001841F0.file_handle != -1) {
             D_L00_001841F0.last_transfer_bytes = D_L00_001841F0.transfer_bytes;
             FUN_00232f20(D_L00_001841F0.buffer, D_L00_001841F0.file_handle, 0, D_L00_001841F0.transfer_bytes, 0);
-            D_L00_001841F0.load_state = -2;
             D_L00_001841F0.level_slot = D_0013D4E1 != 0 ? current_level_index + 0x100 : current_level_index;
             D_L00_001841F0.active = 1;
+            D_L00_001841F0.load_state = -2;
             return;
         }
     }
     D_L00_001841F0.active = 0;
 }
-#endif
 #ifdef NON_MATCHING
 #include "rnc/storage/disc_table.h"
 extern u8 D_0013D4E1;
