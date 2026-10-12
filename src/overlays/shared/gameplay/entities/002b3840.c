@@ -281,7 +281,7 @@ extern int D_00151928_87a8 __asm__("D_00151928") __attribute__((sda));
 extern int D_0015190C_87a8 __asm__("D_0015190C") __attribute__((sda));
 extern int D_00151910_87a8 __asm__("D_00151910") __attribute__((sda));
 
-void FUN_L05_002f87a8(char *moby) {
+void FUN_L05_002f87a8(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
     float position[4], delta[4], effect_position[4], offset[4], second_position[4];
     float angle, distance_scale, delta_length;
