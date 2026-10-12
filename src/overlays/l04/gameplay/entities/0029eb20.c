@@ -206,7 +206,6 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
     struct Moby **children;
     struct Moby *child;
     struct Moby *other;
-    s32 i;
     f32 distance;
     f32 angle;
     f32 angle2;
@@ -241,11 +240,12 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
         moby->pos.x = data->origin.x + data->radius * fast_cos_29ecf8(data->angle);
         moby->pos.y = data->origin.y + data->radius * fast_sin_29ecf8(data->angle);
     } else {
+        s32 i;
         if (data->initialized == 0) goto initialize;
         distance = 10000.0f;
         for (i = 0; i < data->count; i++) {
             f32 d = vector_distance_29ecf8(&moby->pos, &data->children[i]->pos);
-            distance = d < distance ? d : distance;
+            if (d < distance) distance = d;
         }
         speed = 0.0f;
         if (distance < 3.0f) speed = 3.0f - distance;
@@ -254,6 +254,7 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
     if (data->initialized != 0) goto update;
 initialize:
     {
+    s32 i;
     Vec4f *moby_pos = &moby->pos;
     children = data->children;
     data->initialized = 1;
@@ -272,7 +273,7 @@ initialize:
             clear_vector_29ecf8(&part->pos);
             *(s16 *)((char *)part + 0x44) = 0;
             *(f32 *)((char *)part + 0x4c) = 10.0f;
-            *(u128 *)&child->pos = *(u128 *)moby_pos;
+            *(volatile u128 *)&child->pos = *(volatile u128 *)moby_pos;
             angle = random_angle_29ecf8();
             angle2 = random_angle_29ecf8();
             size = random_float_between_29ecf8(0.6f, 0.9f);
@@ -298,14 +299,22 @@ initialize:
     }
     return;
 update:
+    { s32 i;
     children = data->children;
     for (i = 0; i < data->count; i++) {
+        void *part;
         child = children[i];
+        part = child->pvars;
+        speed = (data->radius * 7.753f) / 1800.0f;
         average = (child->unk58 + 1.0f) * 0.5f;
-        D_L04_00166130[6] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * average * 0.05f * frame_scale_sq * average;
-        D_L04_00166130[7] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * (child->unk58 + 1.0f) * 0.5f;
-        FUN_L04_001f30e0(children, data->count, child, child->pvars, D_L04_00166130);
-        apply_child_motion_29ecf8(0.0f, child, child->pvars, D_L04_00166130);
+        D_L04_00166130[6] = speed * frame_scale * average * 0.05f * frame_scale_sq * average;
+        speed = (data->radius * 7.753f) / 1800.0f;
+        speed = speed * frame_scale;
+        average = (child->unk58 + 1.0f) * 0.5f;
+        D_L04_00166130[7] = speed * average;
+        FUN_L04_001f30e0(children, data->count, child, part, D_L04_00166130);
+        apply_child_motion_29ecf8(0.0f, child, part, D_L04_00166130);
+    }
     }
 }
 #endif
