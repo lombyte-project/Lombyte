@@ -1887,8 +1887,8 @@ struct Moby *FUN_L08_002de3e0(void *pos, struct Moby *target, void *velocity, fl
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de528.s", FUN_L08_002de528);
 #else
-extern void effect_2de528(float, float, float, float, float, float, float,
-                          void *, void *, void *, int, int, int, int, int, int, int, int)
+extern void effect_2de528(void *, void *, void *, float, float, int, int, int,
+                          float, float, float, float, int, float, int, int, int, int)
     __asm__("FUN_L00_0025e450");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -1903,57 +1903,61 @@ extern void *D_L08_001600EC;
 
 void FUN_L08_002de528(char *moby, int index, int count, int variant) {
     int i;
-    int class_id;
     int table_offset;
     char *spawned;
+    char *origin;
     float position[4];
     float axis[4];
     float velocity[4];
     float speed;
     float angle;
-    char *origin;
     char *data = *(char **)(moby + 0x78);
 
     if (variant != 0) {
-        effect_2de528(0.0f, 0.0f, 6.0f, 4.0f, 9.0f, 1.0f, 15.0f,
-                       moby, data + 0x20, moby + 0x10, 0x1e, 0x14, 0x14, -1, 1, 1, -1, 0);
+        effect_2de528(moby, data + 0x20, moby + 0x10, 0.0f, 0.0f,
+                       0x1e, 0x14, 0x14, 6.0f, 4.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
     } else {
-        effect_2de528(0.0f, 0.0f, 10.0f, 6.0f, 9.0f, 1.0f, 15.0f,
-                       moby, data + 0x20, moby + 0x10, 0x2d, 0x1e, 0x1e, -1, 1, 1, -1, 0);
+        effect_2de528(moby, data + 0x20, moby + 0x10, 0.0f, 0.0f,
+                       0x2d, 0x1e, 0x1e, 10.0f, 6.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
     }
     origin = moby + 0x10;
-    table_offset = index << 7;
-    while (count-- > 0) {
-        if (variant != 0) {
-            if ((random_integer_below(0xff) & 1) != 0) class_id = 0x30e;
-            else class_id = 0x30f;
-        } else {
-            if ((random_integer_below(0xff) & 1) != 0) class_id = 0x310;
-            else class_id = 0x311;
-        }
-        spawned = (char *)create_moby(class_id);
-        *(short *)(spawned + 0x32) = 0x40;
-        spawned[0x31] = 1;
-        spawned[0x30] = 0x40;
-        *(long long *)(spawned + 0x38) = *(long long *)(moby + 0x38);
-        *(float *)(spawned + 0x40) = random_angle_radians();
-        *(float *)(spawned + 0x44) = random_angle_radians();
-        *(float *)(spawned + 0x48) = random_angle_radians();
-        position[0] = random_float_between(-1.0f, 1.0f);
-        position[1] = random_float_between(-1.0f, 1.0f);
-        position[2] = random_float_between(-1.0f, 1.0f);
-        position[3] = 1.0f;
-        FUN_001f9d20(position, position, (char *)D_L08_001600EC + table_offset);
-        qcopy(spawned + 0x10, position);
-        FUN_001f99f8(axis);
-        FUN_001f9a28(velocity, position, origin);
-        speed = random_float_between(frame_time * 12.0f, frame_time * 15.0f);
-        FUN_001f9c48(speed, velocity, velocity);
-        angle = random_float_between(frame_time * 6.0f, frame_time * 18.0f);
-        speed = random_float_between(60.0f, 90.0f);
-        FUN_L05_00318648(spawned, moby, velocity, axis, FUN_001fa6d0(speed));
+    if (count > 0) {
+        i = count;
+        table_offset = index << 7;
+        do {
+            if (variant != 0) {
+                if ((random_integer_below(0xff) & 1) != 0) spawned = (char *)create_moby(0x30e);
+                else spawned = (char *)create_moby(0x30f);
+            } else {
+                if ((random_integer_below(0xff) & 1) != 0) spawned = (char *)create_moby(0x310);
+                else spawned = (char *)create_moby(0x311);
+            }
+            *(short *)(spawned + 0x32) = 0x40;
+            spawned[0x31] = 1;
+            spawned[0x30] = 0x40;
+            *(long long *)(spawned + 0x38) = *(long long *)(moby + 0x38);
+            *(float *)(spawned + 0x40) = random_angle_radians();
+            *(float *)(spawned + 0x44) = random_angle_radians();
+            *(float *)(spawned + 0x48) = random_angle_radians();
+            position[0] = random_float_between(-1.0f, 1.0f);
+            position[1] = random_float_between(-1.0f, 1.0f);
+            position[2] = random_float_between(-1.0f, 1.0f);
+            position[3] = 1.0f;
+            FUN_001f9d20(position, position, (char *)D_L08_001600EC + table_offset);
+            qcopy(spawned + 0x10, position);
+            --i;
+            FUN_001f99f8(axis);
+            FUN_001f9a28(velocity, position, origin);
+            speed = random_float_between(frame_time * 12.0f, frame_time * 15.0f);
+            FUN_001f9c48(speed, velocity, velocity);
+            angle = random_float_between(frame_time * 6.0f, frame_time * 18.0f);
+            velocity[2] = angle;
+            speed = random_float_between(60.0f, 90.0f);
+            FUN_L05_00318648(spawned, moby, velocity, axis, FUN_001fa6d0(speed));
+        } while (i != 0);
     }
 }
+
 #endif /* NON_MATCHING */
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002DFBC0) */
 
