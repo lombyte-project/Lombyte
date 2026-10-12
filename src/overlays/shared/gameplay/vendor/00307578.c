@@ -35,9 +35,6 @@ void FUN_L06_00307c48(unsigned char *a, unsigned char *m) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307d30.s", FUN_L06_00307d30);
-#else
 #include "rnc/overlay/quad.h"
 extern void FUN_L06_00307578(void);
 extern float D_L06_00167540[];
@@ -47,7 +44,7 @@ extern float D_L06_001622E0 __attribute__((sda));
 extern float D_L06_001622E4 __attribute__((sda));
 extern float D_L06_001622E8 __attribute__((sda));
 extern float D_L06_001622EC __attribute__((sda));
-extern unsigned char D_001413F4;
+extern unsigned char D_001413F4 __attribute__((section(".data")));
 extern unsigned char D_0015EDB4;
 extern unsigned char D_0014C050[];
 extern int current_level_index __asm__("D_0015ED84");
@@ -61,7 +58,13 @@ extern float FUN_001f9b48(void *, void *);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void enqueue_callback_list_1(int, int) __asm__("FUN_001f4600");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
-extern void draw_number(float, void *, void *, int, unsigned int, int, int, int) __asm__("FUN_L01_00285768");
+extern void draw_number(void *, void *, int, unsigned int, int, int, int, float) __asm__("FUN_L01_00285768");
+
+/* Fakematch: the blue channel goes through this inline; written in place, the
+   or is scheduled before the green one. */
+static inline unsigned int or_blue_channel(int blue, unsigned int color) {
+    return blue * 0x10000 | color;
+}
 
 void FUN_L06_00307d30(char *moby) {
     float *data = *(float **)(moby + 0x78);
@@ -102,11 +105,11 @@ void FUN_L06_00307d30(char *moby) {
             pos[2] += D_L06_001622DC * fast_cos(data[6]);
             value = truncate_float_to_s32(D_L06_001622E8 * fast_cos(data[10]));
             color_channels = (value / 2 + 120) * 0x100 | 0x20000000U;
-            color_channels = (value / 3 + 13) * 0x10000 | color_channels;
+            color_channels = or_blue_channel(value / 3 + 13, color_channels);
             color = color_channels | (value + 150U);
             if (D_001413F4 == 1) {
                 if (idata[5] < 10) {
-                    draw_number(0.5f, pos, moby, idata[5] + 2, color, 0x7f, 4, 0xff);
+                    draw_number(pos, moby, idata[5] + 2, color, 0x7f, 4, 0xff, 0.5f);
                 } else {
                     if (D_0015EDB4) {
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
@@ -115,14 +118,14 @@ void FUN_L06_00307d30(char *moby) {
                         offset[1] = fast_sin(angle) * 0.15f;
                         offset[2] = 0.0f;
                         add_vectors(result, offset, pos);
-                        draw_number(0.5f, offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff);
+                        draw_number(offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
                         offset[0] = fast_cos(angle) * -0.4f;
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
                         offset[1] = fast_sin(angle) * -0.4f;
                         offset[2] = 0.0f;
                         add_vectors(result, offset, pos);
-                        draw_number(0.5f, offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff);
+                        draw_number(offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                     } else {
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
                         offset[0] = fast_cos(angle) * -0.4f;
@@ -130,14 +133,14 @@ void FUN_L06_00307d30(char *moby) {
                         offset[1] = fast_sin(angle) * -0.4f;
                         offset[2] = 0.0f;
                         add_vectors(result, offset, pos);
-                        draw_number(0.5f, offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff);
+                        draw_number(offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
                         offset[0] = fast_cos(angle) * 0.15f;
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
                         offset[1] = fast_sin(angle) * 0.15f;
                         offset[2] = 0.0f;
                         add_vectors(result, offset, pos);
-                        draw_number(0.5f, offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff);
+                        draw_number(offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                     }
                 }
             }
@@ -158,7 +161,6 @@ void FUN_L06_00307d30(char *moby) {
         return;
     }
 }
-#endif
 #include "sda.h"
 #include "rnc/overlay/entities.h"
 
