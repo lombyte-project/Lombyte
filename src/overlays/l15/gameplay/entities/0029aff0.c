@@ -39,9 +39,6 @@ void FUN_L15_002e46b0(struct Moby *moby) {
     }
 }
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029aff0.s", FUN_L15_0029aff0);
-#else
 typedef struct {
     Vec4 home;
     s32 open_volume;
@@ -60,6 +57,12 @@ typedef struct {
     struct Moby *owner;
 } VoiceSlot_29aff0;
 
+typedef struct {
+    char pad0[0x454];
+    unsigned char collected[1];
+} CollectedFlags_29aff0;
+
+extern CollectedFlags_29aff0 D_L15_001BB830_29aff0 __asm__("D_L15_001BB830");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -107,8 +110,8 @@ void FUN_L15_0029aff0(struct Moby *m)
         }
 check_lock:
         if (d->lock != 0) {
-            if (((u8 *)D_L15_001BAAD0)[0x11b4 + (s16)m->save_id] != 0 ||
-                ((*(s32 *)(D_0014C190 + current_level_index * 0x100 + ((s16)m->save_id >> 5) * 4) >> (m->save_id & 31)) & 1) != 0)
+            if (D_L15_001BB830_29aff0.collected[(s16)m->save_id] != 0 ||
+                ((*(s32 *)(D_0014C190 + (current_level_index * 0x100 + ((s16)m->save_id >> 5) * 4)) >> (m->save_id & 31)) & 1) != 0)
                 trigger_active = 1;
         }
         if (is_point_inside_clip_volume(D_0013F3D0, d->open_volume)) {
@@ -118,25 +121,26 @@ check_lock:
         }
         return;
     case 2:
-        voice_slot = (VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70);
-        if (voice_slot->owner != m || voice_slot->active == 0)
+        if (((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->owner != m ||
+            ((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->active == 0)
             d->sound = allocate_voice_for_target_entry(0, 4, (int)m);
         if (d->duration < (d->travel = d->travel + (d->duration / 0.6f) * frame_time)) {
             slot = d->sound;
             if (slot != -1) {
-                voice_slot = (VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70);
-                if (voice_slot->owner == m && voice_slot->active != 0)
+                if (((VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70))->owner == m &&
+                    ((VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70))->active != 0)
                     release_voice_slot(slot);
             }
             d->travel = d->duration;
             d->sound = -1;
-            if (d->trigger == -1 && d->lock == 0) {
-                m->state = 3;
-            } else {
+            if (d->trigger != -1 || d->lock != 0) {
                 mask = 1U << (m->save_id & 31);
-                ((u32 *)(D_0014C190 + current_level_index * 0x100))[((s16)m->save_id >> 5)] |= mask;
-                D_L15_001BAAD0[((s16)m->save_id >> 5)] |= mask;
+                bits = (u32 *)(D_0014C190 + (((s16)m->save_id >> 5) * 4 + current_level_index * 0x100));
+                *bits |= mask;
+                D_L15_001BAAD0[((s16)m->save_id >> 5)] |= 1U << (m->save_id & 31);
                 m->state = 5;
+            } else {
+                m->state = 3;
             }
         }
         offset.f[0] = fast_cos(m->rot.z) * -d->travel;
@@ -152,8 +156,8 @@ check_lock:
         m->state = 4;
         return;
     case 4:
-        voice_slot = (VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70);
-        if (voice_slot->owner != m || voice_slot->active == 0)
+        if (((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->owner != m ||
+            ((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->active == 0)
             d->sound = allocate_voice_for_target_entry(0, 4, (int)m);
         if ((d->travel = d->travel - (d->duration / 0.6f) * frame_time) < 0.0f) {
             slot = d->sound;
@@ -177,7 +181,6 @@ check_lock:
         return;
     }
 }
-#endif
 /* Ported from rac1-decomp src/overlays/l15_quartu/vendor_0029C1D0.c (func_L15_002A48B0) */
 #include "eetypes.h"
 
