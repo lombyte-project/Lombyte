@@ -220,7 +220,126 @@ char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, floa
     }
     return (char *)moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ece00.s", FUN_L12_002ece00);
+typedef struct {
+    float vel[4];
+    struct Moby *owner;
+    int timer;
+    float unk18;
+    float yaw;
+} ShotVars_ece00;
+
+typedef struct {
+    float dir[4];
+    float unk10[2];
+    char unk18;
+    char unk19;
+    short oclass;
+    int pad1C;
+    int pad20[4];
+} ShotHit_ece00;
+
+typedef struct { char pad0[0x18]; int moby; } ShotColl_ece00;
+extern ShotColl_ece00 D_L12_001742C0_ece00 __asm__("D_L12_001742C0") __attribute__((section(".data")));
+extern int camera_secondary_mode_ece00 __asm__("D_001413D4") __attribute__((section(".data")));
+extern int D_L12_00161F20;
+extern char D_L12_00167240_ece00[] __asm__("D_L12_00167240");
+extern int D_L12_0015F580;
+extern float D_0015ED6C_ece00 __asm__("D_0015ED6C");
+extern char *FUN_L00_0025a420_ece00(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
+extern void mark_moby_for_removal_ece00(struct Moby *) __asm__("FUN_0020c828");
+extern void add_vector_ece00(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_ece00(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void set_vector_length_ece00(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void FUN_L00_001ff290(void *, void *, void *);
+extern int random_int_between_ece00(int, int) __asm__("FUN_L00_00257b90");
+extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern int FUN_001efa68_ece00(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
+extern int coll_sphere_ece00(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
+extern void make_hit_ece00(void *, struct Moby *, int, float, void *) __asm__("FUN_L00_00259888");
+extern float fast_cos_ece00(float) __asm__("FUN_001f9dc8");
+extern float fast_sin_ece00(float) __asm__("FUN_001f9de0");
+extern void apply_hit_ece00(int, void *) __asm__("FUN_L00_00259a88");
+extern void FUN_L00_0025e450(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float,
+                             int, float, int, int, int, int);
+extern void FUN_L00_0025f090(void *, void *, int, float, float);
+
+/* Level 12 shot: flies with a smoke trail, damages the first moby it hits other than its owner, then pops. */
+void FUN_L12_002ece00(struct Moby *moby) {
+    ShotVars_ece00 *vars = (ShotVars_ece00 *)moby->pvars;
+    float old_pos[4];
+    float side[4];
+    float back[4];
+    float trail[4];
+    ShotHit_ece00 hit;
+    switch (moby->state) {
+    case 1: {
+        char *touch = FUN_L00_0025a420_ece00(moby, 0x230000, 0);
+        int damage;
+        if (touch != 0 && *(struct Moby **)(touch + 0x20) != vars->owner) {
+            moby->state = 2;
+            break;
+        }
+        if (current_level_index == 12 && camera_secondary_mode_ece00 == 50 && vars->owner != 0) {
+            if ((signed char)vars->owner->state < 0) {
+                mark_moby_for_removal_ece00(moby);
+                return;
+            }
+            if (vars->owner->state < 2) {
+                moby->state = 2;
+                break;
+            }
+        }
+        qcopy(old_pos, &moby->pos);
+        add_vector_ece00(&moby->pos, &moby->pos, vars);
+        moby->rot.z = vars->yaw;
+        moby->rot.x = fast_add_rotations_72(moby->rot.x, D_0015ED6C_ece00 * 6.2831855f);
+        set_vector_length_ece00(side, vars, 0.2f);
+        set_vector_length_ece00(back, vars, -0.2f);
+        FUN_L00_001ff290(trail, back, &moby->pos);
+        FUN_L00_00269958(back, side, 0x6F00AFFF, 0xFF, scale_game_frames(random_int_between_ece00(15, 22)), 40,
+                         random_int_between_ece00(20, 35), 1);
+        FUN_L00_00269958(back, side, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(random_int_between_ece00(30, 60)), 40,
+                         random_int_between_ece00(50, 75), 0);
+        if (FUN_001efa68_ece00(&moby->pos, old_pos, 0, moby, 0) || coll_sphere_ece00(&moby->pos, 0.2f, 0, moby)) {
+            if (D_L12_001742C0_ece00.moby != 0 && D_L12_001742C0_ece00.moby != (int)vars->owner) {
+                damage = 1;
+                if (current_level_index == 12 && camera_secondary_mode_ece00 == 50) {
+                    damage = D_L12_00161F20 >= 16 ? 2 : 3;
+                }
+                make_hit_ece00(&hit, moby, 0x10003, damage, vars);
+                hit.dir[0] = fast_cos_ece00(vars->yaw);
+                hit.dir[1] = fast_sin_ece00(vars->yaw);
+                hit.dir[2] = 1.0f;
+                hit.dir[3] = 5627.9248f;
+                hit.unk18 = 1;
+                hit.unk19 = 1;
+                hit.oclass = moby->oclass;
+                apply_hit_ece00(D_L12_001742C0_ece00.moby, &hit);
+            }
+            moby->state = 2;
+        }
+        if (fast_dec_timer_72(&vars->timer)) {
+            moby->state = 2;
+        }
+        break;
+    }
+    case 2:
+        subtract_vector_ece00(old_pos, &moby->pos, D_L12_00167240_ece00);
+        set_vector_length_ece00(old_pos, old_pos, 0.4f);
+        add_vector_ece00(&moby->pos, &moby->pos, old_pos);
+        if (current_level_index == 12 && camera_secondary_mode_ece00 == 50) {
+            char *camera = D_L12_00167240_ece00 - 0x140;
+            FUN_L00_0025e450(moby, &D_L12_0015F580, 0, 0.0f, 0.0f, 3, 3, 5, 0.3f, 0.2f, 0.0f, 0.15f, -1, 0.0f, 0, 0,
+                             -1, 0);
+            *(float *)(camera + 0x160) = 0.025f;
+            *(int *)(camera + 0x168) = scale_game_frames(20);
+        } else {
+            FUN_L00_0025f090(moby, &moby->pos, 0, 0.25f, 13.0f);
+        }
+        mark_moby_for_removal_ece00(moby);
+        break;
+    }
+}
 /* Hoven challenge tracker: unlocks the area once, records the time and run flags for two skill points and
  * awards them (one for staying airborne long enough). */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_002EE600), where it is exact; names translated to the US level program. */
