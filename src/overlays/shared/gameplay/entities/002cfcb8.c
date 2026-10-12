@@ -2865,6 +2865,7 @@ void FUN_L00_002d73e8(P *p) {
     V *transform;
     float x, y, f;
     float *phase;
+    float *source_texcoords;
     s16 *timer;
     V *points, *source;
     float *texcoords, *texcoords_second;
@@ -2907,6 +2908,7 @@ void FUN_L00_002d73e8(P *p) {
         if (D_L00_001D2D10_2d73e8[i] != 0) {
             quad.texture[3] = 0x8000000044ULL;
             for (row = 2; row < 4; row++) {
+                source_texcoords = D_L00_001E11E0_2d73e8;
                 for (point = 0, points = quad.points, texcoords = quad.texcoords, texcoords_second = quad.texcoords + 1, colors = quad.colors; point < 4; point++, points++, texcoords += 2, texcoords_second += 2, colors++) {
                     index = D_L00_001E1380_2d73e8[row][point];
                     source = &D_L00_001E12C0_2d73e8[index];
@@ -2946,14 +2948,17 @@ void FUN_L00_002d73e8(P *p) {
             }
             quad.texture[3] = 0x8000000048ULL;
             alpha = (u32)alpha << 24;
+            source_texcoords = D_L00_001E11E0_2d73e8;
             for (point = 0, points = quad.points, texcoords = quad.texcoords, texcoords_second = quad.texcoords + 1, colors = quad.colors; point < 4; point++, points++, texcoords += 2, texcoords_second += 2, colors++) {
                 source = (V *)(D_L00_001E11A0_2d73e8 + point * 16);
                 points->x = source->x;
                 points->y = source->y * x;
                 points->z = source->z * y;
                 points->w = 1.0f;
-                *texcoords = D_L00_001E11E0_2d73e8[point * 2] - *phase;
-                *texcoords_second = D_L00_001E11E0_2d73e8[point * 2 + 1];
+                f = source_texcoords[0] - *phase;
+                *texcoords_second = source_texcoords[1];
+                source_texcoords += 2;
+                *texcoords = f;
                 *colors = ((u32)alpha * D_L00_001DADA0_2d73e8[point]) | q->col;
                 FUN_001ff6f8_2d73e8(points, points, transform);
             }
@@ -2967,6 +2972,7 @@ void FUN_L00_002d73e8(P *p) {
     positive_transform[3].z -= q->f50;
     if (q->flag42 == 0) {
         for (row = 0; row < 6; row++) {
+            source_texcoords = D_L00_001E11E0_2d73e8;
             for (point = 0, points = quad.points, texcoords = quad.texcoords, texcoords_second = quad.texcoords + 1, colors = quad.colors; point < 4; point++, points++, texcoords += 2, texcoords_second += 2, colors++) {
                 index = D_L00_001E1380_2d73e8[row][point];
                 source = &D_L00_001E1200_2d73e8[index];
