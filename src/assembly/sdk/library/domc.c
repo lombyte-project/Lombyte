@@ -22,6 +22,7 @@ void _doMC(struct MpegDecoder *mpeg, s32 arg1) {
     s32 i;
     u8 *slot;
     u8 *count_slot;
+    s32 count_offset;
 
     sp0 = arg1;
     slot = (u8 *)mpeg + arg1 * 0x140;
@@ -35,7 +36,7 @@ void _doMC(struct MpegDecoder *mpeg, s32 arg1) {
         goto block_6;
     }
     sp8 = (u8 *)mpeg + 0x6C0;
-    for (; i < *(s32 *)(sp4 + sp0 * 0x140); i++) {
+    for (; i < *(s32 *)(sp4 + (count_offset = sp0 * 0x140)); i++) {
         var30 = (u8 *)mpeg + 0x5B8;
         base2 = (u8 *)mpeg + 0x5C8;
         idx = i * 4 + sp0 * 0x140;
@@ -54,28 +55,28 @@ block_6:
     sp8 = (u8 *)mpeg + 0x6C0;
 block_7:
     var30 = (u8 *)mpeg + 0x6B8;
-    if (*(s32 *)((u8 *)sp8 + sp0 * 0x140) == 0) {
+    if (*(s32 *)((u8 *)sp8 + (count_offset = sp0 * 0x140)) == 0) {
         goto block_10;
     }
-    if (*(s32 *)((u8 *)mpeg + sp0 * 0x140 + 0x6CC) == 0) {
+    if (*(s32 *)((u8 *)mpeg + (count_offset = sp0 * 0x140) + 0x6CC) == 0) {
         goto block_10;
     }
     _Error(mpeg, D_00153770);
 block_10:
-    if (*(s32 *)((u8 *)sp8 + sp0 * 0x140) == 0) {
+    if (mpeg->mb_buf[sp0].unk130 == 0) {
         goto block_13;
     }
-    func_001271D8(*(s32 *)(var30 + sp0 * 0x140), *(s32 *)((u8 *)mpeg + sp0 * 0x140 + 0x594));
+    func_001271D8(mpeg->mb_buf[sp0].unk128, mpeg->mb_buf[sp0].ipu_out);
     return;
 block_13:
-    if (*(s32 *)((u8 *)mpeg + sp0 * 0x140 + 0x6CC) == 0) {
+    if (mpeg->mb_buf[sp0].unk13C == 0) {
         goto block_16;
     }
-    func_001271D8(*(s32 *)(var30 + sp0 * 0x140), mpeg->mc_work);
+    func_001271D8(mpeg->mb_buf[sp0].unk128, mpeg->mc_work);
     return;
 block_16:
-    func_00127178(*(s32 *)(var30 + sp0 * 0x140), mpeg->mc_work,
-                  *(s32 *)((u8 *)mpeg + sp0 * 0x140 + 0x594));
+    func_00127178(mpeg->mb_buf[sp0].unk128, mpeg->mc_work,
+                  mpeg->mb_buf[sp0].ipu_out);
     return;
 }
 #endif /* NON_MATCHING */

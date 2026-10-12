@@ -69,10 +69,10 @@ void FUN_L00_00241788(s32 *entries, s32 count) {
             if (entry->value < (entry + 1)->value) {
                 id = sorted[i].id;
                 value = sorted[i].value;
-                sorted[i].id = sorted[i + 1].id;
                 sorted[i].value = sorted[i + 1].value;
-                sorted[i + 1].id = id;
+                sorted[i].id = sorted[i + 1].id;
                 sorted[i + 1].value = value;
+                sorted[i + 1].id = id;
                 changed = 0;
             }
         }

@@ -6,7 +6,8 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002484e0.s", FUN_L00_002484e0);
 #else
 #include "rnc/globals.h"
-#define NOT_SDA
+#include "rnc/gameplay/hero.h"
+#define NOT_SDA __attribute__((section(".data")))
 #define MACRO_ADDR
 
 typedef struct {
@@ -18,8 +19,18 @@ typedef struct {
 
 typedef s32 (*MapFilterCallback)(f32, f32, f32, s32, s32);
 
+/* Retail accesses +0xC, +0x38, and +0x1A4 from the same overlay base. */
+typedef struct {
+    u8 pad0[0xC];
+    u8 *mask;
+    u8 pad10[0x28];
+    u8 *packed;
+    u8 pad3C[0x168];
+    u8 exclusion[128];
+} MapBitGrid;
+
 extern s32 D_L00_00184218 __asm__("D_L00_00184218") NOT_SDA;
-extern u8 D_L00_001841F0[] __asm__("D_L00_001841F0") NOT_SDA;
+extern MapBitGrid D_L00_001841F0 __asm__("D_L00_001841F0") NOT_SDA;
 extern MapFilter D_L00_00182BA0[19][16] __asm__("D_L00_00182BA0") NOT_SDA;
 extern MapFilterCallback D_L00_00183F90[19][8] __asm__("D_L00_00183F90") NOT_SDA;
 extern s32 D_001413DC __asm__("D_001413DC") NOT_SDA;
@@ -43,8 +54,8 @@ void FUN_L00_002484e0(f32 *position) {
     s32 y_max;
     s32 level;
     s32 state;
-    s32 mode15;
-    s32 mode16;
+    s64 mode15;
+    s64 mode16;
     s32 i;
 
     if (D_L00_00184218 == 0) return;
@@ -57,12 +68,13 @@ void FUN_L00_002484e0(f32 *position) {
     y = (s32)(py * 512.0f) + 1;
     if (x < 0 || y < 0 || x >= 512 || y >= 512) return;
 
-    level = current_level_index;
+    /* Retail uses an absolute load of current_level_index for the filter table. */
+    level = *(s32 *)0x0015ed84;
     if (level < 0) level = 0;
     if (level > 18) level = 0;
-    state = (D_001413DC == 17 || D_001413DC == 18 || D_00140634 == 1);
-    mode15 = D_001413DC == 15;
-    mode16 = D_001413DC == 16;
+    state = (hero.state.control_mode == 17 || hero.state.control_mode == 18 || hero.base_condition == 1);
+    mode15 = hero.state.control_mode == 15;
+    mode16 = hero.state.control_mode == 16;
     x_min = x - 16;
     y_min = y - 16;
     x_max = x + 16;
@@ -73,9 +85,9 @@ void FUN_L00_002484e0(f32 *position) {
         f32 value;
         MapFilterCallback callback;
         filters[i] = 1;
-        if (i == 0) continue;
+        if (i <= 0) continue;
         if (D_L00_00182BA0[level][i].lower != D_L00_00182BA0[level][i].upper) {
-            value = *(f32 *)(D_001413D0 + 0x18);
+            value = *(f32 *)((u8 *)hero.moby + 0x18);
             if (D_L00_00182BA0[level][i].lower > value || value > D_L00_00182BA0[level][i].upper) {
                 filters[i] = 0;
                 continue;
@@ -89,7 +101,7 @@ void FUN_L00_002484e0(f32 *position) {
         if ((flags & 8) && mode16) goto reject;
         if ((flags & 16) && !mode15) goto reject;
         if ((flags & 32) && mode15) goto reject;
-        if ((flags & 64) && !D_0013F658) goto reject;
+        if ((flags & 64) && !hero.unk308) goto reject;
         if ((flags & 128) && !D_L00_001844A8[D_L00_00182BA0[level][i].index]) goto reject;
 #define CHECK_CALLBACK(j) \
         if ((flags & (0x100U << (j))) != 0) { \
@@ -110,31 +122,42 @@ reject:
         filters[i] = 0;
     }
 
-    if (x_min < 0) x_min = 0;
-    if (y_min < 0) y_min = 0;
-    if (x_max > 511) x_max = 511;
-    if (y_max > 511) y_max = 511;
-    for (; y_min < y_max; y_min++) {
-        s64 rowbase = (y_min >> 5) << 4;
-        s64 row = y_min << 6;
-        s64 filterrow = ((y_min - y) + 16) * 4;
-        s32 column = x_min;
-        for (; column < x_max; column++) {
-            s32 bitmap_column = column < 0 ? column + 7 : column;
-            u8 *pixel = *(u8 **)(D_L00_001841F0 + 0xc) + row + (bitmap_column >> 3);
-            if (*pixel != 0) {
-                s32 bit = 1 << (column & 7);
-                if (*pixel & bit) {
-            s32 test_column = column + 16 - x;
-            s32 byte_column = test_column < 0 ? test_column + 7 : test_column;
-                    u8 check = D_L00_00184394[filterrow + (byte_column >> 3)];
-                    if (((check >> (test_column - ((byte_column >> 3) << 3))) & 1) == 0) {
-                        u8 packed;
-                        s32 selected;
-                        FUN_L00_00249d80((column >> 5) + rowbase);
-                        packed = (*(u8 **)(D_L00_001841F0 + 0x38))[(y_min & 31) * 16 + ((column & 31) >> 1)];
-                        selected = (column & 1) ? packed >> 4 : packed & 15;
-                        if (filters[selected] != 0) *pixel &= ~bit;
+    {
+        s64 column_start = x_min;
+        s64 column_end = x_max;
+        s64 row_end = y_max;
+        if (column_start < 0) column_start = 0;
+        if (y_min < 0) y_min = 0;
+        if (column_end > 511) column_end = 511;
+        if (row_end > 511) row_end = 511;
+        {
+            s32 test_start = (s32)column_start + 16;
+            s32 byte_start = (s32)column_start + 23;
+            s32 column_offset = -x;
+            for (; y_min < row_end; y_min++) {
+                s32 rowbase = (y_min >> 5) << 4;
+                s32 row = y_min << 6;
+                s32 filterrow = ((y_min - y) + 16) * 4;
+                s64 column = column_start;
+                s32 test_column = test_start + column_offset;
+                s32 byte_column = byte_start + column_offset;
+                for (; column < column_end; column = (s32)column + 1, test_column++, byte_column++) {
+                    s32 bitmap_column = column < 0 ? (s32)column + 7 : (s32)column;
+                    u8 *pixel = D_L00_001841F0.mask + row + (bitmap_column >> 3);
+                    if (*pixel != 0) {
+                        s32 bit = 1 << ((s32)column & 7);
+                        if (*pixel & bit) {
+                            s32 bitmap_column = test_column < 0 ? byte_column : test_column;
+                            u8 check = D_L00_001841F0.exclusion[filterrow + (bitmap_column >> 3)];
+                            if (((check >> (test_column - ((bitmap_column >> 3) << 3))) & 1) == 0) {
+                                u8 packed;
+                                s32 selected;
+                                FUN_L00_00249d80(((s32)column >> 5) + rowbase);
+                                packed = D_L00_001841F0.packed[(y_min & 31) * 16 + (((s32)column & 31) >> 1)];
+                                selected = ((s32)column & 1) ? packed >> 4 : packed & 15;
+                                if (filters[selected] != 0) *pixel &= ~bit;
+                            }
+                        }
                     }
                 }
             }

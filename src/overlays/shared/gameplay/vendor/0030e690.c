@@ -26,7 +26,115 @@ void FUN_L11_0030e690(char *moby) {
         *(float *)(s + 8) = *(float *)(moby + 0x18);
     } while (*p++ >= 0);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030ee00.s", FUN_L11_0030ee00);
+#else
+extern char D_0013F350_ee00[] __asm__("D_0013F350");
+extern unsigned char D_0013D4C3;
+extern unsigned int D_001413DC;
+extern char D_00141968_ee00[] __asm__("D_00141968");
+#define D_00141CF2 (*(unsigned short *)(stats + 0x38a))
+#define D_00141CC8 (*(unsigned short *)(stats + 0x360))
+#define D_00141CCA (*(unsigned short *)(stats + 0x362))
+#define D_00141CCC (*(unsigned int *)(stats + 0x364))
+extern int D_0015EEA4;
+extern int D_0013EEA4 __attribute__((sda));
+extern unsigned char D_0014C050[];
+extern unsigned char D_L00_001BA5D0[];
+extern unsigned char D_L00_001BB230[];
+extern unsigned char D_L00_0015FC88[];
+extern int D_0014CC90[];
+extern float D_0013F3D0[];
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
+extern void FUN_L00_00203908(int, int);
+
+void FUN_L11_0030ee00(char *moby) {
+    int elapsed;
+    int threshold;
+    int id;
+    unsigned char state = *(unsigned char *)(moby + 0x20);
+    char *owner = *(char **)(moby + 0x78);
+    if (state == 0) goto initialize;
+    if (state == 1) goto active;
+    return;
+initialize:
+    {
+        char *stats = D_00141968_ee00;
+        int level = current_level_index;
+        *(volatile unsigned short *)(stats + 0x362) = 0;
+        *(volatile unsigned short *)(stats + 0x360) = 0;
+        *(unsigned short *)(owner + 0x3E) |= 8;
+        if (level == 11 && *(unsigned char *)(moby + 0xB0) != 0xff) {
+            unsigned short uid = *(unsigned short *)(moby + 0xB2);
+            if (D_L00_001BB230[0x454 + (short)uid] != 0 ||
+                ((D_0014CC90[(short)uid >> 5] >> (uid & 31)) & 1)) {
+                *(unsigned char *)(moby + 0x20) = 2;
+                *(float *)(moby + 0x18) -= 1.5f;
+                allocate_voice_for_target_entry(0, 0, moby);
+                return;
+            }
+        }
+        *(unsigned char *)(moby + 0x20) = 1;
+        return;
+    }
+active:
+    {
+    char *hero_state = D_0013F350_ee00;
+    if (*(int *)(hero_state + 0x2fc) == (int)moby && D_0013D4C3 != 0 &&
+        *(short *)(hero_state + 0x30e) == 0 && *(int *)(hero_state + 0x2084) == 0x22) {
+        if (current_level_index == 11 && *(unsigned char *)(moby + 0xB0) != 0xff) {
+            id = *(unsigned char *)(moby + 0xB0);
+            D_L00_001BA5D0[0x454 + *(short *)(moby + 0xB2)] = id + 2;
+            id = *(volatile unsigned char *)(moby + 0xB0);
+            if (id == 0xff) goto change_state;
+            if (D_L00_0015FC88[id] == 0xff) goto change_state;
+            if (D_0014C050[0xb0 + id] != 0xff) goto change_state;
+            D_L00_001BB230[0x454 + *(short *)(moby + 0xB2)] = id + 2;
+        }
+change_state:
+        *(unsigned char *)(moby + 0x20) = 2;
+        *(float *)(moby + 0x18) -= 1.5f;
+        allocate_voice_for_target_entry(0, 0, moby);
+    }
+    }
+    if (*(unsigned char *)(moby + 0xB0) == 0xff) return;
+    if (!(vector_distance_xy(moby + 0x10, D_0013F3D0) < 4.0f)) return;
+    if (D_001413DC >= 2) return;
+    {
+    char *stats = D_00141968_ee00;
+    if (D_0013D4C3 == 0) {
+        elapsed = scale_game_frames(D_0015EEA4) - D_00141CF2 * 600;
+        threshold = (int)((float)scale_game_frames(18) * 60.0f);
+        if (elapsed <= threshold && D_00141CF2 * 600 != 0) {
+            if (scale_game_frames(D_0013EEA4) / 600 > D_00141CF2)
+                D_00141CF2 = scale_game_frames(D_0013EEA4) / 600;
+        } else {
+            FUN_L00_00203908(0x2b02, 0x71);
+        }
+    } else if (D_00141CC8 == 0) {
+        D_00141CC8 = 1;
+        if (D_00141CCA < scale_game_frames(D_0013EEA4) / 600)
+            D_00141CCA = scale_game_frames(D_0013EEA4) / 600;
+        D_00141CCC |= (1u << (current_level_index & 31)) | 0x80000000u;
+    } else {
+        elapsed = scale_game_frames(D_0013EEA4) - D_00141CCA * 600;
+        threshold = (int)((float)scale_game_frames(18) * 60.0f);
+        if (elapsed <= threshold && D_00141CCA * 600 != 0) {
+            if (scale_game_frames(D_0013EEA4) / 600 > D_00141CCA)
+                D_00141CCA = scale_game_frames(D_0013EEA4) / 600;
+        } else {
+            FUN_L00_00203908(0x2b01, 0x6c);
+        }
+    }
+    }
+}
+#undef D_00141CF2
+#undef D_00141CC8
+#undef D_00141CCA
+#undef D_00141CCC
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310cf8.s", FUN_L11_00310cf8);
 #else
@@ -280,8 +388,8 @@ int FUN_L11_003192c8(char *moby) {
         *(long long *)(packet + 0x30) = 0;
         phase = integer_to_float((D_L11_0015F5CC + 3) & 3) / (*(float *)&D_L11_001623F0_d * 4.0f);
         source = D_L11_001F1490;
-        position = (float *)(packet + 0x10);
-        colors = (int *)packet;
+        position = (float *)(stack_data + 0x50 + i * 0x90);
+        colors = (int *)(stack_data + 0x40 + i * 0x90);
         for (j = 0; j < 4; j++) {
             float t;
             position[0] = source[0];
@@ -302,7 +410,7 @@ int FUN_L11_003192c8(char *moby) {
     do {
         unsigned short entry = *(unsigned short *)list;
         char *linked = (char *)(D_L11_0015FFD8 + ((entry & 0x7fff) << 8));
-        if (linked[0x31] != 0 && *(short *)(linked + 0xa6) == *(short *)(moby + 0xa6)) {
+        if (*(unsigned char *)(linked + 0x31) != 0 && *(short *)(linked + 0xa6) == *(short *)(moby + 0xa6)) {
             char *trail = *(char **)(linked + 0x78);
             for (i = 0; i < *(int *)(trail + 0x2c0); i++) {
                 int next = *(int *)(trail + 0x2c4) - i;

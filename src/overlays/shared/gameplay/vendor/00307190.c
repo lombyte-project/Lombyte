@@ -211,19 +211,21 @@ void FUN_L08_00307cf0(char *moby) {
         subtract_vector_xyz(&initial_delta, D_L08_001675C0, data + 0x30);
         *(OvlQuad *)D_L08_00160250 = initial_delta.q;
         base.q = *(OvlQuad *)D_L08_001675C0;
+        count = D_L08_00162374;
         FUN_L00_00262cf0(&base, &base, 16.0f,
                           *(float *)(D_L08_001675C0 + 0x18),
                           *(float *)(D_L08_001675C0 + 0x14));
         base.f[2] = *(float *)(D_L08_001675C0 + 8) + D_L08_00162344;
-        count = D_L08_00162374;
         for (i = count; i > 0; i--) {
             pos = base;
             angle = random_float_between_alt(0.0f, 6.2831855f);
             magnitude = fast_cos(angle);
-            pos.f[0] += magnitude * random_float_between_alt(0.0f, D_L08_00162348);
+            magnitude *= random_float_between_alt(0.0f, D_L08_00162348);
+            pos.f[0] += magnitude;
             angle = random_float_between_alt(0.0f, 6.2831855f);
             magnitude = fast_sin(angle);
-            pos.f[1] += magnitude * random_float_between_alt(0.0f, D_L08_00162348);
+            magnitude *= random_float_between_alt(0.0f, D_L08_00162348);
+            pos.f[1] += magnitude;
             subtract_vector_xyz(&delta, &pos, D_L08_001675C0);
             distance = vector_length_xy(&delta);
             if (distance <= 8.0f) {
@@ -243,12 +245,11 @@ void FUN_L08_00307cf0(char *moby) {
             D_L08_00160260 = *(float *)(D_L08_001675C0 + 8) - D_L08_0016235C;
             height = ground_height_at(&pos);
             if (height < *(float *)(D_L08_001675C0 + 8) + D_L08_00162344) {
-                if (height < D_L08_00160260)
-                    height = D_L08_00160260;
+                height = height < D_L08_00160260 ? D_L08_00160260 : height;
                 if (kind == 0)
-                    FUN_L08_00272cb8(&pos, distance <= 8.0f ? 0 : (void *)D_L08_00162358, &velocity, height);
+                    FUN_L08_00272cb8(&pos, 8.0f < distance ? (void *)D_L08_00162358 : 0, &velocity, height);
                 if (kind == 1)
-                    FUN_L08_0027f5f0(&pos, distance <= 8.0f ? 0 : D_L08_00162358, &velocity, height);
+                    FUN_L08_0027f5f0(&pos, 8.0f < distance ? D_L08_00162358 : 0, &velocity, height);
             }
         }
         base.q = *(OvlQuad *)D_L08_001675C0;
@@ -262,15 +263,16 @@ void FUN_L08_00307cf0(char *moby) {
             pos = base;
             angle = random_float_between_alt(0.0f, 6.2831855f);
             magnitude = fast_cos(angle);
-            pos.f[0] += magnitude * random_float_between_alt(0.0f, 8.0f);
+            magnitude *= random_float_between_alt(0.0f, 8.0f);
+            pos.f[0] += magnitude;
             angle = random_float_between_alt(0.0f, 6.2831855f);
             magnitude = fast_sin(angle);
-            pos.f[1] += magnitude * random_float_between_alt(0.0f, 8.0f);
+            magnitude *= random_float_between_alt(0.0f, 8.0f);
+            pos.f[1] += magnitude;
             D_L08_00160260 = *(float *)(D_L08_001675C0 + 8) - D_L08_0016235C;
             height = ground_height_at(&pos);
             if (height < *(float *)(D_L08_001675C0 + 8) + D_L08_00162344) {
-                if (height < D_L08_00160260)
-                    height = D_L08_00160260;
+                height = height < D_L08_00160260 ? D_L08_00160260 : height;
                 if (kind == 0)
                     FUN_L08_00272cb8(&pos, 0, &velocity, height);
                 if (kind == 1)
@@ -287,10 +289,12 @@ void FUN_L08_00307cf0(char *moby) {
                 pos = base;
                 angle = random_float_between_alt(0.0f, 6.2831855f);
             magnitude = fast_cos(angle);
-            pos.f[0] += magnitude * random_float_between_alt(0.0f, 30.0f);
+            magnitude *= random_float_between_alt(0.0f, 30.0f);
+            pos.f[0] += magnitude;
                 angle = random_float_between_alt(0.0f, 6.2831855f);
             magnitude = fast_sin(angle);
-            pos.f[1] += magnitude * random_float_between_alt(0.0f, 30.0f);
+            magnitude *= random_float_between_alt(0.0f, 30.0f);
+            pos.f[1] += magnitude;
                 FUN_L00_002634f8(&pos);
             }
             base.q = *(OvlQuad *)D_L08_001675C0;
@@ -302,10 +306,12 @@ void FUN_L08_00307cf0(char *moby) {
                 pos = base;
                 angle = random_float_between_alt(0.0f, 6.2831855f);
             magnitude = fast_cos(angle);
-            pos.f[0] += magnitude * random_float_between_alt(0.0f, 8.0f);
+            magnitude *= random_float_between_alt(0.0f, 8.0f);
+            pos.f[0] += magnitude;
                 angle = random_float_between_alt(0.0f, 6.2831855f);
             magnitude = fast_sin(angle);
-            pos.f[1] += magnitude * random_float_between_alt(0.0f, 8.0f);
+            magnitude *= random_float_between_alt(0.0f, 8.0f);
+            pos.f[1] += magnitude;
                 FUN_L00_002634f8(&pos);
             }
         }

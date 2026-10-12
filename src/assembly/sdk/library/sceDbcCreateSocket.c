@@ -30,9 +30,11 @@ extern struct DbcRpcBuffer D_0015B080;
 extern s32 sceSifCallRpc();
 extern s32 debug_print_stub() __asm__("func_00124A20");
 s32 sceDbcCreateSocket(struct DbcSocketParams *arg0, s32 arg1, s32 arg2) {
+    u8 *source_name = arg0->name;
     struct DbcRpcBuffer *state = &D_0015B080;
-    s32 i;
+    s32 i = 0;
     s32 even;
+    u8 *target_name;
     state->unk28 = arg1;
     even = arg0->unk0;
     state->unk2C = arg2;
@@ -42,9 +44,11 @@ s32 sceDbcCreateSocket(struct DbcSocketParams *arg0, s32 arg1, s32 arg2) {
     state->unk8 = arg0->unk8;
     state->unkC = arg0->unkC;
     state->unk10 = arg0->unk10;
-    for (i = 0; i < 0x10; i++) {
-        state->pad_14[i] = arg0->name[i];
-    }
+    target_name = state->pad_14;
+    do {
+        target_name[i] = source_name[i];
+        i++;
+    } while (i < 0x10);
     if (sceSifCallRpc(D_0015B008, 0x80000901, 0, &D_0015B080, 0x400, &D_0015B080, 0x400, 0, 0) <
         0) {
         debug_print_stub(D_00153578);

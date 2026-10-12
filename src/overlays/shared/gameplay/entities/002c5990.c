@@ -430,7 +430,7 @@ void FUN_L09_002c6230(struct Moby *moby) {
     } else {
         target = vars->target;
         if (target != 0 && target->state != 0xfe && target->state != 0xfd) {
-            *(volatile u128 *)(data + 0x120) = *(volatile u128 *)&target->pos;
+            *(volatile Vec4 *)(data + 0x120) = *(volatile Vec4 *)&target->pos;
         } else {
             vars->target = 0;
             vars->unk164 = 2;

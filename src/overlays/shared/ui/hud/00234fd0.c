@@ -112,39 +112,35 @@ void FUN_L00_00235310(int n) {
     }
     D_L00_0017E4D8.t->c[n] = 0;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235668.s", FUN_L00_00235668);
-#else
 extern volatile int D_L00_0015FA70;
 extern volatile int D_L00_0015FA74;
-extern int D_L00_0015FA78;
-extern int D_L00_0015FA7C;
+extern volatile int D_L00_0015FA78;
+extern volatile int D_L00_0015FA7C;
 extern int D_L00_0015FFD8;
-extern int D_L00_0015FFE0;
-extern int D_L00_0015FFE8;
-extern int D_L00_0015F728 __attribute__((sda));
+extern volatile int D_L00_0015FFE0;
+extern volatile int D_L00_0015FFE8;
+extern volatile int D_L00_0015F728 __attribute__((sda));
 
 void FUN_L00_00235668(int state) {
     int oldState = D_L00_0015F728;
     if (state != oldState) {
         int old70, old74, old78, old7C, oldDC, oldE0, oldE8;
-        oldState ^= 1;
+        oldDC = D_L00_0015FFD8;
         old70 = D_L00_0015FA70;
-        D_L00_0015FA70 = D_L00_0015FFD8;
-        old74 = D_L00_0015FA74;
+        D_L00_0015FA70 = oldDC;
         oldDC = D_L00_0015FFDC;
+        old74 = D_L00_0015FA74;
         D_L00_0015FA74 = oldDC;
-        oldE0 = D_L00_0015FFE0;
+        oldDC = D_L00_0015FFE0;
         old78 = D_L00_0015FA78;
-        old7C = D_L00_0015FA7C;
         oldE8 = D_L00_0015FFE8;
-        D_L00_0015F728 = oldState;
-        D_L00_0015FFD8 = old70;
+        old7C = D_L00_0015FA7C;
+        D_L00_0015F728 = oldState ^ 1;
+        *(volatile int *)&D_L00_0015FFD8 = old70;
         D_L00_0015FFDC = old74;
         D_L00_0015FFE0 = old78;
-        D_L00_0015FA78 = oldE0;
+        D_L00_0015FA78 = oldDC;
         D_L00_0015FFE8 = old7C;
         D_L00_0015FA7C = oldE8;
     }
 }
-#endif /* NON_MATCHING */

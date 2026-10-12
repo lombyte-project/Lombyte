@@ -62,7 +62,7 @@ void FUN_L07_0031d2e0(char *moby) {
         i = 0;
         if (count > 0) do {
             char *current_path = D_L07_001B0530[data[1]];
-            int next = (i + 1) % *(int *)current_path;
+            int next = (i + 1) % count;
             float length = fast_vec_dist(current_path + 0x10 + i * 0x10,
                                          current_path + 0x10 + next * 0x10);
             *(float *)(D_L07_001B0530[data[1]] + 0x1c + i * 0x10) = length;
@@ -83,7 +83,7 @@ state_one:
         for (i = 0; list[i] != -1; i++) {
             int id = list[i];
             float value = convert_integer_to_float(D_0013D428[id]);
-            float scale = convert_integer_to_float(D_L07_001C4130[id].scale);
+            float scale = convert_integer_to_float(((L07ScaleRow *)((char *)D_L07_001C4130 + id * 0x18))->scale);
             float ratio = value / scale;
             float step = random_float_between(0.0f, *(float *)(data + 8));
             float min_ratio = *(float *)(data + 2) / 100.0f;

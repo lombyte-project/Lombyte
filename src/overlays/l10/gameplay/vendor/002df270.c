@@ -9,9 +9,6 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002df270.s", FUN_L10_002df270);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dfc38.s", FUN_L10_002dfc38);
-#else
 typedef struct Hit_2DFC38 { float x, y; char pad8[8]; float f10[4]; struct Moby *moby; char pad24[8]; float f2C; int f30; } Hit_2DFC38;
 typedef struct MobyData_2DFC38 { char pad0[0x20]; float f20; char pad24[2]; short f26; char pad28[0x10]; int f38; char pad3C[0x24]; char f60[0x10]; float f70, f74, f78, f7C; char pad80[4]; int f84; char pad88[0x15]; unsigned char f9D; char pad9E[0x22]; char fC0[0x40]; int f100, f104; char pad108[8]; char f110[7]; unsigned char f117; char pad118[0x18]; char f130[0x44]; int f174; float f178; int f17C; float f180; int f184; float f188; int f18C; char pad190[4]; int f194; } MobyData_2DFC38;
 typedef struct Anim_2DFC38 { char pad0[0x30]; float f30[4], f40[4]; char pad50[0x30]; } Anim_2DFC38;
@@ -33,6 +30,8 @@ extern int ahead_f(float, void *, void *) __asm__("FUN_L01_00274b78");
 extern int func_L00_00260FB0_2E2B80(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char D_0013D418 __attribute__((section(".data")));
+typedef struct EventRecord_2DFC38 { unsigned char pad[0x10]; unsigned char flag; } EventRecord_2DFC38;
+extern EventRecord_2DFC38 D_0013D408_2DFC38 __asm__("D_0013D408");
 extern int D_00151F38 __attribute__((sda));
 extern float random_float_between_2DFC38(float, float) __asm__("FUN_002132a8");
 extern float scale_time_2DFC38(float) __asm__("FUN_001f96b0");
@@ -63,30 +62,30 @@ void FUN_L10_002dfc38(struct Moby *moby) {
         hit_update_2DFC38(moby, r, &data->f20, 5, &st, 0, 0, 4);
         if (r != 0) {
             if (data->f20 <= r->f2C) {
-                if (D_00151F38 != 0 && D_0013D418 == 0) {
-                    D_0013D418 = 1;
-                    allocate_voice_for_bank_entry_2DFC38(1, (int)(&D_0013D418 - 0x10), 0);
+                if (D_00151F38 != 0 && D_0013D408_2DFC38.flag == 0) {
+                    D_0013D408_2DFC38.flag = 1;
+                    allocate_voice_for_bank_entry_2DFC38(1, 0, 0);
                     play_sound_2DFC38(0x53d6, -1);
                 }
                 data->f20 = 0.0f;
                 moby->flags &= 0xEFFF;
                 if (moby->prev_seq != 5) blend_moby_animation(moby, 5, 0, game_frames_2DFC38(10));
                 moby->state = 11;
-                data->f9D = 3;
                 data->f70 = D_0015ED70 * 26.0f;
+                data->f9D = 3;
                 data->f74 = 0.0005f;
                 data->f84 = 9;
                 data->f78 = D_0015ED6C * 7.0f;
                 data->f7C = D_0015ED6C * 10.0f;
-                if ((r->f30 & 1) == 0) ang = angle_atan2(moby->pos.x - r->x, moby->pos.y - r->y);
-                else ang = angle_atan2(r->f10[0], r->f10[1]);
+                if (r->f30 & 1) ang = angle_atan2(r->f10[0], r->f10[1]);
+                else ang = angle_atan2(moby->pos.x - r->x, moby->pos.y - r->y);
                 trooper_start_knockback(moby, data->f60, ang, 5, 1, 0);
                 data->f117 = 0x78;
                 trooper_anim_update(moby, data->f110);
                 func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
             } else {
-                data->f117 = 0xfa;
                 data->f20 = data->f20 - r->f2C;
+                data->f117 = 0xfa;
                 data->f26 = game_frames_2DFC38(60);
                 trooper_anim_update(moby, data->f110);
             }
@@ -123,7 +122,6 @@ void FUN_L10_002dfc38(struct Moby *moby) {
     }
     if (data->f100 == 0) data->f100 = D_001414D0_2DFC38[0];
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -1166,49 +1164,55 @@ typedef struct Hit_2E3EF0 {
 } Hit_2E3EF0;
 extern int D_00140408, D_001403E0, D_001413D4, D_001413E0, D_0013F4E8;
 extern int D_001413D0, D_0013F590, D_0013F58C;
-extern unsigned char D_001413F4[], D_0013D419;
+extern unsigned char D_001413F4[];
+typedef struct EventRecord_2E3EF0 { char pad[0x11]; unsigned char flag; } EventRecord_2E3EF0;
+extern EventRecord_2E3EF0 D_0013D419 __asm__("D_0013D408") __attribute__((section(".data")));
 extern int D_0014ED84_2E3EF0 __asm__("D_0014ED84") __attribute__((sda));
 extern float D_0015ED70;
+extern float D_L10_00161E2C __attribute__((sda));
 extern int *D_L10_001B0930[];
 extern float random_float_between(float, float);
 extern float scale_time(float);
 extern int truncate_float_2E3EF0(float) __asm__("FUN_001fa6d0");
 extern void tick_timer_2E3EF0(void *) __asm__("FUN_001f9740");
 extern Hit_2E3EF0 *find_hit_2E3EF0(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int update_hit_2E3EF0(void *, void *, void *, int, unsigned int *, float *, int, int) __asm__("FUN_00213928");
-extern void tick_short_2E3EF0(void *) __asm__("FUN_001f9770");
-extern int game_frames_2E3EF0(int) __asm__("FUN_001f2588");
+extern int update_hit_2E3EF0(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int tick_short_2E3EF0(void *) __asm__("FUN_001f9770");
+extern int game_frames_2E3EF0(int) __asm__("FUN_001f96f8");
 extern void special_2E3EF0(int, int, int) __asm__("FUN_0022db10");
 extern void sound_2E3EF0(int, int) __asm__("FUN_L00_00263d40");
 extern int hit_test_2E3EF0(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void vector_sub_2E3EF0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void vector_scale_2E3EF0(float, void *, void *) __asm__("FUN_001f9bf8");
+extern float D_L10_00174300[];
+extern void vector_scale_2E3EF0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float vector_dot_2E3EF0(void *, void *) __asm__("FUN_001f9ab0");
 extern float abs_float_2E3EF0(float) __asm__("FUN_001f99c0");
 extern float angle_atan2(float, float);
 extern void set_vel_2E3EF0(float, float, void *) __asm__("FUN_L03_00250a78");
 extern void aim_2E3EF0(void *, void *, void *, void *) __asm__("FUN_L00_0025ab48");
-extern void start_move_2E3EF0(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
+extern void start_move_2E3EF0(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void update_anim_2E3EF0(void *, void *) __asm__("FUN_L00_0025d458");
 extern void finish_anim_2E3EF0(void *, void *) __asm__("FUN_L00_0025d538");
 extern float vector_distance(void *, void *);
 extern float vector_distance_2E3EF0(void *, void *) __asm__("FUN_001f9b80");
 extern float vector_distance_2E3EF0_b(void *, void *) __asm__("FUN_001f9b48");
-extern void follow_2E3EF0(float, void *, void *) __asm__("FUN_L01_00274b78");
-extern void follow_path_2E3EF0(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern int follow_2E3EF0(float, void *, void *) __asm__("FUN_L01_00274b78");
+extern int follow_path_2E3EF0(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern void set_state_2E3EF0(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L10_002e3ef0(void *moby_ptr) {
     struct Moby *moby = moby_ptr;
     unsigned char *data = moby->pvars;
     Hit_2E3EF0 *hit;
-    unsigned int status = 1;
-    float damage = 0.0f;
+    int status;
+    float damage;
     int effect;
+    short frames;
+    unsigned long state;
     int *path;
-    float from[4], to[4], vector[4], unit[4];
+    float from[4], to[4], unit[4], vector[4], difference[4];
     float angle, distance;
-    if (D_00140408 == 0x15 && *(void **)(*(char **)(D_001403E0 + 0x78) + 0x10) == moby) {
+    if (hero.items[0].item_id == 0x15 && *(void **)(*(char **)((int)hero.items[0].moby + 0x78) + 0x10) == moby) {
         FUN_L10_002e0138(moby);
         if (moby->state == 1) moby->state = 2;
     }
@@ -1218,29 +1222,32 @@ void FUN_L10_002e3ef0(void *moby_ptr) {
         *(int *)(data + 0x38) = 0;
     }
     tick_timer_2E3EF0(data + 0x1ac);
+    status = 1;
+    damage = 0.0f;
     hit = find_hit_2E3EF0(moby, 0xb30000, 0);
     effect = update_hit_2E3EF0(moby, hit, data + 0x20, 0, &status, &damage, 0, 4);
     tick_short_2E3EF0(data + 0x26);
-    if (status >= 2 && moby->state != 11 && moby->state != 12) {
+    if ((unsigned int)status < 2 || moby->state == 11 || moby->state == 12) goto finish_hit;
+    {
         if (D_0014ED84_2E3EF0 == 10 && hit != 0 && hit->moby != 0 && hit->moby->oclass == 0x31a) {
-            if (*(int *)(data + 0x1ac) != 0 && D_0013D419 == 0) {
-                D_0013D419 = 1;
+            if (*(int *)(data + 0x1ac) != 0 && D_0013D419.flag == 0) {
+                D_0013D419.flag = 1;
                 special_2E3EF0(1, 0, 0);
                 sound_2E3EF0(0x53d6, -1);
             }
         }
-        if (*(short *)(data + 0x26) != 0 && *(unsigned char *)((char *)hit + 0x28) == 0 && damage < 3.0f) {
-            damage = 0.0f;
+        if (*(short *)(data + 0x26) != 0 && *(unsigned char *)((char *)hit + 0x28) == 0) {
             effect = 11;
+            if (damage < 3.0f) damage = 0.0f;
         }
-        if (D_001413D4 == 0x20 || (D_001413E0 == 0x20 && D_0013F4E8 < game_frames_2E3EF0(30))) {
+        if (hero.state.current == 0x20 || (hero.state.prev == 0x20 && hero.state_timer < game_frames_2E3EF0(30))) {
             if (damage > 2.0f) damage = 2.0f;
         }
         if (hit->oclass == moby->oclass) {
             damage = 0.0f;
             effect = 11;
         }
-        if ((unsigned)(moby->prev_seq - 6) < 2 && D_001413F4[0] == 1 && hit->moby == (struct Moby *)D_001413D0) {
+        if ((unsigned)(moby->prev_seq - 6) < 2 && hero.vehicle_mode == 1 && hit->moby == (struct Moby *)hero.moby) {
             damage = 0.0f;
             effect = 11;
         }
@@ -1250,8 +1257,8 @@ void FUN_L10_002e3ef0(void *moby_ptr) {
             from[2] += 1.0f;
             to[2] += 1.0f;
             if (hit_test_2E3EF0(from, to, 2, moby, 0)) {
-                damage = 0.0f;
                 effect = 11;
+                damage = 0.0f;
             }
         } else if (hit->moby != 0 && hit->moby->oclass != 0x359) {
             *(OvlQuad *)from = *(OvlQuad *)&hit->moby->pos;
@@ -1259,10 +1266,10 @@ void FUN_L10_002e3ef0(void *moby_ptr) {
             to[2] += 1.0f;
             if (hit->moby->oclass == 0xba || hit->moby->oclass == 0) from[2] += 0.25f;
             if (hit_test_2E3EF0(from, to, 0x12, moby, 0)) {
-                vector_sub_2E3EF0(vector, to, from);
-                *(OvlQuad *)unit = *(OvlQuad *)vector;
-                vector_scale_2E3EF0(1.0f, unit, unit);
-                vector_scale_2E3EF0(1.0f, vector, (void *)0x174300);
+                vector_sub_2E3EF0(difference, to, from);
+                *(OvlQuad *)unit = *(OvlQuad *)difference;
+                vector_scale_2E3EF0(unit, unit, 1.0f);
+                vector_scale_2E3EF0(vector, D_L10_00174300, 1.0f);
                 if (abs_float_2E3EF0(vector_dot_2E3EF0(unit, vector)) > 0.5f) {
                     damage = 0.0f;
                     effect = 11;
@@ -1280,69 +1287,78 @@ void FUN_L10_002e3ef0(void *moby_ptr) {
         switch (effect) {
         case 0: case 11:
             break;
-        case 1: case 2:
-            moby->state = 11;
-            moby->flags &= 0xefff;
-            break;
         case 3: case 6: case 7: case 8: case 9: case 10:
             moby->state = 10;
-            *(short *)(data + 0x26) = game_frames_2E3EF0(60);
-            *(float *)(data + 0x80) = *(float *)&D_L10_00161E40 * D_0015ED70;
+            frames = game_frames_2E3EF0(60);
+            *(float *)(data + 0x80) = D_L10_00161E2C * D_0015ED70;
+            *(short *)(data + 0x26) = frames;
             set_vel_2E3EF0(0.5f, 0.5f, data + 0x70);
             *(float *)(data + 0xc0) = 8.0f;
             *(float *)(data + 0xc4) = 10.0f;
             *(OvlQuad *)from = *(OvlQuad *)&hit->x;
             aim_2E3EF0(from, &angle, data + 0x88, data + 0x8c);
-            start_move_2E3EF0(angle, moby, data + 0x70, 9, 1, 0);
+            start_move_2E3EF0(moby, data + 0x70, angle, 9, 1, 0);
             data[0x67] = 0xfa;
             update_anim_2E3EF0(moby, data + 0x60);
             break;
         case 4: case 5:
             moby->state = 10;
-            *(short *)(data + 0x26) = game_frames_2E3EF0(60);
-            *(float *)(data + 0x80) = *(float *)&D_L10_00161E40 * D_0015ED70;
-                set_vel_2E3EF0(D_001413F4[0] == 1 ? 1.0f : 3.0f, 0.5f, data + 0x70);
+            frames = game_frames_2E3EF0(60);
+            *(float *)(data + 0x80) = D_L10_00161E2C * D_0015ED70;
+            *(short *)(data + 0x26) = frames;
+            set_vel_2E3EF0(hero.vehicle_mode == 1 ? 1.0f : 3.0f, 0.5f, data + 0x70);
             *(float *)(data + 0xc0) = 3.5f;
             *(float *)(data + 0xc4) = 7.0f;
             *(OvlQuad *)from = *(OvlQuad *)&hit->x;
             aim_2E3EF0(from, &angle, data + 0x88, data + 0x8c);
-            angle = angle_atan2(hit->x, hit->y);
-            start_move_2E3EF0(angle, moby, data + 0x70, 9, 1, 0);
+            start_move_2E3EF0(moby, data + 0x70, angle_atan2(hit->x, hit->y), 9, 1, 0);
             data[0x67] = 0xfa;
             update_anim_2E3EF0(moby, data + 0x60);
             break;
+        case 1: case 2:
+            moby->state = 11;
+            moby->flags &= 0xefff;
+            break;
         }
     }
+finish_hit:
     moby->unkA4 = 0xff;
     finish_anim_2E3EF0(moby, data + 0x60);
-    if ((unsigned)(moby->state - 10) < 3) {
+    state = moby->state;
+    if (state - 10 < 3) {
         *(int *)(data + 0x1d4) = 0;
         return;
     }
     if (*(int *)(data + 0x1ac) != 0) {
         *(float *)(data + 0x1a0) = *(float *)&D_L10_00161E40 + 6.0f;
-    } else if (moby->state != 1) {
-        *(float *)(data + 0x1a0) = *(float *)&D_L10_00161E40;
-    } else {
-        *(float *)(data + 0x1a0) = ((int)moby == D_0013F590 || (int)moby == D_0013F58C) ? 6.0f : 0.0f;
-        if (D_001413F4[0] == 1) FUN_L10_002e0138(moby);
+        goto follow;
     }
-    if (*(int *)(data + 0x1ac) == 0) {
-        distance = vector_distance_2E3EF0(data + 0x170, data + 0x120);
-        if (distance <= *(float *)(data + 0x1a0) &&
-            abs_float_2E3EF0(moby->pos.z - *(float *)(data + 0x128)) <= 3.0f) {
-            path = D_L10_001B0930[*(int *)(data + 0x1b0)];
-            follow_path_2E3EF0(*(float *)(data + 0x1a0), moby, data + 0x120, 0, 0, path + 4, *path);
-        } else {
-            follow_2E3EF0(*(float *)(data + 0x1a0), moby, data + 0x120);
-            *(int *)(data + 0x164) = 2;
-        }
-    } else {
+    if ((unsigned char)state == 1) {
+        if ((int)moby == hero.unk240 || (void *)moby == hero.coll_hit_moby)
+            *(float *)(data + 0x1a0) = 6.0f;
+        else
+            *(int *)(data + 0x1a0) = 0;
+        if (hero.vehicle_mode == 1) FUN_L10_002e0138(moby);
+        goto follow;
+    }
+    *(float *)(data + 0x1a0) = *(float *)&D_L10_00161E40;
+follow:
+    if (*(int *)(data + 0x1ac) != 0) {
         follow_2E3EF0(*(float *)(data + 0x1a0), moby, data + 0x120);
         distance = vector_distance_2E3EF0(data + 0x170, data + 0x120);
         if (distance > *(float *)(data + 0x1a0) ||
             abs_float_2E3EF0(moby->pos.z - *(float *)(data + 0x128)) > 3.0f)
             *(int *)(data + 0x164) = 2;
+    } else {
+        distance = vector_distance_2E3EF0(data + 0x170, data + 0x120);
+        if (*(float *)(data + 0x1a0) < distance ||
+            3.0f < abs_float_2E3EF0(moby->pos.z - *(float *)(data + 0x128))) {
+            follow_2E3EF0(*(float *)(data + 0x1a0), moby, data + 0x120);
+            *(int *)(data + 0x164) = 2;
+        } else {
+            path = D_L10_001B0930[*(int *)(data + 0x1b0)];
+            follow_path_2E3EF0(*(float *)(data + 0x1a0), moby, data + 0x120, 0, 0, path + 4, *path);
+        }
     }
     if (moby->state == 1) *(int *)(data + 0x1d4) = 0;
     else if (*(int *)(data + 0x164) == 2) {
@@ -1352,14 +1368,14 @@ void FUN_L10_002e3ef0(void *moby_ptr) {
                 moby->state = 8;
                 if (moby->prev_seq != 4)
                     set_state_2E3EF0(moby, 4, 0, game_frames_2E3EF0(12));
-            } else if (D_001413F4[0] != 1) {
+            } else if (hero.vehicle_mode != 1) {
                 moby->state = 1;
                 if (moby->prev_seq != 0)
                     set_state_2E3EF0(moby, 0, 0, game_frames_2E3EF0(20));
             }
         }
     } else *(int *)(data + 0x1d4) = 0;
-    if (*(int *)(data + 0x160) == 0) *(int *)(data + 0x160) = D_001413D0;
+    if (*(int *)(data + 0x160) == 0) *(int *)(data + 0x160) = (int)hero.moby;
 }
 #endif
 #define NOT_SDA
@@ -1610,8 +1626,8 @@ void FUN_L10_002e8358(struct Moby *moby) {
                 if (!(D_0013CAE4 & 0x10) || !accepted) return;
                 alternate_item_available[4] = 1;
                 hero.health.hp = 5;
-                current_bolt_count = D_0013ED98 - 4000;
                 D_0013EDA0 = 5;
+                current_bolt_count = D_0013ED98 - 4000;
                 purchase = 0;
             } else {
                 if (alternate_item_available[5] != 0 || timer[1] != 0) return;
@@ -1623,8 +1639,8 @@ void FUN_L10_002e8358(struct Moby *moby) {
                 if (!(D_0013CAE4 & 0x10) || !accepted) return;
                 alternate_item_available[5] = 1;
                 hero.health.hp = 8;
-                current_bolt_count = D_0013ED98 - 30000;
                 D_0013EDA0 = 8;
+                current_bolt_count = D_0013ED98 - 30000;
                 purchase = 1;
             }
             FUN_L00_00298840_vendor(purchase);
@@ -1661,8 +1677,8 @@ extern u16 D_00141CB8 __attribute__((section(".data")));
 extern u16 D_00141CC0 __attribute__((section(".data")));
 extern u16 D_00141CC2 __attribute__((section(".data")));
 extern u32 D_00141CC4 __attribute__((section(".data")));
-#define D_00179890 (*(volatile s32 *)(0x00180000 - 0x6770))
-#define D_001798B4 (*(volatile s32 *)(0x00180000 - 0x674c))
+#define D_00179890 (((volatile s32 *)0x00180000)[-0x6770 / 4])
+#define D_001798B4 (((volatile s32 *)0x00180000)[-0x674c / 4])
 extern s32 D_L10_0015FFE4 __attribute__((section(".data")));
 extern s32 D_L10_0015F5C4 __attribute__((section(".data")));
 extern s32 D_L10_0015ED84 __attribute__((section(".data")));
@@ -1673,7 +1689,7 @@ extern s32 D_L10_0015ED84_sda __asm__("D_L10_0015ED84") __attribute__((sda));
 void FUN_L10_002e85b8(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     struct Moby *other;
-    int found = 0;
+    int found;
     int frame;
     int elapsed;
 
@@ -1681,13 +1697,16 @@ void FUN_L10_002e85b8(struct Moby *moby) {
         D_L10_00161F38 = 1;
     else
         D_L10_00161F38 = 0;
-    if (moby->state == 0) {
+    if (moby->state == 0) goto initialize;
+    if (moby->state != 1) return;
+    goto active;
+initialize:
+    {
         moby->state = 1;
         moby->unk30 = 0xff;
         return;
     }
-    if (moby->state != 1) return;
-
+active:
     if (is_point_inside_clip_volume(D_0013F3D0, data[0]) &&
         (D_001413DC < 2 || D_001413DC == 9) &&
         D_00179890 == 0 && D_001798B4 == -1 && D_00141B10 == 0)
@@ -1711,21 +1730,20 @@ void FUN_L10_002e85b8(struct Moby *moby) {
         D_00179890 == 0 && D_001798B4 == -1 && D_00141C48 == 0)
         FUN_L00_00203908(0x2715, 0x5c);
 
+    found = 0;
     other = (struct Moby *)D_L10_0015FFE4;
     while (other != 0) {
-        if (other->oclass == 0x359) found |= (other->state != 1);
+        if (other->oclass == 0x359 && other->state != 1) found = 1;
         other = other->next;
     }
-    if (!found) return;
-
-    if (data[4] != -1 && vector_distance(D_0013F3D0,
-            (char *)D_L10_0015FFD8 + data[4] * 256 + 0x10) < 15.0f &&
+    if (found && data[4] != -1 && vector_distance(D_0013F3D0,
+            (char *)D_L10_0015FFD0_e[2] + data[4] * 256 + 0x10) < 15.0f &&
         data[5] != -1 && vector_distance(D_0013F3D0,
-            (char *)D_L10_0015FFD8 + data[5] * 256 + 0x10) < 15.0f &&
+            (char *)D_L10_0015FFD0_e[2] + data[5] * 256 + 0x10) < 15.0f &&
         D_00141CB8 == 0)
         FUN_L00_00203908(0x2717, 0x6a);
 
-    if (is_point_inside_clip_volume(D_0013F3D0, data[6]) && data[8] != -1) {
+    if (found && is_point_inside_clip_volume(D_0013F3D0, data[6]) && data[8] != -1) {
         other = (struct Moby *)((char *)D_L10_0015FFD8 + data[8] * 256);
         if (other->oclass == 0x3f7 && other->state != 4) {
             if (D_00141CC0 == 0) {
@@ -1779,7 +1797,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void FUN_L10_002e8ab0(struct Moby *moby) {
     Vars_2E8AB0 *vars = (Vars_2E8AB0 *)moby->pvars;
-    struct Moby *target = 0;
+    struct Moby *target;
     struct Moby *candidate;
     int *bits;
     float rotation[4];
@@ -1792,7 +1810,15 @@ void FUN_L10_002e8ab0(struct Moby *moby) {
 
     state = moby->state;
     if (state == 1) return;
-    if (state == 0) {
+    if (state < 2) {
+        if (state == 0) goto state_zero;
+        return;
+    }
+    if (state == 2) goto state_two;
+    if (state == 3) goto state_three;
+    return;
+state_zero:
+    {
         save_id = moby->save_id;
         signed_save_id = (short)save_id;
         bits = (int *)((char *)D_0014C190_8ab0 + (current_level_index << 8) + (signed_save_id >> 5) * 4);
@@ -1811,7 +1837,9 @@ void FUN_L10_002e8ab0(struct Moby *moby) {
             return;
         }
     }
-    if (state == 2) {
+state_two:
+    {
+        target = 0;
         save_id = moby->save_id;
         signed_save_id = (short)save_id;
         bits = (int *)((char *)D_0014C190_8ab0 + (current_level_index << 8) + (signed_save_id >> 5) * 4);
@@ -1824,7 +1852,6 @@ void FUN_L10_002e8ab0(struct Moby *moby) {
             candidate = (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8));
             target = (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd) ? candidate : 0;
           }
-        }
         if (target == 0) {
           if (vars->targets[1] != -1) {
             candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8));
@@ -1837,6 +1864,7 @@ void FUN_L10_002e8ab0(struct Moby *moby) {
             candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[2] << 8));
             if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
                 target = candidate;
+          }
         }
         if (target == 0) {
             moby->state = 3;
@@ -1875,7 +1903,8 @@ void FUN_L10_002e8ab0(struct Moby *moby) {
         }
         return;
     }
-    if (state == 3) {
+state_three:
+    {
         target = 0;
         if (vars->targets[0] != -1) {
             candidate = (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8));
@@ -1884,18 +1913,20 @@ void FUN_L10_002e8ab0(struct Moby *moby) {
         }
         if (target != 0)
             mark_moby_for_removal(target);
-        else if (vars->targets[1] != -1) {
+        candidate = target;
+        if (target == 0 && vars->targets[1] != -1) {
             candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8));
-            if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
-                target = candidate;
+            if (candidate == 0 || candidate->state == 0xfe || candidate->state == 0xfd)
+                candidate = target;
         }
-        if (target != 0)
-            mark_moby_for_removal(target);
+        if (candidate != 0)
+            mark_moby_for_removal(candidate);
         save_id = moby->save_id;
         signed_save_id = (short)save_id;
         bits = (int *)((char *)D_0014C190_8ab0 + (current_level_index << 8) + (signed_save_id >> 5) * 4);
         *bits |= 1 << (save_id & 31);
-        D_L10_001BA950_8ab0[(short)save_id >> 5] |= 1 << (save_id & 31);
+        signed_save_id = *(volatile short *)&moby->save_id;
+        D_L10_001BA950_8ab0[(short)signed_save_id >> 5] |= 1 << (signed_save_id & 31);
         return;
     }
 }

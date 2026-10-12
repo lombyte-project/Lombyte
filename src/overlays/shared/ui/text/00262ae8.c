@@ -115,7 +115,7 @@ state_one:
         i = 3;
         src = D_0013FA30;
         dst = D_L05_0015FAE0;
-        do { *dst++ = *src++; } while (--i >= 0);
+        for (i = 0; i < 4; i++) dst[i] = src[i];
         if (D_L05_0015FAD4 < D_0013FA5C) {
             D_L05_0015FAD4 = D_0013FA5C;
             counter[1] = D_L05_0015F87C;
@@ -214,18 +214,21 @@ s32 FUN_L05_00262f50(char *e) {
     f32 fade, pulse;
     volatile f32 ratio;
     u8 *q = (u8 *)e + 0x70;
-    u8 *base14 = (u8 *)0x0013f350;
+    u8 *volatile base14;
 
     fade = (f32)q[0] / 10.0f;
     if (fade > 1.0f) fade = 1.0f;
+    base14 = (u8 *)0x0013f350;
     if (*(s32 *)(base14 + 0x208c) != 0x16) return *(s32 *)((u8 *)e + 0x58);
     if (q[2] != 0) {
         sprintf_alt(buf, D_L05_0015F860, D_L05_0015FAD4 * 0x168);
         pulse = convert_integer_to_float(q[1]);
-        period = scale_game_frames(D_L05_0015F87C);
+        period = scale_game_frames(*(s32 *)&D_L05_0015F87C);
         ratio = pulse / (f32)period;
         color = D_L05_0015F8A0;
-        if (q[2] == 1 || q[2] == 3)
+        if (q[2] == 1)
+            color = fast_tween_color(D_L05_0015F894, D_L05_0015F898, ratio);
+        else if (q[2] == 3)
             color = fast_tween_color(D_L05_0015F894, D_L05_0015F898, ratio);
         shadow = truncate_float_to_s32(fade * 128.0f) << 24;
         color += shadow;

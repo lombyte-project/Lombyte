@@ -49,6 +49,7 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     char text[256];
     VendorItemInfo *price_table;
     s32 cost;
+    u16 ammo_cost;
 
     FUN_00201560(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     price_table = D_L00_001C40B0;
@@ -77,8 +78,11 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
         }
         return;
     }
-    cost = vendor_menu.f40 ? price_table[vendor_menu.rows[vendor_menu.f58].fD0].hA : price_table[vendor_menu.rows[vendor_menu.f58].fD0].h8;
-    if (current_bolt_count < cost) {
+    if (vendor_menu.f40)
+        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].hA;
+    else
+        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].h8;
+    if (current_bolt_count < ammo_cost) {
         FUN_001fc4a8(&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5238), -1);
         return;
     }
@@ -98,9 +102,110 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     FUN_001fb3f0(cost, 0x32, 0x80f0f0f0ULL, text, -1);
     FUN_001fb3f0(0xc, 0x32, 0x80f0f0f0ULL, D_L00_00161168, -1);
     FUN_001fb3f0(0x40, 0x32, 0x80f0f0f0ULL, D_L00_00161170, -1);
-    cost = vendor_menu.f40 ? price_table[vendor_menu.rows[vendor_menu.f58].fD0].hA : price_table[vendor_menu.rows[vendor_menu.f58].fD0].h8;
-    FUN_00116248(text, D_L00_00161160, D_L00_00161E34 * cost);
+    if (vendor_menu.f40)
+        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].hA;
+    else
+        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].h8;
+    FUN_00116248(text, D_L00_00161160, D_L00_00161E34 * ammo_cost);
     FUN_001fb888(0x40, 0x4c, 0x80f0f0f0ULL, text, -1);
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a3ec8.s", FUN_L00_002a3ec8);
+#else
+#include "rnc/math/fast_math.h"
+extern float FUN_001f9988(float);
+extern float D_L00_001CA880[];
+extern int D_L00_00161218 __attribute__((sda));
+extern int D_L00_00161220 __attribute__((sda));
+
+void FUN_L00_002a3ec8(float x, float y, float radius, float strength,
+                      float *tiles, int count, int additive) {
+    int tile_index = 0;
+    float *tile = tiles;
+    int row, column, first_column, last_column, last_row;
+    int column_offset, far_row_offset;
+    unsigned neighbor;
+    float grid_x, grid_y, sample_x, sample_y, dy, value, magnitude, distance_squared;
+    if (count > 0) {
+        do {
+            ++tile_index;
+            grid_y = (y - (tile[1] + D_L00_001CA880[3])) / D_L00_001CA880[5];
+            grid_x = (x - (tile[0] + D_L00_001CA880[2])) / D_L00_001CA880[4];
+            row = (int)(grid_y - radius);
+            if (row < 0) row = 0;
+            last_row = (int)(grid_y + radius);
+            if (last_row > 15) last_row = 15;
+            last_column = (int)(grid_x + radius);
+            if (last_column > 15) last_column = 15;
+            first_column = (int)(grid_x - radius);
+            if (first_column < 0) first_column = 0;
+            sample_y = tile[1] + D_L00_001CA880[3] + D_L00_001CA880[5] * (float)row;
+            while (row <= last_row) {
+                sample_x = tile[0] + D_L00_001CA880[2] + D_L00_001CA880[4] * (float)first_column;
+                column = first_column;
+                if (column <= last_column) {
+                    dy = (y - sample_y) * (y - sample_y);
+                    column_offset = column * 4;
+                    far_row_offset = column_offset + 0x3c0;
+                    do {
+                        distance_squared = (x - sample_x) * (x - sample_x) + dy;
+                        value = strength;
+                        if (!(distance_squared < 1.0f))
+                            value = strength / FUN_001f9988(distance_squared);
+                        if (additive == 0) {
+                            magnitude = absolute_float(value);
+                            if (magnitude < absolute_float(*(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161218 * 0x5c0))))
+                                value = *(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161218 * 0x5c0));
+                        } else {
+                            value += *(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161220 * 0x5c0));
+                        }
+                        *(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161218 * 0x5c0)) = value;
+                        if (row < 2 && (neighbor = ((unsigned char *)tile)[12]) != 255) {
+                            if (row == 0)
+                                *(float *)((char *)tiles + neighbor * 0x1190 + (column * 4 + D_L00_00161218 * 0x5c0) + 0x4d0) = *(float *)((char *)(tile + 0x14) + (column * 4 + D_L00_00161218 * 0x5c0));
+                            else
+                                *(float *)((char *)tiles + neighbor * 0x1190 + (column * 4 + D_L00_00161218 * 0x5c0) + 0x550) = value;
+                        }
+                        if (column < 2 && ((unsigned char *)tile)[13] != 255) {
+                            if (column == 0)
+                                *(float *)((char *)tiles + ((unsigned char *)tile)[13] * 0x1190 + (D_L00_00161218 * 0x5c0 + row * 4) + 0x510) = *(float *)((char *)(tile + 0x14) + (row * 0x40 + D_L00_00161218 * 0x5c0));
+                            else
+                                *(float *)((char *)tiles + ((unsigned char *)tile)[13] * 0x1190 + (D_L00_00161218 * 0x5c0 + row * 4) + 0x590) = *(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161218 * 0x5c0));
+                        }
+                        if (row == 15 && ((unsigned char *)tile)[14] != 255)
+                            *(float *)((char *)tiles + ((unsigned char *)tile)[14] * 0x1190 + (column_offset + D_L00_00161218 * 0x5c0) + 0x450) = *(float *)((char *)(tile + 0x14) + (far_row_offset + D_L00_00161218 * 0x5c0));
+                        if (column == 15 && ((unsigned char *)tile)[15] != 255)
+                            *(float *)((char *)tiles + ((unsigned char *)tile)[15] * 0x1190 + (D_L00_00161218 * 0x5c0 + row * 4) + 0x490) = *(float *)((char *)tile + D_L00_00161218 * 0x5c0 + row * 0x40 + 0x8c);
+                        neighbor = ((unsigned char *)tile)[16];
+                        if (neighbor != 255) {
+                            if (column == 0 && row == 0)
+                                *(float *)((char *)tiles + neighbor * 0x1190 + (D_L00_00161218 * 0x5c0) + 0x5dc) = *(float *)((char *)(tile + 0x14) + (D_L00_00161218 * 0x5c0));
+                            if (column == 1 && row == 0)
+                                *(float *)((char *)tiles + ((unsigned char *)tile)[16] * 0x1190 + (D_L00_00161218 * 0x5c0) + 0x5e0) = *(float *)((char *)tile + D_L00_00161218 * 0x5c0 + 0x54);
+                            if (column == 0 && row == 1)
+                                *(float *)((char *)tiles + ((unsigned char *)tile)[16] * 0x1190 + (D_L00_00161218 * 0x5c0) + 0x5e4) = *(float *)((char *)tile + D_L00_00161218 * 0x5c0 + 0x90);
+                        }
+                        neighbor = ((unsigned char *)tile)[17];
+                        if (neighbor != 255 && column == 15 && row == 0)
+                            *(float *)((char *)tiles + neighbor * 0x1190 + (D_L00_00161218 * 0x5c0) + 0x5d8) = *(float *)((char *)tile + D_L00_00161218 * 0x5c0 + 0x8c);
+                        neighbor = ((unsigned char *)tile)[18];
+                        if (neighbor != 255 && column == 0 && row == 15)
+                            *(float *)((char *)tiles + neighbor * 0x1190 + (D_L00_00161218 * 0x5c0) + 0x5d4) = *(float *)((char *)tile + D_L00_00161218 * 0x5c0 + 0x410);
+                        neighbor = ((unsigned char *)tile)[19];
+                        if (neighbor != 255 && column == 15 && row == 15)
+                            *(float *)((char *)tiles + neighbor * 0x1190 + (D_L00_00161218 * 0x5c0) + 0x5d0) = *(float *)((char *)tile + D_L00_00161218 * 0x5c0 + 0x44c);
+                        ++column;
+                        far_row_offset += 4;
+                        column_offset += 4;
+                        sample_x += D_L00_001CA880[4];
+                    } while (column <= last_column);
+                }
+                sample_y += D_L00_001CA880[5];
+                ++row;
+            }
+            tile += 0x464;
+        } while (tile_index < count);
+    }
+}
+#endif

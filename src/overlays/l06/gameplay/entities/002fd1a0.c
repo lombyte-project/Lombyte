@@ -102,9 +102,6 @@ void FUN_L06_002fd1a0(void) {
     } while (i < 50);
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd460.s", FUN_L06_002fd460);
-#else
 #include "eetypes.h"
 #include "qcopy.h"
 
@@ -145,9 +142,10 @@ extern void draw_2fd1a0(void *, void *, int) __asm__("FUN_001f7d30");
 
 void FUN_L06_002fd460(void) {
     Packet_2fd460 first, second;
-    float matrix[5][4] __attribute__((aligned(16)));
+    float matrix[4][4] __attribute__((aligned(16)));
     float vec2[4] __attribute__((aligned(16)));
     float vec1[4] __attribute__((aligned(16)));
+    void *matrix_ptr;
     float y_offset = D_L06_00161FA0 * D_L06_00167400[86];
     float x_offset = D_L06_00161FA4 * D_L06_00167400[85];
     long flags;
@@ -156,36 +154,34 @@ void FUN_L06_002fd460(void) {
 
     first.tex = texture_2fd1a0(D_L06_00161F90);
     second.tex = texture_2fd1a0(0x2a);
+    matrix_ptr = matrix;
     flags = (long)D_L06_00161F7C | (long)D_L06_00161F80 << 2 |
             (long)D_L06_00161F84 << 4 | (long)D_L06_00161F88 << 6 |
             (long)D_L06_00161F8C << 32;
-    first.unk88 = flags;
     second.unk88 = flags;
-    first.unk80 = 0xFF9000000260L;
+    first.unk88 = flags;
     second.unk80 = 0xFF9000000260L;
-    first.unk70 = 0;
+    first.unk80 = 0xFF9000000260L;
     second.unk70 = 0;
-    initialize_matrix_2fd1a0(matrix);
-    first.color[0] = D_L06_00161F94;
-    first.color[1] = D_L06_00161F94;
-    first.color[2] = D_L06_00161F94;
+    first.unk70 = 0;
+    initialize_matrix_2fd1a0(matrix_ptr);
     first.color[3] = D_L06_00161F94;
-    second.color[0] = D_L06_00161F98;
-    second.color[1] = D_L06_00161F98;
-    second.color[2] = D_L06_00161F98;
+    first.color[2] = D_L06_00161F94;
+    first.color[1] = D_L06_00161F94;
+    first.color[0] = D_L06_00161F94;
     second.color[3] = D_L06_00161F98;
+    second.color[2] = D_L06_00161F98;
+    second.color[1] = D_L06_00161F98;
+    second.color[0] = D_L06_00161F98;
     i = 0;
     do {
         transform_2fd1a0(vec1, D_L06_001F0560[i], D_L06_00161F9C);
         multiply_2fd1a0(vec1, vec1, matrix);
         subtract_2fd1a0(vec2, vec1, D_L06_00167540);
         normalize_2fd1a0(vec2, vec2, 1.0f);
-        transform_other_2fd1a0(vec1, D_L06_001EFBE0[i], matrix);
+        transform_other_2fd1a0(vec1, D_L06_001EFBE0[i], matrix_ptr);
         facing = normalize_other_2fd1a0(vec2, vec1);
-        if (facing > 0.0f) {
-            i++;
-            continue;
-        }
+        if (facing > 0.0f) goto next;
         {
             j = 0;
             do {
@@ -205,10 +201,10 @@ void FUN_L06_002fd460(void) {
             draw_2fd1a0(&first, matrix, 0);
             draw_2fd1a0(&second, matrix, 0);
         }
+next:
         i++;
     } while (i < 58);
 }
-#endif
 #include "eetypes.h"
 #include "qcopy.h"
 
@@ -494,7 +490,7 @@ void FUN_L06_002ffcb0(char *moby) {
         if ((float)data[6] < 0.99999f) {
             if ((float)data[6] >= 0.05f && data[3] >= 0) {
                 base = D_L06_001600EC_ffcb0 + (data[3] << 7);
-                *(u128 *)(base + 0x30) = *(u128 *)hero;
+                qcopy(base + 0x30, hero);
                 *(float *)(base + 0x38) -= 0.5f;
                 data[3] = -1;
             }
@@ -788,9 +784,6 @@ void FUN_L06_00300f70(char *arg, void *a, void *b) {
     qcopy(dst + 0x10, b);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00301070.s", FUN_L06_00301070);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00301b90.s", FUN_L06_00301b90);
-#else
 extern unsigned char D_0014C050[];
 extern int D_0015ED84 __asm__("D_0015ED84");
 extern char *D_L06_0015FFD8_301b90 __asm__("D_L06_0015FFD8");
@@ -840,15 +833,15 @@ extern void FUN_001f99f8(void *);
 extern float FUN_001f9e90(float, float);
 extern float FUN_001f9b80(void *, void *);
 extern int FUN_001f96f8(int);
-extern float FUN_001f96b0(float);
+extern float FUN_001f96b0(float) __asm__("FUN_L06_00216fa8");
 extern int FUN_001fa6d0(float);
 extern int FUN_001f9740(void *);
 extern float FUN_002132a8(float, float);
 extern int FUN_L01_0027a248(int, int);
 extern void FUN_00215b10(void);
-extern void FUN_00215b10_state4(void *) __asm__("FUN_00215b10");
 extern int FUN_L00_00211250(void);
-extern void FUN_001f4600(int, char *);
+extern void FUN_001f4600(int, char *) __asm__("FUN_L06_00210fc8");
+extern void FUN_L06_003021d8(char *);
 extern void FUN_0022dba0(int, int, int);
 extern void FUN_L06_002f45f0(int);
 extern void FUN_L00_002eac18(int);
@@ -896,7 +889,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         FUN_L06_002f99b0(*(int *)(d + 8));
         FUN_L06_002fc630(D_L06_0015FFD8_301b90 + (*(int *)(d + 0x20) << 8));
         {
-            *(float *)(D_L06_001600EC_301b90 + (*(int *)(d + 0xC) << 7) + 0x38) += 10.0f;
+            *(float *)((char *)((*(int *)(d + 0xC) << 7) + (int)D_L06_001600EC_301b90) + 0x38) += 10.0f;
             p = D_L06_001B0C30_301b90[*(int *)(d + 0x24)];
             qcopy(va, (char *)p + 0x20);
             qcopy(vb, (char *)p + 0x10);
@@ -918,14 +911,15 @@ void FUN_L06_00301b90(unsigned char *m) {
         return;
     }
     case 3: {
-        int *p;
+        int **p;
         int x, nb;
         float r;
-        p = D_L06_001B0C30_301b90[*(int *)(d + 0x24)];
-        qcopy(vb, (char *)p + 0x10 + (*(int *)(d + 0xB0) << 4));
-        nb = *(int *)(d + 0xB0) + 1;
+        p = &D_L06_001B0C30_301b90[*(int *)(d + 0x24)];
+        nb = *(int *)(d + 0xB0);
+        qcopy(vb, (char *)((nb << 4) + (int)*p) + 0x10);
+        nb++;
         *(int *)(d + 0xB0) = nb;
-        if (nb == *p - 1) {
+        if (nb == **p - 1) {
             m[0x20] = 4;
             FUN_L06_00302400((struct Moby *)m, 1);
             *(int *)(d + 0xB4) = FUN_001fa6d0(FUN_001f96b0(D_L06_001620C4));
@@ -948,32 +942,35 @@ void FUN_L06_00301b90(unsigned char *m) {
     }
     case 4: {
         int x;
+        char *q;
         x = FUN_001f96f8(0x708);
         if (*(int *)(d + 0xB4) == x) {
-            if (*(short *)D_0015172A == 3) FUN_00215b10_state4((int *)d + 0x30);
+            if (*(short *)D_0015172A == 3) FUN_00215b10();
         } else {
             x = FUN_001f96f8(900);
             if (*(int *)(d + 0xB4) == x) FUN_L06_00302400((struct Moby *)m, 2);
             else {
                 x = FUN_001f96f8(300);
-                if (*(int *)(d + 0xB4) == x && *(short *)D_0015172A == 3) FUN_00215b10_state4((int *)d + 0x30);
+                if (*(int *)(d + 0xB4) == x && *(short *)D_0015172A == 3) FUN_00215b10();
             }
         }
         if (FUN_001f9740(d + 0xC0) != 0) {
-            FUN_0022dba0(0, 0, *(int *)(D_0013F3D0_301b90 + 0x2000));
+            FUN_0022dba0(0, 0, (int)hero.moby);
             *(int *)(d + 0xC0) = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8(480.0f, 600.0f)));
-            D_L06_00167560 = 0.4f;
-            D_L06_00167568 = FUN_001f96f8(60);
+            D_L06_00167400[88] = 0.4f;
+            ((int *)D_L06_00167400)[90] = FUN_001f96f8(60);
         }
-        if (D_L06_0015F5C4 == 0) FUN_001f4600(0x3021d8, (char *)m);
-        if (D_001413D4 == 0x72) { m[0x20] = 6; return; }
+        if (D_L06_0015F5C4 == 0) FUN_001f4600((int)FUN_L06_003021d8, (char *)m);
+        if (hero.state.current == 0x72) { m[0x20] = 6; return; }
         if (D_L06_0015F5C4 != 0) return;
         if (FUN_001f9740(d + 0xB4) == 0) return;
         m[0x20] = 5;
+        x = FUN_001f96f8(15);
+        q = D_L06_0015FFD8_301b90 + (*(int *)(d + 0x30) << 8);
         *(float *)(d + 0xB8) = 0.0f;
-        *(int *)(d + 0xBC) = FUN_001f96f8(15);
-        FUN_L06_00304088(D_L06_0015FFD8_301b90 + (*(int *)(d + 0x30) << 8));
-        FUN_0022dba0(1, 0, *(int *)(D_0013F3D0_301b90 + 0x2000));
+        *(int *)(d + 0xBC) = x;
+        FUN_L06_00304088(q);
+        FUN_0022dba0(1, 0, (int)hero.moby);
         return;
     }
     case 5:
@@ -988,7 +985,6 @@ void FUN_L06_00301b90(unsigned char *m) {
         return;
     }
 }
-#endif
 #include "rnc/gameplay/entities/moby.h"
 
 struct TauntVoiceVars {
@@ -1853,6 +1849,7 @@ void FUN_L06_00304818(int unused, void *obj) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003049f8.s", FUN_L06_003049f8);
 #else
 
+#include "rnc/audio/voice_pool.h"
 extern float D_L06_001621F8_3049f8 __asm__("D_L06_001621F8") __attribute__((sda));
 extern float D_L06_001621FC __attribute__((sda));
 extern float D_L06_00162200 __attribute__((sda));
@@ -1887,10 +1884,11 @@ extern void scale_vector_3049f8(void *, void *, float) __asm__("FUN_001f9a68");
 extern float distance_3049f8(void *, void *) __asm__("FUN_001f9b48");
 extern void enqueue_callback_3049f8(int, char *) __asm__("FUN_L06_00210fc8");
 extern float random_float_3049f8(float, float) __asm__("FUN_L00_00257c48");
+extern float random_float_between_3049f8(float, float) __asm__("FUN_002132a8");
 extern int random_byte_3049f8(int) __asm__("FUN_00213260");
 extern int fast_tween_color_3049f8(float, int, int) __asm__("FUN_001fa6e0");
 extern int truncate_float_to_s32_3049f8(float) __asm__("FUN_001fa6d0");
-extern unsigned char scale_game_frames_3049f8(int) __asm__("FUN_001f96f8");
+extern int scale_game_frames_3049f8(int) __asm__("FUN_001f96f8");
 extern void spawn_particle_3049f8(float, void *, void *, int, int, int, int) __asm__("FUN_L00_002730e0");
 
 void FUN_L06_003049f8(char *m) {
@@ -1922,7 +1920,7 @@ void FUN_L06_003049f8(char *m) {
         return;
     }
     case 2: {
-        int *timers = (int *)(data + 0xf00);
+        int *timers;
         float increment;
         float position;
         int i;
@@ -1931,16 +1929,16 @@ void FUN_L06_003049f8(char *m) {
         FUN_L06_00305000(m);
         D_L06_001621F8_3049f8 += D_L06_001621FC * frame_time;
         if (D_L06_001621F8_3049f8 > 1.0f) D_L06_001621F8_3049f8 -= 1.0f;
+        timers = (int *)(data + 0xf00);
         increment = D_L06_00162204 / 30.0f;
         position = -(D_L06_00162204 * 0.5f);
         for (i = 0; i < 4; i++) {
-            float *points = (float *)(data + i * 0x1e0);
-            float *paths = (float *)(data + i * 0x1e0 + 0x790);
             if (timers[i] == 0) {
                 float scratch[120];
-                float *first = scratch, *second = scratch + 4;
+                float *points = (float *)(data + i * 0x1e0);
+                float *paths;
                 float *p = points;
-                float *q = first;
+                float *q = scratch;
                 int j;
                 for (j = 29; j >= 0; j--) {
                     FUN_L06_00217300(p);
@@ -1951,16 +1949,27 @@ void FUN_L06_003049f8(char *m) {
                     random_vector_3049f8(q, 0.0f, D_L06_00162200 * frame_time);
                     q += 4;
                 }
-                q = first;
-                for (j = 27; j >= 0; j--) {
-                    FUN_001f9a10(paths, q, second);
-                    q += 4;
-                    FUN_001f9a10(paths, paths, scratch + 8);
-                    scale_vector_3049f8(paths, paths, 0.333f);
-                    paths += 4;
+                {
+                    /* The completed countdown is -1: these cursors start at
+                     * the second and third scratch vectors. */
+                    float *second = scratch + (j + 2) * 4;
+                    float *third = scratch + (j + 3) * 4;
+                    q = scratch;
+                    paths = (float *)(data + i * 0x1e0 + 0x790);
+                    for (j = 27; j >= 0; j--) {
+                        FUN_001f9a10(paths, q, second);
+                        q += 4;
+                        second += 4;
+                        FUN_001f9a10(paths, paths, third);
+                        third += 4;
+                        scale_vector_3049f8(paths, paths, 0.333f);
+                        paths += 4;
+                    }
                 }
                 timers[i] = D_L06_00162234;
             } else {
+                float *points = (float *)(data + i * 0x1e0);
+                float *paths = (float *)(data + i * 0x1e0 + 0x790);
                 int j;
                 points += 4;
                 for (j = 27; j >= 0; j--) {
@@ -1974,13 +1983,13 @@ void FUN_L06_003049f8(char *m) {
         if (distance_3049f8(m + 0x10, D_L06_00167540) < 48.0f)
             enqueue_callback_3049f8(0x305170, m);
         if (*(int *)(data + 0xf14) < 0) return;
-        if (D_L06_0015FFD8_u[(*(int *)(data + 0xf14) << 8) + 0xbc] == 0) return;
+        if ((unsigned char)D_L06_0015FFD8_u[(*(int *)(data + 0xf14) << 8) + 0xbc] == 0) return;
         *(int *)(m + 0x94) = 0;
         m[0x20] = 3;
         {
             int index = *(int *)(data + 0xf18);
-            if (index != -1 && *(char **)(0x13e5d8 + index * 0x70) == m &&
-                *(unsigned char *)(0x13e5c4 + index * 0x70) != 0)
+            if (index != -1 && ((VoicePoolWindow *)((char *)&voice_pool + index * 0x70))->voice.owner == (VoiceMoby *)m &&
+                ((VoicePoolWindow *)((char *)&voice_pool + index * 0x70))->voice.state != 0)
                 release_voice_3049f8(index);
         }
         *(int *)(data + 0xf18) = -1;
@@ -1989,26 +1998,27 @@ void FUN_L06_003049f8(char *m) {
     }
     case 3: {
         float scratch[120];
-        float *a = scratch, *b = scratch + 16, *c = scratch + 28, *d = scratch + 32, *e = scratch + 36;
+        float *b = scratch + 16, *d = scratch + 32, *e = scratch + 36;
         int i;
-        FUN_001fa050(a, (float *)(m + 0x40));
+        FUN_001fa050(scratch, (float *)(m + 0x40));
         FUN_001f9ff8(b, D_L06_00162208_3049f8);
-        FUN_001fa378(a, a, b);
+        FUN_001fa378(scratch, scratch, b);
         for (i = 0; i < 4; i++) {
             int j;
             FUN_001fa050(b, D_L06_001FE890 + i * 4);
-            FUN_001fa378(b, a, b);
-            FUN_001f9a10(c, c, m + 0x10);
-            c[2] += (float)i * 1.7f + 0.6f;
-            c[3] = 1.0f;
+            FUN_001fa378(b, scratch, b);
+            /* Retail reads this scratch vector before initializing it. */
+            FUN_001f9a10(scratch + 28, scratch + 28, m + 0x10);
+            scratch[30] += (float)i * 1.7f + 0.6f;
+            scratch[31] = 1.0f;
             for (j = 49; j >= 0; j--) {
                 float angle = random_float_3049f8(0.0f, D_L06_00162204 * 0.75f);
                 normalize_vector_3049f8(d, b, angle);
-                FUN_001f9a10(d, d, c);
+                FUN_001f9a10(d, d, scratch + 28);
                 {
-                    int v = fast_tween_color_3049f8(random_float_3049f8(0.0f, 1.0f), D_L06_00162214, D_L06_00162218);
-                    float f = random_float_3049f8(D_L06_0016221C, D_L06_00162220);
-                    int n = truncate_float_to_s32_3049f8(random_float_3049f8((float)D_L06_00162224, (float)D_L06_00162228));
+                    int v = fast_tween_color_3049f8(random_float_between_3049f8(0.0f, 1.0f), D_L06_00162214, D_L06_00162218);
+                    float f = random_float_between_3049f8(D_L06_0016221C, D_L06_00162220);
+                    int n = truncate_float_to_s32_3049f8(random_float_between_3049f8((float)D_L06_00162224, (float)D_L06_00162228));
                     random_vector_3049f8(e, D_L06_0016222C * frame_time, D_L06_00162230 * frame_time);
                     spawn_particle_3049f8(f, d, e, v, scale_game_frames_3049f8(n) & 0xff, random_byte_3049f8(0xff) & 0xff, 0);
                 }

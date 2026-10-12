@@ -421,6 +421,7 @@ extern f32 D_0015ED6C __asm__("D_0015ED6C");
 extern s32 D_001413D0 __asm__("D_001413D0");
 extern u8 D_0013D419 __asm__("D_0013D419");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern f32 scale_time_for_update(f32) __asm__("FUN_001f96b0");
 extern s32 FUN_002182f0(f32) __asm__("FUN_001fa6d0");
 extern void FUN_00217000(void *) __asm__("FUN_001f9740");
 extern struct Moby *FUN_00269230(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
@@ -434,7 +435,7 @@ extern void FUN_0026c348(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 extern s32 FUN_0026eac8(f32, struct Moby *, void *, s32, s32, void *, s32) __asm__("FUN_L00_0025ff38");
 extern f32 FUN_00217528(void *, void *) __asm__("FUN_001f9b80");
 extern f32 FUN_002172b0(f32) __asm__("FUN_001f99c0");
-extern f32 FUN_00266908(s32, f32) __asm__("FUN_L00_00257c48");
+extern f32 FUN_00266908(f32, f32) __asm__("FUN_L00_00257c48");
 extern f32 FUN_00266970(void) __asm__("FUN_00213308");
 extern void FUN_L06_002ff2c8(char *);
 extern unsigned char *FUN_L06_00300c60(char *, f32 *, f32 *);
@@ -444,39 +445,45 @@ void FUN_L06_002feb40(struct Moby *moby) {
     struct Moby *other;
     struct Moby *fragment;
     s32 collision;
-    s32 hit_type;
-    f32 motion[3];
-    f32 position[4];
-    f32 velocity[4];
+    struct {
+        f32 position[4];
+        f32 velocity[4];
+        s32 hit_type;
+        f32 motion[3];
+    } scratch;
     f32 angle;
     f32 speed;
+    f32 remaining;
     s32 i;
     s32 *route;
 
     moby->scale = moby->pclass->scale * D_L06_00161FA8;
     FUN_L06_002ff2c8((char *)moby);
     if (*(s32 *)((char *)vars + 0x38) != 0) {
-        vars->unk188 = FUN_002182f0(random_float_between(180.0f, 240.0f) * frame_scale_inv);
+        vars->unk188 = FUN_002182f0(scale_time_for_update(random_float_between(180.0f, 240.0f)));
         *(s32 *)((char *)vars + 0x38) = 0;
     }
     FUN_00217000(&vars->unk188);
-    motion[0] = 0.0f;
+    scratch.motion[0] = 0.0f;
     other = (struct Moby *)FUN_00269230(moby, 0x330000, 0);
-    collision = FUN_00269288(moby, other, &vars->unk20, 0, &hit_type, motion, 0, 4);
-    if (hit_type != 1 && moby->state != 16) {
+    collision = FUN_00269288(moby, other, &vars->unk20, 0, &scratch.hit_type, scratch.motion, 0, 4);
+    if (scratch.hit_type != 1 && moby->state != 16) {
         if (current_level_index == 10 && other != 0 && *(struct Moby **)((char *)other + 0x20) != 0 &&
             (*(struct Moby **)((char *)other + 0x20))->oclass == 0x31a && D_0013D419 == 0) {
             D_0013D419 = 1;
             FUN_0029ae30(1, 0, 0);
             FUN_00272ad8(0x53d6, -1);
         }
-        vars->unk20 -= motion[0];
-        if (vars->unk20 <= 0.0f) {
+        remaining = vars->unk20 - scratch.motion[0];
+        vars->unk20 = remaining;
+        if (remaining <= 0.0f) {
             collision = 1;
         }
         *(s32 *)((char *)vars + 0x80) = 500;
         *(f32 *)((char *)vars + 0x88) = 0.5f;
         switch (collision) {
+        case 0:
+            break;
         case 1:
         case 2:
             moby->state = 16;
@@ -488,22 +495,22 @@ void FUN_L06_002feb40(struct Moby *moby) {
             angle = FUN_001f9e90(other->pos.x, other->pos.y);
             FUN_0026b368(angle, moby, &vars->vel, 9, 1, 0);
             for (i = 9; i >= 0; i--) {
-                qcopy(position, &moby->pos);
-                position[2] += 2.5f;
-                position[0] += FUN_00266908(0, 0.2f);
-                position[1] += FUN_00266908(0, 0.2f);
-                position[2] += FUN_00266908(0, 0.2f);
+                qcopy(scratch.position, &moby->pos);
+                scratch.position[2] += 2.5f;
+                scratch.position[0] += FUN_00266908(0.0f, 0.2f);
+                scratch.position[1] += FUN_00266908(0.0f, 0.2f);
+                scratch.position[2] += FUN_00266908(0.0f, 0.2f);
                 angle = FUN_00266970();
                 speed = random_float_between(3.0f, 5.7f) * D_0015ED6C;
-                velocity[0] = FUN_001f9dc8(angle) * speed;
-                velocity[1] = FUN_001f9de0(angle) * speed;
-                velocity[2] = 0.0f;
+                scratch.velocity[0] = FUN_001f9dc8(angle) * speed;
+                scratch.velocity[1] = FUN_001f9de0(angle) * speed;
+                scratch.velocity[2] = 0.0f;
                 angle = FUN_001f9e90(other->pos.x, other->pos.y);
-                velocity[0] += FUN_001f9dc8(angle) * D_0015ED6C * 7.0f;
+                scratch.velocity[0] += FUN_001f9dc8(angle) * (D_0015ED6C * 7.0f);
                 angle = FUN_001f9e90(other->pos.x, other->pos.y);
-                velocity[1] += FUN_001f9de0(angle) * D_0015ED6C * 7.0f;
-                velocity[2] = random_float_between(3.0f, 8.5f) * D_0015ED6C;
-                fragment = (struct Moby *)FUN_L06_00300c60((char *)moby, position, velocity);
+                scratch.velocity[1] += FUN_001f9de0(angle) * (D_0015ED6C * 7.0f);
+                scratch.velocity[2] = random_float_between(3.0f, 8.5f) * D_0015ED6C;
+                fragment = (struct Moby *)FUN_L06_00300c60((char *)moby, scratch.position, scratch.velocity);
                 if (fragment != 0) {
                     fragment->scale *= 0.4f;
                 }
@@ -512,13 +519,21 @@ void FUN_L06_002feb40(struct Moby *moby) {
             FUN_00266130(moby, 0, -1);
             break;
         case 3:
+            goto standard_collision;
         case 4:
+            goto standard_collision;
         case 5:
+            goto standard_collision;
         case 6:
+            goto standard_collision;
         case 7:
+            goto standard_collision;
         case 8:
+            goto standard_collision;
         case 9:
+            goto standard_collision;
         case 10:
+        standard_collision:
             moby->state = 15;
             *(s16 *)((char *)vars + 0x26) = scale_game_frames(60);
             *(f32 *)((char *)vars + 0x78) = D_L06_00161FB0 * D_0015ED6C;
@@ -528,6 +543,9 @@ void FUN_L06_002feb40(struct Moby *moby) {
             angle = FUN_001f9e90(other->pos.x, other->pos.y);
             FUN_0026b368(angle, moby, &vars->vel, 7, 1, 0);
             *(u8 *)((char *)vars + 0x117) = 0xfa;
+            break;
+        case 11:
+            break;
         }
         FUN_0026c268(moby, (char *)vars + 0x110);
     }

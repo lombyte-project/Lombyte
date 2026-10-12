@@ -1329,9 +1329,6 @@ void FUN_L05_00316258(char *moby) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003166a0.s", FUN_L05_003166a0);
-#else
 void FUN_L05_003166a0(struct Moby *moby) {
     int *data = (int *)moby->pvars;
 
@@ -1358,14 +1355,13 @@ void FUN_L05_003166a0(struct Moby *moby) {
             target = fast_subtract_rotations(*(float *)&data[3], 0.6981317f);
         else
             target = fast_add_rotations(*(float *)&data[3], 0.6981317f);
-        FUN_L00_0025be00(&moby->rot.z, (float *)&data[1], target,
+        approach_angle(&moby->rot.z, target, (float *)&data[1],
                           frame_time_sq * 12.566371f, frame_time_sq * 12.566371f,
                           frame_time * 12.566371f);
         break;
     }
     }
 }
-#endif
 #include "sda.h"
 
 /* Applies breast growth (D_L05_00161ED0) and big-head manipulators to

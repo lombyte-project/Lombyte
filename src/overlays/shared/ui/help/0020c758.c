@@ -152,7 +152,8 @@ extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f99c0(f32);
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 
-int nearest_rail_point(void *from, void *outOwner, void *to, void *outI, void *outF,
+int nearest_rail_point() __asm__("FUN_L00_0020cd08");
+int FUN_L00_0020cd08(void *from, void *outOwner, void *to, void *outI, void *outF,
                      void *outKind, int skip, int only)
 {
     Vec4 pos;
@@ -160,31 +161,36 @@ int nearest_rail_point(void *from, void *outOwner, void *to, void *outI, void *o
     f32 gotF;
     s32 i, spot_offset, only_offset, active_offset;
     s32 count = D_L00_0015F710;
-    Vec4 *p = &pos;
+    Vec4 *p;
     f32 distance_limit, height_limit, distance, height;
+    struct Hero *hero_state;
+    struct LedgeSpot_20cd08 *spots;
 
-    *(u128 *)p = *(u128 *)from;
     i = 0;
+    p = &pos;
+    *(u128 *)p = *(u128 *)from;
     if (count > 0) {
         active_offset = 0;
         only_offset = 0;
         do {
+            spots = D_L00_0015F70C;
             spot_offset = i * 0x20;
-            if (!((skip == 0 || (int)D_L00_0015F70C[i].owner != skip) &&
-                  (only == 0 || (int)((struct LedgeSpot_20cd08 *)((u8 *)D_L00_0015F70C + only_offset))->owner == only) &&
-                  *((struct LedgeSpot_20cd08 *)((u8 *)D_L00_0015F70C + active_offset))->owner != 0))
+            if (!((skip == 0 || (int)spots[i].owner != skip) &&
+                  (only == 0 || (int)((struct LedgeSpot_20cd08 *)(only_offset + (u32)spots))->owner == only) &&
+                  *((struct LedgeSpot_20cd08 *)(active_offset + (u32)spots))->owner != 0))
                 goto next_spot;
-            if (FUN_001f9b48((u8 *)D_L00_0015F70C + spot_offset, p) >
-                ((struct LedgeSpot_20cd08 *)((u8 *)D_L00_0015F70C + spot_offset))->sphere.f[3])
+            if (FUN_001f9b48((void *)(active_offset + (u32)D_L00_0015F70C), p) >
+                ((struct LedgeSpot_20cd08 *)(spot_offset + (u32)D_L00_0015F70C))->sphere.f[3])
                 goto next_spot;
             if (!FUN_L00_0025df68(D_L00_0015F70C[i].owner, p, to, &gotI, &gotF,
                                   D_L00_0015F70C[i].kind, 12.0f, 10.0f, 0.0f))
                 goto next_spot;
+            hero_state = &hero;
             distance_limit = 0.9f;
             height_limit = 1.5f;
-            if ((u32)D_001413DC < 2)
+            if ((u32)hero_state->state.control_mode < 2)
                 distance_limit = 0.3f;
-            if (hero.unk1CA != 0) {
+            if (hero_state->unk1CA != 0) {
                 height_limit = 10.0f;
                 distance_limit += 0.5f;
             }
@@ -701,19 +707,20 @@ void FUN_L00_0020dd20(void) {
     f32 tenth = 0.1f;
     f32 one = 1.0f;
 
+    struct Hero *hero_ptr = &hero;
     i = 0;
     do {
-        slot = (u8 **)&hero.unkD00 + i;
+        slot = (u8 **)&hero_ptr->unkD00 + i;
         obj = *slot;
         if (obj && *(s32 *)(obj + 0x34)) {
             next = i + 1;
             if (FUN_00213ed8_20dd20((f32 *)(obj + 8), zero, frame_scale * tenth) == zero)
-                FUN_L00_0024f0e8_20dd20((u8 *)hero.moby, slot);
+                FUN_L00_0024f0e8_20dd20((u8 *)hero_ptr->moby, slot);
         } else {
             active = 0;
-            if (hero.unk20AB && (i == 0 || hero.unk20AB == 2))
+            if (hero_ptr->unk20AB && (i == 0 || hero_ptr->unk20AB == 2))
                 active = 1;
-            if (hero.unk20AF) {
+            if (hero_ptr->unk20AF) {
                 active = 0;
                 if (*slot)
                     *(s32 *)(*slot + 0x34) = 1;
@@ -721,7 +728,7 @@ void FUN_L00_0020dd20(void) {
             if (active) {
                 next = i + 1;
                 if (*slot == 0) {
-                    obj = FUN_L00_0024f028_20dd20((u8 *)hero.moby, D_L00_0015F6A0_20dd20[i]);
+                    obj = FUN_L00_0024f028_20dd20((u8 *)hero_ptr->moby, D_L00_0015F6A0_20dd20[i]);
                     *slot = obj;
                     *(s32 *)(obj + 8) = 0;
                     *(s32 *)(*slot + 0x18) = D_L00_00197300_20dd20[D_L00_00197BC0_20dd20[next]];
@@ -731,20 +738,20 @@ void FUN_L00_0020dd20(void) {
                 if (*slot == 0)
                     goto next_slot;
                 if (FUN_00213ed8_20dd20((f32 *)(*slot + 8), zero, frame_scale * tenth) == zero)
-                    FUN_L00_0024f0e8_20dd20((u8 *)hero.moby, slot);
+                    FUN_L00_0024f0e8_20dd20((u8 *)hero_ptr->moby, slot);
             }
         }
         obj = *slot;
         if (obj) {
-            moby = (u8 *)hero.moby;
+            moby = (u8 *)hero_ptr->moby;
             same = moby[0x52] == moby[0x53];
-            if (hero.unkD08[0] && !hero.unkD14) {
+            if (hero_ptr->unkD08[0] && !hero_ptr->unkD14) {
                 FUN_00213ed8_20dd20((f32 *)(obj + 8), zero, frame_scale * tenth);
             } else if (*(s32 *)(obj + 0x34) == 0) {
                 FUN_00213ed8_20dd20((f32 *)(obj + 8), one, frame_scale * tenth);
             }
             change = 0;
-            if (!same && hero.unkA9C) {
+            if (!same && hero_ptr->unkA9C) {
                 if (FUN_L00_002050b8_20dd20(obj[0x23]) != FUN_L00_002050b8_20dd20(moby[0x53]))
                     change = obj[0x22] != obj[0x23];
             }
@@ -1008,36 +1015,36 @@ void FUN_L00_0020e728(void) {
     i = 0;
     slot = hero.unkD08;
     do {
-        u8 *o = *slot;
-        if (o != 0) {
+        if (*slot != 0) {
             int id = FUN_L00_0020d498_c(0);
             if (id == hero.unk2298) {
                 s32 anim;
+                ID_20e4c8 *definition = &D_L00_00179AC0_c[id];
                 if (hero.state.control_mode == 12)
-                    anim = D_L00_00179AC0_c[id].f2C;
+                    anim = definition->f2C;
                 else
-                    anim = D_L00_00179AC0_c[id].f28;
-                if (anim != -1 && o[0x23] != anim) {
+                    anim = definition->f28;
+                if (anim != -1 && (*slot)[0x23] != anim) {
                     hero.unk2294 = anim;
-                    FUN_L00_0024f3e0((u8 *)hero.moby, o, hero.unk2294, 0,
+                    FUN_L00_0024f3e0((u8 *)hero.moby, *slot, hero.unk2294, 0,
                                       FUN_001f96f8_e728(8), 1);
                 }
             }
-            FUN_L00_0024f190((u8 *)hero.moby, o);
+            FUN_L00_0024f190((u8 *)hero.moby, *slot);
             if (hero.unkD14 == 0) {
-                FUN_00213ed8_e728((f32 *)(o + 8), 1.0f, D_0015ED60_e728 * 0.2f);
-                if ((o[5] & 2) && hero.unk20AA == 0) {
+                FUN_00213ed8_e728((f32 *)(*slot + 8), 1.0f, D_0015ED60_e728 * 0.2f);
+                if (((*slot)[5] & 2) && hero.unk20AA == 0) {
                     hero.unkD14 = 1;
-                    *(s32 *)(o + 0x28) = 0;
+                    *(s32 *)(*slot + 0x28) = 0;
                     hero.unk20A8 = 0;
                     return;
                 }
             } else {
                 if (hero.unkD14 == 2)
-                    FUN_00213ed8_e728((f32 *)(o + 8), 0.0f, frame_scale * 0.25f);
+                    FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, frame_scale * 0.25f);
                 else
-                    FUN_00213ed8_e728((f32 *)(o + 8), 0.0f, frame_scale * 0.07f);
-                if (*(f32 *)(o + 8) == 0.0f) {
+                    FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, frame_scale * 0.07f);
+                if (*(f32 *)(*slot + 8) == 0.0f) {
                     FUN_L00_0024f0e8((u8 *)hero.moby, slot);
                     return;
                 }
@@ -1300,12 +1307,12 @@ float FUN_L00_0020f0b8(float *a, float *b) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020f160.s", FUN_L00_0020f160);
 #else
-extern s32 D_00141508 __attribute__((section(".data")));
+extern volatile s32 D_00141508 __attribute__((section(".data")));
 extern s32 D_0014150C __attribute__((section(".data")));
 extern s32 D_00141510 __attribute__((section(".data")));
 extern s32 D_001413D4 __attribute__((section(".data")));
 extern s32 D_001413DC __attribute__((section(".data")));
-extern s32 D_00141514 __attribute__((sda));
+extern volatile s32 D_0013F694 __attribute__((sda));
 extern u8 D_00140640[] __asm__("D_00140640") __attribute__((section(".data")));
 extern void copy_matrix(void *, void *) __asm__("FUN_001fa2b8");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
@@ -1318,12 +1325,17 @@ void FUN_L00_0020f160(void *moby, void *matrix)
 {
     u8 sum[0x40] __attribute__((aligned(16)));
     f32 scores[16];
-    s32 i, j, n, count, chosen, ring, limit;
+    s32 i, j, n, chosen, ring, limit;
+    volatile s32 count;
     f32 maximum;
+    s64 negative_one = -1;
     u8 *record;
+    f32 * volatile score_ptr;
+    void * volatile output;
 
     record = D_00140640 + D_00141508 * 0x30;
     copy_matrix(record, matrix);
+    record = D_00140640 + D_00141508 * 0x30;
     normalize_vector_triplet(record);
     ring = D_00141508 + 1;
     D_00141508 = ring % 16;
@@ -1339,10 +1351,10 @@ void FUN_L00_0020f160(void *moby, void *matrix)
         limit = 5;
     else
         limit = 11;
-    D_00141514 = limit;
-    if (D_00141510 < limit)
+    D_0013F694 = limit;
+    if (D_00141510 < D_0013F694)
         D_00141510++;
-    else if (D_00141510 > limit)
+    else if (D_00141510 > D_0013F694)
         D_00141510--;
     n = D_00141510;
     if (n < 2)
@@ -1350,14 +1362,16 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     if (D_0014150C < n)
         return;
 
+    output = (u8 *)moby + 0x40;
+    score_ptr = scores;
     for (i = 0; i < n; i++) {
         s32 a = D_00141508 - (i - 15);
         a -= ((a < 0 ? a + 15 : a) >> 4) * 16;
         for (j = 0; j < n; j++) {
             if (i != j) {
                 s32 b = D_00141508 - (j - 15);
-                b -= ((b < 0 ? b + 15 : b) >> 4) * 16;
-                scores[i] += FUN_L00_0020f0b8((f32 *)(D_00140640 + a * 0x30),
+                b -= ((negative_one < b ? b : b + 15) >> 4) * 16;
+                score_ptr[i] += FUN_L00_0020f0b8((f32 *)(D_00140640 + a * 0x30),
                                                   (f32 *)(D_00140640 + b * 0x30));
             }
         }
@@ -1372,7 +1386,7 @@ void FUN_L00_0020f160(void *moby, void *matrix)
             count++;
     chosen = 0;
     for (i = 0; i < n; i++) {
-        if (scores[i] <= maximum * 0.2f || count < 1 || count > 2) {
+        if (!(maximum * 0.2f < scores[i]) || count < 1 || count > 2) {
             s32 a = D_00141508 - (i - 15);
             a -= ((a < 0 ? a + 15 : a) >> 4) * 16;
             record = D_00140640 + a * 0x30;
@@ -1383,7 +1397,7 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     }
     for (i = 0; i < 3; i++)
         FUN_001ff300_f160(sum + i * 16, sum + i * 16, 1.0f / (f32)chosen);
-    FUN_0025d330_f160(sum, (u8 *)moby + 0x40);
+    FUN_0025d330_f160(sum, output);
 }
 #endif
 #ifndef NON_MATCHING
@@ -1445,7 +1459,8 @@ void FUN_L00_0020f580(void)
         if ((D_L00_0015F5C4_f580 != 2 && D_L00_0015F5C4_f580 != 6) || i == 4 || i == 5) {
             offset = i * 0x50;
             slot = (u8 *)&hero + offset;
-            for (j = 0; j < 2 && (j < 1 || i == 1 || i == 3 || i == 4); j++) {
+            j = 0;
+            do {
                 moby = *(u8 **)(slot + 0x1090);
                 if (j == 1) moby = *(u8 **)(slot + 0x1094);
                 if (moby != 0) {
@@ -1454,7 +1469,13 @@ void FUN_L00_0020f580(void)
                     if (i == 1 && j == 1) index = 3;
                     index *= 0x40;
                     source = D_0013FE10_f580 + index;
-                    if (*(u8 *)(slot + 0x10aa) == 0) {
+                    if (*(u8 *)(slot + 0x10aa) != 0) {
+                        *(u128 *)((u8 *)&hero + offset + 0x1070) = *(u128 *)(D_0013FE40_f580 + index);
+                        FUN_0025d330_f580(source, (u8 *)&hero + offset + 0x1080);
+                        FUN_00250480_f580(moby);
+                        FUN_00250df8_f580(moby);
+                        *(u16 *)(moby + 0x34) &= 0xfffb;
+                    } else {
                         *(u128 *)(moby + 0x10) = *(u128 *)(D_0013FE40_f580 + index);
                         if (large_font_height == 0 || *(s32 *)(D_00179AC0_f580 + *(s32 *)(slot + 0x10b8) * 0x4c + 0x18) == 0) {
                             first = FUN_L00_0020d4d0(i);
@@ -1521,12 +1542,6 @@ void FUN_L00_0020f580(void)
                         if (D_0015EDB5_f580) FUN_001ff3c0_f580(moby + 0xe0, moby + 0xc0, moby + 0xd0);
                         FUN_00250f98_f580(moby);
                         *(u16 *)(moby + 0x34) |= 6;
-                    } else {
-                        *(u128 *)((u8 *)&hero + offset + 0x1070) = *(u128 *)(D_0013FE40_f580 + index);
-                        FUN_0025d330_f580(source, (u8 *)&hero + offset + 0x1080);
-                        FUN_00250480_f580(moby);
-                        FUN_00250df8_f580(moby);
-                        *(u16 *)(moby + 0x34) &= 0xfffb;
                     }
                 }
 after_moby:
@@ -1557,17 +1572,20 @@ after_moby:
                             FUN_00250df8_f580(effect);
                             *(u64 *)(effect + 0x38) = *(u64 *)(*(u8 **)((u8 *)&hero + 0x2080) + 0x38);
                             random_range = FUN_001fef20_f580(0x78);
-                            angle = FUN_001ff800_f580(((f32)(D_L00_0015F5CC_f580 % random_range) / FUN_00200240_f580(random_range) * 2.0f) * 3.1415927f - 3.1415927f);
-                            color_red = FUN_00200250_f580(angle * 90.0f) + 0xd7;
-                            color_green = FUN_00200250_f580(angle * 50.0f) + 0x32;
+                            angle = FUN_001ff800_f580(((f32)(D_L00_0015F5CC_f580 % random_range) / FUN_00200240_f580(random_range) * 2.0f) * 3.1415927f + -3.1415927f);
+                            color_red = FUN_00200250_f580(angle * 90.0f);
+                            color_green = FUN_00200250_f580(angle * 50.0f);
                             color_blue = FUN_00200250_f580(angle * 10.0f) + 0x14;
+                            color_red += 0xd7;
+                            color_green += 0x32;
                             if (color_red > 0xff) color_red = 0xff;
-                            *(u32 *)(effect + 0x90) = 0x80000000 | (color_blue << 16) | (color_green << 8) | color_red;
+                            *(u32 *)(effect + 0x90) = (color_blue << 16) | 0x80000000 | (color_green << 8) | color_red;
                             *(u16 *)(effect + 0x34) |= 0x10;
                         }
                     }
                 }
-            }
+                j++;
+            } while (j < 2 && (j < 1 || i == 1 || i == 3 || i == 4));
         }
         i++;
     } while (i < 7);
@@ -2022,13 +2040,13 @@ extern s32 D_L00_0015F3F8;
 void FUN_L00_00210748(void) {
     int i = 0;
     do {
-        struct Hero *slot_hero = (struct Hero *)(((char *)&hero) + i * 0x50);
-        struct Moby *moby = slot_hero->items[0].moby;
+        struct HeroItemSlot *slot_hero = &hero.items[i];
+        struct Moby *moby = slot_hero->moby;
         if (moby == 0) {
             hero_switch_item(i);
         } else {
-            if (slot_hero->items[0].state == 2) {
-                slot_hero->items[0].unk20++;
+            if (slot_hero->state == 2) {
+                slot_hero->unk20++;
                 hero_switch_item(i);
                 if (i == 0) {
                     char *p = (char *)&hero;
@@ -2045,9 +2063,11 @@ void FUN_L00_00210748(void) {
                 }
                 if ((moby->unk70 & 2) && moby->prev_seq == 0)
                     set_moby_sequence(moby, 1, 0, 2);
-            } else if (slot_hero->items[0].state == 3) {
-                slot_hero->items[0].unk1B++;
-                if ((moby->unk70 & 2) || i == 1 || i == 0)
+            } else if (slot_hero->state == 3) {
+                slot_hero->unk1B++;
+                if (moby->unk70 & 2)
+                    FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
+                else if (i == 1 || i == 0)
                     FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
             }
             if (moby->state != 0xfe && moby->state != 0xfd && i != 6 && moby->update)

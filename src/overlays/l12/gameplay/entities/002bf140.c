@@ -7,7 +7,145 @@
 #include "asm.h"
 #include "rnc/overlay/watch.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002bf140.s", FUN_L12_002bf140);
+#else
+extern char D_L12_001CBF40_c[] __asm__("D_L12_001CBF40");
+extern float absolute_float(float) __asm__("func_001F99C0");
+extern void FUN_L12_002bf770(int);
+
+extern int D_L12_00151388 __attribute__((sda));
+extern float D_0015ED70_c __asm__("D_0015ED70");
+extern float D_0015ED6C_c __asm__("D_0015ED6C");
+extern float D_0013F3D0_c __asm__("D_0013F3D0");
+extern float D_0013F3D4_c __asm__("D_0013F3D4");
+extern float D_0013F640_c __asm__("D_0013F640");
+extern void slot_limit_c(int) __asm__("FUN_001e93b0");
+extern void initialize_slots_c(void *, int) __asm__("FUN_L01_002b7a48");
+extern void initialize_slot_data_c(float) __asm__("FUN_L01_002b7ef0");
+extern void copy_slot_c(void *, void *) __asm__("FUN_L01_002b7c68");
+extern void finish_slots_c(void *, int) __asm__("FUN_L01_002b7fe0");
+extern float angle_c(float, float) __asm__("FUN_001f9e90");
+extern float sine_c(float) __asm__("FUN_001f9dc8");
+extern float cosine_c(float) __asm__("FUN_001f9de0");
+extern int random_integer_below_c(int) __asm__("FUN_00213260");
+extern float random_float_between_c(float, float) __asm__("FUN_002132a8");
+extern void move_scalar_c(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern void move_slot_c(float, float, float, float, void *, int, int) __asm__("FUN_L00_002a3ec8");
+extern int check_moby_c(float, void *) __asm__("FUN_L01_00275690");
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern void register_callback_c(void *, void *) __asm__("FUN_001f4600");
+extern void FUN_L12_002bf6d0(struct Moby *);
+extern void FUN_L12_002bf770(int);
+extern void FUN_L12_002bf748(void);
+
+void FUN_L12_002bf140(struct Moby *moby) {
+    int state = moby->state;
+    int *data = (int *)moby->pvars;
+    int slot;
+    float value;
+    float other;
+    int i;
+    if (state == 1) goto state_one;
+    if (state < 2) {
+        if (state != 0) goto update_slot;
+        data[3] = D_L12_00151388++;
+        if (D_L12_00151388 > 0x7f) {
+            slot_limit_c(0x20bc90);
+        }
+        moby->scale = moby->pclass->scale * 2.0f;
+        data[0] = 3;
+        moby->unk30 = 0xff;
+        moby->flags |= 1;
+        slot = data[3];
+        if (slot == 0) {
+            short *p = (short *)(D_L12_001CBF40_c + 16 * 0x1190 + 0x1e);
+            i = 16;
+            do {
+                *p = 0;
+                p -= 0x1190 / 2;
+            } while (--i >= 0);
+            initialize_slots_c(D_L12_001CBF40_c, 17);
+            initialize_slot_data_c(1.0f);
+            *(float *)0x001cad00 = 16.0f;
+            *(float *)0x001cad0c = -8.0f;
+            *(float *)0x001cad18 = 0.9f;
+            *(float *)0x001cad08 = -8.0f;
+            *(float *)0x001cad20 = 0.1f;
+            *(float *)0x001cad14 = 1.0f;
+            *(float *)0x001cad10 = 1.0f;
+            *(float *)0x001cad04 = 16.0f;
+            value = angle_c(*(float *)0x00180350, *(float *)0x00180354);
+            *(float *)0x001cad30 = sine_c(value) * 0.57735f;
+            *(float *)0x001cad34 = cosine_c(value) * 0.57735f;
+            *(int *)0x001cad38 = 0xbf13cd36;
+            *(int *)0x001cad28 = data[0] + 0x28;
+            *(u8 *)0x001cad3d = 0x40;
+            *(int *)0x001cad2c = data[1] + 0x28;
+            *(u8 *)0x001cad3c = 0x1c;
+            *(char **)0x001612d0 = D_L12_001CBF40_c;
+            *(void **)0x001612d4 = (void *)0x1cbe00;
+            *(int *)0x001612d8 = 17;
+            *(float *)0x0016120c = 32768.0f;
+            *(float *)0x00161210 = 255.0f;
+            *(float *)0x00161214 = 48.0f;
+            *(int *)0x00161208 = 0;
+        }
+        *(float *)(D_L12_001CBF40_c + data[3] * 0x1190) = moby->pos.x;
+        *(float *)(D_L12_001CBF40_c + data[3] * 0x1190 + 4) = moby->pos.y;
+        *(float *)(D_L12_001CBF40_c + data[3] * 0x1190 + 8) = moby->pos.z;
+        *(int *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x14) = data[0] + 0x28;
+        *(int *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x18) = data[1] + 0x28;
+        *(u8 *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x1c) = 0x1c;
+        *(u8 *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x1d) = 0x44;
+        *(u16 *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x1e) = 0xffff;
+        copy_slot_c(D_L12_001CBF40_c + data[3] * 0x1190, (char *)0x1cbe00 + data[3] * 16);
+        moby->state = 1;
+    } else if (state == 2) {
+        if ((moby->unkBC & 4) == 0) {
+            moby->unkBC = 1;
+        } else {
+            data[5] = 1;
+            *(float *)(data + 4) += 5.0f;
+            moby->unkBC = 1;
+        }
+        if (data[5] != 0) {
+            move_scalar_c(&moby->pos.z, (float *)(data + 2), *(float *)(data + 4), D_0015ED70_c * 4.0f, D_0015ED70_c * 4.0f, D_0015ED6C_c * 4.0f);
+            FUN_L12_002bf6d0(moby);
+        }
+        if (absolute_float(D_0013F3D0_c - moby->pos.x) <= 8.0f ||
+            absolute_float(D_0013F3D4_c - moby->pos.y) <= 8.0f) {
+            D_0013F640_c = moby->pos.z;
+        }
+        if (random_integer_below_c(200) == 0) {
+            value = *(float *)(D_L12_001CBF40_c + data[3] * 0x1190) + random_float_between_c(-4.0f, 4.0f);
+            other = *(float *)(D_L12_001CBF40_c + data[3] * 0x1190 + 4) + random_float_between_c(-4.0f, 4.0f);
+            move_slot_c(value, other, 1.0f, -0.05f, D_L12_001CBF40_c + data[3] * 0x1190, 1, 1);
+        }
+    }
+    goto update_slot;
+state_one:
+    {
+        D_L12_00151388 = 0;
+        FUN_L12_002bf770(data[3]);
+        moby->state = 2;
+        data[4] = *(int *)&moby->pos.z;
+    }
+    goto update_slot;
+update_slot:
+    slot = data[3];
+    if (slot >= 0) {
+        float visible = 0.0f;
+        if (check_moby_c(64.0f, moby) != -1) visible = 1.0f;
+        if (data[6] != -1 && is_point_inside_clip_volume((void *)0x167240, data[6]) == 0) visible = 0.0f;
+        *(u16 *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x1e) = visible == 0.0f ? 0 : 0xffff;
+        if (data[3] == 0) {
+            finish_slots_c(D_L12_001CBF40_c, 17);
+            register_callback_c(FUN_L12_002bf748, moby);
+        }
+    }
+}
+#endif
 /* Level overlay code after unclassified; generated by `decomp overlays stubs`, stubs replaced by C as functions are matched. */
 
 /* records, for entry arg, which of the 48 entries sit one grid step away */
@@ -328,7 +466,7 @@ void FUN_L12_002e3098(struct Moby *moby) {
     float direction[4] __attribute__((aligned(16)));
     float angle, horizontal, vertical, radius;
     int i, j, count, a, b, c, d, life;
-    float *position = pos;
+    float *position;
 
     void *vars = moby->pvars;
 
@@ -336,6 +474,7 @@ void FUN_L12_002e3098(struct Moby *moby) {
     if (moby->state == 15)
         count = truncate_float_to_s32_e3098((float)count * 1.5f);
     if (count > 0) {
+        position = pos;
         i = 0;
         do {
         qcopy(pos, &moby->pos);

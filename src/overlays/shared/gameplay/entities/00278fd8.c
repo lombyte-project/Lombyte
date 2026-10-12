@@ -1261,7 +1261,7 @@ extern float D_L15_0016140C __attribute__((sda));
 extern float D_0015ED70;
 extern float D_0015ED6C;
 extern char D_001413F4[];
-extern short D_0013F658;
+extern short D_0013F658[];
 extern int D_001413D0;
 extern char D_0013F420[];
 extern char *FUN_L00_0025a420(void *, int, int);
@@ -1329,10 +1329,14 @@ void FUN_L15_0029a570(void *mp, int flag) {
         case 6:
         case 7:
         case 8:
-            vz = D_L15_00161400 * D_0015ED6C;
-            vy = D_L15_001613F8 * D_0015ED6C;
-            vx = D_L15_001613FC * D_0015ED6C;
-            fall_speed = D_L15_001613F0 * D_0015ED70;
+            {
+            float frame_time_sq_value = D_0015ED70;
+            float frame_time_value = D_0015ED6C;
+            vz = D_L15_00161400 * frame_time_value;
+            vy = D_L15_001613F8 * frame_time_value;
+            vx = D_L15_001613FC * frame_time_value;
+            fall_speed = D_L15_001613F0 * frame_time_sq_value;
+            }
             *(float *)(data + 0x80) = fall_speed;
             *(float *)(data + 0x88) = vx;
             *(float *)(data + 0x8C) = vy;
@@ -1350,10 +1354,14 @@ void FUN_L15_0029a570(void *mp, int flag) {
             break;
         case 1:
         case 2:
-            fall_speed = D_L15_001613F4 * D_0015ED70;
-            vx = D_L15_00161408 * D_0015ED6C;
-            vy = D_L15_00161404 * D_0015ED6C;
-            vz = D_L15_0016140C * D_0015ED6C;
+            {
+            float frame_time_value = D_0015ED6C;
+            float frame_time_sq_value = D_0015ED70;
+            fall_speed = D_L15_001613F4 * frame_time_sq_value;
+            vz = D_L15_0016140C * frame_time_value;
+            vy = D_L15_00161404 * frame_time_value;
+            vx = D_L15_00161408 * frame_time_value;
+            }
             *(unsigned short *)(moby + 0x34) &= 0xEFFF;
             *(float *)(data + 0x80) = fall_speed;
             *(float *)(data + 0x88) = vx;
@@ -1403,7 +1411,7 @@ void FUN_L15_0029a570(void *mp, int flag) {
         target_angle = FUN_001f9e90(*(float *)(data + 0xD0) - *(float *)(moby + 0x10),
                               *(float *)(data + 0xD4) - *(float *)(moby + 0x14));
         if (fast_difference_between_rotations(*(float *)(moby + 0x48), target_angle) < 1.5707964f) {
-            if (D_0013F658 == 0) {
+            if (D_0013F658[0] == 0) {
                 seen = data[0x15A];
                 goto visibility_checked;
             }
@@ -1419,11 +1427,10 @@ void FUN_L15_0029a570(void *mp, int flag) {
 visibility_checked:
         if (*(int *)(data + 0x114) == 1)
             data[0x15E] = data[0x15B] + 1;
-        else if ((unsigned char)D_001413F4[0] == 3) {
-            if (data[0x15E] >= 2)
-                data[0x15B] = 1;
-        } else
+        else if ((unsigned char)D_001413F4[0] != 3)
             data[0x15E] = 0;
+        else if (data[0x15E] >= 2)
+            data[0x15B] = 1;
         data[0x19F] = 1;
         if (seen == 0) {
             if (data[0x15A] == 0)

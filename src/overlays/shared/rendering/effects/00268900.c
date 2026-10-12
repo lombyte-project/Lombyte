@@ -97,12 +97,6 @@ void FUN_L00_00268900(void)
 {
     u32 *handlers = effect_handlers;
     handlers[0] = (u32)FUN_L00_00268d48;
-    handlers[1] = (u32)FUN_L00_00268fe8;
-    handlers[2] = (u32)FUN_L00_00269290;
-    handlers[3] = (u32)FUN_L00_002694f8;
-    handlers[4] = (u32)FUN_L00_00269a70;
-    handlers[5] = (u32)FUN_L00_00269c70;
-    handlers[6] = (u32)FUN_L00_00269d20;
     handlers[7] = (u32)FUN_L00_0026a418;
     handlers[8] = (u32)FUN_L00_0026a5b8;
     handlers[9] = (u32)FUN_L00_0026a6f0;
@@ -119,6 +113,12 @@ void FUN_L00_00268900(void)
     handlers[20] = (u32)FUN_L00_0026c860;
     handlers[21] = (u32)FUN_L00_0026ccb0;
     handlers[22] = (u32)FUN_L00_00267b10;
+    handlers[1] = (u32)FUN_L00_00268fe8;
+    handlers[2] = (u32)FUN_L00_00269290;
+    handlers[3] = (u32)FUN_L00_002694f8;
+    handlers[4] = (u32)FUN_L00_00269a70;
+    handlers[5] = (u32)FUN_L00_00269c70;
+    handlers[6] = (u32)FUN_L00_00269d20;
     handlers[23] = (u32)FUN_L00_0026d1b0;
     handlers[24] = (u32)FUN_L00_0026d470;
     handlers[25] = (u32)FUN_L00_0026d700;

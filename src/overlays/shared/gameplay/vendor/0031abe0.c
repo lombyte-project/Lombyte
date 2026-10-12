@@ -266,13 +266,7 @@ typedef struct {
     u8 pad44[0xC];
 } CameraView;
 
-typedef struct {
-    f32 dist;           /* 0x00 */
-    f32 unk4;           /* 0x04 */
-    u8 pad8[8];
-    f32 height;         /* 0x10 */
-    u8 pad14[0xC];
-} CameraSpring;
+#include "rnc/gameplay/camera/camera_spring.h"
 
 typedef struct {
     Vec4 vel;           /* 0x00 */
@@ -528,31 +522,35 @@ void FUN_L05_00329ce8(Camera *cam) {
     CameraPreset *preset;
     Vec4 up, pos, relative, lateral, radial, initialTarget, desiredPos, projected, collisionPoint, collisionStep;
     Vec4 *focusPos = &o->focus.pos;
-    Vec4 *base = (Vec4 *)((char *)o + 0xA0);
-    Vec4 *target = &o->unk1B0;
-    Vec4 *next = (Vec4 *)((char *)o + 0x1D0);
+    Vec4 *base;
+    CameraSpring *spring = &o->spring;
+    CameraTrack *track = &o->track;
+    Vec4 *target;
+    Vec4 *next;
     Vec4 *working;
     Vec4 *direction;
     Vec4 *velocity;
     int i;
-    int moving = 0;
+    u8 moving = 0;
     float dist = o->dist;
     float value;
     float dot;
 
-    normalize_vector_xyz(&up, &hero.unk290, -1.0f);
-    *(OvlQuad *)&pos = *(OvlQuad *)focusPos;
     preset = D_L05_0015EF50[cam->preset].preset;
+    normalize_vector_xyz(&up, &hero.unk290, -1.0f);
+    qcopy(&pos, focusPos);
     if (o->mode == 0) {
         subtract_vector_xyz(&relative, &cam->pos, &pos);
+        base = (Vec4 *)((char *)o + 0xA0);
+        i = 0;
         dot = dot_vectors_xyz(&relative, base);
         normalize_vector_xyz(&projected, base, dot);
         subtract_vector_xyz(&lateral, &relative, &projected);
-        normalize_vector_xyz(&radial, &lateral, o->spring.dist);
+        normalize_vector_xyz(&radial, &lateral, spring->dist);
         add_vector_xyz(&initialTarget, &pos, &radial);
-        normalize_vector_xyz(&projected, base, o->spring.height);
+        normalize_vector_xyz(&projected, base, spring->height);
         add_vector_xyz(&desiredPos, &initialTarget, &projected);
-        add_vector_xyz(&desiredPos, &desiredPos, target);
+        add_vector_xyz(&desiredPos, &desiredPos, &o->unk1B0);
         ((float *)&cam->pos)[0] = FUN_001ebd78(o, ((float *)&cam->pos)[0], ((float *)&desiredPos)[0], o->unk10, o->unk14, *(float *)&o->unk18);
         ((float *)&cam->pos)[1] = FUN_001ebd78((char *)o + 4, ((float *)&cam->pos)[1], ((float *)&desiredPos)[1], o->unk10, o->unk14, *(float *)&o->unk18);
         ((float *)&cam->pos)[2] = FUN_001ebd78((char *)o + 8, ((float *)&cam->pos)[2], ((float *)&desiredPos)[2], o->unk10, o->unk14, *(float *)&o->unk18);
@@ -562,10 +560,12 @@ void FUN_L05_00329ce8(Camera *cam) {
         ((float *)&collisionPoint)[3] = 0.0f;
         subtract_vector_xyz(&collisionStep, &cam->pos, &collisionPoint);
         scale_vector_xyz(&collisionStep, &collisionStep, 0.16666667f);
-        i = 0;
+        next = (Vec4 *)((char *)o + 0x1D0);
+        working = &desiredPos;
+        direction = &projected;
         while (i < 6) {
             if (FUN_L00_001f0d60(0.5f, &collisionPoint, 0x12, 0) != 0) {
-                o->spring.height = FUN_001ebd78((char *)preset + 0x48, o->spring.height,
+                spring->height = FUN_001ebd78((char *)preset + 0x48, spring->height,
                     (*(float *)0x00174278) - ((float *)&pos)[2], 0.05f, 0.2f, 0.0f);
                 break;
             }
@@ -573,66 +573,69 @@ void FUN_L05_00329ce8(Camera *cam) {
             add_vector_xyz(&collisionPoint, &collisionPoint, &collisionStep);
         }
         if (i == 6) {
+            target = &o->unk1B0;
             ((float *)target)[0] = FUN_001ebd78((float *)&o->unk1C0 + 0, ((float *)target)[0], 0.0f, 0.02f, 0.2f, 0.05f);
             ((float *)target)[1] = FUN_001ebd78((float *)&o->unk1C0 + 1, ((float *)target)[1], 0.0f, 0.02f, 0.2f, 0.05f);
             ((float *)target)[2] = FUN_001ebd78((float *)&o->unk1C0 + 2, ((float *)target)[2], 0.0f, 0.02f, 0.2f, 0.05f);
-            o->spring.height = FUN_001ebd78((char *)preset + 0x48, o->spring.height,
+            spring->height = FUN_001ebd78((char *)preset + 0x48, spring->height,
                 o->spring_height, 0.005f, 0.2f, 0.0f);
         }
         if (D_0013F65E != 0 && D_0013F62C > 2.0f) {
-            value = absolute_float(o->spring.dist - o->unk190);
-            if (value < 0.015f) o->spring.dist = o->unk190;
-            else if (o->spring.dist < o->unk190) o->spring.dist += 0.015f;
-            else o->spring.dist -= 0.015f;
+            value = absolute_float(spring->dist - o->unk190);
+            if (value < 0.015f) spring->dist = o->unk190;
+            else if (spring->dist < o->unk190) spring->dist += 0.015f;
+            else spring->dist -= 0.015f;
             if (i == 6) {
-                value = absolute_float(o->spring.height - o->unk194);
-                if (value < 0.05f) o->spring.height = o->unk194;
-                else if (o->spring.height < o->unk194) o->spring.height += 0.05f;
-                else o->spring.height -= 0.05f;
+                value = absolute_float(spring->height - o->unk194);
+                if (value < 0.05f) spring->height = o->unk194;
+                else if (spring->height < o->unk194) spring->height += 0.05f;
+                else spring->height -= 0.05f;
             }
-            value = absolute_float(o->focus.dist - o->unk18C);
-            if (value < 0.02f) o->focus.dist = o->unk18C;
-            else if (o->focus.dist < o->unk18C) o->focus.dist += 0.02f;
-            else o->focus.dist -= 0.02f;
+            value = absolute_float(((CameraFocus *)focusPos)->dist - o->unk18C);
+            if (value < 0.02f) ((CameraFocus *)focusPos)->dist = o->unk18C;
+            else if (((CameraFocus *)focusPos)->dist < o->unk18C) ((CameraFocus *)focusPos)->dist += 0.02f;
+            else ((CameraFocus *)focusPos)->dist -= 0.02f;
         } else {
-            value = absolute_float(o->spring.dist - o->spring_dist);
-            if (value < 0.03f) o->spring.dist = o->spring_dist;
-            else if (o->spring.dist < o->spring_dist) o->spring.dist += 0.03f;
-            else o->spring.dist -= 0.03f;
-            value = absolute_float(o->spring.height - o->spring_height);
-            if (value < 0.1f) o->spring.height = o->spring_height;
-            else if (o->spring.height < o->spring_height) o->spring.height += 0.1f;
-            else o->spring.height -= 0.1f;
-            value = absolute_float(o->focus.dist - dist);
-            if (value < 0.04f) o->focus.dist = dist;
-            else if (o->focus.dist < dist) o->focus.dist += 0.04f;
-            else o->focus.dist -= 0.04f;
+            value = absolute_float(spring->dist - o->spring_dist);
+            if (value < 0.03f) spring->dist = o->spring_dist;
+            else if (spring->dist < o->spring_dist) spring->dist += 0.03f;
+            else spring->dist -= 0.03f;
+            value = absolute_float(spring->height - o->spring_height);
+            if (value < 0.1f) spring->height = o->spring_height;
+            else if (spring->height < o->spring_height) spring->height += 0.1f;
+            else spring->height -= 0.1f;
+            value = absolute_float(((CameraFocus *)focusPos)->dist - dist);
+            if (value < 0.04f) ((CameraFocus *)focusPos)->dist = dist;
+            else if (((CameraFocus *)focusPos)->dist < dist) ((CameraFocus *)focusPos)->dist += 0.04f;
+            else ((CameraFocus *)focusPos)->dist -= 0.04f;
         }
         moving = 1;
     } else {
-        qcopy((char *)o + 0x1A0, (char *)&D_001413D0[0] + 0xE0);
-        value = absolute_float(o->spring.dist - o->spring_dist);
-        if (value < 0.015f) o->spring.dist = o->spring_dist;
-        else if (o->spring.dist < o->spring_dist) o->spring.dist += 0.015f;
-        else o->spring.dist -= 0.015f;
-        value = absolute_float(o->spring.height - o->spring_height);
-        if (value < 0.05f) o->spring.height = o->spring_height;
-        else if (o->spring.height < o->spring_height) o->spring.height += 0.05f;
-        else o->spring.height -= 0.05f;
-        value = absolute_float(o->focus.dist - dist);
-        if (value < 0.02f) o->focus.dist = dist;
-        else if (o->focus.dist < dist) o->focus.dist += 0.02f;
-        else o->focus.dist -= 0.02f;
+        qcopy((char *)o + 0x1A0, (char *)hero.moby + 0xE0);
+        value = absolute_float(spring->dist - o->spring_dist);
+        if (value < 0.015f) spring->dist = o->spring_dist;
+        else if (spring->dist < o->spring_dist) spring->dist += 0.015f;
+        else spring->dist -= 0.015f;
+        value = absolute_float(spring->height - o->spring_height);
+        if (value < 0.05f) spring->height = o->spring_height;
+        else if (spring->height < o->spring_height) spring->height += 0.05f;
+        else spring->height -= 0.05f;
+        value = absolute_float(((CameraFocus *)focusPos)->dist - dist);
+        if (value < 0.02f) ((CameraFocus *)focusPos)->dist = dist;
+        else if (((CameraFocus *)focusPos)->dist < dist) ((CameraFocus *)focusPos)->dist += 0.02f;
+        else ((CameraFocus *)focusPos)->dist -= 0.02f;
+        next = (Vec4 *)((char *)o + 0x1D0);
+        base = (Vec4 *)((char *)focusPos + 0x20);
+        working = &desiredPos;
+        direction = &projected;
     }
 
     FUN_L05_003298d8(cam);
-    *(OvlQuad *)focusPos = *(OvlQuad *)next;
-    *(OvlQuad *)&pos = *(OvlQuad *)focusPos;
-    working = &desiredPos;
-    direction = &collisionStep;
+    qcopy(focusPos, next);
+    qcopy(&pos, focusPos);
     velocity = &collisionPoint;
-    normalize_vector_xyz(&desiredPos, base, o->focus.dist);
-    add_vector_xyz(working, &pos, &desiredPos);
+    normalize_vector_xyz(direction, base, ((CameraFocus *)focusPos)->dist);
+    add_vector_xyz(working, &pos, direction);
     subtract_vector_xyz(&relative, working, &cam->pos);
     normalize_vector_xyz(&relative, &relative, 1.0f);
     dot = dot_vectors_xyz(cam, &relative);
@@ -642,16 +645,16 @@ void FUN_L05_00329ce8(Camera *cam) {
     if (!moving || absolute_float(dot) < 0.5f || D_0013FBDD != 0) {
         value = 0.0f;
     } else {
-        normalize_vector_xyz(velocity, (char *)&D_001413D0[0] + 0xC0, 1.0f);
+        normalize_vector_xyz(velocity, (char *)hero.moby + 0xC0, 1.0f);
         dot = dot_vectors_xyz(velocity, (char *)cam + 0x20);
-        normalize_vector_xyz(direction, (char *)cam + 0x20, dot);
-        subtract_vector_xyz(velocity, velocity, direction);
+        normalize_vector_xyz(&collisionStep, (char *)cam + 0x20, dot);
+        subtract_vector_xyz(velocity, velocity, &collisionStep);
         value = dot_vectors_xyz(velocity, (char *)cam + 0x10) * D_0013B5A8;
     }
-    *(float *)&o->track.unk40 = FUN_001ebd78(&o->track.accel, *(float *)&o->track.unk40, value,
-                                 o->track.unk34, o->track.unk38, *(float *)&o->track.unk3C);
-    if (absolute_float(*(float *)&o->track.unk40) > 0.00001f) {
-        normalize_vector_xyz(velocity, (char *)cam + 0x10, *(float *)&o->track.unk40);
+    *(float *)&track->unk40 = FUN_001ebd78(&track->accel, *(float *)&track->unk40, value,
+                                 track->unk34, track->unk38, *(float *)&track->unk3C);
+    if (absolute_float(*(float *)&track->unk40) > 0.00001f) {
+        normalize_vector_xyz(velocity, (char *)cam + 0x10, *(float *)&track->unk40);
         add_vector_xyz(working, working, velocity);
     }
     subtract_vector_xyz(&relative, working, &cam->pos);

@@ -392,18 +392,18 @@ extern float D_L00_00161A10_002d89f0 __asm__("D_L00_00161A10") __attribute__((sd
 extern float D_L00_00161A14_002d89f0 __asm__("D_L00_00161A14") __attribute__((sda));
 extern float D_L00_00161A50_002d89f0 __asm__("D_L00_00161A50") __attribute__((sda));
 extern float D_L00_00161A54_002d89f0 __asm__("D_L00_00161A54") __attribute__((sda));
-extern float D_L00_00161A58_002d89f0 __asm__("D_L00_00161A58") __attribute__((sda));
+extern int D_L00_00161A58_002d89f0 __asm__("D_L00_00161A58") __attribute__((sda));
 extern float D_L00_00161A5C_002d89f0 __asm__("D_L00_00161A5C") __attribute__((sda));
-extern float D_L00_00161A3C_002d89f0 __asm__("D_L00_00161A3C") __attribute__((sda));
-extern float D_L00_00161A40_002d89f0 __asm__("D_L00_00161A40") __attribute__((sda));
-extern float D_L00_00161A44_002d89f0 __asm__("D_L00_00161A44") __attribute__((sda));
-extern float D_L00_00161A48_002d89f0 __asm__("D_L00_00161A48") __attribute__((sda));
+extern int D_L00_00161A3C_002d89f0 __asm__("D_L00_00161A3C") __attribute__((sda));
+extern int D_L00_00161A40_002d89f0 __asm__("D_L00_00161A40") __attribute__((sda));
+extern int D_L00_00161A44_002d89f0 __asm__("D_L00_00161A44") __attribute__((sda));
+extern int D_L00_00161A48_002d89f0 __asm__("D_L00_00161A48") __attribute__((sda));
 extern float D_L00_00161A0C_002d89f0 __asm__("D_L00_00161A0C") __attribute__((sda));
 extern int D_0015EDA0_002d89f0 __asm__("D_0015EDA0");
 extern int D_001415F8_002d89f0 __asm__("D_001415F8");
 extern int D_0013F510_002d89f0 __asm__("D_0013F510");
-extern char D_001413F4_002d89f0 __asm__("D_001413F4");
-extern char D_0015EDB6_002d89f0 __asm__("D_0015EDB6");
+extern unsigned char D_001413F4_002d89f0 __asm__("D_001413F4");
+extern unsigned char D_0015EDB6_002d89f0 __asm__("D_0015EDB6");
 extern char *D_L00_0015F63C_002d89f0 __asm__("D_L00_0015F63C");
 extern float D_L00_001E14A0_002d89f0[] __asm__("D_L00_001E14A0");
 extern float D_0013F3D0_002d89f0[] __asm__("D_0013F3D0");
@@ -413,8 +413,8 @@ extern float D_L00_001E3D20_002d89f0[] __asm__("D_L00_001E3D20");
 extern float D_L00_001E3CA0_002d89f0[] __asm__("D_L00_001E3CA0");
 extern int D_L00_001619F0_002d89f0 __asm__("D_L00_001619F0") __attribute__((sda));
 extern int D_L00_00161A00_002d89f0 __asm__("D_L00_00161A00") __attribute__((sda));
-extern int D_L00_001619F8_002d89f0 __asm__("D_L00_001619F8") __attribute__((sda));
-extern int D_L00_001619FC_002d89f0 __asm__("D_L00_001619FC") __attribute__((sda));
+extern float D_L00_001619F8_002d89f0 __asm__("D_L00_001619F8") __attribute__((sda));
+extern float D_L00_001619FC_002d89f0 __asm__("D_L00_001619FC") __attribute__((sda));
 extern char D_L00_001619F4_002d89f0 __asm__("D_L00_001619F4") __attribute__((sda));
 extern char D_L00_001E3CD0_002d89f0[] __asm__("D_L00_001E3CD0");
 extern char D_L00_001E3CE0_002d89f0[] __asm__("D_L00_001E3CE0");
@@ -428,7 +428,7 @@ extern char D_L00_001E3D60_002d89f0[] __asm__("D_L00_001E3D60");
 extern char D_L00_001E3D70_002d89f0[] __asm__("D_L00_001E3D70");
 extern char D_L00_001E3D80_002d89f0[] __asm__("D_L00_001E3D80");
 extern char D_L00_001E3D90_002d89f0[] __asm__("D_L00_001E3D90");
-extern float FUN_L00_00257b90_002d89f0(float, float) __asm__("FUN_L00_00257b90");
+extern int FUN_L00_00257b90_002d89f0(int, int) __asm__("FUN_L00_00257b90");
 extern float FUN_L00_00257c48_002d89f0(float, float) __asm__("FUN_L00_00257c48");
 extern float FUN_L00_00257e20_002d89f0(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern int FUN_001fef20_002d89f0(int) __asm__("FUN_001f96f8");
@@ -455,8 +455,10 @@ extern int FUN_L00_002d8510_002d89f0(void *) __asm__("FUN_L00_002d8510");
 extern void FUN_L00_002d8418_002d89f0(void *) __asm__("FUN_L00_002d8418");
 extern void FUN_L00_002d81b8_002d89f0(void *) __asm__("FUN_L00_002d81b8");
 extern void FUN_L00_002d8850_002d89f0(void *, void *, int) __asm__("FUN_L00_002d8850");
-extern void FUN_L00_002d9810_002d89f0(void *, void *) __asm__("FUN_001f4600");
+extern void FUN_L00_002d9810_002d89f0(void *, void *) __asm__("FUN_L00_001f93e0");
 extern void FUN_L00_0024eb68_002d89f0(void *) __asm__("FUN_L00_0024eb68");
+extern float FUN_002132a8_002d89f0(float, float) __asm__("FUN_002132a8");
+void FUN_L00_002d9810(u8 *);
 #define D89(o) ((char *)D_L00_001E3CA0_002d89f0+(o))
 #define F89(p,o) (*(float *)((char *)(p)+(o)))
 #define I89(p,o) (*(int *)((char *)(p)+(o)))
@@ -464,113 +466,118 @@ extern void FUN_L00_0024eb68_002d89f0(void *) __asm__("FUN_L00_0024eb68");
 #define B89(p,o) (*(char *)((char *)(p)+(o)))
 void FUN_L00_002d89f0(char *m) {
     D_002d89f0 *d = *(D_002d89f0 **)(m + 0x78);
-    char *other, *e, *spawn;
-    float v140[8], v130[4], v120[4], v110[4], v100[4], vf0[4], ve0[4];
+    char *other, *e, *spawn, *effectData;
+    float v140[4], v130[4], v120[4], v110[4], v100[4], vf0[4], ve0[4];
     float t, phase;
     int i, j, n, r;
-    short h;
+    char **effects;
+    int h;
     switch ((unsigned char)m[0x20]) {
     case 0:
         m[0x20] = 1;
         I89(m,0x94) = 0;
         *(unsigned short *)(m+0x34) |= 0x41;
         m[0xbc] = 0;
-        other = d->owner;
-        qcopy(m+0x10,other+0x10);
-        qcopy(m+0x40,other+0x40);
-        qcopy(d->target,m+0x10);
+        other = d->owner+0x10;
+        qcopy(m+0x10,other);
+        other+=0x30;
+        qcopy(m+0x40,other);
+        qcopy(d->position,m+0x10);
         d->phase = 0;
         d->h8 = 0;
-        d->target[2] += 0.5f;
-        d->angle = FUN_L00_00257b90_002d89f0(d->phase,3.1415927f);
+        d->position[2] += 0.5f;
+        d->angle = FUN_002132a8_002d89f0(d->phase,3.1415927f);
         H89(d,0x56) = 0;
         d->hA = 0;
-        for (i=0; i<4; i++) d->basis[i] = (float)FUN_L00_00257b50_002d89f0(0xff);
-        for (i=0; i<4; i++) d->counters[i] = FUN_001fef20_002d89f0((int)D_L00_00161A58_002d89f0);
-        for (i=7; i>=0; i--) d->effects[i]=0;
+        { int i; for (i=0; i<4; i++) d->basis[i] = (float)FUN_L00_00257b50_002d89f0(0xff); }
+        { int i; for (i=0; i<4; i++) d->counters[i] = FUN_001fef20_002d89f0((int)D_L00_00161A58_002d89f0); }
+        { int i; for (i=7; i>=0; i--) d->effects[i]=0; }
         if (D_L00_0015F63C_002d89f0 == 0) {
+            FUN_001ffa50_002d89f0(m+0xc0,m+0x40);
             D_L00_0015F63C_002d89f0 = m;
-            FUN_001ffa50_002d89f0((char *)d+0xc0,m+0x40);
             m[0x30] = -1;
             F89(d,0x7c) = 0;
-            FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D_L00_001E3CA0_002d89f0,(char *)d+0xc0);
-            qcopy(D89(0x80),(char *)d+0xe0);
-            FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x90),(char *)d+0xd0);
-            qcopy(D89(0x90),(char *)d+0xc0);
-            FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0xa0),(char *)d+0xe0);
-            qcopy(D89(0xa0),(char *)d+0xd0);
-            FUN_L00_001ff278_002d89f0(D89(0x30),(char *)d+0xc0,(char *)d+0xe0);
+            FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D_L00_001E3CA0_002d89f0,m+0xc0);
+            qcopy((D_L00_001E3D20_002d89f0+0),m+0xe0);
+            FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x10),m+0xd0);
+            qcopy((D_L00_001E3D20_002d89f0+4),m+0xc0);
+            FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x20),m+0xe0);
+            qcopy((D_L00_001E3D20_002d89f0+8),m+0xd0);
+            FUN_L00_001ff278_002d89f0(D89(0x30),m+0xc0,m+0xe0);
             FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x30),D89(0x30));
-            FUN_L00_001ff3c0_002d89f0(D89(0xb0),D89(0x30),(char *)d+0xd0);
-            FUN_L00_001ff278_002d89f0(D89(0x40),(char *)d+0xc0,(char *)d+0xd0);
+            FUN_L00_001ff3c0_002d89f0((D_L00_001E3D20_002d89f0+12),D89(0x30),m+0xd0);
+            FUN_L00_001ff278_002d89f0(D89(0x40),m+0xc0,m+0xd0);
             FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x40),D89(0x40));
-            FUN_L00_001ff3c0_002d89f0(D89(0xc0),D89(0x40),(char *)d+0xe0);
-            FUN_L00_001ff2a8_002d89f0(D89(0x50),(char *)d+0xd0,(char *)d+0xe0);
+            FUN_L00_001ff3c0_002d89f0((D_L00_001E3D20_002d89f0+16),D89(0x40),m+0xe0);
+            FUN_L00_001ff2a8_002d89f0(D89(0x50),m+0xd0,m+0xe0);
             FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x50),D89(0x50));
-            FUN_L00_001ff3c0_002d89f0(D89(0xd0),D89(0x50),(char *)d+0xc0);
-            FUN_L00_001ff2a8_002d89f0(D89(0x60),(char *)d+0xc0,(char *)d+0xe0);
+            FUN_L00_001ff3c0_002d89f0((D_L00_001E3D20_002d89f0+20),D89(0x50),m+0xc0);
+            FUN_L00_001ff2a8_002d89f0(D89(0x60),m+0xc0,m+0xe0);
             FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x60),D89(0x60));
-            FUN_L00_001ff3c0_002d89f0(D89(0xe0),D89(0x60),(char *)d+0xd0);
-            FUN_L00_001ff2a8_002d89f0(D89(0x70),(char *)d+0xc0,(char *)d+0xd0);
+            FUN_L00_001ff3c0_002d89f0((D_L00_001E3D20_002d89f0+24),D89(0x60),m+0xd0);
+            FUN_L00_001ff2a8_002d89f0(D89(0x70),m+0xc0,m+0xd0);
             FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x70),D89(0x70));
-            FUN_L00_001ff3c0_002d89f0(D89(0xf0),D89(0x70),(char *)d+0xe0);
+            FUN_L00_001ff3c0_002d89f0((D_L00_001E3D20_002d89f0+28),D89(0x70),m+0xe0);
         }
-        FUN_L00_00262c50_002d89f0(1.0f,FUN_L00_00257b90_002d89f0(0,6.2831855f),FUN_L00_00257b90_002d89f0(-6.2831855f,1.5707964f),d->target);
+        FUN_L00_00262c50_002d89f0(1.0f,FUN_002132a8_002d89f0(0,6.2831855f),FUN_002132a8_002d89f0(-1.5707964f,1.5707964f),d->target);
         F89(d,0x2c) = (float)FUN_L00_00257c48_002d89f0(0.785398f,1.5707964f);
     case 1:
         other = d->owner;
         qcopy(m+0x10,other+0x10);
-        qcopy(d->target,other+0x10);
-        d->target[2] += 0.5f;
+        qcopy(d->position,other+0x10);
+        d->position[2] += 0.5f;
         if (other[0x20] < 0 || other == m) {
             m[0x20] = 2;
             F89(d,0x50) = 0;
         }
     case 2:
-        if (m[0x20] == 2) {
-            qcopy(d->target,m+0x10);
-            d->target[2] += 0.5f;
+        if ((unsigned char)m[0x20] == 2) {
+            qcopy(d->position,m+0x10);
+            d->position[2] += 0.5f;
             FUN_L00_002d81b8_002d89f0(m);
             for (i=0; i<8; i++) {
                 e = d->effects[i];
                 if (e) {
-                    F89(e,0x28) = D_L00_00161A5C_002d89f0 * FUN_L00_001ff800_002d89f0(F89(e,0x2c)) + D_L00_00161A14_002d89f0;
-                    F89(e,0x2c) = FUN_L00_002000e8_002d89f0(F89(e,0x2c),D_L00_001E14A0_002d89f0[i]);
+                    effectData=e+0x20;
+                    F89(effectData,0x8) = D_L00_00161A5C_002d89f0 * FUN_L00_001ff800_002d89f0(F89(effectData,0xc)) + D_L00_00161A14_002d89f0;
+                    F89(effectData,0xc) = FUN_L00_002000e8_002d89f0(F89(effectData,0xc),D_L00_001E14A0_002d89f0[i]);
                 }
             }
         }
-        n = D_001413F4_002d89f0 == 1 ? 4 : D_0015EDA0_002d89f0;
-        if (m[0x20] != 1 && D_L00_0015F63C_002d89f0 &&
+        n = D_0015EDA0_002d89f0;
+        if (hero.vehicle_mode == 1) n=4;
+        if ((unsigned char)m[0x20] != 1 && D_L00_0015F63C_002d89f0 &&
             I89(D_L00_0015F63C_002d89f0,0x78) &&
-            D_001415F8_002d89f0 &&
-            (D_001415F8_002d89f0 + I89(I89(D_L00_0015F63C_002d89f0,0x78),0x7c) < n ||
-             (D_0015EDB6_002d89f0 && D_0013F510_002d89f0 == 0)) &&
-            FUN_L00_001ff450_002d89f0(m+0x10,D_0013F3D0_002d89f0) < 10.0f &&
+            hero.health.hp &&
+            (hero.health.hp + I89(I89(D_L00_0015F63C_002d89f0,0x78),0x7c) < n ||
+             (D_0015EDB6_002d89f0 && hero.invulnerable_frames == 0)) &&
+            FUN_L00_001ff450_002d89f0(m+0x10,&hero.motion) < 10.0f &&
             FUN_L00_002d8980(m)) {
             m[0x20] = 3;
             I89(I89(D_L00_0015F63C_002d89f0,0x78),0x7c)++;
             if (D_0015EDB6_002d89f0)
-                D_0013F510_002d89f0 = FUN_001fef20_002d89f0(600);
+                hero.invulnerable_frames = FUN_001fef20_002d89f0(600);
             d->timer = FUN_001fef20_002d89f0((int)D_L00_00161A3C_002d89f0);
-            FUN_L00_001ff300_002d89f0(-D_L00_00161A54_002d89f0,v110,D_0013F5E0_002d89f0);
-            FUN_L00_001ff278_002d89f0(v110,D_0013F3D0_002d89f0,v110);
-            FUN_L00_001ff300_002d89f0(-D_L00_00161A50_002d89f0,v140,D_0013F5E0_002d89f0);
+            FUN_L00_001ff300_002d89f0(-D_L00_00161A54_002d89f0,v110,&hero.unk290);
+            FUN_L00_001ff278_002d89f0(v110,&hero.motion,v110);
+            FUN_L00_001ff300_002d89f0(-D_L00_00161A50_002d89f0,v140,&hero.unk290);
             FUN_L00_001ff2a8_002d89f0(v120,v110,m+0x10);
             v120[2] -= 0.5f;
             FUN_L00_001ff3c0_002d89f0(v100,v120,v140);
             FUN_L00_001ff3c0_002d89f0(v140,v100,v120);
-            FUN_L00_0025fc08_002d89f0(-6.2831855f,v140,v140,v120);
+            FUN_L00_0025fc08_002d89f0(-1.5707964f,v140,v140,v120);
             FUN_L00_001ff500_002d89f0(D_L00_00161A50_002d89f0,v140,v140);
             FUN_L00_001ff300_002d89f0(0.5f,vf0,v120);
             for (i=0; i<8; i++) {
                 e = d->effects[i];
                 if (e) {
+                    effectData=e+0x20;
                     FUN_L00_0025fc08_002d89f0(i*0.44854963f,v130,v140,v120);
                     FUN_L00_001ff278_002d89f0(ve0,vf0,v130);
-                    F89(e,0x24)=ve0[0]; F89(e,0x28)=ve0[1]; F89(e,0x2c)=ve0[2];
-                    F89(e,0x30)=F89(e,0x10); F89(e,0x34)=F89(e,0x14); F89(e,0x38)=F89(e,0x18);
+                    F89(effectData,0x4)=ve0[0]; F89(effectData,0x8)=ve0[1]; F89(effectData,0xc)=ve0[2];
+                    F89(effectData,0x10)=F89(d->effects[i],0x10); F89(effectData,0x14)=F89(d->effects[i],0x14); F89(effectData,0x18)=F89(d->effects[i],0x18);
                     h=FUN_001fef20_002d89f0((int)FUN_L00_00257b90_002d89f0(D_L00_00161A44_002d89f0,D_L00_00161A48_002d89f0));
-                    H89(e,0x3e)=h; H89(e,0x3c)=h;
+                    H89(effectData,0x1e)=h; H89(effectData,0x1c)=h;
                 }
             }
         }
@@ -579,7 +586,7 @@ void FUN_L00_002d89f0(char *m) {
         if (D_L00_0015F63C_002d89f0 == m) FUN_L00_002d8908();
         qcopy(v140,m+0x10); v140[2] += 0.5f; v140[3] = 1.0f;
         if (FUN_L00_002002e0_002d89f0(64.0f,v140) >= 0) {
-            FUN_L00_002d9810_002d89f0((void *)0x2d9810,m);
+            FUN_L00_002d9810_002d89f0((void *)FUN_L00_002d9810,m);
             n = FUN_L00_001ff488_002d89f0(m+0x10,D_L00_00166DC0_002d89f0) > 10.0f ? 5 : 0x28;
             r = FUN_001fef20_002d89f0(n);
             for (i=0; i<8; i++) {
@@ -589,18 +596,19 @@ void FUN_L00_002d89f0(char *m) {
                     F89(spawn,0x30)=F89(spawn,0x10)-F89(m,0x10);
                     F89(spawn,0x34)=F89(spawn,0x14)-F89(m,0x14);
                     F89(spawn,0x38)=F89(spawn,0x18)-F89(m,0x18);
-                    I89(spawn,0x24)=(int)(m[0x20]==2 ? m : d->owner);
+                    I89(spawn,0x24)=(int)((unsigned char)m[0x20]==2 ? m : d->owner);
                     I89(spawn,4)=D_L00_00161A00_002d89f0;
-                    I89(spawn,0xc)=D_L00_001619F8_002d89f0;
+                    F89(spawn,0xc)=D_L00_001619F8_002d89f0;
                 }
                 e = d->effects[i];
                 if (!e) {
                     e = FUN_L00_00273708_002d89f0(v130,0,1);
                     d->effects[i]=e;
                     if (e) {
-                        I89(e,0x2c)=0; F89(e,0x28)=D_L00_00161A14_002d89f0;
-                        I89(e,0xc)=D_L00_001619FC_002d89f0;
-                        I89(e,4)=D_L00_00161A00_002d89f0;
+                    effectData=e+0x20;
+                        I89(e,0x2c)=0; F89(effectData,0x8)=D_L00_00161A14_002d89f0;
+                        F89(d->effects[i],0xc)=D_L00_001619FC_002d89f0;
+                        I89(d->effects[i],4)=D_L00_00161A00_002d89f0;
                     }
                 } else {
                     qcopy(e+0x10,v130);
@@ -612,51 +620,45 @@ void FUN_L00_002d89f0(char *m) {
     case 3:
         if (D_L00_0015F63C_002d89f0 == m) FUN_L00_002d8908();
         if (H89(d,0x56)) {
-            FUN_L00_001ff300_002d89f0(-D_L00_00161A54_002d89f0,m+0x10,D_0013F5E0_002d89f0);
-            FUN_L00_001ff278_002d89f0(m+0x10,D_0013F3D0_002d89f0,m+0x10);
+            FUN_L00_001ff300_002d89f0(-D_L00_00161A54_002d89f0,m+0x10,&hero.unk290);
+            FUN_L00_001ff278_002d89f0(m+0x10,&hero.motion,m+0x10);
             F89(m,0x4c)=0.5235988f;
             if (FUN_L00_002d8510_002d89f0(m) && FUN_L00_00257b50_002d89f0(5)==0)
                 FUN_L00_002d8418_002d89f0(m);
         }
-        n = D_001413F4_002d89f0 == 1 ? 4 : D_0015EDA0_002d89f0;
-        if (D_001415F8_002d89f0 == n && D_0013F510_002d89f0 && D_0015EDB6_002d89f0 &&
-            d->timer < (h=FUN_001fef20_002d89f0((int)D_L00_00161A40_002d89f0))) {
-            d->timer=h;
-            for (i=2; i>=0; i--) d->counters[i]++;
+        effects=d->effects;
+        n = D_0015EDA0_002d89f0;
+        if (hero.vehicle_mode == 1) n=4;
+        if (hero.health.hp == n && hero.invulnerable_frames && D_0015EDB6_002d89f0) {
+            h=FUN_001fef20_002d89f0(D_L00_00161A40_002d89f0);
+            if (d->timer < h) {
+                d->timer=h;
+                for (i=0; i<4; i++) d->counters[i]++;
+            }
         }
-        if (!FUN_001fef98_002d89f0(&d->timer)) {
-            FUN_L00_001ff300_002d89f0(-D_L00_00161A54_002d89f0,v120,D_0013F5E0_002d89f0);
-            FUN_L00_001ff278_002d89f0(v120,D_0013F3D0_002d89f0,v120);
-            for (i=0; i<8; i++) {
-                e=d->effects[i];
+        if (FUN_001fef98_002d89f0(&d->timer)) {
+            for (i=7; i>=0; i--,effects++) {
+                e=*effects;
                 if (e) {
-                    if (!FUN_001fef98_002d89f0(e+0x3e)) {
-                        qcopy(v100,e+0x10);
-                        qcopy(v130,e+0x30);
-                        v130[3]=0;
-                        phase=1.0f-(float)H89(e,0x3e)/FUN_L00_00200240_002d89f0(H89(e,0x3c));
-                        for (j=0; j<3; j++) {
-                            v140[j]=v130[j]-F89(e,0x24+j*4);
-                            v110[j]=v120[j]-F89(e,0x24+j*4);
-                        }
-                        F89(e,0x10)=FUN_L00_00257e20_002d89f0(v140[0],v130[0],v120[0],v110[0],phase);
-                        F89(e,0x14)=FUN_L00_00257e20_002d89f0(v140[1],v130[1],v120[1],v110[1],phase);
-                        F89(e,0x18)=FUN_L00_00257e20_002d89f0(v140[2],v130[2],v120[2],v110[2],phase);
-                        for (j=0; j<3; j++) vf0[j]=(float)FUN_L00_00257c48_002d89f0(0,0.01f)+F89(e,0x10+j*4);
-                        spawn=FUN_L00_00273708_002d89f0(vf0,FUN_001fef20_002d89f0(0x14),0);
-                        if (spawn) { I89(spawn,4)=D_L00_00161A00_002d89f0; I89(spawn,0xc)=D_L00_001619F8_002d89f0; }
-                        FUN_L00_001ff278_002d89f0(v100,e+0x10,v100);
-                        FUN_L00_001ff300_002d89f0(0.5f,v100,v100);
-                        for (j=0; j<3; j++) vf0[j]=(float)FUN_L00_00257c48_002d89f0(0,0.01f)+v100[j];
-                        spawn=FUN_L00_00273708_002d89f0(vf0,FUN_001fef20_002d89f0(0x14),0);
-                        if (spawn) { I89(spawn,4)=D_L00_00161A00_002d89f0; I89(spawn,0xc)=D_L00_001619F8_002d89f0; }
-                    } else {
+                    effectData=e+0x20; FUN_L00_00267a08_002d89f0(e); *effects=0; }
+            }
+            if (D_L00_0015F63C_002d89f0==m) m[0x20]=4;
+            else FUN_L00_0024eb68_002d89f0(m);
+        } else {
+            FUN_L00_001ff300_002d89f0(-D_L00_00161A54_002d89f0,v120,&hero.unk290);
+            FUN_L00_001ff278_002d89f0(v120,&hero.motion,v120);
+            for (i=7; i>=0; i--,effects++) {
+                e=*effects;
+                if (e) {
+                    effectData=e+0x20;
+                    if (FUN_001fef98_002d89f0(e+0x3e)) {
                         if (!H89(d,0x56)) {
-                            n=D_001413F4_002d89f0==1?4:D_0015EDA0_002d89f0;
-                            if (D_001415F8_002d89f0) {
-                                r=D_001415F8_002d89f0+1;
-                                D_001415F8_002d89f0=n;
-                                if (r<=n) D_001415F8_002d89f0=r;
+                            n=D_0015EDA0_002d89f0;
+                            if (hero.vehicle_mode==1) n=4;
+                            if (hero.health.hp) {
+                                r=hero.health.hp+1;
+                                hero.health.hp=n;
+                                if (r<=n) hero.health.hp=r;
                             }
                             other=D_L00_0015F63C_002d89f0;
                             j=--I89(I89(other,0x78),0x7c);
@@ -665,17 +667,37 @@ void FUN_L00_002d89f0(char *m) {
                             H89(d,0x56)=1;
                         }
                         FUN_L00_00267a08_002d89f0(e);
-                        d->effects[i]=0;
+                        *effects=0;
+                    } else {
+                        qcopy(v100,e+0x10);
+                        t=FUN_L00_00200240_002d89f0(H89(effectData,0x1c));
+                        v130[0]=F89(effectData,0x10); v130[1]=F89(effectData,0x14); v130[2]=F89(effectData,0x18);
+                        v130[3]=0;
+                        phase=1.0f-(float)H89(effectData,0x1e)/t;
+                        v140[0]=v130[0]-F89(effectData,0x4);
+                        v140[1]=v130[1]-F89(effectData,0x8);
+                        v140[2]=v130[2]-F89(effectData,0xc);
+                        v110[0]=v120[0]-F89(effectData,0x4);
+                        v110[1]=v120[1]-F89(effectData,0x8);
+                        v110[2]=v120[2]-F89(effectData,0xc);
+                        F89(e,0x10)=FUN_L00_00257e20_002d89f0(v140[0],v130[0],v120[0],v110[0],phase);
+                        F89(e,0x14)=FUN_L00_00257e20_002d89f0(v140[1],v130[1],v120[1],v110[1],phase);
+                        F89(e,0x18)=FUN_L00_00257e20_002d89f0(v140[2],v130[2],v120[2],v110[2],phase);
+                        vf0[0]=FUN_L00_00257c48_002d89f0(0,0.01f)+F89(e,0x10+0);
+                        vf0[1]=FUN_L00_00257c48_002d89f0(0,0.01f)+F89(e,0x10+4);
+                        vf0[2]=FUN_L00_00257c48_002d89f0(0,0.01f)+F89(e,0x10+8);
+                        spawn=FUN_L00_00273708_002d89f0(vf0,FUN_001fef20_002d89f0(0x14),0);
+                        if (spawn) { I89(spawn,4)=D_L00_00161A00_002d89f0; F89(spawn,0xc)=D_L00_001619F8_002d89f0; }
+                        FUN_L00_001ff278_002d89f0(v100,e+0x10,v100);
+                        FUN_L00_001ff300_002d89f0(0.5f,v100,v100);
+                        vf0[0]=FUN_L00_00257c48_002d89f0(0,0.01f)+v100[0];
+                        vf0[1]=FUN_L00_00257c48_002d89f0(0,0.01f)+v100[1];
+                        vf0[2]=FUN_L00_00257c48_002d89f0(0,0.01f)+v100[2];
+                        spawn=FUN_L00_00273708_002d89f0(vf0,FUN_001fef20_002d89f0(0x14),0);
+                        if (spawn) { I89(spawn,4)=D_L00_00161A00_002d89f0; F89(spawn,0xc)=D_L00_001619F8_002d89f0; }
                     }
                 }
             }
-        } else {
-            for (i=0; i<8; i++) {
-                e=d->effects[i];
-                if (e) { FUN_L00_00267a08_002d89f0(e); d->effects[i]=0; }
-            }
-            if (D_L00_0015F63C_002d89f0==m) m[0x20]=4;
-            else FUN_L00_0024eb68_002d89f0(m);
         }
         break;
     case 4:
@@ -738,10 +760,12 @@ float FUN_L00_00200260_002d9810(float, float) __asm__("FUN_L00_00200260");
 
 void FUN_L00_002d9810(u8 *m) {
     Quad_002d9810 quad;
-    u128 rotated, shifted, cross, normal, position;
+    u128 rotated, shifted, cross, normal;
+    u128 position;
     float transformed[4];
     float projection[8];
     float *data = *(float **)(m + 0x78);
+    char *shape = *(char **)((char *)data + 0xc);
     float ratio = data[0] / D_L00_00161A10_002d9810;
     int i, j, color;
     short *indices;
@@ -766,7 +790,7 @@ void FUN_L00_002d9810(u8 *m) {
     FUN_001f9a10_002d9810(&position, &position, D_L00_00161AF0_002d9810);
     FUN_001f9a28_002d9810(&rotated, D_L00_00166DC0_002d9810, &position);
     FUN_001f9bf8_002d9810(1.0f, &shifted, &rotated);
-    FUN_001f9ad8_002d9810(&cross, &shifted, (char *)data + 0xe0);
+    FUN_001f9ad8_002d9810(&cross, &shifted, shape + 0xe0);
     FUN_001f9bf8_002d9810(1.0f, &cross, &cross);
     FUN_001f9ad8_002d9810(&normal, &cross, &shifted);
     quad.colors[0] = D_L00_00161AD8_002d9810;
@@ -829,9 +853,9 @@ void FUN_L00_002d9810(u8 *m) {
         quad.texture[1] = FUN_001f44b8_002d9810(D_L00_00161AE4_002d9810);
         quad.colors[0] = quad.colors[3] = quad.colors[2] = quad.colors[1] = 0x107f7f7f;
         quad.texture[3] = 0x8000000044ULL;
-        qcopy(&shifted, (char *)data + 0xc0);
-        qcopy(&cross, (char *)data + 0xd0);
-        qcopy(&normal, (char *)data + 0xe0);
+        qcopy(&shifted, shape + 0xc0);
+        qcopy(&cross, shape + 0xd0);
+        qcopy(&normal, shape + 0xe0);
         u = &quad.texcoords[1];
         v = &quad.texcoords[0];
         ((float *)&position)[2] = *(float *)(m + 0x18);
@@ -1390,8 +1414,8 @@ s32 FUN_L00_002dbe20(u8 *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002dbf28.s", FUN_L00_002dbf28);
 #else
 extern u128 D_L00_001EA0B0_002dbf28[] __asm__("D_L00_001EA0B0");
-extern u64 D_L00_001EA100_002dbf28[] __asm__("D_L00_001EA100");
-extern u64 D_L00_001EA118_002dbf28[] __asm__("D_L00_001EA118");
+extern u8 D_L00_001EA100_002dbf28[] __asm__("D_L00_001EA100");
+extern u8 D_L00_001EA118_002dbf28[] __asm__("D_L00_001EA118");
 extern char D_L00_00166DC0_002dbf28[] __asm__("D_L00_00166DC0");
 extern char D_L00_00177F00_002dbf28[] __asm__("D_L00_00177F00");
 extern float FUN_001fa6c0_002dbf28(int) __asm__("FUN_001fa6c0");
@@ -1418,30 +1442,29 @@ extern void FUN_L00_0025a9f8_002dbf28(float, float, float, void *, void *, void 
 
 void FUN_L00_002dbf28(char *moby) {
     u128 matrix[5];
-    u128 position, origin, axis, displacement, scaled, temporary;
-    u8 first_colors[24], second_colors[24];
+    Q_WORDDATA origin, position, axis, temporary, scaled, displacement;
+    u8 first_colors[32], second_colors[32];
     float magnitude, range, deficit, speed;
     int multiplier, count, i, a, b, red, green, blue;
     char *center = moby + 0x10;
 
-    matrix[0] = D_L00_001EA0B0_002dbf28[0];
-    matrix[1] = D_L00_001EA0B0_002dbf28[1];
-    matrix[2] = D_L00_001EA0B0_002dbf28[2];
-    matrix[3] = D_L00_001EA0B0_002dbf28[3];
-    matrix[4] = D_L00_001EA0B0_002dbf28[4];
-    axis = 0;
-    ((float *)&axis)[2] = 1.0f;
+    __builtin_memcpy(matrix, D_L00_001EA0B0_002dbf28, 80);
+    axis.ul128 = 0;
+    axis.fl32[2] = frame_time + frame_time;
     position = axis;
+    axis.ul128 = 0;
+    axis.fl32[2] = 1.0f;
     magnitude = FUN_001fa6c0_002dbf28(D_0013E529) + 1.0f;
-    multiplier = D_0013E529 ? 1 : 2;
+    multiplier = 1;
+    if (!D_0013E529) multiplier = 2;
     FUN_001f9a68_002dbf28(magnitude, &position, &position);
     FUN_001f9a28_002dbf28(&origin, D_L00_00166DC0_002dbf28, center);
     range = FUN_001f9af0_002dbf28(&origin);
 
     for (i = 0; i < 10 / multiplier; i++) {
-        displacement = 0;
-        ((float *)&displacement)[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
-        ((float *)&displacement)[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
+        displacement.ul128 = 0;
+        displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
+        displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
         scaled = displacement;
         FUN_001f9bf8_002dbf28(FUN_001f9ab0_002dbf28(&scaled, &axis), &temporary, &axis);
         FUN_001f9a28_002dbf28(&scaled, &scaled, &temporary);
@@ -1456,9 +1479,9 @@ void FUN_L00_002dbf28(char *moby) {
         FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 0, D_0013E529);
     }
     for (i = 0; i < 4 / multiplier; i++) {
-        displacement = 0;
-        ((float *)&displacement)[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
-        ((float *)&displacement)[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
+        displacement.ul128 = 0;
+        displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
+        displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
         scaled = displacement;
         FUN_001f9bf8_002dbf28(FUN_001f9ab0_002dbf28(&scaled, &axis), &temporary, &axis);
         FUN_001f9a28_002dbf28(&scaled, &scaled, &temporary);
@@ -1472,11 +1495,11 @@ void FUN_L00_002dbf28(char *moby) {
         b = FUN_001f96f8_002dbf28(90);
         FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 1, D_0013E529);
     }
-    displacement = 0;
-    ((float *)&displacement)[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
-    ((float *)&displacement)[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
-    ((float *)&displacement)[2] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
-    ((float *)&origin)[2] += range * 0.5f;
+    displacement.ul128 = 0;
+    displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
+    displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
+    displacement.fl32[2] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
+    origin.fl32[2] += range * 0.5f;
     scaled = displacement;
     FUN_001f9bf8_002dbf28((range / 5.0f) * frame_time, &scaled, &scaled);
     FUN_001f9bf8_002dbf28((range + range) * frame_time, &origin, &origin);
@@ -1508,12 +1531,13 @@ void FUN_L00_002dbf28(char *moby) {
                                    red, green, blue, FUN_L00_00257b90_002dbf28(a, b), 0, 0);
     }
     if (range > 9.0f) {
+        int effect_red, effect_green, effect_blue;
         a = FUN_001f96f8_002dbf28(15);
         FUN_L00_002df808_002dbf28(magnitude * 4.0f, moby, center, &position, a, 127, 127, 127, 32);
-        red = 127; green = 32; blue = 0;
-        FUN_L00_0025c088_002dbf28(&red, &green, &blue, D_0013E529);
+        effect_red = 127; effect_green = 32; effect_blue = 0;
+        FUN_L00_0025c088_002dbf28(&effect_red, &effect_green, &effect_blue, D_0013E529);
         a = FUN_001f96f8_002dbf28(24);
-        FUN_L00_002df808_002dbf28(magnitude * 4.0f, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 32);
+        FUN_L00_002df808_002dbf28(magnitude * 4.0f, moby, center, &position, a, (u8)effect_red, (u8)effect_green, (u8)effect_blue, 32);
     }
     red = 127; green = 63; blue = 0;
     FUN_L00_0025c088_002dbf28(&red, &green, &blue, D_0013E529);
@@ -1533,7 +1557,7 @@ void FUN_L00_002dbf28(char *moby) {
     FUN_L00_002d3838_002dbf28(matrix, center, 0, 0);
     if (D_0013E529) {
         a = FUN_L00_001f2868_002dbf28(3.0f, center, 16, moby, 0);
-        scaled = *(u128 *)(moby + 0x10);
+        scaled.ul128 = *(u128 *)(moby + 0x10);
         FUN_L00_0025a9f8_002dbf28(2.0f, 1.0f, 1.0f, moby, &scaled,
                                    D_L00_00177F00_002dbf28, a, 0, 0x830000, 2, 1);
     }
@@ -1606,7 +1630,8 @@ void FUN_L00_002dd8e8(void) {
     step = 0.05f;
     for (row = 1; row < 10; row++) {
         offset = ((float *)&D_L00_00161B48_002dd8e8)[-1];
-        phase += 0.3f;
+        next_phase = phase + 0.3f;
+        phase = next_phase;
         next_phase = phase + 0.3f;
         ((float *)&D_L00_00161B48_002dd8e8)[-1] += D_L00_00161B48_002dd8e8;
         if (((float *)&D_L00_00161B48_002dd8e8)[-1] > 7.0f)
@@ -1754,7 +1779,324 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
     }
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ddf60.s", FUN_L00_002ddf60);
+#else
+extern float D_L00_00161B84 __attribute__((section(".data")));
+extern float D_L00_00161B80 __attribute__((section(".data")));
+extern float D_L00_00161B80_002ddcb8 __asm__("D_L00_00161B80") __attribute__((sda));
+extern float D_L00_00161B84_002ddcb8 __asm__("D_L00_00161B84") __attribute__((sda));
+extern float D_L00_00161B50_002ddcb8 __asm__("D_L00_00161B50") __attribute__((sda));
+extern int D_L00_00161B54_002ddcb8 __asm__("D_L00_00161B54") __attribute__((sda));
+extern int D_L00_00161B58_002ddcb8 __asm__("D_L00_00161B58") __attribute__((sda));
+extern char D_L00_00166FD0_002ddcb8[] __asm__("D_L00_00166FD0");
+extern char D_L00_001E5F40_002ddcb8[] __asm__("D_L00_001E5F40");
+extern char D_L00_001E5F30_002ddcb8[] __asm__("D_L00_001E5F30");
+extern char D_L00_00161B60_002ddcb8[] __asm__("D_L00_00161B60");
+extern char D_L00_00161B70_002ddcb8[] __asm__("D_L00_00161B70");
+void FUN_001ff300_002ddcb8(void *, void *, float) __asm__("FUN_L00_001ff300");
+void FUN_001ff500_002ddcb8(void *, void *, float) __asm__("FUN_L00_001ff500");
+void FUN_001ff278_002ddcb8(void *, void *, void *) __asm__("FUN_L00_001ff278");
+void FUN_001ff260_002ddcb8(void *) __asm__("FUN_L00_001ff260");
+float FUN_00257cb0_002ddcb8(void) __asm__("FUN_L00_00257cb0");
+void FUN_0025fc08_002ddcb8(void *, float, void *, void *) __asm__("FUN_L00_0025fc08");
+extern char D_L00_001E4B40[];
+extern char D_L00_001E4C80_002ddf60[] __asm__("D_L00_001E4C80");
+extern char D_L00_001E6020_002ddf60[] __asm__("D_L00_001E6020");
+extern char D_L00_001E5FE0[];
+extern short D_L00_001E6008_002ddca0 __asm__("D_L00_001E6008") __attribute__((section(".data")));
+extern char D_L00_00173E60_002ddf60[] __asm__("D_L00_00173E60");
+void FUN_L00_002ddcb8(char *, void *);
+void FUN_L00_002dd8e8(void);
+void FUN_001ff2a8_002ddf60(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_001ff2d8_002ddf60(void *, void *, void *, float) __asm__("FUN_001f9a40");
+void FUN_001ff3c0_002ddf60(void *, void *, void *) __asm__("FUN_001f9ad8");
+void FUN_001ff6d0_002ddf60(void *, void *, void *) __asm__("FUN_001f9cf8");
+float FUN_001ff398_002ddf60(void *, void *) __asm__("FUN_001f9ab0");
+float FUN_001ff3d8_002ddf60(void *) __asm__("FUN_001f9af0");
+float FUN_001ff488_002ddf60(void *, void *) __asm__("FUN_001f9b80");
+int FUN_001efc70_002ddf60(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+int FUN_001fef20_002ddf60(int) __asm__("FUN_001f96f8");
+float FUN_00200240_002ddf60(int) __asm__("FUN_001fa6c0");
+float FUN_001ff818_002ddf60(float) __asm__("FUN_001f9df8");
+float FUN_001ff218_002ddf60(float) __asm__("FUN_001f99c0");
+float FUN_001ff800_002ddf60(float) __asm__("FUN_001f9de0");
+float FUN_00200130_002ddf60(float, float) __asm__("FUN_001fa5c8");
+float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+float FUN_L00_001eb328(void *, float, float, float, float, float);
+float FUN_00257be8_002ddf60(float, float) __asm__("FUN_002132a8");
+int random_integer_below(int) __asm__("FUN_00213260");
+void FUN_001f9598_002ddf60(void (*)(void), void *) __asm__("FUN_001f4600");
+char *FUN_L00_0026d000(void *, int, void *, unsigned int, float, float, float, float);
+void FUN_L00_00267a08(void *);
+void interpolate_vector4_linear_002ddf60(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
+
+void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
+    V4 scaled_first, scaled_third, first, second, third, probe;
+    V4 start, end, axis, temp1, temp2, normal, cross, basis;
+    V4 edge, offset, direction, tangent, following, outward, forward;
+    V4 ring[3];
+    char *global;
+    char *record, *effect, *current, *prior;
+    short *halfword;
+    int i, j, row, segment, count, small_count, index, next_segment;
+    float fraction, sampled, angle, delta, length, row_float, spread, phase, value;
+
+    FUN_L00_002ddcb8(frame_context, initial_vector);
+    global = (char *)&D_0013F350_c;
+    {
+        int i = *(int *)(global + 0x2084);
+    if ((i == 30 || i == 1) && (*(u16 *)(*(char **)(global + 0x2080) + 0x34) & 1)) {
+        qcopy(&first, D_L00_00166FD0_002ddcb8);
+        qcopy(&second, D_L00_00166FD0_002ddcb8 + 0x10);
+        qcopy(&third, D_L00_00166FD0_002ddcb8 + 0x20);
+    } else if (*(short *)(global + 0x22c8) == 1) {
+        FUN_001ff300_002ddcb8(&first, (char *)frame_context + 0xd0, -1.0f);
+        qcopy_nc(&second, (char *)frame_context + 0xc0);
+        qcopy_nc(&third, (char *)frame_context + 0xe0);
+    } else {
+        qcopy(&first, global + 0x640);
+        qcopy(&second, global + 0x650);
+        qcopy(&third, global + 0x660);
+    }
+    }
+    FUN_001ff500_002ddcb8(&scaled_first, &first, D_L00_00161B84);
+    FUN_001ff500_002ddcb8(&scaled_third, &third, 1.0f);
+    qcopy(D_L00_001E5F40_002ddcb8, initial_vector);
+    FUN_001ff500_002ddcb8(&probe, &first, D_L00_00161B84 * 10.0f);
+    FUN_001ff278_002ddcb8(&probe, &probe, initial_vector);
+    if (FUN_001efc70_002ddf60(initial_vector, &probe, 20, *(void **)(global + 0x2080), 0)) {
+        i = truncate_float_to_s32(FUN_001ff488_002ddf60(D_L00_00173E60_002ddf60, initial_vector) / D_L00_00161B84);
+        if (i < 10) {
+            halfword = (short *)(D_L00_001E5F40_002ddcb8 + 0xc8) + i;
+            j = i;
+            do {
+                ++j;
+                if (*halfword > 64) *halfword = 64;
+                *halfword = (unsigned short)*halfword - 4;
+                if (*halfword < 0) *halfword = 0;
+                ++halfword;
+            } while (j < 10);
+        }
+        --i;
+        if (i >= 0) {
+            halfword = (short *)(D_L00_001E5F40_002ddcb8 + 0xc8) + i;
+            do { --i; *halfword = (unsigned short)halfword[1] + 32; --halfword; } while (i >= 0);
+        }
+    } else {
+        ((short *)(D_L00_001E5F40_002ddcb8 + 0xc8))[0] = (unsigned short)((short *)(D_L00_001E5F40_002ddcb8 + 0xc8))[0] + 4;
+        halfword = (short *)(D_L00_001E5F40_002ddcb8 + 0xc8) + 1;
+        i = 8;
+        do { --i; *halfword = (unsigned short)halfword[-1] - 32; ++halfword; } while (i >= 0);
+    }
+    FUN_001ff6d0_002ddf60(&start, D_L00_00161B60_002ddcb8, &first);
+    FUN_001ff278_002ddcb8(&start, &start, &scaled_first);
+    FUN_001ff6d0_002ddf60(&end, D_L00_00161B70_002ddcb8, &first);
+    FUN_001ff278_002ddcb8(&end, &end, &scaled_first);
+    sampled = FUN_00200240_002ddf60(FUN_001fef20_002ddf60(60));
+    fraction = (float)D_L00_00161B54_002ddcb8;
+    ++D_L00_00161B54_002ddcb8;
+    fraction = fraction / sampled;
+    scaled_first[0] = start[0] + (end[0] - start[0]) * fraction;
+    scaled_first[2] = start[2] + (end[2] - start[2]) * fraction;
+    scaled_first[1] = start[1] + (end[1] - start[1]) * fraction;
+    if (FUN_001fef20_002ddf60(60) <= D_L00_00161B54_002ddcb8) {
+        qcopy(D_L00_00161B60_002ddcb8, D_L00_00161B70_002ddcb8);
+        FUN_001ff500_002ddcb8(&axis, &first, D_L00_00161B84);
+        *(u128 *)&temp1 = 0;
+        *(u128 *)&temp2 = 0;
+        temp1[2] = 0.1f;
+        temp2[3] = 1.0f;
+        temp1[3] = 1.0f;
+        temp2[0] = 1.0f;
+        sampled = fast_add_rotations(D_L00_00161B80, FUN_00257be8_002ddf60(45.0f, 315.0f) * 0.017453292f);
+        FUN_0025fc08_002ddcb8(D_L00_00161B70_002ddcb8, sampled, &temp1, &temp2);
+        D_L00_00161B80 = sampled;
+        D_L00_00161B54_002ddcb8 = 0;
+    }
+    *(float *)&D_L00_00161B58_002ddcb8 = fast_add_rotations(*(float *)&D_L00_00161B58_002ddcb8, 0.1f);
+    qcopy(&axis, &third);
+    qcopy(&basis, &axis);
+    FUN_001ff3c0_002ddf60(&cross, &scaled_first, &basis);
+    FUN_001ff500_002ddcb8(&cross, &cross, 1.0f);
+    FUN_001ff3c0_002ddf60(&normal, &basis, &cross);
+    current = D_L00_001E4B40;
+    prior = D_L00_001E6020_002ddf60;
+    i = 19;
+    do {
+        FUN_001ff300_002ddcb8(&temp1, current, 0.1f);
+        --i;
+        FUN_001ff6d0_002ddf60(&temp1, &temp1, &normal);
+        FUN_001ff278_002ddcb8(prior, D_L00_001E5F40_002ddcb8, &temp1);
+        current += 16;
+        prior += 16;
+    } while (i >= 0);
+    row = 1;
+    do {
+        index = row * 16;
+        FUN_001ff2a8_002ddf60(&temp1, D_L00_001E5F40_002ddcb8 + index, D_L00_001E5F30_002ddcb8 + index);
+        qcopy(&temp2, &scaled_first);
+        FUN_001ff3c0_002ddf60(&edge, &temp2, &temp1);
+        delta = FUN_001ff398_002ddf60(&temp1, &temp2);
+        length = FUN_001ff3d8_002ddf60(&temp1);
+        angle = 1.5707964f - FUN_001ff818_002ddf60(delta / (length * D_L00_00161B84));
+        sampled = FUN_L00_001eb328(D_L00_001E5FE0 + row * 4, 0.0f, angle, 0.06f, 0.2f, 0.0f);
+        delta = FUN_00200130_002ddf60(angle, sampled);
+        /* Retail retains the comparison constant as the second angle argument. */
+        if (FUN_001ff218_002ddf60(delta) > 0.31415927f)
+            sampled = fast_add_rotations(sampled, FUN_00200130_002ddf60(delta, 0.31415927f));
+        FUN_0025fc08_002ddcb8(&offset, sampled, &temp1, &edge);
+        FUN_001ff500_002ddcb8(&direction, &offset, D_L00_00161B84_002ddcb8);
+        FUN_001ff2d8_002ddf60(&offset, &offset, &direction, 1.0f);
+        {
+            float length = FUN_001ff3d8_002ddf60(&offset);
+            if (length > 2.0f)
+                FUN_001ff300_002ddcb8(&offset, &offset, 2.0f / length);
+        }
+        row_float = (float)row;
+        if (row > 5) FUN_001ff2d8_002ddf60(&offset, &offset, &temp1, row_float / FUN_00200240_002ddf60(10) + 0.0f);
+        FUN_001ff278_002ddcb8(D_L00_001E5F40_002ddcb8 + index, D_L00_001E5F30_002ddcb8 + index, &offset);
+        qcopy(&tangent, &scaled_first);
+        qcopy(&forward, &axis);
+        FUN_001ff500_002ddcb8(&following, &tangent, 1.0f);
+        FUN_001ff3c0_002ddf60(&outward, &following, &forward);
+        FUN_001ff500_002ddcb8(&outward, &outward, 1.0f);
+        FUN_001ff3c0_002ddf60(&forward, &outward, &following);
+        qcopy(&axis, &forward);
+        spread = row_float * 0.3f;
+        phase = row_float * 0.7f;
+        current = D_L00_001E6020_002ddf60 + row * 0x140;
+        prior = D_L00_001E4B40;
+        ++row;
+        j = 0;
+        do {
+            value = spread + 0.1f;
+            ++j;
+            sampled = fast_add_rotations(*(float *)&D_L00_00161B58_002ddcb8 + phase, 0.0f);
+            sampled = FUN_001ff800_002ddf60(sampled);
+            FUN_001ff300_002ddcb8(&ring[0], prior, value + sampled * 0.1f);
+            FUN_001ff6d0_002ddf60(&ring[0], &ring[0], &following);
+            FUN_001ff278_002ddcb8(current, D_L00_001E5F40_002ddcb8 + index, &ring[0]);
+            current += 16;
+            prior += 16;
+        } while (j < 20);
+        FUN_001ff500_002ddcb8(&scaled_first, &offset, D_L00_00161B84);
+    } while (row < 10);
+    FUN_001f9598_002ddf60(FUN_L00_002dd8e8, frame_context);
+    count = 0;
+    small_count = 0;
+    i = 0;
+    do {
+        j = i + 1;
+        record = D_L00_001E4C80_002ddf60 + i * 24;
+        if (!*(char **)(record + 20) && count < 5) {
+            row = 9;
+            if (((short *)(D_L00_001E5F40_002ddcb8 + 0xc8))[9] < 64) {
+                halfword = (short *)(D_L00_001E5F40_002ddcb8 + 0xc8) + 9;
+                for (row = 8; --halfword, row >= 0; --row)
+                    if (*halfword > 63) break;
+            }
+            if (row > 0) {
+                if (row > 1 && small_count < 2) {
+                    segment = random_integer_below(20);
+                    sampled = FUN_00257be8_002ddf60(0.2f, 1.0f);
+                    current = D_L00_001E6020_002ddf60 + segment * 16;
+                    FUN_001ff2d8_002ddf60(&temp1, current, current + row * 0x140, sampled);
+                    FUN_001ff2d8_002ddf60(&edge, D_L00_001E5F40_002ddcb8, D_L00_001E5F40_002ddcb8 + row * 16, sampled);
+                    sampled = FUN_00257be8_002ddf60(60000.0f, 180000.0f);
+                    segment = random_integer_below(5);
+                    effect = FUN_L00_0026d000(&temp1, segment + 1, &temp2, 0x404040, 0.0f, 1.0f, 1.03f, sampled);
+                    if (effect) {
+                        FUN_001ff2a8_002ddf60(&offset, &temp1, &edge);
+                        ++small_count;
+                        FUN_001ff500_002ddcb8(effect + 0x30, &offset, 0.01f);
+                        *(float *)(effect + 0x38) += 0.02f;
+                    }
+                }
+                qcopy(&temp1, D_L00_001E5F40_002ddcb8 + row * 16);
+                FUN_001ff260_002ddcb8(&temp2);
+                sampled = FUN_00257be8_002ddf60(60000.0f, 180000.0f);
+                effect = FUN_L00_0026d000(&temp1, 6, &temp2, 0x7f404040, 0.0f, 1.0f, 1.0f, sampled);
+                *(char **)(record + 20) = effect;
+                if (effect) {
+                    *(short *)(effect + 10) = 200;
+                    *(int *)(effect + 0x24) = 2;
+                    ++count;
+                    effect[0x2a] = 127;
+                    effect[0x2b] = 200;
+                }
+                *(volatile short *)record = row;
+                *(volatile int *)(record + 4) = 0;
+                *(volatile int *)(record + 8) = 0;
+                *(volatile short *)(record + 2) = random_integer_below(20);
+                *(volatile float *)(record + 12) = FUN_00257be8_002ddf60(0.1f, 0.8f);
+                *(volatile float *)(record + 16) = FUN_00257be8_002ddf60(0.1f, 0.4f);
+            }
+        }
+        if (*(char **)(record + 20)) {
+            row = *(volatile short *)record;
+            FUN_001ff2a8_002ddf60(&temp1, D_L00_001E5F30_002ddcb8 + row * 16, D_L00_001E5F40_002ddcb8 + row * 16);
+            length = FUN_001ff3d8_002ddf60(&temp1);
+            *(volatile float *)(record + 4) += *(volatile float *)(record + 16);
+            *(short *)(*(char **)(record + 20) + 10) = 200;
+            if (length < *(volatile float *)(record + 4)) {
+                index = (unsigned short)*(volatile short *)record - 1;
+                *(volatile short *)record = index;
+                /* Test the wrapped signed halfword, including the original zero case. */
+                if ((int)((unsigned int)index << 16) <= 0) {
+                    FUN_L00_00267a08(*(char **)(record + 20));
+                    *(char **)(record + 20) = 0;
+                } else {
+                    *(volatile float *)(record + 4) -= length;
+                    row = *(volatile short *)record;
+                    FUN_001ff2a8_002ddf60(&temp1, D_L00_001E5F30_002ddcb8 + row * 16, D_L00_001E5F40_002ddcb8 + row * 16);
+                    length = FUN_001ff3d8_002ddf60(&temp1);
+                }
+            }
+            if (*(char **)(record + 20)) {
+                record = D_L00_001E4C80_002ddf60 + i * 24;
+                fraction = *(volatile float *)(record + 4) / length;
+                if (*(volatile short *)record == 2) *(short *)(*(char **)(record + 20) + 10) = 100;
+                else if (*(volatile short *)record < 2) {
+                    *(short *)(*(char **)(record + 20) + 10) = truncate_float_to_s32((1.0f - fraction) * 100.0f);
+                    if (*(short *)(*(char **)(record + 20) + 10) < 61) *(short *)(*(char **)(record + 20) + 10) = 60;
+                }
+                i = i * 24;
+                record = D_L00_001E4C80_002ddf60 + i;
+                if (*(volatile short *)record == 1) {
+                    effect = *(char **)(record + 20);
+                    FUN_001ff2a8_002ddf60(&temp2, initial_vector, effect + 16);
+                    FUN_001ff500_002ddcb8(&temp2, &temp2, *(volatile float *)(record + 16));
+                    FUN_001ff278_002ddcb8(effect + 16, effect + 16, &temp2);
+                    *(float *)(effect + 12) *= frame_scale * -0.050000012f + 1.0f;
+                } else {
+                    FUN_001ff300_002ddcb8(&temp1, &temp1, fraction);
+                    row = *(volatile short *)record;
+                    FUN_001ff278_002ddcb8(*(char **)(record + 20) + 16, D_L00_001E5F40_002ddcb8 + row * 16, &temp1);
+                    segment = *(volatile short *)(record + 2);
+                    FUN_001ff2a8_002ddf60(&temp2, D_L00_001E6020_002ddf60 + row * 0x140 + segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&edge, D_L00_001E6020_002ddf60 + row * 0x140 + segment * 16 - 0x140, D_L00_001E5F30_002ddcb8 + row * 16);
+                    interpolate_vector4_linear_002ddf60(&offset, &temp2, &edge, fraction);
+                    next_segment = (segment + 19) % 20;
+                    FUN_001ff2a8_002ddf60(&direction, D_L00_001E6020_002ddf60 + row * 0x140 + next_segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&tangent, D_L00_001E6020_002ddf60 + row * 0x140 + next_segment * 16 - 0x140, D_L00_001E5F30_002ddcb8 + row * 16);
+                    interpolate_vector4_linear_002ddf60(&following, &direction, &tangent, fraction);
+                    interpolate_vector4_linear_002ddf60(&offset, &offset, &following, *(volatile float *)(record + 8));
+                    value = *(volatile float *)(record + 8) + *(volatile float *)(record + 12);
+                    *(volatile float *)(record + 8) = value;
+                    if (value >= 1.0f) {
+                        *(volatile float *)(record + 8) = value - 1.0f;
+                        *(volatile short *)(record + 2) = next_segment;
+                    }
+                    effect = *(char **)(record + 20);
+                    FUN_001ff278_002ddcb8(effect + 16, effect + 16, &offset);
+                }
+            }
+        }
+        i = j;
+    } while (i < 200);
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

@@ -40,16 +40,15 @@ void FUN_L09_0021e560(int tex0, int tex1) {
     } else {
         TextureEntry *a = (TextureEntry *)D_L09_0016D300 + tex0;
         TextureEntry *b = (TextureEntry *)D_L09_0016D300 + tex1;
-        int base = D_L09_0015F420;
         u64 texture_address;
         u64 *data;
         *(u64 *)0x161fc0 = 0x0800000000000400ULL;
         *(u64 *)0x161fc8 = 0;
         FUN_L02_0024fca0((void *)0x161fd0,
-                          (char *)(base + a->first * 16),
-                          (char *)(base + a->second * 16),
-                          (char *)(base + b->first * 16),
-                          (char *)(base + b->second * 16),
+                          (char *)(D_L09_0015F420 + a->first * 16),
+                          (char *)(D_L09_0015F420 + a->second * 16),
+                          (char *)(D_L09_0015F420 + b->first * 16),
+                          (char *)(D_L09_0015F420 + b->second * 16),
                           0x1000);
         PACKET_CURSOR[0] = 0x10000006;
         PACKET_CURSOR[1] = 0;
@@ -201,10 +200,14 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
     int *scratch = (int *)0x700003fc;
     float *old = (float *)0x001612f8;
     float *current = (float *)0x0016cbc0;
-    old[0] = current[0x218 / 4];
-    old[1] = current[0x21c / 4];
-    old[2] = current[0x228 / 4];
-    *(float *)0x00161304 = current[0x22c / 4];
+    float saved0 = current[0x218 / 4];
+    float saved1 = current[0x21c / 4];
+    float saved2 = current[0x228 / 4];
+    float saved3 = current[0x22c / 4];
+    old[0] = saved0;
+    old[1] = saved1;
+    old[2] = saved2;
+    *(float *)0x00161304 = saved3;
     if (D_L09_0015F458 != 1) {
         current[0x218 / 4] = *(float *)(data + 0x20);
         current[0x21c / 4] = *(float *)(data + 0x24);
@@ -258,8 +261,7 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
     D_L09_001611C0[1] = 0;
     D_L09_001611C0[2] = 0;
     D_L09_001611C0[3] = 0x50000008;
-    color = (unsigned char)data[0x30] | ((unsigned char)data[0x31] << 8) |
-            ((unsigned char)data[0x32] << 16);
+    color = (unsigned char)data[0x32] << 16 | (unsigned char)data[0x31] << 8 | (unsigned char)data[0x30];
     if (D_L09_0015F458 == 1)
         color = *(int *)0x0016cdf0 | (*(int *)0x0016cdf4 << 8) |
                 (*(int *)0x0016cdf8 << 16);

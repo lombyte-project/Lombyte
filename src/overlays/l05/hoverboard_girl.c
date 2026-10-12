@@ -160,8 +160,14 @@ void FUN_L05_00316810(HoverboardGirlMoby *moby, HoverboardGirlState *state) {
                 fast_cos(animation_value * 3.1415927f) * 0.61086524f;
             delta = *(f32 *)0x0015ED64;
         }
-        update_joint_animation(moby, joint, joint_index++ + 2, delta * 0.05f,
-                               delta * 0.3f);
+        {
+            s32 current_joint_index = joint_index + 2;
+            f32 rotation_step = delta * 0.05f;
+            f32 rotation_limit = delta * 0.3f;
+            joint_index++;
+            update_joint_animation(moby, joint, current_joint_index, rotation_step,
+                                   rotation_limit);
+        }
         joint++;
         /* Retail advances both its state window and joint cursor by 0x80. */
         state_window = (HoverboardGirlState *)((u8 *)state_window + 0x80);

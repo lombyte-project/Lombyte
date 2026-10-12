@@ -859,7 +859,7 @@ extern void FUN_L00_001ff008(void);
 
 void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     u8 buffer[0x60] __attribute__((aligned(16)));
-    s32 source, destination, count, pal;
+    s32 source, destination, count, second_count, pal, initial_count;
 
     voice_pool.header[0x6B] |= 8;
     FUN_00118a80(0);
@@ -867,18 +867,23 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     FUN_L00_002656c0();
     D_L00_0015F5D8 = 1;
     D_L00_00161048 = sector;
-    D_L00_0016104C = size;
     D_L00_00161050 = language;
+    D_L00_0016104C = size;
     FUN_L00_001f9838(4);
     FUN_L00_002039a0();
+    destination = *(volatile s32 *)&D_L00_0015F40C;
     D_L00_0015F5C4 = 1;
     D_L00_00161054 = D_L00_00173E00_298840.x4;
-    destination = D_L00_0015F40C;
     D_L00_00161058 = destination;
-    source = depth_buffer_address;
+    initial_count = 13;
+    second_count = 17;
     pal = D_0015ED80;
-    count = pal != 0 ? 14 : 13;
-    for (; count != 0; count--) {
+    source = *(volatile s32 *)&depth_buffer_address;
+    initial_count = pal ? 14 : initial_count;
+    second_count = pal ? 14 : second_count;
+    count = initial_count;
+    for (; count != 0;) {
+        count--;
         FUN_00122330(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
         source += 0x10000;
         FUN_00118a80(0);
@@ -887,14 +892,17 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
         FUN_00120558(0, 0);
     }
     source = D_0015EE78_gp;
-    count = pal != 0 ? 14 : 17;
-    for (; count != 0; count--) {
-        FUN_00122330(buffer, (source << 8) >> 16, 1, 0, 0, 0, 0x40, 0x40);
-        source += 0x4000;
-        FUN_00118a80(0);
-        FUN_00122658(buffer, destination);
-        destination += 0x4000;
-        FUN_00120558(0, 0);
+    if (second_count != 0) {
+        count = second_count;
+        do {
+            count--;
+            FUN_00122330(buffer, (source << 8) >> 16, 1, 0, 0, 0, 0x40, 0x40);
+            source += 0x4000;
+            FUN_00118a80(0);
+            FUN_00122658(buffer, destination);
+            destination += 0x4000;
+            FUN_00120558(0, 0);
+        } while (count != 0);
     }
     if (source > 0x400000) {
         FUN_L00_001eb078(0x1e9480, source - 0x400000);
@@ -916,20 +924,21 @@ extern void FUN_00266970(s32, s32, s32) __asm__("FUN_00216c48");
 
 void FUN_L00_002997c8(void) {
     u8 buffer[0x70] __attribute__((aligned(16)));
-    s32 source, destination, count, second_count, pal;
+    s32 source, destination, count, second_count, pal, initial_count;
     s32 callback, callback_arg;
 
     D_L00_0015F5D8 = 1;
     FUN_00122298(0);
     FUN_00120558(0, 0);
     FUN_00122e68((s32)count_vsync);
+    initial_count = 13;
     second_count = 17;
-    count = 13;
     pal = D_0015ED80;
-    destination = *(s32 *)0x00161058; /* D_L00_00161058 */
-    source = *(s32 *)0x0015EE88;      /* depth_buffer_address */
-    count = pal ? 14 : count;
+    source = depth_buffer_address;
+    destination = D_L00_00161058;
+    initial_count = pal ? 14 : initial_count;
     second_count = pal ? 14 : second_count;
+    count = initial_count;
     for (; count != 0;) {
         count--;
         FUN_00122518(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
@@ -1015,9 +1024,8 @@ void FUN_L00_00299a68(void) {
     FUN_L00_002660c0(0);
     FUN_L00_001f9838(8);
     D_L00_0015F5D8 = 1;
-    D_L00_0015F5C4 = 7;
     D_L00_0015F3FC_298840 = 1.0f;
-    FUN_L00_001ff040((char *)&D_L00_0015F622 - 2, 0, 0x10);
+    FUN_L00_001ff040((D_L00_0015F5C4 = 7, (char *)&D_L00_0015F622 - 2), 0, 0x10);
     offset = D_L00_001611CC - 0xE0000;
     second_destination = D_L00_00173E00_298840.x8 + offset;
     first_destination = D_L00_00173E00_298840.x4 + offset;
@@ -1132,7 +1140,8 @@ void FUN_L00_00299c48(void) {
             D_L00_0015F620 = 0;
             D_L00_0015F622++;
             D_L00_0015F624 = -1;
-            index = (s16)D_L00_0015F622 % 0x14;
+            index = (s16)D_L00_0015F622;
+            index = index % 0x14;
             if (pal_mode == 0) {
                 FUN_L00_00265fa0(D_L00_0015F62C, disc_table.music_60000[index + 18].sector,
                                    disc_table.music_60000[index + 18].size);
@@ -1606,8 +1615,8 @@ void FUN_L00_0029ad08(void) {
     f1f9cf8_29ad08(vec, &D_L00_001610F0, moby + 0xC0);
     moby = *(char * volatile *)(g + 0x1C);
     f1f9a10_29ad08(vec, vec, moby + 0x10);
-    vec[2] += 2.0f;
-    vec[2] = f213508_29ad08(0.5f, vec, 0);
+    *(f32 *)(g + 0xC8) += 2.0f;
+    *(f32 *)(g + 0xC8) = f213508_29ad08(0.5f, vec, 0);
     f1f99f8_29ad08(g + 0xB0);
     moby = *(char * volatile *)(g + 0x1C);
     *(f32 *)(g + 0xB8) = f1fa580_29ad08(*(f32 *)(moby + 0x48), 3.1415927f);
@@ -1618,11 +1627,11 @@ void FUN_L00_0029ad08(void) {
     FUN_002335a0();
     selected = (volatile s32 *)(g + 0x48);
     index = *selected;
+    item = D_L00_001CA020[index];
     offset = D_L00_001611CC - 0x40000;
     D_L00_001611CC = offset;
     D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + offset;
     D_L00_0016C860_298840.x58 = D_L00_00173E00_298840.x4 + offset;
-    item = D_L00_001CA020[index];
     D_L00_0015F3FC = 0;
     D_L00_0015F400_29ad08 = 0;
     if (D_00140408 != 0 && index != D_00140408)

@@ -120,6 +120,8 @@ void FUN_L00_00276368(void) {
     }
     FUN_L00_001ff300(D_L00_00180250, (u8 *)0x00160280, 1.0f);
     qcopy((void *)D_L00_00180240, (u8 *)0x00160290);
+    *(volatile u128_init *)D_L00_00180260 = 0;
+    *(volatile u128_init *)(D_L00_00180260 + 4) = 0;
     qcopy((void *)D_L00_001B9D30, (void *)D_L00_00166DC0_init);
     qcopy((void *)(D_L00_001B9D30 + 4), (void *)(D_L00_00166DC0_init + 4));
     D_L00_001B9DD8 = *(s32 *)D_L00_0016CAF0_raw;
@@ -128,8 +130,6 @@ void FUN_L00_00276368(void) {
     D_L00_0016CC68 = 255.0f;
     D_L00_0016CC58 = 0;
     D_L00_0016CC6C = 0;
-    *(volatile u128_init *)D_L00_00180260 = 0;
-    *(volatile u128_init *)(D_L00_00180260 + 4) = 0;
     FUN_L00_001f7980();
     FUN_L00_00276128();
     FUN_L00_001f6e48();
@@ -625,9 +625,9 @@ typedef struct {
     s32 *image;
 } VoiceRenderObject;
 
-typedef struct {
+typedef struct VoiceRenderEntry {
     s32 unk0;
-    u32 (*draw)(void);
+    u32 (*draw)(struct VoiceRenderEntry *);
     u8 pad8[8];
     u32 flags;
     u8 pad14[4];
@@ -741,14 +741,14 @@ void FUN_L00_002772c0(s32 param_1) {
                 continue;
             }
             if ((flags & 1) != 0) {
-                entry->draw();
+                entry->draw(entry);
                 continue;
             }
             object = (VoiceRenderObject *)D_L00_001B9E90_init[i];
             texture_width = object->image[22];
             texture_height = object->image[23];
-            left = object->image[20];
-            top = object->image[21];
+            right = object->image[20];
+            bottom = object->image[21];
             width_shift = 7;
             if (texture_width > 0x80) {
                 for (width_shift = 8; (1 << (width_shift & 31)) < texture_width; width_shift++) {}
@@ -764,7 +764,8 @@ void FUN_L00_002772c0(s32 param_1) {
             width = 1 << (width_shift & 31);
             height = 1 << (height_shift & 31);
             FUN_L00_0023cc30(0, 0, width, height, *(s32 *)0x00160270, 0, 0);
-            flags = entry->draw();
+            entry = (VoiceRenderEntry *)handles[i];
+            flags = entry->draw(entry);
             FUN_L00_001fca18();
             FUN_L00_002a0ba8(0x42, 0x8000000064ULL);
             FUN_L00_002a0ba8(0x47, 0x43);
@@ -798,7 +799,7 @@ void FUN_L00_002772c0(s32 param_1) {
             } else if ((flags & 0x10) == 0) {
                 continue;
             }
-            FUN_L00_001fa290(left, top, texture_width, texture_height,
+            FUN_L00_001fa290(right, bottom, texture_width, texture_height,
                               out_left, out_top, out_right - out_left, out_bottom - out_top,
                               0x80808080ULL, D_L00_0015EED0);
         }

@@ -5,8 +5,9 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023fa00.s", FUN_L00_0023fa00);
 #else
+#include "rnc/storage/disc_table.h"
+#include "rnc/rendering/level_render_state.h"
 typedef unsigned int u128_copy __attribute__((mode(TI), aligned(16)));
-extern s16 D_0013E056;
 extern s32 D_0015EE54, D_0015EE8C;
 #define D_L00_0015FFC8 (*(s32 *)0x0015ffc8)
 extern s16 D_L00_0015FC0A, D_L00_0015FC0C, D_L00_0015FC0E, D_L00_0015FC1A;
@@ -18,7 +19,6 @@ extern u128_copy D_L00_001AEBC0[];
 extern u128_copy D_00156800 __attribute__((sda)), D_00156810 __attribute__((sda));
 extern u8 D_00156820 __attribute__((sda));
 extern s32 D_00156BC8 __attribute__((sda));
-extern s32 D_00138E4C[];
 extern void hud_send_resident_bank(s32, s32, s32) __asm__("FUN_001f98d0");
 extern void FUN_00122330(void *, s16, s32, s32, s32, s32, s32, s32);
 extern void FUN_00118a80(s32);
@@ -34,7 +34,7 @@ void *FUN_L00_0023fa00(u8 *bank, u8 *header) {
     u8 *destination, *texture;
 
     hud_send_resident_bank((s32)bank, D_0015EE54,
-                           D_00138E4C[(D_0013E056 + 1) * 2] << 11);
+                           disc_table.level_archives[level_render_state.content_variant + 1].size << 11);
     first_offset = *(s32 *)bank;
     second_offset = *(s32 *)(bank + 4);
     third_offset = *(s32 *)(bank + 8);
@@ -59,10 +59,10 @@ void *FUN_L00_0023fa00(u8 *bank, u8 *header) {
                          1, 0, 0, 0, 0x10, 0x10);
             texture = bank + fourth_offset + 0x30;
         }
+        index++;
         FUN_00118a80(0);
         FUN_00122658(buffer, texture);
         FUN_00120558(0, 0);
-        index++;
     } while (index < 4);
     D_L00_0015FC0A = *(s32 *)(header + 0xb4) >> 8;
     D_L00_0015FC0C = *(s32 *)(header + 0xac) >> 8;
@@ -73,7 +73,7 @@ void *FUN_L00_0023fa00(u8 *bank, u8 *header) {
     hud_send_resident_bank((s32)destination, (s32)(bank + second_offset + 0x430), 0x14000);
     D_00156820 = D_L00_0015FFC8;
     allocation = D_00156BC8;
-    if (D_L00_00197BC0[D_L00_00160548[D_0013E056]] == 0xff) {
+    if (D_L00_00197BC0[D_L00_00160548[level_render_state.content_variant]] == 0xff) {
         FUN_L00_002409b8(bank + first_offset, (u8 *)&D_00156800 - D_L00_0015FFC8 * 16, &D_00156820);
         allocation = D_L00_0015FFC8;
     }
@@ -85,7 +85,7 @@ void *FUN_L00_0023fa00(u8 *bank, u8 *header) {
     hud_send_resident_bank((s32)(destination + 0x14000), (s32)(bank + fourth_offset + 0x430), 0x4000);
     D_00156820 = D_L00_0015FFC8;
     allocation = D_00156BC8;
-    if (D_L00_00197BC0[D_L00_00160558[D_0013E056]] == 0xff) {
+    if (D_L00_00197BC0[D_L00_00160558[level_render_state.content_variant]] == 0xff) {
         FUN_L00_002409b8(bank + third_offset, (u8 *)&D_00156810 - D_L00_0015FFC8 * 16, &D_00156820);
         allocation = D_L00_0015FFC8;
     }

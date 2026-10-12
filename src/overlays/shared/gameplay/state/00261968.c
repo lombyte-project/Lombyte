@@ -164,6 +164,7 @@ s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
     OvlVec4 scaled_cross;
     SegmentPath_261d78 **entry;
     s32 i;
+    s32 offset;
     s32 found;
     f32 segment_length;
     f32 projection;
@@ -172,12 +173,13 @@ s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
     found = 0;
     entry = &D_L00_001B04B0_261d78[path_index];
     i = 0;
-    if (i < (*entry)->count - 1) {
+    if (0 < (*entry)->count - 1) {
         do {
-            if ((*entry)->points[i].f[3] != 0.0f || (*entry)->points[i + 1].f[3] != 0.0f) {
-                FUN_001ff2a8_261d78(&difference, &working, &(*entry)->points[i + 1]);
+            offset = i << 4;
+            if ((*entry)->points[i].f[3] != 0.0f || (*entry)->points[offset / 16 + 1].f[3] != 0.0f) {
+                FUN_001ff2a8_261d78(&difference, &working, &(*entry)->points[offset / 16 + 1]);
                 difference.i[2] = 0;
-                FUN_001ff2a8_261d78(&segment, &(*entry)->points[i + 1], &(*entry)->points[i]);
+                FUN_001ff2a8_261d78(&segment, &(*entry)->points[offset / 16 + 1], &(*entry)->points[i]);
                 segment.i[2] = 0;
                 FUN_001ff500_261d78(&scaled_segment, &segment, 1.0f);
                 FUN_001ff3c0_261d78(&cross, &difference, &scaled_segment);
@@ -193,7 +195,7 @@ s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
                             goto next_segment;
                         found = 1;
                         FUN_001ff500_261d78(&scaled_difference, &difference, distance);
-                        FUN_001ff278_261d78(&working, &scaled_difference, &(*entry)->points[i + 1]);
+                        FUN_001ff278_261d78(&working, &scaled_difference, &(*entry)->points[offset / 16 + 1]);
                         working.f[2] = point->f[2];
                     } else {
                         found = 1;
@@ -201,7 +203,7 @@ s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
                         FUN_001ff2a8_261d78(&scaled_difference, &difference, &scaled_cross);
                         FUN_001ff500_261d78(&scaled_difference, &scaled_difference, distance);
                         FUN_001ff278_261d78(&scaled_difference, &scaled_difference, &scaled_cross);
-                        FUN_001ff278_261d78(&working, &scaled_difference, &(*entry)->points[i + 1]);
+                        FUN_001ff278_261d78(&working, &scaled_difference, &(*entry)->points[offset / 16 + 1]);
                         working.f[2] = point->f[2];
                     }
                 }
@@ -265,7 +267,7 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
         do {
             current = (OvlVec4 *)((u8 *)entry + offset + 0x10);
             next = (OvlVec4 *)((u8 *)entry + offset + 0x20);
-            if (current->f[3] != 0.0f || next->f[3] != 0.0f) {
+            if (entry->points[i].f[3] != 0.0f || entry->points[i + 1].f[3] != 0.0f) {
                 FUN_001ff2a8_262030(&difference, &working, current);
                 FUN_001ff2a8_262030(&segment, next, current);
                 FUN_001ff500_262030(&scaled_cross, height_axis, FUN_001ff398_262030(&difference, height_axis));

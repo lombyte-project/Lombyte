@@ -1319,8 +1319,8 @@ void FUN_L14_00314f00(char *moby) {
                     *indices++ = i;
                 }
                 count = *(int *)path;
-                length = FUN_001f9b48_14f00(p + 0x10,
-                    path + ((i + 1) % count) * 16 + 0x10);
+                length = FUN_001f9b48_14f00(path + (i * 16 + 0x10),
+                    path + (((i + 1) % count) * 16 + 0x10));
                 *(float *)(p + 0x1C) = length;
                 if (i < *(int *)path - 1)
                     *(float *)(motion + 0x48) += length;
@@ -1355,8 +1355,8 @@ void FUN_L14_00314f00(char *moby) {
     clear_u64_value_14f00(motion + 0x30);
     { char *copy_source = D_L14_00167504;
     qcopy(moby + 0x30, copy_source + 0x30);
-    qcopy(moby, D_L14_00167504);
-    qcopy(moby + 0x10, D_L14_00167504 + 0x10);
+    qcopy(moby, copy_source);
+    qcopy(moby + 0x10, copy_source + 0x10);
     qcopy(moby + 0x20, copy_source + 0x20); }
     identity[0] = 0.0f;
     identity[1] = 0.0f;

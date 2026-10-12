@@ -173,7 +173,7 @@ void FUN_L15_002d79e8(char *m) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d7bb0.s", FUN_L15_002d7bb0);
 #else
-extern unsigned char D_0013E533_trail __asm__("D_0013E533");
+extern unsigned char D_0013E533_trail __asm__("D_0013E533") __attribute__((section(".data")));
 extern float D_L15_00161C08_trail __asm__("D_L15_00161C08") __attribute__((sda));
 extern float D_L15_00161C0C_trail __asm__("D_L15_00161C0C") __attribute__((sda));
 extern float D_L15_00161C10_trail __asm__("D_L15_00161C10") __attribute__((sda));
@@ -237,7 +237,7 @@ void FUN_L15_002d7bb0(char *moby) {
     float local[4] __attribute__((aligned(16)));
     float end[4] __attribute__((aligned(16)));
     float rotated[4] __attribute__((aligned(16)));
-    float points[4][4] __attribute__((aligned(16)));
+    float points[5][4] __attribute__((aligned(16)));
     float speed, length, radius, angle, width, segment_angle, factor;
     int i, j, sign, color;
     unsigned char enabled = D_0013E533_trail;
@@ -259,7 +259,7 @@ void FUN_L15_002d7bb0(char *moby) {
         float *point = D_L15_001D3750_r[i];
         float *out = D_L15_001D3750_r[20 + i];
         float phase = (float)i;
-        radius = D_L15_00161C0C_trail + (D_L15_00161C10_trail - D_L15_00161C0C_trail) * trail_float_from_int(i) * 0.05f;
+        radius = D_L15_00161C0C_trail + (D_L15_00161C10_trail - D_L15_00161C0C_trail) * (trail_float_from_int(i) * 0.05f);
         radius *= trail_sin(trail_random_angle(D_L15_00161C14_trail + phase * D_L15_00161C08_trail));
         radius += trail_random_range(D_L15_00161C4C_trail, D_L15_00161C50_trail);
         previous = *(float *)&D_L15_001D39D0_r[i];
@@ -289,7 +289,7 @@ void FUN_L15_002d7bb0(char *moby) {
             trail_blend(factor, step, step, offset);
         }
         if (i < 10) {
-            float c, s;
+            float width;
             angle = trail_random_angle(D_L15_00161C1C_trail + phase * D_L15_00161C24_trail);
             segment_angle = trail_random_angle(D_L15_00161C30_trail + phase * D_L15_00161C38_trail);
             width = D_L15_00161C28_trail * trail_sin(segment_angle);
@@ -299,10 +299,8 @@ void FUN_L15_002d7bb0(char *moby) {
             point[0x148 / 4] += radius;
             segment_angle = trail_angle_add(trail_atan2(axis[0], axis[1]), 1.5707964f);
             width = D_L15_00161C2C_trail * trail_cos(angle);
-            c = trail_cos(segment_angle) * width;
-            s = trail_sin(segment_angle) * width;
-            transverse[0] = c;
-            transverse[1] = s;
+            transverse[0] = trail_cos(segment_angle) * width;
+            transverse[1] = trail_sin(segment_angle) * width;
             transverse[2] = 0.0f;
             qcopy(D_L15_001D3A20_r[i], transverse);
             trail_add(out, out, transverse);
@@ -321,26 +319,12 @@ void FUN_L15_002d7bb0(char *moby) {
         short *timer = &D_L15_00161CC0_trail[i];
         if (i < 2) { qcopy(local, data + 0xf0); factor = 0.4f; }
         else { qcopy(local, data + 0x100); factor = 0.5f; }
-        if (trail_timer_done(timer) == 0) {
-            float *track = D_L15_001D3BB0_trail[i];
-            for (j = 0; j < 4; j++) {
-                trail_sub(points[j], &track[j * 4 + 4], &track[j * 4]);
-                points[j][0] += trail_random_range(0.0f, 0.1f);
-                points[j][1] += trail_random_range(0.0f, 0.1f);
-                points[j][2] += trail_random_range(0.0f, 0.1f);
-            }
-            qcopy(track, local);
-            for (j = 0; j < 4; j++) trail_add(&track[j * 4 + 4], &track[j * 4], points[j]);
-            j = D_L15_00161CC0_trail[i];
-            sign = D_L15_00161CD8_trail[i];
-            j = j < sign ? sign - j : j - sign;
-            D_L15_00161CC8_trail[i] = trail_short_from_float((1.0f - trail_float_from_int(j) / trail_float_from_int(trail_scale_frames(15))) * 32.0f);
-        } else {
+        if (trail_timer_done(timer) != 0) {
             float *track = D_L15_001D3BB0_trail[i];
             *timer = trail_scale_frames(D_L15_00161CD0_trail[i]);
             D_L15_00161CC8_trail[i] = 0;
             width = trail_random_range(0.5235988f, 1.0471976f);
-            angle = trail_random_range(-1.0471976f, 0.17453292f);
+            angle = trail_random_between(-1.0471976f, 0.17453292f);
             trail_scale(factor, offset, delta);
             trail_rotate(angle, offset, offset, end);
             trail_rotate(width, offset, offset, rotated);
@@ -349,28 +333,42 @@ void FUN_L15_002d7bb0(char *moby) {
             factor = 1.0f;
             for (j = 0; j < 3; j++) {
                 trail_sub(points[0], track + 4 + j * 4, D_L15_001673C0_trail);
-                width = trail_random_range(0.17453292f, 0.96f) * factor;
+                width = trail_random_between(0.17453292f, 0.96f) * factor;
                 factor = -factor;
                 trail_rotate(width, offset, offset, points[0]);
                 trail_add(track + 8 + j * 4, track + 4 + j * 4, offset);
             }
+        } else {
+            float *track = D_L15_001D3BB0_trail[i];
+            for (j = 0; j < 4; j++) {
+                trail_sub(points[j + 1], &track[j * 4 + 4], &track[j * 4]);
+                points[j + 1][0] += trail_random_range(0.0f, 0.1f);
+                points[j + 1][1] += trail_random_range(0.0f, 0.1f);
+                points[j + 1][2] += trail_random_range(0.0f, 0.1f);
+            }
+            qcopy(track, local);
+            for (j = 0; j < 4; j++) trail_add(&track[j * 4 + 4], &track[j * 4], points[j + 1]);
+            j = D_L15_00161CC0_trail[i];
+            sign = D_L15_00161CD8_trail[i];
+            j = j < sign ? sign - j : j - sign;
+            D_L15_00161CC8_trail[i] = trail_short_from_float((1.0f - trail_float_from_int(j) / trail_float_from_int(trail_scale_frames(15))) * 32.0f);
+
         }
     }
     width = trail_random_range(0.5235988f, 1.0471976f);
-    angle = trail_random_range(-0.5235988f, 1.0471976f);
+    angle = trail_random_between(-0.5235988f, 1.0471976f);
     trail_scale(D_L15_00161C90_trail * D_0015ED60_trail, offset, delta);
     trail_rotate(angle, offset, offset, end);
     trail_rotate(width, offset, offset, rotated);
     sign = trail_random_integer(1, 8);
     if (trail_random_bool(2)) sign = -sign;
     width = trail_random_between(0.2f, 0.6f);
-    color = D_L15_00161C60_trail | 0x7f000000;
-    trail_particle(width * 0.3f, width, 0.0f, data + 0xf0, trail_scale_frames(15), color, 0, sign, offset);
+    trail_particle(width * 0.3f, width, 0.0f, data + 0xf0, trail_scale_frames(15), (color = D_L15_00161C60_trail | 0x7f000000), 0, sign, offset);
     trail_particle(width * 0.15f, width * 0.5f, 0.0f, data + 0xf0, trail_scale_frames(15), 0x307f7f7f, 0, -sign, offset);
     sign = trail_random_integer(1, 8);
     if (trail_random_bool(2)) sign = -sign;
     width = trail_random_between(0.15f, 3.0f);
-    trail_particle(width * 0.1f, width, 0.0f, data + 0x110, trail_scale_frames(12), color, 0, sign, (void *)0x15f580);
+    trail_particle(width * 0.1f, width, 0.0f, data + 0x110, trail_scale_frames(12), (color = D_L15_00161C60_trail | 0x7f000000), 0, sign, (void *)0x15f580);
 }
 #endif
 extern float D_0015ED60_8710 __asm__("D_0015ED60");

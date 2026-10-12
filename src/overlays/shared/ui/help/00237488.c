@@ -738,7 +738,10 @@ void FUN_L05_00253b48(void) {
         if (hero.unk8BC == 0) {
             FUN_L00_002591d0((void **)&second, *(s32 *)(state + 0x48), 0, 0);
             if (second != 0) {
-                u32 color = (blue << 16) | 0x80000000U | (green << 8) | red;
+                u32 color = blue << 16;
+                color |= 0x80000000U;
+                color |= green << 8;
+                color |= red;
                 do {
                     moby = second;
                     if (*(s16 *)(moby + 0xA6) == 0x474) {
@@ -807,11 +810,13 @@ void FUN_L05_00254058(void) {
     if (D_0013D388 == 0) return;
     if (*(s32 *)((char *)&hero + 0x8A8) != 0) {
         s32 duration = D_0015EEA4_sda;
+        s32 frame_count;
         if (D_00141848.stat[30].count <= 0xFFFE) {
             D_00141848.stat[30].count++;
             duration = *(s32 *)0x0015EEA4;
         }
-        if (D_00141848.stat[30].unk2 < scale_game_frames(duration) / 600)
+        frame_count = scale_game_frames(duration) / 600;
+        if (D_00141848.stat[30].unk2 < frame_count)
             D_00141848.stat[30].unk2 = scale_game_frames(D_0015EEA4_sda) / 600;
         D_00141848.stat[30].level_mask |= 1 << D_0015ED84;
         D_00141848.stat[30].level_mask |= 0x80000000;

@@ -457,18 +457,16 @@ int FUN_L00_002365a8(HudElem *e) {
     if (e->unk74 * 3 < 10001) {
         size = FUN_001fef20(1);
         half_w = FUN_001fef10(0.75f);
-        period = (int)((float)size * 60.0f);
-        threshold = (int)(half_w * 60.0f);
-        previous = (D_L00_0015F3F8 - 1) % period < threshold;
+        previous = (D_L00_0015F3F8 - 1) % (int)((float)size * 60.0f) <
+                   (int)(half_w * 60.0f);
     } else {
         previous = 0;
     }
     if (e->unk74 * 3 < 10001) {
         size = FUN_001fef20(1);
         half_w = FUN_001fef10(0.75f);
-        period = (int)((float)size * 60.0f);
-        threshold = (int)(half_w * 60.0f);
-        current = D_L00_0015F3F8 % period < threshold;
+        current = D_L00_0015F3F8 % (int)((float)size * 60.0f) <
+                  (int)(half_w * 60.0f);
     } else {
         current = 0;
     }
@@ -480,24 +478,24 @@ int FUN_L00_002365a8(HudElem *e) {
     half_h = (float)D_L00_0015F764 * D_L00_0015F76C * 0.5f;
     fade = (float)(10000 - e->unk74) / 10000.0f;
     half_w = (float)D_L00_0015F760 * D_L00_0015F768 * 0.5f;
-    origin.x = (half_w / 17.0f) * 16.0f;
     origin.y = (-half_h / 116.0f) * 16.0f;
-    origin.z = 1.0f;
-    origin.w = 1.0f;
+    origin.x = (half_w / 17.0f) * 16.0f;
+    direction.w = 0.0f;
+    direction.z = 0.0f;
     direction.x = (half_w + (float)(x + e->unk48) +
                    (1.0f - D_L00_0015F768) * 0.5f * (float)D_L00_0015F760) * 16.0f;
     direction.y = (half_h + (float)(y + e->unk4A) +
                    (1.0f - D_L00_0015F76C) * 0.5f * (float)D_L00_0015F764) * 16.0f;
-    direction.z = 0.0f;
-    direction.w = 0.0f;
+    origin.w = 1.0f;
+    origin.z = 1.0f;
     offset = 116.0f - (fade + fade) * 116.0f;
     image = FUN_0023b208(*(int *)e, 2);
     FUN_001ff260(&first_step);
     FUN_001ff260(&second_step);
     FUN_001ff260(&third_step);
-    first_step.x = first_step.y = D_L00_0015F750 * 16.0f;
-    second_step.x = second_step.y = (D_L00_0015F754 - D_L00_0015F750) * 16.0f;
-    third_step.x = third_step.y = (D_L00_0015F758 - D_L00_0015F754) * 16.0f;
+    first_step.y = first_step.x = D_L00_0015F750 * 16.0f;
+    second_step.y = second_step.x = (D_L00_0015F754 - D_L00_0015F750) * 16.0f;
+    third_step.y = third_step.x = (D_L00_0015F758 - D_L00_0015F754) * 16.0f;
     star_width = 0;
     for (i = 0; i < 100; i++) {
         if (i == 0) {

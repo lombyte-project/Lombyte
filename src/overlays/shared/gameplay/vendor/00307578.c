@@ -38,6 +38,9 @@ void FUN_L06_00307c48(unsigned char *a, unsigned char *m) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307d30.s", FUN_L06_00307d30);
 #else
+#include "rnc/overlay/quad.h"
+extern void FUN_L06_00307578(void);
+extern float D_L06_00167540[];
 extern float frame_time __asm__("D_0015ED6C");
 extern float D_L06_001622DC __attribute__((sda));
 extern float D_L06_001622E0 __attribute__((sda));
@@ -69,6 +72,7 @@ void FUN_L06_00307d30(char *moby) {
     float angle;
     int value;
     unsigned int color;
+    unsigned int color_channels;
     int i;
 
     if (*(int *)data == -1) return;
@@ -82,75 +86,76 @@ void FUN_L06_00307d30(char *moby) {
         moby[0x20] = 1;
         data[9] = D_L06_001622EC;
         return;
-    case 2:
-        data[9] -= frame_time + frame_time;
-        if (data[9] < 0.0f) data[9] = 0.0f;
-        if (0.0f < data[9]) enqueue_callback_list_1(0x307578, (int)moby);
-        return;
     case 1:
-        break;
-    default:
-        return;
-    }
-    *(long long *)pos = *(long long *)(moby + 0x10);
-    pos[2] = *(float *)(moby + 0x18) + 2.75f;
-    pos[3] = *(float *)(moby + 0x1c);
-    if (FUN_001f9b48((void *)0x167540, moby + 0x10) < 32.0f) {
-        data[9] += frame_time + frame_time;
-        if (D_L06_001622EC < data[9]) data[9] = D_L06_001622EC;
-    } else if (36.0f < FUN_001f9b48((void *)0x167540, moby + 0x10)) {
-        data[9] -= frame_time + frame_time;
-        if (data[9] < 0.0f) data[9] = 0.0f;
-    }
-    if (0.0f < data[9]) {
-        enqueue_callback_list_1(0x307578, (int)moby);
-        data[6] = fast_add_rotations(data[6], (360.0f / D_L06_001622E0) * 0.017453292f * frame_time);
-        pos[2] += D_L06_001622DC * fast_cos(data[6]);
-        value = truncate_float_to_s32(D_L06_001622E8 * fast_cos(data[10]));
-        color = 0x20000000 | ((value / 3 + 13) << 16) | ((value / 2 + 120) << 8) | (value + 150);
-        if (D_001413F4 == 1) {
-            if (idata[5] < 10) {
-                draw_number(0.5f, pos, moby, idata[5] + 2, color, 0x7f, 4, 0xff);
-            } else {
-                if (D_0015EDB4) {
-                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
-                    offset[0] = fast_cos(angle) * 0.15f;
-                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
-                    offset[1] = fast_sin(angle) * 0.15f;
-                    offset[2] = 0.0f;
-                    add_vectors(result, offset, pos);
-                    draw_number(0.5f, offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff);
-                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
-                    offset[0] = fast_cos(angle) * -0.4f;
-                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
-                    offset[1] = fast_sin(angle) * -0.4f;
-                    offset[2] = 0.0f;
-                    add_vectors(result, offset, pos);
-                    draw_number(0.5f, offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff);
-                }                 else {
-                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
-                    offset[0] = fast_cos(angle) * -0.4f;
-                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
-                    offset[1] = fast_sin(angle) * -0.4f;
-                    offset[2] = 0.0f;
-                    add_vectors(result, offset, pos);
-                    draw_number(0.5f, offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff);
-                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
-                    offset[0] = fast_cos(angle) * 0.15f;
-                    angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
-                    offset[1] = fast_sin(angle) * 0.15f;
-                    offset[2] = 0.0f;
-                    add_vectors(result, offset, pos);
-                    draw_number(0.5f, offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff);
+        *(OvlQuad *)pos = *(OvlQuad *)(moby + 0x10);
+        pos[2] += 2.75f;
+        if (FUN_001f9b48(D_L06_00167540, moby + 0x10) < 32.0f) {
+            data[9] += frame_time + frame_time;
+            if (D_L06_001622EC < data[9]) data[9] = D_L06_001622EC;
+        } else if (36.0f < FUN_001f9b48(D_L06_00167540, moby + 0x10)) {
+            data[9] -= frame_time + frame_time;
+            if (data[9] < 0.0f) data[9] = 0.0f;
+        }
+        if (0.0f < data[9]) {
+            enqueue_callback_list_1((int)FUN_L06_00307578, (int)moby);
+            data[6] = fast_add_rotations(data[6], (360.0f / D_L06_001622E0) * 0.017453292f * frame_time);
+            pos[2] += D_L06_001622DC * fast_cos(data[6]);
+            value = truncate_float_to_s32(D_L06_001622E8 * fast_cos(data[10]));
+            color_channels = (value / 2 + 120) * 0x100 | 0x20000000U;
+            color_channels = (value / 3 + 13) * 0x10000 | color_channels;
+            color = color_channels | (value + 150U);
+            if (D_001413F4 == 1) {
+                if (idata[5] < 10) {
+                    draw_number(0.5f, pos, moby, idata[5] + 2, color, 0x7f, 4, 0xff);
+                } else {
+                    if (D_0015EDB4) {
+                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        offset[0] = fast_cos(angle) * 0.15f;
+                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        offset[1] = fast_sin(angle) * 0.15f;
+                        offset[2] = 0.0f;
+                        add_vectors(result, offset, pos);
+                        draw_number(0.5f, offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff);
+                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        offset[0] = fast_cos(angle) * -0.4f;
+                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        offset[1] = fast_sin(angle) * -0.4f;
+                        offset[2] = 0.0f;
+                        add_vectors(result, offset, pos);
+                        draw_number(0.5f, offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff);
+                    } else {
+                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        offset[0] = fast_cos(angle) * -0.4f;
+                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        offset[1] = fast_sin(angle) * -0.4f;
+                        offset[2] = 0.0f;
+                        add_vectors(result, offset, pos);
+                        draw_number(0.5f, offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff);
+                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        offset[0] = fast_cos(angle) * 0.15f;
+                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        offset[1] = fast_sin(angle) * 0.15f;
+                        offset[2] = 0.0f;
+                        add_vectors(result, offset, pos);
+                        draw_number(0.5f, offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff);
+                    }
                 }
             }
         }
-    }
-    if (idata[5] < 1 || D_0014C050[(unsigned char)moby[0xb0] + current_level_index * 16] == 0xff) {
-        for (i = 0; i < 4; i++) {
-            if (idata[i] != -1) FUN_L06_00307c48((unsigned char *)moby, (unsigned char *)(D_L06_0015FFD8 + idata[i] * 0x100));
+        if (idata[5] < 1 || D_0014C050[(unsigned char)moby[0xb0] + current_level_index * 16] == 0xff) {
+            for (i = 0; i < 4; i++) {
+                if (idata[i] != -1) FUN_L06_00307c48((unsigned char *)moby, (unsigned char *)(D_L06_0015FFD8 + idata[i] * 0x100));
+            }
+            moby[0x20] = 2;
         }
-        moby[0x20] = 2;
+        break;
+    case 2:
+        data[9] -= frame_time + frame_time;
+        if (data[9] < 0.0f) data[9] = 0.0f;
+        if (0.0f < data[9]) enqueue_callback_list_1((int)FUN_L06_00307578, (int)moby);
+        return;
+    default:
+        return;
     }
 }
 #endif
@@ -336,18 +341,14 @@ void FUN_L06_0030bfa8(char *moby) {
     colors[1] = color;
     colors[0] = color;
     radius = truncate_float_to_s32((float)(D_L06_00162418 << 4) * size);
-    upper_plus = (s64)(s32)((y + radius) << 16) + 0xfffff080008000LL;
-    upper_minus = (s64)(s32)((y - radius) << 16) + 0xfffff080008000LL;
-    left = x - radius;
+    upper_plus = 0xfffff080008000LL + (s64)(s32)((y + radius) << 16);
+    upper_minus = 0xfffff080008000LL + (s64)(s32)((y - radius) << 16);
     right = x + radius;
-    corners[2] = upper_plus;
-    corners[3] = upper_plus;
-    corners[0] = upper_minus;
-    corners[1] = upper_minus;
-    corners[2] += right;
-    corners[0] += right;
-    corners[3] += left;
-    corners[1] += left;
+    left = x - radius;
+    corners[0] = upper_minus + right;
+    corners[2] = upper_plus + right;
+    corners[1] = upper_minus + left;
+    corners[3] = upper_plus + left;
    texture = get_effect_texture(D_L06_00162414);
     FUN_L02_0020bc88(corners, uvs, colors, texture, 1);
     vu1_add_g_sregister(0x47, 0x5360B);

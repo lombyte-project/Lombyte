@@ -2319,32 +2319,97 @@ extern int D_L18_0015F580;
 extern int D_0013F3D0_9768 __asm__("D_0013F3D0");
 extern int D_0014C050_9768[] __asm__("D_0014C050");
 
+extern unsigned char D_L18_001F29A0_9768[] __asm__("D_L18_001F29A0");
+extern unsigned char D_L18_001F29B8_9768[] __asm__("D_L18_001F29B8");
+
 void FUN_L18_002e9768(struct Moby *moby) {
     float *data = (float *)moby->pvars;
     int state = moby->state;
-    int i, first, second, lifetime, spread;
-    float position[4];
-    float colors[6];
-    float colors2[6];
-    float direction[4];
-    float velocity[4];
-    float vector[4];
-    float random[4];
+    int lifetime, spread;
+    int *first, *second;
     float magnitude;
-    float *pos = &moby->pos.x;
 
-    if (state == 1) goto state_one;
-    if (state < 2) {
-        if (state != 0) return;
-        if (moby->unkB0 == 0xff ||
-            *((unsigned char *)D_0014C050_9768 + current_level_index * 16 + moby->unkB0) != 0xff) {
+    switch (state) {
+    case 0: {
+        unsigned char unkB0 = moby->unkB0;
+        if (unkB0 == 0xff ||
+            *((unsigned char *)D_0014C050_9768 + current_level_index * 16 + unkB0) != 0xff) {
             moby->state = 1;
             if (*(int *)data != 0) *(int *)(*(int *)data) = 3;
             return;
         }
-    } else if (state == 2) {
-        if (moby->oclass != 0x37c) {
-            float speed = FUN_L00_00257c48(10.0f, 15.0f) * frame_time;
+        goto remove;
+    }
+    case 1:
+        if (FUN_L00_0025a420(moby, 0x80000, 0)) {
+            FUN_L18_002e9e50(moby->group);
+            FUN_L00_0028dc90(0, 0, (int)moby, 0x375);
+        }
+        moby->unkA4 = 0xff;
+        return;
+    case 2:
+        if (moby->oclass == 0x37c) {
+            float *pos = &moby->pos.x;
+            {
+                int i;
+                float colors[6];
+                float colors2[6];
+                float position[4];
+                i = 0;
+                do {
+                    magnitude = random_float_between_9768(8.0f, 10.0f) * frame_time;
+                    __builtin_memcpy(colors, D_L18_001F29A0_9768, 24);
+                    __builtin_memcpy(colors2, D_L18_001F29B8_9768, 24);
+                    qcopy(position, pos);
+                    ++i;
+                    position[2] += random_float_between_9768(0.0f, 6.0f);
+                    first = (int *)colors + random_integer_below_9768(6);
+                    second = (int *)colors2 + random_integer_below_9768(6);
+                    lifetime = FUN_L00_00257b90(scale_game_frames_9768(15), scale_game_frames_9768(20));
+                    spread = FUN_L00_00257b90(scale_game_frames_9768(30), scale_game_frames_9768(45));
+                    spawn_particle_9768(1500000.0f, magnitude, position, &D_L18_0015F580,
+                    *first, *second,
+                    lifetime, spread, 0, 0);
+                    lifetime = FUN_L00_00257b90(scale_game_frames_9768(5), scale_game_frames_9768(10));
+                    spread = FUN_L00_00257b90(scale_game_frames_9768(15), scale_game_frames_9768(20));
+                    spawn_particle_9768(1500000.0f, magnitude * 0.5f, position, &D_L18_0015F580,
+                    0x7fffffff, 0xffffff, lifetime, spread, 0, 0);
+                } while ((float)i < 10.0f);
+            }
+            {
+                int i;
+                float position[4];
+                float colors[6];
+                float velocity[4];
+                float colors2[6];
+                float direction[4];
+                i = 0;
+                do {
+                    qcopy(position, pos);
+                    ++i;
+                    position[2] += random_float_between_9768(0.0f, 6.0f);
+                    __builtin_memcpy(colors, D_L18_001F29A0_9768, 24);
+                    __builtin_memcpy(colors2, D_L18_001F29B8_9768, 24);
+                    *(OvlQuad *)direction = 0;
+                    direction[0] = random_float_between_9768(-1.0f, 1.0f);
+                    direction[1] = random_float_between_9768(-1.0f, 1.0f);
+                    direction[2] = random_float_between_9768(-1.0f, 1.0f);
+                    *(u128 *)velocity = *(u128 *)direction;
+                    scale_vector_9768(velocity, velocity, random_float_between_9768(0.0f, 3.0f) * frame_time);
+                    first = (int *)colors + random_integer_below_9768(6);
+                    second = (int *)colors2 + random_integer_below_9768(6);
+                    spawn_particle_alt_9768(500000.0f, position, velocity, *first,
+                    *second,
+                    FUN_L00_00257b90(scale_game_frames_9768(30), scale_game_frames_9768(45)));
+                } while ((float)i < 10.0f);
+            }
+remove:
+            remove_moby_9768(moby);
+            return;
+        } else {
+            float *pos = &moby->pos.x;
+            float vector[4];
+            float speed = random_float_between_9768(10.0f, 15.0f) * frame_time;
             moby->unk94 = 0;
             moby->state = 3;
             data[2] = FUN_L00_00257c48(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
@@ -2358,48 +2423,9 @@ void FUN_L18_002e9768(struct Moby *moby) {
             data[7] = moby->pos.z;
             return;
         }
-        for (i = 0; (float)i < 10.0f; ) {
-            magnitude = random_float_between_9768(8.0f, 10.0f) * frame_time;
-            __builtin_memcpy(colors, (void *)0x001f29a0, 24);
-            __builtin_memcpy(colors2, (void *)0x001f29b8, 24);
-            *(u128 *)position = *(u128 *)pos;
-            ++i;
-            position[2] += random_float_between_9768(0.0f, 6.0f);
-            first = random_integer_below_9768(6);
-            second = random_integer_below_9768(6);
-            lifetime = FUN_L00_00257b90(scale_game_frames_9768(15), scale_game_frames_9768(20));
-            spread = FUN_L00_00257b90(scale_game_frames_9768(30), scale_game_frames_9768(45));
-            spawn_particle_9768(1500000.0f, magnitude, position, &D_L18_0015F580,
-                                ((int *)colors)[first], ((int *)colors2)[second],
-                                lifetime, spread, 0, 0);
-            spawn_particle_9768(1500000.0f, magnitude * 0.5f, position, &D_L18_0015F580,
-                                0x7fffffff, 0xffffff,
-                                FUN_L00_00257b90(scale_game_frames_9768(5), scale_game_frames_9768(10)),
-                                FUN_L00_00257b90(scale_game_frames_9768(15), scale_game_frames_9768(20)), 0, 0);
-        }
-        for (i = 0; (float)i < 10.0f; ) {
-            *(u128 *)position = *(u128 *)pos;
-            ++i;
-            position[2] += random_float_between_9768(0.0f, 6.0f);
-            __builtin_memcpy(colors, (void *)0x001f29a0, 24);
-            __builtin_memcpy(colors2, (void *)0x001f29b8, 24);
-            direction[0] = 0.0f;
-            direction[1] = 0.0f;
-            direction[2] = 0.0f;
-            direction[3] = 0.0f;
-            direction[0] = random_float_between_9768(-1.0f, 1.0f);
-            direction[1] = random_float_between_9768(-1.0f, 1.0f);
-            direction[2] = random_float_between_9768(-1.0f, 1.0f);
-            *(u128 *)random = *(u128 *)direction;
-            *(u128 *)velocity = *(u128 *)direction;
-            scale_vector_9768(velocity, velocity, random_float_between_9768(0.0f, 3.0f) * frame_time);
-            first = random_integer_below_9768(6);
-            second = random_integer_below_9768(6);
-            spawn_particle_alt_9768(500000.0f, position, velocity, ((int *)colors)[first],
-                                    ((int *)colors2)[second],
-                                    FUN_L00_00257b90(scale_game_frames_9768(30), scale_game_frames_9768(45)));
-        }
-    } else if (state == 3) {
+        break;
+    case 3: {
+        float *pos = &moby->pos.x;
         moby->rot.x = fast_add_rotations_9768(moby->rot.x, data[2]);
         moby->rot.y = fast_add_rotations_9768(moby->rot.y, data[2]);
         data[6] -= D_0015ED70_9768 * 20.0f;
@@ -2410,15 +2436,10 @@ void FUN_L18_002e9768(struct Moby *moby) {
             remove_moby_9768(moby);
         }
         return;
-    } else return;
-    remove_moby_9768(moby);
-    return;
-state_one:
-    if (FUN_L00_0025a420(moby, 0x80000, 0)) {
-        FUN_L18_002e9e50(moby->group);
-        FUN_L00_0028dc90(0, 0, (int)moby, 0x375);
     }
-    moby->unkA4 = 0xff;
+    default: return;
+    }
+    return;
 }
 #endif
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB260), where it is exact; names translated to the US level program. */
@@ -2527,7 +2548,7 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
     L18FlareVector basis[4][4];
     float *data = (float *)moby->pvars;
     int i, j;
-    float size;
+    volatile float size;
     clear_flare_vector(&axis);
     axis.z = flare_length(D_L18_001677C0_flare[0] - moby->pos.x,
                           D_L18_001677C0_flare[1] - moby->pos.y);
@@ -2562,7 +2583,8 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
         packet[i].zero = 0;
         j = 0;
         do {
-            packet[i].uv[j] = D_L18_001D9B50_flare[j];
+            packet[i].uv[j].u = D_L18_001D9B50_flare[j].u;
+            packet[i].uv[j].v = D_L18_001D9B50_flare[j].v;
             if (i == 0) {
                 packet[i].color[j] = tween_flare_color(size,
                     D_L18_00161EF8_flare[i] & 0xffffff, D_L18_00161EF8_flare[i]);

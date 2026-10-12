@@ -39,6 +39,7 @@ extern void FUN_00213f38(float *, float *, float, float, float, float);
 extern void FUN_L00_00257d78(float *, float, float);
 extern float FUN_002132a8(float, float);
 extern float FUN_001f96b0(float);
+extern float scale_timer_random(float) __asm__("FUN_L02_0020ff48");
 extern int FUN_001fa6d0(float);
 extern int FUN_001f9770(void *);
 extern char *FUN_L00_0026b230(void *, void *, int, float);
@@ -95,7 +96,9 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
         }
     }
     if (FUN_001f9770(slots + 0x1c)) {
-        *(short *)(slots + 0x1c) = FUN_001fa6d0((D_0015ED68 * FUN_002132a8(10.0f, 30.0f)));
+        speed = FUN_002132a8(10.0f, 30.0f);
+        speed = scale_timer_random(speed);
+        *(short *)(slots + 0x1c) = FUN_001fa6d0(speed);
         FUN_L00_00257d78(offset, 0.0f, D_0015ED6C + D_0015ED6C);
         FUN_001f9a68(velocity, adjusted, FUN_002132a8(0.5f, 0.1f));
         FUN_001f9a10(velocity, velocity, offset);

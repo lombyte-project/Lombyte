@@ -838,22 +838,36 @@ int FUN_L02_002fb648(char *moby) {
     }
     if (*(int *)(data + 0xc) >= 0) {
         result = is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0xc));
-        return result != 0;
+        if (result == 0) {
+            goto rejected;
+        }
+        return 1;
     }
     if (*(int *)(data + 0x10) >= 0) {
         result = FUN_L00_0025fa38(&hero.motion.pos, *(int *)(data + 0x10));
-        return result != 0;
+        if (result == 0) {
+            goto rejected;
+        }
+        return 1;
     }
     if (*(int *)(data + 8) >= 0) {
         result = FUN_L00_0025faf0(&hero.motion.pos, *(int *)(data + 8));
-        return result != 0;
+        if (result == 0) {
+            goto rejected;
+        }
+        return 1;
     }
     if (*(int *)(data + 0x14) < 0) {
-        return 0;
+        goto rejected;
     }
     entry = (int *)D_L02_001B0AB0[*(int *)(data + 0x14)];
     result = point_in_path_xy(&hero.motion.pos, entry + 4, *entry);
-    return result != 0;
+    if (result == 0) {
+        goto rejected;
+    }
+    return 1;
+rejected:
+    return 0;
 }
 #endif
 /* Checks whether the target's direction is within a and b degrees of the reference axis. */
@@ -927,6 +941,7 @@ int FUN_L02_002fb788(char *moby, float a, float b) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb9c8.s", FUN_L02_002fb9c8);
 #else
 extern int D_L02_0015FFD8;
+#include "rnc/input/pad_state.h"
 extern int D_L02_001ABE40[];
 extern char *D_L02_00167400;
 extern char *D_L02_0015EF50;
@@ -981,13 +996,21 @@ int FUN_L02_002fb9c8(char *moby) {
     if (index >= 0) {
         group = (unsigned short *)D_L02_001ABE40[index];
         if (group == 0) goto invalid;
-        do {
-            unsigned short entry = *group;
-            target = (char *)(D_L02_0015FFD8 + ((entry & 0x7fff) << 8));
-            if (*(signed char *)(target + 0x20) >= 0) break;
-            group++;
-            if ((short)entry < 0) goto invalid;
-        } while (1);
+        {
+            unsigned int entry = *group;
+            char *group_base = (char *)D_L02_0015FFD8;
+            target = group_base + ((entry & 0x7fff) << 8);
+            if (*(signed char *)(target + 0x20) < 0) {
+                char *group_target;
+                do {
+                    group++;
+                    if ((int)(entry << 16) < 0) goto invalid;
+                    entry = *group;
+                    group_target = group_base + ((entry & 0x7fff) << 8);
+                } while (*(signed char *)(group_target + 0x20) < 0);
+                target = group_target;
+            }
+        }
     } else {
         target = (char *)(D_L02_0015FFD8 + (*(int *)(data + 0x28) << 8));
         if (*(signed char *)(target + 0x20) < 0) goto invalid;
@@ -1009,8 +1032,10 @@ int FUN_L02_002fb9c8(char *moby) {
     }
     if (*(short *)(data + 0x3c) == 5) {
         angle = FUN_001f9e90(*(float *)D_L02_00167400, *(float *)(D_L02_00167400 + 4));
-        if (*(short *)(data + 0x20) < 2 || absolute_float(D_0013CA40) >= 0.3f || absolute_float(*(float *)D_0013CA44) >= 0.3f)
+        if (*(short *)(data + 0x20) < 2)
             *(float *)(data + 0x40) = *(float *)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x18);
+        else if (absolute_float(controller_state.analog[0]) >= 0.3f || absolute_float(controller_state.analog[1]) >= 0.3f)
+            *(float *)(data + 0x40) = angle;
         heading = *(float *)(data + 0x40);
         if (fast_difference_between_rotations(heading, angle) > 1.5707964f)
             fast_add_rotations(heading, 3.1415927f);
@@ -1019,25 +1044,25 @@ int FUN_L02_002fb9c8(char *moby) {
         heading = *(float *)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x18);
         angle = FUN_001f9e90(*(float *)D_L02_00167400, *(float *)(D_L02_00167400 + 4));
         if (fast_difference_between_rotations(heading, angle) > 1.5707964f)
-            *(float *)(data + 0x40) = fast_add_rotations(heading, 3.1415927f);
-        else
-            *(float *)(data + 0x40) = heading;
+            heading = fast_add_rotations(heading, 3.1415927f);
+        *(float *)(data + 0x40) = heading;
     }
     active = 1;
     scale = 1.0f;
     *(short *)(data + 0x20) += 1;
-    duration = scale_game_frames(300);
     if (*(short *)(data + 0x3c) == 1) {
+        duration = scale_game_frames(300);
         retry = scale_game_frames(400);
         end = scale_game_frames(560);
     } else {
+        duration = scale_game_frames(300);
         retry = scale_game_frames(350);
         end = scale_game_frames(400);
     }
     frames = scale_game_frames(200);
     if (*(short *)(data + 0x3c) == 7) {
         int count;
-        if (D_0013CA40 != 0.0f) *(short *)(data + 0x20) = duration;
+        if (controller_state.analog[0] != 0.0f) *(short *)(data + 0x20) = duration;
         count = *(short *)(data + 0x20);
         if (count >= duration) {
             active = 0;
@@ -1059,15 +1084,19 @@ int FUN_L02_002fb9c8(char *moby) {
     } else if ((unsigned short)(*(short *)(data + 0x3c) - 1) < 2) {
         FUN_L02_002f6570(176);
         FUN_L02_002f6598(1.0f, 12.0f, 0.11f);
-        if (D_0013CA40 != 0.0f || *(float *)D_0013CA44 != 0.0f)
+        if (controller_state.analog[0] != 0.0f || controller_state.analog[1] != 0.0f)
             *(short *)(data + 0x20) = duration;
         if (*(short *)(data + 0x20) >= duration) {
-            short count = *(short *)(data + 0x3e) + 1;
+            int count = (unsigned short)*(short *)(data + 0x3e) + 1;
             *(short *)(data + 0x3e) = count;
-            if (count < retry || FUN_L02_002fb788(moby, 30.0f, 0.0f) == 0)
+            if ((short)count >= retry) {
+                if (FUN_L02_002fb788(moby, 30.0f, 0.0f) != 0)
+                    *(short *)(data + 0x20) = end;
+                else
+                    active = 0;
+            } else {
                 active = 0;
-            else
-                *(short *)(data + 0x20) = end;
+            }
         }
         if (*(short *)(data + 0x20) >= end) {
             active = 1;
@@ -1107,17 +1136,16 @@ int FUN_L02_002fb9c8(char *moby) {
     if (*(float *)(data + 0x38) != 0.0f)
         FUN_L00_002e84b8(*(float *)(data + 0x38), 0.003f);
     if (*(float *)(data + 0x4c) != 0.0f)
-        FUN_L00_002e84f0(0, *(float *)(data + 0x4c), 0.005f);
+        follow_camera_set_offset_scale(0, *(float *)(data + 0x4c), 0.005f);
     if (*(short *)(data + 0x3c) == 3) {
         FUN_L00_002e8568(0);
         FUN_L00_002e8620();
         FUN_L00_002e8648();
         FUN_L00_002e85d8(0.01f, 0.2f);
-        if (*(short *)(data + 0x20) < scale_game_frames(120))
-            amount = ((float)*(short *)(data + 0x20) / FUN_001fa6c0(scale_game_frames(120))) * 0.02f + 0.01f;
+        if (*(short *)(data + 0x20) >= scale_game_frames(120))
+            FUN_L00_002e8590(0.03f, 0.2f);
         else
-            amount = 0.03f;
-        FUN_L00_002e8590(amount, 0.2f);
+            FUN_L00_002e8590(((float)*(short *)(data + 0x20) / FUN_001fa6c0(scale_game_frames(120))) * 0.02f + 0.01f, 0.2f);
     }
     if ((unsigned short)(*(short *)(data + 0x3c) - 4) < 2) {
         FUN_L00_002e8568(0);

@@ -62,6 +62,9 @@ extern int FUN_00116248(char *, const char *, ...);
 extern int FUN_001f6250(char *, int);
 extern void FUN_L00_001fb470(int x, int y, u64 color, char *text, int len);
 #ifdef NON_MATCHING
+extern struct { int word[5]; } D_L05_0015FA30_words __asm__("D_L05_0015FA30") __attribute__((sda));
+extern struct { int word[2]; } D_L05_0015FA50_words __asm__("D_L05_0015FA50") __attribute__((sda));
+extern struct { int word; } D_L05_0015FA58_word __asm__("D_L05_0015FA58") __attribute__((sda));
 extern int D_0015ED84;
 extern char D_L05_0015F860[];
 extern char D_L05_0015F9E0[];
@@ -94,7 +97,7 @@ int FUN_L05_00266320(HudElem *e) {
     FUN_00116248(buf, D_L05_0015F9E0, count);
     FUN_L00_001fb470(x - 1, y + 2, 0x80000000, buf, -1);
     FUN_L00_001fb470(x, y, D_L05_0015FA2C, buf, -1);
-    x = *(&D_L05_0015FA30 + 4);
+    x = D_L05_0015FA30_words.word[4];
     if (hero.unk8C0 == 1) {
         FUN_00116248(buf, D_L05_0015F9E8, 1);
     } else if (hero.unk8C0 == 2) {
@@ -113,19 +116,19 @@ int FUN_L05_00266320(HudElem *e) {
     FUN_L00_001fb470(x, y, D_L05_0015FA28, buf, -1);
     if (D_0015ED84 == 0x10) {
         FUN_00116248(small_buf, D_L05_0015F860, hero.unk8CE);
-        x2 = *(int *)D_L05_0015FA50;
-        y2 = *(int *)(D_L05_0015FA50 + 4);
+        x2 = D_L05_0015FA50_words.word[0];
+        y2 = D_L05_0015FA50_words.word[1];
         if (D_0013D388[0] == 0) {
             x2 = e->unk50;
             y2 = D_0015ED80 ? 10 : 18;
         }
-        FUN_00201128(x2 - 0x18, y2, *(int *)D_L05_0015FA58, 0x20, 0x60);
+        FUN_00201128(x2 - 0x18, y2, D_L05_0015FA58_word.word, 0x20, 0x60);
         FUN_001ffc30(FUN_001ff960(0x7558, 2), x2, y2, 0x20, 0x20, 0x80);
         FUN_L00_001fb470(x2 + 0x29, y2 + 8, 0x80000000, small_buf, -1);
-        if (hero.unk8CE == 0) {
-            FUN_L00_001fb470(x2 + 0x28, y2 + 7, 0x80202080, small_buf, -1);
-        } else {
+        if (hero.unk8CE != 0) {
             FUN_L00_001fb470(x2 + 0x28, y2 + 7, 0x80e08060, small_buf, -1);
+        } else {
+            FUN_L00_001fb470(x2 + 0x28, y2 + 7, 0x80202080, small_buf, -1);
         }
     }
     return e->w;

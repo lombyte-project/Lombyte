@@ -100,6 +100,9 @@ extern int float_to_integer(float) __asm__("FUN_001fa6d0");
 extern float integer_to_float(int) __asm__("FUN_001fa6c0");
 extern void transform_vectors(float *, void *, int) __asm__("FUN_001f7d30");
 typedef struct { float v[4]; } aligned_vector __attribute__((aligned(16)));
+extern int D_L10_0015B340 __asm__("D_0015B340") __attribute__((sda));
+extern int D_L10_0015B348[] __asm__("D_0015B348") __attribute__((sda));
+
 
 void FUN_L10_002e91b8(unsigned char *m) {
     unsigned char first[0x90] __attribute__((aligned(16)));
@@ -126,10 +129,8 @@ void FUN_L10_002e91b8(unsigned char *m) {
     *(int *)(second + 0x4c) = 0;
     i = 3;
     do {
-        first_vectors[0] = first_source[0]; first_vectors[1] = first_source[1];
-        first_vectors[2] = first_source[2]; first_vectors[3] = first_source[3];
-        second_vectors[0] = second_source[0]; second_vectors[1] = second_source[1];
-        second_vectors[2] = second_source[2]; second_vectors[3] = second_source[3];
+        *(aligned_vector *)first_vectors = *(aligned_vector *)first_source;
+        *(aligned_vector *)second_vectors = *(aligned_vector *)second_source;
         first_source += 4;
         second_source += 4;
         first_vectors[0] *= scale[0];
@@ -141,9 +142,9 @@ void FUN_L10_002e91b8(unsigned char *m) {
         i--;
     } while (i >= 0);
 
-    for (i = 0; i < *(int *)0x0015b340; i++) {
+    for (i = 0; i < D_L10_0015B340; i++) {
         int parity = i & 1;
-        int *colors = (int *)0x0015b348;
+        int *colors = D_L10_0015B348;
         unsigned long long color = (long long)colors[parity] |
             ((long long)colors[parity + 2] << 2) |
             ((long long)colors[parity + 4] << 4) |
@@ -156,7 +157,10 @@ void FUN_L10_002e91b8(unsigned char *m) {
         float *first_offsets = (float *)(second + 0x58);
         float *second_offsets = (float *)(second + 0x68);
         *(unsigned long long *)(first + 0x88) = color;
-        *(unsigned long long *)(second + 0x88) = color;
+        *(unsigned long long *)(second + 0x88) =
+            (long long)colors[parity] | ((long long)colors[parity + 2] << 2) |
+            ((long long)colors[parity + 4] << 4) | ((long long)colors[parity + 6] << 6) |
+            0x8000000000ULL;
         ((int *)(first + 0x40))[0] = shade;
         ((int *)(second + 0x40))[2] = shade;
         ((int *)(second + 0x40))[0] = shade;
@@ -166,9 +170,8 @@ void FUN_L10_002e91b8(unsigned char *m) {
         for (j = 0; j < 4; j++) {
             for (k = 0; k != 2; k++) {
                 int index = i * 2 + k;
-                float frequency = ((float *)0x001da270)[index];
-                int limit = float_to_integer(frequency * 360.0f);
-                float angle = integer_to_float(*(int *)0x0015f3f8 % limit) / frequency - 180.0f;
+                int limit = float_to_integer(((float *)0x001da270)[index] * 360.0f);
+                float angle = integer_to_float(*(int *)0x0015f3f8 % limit) / ((float *)0x001da270)[index] - 180.0f;
                 float wave;
                 if (((int *)0x001da2b0)[index] == 0)
                     wave = FUN_001f9de0(angle * 0.017453292f);

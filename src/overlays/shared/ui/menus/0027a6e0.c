@@ -71,8 +71,8 @@ void FUN_L00_002831c0(void) {
     }
     if (code < 0) return;
     if (code < 0x25) {
-        D_0013D4E8[code] = 1;
         D_0013D4C0[code] = 1;
+        D_0013D4E8[code] = 1;
     } else if (code < 0x37) {
         unlock_planet(code - 0x24);
     } else if (code < 0x3d) {

@@ -1220,8 +1220,7 @@ extern float fast_difference_between_rotations_2acfd8(float, float) __asm__("FUN
 extern float convert_integer_to_float_2acfd8(int) __asm__("FUN_001fa6c0");
 extern int FUN_001efa68_2acfd8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void FUN_L00_002c2488_2acfd8(void *, void *, void *, float, float, float) __asm__("FUN_L00_002c2488");
-void launch_bomb(float *pos, unsigned char *moby, float *velocity) __asm__("FUN_L00_002acfd8");
-void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
+void FUN_L00_002acfd8(float *pos, unsigned char *moby, float *velocity) {
     float *v = *(float **)(moby + 0x78);
     float difference[4] __attribute__((aligned(16)));
     float direction[4] __attribute__((aligned(16)));
@@ -1233,8 +1232,9 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
     *(short *)((char *)v + 0x6a) = scale_game_frames_2acfd8(30);
     moby[0x20] = 1;
     qcopy(v, velocity);
-    if (hero.state.control_mode == 15 ||
-        (hero.ground_moby != 0 && FUN_L00_002603d0_2acfd8() != 0)) {
+    if (hero.state.control_mode == 15) {
+        add_vector_xyz_2acfd8(v, v, (char *)&hero + 0x100);
+    } else if (hero.ground_moby != 0 && FUN_L00_002603d0_2acfd8() != 0) {
         add_vector_xyz_2acfd8(v, v, (char *)&hero + 0x100);
     } else if (*(float **)((char *)v + 0x60) != 0) {
         short cls = *(short *)(*(char **)((char *)v + 0x60) + 0xa6);
@@ -1371,28 +1371,28 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
     }
     if (FUN_001efa68_2ad410(&hero_position, &position, 0x10, hero.moby, 0) &&
         (FUN_001f0b58_2ad410() || 0.0f < velocity.f[2])) {
-        if (D_H910.moby && D_H910.i1C <= 0) {
-            if ((D_H910.moby != hero.moby && D_H910.moby != v->holder) ||
+        if (coll_hit.moby && coll_hit.i1C <= 0) {
+            if ((coll_hit.moby != hero.moby && coll_hit.moby != v->holder) ||
                 timer < FUN_001fef20_2ad410(300) - FUN_001fef20_2ad410(10)) {
                 offset.q = 0;
                 offset.f[2] = 0.5f;
-                if (v->last_hit != D_H910.moby) {
+                if (v->last_hit != coll_hit.moby) {
                     v->hit_count = 0;
-                    v->last_hit = D_H910.moby;
+                    v->last_hit = coll_hit.moby;
                 } else {
                     v->hit_count++;
-                    FUN_001ff2a8_2ad410(&start, (char *)D_H910.moby + 0x10, &v->previous_hit);
+                    FUN_001ff2a8_2ad410(&start, (char *)coll_hit.moby + 0x10, &v->previous_hit);
                     v->difference.q = start.q;
                 }
-                v->previous_hit.q = D_H910.moby->pos.q;
-                found = 1;
+                v->previous_hit.q = coll_hit.moby->pos.q;
                 object_hit = 1;
-                qcopy(&v->landing, (char *)D_H910.moby + 0x10);
+                qcopy(&v->landing, (char *)coll_hit.moby + 0x10);
+                found = 1;
                 FUN_001ff278_2ad410(&offset, &offset, &v->landing);
                 FUN_00259698_2ad410(&offset, 0, 0.5f);
             }
-        } else if (D_H910.i1C > 0) {
-            qcopy(&v->landing, &D_H910.pos);
+        } else if (coll_hit.i1C > 0) {
+            qcopy(&v->landing, &coll_hit.pos);
             found = 1;
         }
     }
@@ -1412,32 +1412,32 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
             continue;
         if (!FUN_001f0b58_2ad410() && 0.0f < velocity.f[2])
             continue;
-        if (D_H910.moby && D_H910.i1C <= 0) {
+        if (coll_hit.moby && coll_hit.i1C <= 0) {
             if (!(position.f[2] - hero_position.f[2] < 2.0f))
                 goto check_surface_2ad410;
-            if ((D_H910.moby == hero.moby || D_H910.moby == v->holder) &&
+            if ((coll_hit.moby == hero.moby || coll_hit.moby == v->holder) &&
                 timer >= FUN_001fef20_2ad410(300) - FUN_001fef20_2ad410(10))
                 continue;
             offset.q = 0;
             offset.f[2] = 0.5f;
-            if (v->last_hit != D_H910.moby) {
+            if (v->last_hit != coll_hit.moby) {
                 v->hit_count = 0;
-                v->last_hit = D_H910.moby;
+                v->last_hit = coll_hit.moby;
             } else {
                 v->hit_count++;
-                FUN_001ff2a8_2ad410(&start, (char *)D_H910.moby + 0x10, &v->previous_hit);
+                FUN_001ff2a8_2ad410(&start, (char *)coll_hit.moby + 0x10, &v->previous_hit);
                 v->difference.q = start.q;
             }
-            v->previous_hit.q = D_H910.moby->pos.q;
-            qcopy(&v->landing, (char *)D_H910.moby + 0x10);
+            v->previous_hit.q = coll_hit.moby->pos.q;
+            object_hit = 1;
+            qcopy(&v->landing, (char *)coll_hit.moby + 0x10);
             FUN_001ff278_2ad410(&offset, &offset, &v->landing);
             FUN_00259698_2ad410(&offset, 0, 0.5f);
-            object_hit = 1;
             break;
         }
 check_surface_2ad410:
-        if (D_H910.i1C > 0) {
-            qcopy(&v->landing, &D_H910.pos);
+        if (coll_hit.i1C > 0) {
+            qcopy(&v->landing, &coll_hit.pos);
             break;
         }
     }
@@ -1445,22 +1445,29 @@ landing_done_2ad410:
     if (!timer)
         goto return_zero_2ad410;
     if (!mode) {
-        if (!D_H910.moby)
+        if (!coll_hit.moby)
             goto return_zero_2ad410;
-        if (!FUN_L00_002603d0_2ad410(D_H910.moby))
+        if (!FUN_L00_002603d0_2ad410(coll_hit.moby))
             goto return_zero_2ad410;
     }
-    if (mode != 2 || !D_H910.moby || !FUN_L00_002603d0_2ad410(D_H910.moby))
+    if (mode != 2 || !coll_hit.moby || !FUN_L00_002603d0_2ad410(coll_hit.moby))
         FUN_001f93e0_2ad410(FUN_L00_002acbf0, m);
     if (!object_hit && v->last_hit) {
-        if (v->last_hit->state == 0xfe || v->last_hit->state == 0xfd ||
-            !(v->last_hit->flags & 0x1000) ||
-            v->hit_count > FUN_001fef20_2ad410(30)) {
+        if (v->last_hit->state == 0xfe) {
             v->hit_count = 0;
-            v->last_hit = 0;
+        } else if (v->last_hit->state == 0xfd) {
+            v->hit_count = 0;
+        } else if (!(v->last_hit->flags & 0x1000)) {
+            v->hit_count = 0;
+        } else {
+            if (v->hit_count <= FUN_001fef20_2ad410(30))
+                goto keep_hit_2ad410;
+            v->hit_count = 0;
         }
+        v->last_hit = 0;
     }
-    qcopy(&v->normal, &D_L00_00173E80_2ad410);
+keep_hit_2ad410:
+    v->normal.q = D_L00_00173E80_2ad410.q;
     FUN_001ff2a8_2ad410(&previous, &v->landing, D_L00_00166DC0);
     FUN_001ff300_2ad410(0.95f, &previous, &previous);
     FUN_001ff278_2ad410(&v->landing, &previous, D_L00_00166DC0);
@@ -2481,7 +2488,379 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         o = active_mobies[i];
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b03a0.s", FUN_L00_002b03a0);
+#else
+typedef struct { unsigned int color[6]; } ProjectileColors;
+typedef union {
+    struct { U910 distance, velocity, target_sample, intercept; } vectors;
+    Qry910 query;
+} ProjectileScratch;
+extern B910 D_L00_001E9950;
+extern B910 D_L00_001E99A0;
+extern ProjectileColors D_L00_001E99F0;
+extern ProjectileColors D_L00_001E9A08;
+extern float D_0015F5D0 __asm__("D_L00_0015F5D0");
+extern float D_0015F5D4 __asm__("D_L00_0015F5D4");
+extern U910 D_L00_00160660, D_L00_00160680;
+extern unsigned char *D_L00_001B20DC;
+/* Retail adds into the second argument and ignores the destination. */
+extern void FUN_L00_001ff290(void *, void *, void *);
+extern void FUN_L00_001ff2c0(void *, void *, void *);
+extern float FUN_L00_001ff430(void *);
+extern void FUN_L00_001ffd48(void *, void *, float);
+extern void FUN_L00_001ffe20(void *, void *, void *);
+extern float spring_turn(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
+extern void FUN_001f9fc8(void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_L00_0026a4c8(void *, void *, int, int, int, float);
+extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
+extern unsigned char *FUN_L00_002712b8(void *, void *, int, int, int, int, float, float, float, float, float) __asm__("FUN_L00_002712b8");
+extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
+
+void FUN_L00_002b03a0(unsigned char *m) {
+    B910 a = D_L00_001E9950;
+    B910 b = D_L00_001E99A0;
+    U910 camera_distance, previous, recoil, up, random, offset, target_position, target_motion;
+    ProjectileScratch scratch;
+    U910 matrix[4], matrix_squared[4], product[4], scaled[4], rotation[4];
+    O *v;
+    char *target;
+    void * volatile hit_owner = 0;
+    void *pos = m + 0x10;
+    int reduced = 0;
+    int count, mode, i, j, low, high, life, color1, color2;
+    float ratio, factor, yaw, pitch, time, speed, coefficient, discriminant, root1, root2, angle, length, bias;
+
+    up.q = 0;
+    up.f[2] = frame_time * 8.0f;
+    recoil.q = up.q;
+    up.q = 0;
+    up.f[2] = 1.0f;
+    v = *(O **)(m + 0x78);
+    target = v->owner;
+    if (0.9f < D_0015F5D0 || 0.9f < D_0015F5D4)
+        reduced = 1;
+    *(float *)&v->w20 += ((*(float *)&v->w34 - *(float *)&v->w20) / 10.0f) * frame_scale_sq;
+    FUN_001f9770((char *)v + 0x3C);
+    ratio = convert_integer_to_float(*(short *)((char *)v + 0x3C));
+    ratio /= convert_integer_to_float(*(short *)((char *)v + 0x3E));
+    add_vector_xyz(&scratch.vectors.distance, D_0013F490_2afc70, (char *)D_0013F490_2afc70 - 0x40);
+    target_motion.q = scratch.vectors.distance.q;
+    scale_vector_xyz(&target_motion, &target_motion, ratio);
+    factor = convert_integer_to_float(D_0013E520.bB) + 1.0f;
+    if (target != 0) {
+        low = scale_game_frames(300);
+        high = scale_game_frames(5);
+        if (v->w14 < low - high && *(signed char *)(target + 0x20) >= 0) {
+            time = 0.0f;
+            qcopy(&scratch.vectors.target_sample, target + 0x10);
+            scratch.vectors.target_sample.f[2] += v->f1C;
+            subtract_vector_xyz(&scratch.vectors.distance, &scratch.vectors.target_sample, pos);
+            if (v->w38 != 0) {
+                subtract_vector_xyz(&scratch.vectors.velocity, &scratch.vectors.target_sample, v);
+                FUN_L00_001ff2c0(&scratch.vectors.intercept, &scratch.vectors.velocity, &target_motion);
+                qcopy(v, &scratch.vectors.target_sample);
+                speed = FUN_L00_001ff430(&scratch.vectors.velocity);
+                speed = *(float *)&v->w20 * *(float *)&v->w20 - speed;
+                coefficient = (scratch.vectors.velocity.f[0] * scratch.vectors.distance.f[0] + scratch.vectors.velocity.f[1] * scratch.vectors.distance.f[1] +
+                               scratch.vectors.velocity.f[2] * scratch.vectors.distance.f[2]) * -2.0f;
+                length = FUN_L00_001ff430(&scratch.vectors.distance);
+                discriminant = FUN_001f9988(coefficient * coefficient - speed * 4.0f * -length);
+                root1 = (-coefficient + discriminant) / (speed + speed);
+                root2 = (-coefficient - discriminant) / (speed + speed);
+                if (0.0f < root1 && 0.0f < root2) {
+                    time = root2;
+                    if (root2 < root1) time = root1;
+                } else {
+                    time = root1;
+                    if (!(0.0f < root1)) {
+                        time = -1.0f;
+                        if (0.0f < root2) time = root2;
+                    }
+                }
+            }
+            if (0.0f < time && time < (float)scale_game_frames(300)) {
+                scale_vector_xyz(&scratch.vectors.intercept, &scratch.vectors.velocity, time);
+                add_vector_xyz(&scratch.vectors.intercept, &scratch.vectors.intercept, &scratch.vectors.distance);
+                yaw = FUN_001f9e90(scratch.vectors.intercept.f[0], scratch.vectors.intercept.f[1]);
+                pitch = -FUN_001f9e90(vector_length_xy(&scratch.vectors.intercept), scratch.vectors.intercept.f[2]);
+            } else {
+                yaw = FUN_001f9e90(scratch.vectors.distance.f[0], scratch.vectors.distance.f[1]);
+                pitch = -FUN_001f9e90(vector_length_xy(&scratch.vectors.distance), scratch.vectors.distance.f[2]);
+            }
+            goto turn;
+        }
+    }
+    low = scale_game_frames(300);
+    high = scale_game_frames(5);
+    if (v->w14 < low - high) {
+        yaw = v->f2C;
+        pitch = v->f30;
+    } else {
+        yaw = *(float *)(m + 0x48);
+        pitch = *(float *)(m + 0x44);
+    }
+turn:
+    if (target != 0) {
+        *(float *)(m + 0x48) = spring_turn((float *)&v->w24, *(float *)(m + 0x48), yaw,
+            frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f);
+        *(float *)(m + 0x44) = spring_turn((float *)&v->w28, *(float *)(m + 0x44), pitch,
+            frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f);
+    } else {
+        *(float *)(m + 0x48) = spring_turn((float *)&v->w24, *(float *)(m + 0x48), yaw,
+            frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 4.712389f);
+        *(float *)(m + 0x44) = spring_turn((float *)&v->w28, *(float *)(m + 0x44), pitch,
+            frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 4.712389f);
+    }
+    build_spherical_offset(offset.f, *(float *)&v->w20, *(float *)(m + 0x48), -*(float *)(m + 0x44));
+    normalize_vector_xyz(coll_hit_normal, &offset, 1.0f);
+    scale_vector_xyz(coll_hit_normal, coll_hit_normal, -1.0f);
+    if (!reduced || !(D_L00_0015F5CC & 1)) {
+        unsigned char *particle;
+        scratch.vectors.velocity.q = 0;
+        scratch.vectors.velocity.f[0] = random_float_between(-1.0f, 1.0f);
+        scratch.vectors.velocity.f[1] = random_float_between(-1.0f, 1.0f);
+        scratch.vectors.velocity.f[2] = random_float_between(-1.0f, 1.0f);
+        scratch.vectors.distance.q = scratch.vectors.velocity.q;
+        normalize_vector_xyz(&scratch.vectors.distance, &scratch.vectors.distance, random_float_between(0.1f, 0.2f) * frame_time);
+        normalize_vector_xyz(&random, &offset, -random_float_between(frame_time * 0.1f, frame_time));
+        add_vector_xyz(&scratch.vectors.distance, &scratch.vectors.distance, &random);
+        normalize_vector_xyz(&random, &offset, random_float_between(0.0f, 1.0f) * *(float *)&v->w20);
+        add_vector_xyz(&random, &random, pos);
+        life = scale_game_frames(40);
+        particle = FUN_L00_002712b8(&random, &scratch.vectors.distance, life, 50, 0x505050, 3,
+                                      40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
+        if (particle != 0) {
+            unsigned char color = *D_L00_001B20DC;
+            particle[3] = 0x44;
+            particle[2] = color;
+        }
+        life = scale_game_frames(7);
+        FUN_L00_002712b8(pos, &scratch.vectors.distance, life, 0x7F, 0xB0B0B0, 3,
+                            40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
+        scratch.vectors.velocity.q = 0;
+        scratch.vectors.velocity.f[2] = 0.02f;
+        FUN_001f9cf8(&scratch.vectors.velocity, &scratch.vectors.velocity, m + 0xC0);
+        angle = random_angle_radians();
+        build_look_at_matrix(&scratch.vectors.velocity, &scratch.vectors.velocity, m + 0xC0, angle);
+        color1 = FUN_L00_0025c0e8(0x4F007FFF, D_0013E520.bB);
+        life = scale_game_frames(15);
+        spawn_burst(&random, &scratch.vectors.velocity, color1, 0x1FFFFFFF, life, 1, 25000.0f);
+    }
+    qcopy(&previous, pos);
+    FUN_L00_001ff290(&scratch.vectors.distance, &offset, &target_motion);
+    add_vector_xyz(pos, pos, &offset);
+    if (*(float *)(m + 0x10) < 0.0f || *(float *)(m + 0x14) < 0.0f || *(float *)(m + 0x18) < 0.0f)
+        goto remove;
+    scratch.query.flags = 0x830000;
+    scratch.query.fC = 3.0f;
+    scratch.query.moby = (M910 *)m;
+    scratch.query.i10 = 1;
+    qcopy(&scratch.query, &offset);
+    FUN_001f9c48(&scratch.query, &scratch.query, 1.0f);
+    scratch.query.dir[3] = 5627.925f;
+    scratch.query.b8 = 3;
+    scratch.query.cls = *(unsigned short *)(m + 0xA6);
+    scratch.query.dir[2] = 1.0f;
+    scratch.query.b9 = 1;
+    if (FUN_001efa68(&previous, pos, 0, (int)D_001413D0_2afc70, (int)&scratch.query)) {
+        if (coll_hit.moby != 0) {
+            if (coll_hit.moby == (M910 *)D_001413D0_2afc70) goto hit_ready;
+            if (coll_hit.moby == (M910 *)v->w10) goto hit_ready;
+            m[0xBC] = 2;
+            qcopy(pos, &coll_hit.pos);
+            subtract_vector_xyz(&target_position, (char *)&coll_hit + 0x50, (char *)&coll_hit + 0x60);
+            hit_owner = m;
+        } else {
+            if (coll_hit.i1C < 1) goto hit_ready;
+            m[0xBC] = 1;
+            qcopy(pos, &coll_hit.pos);
+            subtract_vector_xyz(&target_position, (char *)&coll_hit + 0x50, (char *)&coll_hit + 0x60);
+        }
+        normalize_vector_xyz(&target_position, &target_position, 1.0f);
+        FUN_L00_001ff660(&recoil, &offset, coll_hit_normal);
+        normalize_vector_xyz(&recoil, &recoil, frame_time + frame_time);
+        normalize_vector_xyz(&up, coll_hit_normal, 1.0f);
+    } else if (tick_countdown_32_alt(&v->w14) || *(float *)((char *)v + 0x48) < FUN_001f9b80(pos, &hero_pos)) {
+        up.q = D_L00_00160680.q;
+        target_position.q = D_L00_00160660.q;
+        FUN_001f9cf8(&target_position, &target_position, m + 0xC0);
+        FUN_001f9cf8(&up, &up, m + 0xC0);
+        if (D_0013E520.bB == 0) goto remove;
+        m[0xBC] = 1;
+        add_vector_xyz(&recoil, &recoil, &offset);
+    }
+hit_ready:
+    if (m[0xBC] != 0) {
+        int hit_count;
+        U910 random;
+        ProjectileColors colors1, colors2;
+        float blast = factor + factor;
+        hit_count = collect_mobies_in_sphere(pos, 0x10, m, 0, blast);
+        count = 10;
+        qcopy(&scratch.vectors.intercept, m + 0x10);
+        send_blast_hits(m, &scratch.vectors.intercept, D_L00_00177F00, hit_count, (int)hit_owner,
+                        0x830000, 3, 1, 3.0f, 1.0f, 1.0f);
+        matrix[0].f[0] = 0;
+        matrix[0].f[1] = up.f[2];
+        matrix[0].f[2] = -up.f[1];
+        matrix[0].f[3] = 0;
+        matrix[1].f[0] = -up.f[2];
+        matrix[1].f[1] = 0;
+        matrix[1].f[2] = up.f[0];
+        matrix[1].f[3] = 0;
+        matrix[2].f[0] = up.f[1];
+        matrix[2].f[1] = -up.f[0];
+        matrix[2].f[2] = 0;
+        matrix[2].f[3] = 0;
+        matrix[3].f[0] = 0.0f;
+        matrix[3].f[1] = 0.0f;
+        matrix[3].f[2] = 0.0f;
+        matrix[3].f[3] = 0.0f;
+        FUN_001fa378(matrix_squared, matrix, matrix);
+        mode = 0;
+        if (reduced) { count /= 3; mode = 1; }
+        for (i = count; i != 0; ) {
+            if (m[0xBC] == 1) {
+                angle = random_angle_radians();
+                FUN_L00_001ffd48(rotation, matrix_squared, 1.0f - fast_cos(angle));
+                FUN_L00_001ffd48(scaled, matrix, fast_sin(angle));
+                FUN_L00_001ffe20(scaled, scaled, rotation);
+                FUN_001f9fc8(rotation);
+                FUN_L00_001ffe20(product, scaled, rotation);
+                FUN_001f9d20(&scratch.vectors.intercept, &target_position, product);
+                normalize_vector_xyz(&scratch.vectors.intercept, &scratch.vectors.intercept, random_float_between(8.5f, 16.5f) * frame_time * factor);
+            } else {
+                speed = random_float_between(8.5f, 16.5f) * frame_time * factor;
+                yaw = random_angle_radians();
+                pitch = random_angle_radians();
+                build_spherical_offset(scratch.vectors.intercept.f, speed, yaw, pitch);
+            }
+            scratch.vectors.intercept.f[2] += frame_time * 5.0f;
+            add_vector_xyz(&scratch.vectors.intercept, &scratch.vectors.intercept, &recoil);
+            color1 = FUN_L00_0025c0e8(0x4F007FFF, D_0013E520.bB);
+            color2 = FUN_L00_0025c0e8(0x1F00007F, D_0013E520.bB);
+            if (1.0f < vector_length_xyz(&scratch.vectors.intercept))
+                normalize_vector_xyz(&scratch.vectors.intercept, &scratch.vectors.intercept, frame_time * 8.0f);
+            i--;
+            low = scale_game_frames(60);
+            high = scale_game_frames(120);
+            life = FUN_L00_00257b90(low, high);
+            FUN_L00_0026bb70(pos, &scratch.vectors.intercept, color1, color2, factor * 40000.0f,
+                             life - mode * 35, 1, -1, -1);
+        }
+        random.q = 0;
+        random.f[0] = random_float_between(-1.0f, 1.0f);
+        random.f[1] = random_float_between(-1.0f, 1.0f);
+        random.f[2] = random_float_between(-1.0f, 1.0f);
+        scratch.vectors.intercept.q = random.q;
+        subtract_vector_xyz(&camera_distance, D_L00_00166DC0, pos);
+        length = vector_length_xyz(&camera_distance);
+        camera_distance.f[2] += length * 0.5f;
+        normalize_vector_xyz(&scratch.vectors.intercept, &scratch.vectors.intercept, (length / 5.0f) * frame_time * factor);
+        normalize_vector_xyz(&camera_distance, &camera_distance, (length + length) * frame_time);
+        add_vector_xyz(&scratch.vectors.intercept, &scratch.vectors.intercept, &camera_distance);
+        FUN_001f9c90_2adb30(&scratch.vectors.intercept, &scratch.vectors.intercept, frame_time * 10.0f);
+        low = scale_game_frames(60);
+        high = scale_game_frames(90);
+        spawn_debris(pos, &scratch.vectors.intercept, FUN_L00_00257b90(low, high), 0, 0);
+        j = 3;
+        if (length < 6.0f) j = truncate_float_to_s32(length) / 2;
+        bias = 0.0f;
+        if (length < 7.0f) bias = 7.0f - length;
+        if (reduced) j /= 2;
+        if (j > 0) do {
+            speed = random_float_between(8.0f, 10.0f);
+            j--;
+            colors1 = D_L00_001E99F0;
+            colors2 = D_L00_001E9A08;
+            speed = speed * factor * frame_time - bias * frame_time;
+            color1 = FUN_L00_0025c0e8(colors1.color[random_integer_below(6)], D_0013E520.bB);
+            color2 = FUN_L00_0025c0e8(colors2.color[random_integer_below(6)], D_0013E520.bB);
+            low = scale_game_frames(15); high = scale_game_frames(20);
+            i = FUN_L00_00257b90(low, high) - mode * 7;
+            low = scale_game_frames(25); high = scale_game_frames(30);
+            life = FUN_L00_00257b90(low, high) - mode * 10;
+            FUN_L00_0026a9f0_2adb30(pos, &recoil, color1, color2, 400000.0f, i, life, 0, 0, speed);
+            low = scale_game_frames(5); high = scale_game_frames(10);
+            i = FUN_L00_00257b90(low, high) - mode * 5;
+            low = scale_game_frames(15); high = scale_game_frames(20);
+            life = FUN_L00_00257b90(low, high) - mode * 7;
+            FUN_L00_0026a9f0_2adb30(pos, &recoil, 0x7FFFFFFF, 0xFFFFFF, 400000.0f, i, life, 0, 0, speed * 0.5f);
+        } while (j != 0);
+        for (i = count; i != 0; ) {
+            U910 velocity, random;
+            colors1 = D_L00_001E99F0;
+            colors2 = D_L00_001E9A08;
+            random.q = 0;
+            random.f[0] = random_float_between(-1.0f, 1.0f);
+            i--;
+            random.f[1] = random_float_between(-1.0f, 1.0f);
+            random.f[2] = random_float_between(-1.0f, 1.0f);
+            velocity.q = random.q;
+            normalize_vector_xyz(&velocity, &velocity, random_float_between(0.0f, 3.0f) * frame_time * factor);
+            color1 = FUN_L00_0025c0e8(colors1.color[random_integer_below(6)], D_0013E520.bB);
+            color2 = FUN_L00_0025c0e8(colors2.color[random_integer_below(6)], D_0013E520.bB);
+            low = scale_game_frames(20); high = scale_game_frames(35);
+            life = FUN_L00_00257b90(low, high) - mode * 10;
+            FUN_L00_0026a4c8(pos, &velocity, color1, color2, life, factor * 200000.0f);
+        }
+        if (D_0015F5D0 < 0.95f && 9.0f < length) {
+            unsigned char red = 0x7F, blue = 0x7F;
+            if (D_0013E520.bB != 0) { red = 0x3C; blue = 0x3C; }
+            life = scale_game_frames(15);
+            spawn_glow_particle(m, pos, &recoil, life, red, 0x7F, blue, 0x20, factor * 4.0f);
+            life = scale_game_frames(24);
+            spawn_glow_particle(m, pos, &recoil, life, red, 0x7F, blue, 0x20, factor * 4.0f);
+        }
+        color1 = 0x7F;
+        if (D_0013E520.bB != 0) color1 = 0x20;
+        life = scale_game_frames(20);
+        spawn_glow_particle(m, pos, &recoil, life, color1, 0x7F, 0, 0x30, factor * 4.0f);
+        if (!reduced) {
+            life = scale_game_frames(19);
+            spawn_glow_particle(m, pos, &recoil, life, 0xFF, 0xFF, 0xFF, 0x20, blast);
+        }
+        offset.f[0] = 0;
+        m[0xBC] = 0;
+        if (length < 20.0f) player_camera.f160 = 0.4f - length * 0.0175f;
+        else player_camera.f160 = 0.050000012f;
+        player_camera.i168 = scale_game_frames(25);
+        allocate_voice_for_target_entry(0, 0, m);
+        if (!reduced) {
+            if (D_0013E520.bB == 0) FUN_L00_002d3838((char *)&a, pos, 0, 0);
+            else FUN_L00_002d3838((char *)&b, pos, 0, 0);
+        }
+        j = *(int *)((char *)v + 0x40) + 1;
+        *(int *)((char *)v + 0x40) = j;
+        if (D_0013E520.bB == 0 || j == 3) {
+remove:
+            FUN_L00_0025f800(m, D_L00_001B0770_2afc70);
+            mark_moby_for_removal(m);
+            return;
+        }
+        v->owner = 0;
+        m[0xBC] = 0;
+        normalize_vector_xyz(coll_hit_normal, coll_hit_normal, 1.0f);
+        FUN_L00_001ff660(&random, &offset, coll_hit_normal);
+        *(float *)(m + 0x48) = FUN_001f9e90(random.f[0], random.f[1]);
+        *(float *)(m + 0x44) = -FUN_001f9e90(vector_length_xy(&random), random.f[2]);
+        v->w24 = 0; v->w28 = 0;
+        normalize_vector_xyz(&scratch.vectors.velocity, coll_hit_normal, 0.05f);
+        add_vector_xyz(pos, pos, &scratch.vectors.velocity);
+        if (coll_hit.moby != 0) v->w10 = (int)coll_hit.moby;
+        if (*(int *)((char *)v + 0x44) == 0)
+            *(int *)((char *)v + 0x44) = scale_game_frames(90);
+        FUN_L00_002affa8((char *)m, v, (char *)coll_hit.moby);
+        allocate_voice_for_target_entry(1, 0, m);
+    }
+    if (tick_countdown_32_alt((int *)((char *)v + 0x44))) *(int *)((char *)v + 0x40) = 0;
+    return;
+}
+#endif
 typedef struct {
     float f[4];
 } __attribute__((aligned(16))) V_2b1af0;

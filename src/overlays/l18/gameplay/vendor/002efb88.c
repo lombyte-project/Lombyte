@@ -291,7 +291,7 @@ void FUN_L18_002f0390(struct Moby *moby) {
     struct Moby * volatile saved_moby = moby;
     short *p;
     int i, j, k;
-    if (D_L18_00162238 != 0) return;
+    if (D_L18_00162238 == 0) {
     for (i = 0; i < 16; i++) {
         char *quad = quads[i];
         float offset;
@@ -302,16 +302,17 @@ void FUN_L18_002f0390(struct Moby *moby) {
                                    ((long)D_L18_00162248 << 4) | ((long)D_L18_0016224C << 6) |
                                    0x8000000000LL);
         offset = convert_integer_to_float_group_quad((D_L18_0015F5CC + 3) & 3) * 0.0625f;
-        for (j = 0; j < 4; j++) {
+        { float *src = (float *)0x1da2f0;
+        char *dst = quad + 0x50;
+        for (j = 0; j < 4; j++, src += 2, dst += 8) {
             float t;
-            float *src = (float *)(0x1da2f0 + j * 8);
-            *(float *)(quad + 0x50 + j * 8) = src[0];
-            *(float *)(quad + 0x54 + j * 8) = src[1];
+            *(float *)dst = src[0];
+            *(float *)(dst + 4) = src[1];
             t = convert_integer_to_float_group_quad(i - ((j >> 1) - 1)) * 0.25f + offset;
             if (t > 1.0f) t = 1.0f;
             else if (t < 0.0f) t = 0.0f;
             *(int *)(quad + 0x40 + j * 4) = interpolate_color(D_L18_00162250, D_L18_00162254, t);
-        }
+        } }
     }
     clear_memory(extra, 0, 0x20);
     extra[2] = 0.15f;
@@ -335,6 +336,7 @@ void FUN_L18_002f0390(struct Moby *moby) {
             }
         }
     } while (*p++ >= 0);
+    }
 }
 #endif
 /* Per-frame callback: swings every class 0x54B moby in the group around its base point by its state. */

@@ -50,7 +50,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
     u8 delta[16];
     u8 matrix[64];
     struct Moby *child;
-    u16 save_id;
+    s16 save_id;
     u32 *bits;
     s32 first;
     s32 second;
@@ -96,11 +96,11 @@ void FUN_L15_002e5958(struct Moby *moby) {
     case 2:
         save_id = moby->save_id;
         if (D_L15_001BB830[0x454 + (s16)save_id] != 0 ||
-            ((((s32)D_0014C190[current_level_index * 64 + ((s16)save_id >> 5)]) >> (save_id & 31)) & 1) != 0) {
+            ((((s32)*(u32 *)((u8 *)D_0014C190 + (current_level_index << 8) + (((s16)save_id >> 5) << 2))) >> (save_id & 31)) & 1) != 0) {
             if (vars->enabled != 0) {
                 FUN_L01_0026e0e0(moby->group, 4);
                 vars->timer = vars->restart_timer;
-                moby->state = 4;
+                *(volatile u8 *)&moby->state = 4;
                 return;
             }
         }
@@ -118,7 +118,13 @@ void FUN_L15_002e5958(struct Moby *moby) {
             vars->triggered = 1;
         }
         if (moby->state == 2) {
-            if (vars->child_count < vars->notified_count) {
+            if (vars->child_count >= vars->notified_count) {
+                FUN_L01_0026e0e0(moby->group, 4);
+                allocate_voice_for_target_entry(1, 0x31, moby);
+                vars->timer = vars->restart_timer;
+                *(volatile u8 *)&moby->state = 4;
+                return;
+            } else {
                 if (FUN_001f9770(&vars->timer) == 0) {
                     if (FUN_001f9770(&vars->delay) != 0) {
                         allocate_voice_for_target_entry(0, 0x31, moby);
@@ -136,11 +142,6 @@ void FUN_L15_002e5958(struct Moby *moby) {
                     allocate_voice_for_target_entry(2, 0x31, moby);
                     FUN_L01_0026e0e0(moby->group, 3);
                 }
-            } else {
-                FUN_L01_0026e0e0(moby->group, 4);
-                allocate_voice_for_target_entry(1, 0x31, moby);
-                vars->timer = vars->restart_timer;
-                moby->state = 4;
             }
         }
         break;
@@ -162,7 +163,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
             }
         }
         save_id = moby->save_id;
-        bits = &D_0014C190[current_level_index * 64 + ((s16)save_id >> 5)];
+        bits = &D_0014C190[(current_level_index << 6) + (save_id >> 5)];
         *bits |= 1U << (save_id & 31);
         save_id = moby->save_id;
         bits = &D_L15_001BAAD0[(s16)save_id >> 5];
@@ -299,17 +300,13 @@ extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_00210a08(int, int, struct Moby *);
 
 void FUN_L15_002ed068(struct Moby *moby) {
-    char *linked = (char *)moby->pvars;
+    u8 *linked = moby->pvars;
     struct Moby *entry;
     u8 state = moby->state;
     u8 position[16] __attribute__((aligned(16)));
 
-    if (state == 1) {
-        moby->state = 2;
-        return;
-    }
-    if (state < 2) {
-        if (state != 0) return;
+    switch (state) {
+    case 0:
         if (*(int *)(linked + 0x60) == -1) {
             mark_moby_for_removal_002ed068(moby);
             return;
@@ -323,8 +320,11 @@ void FUN_L15_002ed068(struct Moby *moby) {
         } else {
             moby->state = 1;
         }
-    } else {
-        if (state != 2) return;
+        break;
+    case 1:
+        moby->state = 2;
+        return;
+    case 2:
         if (D_0013F64C == moby && D_0013F65E == 0 && D_L15_0015F5C4 != 2 && D_001413D4 != 0x1d) {
             if (D_001413F4 == 0) {
                 try_set_help_message(4, 0x3aa4);
@@ -350,8 +350,8 @@ void FUN_L15_002ed068(struct Moby *moby) {
             *(u128 *)position = *(u128 *)&moby->pos;
             *(float *)(position + 8) = probe_ground_height(position, 0, 0.5f) + 0.1f;
             FUN_L00_00216f90(position, &moby->rot, 0, 1);
-            entry->unk31 = 1;
             entry->unk94 = entry->pclass->unk10;
+            entry->unk31 = 1;
             entry->flags &= ~1;
             FUN_L00_00210a08(2, 0x5a, entry);
             if (current_level_index == 0xf) {
@@ -368,6 +368,9 @@ void FUN_L15_002ed068(struct Moby *moby) {
             moby->state = 3;
             return;
         }
+        break;
+    default:
+        return;
     }
     *(int *)(linked + 0x68) = -1;
 }

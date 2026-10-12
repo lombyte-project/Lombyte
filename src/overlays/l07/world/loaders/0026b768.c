@@ -6,6 +6,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0026b768.s", FUN_L07_0026b768);
 #else
+#include "rnc/overlay/quad.h"
 #define W(a) (*(s32 *)(a))
 #define H(a) (*(s16 *)(a))
 #define UH(a) (*(u16 *)(a))
@@ -137,14 +138,13 @@ s32 FUN_L07_0026b768(s32 load, s32 mode)
         W(0x0016000c) = -1;
         W(0x00160010) = 0;
         entry = (s32 *)((s32)header + header[0x21]);
-        for (i = 0; i < W(0x00159408); i++, entry += 4) {
+        for (i = 0; i < header[0x20]; i++, entry += 4) {
             s32 source;
             W(0x001afc40 + i * 4) = entry[1];
             W(0x001afca0 + i * 4) = base + entry[0];
             W(0x001afd00 + i * 4) = entry[2];
             source = (s32)header + header[7] + 0x10 + B(0x00197c40 + entry[1]) * 0x20;
-            Q(0x001afd60 + i * 0x10) = Q(source);
-            Q(0x001afd68 + i * 0x10) = Q(source + 8);
+            *(OvlQuad *)(0x001afd60 + i * 0x10) = *(OvlQuad *)source;
         }
         entry = (s32 *)((s32)header + header[9]);
         for (i = 0; i < header[8]; i++, entry += 8)
@@ -171,12 +171,13 @@ s32 FUN_L07_0026b768(s32 load, s32 mode)
         aligned_base = (base + end + 0x3f) & ~0x3f;
         W(0x0015f5f4) = aligned_base;
         copy_bytes((void *)aligned_base, (void *)((s32)table + table[0]), alloc_size);
+        offset = (s32)table + table[2];
         for (i = 0; i < W(0x0015f5f0); i++) {
             s32 slot = W(0x0015f5f4) + i * 0x20;
             s16 index = H(slot + 0x1a);
-            if (index < table[3]) UH(slot + 0x1a) = UH((s32)table + table[2] + index * 4);
-            else { debug_print((const char *)0x0020fa20); H(slot + 0x1a) = -1; }
-            W(slot + 0x1c) = W(0x0015ed5c);
+            if (index < table[3]) UH(slot + 0x1a) = UH(offset + index * 4);
+            else { debug_print((const char *)0x0020fa20); H(W(0x0015f5f4) + i * 0x20 + 0x1a) = -1; }
+            W(W(0x0015f5f4) + i * 0x20 + 0x1c) = W(0x0015ed5c);
         }
         record = table + 4;
         value = W(0x0015ffc0);
@@ -190,8 +191,12 @@ s32 FUN_L07_0026b768(s32 load, s32 mode)
                     if (W(0x001afc40 + j * 4) == H(0x00197a80 + i * 2)) {
                         if (j < W(0x00160008)) {
                             fill_bytes((void *)(0x001afee0 + j * 0x20), -1, 0x20);
+                            value = W(0x0015ffc0);
+                            ids = (s16 *)((s32)table + record[0]);
                             for (copy_index = 0; copy_index < record[1]; copy_index++) {
                                 UH(0x001afee0 + j * 0x20 + copy_index * 2) = ids[copy_index * 2];
+                                /* Retail switches the outer bound only if a sixteenth ID remains. */
+                                if (copy_index + 1 >= record[1]) break;
                                 if (copy_index >= 14) {
                                     value = W(0x001593c0);
                                     break;
@@ -202,13 +207,16 @@ s32 FUN_L07_0026b768(s32 load, s32 mode)
                     }
                 }
             } else {
-                s32 stamp = W(0x0015ed5c);
+                s32 stamp;
                 if (record[1] != B(*object_slot + 0xd))
                     debug_print((const char *)0x0020fa40, H(0x00197a80 + i * 2));
+                stamp = W(0x0015ed5c);
+                ids = (s16 *)((s32)table + record[0]);
+                value = W(0x0015ffc0);
                 for (j = 0; j < B(*object_slot + 0xd); j++) {
                     s32 object = W(*object_slot + 0x28) + j * 0x20;
                     UH(object + 0x1a) = ids[j * 2];
-                    W(object + 0x1c) = stamp;
+                    W(W(*object_slot + 0x28) + j * 0x20 + 0x1c) = stamp;
                 }
             }
         }
@@ -252,7 +260,7 @@ s32 FUN_L07_0026b768(s32 load, s32 mode)
         PRINT_SIZE(0x0020fc70, W(0x0015ffe8) - W(0x0015ffd8), scale);
         PRINT_SIZE(0x0020fc88, W(0x00160108) - W(0x0015ffe8), scale);
         PRINT_SIZE(0x0020fca0, W(0x0016016c) - W(0x00160108), scale);
-        debug_print((const char *)0x0020fcb8, 3.5);
+        debug_print((const char *)0x0020fcb8, 128.0);
         debug_print((const char *)0x0015fc80);
         PRINT_SIZE(0x0020fcd0, W(0x0016016c) + 0x20000, 0.00000095367431640625f);
         debug_print((const char *)0x0015fc80);

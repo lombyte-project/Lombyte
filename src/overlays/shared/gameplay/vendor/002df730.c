@@ -494,7 +494,7 @@ extern f32 FUN_L00_00257c48_2e2250(f32, f32) __asm__("FUN_L00_00257c48");
 extern void FUN_L00_00257d00_2e2250(f32, f32, Vec_2e2250 *) __asm__("FUN_L00_00257d00");
 extern s32 FUN_L00_00257b50_2e2250(s32) __asm__("FUN_L00_00257b50");
 extern Spark_2e2250 *FUN_L00_00274948_2e2250(Vec_2e2250 *, Vec_2e2250 *, s32, s32) __asm__("FUN_L00_00274948");
-extern s16 FUN_001fef20_2e2250(s32) __asm__("FUN_001f96f8");
+extern s32 FUN_001fef20_2e2250(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_0023e738_2e2250(f32, f32, f32, f32, f32, Vec_2e2250 *) __asm__("FUN_L00_0023e738");
 extern Vec_2e2250 D_0013F5E0_2e2250 __asm__("D_0013F5E0");
 
@@ -502,6 +502,8 @@ void FUN_L00_002e2250(s32 owner, s32 i) {
     Vec_2e2250 distance, scaled, rotated, cross, center, delta, position, velocity, spawn_position;
     Pane_2e2250 *pane0, *pane1;
     Spark_2e2250 *spark;
+    Vec_2e2250 *velocity_basis, *slot_position;
+    s32 *effect_id;
     f32 step, radius, angle, magnitude, n;
     s32 j, first, second, light;
     first = i * 2;
@@ -535,10 +537,12 @@ void FUN_L00_002e2250(s32 owner, s32 i) {
     for (j = 0; j < 19; j++) {
         f32 t = (f32)j;
         f32 ratio = FUN_00200240_2e2250(j) / FUN_00200240_2e2250(20);
-        f32 wave = FUN_001ff800_2e2250(FUN_L00_0025e310_2e2250(D_L00_00161C08_2e2250[i] + t * phase_step));
+        f32 wave;
+        ratio = ratio * 0.3f + 0.1f;
+        wave = FUN_001ff800_2e2250(FUN_L00_0025e310_2e2250(D_L00_00161C08_2e2250[i] + t * phase_step));
         pane0->points[j].y = 0.0f;
         pane0->points[j].w = 1.0f;
-        pane0->points[j].z = (ratio * 0.3f + 0.1f) * wave;
+        pane0->points[j].z = ratio * wave;
         pane0->points[j].x = step * t;
     }
     }
@@ -557,75 +561,79 @@ void FUN_L00_002e2250(s32 owner, s32 i) {
         pane1->points[j].z = 0.0f;
         a = FUN_L00_0025e310_2e2250(D_L00_00161C18_2e2250[i] + t * 0.99483764f);
         b = FUN_L00_0025e310_2e2250(D_L00_00161C28_2e2250[i] + t * 0.20944f);
-        { f32 sin_b = FUN_001ff800_2e2250(b); f32 sin_a = FUN_001ff800_2e2250(a);
+        { f32 sin_b = FUN_001ff800_2e2250(b) * 0.5f; f32 sin_a = FUN_001ff800_2e2250(a);
         random = FUN_L00_00257c48_2e2250(0.0f, 0.2f);
-        pane1->points[j].z = pane1->points[j].z + sin_b * 0.5f * sin_a + random; }
-        pane1->points[j].w = 1.0f;
+        pane1->points[j].z = pane1->points[j].z + (sin_b * sin_a + random); }
         pane1->points[j].y = FUN_001ff7e8_2e2250(a) * 0.3f;
+        pane1->points[j].w = 1.0f;
         pane1->points[j].x = step * t;
     }
+    velocity_basis = (Vec_2e2250 *)((u8 *)D_L00_001E6D20_2e2250 + i * 0x40);
+    slot_position = (Vec_2e2250 *)((u8 *)D_L00_001E6D50_2e2250 + i * 0x40);
+    effect_id = &D_L00_00161C88_2e2250[i];
     magnitude = FUN_L00_00257be8_2e2250(0.01f, 0.05f);
     angle = FUN_L00_00257c48_2e2250(0.34906584f, 0.6981317f);
-    velocity.x = 0.0f; velocity.y = 0.0f; velocity.z = 1.0f; velocity.w = 1.0f;
+    *(u128 *)&velocity = 0;
+    velocity.x = 1.0f; velocity.w = 1.0f;
     velocity.x = magnitude * FUN_001ff7e8_2e2250(angle);
     velocity.y = magnitude * FUN_001ff800_2e2250(angle);
-    FUN_001ff6d0_2e2250(&velocity, &velocity, (Vec_2e2250 *)((u8 *)D_L00_001E6D20_2e2250 + i * 0x40));
-    FUN_L00_00274948_2e2250((Vec_2e2250 *)((u8 *)D_L00_001E6D50_2e2250 + i * 0x40), &velocity, 0x7f, D_L00_00161C88_2e2250[i]);
+    FUN_001ff6d0_2e2250(&velocity, &velocity, velocity_basis);
+    FUN_L00_00274948_2e2250(slot_position, &velocity, 0x7f, *effect_id);
     if (FUN_L00_00257b50_2e2250(3) == 0) {
-        FUN_001ff300_2e2250(0.3f, &spawn_position, (Vec_2e2250 *)((u8 *)D_L00_001E6D20_2e2250 + i * 0x40));
-        FUN_001ff278_2e2250(&spawn_position, &spawn_position, (Vec_2e2250 *)((u8 *)D_L00_001E6D50_2e2250 + i * 0x40));
-        spark = FUN_L00_00274948_2e2250(&spawn_position, (Vec_2e2250 *)D_L00_0015F580_2e2250, 0x7f, D_L00_00161C88_2e2250[i]);
+        FUN_001ff300_2e2250(0.3f, &spawn_position, velocity_basis);
+        FUN_001ff278_2e2250(&spawn_position, &spawn_position, slot_position);
+        spark = FUN_L00_00274948_2e2250(&spawn_position, (Vec_2e2250 *)D_L00_0015F580_2e2250, 0x7f, *effect_id);
         if (spark != 0) {
             s16 life;
+            f32 *unk20 = spark->unk20;
             *(f32 *)((u8 *)spark + 0xc) = 120000.0f;
             life = FUN_001fef20_2e2250(4);
             *(s16 *)((u8 *)spark + 0xa) = life;
             n = FUN_00200240_2e2250((s16)life);
-            *(s32 *)((u8 *)spark + 0x38) = 0x7f7f7f;
-            *(f32 *)((u8 *)spark + 0x30) = 1.0f / n;
-            if (D_L00_00161C68_2e2250[i] == 1) *(s16 *)((u8 *)spark + 0x36) = 1;
+            *(s32 *)((u8 *)unk20 + 0x18) = 0x7f7f7f;
+            *(f32 *)((u8 *)unk20 + 0x10) = 1.0f / n;
+            if (D_L00_00161C68_2e2250[i] == 1) *(s16 *)((u8 *)unk20 + 0x16) = 1;
         }
     }
     FUN_L00_00257be8_2e2250(0.01f, 0.05f);
     FUN_L00_00257d00_2e2250(0.01f, 0.05f, &velocity);
-    FUN_L00_00274948_2e2250(&position, &velocity, 0x7f, D_L00_00161C88_2e2250[i]);
+    FUN_L00_00274948_2e2250(&position, &velocity, 0x7f, *effect_id);
     if (FUN_L00_00257b50_2e2250(3) == 0) {
-        spark = FUN_L00_00274948_2e2250(&position, (Vec_2e2250 *)D_L00_0015F580_2e2250, 0x7f, D_L00_00161C88_2e2250[i]);
+        spark = FUN_L00_00274948_2e2250(&position, (Vec_2e2250 *)D_L00_0015F580_2e2250, 0x7f, *effect_id);
         if (spark != 0) {
             s16 life;
+            f32 *unk20 = spark->unk20;
             *(f32 *)((u8 *)spark + 0xc) = 120000.0f;
             life = FUN_001fef20_2e2250(4);
             *(s16 *)((u8 *)spark + 0xa) = life;
             n = FUN_00200240_2e2250((s16)life);
-            *(s32 *)((u8 *)spark + 0x38) = 0x7f7f7f;
-            *(f32 *)((u8 *)spark + 0x30) = 1.0f / n;
-            if (D_L00_00161C68_2e2250[i] == 1) *(s16 *)((u8 *)spark + 0x36) = 2;
+            *(s32 *)((u8 *)unk20 + 0x18) = 0x7f7f7f;
+            *(f32 *)((u8 *)unk20 + 0x10) = 1.0f / n;
+            if (D_L00_00161C68_2e2250[i] == 1) *(s16 *)((u8 *)unk20 + 0x16) = 2;
         }
     }
     if (D_L00_00161C58_2e2250[i] != 0) {
         if (D_L00_00161C58_2e2250[i] & 1) {
-            qcopy(&spawn_position, (Vec_2e2250 *)((u8 *)D_L00_001E6D50_2e2250 + i * 0x40));
+            qcopy(&spawn_position, slot_position);
             spawn_position.z -= 0.25f;
-            light = D_L00_00161C38_2e2250[i];
-            if (light == -1) {
-                light = FUN_L00_0023e738_2e2250(D_L00_00161BF0_2e2250, 0.0f, 1.0f, 1.0f, 2.0f, &spawn_position);
-                D_L00_00161C38_2e2250[i] = light;
+            if (D_L00_00161C38_2e2250[i] == -1) {
+                D_L00_00161C38_2e2250[i] = FUN_L00_0023e738_2e2250(D_L00_00161BF0_2e2250, 0.0f, 1.0f, 1.0f, 2.0f, &spawn_position);
             }
-            if (light >= 0) {
-                qcopy(D_L00_001802C0_2e2250 + light * 0x20 + 0x10, &spawn_position);
-                *(f32 *)(D_L00_001802C0_2e2250 + light * 0x20 + 0x1c) = D_L00_00161BF0_2e2250;
+            if (D_L00_00161C38_2e2250[i] >= 0) {
+                u8 *light_record = D_L00_001802C0_2e2250 + D_L00_00161C38_2e2250[i] * 0x20;
+                qcopy(light_record + 0x10, &spawn_position);
+                *(f32 *)(light_record + 0x1c) = D_L00_00161BF0_2e2250;
             }
         }
         if (D_L00_00161C58_2e2250[i] & 2) {
             position.z += 0.5f;
-            light = D_L00_00161C48_2e2250[i];
-            if (light == -1) {
-                light = FUN_L00_0023e738_2e2250(D_L00_00161BF0_2e2250, 0.0f, 1.0f, 1.0f, 2.0f, &position);
-                D_L00_00161C48_2e2250[i] = light;
+            if (D_L00_00161C48_2e2250[i] == -1) {
+                D_L00_00161C48_2e2250[i] = FUN_L00_0023e738_2e2250(D_L00_00161BF0_2e2250, 0.0f, 1.0f, 1.0f, 2.0f, &position);
             }
-            if (light >= 0) {
-                qcopy(D_L00_001802C0_2e2250 + light * 0x20 + 0x10, &position);
-                *(f32 *)(D_L00_001802C0_2e2250 + light * 0x20 + 0x1c) = D_L00_00161BF0_2e2250;
+            if (D_L00_00161C48_2e2250[i] >= 0) {
+                u8 *light_record = D_L00_001802C0_2e2250 + D_L00_00161C48_2e2250[i] * 0x20;
+                qcopy(light_record + 0x10, &position);
+                *(f32 *)(light_record + 0x1c) = D_L00_00161BF0_2e2250;
             }
         }
     }

@@ -211,7 +211,7 @@ void FUN_L07_00313420(char *moby, char *data, float *health) {
                     moby[0x20] = 11;
                     moby[0xbc]++;
                 }
-                if ((original_health <= wide || wide < *health) && (original_health > narrow && *health <= narrow))
+                if ((wide < original_health && *health <= wide) || (narrow < original_health && *health <= narrow))
                     data[0x1c7] = 1;
             }
         }
@@ -523,8 +523,8 @@ void FUN_L07_00317910(void) {
                 }
             }
             if (row == 1) {
-                packet.color[2] = 0x20404040;
                 packet.color[3] = 0x20404040;
+                packet.color[2] = 0x20404040;
             } else if (row == 9) {
                 packet.color[0] = 0x404040;
                 packet.color[1] = 0x404040;
@@ -688,6 +688,7 @@ extern f32 FUN_001f9b48(void *, void *);
 extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f99c0(f32);
 extern void FUN_L00_0025a120(struct Moby *);
+extern void make_hit_descriptor_19040(f32, void *, void *, s32, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int);
 extern void FUN_L00_00257470(void *, int, int);
@@ -709,7 +710,7 @@ void FUN_L07_00319040(struct Moby *moby) {
     u8 contact[0x30];
     Vec4 probe;
     Vec4 push;
-    s32 touching;
+    volatile s32 touching;
     f32 speed;
     volatile f32 one;
     f32 stable_one;
@@ -768,11 +769,10 @@ void FUN_L07_00319040(struct Moby *moby) {
         if (moby->prev_seq != 1) FUN_00212f90(moby, 1, 0, 10);
         moby->state = 3;
     case 3:
-        speed = frame_time_sq;
         if ((moby->unk70 & 2) && moby->seq == 1 && moby->prev_seq != 2) {
             FUN_00212f90(moby, 2, 0, 10);
-            speed = frame_time_sq;
         }
+        speed = frame_time_sq;
         new_speed = *(f32 *)(vars + 0x70) + speed * 30.0f;
         max_speed = D_0015ED6C * 6.0f;
         *(f32 *)(vars + 0x70) = new_speed;
@@ -794,7 +794,7 @@ void FUN_L07_00319040(struct Moby *moby) {
         if (!(FUN_001f9b48(&moby->pos, vars + 0x60) > 64.0f)) {
             one = 1.0f;
             stable_one = one;
-            FUN_L00_00259888(contact, moby, 0x10001, stable_one, &dir);
+            make_hit_descriptor_19040(stable_one, contact, moby, 0x10001, &dir);
             qcopy(&probe, &moby->pos);
             probe.f[2] += 0.75f;
             if (!probe_world_sphere(0.75f, &probe, 0x10, moby, contact) ||
@@ -1093,9 +1093,6 @@ void FUN_L07_00319f48(struct Moby *m) {
     }
     m->unkA4 = 0xFF;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031a250.s", FUN_L07_0031a250);
-#else
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern float FUN_001fa580(float, float);
@@ -1114,51 +1111,53 @@ extern char D_0013F3D0[];
 extern void FUN_L07_0030b538(void *, void *, void *, int);
 extern float D_0015ED6C;
 
-void FUN_L07_0031a250(char *moby) {
+void FUN_L07_0031a250(unsigned char *moby) {
     char *data;
     char *hit;
-    float velocity[4];
+    char *collision;
+    char *animation;
     char position[16];
+    float velocity[4];
     int contact[4];
     float direction;
     float distance;
     if (moby == 0) return;
     data = *(char **)(moby + 0x78);
     if (data == 0) return;
+    collision = data + 0x20;
+    animation = data + 0x60;
     hit = FUN_L00_0025a420((void *)moby, 0x230000, 0);
-    FUN_00213928((void *)moby, (MobyHit *)hit, data + 0x20, 0, contact, 0, 0, 4);
+    FUN_00213928((void *)moby, (MobyHit *)hit, collision, 0, contact, 0, 0, 4);
     if ((u8)moby[0x20] < 2 && contact[0] > 1) {
         FUN_0022da68(1, 0, moby);
         FUN_L00_00257470(moby, 0, -1);
         *(u16 *)(moby + 0x34) &= 0xefff;
-        data[0x67] = 0xfa;
+        *(u8 *)(data + 0x67) = 0xfa;
         *(s16 *)(data + 0x26) = FUN_001f96f8(60);
-        FUN_L00_0025d458(moby, data + 0x60);
+        FUN_L00_0025d458(moby, animation);
         *(s16 *)(data + 0x7c) = FUN_001f96f8(60);
         if ((u8)moby[0x53] != 2) FUN_00212f90(moby, 2, 0, 5);
         moby[0x20] = 2;
     }
-    moby[0xa4] = -1;
-    FUN_L00_0025d538(moby, data + 0x60);
+    *(u8 *)(moby + 0xa4) = 0xff;
+    FUN_L00_0025d538(moby, animation);
     switch ((u8)moby[0x20]) {
     case 0:
         if (*(int *)(data + 0x70) != -1) {
-            char *target = D_L07_0015FFD8 + *(int *)(data + 0x70) * 0x100;
-            direction = FUN_001f9e90(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
+            char *target = (char *)(*(int *)(data + 0x70) * 0x100 + (int)D_L07_0015FFD8);
+            *(float *)(data + 0x80) = FUN_001f9e90(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
                                       *(float *)(target + 0x14) - *(float *)(moby + 0x14));
-            *(float *)(data + 0x80) = direction;
-            if (direction < 0.0f) *(float *)(data + 0x80) = direction + 6.2831855f;
+            if (*(float *)(data + 0x80) < 0.0f) *(float *)(data + 0x80) += 6.2831855f;
         }
-        if (*(int *)(data + 0x74) == -1) {
-            *(float *)(data + 0x84) = *(float *)(data + 0x80) + 6.2831855f;
-        } else {
-            char *target = D_L07_0015FFD8 + *(int *)(data + 0x74) * 0x100;
-            direction = FUN_001f9e90(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
+        if (*(int *)(data + 0x74) != -1) {
+            char *target = (char *)(*(int *)(data + 0x74) * 0x100 + (int)D_L07_0015FFD8);
+            *(float *)(data + 0x84) = FUN_001f9e90(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
                                       *(float *)(target + 0x14) - *(float *)(moby + 0x14));
-            *(float *)(data + 0x84) = direction;
-            if (direction < 0.0f) *(float *)(data + 0x84) = direction + 6.2831855f;
+            if (*(float *)(data + 0x84) < 0.0f) *(float *)(data + 0x84) += 6.2831855f;
             if (*(float *)(data + 0x84) < *(float *)(data + 0x80))
-                *(float *)(data + 0x84) = *(float *)(data + 0x80) + 6.2831855f;
+                *(float *)(data + 0x84) += 6.2831855f;
+        } else {
+            *(float *)(data + 0x84) = *(float *)(data + 0x80) + 6.2831855f;
         }
         *(float *)(data + 0x88) = 0.0f;
         *(float *)(data + 0x8c) = *(float *)(data + 0x84) - *(float *)(data + 0x80);
@@ -1173,37 +1172,37 @@ void FUN_L07_0031a250(char *moby) {
     case 1:
         if ((u8)moby[0x52] != 1 && ((u8)moby[0x70] & 2) != 0 && (u8)moby[0x53] != 1)
             FUN_00212f90(moby, 1, 0, 1);
-        if (*(s16 *)(data + 0x7e) == 0) {
-            direction = *(float *)(data + 0x88) + *(float *)(data + 0x78) * 0.017453292f * frame_time_sq;
-            *(float *)(data + 0x88) = direction;
-            if (*(float *)(data + 0x8c) < direction) {
-                *(float *)(data + 0x88) = *(float *)(data + 0x8c);
-                *(s16 *)(data + 0x7e) = 1;
-            }
-        } else {
-            direction = *(float *)(data + 0x88) - *(float *)(data + 0x78) * 0.017453292f * frame_time_sq;
-            *(float *)(data + 0x88) = direction;
-            if (direction < 0.0f) {
+        if (*(s16 *)(data + 0x7e) != 0) {
+            *(float *)(data + 0x88) -= *(float *)(data + 0x78) * 0.017453292f * frame_time;
+            if (*(float *)(data + 0x88) < 0.0f) {
                 *(float *)(data + 0x88) = 0.0f;
                 *(s16 *)(data + 0x7e) = 0;
+            }
+        } else {
+            *(float *)(data + 0x88) += *(float *)(data + 0x78) * 0.017453292f * frame_time;
+            if (*(float *)(data + 0x8c) < *(float *)(data + 0x88)) {
+                *(float *)(data + 0x88) = *(float *)(data + 0x8c);
+                *(s16 *)(data + 0x7e) = 1;
             }
         }
         *(float *)(moby + 0x48) = FUN_L00_0025e310(*(float *)(data + 0x80) + *(float *)(data + 0x88));
         if (FUN_001f9770(data + 0x7c) == 0) return;
-        if (moby[0xbc] == 0) {
+        if ((u8)moby[0xbc] == 0) {
             if (*(int *)(data + 0x98) == 0 || (*(u16 *)(data + 0x9c) & 1)) {
                 FUN_L00_0024f7c8(moby, 0, position);
-                velocity[0] = FUN_001f9dc8(*(float *)(moby + 0x48)) * D_0015ED6C * 15.0f;
-                velocity[1] = FUN_001f9de0(*(float *)(moby + 0x48)) * D_0015ED6C * 15.0f;
+                velocity[0] = FUN_001f9dc8(*(float *)(moby + 0x48)) * (D_0015ED6C * 15.0f);
+                velocity[1] = FUN_001f9de0(*(float *)(moby + 0x48)) * (D_0015ED6C * 15.0f);
                 velocity[2] = 0.0f;
                 FUN_0022da68(0, 0, moby);
                 FUN_L07_0030b538(position, velocity, moby, (u8)data[0x9e]);
             }
-            if (*(int *)(data + 0x98) == 0) {
+            if (*(int *)(data + 0x98) != 0) {
+                if (FUN_001f9770(data + 0x9c) != 0) {
+                    moby[0xbc] = 1;
+                    *(u16 *)(data + 0x9c) = *(u16 *)(data + 0x98);
+                }
+            } else {
                 *(u16 *)(data + 0x9c) ^= 1;
-            } else if (FUN_001f9770(data + 0x9c) != 0) {
-                moby[0xbc] = 1;
-                *(u16 *)(data + 0x9c) = *(u16 *)(data + 0x98);
             }
         } else if (FUN_001f9770(data + 0x9c) != 0) {
             moby[0xbc] = 0;
@@ -1211,15 +1210,20 @@ void FUN_L07_0031a250(char *moby) {
         }
         *(s16 *)(data + 0x7c) = FUN_001f96f8(6);
         distance = FUN_001f9b80(moby + 0x10, D_0013F3D0);
-        if (distance <= 55.0f) {
-            if (distance <= 35.0f || moby[0x31] != 0) return;
+        if (!(55.0f < distance)) {
+            if (!(35.0f < distance) || (u8)moby[0x31] != 0) return;
         }
         if (distance > 80.0f) *(s16 *)(data + 0x7c) *= 3;
-        else if (distance > 120.0f) *(s16 *)(data + 0x7c) <<= 2;
-        else *(s16 *)(data + 0x7c) <<= 1;
+        else if (distance > 120.0f) {
+            int timer = *(s16 *)(data + 0x7c);
+            *(s16 *)(data + 0x7c) = timer << 2;
+        } else {
+            int timer = *(s16 *)(data + 0x7c);
+            *(s16 *)(data + 0x7c) = timer << 1;
+        }
         break;
     case 2:
-        direction = frame_time_sq;
+        direction = frame_time;
         if ((u8)moby[0x52] != 4 && ((u8)moby[0x70] & 2) && (u8)moby[0x53] != 4) {
             FUN_00212f90(moby, 4, 0, 1);
             direction = D_0015ED6C;
@@ -1233,11 +1237,12 @@ void FUN_L07_0031a250(char *moby) {
         if ((u8)moby[0x52] != 4 && ((u8)moby[0x70] & 2) && (u8)moby[0x53] != 4)
             FUN_00212f90(moby, 4, 0, 0);
         if (*(float *)(data + 0x90) - 0.7f < *(float *)(moby + 0x18))
-            *(float *)(moby + 0x18) -= frame_time_sq * 5.0f;
+            *(float *)(moby + 0x18) -= frame_time * 5.0f;
         else
             *(float *)(moby + 0x18) = *(float *)(data + 0x90) - 0.7f;
         direction = FUN_L00_0025e310(*(float *)(data + 0x80) + *(float *)(data + 0x88));
-        if (D_0015ED6C * 12.566371f < FUN_001fa688(*(float *)(moby + 0x48), direction))
+        distance = FUN_001fa688(*(float *)(moby + 0x48), direction);
+        if (D_0015ED6C * 12.566371f < distance)
             *(float *)(moby + 0x48) = FUN_001fa580(*(float *)(moby + 0x48), D_0015ED6C * 12.566371f);
         else
             *(float *)(moby + 0x48) = FUN_L00_0025e310(*(float *)(data + 0x80) + *(float *)(data + 0x88));
@@ -1261,4 +1266,3 @@ void FUN_L07_0031a250(char *moby) {
         break;
     }
 }
-#endif

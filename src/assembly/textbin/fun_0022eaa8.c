@@ -309,9 +309,9 @@ void update_level_gameplay_frame(void) {
             update_moby_animation_state(object);
             func_001F98D0(object->frame_data_a + 0x10, (void *)current_frame_payload, 0x20);
             func_001F98D0(object->frame_data_b + 0x10, (void *)next_frame_payload, 0x20);
+            *(volatile u8 *)&object->opacity = 0xFF;
+            *(volatile u8 *)&object->cached_selector = 0xFF;
             object->selected_index = 0x1FF;
-            object->opacity = 0xFF;
-            object->cached_selector = 0xFF;
             func_0020DEF8(object);
             object->selected_a = object->model->count - 1;
             object->selected_b = object->model->count - 1;

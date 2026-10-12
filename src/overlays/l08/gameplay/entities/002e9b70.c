@@ -9,31 +9,7 @@
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
 
-
-/* A looping waypoint path: count points, 16 bytes apart. */
-typedef struct {
-    s32 count;
-    u8 pad4[0xC];
-    Vec4 points[1];
-} SwarmPath;
-
-/* Position on a path: the current point, the step direction and the path. */
-typedef struct {
-    s32 point;
-    s8 direction;
-    u8 pad5[0xB];
-    SwarmPath *path;
-    s32 path_id; /* index into D_L08_001B0CB0 */
-    u8 pad18[0x18];
-} SwarmPathFollower;
-
-/* Child moby slot, as FUN_L08_002e9558 fills them. */
-typedef struct {
-    struct Moby *moby;
-    struct Moby *parent;
-    s32 joint;
-    s32 parent_joint;
-} SwarmPart;
+#include "rnc/overlay/swarm_path.h"
 
 typedef struct {
     SwarmPathFollower follow[2]; /* 0x00: [0] cruising (state 1), [1] circling (state 2) */
@@ -45,12 +21,6 @@ typedef struct {
     s16 pad17C;
     s16 sound;                   /* 0x17E */
 } SwarmVars;
-
-/* pvars of the target: the projectiles fired at it. */
-typedef struct {
-    u8 pad0[0x60];
-    struct Moby *shots[8];
-} SwarmTargetVars;
 
 extern s32 D_L08_00161D40 __attribute__((sda));
 extern f32 D_L08_00161D34 __attribute__((sda));
@@ -490,7 +460,122 @@ void FUN_L08_002f1548(struct Moby *moby) {
         break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f44c0.s", FUN_L08_002f44c0);
+#else
+extern s32 D_001413D4 __attribute__((section(".data")));
+extern struct Moby *D_0013F58C __attribute__((section(".data")));
+extern f32 D_0015B370 __attribute__((sda));
+
+extern s32 find_moby_hit_44c0(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
+extern f32 FUN_001f9b80_44c0(void *, void *) __asm__("FUN_001f9b80");
+extern f32 fast_add_rotations_44c0(f32, f32) __asm__("FUN_001fa580");
+extern f32 FUN_001f9e90_44c0(f32, f32) __asm__("FUN_001f9e90");
+extern f32 FUN_001f9b48_44c0(void *, void *) __asm__("FUN_001f9b48");
+extern void clear_u64_value_44c0(void *) __asm__("FUN_001f99f8");
+extern void subtract_vector_xyz_44c0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void normalize_vector_xyz_44c0(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void add_vector_xyz_44c0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern s32 scale_game_frames_44c0(s32) __asm__("FUN_001f96f8");
+extern void approach_value_44c0(void *, f32, f32) __asm__("FUN_00213ed8");
+extern void mark_moby_for_removal_44c0(struct Moby *) __asm__("FUN_0020c828");
+extern void allocate_voice_for_target_entry_44c0(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern void FUN_L00_00258278_44c0(struct Moby *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_00258278");
+extern void FUN_L00_0025e450_44c0(void *, void *, void *, f32, f32, s32, s32, s32,
+                         f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
+
+void FUN_L08_002f44c0(struct Moby *moby)
+{
+    SwarmPathFollower *follower = (SwarmPathFollower *)moby->pvars;
+    Vec4 point;
+    Vec4 step;
+    f32 fade;
+    s32 waypoint;
+    f32 distance;
+
+    {
+        s32 state = moby->state;
+        if (state == 1) goto state_one;
+        if (state < 2) {
+            if (state != 0) return;
+            goto state_zero;
+        }
+        if (state == 2) goto state_two;
+        if (state != 3) return;
+        goto state_three;
+    }
+state_zero: {
+        fade = moby->pos.z;
+        moby->state = 1;
+        moby->pos.z = fade + 0.4f;
+        return;
+    }
+state_one: {
+        s32 active = find_moby_hit_44c0(moby, 0x330000, 0);
+        distance = FUN_001f9b80_44c0(&moby->pos, (void *)0x13f3d0);
+        if ((distance < 2.0f && D_001413D4 == 0x42) || D_0013F58C == moby) {
+            allocate_voice_for_target_entry_44c0(0, 0, moby);
+            FUN_L00_0025e450_44c0(moby, (void *)0x15f580, &moby->pos, 3.0f, 1.0f, 10, 20, 60,
+                          3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+        } else {
+            if (active == 0) return;
+            allocate_voice_for_target_entry_44c0(0, 0, moby);
+            FUN_L00_0025e450_44c0(moby, (void *)0x15f580, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
+                          1.0f, 3.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+        }
+        mark_moby_for_removal_44c0(moby);
+        return;
+    }
+state_two: {
+        moby->pos.z -= 0.4f;
+        if (follower->path_id == -1 || follower->path->count == 0) {
+            mark_moby_for_removal_44c0(moby);
+            return;
+        }
+        moby->rot.y = fast_add_rotations_44c0(moby->rot.y, D_0015B370 * 0.017453292f * frame_time);
+        distance = FUN_001f9b80_44c0(&moby->pos, (void *)0x13f3d0);
+        if (distance < 2.0f && D_001413D4 == 0x42) {
+            clear_u64_value_44c0(&step);
+            FUN_L00_0025e450_44c0(moby, &step, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
+                          3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            mark_moby_for_removal_44c0(moby);
+            return;
+        }
+        waypoint = (follower->point + follower->path->count + follower->direction) % follower->path->count;
+        FUN_L00_00258278_44c0(moby, FUN_001f9e90_44c0(follower->path->points[waypoint].f[0] - moby->pos.x,
+                                   follower->path->points[waypoint].f[1] - moby->pos.y),
+                     (f32 *)((char *)follower + 0x34), 0.01f, 0.3f, 0.1f);
+        qcopy(&point, &follower->path->points[waypoint]);
+        if (waypoint == 0) {
+            distance = FUN_001f9b80_44c0(&moby->pos, (void *)0x13f3d0);
+            if (distance < 24.0f) {
+                clear_u64_value_44c0(&step);
+                FUN_L00_0025e450_44c0(moby, &step, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
+                              3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+                allocate_voice_for_target_entry_44c0(0, 0, moby);
+                mark_moby_for_removal_44c0(moby);
+                return;
+            }
+            moby->state = 3;
+        } else {
+            subtract_vector_xyz_44c0(&step, &point, &moby->pos);
+            normalize_vector_xyz_44c0(&step, &step, frame_time * 3.0f);
+            add_vector_xyz_44c0(&moby->pos, &moby->pos, &step);
+        }
+        if (FUN_001f9b48_44c0(&moby->pos, &point) < 0.1f) {
+            follower->point = waypoint;
+        }
+        moby->pos.z += 0.4f;
+        return;
+    }
+state_three: {
+        f32 timer = (f32)moby->unk23;
+        approach_value_44c0(&timer, 0.0f, 128.0f / (f32)scale_game_frames_44c0(30));
+        moby->unk23 = (u8)(s32)timer;
+        if (moby->unk23 == 0) mark_moby_for_removal_44c0(moby);
+    }
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -514,7 +599,10 @@ float FUN_L08_002f5d98(float x, char *arg) {
     t = arg + 0x90;
     return *(float *)(t - (-(i * 4))) * (1.0f - fr) + *(float *)(t - (-(j * 4))) * fr;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f5e58.s", FUN_L08_002f5e58);
+#else
+#endif
 /* Pvars of a flickering point light. */
 typedef struct {
     f32 size_x;          /* 0x0: the larger of size_x/size_y sets the draw scale */
@@ -563,7 +651,277 @@ extern char D_L08_001FC2D0[];
 extern s32 DebugPrint();
 extern int FUN_L00_0023e738(float *, float, float, float, float, float);
 extern void FUN_L00_0023e838(int);
-void FUN_L08_002f5e58(void);
+void FUN_L08_002f5e58(struct Moby *m);
+#ifdef NON_MATCHING
+extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
+extern s32 D_L08_0015F3F8;
+extern s32 D_L08_0015F3F8_gp __asm__("D_L08_0015f3f8") __attribute__((sda));
+extern f32 FUN_001f9dc8(f32);
+extern f32 FUN_001f9de0(f32);
+extern f32 FUN_001f9988(f32);
+extern f32 FUN_L00_0025e310(f32);
+extern f32 FUN_L00_00200228(f32, void *) __asm__("FUN_L00_00200228");
+extern s32 tick_countdown_16(s16 *) __asm__("FUN_001f9770");
+extern s32 random_integer_between(s32, s32) __asm__("FUN_L00_00257b90");
+extern void FUN_001f9a68(void *, void *, f32);
+extern void FUN_001f9ad8(void *, void *, void *);
+extern void FUN_001f7d30(void *, void *, s32);
+extern void FUN_L00_0026ced0(void *, void *, u32, u32, s32, f32);
+extern void FUN_L08_0027b450(struct Moby *, void *, void *, s32, s32, s32, s32, s32, f32);
+
+/* The draw helper reads this contiguous 0x90-byte packet. */
+typedef struct {
+    Vec4 points[4];
+    u32 color[4];
+    f32 uv[4][2];
+    u64 gs[4];
+} FlickerDrawPacket;
+
+void FUN_L08_002f5e58(struct Moby *m) {
+    FlickerLightVars *d;
+    u8 *b;
+    f32 *f;
+    Vec4 corners[4], across, down[2], edge[2], point, width, normal, mat[4];
+    FlickerDrawPacket packet;
+    Vec4 velocity, offset, position, wave, sag;
+    Vec4 *grid;
+    f32 *u, *v;
+    f32 inv_x, inv_y, time, phase, amp_a, amp_b, phase_a, phase_b;
+    f32 phase_step, amp_step_a, amp_step_b, step_a, step_b, height_a, height_b;
+    f32 next_phase, next_amp_a, next_amp_b, next_a, next_b;
+    f32 x, y, noise_x, noise_y, angle, base, sine, shape, bend, a, c, t;
+    s32 i, j, k, stride, alpha, timer, count, lifetime;
+    u32 color_a, color_b;
+    s32 temp;
+    u8 red, green, blue;
+    s8 light;
+    Vec4 *at;
+    if (m == NULL) return;
+    d = (FlickerLightVars *)m->pvars;
+    if (d == NULL) return;
+    b = (u8 *)d;
+    f = (f32 *)d;
+    stride = (b[8] + 1) * 16;
+    grid = __builtin_alloca(((u32)(b[8] + 1) * 128 * (b[9] + 1)) >> 3);
+    inv_x = 1.0f / convert_integer_to_float(b[8]);
+    inv_y = 1.0f / convert_integer_to_float(b[9]);
+    u = __builtin_alloca((b[8] * 4 + 0x13) & 0x7f0);
+    v = __builtin_alloca((b[9] * 4 + 0x13) & 0x7f0);
+    time = convert_integer_to_float(D_L08_0015F3F8);
+    {
+        f32 *current = d->levels_a;
+        f32 *target = d->levels_b;
+        i = 7;
+        do {
+            f32 value = *current;
+            if (value < *target) {
+                value = value + f[0x22] * f[0x23];
+                *current = value;
+                if (*target <= value) *target = random_float_between(1.0f-f[0x22], 1.0f);
+            } else {
+                value = value - f[0x22] * f[0x23];
+                *current = value;
+                if (value <= *target) *target = random_float_between(1.0f-f[0x22], 1.0f);
+            }
+            target++;
+            i--;
+            current++;
+        } while (i >= 0);
+    }
+    a = convert_integer_to_float(b[0x13]);
+    c = convert_integer_to_float(m->unk23);
+    alpha = truncate_float_to_s32_u(d->intensity * a * c * 0.0078125f) & 0xff;
+    if (b[0xd] == 0) b[0xf] = b[0xc];
+    else b[0xf] = b[0xc] + (D_L08_0015F3F8_gp / (b[0xe]+1)) % b[0xd];
+    temp = b[0xf];
+    if (!(d->flags & 1)) temp += 0x28;
+    packet.gs[1] = get_effect_texture(temp);
+    packet.gs[0] = 0;
+    packet.gs[2] = 0xff9000000260ULL;
+    packet.gs[3] = (u64)b[0x3c] | (u64)b[0x3d] << 2 | (u64)b[0x3e] << 4 |
+                   (u64)b[0x3f] << 6 | (u64)b[0x13] << 32;
+    packet.color[3] = (u32)b[0x13] << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
+    packet.color[0] = packet.color[1] = packet.color[2] = packet.color[3];
+    corners[0].q = corners[1].q = corners[2].q = corners[3].q = 0;
+    t = d->size_x * 0.5f;
+    corners[1].f[0] = corners[3].f[0] = t;
+    corners[0].f[0] = corners[2].f[0] = -t;
+    corners[0].f[2] = f[0x20] + 0.01f;
+    corners[1].f[2] = f[0x21] + 0.01f;
+    FUN_001fa050(mat, &m->rot);
+    FUN_001f9d20(&corners[0], &corners[0], mat);
+    FUN_001f9d20(&corners[1], &corners[1], mat);
+    FUN_001f9d20(&corners[2], &corners[2], mat);
+    FUN_001f9d20(&corners[3], &corners[3], mat);
+    subtract_vector_xyz(&down[0], &corners[2], &corners[0]);
+    FUN_001f9a68(&down[0], &down[0], inv_y);
+    subtract_vector_xyz(&down[1], &corners[3], &corners[1]);
+    FUN_001f9a68(&down[1], &down[1], inv_y);
+    phase_step = (f[6] - f[5]) * inv_y;
+    amp_step_a = (f[9] - f[7]) * inv_y;
+    amp_step_b = (f[10] - f[8]) * inv_y;
+    step_a = (f[0x1a] - f[0x18]) * inv_x;
+    height_a = d->size_y - f[0x20];
+    height_b = d->size_y - f[0x21];
+    step_b = (f[0x1b] - f[0x19]) * inv_y;
+    subtract_vector_xyz(&width, &corners[1], &corners[0]);
+    FUN_001f9ad8(&normal, &width, &down[0]);
+    normalize_vector_xyz(&normal, &normal, 1.0f);
+    qcopy(&edge[0], &corners[0]);
+    qcopy(&edge[1], &corners[1]);
+    bend = d->levels_a[0];
+    phase = f[5]; amp_a = f[7]; amp_b = f[8];
+    phase_a = f[0x18]; phase_b = f[0x19];
+    i = 0;
+    do {
+        y = convert_integer_to_float(i) / convert_integer_to_float(b[9]);
+        qcopy(&point, &edge[0]);
+        next_phase = phase + phase_step;
+        next_amp_b = amp_b + amp_step_b;
+        next_a = phase_a + step_a;
+        next_amp_a = amp_a + amp_step_a;
+        next_b = phase_b + step_b;
+        subtract_vector_xyz(&across, &edge[1], &edge[0]);
+        FUN_001f9a68(&across, &across, inv_x);
+        noise_y = FUN_L08_002f5d98(y, (char *)d);
+        j = 0;
+        do {
+            x = convert_integer_to_float(j) / convert_integer_to_float(b[8]);
+            a = FUN_L00_0025e310(f[0x17] * time);
+            angle = x * 3.1415927f;
+            c = FUN_001f9de0(a);
+            base = time * phase + f[0x16] * c;
+            noise_x = FUN_L08_002f5d98(x, (char *)d);
+            base = base + (noise_x * f[0x34] + noise_y * f[0x35] + bend * f[0x36]);
+            shape = height_a * x + height_b * (1.0f-x);
+            a = FUN_L00_0025e310(base + phase_a + f[0xb] * x + f[0xd] * y);
+            c = FUN_L00_0025e310(base + phase_b + f[0xc] * y + f[0xe] * x);
+            sine = FUN_001f9988(FUN_001f9de0(angle));
+            shape = shape * sine * (1.0f-y);
+            t = FUN_001f9dc8(a);
+            normalize_vector_xyz(&velocity, &across, amp_a * t * sine * noise_x);
+            t = FUN_001f9de0(c);
+            normalize_vector_xyz(&offset, &down[0], amp_b * t * sine * noise_x);
+            a = FUN_001f9de0(y * 3.1415927f);
+            c = FUN_001f9de0(angle);
+            t = FUN_001f9de0(FUN_L00_0025e310(base + f[0xb] * x));
+            base = FUN_001f9de0(FUN_L00_0025e310(base + f[0xd] * y));
+            normalize_vector_xyz(&wave, &normal, a * c * (f[0x1e] * t + f[0x1f] * base));
+            normalize_vector_xyz(&sag, &down[0], shape);
+            add_vector_xyz(&position, &velocity, &offset);
+            add_vector_xyz(&position, &position, &wave);
+            subtract_vector_xyz(&position, &position, &sag);
+            add_vector_xyz((char *)grid + i*stride + j*16, &point, &position);
+            ((Vec4 *)((char *)grid + i*stride + j*16))->f[3] = 1.0f /
+                (((1.0f-f[0x56]) + f[0x56]*sine*sine*sine) * ((1.0f-f[0x57])+f[0x57]*y));
+            add_vector_xyz(&point, &point, &across);
+            j++;
+        } while (j <= b[8]);
+        add_vector_xyz(&edge[0], &edge[0], &down[0]);
+        phase = next_phase; amp_a = next_amp_a;
+        add_vector_xyz(&edge[1], &edge[1], &down[1]);
+        amp_b = next_amp_b; phase_a = next_a; phase_b = next_b;
+        i++;
+    } while (i <= b[9]);
+    a = FUN_001f9de0(FUN_L00_0025e310(time * f[0x12]));
+    a = FUN_L00_00200228(time*f[0x10] + f[0x11]*a, &temp);
+    for (i=0; i<=b[8]; i++) { u[i] = a; a = a + inv_x / d->period_a; }
+    a = FUN_001f9de0(FUN_L00_0025e310(time * f[0x15]));
+    a = FUN_L00_00200228(time*f[0x13] + f[0x14]*a, &temp);
+    for (i=0; i<=b[9]; i++) { v[i] = a; a = a + inv_y / d->period_b; }
+    for (i=0; i<b[9]; i++) {
+        for (j=0; j<b[8]; j++) {
+            packet.uv[0][0] = u[j]; packet.uv[0][1] = v[i];
+            packet.uv[1][0] = u[j+1]; packet.uv[1][1] = v[i];
+            packet.uv[2][0] = u[j]; packet.uv[2][1] = v[i+1];
+            packet.uv[3][0] = u[j+1]; packet.uv[3][1] = v[i+1];
+            add_vector_xyz(&packet.points[0], (char *)grid+i*stride+j*16, &m->pos);
+            add_vector_xyz(&packet.points[1], (char *)grid+i*stride+(j+1)*16, &m->pos);
+            add_vector_xyz(&packet.points[2], (char *)grid+(i+1)*stride+j*16, &m->pos);
+            add_vector_xyz(&packet.points[3], (char *)grid+(i+1)*stride+(j+1)*16, &m->pos);
+            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+i*stride+j*16))->f[3]);
+            packet.color[0] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
+            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+i*stride+(j+1)*16))->f[3]);
+            packet.color[1] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
+            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+(i+1)*stride+j*16))->f[3]);
+            packet.color[2] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
+            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+(i+1)*stride+(j+1)*16))->f[3]);
+            packet.color[3] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
+            FUN_001f7d30(&packet, NULL, 0);
+        }
+    }
+    if (!(d->flags & 2)) return;
+    if (tick_countdown_32_alt((s32 *)(b+0xf8))) {
+        *(s32 *)(b+0xf8) = scale_game_frames(b[0xf3]);
+        i=0;
+        if (b[0xf2]) do {
+            t = d->size_x * 0.5f;
+            i++;
+            a = random_float_between(-1.0f, 1.0f);
+            a = random_float_between(0.0f, a*f[0x3d]);
+            c = FUN_001f9988(FUN_001f9dc8(a*3.1415927f));
+            normalize_vector_xyz(&position, &down[0], -(f[0x3f]+c*f[0x40]));
+            normalize_vector_xyz(&offset, &across, a*t);
+            add_vector_xyz(&offset, &offset, &m->pos);
+            add_vector_xyz(&offset, &offset, &position);
+            velocity.f[0] = random_float_between(-f[0x37], f[0x37]) * frame_scale;
+            velocity.f[1] = random_float_between(-f[0x37], f[0x37]) * frame_scale;
+            velocity.f[2] = random_float_between(0.0f, f[0x38]) * frame_scale;
+            t = random_float_between(f[0x39], f[0x3a]);
+            lifetime = (s16)scale_game_frames(*(s16 *)(b+0xf0));
+            red = b[0xec]; green = b[0xed]; blue = b[0xee];
+            temp = (u8)truncate_float_to_s32_u(convert_integer_to_float(b[0xef])*a);
+            FUN_L08_0027b450(m, &offset, &velocity, lifetime, red, green, blue, temp, t);
+        } while (i < b[0xf2]);
+    }
+    if (tick_countdown_16((s16 *)(b+0x122))) {
+        *(s16 *)(b+0x122) = scale_game_frames(b[0x121]);
+        i=0;
+        if (b[0x120]) do {
+            i++;
+            color_a = (u32)b[0x117]<<24 | (u32)b[0x116]<<16 | (u32)b[0x115]<<8 | b[0x114];
+            color_b = (u32)b[0x11b]<<24 | (u32)b[0x11a]<<16 | (u32)b[0x119]<<8 | b[0x118];
+            t = d->size_x * 0.5f;
+            c = random_float_between(f[0x43], f[0x44]);
+            lifetime = scale_game_frames(random_integer_between(*(s16 *)(b+0x11c), *(s16 *)(b+0x11e)));
+            a = random_float_between(-1.0f, 1.0f);
+            a = a*f[0x49];
+            a = random_float_between(-a, a);
+            shape = FUN_001f9988(FUN_001f9dc8(a*3.1415927f));
+            normalize_vector_xyz(&position, &down[0], -(f[0x4b]+shape*f[0x4c]));
+            normalize_vector_xyz(&offset, &across, a*t);
+            add_vector_xyz(&offset, &offset, &m->pos);
+            add_vector_xyz(&offset, &offset, &position);
+            velocity.f[0] = random_float_between(-f[0x41], f[0x41])*frame_scale;
+            velocity.f[1] = random_float_between(-f[0x41], f[0x41])*frame_scale;
+            velocity.f[2] = random_float_between(0.0f, f[0x42])*frame_scale;
+            FUN_001f9a68(&velocity, &velocity, (1.0f-f[0x4a])+shape*f[0x4a]);
+            FUN_L00_0026ced0(&offset, &velocity, color_a, color_b, lifetime, c);
+        } while (i < b[0x120]);
+    }
+    light = d->light;
+    if (light != -1) {
+        at = (Vec4 *)((char *)&D_L08_00180AC0[light]+0x10);
+        if (FUN_001f9b48(&d->light_pos, at) < f[0x4f]*frame_scale) {
+            a = random_float_between((f32)-(s32)b[0x139], (f32)b[0x139]);
+            a = (a+d->size_x)*0.5f;
+            c = random_float_between((f32)-(s32)b[0x13a], (f32)b[0x13a]);
+            c = (c+d->size_y)*0.5f;
+            normalize_vector_xyz(&velocity, &across, a);
+            normalize_vector_xyz(&offset, &down[0], -c);
+            add_vector_xyz(&d->light_pos, &velocity, &offset);
+            add_vector_xyz(&d->light_pos, &d->light_pos, &corners[0]);
+            add_vector_xyz(&d->light_pos, &d->light_pos, &m->pos);
+        } else {
+            subtract_vector_xyz(&velocity, &d->light_pos, at);
+            normalize_vector_xyz(&velocity, &velocity, f[0x4f]*frame_scale);
+            add_vector_xyz(at, at, &velocity);
+            at->f[3] = convert_integer_to_float(d->radius);
+        }
+    }
+    d->flags ^= 2;
+}
+#endif
 
 void FUN_L08_002f70a0(struct Moby *m) {
     FlickerLightVars *d;
