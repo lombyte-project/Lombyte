@@ -1298,10 +1298,10 @@ extern void approach_value_2f6470(float *, float, float) __asm__("FUN_00213ed8")
 extern float fast_cos_2f6470(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2f6470(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations_2f6470(float, float) __asm__("FUN_001fa580");
-extern void add_vector_xyz_2f6470(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void subtract_vector_xyz_2f6470(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void scale_vector_xyz_2f6470(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float vector_dot_2f6470(void *, void *) __asm__("FUN_001f9ab0");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void rotation_matrix_2f6470(void *, void *) __asm__("FUN_001fa050");
 extern void rotation_matrix_y_2f6470(void *, float) __asm__("FUN_001f9ff8");
 extern void multiply_matrix_2f6470(void *, void *, void *) __asm__("FUN_001fa378");
@@ -1373,10 +1373,10 @@ void FUN_L06_002f6470(char *moby) {
             qcopy(&vectors.matrix[0], vectors.pos);
             vectors.matrix[0].f[2] -= D_L06_00161E18;
             qcopy(&vectors.matrix[1], &vectors.matrix[0]);
-            add_vector_xyz_2f6470(&vectors.matrix[0], &vectors.matrix[0], &vectors.matrix[2]);
-            add_vector_xyz_2f6470(&vectors.matrix[1], &vectors.matrix[1], &vectors.matrix[2]);
-            add_vector_xyz_2f6470(&vectors.matrix[0], &vectors.matrix[0], &vectors.matrix[3]);
-            subtract_vector_xyz_2f6470(&vectors.matrix[1], &vectors.matrix[1], &vectors.matrix[3]);
+            fast_vec_add(&vectors.matrix[0], &vectors.matrix[0], &vectors.matrix[2]);
+            fast_vec_add(&vectors.matrix[1], &vectors.matrix[1], &vectors.matrix[2]);
+            fast_vec_add(&vectors.matrix[0], &vectors.matrix[0], &vectors.matrix[3]);
+            fast_vec_sub(&vectors.matrix[1], &vectors.matrix[1], &vectors.matrix[3]);
             collision_setup_2f6470(vectors.shared.local_matrix, moby, 0x10001, 5.0f, &vectors.matrix[2]);
             FUN_001efa68(&vectors.matrix[0], &vectors.matrix[1], 0, moby, vectors.shared.local_matrix);
             if (D_00141968[43].count == 0 && *(short *)(data + 0x16) == 0 && D_L06_001745D8 == (int)hero.moby) {
@@ -1392,10 +1392,10 @@ void FUN_L06_002f6470(char *moby) {
             qcopy(&vectors.matrix[0], vectors.pos);
             vectors.matrix[0].f[2] -= D_L06_00161E18;
             qcopy(&vectors.matrix[1], &vectors.matrix[0]);
-            add_vector_xyz_2f6470(&vectors.matrix[0], &vectors.matrix[0], &vectors.matrix[2]);
-            add_vector_xyz_2f6470(&vectors.matrix[1], &vectors.matrix[1], &vectors.matrix[2]);
-            add_vector_xyz_2f6470(&vectors.matrix[0], &vectors.matrix[0], &vectors.matrix[3]);
-            subtract_vector_xyz_2f6470(&vectors.matrix[1], &vectors.matrix[1], &vectors.matrix[3]);
+            fast_vec_add(&vectors.matrix[0], &vectors.matrix[0], &vectors.matrix[2]);
+            fast_vec_add(&vectors.matrix[1], &vectors.matrix[1], &vectors.matrix[2]);
+            fast_vec_add(&vectors.matrix[0], &vectors.matrix[0], &vectors.matrix[3]);
+            fast_vec_sub(&vectors.matrix[1], &vectors.matrix[1], &vectors.matrix[3]);
             collision_setup_2f6470(vectors.shared.local_matrix, moby, 0x10001, 5.0f, &vectors.matrix[2]);
             FUN_001efa68(&vectors.matrix[0], &vectors.matrix[1], 0, moby, vectors.shared.local_matrix);
             if (D_00141968[43].count == 0 && *(short *)(data + 0x16) == 0 && D_L06_001745D8 == (int)hero.moby) {
@@ -1403,12 +1403,12 @@ void FUN_L06_002f6470(char *moby) {
                 *(short *)(data + 0x16) = scale_game_frames_2f6470(30);
             }
         if (hero.coll_hit_moby == (u8 *)moby) {
-                subtract_vector_xyz_2f6470(&vectors.shared.collision.delta, &hero.motion.pos, vectors.pos);
-                dot = vector_dot_2f6470(&vectors.shared.collision.delta, moby + 0xc0);
+                fast_vec_sub(&vectors.shared.collision.delta, &hero.motion.pos, vectors.pos);
+                dot = fast_vec_dot(&vectors.shared.collision.delta, moby + 0xc0);
                 if (dot > 0.0f)
-                    scale_vector_xyz_2f6470(vectors.shared.local_matrix, moby + 0xc0, 1.0f);
+                    fast_vec_normalize(vectors.shared.local_matrix, moby + 0xc0, 1.0f);
                 else
-                    scale_vector_xyz_2f6470(vectors.shared.local_matrix, moby + 0xc0, -1.0f);
+                    fast_vec_normalize(vectors.shared.local_matrix, moby + 0xc0, -1.0f);
                 collision_response_2f6470((int)hero.moby, vectors.shared.local_matrix);
                 if (D_00141968[43].count == 0 && *(short *)(data + 0x16) == 0) {
                     (*(short *)(data + 0x14))++;
@@ -1472,15 +1472,15 @@ void FUN_L06_002f6470(char *moby) {
             vectors.i = i;
             multiply_matrix_2f6470(vectors.shared.local_matrix, vectors.matrix, vectors.shared.local_matrix);
             transform_vector_2f6470(&vectors.at, D_L06_001DAFD0 + index * 4, vectors.matrix);
-            add_vector_xyz_2f6470(&vectors.shared.collision.delta, &vectors.at, vectors.pos);
+            fast_vec_add(&vectors.shared.collision.delta, &vectors.at, vectors.pos);
             vectors.shared.collision.delta.f[3] = 1.0f;
             j = 19;
             do {
                 float amount;
                 j--;
                 amount = random_float_between_2f6470(0.0f, D_L06_00161E08 * 0.5f);
-                scale_vector_xyz_2f6470(&vectors.offset, vectors.column, amount);
-                add_vector_xyz_2f6470(&vectors.offset, &vectors.offset, &vectors.shared.collision.delta);
+                fast_vec_normalize(&vectors.offset, vectors.column, amount);
+                fast_vec_add(&vectors.offset, &vectors.offset, &vectors.shared.collision.delta);
                 distance = random_float_between_alt_2f6470(0.0f, 1.0f);
                 color = make_particle_color_2f6470(D_L06_00161E1C, D_L06_00161E20, distance);
                 dot = random_float_between_alt_2f6470(D_L06_00161E24, D_L06_00161E28);
@@ -2423,7 +2423,7 @@ void FUN_L06_002f54a0_c(char *a) __asm__("FUN_L06_002f54a0");
 extern unsigned char D_0013D5DD_2FDA70[] __asm__("D_0013D4C6");
 extern unsigned char D_0013D4AF_2FDA70[] __asm__("D_0013D3A8");
 extern unsigned char D_0013D5CA_2FDA70[] __asm__("D_0013D4C6");
-extern unsigned char D_0013D355_2FDA70[] __asm__("D_0013D388");
+extern unsigned char alternate_item_available[] __asm__("D_0013D388");
 extern char D_0013A5E0_2FDA70[] __asm__("D_0013CAE4");
 
 void FUN_L06_002fc640(Moby_2FDA70 *moby) {
@@ -2463,8 +2463,8 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
         break;
     case 1:
         if (is_point_inside_clip_volume(&((Hero_2FDA70 *)(D_0013F350))->pos, d->f70) != 0) {
-            if (((Flags_2FDA70 *)(D_0013D355_2FDA70))->f20 == 0) {
-                ((Flags_2FDA70 *)(D_0013D355_2FDA70))->f20 = 1;
+            if (((Flags_2FDA70 *)(alternate_item_available))->f20 == 0) {
+                ((Flags_2FDA70 *)(alternate_item_available))->f20 = 1;
             }
             moby->state = 3;
             d->f90 = 0;

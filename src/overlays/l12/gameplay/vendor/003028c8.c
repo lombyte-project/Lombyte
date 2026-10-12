@@ -259,7 +259,7 @@ extern float func_001F9B88_304310(float) __asm__("FUN_001f99c0");
 extern void func_L00_0025C710_304310(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern float func_001F9D48_304310(void *, void *) __asm__("FUN_001f9b80");
 extern void func_001F9BD8_304310(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void func_001F9C30_304310(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern int func_L00_00200290_304310(void *, float) __asm__("FUN_001fa728");
 extern int func_00215570_304310(void *, int) __asm__("FUN_00214720");
 extern void func_L12_00304038_304310(void *) __asm__("FUN_L12_00302c58");
@@ -321,7 +321,7 @@ void FUN_L12_00302f30(Moby *moby) {
         }
         if (moby->unk31 == 0 && D_L12_0015FFD8[data->target].unk31 == 0) {
             func_001F9BD8_304310(&tmp0, ((float *)&moby->pos), ((float *)&D_L12_0015FFD8[data->target].pos));
-            func_001F9C30_304310(&tmp0, &tmp0, half);
+            fast_vec_scale(&tmp0, &tmp0, half);
             tmp0.f[3] = 16.0f;
             if (func_L00_00200290_304310(&tmp0, 32.0f) == -1) {
                 return;

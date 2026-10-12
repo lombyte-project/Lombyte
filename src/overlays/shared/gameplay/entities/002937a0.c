@@ -381,9 +381,9 @@ typedef struct {
 } Packet_002d3878 __attribute__((aligned(16)));
 extern u64 FUN_001f44b8_002d3878(int) __asm__("FUN_001f44b8");
 extern void get_moby_position_002d3878(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void subtract_vector_xyz_002d3878(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void scale_vector_002d3878(float, void *) __asm__("FUN_L00_0025f730");
-extern float vector_length_xyz_002d3878(void *) __asm__("FUN_001f9af0");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void clear_vector_002d3878(void *) __asm__("FUN_001f99f8");
 extern float vector_length_xy_002d3878(void *) __asm__("FUN_001f9b20");
 extern float angle_atan2_002d3878(float, float) __asm__("FUN_001f9e90");
@@ -417,11 +417,11 @@ void FUN_L08_002d3878(char *m) {
     pk.uv[4] = 0.0f; pk.uv[5] = 1.0f;
     pk.uv[6] = 1.0f; pk.uv[7] = 1.0f;
     get_moby_position_002d3878(m, 2, &pos);
-    subtract_vector_xyz_002d3878(&delta, *(char **)(data + 0x218) + 0x10, &pos);
+    fast_vec_sub(&delta, *(char **)(data + 0x218) + 0x10, &pos);
     scale_vector_002d3878(3.0f, &delta);
     delta.v[3] = 1.0f;
     delta.v[2] = (*(float *)(*(char **)(data + 0x218) + 0x18) + 0.25f) - delta.v[2];
-    length = vector_length_xyz_002d3878(&delta);
+    length = fast_vec_length(&delta);
     clear_vector_002d3878(&angles);
     angles.v[1] = -angle_atan2_002d3878(vector_length_xy_002d3878(&delta), delta.v[2]);
     angles.v[2] = angle_atan2_002d3878(delta.v[0], delta.v[1]);
@@ -595,10 +595,10 @@ extern float D_L08_00161898_002d4108 __asm__("D_L08_00161898") __attribute__((sd
 extern float D_L08_0016189C_002d4108 __asm__("D_L08_0016189C") __attribute__((sda));
 u64 FUN_001f44b8_002d4108(s32) __asm__("FUN_001f44b8");
 void FUN_001f9a28_002d4108(void *, void *, void *) __asm__("FUN_001f9a28");
-void FUN_001f9bf8_002d4108(void *, void *, float) __asm__("FUN_001f9bf8");
-void FUN_001f9ad8_002d4108(void *, void *, void *) __asm__("FUN_001f9ad8");
-void FUN_001f9a68_002d4108(void *, void *, float) __asm__("FUN_001f9a68");
-void FUN_001f9a10_002d4108(void *, void *, void *) __asm__("FUN_001f9a10");
+void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9d20_002d4108(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f7d30_002d4108(void *, s32, s32) __asm__("FUN_001f7d30");
 
@@ -629,19 +629,19 @@ void FUN_L08_002d4108(char *arg) {
     pk.uv[7] = 1.0f;
     qcopy(M[3], (float *)(data + 0x220));
     FUN_001f9a28_002d4108(M[0], D_L08_001675C0_002d4108, M[3]);
-    FUN_001f9bf8_002d4108(M[0], M[0], 1.0f);
-    FUN_001f9ad8_002d4108(M[1], M[0], up);
-    FUN_001f9bf8_002d4108(M[1], M[1], 1.0f);
-    FUN_001f9ad8_002d4108(M[2], M[1], M[0]);
-    FUN_001f9a68_002d4108(t, M[0], D_L08_00161898_002d4108);
-    FUN_001f9a10_002d4108(M[3], M[3], t);
+    fast_vec_normalize(M[0], M[0], 1.0f);
+    fast_vec_cross(M[1], M[0], up);
+    fast_vec_normalize(M[1], M[1], 1.0f);
+    fast_vec_cross(M[2], M[1], M[0]);
+    fast_vec_scale(t, M[0], D_L08_00161898_002d4108);
+    fast_vec_add(M[3], M[3], t);
     col = (*(u32 *)(arg + 0x90) & 0xFFFFFF) | 0x40000000;
     pk.col[3] = col;
     pk.col[2] = col;
     pk.col[1] = col;
     pk.col[0] = col;
     for (i = 0; i < 4; i++) {
-        FUN_001f9a68_002d4108(pk.m[i], D_L08_001D1D80_002d4108[i], D_L08_0016189C_002d4108);
+        fast_vec_scale(pk.m[i], D_L08_001D1D80_002d4108[i], D_L08_0016189C_002d4108);
         FUN_001f9d20_002d4108(pk.m[i], pk.m[i], M);
     }
     FUN_001f7d30_002d4108(&pk, 0, 0);
@@ -1226,7 +1226,7 @@ extern int closest302618(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern void steer302618(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
 extern int range302618(int, int) __asm__("FUN_L00_00257b90");
 extern void subtract302618(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float dot302618(void *, void *) __asm__("FUN_001f9ab0");
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float animframe302618(void *) __asm__("FUN_0020c9e0");
 extern void lerp302618(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern int ray302618(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -1369,7 +1369,7 @@ void FUN_L08_00301158(char *m) {
                 d->f1F4=(d->f1F4+1)&1;
                 (*(unsigned char *)((char *)(m)+0x20))=4;
                 subtract302618(pos,D_L08_001B0CB0[d->f1D4]+0x10+d->f1F4*16,m+0x10);
-                if(dot302618(m+0xD0,pos)<0.0f) {
+                if(fast_vec_dot(m+0xD0,pos)<0.0f) {
                     if((*(unsigned char *)((char *)(m)+0x53))!=18) animate302618(m,18,0,scale302618(5));
                 } else if((*(unsigned char *)((char *)(m)+0x53))!=16) animate302618(m,16,0,scale302618(5));
             } else if(target && fast_distance302618(m+0x10,target+0x10)<melee302618) {
@@ -1443,7 +1443,7 @@ void FUN_L08_00301158(char *m) {
                 d->f1F4=(d->f1F4+1)&1;
                 (*(unsigned char *)((char *)(m)+0x20))=4;
                 subtract302618(pos,D_L08_001B0CB0[d->f1D4]+0x10+d->f1F4*16,m+0x10);
-                if(dot302618(m+0xD0,pos)<0.0f) {
+                if(fast_vec_dot(m+0xD0,pos)<0.0f) {
                     if((*(unsigned char *)((char *)(m)+0x53))!=18) animate302618(m,18,0,scale302618(5));
                 } else if((*(unsigned char *)((char *)(m)+0x53))!=16) animate302618(m,16,0,scale302618(5));
             }

@@ -184,7 +184,7 @@ void FUN_L11_00310cf8_c(float, float, float, float, float, int, int, long long, 
     __asm__("FUN_L11_00310cf8");
 typedef unsigned int u128_quad __attribute__((mode(TI)));
 extern int D_L11_001611C0_g __asm__("D_L11_001611C0");
-extern int D_0013E500_g[] __asm__("D_0013E500");
+extern int screen_extent[] __asm__("D_0013E500");
 extern int ftoi_g(float) __asm__("FUN_001fa6d0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -237,26 +237,26 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     sx = ftoi_g(top_left[0] * 16.0f);
     sy = ftoi_g(top_left[1] * 16.0f);
     q[7] = texture_width << 4;
-    q[6] = (unsigned long long)(sx + D_0013E500_g[4] - 8) |
-           ((unsigned long long)(sy + D_0013E500_g[5] - 8) << 16) |
+    q[6] = (unsigned long long)(sx + screen_extent[4] - 8) |
+           ((unsigned long long)(sy + screen_extent[5] - 8) << 16) |
            ((unsigned long long)z_and_fog << 32);
     sx = ftoi_g(bottom_left[0] * 16.0f);
     sy = ftoi_g(bottom_left[1] * 16.0f);
     q[9] = texture_height << 20;
-    q[8] = (unsigned long long)(sx + D_0013E500_g[4] - 8) |
-           ((unsigned long long)(sy + D_0013E500_g[5] - 8) << 16) |
+    q[8] = (unsigned long long)(sx + screen_extent[4] - 8) |
+           ((unsigned long long)(sy + screen_extent[5] - 8) << 16) |
            ((unsigned long long)z_and_fog << 32);
     sx = ftoi_g(top_right[0] * 16.0f);
     sy = ftoi_g(top_right[1] * 16.0f);
     q[11] = (texture_height << 20) + (texture_width << 4);
-    q[10] = (unsigned long long)(sx + D_0013E500_g[4] - 8) |
-            ((unsigned long long)(sy + D_0013E500_g[5] - 8) << 16) |
+    q[10] = (unsigned long long)(sx + screen_extent[4] - 8) |
+            ((unsigned long long)(sy + screen_extent[5] - 8) << 16) |
             ((unsigned long long)z_and_fog << 32);
     sx = ftoi_g(bottom_right[0] * 16.0f);
     sy = ftoi_g(bottom_right[1] * 16.0f);
     q[13] = 0;
-    q[12] = (unsigned long long)(sx + D_0013E500_g[4] - 8) |
-            ((unsigned long long)(sy + D_0013E500_g[5] - 8) << 16) |
+    q[12] = (unsigned long long)(sx + screen_extent[4] - 8) |
+            ((unsigned long long)(sy + screen_extent[5] - 8) << 16) |
             ((unsigned long long)z_and_fog << 32);
     D_L11_001611C0_g += 0x70;
 }
@@ -612,7 +612,7 @@ typedef unsigned int u128_ad0 __attribute__((mode(TI)));
 extern int D_L11_001611C0_g __asm__("D_L11_001611C0");
 extern u128_ad0 D_L11_001608E0_g __asm__("D_L11_001608E0");
 extern u128_ad0 D_L11_001608F0_g __asm__("D_L11_001608F0");
-extern int D_0013E500_g[] __asm__("D_0013E500");
+extern int screen_extent[] __asm__("D_0013E500");
 extern float itof_g(int) __asm__("FUN_001fa6c0");
 extern int ftoi_g(float) __asm__("FUN_001fa6d0");
 
@@ -648,7 +648,7 @@ void FUN_L11_00310ad0(short *pts, int n, float x0, float y0, unsigned int col, u
     for (i = 0; i < n; i++) {
         x = ftoi_g((itof_g(pts[i * 2]) * scale + x0) * 16.0f);
         y = ftoi_g((itof_g(pts[i * 2 + 1]) * scale + y0) * 16.0f);
-        o[i] = (unsigned long long)(x + D_0013E500_g[4] - 8) | ((unsigned long long)(y + D_0013E500_g[5] - 8) << 16) | ((unsigned long long)col << 32);
+        o[i] = (unsigned long long)(x + screen_extent[4] - 8) | ((unsigned long long)(y + screen_extent[5] - 8) << 16) | ((unsigned long long)col << 32);
     }
     D_L11_001611C0_g += ((n + 1) / 2) * 16;
 }

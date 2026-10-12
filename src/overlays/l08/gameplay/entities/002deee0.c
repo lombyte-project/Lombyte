@@ -679,14 +679,14 @@ extern float func_001F9FA8_2E16A0(float) __asm__("FUN_001f9de0");
 extern float func_001FA748_2E16A0(float, float) __asm__("FUN_001fa580");
 extern float func_001FA850_2E16A0(float, float) __asm__("FUN_001fa688");
 extern float func_L00_001FF860_2E16A0(float,float) __asm__("FUN_001f9e90");
-extern void func_001F9BD8_2E16A0(void *,void *,void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *,void *,void *) __asm__("FUN_001f9a10");
 extern void func_001F99D8_2E16A0(void *,int) __asm__("FUN_001f9810");
 extern void func_001FA1F8_2E16A0(void *,void *) __asm__("FUN_001fa030");
 extern void func_001F9BC0_2E16A0(void *) __asm__("FUN_001f99f8");
 extern void func_001F9EC0_2E16A0(void *,void *,void *) __asm__("FUN_001f9cf8");
 extern int hero_state52(int,int) __asm__("FUN_L08_00230b38");
 extern void func_L00_002EC0C8_2E16A0(int) __asm__("FUN_L00_002eac18");
-extern void func_L00_001FF4B0_2E16A0(void *,void *,float) __asm__("FUN_001f9bf8");
+extern void fast_vec_normalize(void *,void *,float) __asm__("FUN_001f9bf8");
 extern void func_L00_001FF328_2E16A0(void *,void *,float) __asm__("FUN_L00_001ff378");
 extern void func_L00_00217718_2E16A0(void *,void *,int,int) __asm__("FUN_L00_00216f90");
 extern void func_L08_00307FF0_2E16A0(char *,int) __asm__("FUN_L08_00306b30");
@@ -696,7 +696,7 @@ extern void func_L00_002EBE88_2E16A0(void *) __asm__("FUN_L00_002ea9d8");
 extern void func_L00_002EBEE0_2E16A0(void *) __asm__("FUN_L00_002eaa30");
 extern float func_001F9D48_2E16A0(void *,void *) __asm__("FUN_001f9b80");
 extern float func_001F9CE8_2E16A0(void *) __asm__("FUN_001f9b20");
-extern float func_001F9CB8_2E16A0(void *) __asm__("FUN_001f9af0");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float func_002140F8_2E16A0(float,float) __asm__("FUN_002132a8");
 extern float func_00214D28_2E16A0(float *,float,float) __asm__("FUN_00213ed8");
 extern int func_001F9850_2E16A0(int) __asm__("FUN_001f96f8");
@@ -729,7 +729,7 @@ void FUN_L08_002e0328(Moby *m) {
         offset[0] = func_001F9F90_2E16A0(hero52.rot[2]) * -0.7f;
         offset[1] = func_001F9FA8_2E16A0(hero52.rot[2]) * -0.7f;
         offset[2] = 0.0f;
-        func_001F9BD8_2E16A0(hero52.pos, hero52.pos, offset);
+        fast_vec_add(hero52.pos, hero52.pos, offset);
         func_001F99D8_2E16A0((char *)hero52.pos + 0x60, 0x90);
         if (d->health == 0) {
             Moby *node;
@@ -738,8 +738,8 @@ void FUN_L08_002e0328(Moby *m) {
             node = (Moby *)(D_L08_00160058_2E16A0 + (d->platform_index << 8));
             qcopy(direction, (*(float (*)[4])&node->rot));
             direction[2] = func_001FA748_2E16A0(direction[2], 3.1415927f);
-            func_L00_001FF4B0_2E16A0(work, (*(float (*)[16])&node->unkC0), 2.5f);
-            func_001F9BD8_2E16A0(work, work, (*(float (*)[4])&node->pos));
+            fast_vec_normalize(work, (*(float (*)[16])&node->unkC0), 2.5f);
+            fast_vec_add(work, work, (*(float (*)[4])&node->pos));
             func_L00_00217718_2E16A0(work, direction, 0, 1);
             func_L08_00307FF0_2E16A0((char *)node, 0);
             return;
@@ -752,7 +752,7 @@ void FUN_L08_002e0328(Moby *m) {
             func_001FA1F8_2E16A0((*(float (*)[16])&m->unkC0), (*(float (*)[4])&m->rot));
             func_001F9BC0_2E16A0(direction); direction[2] = (*(float (*)[4])&m->rot)[2];
             func_001F9EC0_2E16A0(work, &D_L08_00161B20_2E16A0, (*(float (*)[16])&m->unkC0));
-            func_001F9BD8_2E16A0(work, work, (*(float (*)[4])&m->pos));
+            fast_vec_add(work, work, (*(float (*)[4])&m->pos));
             func_L00_00217718_2E16A0(work, direction, 0, 1);
             func_L00_002EC0C8_2E16A0(0);
             hero52.rot[2] = func_001FA748_2E16A0(hero52.rot[2], 3.1415927f);
@@ -833,7 +833,7 @@ void FUN_L08_002e0328(Moby *m) {
                 func_00215C00_2E16A0(direction, D_L08_00161B90_2E16A0 * D_0015EE6C_2E16A0, (*(float (*)[4])&m->rot)[2], -(*(float (*)[4])&m->rot)[1]);
                 func_00213DE0_2E16A0(d->guns[0], 1, 0, 0);
                 func_001F9EC0_2E16A0(muzzle, &D_L08_00161BC0_2E16A0, (*(float (*)[16])&m->unkC0));
-                func_001F9BD8_2E16A0(muzzle, (*(float (*)[4])&m->pos), muzzle);
+                fast_vec_add(muzzle, (*(float (*)[4])&m->pos), muzzle);
                 func_L08_002E9288_2E16A0(m, muzzle, direction, target);
                 sound52(0,0,m);
                 cannon_camera52.mag0 = 0.03f;
@@ -848,13 +848,13 @@ void FUN_L08_002e0328(Moby *m) {
                     random_vec[1] = func_002140F8_2E16A0(-1.0f,1.0f);
                     random_vec[2] = func_002140F8_2E16A0(-1.0f,1.0f);
                     *(u128 *)scatter = *(u128 *)random_vec;
-                    func_L00_001FF4B0_2E16A0(scatter, scatter, func_001F9CB8_2E16A0(direction) * (D_0015EE60_2E16A0 * -0.35000002f + 1.0f));
-                    func_001F9BD8_2E16A0(scatter, direction, scatter);
-                    func_L00_001FF4B0_2E16A0(scatter, scatter, func_002140F8_2E16A0(D_0015EE6C_2E16A0 * 3.0f, D_0015EE6C_2E16A0 * 6.0f));
+                    fast_vec_normalize(scatter, scatter, fast_vec_length(direction) * (D_0015EE60_2E16A0 * -0.35000002f + 1.0f));
+                    fast_vec_add(scatter, direction, scatter);
+                    fast_vec_normalize(scatter, scatter, func_002140F8_2E16A0(D_0015EE6C_2E16A0 * 3.0f, D_0015EE6C_2E16A0 * 6.0f));
                     lo = func_001F9850_2E16A0(5);
                     func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)scatter, 0x5F2F4F6F, func_L00_00258BC8_2E16A0(lo, func_001F9850_2E16A0(10)), 50000.0f);
                 } while (--count >= 0);
-                func_L00_001FF4B0_2E16A0(direction, direction, D_0015EE6C_2E16A0 * 0.5f);
+                fast_vec_normalize(direction, direction, D_0015EE6C_2E16A0 * 0.5f);
                 lo = func_001F9850_2E16A0(4);
                 func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)direction, 0x2F4F7F7F, func_L00_00258BC8_2E16A0(lo,func_001F9850_2E16A0(7)),500000.0f);
             } else {
@@ -862,7 +862,7 @@ void FUN_L08_002e0328(Moby *m) {
                 func_00215C00_2E16A0(direction, D_L08_00161B90_2E16A0 * D_0015EE6C_2E16A0, (*(float (*)[4])&m->rot)[2], -(*(float (*)[4])&m->rot)[1]);
                 func_00213DE0_2E16A0(d->guns[1], 1, 0, 0);
                 func_001F9EC0_2E16A0(muzzle, &D_L08_00161BD0_2E16A0, (*(float (*)[16])&m->unkC0));
-                func_001F9BD8_2E16A0(muzzle, (*(float (*)[4])&m->pos), muzzle);
+                fast_vec_add(muzzle, (*(float (*)[4])&m->pos), muzzle);
                 func_L08_002E9288_2E16A0(m, muzzle, direction, func_L08_002E15A0_2E16A0((char *)m));
                 sound52(0,0,m);
                 cannon_camera52.mag0 = 0.03f;
@@ -877,13 +877,13 @@ void FUN_L08_002e0328(Moby *m) {
                     random_vec[1] = func_002140F8_2E16A0(-1.0f,1.0f);
                     random_vec[2] = func_002140F8_2E16A0(-1.0f,1.0f);
                     *(u128 *)scatter = *(u128 *)random_vec;
-                    func_L00_001FF4B0_2E16A0(scatter, scatter, func_001F9CB8_2E16A0(direction) * (D_0015EE60_2E16A0 * -0.35000002f + 1.0f));
-                    func_001F9BD8_2E16A0(scatter, direction, scatter);
-                    func_L00_001FF4B0_2E16A0(scatter, scatter, func_002140F8_2E16A0(D_0015EE6C_2E16A0 * 3.0f, D_0015EE6C_2E16A0 * 6.0f));
+                    fast_vec_normalize(scatter, scatter, fast_vec_length(direction) * (D_0015EE60_2E16A0 * -0.35000002f + 1.0f));
+                    fast_vec_add(scatter, direction, scatter);
+                    fast_vec_normalize(scatter, scatter, func_002140F8_2E16A0(D_0015EE6C_2E16A0 * 3.0f, D_0015EE6C_2E16A0 * 6.0f));
                     lo = func_001F9850_2E16A0(5);
                     func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)scatter, 0x5F2F4F6F, func_L00_00258BC8_2E16A0(lo, func_001F9850_2E16A0(10)), 50000.0f);
                 } while (--count >= 0);
-                func_L00_001FF4B0_2E16A0(direction, direction, D_0015EE6C_2E16A0 * 0.5f);
+                fast_vec_normalize(direction, direction, D_0015EE6C_2E16A0 * 0.5f);
                 lo = func_001F9850_2E16A0(4);
                 func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)direction, 0x2F4F7F7F, func_L00_00258BC8_2E16A0(lo,func_001F9850_2E16A0(7)),500000.0f);
             }
@@ -891,7 +891,7 @@ void FUN_L08_002e0328(Moby *m) {
         if (tick52(&d->camera_timer)) {
             func_L08_00315068_2E16A0();
             func_001F9EC0_2E16A0(direction, &D_L08_00161BE0_2E16A0, (*(float (*)[16])&m->unkC0));
-            func_001F9BD8_2E16A0(direction, direction, (*(float (*)[4])&m->pos));
+            fast_vec_add(direction, direction, (*(float (*)[4])&m->pos));
             func_L00_002EBE88_2E16A0(direction); func_L00_002EBEE0_2E16A0((*(float (*)[4])&m->rot));
         }
         func_001F49B0_2E16A0(func_L08_002E0258_2E16A0, m);
@@ -927,8 +927,8 @@ void FUN_L08_002e0328(Moby *m) {
                         func_L00_002EC0C8_2E16A0(0); m->state = 4;
                         node = (Moby *)(D_L08_00160058_2E16A0 + (d->platform_index << 8));
                         qcopy(muzzle, (*(float (*)[4])&node->rot)); muzzle[2] = func_001FA748_2E16A0(muzzle[2], 3.1415927f);
-                        func_L00_001FF4B0_2E16A0(direction, (*(float (*)[16])&node->unkC0), 2.5f);
-                        func_001F9BD8_2E16A0(direction, direction, (*(float (*)[4])&node->pos));
+                        fast_vec_normalize(direction, (*(float (*)[16])&node->unkC0), 2.5f);
+                        fast_vec_add(direction, direction, (*(float (*)[4])&node->pos));
                         func_L00_00217718_2E16A0(direction, muzzle, 0, 1);
                         func_L08_00307FF0_2E16A0((char *)node, 1);
                         d->visual_angle = 1.5707964f; return;
@@ -963,7 +963,7 @@ void FUN_L08_002e0328(Moby *m) {
             node->unk30 = 0xFF; d->guns[0]->unk32 = 0x7E; d->guns[0]->unk31 = 1;
             (*(long *)&d->guns[0]->spawn_frame) = (*(long *)&m->spawn_frame);
             func_001F9EC0_2E16A0(work, &D_L08_00161BA0_2E16A0, (*(float (*)[16])&m->unkC0));
-            func_001F9BD8_2E16A0(work, (*(float (*)[4])&m->pos), work);
+            fast_vec_add(work, (*(float (*)[4])&m->pos), work);
             {
             Moby *gun = d->guns[0];
             qcopy((*(float (*)[4])&gun->pos), work); qcopy((*(float (*)[4])&gun->rot), (*(float (*)[4])&m->rot));
@@ -972,7 +972,7 @@ void FUN_L08_002e0328(Moby *m) {
         }
     } else {
         func_001F9EC0_2E16A0(work, &D_L08_00161BA0_2E16A0, (*(float (*)[16])&m->unkC0));
-        func_001F9BD8_2E16A0(work, (*(float (*)[4])&m->pos), work);
+        fast_vec_add(work, (*(float (*)[4])&m->pos), work);
         {
             Moby *gun = d->guns[0];
             qcopy((*(float (*)[4])&gun->pos), work); qcopy((*(float (*)[4])&gun->rot), (*(float (*)[4])&m->rot));
@@ -987,7 +987,7 @@ void FUN_L08_002e0328(Moby *m) {
             node->unk30 = 0xFF; d->guns[1]->unk32 = 0x7E; d->guns[1]->unk31 = 1;
             (*(long *)&d->guns[1]->spawn_frame) = (*(long *)&m->spawn_frame);
             func_001F9EC0_2E16A0(work, &D_L08_00161BB0_2E16A0, (*(float (*)[16])&m->unkC0));
-            func_001F9BD8_2E16A0(work, (*(float (*)[4])&m->pos), work);
+            fast_vec_add(work, (*(float (*)[4])&m->pos), work);
             {
             Moby *gun = d->guns[1];
             qcopy((*(float (*)[4])&gun->pos), work); qcopy((*(float (*)[4])&gun->rot), (*(float (*)[4])&m->rot));
@@ -996,7 +996,7 @@ void FUN_L08_002e0328(Moby *m) {
         }
     } else {
         func_001F9EC0_2E16A0(work, &D_L08_00161BB0_2E16A0, (*(float (*)[16])&m->unkC0));
-        func_001F9BD8_2E16A0(work, (*(float (*)[4])&m->pos), work);
+        fast_vec_add(work, (*(float (*)[4])&m->pos), work);
         {
             Moby *gun = d->guns[1];
             qcopy((*(float (*)[4])&gun->pos), work); qcopy((*(float (*)[4])&gun->rot), (*(float (*)[4])&m->rot));
@@ -1006,7 +1006,7 @@ void FUN_L08_002e0328(Moby *m) {
 
     if (d->visual) {
         func_001F9EC0_2E16A0(work, &D_L08_00161C80_2E16A0, (*(float (*)[16])&m->unkC0));
-        func_001F9BD8_2E16A0((*(float (*)[4])&d->visual->pos), work, (*(float (*)[4])&m->pos));
+        fast_vec_add((*(float (*)[4])&d->visual->pos), work, (*(float (*)[4])&m->pos));
         {
             Moby *visual = d->visual;
             qcopy((*(float (*)[4])&visual->rot), (*(float (*)[4])&m->rot));
@@ -2006,8 +2006,8 @@ typedef struct {
 } Quad_5188;
 
 extern void add_vector_xyz_5188(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void subtract_vector_xyz_5188(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void scale_vector_xyz_5188(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void normalize_vector_xyz_5188(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float vector_length_5188(void *) __asm__("FUN_001f9af0");
 extern void FUN_001f9d20_5188(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -2042,12 +2042,12 @@ void FUN_L08_002e5188(struct Moby *moby) {
     add_vector_xyz_5188(pos, pos, direction);
     normalize_vector_xyz_5188(direction, (char *)moby + 0xc0, D_L08_00161C60);
     add_vector_xyz_5188(pos, pos, direction);
-    subtract_vector_xyz_5188(pos, pos, D_L08_001675C0);
+    fast_vec_sub(pos, pos, D_L08_001675C0);
     length = vector_length_5188(pos);
     pos[3] = 1.0f;
-    scale_vector_xyz_5188(pos, pos, 1024.0f);
+    fast_vec_scale(pos, pos, 1024.0f);
     FUN_001f9d20_5188(pos, pos, D_L08_001675C0 - 0x100);
-    scale_vector_xyz_5188(pos, pos, *(float *)(projection_constants + 0x210) / pos[3]);
+    fast_vec_scale(pos, pos, *(float *)(projection_constants + 0x210) / pos[3]);
 
     base_x = truncate_float_to_s32_5188(pos[0] * 16.0f) + 0x8000;
     base_y = (truncate_float_to_s32_5188(pos[1] * 16.0f) + 0x8000) << 16;

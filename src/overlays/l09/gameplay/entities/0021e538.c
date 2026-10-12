@@ -913,7 +913,7 @@ extern Path_2ECC50 *D_L09_001B0930_2ECC50[] __asm__("D_L09_001B0630");
 extern struct Moby *func_L09_002EBD30_2ECC50(void *m) __asm__("FUN_L09_002eaa50");
 extern struct Moby *func_L09_002EBA58_2ECC50(void) __asm__("FUN_L09_002ea778");
 extern int func_L09_00295880_2ECC50(void *, void *, void *, int, int, float) __asm__("FUN_L09_00294ae0");
-extern float func_001F9C78_2ECC50(void *, void *) __asm__("FUN_001f9ab0");
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 
 void FUN_L09_002eb970(struct Moby *m) {
     Data_2ECC50 *d = (*(Data_2ECC50 **)&m->pvars);
@@ -1003,7 +1003,7 @@ void FUN_L09_002eb970(struct Moby *m) {
         len = vector_length_xyz_c3(v0);
         normalize_vector_xyz_c3(v0, v0, 1.0f);
         subtract_vector_xyz(v1, ((f32 *)&m->pos), path->pts[0]);
-        dot = func_001F9C78_2ECC50(v1, v0);
+        dot = fast_vec_dot(v1, v0);
         if (dot < 0.0f) {
             dot = 0.0f;
         }
@@ -1016,7 +1016,7 @@ void FUN_L09_002eb970(struct Moby *m) {
         len = vector_length_xyz_c3(v0);
         normalize_vector_xyz_c3(v0, v0, 1.0f);
         subtract_vector_xyz(v1, ((f32 *)&m->pos), path->pts[path->n - 1]);
-        dot = func_001F9C78_2ECC50(v1, v0);
+        dot = fast_vec_dot(v1, v0);
         if (dot < 0.0f) {
             dot = 0.0f;
         }
@@ -1486,17 +1486,17 @@ extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c);
 void FUN_L07_00288968(void *a0, void *a1, void *a2, void *a3, void *a4);
-extern void func_001F9C30_2F9A50(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern int func_001F9850_2F9A50(int) __asm__("FUN_001f96f8");
 extern int func_001F9908_2F9A50(int *) __asm__("FUN_001f9740");
-extern void func_001F9BF0_2F9A50(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float func_001F9C78_2F9A50(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float func_L00_0025CCF0_2F9A50(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void func_L07_00289960_2F9A50(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
 extern void func_L00_00263B78_2F9A50(float, float, void *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void func_L00_00263BF8_2F9A50(void *, float *, float *, float, float, float) __asm__("FUN_L00_00262b80");
 extern float func_001FA748_2F9A50(float, float) __asm__("FUN_001fa580");
-extern void func_001F9BD8_2F9A50(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void func_L00_002617B0_2F9A50(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern int func_0022ED80_2F9A50(int, int, void *) __asm__("FUN_0022da68");
 extern unsigned char D_0013E633_2F9A50[] __asm__("D_0013F350");
@@ -1515,7 +1515,7 @@ void FUN_L09_002f86a0(Moby *moby)
     float z0;
     float k;
 
-    func_001F9C30_2F9A50(&m0, &(*(Vec_2F9A50 *)&moby->pos), -1.0f);
+    fast_vec_scale(&m0, &(*(Vec_2F9A50 *)&moby->pos), -1.0f);
     qcopy(&rot, &(*(Vec_2F9A50 *)&moby->rot));
     low = data->baseZ - 0.25f;
     z0 = (*(Vec_2F9A50 *)&moby->pos).z;
@@ -1539,7 +1539,7 @@ void FUN_L09_002f86a0(Moby *moby)
         float a, b, y;
         float deg;
         func_001F9908_2F9A50(&data->timer);
-        func_001F9BF0_2F9A50(&rel, (D_0013E633_2F9A50 + 0x80), &(*(Vec_2F9A50 *)&moby->pos));
+        fast_vec_sub(&rel, (D_0013E633_2F9A50 + 0x80), &(*(Vec_2F9A50 *)&moby->pos));
         deg = 0.01745329238474369f;
         a = func_001F9C78_2F9A50(&rel, &(*(Vec_2F9A50 *)&moby->unkC0));
         b = func_001F9C78_2F9A50(&rel, &(*(Vec_2F9A50 *)&moby->unkD0));
@@ -1560,7 +1560,7 @@ void FUN_L09_002f86a0(Moby *moby)
             func_0022ED80_2F9A50(1, 0, moby);
         }
         func_L07_00289960_2F9A50((D_0013E633_2F9A50 + 0x80), &out, &(*(Vec_2F9A50 *)&moby->pos), &ang, &data->ang);
-        func_001F9BF0_2F9A50(D_0013E633_2F9A50 + 0xF0, &out, (D_0013E633_2F9A50 + 0x80));
+        fast_vec_sub(D_0013E633_2F9A50 + 0xF0, &out, (D_0013E633_2F9A50 + 0x80));
         ((Hero *)D_0013E633_2F9A50)->motion.unkF0.f[2] =
             ((Hero *)D_0013E633_2F9A50)->motion.unkF0.f[2] + ((*(Vec_2F9A50 *)&moby->pos).z - pos.z);
     } else {
@@ -1586,7 +1586,7 @@ void FUN_L09_002f86a0(Moby *moby)
         D_0015ED6C_c2 * 0.3141592741012573f, D_0015ED6C_c2 * 0.48869219422340393f);
     (*(Vec_2F9A50 *)&moby->rot).x = func_001FA748_2F9A50(data->ang.x, (*(Vec_2F9A50 *)&moby->rot).x);
     (*(Vec_2F9A50 *)&moby->rot).y = func_001FA748_2F9A50(data->ang.y, (*(Vec_2F9A50 *)&moby->rot).y);
-    func_001F9BD8_2F9A50(&m0, &m0, &(*(Vec_2F9A50 *)&moby->pos));
+    fast_vec_add(&m0, &m0, &(*(Vec_2F9A50 *)&moby->pos));
     func_L00_002617B0_2F9A50(data->f20, &m0, &rot, &(*(Vec_2F9A50 *)&moby->rot));
 }
 /* UpdateMoby_1000: timer and sound bookkeeping */
@@ -1597,7 +1597,7 @@ extern int D_L09_0015F5CC_q __asm__("D_L09_0015F5CC");
 extern int D_L09_001613C8_q __asm__("D_L09_001613C8");
 extern int give_reward(int a, int b) __asm__("FUN_L00_00203908");
 extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
-extern unsigned char D_0013D408_q[] __asm__("D_0013D408") __attribute__((section(".data")));
+extern unsigned char item_unlocked[] __asm__("D_0013D408") __attribute__((section(".data")));
 extern unsigned char D_0013D4C2_q[] __asm__("D_0013D4C2");
 extern unsigned char D_0013F3D0_q[] __asm__("D_0013F3D0") __attribute__((section(".data")));
 extern unsigned char D_00141968_q[] __asm__("D_00141968") __attribute__((section(".data")));
@@ -1613,7 +1613,7 @@ void FUN_L09_00300888(struct Moby *moby) {
     int n;
     if (D_L09_0015F5CC_q > 0) {
         if (D_L09_001613C8_q == 0) {
-            q = D_0013D408_q;
+            q = item_unlocked;
             if (q[0xE] == 0) {
                 q[0xE] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);

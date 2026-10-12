@@ -652,9 +652,9 @@ extern int rand_2E39E0(void) __asm__("FUN_001160d8");
 extern int range_2E39E0(int, int) __asm__("FUN_L00_00257b90");
 extern void animate_2E39E0(Moby *, int, int, int) __asm__("FUN_00212f90");
 extern float ground_2E39E0(void *, int, float) __asm__("FUN_00213508");
-extern void vec_sub_2E39E0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void vec_add_2E39E0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern float length_2E39E0(void *) __asm__("FUN_001f9af0");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fabs_2E39E0(float) __asm__("FUN_001f99c0");
 extern int status_2E39E0(int) __asm__("FUN_00213260");
 extern float range_float_2E39E0(float, float) __asm__("FUN_002132a8");
@@ -671,7 +671,7 @@ extern int recover_2E39E0(Moby *, void *) __asm__("FUN_L00_002dc9f0");
 extern void zero_2E39E0(void *) __asm__("FUN_001f99f8");
 extern float angle_delta_2E39E0(float, float) __asm__("FUN_001fa5c8");
 extern float angle_add_2E39E0(float, float) __asm__("FUN_001fa580");
-extern void vec_scale_2E39E0(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float fixed_2E39E0(short) __asm__("FUN_001fa6c0");
 extern int hazard_2E39E0(void) __asm__("FUN_001f0b58");
 extern void splash_2E39E0(Moby *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -798,8 +798,8 @@ void FUN_L09_002e27d8(Moby *m) {
         ground = m->pos.z = ground_2E39E0(&m->pos, 0, 0.5f);
         break;
     case 1:
-        vec_sub_2E39E0(&step, &query, &m->pos);
-        if ((kind < 2 || length_2E39E0(&step) < d->range + 4.0f) && fabs_2E39E0(m->pos.z - query.z) < 8.0f && !status_2E39E0(19)) {
+        fast_vec_sub(&step, &query, &m->pos);
+        if ((kind < 2 || fast_vec_length(&step) < d->range + 4.0f) && fabs_2E39E0(m->pos.z - query.z) < 8.0f && !status_2E39E0(19)) {
             m->state = 2;
             if (m->prev_seq != 4) animate_2E39E0(m, 4, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         } else if (m->unkBC == 1 && !status_2E39E0(19)) {
@@ -816,8 +816,8 @@ void FUN_L09_002e27d8(Moby *m) {
     case 10:
     case 11:
         turn_2E39E0(m, angle_2E39E0(query.x - m->pos.x, query.y - m->pos.y), d->turn, 0.02f, 0.3f, 0.1f);
-        vec_sub_2E39E0(&step, &query, &m->pos);
-        if ((kind < 2 || length_2E39E0(&step) < d->range) && fabs_2E39E0(m->pos.z - query.z) < 8.0f && !status_2E39E0(19)) {
+        fast_vec_sub(&step, &query, &m->pos);
+        if ((kind < 2 || fast_vec_length(&step) < d->range) && fabs_2E39E0(m->pos.z - query.z) < 8.0f && !status_2E39E0(19)) {
             if (m->group != 0xFF) event_2E39E0(m->group, 1);
             if (status_2E39E0(0x100) & 1) d->side_deg = -d->side_deg;
             d->side = d->side_deg * 0.017453292f;
@@ -846,20 +846,20 @@ void FUN_L09_002e27d8(Moby *m) {
         step.x = 2.0f * sine_2E39E0(m->rot.z);
         step.y = 2.0f * cosine_2E39E0(m->rot.z);
         step.z = 0.0f;
-        vec_add_2E39E0(&goal, &m->pos, &step);
+        fast_vec_add(&goal, &m->pos, &step);
         flags = move_2E39E0(m, &d->steer, &goal, &step, 1.0f);
         if (timer32_2E39E0(&d->side_timer)) {
             d->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
             d->side = -d->side;
         }
-        vec_sub_2E39E0(&away, &query, &d->home);
+        fast_vec_sub(&away, &query, &d->home);
         if ((flags & 4) || (fast_distance_2E39E0(&m->pos, &query) < 1.5f && !(flags & 2))) {
             m->state = 4;
             if (m->prev_seq != 1) animate_2E39E0(m, 1, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         } else if (d->f190 < D_0015EE6C_2E39E0 || 1.0f < steep || (flags & 2)) {
             d->home_timer = ticks_2E39E0(50);
             m->state = 5;
-        } else if (length_2E39E0(&away) < d->range + 4.0f && fabs_2E39E0(m->pos.z - query.z) < 8.0f) {
+        } else if (fast_vec_length(&away) < d->range + 4.0f && fabs_2E39E0(m->pos.z - query.z) < 8.0f) {
             if (m->group != 0xFF) event_2E39E0(m->group, 1);
         } else if (m->unkBC != 1) {
             m->state = 5;
@@ -899,14 +899,14 @@ void FUN_L09_002e27d8(Moby *m) {
         step.x = 2.0f * sine_2E39E0(m->rot.z);
         step.y = 2.0f * cosine_2E39E0(m->rot.z);
         step.z = 0.0f;
-        vec_add_2E39E0(&goal, &m->pos, &step);
+        fast_vec_add(&goal, &m->pos, &step);
         flags = move_2E39E0(m, &d->steer, &goal, &step, 1.0f);
         if (fast_distance_2E39E0(&m->pos, &d->home) < 2.0f) {
             m->state = 1;
             if (m->prev_seq != 2) animate_2E39E0(m, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         }
-        vec_sub_2E39E0(&away, &query, &d->home);
-        if (expired && length_2E39E0(&away) < d->range) {
+        fast_vec_sub(&away, &query, &d->home);
+        if (expired && fast_vec_length(&away) < d->range) {
             if (m->group != 0xFF) event_2E39E0(m->group, 1);
             m->state = 3;
             if (m->prev_seq != 0) animate_2E39E0(m, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
@@ -970,9 +970,9 @@ void FUN_L09_002e27d8(Moby *m) {
         step.x = 2.0f * sine_2E39E0(m->rot.z);
         step.y = 2.0f * cosine_2E39E0(m->rot.z);
         step.z = 0.0f;
-        vec_add_2E39E0(&goal, &m->pos, &step);
+        fast_vec_add(&goal, &m->pos, &step);
         flags = move_2E39E0(m, &d->steer, &goal, &step, 1.0f);
-        vec_sub_2E39E0(&away, &query, &d->home);
+        fast_vec_sub(&away, &query, &d->home);
         if ((flags & 4) || (fast_distance_2E39E0(&m->pos, &query) < 1.5f && steep <= 1.0f)) {
             m->state = 4;
             if (m->prev_seq != 1) animate_2E39E0(m, 1, 0, ticks_2E39E0(range_2E39E0(10, 13)));
@@ -997,7 +997,7 @@ void FUN_L09_002e27d8(Moby *m) {
         step.x = sine_2E39E0(m->rot.z) * (d->speed * D_0015EE6C_2E39E0);
         step.y = cosine_2E39E0(m->rot.z) * (d->speed * D_0015EE6C_2E39E0);
         step.z = 0.0f;
-        vec_add_2E39E0(&goal, &m->pos, &step);
+        fast_vec_add(&goal, &m->pos, &step);
         for (o = D_L09_00160064_2E39E0; o != 0; o = o->next) {
             if (o != m && (signed char)o->state >= 0 && (o->oclass == 0 || o->oclass == 193)) {
                 if (fast_distance_2E39E0(&goal, &o->pos) < 2.0f) {
@@ -1007,9 +1007,9 @@ void FUN_L09_002e27d8(Moby *m) {
                     float t = D_0015EE6C_2E39E0 * 1.5707964f;
                     if (!(dl > 0.0f)) t = -t;
                     m->rot.z = angle_add_2E39E0(m->rot.z, t);
-                    vec_sub_2E39E0(&goal, &m->pos, &o->pos);
-                    vec_scale_2E39E0(&goal, &goal, 2.0f);
-                    vec_add_2E39E0(&goal, &goal, &o->pos);
+                    fast_vec_sub(&goal, &m->pos, &o->pos);
+                    fast_vec_normalize(&goal, &goal, 2.0f);
+                    fast_vec_add(&goal, &goal, &o->pos);
                     goal.z = z;
                 }
             }

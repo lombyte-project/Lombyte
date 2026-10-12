@@ -95,11 +95,11 @@ extern char D_L04_00174070_1F3010[] __asm__("D_L04_00173FF0");
 extern char D_0013F450_1F3010[] __asm__("D_0013F350");
 extern void func_001F9BC0_1F3010(void *) __asm__("FUN_001f99f8");
 extern float func_001F9D10_1F3010(void *, void *) __asm__("FUN_001f9b48");
-extern void func_001F9BF0_1F3010(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float func_001F9CB8_1F3010(void *) __asm__("FUN_001f9af0");
-extern void func_L00_001FF4B0_1F3010(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void func_001F9BD8_1F3010(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void func_001F9C30_1F3010(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern int func_L00_001EFFF0_1F3010(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float func_001F9CE8_1F3010(void *) __asm__("FUN_001f9b20");
 extern float func_L00_001FF860_1F3010(float, float) __asm__("FUN_001f9e90");
@@ -145,33 +145,33 @@ void FUN_L04_001f30e0(Moby **list, int n, Moby *m, Steer_1F3010 *c, float *f) {
         r = func_L04_001F2F68_1F3010(m, &path[1], path[0].n);
         flag = func_L04_0024D790_1F3010(&o, &m->pos, &path[1], path[0].n);
         if (flag == 0) {
-            func_001F9BF0_1F3010(&w, &o, &m->pos);
-            s = func_001F9CB8_1F3010(&w);
+            fast_vec_sub(&w, &o, &m->pos);
+            s = fast_vec_length(&w);
             if (s != 0.0f) {
                 s = -f[2] / (s * s);
             } else {
                 s = -1000.0f;
             }
         } else {
-            func_001F9BF0_1F3010(&w, &o, &m->pos);
-            s = func_001F9CB8_1F3010(&w) + 3.0f;
+            fast_vec_sub(&w, &o, &m->pos);
+            s = fast_vec_length(&w) + 3.0f;
             if (d < s) {
                 s = s * (f[2] * s);
             } else {
                 s = 10000.0f;
             }
         }
-        func_L00_001FF4B0_1F3010(&w, &w, s);
-        func_001F9BD8_1F3010(c, c, &w);
+        fast_vec_normalize(&w, &w, s);
+        fast_vec_add(c, c, &w);
     }
     if (f[0] != 0.0f) {
-        func_L00_001FF4B0_1F3010(&w, &c->dir, f[0]);
-        func_001F9BD8_1F3010(c, c, &w);
+        fast_vec_normalize(&w, &c->dir, f[0]);
+        fast_vec_add(c, c, &w);
     }
     if (c->target == m) {
         qcopy(&w, &c->pos);
-        func_L00_001FF4B0_1F3010(&w, &w, f[1]);
-        func_001F9BD8_1F3010(c, c, &w);
+        fast_vec_normalize(&w, &w, f[1]);
+        fast_vec_add(c, c, &w);
     } else {
         if (c->path != -1) {
             k = r;
@@ -201,32 +201,32 @@ void FUN_L04_001f30e0(Moby **list, int n, Moby *m, Steer_1F3010 *c, float *f) {
             if (lo <= -1) {
                 lo = hi - 1;
             }
-            func_001F9BD8_1F3010(&w, &path[j + 1], &path[lo + 1]);
-            func_001F9BD8_1F3010(&w, &w, &path[k + 1]);
-            func_001F9C30_1F3010(&w, &w, 0.33333334f);
+            fast_vec_add(&w, &path[j + 1], &path[lo + 1]);
+            fast_vec_add(&w, &w, &path[k + 1]);
+            fast_vec_scale(&w, &w, 0.33333334f);
             if (flag == 0) {
-                func_001F9BF0_1F3010(&w, &w, &m->pos);
-                s = func_001F9CB8_1F3010(&w);
-                func_L00_001FF4B0_1F3010(&w, &w, s * (s * s * f[2]));
-                func_001F9BD8_1F3010(c, c, &w);
+                fast_vec_sub(&w, &w, &m->pos);
+                s = fast_vec_length(&w);
+                fast_vec_normalize(&w, &w, s * (s * s * f[2]));
+                fast_vec_add(c, c, &w);
             }
         }
         if (c->target != 0) {
-            func_001F9BF0_1F3010(&w, &c->target->pos, &m->pos);
-            if (func_001F9CB8_1F3010(&w) < d) {
-                s = func_001F9CB8_1F3010(&w);
-                func_L00_001FF4B0_1F3010(&w, &w, s * (s * s * f[1]));
-                func_001F9BD8_1F3010(c, c, &w);
+            fast_vec_sub(&w, &c->target->pos, &m->pos);
+            if (fast_vec_length(&w) < d) {
+                s = fast_vec_length(&w);
+                fast_vec_normalize(&w, &w, s * (s * s * f[1]));
+                fast_vec_add(c, c, &w);
             }
         }
         if (c->point != 0) {
             w.x = c->point->x - m->pos.x;
             w.y = c->point->y - m->pos.y;
             w.z = c->point->z - m->pos.z;
-            if (func_001F9CB8_1F3010(&w) < d) {
-                s = func_001F9CB8_1F3010(&w);
-                func_L00_001FF4B0_1F3010(&w, &w, s * (s * s * f[1]));
-                func_001F9BD8_1F3010(c, c, &w);
+            if (fast_vec_length(&w) < d) {
+                s = fast_vec_length(&w);
+                fast_vec_normalize(&w, &w, s * (s * s * f[1]));
+                fast_vec_add(c, c, &w);
             }
         }
         for (i = 0; i < n + 1; i++) {
@@ -260,15 +260,15 @@ void FUN_L04_001f30e0(Moby **list, int n, Moby *m, Steer_1F3010 *c, float *f) {
                 } else {
                     g = 1000.0f;
                 }
-                func_001F9BF0_1F3010(&w, &m->pos, &obj->pos);
-                func_L00_001FF4B0_1F3010(&w, &w, g);
-                func_001F9BD8_1F3010(c, c, &w);
+                fast_vec_sub(&w, &m->pos, &obj->pos);
+                fast_vec_normalize(&w, &w, g);
+                fast_vec_add(c, c, &w);
             }
         }
     }
     if (c->f48 == 0.0f) {
-        func_001F9BD8_1F3010(&a, &m->pos, &c->pos);
-        func_001F9BD8_1F3010(&e, &m->pos, &c->pos);
+        fast_vec_add(&a, &m->pos, &c->pos);
+        fast_vec_add(&e, &m->pos, &c->pos);
         a.z = a.z + 1.5f;
         e.z = 0.01f;
         if (func_L00_001EFFF0_1F3010(&a, &e, 2, m, 0) != 0) {
@@ -276,31 +276,31 @@ void FUN_L04_001f30e0(Moby **list, int n, Moby *m, Steer_1F3010 *c, float *f) {
                 qcopy(&x, &D_L04_00174040_1F3010.normal);
                 s = func_L00_001FF860_1F3010(D_L04_00174040_1F3010.normal.z, func_001F9CE8_1F3010(&D_L04_00174040_1F3010.normal));
                 func_L00_001FF500_1F3010(&x, &x, 1.0f);
-                func_001F9C30_1F3010(&x, &x, f[3]);
-                func_001F9BD8_1F3010(c, c, &x);
+                fast_vec_scale(&x, &x, f[3]);
+                fast_vec_add(c, c, &x);
                 if (0.4f < s) {
-                    func_001F9C30_1F3010(&x, &x, f[3] * (s * 10000.0f));
-                    func_001F9BD8_1F3010(c, c, &x);
+                    fast_vec_scale(&x, &x, f[3] * (s * 10000.0f));
+                    fast_vec_add(c, c, &x);
                 }
                 if (0.2f < m->pos.z - D_L04_00174040_1F3010.z) {
                     func_L00_001FF500_1F3010(&x, &c->pos, -(f[3] * 1000.0f));
-                    func_001F9BD8_1F3010(c, c, &x);
+                    fast_vec_add(c, c, &x);
                 }
             }
         }
     } else {
         if (func_L00_001F10E0_1F3010(f[4], &m->pos, 4, m) != 0) {
-            func_001F9BF0_1F3010(&w, D_L04_00174070_1F3010, &m->pos);
+            fast_vec_sub(&w, D_L04_00174070_1F3010, &m->pos);
             w.z = w.z + f[3];
-            func_L00_001FF4B0_1F3010(&w, &w, f[3]);
-            func_001F9BD8_1F3010(c, c, &w);
+            fast_vec_normalize(&w, &w, f[3]);
+            fast_vec_add(c, c, &w);
         }
     }
     if (c->f48 == 0.0f) {
         func_L00_001FF500_1F3010(c, c, f[6]);
         c->vel.z = 0.0f;
     } else {
-        func_L00_001FF4B0_1F3010(c, c, f[6]);
+        fast_vec_normalize(c, c, f[6]);
         c->vel.z = c->vel.z / c->f48;
     }
     if (func_001F9938_1F3010(&c->timer) != 0) {
@@ -313,11 +313,11 @@ void FUN_L04_001f30e0(Moby **list, int n, Moby *m, Steer_1F3010 *c, float *f) {
             c->drift.z = 0.0f;
         }
     }
-    func_001F9BD8_1F3010(c, c, &c->drift);
+    fast_vec_add(c, c, &c->drift);
     if (mob != 0) {
-        func_001F9BF0_1F3010(&w, &m->pos, &mob->pos);
+        fast_vec_sub(&w, &m->pos, &mob->pos);
         if (c->f48 != 0.0f) {
-            func_L00_001FF4B0_1F3010(c, &w, f[6]);
+            fast_vec_normalize(c, &w, f[6]);
         } else {
             func_L00_001FF500_1F3010(c, &w, f[6]);
         }

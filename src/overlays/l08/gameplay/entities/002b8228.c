@@ -110,8 +110,8 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L08_002b8228_c(struct Moby *moby) __asm__("FUN_L08_002b8228");
-extern float func_001F9CB8_2B94B0(void *a) __asm__("FUN_001f9af0");
-extern void func_L00_001FF4B0_2B94B0(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int func_L00_001F39B0_2B94B0(void *, void *, int, int, int) __asm__("FUN_L08_002025d0");
 extern void func_L00_001FF610_2B94B0(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern float func_001FA748_2B94B0(float, float) __asm__("FUN_001fa580");
@@ -147,15 +147,15 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
     case 1:
         qcopy(P, m->pos);
         d->vel[2] = d->vel[2] - D_0015ED70 * 9.8f;
-        f20 = func_001F9CB8_2B94B0(d->vel);
+        f20 = fast_vec_length(d->vel);
         if (D_L08_0016144C * 1.8f * D_0015ED60 < f20) {
-            func_L00_001FF4B0_2B94B0(d->vel, d->vel, D_L08_0016144C * 1.8f * D_0015ED60);
+            fast_vec_normalize(d->vel, d->vel, D_L08_0016144C * 1.8f * D_0015ED60);
             f20 = D_L08_0016144C * 1.8f * D_0015ED60;
         }
         add_vector_xyz(A, P, d->vel);
-        func_L00_001FF4B0_2B94B0(B, d->vel, D_L08_0016144C);
+        fast_vec_normalize(B, d->vel, D_L08_0016144C);
         subtract_vector_xyz(B, P, B);
-        func_L00_001FF4B0_2B94B0(C, d->vel, f20 + D_L08_0016144C);
+        fast_vec_normalize(C, d->vel, f20 + D_L08_0016144C);
         add_vector_xyz(C, C, P);
         if (D_L08_0015F5CC_c % 2 == (((char *)m - D_L08_0015FFD8) >> 8) % 2
             && func_L00_001F39B0_2B94B0(B, C, 2, 0, 0) != 0) {
@@ -165,13 +165,13 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
                     ok = 0;
                 } else {
                     subtract_vector_xyz(E, P, (D_L08_001746D8_2B94B0 + 8));
-                    func_L00_001FF4B0_2B94B0(E, E, D_L08_0016144C);
+                    fast_vec_normalize(E, E, D_L08_0016144C);
                     add_vector_xyz(P, (D_L08_001746D8_2B94B0 + 8), E);
                 }
                 if (ok != 0) {
                     func_L00_001FF610_2B94B0(F, d->vel, D_L08_00174700_2B94B0);
-                    f = func_001F9CB8_2B94B0(F) - D_L08_0016145C;
-                    func_L00_001FF4B0_2B94B0(d->vel, F, f < 0.0f ? 0.0f : f);
+                    f = fast_vec_length(F) - D_L08_0016145C;
+                    fast_vec_normalize(d->vel, F, f < 0.0f ? 0.0f : f);
                 } else {
                     clear_u64_value(d->vel);
                     qcopy(P, (D_L08_001746D8_2B94B0 + 8));
@@ -265,7 +265,7 @@ extern int FUN_001f9740(int *) __asm__("FUN_001f9740");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_001f9ad8(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern float vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -386,7 +386,7 @@ void FUN_L08_002d23f0(char *moby) {
                     qcopy(position, collision_result + 0x20);
                     ((float *)position)[2] += 0.16f;
                     rotate_vector_2d23f0(velocity, velocity, collision_result + 0x40);
-                    FUN_001f9ad8(impulse, velocity, collision_result + 0x40);
+                    fast_vec_cross(impulse, velocity, collision_result + 0x40);
                     scale_vector_xyz(impulse, impulse, random_float_between(-(D_0015ED6C * 1.5f), D_0015ED6C * 1.5f));
                     add_vector_xyz(velocity, velocity, impulse);
                     normalize_vector_xyz(velocity, velocity, 0.4f);
@@ -761,8 +761,8 @@ extern void func_0020DAF8_2D6C58(char *, int, char *) __asm__("FUN_0020cca8");
 extern float func_00214158_2D6C58(void) __asm__("FUN_00213308");
 extern float func_002140F8_2D6C58(float, float) __asm__("FUN_002132a8");
 extern void func_L00_001FF4B0_2D6C58(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void func_001F9BD8_2D6C58(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void func_001F9C30_2D6C58(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float func_001F9F90_2D6C58(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2D6C58(float) __asm__("FUN_001f9de0");
 extern float func_001F9878_2D6C58(float) __asm__("FUN_001f96b0");
@@ -796,8 +796,8 @@ void FUN_L08_002d5950(char *moby, int a1, int count) {
         qcopy(t70, d + 0x40);
         if (count / 3 < i) {
             func_L00_001FF4B0_2D6C58(t80, t30, func_002140F8_2D6C58(D_L08_001618DC, D_L08_001618DC * 1.2f) * D_0015ED6C);
-            func_001F9BD8_2D6C58(t60, t60, t80);
-            func_001F9C30_2D6C58(t70, t70, 0.5f);
+            fast_vec_add(t60, t60, t80);
+            fast_vec_scale(t70, t70, 0.5f);
             t = func_001F9F90_2D6C58(s);
             t = t * (func_002140F8_2D6C58(0.0f, D_L08_001618E8) * D_0015ED6C);
             t70[0] = t70[0] + t;
@@ -807,8 +807,8 @@ void FUN_L08_002d5950(char *moby, int a1, int count) {
             t70[2] = D_L08_001618E0 * D_0015ED6C;
         } else {
             func_L00_001FF4B0_2D6C58(t80, t30, func_002140F8_2D6C58(0.0f, D_L08_001618DC) * D_0015ED6C);
-            func_001F9BD8_2D6C58(t60, t60, t80);
-            func_001F9C30_2D6C58(t70, t70, 0.5f);
+            fast_vec_add(t60, t60, t80);
+            fast_vec_scale(t70, t70, 0.5f);
             t = func_001F9F90_2D6C58(s);
             t = t * (func_002140F8_2D6C58(0.0f, D_L08_001618E8 * 0.25f) * D_0015ED6C);
             t70[0] = t70[0] + t;

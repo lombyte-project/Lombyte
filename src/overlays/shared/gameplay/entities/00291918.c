@@ -608,11 +608,11 @@ extern float func_001F9D10_2CDDC8(void *, void *) __asm__("FUN_001f9b48");
 extern int func_00215570_2CDDC8(void *, int) __asm__("FUN_00214720");
 extern char D_0013E633_2CDDC8[] __asm__("D_0013E533");
 extern float func_001FA888_2CDDC8(int) __asm__("FUN_001fa6c0");
-extern void func_001F9BF0_2CDDC8(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void func_001F9C30_2CDDC8(void *, void *, float) __asm__("FUN_001f9a68");
-extern void func_001F9BD8_2CDDC8(void *, void *, void *) __asm__("FUN_001f9a10");
-extern float func_001F9CB8_2CDDC8(void *) __asm__("FUN_001f9af0");
-extern void func_L00_001FF4B0_2CDDC8(void *,void *,float) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern void fast_vec_normalize(void *,void *,float) __asm__("FUN_001f9bf8");
 extern float func_001F9F90_2CDDC8(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2CDDC8(float) __asm__("FUN_001f9de0");
 extern void func_L00_00250800_2CDDC8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -705,9 +705,9 @@ void FUN_L03_002cca00(HMob49_2CDDC8 *m) {
             if (d->speed<=D_L03_0016199C*D_0015ED6C) { func_001F9978_2CDDC8(); return; }
             w.segment_a=path->count-2; w.fraction_a=1.0f;
         }
-        func_001F9BF0_2CDDC8(w.projected,&path->points[w.segment_a+1],&path->points[w.segment_a]);
-        func_001F9C30_2CDDC8(w.projected,w.projected,w.fraction_a);
-        func_001F9BD8_2CDDC8(w.projected,w.projected,path->points+w.segment_a);
+        fast_vec_sub(w.projected,&path->points[w.segment_a+1],&path->points[w.segment_a]);
+        fast_vec_scale(w.projected,w.projected,w.fraction_a);
+        fast_vec_add(w.projected,w.projected,path->points+w.segment_a);
         if (w.segment_a+1<path->count-8) {
             float *next=(float *)((char *)path+((w.segment_a+1)<<4));
             angle=func_L00_001FF860_2CDDC8(next[4]-m->position[0],next[5]-m->position[1]);
@@ -716,13 +716,13 @@ void FUN_L03_002cca00(HMob49_2CDDC8 *m) {
             angle=func_L00_001FF860_2CDDC8(w.target.position[0]-m->position[0],w.target.position[1]-m->position[1]);
             m->rotation[2]=func_L00_00259148_2CDDC8(&d->yaw_velocity,m->rotation[2],angle,0.01f,0.3f,0.1f);
         }
-        func_001F9BF0_2CDDC8(w.movement,w.projected,m->position);
-        distance=func_001F9CB8_2CDDC8(w.movement); if (d->speed<distance) distance=d->speed;
-        func_L00_001FF4B0_2CDDC8(w.movement,w.movement,distance);
+        fast_vec_sub(w.movement,w.projected,m->position);
+        distance=fast_vec_length(w.movement); if (d->speed<distance) distance=d->speed;
+        fast_vec_normalize(w.movement,w.movement,distance);
         motion_scale=20.0f; motion_gain=1.0471976f;
     {
         float delta,roll,pitch;
-        func_001F9BD8_2CDDC8(m->position,m->position,w.movement);
+        fast_vec_add(m->position,m->position,w.movement);
         delta=func_001FA790_2CDDC8(func_L00_001FF860_2CDDC8(w.movement[0],w.movement[1]),m->rotation[2]);
         roll=d->speed*0.34906584f*func_001F9F90_2CDDC8(delta)/(D_0015ED6C*motion_scale);
         pitch=d->speed*-0.34906584f*func_001F9FA8_2CDDC8(delta);
@@ -742,7 +742,7 @@ void FUN_L03_002cca00(HMob49_2CDDC8 *m) {
         projectile=d->projectile;
         if (!projectile || projectile->class_id!=0x350 || projectile->state==254 || projectile->state==253) {
             func_L00_00250800_2CDDC8(m,0,w.movement);
-            func_001F9BF0_2CDDC8(w.direction,w.target.position,w.movement);
+            fast_vec_sub(w.direction,w.target.position,w.movement);
             *(HQuad49_2CDDC8*)w.projected=*(HQuad49_2CDDC8*)w.direction; func_001FA4A0_2CDDC8(w.offset,m->transform); func_001F9EE8_2CDDC8(w.projected,w.projected,w.offset);
             angle=func_L00_001FF860_2CDDC8(w.projected[0],w.projected[1]);
             d->gun_yaw=func_L00_00259148_2CDDC8(&d->gun_yaw_velocity,d->gun_yaw,angle,D_0015ED70*6.2831855f,D_0015ED70*12.566371f,D_0015ED6C*6.2831855f);
@@ -751,7 +751,7 @@ void FUN_L03_002cca00(HMob49_2CDDC8 *m) {
             func_L00_001FFED8_2CDDC8(d->gun_yaw_matrix+4,2,d->gun_yaw); func_L00_001FFED8_2CDDC8(d->gun_pitch_matrix+4,2,d->gun_pitch); d->projectile=0;
         } else {
             func_L00_00250800_2CDDC8(m,0,w.movement);
-            func_001F9BF0_2CDDC8(w.direction,d->projectile->position,w.movement);
+            fast_vec_sub(w.direction,d->projectile->position,w.movement);
             *(HQuad49_2CDDC8*)w.projected=*(HQuad49_2CDDC8*)w.direction; func_001FA4A0_2CDDC8(w.offset,m->transform); func_001F9EE8_2CDDC8(w.projected,w.projected,w.offset);
             angle=func_L00_001FF860_2CDDC8(w.projected[0],w.projected[1]);
             d->gun_yaw=func_L00_00259148_2CDDC8(&d->gun_yaw_velocity,d->gun_yaw,angle,D_0015ED70*6.2831855f,D_0015ED70*12.566371f,D_0015ED6C*6.2831855f);
@@ -763,17 +763,17 @@ void FUN_L03_002cca00(HMob49_2CDDC8 *m) {
             float node_distance=func_001F9D48_2CDDC8(&route->path->points[point],w.target.position);
             if (node_distance<20.0f && func_001F9B88_2CDDC8(w.target.position[2]-m->position[2])<10.0f && node_distance<func_001F9D10_2CDDC8(&route->path->points[point+1],w.target.position) && point<route->path->count-2) route->index++;
         }
-        func_001F9BF0_2CDDC8(w.direction,&route->path->points[point],m->position);
-        distance=func_001F9CB8_2CDDC8(w.direction);
+        fast_vec_sub(w.direction,&route->path->points[point],m->position);
+        distance=fast_vec_length(w.direction);
         if (distance<d->speed*d->speed/((D_0015ED70*4.0f)*2.0f) || func_001F9D10_2CDDC8(&route->path->points[point],w.target.position)<func_001F9D10_2CDDC8(m->position,w.target.position)) {
             d->speed-=D_0015ED70*4.0f; if (d->speed<0) d->speed=0;
         } else { d->speed+=D_0015ED70*4.0f; if (D_0015ED6C*10.0f<d->speed) d->speed=D_0015ED6C*10.0f; }
         distance=func_001F9D10_2CDDC8(&route->path->points[point],w.target.position); other_distance=func_001F9D10_2CDDC8(m->position,w.target.position);
-        if (distance<other_distance) func_L00_001FF4B0_2CDDC8(w.direction,w.direction,-d->speed); else func_L00_001FF4B0_2CDDC8(w.direction,w.direction,d->speed);
+        if (distance<other_distance) fast_vec_normalize(w.direction,w.direction,-d->speed); else fast_vec_normalize(w.direction,w.direction,d->speed);
         motion_scale=10.0f; motion_gain=1.0471976f;
     {
         float delta,roll,pitch;
-        func_001F9BD8_2CDDC8(m->position,m->position,w.direction);
+        fast_vec_add(m->position,m->position,w.direction);
         delta=func_001FA790_2CDDC8(func_L00_001FF860_2CDDC8(w.direction[0],w.direction[1]),m->rotation[2]);
         roll=d->speed*0.34906584f*func_001F9F90_2CDDC8(delta)/(D_0015ED6C*motion_scale);
         pitch=d->speed*-0.34906584f*func_001F9FA8_2CDDC8(delta);
@@ -790,7 +790,7 @@ void FUN_L03_002cca00(HMob49_2CDDC8 *m) {
             m->previous_state=3; m->state=4; d->reaction_timer=func_001F9850_2CDDC8(15); break;
         } else if (func_00215570_2CDDC8(w.target.position,d->shoot_region) && (func_001F9938_2CDDC8(&d->shot_timer) || (!d->projectile && d->timer))) {
             d->shot_timer=func_001F9850_2CDDC8(360); qcopy(w.shot_origin,w.target.position);
-            func_001F9BF0_2CDDC8(w.shot_velocity,w.shot_origin,w.movement); func_L00_001FF500_2CDDC8(w.shot_velocity,w.shot_velocity,D_0015ED6C*6.0f); w.shot_velocity[2]=0;
+            fast_vec_sub(w.shot_velocity,w.shot_origin,w.movement); func_L00_001FF500_2CDDC8(w.shot_velocity,w.shot_velocity,D_0015ED6C*6.0f); w.shot_velocity[2]=0;
             d->projectile=(HMob49_2CDDC8*)func_L03_002D65D0_2CDDC8((char*)w.shot_velocity,(char*)w.movement,(int)m,func_001F9850_2CDDC8(240),w.target.position[2]);
         }
         break;
@@ -821,16 +821,16 @@ void FUN_L03_002cca00(HMob49_2CDDC8 *m) {
             if (d->speed<=D_L03_0016199C*D_0015ED6C) { func_001F9978_2CDDC8(); return; }
             w.segment_b=path->count-2; w.fraction_b=1.0f;
         }
-        func_001F9BF0_2CDDC8(w.projected,&path->points[w.segment_b+1],&path->points[w.segment_b]);
-        func_001F9C30_2CDDC8(w.projected,w.projected,w.fraction_b); func_001F9BD8_2CDDC8(w.projected,w.projected,path->points+w.segment_b);
+        fast_vec_sub(w.projected,&path->points[w.segment_b+1],&path->points[w.segment_b]);
+        fast_vec_scale(w.projected,w.projected,w.fraction_b); fast_vec_add(w.projected,w.projected,path->points+w.segment_b);
         angle=func_L00_001FF860_2CDDC8(w.target.position[0]-m->position[0],w.target.position[1]-m->position[1]);
         m->rotation[2]=func_L00_00259148_2CDDC8(&d->yaw_velocity,m->rotation[2],angle,0.01f,0.3f,0.1f);
-        func_001F9BF0_2CDDC8(w.movement,w.projected,m->position); distance=func_001F9CB8_2CDDC8(w.movement);
+        fast_vec_sub(w.movement,w.projected,m->position); distance=fast_vec_length(w.movement);
         if (d->speed<distance) distance=d->speed;
-        func_L00_001FF4B0_2CDDC8(w.movement,w.movement,distance); motion_scale=20.0f; motion_gain=1.0471976f;
+        fast_vec_normalize(w.movement,w.movement,distance); motion_scale=20.0f; motion_gain=1.0471976f;
     {
         float delta,roll,pitch;
-        func_001F9BD8_2CDDC8(m->position,m->position,w.movement);
+        fast_vec_add(m->position,m->position,w.movement);
         delta=func_001FA790_2CDDC8(func_L00_001FF860_2CDDC8(w.movement[0],w.movement[1]),m->rotation[2]);
         roll=d->speed*0.34906584f*func_001F9F90_2CDDC8(delta)/(D_0015ED6C*motion_scale);
         pitch=d->speed*-0.34906584f*func_001F9FA8_2CDDC8(delta);
@@ -849,7 +849,7 @@ void FUN_L03_002cca00(HMob49_2CDDC8 *m) {
             w.movement[1]=func_001F9FA8_2CDDC8(m->rotation[2])*-d->speed; w.movement[2]=0;
     {
         float delta,roll,pitch;
-        func_001F9BD8_2CDDC8(m->position,m->position,w.movement);
+        fast_vec_add(m->position,m->position,w.movement);
         delta=func_001FA790_2CDDC8(func_L00_001FF860_2CDDC8(w.movement[0],w.movement[1]),m->rotation[2]);
         roll=d->speed*0.34906584f*func_001F9F90_2CDDC8(delta)/(D_0015ED6C*motion_scale);
         pitch=d->speed*-0.34906584f*func_001F9FA8_2CDDC8(delta);
@@ -872,7 +872,7 @@ void FUN_L03_002cca00(HMob49_2CDDC8 *m) {
             HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_0015FFD8_c+(d->child_index<<8));
             ((unsigned char*)child->data)[0x262]=2; child->alpha=255; child->flags&=0xFFF9;
             w.hit.radius=20.0f; w.hit.flags=0x830000; w.hit.allow=1; w.hit.source=m;
-            func_001F9BF0_2CDDC8(w.hit.direction,child->position,m->position); func_L00_001FF500_2CDDC8(w.hit.direction,w.hit.direction,1.0f);
+            fast_vec_sub(w.hit.direction,child->position,m->position); func_L00_001FF500_2CDDC8(w.hit.direction,w.hit.direction,1.0f);
             w.hit.direction[2]=1.0f; w.hit.direction[3]=5627.925f; w.hit.kind=3; w.hit.enabled=3; w.hit.class_id=m->class_id;
             func_L00_0025AAC0_2CDDC8(child,&w.hit);
         }

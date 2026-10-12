@@ -99,11 +99,11 @@ extern void func_0020D678_2E0630(void *) __asm__("FUN_0020c828");
 extern int func_001F9850_2E0630(int) __asm__("FUN_001f96f8");
 extern void func_001F9BC0_2E0630(void *) __asm__("FUN_001f99f8");
 extern float func_00214D88_2E0630(float *, float, float *, float, float, float) __asm__("FUN_00213f38");
-extern float func_001F9CB8_2E0630(void *) __asm__("FUN_001f9af0");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float func_L00_001FF860_2E0630(float, float) __asm__("FUN_001f9e90");
 extern float func_L00_0025CE58_2E0630(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern float func_001FA850_2E0630(float, float) __asm__("FUN_001fa688");
-extern void func_001F9BF0_2E0630(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_002607A8_2E0630(void *, float) __asm__("FUN_L00_0025f730");
 extern int func_L00_00259B08_2E0630(void *, void *, float, int, float, int) __asm__("FUN_L00_00258ad0");
 extern void func_00213DE0_2E0630(void *, int, int, int) __asm__("FUN_00212f90");
@@ -118,7 +118,7 @@ extern float func_001F9D48_2E0630(void *, void *) __asm__("FUN_001f9b80");
 extern int func_001F9908_2E0630(void *) __asm__("FUN_001f9740");
 extern float func_002140F8_2E0630(float, float) __asm__("FUN_002132a8");
 extern float func_00214158_2E0630(void) __asm__("FUN_00213308");
-extern void func_001F9BD8_2E0630(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_L00_001F10E0_2E0630(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int func_L00_0025D6F0_2E0630(void *, void *) __asm__("FUN_L00_0025c698");
 extern void func_L00_002584A8_2E0630(void *, int, int) __asm__("FUN_L00_00257470");
@@ -180,14 +180,14 @@ void FUN_L10_002df270(Moby *m) {
         float dist;
         m->unk58 = 4.0f;
         qcopy(v, &D_L10_001B0C30_2E0630[d->f150]->nodes[d->f158]);
-        v[5] = func_001F9CB8_2E0630(&d->v120);
+        v[5] = fast_vec_length(&d->v120);
         dist = func_001F9D10_2E0630(v, &m->pos);
         *(int *)&v[4] = 0;
         func_L00_0025CE58_2E0630(&m->rot.z, func_L00_001FF860_2E0630(v[0] - m->pos.x, v[1] - m->pos.y), &d->f170,
             D_0015ED70 * 25.132742f, D_0015ED70 * 25.132742f, D_0015ED6C * 50.265484f);
         if (func_001FA850_2E0630(func_L00_001FF860_2E0630(v[0] - m->pos.x, v[1] - m->pos.y), m->rot.z) < 0.78539819f) {
             func_00214D88_2E0630(&v[4], dist, &v[5], D_0015ED70 * 20.0f, D_0015ED70 * 20.0f, D_0015ED6C * 20.0f);
-            func_001F9BF0_2E0630(&d->v120, v, &m->pos);
+            fast_vec_sub(&d->v120, v, &m->pos);
             func_L00_002607A8_2E0630(&d->v120, v[5]);
         } else {
             func_001F9BC0_2E0630(&d->v120);
@@ -264,23 +264,23 @@ void FUN_L10_002df270(Moby *m) {
         v[1] = func_001F9FA8_2E0630(a) * r;
         v[2] = zero;
         v[2] = func_002140F8_2E0630(5.0f, 7.0f);
-        func_001F9BD8_2E0630(&d->v140, v, &d->v130);
+        fast_vec_add(&d->v140, v, &d->v130);
         m->state = 10;
         break;
     }
     case 10:
         func_L00_002592B0_2E0630(m, func_L00_001FF860_2E0630(d->v140.x - m->pos.x, d->v140.y - m->pos.y), &d->f170,
             0.05f, 0.3f, 0.2f);
-        func_001F9BF0_2E0630(&d->v40, &d->v140, &m->pos);
+        fast_vec_sub(&d->v40, &d->v140, &m->pos);
         func_L00_002607A8_2E0630(&d->v40, D_0015ED6C * 4.0f);
-        func_001F9BD8_2E0630(v, &d->v40, &m->pos);
+        fast_vec_add(v, &d->v40, &m->pos);
         if (func_L00_001F10E0_2E0630(0.4f, v, 0, m)) {
             func_001F9BC0_2E0630(&d->v40);
             m->state = 9;
         } else {
             qcopy(&m->pos, v);
         }
-        if (func_001F9CB8_2E0630(&d->v40) == 0.0f) m->state = 9;
+        if (fast_vec_length(&d->v40) == 0.0f) m->state = 9;
         break;
     case 11:
         if ((func_L00_0025D6F0_2E0630(m, d->a60) & 1) == 0) break;
@@ -1536,8 +1536,8 @@ extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern int func_001F9850_2E52B0(int) __asm__("FUN_001f96f8");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void func_001F9BF0_2E52B0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void func_L00_001FF4B0_2E52B0(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float func_001F9C78_2E52B0(void *, void *) __asm__("FUN_001f9ab0");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float func_001F9B88_2E52B0(float) __asm__("FUN_001f99c0");
 extern float func_L00_001FF860_2E52B0(float, float) __asm__("FUN_001f9e90");
 extern void trooper_set_knockback(float *, float, float) __asm__("FUN_L03_00250a78");
@@ -1633,9 +1633,9 @@ void FUN_L10_002e3ef0(void *mv) {
             if (collision_line(&vA, &vB, 0x12, m, 0) != 0) {
                 func_001F9BF0_2E52B0(&dst, &vB, &vA);
                 *(u128_2E52B0 *)&W = *(u128_2E52B0 *)&dst;
-                func_L00_001FF4B0_2E52B0(&W, &W, 1.0f);
-                func_L00_001FF4B0_2E52B0(&X, &D_L10_00174380_2E52B0, 1.0f);
-                if (0.5f < func_001F9B88_2E52B0(func_001F9C78_2E52B0(&W, &X))) {
+                fast_vec_normalize(&W, &W, 1.0f);
+                fast_vec_normalize(&X, &D_L10_00174380_2E52B0, 1.0f);
+                if (0.5f < func_001F9B88_2E52B0(fast_vec_dot(&W, &X))) {
                     B = 0.0f;
                     v21 = 11;
                 }

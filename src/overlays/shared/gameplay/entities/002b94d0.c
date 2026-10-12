@@ -61,17 +61,17 @@ typedef struct {
     long z4, q0, q1, q2;
 } RT_2baae0;
 
-extern float D_L00_00166DC0_2baae0[] __asm__("D_L00_00166DC0");
+extern float g_debug_camera[] __asm__("D_L00_00166DC0");
 extern int D_L00_00161638 __attribute__((sda));
 extern int D_L00_0016163C __attribute__((sda));
 extern int D_L00_001615F4 __attribute__((sda));
 extern int D_L00_001615F8 __attribute__((sda));
-extern float vlen_2baae0(void *) __asm__("FUN_001f9af0");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern long tex_2baae0(int) __asm__("FUN_001f44b8");
-extern void vadd_2baae0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void vsub_2baae0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void cross_2baae0(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void vmul_2baae0(float, void *, void *) __asm__("FUN_001f9a68");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 extern void draw_2baae0(void *, void *, int) __asm__("FUN_001f7d30");
 extern void gsreg_2baae0(int, long) __asm__("FUN_00233980");
 
@@ -119,25 +119,25 @@ void FUN_L00_002baae0(void *mv, int a, int b, int n, float sx, float sy, float s
     t.f[5] = 0;
     t.f[6] = D_L00_001615EC + 1.0f;
     t.f[7] = 1.0f;
-    vsub_2baae0(w140, m, D_L00_00166DC0_2baae0);
-    vsub_2baae0(w150, m + 0x10, m);
-    cross_2baae0(w120, w150, w140);
-    len0 = vlen_2baae0(w120);
+    fast_vec_sub(w140, m, g_debug_camera);
+    fast_vec_sub(w150, m + 0x10, m);
+    fast_vec_cross(w120, w150, w140);
+    len0 = fast_vec_length(w120);
     if (len0 != 0)
         len0 = 1.0f / len0;
-    vmul_2baae0(D_L00_001615FC * len0, w120, w120);
-    vadd_2baae0(q[0], m, w120);
-    vsub_2baae0(q[1], m, w120);
+    fast_vec_scale(D_L00_001615FC * len0, w120, w120);
+    fast_vec_add(q[0], m, w120);
+    fast_vec_sub(q[1], m, w120);
     for (i = 1; i < n - 1; i++) {
-        vsub_2baae0(w140, v[i], D_L00_00166DC0_2baae0);
-        vsub_2baae0(w150, v[i + 1], v[i]);
-        cross_2baae0(w120, w150, w140);
-        len = vlen_2baae0(w120);
+        fast_vec_sub(w140, v[i], g_debug_camera);
+        fast_vec_sub(w150, v[i + 1], v[i]);
+        fast_vec_cross(w120, w150, w140);
+        len = fast_vec_length(w120);
         if (len != 0)
             len = 1.0f / len;
-        vmul_2baae0(D_L00_001615FC * len, w120, w120);
-        vadd_2baae0(q[2], v[i], w120);
-        vsub_2baae0(q[3], v[i], w120);
+        fast_vec_scale(D_L00_001615FC * len, w120, w120);
+        fast_vec_add(q[2], v[i], w120);
+        fast_vec_sub(q[3], v[i], w120);
         if (i == 1) {
             t.c[1] = D_L00_001615F4;
             t.c[0] = D_L00_001615F4;
@@ -153,37 +153,37 @@ void FUN_L00_002baae0(void *mv, int a, int b, int n, float sx, float sy, float s
         qcopy(q[1], q[3]);
     }
     for (i = 0; i < n - 1; i++) {
-        vsub_2baae0(a180, m + i * 16, D_L00_00166DC0_2baae0);
-        vsub_2baae0(b190, m + i * 16 + 16, D_L00_00166DC0_2baae0);
-        l0 = vlen_2baae0(a180);
-        l1 = vlen_2baae0(b190);
+        fast_vec_sub(a180, m + i * 16, g_debug_camera);
+        fast_vec_sub(b190, m + i * 16 + 16, g_debug_camera);
+        l0 = fast_vec_length(a180);
+        l1 = fast_vec_length(b190);
         if (l1 < l0) {
             if (l1 == 0)
                 qcopy(b190, a180);
             else
-                vmul_2baae0(l0 / l1, b190, b190);
+                fast_vec_scale(l0 / l1, b190, b190);
         } else {
             if (l0 == 0)
                 qcopy(a180, b190);
             else
-                vmul_2baae0(l1 / l0, a180, a180);
+                fast_vec_scale(l1 / l0, a180, a180);
         }
-        vadd_2baae0(r160, D_L00_00166DC0_2baae0, a180);
-        vadd_2baae0(r170, D_L00_00166DC0_2baae0, b190);
-        vsub_2baae0(w150, r170, r160);
-        vmul_2baae0(sz, s1B0, w150);
-        vsub_2baae0(r160, r160, s1B0);
-        vadd_2baae0(r170, r170, s1B0);
-        vsub_2baae0(s1A0, D_L00_00166DC0_2baae0, r160);
-        cross_2baae0(w120, s1A0, w150);
-        l2 = vlen_2baae0(w120);
+        fast_vec_add(r160, g_debug_camera, a180);
+        fast_vec_add(r170, g_debug_camera, b190);
+        fast_vec_sub(w150, r170, r160);
+        fast_vec_scale(sz, s1B0, w150);
+        fast_vec_sub(r160, r160, s1B0);
+        fast_vec_add(r170, r170, s1B0);
+        fast_vec_sub(s1A0, g_debug_camera, r160);
+        fast_vec_cross(w120, s1A0, w150);
+        l2 = fast_vec_length(w120);
         if (l2 != 0)
             l2 = 1.0f / l2;
-        vmul_2baae0(sy * l2, w130, w120);
-        vadd_2baae0(q2[0], r160, w130);
-        vsub_2baae0(q2[1], r160, w130);
-        vadd_2baae0(q2[2], r170, w130);
-        vsub_2baae0(q2[3], r170, w130);
+        fast_vec_scale(sy * l2, w130, w120);
+        fast_vec_add(q2[0], r160, w130);
+        fast_vec_sub(q2[1], r160, w130);
+        fast_vec_add(q2[2], r170, w130);
+        fast_vec_sub(q2[3], r170, w130);
         if (i == 0) {
             u.c[1] = D_L00_001615F8;
             u.c[0] = D_L00_001615F8;
@@ -222,7 +222,7 @@ extern UV_2bb0b0 D_L00_001DB5A0_2bb0b0[] __asm__("D_L00_001DB5A0")
     __attribute__((section(".data")));
 void vsub_2bb0b0(void *, void *, void *) __asm__("FUN_001f9a28");
 void vadd_2bb0b0(void *, void *, void *) __asm__("FUN_001f9a10");
-void vscl_2bb0b0(void *, void *, float) __asm__("FUN_001f9bf8");
+void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void cross_2bb0b0(void *, void *, void *) __asm__("FUN_001f9ad8");
 void vmul_2bb0b0(float, void *, void *) __asm__("FUN_001f9a68");
 void xform_2bb0b0(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -241,13 +241,13 @@ void FUN_L00_002bb0b0(void *mv) {
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
     vsub_2bb0b0(&mat[3], &D_L00_00166DC0_2bb0b0, pos);
-    vscl_2bb0b0(&mat[3], &mat[3], 0.3f);
+    fast_vec_normalize(&mat[3], &mat[3], 0.3f);
     vadd_2bb0b0(&mat[3], &mat[3], pos);
     mat[3].f[3] = 1.0f;
     vsub_2bb0b0(&mat[0], &D_L00_00166DC0_2bb0b0, &mat[3]);
-    vscl_2bb0b0(&mat[0], &mat[0], 1.0f);
+    fast_vec_normalize(&mat[0], &mat[0], 1.0f);
     cross_2bb0b0(&mat[1], &mat[0], &D_0013F5E0_2bb0b0);
-    vscl_2bb0b0(&mat[1], &mat[1], -1.0f);
+    fast_vec_normalize(&mat[1], &mat[1], -1.0f);
     cross_2bb0b0(&mat[2], &mat[1], &mat[0]);
     c = D_L00_00161640_2bb0b0;
     quad.color[3] = c;
@@ -982,9 +982,9 @@ void FUN_L00_002bd0a0(u8 *m);
 extern char D_0013F450_2BDAF0[] __asm__("D_0013F350");
 extern char D_0013A5E0_2BDAF0[] __asm__("D_0013CAE0");
 extern char D_0014171B_2BDAF0[] __asm__("D_00141680");
-extern char D_0013D510_2BDAF0[] __asm__("D_0013D408");
+extern char item_unlocked[] __asm__("D_0013D408");
 extern unsigned char D_0013E633_2BDAF0[] __asm__("D_0013E533");
-extern char D_0013E650_2BDAF0[] __asm__("D_0013E550");
+extern char voice_pool[] __asm__("D_0013E550");
 extern char D_L00_001803C0_2BDAF0[] __asm__("D_L00_001802C0");
 extern char D_L00_00166D80_2BDAF0[] __asm__("D_L00_00166C80");
 extern float func_0020D830_2BDAF0(void *) __asm__("FUN_0020c9e0");
@@ -1127,8 +1127,8 @@ void FUN_L00_002bc7e8(Moby *m) {
             D_L00_001616EC = 10000 - func_001FA898_2BDAF0(p->left * 10000.0f / p->total);
         }
         if (p->target != 0 && p->left <= 0.0f) {
-            if (D_0015ED84 == 5 && p->target->oclass == 0x271 && ((Skill_2BDAF0 *)D_0013D510_2BDAF0)->f8 == 0) {
-                ((Skill_2BDAF0 *)D_0013D510_2BDAF0)->f8 = 1;
+            if (D_0015ED84 == 5 && p->target->oclass == 0x271 && ((Skill_2BDAF0 *)item_unlocked)->f8 == 0) {
+                ((Skill_2BDAF0 *)item_unlocked)->f8 = 1;
                 func_0022EE28_2BDAF0(1, 0, 0);
                 func_L00_00264DB8_2BDAF0(0x53D6, -1);
             }
@@ -1182,8 +1182,8 @@ void FUN_L00_002bc7e8(Moby *m) {
             D_L00_001617C0 = -1;
         }
         if (D_L00_001617C8 >= 0) {
-            if (D_L00_001617C8 != -1 && ((Voice_2BDAF0 *)(D_0013E650_2BDAF0 + D_L00_001617C8 * 0x70))->owner == m
-                && ((Voice_2BDAF0 *)(D_0013E650_2BDAF0 + D_L00_001617C8 * 0x70))->on != 0) {
+            if (D_L00_001617C8 != -1 && ((Voice_2BDAF0 *)(voice_pool + D_L00_001617C8 * 0x70))->owner == m
+                && ((Voice_2BDAF0 *)(voice_pool + D_L00_001617C8 * 0x70))->on != 0) {
                 func_L00_0028EBF0_2BDAF0(D_L00_001617C8);
             }
             D_L00_001617C8 = -1;
@@ -1310,8 +1310,8 @@ extern void FUN_001ff500_2bd0a0(f32, void *, void *) __asm__("FUN_001f9bf8");
 extern void FUN_001ff3c0_2bd0a0(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void FUN_0025fc08_2bd0a0(f32, void *, void *, void *) __asm__("FUN_L00_0025fc08");
 extern void FUN_001ff6f8_2bd0a0(void *, void *, void *) __asm__("FUN_001f9d20");
-extern f32 FUN_001ff800_2bd0a0(f32) __asm__("FUN_001f9dc8");
-extern f32 FUN_001ff7e8_2bd0a0(f32) __asm__("FUN_001f9de0");
+extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 FUN_00200240_2bd0a0(s32) __asm__("FUN_001fa6c0");
 extern s32 FUN_00200250_2bd0a0(f32) __asm__("FUN_001fa6d0");
 extern void FUN_001f9598_2bd0a0(void *, void *) __asm__("FUN_001f4600");
@@ -1387,8 +1387,8 @@ void FUN_L00_002bd0a0(u8 *m) {
         FUN_001ff3c0_2bd0a0(&cross, &side, &end);
         size = D_L00_0016172C + (D_L00_00161730 - D_L00_0016172C) * step;
         phase = FUN_L00_0025e310_2bd0a0(D_L00_001617D0_f + D_L00_001616FC_2bd0a0 * FUN_00200240_2bd0a0(i));
-        angle[1] = size * FUN_001ff800_2bd0a0(phase);
-        angle[2] = size * FUN_001ff7e8_2bd0a0(phase);
+        angle[1] = size * fast_cos(phase);
+        angle[2] = size * fast_sin(phase);
         FUN_001ff6f8_2bd0a0(&D_L00_001DC020_2bd0a0[i], angle, &end);
         angle[2] = -angle[2];
         FUN_001ff6f8_2bd0a0(&D_L00_001DC0E0_2bd0a0[i], angle, &end);
@@ -1643,25 +1643,25 @@ void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sz, float s
     t.f[5] = 0;
     t.f[6] = D_L00_0016178C + 1.0f;
     t.f[7] = 1.0f;
-    vsub_2baae0(w140, m, D_L00_00166DC0_2baae0);
-    vsub_2baae0(w150, m + 0x10, m);
-    cross_2baae0(w120, w150, w140);
-    len0 = vlen_2baae0(w120);
+    fast_vec_sub(w140, m, g_debug_camera);
+    fast_vec_sub(w150, m + 0x10, m);
+    fast_vec_cross(w120, w150, w140);
+    len0 = fast_vec_length(w120);
     len0 = len0 != 0.0f ? 1.0f / len0 : len0;
-    vmul_2baae0(D_L00_00161774 * len0, w120, w120);
-    vadd_2baae0(q[0], m, w120);
-    vsub_2baae0(q[1], m, w120);
+    fast_vec_scale(D_L00_00161774 * len0, w120, w120);
+    fast_vec_add(q[0], m, w120);
+    fast_vec_sub(q[1], m, w120);
     i = 1;
     if (i < n - 1) do {
-        vsub_2baae0(w140, v[i], D_L00_00166DC0_2baae0);
-        vsub_2baae0(w150, v[i + 1], v[i]);
-        cross_2baae0(w120, w150, w140);
-        len = vlen_2baae0(w120);
+        fast_vec_sub(w140, v[i], g_debug_camera);
+        fast_vec_sub(w150, v[i + 1], v[i]);
+        fast_vec_cross(w120, w150, w140);
+        len = fast_vec_length(w120);
         if (len != 0)
             len = 1.0f / len;
-        vmul_2baae0(D_L00_00161774 * len, w120, w120);
-        vadd_2baae0(q[2], v[i], w120);
-        vsub_2baae0(q[3], v[i], w120);
+        fast_vec_scale(D_L00_00161774 * len, w120, w120);
+        fast_vec_add(q[2], v[i], w120);
+        fast_vec_sub(q[3], v[i], w120);
         if (i == 1) {
             t.c[1] = D_L00_00161780;
             t.c[0] = D_L00_00161780;
@@ -1679,37 +1679,37 @@ void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sz, float s
     } while (i < n - 1);
     i = 0;
     if (i < n - 1) do {
-        vsub_2baae0(a180, m + i * 16, D_L00_00166DC0_2baae0);
-        vsub_2baae0(b190, m + i * 16 + 16, D_L00_00166DC0_2baae0);
-        l0 = vlen_2baae0(a180);
-        l1 = vlen_2baae0(b190);
+        fast_vec_sub(a180, m + i * 16, g_debug_camera);
+        fast_vec_sub(b190, m + i * 16 + 16, g_debug_camera);
+        l0 = fast_vec_length(a180);
+        l1 = fast_vec_length(b190);
         if (l1 < l0) {
             if (l1 == 0)
                 qcopy(b190, a180);
             else
-                vmul_2baae0(l0 / l1, b190, b190);
+                fast_vec_scale(l0 / l1, b190, b190);
         } else {
             if (l0 == 0)
                 qcopy(a180, b190);
             else
-                vmul_2baae0(l1 / l0, a180, a180);
+                fast_vec_scale(l1 / l0, a180, a180);
         }
-        vadd_2baae0(r160, D_L00_00166DC0_2baae0, a180);
-        vadd_2baae0(r170, D_L00_00166DC0_2baae0, b190);
-        vsub_2baae0(w150, r170, r160);
-        vmul_2baae0(sy, s1B0, w150);
-        vsub_2baae0(r160, r160, s1B0);
-        vadd_2baae0(r170, r170, s1B0);
-        vsub_2baae0(s1A0, D_L00_00166DC0_2baae0, r160);
-        cross_2baae0(w120, s1A0, w150);
-        l2 = vlen_2baae0(w120);
+        fast_vec_add(r160, g_debug_camera, a180);
+        fast_vec_add(r170, g_debug_camera, b190);
+        fast_vec_sub(w150, r170, r160);
+        fast_vec_scale(sy, s1B0, w150);
+        fast_vec_sub(r160, r160, s1B0);
+        fast_vec_add(r170, r170, s1B0);
+        fast_vec_sub(s1A0, g_debug_camera, r160);
+        fast_vec_cross(w120, s1A0, w150);
+        l2 = fast_vec_length(w120);
         if (l2 != 0)
             l2 = 1.0f / l2;
-        vmul_2baae0(sz * l2, w130, w120);
-        vadd_2baae0(q2[0], r160, w130);
-        vsub_2baae0(q2[1], r160, w130);
-        vadd_2baae0(q2[2], r170, w130);
-        vsub_2baae0(q2[3], r170, w130);
+        fast_vec_scale(sz * l2, w130, w120);
+        fast_vec_add(q2[0], r160, w130);
+        fast_vec_sub(q2[1], r160, w130);
+        fast_vec_add(q2[2], r170, w130);
+        fast_vec_sub(q2[3], r170, w130);
         if (i == 0) {
             u.c[1] = color1;
             u.c[0] = color1;
