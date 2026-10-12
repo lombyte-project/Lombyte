@@ -215,48 +215,64 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     subtract_vector_xyz(top_left, top_left, horizontal);
     add_vector_xyz(bottom_left, center, vertical);
     subtract_vector_xyz(top_right, center, horizontal);
-    bottom_right[0] = center[0];
-    bottom_right[1] = center[1];
-    bottom_right[2] = center[2];
-    bottom_right[3] = center[3];
+    *(u128_quad *)bottom_right = *(u128_quad *)center;
 
     tag = (int *)D_L11_001611C0_g;
-    tag[0] = 0x10000007;
-    tag[1] = 0;
-    tag[2] = 0;
-    tag[3] = 0x50000007;
+    ((int *)(*(volatile int *)&D_L11_001611C0_g))[0] = 0x10000007;
+    ((int *)(*(volatile int *)&D_L11_001611C0_g))[1] = 0;
+    ((int *)(*(volatile int *)&D_L11_001611C0_g))[2] = 0;
+    ((int *)(*(volatile int *)&D_L11_001611C0_g))[3] = 0x50000007;
+    tag = (int *)(*(volatile int *)&D_L11_001611C0_g);
     q = (unsigned long long *)(tag + 4);
     D_L11_001611C0_g = (int)q;
     q[0] = 0xB400000000008001ULL;
     q[1] = 0x53535353106ULL;
     q[2] = (unsigned long long)texture;
     q[3] = 0x154;
-    q[4] = ((unsigned long long)(alpha & 0xff) << 24) | ((blue & 0xff) << 16) |
-           ((green & 0xff) << 8) | (red & 0xff);
+    q[4] = (unsigned long long)(red & 0xff) | ((unsigned long long)(green & 0xff) << 8) |
+           ((unsigned long long)(blue & 0xff) << 16) | ((unsigned long long)(alpha & 0xff) << 24);
     q[5] = 0x100010;
+    texture_width <<= 4;
+    texture_height <<= 20;
     sx = ftoi_g(top_left[0] * 16.0f);
     sy = ftoi_g(top_left[1] * 16.0f);
-    q[7] = texture_width << 4;
-    q[6] = (unsigned long long)(sx + screen_extent[4] - 8) |
-           ((unsigned long long)(sy + screen_extent[5] - 8) << 16) |
+    sy += screen_extent[5];
+    sx += screen_extent[4];
+    sy -= 8;
+    sx -= 8;
+    q[7] = texture_width;
+    q[6] = (unsigned long long)(sx) |
+           ((unsigned long long)(sy) << 16) |
            ((unsigned long long)z_and_fog << 32);
     sx = ftoi_g(bottom_left[0] * 16.0f);
     sy = ftoi_g(bottom_left[1] * 16.0f);
-    q[9] = texture_height << 20;
-    q[8] = (unsigned long long)(sx + screen_extent[4] - 8) |
-           ((unsigned long long)(sy + screen_extent[5] - 8) << 16) |
+    sy += screen_extent[5];
+    sx += screen_extent[4];
+    sy -= 8;
+    sx -= 8;
+    q[9] = texture_height;
+    q[8] = (unsigned long long)(sx) |
+           ((unsigned long long)(sy) << 16) |
            ((unsigned long long)z_and_fog << 32);
     sx = ftoi_g(top_right[0] * 16.0f);
     sy = ftoi_g(top_right[1] * 16.0f);
-    q[11] = (texture_height << 20) + (texture_width << 4);
-    q[10] = (unsigned long long)(sx + screen_extent[4] - 8) |
-            ((unsigned long long)(sy + screen_extent[5] - 8) << 16) |
+    sy += screen_extent[5];
+    sx += screen_extent[4];
+    sy -= 8;
+    sx -= 8;
+    q[11] = (texture_height) + (texture_width);
+    q[10] = (unsigned long long)(sx) |
+            ((unsigned long long)(sy) << 16) |
             ((unsigned long long)z_and_fog << 32);
     sx = ftoi_g(bottom_right[0] * 16.0f);
     sy = ftoi_g(bottom_right[1] * 16.0f);
+    sy += screen_extent[5];
+    sx += screen_extent[4];
+    sy -= 8;
+    sx -= 8;
     q[13] = 0;
-    q[12] = (unsigned long long)(sx + screen_extent[4] - 8) |
-            ((unsigned long long)(sy + screen_extent[5] - 8) << 16) |
+    q[12] = (unsigned long long)(sx) |
+            ((unsigned long long)(sy) << 16) |
             ((unsigned long long)z_and_fog << 32);
     D_L11_001611C0_g += 0x70;
 }
