@@ -980,410 +980,326 @@ void FUN_L00_001f4598(void) {
 }
 #endif /* NON_MATCHING */
 /* Pending C: keep the oracle until the placed overlay bytes match. */
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f58e0.s", FUN_L00_001f58e0);
-#else
 #include "types.h"
 
-#include "rnc/rendering/debug/debug_menu.h"
-extern s32 D_L00_0015F5D8;
-extern f32 D_L00_0015F450;
-extern u8 D_L00_0015F446;
-extern f32 D_L00_0015F454;
-extern u8 D_L00_0015F444;
-extern volatile u32 D_L00_001611A0;
-extern u8 D_L00_0015F445;
-extern f32 D_L00_0015F448;
-extern f32 D_L00_0015F44C;
-extern u8 D_0014C050[];
-extern const char D_L00_0015F008[];
-extern const char D_L00_0015F010[];
-extern const char D_L00_0015F020[];
-extern const char D_L00_0015F028[];
-extern const char D_L00_0015F030[];
-extern const char D_L00_0015F040[];
-extern const char D_L00_0015F048[];
-extern const char D_L00_0015F050[];
-extern const char D_L00_0015F058[];
-extern const char D_L00_0015F060[];
-extern const char D_L00_0015F068[];
-extern const char D_L00_0015F070[];
-extern const char D_L00_0015F078[];
-extern const char D_L00_0015F080[];
-extern const char D_L00_0015F088[];
-extern const char D_L00_0015F090[];
-extern const char D_L00_0015F0A0[];
-extern const char D_L00_0015F0A8[];
-extern const char D_L00_0015F0B8[];
-extern const char D_L00_0015F0C0[];
-extern const char D_L00_0015F0C8[];
-extern const char D_L00_0015F0D0[];
-extern const char D_L00_0015F0D8[];
-extern const char D_L00_0015F0E0[];
-extern const char D_L00_0015F0E8[];
-extern const char D_L00_0015F0F0[];
-extern const char D_L00_0015F0F8[];
-extern const char D_L00_0015F100[];
-extern const char D_L00_0015F108[];
-extern const char D_L00_0015F118[];
-extern const char D_L00_0015F128[];
-extern const char D_L00_0015F138[];
-extern const char D_L00_0015F148[];
-extern const char D_L00_0015F150[];
-extern const char D_L00_0015F158[];
-extern const char D_L00_0015F160[];
-extern const char D_L00_0015F168[];
-extern const char D_L00_0015F170[];
-extern const char D_L00_0015F180[];
-extern const char D_L00_0015F190[];
-extern const char D_L00_0015F1A0[];
-extern const char D_L00_0015F1B0[];
-extern const char D_L00_0015F1C0[];
-extern const char D_L00_0015F1C8[];
-extern const char D_L00_0015F1D8[];
-extern const char D_L00_0015F1E8[];
-extern const char D_L00_0015F1F0[];
-extern const char D_L00_0015F200[];
-extern const char D_L00_0015F210[];
-extern const char D_L00_0015F220[];
-extern const char D_L00_0015F228[];
-extern const char D_L00_0015F230[];
-extern const char D_L00_0015F238[];
-extern const char D_L00_0015F240[];
-extern const char D_L00_0015F248[];
-extern const char D_L00_0015F250[];
-extern const char D_L00_0015F258[];
-extern const char D_L00_0015F260[];
-extern const char D_L00_0015F268[];
-extern const char D_L00_0015F270[];
-extern const char D_L00_0015F278[];
-extern const char D_L00_0015F280[];
-extern const char D_L00_0015F288[];
-extern const char D_L00_0015F298[];
-extern const char D_L00_0015F2A8[];
-extern const char D_L00_0015F2B8[];
-extern const char *D_L00_00160C18[];
-extern const char *D_L00_00160C40[];
-extern const char *D_L00_00160CA8[];
-extern const char *D_L00_00160CC0[];
-extern const char *D_L00_00160CE0[];
-extern const char *D_L00_00160CF0[];
-extern const char *D_L00_00160D08[];
-extern const char *D_L00_001C3E28[];
-extern void append_gif_transfer_packet(void) __asm__("FUN_001fb368");
-extern void print_debug_text(s32, s32, s32, const char *) __asm__("FUN_001f0bd0");
-extern void print_debug_text_centered(s32, s32, s32, const char *) __asm__("FUN_001f0c50");
-extern void FUN_L00_001f36f8(void);
-extern s32 FUN_00116248(char *, const char *, ...);
-extern f64 FUN_00120478(f32);
 
-extern s32 D_0013D450;
-extern s32 D_0013D454;
-extern s32 D_0013D45C;
-extern s32 D_0013D464;
-extern s32 D_0013D468;
-extern s32 D_0013D46C;
-extern s32 D_0013D474;
-extern s32 D_0013D478;
-extern s32 D_0013D484;
-extern s32 D_0013D488;
-extern u8 D_0013E529;
-extern u8 D_0013E52A;
-extern u8 D_0013E52B;
-extern u8 D_0013E52F;
-extern u8 D_0013E530;
-extern u8 D_0013E531;
-extern u8 D_0013E533;
-extern u8 D_0013E534;
-extern u8 D_0013E535;
-extern u8 D_0013E539;
+
+/* Draws the debug menu: the mode and toggle rows, the camera, display and occlusion modes, the mission line
+ * (via the table at D_0014171B + 0xAA35), then the weapon and ammo counters. Waits on the flag at D_L00_00161260
+ * before the last section. */
+/* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001F5C60), where it is exact; names translated to the US level program. */
+
+typedef struct {
+ s32 mode, bits, draw_bits, group, item, camera_mode, display_mode, occl_mode;
+ s32 f20, f24, f28, f2C, f30, f34, selection, mission;
+ char pad40[0xB0];
+ s32 fF0, fF4;
+ u8 saved_timer, point_timer;
+} DebugMenu60;
+
+typedef struct {
+ char pad0[0x28];
+ s32 ammo28, ammo2C, unused30, ammo34, unused38, ammo3C, ammo40, ammo44;
+ s32 unused48, ammo4C, ammo50, unused54, unused58, ammo5C, ammo60;
+} AmmoDisplay60;
+
+extern char *D_L00_00160C18[];
+extern char *D_L00_00160C40[];
+extern char *D_L00_00160CA8[];
+extern char *D_L00_00160CC0[];
+extern char *D_L00_00160CE0[];
+extern char *D_L00_00160CF0[];
+extern char *D_L00_00160D08[];
+extern char *D_L00_001C3E28[];
+extern char D_0013D428[];
 extern s32 D_0015ED84;
+extern char D_L00_0015F008[];
+extern char D_L00_0015F010[];
+extern char D_L00_0015F020[];
+extern char D_L00_0015F028[];
+extern char D_L00_0015F030[];
+extern char D_L00_0015F040[];
+extern char D_L00_0015F048[];
+extern char D_L00_0015F050[];
+extern char D_L00_0015F058[];
+extern char D_L00_0015F060[];
+extern char D_L00_0015F068[];
+extern char D_L00_0015F070[];
+extern char D_L00_0015F078[];
+extern char D_L00_0015F080[];
+extern char D_L00_0015F088[];
+extern char D_L00_0015F090[];
+extern char D_L00_0015F0A0[];
+extern char D_L00_0015F0A8[];
+extern char D_L00_0015F0B8[];
+extern char D_L00_0015F0C0[];
+extern char D_L00_0015F0C8[];
+extern char D_L00_0015F0D0[];
+extern char D_L00_0015F0D8[];
+extern char D_L00_0015F0E0[];
+extern char D_L00_0015F0E8[];
+extern char D_L00_0015F0F8[];
+extern char D_L00_0015F100[];
+extern char D_L00_0015F108[];
+extern char D_L00_0015F118[];
+extern char D_L00_0015F128[];
+extern char D_L00_0015F138[];
+extern char D_L00_0015F148[];
+extern char D_L00_0015F150[];
+extern char D_L00_0015F158[];
+extern char D_L00_0015F160[];
+extern char D_L00_0015F168[];
+extern char D_L00_0015F170[];
+extern char D_L00_0015F180[];
+extern char D_L00_0015F190[];
+extern char D_L00_0015F1A0[];
+extern char D_L00_0015F1B0[];
+extern char D_L00_0015F1C0[];
+extern char D_L00_0015F1C8[];
+extern char D_L00_0015F1D8[];
+extern char D_L00_0015F1E8[];
+extern char D_L00_0015F1F0[];
+extern char D_L00_0015F200[];
+extern char D_L00_0015F210[];
+extern char D_L00_0015F220[];
+extern char D_L00_0015F228[];
+extern char D_L00_0015F230[];
+extern char D_L00_0015F238[];
+extern char D_L00_0015F240[];
+extern char D_L00_0015F250[];
+extern char D_L00_0015F258[];
+extern char D_L00_0015F260[];
+extern char D_L00_0015F268[];
+extern char D_L00_0015F270[];
+extern char D_L00_0015F278[];
+extern char D_L00_0015F280[];
+extern char D_L00_0015F288[];
+extern char D_L00_0015F298[];
+extern char D_L00_0015F2A8[];
+extern char D_L00_0015F2B8[];
+extern float D_L00_0015F448;
+extern char D_L00_0016C058_c[] __asm__("D_L00_0016C058");
+extern char D_L00_0015F248[];
+extern float D_L00_0015F44C;
+extern float D_L00_0015F450;
+extern float D_L00_0015F454;
+extern int D_0013E520[];
+extern int fptodp(float) __asm__("FUN_00120478");
+extern int print_debug_text_centered_alt(int,int,int,char*) __asm__("FUN_001f0c50");
+extern s32 D_0015ED98;
+extern char D_L00_0015F0F0[];
+extern s32 D_L00_0015F5D8;
+extern s32 sprintf(char *, const char *, ...);
+extern u8 D_0014C050[];
+extern u8 D_L00_0015F444;
+extern u8 D_L00_0015F445;
+extern u8 D_L00_0015F446;
+extern void FUN_L00_001f36f8(void);
+extern void append_gif_transfer_packet() __asm__("func_001FB368");
+extern volatile s32 D_L00_001611A0;
+void print_debug_text(s32 x, s32 y, s32 color, char *text) __asm__("FUN_001f0bd0");
+extern DebugMenu60 debug_menu60 __asm__("D_L00_0016C058");
+extern double promote_float60(float) __asm__("FUN_00120478");
 
-void draw_debug_menu(void) __asm__("FUN_L00_001f58e0");
+static __inline__ int flag_offset60(int flags) {
+    if (!flags) return 0;
+    return sizeof(char *);
+}
 
-void draw_debug_menu(void) {
-    s32 choice_offset;
-    f32 percent;
-    f64 value;
-    char buffer[16];
+void FUN_L00_001f58e0(void) {
+    char buf[16];
+    int stride;
+    char *fmt;
+    AmmoDisplay60 *ammo;
+    u8 *weapon_order;
+
     append_gif_transfer_packet();
     if (D_L00_0015F5D8 == 0) {
-        print_debug_text_centered(0x100, 0x10, 0x80c0c000, D_L00_0015F008);
-        print_debug_text_centered(0x100, 0x18, 0x80c0c000, D_L00_0015F010);
-        print_debug_text(0xc, 0x2c, 0x8000c000, D_L00_0015F020);
-        print_debug_text(0xc, 0x32, 0x8000c000, D_L00_0015F028);
-        print_debug_text(0x14, 0x40, 0x8000c0c0, D_L00_0015F030);
-        choice_offset = 0;
-        if ((g_debug_menu.update_flags & 1) != 0) {
-            choice_offset = 4;
+        print_debug_text_centered_alt(0x100, 0x10, 0x80C0C000, D_L00_0015F008);
+        print_debug_text_centered_alt(0x100, 0x18, 0x80C0C000, D_L00_0015F010);
+        print_debug_text(0xC, 0x2C, 0x8000C000, D_L00_0015F020);
+        print_debug_text(0xC, 0x32, 0x8000C000, D_L00_0015F028);
+        print_debug_text(0x14, 0x40, 0x8000C0C0, D_L00_0015F030);
+        print_debug_text(0x6C, 0x40, 0x80F0F0F0, *(char **)((char *)D_L00_00160C18 + flag_offset60(debug_menu60.draw_bits & 1)));
+        print_debug_text(0x14, 0x4F, 0x8000C0C0, D_L00_0015F040);
+        print_debug_text(0x6C, 0x4F, 0x80F0F0F0, *(char **)((char *)D_L00_00160C18 + flag_offset60(debug_menu60.draw_bits & 2)));
+        print_debug_text(0x14, 0x5E, 0x8000C0C0, D_L00_0015F048);
+        print_debug_text(0x6C, 0x5E, 0x80F0F0F0, *(char **)((char *)D_L00_00160C18 + flag_offset60(debug_menu60.draw_bits & 4)));
+        print_debug_text(0x14, 0x6D, 0x8000C0C0, D_L00_0015F050);
+        print_debug_text(0x6C, 0x6D, 0x80F0F0F0, *(char **)((char *)D_L00_00160C18 + flag_offset60(debug_menu60.draw_bits & 8)));
+        print_debug_text(0x14, 0x7C, 0x8000C0C0, D_L00_0015F058);
+        print_debug_text(0x6C, 0x7C, 0x80F0F0F0, *(char **)((char *)D_L00_00160C18 + flag_offset60(debug_menu60.draw_bits & 0x10)));
+        if (debug_menu60.group == 0) {
+            print_debug_text(9, (debug_menu60.item * 0xF) + 0x40, 0x800000C0, D_L00_0015F060);
         }
-        print_debug_text(0x6c, 0x40, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        print_debug_text(0x14, 0x4f, 0x8000c0c0, D_L00_0015F040);
-        choice_offset = 0;
-        if ((g_debug_menu.update_flags & 2) != 0) {
-            choice_offset = 4;
-        }
-        print_debug_text(0x6c, 0x4f, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        print_debug_text(0x14, 0x5e, 0x8000c0c0, D_L00_0015F048);
-        choice_offset = 0;
-        if ((g_debug_menu.update_flags & 4) != 0) {
-            choice_offset = 4;
-        }
-        print_debug_text(0x6c, 0x5e, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        print_debug_text(0x14, 0x6d, 0x8000c0c0, D_L00_0015F050);
-        choice_offset = 0;
-        if ((g_debug_menu.update_flags & 8) != 0) {
-            choice_offset = 4;
-        }
-        print_debug_text(0x6c, 0x6d, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        print_debug_text(0x14, 0x7c, 0x8000c0c0, D_L00_0015F058);
-        choice_offset = 0;
-        if ((g_debug_menu.update_flags & 0x10) != 0) {
-            choice_offset = 4;
-        }
-        print_debug_text(0x6c, 0x7c, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        if (g_debug_menu.selected_column == 0) {
-            print_debug_text(9, g_debug_menu.selected_row * 0xf + 0x40, 0x800000c0, D_L00_0015F060);
-        }
-        print_debug_text(0xa8, 0x2c, 0x8000c000, D_L00_0015F068);
-        print_debug_text(0xa8, 0x32, 0x8000c000, D_L00_0015F070);
-        print_debug_text(0xb0, 0x40, 0x8000c0c0, D_L00_0015F078);
-        print_debug_text(0x108, 0x40, 0x80f0f0f0, D_L00_00160C40[g_debug_menu.control_mode]);
-        print_debug_text(0xb0, 0x4f, 0x8000c0c0, D_L00_0015F080);
-        print_debug_text(0x108, 0x4f, 0x80f0f0f0, D_L00_001C3E28[g_debug_menu.profiler_mode]);
-        print_debug_text(0xb0, 0x5e, 0x8000c0c0, D_L00_0015F088);
-        print_debug_text(0x108, 0x5e, 0x80f0f0f0, D_L00_00160D08[g_debug_menu.occlusion_mode]);
-        print_debug_text(0xb0, 0x6d, 0x8000c0c0, D_L00_0015F090);
-        choice_offset = 4;
-        if (g_debug_menu.bookmark_enabled != 0) {
-            choice_offset = 0;
-        }
-        print_debug_text(0x108, 0x6d, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        print_debug_text(0xb0, 0x7c, 0x8000c0c0, D_L00_0015F0A0);
-        print_debug_text(
-            0x108, 0x7c, 0x80f0f0f0,
-            *(const char **)((const u8 *)D_L00_00160C18 + g_debug_menu.invincibility_enabled * 4));
-        print_debug_text(0xb0, 0x8b, 0x8000c0c0, D_L00_0015F0A8);
-        print_debug_text(0x108, 0x8b, 0x80f0f0f0,
-                         D_L00_00160CA8[g_debug_menu.draw_distance_override]);
-        print_debug_text(0xb0, 0x9a, 0x8000c0c0, D_L00_0015F0B8);
-        print_debug_text(0x108, 0x9a, 0x80f0f0f0, D_L00_00160CC0[g_debug_menu.collision_mode]);
-        print_debug_text(0xb0, 0xa9, 0x8000c0c0, D_L00_0015F0C0);
-        print_debug_text(0x108, 0xa9, 0x80f0f0f0, D_L00_00160CE0[g_debug_menu.television_mode]);
-        print_debug_text(0xb0, 0xb8, 0x8000c0c0, D_L00_0015F0C8);
-        print_debug_text(0x108, 0xb8, 0x80f0f0f0, D_L00_00160CF0[g_debug_menu.screen_mode]);
-        print_debug_text(0xb0, 199, 0x8000c0c0, D_L00_0015F0D0);
-        if (g_debug_menu.scene_index < 0) {
-            print_debug_text(0x108, 199, 0x80f0f0f0, D_L00_0015F0E0);
+        print_debug_text(0xA8, 0x2C, 0x8000C000, D_L00_0015F068);
+        print_debug_text(0xA8, 0x32, 0x8000C000, D_L00_0015F070);
+        print_debug_text(0xB0, 0x40, 0x8000C0C0, D_L00_0015F078);
+        print_debug_text(0x108, 0x40, 0x80F0F0F0, D_L00_00160C40[debug_menu60.camera_mode]);
+        print_debug_text(0xB0, 0x4F, 0x8000C0C0, D_L00_0015F080);
+        print_debug_text(0x108, 0x4F, 0x80F0F0F0, D_L00_001C3E28[debug_menu60.display_mode]);
+        print_debug_text(0xB0, 0x5E, 0x8000C0C0, D_L00_0015F088);
+        print_debug_text(0x108, 0x5E, 0x80F0F0F0, D_L00_00160D08[debug_menu60.occl_mode]);
+        print_debug_text(0xB0, 0x6D, 0x8000C0C0, D_L00_0015F090);
+        print_debug_text(0x108, 0x6D, 0x80F0F0F0, D_L00_00160C18[(debug_menu60.f20 != 0) ? 0 : 1]);
+        print_debug_text(0xB0, 0x7C, 0x8000C0C0, D_L00_0015F0A0);
+        print_debug_text(0x108, 0x7C, 0x80F0F0F0, D_L00_00160C18[debug_menu60.f24]);
+        print_debug_text(0xB0, 0x8B, 0x8000C0C0, D_L00_0015F0A8);
+        print_debug_text(0x108, 0x8B, 0x80F0F0F0, D_L00_00160CA8[debug_menu60.f28]);
+        print_debug_text(0xB0, 0x9A, 0x8000C0C0, D_L00_0015F0B8);
+        print_debug_text(0x108, 0x9A, 0x80F0F0F0, D_L00_00160CC0[debug_menu60.f2C]);
+        print_debug_text(0xB0, 0xA9, 0x8000C0C0, D_L00_0015F0C0);
+        print_debug_text(0x108, 0xA9, 0x80F0F0F0, D_L00_00160CE0[debug_menu60.f30]);
+        print_debug_text(0xB0, 0xB8, 0x8000C0C0, D_L00_0015F0C8);
+        print_debug_text(0x108, 0xB8, 0x80F0F0F0, D_L00_00160CF0[debug_menu60.f34]);
+        print_debug_text(0xB0, 0xC7, 0x8000C0C0, D_L00_0015F0D0);
+        if (debug_menu60.selection >= 0) {
+            sprintf(buf, D_L00_0015F0D8, debug_menu60.selection);
+            print_debug_text(0x108, 0xC7, 0x80F0F0F0, buf);
         } else {
-            FUN_00116248(buffer, D_L00_0015F0D8);
-            print_debug_text(0x108, 199, 0x80f0f0f0, buffer);
+            print_debug_text(0x108, 0xC7, 0x80F0F0F0, D_L00_0015F0E0);
         }
-        print_debug_text(0xb0, 0xd6, 0x8000c0c0, D_L00_0015F0E8);
-        FUN_00116248(buffer, D_L00_0015F0F0, g_debug_menu.segment_index,
-                     D_0014C050[g_debug_menu.segment_index + D_0015ED84 * 0x10]);
-        print_debug_text(0x108, 0xd6, 0x80f0f0f0, buffer);
-        if (g_debug_menu.selected_column == 1) {
-            print_debug_text(0xa5, g_debug_menu.selected_row * 0xf + 0x40, 0x800000c0,
-                             D_L00_0015F060);
+        stride = 16;
+        print_debug_text(0xB0, 0xD6, 0x8000C0C0, D_L00_0015F0E8);
+        {
+            int mission = debug_menu60.mission;
+            sprintf(buf, D_L00_0015F0F0, mission, (D_0014C050)[mission + D_0015ED84 * stride]);
         }
-        print_debug_text(0x158, 0x2c, 0x8000c000, D_L00_0015F0F8);
-        print_debug_text(0x158, 0x32, 0x8000c000, D_L00_0015F070);
-        print_debug_text(0x160, 0x40, 0x8000c0c0, D_L00_0015F100);
-        choice_offset = 0;
-        if ((g_debug_menu.draw_flags & 1) != 0) {
-            choice_offset = 4;
+        print_debug_text(0x108, 0xD6, 0x80F0F0F0, buf);
+        if (debug_menu60.group == 1) {
+            print_debug_text(0xA5, (debug_menu60.item * 0xF) + 0x40, 0x800000C0, D_L00_0015F060);
         }
-        print_debug_text(0x1cc, 0x40, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        print_debug_text(0x160, 0x4f, 0x8000c0c0, D_L00_0015F108);
-        choice_offset = 0;
-        if ((g_debug_menu.draw_flags & 2) != 0) {
-            choice_offset = 4;
+        print_debug_text(0x158, 0x2C, 0x8000C000, D_L00_0015F0F8);
+        print_debug_text(0x158, 0x32, 0x8000C000, D_L00_0015F070);
+        print_debug_text(0x160, 0x40, 0x8000C0C0, D_L00_0015F100);
+        print_debug_text(0x1CC, 0x40, 0x80F0F0F0, *(char **)((char *)D_L00_00160C18 + flag_offset60(debug_menu60.bits & 1)));
+        print_debug_text(0x160, 0x4F, 0x8000C0C0, D_L00_0015F108);
+        print_debug_text(0x1CC, 0x4F, 0x80F0F0F0, *(char **)((char *)D_L00_00160C18 + flag_offset60(debug_menu60.bits & 2)));
+        print_debug_text(0x160, 0x5E, 0x8000C0C0, D_L00_0015F118);
+        print_debug_text(0x1CC, 0x5E, 0x80F0F0F0, *(char **)((char *)D_L00_00160C18 + flag_offset60(debug_menu60.bits & 4)));
+        print_debug_text(0x160, 0x6D, 0x8000C0C0, D_L00_0015F128);
+        print_debug_text(0x1CC, 0x6D, 0x80F0F0F0, *(char **)((char *)D_L00_00160C18 + flag_offset60(debug_menu60.bits & 8)));
+        print_debug_text(0x160, 0x7C, 0x8000C0C0, D_L00_0015F138);
+        print_debug_text(0x1CC, 0x7C, 0x80F0F0F0, *(char **)((char *)D_L00_00160C18 + flag_offset60(debug_menu60.bits & 0x10)));
+        print_debug_text(0x160, 0x8B, 0x8000C0C0, D_L00_0015F148);
+        print_debug_text(0x1CC, 0x8B, 0x80F0F0F0, *(char **)((char *)D_L00_00160C18 + flag_offset60(debug_menu60.bits & 0x20)));
+        print_debug_text(0x160, 0x9A, 0x8000C0C0, D_L00_0015F150);
+        print_debug_text(0x1CC, 0x9A, 0x80F0F0F0, *(char **)((char *)D_L00_00160C18 + flag_offset60(debug_menu60.bits & 0x40)));
+        print_debug_text(0x160, 0xA9, 0x8000C0C0, D_L00_0015F158);
+        print_debug_text(0x1CC, 0xA9, 0x80F0F0F0, *(char **)((char *)D_L00_00160C18 + flag_offset60(debug_menu60.bits & 0x80)));
+        print_debug_text(0x160, 0xB8, 0x8000C0C0, D_L00_0015F160);
+        print_debug_text(0x1CC, 0xB8, 0x80F0F0F0, *(char **)((char *)D_L00_00160C18 + flag_offset60(debug_menu60.bits & 0x100)));
+        if (debug_menu60.group == 2) {
+            print_debug_text(0x155, (debug_menu60.item * 0xF) + 0x3E, 0x800000C0, D_L00_0015F060);
         }
-        print_debug_text(0x1cc, 0x4f, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        print_debug_text(0x160, 0x5e, 0x8000c0c0, D_L00_0015F118);
-        choice_offset = 0;
-        if ((g_debug_menu.draw_flags & 4) != 0) {
-            choice_offset = 4;
+        print_debug_text(0xC, 0xA6, 0x8000C000, D_L00_0015F168);
+        print_debug_text(0xC, 0xAC, 0x8000C000, D_L00_0015F070);
+        if (debug_menu60.group == 3) {
+            print_debug_text(9, (debug_menu60.item * 0xF) + 0xB8, 0x800000C0, D_L00_0015F060);
         }
-        print_debug_text(0x1cc, 0x5e, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        print_debug_text(0x160, 0x6d, 0x8000c0c0, D_L00_0015F128);
-        choice_offset = 0;
-        if ((g_debug_menu.draw_flags & 8) != 0) {
-            choice_offset = 4;
+        print_debug_text(0x14, 0xBA, 0x8000C0C0, D_L00_0015F170);
+        weapon_order = (u8 *)D_0013E520;
+        sprintf(buf, D_L00_0015F0D8, (s32) weapon_order[0x9]);
+        print_debug_text(0x7A, 0xBA, 0x80406080, buf);
+        print_debug_text(0x14, 0xC9, 0x8000C0C0, D_L00_0015F180);
+        sprintf(buf, D_L00_0015F0D8, (s32) weapon_order[0x15]);
+        print_debug_text(0x7A, 0xC9, 0x80406080, buf);
+        print_debug_text(0x14, 0xD8, 0x8000C0C0, D_L00_0015F190);
+        sprintf(buf, D_L00_0015F0D8, (s32) weapon_order[0x19]);
+        print_debug_text(0x7A, 0xD8, 0x80406080, buf);
+        print_debug_text(0x14, 0xE7, 0x8000C0C0, D_L00_0015F1A0);
+        ammo = (AmmoDisplay60 *)(D_0013D428);
+        sprintf(buf, D_L00_0015F0D8, ammo->ammo5C);
+        print_debug_text(0x8C, 0xE7, 0x80F0F0F0, buf);
+        print_debug_text(0x14, 0xF6, 0x8000C0C0, D_L00_0015F1B0);
+        sprintf(buf, D_L00_0015F0D8, ammo->ammo60);
+        print_debug_text(0x8C, 0xF6, 0x80F0F0F0, buf);
+        print_debug_text(0x14, 0x105, 0x8000C0C0, D_L00_0015F1C0);
+        sprintf(buf, D_L00_0015F0D8, ammo->ammo28);
+        print_debug_text(0x8C, 0x105, 0x80F0F0F0, buf);
+        sprintf(buf, D_L00_0015F0D8, (s32) weapon_order[0xA]);
+        print_debug_text(0x7A, 0x105, 0x80406080, buf);
+        print_debug_text(0x14, 0x114, 0x8000C0C0, D_L00_0015F1C8);
+        sprintf(buf, D_L00_0015F0D8, ammo->ammo2C);
+        print_debug_text(0x8C, 0x114, 0x80F0F0F0, buf);
+        sprintf(buf, D_L00_0015F0D8, (s32) weapon_order[0xB]);
+        print_debug_text(0x7A, 0x114, 0x80406080, buf);
+        print_debug_text(0x14, 0x123, 0x8000C0C0, D_L00_0015F1D8);
+        sprintf(buf, D_L00_0015F0D8, ammo->ammo34);
+        print_debug_text(0x8C, 0x123, 0x80F0F0F0, buf);
+        print_debug_text(0x14, 0x132, 0x8000C0C0, D_L00_0015F1E8);
+        sprintf(buf, D_L00_0015F0D8, ammo->ammo50);
+        print_debug_text(0x8C, 0x132, 0x80F0F0F0, buf);
+        sprintf(buf, D_L00_0015F0D8, (s32) weapon_order[0x14]);
+        print_debug_text(0x7A, 0x132, 0x80406080, buf);
+        print_debug_text(0x14, 0x141, 0x8000C0C0, D_L00_0015F1F0);
+        sprintf(buf, D_L00_0015F0D8, ammo->ammo40);
+        print_debug_text(0x8C, 0x141, 0x80F0F0F0, buf);
+        sprintf(buf, D_L00_0015F0D8, (s32) weapon_order[0x10]);
+        print_debug_text(0x7A, 0x141, 0x80406080, buf);
+        print_debug_text(0x14, 0x150, 0x8000C0C0, D_L00_0015F200);
+        sprintf(buf, D_L00_0015F0D8, ammo->ammo4C);
+        print_debug_text(0x8C, 0x150, 0x80F0F0F0, buf);
+        sprintf(buf, D_L00_0015F0D8, (s32) weapon_order[0x13]);
+        print_debug_text(0x7A, 0x150, 0x80406080, buf);
+        print_debug_text(0x14, 0x15F, 0x8000C0C0, D_L00_0015F210);
+        sprintf(buf, fmt = D_L00_0015F0D8, ammo->ammo44);
+        print_debug_text(0x8C, 0x15F, 0x80F0F0F0, buf);
+        sprintf(buf, fmt, (s32) weapon_order[0x11]);
+        print_debug_text(0x7A, 0x15F, 0x80406080, buf);
+        print_debug_text(0x14, 0x16E, 0x8000C0C0, D_L00_0015F220);
+        sprintf(buf, fmt, ammo->ammo3C);
+        print_debug_text(0x8C, 0x16E, 0x80F0F0F0, buf);
+        sprintf(buf, fmt, (s32) weapon_order[0xF]);
+        print_debug_text(0x7A, 0x16E, 0x80406080, buf);
+        print_debug_text(0x14, 0x17D, 0x8000C0C0, D_L00_0015F228);
+        sprintf(buf, fmt, D_0015ED98);
+        print_debug_text(0x8C, 0x17D, 0x80F0F0F0, buf);
+        print_debug_text(0xBC, 0x100, 0x8000C000, D_L00_0015F230);
+        print_debug_text(0xBC, 0x106, 0x8000C000, D_L00_0015F238);
+        if (debug_menu60.group == 4) {
+            print_debug_text(0xB9, (debug_menu60.item * 0xF) + 0x112, 0x800000C0, D_L00_0015F060);
         }
-        print_debug_text(0x1cc, 0x6d, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        print_debug_text(0x160, 0x7c, 0x8000c0c0, D_L00_0015F138);
-        choice_offset = 0;
-        if ((g_debug_menu.draw_flags & 0x10) != 0) {
-            choice_offset = 4;
+        print_debug_text(0xC4, 0x114, 0x8000C0C0, D_L00_0015F240);
+        sprintf(buf, D_L00_0015F248, promote_float60(D_L00_0015F448 * 0.0009765625f));
+        print_debug_text(0x11C, 0x114, 0x80F0F0F0, buf);
+        print_debug_text(0xC4, 0x123, 0x8000C0C0, D_L00_0015F250);
+        sprintf(buf, D_L00_0015F248, promote_float60(100.0f - (D_L00_0015F450 / 2.55f)));
+        print_debug_text(0x11C, 0x123, 0x80F0F0F0, buf);
+        print_debug_text(0xC4, 0x132, 0x8000C0C0, D_L00_0015F258);
+        sprintf(buf, D_L00_0015F248, promote_float60(D_L00_0015F44C * 0.0009765625f));
+        print_debug_text(0x11C, 0x132, 0x80F0F0F0, buf);
+        print_debug_text(0xC4, 0x141, 0x8000C0C0, D_L00_0015F260);
+        sprintf(buf, D_L00_0015F248, promote_float60(100.0f - (D_L00_0015F454 / 2.55f)));
+        print_debug_text(0x11C, 0x141, 0x80F0F0F0, buf);
+        print_debug_text(0xC4, 0x150, 0x8000C0C0, D_L00_0015F268);
+        sprintf(buf, fmt, (s32) D_L00_0015F444);
+        print_debug_text(0x11C, 0x150, 0x80F0F0F0, buf);
+        print_debug_text(0xC4, 0x15F, 0x8000C0C0, D_L00_0015F270);
+        sprintf(buf, fmt, (s32) D_L00_0015F445);
+        print_debug_text(0x11C, 0x15F, 0x80F0F0F0, buf);
+        print_debug_text(0xC4, 0x16E, 0x8000C0C0, D_L00_0015F278);
+        sprintf(buf, fmt, (s32) D_L00_0015F446);
+        print_debug_text(0x11C, 0x16E, 0x80F0F0F0, buf);
+        print_debug_text(0x160, 0x100, 0x8000C000, D_L00_0015F280);
+        print_debug_text(0x160, 0x106, 0x8000C000, D_L00_0015F070);
+        if (debug_menu60.group == 5) {
+            print_debug_text(0x15D, (debug_menu60.item * 0xF) + 0x112, 0x800000C0, D_L00_0015F060);
         }
-        print_debug_text(0x1cc, 0x7c, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        print_debug_text(0x160, 0x8b, 0x8000c0c0, D_L00_0015F148);
-        choice_offset = 0;
-        if ((g_debug_menu.draw_flags & 0x20) != 0) {
-            choice_offset = 4;
-        }
-        print_debug_text(0x1cc, 0x8b, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        print_debug_text(0x160, 0x9a, 0x8000c0c0, D_L00_0015F150);
-        choice_offset = 0;
-        if ((g_debug_menu.draw_flags & 0x40) != 0) {
-            choice_offset = 4;
-        }
-        print_debug_text(0x1cc, 0x9a, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        print_debug_text(0x160, 0xa9, 0x8000c0c0, D_L00_0015F158);
-        choice_offset = 0;
-        if ((g_debug_menu.draw_flags & 0x80) != 0) {
-            choice_offset = 4;
-        }
-        print_debug_text(0x1cc, 0xa9, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        print_debug_text(0x160, 0xb8, 0x8000c0c0, D_L00_0015F160);
-        choice_offset = 0;
-        if ((g_debug_menu.draw_flags & 0x100) != 0) {
-            choice_offset = 4;
-        }
-        print_debug_text(0x1cc, 0xb8, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        if (g_debug_menu.selected_column == 2) {
-            print_debug_text(0x155, g_debug_menu.selected_row * 0xf + 0x3e, 0x800000c0,
-                             D_L00_0015F060);
-        }
-        print_debug_text(0xc, 0xa6, 0x8000c000, D_L00_0015F168);
-        print_debug_text(0xc, 0xac, 0x8000c000, D_L00_0015F070);
-        if (g_debug_menu.selected_column == 3) {
-            print_debug_text(9, g_debug_menu.selected_row * 0xf + 0xb8, 0x800000c0, D_L00_0015F060);
-        }
-        print_debug_text(0x14, 0xba, 0x8000c0c0, D_L00_0015F170);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013E529);
-        print_debug_text(0x7a, 0xba, 0x80406080, buffer);
-        print_debug_text(0x14, 0xc9, 0x8000c0c0, D_L00_0015F180);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013E535);
-        print_debug_text(0x7a, 0xc9, 0x80406080, buffer);
-        print_debug_text(0x14, 0xd8, 0x8000c0c0, D_L00_0015F190);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013E539);
-        print_debug_text(0x7a, 0xd8, 0x80406080, buffer);
-        print_debug_text(0x14, 0xe7, 0x8000c0c0, D_L00_0015F1A0);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013D484);
-        print_debug_text(0x8c, 0xe7, 0x80f0f0f0, buffer);
-        print_debug_text(0x14, 0xf6, 0x8000c0c0, D_L00_0015F1B0);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013D488);
-        print_debug_text(0x8c, 0xf6, 0x80f0f0f0, buffer);
-        print_debug_text(0x14, 0x105, 0x8000c0c0, D_L00_0015F1C0);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013D450);
-        print_debug_text(0x8c, 0x105, 0x80f0f0f0, buffer);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013E52A);
-        print_debug_text(0x7a, 0x105, 0x80406080, buffer);
-        print_debug_text(0x14, 0x114, 0x8000c0c0, D_L00_0015F1C8);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013D454);
-        print_debug_text(0x8c, 0x114, 0x80f0f0f0, buffer);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013E52B);
-        print_debug_text(0x7a, 0x114, 0x80406080, buffer);
-        print_debug_text(0x14, 0x123, 0x8000c0c0, D_L00_0015F1D8);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013D45C);
-        print_debug_text(0x8c, 0x123, 0x80f0f0f0, buffer);
-        print_debug_text(0x14, 0x132, 0x8000c0c0, D_L00_0015F1E8);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013D478);
-        print_debug_text(0x8c, 0x132, 0x80f0f0f0, buffer);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013E534);
-        print_debug_text(0x7a, 0x132, 0x80406080, buffer);
-        print_debug_text(0x14, 0x141, 0x8000c0c0, D_L00_0015F1F0);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013D468);
-        print_debug_text(0x8c, 0x141, 0x80f0f0f0, buffer);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013E530);
-        print_debug_text(0x7a, 0x141, 0x80406080, buffer);
-        print_debug_text(0x14, 0x150, 0x8000c0c0, D_L00_0015F200);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013D474);
-        print_debug_text(0x8c, 0x150, 0x80f0f0f0, buffer);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013E533);
-        print_debug_text(0x7a, 0x150, 0x80406080, buffer);
-        print_debug_text(0x14, 0x15f, 0x8000c0c0, D_L00_0015F210);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013D46C);
-        print_debug_text(0x8c, 0x15f, 0x80f0f0f0, buffer);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013E531);
-        print_debug_text(0x7a, 0x15f, 0x80406080, buffer);
-        print_debug_text(0x14, 0x16e, 0x8000c0c0, D_L00_0015F220);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013D464);
-        print_debug_text(0x8c, 0x16e, 0x80f0f0f0, buffer);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_0013E52F);
-        print_debug_text(0x7a, 0x16e, 0x80406080, buffer);
-        print_debug_text(0x14, 0x17d, 0x8000c0c0, D_L00_0015F228);
-        FUN_00116248(buffer, D_L00_0015F0D8, current_bolt_count);
-        print_debug_text(0x8c, 0x17d, 0x80f0f0f0, buffer);
-        print_debug_text(0xbc, 0x100, 0x8000c000, D_L00_0015F230);
-        print_debug_text(0xbc, 0x106, 0x8000c000, D_L00_0015F238);
-        if (g_debug_menu.selected_column == 4) {
-            print_debug_text(0xb9, g_debug_menu.selected_row * 0xf + 0x112, 0x800000c0,
-                             D_L00_0015F060);
-        }
-        print_debug_text(0xc4, 0x114, 0x8000c0c0, D_L00_0015F240);
-        percent = 100.0f;
-        value = FUN_00120478(D_L00_0015F448 * 0.0009765625f);
-        FUN_00116248(buffer, D_L00_0015F248, value);
-        print_debug_text(0x11c, 0x114, 0x80f0f0f0, buffer);
-        print_debug_text(0xc4, 0x123, 0x8000c0c0, D_L00_0015F250);
-        value = FUN_00120478(percent - D_L00_0015F450 / 2.55f);
-        FUN_00116248(buffer, D_L00_0015F248, value);
-        print_debug_text(0x11c, 0x123, 0x80f0f0f0, buffer);
-        print_debug_text(0xc4, 0x132, 0x8000c0c0, D_L00_0015F258);
-        value = FUN_00120478(D_L00_0015F44C * 0.0009765625f);
-        FUN_00116248(buffer, D_L00_0015F248, value);
-        print_debug_text(0x11c, 0x132, 0x80f0f0f0, buffer);
-        print_debug_text(0xc4, 0x141, 0x8000c0c0, D_L00_0015F260);
-        value = FUN_00120478(percent - D_L00_0015F454 / 2.55f);
-        FUN_00116248(buffer, D_L00_0015F248, value);
-        print_debug_text(0x11c, 0x141, 0x80f0f0f0, buffer);
-        print_debug_text(0xc4, 0x150, 0x8000c0c0, D_L00_0015F268);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_L00_0015F444);
-        print_debug_text(0x11c, 0x150, 0x80f0f0f0, buffer);
-        print_debug_text(0xc4, 0x15f, 0x8000c0c0, D_L00_0015F270);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_L00_0015F445);
-        print_debug_text(0x11c, 0x15f, 0x80f0f0f0, buffer);
-        print_debug_text(0xc4, 0x16e, 0x8000c0c0, D_L00_0015F278);
-        FUN_00116248(buffer, D_L00_0015F0D8, D_L00_0015F446);
-        print_debug_text(0x11c, 0x16e, 0x80f0f0f0, buffer);
-        print_debug_text(0x160, 0x100, 0x8000c000, D_L00_0015F280);
-        print_debug_text(0x160, 0x106, 0x8000c000, D_L00_0015F070);
-        if (g_debug_menu.selected_column == 5) {
-            print_debug_text(0x15d, g_debug_menu.selected_row * 0xf + 0x112, 0x800000c0,
-                             D_L00_0015F060);
-        }
-        print_debug_text(0x168, 0x114, 0x8000c0c0, D_L00_0015F288);
-        choice_offset = 4;
-        if (g_debug_menu.battle_camera_enabled != 0) {
-            choice_offset = 0;
-        }
-        print_debug_text(0x1ca, 0x114, 0x80f0f0f0,
-                         *(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-        print_debug_text(0x168, 0x123, 0x8000c0c0, D_L00_0015F298);
-        print_debug_text(
-            0x1ca, 0x123, 0x80f0f0f0,
-            *(const char **)((const u8 *)D_L00_00160C18 + g_debug_menu.actuator_enabled * 4));
-        print_debug_text(0x168, 0x132, 0x8000c0c0, D_L00_0015F2A8);
-        buffer[1] = 0;
-        buffer[0] = g_debug_menu.sample_capture_status;
-        print_debug_text(0x1ca, 0x132, 0x80f0f0f0, buffer);
-        print_debug_text(0x168, 0x141, 0x8000c0c0, D_L00_0015F2B8);
-        buffer[1] = 0;
-        buffer[0] = g_debug_menu.start_capture_status;
-        print_debug_text(0x1ca, 0x141, 0x80f0f0f0, buffer);
+        print_debug_text(0x168, 0x114, 0x8000C0C0, D_L00_0015F288);
+        print_debug_text(0x1CA, 0x114, 0x80F0F0F0, D_L00_00160C18[(debug_menu60.fF0 != 0) ? 0 : 1]);
+        print_debug_text(0x168, 0x123, 0x8000C0C0, D_L00_0015F298);
+        print_debug_text(0x1CA, 0x123, 0x80F0F0F0, D_L00_00160C18[debug_menu60.fF4]);
+        print_debug_text(0x168, 0x132, 0x8000C0C0, D_L00_0015F2A8);
+        buf[1] = 0;
+        buf[0] = debug_menu60.point_timer;
+        print_debug_text(0x1CA, 0x132, 0x80F0F0F0, buf);
+        print_debug_text(0x168, 0x141, 0x8000C0C0, D_L00_0015F2B8);
+        buf[1] = 0;
+        buf[0] = debug_menu60.saved_timer;
+        print_debug_text(0x1CA, 0x141, 0x80F0F0F0, buf);
         FUN_L00_001f36f8();
-        do {
-        } while ((D_L00_001611A0 & 1) != 0);
+        while (D_L00_001611A0 & 1) {}
     }
-    return;
 }
-#endif /* NON_MATCHING */
+
