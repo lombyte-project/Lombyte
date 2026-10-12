@@ -76,10 +76,10 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00285008.s", FUN_L00_00285008);
 extern char D_L00_001BA5D0[] __attribute__((section(".data")));
 extern u8 *D_L00_0015FFD8;
 extern u8 *D_L00_0015FFDC;
-extern unsigned short D_00151708;
+extern unsigned short D_00151708 __attribute__((section(".data")));
 extern void FUN_001f97e8(void *, int, int);
 extern void FUN_001f97b0(void);
-extern void FUN_L00_00210a08(s32, s32);
+extern void FUN_L00_00210a08(s32, s32, void *);
 extern void FUN_L00_00250df8(void *);
 extern void FUN_001fa030(void *, void *);
 extern void init_camera_system(void) __asm__("FUN_L00_001ed280");
@@ -99,36 +99,44 @@ void FUN_L00_00285008(void) {
     FUN_001f9838((int)D_L00_001BA5D0, s, 0xC60);
     qcopy(&hero.motion.pos, s + 0x10);
     qcopy(&hero.motion.rot, s + 0x20);
-    p = &hero;
-    *(int *)((char *)p->moby + 0x38) = *(int *)(s + 0x30);
-    *(int *)((char *)p->moby + 0x3C) = *(int *)(s + 0x34);
-    *(int *)((char *)p->moby + 0x80) = *(int *)(s + 0x38);
+    *(int *)((char *)hero.moby + 0x38) = *(int *)(s + 0x30);
+    *(int *)((char *)hero.moby + 0x3C) = *(int *)(s + 0x34);
+    *(int *)((char *)hero.moby + 0x80) = *(int *)(s + 0x38);
     D_0013E550[0x6B] |= 7;
-    D_00151708 = *(unsigned short *)(s + 0xC54);
     *(int *)(D_0013E550 + 0x64) = *(int *)(s + 0x3C);
-    D_0013E550[0x68] = s[0x40];
     D_0013E550[0x69] = s[0x41];
+    D_0013E550[0x68] = s[0x40];
     D_0013E550[0x6A] = s[0x42];
+    D_00151708 = *(unsigned short *)(s + 0xC54);
     if (*(int *)(s + 0x44) != 0 && *(int *)(s + 0x44) != 3) {
         id = 0;
         if (*(int *)(s + 0x44) == 1)
-            id = 0x57;
-        else if (*(int *)(s + 0x44) == 2)
+            goto mode_one;
+        if (*(int *)(s + 0x44) == 2) {
             id = 0x1A3;
-        else
-            FUN_001f97b0();
+            goto scan;
+        }
+        goto invalid_mode;
+mode_one:
+        id = 0x57;
+        goto scan;
+invalid_mode:
+        FUN_001f97b0();
+scan:
         for (i = 0; ; i++) {
             m = D_L00_0015FFD8 + i * 0x100;
             if (m >= D_L00_0015FFDC)
                 break;
             if (*(short *)(m + 0xA6) == id) {
-                FUN_L00_00210a08(*(int *)(D_L00_001BB230 + 0x44), *(int *)(s + 0x4C));
+                char *s = D_L00_001BB230;
+                FUN_L00_00210a08(*(int *)(s + 0x44), *(int *)(s + 0x4C), m);
                 break;
             }
         }
     }
+    p = &hero;
     FUN_L00_00250df8(p->moby);
-    FUN_001fa030((char *)p->moby + 0xC0, &hero.motion.rot);
+    FUN_001fa030((char *)hero.moby + 0xC0, &hero.motion.rot);
     init_camera_system();
     FUN_L00_002852c0();
 }
