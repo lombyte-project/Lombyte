@@ -40,6 +40,7 @@ void FUN_L00_002648e0(void) {
     s32 scaled_ticks;
     s32 count;
     s32 *entry;
+    s16 profile_label;
 
     if ((D_0013CAE0 & 0x800000007LL) != 0x800000007LL) {
         FUN_L00_00264848();
@@ -52,16 +53,16 @@ void FUN_L00_002648e0(void) {
     *(volatile u32 *)0x10000010 = 0x81;
     FUN_L00_001ff040((void *)0x11004000, 0, 0x700);
 
-    moby = FUN_L00_00250768();
-    D_L00_0015FFE4 = moby;
+    moby = D_L00_0015FFE4 = FUN_L00_00250768();
     while (moby != 0) {
+        s32 current_ticks;
         if ((s8)moby->state >= 0) {
             *(volatile u32 *)0x10000000 = 0;
             if (!(moby->flags & 0x40)) {
                 FUN_L00_00250480(moby);
             }
             if (moby->update != 0) {
-                moby->update(moby);
+                ((volatile struct Moby *)moby)->update(moby);
             }
             if (!(((volatile struct Moby *)moby)->flags & 4)) {
                 FUN_L00_00250df8(moby);
@@ -74,12 +75,19 @@ void FUN_L00_002648e0(void) {
         moby = moby->next;
     }
 
-    total_ticks = 0.0f;
-    profile = (MobyProfile *)0x11004000;
-    for (i = 0xdf; i-- >= 0; profile++) {
-        if (profile->count != 0) {
-            total_ticks += (f32)profile->ticks;
-        }
+    /* The predecrement scan includes all 224 profile entries. */
+    {
+        s32 i;
+        total_ticks = 0.0f;
+        profile = (MobyProfile *)0x11004000;
+        i = 0xdf;
+        do {
+            i--;
+            if (profile->count != 0) {
+                total_ticks += (f32)profile->ticks;
+            }
+            profile++;
+        } while (i >= 0);
     }
 
     current_ticks = 100000000;
@@ -91,9 +99,10 @@ void FUN_L00_002648e0(void) {
                 if (profile->ticks == current_ticks) {
                     count = profile->count;
                     scaled_ticks = (current_ticks << 5) / count;
+                    profile_label = D_L00_00197A00[i];
                     share = FUN_L00_00200240(current_ticks) / total_ticks;
                     share = share * 100.0f;
-                    FUN_L00_001eb078(D_L00_001E90C8, D_L00_00197A00[i], count,
+                    FUN_L00_001eb078(D_L00_001E90C8, profile_label, profile->count,
                                    scaled_ticks, FUN_00120478(share));
                     profile->count = 0;
                 } else if (next_ticks < profile->ticks) {
