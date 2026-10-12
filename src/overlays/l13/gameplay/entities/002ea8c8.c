@@ -5,7 +5,97 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ea8c8.s", FUN_L13_002ea8c8);
+#include "qcopy.h"
+#include "rnc/rendering/geometry_quad.h"
+
+extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
+extern float vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
+extern int D_L13_0015F5CC;
+extern char D_L13_00160680[] __attribute__((section(".sdata")));
+
+void FUN_L13_002ea8c8(struct Moby *moby) {
+    char *vars = (char *)moby->pvars;
+    struct GeometryQuad quad;
+    float start[4];
+    float direction[4];
+    float position[4];
+    float offset[4];
+    float side[4];
+    float up[4];
+    float edge[4];
+    float length;
+    float step;
+    float distance;
+    float width;
+    float scale;
+    float zero = 0.0f;
+    float one = 1.0f;
+    u64 texture;
+
+    texture = get_effect_texture(0x34);
+    quad.colors[3] = 0x40808080;
+    quad.colors[2] = 0x40808080;
+    quad.colors[1] = 0x40808080;
+    quad.colors[0] = 0x40808080;
+    quad.texture = texture;
+    quad.texture_state = 0xFF9000000260LL;
+    quad.reserved.value = 4;
+    quad.primitive = 0x8000000048LL;
+    quad.texture_coordinates[0][0] = zero;
+    quad.texture_coordinates[2][0] = zero;
+    quad.texture_coordinates[1][0] = one;
+    quad.texture_coordinates[3][0] = one;
+    quad.texture_coordinates[0][1] = zero;
+    quad.texture_coordinates[1][1] = zero;
+    quad.texture_coordinates[2][1] = one;
+    quad.texture_coordinates[3][1] = one;
+    moby_point_position(moby, 0x13, start);
+    subtract_vector_xyz(direction, vars + 0x80, start);
+    clamp_vector_length(direction, direction, 100.0f);
+    length = vector_length_xyz(direction);
+    scale = length / 100.0f;
+    if (scale < 1.0f)
+        step = 1.0f;
+    else
+        step = scale;
+    normalize_vector_xyz(direction, direction, step);
+    qcopy(position, start);
+    distance = zero;
+    normalize_vector_xyz(offset, direction, convert_integer_to_float(D_L13_0015F5CC % 20) / 20.0f);
+    subtract_vector_xyz(position, position, offset);
+    while (distance < length) {
+        width = (distance * 0.0f) / (length + length) + 0.5f;
+        cross_vectors_xyz(side, direction, D_L13_00160680);
+        normalize_vector_xyz(side, side, width);
+        cross_vectors_xyz(up, direction, side);
+        normalize_vector_xyz(up, up, width);
+        subtract_vector_xyz(edge, position, up);
+        subtract_vector_xyz(&quad.positions[0], edge, side);
+        add_vector_xyz(&quad.positions[1], edge, side);
+        add_vector_xyz(edge, position, up);
+        subtract_vector_xyz(&quad.positions[2], edge, side);
+        add_vector_xyz(&quad.positions[3], edge, side);
+        if (10.0f < length && length - 10.0f < distance) {
+            int color = truncate_float_to_s32((length - distance) * 6.4f) << 24 | 0x808080;
+            quad.colors[3] = color;
+            quad.colors[2] = color;
+            quad.colors[1] = color;
+            quad.colors[0] = color;
+        }
+        draw_geometry_quad(&quad, 0, 1);
+        distance += step;
+        add_vector_xyz(position, position, direction);
+    }
+}
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002EC038), where it is exact; names translated to the US level program. */
