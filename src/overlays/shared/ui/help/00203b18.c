@@ -624,7 +624,7 @@ extern f32 D_L00_0017B85C_002062b0 __asm__("D_L00_0017B85C") __attribute__((sect
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_00211670(void);
 extern void FUN_L00_0020b960(void);
-extern void FUN_L00_0020bed0(void);
+extern void FUN_L00_0020bed0_u(void) __asm__("FUN_L00_0020bed0");
 extern void FUN_L00_00215b68(void);
 extern void FUN_L00_00229b70(void);
 extern void FUN_L00_00216f10(void);
@@ -686,7 +686,7 @@ void FUN_L00_002062b0(void) {
     FUN_L00_0020b960();
     g = (char *)&hero;
     if (*(u8 *)(g + 0x20a4) == 1) {
-        FUN_L00_0020bed0();
+        FUN_L00_0020bed0_u();
         FUN_L00_00215b68();
     }
     FUN_L00_00229b70();
@@ -1101,7 +1101,7 @@ void FUN_L00_002062b0(void);
 void FUN_L00_00232670(void);
 void hero_update(void) __asm__("FUN_L00_00211670");
 void FUN_L00_0020b960(void);
-void FUN_L00_0020bed0(void);
+void FUN_L00_0020bed0_u(void) __asm__("FUN_L00_0020bed0");
 void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
 void FUN_L00_0020d330(void);
 void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
@@ -1150,7 +1150,7 @@ void FUN_L00_002070d0(void) {
     FUN_L00_00232670();
     hero_update();
     FUN_L00_0020b960();
-    FUN_L00_0020bed0();
+    FUN_L00_0020bed0_u();
     find_grind_rail();
     FUN_L00_0020d330();
     hero_update_transitions();
@@ -2020,7 +2020,9 @@ void FUN_L00_00208b60(void) {
     px = &x;
     t = D_L00_0017C300_208b60;
     for (i = 3; i >= 0; i--, t++) {
-        M_208b60 *m = G.m2080;
+        M_208b60 *m;
+        U_208b60 *u = &D_L00_00173E40_208b60;
+        m = G.m2080;
         sc = m->fC * 0.0009765625f;
         FUN_001f9a68_208b60(pw, m, 0.0009765625f);
         w.f[0] += c * t->x * sc;
@@ -2029,8 +2031,8 @@ void FUN_L00_00208b60(void) {
         normalize_vector_xyz(px, &v, ((w.f[2] - h) + 0.5f) / -v.f[2]);
         FUN_001f9a10_208b60(px, pw, px);
         if (collision_line(pw, px, 0x22, 0, 0)) {
-            lo = FUN_001f99d0_208b60(lo, D_L00_00173E40_208b60.f28);
-            hi = FUN_001f99c8_208b60(hi, D_L00_00173E40_208b60.f28);
+            lo = FUN_001f99d0_208b60(lo, u->f28);
+            hi = FUN_001f99c8_208b60(hi, u->f28);
         }
     }
     G.m2080->f84 = lo - 0.12f;
@@ -3403,175 +3405,196 @@ void FUN_L00_0020b960(void) {
     }
 }
 #undef P
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020bed0.s", FUN_L00_0020bed0);
-#else
-extern f32 D_0015ED6C_20bed0 __asm__("D_0015ED6C");
-extern u8 D_L00_00173E40_20bed0[] __asm__("D_L00_00173E40");
-extern f32 FUN_001ff7e8_20bed0(f32) __asm__("FUN_001f9dc8");
-extern f32 FUN_001ff800_20bed0(f32) __asm__("FUN_001f9de0");
-extern f32 FUN_001ff8b0_20bed0(f32, f32) __asm__("FUN_001f9e90");
-extern f32 FUN_002000e8_20bed0(f32, f32) __asm__("FUN_001fa580");
-extern f32 FUN_002001f0_20bed0(f32, f32) __asm__("FUN_001fa688");
-extern f32 FUN_001ff408_20bed0(void *) __asm__("FUN_001f9b20");
-extern s32 FUN_001efc70_20bed0(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-extern s32 FUN_001f35d8_20bed0(void) __asm__("FUN_001f0b58");
-extern s32 FUN_L00_001f19a0_20bed0(f32, void *, s32, s32) __asm__("FUN_L00_001f19a0");
-extern void FUN_L00_00259508_20bed0(f32, void *, void *, void *, s32) __asm__("FUN_L00_00259508");
-extern s32 FUN_L00_0025c338_20bed0(s32) __asm__("FUN_L00_0025c338");
-extern u8 *FUN_L00_002603d0_20bed0(s32) __asm__("FUN_L00_002603d0");
-extern s32 FUN_001fef20_20bed0(s32) __asm__("FUN_001f96f8");
+#include "rnc/math/vector.h"
+#include "rnc/gameplay/entities/moby.h"
+
+/* the ledge probe of the hero: looks for an edge ahead to grab, and where it finds one stores the grab point and direction */
+/* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020C568), where it is exact; names translated to the US level program. */
+
+typedef struct Hero Hero;
+
+typedef struct {
+    char p0[0x18];
+    char *m18;
+    char p1C[4];
+    float v20[4];
+    char p30[0x10];
+    float v40[4];
+} Hit_20C568;
+
+typedef struct {
+    char p0[0x1E];
+    unsigned short h1E;
+    char p20[0x1C];
+    int i3C;
+} Obj_20C568;
+
+extern U_208b60 D_L00_00173E40;
+extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
+extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float D_0015ED6C;
+extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
+extern int FUN_001efa68_c(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern int FUN_001f0b58(void);
+extern int FUN_L00_001f19a0();
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern unsigned char D_0013F350[];
+f32 FUN_001f9e90_c2(f32, f32) __asm__("FUN_001f9e90");
+void FUN_L00_00259508(void *a, void *b, void *c, int d, float f);
+extern char D_0013F450_20C568[] __asm__("D_0013F350");
+extern char D_L00_00173F40_20C568[] __asm__("D_L00_00173E40");
+extern float D_0015EE6C_20C568 __asm__("D_0015ED6C");
+extern int func_001F9850_20C568(int) __asm__("FUN_001f96f8");
+extern void func_L00_0025A540_20C568(void *a, void *b, void *c, int d, float f) __asm__("FUN_L00_00259508");
+extern float func_001F9F90_20C568(float) __asm__("FUN_001f9dc8");
+extern float func_001F9FA8_20C568(float) __asm__("FUN_001f9de0");
+extern int func_L00_001EFFF0_20C568(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern int func_L00_001F3958_20C568(void) __asm__("FUN_001f0b58");
+extern float func_001F9CE8_20C568(void *) __asm__("FUN_001f9b20");
+extern float func_L00_001FF860_20C568(float, float) __asm__("FUN_001f9e90");
+extern Obj_20C568 *func_L00_0025D390_20C568(char *) __asm__("FUN_002141f8");
+extern Obj_20C568 *FUN_L00_002603d0(char *);
+extern int func_L00_001F1D20_20C568(float, float, void *, int, int) __asm__("FUN_L00_001f19a0");
+extern float func_001FA748_20C568(float, float) __asm__("FUN_001fa580");
+extern float func_001FA850_20C568(float, float) __asm__("FUN_001fa688");
 
 void FUN_L00_0020bed0(void) {
-    Vec4 pos, top, wall, origin, trial, upper, goal, result;
-    struct Hero *g;
-    u8 *hit;
-    f32 down, step, height, front, back, reach, side, offset;
-    f32 angle, distance, delta;
-    s32 i, found, material, collision, flags;
-    u8 *object;
+    float v0[4], v10[4], v20[4], v30[4], v40[4], v50[4], v60[4], v70[4];
+    float down, fwd, up, top, drop, rise, back;
+    float speed, ang, d;
+    int go, found, edge, i, j, hit, ok, r;
+    Obj_20C568 *a;
+    Obj_20C568 *b;
 
-    if (hero.unk308 == 2)
-        return;
-    hero.unk4E8 = 0;
-    if (hero.unk1B0 != 0)
-        return;
-    {
-        s32 found = 0;
-        if (hero.vehicle_mode == 0) {
-            if ((hero.state.control_mode == 4 && (hero.unk41E != 0 || hero.motion.velocity.f[2] < D_0015ED6C_20bed0 * 3.5f)) ||
-                hero.state.control_mode == 2 || hero.state.current == 8 || hero.state.current == 0x1a || hero.state.current == 0x1b)
-                found = 1;
-            if (hero.state.current == 0xe && hero.anim_frame < 37.0f)
-                found = 0;
-        }
-        if (hero.vehicle_mode == 1) {
-            if ((hero.state.control_mode == 4 && (hero.unk41E != 0 || hero.motion.velocity.f[2] < D_0015ED6C_20bed0 * 2.5f)) ||
-                hero.state.control_mode == 2 || hero.state.current == 0x4f || hero.state.current == 0x4d || hero.state.current == 0x4e)
-                found = 1;
-        }
-        if (!found)
-            return;
+    if (((Hero *)D_0013F450_20C568)->unk308 == 2) return;
+    ((Hero *)D_0013F450_20C568)->unk4E8 = 0;
+    if (((Hero *)D_0013F450_20C568)->unk1B0 != 0) return;
+    go = 0;
+    if (((Hero *)D_0013F450_20C568)->vehicle_mode == 0) {
+        if ((((Hero *)D_0013F450_20C568)->state.control_mode == 4 && (((Hero *)D_0013F450_20C568)->unk41E != 0 || ((Hero *)D_0013F450_20C568)->motion.velocity.f[2] < D_0015EE6C_20C568 * 3.5f)) || ((Hero *)D_0013F450_20C568)->state.control_mode == 2 || ((Hero *)D_0013F450_20C568)->state.current == 8 || ((Hero *)D_0013F450_20C568)->state.current == 0x1A || ((Hero *)D_0013F450_20C568)->state.current == 0x1B) go = 1;
+        if (((Hero *)D_0013F450_20C568)->state.current == 0xE && ((Hero *)D_0013F450_20C568)->anim_frame < 37.0f) go = 0;
     }
-    g = &hero;
-    down = -0.7f; step = 0.3f; height = 1.5f; front = 1.15f;
-    back = -1.43f; reach = 1.8f; side = 0.45f;
-    if (g->vehicle_mode == 1) {
-        front = 0.7f; down = -0.4f; step = 0.25f; reach = 0.7f;
-        height = 0.725f; back = -0.71f; side = 0.32f;
+    if (((Hero *)D_0013F450_20C568)->vehicle_mode == 1) {
+        if ((((Hero *)D_0013F450_20C568)->state.control_mode == 4 && (((Hero *)D_0013F450_20C568)->unk41E != 0 || ((Hero *)D_0013F450_20C568)->motion.velocity.f[2] < D_0015EE6C_20C568 * 2.5f)) || ((Hero *)D_0013F450_20C568)->state.control_mode == 2 || ((Hero *)D_0013F450_20C568)->state.current == 0x4F || ((Hero *)D_0013F450_20C568)->state.current == 0x4D || ((Hero *)D_0013F450_20C568)->state.current == 0x4E) go = 1;
     }
-    {
-        f32 angle = g->unk940;
-        if (g->state.control_mode == 4)
-            angle = g->unk4A0;
-        FUN_L00_00259508_20bed0(angle, &pos, &g->motion.pos, &g->motion.unk110, FUN_001fef20_20bed0(2));
-        offset = 0.15f;
-        distance = 0.25f;
+    if (!go) return;
+
+    down = -0.7f;
+    fwd = 0.3f;
+    up = 1.5f;
+    top = 1.15f;
+    drop = -1.43f;
+    rise = 1.8f;
+    back = 0.45f;
+    if (((Hero *)D_0013F450_20C568)->vehicle_mode == 1) {
+        down = -0.4f;
+        fwd = 0.25f;
+        up = 0.725f;
+        top = 0.7f;
+        drop = -0.71f;
+        rise = 0.7f;
+        back = 0.32f;
     }
-    {
-        s32 found = 0;
-        s32 i;
-        pos.f[0] += FUN_001ff7e8_20bed0(g->motion.rot.f[2]) * g->unk234;
-        pos.f[1] += FUN_001ff800_20bed0(g->motion.rot.f[2]) * g->unk234;
-        hit = D_L00_00173E40_20bed0;
-        for (i = 0; i < 4; i++) {
-            pos.f[0] += FUN_001ff7e8_20bed0(hero.motion.rot.f[2]) * step * distance;
-            pos.f[1] += FUN_001ff800_20bed0(hero.motion.rot.f[2]) * step * distance;
-            qcopy(&top, &pos);
-            top.f[2] += height + offset;
-            qcopy(&wall, &pos);
-            wall.f[2] += front;
-            collision = FUN_001efc70_20bed0(&top, &wall, 4, (s32)hero.moby, 0);
-            if (collision != 0) {
-                material = FUN_001f35d8_20bed0();
-                if (material != 9 && material != 12 && material != 0 &&
-                    FUN_001ff8b0_20bed0(*(f32 *)(hit + 0x48), FUN_001ff408_20bed0(hit + 0x40)) < 0.34906584f)
-                    found = 1;
-            }
-            if (found)
-                break;
-        }
-        if (!found)
-            return;
-    }
-    if (*(s32 *)(D_L00_00173E40_20bed0 + 0x18) != 0) {
-        flags = 0;
-        collision = FUN_L00_0025c338_20bed0(*(s32 *)(D_L00_00173E40_20bed0 + 0x18));
-        object = FUN_L00_002603d0_20bed0(*(s32 *)(D_L00_00173E40_20bed0 + 0x18));
-        if (collision && (*(u16 *)(collision + 0x1e) & 1))
-            flags = 1;
-        else if (object)
-            flags = *(u32 *)(object + 0x3c) & 1;
-        if (!flags)
-            return;
-    }
-    hero.unk4F8 = *(s32 *)(D_L00_00173E40_20bed0 + 0x18);
-    if (hero.motion.pos.f[2] + height < *(f32 *)(D_L00_00173E40_20bed0 + 0x28))
-        return;
-    qcopy(&top, D_L00_00173E40_20bed0 + 0x20);
-    qcopy(&wall, D_L00_00173E40_20bed0 + 0x20);
-    wall.f[2] += 0.05f;
-    qcopy_nc(&origin, &hero.motion.pos);
-    origin.f[2] = wall.f[2];
-    if (FUN_001efc70_20bed0(&origin, &wall, 4, (s32)hero.moby, 0))
-        return;
-    qcopy(&trial, D_L00_00173E40_20bed0 + 0x20);
-    trial.f[2] += 0.6f;
-    if (FUN_L00_001f19a0_20bed0(0.45f, &trial, 4, (s32)hero.moby) == 0)
-        hero.unk4F4 &= ~1;
-    else
-        hero.unk4F4 |= 1;
-    distance = FUN_001ff8b0_20bed0(top.f[0] - hero.motion.pos.f[0], top.f[1] - hero.motion.pos.f[1]);
-    hero.unk4E0 = top.f[2];
-    if (top.f[2] - hero.ground_z.f < reach)
-        return;
-    front = 5.0f;
-    step = 1.0f;
+    speed = ((Hero *)D_0013F450_20C568)->unk940;
+    if (((Hero *)D_0013F450_20C568)->state.control_mode == 4) speed = ((Hero *)D_0013F450_20C568)->unk4A0;
+    r = func_001F9850_20C568(2);
+    func_L00_0025A540_20C568(v0, ((Hero *)D_0013F450_20C568)->motion.pos.f, ((Hero *)D_0013F450_20C568)->motion.unk110.f, r, speed);
     found = 0;
-    for (i = 0; i < 5; i++) {
-        qcopy(&upper, &hero.motion.pos);
-        qcopy(&goal, &top);
-        delta = hero.unk234 + hero.unk234;
-        goal.f[0] += FUN_001ff7e8_20bed0(distance) * delta;
-        goal.f[1] += FUN_001ff800_20bed0(distance) * delta;
-        upper.f[2] = goal.f[2] + down * (step - (f32)i / front);
-        goal.f[2] = upper.f[2];
-        collision = FUN_001efc70_20bed0(&upper, &goal, 2, 0, 0);
-        if (collision) {
-            found = 1;
-            hero.unk4E4 = FUN_001ff8b0_20bed0(*(f32 *)(D_L00_00173E40_20bed0 + 0x40), *(f32 *)(D_L00_00173E40_20bed0 + 0x44));
+    v0[0] += func_001F9F90_20C568(((Hero *)D_0013F450_20C568)->motion.rot.f[2]) * ((Hero *)D_0013F450_20C568)->unk234;
+    v0[1] += func_001F9FA8_20C568(((Hero *)D_0013F450_20C568)->motion.rot.f[2]) * ((Hero *)D_0013F450_20C568)->unk234;
+    for (i = 0; !found && i < 4; i++) {
+        v0[0] += func_001F9F90_20C568(((Hero *)D_0013F450_20C568)->motion.rot.f[2]) * fwd * 0.25f;
+        v0[1] += func_001F9FA8_20C568(((Hero *)D_0013F450_20C568)->motion.rot.f[2]) * fwd * 0.25f;
+        qcopy(v10, v0);
+        v10[2] += up + 0.15f;
+        qcopy(v20, v0);
+        v20[2] += top;
+        if (func_L00_001EFFF0_20C568(v10, v20, 4, (int)((Hero *)D_0013F450_20C568)->moby, 0)) {
+            hit = func_L00_001F3958_20C568();
+            if (hit != 9 && hit != 12 && hit != 0) {
+                if (func_L00_001FF860_20C568(((Hit_20C568 *)D_L00_00173F40_20C568)->v40[2], func_001F9CE8_20C568(((Hit_20C568 *)D_L00_00173F40_20C568)->v40)) < 0.3490658402442932f) found = 1;
+            }
+        }
+    }
+    if (!found) return;
+
+    if (((Hit_20C568 *)D_L00_00173F40_20C568)->m18 != 0) {
+        ok = 0;
+        a = func_L00_0025D390_20C568(((Hit_20C568 *)D_L00_00173F40_20C568)->m18);
+        b = FUN_L00_002603d0(((Hit_20C568 *)D_L00_00173F40_20C568)->m18);
+        if (a != 0 && (a->h1E & 1)) {
+            ok = 1;
+        } else if (b != 0) {
+            ok = b->i3C & 1;
+        }
+        if (!ok) return;
+    }
+    ((Hero *)D_0013F450_20C568)->unk4F8 = (s32)(((Hit_20C568 *)D_L00_00173F40_20C568)->m18);
+    if (((Hero *)D_0013F450_20C568)->motion.pos.f[2] + up < ((Hit_20C568 *)D_L00_00173F40_20C568)->v20[2]) return;
+    qcopy(v10, ((Hit_20C568 *)D_L00_00173F40_20C568)->v20);
+    qcopy(v20, ((Hit_20C568 *)D_L00_00173F40_20C568)->v20);
+    v20[2] += 0.05f;
+    qcopy_nc(v30, ((Hero *)D_0013F450_20C568)->motion.pos.f);
+    v30[2] = v20[2];
+    if (func_L00_001EFFF0_20C568(v30, v20, 4, (int)((Hero *)D_0013F450_20C568)->moby, 0)) return;
+    qcopy(v40, ((Hit_20C568 *)D_L00_00173F40_20C568)->v20);
+    v40[2] += 0.6f;
+    if (func_L00_001F1D20_20C568(0.45f, 0.6f, v40, 4, (int)((Hero *)D_0013F450_20C568)->moby)) {
+        ((Hero *)D_0013F450_20C568)->unk4F4 |= 1;
+    } else {
+        ((Hero *)D_0013F450_20C568)->unk4F4 &= 0xFFFFFFFE;
+    }
+    ang = func_L00_001FF860_20C568(v10[0] - ((Hero *)D_0013F450_20C568)->motion.pos.f[0], v10[1] - ((Hero *)D_0013F450_20C568)->motion.pos.f[1]);
+    ((Hero *)D_0013F450_20C568)->unk4E0 = v10[2];
+    if (v10[2] - ((Hero *)D_0013F450_20C568)->ground_z.f < rise) return;
+
+    edge = 0;
+    for (j = 0; j < 5; j++) {
+        float len;
+
+        qcopy(v50, ((Hero *)D_0013F450_20C568)->motion.pos.f);
+        qcopy(v60, v10);
+        len = ((Hero *)D_0013F450_20C568)->unk234 * 2.0f;
+        v60[0] += func_001F9F90_20C568(ang) * len;
+        v60[1] += func_001F9FA8_20C568(ang) * len;
+        v60[2] += down * (1.0f - (float)j / 5.0f);
+        v50[2] = v60[2];
+        if (func_L00_001EFFF0_20C568(v50, v60, 2, 0, 0)) {
+            edge = 1;
+            ((Hero *)D_0013F450_20C568)->unk4E4 = func_L00_001FF860_20C568(((Hit_20C568 *)D_L00_00173F40_20C568)->v40[0], ((Hit_20C568 *)D_L00_00173F40_20C568)->v40[1]);
             break;
         }
     }
-    if (!found)
-        return;
-    angle = FUN_002000e8_20bed0(hero.unk4E4, 3.1415927f);
-    if (!(FUN_002001f0_20bed0(hero.motion.rot.f[2], angle) < 1.134464f))
-        return;
-    front = 2.4f;
-    step = 0.03f;
-    distance = 0.5f;
-    for (delta = 0.0f; delta < front; delta += step) {
-        qcopy(&goal, &top);
-        goal.f[2] = top.f[2];
-        goal.f[0] += FUN_001ff7e8_20bed0(hero.unk4E4) * delta;
-        goal.f[1] += FUN_001ff800_20bed0(hero.unk4E4) * delta;
-        qcopy(&upper, &goal);
-        upper.f[2] -= distance;
-        goal.f[2] += distance;
-        if (FUN_001efc70_20bed0(&goal, &upper, 4, (s32)hero.moby, 0) == 0) {
-            qcopy(&result, &goal);
-            delta = -(step * distance);
-            result.f[2] = top.f[2];
-            result.f[0] += FUN_001ff7e8_20bed0(hero.unk4E4) * delta;
-            result.f[1] += FUN_001ff800_20bed0(hero.unk4E4) * delta;
-            qcopy(&hero.unk4D0, &result);
-            hero.unk4D0.f[0] += FUN_001ff7e8_20bed0(hero.unk4E4) * side;
-            hero.unk4D0.f[1] += FUN_001ff800_20bed0(hero.unk4E4) * side;
-            hero.unk4D0.f[2] += back;
-            hero.unk4E8 = 1;
-            return;
+    if (!edge) return;
+    if (!(func_001FA850_20C568(((Hero *)D_0013F450_20C568)->motion.rot.f[2], func_001FA748_20C568(((Hero *)D_0013F450_20C568)->unk4E4, 3.1415927f)) < 1.1344640f)) return;
+    {
+        float max = 2.4f;
+        float step = 0.03f;
+
+        for (d = 0.0f; d < max; d += step) {
+            qcopy(v60, v10);
+            v60[2] = v10[2];
+            v60[0] += func_001F9F90_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * d;
+            v60[1] += func_001F9FA8_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * d;
+            qcopy(v50, v60);
+            v60[2] += 0.5f;
+            v50[2] -= 0.5f;
+            if (!func_L00_001EFFF0_20C568(v60, v50, 4, (int)((Hero *)D_0013F450_20C568)->moby, 0)) {
+                qcopy(v70, v60);
+                d = step * 0.5f;
+                d = -d;
+                v70[2] = v10[2];
+                v70[0] += func_001F9F90_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * d;
+                v70[1] += func_001F9FA8_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * d;
+                qcopy(((Hero *)D_0013F450_20C568)->unk4D0.f, v70);
+                ((Hero *)D_0013F450_20C568)->unk4D0.f[0] += func_001F9F90_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * back;
+                ((Hero *)D_0013F450_20C568)->unk4D0.f[1] += func_001F9FA8_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * back;
+                ((Hero *)D_0013F450_20C568)->unk4E8 = 1;
+                ((Hero *)D_0013F450_20C568)->unk4D0.f[2] += drop;
+                return;
+            }
         }
     }
 }
-#endif
