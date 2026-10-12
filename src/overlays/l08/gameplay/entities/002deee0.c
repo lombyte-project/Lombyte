@@ -567,7 +567,454 @@ void FUN_L08_002deee0(Moby *m) {
     xy[3] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161C08_2E0258 * 16.0f) + 0x8000;
     draw_quad51(xy, uv_words, color_words, texture51(D_L08_00161C3C_2E0258), 1);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e0328.s", FUN_L08_002e0328);
+/* Updates the mounted Batalia cannon: entry/exit, aiming, alternating barrels, waves, and attached visuals. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E16A0), where it is exact; names translated to the US level program. */
+
+typedef struct CannonData52_2E16A0 CannonData52_2E16A0;
+
+struct CannonData52_2E16A0 {
+    char pad0[0x40]; short fire_timer, exit_timer; int pad44; float pitch_step, yaw_step;
+    short pad50, camera_timer, barrel, pad56; int health; short wave_timer;
+    unsigned char target_index, target_timer; Moby *linked[8]; int indices[4];
+    Moby *guns[2]; float range; int platform_index, lock_timer;
+    Moby *visual; float visual_angle;
+};
+
+typedef struct Hero52_2E16A0 {
+    char pad0[0x80]; float pos[4], rot[4]; char padA0[0x156F]; unsigned char interact;
+    char pad1610[0x710]; float input[2]; char pad1D28[0x358]; Moby *moby;
+} Hero52_2E16A0;
+
+typedef struct CannonCamera52_2E16A0 { char pad0[0x160]; float mag0; int pad164, timer0, pad16C; float mag1; int pad174, timer1; } CannonCamera52_2E16A0;
+
+char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f);
+char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value);
+extern unsigned char D_0014095F_r[] __asm__("D_0014095F");
+extern char *D_L08_0015FFD8;
+extern char D_0013CAE0[];
+extern f32 approach_value(f32 target, f32 step, f32 *value) __asm__("FUN_00213ed8");
+extern f32 fast_add_rotations_c3(f32, f32) __asm__("func_001FA580");
+extern f32 random_float_between_c3(f32, f32) __asm__("func_002132A8");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern float D_0015ED6C;
+extern float D_0015ED70_c __asm__("D_0015ED70");
+extern float FUN_001f9b80(void *, void *);
+extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
+extern int D_0013CAE4 __attribute__((section(".data"))); /* no foreign declaration */
+extern int D_0013F350;
+extern float D_0015ED60;
+extern int D_0015EDDC;
+extern int D_L08_00161A90 __attribute__((sda));
+extern float D_L08_00161AE8 __attribute__((sda));
+extern float D_L08_00161AEC __attribute__((sda));
+extern float D_L08_00161AF0 __attribute__((sda));
+extern float D_L08_00161AF4 __attribute__((sda));
+extern float D_L08_00161AF8 __attribute__((sda));
+extern float D_L08_00161AFC __attribute__((sda));
+extern float D_L08_00161B00 __attribute__((sda));
+extern int D_L08_00161B10 __attribute__((sda));
+extern int D_L08_00161B20 __attribute__((sda));
+extern int D_L08_00161B30 __attribute__((sda));
+extern int D_L08_00161B40 __attribute__((sda));
+extern int D_L08_00161B50 __attribute__((sda));
+extern int D_L08_00161BF0 __attribute__((sda));
+extern int D_L08_00167480;
+extern int FUN_001f9770_c() __asm__("FUN_001f9770");
+extern int FUN_L00_001fefc8();
+extern int FUN_L00_001ff378();
+extern int FUN_L00_00211250();
+extern int FUN_L00_00257b90(int, int);
+extern s32 D_0015ED84;
+extern s32 allocate_voice_for_target_entry_alt_c(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern u8 D_0014C050[];
+extern void FUN_L08_00230b38(int, int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void build_spherical_offset_c(void *, f32, f32, f32) __asm__("func_00214DB0");
+extern void clear_blocks_16(void *, s32) __asm__("func_001F9810");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
+extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
+int FUN_L08_002e0228_c(struct Moby *m) __asm__("FUN_L08_002e0228");
+void FUN_L00_00216f90(void *pos, void *rot, int mode, int flag);
+void FUN_L00_002ea9d8(char *src);
+void FUN_L00_002eaa30(char *src);
+void FUN_L00_002eaaa0(void *pa, void *pb, s32 mode, s32 w, s32 x);
+void FUN_L00_002eac18(int mode);
+void FUN_L08_002deee0_c(struct Moby *moby) __asm__("FUN_L08_002deee0");
+void FUN_L08_00306b30(u8 *object, s32 mode);
+void FUN_L08_00313ba8(void);
+extern Hero52_2E16A0 hero52 __asm__("D_0013F350");
+extern char D_0013E633_2E16A0[] __asm__("D_0013CAE0");
+extern char D_0013A5E0_2E16A0[] __asm__("D_0013CAE4");
+extern unsigned char visited52[][16] __asm__("D_0014C050");
+extern int invert52 __asm__("D_0015EDDC");
+extern char *D_L08_00160058_2E16A0 __asm__("D_L08_0015FFD8");
+extern int D_0015EE84_2E16A0 __asm__("D_0015ED84");
+extern float D_0015EE60_2E16A0 __asm__("D_0015ED60");
+extern float D_0015EE6C_2E16A0 __asm__("D_0015ED6C");
+extern float D_0015EE70_2E16A0 __asm__("D_0015ED70");
+extern CannonCamera52_2E16A0 cannon_camera52 __asm__("D_L08_00167480");
+extern short D_L08_00161B20_2E16A0 __asm__("D_L08_00161A90") __attribute__((sda));
+extern short D_L08_00161BA0_2E16A0 __asm__("D_L08_00161B10") __attribute__((sda));
+extern short D_L08_00161BB0_2E16A0 __asm__("D_L08_00161B20") __attribute__((sda));
+extern short D_L08_00161BC0_2E16A0 __asm__("D_L08_00161B30") __attribute__((sda));
+extern short D_L08_00161BD0_2E16A0 __asm__("D_L08_00161B40") __attribute__((sda));
+extern short D_L08_00161BE0_2E16A0 __asm__("D_L08_00161B50") __attribute__((sda));
+extern short D_L08_00161C80_2E16A0 __asm__("D_L08_00161BF0") __attribute__((sda));
+extern float D_L08_00161B78_2E16A0 __asm__("D_L08_00161AE8") __attribute__((sda));
+extern float D_L08_00161B7C_2E16A0 __asm__("D_L08_00161AEC") __attribute__((sda));
+extern float D_L08_00161B80_2E16A0 __asm__("D_L08_00161AF0") __attribute__((sda));
+extern float D_L08_00161B84_2E16A0 __asm__("D_L08_00161AF4") __attribute__((sda));
+extern float D_L08_00161B88_2E16A0 __asm__("D_L08_00161AF8") __attribute__((sda));
+extern float D_L08_00161B8C_2E16A0 __asm__("D_L08_00161AFC") __attribute__((sda));
+extern float D_L08_00161B90_2E16A0 __asm__("D_L08_00161B00") __attribute__((sda));
+extern int tick52(short *) __asm__("FUN_001f9770");
+extern float func_001F9F90_2E16A0(float) __asm__("FUN_001f9dc8");
+extern float func_001F9FA8_2E16A0(float) __asm__("FUN_001f9de0");
+extern float func_001FA748_2E16A0(float, float) __asm__("FUN_001fa580");
+extern float func_001FA850_2E16A0(float, float) __asm__("FUN_001fa688");
+extern float func_L00_001FF860_2E16A0(float,float) __asm__("FUN_001f9e90");
+extern void func_001F9BD8_2E16A0(void *,void *,void *) __asm__("FUN_001f9a10");
+extern void func_001F99D8_2E16A0(void *,int) __asm__("FUN_001f9810");
+extern void func_001FA1F8_2E16A0(void *,void *) __asm__("FUN_001fa030");
+extern void func_001F9BC0_2E16A0(void *) __asm__("FUN_001f99f8");
+extern void func_001F9EC0_2E16A0(void *,void *,void *) __asm__("FUN_001f9cf8");
+extern int hero_state52(int,int) __asm__("FUN_L08_00230b38");
+extern void func_L00_002EC0C8_2E16A0(int) __asm__("FUN_L00_002eac18");
+extern void func_L00_001FF4B0_2E16A0(void *,void *,float) __asm__("FUN_001f9bf8");
+extern void func_L00_001FF328_2E16A0(void *,void *,float) __asm__("FUN_L00_001ff378");
+extern void func_L00_00217718_2E16A0(void *,void *,int,int) __asm__("FUN_L00_00216f90");
+extern void func_L08_00307FF0_2E16A0(char *,int) __asm__("FUN_L08_00306b30");
+extern void func_L00_00211908_2E16A0(void) __asm__("FUN_L00_00211250");
+extern void func_L00_002EBF50_2E16A0(void *,void *,int,int,int) __asm__("FUN_L00_002eaaa0");
+extern void func_L00_002EBE88_2E16A0(void *) __asm__("FUN_L00_002ea9d8");
+extern void func_L00_002EBEE0_2E16A0(void *) __asm__("FUN_L00_002eaa30");
+extern float func_001F9D48_2E16A0(void *,void *) __asm__("FUN_001f9b80");
+extern float func_001F9CE8_2E16A0(void *) __asm__("FUN_001f9b20");
+extern float func_001F9CB8_2E16A0(void *) __asm__("FUN_001f9af0");
+extern float func_002140F8_2E16A0(float,float) __asm__("FUN_002132a8");
+extern float func_00214D28_2E16A0(float *,float,float) __asm__("FUN_00213ed8");
+extern int func_001F9850_2E16A0(int) __asm__("FUN_001f96f8");
+extern int func_L08_002E15A0_2E16A0(char *) __asm__("FUN_L08_002e0228");
+extern int func_L00_00258BC8_2E16A0(int,int) __asm__("FUN_L00_00257b90");
+extern int func_L00_001FEF78_2E16A0(void *) __asm__("FUN_L00_001fefc8");
+extern void *func_0020D348_2E16A0(int) __asm__("FUN_0020c4f8");
+extern void func_00215C00_2E16A0(void *,float,float,float) __asm__("FUN_00214db0");
+extern void func_00213DE0_2E16A0(void *,int,int,int) __asm__("FUN_00212f90");
+extern void func_L08_002E9288_2E16A0(void *,void *,void *,int) __asm__("FUN_L08_002e7eb0");
+extern int sound52(int,int,void *) __asm__("FUN_0022da68");
+extern char *func_L00_0026EBC0_2E16A0(char *,char *,int,int,float) __asm__("FUN_L00_0026dd20");
+extern void func_L08_00315068_2E16A0(void) __asm__("FUN_L08_00313ba8");
+extern void func_0020D678_2E16A0(void *) __asm__("FUN_0020c828");
+extern void func_L00_00251E30_2E16A0(void *) __asm__("FUN_L00_00250df8");
+extern void func_001F49B0_2E16A0(void *,void *) __asm__("FUN_001f4600");
+extern void func_L08_002E0258_2E16A0(void *) __asm__("FUN_L08_002deee0");
+
+void FUN_L08_002e0328(Moby *m) {
+    float position[4], offset[4], work[4], direction[4], muzzle[4], scatter[4], random_vec[4];
+    CannonData52_2E16A0 *d = (*(CannonData52_2E16A0 **)&m->pvars);
+    int i, target, all_done, dead, best, lo;
+    Moby **links;
+    float yaw, pitch, magnitude, best_angle;
+    qcopy(position, (*(float (*)[4])&m->pos));
+    position[2] += 0.4f;
+    if (tick52(&d->exit_timer) && m->unkBC == 1) {
+        qcopy(hero52.pos, position);
+        qcopy(hero52.rot, (*(float (*)[4])&m->rot));
+        offset[0] = func_001F9F90_2E16A0(hero52.rot[2]) * -0.7f;
+        offset[1] = func_001F9FA8_2E16A0(hero52.rot[2]) * -0.7f;
+        offset[2] = 0.0f;
+        func_001F9BD8_2E16A0(hero52.pos, hero52.pos, offset);
+        func_001F99D8_2E16A0((char *)hero52.pos + 0x60, 0x90);
+        if (d->health == 0) {
+            Moby *node;
+            (*(float (*)[4])&m->rot)[1] = 0.0f; m->unkBC = 2;
+            func_L00_002EC0C8_2E16A0(0); m->state = 4;
+            node = (Moby *)(D_L08_00160058_2E16A0 + (d->platform_index << 8));
+            qcopy(direction, (*(float (*)[4])&node->rot));
+            direction[2] = func_001FA748_2E16A0(direction[2], 3.1415927f);
+            func_L00_001FF4B0_2E16A0(work, (*(float (*)[16])&node->unkC0), 2.5f);
+            func_001F9BD8_2E16A0(work, work, (*(float (*)[4])&node->pos));
+            func_L00_00217718_2E16A0(work, direction, 0, 1);
+            func_L08_00307FF0_2E16A0((char *)node, 0);
+            return;
+        }
+        if (visited52[D_0015EE84_2E16A0][m->unkB0] != 0xFF && (hero52.interact & 1)) func_L00_00211908_2E16A0();
+        if (((*(int *)D_0013A5E0_2E16A0 & 0x10) || (*(unsigned char *)(D_0014095F_r) & 1)) && visited52[D_0015EE84_2E16A0][m->unkB0] == 0xFF) {
+            hero52.interact = 0;
+            hero_state52(0, 1);
+            m->unkBC = 2; (*(float (*)[4])&m->rot)[1] = 0.0f;
+            func_001FA1F8_2E16A0((*(float (*)[16])&m->unkC0), (*(float (*)[4])&m->rot));
+            func_001F9BC0_2E16A0(direction); direction[2] = (*(float (*)[4])&m->rot)[2];
+            func_001F9EC0_2E16A0(work, &D_L08_00161B20_2E16A0, (*(float (*)[16])&m->unkC0));
+            func_001F9BD8_2E16A0(work, work, (*(float (*)[4])&m->pos));
+            func_L00_00217718_2E16A0(work, direction, 0, 1);
+            func_L00_002EC0C8_2E16A0(0);
+            hero52.rot[2] = func_001FA748_2E16A0(hero52.rot[2], 3.1415927f);
+            m->state = 4;
+        } else {
+            int *indices; int count;
+            if (m->state != 5) {
+                d->camera_timer = 2;
+                func_L00_002EBF50_2E16A0((*(float (*)[4])&m->pos), (*(float (*)[4])&m->rot), 1, 0, 0);
+            }
+            m->state = 5;
+            {
+            int waiting = 2, activated = 3;
+            indices = d->indices;
+            for (count = 3; count >= 0; count--) {
+                if (((Moby *)D_L08_00160058_2E16A0)[*indices].state == waiting)
+                    ((Moby *)D_L08_00160058_2E16A0)[*indices].state = activated;
+                indices++;
+            }
+            }
+        }
+    } else if (m->unkBC == 2) {
+        if (func_001F9D48_2E16A0(position, (*(float (*)[4])&hero52.moby->pos)) > 1.0f) {
+            m->unkBC = 0;
+            d->exit_timer = func_001F9850_2E16A0(60);
+        }
+    } else if (visited52[D_0015EE84_2E16A0][m->unkB0] == 0xFF) {
+        if (func_001F9D48_2E16A0(position, (*(float (*)[4])&hero52.moby->pos)) < 1.0f && hero52.pos[2] - (*(float (*)[4])&m->pos)[2] < 7.0f && d->exit_timer == 0 && d->health > 0) {
+            m->unkBC = 1;
+            hero_state52(50, 1);
+        }
+    }
+    switch (m->state) {
+    case 0: {
+        Moby *node; int *indices; int count;
+        m->state = 4; d->health = 200; d->range = 10.0f;
+        node = func_0020D348_2E16A0(0x710); d->visual = node;
+        if (node) {
+            qcopy((*(float (*)[4])&node->pos), (*(float (*)[4])&m->pos)); qcopy((*(float (*)[4])&node->rot), (*(float (*)[4])&m->rot));
+            node->unk32 = 0x30; d->visual->unk31 = 1; (*(long *)&d->visual->spawn_frame) = (*(long *)&m->spawn_frame);
+        }
+        (*(float (*)[4])&m->rot)[1] = 0.0f;
+        d->fire_timer = func_001F9850_2E16A0(30); d->exit_timer = 0;
+        d->pitch_step = 0.0f; d->yaw_step = 0.0f;
+        indices = (int *)&d->linked[7]; count = 7;
+        do { *indices-- = 0; } while (--count >= 0);
+        d->wave_timer = func_001F9850_2E16A0(180); d->target_timer = 0; d->target_index = 0;
+        if (visited52[D_0015EE84_2E16A0][m->unkB0] != 0xFF) d->visual_angle = 0.0f;
+        else d->visual_angle = 1.5707964f;
+        break;
+    }
+    case 5:
+        if (d->health < 0) d->health = 0;
+        work[0] = hero52.input[0];
+        work[1] = invert52 ? hero52.input[1] : -hero52.input[1];
+        magnitude = func_001F9CE8_2E16A0(work);
+        if (magnitude > 1.0f) func_L00_001FF328_2E16A0(work, work, magnitude);
+        yaw = D_L08_00161B78_2E16A0 * 0.017453292f * D_0015EE6C_2E16A0 * -work[0];
+        pitch = -(D_L08_00161B7C_2E16A0 * 0.017453292f * D_0015EE6C_2E16A0) * work[1];
+        if ((d->yaw_step >= 0.0f && d->yaw_step < yaw) || (d->yaw_step <= 0.0f && yaw < d->yaw_step))
+            func_00214D28_2E16A0(&d->yaw_step, yaw, D_L08_00161B80_2E16A0 * 0.017453292f * D_0015EE70_2E16A0);
+        else func_00214D28_2E16A0(&d->yaw_step, yaw, D_L08_00161B88_2E16A0 * 0.017453292f * D_0015EE70_2E16A0);
+        if ((d->pitch_step >= 0.0f && d->pitch_step < pitch) || (d->pitch_step <= 0.0f && pitch < d->pitch_step))
+            func_00214D28_2E16A0(&d->pitch_step, pitch, D_L08_00161B84_2E16A0 * 0.017453292f * D_0015EE70_2E16A0);
+        else func_00214D28_2E16A0(&d->pitch_step, pitch, D_L08_00161B8C_2E16A0 * 0.017453292f * D_0015EE70_2E16A0);
+        (*(float (*)[4])&m->rot)[2] = func_001FA748_2E16A0((*(float (*)[4])&m->rot)[2], d->yaw_step);
+        (*(float (*)[4])&m->rot)[1] = func_001FA748_2E16A0((*(float (*)[4])&m->rot)[1], d->pitch_step);
+        if ((*(float (*)[4])&m->rot)[1] < -0.7853982f) (*(float (*)[4])&m->rot)[1] = -0.7853982f;
+        else if ((*(float (*)[4])&m->rot)[1] > 0.34906584f) (*(float (*)[4])&m->rot)[1] = 0.34906584f;
+        target = func_L08_002E15A0_2E16A0((char *)m);
+        if (target) {
+            if (d->lock_timer < func_001F9850_2E16A0(30)) d->lock_timer++;
+        } else if (d->lock_timer) d->lock_timer--;
+        tick52(&d->fire_timer);
+        if ((*(int *)D_0013CAE0 & 0x20) && d->fire_timer == 0) {
+            if (d->barrel == 1) {
+                int count;
+                func_00215C00_2E16A0(direction, D_L08_00161B90_2E16A0 * D_0015EE6C_2E16A0, (*(float (*)[4])&m->rot)[2], -(*(float (*)[4])&m->rot)[1]);
+                func_00213DE0_2E16A0(d->guns[0], 1, 0, 0);
+                func_001F9EC0_2E16A0(muzzle, &D_L08_00161BC0_2E16A0, (*(float (*)[16])&m->unkC0));
+                func_001F9BD8_2E16A0(muzzle, (*(float (*)[4])&m->pos), muzzle);
+                func_L08_002E9288_2E16A0(m, muzzle, direction, target);
+                sound52(0,0,m);
+                cannon_camera52.mag0 = 0.03f;
+                cannon_camera52.timer0 = func_001F9850_2E16A0(10);
+                cannon_camera52.mag1 = 0.03f;
+                cannon_camera52.timer1 = func_001F9850_2E16A0(7);
+                d->barrel = 0; d->fire_timer = func_001F9850_2E16A0(20);
+                count = 4;
+                do {
+                    *(u128 *)random_vec = 0;
+                    random_vec[0] = func_002140F8_2E16A0(-1.0f,1.0f);
+                    random_vec[1] = func_002140F8_2E16A0(-1.0f,1.0f);
+                    random_vec[2] = func_002140F8_2E16A0(-1.0f,1.0f);
+                    *(u128 *)scatter = *(u128 *)random_vec;
+                    func_L00_001FF4B0_2E16A0(scatter, scatter, func_001F9CB8_2E16A0(direction) * (D_0015EE60_2E16A0 * -0.35000002f + 1.0f));
+                    func_001F9BD8_2E16A0(scatter, direction, scatter);
+                    func_L00_001FF4B0_2E16A0(scatter, scatter, func_002140F8_2E16A0(D_0015EE6C_2E16A0 * 3.0f, D_0015EE6C_2E16A0 * 6.0f));
+                    lo = func_001F9850_2E16A0(5);
+                    func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)scatter, 0x5F2F4F6F, func_L00_00258BC8_2E16A0(lo, func_001F9850_2E16A0(10)), 50000.0f);
+                } while (--count >= 0);
+                func_L00_001FF4B0_2E16A0(direction, direction, D_0015EE6C_2E16A0 * 0.5f);
+                lo = func_001F9850_2E16A0(4);
+                func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)direction, 0x2F4F7F7F, func_L00_00258BC8_2E16A0(lo,func_001F9850_2E16A0(7)),500000.0f);
+            } else {
+                int count;
+                func_00215C00_2E16A0(direction, D_L08_00161B90_2E16A0 * D_0015EE6C_2E16A0, (*(float (*)[4])&m->rot)[2], -(*(float (*)[4])&m->rot)[1]);
+                func_00213DE0_2E16A0(d->guns[1], 1, 0, 0);
+                func_001F9EC0_2E16A0(muzzle, &D_L08_00161BD0_2E16A0, (*(float (*)[16])&m->unkC0));
+                func_001F9BD8_2E16A0(muzzle, (*(float (*)[4])&m->pos), muzzle);
+                func_L08_002E9288_2E16A0(m, muzzle, direction, func_L08_002E15A0_2E16A0((char *)m));
+                sound52(0,0,m);
+                cannon_camera52.mag0 = 0.03f;
+                cannon_camera52.timer0 = func_001F9850_2E16A0(10);
+                cannon_camera52.mag1 = 0.03f;
+                cannon_camera52.timer1 = func_001F9850_2E16A0(7);
+                d->barrel = 1; d->fire_timer = func_001F9850_2E16A0(20);
+                count = 4;
+                do {
+                    *(u128 *)random_vec = 0;
+                    random_vec[0] = func_002140F8_2E16A0(-1.0f,1.0f);
+                    random_vec[1] = func_002140F8_2E16A0(-1.0f,1.0f);
+                    random_vec[2] = func_002140F8_2E16A0(-1.0f,1.0f);
+                    *(u128 *)scatter = *(u128 *)random_vec;
+                    func_L00_001FF4B0_2E16A0(scatter, scatter, func_001F9CB8_2E16A0(direction) * (D_0015EE60_2E16A0 * -0.35000002f + 1.0f));
+                    func_001F9BD8_2E16A0(scatter, direction, scatter);
+                    func_L00_001FF4B0_2E16A0(scatter, scatter, func_002140F8_2E16A0(D_0015EE6C_2E16A0 * 3.0f, D_0015EE6C_2E16A0 * 6.0f));
+                    lo = func_001F9850_2E16A0(5);
+                    func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)scatter, 0x5F2F4F6F, func_L00_00258BC8_2E16A0(lo, func_001F9850_2E16A0(10)), 50000.0f);
+                } while (--count >= 0);
+                func_L00_001FF4B0_2E16A0(direction, direction, D_0015EE6C_2E16A0 * 0.5f);
+                lo = func_001F9850_2E16A0(4);
+                func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)direction, 0x2F4F7F7F, func_L00_00258BC8_2E16A0(lo,func_001F9850_2E16A0(7)),500000.0f);
+            }
+        }
+        if (tick52(&d->camera_timer)) {
+            func_L08_00315068_2E16A0();
+            func_001F9EC0_2E16A0(direction, &D_L08_00161BE0_2E16A0, (*(float (*)[16])&m->unkC0));
+            func_001F9BD8_2E16A0(direction, direction, (*(float (*)[4])&m->pos));
+            func_L00_002EBE88_2E16A0(direction); func_L00_002EBEE0_2E16A0((*(float (*)[4])&m->rot));
+        }
+        func_001F49B0_2E16A0(func_L08_002E0258_2E16A0, m);
+        if (tick52(&d->wave_timer)) {
+            int count;
+            dead = 0;
+            all_done = 1; links = d->linked; count = 7;
+            do {
+                if (*links && (signed char)(*links)->state >= 0)
+                    all_done = (*links)->state == 2 ? all_done : 0;
+                links++;
+            } while (--count >= 0);
+            if (all_done) {
+                int cutoff = -1;
+                int *indices = d->indices;
+                int *walk = indices;
+                count = 3;
+                do {
+                    Moby *node;
+                    node = (Moby *)((*walk << 8) + (unsigned int)D_L08_00160058_2E16A0);
+                    if ((signed char)node->state <= cutoff) dead++;
+                    walk++;
+                } while (--count >= 0);
+                switch (dead) {
+                case 0: d->range = 10.0f; d->wave_timer = func_001F9850_2E16A0(285); break;
+                case 1: d->range = 12.5f; d->wave_timer = func_001F9850_2E16A0(240); break;
+                case 2: d->range = 15.0f; d->wave_timer = func_001F9850_2E16A0(195); break;
+                case 3: d->range = 17.5f; d->wave_timer = func_001F9850_2E16A0(150); break;
+                case 4:
+                    if (visited52[D_0015EE84_2E16A0][m->unkB0] != 0xFF) {
+                        Moby *node;
+                        (*(float (*)[4])&m->rot)[1] = 0.0f; m->unkBC = 2;
+                        func_L00_002EC0C8_2E16A0(0); m->state = 4;
+                        node = (Moby *)(D_L08_00160058_2E16A0 + (d->platform_index << 8));
+                        qcopy(muzzle, (*(float (*)[4])&node->rot)); muzzle[2] = func_001FA748_2E16A0(muzzle[2], 3.1415927f);
+                        func_L00_001FF4B0_2E16A0(direction, (*(float (*)[16])&node->unkC0), 2.5f);
+                        func_001F9BD8_2E16A0(direction, direction, (*(float (*)[4])&node->pos));
+                        func_L00_00217718_2E16A0(direction, muzzle, 0, 1);
+                        func_L08_00307FF0_2E16A0((char *)node, 1);
+                        d->visual_angle = 1.5707964f; return;
+                    }
+                    break;
+                }
+                if (func_L00_001FEF78_2E16A0(&d->target_timer) || (signed char)((Moby *)D_L08_00160058_2E16A0)[*(int *)((unsigned int)indices + (d->target_index << 2))].state < 0) {
+                    d->target_timer = 1; best_angle = 3.1415927f; best = -1;
+                    for (i=0; i<4; i++) {
+                        Moby *node;
+                        node = (Moby *)(D_L08_00160058_2E16A0 + (indices[i] << 8));
+                        if (func_001FA850_2E16A0(func_L00_001FF860_2E16A0((*(float (*)[4])&node->pos)[0]-hero52.pos[0], (*(float (*)[4])&node->pos)[1]-hero52.pos[1]), hero52.rot[2]) < best_angle && node->state < 0x7F) {
+                            best = i;
+                            best_angle = func_001FA850_2E16A0(func_L00_001FF860_2E16A0((*(float (*)[4])&node->pos)[0]-hero52.pos[0], (*(float (*)[4])&node->pos)[1]-hero52.pos[1]), hero52.rot[2]);
+                        }
+                    }
+                    d->target_index = best;
+                }
+                ((Moby *)D_L08_00160058_2E16A0)[*(int *)((unsigned int)indices + (d->target_index << 2))].unkBC = 1;
+            }
+        }
+        break;
+    case 4:
+        break;
+    case 6:
+        func_0020D678_2E16A0(d->guns[0]); func_0020D678_2E16A0(d->guns[1]); func_0020D678_2E16A0(m); return;
+    }
+    if (d->guns[0] == 0) {
+        Moby *node;
+        node = func_0020D348_2E16A0(0x236); d->guns[0] = node;
+        if (node) {
+            node->unk30 = 0xFF; d->guns[0]->unk32 = 0x7E; d->guns[0]->unk31 = 1;
+            (*(long *)&d->guns[0]->spawn_frame) = (*(long *)&m->spawn_frame);
+            func_001F9EC0_2E16A0(work, &D_L08_00161BA0_2E16A0, (*(float (*)[16])&m->unkC0));
+            func_001F9BD8_2E16A0(work, (*(float (*)[4])&m->pos), work);
+            {
+            Moby *gun = d->guns[0];
+            qcopy((*(float (*)[4])&gun->pos), work); qcopy((*(float (*)[4])&gun->rot), (*(float (*)[4])&m->rot));
+            func_L00_00251E30_2E16A0(gun);
+        }
+        }
+    } else {
+        func_001F9EC0_2E16A0(work, &D_L08_00161BA0_2E16A0, (*(float (*)[16])&m->unkC0));
+        func_001F9BD8_2E16A0(work, (*(float (*)[4])&m->pos), work);
+        {
+            Moby *gun = d->guns[0];
+            qcopy((*(float (*)[4])&gun->pos), work); qcopy((*(float (*)[4])&gun->rot), (*(float (*)[4])&m->rot));
+            if ((gun->unk70 & 2) && gun->prev_seq == 1) func_00213DE0_2E16A0(gun,0,0,0);
+        }
+    }
+
+    if (d->guns[1] == 0) {
+        Moby *node;
+        node = func_0020D348_2E16A0(0x236); d->guns[1] = node;
+        if (node) {
+            node->unk30 = 0xFF; d->guns[1]->unk32 = 0x7E; d->guns[1]->unk31 = 1;
+            (*(long *)&d->guns[1]->spawn_frame) = (*(long *)&m->spawn_frame);
+            func_001F9EC0_2E16A0(work, &D_L08_00161BB0_2E16A0, (*(float (*)[16])&m->unkC0));
+            func_001F9BD8_2E16A0(work, (*(float (*)[4])&m->pos), work);
+            {
+            Moby *gun = d->guns[1];
+            qcopy((*(float (*)[4])&gun->pos), work); qcopy((*(float (*)[4])&gun->rot), (*(float (*)[4])&m->rot));
+            func_L00_00251E30_2E16A0(gun);
+        }
+        }
+    } else {
+        func_001F9EC0_2E16A0(work, &D_L08_00161BB0_2E16A0, (*(float (*)[16])&m->unkC0));
+        func_001F9BD8_2E16A0(work, (*(float (*)[4])&m->pos), work);
+        {
+            Moby *gun = d->guns[1];
+            qcopy((*(float (*)[4])&gun->pos), work); qcopy((*(float (*)[4])&gun->rot), (*(float (*)[4])&m->rot));
+            if ((gun->unk70 & 2) && gun->prev_seq == 1) func_00213DE0_2E16A0(gun,0,0,0);
+        }
+    }
+
+    if (d->visual) {
+        func_001F9EC0_2E16A0(work, &D_L08_00161C80_2E16A0, (*(float (*)[16])&m->unkC0));
+        func_001F9BD8_2E16A0((*(float (*)[4])&d->visual->pos), work, (*(float (*)[4])&m->pos));
+        {
+            Moby *visual = d->visual;
+            qcopy((*(float (*)[4])&visual->rot), (*(float (*)[4])&m->rot));
+            (*(float (*)[4])&d->visual->rot)[1] = func_001FA748_2E16A0((*(float (*)[4])&visual->rot)[1], d->visual_angle);
+        }
+        func_L00_00251E30_2E16A0(d->visual);
+    }
+}
 #include "sda.h"
 
 /* Update function for moby classes 441-443 on level 08 (falling debris): picks its spin, falls with a smoke trail, bursts into particles near the ground, then falls on until out of bounds. */
