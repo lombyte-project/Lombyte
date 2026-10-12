@@ -798,7 +798,7 @@ typedef struct {
 char *FUN_L06_002d8510(char *owner);
 char *FUN_L06_002d8b98(char *owner);
 extern GbHit D_L06_001745C0;
-extern GbMoby *D_L06_0015FFD8;
+extern GbMoby *D_L06_0015FFD8_u __asm__("D_L06_0015FFD8");
 extern GbMoby *D_L06_001745D8 __attribute__((section(".data")));
 extern GbStats D_L06_0017EC58;
 extern char *FUN_L00_0026daa0(float, char *, int, int, int);
@@ -1073,7 +1073,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
             }
             ta = &d->f2A0[j];
             tb = &d->f2C0[j];
-            m = &D_L06_0015FFD8[*ta];
+            m = &D_L06_0015FFD8_u[*ta];
             if (m->cls_id == 0x3F7 && m->state != 4 &&
                 is_point_inside_clip_volume(((GbMoby *)hero.moby)->pos, *tb) != 0 &&
                 is_point_inside_clip_volume(moby->pos, *tb) == 0) {
@@ -2104,7 +2104,157 @@ void FUN_L06_002f38c8(char *obj) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f4f00.s", FUN_L06_002f4f00);
+#include "rnc/math/vector.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/entities/moby.h"
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F6330), where it is exact; names translated to the US level program. */
+
+typedef struct Moby Moby;
+
+typedef struct {
+    float pos[4];              /* 0x00 */
+    float f10;                 /* 0x10 */
+    float f14;                 /* 0x14 */
+    int f18;                   /* 0x18 */
+    int idx;                   /* 0x1C */
+    float f20;                 /* 0x20 */
+    Moby *slots[7];     /* 0x24 */
+} Vars_2F6330;
+
+extern Moby *D_L06_0015FFD8;
+extern char *func_0020D348_m(int);
+extern char D_0013F3D0[];
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
+extern float D_0015ED6C;
+extern float D_L06_00161D3C __attribute__((sda));
+extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern float D_0015ED70;
+extern float D_L06_00161D38 __attribute__((sda));
+extern float D_L06_00161D40 __attribute__((sda));
+extern float D_L06_00161D44 __attribute__((sda));
+extern float D_L06_00161D48 __attribute__((sda));
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
+extern Moby *func_0020D348_2F6330(int) __asm__("FUN_0020c4f8");
+extern int func_0022ED80_2F6330(int, int, void *) __asm__("FUN_0022da68");
+
+void FUN_L06_002f4f00(Moby *m) {
+    Vars_2F6330 *d = (Vars_2F6330 *)(*(void **)&m->pvars);
+    float tmp[4];
+    int i;
+    int j;
+    int k;
+    int flag;
+
+    switch (m->state) {
+    case 0:
+        d->f10 = (*(float (*)[4])&m->rot)[0];
+        qcopy(d->pos, (*(float (*)[4])&m->pos));
+        m->state = 2;
+        for (i = 0; i < 7; i++) {
+            d->slots[i] = func_0020D348_2F6330(0x3FD);
+            (*(char *)&d->slots[i]->unk30) = 0x40;
+            d->slots[i]->unk32 = 0x40;
+            (*(char *)&d->slots[i]->unk31) = 1;
+            (*(long *)&d->slots[i]->spawn_frame) = (*(long *)&m->spawn_frame);
+            d->slots[i]->flags = m->flags;
+            qcopy_nc((*(float (*)[4])&d->slots[i]->pos), (*(float (*)[4])&m->pos));
+            qcopy_nc((*(float (*)[4])&d->slots[i]->rot), (*(float (*)[4])&m->rot));
+            (*(float (*)[4])&d->slots[i]->rot)[0] = fast_add_rotations((*(float (*)[4])&d->slots[i]->rot)[0], (float)((i + 1) * 45) * 0.017453292f);
+            d->slots[i]->state = 1;
+            vu_euler_rotation_basis((*(float (*)[4])&d->slots[i]->unkC0), (*(float (*)[4])&d->slots[i]->rot));
+        }
+        break;
+    case 1:
+        d->f10 = (*(float (*)[4])&m->rot)[0];
+        qcopy(d->pos, (*(float (*)[4])&m->pos));
+        m->state = 3;
+        normalize_vector_xyz(tmp, (*(float (*)[4])&m->unkE0), D_L06_00161D48);
+        add_vector_xyz((*(float (*)[4])&m->pos), tmp, d);
+        break;
+    case 2:
+        if (m->unkBC == 0) {
+            flag = 0;
+            if (d->idx >= 0) {
+                                if (D_L06_0015FFD8[d->idx].oclass == 0x5A8) {
+                    if (vector_distance(D_0013F3D0, (*(float (*)[4])&D_L06_0015FFD8[d->idx].pos)) < 20.0f) {
+                        flag = 1;
+                    }
+                } else if (D_L06_0015FFD8[d->idx].oclass == 0x24A) {
+                    flag = D_L06_0015FFD8[d->idx].unkBC != 0;
+                } else {
+                    flag = D_L06_0015FFD8[d->idx].state >= 3;
+                }
+            } else {
+                if (vector_distance((*(float (*)[4])&m->pos), D_0013F3D0) < 6.0f && D_L06_00161D44 == 0.0f) {
+                    flag = 1;
+                }
+            }
+            if (flag) {
+                for (j = 0; j < 7; j++) {
+                    if (d->slots[j]->state != 3) {
+                        flag = 0;
+                    }
+                }
+                if (flag) {
+                    func_0022ED80_2F6330(0, 0, m);
+                    m->state = 4;
+                    d->f18 = 0;
+                    d->f14 = 0.0f;
+                    for (k = 0; k < 7; k++) {
+                        d->slots[k]->state = 5;
+                    }
+                }
+            }
+        }
+    case 3:
+        normalize_vector_xyz(tmp, (*(float (*)[4])&m->unkE0), D_L06_00161D48);
+        add_vector_xyz((*(float (*)[4])&m->pos), tmp, d);
+        break;
+    case 4:
+    case 5:
+        FUN_L00_0025be00(&d->f14, &d->f20, 1.0471976f,
+                          D_L06_00161D38 * 0.017453292f * D_0015ED70,
+                          D_L06_00161D3C * 0.017453292f * D_0015ED70,
+                          D_L06_00161D40 * 0.017453292f * D_0015ED6C);
+        (*(float (*)[4])&m->rot)[0] = fast_subtract_rotations(d->f10, d->f14);
+        if (d->f14 >= 1.0471976f) {
+            m->flags |= 1;
+            (*(char *)&m->unk31) = 0;
+            if (m->state == 4) {
+                m->state = 6;
+            } else {
+                m->state = 7;
+            }
+        }
+        break;
+    case 8:
+    case 9:
+        FUN_L00_0025be00(&d->f14, &d->f20, 0.0f,
+                          D_L06_00161D38 * 0.017453292f * D_0015ED70,
+                          D_L06_00161D3C * 0.017453292f * D_0015ED70,
+                          D_L06_00161D40 * 0.017453292f * D_0015ED6C);
+        (*(float (*)[4])&m->rot)[0] = fast_subtract_rotations(d->f10, d->f14);
+        if (d->f14 <= 0.0f) {
+            if (m->state == 8) {
+                m->state = 2;
+            } else {
+                m->state = 3;
+            }
+        }
+        break;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F86B8), where it is exact; names translated to the US level program. */
 
 extern float random_angle_radians_alt(void) __asm__("FUN_00213308");
