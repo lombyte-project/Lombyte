@@ -1448,7 +1448,7 @@ extern float FUN_L08_002dc9a8_cos(float) __asm__("FUN_001f9de0");
 extern int FUN_L08_002dc9a8_random_below(int) __asm__("FUN_00213260");
 extern int FUN_L08_002dc9a8_random_color(int) __asm__("FUN_001f96f8");
 extern int FUN_L08_002dc9a8_blend(int, int) __asm__("FUN_L00_00257b90");
-extern int FUN_L08_002dc9a8_color(float, int, int) __asm__("FUN_L00_002371e0");
+extern int FUN_L08_002dc9a8_color(float, int, int) __asm__("FUN_L08_00264930");
 extern void FUN_L08_002dc9a8_emit(float, void *, void *, int, int, int, int) __asm__("FUN_L00_0026bed0");
 extern void FUN_L08_002dc9a8_special(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_L08_002dc9a8_start(int, int, void *) __asm__("FUN_0022da68");
@@ -1456,7 +1456,11 @@ extern void FUN_L08_002dc9a8_finish(void *) __asm__("FUN_0020c828");
 extern float D_0015ED6C_2DC9A8 __asm__("D_0015ED6C");
 extern float D_0015ED70_2DC9A8 __asm__("D_0015ED70");
 extern char D_L08_00174640_2DC9A8[] __asm__("D_L08_00174640");
-extern int D_L08_00174658_2DC9A8 __asm__("D_L08_00174658");
+extern int D_L08_00174658_2DC9A8 __asm__("D_L08_00174658") __attribute__((section(".data")));
+
+typedef struct __attribute__((packed)) EffectVectorCopy_2DC9A8 {
+    unsigned long long values[2];
+} EffectVectorCopy_2DC9A8;
 
 typedef struct EffectRecord_2DC9A8 {
     float pos[4];
@@ -1473,83 +1477,94 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
     char *data = *(char **)(m + 0x78);
     float original[4];
     EffectRecord_2DC9A8 record;
-    float *position = record.pos;
-    float velocity[4];
+    float *position;
     float effect[4];
+    float velocity[4];
     float frame_time;
     float radius;
-    int i, axis, color, color2, alpha;
+    int i, axis;
     float angle;
 
     if (FUN_L08_002dc9a8_collision(0.5f, m + 0x10, 0, m, 0) != 0 &&
         D_L08_00174658_2DC9A8 != 0 &&
-        (*(int *)(data + 0x20) != D_L08_00174658_2DC9A8 || *(int *)(data + 0x14) != 0)) {
+        (D_L08_00174658_2DC9A8 != *(int *)(data + 0x20) || *(int *)(data + 0x14) != 0)) {
         m[0x20] = 99;
     }
-    if ((unsigned char)m[0x20] == 1) {
-        __builtin_memcpy(original, m + 0x10, 16);
-        FUN_L08_002dc9a8_transform(m + 0x10, m + 0x10, data);
+    switch ((unsigned char)m[0x20]) {
+    case 1: {
+        position = (float *)(m + 0x10);
+        *(volatile u128 *)original = *(volatile u128 *)position;
+        FUN_L08_002dc9a8_transform(position, position, data);
         *(float *)(data + 8) -= D_0015ED70_2DC9A8 * 10.8f;
-        *(u128 *)record.pos = *(u128 *)(m + 0x10);
-        *(u128 *)record.velocity = *(u128 *)data;
+        *(volatile u128 *)record.pos = *(volatile u128 *)position;
         record.owner = m;
         record.flags = 0x810000;
         record.scale = 1.0f;
         record.state = 1;
+        *(volatile u128 *)record.velocity = *(volatile u128 *)data;
         if (FUN_L08_002dc9a8_trace(original, &record, 0, m, 0) == 0) {
             if (FUN_L08_002dc9a8_test(data + 0x10) != 0) m[0x20] = 99;
         } else if (*(int *)(data + 0x20) != 0 &&
                    *(int *)(data + 0x20) != D_L08_00174658_2DC9A8) {
             m[0x20] = 99;
-            *(u128 *)(m + 0x10) = *(u128 *)(D_L08_00174640_2DC9A8 + 0x20);
+            *(volatile u128 *)position = *(volatile u128 *)(D_L08_00174640_2DC9A8 + 0x20);
             FUN_L08_002dc9a8_add(data, data, D_L08_00174640_2DC9A8 + 0x40);
             FUN_L08_002dc9a8_scale(D_0015ED6C_2DC9A8 + D_0015ED6C_2DC9A8, data, data);
         }
-    } else if ((unsigned char)m[0x20] == 99) {
+    } break;
+    case 99: {
         frame_time = D_0015ED6C_2DC9A8;
-        position[0] = frame_time * 14.0f;
-        position[1] = frame_time * 22.0f;
-        position[2] = frame_time * 12.0f;
-        position[3] = 0.0f;
-        *(u128 *)original = *(u128 *)position;
+        record.pos[0] = frame_time * 14.0f;
+        record.pos[1] = frame_time * 22.0f;
+        record.pos[2] = frame_time * 12.0f;
+        record.pos[3] = 0.0f;
+        *(EffectVectorCopy_2DC9A8 *)original = *(EffectVectorCopy_2DC9A8 *)record.pos;
         record.owner = m;
         record.flags = 0x810001;
         record.scale = 1.0f;
-        record.state = 0;
         FUN_L08_002dc9a8_setup(record.velocity);
+        record.state = 0;
         FUN_L08_002dc9a8_collision(1.0f, m + 0x10, 9, m, record.velocity);
         FUN_L08_002dc9a8_start(0, 0, m);
         for (i = 0; i < 50; i++) {
             axis = i % 4;
+            *(u128 *)velocity = 0;
             velocity[0] = FUN_L08_002dc9a8_random(D_0015ED6C_2DC9A8 * -0.5f,
                                                     D_0015ED6C_2DC9A8 * 0.5f);
             velocity[1] = FUN_L08_002dc9a8_random(D_0015ED6C_2DC9A8 * -0.5f,
                                                     D_0015ED6C_2DC9A8 * 0.5f);
             velocity[2] = FUN_L08_002dc9a8_random(D_0015ED6C_2DC9A8 * 4.0f,
                                                     original[axis]);
-            velocity[3] = 0.0f;
             *(u128 *)effect = *(u128 *)velocity;
             radius = FUN_L08_002dc9a8_random(0.0f, 0.25f);
             angle = FUN_L08_002dc9a8_random_word();
-            position[0] = FUN_L08_002dc9a8_sin(angle) * radius;
-            position[1] = FUN_L08_002dc9a8_cos(angle) * radius;
-            position[2] = 0.0f;
-            FUN_L08_002dc9a8_transform(position, position, m + 0x10);
-            position[2] -= radius * 0.717f;
-            effect[2] -= radius * D_0015ED6C_2DC9A8 * 8.0f;
-            if (axis == 0) {
+            record.pos[0] = FUN_L08_002dc9a8_sin(angle) * radius;
+            record.pos[1] = FUN_L08_002dc9a8_cos(angle) * radius;
+            record.pos[2] = 0.0f;
+            FUN_L08_002dc9a8_transform(record.pos, record.pos, m + 0x10);
+            frame_time = radius * D_0015ED6C_2DC9A8;
+            radius *= 0.717f;
+            record.pos[2] -= radius;
+            effect[2] -= frame_time * 8.0f;
+            switch (axis) {
+            case 0: {
+                int color, color2, alpha;
                 float size = FUN_L08_002dc9a8_random(200000.0f, 300000.0f);
                 color = FUN_L08_002dc9a8_random_color(60);
                 color2 = FUN_L08_002dc9a8_random_color(120);
                 alpha = FUN_L08_002dc9a8_blend(color, color2);
-                FUN_L08_002dc9a8_emit(size, position, effect, 0x1f101820, 0x101010, alpha, 0);
-            } else if (axis == 2) {
+                FUN_L08_002dc9a8_emit(size, record.pos, effect, 0x1f101820, 0x101010, alpha, 0);
+            } break;
+            case 2: {
+                int color, color2, alpha;
                 color = FUN_L08_002dc9a8_random_below(100) < 40 ? 0x5ff8f8f8 : 0x2f486078;
                 color2 = FUN_L08_002dc9a8_random_color(30);
                 alpha = FUN_L08_002dc9a8_random_color(45);
-                FUN_L08_002dc9a8_emit(150000.0f, position, effect, color, 0x0f000020,
+                FUN_L08_002dc9a8_emit(150000.0f, record.pos, effect, color, 0x0f000020,
                                       FUN_L08_002dc9a8_blend(color2, alpha), 2);
-            } else if (axis == 3) {
+            } break;
+            case 3: {
+                int color, color2, alpha;
                 color = FUN_L08_002dc9a8_color(FUN_L08_002dc9a8_random(0.25f, 1.0f),
                                                   0x7f000000, 0x7f182030);
                 color2 = FUN_L08_002dc9a8_color(FUN_L08_002dc9a8_random(0.5f, 1.0f),
@@ -1560,11 +1575,14 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
                 radius = FUN_L08_002dc9a8_random(150000.0f, 200000.0f);
                 alpha = FUN_L08_002dc9a8_random_color(60);
                 alpha = FUN_L08_002dc9a8_blend(alpha, FUN_L08_002dc9a8_random_color(120));
-                FUN_L08_002dc9a8_emit(radius, position, effect, color, color2,
+                FUN_L08_002dc9a8_emit(radius, record.pos, effect, color, color2,
                                       alpha, 3);
+            } break;
+            case 1: break;
             }
         }
         FUN_L08_002dc9a8_finish(m);
+    } break;
     }
 }
 #endif
