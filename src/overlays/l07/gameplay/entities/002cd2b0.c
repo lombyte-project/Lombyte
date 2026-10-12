@@ -2741,7 +2741,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00311eb8.s", FUN_L07_00311eb8);
 #else
 #include "eetypes.h"
 
-extern short FUN_L00_0023e5e0_l07(float, float, void *, int) __asm__("FUN_L00_0023e5e0");
+extern short FUN_L00_0023e5e0_l07(void *, float, float, int) __asm__("FUN_L00_0023e5e0");
 extern float FUN_001fa6c0_l07(int) __asm__("FUN_001fa6c0");
 
 void FUN_L07_00311eb8(float size, void *moby, void *state, int sequence, void *position,
@@ -2761,38 +2761,39 @@ void FUN_L07_00311eb8(float size, void *moby, void *state, int sequence, void *p
     else
         qcopy(&spawn_position, position);
     handle = *(short *)(s + 0x280);
+    slot = *(unsigned short *)(s + 0x280);
     if (handle == -1) {
       if (duration > 0) {
         if (size == -1.0f)
             size = 15.0f;
-        if (color == -1U)
+        if ((int)color == -1)
             color = 0x80004080;
         if (next_color == -1)
             next_color = 0;
-        handle = FUN_L00_0023e5e0_l07(size, 0.0f, &spawn_position, color);
+        handle = FUN_L00_0023e5e0_l07(&spawn_position, size, 0.0f, color);
         *(short *)(s + 0x280) = handle;
         *(short *)(s + 0x284) = 0;
       }
+      handle = *(short *)(s + 0x280);
+      slot = *(unsigned short *)(s + 0x280);
+      if (handle == -1)
+          return;
     }
-    handle = *(short *)(s + 0x280);
-    if (handle == -1)
-        return;
-    slot = *(unsigned short *)(s + 0x280);
     effect = D_L07_00180340 + ((int)(short)slot << 5);
-    if (*(short *)(s + 0x282) == sequence && sequence != -1 &&
-        (old_duration = *(short *)(s + 0x284)) != 0) {
+    if (*(short *)(s + 0x282) != sequence || sequence == -1 ||
+        (old_duration = *(short *)(s + 0x284)) == 0) {
         if (duration != -1) {
-            faded_duration = (*(short *)(s + 0x286) * 7) / 8;
-            if (old_duration <= faded_duration)
-                *(short *)(s + 0x284) = faded_duration;
+            *(short *)(s + 0x284) = duration;
+            *(short *)(s + 0x286) = duration;
         }
     } else if (duration != -1) {
-        *(short *)(s + 0x286) = duration;
-        *(short *)(s + 0x284) = duration;
+        faded_duration = (*(short *)(s + 0x286) * 7) / 8;
+        if (old_duration <= faded_duration)
+            *(short *)(s + 0x284) = faded_duration;
     }
     if (size != -1.0f)
         *(float *)(effect + 0x1c) = size;
-    if (color != -1U) {
+    if ((int)color != -1) {
         *(int *)(s + 0x288) = color;
         *(float *)(effect + 0) = FUN_001fa6c0_l07(color & 0xff) * 0.0078125f;
         *(float *)(effect + 4) = FUN_001fa6c0_l07(((int)color >> 8) & 0xff) * 0.0078125f;
