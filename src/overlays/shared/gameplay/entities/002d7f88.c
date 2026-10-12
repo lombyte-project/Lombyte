@@ -807,6 +807,7 @@ typedef struct {
     u64 texture[4];
 } __attribute__((aligned(16))) Quad_002d9810;
 extern float D_L00_00161A10_002d9810 __asm__("D_L00_00161A10") __attribute__((sda));
+extern int D_L00_00161B10_002d9810 __asm__("D_L00_00161B10") __attribute__((section(".data")));
 extern int D_L00_00161AD0_002d9810 __asm__("D_L00_00161AD0") __attribute__((sda));
 extern u32 D_L00_00161AE0_002d9810 __asm__("D_L00_00161AE0") __attribute__((sda));
 extern int D_L00_00161AC0_002d9810 __asm__("D_L00_00161AC0") __attribute__((sda));
@@ -846,19 +847,23 @@ float FUN_L00_00200260_002d9810(float, float) __asm__("FUN_L00_00200260");
 
 void FUN_L00_002d9810(u8 *m) {
     Quad_002d9810 quad;
-    u128 rotated, shifted, cross, normal;
-    u128 position;
-    float transformed[4];
-    float projection[8];
+    float shifted[4] __attribute__((aligned(16)));
+    float cross[4] __attribute__((aligned(16)));
+    float normal[4] __attribute__((aligned(16)));
+    float position[4] __attribute__((aligned(16)));
+    float projection[4] __attribute__((aligned(16)));
+    float rotated[4] __attribute__((aligned(16)));
+    float transformed[4] __attribute__((aligned(16)));
     float *data = *(float **)(m + 0x78);
-    char *shape = *(char **)((char *)data + 0xc);
+    char *shape;
     float ratio = data[0] / D_L00_00161A10_002d9810;
-    int i, j, color;
+    int i = 0x121, j, color;
     short *indices;
     char *source;
-    char *destination = (char *)0x1e3da0;
+    char *destination = D_L00_001E3DA0_002d9810;
     char *pointA, *pointB;
     float *u, *v;
+    float *shiftedVector;
 
     quad.texture[1] = FUN_001f44b8_002d9810(D_L00_00161AD4_002d9810);
     quad.texture[2] = 0xff9000000260ULL;
@@ -869,16 +874,19 @@ void FUN_L00_002d9810(u8 *m) {
                       ((u64)D_L00_00161AD0_002d9810 << 32);
     quad.texture[0] = 0;
     FUN_00233980_002d9810(0x47, 0x53001);
+    shiftedVector = shifted;
     ((float *)&position)[0] = *(float *)(m + 0x10);
     ((float *)&position)[1] = *(float *)(m + 0x14);
-    ((float *)&position)[2] = *(float *)(m + 0x18) + 0.5f + data[0];
+    ((float *)&position)[2] = *(float *)(m + 0x18) + 0.5f;
     ((float *)&position)[3] = 1.0f;
+    ((float *)&position)[2] += data[0];
     FUN_001f9a10_002d9810(&position, &position, D_L00_00161AF0_002d9810);
     FUN_001f9a28_002d9810(&rotated, D_L00_00166DC0_002d9810, &position);
-    FUN_001f9bf8_002d9810(1.0f, &shifted, &rotated);
-    FUN_001f9ad8_002d9810(&cross, &shifted, shape + 0xe0);
+    FUN_001f9bf8_002d9810(1.0f, shiftedVector, &rotated);
+    shape = *(char **)((char *)data + 0xc);
+    FUN_001f9ad8_002d9810(&cross, shiftedVector, shape + 0xe0);
     FUN_001f9bf8_002d9810(1.0f, &cross, &cross);
-    FUN_001f9ad8_002d9810(&normal, &cross, &shifted);
+    FUN_001f9ad8_002d9810(&normal, &cross, shiftedVector);
     quad.colors[0] = D_L00_00161AD8_002d9810;
     quad.colors[3] = D_L00_00161AD8_002d9810;
     quad.colors[2] = D_L00_00161AD8_002d9810;
@@ -890,15 +898,17 @@ void FUN_L00_002d9810(u8 *m) {
     FUN_00233980_002d9810(0x4a, 0);
     FUN_001f76a0_002d9810();
     source = D_L00_001E14C0_002d9810;
-    i = 0x121;
     do {
-        FUN_001f9d20_002d9810(&transformed, source, &shifted);
-        i--;
-        ((float *)destination)[0] = transformed[0];
-        ((float *)destination)[1] = transformed[1];
-        ((float *)destination)[2] = transformed[2];
-        destination += 12;
+        FUN_001f9d20_002d9810(&transformed, source, shiftedVector);
         source += 16;
+        i--;
+        {
+            float x = transformed[0], y = transformed[1], z = transformed[2];
+            ((float *)destination)[0] = x;
+            ((float *)destination)[1] = y;
+            ((float *)destination)[2] = z;
+        }
+        destination += 12;
     } while (i >= 0);
     FUN_L00_001fde98_002d9810(0x94, D_L00_001E3DA0_002d9810,
                                 D_L00_001E2FF0_002d9810, D_L00_001E26E0_002d9810, 1);
@@ -911,10 +921,11 @@ void FUN_L00_002d9810(u8 *m) {
     quad.texture[1] = FUN_001f44b8_002d9810(0xb);
     quad.texture[3] = 0x8000000048ULL;
     color = FUN_001fa6d0_002d9810(ratio * 64.0f + 128.0f);
+    color = ((u32)(color + D_L00_00161B10_002d9810) << 24) | D_L00_00161AE0_002d9810;
     quad.colors[3] = 0;
-    quad.colors[0] = ((color + D_L00_00161AD0_002d9810) << 24) | D_L00_00161AE0_002d9810;
     quad.colors[2] = 0;
-    quad.colors[1] = quad.colors[0];
+    quad.colors[0] = color;
+    quad.colors[1] = color;
     for (i = 0; i < 32; i++) {
         indices = (short *)(D_L00_001E3A80_002d9810 + i * 8);
         pointA = (char *)quad.points;
@@ -922,35 +933,44 @@ void FUN_L00_002d9810(u8 *m) {
         for (j = 0; j < 4; j++) {
             if (j >= 2)
                 FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810 * D_L00_00161AEC_002d9810,
-                                        pointB, D_L00_001E3480_002d9810 + indices[j] * 16);
+                                        pointB, D_L00_001E3480_002d9810 + *indices * 16);
             else
                 FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810, pointA,
-                                        D_L00_001E3480_002d9810 + indices[j] * 16);
+                                        D_L00_001E3480_002d9810 + *indices * 16);
+            indices++;
             pointA += 16;
             pointB += 16;
         }
-        quad.texcoords[0] = quad.texcoords[1] = quad.texcoords[2] = quad.texcoords[3] =
-            quad.texcoords[4] = 0.5f;
-        quad.texcoords[5] = quad.texcoords[7] = 1.0f;
+        quad.texcoords[0] = 0.5f;
+        quad.texcoords[1] = 0.5f;
+        quad.texcoords[2] = 0.5f;
+        quad.texcoords[3] = 0.5f;
+        quad.texcoords[4] = 0.5f;
+        quad.texcoords[5] = 1.0f;
         quad.texcoords[6] = 0.5f;
-        FUN_001f7d30_002d9810(&quad, &shifted, 0);
+        quad.texcoords[7] = 1.0f;
+        FUN_001f7d30_002d9810(&quad, shiftedVector, 0);
     }
     if (FUN_L00_002d8128(m)) {
         quad.texture[1] = FUN_001f44b8_002d9810(D_L00_00161AE4_002d9810);
-        quad.colors[0] = quad.colors[3] = quad.colors[2] = quad.colors[1] = 0x107f7f7f;
+        quad.colors[0] = 0x107f7f7f;
+        quad.colors[3] = 0x107f7f7f;
+        quad.colors[2] = 0x107f7f7f;
+        quad.colors[1] = 0x107f7f7f;
         quad.texture[3] = 0x8000000044ULL;
-        qcopy(&shifted, shape + 0xc0);
+        shape = *(char **)((char *)data + 0xc);
+        qcopy(shiftedVector, shape + 0xc0);
         qcopy(&cross, shape + 0xd0);
         qcopy(&normal, shape + 0xe0);
-        u = &quad.texcoords[1];
-        v = &quad.texcoords[0];
         ((float *)&position)[2] = *(float *)(m + 0x18);
         for (i = 0; i < 4; i++) {
+            u = &quad.texcoords[1];
+            v = &quad.texcoords[0];
             indices = (short *)(D_L00_001E3C80_002d9810 + i * 8);
             source = (char *)quad.points;
             for (j = 3; j >= 0; j--) {
                 FUN_001f9d20_002d9810(source, D_L00_001E3B80_002d9810 + (*indices++) * 16,
-                                       &shifted);
+                                       shiftedVector);
                 FUN_001f9a28_002d9810(projection, source, D_L00_00166DC0_002d9810);
                 source += 16;
                 projection[1] = projection[2];
