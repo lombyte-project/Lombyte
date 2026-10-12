@@ -932,11 +932,12 @@ extern void FUN_L00_002d1f30(void *, void *, void *, f32, f32, f32);
 
 void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
     void *volatile saved_moby = moby;
-    Vec_2d2158 target = *position;
+    Vec_2d2158 target;
     Vec_2d2158 basis[3], matrix[4], direction, offset, trace_start, trace_end, velocity;
     void *tracked;
     f32 angle, length, ratio, amount, vertical;
     s32 hit = 0;
+    qcopy(&target, position);
     setup_matrix_2d2158(basis, &D_L00_00166C80_2d2158);
     matrix_from_basis_rows_2d2158(matrix, basis);
     tracked = *(void **)(vars + 0x50);
@@ -968,15 +969,20 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
         fast_subtract_rotations_2d2158(*(f32 *)(D_001413D0_2d2158 + 0x48), angle);
         angle = angle_atan2_2d2158(velocity.f[0], velocity.f[1]);
         length = vector_length_xy_2d2158(&velocity);
-        vertical = angle_atan2_2d2158(length, velocity.f[2]);
-        if (vertical > 0.5934119f) vertical = 0.5934119f;
-        if (vertical < -1.3962634f) vertical = -1.3962634f;
-        build_spherical_offset_2d2158(&velocity,
-            (D_0013CAE0_2d2158 & 5) ? 3.5f : 2.5f, angle, vertical);
-        trace_start.q = D_L00_00166DC0_2d2158.q;
+        {
+            f32 vertical = angle_atan2_2d2158(length, velocity.f[2]);
+            if (vertical > 0.5934119f) vertical = 0.5934119f;
+            if (vertical < -1.3962634f) vertical = -1.3962634f;
+            build_spherical_offset_2d2158(&velocity,
+                (D_0013CAE0_2d2158 & 5) ? 3.5f : 2.5f, angle, vertical);
+        }
+        qcopy(&trace_start, &D_L00_00166DC0_2d2158);
         length = vector_length_xy_2d2158(&velocity);
-        ratio = velocity.f[2] / (length == 0.0f ? 0.01f : length);
-        amount = fast_sqrt_2d2158(D_0015ED70_2d2158 * 9.0f * 3.5f * 0.5f);
+        if (length == 0.0f)
+            ratio = velocity.f[2] / 0.01f;
+        else
+            ratio = velocity.f[2] / length;
+        amount = fast_sqrt_2d2158(D_0015ED70_2d2158 * 9.0f * ((D_0013CAE0_2d2158 & 5) ? 3.5f : 2.5f) * 0.5f);
         amount = ((amount + amount) * amount * (1.0f - ratio)) / (D_0015ED70_2d2158 * 9.0f);
         vertical = ratio * amount;
         if (amount > 0.0f) {
@@ -986,7 +992,7 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
             add_vector_2d2158(&trace_end, &D_L00_00166DC0_2d2158, &velocity);
             if (trace_segment_2d2158(&D_L00_00166DC0_2d2158, &trace_end, 2, saved_moby, 0) &&
                 D_L00_00173E58_2d2158 != D_001413D0_2d2158) {
-                offset.q = D_L00_00173E60_2d2158.q;
+                qcopy(&offset, &D_L00_00173E60_2d2158);
                 hit = 1;
                 angle = angle_atan2_2d2158(offset.f[0] - target.f[0], offset.f[1] - target.f[1]);
             }
