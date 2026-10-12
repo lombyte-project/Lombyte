@@ -1568,6 +1568,7 @@ void FUN_L05_00305178(char *moby) {
     float position[4] __attribute__((aligned(16)));
     char effect_data[16] __attribute__((aligned(16)));
     float speed;
+    float frame_scale;
     float angle;
     struct Hero *base;
 
@@ -1659,7 +1660,9 @@ mark_children:
     if (*(char **)(data + 0x184) != 0) {
         char *first;
         speed = vector_length_305178(data + 0x40);
-        speed /= frame_time * D_L05_00161AF0;
+        frame_scale = frame_time;
+        frame_scale = frame_scale * D_L05_00161AF0;
+        speed /= frame_scale;
         angle = D_L05_00161AF4;
         *(float *)(*(char **)(data + 0x184) + 0x58) = speed;
         *(float *)(*(char **)(data + 0x184) + 0x58) +=
@@ -1671,7 +1674,9 @@ mark_children:
     if (*(char **)(data + 0x188) != 0) {
         char *second;
         speed = vector_length_305178(data + 0x40);
-        speed /= frame_time * D_L05_00161AF0;
+        frame_scale = frame_time;
+        frame_scale = frame_scale * D_L05_00161AF0;
+        speed /= frame_scale;
         angle = D_L05_00161AF4;
         *(float *)(*(char **)(data + 0x188) + 0x58) = speed;
         *(float *)(*(char **)(data + 0x188) + 0x58) -=
