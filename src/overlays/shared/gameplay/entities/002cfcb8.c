@@ -771,15 +771,15 @@ void FUN_L00_002d19b0(u8 *m) {
     u8 *vars = *(u8 **)(m + 0x78);
     s16 *indices = D_L00_001DEE10_2d19b0;
     f32 (*uv)[2], (*old_uv)[2];
-    f32 *uv_y;
+    f32 *uv_y, *texcoords;
     s32 i, j, index, active = 0;
     f32 blend, len, x, y;
 
     quad.texture[1] = get_effect_texture_2d19b0(D_L00_001618F0);
+    quad.texture[2] = 0xff9000000260ULL;
     quad.texture[3] = (u64)(s64)D_L00_001618DC | ((u64)(s64)D_L00_001618E0 << 2) |
                       ((u64)(s64)D_L00_001618E4 << 4) | ((u64)(s64)D_L00_001618E8 << 6) |
                       ((u64)(s64)D_L00_001618EC << 32);
-    quad.texture[2] = 0xff9000000260ULL;
     quad.colors[0] = D_L00_001618F4;
     quad.texture[0] = 0;
     quad.colors[1] = D_L00_001618F4;
@@ -794,7 +794,6 @@ void FUN_L00_002d19b0(u8 *m) {
         blend = convert_integer_to_float_2d19b0(*(s32 *)(vars + 0x40));
         blend /= convert_integer_to_float_2d19b0(scale_game_frames_2d19b0(0x3c));
         uv = D_L00_001E0B00_2d19b0;
-        uv_y = &D_L00_001E0B00_2d19b0[0][1];
         old_uv = D_L00_001E0E30_2d19b0;
         for (i = 0; i < 0x66; i++) {
             transform_vector_2d19b0(&D_L00_001E04A0_2d19b0[i], &D_L00_001DE7B0_2d19b0[i], vars);
@@ -810,16 +809,16 @@ void FUN_L00_002d19b0(u8 *m) {
             len = fast_sqrt_2d19b0(c.z + c.z);
             len += len;
             if (m[0x20] == 1 || *(s32 *)(vars + 0x40) == 0) {
+                x = c.x / len + 0.5f;
                 y = c.y / len + 0.5f;
-                uv[0][0] = c.x / len + 0.5f;
+                uv[0][0] = x;
             } else {
                 x = c.x / len + 0.5f;
                 y = c.y / len + 0.5f;
                 uv[0][0] = x + (old_uv[0][0] - x) * blend;
                 y = y + (old_uv[0][1] - y) * blend;
             }
-            *uv_y = y;
-            uv_y += 2;
+            uv[0][1] = y;
             uv++;
             old_uv++;
         }
@@ -839,12 +838,21 @@ void FUN_L00_002d19b0(u8 *m) {
         }
         *(s32 *)(vars + 0x40) = scale_game_frames_2d19b0(0x3c);
     }
+    texcoords = quad.texcoords;
+    uv_y = quad.texcoords + 1;
     for (i = 0; i < 0x4a; i++) {
+        f32 *uv_x = texcoords;
+        f32 *uv_second = uv_y;
+        u128 *points = quad.points;
+        s16 *face_indices = indices + i * 12;
         for (j = 0; j < 4; j++) {
-            index = indices[i * 12 + j * 3];
-            quad.points[j] = *(u128 *)&D_L00_001E04A0_2d19b0[index];
-            quad.texcoords[j * 2] = D_L00_001E0B00_2d19b0[index][0];
-            quad.texcoords[j * 2 + 1] = D_L00_001E0B00_2d19b0[index][1];
+            index = *face_indices;
+            face_indices += 3;
+            *points++ = *(u128 *)&D_L00_001E04A0_2d19b0[index];
+            *uv_x = D_L00_001E0B00_2d19b0[index][0];
+            *uv_second = D_L00_001E0B00_2d19b0[index][1];
+            uv_x += 2;
+            uv_second += 2;
         }
         transform_vectors_2d19b0(&quad, 0, 0);
     }
