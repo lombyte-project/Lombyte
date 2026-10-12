@@ -856,9 +856,10 @@ void FUN_L12_002e3098(struct Moby *moby) {
     count = D_L12_0016183C;
     if (moby->state == 15)
         count = truncate_float_to_s32_e3098((float)count * 1.5f);
+    i = 0;
     if (count > 0) {
         position = pos;
-        i = 0;
+
         do {
         qcopy(pos, &moby->pos);
         randomize_position(position, D_L12_00161844);
@@ -895,7 +896,7 @@ void FUN_L12_002e3098(struct Moby *moby) {
             life = truncate_float_to_s32_e3098(FUN_001f96b0(
                 random_float_between_alt_e3098(
                     (float)D_L12_00161884 * 0.5f, (float)D_L12_00161884 * 2.5f)));
-            spawn_particle(position, velocity, accel, a, b, c, d, life, -1);
+            spawn_particle(pos, velocity, accel, a, b, c, d, life, -1);
         }
         } while (++i < count);
     }
