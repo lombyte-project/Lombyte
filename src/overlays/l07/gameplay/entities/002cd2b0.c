@@ -1809,7 +1809,7 @@ void FUN_L07_0030d4d8(struct Moby *moby) {
     Vec4 offset;
     /* The target helper writes four vectors, a moby pointer and a result kind. */
     float target[18] __attribute__((aligned(16)));
-    Vec4 rotation, velocity, position;
+    Vec4 position, velocity, rotation;
     float matrix[16] __attribute__((aligned(16)));
     Vec4 best, point;
     int hit;
@@ -1904,9 +1904,10 @@ animate:
                 FUN_001f9d20(&offset, &offset, matrix);
                 normalize_vector_xyz(&velocity, &offset, D_0015ED6C * 7.0f);
                 add_vector_xyz(&offset, &offset, &moby->pos);
-                velocity.f[2] = FUN_L00_0025abf0(&position, &offset, 0, D_0015ED6C * 7.0f, -(frame_time_sq * 9.8f));
-                add_vector_xyz(&position, &position, &velocity);
-                FUN_L07_0030ba90((char *)&position, (char *)&velocity, (int)moby, *(short *)(data + 0xba));
+                position_ptr = &position;
+                velocity.f[2] = FUN_L00_0025abf0(position_ptr, &offset, 0, D_0015ED6C * 7.0f, -(frame_time_sq * 9.8f));
+                add_vector_xyz(position_ptr, position_ptr, &velocity);
+                FUN_L07_0030ba90((char *)position_ptr, (char *)&velocity, (int)moby, *(short *)(data + 0xba));
                 *(short *)(data + 0xba) += 1;
             }
         }
