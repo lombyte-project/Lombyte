@@ -124,7 +124,143 @@ unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, fl
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003089d0.s", FUN_L11_003089d0);
+#include "rnc/overlay/quad.h"
+#include "rnc/gameplay/entities/moby.h"
+
+typedef struct {
+    float x, y, z;
+} Vec3_089d0;
+
+typedef struct {
+    float vel[4];
+    float size;
+    int unk14;
+    int timer;
+    struct Moby *owner;
+    float target_pos[3];
+    struct Moby *target;
+    float *aim;
+    float *src;
+} MissileVars_089d0;
+
+typedef struct {
+    u8 pad0[0x1A];
+    s16 oclass;
+    u8 pad1C[0x14];
+} MissileHit_089d0;
+
+extern int D_L11_0015F5CC_089d0 __asm__("D_L11_0015F5CC");
+extern char *D_L11_0015FFD8_089d0 __asm__("D_L11_0015FFD8");
+extern char D_L11_00174880_089d0[] __asm__("D_L11_00174880");
+extern int ftoi_089d0(float) __asm__("FUN_001fa6d0");
+extern float distance_089d0(void *, void *) __asm__("FUN_001f9b48");
+extern float vector_length_089d0(void *) __asm__("FUN_001f9af0");
+extern float angle_xy_089d0(float, float) __asm__("FUN_001f9e90");
+extern float subtract_rotations_089d0(float, float) __asm__("FUN_001fa5c8");
+extern float add_rotations_089d0(float, float) __asm__("FUN_001fa580");
+extern float absolute_float_089d0(float) __asm__("FUN_001f99c0");
+extern float distance_xy_089d0(void *, void *) __asm__("FUN_001f9b80");
+extern void build_spherical_offset_089d0(void *, float, float, float) __asm__("FUN_00214db0");
+extern void no_op_089d0(void *, void *) __asm__("FUN_001e93e8");
+extern void add_vector_089d0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_089d0(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void make_hit_089d0(float, void *, struct Moby *, int) __asm__("FUN_L00_00259858");
+extern int collision_line_089d0(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern float random_float_between_089d0(float, float) __asm__("FUN_002132a8");
+extern void reflect_089d0(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern int scale_game_frames_089d0(int) __asm__("FUN_001f96f8");
+extern int random_int_between_089d0(int, int) __asm__("FUN_L00_00257b90");
+extern char *spawn_spark_089d0(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
+extern void remove_moby_089d0(void *) __asm__("FUN_0020c828");
+extern int tick_countdown_089d0(int *) __asm__("FUN_001f9740");
+char *FUN_L11_00308670(float *pos, float *aim, float r1, float r2, float maxd);
+
+static inline void copy_xyz_089d0(float *dst, float *src) {
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+}
+
+/* Homing missile: eases its scale, re-picks a target every sixth frame, turns toward it within a cone and flies on;
+   on impact it bursts into five sparks, otherwise it shrinks away once its timer runs out. */
+void FUN_L11_003089d0(struct Moby *moby) {
+    MissileVars_089d0 *vars = (MissileVars_089d0 *)moby->pvars;
+    float old[4];
+    float look[4];
+    MissileHit_089d0 hit;
+    float q[4];
+    float r[4];
+    struct Moby *target;
+    float speed, yaw, yaw_off, pitch, pitch_off, max_yaw, max_pitch;
+    int i;
+
+    moby->scale += (moby->pclass->scale - moby->scale) * 0.1f;
+    qcopy(old, &moby->pos);
+    if (D_L11_0015F5CC_089d0 % 6 == (((char *)moby - D_L11_0015FFD8_089d0) >> 8) % 6)
+        vars->target = 0;
+    moby->alpha = ftoi_089d0(vars->size * 24.0f);
+    copy_xyz_089d0(look, vars->target_pos);
+    ((int *)look)[3] = 0;
+    target = vars->target;
+    if (target == 0 || target->state == 0xFE || target->state == 0xFD ||
+        distance_089d0(&target->pos, look) > 3.0f)
+        vars->target = (struct Moby *)FUN_L11_00308670((float *)&moby->pos, (float *)&moby->rot, 0.2617994f, 0.2617994f, 60.0f);
+    if (vars->target != 0) {
+        copy_xyz_089d0(vars->target_pos, (float *)&vars->target->pos);
+        speed = vector_length_089d0(vars);
+        yaw_off = subtract_rotations_089d0(angle_xy_089d0(vars->target->pos.x - moby->pos.x, vars->target->pos.y - moby->pos.y), moby->rot.z);
+        yaw = absolute_float_089d0(yaw_off);
+        pitch_off = subtract_rotations_089d0(-angle_xy_089d0(distance_xy_089d0(&moby->pos, &vars->target->pos), vars->target->pos.z - moby->pos.z), moby->rot.y);
+        pitch = absolute_float_089d0(pitch_off);
+        if (yaw < 0.2617994f && pitch < 0.2617994f) {
+            max_yaw = frame_time * 0.87266463f;
+            if (max_yaw < yaw) {
+                yaw_off /= yaw;
+                yaw_off *= max_yaw;
+            }
+            moby->rot.z = add_rotations_089d0(moby->rot.z, yaw_off);
+            max_pitch = frame_time * 0.87266463f;
+            if (max_pitch < pitch) {
+                pitch_off /= pitch;
+                pitch_off *= max_pitch;
+            }
+            moby->rot.y = add_rotations_089d0(moby->rot.y, pitch_off);
+            build_spherical_offset_089d0(vars, speed, moby->rot.z, -moby->rot.y);
+            no_op_089d0(&moby->pos, &vars->target->pos);
+        } else {
+            vars->target = 0;
+        }
+    }
+    add_vector_089d0(&moby->pos, &moby->pos, vars);
+    if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f ||
+        moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
+        remove_moby_089d0(moby);
+        return;
+    }
+    make_hit_089d0(1.0f, &hit, moby, 0x10000);
+    hit.oclass = moby->oclass;
+    if (collision_line_089d0(old, &moby->pos, 0, vars->owner, &hit)) {
+        for (i = 0; i < 5; i++) {
+            *(OvlQuad *)r = 0;
+            r[0] = random_float_between_089d0(-1.0f, 1.0f);
+            r[1] = random_float_between_089d0(-1.0f, 1.0f);
+            r[2] = random_float_between_089d0(-1.0f, 1.0f);
+            *(OvlQuad *)q = *(OvlQuad *)r;
+            reflect_089d0(r, vars, D_L11_00174880_089d0);
+            normalize_vector_089d0(q, q, vector_length_089d0(r) * 0.5f);
+            add_vector_089d0(q, r, q);
+            normalize_vector_089d0(q, q, random_float_between_089d0(frame_time * 5.0f, frame_time * 9.0f));
+            spawn_spark_089d0(&moby->pos, q, 0x7F2F4F6F, random_int_between_089d0(scale_game_frames_089d0(10), scale_game_frames_089d0(15)), 90000.0f);
+        }
+        remove_moby_089d0(moby);
+        return;
+    }
+    if (tick_countdown_089d0(&vars->timer)) {
+        vars->size *= 0.74f;
+        if (vars->size < 0.02f)
+            remove_moby_089d0(moby);
+    }
+}
 /* spawns a streak moby aimed along a direction with the given size and colour */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030A318), where it is exact; names translated to the US level program. */
 
