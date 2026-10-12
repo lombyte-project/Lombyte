@@ -3461,25 +3461,25 @@ extern float func_001FA748_20C568(float, float) __asm__("FUN_001fa580");
 extern float func_001FA850_20C568(float, float) __asm__("FUN_001fa688");
 
 void FUN_L00_0020bed0(void) {
-    float v0[4], v10[4], v20[4], v30[4], v40[4], v50[4], v60[4], v70[4];
+    float probe[4], ledge[4], ray_end[4], hero_level[4], clearance[4], edge_start[4], edge_end[4], grab_point[4];
     float down, fwd, up, top, drop, rise, back;
-    float speed, ang, d;
-    int go, found, edge, i, j, hit, ok, r;
-    Obj_20C568 *a;
-    Obj_20C568 *b;
+    float speed, ledge_yaw, offset;
+    int can_grab, found, edge, i, j, surface, grabbable, frames;
+    Obj_20C568 *moby_info;
+    Obj_20C568 *moby_props;
 
     if (((Hero *)D_0013F450_20C568)->unk308 == 2) return;
     ((Hero *)D_0013F450_20C568)->unk4E8 = 0;
     if (((Hero *)D_0013F450_20C568)->unk1B0 != 0) return;
-    go = 0;
+    can_grab = 0;
     if (((Hero *)D_0013F450_20C568)->vehicle_mode == 0) {
-        if ((((Hero *)D_0013F450_20C568)->state.control_mode == 4 && (((Hero *)D_0013F450_20C568)->unk41E != 0 || ((Hero *)D_0013F450_20C568)->motion.velocity.f[2] < D_0015EE6C_20C568 * 3.5f)) || ((Hero *)D_0013F450_20C568)->state.control_mode == 2 || ((Hero *)D_0013F450_20C568)->state.current == 8 || ((Hero *)D_0013F450_20C568)->state.current == 0x1A || ((Hero *)D_0013F450_20C568)->state.current == 0x1B) go = 1;
-        if (((Hero *)D_0013F450_20C568)->state.current == 0xE && ((Hero *)D_0013F450_20C568)->anim_frame < 37.0f) go = 0;
+        if ((((Hero *)D_0013F450_20C568)->state.control_mode == 4 && (((Hero *)D_0013F450_20C568)->unk41E != 0 || ((Hero *)D_0013F450_20C568)->motion.velocity.f[2] < D_0015EE6C_20C568 * 3.5f)) || ((Hero *)D_0013F450_20C568)->state.control_mode == 2 || ((Hero *)D_0013F450_20C568)->state.current == 8 || ((Hero *)D_0013F450_20C568)->state.current == 0x1A || ((Hero *)D_0013F450_20C568)->state.current == 0x1B) can_grab = 1;
+        if (((Hero *)D_0013F450_20C568)->state.current == 0xE && ((Hero *)D_0013F450_20C568)->anim_frame < 37.0f) can_grab = 0;
     }
     if (((Hero *)D_0013F450_20C568)->vehicle_mode == 1) {
-        if ((((Hero *)D_0013F450_20C568)->state.control_mode == 4 && (((Hero *)D_0013F450_20C568)->unk41E != 0 || ((Hero *)D_0013F450_20C568)->motion.velocity.f[2] < D_0015EE6C_20C568 * 2.5f)) || ((Hero *)D_0013F450_20C568)->state.control_mode == 2 || ((Hero *)D_0013F450_20C568)->state.current == 0x4F || ((Hero *)D_0013F450_20C568)->state.current == 0x4D || ((Hero *)D_0013F450_20C568)->state.current == 0x4E) go = 1;
+        if ((((Hero *)D_0013F450_20C568)->state.control_mode == 4 && (((Hero *)D_0013F450_20C568)->unk41E != 0 || ((Hero *)D_0013F450_20C568)->motion.velocity.f[2] < D_0015EE6C_20C568 * 2.5f)) || ((Hero *)D_0013F450_20C568)->state.control_mode == 2 || ((Hero *)D_0013F450_20C568)->state.current == 0x4F || ((Hero *)D_0013F450_20C568)->state.current == 0x4D || ((Hero *)D_0013F450_20C568)->state.current == 0x4E) can_grab = 1;
     }
-    if (!go) return;
+    if (!can_grab) return;
 
     down = -0.7f;
     fwd = 0.3f;
@@ -3499,21 +3499,21 @@ void FUN_L00_0020bed0(void) {
     }
     speed = ((Hero *)D_0013F450_20C568)->unk940;
     if (((Hero *)D_0013F450_20C568)->state.control_mode == 4) speed = ((Hero *)D_0013F450_20C568)->unk4A0;
-    r = func_001F9850_20C568(2);
-    func_L00_0025A540_20C568(v0, ((Hero *)D_0013F450_20C568)->motion.pos.f, ((Hero *)D_0013F450_20C568)->motion.unk110.f, r, speed);
+    frames = func_001F9850_20C568(2);
+    func_L00_0025A540_20C568(probe, ((Hero *)D_0013F450_20C568)->motion.pos.f, ((Hero *)D_0013F450_20C568)->motion.unk110.f, frames, speed);
     found = 0;
-    v0[0] += func_001F9F90_20C568(((Hero *)D_0013F450_20C568)->motion.rot.f[2]) * ((Hero *)D_0013F450_20C568)->unk234;
-    v0[1] += func_001F9FA8_20C568(((Hero *)D_0013F450_20C568)->motion.rot.f[2]) * ((Hero *)D_0013F450_20C568)->unk234;
+    probe[0] += func_001F9F90_20C568(((Hero *)D_0013F450_20C568)->motion.rot.f[2]) * ((Hero *)D_0013F450_20C568)->unk234;
+    probe[1] += func_001F9FA8_20C568(((Hero *)D_0013F450_20C568)->motion.rot.f[2]) * ((Hero *)D_0013F450_20C568)->unk234;
     for (i = 0; !found && i < 4; i++) {
-        v0[0] += func_001F9F90_20C568(((Hero *)D_0013F450_20C568)->motion.rot.f[2]) * fwd * 0.25f;
-        v0[1] += func_001F9FA8_20C568(((Hero *)D_0013F450_20C568)->motion.rot.f[2]) * fwd * 0.25f;
-        qcopy(v10, v0);
-        v10[2] += up + 0.15f;
-        qcopy(v20, v0);
-        v20[2] += top;
-        if (func_L00_001EFFF0_20C568(v10, v20, 4, (int)((Hero *)D_0013F450_20C568)->moby, 0)) {
-            hit = func_L00_001F3958_20C568();
-            if (hit != 9 && hit != 12 && hit != 0) {
+        probe[0] += func_001F9F90_20C568(((Hero *)D_0013F450_20C568)->motion.rot.f[2]) * fwd * 0.25f;
+        probe[1] += func_001F9FA8_20C568(((Hero *)D_0013F450_20C568)->motion.rot.f[2]) * fwd * 0.25f;
+        qcopy(ledge, probe);
+        ledge[2] += up + 0.15f;
+        qcopy(ray_end, probe);
+        ray_end[2] += top;
+        if (func_L00_001EFFF0_20C568(ledge, ray_end, 4, (int)((Hero *)D_0013F450_20C568)->moby, 0)) {
+            surface = func_L00_001F3958_20C568();
+            if (surface != 9 && surface != 12 && surface != 0) {
                 if (func_L00_001FF860_20C568(((Hit_20C568 *)D_L00_00173F40_20C568)->v40[2], func_001F9CE8_20C568(((Hit_20C568 *)D_L00_00173F40_20C568)->v40)) < 0.3490658402442932f) found = 1;
             }
         }
@@ -3521,47 +3521,47 @@ void FUN_L00_0020bed0(void) {
     if (!found) return;
 
     if (((Hit_20C568 *)D_L00_00173F40_20C568)->m18 != 0) {
-        ok = 0;
-        a = func_L00_0025D390_20C568(((Hit_20C568 *)D_L00_00173F40_20C568)->m18);
-        b = FUN_L00_002603d0(((Hit_20C568 *)D_L00_00173F40_20C568)->m18);
-        if (a != 0 && (a->h1E & 1)) {
-            ok = 1;
-        } else if (b != 0) {
-            ok = b->i3C & 1;
+        grabbable = 0;
+        moby_info = func_L00_0025D390_20C568(((Hit_20C568 *)D_L00_00173F40_20C568)->m18);
+        moby_props = FUN_L00_002603d0(((Hit_20C568 *)D_L00_00173F40_20C568)->m18);
+        if (moby_info != 0 && (moby_info->h1E & 1)) {
+            grabbable = 1;
+        } else if (moby_props != 0) {
+            grabbable = moby_props->i3C & 1;
         }
-        if (!ok) return;
+        if (!grabbable) return;
     }
     ((Hero *)D_0013F450_20C568)->unk4F8 = (s32)(((Hit_20C568 *)D_L00_00173F40_20C568)->m18);
     if (((Hero *)D_0013F450_20C568)->motion.pos.f[2] + up < ((Hit_20C568 *)D_L00_00173F40_20C568)->v20[2]) return;
-    qcopy(v10, ((Hit_20C568 *)D_L00_00173F40_20C568)->v20);
-    qcopy(v20, ((Hit_20C568 *)D_L00_00173F40_20C568)->v20);
-    v20[2] += 0.05f;
-    qcopy_nc(v30, ((Hero *)D_0013F450_20C568)->motion.pos.f);
-    v30[2] = v20[2];
-    if (func_L00_001EFFF0_20C568(v30, v20, 4, (int)((Hero *)D_0013F450_20C568)->moby, 0)) return;
-    qcopy(v40, ((Hit_20C568 *)D_L00_00173F40_20C568)->v20);
-    v40[2] += 0.6f;
-    if (func_L00_001F1D20_20C568(0.45f, 0.6f, v40, 4, (int)((Hero *)D_0013F450_20C568)->moby)) {
+    qcopy(ledge, ((Hit_20C568 *)D_L00_00173F40_20C568)->v20);
+    qcopy(ray_end, ((Hit_20C568 *)D_L00_00173F40_20C568)->v20);
+    ray_end[2] += 0.05f;
+    qcopy_nc(hero_level, ((Hero *)D_0013F450_20C568)->motion.pos.f);
+    hero_level[2] = ray_end[2];
+    if (func_L00_001EFFF0_20C568(hero_level, ray_end, 4, (int)((Hero *)D_0013F450_20C568)->moby, 0)) return;
+    qcopy(clearance, ((Hit_20C568 *)D_L00_00173F40_20C568)->v20);
+    clearance[2] += 0.6f;
+    if (func_L00_001F1D20_20C568(0.45f, 0.6f, clearance, 4, (int)((Hero *)D_0013F450_20C568)->moby)) {
         ((Hero *)D_0013F450_20C568)->unk4F4 |= 1;
     } else {
         ((Hero *)D_0013F450_20C568)->unk4F4 &= 0xFFFFFFFE;
     }
-    ang = func_L00_001FF860_20C568(v10[0] - ((Hero *)D_0013F450_20C568)->motion.pos.f[0], v10[1] - ((Hero *)D_0013F450_20C568)->motion.pos.f[1]);
-    ((Hero *)D_0013F450_20C568)->unk4E0 = v10[2];
-    if (v10[2] - ((Hero *)D_0013F450_20C568)->ground_z.f < rise) return;
+    ledge_yaw = func_L00_001FF860_20C568(ledge[0] - ((Hero *)D_0013F450_20C568)->motion.pos.f[0], ledge[1] - ((Hero *)D_0013F450_20C568)->motion.pos.f[1]);
+    ((Hero *)D_0013F450_20C568)->unk4E0 = ledge[2];
+    if (ledge[2] - ((Hero *)D_0013F450_20C568)->ground_z.f < rise) return;
 
     edge = 0;
     for (j = 0; j < 5; j++) {
         float len;
 
-        qcopy(v50, ((Hero *)D_0013F450_20C568)->motion.pos.f);
-        qcopy(v60, v10);
+        qcopy(edge_start, ((Hero *)D_0013F450_20C568)->motion.pos.f);
+        qcopy(edge_end, ledge);
         len = ((Hero *)D_0013F450_20C568)->unk234 * 2.0f;
-        v60[0] += func_001F9F90_20C568(ang) * len;
-        v60[1] += func_001F9FA8_20C568(ang) * len;
-        v60[2] += down * (1.0f - (float)j / 5.0f);
-        v50[2] = v60[2];
-        if (func_L00_001EFFF0_20C568(v50, v60, 2, 0, 0)) {
+        edge_end[0] += func_001F9F90_20C568(ledge_yaw) * len;
+        edge_end[1] += func_001F9FA8_20C568(ledge_yaw) * len;
+        edge_end[2] += down * (1.0f - (float)j / 5.0f);
+        edge_start[2] = edge_end[2];
+        if (func_L00_001EFFF0_20C568(edge_start, edge_end, 2, 0, 0)) {
             edge = 1;
             ((Hero *)D_0013F450_20C568)->unk4E4 = func_L00_001FF860_20C568(((Hit_20C568 *)D_L00_00173F40_20C568)->v40[0], ((Hit_20C568 *)D_L00_00173F40_20C568)->v40[1]);
             break;
@@ -3573,22 +3573,22 @@ void FUN_L00_0020bed0(void) {
         float max = 2.4f;
         float step = 0.03f;
 
-        for (d = 0.0f; d < max; d += step) {
-            qcopy(v60, v10);
-            v60[2] = v10[2];
-            v60[0] += func_001F9F90_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * d;
-            v60[1] += func_001F9FA8_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * d;
-            qcopy(v50, v60);
-            v60[2] += 0.5f;
-            v50[2] -= 0.5f;
-            if (!func_L00_001EFFF0_20C568(v60, v50, 4, (int)((Hero *)D_0013F450_20C568)->moby, 0)) {
-                qcopy(v70, v60);
-                d = step * 0.5f;
-                d = -d;
-                v70[2] = v10[2];
-                v70[0] += func_001F9F90_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * d;
-                v70[1] += func_001F9FA8_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * d;
-                qcopy(((Hero *)D_0013F450_20C568)->unk4D0.f, v70);
+        for (offset = 0.0f; offset < max; offset += step) {
+            qcopy(edge_end, ledge);
+            edge_end[2] = ledge[2];
+            edge_end[0] += func_001F9F90_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * offset;
+            edge_end[1] += func_001F9FA8_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * offset;
+            qcopy(edge_start, edge_end);
+            edge_end[2] += 0.5f;
+            edge_start[2] -= 0.5f;
+            if (!func_L00_001EFFF0_20C568(edge_end, edge_start, 4, (int)((Hero *)D_0013F450_20C568)->moby, 0)) {
+                qcopy(grab_point, edge_end);
+                offset = step * 0.5f;
+                offset = -offset;
+                grab_point[2] = ledge[2];
+                grab_point[0] += func_001F9F90_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * offset;
+                grab_point[1] += func_001F9FA8_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * offset;
+                qcopy(((Hero *)D_0013F450_20C568)->unk4D0.f, grab_point);
                 ((Hero *)D_0013F450_20C568)->unk4D0.f[0] += func_001F9F90_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * back;
                 ((Hero *)D_0013F450_20C568)->unk4D0.f[1] += func_001F9FA8_20C568(((Hero *)D_0013F450_20C568)->unk4E4) * back;
                 ((Hero *)D_0013F450_20C568)->unk4E8 = 1;

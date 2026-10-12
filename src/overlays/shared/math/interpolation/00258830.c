@@ -24,61 +24,61 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern Vec4 D_94C8_60 __asm__("D_L00_00173E60");
 extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
-int FUN_L00_00258830(char *m, char *v, int flags, float a, float b, float c) {
-    Vs t0;
-    Vs t1;
-    Vs t2;
-    Vs t3;
-    int r = 0;
-    int fl = (flags * 2) & 0x20;
-    char *p = m + 0x10;
+int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, float radius, float height) {
+    Vs old_pos;
+    Vs ray_start;
+    Vs ray_end;
+    Vs reach;
+    int result = 0;
+    int coll_flags = (flags * 2) & 0x20;
+    char *pos = moby + 0x10;
     int i;
-    char *q;
+    char *position;
 
-    qcopy(&t0, p);
-    add_vector_xyz(p, p, v);
-    if (b < vector_length_xyz(v)) {
-        qcopy(&t1, &t0);
-        t1.a[2] += a;
-        normalize_vector_xyz(&t3, v, b);
-        add_vector_xyz(&t2, &t3, p);
-        t2.a[2] += a;
-        if (FUN_001efa68(&t1, &t2, fl, (int)m, 0)) {
-            subtract_vector_xyz(p, (char *)&D_94C8_60, &t3);
-            r = 1;
-            *(float *)(m + 0x18) -= a;
+    qcopy(&old_pos, pos);
+    add_vector_xyz(pos, pos, velocity);
+    if (radius < vector_length_xyz(velocity)) {
+        qcopy(&ray_start, &old_pos);
+        ray_start.a[2] += step_height;
+        normalize_vector_xyz(&reach, velocity, radius);
+        add_vector_xyz(&ray_end, &reach, pos);
+        ray_end.a[2] += step_height;
+        if (FUN_001efa68(&ray_start, &ray_end, coll_flags, (int)moby, 0)) {
+            subtract_vector_xyz(pos, (char *)&D_94C8_60, &reach);
+            result = 1;
+            *(float *)(moby + 0x18) -= step_height;
         }
     }
-    for (i = 0, q = m + 0x10; i < 6; i++) {
-        qcopy(&t1, q);
-        t1.a[2] += a;
-        if (func_L00_001F10E0_l(&t1, b, fl | 4, m)) {
-            qcopy(q, &D_L00_00173E70);
-            r |= 1;
-            *(float *)(m + 0x18) -= a;
+    for (i = 0, position = moby + 0x10; i < 6; i++) {
+        qcopy(&ray_start, position);
+        ray_start.a[2] += step_height;
+        if (func_L00_001F10E0_l(&ray_start, radius, coll_flags | 4, moby)) {
+            qcopy(position, &D_L00_00173E70);
+            result |= 1;
+            *(float *)(moby + 0x18) -= step_height;
         } else {
             break;
         }
     }
-    b = *(float *)(m + 0x18) - c;
-    qcopy(&t1, q);
-    qcopy(&t2, q);
-    t1.a[2] += a;
-    t2.a[2] = b - 0.05f;
-    if (FUN_001efa68(&t1, &t2, fl | 2, (int)m, 0)) {
+    radius = *(float *)(moby + 0x18) - height;
+    qcopy(&ray_start, position);
+    qcopy(&ray_end, position);
+    ray_start.a[2] += step_height;
+    ray_end.a[2] = radius - 0.05f;
+    if (FUN_001efa68(&ray_start, &ray_end, coll_flags | 2, (int)moby, 0)) {
         if (D_L00_00173E40[7] > 0) {
-            float g;
-            r |= 2;
-            g = FUN_001f9e90(*(float *)((char *)D_L00_00173E40 + 0x48), vector_length_xy((char *)D_L00_00173E40 + 0x40));
-            if (g > 0.5f) {
-                r |= 4;
+            float surface;
+            result |= 2;
+            surface = FUN_001f9e90(*(float *)((char *)D_L00_00173E40 + 0x48), vector_length_xy((char *)D_L00_00173E40 + 0x40));
+            if (surface > 0.5f) {
+                result |= 4;
             }
-            g = *(float *)((char *)D_L00_00173E40 + 0x28);
-            if (b < g) {
-                *(float *)(m + 0x18) += (g - b) * 0.3f;
+            surface = *(float *)((char *)D_L00_00173E40 + 0x28);
+            if (radius < surface) {
+                *(float *)(moby + 0x18) += (surface - radius) * 0.3f;
             }
         }
     }
-    subtract_vector_xyz(v, q, &t0);
-    return r;
+    subtract_vector_xyz(velocity, position, &old_pos);
+    return result;
 }

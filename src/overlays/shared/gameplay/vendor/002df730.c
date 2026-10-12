@@ -178,48 +178,48 @@ extern float func_001FA748_2E0E50(float, float) __asm__("FUN_001fa580");
 extern void func_L00_002EC0C8_2E0E50(int) __asm__("FUN_L00_002eac18");
 extern int func_001F9908_2E0E50(void *) __asm__("FUN_001f9740");
 
-void FUN_L00_002df9a0(Moby *m) {
-    Vec_2E0E50 v0, v10;
-    Data_2E0E50 *d = (void *)m->pvars;
+void FUN_L00_002df9a0(Moby *moby) {
+    Vec_2E0E50 camera_pos, camera_rot;
+    Data_2E0E50 *data = (void *)moby->pvars;
 
     if (((Hero *)D_0013E633_2E0E50)->items[0].state == 3) {
-        func_L00_002E17F0_2E0E50(m);
+        func_L00_002E17F0_2E0E50(moby);
         return;
     }
     if (((Hero *)D_0013E633_2E0E50)->unk20B0 != 0) {
         if (D_L00_0015F6A8_2E0E50 == 0 && !((unsigned int)(((Hero *)D_0013E633_2E0E50)->state.current - 0x38) < 2)) {
-            func_L00_002E1660_2E0E50(m);
+            func_L00_002E1660_2E0E50(moby);
         }
         if (((Hero *)D_0013E633_2E0E50)->unk20B0 != 0) {
-            float a = D_0015EE64_2E0E50 * 0.02f;
-            float b = D_0015EE64_2E0E50 * 0.3f;
+            float accel = D_0015EE64_2E0E50 * 0.02f;
+            float max_speed = D_0015EE64_2E0E50 * 0.3f;
 
             ((Hero *)D_0013E633_2E0E50)->unk18F0[0].unkA0 = 1;
             ((Hero *)D_0013E633_2E0E50)->unk18F0[0].scale = 2.3f;
-            ((Hero *)D_0013E633_2E0E50)->unk18F0[0].accel = a;
-            ((Hero *)D_0013E633_2E0E50)->unk18F0[0].max_speed = b;
+            ((Hero *)D_0013E633_2E0E50)->unk18F0[0].accel = accel;
+            ((Hero *)D_0013E633_2E0E50)->unk18F0[0].max_speed = max_speed;
             if (!((unsigned int)(((Hero *)D_0013E633_2E0E50)->state.current - 0x38) < 2)) {
-                float c = 1024.0f / m->scale * -0.2f;
+                float offset_y = 1024.0f / moby->scale * -0.2f;
 
-                ((Hero *)D_0013E633_2E0E50)->unk18F0[1].accel = a;
-                ((Hero *)D_0013E633_2E0E50)->unk18F0[1].max_speed = b;
-                ((Hero *)D_0013E633_2E0E50)->unk18F0[2].max_speed = b;
+                ((Hero *)D_0013E633_2E0E50)->unk18F0[1].accel = accel;
+                ((Hero *)D_0013E633_2E0E50)->unk18F0[1].max_speed = max_speed;
+                ((Hero *)D_0013E633_2E0E50)->unk18F0[2].max_speed = max_speed;
                 ((Hero *)D_0013E633_2E0E50)->unk18F0[1].unkA0 = 2;
                 ((Hero *)D_0013E633_2E0E50)->unk18F0[2].unkA0 = 3;
-                ((Hero *)D_0013E633_2E0E50)->unk18F0[2].accel = a;
-                ((Hero *)D_0013E633_2E0E50)->unk18F0[1].pos_target.f[1] = c;
-                ((Hero *)D_0013E633_2E0E50)->unk18F0[2].pos_target.f[1] = c;
+                ((Hero *)D_0013E633_2E0E50)->unk18F0[2].accel = accel;
+                ((Hero *)D_0013E633_2E0E50)->unk18F0[1].pos_target.f[1] = offset_y;
+                ((Hero *)D_0013E633_2E0E50)->unk18F0[2].pos_target.f[1] = offset_y;
             }
         }
     }
-    switch (m->state) {
+    switch (moby->state) {
     case 0:
-        func_0022ED80_2E0E50(0, 0, m);
-        m->state = 1;
+        func_0022ED80_2E0E50(0, 0, moby);
+        moby->state = 1;
         break;
     case 1:
-        if (m->unk70 & 2) {
-            m->state = 2;
+        if (moby->unk70 & 2) {
+            moby->state = 2;
         }
         break;
     case 2:
@@ -233,10 +233,10 @@ void FUN_L00_002df9a0(Moby *m) {
             || ((Hero *)D_0013E633_2E0E50)->ground_moby->oclass != 0x155) {
             break;
         }
-        if (func_L00_002E1790_2E0E50(m) == 0 || (unsigned int)((Hero *)D_0013E633_2E0E50)->state.control_mode >= 2) {
+        if (func_L00_002E1790_2E0E50(moby) == 0 || (unsigned int)((Hero *)D_0013E633_2E0E50)->state.control_mode >= 2) {
             break;
         }
-        m->state = 3;
+        moby->state = 3;
         func_L00_00222B80_2E0E50(0x38, 0);
         if (((Hero *)D_0013E633_2E0E50)->unk20B0 != 0) {
             func_L00_00232C10_2E0E50(0x83, 0, func_001F9850_2E0E50(6));
@@ -245,18 +245,18 @@ void FUN_L00_002df9a0(Moby *m) {
         }
         break;
     case 3: {
-        int *e;
-        char *q;
+        int *platform;
+        char *linked;
 
         if (((Hero *)D_0013E633_2E0E50)->ground_moby == 0 || ((Hero *)D_0013E633_2E0E50)->ground_moby->oclass != 0x155) {
-            func_L00_002E17F0_2E0E50(m);
+            func_L00_002E17F0_2E0E50(moby);
             return;
         }
         if (!(((Hero *)D_0013E633_2E0E50)->unkA98 & 2)) {
             break;
         }
-        e = (void *)((Hero *)D_0013E633_2E0E50)->ground_moby->pvars;
-        q = D_L00_00160098_2E0E50 + (e[0] << 8);
+        platform = (void *)((Hero *)D_0013E633_2E0E50)->ground_moby->pvars;
+        linked = D_L00_00160098_2E0E50 + (platform[0] << 8);
         func_L00_00222B80_2E0E50(0x39, 0);
         if (((Hero *)D_0013E633_2E0E50)->unk20B0 != 0) {
             func_L00_00232C10_2E0E50(0x84, 0, func_001F9850_2E0E50(6));
@@ -268,80 +268,80 @@ void FUN_L00_002df9a0(Moby *m) {
         } else {
             func_0022ED80_2E0E50(0x15, 0, ((Hero *)D_0013E633_2E0E50)->moby);
         }
-        if (e[1] != -1 && e[2] != -1) {
-            m->unkBC = 0;
-            m->state = 4;
-            d->f10 = 0.0f;
+        if (platform[1] != -1 && platform[2] != -1) {
+            moby->unkBC = 0;
+            moby->state = 4;
+            data->f10 = 0.0f;
             func_L00_002EBF50_2E0E50(D_L00_00166EC0_2E0E50, D_L00_00166EC0_2E0E50 + 0x10, 1, 0, 0);
             if (((Hero *)D_0013E633_2E0E50)->unk20B0 != 0) {
-                d->i8 = e[1];
-                d->iC = e[2];
+                data->i8 = platform[1];
+                data->iC = platform[2];
             } else {
-                d->iC = e[1];
-                d->i8 = e[2];
+                data->iC = platform[1];
+                data->i8 = platform[2];
             }
             break;
         }
-        m->state = 5;
-        d->i0 = func_001FA898_2E0E50(func_001F9878_2E0E50(D_L00_00161C84_2E0E50));
+        moby->state = 5;
+        data->i0 = func_001FA898_2E0E50(func_001F9878_2E0E50(D_L00_00161C84_2E0E50));
         if (((Hero *)D_0013E633_2E0E50)->unk20B0 == 0) {
-            ((Moby *)q)->unkBC = 8;
+            ((Moby *)linked)->unkBC = 8;
             ((Hero *)D_0013E633_2E0E50)->unk20B0 = 1;
         } else {
-            ((Moby *)q)->unkBC = 4;
+            ((Moby *)linked)->unkBC = 4;
             ((Hero *)D_0013E633_2E0E50)->unk20B0 = 0;
         }
         break;
     }
     case 4:
         if (((Hero *)D_0013E633_2E0E50)->ground_moby == 0 || ((Hero *)D_0013E633_2E0E50)->ground_moby->oclass != 0x155) {
-            func_L00_002E17F0_2E0E50(m);
+            func_L00_002E17F0_2E0E50(moby);
             return;
         }
-        switch (m->unkBC) {
+        switch (moby->unkBC) {
         case 0: {
-            char *q;
+            char *linked;
 
             func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 1.0f, 1.0f / func_001F9850_2E0E50(15));
             if (!(1.0f <= D_L00_0015F4FC_2E0E50)) {
                 break;
             }
-            q = D_L00_00160098_2E0E50 + (*(int *)((Hero *)D_0013E633_2E0E50)->ground_moby->pvars << 8);
-            m->unkBC = 1;
-            func_L00_002EBE88_2E0E50(D_L00_001601AC_2E0E50 + (d->i8 << 7) + 0x30);
-            func_L00_002EBEE0_2E0E50(D_L00_001601AC_2E0E50 + (d->i8 << 7) + 0x70);
+            linked = D_L00_00160098_2E0E50 + (*(int *)((Hero *)D_0013E633_2E0E50)->ground_moby->pvars << 8);
+            moby->unkBC = 1;
+            func_L00_002EBE88_2E0E50(D_L00_001601AC_2E0E50 + (data->i8 << 7) + 0x30);
+            func_L00_002EBEE0_2E0E50(D_L00_001601AC_2E0E50 + (data->i8 << 7) + 0x70);
             D_L00_0015F504_2E0E50 = 1;
             if (((Hero *)D_0013E633_2E0E50)->unk20B0 == 0) {
-                ((Moby *)q)->unkBC = 8;
+                ((Moby *)linked)->unkBC = 8;
                 ((Hero *)D_0013E633_2E0E50)->unk20B0 = 1;
             } else {
-                ((Moby *)q)->unkBC = 4;
+                ((Moby *)linked)->unkBC = 4;
                 ((Hero *)D_0013E633_2E0E50)->unk20B0 = 0;
             }
             break;
         }
         case 1:
-            if (d->f10 == 0.0f && 0.0f < D_L00_0015F4FC_2E0E50) {
+            if (data->f10 == 0.0f && 0.0f < D_L00_0015F4FC_2E0E50) {
                 func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 0.0f, 1.0f / func_001F9850_2E0E50(15));
                 return;
             }
-            if (d->f10 < 1.0f) {
-                func_00214D88_2E0E50(&d->f10, &d->f14, 1.0f, D_0015EE70_2E0E50 * 0.666f, D_0015EE70_2E0E50 * 0.666f, D_0015EE6C_2E0E50 * 0.5f);
-                func_001F9C08_2E0E50(&v0, D_L00_001601AC_2E0E50 + (d->i8 << 7) + 0x30, D_L00_001601AC_2E0E50 + (d->iC << 7) + 0x30, d->f10);
-                func_001F9BC0_2E0E50(&v10);
-                v10.y = func_001FA790_2E0E50(((Node_2E0E50 *)D_L00_001601AC_2E0E50)[d->iC].v70.y, ((Node_2E0E50 *)D_L00_001601AC_2E0E50)[d->i8].v70.y) * d->f10;
-                v10.y = func_001FA748_2E0E50(((Node_2E0E50 *)D_L00_001601AC_2E0E50)[d->i8].v70.y, v10.y);
-                v10.z = func_001FA790_2E0E50(((Node_2E0E50 *)D_L00_001601AC_2E0E50)[d->iC].v70.z, ((Node_2E0E50 *)D_L00_001601AC_2E0E50)[d->i8].v70.z) * d->f10;
-                v10.z = func_001FA748_2E0E50(((Node_2E0E50 *)D_L00_001601AC_2E0E50)[d->i8].v70.z, v10.z);
-                func_L00_002EBE88_2E0E50(&v0);
-                func_L00_002EBEE0_2E0E50(&v10);
+            if (data->f10 < 1.0f) {
+                func_00214D88_2E0E50(&data->f10, &data->f14, 1.0f, D_0015EE70_2E0E50 * 0.666f, D_0015EE70_2E0E50 * 0.666f, D_0015EE6C_2E0E50 * 0.5f);
+                func_001F9C08_2E0E50(&camera_pos, D_L00_001601AC_2E0E50 + (data->i8 << 7) + 0x30, D_L00_001601AC_2E0E50 + (data->iC << 7) + 0x30, data->f10);
+                func_001F9BC0_2E0E50(&camera_rot);
+                camera_rot.y = func_001FA790_2E0E50(((Node_2E0E50 *)D_L00_001601AC_2E0E50)[data->iC].v70.y, ((Node_2E0E50 *)D_L00_001601AC_2E0E50)[data->i8].v70.y) * data->f10;
+                camera_rot.y = func_001FA748_2E0E50(((Node_2E0E50 *)D_L00_001601AC_2E0E50)[data->i8].v70.y, camera_rot.y);
+                camera_rot.z = func_001FA790_2E0E50(((Node_2E0E50 *)D_L00_001601AC_2E0E50)[data->iC].v70.z, ((Node_2E0E50 *)D_L00_001601AC_2E0E50)[data->i8].v70.z) * data->f10;
+                camera_rot.z = func_001FA748_2E0E50(((Node_2E0E50 *)D_L00_001601AC_2E0E50)[data->i8].v70.z, camera_rot.z);
+                func_L00_002EBE88_2E0E50(&camera_pos);
+                func_L00_002EBEE0_2E0E50(&camera_rot);
                 return;
             }
             if (D_L00_0015F4FC_2E0E50 < 1.0f) {
                 func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 1.0f, 1.0f / func_001F9850_2E0E50(15));
                 return;
             }
-            m->unkBC = 2;
+            moby->unkBC = 2;
             D_L00_0015F504_2E0E50 = 0;
             func_L00_002EC0C8_2E0E50(3);
             return;
@@ -350,7 +350,7 @@ void FUN_L00_002df9a0(Moby *m) {
                 func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 0.0f, 1.0f / func_001F9850_2E0E50(15));
                 return;
             }
-            m->state = 2;
+            moby->state = 2;
             func_L00_00222B80_2E0E50(0x3A, 0);
             if (((Hero *)D_0013E633_2E0E50)->unk20B0 != 0) {
                 func_L00_00232C10_2E0E50(0x48, 0, func_001F9850_2E0E50(6));
@@ -362,11 +362,11 @@ void FUN_L00_002df9a0(Moby *m) {
         break;
     case 5:
         if (((Hero *)D_0013E633_2E0E50)->ground_moby != 0 && ((Hero *)D_0013E633_2E0E50)->ground_moby->oclass == 0x155
-            && func_001F9908_2E0E50(d) == 0) {
+            && func_001F9908_2E0E50(data) == 0) {
             break;
         }
-        func_L00_002E17F0_2E0E50(m);
-        m->state = 2;
+        func_L00_002E17F0_2E0E50(moby);
+        moby->state = 2;
         break;
     }
 }
@@ -867,158 +867,158 @@ extern int func_001F9850_2E3700(int) __asm__("FUN_001f96f8");
 extern void func_002141A8_2E3700(void *, float, float) __asm__("FUN_00213358");
 extern int func_L00_0023F0D0_2E3700(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 
-void FUN_L00_002e2250(int unused, int idx) {
-    Vec_2E3700 d;
+void FUN_L00_002e2250(int unused, int beam) {
+    Vec_2E3700 span;
     Vec_2E3700 dir;
     Vec_2E3700 side;
     Vec_2E3700 up;
     Vec_2E3700 from;
-    Vec_2E3700 d2;
+    Vec_2E3700 span2;
     Vec_2E3700 tip;
     Vec4 vel;
     Vec_2E3700 pos;
-    int k = idx * 2;
-    int k1 = k + 1;
+    int strand = beam * 2;
+    int next_strand = strand + 1;
     float step;
-    float ang;
+    float phase_step;
     float one;
-    Pt_2E3700 *p;
+    Pt_2E3700 *point;
     int i;
     int j;
     int n;
 
-    func_001F9BF0_2E3700(d, &D_L00_001E7130_2E3700[idx], &D_L00_001E70A0_2E3700[idx]);
-    step = fast_vec_length(d) / 20.0f;
-    if (D_L00_00161CC8_2E3700[idx] == 2) {
-        D_L00_00161CC8_2E3700[idx] = 3;
+    func_001F9BF0_2E3700(span, &D_L00_001E7130_2E3700[beam], &D_L00_001E70A0_2E3700[beam]);
+    step = fast_vec_length(span) / 20.0f;
+    if (D_L00_00161CC8_2E3700[beam] == 2) {
+        D_L00_00161CC8_2E3700[beam] = 3;
         for (i = 0; i < 20; i++) {
-            Pt_2E3700 *a = &D_L00_001E7190_2E3700[k][i];
-            Pt_2E3700 *b = &D_L00_001E7190_2E3700[k1][i];
+            Pt_2E3700 *first = &D_L00_001E7190_2E3700[strand][i];
+            Pt_2E3700 *second = &D_L00_001E7190_2E3700[next_strand][i];
 
-            a->x = step * (float)i;
-            a->y = a->z = 0.0f;
-            a->w = 1.0f;
-            b->x = step * (float)i;
-            b->y = b->z = 0.0f;
-            b->w = 1.0f;
+            first->x = step * (float)i;
+            first->y = first->z = 0.0f;
+            first->w = 1.0f;
+            second->x = step * (float)i;
+            second->y = second->z = 0.0f;
+            second->w = 1.0f;
         }
     }
-    D_L00_00161CD8_2E3700[idx] = func_001FA748_2E3700(D_L00_00161CD8_2E3700[idx], 0.17453292f);
-    D_L00_00161CE8_2E3700[idx] = func_001FA790_2E3700(D_L00_00161CE8_2E3700[idx], 0.80285144f);
-    D_L00_00161CF8_2E3700[idx] = func_001FA748_2E3700(D_L00_00161CF8_2E3700[idx], 0.05236f);
-    ang = 360.0f / (func_001FA888_2E3700(20) * 0.5f) * 0.017453292f;
+    D_L00_00161CD8_2E3700[beam] = func_001FA748_2E3700(D_L00_00161CD8_2E3700[beam], 0.17453292f);
+    D_L00_00161CE8_2E3700[beam] = func_001FA790_2E3700(D_L00_00161CE8_2E3700[beam], 0.80285144f);
+    D_L00_00161CF8_2E3700[beam] = func_001FA748_2E3700(D_L00_00161CF8_2E3700[beam], 0.05236f);
+    phase_step = 360.0f / (func_001FA888_2E3700(20) * 0.5f) * 0.017453292f;
     for (j = 0; j < 19; j++) {
         float fj = (float)j;
-        float a = func_001FA888_2E3700(j) / func_001FA888_2E3700(20) * 0.3f + 0.1f;
-        Pt_2E3700 *p = &D_L00_001E7190_2E3700[k][j];
+        float amplitude = func_001FA888_2E3700(j) / func_001FA888_2E3700(20) * 0.3f + 0.1f;
+        Pt_2E3700 *point = &D_L00_001E7190_2E3700[strand][j];
 
-        a = a * func_001F9FA8_2E3700(func_L00_0025F368_2E3700(D_L00_00161CD8_2E3700[idx] + fj * ang));
-        p->y = 0.0f;
-        p->w = 1.0f;
-        p->z = a;
-        p->x = step * fj;
+        amplitude = amplitude * func_001F9FA8_2E3700(func_L00_0025F368_2E3700(D_L00_00161CD8_2E3700[beam] + fj * phase_step));
+        point->y = 0.0f;
+        point->w = 1.0f;
+        point->z = amplitude;
+        point->x = step * fj;
     }
-    qcopy_nc(from, &D_L00_001E70A0_2E3700[idx]);
+    qcopy_nc(from, &D_L00_001E70A0_2E3700[beam]);
     one = 1.0f;
-    func_001F9BF0_2E3700(d2, &D_L00_001E7130_2E3700[idx], from);
-    func_L00_001FF4B0_2E3700(dir, d2, one);
+    func_001F9BF0_2E3700(span2, &D_L00_001E7130_2E3700[beam], from);
+    func_L00_001FF4B0_2E3700(dir, span2, one);
     func_001F9CA0_2E3700(side, dir, D_0013E633_2E3700);
     func_L00_001FF4B0_2E3700(side, side, -1.0f);
     func_001F9CA0_2E3700(up, side, dir);
-    func_001F9EE8_2E3700(tip, &D_L00_001E7190_2E3700[k][18], dir);
-    qcopy(&D_L00_001E7160_2E3700[idx], tip);
-    p = D_L00_001E7190_2E3700[k1];
+    func_001F9EE8_2E3700(tip, &D_L00_001E7190_2E3700[strand][18], dir);
+    qcopy(&D_L00_001E7160_2E3700[beam], tip);
+    point = D_L00_001E7190_2E3700[next_strand];
     for (n = 0; n < 19; n++) {
         float fn = (float)n;
-        float s;
-        float t;
-        float a;
-        float b;
+        float twist;
+        float swell;
+        float height;
+        float ripple;
         float random;
 
-        p->z = 0.0f;
-        s = func_L00_0025F368_2E3700(D_L00_00161CE8_2E3700[idx] + fn * 0.99483764f);
-        t = func_L00_0025F368_2E3700(D_L00_00161CF8_2E3700[idx] + fn * 0.20944f);
-        a = func_001F9FA8_2E3700(t) * 0.5f;
-        b = func_001F9FA8_2E3700(s);
+        point->z = 0.0f;
+        twist = func_L00_0025F368_2E3700(D_L00_00161CE8_2E3700[beam] + fn * 0.99483764f);
+        swell = func_L00_0025F368_2E3700(D_L00_00161CF8_2E3700[beam] + fn * 0.20944f);
+        height = func_001F9FA8_2E3700(swell) * 0.5f;
+        ripple = func_001F9FA8_2E3700(twist);
         random = func_L00_00258C80_2E3700(0.0f, 0.2f);
-        p->z += a * b + random;
-        p->y = func_001F9F90_2E3700(s) * 0.3f;
-        p->w = 1.0f;
-        p->x = step * fn;
-        p++;
+        point->z += height * ripple + random;
+        point->y = func_001F9F90_2E3700(twist) * 0.3f;
+        point->w = 1.0f;
+        point->x = step * fn;
+        point++;
     }
     {
         float one;
-        float r = func_002140F8_2E3700(0.01f, 0.05f);
-        float a;
+        float speed = func_002140F8_2E3700(0.01f, 0.05f);
+        float angle;
 
         one = 1.0f;
-        a = func_L00_00258C80_2E3700(0.34906584f, 0.6981317f);
+        angle = func_L00_00258C80_2E3700(0.34906584f, 0.6981317f);
         vel.q = 0;
         vel.f[0] = one;
         vel.f[3] = one;
-        vel.f[0] = r * func_001F9F90_2E3700(a);
-        vel.f[1] = r * func_001F9FA8_2E3700(a);
-        func_001F9EC0_2E3700(&vel, &vel, &D_L00_001E7070_2E3700[idx]);
-        func_L00_002757E8_2E3700(D_L00_001E7070_2E3700[idx].v30, &vel, 0x7F, D_L00_00161D58_2E3700[idx]);
+        vel.f[0] = speed * func_001F9F90_2E3700(angle);
+        vel.f[1] = speed * func_001F9FA8_2E3700(angle);
+        func_001F9EC0_2E3700(&vel, &vel, &D_L00_001E7070_2E3700[beam]);
+        func_L00_002757E8_2E3700(D_L00_001E7070_2E3700[beam].v30, &vel, 0x7F, D_L00_00161D58_2E3700[beam]);
         if (func_002140B0_2E3700(3) == 0) {
-            Part_2E3700 *p;
+            Part_2E3700 *spark;
 
-            fast_vec_scale(pos, &D_L00_001E7070_2E3700[idx], 0.3f);
-            func_001F9BD8_2E3700(pos, pos, D_L00_001E7070_2E3700[idx].v30);
-            p = func_L00_002757E8_2E3700(pos, D_L00_0015F660_2E3700, 0x7F, D_L00_00161D58_2E3700[idx]);
-            if (p != 0) {
-                PartSub_2E3700 *q = &p->sub;
+            fast_vec_scale(pos, &D_L00_001E7070_2E3700[beam], 0.3f);
+            func_001F9BD8_2E3700(pos, pos, D_L00_001E7070_2E3700[beam].v30);
+            spark = func_L00_002757E8_2E3700(pos, D_L00_0015F660_2E3700, 0x7F, D_L00_00161D58_2E3700[beam]);
+            if (spark != 0) {
+                PartSub_2E3700 *sub = &spark->sub;
 
-                p->fC = 120000.0f;
-                p->fA = func_001F9850_2E3700(4);
-                q->f10 = one / func_001FA888_2E3700(p->fA);
-                q->f18 = 0x7F7F7F;
-                if (D_L00_00161D38_2E3700[idx] == 1) q->f16 = 1;
+                spark->fC = 120000.0f;
+                spark->fA = func_001F9850_2E3700(4);
+                sub->f10 = one / func_001FA888_2E3700(spark->fA);
+                sub->f18 = 0x7F7F7F;
+                if (D_L00_00161D38_2E3700[beam] == 1) sub->f16 = 1;
             }
         }
         func_002140F8_2E3700(0.01f, 0.05f);
         func_002141A8_2E3700(&vel, 0.01f, 0.05f);
-        func_L00_002757E8_2E3700(tip, &vel, 0x7F, D_L00_00161D58_2E3700[idx]);
+        func_L00_002757E8_2E3700(tip, &vel, 0x7F, D_L00_00161D58_2E3700[beam]);
         if (func_002140B0_2E3700(3) == 0) {
-            Part_2E3700 *p = func_L00_002757E8_2E3700(tip, D_L00_0015F660_2E3700, 0x7F, D_L00_00161D58_2E3700[idx]);
+            Part_2E3700 *spark = func_L00_002757E8_2E3700(tip, D_L00_0015F660_2E3700, 0x7F, D_L00_00161D58_2E3700[beam]);
 
-            if (p != 0) {
-                PartSub_2E3700 *q = &p->sub;
+            if (spark != 0) {
+                PartSub_2E3700 *sub = &spark->sub;
 
-                p->fC = 120000.0f;
-                p->fA = func_001F9850_2E3700(4);
-                q->f10 = 1.0f / func_001FA888_2E3700(p->fA);
-                q->f18 = 0x7F7F7F;
-                if (D_L00_00161D38_2E3700[idx] == 1) q->f16 = 2;
+                spark->fC = 120000.0f;
+                spark->fA = func_001F9850_2E3700(4);
+                sub->f10 = 1.0f / func_001FA888_2E3700(spark->fA);
+                sub->f18 = 0x7F7F7F;
+                if (D_L00_00161D38_2E3700[beam] == 1) sub->f16 = 2;
             }
         }
     }
-    if (D_L00_00161D28_2E3700[idx] != 0) {
-        if (D_L00_00161D28_2E3700[idx] & 1) {
-            qcopy(pos, &D_L00_001E70A0_2E3700[idx]);
+    if (D_L00_00161D28_2E3700[beam] != 0) {
+        if (D_L00_00161D28_2E3700[beam] & 1) {
+            qcopy(pos, &D_L00_001E70A0_2E3700[beam]);
             pos[2] -= 0.25f;
-            if (D_L00_00161D08_2E3700[idx] == -1) {
-                D_L00_00161D08_2E3700[idx] = func_L00_0023F0D0_2E3700(pos, D_L00_00161CC0_2E3700, 0.0f, 1.0f, 1.0f, 2.0f);
+            if (D_L00_00161D08_2E3700[beam] == -1) {
+                D_L00_00161D08_2E3700[beam] = func_L00_0023F0D0_2E3700(pos, D_L00_00161CC0_2E3700, 0.0f, 1.0f, 1.0f, 2.0f);
             }
-            if (D_L00_00161D08_2E3700[idx] >= 0) {
-                Snd_2E3700 *s = &D_L00_001803C0_2E3700[D_L00_00161D08_2E3700[idx]];
+            if (D_L00_00161D08_2E3700[beam] >= 0) {
+                Snd_2E3700 *light = &D_L00_001803C0_2E3700[D_L00_00161D08_2E3700[beam]];
 
-                qcopy(s->v10, pos);
-                s->f1C = D_L00_00161CC0_2E3700;
+                qcopy(light->v10, pos);
+                light->f1C = D_L00_00161CC0_2E3700;
             }
         }
-        if (D_L00_00161D28_2E3700[idx] & 2) {
+        if (D_L00_00161D28_2E3700[beam] & 2) {
             tip[2] += 0.5f;
-            if (D_L00_00161D18_2E3700[idx] == -1) {
-                D_L00_00161D18_2E3700[idx] = func_L00_0023F0D0_2E3700(tip, D_L00_00161CC0_2E3700, 0.0f, 1.0f, 1.0f, 2.0f);
+            if (D_L00_00161D18_2E3700[beam] == -1) {
+                D_L00_00161D18_2E3700[beam] = func_L00_0023F0D0_2E3700(tip, D_L00_00161CC0_2E3700, 0.0f, 1.0f, 1.0f, 2.0f);
             }
-            if (D_L00_00161D18_2E3700[idx] >= 0) {
-                Snd_2E3700 *s = &D_L00_001803C0_2E3700[D_L00_00161D18_2E3700[idx]];
+            if (D_L00_00161D18_2E3700[beam] >= 0) {
+                Snd_2E3700 *light = &D_L00_001803C0_2E3700[D_L00_00161D18_2E3700[beam]];
 
-                qcopy(s->v10, tip);
-                s->f1C = D_L00_00161CC0_2E3700;
+                qcopy(light->v10, tip);
+                light->f1C = D_L00_00161CC0_2E3700;
             }
         }
     }

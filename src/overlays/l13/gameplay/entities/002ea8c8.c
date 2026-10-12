@@ -416,393 +416,393 @@ extern void func_L13_002E9F90_2(void *, void *) __asm__("FUN_L13_002e8b58");
 extern char *D_L13_00160058_m __asm__("D_L13_0015FFD8");
 extern char D_0013E633_snd[] __asm__("D_0013E533");
 
-void FUN_L13_002eb098(Moby388 *m) {
-    Ship388 *d = m->d;
-    float sp20[4];
-    float sp30[4];
-    float sp40[4];
-    float sp50[4];
+void FUN_L13_002eb098(Moby388 *moby) {
+    Ship388 *data = moby->d;
+    float offset[4];
+    float joint[4];
+    float ray_start[4];
+    float probe[4];
     int i;
 
-    d->i108 = func_001FA898_r(d->f20 * 16.0f) & 0xFFF0;
-    if (d->i108 >= func_001FA898_r(((float)d->s24 - 0.5f) * 16.0f)) {
-        d->i108 |= 0xF;
+    data->i108 = func_001FA898_r(data->f20 * 16.0f) & 0xFFF0;
+    if (data->i108 >= func_001FA898_r(((float)data->s24 - 0.5f) * 16.0f)) {
+        data->i108 |= 0xF;
     }
-    if (0.5f < d->f20) {
-        int t = ((func_001FA898_r(d->f20) % (d->s24 / 6)) * 16) / (d->s24 / 6);
-        if (t < 0) t = 0;
-        d->i108 += t & 0xF;
+    if (0.5f < data->f20) {
+        int segment = ((func_001FA898_r(data->f20) % (data->s24 / 6)) * 16) / (data->s24 / 6);
+        if (segment < 0) segment = 0;
+        data->i108 += segment & 0xF;
     } else {
-        d->i108 = 0;
+        data->i108 = 0;
     }
 
-    switch (m->state) {
+    switch (moby->state) {
     case 0: {
         int j;
-        if (m->bB0 != 0xFF && D_0014C050[m->bB0 + (D_0015ED84 << 4)] == 0xFF) {
-            mark_moby_for_removal_c(m);
+        if (moby->bB0 != 0xFF && D_0014C050[moby->bB0 + (D_0015ED84 << 4)] == 0xFF) {
+            mark_moby_for_removal_c(moby);
             return;
         }
-        m->scale = *(float *)(m->cls + 0x24) * 4.0f;
+        moby->scale = *(float *)(moby->cls + 0x24) * 4.0f;
         for (i = 0; i < 10; i++) {
-            d->parts[i] = FUN_L13_002ecd10_c((char *)m, i, D_L13_001D34D8[i]);
+            data->parts[i] = FUN_L13_002ecd10_c((char *)moby, i, D_L13_001D34D8[i]);
         }
-        d->owner = (char *)m;
+        data->owner = (char *)moby;
         for (j = 0; j < 5; j++) {
-            char *path = D_L13_001B07B0[d->paths[j]];
+            char *path = D_L13_001B07B0[data->paths[j]];
             if (distance_xyz(path + 0x10, path + *(int *)path * 16) < 0.5f) {
                 *(int *)path -= 1;
             }
         }
-        d->fAC = D_0015ED6C * 42.0f * 0.1f;
-        d->f70 = fast_cos(m->rot[2]) * d->fAC;
-        d->f74 = fast_sin(m->rot[2]) * d->fAC;
-        d->i78 = 0;
-        qcopy(m->pos, D_L13_001B07B0[d->paths[0]] + 0x10);
-        d->s9E = 0;
-        d->s9C = 1;
-        m->b30 = 0xFF;
-        m->s32 = 0xFF;
-        d->b10C = 1;
-        d->bFE = 0;
-        d->bFC = 0;
-        m->state = 1;
-        d->b10E = 8;
-        d->child110 = 0;
-        d->snd114 = -1;
-        d->snd118 = -1;
-        d->snd11C = -1;
-        d->f20 = d->s24;
-        d->light120 = -1;
-        d->h138 = 0;
-        d->b148 = 0;
-        d->i13C = 0;
-        if (d->hud104 != -1) {
-            set_animation_parameter(d->hud104, 0);
-            d->hud104 = -1;
+        data->fAC = D_0015ED6C * 42.0f * 0.1f;
+        data->f70 = fast_cos(moby->rot[2]) * data->fAC;
+        data->f74 = fast_sin(moby->rot[2]) * data->fAC;
+        data->i78 = 0;
+        qcopy(moby->pos, D_L13_001B07B0[data->paths[0]] + 0x10);
+        data->s9E = 0;
+        data->s9C = 1;
+        moby->b30 = 0xFF;
+        moby->s32 = 0xFF;
+        data->b10C = 1;
+        data->bFE = 0;
+        data->bFC = 0;
+        moby->state = 1;
+        data->b10E = 8;
+        data->child110 = 0;
+        data->snd114 = -1;
+        data->snd118 = -1;
+        data->snd11C = -1;
+        data->f20 = data->s24;
+        data->light120 = -1;
+        data->h138 = 0;
+        data->b148 = 0;
+        data->i13C = 0;
+        if (data->hud104 != -1) {
+            set_animation_parameter(data->hud104, 0);
+            data->hud104 = -1;
         }
-        m->i94 = 0;
-        m->flags |= 0x41;
+        moby->i94 = 0;
+        moby->flags |= 0x41;
         break;
     }
     case 1: {
-        char *g = ((char *)&D_0013F350);
-        if (*(int *)(g + 0x2084) == 0x32 && *(Moby388 **)(g + 0x15F0) != 0) {
-            m->flags &= 0xFFBE;
-            m->i94 = *(int *)(m->cls + 0x10);
-            m->s32 = 0x3FF;
-            if (*(Moby388 **)(g + 0x15F0) != 0) {
-                char *hd = (char *)(*(Moby388 **)(g + 0x15F0))->d;
-                int t;
+        char *hero = ((char *)&D_0013F350);
+        if (*(int *)(hero + 0x2084) == 0x32 && *(Moby388 **)(hero + 0x15F0) != 0) {
+            moby->flags &= 0xFFBE;
+            moby->i94 = *(int *)(moby->cls + 0x10);
+            moby->s32 = 0x3FF;
+            if (*(Moby388 **)(hero + 0x15F0) != 0) {
+                char *ship = (char *)(*(Moby388 **)(hero + 0x15F0))->d;
+                int elapsed;
                 if (D_L13_00161954 == -1) {
                     D_L13_00161954 = D_0015EEA4;
                     DebugPrint_alt(D_L13_001F4EF0, D_0015EEA4, D_0015EEA4 / 60, D_0015EEA4 / 360);
                 }
-                t = (unsigned int)(D_0015EEA4 - D_L13_00161954) / 360;
-                if (t >= 0x29) {
+                elapsed = (unsigned int)(D_0015EEA4 - D_L13_00161954) / 360;
+                if (elapsed >= 0x29) {
                     DebugPrint_alt(D_L13_00161958);
-                    d->s24 = 0x66;
-                    d->f20 = 102.0f;
-                    *(int *)(hd + 0x138) = 0x221;
-                } else if (t >= 0x1A) {
+                    data->s24 = 0x66;
+                    data->f20 = 102.0f;
+                    *(int *)(ship + 0x138) = 0x221;
+                } else if (elapsed >= 0x1A) {
                     DebugPrint_alt(D_L13_00161968);
-                    d->s24 = 0x78;
-                    d->f20 = 120.0f;
-                    *(int *)(hd + 0x138) = 0x234;
+                    data->s24 = 0x78;
+                    data->f20 = 120.0f;
+                    *(int *)(ship + 0x138) = 0x234;
                 }
             }
-            m->state = 2;
+            moby->state = 2;
         }
         break;
     }
     case 2: {
         {
-            char *g = ((char *)&D_0013F350);
-            if (*(Moby388 **)(g + 0x15F0) != 0 && (*(Moby388 **)(g + 0x15F0))->cls_id == 0x45) {
-                (*(Moby388 **)(g + 0x15F0))->bBC = 0;
+            char *hero = ((char *)&D_0013F350);
+            if (*(Moby388 **)(hero + 0x15F0) != 0 && (*(Moby388 **)(hero + 0x15F0))->cls_id == 0x45) {
+                (*(Moby388 **)(hero + 0x15F0))->bBC = 0;
             }
         }
-        d->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)FUN_L00_00235d80, (int)FUN_L00_00235ea0,
-                                  (int)FUN_L06_00249738, (int)&d->i108,
-                                  (d->s24 << 4) | 0xF);
-        d->fAC += (D_0015ED6C * 42.0f - d->fAC) * 0.1f;
-        if (FUN_L13_002e9160(m, d, 0, 1) != 0) {
-            char *g = ((char *)&D_0013F350);
-            char *hd;
-            m->bBC = 1;
-            hd = (char *)(*(Moby388 **)(g + 0x15F0))->d;
-            *(int *)(hd + 0x88) = 0;
-            *(int *)(hd + 0xEC) = 0;
-            *(int *)(hd + 0x8C) = 0;
-            *(int *)(hd + 0x118) = 0;
-            d->b13B = D_L13_001D3448[m->bBC];
-            d->iF8 = scale_game_frames_alt(0x14);
-            m->state = 3;
-            d->s9C = FUN_L01_0028b510(m->pos, D_L13_001B07B0[d->paths[d->b13B]], 0.0f);
-            d->s9C = *(unsigned short *)((char *)d + 0x9C) + FUN_L00_00257b90(3, 7);
-            d->s9C = d->s9C % *(int *)D_L13_001B07B0[d->paths[d->b13B]];
-            d->s9E = d->s9C - 1;
-            if (d->s9E < 0) {
-                d->s9E = *(unsigned short *)D_L13_001B07B0[d->paths[d->b13B]] - 1;
+        data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)FUN_L00_00235d80, (int)FUN_L00_00235ea0,
+                                  (int)FUN_L06_00249738, (int)&data->i108,
+                                  (data->s24 << 4) | 0xF);
+        data->fAC += (D_0015ED6C * 42.0f - data->fAC) * 0.1f;
+        if (FUN_L13_002e9160(moby, data, 0, 1) != 0) {
+            char *hero = ((char *)&D_0013F350);
+            char *ship;
+            moby->bBC = 1;
+            ship = (char *)(*(Moby388 **)(hero + 0x15F0))->d;
+            *(int *)(ship + 0x88) = 0;
+            *(int *)(ship + 0xEC) = 0;
+            *(int *)(ship + 0x8C) = 0;
+            *(int *)(ship + 0x118) = 0;
+            data->b13B = D_L13_001D3448[moby->bBC];
+            data->iF8 = scale_game_frames_alt(0x14);
+            moby->state = 3;
+            data->s9C = FUN_L01_0028b510(moby->pos, D_L13_001B07B0[data->paths[data->b13B]], 0.0f);
+            data->s9C = *(unsigned short *)((char *)data + 0x9C) + FUN_L00_00257b90(3, 7);
+            data->s9C = data->s9C % *(int *)D_L13_001B07B0[data->paths[data->b13B]];
+            data->s9E = data->s9C - 1;
+            if (data->s9E < 0) {
+                data->s9E = *(unsigned short *)D_L13_001B07B0[data->paths[data->b13B]] - 1;
             }
         }
         break;
     }
     case 3:
     case 4:
-        d->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)FUN_L00_00235d80, (int)FUN_L00_00235ea0,
-                                  (int)FUN_L06_00249738, (int)&d->i108,
-                                  (d->s24 << 4) | 0xF);
+        data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)FUN_L00_00235d80, (int)FUN_L00_00235ea0,
+                                  (int)FUN_L06_00249738, (int)&data->i108,
+                                  (data->s24 << 4) | 0xF);
         if (*(Moby388 **)(((char *)&D_00140940)) != 0 && (*(Moby388 **)(((char *)&D_00140940)))->cls_id == 0x45) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
         }
-        FUN_L13_002eac00_c(m, d);
-        if (FUN_L13_002e9408(m, d, d->b13B, 1) & 2) {
-            if (d->b13B != D_L13_001D3448[m->bBC]) {
-                d->b13B = D_L13_001D3448[m->bBC];
-                d->s9C = FUN_L01_0028b510(m->pos, D_L13_001B07B0[d->paths[D_L13_001D3448[m->bBC]]], 0.0f);
-                d->s9C = *(unsigned short *)((char *)d + 0x9C) + FUN_L00_00257b90(3, 7);
-                d->s9C = d->s9C % *(int *)D_L13_001B07B0[d->paths[D_L13_001D3448[m->bBC]]];
-                d->s9E = d->s9C - 1;
-                if (d->s9E < 0) {
-                    d->s9E = *(unsigned short *)D_L13_001B07B0[d->paths[D_L13_001D3448[m->bBC]]] - 1;
+        FUN_L13_002eac00_c(moby, data);
+        if (FUN_L13_002e9408(moby, data, data->b13B, 1) & 2) {
+            if (data->b13B != D_L13_001D3448[moby->bBC]) {
+                data->b13B = D_L13_001D3448[moby->bBC];
+                data->s9C = FUN_L01_0028b510(moby->pos, D_L13_001B07B0[data->paths[D_L13_001D3448[moby->bBC]]], 0.0f);
+                data->s9C = *(unsigned short *)((char *)data + 0x9C) + FUN_L00_00257b90(3, 7);
+                data->s9C = data->s9C % *(int *)D_L13_001B07B0[data->paths[D_L13_001D3448[moby->bBC]]];
+                data->s9E = data->s9C - 1;
+                if (data->s9E < 0) {
+                    data->s9E = *(unsigned short *)D_L13_001B07B0[data->paths[D_L13_001D3448[moby->bBC]]] - 1;
                 }
             }
         }
-        if (m->bBC != 4) {
-            FUN_L13_002e9a48(m, d);
+        if (moby->bBC != 4) {
+            FUN_L13_002e9a48(moby, data);
         } else {
-            FUN_L00_0025d538(m, (char *)d + 0x60);
+            FUN_L00_0025d538(moby, (char *)data + 0x60);
         }
         break;
     case 5: {
-        float dist;
-        d->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)FUN_L00_00235d80, (int)FUN_L00_00235ea0,
-                                  (int)FUN_L06_00249738, (int)&d->i108,
-                                  (d->s24 << 4) | 0xF);
-        FUN_L13_002eac00_c(m, d);
-        FUN_L00_0024f7c8(m, 0x13, sp30);
-        dist = distance_xyz(d->v80, ((char *)&D_0013F3D0));
-        if (d->snd11C != -1) {
-            char *e = D_0013E633_snd + 0x1D + d->snd11C * 0x70;
-            if (*(Moby388 **)(e + 0x88) == m && *(unsigned char *)(e + 0x74) != 0) goto have11C;
+        float hero_distance;
+        data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)FUN_L00_00235d80, (int)FUN_L00_00235ea0,
+                                  (int)FUN_L06_00249738, (int)&data->i108,
+                                  (data->s24 << 4) | 0xF);
+        FUN_L13_002eac00_c(moby, data);
+        FUN_L00_0024f7c8(moby, 0x13, joint);
+        hero_distance = distance_xyz(data->v80, ((char *)&D_0013F3D0));
+        if (data->snd11C != -1) {
+            char *voice = D_0013E633_snd + 0x1D + data->snd11C * 0x70;
+            if (*(Moby388 **)(voice + 0x88) == moby && *(unsigned char *)(voice + 0x74) != 0) goto have11C;
         }
-        d->snd11C = -1;
-        d->snd11C = allocate_voice_for_target_entry_alt(4, 4, (int)m);
+        data->snd11C = -1;
+        data->snd11C = allocate_voice_for_target_entry_alt(4, 4, (int)moby);
     have11C:
-        if (d->bFF == 0) {
+        if (data->bFF == 0) {
             {
-                char *g = ((char *)&D_0013F350);
-                if (*(Moby388 **)(g + 0x15F0) != 0 && (*(Moby388 **)(g + 0x15F0))->cls_id == 0x45) {
-                    (*(Moby388 **)(g + 0x15F0))->bBC = 0;
+                char *hero = ((char *)&D_0013F350);
+                if (*(Moby388 **)(hero + 0x15F0) != 0 && (*(Moby388 **)(hero + 0x15F0))->cls_id == 0x45) {
+                    (*(Moby388 **)(hero + 0x15F0))->bBC = 0;
                 }
             }
-            d->fAC += (D_0015ED6C * 30.0f - d->fAC) * 0.1f;
-            if (D_0015ED6C * 40.0f < dist) {
-                subtract_vector_xyz(sp20, ((char *)&D_0013F3D0), d->v80);
-                normalize_vector_xyz(sp20, sp20, D_0015ED6C * 40.0f);
-                add_vector_xyz(d->v80, d->v80, sp20);
+            data->fAC += (D_0015ED6C * 30.0f - data->fAC) * 0.1f;
+            if (D_0015ED6C * 40.0f < hero_distance) {
+                subtract_vector_xyz(offset, ((char *)&D_0013F3D0), data->v80);
+                normalize_vector_xyz(offset, offset, D_0015ED6C * 40.0f);
+                add_vector_xyz(data->v80, data->v80, offset);
             } else {
-                qcopy(sp20, ((char *)&D_0013F3D0));
-                d->iF8 = scale_game_frames_alt(0x78);
-                if (!(d->h138 & 4)) {
-                    if (FUN_L13_002e86f8(m, d, 0x17, 4) != 0) {
-                        d->h138 |= 4;
+                qcopy(offset, ((char *)&D_0013F3D0));
+                data->iF8 = scale_game_frames_alt(0x78);
+                if (!(data->h138 & 4)) {
+                    if (FUN_L13_002e86f8(moby, data, 0x17, 4) != 0) {
+                        data->h138 |= 4;
                     }
                 }
-                d->bFF = 1;
+                data->bFF = 1;
             }
-            if (FUN_L13_002e9160(m, d, d->b13B, 1) & 2) {
-                if (d->b13B != D_L13_001D3448[m->bBC]) {
-                    d->b13B = D_L13_001D3448[m->bBC];
-                    d->s9C = FUN_L01_0028b510(m->pos, D_L13_001B07B0[d->paths[D_L13_001D3448[m->bBC]]], 0.0f);
-                    d->s9C = *(unsigned short *)((char *)d + 0x9C) + FUN_L00_00257b90(3, 7);
-                    d->s9C = d->s9C % *(int *)D_L13_001B07B0[d->paths[D_L13_001D3448[m->bBC]]];
-                    d->s9E = d->s9C - 1;
-                    if (d->s9E < 0) {
-                        d->s9E = *(unsigned short *)D_L13_001B07B0[d->paths[D_L13_001D3448[m->bBC]]] - 1;
+            if (FUN_L13_002e9160(moby, data, data->b13B, 1) & 2) {
+                if (data->b13B != D_L13_001D3448[moby->bBC]) {
+                    data->b13B = D_L13_001D3448[moby->bBC];
+                    data->s9C = FUN_L01_0028b510(moby->pos, D_L13_001B07B0[data->paths[D_L13_001D3448[moby->bBC]]], 0.0f);
+                    data->s9C = *(unsigned short *)((char *)data + 0x9C) + FUN_L00_00257b90(3, 7);
+                    data->s9C = data->s9C % *(int *)D_L13_001B07B0[data->paths[D_L13_001D3448[moby->bBC]]];
+                    data->s9E = data->s9C - 1;
+                    if (data->s9E < 0) {
+                        data->s9E = *(unsigned short *)D_L13_001B07B0[data->paths[D_L13_001D3448[moby->bBC]]] - 1;
                     }
                 }
             }
-            subtract_vector_xyz(sp40, d->v80, sp30);
-            normalize_vector_xyz(sp40, sp40, 8.0f);
-            add_vector_xyz(sp40, sp40, sp30);
-            if (FUN_001efa68(sp40, d->v80, 0, m, 0) != 0) {
+            subtract_vector_xyz(ray_start, data->v80, joint);
+            normalize_vector_xyz(ray_start, ray_start, 8.0f);
+            add_vector_xyz(ray_start, ray_start, joint);
+            if (FUN_001efa68(ray_start, data->v80, 0, moby, 0) != 0) {
                 if (D_L13_00174158[0] == 0 || D_L13_00174158[0]->cls_id == 0xD4) {
-                    d->i100 = 0;
+                    data->i100 = 0;
                 }
             }
-            qcopy(sp50, d->v80);
-            sp50[3] = 1.0f;
-            if (FUN_001fa728(sp50, 100.0f) <= 0 && m->b31 == 0) {
+            qcopy(probe, data->v80);
+            probe[3] = 1.0f;
+            if (FUN_001fa728(probe, 100.0f) <= 0 && moby->b31 == 0) {
                 DebugPrint_alt(D_L13_001F4F18);
-                d->i100 = 0;
+                data->i100 = 0;
             }
-            if (distance_xyz(sp40, ((char *)&D_0013F3D0)) > 100.0f) {
+            if (distance_xyz(ray_start, ((char *)&D_0013F3D0)) > 100.0f) {
                 DebugPrint_alt(D_L13_001F4F38);
-                d->i100 = 0;
+                data->i100 = 0;
             }
         } else {
-            char *g = ((char *)&D_0013F350);
-            float yaw, pitch, f;
-            yaw = FUN_001f9e90(*(float *)(g + 0x80) - m->pos[0], *(float *)(g + 0x84) - m->pos[1]);
-            pitch = -FUN_001f9e90(FUN_001f9b80(m->pos, g + 0x80), *(float *)(g + 0x88) - m->pos[2]);
-            FUN_L13_002e9018(m, d, yaw, pitch);
-            if (*(Moby388 **)(g + 0x15F0) != 0 && (*(Moby388 **)(g + 0x15F0))->cls_id == 0x45) {
-                (*(Moby388 **)(g + 0x15F0))->bBC = 1;
+            char *hero = ((char *)&D_0013F350);
+            float yaw, pitch, distance;
+            yaw = FUN_001f9e90(*(float *)(hero + 0x80) - moby->pos[0], *(float *)(hero + 0x84) - moby->pos[1]);
+            pitch = -FUN_001f9e90(FUN_001f9b80(moby->pos, hero + 0x80), *(float *)(hero + 0x88) - moby->pos[2]);
+            FUN_L13_002e9018(moby, data, yaw, pitch);
+            if (*(Moby388 **)(hero + 0x15F0) != 0 && (*(Moby388 **)(hero + 0x15F0))->cls_id == 0x45) {
+                (*(Moby388 **)(hero + 0x15F0))->bBC = 1;
             }
-            d->fAC *= 0.8f;
-            distance_xyz(m->pos, ((char *)&D_0013F3D0));
-            FUN_L00_0024f7c8(m, 0x13, sp50);
-            subtract_vector_xyz(sp40, d->v80, sp50);
-            normalize_vector_xyz(sp40, sp40, 30.0f);
-            add_vector_xyz(sp40, sp40, sp50);
-            subtract_vector_xyz(sp20, sp40, d->v80);
-            f = distance_xyz(sp40, ((char *)&D_0013F3D0));
-            if (f != 30.0f) {
-                normalize_vector_xyz(sp20, sp20, (D_0015ED6C * 15.0f < f) ? D_0015ED6C * 15.0f : f);
-                add_vector_xyz(d->v80, d->v80, sp20);
+            data->fAC *= 0.8f;
+            distance_xyz(moby->pos, ((char *)&D_0013F3D0));
+            FUN_L00_0024f7c8(moby, 0x13, probe);
+            subtract_vector_xyz(ray_start, data->v80, probe);
+            normalize_vector_xyz(ray_start, ray_start, 30.0f);
+            add_vector_xyz(ray_start, ray_start, probe);
+            subtract_vector_xyz(offset, ray_start, data->v80);
+            distance = distance_xyz(ray_start, ((char *)&D_0013F3D0));
+            if (distance != 30.0f) {
+                normalize_vector_xyz(offset, offset, (D_0015ED6C * 15.0f < distance) ? D_0015ED6C * 15.0f : distance);
+                add_vector_xyz(data->v80, data->v80, offset);
             }
             {
-                char *g2 = ((char *)&D_0013F350);
-                if (*(Moby388 **)(g2 + 0x15F0) != 0) {
-                    Moby388 *h = *(Moby388 **)(g2 + 0x15F0);
-                    char *hd;
-                    float a, aa, b, bb;
-                    qcopy(h->pos, d->v80);
-                    hd = (char *)h->d;
-                    a = fast_subtract_rotations(FUN_001f9e90(m->pos[0] - h->pos[0], m->pos[1] - h->pos[1]), *(float *)(hd + 0x38));
-                    aa = absolute_float(a);
-                    b = fast_subtract_rotations(-FUN_001f9e90(FUN_001f9b80((*(Moby388 **)(g2 + 0x15F0))->pos, m->pos),
-                                                         m->pos[2] - (*(Moby388 **)(g2 + 0x15F0))->pos[2]),
-                                      *(float *)(hd + 0x34));
-                    bb = absolute_float(b);
-                    if (aa > 0.38397244f) {
-                        *(float *)(hd + 0x38) = fast_add_rotations(*(float *)(hd + 0x38), FUN_L00_0025e310((aa - 0.38397244f) / 0.17453292f * a));
+                char *hero = ((char *)&D_0013F350);
+                if (*(Moby388 **)(hero + 0x15F0) != 0) {
+                    Moby388 *ship_moby = *(Moby388 **)(hero + 0x15F0);
+                    char *ship;
+                    float yaw_error, abs_yaw_error, pitch_error, abs_pitch_error;
+                    qcopy(ship_moby->pos, data->v80);
+                    ship = (char *)ship_moby->d;
+                    yaw_error = fast_subtract_rotations(FUN_001f9e90(moby->pos[0] - ship_moby->pos[0], moby->pos[1] - ship_moby->pos[1]), *(float *)(ship + 0x38));
+                    abs_yaw_error = absolute_float(yaw_error);
+                    pitch_error = fast_subtract_rotations(-FUN_001f9e90(FUN_001f9b80((*(Moby388 **)(hero + 0x15F0))->pos, moby->pos),
+                                                         moby->pos[2] - (*(Moby388 **)(hero + 0x15F0))->pos[2]),
+                                      *(float *)(ship + 0x34));
+                    abs_pitch_error = absolute_float(pitch_error);
+                    if (abs_yaw_error > 0.38397244f) {
+                        *(float *)(ship + 0x38) = fast_add_rotations(*(float *)(ship + 0x38), FUN_L00_0025e310((abs_yaw_error - 0.38397244f) / 0.17453292f * yaw_error));
                     }
-                    if (bb > 0.38397244f) {
-                        *(float *)(hd + 0x34) = fast_add_rotations(*(float *)(hd + 0x34), FUN_L00_0025e310((bb - 0.38397244f) / 0.17453292f * b));
+                    if (abs_pitch_error > 0.38397244f) {
+                        *(float *)(ship + 0x34) = fast_add_rotations(*(float *)(ship + 0x34), FUN_L00_0025e310((abs_pitch_error - 0.38397244f) / 0.17453292f * pitch_error));
                     }
                 }
             }
         }
-        if (m->bBC != 4) {
-            FUN_L13_002e9a48(m, d);
+        if (moby->bBC != 4) {
+            FUN_L13_002e9a48(moby, data);
         } else {
-            FUN_L00_0025d538(m, (char *)d + 0x60);
+            FUN_L00_0025d538(moby, (char *)data + 0x60);
         }
         {
-            char *g3 = ((char *)&D_0013F350);
-            if (fast_difference_between_rotations(m->rot[2], FUN_001f9e90(*(float *)(g3 + 0x80) - m->pos[0], *(float *)(g3 + 0x84) - m->pos[1])) < 1.0471976f) {
-                enqueue_callback_list_1(FUN_L13_002ea8c8, m);
+            char *hero = ((char *)&D_0013F350);
+            if (fast_difference_between_rotations(moby->rot[2], FUN_001f9e90(*(float *)(hero + 0x80) - moby->pos[0], *(float *)(hero + 0x84) - moby->pos[1])) < 1.0471976f) {
+                enqueue_callback_list_1(FUN_L13_002ea8c8, moby);
             }
         }
         break;
     }
     case 6: {
-        char *q;
+        char *dialog;
         if (*(Moby388 **)(((char *)&D_00140940)) != 0 && (*(Moby388 **)(((char *)&D_00140940)))->cls_id == 0x45) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
         }
-        FUN_L13_002e9160(m, d, d->b13B, 1);
-        q = (char *)((char *)&D_001516D0);
-        if (*(int *)(q + 0x50) == 0) {
-            int v = *(int *)(q + 0x1C);
-            if (v == -1 && (short)d->h138 <= 0) {
-                if (FUN_L13_002e86f8(m, d, D_L13_00161950 + 0x1D, 1) != 0) {
+        FUN_L13_002e9160(moby, data, data->b13B, 1);
+        dialog = (char *)((char *)&D_001516D0);
+        if (*(int *)(dialog + 0x50) == 0) {
+            int line = *(int *)(dialog + 0x1C);
+            if (line == -1 && (short)data->h138 <= 0) {
+                if (FUN_L13_002e86f8(moby, data, D_L13_00161950 + 0x1D, 1) != 0) {
                     D_L13_00161950 = (D_L13_00161950 + 1) % 4;
-                    d->h138 += 1;
+                    data->h138 += 1;
                 }
             }
         }
         break;
     }
     case 7: {
-        float yawT, pitchT;
+        float target_yaw, target_pitch;
         if (*(Moby388 **)(((char *)&D_00140940)) != 0 && (*(Moby388 **)(((char *)&D_00140940)))->cls_id == 0x45) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
         }
-        if (d->iF8 == 1) {
-            FUN_L13_002e9680(m, d, 8);
-            allocate_voice_for_target_entry_alt(7, 0, (int)m);
+        if (data->iF8 == 1) {
+            FUN_L13_002e9680(moby, data, 8);
+            allocate_voice_for_target_entry_alt(7, 0, (int)moby);
         }
-        tick_countdown_32_alt(&d->iF8);
-        if (FUN_L13_002e9160(m, d, d->b13B, 0) != 0 ||
-            d->s9C >= *(int *)D_L13_001B07B0[d->paths[d->b13B]] - 1) {
-            d->iF8 = scale_game_frames_alt(0xB4);
-            m->state = 8;
+        tick_countdown_32_alt(&data->iF8);
+        if (FUN_L13_002e9160(moby, data, data->b13B, 0) != 0 ||
+            data->s9C >= *(int *)D_L13_001B07B0[data->paths[data->b13B]] - 1) {
+            data->iF8 = scale_game_frames_alt(0xB4);
+            moby->state = 8;
         }
-        m->rot[0] = fast_add_rotations(m->rot[0], D_0015ED6C * 4.1887903f);
+        moby->rot[0] = fast_add_rotations(moby->rot[0], D_0015ED6C * 4.1887903f);
         {
-            Path388 *path = (Path388 *)D_L13_001B07B0[d->paths[d->b13B]];
-            int i = d->s9C;
+            Path388 *path = (Path388 *)D_L13_001B07B0[data->paths[data->b13B]];
+            int i = data->s9C;
             int n = path->n;
-            yawT = FUN_001f9e90(path->pts[(i + 3 >= n - 1) ? n - 1 : i + 3][0] - path->pts[i][0],
+            target_yaw = FUN_001f9e90(path->pts[(i + 3 >= n - 1) ? n - 1 : i + 3][0] - path->pts[i][0],
                                      path->pts[(i + 3 < n - 1) ? i + 3 : n - 1][1] - path->pts[i][1]);
         }
         {
-            char *path = D_L13_001B07B0[d->paths[d->b13B]];
-            int i = d->s9C;
+            char *path = D_L13_001B07B0[data->paths[data->b13B]];
+            int i = data->s9C;
             int n = *(int *)path;
-            float dz = FUN_001f9b80(path + (i * 16 + 0x10), path + (((i + 3 >= n - 1) ? n - 1 : i + 3) * 16 + 0x10));
-            Path388 *path2 = (Path388 *)D_L13_001B07B0[d->paths[d->b13B]];
-            int i2 = d->s9C;
+            float flat_distance = FUN_001f9b80(path + (i * 16 + 0x10), path + (((i + 3 >= n - 1) ? n - 1 : i + 3) * 16 + 0x10));
+            Path388 *path2 = (Path388 *)D_L13_001B07B0[data->paths[data->b13B]];
+            int i2 = data->s9C;
             int n2 = path2->n;
-            pitchT = -FUN_001f9e90(dz, path2->pts[(i2 + 3 >= n2 - 1) ? n2 - 1 : i2 + 3][2] - path2->pts[i2][2]);
+            target_pitch = -FUN_001f9e90(flat_distance, path2->pts[(i2 + 3 >= n2 - 1) ? n2 - 1 : i2 + 3][2] - path2->pts[i2][2]);
         }
-        FUN_L00_00258278(m, &d->fA8, yawT, D_0015ED70 * 3.1415927f, D_0015ED70 * 6.2831855f, D_0015ED6C * 6.2831855f);
-        m->rot[1] = FUN_L00_00258110(&d->fA4, m->rot[1], pitchT, D_0015ED70 * 3.1415927f, D_0015ED70 * 6.2831855f, D_0015ED6C * 6.2831855f);
-        m->scale *= 0.99925f;
-        d->fAC *= 0.9992f;
+        FUN_L00_00258278(moby, &data->fA8, target_yaw, D_0015ED70 * 3.1415927f, D_0015ED70 * 6.2831855f, D_0015ED6C * 6.2831855f);
+        moby->rot[1] = FUN_L00_00258110(&data->fA4, moby->rot[1], target_pitch, D_0015ED70 * 3.1415927f, D_0015ED70 * 6.2831855f, D_0015ED6C * 6.2831855f);
+        moby->scale *= 0.99925f;
+        data->fAC *= 0.9992f;
         if (random_integer_below(0x11) == 0) {
-            float s = m->scale / (*(float *)(m->cls + 0x24) * 3.0f);
-            normalize_vector_xyz(sp30, m->mat[0], random_float_between(-5.0f, 5.0f) * s);
-            add_vector_xyz(sp20, m->pos, sp30);
-            normalize_vector_xyz(sp30, m->mat[1], random_float_between(-4.0f, 4.0f) * s);
-            add_vector_xyz(sp20, sp20, sp30);
-            normalize_vector_xyz(sp30, m->mat[2], random_float_between(-4.0f, 4.0f) * s);
-            add_vector_xyz(sp20, sp20, sp30);
-            splash_L13(m, sp20, -1, s * 1.6f, 13.0f);
+            float size_ratio = moby->scale / (*(float *)(moby->cls + 0x24) * 3.0f);
+            normalize_vector_xyz(joint, moby->mat[0], random_float_between(-5.0f, 5.0f) * size_ratio);
+            add_vector_xyz(offset, moby->pos, joint);
+            normalize_vector_xyz(joint, moby->mat[1], random_float_between(-4.0f, 4.0f) * size_ratio);
+            add_vector_xyz(offset, offset, joint);
+            normalize_vector_xyz(joint, moby->mat[2], random_float_between(-4.0f, 4.0f) * size_ratio);
+            add_vector_xyz(offset, offset, joint);
+            splash_L13(moby, offset, -1, size_ratio * 1.6f, 13.0f);
         }
-        func_L13_002E9F90_2(m, d);
+        func_L13_002E9F90_2(moby, data);
         {
-            char *q = (char *)((char *)&D_001516D0);
-            if (*(int *)(q + 0x50) == 0 && *(int *)(q + 0x1C) == -1) {
-                if (d->iF8 < scale_game_frames_alt(0x1A4) && d->i13C < 0) {
-                    if (FUN_L13_002e86f8(m, d, 0x23, 1) != 0) {
-                        d->i13C &= 0x7FFFFFFF;
+            char *dialog = (char *)((char *)&D_001516D0);
+            if (*(int *)(dialog + 0x50) == 0 && *(int *)(dialog + 0x1C) == -1) {
+                if (data->iF8 < scale_game_frames_alt(0x1A4) && data->i13C < 0) {
+                    if (FUN_L13_002e86f8(moby, data, 0x23, 1) != 0) {
+                        data->i13C &= 0x7FFFFFFF;
                     }
-                } else if (d->iF8 < scale_game_frames_alt(0xB4) && (d->i13C & 0x40000000) &&
-                           FUN_L13_002e86f8(m, d, 0x24, 1) != 0) {
-                    d->i13C &= 0xBFFFFFFF;
+                } else if (data->iF8 < scale_game_frames_alt(0xB4) && (data->i13C & 0x40000000) &&
+                           FUN_L13_002e86f8(moby, data, 0x24, 1) != 0) {
+                    data->i13C &= 0xBFFFFFFF;
                 }
             }
         }
         break;
     }
     case 8: {
-        char *k;
+        char *view;
         if (*(Moby388 **)(((char *)&D_00140940)) != 0 && (*(Moby388 **)(((char *)&D_00140940)))->cls_id == 0x45) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
         }
-        m->rot[0] = fast_add_rotations(m->rot[0], D_0015ED6C * 4.1887903f);
-        k = D_L13_00166F80;
-        m->rot[2] = *(float *)(k + 0x158);
-        m->rot[1] = *(float *)(k + 0x154);
-        m->scale *= 0.98f;
-        if (d->iF8 == scale_game_frames_alt(0x1E)) {
-            FUN_L00_0025e450(m, &d->f70, 0, 0.0f, 0.0f, 0x1E, 8, 0x20, 5.0f, 3.0f, 0.0f, 7, 1.0f, 0.0f, 1, 5, -1, 0);
+        moby->rot[0] = fast_add_rotations(moby->rot[0], D_0015ED6C * 4.1887903f);
+        view = D_L13_00166F80;
+        moby->rot[2] = *(float *)(view + 0x158);
+        moby->rot[1] = *(float *)(view + 0x154);
+        moby->scale *= 0.98f;
+        if (data->iF8 == scale_game_frames_alt(0x1E)) {
+            FUN_L00_0025e450(moby, &data->f70, 0, 0.0f, 0.0f, 0x1E, 8, 0x20, 5.0f, 3.0f, 0.0f, 7, 1.0f, 0.0f, 1, 5, -1, 0);
         }
-        func_L13_002E9F90_2(m, d);
-        if (tick_countdown_32_alt(&d->iF8) != 0) {
-            Moby388 *o = (Moby388 *)(D_L13_00160058_m + (d->i134 << 8));
-            o->state = 8;
-            o->flags |= 2;
-            if (d->light120 != -1) {
-                FUN_L00_0023e838(d->light120);
+        func_L13_002E9F90_2(moby, data);
+        if (tick_countdown_32_alt(&data->iF8) != 0) {
+            Moby388 *owner = (Moby388 *)(D_L13_00160058_m + (data->i134 << 8));
+            owner->state = 8;
+            owner->flags |= 2;
+            if (data->light120 != -1) {
+                FUN_L00_0023e838(data->light120);
             }
-            FUN_L13_00316f48(d->i12C);
-            mark_moby_for_removal_c(m);
+            FUN_L13_00316f48(data->i12C);
+            mark_moby_for_removal_c(moby);
             return;
         }
         break;
@@ -810,194 +810,194 @@ void FUN_L13_002eb098(Moby388 *m) {
     case 9: {
         char *path;
         char **parts;
-        if (d->pF0 != 0) {
-            mark_moby_for_removal_c(d->pF0);
-            d->pF0 = 0;
+        if (data->pF0 != 0) {
+            mark_moby_for_removal_c(data->pF0);
+            data->pF0 = 0;
         }
-        if (d->child110 != 0) {
-            mark_moby_for_removal_c(d->child110);
-            d->child110 = 0;
+        if (data->child110 != 0) {
+            mark_moby_for_removal_c(data->child110);
+            data->child110 = 0;
         }
-        parts = d->parts;
+        parts = data->parts;
         for (i = 0; i < 10; i++) {
             if (parts[i] != 0) {
                 mark_moby_for_removal_c(parts[i]);
                 parts[i] = 0;
             }
         }
-        if (d->snd118 != -1) {
-            char *e = D_0013E633_snd + 0x1D + d->snd118 * 0x70;
-            if (*(Moby388 **)(e + 0x88) == m && *(unsigned char *)(e + 0x74) != 0) {
-                release_voice_slot(d->snd118);
+        if (data->snd118 != -1) {
+            char *voice = D_0013E633_snd + 0x1D + data->snd118 * 0x70;
+            if (*(Moby388 **)(voice + 0x88) == moby && *(unsigned char *)(voice + 0x74) != 0) {
+                release_voice_slot(data->snd118);
             }
-            d->snd118 = -1;
+            data->snd118 = -1;
         }
-        if (d->snd114 != -1) {
-            char *e = D_0013E633_snd + 0x1D + d->snd114 * 0x70;
-            if (*(Moby388 **)(e + 0x88) == m && *(unsigned char *)(e + 0x74) != 0) {
-                release_voice_slot(d->snd114);
+        if (data->snd114 != -1) {
+            char *voice = D_0013E633_snd + 0x1D + data->snd114 * 0x70;
+            if (*(Moby388 **)(voice + 0x88) == moby && *(unsigned char *)(voice + 0x74) != 0) {
+                release_voice_slot(data->snd114);
             }
-            d->snd114 = -1;
+            data->snd114 = -1;
         }
-        if (d->snd11C != -1) {
-            char *e = D_0013E633_snd + 0x1D + d->snd11C * 0x70;
-            if (*(Moby388 **)(e + 0x88) == m && *(unsigned char *)(e + 0x74) != 0) {
-                release_voice_slot(d->snd11C);
+        if (data->snd11C != -1) {
+            char *voice = D_0013E633_snd + 0x1D + data->snd11C * 0x70;
+            if (*(Moby388 **)(voice + 0x88) == moby && *(unsigned char *)(voice + 0x74) != 0) {
+                release_voice_slot(data->snd11C);
             }
-            d->snd11C = -1;
+            data->snd11C = -1;
         }
-        if (d->light120 != -1) {
-            FUN_L00_0023e838(d->light120);
+        if (data->light120 != -1) {
+            FUN_L00_0023e838(data->light120);
         }
-        if (d->hud104 != -1) {
-            set_animation_parameter(d->hud104, 0);
-            d->hud104 = -1;
+        if (data->hud104 != -1) {
+            set_animation_parameter(data->hud104, 0);
+            data->hud104 = -1;
         }
-        path = D_L13_001B07B0[d->paths[0]];
-        qcopy(m->pos, path + 0x10);
-        m->rot[2] = FUN_001f9e90(*(float *)(path + 0x20) - m->pos[0], *(float *)(path + 0x24) - m->pos[1]);
-        d->b10C = 1;
-        d->s9C = 0;
-        d->s9E = 0;
-        d->iA0 = 0;
-        d->fA4 = 0;
-        d->fA8 = 0;
-        d->fAC = 0;
-        d->iF4 = 0;
-        d->iF8 = 0;
-        d->bFC = 0;
-        d->bFD = 0;
-        d->bFE = 0;
-        d->bFF = 0;
-        d->i100 = 0;
-        d->b10D = 0;
-        d->b10E = 0;
-        d->b10F = 0;
-        d->i124 = 0;
-        d->h138 = 0;
-        d->b13A = 0;
-        d->b13B = 0;
-        d->i13C = 0;
-        d->h144 = 0;
-        d->h146 = 0;
-        d->b148 = 0;
-        m->bBC = 0;
-        qzero(&d->f70);
-        qzero(d->v80);
-        m->state = 0;
+        path = D_L13_001B07B0[data->paths[0]];
+        qcopy(moby->pos, path + 0x10);
+        moby->rot[2] = FUN_001f9e90(*(float *)(path + 0x20) - moby->pos[0], *(float *)(path + 0x24) - moby->pos[1]);
+        data->b10C = 1;
+        data->s9C = 0;
+        data->s9E = 0;
+        data->iA0 = 0;
+        data->fA4 = 0;
+        data->fA8 = 0;
+        data->fAC = 0;
+        data->iF4 = 0;
+        data->iF8 = 0;
+        data->bFC = 0;
+        data->bFD = 0;
+        data->bFE = 0;
+        data->bFF = 0;
+        data->i100 = 0;
+        data->b10D = 0;
+        data->b10E = 0;
+        data->b10F = 0;
+        data->i124 = 0;
+        data->h138 = 0;
+        data->b13A = 0;
+        data->b13B = 0;
+        data->i13C = 0;
+        data->h144 = 0;
+        data->h146 = 0;
+        data->b148 = 0;
+        moby->bBC = 0;
+        qzero(&data->f70);
+        qzero(data->v80);
+        moby->state = 0;
         return;
     }
     }
 
-    if (m->pos[0] < 22.0f) m->pos[0] = 22.0f;
-    if (m->pos[0] > 1001.0f) m->pos[0] = 1001.0f;
-    if (m->pos[1] < 22.0f) m->pos[1] = 22.0f;
-    if (m->pos[1] > 1001.0f) m->pos[1] = 1001.0f;
-    if (m->pos[2] < 22.0f) m->pos[2] = 22.0f;
-    if (m->pos[2] > 1001.0f) m->pos[2] = 1001.0f;
+    if (moby->pos[0] < 22.0f) moby->pos[0] = 22.0f;
+    if (moby->pos[0] > 1001.0f) moby->pos[0] = 1001.0f;
+    if (moby->pos[1] < 22.0f) moby->pos[1] = 22.0f;
+    if (moby->pos[1] > 1001.0f) moby->pos[1] = 1001.0f;
+    if (moby->pos[2] < 22.0f) moby->pos[2] = 22.0f;
+    if (moby->pos[2] > 1001.0f) moby->pos[2] = 1001.0f;
 
-    if (m->bBC == 4) {
-        if (d->child110 == 0) {
-            d->child110 = FUN_L13_002e8438(m);
-        } else if (((Moby388 *)d->child110)->state >= 3) {
-            ((Moby388 *)d->child110)->state = 1;
+    if (moby->bBC == 4) {
+        if (data->child110 == 0) {
+            data->child110 = FUN_L13_002e8438(moby);
+        } else if (((Moby388 *)data->child110)->state >= 3) {
+            ((Moby388 *)data->child110)->state = 1;
         }
-        if (d->snd118 != -1) {
-            char *e = D_0013E633_snd + 0x1D + d->snd118 * 0x70;
-            if (*(Moby388 **)(e + 0x88) == m && *(unsigned char *)(e + 0x74) != 0) goto have118;
+        if (data->snd118 != -1) {
+            char *voice = D_0013E633_snd + 0x1D + data->snd118 * 0x70;
+            if (*(Moby388 **)(voice + 0x88) == moby && *(unsigned char *)(voice + 0x74) != 0) goto have118;
         }
-        d->snd118 = -1;
-        d->snd118 = allocate_voice_for_target_entry_alt(6, 4, (int)m);
+        data->snd118 = -1;
+        data->snd118 = allocate_voice_for_target_entry_alt(6, 4, (int)moby);
     have118:;
     } else {
-        if (d->child110 != 0) {
-            Moby388 *c;
-            if (d->snd118 != -1) {
-                char *e = D_0013E633_snd + 0x1D + d->snd118 * 0x70;
-                if (*(Moby388 **)(e + 0x88) == m && *(unsigned char *)(e + 0x74) != 0) {
-                    release_voice_slot(d->snd118);
+        if (data->child110 != 0) {
+            Moby388 *child;
+            if (data->snd118 != -1) {
+                char *voice = D_0013E633_snd + 0x1D + data->snd118 * 0x70;
+                if (*(Moby388 **)(voice + 0x88) == moby && *(unsigned char *)(voice + 0x74) != 0) {
+                    release_voice_slot(data->snd118);
                 }
-                d->snd118 = -1;
+                data->snd118 = -1;
             }
-            c = (Moby388 *)d->child110;
-            if (c == 0) {
-                d->child110 = 0;
-            } else if (c->cls_id != 0x160) {
-                d->child110 = 0;
-            } else if (c->state == 0xFE) {
-                d->child110 = 0;
-            } else if (c->state == 0xFD) {
-                d->child110 = 0;
-            } else if (c->state < 3) {
-                c->state = 3;
+            child = (Moby388 *)data->child110;
+            if (child == 0) {
+                data->child110 = 0;
+            } else if (child->cls_id != 0x160) {
+                data->child110 = 0;
+            } else if (child->state == 0xFE) {
+                data->child110 = 0;
+            } else if (child->state == 0xFD) {
+                data->child110 = 0;
+            } else if (child->state < 3) {
+                child->state = 3;
             }
         }
     }
 
-    if (m->state >= 2) {
-        FUN_L13_002e8d28(m, d);
-        if (m->state != 8 || scale_game_frames_alt(0x78) < d->iF8) {
-            FUN_L13_002e8920(m, d);
+    if (moby->state >= 2) {
+        FUN_L13_002e8d28(moby, data);
+        if (moby->state != 8 || scale_game_frames_alt(0x78) < data->iF8) {
+            FUN_L13_002e8920(moby, data);
         }
-        if (d->snd114 != -1) {
-            char *e = D_0013E633_snd + 0x1D + d->snd114 * 0x70;
-            if (*(Moby388 **)(e + 0x88) == m && *(unsigned char *)(e + 0x74) != 0) goto have114;
+        if (data->snd114 != -1) {
+            char *voice = D_0013E633_snd + 0x1D + data->snd114 * 0x70;
+            if (*(Moby388 **)(voice + 0x88) == moby && *(unsigned char *)(voice + 0x74) != 0) goto have114;
         }
-        d->snd114 = -1;
-        d->snd114 = allocate_voice_for_target_entry_alt(0, 4, (int)m);
+        data->snd114 = -1;
+        data->snd114 = allocate_voice_for_target_entry_alt(0, 4, (int)moby);
     have114:
-        transform_vector_by_basis(sp20, D_L13_00160660, m->mat[0]);
-        normalize_vector_xyz(sp20, sp20, 7.0f);
-        subtract_vector_xyz(sp20, m->pos, sp20);
-        sp20[3] = 50.0f;
-        if (d->light120 == -1) {
-            d->light120 = FUN_L00_0023e738(sp20, 50.0f, 0.0f, 3.0f, 0.5f, 0.01f);
+        transform_vector_by_basis(offset, D_L13_00160660, moby->mat[0]);
+        normalize_vector_xyz(offset, offset, 7.0f);
+        subtract_vector_xyz(offset, moby->pos, offset);
+        offset[3] = 50.0f;
+        if (data->light120 == -1) {
+            data->light120 = FUN_L00_0023e738(offset, 50.0f, 0.0f, 3.0f, 0.5f, 0.01f);
         } else {
-            char *l = D_L13_001805C0 + (d->light120 << 5);
-            qcopy(l + 0x10, sp20);
+            char *light = D_L13_001805C0 + (data->light120 << 5);
+            qcopy(light + 0x10, offset);
         }
     }
-    d->b10F = 0;
+    data->b10F = 0;
 
     {
-        Moby388 *o = (Moby388 *)(D_L13_00160058_m + (d->i134 << 8));
-        if (m->state != 6) {
-            if (o == 0 || o->cls_id != 0x45 || o->state == 0xFE || o->state == 0xFD || o->state == 7) {
-                m->state = 6;
-                if (FUN_L13_002e86f8(m, d, D_L13_00161950 + 0x1D, 1) != 0) {
+        Moby388 *owner = (Moby388 *)(D_L13_00160058_m + (data->i134 << 8));
+        if (moby->state != 6) {
+            if (owner == 0 || owner->cls_id != 0x45 || owner->state == 0xFE || owner->state == 0xFD || owner->state == 7) {
+                moby->state = 6;
+                if (FUN_L13_002e86f8(moby, data, D_L13_00161950 + 0x1D, 1) != 0) {
                     D_L13_00161950 = (D_L13_00161950 + 1) % 4;
-                    d->h138 = 1;
+                    data->h138 = 1;
                 } else {
-                    d->h138 = 0;
+                    data->h138 = 0;
                 }
             }
         }
     }
 
-    if (d->b13A != 0) {
+    if (data->b13A != 0) {
         if (D_0015172A[0] == 3) {
             continue_audio_stream_if_ready_alt();
-            d->h144 = scale_game_frames_alt(0x168);
-            d->h146 = scale_game_frames_alt(0x3C);
-            d->b13A = 0;
+            data->h144 = scale_game_frames_alt(0x168);
+            data->h146 = scale_game_frames_alt(0x3C);
+            data->b13A = 0;
         }
     } else {
-        if (m->state != 6) {
-            char *g = ((char *)&D_0013F350);
-            if (*(int *)(g + 0x2084) == 0x32) {
-                if (*(Moby388 **)(g + 0x15F0) != 0 &&
-                    (*(Moby388 **)(g + 0x15F0))->cls_id == 0x45 &&
-                    (unsigned int)(*(int *)((char *)(*(Moby388 **)(g + 0x15F0))->d + 0x120) - 1) < 0x270F &&
+        if (moby->state != 6) {
+            char *hero = ((char *)&D_0013F350);
+            if (*(int *)(hero + 0x2084) == 0x32) {
+                if (*(Moby388 **)(hero + 0x15F0) != 0 &&
+                    (*(Moby388 **)(hero + 0x15F0))->cls_id == 0x45 &&
+                    (unsigned int)(*(int *)((char *)(*(Moby388 **)(hero + 0x15F0))->d + 0x120) - 1) < 0x270F &&
                     random_integer_below(2) == 0) {
-                    FUN_L13_002e86f8(m, d, 3, 9);
+                    FUN_L13_002e86f8(moby, data, 3, 9);
                 }
             }
         }
     }
-    FUN_001f9770(&d->h144);
-    FUN_001f9770(&d->h146);
-    if (m->state >= 2 && m->state <= 5 && (((unsigned char *)D_0013E533)[0x242C] & 1)) {
-        m->state = 9;
+    FUN_001f9770(&data->h144);
+    FUN_001f9770(&data->h146);
+    if (moby->state >= 2 && moby->state <= 5 && (((unsigned char *)D_0013E533)[0x242C] & 1)) {
+        moby->state = 9;
     }
 }
 #define NOT_SDA

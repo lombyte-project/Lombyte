@@ -88,17 +88,17 @@ extern int func_001F9850_3102C8(int) __asm__("FUN_001f96f8");
 
 void FUN_L11_0030ee00(Lock_3102C8 *moby)
 {
-    char *d = moby->vars;
+    char *vars = moby->vars;
 
     switch (moby->state) {
     case 0: {
-        int e = D_0015ED84;
+        int level = D_0015ED84;
         ((Stats_3102C8 *)(D_00141968_r))->count = 0;
         ((Stats_3102C8 *)(D_00141968_r))->best = 0;
-        *(unsigned short *)(d + 0x3E) |= 8;
-        if (e == 0xB && moby->bB0 != 0xFF) {
+        *(unsigned short *)(vars + 0x3E) |= 8;
+        if (level == 0xB && moby->bB0 != 0xFF) {
             if (D_L11_001BBF40_3102C8.collected[(short)moby->uid] != 0 ||
-                ((*(int *)(D_0014C190_r + (((short)moby->uid >> 5) * 4 + (e << 8))) >> (moby->uid & 0x1F)) & 1)) {
+                ((*(int *)(D_0014C190_r + (((short)moby->uid >> 5) * 4 + (level << 8))) >> (moby->uid & 0x1F)) & 1)) {
                 moby->state = 2;
                 moby->z = moby->z - 1.5f;
                 func_0022ED80_3102C8(0, 0, moby);
@@ -112,14 +112,14 @@ void FUN_L11_0030ee00(Lock_3102C8 *moby)
         if (((void *)((Hero *)(D_0013F350_r))->ground_moby) == moby && D_0013D4C0[3] != 0 &&
             ((Hero *)(D_0013F350_r))->air_frames.s == 0 && ((Hero *)(D_0013F350_r))->state.current == 0x22) {
             if (D_0015ED84 == 0xB && moby->bB0 != 0xFF) {
-                int c;
-                int u;
+                int group;
+                int group_index;
                 D_L11_001BB2E0_3102C8.collected[(short)moby->uid] = moby->bB0 + 2;
-                c = moby->bB0;
-                u = c & 0xFF;
-                if (c == 0xFF || (D_L11_0015FD08_3102C8[u] != 0xFF &&
-                                  (D_0014C050_r)[u + (D_0015ED84 << 4)] == 0xFF)) {
-                    D_L11_001BBF40_3102C8.collected[(short)moby->uid] = c + 2;
+                group = moby->bB0;
+                group_index = group & 0xFF;
+                if (group == 0xFF || (D_L11_0015FD08_3102C8[group_index] != 0xFF &&
+                                  (D_0014C050_r)[group_index + (D_0015ED84 << 4)] == 0xFF)) {
+                    D_L11_001BBF40_3102C8.collected[(short)moby->uid] = group + 2;
                 }
             }
             moby->state = 2;
@@ -136,36 +136,36 @@ void FUN_L11_0030ee00(Lock_3102C8 *moby)
             return;
         }
         if (D_0013D4C0[3] == 0) {
-            int r = func_001F9850_3102C8(D_0015EEA4) - ((Stats_3102C8 *)(D_00141968_r))->best2 * 600;
-            if ((int)((float)func_001F9850_3102C8(0x12) * 60.0f) < r ||
+            int elapsed = func_001F9850_3102C8(D_0015EEA4) - ((Stats_3102C8 *)(D_00141968_r))->best2 * 600;
+            if ((int)((float)func_001F9850_3102C8(0x12) * 60.0f) < elapsed ||
                 ((Stats_3102C8 *)(D_00141968_r))->best2 * 600 == 0) {
                 func_L00_00203F20_3102C8(0x2B02, 0x71);
                 return;
             }
             {
-                int q = func_001F9850_3102C8(D_0015EEA4) / 600;
-                if (((Stats_3102C8 *)(D_00141968_r))->best2 < q) {
+                int now = func_001F9850_3102C8(D_0015EEA4) / 600;
+                if (((Stats_3102C8 *)(D_00141968_r))->best2 < now) {
                     ((Stats_3102C8 *)(D_00141968_r))->best2 = func_001F9850_3102C8(D_0015EEA4) / 600;
                 }
             }
         } else if (((Stats_3102C8 *)(D_00141968_r))->count != 0) {
-            int r = func_001F9850_3102C8(D_0015EEA4) - ((Stats_3102C8 *)(D_00141968_r))->best * 600;
-            if ((int)((float)func_001F9850_3102C8(0x12) * 60.0f) < r ||
+            int elapsed = func_001F9850_3102C8(D_0015EEA4) - ((Stats_3102C8 *)(D_00141968_r))->best * 600;
+            if ((int)((float)func_001F9850_3102C8(0x12) * 60.0f) < elapsed ||
                 ((Stats_3102C8 *)(D_00141968_r))->best * 600 == 0) {
                 func_L00_00203F20_3102C8(0x2B01, 0x6C);
                 return;
             }
             {
-                int q = func_001F9850_3102C8(D_0015EEA4) / 600;
-                if (((Stats_3102C8 *)(D_00141968_r))->best < q) {
+                int now = func_001F9850_3102C8(D_0015EEA4) / 600;
+                if (((Stats_3102C8 *)(D_00141968_r))->best < now) {
                     ((Stats_3102C8 *)(D_00141968_r))->best = func_001F9850_3102C8(D_0015EEA4) / 600;
                 }
             }
         } else {
             ((Stats_3102C8 *)(D_00141968_r))->count += 1;
             {
-                int q = func_001F9850_3102C8(D_0015EEA4) / 600;
-                if (((Stats_3102C8 *)(D_00141968_r))->best < q) {
+                int now = func_001F9850_3102C8(D_0015EEA4) / 600;
+                if (((Stats_3102C8 *)(D_00141968_r))->best < now) {
                     ((Stats_3102C8 *)(D_00141968_r))->best = func_001F9850_3102C8(D_0015EEA4) / 600;
                 }
             }

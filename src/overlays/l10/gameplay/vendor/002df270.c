@@ -31,26 +31,26 @@ typedef struct D_2E0630 {
     char p2A[6];
     float f30;
     char p34[0xC];
-    V_2E0630 v40;
+    V_2E0630 step;
     char p50[0x10];
-    char a60[0xA0];
-    struct Moby *f100;
+    char react[0xA0];
+    struct Moby *leader;
     int f104;
     char p108[0x18];
-    V_2E0630 v120;
-    V_2E0630 v130;
-    V_2E0630 v140;
-    int f150;
+    V_2E0630 vel;
+    V_2E0630 home;
+    V_2E0630 wander_goal;
+    int path;
     char p154[4];
-    int f158;
+    int node_index;
     char p15C[4];
-    int f160[4];
-    float f170;
+    int linked[4];
+    float yaw_speed;
     int f174;
     char p178[0x24];
-    int f19C;
+    int wander_timer;
     char p1A0[0xD0];
-    char a270[4];
+    char sound_state[4];
 } D_2E0630;
 
 extern char *D_L10_0015FFD0_g[] __asm__("D_L10_0015FFD0") __attribute__((section(".sdata")));
@@ -127,166 +127,166 @@ extern V_2E0630 D_L10_001672C0_2E0630 __asm__("D_L10_00167240");
 extern Path_2E0630 *D_L10_001B0C30_2E0630[] __asm__("D_L10_001B0930");
 extern V_2E0630 D_L10_00174360_2E0630 __asm__("D_L10_001742E0");
 
-void FUN_L10_002df270(Moby *m) {
-    float v[6];
-    D_2E0630 *d = (D_2E0630 *)m->pvars;
-    Moby *P;
+void FUN_L10_002df270(Moby *moby) {
+    float waypoint[6];
+    D_2E0630 *data = (D_2E0630 *)moby->pvars;
+    Moby *leader;
 
-    func_L10_002E0FF8_2E0630(m);
-    P = d->f100;
-    func_L00_00264B40_2E0630(2.5f, m, 0, d->a270);
-    if (m->unk31 != 0 && func_001F9D10_2E0630(&m->pos, &D_L10_001672C0_2E0630) < 29.0f) {
-        func_L00_0025B178_2E0630(m);
-        m->unk7F = 0x17;
+    func_L10_002E0FF8_2E0630(moby);
+    leader = data->leader;
+    func_L00_00264B40_2E0630(2.5f, moby, 0, data->sound_state);
+    if (moby->unk31 != 0 && func_001F9D10_2E0630(&moby->pos, &D_L10_001672C0_2E0630) < 29.0f) {
+        func_L00_0025B178_2E0630(moby);
+        moby->unk7F = 0x17;
     }
-    m->unk58 = 1.0f;
-    switch (m->state) {
+    moby->unk58 = 1.0f;
+    switch (moby->state) {
     case 0:
-        d->f30 = 0.5f;
-        d->f20 = 1.0f;
-        d->h24 = 1;
-        d->b28 = 0;
-        d->b29 = 1;
-        m->flags |= 0x1000;
-        qcopy(&d->v130, &m->pos);
-        qcopy(&d->v140, &d->v130);
-        if (d->f174 != 1) {
-            func_0020D678_2E0630(m);
+        data->f30 = 0.5f;
+        data->f20 = 1.0f;
+        data->h24 = 1;
+        data->b28 = 0;
+        data->b29 = 1;
+        moby->flags |= 0x1000;
+        qcopy(&data->home, &moby->pos);
+        qcopy(&data->wander_goal, &data->home);
+        if (data->f174 != 1) {
+            func_0020D678_2E0630(moby);
         } else {
-            m->state = 1;
+            moby->state = 1;
         }
         break;
     case 1:
-        if (d->f104 == 2 && d->f174 != 0) break;
-        m->state = 2;
-        if (m->prev_seq != 1) func_00213DE0_2E0630(m, 1, 0, func_001F9850_2E0630(10));
+        if (data->f104 == 2 && data->f174 != 0) break;
+        moby->state = 2;
+        if (moby->prev_seq != 1) func_00213DE0_2E0630(moby, 1, 0, func_001F9850_2E0630(10));
         break;
     case 2:
-        if ((m->unk70 & 2) == 0) break;
-        m->state = 4;
-        func_001F9BC0_2E0630(&d->v120);
-        if (m->prev_seq != 4) func_00213DE0_2E0630(m, 4, 0, func_001F9850_2E0630(10));
+        if ((moby->unk70 & 2) == 0) break;
+        moby->state = 4;
+        func_001F9BC0_2E0630(&data->vel);
+        if (moby->prev_seq != 4) func_00213DE0_2E0630(moby, 4, 0, func_001F9850_2E0630(10));
         break;
     case 3:
         break;
     case 4:
-        m->unk58 = 4.0f;
-        if (func_00214D88_2E0630(&m->pos.z, d->v130.z + 2.0f, &d->v120.z,
+        moby->unk58 = 4.0f;
+        if (func_00214D88_2E0630(&moby->pos.z, data->home.z + 2.0f, &data->vel.z,
                 D_0015ED70 * 18.0f, D_0015ED70 * 18.0f, D_0015ED6C * 6.0f) == 0.0f) {
-            m->state = 5;
+            moby->state = 5;
         }
         break;
     case 5: {
-        float dist;
-        m->unk58 = 4.0f;
-        qcopy(v, &D_L10_001B0C30_2E0630[d->f150]->nodes[d->f158]);
-        v[5] = fast_vec_length(&d->v120);
-        dist = func_001F9D10_2E0630(v, &m->pos);
-        *(int *)&v[4] = 0;
-        func_L00_0025CE58_2E0630(&m->rot.z, func_L00_001FF860_2E0630(v[0] - m->pos.x, v[1] - m->pos.y), &d->f170,
+        float distance;
+        moby->unk58 = 4.0f;
+        qcopy(waypoint, &D_L10_001B0C30_2E0630[data->path]->nodes[data->node_index]);
+        waypoint[5] = fast_vec_length(&data->vel);
+        distance = func_001F9D10_2E0630(waypoint, &moby->pos);
+        *(int *)&waypoint[4] = 0;
+        func_L00_0025CE58_2E0630(&moby->rot.z, func_L00_001FF860_2E0630(waypoint[0] - moby->pos.x, waypoint[1] - moby->pos.y), &data->yaw_speed,
             D_0015ED70 * 25.132742f, D_0015ED70 * 25.132742f, D_0015ED6C * 50.265484f);
-        if (func_001FA850_2E0630(func_L00_001FF860_2E0630(v[0] - m->pos.x, v[1] - m->pos.y), m->rot.z) < 0.78539819f) {
-            func_00214D88_2E0630(&v[4], dist, &v[5], D_0015ED70 * 20.0f, D_0015ED70 * 20.0f, D_0015ED6C * 20.0f);
-            fast_vec_sub(&d->v120, v, &m->pos);
-            func_L00_002607A8_2E0630(&d->v120, v[5]);
+        if (func_001FA850_2E0630(func_L00_001FF860_2E0630(waypoint[0] - moby->pos.x, waypoint[1] - moby->pos.y), moby->rot.z) < 0.78539819f) {
+            func_00214D88_2E0630(&waypoint[4], distance, &waypoint[5], D_0015ED70 * 20.0f, D_0015ED70 * 20.0f, D_0015ED6C * 20.0f);
+            fast_vec_sub(&data->vel, waypoint, &moby->pos);
+            func_L00_002607A8_2E0630(&data->vel, waypoint[5]);
         } else {
-            func_001F9BC0_2E0630(&d->v120);
+            func_001F9BC0_2E0630(&data->vel);
         }
-        func_L00_00259B08_2E0630(m, &d->v120, 0.5f, 0x200, 0.0f, 0);
-        if (!(dist < 1.0f)) break;
+        func_L00_00259B08_2E0630(moby, &data->vel, 0.5f, 0x200, 0.0f, 0);
+        if (!(distance < 1.0f)) break;
         {
-            int w = d->f158++;
-            if (0.0f < D_L10_001B0C30_2E0630[d->f150]->nodes[w].w) {
-                m->state = 6;
-                if (m->prev_seq != 3) func_00213DE0_2E0630(m, 3, 0, func_001F9850_2E0630(10));
+            int node_index = data->node_index++;
+            if (0.0f < D_L10_001B0C30_2E0630[data->path]->nodes[node_index].w) {
+                moby->state = 6;
+                if (moby->prev_seq != 3) func_00213DE0_2E0630(moby, 3, 0, func_001F9850_2E0630(10));
             } else {
-                if (w + 1 != D_L10_001B0C30_2E0630[d->f150]->count) break;
-                m->state = 10;
-                if (m->prev_seq != 4) func_00213DE0_2E0630(m, 4, 0, func_001F9850_2E0630(10));
-                func_00214358_2E0630(&m->pos, 0, 0.5f);
-                qcopy(&d->v130, &D_L10_00174360_2E0630);
-                qcopy(&d->v140, &m->pos);
+                if (node_index + 1 != D_L10_001B0C30_2E0630[data->path]->count) break;
+                moby->state = 10;
+                if (moby->prev_seq != 4) func_00213DE0_2E0630(moby, 4, 0, func_001F9850_2E0630(10));
+                func_00214358_2E0630(&moby->pos, 0, 0.5f);
+                qcopy(&data->home, &D_L10_00174360_2E0630);
+                qcopy(&data->wander_goal, &moby->pos);
             }
         }
         break;
     }
     case 6:
-        func_L00_0025CE58_2E0630(&m->rot.z, func_L00_001FF860_2E0630(P->pos.x - m->pos.x, P->pos.y - m->pos.y), &d->f170,
+        func_L00_0025CE58_2E0630(&moby->rot.z, func_L00_001FF860_2E0630(leader->pos.x - moby->pos.x, leader->pos.y - moby->pos.y), &data->yaw_speed,
             D_0015ED70 * 25.132742f, D_0015ED70 * 25.132742f, D_0015ED6C * 50.265484f);
-        if ((m->unk70 & 2) == 0) break;
+        if ((moby->unk70 & 2) == 0) break;
         {
-            char *e = D_L10_0015FFD0_g[2] + (d->f160[func_001FA898_2E0630(D_L10_001B0C30_2E0630[d->f150]->nodes[d->f158 - 1].w) - 1] << 8);
-            if (e != 0) func_L10_002E14F8_2E0630(e);
+            char *linked = D_L10_0015FFD0_g[2] + (data->linked[func_001FA898_2E0630(D_L10_001B0C30_2E0630[data->path]->nodes[data->node_index - 1].w) - 1] << 8);
+            if (linked != 0) func_L10_002E14F8_2E0630(linked);
         }
-        if (d->f158 == D_L10_001B0C30_2E0630[d->f150]->count) {
-            m->state = 10;
-            if (m->prev_seq != 4) func_00213DE0_2E0630(m, 4, 0, func_001F9850_2E0630(10));
-            func_00214358_2E0630(&m->pos, 0, 0.5f);
-            qcopy(&d->v130, &D_L10_00174360_2E0630);
-            qcopy(&d->v140, &m->pos);
+        if (data->node_index == D_L10_001B0C30_2E0630[data->path]->count) {
+            moby->state = 10;
+            if (moby->prev_seq != 4) func_00213DE0_2E0630(moby, 4, 0, func_001F9850_2E0630(10));
+            func_00214358_2E0630(&moby->pos, 0, 0.5f);
+            qcopy(&data->home, &D_L10_00174360_2E0630);
+            qcopy(&data->wander_goal, &moby->pos);
         } else {
-            m->state = 5;
-            if (m->prev_seq != 4) func_00213DE0_2E0630(m, 4, 0, func_001F9850_2E0630(10));
+            moby->state = 5;
+            if (moby->prev_seq != 4) func_00213DE0_2E0630(moby, 4, 0, func_001F9850_2E0630(10));
         }
         break;
     case 7:
         break;
     case 8: {
-        float z = 0.0f;
-        float t;
-        func_L00_0025CC58_2E0630(&m->rot.y, 0, z, D_0015ED6C * 12.566371f);
-        func_L00_002592B0_2E0630(m, func_L00_001FF860_2E0630(d->v130.x - m->pos.x, d->v130.y - m->pos.y), &d->f170,
+        float zero = 0.0f;
+        float climb;
+        func_L00_0025CC58_2E0630(&moby->rot.y, 0, zero, D_0015ED6C * 12.566371f);
+        func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(data->home.x - moby->pos.x, data->home.y - moby->pos.y), &data->yaw_speed,
             0.02f, 0.3f, D_0015ED6C * 6.2831855f);
-        d->v120.x = func_001F9F90_2E0630(m->rot.z) * (D_0015ED6C * 6.0f);
-        d->v120.y = func_001F9FA8_2E0630(m->rot.z) * (D_0015ED6C * 6.0f);
-        d->v120.z = z;
-        t = d->v130.z + 2.0f - m->pos.z;
-        if (D_0015ED6C * 6.0f < t) {
-            t = D_0015ED6C * 6.0f;
-        } else if (t < D_0015ED6C * -6.0f) {
-            t = D_0015ED6C * -6.0f;
+        data->vel.x = func_001F9F90_2E0630(moby->rot.z) * (D_0015ED6C * 6.0f);
+        data->vel.y = func_001F9FA8_2E0630(moby->rot.z) * (D_0015ED6C * 6.0f);
+        data->vel.z = zero;
+        climb = data->home.z + 2.0f - moby->pos.z;
+        if (D_0015ED6C * 6.0f < climb) {
+            climb = D_0015ED6C * 6.0f;
+        } else if (climb < D_0015ED6C * -6.0f) {
+            climb = D_0015ED6C * -6.0f;
         }
-        d->v120.z = t;
-        func_L00_00259B08_2E0630(m, &d->v120, 0.5f, 0x200, 0.0f, 0);
-        if (func_001F9D48_2E0630(&m->pos, &d->v130) < 2.0f) m->state = 7;
+        data->vel.z = climb;
+        func_L00_00259B08_2E0630(moby, &data->vel, 0.5f, 0x200, 0.0f, 0);
+        if (func_001F9D48_2E0630(&moby->pos, &data->home) < 2.0f) moby->state = 7;
         break;
     }
     case 9: {
-        float r;
-        float a;
+        float radius;
+        float angle;
         float zero;
-        if (!func_001F9908_2E0630(&d->f19C)) break;
+        if (!func_001F9908_2E0630(&data->wander_timer)) break;
         zero = 0.0f;
-        d->f19C = func_001F9850_2E0630(0x78);
-        r = func_002140F8_2E0630(zero, 3.0f);
-        a = func_00214158_2E0630();
-        v[0] = func_001F9F90_2E0630(a) * r;
-        v[1] = func_001F9FA8_2E0630(a) * r;
-        v[2] = zero;
-        v[2] = func_002140F8_2E0630(5.0f, 7.0f);
-        fast_vec_add(&d->v140, v, &d->v130);
-        m->state = 10;
+        data->wander_timer = func_001F9850_2E0630(0x78);
+        radius = func_002140F8_2E0630(zero, 3.0f);
+        angle = func_00214158_2E0630();
+        waypoint[0] = func_001F9F90_2E0630(angle) * radius;
+        waypoint[1] = func_001F9FA8_2E0630(angle) * radius;
+        waypoint[2] = zero;
+        waypoint[2] = func_002140F8_2E0630(5.0f, 7.0f);
+        fast_vec_add(&data->wander_goal, waypoint, &data->home);
+        moby->state = 10;
         break;
     }
     case 10:
-        func_L00_002592B0_2E0630(m, func_L00_001FF860_2E0630(d->v140.x - m->pos.x, d->v140.y - m->pos.y), &d->f170,
+        func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(data->wander_goal.x - moby->pos.x, data->wander_goal.y - moby->pos.y), &data->yaw_speed,
             0.05f, 0.3f, 0.2f);
-        fast_vec_sub(&d->v40, &d->v140, &m->pos);
-        func_L00_002607A8_2E0630(&d->v40, D_0015ED6C * 4.0f);
-        fast_vec_add(v, &d->v40, &m->pos);
-        if (func_L00_001F10E0_2E0630(0.4f, v, 0, m)) {
-            func_001F9BC0_2E0630(&d->v40);
-            m->state = 9;
+        fast_vec_sub(&data->step, &data->wander_goal, &moby->pos);
+        func_L00_002607A8_2E0630(&data->step, D_0015ED6C * 4.0f);
+        fast_vec_add(waypoint, &data->step, &moby->pos);
+        if (func_L00_001F10E0_2E0630(0.4f, waypoint, 0, moby)) {
+            func_001F9BC0_2E0630(&data->step);
+            moby->state = 9;
         } else {
-            qcopy(&m->pos, v);
+            qcopy(&moby->pos, waypoint);
         }
-        if (fast_vec_length(&d->v40) == 0.0f) m->state = 9;
+        if (fast_vec_length(&data->step) == 0.0f) moby->state = 9;
         break;
     case 11:
-        if ((func_L00_0025D6F0_2E0630(m, d->a60) & 1) == 0) break;
-        func_L00_002584A8_2E0630(m, 0x200, -1);
-        func_L00_00260460_2E0630(m, &m->pos, -1, 0.5f, 10.0f);
-        func_0020D678_2E0630(m);
+        if ((func_L00_0025D6F0_2E0630(moby, data->react) & 1) == 0) break;
+        func_L00_002584A8_2E0630(moby, 0x200, -1);
+        func_L00_00260460_2E0630(moby, &moby->pos, -1, 0.5f, 10.0f);
+        func_0020D678_2E0630(moby);
         break;
     }
 }
@@ -2098,12 +2098,12 @@ extern char D_0013D355_2E9978[] __asm__("D_00141B28");
 
 void FUN_L10_002e85b8(Moby *moby)
 {
-    EvData_2E9978 *d = (EvData_2E9978 *)((int *)moby->pvars);
-    Moby *p;
-    int flag;
-    int sub;
+    EvData_2E9978 *data = (EvData_2E9978 *)((int *)moby->pvars);
+    Moby *other;
+    int any_active;
+    int elapsed;
 
-    if (func_00215570_2E9978(D_0013F3D0_r, d->f1C)) {
+    if (func_00215570_2E9978(D_0013F3D0_r, data->f1C)) {
         D_L10_00161F38 = 1;
     } else {
         D_L10_00161F38 = 0;
@@ -2114,14 +2114,14 @@ void FUN_L10_002e85b8(Moby *moby)
         moby->state = 1;
         break;
     case 1:
-        if (func_00215570_2E9978(D_0013F3D0_r, d->f0) != 0
+        if (func_00215570_2E9978(D_0013F3D0_r, data->f0) != 0
             && (((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C == 9)
             && ((Msg_2E9978 *)D_L10_00179910_2E9978)->f0 == 0
             && ((Msg_2E9978 *)D_L10_00179910_2E9978)->f24 == -1
             && *(unsigned short *)(D_00141B10_r) == 0) {
             func_L00_00203F20_2E9978(0x2710, 0x35);
         }
-        if (func_00215570_2E9978(D_0013F3D0_r, d->f4) != 0
+        if (func_00215570_2E9978(D_0013F3D0_r, data->f4) != 0
             && (((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C == 9)
             && ((Msg_2E9978 *)D_L10_00179910_2E9978)->f0 == 0
             && ((Msg_2E9978 *)D_L10_00179910_2E9978)->f24 == -1) {
@@ -2141,7 +2141,7 @@ void FUN_L10_002e85b8(Moby *moby)
             && *(unsigned short *)(D_00141B18_r) == 0) {
             func_L00_00203F20_2E9978(0x2711, 0x36);
         }
-        if (func_00215570_2E9978(D_0013F3D0_r, d->f8) != 0
+        if (func_00215570_2E9978(D_0013F3D0_r, data->f8) != 0
             && (((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C == 9)
             && D_0013D4CB_r[0] == 0
             && ((Msg_2E9978 *)D_L10_00179910_2E9978)->f0 == 0
@@ -2149,26 +2149,26 @@ void FUN_L10_002e85b8(Moby *moby)
             && *(unsigned short *)(D_00141C48_r) == 0) {
             func_L00_00203F20_2E9978(0x2715, 0x5C);
         }
-        flag = 0;
-        for (p = D_L10_0015FFE4; p != 0; p = p->next) {
-            if (p->oclass == 0x359 && p->state != 1) flag = 1;
+        any_active = 0;
+        for (other = D_L10_0015FFE4; other != 0; other = other->next) {
+            if (other->oclass == 0x359 && other->state != 1) any_active = 1;
         }
-        if (flag == 0) break;
-        if (d->f10 != -1
-            && func_001F9D48_2E9978(D_0013F3D0_r, &D_L10_0015FFD0_m[2][d->f10].pos) < 15.0f
-            && d->f14 != -1
-            && func_001F9D48_2E9978(D_0013F3D0_r, &D_L10_0015FFD0_m[2][d->f14].pos) < 15.0f
+        if (any_active == 0) break;
+        if (data->f10 != -1
+            && func_001F9D48_2E9978(D_0013F3D0_r, &D_L10_0015FFD0_m[2][data->f10].pos) < 15.0f
+            && data->f14 != -1
+            && func_001F9D48_2E9978(D_0013F3D0_r, &D_L10_0015FFD0_m[2][data->f14].pos) < 15.0f
             && *(unsigned short *)(D_00141CB8_r) == 0) {
             func_L00_00203F20_2E9978(0x2717, 0x6A);
         }
-        if (flag == 0) break;
-        if (func_00215570_2E9978(D_0013F3D0_r, d->f18) == 0) break;
-        if (d->f20 == -1) break;
-        if (D_L10_0015FFD8_c2[d->f20].oclass != 0x3F7) break;
-        if (D_L10_0015FFD8_c2[d->f20].state == 4) break;
+        if (any_active == 0) break;
+        if (func_00215570_2E9978(D_0013F3D0_r, data->f18) == 0) break;
+        if (data->f20 == -1) break;
+        if (D_L10_0015FFD8_c2[data->f20].oclass != 0x3F7) break;
+        if (D_L10_0015FFD8_c2[data->f20].state == 4) break;
         if (((Save_2E9978 *)(D_00141968_r))->f358 != 0) {
-            sub = func_001F9850_2E9978(D_0015EEA4) - ((Save_2E9978 *)(D_00141968_r))->f35A * 600;
-            if ((int)((float)func_001F9850_2E9978(0x12) * 60.0f) < sub || ((Save_2E9978 *)(D_00141968_r))->f35A * 600 == 0) {
+            elapsed = func_001F9850_2E9978(D_0015EEA4) - ((Save_2E9978 *)(D_00141968_r))->f35A * 600;
+            if ((int)((float)func_001F9850_2E9978(0x12) * 60.0f) < elapsed || ((Save_2E9978 *)(D_00141968_r))->f35A * 600 == 0) {
                 func_L00_00203F20_2E9978(0x2718, 0x6B);
                 break;
             }

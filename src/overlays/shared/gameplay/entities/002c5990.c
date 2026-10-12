@@ -366,53 +366,53 @@ extern float func_001F9B88_2C73D0(float) __asm__("FUN_001f99c0");
 extern Path_2C73D0 *D_L09_001B0930_2C73D0[] __asm__("D_L09_001B0630");
 extern char D_0013E633_2C73D0[] __asm__("D_001413D0");
 
-void FUN_L09_002c6230(Moby *m) {
-    char vec[16];
-    int flag;
-    float a1;
-    float ang1;
-    float ang2;
-    Data_2C73D0 *d;
-    Hit_2C73D0 *r;
+void FUN_L09_002c6230(Moby *moby) {
+    char hit_pos[16];
+    int hit;
+    float damage;
+    float knock_angle;
+    float knock_angle_fatal;
+    Data_2C73D0 *data;
+    Hit_2C73D0 *source;
     int response;
-    int res;
-    int lost;
+    int result;
+    int lost_state;
 
-    d = (struct Data_2C73D0 *)m->pvars;
-    if (m->state == 0) {
+    data = (struct Data_2C73D0 *)moby->pvars;
+    if (moby->state == 0) {
         return;
     }
-    m->scale = m->scale + ((((Cls_2C73D0 *)m->pclass)->scale * D_L09_0016140C) - m->scale) * 0.1f;
-    if (func_001F9908_2C73D0(&d->timer) == 2) {
-        m->state = 7;
+    moby->scale = moby->scale + ((((Cls_2C73D0 *)moby->pclass)->scale * D_L09_0016140C) - moby->scale) * 0.1f;
+    if (func_001F9908_2C73D0(&data->timer) == 2) {
+        moby->state = 7;
         return;
     }
-    if (d->timer == func_001F9850_2C73D0(0xA) || d->timer == func_001F9850_2C73D0(0x14)
-        || d->timer == func_001F9850_2C73D0(0x28) || d->timer == func_001F9850_2C73D0(0x3C)
-        || d->timer == func_001F9850_2C73D0(0x78) || d->timer == func_001F9850_2C73D0(0xB3)) {
-        d->reactTime = 0xF0;
-        func_L00_0025E4B0_2C73D0(m, d->react);
+    if (data->timer == func_001F9850_2C73D0(0xA) || data->timer == func_001F9850_2C73D0(0x14)
+        || data->timer == func_001F9850_2C73D0(0x28) || data->timer == func_001F9850_2C73D0(0x3C)
+        || data->timer == func_001F9850_2C73D0(0x78) || data->timer == func_001F9850_2C73D0(0xB3)) {
+        data->reactTime = 0xF0;
+        func_L00_0025E4B0_2C73D0(moby, data->react);
     }
-    a1 = 0.0f;
-    r = func_L00_0025B478_2C73D0(m, 0x330000, 0);
-    response = func_L00_0025B4D0_2C73D0(m, r, &d->health, 0, &flag, &a1, 0, 4);
-    if (flag != 1 && m->state != 6) {
-        d->health = d->health - a1;
-        if (d->health <= 0.0f) {
+    damage = 0.0f;
+    source = func_L00_0025B478_2C73D0(moby, 0x330000, 0);
+    response = func_L00_0025B4D0_2C73D0(moby, source, &data->health, 0, &hit, &damage, 0, 4);
+    if (hit != 1 && moby->state != 6) {
+        data->health = data->health - damage;
+        if (data->health <= 0.0f) {
             response = 1;
         }
-        d->f90 = func_001FA898_2C73D0(512.0f);
-        d->f80 = D_L09_001613F8 * D_0015ED70;
-        d->f84 = D_0015ED70 * 30.0f;
-        d->f98 = 0.0f;
-        d->f94 = 1;
-        d->bAD = 0;
-        func_0022ED80_2C73D0(8, 0, m);
+        data->f90 = func_001FA898_2C73D0(512.0f);
+        data->f80 = D_L09_001613F8 * D_0015ED70;
+        data->f84 = D_0015ED70 * 30.0f;
+        data->f98 = 0.0f;
+        data->f94 = 1;
+        data->bAD = 0;
+        func_0022ED80_2C73D0(8, 0, moby);
 
         switch (response) {
         case 9:
         case 10:
-            d->reactTime = 0xFA;
+            data->reactTime = 0xFA;
             break;
         case 3:
         case 4:
@@ -420,84 +420,84 @@ void FUN_L09_002c6230(Moby *m) {
         case 6:
         case 7:
         case 8:
-            d->fC0 = 3.0f;
-            d->fC4 = 6.0f;
-            d->f88 = D_L09_00161400 * D_0015ED6C;
-            d->f8C = 0.0f;
-            ang1 = func_L00_001FF860_2C73D0(m->pos.x - r->owner->pos.x, m->pos.y - r->owner->pos.y);
-            *(Q_2C73D0 *)vec = r->pos;
-            func_L00_0025BBA0_2C73D0(vec, &ang1, &d->f88, &d->f8C);
-            func_L00_0025D5B0_2C73D0(m, d->f70, ang1, 4, 1, 0);
-            m->state = 5;
-            if (m->group != 0xFF) {
-                func_L01_0026F040_2C73D0(m->group, 1);
+            data->fC0 = 3.0f;
+            data->fC4 = 6.0f;
+            data->f88 = D_L09_00161400 * D_0015ED6C;
+            data->f8C = 0.0f;
+            knock_angle = func_L00_001FF860_2C73D0(moby->pos.x - source->owner->pos.x, moby->pos.y - source->owner->pos.y);
+            *(Q_2C73D0 *)hit_pos = source->pos;
+            func_L00_0025BBA0_2C73D0(hit_pos, &knock_angle, &data->f88, &data->f8C);
+            func_L00_0025D5B0_2C73D0(moby, data->f70, knock_angle, 4, 1, 0);
+            moby->state = 5;
+            if (moby->group != 0xFF) {
+                func_L01_0026F040_2C73D0(moby->group, 1);
             }
-            d->reactTime = 0x78;
+            data->reactTime = 0x78;
             break;
         case 1:
         case 2:
-            m->flags &= 0xEFFF;
-            d->f80 = D_L09_001613F8 * D_0015ED70;
-            d->f88 = D_L09_00161408 * D_0015ED6C;
-            d->f8C = D_L09_00161404 * D_0015ED6C;
-            d->fC0 = 14.0f;
-            d->fC4 = 28.0f;
-            ang2 = func_L00_001FF860_2C73D0(m->pos.x - r->owner->pos.x, m->pos.y - r->owner->pos.y);
-            *(Q_2C73D0 *)vec = r->pos;
-            func_L00_0025BBA0_2C73D0(vec, &ang2, &d->f88, &d->f8C);
-            func_L00_0025D5B0_2C73D0(m, d->f70, ang2, 4, 1, 0);
-            func_L00_002584A8_2C73D0(m, 0, -1);
-            m->state = 6;
-            d->reactTime = 0xF0;
+            moby->flags &= 0xEFFF;
+            data->f80 = D_L09_001613F8 * D_0015ED70;
+            data->f88 = D_L09_00161408 * D_0015ED6C;
+            data->f8C = D_L09_00161404 * D_0015ED6C;
+            data->fC0 = 14.0f;
+            data->fC4 = 28.0f;
+            knock_angle_fatal = func_L00_001FF860_2C73D0(moby->pos.x - source->owner->pos.x, moby->pos.y - source->owner->pos.y);
+            *(Q_2C73D0 *)hit_pos = source->pos;
+            func_L00_0025BBA0_2C73D0(hit_pos, &knock_angle_fatal, &data->f88, &data->f8C);
+            func_L00_0025D5B0_2C73D0(moby, data->f70, knock_angle_fatal, 4, 1, 0);
+            func_L00_002584A8_2C73D0(moby, 0, -1);
+            moby->state = 6;
+            data->reactTime = 0xF0;
             break;
         case 0:
         case 11:
         default:
             break;
         }
-        func_L00_0025E4B0_2C73D0(m, d->react);
+        func_L00_0025E4B0_2C73D0(moby, data->react);
     }
-    m->unkA4 = 0xFF;
-    func_L00_0025E590_2C73D0(m, d->react);
-    if (d->f38 != 0 || m->unkBC == 1) {
-        d->retreat = func_001FA898_2C73D0(func_001F9878_2C73D0(func_002140F8_2C73D0(180.0f, 240.0f)));
-        d->f38 = 0;
-        m->unkBC = 0;
+    moby->unkA4 = 0xFF;
+    func_L00_0025E590_2C73D0(moby, data->react);
+    if (data->f38 != 0 || moby->unkBC == 1) {
+        data->retreat = func_001FA898_2C73D0(func_001F9878_2C73D0(func_002140F8_2C73D0(180.0f, 240.0f)));
+        data->f38 = 0;
+        moby->unkBC = 0;
     }
-    func_001F9908_2C73D0(&d->retreat);
+    func_001F9908_2C73D0(&data->retreat);
     if (func_002140B0_2C73D0(4) == 0) {
-        float *tgt;
-        if (d->retreat != 0) {
-            d->reach = 24.0f;
-            tgt = d->target;
-            res = func_L00_00260D30_2C73D0(m, tgt, 24.0f);
-            lost = 2;
+        float *goal;
+        if (data->retreat != 0) {
+            data->reach = 24.0f;
+            goal = data->target;
+            result = func_L00_00260D30_2C73D0(moby, goal, 24.0f);
+            lost_state = 2;
         } else {
-            Path_2C73D0 *tb;
-            d->reach = 12.0f;
-            tb = D_L09_001B0930_2C73D0[d->path];
-            tgt = d->target;
-            res = func_L00_00260FB0_2C73D0(m, tgt, 12.0f, 0, 0, tb->pts, tb->count);
-            lost = 2;
+            Path_2C73D0 *path;
+            data->reach = 12.0f;
+            path = D_L09_001B0930_2C73D0[data->path];
+            goal = data->target;
+            result = func_L00_00260FB0_2C73D0(moby, goal, 12.0f, 0, 0, path->pts, path->count);
+            lost_state = 2;
         }
-        if (res != lost && d->retreat == 0) {
-            if (d->reach < func_001F9D48_2C73D0(&m->pos, tgt)) {
-                d->f164 = lost;
-            } else if (3.0f < func_001F9B88_2C73D0(m->pos.z - d->target[2])) {
-                d->f164 = lost;
+        if (result != lost_state && data->retreat == 0) {
+            if (data->reach < func_001F9D48_2C73D0(&moby->pos, goal)) {
+                data->f164 = lost_state;
+            } else if (3.0f < func_001F9B88_2C73D0(moby->pos.z - data->target[2])) {
+                data->f164 = lost_state;
             }
         }
     } else {
-        Moby *target = d->f160;
+        Moby *target = data->f160;
         if (target != 0 && target->state != 0xFE && target->state != 0xFD) {
-            qcopy(d->target, &target->pos);
+            qcopy(data->target, &target->pos);
         } else {
-            d->f160 = 0;
-            d->f164 = 2;
+            data->f160 = 0;
+            data->f164 = 2;
         }
     }
-    if (d->f160 == 0) {
-        d->f160 = *(Moby **)D_0013E633_2C73D0;
+    if (data->f160 == 0) {
+        data->f160 = *(Moby **)D_0013E633_2C73D0;
     }
 }
 /* Ground enemy update: damage reaction, leash and wake checks, then its chase / attack / return state machine. */
@@ -678,7 +678,7 @@ extern void splash_2E39E0(Moby *, void *, int, float, float) __asm__("FUN_L00_00
 extern void delete_2E39E0(Moby *) __asm__("FUN_0020c828");
 extern void effects_update_2E39E0(Moby *, void *) __asm__("FUN_L00_0025d538");
 
-void FUN_L09_002e27d8(Moby *m) {
+void FUN_L09_002e27d8(Moby *moby) {
     V_2E39E0 previous;
     Target_2E39E0 query;
     V_2E39E0 step;
@@ -686,355 +686,355 @@ void FUN_L09_002e27d8(Moby *m) {
     V_2E39E0 away;
     int hit_index;
     float damage;
-    Data_2E39E0 *d = (Data_2E39E0 *)m->pvars;
+    Data_2E39E0 *data = (Data_2E39E0 *)moby->pvars;
     int kind = 2;
     int expired;
     float ground;
 
-    if (m->state != 99 && m->state != 7) {
+    if (moby->state != 99 && moby->state != 7) {
         Hit_2E39E0 *hit;
         damage = 0.0f;
-        hit = hit_query_2E39E0(m, 0x330000, 0);
-        hit_check_2E39E0(m, hit, &d->health, 0, &hit_index, &damage, 0, 4);
-        timer16_2E39E0(&d->cooldown);
-        if (d->cooldown < ticks_2E39E0(45) && hit != 0) {
+        hit = hit_query_2E39E0(moby, 0x330000, 0);
+        hit_check_2E39E0(moby, hit, &data->health, 0, &hit_index, &damage, 0, 4);
+        timer16_2E39E0(&data->cooldown);
+        if (data->cooldown < ticks_2E39E0(45) && hit != 0) {
             if ((unsigned short)(hit->moby->oclass - 0xB0) < 2) {
-                if (d->cooldown != 0) hit->damage = 0.0f;
+                if (data->cooldown != 0) hit->damage = 0.0f;
                 else hit->damage = 1.0f;
             }
-            if (m->group != 0xFF) event_2E39E0(m->group, 1);
+            if (moby->group != 0xFF) event_2E39E0(moby->group, 1);
             if (hit->damage != 0.0f) {
-                float health = d->health - hit->damage;
-                float up = lift_2E39E0 * D_0015EE6C_2E39E0;
+                float health = data->health - hit->damage;
+                float lift = lift_2E39E0 * D_0015EE6C_2E39E0;
                 float back = impulse_2E39E0 * D_0015EE6C_2E39E0;
-                d->f144 = 9;
-                d->f130 = 0.008f;
-                d->f134 = 0.0005f;
-                d->health = health;
-                d->up = up;
-                d->back = back;
-                d->f15D = 0;
+                data->f144 = 9;
+                data->f130 = 0.008f;
+                data->f134 = 0.0005f;
+                data->health = health;
+                data->up = lift;
+                data->back = back;
+                data->f15D = 0;
                 if (health <= 0.0f) {
                     float up_die = D_0015EE6C_2E39E0 * 8.0f;
                     float back_die = D_0015EE6C_2E39E0 * 10.0f;
-                    m->flags &= 0xEFFF;
-                    d->up = up_die;
-                    d->back = back_die;
+                    moby->flags &= 0xEFFF;
+                    data->up = up_die;
+                    data->back = back_die;
                     if (hit->kind == 180) {
-                        d->up = up_die * 1.35f;
-                        d->back = back_die * 1.35f;
+                        data->up = up_die * 1.35f;
+                        data->back = back_die * 1.35f;
                     }
-                    knock_2E39E0(m, d->motion, angle_2E39E0(m->pos.x - query.x, m->pos.y - query.y), 5, 1, 0);
-                    d->f170 = 11.0f;
-                    d->f174 = 18.0f;
-                    if (D_001413F4[0] == 2) explode_2E39E0(m, 0x200, -1);
-                    else explode_2E39E0(m, 0, -1);
-                    m->unk94 = 0;
-                    m->state = 99;
-                    d->f117 = 120;
-                    effects_start_2E39E0(m, d->effects);
+                    knock_2E39E0(moby, data->motion, angle_2E39E0(moby->pos.x - query.x, moby->pos.y - query.y), 5, 1, 0);
+                    data->f170 = 11.0f;
+                    data->f174 = 18.0f;
+                    if (D_001413F4[0] == 2) explode_2E39E0(moby, 0x200, -1);
+                    else explode_2E39E0(moby, 0, -1);
+                    moby->unk94 = 0;
+                    moby->state = 99;
+                    data->f117 = 120;
+                    effects_start_2E39E0(moby, data->effects);
                 } else {
                     if (hit->kind == 180) {
-                        d->up = up * 1.35f;
-                        d->back = back * 1.35f;
+                        data->up = lift * 1.35f;
+                        data->back = back * 1.35f;
                     }
-                    knock_2E39E0(m, d->motion, angle_2E39E0(m->pos.x - query.x, m->pos.y - query.y), 6, 1, 0);
-                    d->f170 = 5.0f;
-                    d->f174 = 10.0f;
-                    m->state = 6;
-                    d->f117 = 250;
-                    d->cooldown = ticks_2E39E0(60);
-                    effects_start_2E39E0(m, d->effects);
+                    knock_2E39E0(moby, data->motion, angle_2E39E0(moby->pos.x - query.x, moby->pos.y - query.y), 6, 1, 0);
+                    data->f170 = 5.0f;
+                    data->f174 = 10.0f;
+                    moby->state = 6;
+                    data->f117 = 250;
+                    data->cooldown = ticks_2E39E0(60);
+                    effects_start_2E39E0(moby, data->effects);
                 }
             }
         }
-        m->unkA4 = 0xFF;
-        sound_2E39E0(2.1f, m, 0, d->sound);
-        if (m->unk31 != 0 && distance_2E39E0(&m->pos, D_L09_00166FC0_2E39E0) < 38.0f) {
-            wake_2E39E0(m);
-            m->unk7F = 30;
+        moby->unkA4 = 0xFF;
+        sound_2E39E0(2.1f, moby, 0, data->sound);
+        if (moby->unk31 != 0 && distance_2E39E0(&moby->pos, D_L09_00166FC0_2E39E0) < 38.0f) {
+            wake_2E39E0(moby);
+            moby->unk7F = 30;
         }
-        if (fast_distance_2E39E0(&m->pos, D_0013E633_2E39E0) > 40.0f) return;
-        if (d->hidden != 0) {
+        if (fast_distance_2E39E0(&moby->pos, D_0013E633_2E39E0) > 40.0f) return;
+        if (data->hidden != 0) {
             if ((*(unsigned char *)&((Hero *)D_0013E633_2E39E0)->unk2020[1]) != 2) {
-                m->unk30 = 0xFF;
-                m->unk94 = 0;
-                m->flags = (m->flags | 0x41) & 0xEFFF;
+                moby->unk30 = 0xFF;
+                moby->unk94 = 0;
+                moby->flags = (moby->flags | 0x41) & 0xEFFF;
                 return;
             }
-            m->flags &= 0xFFBE;
-            m->unk94 = *(int *)(((char *)m->pclass) + 0x10);
-            m->unk30 = 0x40;
-            m->flags |= 0x1000;
+            moby->flags &= 0xFFBE;
+            moby->unk94 = *(int *)(((char *)moby->pclass) + 0x10);
+            moby->unk30 = 0x40;
+            moby->flags |= 0x1000;
         }
-        if (d->hurt != 0) d->alert = ticks_2E39E0(240);
-        d->hurt = 0;
-        timer32_2E39E0(&d->f208);
-        if (timer16_2E39E0(&d->alert)) d->range = 12.0f;
-        else d->range = 20.0f;
-        kind = target_2E39E0(m, &query, d->range);
+        if (data->hurt != 0) data->alert = ticks_2E39E0(240);
+        data->hurt = 0;
+        timer32_2E39E0(&data->f208);
+        if (timer16_2E39E0(&data->alert)) data->range = 12.0f;
+        else data->range = 20.0f;
+        kind = target_2E39E0(moby, &query, data->range);
     }
-    qcopy(&previous, &m->pos);
-    expired = timer32_2E39E0(&d->home_timer) != 0;
+    qcopy(&previous, &moby->pos);
+    expired = timer32_2E39E0(&data->home_timer) != 0;
     ground = -1.0f;
-    switch (m->state) {
+    switch (moby->state) {
     case 0:
-        qcopy(&d->home, &m->pos);
-        m->state = 1;
-        d->f29 = 0;
-        d->health = 1.0f;
-        d->f24 = 1;
-        d->f5A = 2;
-        d->f58 = 8;
-        d->alert = 0;
-        d->f208 = 0;
-        steer_init_2E39E0(&d->steer);
-        d->steer = 0x38D;
-        d->f188 = d->f18C = 2.0f;
-        d->f1A4 = d->speed * D_0015EE6C_2E39E0;
-        if (rand_2E39E0() & 1) m->flags |= 0x8000;
-        d->settings = &settings_2E39E0;
-        if (m->prev_seq != 2) animate_2E39E0(m, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-        ground = m->pos.z = ground_2E39E0(&m->pos, 0, 0.5f);
+        qcopy(&data->home, &moby->pos);
+        moby->state = 1;
+        data->f29 = 0;
+        data->health = 1.0f;
+        data->f24 = 1;
+        data->f5A = 2;
+        data->f58 = 8;
+        data->alert = 0;
+        data->f208 = 0;
+        steer_init_2E39E0(&data->steer);
+        data->steer = 0x38D;
+        data->f188 = data->f18C = 2.0f;
+        data->f1A4 = data->speed * D_0015EE6C_2E39E0;
+        if (rand_2E39E0() & 1) moby->flags |= 0x8000;
+        data->settings = &settings_2E39E0;
+        if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        ground = moby->pos.z = ground_2E39E0(&moby->pos, 0, 0.5f);
         break;
     case 1:
-        fast_vec_sub(&step, &query, &m->pos);
-        if ((kind < 2 || fast_vec_length(&step) < d->range + 4.0f) && fabs_2E39E0(m->pos.z - query.z) < 8.0f && !status_2E39E0(19)) {
-            m->state = 2;
-            if (m->prev_seq != 4) animate_2E39E0(m, 4, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-        } else if (m->unkBC == 1 && !status_2E39E0(19)) {
-            if (status_2E39E0(0x100) & 1) d->side_deg = -d->side_deg;
-            d->side = d->side_deg * 0.017453292f;
-            d->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
-            m->state = 3;
-            if (m->prev_seq != 0) animate_2E39E0(m, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-            m->unkBC = 0;
+        fast_vec_sub(&step, &query, &moby->pos);
+        if ((kind < 2 || fast_vec_length(&step) < data->range + 4.0f) && fabs_2E39E0(moby->pos.z - query.z) < 8.0f && !status_2E39E0(19)) {
+            moby->state = 2;
+            if (moby->prev_seq != 4) animate_2E39E0(moby, 4, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        } else if (moby->unkBC == 1 && !status_2E39E0(19)) {
+            if (status_2E39E0(0x100) & 1) data->side_deg = -data->side_deg;
+            data->side = data->side_deg * 0.017453292f;
+            data->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
+            moby->state = 3;
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            moby->unkBC = 0;
         }
         break;
     case 2:
     case 8:
     case 10:
     case 11:
-        turn_2E39E0(m, angle_2E39E0(query.x - m->pos.x, query.y - m->pos.y), d->turn, 0.02f, 0.3f, 0.1f);
-        fast_vec_sub(&step, &query, &m->pos);
-        if ((kind < 2 || fast_vec_length(&step) < d->range) && fabs_2E39E0(m->pos.z - query.z) < 8.0f && !status_2E39E0(19)) {
-            if (m->group != 0xFF) event_2E39E0(m->group, 1);
-            if (status_2E39E0(0x100) & 1) d->side_deg = -d->side_deg;
-            d->side = d->side_deg * 0.017453292f;
-            d->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
-            m->state = 3;
-            if (m->prev_seq != 0) animate_2E39E0(m, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-            m->unkBC = 0;
-        } else if (m->unkBC == 1 && !status_2E39E0(19)) {
-            if (status_2E39E0(0x100) & 1) d->side_deg = -d->side_deg;
-            d->side = d->side_deg * 0.017453292f;
-            d->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
-            m->state = 3;
-            if (m->prev_seq != 0) animate_2E39E0(m, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-            m->unkBC = 0;
+        turn_2E39E0(moby, angle_2E39E0(query.x - moby->pos.x, query.y - moby->pos.y), data->turn, 0.02f, 0.3f, 0.1f);
+        fast_vec_sub(&step, &query, &moby->pos);
+        if ((kind < 2 || fast_vec_length(&step) < data->range) && fabs_2E39E0(moby->pos.z - query.z) < 8.0f && !status_2E39E0(19)) {
+            if (moby->group != 0xFF) event_2E39E0(moby->group, 1);
+            if (status_2E39E0(0x100) & 1) data->side_deg = -data->side_deg;
+            data->side = data->side_deg * 0.017453292f;
+            data->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
+            moby->state = 3;
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            moby->unkBC = 0;
+        } else if (moby->unkBC == 1 && !status_2E39E0(19)) {
+            if (status_2E39E0(0x100) & 1) data->side_deg = -data->side_deg;
+            data->side = data->side_deg * 0.017453292f;
+            data->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
+            moby->state = 3;
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            moby->unkBC = 0;
         }
-        if (m->prev_seq == 4 && (m->unk70 & 2)) animate_2E39E0(m, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        if (moby->prev_seq == 4 && (moby->unk70 & 2)) animate_2E39E0(moby, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         break;
     case 3: {
         int flags;
         float steep;
-        steep = fabs_2E39E0(m->pos.z - query.z);
-        steep /= fast_distance_2E39E0(&m->pos, &query);
-        if (d->path != -1) project_2E39E0(m, D_L09_001B0930_2E39E0[d->path], &query, &goal);
+        steep = fabs_2E39E0(moby->pos.z - query.z);
+        steep /= fast_distance_2E39E0(&moby->pos, &query);
+        if (data->path != -1) project_2E39E0(moby, D_L09_001B0930_2E39E0[data->path], &query, &goal);
         else qcopy(&goal, &query);
-        turn_2E39E0(m, angle_2E39E0(goal.x - m->pos.x, goal.y - m->pos.y) + d->side, d->turn, 0.05f, 0.3f, 0.2f);
-        step.x = 2.0f * sine_2E39E0(m->rot.z);
-        step.y = 2.0f * cosine_2E39E0(m->rot.z);
+        turn_2E39E0(moby, angle_2E39E0(goal.x - moby->pos.x, goal.y - moby->pos.y) + data->side, data->turn, 0.05f, 0.3f, 0.2f);
+        step.x = 2.0f * sine_2E39E0(moby->rot.z);
+        step.y = 2.0f * cosine_2E39E0(moby->rot.z);
         step.z = 0.0f;
-        fast_vec_add(&goal, &m->pos, &step);
-        flags = move_2E39E0(m, &d->steer, &goal, &step, 1.0f);
-        if (timer32_2E39E0(&d->side_timer)) {
-            d->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
-            d->side = -d->side;
+        fast_vec_add(&goal, &moby->pos, &step);
+        flags = move_2E39E0(moby, &data->steer, &goal, &step, 1.0f);
+        if (timer32_2E39E0(&data->side_timer)) {
+            data->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
+            data->side = -data->side;
         }
-        fast_vec_sub(&away, &query, &d->home);
-        if ((flags & 4) || (fast_distance_2E39E0(&m->pos, &query) < 1.5f && !(flags & 2))) {
-            m->state = 4;
-            if (m->prev_seq != 1) animate_2E39E0(m, 1, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-        } else if (d->f190 < D_0015EE6C_2E39E0 || 1.0f < steep || (flags & 2)) {
-            d->home_timer = ticks_2E39E0(50);
-            m->state = 5;
-        } else if (fast_vec_length(&away) < d->range + 4.0f && fabs_2E39E0(m->pos.z - query.z) < 8.0f) {
-            if (m->group != 0xFF) event_2E39E0(m->group, 1);
-        } else if (m->unkBC != 1) {
-            m->state = 5;
+        fast_vec_sub(&away, &query, &data->home);
+        if ((flags & 4) || (fast_distance_2E39E0(&moby->pos, &query) < 1.5f && !(flags & 2))) {
+            moby->state = 4;
+            if (moby->prev_seq != 1) animate_2E39E0(moby, 1, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        } else if (data->f190 < D_0015EE6C_2E39E0 || 1.0f < steep || (flags & 2)) {
+            data->home_timer = ticks_2E39E0(50);
+            moby->state = 5;
+        } else if (fast_vec_length(&away) < data->range + 4.0f && fabs_2E39E0(moby->pos.z - query.z) < 8.0f) {
+            if (moby->group != 0xFF) event_2E39E0(moby->group, 1);
+        } else if (moby->unkBC != 1) {
+            moby->state = 5;
         }
-        m->unkBC = 0;
+        moby->unkBC = 0;
         break;
     }
     case 4:
-        turn_2E39E0(m, angle_2E39E0(query.x - m->pos.x, query.y - m->pos.y), d->turn, 0.05f, 0.3f, 0.2f);
-        if (m->seq == m->prev_seq && frame_2E39E0(m) == 13.0f && fabs_2E39E0(m->pos.z - query.z) < 0.5f
-            && fast_distance_2E39E0(&m->pos, &query) < 2.0f
-            && angle_dist_2E39E0(angle_2E39E0(query.x - m->pos.x, query.y - m->pos.y), m->rot.z) < 0.2617994f) {
-            step.x = sine_2E39E0(m->rot.z) * 0.2f;
-            step.y = cosine_2E39E0(m->rot.z) * 0.2f;
+        turn_2E39E0(moby, angle_2E39E0(query.x - moby->pos.x, query.y - moby->pos.y), data->turn, 0.05f, 0.3f, 0.2f);
+        if (moby->seq == moby->prev_seq && frame_2E39E0(moby) == 13.0f && fabs_2E39E0(moby->pos.z - query.z) < 0.5f
+            && fast_distance_2E39E0(&moby->pos, &query) < 2.0f
+            && angle_dist_2E39E0(angle_2E39E0(query.x - moby->pos.x, query.y - moby->pos.y), moby->rot.z) < 0.2617994f) {
+            step.x = sine_2E39E0(moby->rot.z) * 0.2f;
+            step.y = cosine_2E39E0(moby->rot.z) * 0.2f;
             step.z = 0.0f;
             qcopy(&goal, &query);
             goal.z += 0.75f;
-            hurt_2E39E0(query.who, m, 1, &goal, &step, 1.0f);
+            hurt_2E39E0(query.who, moby, 1, &goal, &step, 1.0f);
         }
-        if ((m->unk70 & 2) && fast_distance_2E39E0(&m->pos, &query) > 1.5f) {
-            m->state = 3;
-            if (m->prev_seq != 0) animate_2E39E0(m, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        if ((moby->unk70 & 2) && fast_distance_2E39E0(&moby->pos, &query) > 1.5f) {
+            moby->state = 3;
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         }
-        ground = ground_2E39E0(&m->pos, 0, 0.5f);
-        d->fall = d->fall - D_0015EE70_2E39E0 * 9.8f;
-        m->pos.z = m->pos.z + d->fall;
-        if (m->pos.z < ground) {
-            d->fall = 0.0f;
-            m->pos.z = ground;
+        ground = ground_2E39E0(&moby->pos, 0, 0.5f);
+        data->fall = data->fall - D_0015EE70_2E39E0 * 9.8f;
+        moby->pos.z = moby->pos.z + data->fall;
+        if (moby->pos.z < ground) {
+            data->fall = 0.0f;
+            moby->pos.z = ground;
         }
         break;
     case 5: {
         int flags;
-        if (d->path != -1) project_2E39E0(m, D_L09_001B0930_2E39E0[d->path], &d->home, &goal);
-        else qcopy(&goal, &d->home);
-        turn_2E39E0(m, angle_2E39E0(goal.x - m->pos.x, goal.y - m->pos.y), d->turn, 0.02f, 0.3f, 0.1f);
-        step.x = 2.0f * sine_2E39E0(m->rot.z);
-        step.y = 2.0f * cosine_2E39E0(m->rot.z);
+        if (data->path != -1) project_2E39E0(moby, D_L09_001B0930_2E39E0[data->path], &data->home, &goal);
+        else qcopy(&goal, &data->home);
+        turn_2E39E0(moby, angle_2E39E0(goal.x - moby->pos.x, goal.y - moby->pos.y), data->turn, 0.02f, 0.3f, 0.1f);
+        step.x = 2.0f * sine_2E39E0(moby->rot.z);
+        step.y = 2.0f * cosine_2E39E0(moby->rot.z);
         step.z = 0.0f;
-        fast_vec_add(&goal, &m->pos, &step);
-        flags = move_2E39E0(m, &d->steer, &goal, &step, 1.0f);
-        if (fast_distance_2E39E0(&m->pos, &d->home) < 2.0f) {
-            m->state = 1;
-            if (m->prev_seq != 2) animate_2E39E0(m, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        fast_vec_add(&goal, &moby->pos, &step);
+        flags = move_2E39E0(moby, &data->steer, &goal, &step, 1.0f);
+        if (fast_distance_2E39E0(&moby->pos, &data->home) < 2.0f) {
+            moby->state = 1;
+            if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         }
-        fast_vec_sub(&away, &query, &d->home);
-        if (expired && fast_vec_length(&away) < d->range) {
-            if (m->group != 0xFF) event_2E39E0(m->group, 1);
-            m->state = 3;
-            if (m->prev_seq != 0) animate_2E39E0(m, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-        } else if (expired && m->unkBC == 1) {
-            m->state = 3;
-            if (m->prev_seq != 0) animate_2E39E0(m, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        fast_vec_sub(&away, &query, &data->home);
+        if (expired && fast_vec_length(&away) < data->range) {
+            if (moby->group != 0xFF) event_2E39E0(moby->group, 1);
+            moby->state = 3;
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        } else if (expired && moby->unkBC == 1) {
+            moby->state = 3;
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         } else if (flags & 2) {
-            m->pos.x = previous.x;
-            m->pos.y = previous.y;
-            m->state = 12;
-            if (m->prev_seq != 4) animate_2E39E0(m, 4, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            moby->pos.x = previous.x;
+            moby->pos.y = previous.y;
+            moby->state = 12;
+            if (moby->prev_seq != 4) animate_2E39E0(moby, 4, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         }
-        m->unkBC = 0;
+        moby->unkBC = 0;
         break;
     }
     case 6:
-        if (knock_update_2E39E0(m, d->motion) & 1) {
-            m->state = 9;
-            if (m->prev_seq != 3) animate_2E39E0(m, 3, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        if (knock_update_2E39E0(moby, data->motion) & 1) {
+            moby->state = 9;
+            if (moby->prev_seq != 3) animate_2E39E0(moby, 3, 0, ticks_2E39E0(range_2E39E0(10, 13)));
             return;
         }
-        if (m->pos.z < 0.0f) {
-            delete_2E39E0(m);
+        if (moby->pos.z < 0.0f) {
+            delete_2E39E0(moby);
             return;
         }
         break;
     case 7:
-        if (recover_2E39E0(m, d->motion)) {
-            m->state = 1;
-            if (m->prev_seq != 2) animate_2E39E0(m, 2, 0, 0);
-            d->fC8 = 0;
+        if (recover_2E39E0(moby, data->motion)) {
+            moby->state = 1;
+            if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, 0);
+            data->fC8 = 0;
         }
         break;
     case 9:
-        if (frame_2E39E0(m) > 29.0f) {
-            m->state = 3;
-            if (m->prev_seq != 0) animate_2E39E0(m, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        if (frame_2E39E0(moby) > 29.0f) {
+            moby->state = 3;
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
             return;
         }
         break;
     case 99:
-        if (knock_update_2E39E0(m, d->motion) & 0x40) {
+        if (knock_update_2E39E0(moby, data->motion) & 0x40) {
             zero_2E39E0(&step);
-            splash_2E39E0(m, &m->pos, 6, 0.5f, 13.0f);
-            delete_2E39E0(m);
+            splash_2E39E0(moby, &moby->pos, 6, 0.5f, 13.0f);
+            delete_2E39E0(moby);
             return;
         }
-        if (m->pos.z < 0.0f) {
-            delete_2E39E0(m);
+        if (moby->pos.z < 0.0f) {
+            delete_2E39E0(moby);
             return;
         }
         break;
     case 12: {
         int flags;
         float steep;
-        steep = fabs_2E39E0(m->pos.z - query.z);
-        steep /= fast_distance_2E39E0(&m->pos, &query);
-        if (d->path != -1) project_2E39E0(m, D_L09_001B0930_2E39E0[d->path], &d->home, &goal);
-        else qcopy(&goal, &d->home);
-        turn_2E39E0(m, angle_2E39E0(goal.x - m->pos.x, goal.y - m->pos.y), d->turn, 0.05f, 0.3f, 0.2f);
-        step.x = 2.0f * sine_2E39E0(m->rot.z);
-        step.y = 2.0f * cosine_2E39E0(m->rot.z);
+        steep = fabs_2E39E0(moby->pos.z - query.z);
+        steep /= fast_distance_2E39E0(&moby->pos, &query);
+        if (data->path != -1) project_2E39E0(moby, D_L09_001B0930_2E39E0[data->path], &data->home, &goal);
+        else qcopy(&goal, &data->home);
+        turn_2E39E0(moby, angle_2E39E0(goal.x - moby->pos.x, goal.y - moby->pos.y), data->turn, 0.05f, 0.3f, 0.2f);
+        step.x = 2.0f * sine_2E39E0(moby->rot.z);
+        step.y = 2.0f * cosine_2E39E0(moby->rot.z);
         step.z = 0.0f;
-        fast_vec_add(&goal, &m->pos, &step);
-        flags = move_2E39E0(m, &d->steer, &goal, &step, 1.0f);
-        fast_vec_sub(&away, &query, &d->home);
-        if ((flags & 4) || (fast_distance_2E39E0(&m->pos, &query) < 1.5f && steep <= 1.0f)) {
-            m->state = 4;
-            if (m->prev_seq != 1) animate_2E39E0(m, 1, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        fast_vec_add(&goal, &moby->pos, &step);
+        flags = move_2E39E0(moby, &data->steer, &goal, &step, 1.0f);
+        fast_vec_sub(&away, &query, &data->home);
+        if ((flags & 4) || (fast_distance_2E39E0(&moby->pos, &query) < 1.5f && steep <= 1.0f)) {
+            moby->state = 4;
+            if (moby->prev_seq != 1) animate_2E39E0(moby, 1, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         } else if (steep <= 1.0f && !(flags & 2)) {
-            m->state = 5;
-            if (m->prev_seq != 0) animate_2E39E0(m, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            moby->state = 5;
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         } else if ((flags & 2) && expired) {
-            m->state = 1;
-            if (m->prev_seq != 2) animate_2E39E0(m, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-        } else if (m->unk70 & 2) {
-            int a;
+            moby->state = 1;
+            if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        } else if (moby->unk70 & 2) {
+            int animation;
             status_2E39E0(4);
-            a = status_2E39E0(4) ? 2 : 4;
-            animate_2E39E0(m, a, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            animation = status_2E39E0(4) ? 2 : 4;
+            animate_2E39E0(moby, animation, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         }
-        m->unkBC = 0;
+        moby->unkBC = 0;
         break;
     }
     case 13: {
-        Moby *o;
-        if (m->seq != 0 && m->prev_seq != 0) animate_2E39E0(m, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-        step.x = sine_2E39E0(m->rot.z) * (d->speed * D_0015EE6C_2E39E0);
-        step.y = cosine_2E39E0(m->rot.z) * (d->speed * D_0015EE6C_2E39E0);
+        Moby *other;
+        if (moby->seq != 0 && moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        step.x = sine_2E39E0(moby->rot.z) * (data->speed * D_0015EE6C_2E39E0);
+        step.y = cosine_2E39E0(moby->rot.z) * (data->speed * D_0015EE6C_2E39E0);
         step.z = 0.0f;
-        fast_vec_add(&goal, &m->pos, &step);
-        for (o = D_L09_00160064_2E39E0; o != 0; o = o->next) {
-            if (o != m && (signed char)o->state >= 0 && (o->oclass == 0 || o->oclass == 193)) {
-                if (fast_distance_2E39E0(&goal, &o->pos) < 2.0f) {
-                    float z = m->pos.z;
-                    float a = angle_2E39E0(o->pos.x - m->pos.x, o->pos.y - m->pos.y);
-                    float dl = angle_delta_2E39E0(m->rot.z, a);
-                    float t = D_0015EE6C_2E39E0 * 1.5707964f;
-                    if (!(dl > 0.0f)) t = -t;
-                    m->rot.z = angle_add_2E39E0(m->rot.z, t);
-                    fast_vec_sub(&goal, &m->pos, &o->pos);
+        fast_vec_add(&goal, &moby->pos, &step);
+        for (other = D_L09_00160064_2E39E0; other != 0; other = other->next) {
+            if (other != moby && (signed char)other->state >= 0 && (other->oclass == 0 || other->oclass == 193)) {
+                if (fast_distance_2E39E0(&goal, &other->pos) < 2.0f) {
+                    float old_z = moby->pos.z;
+                    float bearing = angle_2E39E0(other->pos.x - moby->pos.x, other->pos.y - moby->pos.y);
+                    float turn_side = angle_delta_2E39E0(moby->rot.z, bearing);
+                    float turn = D_0015EE6C_2E39E0 * 1.5707964f;
+                    if (!(turn_side > 0.0f)) turn = -turn;
+                    moby->rot.z = angle_add_2E39E0(moby->rot.z, turn);
+                    fast_vec_sub(&goal, &moby->pos, &other->pos);
                     fast_vec_normalize(&goal, &goal, 2.0f);
-                    fast_vec_add(&goal, &goal, &o->pos);
-                    goal.z = z;
+                    fast_vec_add(&goal, &goal, &other->pos);
+                    goal.z = old_z;
                 }
             }
         }
-        qcopy(&m->pos, &goal);
-        ground = ground_2E39E0(&m->pos, 0, 0.5f);
-        d->fall = d->fall - D_0015EE70_2E39E0 * 9.8f;
-        m->pos.z = m->pos.z + d->fall;
-        if (m->pos.z < ground) {
-            d->fall = 0.0f;
-            m->pos.z = ground;
+        qcopy(&moby->pos, &goal);
+        ground = ground_2E39E0(&moby->pos, 0, 0.5f);
+        data->fall = data->fall - D_0015EE70_2E39E0 * 9.8f;
+        moby->pos.z = moby->pos.z + data->fall;
+        if (moby->pos.z < ground) {
+            data->fall = 0.0f;
+            moby->pos.z = ground;
         }
-        if (d->anchor == 0 || fast_distance_2E39E0(&m->pos, &d->anchor->pos) > fixed_2E39E0(d->leash)) {
-            m->state = 5;
-            if (m->prev_seq != 0) animate_2E39E0(m, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        if (data->anchor == 0 || fast_distance_2E39E0(&moby->pos, &data->anchor->pos) > fixed_2E39E0(data->leash)) {
+            moby->state = 5;
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         }
-        m->unkBC = 0;
+        moby->unkBC = 0;
         break;
     }
     }
-    if (ground == -1.0f) ground = ground_2E39E0(&m->pos, 0, 0.5f);
-    if (ground != 0.0f && m->pos.z - ground < 0.1f && hazard_2E39E0() == 1) {
-        splash_2E39E0(m, &m->pos, 6, 0.5f, 13.0f);
-        delete_2E39E0(m);
+    if (ground == -1.0f) ground = ground_2E39E0(&moby->pos, 0, 0.5f);
+    if (ground != 0.0f && moby->pos.z - ground < 0.1f && hazard_2E39E0() == 1) {
+        splash_2E39E0(moby, &moby->pos, 6, 0.5f, 13.0f);
+        delete_2E39E0(moby);
         return;
     }
-    effects_update_2E39E0(m, d->effects);
+    effects_update_2E39E0(moby, data->effects);
 }

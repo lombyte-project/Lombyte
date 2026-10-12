@@ -1506,20 +1506,20 @@ extern unsigned char D_0013F3D0[];
 void FUN_L09_002f86a0(Moby *moby)
 {
     PlatVars_2F9A50 *data = (*(PlatVars_2F9A50 **)&moby->pvars);
-    Vec_2F9A50 m0;
-    Vec_2F9A50 rot;
-    Vec_2F9A50 rel;
-    Vec_2F9A50 ang;
-    Vec_2F9A50 pos;
-    Vec_2F9A50 out;
-    float low;
-    float z0;
-    float k;
+    Vec_2F9A50 movement;
+    Vec_2F9A50 old_rot;
+    Vec_2F9A50 hero_offset;
+    Vec_2F9A50 old_angles;
+    Vec_2F9A50 old_pos;
+    Vec_2F9A50 carried_pos;
+    float sink_level;
+    float old_z;
+    float tilt;
 
-    fast_vec_scale(&m0, &(*(Vec_2F9A50 *)&moby->pos), -1.0f);
-    qcopy(&rot, &(*(Vec_2F9A50 *)&moby->rot));
-    low = data->baseZ - 0.25f;
-    z0 = (*(Vec_2F9A50 *)&moby->pos).z;
+    fast_vec_scale(&movement, &(*(Vec_2F9A50 *)&moby->pos), -1.0f);
+    qcopy(&old_rot, &(*(Vec_2F9A50 *)&moby->rot));
+    sink_level = data->baseZ - 0.25f;
+    old_z = (*(Vec_2F9A50 *)&moby->pos).z;
     if (data->init == 0) {
         qcopy(&data->ang, &(*(Vec_2F9A50 *)&moby->rot));
         qzero(&data->angvel);
@@ -1537,48 +1537,48 @@ void FUN_L09_002f86a0(Moby *moby)
         }
     }
     if (data->timer != 0) {
-        float a, b, y;
-        float deg;
+        float side_dot, front_dot, pitch_target;
+        float deg_to_rad;
         func_001F9908_2F9A50(&data->timer);
-        fast_vec_sub(&rel, (D_0013E633_2F9A50 + 0x80), &(*(Vec_2F9A50 *)&moby->pos));
-        deg = 0.01745329238474369f;
-        a = func_001F9C78_2F9A50(&rel, &(*(Vec_2F9A50 *)&moby->unkC0));
-        b = func_001F9C78_2F9A50(&rel, &(*(Vec_2F9A50 *)&moby->unkD0));
-        k = D_L09_001619F4;
-        y = k * a;
-        *(u128 *)&ang = *(u128 *)&data->ang;
-        *(u128 *)&pos = *(u128 *)&moby->pos;
-        func_L00_0025CCF0_2F9A50(&data->ang.x, -k * b, &data->angvel.x, 0,
-            D_L09_00161A04 * deg * D_0015ED70,
+        fast_vec_sub(&hero_offset, (D_0013E633_2F9A50 + 0x80), &(*(Vec_2F9A50 *)&moby->pos));
+        deg_to_rad = 0.01745329238474369f;
+        side_dot = func_001F9C78_2F9A50(&hero_offset, &(*(Vec_2F9A50 *)&moby->unkC0));
+        front_dot = func_001F9C78_2F9A50(&hero_offset, &(*(Vec_2F9A50 *)&moby->unkD0));
+        tilt = D_L09_001619F4;
+        pitch_target = tilt * side_dot;
+        *(u128 *)&old_angles = *(u128 *)&data->ang;
+        *(u128 *)&old_pos = *(u128 *)&moby->pos;
+        func_L00_0025CCF0_2F9A50(&data->ang.x, -tilt * front_dot, &data->angvel.x, 0,
+            D_L09_00161A04 * deg_to_rad * D_0015ED70,
             D_L09_00161A08 * D_0015ED64,
-            D_L09_00161A0C * deg * D_0015ED6C_c2);
-        func_L00_0025CCF0_2F9A50(&data->ang.y, y, &data->angvel.y, 0,
-            D_L09_00161A04 * deg * D_0015ED70,
+            D_L09_00161A0C * deg_to_rad * D_0015ED6C_c2);
+        func_L00_0025CCF0_2F9A50(&data->ang.y, pitch_target, &data->angvel.y, 0,
+            D_L09_00161A04 * deg_to_rad * D_0015ED70,
             D_L09_00161A08 * D_0015ED64,
-            D_L09_00161A0C * deg * D_0015ED6C_c2);
+            D_L09_00161A0C * deg_to_rad * D_0015ED6C_c2);
         (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z - D_L09_001619F8 * D_0015ED6C_c2;
-        if (low < z0 && (*(Vec_2F9A50 *)&moby->pos).z <= low) {
+        if (sink_level < old_z && (*(Vec_2F9A50 *)&moby->pos).z <= sink_level) {
             func_0022ED80_2F9A50(1, 0, moby);
         }
-        func_L07_00289960_2F9A50((D_0013E633_2F9A50 + 0x80), &out, &(*(Vec_2F9A50 *)&moby->pos), &ang, &data->ang);
-        fast_vec_sub(D_0013E633_2F9A50 + 0xF0, &out, (D_0013E633_2F9A50 + 0x80));
+        func_L07_00289960_2F9A50((D_0013E633_2F9A50 + 0x80), &carried_pos, &(*(Vec_2F9A50 *)&moby->pos), &old_angles, &data->ang);
+        fast_vec_sub(D_0013E633_2F9A50 + 0xF0, &carried_pos, (D_0013E633_2F9A50 + 0x80));
         ((Hero *)D_0013E633_2F9A50)->motion.unkF0.f[2] =
-            ((Hero *)D_0013E633_2F9A50)->motion.unkF0.f[2] + ((*(Vec_2F9A50 *)&moby->pos).z - pos.z);
+            ((Hero *)D_0013E633_2F9A50)->motion.unkF0.f[2] + ((*(Vec_2F9A50 *)&moby->pos).z - old_pos.z);
     } else {
-        float deg = 0.01745329238474369f;
+        float deg_to_rad = 0.01745329238474369f;
         func_L00_0025CCF0_2F9A50(&data->ang.x, 0.0f, &data->angvel.x, 0,
-            D_L09_00161A10 * deg * D_0015ED70,
+            D_L09_00161A10 * deg_to_rad * D_0015ED70,
             D_L09_00161A14 * D_0015ED64,
-            D_L09_00161A18 * deg * D_0015ED6C_c2);
+            D_L09_00161A18 * deg_to_rad * D_0015ED6C_c2);
         func_L00_0025CCF0_2F9A50(&data->ang.y, 0.0f, &data->angvel.y, 0,
-            D_L09_00161A10 * deg * D_0015ED70,
+            D_L09_00161A10 * deg_to_rad * D_0015ED70,
             D_L09_00161A14 * D_0015ED64,
-            D_L09_00161A18 * deg * D_0015ED6C_c2);
+            D_L09_00161A18 * deg_to_rad * D_0015ED6C_c2);
         (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z + D_L09_001619FC * D_0015ED6C_c2 * (data->baseZ - (*(Vec_2F9A50 *)&moby->pos).z);
         if (data->baseZ < (*(Vec_2F9A50 *)&moby->pos).z) {
             (*(Vec_2F9A50 *)&moby->pos).z = data->baseZ;
         }
-        if (z0 < low && low <= (*(Vec_2F9A50 *)&moby->pos).z) {
+        if (old_z < sink_level && sink_level <= (*(Vec_2F9A50 *)&moby->pos).z) {
             func_0022ED80_2F9A50(2, 0, moby);
         }
     }
@@ -1587,8 +1587,8 @@ void FUN_L09_002f86a0(Moby *moby)
         D_0015ED6C_c2 * 0.3141592741012573f, D_0015ED6C_c2 * 0.48869219422340393f);
     (*(Vec_2F9A50 *)&moby->rot).x = func_001FA748_2F9A50(data->ang.x, (*(Vec_2F9A50 *)&moby->rot).x);
     (*(Vec_2F9A50 *)&moby->rot).y = func_001FA748_2F9A50(data->ang.y, (*(Vec_2F9A50 *)&moby->rot).y);
-    fast_vec_add(&m0, &m0, &(*(Vec_2F9A50 *)&moby->pos));
-    func_L00_002617B0_2F9A50(data->f20, &m0, &rot, &(*(Vec_2F9A50 *)&moby->rot));
+    fast_vec_add(&movement, &movement, &(*(Vec_2F9A50 *)&moby->pos));
+    func_L00_002617B0_2F9A50(data->f20, &movement, &old_rot, &(*(Vec_2F9A50 *)&moby->rot));
 }
 /* UpdateMoby_1000: timer and sound bookkeeping */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00301C38), where it is exact; names translated to the US level program. */

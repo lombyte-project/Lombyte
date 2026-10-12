@@ -196,26 +196,26 @@ void FUN_L04_002e4418(Moby *moby) {
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1
             && D_0014C050_c[moby->unkB0 + (D_0015ED84 << 4)] != 0xFF) {
             if (data->f14 == -1) {
-                Help_2E57F8 *h = (Help_2E57F8 *)(((char *)&D_00141848));
+                Help_2E57F8 *usage = (Help_2E57F8 *)(((char *)&D_00141848));
                 data->f14 = D_0015EEAC;
-                if (h[0x18].count < 0xFFFF) {
-                    h[0x18].count++;
+                if (usage[0x18].count < 0xFFFF) {
+                    usage[0x18].count++;
                 }
-                if (scale_game_frames_alt(D_0015EEA4) / 600 > h[0x18].time) {
-                    h[0x18].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                if (scale_game_frames_alt(D_0015EEA4) / 600 > usage[0x18].time) {
+                    usage[0x18].time = scale_game_frames_alt(D_0015EEA4) / 600;
                 }
-                h[0x18].mask = h[0x18].mask | (1 << D_0015ED84) | 0x80000000;
+                usage[0x18].mask = usage[0x18].mask | (1 << D_0015ED84) | 0x80000000;
             } else if (D_00141908 >= 3) {
                 if (D_0013D4D4 == 0) {
-                    Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
-                    if (b[0x1D].count == 0) {
+                    Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+                    if (help[0x1D].count == 0) {
                         FUN_L00_00203908(0xFA1, 0x1D);
                     }
                 } else {
-                    int t = scale_game_frames_alt(D_0015EEA4) - D_001417C2 * 600;
-                    if (scale_game_frames_alt(0x4650) < t) {
-                        Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
-                        if (b[0x1C].count == 0) {
+                    int elapsed = scale_game_frames_alt(D_0015EEA4) - D_001417C2 * 600;
+                    if (scale_game_frames_alt(0x4650) < elapsed) {
+                        Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+                        if (help[0x1C].count == 0) {
                             FUN_L00_00203908(0xFA0, 0x1C);
                         }
                     }
@@ -224,17 +224,17 @@ void FUN_L04_002e4418(Moby *moby) {
         }
 
         {
-            Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
-            if (b[0x42].count < 4) {
+            Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+            if (help[0x42].count < 4) {
                 if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f34) != 0
                     || is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f38) != 0) {
-                    Hero *h = (Hero *)(((char *)&D_0013F3D0 - 0x80));
-                    if (h->state.prev == 0x3B && h->state_timer == 0) {
-                        Moby *m;
-                        for (m = D_L04_00160064_2E57F8; m != 0; m = m->next) {
-                            if (m->oclass == 0x118
-                                && distance_xyz(((float *)&m->pos), ((char *)&D_0013F3D0)) < 3.0f
-                                && *(float *)*(void **)&m->pvars != 1.0f) {
+                    Hero *hero = (Hero *)(((char *)&D_0013F3D0 - 0x80));
+                    if (hero->state.prev == 0x3B && hero->state_timer == 0) {
+                        Moby *other;
+                        for (other = D_L04_00160064_2E57F8; other != 0; other = other->next) {
+                            if (other->oclass == 0x118
+                                && distance_xyz(((float *)&other->pos), ((char *)&D_0013F3D0)) < 3.0f
+                                && *(float *)*(void **)&other->pvars != 1.0f) {
                                 data->f20++;
                                 if (data->f20 == 3 || data->f20 == 6) {
                                     FUN_L00_00203908(0x3EE, 0x42);
@@ -247,10 +247,10 @@ void FUN_L04_002e4418(Moby *moby) {
         }
 
         {
-            unsigned char *g = ((char *)&D_0013D4E8);
-            if (g[9] != 0 && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
-                Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
-                if (b[0x1E].count == 0) {
+            unsigned char *item_flags = ((char *)&D_0013D4E8);
+            if (item_flags[9] != 0 && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
+                Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+                if (help[0x1E].count == 0) {
                     FUN_L00_00203908(0xFA2, 0x1E);
                 }
             }
@@ -258,8 +258,8 @@ void FUN_L04_002e4418(Moby *moby) {
 
         if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f3C) != 0 && D_00141940 == 0
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
-            Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
-            if (b[0x77].count == 0) {
+            Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+            if (help[0x77].count == 0) {
                 FUN_L00_00203908(0x4E2D, 0x77);
             }
         }
@@ -289,50 +289,50 @@ void FUN_L04_002e4418(Moby *moby) {
             && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
             if (D_0013D4DA == 0) {
-                Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
-                int t = scale_game_frames_alt(D_0015EEA4) - b[0x1F].time * 600;
-                if ((int)(scale_game_frames_alt(0x12) * 60.0f) < t || b[0x1F].time * 600 == 0) {
+                Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+                int elapsed = scale_game_frames_alt(D_0015EEA4) - help[0x1F].time * 600;
+                if ((int)(scale_game_frames_alt(0x12) * 60.0f) < elapsed || help[0x1F].time * 600 == 0) {
                     FUN_L00_00203908(0xFA3, 0x1F);
                 } else {
-                    int n = scale_game_frames_alt(D_0015EEA4) / 600;
-                    if (b[0x1F].time < n) {
-                        b[0x1F].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                    int now = scale_game_frames_alt(D_0015EEA4) / 600;
+                    if (help[0x1F].time < now) {
+                        help[0x1F].time = scale_game_frames_alt(D_0015EEA4) / 600;
                     }
                 }
             } else {
                 if (data->f48 != -1 && D_L04_00160058_2E57F8[data->f48].oclass == 0x267 && D_L04_00160058_2E57F8[data->f48].state == 4) {
-                    Help_2E57F8 *h = (Help_2E57F8 *)(((char *)&D_00141848));
-                    unsigned int c = h[0x11].count;
-                    if (c <= 0xFFFE) {
-                        h[0x11].count = c + 1;
+                    Help_2E57F8 *usage = (Help_2E57F8 *)(((char *)&D_00141848));
+                    unsigned int count = usage[0x11].count;
+                    if (count <= 0xFFFE) {
+                        usage[0x11].count = count + 1;
                     }
-                    if (scale_game_frames_alt(D_0015EEA4) / 600 > h[0x11].time) {
-                        h[0x11].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                    if (scale_game_frames_alt(D_0015EEA4) / 600 > usage[0x11].time) {
+                        usage[0x11].time = scale_game_frames_alt(D_0015EEA4) / 600;
                     }
-                    h[0x11].mask = h[0x11].mask | (1 << D_0015ED84) | 0x80000000;
+                    usage[0x11].mask = usage[0x11].mask | (1 << D_0015ED84) | 0x80000000;
                 } else if (data->fC == 0) {
                     if (D_001418D0 == 0) {
-                        Help_2E57F8 *b;
+                        Help_2E57F8 *help;
                         data->f8++;
-                        b = (Help_2E57F8 *)(((char *)&D_00141968));
-                        if (b[0x20].count != 0) {
-                            int t = scale_game_frames_alt(D_0015EEA4) - b[0x20].time * 600;
-                            if ((int)(scale_game_frames_alt(0x12) * 60.0f) < t || b[0x20].time * 600 == 0) {
+                        help = (Help_2E57F8 *)(((char *)&D_00141968));
+                        if (help[0x20].count != 0) {
+                            int elapsed = scale_game_frames_alt(D_0015EEA4) - help[0x20].time * 600;
+                            if ((int)(scale_game_frames_alt(0x12) * 60.0f) < elapsed || help[0x20].time * 600 == 0) {
                                 FUN_L00_00203908(0xFA4, 0x20);
                             } else {
-                                int n = scale_game_frames_alt(D_0015EEA4) / 600;
-                                if (b[0x20].time < n) {
-                                    b[0x20].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                                int now = scale_game_frames_alt(D_0015EEA4) / 600;
+                                if (help[0x20].time < now) {
+                                    help[0x20].time = scale_game_frames_alt(D_0015EEA4) / 600;
                                 }
                             }
                         } else {
-                            int n;
-                            b[0x20].count++;
-                            n = scale_game_frames_alt(D_0015EEA4) / 600;
-                            if (b[0x20].time < n) {
-                                b[0x20].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                            int now;
+                            help[0x20].count++;
+                            now = scale_game_frames_alt(D_0015EEA4) / 600;
+                            if (help[0x20].time < now) {
+                                help[0x20].time = scale_game_frames_alt(D_0015EEA4) / 600;
                             }
-                            b[0x20].mask = b[0x20].mask | (1 << D_0015ED84) | 0x80000000;
+                            help[0x20].mask = help[0x20].mask | (1 << D_0015ED84) | 0x80000000;
                         }
                     }
                 }
@@ -346,25 +346,25 @@ void FUN_L04_002e4418(Moby *moby) {
         if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f50) != 0
             && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
-            int t = scale_game_frames_alt(D_0015EEA4) - D_00141892 * 600;
-            if (scale_game_frames_alt(0x34BC0) < t) {
-                Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
-                if (!(b[0x43].mask & (1 << D_0015ED84))) {
+            int elapsed = scale_game_frames_alt(D_0015EEA4) - D_00141892 * 600;
+            if (scale_game_frames_alt(0x34BC0) < elapsed) {
+                Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+                if (!(help[0x43].mask & (1 << D_0015ED84))) {
                     FUN_L00_00203908(0x3EF, 0x43);
                 }
             }
         }
 
         {
-            Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
-            if (b[0x46].count == 0 || b[0x47].count == 0) {
-                Hero *h = (Hero *)(((char *)&D_0013F3D0 - 0x80));
-                Moby *p;
-                if (h->state.current == 0x72 && (p = h->ground_moby) != 0 && p->oclass == 0x267
-                    && is_point_inside_clip_volume((char *)h + 0x80, data->f4) != 0) {
-                    if (b[0x46].count == 0) {
+            Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+            if (help[0x46].count == 0 || help[0x47].count == 0) {
+                Hero *hero = (Hero *)(((char *)&D_0013F3D0 - 0x80));
+                Moby *ground;
+                if (hero->state.current == 0x72 && (ground = hero->ground_moby) != 0 && ground->oclass == 0x267
+                    && is_point_inside_clip_volume((char *)hero + 0x80, data->f4) != 0) {
+                    if (help[0x46].count == 0) {
                         FUN_L00_00203908(0x7DB, 0x46);
-                    } else if (b[0x47].count == 0) {
+                    } else if (help[0x47].count == 0) {
                         data->f1C++;
                         if (scale_game_frames_alt(0x708) < data->f1C) {
                             FUN_L00_00203908(0x7DC, 0x47);
@@ -377,16 +377,16 @@ void FUN_L04_002e4418(Moby *moby) {
         }
 
         if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f30) != 0) {
-            Help_2E57F8 *h = (Help_2E57F8 *)(((char *)&D_00141848));
-            if (h[0x19].count == 0
+            Help_2E57F8 *usage = (Help_2E57F8 *)(((char *)&D_00141848));
+            if (usage[0x19].count == 0
                 && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)) {
-                int n;
-                h[0x19].count++;
-                n = scale_game_frames_alt(D_0015EEA4) / 600;
-                if (h[0x19].time < n) {
-                    h[0x19].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                int now;
+                usage[0x19].count++;
+                now = scale_game_frames_alt(D_0015EEA4) / 600;
+                if (usage[0x19].time < now) {
+                    usage[0x19].time = scale_game_frames_alt(D_0015EEA4) / 600;
                 }
-                h[0x19].mask = h[0x19].mask | (1 << D_0015ED84) | 0x80000000;
+                usage[0x19].mask = usage[0x19].mask | (1 << D_0015ED84) | 0x80000000;
             }
         }
 
@@ -405,8 +405,8 @@ void FUN_L04_002e4418(Moby *moby) {
             && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)
             && data->f24 >= 3
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
-            Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
-            if (b[0x49].count == 0) {
+            Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+            if (help[0x49].count == 0) {
                 FUN_L00_00203908(0xFA5, 0x49);
             }
         }

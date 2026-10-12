@@ -69,33 +69,33 @@ extern float D_L12_001FB7D0_303CA8[] __asm__("D_L12_001FB510");
 
 void FUN_L12_003028c8(Moby *moby) {
     Quad_303CA8 quad[2];
-    float m[16];
-    float mats[5][16];
-    float vec[4];
+    float rotation_matrix[16];
+    float matrices[5][16];
+    float anchor[4];
     Data_303CA8 *data;
     float *pos;
-    float *row;
-    float t;
-    float u;
-    int i, j, k, n, d, idx;
+    float *translation;
+    float fade;
+    float scroll;
+    int i, segment, uv_index, vertex, pass, ring;
 
     data = *(Data_303CA8 **)&moby->pvars;
-    func_001FA218_303CA8(m, ((float *)&moby->rot));
+    func_001FA218_303CA8(rotation_matrix, ((float *)&moby->rot));
     pos = ((float *)&moby->pos);
-    row = &mats[0][12];
+    translation = &matrices[0][12];
     for (i = 0; i < 2; i++) {
-        float *cp = mats[i];
+        float *matrix = matrices[i];
 
-        func_001FA218_303CA8(cp, D_L12_001FB5B0[i]);
-        func_001FA540_303CA8(cp, m, cp);
+        func_001FA218_303CA8(matrix, D_L12_001FB5B0[i]);
+        func_001FA540_303CA8(matrix, rotation_matrix, matrix);
         if (!(i & 1) && data->target != -1) {
-            qcopy(vec, ((float *)&D_L12_0015FFD8[data->target].pos));
+            qcopy(anchor, ((float *)&D_L12_0015FFD8[data->target].pos));
         } else {
-            qcopy(vec, pos);
+            qcopy(anchor, pos);
         }
-        func_001F9BD8_303CA8(row, row, vec);
-        row += 16;
-        cp[15] = 1.0f;
+        func_001F9BD8_303CA8(translation, translation, anchor);
+        translation += 16;
+        matrix[15] = 1.0f;
     }
     quad[1].g[1] = func_001F4868_303CA8(0xE);
     quad[1].g[3] = (long)D_L12_00161DCC | ((long)D_L12_00161DD0 << 2) | ((long)D_L12_00161DD4 << 4) | ((long)D_L12_00161DD8 << 6) | (0x8000L << 24);
@@ -103,34 +103,34 @@ void FUN_L12_003028c8(Moby *moby) {
     quad[1].g[0] = 0;
     {
         float *uv = &quad[1].uv[1];
-        int c;
+        int corner;
 
-        for (c = 0; c < 4; c++) {
-            *uv = D_L12_001FB7D0_303CA8[c * 2 + 1];
+        for (corner = 0; corner < 4; corner++) {
+            *uv = D_L12_001FB7D0_303CA8[corner * 2 + 1];
             uv += 2;
         }
     }
-    for (idx = 0; idx < 4; idx++) {
-        if (D_L12_00161E08 < data->phase[idx]) {
-            t = func_001FA888_303CA8(data->phase[idx] - D_L12_00161E08) / func_001FA888_303CA8(D_L12_00161E04 - D_L12_00161E08);
+    for (ring = 0; ring < 4; ring++) {
+        if (D_L12_00161E08 < data->phase[ring]) {
+            fade = func_001FA888_303CA8(data->phase[ring] - D_L12_00161E08) / func_001FA888_303CA8(D_L12_00161E04 - D_L12_00161E08);
         } else {
-            t = 1.0f - func_001FA888_303CA8(data->phase[idx]) / func_001FA888_303CA8(D_L12_00161E08);
+            fade = 1.0f - func_001FA888_303CA8(data->phase[ring]) / func_001FA888_303CA8(D_L12_00161E08);
         }
-        quad[1].c[0] = quad[1].c[1] = quad[1].c[2] = quad[1].c[3] = func_001FA8A8_303CA8(D_L12_00161DEC, D_L12_00161DF0, t);
-        u = 0.0f;
-        for (j = 0; j < data->count - 1; j++) {
-            u = u + D_L12_00161DF4;
-            if (1.0f < u) {
-                u = u - 1.0f;
+        quad[1].c[0] = quad[1].c[1] = quad[1].c[2] = quad[1].c[3] = func_001FA8A8_303CA8(D_L12_00161DEC, D_L12_00161DF0, fade);
+        scroll = 0.0f;
+        for (segment = 0; segment < data->count - 1; segment++) {
+            scroll = scroll + D_L12_00161DF4;
+            if (1.0f < scroll) {
+                scroll = scroll - 1.0f;
             }
-            for (k = 0; k < 4; k++) {
-                quad[1].uv[k * 2] = D_L12_001FB7D0_303CA8[k * 2] + u + D_L12_00161DF8;
+            for (uv_index = 0; uv_index < 4; uv_index++) {
+                quad[1].uv[uv_index * 2] = D_L12_001FB7D0_303CA8[uv_index * 2] + scroll + D_L12_00161DF8;
             }
-            for (n = 0; n < 4; n++) {
-                func_001F9BD8_303CA8(&quad[1].v[n * 4], D_L12_001FB530[n], data->ring[idx][j + (n >> 1)]);
+            for (vertex = 0; vertex < 4; vertex++) {
+                func_001F9BD8_303CA8(&quad[1].v[vertex * 4], D_L12_001FB530[vertex], data->ring[ring][segment + (vertex >> 1)]);
             }
-            for (d = 0; d < 2; d++) {
-                func_L00_001FD1D8_303CA8(&quad[1], mats[d], 0);
+            for (pass = 0; pass < 2; pass++) {
+                func_L00_001FD1D8_303CA8(&quad[1], matrices[pass], 0);
             }
         }
     }
@@ -270,14 +270,14 @@ extern char D_L12_001672C0_304310[] __asm__("D_L12_00167240");
 extern float D_0013F4D0_304310[] __asm__("D_0013F3D0");
 
 void FUN_L12_00302f30(Moby *moby) {
-    Vec4 tmp0;
-    Vec4 tmp1;
+    Vec4 start;
+    Vec4 end;
     char hit[0x30];
     Data_304310 *data = *(Data_304310 **)&moby->pvars;
     Row_304310 *row;
-    float a;
+    float swing;
     float half;
-    int idx;
+    int target;
 
     if (data->target == -1) {
         return;
@@ -299,31 +299,31 @@ void FUN_L12_00302f30(Moby *moby) {
         data->dist = func_001F9D10_304310(((float *)&moby->pos), (char *)D_L12_0015FFD8 + (data->target << 8) + 0x10);
         data->angle = func_001FA748_304310(data->angle, data->turn * 0.017453292f * D_0015ED6C);
         row = D_L12_001B0C30_304310[data->row];
-        a = func_001F9FA8_304310(data->angle);
+        swing = func_001F9FA8_304310(data->angle);
         if (1.5707964f < data->angle && data->angle < 3.1415927f) {
-            a = 2.0f - a;
+            swing = 2.0f - swing;
         }
         if (-3.1415927f < data->angle && data->angle < -1.5707964f) {
-            a = 2.0f - a;
+            swing = 2.0f - swing;
         }
         half = 0.5f;
-        a = a * half;
-        a = a + half;
-        if (1.0f < a) {
-            a = a - 2.0f;
+        swing = swing * half;
+        swing = swing + half;
+        if (1.0f < swing) {
+            swing = swing - 2.0f;
         }
-        a = func_001F9B88_304310(a);
-        tmp0.q = row->v10;
-        tmp1.q = row->v20;
-        func_L00_0025C710_304310(((float *)&moby->pos), &tmp0, &tmp1, a);
+        swing = func_001F9B88_304310(swing);
+        start.q = row->v10;
+        end.q = row->v20;
+        func_L00_0025C710_304310(((float *)&moby->pos), &start, &end, swing);
         if (func_001F9D48_304310(((float *)&moby->pos), D_0013F4D0_304310) > 64.0f) {
             return;
         }
         if (moby->unk31 == 0 && D_L12_0015FFD8[data->target].unk31 == 0) {
-            func_001F9BD8_304310(&tmp0, ((float *)&moby->pos), ((float *)&D_L12_0015FFD8[data->target].pos));
-            fast_vec_scale(&tmp0, &tmp0, half);
-            tmp0.f[3] = 16.0f;
-            if (func_L00_00200290_304310(&tmp0, 32.0f) == -1) {
+            func_001F9BD8_304310(&start, ((float *)&moby->pos), ((float *)&D_L12_0015FFD8[data->target].pos));
+            fast_vec_scale(&start, &start, half);
+            start.f[3] = 16.0f;
+            if (func_L00_00200290_304310(&start, 32.0f) == -1) {
                 return;
             }
         }
@@ -334,14 +334,14 @@ void FUN_L12_00302f30(Moby *moby) {
             return;
         }
         func_L12_00304038_304310(moby);
-        idx = data->target;
-        if (idx == -1) {
+        target = data->target;
+        if (target == -1) {
             return;
         }
-        qcopy(&tmp0, &moby->pos.z);
-        qcopy(&tmp1, ((float *)&D_L12_0015FFD8[idx].pos));
+        qcopy(&start, &moby->pos.z);
+        qcopy(&end, ((float *)&D_L12_0015FFD8[target].pos));
         func_L00_0025A8C0_304310(hit, moby, 0x10001, 1.0f, D_L12_0015F580);
-        func_L00_001EFFF0_304310(&tmp0, &tmp1, 0, 0, hit);
+        func_L00_001EFFF0_304310(&start, &end, 0, 0, hit);
         break;
     }
 }
@@ -879,85 +879,85 @@ extern void func_L02_0020BF88_3055F8(void *, void *, void *, long, int) __asm__(
 void FUN_L12_00304218(Moby *moby) {
     int uv[4];
     long xy[4];
-    int col[4];
-    Data_3055F8 *d = *(Data_3055F8 **)&moby->pvars;
-    long tex;
-    int n;
-    int c;
-    int c2;
+    int colors[4];
+    Data_3055F8 *data = *(Data_3055F8 **)&moby->pvars;
+    long texture;
+    int filled;
+    int color;
+    int dim_color;
     int i;
     int j;
-    float a;
+    float angle;
 
     vu1_add_g_sregister_c(0x42, 0x8000000044L);
     uv[0] = D_L12_00161F08;
     uv[1] = D_L12_00161F0C;
     uv[2] = D_L12_00161F10;
     uv[3] = D_L12_00161F14;
-    col[3] = D_L12_00161EB0;
-    col[2] = D_L12_00161EB0;
-    col[1] = D_L12_00161EB0;
-    col[0] = D_L12_00161EB0;
-    tex = func_001F4868_3055F8(D_L12_00161E5C + 0x28);
+    colors[3] = D_L12_00161EB0;
+    colors[2] = D_L12_00161EB0;
+    colors[1] = D_L12_00161EB0;
+    colors[0] = D_L12_00161EB0;
+    texture = func_001F4868_3055F8(D_L12_00161E5C + 0x28);
     for (i = 0; i < 4; i++) {
-        float sx;
-        float sy;
+        float sign_x;
+        float sign_y;
         if (i & 1) {
-            sx = -1.0f;
+            sign_x = -1.0f;
         } else {
-            sx = 1.0f;
+            sign_x = 1.0f;
         }
         if (i >= 2) {
-            sy = -1.0f;
+            sign_y = -1.0f;
         } else {
-            sy = 1.0f;
+            sign_y = 1.0f;
         }
         xy[3] = 0xFFFFF000000000L;
         xy[2] = 0xFFFFF000000000L;
         xy[1] = 0xFFFFF000000000L;
         xy[0] = 0xFFFFF000000000L;
-        xy[0] += (u32)((func_001FA898_3055F8((*(float *)&D_L12_00161E18 + *(float *)&D_L12_00161E20 * sy) * 16.0f) << 16) - (int)0x80000000);
-        xy[0] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14 + *(float *)&D_L12_00161E1C * sx) << 4) + 0x8000;
+        xy[0] += (u32)((func_001FA898_3055F8((*(float *)&D_L12_00161E18 + *(float *)&D_L12_00161E20 * sign_y) * 16.0f) << 16) - (int)0x80000000);
+        xy[0] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14 + *(float *)&D_L12_00161E1C * sign_x) << 4) + 0x8000;
         xy[1] += (u32)((func_001FA898_3055F8(*(float *)&D_L12_00161E18 * 16.0f) << 16) - (int)0x80000000);
-        xy[1] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14 + *(float *)&D_L12_00161E1C * sx) << 4) + 0x8000;
-        xy[2] += (u32)((func_001FA898_3055F8((*(float *)&D_L12_00161E18 + *(float *)&D_L12_00161E20 * sy) * 16.0f) << 16) - (int)0x80000000);
+        xy[1] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14 + *(float *)&D_L12_00161E1C * sign_x) << 4) + 0x8000;
+        xy[2] += (u32)((func_001FA898_3055F8((*(float *)&D_L12_00161E18 + *(float *)&D_L12_00161E20 * sign_y) * 16.0f) << 16) - (int)0x80000000);
         xy[2] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14) << 4) + 0x8000;
         xy[3] += (u32)((func_001FA898_3055F8(*(float *)&D_L12_00161E18 * 16.0f) << 16) - (int)0x80000000);
         xy[3] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14) << 4) + 0x8000;
-        func_L02_0020BF88_3055F8(xy, uv, col, tex, 1);
+        func_L02_0020BF88_3055F8(xy, uv, colors, texture, 1);
     }
-    tex = func_001F4868_3055F8(6);
+    texture = func_001F4868_3055F8(6);
     uv[0] = D_L12_00161E2C;
     uv[1] = D_L12_00161E30;
     uv[2] = D_L12_00161E34;
     uv[3] = D_L12_00161E38;
-    if (d->f8C > 100.0f) {
-        c = FUN_001fa6e0(0x6000FFFF, 0x6000FF00, (d->f8C - 100.0f) / 100.0f);
+    if (data->f8C > 100.0f) {
+        color = FUN_001fa6e0(0x6000FFFF, 0x6000FF00, (data->f8C - 100.0f) / 100.0f);
     } else {
-        c = FUN_001fa6e0(0x600000FF, 0x6000FFFF, d->f8C / 100.0f);
+        color = FUN_001fa6e0(0x600000FF, 0x6000FFFF, data->f8C / 100.0f);
     }
-    n = func_001FA898_3055F8((1.0f - d->f8C / 200.0f) * 32.0f);
-    c2 = (c & 0xFFFFFF) + 0x20000000;
+    filled = func_001FA898_3055F8((1.0f - data->f8C / 200.0f) * 32.0f);
+    dim_color = (color & 0xFFFFFF) + 0x20000000;
     for (j = 0; j < 32; j++) {
-        float a0, a1;
+        float start_angle, end_angle;
         int x0, y0, x1, y1;
-        if (j >= n) {
-            col[3] = c;
-            col[2] = c;
-            col[1] = c;
-            col[0] = c;
+        if (j >= filled) {
+            colors[3] = color;
+            colors[2] = color;
+            colors[1] = color;
+            colors[0] = color;
         } else {
-            col[3] = c2;
-            col[2] = c2;
-            col[1] = c2;
-            col[0] = c2;
+            colors[3] = dim_color;
+            colors[2] = dim_color;
+            colors[1] = dim_color;
+            colors[0] = dim_color;
         }
-        a0 = func_001FA7D8_3055F8((float)j * 0.19634955f);
-        a1 = fast_add_rotations_c2(a0, 0.19634955f);
-        x0 = func_001FA898_3055F8(*(float *)&D_L12_00161E24 * fast_sin(a0));
-        y0 = func_001FA898_3055F8(*(float *)&D_L12_00161E28 * -fast_cos(a0));
-        x1 = func_001FA898_3055F8(*(float *)&D_L12_00161E24 * fast_sin(a1));
-        y1 = func_001FA898_3055F8(*(float *)&D_L12_00161E28 * -fast_cos(a1));
+        start_angle = func_001FA7D8_3055F8((float)j * 0.19634955f);
+        end_angle = fast_add_rotations_c2(start_angle, 0.19634955f);
+        x0 = func_001FA898_3055F8(*(float *)&D_L12_00161E24 * fast_sin(start_angle));
+        y0 = func_001FA898_3055F8(*(float *)&D_L12_00161E28 * -fast_cos(start_angle));
+        x1 = func_001FA898_3055F8(*(float *)&D_L12_00161E24 * fast_sin(end_angle));
+        y1 = func_001FA898_3055F8(*(float *)&D_L12_00161E28 * -fast_cos(end_angle));
         xy[3] = 0xFFFFF000000000L;
         xy[2] = 0xFFFFF000000000L;
         xy[1] = 0xFFFFF000000000L;
@@ -970,55 +970,55 @@ void FUN_L12_00304218(Moby *moby) {
         xy[2] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14 + (float)x0) << 4) + 0x8000;
         xy[3] += (u32)((func_001FA898_3055F8(*(float *)&D_L12_00161E18 * 16.0f) << 16) - (int)0x80000000);
         xy[3] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14) << 4) + 0x8000;
-        func_L02_0020BF88_3055F8(xy, uv, col, tex, 1);
+        func_L02_0020BF88_3055F8(xy, uv, colors, texture, 1);
     }
-    if (scale_game_frames_alt(0xF) < d->f88) {
-        c = FUN_001fa6e0(0x5000FFFF, 0x500000FF, func_001FA888_3055F8(d->f88 - scale_game_frames_alt(0xF)) / (float)scale_game_frames_alt(0xF));
+    if (scale_game_frames_alt(0xF) < data->f88) {
+        color = FUN_001fa6e0(0x5000FFFF, 0x500000FF, func_001FA888_3055F8(data->f88 - scale_game_frames_alt(0xF)) / (float)scale_game_frames_alt(0xF));
     } else {
-        c = FUN_001fa6e0(0x5000FF00, 0x5000FFFF, func_001FA888_3055F8(d->f88) / (float)scale_game_frames_alt(0xF));
+        color = FUN_001fa6e0(0x5000FF00, 0x5000FFFF, func_001FA888_3055F8(data->f88) / (float)scale_game_frames_alt(0xF));
     }
     uv[0] = D_L12_00161E4C;
     uv[1] = D_L12_00161E50;
     uv[2] = D_L12_00161E54;
     uv[3] = D_L12_00161E58;
-    col[3] = c;
-    col[2] = c;
-    col[1] = c;
-    col[0] = c;
+    colors[3] = color;
+    colors[2] = color;
+    colors[1] = color;
+    colors[0] = color;
     xy[3] = 0xFFFFF000000000L;
     xy[2] = 0xFFFFF000000000L;
     xy[1] = 0xFFFFF000000000L;
     xy[0] = 0xFFFFF000000000L;
-    a = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, 0.0f));
-    xy[0] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[0] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
-    a = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, 1.5707964f));
-    xy[1] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[1] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
-    a = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, -1.5707964f));
-    xy[2] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[2] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
-    a = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, 3.1415927f));
-    xy[3] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[3] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
-    func_L02_0020BF88_3055F8(xy, uv, col, get_effect_texture(D_L12_00161E3C), 1);
+    angle = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, 0.0f));
+    xy[0] += (u32)((func_001FA898_3055F8(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[0] += func_001FA898_3055F8(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    angle = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, 1.5707964f));
+    xy[1] += (u32)((func_001FA898_3055F8(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[1] += func_001FA898_3055F8(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    angle = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, -1.5707964f));
+    xy[2] += (u32)((func_001FA898_3055F8(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[2] += func_001FA898_3055F8(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    angle = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, 3.1415927f));
+    xy[3] += (u32)((func_001FA898_3055F8(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[3] += func_001FA898_3055F8(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(D_L12_00161E3C), 1);
     xy[3] = 0xFFFFF000000000L;
     xy[2] = 0xFFFFF000000000L;
     xy[1] = 0xFFFFF000000000L;
     xy[0] = 0xFFFFF000000000L;
-    a = func_001FA7D8_3055F8(fast_add_rotations_c2(d->f74 * 8.0f, 0.0f));
-    xy[0] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[0] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
-    a = func_001FA7D8_3055F8(fast_add_rotations_c2(d->f74 * 8.0f, 1.5707964f));
-    xy[1] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[1] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
-    a = func_001FA7D8_3055F8(fast_add_rotations_c2(d->f74 * 8.0f, -1.5707964f));
-    xy[2] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[2] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
-    a = func_001FA7D8_3055F8(fast_add_rotations_c2(d->f74 * 8.0f, 3.1415927f));
-    xy[3] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[3] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
-    func_L02_0020BF88_3055F8(xy, uv, col, get_effect_texture(D_L12_00161E40), 1);
+    angle = func_001FA7D8_3055F8(fast_add_rotations_c2(data->f74 * 8.0f, 0.0f));
+    xy[0] += (u32)((func_001FA898_3055F8(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[0] += func_001FA898_3055F8(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    angle = func_001FA7D8_3055F8(fast_add_rotations_c2(data->f74 * 8.0f, 1.5707964f));
+    xy[1] += (u32)((func_001FA898_3055F8(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[1] += func_001FA898_3055F8(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    angle = func_001FA7D8_3055F8(fast_add_rotations_c2(data->f74 * 8.0f, -1.5707964f));
+    xy[2] += (u32)((func_001FA898_3055F8(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[2] += func_001FA898_3055F8(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    angle = func_001FA7D8_3055F8(fast_add_rotations_c2(data->f74 * 8.0f, 3.1415927f));
+    xy[3] += (u32)((func_001FA898_3055F8(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[3] += func_001FA898_3055F8(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(D_L12_00161E40), 1);
 }
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 

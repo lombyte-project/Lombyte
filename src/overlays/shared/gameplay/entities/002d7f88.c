@@ -515,105 +515,105 @@ extern int func_L00_0028EF68_2D9EA0(int, int, void *, int) __asm__("FUN_L00_0028
 extern float func_001FA888_2D9EA0(int) __asm__("FUN_001fa6c0");
 extern float func_L00_00258E58_2D9EA0(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 
-void FUN_L00_002d89f0(Moby *m) {
+void FUN_L00_002d89f0(Moby *moby) {
     V_2D9EA0 v0, v10, v20, v30, v40, v50, v60;
-    D_2D9EA0 *d = (D_2D9EA0 *)m->pvars;
+    D_2D9EA0 *data = (D_2D9EA0 *)moby->pvars;
 
-    switch (m->state) {
+    switch (moby->state) {
     case 0: {
-        Moby *c;
+        Moby *owner;
         int i;
-        m->state = 1;
-        m->flags |= 0x41;
-        m->unk94 = 0;
-        m->unkBC = 0;
-        c = d->owner;
-        qcopy(&m->pos, &c->pos);
-        qcopy(&m->rot, &c->rot);
-        qcopy(&d->pos, &m->pos);
-        *(int *)&d->f0 = 0;
-        d->h8 = 0;
-        d->pos.z += 0.5f;
-        d->f4 = func_002140F8_2D9EA0(d->f0, 3.1415927f);
-        d->h56 = 0;
-        d->hA = 0;
-        for (i = 0; i < 4; i++) d->f60[i] = (float)func_002140B0_2D9EA0(0xFF);
-        for (i = 0; i < 4; i++) d->h58[i] = func_001F9850_2D9EA0(D_L00_00161A58);
-        for (i = 7; i >= 0; i--) d->slots[i] = 0;
+        moby->state = 1;
+        moby->flags |= 0x41;
+        moby->unk94 = 0;
+        moby->unkBC = 0;
+        owner = data->owner;
+        qcopy(&moby->pos, &owner->pos);
+        qcopy(&moby->rot, &owner->rot);
+        qcopy(&data->pos, &moby->pos);
+        *(int *)&data->f0 = 0;
+        data->h8 = 0;
+        data->pos.z += 0.5f;
+        data->f4 = func_002140F8_2D9EA0(data->f0, 3.1415927f);
+        data->h56 = 0;
+        data->hA = 0;
+        for (i = 0; i < 4; i++) data->f60[i] = (float)func_002140B0_2D9EA0(0xFF);
+        for (i = 0; i < 4; i++) data->h58[i] = func_001F9850_2D9EA0(D_L00_00161A58);
+        for (i = 7; i >= 0; i--) data->slots[i] = 0;
         if (D_L00_0015F63C == 0) {
-            func_001FA1F8_2D9EA0(&m->unkC0, &m->rot);
-            D_L00_0015F63C = m;
-            m->unk30 = 0xFF;
-            d->f7C = 0;
-            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[0], &m->unkC0, D_L00_00161A14_c);
-            qcopy(&D_L00_001E4070_2D9EA0[0], &m->unkE0);
-            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[1], &m->unkD0, D_L00_00161A14_c);
-            qcopy(&D_L00_001E4070_2D9EA0[1], &m->unkC0);
-            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[2], &m->unkE0, D_L00_00161A14_c);
-            qcopy(&D_L00_001E4070_2D9EA0[2], &m->unkD0);
-            func_001F9BD8_2D9EA0(&D_L00_001E3CA0_c[3], &m->unkC0, &m->unkE0);
+            func_001FA1F8_2D9EA0(&moby->unkC0, &moby->rot);
+            D_L00_0015F63C = moby;
+            moby->unk30 = 0xFF;
+            data->f7C = 0;
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[0], &moby->unkC0, D_L00_00161A14_c);
+            qcopy(&D_L00_001E4070_2D9EA0[0], &moby->unkE0);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[1], &moby->unkD0, D_L00_00161A14_c);
+            qcopy(&D_L00_001E4070_2D9EA0[1], &moby->unkC0);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[2], &moby->unkE0, D_L00_00161A14_c);
+            qcopy(&D_L00_001E4070_2D9EA0[2], &moby->unkD0);
+            func_001F9BD8_2D9EA0(&D_L00_001E3CA0_c[3], &moby->unkC0, &moby->unkE0);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[3], &D_L00_001E3CA0_c[3], D_L00_00161A14_c);
-            fast_vec_cross(&D_L00_001E4070_2D9EA0[3], &D_L00_001E3CA0_c[3], &m->unkD0);
-            func_001F9BD8_2D9EA0(&D_L00_001E3CA0_c[4], &m->unkC0, &m->unkD0);
+            fast_vec_cross(&D_L00_001E4070_2D9EA0[3], &D_L00_001E3CA0_c[3], &moby->unkD0);
+            func_001F9BD8_2D9EA0(&D_L00_001E3CA0_c[4], &moby->unkC0, &moby->unkD0);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[4], &D_L00_001E3CA0_c[4], D_L00_00161A14_c);
-            fast_vec_cross(&D_L00_001E4070_2D9EA0[4], &D_L00_001E3CA0_c[4], &m->unkE0);
-            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[5], &m->unkD0, &m->unkE0);
+            fast_vec_cross(&D_L00_001E4070_2D9EA0[4], &D_L00_001E3CA0_c[4], &moby->unkE0);
+            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[5], &moby->unkD0, &moby->unkE0);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[5], &D_L00_001E3CA0_c[5], D_L00_00161A14_c);
-            fast_vec_cross(&D_L00_001E4070_2D9EA0[5], &D_L00_001E3CA0_c[5], &m->unkC0);
-            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[6], &m->unkC0, &m->unkE0);
+            fast_vec_cross(&D_L00_001E4070_2D9EA0[5], &D_L00_001E3CA0_c[5], &moby->unkC0);
+            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[6], &moby->unkC0, &moby->unkE0);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[6], &D_L00_001E3CA0_c[6], D_L00_00161A14_c);
-            fast_vec_cross(&D_L00_001E4070_2D9EA0[6], &D_L00_001E3CA0_c[6], &m->unkD0);
-            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[7], &m->unkC0, &m->unkD0);
+            fast_vec_cross(&D_L00_001E4070_2D9EA0[6], &D_L00_001E3CA0_c[6], &moby->unkD0);
+            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[7], &moby->unkC0, &moby->unkD0);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[7], &D_L00_001E3CA0_c[7], D_L00_00161A14_c);
-            fast_vec_cross(&D_L00_001E4070_2D9EA0[7], &D_L00_001E3CA0_c[7], &m->unkE0);
+            fast_vec_cross(&D_L00_001E4070_2D9EA0[7], &D_L00_001E3CA0_c[7], &moby->unkE0);
         }
         {
-            float a = func_002140F8_2D9EA0(0.0f, 6.2831855f);
-            func_00215C00_2D9EA0(&d->v20, 1.0f, a, func_002140F8_2D9EA0(-1.5707964f, 1.5707964f));
+            float yaw = func_002140F8_2D9EA0(0.0f, 6.2831855f);
+            func_00215C00_2D9EA0(&data->v20, 1.0f, yaw, func_002140F8_2D9EA0(-1.5707964f, 1.5707964f));
         }
-        d->v20.w = func_L00_00258C80_2D9EA0(0.785398006f, 1.5707964f);
+        data->v20.w = func_L00_00258C80_2D9EA0(0.785398006f, 1.5707964f);
     }
     case 1: {
-        Moby *c = d->owner;
-        qcopy(&m->pos, &c->pos);
-        qcopy(&d->pos, &c->pos);
-        d->pos.z += 0.5f;
-        if ((signed char)c->state < 0 || c == m) {
-            m->state = 2;
-            d->f50 = 0;
+        Moby *owner = data->owner;
+        qcopy(&moby->pos, &owner->pos);
+        qcopy(&data->pos, &owner->pos);
+        data->pos.z += 0.5f;
+        if ((signed char)owner->state < 0 || owner == moby) {
+            moby->state = 2;
+            data->f50 = 0;
         }
     }
     case 2:
-        if (m->state == 2) {
+        if (moby->state == 2) {
             int i;
-            qcopy(&d->pos, &m->pos);
-            d->pos.z += 0.5f;
-            func_L00_002D9668_2D9EA0(m);
+            qcopy(&data->pos, &moby->pos);
+            data->pos.z += 0.5f;
+            func_L00_002D9668_2D9EA0(moby);
             for (i = 0; i < 8; i++) {
-                if (d->slots[i] != 0) {
-                    Ext_2D9EA0 *x = (Ext_2D9EA0 *)(d->slots[i] + 1);
-                    x->u.s.scale = D_L00_00161A5C * func_001F9FA8_2D9EA0(x->u.s.ang) + D_L00_00161A14_c;
-                    x->u.s.ang = func_001FA748_2D9EA0(x->u.s.ang, D_L00_001E17F0_2D9EA0[i]);
+                if (data->slots[i] != 0) {
+                    Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(data->slots[i] + 1);
+                    ext->u.s.scale = D_L00_00161A5C * func_001F9FA8_2D9EA0(ext->u.s.ang) + D_L00_00161A14_c;
+                    ext->u.s.ang = func_001FA748_2D9EA0(ext->u.s.ang, D_L00_001E17F0_2D9EA0[i]);
                 }
             }
         }
         {
-            Hero *g = (Hero *)D_0013F350_c2;
-            int lim = D_0015EDA0;
-            if (g->vehicle_mode == 1) lim = 4;
-            if (m->state != 1 && D_L00_0015F63C != 0 && ((D_2D9EA0 *)D_L00_0015F63C->pvars) != 0 && g->health.hp != 0
-                && (g->health.hp + ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C < lim || (D_0015EDB6 != 0 && g->invulnerable_frames == 0))
-                && func_001F9D10_2D9EA0(&m->pos, &g->motion.pos) < 10.0f
-                && func_L00_002D9E30_2D9EA0(m)) {
+            Hero *hero = (Hero *)D_0013F350_c2;
+            int max_hp = D_0015EDA0;
+            if (hero->vehicle_mode == 1) max_hp = 4;
+            if (moby->state != 1 && D_L00_0015F63C != 0 && ((D_2D9EA0 *)D_L00_0015F63C->pvars) != 0 && hero->health.hp != 0
+                && (hero->health.hp + ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C < max_hp || (D_0015EDB6 != 0 && hero->invulnerable_frames == 0))
+                && func_001F9D10_2D9EA0(&moby->pos, &hero->motion.pos) < 10.0f
+                && func_L00_002D9E30_2D9EA0(moby)) {
                 int i;
-                m->state = 3;
+                moby->state = 3;
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C++;
-                if (D_0015EDB6 != 0) g->invulnerable_frames = func_001F9850_2D9EA0(0x258);
-                d->h54 = func_001F9850_2D9EA0(D_L00_00161A3C);
-                func_001F9C30_2D9EA0(&v30, &g->unk290, -D_L00_00161A54);
-                func_001F9BD8_2D9EA0(&v30, &g->motion.pos, &v30);
-                func_001F9C30_2D9EA0(&v0, &g->unk290, -D_L00_00161A50);
-                func_001F9BF0_2D9EA0(&v20, &v30, &m->pos);
+                if (D_0015EDB6 != 0) hero->invulnerable_frames = func_001F9850_2D9EA0(0x258);
+                data->h54 = func_001F9850_2D9EA0(D_L00_00161A3C);
+                func_001F9C30_2D9EA0(&v30, &hero->unk290, -D_L00_00161A54);
+                func_001F9BD8_2D9EA0(&v30, &hero->motion.pos, &v30);
+                func_001F9C30_2D9EA0(&v0, &hero->unk290, -D_L00_00161A50);
+                func_001F9BF0_2D9EA0(&v20, &v30, &moby->pos);
                 v20.z -= 0.5f;
                 fast_vec_cross(&v40, &v20, &v0);
                 fast_vec_cross(&v0, &v40, &v20);
@@ -621,179 +621,179 @@ void FUN_L00_002d89f0(Moby *m) {
                 func_L00_001FF4B0_2D9EA0(&v0, &v0, D_L00_00161A50);
                 func_001F9C30_2D9EA0(&v50, &v20, 0.5f);
                 for (i = 0; i < 8; i++) {
-                    if (d->slots[i] != 0) {
-                        Ext_2D9EA0 *x = (Ext_2D9EA0 *)(d->slots[i] + 1);
+                    if (data->slots[i] != 0) {
+                        Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(data->slots[i] + 1);
                         func_002156E0_2D9EA0(&v10, &v0, (float)i * 0.448549628f, &v20);
                         func_001F9BD8_2D9EA0(&v60, &v50, &v10);
                         {
-                            V3_2D9EA0 *dst = &x->u.a;
+                            V3_2D9EA0 *dst = &ext->u.a;
                             dst->x = v60.x;
                             dst->y = v60.y;
                             dst->z = v60.z;
                         }
                         {
-                            V3_2D9EA0 *dst = &x->b;
-                            V3_2D9EA0 *src = (V3_2D9EA0 *)&d->slots[i]->pos;
+                            V3_2D9EA0 *dst = &ext->b;
+                            V3_2D9EA0 *src = (V3_2D9EA0 *)&data->slots[i]->pos;
                             dst->x = src->x;
                             dst->y = src->y;
                             dst->z = src->z;
                         }
-                        x->h1E = x->h1C = func_001F9850_2D9EA0(func_L00_00258BC8_2D9EA0(D_L00_00161A44, D_L00_00161A48));
+                        ext->h1E = ext->h1C = func_001F9850_2D9EA0(func_L00_00258BC8_2D9EA0(D_L00_00161A44, D_L00_00161A48));
                     }
                 }
             }
         }
-        d->f0 = D_L00_00161A10 * func_001F9FA8_2D9EA0(d->f4);
-        d->f4 = func_001FA748_2D9EA0(d->f4, D_L00_00161A0C);
-        if (D_L00_0015F63C == m) func_L00_002D9DB8_2D9EA0();
-        qcopy(&v0, &m->pos);
+        data->f0 = D_L00_00161A10 * func_001F9FA8_2D9EA0(data->f4);
+        data->f4 = func_001FA748_2D9EA0(data->f4, D_L00_00161A0C);
+        if (D_L00_0015F63C == moby) func_L00_002D9DB8_2D9EA0();
+        qcopy(&v0, &moby->pos);
         v0.z += 0.5f;
         v0.w = 1.0f;
         if (func_L00_00200290_2D9EA0(&v0, 64.0f) >= 0) {
             int i;
-            int n;
-            func_001F49B0_2D9EA0(func_L00_002DACC0_2D9EA0, (int)m);
-            if (10.0f < func_001F9D48_2D9EA0(&m->pos, D_L00_00166DC0)) n = func_001F9850_2D9EA0(5);
-            else n = func_001F9850_2D9EA0(40);
+            int lifetime;
+            func_001F49B0_2D9EA0(func_L00_002DACC0_2D9EA0, (int)moby);
+            if (10.0f < func_001F9D48_2D9EA0(&moby->pos, D_L00_00166DC0)) lifetime = func_001F9850_2D9EA0(5);
+            else lifetime = func_001F9850_2D9EA0(40);
             for (i = 0; i < 8; i++) {
-                Part_2D9EA0 *e;
-                Part_2D9EA0 *p;
-                func_L00_002D9D00_2D9EA0(m, &v10, i);
-                e = func_L00_002745A8_2D9EA0(&v10, n, 2);
-                if (e != 0) {
-                    Ext_2D9EA0 *x = (Ext_2D9EA0 *)(e + 1);
-                    x->b.x = e->pos.x - m->pos.x;
-                    x->b.y = e->pos.y - m->pos.y;
-                    x->b.z = e->pos.z - m->pos.z;
-                    if (m->state == 2) x->u.s.owner = m;
-                    else x->u.s.owner = d->owner;
-                    e->f4 = D_L00_00161A00;
-                    e->fC = D_L00_001619F8;
+                Part_2D9EA0 *part;
+                Part_2D9EA0 *slot;
+                func_L00_002D9D00_2D9EA0(moby, &v10, i);
+                part = func_L00_002745A8_2D9EA0(&v10, lifetime, 2);
+                if (part != 0) {
+                    Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(part + 1);
+                    ext->b.x = part->pos.x - moby->pos.x;
+                    ext->b.y = part->pos.y - moby->pos.y;
+                    ext->b.z = part->pos.z - moby->pos.z;
+                    if (moby->state == 2) ext->u.s.owner = moby;
+                    else ext->u.s.owner = data->owner;
+                    part->f4 = D_L00_00161A00;
+                    part->fC = D_L00_001619F8;
                 }
-                p = d->slots[i];
-                if (p == 0) {
-                    d->slots[i] = func_L00_002745A8_2D9EA0(&v10, 0, 1);
-                    if (d->slots[i] != 0) {
-                        Ext_2D9EA0 *x = (Ext_2D9EA0 *)(d->slots[i] + 1);
-                        x->u.s.scale = D_L00_00161A14_c;
-                        x->u.s.ang = 0.0f;
-                        d->slots[i]->fC = D_L00_001619FC;
-                        d->slots[i]->f4 = D_L00_00161A00;
+                slot = data->slots[i];
+                if (slot == 0) {
+                    data->slots[i] = func_L00_002745A8_2D9EA0(&v10, 0, 1);
+                    if (data->slots[i] != 0) {
+                        Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(data->slots[i] + 1);
+                        ext->u.s.scale = D_L00_00161A14_c;
+                        ext->u.s.ang = 0.0f;
+                        data->slots[i]->fC = D_L00_001619FC;
+                        data->slots[i]->f4 = D_L00_00161A00;
                     }
                 } else {
-                    qcopy(&p->pos, &v10);
-                    p->b8 += D_L00_001619F4;
+                    qcopy(&slot->pos, &v10);
+                    slot->b8 += D_L00_001619F4;
                 }
             }
         }
         break;
     case 3:
-        if (D_L00_0015F63C == m) func_L00_002D9DB8_2D9EA0();
-        if (d->h56 != 0) {
-            func_001F9C30_2D9EA0(&m->pos, D_0013F5E0, -D_L00_00161A54);
-            func_001F9BD8_2D9EA0(&m->pos, D_0013F5E0 - 0x210, &m->pos);
-            m->rot.w = 0.52359879f;
-            if (func_L00_002D99C0_2D9EA0(m) != 0 && func_002140B0_2D9EA0(5) == 0) func_L00_002D98C8_2D9EA0(m);
+        if (D_L00_0015F63C == moby) func_L00_002D9DB8_2D9EA0();
+        if (data->h56 != 0) {
+            func_001F9C30_2D9EA0(&moby->pos, D_0013F5E0, -D_L00_00161A54);
+            func_001F9BD8_2D9EA0(&moby->pos, D_0013F5E0 - 0x210, &moby->pos);
+            moby->rot.w = 0.52359879f;
+            if (func_L00_002D99C0_2D9EA0(moby) != 0 && func_002140B0_2D9EA0(5) == 0) func_L00_002D98C8_2D9EA0(moby);
         }
         {
-            Hero *g = (Hero *)D_0013F350_c2;
-            int lim = D_0015EDA0;
-            if (g->vehicle_mode == 1) lim = 4;
-            if (g->health.hp == lim && g->invulnerable_frames != 0 && D_0015EDB6 != 0) {
-                int r = func_001F9850_2D9EA0(D_L00_00161A40);
-                if (d->h54 < r) {
+            Hero *hero = (Hero *)D_0013F350_c2;
+            int max_hp = D_0015EDA0;
+            if (hero->vehicle_mode == 1) max_hp = 4;
+            if (hero->health.hp == max_hp && hero->invulnerable_frames != 0 && D_0015EDB6 != 0) {
+                int duration = func_001F9850_2D9EA0(D_L00_00161A40);
+                if (data->h54 < duration) {
                     int i;
-                    d->h54 = r;
-                    for (i = 0; i < 4; i++) d->h58[i]++;
+                    data->h54 = duration;
+                    for (i = 0; i < 4; i++) data->h58[i]++;
                 }
             }
         }
-        if (func_001F9938_2D9EA0(&d->h54)) {
+        if (func_001F9938_2D9EA0(&data->h54)) {
             int i;
             for (i = 0; i < 8; i++) {
-                if (d->slots[i] != 0) {
-                    func_L00_002688A8_2D9EA0(d->slots[i]);
-                    d->slots[i] = 0;
+                if (data->slots[i] != 0) {
+                    func_L00_002688A8_2D9EA0(data->slots[i]);
+                    data->slots[i] = 0;
                 }
             }
-            if (D_L00_0015F63C == m) m->state = 4;
-            else func_0020D678_2D9EA0(m);
+            if (D_L00_0015F63C == moby) moby->state = 4;
+            else func_0020D678_2D9EA0(moby);
         } else {
             int i;
             func_001F9C30_2D9EA0(&v20, D_0013F5E0, -D_L00_00161A54);
             func_001F9BD8_2D9EA0(&v20, D_0013F5E0 - 0x210, &v20);
             for (i = 0; i < 8; i++) {
-                Part_2D9EA0 *e = d->slots[i];
-                Ext_2D9EA0 *x;
-                if (e == 0) continue;
-                x = (Ext_2D9EA0 *)(e + 1);
-                if (func_001F9938_2D9EA0(&x->h1E)) {
-                    if (d->h56 == 0) {
-                        Hero *g = (Hero *)D_0013F350_c2;
-                        int lim = D_0015EDA0;
-                        if (g->vehicle_mode == 1) lim = 4;
-                        if (g->health.hp != 0) {
-                            int t = g->health.hp + 1;
-                            g->health.hp = (lim < t) ? lim : t;
+                Part_2D9EA0 *part = data->slots[i];
+                Ext_2D9EA0 *ext;
+                if (part == 0) continue;
+                ext = (Ext_2D9EA0 *)(part + 1);
+                if (func_001F9938_2D9EA0(&ext->h1E)) {
+                    if (data->h56 == 0) {
+                        Hero *hero = (Hero *)D_0013F350_c2;
+                        int max_hp = D_0015EDA0;
+                        if (hero->vehicle_mode == 1) max_hp = 4;
+                        if (hero->health.hp != 0) {
+                            int new_hp = hero->health.hp + 1;
+                            hero->health.hp = (max_hp < new_hp) ? max_hp : new_hp;
                         }
                         {
-                            D_2D9EA0 *o = (D_2D9EA0 *)D_L00_0015F63C->pvars;
-                            o->f7C--;
-                            if (o->f7C < 0) o->f7C = 0;
+                            D_2D9EA0 *leader_data = (D_2D9EA0 *)D_L00_0015F63C->pvars;
+                            leader_data->f7C--;
+                            if (leader_data->f7C < 0) leader_data->f7C = 0;
                         }
-                        func_L00_0028EF68_2D9EA0(1, 0, m, 0x1F5);
-                        d->h56 = 1;
+                        func_L00_0028EF68_2D9EA0(1, 0, moby, 0x1F5);
+                        data->h56 = 1;
                     }
-                    func_L00_002688A8_2D9EA0(e);
-                    d->slots[i] = 0;
+                    func_L00_002688A8_2D9EA0(part);
+                    data->slots[i] = 0;
                 } else {
-                    float t;
-                    float k;
-                    Part_2D9EA0 *n;
-                    qcopy(&v40, &e->pos);
-                    k = func_001FA888_2D9EA0(x->h1C);
-                    k = (float)x->h1E / k;
+                    float progress;
+                    float remaining;
+                    Part_2D9EA0 *spark;
+                    qcopy(&v40, &part->pos);
+                    remaining = func_001FA888_2D9EA0(ext->h1C);
+                    remaining = (float)ext->h1E / remaining;
                     {
-                        V3_2D9EA0 *src = &x->b;
+                        V3_2D9EA0 *src = &ext->b;
                         v10.x = src->x;
                         v10.y = src->y;
                         v10.z = src->z;
                     }
                     v10.w = 0.0f;
-                    t = 1.0f - k;
-                    v0.x = v10.x - x->u.a.x;
-                    v0.y = v10.y - x->u.a.y;
-                    v0.z = v10.z - x->u.a.z;
-                    v30.x = v20.x - x->u.a.x;
-                    v30.y = v20.y - x->u.a.y;
-                    v30.z = v20.z - x->u.a.z;
-                    e->pos.x = func_L00_00258E58_2D9EA0(v0.x, v10.x, v20.x, v30.x, t);
-                    e->pos.y = func_L00_00258E58_2D9EA0(v0.y, v10.y, v20.y, v30.y, t);
-                    e->pos.z = func_L00_00258E58_2D9EA0(v0.z, v10.z, v20.z, v30.z, t);
-                    v50.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + e->pos.x;
-                    v50.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + e->pos.y;
-                    v50.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + e->pos.z;
-                    n = func_L00_002745A8_2D9EA0(&v50, func_001F9850_2D9EA0(0x14), 0);
-                    if (n != 0) {
-                        n->f4 = D_L00_00161A00;
-                        n->fC = D_L00_001619F8;
+                    progress = 1.0f - remaining;
+                    v0.x = v10.x - ext->u.a.x;
+                    v0.y = v10.y - ext->u.a.y;
+                    v0.z = v10.z - ext->u.a.z;
+                    v30.x = v20.x - ext->u.a.x;
+                    v30.y = v20.y - ext->u.a.y;
+                    v30.z = v20.z - ext->u.a.z;
+                    part->pos.x = func_L00_00258E58_2D9EA0(v0.x, v10.x, v20.x, v30.x, progress);
+                    part->pos.y = func_L00_00258E58_2D9EA0(v0.y, v10.y, v20.y, v30.y, progress);
+                    part->pos.z = func_L00_00258E58_2D9EA0(v0.z, v10.z, v20.z, v30.z, progress);
+                    v50.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.x;
+                    v50.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.y;
+                    v50.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.z;
+                    spark = func_L00_002745A8_2D9EA0(&v50, func_001F9850_2D9EA0(0x14), 0);
+                    if (spark != 0) {
+                        spark->f4 = D_L00_00161A00;
+                        spark->fC = D_L00_001619F8;
                     }
-                    func_001F9BD8_2D9EA0(&v40, &e->pos, &v40);
+                    func_001F9BD8_2D9EA0(&v40, &part->pos, &v40);
                     func_001F9C30_2D9EA0(&v40, &v40, 0.5f);
                     v50.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.x;
                     v50.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.y;
                     v50.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.z;
-                    n = func_L00_002745A8_2D9EA0(&v50, func_001F9850_2D9EA0(0x14), 0);
-                    if (n != 0) {
-                        n->f4 = D_L00_00161A00;
-                        n->fC = D_L00_001619F8;
+                    spark = func_L00_002745A8_2D9EA0(&v50, func_001F9850_2D9EA0(0x14), 0);
+                    if (spark != 0) {
+                        spark->f4 = D_L00_00161A00;
+                        spark->fC = D_L00_001619F8;
                     }
                 }
             }
         }
         break;
     case 4:
-        if (D_L00_0015F63C == m) func_L00_002D9DB8_2D9EA0();
+        if (D_L00_0015F63C == moby) func_L00_002D9DB8_2D9EA0();
         break;
     }
 }
@@ -1833,264 +1833,264 @@ extern int func_001FA898_2DDEA0(float) __asm__("FUN_001fa6d0");
 extern int func_L00_00259B08_2DDEA0(void *, void *, float, int, float, int) __asm__("FUN_L00_00258ad0");
 extern void func_001E9730_2DDEA0(void *) __asm__("FUN_001e93b0");
 
-int FUN_L00_002dc9f0(struct Moby *self, char *q) {
-    Frame_2DDEA0 fr;
-    R_2DDEA0 *m;
+int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
+    Frame_2DDEA0 work;
+    R_2DDEA0 *record;
 
-    if (self == 0 || self->state == 0xFE || self->state == 0xFD) return 0;
-    m = func_L00_002DCD40_2DDEA0(self);
-    if (m != 0) {
-        *(u128 *)&m->v30 = *(u128 *)&self->pos;
-        switch ((short)(m->state - 1)) {
+    if (moby == 0 || moby->state == 0xFE || moby->state == 0xFD) return 0;
+    record = func_L00_002DCD40_2DDEA0(moby);
+    if (record != 0) {
+        *(u128 *)&record->v30 = *(u128 *)&moby->pos;
+        switch ((short)(record->state - 1)) {
         case 0: {
-            float f20, f21;
-            f21 = 0.01f;
-            f20 = func_001FA748_2DDEA0(func_L00_001FF860_2DDEA0(m->x - self->pos.x, m->y - self->pos.y), 3.1415927f);
-            func_L00_002592B0_2DDEA0(self, q + 0x44, f20, D_0015EE64_2DDEA0 * 0.19634955f, D_0015EE64_2DDEA0 * 0.19634955f, D_0015EE60_2DDEA0 * 0.3927f);
-            if (func_001FA790_2DDEA0(f20, f21) < self->rot.z && self->rot.z < func_001FA748_2DDEA0(f20, f21)) {
-                m->state = 2;
-                m->f6C = 0.0f;
+            float yaw, tolerance;
+            tolerance = 0.01f;
+            yaw = func_001FA748_2DDEA0(func_L00_001FF860_2DDEA0(record->x - moby->pos.x, record->y - moby->pos.y), 3.1415927f);
+            func_L00_002592B0_2DDEA0(moby, vars + 0x44, yaw, D_0015EE64_2DDEA0 * 0.19634955f, D_0015EE64_2DDEA0 * 0.19634955f, D_0015EE60_2DDEA0 * 0.3927f);
+            if (func_001FA790_2DDEA0(yaw, tolerance) < moby->rot.z && moby->rot.z < func_001FA748_2DDEA0(yaw, tolerance)) {
+                record->state = 2;
+                record->f6C = 0.0f;
             }
-            func_001F9BC0_2DDEA0(&m->vel);
+            func_001F9BC0_2DDEA0(&record->vel);
             break;
         }
         case 1:
-            self->unk58 = m->f6C + 1.0f;
-            m->f6C = m->f6C + 1.0f / func_001FA888_2DDEA0(func_001F9850_2DDEA0(1));
-            if (1.0f < m->f6C) m->f6C = 1.0f;
-            self->pos.z += m->f6C / 100.0f * D_0015EE60_2DDEA0;
-            func_00215328_2DDEA0(&m->q20, &self->unkC0);
-            func_001F9BC0_2DDEA0(&m->vel);
+            moby->unk58 = record->f6C + 1.0f;
+            record->f6C = record->f6C + 1.0f / func_001FA888_2DDEA0(func_001F9850_2DDEA0(1));
+            if (1.0f < record->f6C) record->f6C = 1.0f;
+            moby->pos.z += record->f6C / 100.0f * D_0015EE60_2DDEA0;
+            func_00215328_2DDEA0(&record->q20, &moby->unkC0);
+            func_001F9BC0_2DDEA0(&record->vel);
             break;
         case 2: {
-            float one, f20, f21;
-            self->unk31 = 1;
-            self->flags &= 0xFFFE;
+            float one, distance, half;
+            moby->unk31 = 1;
+            moby->flags &= 0xFFFE;
             one = 1.0f;
-            if (m->f6C < one) {
-                m->f6C = m->f6C + one / func_001FA888_2DDEA0(func_001F9850_2DDEA0(30));
-                fr.q = 0;
-                fr.v[0].x = -1.5707964f;
-                fr.v[0].z = -1.5707964f;
-                func_001FA218_2DDEA0(&fr.v[11], &fr.v[0]);
-                func_001FA460_2DDEA0(&fr.v[3], &m->owner->unkC0);
-                func_001FA540_2DDEA0(&fr.v[7], &fr.v[3], &fr.v[11]);
-                func_002150B0_2DDEA0(&fr.v[1], &fr.v[7]);
-                func_001FA5C8_2DDEA0(&fr.v[2], &m->q20, &fr.v[1], m->f6C);
-                func_001FA6C0_2DDEA0(&fr.v[2], &fr.v[3]);
-                func_001FA480_2DDEA0(&self->unkC0, &fr.v[3]);
-                self->flags = (self->flags | 4) & 0x7FFF;
+            if (record->f6C < one) {
+                record->f6C = record->f6C + one / func_001FA888_2DDEA0(func_001F9850_2DDEA0(30));
+                work.q = 0;
+                work.v[0].x = -1.5707964f;
+                work.v[0].z = -1.5707964f;
+                func_001FA218_2DDEA0(&work.v[11], &work.v[0]);
+                func_001FA460_2DDEA0(&work.v[3], &record->owner->unkC0);
+                func_001FA540_2DDEA0(&work.v[7], &work.v[3], &work.v[11]);
+                func_002150B0_2DDEA0(&work.v[1], &work.v[7]);
+                func_001FA5C8_2DDEA0(&work.v[2], &record->q20, &work.v[1], record->f6C);
+                func_001FA6C0_2DDEA0(&work.v[2], &work.v[3]);
+                func_001FA480_2DDEA0(&moby->unkC0, &work.v[3]);
+                moby->flags = (moby->flags | 4) & 0x7FFF;
             } else {
-                m->f6C = one;
+                record->f6C = one;
             }
-            func_L00_00250800_2DDEA0(m->owner, 0, &fr.v[0]);
-            f21 = 0.5f;
-            f20 = func_001F9D48_2DDEA0(&self->pos, &fr.v[0]);
-            self->scale = ((Cls_2DDEA0 *)self->pclass)->f24 * (f20 / (m->f64 + m->f64) + f21);
-            m->f98 = m->f98 + D_0015EE64_2DDEA0 * 0.11f;
-            if (D_0015EE60_2DDEA0 * 0.75f < m->f98) m->f98 = D_0015EE60_2DDEA0 * 0.75f;
-            if (f20 < m->f98 * 70.0f) {
-                func_00213DE0_2DDEA0(m->owner, 4, 0, func_001F9850_2DDEA0(2));
+            func_L00_00250800_2DDEA0(record->owner, 0, &work.v[0]);
+            half = 0.5f;
+            distance = func_001F9D48_2DDEA0(&moby->pos, &work.v[0]);
+            moby->scale = ((Cls_2DDEA0 *)moby->pclass)->f24 * (distance / (record->f64 + record->f64) + half);
+            record->f98 = record->f98 + D_0015EE64_2DDEA0 * 0.11f;
+            if (D_0015EE60_2DDEA0 * 0.75f < record->f98) record->f98 = D_0015EE60_2DDEA0 * 0.75f;
+            if (distance < record->f98 * 70.0f) {
+                func_00213DE0_2DDEA0(record->owner, 4, 0, func_001F9850_2DDEA0(2));
             }
-            if (f20 < 3.0f) {
+            if (distance < 3.0f) {
                 D_001404FC_2DDEA0[0] = 2;
-                self->unk94 = 0;
+                moby->unk94 = 0;
             }
-            if (f20 < m->f98) {
+            if (distance < record->f98) {
                 ((struct Hero *)D_0013F450_2DDEA0)->unk207C--;
                 ((struct Hero *)D_0013F450_2DDEA0)->unk2078++;
-                func_L00_002DB6C8_2DDEA0(self, &fr.v[0]);
-                ((struct Hero *)D_0013F450_2DDEA0)->unk2050[m->idx]->flags &= 0xEFFF;
+                func_L00_002DB6C8_2DDEA0(moby, &work.v[0]);
+                ((struct Hero *)D_0013F450_2DDEA0)->unk2050[record->idx]->flags &= 0xEFFF;
             } else {
-                func_001FA4A0_2DDEA0(&fr.v[5], D_0013FA90_2DDEA0);
-                func_001F9BF0_2DDEA0(&fr.v[2], &self->pos, &fr.v[0]);
-                func_001F9EE8_2DDEA0(&fr.v[2], &fr.v[2], &fr.v[5]);
-                if (fr.v[2].x < 0.0f) {
-                    if (0.0f < fr.v[2].y) {
-                        { float t = -fr.v[2].x; float r; if (t < 2.0f) r = t; else r = 2.0f; fr.v[3].y = r; }
+                func_001FA4A0_2DDEA0(&work.v[5], D_0013FA90_2DDEA0);
+                func_001F9BF0_2DDEA0(&work.v[2], &moby->pos, &work.v[0]);
+                func_001F9EE8_2DDEA0(&work.v[2], &work.v[2], &work.v[5]);
+                if (work.v[2].x < 0.0f) {
+                    if (0.0f < work.v[2].y) {
+                        { float t = -work.v[2].x; float r; if (t < 2.0f) r = t; else r = 2.0f; work.v[3].y = r; }
                     } else {
-                        fr.v[3].y = (-2.0f < fr.v[2].x) ? fr.v[2].x : -2.0f;
+                        work.v[3].y = (-2.0f < work.v[2].x) ? work.v[2].x : -2.0f;
                     }
-                    fr.v[3].x = -fr.v[2].x * 0.5f;
+                    work.v[3].x = -work.v[2].x * 0.5f;
                 } else {
-                    fr.v[3].y = fr.v[2].y * f21;
-                    fr.v[3].x = (func_001F9B88_2DDEA0(fr.v[2].y) < 2.0f) ? func_001F9B88_2DDEA0(fr.v[2].y) : 2.0f;
+                    work.v[3].y = work.v[2].y * half;
+                    work.v[3].x = (func_001F9B88_2DDEA0(work.v[2].y) < 2.0f) ? func_001F9B88_2DDEA0(work.v[2].y) : 2.0f;
                 }
-                fr.v[3].z = 0.0f;
-                func_001F9EC0_2DDEA0(&fr.v[3], &fr.v[3], D_0013FA90_2DDEA0);
-                fr.v[3].z = 0.0f;
-                qcopy(&fr.v[4], &fr.v[0]);
-                func_001F9BD8_2DDEA0(&fr.v[0], &fr.v[0], &fr.v[3]);
-                func_001E9768_2DDEA0(&fr.v[4], &fr.v[0]);
-                func_001F9BF0_2DDEA0(&fr.v[1], &fr.v[0], &self->pos);
-                func_L00_001FF4B0_2DDEA0(&fr.v[1], &fr.v[1], m->f98);
-                func_001F9BD8_2DDEA0(&self->pos, &self->pos, &fr.v[1]);
-                func_0020EEE8_2DDEA0(self);
+                work.v[3].z = 0.0f;
+                func_001F9EC0_2DDEA0(&work.v[3], &work.v[3], D_0013FA90_2DDEA0);
+                work.v[3].z = 0.0f;
+                qcopy(&work.v[4], &work.v[0]);
+                func_001F9BD8_2DDEA0(&work.v[0], &work.v[0], &work.v[3]);
+                func_001E9768_2DDEA0(&work.v[4], &work.v[0]);
+                func_001F9BF0_2DDEA0(&work.v[1], &work.v[0], &moby->pos);
+                func_L00_001FF4B0_2DDEA0(&work.v[1], &work.v[1], record->f98);
+                func_001F9BD8_2DDEA0(&moby->pos, &moby->pos, &work.v[1]);
+                func_0020EEE8_2DDEA0(moby);
             }
             break;
         }
         case 3:
-            self->flags = (self->flags | 3) & 0xFFFB;
-            self->unk31 = 0;
-            self->unk94 = 0;
-            if (self->unk70 & 2) {
-                if (self->prev_seq != m->anims[4]) {
-                    unsigned char c = m->anims[4];
-                    func_00213DE0_2DDEA0(self, c, 0, func_001F9850_2DDEA0(3));
+            moby->flags = (moby->flags | 3) & 0xFFFB;
+            moby->unk31 = 0;
+            moby->unk94 = 0;
+            if (moby->unk70 & 2) {
+                if (moby->prev_seq != record->anims[4]) {
+                    unsigned char anim = record->anims[4];
+                    func_00213DE0_2DDEA0(moby, anim, 0, func_001F9850_2DDEA0(3));
                 }
-                self->scale = ((Cls_2DDEA0 *)self->pclass)->f24 * 0.3f;
-                qzero(&self->rot);
+                moby->scale = ((Cls_2DDEA0 *)moby->pclass)->f24 * 0.3f;
+                qzero(&moby->rot);
             }
             break;
         case 4:
         case 5: {
-            float f20, f21;
-            int r30, r18;
-            self->unk31 = 1;
-            self->flags &= 0xFFFE;
-            if (self->pos.z < 2.0f) {
-                func_L00_002DDDE8_2DDEA0(self, m, 0);
+            float spin, one;
+            int hit_wall, surface;
+            moby->unk31 = 1;
+            moby->flags &= 0xFFFE;
+            if (moby->pos.z < 2.0f) {
+                func_L00_002DDDE8_2DDEA0(moby, record, 0);
                 return 0;
             }
-            fr.q = *(u128 *)&m->vel;
-            self->scale = self->scale + ((Cls_2DDEA0 *)self->pclass)->f24 * (m->f7C * D_0015EE60_2DDEA0);
-            if (((Cls_2DDEA0 *)self->pclass)->f24 < self->scale) self->scale = ((Cls_2DDEA0 *)self->pclass)->f24;
-            if (m->target != 0 && m->target->state != 0xFE && m->target->state != 0xFD) {
-                int a = func_001F9850_2DDEA0(0x12C);
-                if (m->i94 < a - func_001F9850_2DDEA0(5)) {
-                    float spd, a, b, sr, u1, u2, t;
-                    qcopy(&fr.v[3], &m->target->pos);
-                    fr.v[3].z = fr.v[3].z + m->f90;
-                    func_001F9BF0_2DDEA0(&fr.v[2], &fr.v[3], &m->v40);
-                    func_001F9BF0_2DDEA0(&fr.v[1], &fr.v[3], &self->pos);
-                    qcopy(&m->v40, &fr.v[3]);
-                    spd = func_001F9CB8_2DDEA0(&m->vel);
-                    a = spd * spd - func_L00_001FF3E0_2DDEA0(&fr.v[2]);
-                    b = (fr.v[2].x * fr.v[1].x + fr.v[2].y * fr.v[1].y + fr.v[2].z * fr.v[1].z) * -2.0f;
-                    sr = func_001F9B50_2DDEA0(b * b - a * 4.0f * -func_L00_001FF3E0_2DDEA0(&fr.v[1]));
-                    u1 = (-b + sr) / (2.0f * a);
-                    u2 = (-b - sr) / (2.0f * a);
-                    if (0.0f < u1 && 0.0f < u2) {
-                        t = (u2 < u1) ? u1 : u2;
-                    } else if (0.0f < u1) {
-                        t = u1;
-                    } else if (0.0f < u2) {
-                        t = u2;
+            work.q = *(u128 *)&record->vel;
+            moby->scale = moby->scale + ((Cls_2DDEA0 *)moby->pclass)->f24 * (record->f7C * D_0015EE60_2DDEA0);
+            if (((Cls_2DDEA0 *)moby->pclass)->f24 < moby->scale) moby->scale = ((Cls_2DDEA0 *)moby->pclass)->f24;
+            if (record->target != 0 && record->target->state != 0xFE && record->target->state != 0xFD) {
+                int max_life = func_001F9850_2DDEA0(0x12C);
+                if (record->i94 < max_life - func_001F9850_2DDEA0(5)) {
+                    float speed, quad_a, quad_b, root, root1, root2, time;
+                    qcopy(&work.v[3], &record->target->pos);
+                    work.v[3].z = work.v[3].z + record->f90;
+                    func_001F9BF0_2DDEA0(&work.v[2], &work.v[3], &record->v40);
+                    func_001F9BF0_2DDEA0(&work.v[1], &work.v[3], &moby->pos);
+                    qcopy(&record->v40, &work.v[3]);
+                    speed = func_001F9CB8_2DDEA0(&record->vel);
+                    quad_a = speed * speed - func_L00_001FF3E0_2DDEA0(&work.v[2]);
+                    quad_b = (work.v[2].x * work.v[1].x + work.v[2].y * work.v[1].y + work.v[2].z * work.v[1].z) * -2.0f;
+                    root = func_001F9B50_2DDEA0(quad_b * quad_b - quad_a * 4.0f * -func_L00_001FF3E0_2DDEA0(&work.v[1]));
+                    root1 = (-quad_b + root) / (2.0f * quad_a);
+                    root2 = (-quad_b - root) / (2.0f * quad_a);
+                    if (0.0f < root1 && 0.0f < root2) {
+                        time = (root2 < root1) ? root1 : root2;
+                    } else if (0.0f < root1) {
+                        time = root1;
+                    } else if (0.0f < root2) {
+                        time = root2;
                     } else {
-                        t = -1.0f;
+                        time = -1.0f;
                     }
-                    if (0.0f < t) {
-                        func_001F9C30_2DDEA0(&fr.v[4], &fr.v[2], t);
-                        func_001F9BD8_2DDEA0(&fr.v[4], &fr.v[4], &fr.v[1]);
-                        func_L00_001FF4B0_2DDEA0(&fr.v[4], &fr.v[4], D_0015EE70_2DDEA0 * 90.0f);
-                        func_001F9BD8_2DDEA0(&m->vel, &m->vel, &fr.v[4]);
-                        func_L00_001FF4B0_2DDEA0(&m->vel, &m->vel, spd);
+                    if (0.0f < time) {
+                        func_001F9C30_2DDEA0(&work.v[4], &work.v[2], time);
+                        func_001F9BD8_2DDEA0(&work.v[4], &work.v[4], &work.v[1]);
+                        func_L00_001FF4B0_2DDEA0(&work.v[4], &work.v[4], D_0015EE70_2DDEA0 * 90.0f);
+                        func_001F9BD8_2DDEA0(&record->vel, &record->vel, &work.v[4]);
+                        func_L00_001FF4B0_2DDEA0(&record->vel, &record->vel, speed);
                     } else {
-                        func_L00_001FF4B0_2DDEA0(&fr.v[1], &fr.v[1], D_0015EE70_2DDEA0 * 90.0f);
-                        func_001F9BD8_2DDEA0(&m->vel, &m->vel, &fr.v[1]);
-                        func_L00_001FF4B0_2DDEA0(&m->vel, &m->vel, spd);
+                        func_L00_001FF4B0_2DDEA0(&work.v[1], &work.v[1], D_0015EE70_2DDEA0 * 90.0f);
+                        func_001F9BD8_2DDEA0(&record->vel, &record->vel, &work.v[1]);
+                        func_L00_001FF4B0_2DDEA0(&record->vel, &record->vel, speed);
                     }
                 }
             }
-            f21 = 1.0f;
-            func_001F9BD8_2DDEA0(&self->pos, &self->pos, &m->vel);
-            func_L00_0025A8C0_2DDEA0(&fr.v[1], self, 0x430000, 2.0f, &m->vel);
-            func_L00_001FF500_2DDEA0(&fr.v[1], &fr.v[1], f21);
-            fr.h.hit.v.w = 5627.925f;
-            fr.h.hit.b18 = 1;
-            fr.h.hit.b19 = 3;
-            fr.h.hit.h1A = 0x351;
-            fr.h.hit.v.z = f21;
-            r30 = func_L00_001F2BE8_2DDEA0(m->f80, &self->pos, 1, self, &fr.v[1]);
-            r30 |= func_L00_001F10E0_2DDEA0(m->f80, &self->pos, 0, self);
-            if (r30 != 0) {
-                qcopy_nc(&self->pos, &((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->v30);
-                func_001F9BF0_2DDEA0(&m->v50, &((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->v20, &self->pos);
+            one = 1.0f;
+            func_001F9BD8_2DDEA0(&moby->pos, &moby->pos, &record->vel);
+            func_L00_0025A8C0_2DDEA0(&work.v[1], moby, 0x430000, 2.0f, &record->vel);
+            func_L00_001FF500_2DDEA0(&work.v[1], &work.v[1], one);
+            work.h.hit.v.w = 5627.925f;
+            work.h.hit.b18 = 1;
+            work.h.hit.b19 = 3;
+            work.h.hit.h1A = 0x351;
+            work.h.hit.v.z = one;
+            hit_wall = func_L00_001F2BE8_2DDEA0(record->f80, &moby->pos, 1, moby, &work.v[1]);
+            hit_wall |= func_L00_001F10E0_2DDEA0(record->f80, &moby->pos, 0, moby);
+            if (hit_wall != 0) {
+                qcopy_nc(&moby->pos, &((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->v30);
+                func_001F9BF0_2DDEA0(&record->v50, &((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->v20, &moby->pos);
             }
-            if (((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->hit != 0 && ((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->hit->oclass == 0) r30 = 0;
-            if (m->state == 6) {
-                self->flags &= 0x7FFF;
-                self->unk94 = ((Cls_2DDEA0 *)self->pclass)->i10;
-                self->flags |= 4;
-                m->v50.z = f21;
-                m->v50.x = 0.0f;
-                m->v50.y = 0.0f;
-                m->v50.w = 0.01f;
-                f20 = func_001F9CB8_2DDEA0(&fr.v[0]) / m->f80;
-                func_00215328_2DDEA0(&fr.v[1], &self->unkC0);
-                func_L00_001FF4B0_2DDEA0(&m->v50, &m->v50, f21);
-                func_L00_0025F368_2DDEA0(f20);
-                func_L00_001FF4B0_2DDEA0(&fr.v[4], &m->vel, -1.0f);
-                func_001F9CA0_2DDEA0(&fr.v[3], &fr.v[4], &m->v50);
-                func_L00_001FF4B0_2DDEA0(&fr.v[3], &fr.v[3], f21);
-                func_00215380_2DDEA0(&fr.v[2], &fr.v[3], f20);
-                func_001FA588_2DDEA0(&fr.v[5], &fr.v[1], &fr.v[2]);
-                func_001FA6C0_2DDEA0(&fr.v[5], &fr.v[6]);
-                func_L00_001FF4B0_2DDEA0(&self->unkC0, &fr.v[6], f21);
-                func_L00_001FF4B0_2DDEA0(&self->unkD0, &fr.v[7], f21);
-                func_L00_001FF4B0_2DDEA0(&self->unkE0, &fr.v[8], f21);
+            if (((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->hit != 0 && ((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->hit->oclass == 0) hit_wall = 0;
+            if (record->state == 6) {
+                moby->flags &= 0x7FFF;
+                moby->unk94 = ((Cls_2DDEA0 *)moby->pclass)->i10;
+                moby->flags |= 4;
+                record->v50.z = one;
+                record->v50.x = 0.0f;
+                record->v50.y = 0.0f;
+                record->v50.w = 0.01f;
+                spin = func_001F9CB8_2DDEA0(&work.v[0]) / record->f80;
+                func_00215328_2DDEA0(&work.v[1], &moby->unkC0);
+                func_L00_001FF4B0_2DDEA0(&record->v50, &record->v50, one);
+                func_L00_0025F368_2DDEA0(spin);
+                func_L00_001FF4B0_2DDEA0(&work.v[4], &record->vel, -1.0f);
+                func_001F9CA0_2DDEA0(&work.v[3], &work.v[4], &record->v50);
+                func_L00_001FF4B0_2DDEA0(&work.v[3], &work.v[3], one);
+                func_00215380_2DDEA0(&work.v[2], &work.v[3], spin);
+                func_001FA588_2DDEA0(&work.v[5], &work.v[1], &work.v[2]);
+                func_001FA6C0_2DDEA0(&work.v[5], &work.v[6]);
+                func_L00_001FF4B0_2DDEA0(&moby->unkC0, &work.v[6], one);
+                func_L00_001FF4B0_2DDEA0(&moby->unkD0, &work.v[7], one);
+                func_L00_001FF4B0_2DDEA0(&moby->unkE0, &work.v[8], one);
             }
-            if (r30 != 0) {
-                r18 = 0;
+            if (hit_wall != 0) {
+                surface = 0;
                 if (((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->hit != 0 && ((Cls_2DDEA0 *)((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->hit->pclass) != 0) {
-                    r18 = ((Cls_2DDEA0 *)((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->hit->pclass)->h46;
+                    surface = ((Cls_2DDEA0 *)((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->hit->pclass)->h46;
                 }
                 func_L00_001FF4B0_2DDEA0(&((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->v40, &((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->v40, 1.0f);
-                if (self->prev_seq != m->anims[6]) {
-                    unsigned char c = m->anims[6];
-                    func_00213DE0_2DDEA0(self, c, 0, func_001F9850_2DDEA0(0x14));
+                if (moby->prev_seq != record->anims[6]) {
+                    unsigned char anim = record->anims[6];
+                    func_00213DE0_2DDEA0(moby, anim, 0, func_001F9850_2DDEA0(0x14));
                 }
-                self->unk98 = m->i88;
-                m->state = 6;
+                moby->unk98 = record->i88;
+                record->state = 6;
                 if (0.87266463f < func_L00_001FF860_2DDEA0(((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->v40.z, func_001F9CE8_2DDEA0(&((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->v40))) {
-                    if (m->h9E >= 0) func_0022ED80_2DDEA0(m->h9E, 0, self);
-                    func_L00_002DDDE8_2DDEA0(self, m, 1);
+                    if (record->h9E >= 0) func_0022ED80_2DDEA0(record->h9E, 0, moby);
+                    func_L00_002DDDE8_2DDEA0(moby, record, 1);
                     return 0;
                 }
-                if (D_0013E629_2DDEA0[0] != 0 && r18 >= 5) {
-                    if (m->h9E >= 0) func_0022ED80_2DDEA0(m->h9E, 0, self);
-                    func_L00_002DDDE8_2DDEA0(self, m, 1);
+                if (D_0013E629_2DDEA0[0] != 0 && surface >= 5) {
+                    if (record->h9E >= 0) func_0022ED80_2DDEA0(record->h9E, 0, moby);
+                    func_L00_002DDDE8_2DDEA0(moby, record, 1);
                 }
-                qzero(&fr.v[1]);
-                fr.v[1].z = ((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->v40.z;
-                func_L00_001FF610_2DDEA0(&m->vel, &m->vel, &fr.v[1]);
+                qzero(&work.v[1]);
+                work.v[1].z = ((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->v40.z;
+                func_L00_001FF610_2DDEA0(&record->vel, &record->vel, &work.v[1]);
             }
-            if (func_001F9908_2DDEA0(&m->i94) != 0) {
-                func_L00_002DDDE8_2DDEA0(self, m, 1);
+            if (func_001F9908_2DDEA0(&record->i94) != 0) {
+                func_L00_002DDDE8_2DDEA0(moby, record, 1);
                 return 0;
             }
-            if (60.0f < func_001F9D48_2DDEA0(&self->pos, D_0013F4D0_2DDEA0)) {
-                func_L00_002DDDE8_2DDEA0(self, m, 1);
+            if (60.0f < func_001F9D48_2DDEA0(&moby->pos, D_0013F4D0_2DDEA0)) {
+                func_L00_002DDDE8_2DDEA0(moby, record, 1);
                 return 0;
             }
-            if (func_001F9CB8_2DDEA0(&m->vel) < D_0015EE60_2DDEA0 * 0.01f) {
-                func_L00_002DDDE8_2DDEA0(self, m, 1);
+            if (func_001F9CB8_2DDEA0(&record->vel) < D_0015EE60_2DDEA0 * 0.01f) {
+                func_L00_002DDDE8_2DDEA0(moby, record, 1);
                 return 0;
             }
-            m->vel.z = m->vel.z - D_0015EE64_2DDEA0 * 0.00925f;
-            func_L00_0026D270_2DDEA0(&self->pos, &self->unkC0);
+            record->vel.z = record->vel.z - D_0015EE64_2DDEA0 * 0.00925f;
+            func_L00_0026D270_2DDEA0(&moby->pos, &moby->unkC0);
             break;
         }
         case 6: {
-            int r18;
-            self->unk31 = 1;
-            self->flags &= 0xFFFE;
-            m->vel.z = m->vel.z - D_0015EE64_2DDEA0 * 0.013f;
-            if (self->pos.z < 2.0f) {
-                func_L00_002DDDE8_2DDEA0(self, m, 1);
+            int landed;
+            moby->unk31 = 1;
+            moby->flags &= 0xFFFE;
+            record->vel.z = record->vel.z - D_0015EE64_2DDEA0 * 0.013f;
+            if (moby->pos.z < 2.0f) {
+                func_L00_002DDDE8_2DDEA0(moby, record, 1);
                 return 0;
             }
-            r18 = func_L00_00259B08_2DDEA0(self, &m->vel, 0.8f, func_001FA898_2DDEA0(m->f8C * 1024.0f), 0.0f, 0);
-            self->rot.x = self->rot.x / 1.5f;
-            self->rot.y = self->rot.y / 1.5f;
-            if (r18 != 0) {
-                self->rot.x = 0.0f;
-                self->rot.y = 0.0f;
-                self->unk58 = 1.0f;
+            landed = func_L00_00259B08_2DDEA0(moby, &record->vel, 0.8f, func_001FA898_2DDEA0(record->f8C * 1024.0f), 0.0f, 0);
+            moby->rot.x = moby->rot.x / 1.5f;
+            moby->rot.y = moby->rot.y / 1.5f;
+            if (landed != 0) {
+                moby->rot.x = 0.0f;
+                moby->rot.y = 0.0f;
+                moby->unk58 = 1.0f;
                 return 1;
             }
-            if (self->unk70 & 2) {
-                self->unk58 = m->f78;
+            if (moby->unk70 & 2) {
+                moby->unk58 = record->f78;
             }
             break;
         }
@@ -2099,12 +2099,12 @@ int FUN_L00_002dc9f0(struct Moby *self, char *q) {
             break;
         }
     }
-    if (self->flags & 4) func_0020EEE8_2DDEA0(self);
-    if (m->state < 4) {
-        if (m->timer <= 0.0f) {
-            if (((Cls_2DDEA0 *)self->pclass)->f2C->fC != 0) ((Cls_2DDEA0 *)self->pclass)->f2C->fC(self);
+    if (moby->flags & 4) func_0020EEE8_2DDEA0(moby);
+    if (record->state < 4) {
+        if (record->timer <= 0.0f) {
+            if (((Cls_2DDEA0 *)moby->pclass)->f2C->fC != 0) ((Cls_2DDEA0 *)moby->pclass)->f2C->fC(moby);
         }
-        m->timer = m->timer - 1.0f;
+        record->timer = record->timer - 1.0f;
     }
     return 0;
 }

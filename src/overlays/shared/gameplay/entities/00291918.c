@@ -627,276 +627,276 @@ extern char D_L03_00166F40_2CDDC8[] __asm__("D_L03_00166EC0");
 extern void func_L00_0025B178_2CDDC8(void *) __asm__("FUN_L00_0025a120");
 extern void func_L00_00251E30_2CDDC8(void *) __asm__("FUN_L00_00250df8");
 
-void FUN_L03_002cca00(HMob49_2CDDC8 *m) {
-    HData49_2CDDC8 *d=m->data;
-    HWork49_2CDDC8 w;
+void FUN_L03_002cca00(HMob49_2CDDC8 *moby) {
+    HData49_2CDDC8 *data=moby->data;
+    HWork49_2CDDC8 work;
     float target_range=40.0f;
     float motion_scale,motion_gain;
     int index;
-    if (d->timer) target_range=80.0f;
-    helicopter_target49_2CDDC8(m,&w.target,target_range);
-    index=(short)m->pool_index;
-    if ((D_L03_001BA8E0_2CDDC8[index>>5]>>(m->pool_index&31))&1) {
-        if (d->child_index!=-1) func_0020D678_2CDDC8((HMob49_2CDDC8*)(D_L03_0015FFD8_c+(d->child_index<<8)));
-        func_0020D678_2CDDC8(m); return;
+    if (data->timer) target_range=80.0f;
+    helicopter_target49_2CDDC8(moby,&work.target,target_range);
+    index=(short)moby->pool_index;
+    if ((D_L03_001BA8E0_2CDDC8[index>>5]>>(moby->pool_index&31))&1) {
+        if (data->child_index!=-1) func_0020D678_2CDDC8((HMob49_2CDDC8*)(D_L03_0015FFD8_c+(data->child_index<<8)));
+        func_0020D678_2CDDC8(moby); return;
     }
-    if (d->route_a.path_id==-1 || (m->state!=0 && d->enabled!=1)) {
-        if (d->child_index!=-1) func_0020D678_2CDDC8((HMob49_2CDDC8*)(D_L03_0015FFD8_c+(d->child_index<<8)));
-        func_0020D678_2CDDC8(m); return;
+    if (data->route_a.path_id==-1 || (moby->state!=0 && data->enabled!=1)) {
+        if (data->child_index!=-1) func_0020D678_2CDDC8((HMob49_2CDDC8*)(D_L03_0015FFD8_c+(data->child_index<<8)));
+        func_0020D678_2CDDC8(moby); return;
     }
-    if (d->request) { d->request=0; d->timer=func_001F9850_2CDDC8(240); }
-    func_001F9908_2CDDC8(&d->timer);
-    if (d->child_index!=-1) {
-        HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_0015FFD8_c+(d->child_index<<8));
+    if (data->request) { data->request=0; data->timer=func_001F9850_2CDDC8(240); }
+    func_001F9908_2CDDC8(&data->timer);
+    if (data->child_index!=-1) {
+        HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_0015FFD8_c+(data->child_index<<8));
         if (child->class_id==0x23E && (signed char)child->state>=0) {
             char *gun=(char*)child->data+0x150;
             func_L00_00264BB0_2CDDC8(gun,2.5f);
             func_L00_00263950_2CDDC8((char*)child,gun,2,D_0015ED64*0.03f,D_0015ED64*0.3f);
         }
     }
-    func_L03_002CF600_2CDDC8((char*)m);
-    switch (m->state) {
+    func_L03_002CF600_2CDDC8((char*)moby);
+    switch (moby->state) {
     case 0: {
         HPath49_2CDDC8 **paths;
-        m->update_distance=0x20; d->health=3.0f; d->health_word=func_001FA898_2CDDC8(3.0f);
-        d->enabled=1; d->kind=2; d->gun_kind=25; d->gun_enabled=1; d->gun_mode=6; d->flag29=0;
+        moby->update_distance=0x20; data->health=3.0f; data->health_word=func_001FA898_2CDDC8(3.0f);
+        data->enabled=1; data->kind=2; data->gun_kind=25; data->gun_enabled=1; data->gun_mode=6; data->flag29=0;
         paths=D_L03_001B08B0_2CDDC8;
-        d->route_a.path=paths[d->route_a.path_id];
-        if (d->route_b.path_id!=-1) d->route_b.path=paths[d->route_b.path_id];
-        qcopy(m->position,d->route_a.path->points);
-        d->route_a.index=1; d->speed=0; d->pitch_velocity=0; d->roll_velocity=0; d->alternate=0;
-        func_0020D960_2CDDC8((char*)m,0,d->gun_yaw_matrix); func_0020D960_2CDDC8((char*)m,1,d->gun_pitch_matrix);
-        d->sound=-1; d->projectile=0; d->gun_yaw=m->rotation[2]; d->gun_yaw_velocity=0;
-        d->gun_pitch=m->rotation[1]; d->gun_pitch_velocity=0;
-        if (m->brightness<128) m->brightness=128;
-        if (d->child_index!=-1) {
-            HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_0015FFD8_c+(d->child_index<<8));
+        data->route_a.path=paths[data->route_a.path_id];
+        if (data->route_b.path_id!=-1) data->route_b.path=paths[data->route_b.path_id];
+        qcopy(moby->position,data->route_a.path->points);
+        data->route_a.index=1; data->speed=0; data->pitch_velocity=0; data->roll_velocity=0; data->alternate=0;
+        func_0020D960_2CDDC8((char*)moby,0,data->gun_yaw_matrix); func_0020D960_2CDDC8((char*)moby,1,data->gun_pitch_matrix);
+        data->sound=-1; data->projectile=0; data->gun_yaw=moby->rotation[2]; data->gun_yaw_velocity=0;
+        data->gun_pitch=moby->rotation[1]; data->gun_pitch_velocity=0;
+        if (moby->brightness<128) moby->brightness=128;
+        if (data->child_index!=-1) {
+            HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_0015FFD8_c+(data->child_index<<8));
             func_00213DE0_2CDDC8(child,8,0,0); child->alpha=0; child->animation=0; child->flags&=0xFFBE;
         }
-        if (D_0014171B_2CDDC8[m->persistent+(D_0015ED68_e[7]<<4)]!=255 && d->activation_path!=-1 && d->activation_region!=-1) {
-            HPath49_2CDDC8 *path=paths[d->activation_path];
+        if (D_0014171B_2CDDC8[moby->persistent+(D_0015ED68_e[7]<<4)]!=255 && data->activation_path!=-1 && data->activation_region!=-1) {
+            HPath49_2CDDC8 *path=paths[data->activation_path];
             int i;
             for (i=0; i<path->count-2; i++)
                 path->points[i].length=func_001F9D10_2CDDC8(&path->points[i],&path->points[i+1]);
-            *(HQuad49_2CDDC8*)m->position=*(HQuad49_2CDDC8*)path->points; m->state=1; break;
+            *(HQuad49_2CDDC8*)moby->position=*(HQuad49_2CDDC8*)path->points; moby->state=1; break;
         }
-        m->state=2;
+        moby->state=2;
         break;
     }
     case 1: {
-        HPath49_2CDDC8 *path=D_L03_001B08B0_2CDDC8[d->activation_path];
+        HPath49_2CDDC8 *path=D_L03_001B08B0_2CDDC8[data->activation_path];
         float progress,distance,step,limit,angle;
-        if (d->activation_region!=-1 && !func_00215570_2CDDC8(D_0013F3D0,d->activation_region)) break;
-        d->activation_region=-1;
-        func_L00_0025EFC0_2CDDC8(path,m->position,w.projected,&w.segment_a,&w.fraction_a,0,999.0f,5.0f,0.0f);
-        progress=func_001FA888_2CDDC8(w.segment_a)*path->points[0].length+w.fraction_a+2.0f;
-        distance=func_001F9D10_2CDDC8(m->position,(char*)path+(path->count<<4));
+        if (data->activation_region!=-1 && !func_00215570_2CDDC8(D_0013F3D0,data->activation_region)) break;
+        data->activation_region=-1;
+        func_L00_0025EFC0_2CDDC8(path,moby->position,work.projected,&work.segment_a,&work.fraction_a,0,999.0f,5.0f,0.0f);
+        progress=func_001FA888_2CDDC8(work.segment_a)*path->points[0].length+work.fraction_a+2.0f;
+        distance=func_001F9D10_2CDDC8(moby->position,(char*)path+(path->count<<4));
         step=D_0015ED70*10.0f;
-        if (distance<=d->speed*d->speed/(step+step)) {
-            float speed=d->speed-step; limit=D_L03_0016199C*D_0015ED6C; d->speed=speed; if (speed<limit) d->speed=limit;
-        } else { float speed=d->speed+step; limit=D_0015ED6C*20.0f; d->speed=speed; if (limit<speed) d->speed=limit; }
-        w.segment_a=func_001FA898_2CDDC8(progress/path->points[0].length);
-        w.fraction_a=(progress-func_001FA888_2CDDC8(w.segment_a)*path->points[0].length)/path->points[0].length;
-        if (w.segment_a>=path->count-1) {
-            if (d->route_a.path_id!=-1 && d->speed<=D_L03_0016199C*D_0015ED6C) {
-                d->alternate=0; qcopy(m->position,d->route_a.path->points); d->route_a.index=1;
-                m->previous_state=2; m->state=4; d->reaction_timer=func_001F9850_2CDDC8(15); break;
+        if (distance<=data->speed*data->speed/(step+step)) {
+            float speed=data->speed-step; limit=D_L03_0016199C*D_0015ED6C; data->speed=speed; if (speed<limit) data->speed=limit;
+        } else { float speed=data->speed+step; limit=D_0015ED6C*20.0f; data->speed=speed; if (limit<speed) data->speed=limit; }
+        work.segment_a=func_001FA898_2CDDC8(progress/path->points[0].length);
+        work.fraction_a=(progress-func_001FA888_2CDDC8(work.segment_a)*path->points[0].length)/path->points[0].length;
+        if (work.segment_a>=path->count-1) {
+            if (data->route_a.path_id!=-1 && data->speed<=D_L03_0016199C*D_0015ED6C) {
+                data->alternate=0; qcopy(moby->position,data->route_a.path->points); data->route_a.index=1;
+                moby->previous_state=2; moby->state=4; data->reaction_timer=func_001F9850_2CDDC8(15); break;
             }
-            if (d->speed<=D_L03_0016199C*D_0015ED6C) { func_001F9978_2CDDC8(); return; }
-            w.segment_a=path->count-2; w.fraction_a=1.0f;
+            if (data->speed<=D_L03_0016199C*D_0015ED6C) { func_001F9978_2CDDC8(); return; }
+            work.segment_a=path->count-2; work.fraction_a=1.0f;
         }
-        fast_vec_sub(w.projected,&path->points[w.segment_a+1],&path->points[w.segment_a]);
-        fast_vec_scale(w.projected,w.projected,w.fraction_a);
-        fast_vec_add(w.projected,w.projected,path->points+w.segment_a);
-        if (w.segment_a+1<path->count-8) {
-            float *next=(float *)((char *)path+((w.segment_a+1)<<4));
-            angle=func_L00_001FF860_2CDDC8(next[4]-m->position[0],next[5]-m->position[1]);
-            m->rotation[2]=func_L00_00259148_2CDDC8(&d->yaw_velocity,m->rotation[2],angle,0.01f,0.3f,0.1f);
+        fast_vec_sub(work.projected,&path->points[work.segment_a+1],&path->points[work.segment_a]);
+        fast_vec_scale(work.projected,work.projected,work.fraction_a);
+        fast_vec_add(work.projected,work.projected,path->points+work.segment_a);
+        if (work.segment_a+1<path->count-8) {
+            float *next=(float *)((char *)path+((work.segment_a+1)<<4));
+            angle=func_L00_001FF860_2CDDC8(next[4]-moby->position[0],next[5]-moby->position[1]);
+            moby->rotation[2]=func_L00_00259148_2CDDC8(&data->yaw_velocity,moby->rotation[2],angle,0.01f,0.3f,0.1f);
         } else {
-            angle=func_L00_001FF860_2CDDC8(w.target.position[0]-m->position[0],w.target.position[1]-m->position[1]);
-            m->rotation[2]=func_L00_00259148_2CDDC8(&d->yaw_velocity,m->rotation[2],angle,0.01f,0.3f,0.1f);
+            angle=func_L00_001FF860_2CDDC8(work.target.position[0]-moby->position[0],work.target.position[1]-moby->position[1]);
+            moby->rotation[2]=func_L00_00259148_2CDDC8(&data->yaw_velocity,moby->rotation[2],angle,0.01f,0.3f,0.1f);
         }
-        fast_vec_sub(w.movement,w.projected,m->position);
-        distance=fast_vec_length(w.movement); if (d->speed<distance) distance=d->speed;
-        fast_vec_normalize(w.movement,w.movement,distance);
+        fast_vec_sub(work.movement,work.projected,moby->position);
+        distance=fast_vec_length(work.movement); if (data->speed<distance) distance=data->speed;
+        fast_vec_normalize(work.movement,work.movement,distance);
         motion_scale=20.0f; motion_gain=1.0471976f;
     {
         float delta,roll,pitch;
-        fast_vec_add(m->position,m->position,w.movement);
-        delta=func_001FA790_2CDDC8(func_L00_001FF860_2CDDC8(w.movement[0],w.movement[1]),m->rotation[2]);
-        roll=d->speed*0.34906584f*func_001F9F90_2CDDC8(delta)/(D_0015ED6C*motion_scale);
-        pitch=d->speed*-0.34906584f*func_001F9FA8_2CDDC8(delta);
+        fast_vec_add(moby->position,moby->position,work.movement);
+        delta=func_001FA790_2CDDC8(func_L00_001FF860_2CDDC8(work.movement[0],work.movement[1]),moby->rotation[2]);
+        roll=data->speed*0.34906584f*func_001F9F90_2CDDC8(delta)/(D_0015ED6C*motion_scale);
+        pitch=data->speed*-0.34906584f*func_001F9FA8_2CDDC8(delta);
         motion_scale*=D_0015ED6C; pitch/=motion_scale;
-        m->rotation[1]=func_L00_00259148_2CDDC8(&d->roll_velocity,m->rotation[1],roll,D_0015ED70*0.5235988f,D_0015ED70*motion_gain,D_0015ED6C*0.7853982f);
-        m->rotation[0]=func_L00_00259148_2CDDC8(&d->pitch_velocity,m->rotation[0],pitch,D_0015ED70*motion_gain,D_0015ED70*2.0943952f,D_0015ED6C*1.5707964f);
+        moby->rotation[1]=func_L00_00259148_2CDDC8(&data->roll_velocity,moby->rotation[1],roll,D_0015ED70*0.5235988f,D_0015ED70*motion_gain,D_0015ED6C*0.7853982f);
+        moby->rotation[0]=func_L00_00259148_2CDDC8(&data->pitch_velocity,moby->rotation[0],pitch,D_0015ED70*motion_gain,D_0015ED70*2.0943952f,D_0015ED6C*1.5707964f);
     }
         break;
     }
     case 2: {
-        HRoute49_2CDDC8 *route=d->alternate ? &d->route_b : &d->route_a;
+        HRoute49_2CDDC8 *route=data->alternate ? &data->route_b : &data->route_a;
         int point=route->index;
-        float angle=func_L00_001FF860_2CDDC8(w.target.position[0]-m->position[0],w.target.position[1]-m->position[1]);
+        float angle=func_L00_001FF860_2CDDC8(work.target.position[0]-moby->position[0],work.target.position[1]-moby->position[1]);
         HMob49_2CDDC8 *projectile;
         float distance,other_distance;
-        m->rotation[2]=func_L00_00259148_2CDDC8(&d->yaw_velocity,m->rotation[2],angle,0.01f,0.3f,0.1f);
-        projectile=d->projectile;
+        moby->rotation[2]=func_L00_00259148_2CDDC8(&data->yaw_velocity,moby->rotation[2],angle,0.01f,0.3f,0.1f);
+        projectile=data->projectile;
         if (!projectile || projectile->class_id!=0x350 || projectile->state==254 || projectile->state==253) {
-            func_L00_00250800_2CDDC8(m,0,w.movement);
-            fast_vec_sub(w.direction,w.target.position,w.movement);
-            *(HQuad49_2CDDC8*)w.projected=*(HQuad49_2CDDC8*)w.direction; func_001FA4A0_2CDDC8(w.offset,m->transform); func_001F9EE8_2CDDC8(w.projected,w.projected,w.offset);
-            angle=func_L00_001FF860_2CDDC8(w.projected[0],w.projected[1]);
-            d->gun_yaw=func_L00_00259148_2CDDC8(&d->gun_yaw_velocity,d->gun_yaw,angle,D_0015ED70*6.2831855f,D_0015ED70*12.566371f,D_0015ED6C*6.2831855f);
-            angle=-func_L00_001FF860_2CDDC8(func_001F9CE8_2CDDC8(w.projected),w.projected[2]);
-            d->gun_pitch=func_L00_00259148_2CDDC8(&d->gun_pitch_velocity,d->gun_pitch,angle,D_0015ED70*3.1415927f,D_0015ED70*6.2831855f,D_0015ED6C*1.5707964f);
-            func_L00_001FFED8_2CDDC8(d->gun_yaw_matrix+4,2,d->gun_yaw); func_L00_001FFED8_2CDDC8(d->gun_pitch_matrix+4,2,d->gun_pitch); d->projectile=0;
+            func_L00_00250800_2CDDC8(moby,0,work.movement);
+            fast_vec_sub(work.direction,work.target.position,work.movement);
+            *(HQuad49_2CDDC8*)work.projected=*(HQuad49_2CDDC8*)work.direction; func_001FA4A0_2CDDC8(work.offset,moby->transform); func_001F9EE8_2CDDC8(work.projected,work.projected,work.offset);
+            angle=func_L00_001FF860_2CDDC8(work.projected[0],work.projected[1]);
+            data->gun_yaw=func_L00_00259148_2CDDC8(&data->gun_yaw_velocity,data->gun_yaw,angle,D_0015ED70*6.2831855f,D_0015ED70*12.566371f,D_0015ED6C*6.2831855f);
+            angle=-func_L00_001FF860_2CDDC8(func_001F9CE8_2CDDC8(work.projected),work.projected[2]);
+            data->gun_pitch=func_L00_00259148_2CDDC8(&data->gun_pitch_velocity,data->gun_pitch,angle,D_0015ED70*3.1415927f,D_0015ED70*6.2831855f,D_0015ED6C*1.5707964f);
+            func_L00_001FFED8_2CDDC8(data->gun_yaw_matrix+4,2,data->gun_yaw); func_L00_001FFED8_2CDDC8(data->gun_pitch_matrix+4,2,data->gun_pitch); data->projectile=0;
         } else {
-            func_L00_00250800_2CDDC8(m,0,w.movement);
-            fast_vec_sub(w.direction,d->projectile->position,w.movement);
-            *(HQuad49_2CDDC8*)w.projected=*(HQuad49_2CDDC8*)w.direction; func_001FA4A0_2CDDC8(w.offset,m->transform); func_001F9EE8_2CDDC8(w.projected,w.projected,w.offset);
-            angle=func_L00_001FF860_2CDDC8(w.projected[0],w.projected[1]);
-            d->gun_yaw=func_L00_00259148_2CDDC8(&d->gun_yaw_velocity,d->gun_yaw,angle,D_0015ED70*6.2831855f,D_0015ED70*12.566371f,D_0015ED6C*6.2831855f);
-            angle=-func_L00_001FF860_2CDDC8(func_001F9CE8_2CDDC8(w.projected),w.projected[2]);
-            d->gun_pitch=func_L00_00259148_2CDDC8(&d->gun_pitch_velocity,d->gun_pitch,angle,D_0015ED70*3.1415927f,D_0015ED70*6.2831855f,D_0015ED6C*1.5707964f);
-            func_L00_001FFED8_2CDDC8(d->gun_yaw_matrix+4,2,d->gun_yaw); func_L00_001FFED8_2CDDC8(d->gun_pitch_matrix+4,2,d->gun_pitch);
+            func_L00_00250800_2CDDC8(moby,0,work.movement);
+            fast_vec_sub(work.direction,data->projectile->position,work.movement);
+            *(HQuad49_2CDDC8*)work.projected=*(HQuad49_2CDDC8*)work.direction; func_001FA4A0_2CDDC8(work.offset,moby->transform); func_001F9EE8_2CDDC8(work.projected,work.projected,work.offset);
+            angle=func_L00_001FF860_2CDDC8(work.projected[0],work.projected[1]);
+            data->gun_yaw=func_L00_00259148_2CDDC8(&data->gun_yaw_velocity,data->gun_yaw,angle,D_0015ED70*6.2831855f,D_0015ED70*12.566371f,D_0015ED6C*6.2831855f);
+            angle=-func_L00_001FF860_2CDDC8(func_001F9CE8_2CDDC8(work.projected),work.projected[2]);
+            data->gun_pitch=func_L00_00259148_2CDDC8(&data->gun_pitch_velocity,data->gun_pitch,angle,D_0015ED70*3.1415927f,D_0015ED70*6.2831855f,D_0015ED6C*1.5707964f);
+            func_L00_001FFED8_2CDDC8(data->gun_yaw_matrix+4,2,data->gun_yaw); func_L00_001FFED8_2CDDC8(data->gun_pitch_matrix+4,2,data->gun_pitch);
         }
         if (point>0 && point<route->path->count-1) {
-            float node_distance=func_001F9D48_2CDDC8(&route->path->points[point],w.target.position);
-            if (node_distance<20.0f && func_001F9B88_2CDDC8(w.target.position[2]-m->position[2])<10.0f && node_distance<func_001F9D10_2CDDC8(&route->path->points[point+1],w.target.position) && point<route->path->count-2) route->index++;
+            float node_distance=func_001F9D48_2CDDC8(&route->path->points[point],work.target.position);
+            if (node_distance<20.0f && func_001F9B88_2CDDC8(work.target.position[2]-moby->position[2])<10.0f && node_distance<func_001F9D10_2CDDC8(&route->path->points[point+1],work.target.position) && point<route->path->count-2) route->index++;
         }
-        fast_vec_sub(w.direction,&route->path->points[point],m->position);
-        distance=fast_vec_length(w.direction);
-        if (distance<d->speed*d->speed/((D_0015ED70*4.0f)*2.0f) || func_001F9D10_2CDDC8(&route->path->points[point],w.target.position)<func_001F9D10_2CDDC8(m->position,w.target.position)) {
-            d->speed-=D_0015ED70*4.0f; if (d->speed<0) d->speed=0;
-        } else { d->speed+=D_0015ED70*4.0f; if (D_0015ED6C*10.0f<d->speed) d->speed=D_0015ED6C*10.0f; }
-        distance=func_001F9D10_2CDDC8(&route->path->points[point],w.target.position); other_distance=func_001F9D10_2CDDC8(m->position,w.target.position);
-        if (distance<other_distance) fast_vec_normalize(w.direction,w.direction,-d->speed); else fast_vec_normalize(w.direction,w.direction,d->speed);
+        fast_vec_sub(work.direction,&route->path->points[point],moby->position);
+        distance=fast_vec_length(work.direction);
+        if (distance<data->speed*data->speed/((D_0015ED70*4.0f)*2.0f) || func_001F9D10_2CDDC8(&route->path->points[point],work.target.position)<func_001F9D10_2CDDC8(moby->position,work.target.position)) {
+            data->speed-=D_0015ED70*4.0f; if (data->speed<0) data->speed=0;
+        } else { data->speed+=D_0015ED70*4.0f; if (D_0015ED6C*10.0f<data->speed) data->speed=D_0015ED6C*10.0f; }
+        distance=func_001F9D10_2CDDC8(&route->path->points[point],work.target.position); other_distance=func_001F9D10_2CDDC8(moby->position,work.target.position);
+        if (distance<other_distance) fast_vec_normalize(work.direction,work.direction,-data->speed); else fast_vec_normalize(work.direction,work.direction,data->speed);
         motion_scale=10.0f; motion_gain=1.0471976f;
     {
         float delta,roll,pitch;
-        fast_vec_add(m->position,m->position,w.direction);
-        delta=func_001FA790_2CDDC8(func_L00_001FF860_2CDDC8(w.direction[0],w.direction[1]),m->rotation[2]);
-        roll=d->speed*0.34906584f*func_001F9F90_2CDDC8(delta)/(D_0015ED6C*motion_scale);
-        pitch=d->speed*-0.34906584f*func_001F9FA8_2CDDC8(delta);
+        fast_vec_add(moby->position,moby->position,work.direction);
+        delta=func_001FA790_2CDDC8(func_L00_001FF860_2CDDC8(work.direction[0],work.direction[1]),moby->rotation[2]);
+        roll=data->speed*0.34906584f*func_001F9F90_2CDDC8(delta)/(D_0015ED6C*motion_scale);
+        pitch=data->speed*-0.34906584f*func_001F9FA8_2CDDC8(delta);
         motion_scale*=D_0015ED6C; pitch/=motion_scale;
-        m->rotation[1]=func_L00_00259148_2CDDC8(&d->roll_velocity,m->rotation[1],roll,D_0015ED70*0.5235988f,D_0015ED70*motion_gain,D_0015ED6C*0.7853982f);
-        m->rotation[0]=func_L00_00259148_2CDDC8(&d->pitch_velocity,m->rotation[0],pitch,D_0015ED70*motion_gain,D_0015ED70*2.0943952f,D_0015ED6C*1.5707964f);
+        moby->rotation[1]=func_L00_00259148_2CDDC8(&data->roll_velocity,moby->rotation[1],roll,D_0015ED70*0.5235988f,D_0015ED70*motion_gain,D_0015ED6C*0.7853982f);
+        moby->rotation[0]=func_L00_00259148_2CDDC8(&data->pitch_velocity,moby->rotation[0],pitch,D_0015ED70*motion_gain,D_0015ED70*2.0943952f,D_0015ED6C*1.5707964f);
     }
-        if (func_00215570_2CDDC8(w.target.position,d->alternate ? d->other_switch_region : d->switch_region)) {
-            if (d->alternate ? d->other_exit_path!=-1 : d->exit_path!=-1) {
-                HPath49_2CDDC8 *path=D_L03_001B08B0_2CDDC8[d->alternate ? d->other_exit_path : d->exit_path]; int i;
+        if (func_00215570_2CDDC8(work.target.position,data->alternate ? data->other_switch_region : data->switch_region)) {
+            if (data->alternate ? data->other_exit_path!=-1 : data->exit_path!=-1) {
+                HPath49_2CDDC8 *path=D_L03_001B08B0_2CDDC8[data->alternate ? data->other_exit_path : data->exit_path]; int i;
                 for (i=0; i<path->count-2; i++)
                     path->points[i].length=func_001F9D10_2CDDC8(&path->points[i],&path->points[i+1]);
             }
-            m->previous_state=3; m->state=4; d->reaction_timer=func_001F9850_2CDDC8(15); break;
-        } else if (func_00215570_2CDDC8(w.target.position,d->shoot_region) && (func_001F9938_2CDDC8(&d->shot_timer) || (!d->projectile && d->timer))) {
-            d->shot_timer=func_001F9850_2CDDC8(360); qcopy(w.shot_origin,w.target.position);
-            fast_vec_sub(w.shot_velocity,w.shot_origin,w.movement); func_L00_001FF500_2CDDC8(w.shot_velocity,w.shot_velocity,D_0015ED6C*6.0f); w.shot_velocity[2]=0;
-            d->projectile=(HMob49_2CDDC8*)func_L03_002D65D0_2CDDC8((char*)w.shot_velocity,(char*)w.movement,(int)m,func_001F9850_2CDDC8(240),w.target.position[2]);
+            moby->previous_state=3; moby->state=4; data->reaction_timer=func_001F9850_2CDDC8(15); break;
+        } else if (func_00215570_2CDDC8(work.target.position,data->shoot_region) && (func_001F9938_2CDDC8(&data->shot_timer) || (!data->projectile && data->timer))) {
+            data->shot_timer=func_001F9850_2CDDC8(360); qcopy(work.shot_origin,work.target.position);
+            fast_vec_sub(work.shot_velocity,work.shot_origin,work.movement); func_L00_001FF500_2CDDC8(work.shot_velocity,work.shot_velocity,D_0015ED6C*6.0f); work.shot_velocity[2]=0;
+            data->projectile=(HMob49_2CDDC8*)func_L03_002D65D0_2CDDC8((char*)work.shot_velocity,(char*)work.movement,(int)moby,func_001F9850_2CDDC8(240),work.target.position[2]);
         }
         break;
     }
     case 3: {
         HPath49_2CDDC8 *path;
         float progress,distance,step,limit,angle;
-        if (d->exit_path==-1) {
-            func_00214D28_2CDDC8(&m->position[2],200.0f,D_0015ED6C*8.0f);
-            m->rotation[1]=func_L00_00259148_2CDDC8(&d->roll_velocity,m->rotation[1],0.0f,D_0015ED70*0.5235988f,D_0015ED70*1.0471976f,D_0015ED6C*0.7853982f);
-            m->rotation[0]=func_L00_00259148_2CDDC8(&d->pitch_velocity,m->rotation[0],0.0f,D_0015ED70*0.5235988f,D_0015ED70*1.0471976f,D_0015ED6C*0.7853982f); break;
+        if (data->exit_path==-1) {
+            func_00214D28_2CDDC8(&moby->position[2],200.0f,D_0015ED6C*8.0f);
+            moby->rotation[1]=func_L00_00259148_2CDDC8(&data->roll_velocity,moby->rotation[1],0.0f,D_0015ED70*0.5235988f,D_0015ED70*1.0471976f,D_0015ED6C*0.7853982f);
+            moby->rotation[0]=func_L00_00259148_2CDDC8(&data->pitch_velocity,moby->rotation[0],0.0f,D_0015ED70*0.5235988f,D_0015ED70*1.0471976f,D_0015ED6C*0.7853982f); break;
         }
-        path=D_L03_001B08B0_2CDDC8[d->alternate ? d->other_exit_path : d->exit_path];
-        func_L00_0025EFC0_2CDDC8(path,m->position,w.projected,&w.segment_b,&w.fraction_b,0,999.0f,5.0f,0.0f);
-        progress=func_001FA888_2CDDC8(w.segment_b)*path->points[0].length+w.fraction_b+2.0f;
-        distance=func_001F9D10_2CDDC8(m->position,(char*)path+(path->count<<4)); step=D_0015ED70*10.0f;
-        if (distance<=d->speed*d->speed/(step+step)) {
-            float speed=d->speed-step; limit=D_L03_0016199C*D_0015ED6C; d->speed=speed; if (speed<limit) d->speed=limit;
-        } else { float speed=d->speed+step; limit=D_0015ED6C*20.0f; d->speed=speed; if (limit<speed) d->speed=limit; }
-        w.segment_b=func_001FA898_2CDDC8(progress/path->points[0].length);
-        w.fraction_b=(progress-func_001FA888_2CDDC8(w.segment_b)*path->points[0].length)/path->points[0].length;
-        if (w.segment_b>=path->count-1) {
-            if (d->other_exit_path!=-1 && d->route_b.path_id!=-1 && d->speed<=D_L03_0016199C*D_0015ED6C) {
-                HRoute49_2CDDC8 *route; d->alternate^=1; route=d->alternate ? &d->route_b : &d->route_a;
-                qcopy(m->position,route->path->points); route->index=1;
-                m->previous_state=2; m->state=4; d->reaction_timer=func_001F9850_2CDDC8(15); break;
+        path=D_L03_001B08B0_2CDDC8[data->alternate ? data->other_exit_path : data->exit_path];
+        func_L00_0025EFC0_2CDDC8(path,moby->position,work.projected,&work.segment_b,&work.fraction_b,0,999.0f,5.0f,0.0f);
+        progress=func_001FA888_2CDDC8(work.segment_b)*path->points[0].length+work.fraction_b+2.0f;
+        distance=func_001F9D10_2CDDC8(moby->position,(char*)path+(path->count<<4)); step=D_0015ED70*10.0f;
+        if (distance<=data->speed*data->speed/(step+step)) {
+            float speed=data->speed-step; limit=D_L03_0016199C*D_0015ED6C; data->speed=speed; if (speed<limit) data->speed=limit;
+        } else { float speed=data->speed+step; limit=D_0015ED6C*20.0f; data->speed=speed; if (limit<speed) data->speed=limit; }
+        work.segment_b=func_001FA898_2CDDC8(progress/path->points[0].length);
+        work.fraction_b=(progress-func_001FA888_2CDDC8(work.segment_b)*path->points[0].length)/path->points[0].length;
+        if (work.segment_b>=path->count-1) {
+            if (data->other_exit_path!=-1 && data->route_b.path_id!=-1 && data->speed<=D_L03_0016199C*D_0015ED6C) {
+                HRoute49_2CDDC8 *route; data->alternate^=1; route=data->alternate ? &data->route_b : &data->route_a;
+                qcopy(moby->position,route->path->points); route->index=1;
+                moby->previous_state=2; moby->state=4; data->reaction_timer=func_001F9850_2CDDC8(15); break;
             }
-            if (d->speed<=D_L03_0016199C*D_0015ED6C) { func_001F9978_2CDDC8(); return; }
-            w.segment_b=path->count-2; w.fraction_b=1.0f;
+            if (data->speed<=D_L03_0016199C*D_0015ED6C) { func_001F9978_2CDDC8(); return; }
+            work.segment_b=path->count-2; work.fraction_b=1.0f;
         }
-        fast_vec_sub(w.projected,&path->points[w.segment_b+1],&path->points[w.segment_b]);
-        fast_vec_scale(w.projected,w.projected,w.fraction_b); fast_vec_add(w.projected,w.projected,path->points+w.segment_b);
-        angle=func_L00_001FF860_2CDDC8(w.target.position[0]-m->position[0],w.target.position[1]-m->position[1]);
-        m->rotation[2]=func_L00_00259148_2CDDC8(&d->yaw_velocity,m->rotation[2],angle,0.01f,0.3f,0.1f);
-        fast_vec_sub(w.movement,w.projected,m->position); distance=fast_vec_length(w.movement);
-        if (d->speed<distance) distance=d->speed;
-        fast_vec_normalize(w.movement,w.movement,distance); motion_scale=20.0f; motion_gain=1.0471976f;
+        fast_vec_sub(work.projected,&path->points[work.segment_b+1],&path->points[work.segment_b]);
+        fast_vec_scale(work.projected,work.projected,work.fraction_b); fast_vec_add(work.projected,work.projected,path->points+work.segment_b);
+        angle=func_L00_001FF860_2CDDC8(work.target.position[0]-moby->position[0],work.target.position[1]-moby->position[1]);
+        moby->rotation[2]=func_L00_00259148_2CDDC8(&data->yaw_velocity,moby->rotation[2],angle,0.01f,0.3f,0.1f);
+        fast_vec_sub(work.movement,work.projected,moby->position); distance=fast_vec_length(work.movement);
+        if (data->speed<distance) distance=data->speed;
+        fast_vec_normalize(work.movement,work.movement,distance); motion_scale=20.0f; motion_gain=1.0471976f;
     {
         float delta,roll,pitch;
-        fast_vec_add(m->position,m->position,w.movement);
-        delta=func_001FA790_2CDDC8(func_L00_001FF860_2CDDC8(w.movement[0],w.movement[1]),m->rotation[2]);
-        roll=d->speed*0.34906584f*func_001F9F90_2CDDC8(delta)/(D_0015ED6C*motion_scale);
-        pitch=d->speed*-0.34906584f*func_001F9FA8_2CDDC8(delta);
+        fast_vec_add(moby->position,moby->position,work.movement);
+        delta=func_001FA790_2CDDC8(func_L00_001FF860_2CDDC8(work.movement[0],work.movement[1]),moby->rotation[2]);
+        roll=data->speed*0.34906584f*func_001F9F90_2CDDC8(delta)/(D_0015ED6C*motion_scale);
+        pitch=data->speed*-0.34906584f*func_001F9FA8_2CDDC8(delta);
         motion_scale*=D_0015ED6C; pitch/=motion_scale;
-        m->rotation[1]=func_L00_00259148_2CDDC8(&d->roll_velocity,m->rotation[1],roll,D_0015ED70*0.5235988f,D_0015ED70*motion_gain,D_0015ED6C*0.7853982f);
-        m->rotation[0]=func_L00_00259148_2CDDC8(&d->pitch_velocity,m->rotation[0],pitch,D_0015ED70*motion_gain,D_0015ED70*2.0943952f,D_0015ED6C*1.5707964f);
+        moby->rotation[1]=func_L00_00259148_2CDDC8(&data->roll_velocity,moby->rotation[1],roll,D_0015ED70*0.5235988f,D_0015ED70*motion_gain,D_0015ED6C*0.7853982f);
+        moby->rotation[0]=func_L00_00259148_2CDDC8(&data->pitch_velocity,moby->rotation[0],pitch,D_0015ED70*motion_gain,D_0015ED70*2.0943952f,D_0015ED6C*1.5707964f);
     }
         break;
     }
     case 4:
-        if (func_001F9938_2CDDC8(&d->reaction_timer)) m->state=m->previous_state;
+        if (func_001F9938_2CDDC8(&data->reaction_timer)) moby->state=moby->previous_state;
         else {
-            d->speed-=D_0015ED70*4.0f; if (d->speed<0) d->speed=0;
+            data->speed-=D_0015ED70*4.0f; if (data->speed<0) data->speed=0;
             motion_scale=10.0f; motion_gain=1.0471976f;
-            w.movement[0]=func_001F9F90_2CDDC8(m->rotation[2])*-d->speed;
-            w.movement[1]=func_001F9FA8_2CDDC8(m->rotation[2])*-d->speed; w.movement[2]=0;
+            work.movement[0]=func_001F9F90_2CDDC8(moby->rotation[2])*-data->speed;
+            work.movement[1]=func_001F9FA8_2CDDC8(moby->rotation[2])*-data->speed; work.movement[2]=0;
     {
         float delta,roll,pitch;
-        fast_vec_add(m->position,m->position,w.movement);
-        delta=func_001FA790_2CDDC8(func_L00_001FF860_2CDDC8(w.movement[0],w.movement[1]),m->rotation[2]);
-        roll=d->speed*0.34906584f*func_001F9F90_2CDDC8(delta)/(D_0015ED6C*motion_scale);
-        pitch=d->speed*-0.34906584f*func_001F9FA8_2CDDC8(delta);
+        fast_vec_add(moby->position,moby->position,work.movement);
+        delta=func_001FA790_2CDDC8(func_L00_001FF860_2CDDC8(work.movement[0],work.movement[1]),moby->rotation[2]);
+        roll=data->speed*0.34906584f*func_001F9F90_2CDDC8(delta)/(D_0015ED6C*motion_scale);
+        pitch=data->speed*-0.34906584f*func_001F9FA8_2CDDC8(delta);
         motion_scale*=D_0015ED6C; pitch/=motion_scale;
-        m->rotation[1]=func_L00_00259148_2CDDC8(&d->roll_velocity,m->rotation[1],roll,D_0015ED70*0.5235988f,D_0015ED70*motion_gain,D_0015ED6C*0.7853982f);
-        m->rotation[0]=func_L00_00259148_2CDDC8(&d->pitch_velocity,m->rotation[0],pitch,D_0015ED70*motion_gain,D_0015ED70*2.0943952f,D_0015ED6C*1.5707964f);
+        moby->rotation[1]=func_L00_00259148_2CDDC8(&data->roll_velocity,moby->rotation[1],roll,D_0015ED70*0.5235988f,D_0015ED70*motion_gain,D_0015ED6C*0.7853982f);
+        moby->rotation[0]=func_L00_00259148_2CDDC8(&data->pitch_velocity,moby->rotation[0],pitch,D_0015ED70*motion_gain,D_0015ED70*2.0943952f,D_0015ED6C*1.5707964f);
     }
         
         }
         break;
     case 5: {
         float angle; int i; 
-        *(HQuad49_2CDDC8*)w.movement=0; angle=func_00214158_2CDDC8(); func_L00_00250800_2CDDC8(m,4,w.projected);
+        *(HQuad49_2CDDC8*)work.movement=0; angle=func_00214158_2CDDC8(); func_L00_00250800_2CDDC8(moby,4,work.projected);
         for (i=0; i<4; i++) {
-            w.offset[0]=func_001F9F90_2CDDC8(angle)*1.5f; w.offset[1]=func_001F9FA8_2CDDC8(angle)*1.5f;
-            w.offset[2]=0; angle=func_001FA748_2CDDC8(angle,1.5707964f); func_L00_001FF240_2CDDC8(w.hit.direction,w.offset,w.projected);
+            work.offset[0]=func_001F9F90_2CDDC8(angle)*1.5f; work.offset[1]=func_001F9FA8_2CDDC8(angle)*1.5f;
+            work.offset[2]=0; angle=func_001FA748_2CDDC8(angle,1.5707964f); func_L00_001FF240_2CDDC8(work.hit.direction,work.offset,work.projected);
         }
-        func_L00_00250800_2CDDC8(m,5,w.offset);
-        if (d->child_index!=-1) {
-            HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_0015FFD8_c+(d->child_index<<8));
+        func_L00_00250800_2CDDC8(moby,5,work.offset);
+        if (data->child_index!=-1) {
+            HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_0015FFD8_c+(data->child_index<<8));
             ((unsigned char*)child->data)[0x262]=2; child->alpha=255; child->flags&=0xFFF9;
-            w.hit.radius=20.0f; w.hit.flags=0x830000; w.hit.allow=1; w.hit.source=m;
-            fast_vec_sub(w.hit.direction,child->position,m->position); func_L00_001FF500_2CDDC8(w.hit.direction,w.hit.direction,1.0f);
-            w.hit.direction[2]=1.0f; w.hit.direction[3]=5627.925f; w.hit.kind=3; w.hit.enabled=3; w.hit.class_id=m->class_id;
-            func_L00_0025AAC0_2CDDC8(child,&w.hit);
+            work.hit.radius=20.0f; work.hit.flags=0x830000; work.hit.allow=1; work.hit.source=moby;
+            fast_vec_sub(work.hit.direction,child->position,moby->position); func_L00_001FF500_2CDDC8(work.hit.direction,work.hit.direction,1.0f);
+            work.hit.direction[2]=1.0f; work.hit.direction[3]=5627.925f; work.hit.kind=3; work.hit.enabled=3; work.hit.class_id=moby->class_id;
+            func_L00_0025AAC0_2CDDC8(child,&work.hit);
         }
-        func_L00_0025F4A8_2CDDC8(m,w.movement,m->position,0.0f,0.0f,20,3,4,4.0f,2.0f,100000.0f,3.0f,2,15.0f,1,1,-1,0);
-        func_L00_002584A8_2CDDC8(m,0,-1);
-        func_L00_00265050_2CDDC8(m,0x637,m->position,m->rotation,0,0,0.0f,D_L03_0015F580_c,D_L03_0015F580_c,D_L03_0015F580_c);
-        func_L00_00265050_2CDDC8(m,0x638,m->position,m->rotation,0,0,0.0f,D_L03_0015F580_c,D_L03_0015F580_c,D_L03_0015F580_c);
-        func_L00_00265050_2CDDC8(m,0x639,m->position,m->rotation,0,0,0.0f,D_L03_0015F580_c,D_L03_0015F580_c,D_L03_0015F580_c);
-        func_0020D9D8_2CDDC8(m,d->gun_yaw_matrix); func_0020D9D8_2CDDC8(m,d->gun_pitch_matrix);
-        if (d->sound!=-1) {
-            unsigned char *audio=(unsigned char*)(D_0013E633_2CDDC8+0x1D+d->sound*0x70);
-            if (*(HMob49_2CDDC8**)(audio+0x88)==m && audio[0x74]) func_L00_0028EBF0_2CDDC8(d->sound);
+        func_L00_0025F4A8_2CDDC8(moby,work.movement,moby->position,0.0f,0.0f,20,3,4,4.0f,2.0f,100000.0f,3.0f,2,15.0f,1,1,-1,0);
+        func_L00_002584A8_2CDDC8(moby,0,-1);
+        func_L00_00265050_2CDDC8(moby,0x637,moby->position,moby->rotation,0,0,0.0f,D_L03_0015F580_c,D_L03_0015F580_c,D_L03_0015F580_c);
+        func_L00_00265050_2CDDC8(moby,0x638,moby->position,moby->rotation,0,0,0.0f,D_L03_0015F580_c,D_L03_0015F580_c,D_L03_0015F580_c);
+        func_L00_00265050_2CDDC8(moby,0x639,moby->position,moby->rotation,0,0,0.0f,D_L03_0015F580_c,D_L03_0015F580_c,D_L03_0015F580_c);
+        func_0020D9D8_2CDDC8(moby,data->gun_yaw_matrix); func_0020D9D8_2CDDC8(moby,data->gun_pitch_matrix);
+        if (data->sound!=-1) {
+            unsigned char *audio=(unsigned char*)(D_0013E633_2CDDC8+0x1D+data->sound*0x70);
+            if (*(HMob49_2CDDC8**)(audio+0x88)==moby && audio[0x74]) func_L00_0028EBF0_2CDDC8(data->sound);
         }
-        d->sound=-1; func_0020D678_2CDDC8(m); return;
+        data->sound=-1; func_0020D678_2CDDC8(moby); return;
     }
     default: break;
     }
-    if (m->nearby && func_001F9D10_2CDDC8(m->position,D_L03_00166F40_2CDDC8)<40.0f) func_L00_0025B178_2CDDC8(m);
-    m->position[2]-=D_L03_00161998*func_001F9F90_2CDDC8(d->bob);
-    d->bob=func_001FA748_2CDDC8(d->bob,6.2831855f/func_001F9878_2CDDC8(D_L03_00161994*60.0f));
-    m->position[2]+=D_L03_00161998*func_001F9F90_2CDDC8(d->bob);
-    if (d->child_index!=-1) {
-        HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_0015FFD8_c+(d->child_index<<8));
-        *(HQuad49_2CDDC8*)child->position=*(HQuad49_2CDDC8*)m->position; *(HQuad49_2CDDC8*)child->rotation=*(HQuad49_2CDDC8*)m->rotation;
+    if (moby->nearby && func_001F9D10_2CDDC8(moby->position,D_L03_00166F40_2CDDC8)<40.0f) func_L00_0025B178_2CDDC8(moby);
+    moby->position[2]-=D_L03_00161998*func_001F9F90_2CDDC8(data->bob);
+    data->bob=func_001FA748_2CDDC8(data->bob,6.2831855f/func_001F9878_2CDDC8(D_L03_00161994*60.0f));
+    moby->position[2]+=D_L03_00161998*func_001F9F90_2CDDC8(data->bob);
+    if (data->child_index!=-1) {
+        HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_0015FFD8_c+(data->child_index<<8));
+        *(HQuad49_2CDDC8*)child->position=*(HQuad49_2CDDC8*)moby->position; *(HQuad49_2CDDC8*)child->rotation=*(HQuad49_2CDDC8*)moby->rotation;
         func_L00_002514B8_2CDDC8(child); func_L00_00251E30_2CDDC8(child); child->flags|=6;
     }
 }
@@ -1080,139 +1080,139 @@ extern void mark_moby_for_removal_c_c(void *) __asm__("func_0020C828");
 extern char D_0013E550[];
 
 void FUN_L03_002d47c0(Moby *moby) {
-    Tgt_2D5B88 tgt;
-    Vec_2D5B88 v50;
+    Tgt_2D5B88 target_info;
+    Vec_2D5B88 start_pos;
     Hit_2D5B88 hit;
-    Vec_2D5B88 v90;
-    Vec_2D5B88 vA0;
-    Vec_2D5B88 vB0;
-    Vec_2D5B88 vC0;
-    Vec_2D5B88 vD0;
-    Vec_2D5B88 vE0;
-    Vec_2D5B88 vF0;
-    Vec_2D5B88 v100;
-    Vec_2D5B88 v110;
-    Vec_2D5B88 v120;
-    float ang;
-    int *snd = 0;
-    Data_2D5B88 *d = (Data_2D5B88 *)((char *)moby->pvars);
+    Vec_2D5B88 direction;
+    Vec_2D5B88 muzzle;
+    Vec_2D5B88 aim;
+    Vec_2D5B88 ray_end;
+    Vec_2D5B88 side_offset;
+    Vec_2D5B88 gun_pos;
+    Vec_2D5B88 spark_vel;
+    Vec_2D5B88 spark_dir;
+    Vec_2D5B88 tracer_vel;
+    Vec_2D5B88 tracer_offset;
+    float heading;
+    int *voice_slot = 0;
+    Data_2D5B88 *data = (Data_2D5B88 *)((char *)moby->pvars);
     int state;
     int i;
     int j;
-    float lim;
-    float dist;
+    float max_climb;
+    float target_distance;
 
-    FUN_L03_0024e830(moby, &tgt, 20.0f);
-    if (d->target->oclass == 0x277) {
-        snd = (int *)(((char *)d->target->pvars) + 0x250);
-    } else if (d->target->oclass == 0xE9) {
-        snd = (int *)(((char *)d->target->pvars) + 0x1B8);
-        if (d->target->state == 0x40 || d->target->state == 1) {
+    FUN_L03_0024e830(moby, &target_info, 20.0f);
+    if (data->target->oclass == 0x277) {
+        voice_slot = (int *)(((char *)data->target->pvars) + 0x250);
+    } else if (data->target->oclass == 0xE9) {
+        voice_slot = (int *)(((char *)data->target->pvars) + 0x1B8);
+        if (data->target->state == 0x40 || data->target->state == 1) {
             moby->state = 2;
         }
     }
     state = moby->state;
     switch (state) {
     case 1:
-        FUN_001f9c48(&v90, d, 1.0f);
-        d->vel.z = 1.0f;
-        FUN_L00_00259888(&hit, moby, 0x10003, 2.0f, &v90);
+        FUN_001f9c48(&direction, data, 1.0f);
+        data->vel.z = 1.0f;
+        FUN_L00_00259888(&hit, moby, 0x10003, 2.0f, &direction);
         FUN_001f9c48(&hit, &hit, 1.0f);
         hit.dir.z = 1.0f;
         hit.dir.w = 5627.9248f;
         hit.b18 = state;
         hit.b19 = state;
         hit.h1A = moby->oclass;
-        qcopy(&v50, &moby->pos);
-        d->vel.z = -(moby->pos.z - d->vel.w) / 10.0f;
-        lim = D_0015ED6C_c * 8.0f;
-        if (d->vel.z > lim) {
-            d->vel.z = lim;
-        } else if (d->vel.z < -lim) {
-            d->vel.z = -lim;
+        qcopy(&start_pos, &moby->pos);
+        data->vel.z = -(moby->pos.z - data->vel.w) / 10.0f;
+        max_climb = D_0015ED6C_c * 8.0f;
+        if (data->vel.z > max_climb) {
+            data->vel.z = max_climb;
+        } else if (data->vel.z < -max_climb) {
+            data->vel.z = -max_climb;
         }
-        ang = FUN_001f9e90(d->vel.x, d->vel.y);
-        if (fast_difference_between_rotations_c(ang, FUN_001f9e90(tgt.pos.x - moby->pos.x, tgt.pos.y - moby->pos.y)) < 1.5707964f) {
-            FUN_L00_0025bc00(&ang, 0, FUN_001f9e90(tgt.pos.x - moby->pos.x, tgt.pos.y - moby->pos.y), D_L03_00161B30 * 0.017453292f * D_0015ED6C_c);
-            d->vel.x = fast_cos_c2(ang) * vector_length_xy(d);
-            d->vel.y = fast_sin_c2(ang) * vector_length_xy(d);
+        heading = FUN_001f9e90(data->vel.x, data->vel.y);
+        if (fast_difference_between_rotations_c(heading, FUN_001f9e90(target_info.pos.x - moby->pos.x, target_info.pos.y - moby->pos.y)) < 1.5707964f) {
+            FUN_L00_0025bc00(&heading, 0, FUN_001f9e90(target_info.pos.x - moby->pos.x, target_info.pos.y - moby->pos.y), D_L03_00161B30 * 0.017453292f * D_0015ED6C_c);
+            data->vel.x = fast_cos_c2(heading) * vector_length_xy(data);
+            data->vel.y = fast_sin_c2(heading) * vector_length_xy(data);
         }
-        add_vector_xyz(&moby->pos, &moby->pos, d);
-        dist = FUN_001f9b80(&moby->pos, &d->target->pos);
-        if (snd != 0) {
-            int h = *snd;
-            if (d->target->pos.z - tgt.pos.z < dist) {
-                if (FUN_L00_0028d8c0(d->target, h) == 0) {
-                    *snd = allocate_voice_for_target_entry_alt(0, 4, (int)d->target);
+        add_vector_xyz(&moby->pos, &moby->pos, data);
+        target_distance = FUN_001f9b80(&moby->pos, &data->target->pos);
+        if (voice_slot != 0) {
+            int voice = *voice_slot;
+            if (data->target->pos.z - target_info.pos.z < target_distance) {
+                if (FUN_L00_0028d8c0(data->target, voice) == 0) {
+                    *voice_slot = allocate_voice_for_target_entry_alt(0, 4, (int)data->target);
                 }
             } else {
-                if (h != -1) {
-                    char *e = ((char *)&D_0013E550) + h * 0x70;
-                    if (*(Moby **)(e + 0x88) == d->target && *(unsigned char *)(e + 0x74) != 0) {
-                        release_voice_slot(h);
+                if (voice != -1) {
+                    char *entry = ((char *)&D_0013E550) + voice * 0x70;
+                    if (*(Moby **)(entry + 0x88) == data->target && *(unsigned char *)(entry + 0x74) != 0) {
+                        release_voice_slot(voice);
                     }
                 }
-                *snd = -1;
+                *voice_slot = -1;
             }
         }
-        if (d->target->pos.z - tgt.pos.z < dist) {
-            if (d->timer % scale_game_frames_alt(6) == 0) {
-                d->flip ^= 1;
-                vD0.x = fast_cos_c2(fast_add_rotations_c2(ang, d->flip ? 1.5707964f : -1.5707964f)) * 0.25f;
-                vD0.y = fast_sin_c2(fast_add_rotations_c2(ang, d->flip ? 1.5707964f : -1.5707964f)) * 0.25f;
-                vD0.z = 0.0f;
-                add_vector_xyz(&vE0, &moby->pos, &vD0);
-                FUN_L00_0024f7c8(d->target, 3 - d->flip, &vA0);
-                subtract_vector_xyz(&vB0, &vE0, &vA0);
-                scale_vector_xyz(&vC0, &vB0, 2.0f);
-                add_vector_xyz(&vC0, &vC0, &vA0);
+        if (data->target->pos.z - target_info.pos.z < target_distance) {
+            if (data->timer % scale_game_frames_alt(6) == 0) {
+                data->flip ^= 1;
+                side_offset.x = fast_cos_c2(fast_add_rotations_c2(heading, data->flip ? 1.5707964f : -1.5707964f)) * 0.25f;
+                side_offset.y = fast_sin_c2(fast_add_rotations_c2(heading, data->flip ? 1.5707964f : -1.5707964f)) * 0.25f;
+                side_offset.z = 0.0f;
+                add_vector_xyz(&gun_pos, &moby->pos, &side_offset);
+                FUN_L00_0024f7c8(data->target, 3 - data->flip, &muzzle);
+                subtract_vector_xyz(&aim, &gun_pos, &muzzle);
+                scale_vector_xyz(&ray_end, &aim, 2.0f);
+                add_vector_xyz(&ray_end, &ray_end, &muzzle);
                 for (i = 0; i < 5; i++) {
-                    *(u128_2D5B88 *)&v100 = 0;
-                    v100.x = random_float_between_c(-1.0f, 1.0f);
-                    v100.y = random_float_between_c(-1.0f, 1.0f);
-                    v100.z = random_float_between_c(-1.0f, 1.0f);
-                    *(u128_2D5B88 *)&vF0 = *(u128_2D5B88 *)&v100;
-                    normalize_vector_xyz(&vF0, &vF0, vector_length_xyz(&vB0) * 0.65f);
-                    add_vector_xyz(&vF0, &vB0, &vF0);
-                    normalize_vector_xyz(&vF0, &vF0, random_float_between_c(D_0015ED6C_c * 5.0f, D_0015ED6C_c * 15.0f));
-                    FUN_L00_0026dd20(&vA0, &vF0, 0x5F2F4F6F, FUN_L00_00257b90(scale_game_frames_alt(5), scale_game_frames_alt(10)), 50000.0f);
+                    *(u128_2D5B88 *)&spark_dir = 0;
+                    spark_dir.x = random_float_between_c(-1.0f, 1.0f);
+                    spark_dir.y = random_float_between_c(-1.0f, 1.0f);
+                    spark_dir.z = random_float_between_c(-1.0f, 1.0f);
+                    *(u128_2D5B88 *)&spark_vel = *(u128_2D5B88 *)&spark_dir;
+                    normalize_vector_xyz(&spark_vel, &spark_vel, vector_length_xyz(&aim) * 0.65f);
+                    add_vector_xyz(&spark_vel, &aim, &spark_vel);
+                    normalize_vector_xyz(&spark_vel, &spark_vel, random_float_between_c(D_0015ED6C_c * 5.0f, D_0015ED6C_c * 15.0f));
+                    FUN_L00_0026dd20(&muzzle, &spark_vel, 0x5F2F4F6F, FUN_L00_00257b90(scale_game_frames_alt(5), scale_game_frames_alt(10)), 50000.0f);
                 }
-                normalize_vector_xyz(&vB0, &vB0, D_0015ED6C_c * 0.5f);
-                FUN_L00_0026dd20(&vA0, &vB0, 0x2F4F7F7F, FUN_L00_00257b90(scale_game_frames_alt(4), scale_game_frames_alt(7)), 400000.0f);
-                scale_vector_xyz(&v100, d, FUN_001f96b0(6.0f));
-                add_vector_xyz(&v100, &v100, &moby->pos);
-                subtract_vector_xyz(&v100, &v100, &vD0);
-                subtract_vector_xyz(&v110, &v100, &vA0);
-                normalize_vector_xyz(&v100, &v110, 2.0f);
-                subtract_vector_xyz(&v120, &vA0, &v100);
-                *(u128_2D5B88 *)&vF0 = *(u128_2D5B88 *)&v120;
-                add_vector_xyz(&v100, &v100, &vF0);
-                normalize_vector_xyz(&v110, &v110, D_0015ED6C_c * 100.0f);
-                FUN_L03_00260130(d->target, &vF0, &v100, &v110, scale_game_frames_alt(0x2D));
-                if (FUN_001efa68(&vA0, &vC0, 0, d->target, 0) != 0) {
-                    qcopy(&vA0, D_L03_00173F60);
-                    normalize_vector_xyz(&vB0, &vB0, D_0015ED6C_c * 10.0f);
+                normalize_vector_xyz(&aim, &aim, D_0015ED6C_c * 0.5f);
+                FUN_L00_0026dd20(&muzzle, &aim, 0x2F4F7F7F, FUN_L00_00257b90(scale_game_frames_alt(4), scale_game_frames_alt(7)), 400000.0f);
+                scale_vector_xyz(&spark_dir, data, FUN_001f96b0(6.0f));
+                add_vector_xyz(&spark_dir, &spark_dir, &moby->pos);
+                subtract_vector_xyz(&spark_dir, &spark_dir, &side_offset);
+                subtract_vector_xyz(&tracer_vel, &spark_dir, &muzzle);
+                normalize_vector_xyz(&spark_dir, &tracer_vel, 2.0f);
+                subtract_vector_xyz(&tracer_offset, &muzzle, &spark_dir);
+                *(u128_2D5B88 *)&spark_vel = *(u128_2D5B88 *)&tracer_offset;
+                add_vector_xyz(&spark_dir, &spark_dir, &spark_vel);
+                normalize_vector_xyz(&tracer_vel, &tracer_vel, D_0015ED6C_c * 100.0f);
+                FUN_L03_00260130(data->target, &spark_vel, &spark_dir, &tracer_vel, scale_game_frames_alt(0x2D));
+                if (FUN_001efa68(&muzzle, &ray_end, 0, data->target, 0) != 0) {
+                    qcopy(&muzzle, D_L03_00173F60);
+                    normalize_vector_xyz(&aim, &aim, D_0015ED6C_c * 10.0f);
                     for (j = 0; j < 10; j++) {
-                        *(u128_2D5B88 *)&v100 = 0;
-                        v100.x = random_float_between_c(-1.0f, 1.0f);
-                        v100.y = random_float_between_c(-1.0f, 1.0f);
-                        v100.z = random_float_between_c(-1.0f, 1.0f);
-                        *(u128_2D5B88 *)&vF0 = *(u128_2D5B88 *)&v100;
-                        FUN_L00_001ff660(&v100, &vB0, D_L03_00173F80);
-                        normalize_vector_xyz(&vF0, &vF0, vector_length_xyz(&v100) * 0.5f);
-                        add_vector_xyz(&v100, &v100, &vF0);
-                        normalize_vector_xyz(&v100, &v100, random_float_between_c(D_0015ED6C_c * 3.0f, D_0015ED6C_c * 6.0f));
-                        FUN_L00_0026dd20(&vA0, &v100, 0x7F2F4F6F, FUN_L00_00257b90(scale_game_frames_alt(0xF), scale_game_frames_alt(0x14)), 30000.0f);
+                        *(u128_2D5B88 *)&spark_dir = 0;
+                        spark_dir.x = random_float_between_c(-1.0f, 1.0f);
+                        spark_dir.y = random_float_between_c(-1.0f, 1.0f);
+                        spark_dir.z = random_float_between_c(-1.0f, 1.0f);
+                        *(u128_2D5B88 *)&spark_vel = *(u128_2D5B88 *)&spark_dir;
+                        FUN_L00_001ff660(&spark_dir, &aim, D_L03_00173F80);
+                        normalize_vector_xyz(&spark_vel, &spark_vel, vector_length_xyz(&spark_dir) * 0.5f);
+                        add_vector_xyz(&spark_dir, &spark_dir, &spark_vel);
+                        normalize_vector_xyz(&spark_dir, &spark_dir, random_float_between_c(D_0015ED6C_c * 3.0f, D_0015ED6C_c * 6.0f));
+                        FUN_L00_0026dd20(&muzzle, &spark_dir, 0x7F2F4F6F, FUN_L00_00257b90(scale_game_frames_alt(0xF), scale_game_frames_alt(0x14)), 30000.0f);
                     }
-                    normalize_vector_xyz(&vB0, &vB0, -1.0f);
-                    add_vector_xyz(&vC0, &vA0, &vB0);
-                    if (FUN_001efa68(&vA0, &vC0, 0x10, d->target, &hit) != 0 && D_L03_00173F58 != 0
+                    normalize_vector_xyz(&aim, &aim, -1.0f);
+                    add_vector_xyz(&ray_end, &muzzle, &aim);
+                    if (FUN_001efa68(&muzzle, &ray_end, 0x10, data->target, &hit) != 0 && D_L03_00173F58 != 0
                         && (D_L03_00173F58 == ((Hero *)(D_0013E533 + 0xE1D))->moby || D_L03_00173F58->oclass == 0x1DF)) {
                         moby->state = 2;
                     }
-                    qcopy(&vC0, &vA0);
-                    vC0.z += 2.0f;
-                    if (FUN_001efa68(&vA0, &vC0, 0x10, d->target, &hit) != 0 && D_L03_00173F58 != 0
+                    qcopy(&ray_end, &muzzle);
+                    ray_end.z += 2.0f;
+                    if (FUN_001efa68(&muzzle, &ray_end, 0x10, data->target, &hit) != 0 && D_L03_00173F58 != 0
                         && (D_L03_00173F58 == ((Hero *)(D_0013E533 + 0xE1D))->moby || D_L03_00173F58->oclass == 0x1DF)) {
                         moby->state = 2;
                     }
@@ -1223,20 +1223,20 @@ void FUN_L03_002d47c0(Moby *moby) {
                 }
             }
         }
-        if (tick_countdown_32_alt(&d->timer) != 0 || d->target == 0 || d->target->state == 0xFE || d->target->state == 0xFD) {
+        if (tick_countdown_32_alt(&data->timer) != 0 || data->target == 0 || data->target->state == 0xFE || data->target->state == 0xFD) {
             moby->state = 2;
         }
         break;
     case 2:
-        if (snd != 0) {
-            int h = *snd;
-            if (h != -1) {
-                char *e = ((char *)&D_0013E550) + h * 0x70;
-                if (*(Moby **)(e + 0x88) == d->target && *(unsigned char *)(e + 0x74) != 0) {
-                    release_voice_slot(h);
+        if (voice_slot != 0) {
+            int voice = *voice_slot;
+            if (voice != -1) {
+                char *entry = ((char *)&D_0013E550) + voice * 0x70;
+                if (*(Moby **)(entry + 0x88) == data->target && *(unsigned char *)(entry + 0x74) != 0) {
+                    release_voice_slot(voice);
                 }
             }
-            *snd = -1;
+            *voice_slot = -1;
         }
         mark_moby_for_removal_c_c(moby);
         break;

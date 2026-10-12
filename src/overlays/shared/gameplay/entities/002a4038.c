@@ -105,13 +105,13 @@ extern long texture_register_ref[] __asm__("D_L02_001612F0") __attribute__((sect
 #define TEXTURE_REGISTER (texture_register_ref[0])
 
 void FUN_L02_002a40f0(QuadDrawArgs *arg) {
-    float m[16];
+    float view_matrix[16];
     int *base;
-    int *p;
+    int *cursor;
     long *words;
-    long w;
-    long sel;
-    unsigned int lim;
+    long color;
+    long blend_mode;
+    unsigned int alpha_limit;
 
     D_L02_001612F8 = ((QuadCamera *)D_L02_0016D040)->f218;
     D_L02_001612FC = ((QuadCamera *)D_L02_0016D040)->f21C;
@@ -125,9 +125,9 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     }
     update_view_context();
     FUN_001f2260();
-    FUN_001f9ff8(m, 1024.0f);
-    setup_offset_vector(&m[12], D_L02_001673C0, -1024.0f);
-    m[15] = 1.0f;
+    FUN_001f9ff8(view_matrix, 1024.0f);
+    setup_offset_vector(&view_matrix[12], D_L02_001673C0, -1024.0f);
+    view_matrix[15] = 1.0f;
     FUN_00233830(D_0010E810, D_0010E800_ref[0]);
     PACKET_CURSOR[0] = 0x10000000;
     PACKET_CURSOR[1] = 0;
@@ -138,18 +138,18 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     base[5] = 0;
     base[6] = 0;
     base[7] = 0x6C0C43A4;
-    p = base + 8;
-    FUN_001fa378(p, D_L02_001673C0 - 0x100, m);
-    p = base + 0x18;
-    FUN_001fa378(p, D_L02_001673C0 - 0x80, m);
+    cursor = base + 8;
+    FUN_001fa378(cursor, D_L02_001673C0 - 0x100, view_matrix);
+    cursor = base + 0x18;
+    FUN_001fa378(cursor, D_L02_001673C0 - 0x80, view_matrix);
     base[0x28] = 0x8000;
     base[0x29] = 0x303EC000;
     base[0x2A] = 0x412;
     *(float *)(base + 0x2B) = ((QuadCamera *)D_L02_0016D040)->f210;
-    p = base + 0x2C;
-    qcopy(p, ((QuadCamera *)D_L02_0016D040)->v190);
-    p = base + 0x30;
-    qcopy(p, ((QuadCamera *)D_L02_0016D040)->v1A0);
+    cursor = base + 0x2C;
+    qcopy(cursor, ((QuadCamera *)D_L02_0016D040)->v190);
+    cursor = base + 0x30;
+    qcopy(cursor, ((QuadCamera *)D_L02_0016D040)->v1A0);
     *(float *)(base + 0x34) = ((QuadCamera *)D_L02_0016D040)->f22C;
     *(float *)(base + 0x35) = ((QuadCamera *)D_L02_0016D040)->f228;
     base[0x36] = 0;
@@ -158,9 +158,9 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     base[0x39] = 0x020001D2;
     base[0x3A] = 0x15000000;
     base[0x3B] = 0;
-    p = base + 0x3C;
-    PACKET_CURSOR[0] |= ((char *)p - (char *)PACKET_CURSOR >> 4) - 1;
-    PACKET_CURSOR = p;
+    cursor = base + 0x3C;
+    PACKET_CURSOR[0] |= ((char *)cursor - (char *)PACKET_CURSOR >> 4) - 1;
+    PACKET_CURSOR = cursor;
     PACKET_CURSOR[0] = 0x30000003;
     PACKET_CURSOR[1] = (int)D_L02_001CB8F0;
     PACKET_CURSOR[2] = 0;
@@ -172,38 +172,38 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     PACKET_CURSOR[3] = 0x50000009;
     PACKET_CURSOR += 4;
     {
-        int t;
-        int q;
-        float frac;
+        int frame;
+        int step;
+        float fraction;
         char *dst;
-        QuadFrame *e1;
-        QuadFrame *e2;
-        char *pa, *pb, *pc, *pd;
-        t = FRAME_COUNTER;
-        q = t / arg->frames;
-        frac = (float)t / (float)arg->frames - (float)q;
-        e1 = &D_L02_0016D780[arg->first + q % arg->count];
-        e2 = &D_L02_0016D780[arg->first + (q + 1) % arg->count];
-        pa = D_L02_0015F420 + e1->a * 16;
-        pb = D_L02_0015F420 + e1->b * 16;
-        pd = D_L02_0015F420 + e2->b * 16;
-        pc = D_L02_0015F420 + e2->a * 16;
+        QuadFrame *frame_from;
+        QuadFrame *frame_to;
+        char *from_a, *from_b, *to_a, *to_b;
+        frame = FRAME_COUNTER;
+        step = frame / arg->frames;
+        fraction = (float)frame / (float)arg->frames - (float)step;
+        frame_from = &D_L02_0016D780[arg->first + step % arg->count];
+        frame_to = &D_L02_0016D780[arg->first + (step + 1) % arg->count];
+        from_a = D_L02_0015F420 + frame_from->a * 16;
+        from_b = D_L02_0015F420 + frame_from->b * 16;
+        to_b = D_L02_0015F420 + frame_to->b * 16;
+        to_a = D_L02_0015F420 + frame_to->a * 16;
         dst = arg->dst;
         *(long *)dst = 0x0800000000000400;
         *(long *)(arg->dst + 8) = 0;
-        FUN_L02_0024fca0(arg->dst + 0x10, pa, pb, pc, pd, 0x1000, frac);
+        FUN_L02_0024fca0(arg->dst + 0x10, from_a, from_b, to_a, to_b, 0x1000, fraction);
     }
     TEXTURE_REGISTER = (TEXTURE_CURSOR >> 8) | 0x18100000 | 0x580000000;
-    w = arg->c30 | arg->c31 << 8 | arg->c32 << 16;
+    color = arg->c30 | arg->c31 << 8 | arg->c32 << 16;
     if (D_L02_0015F458 == 1) {
-        w = ((QuadCamera *)D_L02_0016D040)->c230 | ((QuadCamera *)D_L02_0016D040)->c234 << 8
+        color = ((QuadCamera *)D_L02_0016D040)->c230 | ((QuadCamera *)D_L02_0016D040)->c234 << 8
             | ((QuadCamera *)D_L02_0016D040)->c238 << 16;
     }
     words = (long *)PACKET_CURSOR;
-    lim = 0x60;
-    sel = 0x5360A;
-    if (!(lim < arg->alpha)) {
-        sel = 0x5370B;
+    alpha_limit = 0x60;
+    blend_mode = 0x5360A;
+    if (!(alpha_limit < arg->alpha)) {
+        blend_mode = 0x5370B;
     }
     words[0] = 0x8000000000008001;
     words[1] = 0xEEEEEEEE;
@@ -211,7 +211,7 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     words[3] = 0x42;
     words[4] = TEXTURE_REGISTER;
     words[5] = 6;
-    words[6] = w;
+    words[6] = color;
     words[7] = 0x3D;
     words[8] = (long)(TEXTURE_CURSOR >> 8) << 32 | 0x1000000000000;
     words[9] = 0x50;
@@ -221,7 +221,7 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     words[13] = 0x52;
     words[14] = 0;
     words[15] = 0x53;
-    words[16] = sel;
+    words[16] = blend_mode;
     words[17] = 0x47;
     PACKET_CURSOR = (int *)(words + 18);
     PACKET_CURSOR[0] = 0x30000401;
@@ -500,16 +500,16 @@ extern int D_0013CAE4 __attribute__((section(".data")));
 extern char D_0013C940[];
 
 void FUN_L02_002d8ad0(Moby *moby) {
-    Vec_2D9F08 v0, v10;
-    Data_2D9F08 *d = (struct Data_2D9F08 *)moby->pvars;
+    Vec_2D9F08 camera_pos, camera_rot;
+    Data_2D9F08 *data = (struct Data_2D9F08 *)moby->pvars;
     int i;
 
-    if (d == 0) {
+    if (data == 0) {
         return;
     }
     switch (moby->state) {
     case 0:
-        d->h12 = 0;
+        data->h12 = 0;
         moby->state = 1;
         D_L02_001D3680_2D9F08[2][1] = 17.0f;
         D_L02_001D3680_2D9F08[0][1] = 17.0f;
@@ -519,7 +519,7 @@ void FUN_L02_002d8ad0(Moby *moby) {
         D_L02_001D3680_2D9F08[3][0] = -17.0f;
         D_L02_001D3680_2D9F08[3][1] = -17.0f;
         D_L02_001D3680_2D9F08[0][0] = 17.0f;
-        D_L02_00161BAC_2D9F08 = d->iEC;
+        D_L02_00161BAC_2D9F08 = data->iEC;
         if (moby->unkB0 != 0xFF) {
             if (D_L02_001BBB40_2D9F08.collected[(short)moby->save_id] != 0
                 || (((int *)(D_0014C290_2D9F08 + (D_0015EE84_2D9F08 << 8)))[(short)moby->save_id >> 5] >> (moby->save_id & 0x1F)) & 1) {
@@ -529,114 +529,114 @@ void FUN_L02_002d8ad0(Moby *moby) {
         break;
     case 1:
         if (((Hero *)(D_0013E633_2D9F08 + 0xE1D))->ground_moby == moby && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->air_frames.s == 0) {
-            int on;
+            int holding_tool;
 
-            if (d->h12 == 0) {
-                d->h12 = 1;
+            if (data->h12 == 0) {
+                data->h12 = 1;
                 func_0022ED80_2D9F08(3, 0, moby);
             }
             if (((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby != 0 && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].item_id == 0x1A) {
                 moby->unk90 = D_L02_00161B30_2D9F08;
-                on = 1;
+                holding_tool = 1;
             } else {
                 moby->unk90 = D_L02_00161B34_2D9F08;
-                on = 0;
+                holding_tool = 0;
             }
-            if (on && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby->unkBC != 0) {
-                d->h10 = func_001F9850_2D9F08(0x12C);
-                d->h11C = 0;
-                d->h11E = 0;
+            if (holding_tool && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby->unkBC != 0) {
+                data->h10 = func_001F9850_2D9F08(0x12C);
+                data->h11C = 0;
+                data->h11E = 0;
                 func_L02_0022BE40_2D9F08(0x72, 0);
                 func_L00_00232C10_2D9F08(0x57, 0, func_001F9850_2D9F08(6));
                 func_L00_002EBF50_2D9F08(&D_L02_00167440_2D9F08[0], &D_L02_00167440_2D9F08[1], 1, 0, 0);
                 moby->state = 2;
-                d->h10 = func_001F9850_2D9F08(0x3C);
-                d->f110 = 0.0f;
-                qcopy(&d->vF0, &D_L02_00167440_2D9F08[0]);
-                qcopy(&d->v100, &D_L02_00167440_2D9F08[1]);
+                data->h10 = func_001F9850_2D9F08(0x3C);
+                data->f110 = 0.0f;
+                qcopy(&data->vF0, &D_L02_00167440_2D9F08[0]);
+                qcopy(&data->v100, &D_L02_00167440_2D9F08[1]);
             }
         } else {
-            d->h12 = 0;
+            data->h12 = 0;
             moby->unk90 = D_L02_00161B38_2D9F08;
         }
         break;
     case 2:
         func_L02_002DA728_2D9F08(moby);
-        func_L02_002D9D48_2D9F08(&v0, &v10, moby);
-        func_00214D88_2D9F08(&d->f110, &d->f114, 1.0f, D_0015EE70_2D9F08 + D_0015EE70_2D9F08, D_0015EE70_2D9F08 + D_0015EE70_2D9F08, D_0015EE6C_2D9F08 + D_0015EE6C_2D9F08);
-        func_001F9C08_2D9F08(&v0, &d->vF0, &v0, d->f110);
-        v10.z = func_001FA748_2D9F08(func_001FA790_2D9F08(v10.z, d->v100.z) * d->f110, d->v100.z);
-        v10.y = func_001FA748_2D9F08(func_001FA790_2D9F08(v10.y, d->v100.y) * d->f110, d->v100.y);
-        func_L00_002EBE88_2D9F08(&v0);
-        func_L00_002EBEE0_2D9F08(&v10);
+        func_L02_002D9D48_2D9F08(&camera_pos, &camera_rot, moby);
+        func_00214D88_2D9F08(&data->f110, &data->f114, 1.0f, D_0015EE70_2D9F08 + D_0015EE70_2D9F08, D_0015EE70_2D9F08 + D_0015EE70_2D9F08, D_0015EE6C_2D9F08 + D_0015EE6C_2D9F08);
+        func_001F9C08_2D9F08(&camera_pos, &data->vF0, &camera_pos, data->f110);
+        camera_rot.z = func_001FA748_2D9F08(func_001FA790_2D9F08(camera_rot.z, data->v100.z) * data->f110, data->v100.z);
+        camera_rot.y = func_001FA748_2D9F08(func_001FA790_2D9F08(camera_rot.y, data->v100.y) * data->f110, data->v100.y);
+        func_L00_002EBE88_2D9F08(&camera_pos);
+        func_L00_002EBEE0_2D9F08(&camera_rot);
         D_L02_0017EB88_2D9F08 = 1;
         func_00216028_2D9F08(6, 0);
         if (D_L02_00167300_2D9F08.p180 != 0 && D_L02_00167300_2D9F08.p180->unk86 != 5) {
             func_L00_002EBF50_2D9F08(&D_L02_00167300_2D9F08.v140, &D_L02_00167300_2D9F08.v150, 1, 0, 0);
         }
         i = 0;
-        if (0.99f <= d->f110 && func_001FA850_2D9F08(D_L02_00167300_2D9F08.v150.z, v10.z) < 0.017453292f) {
+        if (0.99f <= data->f110 && func_001FA850_2D9F08(D_L02_00167300_2D9F08.v150.z, camera_rot.z) < 0.017453292f) {
             func_001F49B0_2D9F08(func_L02_002DA820_2D9F08, moby);
             for (i = 0; i < 12; i++) {
-                if (d->iB0[i] == 1) {
+                if (data->iB0[i] == 1) {
                     break;
                 }
             }
-            if (0.0f < d->fE4) {
-                d->fE4 = func_001FA748_2D9F08(d->fE4, D_0015EE6C_2D9F08 * 6.2831855f);
-                if (0.5235988f < d->fE4) {
-                    d->fE4 = 0.0f;
-                    if (d->iE0 == 1) {
-                        d->i14 += 11;
-                        d->i14 %= 12;
-                    } else if (d->iE0 == 2) {
-                        d->i18 += 11;
-                        d->i18 %= 12;
+            if (0.0f < data->fE4) {
+                data->fE4 = func_001FA748_2D9F08(data->fE4, D_0015EE6C_2D9F08 * 6.2831855f);
+                if (0.5235988f < data->fE4) {
+                    data->fE4 = 0.0f;
+                    if (data->iE0 == 1) {
+                        data->i14 += 11;
+                        data->i14 %= 12;
+                    } else if (data->iE0 == 2) {
+                        data->i18 += 11;
+                        data->i18 %= 12;
                     } else {
-                        d->i1C += 11;
-                        d->i1C %= 12;
+                        data->i1C += 11;
+                        data->i1C %= 12;
                     }
                 }
-            } else if (d->fE4 < 0.0f) {
-                d->fE4 = func_001FA748_2D9F08(d->fE4, -(D_0015EE6C_2D9F08 * 6.2831855f));
-                if (d->fE4 < -0.5235988f) {
-                    d->fE4 = 0.0f;
-                    if (d->iE0 == 1) {
-                        d->i14 += 13;
-                        d->i14 %= 12;
-                    } else if (d->iE0 == 2) {
-                        d->i18 += 13;
-                        d->i18 %= 12;
+            } else if (data->fE4 < 0.0f) {
+                data->fE4 = func_001FA748_2D9F08(data->fE4, -(D_0015EE6C_2D9F08 * 6.2831855f));
+                if (data->fE4 < -0.5235988f) {
+                    data->fE4 = 0.0f;
+                    if (data->iE0 == 1) {
+                        data->i14 += 13;
+                        data->i14 %= 12;
+                    } else if (data->iE0 == 2) {
+                        data->i18 += 13;
+                        data->i18 %= 12;
                     } else {
-                        d->i1C += 13;
-                        d->i1C %= 12;
+                        data->i1C += 13;
+                        data->i1C %= 12;
                     }
                 }
             } else if (i == 12) {
-                if (func_001F9938_2D9F08(&d->h10)) {
+                if (func_001F9938_2D9F08(&data->h10)) {
                     moby->state = 3;
                 }
             } else if (((Pad_2D9F08 *)D_0013C940)->b1C0.l & 0xA00000000000) {
-                d->h11E |= 1;
+                data->h11E |= 1;
                 func_0022ED80_2D9F08(0, 0, moby);
                 if (((Pad_2D9F08 *)D_0013C940)->b1C0.w.hi & 0x8000) {
-                    d->fE4 = -(D_0015EE6C_2D9F08 * 6.2831855f);
+                    data->fE4 = -(D_0015EE6C_2D9F08 * 6.2831855f);
                 } else {
-                    d->fE4 = D_0015EE6C_2D9F08 * 6.2831855f;
+                    data->fE4 = D_0015EE6C_2D9F08 * 6.2831855f;
                 }
             } else if (((Pad_2D9F08 *)D_0013C940)->i1A4 & 0x1000) {
-                d->h11E |= 2;
-                d->iE0 = d->iE0 - 1;
-                if (d->iE0 == 0) {
-                    d->iE0 = 1;
+                data->h11E |= 2;
+                data->iE0 = data->iE0 - 1;
+                if (data->iE0 == 0) {
+                    data->iE0 = 1;
                 } else {
                     func_0022ED80_2D9F08(1, 0, moby);
                 }
             } else if (((Pad_2D9F08 *)D_0013C940)->i1A4 & 0x4000) {
-                d->h11E |= 2;
-                d->iE0 = d->iE0 + 1;
-                if (d->iE0 == 4) {
-                    d->iE0 = 3;
+                data->h11E |= 2;
+                data->iE0 = data->iE0 + 1;
+                if (data->iE0 == 4) {
+                    data->iE0 = 3;
                 } else {
                     func_0022ED80_2D9F08(1, 0, moby);
                 }
@@ -650,7 +650,7 @@ void FUN_L02_002d8ad0(Moby *moby) {
                 moby->state = 1;
                 func_L00_002EC0C8_2D9F08(1);
                 func_L01_00240CE8_2D9F08();
-                d->h10 = func_001F9850_2D9F08(0x3C);
+                data->h10 = func_001F9850_2D9F08(0x3C);
             }
         }
         break;
@@ -667,7 +667,7 @@ void FUN_L02_002d8ad0(Moby *moby) {
         }
         break;
     }
-    func_L00_0025E590_2D9F08(moby, d);
+    func_L00_0025E590_2D9F08(moby, data);
 }
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))

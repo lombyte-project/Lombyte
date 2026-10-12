@@ -1022,155 +1022,155 @@ extern void func_L00_00236BF8_2BDAF0(void) __asm__("FUN_L00_00236268");
 extern void func_L00_00236DE8_2BDAF0(void) __asm__("FUN_L00_00236458");
 extern void func_L00_002377E0_2BDAF0(void) __asm__("FUN_L00_00236e50");
 
-void FUN_L00_002bc7e8(Moby *m) {
+void FUN_L00_002bc7e8(Moby *moby) {
     Vq_2BDAF0 direction;
-    Vq_2BDAF0 v[3];
-    Vq_2BDAF0 mt[4];
-    Ray_2BDAF0 *p;
-    int flag;
-    int near;
+    Vq_2BDAF0 points[3];
+    Vq_2BDAF0 matrix[4];
+    Ray_2BDAF0 *data;
+    int busy;
+    int in_range;
     Moby *hit;
-    int r;
+    int now;
 
-    flag = 0;
+    busy = 0;
     if (((Hero *)D_0013F450_2BDAF0)->items[0].state == 3) {
-        flag = 1;
+        busy = 1;
     }
-    p = (struct Ray_2BDAF0 *)m->pvars;
-    if (m->state == 0) {
-        m->state = 1;
+    data = (struct Ray_2BDAF0 *)moby->pvars;
+    if (moby->state == 0) {
+        moby->state = 1;
         D_L00_001617C0 = -1;
         D_L00_001617C8 = -1;
         D_L00_001617C4 = 0;
     }
-    near = 1;
-    if (m->prev_seq == 0 && func_0020D830_2BDAF0(m) < 6.0f) {
-        near = 0;
+    in_range = 1;
+    if (moby->prev_seq == 0 && func_0020D830_2BDAF0(moby) < 6.0f) {
+        in_range = 0;
     }
-    func_001F9938_2BDAF0(&p->timer);
+    func_001F9938_2BDAF0(&data->timer);
     if ((((unsigned int)((Hero *)D_0013F450_2BDAF0)->state.control_mode < 2 || ((Hero *)D_0013F450_2BDAF0)->state.control_mode == 12
           || ((Hero *)D_0013F450_2BDAF0)->state.control_mode == 4 || ((Hero *)D_0013F450_2BDAF0)->state.control_mode == 5))
         && (*(int *)D_0013A5E0_2BDAF0 & ((Hero *)D_0013F450_2BDAF0)->items[0].button_mask) != 0
-        && !flag && near) {
+        && !busy && in_range) {
         if (((Hero *)D_0013F450_2BDAF0)->unk20A8 == 0) {
             func_L00_0020EB60_2BDAF0();
         }
-        if (p->seen == 0) {
-            p->seen = 1;
+        if (data->seen == 0) {
+            data->seen = 1;
             if (((Stats_2BDAF0 *)(D_00141680_r))->kills <= 0xFFFE) {
                 ((Stats_2BDAF0 *)(D_00141680_r))->kills++;
             }
-            r = func_001F9850_2BDAF0(D_0015EEA4) / 600;
-            if (((Stats_2BDAF0 *)(D_00141680_r))->best < r) {
+            now = func_001F9850_2BDAF0(D_0015EEA4) / 600;
+            if (((Stats_2BDAF0 *)(D_00141680_r))->best < now) {
                 ((Stats_2BDAF0 *)(D_00141680_r))->best = func_001F9850_2BDAF0(D_0015EEA4) / 600;
             }
             ((Stats_2BDAF0 *)(D_00141680_r))->levels = ((Stats_2BDAF0 *)(D_00141680_r))->levels | (1 << D_0015ED84) | 0x80000000;
         }
-        if (p->timer == 0) {
-            p->timer = func_001F9850_2BDAF0(15);
+        if (data->timer == 0) {
+            data->timer = func_001F9850_2BDAF0(15);
         }
-        func_L00_00250800_2BDAF0(m, 0, p);
+        func_L00_00250800_2BDAF0(moby, 0, data);
         if (((Hero *)D_0013F450_2BDAF0)->state.current == 1) {
             func_L00_00222B80_2BDAF0(30, 1);
         }
         *(u128_2BDAF0 *)&direction = 0;
         if (((Hero *)D_0013F450_2BDAF0)->state.current == 30
             && (*(unsigned short *)((char *)((Hero *)D_0013F450_2BDAF0)->moby + 0x34) & 1)) {
-            func_001FA480_2BDAF0(v, D_L00_00166D80_2BDAF0);
-            func_001FA4A0_2BDAF0(mt, v);
+            func_001FA480_2BDAF0(points, D_L00_00166D80_2BDAF0);
+            func_001FA4A0_2BDAF0(matrix, points);
             direction.z = 1.0f;
-            func_001F9EE8_2BDAF0(&direction, &direction, mt);
+            func_001F9EE8_2BDAF0(&direction, &direction, matrix);
         } else if (((Hero *)D_0013F450_2BDAF0)->unk22C8 == 1) {
-            func_001F9C30_2BDAF0(&direction, &m->unkD0, -1.0f);
+            func_001F9C30_2BDAF0(&direction, &moby->unkD0, -1.0f);
         } else {
             direction.x = 1.0f;
             func_001F9EC0_2BDAF0(&direction, &direction, ((Hero *)D_0013F450_2BDAF0)->basis[0].f);
         }
-        p->yaw = func_L00_001FF860_2BDAF0(direction.x, direction.y);
-        p->pitch = func_L00_001FF860_2BDAF0(func_001F9CE8_2BDAF0(&direction), direction.z);
-        *(u128_2BDAF0 *)&v[0] = *(u128_2BDAF0 *)p->pos;
-        hit = func_L00_002BD6B8_2BDAF0(m, &v[0], &p->yaw, &p->pitch);
-        func_001F9908_2BDAF0(&p->delay);
-        if (p->target != 0) {
-            if (p->target->state == 0xFE) {
-                p->target = 0;
-                p->delay = 0;
-            } else if (p->target->state == 0xFD) {
-                p->target = 0;
-                p->delay = 0;
+        data->yaw = func_L00_001FF860_2BDAF0(direction.x, direction.y);
+        data->pitch = func_L00_001FF860_2BDAF0(func_001F9CE8_2BDAF0(&direction), direction.z);
+        *(u128_2BDAF0 *)&points[0] = *(u128_2BDAF0 *)data->pos;
+        hit = func_L00_002BD6B8_2BDAF0(moby, &points[0], &data->yaw, &data->pitch);
+        func_001F9908_2BDAF0(&data->delay);
+        if (data->target != 0) {
+            if (data->target->state == 0xFE) {
+                data->target = 0;
+                data->delay = 0;
+            } else if (data->target->state == 0xFD) {
+                data->target = 0;
+                data->delay = 0;
             }
         }
-        if (hit != 0 || p->delay != 0) {
+        if (hit != 0 || data->delay != 0) {
         if (hit != 0) {
-            float *s = func_L00_0025D390_2BDAF0(hit);
-            if (hit != p->target && p->delay == 0) {
-                p->target = hit;
-                p->total = func_001FA888_2BDAF0(((short *)s)[2]);
-                p->left = s[0];
-                p->delay = func_001F9850_2BDAF0(30);
-                if (p->total <= 1.0f) {
-                    p->left = 0.0f;
+            float *target_health = func_L00_0025D390_2BDAF0(hit);
+            if (hit != data->target && data->delay == 0) {
+                data->target = hit;
+                data->total = func_001FA888_2BDAF0(((short *)target_health)[2]);
+                data->left = target_health[0];
+                data->delay = func_001F9850_2BDAF0(30);
+                if (data->total <= 1.0f) {
+                    data->left = 0.0f;
                 }
-                p->snd = func_001FFB38_2BDAF0(4, 0x7533, func_L00_00236BF8_2BDAF0, func_L00_00236DE8_2BDAF0,
+                data->snd = func_001FFB38_2BDAF0(4, 0x7533, func_L00_00236BF8_2BDAF0, func_L00_00236DE8_2BDAF0,
                                               func_L00_002377E0_2BDAF0, &D_L00_001616EC, 10000);
             }
         }
             {
-                float a = func_001FA888_2BDAF0(D_0013E633_2BDAF0[2]) * 0.33f + 1.0f;
-                float d = p->left - D_L00_001616E0 * D_0015ED6C * a;
-                p->left = d;
-                if (d < 0.0f) {
-                    p->left = 0.0f;
+                float level_bonus = func_001FA888_2BDAF0(D_0013E633_2BDAF0[2]) * 0.33f + 1.0f;
+                float remaining = data->left - D_L00_001616E0 * D_0015ED6C * level_bonus;
+                data->left = remaining;
+                if (remaining < 0.0f) {
+                    data->left = 0.0f;
                 }
             }
-            D_L00_001616EC = 10000 - func_001FA898_2BDAF0(p->left * 10000.0f / p->total);
+            D_L00_001616EC = 10000 - func_001FA898_2BDAF0(data->left * 10000.0f / data->total);
         }
-        if (p->target != 0 && p->left <= 0.0f) {
-            if (D_0015ED84 == 5 && p->target->oclass == 0x271 && ((Skill_2BDAF0 *)item_unlocked)->f8 == 0) {
+        if (data->target != 0 && data->left <= 0.0f) {
+            if (D_0015ED84 == 5 && data->target->oclass == 0x271 && ((Skill_2BDAF0 *)item_unlocked)->f8 == 0) {
                 ((Skill_2BDAF0 *)item_unlocked)->f8 = 1;
                 func_0022EE28_2BDAF0(1, 0, 0);
                 func_L00_00264DB8_2BDAF0(0x53D6, -1);
             }
-            func_L00_002CA728_2BDAF0(p->target);
-            p->target = 0;
+            func_L00_002CA728_2BDAF0(data->target);
+            data->target = 0;
         }
-        func_L00_002BE3A8_2BDAF0(m);
+        func_L00_002BE3A8_2BDAF0(moby);
         if (D_L00_001617C0 == -1) {
-            D_L00_001617C0 = func_L00_0023EF78_2BDAF0((float *)&m->pos, 7.5f, 0.0f, 0x207F7F);
+            D_L00_001617C0 = func_L00_0023EF78_2BDAF0((float *)&moby->pos, 7.5f, 0.0f, 0x207F7F);
         }
         if (D_L00_001617C0 >= 0) {
             D_L00_001617C4 = func_001F9850_2BDAF0(20);
-            func_L00_001FF4B0_2BDAF0(&v[0], &m->unkD0, -0.5f);
-            func_001F9BD8_2BDAF0(&v[1], p, &v[0]);
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[0] = v[1].x;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[1] = v[1].y;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[2] = v[1].z;
+            func_L00_001FF4B0_2BDAF0(&points[0], &moby->unkD0, -0.5f);
+            func_001F9BD8_2BDAF0(&points[1], data, &points[0]);
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[0] = points[1].x;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[1] = points[1].y;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[2] = points[1].z;
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].radius = 7.5f;
         }
-        if (func_L00_0028EB98_2BDAF0(m, D_L00_001617C8) == 0) {
-            D_L00_001617C8 = func_0022ED80_2BDAF0(0, 4, m);
+        if (func_L00_0028EB98_2BDAF0(moby, D_L00_001617C8) == 0) {
+            D_L00_001617C8 = func_0022ED80_2BDAF0(0, 4, moby);
         }
     } else {
-        p->target = 0;
-        p->seen = 0;
-        p->delay = 0;
-        if (p->snd != -1) {
-            func_001FFCB0_2BDAF0(p->snd);
-            p->snd = -1;
+        data->target = 0;
+        data->seen = 0;
+        data->delay = 0;
+        if (data->snd != -1) {
+            func_001FFCB0_2BDAF0(data->snd);
+            data->snd = -1;
         }
         D_L00_001617BC = 1;
         if (D_L00_001617C0 >= 0) {
-            float f;
-            func_L00_001FF4B0_2BDAF0(&direction, &m->unkD0, -0.5f);
-            func_001F9BD8_2BDAF0(&v[0], p, &direction);
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[0] = v[0].x;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[1] = v[0].y;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[2] = v[0].z;
+            float brightness;
+            func_L00_001FF4B0_2BDAF0(&direction, &moby->unkD0, -0.5f);
+            func_001F9BD8_2BDAF0(&points[0], data, &direction);
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[0] = points[0].x;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[1] = points[0].y;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[2] = points[0].z;
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].radius = 7.5f;
-            f = func_001FA888_2BDAF0(D_L00_001617C4) * 0.05f;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[0] = f;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[1] = f;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[2] = f * 0.25f;
+            brightness = func_001FA888_2BDAF0(D_L00_001617C4) * 0.05f;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[0] = brightness;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[1] = brightness;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[2] = brightness * 0.25f;
             if (func_001F9908_2BDAF0(&D_L00_001617C4) != 0) {
                 func_L00_0023F1D0_2BDAF0(D_L00_001617C0);
                 D_L00_001617C0 = -1;
@@ -1181,7 +1181,7 @@ void FUN_L00_002bc7e8(Moby *m) {
             D_L00_001617C0 = -1;
         }
         if (D_L00_001617C8 >= 0) {
-            if (D_L00_001617C8 != -1 && ((Voice_2BDAF0 *)(voice_pool + D_L00_001617C8 * 0x70))->owner == m
+            if (D_L00_001617C8 != -1 && ((Voice_2BDAF0 *)(voice_pool + D_L00_001617C8 * 0x70))->owner == moby
                 && ((Voice_2BDAF0 *)(voice_pool + D_L00_001617C8 * 0x70))->on != 0) {
                 func_L00_0028EBF0_2BDAF0(D_L00_001617C8);
             }
@@ -1189,7 +1189,7 @@ void FUN_L00_002bc7e8(Moby *m) {
         }
         func_L00_0020ED30_2BDAF0();
     }
-    if (flag && D_L00_001617C0 >= 0) {
+    if (busy && D_L00_001617C0 >= 0) {
         func_L00_0023F1D0_2BDAF0(D_L00_001617C0);
         D_L00_001617C0 = -1;
     }
@@ -1399,78 +1399,78 @@ extern int func_001FA898_2BE3A8(float) __asm__("FUN_001fa6d0");
 extern void func_L00_002767B0_2BE3A8(void *, int, int, int, int, void *, struct Moby *, float, float) __asm__("FUN_L00_00275910");
 extern int func_001F9908_2BE3A8(int *) __asm__("FUN_001f9740");
 
-void FUN_L00_002bd0a0(struct Moby *m) {
+void FUN_L00_002bd0a0(struct Moby *moby) {
     Vec_2BE3A8 aim;
-    Vec_2BE3A8 seg;
-    Vec_2BE3A8 off;
-    Vec_2BE3A8 end;
-    Vec_2BE3A8 tmp;
+    Vec_2BE3A8 segment;
+    Vec_2BE3A8 wave_offset;
+    Vec_2BE3A8 beam_end;
+    Vec_2BE3A8 point;
     Vec_2BE3A8 dir;
     Vec_2BE3A8 side;
-    Vars_2BE3A8 *p;
+    Vars_2BE3A8 *data;
     Info_2BE3A8 *info;
-    int j;
-    int k;
-    int q;
+    int ring_index;
+    int slot;
+    int pulse;
     int sign;
-    int n;
-    int col;
-    float len;
-    float t;
-    float a;
-    float w;
-    float s;
+    int node_index;
+    int color;
+    float beam_length;
+    float progress;
+    float factor;
+    float wave_width;
+    float spark_size;
 
-    p = (Vars_2BE3A8 *)m->pvars;
-    off.w = 1.0f;
-    off.x = 0.0f;
+    data = (Vars_2BE3A8 *)moby->pvars;
+    wave_offset.w = 1.0f;
+    wave_offset.x = 0.0f;
     func_L00_002BE2A0_2BE3A8();
     D_L00_001618A0_2BE3A8 = func_L00_0025F368_2BE3A8(D_L00_001618A0_2BE3A8 + D_L00_001617C8_2BE3A8);
-    func_00215C00_2BE3A8(&aim, D_L00_0016189C_2BE3A8, p->f48, p->f4C);
-    if (p->target != 0 && (info = func_L00_0025D390_2BE3A8(p->target)) != 0) {
-        qcopy(&end, &p->target->pos);
-        end.z = end.z + info->height;
+    func_00215C00_2BE3A8(&aim, D_L00_0016189C_2BE3A8, data->f48, data->f4C);
+    if (data->target != 0 && (info = func_L00_0025D390_2BE3A8(data->target)) != 0) {
+        qcopy(&beam_end, &data->target->pos);
+        beam_end.z = beam_end.z + info->height;
     } else {
-        func_00215C00_2BE3A8(&end, D_L00_001617AC_2BE3A8, p->f48, p->f4C);
-        func_001F9BD8_2BE3A8(&end, &end, p);
+        func_00215C00_2BE3A8(&beam_end, D_L00_001617AC_2BE3A8, data->f48, data->f4C);
+        func_001F9BD8_2BE3A8(&beam_end, &beam_end, data);
     }
-    len = D_L00_001617AC_2BE3A8;
-    if (p->target == 0) {
-        if (func_L00_001EFFF0_2BE3A8(p, &end, 20, *(void **)D_0013E633_2BE3A8, 0) != 0) {
-            len = func_001F9D48_2BE3A8(&D_L00_00173F60_2BE3A8, p);
+    beam_length = D_L00_001617AC_2BE3A8;
+    if (data->target == 0) {
+        if (func_L00_001EFFF0_2BE3A8(data, &beam_end, 20, *(void **)D_0013E633_2BE3A8, 0) != 0) {
+            beam_length = func_001F9D48_2BE3A8(&D_L00_00173F60_2BE3A8, data);
         }
     } else {
-        len = func_001F9D48_2BE3A8(&p->target->pos, p);
+        beam_length = func_001F9D48_2BE3A8(&data->target->pos, data);
     }
     {
         int i;
 
-        D_L00_0016189C_2BE3A8 = len * D_L00_001617C0_2BE3A8;
-        qcopy(&D_L00_001DC260_2BE3A8[0], p);
-        qcopy(&D_L00_001DC320_2BE3A8[0], p);
-        qcopy(&D_L00_001DC3E0_2BE3A8[0], p);
+        D_L00_0016189C_2BE3A8 = beam_length * D_L00_001617C0_2BE3A8;
+        qcopy(&D_L00_001DC260_2BE3A8[0], data);
+        qcopy(&D_L00_001DC320_2BE3A8[0], data);
+        qcopy(&D_L00_001DC3E0_2BE3A8[0], data);
         for (i = 1; i < 12; i++) {
-            float d;
+            float seg_length;
 
-            func_001F9BF0_2BE3A8(&seg, &D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1]);
-            t = func_001FA888_2BE3A8(i) * D_L00_001617C0_2BE3A8;
-            a = t * -0.49999997f + 0.9f;
-            if (D_L00_001617C4_2BE3A8 < i && p->target != 0) {
-                func_001F9BF0_2BE3A8(&tmp, &p->target->pos, &D_L00_001DC260_2BE3A8[i]);
-                func_L00_001FF4B0_2BE3A8(&tmp, &tmp, D_L00_0016189C_2BE3A8);
-                func_001F9C08_2BE3A8(&aim, &aim, &tmp, 0.2f);
+            func_001F9BF0_2BE3A8(&segment, &D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1]);
+            progress = func_001FA888_2BE3A8(i) * D_L00_001617C0_2BE3A8;
+            factor = progress * -0.49999997f + 0.9f;
+            if (D_L00_001617C4_2BE3A8 < i && data->target != 0) {
+                func_001F9BF0_2BE3A8(&point, &data->target->pos, &D_L00_001DC260_2BE3A8[i]);
+                func_L00_001FF4B0_2BE3A8(&point, &point, D_L00_0016189C_2BE3A8);
+                func_001F9C08_2BE3A8(&aim, &aim, &point, 0.2f);
             }
-            func_001F9C08_2BE3A8(&tmp, &seg, &aim, a);
-            d = func_001F9CB8_2BE3A8(&tmp);
-            if (d == 0.0f) {
+            func_001F9C08_2BE3A8(&point, &segment, &aim, factor);
+            seg_length = func_001F9CB8_2BE3A8(&point);
+            if (seg_length == 0.0f) {
                 qcopy(&D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1]);
             } else {
-                func_001F9C30_2BE3A8(&tmp, &tmp, D_L00_0016189C_2BE3A8 / d);
-                func_001F9BD8_2BE3A8(&D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1], &tmp);
+                func_001F9C30_2BE3A8(&point, &point, D_L00_0016189C_2BE3A8 / seg_length);
+                func_001F9BD8_2BE3A8(&D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1], &point);
             }
             func_001F9BF0_2BE3A8(&dir, &D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1]);
             func_001F9CA0_2BE3A8(&side, &dir, D_0013F5E0_r);
-            func_L00_001FF4B0_2BE3A8(&side, &side, D_L00_001617D8_2BE3A8 + (D_L00_001617DC_2BE3A8 - D_L00_001617D8_2BE3A8) * t);
+            func_L00_001FF4B0_2BE3A8(&side, &side, D_L00_001617D8_2BE3A8 + (D_L00_001617DC_2BE3A8 - D_L00_001617D8_2BE3A8) * progress);
             {
                 Vec_2BE3A8 ring;
                 Vec_2BE3A8 fwd;
@@ -1478,135 +1478,135 @@ void FUN_L00_002bd0a0(struct Moby *m) {
                 Vec_2BE3A8 up;
                 Vec_2BE3A8 node;
 
-                for (j = 0; j < 20; j++) {
-                    func_002156E0_2BE3A8(&ring, &side, &dir, (float)j * D_L00_001617D4_2BE3A8);
-                    func_001F9BD8_2BE3A8(&D_L00_001DC4A0_2BE3A8[i][j], &ring, &D_L00_001DC260_2BE3A8[i]);
+                for (ring_index = 0; ring_index < 20; ring_index++) {
+                    func_002156E0_2BE3A8(&ring, &side, &dir, (float)ring_index * D_L00_001617D4_2BE3A8);
+                    func_001F9BD8_2BE3A8(&D_L00_001DC4A0_2BE3A8[i][ring_index], &ring, &D_L00_001DC260_2BE3A8[i]);
                 }
                 qcopy(&node, &D_L00_001DC260_2BE3A8[i]);
                 func_L00_001FF4B0_2BE3A8(&fwd, &dir, 1.0f);
                 func_L00_001FF4B0_2BE3A8(&out, &side, 1.0f);
                 func_001F9CA0_2BE3A8(&up, &out, &fwd);
-                w = D_L00_001617FC_2BE3A8;
-                w = w + (D_L00_00161800_2BE3A8 - w) * t;
-                a = func_L00_0025F368_2BE3A8(D_L00_001618A0_2BE3A8 + D_L00_001617CC_2BE3A8 * func_001FA888_2BE3A8(i));
-                off.y = w * func_001F9FA8_2BE3A8(a);
-                w = w * func_001F9F90_2BE3A8(a);
-                off.z = w;
-                func_001F9EE8_2BE3A8(&D_L00_001DC320_2BE3A8[i], &off, &fwd);
-                off.z = -off.z;
-                func_001F9EE8_2BE3A8(&D_L00_001DC3E0_2BE3A8[i], &off, &fwd);
+                wave_width = D_L00_001617FC_2BE3A8;
+                wave_width = wave_width + (D_L00_00161800_2BE3A8 - wave_width) * progress;
+                factor = func_L00_0025F368_2BE3A8(D_L00_001618A0_2BE3A8 + D_L00_001617CC_2BE3A8 * func_001FA888_2BE3A8(i));
+                wave_offset.y = wave_width * func_001F9FA8_2BE3A8(factor);
+                wave_width = wave_width * func_001F9F90_2BE3A8(factor);
+                wave_offset.z = wave_width;
+                func_001F9EE8_2BE3A8(&D_L00_001DC320_2BE3A8[i], &wave_offset, &fwd);
+                wave_offset.z = -wave_offset.z;
+                func_001F9EE8_2BE3A8(&D_L00_001DC3E0_2BE3A8[i], &wave_offset, &fwd);
             }
         }
     }
-    func_001F49B0_2BE3A8(func_L00_002BEF58_2BE3A8, m);
-    s = func_002140F8_2BE3A8(0.1f, 2.0f);
+    func_001F49B0_2BE3A8(func_L00_002BEF58_2BE3A8, moby);
+    spark_size = func_002140F8_2BE3A8(0.1f, 2.0f);
     sign = func_002140B0_2BE3A8(2);
     if (sign == 0) {
         sign = sign - 1;
     }
     if (func_002140B0_2BE3A8(2) == 0) {
-        qcopy(&tmp, &D_L00_001DC320_2BE3A8[11]);
-        func_L00_00272F00_2BE3A8(&tmp, func_001F9850_2BE3A8(30), 0x7F7F2020, 0, sign, D_L00_0015F660_2BE3A8, s * 0.1f, s, 0.003f);
+        qcopy(&point, &D_L00_001DC320_2BE3A8[11]);
+        func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F7F2020, 0, sign, D_L00_0015F660_2BE3A8, spark_size * 0.1f, spark_size, 0.003f);
         sign = -sign;
-        func_L00_00272F00_2BE3A8(&tmp, func_001F9850_2BE3A8(30), 0x7F7F7F7F, 1, sign, D_L00_0015F660_2BE3A8, s * 0.07f, s * 0.7f, 0.003f);
+        func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F7F7F7F, 1, sign, D_L00_0015F660_2BE3A8, spark_size * 0.07f, spark_size * 0.7f, 0.003f);
     }
     if (func_002140B0_2BE3A8(2) == 0) {
-        qcopy(&tmp, &D_L00_001DC3E0_2BE3A8[11]);
-        func_L00_00272F00_2BE3A8(&tmp, func_001F9850_2BE3A8(30), 0x7F20207F, 0, sign, D_L00_0015F660_2BE3A8, s * 0.1f, s, 0.003f);
+        qcopy(&point, &D_L00_001DC3E0_2BE3A8[11]);
+        func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F20207F, 0, sign, D_L00_0015F660_2BE3A8, spark_size * 0.1f, spark_size, 0.003f);
         sign = -sign;
-        func_L00_00272F00_2BE3A8(&tmp, func_001F9850_2BE3A8(30), 0x7F7F7F7F, 1, sign, D_L00_0015F660_2BE3A8, s * 0.07f, s * 0.7f, 0.003f);
+        func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F7F7F7F, 1, sign, D_L00_0015F660_2BE3A8, spark_size * 0.07f, spark_size * 0.7f, 0.003f);
     }
     func_001F9BF0_2BE3A8(&dir, &D_L00_001DC260_2BE3A8[1], &D_L00_001DC260_2BE3A8[0]);
     func_L00_001FF4B0_2BE3A8(&dir, &dir, D_L00_00161804_2BE3A8 * D_0015EE60_2BE3A8);
     if (func_002140B0_2BE3A8(2) == 0) {
-        func_L00_001FF4B0_2BE3A8(&side, &m->unkD0, D_L00_00161810_2BE3A8);
-        func_001F9BD8_2BE3A8(&tmp, &D_L00_001DC260_2BE3A8[0], &side);
+        func_L00_001FF4B0_2BE3A8(&side, &moby->unkD0, D_L00_00161810_2BE3A8);
+        func_001F9BD8_2BE3A8(&point, &D_L00_001DC260_2BE3A8[0], &side);
         {
-            Tab_2BE3A8 cols;
+            Tab_2BE3A8 colors;
             Vec_2BE3A8 out;
             Vec_2BE3A8 up;
 
-            cols = D_L00_001E9E30_2BE3A8;
-            col = cols.c[func_002140B0_2BE3A8(5)];
-            w = func_L00_00258C80_2BE3A8(0.0f, D_L00_0016180C_2BE3A8);
+            colors = D_L00_001E9E30_2BE3A8;
+            color = colors.c[func_002140B0_2BE3A8(5)];
+            wave_width = func_L00_00258C80_2BE3A8(0.0f, D_L00_0016180C_2BE3A8);
             func_002156E0_2BE3A8(&out, &dir, D_0013F5E0_r, func_L00_00258C80_2BE3A8(0.0f, D_L00_0016180C_2BE3A8));
             func_001F9CA0_2BE3A8(&up, &dir, D_0013F5E0_r);
-            func_002156E0_2BE3A8(&out, &out, &up, w);
-            n = func_001FA898_2BE3A8(len * 1.2f / (D_L00_00161804_2BE3A8 * D_0015EE60_2BE3A8));
-            if (p->target != 0) {
-                n = n * 3;
+            func_002156E0_2BE3A8(&out, &out, &up, wave_width);
+            node_index = func_001FA898_2BE3A8(beam_length * 1.2f / (D_L00_00161804_2BE3A8 * D_0015EE60_2BE3A8));
+            if (data->target != 0) {
+                node_index = node_index * 3;
             }
-            func_L00_002767B0_2BE3A8(&tmp, n, col, 0, sign, &out, p->target, s * 0.1f, s);
-            func_L00_002767B0_2BE3A8(&tmp, n, 0x7F7F7F7F, 1, -sign, &out, p->target, s * 0.07f, s * 0.7f);
+            func_L00_002767B0_2BE3A8(&point, node_index, color, 0, sign, &out, data->target, spark_size * 0.1f, spark_size);
+            func_L00_002767B0_2BE3A8(&point, node_index, 0x7F7F7F7F, 1, -sign, &out, data->target, spark_size * 0.07f, spark_size * 0.7f);
         }
     }
     if (func_001F9908_2BE3A8(&D_L00_001618F4_2BE3A8) != 0) {
         D_L00_001618F4_2BE3A8 = func_001F9850_2BE3A8(D_L00_00161814_2BE3A8);
-        for (k = 0; k < 3; k++) {
-            if (D_L00_001618E8_2BE3A8[k] == 0) {
-                D_L00_001618E8_2BE3A8[k] = 1;
-                D_L00_001618A8_2BE3A8[k] = func_001F9850_2BE3A8(D_L00_0016181C_2BE3A8);
-                D_L00_001618C8_2BE3A8[k] = 0.0f;
-                D_L00_001618D8_2BE3A8[k] = D_L00_0016182C_2BE3A8;
-                D_L00_001618B8_2BE3A8[k] = func_001FA888_2BE3A8(D_L00_00161833_2BE3A8[0]);
-                qcopy(&D_L00_001DD3A0_2BE3A8[k], p);
+        for (slot = 0; slot < 3; slot++) {
+            if (D_L00_001618E8_2BE3A8[slot] == 0) {
+                D_L00_001618E8_2BE3A8[slot] = 1;
+                D_L00_001618A8_2BE3A8[slot] = func_001F9850_2BE3A8(D_L00_0016181C_2BE3A8);
+                D_L00_001618C8_2BE3A8[slot] = 0.0f;
+                D_L00_001618D8_2BE3A8[slot] = D_L00_0016182C_2BE3A8;
+                D_L00_001618B8_2BE3A8[slot] = func_001FA888_2BE3A8(D_L00_00161833_2BE3A8[0]);
+                qcopy(&D_L00_001DD3A0_2BE3A8[slot], data);
                 func_001F9BF0_2BE3A8(&side, &D_L00_001DC260_2BE3A8[1], &D_L00_001DC260_2BE3A8[0]);
-                func_L00_001FF4B0_2BE3A8(&D_L00_001DD3D0_2BE3A8[k], &side, 1.0f);
+                func_L00_001FF4B0_2BE3A8(&D_L00_001DD3D0_2BE3A8[slot], &side, 1.0f);
                 break;
             }
         }
     }
-    for (q = 0; q < 3; q++) {
+    for (pulse = 0; pulse < 3; pulse++) {
         Vec_2BE3A8 step;
         float dt;
-        float sum;
-        float full;
+        float travelled;
+        float max_length;
         float ratio;
-        float rem;
-        float inv;
+        float remainder;
+        float inv_length;
 
-        if (D_L00_001618E8_2BE3A8[q] == 0) {
+        if (D_L00_001618E8_2BE3A8[pulse] == 0) {
             continue;
         }
-        if (func_001F9908_2BE3A8(&D_L00_001618A8_2BE3A8[q]) != 0) {
-            D_L00_001618E8_2BE3A8[q] = 0;
+        if (func_001F9908_2BE3A8(&D_L00_001618A8_2BE3A8[pulse]) != 0) {
+            D_L00_001618E8_2BE3A8[pulse] = 0;
             continue;
         }
-        if (D_L00_001618A8_2BE3A8[q] < D_L00_00161820_2BE3A8) {
-            D_L00_001618B8_2BE3A8[q] = D_L00_001618B8_2BE3A8[q] - D_L00_00161838_2BE3A8;
+        if (D_L00_001618A8_2BE3A8[pulse] < D_L00_00161820_2BE3A8) {
+            D_L00_001618B8_2BE3A8[pulse] = D_L00_001618B8_2BE3A8[pulse] - D_L00_00161838_2BE3A8;
         }
         dt = D_L00_00161818_2BE3A8 * D_0015EE6C_2BE3A8;
-        sum = D_L00_001618C8_2BE3A8[q] + dt;
-        full = D_L00_001617AC_2BE3A8;
-        ratio = sum / full;
-        D_L00_001618C8_2BE3A8[q] = sum;
+        travelled = D_L00_001618C8_2BE3A8[pulse] + dt;
+        max_length = D_L00_001617AC_2BE3A8;
+        ratio = travelled / max_length;
+        D_L00_001618C8_2BE3A8[pulse] = travelled;
         if (1.0f < ratio) {
             ratio = 1.0f;
         }
-        D_L00_001618D8_2BE3A8[q] = D_L00_0016182C_2BE3A8 + (D_L00_00161828_2BE3A8 - D_L00_0016182C_2BE3A8) * ratio;
-        if (full <= sum) {
-            func_001F9C30_2BE3A8(&side, &D_L00_001DD3D0_2BE3A8[q], dt);
-            func_001F9BD8_2BE3A8(&D_L00_001DD3A0_2BE3A8[q], &D_L00_001DD3A0_2BE3A8[q], &side);
+        D_L00_001618D8_2BE3A8[pulse] = D_L00_0016182C_2BE3A8 + (D_L00_00161828_2BE3A8 - D_L00_0016182C_2BE3A8) * ratio;
+        if (max_length <= travelled) {
+            func_001F9C30_2BE3A8(&side, &D_L00_001DD3D0_2BE3A8[pulse], dt);
+            func_001F9BD8_2BE3A8(&D_L00_001DD3A0_2BE3A8[pulse], &D_L00_001DD3A0_2BE3A8[pulse], &side);
             continue;
         }
-        n = func_001FA898_2BE3A8(sum / D_L00_0016189C_2BE3A8);
-        rem = D_L00_001618C8_2BE3A8[q] - func_001FA888_2BE3A8(n) * D_L00_0016189C_2BE3A8;
-        qcopy(&D_L00_001DD3A0_2BE3A8[q], &D_L00_001DC260_2BE3A8[n]);
-        if (n == 11) {
-            func_001F9BF0_2BE3A8(&side, &D_L00_001DC260_2BE3A8[n], &D_L00_001DC250_2BE3A8[n]);
+        node_index = func_001FA898_2BE3A8(travelled / D_L00_0016189C_2BE3A8);
+        remainder = D_L00_001618C8_2BE3A8[pulse] - func_001FA888_2BE3A8(node_index) * D_L00_0016189C_2BE3A8;
+        qcopy(&D_L00_001DD3A0_2BE3A8[pulse], &D_L00_001DC260_2BE3A8[node_index]);
+        if (node_index == 11) {
+            func_001F9BF0_2BE3A8(&side, &D_L00_001DC260_2BE3A8[node_index], &D_L00_001DC250_2BE3A8[node_index]);
         } else {
-            func_001F9BF0_2BE3A8(&side, &D_L00_001DC260_2BE3A8[n + 1], &D_L00_001DC260_2BE3A8[n]);
+            func_001F9BF0_2BE3A8(&side, &D_L00_001DC260_2BE3A8[node_index + 1], &D_L00_001DC260_2BE3A8[node_index]);
         }
-        inv = func_001F9CB8_2BE3A8(&side);
-        if (inv == 0.0f) {
+        inv_length = func_001F9CB8_2BE3A8(&side);
+        if (inv_length == 0.0f) {
             continue;
         }
-        inv = 1.0f / inv;
-        func_001F9C30_2BE3A8(&step, &side, rem * inv);
-        func_001F9BD8_2BE3A8(&D_L00_001DD3A0_2BE3A8[q], &D_L00_001DD3A0_2BE3A8[q], &step);
-        func_L00_001FF4B0_2BE3A8(&step, &side, inv);
-        func_001F9C08_2BE3A8(&D_L00_001DD3D0_2BE3A8[q], &D_L00_001DD3D0_2BE3A8[q], &step, 0.1f);
-        func_L00_001FF4B0_2BE3A8(&D_L00_001DD3D0_2BE3A8[q], &D_L00_001DD3D0_2BE3A8[q], 1.0f);
+        inv_length = 1.0f / inv_length;
+        func_001F9C30_2BE3A8(&step, &side, remainder * inv_length);
+        func_001F9BD8_2BE3A8(&D_L00_001DD3A0_2BE3A8[pulse], &D_L00_001DD3A0_2BE3A8[pulse], &step);
+        func_L00_001FF4B0_2BE3A8(&step, &side, inv_length);
+        func_001F9C08_2BE3A8(&D_L00_001DD3D0_2BE3A8[pulse], &D_L00_001DD3D0_2BE3A8[pulse], &step, 0.1f);
+        func_L00_001FF4B0_2BE3A8(&D_L00_001DD3D0_2BE3A8[pulse], &D_L00_001DD3D0_2BE3A8[pulse], 1.0f);
     }
 }
 #include "qcopy.h"
@@ -2548,39 +2548,39 @@ extern char D_L00_00173F80_2C0CF8[] __asm__("D_L00_00173E80");
 extern void *D_L00_00173F58_2C0CF8[] __asm__("D_L00_00173E58");
 extern char D_0013E633_2C0CF8[] __asm__("D_00141260");
 
-int FUN_L00_002bf9f0(Mob_2C0CF8 *m, Blk_2C0CF8 *p, void *q, int flag) {
-    float d[4];
+int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int check_line) {
+    float jump[4];
     float land[4];
     float from[4];
     float to[4];
     float half[4];
     float mid[4];
-    float z[4];
-    int ok;
+    float up[4];
+    int can_halve;
     float half_length;
     float sum;
 
-    ok = 1;
-    func_001F9BF0_2C0CF8(d, q, m->pos);
-    func_L00_001FF5B0_2C0CF8(m->f2C * 5.2f / m->p24->f24, d, d);
-    func_001F9BD8_2C0CF8(land, m->pos, d);
-    func_001F9C30_2C0CF8(half, d, 0.5f);
+    can_halve = 1;
+    func_001F9BF0_2C0CF8(jump, target, moby->pos);
+    func_L00_001FF5B0_2C0CF8(moby->f2C * 5.2f / moby->p24->f24, jump, jump);
+    func_001F9BD8_2C0CF8(land, moby->pos, jump);
+    func_001F9C30_2C0CF8(half, jump, 0.5f);
     half_length = func_001F9CE8_2C0CF8(half);
-    func_001F9BD8_2C0CF8(half, m->pos, half);
+    func_001F9BD8_2C0CF8(half, moby->pos, half);
     if (!(0.5f < half_length)) {
-        ok = 0;
+        can_halve = 0;
     }
-    land[2] = func_L00_002BFF88_2C0CF8(land, m);
-    d[2] = land[2] - m->pos[2];
+    land[2] = func_L00_002BFF88_2C0CF8(land, moby);
+    jump[2] = land[2] - moby->pos[2];
     if (land[2] == 0.0f) {
-        if (ok) {
-            return FUN_L00_002bf9f0(m, p, half, 1);
+        if (can_halve) {
+            return FUN_L00_002bf9f0(moby, block, half, 1);
         }
         return 0;
     }
-    if (m->f2C * 3.0f / m->p24->f24 < d[2]) {
-        if (ok) {
-            return FUN_L00_002bf9f0(m, p, half, 1);
+    if (moby->f2C * 3.0f / moby->p24->f24 < jump[2]) {
+        if (can_halve) {
+            return FUN_L00_002bf9f0(moby, block, half, 1);
         }
         return 0;
     }
@@ -2589,54 +2589,54 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *m, Blk_2C0CF8 *p, void *q, int flag) {
     sum = func_001F9B88_2C0CF8(mid[0]);
     sum = sum + func_001F9B88_2C0CF8(mid[1]);
     if (func_001F9B88_2C0CF8(mid[2]) < sum) {
-        if (ok) {
-            return FUN_L00_002bf9f0(m, p, half, 1);
+        if (can_halve) {
+            return FUN_L00_002bf9f0(moby, block, half, 1);
         }
         return 0;
     }
-    land[2] = land[2] + m->f2C * 0.025f / m->p24->f24;
-    if (func_L00_002BFDB8_2C0CF8(m, 6, land)) {
-        if (ok) {
-            return FUN_L00_002bf9f0(m, p, half, 1);
+    land[2] = land[2] + moby->f2C * 0.025f / moby->p24->f24;
+    if (func_L00_002BFDB8_2C0CF8(moby, 6, land)) {
+        if (can_halve) {
+            return FUN_L00_002bf9f0(moby, block, half, 1);
         }
         return 0;
     }
-    land[2] = land[2] - m->f2C * 0.025f / m->p24->f24;
-    qcopy_nc(from, m->pos);
-    from[2] = from[2] + m->f2C * 0.2f / m->p24->f24;
+    land[2] = land[2] - moby->f2C * 0.025f / moby->p24->f24;
+    qcopy_nc(from, moby->pos);
+    from[2] = from[2] + moby->f2C * 0.2f / moby->p24->f24;
     qcopy_nc(to, land);
-    to[2] = to[2] + m->f2C * 0.2f / m->p24->f24;
-    if (flag) {
-        if (func_L00_001EFFF0_2C0CF8(from, to, 6, m, 0) == 0) {
-            if (ok) {
-                return FUN_L00_002bf9f0(m, p, half, 1);
+    to[2] = to[2] + moby->f2C * 0.2f / moby->p24->f24;
+    if (check_line) {
+        if (func_L00_001EFFF0_2C0CF8(from, to, 6, moby, 0) == 0) {
+            if (can_halve) {
+                return FUN_L00_002bf9f0(moby, block, half, 1);
             }
             return 0;
         }
     }
-    func_L00_002BFF08_2C0CF8(p);
-    func_L00_002C0BB8_2C0CF8(m, D_0013E633_2C0CF8, land);
-    func_L00_002BFF50_2C0CF8(p);
-    func_001F9C30_2C0CF8(mid, d, 0.5f);
-    func_001F9BD8_2C0CF8(mid, mid, m->pos);
-    qzero(z);
-    z[2] = p->f50;
-    mid[2] = func_L00_0025A4A0_2C0CF8(m->pos, z, 0, *(float *)(D_0013E633_2C0CF8 + 0x1C));
+    func_L00_002BFF08_2C0CF8(block);
+    func_L00_002C0BB8_2C0CF8(moby, D_0013E633_2C0CF8, land);
+    func_L00_002BFF50_2C0CF8(block);
+    func_001F9C30_2C0CF8(mid, jump, 0.5f);
+    func_001F9BD8_2C0CF8(mid, mid, moby->pos);
+    qzero(up);
+    up[2] = block->f50;
+    mid[2] = func_L00_0025A4A0_2C0CF8(moby->pos, up, 0, *(float *)(D_0013E633_2C0CF8 + 0x1C));
     func_L00_002C0B18_2C0CF8(from, mid, 10, 0, 32, 32, 40000.0f, 60);
     func_L00_002C0B18_2C0CF8(to, mid, 10, 0, 32, 32, 40000.0f, 60);
-    if (func_L00_001EFFF0_2C0CF8(from, mid, 6, m, 0) != 0 && D_L00_00173F58_2C0CF8[0] != p->p38) {
-        if (ok) {
-            return FUN_L00_002bf9f0(m, p, half, 1);
+    if (func_L00_001EFFF0_2C0CF8(from, mid, 6, moby, 0) != 0 && D_L00_00173F58_2C0CF8[0] != block->p38) {
+        if (can_halve) {
+            return FUN_L00_002bf9f0(moby, block, half, 1);
         }
         return 0;
     }
-    if (func_L00_001EFFF0_2C0CF8(mid, to, 6, m, 0) != 0 && D_L00_00173F58_2C0CF8[0] != p->p38) {
-        if (ok) {
-            return FUN_L00_002bf9f0(m, p, half, 1);
+    if (func_L00_001EFFF0_2C0CF8(mid, to, 6, moby, 0) != 0 && D_L00_00173F58_2C0CF8[0] != block->p38) {
+        if (can_halve) {
+            return FUN_L00_002bf9f0(moby, block, half, 1);
         }
         return 0;
     }
-    m->bBC = 0xD;
+    moby->bBC = 0xD;
     return 1;
 }
 #include "eetypes.h"

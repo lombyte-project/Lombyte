@@ -949,10 +949,10 @@ typedef struct {
 
 typedef struct Data_2F69D0 {
     char p0[0x60];
-    int i60;
-    int i64;
-    int i68;
-    float f6C;
+    int node_start;
+    int node_mid;
+    int node_end;
+    float fade;
     Moby *a[20];
     Moby *b[20];
     Moby *c[10];
@@ -1056,81 +1056,81 @@ extern int func_L00_00203F20_2F69D0(int, int) __asm__("FUN_L00_00203908");
 extern void func_L00_00264DB8_2F69D0(int, int) __asm__("FUN_L00_00263d40");
 extern int func_0020BFC8_2F69D0(int, int) __asm__("FUN_0020b178");
 
-void FUN_L06_002f55a0(Moby *m) {
-    Vec_2F69D0 v0, v10, v20, v30, v40, v50;
-    Data_2F69D0 *s = (struct Data_2F69D0 *)m->pvars;
-    float old, t;
-    int i, j, k;
+void FUN_L06_002f55a0(Moby *moby) {
+    Vec_2F69D0 position, rotation, from_pos, from_rot, to_pos, to_rot;
+    Data_2F69D0 *data = (struct Data_2F69D0 *)moby->pvars;
+    float previous_fade, blend;
+    int i, j, slot;
 
-    switch (m->state) {
+    switch (moby->state) {
     case 0: {
-        int t = D_0014C150_2F69D0[m->unkB0 + (D_0015EE84_2F69D0 << 4)];
-        if (t == 0xFF) {
-            m->state = 6;
+        int status = D_0014C150_2F69D0[moby->unkB0 + (D_0015EE84_2F69D0 << 4)];
+        if (status == 0xFF) {
+            moby->state = 6;
             D_L06_00161E08_2F69D0 = 20.0f;
             D_L06_00161E0C_2F69D0 = 1000.0f;
             D_L06_00161E10_2F69D0 = 1000.0f;
         } else {
-            m->state = 1;
+            moby->state = 1;
         }
         for (i = 0; i < 20; i++) {
-            s->a[i] = func_0020D348_2F69D0(0x405);
-            s->a[i]->unk32 = 0x40;
-            s->a[i]->unk31 = 1;
-            s->a[i]->spawn_frame = (*(long *)&((Hero *)D_0013E633_2F69D0)->moby->spawn_frame);
-            s->a[i]->flags = m->flags;
-            qcopy_nc(&s->a[i]->pos, &m->pos);
-            qcopy_nc(&s->a[i]->rot, &m->rot);
-            s->b[i] = func_0020D348_2F69D0(0x405);
-            s->b[i]->unk32 = 0x40;
-            s->b[i]->unk31 = 1;
-            s->b[i]->spawn_frame = (*(long *)&m->spawn_frame);
-            s->b[i]->flags = m->flags;
-            qcopy_nc(&s->b[i]->pos, &m->pos);
-            qcopy_nc(&s->b[i]->rot, &m->rot);
+            data->a[i] = func_0020D348_2F69D0(0x405);
+            data->a[i]->unk32 = 0x40;
+            data->a[i]->unk31 = 1;
+            data->a[i]->spawn_frame = (*(long *)&((Hero *)D_0013E633_2F69D0)->moby->spawn_frame);
+            data->a[i]->flags = moby->flags;
+            qcopy_nc(&data->a[i]->pos, &moby->pos);
+            qcopy_nc(&data->a[i]->rot, &moby->rot);
+            data->b[i] = func_0020D348_2F69D0(0x405);
+            data->b[i]->unk32 = 0x40;
+            data->b[i]->unk31 = 1;
+            data->b[i]->spawn_frame = (*(long *)&moby->spawn_frame);
+            data->b[i]->flags = moby->flags;
+            qcopy_nc(&data->b[i]->pos, &moby->pos);
+            qcopy_nc(&data->b[i]->rot, &moby->rot);
         }
         for (j = 0; j < 10; j++) {
-            s->c[j] = func_0020D348_2F69D0(0x406);
-            s->c[j]->unk32 = 0x40;
-            s->c[j]->unk31 = 1;
-            s->c[j]->spawn_frame = (*(long *)&((Hero *)D_0013E633_2F69D0)->moby->spawn_frame);
-            s->c[j]->flags = m->flags;
-            qcopy_nc(&s->c[j]->pos, &m->pos);
-            qcopy_nc(&s->c[j]->rot, &m->rot);
-            s->d[j] = func_0020D348_2F69D0(0x406);
-            s->d[j]->unk32 = 0x40;
-            s->d[j]->unk31 = 1;
-            s->d[j]->spawn_frame = (*(long *)&m->spawn_frame);
-            s->d[j]->flags = m->flags;
-            qcopy_nc(&s->d[j]->pos, &m->pos);
-            qcopy_nc(&s->d[j]->rot, &m->rot);
+            data->c[j] = func_0020D348_2F69D0(0x406);
+            data->c[j]->unk32 = 0x40;
+            data->c[j]->unk31 = 1;
+            data->c[j]->spawn_frame = (*(long *)&((Hero *)D_0013E633_2F69D0)->moby->spawn_frame);
+            data->c[j]->flags = moby->flags;
+            qcopy_nc(&data->c[j]->pos, &moby->pos);
+            qcopy_nc(&data->c[j]->rot, &moby->rot);
+            data->d[j] = func_0020D348_2F69D0(0x406);
+            data->d[j]->unk32 = 0x40;
+            data->d[j]->unk31 = 1;
+            data->d[j]->spawn_frame = (*(long *)&moby->spawn_frame);
+            data->d[j]->flags = moby->flags;
+            qcopy_nc(&data->d[j]->pos, &moby->pos);
+            qcopy_nc(&data->d[j]->rot, &moby->rot);
         }
-        func_L06_002F71A8_2F69D0(m);
+        func_L06_002F71A8_2F69D0(moby);
         break;
     }
     case 1:
         if (D_001413F4_r[0] == 1 && D_0013D4D6[0] != 0 && D_L06_0015F6A8_2F69D0 == 0) {
             D_L06_0015F4FC_2F69D0 = 1.0f;
-            m->state = 3;
-            s->f6C = -0.01f;
+            moby->state = 3;
+            data->fade = -0.01f;
         }
         break;
     case 2:
         break;
     case 3:
-        old = s->f6C;
-        func_00214D28_2F69D0(&s->f6C, 1.0f, 1.0f / func_001F9850_2F69D0(20));
-        D_L06_0015F4FC_2F69D0 = 1.0f - func_001F9B88_2F69D0(s->f6C);
-        if (old < 0.0f && 0.0f <= s->f6C) {
+        previous_fade = data->fade;
+        func_00214D28_2F69D0(&data->fade, 1.0f, 1.0f / func_001F9850_2F69D0(20));
+        D_L06_0015F4FC_2F69D0 = 1.0f - func_001F9B88_2F69D0(data->fade);
+        if (previous_fade < 0.0f && 0.0f <= data->fade) {
             func_L00_00217718_2F69D0(D_0013E633_2F69D0 + 0x80, D_0013E633_2F69D0 + 0x90, 0x72, 1);
-            func_L00_002EBF50_2F69D0(D_L06_0016016C_2F69D0 + (s->i60 << 7) + 0x30, D_L06_0016016C_2F69D0 + (s->i60 << 7) + 0x70, 1, 0, 0);
-        } else if (1.0f <= s->f6C) {
-            m->state = 4;
-            m->unkBC = func_0022ED80_2F69D0(0, 4, s->c[9]);
+            func_L00_002EBF50_2F69D0(D_L06_0016016C_2F69D0 + (data->node_start << 7) + 0x30, D_L06_0016016C_2F69D0 + (data->node_start << 7) + 0x70, 1, 0, 0);
+        } else if (1.0f <= data->fade) {
+            moby->state = 4;
+            moby->unkBC = func_0022ED80_2F69D0(0, 4, data->c[9]);
         }
         break;
     case 4:
-        func_L00_002512D8_2F69D0(m->unkB0);
+        func_L00_002512D8_2F69D0(moby->unkB0);
         if (D_L06_00161E08_2F69D0 < 20.0f) {
             func_00214D88_2F69D0(&D_L06_00161E08_2F69D0, &D_L06_00161E2C_2F69D0, 20.0f, D_L06_00161E20_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E20_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E14_2F69D0 * D_0015EE6C_2F69D0);
         }
@@ -1141,52 +1141,52 @@ void FUN_L06_002f55a0(Moby *m) {
             func_00214D88_2F69D0(&D_L06_00161E10_2F69D0, &D_L06_00161E34_2F69D0, 1000.0f, D_L06_00161E28_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E28_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E1C_2F69D0 * D_0015EE6C_2F69D0);
         }
         if (1000.0f <= D_L06_00161E10_2F69D0) {
-            m->state = 5;
-            s->f6C = -1.0f;
+            moby->state = 5;
+            data->fade = -1.0f;
         }
-        k = m->unkBC;
+        slot = moby->unkBC;
         if (20.0f <= D_L06_00161E08_2F69D0) {
-            if (func_L00_0028EB98_2F69D0(s->c[9], k) != 0) {
-                if (k != -1 && ((Slot_2F69D0 *)(D_0013E650_2F69D0 + k * 0x70))->p88 == s->c[9] && ((Slot_2F69D0 *)(D_0013E650_2F69D0 + k * 0x70))->b74 != 0) {
-                    func_L00_0028EBF0_2F69D0(k);
+            if (func_L00_0028EB98_2F69D0(data->c[9], slot) != 0) {
+                if (slot != -1 && ((Slot_2F69D0 *)(D_0013E650_2F69D0 + slot * 0x70))->p88 == data->c[9] && ((Slot_2F69D0 *)(D_0013E650_2F69D0 + slot * 0x70))->b74 != 0) {
+                    func_L00_0028EBF0_2F69D0(slot);
                 }
-                k = -1;
-                m->unkBC = k;
+                slot = -1;
+                moby->unkBC = slot;
             }
         }
-        func_L06_002F71A8_2F69D0(m);
+        func_L06_002F71A8_2F69D0(moby);
         if (D_L06_00161E08_2F69D0 < 20.0f) {
-            t = D_L06_00161E08_2F69D0 / 20.0f;
-            qcopy_nc(&v20, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[s->i60].v30);
-            qcopy_nc(&v40, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[s->i64].v30);
-            qcopy_nc(&v30, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[s->i60].v70);
-            qcopy_nc(&v50, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[s->i64].v70);
+            blend = D_L06_00161E08_2F69D0 / 20.0f;
+            qcopy_nc(&from_pos, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_start].v30);
+            qcopy_nc(&to_pos, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_mid].v30);
+            qcopy_nc(&from_rot, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_start].v70);
+            qcopy_nc(&to_rot, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_mid].v70);
         } else {
-            t = D_L06_00161E10_2F69D0 / 1000.0f;
-            qcopy_nc(&v20, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[s->i64].v30);
-            qcopy_nc(&v40, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[s->i68].v30);
-            qcopy_nc(&v30, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[s->i64].v70);
-            qcopy_nc(&v50, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[s->i68].v70);
+            blend = D_L06_00161E10_2F69D0 / 1000.0f;
+            qcopy_nc(&from_pos, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_mid].v30);
+            qcopy_nc(&to_pos, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_end].v30);
+            qcopy_nc(&from_rot, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_mid].v70);
+            qcopy_nc(&to_rot, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_end].v70);
         }
-        func_001F9C08_2F69D0(&v0, &v20, &v40, t);
-        v10.x = func_001FA790_2F69D0(v50.x, v30.x) * t;
-        v10.x = func_001FA748_2F69D0(v30.x, v10.x);
-        v10.y = func_001FA790_2F69D0(v50.y, v30.y) * t;
-        v10.y = func_001FA748_2F69D0(v30.y, v10.y);
-        v10.z = func_001FA790_2F69D0(v50.z, v30.z) * t;
-        v10.z = func_001FA748_2F69D0(v30.z, v10.z);
-        func_L00_002EBE88_2F69D0(&v0);
-        func_L00_002EBEE0_2F69D0(&v10);
+        func_001F9C08_2F69D0(&position, &from_pos, &to_pos, blend);
+        rotation.x = func_001FA790_2F69D0(to_rot.x, from_rot.x) * blend;
+        rotation.x = func_001FA748_2F69D0(from_rot.x, rotation.x);
+        rotation.y = func_001FA790_2F69D0(to_rot.y, from_rot.y) * blend;
+        rotation.y = func_001FA748_2F69D0(from_rot.y, rotation.y);
+        rotation.z = func_001FA790_2F69D0(to_rot.z, from_rot.z) * blend;
+        rotation.z = func_001FA748_2F69D0(from_rot.z, rotation.z);
+        func_L00_002EBE88_2F69D0(&position);
+        func_L00_002EBEE0_2F69D0(&rotation);
         break;
     case 5:
-        old = s->f6C;
-        func_00214D28_2F69D0(&s->f6C, 1.0f, 1.0f / func_001F9850_2F69D0(20));
-        D_L06_0015F4FC_2F69D0 = 1.0f - func_001F9B88_2F69D0(s->f6C);
-        if (old < 0.0f && 0.0f <= s->f6C) {
+        previous_fade = data->fade;
+        func_00214D28_2F69D0(&data->fade, 1.0f, 1.0f / func_001F9850_2F69D0(20));
+        D_L06_0015F4FC_2F69D0 = 1.0f - func_001F9B88_2F69D0(data->fade);
+        if (previous_fade < 0.0f && 0.0f <= data->fade) {
             func_L06_00239CD0_2F69D0();
             func_L00_002EC0C8_2F69D0(3);
-        } else if (1.0f <= s->f6C) {
-            m->state = 6;
+        } else if (1.0f <= data->fade) {
+            moby->state = 6;
             func_L00_00203F20_2F69D0(0x1776, 0x2D);
             func_L00_00264DB8_2F69D0(0x177C, -1);
             func_0020BFC8_2F69D0(0, -1);
@@ -1795,36 +1795,36 @@ void FUN_L06_002f91e8(Moby *moby)
 {
     BlargVars_2FA618 *data = (struct BlargVars_2FA618 *)moby->pvars;
     int hit;
-    float dmg;
+    float damage;
     Target_2FA618 *target;
-    int r;
+    int reaction;
 
     if (data->f38 != 0) {
         data->f1AC = func_001FA898_2FA618(func_001F9878_2FA618(func_002140F8_2FA618(180.0f, 240.0f)));
         data->f38 = 0;
     }
     func_001F9908_2FA618(&data->f1AC);
-    dmg = 0.0f;
+    damage = 0.0f;
     target = func_L00_0025B478_2FA618(moby, 0x330000, 0);
     if (target != 0 && target->owner != 0 &&
         target->owner->oclass == 0x418) {
         target = 0;
     }
-    r = func_L00_0025B4D0_2FA618(moby, target, &data->health, 0, &hit, &dmg, 0, 4);
+    reaction = func_L00_0025B4D0_2FA618(moby, target, &data->health, 0, &hit, &damage, 0, 4);
 
     if (hit != 1 && moby->state != 0x11 && moby->state != 3) {
-        data->health = data->health - dmg;
+        data->health = data->health - damage;
         if (moby->group != 0xFF) {
             func_L06_002FAAC8_2FA618(moby);
         }
         if (data->health <= 0.0f) {
-            r = 1;
+            reaction = 1;
         } else if (data->f1CC != 0) {
-            r = 0xB;
+            reaction = 0xB;
             data->f67 = 0xFA;
         }
 
-        switch (r) {
+        switch (reaction) {
         case 0:
             break;
         case 3:

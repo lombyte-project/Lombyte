@@ -697,91 +697,91 @@ extern int func_001FA8A8_239918(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_001F6EA8_239918(int, int, int, int, int) __asm__("FUN_001f6af0");
 extern int func_L00_00236400_239918(void *, int *, int *) __asm__("FUN_L00_00235a70");
 
-int FUN_L00_00238f88(Elem_239918 *e) {
+int FUN_L00_00238f88(Elem_239918 *element) {
     Ids_239918 text_ids;
     int x, y;
-    int a, b, hw, hh, i, alpha, k, yy, col, shadow, str;
-    float f22, f23;
-    unsigned char *q;
+    int frame_alpha, pulse_alpha, half_width, half_height, i, alpha, selected, text_y, color, shadow, text;
+    float open_fade, text_fade;
+    unsigned char *counters;
 
-    q = e->cnt;
+    counters = element->cnt;
     {
-        float t = func_001FA888_239918(e->cnt[0]);
-        f22 = t / func_001FA888_239918(D_L00_0015F780_c);
+        float frames = func_001FA888_239918(element->cnt[0]);
+        open_fade = frames / func_001FA888_239918(D_L00_0015F780_c);
     }
-    if (1.0f < f22) {
-        f22 = 1.0f;
-    } else if (f22 < 0.0f) {
-        f22 = 0.0f;
-    }
-    {
-        float t = func_001FA888_239918(q[1]);
-        f23 = t / func_001FA888_239918(D_L00_0015F780_c);
-    }
-    if (1.0f < f23) {
-        f23 = 1.0f;
-    } else if (f23 < 0.0f) {
-        f23 = 0.0f;
+    if (1.0f < open_fade) {
+        open_fade = 1.0f;
+    } else if (open_fade < 0.0f) {
+        open_fade = 0.0f;
     }
     {
-        float t = func_001FA888_239918(D_L00_0015F5CC % D_L00_0015F7B0);
+        float frames = func_001FA888_239918(counters[1]);
+        text_fade = frames / func_001FA888_239918(D_L00_0015F780_c);
+    }
+    if (1.0f < text_fade) {
+        text_fade = 1.0f;
+    } else if (text_fade < 0.0f) {
+        text_fade = 0.0f;
+    }
+    {
+        float phase = func_001FA888_239918(D_L00_0015F5CC % D_L00_0015F7B0);
         float wave;
-        float s;
-        t = t / func_001FA888_239918(D_L00_0015F7B0);
-        t = t * 6.2831802f;
-        wave = func_001F9FA8_239918(t - 3.1415901f);
-        s = f22 * 128.0f;
-        a = func_001FA898_239918(s);
+        float max_alpha;
+        phase = phase / func_001FA888_239918(D_L00_0015F7B0);
+        phase = phase * 6.2831802f;
+        wave = func_001F9FA8_239918(phase - 3.1415901f);
+        max_alpha = open_fade * 128.0f;
+        frame_alpha = func_001FA898_239918(max_alpha);
         wave = wave * 0.125f;
         wave = wave + 0.875f;
-        b = func_001FA898_239918(s * wave);
+        pulse_alpha = func_001FA898_239918(max_alpha * wave);
     }
-    x = e->x;
-    y = e->y;
-    func_L00_00236400_239918(e, &x, &y);
-    hw = D_L00_0015F718_c / 2;
-    hh = D_L00_0015F71C_c / 2;
-    func_00200468_239918(func_00200198_239918(0xE934, 1), x, y, hw, hh, a);
-    func_00200468_239918(func_00200198_239918(0xE934, 1), x + D_L00_0015F718_c, y + D_L00_0015F71C_c, -hw, -hh, a);
-    func_00200468_239918(func_00200198_239918(0xE934, 1), x + D_L00_0015F718_c, y, -hw, hh, a);
-    func_00200468_239918(func_00200198_239918(0xE934, 1), x, y + D_L00_0015F71C_c, hw, -hh, a);
+    x = element->x;
+    y = element->y;
+    func_L00_00236400_239918(element, &x, &y);
+    half_width = D_L00_0015F718_c / 2;
+    half_height = D_L00_0015F71C_c / 2;
+    func_00200468_239918(func_00200198_239918(0xE934, 1), x, y, half_width, half_height, frame_alpha);
+    func_00200468_239918(func_00200198_239918(0xE934, 1), x + D_L00_0015F718_c, y + D_L00_0015F71C_c, -half_width, -half_height, frame_alpha);
+    func_00200468_239918(func_00200198_239918(0xE934, 1), x + D_L00_0015F718_c, y, -half_width, half_height, frame_alpha);
+    func_00200468_239918(func_00200198_239918(0xE934, 1), x, y + D_L00_0015F71C_c, half_width, -half_height, frame_alpha);
     for (i = 0; i < D_L00_0015FA90; i++) {
-        int X, Y;
-        float f20 = func_001FA748_239918((float)i * 2.0f * 3.1415927f / (float)D_L00_0015FA90 - 3.1415927f, 1.5707964f);
-        X = x + D_L00_0015F720 + (int)(D_L00_0015F78C * func_001F9F90_239918(f20) * D_L00_0015F7C4);
-        Y = y + D_L00_0015F724 + (int)(D_L00_0015F78C * func_001F9FA8_239918(f20));
-        if (e->sel == i && D_L00_0015FAC0_c2[D_L00_0015F72C][i].f0 != 0) {
-            func_00200468_239918(func_00200198_239918(0xE99C, 0), X - 0x13, Y - 0x13, 0x26, 0x26, b);
+        int icon_x, icon_y;
+        float angle = func_001FA748_239918((float)i * 2.0f * 3.1415927f / (float)D_L00_0015FA90 - 3.1415927f, 1.5707964f);
+        icon_x = x + D_L00_0015F720 + (int)(D_L00_0015F78C * func_001F9F90_239918(angle) * D_L00_0015F7C4);
+        icon_y = y + D_L00_0015F724 + (int)(D_L00_0015F78C * func_001F9FA8_239918(angle));
+        if (element->sel == i && D_L00_0015FAC0_c2[D_L00_0015F72C][i].f0 != 0) {
+            func_00200468_239918(func_00200198_239918(0xE99C, 0), icon_x - 0x13, icon_y - 0x13, 0x26, 0x26, pulse_alpha);
         }
         if (D_L00_0015FAC0_c2[D_L00_0015F72C][i].f0 != 0) {
-            if (i != e->sel) {
-                alpha = func_001FA898_239918((float)a * D_L00_0015F7C0);
+            if (i != element->sel) {
+                alpha = func_001FA898_239918((float)frame_alpha * D_L00_0015F7C0);
             } else {
-                alpha = a;
+                alpha = frame_alpha;
             }
             if (((Arena_239918 *)D_L00_0017E5D8_239918)->f2C != 0) {
-                func_L00_0023BAB8_239918(e, func_00200198_239918(D_L00_0015FAC0_c2[D_L00_0015F72C][i].f0, D_L00_0015FAC0_c2[D_L00_0015F72C][i].f4), X, Y, 1, alpha);
+                func_L00_0023BAB8_239918(element, func_00200198_239918(D_L00_0015FAC0_c2[D_L00_0015F72C][i].f0, D_L00_0015FAC0_c2[D_L00_0015F72C][i].f4), icon_x, icon_y, 1, alpha);
             } else {
-                func_L00_0023BAB8_239918(e, func_00200198_239918(D_L00_0015FAC0_c2[D_L00_0015F72C][i].f0, D_L00_0015FAC0_c2[D_L00_0015F72C][i].f4 + 4), X, Y, 1, a);
+                func_L00_0023BAB8_239918(element, func_00200198_239918(D_L00_0015FAC0_c2[D_L00_0015F72C][i].f0, D_L00_0015FAC0_c2[D_L00_0015F72C][i].f4 + 4), icon_x, icon_y, 1, frame_alpha);
             }
         }
     }
-    k = e->sel;
-    if (k >= 0 && D_L00_0015FAC0_c2[D_L00_0015F72C][k].f0 != 0) {
+    selected = element->sel;
+    if (selected >= 0 && D_L00_0015FAC0_c2[D_L00_0015F72C][selected].f0 != 0) {
         text_ids = D_L00_0015F8C0_239918;
-        if (D_L00_0015FAC0_c2[D_L00_0015F72C][k].f0 != 0) {
-            str = func_001FE540_239918(text_ids.v[k]);
-            if (str != 0 && func_00116810_239918(str) != 0) {
-                float f20 = f23 * f22;
-                col = func_001FA8A8_239918(D_L00_0015F7D4, D_L00_0015F7D8, f20);
-                shadow = func_001FA8A8_239918(0, 0x80000000, f20);
-                yy = y + D_L00_0015F7DC + D_L00_0015F724;
-                func_001F6EA8_239918(x + D_L00_0015F720 - 1, yy - 1, shadow, str, -1);
-                func_001F6EA8_239918(x + D_L00_0015F720, yy, col, str, -1);
+        if (D_L00_0015FAC0_c2[D_L00_0015F72C][selected].f0 != 0) {
+            text = func_001FE540_239918(text_ids.v[selected]);
+            if (text != 0 && func_00116810_239918(text) != 0) {
+                float fade = text_fade * open_fade;
+                color = func_001FA8A8_239918(D_L00_0015F7D4, D_L00_0015F7D8, fade);
+                shadow = func_001FA8A8_239918(0, 0x80000000, fade);
+                text_y = y + D_L00_0015F7DC + D_L00_0015F724;
+                func_001F6EA8_239918(x + D_L00_0015F720 - 1, text_y - 1, shadow, text, -1);
+                func_001F6EA8_239918(x + D_L00_0015F720, text_y, color, text, -1);
             }
         }
     }
-    return e->ret;
+    return element->ret;
 }
 typedef struct {
     short a, b, c, d;
