@@ -463,9 +463,12 @@ void FUN_L08_002f1548(struct Moby *moby) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f44c0.s", FUN_L08_002f44c0);
 #else
+extern char D_0013F3D0[];
+extern char D_L08_0015F580[];
 extern s32 D_001413D4 __attribute__((section(".data")));
 extern struct Moby *D_0013F58C __attribute__((section(".data")));
-extern f32 D_0015B370 __attribute__((sda));
+/* Retail loads gp - 0x4C90; GP 0x166C00 places this scalar at 0x161F70. */
+extern f32 D_0015B370 __asm__("D_L08_00161F70") __attribute__((sda));
 
 extern s32 find_moby_hit_44c0(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern f32 FUN_001f9b80_44c0(void *, void *) __asm__("FUN_001f9b80");
@@ -489,20 +492,17 @@ void FUN_L08_002f44c0(struct Moby *moby)
     SwarmPathFollower *follower = (SwarmPathFollower *)moby->pvars;
     Vec4 point;
     Vec4 step;
+    Vec4 velocity; /* Effect scratch is separate from the waypoint movement step. */
     f32 fade;
     s32 waypoint;
     f32 distance;
 
-    {
-        s32 state = moby->state;
-        if (state == 1) goto state_one;
-        if (state < 2) {
-            if (state != 0) return;
-            goto state_zero;
-        }
-        if (state == 2) goto state_two;
-        if (state != 3) return;
-        goto state_three;
+    switch (moby->state) {
+    case 0: goto state_zero;
+    case 1: goto state_one;
+    case 2: goto state_two;
+    case 3: goto state_three;
+    default: return;
     }
 state_zero: {
         fade = moby->pos.z;
@@ -512,15 +512,15 @@ state_zero: {
     }
 state_one: {
         s32 active = find_moby_hit_44c0(moby, 0x330000, 0);
-        distance = FUN_001f9b80_44c0(&moby->pos, (void *)0x13f3d0);
-        if ((distance < 2.0f && D_001413D4 == 0x42) || D_0013F58C == moby) {
+        distance = FUN_001f9b80_44c0(&moby->pos, D_0013F3D0);
+        if ((distance < 2.0f && *(s32 *)(D_0013F3D0 + 0x2004) == 0x42) || *(struct Moby **)(D_0013F3D0 + 0x1bc) == moby) {
             allocate_voice_for_target_entry_44c0(0, 0, moby);
-            FUN_L00_0025e450_44c0(moby, (void *)0x15f580, &moby->pos, 3.0f, 1.0f, 10, 20, 60,
+            FUN_L00_0025e450_44c0(moby, D_L08_0015F580, &moby->pos, 3.0f, 1.0f, 10, 20, 60,
                           3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
         } else {
             if (active == 0) return;
             allocate_voice_for_target_entry_44c0(0, 0, moby);
-            FUN_L00_0025e450_44c0(moby, (void *)0x15f580, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
+            FUN_L00_0025e450_44c0(moby, D_L08_0015F580, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
                           1.0f, 3.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
         }
         mark_moby_for_removal_44c0(moby);
@@ -533,10 +533,10 @@ state_two: {
             return;
         }
         moby->rot.y = fast_add_rotations_44c0(moby->rot.y, D_0015B370 * 0.017453292f * frame_time);
-        distance = FUN_001f9b80_44c0(&moby->pos, (void *)0x13f3d0);
-        if (distance < 2.0f && D_001413D4 == 0x42) {
-            clear_u64_value_44c0(&step);
-            FUN_L00_0025e450_44c0(moby, &step, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
+        distance = FUN_001f9b80_44c0(&moby->pos, D_0013F3D0);
+        if (distance < 2.0f && *(s32 *)(D_0013F3D0 + 0x2004) == 0x42) {
+            clear_u64_value_44c0(&velocity);
+            FUN_L00_0025e450_44c0(moby, &velocity, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
                           3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             mark_moby_for_removal_44c0(moby);
             return;
@@ -546,21 +546,21 @@ state_two: {
                                    follower->path->points[waypoint].f[1] - moby->pos.y),
                      (f32 *)((char *)follower + 0x34), 0.01f, 0.3f, 0.1f);
         qcopy(&point, &follower->path->points[waypoint]);
-        if (waypoint == 0) {
-            distance = FUN_001f9b80_44c0(&moby->pos, (void *)0x13f3d0);
+        if (waypoint != 0) {
+            subtract_vector_xyz_44c0(&step, &point, &moby->pos);
+            normalize_vector_xyz_44c0(&step, &step, frame_time * 3.0f);
+            add_vector_xyz_44c0(&moby->pos, &moby->pos, &step);
+        } else {
+            distance = FUN_001f9b80_44c0(&moby->pos, D_0013F3D0);
             if (distance < 24.0f) {
-                clear_u64_value_44c0(&step);
-                FUN_L00_0025e450_44c0(moby, &step, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
+                clear_u64_value_44c0(&velocity);
+                FUN_L00_0025e450_44c0(moby, &velocity, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
                               3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
                 allocate_voice_for_target_entry_44c0(0, 0, moby);
                 mark_moby_for_removal_44c0(moby);
                 return;
             }
             moby->state = 3;
-        } else {
-            subtract_vector_xyz_44c0(&step, &point, &moby->pos);
-            normalize_vector_xyz_44c0(&step, &step, frame_time * 3.0f);
-            add_vector_xyz_44c0(&moby->pos, &moby->pos, &step);
         }
         if (FUN_001f9b48_44c0(&moby->pos, &point) < 0.1f) {
             follower->point = waypoint;
@@ -569,9 +569,10 @@ state_two: {
         return;
     }
 state_three: {
-        f32 timer = (f32)moby->unk23;
+        Vec4 timer;
+        timer.f[0] = (f32)moby->unk23;
         approach_value_44c0(&timer, 0.0f, 128.0f / (f32)scale_game_frames_44c0(30));
-        moby->unk23 = (u8)(s32)timer;
+        moby->unk23 = (u8)(s32)timer.f[0];
         if (moby->unk23 == 0) mark_moby_for_removal_44c0(moby);
     }
 }
