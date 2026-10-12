@@ -68,8 +68,9 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
         if (*(volatile s32 *)&level_map_markers[level_index].x == 0) {
             continue;
         }
+        marker_x = level_visit_state[level_index];
         availability = 3;
-        if (level_visit_state[level_index] == 0) {
+        if (marker_x == 0) {
             availability = 2;
             /* This separate state table gates markers that have not been visited. */
             if (level_available[level_index] == 0) {

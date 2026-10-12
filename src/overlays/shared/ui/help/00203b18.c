@@ -278,37 +278,45 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002056a8.s", FUN_L00_002056a8);
 #else
 typedef u32 Quad_56a8 __attribute__((mode(TI), aligned(16)));
 extern u8 D_L00_0017A680_56a8[] __asm__("D_L00_0017A680");
+extern Quad_56a8 D_L00_0017C040_56a8[] __asm__("D_L00_0017C040");
+extern Quad_56a8 D_L00_0017C0B0_56a8[] __asm__("D_L00_0017C0B0");
+extern Quad_56a8 D_L00_0017C120_56a8[] __asm__("D_L00_0017C120");
+extern s32 D_L00_0017C1C0_56a8[] __asm__("D_L00_0017C1C0");
+extern f32 D_L00_0017C190_56a8[] __asm__("D_L00_0017C190");
 
 void FUN_L00_002056a8(void) {
-    u8 *e = D_L00_0017A680_56a8;
+    u8 *e;
     u8 *g;
     s32 i;
-    f32 *yaw = (f32 *)(e + 0x8a8);
     s32 *timer;
 
-    *yaw = *(f32 *)(e + 0x278) * 0.25f;
-    if (*yaw > 0.14835298f)
-        *yaw = 0.14835298f;
-    else if (*yaw < -0.14835298f)
-        *yaw = -0.14835298f;
+    {
+        u8 *e = D_L00_0017A680_56a8;
+        *(f32 *)(e + 0x8a8) = *(f32 *)(e + 0x278) * 0.25f;
+        if (*(f32 *)(e + 0x8a8) > 0.14835298f)
+            *(f32 *)(e + 0x8a8) = 0.14835298f;
+        else if (*(f32 *)(e + 0x8a8) < -0.14835298f)
+            *(f32 *)(e + 0x8a8) = -0.14835298f;
+    }
+    e = D_L00_0017A680_56a8;
     *(f32 *)(e + 0x8a4) = *(f32 *)(e + 0x274) / 2.8f;
     if (*(f32 *)(e + 0x8a4) > 0.29670596f)
         *(f32 *)(e + 0x8a4) = 0.29670596f;
     if (*(f32 *)(e + 0x8a4) < -0.17453292f)
         *(f32 *)(e + 0x8a4) = -0.17453292f;
-    g = (u8 *)&hero;
-    timer = (s32 *)(g + 0xff0);
-    if ((u8)(*(u8 *)(*(u32 *)(g + 0x2080) + 0x53) - 1) < 2) {
-        if (*yaw > 0.034906585f)
-            *yaw = 0.034906585f;
-        if (*yaw < -0.034906585f)
-            *yaw = -0.034906585f;
+    if ((u32)(*((u8 *)hero.moby + 0x53) - 1) < 2) {
+        if (*(f32 *)(e + 0x8a8) > 0.034906585f)
+            *(f32 *)(e + 0x8a8) = 0.034906585f;
+        if (*(f32 *)(e + 0x8a8) < -0.034906585f)
+            *(f32 *)(e + 0x8a8) = -0.034906585f;
         if (*(f32 *)(e + 0x8a4) > 0.12217305f)
             *(f32 *)(e + 0x8a4) = 0.12217305f;
         if (*(f32 *)(e + 0x8a4) < -0.12217305f)
             *(f32 *)(e + 0x8a4) = -0.12217305f;
     }
     FUN_L00_00205600();
+    g = (u8 *)&hero;
+    timer = &((struct Hero *)g)->rand_timer.fired;
     if (*timer != 0) {
         *timer = *timer + 1;
         if (*timer > 11)
@@ -316,9 +324,9 @@ void FUN_L00_002056a8(void) {
         if (*timer == 0) {
             u8 *slot = g + 0xd30;
             u8 *active = g + 0xd31;
-            for (i = 6; i >= 0; i--, slot += 0x40, active += 0x40) {
+            for (i = 6; i >= 0; slot += 0x40, i--, active += 0x40) {
                 if (*active != 0)
-                    detach_manipulator(*(s32 *)(g + 0x2080), slot);
+                    detach_manipulator((s32)((struct Hero *)g)->moby, slot);
             }
         } else {
             u8 *slot = g + 0xd30;
@@ -326,21 +334,27 @@ void FUN_L00_002056a8(void) {
             u8 *dst_a = g + 0xd40;
             u8 *dst_b = g + 0xd50;
             u8 *dst_c = g + 0xd60;
-            Quad_56a8 *src_a = (Quad_56a8 *)(e + 0x19c0);
-            Quad_56a8 *src_b = (Quad_56a8 *)(e + 0x1a30);
-            Quad_56a8 *src_c = (Quad_56a8 *)(e + 0x1aa0);
-            s32 *kind = (s32 *)0x17c1c0;
-            for (i = 0; i < 7; i++, active += 0x40, slot += 0x40, dst_a += 0x40, dst_b += 0x40, dst_c += 0x40, src_a++, src_b++, src_c++, kind++) {
+            Quad_56a8 *src_a = D_L00_0017C040_56a8;
+            Quad_56a8 *src_b = D_L00_0017C0B0_56a8;
+            Quad_56a8 *src_c = D_L00_0017C120_56a8;
+            s32 *kind = D_L00_0017C1C0_56a8;
+            for (i = 0; i != 7; i++, src_c++, dst_c += 0x40, src_b++, src_a++,
+                 dst_a += 0x40, kind++, slot += 0x40, active += 0x40, dst_b += 0x40) {
                 if (active[0xd31] == 0) {
-                    attach_manipulator(*(s32 *)(g + 0x2080), *kind, slot);
+                    attach_manipulator((s32)((struct Hero *)g)->moby, *kind, slot);
                     active[0xd33] = 1;
                     *(Quad_56a8 *)dst_a = *src_a;
                     *(Quad_56a8 *)dst_b = *src_b;
                     *(Quad_56a8 *)dst_c = *src_c;
                 }
             }
-            for (i = 0; i < 7; i++)
-                *(f32 *)(g + 0xd3c + i * 0x40) = *(f32 *)(0x17c190 + *timer * 4);
+            {
+                f32 *yaw = (f32 *)(g + 0xd3c);
+                for (i = 6; i >= 0; i--) {
+                    *yaw = D_L00_0017C190_56a8[*timer];
+                    yaw = (f32 *)((u8 *)yaw + 0x40);
+                }
+            }
         }
     }
 }
@@ -990,7 +1004,7 @@ void FUN_L00_00206e00(void) {
     s32 i, j, length, position;
     u8 *sequence;
     u8 *history;
-    s32 *history_count;
+    volatile s32 *history_count;
     if (D_0015EEA0 == 0 && D_0015EE20 == 0)
         return;
     g = &hero;
@@ -2218,16 +2232,17 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
     u64 value;
 
     if (context == 0)
-        context = D_001413D0_002092c8;
+        context = *(volatile s32 *)D_001413D0;
     out = (u64 *)((u8 *)header + 0x18);
     FUN_00254b58_002092c8(context);
     *(u64 *)(header + 8) = 0x7fff000000000000ULL;
     first_count = 1;
     if (indices[1] >= 0) {
+        s32 source_address = 0x70000000;
         first_index = indices + 1;
         do {
             first_count++;
-            *out = FUN_001ff768_002092c8(0x70000000 + (*first_index++ << 6), 32768.0f);
+            *out = FUN_001ff768_002092c8((*first_index++ << 6) + source_address, 32768.0f);
             out++;
         } while (*first_index >= 0);
     }
@@ -2277,13 +2292,13 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
     if ((u32)out & 0xf)
         *out++ = 0;
     header[7] = third_count;
-    header[6] = (first_count + second_count) << 3;
     header[4] = first_count << 3;
     header[3] = ((u8 *)out - ((u8 *)header + 0x10)) >> 4;
     header[5] = second_count;
-    header[0] = 0;
+    header[6] = (first_count + second_count) << 3;
     header[1] = 0;
     header[2] = 0;
+    header[0] = 0;
 }
 #endif
 typedef struct {

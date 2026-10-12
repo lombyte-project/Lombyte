@@ -74,14 +74,18 @@ s32 FUN_L06_00249738(u8 *p) {
         }
         append_screen_rect_packet(start_x, y + 8, start_x + x, y + 26, color, 0);
         x = start_x;
-        if (remaining > 0) do {
-            draw_hud_sprite(get_icon_frame(0x7562, 1), x, y, 32, 32, inner);
-            x += 32;
-            remaining--;
-        } while (remaining != 0);
+        segments = x - 40;
+        if (remaining > 0) {
+            tile_count = remaining;
+            do {
+                draw_hud_sprite(get_icon_frame(0x7562, 1), x, y, 32, 32, inner);
+                x += 32;
+                tile_count--;
+            } while (tile_count != 0);
+        }
         draw_hud_sprite(get_icon_frame(0x7562, 2), x, y, 32, 32, inner);
-        draw_hud_sprite(get_icon_frame(0x7562, 4), start_x - 40, y - 8, 48, 48, i);
-        draw_hud_sprite(get_icon_frame(0x7562, 0), start_x - 40, y - 8, 48, 48, i);
+        draw_hud_sprite(get_icon_frame(0x7562, 4), segments, y - 8, 48, 48, i);
+        draw_hud_sprite(get_icon_frame(0x7562, 0), segments, y - 8, 48, 48, i);
     }
     return *(s32 *)(p + 0x58);
 }

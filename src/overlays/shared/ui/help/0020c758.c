@@ -1324,55 +1324,64 @@ extern void FUN_0025d330_f160(void *, void *) __asm__("FUN_00214598");
 void FUN_L00_0020f160(void *moby, void *matrix)
 {
     u8 sum[0x40] __attribute__((aligned(16)));
+    /* Retail adds distances to these stack values without initializing them. */
     f32 scores[16];
     s32 i, j, n, chosen, ring, limit;
     volatile s32 count;
     f32 maximum;
-    s64 negative_one = -1;
+    s64 negative_one;
     u8 *record;
-    f32 * volatile score_ptr;
+    f32 *score_ptr;
     void * volatile output;
 
-    record = D_00140640 + D_00141508 * 0x30;
-    copy_matrix(record, matrix);
-    record = D_00140640 + D_00141508 * 0x30;
-    normalize_vector_triplet(record);
-    ring = D_00141508 + 1;
-    D_00141508 = ring % 16;
-    D_0014150C++;
-    if (D_0014150C > 16)
-        D_0014150C = 16;
+    {
+        /* Retail: hero + 0x12F0 ring; counters at +0x21B8..+0x21C0. */
+        struct Hero *hero_ptr = &hero;
+        u8 *records = hero_ptr->pad_12EF + 1;
+        record = records + (*(volatile s32 *)hero_ptr->pad_21B8) * 0x30;
+        copy_matrix(record, matrix);
+        record = records + (*(volatile s32 *)hero_ptr->pad_21B8) * 0x30;
+        normalize_vector_triplet(record);
+        ring = (*(volatile s32 *)hero_ptr->pad_21B8) + 1;
+        (*(volatile s32 *)hero_ptr->pad_21B8) = ring % 16;
+        (*(s32 *)(hero_ptr->pad_21B8 + 4))++;
+        if ((*(s32 *)(hero_ptr->pad_21B8 + 4)) > 16)
+            (*(s32 *)(hero_ptr->pad_21B8 + 4)) = 16;
+    }
     for (i = 0; i < 3; i++)
         FUN_001ff260_f160(sum + i * 16);
 
-    if (D_001413DC == 22)
+    if (hero.state.control_mode == 22)
         limit = 14;
-    else if (D_001413D4 == 2)
+    else if (hero.state.current == 2)
         limit = 5;
     else
         limit = 11;
     D_0013F694 = limit;
-    if (D_00141510 < D_0013F694)
-        D_00141510++;
-    else if (D_00141510 > D_0013F694)
-        D_00141510--;
-    n = D_00141510;
+    if ((*(s32 *)(hero.pad_21B8 + 8)) < D_0013F694)
+        (*(s32 *)(hero.pad_21B8 + 8))++;
+    else if ((*(s32 *)(hero.pad_21B8 + 8)) > D_0013F694)
+        (*(s32 *)(hero.pad_21B8 + 8))--;
+    n = (*(s32 *)(hero.pad_21B8 + 8));
     if (n < 2)
         n = 2;
-    if (D_0014150C < n)
+    if ((*(s32 *)(hero.pad_21B8 + 4)) < n)
         return;
 
     output = (u8 *)moby + 0x40;
-    score_ptr = scores;
+    count = 0;
+    if (n > 0)
+        score_ptr = scores;
     for (i = 0; i < n; i++) {
-        s32 a = D_00141508 - (i - 15);
+        s32 a = (*(volatile s32 *)(hero.pad_21B8)) - (i - 15);
         a -= ((a < 0 ? a + 15 : a) >> 4) * 16;
+        negative_one = -1;
         for (j = 0; j < n; j++) {
             if (i != j) {
-                s32 b = D_00141508 - (j - 15);
+                s32 b = (*(volatile s32 *)(hero.pad_21B8)) - (j - 15);
                 b -= ((negative_one < b ? b : b + 15) >> 4) * 16;
-                score_ptr[i] += FUN_L00_0020f0b8((f32 *)(D_00140640 + a * 0x30),
-                                                  (f32 *)(D_00140640 + b * 0x30));
+                score_ptr[i] += FUN_L00_0020f0b8((f32 *)((hero.pad_12EF + 1) + a * 0x30),
+                                                  (f32 *)((hero.pad_12EF + 1) + b * 0x30));
             }
         }
     }
@@ -1380,16 +1389,16 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     for (i = 0; i < n; i++)
         if (maximum < scores[i])
             maximum = scores[i];
-    count = 0;
     for (i = 0; i < n; i++)
         if (maximum * 0.2f < scores[i])
             count++;
     chosen = 0;
+    limit = count > 2;
     for (i = 0; i < n; i++) {
-        if (!(maximum * 0.2f < scores[i]) || count < 1 || count > 2) {
-            s32 a = D_00141508 - (i - 15);
+        if (!(maximum * 0.2f < scores[i]) || count < 1 || limit) {
+            s32 a = (*(volatile s32 *)(hero.pad_21B8)) - (i - 15);
             a -= ((a < 0 ? a + 15 : a) >> 4) * 16;
-            record = D_00140640 + a * 0x30;
+            record = (hero.pad_12EF + 1) + a * 0x30;
             chosen++;
             for (j = 0; j < 3; j++)
                 FUN_001ff278_f160(sum + j * 16, sum + j * 16, record + j * 16);
@@ -1447,8 +1456,7 @@ extern s32 FUN_L00_0020d540_f580(s32) __asm__("FUN_L00_0020d540");
 void FUN_L00_0020f580(void)
 {
     union { f32 direction[4]; u8 saved[0x20]; } scratch __attribute__((aligned(16)));
-    u8 position[0x30] __attribute__((aligned(16)));
-    u8 rotation[0x10] __attribute__((aligned(16)));
+    struct { u8 position[0x30]; u8 rotation[0x10]; } transform __attribute__((aligned(16)));
     s32 i, j, index, offset, first, second, third, random_range;
     s32 color_red, color_green, color_blue;
     u8 *moby, *effect, *source, *slot;
@@ -1551,8 +1559,8 @@ after_moby:
                         if (D_001404DC_f580 != 0) {
                             effect = (u8 *)D_001404DC_f580;
                             *(u32 *)(effect + 0x90) = 0x801432d7;
-                            *(u128 *)(effect + 0x10) = *(u128 *)D_0013F3D0_f580;
-                            *(u128 *)(effect + 0x40) = *(u128 *)D_0013F3E0_f580;
+                            qcopy(effect + 0x10, &hero.motion.pos);
+                            qcopy(effect + 0x40, &hero.motion.rot);
                             *(u16 *)(effect + 0x32) = 0x40;
                             *(u8 *)(effect + 0x31) = 1;
                             *(u8 *)(effect + 0x30) = 0;
@@ -1563,12 +1571,12 @@ after_moby:
                     }
                     if (D_001404DC_f580 != 0) {
                         effect = (u8 *)D_001404DC_f580;
-                        if ((*(u16 *)(effect + 0x34) & 1) == 0) {
-                            FUN_0024f728_f580(moby, 6, position);
-                            *(u128 *)D_001410D0_f580 = *(u128 *)rotation;
+                        if (((*(u16 *)(effect + 0x34) ^ 1) & 1) != 0) {
+                            FUN_0024f728_f580(moby, 6, transform.position);
+                            *(u128 *)D_001410D0_f580 = *(u128 *)transform.rotation;
                             FUN_00207d00_f580();
-                            *(u128 *)(effect + 0x10) = *(u128 *)rotation;
-                            FUN_001ffcd8_f580(effect + 0xc0, position);
+                            *(u128 *)(effect + 0x10) = *(u128 *)transform.rotation;
+                            FUN_001ffcd8_f580(effect + 0xc0, transform.position);
                             FUN_00250df8_f580(effect);
                             *(u64 *)(effect + 0x38) = *(u64 *)(*(u8 **)((u8 *)&hero + 0x2080) + 0x38);
                             random_range = FUN_001fef20_f580(0x78);

@@ -31,9 +31,6 @@ unsigned char *FUN_L07_0029a2a0(char *pos, char *vec) {
     }
     return p;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0029b8d8.s", FUN_L07_0029b8d8);
-#else
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int rand(void);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -63,10 +60,10 @@ unsigned char *FUN_L07_0029b8d8(void *m, short index, float amount, float factor
         }
         p[8] = rand();
         *(int *)(p + 4) = 0x7f7f7f;
-        p[9] = func_001FA898_r(4.0f) + 0x40;
-        p[3] = 0x48;
-        *(unsigned char *)(q - 0x1f) = 0;
-        *(float *)(p + 0xc) = amount;
+        *(volatile unsigned char *)(p + 9) = func_001FA898_r(4.0f) + 0x40;
+        *(volatile unsigned char *)(p + 3) = 0x48;
+        *(volatile unsigned char *)(p + 1) = 0;
+        *(volatile float *)(p + 0xc) = amount;
         p[2] = D_L07_001B21F4[*(short *)(q + 0xc)];
         *(float *)(q + 0x10) = D_0015ED60 * 0.015f;
         *(short *)(q + 0xe) = index;
@@ -78,4 +75,3 @@ unsigned char *FUN_L07_0029b8d8(void *m, short index, float amount, float factor
     }
     return p;
 }
-#endif /* NON_MATCHING */

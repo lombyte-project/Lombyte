@@ -404,10 +404,7 @@ void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4
     FUN_001f9a68(tmp, p2, b - a);
     FUN_001f9a10(out, out, tmp);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028bb90.s", FUN_L01_0028bb90);
-#else
-float FUN_L01_0028bb90(T_28b828 *path, int particles, void *moby, float a, float b) {
+float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *moby) {
     OvlVec4 previousTangent;
     OvlVec4 nextTangent;
     OvlVec4 currentNode;
@@ -424,7 +421,9 @@ float FUN_L01_0028bb90(T_28b828 *path, int particles, void *moby, float a, float
     if (particles) {
         FUN_L01_00285768(0.666f, &nextNode, (int)moby, 0, 0x80101080, 0x7f, -1, 0xff);
     }
-    FUN_L01_0028b8c8(&nextTangent, (int *)path, 0, a, b);
+    /* The SN ABI assigns float arguments independently of the integer arguments.
+     * Keep the retail argument setup order without changing the shared helper. */
+    ((void (*)(void *, int *, float, float, int))FUN_L01_0028b8c8)(&nextTangent, (int *)path, a, b, 0);
 
     index = 0;
     while (index < count) {
@@ -442,7 +441,7 @@ float FUN_L01_0028bb90(T_28b828 *path, int particles, void *moby, float a, float
         segmentLength = 0.0f;
         nextNode.q = *(OvlQuad *)((char *)path->f10 + nextIndex * 16 + 0x10);
         *(int *)path = index;
-        FUN_L01_0028b8c8(&nextTangent, (int *)path, 1, a, b);
+        ((void (*)(void *, int *, float, float, int))FUN_L01_0028b8c8)(&nextTangent, (int *)path, a, b, 1);
         previousPoint.q = currentNode.q;
         step = t;
         do {
@@ -464,4 +463,3 @@ float FUN_L01_0028bb90(T_28b828 *path, int particles, void *moby, float a, float
     *(int *)path = savedIndex;
     return total;
 }
-#endif

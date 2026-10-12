@@ -61,13 +61,14 @@ void FUN_L07_0031d2e0(char *moby) {
         count = *(int *)path;
         i = 0;
         if (count > 0) do {
-            char *current_path = D_L07_001B0530[data[1]];
-            int next = (i + 1) % count;
+            char *current_path = D_L07_001B0530[path_index];
+            int next = (i + 1) % *(int *)current_path;
             float length = fast_vec_dist(current_path + 0x10 + i * 0x10,
                                          current_path + 0x10 + next * 0x10);
             *(float *)(D_L07_001B0530[data[1]] + 0x1c + i * 0x10) = length;
             *(float *)(data + 8) += *(float *)(D_L07_001B0530[data[1]] + 0x1c + i * 0x10);
-            count = *(int *)D_L07_001B0530[data[1]];
+            path_index = data[1];
+            count = *(int *)D_L07_001B0530[path_index];
             i++;
         } while (i < count);
         moby[0x20] = 1;
@@ -113,15 +114,18 @@ state_one:
                 segment = 0;
                 debug_print(D_L07_00211B50, total, batch);
                 if (total > 0) {
-                    remaining = total - batch;
                     do {
+                        int accepted = 0;
+                        remaining = total - batch;
                         do {
                             sample_path(step, (int *)path, position, &segment, &fraction, 1);
                             if (data[9] == -1 ||
-                                12.0f < vector_distance((*(char **)0x15ffd8) + data[9] * 0x100 + 0x10, position))
-                                break;
-                            step += 10.0f;
-                        } while (1);
+                                12.0f < vector_distance(D_L07_0015FFD8 + data[9] * 0x100 + 0x10, position))
+                                accepted = 1;
+                            else
+                                step += 10.0f;
+                        } while (!accepted);
+                        total = remaining;
                         {
                             int x = FUN_00120478(position[0]);
                             int y = FUN_00120478(position[1]);
@@ -135,9 +139,7 @@ state_one:
                             debug_print(D_L07_00211BA8, remaining);
                             batch = remaining;
                         }
-                        total = remaining;
-                        remaining = total - batch;
-                    } while (total > 0);
+                    } while (remaining > 0);
                 }
             }
         }

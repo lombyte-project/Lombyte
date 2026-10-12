@@ -27,6 +27,7 @@ void _printf(const char *fmt, char *ap) {
 
     ie = DIntr();
     for (; *fmt != 0; fmt++) {
+        p = (char *)fmt;
         pad = 0;
         mod = 0;
         if (*fmt == '%') {
@@ -100,9 +101,11 @@ void _printf(const char *fmt, char *ap) {
                 } else {
                     do {
                         d = v & 0xF;
-                        ch = (d < 10) ? d + '0' : d + 'a' - 10;
-                    --p;
-                    *p = ch;
+                        if (d < 10) {
+                            *--p = d + '0';
+                        } else {
+                            *--p = d + 'a' - 10;
+                        }
                         v = (u64)v >> 4;
                     } while (v != 0);
                 }
@@ -176,9 +179,9 @@ void _printf(const char *fmt, char *ap) {
                     printfloat(f);
                 }
             } break;
-            case 's' - '0':
-                p = ARG(char *);
-                if (*p == 0) {
+            case 's' - '0': {
+                char *string = ARG(char *);
+                if (*string == 0) {
                     D_0012FC00[0]('(');
                     D_0012FC00[0]('n');
                     D_0012FC00[0]('u');
@@ -186,6 +189,7 @@ void _printf(const char *fmt, char *ap) {
                     D_0012FC00[0]('l');
                     D_0012FC00[0](')');
                 } else {
+                    p = string;
                     if (*p != 0) {
                         do {
                             D_0012FC00[0](*p++);
@@ -193,6 +197,7 @@ void _printf(const char *fmt, char *ap) {
                     }
                 }
                 break;
+            }
             case 'c' - '0':
                 v = ARG(char);
                 D_0012FC00[0](v);

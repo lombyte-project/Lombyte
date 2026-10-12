@@ -48,12 +48,15 @@ void FUN_L01_0030b618(u8 *m) {
             mark_moby_for_removal_b618(m);
             return;
         }
-        for (i = 0; i < *(s32 *)(e + 0x58); i++) {
-            f32 *point = ((f32 *)e) + i * 4;
-            point[0] *= 0.00390625f;
-            point[1] *= 0.00390625f;
-            point[2] *= 0.00390625f;
-            point[3] *= 0.00390625f;
+        {
+            s32 i;
+            for (i = 0; i < *(s32 *)(e + 0x58); i++) {
+                f32 *point = ((f32 *)e) + i * 4;
+                point[0] *= 0.00390625f;
+                point[1] *= 0.00390625f;
+                point[2] *= 0.00390625f;
+                point[3] *= 0.00390625f;
+            }
         }
         *(s32 *)(e + 0x68) = -1;
         if (m[0x30] < truncate_float_to_s32_b618(*(f32 *)(e + 0x5c)) + 4)
@@ -110,12 +113,14 @@ void FUN_L01_0030b618(u8 *m) {
             interpolate_vector_b618(e + 0x40, &first, &second, sine);
         }
         cutoff = *(f32 *)(e + 0x5c) * 0.75f;
-        if (cutoff < elapsed) {
-            f32 numerator = elapsed - cutoff;
+        {
             f32 denominator = *(f32 *)(e + 0x5c) - cutoff;
-            first = 0;
-            second = *(OvlQuad *)(e + 0x40);
-            interpolate_vector_b618(e + 0x40, &second, &first, numerator / denominator);
+            if (cutoff < elapsed) {
+                f32 numerator = elapsed - cutoff;
+                first = 0;
+                second = *(OvlQuad *)(e + 0x40);
+                interpolate_vector_b618(e + 0x40, &second, &first, numerator / denominator);
+            }
         }
         slot = *(s32 *)(e + 0x68);
         if (slot == -1) {
@@ -140,9 +145,6 @@ void FUN_L01_0030b618(u8 *m) {
     }
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030bfa8.s", FUN_L01_0030bfa8);
-#else
 #include "rnc/overlay/quad.h"
 typedef union {
     OvlQuad q;
@@ -181,6 +183,8 @@ void FUN_L01_0030bfa8(char *m) {
         struct { GlowVec_bfa8 mat0, mat1, mat2, point, partial, offset; } basis;
     } local;
     GlowVec_bfa8 *dst;
+    GlowVec_bfa8 *src;
+    GlowVec_bfa8 *basis;
     s32 i;
     f32 one;
     OvlQuad q0, q1, q2, q3;
@@ -211,27 +215,31 @@ void FUN_L01_0030bfa8(char *m) {
     scale_vector_xyz_bfa8(&local.basis.offset, m + 0xc0, D_L01_00162064);
     scale_vector_xyz_bfa8(&local.basis.partial, m + 0xe0, D_L01_0016206C);
     add_vector_xyz_bfa8(&local.basis.offset, &local.basis.offset, &local.basis.partial);
+    src = &local.basis.mat0;
     add_vector_xyz_bfa8(&local.basis.point, &local.basis.offset, m + 0x10);
-    subtract_vector_xyz_bfa8(&local.basis.mat0, D_L01_00167240, &local.basis.point);
-    normalize_vector_xyz_bfa8(&local.basis.mat0, &local.basis.mat0, one);
-    cross_vectors_xyz_bfa8(&local.basis.mat1, &local.basis.mat0, D_0013F5E0);
-    normalize_vector_xyz_bfa8(&local.basis.mat1, &local.basis.mat1, -1.0f);
-    cross_vectors_xyz_bfa8(&local.basis.mat2, &local.basis.mat1, &local.basis.mat0);
+    subtract_vector_xyz_bfa8(src, D_L01_00167240, &local.basis.point);
+    normalize_vector_xyz_bfa8(src, src, one);
+    dst = &local.basis.mat1;
+    cross_vectors_xyz_bfa8(dst, src, D_0013F5E0);
+    normalize_vector_xyz_bfa8(dst, dst, -1.0f);
+    cross_vectors_xyz_bfa8(&local.basis.mat2, dst, src);
+    basis = src;
 
     local.quad.color[3] = 0x202020FF;
     local.quad.color[2] = 0x202020FF;
     local.quad.color[1] = 0x202020FF;
     local.quad.color[0] = 0x202020FF;
+    src = local.src_corner;
     dst = local.quad.corner;
     do {
-        scale_vector_xyz_bfa8(dst, &local.src_corner[3 - i], 0.4f);
-        transform_vector_bfa8(dst, dst, &local.basis.mat0);
+        scale_vector_xyz_bfa8(dst, src, 0.4f);
+        src++;
+        transform_vector_bfa8(dst, dst, basis);
         dst++;
         i--;
     } while (i >= 0);
-    draw_geometry_quad_bfa8(&local.quad, &local.basis.mat0, 0);
+    draw_geometry_quad_bfa8(&local.quad, 0, 0);
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -276,9 +284,6 @@ char *FUN_L01_0030c898(char *owner, char *pos, float a, float b, float c, float 
     }
     return m;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c9a8.s", FUN_L01_0030c9a8);
-#else
 typedef struct {
     OvlQuad dir;
     void *owner;
@@ -333,16 +338,20 @@ void FUN_L01_0030c9a8(char *m) {
     pitch_k = frame_time_sq * 4.712389f;
     pitch_max = frame_time * 3.1415927f;
     *(f32 *)(m + 0x48) = desired_yaw;
-    *(f32 *)(m + 0x44) = spring_turn((f32 *)(e + 4), *(f32 *)(m + 0x44), desired_pitch,
-                                            pitch_k, pitch_d, pitch_max);
-    build_spherical_offset_30c9a8(offset.f, frame_time * 40.0f,
-                                   *(f32 *)(m + 0x48), -*(f32 *)(m + 0x44));
-    old_pos.q = *(OvlQuad *)pos;
+    {
+        f32 pitch_result = spring_turn((f32 *)(e + 4), *(f32 *)(m + 0x44), desired_pitch,
+                                                pitch_k, pitch_d, pitch_max);
+        pitch_max = frame_time * 40.0f;
+        *(f32 *)(m + 0x44) = pitch_result;
+        build_spherical_offset_30c9a8(offset.f, pitch_max,
+                                       *(f32 *)(m + 0x48), -pitch_result);
+    }
+    qcopy(&old_pos, pos);
     fast_vec_add(pos, pos, &offset);
-    if (pos[0] < 2.0f || pos[0] > 1021.0f ||
-        pos[1] < 2.0f || pos[1] > 1021.0f ||
-        pos[2] < 2.0f || pos[2] > 1021.0f ||
-        pos[0] < 0.0f || pos[1] < 0.0f || pos[2] < 0.0f ||
+    if (*(f32 *)(m + 0x10) < 2.0f || *(f32 *)(m + 0x10) > 1021.0f ||
+        *(f32 *)(m + 0x14) < 2.0f || *(f32 *)(m + 0x14) > 1021.0f ||
+        *(f32 *)(m + 0x18) < 2.0f || *(f32 *)(m + 0x18) > 1021.0f ||
+        *(f32 *)(m + 0x10) < 0.0f || *(f32 *)(m + 0x14) < 0.0f || *(f32 *)(m + 0x18) < 0.0f ||
         distance_xyz_30c9a8(pos, D_L01_00167240_30c9a8) > 64.0f) {
         mark_moby_for_removal_30c9a8(m);
         return;
@@ -370,11 +379,10 @@ void FUN_L01_0030c9a8(char *m) {
                 *(s16 *)(e + 0x14) = scale_game_frames(3);
             return;
         }
-        *(OvlQuad *)pos = D_L01_001742E0_30c9a8;
+        qcopy(pos, &D_L01_001742E0_30c9a8);
     }
     mark_moby_for_removal_30c9a8(m);
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

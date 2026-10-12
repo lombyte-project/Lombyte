@@ -414,7 +414,7 @@ extern u128 D_0013F3D0;
 extern int FUN_L05_002388a0(float, float, float *) __asm__("FUN_L00_0020a240");
 extern float FUN_L00_0022e0f0(void *) __asm__("FUN_001f9b20");
 extern float FUN_L00_0022e598(float, float) __asm__("FUN_001f9e90");
-extern int FUN_L00_00288630(void) __asm__("FUN_L00_0025e3b8");
+extern int FUN_L00_00288630(void *) __asm__("FUN_L00_0025e3b8");
 extern void FUN_L00_0025c9d8(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern int FUN_L00_0021e8d8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float FUN_L00_0022e138(void *, void *) __asm__("FUN_001f9b48");
@@ -446,7 +446,7 @@ void FUN_L05_0024bdc0(void) {
             hero.unk250 = FUN_L00_0022e598(*(float *)(level + 0x48), probe_value);
             if (*(int *)(level + 0x18)) {
                 hero.unk255 = 1;
-                if (FUN_L00_00288630()) hero.unk254 = 1;
+                if (FUN_L00_00288630(*(void **)(level + 0x18))) hero.unk254 = 1;
             }
         }
     }
@@ -1141,6 +1141,7 @@ extern void FUN_L00_002592b8(void **, void *, s32, s32);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern s32 D_L00_0015F5CC __asm__("D_L00_0015F5CC");
 extern s32 D_0013D4B8;
+extern s32 weapon_ammo_counts[37] __asm__("D_0013D428");
 extern f32 D_0013F420[];
 extern f32 D_0013F3D0[];
 
@@ -1198,18 +1199,17 @@ void FUN_L05_00253b48(void) {
                 color |= green << 8;
                 color |= red;
                 do {
-                    moby = second;
-                    if (*(s16 *)(moby + 0xA6) == 0x474) {
-                        *(u16 *)(moby + 0x34) |= 0x10;
-                        *(u32 *)(moby + 0x90) = color;
-                        if (FUN_L00_001fefc8(moby + 0xBC, moby) != 0) {
-                            FUN_001f9a28(delta, moby + 0x10, D_0013F3D0);
+                    if (*(s16 *)(second + 0xA6) == 0x474) {
+                        *(u16 *)(second + 0x34) |= 0x10;
+                        *(u32 *)(second + 0x90) = color;
+                        if (FUN_L00_001fefc8(second + 0xBC, second) != 0) {
+                            FUN_001f9a28(delta, second + 0x10, D_0013F3D0);
                             FUN_001f9fc8(matrix);
-                            FUN_001fa2d8(matrix, moby + 0xC0);
+                            FUN_001fa2d8(matrix, second + 0xC0);
                             FUN_001f9d20(delta, delta, matrix);
                             if (FUN_001f99c0(delta[0]) < 2.8f && FUN_001f99c0(delta[1]) < 1.25f && FUN_001f99c0(delta[2]) < 1.5f) {
-                                hero.unk8C4 += **(s32 **)(moby + 0x78);
-                                moby[0xBC] = FUN_001f96f8(0x3C);
+                                hero.unk8C4 += **(s32 **)(second + 0x78);
+                                second[0xBC] = FUN_001f96f8(0x3C);
                                 if (hero.unk86C != 0)
                                     allocate_voice_for_target_entry(1, 0, hero.unk86C);
                             }
@@ -1225,18 +1225,19 @@ void FUN_L05_00253b48(void) {
         while (third != 0) {
 
             if (*(s16 *)(third + 0xA6) == 0x1D6 && FUN_L00_001fefc8(third + 0xBC, third) != 0 && FUN_001f9b48(D_0013F420, third + 0x10) < 1.5f) {
+                struct Hero *g = &hero;
                 third[0xBC] = FUN_001f96f8(300);
-                if (*(s32 *)((u8 *)&hero + 0x10B8) != 0x24) {
-                    *(s32 *)((u8 *)&hero + 0x20B8) = 0x24;
-                    hero.unk20AC = 0;
+                if (*(s32 *)((u8 *)g + 0x10B8) != 0x24) {
+                    *(s32 *)((u8 *)g + 0x20B8) = 0x24;
+                    g->unk20AC = 0;
                     FUN_L05_0023dc88(0);
-                    hero.unk20AC = 1;
+                    g->unk20AC = 1;
                 }
-                hero.unk8CE++;
-                if (hero.unk8CE > 3)
-                    hero.unk8CE = 3;
-                *(s32 *)((u8 *)&hero + 0x20B8) = 0x24;
-                D_0013D4B8++;
+                g->unk8CE++;
+                if (g->unk8CE > 3)
+                    g->unk8CE = 3;
+                *(s32 *)((u8 *)g + 0x20B8) = 0x24;
+                weapon_ammo_counts[36]++;
             }
             FUN_L00_002592b8((void **)&third, third, 0, 0);
         }
@@ -1298,10 +1299,13 @@ void FUN_L05_00254058(void) {
     total = *(s32 *)((char *)&hero + 0x70C);
     if (total > 0) {
         step = 100;
+        i = total;
+        total = 0;
         do {
-            *(s32 *)((char *)&hero + 0x710) += step;
+            total += step;
             step += 50;
-        } while (--total != 0);
+        } while (--i != 0);
+        *(s32 *)((char *)&hero + 0x710) = total;
     }
     *(s32 *)((char *)&hero + 0x6F0) = 0;
     for (i = 0; i < 4; i++) {
@@ -1338,60 +1342,67 @@ typedef struct {
 } HelpPath;
 
 void FUN_L05_00254358(f32 *position, f32 *direction) {
-    char *g = (char *)&hero;
+    struct Hero *g = &hero;
     HelpPath *path;
+    f32 height_limit;
     f32 best;
-    s32 index = 0;
-    s32 selected = 0;
+    s32 index;
+    s32 selected;
     HelpPathPoint point;
     HelpPathPoint *p;
-    char *origin = g + 0x80;
+    HelpPath *cursor;
+    char *origin = (char *)g + 0x80;
 
-    if (*(void **)(g + 0x86C) == 0) {
+    if (g->unk86C == 0) {
         *(HelpPathPoint *)position = *(HelpPathPoint *)origin;
         *(HelpPathPoint *)direction = *(HelpPathPoint *)(origin + 0x10);
         return;
     }
-    path = (HelpPath *)D_L05_001B0930[*(s32 *)(*(char **)(*(char **)(g + 0x86C) + 0x78) + 0x24)];
+    path = (HelpPath *)D_L05_001B0930[*(s32 *)(*(char **)(g->unk86C + 0x78) + 0x24)];
+    height_limit = 4.0f;
     best = 9999999.0f;
-    if (path->count > 0) do {
-        f32 a;
-        s32 next;
-        f32 b;
-        p = &path->points[index];
-        a = FUN_001f9e90(p->x - *(f32 *)(origin + 0), p->y - *(f32 *)(origin + 4));
-        next = (index + (path->count + 2)) % path->count;
-        b = FUN_001f9e90(path->points[next].x - p->x, path->points[next].y - p->y);
-        if (fast_difference_between_rotations(a, b) > 1.5707964f) {
-            if (current_level_index == 0x10 && *(void **)(g + 0x8B4) != 0) {
-                f32 a = *(f32 *)(origin + *(s16 *)(g + 0x8C8) * 16 + 0x18);
-                f32 b = *(f32 *)(origin + *(s16 *)(g + 0x898) * 16 + 0x18);
-                f32 high = b;
-                if (!(a < b)) high = a;
-                if (absolute_float(high - p->z) > 4.0f) {
-                    goto next_point;
+    index = 0;
+    selected = 0;
+    p = path->points;
+    if (path->count > 0) {
+        cursor = path;
+        do {
+            f32 a;
+            s32 next;
+            f32 b;
+            a = FUN_001f9e90(cursor->points[0].x - *(f32 *)origin, cursor->points[0].y - *(f32 *)(origin + 4));
+            next = (s32)((u32)index + ((u32)path->count + 2U)) % path->count;
+            b = FUN_001f9e90(path->points[next].x - cursor->points[0].x, path->points[next].y - cursor->points[0].y);
+            if (fast_difference_between_rotations(a, b) > 1.5707964f) {
+                if (current_level_index == 0x10 && g->unk8B4 != 0) {
+                    f32 a = *(f32 *)((char *)g->unk8B4 + *(s16 *)((char *)g + 0x8C8) * 16 + 0x18);
+                    f32 b = *(f32 *)((char *)g->unk8B4 + g->unk898 * 16 + 0x18);
+                    f32 high = (a < b ? b : a) - cursor->points[0].z;
+                    if (absolute_float(high) > height_limit) {
+                        goto next_point;
+                    }
+                }
+                {
+                    f32 distance = FUN_001f9b80(origin, p);
+                    if (distance < best) {
+                        best = distance;
+                        selected = index;
+                    }
                 }
             }
-            {
-                f32 distance = FUN_001f9b80(origin, p);
-                if (distance < best) {
-                    best = distance;
-                    selected = index;
-                }
-            }
-        } else {
-            selected = index;
-        }
 next_point:
-        index += 2;
-    } while (index < path->count);
+            index += 2;
+            p += 2;
+            cursor = (HelpPath *)((char *)cursor + 0x20);
+        } while (index < path->count);
+    }
     p = &path->points[selected];
     *(HelpPathPoint *)position = *p;
     point = *(HelpPathPoint *)position;
     point.z += 2.0f;
     position[2] = find_ground_height(0.5f, &point, 0);
     clear_u64_value(direction);
-    direction[2] = FUN_001f9e90(p[1].x - p->x, p[1].y - p->y);
+    direction[2] = FUN_001f9e90(path->points[selected + 1].x - path->points[selected].x, path->points[selected + 1].y - path->points[selected].y);
 }
 #endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254608.s", FUN_L05_00254608);

@@ -859,7 +859,7 @@ extern unsigned int D_L15_001BAAD0[];
 extern unsigned int D_L15_0014C190[];
 extern int D_L15_0015ED84;
 extern int D_L15_0015ED98;
-extern int D_L15_00184AAC __attribute__((section(".data")));
+extern volatile int D_L15_00184AAC __attribute__((section(".data")));
 extern unsigned char D_0013D38A;
 extern unsigned char D_0013D3F5;
 extern unsigned char D_001413F4;
@@ -882,48 +882,51 @@ extern char *FUN_L15_002eb9e0(char *, char *);
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern float FUN_L00_00249000(float, void *, int) __asm__("FUN_00213508");
 
+/* Bind this call to its checked overlay instance rather than a duplicate. */
+extern float FUN_001f96b0_slot(float) __asm__("FUN_L15_001f8648");
+
+#include "rnc/gameplay/state/item_state.h"
+
 void FUN_L15_002ec030(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     float vec[4] __attribute__((aligned(16)));
-    OvlQuad tmp[2];
+    float tmp[4] __attribute__((aligned(16)));
+    OvlQuad position;
     float angle;
-    unsigned int *bits;
     char *effect;
     if (data[3] != -1) {
         if (moby->state != 0) {
-            FUN_001f9a28(&tmp[0], (char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10, data + 4);
-            *(OvlQuad *)vec = tmp[0];
-            FUN_L00_001ff290(&tmp[0], &moby->pos, vec);
+            FUN_001f9a28(tmp, (char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10, data + 4);
+            *(OvlQuad *)vec = *(OvlQuad *)tmp;
+            FUN_L00_001ff290(tmp, &moby->pos, vec);
         }
         *(OvlQuad *)(data + 4) = *(OvlQuad *)((char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10);
     }
     switch (moby->state) {
     case 0: {
         int save_index;
-        int *save_bits;
         int remaining;
         int *slot_list;
         save_index = ((int)((unsigned int)moby->save_id << 16)) >> 16;
-        save_bits = (int *)((char *)D_L15_0014C190 + D_L15_0015ED84 * 0x100 + (save_index >> 5) * 4);
-        if (D_L15_001BB830[save_index + 0x454] == 0 &&
-            ((*save_bits & (1 << (moby->save_id & 31))) == 0)) {
-            D_L15_00184AAC = 0;
-            moby->state = 1;
-            slot_list = data + 8;
-            remaining = 0x17;
-            do {
-                if (*slot_list != -1)
-                    FUN_L15_002ebf28(*slot_list, 0);
-                remaining--;
-                slot_list++;
-            } while (remaining >= 0);
-        } else {
+        if (D_L15_001BB830[save_index + 0x454] != 0 ||
+            ((*(int *)(D_L15_0015ED84 * 0x100 + (save_index >> 5) * 4 + (char *)D_L15_0014C190) >> (moby->save_id & 31) & 1) != 0)) {
             moby->state = 4;
+            break;
         }
+        D_L15_00184AAC = 0;
+        moby->state = 1;
+        slot_list = data + 8;
+        remaining = 0x17;
+        do {
+            if (*slot_list != -1)
+                FUN_L15_002ebf28(*slot_list, 0);
+            remaining--;
+            slot_list++;
+        } while (remaining >= 0);
         break;
     }
     case 1:
-        if (D_0013D38A != 0 && FUN_001f9b80(D_0013F3D0, &moby->pos) < 3.0f && D_001413F4 == 0) {
+        if (alternate_item_available[2] != 0 && FUN_001f9b80(D_0013F3D0, &moby->pos) < 3.0f && *((unsigned char *)D_0013F3D0 + 0x2024) == 0) {
             FUN_L15_002f78b8(data[0]);
             moby->state = 2;
         }
@@ -933,20 +936,20 @@ void FUN_L15_002ec030(struct Moby *moby) {
             vec[0] = FUN_001f9dc8(FUN_001fa580(moby->rot.z, -1.5707964f)) * 2.0f;
             vec[1] = FUN_001f9de0(FUN_001fa580(moby->rot.z, -1.5707964f)) * 2.0f;
             vec[2] = 0.0f;
-            FUN_L00_001ff290(&tmp[1], vec, &moby->pos);
-            clear_u64_value(&tmp[0]);
-            ((float *)&tmp[0])[2] = FUN_001fa580(moby->rot.z, 1.5707964f);
-            ((float *)&tmp[0])[1] = 1.5707964f;
-            data[1] = (int)FUN_L15_002eb9e0((char *)vec, (char *)&tmp[0]);
+            FUN_L00_001ff290(&position, vec, &moby->pos);
+            clear_u64_value(tmp);
+            tmp[2] = FUN_001fa580(moby->rot.z, 1.5707964f);
+            tmp[1] = 1.5707964f;
+            data[1] = (int)FUN_L15_002eb9e0((char *)vec, (char *)tmp);
             data[2] = 0;
             vec[0] = FUN_001f9dc8(FUN_001fa580(moby->rot.z, -1.5707964f)) * 3.0f;
             vec[1] = FUN_001f9de0(FUN_001fa580(moby->rot.z, -1.5707964f)) * 3.0f;
             vec[2] = 0.0f;
-            FUN_L00_001ff290(&tmp[1], vec, &moby->pos);
+            FUN_L00_001ff290(&position, vec, &moby->pos);
             vec[2] = FUN_L00_00249000(0.5f, vec, 0);
-            clear_u64_value(&tmp[0]);
-            ((float *)&tmp[0])[2] = FUN_001fa580(moby->rot.z, 1.5707964f);
-            FUN_L00_00216f90(vec, &tmp[0], 0x72, 0);
+            clear_u64_value(tmp);
+            tmp[2] = FUN_001fa580(moby->rot.z, 1.5707964f);
+            FUN_L00_00216f90(vec, tmp, 0x72, 0);
             if (data[8] != -1)
                 FUN_L15_002ebf28(data[8], 1);
             moby->state = 3;
@@ -954,49 +957,51 @@ void FUN_L15_002ec030(struct Moby *moby) {
         break;
     case 3:
         if (data[1] != 0) {
-            *(float *)&data[2] = FUN_001fa580(*(float *)&data[2], (360.0f / FUN_001f96b0(360.0f)) * 0.017453292f);
+            *(float *)&data[2] = FUN_001fa580(*(float *)&data[2], (360.0f / FUN_001f96b0_slot(360.0f)) * 0.017453292f);
             angle = FUN_001f9dc8(*(float *)&data[2]) + 1.0f;
             vec[0] = FUN_001f9dc8(FUN_001fa580(moby->rot.z, -1.5707964f)) * angle;
             vec[1] = FUN_001f9de0(FUN_001fa580(moby->rot.z, -1.5707964f)) * angle;
             vec[2] = 0.0f;
-            FUN_001f9a10(&tmp[0], &moby->pos, vec);
             effect = (char *)data[1];
-            *(OvlQuad *)(effect + 0x10) = tmp[0];
+            FUN_001f9a10(tmp, &moby->pos, vec);
+            *(OvlQuad *)(effect + 0x10) = *(OvlQuad *)tmp;
             if (angle < 0.5f) {
-                bits = (unsigned int *)((char *)D_L15_0014C190 + D_L15_0015ED84 * 0x100 + ((short)moby->save_id >> 5) * 4);
+                unsigned int *bits;
+                bits = (unsigned int *)(((short)moby->save_id >> 5) * 4 + D_L15_0015ED84 * 0x100 + (char *)D_L15_0014C190);
                 *bits |= 1u << (moby->save_id & 31);
-                bits = &D_L15_001BAAD0[(short)moby->save_id >> 5];
-                *bits |= 1u << (moby->save_id & 31);
+                {
+                    unsigned int *bits = &D_L15_001BAAD0[(short)moby->save_id >> 5];
+                    *bits |= 1u << (moby->save_id & 31);
+                }
                 moby->state = 4;
             }
         }
         break;
     case 4:
         D_L15_00184AAC = 1;
-        if (data[1] == 0) {
+        if (*(volatile int *)(data + 1) == 0) {
             vec[0] = FUN_001f9dc8(FUN_001fa580(moby->rot.z, -1.5707964f)) * 0.5f;
             vec[1] = FUN_001f9de0(FUN_001fa580(moby->rot.z, -1.5707964f)) * 0.5f;
             vec[2] = 0.0f;
-            FUN_L00_001ff290(&tmp[1], vec, &moby->pos);
-            clear_u64_value(&tmp[0]);
-            ((float *)&tmp[0])[2] = FUN_001fa580(moby->rot.z, 1.5707964f);
-            ((float *)&tmp[0])[1] = 1.5707964f;
-            *(OvlQuad *)&tmp[1] = *(OvlQuad *)&moby->pos;
-            data[1] = (int)FUN_L15_002eb9e0((char *)&tmp[1], (char *)&tmp[0]);
+            FUN_L00_001ff290(&position, vec, &moby->pos);
+            clear_u64_value(tmp);
+            tmp[2] = FUN_001fa580(moby->rot.z, 1.5707964f);
+            tmp[1] = 1.5707964f;
+            *(OvlQuad *)&position = *(OvlQuad *)&moby->pos;
+            data[1] = (int)FUN_L15_002eb9e0((char *)&position, (char *)tmp);
         } else {
             vec[0] = FUN_001f9dc8(FUN_001fa580(moby->rot.z, -1.5707964f)) * 0.5f;
             vec[1] = FUN_001f9de0(FUN_001fa580(moby->rot.z, -1.5707964f)) * 0.5f;
             vec[2] = 0.0f;
-            FUN_L00_001ff290(&tmp[1], vec, &moby->pos);
-            clear_u64_value(&tmp[0]);
-            ((float *)&tmp[0])[2] = FUN_001fa580(moby->rot.z, 1.5707964f);
-            ((float *)&tmp[0])[1] = 1.5707964f;
-            effect = (char *)data[1];
-            *(OvlQuad *)(effect + 0x10) = *(OvlQuad *)vec;
-            *(OvlQuad *)(effect + 0x40) = tmp[0];
+            FUN_L00_001ff290(&position, vec, &moby->pos);
+            clear_u64_value(tmp);
+            tmp[2] = FUN_001fa580(moby->rot.z, 1.5707964f);
+            tmp[1] = 1.5707964f;
+            *(OvlQuad *)((char *)data[1] + 0x10) = *(OvlQuad *)vec;
+            *(OvlQuad *)((char *)data[1] + 0x40) = *(OvlQuad *)tmp;
         }
-        if (D_0013D3F5 == 0 && FUN_L15_002ebfb0(data[8]) > 9) {
-            D_0013D3F5 = 1;
+        if (alternate_item_available[0x6D] == 0 && FUN_L15_002ebfb0(data[8]) > 9) {
+            alternate_item_available[0x6D] = 1;
             D_L15_0015ED98 += 15000;
         }
         break;
@@ -1484,11 +1489,11 @@ void FUN_L15_002edbe0(struct Moby *moby) {
     FUN_L00_00250320(moby, &r, &g, &b);
     p = (Quad4 *)&t.f[1];
     color = (D_L15_001621EC << 24) | (b << 16) | (g << 8) | r;
+    end = D_L15_001DECB0 + 0x230 / 4;
     o = D_L15_001DECB0;
     zout = D_L15_001DECB0 + 2;
-    s = D_L15_001DE860;
     colors = D_L15_001DF048;
-    end = D_L15_001DECB0 + 0x230 / 4;
+    s = D_L15_001DE860;
     do {
         float x = s[0];
         float y = s[1];

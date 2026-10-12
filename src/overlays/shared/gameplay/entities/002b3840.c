@@ -281,7 +281,7 @@ extern int D_00151928_87a8 __asm__("D_00151928") __attribute__((sda));
 extern int D_0015190C_87a8 __asm__("D_0015190C") __attribute__((sda));
 extern int D_00151910_87a8 __asm__("D_00151910") __attribute__((sda));
 
-void FUN_L05_002f87a8(char *moby) {
+void FUN_L05_002f87a8(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
     float position[4], delta[4], effect_position[4], offset[4], second_position[4];
     float angle, distance_scale, delta_length;
@@ -522,6 +522,9 @@ void FUN_L05_0030c220(struct Moby *m) {
     float sign;
     float pass;
     int i, j, color;
+    int next_pass;
+    float *vertex_a, *vertex_b;
+    int *color_a, *color_b;
     char *vars = (char *)m->pvars;
 
     get_moby_position(m, 0, position);
@@ -533,7 +536,7 @@ void FUN_L05_0030c220(struct Moby *m) {
     normalize_vector_xyz_30c220(direction, direction, 1.0f);
     cross_vector_xyz_30c220(side, direction, up);
     cross_vector_xyz_30c220(direction, up, side);
-    qcopy(matrix, position);
+    *(u128 *)matrix = *(u128 *)position;
 
     texture = get_effect_texture_30c220(D_L05_00161D0C);
     flags = (u64)(s64)D_L05_00161CF4 |
@@ -545,32 +548,56 @@ void FUN_L05_0030c220(struct Moby *m) {
     a.control[1] = b.control[1] = texture;
     a.control[2] = b.control[2] = 0xff9000000260ULL;
     a.control[3] = b.control[3] = flags;
-    j = 0;
-    do {
-        float u = D_L05_001D67B0[j * 2];
-        float v = D_L05_001D67B0[j * 2 + 1];
-        a.texcoord[j * 2] = b.texcoord[j * 2] = u;
-        a.texcoord[j * 2 + 1] = b.texcoord[j * 2 + 1] = v;
-    } while (++j < 4);
+    {
+        float *texcoord_a = a.texcoord;
+        float *texcoord_a_v = a.texcoord + 1;
+        float *texcoord_b = b.texcoord;
+        float *texcoord_b_v = b.texcoord + 1;
+        float *texcoord = D_L05_001D67B0;
+        int count = 3;
+        do {
+            float u = texcoord[0];
+            float v = texcoord[1];
+            *texcoord_a = u;
+            *texcoord_a_v = v;
+            *texcoord_b = u;
+            *texcoord_b_v = v;
+            texcoord += 2;
+            texcoord_a += 2;
+            texcoord_a_v += 2;
+            texcoord_b += 2;
+            texcoord_b_v += 2;
+        } while (--count >= 0);
+    }
     i = 0;
     do {
+        next_pass = i + 1;
         pass = (float)i;
         j = 0;
+        vertex_a = a.vertex[0];
+        vertex_b = b.vertex[0];
+        color_a = a.color;
+        color_b = b.color;
         do {
-            qcopy(a.vertex[j], D_L05_001D67D0[j]);
+            qcopy_nc(vertex_a, D_L05_001D67D0[j]);
             qcopy(b.vertex[j], D_L05_001D6810[j]);
-            { float parity = (float)(j & 1); phase = (pass + parity) * 0.1f; }
-            sign = j < 2 ? 1.0f : -1.0f;
+            phase = (float)(i + (j & 1)) * 0.1f;
+            sign = 1.0f;
+            if (j > 1) sign = -1.0f;
             color = fast_tween_color(D_L05_00161D04, D_L05_00161D08, phase);
-            a.color[j] = b.color[j] = color;
-            a.vertex[j][2] += pass * 10.0f;
-            a.vertex[j][0] += phase * 8.0f * sign;
-            b.vertex[j][0] += phase * 6.0f * sign;
-            b.vertex[j][2] += pass * 12.0f;
+            *color_b++ = color;
+            *color_a++ = color;
+            vertex_a[2] += pass * 10.0f;
+            vertex_a[0] += phase * 8.0f * sign;
+            vertex_b[0] += phase * 6.0f * sign;
+            vertex_b[2] += pass * 12.0f;
+            vertex_a += 4;
+            vertex_b += 4;
         } while (++j < 4);
         draw_quad_30c220(&a, matrix, 0);
         draw_quad_30c220(&b, matrix, 0);
-    } while (++i < 10);
+        i = next_pass;
+    } while (i < 10);
 }
 #endif
 #ifndef NON_MATCHING

@@ -284,14 +284,15 @@ void FUN_L11_003094f8(char *moby) {
         normalize_vector_xyz(&temp, data,
                              random_float_between(t, t + 0.33333334f) *
                                  *(float *)(data + 0x2c));
-        add_vector_xyz(&temp, &temp, pos);
+        add_vector_xyz(&temp, &temp, moby + 0x10);
         particle = FUN_L00_002712b8_94f8(&temp, &velocity, scale_game_frames(60),
                                           0x7f, 0x606060, 3, 40000.0f, 1000.0f,
                                           1.0f, -0.0002f, 0.0f);
         if (particle != 0) {
             unsigned char *texture_pixels = *(unsigned char **)(texture + 0x5c);
+            unsigned char texture_pixel = texture_pixels[0];
             particle[3] = 0x44;
-            particle[2] = texture_pixels[0];
+            particle[2] = texture_pixel;
         }
         *(Q_94f8 *)&random = 0;
         random.z = 0.02f;
@@ -302,9 +303,17 @@ void FUN_L11_003094f8(char *moby) {
                                scale_game_frames(5), 1, 20000.0f);
     }
     target = *(char **)(data + 0x24);
-    if (target == 0 || (unsigned char)target[0x20] == 0xfe ||
-        (unsigned char)target[0x20] == 0xfd ||
-        !(distance_xyz_94f8(data + 0x10, target + 0x10) < 3.0f)) {
+    if (target != 0 && (unsigned char)target[0x20] != 0xfe &&
+        (unsigned char)target[0x20] != 0xfd &&
+        distance_xyz_94f8(data + 0x10, target + 0x10) < 3.0f) {
+        yaw = angle_xy_94f8(*(float *)(*(char **)(data + 0x24) + 0x10) - *(float *)(moby + 0x10),
+                             *(float *)(*(char **)(data + 0x24) + 0x14) - *(float *)(moby + 0x14));
+        *(float *)(moby + 0x48) = yaw;
+        pitch = -angle_xy_94f8(distance_xy_94f8(pos, *(char **)(data + 0x24) + 0x10),
+                                *(float *)(*(char **)(data + 0x24) + 0x18) - *(float *)(moby + 0x18));
+        *(float *)(moby + 0x44) = pitch;
+        qcopy(data + 0x10, *(char **)(data + 0x24) + 0x10);
+    } else {
         FUN_L00_0025be00_94f8((float *)(moby + 0x48), (float *)(data + 0x30),
                                *(float *)(moby + 0x48), frame_time_sq * 251.32741f,
                                frame_time_sq * 251.32741f, frame_time * 2513.2742f);
@@ -312,34 +321,23 @@ void FUN_L11_003094f8(char *moby) {
                                *(float *)(moby + 0x44), frame_time_sq * 251.32741f,
                                frame_time_sq * 251.32741f, frame_time * 2513.2742f);
         *(char **)(data + 0x24) = 0;
-    } else {
-        target = *(char **)(data + 0x24);
-        yaw = angle_xy_94f8(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
-                             *(float *)(target + 0x14) - *(float *)(moby + 0x14));
-        *(float *)(moby + 0x48) = yaw;
-        pitch = -angle_xy_94f8(distance_xy_94f8(pos, target + 0x10),
-                                *(float *)(target + 0x18) - *(float *)(moby + 0x18));
-        *(float *)(moby + 0x44) = pitch;
-        qcopy(data + 0x10, target + 0x10);
     }
     build_spherical_offset_94f8(data, *(float *)(data + 0x2c),
                                 *(float *)(moby + 0x48), -*(float *)(moby + 0x44));
     add_vector_xyz(pos, pos, data);
-    if (!(*(float *)(moby + 0x10) < 2.0f) && !(1021.0f < *(float *)(moby + 0x10)) &&
-        !(*(float *)(moby + 0x14) < 2.0f) && !(1021.0f < *(float *)(moby + 0x14)) &&
-        !(*(float *)(moby + 0x18) < 2.0f) && !(1021.0f < *(float *)(moby + 0x18))) {
-        moby_point_position_94f8(moby, 1, &spray);
-        if (FUN_001efa68(&old, &spray, 0, *(void **)(data + 0x20), 0) == 0) {
-            if (tick_countdown_32_alt(data + 0x28)) {
-                mark_moby_for_removal(moby);
-            }
-            return;
-        }
+    if (*(float *)(moby + 0x10) < 2.0f || 1021.0f < *(float *)(moby + 0x10) ||
+        *(float *)(moby + 0x14) < 2.0f || 1021.0f < *(float *)(moby + 0x14) ||
+        *(float *)(moby + 0x18) < 2.0f || 1021.0f < *(float *)(moby + 0x18)) goto remove;
+    moby_point_position_94f8(moby, 1, &spray);
+    if (FUN_001efa68(&old, &spray, 0, *(void **)(data + 0x20), 0)) {
         FUN_L00_0025e450_94f8(moby, data, D_L11_00174860_94f8, 2.0f, 10.0f,
                                10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f,
                                -1, 20.0f, 0, 1, -1, 0);
+remove:
+        mark_moby_for_removal(moby);
+    } else if (tick_countdown_32_alt(data + 0x28)) {
+        mark_moby_for_removal(moby);
     }
-    mark_moby_for_removal(moby);
 }
 #endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a908.s", FUN_L11_0030a908);

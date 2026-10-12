@@ -43,19 +43,19 @@ void *FUN_L00_0023fa00(u8 *bank, u8 *header) {
     index = 0;
     do {
         if (index == 0) {
-            FUN_00122330(buffer, ((D_0015EE8C + *(s32 *)(header + 0xac)) << 8) >> 16,
+            FUN_00122330(buffer, ((*(s32 *)(header + 0xac) + D_0015EE8C) << 8) >> 16,
                          1, 0x13, 0, 0, 0x40, 0x40);
             texture = destination + 0x14430;
         } else if (index == 1) {
-            FUN_00122330(buffer, ((D_0015EE8C + *(s32 *)(header + 0xb0)) << 8) >> 16,
+            FUN_00122330(buffer, ((*(s32 *)(header + 0xb0) + D_0015EE8C) << 8) >> 16,
                          1, 0x13, 0, 0, 0x20, 0x20);
             texture = destination + 0x15430;
         } else if (index == 2) {
-            FUN_00122330(buffer, ((D_0015EE8C + *(s32 *)(header + 0xb4)) << 8) >> 16,
+            FUN_00122330(buffer, ((*(s32 *)(header + 0xb4) + D_0015EE8C) << 8) >> 16,
                          1, 0, 0, 0, 0x10, 0x10);
             texture = destination + 0x30;
         } else {
-            FUN_00122330(buffer, ((D_0015EE8C + *(s32 *)(header + 0xb8)) << 8) >> 16,
+            FUN_00122330(buffer, ((*(s32 *)(header + 0xb8) + D_0015EE8C) << 8) >> 16,
                          1, 0, 0, 0, 0x10, 0x10);
             texture = bank + fourth_offset + 0x30;
         }

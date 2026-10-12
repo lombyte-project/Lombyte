@@ -46,7 +46,8 @@ s32 sceDbcCreateSocket(struct DbcSocketParams *arg0, s32 arg1, s32 arg2) {
     state->unk10 = arg0->unk10;
     target_name = state->pad_14;
     do {
-        target_name[i] = source_name[i];
+        even = source_name[i];
+        target_name[i] = even;
         i++;
     } while (i < 0x10);
     if (sceSifCallRpc(D_0015B008, 0x80000901, 0, &D_0015B080, 0x400, &D_0015B080, 0x400, 0, 0) <

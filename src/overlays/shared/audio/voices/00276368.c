@@ -250,6 +250,7 @@ extern s32 show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern void hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 
+#include "rnc/gameplay/hero.h"
 void FUN_L00_00276908(void) {
     s32 i;
     s32 value;
@@ -263,72 +264,76 @@ void FUN_L00_00276908(void) {
     s32 *active;
     u8 *table;
 
-    if (*(s32 *)(state + 0x110) < 10) {
-        return;
-    }
-    FUN_L00_002a09d8(1);
-    FUN_L00_002a07f8();
-    if (*(void **)(state + 4) != 0) {
-        for (i = 0; i < 14; i++) {
-            obj = D_L00_001B9CF0.owner->objs[i];
-            if (obj != 0) {
-                callback = *(void (**)(void *, s32))((u8 *)obj + 0xc);
-                if (callback != 0) {
-                    callback(obj, 0);
+    if (D_L00_001B9CF0.progress >= 10) {
+
+        FUN_L00_002a09d8(1);
+        FUN_L00_002a07f8();
+        if (*(void **)(state + 4) != 0) {
+            for (i = 0; i < 14; i++) {
+                obj = D_L00_001B9CF0.owner->objs[i];
+                if (obj != 0) {
+                    callback = *(void (**)(void *, s32))((u8 *)obj + 0xc);
+                    if (callback != 0) {
+                        callback(obj, 0);
+                    }
                 }
             }
+            *(void **)(state + 4) = 0;
         }
-        *(void **)(state + 4) = 0;
-    }
-    saved = D_00141408;
-    desired = (s32 *)(state + 0x30);
-    active = D_00141660;
-    remaining = 3;
-    do {
-        if (*active != *desired) {
-            *saved = *desired != 0 ? *desired : 0x26;
-        }
-        saved++;
-        desired++;
-        active++;
-        remaining--;
-    } while (remaining >= 0);
-    D_0015EE78_gp = *(s32 *)(state + 0x18);
-    hud_send_resident_bank(0, *(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x74), 0);
-    FUN_L00_00235310(2);
-    if (*(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x80) != 0) {
-        FUN_L00_00235310(3);
-    }
-    if (*(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x84) != 0) {
-        FUN_L00_00235310(4);
-    }
-    for (i = 13; i >= 0; i--) {
-        D_L00_001B9E90[13 - i] = delete_moby(D_L00_001B9E90[13 - i]);
-    }
-    handle = show_health_hud();
-    hud_keep_visible(handle, scale_game_frames(0xb4));
-    handle = queue_animation_update(2, 0x754e, FUN_L00_00239cc8, FUN_L00_00239d00,
-                                FUN_L00_00239df8, &current_bolt_count, 9999999);
-    hud_keep_visible(handle, scale_game_frames(0xb4));
-    D_L00_001B9CF0.state = 0x14;
-    D_L00_001B9CF0.unk14 = 2;
-    table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
-    value = *(s32 *)(state + 0xcc);
-    if (value < table[0xc]) {
-        i = value;
+        active = D_00141660;
+        desired = (s32 *)(state + 0x30);
+        remaining = 3;
+        saved = (s32 *)&hero;
+        saved = (s32 *)((u8 *)saved + 0x20b8);
         do {
-            table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
-            *(s32 *)(table + 0x48 + i * 4) = 0;
-            i++;
-            table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
-        } while (i < table[0xc]);
+            if (*active != *desired) {
+                *saved = *desired != 0 ? *desired : 0x26;
+            }
+            saved++;
+            desired++;
+            remaining--;
+            active++;
+        } while (remaining >= 0);
+        D_0015EE78_gp = *(s32 *)(state + 0x18);
+        hud_send_resident_bank(0, *(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x74), 0);
+        FUN_L00_00235310(2);
+        if (*(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x80) != 0) {
+            FUN_L00_00235310(3);
+        }
+        if (*(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x84) != 0) {
+            FUN_L00_00235310(4);
+        }
+        saved = (s32 *)D_L00_001B9E90;
+        remaining = 13;
+        do {
+            remaining--;
+            *saved = (s32)delete_moby((struct Ent *)*saved);
+            saved++;
+        } while (remaining >= 0);
+        handle = show_health_hud();
+        hud_keep_visible(handle, scale_game_frames(0xb4));
+        handle = queue_animation_update(2, 0x754e, FUN_L00_00239cc8, FUN_L00_00239d00,
+                                    FUN_L00_00239df8, &current_bolt_count, 9999999);
+        hud_keep_visible(handle, scale_game_frames(0xb4));
+        D_L00_001B9CF0.state = 0x14;
+        D_L00_001B9CF0.unk14 = 2;
+        table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
+        value = *(s32 *)(state + 0xcc);
+        if (value < table[0xc]) {
+            do {
+                table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
+                *(s32 *)(table + 0x48 + value * 4) = 0;
+                value++;
+                table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
+            } while (value < table[0xc]);
+        }
+        table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
+        table[0xc] = *(u8 *)(state + 0xcc);
+        D_L00_0015F5D8 = 1;
+        *(s32 *)(D_L00_00173E40 + 0x10) &= 0x7fffffff;
+        FUN_L00_002a08c8();
+        FUN_L00_002a09d8(1);
     }
-    table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
-    table[0xc] = (u8)value;
-    D_L00_0015F5D8 = 1;
-    *(s32 *)(D_L00_00173E40 + 0x10) &= 0x7fffffff;
-    FUN_L00_002a08c8();
-    FUN_L00_002a09d8(1);
 }
 #endif
 #include "eetypes.h"

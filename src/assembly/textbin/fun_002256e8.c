@@ -96,7 +96,7 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         header = (AnimationTableHeader *)stream->buffer;
         table_index = class_slot >> 8;
     next:
-        animation_table = stream->buffer + header[table_index].offset;
+        animation_table = stream->buffer + ((AnimationTableHeader *)((u8 *)header + (table_index << 3)))->offset;
         table_index++;
         (*class_resource)->animation_tables[table_index] = animation_table;
         relocate_asset_entry_pointers(*class_resource, table_index);

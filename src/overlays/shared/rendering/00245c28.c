@@ -344,14 +344,14 @@ void FUN_L00_002468b8(void) {
     FUN_001e93e8();
     FUN_0020bf90(state->archive_index, 1);
     first_base = D_L00_001B9CF0.first_base;
-    second_base = D_L00_001B9CF0.second_base;
+    state->old_base = first_base;
+    state->start = 0;
     buffer = first_base + 0x9a800;
+    state->buffer = buffer;
+    second_base = D_L00_001B9CF0.second_base;
+    state->old_end = second_base;
     D_L00_001B9CF0.first_base = buffer + 0x48000;
     D_L00_001B9CF0.second_base = second_base + 0x48000;
-    D_L00_001841F0.old_base = first_base;
-    D_L00_001841F0.start = 0;
-    D_L00_001841F0.buffer = buffer;
-    D_L00_001841F0.old_end = second_base;
     state->zero_284 = 0;
     state->zero_288 = 0;
     state->slot_28c = -1;
@@ -379,9 +379,9 @@ void FUN_L00_002468b8(void) {
         if (D_L00_001841F0.file_handle != -1) {
             D_L00_001841F0.last_transfer_bytes = D_L00_001841F0.transfer_bytes;
             FUN_00232f20(D_L00_001841F0.buffer, D_L00_001841F0.file_handle, 0, D_L00_001841F0.transfer_bytes, 0);
+            D_L00_001841F0.active = 1;
             D_L00_001841F0.load_state = -2;
             D_L00_001841F0.level_slot = D_0013D4E1 != 0 ? current_level_index + 0x100 : current_level_index;
-            D_L00_001841F0.active = 1;
             return;
         }
     }
@@ -417,6 +417,10 @@ void hud_send_resident_bank(s32, s32, s32) __asm__("FUN_001ff128");
 void FUN_L00_00248278(s32, s32, s32) __asm__("FUN_L00_00248278");
 void FUN_L00_00249f48(s32, void *, s32) __asm__("FUN_L00_00249f48");
 
+extern u8 D_L00_00184394[];
+extern s32 D_L00_00183EF0[];
+extern char render_archive_source_file[] __asm__("D_L00_0015FE00");
+
 void FUN_L00_002464a8(void) {
     s32 i, x, y;
     s32 *source;
@@ -436,15 +440,16 @@ void FUN_L00_002464a8(void) {
     u8 *mask;
     RenderArchiveLoad *state = &D_L00_001841F0_load;
 
+    heap_tag = (s32)render_archive_source_file;
     state->initialized = 1;
-    source = (s32 *)0x183ef0;
+    source = D_L00_00183EF0;
     destination = (s32 *)((u8 *)state + 0x154);
     for (i = 0x13; i >= 0; i--) {
         word0 = source[0];
         word1 = source[1];
-        destination[-0x14] = word0;
+        *(s32 *)((u8 *)destination - 0x50) = word0;
         destination[0] = word1;
-        ((f32 *)destination)[-0x28] = 0.65f;
+        *(f32 *)((u8 *)destination - 0xa0) = 0.65f;
         source += 2;
         destination++;
     }
@@ -479,7 +484,7 @@ void FUN_L00_002464a8(void) {
     }
     file += state->archive_index;
     if (file->size == 0) {
-        state->first_data = 0;
+        D_L00_001841F0_load.first_data = 0;
         *(s32 *)0x184218 = 0;
         state->scratch_data = 0;
         state->mask_data = 0;
@@ -489,7 +494,6 @@ void FUN_L00_002464a8(void) {
     *(s32 *)0x184218 = 1;
     archive_base = (s32 *)D_L00_00173E08;
     archive = (s32 *)((s32)archive_base + 0x9a800);
-    heap_tag = 0x15fe00;
     scratch = file->size << 7;
     FUN_00266040(archive, file->sector, file->size);
     state->file_handle = FUN_00293c58(archive, scratch, 0x4800, 0x1e8b00);
@@ -497,34 +501,34 @@ void FUN_L00_002464a8(void) {
     FUN_L00_0024d8d0(archive, archive_base);
     archive = archive_base;
     first_size = archive[1] - archive[0];
-    state->first_data = FUN_002355f0(first_size, 0, heap_tag, 0x2db);
-    hud_send_resident_bank(state->first_data, (s32)archive + archive[0], first_size);
-    state->first_data += 8;
-    state->second_data = state->first_data;
+    D_L00_001841F0_load.first_data = FUN_002355f0(first_size, 0, heap_tag, 0x2db);
+    hud_send_resident_bank(D_L00_001841F0_load.first_data, (s32)archive + archive[0], first_size);
+    D_L00_001841F0_load.first_data += 8;
+    state->second_data = D_L00_001841F0_load.first_data;
     second_size = archive[2] - archive[1];
     state->second_raw = FUN_002355f0(second_size, 0, heap_tag, 0x2ec);
     hud_send_resident_bank(state->second_raw, (s32)archive + archive[1], second_size);
     state->scratch_data = FUN_002355f0(0x1000, 0, heap_tag, 0x2f3);
     destination = (s32 *)0x184228;
     for (i = 0; i < 8; i++) {
-        destination[-2] = -1;
-        destination[-1] = -1;
+        *(s32 *)((u8 *)destination - 8) = -1;
+        *(s32 *)((u8 *)destination - 4) = -1;
         destination[0] = state->scratch_data + i * 0x200;
         destination += 4;
     }
-    state->mask_data = FUN_002355f0(0x8000, 0, heap_tag, 0x2fc);
+    state->mask_data = FUN_002355f0(0x8000, 0, (s32)render_archive_source_file, 0x2fc);
     level_data = (u8 *)(0x141ec0 + state->archive_index * 0x800);
     if (level_data[0] == 0) {
-        FUN_L00_00248278(state->mask_data, state->first_data, state->second_data);
+        FUN_L00_00248278(state->mask_data, D_L00_001841F0_load.first_data, state->second_data);
     } else {
         FUN_L00_00249f48(state->mask_data, level_data, state->second_raw);
     }
-    mask = (u8 *)0x184394;
+    mask = D_L00_00184394;
     for (y = 0; y < 32; y++) {
         for (x = 0; x < 32; x++) {
             if ((15.5f - (f32)x) * (15.5f - (f32)x) +
                 (15.5f - (f32)y) * (15.5f - (f32)y) > 256.0f) {
-                mask[y * 4 + x / 8] |= 1 << (x % 8);
+                mask[x / 8 + y * 4] |= 1 << (x % 8);
             }
         }
     }

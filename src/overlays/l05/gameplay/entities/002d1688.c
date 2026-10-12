@@ -748,10 +748,11 @@ void FUN_L05_002d7140(char *moby) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7920.s", FUN_L05_002d7920);
 #else
+/* Retail quad packet: vertices +0x00, colors +0x40, UVs +0x50, commands +0x70. */
 typedef struct {
+    char vertices[0x40];
     int color[4];
     float uv[4][2];
-    char unused[0x40];
     u64 zero;
     u64 effect_texture;
     u64 texture;
@@ -782,9 +783,9 @@ extern void clear_glow_matrix_7920(void *, int, int) __asm__("FUN_001153fc");
 
 void FUN_L05_002d7920(char *moby) {
     L05GlowPacket packet[16];
-    float *matrix = (float *)((char *)packet + 0x8c0);
-    float *center = (float *)((char *)packet + 0x8e0);
-    int i, j, k, frame;
+    float matrix[8];
+    float center[4];
+    int i, j, frame;
     short *list;
     char *member;
     char *data;
@@ -826,20 +827,24 @@ void FUN_L05_002d7920(char *moby) {
         member = D_L05_0015FFD8_7920 + ((*list & 0x7fff) << 8);
         if (*(short *)(member + 0xa6) == 0x4f && (unsigned char)member[0x20] == 1) {
             data = *(char **)(member + 0x78);
-            *(u128 *)center = *(u128 *)(member + 0x10);
+            qcopy_nc(center, member + 0x10);
             center[3] = 20.0f;
             if (sphere_in_view_7920(center, 512.0f) != -1) {
                 for (frame = 0; frame < *(short *)(data + 0x320); frame++) {
+                    int i;
+                    int vertex_index;
+                    char *vertices = (char *)packet + frame * 0x90;
+                    vertex_index = (*(short *)(data + 0x322) - frame + 15) & 15;
                     for (i = 0; i < 3; i++) {
                         if (D_L05_001613F4 == 0) {
+                            int k;
+                            char *vertex_source = data + (i * 0x100 + 0x20);
                             for (k = 0; k < 4; k++) {
-                                j = (*(short *)(data + 0x322) - frame + 15) & 15;
-                                j += k >> 1;
-                                transform_glow_vertex_7920((char *)packet + frame * 0x90 + k * 0x10,
-                                                           data + i * 0x100 + 0x20 + ((j & 15) << 4),
+                                transform_glow_vertex_7920(vertices + k * 0x10,
+                                                           vertex_source + (((vertex_index + (k >> 1)) & 15) << 4),
                                                            (char *)matrix + (k & 1) * 0x10);
                             }
-                            draw_geometry_quad_7920((char *)packet + frame * 0x90, 0, 0);
+                            draw_geometry_quad_7920(vertices, 0, 0);
                         }
                     }
                 }
@@ -1450,28 +1455,42 @@ extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void scale_vector_304058(void *, void *, float) __asm__("FUN_001f9bf8");
 
-float FUN_L05_00304058(volatile s32 path_index, void *position, void *out, float reach) {
+float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
     Vec4 segment, result, from_point, normal, projection, cross, offset;
     float separation;
     float along;
     float segment_length;
-    float best = 512.0f;
-    volatile int changed = 0;
+    float best;
+    struct { s32 path_index; void *out; volatile int changed; } state;
     int i;
+    int next_index;
     char *path;
+    int path_offset;
+    char **path_entry;
 
-    from_point = *(Vec4 *)position;
-    for (i = 0; i < *(int *)D_L05_001B0930[path_index] - 1; i++) {
-        char *next;
-        path = D_L05_001B0930[path_index];
-        next = path + (i + 1) * 16 + 0x10;
-        if (*(float *)(path + i * 16 + 0x1c) == 0.0f &&
-            *(float *)(path + (i + 1) * 16 + 0x1c) == 0.0f)
-            continue;
+    state.path_index = path_index;
+    state.out = out;
+    state.changed = 0;
+    best = 512.0f;
+    qcopy_nc(&from_point, position);
+    path_offset = path_index * 4;
+    i = 0;
+    if (state.changed < *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1) do {
+        int next;
+        int segment_offset = i * 16;
+        next_index = i + 1;
+        path_entry = (char **)((char *)D_L05_001B0930 + path_offset);
+        path = *(char **)((char *)D_L05_001B0930 + path_offset);
 
-        subtract_vector_304058(&segment, &from_point, next);
+        if (*(float *)(path + segment_offset + 0x1c) == 0.0f &&
+            *(float *)(path + next_index * 16 + 0x1c) == 0.0f)
+            goto loop_next;
+
+        next = segment_offset + 0x10;
+        subtract_vector_304058(&segment, &from_point, path + next);
         segment.f[2] = 0.0f;
-        subtract_vector_304058(&normal, path + i * 16 + 0x20, next);
+        subtract_vector_304058(&normal, *path_entry + (segment_offset + 0x20),
+                               *path_entry + next);
         normal.f[2] = 0.0f;
         scale_vector_304058(&projection, &normal, 1.0f);
         fast_vec_cross(&cross, &segment, &projection);
@@ -1479,27 +1498,30 @@ float FUN_L05_00304058(volatile s32 path_index, void *position, void *out, float
         if (separation < best)
             best = separation;
         if (reach < separation)
-            continue;
+            goto loop_next;
         segment_length = fast_vec_length(&normal);
         along = fast_vec_dot(&segment, &projection);
         if (segment_length < along || along < 0.0f) {
             if (!(fast_vec_length(&segment) < reach))
-                continue;
-            changed = 1;
+                goto loop_next;
+            state.changed = 1;
             scale_vector_304058(&result, &segment, reach);
         } else {
-            changed = 1;
+            state.changed = 1;
             scale_vector_304058(&offset, &projection, along);
             subtract_vector_304058(&result, &segment, &offset);
             scale_vector_304058(&result, &result, reach);
             add_vector_304058(&result, &result, &offset);
         }
-        add_vector_304058(&from_point, &result, next);
+        add_vector_304058(&from_point, &result,
+                          *path_entry + next);
         from_point.f[2] = ((Vec4f *)position)->z;
-        path = D_L05_001B0930[path_index];
-    }
-    if (changed)
-        *(Vec4 *)out = from_point;
+loop_next:
+        i = next_index;
+        path_offset = *(volatile s32 *)&state.path_index * 4;
+    } while (i < *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1);
+    if (state.changed)
+        qcopy(state.out, &from_point);
     return best;
 }
 #endif
@@ -1546,6 +1568,7 @@ void FUN_L05_00305178(char *moby) {
     float position[4] __attribute__((aligned(16)));
     char effect_data[16] __attribute__((aligned(16)));
     float speed;
+    float frame_scale;
     float angle;
     struct Hero *base;
 
@@ -1637,7 +1660,9 @@ mark_children:
     if (*(char **)(data + 0x184) != 0) {
         char *first;
         speed = vector_length_305178(data + 0x40);
-        speed /= frame_time * D_L05_00161AF0;
+        frame_scale = frame_time;
+        frame_scale = frame_scale * D_L05_00161AF0;
+        speed /= frame_scale;
         angle = D_L05_00161AF4;
         *(float *)(*(char **)(data + 0x184) + 0x58) = speed;
         *(float *)(*(char **)(data + 0x184) + 0x58) +=
@@ -1649,7 +1674,9 @@ mark_children:
     if (*(char **)(data + 0x188) != 0) {
         char *second;
         speed = vector_length_305178(data + 0x40);
-        speed /= frame_time * D_L05_00161AF0;
+        frame_scale = frame_time;
+        frame_scale = frame_scale * D_L05_00161AF0;
+        speed /= frame_scale;
         angle = D_L05_00161AF4;
         *(float *)(*(char **)(data + 0x188) + 0x58) = speed;
         *(float *)(*(char **)(data + 0x188) + 0x58) -=

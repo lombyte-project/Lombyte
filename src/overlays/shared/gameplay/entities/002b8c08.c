@@ -2000,9 +2000,11 @@ scan:
         other = entities + (index << 8);
         if ((unsigned char)other[0x20] != 12 || *(short *)(other + 0xA6) != type) goto advance;
         {
-            char *other_data = *(char **)(other + 0x78);
-            char *self_data = *(char **)(self + 0x78);
-            other[0x30] = self[0x30];
+            /* Retail reads both pvars pointers and unk30 before writing the entity. */
+            char *other_data = *(char * volatile *)(other + 0x78);
+            unsigned char unk30 = *(volatile unsigned char *)(self + 0x30);
+            char *self_data = *(char * volatile *)(self + 0x78);
+            other[0x30] = unk30;
             *(unsigned short *)(other + 0x32) = *(unsigned short *)(self + 0x32);
             {
                 unsigned long long spawn_frame = *(unsigned long long *)(self + 0x38);
@@ -2156,9 +2158,10 @@ extern void FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 
 void FUN_L01_002ef770(unsigned char *moby, f32 *mode) {
     char *data = (char *)MOBY(moby)->pvars;
-    f32 origin[4], pos[4], velocity[4];
+    f32 pos[4], origin[4], velocity[4];
+    u128 *dest;
+    f32 *origin_copy;
     u128 *source;
-    u128 * volatile dest;
     f32 angle, radius, vertical, lateral, scale, scaled_radius, scaled_vertical;
     s32 i, next, j, lower, upper, first, second, duration;
 
@@ -2166,15 +2169,16 @@ void FUN_L01_002ef770(unsigned char *moby, f32 *mode) {
     if (D_L01_001619EC > 0) {
       source = (u128 *)(moby + 0x10);
       dest = (u128 *)pos;
+      origin_copy = origin;
       do {
-        *dest = *source;
-        FUN_L00_0025f8e0(pos, D_L01_001619F4 * *(f32 *)(data + 0x250));
+        qcopy_nc(dest, source);
+        FUN_L00_0025f8e0(dest, D_L01_001619F4 * *(f32 *)(data + 0x250));
         pos[2] += 1.0f;
         angle = random_angle_radians();
         radius = random_float_between_alt(D_L01_00161A00, D_L01_00161A04);
         lateral = random_float_between_alt(D_L01_00161A08, D_L01_00161A0C);
         vertical = random_float_between_alt(0.0f, D_L01_00161A38);
-        scale_vector_xyz(origin, mode, vertical * D_0015ED6C);
+        scale_vector_xyz(origin_copy, mode, vertical * D_0015ED6C);
         scale = fast_cos(angle);
         origin[0] += scale * (radius * D_0015ED6C);
         scale = fast_sin(angle);
@@ -2182,12 +2186,10 @@ void FUN_L01_002ef770(unsigned char *moby, f32 *mode) {
         origin[1] += scale * scaled_radius;
         scaled_vertical = lateral * D_0015ED6C;
         origin[2] += scaled_vertical;
-        *(u128 *)velocity = *(u128 *)origin;
+        qcopy(velocity, origin_copy);
         next = i + 1;
         velocity[2] -= D_L01_00161A10 * D_0015ED70 * (f32)scale_game_frames(D_L01_00161A30);
-        j = 0;
-        if (D_L01_001619F0 > 0) do {
-            j++;
+        for (j = 0; j < D_L01_001619F0; j++) {
             scale = random_float_between_alt(0.5f, 1.5f);
             origin[3] = scale * D_L01_00161A14;
             velocity[3] = scale * D_L01_00161A18;
@@ -2198,8 +2200,8 @@ void FUN_L01_002ef770(unsigned char *moby, f32 *mode) {
             first = scale_game_frames(D_L01_00161A2C);
             second = scale_game_frames(D_L01_00161A30);
             duration = truncate_float_to_s32(FUN_00220e20(random_float_between_alt((f32)D_L01_00161A34 * 0.5f, (f32)D_L01_00161A34 * 2.5f)));
-            FUN_00218888(pos, origin, velocity, lower, upper, first, second, duration, -1);
-        } while (j < D_L01_001619F0);
+            FUN_00218888(pos, origin_copy, velocity, lower, upper, first, second, duration, -1);
+        }
         i = next;
       } while (i < D_L01_001619EC);
     }

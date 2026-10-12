@@ -1,3 +1,8 @@
+#include "asm.h"
+
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/expected/asm/assembly/gameplay/entities/update_visible_resident_objects/FUN_00212e28.s", FUN_00212e28);
+#else
 #include "types.h"
 #include "rnc/gameplay/entities/moby.h"
 
@@ -48,3 +53,5 @@ void update_visible_resident_objects(void) {
 
 extern __typeof__(update_visible_resident_objects) func_00212E28
     __attribute__((alias("FUN_00212e28")));
+
+#endif /* NON_MATCHING */

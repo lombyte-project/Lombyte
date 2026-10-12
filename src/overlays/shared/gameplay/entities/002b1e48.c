@@ -220,12 +220,12 @@ void FUN_L07_00310df0(u8 *moby)
 {
     u8 *data = *(u8 **)(moby + 0x78);
     u8 *other;
-    u8 *position;
+    u8 *position = moby + 0x10;
     f32 vectors[8];
     f32 distance;
-    s32 index;
     u8 state;
     typedef u32 quadword __attribute__((mode(TI), aligned(16)));
+    typedef union { quadword q; f32 f[4]; } vector;
 
     if (moby[0xb0] != 0xff &&
         D_0014C150_30D370[moby[0xb0] + D_0015ED84 * 16] == 0xff)
@@ -234,56 +234,49 @@ void FUN_L07_00310df0(u8 *moby)
     state = moby[0x20];
     switch (state) {
     case 0:
-        position = moby + 0x10;
-        *(quadword *)data = *(quadword *)position;
-        index = *(s32 *)(data + 0x38);
-        if (index != -1)
-            ((s32 *)0x184528)[index] = 0;
+        *(vector *)data = *(vector *)position;
+        if (*(s32 *)(data + 0x38) != -1)
+            ((s32 *)0x184528)[*(s32 *)(data + 0x38)] = 0;
         moby[0x20] = 1;
         *(s32 *)(data + 0x0c) = 0;
         return;
     case 1:
-        index = *(s32 *)(data + 0x38);
-        if (index != -1)
-            ((s32 *)0x184528)[index] = 0;
-        index = *(s32 *)(data + 0x10);
-        if (index != -1) {
-            other = D_L07_0015FFD8_310df0 + index * 0x100;
+        if (*(s32 *)(data + 0x38) != -1)
+            ((s32 *)0x184528)[*(s32 *)(data + 0x38)] = 0;
+        if (*(s32 *)(data + 0x10) != -1) {
+            other = D_L07_0015FFD8_310df0 + *(s32 *)(data + 0x10) * 0x100;
             if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
                 other[0x20] != *(u32 *)(data + 0x14))
                 return;
         }
-        vectors[4] = vectors[5] = vectors[6] = vectors[7] = 0.0f;
-        vectors[4] = vectors[0] = *(f32 *)(data + 0x1c);
-        vectors[5] = vectors[1] = *(f32 *)(data + 0x20);
-        vectors[6] = vectors[2] = *(f32 *)(data + 0x24);
-        vectors[3] = vectors[7];
+        *(quadword *)(vectors + 4) = 0;
+        vectors[4] = *(f32 *)(data + 0x1c);
+        vectors[5] = *(f32 *)(data + 0x20);
+        vectors[6] = *(f32 *)(data + 0x24);
+        *(quadword *)vectors = *(quadword *)(vectors + 4);
         *(f32 *)(data + 0x0c) = vector_length_xyz_310df0(vectors);
         if (*(s32 *)(data + 0x30) != -1)
             play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
-        state = 2;
-        break;
+        moby[0x20] = 2;
+        return;
     case 2:
-        index = *(s32 *)(data + 0x38);
-        if (index != -1)
-            ((s32 *)0x184528)[index] = 1;
-        index = *(s32 *)(data + 0x10);
-        if (index != -1) {
-            other = D_L07_0015FFD8_310df0 + index * 0x100;
+        if (*(s32 *)(data + 0x38) != -1)
+            ((s32 *)0x184528)[*(s32 *)(data + 0x38)] = 1;
+        if (*(s32 *)(data + 0x10) != -1) {
+            other = D_L07_0015FFD8_310df0 + *(s32 *)(data + 0x10) * 0x100;
             if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
                 other[0x20] == *(u32 *)(data + 0x18)) {
                 if (*(s32 *)(data + 0x30) != -1)
                     play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
-                state = 4;
-                break;
+                moby[0x20] = 4;
+                return;
             }
         }
-        vectors[4] = vectors[5] = vectors[6] = vectors[7] = 0.0f;
-        vectors[4] = vectors[0] = *(f32 *)(data + 0x1c);
-        vectors[5] = vectors[1] = *(f32 *)(data + 0x20);
-        vectors[6] = vectors[2] = *(f32 *)(data + 0x24);
-        vectors[3] = vectors[7];
-        position = moby + 0x10;
+        *(quadword *)(vectors + 4) = 0;
+        vectors[4] = *(f32 *)(data + 0x1c);
+        vectors[5] = *(f32 *)(data + 0x20);
+        vectors[6] = *(f32 *)(data + 0x24);
+        *(quadword *)vectors = *(quadword *)(vectors + 4);
         subtract_vector_xyz_310df0(vectors, vectors, moby + 0xc0);
         scale_vector_xyz_310df0(vectors + 4, vectors, *(f32 *)(data + 0x28) * D_0015ED6C_310df0);
         add_vector_xyz_310df0(position, position, vectors + 4);
@@ -291,46 +284,41 @@ void FUN_L07_00310df0(u8 *moby)
         if (!(*(f32 *)(data + 0x0c) < 0.0f))
             return;
         add_vector_xyz_310df0(position, data, vectors);
-        *(s32 *)(data + 0x0c) = 0;
+        *(f32 *)(data + 0x0c) = 0.0f;
         moby[0x20] = 3;
         if (*(s32 *)(data + 0x34) != -1)
             play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
         return;
     case 3:
-        index = *(s32 *)(data + 0x38);
-        if (index != -1)
-            ((s32 *)0x184528)[index] = 1;
-        index = *(s32 *)(data + 0x10);
-        if (index == -1)
+        if (*(s32 *)(data + 0x38) != -1)
+            ((s32 *)0x184528)[*(s32 *)(data + 0x38)] = 1;
+        if (*(s32 *)(data + 0x10) == -1)
             return;
-        other = D_L07_0015FFD8_310df0 + index * 0x100;
+        other = D_L07_0015FFD8_310df0 + *(s32 *)(data + 0x10) * 0x100;
         if (other == 0 || other[0x20] == 0xfe || other[0x20] == 0xfd ||
             other[0x20] != *(u32 *)(data + 0x18))
             return;
         *(s32 *)(data + 0x0c) = 0;
         if (*(s32 *)(data + 0x30) != -1)
             play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
-        state = 4;
-        break;
+        moby[0x20] = 4;
+        return;
     case 4:
-        index = *(s32 *)(data + 0x38);
-        if (index != -1)
-            ((s32 *)0x184528)[index] = 0;
-        index = *(s32 *)(data + 0x10);
-        if (index == -1 ||
-            (other = D_L07_0015FFD8_310df0 + index * 0x100) == 0 ||
+        if (*(s32 *)(data + 0x38) != -1)
+            ((s32 *)0x184528)[*(s32 *)(data + 0x38)] = 0;
+        if (*(s32 *)(data + 0x10) == -1 ||
+            (other = D_L07_0015FFD8_310df0 + *(s32 *)(data + 0x10) * 0x100) == 0 ||
             other[0x20] == 0xfe || other[0x20] == 0xfd ||
             other[0x20] == *(u32 *)(data + 0x14)) {
             if (*(s32 *)(data + 0x30) != -1)
                 play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
-            state = 2;
+            moby[0x20] = 2;
         } else {
-            vectors[4] = vectors[5] = vectors[6] = vectors[7] = 0.0f;
+            *(quadword *)(vectors + 4) = 0;
             vectors[4] = *(f32 *)(data + 0x1c);
             vectors[5] = *(f32 *)(data + 0x20);
             vectors[6] = *(f32 *)(data + 0x24);
-            vectors[3] = vectors[7];
-            position = moby + 0x10;
+            *(quadword *)vectors = *(quadword *)(vectors + 4);
             distance = vector_length_xyz_310df0(vectors);
             scale_vector_xyz_310df0(vectors, vectors, -(*(f32 *)(data + 0x2c) * D_0015ED6C_310df0));
             subtract_vector_xyz_310df0(vectors + 4, vectors, moby + 0xc0);
@@ -338,20 +326,18 @@ void FUN_L07_00310df0(u8 *moby)
             *(f32 *)(data + 0x0c) += *(f32 *)(data + 0x2c) * D_0015ED6C_310df0;
             if (!(distance < *(f32 *)(data + 0x0c)))
                 return;
-            *(quadword *)position = *(quadword *)data;
+            *(vector *)position = *(vector *)data;
             if (*(s32 *)(data + 0x30) != -1)
                 play_sound_310df0(*(s32 *)(data + 0x34), 0, moby);
-            index = *(s32 *)(data + 0x38);
-            if (index != -1)
-                ((s32 *)0x184528)[index] = 0;
-            state = 1;
+            if (*(s32 *)(data + 0x38) != -1)
+                ((s32 *)0x184528)[*(s32 *)(data + 0x38)] = 0;
+            moby[0x20] = 1;
         }
         break;
     case 5:
     default:
         return;
     }
-    moby[0x20] = state;
 }
 #endif
 #ifndef NON_MATCHING
@@ -367,13 +353,14 @@ extern void update_moby_motion_31aee0(void *, void *, void *, void *) __asm__("F
 extern u8 *D_L07_0015FFD8_31aee0 __asm__("D_L07_0015FFD8") __attribute__((sda));
 extern f32 D_0015ED6C_31aee0 __asm__("D_0015ED6C");
 
+extern s32 D_L07_00184528[] NOT_SDA;
 void FUN_L07_0031aee0(u8 *moby)
 {
     u8 *data = *(u8 **)(moby + 0x78);
     u8 *other;
     u8 *position;
     f32 delta[4];
-    f32 old_rotation[8];
+    f32 old_rotation[4];
     f32 vectors[8];
     f32 distance;
     s32 index;
@@ -381,7 +368,7 @@ void FUN_L07_0031aee0(u8 *moby)
     typedef u32 quadword __attribute__((mode(TI), aligned(16)));
 
     scale_vector_xyz_31aee0(-1.0f, delta, moby + 0x10);
-    *(quadword *)(old_rotation + 4) = *(quadword *)(moby + 0x40);
+    *(quadword *)(old_rotation) = *(quadword *)(moby + 0x40);
 
     if (moby[0xb0] != 0xff &&
         D_0014C150_30D370[moby[0xb0] + D_0015ED84 * 16] == 0xff)
@@ -394,7 +381,7 @@ void FUN_L07_0031aee0(u8 *moby)
         *(quadword *)(data + 0xa0) = *(quadword *)position;
         index = *(s32 *)(data + 0xd8);
         if (index != -1)
-            ((s32 *)0x184528)[index] = 0;
+            D_L07_00184528[index] = 0;
         moby[0x20] = 1;
         *(s32 *)(data + 0xac) = 0;
         break;
@@ -443,7 +430,7 @@ void FUN_L07_0031aee0(u8 *moby)
             *(s32 *)(data + 0xac) = 0;
             index = *(s32 *)(data + 0xd8);
             if (index != -1)
-                ((s32 *)0x184528)[index] = 1;
+                D_L07_00184528[index] = 1;
             moby[0x20] = 3;
             if (*(s32 *)(data + 0xd4) != -1)
                 play_sound_31aee0(*(s32 *)(data + 0xd0), 0, moby);
@@ -489,7 +476,7 @@ void FUN_L07_0031aee0(u8 *moby)
                     play_sound_31aee0(*(s32 *)(data + 0xd4), 0, moby);
                 index = *(s32 *)(data + 0xd8);
                 if (index != -1)
-                    ((s32 *)0x184528)[index] = 0;
+                    D_L07_00184528[index] = 0;
                 moby[0x20] = 1;
             }
         }
@@ -498,6 +485,6 @@ void FUN_L07_0031aee0(u8 *moby)
         break;
     }
     add_vector_xyz_31aee0(delta, delta, moby + 0x10);
-    update_moby_motion_31aee0(data + 0x60, delta, old_rotation + 4, moby + 0x40);
+    update_moby_motion_31aee0(data + 0x60, delta, old_rotation, moby + 0x40);
 }
 #endif

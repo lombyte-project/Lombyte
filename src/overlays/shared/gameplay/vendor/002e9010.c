@@ -1335,49 +1335,70 @@ extern float FUN_001ff8b0_2ebbd8(float, float) __asm__("FUN_001f9e90");
 
 void FUN_L00_002ebbd8(void *arg) {
     O002ebb00 *o = (O002ebb00 *)arg;
-    char *m = (char *)o->m;
-    char *p = m + 0x40;
-    struct Hero *g = &hero;
+    char *m;
+    char *p;
+    struct Hero *g;
     char *cam;
     char *tail;
     char *source;
-    int state;
+    char *q;
+    int state = current_level_index;
+    float scale = 1.5f;
     int frames;
     int next;
 
+    {
+        char *m = (char *)o->m;
+        p = m + 0x40;
+    }
     *(int *)(p + 0x40) = 0;
-    if (current_level_index == 14 &&
-        (unsigned)(g->state.current - 0x2c) < 2)
-        *(float *)(p + 0x4c) = 2.0f;
-    else
-        *(float *)(p + 0x4c) = 1.5f;
-    *(volatile float *)(p + 0x48) = 0.20943952f;
-    *(volatile float *)(p + 0x58) = 0.0017453292f;
-    *(volatile float *)(p + 0x5c) = -0.004363323f;
+    if (state == 14) {
+        if ((unsigned)(hero.state.current - 0x2c) >= 2) {
+            *(float *)(p + 0x4c) = scale;
+            goto scale_done;
+        }
+        scale = 2.0f;
+    }
+    *(float *)(p + 0x4c) = scale;
+scale_done:
+    g = &hero;
+    *(float *)(p + 0x48) = 0.20943952f;
+    *(float *)(p + 0x58) = 0.0017453292f;
+    *(float *)(p + 0x5c) = -0.004363323f;
     *(int *)(p + 0x44) = ((int)g->moby);
-    *(volatile float *)(m + 0xa0) = 4.64f;
-    *(volatile float *)(m + 0xb4) = 0.05f;
-    *(volatile float *)(m + 0xa4) = 0.5f;
-    *(volatile float *)(m + 0xb0) = 2.0f;
-    *(volatile int *)(m + 0x18) = 0;
-    *(volatile float *)(m + 0x10) = 0.01f;
-    *(volatile float *)(m + 0x14) = 0.3f;
+    {
+        char *m = (char *)((volatile O002ebb00 *)o)->m + 0xa0;
+        *(float *)(m + 0) = 4.64f;
+        *(float *)(m + 4) = 0.5f;
+        *(float *)(m + 0x10) = 2.0f;
+        *(float *)(m + 0x14) = 0.05f;
+    }
+    {
+        char *m = (char *)((volatile O002ebb00 *)o)->m;
+        *(int *)(m + 0x18) = 0;
+        *(float *)(m + 0x10) = 0.01f;
+        *(float *)(m + 0x14) = 0.3f;
+        frames = FUN_001fef20_2ebbd8(0x78);
+        *(short *)(m + 0x1c) = 0;
+        *(short *)(m + 0x1e) = frames;
+        FUN_001ff260_2ebbd8(m);
+    }
+    {
+        char *m = (char *)((volatile O002ebb00 *)o)->m + 0x30;
+        *(float *)(m + 4) = 0.02f;
+        *(float *)(m + 8) = 0.2f;
+        *(int *)(m + 0xc) = 0;
+        *(int *)m = 0;
+    }
     m = (char *)((volatile O002ebb00 *)o)->m;
-    frames = FUN_001fef20_2ebbd8(0x78);
-    *(short *)(m + 0x1c) = 0;
-    *(short *)(m + 0x1e) = frames;
-    FUN_001ff260_2ebbd8(m);
-    m = (char *)((volatile O002ebb00 *)o)->m;
-    *(float *)(m + 0x34) = 0.02f;
-    *(float *)(m + 0x38) = 0.2f;
-    *(int *)(m + 0x3c) = 0;
-    *(int *)(m + 0x30) = 0;
     tail = m + 0xb8;
     *(int *)(tail + 4) = 0;
-    m = (char *)((volatile O002ebb00 *)o)->m;
-    cam = D_00166C80_c;
-    source = *(char **)(cam + 0x184);
-    qcopy((char *)o + 0x30, source + 0x30);
+    {
+        char *cam = D_00166C80_c;
+        source = *(char **)(cam + 0x184);
+    }
+    q = (char *)o + 0x30;
+    qcopy(q, source + 0x30);
     qcopy(o, source);
     qcopy((char *)o + 0x10, source + 0x10);
     qcopy((char *)o + 0x20, source + 0x20);
@@ -1388,19 +1409,19 @@ void FUN_L00_002ebbd8(void *arg) {
         *(float *)(p + 0x34) = FUN_001ff800_2ebbd8(g->unk9AC);
         *(int *)(p + 0x38) = 0;
         *(float *)(m + 0xb8) = g->unk9AC;
-        next = (int)g->unk994;
+        *(int *)(tail + 8) = (int)g->unk994;
     } else {
-        FUN_001ff2a8_2ebbd8(p + 0x30, ((char *)g->unk964) + 0x10, (char *)o + 0x30);
+        FUN_001ff2a8_2ebbd8(p + 0x30, ((char *)g->unk964) + 0x10, q);
         *(int *)(p + 0x38) = 0;
         *(int *)(p + 0x3c) = 0;
         FUN_001ff500_2ebbd8(p + 0x30, p + 0x30, 1.0f);
         *(float *)(m + 0xb8) =
             FUN_001ff8b0_2ebbd8(*(float *)(p + 0x30), *(float *)(p + 0x34));
-        next = (int)g->unk964;
+        *(int *)(tail + 8) = (int)g->unk964;
     }
-    *(int *)(tail + 8) = next;
-    *(volatile short *)(cam + 0x270) = 1;
-    *(volatile char *)(cam + 0x273) = 2;
+    cam = D_00166C80_c;
+    *(char *)(cam + 0x273) = 2;
+    *(short *)(cam + 0x270) = 1;
     *(int *)(cam + 0x2f4) = FUN_001fef20_2ebbd8(0x3c);
 }
 #endif

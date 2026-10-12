@@ -33,6 +33,7 @@ struct L07MovingVars {
 
 extern u8 D_0014C050[];
 extern u8 D_L07_0015FC88[];
+extern s32 D_L07_00184528[] NOT_SDA;
 extern struct Moby *D_L07_0015FFD8;
 extern float vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -69,7 +70,7 @@ checked_spawn:
     case 0:
         qcopy(&vars->home, &moby->pos);
         if (vars->indicator != -1)
-            ((s32 *)0x184528)[vars->indicator] = 0;
+            D_L07_00184528[vars->indicator] = 0;
         moby->state = 1;
         vars->home.w = 0;
         return;
@@ -116,7 +117,7 @@ checked_spawn:
         add_vector_xyz(&moby->pos, &vars->home, &next);
         vars->home.w = 0;
         if (vars->indicator != -1)
-            ((s32 *)0x184528)[vars->indicator] = 1;
+            D_L07_00184528[vars->indicator] = 1;
         moby->state = 3;
         if (vars->endSound != -1)
             FUN_0022da68(vars->startSound, 0, moby);
@@ -159,7 +160,7 @@ checked_spawn:
         if (vars->startSound != -1)
             FUN_0022da68(vars->endSound, 0, moby);
         if (vars->indicator != -1)
-            ((s32 *)0x184528)[vars->indicator] = 0;
+            D_L07_00184528[vars->indicator] = 0;
         moby->state = 1;
         break;
     case 5:

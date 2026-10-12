@@ -1530,7 +1530,7 @@ extern f32 D_0013F3D0_b6bc8[] __asm__("D_0013F3D0");
 
 s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     u128 velocity __attribute__((aligned(16)));
-    u128 pos __attribute__((aligned(16)));
+    union { u128 q; f32 f[4]; } pos __attribute__((aligned(16)));
     Moby **p;
     Moby *other;
     u8 *state;
@@ -1541,8 +1541,9 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     s16 *entry;
     f32 distance;
     f32 angle;
+    struct Hero *g;
 
-    pos = *(u128 *)((u8 *)m + 0x10);
+    pos.q = *(u128 *)((u8 *)m + 0x10);
     vars = m->vars;
     limit = FUN_L00_00257b50_b6bc8(vars->pad14 > 0 ? vars->pad14 : 1);
     vars->pad14 = 0;
@@ -1555,23 +1556,25 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
                 ((u16)(*(u16 *)((u8 *)other + 0xa6) - 500) < 2 ||
                  *(s16 *)((u8 *)other + 0xa6) == 0x1f9 ||
                  *(s16 *)((u8 *)other + 0xa6) == 0x1ff)) {
-                angle = FUN_002001f0_b6bc8(D_0013F3D0_b6bc8[6],
-                    FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - D_0013F3D0_b6bc8[0],
-                                           *(f32 *)((u8 *)other + 0x14) - D_0013F3D0_b6bc8[1]));
+                g = &hero;
+                angle = FUN_002001f0_b6bc8(g->motion.rot.f[2],
+                    FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
+                                           *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]));
                 if (angle < 0.9599311f) {
                     if (vars->pad14 == limit) {
                         FUN_001ff2a8_b6bc8(&velocity, (u8 *)other + 0x10, (u8 *)m + 0x10);
                         FUN_001ff500_b6bc8(1.5f, &velocity, &velocity);
-                        FUN_L00_00259bc8_b6bc8(other, m, 0x10000, D_0013F3D0_b6bc8, &velocity, 1.0f);
+                        FUN_L00_00259bc8_b6bc8(other, m, 0x10000, &g->motion.pos, &velocity, 1.0f);
                         vars->frame = FUN_001fef20_b6bc8(FUN_L00_00257b90_c(5, 0x2d));
                     }
                     vars->pad14++;
                 }
             }
             if (distance < radius) {
-                angle = FUN_002001f0_b6bc8(D_0013F3D0_b6bc8[6],
-                    FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - D_0013F3D0_b6bc8[0],
-                                           *(f32 *)((u8 *)other + 0x14) - D_0013F3D0_b6bc8[1]));
+                g = &hero;
+                angle = FUN_002001f0_b6bc8(g->motion.rot.f[2],
+                    FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
+                                           *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]));
                 if (angle < 0.9599311f) {
                     Moby *current = *(Moby **)(state + 0x18);
                     if (current == 0 || distance < FUN_001ff488_b6bc8((u8 *)current + 0x10, (u8 *)other + 0x10)) {
@@ -1584,25 +1587,28 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
         p++;
     }
     i = 1;
-    entry = D_001B07B0_b6bc8 + 1;
-    if (D_001B07B0_b6bc8[0] > 0) do {
-        other = (Moby *)(D_0015FFD8_b6bc8 + *entry * 0x100);
-        if (other != 0 && (s8)other->state >= 0) {
-            state = (u8 *)other->vars;
-            distance = FUN_001ff488_b6bc8(&pos, (u8 *)other + 0x10);
-            if (distance < radius) {
-                angle = FUN_002001f0_b6bc8(D_0013F3D0_b6bc8[6],
-                    FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - D_0013F3D0_b6bc8[0],
-                                           *(f32 *)((u8 *)other + 0x14) - D_0013F3D0_b6bc8[1]));
-                if (angle < 0.9599311f) {
-                    *(Moby **)(state + 0x78) = m;
-                    count++;
+    if (D_001B07B0_b6bc8[0] > 0) {
+        entry = D_001B07B0_b6bc8 + 1;
+        do {
+            other = (Moby *)(D_0015FFD8_b6bc8 + *entry * 0x100);
+            if (other != 0 && (s8)other->state >= 0) {
+                state = (u8 *)other->vars;
+                distance = FUN_001ff488_b6bc8(&pos, (u8 *)other + 0x10);
+                if (distance < radius) {
+                    g = &hero;
+                    angle = FUN_002001f0_b6bc8(g->motion.rot.f[2],
+                        FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
+                                               *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]));
+                    if (angle < 0.9599311f) {
+                        *(Moby **)(state + 0x78) = m;
+                        count++;
+                    }
                 }
             }
-        }
-        i++;
-        entry++;
-    } while (i <= D_001B07B0_b6bc8[0]);
+            i++;
+            entry++;
+        } while (i <= D_001B07B0_b6bc8[0]);
+    }
     return count;
 }
 #endif

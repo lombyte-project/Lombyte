@@ -94,26 +94,24 @@ void FUN_L00_001fcca0(LevelTextEntry *entry, s32 frame) {
         ch = (u8)*source;
         while (ch != 0) {
             out = next;
-            if (ch != 1) {
-                *out = ch;
-                source++;
-                out++;
-                next = out;
-                ch = *source;
-            } else {
-                *out = ' ';
-                out++;
-                *out = '-';
-                out++;
-                *out = ' ';
+            if (ch == 1) {
+                *out++ = ' ';
+                *out++ = '-';
+                *out++ = ' ';
                 ch = *source;
                 while ((u8)ch == 1) {
                     source++;
                     ch = *source;
                 }
-                next = out + 1;
+                next = out;
                 if (ch == 0)
                     next -= 3;
+            } else {
+                *out = ch;
+                source++;
+                out++;
+                next = out;
+                ch = *source;
             }
         }
         out = next;
@@ -128,9 +126,9 @@ void FUN_L00_001fcca0(LevelTextEntry *entry, s32 frame) {
                 *out = 0;
                 FUN_L00_001fcb28(entry->x, y, entry->mode, buffer, scale, alpha);
                 y += 26;
+                out = buffer;
                 while (*source == 1)
                     source++;
-                out = buffer;
                 if (*source == 0)
                     break;
             } else {

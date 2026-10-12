@@ -3715,24 +3715,30 @@ void FUN_L00_00228c18(void) {
             }
         }
     }
-    switch (hero.state.step) {
-    case 0:
-        hero.anim_speed = hero.ground_speed * 157.0f;
-        if (hero.anim_speed < 0.6f)
-            hero.anim_speed = 0.6f;
-        limit = 4.0f;
-        break;
-    case 1:
-        hero.anim_speed = hero.ground_speed * 14.0f;
-        if (hero.anim_speed < 0.6f)
-            hero.anim_speed = 0.6f;
-        limit = 2.2f;
-        break;
-    default:
-        return;
+    {
+        struct Hero *g = &hero;
+        float anim_speed;
+        switch (g->state.step) {
+        case 0:
+            g->anim_speed = g->ground_speed * 157.0f;
+            if (g->anim_speed < 0.6f)
+                g->anim_speed = 0.6f;
+            limit = 4.0f;
+            anim_speed = g->anim_speed;
+            break;
+        case 1:
+            g->anim_speed = g->ground_speed * 14.0f;
+            if (g->anim_speed < 0.6f)
+                g->anim_speed = 0.6f;
+            anim_speed = g->anim_speed;
+            limit = 2.2f;
+            break;
+        default:
+            return;
+        }
+        if (limit < anim_speed)
+            g->anim_speed = limit;
     }
-    if (limit < hero.anim_speed)
-        hero.anim_speed = limit;
 }
 #endif
 #define NOT_SDA

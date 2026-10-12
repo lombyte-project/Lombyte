@@ -954,10 +954,7 @@ void FUN_L00_002e7530(O002e7530 *o, V002e7530 *a, V002e7530 *b, V002e7530 *c, V0
     add_vector_xyz(&t3, m, &t2);
     subtract_vector_xyz(a, &t3, out);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7618.s", FUN_L00_002e7618);
-#else
-extern char *current_follow_cam __asm__("D_L00_00166E00");
+extern char *current_follow_cam __asm__("D_L00_00166E00") __attribute__((section(".data")));
 extern int D_L00_0015EF5C_2e7618 __asm__("D_L00_0015EF5C");
 extern int D_001413D0_2e7618 __asm__("D_001413D0") __attribute__((section(".data")));
 extern struct { u8 pad[0x2080]; int value; } D_0013F350_2e7618 __asm__("D_0013F350") __attribute__((section(".data")));
@@ -991,9 +988,9 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
     path = (V002e7530 *)(m + 0x90);
     add_vector_xyz_2e7618(&pos, path, orbit);
     measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
-    radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) *
-              (distance_xyz(path, &temp) /
-               (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30)))) * 0.75f;
+    radius = distance_xyz(path, &temp) /
+              (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30));
+    radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) * radius) * 0.75f;
     if (measure < radius) {
         found = 1;
         FUN_L00_002e7530(o, &delta, &temp, &hit, &start, radius - measure, dist);
@@ -1002,9 +999,9 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
             subtract_vector_xyz_2e7618(&diff, &start, out);
             add_vector_xyz_2e7618(&hit, &D_L00_00173E60, &diff);
             measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
-            radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) *
-                      (distance_xyz(path, &temp) /
-                       (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30)))) * 0.75f;
+            radius = distance_xyz(path, &temp) /
+                      (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30));
+            radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) * radius) * 0.75f;
             if (measure < radius) {
                 FUN_L00_002e7530(o, &next, &temp, &hit, &start, radius - measure, dist);
                 add_vector_xyz_2e7618(&delta, &delta, &next);
@@ -1013,9 +1010,9 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
                     subtract_vector_xyz_2e7618(&diff, &start, out);
                     add_vector_xyz_2e7618(&hit, &D_L00_00173E60, &diff);
                     measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
-                    radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) *
-                              (distance_xyz(path, &temp) /
-                               (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30)))) * 0.75f;
+                    radius = distance_xyz(path, &temp) /
+                              (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30));
+                    radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) * radius) * 0.75f;
                     if (measure < radius) {
                         FUN_L00_002e7530(o, &next, &temp, &hit, &start, radius - measure, dist);
                         add_vector_xyz_2e7618(&delta, &delta, &next);
@@ -1027,7 +1024,6 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
     add_vector_xyz_2e7618(out, &start, &delta);
     return found;
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

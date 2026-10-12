@@ -217,67 +217,66 @@ void FUN_L00_00214ed8(float a, float b, float c) {
         hero.unkA5C = r;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00214fe8.s", FUN_L00_00214fe8);
-#else
 extern s16 D_0013F658_214fe8 __asm__("D_0013F658");
 extern s32 camera_secondary_mode __asm__("D_001413D4");
 extern s32 D_0013F64C_214fe8 __asm__("D_0013F64C");
 extern f32 D_0015ED64_214fe8 __asm__("D_0015ED64");
 extern char D_0013F390_214fe8[] __asm__("D_0013F390");
 extern char D_0013F350_214fe8[] __asm__("D_0013F350");
-extern char D_L00_0017A680_214fe8[] __asm__("D_L00_0017A680");
+extern struct { f32 f[0xB68 / 4]; } D_L00_0017A680_214fe8 __asm__("D_L00_0017A680");
 extern void FUN_001f9d20_214fe8(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_L00_0020a1f8_214fe8(f32, f32) __asm__("FUN_L00_0020a1f8");
-#define V214(off) (*(f32 *)(D_L00_0017A680_214fe8 + (off)))
+#define V214(off) (D_L00_0017A680_214fe8.f[(off) / 4])
 void FUN_L00_00214fe8(void) {
     HopVec_214658 vec;
     f32 *v = vec.f;
     f32 limit, x, y, pitch, z, lean;
-    char *state = D_0013F350_214fe8;
-    if (*(s16 *)(state + 0x308) == 0) return;
+    struct Hero *state = &hero;
+    if (state->unk308 == 0) return;
     vec.q = 0;
     v[2] = -1.0f;
-    FUN_001f9d20_214fe8(v, v, state + 0x40);
+    FUN_001f9d20_214fe8(v, v, (char *)state + 0x40);
     FUN_L00_0020a1f8_214fe8(D_0015ED64_214fe8 * 0.013f, D_0015ED64_214fe8 * 0.3f);
     limit = 0.43633232f;
-    if (*(s32 *)(state + 0x2084) == 0x3f) limit = 0.29670596f;
-    else if (*(s32 *)(state + 0x2084) == 0x70) limit = 0.08726646f;
-    else if (*(s32 *)(state + 0x2084) == 0x71 || *(s32 *)(state + 0x2084) == 4) limit = 0.19198622f;
-    if (*(s32 *)(state + 0x2fc) != 0 && 0.15707964f < limit) limit = 0.15707964f;
-    x = v[0] * 0.6981317f;
+    if (state->state.current == 0x3f) limit = 0.29670596f;
+    else if (state->state.current == 0x70) limit = 0.08726646f;
+    else if (state->state.current == 0x71 || state->state.current == 4) limit = 0.19198622f;
+    if (hero.ground_moby != 0 && 0.15707964f < limit) limit = 0.15707964f;
+    x = vec.f[0] * 0.6981317f;
     if (limit < x) x = limit;
     else if (x < -limit) x = -limit;
     V214(0x114) = x;
     V214(0x274) = -x * 0.5f;
-    y = -v[1] * 0.6981317f;
+    /* Keep the independent scalar reloads used by retail. */
+    y = -((volatile f32 *)vec.f)[1] * 0.6981317f;
     if (limit < y) y = limit;
     else if (y < -limit) y = -limit;
     V214(0x110) = y;
     V214(0x270) = -y * 0.25f;
-    pitch = -v[0] * 1.2217305f;
-    if (0.99483764f < pitch) pitch = 0.99483764f;
-    if (pitch < -0.12217305f) pitch = -0.12217305f;
-    if (0.85f < v[2]) {
-        if (pitch < 1.3962634f) pitch = 1.3962634f;
-    } else if (0.5f < v[2]) {
-        if (pitch < 1.2217305f) pitch = 1.2217305f;
+    x = -((volatile f32 *)vec.f)[0] * 1.2217305f;
+    if (0.99483764f < x) x = 0.99483764f;
+    if (x < -0.12217305f) x = -0.12217305f;
+    if (0.85f < vec.f[2]) {
+        if (x < 1.3962634f) x = 1.3962634f;
+    } else if (0.5f < vec.f[2]) {
+        if (x < 1.2217305f) x = 1.2217305f;
     }
-    z = v[1] * 1.2217305f;
+    pitch = x;
+    y = vec.f[1] * 1.2217305f;
     V214(0x954) = pitch * 0.57f;
-    V214(0xAB4) = pitch * 0.5f;
-    V214(0xB64) = pitch * 0.35f;
     V214(0xA04) = pitch * 0.5f;
-    if (1.2217305f < z) z = 1.2217305f;
-    else if (z < -1.2217305f) z = -1.2217305f;
+    V214(0xB64) = pitch * 0.35f;
+    V214(0xAB4) = pitch * 0.5f;
+    if (1.2217305f < y) y = 1.2217305f;
+    else if (y < -1.2217305f) y = -1.2217305f;
+    z = y;
     V214(0xB60) = z;
     lean = z * 0.7f;
-    V214(0xAB0) = lean;
     V214(0x950) = lean;
     V214(0xA00) = lean;
+    V214(0xAB0) = lean;
 }
 #undef V214
-#endif
 typedef struct {
     u8 p0[0x10E0];
     f32 f10E0;

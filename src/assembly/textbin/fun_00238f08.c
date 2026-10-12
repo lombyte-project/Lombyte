@@ -56,8 +56,8 @@ void render_vendor_buy_label_pass(s32 capture_context, s32 target_width, s32 tar
         if (vendor_state.entries[vendor_state.selected_entry].purchase_kind == 1 &&
             (entry = (u8 *)&vendor_state +
                          vendor_state.selected_entry * sizeof(struct VendorSelectionEntry),
-             price = *(s32 *)(entry + 0xD0),
-             vendor_item_prices[price].ammo_capacity <= weapon_ammo_counts[price])) {
+             evaluated_message_id = *(s32 *)(entry + 0xD0),
+             vendor_item_prices[evaluated_message_id].ammo_capacity <= weapon_ammo_counts[evaluated_message_id])) {
             evaluated_message_id = 0x5233;
         } else if (vendor_state.entries[vendor_state.selected_entry].purchase_kind == 1) {
             if (vendor_state.discount_ammo_pricing != 0) {
