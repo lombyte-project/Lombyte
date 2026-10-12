@@ -1155,7 +1155,7 @@ extern void cross_vectors_2e0170(void *, void *, void *) __asm__("FUN_001f9ad8")
 extern void build_look_at_2e0170(void *, void *, void *, float) __asm__("FUN_00214890");
 extern float random_scaled_2e0170(float, float) __asm__("FUN_002132a8");
 extern float random_angle_2e0170(float, float) __asm__("FUN_L00_00257c48");
-extern void create_effect_2e0170(float, float, float, void *, void *, void *, void *, void *, int) __asm__("FUN_L00_0025df68");
+extern void create_effect_2e0170(void *, void *, void *, void *, void *, int, float, float, float) __asm__("FUN_L00_0025df68");
 extern float D_0015ED60;
 extern float D_0015ED6C;
 extern char *race_paths_2e0170 __asm__("D_L14_0015F70C");
@@ -1166,11 +1166,12 @@ extern short D_L14_00161B3C_2e0170 __asm__("D_L14_00161B3C") __attribute__((sda)
 
 unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
     unsigned char *m = spawn_moby_2e0170(0x193);
-    unsigned char *pos = m + 0x10;
+    unsigned char *pos;
     if (m != 0) {
         char *d = *(char **)(m + 0x78);
         float vec[8];
-        *(u128 *)pos = *(u128 *)(owner + 0x10);
+        pos = m + 0x10;
+        qcopy(pos, owner + 0x10);
         *(float *)(m + 0x48) = *(float *)(owner + 0x48);
         m[0x20] = mode;
         m[0x30] = 0xFF;
@@ -1179,16 +1180,18 @@ unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
         *(char **)d = owner;
         if (m[0x20] == 0) {
             int index;
+            char *path;
             *(int *)(d + 4) = scale_game_frames_2e0170(90);
+            path = race_paths_2e0170;
             *(float *)(d + 8) = *scale * D_0015ED6C;
             index = *(int *)(*(char **)(owner + 0x78) + 0x60);
             *(int *)(d + 0x14) = 0;
             *(int *)(d + 0x0C) = index;
             *(int *)(d + 0x10) = 0;
-            create_effect_2e0170(20.0f, 5.0f, *(float *)(d + 0x14),
-                *(void **)(race_paths_2e0170 + index * 0x20 + 0x10),
-                pos, vec, d + 0x10, d + 0x14, 0);
+            create_effect_2e0170(*(void **)(path + index * 0x20 + 0x10),
+                pos, vec, d + 0x10, d + 0x14, 0, 20.0f, 5.0f, *(float *)(d + 0x14));
         } else {
+            float angle;
             *(int *)(d + 4) = scale_game_frames_2e0170(200);
             subtract_vector_2e0170(vec, pos, &hero.motion.pos);
             vec[2] = 0.0f;
@@ -1196,8 +1199,8 @@ unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
                 random_scaled_2e0170(*(float *)&D_L14_00161B30_2e0170 * D_0015ED60,
                                        *(float *)&D_L14_00161B34_2e0170 * D_0015ED60));
             cross_vectors_2e0170(vec + 4, &hero.unk290, vec);
-            build_look_at_2e0170(d + 0x30, vec, &hero.unk290,
-                random_angle_2e0170(0.5759586691856384f, 1.3962633609771729f));
+            angle = random_angle_2e0170(0.5759586691856384f, 1.3962633609771729f);
+            build_look_at_2e0170(d + 0x30, vec, &hero.unk290, angle);
             *(float *)(d + 0x38) = random_scaled_2e0170(*(float *)&D_L14_00161B38_2e0170 * D_0015ED60,
                 *(float *)&D_L14_00161B3C_2e0170 * D_0015ED60);
             *(float *)(d + 0x20) = random_angle_2e0170(0.0f, 0.008726646f);
