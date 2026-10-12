@@ -734,7 +734,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002f5ba0.s", FUN_L07_002f5ba0);
 extern u8 D_0013D388[];
 extern s32 D_L07_0015F5C4;
 extern char *D_L07_0015FFD8;
-extern char *D_L07_001600EC;
+extern char *D_L07_001600EC __attribute__((section(".data")));
 extern char D_0013F3D0[];
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_L00_00298840(int);
@@ -783,7 +783,10 @@ void FUN_L07_002f5ba0(struct Moby *moby) {
                         *(u16 *)(other + 0x34) |= 0x41;
                     }
                     if (data[5] != -1) {
-                        *(u16 *)(D_L07_0015FFD8 + data[5] * 0x100 + 0x34) |= 0x41;
+                        {
+                            char *other = D_L07_0015FFD8 + data[5] * 0x100;
+                            *(u16 *)(other + 0x34) |= 0x41;
+                        }
                     }
                     moby->state = 5;
                     FUN_L00_00298840(1);
@@ -800,7 +803,10 @@ void FUN_L07_002f5ba0(struct Moby *moby) {
     case 5:
         if (D_L07_0015F5C4 != 2) {
             if (data[3] != -1) {
-                *(u16 *)(D_L07_0015FFD8 + data[3] * 0x100 + 0x34) |= 0x41;
+                {
+                    char *other = D_L07_0015FFD8 + data[3] * 0x100;
+                    *(u16 *)(other + 0x34) |= 0x41;
+                }
             }
             moby->state = 6;
             FUN_L00_00298840(2);
@@ -809,7 +815,7 @@ void FUN_L07_002f5ba0(struct Moby *moby) {
     case 6:
         if (D_L07_0015F5C4 != 2) {
             if (data[6] != -1) {
-                entry = D_L07_001600EC + data[6] * 0x80;
+                char *entry = (char *)((u32)data[6] * 0x80 + (u32)D_L07_001600EC);
                 FUN_L00_00216f90(entry + 0x30, entry + 0x70, 0, 1);
             }
             moby->state = 7;
@@ -817,35 +823,46 @@ void FUN_L07_002f5ba0(struct Moby *moby) {
         break;
     case 7:
         if (data[3] != -1) {
-            *(u16 *)(D_L07_0015FFD8 + data[3] * 0x100 + 0x34) &= ~0x41;
+            {
+                char *other = D_L07_0015FFD8 + data[3] * 0x100;
+                *(u16 *)(other + 0x34) &= ~0x41;
+            }
         }
         if (data[5] != -1) {
-            *(u16 *)(D_L07_0015FFD8 + data[5] * 0x100 + 0x34) &= ~0x41;
+            {
+                char *other = D_L07_0015FFD8 + data[5] * 0x100;
+                *(u16 *)(other + 0x34) &= ~0x41;
+            }
         }
         FUN_L01_0027a248(2, 4);
         moby->state = 8;
         break;
     case 8: {
         char *other;
-        if (!D_0013D388[0x2a]) {
-            if (data[3] == -1 ||
-                (other = D_L07_0015FFD8 + data[3] * 0x100) == 0 ||
-                ((u8 *)other)[0x20] == 0xfe || ((u8 *)other)[0x20] == 0xfd) {
-                if (data[1] == -1) {
-                    moby->state = 13;
-                } else if (is_point_inside_clip_volume(D_0013F3D0, data[1])) {
-                    entry = D_L07_001600EC + data[7] * 0x80;
-                    FUN_L00_00216f90(entry + 0x30, entry + 0x70, 0x72, 1);
-                    D_0013D388[0x2a] = 1;
-                    moby->state = 9;
-                    FUN_L00_00298840(3);
-                }
-            }
-        } else {
-            moby->state = 12;
+        u8 next_state = 12;
+        if (D_0013D388[0x2a]) goto store_state;
+        if (data[3] != -1) {
+            char *other = D_L07_0015FFD8 + data[3] * 0x100;
+            if (other && ((u8 *)other)[0x20] != 0xfe && ((u8 *)other)[0x20] != 0xfd)
+                goto check_state;
         }
+        next_state = 13;
+        if (data[1] == -1) {
+            goto store_state;
+        }
+        if (is_point_inside_clip_volume(D_0013F3D0, data[1])) {
+            char *entry = (char *)((u32)data[7] * 0x80 + (u32)D_L07_001600EC);
+            FUN_L00_00216f90(entry + 0x30, entry + 0x70, 0x72, 1);
+            D_0013D388[0x2a] = 1;
+            moby->state = 9;
+            FUN_L00_00298840(3);
+        }
+        goto check_state;
+store_state:
+        moby->state = next_state;
+check_state:
         if (moby->state != 8 && data[4] != -1) {
-            other = D_L07_0015FFD8 + data[4] * 0x100;
+            char *other = D_L07_0015FFD8 + data[4] * 0x100;
             *(u16 *)(other + 0x34) |= 0x41;
         }
         break;
@@ -864,7 +881,7 @@ void FUN_L07_002f5ba0(struct Moby *moby) {
         char *other;
         if (D_L07_0015F5C4 != 2) {
             if (data[7] != -1) {
-                entry = D_L07_001600EC + data[7] * 0x80;
+                char *entry = (char *)((u32)data[7] * 0x80 + (u32)D_L07_001600EC);
                 FUN_L00_00216f90(entry + 0x30, entry + 0x70, 0, 1);
             }
             if (data[4] != -1) {
