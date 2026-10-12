@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/globals.h"
-extern s32 D_001DDFB8[];
-extern s32 D_00160F0C;
+extern s32 vu_chain_table[] __asm__("D_001DDFB8");
+extern s32 current_vu_chain __asm__("D_00160F0C");
 
 void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
 
@@ -12,5 +12,5 @@ void calculate_dma_transfer_address(void) {
     if (i >= 0x13) {
         i = 0;
     }
-    D_00160F0C = D_001DDFB8[i];
+    current_vu_chain = vu_chain_table[i];
 }

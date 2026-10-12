@@ -1002,7 +1002,7 @@ void FUN_L04_002d6f68(char *moby) {
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern int FUN_001f9740(s32 *);
 extern int FUN_001f96f8(int);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern float D_L04_001CB940[6];
@@ -1031,7 +1031,7 @@ void FUN_L04_002d7e90(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         qcopy(data + 0x30, &moby->pos);
-        *(int *)(data + 0x40) = *(int *)(data + 0x44) = FUN_L00_00257b90(120, 2400);
+        *(int *)(data + 0x40) = *(int *)(data + 0x44) = random_int_between(120, 2400);
         *(float *)(data + 0x4c) = moby->scale * random_float_between(0.8f, 1.2f);
         moby->state = 1;
         break;
@@ -1044,8 +1044,8 @@ void FUN_L04_002d7e90(struct Moby *moby) {
         direction.f[0] = random_float_between(-1.0f, 1.0f);
         direction.f[1] = random_float_between(-1.0f, 1.0f);
         direction.f[2] = random_float_between(-1.0f, 1.0f);
-        moby->unk30 = 0xff;
-        moby->unk32 = 0x40;
+        moby->update_dist = 0xff;
+        moby->draw_dist = 0x40;
         moby->scale = 0.0f;
         motion = (float *)moby->pvars;
         initialDirection.q = direction.q;
@@ -1056,7 +1056,7 @@ void FUN_L04_002d7e90(struct Moby *moby) {
         normalize_vector_xyz(&moby->rot, &initialDirection, 3.1415927f);
         normalize_vector_xyz(motion + 8, &initialDirection, 0.098174773f);
         normalize_vector_xyz(motion + 4, &initialDirection, D_L04_001CB940[5] * 0.5f);
-        *(int *)(motion + 16) = *(int *)(motion + 17) = FUN_L00_00257b90(720, 1200);
+        *(int *)(motion + 16) = *(int *)(motion + 17) = random_int_between(720, 1200);
         moby->state = 2;
         return;
     case 2:
@@ -1109,7 +1109,7 @@ void FUN_L04_002d7e90(struct Moby *moby) {
         if (*(int *)(data + 0x44) > 0)
             return;
         qcopy(&moby->pos, data + 0x30);
-        timer = FUN_L00_00257b90(120, 2400);
+        timer = random_int_between(120, 2400);
         /* Preserve the retail ordering of the timer reload stores. */
         *(volatile int *)(data + 0x40) = timer;
         *(volatile int *)(data + 0x44) = timer;
@@ -1213,7 +1213,7 @@ extern void FUN_L00_002d6bf0(struct Moby *);
 extern void remove_moby_2e1a10(struct Moby *) __asm__("FUN_0020c828");
 extern void FUN_L04_002e1d00_m(struct Moby *) __asm__("FUN_L04_002e1d00");
 extern void FUN_L00_00298840(int);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_00260860(int, int);
 extern void FUN_L00_00284e50(void *, void *);
 extern void FUN_001e93b0(char *, int);
@@ -1250,9 +1250,9 @@ void FUN_L04_002e1a10(struct Moby *moby) {
         if (D_L04_0015F5C4 == 2)
             break;
         if (!D_0013D4C9[0])
-            FUN_L00_00263d40(0xFA7, -1);
+            queue_dialogue_message(0xFA7, -1);
         else
-            FUN_L00_00263d40(0x53DF, -1);
+            queue_dialogue_message(0x53DF, -1);
         D_L04_0015F640 = 0xB4;
         FUN_L00_00260860(9, 1);
         if (vars->exitMoby != -1) {

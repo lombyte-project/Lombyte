@@ -129,13 +129,13 @@ struct HeroMotion {
     Vec4 unkC0;                    /* 0xC0 */
     Vec4 unkD0;                    /* 0xD0 */
     Vec4 velocity;                 /* 0xE0: per-frame velocity */
-    Vec4 unkF0;                    /* 0xF0 */
-    Vec4 unk100;                   /* 0x100 */
+    Vec4 platform_delta;           /* 0xF0: platform movement this frame */
+    Vec4 displacement;             /* 0x100: total displacement this frame */
     Vec4 unk110;                   /* 0x110 */
     Vec4 unk120;                   /* 0x120 */
     Vec4 unk130;                   /* 0x130 */
     Vec4 platform_carry;                   /* 0x140 */
-    Vec4 unk150;                   /* 0x150: copied from unk110/unk100 on hero_set_state */
+    Vec4 unk150;                   /* 0x150: copied from unk110/displacement on hero_set_state */
     f32 speed_xy;                  /* 0x160: current horizontal speed per frame; eases toward ground_speed, capped at frame_time * 52 */
     f32 unk164;                    /* 0x164 */
     f32 unk168;                    /* 0x168 */
@@ -234,7 +234,7 @@ struct Hero {
     u8 pad_1FA[0x6];
     Vec4 unk200;                   /* 0x200 */
     Vec4 unk210;                   /* 0x210 */
-    f32 unk220;                    /* 0x220 */
+    f32 capsule_top;               /* 0x220 */
     f32 unk224;                    /* 0x224 */
     f32 unk228;                    /* 0x228 */
     f32 unk22C;                    /* 0x22C */
@@ -257,7 +257,7 @@ struct Hero {
     u8 pad_264[0xC];
     Vec4 unk270;                   /* 0x270 */
     Vec4 unk280;                   /* 0x280 */
-    Vec4 unk290;                   /* 0x290 */
+    Vec4 gravity_dir;              /* 0x290: gravity direction (0, 0, -1) */
     Vec4 ground_point;             /* 0x2A0: ground probe hit point under the hero */
     Vec4 unk2B0;                   /* 0x2B0 */
     union { f32 f[2]; s32 i[2]; } unk2C0; /* 0x2C0: written as floats and zeroed as ints */
@@ -266,14 +266,14 @@ struct Hero {
     union { f32 f; s32 i; } ground_z; /* 0x2D8: ground_point.z; zeroed as an int */
     f32 ground_distance;           /* 0x2DC: distance from motion.pos to ground_point */
     union { f32 f; s32 i; } ground_slope; /* 0x2E0: written as a float and zeroed as an int */
-    union { f32 f; s32 i; } unk2E4; /* 0x2E4: written as a float and zeroed as an int */
+    union { f32 f; s32 i; } ground_pitch; /* 0x2E4: written as a float and zeroed as an int */
     union { f32 f; s32 i; } unk2E8; /* 0x2E8: written as a float and zeroed as an int */
     f32 downhill_yaw;                    /* 0x2EC */
     f32 water_surface_z;          /* 0x2F0 */
     f32 unk2F4;                    /* 0x2F4 */
     s32 unk2F8;                    /* 0x2F8 */
     struct Moby *ground_moby;      /* 0x2FC: moby the ground probe hit (0 = level ground) */
-    s32 unk300;                    /* 0x300 */
+    s32 grounded_frames;           /* 0x300: frames on the ground */
     f32 unk304;                    /* 0x304 */
     s16 unk308;                    /* 0x308 */
     s16 unk30A;                    /* 0x30A */
@@ -679,8 +679,8 @@ struct Hero {
     struct HeroEase unk18F0[3];    /* 0x18F0: eased records, kind 5 set when an item slot is ready (FUN_L00_00210748) */
     Vec4 unk1B00[32];              /* 0x1B00: ring of 32 quads indexed by unk21B0 */
     u8 unk1D00[0x20];              /* 0x1D00 */
-    f32 unk1D20;                   /* 0x1D20 */
-    f32 unk1D24;                   /* 0x1D24 */
+    f32 stick_x;                   /* 0x1D20: stick vector (d-pad when the stick is idle) */
+    f32 stick_y;                   /* 0x1D24 */
     u8 pad_1D28[0x68];
     struct HeroEase unk1D90;       /* 0x1D90: manipulator record handed to attach_manipulator (FUN_L00_00234808) */
     u8 pad_1E40[0x70];

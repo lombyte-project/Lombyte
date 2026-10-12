@@ -91,7 +91,7 @@ extern int D_L10_00161FAC __attribute__((sda));
 extern int D_L10_00161FB0 __attribute__((sda));
 extern int D_L10_00161FB4 __attribute__((sda));
 extern int D_L10_00161FB8 __attribute__((sda));
-extern void FUN_L00_00257d78(float *, float, float);
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -121,7 +121,7 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
         return;
     clear_u64_value(vel);
     vel[2] = D_L10_00161F68 * frame_time;
-    FUN_L00_00257d78(acc, 0.0f, D_L10_00161F70 * frame_time);
+    random_vector(acc, 0.0f, D_L10_00161F70 * frame_time);
     acc[2] += D_L10_00161F6C * frame_time;
     vel[3] = random_float_between(D_L10_00161F74, D_L10_00161F78);
     acc[3] = random_float_between(D_L10_00161F7C, D_L10_00161F80);
@@ -171,7 +171,7 @@ extern int D_L10_00161FE8 __attribute__((sda));
 extern int D_L10_00161FEC __attribute__((sda));
 extern int D_L10_00161FF0 __attribute__((sda));
 extern int D_L10_00161FF4 __attribute__((sda));
-extern void FUN_L00_00257d78(float *, float, float);
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void clear_u64_value(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -192,7 +192,7 @@ void FUN_L10_002ea7b0(void *pos, short *timer) {
         return;
     clear_u64_value(vel);
     vel[2] = D_L10_00161FBC * frame_time;
-    FUN_L00_00257d78(acc, 0.0f, D_L10_00161FC4 * frame_time);
+    random_vector(acc, 0.0f, D_L10_00161FC4 * frame_time);
     acc[2] += D_L10_00161FC0 * frame_time;
     vel[3] = random_float_between(D_L10_00161FC8, D_L10_00161FCC);
     acc[3] = random_float_between(D_L10_00161FD0, D_L10_00161FD4);
@@ -241,7 +241,7 @@ extern short D_L10_00162048 __attribute__((sda));
 extern short D_L10_00162044 __attribute__((sda));
 extern short D_L10_0016204C __attribute__((sda));
 extern short D_L10_00162050 __attribute__((sda));
-extern void FUN_L00_00257d78(float *, float, float);
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
@@ -269,7 +269,7 @@ void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
     b = func_001FA898_r((float)*(int *)&D_L10_0016201C * s);
     c = func_001FA898_r(FUN_001f9988((height + height) / (*(float *)&D_L10_00162000 * frame_time_sq)) * *(float *)&D_L10_00162050 * s);
     clear_u64_value(vel);
-    FUN_L00_00257d78(acc, 0.0f, *(float *)&D_L10_00162004 * frame_time);
+    random_vector(acc, 0.0f, *(float *)&D_L10_00162004 * frame_time);
     acc[2] -= *(float *)&D_L10_00162000 * frame_time_sq * (float)c;
     vel[3] = random_float_between(*(float *)&D_L10_00162008, *(float *)&D_L10_0016200C);
     acc[3] = random_float_between(*(float *)&D_L10_00162010, *(float *)&D_L10_00162014);
@@ -298,7 +298,7 @@ extern void FUN_L00_002637f8(int);
 void FUN_L10_002eacd8(struct Moby *m) {
     switch (m->state) {
     case 0:
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         m->state = 1;
         break;
     case 1:

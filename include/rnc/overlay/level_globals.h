@@ -17,7 +17,7 @@ extern f32 D_L00_0015EF44;
 extern s32 D_L00_0015EF60;
 extern char *D_L00_00168FC0;
 extern u64 * volatile D_L00_001611C0;
-extern volatile u64 D_0015EEC8;
+extern volatile u64 debug_font_pif_header __asm__("D_0015EEC8");
 extern u8 D_L00_00179700[];
 extern volatile s32 D_L00_0015FFDC;
 extern s32 D_L00_00161054;

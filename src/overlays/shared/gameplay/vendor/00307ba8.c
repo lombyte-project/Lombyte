@@ -48,9 +48,9 @@ struct Moby *FUN_L09_00307ba8(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life)
         pv->owner = owner;
         m->rot.x = 0.0f;
         m->scale *= 4.0f;
-        m->unk30 = 0xFF;
-        m->unk32 = 0xFF;
-        m->unk31 = 1;
+        m->update_dist = 0xFF;
+        m->draw_dist = 0xFF;
+        m->visible = 1;
         m->rot.y = -atan2_307ba8(vector_length_xy_307ba8(vp), vp->f[2]);
         m->rot.z = atan2_307ba8(v.f[0], vp->f[1]);
         qcopy(&m->pos, pp);
@@ -65,7 +65,7 @@ struct Moby *FUN_L09_00307ba8(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life)
         pv->unk28 = 0;
         trail = life * 5 / 4;
         m->flags |= 0x200;
-        m->unk23 = 0x40;
+        m->alpha = 0x40;
         FUN_L00_0026daa0_307ba8(400000.0f, m, 0x2F7F4F4F, trail, -1);
         FUN_L00_0026daa0_307ba8(160000.0f, m, 0x4F7F7F7F, trail, -1);
         FUN_L00_00250df8_307ba8(m);
@@ -145,7 +145,7 @@ void FUN_L09_00307d68(struct Moby *m)
     }
 
     probe = 0;
-    if (m->unkBC == 0) {
+    if (m->command == 0) {
         pr.mask = 0x70001;
         pr.radius = 3.0f;
         pr.self = m;
@@ -160,10 +160,10 @@ void FUN_L09_00307d68(struct Moby *m)
         pr.unk19 = 3;
         pr.oclass = m->oclass;
     }
-    if (tick_countdown_16_307d68(&v->life) && m->unkBC == 0) {
-        m->unkBC = 1;
+    if (tick_countdown_16_307d68(&v->life) && m->command == 0) {
+        m->command = 1;
         v->life = v->life_max / 4;
-    } else if (v->life <= 0 && m->unkBC != 0) {
+    } else if (v->life <= 0 && m->command != 0) {
         mark_moby_for_removal_307d68(m);
         return;
     }
@@ -171,7 +171,7 @@ void FUN_L09_00307d68(struct Moby *m)
         return;
 
     qcopy(&m->pos, &D_L09_00173FE0_307d68);
-    if (m->unkBC == 0) {
+    if (m->command == 0) {
         for (i = 0; i < 5; i++) {
             r.q = 0;
             r.f[0] = random_float_between_307d68(-1.0f, 1.0f);
@@ -224,20 +224,20 @@ struct Moby *FUN_L09_0030a778(struct Moby *owner, Vec4 *pos)
         qcopy_nc(&m->pos, pos_ptr);
         m->pos.w = 0.0f;
         m->state = 0;
-        m->unkBC = 0;
+        m->command = 0;
         m->flags = m->pclass->flags;
         m->scale = m->pclass->scale;
-        m->unk30 = 0xff;
-        m->unk32 = 0xff;
-        m->unk31 = 1;
+        m->update_dist = 0xff;
+        m->draw_dist = 0xff;
+        m->visible = 1;
         if (*(s32 *)((u8 *)m->pclass + 0x40) != 0)
             m->flags |= 0x10;
         if (*((u8 *)m->pclass + 0x0f) != 0)
             m->flags |= 0x400;
-        m->unk36 = 0x7f80;
+        m->occlusion = 0x7f80;
         m->unk71 = 0xff;
         m->unk72 = 0xff;
-        m->unkA4 = 0xff;
+        m->hit_slot = 0xff;
         if (owner_vars[0x93] != 0)
             m->scale = m->pclass->scale * 0.1f;
         FUN_00212ed8_30a778(m, 0, 0);
@@ -257,7 +257,7 @@ struct Moby *FUN_L09_0030a778(struct Moby *owner, Vec4 *pos)
             owner->unkB4 = 1;
         {
             struct Moby *target = ((struct Moby *volatile *)&m)[0];
-            target->unk94 = target->pclass->unk10;
+            target->collision = target->pclass->collision;
         }
         FUN_L00_0025d1b8_30a778(m);
         FUN_L00_00250df8_30a778(m);
@@ -413,7 +413,7 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
-extern s32 FUN_L00_001f0d60(f32, void *, s32, struct Moby *);
+extern s32 coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_001fefc8(void *);
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_00259fe8(struct Moby *, f32);
@@ -465,15 +465,15 @@ void FUN_L09_0030b3b0(struct Moby *moby) {
         add_vector_xyz(&moby->pos, &moby->pos, &vars->vel);
         normalize_vector_xyz(&step, &vars->vel, 0.2f);
         add_vector_xyz(&step, &step, &moby->pos);
-        moby->unk94 = 0;
-        vars->owner->unk94 = 0;
+        moby->collision = 0;
+        vars->owner->collision = 0;
         if (FUN_001efa68(&prev, &step, 4, moby, 0) != 0) {
             subtract_vector_xyz(&step, &D_L09_00173FC0.point, &step);
             normalize_vector_xyz(&step, &step, 0.215f);
             add_vector_xyz(&moby->pos, &moby->pos, &step);
             bubble_bounce(moby, vars);
         }
-        if (FUN_L00_001f0d60(0.2f, &moby->pos, 4, moby) != 0) {
+        if (coll_sphere(0.2f, &moby->pos, 4, moby) != 0) {
             subtract_vector_xyz(&step, &D_L09_00173FC0.point, D_L09_00173FC0.pad30);
             normalize_vector_xyz(&step, &step, 0.015f);
             add_vector_xyz(&moby->pos, D_L09_00173FC0.pad30, &step);
@@ -498,8 +498,8 @@ void FUN_L09_0030b3b0(struct Moby *moby) {
         }
         moby->rot.x = FUN_L00_0025e310(vars->vel.f[0]);
         moby->rot.y = FUN_L00_0025e310(vars->vel.f[1]);
-        moby->unk94 = moby->pclass->unk10;
-        vars->owner->unk94 = vars->owner->pclass->unk10;
+        moby->collision = moby->pclass->collision;
+        vars->owner->collision = vars->owner->pclass->collision;
         vars->vel.f[2] -= frame_time_sq * 9.8f;
         moby->rot.x += frame_scale * 0.01f;
         moby->rot.y += frame_scale * 0.02f;

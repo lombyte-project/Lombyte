@@ -856,7 +856,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
         }
         if (distance > limit)
             continue;
-        build_spherical_offset(offset, distance, *heading, *pitch + hero.unk2E4.f * 0.5f);
+        build_spherical_offset(offset, distance, *heading, *pitch + hero.ground_pitch.f * 0.5f);
         FUN_001f9a10(offset, offset, position);
         apparentAngle = FUN_001f9df8(FUN_001f9b48(offset, target) / (distance + distance));
         apparentAngle += apparentAngle;
@@ -1102,7 +1102,7 @@ void FUN_L00_002bc7e8(Moby *moby) {
             direction.z = 1.0f;
             func_001F9EE8_2BDAF0(&direction, &direction, matrix);
         } else if (((Hero *)D_0013F450_2BDAF0)->unk22C8 == 1) {
-            func_001F9C30_2BDAF0(&direction, &moby->unkD0, -1.0f);
+            func_001F9C30_2BDAF0(&direction, &moby->rot_row1, -1.0f);
         } else {
             direction.x = 1.0f;
             func_001F9EC0_2BDAF0(&direction, &direction, ((Hero *)D_0013F450_2BDAF0)->basis[0].f);
@@ -1161,7 +1161,7 @@ void FUN_L00_002bc7e8(Moby *moby) {
         }
         if (D_L00_001617C0 >= 0) {
             D_L00_001617C4 = func_001F9850_2BDAF0(20);
-            func_L00_001FF4B0_2BDAF0(&points[0], &moby->unkD0, -0.5f);
+            func_L00_001FF4B0_2BDAF0(&points[0], &moby->rot_row1, -0.5f);
             func_001F9BD8_2BDAF0(&points[1], data, &points[0]);
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[0] = points[1].x;
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[1] = points[1].y;
@@ -1182,7 +1182,7 @@ void FUN_L00_002bc7e8(Moby *moby) {
         D_L00_001617BC = 1;
         if (D_L00_001617C0 >= 0) {
             float brightness;
-            func_L00_001FF4B0_2BDAF0(&direction, &moby->unkD0, -0.5f);
+            func_L00_001FF4B0_2BDAF0(&direction, &moby->rot_row1, -0.5f);
             func_001F9BD8_2BDAF0(&points[0], data, &direction);
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[0] = points[0].x;
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[1] = points[0].y;
@@ -1540,7 +1540,7 @@ void FUN_L00_002bd0a0(struct Moby *moby) {
     func_001F9BF0_2BE3A8(&dir, &D_L00_001DC260_2BE3A8[1], &D_L00_001DC260_2BE3A8[0]);
     func_L00_001FF4B0_2BE3A8(&dir, &dir, D_L00_00161804_2BE3A8 * D_0015EE60_2BE3A8);
     if (func_002140B0_2BE3A8(2) == 0) {
-        func_L00_001FF4B0_2BE3A8(&side, &moby->unkD0, D_L00_00161810_2BE3A8);
+        func_L00_001FF4B0_2BE3A8(&side, &moby->rot_row1, D_L00_00161810_2BE3A8);
         func_001F9BD8_2BE3A8(&point, &D_L00_001DC260_2BE3A8[0], &side);
         {
             Tab_2BE3A8 colors;
@@ -2050,7 +2050,7 @@ typedef struct {
 extern char D_0013E533[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int D_L00_00173E40[];
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
 int FUN_L00_002beab0(char *a, int b, Vx *c) {
     Vx v;
@@ -2065,7 +2065,7 @@ int FUN_L00_002beab0(char *a, int b, Vx *c) {
     }
     t = s * 0.2f;
     v.z = v.z + t;
-    r = FUN_L00_001f0d60(s * 0.1999f, &v, b, a);
+    r = coll_sphere(s * 0.1999f, &v, b, a);
     if (r != 0) {
         float *g = (float *)D_L00_00173E40;
         g[14] -= t;

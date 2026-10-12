@@ -4,7 +4,7 @@
 #include "rnc/rendering/dma_tag.h"
 
 extern s32 D_001940C0[];
-extern s32 D_00160F0C;
+extern s32 current_vu_chain __asm__("D_00160F0C");
 extern s32 D_0015F5B8;
 extern s32 D_00160EF8[];
 extern s32 D_00160F10 MACRO_ADDR;
@@ -20,7 +20,7 @@ void vu1_init_chain(void) {
 
     start = D_001940C0[1];
     end = D_001940C0[2];
-    limit = start + D_00160F0C - D_0015F5B8;
+    limit = start + current_vu_chain - D_0015F5B8;
     D_00160EF8[1] = end;
     D_00160F10 = 0;
     render_packet_cursor.addr = start;

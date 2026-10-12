@@ -753,7 +753,7 @@ void FUN_L00_0026ac78(char *m) {
             FUN_L00_00267a08(m);
     }
 }
-extern unsigned char *FUN_L00_002678c0_26b230(int, int) __asm__("FUN_L00_002678c0");
+extern unsigned char *create_part2(int, int) __asm__("FUN_L00_002678c0");
 extern float FUN_L00_00257c48_26b230(float, float) __asm__("FUN_L00_00257c48");
 extern float FUN_001f96b0_26b230(float) __asm__("FUN_001f96b0");
 extern int FUN_001fa6d0_26b230(float) __asm__("FUN_001fa6d0");
@@ -782,7 +782,7 @@ extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
 
 unsigned char *FUN_L00_0026b230(void *pos, void *vel, unsigned char flags, float size) {
     void *source = pos;
-    unsigned char *particle = FUN_L00_002678c0_26b230(0xC, 0);
+    unsigned char *particle = create_part2(0xC, 0);
     if (particle) {
         unsigned char *motion = particle + 0x20;
         qcopy(particle + 0x10, source);

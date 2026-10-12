@@ -6,14 +6,16 @@
   "preview-build function matches (normalized instruction hashes)",
   "exact boot-symbol matches (normalized instruction hashes)",
   "moby class names from each level program's lvl.vtbl dispatch records, joined with the Wrench moby_classes unpack (the record's first word is the class id, the directory name carries it)",
-  "memory-card state names from each level program's handler table: the dispatcher indexes the handler table with the state, and the table of state names follows it (same length, last slot null)"
+  "memory-card state names from each level program's handler table: the dispatcher indexes the handler table with the state, and the table of state names follows it (same length, last slot null)",
+  "ReRAC's names for level functions (its tools/ghidra/names/doc_names.csv, read in Ghidra), with its confidence (verified, inferred, suggested); recorded as evidence, applied in src/overlays only when verified or inferred"
  ],
  "stats": {
-  "functions_with_evidence": 656,
+  "functions_with_evidence": 657,
   "named": 350,
   "with_assert_evidence": 0,
   "assert_records": 0,
-  "modules": {}
+  "modules": {},
+  "with_rerac_name": 1
  },
  "functions": [
   {
@@ -9468,6 +9470,21 @@
     "name": "FUN_002dfb18",
     "addr": 3013400,
     "words": 220
+   }
+  },
+  {
+   "function": "FUN_00318a68",
+   "addr": 3246696,
+   "sources": [
+    "rerac-name"
+   ],
+   "name_evidence": null,
+   "modules": [],
+   "assert_evidence": [],
+   "preview": null,
+   "rerac_name": {
+    "name": "SetWaterPlane",
+    "confidence": "suggested"
    }
   },
   {

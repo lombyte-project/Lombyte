@@ -32,7 +32,7 @@ void FUN_L15_002e73c0(struct Moby *moby) {
             break;
         }
         case 3:
-            moby->unk58 = 1.3888889f;
+            moby->anim_speed = 1.3888889f;
             *(float *)(data + 0x40) =
                 FUN_001f9dc8(FUN_001fa580(moby->rot.z, 1.5707964f)) *
                 (frame_time * 2.5f);
@@ -345,7 +345,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L15_00162078_d __asm__("D_L15_00162078") __attribute__((sda));
 extern unsigned char D_0013D4FD[];
 extern void FUN_L00_00260860(int, int);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_00298840(int);
 extern void FUN_L00_002d6bf0(char *);
 extern void FUN_L10_00298940(char *);
@@ -374,7 +374,7 @@ void FUN_L15_002ea748(struct Moby *m) {
         break;
     case 2:
         if (D_L15_0015F5C4 != 2) {
-            FUN_L00_00263d40(0x3AA3, -1);
+            queue_dialogue_message(0x3AA3, -1);
             D_L15_0015F640 = scale_game_frames(0xB4);
             FUN_L00_00260860(0x22, 1);
             memcard_save_data(0, -1);
@@ -402,7 +402,7 @@ void FUN_L15_002eabd8(struct Moby *moby) {
     case 0:
         data[0] = func_001FA898_r(FUN_001f96b0(*(float *)(data + 1) * 60.0f));
         moby->state = 1;
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         break;
     case 1:
         if (FUN_001f9740(data)) {
@@ -636,10 +636,10 @@ void FUN_L15_002eb6b8(void);
 
 void FUN_L15_002eb4c0(struct Moby *m) {
     char *d = (char *)m->pvars;
-    m->unk30 = 0x80;
+    m->update_dist = 0x80;
     switch (m->state) {
     case 0:
-        if (D_0014C050_v[m->unkB0 + current_level_index * 16] == 0xFF)
+        if (D_0014C050_v[m->mission + current_level_index * 16] == 0xFF)
             break;
         if (D_L15_00161AC0_v != 0)
             break;
@@ -649,7 +649,7 @@ void FUN_L15_002eb4c0(struct Moby *m) {
             break;
         start_scene_p(3);
         m->state = 2;
-        FUN_L00_002502a0_v(m->unkB0);
+        FUN_L00_002502a0_v(m->mission);
         FUN_L00_00232fe8_v();
         break;
     case 2:
@@ -1060,22 +1060,22 @@ void FUN_L15_002ec760(struct Moby *moby) {
         *(unsigned short *)(other + 0x34) |= 0x41;
     }
     if (moby->state == 9) {
-        moby->unk30 = 0;
-        moby->unk94 = 0;
+        moby->update_dist = 0;
+        moby->collision = 0;
         moby->flags |= 0x41;
         return;
     }
     if (D_L15_0015F5C4 == 2) {
-        moby->unk94 = 0;
+        moby->collision = 0;
         moby->flags |= 0x41;
     } else {
-        moby->unk94 = moby->pclass->unk10;
+        moby->collision = moby->pclass->collision;
         moby->flags &= 0xffbe;
         FUN_002499d8(moby);
     }
     switch (moby->state) {
     case 0:
-        moby->unk30 = 0xff;
+        moby->update_dist = 0xff;
         moby->state = 1;
         *(float *)(data + 0xc) = 20.0f;
         FUN_00255e88(moby, data);
@@ -1099,7 +1099,7 @@ void FUN_L15_002ec760(struct Moby *moby) {
         if (is_point_inside_clip_volume((void *)0x13f3d0, *(int *)(data + 0x27c)) &&
             (D_001413DC < 2 || D_001413DC == 9) && FUN_00255a30(moby, data)) {
             FUN_L00_002502a0_v(*(int *)(data + 0x280));
-            moby->unk58 = 0.0f;
+            moby->anim_speed = 0.0f;
             moby->state = 2;
             if (D_L15_0015FFE4 != 0) {
                 other = (char *)D_L15_0015FFE4;
@@ -1115,7 +1115,7 @@ void FUN_L15_002ec760(struct Moby *moby) {
         break;
     case 2:
         if (D_L15_0015F5C4 != 2) {
-            moby->unk58 = 1.0f;
+            moby->anim_speed = 1.0f;
             if (*(short *)(data + 4) == 0) {
                 if (*(int *)(data + 0x150) != -1) {
                     other = D_L15_001600EC + *(int *)(data + 0x150) * 0x80;
@@ -1278,7 +1278,7 @@ void FUN_L15_002ed398(struct Moby *moby) {
     int v;
     switch (state) {
     case 0:
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         data[13] = FUN_001f96f8(0x4B0);
         moby->state = 1;
         break;
@@ -1414,7 +1414,7 @@ extern void FUN_L00_002637f8(int);
 void FUN_L15_002edb20(struct Moby *m) {
     switch (m->state) {
     case 0:
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         m->state = 1;
         break;
     case 1:

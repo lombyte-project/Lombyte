@@ -432,7 +432,7 @@ void FUN_L06_002fd088(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002B5990), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_001600EC;
-extern char D_0013E050[];
+extern char ship_substate[] __asm__("D_0013E050");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -451,7 +451,7 @@ void FUN_L06_002b4770(char *m) {
         if (*(int *)(d + 0x10) == 0) {
             int x;
             *(int *)(d + 0x10) = 0;
-            x = *(int *)(D_0013E050);
+            x = *(int *)(ship_substate);
             if (x == 8) {
                 *(int *)(d + 0x10) = 1;
                 *(float *)(d + 0x18) = 0.3490658402442932f;
@@ -1064,7 +1064,7 @@ void FUN_L06_002f55a0(Moby *moby) {
 
     switch (moby->state) {
     case 0: {
-        int status = D_0014C150_2F69D0[moby->unkB0 + (D_0015EE84_2F69D0 << 4)];
+        int status = D_0014C150_2F69D0[moby->mission + (D_0015EE84_2F69D0 << 4)];
         if (status == 0xFF) {
             moby->state = 6;
             D_L06_00161E08_2F69D0 = 20.0f;
@@ -1075,15 +1075,15 @@ void FUN_L06_002f55a0(Moby *moby) {
         }
         for (i = 0; i < 20; i++) {
             data->a[i] = func_0020D348_2F69D0(0x405);
-            data->a[i]->unk32 = 0x40;
-            data->a[i]->unk31 = 1;
+            data->a[i]->draw_dist = 0x40;
+            data->a[i]->visible = 1;
             data->a[i]->spawn_frame = (*(long *)&((Hero *)D_0013E633_2F69D0)->moby->spawn_frame);
             data->a[i]->flags = moby->flags;
             qcopy_nc(&data->a[i]->pos, &moby->pos);
             qcopy_nc(&data->a[i]->rot, &moby->rot);
             data->b[i] = func_0020D348_2F69D0(0x405);
-            data->b[i]->unk32 = 0x40;
-            data->b[i]->unk31 = 1;
+            data->b[i]->draw_dist = 0x40;
+            data->b[i]->visible = 1;
             data->b[i]->spawn_frame = (*(long *)&moby->spawn_frame);
             data->b[i]->flags = moby->flags;
             qcopy_nc(&data->b[i]->pos, &moby->pos);
@@ -1091,15 +1091,15 @@ void FUN_L06_002f55a0(Moby *moby) {
         }
         for (j = 0; j < 10; j++) {
             data->c[j] = func_0020D348_2F69D0(0x406);
-            data->c[j]->unk32 = 0x40;
-            data->c[j]->unk31 = 1;
+            data->c[j]->draw_dist = 0x40;
+            data->c[j]->visible = 1;
             data->c[j]->spawn_frame = (*(long *)&((Hero *)D_0013E633_2F69D0)->moby->spawn_frame);
             data->c[j]->flags = moby->flags;
             qcopy_nc(&data->c[j]->pos, &moby->pos);
             qcopy_nc(&data->c[j]->rot, &moby->rot);
             data->d[j] = func_0020D348_2F69D0(0x406);
-            data->d[j]->unk32 = 0x40;
-            data->d[j]->unk31 = 1;
+            data->d[j]->draw_dist = 0x40;
+            data->d[j]->visible = 1;
             data->d[j]->spawn_frame = (*(long *)&moby->spawn_frame);
             data->d[j]->flags = moby->flags;
             qcopy_nc(&data->d[j]->pos, &moby->pos);
@@ -1126,11 +1126,11 @@ void FUN_L06_002f55a0(Moby *moby) {
             func_L00_002EBF50_2F69D0(D_L06_0016016C_2F69D0 + (data->node_start << 7) + 0x30, D_L06_0016016C_2F69D0 + (data->node_start << 7) + 0x70, 1, 0, 0);
         } else if (1.0f <= data->fade) {
             moby->state = 4;
-            moby->unkBC = func_0022ED80_2F69D0(0, 4, data->c[9]);
+            moby->command = func_0022ED80_2F69D0(0, 4, data->c[9]);
         }
         break;
     case 4:
-        func_L00_002512D8_2F69D0(moby->unkB0);
+        func_L00_002512D8_2F69D0(moby->mission);
         if (D_L06_00161E08_2F69D0 < 20.0f) {
             func_00214D88_2F69D0(&D_L06_00161E08_2F69D0, &D_L06_00161E2C_2F69D0, 20.0f, D_L06_00161E20_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E20_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E14_2F69D0 * D_0015EE6C_2F69D0);
         }
@@ -1144,14 +1144,14 @@ void FUN_L06_002f55a0(Moby *moby) {
             moby->state = 5;
             data->fade = -1.0f;
         }
-        slot = moby->unkBC;
+        slot = moby->command;
         if (20.0f <= D_L06_00161E08_2F69D0) {
             if (func_L00_0028EB98_2F69D0(data->c[9], slot) != 0) {
                 if (slot != -1 && ((Slot_2F69D0 *)(D_0013E650_2F69D0 + slot * 0x70))->p88 == data->c[9] && ((Slot_2F69D0 *)(D_0013E650_2F69D0 + slot * 0x70))->b74 != 0) {
                     func_L00_0028EBF0_2F69D0(slot);
                 }
                 slot = -1;
-                moby->unkBC = slot;
+                moby->command = slot;
             }
         }
         func_L06_002F71A8_2F69D0(moby);
@@ -1861,7 +1861,7 @@ void FUN_L06_002f91e8(Moby *moby)
         func_L00_0025E4B0_2FA618(moby, data->f60);
     }
 
-    moby->unkA4 = 0xFF;
+    moby->hit_slot = 0xFF;
     func_L00_0025E590_2FA618(moby, data->f60);
     switch (moby->state) {
     case 8:
@@ -1874,7 +1874,7 @@ void FUN_L06_002f91e8(Moby *moby)
         break;
     }
     data->f1C8 = func_001FA748_2FA618(data->f1C8, D_L06_00161EE4 * 0.017453292f * D_0015ED6C_c);
-    moby->unk90 = func_001FA8A8_2FA618(D_L06_00161EE8, D_L06_00161EEC,
+    moby->glow_color = func_001FA8A8_2FA618(D_L06_00161EE8, D_L06_00161EEC,
                                      (func_001F9FA8_2FA618(data->f1C8) + 1.0f) * 0.5f);
 
     if (data->f1AC != 0) {

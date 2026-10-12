@@ -3,8 +3,8 @@
 #include "sda.h"
 #include "qcopy.h"
 
-extern char D_001871B0[];
-extern char D_00187290[];
+extern char cam_trans_state[] __asm__("D_001871B0");
+extern char camera_rows[] __asm__("D_00187290");
 #include "rnc/gameplay/camera/update_cam.h"
 extern int step_camera_blend(void *, void *) __asm__("func_001ECAF8");
 extern int advance_alternate_camera_transition(void *, void *) __asm__("FUN_001eccd8");
@@ -19,7 +19,7 @@ extern int advance_alternate_camera_transition(void *, void *) __asm__("FUN_001e
 void update_camera_blend(char *to_cam) __asm__("FUN_001ed2b0");
 
 void update_camera_blend(char *to_cam) {
-    char *base = D_001871B0;
+    char *base = cam_trans_state;
     int result;
 
     if (*(unsigned char *)(base + 2) == 0) {
@@ -29,10 +29,10 @@ void update_camera_blend(char *to_cam) {
     }
     if (result != 0) {
         if (camera_position_publication_suppressed[0] == 0) {
-            qcopy(D_00187290, to_cam);
-            qcopy(D_00187290 + 0x10, to_cam + 0x10);
-            qcopy(D_00187290 + 0x20, to_cam + 0x20);
-            qcopy(D_00187290 - 0x210, to_cam + 0x30);
+            qcopy(camera_rows, to_cam);
+            qcopy(camera_rows + 0x10, to_cam + 0x10);
+            qcopy(camera_rows + 0x20, to_cam + 0x20);
+            qcopy(camera_rows - 0x210, to_cam + 0x30);
         }
         *(short *)base = 0;
         base[2] = 0;

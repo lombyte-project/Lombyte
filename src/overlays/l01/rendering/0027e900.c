@@ -32,7 +32,7 @@ typedef struct {
     SparkBody body;
 } Spark;
 
-extern void *FUN_L00_002678b8(s32);
+extern void *create_part(s32) __asm__("FUN_L00_002678b8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_0025bfe0(f32, f32, f32, f32);
@@ -48,7 +48,7 @@ void FUN_L01_0027e900(s32 id, u128 *pos, s32 life, u8 kind, u8 tex, u8 mode, f32
     if (id == 0) {
         return;
     }
-    p = FUN_L00_002678b8(6);
+    p = create_part(6);
     if (p == 0) {
         return;
     }
@@ -103,7 +103,7 @@ typedef struct {
     u128 pos;
     PartMotion m;
 } Particle;
-extern void *FUN_L00_002678b8(s32);
+extern void *create_part(s32) __asm__("FUN_L00_002678b8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern u8 *D_L01_001B25E0[];
@@ -113,7 +113,7 @@ Particle *FUN_L01_00287b00(u128 *pos, u128 *vel, f32 f) {
     s32 c;
     u32 col;
 
-    p = FUN_L00_002678b8(0x38);
+    p = create_part(0x38);
     if (p != 0) {
         qcopy(&p->pos, pos);
         c = random_integer_below(0x10) * 2 + 0x60;
@@ -130,7 +130,7 @@ Particle *FUN_L01_00287b00(u128 *pos, u128 *vel, f32 f) {
     return p;
 }
 extern u8 *D_L01_001B25E4[];
-void *FUN_L00_002678b8(s32);
+void *create_part(s32) __asm__("FUN_L00_002678b8");
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -140,7 +140,7 @@ Particle *FUN_L01_00287c80(u128 *pos, u128 *dir, f32 scale, f32 speed) {
     PartMotion *m;
     f32 r;
 
-    p = FUN_L00_002678b8(0x39);
+    p = create_part(0x39);
     if (p != NULL) {
         qcopy(&p->pos, pos);
         m = &p->m;

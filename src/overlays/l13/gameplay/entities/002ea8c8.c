@@ -13,7 +13,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ea8c8.s", FUN_L13_002ea8c8);
 extern char D_0013E533[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern int FUN_L00_001fefc8(void *);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L13_002e86f8(void *, void *, int, int);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -138,10 +138,10 @@ s3:
     e = ((unsigned char *)p)[0xFE] ^ 1;
     ((unsigned char *)p)[0xFE] = e;
     if (!e) {
-        ((unsigned char *)p)[0xFD] = FUN_L00_00257b90(4, 6);
+        ((unsigned char *)p)[0xFD] = random_int_between(4, 6);
         moby[0x20] = 4;
     } else {
-        ((unsigned char *)p)[0xFD] = FUN_L00_00257b90(0x14, 0x32);
+        ((unsigned char *)p)[0xFD] = random_int_between(0x14, 0x32);
         moby[0x20] = 3;
     }
     *(int *)(p + 0xF8) = scale_game_frames_alt(0x78);
@@ -193,10 +193,10 @@ s2:
     e = ((unsigned char *)p)[0xFE] ^ 1;
     ((unsigned char *)p)[0xFE] = e;
     if (!e) {
-        ((unsigned char *)p)[0xFD] = FUN_L00_00257b90(4, 6);
+        ((unsigned char *)p)[0xFD] = random_int_between(4, 6);
         moby[0x20] = 4;
     } else {
-        ((unsigned char *)p)[0xFD] = FUN_L00_00257b90(0x14, 0x32);
+        ((unsigned char *)p)[0xFD] = random_int_between(0x14, 0x32);
         moby[0x20] = 3;
     }
     *(int *)(p + 0xF8) = scale_game_frames_alt(0x3C);
@@ -539,7 +539,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
             data->iF8 = scale_game_frames_alt(0x14);
             moby->state = 3;
             data->s9C = FUN_L01_0028b510(moby->pos, D_L13_001B07B0[data->paths[data->b13B]], 0.0f);
-            data->s9C = *(unsigned short *)((char *)data + 0x9C) + FUN_L00_00257b90(3, 7);
+            data->s9C = *(unsigned short *)((char *)data + 0x9C) + random_int_between(3, 7);
             data->s9C = data->s9C % *(int *)D_L13_001B07B0[data->paths[data->b13B]];
             data->s9E = data->s9C - 1;
             if (data->s9E < 0) {
@@ -561,7 +561,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
             if (data->b13B != D_L13_001D3448[moby->bBC]) {
                 data->b13B = D_L13_001D3448[moby->bBC];
                 data->s9C = FUN_L01_0028b510(moby->pos, D_L13_001B07B0[data->paths[D_L13_001D3448[moby->bBC]]], 0.0f);
-                data->s9C = *(unsigned short *)((char *)data + 0x9C) + FUN_L00_00257b90(3, 7);
+                data->s9C = *(unsigned short *)((char *)data + 0x9C) + random_int_between(3, 7);
                 data->s9C = data->s9C % *(int *)D_L13_001B07B0[data->paths[D_L13_001D3448[moby->bBC]]];
                 data->s9E = data->s9C - 1;
                 if (data->s9E < 0) {
@@ -616,7 +616,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
                 if (data->b13B != D_L13_001D3448[moby->bBC]) {
                     data->b13B = D_L13_001D3448[moby->bBC];
                     data->s9C = FUN_L01_0028b510(moby->pos, D_L13_001B07B0[data->paths[D_L13_001D3448[moby->bBC]]], 0.0f);
-                    data->s9C = *(unsigned short *)((char *)data + 0x9C) + FUN_L00_00257b90(3, 7);
+                    data->s9C = *(unsigned short *)((char *)data + 0x9C) + random_int_between(3, 7);
                     data->s9C = data->s9C % *(int *)D_L13_001B07B0[data->paths[D_L13_001D3448[moby->bBC]]];
                     data->s9E = data->s9C - 1;
                     if (data->s9E < 0) {
@@ -1217,17 +1217,17 @@ extern int D_0015EEA4;
 extern int D_L13_0015F5C4;
 extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern int D_L13_00179710[];
-extern int FUN_L00_00203908(int a, int b);
+extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
-extern unsigned char D_0013D407[];
+extern unsigned char menu_item_enabled_115[] __asm__("D_0013D407");
 extern char D_00141968[];
 extern char D_00141CE4[];
 
 void FUN_L13_002f3778(struct Moby *moby) {
     char *data;
     unsigned char *p;
-    moby->unk30 = 0xFF;
+    moby->update_dist = 0xFF;
     data = (char *)moby->pvars;
     if (D_L13_00179710[0] == 0 && D_L13_00179710[9] == -1) {
         unsigned int v = *(unsigned int *)(&hero.state.control_mode);
@@ -1245,7 +1245,7 @@ void FUN_L13_002f3778(struct Moby *moby) {
                 }
             }
         join:
-            p = D_0013D407 + 0xB9;
+            p = menu_item_enabled_115 + 0xB9;
             if (p[0xB] != 0 || p[0xD] != 0) {
                 unsigned char *q = ((char *)&D_00141968);
                 unsigned int h = *(unsigned short *)(q + 0x378);
@@ -1261,7 +1261,7 @@ void FUN_L13_002f3778(struct Moby *moby) {
             direct:
                 if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)data) != 0) {
                     if (*(int *)(((char *)&D_00141CE4)) >= 0) {
-                        FUN_L00_00203908(0x32C8, 0x6F);
+                        help_request(0x32C8, 0x6F);
                     }
                 }
             }

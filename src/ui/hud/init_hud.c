@@ -17,12 +17,12 @@ struct HudSlot {
 };
 #include "rnc/ui/hud/hud_state.h"
 
-extern u8 D_0015F6D8[];
-extern struct Globals_0015FA00 *D_0015FA00;
+extern u8 hud_file_str[] __asm__("D_0015F6D8");
+extern struct Globals_0015FA00 *hud_bank_main __asm__("D_0015FA00");
 extern s32 D_0015FA04 __attribute__((sda));
-extern s32 D_0015FA08;
-extern s32 D_0015FA0C;
-extern u8 D_00199B60[];
+extern s32 hud_bank_end __asm__("D_0015FA08");
+extern s32 hud_bank_aux __asm__("D_0015FA0C");
+extern u8 hud_chan_slots[] __asm__("D_00199B60");
 extern s32 func_001F9810();
 extern s32 hud_heap_alloc() __asm__("func_001FF288");
 extern s32 queue_animation_update() __asm__("func_001FF308");
@@ -37,7 +37,7 @@ void init_hud(void) {
 
     slot_index = 0;
     {
-        u8 *base = D_00199B60;
+        u8 *base = hud_chan_slots;
         slot = (struct HudSlot *)((u8 *)base + 0x24);
     }
     hud_state.serial = 0;
@@ -53,13 +53,13 @@ void init_hud(void) {
         slot->unk0 = 0;
         slot = (struct HudSlot *)((u8 *)slot + 0x90);
     } while (slot_index < 0xD);
-    temp_2_41 = D_0015FA00;
+    temp_2_41 = hud_bank_main;
     if (temp_2_41 == NULL) {
-        D_0015FA00 = hud_heap_alloc(0x2800, 0, D_0015F6D8, 0x115);
-        D_0015FA0C = hud_heap_alloc(0x1400, 0, D_0015F6D8, 0x116);
+        hud_bank_main = hud_heap_alloc(0x2800, 0, hud_file_str, 0x115);
+        hud_bank_aux = hud_heap_alloc(0x1400, 0, hud_file_str, 0x116);
     }
-    D_0015FA08 = (s32)((u8 *)D_0015FA00 + 0x2800);
-    D_0015FA04 = (s32)D_0015FA00;
-    func_001F9810(D_0015FA00, 0x2800);
-    D_0015FA00->unk20 = 0xFF;
+    hud_bank_end = (s32)((u8 *)hud_bank_main + 0x2800);
+    D_0015FA04 = (s32)hud_bank_main;
+    func_001F9810(hud_bank_main, 0x2800);
+    hud_bank_main->unk20 = 0xFF;
 }

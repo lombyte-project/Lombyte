@@ -5,7 +5,7 @@ extern s32 D_0015F638;
 extern s32 D_0015F63C;
 extern s32 D_00160EF8[];
 extern s32 D_00160F04;
-extern s32 D_00160F0C;
+extern s32 current_vu_chain __asm__("D_00160F0C");
 extern s32 D_00160F10;
 void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 
@@ -18,7 +18,7 @@ void swap_render_buffer_chain(void) {
     next_buffer = D_00160EF8[next_index];
     D_00160F04 = render_packet_cursor.addr;
     D_00160F10 = next_index;
-    buffer_limit = (next_buffer + D_00160F0C) - D_0015F5B8;
+    buffer_limit = (next_buffer + current_vu_chain) - D_0015F5B8;
     render_packet_cursor.addr = next_buffer;
     D_0015F638 = buffer_limit;
     D_0015F63C = buffer_limit - 0x2000;

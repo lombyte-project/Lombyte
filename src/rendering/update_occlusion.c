@@ -1,14 +1,14 @@
 #include "types.h"
-extern u32 D_0018C334[];
-extern u8 D_00193FC0[];
+extern u32 occl_update[] __asm__("D_0018C334");
+extern u8 occl_visibility[] __asm__("D_00193FC0");
 extern s32 build_occlusion_visibility() __asm__("FUN_001f2820");
 extern s32 FUN_001f97e8();
 void update_occlusion(void) __asm__("FUN_001f2c10");
 
 void update_occlusion(void) {
-    if (D_0018C334[0] == 0) {
-        FUN_001f97e8(D_00193FC0, -1, 0x80);
-    } else if (D_0018C334[0] == 2) {
+    if (occl_update[0] == 0) {
+        FUN_001f97e8(occl_visibility, -1, 0x80);
+    } else if (occl_update[0] == 2) {
         build_occlusion_visibility();
     }
 }

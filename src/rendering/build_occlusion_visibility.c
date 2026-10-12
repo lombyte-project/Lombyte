@@ -8,12 +8,12 @@ typedef struct {
 } Camera;
 
 extern Camera D_00186F40;
-extern u8 D_00193FC0[];
-extern u8 D_00194040[];
-extern f32 *D_0015F644;
+extern u8 occl_visibility[] __asm__("D_00193FC0");
+extern u8 occl_visibility_merged[] __asm__("D_00194040");
+extern f32 *occl_oct __asm__("D_0015F644");
 extern s32 D_0015F648;
-extern s32 D_0015F64C;
-extern u8 *D_0015F650;
+extern s32 occl_invalid_grid __asm__("D_0015F64C");
+extern u8 *occl_previous_grid __asm__("D_0015F650");
 #include "rnc/gameplay/camera/update_cam.h"
 
 extern u8 *parse_occlusion_grid(s32, s32, s32) __asm__("FUN_001f2690");
@@ -40,11 +40,11 @@ void build_occlusion_visibility(void) {
     z = truncate_float_to_s32(D_00186F40.z * scale);
     vis = parse_occlusion_grid(x, y, z);
     if (vis != 0) {
-        D_0015F64C = 0;
-        FUN_001f98d0(D_00193FC0, vis, 0x80);
-        D_0015F650 = vis;
+        occl_invalid_grid = 0;
+        FUN_001f98d0(occl_visibility, vis, 0x80);
+        occl_previous_grid = vis;
     } else {
-        D_0015F64C = 1;
+        occl_invalid_grid = 1;
         if (D_0015F648 == 0) {
             gx = get_occlusion_grid_from_pair(x - 1, y, z, x + 1, y, z,
                                               D_00186F40.x * scale - func_001FA6C0(x));
@@ -53,51 +53,51 @@ void build_occlusion_visibility(void) {
             gz = get_occlusion_grid_from_pair(x, y, z - 1, x, y, z + 1,
                                               D_00186F40.z * scale - func_001FA6C0(z));
             if (gx != 0 || gy != 0 || gz != 0) {
-                FUN_001f9810(D_00194040, 0x80);
+                FUN_001f9810(occl_visibility_merged, 0x80);
                 if (gx != 0) {
-                    FUN_001f98f8(D_00194040, D_00194040, gx, 0x80);
+                    FUN_001f98f8(occl_visibility_merged, occl_visibility_merged, gx, 0x80);
                 }
                 if (gy != 0) {
-                    FUN_001f98f8(D_00194040, D_00194040, gy, 0x80);
+                    FUN_001f98f8(occl_visibility_merged, occl_visibility_merged, gy, 0x80);
                 }
                 if (gz != 0) {
-                    FUN_001f98f8(D_00194040, D_00194040, gz, 0x80);
+                    FUN_001f98f8(occl_visibility_merged, occl_visibility_merged, gz, 0x80);
                 }
-                vis = D_00194040;
-                D_0015F650 = vis;
-                FUN_001f98d0(D_00193FC0, vis, 0x80);
+                vis = occl_visibility_merged;
+                occl_previous_grid = vis;
+                FUN_001f98d0(occl_visibility, vis, 0x80);
             }
         }
         if (vis == 0) {
             switch (D_0015F648) {
             case 0:
-                if (camera_position_publication_suppressed[0] == 0 && D_0015F650 != 0) {
-                    FUN_001f98d0(D_00193FC0, D_0015F650, 0x80);
+                if (camera_position_publication_suppressed[0] == 0 && occl_previous_grid != 0) {
+                    FUN_001f98d0(occl_visibility, occl_previous_grid, 0x80);
                 } else {
-                    fill_transfer_words(D_00193FC0, -1, 0x80);
+                    fill_transfer_words(occl_visibility, -1, 0x80);
                 }
                 break;
             case 1:
-                fill_transfer_words(D_00193FC0, -1, 0x80);
+                fill_transfer_words(occl_visibility, -1, 0x80);
                 break;
             case 2:
-                p = D_0015F644;
+                p = occl_oct;
                 if (p != 0) {
                     bx = 0.0f < D_00186F40.x - p[0];
                     by = 0.0f < D_00186F40.y - p[1];
                     bz = 0.0f < D_00186F40.z - p[2];
-                    FUN_001f98d0(D_00193FC0, (u8 *)p + ((bz + by * 2 + bx * 4) * 0x80 + 0x10),
+                    FUN_001f98d0(occl_visibility, (u8 *)p + ((bz + by * 2 + bx * 4) * 0x80 + 0x10),
                                  0x80);
-                } else if (camera_position_publication_suppressed[0] == 0 && D_0015F650 != 0) {
-                    FUN_001f98d0(D_00193FC0, D_0015F650, 0x80);
+                } else if (camera_position_publication_suppressed[0] == 0 && occl_previous_grid != 0) {
+                    FUN_001f98d0(occl_visibility, occl_previous_grid, 0x80);
                 } else {
-                    fill_transfer_words(D_00193FC0, -1, 0x80);
+                    fill_transfer_words(occl_visibility, -1, 0x80);
                 }
                 break;
             }
         }
     }
-    D_00193FC0[0x7F] |= 0x80;
+    occl_visibility[0x7F] |= 0x80;
 }
 
 extern __typeof__(build_occlusion_visibility) func_001F2820 __attribute__((alias("FUN_001f2820")));

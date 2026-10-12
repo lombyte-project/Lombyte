@@ -34,9 +34,9 @@ void FUN_L18_002fcd00(struct Moby *arg) {
         blend_moby_animation(arg, 0, 0, scale_ticks(10));
     }
     flags = arg->flags;
-    arg->unk31 = 0;
+    arg->visible = 0;
     flags |= 1;
-    arg->unk94 = 0;
+    arg->collision = 0;
     flags &= 0xEFFF;
     arg->flags = flags;
 }

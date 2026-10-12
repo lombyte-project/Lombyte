@@ -101,9 +101,9 @@ void FUN_L09_002c5990(struct Moby *moby) {
     FUN_L09_002c6230_u(moby);
     target = vars->target;
     FUN_L00_00263ac8(moby, 0, vars->unk280, 2.7f);
-    if (moby->unk31 != 0 && FUN_001f9b48(&moby->pos, &D_L09_00166F40) < 29.0f) {
+    if (moby->visible != 0 && FUN_001f9b48(&moby->pos, &D_L09_00166F40) < 29.0f) {
         FUN_L00_0025a120(moby);
-        moby->unk7F = 0x17;
+        moby->shadow_range = 0x17;
     }
     mode = D_L09_0015F5C4;
     if (mode == 2) {
@@ -138,7 +138,7 @@ void FUN_L09_002c5990(struct Moby *moby) {
                          FUN_001f9e90(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                          &vars->heading_speed, frame_time_sq * 8.726646f, frame_time_sq * 8.726646f,
                          frame_time * 12.566371f);
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             if (FUN_00213260(0x13) == 0) {
                 if (moby->prev_seq != 2) {
                     blend_moby_animation(moby, 2, 0, FUN_L00_00257b90(7, 12));
@@ -146,7 +146,7 @@ void FUN_L09_002c5990(struct Moby *moby) {
             } else if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, FUN_L00_00257b90(7, 14));
             }
-            moby->unk58 = random_float_between(0.95f, 1.05f);
+            moby->anim_speed = random_float_between(0.95f, 1.05f);
         }
         if (vars->unk164 != 2) {
             if (moby->group != 0xFF) {
@@ -160,7 +160,7 @@ void FUN_L09_002c5990(struct Moby *moby) {
         }
         break;
     case 3:
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             if (moby->group != 0xFF) {
                 FUN_L01_0026e090(moby->group, 1);
             }
@@ -457,12 +457,12 @@ void FUN_L09_002c6230(Moby *moby) {
         }
         func_L00_0025E4B0_2C73D0(moby, data->react);
     }
-    moby->unkA4 = 0xFF;
+    moby->hit_slot = 0xFF;
     func_L00_0025E590_2C73D0(moby, data->react);
-    if (data->f38 != 0 || moby->unkBC == 1) {
+    if (data->f38 != 0 || moby->command == 1) {
         data->retreat = func_001FA898_2C73D0(func_001F9878_2C73D0(func_002140F8_2C73D0(180.0f, 240.0f)));
         data->f38 = 0;
-        moby->unkBC = 0;
+        moby->command = 0;
     }
     func_001F9908_2C73D0(&data->retreat);
     if (func_002140B0_2C73D0(4) == 0) {
@@ -729,7 +729,7 @@ void FUN_L09_002e27d8(Moby *moby) {
                     data->f174 = 18.0f;
                     if (D_001413F4[0] == 2) explode_2E39E0(moby, 0x200, -1);
                     else explode_2E39E0(moby, 0, -1);
-                    moby->unk94 = 0;
+                    moby->collision = 0;
                     moby->state = 99;
                     data->f117 = 120;
                     effects_start_2E39E0(moby, data->effects);
@@ -748,23 +748,23 @@ void FUN_L09_002e27d8(Moby *moby) {
                 }
             }
         }
-        moby->unkA4 = 0xFF;
+        moby->hit_slot = 0xFF;
         sound_2E39E0(2.1f, moby, 0, data->sound);
-        if (moby->unk31 != 0 && distance_2E39E0(&moby->pos, D_L09_00166FC0_2E39E0) < 38.0f) {
+        if (moby->visible != 0 && distance_2E39E0(&moby->pos, D_L09_00166FC0_2E39E0) < 38.0f) {
             wake_2E39E0(moby);
-            moby->unk7F = 30;
+            moby->shadow_range = 30;
         }
         if (fast_distance_2E39E0(&moby->pos, D_0013E633_2E39E0) > 40.0f) return;
         if (data->hidden != 0) {
             if ((*(unsigned char *)&((Hero *)D_0013E633_2E39E0)->unk2020[1]) != 2) {
-                moby->unk30 = 0xFF;
-                moby->unk94 = 0;
+                moby->update_dist = 0xFF;
+                moby->collision = 0;
                 moby->flags = (moby->flags | 0x41) & 0xEFFF;
                 return;
             }
             moby->flags &= 0xFFBE;
-            moby->unk94 = *(int *)(((char *)moby->pclass) + 0x10);
-            moby->unk30 = 0x40;
+            moby->collision = *(int *)(((char *)moby->pclass) + 0x10);
+            moby->update_dist = 0x40;
             moby->flags |= 0x1000;
         }
         if (data->hurt != 0) data->alert = ticks_2E39E0(240);
@@ -802,13 +802,13 @@ void FUN_L09_002e27d8(Moby *moby) {
         if ((kind < 2 || fast_vec_length(&step) < data->range + 4.0f) && fabs_2E39E0(moby->pos.z - query.z) < 8.0f && !status_2E39E0(19)) {
             moby->state = 2;
             if (moby->prev_seq != 4) animate_2E39E0(moby, 4, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-        } else if (moby->unkBC == 1 && !status_2E39E0(19)) {
+        } else if (moby->command == 1 && !status_2E39E0(19)) {
             if (status_2E39E0(0x100) & 1) data->side_deg = -data->side_deg;
             data->side = data->side_deg * 0.017453292f;
             data->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
             moby->state = 3;
             if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-            moby->unkBC = 0;
+            moby->command = 0;
         }
         break;
     case 2:
@@ -824,16 +824,16 @@ void FUN_L09_002e27d8(Moby *moby) {
             data->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
             moby->state = 3;
             if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-            moby->unkBC = 0;
-        } else if (moby->unkBC == 1 && !status_2E39E0(19)) {
+            moby->command = 0;
+        } else if (moby->command == 1 && !status_2E39E0(19)) {
             if (status_2E39E0(0x100) & 1) data->side_deg = -data->side_deg;
             data->side = data->side_deg * 0.017453292f;
             data->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
             moby->state = 3;
             if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-            moby->unkBC = 0;
+            moby->command = 0;
         }
-        if (moby->prev_seq == 4 && (moby->unk70 & 2)) animate_2E39E0(moby, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        if (moby->prev_seq == 4 && (moby->anim_flags & 2)) animate_2E39E0(moby, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         break;
     case 3: {
         int flags;
@@ -861,10 +861,10 @@ void FUN_L09_002e27d8(Moby *moby) {
             moby->state = 5;
         } else if (fast_vec_length(&away) < data->range + 4.0f && fabs_2E39E0(moby->pos.z - query.z) < 8.0f) {
             if (moby->group != 0xFF) event_2E39E0(moby->group, 1);
-        } else if (moby->unkBC != 1) {
+        } else if (moby->command != 1) {
             moby->state = 5;
         }
-        moby->unkBC = 0;
+        moby->command = 0;
         break;
     }
     case 4:
@@ -879,7 +879,7 @@ void FUN_L09_002e27d8(Moby *moby) {
             goal.z += 0.75f;
             hurt_2E39E0(query.who, moby, 1, &goal, &step, 1.0f);
         }
-        if ((moby->unk70 & 2) && fast_distance_2E39E0(&moby->pos, &query) > 1.5f) {
+        if ((moby->anim_flags & 2) && fast_distance_2E39E0(&moby->pos, &query) > 1.5f) {
             moby->state = 3;
             if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         }
@@ -910,7 +910,7 @@ void FUN_L09_002e27d8(Moby *moby) {
             if (moby->group != 0xFF) event_2E39E0(moby->group, 1);
             moby->state = 3;
             if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-        } else if (expired && moby->unkBC == 1) {
+        } else if (expired && moby->command == 1) {
             moby->state = 3;
             if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         } else if (flags & 2) {
@@ -919,7 +919,7 @@ void FUN_L09_002e27d8(Moby *moby) {
             moby->state = 12;
             if (moby->prev_seq != 4) animate_2E39E0(moby, 4, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         }
-        moby->unkBC = 0;
+        moby->command = 0;
         break;
     }
     case 6:
@@ -982,13 +982,13 @@ void FUN_L09_002e27d8(Moby *moby) {
         } else if ((flags & 2) && expired) {
             moby->state = 1;
             if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-        } else if (moby->unk70 & 2) {
+        } else if (moby->anim_flags & 2) {
             int animation;
             status_2E39E0(4);
             animation = status_2E39E0(4) ? 2 : 4;
             animate_2E39E0(moby, animation, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         }
-        moby->unkBC = 0;
+        moby->command = 0;
         break;
     }
     case 13: {
@@ -1026,7 +1026,7 @@ void FUN_L09_002e27d8(Moby *moby) {
             moby->state = 5;
             if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         }
-        moby->unkBC = 0;
+        moby->command = 0;
         break;
     }
     }

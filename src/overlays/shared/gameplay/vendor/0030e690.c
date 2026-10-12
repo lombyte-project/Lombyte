@@ -572,11 +572,11 @@ void FUN_L11_00319670(char *moby) {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int D_0015EE00;
 extern int D_0015EEA4;
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D408[];
 extern unsigned char D_00141968[];
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
@@ -607,7 +607,7 @@ void FUN_L11_0031a1c0(char *m) {
             if (++D_0015EE00 >= 3 && D_0013D408[0x12] == 0) {
                 D_0013D408[0x12] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
-                FUN_L00_00263d40(0x53D6, -1);
+                queue_dialogue_message(0x53D6, -1);
             }
         }
         if (*(int *)(d + 0x88) != 0) {
@@ -630,7 +630,7 @@ void FUN_L11_0031a1c0(char *m) {
             *(int *)(m + 0x94) = 0;
             *(unsigned short *)(m + 0x34) |= 1;
         }
-        if (FUN_L00_001f0d60(1.0f, m + 0x10, 0, m)) {
+        if (coll_sphere(1.0f, m + 0x10, 0, m)) {
             m[0x20] = 6;
             if (((unsigned char *)m)[0x53] != 1) {
                 blend_moby_animation(m, 1, 0, scale_game_frames(10));

@@ -11,7 +11,7 @@ extern s32 D_0015EEA0;
    here because retail reads it once for the -1 and 2 tests and then
    again inside the skip-allowed test, with no store or call in between;
    this compiler only repeats such a load for a volatile object. */
-extern volatile s32 D_0015EED8;
+extern volatile s32 decode_mode __asm__("D_0015EED8");
 extern s32 D_0016120C;
 extern void FlushCache(s32);
 extern s32 sceGsSyncV(s32);
@@ -83,10 +83,10 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
     sceGsSyncV(0);
     while (decode_remaining >= 5 && video_dec_get_state(video_dec) != 3) {
         update_primary_pad_state();
-        mode = D_0015EED8;
+        mode = decode_mode;
         if (mode != -1) {
             if ((mode == 2 && pad_pressed(&pad_words, -1))
-                || ((D_0015EEA0 != 0 || D_0015EE20 != 0 || D_0015EED8 != 0
+                || ((D_0015EEA0 != 0 || D_0015EE20 != 0 || decode_mode != 0
                      || current_level_index <= 0)
                     && pad_pressed(&pad_words, 0x800))) {
                 skip = 1;

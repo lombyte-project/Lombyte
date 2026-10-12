@@ -5,15 +5,15 @@ struct SndCb {
     s64 data;
 };
 extern s32 D_0015ECC4 __attribute__((sda));
-extern s32 D_0015EC80 __attribute__((sda));
-extern s32 D_0015ECC0 __attribute__((sda));
-extern s32 *D_0015ECA0[2] __attribute__((sda));
-extern s32 D_0015ECA8[2] __attribute__((sda));
-extern struct SndCb *D_0015ECB0[2] __attribute__((sda));
-extern s32 D_00133100[4];
+extern s32 snd_current_buffer __asm__("D_0015EC80") __attribute__((sda));
+extern s32 snd_batch_index __asm__("D_0015ECC0") __attribute__((sda));
+extern s32 *snd_batch_command_buffers[2] __asm__("D_0015ECA0") __attribute__((sda));
+extern s32 snd_batch_free_bytes[2] __asm__("D_0015ECA8") __attribute__((sda));
+extern struct SndCb *snd_stream_buffers[2] __asm__("D_0015ECB0") __attribute__((sda));
+extern s32 snd_sync_buffer[4] __asm__("D_00133100");
 extern u8 D_0015EBC0[];
-extern char D_00153D20[];
-extern char D_00154070[];
+extern char snd_non_idle_error_string[] __asm__("D_00153D20");
+extern char snd_no_wait_continuing_string[] __asm__("D_00154070");
 extern s32 printf(const char *, ...);
 extern s32 snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern void snd_post_message(void) __asm__("func_0012E9A0");
@@ -32,14 +32,14 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
     u8 *p;
 
     held = 0;
-    if (D_0015ECC4 == 0 && D_0015EC80 == 0 && size == 0 && cb == 0) {
-        StoreObjectIndex(D_00133100, 1);
+    if (D_0015ECC4 == 0 && snd_current_buffer == 0 && size == 0 && cb == 0) {
+        StoreObjectIndex(snd_sync_buffer, 1);
         while (SceSifCheckStatRpc(D_0015EBC0) != 0) {
-            printf(D_00153D20);
+            printf(snd_non_idle_error_string);
             snd_flush_sound_commands();
             FlushCache(0);
         }
-        sceSifCallRpc(D_0015EBC0, cmd, 1, 0, 0, D_00133100, 0xC, 0, 0);
+        sceSifCallRpc(D_0015EBC0, cmd, 1, 0, 0, snd_sync_buffer, 0xC, 0, 0);
         return;
     }
     need = size + 4;
@@ -47,24 +47,24 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
     if (need % 4 != 0) {
         need += 4 - need % 4;
     }
-    while (*D_0015ECA0[D_0015ECC0] == 0x100 || D_0015ECA8[D_0015ECC0] < need) {
+    while (*snd_batch_command_buffers[snd_batch_index] == 0x100 || snd_batch_free_bytes[snd_batch_index] < need) {
         if (D_0015ECC4 != 0) {
             D_0015ECC4 = 0;
             held = 1;
         }
         snd_flush_sound_commands();
         if (tries == 1) {
-            printf("snd_SendIOPCommandNoWait: BUFFER %d FULL(%d)! Sound stalled waiting for IOP comands to finish!\n", D_0015ECC0, *D_0015ECA0[D_0015ECC0]);
+            printf("snd_SendIOPCommandNoWait: BUFFER %d FULL(%d)! Sound stalled waiting for IOP comands to finish!\n", snd_batch_index, *snd_batch_command_buffers[snd_batch_index]);
         }
         tries++;
     }
     if (tries != 0) {
-        printf(D_00154070, tries);
+        printf(snd_no_wait_continuing_string, tries);
     }
     if (held != 0) {
         D_0015ECC4 = 1;
     }
-    p = (u8 *)D_0015ECA0[D_0015ECC0] - (D_0015ECA8[D_0015ECC0] - 0x1000);
+    p = (u8 *)snd_batch_command_buffers[snd_batch_index] - (snd_batch_free_bytes[snd_batch_index] - 0x1000);
     *(s16 *)p = cmd;
     p += 2;
     *(s16 *)p = size;
@@ -72,9 +72,9 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
     for (i = 0; i < size; i++) {
         p[i] = data[i];
     }
-    D_0015ECA8[D_0015ECC0] -= need;
-    D_0015ECB0[D_0015ECC0][*D_0015ECA0[D_0015ECC0]].func = cb;
-    D_0015ECB0[D_0015ECC0][*D_0015ECA0[D_0015ECC0]].data = cb_data;
+    snd_batch_free_bytes[snd_batch_index] -= need;
+    snd_stream_buffers[snd_batch_index][*snd_batch_command_buffers[snd_batch_index]].func = cb;
+    snd_stream_buffers[snd_batch_index][*snd_batch_command_buffers[snd_batch_index]].data = cb_data;
     snd_post_message();
 }
 

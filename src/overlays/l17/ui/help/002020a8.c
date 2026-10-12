@@ -210,7 +210,7 @@ s32 FUN_L17_0020dbe8(s32 arg) {
         break;
     }
     FUN_001f9a10_8(&hero.motion.velocity, &hero.motion.velocity, &v);
-    FUN_001f9a10_8(&hero.motion.unk100, &hero.motion.unk100, &v);
+    FUN_001f9a10_8(&hero.motion.displacement, &hero.motion.displacement, &v);
     return 1;
 }
 #define NOT_SDA
@@ -253,7 +253,7 @@ void FUN_L17_0020e1c0(void) {
     } else if ((u32)(hero.state.control_mode - 0x11) < 2) {
         hero.unk228 = 0.0f;
         hero.unk22C = 0.0f;
-    } else if (hero.unk12E2 && hero.unk300) {
+    } else if (hero.unk12E2 && hero.grounded_frames) {
         hero.unk228 = 0.8f;
         hero.unk22C = 0.9f;
     } else if (hero.state.current == HERO_STATE_SINK) {

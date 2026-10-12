@@ -88,7 +88,7 @@ void FUN_L00_00271450(unsigned char *p) {
         t[0] = *(OvlQuad *)(&hero.motion.platform_carry);
         FUN_L00_001ff318_271450(m, t, *(float *)(p + 0x1C));
         FUN_L00_001ff290_271450(m, r, t);
-        FUN_001f9a68_271450(m, &hero.unk290, *(float *)(q + 0xC));
+        FUN_001f9a68_271450(m, &hero.gravity_dir, *(float *)(q + 0xC));
         FUN_001f9a10_271450(v, v, m);
         FUN_001f9a68_271450(v, v, *(float *)(q + 0x18));
         *(float *)(p + 0x20) = v[0];
@@ -2038,7 +2038,7 @@ void FUN_L00_00275aa0(unsigned char *m) {
     if (*(int *)(q + 0x18)) {
         subtract_vector_xyz(d, (char *)*(int *)(q + 0x18) + 0x10, m + 0x10);
         if (d[0] <= 2.0f && d[1] <= 2.0f) {
-            cross_vectors_xyz(t, d, hero.unk290.f);
+            cross_vectors_xyz(t, d, hero.gravity_dir.f);
             normalize_vector_xyz(t, t, D_0015964C_275aa0);
             FUN_001f9a10_275aa0(m + 0x10, m + 0x10, t);
             if (d[0] <= 0.5f && d[1] <= 0.5f)

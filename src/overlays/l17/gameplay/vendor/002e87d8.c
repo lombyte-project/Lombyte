@@ -17,7 +17,7 @@
 extern char *D_L17_00160058 __asm__("D_L17_0015FFD8");
 extern char D_L17_00167740[] __asm__("D_L17_001676C0");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float D_0015EE6C __asm__("D_0015ED6C");
+extern float freeze_stats_score_ref_b __asm__("D_0015ED6C");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int D_L17_0015F6A8 __asm__("D_L17_0015F5C4");
@@ -51,19 +51,19 @@ void FUN_L17_002e87d8(struct Moby *m) {
         if ((m->oclass) == 0x550 || (m->oclass) == 0x551 ||
             (m->oclass) == 0x553 || (m->oclass) == 0x557 ||
             (m->oclass) == 0x55D) {
-            m->unkBC = 1;
+            m->command = 1;
         }
         *(OvlQuad *)d = *(OvlQuad *)&m->pos;
         m->state = 1;
         break;
     case 2:
-        if (m->pclass->unk28 != 0 &&
+        if (m->pclass->sound_defs != 0 &&
             FUN_L00_0028d8c0(m, (*(int *)(d + ((0x20))))) == 0) {
             (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
         }
-        k = D_0015EE6C * 3.0f;
+        k = freeze_stats_score_ref_b * 3.0f;
         f = (*(float *)(d + ((0x14))));
-        if (m->unkBC == 0)
+        if (m->command == 0)
             k = -k;
         (*(float *)(d + ((0x14)))) = f + k;
         if ((m->oclass) == 0x55C || (m->oclass) == 0x55D ||
@@ -113,7 +113,7 @@ void FUN_L17_002e87d8(struct Moby *m) {
                                                 (*(int *)(d + ((0x18))))) == 0)
                     break;
             }
-            if (m->pclass->unk28 != 0 &&
+            if (m->pclass->sound_defs != 0 &&
                 FUN_L00_0028d8c0(m, (*(int *)(d + ((0x20))))) == 0) {
                 (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
             }
@@ -140,14 +140,14 @@ void FUN_L17_002e87d8(struct Moby *m) {
             is_point_inside_clip_volume(D_L17_00160058 + (*(int *)(d + ((0x10)))) * 0x100 + 0x10,
                                         (*(int *)(d + ((0x18))))))
             break;
-        if (m->pclass->unk28 != 0 &&
+        if (m->pclass->sound_defs != 0 &&
             FUN_L00_0028d8c0(m, (*(int *)(d + ((0x20))))) == 0) {
             (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
         }
         m->state = 5;
         break;
     case 5:
-        if (m->pclass->unk28 != 0 &&
+        if (m->pclass->sound_defs != 0 &&
             FUN_L00_0028d8c0(m, (*(int *)(d + ((0x20))))) == 0) {
             (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
         }
@@ -160,11 +160,11 @@ void FUN_L17_002e87d8(struct Moby *m) {
             break;
         }
         f = absolute_float_c((*(float *)(d + ((0x14)))));
-        k2 = D_0015EE6C * 3.0f;
+        k2 = freeze_stats_score_ref_b * 3.0f;
         if (f > k2) {
             float g = (*(float *)(d + ((0x14))));
             float r;
-            if (m->unkBC == 0) {
+            if (m->command == 0) {
                 float n = -k2;
                 r = g - n;
             } else {
@@ -262,8 +262,8 @@ void FUN_L17_002e8e08(struct Moby *moby) {
 
     switch (moby->state) {
     case 0:
-        moby->unk32 = 0;
-        moby->unk31 = 0;
+        moby->draw_dist = 0;
+        moby->visible = 0;
         t = d + 0x10;
         *(OvlQuad *)e = *(OvlQuad *)(&hero.motion.unkD0);
         e[2] = e[2] - 0.5f;
@@ -439,7 +439,7 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float vector_length_xyz(void *a);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern unsigned char D_0013E504[];
+extern unsigned char frame_size[] __asm__("D_0013E504");
 extern unsigned char D_0015EDB4[4];
 extern void FUN_001fa050(float *, float *);
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
@@ -484,7 +484,7 @@ void FUN_L17_002eaae0(char *rot, char *from, char *moby, int icon, long color, i
         }
         t = &D_L17_001D9B38[icon];
         y -= 0x50;
-        y += *(int *)(D_0013E504);
+        y += *(int *)(frame_size);
         x += 0x1B0;
         draw_textured_quad(x - t->x, y - t->y, t->w, t->h, t->u, t->v, t->w, t->h, color,
                            get_effect_texture(tex + 0x28 + t->tex));
@@ -1299,8 +1299,8 @@ void FUN_L17_002ec360(Moby *m, Obj *o) {
 
     if (D_L17_00162014 < o->count) {
         g = &hero;
-        x = g->unk1D20;
-        y = g->unk1D24;
+        x = g->stick_x;
+        y = g->stick_y;
         ka = D_L17_001620B4;
         kb = D_L17_001620C4;
         a = x;
@@ -2297,7 +2297,7 @@ void FUN_L17_002eea70(struct Moby *moby) {
     char *state = (char *)moby->pvars;
     if (hero.unk308 && hero.ground_moby == moby) {
         char *vec = *(char **)(D_L17_001B0DB0 + *(int *)(state + 0x80) * 4) + 0x10;
-        char *point = &moby->unkC0;
+        char *point = &moby->rot_row0;
         int i;
         for (i = 10; i >= 0; i--) {
             FUN_001f9cf8(vec, D_L17_001D9F70 + (10 - i) * 0x10, point);
@@ -3067,7 +3067,7 @@ void FUN_L17_002f0210(struct Moby *moby) {
         } else {
             color = (alpha << 24) | (b << 16) | (g << 8) | r;
         }
-        moby->unk90 = FUN_001fa6e0(moby->unk90, color, 0.1f);
+        moby->glow_color = FUN_001fa6e0(moby->glow_color, color, 0.1f);
         for (i = 0; i < 3; i++) {
             moby_point_position(moby, i + 1, data + 0x200 + i * 16);
         }
@@ -3469,8 +3469,8 @@ void FUN_L17_002f1940(struct Moby *m) {
             v->dir = 0;
             v->side = 0;
         }
-        m->unk30 = 0xFF;
-        m->unk32 = 0x80;
+        m->update_dist = 0xFF;
+        m->draw_dist = 0x80;
         m->spawn_frame = *(long *)(((char *)hero.moby) + 0x38);
         m->state = 1;
         if (m->prev_seq != 2) {
@@ -3486,7 +3486,7 @@ void FUN_L17_002f1940(struct Moby *m) {
         }
         break;
     case 1:
-        if (m->prev_seq == 2 && (m->unk70 & 2) && v->sfx == 0) {
+        if (m->prev_seq == 2 && (m->anim_flags & 2) && v->sfx == 0) {
             allocate_voice_for_target_entry(1, 0, (int)m);
             v->sfx = 0;
         }
@@ -3562,7 +3562,7 @@ void FUN_L17_002f1940(struct Moby *m) {
                 ofs = v->cam[t] << 7;
                 qcopy(&m->pos, (char *)(ofs + base + 0x30));
                 qcopy(&m->rot, (char *)(ofs + base + 0x70));
-                vu_euler_rotation_basis(&m->unkC0, &m->rot);
+                vu_euler_rotation_basis(&m->rot_row0, &m->rot);
                 m->scale = m->pclass->scale;
             }
         }
@@ -3577,11 +3577,11 @@ void FUN_L17_002f1940(struct Moby *m) {
             base = (int)D_L17_001600EC;
             qcopy(&m->pos, (char *)(ofs + base + 0x30));
             qcopy(&m->rot, (char *)(ofs + base + 0x70));
-            vu_euler_rotation_basis(&m->unkC0, &m->rot);
+            vu_euler_rotation_basis(&m->rot_row0, &m->rot);
             m->scale = m->pclass->scale;
             qcopy(b, &m->pos);
-            normalize_vector_xyz(a, &m->unkC0, -2.0f);
-            add_vector_xyz(a, a, &m->unkE0);
+            normalize_vector_xyz(a, &m->rot_row0, -2.0f);
+            add_vector_xyz(a, a, &m->rot_row2);
             add_vector_xyz(b, b, a);
             clear_vector(rot);
             rot[2] = fast_add_rotations(m->rot.z, 3.1415927f);

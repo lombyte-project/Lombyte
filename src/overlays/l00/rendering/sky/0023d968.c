@@ -8,9 +8,9 @@
 void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
-extern void FUN_L00_002892d0(void);
+extern void update_sky_shells_static(void) __asm__("FUN_L00_002892d0");
 extern void FUN_L00_00289330(void);
-extern void FUN_L00_00289420(void);
+extern void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
 extern void FUN_L00_002895a0(void);
 extern void FUN_L00_002899a8(void);
 extern void FUN_L00_00289a90(void);
@@ -37,7 +37,7 @@ void FUN_L00_0023d968(void) {
         FUN_L00_00289330();
         break;
     case 1:
-        FUN_L00_00289420();
+        update_sky_shells_animated();
         break;
     case 2:
         FUN_L00_002895a0();
@@ -94,7 +94,7 @@ void FUN_L00_0023d968(void) {
         FUN_L00_0028b1a0();
         break;
     default:
-        FUN_L00_002892d0();
+        update_sky_shells_static();
         break;
     }
     do_sky_gif_paging();
@@ -140,7 +140,7 @@ extern void FUN_L00_002935b8();
 extern void FUN_L00_0023e008(VeldinMoby *);
 void moby_point_position(char *arg0, int arg1, void *arg2) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257024(void *);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0026ced0(void *, void *, s32, s32, s32, f32);
 extern VeldinLevelState D_L00_0016C860;
 
@@ -187,7 +187,7 @@ void FUN_L00_0023e268(void) {
                     v.f, veldin_random_range(frame_time * 0.7f, frame_time * 2.2f), a, b);
                 r = scale_game_frames(0xC);
                 FUN_L00_0026ced0(&buf, &v, 0x80808080, 0x808080,
-                                 FUN_L00_00257b90(r, scale_game_frames(0x23)), 147000.0f);
+                                 random_int_between(r, scale_game_frames(0x23)), 147000.0f);
             }
         }
     }

@@ -360,21 +360,21 @@ typedef struct {
 
 extern ItemDef item_defs[] __asm__("D_L00_00179AC0") __attribute__((section(".data")));
 extern int D_0013D428[];
-extern int D_00141EA0[];
+extern int pause_iop_sprite_lists[] __asm__("D_00141EA0");
 extern int D_L00_001B0340[] __attribute__((section(".data")));
 extern int D_L00_001C3E98[] __attribute__((section(".data")));
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013D4C0[];
-extern unsigned char D_0013D4E8[];
+extern unsigned char items_acquired[] __asm__("D_0013D4E8");
 extern int D_00141408 __attribute__((section(".data")));
 extern int D_00141410 __attribute__((section(".data")));
 extern int D_00141414 __attribute__((section(".data")));
 extern unsigned char D_0015EDD0[] __attribute__((section(".sdata")));
-extern void FUN_L00_00263d40(int arg0, int arg1);
+extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 
 void FUN_L00_00260860(int id, int flag) {
     unsigned char *pa = &D_0013D4C0[id];
-    unsigned char *pb = &D_0013D4E8[id];
+    unsigned char *pb = &items_acquired[id];
     int idx = id + 0x25;
     int *p;
     int i;
@@ -385,7 +385,7 @@ void FUN_L00_00260860(int id, int flag) {
     p = &D_L00_001B0340[idx];
     *pb = 1;
     if (*p != -1) {
-        FUN_L00_00263d40(*p, scale_game_frames(0x12C));
+        queue_dialogue_message(*p, scale_game_frames(0x12C));
     }
     if (*pa == 0) {
         VendorItemInfo *r;
@@ -424,10 +424,10 @@ void FUN_L00_00260860(int id, int flag) {
             }
         }
         if (item_defs[id].t == 0) {
-            for (i = 0; i < 8 && D_00141EA0[i] != 0; i++) {
+            for (i = 0; i < 8 && pause_iop_sprite_lists[i] != 0; i++) {
             }
             if (i < 8) {
-                D_00141EA0[i] = id;
+                pause_iop_sprite_lists[i] = id;
             }
         }
     }

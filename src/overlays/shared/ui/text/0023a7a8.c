@@ -24,7 +24,7 @@ extern short D_L00_0015F934_d __asm__("D_L00_0015F934") __attribute__((sda));
 extern short D_L00_0015F938_d __asm__("D_L00_0015F938") __attribute__((sda));
 extern short D_L00_0015F93C_d __asm__("D_L00_0015F93C") __attribute__((sda));
 extern short D_L00_0015F940_d __asm__("D_L00_0015F940") __attribute__((sda));
-extern void FUN_L00_0023b120(char *, int, int, int, int, int);
+extern void hud_frame(char *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
 void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffc30");
 void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffe18");
 void font_print_right(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6940");
@@ -69,7 +69,7 @@ int FUN_L00_0023a7a8(char *m) {
                                 0x20, a);
         tex = find_valid_animation_frame_index_alt(*(int *)m, 3);
         *(int *)(m + 0x44) = tex;
-        FUN_L00_0023b120(m, tex, x, y, 0, alpha);
+        hud_frame(m, tex, x, y, 0, alpha);
         v74 = *(int *)(m + 0x74);
         sprintf_alt(buf, D_L00_0015F7C8, v74, *(int *)(m + 8));
         if (v74 != 0)

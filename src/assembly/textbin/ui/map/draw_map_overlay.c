@@ -33,7 +33,7 @@ typedef struct {
 #define SPR ((MapIconBounds *)0x70000000)
 
 extern u8 D_0013D5BC[];
-extern u16 D_001518D2[];
+extern u16 occl_cam_param1[] __asm__("D_001518D2");
 extern u8 D_0015EDB4;
 extern s32 D_0015FD60 __attribute__((sda));
 extern f32 D_0015FD80 __attribute__((sda));
@@ -111,7 +111,7 @@ void draw_map_overlay(void) {
         u8 *font = D_001E8068;
 
         setup_gif_paging(0);
-        print_debug_text_centered(0x100, (s16)D_001518D2[0] >> 1, 0x80909090, font);
+        print_debug_text_centered(0x100, (s16)occl_cam_param1[0] >> 1, 0x80909090, font);
         do_gif_paging();
         return;
     }

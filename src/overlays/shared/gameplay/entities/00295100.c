@@ -651,7 +651,7 @@ typedef struct {
 extern f32 fade_level __asm__("D_L00_0015F3FC");
 extern VendorCutscene D_L00_0016C860;
 extern s32 D_0015EEA0;
-extern s32 D_0015EED8;
+extern s32 decode_mode __asm__("D_0015EED8");
 extern void FUN_L00_0023e268(void);
 extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern void FUN_00215b10(void);
@@ -716,7 +716,7 @@ void FUN_L00_00298f90(void) {
     done = cs->f34 >= cs->h40;
     if (cs->f34 >= scale_game_frames(0x12) && fade_level == 0.0f) {
 
-        if ((D_0015EEA0 || D_0015EE20 || D_0015EED8 || current_level_index <= 0) && (D_0013C940.buttons.w.pressed & 0x800)) {
+        if ((D_0015EEA0 || D_0015EE20 || decode_mode || current_level_index <= 0) && (D_0013C940.buttons.w.pressed & 0x800)) {
             done = 1;
         } else if ((D_0013C940.buttons.held_pressed & 0x8000000000FUL) == 0x8000000000FUL) {
             done = 1;
@@ -963,8 +963,8 @@ void FUN_L00_002997c8(void) {
             FUN_00120558(0, 0);
         } while (count != 0);
     }
-    if (D_0015EED8 == 2)
-        D_0015EED8 = 0;
+    if (decode_mode == 2)
+        decode_mode = 0;
     FUN_L00_001f9838(4);
     music_start_track(music_stream_state.primary.track, 1, 0x400);
     *(volatile s32 *)&D_L00_0015F5C4 = 0;
@@ -2023,7 +2023,7 @@ extern void FUN_0022ca50(void);
  * progress tables D_L00_001C40B0 / D_0013D428 / D_0013DD70 / D_0015ED98. */
 
 
-extern s32 D_0013DD70[];
+extern s32 ammo_bought_stats[] __asm__("D_0013DD70");
 extern u8 D_0013D4E3[];
 extern s32 D_0015ED98;
 extern u8 D_00141345[];
@@ -2206,7 +2206,7 @@ void FUN_L00_0029ba78(void) {
                         k = D_L00_00161E34;
                         k -= FUN_L00_00233e40_2ba78(CUR_ITEM.fD0, k);
                         n = (vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8) * k;
-                        D_0013DD70[CUR_ITEM.fD0] += k;
+                        ammo_bought_stats[CUR_ITEM.fD0] += k;
                         FUN_L00_0029b4d8_2ba78(3);
                         D_0015ED98 = D_0015ED98 - n;
                         FUN_L00_0029a400_2ba78(vendor_menu.f40 != 0);

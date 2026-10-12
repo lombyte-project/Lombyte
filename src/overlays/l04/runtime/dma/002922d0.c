@@ -370,7 +370,7 @@ int FUN_L04_00295778(struct Moby *m, LegRig *rig, float amount, float target, fl
     if (m->seq != 0xff)
         time = FUN_0020c9e0(m);
     else
-        time = FUN_001fa6c0(m->prev_frame) + FUN_L04_002418b0(m->unk22, m->prev_seq);
+        time = FUN_001fa6c0(m->prev_frame) + FUN_L04_002418b0(m->class_slot, m->prev_seq);
     mode = rig_pick_mode(m, rig, time);
     if (rig->unkEE & 4) {
         m->rot.z = rig_turn(m->rot.z, *(float *)((char *)rig + 0x6c), (float *)&rig->unkC8, rig->unkCC, rig->unkD0, rig->unkD4);
@@ -477,7 +477,7 @@ have_height:
     local.joints[5] = rig->jointB5;
     transform_joint_points(m, 6, local.joints, rig);
     if (rig->unkB7 != 0x12 || m->seq != rig->anims[12]->id) {
-        m->unk58 = 1.0f;
+        m->anim_speed = 1.0f;
         first = rig->anims;
         if (rig->unkB7 != 0) {
             entry = first;
@@ -488,7 +488,7 @@ have_height:
                         if (0.09239978f < height && amount < D_L04_0015816C * 0.19f)
                             entry = first;
                     }
-                    m->unk58 = D_L04_0015ED68 * FUN_001f99c0(rig->speed / (*entry)->rate);
+                    m->anim_speed = D_L04_0015ED68 * FUN_001f99c0(rig->speed / (*entry)->rate);
                     return flags;
                 }
             }
@@ -537,7 +537,7 @@ void FUN_L04_00295de8(struct Moby *m, LegRig *rig) {
         t = FUN_0020c9e0(m);
     } else {
         t = FUN_001fa6c0(m->prev_frame);
-        t += FUN_L04_002418b0(m->unk22, m->prev_seq);
+        t += FUN_L04_002418b0(m->class_slot, m->prev_seq);
     }
     rig->mode = 5;
     rig->speed = 0.0f;
@@ -545,7 +545,7 @@ void FUN_L04_00295de8(struct Moby *m, LegRig *rig) {
     e = rig->anims;
     for (j = 12; j >= 0; j--, e++) {
         if ((*e)->id == m->prev_seq) {
-            rig->speed = FUN_001f99c0(m->unk58 * (*e)->rate);
+            rig->speed = FUN_001f99c0(m->anim_speed * (*e)->rate);
             rig->unkB7 = D_L04_001CA938[12 - j][0];
         }
     }

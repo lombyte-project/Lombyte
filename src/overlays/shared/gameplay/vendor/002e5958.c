@@ -59,7 +59,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
     if ((u8)(moby->state - 1) < 2) {
         subtract_vector_xyz(delta, &moby->pos, D_0013F3D0);
         if (vector_length_xyz(delta) < vars->distance) {
-            FUN_001fa2d8(matrix, &moby->unkC0);
+            FUN_001fa2d8(matrix, &moby->rot_row0);
             FUN_001f9d20(delta, delta, matrix);
             if (*(f32 *)(delta + 4) < 0.2f) near_parent = 1;
         }
@@ -224,7 +224,7 @@ extern int D_L15_0015F640;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L15_001621A0_d __asm__("D_L15_001621A0") __attribute__((sda));
 extern unsigned char D_0013D388_bd78[] __asm__("D_0013D388");
-extern void FUN_L00_00263d40(int arg0, int arg1);
+extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_00298840(int);
 extern void FUN_L02_002ea7d0(char *);
 extern void FUN_L02_002ea8b0(char *);
@@ -260,7 +260,7 @@ void FUN_L15_002ebd78(struct Moby *moby) {
             break;
         case 2:
             if (D_L15_0015F5C4 != 2) {
-                FUN_L00_00263d40(0x426A, -1);
+                queue_dialogue_message(0x426A, -1);
                 D_L15_0015F640 = scale_game_frames(0xB4);
                 p = D_0013D388_bd78;
                 p[2] = 1;
@@ -314,12 +314,12 @@ void FUN_L15_002ed068(struct Moby *moby) {
             return;
         }
         entry = (struct Moby *)((char *)D_L15_0015FFD8 + (*(int *)((u8 *)linked + 0x60) << 8));
-        entry->unk31 = 0;
+        entry->visible = 0;
         level = current_level_index;
-        entry->unk94 = 0;
+        entry->collision = 0;
         entry->flags |= 1;
         moby->state = (level != 0x12 ||
-            D_0014C050[0x120 + moby->unkB0] != 0xff) ? 1 : 3;
+            D_0014C050[0x120 + moby->mission] != 0xff) ? 1 : 3;
         break;
     }
     case 1:
@@ -336,8 +336,8 @@ void FUN_L15_002ed068(struct Moby *moby) {
             if (D_L15_0015F594 != 4) return;
             if (hero.vehicle_mode == 2 && current_level_index == 0xf) {
                 linked = (struct Moby *)((char *)D_L15_0015FFD8_data + (*(int *)((u8 *)linked + 0x60) << 8));
-                linked->unk94 = 0;
-                linked->unk31 = 0;
+                linked->collision = 0;
+                linked->visible = 0;
                 linked->flags |= 1;
                 FUN_L15_00208ca8();
                 set_moby_animation(linked, 0, 0);
@@ -351,8 +351,8 @@ void FUN_L15_002ed068(struct Moby *moby) {
             *(u128 *)position = *(u128 *)&moby->pos;
             *(float *)(position + 8) = probe_ground_height(position, 0, 0.5f) + 0.1f;
             FUN_L00_00216f90(position, &moby->rot, 0, 1);
-            linked->unk94 = linked->pclass->unk10;
-            linked->unk31 = 1;
+            linked->collision = linked->pclass->collision;
+            linked->visible = 1;
             linked->flags &= ~1;
             FUN_L00_00210a08(2, 0x5a, linked);
             if (current_level_index == 0xf) {

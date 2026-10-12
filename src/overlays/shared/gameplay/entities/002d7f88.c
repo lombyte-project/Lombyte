@@ -235,7 +235,7 @@ void FUN_L00_002d8418(char *p) {
     Vec4_002d8418 q;
     char *pos = p + 0x10;
     fast_vec_sub(&d, g_debug_camera, pos);
-    fast_vec_scale(&r, &hero.unk290,
+    fast_vec_scale(&r, &hero.gravity_dir,
                           FUN_002132a8_002d8418(D_L00_00161A60_002d8418 * D_0015ED6C_002d8418,
                                                 D_L00_00161A64_002d8418 * D_0015ED6C_002d8418));
     FUN_00214890_002d8418(&q, &r, &d, FUN_00213308_002d8418());
@@ -525,8 +525,8 @@ void FUN_L00_002d89f0(Moby *moby) {
         int i;
         moby->state = 1;
         moby->flags |= 0x41;
-        moby->unk94 = 0;
-        moby->unkBC = 0;
+        moby->collision = 0;
+        moby->command = 0;
         owner = data->owner;
         qcopy(&moby->pos, &owner->pos);
         qcopy(&moby->rot, &owner->rot);
@@ -541,31 +541,31 @@ void FUN_L00_002d89f0(Moby *moby) {
         for (i = 0; i < 4; i++) data->h58[i] = func_001F9850_2D9EA0(D_L00_00161A58);
         for (i = 7; i >= 0; i--) data->slots[i] = 0;
         if (D_L00_0015F63C == 0) {
-            func_001FA1F8_2D9EA0(&moby->unkC0, &moby->rot);
+            func_001FA1F8_2D9EA0(&moby->rot_row0, &moby->rot);
             D_L00_0015F63C = moby;
-            moby->unk30 = 0xFF;
+            moby->update_dist = 0xFF;
             data->f7C = 0;
-            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[0], &moby->unkC0, D_L00_00161A14_c);
-            qcopy(&D_L00_001E4070_2D9EA0[0], &moby->unkE0);
-            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[1], &moby->unkD0, D_L00_00161A14_c);
-            qcopy(&D_L00_001E4070_2D9EA0[1], &moby->unkC0);
-            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[2], &moby->unkE0, D_L00_00161A14_c);
-            qcopy(&D_L00_001E4070_2D9EA0[2], &moby->unkD0);
-            func_001F9BD8_2D9EA0(&D_L00_001E3CA0_c[3], &moby->unkC0, &moby->unkE0);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[0], &moby->rot_row0, D_L00_00161A14_c);
+            qcopy(&D_L00_001E4070_2D9EA0[0], &moby->rot_row2);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[1], &moby->rot_row1, D_L00_00161A14_c);
+            qcopy(&D_L00_001E4070_2D9EA0[1], &moby->rot_row0);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[2], &moby->rot_row2, D_L00_00161A14_c);
+            qcopy(&D_L00_001E4070_2D9EA0[2], &moby->rot_row1);
+            func_001F9BD8_2D9EA0(&D_L00_001E3CA0_c[3], &moby->rot_row0, &moby->rot_row2);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[3], &D_L00_001E3CA0_c[3], D_L00_00161A14_c);
-            fast_vec_cross(&D_L00_001E4070_2D9EA0[3], &D_L00_001E3CA0_c[3], &moby->unkD0);
-            func_001F9BD8_2D9EA0(&D_L00_001E3CA0_c[4], &moby->unkC0, &moby->unkD0);
+            fast_vec_cross(&D_L00_001E4070_2D9EA0[3], &D_L00_001E3CA0_c[3], &moby->rot_row1);
+            func_001F9BD8_2D9EA0(&D_L00_001E3CA0_c[4], &moby->rot_row0, &moby->rot_row1);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[4], &D_L00_001E3CA0_c[4], D_L00_00161A14_c);
-            fast_vec_cross(&D_L00_001E4070_2D9EA0[4], &D_L00_001E3CA0_c[4], &moby->unkE0);
-            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[5], &moby->unkD0, &moby->unkE0);
+            fast_vec_cross(&D_L00_001E4070_2D9EA0[4], &D_L00_001E3CA0_c[4], &moby->rot_row2);
+            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[5], &moby->rot_row1, &moby->rot_row2);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[5], &D_L00_001E3CA0_c[5], D_L00_00161A14_c);
-            fast_vec_cross(&D_L00_001E4070_2D9EA0[5], &D_L00_001E3CA0_c[5], &moby->unkC0);
-            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[6], &moby->unkC0, &moby->unkE0);
+            fast_vec_cross(&D_L00_001E4070_2D9EA0[5], &D_L00_001E3CA0_c[5], &moby->rot_row0);
+            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[6], &moby->rot_row0, &moby->rot_row2);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[6], &D_L00_001E3CA0_c[6], D_L00_00161A14_c);
-            fast_vec_cross(&D_L00_001E4070_2D9EA0[6], &D_L00_001E3CA0_c[6], &moby->unkD0);
-            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[7], &moby->unkC0, &moby->unkD0);
+            fast_vec_cross(&D_L00_001E4070_2D9EA0[6], &D_L00_001E3CA0_c[6], &moby->rot_row1);
+            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[7], &moby->rot_row0, &moby->rot_row1);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[7], &D_L00_001E3CA0_c[7], D_L00_00161A14_c);
-            fast_vec_cross(&D_L00_001E4070_2D9EA0[7], &D_L00_001E3CA0_c[7], &moby->unkE0);
+            fast_vec_cross(&D_L00_001E4070_2D9EA0[7], &D_L00_001E3CA0_c[7], &moby->rot_row2);
         }
         {
             float yaw = func_002140F8_2D9EA0(0.0f, 6.2831855f);
@@ -610,9 +610,9 @@ void FUN_L00_002d89f0(Moby *moby) {
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C++;
                 if (D_0015EDB6 != 0) hero->invulnerable_frames = func_001F9850_2D9EA0(0x258);
                 data->h54 = func_001F9850_2D9EA0(D_L00_00161A3C);
-                func_001F9C30_2D9EA0(&v30, &hero->unk290, -D_L00_00161A54);
+                func_001F9C30_2D9EA0(&v30, &hero->gravity_dir, -D_L00_00161A54);
                 func_001F9BD8_2D9EA0(&v30, &hero->motion.pos, &v30);
-                func_001F9C30_2D9EA0(&v0, &hero->unk290, -D_L00_00161A50);
+                func_001F9C30_2D9EA0(&v0, &hero->gravity_dir, -D_L00_00161A50);
                 func_001F9BF0_2D9EA0(&v20, &v30, &moby->pos);
                 v20.z -= 0.5f;
                 fast_vec_cross(&v40, &v20, &v0);
@@ -1884,16 +1884,16 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             break;
         }
         case 1:
-            moby->unk58 = record->f6C + 1.0f;
+            moby->anim_speed = record->f6C + 1.0f;
             record->f6C = record->f6C + 1.0f / func_001FA888_2DDEA0(func_001F9850_2DDEA0(1));
             if (1.0f < record->f6C) record->f6C = 1.0f;
             moby->pos.z += record->f6C / 100.0f * D_0015EE60_2DDEA0;
-            func_00215328_2DDEA0(&record->q20, &moby->unkC0);
+            func_00215328_2DDEA0(&record->q20, &moby->rot_row0);
             func_001F9BC0_2DDEA0(&record->vel);
             break;
         case 2: {
             float one, distance, half;
-            moby->unk31 = 1;
+            moby->visible = 1;
             moby->flags &= 0xFFFE;
             one = 1.0f;
             if (record->f6C < one) {
@@ -1902,12 +1902,12 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 work.v[0].x = -1.5707964f;
                 work.v[0].z = -1.5707964f;
                 func_001FA218_2DDEA0(&work.v[11], &work.v[0]);
-                func_001FA460_2DDEA0(&work.v[3], &record->owner->unkC0);
+                func_001FA460_2DDEA0(&work.v[3], &record->owner->rot_row0);
                 func_001FA540_2DDEA0(&work.v[7], &work.v[3], &work.v[11]);
                 func_002150B0_2DDEA0(&work.v[1], &work.v[7]);
                 func_001FA5C8_2DDEA0(&work.v[2], &record->q20, &work.v[1], record->f6C);
                 func_001FA6C0_2DDEA0(&work.v[2], &work.v[3]);
-                func_001FA480_2DDEA0(&moby->unkC0, &work.v[3]);
+                func_001FA480_2DDEA0(&moby->rot_row0, &work.v[3]);
                 moby->flags = (moby->flags | 4) & 0x7FFF;
             } else {
                 record->f6C = one;
@@ -1923,7 +1923,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             }
             if (distance < 3.0f) {
                 D_001404FC_2DDEA0[0] = 2;
-                moby->unk94 = 0;
+                moby->collision = 0;
             }
             if (distance < record->f98) {
                 ((struct Hero *)D_0013F450_2DDEA0)->unk207C--;
@@ -1960,9 +1960,9 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
         }
         case 3:
             moby->flags = (moby->flags | 3) & 0xFFFB;
-            moby->unk31 = 0;
-            moby->unk94 = 0;
-            if (moby->unk70 & 2) {
+            moby->visible = 0;
+            moby->collision = 0;
+            if (moby->anim_flags & 2) {
                 if (moby->prev_seq != record->anims[4]) {
                     unsigned char anim = record->anims[4];
                     func_00213DE0_2DDEA0(moby, anim, 0, func_001F9850_2DDEA0(3));
@@ -1975,7 +1975,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
         case 5: {
             float spin, one;
             int hit_wall, surface;
-            moby->unk31 = 1;
+            moby->visible = 1;
             moby->flags &= 0xFFFE;
             if (moby->pos.z < 2.0f) {
                 func_L00_002DDDE8_2DDEA0(moby, record, 0);
@@ -2039,14 +2039,14 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             if (((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->hit != 0 && ((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->hit->oclass == 0) hit_wall = 0;
             if (record->state == 6) {
                 moby->flags &= 0x7FFF;
-                moby->unk94 = ((Cls_2DDEA0 *)moby->pclass)->i10;
+                moby->collision = ((Cls_2DDEA0 *)moby->pclass)->i10;
                 moby->flags |= 4;
                 record->v50.z = one;
                 record->v50.x = 0.0f;
                 record->v50.y = 0.0f;
                 record->v50.w = 0.01f;
                 spin = func_001F9CB8_2DDEA0(&work.v[0]) / record->f80;
-                func_00215328_2DDEA0(&work.v[1], &moby->unkC0);
+                func_00215328_2DDEA0(&work.v[1], &moby->rot_row0);
                 func_L00_001FF4B0_2DDEA0(&record->v50, &record->v50, one);
                 func_L00_0025F368_2DDEA0(spin);
                 func_L00_001FF4B0_2DDEA0(&work.v[4], &record->vel, -1.0f);
@@ -2055,9 +2055,9 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 func_00215380_2DDEA0(&work.v[2], &work.v[3], spin);
                 func_001FA588_2DDEA0(&work.v[5], &work.v[1], &work.v[2]);
                 func_001FA6C0_2DDEA0(&work.v[5], &work.v[6]);
-                func_L00_001FF4B0_2DDEA0(&moby->unkC0, &work.v[6], one);
-                func_L00_001FF4B0_2DDEA0(&moby->unkD0, &work.v[7], one);
-                func_L00_001FF4B0_2DDEA0(&moby->unkE0, &work.v[8], one);
+                func_L00_001FF4B0_2DDEA0(&moby->rot_row0, &work.v[6], one);
+                func_L00_001FF4B0_2DDEA0(&moby->rot_row1, &work.v[7], one);
+                func_L00_001FF4B0_2DDEA0(&moby->rot_row2, &work.v[8], one);
             }
             if (hit_wall != 0) {
                 surface = 0;
@@ -2069,7 +2069,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                     unsigned char anim = record->anims[6];
                     func_00213DE0_2DDEA0(moby, anim, 0, func_001F9850_2DDEA0(0x14));
                 }
-                moby->unk98 = record->i88;
+                moby->collision_disable = record->i88;
                 record->state = 6;
                 if (0.87266463f < func_L00_001FF860_2DDEA0(((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->v40.z, func_001F9CE8_2DDEA0(&((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->v40))) {
                     if (record->h9E >= 0) func_0022ED80_2DDEA0(record->h9E, 0, moby);
@@ -2097,12 +2097,12 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 return 0;
             }
             record->vel.z = record->vel.z - D_0015EE64_2DDEA0 * 0.00925f;
-            func_L00_0026D270_2DDEA0(&moby->pos, &moby->unkC0);
+            func_L00_0026D270_2DDEA0(&moby->pos, &moby->rot_row0);
             break;
         }
         case 6: {
             int landed;
-            moby->unk31 = 1;
+            moby->visible = 1;
             moby->flags &= 0xFFFE;
             record->vel.z = record->vel.z - D_0015EE64_2DDEA0 * 0.013f;
             if (moby->pos.z < 2.0f) {
@@ -2115,11 +2115,11 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             if (landed != 0) {
                 moby->rot.x = 0.0f;
                 moby->rot.y = 0.0f;
-                moby->unk58 = 1.0f;
+                moby->anim_speed = 1.0f;
                 return 1;
             }
-            if (moby->unk70 & 2) {
-                moby->unk58 = record->f78;
+            if (moby->anim_flags & 2) {
+                moby->anim_speed = record->f78;
             }
             break;
         }

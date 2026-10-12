@@ -36,14 +36,14 @@ typedef struct {
 } Suffixes;
 
 extern s32 D_00160070 __attribute__((sda));
-extern s32 D_0015F60C;
+extern s32 world_update_time __asm__("D_0015F60C");
 extern s32 D_0015F60C_far __asm__("D_0015F60C") MACRO_ADDR;
 extern s32 D_001993C0[];
 extern Suffixes D_001E8680;
 extern char D_00160088[];
 extern char D_00160090[];
 extern Weapon D_001DFFB0[];
-extern u8 D_0013D4E8[];
+extern u8 items_acquired[] __asm__("D_0013D4E8");
 #include "rnc/gameplay/state/item_state.h"
 extern void func_001E9458(s32);
 extern s32 remove_hud_item(s32) __asm__("FUN_001ff480");
@@ -78,7 +78,7 @@ void FUN_00216c48(void *arg0, Menu *menu, s32 arg2) {
     }
     if (arg2 != 0) {
         menu->unk4 = menu->unk36;
-        menu->unk38 = D_0015F60C;
+        menu->unk38 = world_update_time;
         n = e->unk6;
         if (menu->unk36 != n) {
             flags = e->unk10;
@@ -136,7 +136,7 @@ void FUN_00216c48(void *arg0, Menu *menu, s32 arg2) {
     case 3:
         ok = 0;
         if (item_available[e->unkA] != 0) {
-            ok = D_0013D4E8[e->unkA] == 0;
+            ok = items_acquired[e->unkA] == 0;
         }
         break;
     case 4:

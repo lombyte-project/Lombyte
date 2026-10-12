@@ -5,14 +5,14 @@
 extern u8 D_00100080[];
 extern u8 D_0010FAA0[];
 extern u16 D_0010FA90[];
-extern s32 D_0015F620;
+extern s32 font_state __asm__("D_0015F620");
 extern s32 D_0015F638;
 extern s32 D_0015F63C;
 extern u8 D_0015FED0[];
 extern s32 D_0015FF0C;
-extern s32 D_0015FF14;
+extern s32 moby_anim_head __asm__("D_0015FF14");
 extern s32 D_0015FF40;
-extern s32 D_00160F08;
+extern s32 vu1_chain_limit __asm__("D_00160F08");
 extern void func_001F21B8();
 extern void vu0_load_micro_program() __asm__("func_002334D8");
 extern void vu1_add_data_ref() __asm__("func_00233830");
@@ -24,7 +24,7 @@ void draw_mobys_setup(void) {
     register s32 current;
     register s32 callbackArg;
     vu1_add_data_ref(D_0010FAA0, D_0010FA90[0]);
-    D_0015F620 = 6;
+    font_state = 6;
     vu0_load_micro_program(D_00100080);
     vu1_add_g_sregister(0x47, 0x5360B);
     current = render_packet_cursor.addr;
@@ -35,8 +35,8 @@ void draw_mobys_setup(void) {
     render_packet_cursor.addr = current;
     func_001F21B8(D_0015FED0, callbackArg);
     D_0015FF40 = 0;
-    D_00160F08 = D_0015F63C + 0xFFFF0000;
-    D_0015FF14 = D_0015F638;
+    vu1_chain_limit = D_0015F63C + 0xFFFF0000;
+    moby_anim_head = D_0015F638;
 }
 
 extern __typeof__(draw_mobys_setup) func_0020D278 __attribute__((alias("FUN_0020d278")));

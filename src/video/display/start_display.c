@@ -1,6 +1,6 @@
 #include "types.h"
 
-extern volatile s32 D_001611E0;
+extern volatile s32 movie_display_active __asm__("D_001611E0");
 extern volatile s32 D_001611E4;
 extern s32 sceGsSyncV();
 
@@ -10,7 +10,7 @@ void start_display(s32 arg0) {
     do {
 
     } while (sceGsSyncV(0) == arg0);
-    D_001611E0 = 1;
+    movie_display_active = 1;
     D_001611E4 = 0;
 }
 

@@ -69,7 +69,7 @@ void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
     tags[4] = 0x2400000000000001ULL;
     tags[5] = 0x61;
     tags[6] = color & 0xFFFFFFFFULL;
-    texture_state = D_0015EEC8;
+    texture_state = debug_font_pif_header;
     tags[9] = 0x5353;
     tags[7] = texture_state;
     tags[8] = 0x4400000000008003ULL;
@@ -423,8 +423,8 @@ typedef struct {
 extern DebugRowCounts D_L00_001E7920;
 extern u32 D_0013CAE0 NOT_SDA;
 extern u32 D_0013CAE4 NOT_SDA;
-extern u16 D_001518D0 NOT_SDA;
-extern u16 D_001518D2 NOT_SDA;
+extern u16 occl_cam_param0 __asm__("D_001518D0") NOT_SDA;
+extern u16 occl_cam_param1 __asm__("D_001518D2") NOT_SDA;
 extern s32 D_0015ED84 MACRO_ADDR;
 extern u8 D_L00_0015F444 MACRO_ADDR;
 extern u8 D_L00_0015F445 MACRO_ADDR;
@@ -684,9 +684,9 @@ void FUN_L00_001f4598(void) {
                 } else {
                     scale = 0.5f;
                 }
-                dimension = (float)FUN_001fa6c0(D_001518D0);
+                dimension = (float)FUN_001fa6c0(occl_cam_param0);
                 D_L00_0016CC40 = dimension * scale;
-                dimension = (float)FUN_001fa6c0(D_001518D2);
+                dimension = (float)FUN_001fa6c0(occl_cam_param1);
                 D_L00_0016CC44 = dimension * scale;
                 D_L00_0016CC48 = D_L00_0016CC40 * 4.0f;
                 D_L00_0016CC4C = D_L00_0016CC44 * 4.0f;

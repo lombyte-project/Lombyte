@@ -112,7 +112,7 @@ extern s32 D_L00_0015F71C __attribute__((sda));
 extern s32 D_L00_0015F72C __attribute__((sda));
 extern D00237ae8 D_L00_0017DAC0[];
 extern E00237ae8 item_defs[] __asm__("D_L00_00179AC0");
-extern s32 D_00141EA0[];
+extern s32 pause_iop_sprite_lists[] __asm__("D_00141EA0");
 s32 FUN_001f96f8(s32);
 void FUN_L00_00237ae8(O00237ae8 *o) {
     s32 i;
@@ -131,7 +131,7 @@ void FUN_L00_00237ae8(O00237ae8 *o) {
     D_L00_0015F72C = 0;
     d = D_L00_0017DAC0;
     tab = item_defs;
-    s = D_00141EA0;
+    s = pause_iop_sprite_lists;
     for (i = 7; i >= 0; i--) {
         d->x18 = *s;
         d->x0 = tab[*s].x38;
@@ -337,7 +337,7 @@ extern s32 D_L00_0015F7BC __attribute__((sda));
 extern s32 D_L00_0015FA90;
 extern Ent **D_L00_0015FAC0_c __asm__("D_L00_0015FAC0");
 extern s32 D_L00_0017E504;
-extern s32 D_00141EA0[];
+extern s32 pause_iop_sprite_lists[] __asm__("D_00141EA0");
 extern E00237ae8 D_L00_00179AC0[];
 extern s32 D_0013D428[];
 extern u8 D_0013E520[];
@@ -432,7 +432,7 @@ s32 FUN_L00_002382a0(char *rec) {
     if (selected >= 0 && D_L00_0015FAC0_c[D_L00_0015F72C][selected].f0 != 0) {
         f32 opacity = open * fade;
         color = fast_tween_color_alpha_first(opacity, D_L00_0015F798, D_L00_0015F79C);
-        id = D_00141EA0[selected];
+        id = pause_iop_sprite_lists[selected];
         if (D_L00_001C40B0[id].h8 != 0) {
             item = D_0013D428[id];
             sprintf_alt(formatted, D_L00_0015F7C8, item, D_L00_001C40B0[id].hE);
@@ -489,7 +489,7 @@ s32 FUN_L00_002382a0(char *rec) {
                 }
             }
         }
-        if (D_L00_001C40B0[D_00141EA0[selected]].h8 != 0)
+        if (D_L00_001C40B0[pause_iop_sprite_lists[selected]].h8 != 0)
             text_y = D_L00_0015F7B4;
         else if (prefix_length != 0)
             text_y = D_L00_0015F7B8;
@@ -1222,7 +1222,7 @@ void FUN_L00_0023a218(u8 *m) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a2d0.s", FUN_L00_0023a2d0);
 #else
-extern s32 D_0013E504;
+extern s32 frame_size __asm__("D_0013E504");
 extern s32 D_L00_0015F5CC;
 extern char D_L00_0015F918[];
 extern s32 D_L00_0015F8F8 __attribute__((sda));
@@ -1245,9 +1245,9 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     s32 color, shadow, period;
     f32 open, text, pulse, scaled_text;
 
-    y = D_0013E504 - 42;
+    y = frame_size - 42;
     if (pal_mode_reload[0] == 0)
-        y = D_0013E504 - 50;
+        y = frame_size - 50;
     x = m->x;
     if (hero.vehicle_mode == 2)
         return m->ret;

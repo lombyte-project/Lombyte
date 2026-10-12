@@ -16,7 +16,7 @@ extern s32 FUN_L00_0025e3b8(s32);
 extern void FUN_L00_00233660(Vec4 *, f32, f32, f32);
 extern int collision_line(void *from, void *to, int mask, void *ignore, int) __asm__("FUN_001efa68");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern s32 FUN_L00_001f0d60(f32, Vec4 *, s32, s32);
+extern s32 coll_sphere(f32, Vec4 *, s32, s32) __asm__("FUN_L00_001f0d60");
 
 void FUN_L00_00221310(void) {
     Vec4 first;
@@ -47,7 +47,7 @@ void FUN_L00_00221310(void) {
     if (D_L00_0015F5CC % 5 == 0) {
         hero.unk260 = 0;
         hero.unk258 = 0.0f;
-        if (hero.unk300 != 0) {
+        if (hero.grounded_frames != 0) {
             base = hero.unk258;
             FUN_L00_00233660(&first, 1.1f, base, 1.0f);
             FUN_L00_00233660(&second, 1.1f, base, -20.0f);
@@ -68,7 +68,7 @@ void FUN_L00_00221310(void) {
                which gives retail's two mov.s before the loop. */
             for (off = -0.4f; off < 0.5f; off += 0.1f) {
                 FUN_L00_00233660(&probe, off + 1.1f, 0.0f, 0.0f);
-                if (!FUN_L00_001f0d60(hero.unk234, &probe, 2, 0)) {
+                if (!coll_sphere(hero.unk234, &probe, 2, 0)) {
                     hero.unk260 = 1;
                     if (hit == 0) {
                         hero.unk258 = 20.0f;
@@ -189,9 +189,9 @@ void FUN_L00_002215c8(void) {
             if (m != 0) {
                 qcopy(&m->pos, &hero.motion.pos);
                 qcopy(&m->rot, &hero.motion.rot);
-                m->unk32 = 0x40;
-                ((struct Moby *)hero.unkA8C)->unk31 = 1;
-                ((struct Moby *)hero.unkA8C)->unk90 = 0;
+                m->draw_dist = 0x40;
+                ((struct Moby *)hero.unkA8C)->visible = 1;
+                ((struct Moby *)hero.unkA8C)->glow_color = 0;
                 ((struct Moby *)hero.unkA8C)->spawn_frame = hero.moby->spawn_frame;
                 FUN_L00_00250df8_2215c8(hero.unkA8C);
                 FUN_L00_00210a08_2215c8(3, 0x53, hero.unkA8C);
@@ -339,14 +339,14 @@ int FUN_L00_00221d98(void) {
     return r;
 }
 extern char D_0013F350[];
-void FUN_L00_002118c8(int, float);
+void stick_target(int, float) __asm__("FUN_L00_002118c8");
 float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 int stick_direction_vs_facing(void) {
     int r = 2;
     float a;
-    FUN_L00_002118c8(0, 1.0f);
+    stick_target(0, 1.0f);
     {
         struct Hero *g = &hero;
         a = fast_subtract_rotations(g->motion.move_yaw, g->motion.rot.f[2]);
@@ -589,7 +589,7 @@ typedef struct {
 extern char D_L00_0015F6E8[4] __attribute__((sda));
 extern char D_L00_0017BF20_e[] __asm__("D_L00_0017BF20");
 extern char D_L00_0017BF60_e[] __asm__("D_L00_0017BF60");
-extern unsigned char D_0015EDB5;
+extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");
 extern T2C_222B80 attack_records[] __asm__("D_L00_0017BC28");
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern char D_00141680[];
@@ -601,7 +601,7 @@ extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0020d658(int back);
 extern float FUN_L00_002339d0(float *v);
-extern float FUN_L00_00257c48(float lo, float hi);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float dot_vectors_xyz(void *a, void *b);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
@@ -618,7 +618,7 @@ extern int FUN_L00_00211360(char *);
 extern int FUN_L00_00216de8(int, int);
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int FUN_L00_00229a98(void);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -635,7 +635,7 @@ extern void FUN_L00_0020a500(void);
 extern void FUN_L00_0020b930(void);
 extern void FUN_L00_0020e360(int a, int b);
 extern void FUN_L00_0020e698(void);
-extern void FUN_L00_002118c8(int, float);
+extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern void FUN_L00_00213de8(float);
 extern void FUN_L00_00214ed8(float a, float b, float c);
 extern void FUN_L00_00216ec0(int, int, int);
@@ -724,7 +724,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
-        p->unk1010 = FUN_L00_00257b90(scale_game_frames(0x32), scale_game_frames(0x64));
+        p->unk1010 = random_int_between(scale_game_frames(0x32), scale_game_frames(0x64));
         FUN_L00_0020a500();
         if (p->vehicle_mode != 0) {
             FUN_L00_00227638();
@@ -807,7 +807,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
         p->health.hp = 0;
-        p->unk694 = p->motion.unk100.f[2] * 0.2f;
+        p->unk694 = p->motion.displacement.f[2] * 0.2f;
         p->unk69C = p->water_surface_z - 0.37f;
         if (p->unk694 < frame_time * -7.0f)
             p->unk694 = frame_time * -7.0f;
@@ -888,8 +888,8 @@ int hero_set_state(int a, int b) {
                 FUN_L00_002a3ec8(D_L00_001612D0, D_L00_001612D8, 0, p->motion.pos.f[0],
                                  p->motion.pos.f[1], 0.4f, 0.3f);
             }
-        } else if (p->motion.unk100.f[2] < frame_time * -0.5f) {
-            int n = truncate_float_to_s32(absolute_float(p->motion.unk100.f[2]) * 300.0f);
+        } else if (p->motion.displacement.f[2] < frame_time * -0.5f) {
+            int n = truncate_float_to_s32(absolute_float(p->motion.displacement.f[2]) * 300.0f);
             FUN_L00_00209ca8(3, n < 0x28 ? n : 0x28, 1);
             if (D_L00_001612D0 != 0) {
                 FUN_L00_002a3ec8(D_L00_001612D0, D_L00_001612D8, 0, p->motion.pos.f[0],
@@ -920,7 +920,7 @@ int hero_set_state(int a, int b) {
         }
         {
             struct Hero *s = &hero;
-            s->unk694 = s->motion.unk100.f[2] * 0.37f;
+            s->unk694 = s->motion.displacement.f[2] * 0.37f;
             if (s->unk694 < frame_time * -7.0f)
                 s->unk694 = frame_time * -7.0f;
             s->unk69C = s->water_surface_z;
@@ -943,7 +943,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         FUN_L00_00213de8(0.5f);
         p->unk20A7 = 1;
-        qcopy(&p->motion.velocity, &p->motion.unk100);
+        qcopy(&p->motion.velocity, &p->motion.displacement);
         r = find_moby_hit(((void *)p->moby), 1, 0);
         if (r != 0) {
             hero_change_health(truncate_float_to_s32(*(float *)(r + 0x2C)));
@@ -1078,7 +1078,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
-        qcopy(&p->motion.unk150, &p->motion.unk100);
+        qcopy(&p->motion.unk150, &p->motion.displacement);
         set_hero_animation(hero_idle_sequence(0), 0, (float)scale_game_frames(0xA));
         p->unk1D0 = scale_game_frames(7);
         break;
@@ -1087,7 +1087,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
-        qcopy(&p->motion.unk150, &p->motion.unk100);
+        qcopy(&p->motion.unk150, &p->motion.displacement);
         set_hero_animation(hero_idle_sequence(0), 0, (float)scale_game_frames(5));
         p->unk1D0 = scale_game_frames(7);
         break;
@@ -1096,7 +1096,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
-        p->ground_speed = vector_length_xy(&p->motion.unk100);
+        p->ground_speed = vector_length_xy(&p->motion.displacement);
         p->state.step = 0;
         p->unk3B8 = 0;
         p->unk3BC = 0;
@@ -1118,7 +1118,7 @@ int hero_set_state(int a, int b) {
             if (frame_time * 7.0f < q->ground_speed)
                 q->ground_speed = frame_time * 7.0f;
             q->unk3BE = 0;
-            FUN_L00_002118c8(0, 1.0f);
+            stick_target(0, 1.0f);
             if (1.5707964f <
                 fast_difference_between_rotations(q->motion.rot.f[2], q->motion.move_yaw)) {
                 if (q->state.prev_control_mode == 7 || q->state.prev == 3 ||
@@ -1218,7 +1218,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 3;
         p->unk20A7 = 1;
         fill_transfer_words(&p->unk9D0, 0, 0x20);
-        qcopy(&p->motion.unk150, &p->motion.unk100);
+        qcopy(&p->motion.unk150, &p->motion.displacement);
         if (b)
             set_hero_animation(0x64, 0, (float)scale_game_frames(0xF));
         break;
@@ -1462,7 +1462,7 @@ int hero_set_state(int a, int b) {
         if (0.001f < vector_length_xyz(&d.v)) {
             normalize_vector_xyz(&d.v, &d.v, 1.0f);
             if (p->state.prev_control_mode != 0xF) {
-                p->unk5B0 = dot_vectors_xyz(&p->motion.unk100, &d.v);
+                p->unk5B0 = dot_vectors_xyz(&p->motion.displacement, &d.v);
             }
         }
         {
@@ -1504,7 +1504,7 @@ int hero_set_state(int a, int b) {
         subtract_vector_xyz(&d.v, &out, &p->motion.pos);
         if (0.001f < vector_length_xyz(&d.v)) {
             normalize_vector_xyz(&d.v, &d.v, 1.0f);
-            p->unk604 = dot_vectors_xyz(&p->motion.unk100, &d.v);
+            p->unk604 = dot_vectors_xyz(&p->motion.displacement, &d.v);
         }
         p->unk604 = p->unk604 * 0.5f;
         if (p->unk604 < 0.0f)
@@ -1581,9 +1581,9 @@ int hero_set_state(int a, int b) {
                 p->health.unk22B2 = FUN_L00_00216de8(0x17, 0x20);
             }
             p->unk950 =
-                FUN_L00_00257c48(frame_time * 3.1415927f, frame_time * 4.3633232f);
+                randf_sym(frame_time * 3.1415927f, frame_time * 4.3633232f);
             p->unk954 =
-                FUN_L00_00257c48(frame_time * 3.1415927f, frame_time * 4.3633232f);
+                randf_sym(frame_time * 3.1415927f, frame_time * 4.3633232f);
         }
         {
             struct Hero *q = &hero;
@@ -1634,7 +1634,7 @@ int hero_set_state(int a, int b) {
         if (frame_time * 4.5f < p->motion.speed_xy) {
             FUN_L00_00213de8(frame_time * 4.5f / p->motion.speed_xy);
         }
-        qcopy(&p->motion.velocity, &p->motion.unk100);
+        qcopy(&p->motion.velocity, &p->motion.displacement);
         if (b) {
             set_hero_animation(0x13, 0, (float)t8);
         }
@@ -2142,7 +2142,7 @@ int hero_set_state(int a, int b) {
                     if (q->unk450 == 2)
                         q->unk450 = 0;
                     id = q->unk450 + 0x1C;
-                    if (D_0015EDB5 != 0) {
+                    if (opt_mirror_anim != 0) {
                         if (id == 0x1C) {
                             id = 0x1D;
                         } else if (id == 0x1D) {
@@ -2551,7 +2551,7 @@ int hero_set_state(int a, int b) {
         if (frame_time * 4.5f < p->motion.speed_xy) {
             FUN_L00_00213de8(frame_time * 4.5f / p->motion.speed_xy);
         }
-        qcopy(&p->motion.velocity, &p->motion.unk100);
+        qcopy(&p->motion.velocity, &p->motion.displacement);
         if (b)
             set_hero_animation(0xE, 0, (float)scale_game_frames(0xC));
         break;
@@ -2849,7 +2849,7 @@ int hero_set_state(int a, int b) {
             p->unk5B0 = frame_time * 2.5f;
         p->unk5AC.i = 0;
         clear_vector(&p->motion.velocity);
-        clear_vector(&p->motion.unk100);
+        clear_vector(&p->motion.displacement);
         p->motion.velocity.f[2] = frame_time * 10.0f;
         if (b)
             set_hero_animation(0x10, 2, -3.0f);
@@ -3067,7 +3067,7 @@ int FUN_L00_002279b0(void) {
     if (p->base_condition != 0) {
         if (p->state.control_mode == 0x11) {
             if (p->state.step != 1) {
-                if (0.0f < p->motion.unk100.f[2]) {
+                if (0.0f < p->motion.displacement.f[2]) {
                     if (p->water_surface_z - 0.4f < p->motion.pos.f[2]) {
                         r = 1;
                     }
@@ -3080,7 +3080,7 @@ int FUN_L00_002279b0(void) {
             }
             if (absolute_float(p->water_surface_z - (p->motion.pos.f[2] + 0.45f)) < t) {
                 if (p->state.control_mode != 4 || p->unk41E != 0) {
-                    if (0.8f < p->unk22A4 && p->motion.unk100.f[2] < 0.0f) {
+                    if (0.8f < p->unk22A4 && p->motion.displacement.f[2] < 0.0f) {
                         r = 1;
                     }
                 }

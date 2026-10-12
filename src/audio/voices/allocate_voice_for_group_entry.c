@@ -9,8 +9,8 @@ struct VoiceGroupEntryWindow {
 };
 extern u8 D_0013E550[];
 extern s32 D_0015F5B4;
-extern s32 D_0015F630;
-extern u8 *D_0015F634;
+extern s32 level_sound_def_count __asm__("D_0015F630");
+extern u8 *level_sound_defs __asm__("D_0015F634");
 extern s32 allocate_voice_slot(u8 *, s32, s32, s32, s32) __asm__("func_0022D7F0");
 
 s32 allocate_voice_for_group_entry(s32 group_entry_index, s32 flags,
@@ -22,10 +22,10 @@ s32 allocate_voice_for_group_entry(s32 group_entry_index, s32 flags, s32 owner) 
     struct VoiceGroupEntryWindow *slot;
 
     entry_index = group_entry_index + D_0015F5B4;
-    if (entry_index >= D_0015F630) {
+    if (entry_index >= level_sound_def_count) {
         return -1;
     }
-    slot_index = allocate_voice_slot(D_0015F634 + (entry_index << 5), flags, owner, 0, 0x400);
+    slot_index = allocate_voice_slot(level_sound_defs + (entry_index << 5), flags, owner, 0, 0x400);
     if (slot_index >= 0) {
         slot = (struct VoiceGroupEntryWindow *)(slot_index * 0x70 + D_0013E550);
         slot->owner = owner;

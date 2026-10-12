@@ -12,14 +12,14 @@ extern s64 D_0015EF48;
 extern s32 D_0015EF50;
 extern s32 D_0015EF54;
 extern f32 D_0015F43C;
-extern s32 D_0015F464;
-extern s32 D_0015F620;
+extern s32 draw_callback_count __asm__("D_0015F464");
+extern s32 font_state __asm__("D_0015F620");
 extern struct Globals_0016045C *D_0016045C;
 extern s32 D_0018A2E8[];
-extern u8 D_00193FC0[];
+extern u8 occl_visibility[] __asm__("D_00193FC0");
 extern u8 D_001D8EB0[];
 extern u8 D_001E1300[];
-extern u8 D_001E3200[];
+extern u8 tie_light_data[] __asm__("D_001E3200");
 extern s32 AppendDmaTag();
 extern s32 fill_transfer_words() __asm__("func_001F97E8");
 extern s32 FlushCache();
@@ -43,7 +43,7 @@ extern s32 patch_moby_gifs() __asm__("func_0020CEF8");
 extern s32 draw_mobys() __asm__("func_0020D460");
 extern void func_00217C18();
 extern s32 render_level_effects_and_screen_sprites() __asm__("func_002196B8");
-extern s32 func_00228A30();
+extern s32 patch_shrub_gifs() __asm__("func_00228A30");
 extern s32 draw_shrubs() __asm__("func_00228B38");
 extern s32 func_0022A5E0();
 extern s32 patch_tfrag_gifs() __asm__("func_00233308");
@@ -64,12 +64,12 @@ void transition_default_draw(s32 *arg0) {
     if (D_0016045C == 0 || D_0016045C->unk4 != 0) {
         append_gif_transfer_packet();
     }
-    fill_transfer_words(D_00193FC0, -1, 0x80);
+    fill_transfer_words(occl_visibility, -1, 0x80);
     transition_update_movie_camera();
     func_001F2260();
     prune_moby_references();
     reset_gs_registers();
-    D_0015F620 = -1;
+    font_state = -1;
     if (D_0016045C != 0) {
         transition_draw_sky();
     }
@@ -87,7 +87,7 @@ void transition_default_draw(s32 *arg0) {
     AppendDmaTag(0x02080000);
     setup_gif_paging(0);
     vu1_gs_regs_alt();
-    if (D_0015F464 != 0) {
+    if (draw_callback_count != 0) {
         dispatch_callback_list_1();
     }
     vu1_gs_regs_alt();
@@ -96,7 +96,7 @@ void transition_default_draw(s32 *arg0) {
         vu1_gs_regs_alt();
         FlushCache(0);
         func_00217C18();
-        D_0015F620 = 8;
+        font_state = 8;
     }
     aa_blur_pass();
     reset_gs_registers();
@@ -128,11 +128,11 @@ void transition_default_draw(s32 *arg0) {
     func_00234F98(D_001E1300);
     patch_tfrag_gifs();
     vu1_sync_chain(4);
-    func_00237370(D_001E3200);
+    func_00237370(tie_light_data);
     patch_tie_texture_fields();
     vu1_sync_chain(8);
     func_0022A5E0(D_001D8EB0);
-    func_00228A30();
+    patch_shrub_gifs();
     vu1_sync_chain(0x10);
     patch_moby_gifs();
     update_fog();

@@ -78,7 +78,7 @@ extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
-extern s32 FUN_L00_00203908(s32, s32);
+extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern s32 FUN_L00_002d8128(void *);
 extern s32 FUN_L01_00275690(f32, void *);
 
@@ -94,31 +94,31 @@ void FUN_L01_0030acb8(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         data[5] = 0;
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         moby->state = 1;
         data[10] = 0;
         break;
     case 1:
         if (level_frame_count < scale_game_frames(400) && usage_stats.stat[12].count != 0 && usage_stats.stat[11].count == 0) {
             if (scale_game_frames(game_frame_count) - usage_stats.stat[12].unk2 * 600 < scale_game_frames(1100) && help_records[0x51].v >= 0) {
-                FUN_L00_00203908(0x4E27, 0x51);
+                help_request(0x4E27, 0x51);
             }
         }
         if (level_frame_count < scale_game_frames(400) && usage_stats.stat[29].count != 0) {
             if (scale_game_frames(game_frame_count) - usage_stats.stat[29].unk2 * 600 < scale_game_frames(1100) && help_records[0x72].v >= 0) {
-                FUN_L00_00203908(0x4E28, 0x72);
+                help_request(0x4E28, 0x72);
             }
         }
         if (cutscene_mode == 0) {
             if (level_available[3] != 0 && level_available[2] == 0 && help_state.state == 0 &&
                 help_state.cur == -1 && help_records[4].id == 0) {
-                FUN_L00_00203908(0x3E8, 4);
+                help_request(0x3E8, 4);
             } else if (level_available[3] == 0 && level_available[2] != 0 && help_state.state == 0 &&
                        help_state.cur == -1 && help_records[5].id == 0) {
-                FUN_L00_00203908(0x3E9, 5);
+                help_request(0x3E9, 5);
             } else if (level_available[3] != 0 && level_available[2] != 0 && help_state.state == 0 &&
                        help_state.cur == -1 && help_records[6].id == 0 && help_records[4].id == 0) {
-                FUN_L00_00203908(0x3EA, 6);
+                help_request(0x3EA, 6);
             }
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[15]) &&
@@ -127,19 +127,19 @@ void FUN_L01_0030acb8(struct Moby *moby) {
             t = scale_game_frames(game_frame_count) - usage_stats.stat[9].unk2 * 600;
             /* "< 1" rather than "!": cc1 would otherwise test the bit as (v >> level) & 1 */
             if (scale_game_frames(216000) < t && (u32)(help_records[0x43].v & (1 << current_level_index)) < 1) {
-                FUN_L00_00203908(0x3EF, 0x43);
+                help_request(0x3EF, 0x43);
             }
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[14]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L01_0015F68C < 3 &&
             help_state.state == 0 && help_state.cur == -1 && help_records[0x40].id == 0) {
-            FUN_L00_00203908(0x3EC, 0x40);
+            help_request(0x3EC, 0x40);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[14]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && hero.state.current == 1 &&
             D_L01_0015F688 == -1 && help_state.state == 0 && help_state.cur == -1 &&
             help_records[0x40].id != 0 && help_records[0x41].id == 0) {
-            FUN_L00_00203908(0x3ED, 0x41);
+            help_request(0x3ED, 0x41);
         }
         if (help_records[0x42].id < 2 && is_point_inside_clip_volume(&hero.motion.pos, data[12]) && hero.state.prev == 0x3B &&
             hero.state_timer == 0) {
@@ -148,7 +148,7 @@ void FUN_L01_0030acb8(struct Moby *moby) {
                     *(f32 *)m->pvars != 1.0f) {
                     data[13]++;
                     if (data[13] == 3 || data[13] == 6) {
-                        FUN_L00_00203908(0x3EE, 0x42);
+                        help_request(0x3EE, 0x42);
                     }
                 }
             }
@@ -159,7 +159,7 @@ void FUN_L01_0030acb8(struct Moby *moby) {
             data[11]++;
             if (is_point_inside_clip_volume(&hero.motion.pos, data[8]) && scale_game_frames(240) < data[11] &&
                 usage_stats.stat[22].count == 0) {
-                FUN_L00_00203908(0x3F0, 0x44);
+                help_request(0x3F0, 0x44);
                 if (usage_stats.stat[22].count < 0xFFFF) {
                     usage_stats.stat[22].count++;
                 }
@@ -170,7 +170,7 @@ void FUN_L01_0030acb8(struct Moby *moby) {
                 usage_stats.stat[22].level_mask = usage_stats.stat[22].level_mask | (1 << current_level_index) | 0x80000000;
             } else if (is_point_inside_clip_volume(&hero.motion.pos, data[9]) && scale_game_frames(360) < data[11] &&
                        usage_stats.stat[23].count == 0) {
-                FUN_L00_00203908(0x3F0, 0x44);
+                help_request(0x3F0, 0x44);
                 if (usage_stats.stat[23].count < 0xFFFF) {
                     usage_stats.stat[23].count++;
                 }
@@ -198,9 +198,9 @@ void FUN_L01_0030acb8(struct Moby *moby) {
                         usage_stats.stat[13].unk2 = scale_game_frames(game_frame_count) / 600;
                     }
                     usage_stats.stat[13].level_mask = usage_stats.stat[13].level_mask | (1 << current_level_index) | 0x80000000;
-                    FUN_L00_00203908(1, 1);
+                    help_request(1, 1);
                 } else if (FUN_L01_00275690(255.0f, m2) != 0) {
-                    FUN_L00_00203908(2, 2);
+                    help_request(2, 2);
                 }
             }
         }
@@ -234,7 +234,7 @@ extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 FUN_001f99c0(f32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
@@ -282,7 +282,7 @@ void FUN_L01_0030ba18(struct Moby *m) {
         mark_moby_for_removal(m);
         return;
     }
-    hit = FUN_L00_001f0d60(2.0f, &m->pos, 0, (void *)v->owner);
+    hit = coll_sphere(2.0f, &m->pos, 0, (void *)v->owner);
     if (tick_countdown_32(&v->timer) || hit) {
         if (hit) {
             if (D_L01_001742C0.have_normal) {
@@ -350,7 +350,7 @@ typedef struct {
 extern DebrisMoby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8(DebrisMoby *);
 extern void FUN_001f9bf8(void *, void *, f32);
-extern f32 FUN_L00_00257c48(f32 lo, f32 hi);
+extern f32 randf_sym(f32 lo, f32 hi) __asm__("FUN_L00_00257c48");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
@@ -370,9 +370,9 @@ DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
         m->b31 = 1;
         m->scale = m->scale * scale;
         FUN_001f9bf8(v, dir, random_float_between(0.8f, 1.2f));
-        v->spin_x = FUN_L00_00257c48(0.0f, 0.008726646f);
-        v->spin_y = FUN_L00_00257c48(0.05235988f, 0.13962634f);
-        v->spin_z = FUN_L00_00257c48(0.0f, DEG_TO_RAD);
+        v->spin_x = randf_sym(0.0f, 0.008726646f);
+        v->spin_y = randf_sym(0.05235988f, 0.13962634f);
+        v->spin_z = randf_sym(0.0f, DEG_TO_RAD);
         v->timer = scale_game_frames(200);
         FUN_L00_00250df8(m);
     }
@@ -457,7 +457,7 @@ void FUN_L01_0030c190(struct Moby *moby) {
 
     switch (moby->state) {
     case 0:
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         moby->state = 1;
         break;
     case 1:

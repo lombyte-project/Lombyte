@@ -142,8 +142,8 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
         FUN_L02_0025c758(moby);
         prop = create_moby(0x38);
         *(struct Moby **)(data + 0x178) = prop;
-        prop->unk32 = 0x40;
-        (*(struct Moby **)(data + 0x178))->unk31 = 1;
+        prop->draw_dist = 0x40;
+        (*(struct Moby **)(data + 0x178))->visible = 1;
         (*(struct Moby **)(data + 0x178))->spawn_frame = moby->spawn_frame;
         (*(struct Moby **)(data + 0x178))->flags |= 0x100;
         break;
@@ -181,7 +181,7 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
             if (moby->prev_seq != 1) {
                 blend_anim(moby, 1, 0, scale_frames(10));
             }
-        } else if (moby->prev_seq == 1 && (moby->unk70 & 2)) {
+        } else if (moby->prev_seq == 1 && (moby->anim_flags & 2)) {
             blend_anim(moby, 0, 0, scale_frames(10));
         }
         break;
@@ -189,24 +189,24 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
         if (level_game_mode != 2) {
             moby->state = 1;
             if (*(s16 *)(data + 4) == 0) {
-                FUN_L00_002502a0(moby->unkB0);
+                FUN_L00_002502a0(moby->mission);
                 if (*(s32 *)(data + 0x150) != -1) {
                     char *p = D_L02_001600EC + (*(s32 *)(data + 0x150) << 7);
                     FUN_L00_00284e50(p + 0x30, p + 0x70);
                 }
             } else if (*(s16 *)(data + 4) == 2) {
-                moby->unk31 = 0;
-                moby->unk94 = 0;
+                moby->visible = 0;
+                moby->collision = 0;
                 moby->flags |= 1;
                 if (*(struct Moby **)(data + 0x178) != 0) {
                     (*(struct Moby **)(data + 0x178))->flags |= 1;
-                    (*(struct Moby **)(data + 0x178))->unk31 = 0;
+                    (*(struct Moby **)(data + 0x178))->visible = 0;
                 }
                 FUN_L02_00298c68(2);
                 moby->state = 5;
             }
         } else if (talk_camera.placed == 0) {
-            vec_set_len(&talk_camera.pos, &moby->unkC0, 2.5f);
+            vec_set_len(&talk_camera.pos, &moby->rot_row0, 2.5f);
             vec_add(&talk_camera.pos, &talk_camera.pos, &moby->pos);
             talk_camera.pos.z = ground_height(&talk_camera.pos, 0, 0.5f);
             vec_clear(&talk_camera.vel);
@@ -269,8 +269,8 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
         if (*(struct Moby **)(data + 0x178) != 0) {
             moby_point_position(moby, 2, &(*(struct Moby **)(data + 0x178))->pos);
             FUN_0020cca8(moby, 2, mtx);
-            copy_matrix(&(*(struct Moby **)(data + 0x178))->unkC0, mtx);
-            transform_vector_by_basis(&offset, D_L02_00161CE0, &(*(struct Moby **)(data + 0x178))->unkC0);
+            copy_matrix(&(*(struct Moby **)(data + 0x178))->rot_row0, mtx);
+            transform_vector_by_basis(&offset, D_L02_00161CE0, &(*(struct Moby **)(data + 0x178))->rot_row0);
             vec_add(&(*(struct Moby **)(data + 0x178))->pos, &(*(struct Moby **)(data + 0x178))->pos, &offset);
             FUN_L00_00250df8(*(struct Moby **)(data + 0x178));
         }
@@ -297,7 +297,7 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
                 angle_diff(moby->rot.z, angle_atan2(hero.motion.unkD0.f[0] - moby->pos.x,
                                                                      hero.motion.unkD0.f[1] - moby->pos.y)) <
                     1.5707964f) {
-                if (vec_len(&hero.motion.unk100) > 0.01f) {
+                if (vec_len(&hero.motion.displacement) > 0.01f) {
                     *(s16 *)(data + 0x174) = scale_frames(120);
                 } else {
                     count_down_16((s16 *)(data + 0x174));
@@ -367,7 +367,7 @@ void FUN_L02_002e1950(struct Moby *m) {
         v->unk180 = 0;
         v->dialog = D_L02_00161D00;
         m->state = 1;
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         watcher_init(m, v);
         FUN_L02_0025c758(m);
         break;
@@ -396,13 +396,13 @@ void FUN_L02_002e1950(struct Moby *m) {
                 a = 2;
             if (m->prev_seq != a)
                 blend_anim(m, a, 0, scale_frames(10));
-        } else if ((m->unk70 & 2) && m->prev_seq) {
+        } else if ((m->anim_flags & 2) && m->prev_seq) {
             blend_anim(m, 0, 0, scale_frames(10));
         }
         break;
     case 2:
         if (D_L02_0016CE60.placed == 0) {
-            vec_set_len(&D_L02_0016CE60.pos, &m->unkC0, 2.5f);
+            vec_set_len(&D_L02_0016CE60.pos, &m->rot_row0, 2.5f);
             vec_add(&D_L02_0016CE60.pos, &D_L02_0016CE60.pos, &m->pos);
             D_L02_0016CE60.pos.z += 10.0f;
             D_L02_0016CE60.pos.z = ground_height(&D_L02_0016CE60.pos, 0, 0.5f);
@@ -422,7 +422,7 @@ void FUN_L02_002e1950(struct Moby *m) {
         if (vec_dist(&m->pos, &hero.motion.pos) < 8.0f
             && angle_diff(m->rot.z, angle_atan2(hero.motion.unkD0.f[0] - m->pos.x,
                                                 hero.motion.unkD0.f[1] - m->pos.y)) < 1.5707964f) {
-            if (vec_len(&hero.motion.unk100) > 0.01f)
+            if (vec_len(&hero.motion.displacement) > 0.01f)
                 v->moving_timer = scale_frames(120);
             else
                 count_down(&v->moving_timer);
@@ -587,14 +587,14 @@ void FUN_L02_002e2228(struct Moby *moby) {
         blend_moby_animation(driver, 3, 0, 0);
         break;
     case 1:
-        if (D_0014C050[current_level_index][moby->unkB0] == 0xFF) {
+        if (D_0014C050[current_level_index][moby->mission] == 0xFF) {
             moby->state = 5;
         }
         break;
     case 3:
     case 5:
         ride = 0;
-        if (hero.ground_moby == moby && hero.air_frames.s == 0 && moby->unkBC == 0) {
+        if (hero.ground_moby == moby && hero.air_frames.s == 0 && moby->command == 0) {
             ride = 1;
         } else if (distance_xyz(&moby->pos, &hero.motion.pos) < 16.0f) {
             if (moby->state == 5 && hero.motion.pos.f[2] < moby->pos.z - 5.0f) {
@@ -614,7 +614,7 @@ void FUN_L02_002e2228(struct Moby *moby) {
                 *(int *)(data + 0xA4) = allocate_voice_for_target(0, 4, driver);
             }
         } else if (hero.ground_moby != moby) {
-            moby->unkBC = 0;
+            moby->command = 0;
         }
         break;
     case 2:
@@ -622,7 +622,7 @@ void FUN_L02_002e2228(struct Moby *moby) {
         FUN_0020cca8(driver, 0, joint_mtx);
         moby->rot.z = atan2_e2228(joint_mtx[0], joint_mtx[1]);
         if (distance_xyz(&moby->pos, &hero.motion.pos) < 1.5f && hero.motion.pos.f[2] < moby->pos.z - 1.5f) {
-            driver->unk58 = 0.0f;
+            driver->anim_speed = 0.0f;
             voice = *(int *)(data + 0xA4);
             if (voice != -1) {
                 char *e = D_0013E550 + voice * 0x70;
@@ -632,16 +632,16 @@ void FUN_L02_002e2228(struct Moby *moby) {
             }
             *(int *)(data + 0xA4) = -1;
         }
-        if (driver->unk58 == 0.0f &&
+        if (driver->anim_speed == 0.0f &&
             (distance_xyz(&moby->pos, &hero.motion.pos) > 2.0f || moby->pos.z - 1.25f < hero.motion.pos.f[2])) {
-            driver->unk58 = 1.0f;
+            driver->anim_speed = 1.0f;
             if (moby->state == 2) {
                 *(int *)(data + 0xA4) = allocate_voice_for_target(2, 4, driver);
             } else {
                 *(int *)(data + 0xA4) = allocate_voice_for_target(0, 4, driver);
             }
         }
-        if (driver->unk70 & 2) {
+        if (driver->anim_flags & 2) {
             voice = *(int *)(data + 0xA4);
             if (voice != -1) {
                 char *e = D_0013E550 + voice * 0x70;
@@ -659,7 +659,7 @@ void FUN_L02_002e2228(struct Moby *moby) {
                 blend_moby_animation(driver, 3, 0, 0);
                 allocate_voice_for_target(1, 0, driver);
             }
-            moby->unkBC = 1;
+            moby->command = 1;
         }
         break;
     case 6:
@@ -722,7 +722,7 @@ void FUN_L02_002ea198(struct Moby *moby) {
     case 0:
         FUN_L02_002a47f8(0.16666667f);
         moby->state = 1;
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         break;
     case 1:
         add_draw_callback(FUN_L02_002ea048_cb, moby);

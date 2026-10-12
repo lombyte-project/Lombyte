@@ -19,7 +19,7 @@ typedef struct {
 } HelpTarget;
 
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
-extern void FUN_L00_00203908(s32, s32);
+extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern u16 D_00141848[];
 extern u16 D_00141850[];
 extern u16 D_00141968[];
@@ -38,26 +38,26 @@ void FUN_L00_002e0988(HelpMoby *m) {
         m->alpha = 0xFF;
     }
     if (D_00141968[0x18 / 2] == 0) {
-        FUN_L00_00203908(3, 3);
+        help_request(3, 3);
     }
     if (D_00141968[0x3A0 / 2] == 0) {
         if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[4]) != 0) {
-            FUN_L00_00203908(0x4E2A, 0x74);
+            help_request(0x4E2A, 0x74);
         }
     }
     if (D_00141968[0x48 / 2] == 0) {
         if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[0]) != 0 && D_00141850[0] == 0) {
-            FUN_L00_00203908(5, 9);
+            help_request(5, 9);
         }
     }
     if (D_00141968[0x40 / 2] == 0 && D_00141848[0] == 0) {
         if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[1]) != 0) {
-            FUN_L00_00203908(4, 8);
+            help_request(4, 8);
         }
     }
     if (D_00141968[0] == 0) {
         if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[2]) != 0) {
-            FUN_L00_00203908(0, 0);
+            help_request(0, 0);
         }
     }
     if (D_00141968[0x8 / 2] == 0 && D_00141968[0x10 / 2] == 0) {
@@ -68,9 +68,9 @@ void FUN_L00_002e0988(HelpMoby *m) {
                 t = (HelpTarget *)(D_L00_0015FFD8 + (*p << 8));
                 if (t == 0 || t->state == 0xFE || t->state == 0xFD) {
                     if (g->health.hp < 4) {
-                        FUN_L00_00203908(1, 1);
+                        help_request(1, 1);
                     } else {
-                        FUN_L00_00203908(2, 2);
+                        help_request(2, 2);
                     }
                 }
             }
@@ -499,7 +499,7 @@ extern int FUN_001f9770(void *);
 extern f32 FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern void FUN_L00_00257470(TrollMoby *, s32, s32);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern TrollColl *find_moby_hit(TrollMoby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void hit_reaction(TrollMoby *, TrollColl *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_L00_0025a478");
 extern void FUN_L00_0025ab48(TrollVec *, f32 *, f32 *, f32 *);
@@ -536,7 +536,7 @@ void FUN_L00_002e1678(TrollMoby *m) {
     }
     if (vars->unk38 != 0) {
         vars->unk38 = 0;
-        vars->unk1DA = scale_game_frames(FUN_L00_00257b90(0xB4, 0x12C));
+        vars->unk1DA = scale_game_frames(random_int_between(0xB4, 0x12C));
     }
     FUN_001f9770(&vars->unk1DA);
     anim = vars->unk60;
@@ -738,7 +738,7 @@ void FUN_L00_002e1c78(GlowMoby *m) {
     mat[3].f[3] = one;
     FUN_001f9a28(&mat[0], &glow_origin, &mat[3]);
     FUN_001f9bf8(&mat[0], &mat[0], one);
-    fast_vec_cross(&mat[1], &mat[0], (GlowVec *)&hero.unk290);
+    fast_vec_cross(&mat[1], &mat[0], (GlowVec *)&hero.gravity_dir);
     FUN_001f9bf8(&mat[1], &mat[1], -1.0f);
     fast_vec_cross(&mat[2], &mat[1], &mat[0]);
     quad.tex = get_effect_texture(0xB);
@@ -890,14 +890,14 @@ void FUN_L00_002e3800(FlockMoby *moby) {
                 moby_point_position(src, 0, pos);
                 FUN_L00_00263b70(pos, pos, D_L00_0015F580, 120000.0f, 50000.0f);
                 for (i = 0; i < 10; i++) {
-                    color = (FUN_L00_00257b90(0x40, 0x80) << 24) | 0x787878;
-                    v = FUN_L00_00257b90(0, 4);
+                    color = (random_int_between(0x40, 0x80) << 24) | 0x787878;
+                    v = random_int_between(0, 4);
                     part = FUN_L00_0026d000(pos, random_integer_below(2) == 0 ? v : -v,
                                             D_L00_0015F580, color, 0.75f, 1.0f, 1.03f, 120000.0f);
                     if (part != 0) {
                         part->unk3 = 0x44;
                         tail = &part->tail;
-                        part->unk8 = FUN_L00_00257b90(0, 0xFF);
+                        part->unk8 = random_int_between(0, 0xFF);
                         part->unkA = vend_rand(60);
                         tail->unk4 = 2;
                         tail->unkA = color >> 24;

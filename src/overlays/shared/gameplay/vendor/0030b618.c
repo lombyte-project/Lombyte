@@ -439,7 +439,7 @@ struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax
         f32 dist, score, p2;
         struct Moby *hit;
 
-        if (t->unk32 == 0) continue;
+        if (t->draw_dist == 0) continue;
         hp = FUN_002141f8_30d308(t);
         if (t == 0 || t->pclass == 0) continue;
         cls = ((TargetClass_30d308 *)t->pclass)->kind;
@@ -608,13 +608,13 @@ void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
         d = FUN_001f9b80(&m->pos, &hero.motion.pos);
     }
     FUN_001f9b80(&m->pos, p);
-    switch (m->unkBC) {
+    switch (m->command) {
     case 0:
         ang = FUN_001f9e90(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
         FUN_L00_00258278(m, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
                          frame_time * 11.519173f);
         if (1.3f < d) {
-            m->unkBC = 2;
+            m->command = 2;
         }
         break;
     case 2:
@@ -647,7 +647,7 @@ void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
             p->stuck = 0;
         } else if (len < 0.005f) {
             n = ++p->stuck;
-            if (FUN_001f96f8(20) < n && m->unk31 == 0) {
+            if (FUN_001f96f8(20) < n && m->visible == 0) {
                 qcopy(&m->pos, p);
                 p->stuck = 0;
             }
@@ -660,9 +660,9 @@ void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
         }
         break;
     default:
-        m->unkBC = 0;
+        m->command = 0;
         if (1.3f < d) {
-            m->unkBC = 2;
+            m->command = 2;
         }
         break;
     }

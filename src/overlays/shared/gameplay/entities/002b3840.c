@@ -134,7 +134,7 @@ void FUN_L05_002f5200(struct Moby *m) {
     s32 i;
     s32 *path;
 
-    m->unk30 = 0xFF;
+    m->update_dist = 0xFF;
     inside = 0;
     if (v->use_alt_target != 0) {
         qcopy(&target, &D_L05_001671C0_2f5200);
@@ -156,13 +156,13 @@ void FUN_L05_002f5200(struct Moby *m) {
             }
         }
     }
-    if ((inside && m->unkBC == 0) || (!inside && m->unkBC != 0) || m->state == 0) {
+    if ((inside && m->command == 0) || (!inside && m->command != 0) || m->state == 0) {
         if (inside) {
-            m->unkBC = 1;
+            m->command = 1;
         } else {
-            m->unkBC = 0;
+            m->command = 0;
         }
-        m->state = m->unkBC + 1;
+        m->state = m->command + 1;
         for (i = 0; i < 12; i++) {
             if (v->on_lists[i] != -1) {
                 FUN_L05_002f5190_2f5200(m, v, v->on_lists[i], inside);
@@ -436,7 +436,7 @@ void FUN_L05_00307010(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0030D500), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9de0(float);
-extern float FUN_L00_00257c48(float lo, float hi);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void FUN_L00_002502f0(void *, int, int, int);
@@ -455,11 +455,11 @@ void FUN_L05_0030c0a8(unsigned char *m) {
         lo = frame_time * 0.47123888f;
         hi = frame_time * 0.5235988f;
         *(float *)(d + 0x44) = r;
-        r = FUN_L00_00257c48(lo, hi);
+        r = randf_sym(lo, hi);
         lo = frame_time * 0.20943951f;
         hi = frame_time * 0.2617994f;
         *(float *)(d + 0x50) = r;
-        *(float *)(d + 0x4C) = FUN_L00_00257c48(lo, hi);
+        *(float *)(d + 0x4C) = randf_sym(lo, hi);
         FUN_L00_002502f0(m, 0x80, 0x80, 0x80);
         attach_manipulator((char *)m, 0, d);
         m[0x20] = 1;
@@ -642,14 +642,14 @@ void FUN_L05_0030c5b0(struct Moby *m) {
             if (v->active == 0) {
                 goto active_30c5b0;
             }
-            if (D_0014C050[current_level_index][m->unkB0] != 0xFF) {
+            if (D_0014C050[current_level_index][m->mission] != 0xFF) {
                 goto active_30c5b0;
             }
         }
         {
-            m->unkBC = 2;
+            m->command = 2;
             m->state = 2;
-            m->unk90 = 0x80208020;
+            m->glow_color = 0x80208020;
             if (v->table != -1) {
                 int i = 0;
                 while (i < *(int *)D_L05_001B0930[v->table]) {
@@ -670,17 +670,17 @@ void FUN_L05_0030c5b0(struct Moby *m) {
         intensity = truncate_float_to_s32((fast_sin(v->angle) * 4.0f - 3.0f) * 128.0f);
         if (intensity > 0x80) intensity = 0x80;
         else if (intensity < 0x20) intensity = 0x20;
-        m->unk90 = 0x80000000 | intensity << 16 | intensity << 8 | intensity;
+        m->glow_color = 0x80000000 | intensity << 16 | intensity << 8 | intensity;
         if (hero.ground_moby == m && hero.air_frames.s == 0) {
             int next_state = 2;
-            D_L05_001BAA50.killed[(short)m->save_id] = m->unkB0 + 2;
-            if (m->unkB0 == 0xFF ||
-                (D_L05_0015FC88[m->unkB0] != 0xFF && D_0014C050[current_level_index][m->unkB0] == 0xFF)) {
-                D_L05_001BB6B0.killed[(short)m->save_id] = m->unkB0 + 2;
+            D_L05_001BAA50.killed[(short)m->save_id] = m->mission + 2;
+            if (m->mission == 0xFF ||
+                (D_L05_0015FC88[m->mission] != 0xFF && D_0014C050[current_level_index][m->mission] == 0xFF)) {
+                D_L05_001BB6B0.killed[(short)m->save_id] = m->mission + 2;
             }
             m->state = next_state;
-            m->unkBC = 1;
-            m->unk90 = 0x80208020;
+            m->command = 1;
+            m->glow_color = 0x80208020;
             allocate_voice_for_target_entry(0, 0, m);
             if (v->table != -1) {
                 int i = 0;
@@ -759,7 +759,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED70;
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void FUN_001fa050(void *, void *);
 extern void FUN_L00_001ff660(void *, void *, void *);
@@ -810,7 +810,7 @@ void FUN_L05_003186f8(char *moby)
             add_vector_xyz(buf + 0x50, buf + 0x50, moby + 0x10);
         }
 
-        if (FUN_L00_001f0d60(convert_integer_to_float(*(int *)(data + 0xC)) * 0.0009765625f, buf + 0x50, 0, moby)) {
+        if (coll_sphere(convert_integer_to_float(*(int *)(data + 0xC)) * 0.0009765625f, buf + 0x50, 0, moby)) {
             hs = D_L05_00174240;
             if (*(int *)(hs + 0x18) == 0 || *(int *)(hs + 0x18) != *(int *)(data + 8)) {
                 *(int *)data = 0;

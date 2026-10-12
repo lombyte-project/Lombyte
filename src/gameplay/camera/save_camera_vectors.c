@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/game/camera.c, func_001ECB98). */
 #include "qcopy.h"
-extern char D_001871B0[];
+extern char cam_trans_state[] __asm__("D_001871B0");
 extern void FUN_001f9a10(void *, void *, void *);
 extern char D_0013F490[];
 /* When the flag at +2 is clear, copies the 16-byte vector at +0x50 to
@@ -9,7 +9,7 @@ extern char D_0013F490[];
 void save_camera_vectors(void) __asm__("FUN_001ec7f0");
 
 void save_camera_vectors(void) {
-    char *base = D_001871B0;
+    char *base = cam_trans_state;
     if (*(unsigned char *)(base + 2) == 0) {
         qcopy(base + 0xC0, base + 0x50);
         if (*(unsigned char *)(base + 3) == 2) {

@@ -18,7 +18,7 @@ extern float FUN_001f9b48(void *, void *);
 extern int FUN_001f96f8(int);
 extern int FUN_001f9770(void *);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
 void FUN_L03_0029d1b8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -35,7 +35,7 @@ void FUN_L03_0029d1b8(struct Moby *moby) {
         if (*(short *)(data + 0x148) == -1) {
             int lo = *(short *)(data + 0x14C);
             *(short *)(data + 0x148) =
-                FUN_001f96f8(FUN_L00_00257b90(lo, lo + *(short *)(data + 0x14E)));
+                FUN_001f96f8(random_int_between(lo, lo + *(short *)(data + 0x14E)));
         } else {
             int x, y;
             if (!FUN_001f9770(data + 0x148)) {
@@ -47,7 +47,7 @@ void FUN_L03_0029d1b8(struct Moby *moby) {
             }
             x = FUN_001f96f8(0x898);
             y = FUN_001f96f8(0x898);
-            *(short *)(data + 0x148) = FUN_001f96f8(FUN_L00_00257b90(x, y + FUN_001f96f8(0x3E8)));
+            *(short *)(data + 0x148) = FUN_001f96f8(random_int_between(x, y + FUN_001f96f8(0x3E8)));
         }
         break;
     }
@@ -476,7 +476,7 @@ void FUN_L03_00292890(char *moby);
         }                                                                                                       \
         if (FUN_001f9740(&data->i104)) {                                                                        \
             allocate_voice_for_target_entry(0, 0, (int)moby);                                                   \
-            data->i104 = FUN_L00_00257b90(FUN_001f96f8(900), FUN_001f96f8(400));                                \
+            data->i104 = random_int_between(FUN_001f96f8(900), FUN_001f96f8(400));                                \
         }                                                                                                       \
     }
 
@@ -930,7 +930,7 @@ void FUN_L03_002953f8(struct Moby *moby) {
             qcopy(d0, p);
             qcopy(d1, q);
             *(int *)(data + 0x5C) = 3;
-            moby->unk30 = moby->unk32 = 0xFF;
+            moby->update_dist = moby->draw_dist = 0xFF;
         }
         subtract_vector_xyz(a, p, d0);
         FUN_L00_00260738(data + 0x20, a, d1, q);
@@ -1032,7 +1032,7 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
                     FUN_L00_0026ced0(pos, v, 0x80808080, 0x808080, FUN_001f96f8(35), 105000.0f);
                 }
             }
-            data[0x12E] = FUN_L00_00257b90(FUN_001f96f8(7), FUN_001f96f8(20));
+            data[0x12E] = random_int_between(FUN_001f96f8(7), FUN_001f96f8(20));
         }
         break;
     case 0x76:
@@ -1048,7 +1048,7 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
                     FUN_L00_0026ced0(pos, v, 0x80808080, 0x808080, FUN_001f96f8(45), 168000.0f);
                 }
             }
-            data[0x12E] = FUN_L00_00257b90(FUN_001f96f8(7), FUN_001f96f8(20));
+            data[0x12E] = random_int_between(FUN_001f96f8(7), FUN_001f96f8(20));
         }
         break;
     case 0x4B:
@@ -1126,7 +1126,7 @@ extern float FUN_001f9de0(float);
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void FUN_0022dba0(int, int, void *);
 extern void FUN_L00_00260a88(void *, int, int, int, int);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int);
 extern void spawn_debris_29d2e0(char *, int, float *, void *, int, int, float, float *, float *, float *) __asm__("FUN_L00_00263fd8");
@@ -1213,7 +1213,7 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
         if (*(short *)(moby + 0xA6) == 0x31B && D_0013D408_29d2e0[4] == 0) {
             D_0013D408_29d2e0[4] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
-            FUN_L00_00263d40(0x53D6, -1);
+            queue_dialogue_message(0x53D6, -1);
         }
         FUN_0022dba0(0, 0, moby);
     }
@@ -1916,7 +1916,7 @@ void FUN_L03_002c6a20(struct Moby *moby) {
   *(unsigned char *)(data+0x117)=240;
   FUN_L00_0025d458(moby,(short *)(data+0x110));
  }
- moby->unkA4=255;
+ moby->hit_slot=255;
 }
 /* scans class instances for either predicate */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8160), where it is exact; names translated to the US level program. */
@@ -1970,14 +1970,14 @@ int FUN_L03_002c6e18(float ang, struct Moby *moby, struct Moby *target) {
             if (FUN_001f9b80(&moby->pos, target) < 20.0f) {
                 if (absolute_float(f20) > 1.1780972f) {
                     blend_moby_animation_u(moby, 1, 0, scale_game_frames(10));
-                    moby->unk58 = 1.0f;
+                    moby->anim_speed = 1.0f;
                 } else {
                     blend_moby_animation_u(moby, 9, 0, scale_game_frames(10));
                 }
                 *(float *)(data + 0x28C) = ang;
                 st = moby->state;
                 moby->state = 0xC;
-                moby->unkBC = st;
+                moby->command = st;
                 return 1;
             }
         }
@@ -2190,7 +2190,7 @@ extern Moby2C8398 *D_L03_0015FFD8_m __asm__("D_L03_0015FFD8");
 extern int D_L03_001618F4_i __asm__("D_L03_001618F4") __attribute__((sda));
 extern int FUN_001f9770_cf(float, unsigned char *, char *) __asm__("FUN_L03_002c6e18");
 extern int FUN_001fa688_cf(void *) __asm__("FUN_001f9770");
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_L00_0024f7c8_cf(char *, float) __asm__("FUN_00214cc8");
 extern int FUN_L00_0025df68_cf(char *m, char *p, float *pos, char *v) __asm__("FUN_L00_00259028");
 extern int FUN_L00_0025e450_cf(void *, void *) __asm__("FUN_L00_0025c698");
@@ -2808,7 +2808,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                 convert_integer_to_float_cf(a, b, 0x24, m, 0);
                 qcopy(b, D_L03_00173F60);
             }
-            if (FUN_L00_001f0d60(FUN_L00_0025a120_cf(q->i20) * 0.0009765625f, b, 0x24, m)) {
+            if (coll_sphere(FUN_L00_0025a120_cf(q->i20) * 0.0009765625f, b, 0x24, m)) {
                 qcopy(m->pos, D_L03_00173F70);
                 m->pos[2] = a[2] + q->f8 - q->f28;
             }

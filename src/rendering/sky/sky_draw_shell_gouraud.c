@@ -24,7 +24,7 @@ struct Shell {
 
 extern s32 D_00160408[2] __attribute__((sda));
 extern s32 D_00160410 __attribute__((sda));
-extern u8 D_0013D0F0[];
+extern u8 sky_gouraud_gs_block[] __asm__("D_0013D0F0");
 
 extern void FUN_0022c4c8(struct SkyTile *tiles, s32 count, u8 *visibility) __asm__("FUN_0022c4c8");
 extern void WriteDmaChannelRegisters(s32 address, s32 qwc, s32 destination);
@@ -50,7 +50,7 @@ void sky_draw_shell_gouraud(struct Shell *shell) {
     FUN_0022c4c8(shell->tiles, shell->count, visibility);
 
     render_packet_cursor.words[0] = 0x30000007;
-    *(s32 *)((u32)render_packet_cursor.words + 4) = (s32)D_0013D0F0;
+    *(s32 *)((u32)render_packet_cursor.words + 4) = (s32)sky_gouraud_gs_block;
     *(s32 *)((u32)render_packet_cursor.words + 8) = 0;
     *(s32 *)((u32)render_packet_cursor.words + 12) = 0x50000007;
     render_packet_cursor.words += 4;

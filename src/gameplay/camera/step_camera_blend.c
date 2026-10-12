@@ -4,8 +4,8 @@
 extern void FUN_001f9a10(void *, void *, void *);
 extern char D_0013F490[];
 extern char D_00187080[];
-extern char D_0018C318[];
-extern char D_00187290[];
+extern char occl_cam_state[] __asm__("D_0018C318");
+extern char camera_rows[] __asm__("D_00187290");
 extern float D_0015ED60 MACRO_ADDR;
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void func_002144D8(void *, void *);
@@ -35,7 +35,7 @@ int step_camera_blend(void *to_blend, void *cam_blend) {
     }
     t = cosine_interpolate(0.0f, 1.0f, cam[3]);
     FUN_001f9a10(cam + 12, D_0013F490, cam + 12);
-    st = D_0018C318;
+    st = occl_cam_state;
     cam[16] = cam[12] + (to[12] - cam[12]) * t;
     cam[17] = cam[13] + (to[13] - cam[13]) * t;
     cam[18] = cam[14] + (to[14] - cam[14]) * t;
@@ -48,7 +48,7 @@ int step_camera_blend(void *to_blend, void *cam_blend) {
     FUN_001fa400(rot, cam + 8, m, t);
     FUN_001fa4f8(rot, q);
     if (*(int *)(st + 0x14) == 0) {
-        func_001FA2B8(D_00187290, q);
+        func_001FA2B8(camera_rows, q);
     }
     cam[3] += cam[4] * D_0015ED60;
     if (1.0f < cam[3]) {

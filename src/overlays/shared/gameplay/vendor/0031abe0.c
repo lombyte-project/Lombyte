@@ -174,7 +174,7 @@ void FUN_L05_00329358(char *moby) {
             p[2] = 77.5f;
         }
     }
-    normalize_vector_xyz(p + 8, &hero.unk290, -1.0f);
+    normalize_vector_xyz(p + 8, &hero.gravity_dir, -1.0f);
 }
 extern char *D_L05_00167200 __attribute__((section(".data")));
 void FUN_L05_003294c0(float a, float b, float c, float d, float e, float f, float g, float h) {
@@ -224,7 +224,7 @@ void FUN_L05_00329540(char *m) {
     normalize_vector_xyz(v3, ((char *)g->moby) + 0xC0, 1.0f);
     normalize_vector_xyz(v3, v3, *(float *)(d + 0xE0));
     subtract_vector_xyz(at, a, v3);
-    normalize_vector_xyz(v4, &g->unk290, -1.0f);
+    normalize_vector_xyz(v4, &g->gravity_dir, -1.0f);
     normalize_vector_xyz(v3, v4, *(float *)(b + 0x10));
     add_vector_xyz(at, at, v3);
     normalize_vector_xyz(v0, v4, *(float *)(a + 0x4C));
@@ -439,10 +439,10 @@ void FUN_L05_003298d8(Camera *cam) {
     f32 pitch;
     f32 tilt;
 
-    normalize_vector_xyz(&up, &hero.unk290, -1.0f);
+    normalize_vector_xyz(&up, &hero.gravity_dir, -1.0f);
     if (o->mode == 0 && hero.unk88E != 0) {
         o->mode = 1;
-        cross_vectors_xyz(&side, &hero.moby->unkE0, &up);
+        cross_vectors_xyz(&side, &hero.moby->rot_row2, &up);
         normalize_vector_xyz(&side, &side, 1.0f);
         cross_vectors_xyz(&fwd, &up, &side);
         normalize_vector_xyz(&fwd, &fwd, 1.0f);

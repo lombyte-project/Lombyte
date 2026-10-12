@@ -15,7 +15,7 @@ struct FreezeModeState {
 };
 
 extern s32 D_0015F604;
-extern struct FreezeModeState D_00193300;
+extern struct FreezeModeState freeze __asm__("D_00193300");
 extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern s32 music_pause();
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -31,13 +31,13 @@ void mode_freeze_init(u32 mode, s32 arg1) {
         snd_pause_all_sounds_in_group(0x1D);
         music_pause(0);
     }
-    D_00193300.unk14 = D_0015F604;
-    D_00193300.unk18 = arg1;
+    freeze.unk14 = D_0015F604;
+    freeze.unk18 = arg1;
     D_0015F604 = 4;
-    D_00193300.unk0 = mode;
+    freeze.unk0 = mode;
     switch (mode) {
     case 0:
-        st = &D_00193300;
+        st = &freeze;
         st->unk8 = (s32)get_help_message_text(0x4F6E);
         st->unkC = (s32)get_help_message_text(0x5248);
         st->unk10 = (s32)get_help_message_text(0x5249);
@@ -48,13 +48,13 @@ void mode_freeze_init(u32 mode, s32 arg1) {
         st->unk28 = 0;
         break;
     case 2:
-        D_00193300.unk8 = (s32)get_help_message_text(0x524A);
-        D_00193300.unkC = 0;
-        D_00193300.unk4 = 0;
+        freeze.unk8 = (s32)get_help_message_text(0x524A);
+        freeze.unkC = 0;
+        freeze.unk4 = 0;
         break;
     case 1:
     case 4:
-        st = &D_00193300;
+        st = &freeze;
         st->unk8 = (s32)get_help_message_text(0x5229);
         st->unkC = (s32)get_help_message_text(0x4EE0);
         st->unk10 = (s32)get_help_message_text(0x524A);
@@ -62,24 +62,24 @@ void mode_freeze_init(u32 mode, s32 arg1) {
         break;
     case 5:
         push_help_history(0x4E2B);
-        D_00193300.unk4 = scale_game_frames(0x1E);
-        D_00193300.unk20 = 0;
-        D_00193300.unk24 = scale_game_frames(0x1E);
+        freeze.unk4 = scale_game_frames(0x1E);
+        freeze.unk20 = 0;
+        freeze.unk24 = scale_game_frames(0x1E);
         break;
     case 3:
-        D_00193300.unk4 = scale_game_frames(0x1E);
-        D_00193300.unk20 = 0;
-        D_00193300.unk24 = scale_game_frames(0x1E);
+        freeze.unk4 = scale_game_frames(0x1E);
+        freeze.unk20 = 0;
+        freeze.unk24 = scale_game_frames(0x1E);
         break;
     case 6:
-        D_00193300.unk4 = scale_game_frames(0x1E);
-        D_00193300.unk1C = 0;
+        freeze.unk4 = scale_game_frames(0x1E);
+        freeze.unk1C = 0;
         break;
     default:
-        D_00193300.unk8 = 0;
-        D_00193300.unkC = 0;
-        D_00193300.unk10 = 0;
-        D_00193300.unk4 = 0x78;
+        freeze.unk8 = 0;
+        freeze.unkC = 0;
+        freeze.unk10 = 0;
+        freeze.unk4 = 0x78;
         break;
     }
 }

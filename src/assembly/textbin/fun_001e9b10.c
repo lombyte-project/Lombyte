@@ -141,24 +141,24 @@ extern f32 D_0015F488;
 extern f32 D_0015F48C;
 extern f32 D_0015F490;
 extern f32 D_0015F494;
-extern s32 D_0015F60C;
+extern s32 world_update_time __asm__("D_0015F60C");
 extern Ent100 *D_0015FF18;
-extern Ent100 *D_0015FF1C;
-extern Ent100 *D_0015FF20;
-extern u8 *D_0015FF28;
-extern s32 D_0015FF30;
+extern Ent100 *moby_instance_end __asm__("D_0015FF1C");
+extern Ent100 *moby_instance_perm_end __asm__("D_0015FF20");
+extern u8 *moby_vars __asm__("D_0015FF28");
+extern s32 occl_fog_count __asm__("D_0015FF30");
 extern u8 *D_001600AC;
 extern s32 D_001600B0;
 extern s32 D_001600B4;
 extern s32 D_001600B8;
-extern s32 D_001600BC;
-extern u8 D_0016034C;
+extern s32 part_clip_dist __asm__("D_001600BC");
+extern u8 requested_video_mode __asm__("D_0016034C");
 extern s32 D_001603D0;
 extern Tie *D_001603D4;
 extern Tie *D_001603D8;
 extern TieData *D_001603DC;
 extern u8 *D_001603E0;
-extern f32 D_001603E4;
+extern f32 occl_fog_density_set __asm__("D_001603E4");
 extern S160AB0 D_00160AB0;
 extern Ent40 *D_00160E8C __attribute__((sda));
 extern s32 D_00160E90;
@@ -169,17 +169,17 @@ extern ShrubData *D_00160F58;
 extern s32 D_00160F5C;
 extern f32 D_00160F70;
 extern u8 D_00186F40[];
-extern S18C318 D_0018C318;
+extern S18C318 occl_cam_state __asm__("D_0018C318");
 extern Display D_0018CD00;
 extern u8 *D_001940D8 NOT_SDA;
-extern Buf194100 D_00194100;
+extern Buf194100 coll_output __asm__("D_00194100");
 extern u8 D_00194180[];
 extern u8 D_001941C0[];
-extern u8 D_0019BDC0[];
-extern u8 D_0019C1C0[];
-extern u8 D_0019C3C0[];
+extern u8 dir_lights[] __asm__("D_0019BDC0");
+extern u8 point_lights[] __asm__("D_0019C1C0");
+extern u8 point_light_data[] __asm__("D_0019C3C0");
 extern u8 D_001AAA40[];
-extern u8 D_001B76E0[];
+extern u8 moby_grids[] __asm__("D_001B76E0");
 extern u8 D_001C76E0[];
 extern u8 D_001CD780[];
 extern TieClass *D_001D7F30[];
@@ -264,13 +264,13 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     } else if (frame_scale != 1.0f) {
         set_video_timing(0);
     }
-    D_0016034C = *(u8 *)&D_0015ED80;
-    D_00194100.x4 = D_001941C0;
-    D_00194100.x8 = D_00194180;
-    D_00194100.xC = 0;
-    D_00194100.x10 = 0;
-    D_00194100.x14 = 0;
-    func_001F9810(D_001B76E0, 0x10000);
+    requested_video_mode = *(u8 *)&D_0015ED80;
+    coll_output.x4 = D_001941C0;
+    coll_output.x8 = D_00194180;
+    coll_output.xC = 0;
+    coll_output.x10 = 0;
+    coll_output.x14 = 0;
+    func_001F9810(moby_grids, 0x10000);
     func_001F9810(D_001C76E0, 0x60);
 
     c = (u8 *)hdr + hdr->x0;
@@ -293,14 +293,14 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     update_fog();
     D_00160EC0 = 512000.0f;
     D_00160F70 = 720.0f;
-    D_001603E4 = 500.0f;
-    D_0015FF30 = 500;
-    D_001600BC = 0x1F4000;
+    occl_fog_density_set = 500.0f;
+    occl_fog_count = 500;
+    part_clip_dist = 0x1F4000;
     PackDmaTag(D_0018CD00.x23C, D_0018CD00.x240, D_0018CD00.x244);
     vu0_load_micro_program(D_00100AE0);
-    func_001F9810(D_0019C1C0, 0x100);
-    func_001F9810(D_0019C3C0, 0x180);
-    func_001F9810(D_0019BDC0, 0x400);
+    func_001F9810(point_lights, 0x100);
+    func_001F9810(point_light_data, 0x180);
+    func_001F9810(dir_lights, 0x400);
 
     lc = (u8 *)hdr + hdr->x4;
     n = *(s32 *)lc;
@@ -310,7 +310,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
         n = 12;
     }
     if (n != 0) {
-        func_001F9838(D_0019BDC0, lc, n << 6);
+        func_001F9838(dir_lights, lc, n << 6);
     }
 
     for (i0 = 0; i0 < D_00160E90; i0++) {
@@ -513,18 +513,18 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     D_0015FF18 = (Ent100 *)p;
     fill_transfer_words(p, 0, 0x4000);
     p = p2;
-    D_0015FF1C = D_0015FF18;
+    moby_instance_end = D_0015FF18;
     *((u8 *)D_0015FF18 + 0x20) = 0xFF;
-    D_0015FF28 = p;
+    moby_vars = p;
     p += 0x2000;
     D_001600AC = p;
-    D_0015FF20 = &D_0015FF18[0x3F];
+    moby_instance_perm_end = &D_0015FF18[0x3F];
     p += 0x20000;
     D_001600B4 = -1;
     D_001600B0 = 0;
     D_001600B8 = 0;
     func_001F9810(D_001CD780, 0x200);
-    for (e = D_0015FF18; e != D_0015FF20; e++) {
+    for (e = D_0015FF18; e != moby_instance_perm_end; e++) {
         e->x36 = 0x7F80;
     }
     for (o = D_00160F50; o != D_00160F54; o++) {
@@ -533,11 +533,11 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     for (i0 = 0; i0 < D_00160E90; i0++) {
         D_00160E8C[i0].x3A = 0x7F80;
     }
-    D_0018C318.x1C = 0;
+    occl_cam_state.x1C = 0;
     reset_draw_globals();
     func_00217020();
     func_001F61E8();
-    D_0015F60C = 0;
+    world_update_time = 0;
     D_0015F43C = 1.0f;
     return p;
 }

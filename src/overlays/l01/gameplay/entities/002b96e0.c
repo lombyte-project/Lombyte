@@ -253,7 +253,7 @@ extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_001f9cf8(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a10(void *, void *, void *);
-extern int FUN_L00_00257b90(int lo, int hi);
+extern int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
 extern s32 FUN_001f96f8(s32);
 extern void FUN_L00_0026ced0(void *, void *, u32, u32, f32, s32);
 
@@ -287,7 +287,7 @@ void FUN_L01_002e6518(SplashMoby_u *m, u128 *origin) {
         c1 = &inner.c[random_integer_below(6)];
         c2 = &outer.c[random_integer_below(6)];
         size = random_float_between(105000.0f, 157500.0f);
-        FUN_L00_0026ced0(&tmp, &vel, *c1, *c2, size, FUN_001f96f8(FUN_L00_00257b90(5, 0xF)));
+        FUN_L00_0026ced0(&tmp, &vel, *c1, *c2, size, FUN_001f96f8(random_int_between(5, 0xF)));
     }
 }
 #include "qcopy.h"
@@ -1495,7 +1495,7 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 FUN_00213508(void *, s32, f32);
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern s32 FUN_L00_001f0d60(void *, s32, void *, f32);
+extern s32 coll_sphere(void *, s32, void *, f32) __asm__("FUN_L00_001f0d60");
 extern s32 FUN_L00_001f35d8_cf(void) __asm__("FUN_001f0b58");
 extern void FUN_L00_001ff500_cf(void *, void *, float) __asm__("FUN_001f9bf8");
 extern f32 FUN_L00_001ff8b0_cf(f32, f32) __asm__("FUN_001f9e90");
@@ -1692,7 +1692,7 @@ void FUN_L01_002efc60(Mob577 *self) {
         FUN_001f9a28(&v->vel, &v->dest, &self->pos);
         FUN_L00_0025f730(&v->vel, frame_time * 4.0f);
         FUN_001f9a10(&v70, &v->vel, &self->pos);
-        if (FUN_L00_001f0d60(&v70, 0, self, 0.4f) != 0) {
+        if (coll_sphere(&v70, 0, self, 0.4f) != 0) {
             clear_u64_value(&v->vel);
             self->state = 14;
         } else {
@@ -2185,7 +2185,7 @@ void FUN_L01_002f3120(Moby *self)
             if (v->max_speed < vector_length_xyz(v)) {
                 normalize_vector_xyz(v, v, v->max_speed);
             }
-            qcopy(&hero.motion.unkF0, v);
+            qcopy(&hero.motion.platform_delta, v);
             if (v->pull != 0) {
                 subtract_vector_xyz(&pull, &nearest, &hero.motion.pos);
                 pull.f[2] = 0.0f;
@@ -2193,13 +2193,13 @@ void FUN_L01_002f3120(Moby *self)
                 if (limit < vector_length_xyz(&pull)) {
                     normalize_vector_xyz(&pull, &pull, limit);
                 }
-                add_vector_xyz(&hero.motion.unkF0, &hero.motion.unkF0, &pull);
+                add_vector_xyz(&hero.motion.platform_delta, &hero.motion.platform_delta, &pull);
             }
         } else {
             /* past the end: slow down (factor 1 - 0.005 per frame unit) */
             len = vector_length_xyz(v);
             normalize_vector_xyz(v, v, frame_scale * -0.004999995231628418f * len + len);
-            qcopy(&hero.motion.unkF0, v);
+            qcopy(&hero.motion.platform_delta, v);
         }
         if (hero.state.control_mode == 0x12 && hero.state.prev == hero.state.control_mode) {
             if (hero.state_timer < scale_game_frames(3)) {
@@ -2214,7 +2214,7 @@ void FUN_L01_002f3120(Moby *self)
                && (u32)(hero.state.control_mode - 4) < 2) {
         len = vector_length_xyz(v);
         normalize_vector_xyz(v, v, frame_scale * -0.014999985694885254f * len + len);
-        qcopy(&hero.motion.unkF0, v);
+        qcopy(&hero.motion.platform_delta, v);
         if (hero.unk1D8 < scale_game_frames(0x23)) {
             hero.unk1D8 = scale_game_frames(0x23);
         }
@@ -2538,7 +2538,7 @@ extern void transform_vector_f49(void *, void *, void *) __asm__("FUN_001f9cf8")
 extern void FUN_0020d580(void *);
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L01_002f5168(char *);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Rider carrier: waits for the hero in its clip volume, then follows its path carrying up to eight rider mobys (and steers its camera moby), drops them off one by one at the marked node and removes itself at the end of the path. */
@@ -2666,7 +2666,7 @@ void FUN_L01_002f4960(CarrierMoby *m) {
                 break;
             }
             v->riders[j] = -1;
-            v->timer = FUN_L00_00257b90(0x14, 0x1E);
+            v->timer = random_int_between(0x14, 0x1E);
             return;
         }
     }
@@ -3359,7 +3359,7 @@ void FUN_L01_002f8c58(SteamMoby *m) {
         FUN_001f9a10(&pos, &pos, &m->pos);
         pos.f[2] += v->height;
         FUN_L01_002f8530(&pos, &vel, colors.c[random_integer_below(3)],
-                         FUN_L00_00257b90(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
+                         random_int_between(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
     }
     for (i = 0; i < 2; i++) {
         colors = D_L01_00161C18;
@@ -3511,7 +3511,7 @@ void FUN_L01_002f9080(CapMoby *m) {
         pos.f[2] = 0.0f;
         FUN_001f9a10(&pos, &pos, &v->home);
         FUN_L01_002f8530(&pos, &vel, colors.c[random_integer_below(3)],
-                         FUN_L00_00257b90(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
+                         random_int_between(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
     }
     switch (m->state) {
     case 0:
@@ -3535,7 +3535,7 @@ void FUN_L01_002f9080(CapMoby *m) {
             if (hero.motion.pos.f[2] >= *(f32 *)(e + 0x38) &&
                 FUN_001f9b80(&hero.motion.pos, e + 0x30) < 10.0f &&
                 ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
-                v->wait = FUN_L00_00257b90(FUN_001f96f8(300), FUN_001f96f8(600));
+                v->wait = random_int_between(FUN_001f96f8(300), FUN_001f96f8(600));
                 v->rise = FUN_001f96f8(v->rise_len);
                 m->state = 2;
                 D_L01_00167100.shake = 0.4f;

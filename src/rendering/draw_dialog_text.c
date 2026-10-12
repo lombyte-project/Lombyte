@@ -19,46 +19,46 @@ typedef struct {
     s32 unk24;    /* 0x24 */
 } MessageBox;
 
-extern MessageBox D_00193300;
+extern MessageBox freeze __asm__("D_00193300");
 extern s32 D_0015F438;
-extern s32 D_0015F4E8 __attribute__((sda));
-extern s32 D_0015F4EC __attribute__((sda));
-extern s32 D_0015F4F0 __attribute__((sda));
-extern s32 D_0015F4F4 __attribute__((sda));
-extern s32 D_0015F4F8 __attribute__((sda));
-extern s32 D_0015F4FC __attribute__((sda));
-extern s32 D_0015F500 __attribute__((sda));
-extern s32 D_0015F504 __attribute__((sda));
-extern s32 D_0015F508 __attribute__((sda));
-extern s32 D_0015F50C __attribute__((sda));
-extern s32 D_0015F510 __attribute__((sda));
-extern s32 D_0015F514 __attribute__((sda));
-extern s32 D_0015F518 __attribute__((sda));
-extern s32 D_0015F51C __attribute__((sda));
-extern s32 D_0015F520 __attribute__((sda));
-extern s32 D_0015F524 __attribute__((sda));
-extern s32 D_0015F528 __attribute__((sda));
-extern s32 D_0015F52C __attribute__((sda));
-extern s32 D_0015F530 __attribute__((sda));
-extern s32 D_0015F534 __attribute__((sda));
-extern s32 D_0015F538 __attribute__((sda));
-extern s32 D_0015F53C __attribute__((sda));
-extern s32 D_0015F540 __attribute__((sda));
-extern char D_0015F548[];
-extern char D_0015F550[];
-extern char D_0015F560[];
-extern char D_0015F568[];
-extern char D_0015F570[];
-extern char D_0015F578[];
-extern char D_0015F580[];
-extern char D_0015F588[];
-extern char D_0015F590[];
-extern char D_0015F5A0[];
-extern s32 D_0015F5E8;
-extern struct TextRegion D_001E78F0;
-extern struct TextRegion D_001E7908;
-extern s32 D_0015EE58[] MACRO_ADDR;
-extern s32 D_0015EE68[] MACRO_ADDR;
+extern s32 freeze_ans2_y __asm__("D_0015F4E8") __attribute__((sda));
+extern s32 freeze_ans1_y __asm__("D_0015F4EC") __attribute__((sda));
+extern s32 freeze_tween_color_a __asm__("D_0015F4F0") __attribute__((sda));
+extern s32 freeze_tween_color_b __asm__("D_0015F4F4") __attribute__((sda));
+extern s32 freeze_bevel_ax __asm__("D_0015F4F8") __attribute__((sda));
+extern s32 freeze_bevel_ay __asm__("D_0015F4FC") __attribute__((sda));
+extern s32 freeze_bevel_a_half_x __asm__("D_0015F500") __attribute__((sda));
+extern s32 freeze_bevel_a_half_y __asm__("D_0015F504") __attribute__((sda));
+extern s32 freeze_bevel_a_text_y __asm__("D_0015F508") __attribute__((sda));
+extern s32 freeze_bevel_bx __asm__("D_0015F50C") __attribute__((sda));
+extern s32 freeze_bevel_by __asm__("D_0015F510") __attribute__((sda));
+extern s32 freeze_bevel_b_half_x __asm__("D_0015F514") __attribute__((sda));
+extern s32 freeze_bevel_b_half_y __asm__("D_0015F518") __attribute__((sda));
+extern s32 freeze_stats_text_y __asm__("D_0015F51C") __attribute__((sda));
+extern s32 freeze_wave_period __asm__("D_0015F520") __attribute__((sda));
+extern s32 freeze_wave_color_a __asm__("D_0015F524") __attribute__((sda));
+extern s32 freeze_wave_color_b __asm__("D_0015F528") __attribute__((sda));
+extern s32 freeze_slot_color __asm__("D_0015F52C") __attribute__((sda));
+extern s32 freeze_slot_color_b __asm__("D_0015F530") __attribute__((sda));
+extern s32 freeze_slot_color_c __asm__("D_0015F534") __attribute__((sda));
+extern s32 freeze_slot_color_d __asm__("D_0015F538") __attribute__((sda));
+extern s32 freeze_slot_color_e __asm__("D_0015F53C") __attribute__((sda));
+extern s32 freeze_slot_color_f __asm__("D_0015F540") __attribute__((sda));
+extern char freeze_default_text[] __asm__("D_0015F548");
+extern char freeze_fmt_scsc[] __asm__("D_0015F550");
+extern char freeze_fmt_indent[] __asm__("D_0015F560");
+extern char freeze_fmt_st[] __asm__("D_0015F568");
+extern char freeze_fmt_nd[] __asm__("D_0015F570");
+extern char freeze_fmt_rd[] __asm__("D_0015F578");
+extern char freeze_fmt_th[] __asm__("D_0015F580");
+extern char freeze_fmt_s[] __asm__("D_0015F588");
+extern char freeze_fmt_time[] __asm__("D_0015F590");
+extern char freeze_fmt_score[] __asm__("D_0015F5A0");
+extern s32 boot_level_active __asm__("D_0015F5E8");
+extern struct TextRegion freeze_win_template_a __asm__("D_001E78F0");
+extern struct TextRegion freeze_win_template_b __asm__("D_001E7908");
+extern s32 freeze_stats_time_ref_a[] __asm__("D_0015EE58") MACRO_ADDR;
+extern s32 freeze_stats_score_ref_a[] __asm__("D_0015EE68") MACRO_ADDR;
 
 extern void memset(void *, s32, s32);
 extern s32 sprintf(char *, const char *, ...);
@@ -93,7 +93,7 @@ void draw_dialog_text(void) {
     struct TextRegion box;
 
     setup_gif_paging(0);
-    switch (D_00193300.state) {
+    switch (freeze.state) {
     case 5: {
         u8 *p;
         s32 color;
@@ -106,10 +106,10 @@ void draw_dialog_text(void) {
         f32 angle;
         f32 pivot;
 
-        alpha = 1.0f - (f32)D_00193300.timer / (f32)scale_game_frames(30);
+        alpha = 1.0f - (f32)freeze.timer / (f32)scale_game_frames(30);
         draw_ui_frame(0x50, 0x154, 0x60, 0x1A0, (s32)(alpha * 80.0f));
-        box = D_001E78F0;
-        color = func_001FA6E0(D_0015F4F0, D_0015F4F4, alpha);
+        box = freeze_win_template_a;
+        color = func_001FA6E0(freeze_tween_color_a, freeze_tween_color_b, alpha);
         strncpy(SCRATCHPAD, get_help_message_text(0x4E2B), 0x400);
         p = SCRATCHPAD;
         while (*p >= 2) {
@@ -130,7 +130,7 @@ void draw_dialog_text(void) {
         box.anchor_y = 0x136 - box.rendered_height;
         font_print_window(&box, color, p, -1, get_effect_texture(1), normal_font_metrics);
         tint = func_001FA6E0(0x20FFFF, 0x8020FFFF,
-                            1.0f - (f32)D_00193300.unk24 / (f32)scale_game_frames(30));
+                            1.0f - (f32)freeze.unk24 / (f32)scale_game_frames(30));
         font_print_center(0x100, 0x140, tint, get_help_message_text(0x524A), -1);
         mid = (y + box.anchor_y) >> 1;
         vu1_add_g_sregister(0x47, 0x3004B);
@@ -152,7 +152,7 @@ void draw_dialog_text(void) {
         s32 h;
         f32 alpha;
 
-        text = D_0015F548;
+        text = freeze_default_text;
         left = 0;
         mid = 0;
         right = 0;
@@ -196,7 +196,7 @@ void draw_dialog_text(void) {
         case 2:
             mid = 0x524A;
             text = get_help_message_text(0x4FA6);
-            if (D_00193300.timer != 0) {
+            if (freeze.timer != 0) {
                 mid = 0;
             }
             break;
@@ -204,10 +204,10 @@ void draw_dialog_text(void) {
             if (mode_freeze_flags & 4) {
                 mid = 0x4FA8;
                 text = get_help_message_text(0x4FA7);
-            } else if (D_0015F5E8 != 0) {
+            } else if (boot_level_active != 0) {
                 left = 0x524E;
                 right = 0x524B;
-                sprintf(buf, D_0015F550, get_help_message_text(0x4FA9), 1, 1, get_help_message_text(0x4FAA));
+                sprintf(buf, freeze_fmt_scsc, get_help_message_text(0x4FA9), 1, 1, get_help_message_text(0x4FAA));
                 text = buf;
             } else {
                 mid = 0x4FA8;
@@ -225,7 +225,7 @@ void draw_dialog_text(void) {
         case 24:
             left = 0x524E;
             right = 0x524B;
-            sprintf(buf, D_0015F550, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));
+            sprintf(buf, freeze_fmt_scsc, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));
             text = buf;
             break;
         case 23:
@@ -235,7 +235,7 @@ void draw_dialog_text(void) {
             break;
         case 3:
         case 4:
-            if (D_0015F5E8 != 0 && (mode_freeze_flags & 2)) {
+            if (boot_level_active != 0 && (mode_freeze_flags & 2)) {
                 left = 0x524E;
                 right = 0x524B;
                 text = get_help_message_text(0x4FAB);
@@ -246,7 +246,7 @@ void draw_dialog_text(void) {
             break;
         case 5:
             mid = 0x4FA8;
-            sprintf(buf, D_0015F550, get_help_message_text(0x4FB0), 1, 1, get_help_message_text(0x4FA7));
+            sprintf(buf, freeze_fmt_scsc, get_help_message_text(0x4FB0), 1, 1, get_help_message_text(0x4FA7));
             text = buf;
             break;
         }
@@ -257,12 +257,12 @@ void draw_dialog_text(void) {
         box.bottom = y + h;
         box.anchor_y = y + 4;
         box.top = y;
-        alpha = 1.0f - (f32)D_00193300.timer / (f32)scale_game_frames(30);
+        alpha = 1.0f - (f32)freeze.timer / (f32)scale_game_frames(30);
         draw_ui_frame(box.top, box.bottom, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         box.flags ^= 4;
-        font_print_window_regular(&box, func_001FA6E0(D_0015F4F0, D_0015F4F4, alpha), text, -1);
+        font_print_window_regular(&box, func_001FA6E0(freeze_tween_color_a, freeze_tween_color_b, alpha), text, -1);
         tint = func_001FA6E0(0x20FFFF, 0x8020FFFF,
-                            1.0f - (f32)D_00193300.unk24 / (f32)scale_game_frames(30));
+                            1.0f - (f32)freeze.unk24 / (f32)scale_game_frames(30));
         if (left != 0) {
             font_print_center(0xCA, box.bottom - 0x14, tint, get_help_message_text(left), -1);
         }
@@ -280,12 +280,12 @@ void draw_dialog_text(void) {
         s32 id;
         f32 alpha;
 
-        box = D_001E7908;
-        alpha = 1.0f - (f32)D_00193300.timer / (f32)scale_game_frames(30);
+        box = freeze_win_template_b;
+        alpha = 1.0f - (f32)freeze.timer / (f32)scale_game_frames(30);
         draw_ui_frame(0x64, 0x12C, 0x60, 0x1A0, (s32)(alpha * 80.0f));
-        text_color = func_001FA6E0(D_0015F4F0, D_0015F4F4, alpha);
+        text_color = func_001FA6E0(freeze_tween_color_a, freeze_tween_color_b, alpha);
         button_color = func_001FA6E0(0x20FFFF, 0x8020FFFF, alpha);
-        switch (D_00193300.choice) {
+        switch (freeze.choice) {
         case 0:
         case 1:
             font_print_center(0xCA, 0x118, button_color, get_help_message_text(0x524E), -1);
@@ -327,60 +327,60 @@ void draw_dialog_text(void) {
         f32 scale;
         f32 f;
 
-        pulse = func_001FA6E0(D_0015F524, D_0015F528,
-                             fast_sin((f32)(D_0015F438 % D_0015F520) / convert_integer_to_float(D_0015F520) * 6.28318f - 3.14159f) *
+        pulse = func_001FA6E0(freeze_wave_color_a, freeze_wave_color_b,
+                             fast_sin((f32)(D_0015F438 % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f - 3.14159f) *
                                      0.5f +
                                  0.5f);
-        scale = (f32)D_00193300.unk20 * 0.125f;
+        scale = (f32)freeze.unk20 * 0.125f;
         if (scale > 1.0f) {
             scale = 1.0f;
         } else if (scale < 0.1f) {
             scale = 0.1f;
         }
-        c1 = D_0015F52C;
-        c2 = D_0015F534;
-        c3 = D_0015F53C;
-        if (D_00193300.unk24 != 0) {
-            f = (f32)D_00193300.unk24 * 0.125f;
+        c1 = freeze_slot_color;
+        c2 = freeze_slot_color_c;
+        c3 = freeze_slot_color_e;
+        if (freeze.unk24 != 0) {
+            f = (f32)freeze.unk24 * 0.125f;
             if (f > 1.0f) {
                 f = 1.0f;
             } else if (f < 0.0f) {
                 f = 0.0f;
             }
-            c1 = func_001FA6E0(D_0015F52C, D_0015F530, f);
-            c2 = func_001FA6E0(D_0015F534, D_0015F538, f);
-            c3 = func_001FA6E0(D_0015F53C, D_0015F540, f);
+            c1 = func_001FA6E0(freeze_slot_color, freeze_slot_color_b, f);
+            c2 = func_001FA6E0(freeze_slot_color_c, freeze_slot_color_d, f);
+            c3 = func_001FA6E0(freeze_slot_color_e, freeze_slot_color_f, f);
         }
         if (hero.unk89A < 3) {
-            draw_outlined_rect(D_0015F4FC - truncate_float_to_s32((f32)D_0015F504 * scale),
-                         D_0015F4FC + truncate_float_to_s32((f32)D_0015F504 * scale),
-                         D_0015F4F8 - truncate_float_to_s32((f32)D_0015F500 * scale),
-                         D_0015F4F8 + truncate_float_to_s32((f32)D_0015F500 * scale), pulse);
-            font_print_center(0x100, D_0015F508, c1, get_help_message_text(0x4F6E), -1);
-            font_print_center(0x100, D_0015F508 + 0x18, c1, get_help_message_text(0x5249), -1);
-            font_print_center(0x100, D_0015F508 + 0x30, c1, get_help_message_text(0x5248), -1);
+            draw_outlined_rect(freeze_bevel_ay - truncate_float_to_s32((f32)freeze_bevel_a_half_y * scale),
+                         freeze_bevel_ay + truncate_float_to_s32((f32)freeze_bevel_a_half_y * scale),
+                         freeze_bevel_ax - truncate_float_to_s32((f32)freeze_bevel_a_half_x * scale),
+                         freeze_bevel_ax + truncate_float_to_s32((f32)freeze_bevel_a_half_x * scale), pulse);
+            font_print_center(0x100, freeze_bevel_a_text_y, c1, get_help_message_text(0x4F6E), -1);
+            font_print_center(0x100, freeze_bevel_a_text_y + 0x18, c1, get_help_message_text(0x5249), -1);
+            font_print_center(0x100, freeze_bevel_a_text_y + 0x30, c1, get_help_message_text(0x5248), -1);
         } else {
-            draw_outlined_rect(D_0015F510 - truncate_float_to_s32((f32)D_0015F518 * scale),
-                         D_0015F510 + truncate_float_to_s32((f32)D_0015F518 * scale),
-                         D_0015F50C - truncate_float_to_s32((f32)D_0015F514 * scale),
-                         D_0015F50C + truncate_float_to_s32((f32)D_0015F514 * scale), pulse);
-            sprintf(line, D_0015F560, get_help_message_text(0x5240));
+            draw_outlined_rect(freeze_bevel_by - truncate_float_to_s32((f32)freeze_bevel_b_half_y * scale),
+                         freeze_bevel_by + truncate_float_to_s32((f32)freeze_bevel_b_half_y * scale),
+                         freeze_bevel_bx - truncate_float_to_s32((f32)freeze_bevel_b_half_x * scale),
+                         freeze_bevel_bx + truncate_float_to_s32((f32)freeze_bevel_b_half_x * scale), pulse);
+            sprintf(line, freeze_fmt_indent, get_help_message_text(0x5240));
             if (hero.unk8C0 == 1) {
-                sprintf(line, D_0015F568, 1);
+                sprintf(line, freeze_fmt_st, 1);
             } else if (hero.unk8C0 == 2) {
-                sprintf(line, D_0015F570, 2);
+                sprintf(line, freeze_fmt_nd, 2);
             } else if (hero.unk8C0 == 3) {
-                sprintf(line, D_0015F578, 3);
+                sprintf(line, freeze_fmt_rd, 3);
             } else {
-                sprintf(line, D_0015F580, hero.unk8C0);
+                sprintf(line, freeze_fmt_th, hero.unk8C0);
             }
             line[3] = ' ';
             if (hero.unk8C0 == 1) {
-                font_print_center(0x100, D_0015F51C, c2, line, -1);
+                font_print_center(0x100, freeze_stats_text_y, c2, line, -1);
             } else {
-                font_print_center(0x100, D_0015F51C, c3, line, -1);
+                font_print_center(0x100, freeze_stats_text_y, c3, line, -1);
             }
-            best = D_0015EE58[(current_level_index ^ 0x10) ? 0 : 1];
+            best = freeze_stats_time_ref_a[(current_level_index ^ 0x10) ? 0 : 1];
             if (best == hero.unk894) {
                 unit = pal_mode ? 3000 : 3600;
                 per = unit / 60;
@@ -388,56 +388,56 @@ void draw_dialog_text(void) {
                 rem = best - min * unit;
                 sec = rem / per;
                 hund = (rem - sec * per) * 100 / per;
-                sprintf(line, D_0015F588, get_help_message_text(0x50A3));
-                font_print_center(0x100, D_0015F51C + 0x26, c2, line, -1);
-                sprintf(line, D_0015F590, min, sec, hund);
-                font_print_center(0x100, D_0015F51C + 0x3A, c2, line, -1);
+                sprintf(line, freeze_fmt_s, get_help_message_text(0x50A3));
+                font_print_center(0x100, freeze_stats_text_y + 0x26, c2, line, -1);
+                sprintf(line, freeze_fmt_time, min, sec, hund);
+                font_print_center(0x100, freeze_stats_text_y + 0x3A, c2, line, -1);
             } else {
-                sprintf(line, D_0015F588, get_help_message_text(0x50A2));
-                font_print_center(0x100, D_0015F51C + 0x30, c3, line, -1);
+                sprintf(line, freeze_fmt_s, get_help_message_text(0x50A2));
+                font_print_center(0x100, freeze_stats_text_y + 0x30, c3, line, -1);
             }
-            record = D_0015EE68[(current_level_index ^ 0x10) ? 0 : 1];
+            record = freeze_stats_score_ref_a[(current_level_index ^ 0x10) ? 0 : 1];
             if (record != 0 && record == hero.unk8A8) {
-                sprintf(line, D_0015F588, get_help_message_text(0x50A5));
-                font_print_center(0x100, D_0015F51C + 0x56, c2, line, -1);
-                sprintf(line, D_0015F5A0, hero.unk8A8);
-                font_print_center(0x100, D_0015F51C + 0x6A, c2, line, -1);
+                sprintf(line, freeze_fmt_s, get_help_message_text(0x50A5));
+                font_print_center(0x100, freeze_stats_text_y + 0x56, c2, line, -1);
+                sprintf(line, freeze_fmt_score, hero.unk8A8);
+                font_print_center(0x100, freeze_stats_text_y + 0x6A, c2, line, -1);
             } else {
-                sprintf(line, D_0015F588, get_help_message_text(0x50A4));
-                font_print_center(0x100, D_0015F51C + 0x60, c3, line, -1);
+                sprintf(line, freeze_fmt_s, get_help_message_text(0x50A4));
+                font_print_center(0x100, freeze_stats_text_y + 0x60, c3, line, -1);
             }
-            font_print_center(0x100, D_0015F51C + 0x90, c1, get_help_message_text(0x5249), -1);
-            font_print_center(0x100, D_0015F51C + 0xA8, c1, get_help_message_text(0x5248), -1);
+            font_print_center(0x100, freeze_stats_text_y + 0x90, c1, get_help_message_text(0x5249), -1);
+            font_print_center(0x100, freeze_stats_text_y + 0xA8, c1, get_help_message_text(0x5248), -1);
         }
         break;
     }
     case 2:
         draw_outlined_rect(0x64, 0xA0, 0xB0, 0x150,
-                     func_001FA6E0(D_0015F524, D_0015F528,
-                                  fast_sin((f32)(D_0015F438 % D_0015F520) / convert_integer_to_float(D_0015F520) * 6.28318f -
+                     func_001FA6E0(freeze_wave_color_a, freeze_wave_color_b,
+                                  fast_sin((f32)(D_0015F438 % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
                                       0.5f));
-        font_print_center(0x100, 0x7A, 0x8000C0C0, D_00193300.title, -1);
+        font_print_center(0x100, 0x7A, 0x8000C0C0, freeze.title, -1);
         break;
     default: {
-        MessageBox *mb = &D_00193300;
+        MessageBox *mb = &freeze;
         s32 pulse;
 
-        pulse = func_001FA6E0(D_0015F524, D_0015F528,
-                                  fast_sin((f32)(D_0015F438 % D_0015F520) / convert_integer_to_float(D_0015F520) * 6.28318f -
+        pulse = func_001FA6E0(freeze_wave_color_a, freeze_wave_color_b,
+                                  fast_sin((f32)(D_0015F438 % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
                                       0.5f);
-        draw_outlined_rect(0x50, D_0015F4EC + 0x1A, 0xB0, 0x150, pulse);
+        draw_outlined_rect(0x50, freeze_ans1_y + 0x1A, 0xB0, 0x150, pulse);
         if (mb->title != NULL) {
             font_print_center(0x100, 0x5A, 0x8000C0C0, mb->title, -1);
         }
         if (mb->line1 != NULL) {
-            font_print_center(0x100, D_0015F4E8, 0x80FFA888, mb->line1, -1);
+            font_print_center(0x100, freeze_ans2_y, 0x80FFA888, mb->line1, -1);
         }
         if (mb->line2 != NULL) {
-            font_print_center(0x100, D_0015F4EC, 0x80FFA888, mb->line2, -1);
+            font_print_center(0x100, freeze_ans1_y, 0x80FFA888, mb->line2, -1);
         }
         break;
     }

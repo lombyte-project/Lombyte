@@ -12,7 +12,7 @@ struct HelpMessageState {
 };
 
 extern struct HelpMessageState D_001996D0;
-extern HelpMsg *D_0015F6A0;
+extern HelpMsg *help_msgs __asm__("D_0015F6A0");
 s32 find_help_message_index(s32 message_id) __asm__("FUN_001fdca0");
 
 s32 find_help_message_index(s32 message_id) {
@@ -21,13 +21,13 @@ s32 find_help_message_index(s32 message_id) {
 
     i = 0;
     if (D_001996D0.unk2C > 0) {
-        if (D_0015F6A0[0].id == message_id) {
+        if (help_msgs[0].id == message_id) {
             found = 0;
         } else {
         next:
             i++;
             if (i < D_001996D0.unk2C) {
-                if (D_0015F6A0[i].id == message_id) {
+                if (help_msgs[i].id == message_id) {
                     found = i;
                 } else {
                     goto next;

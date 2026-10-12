@@ -35,7 +35,7 @@ extern u8 D_0019C150[];
 extern u8 D_0019C160[];
 extern s32 D_001940C0[];
 extern s32 D_0015F438;
-extern s32 D_00160F0C;
+extern s32 current_vu_chain __asm__("D_00160F0C");
 extern void FUN_0023a2c0();
 extern struct S D_00186F40;
 extern u8 D_001601C0 __attribute__((sda));
@@ -69,7 +69,7 @@ void FUN_00218f98(void) {
     d = b + 0xE0000;
     menu_system.unkFC = c + 0xC1000;
     menu_system.unk100 = d + 0x11800;
-    D_00160F0C = 0xA0000;
+    current_vu_chain = 0xA0000;
     menu_system.unk104 = a;
     menu_system.unk10 = b;
     menu_system.help_text_buffer = c;

@@ -10,8 +10,8 @@ extern char D_001E3000[];
 extern char D_001E4200[];
 extern char D_001E2A00[];
 extern char D_001E3E00[];
-extern char D_001E3200[];
-extern char D_001E4400[];
+extern char tie_light_data[] __asm__("D_001E3200");
+extern char tie_light_data2[] __asm__("D_001E4400");
 extern int D_0015EE78 MACRO_ADDR;
 extern int D_0015EE74 MACRO_ADDR;
 extern int D_00160F68 MACRO_ADDR;
@@ -52,7 +52,7 @@ void draw_ties_2(void) {
         if (d->tie.enabled != 0) {
             FlushCache(0);
             FUN_00235be8();
-            WriteDmaChannel(D_001E4400, 0x3600, 0x40);
+            WriteDmaChannel(tie_light_data2, 0x3600, 0x40);
         }
     }
     dma_tie_textures();
@@ -82,7 +82,7 @@ void draw_ties_2(void) {
         if (d->tie.enabled != 0) {
             FlushCache(0);
             FUN_00235be8();
-            WriteDmaChannel(D_001E3200, 0x3600, 0x40);
+            WriteDmaChannel(tie_light_data, 0x3600, 0x40);
         }
     }
     func_001F21B8(D_00160F40, 5);

@@ -14,7 +14,7 @@ struct LevelProjectionState {
 #include "rnc/rendering/screen.h"
 extern s32 game_frame_counter __asm__("D_0015F438");
 extern f32 sequence_fade __asm__("D_0015F43C");
-extern s32 D_0015F620;
+extern s32 font_state __asm__("D_0015F620");
 extern s32 D_0018CB54[];
 extern s32 D_0018CC98[];
 extern struct LevelProjectionState view_context __asm__("D_0018CD00");
@@ -57,7 +57,7 @@ void render_level_frame(void) {
     prune_moby_references();
     reset_gs_registers();
     saved_projection_scale = view_context.projection_scale;
-    D_0015F620 = -1;
+    font_state = -1;
     if (saved_projection_scale < 0.63f) {
         view_context.projection_scale = 0.63f;
     }

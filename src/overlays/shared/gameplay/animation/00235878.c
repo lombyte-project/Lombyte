@@ -537,8 +537,8 @@ extern int current_level_index __asm__("D_0015ED84");
 extern int current_level_index_sda __asm__("D_0015ED84") __attribute__((sda));
 extern int D_L00_0015F770 __attribute__((sda));
 extern unsigned char D_L00_0017E530[];
-extern int D_0015EE58[];
-extern int D_0015EE68[];
+extern int freeze_stats_time_ref_a[] __asm__("D_0015EE58");
+extern int freeze_stats_score_ref_a[] __asm__("D_0015EE68");
 extern float D_0013F3D0[];
 
 extern float FUN_00200240(unsigned int) __asm__("FUN_001fa6c0");
@@ -633,8 +633,8 @@ int FUN_L00_00237200(HudElem *e) {
             *(int *)0x15f648 = y + 100;
             extra = 4;
             if (current_level_index_sda != 0x10) extra = 0;
-            elapsed = *(int *)((char *)D_0015EE58 + extra);
-            extra = *(int *)((char *)D_0015EE68 + extra);
+            elapsed = *(int *)((char *)freeze_stats_time_ref_a + extra);
+            extra = *(int *)((char *)freeze_stats_score_ref_a + extra);
             if (elapsed != 0) {
                 interval = pal_mode != 0 ? 3000 : 3600;
                 minute_scale = interval / 60;

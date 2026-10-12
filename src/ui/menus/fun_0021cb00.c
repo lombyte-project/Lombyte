@@ -1,9 +1,9 @@
 #include "sda.h"
 extern int D_0015EDF0 MACRO_ADDR;
-extern int D_0013E5A0 NOT_SDA;
+extern int pause_sound_volume __asm__("D_0013E5A0") NOT_SDA;
 
 int FUN_0021cb00(void) {
-    D_0013E5A0 = D_0015EDF0 * 8 / 10;
+    pause_sound_volume = D_0015EDF0 * 8 / 10;
     return 0;
 }
 

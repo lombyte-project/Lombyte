@@ -74,9 +74,9 @@ s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *m, s32 mode)
         d.f[2] += 0.39081999659538269043f;
         qcopy(&e, &v->vel);
         if (hero.state.control_mode == 15)
-            add_vector_xyz_2c8440(&e, &e, &hero.motion.unk100);
+            add_vector_xyz_2c8440(&e, &e, &hero.motion.displacement);
         if (hero.ground_moby && FUN_L00_002603d0_2c8440((int)hero.ground_moby) && mode)
-            add_vector_xyz_2c8440(&e, &e, &hero.motion.unk100);
+            add_vector_xyz_2c8440(&e, &e, &hero.motion.displacement);
         t = scale_game_frames_2c8440(300);
     } else {
         u8 *holder_vars = v->holder->pvars;
@@ -294,9 +294,9 @@ struct Moby *FUN_L00_002c9348(State *a) {
 
     n = (struct Moby *)create_moby(0x10E);
     if (n != NULL) {
-        n->unk30 = 0x7F;
-        n->unk32 = 0x7F;
-        n->unk31 = 1;
+        n->update_dist = 0x7F;
+        n->draw_dist = 0x7F;
+        n->visible = 1;
         s2 = (Sub *)n->pvars;
         if ((a->flags34 & 0x20) != 0) {
             o = a->unk78->unk0C;
@@ -308,7 +308,7 @@ struct Moby *FUN_L00_002c9348(State *a) {
         } else {
             n->spawn_frame = a->unk38;
         }
-        n->unk58 = random_float_between(0.85f, 1.15f);
+        n->anim_speed = random_float_between(0.85f, 1.15f);
         qcopy(&n->pos, &a->pos);
         clear_u64_value(&n->rot);
         n->rot.z = FUN_001f9e90(n->pos.x - hero.motion.pos.f[0], n->pos.y - hero.motion.pos.f[1]);
@@ -328,7 +328,7 @@ struct Moby *FUN_L00_002c9348(State *a) {
             n->rot.x = -g;
             n->rot.y = FUN_001f9e90(loc.t3, loc.t1);
         }
-        n->unk94 = ((Part *)n->pclass)->unk10;
+        n->collision = ((Part *)n->pclass)->unk10;
         FUN_0022da68_c(1, 0, n);
         n->state = 1;
         s2->unk66 = 0;
@@ -337,7 +337,7 @@ struct Moby *FUN_L00_002c9348(State *a) {
         s2->unk70 = -1;
         s2->unk78 = g * 3.0f + 1.0f;
         s2->unk74 = D_0013E520[0x15];
-        n->unkBC = s2->unk74;
+        n->command = s2->unk74;
         FUN_L00_00257470(a, 0, -1);
         q = FUN_002141f8(a);
         if (q != NULL && *(u8 *)((u8 *)q + 0xE) == 1) {
@@ -497,9 +497,9 @@ struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Mob
     if (m != 0) {
     vars = m->pvars;
     *(struct Moby **)(vars + 0x20) = source;
-    m->unk31 = 1;
-    m->unk30 = 0x7f;
-    m->unk32 = 0x7f;
+    m->visible = 1;
+    m->update_dist = 0x7f;
+    m->draw_dist = 0x7f;
     m->spawn_frame = source->spawn_frame;
     *(f32 *)((u8 *)m + 0x40) = D_L00_00161890_2caf70;
     *(f32 *)((u8 *)m + 0x44) = FUN_002000e8_2caf70(speed, D_L00_00161894_2caf70);
@@ -1592,7 +1592,7 @@ void FUN_L00_002cd1f0(struct Moby *m)
             if (coll_hit_2c8440.moby == 0) {
                 if (coll_hit_2c8440.unk1C <= 0)
                     goto bounce_only;
-                m->unkBC = 1;
+                m->command = 1;
                 qcopy(&m->pos, &coll_hit_2c8440.point);
                 FUN_001ff660_2cd1f0(&vector_scratch.bounce, &query, &coll_hit_normal_2c8440);
                 FUN_001ff500_2cd1f0(&vector_scratch.bounce, &vector_scratch.bounce, frame_time + frame_time);
@@ -1602,7 +1602,7 @@ void FUN_L00_002cd1f0(struct Moby *m)
                 player = D_001413D0_2ccee0;
                 if (other == (struct Moby *)player || other == v->owner || other->oclass == 0x1c9 || other->oclass == 0)
                     goto bounce_only;
-                m->unkBC = 2;
+                m->command = 2;
                 qcopy(&m->pos, &coll_hit_2c8440.point);
                 FUN_001ff660_2cd1f0(&vector_scratch.bounce, &query, &coll_hit_normal_2c8440);
                 FUN_001ff500_2cd1f0(&vector_scratch.bounce, &vector_scratch.bounce, frame_time + frame_time);
@@ -2011,7 +2011,7 @@ void FUN_L00_002ce358(struct Moby *m)
     goto update_effects;
 state2:
     {
-        m->unk94 = 0;
+        m->collision = 0;
         qcopy(&old_pos, &m->pos);
         FUN_L00_002cde78((char *)m);
         f = frame_scale * 0.05f;
@@ -2039,7 +2039,7 @@ state2:
         subtract_vector_xyz_2c8440(&target_pos, &target_pos, &m->pos);
         FUN_001ff598_2ce358(&target_pos, &target_pos, D_0015ED6C_2c8440 * 10.0f);
         if (FUN_00258830_2ce358(0.0f, 0.18f, 0.0f, m, &target_pos, 0) & 1) {
-            if (!m->unk31) {
+            if (!m->visible) {
                 add_vector_xyz_2c8440(&m->pos, &D_L00_00166DC0_2ce358, &D_L00_00166FF0_2ce358);
                 subtract_vector_xyz_2c8440(&m->pos, &m->pos, &D_L00_00166FD0_2ce358);
             }
@@ -2082,10 +2082,10 @@ update_rotations:
     }
 state3:
     {
-        m->unk94 = m->pclass->unk10;
+        m->collision = m->pclass->collision;
         qcopy(&old_pos, &m->pos);
         m->scale += (m->pclass->scale - m->scale) * (frame_scale * 0.05f);
-        m->unk94 = m->pclass->unk10;
+        m->collision = m->pclass->collision;
         FUN_L00_002cde78((char *)m);
         target = v->target;
         if (target == 0 || target->oclass != v->target_oclass || target->state == 0xfe || target->state == 0xfd) {
@@ -2150,8 +2150,8 @@ state4:
             FUN_001ff598_2ce358(&v->position, &v->position, frame_scale * 0.9f);
             add_vector_xyz_2c8440(&m->pos, &m->pos, &v->position);
         }
-        m->unk23 -= 4;
-        if (m->unk23 < 6)
+        m->alpha -= 4;
+        if (m->alpha < 6)
             m->state = 5;
         goto update_effects;
     }
@@ -2297,7 +2297,7 @@ void crate_update(struct Moby *moby) {
         if (D_0015ED84 == 0x12 && moby->oclass == 0x1FF && pv->unkC8 != 0) {
             moby->state = 6;
             moby->flags |= 0x41;
-            moby->unk94 = 0;
+            moby->collision = 0;
             moby->flags &= ~0x1000;
         } else {
             moby->state = 1;
@@ -2319,7 +2319,7 @@ void crate_update(struct Moby *moby) {
             (hero.unk240 == (s32)moby || hero.coll_hit_moby == (u8 *)moby ||
              (hero.ground_moby == moby && hero.air_frames.s == 0) ||
              hero.unk4F8 == (s32)moby || touched)) {
-            moby->unkBC = 0;
+            moby->command = 0;
             moby->state = 5;
             break;
         }
@@ -2333,9 +2333,9 @@ void crate_update(struct Moby *moby) {
         if (moby->oclass == 0x1F9) {
             moby->state = 5;
             if (other->hit.s.flags & 0x20000) {
-                moby->unkBC = 1;
+                moby->command = 1;
             } else {
-                moby->unkBC = truncate_float_to_s32(FUN_001f96b0(random_float_between(5.0f, 15.0f)));
+                moby->command = truncate_float_to_s32(FUN_001f96b0(random_float_between(5.0f, 15.0f)));
             }
             pv->unkB8 = moby->spawn_frame;
             doHit = 0;
@@ -2357,12 +2357,12 @@ void crate_update(struct Moby *moby) {
             }
             if (moby->oclass != 0x1FE) {
                 moby->oclass++;
-                moby->unk22 = D_L00_00197BC0[moby->oclass];
-                moby->pclass = D_L00_00197300[moby->unk22];
+                moby->class_slot = D_L00_00197BC0[moby->oclass];
+                moby->pclass = D_L00_00197300[moby->class_slot];
                 FUN_0020c880(moby);
                 moby->unk72 = ((Part *)moby->pclass)->unkE;
                 moby->state = 2;
-                moby->unkBC = scale_game_frames(15);
+                moby->command = scale_game_frames(15);
                 doHit = 0;
             }
         }
@@ -2386,8 +2386,8 @@ void crate_update(struct Moby *moby) {
         break;
 
     case 2:
-        if (--moby->unkBC == 0xFF) {
-            moby->unkA4 = 0xFF;
+        if (--moby->command == 0xFF) {
+            moby->hit_slot = 0xFF;
             moby->state = 1;
         }
         break;
@@ -2400,7 +2400,7 @@ void crate_update(struct Moby *moby) {
             burst.unk1C = 2.0f;
             clear_u64_value(&burst.pos);
             burst.unk20 = 0;
-            normalize_vector_xyz(&at, &moby->unkE0, 0.5f);
+            normalize_vector_xyz(&at, &moby->rot_row2, 0.5f);
             add_vector_xyz(&at, &at, &moby->pos);
             r = FUN_001fa6c0(pv->unkCA) / FUN_001f96b0(20.0f);
             burst.unk14 = 1;
@@ -2412,9 +2412,9 @@ void crate_update(struct Moby *moby) {
         }
         if (pv->unkC8 != 0) {
             moby->flags |= 1;
-            moby->unk94 = 0;
+            moby->collision = 0;
             moby->flags &= ~0x1000;
-            moby->unk31 = 0;
+            moby->visible = 0;
             if (moby->unkB4 >= 2) {
                 moby->unkB4 = 1;
             }
@@ -2433,7 +2433,7 @@ void crate_update(struct Moby *moby) {
         qcopy(&burst.pos, &moby->pos);
         burst.pos.z += 0.5f;
         burst.pos.w = 1.0f;
-        if (FUN_001fa728(&burst.pos, moby->unk32) != -1) {
+        if (FUN_001fa728(&burst.pos, moby->draw_dist) != -1) {
             break;
         }
         if (!FUN_L00_001fefc8(&pv->unkC9)) {
@@ -2441,9 +2441,9 @@ void crate_update(struct Moby *moby) {
         }
         if (moby->group == 0xFF) {
             moby->state = 1;
-            moby->unk31 = 1;
+            moby->visible = 1;
             moby->flags &= ~1;
-            moby->unk94 = ((Part *)moby->pclass)->unk10;
+            moby->collision = ((Part *)moby->pclass)->unk10;
             moby->flags |= 0x1000;
             break;
         }
@@ -2485,9 +2485,9 @@ void crate_update(struct Moby *moby) {
                     pv->below = it;
                     pv->rider = NULL;
                     moby->state = 1;
-                    moby->unk31 = 1;
+                    moby->visible = 1;
                     moby->flags &= ~1;
-                    moby->unk94 = ((Part *)moby->pclass)->unk10;
+                    moby->collision = ((Part *)moby->pclass)->unk10;
                     moby->flags |= 0x1000;
                     pv->flags |= 4;
                     break;
@@ -2500,45 +2500,45 @@ void crate_update(struct Moby *moby) {
             moby->state = 1;
             pv->rider = NULL;
             pv->below = NULL;
-            moby->unk31 = 1;
+            moby->visible = 1;
             moby->flags &= ~1;
-            moby->unk94 = ((Part *)moby->pclass)->unk10;
+            moby->collision = ((Part *)moby->pclass)->unk10;
             moby->flags |= 0x1000;
         }
         break;
     }
 
     case 5:
-        if (moby->unkBC == 0) {
-            moby->unkBC = scale_game_frames(60) * 3 - 1;
+        if (moby->command == 0) {
+            moby->command = scale_game_frames(60) * 3 - 1;
             pv->unkB8 = moby->spawn_frame;
-        } else if (moby->unkBC > scale_game_frames(15) && other != NULL) {
-            moby->unkBC = truncate_float_to_s32(FUN_001f96b0(random_float_between(5.0f, 15.0f)));
+        } else if (moby->command > scale_game_frames(15) && other != NULL) {
+            moby->command = truncate_float_to_s32(FUN_001f96b0(random_float_between(5.0f, 15.0f)));
         }
-        if (moby->unkBC % scale_game_frames(60) == scale_game_frames(60) - 3 ||
-            moby->unkBC == scale_game_frames(13)) {
+        if (moby->command % scale_game_frames(60) == scale_game_frames(60) - 3 ||
+            moby->command == scale_game_frames(13)) {
             allocate_voice_for_target_entry(1, 0x20, (char *)moby);
         }
-        if (moby->unkBC % scale_game_frames(60) > scale_game_frames(40) ||
-            moby->unkBC < scale_game_frames(15)) {
+        if (moby->command % scale_game_frames(60) > scale_game_frames(40) ||
+            moby->command < scale_game_frames(15)) {
             FUN_L00_002502f0(moby, 0xC8, 0x40, 0x40);
         } else {
             moby->spawn_frame = pv->unkB8;
         }
-        if (moby->unkBC == 1 || D_001413DC == 0x16) {
+        if (moby->command == 1 || D_001413DC == 0x16) {
             moby->spawn_frame = pv->unkB8;
             break_crate(moby, 1, NULL);
             crate_drop_bolts(moby);
         }
-        moby->unkBC--;
+        moby->command--;
         break;
 
     case 4:
-        if (FUN_L00_001fefc8(&moby->unkBC)) {
+        if (FUN_L00_001fefc8(&moby->command)) {
             moby->state = 1;
             moby->flags &= ~1;
         }
         break;
     }
-    moby->unkA4 = 0xFF;
+    moby->hit_slot = 0xFF;
 }

@@ -32,7 +32,7 @@ struct LightRecord {
 extern s32 D_001603D4[];
 extern s32 D_00160E8C[];
 extern s32 D_00160F50[];
-extern u8 D_0019C3C0[];
+extern u8 point_light_data[] __asm__("D_0019C3C0");
 extern u8 D_001E7B50[];
 extern u8 D_001E7B70[];
 extern u8 D_001E7B98[];
@@ -62,7 +62,7 @@ void detach_point_light(s32 light_index) {
     struct LightRecord *light_entry;
 
     temp_30_16 = light_index & 0xFFFF;
-    light_entry = (light_index * 0x30) + D_0019C3C0;
+    light_entry = (light_index * 0x30) + point_light_data;
     temp_22_33 = (light_index * 0x10) & 0xFFFF;
     temp_21_24 = (light_index << 8) & 0xFFFF;
     var_17_29 = light_entry->unkC + (light_entry->unk0 * 2);

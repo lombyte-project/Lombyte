@@ -371,12 +371,12 @@ char *FUN_L09_002c2500(struct Moby *src, char *pos, int cls) {
         FUN_L00_00250df8(m);
         moby_point_position(m, 0, &v0);
         subtract_vector_xyz(&v1, pos, &v0);
-        FUN_001f9cf8(&v1, &v1, &src->unkC0);
+        FUN_001f9cf8(&v1, &v1, &src->rot_row0);
         add_vector_xyz(p, pos, &v1);
         qcopy(m + 0x40, &src->rot);
-        *(OvlQuad *)(m + 0xC0) = *(OvlQuad *)&src->unkC0;
-        *(OvlQuad *)(m + 0xD0) = *(OvlQuad *)&src->unkD0;
-        *(OvlQuad *)(m + 0xE0) = *(OvlQuad *)&src->unkE0;
+        *(OvlQuad *)(m + 0xC0) = *(OvlQuad *)&src->rot_row0;
+        *(OvlQuad *)(m + 0xD0) = *(OvlQuad *)&src->rot_row1;
+        *(OvlQuad *)(m + 0xE0) = *(OvlQuad *)&src->rot_row2;
         FUN_L00_00250df8(m);
     }
     return m;
@@ -568,12 +568,12 @@ struct Moby *FUN_L09_002eaa50(struct Moby *owner) {
         vars->path = ovars->path;
         vars->unk48 = 1;
         vars->unk14 = 0;
-        m->unkBC = 1;
-        m->unk31 = 1;
-        m->unk30 = 0xFF;
-        m->unk32 = 0xFF;
+        m->command = 1;
+        m->visible = 1;
+        m->update_dist = 0xFF;
+        m->draw_dist = 0xFF;
         glow_n(m, 0x80, 0x80, 0x80);
-        m->unk23 = 0;
+        m->alpha = 0;
         m->scale *= random_float_2eaa50(0.4f, 0.85f);
         vars->spin_x = random_float_2eaa50(-0.0052359877f, 0.0052359877f);
         vars->spin_y = random_float_2eaa50(-0.0052359877f, 0.0052359877f);
@@ -851,8 +851,8 @@ void FUN_L09_002eaea8(Moby *m) {
         m->state++;
         if (d->target[2] == 25.0f) {
             int j;
-            m->unk32 = 0;
-            m->unk31 = 0;
+            m->draw_dist = 0;
+            m->visible = 0;
             qcopy(v2, d->pos);
             v2[2] = 25.0f;
             for (j = 1; j >= 0; j--) {
@@ -965,7 +965,7 @@ void FUN_L09_002eb970(struct Moby *m) {
         FUN_L09_002eaea8_c((void *)m);
         return;
     }
-    if (m->unkBC == 0 && d->init == 0) {
+    if (m->command == 0 && d->init == 0) {
         d->speed = D_0015ED6C_c * 10.0f;
         d->centre[0] = d->centre[1] = d->centre[2] = 0.0f;
         if (d->path >= 0) {
@@ -1003,19 +1003,19 @@ void FUN_L09_002eb970(struct Moby *m) {
         }
         d->init = 1;
     }
-    if (m->unkBC == 0) {
+    if (m->command == 0) {
         if (random_integer_below_c3(scale_game_frames(40)) == 0) {
             func_L09_002EBA58_2ECC50();
         }
     }
-    m->unk30 = 0xFF;
-    m->unk32 = 0xFF;
+    m->update_dist = 0xFF;
+    m->draw_dist = 0xFF;
     if (d->path < 0) {
         return;
     }
     qcopy_nc(((f32 *)&m->pos), d->target);
     path = D_L09_001B0930_2ECC50[d->path];
-    if (m->unkBC == 0 && d->count < 50 && fast_dec_timer(&d->timer)) {
+    if (m->command == 0 && d->count < 50 && fast_dec_timer(&d->timer)) {
         d->timer = scale_game_frames(15) + random_integer_below_c3(scale_game_frames(30));
         func_L09_002EBD30_2ECC50(m);
     }
@@ -1023,7 +1023,7 @@ void FUN_L09_002eb970(struct Moby *m) {
     m->rot.y = fast_add_rotations_c2(m->rot.y, d->f44);
     d->node = func_L09_00295880_2ECC50(m, path, ((f32 *)&m->pos), d->node, 1, d->speed);
     if (d->node == path->n - 1) {
-        if (m->unkBC != 0) {
+        if (m->command != 0) {
             (*(Data_2ECC50 **)&(*(Data_2ECC50 **)&m->pvars)->owner->pvars)->count--;
             mark_moby_for_removal_c2(m);
         } else {
@@ -1040,9 +1040,9 @@ void FUN_L09_002eb970(struct Moby *m) {
         if (dot < 0.0f) {
             dot = 0.0f;
         }
-        m->unk23 = (int)(dot * 128.0f / len);
-        if (m->unk23 > 0x80) {
-            m->unk23 = 0x80;
+        m->alpha = (int)(dot * 128.0f / len);
+        if (m->alpha > 0x80) {
+            m->alpha = 0x80;
         }
     } else if (d->node == path->n - 2) {
         subtract_vector_xyz(v0, path->pts[path->n - 2], path->pts[path->n - 1]);
@@ -1053,12 +1053,12 @@ void FUN_L09_002eb970(struct Moby *m) {
         if (dot < 0.0f) {
             dot = 0.0f;
         }
-        m->unk23 = (int)(dot * 128.0f / len);
-        if (m->unk23 > 0x80) {
-            m->unk23 = 0x80;
+        m->alpha = (int)(dot * 128.0f / len);
+        if (m->alpha > 0x80) {
+            m->alpha = 0x80;
         }
     } else {
-        m->unk23 = 0x80;
+        m->alpha = 0x80;
     }
     qcopy(d->target, ((f32 *)&m->pos));
     add_vector_xyz(((f32 *)&m->pos), ((f32 *)&m->pos), d);
@@ -1160,7 +1160,7 @@ void FUN_L09_002ee110(struct Moby *m) {
             return;
         }
     }
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
 }
 typedef unsigned int u128_ee380 __attribute__((mode(TI)));
 #include "qcopy.h"
@@ -1304,9 +1304,9 @@ struct Moby *FUN_L09_002ef868(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, 
     if (m != 0) {
         d = (struct DebrisVars *)m->pvars;
         d->src = src;
-        m->unk30 = 0x7F;
-        m->unk32 = 0x7F;
-        m->unk31 = 1;
+        m->update_dist = 0x7F;
+        m->draw_dist = 0x7F;
+        m->visible = 1;
         m->spawn_frame = src->spawn_frame;
         m->rot.x = random_angle_radians();
         m->rot.y = random_angle_radians();
@@ -1407,8 +1407,8 @@ char *FUN_L09_002efda8(struct Moby *owner, void *position, float angle) {
     if (moby != 0) {
         unsigned char state;
 
-        ((unsigned char *)moby)[0x30] = owner->unk30;
-        state = owner->unk30;
+        ((unsigned char *)moby)[0x30] = owner->update_dist;
+        state = owner->update_dist;
         moby[0x31] = 1;
         *(short *)(moby + 0x32) = state;
         qcopy(moby + 0x10, copy);
@@ -1449,11 +1449,11 @@ char *FUN_L09_002efe48(void *unused, float lower_radius, float upper_radius, voi
         add_vector_xyz(&MOBY(moby)->pos, &MOBY(moby)->pos, origin);
         add_vector_xyz(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);
         scale_vector_xyz(data, data, 0.35f);
-        MOBY(moby)->unk58 *= 0.5f;
+        MOBY(moby)->anim_speed *= 0.5f;
         MOBY(moby)->rot.z = angle_atan2(*(float *)data, *(float *)(data + 4));
-        MOBY(moby)->unk30 = 0xFF;
-        MOBY(moby)->unk32 = 0xFF;
-        MOBY(moby)->unk31 = 1;
+        MOBY(moby)->update_dist = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
+        MOBY(moby)->visible = 1;
         pi -= difference;
         MOBY(moby)->scale *= (3.1415927f - difference) + (3.1415927f - difference) + 1.0f;
         FUN_L00_00250df8(moby);
@@ -1467,7 +1467,7 @@ void FUN_L09_002f0040(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     FUN_001f9a10(&moby->pos, &moby->pos, data);
     FUN_001f9a68(data, data, 1.0f + frame_scale * -0.019999980926513672f);
-    if (moby->unk70 & 2) {
+    if (moby->anim_flags & 2) {
         delete_moby(moby);
     }
 }
@@ -1574,8 +1574,8 @@ void FUN_L09_002f86a0(Moby *moby)
         func_001F9908_2F9A50(&data->timer);
         fast_vec_sub(&hero_offset, (D_0013E633_2F9A50 + 0x80), &(*(Vec_2F9A50 *)&moby->pos));
         deg_to_rad = 0.01745329238474369f;
-        side_dot = func_001F9C78_2F9A50(&hero_offset, &(*(Vec_2F9A50 *)&moby->unkC0));
-        front_dot = func_001F9C78_2F9A50(&hero_offset, &(*(Vec_2F9A50 *)&moby->unkD0));
+        side_dot = func_001F9C78_2F9A50(&hero_offset, &(*(Vec_2F9A50 *)&moby->rot_row0));
+        front_dot = func_001F9C78_2F9A50(&hero_offset, &(*(Vec_2F9A50 *)&moby->rot_row1));
         tilt = D_L09_001619F4;
         pitch_target = tilt * side_dot;
         *(u128 *)&old_angles = *(u128 *)&data->ang;
@@ -1594,8 +1594,8 @@ void FUN_L09_002f86a0(Moby *moby)
         }
         func_L07_00289960_2F9A50((D_0013E633_2F9A50 + 0x80), &carried_pos, &(*(Vec_2F9A50 *)&moby->pos), &old_angles, &data->ang);
         fast_vec_sub(D_0013E633_2F9A50 + 0xF0, &carried_pos, (D_0013E633_2F9A50 + 0x80));
-        ((Hero *)D_0013E633_2F9A50)->motion.unkF0.f[2] =
-            ((Hero *)D_0013E633_2F9A50)->motion.unkF0.f[2] + ((*(Vec_2F9A50 *)&moby->pos).z - old_pos.z);
+        ((Hero *)D_0013E633_2F9A50)->motion.platform_delta.f[2] =
+            ((Hero *)D_0013E633_2F9A50)->motion.platform_delta.f[2] + ((*(Vec_2F9A50 *)&moby->pos).z - old_pos.z);
     } else {
         float deg_to_rad = 0.01745329238474369f;
         func_L00_0025CCF0_2F9A50(&data->ang.x, 0.0f, &data->angvel.x, 0,

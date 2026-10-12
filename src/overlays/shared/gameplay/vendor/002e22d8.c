@@ -264,7 +264,7 @@ extern int FUN_0022da68_i(int, int, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, char *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern float FUN_L00_00257c48(float, float);
+extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void mark_moby_for_removal_u(char *) __asm__("FUN_0020c828");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_0025d458(void *, void *);
@@ -310,7 +310,7 @@ void FUN_L16_002e2b60(struct Moby *m) {
                     FUN_0022da68_i(3, 0, m);
                     *(unsigned char *)(d + 0x67) = 120;
                     *(float *)(d + 0x188) =
-                        FUN_L00_00257c48(30.0f, 50.0f) * DEG_TO_RAD * D_0015ED6C_e;
+                        randf_sym(30.0f, 50.0f) * DEG_TO_RAD * D_0015ED6C_e;
                 }
             } else {
                 FUN_0022da68_i(3, 0, m);
@@ -332,7 +332,7 @@ void FUN_L16_002e2b60(struct Moby *m) {
         }
         FUN_L00_0025d458(m, d + 0x60);
     }
-    m->unkA4 = 255;
+    m->hit_slot = 255;
     FUN_L00_0025d538(m, d + 0x60);
     if (*(int *)(d + 0xD0) != -1 && D_001413DC[0] != 22) {
         char *path = D_L16_001B0930[*(int *)(d + 0xD0)];
@@ -452,7 +452,7 @@ void FUN_L16_002e5708(struct Moby *m) {
     switch (m->state) {
     case 0:
         m->state = 1;
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         break;
     case 1:
         cycle = *(float *)(d + 0xC) + *(float *)&D_L16_00161E04_d * frame_time;
@@ -469,10 +469,10 @@ void FUN_L16_002e5708(struct Moby *m) {
             p[i] = fast_add_rotations(p[i],
                                       ((float *)&D_L16_00161E08_d)[i] * DEG_TO_RAD * frame_time);
         }
-        if (m->unk31)
+        if (m->visible)
             enqueue_callback_list_1_alt(FUN_L16_002e58d8_u, m);
         if (*(int *)(d + 0x20) != -1 && FUN_L16_002e5cd0(*(int *)(d + 0x20))) {
-            m->unk94 = 0;
+            m->collision = 0;
             m->state = 2;
             FUN_L16_002e5d30_c(*(int *)(d + 0x20));
         }
@@ -480,7 +480,7 @@ void FUN_L16_002e5708(struct Moby *m) {
     case 2:
         if (!FUN_L16_002e5cd0(*(int *)(d + 0x20))) {
             m->state = 1;
-            m->unk94 = m->pclass->unk10;
+            m->collision = m->pclass->collision;
         }
         break;
     }

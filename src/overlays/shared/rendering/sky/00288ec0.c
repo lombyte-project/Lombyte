@@ -128,7 +128,8 @@ extern char *D_L00_0016051C;
 void FUN_001f9fc8();
 void FUN_0022b690();
 /* Runs FUN_001f9fc8 on D_L00_001BD7E0 and draws each sky shell. */
-void FUN_L00_002892d0(void) {
+void update_sky_shells_static(void) __asm__("FUN_L00_002892d0");
+void update_sky_shells_static(void) {
     int i;
     FUN_001f9fc8(D_L00_001BD7E0);
     for (i = 0; i < *(short *)(D_L00_0016051C + 6); i++)
@@ -148,7 +149,8 @@ extern void FUN_001f9fc8_c(void *) __asm__("FUN_001f9fc8");
 void FUN_001fa070(void *, void *);
 void sky_draw_shell(s32 shell_index) __asm__("FUN_0022b690");
 
-void FUN_L00_00289420(void) {
+void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
+void update_sky_shells_animated(void) {
     float v[4] __attribute__((aligned(16)));
     int i;
     *(short *)(D_L00_0016051C + 4) = 0;

@@ -30,7 +30,7 @@ typedef struct {
 extern Checkpoints D_0013D290;
 #include "rnc/gameplay/state/item_state.h"
 extern u8 D_0014BEC0[];
-extern s32 D_00141EA0[];
+extern s32 pause_iop_sprite_lists[] __asm__("D_00141EA0");
 extern u8 D_0015EDD0[] MACRO_ADDR;
 extern s32 D_0015EDA0;
 extern u8 D_0015EE1C;
@@ -59,7 +59,7 @@ void FUN_00226b08(s32 slot) {
     func_001F9838((void *)0x70000030, item_available, 0x25);
     func_001F9838((void *)0x70000060, weapon_ammo_counts, 0x94);
     func_001F9838((void *)0x70000100, D_0014BEC0, 0x50);
-    func_001F9838((void *)0x70000150, D_00141EA0, 0x20);
+    func_001F9838((void *)0x70000150, pause_iop_sprite_lists, 0x20);
     func_001F9838((void *)0x70000170, D_0015EDD0, 0xC);
     func_001F9838((void *)0x70000180, item_unlocked, 0x20);
     saved = current_bolt_count;
@@ -76,7 +76,7 @@ void FUN_00226b08(s32 slot) {
     func_001F9838(D_0014BEC0, (void *)0x70000100, 0x50);
     for (i = 0; i < 8; i++) {
         s32 item = items[i];
-        D_00141EA0[i] = item_available[item] ? item : 0;
+        pause_iop_sprite_lists[i] = item_available[item] ? item : 0;
     }
     func_001F9838(D_0015EDD0, (void *)0x70000170, 0xC);
     func_001F9838(item_unlocked, (void *)0x70000180, 0x20);

@@ -4,7 +4,7 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
 
-extern u8 D_00151704[];
+extern u8 music_player_main[] __asm__("D_00151704");
 extern void snd_set_sound_params_cb(s32, s32, s32, s32, s32, s32,
                                     void (*)(u32, s64), s64) __asm__("func_0012E4C0");
 extern void set_sound_handle_id(u32, s64) __asm__("func_00216B68");

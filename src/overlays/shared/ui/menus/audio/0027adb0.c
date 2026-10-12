@@ -8,18 +8,18 @@ typedef struct {
     s32 c;
     s32 d;
 } E_27adb0;
-extern s32 D_0015EE30;
-extern u8 D_00141E08[];
+extern s32 active_message_record_count __asm__("D_0015EE30");
+extern u8 active_message_records[] __asm__("D_00141E08");
 extern u16 D_L00_00179452[];
 extern E_27adb0 D_L00_001B3D40[];
 /* Fills D_L00_001B3D40 from the D_00141E08 table in reverse order, then ends it with 0. */
 s32 FUN_L00_0027adb0(void) {
     s32 i, j;
-    for (i = 0; i < D_0015EE30; i = j) {
+    for (i = 0; i < active_message_record_count; i = j) {
         j = i + 1;
         D_L00_001B3D40[i].b = 1;
-        D_L00_001B3D40[i].a = *(u16 *)((char *)D_L00_00179452 + D_00141E08[D_0015EE30 - j] * 4);
+        D_L00_001B3D40[i].a = *(u16 *)((char *)D_L00_00179452 + active_message_records[active_message_record_count - j] * 4);
     }
-    D_L00_001B3D40[*(volatile s32 *)&D_0015EE30].a = 0;
+    D_L00_001B3D40[*(volatile s32 *)&active_message_record_count].a = 0;
     return 0;
 }

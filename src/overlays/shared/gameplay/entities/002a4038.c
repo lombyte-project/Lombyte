@@ -89,7 +89,7 @@ extern float D_L02_001612FC;
 extern float D_L02_00161300;
 extern float D_L02_00161304;
 extern char D_L02_001673C0[];
-extern char D_0010E810[];
+extern char font_vu_program[] __asm__("D_0010E810");
 extern char D_L02_001CB8F0[];
 extern QuadFrame D_L02_0016D780[];
 extern char *D_L02_0015F420;
@@ -128,7 +128,7 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     FUN_001f9ff8(view_matrix, 1024.0f);
     setup_offset_vector(&view_matrix[12], D_L02_001673C0, -1024.0f);
     view_matrix[15] = 1.0f;
-    FUN_00233830(D_0010E810, D_0010E800_ref[0]);
+    FUN_00233830(font_vu_program, D_0010E800_ref[0]);
     PACKET_CURSOR[0] = 0x10000000;
     PACKET_CURSOR[1] = 0;
     PACKET_CURSOR[2] = 0x11000000;
@@ -520,7 +520,7 @@ void FUN_L02_002d8ad0(Moby *moby) {
         D_L02_001D3680_2D9F08[3][1] = -17.0f;
         D_L02_001D3680_2D9F08[0][0] = 17.0f;
         D_L02_00161BAC_2D9F08 = data->iEC;
-        if (moby->unkB0 != 0xFF) {
+        if (moby->mission != 0xFF) {
             if (D_L02_001BBB40_2D9F08.collected[(short)moby->save_id] != 0
                 || (((int *)(D_0014C290_2D9F08 + (D_0015EE84_2D9F08 << 8)))[(short)moby->save_id >> 5] >> (moby->save_id & 0x1F)) & 1) {
                 moby->state = 4;
@@ -536,13 +536,13 @@ void FUN_L02_002d8ad0(Moby *moby) {
                 func_0022ED80_2D9F08(3, 0, moby);
             }
             if (((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby != 0 && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].item_id == 0x1A) {
-                moby->unk90 = D_L02_00161B30_2D9F08;
+                moby->glow_color = D_L02_00161B30_2D9F08;
                 holding_tool = 1;
             } else {
-                moby->unk90 = D_L02_00161B34_2D9F08;
+                moby->glow_color = D_L02_00161B34_2D9F08;
                 holding_tool = 0;
             }
-            if (holding_tool && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby->unkBC != 0) {
+            if (holding_tool && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby->command != 0) {
                 data->h10 = func_001F9850_2D9F08(0x12C);
                 data->h11C = 0;
                 data->h11E = 0;
@@ -557,7 +557,7 @@ void FUN_L02_002d8ad0(Moby *moby) {
             }
         } else {
             data->h12 = 0;
-            moby->unk90 = D_L02_00161B38_2D9F08;
+            moby->glow_color = D_L02_00161B38_2D9F08;
         }
         break;
     case 2:
@@ -656,13 +656,13 @@ void FUN_L02_002d8ad0(Moby *moby) {
         break;
     case 3:
         if (D_0013F450_2D9F08.unkA98 & 2) {
-            if (moby->unkB0 != 0xFF) {
+            if (moby->mission != 0xFF) {
                 ((int *)(D_0014C290_2D9F08 + (D_0015EE84_2D9F08 << 8)))[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
                 D_L02_001BADE0_2D9F08[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
             }
             func_L00_002EC0C8_2D9F08(1);
             func_L02_0022BE40_2D9F08(0, 1);
-            moby->unkBC = 1;
+            moby->command = 1;
             moby->state = 4;
         }
         break;
@@ -1481,7 +1481,7 @@ extern int D_L02_0015F5CC;
 extern int D_L02_0015F5C4;
 extern unsigned char D_001413F4 __attribute__((section(".data")));
 extern int D_L02_0015F640 __attribute__((sda));
-extern unsigned char D_0013D4E8[];
+extern unsigned char items_acquired[] __asm__("D_0013D4E8");
 extern char D_0013F3D0[];
 extern float D_0013F3D8;
 extern float D_L02_00174468 __attribute__((section(".data")));
@@ -1504,7 +1504,7 @@ void FUN_L02_002ea210(char *moby) {
     switch (*(unsigned char *)(moby + 0x20)) {
     case 0:
         ea210_init(moby);
-        if (D_0013D4E8[which] == 0) {
+        if (items_acquired[which] == 0) {
             float height;
             ea210_vec(0.5f, moby + 0x10, 0);
             *(float *)(moby + 0x44) = 3.14159274f;

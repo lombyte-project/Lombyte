@@ -17,7 +17,7 @@ typedef struct {
 extern HelpState D_001996D0;
 extern u8 D_0015EE1C;
 extern u8 D_0015EE1D;
-extern TextEntry *D_0015F6A0;
+extern TextEntry *help_msgs __asm__("D_0015F6A0");
 #include "rnc/rendering/screen.h"
 extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("func_0022DB10");
 extern void font_set_window(u16 *, u16, u16, u16, u16, u16, u16, u16, u32);
@@ -42,7 +42,7 @@ void link_localized_display_text(void) {
         allocate_voice_for_bank_entry(0, 1, 0);
     }
     box = &D_001996D0;
-    text = D_0015F6A0[box->pad[6]].text;
+    text = help_msgs[box->pad[6]].text;
     font_set_window(win, 0xF0, 0x1E0, 0x2C, 0x1D4, 0x100, 0x168, 0x10, 7);
     font_print_window_small(win, 0x80FFA888L, text, -1);
     screenY = screen_extent.height;

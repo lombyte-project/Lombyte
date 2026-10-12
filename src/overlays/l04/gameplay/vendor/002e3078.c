@@ -58,7 +58,7 @@ void FUN_L04_002e3078(struct Moby *moby) {
     Vec4 *r;
     struct VendorVars *vars = (struct VendorVars *)moby->pvars;
 
-    if (moby->unk31 != 0 && FUN_001f9b48(&moby->pos, D_L04_00166F40) < 30.0f) {
+    if (moby->visible != 0 && FUN_001f9b48(&moby->pos, D_L04_00166F40) < 30.0f) {
         FUN_L00_0025a120(moby);
         ((struct VendorMobyView *)moby)->unk7F = 0x18;
     }
@@ -68,7 +68,7 @@ void FUN_L04_002e3078(struct Moby *moby) {
         if (D_0014C050[((struct VendorMobyView *)moby)->slot + current_level_index * 16] == 0xFF) {
             moby->state = 3;
             moby->flags |= 0x41;
-            moby->unk94 = 0;
+            moby->collision = 0;
             break;
         }
         moby->state = 1;
@@ -97,7 +97,7 @@ void FUN_L04_002e3078(struct Moby *moby) {
             FUN_0020b178(0, -1);
             moby->state = 3;
             moby->flags |= 0x41;
-            moby->unk94 = 0;
+            moby->collision = 0;
             break;
         }
         if (D_L04_0015F5C4 != 2)
@@ -105,7 +105,7 @@ void FUN_L04_002e3078(struct Moby *moby) {
         break;
     case 3:
         moby->flags |= 0x41;
-        moby->unk94 = 0;
+        moby->collision = 0;
         break;
     }
 }
@@ -155,13 +155,13 @@ extern int D_0015EEA4 __attribute__((section(".sdata")));
 extern int D_0015EEAC __attribute__((section(".sdata")));
 extern int D_L04_0015FFE4; /* no foreign declaration */
 extern int D_L04_00179590[] __attribute__((section(".data")));
-extern int FUN_L00_00203908(int a, int b);
+extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern unsigned char D_0013D3A4 __attribute__((section(".data")));
-extern unsigned char D_0013D3A5 __attribute__((section(".data")));
-extern unsigned char D_0013D3A6 __attribute__((section(".data")));
-extern unsigned char D_0013D3A7 __attribute__((section(".data")));
+extern unsigned char menu_item_enabled_16 __asm__("D_0013D3A4") __attribute__((section(".data")));
+extern unsigned char menu_item_enabled_17 __asm__("D_0013D3A5") __attribute__((section(".data")));
+extern unsigned char menu_item_enabled_18 __asm__("D_0013D3A6") __attribute__((section(".data")));
+extern unsigned char menu_item_enabled_19 __asm__("D_0013D3A7") __attribute__((section(".data")));
 extern unsigned char D_0013D4D4 __attribute__((section(".data")));
 extern unsigned char D_0013D4DA __attribute__((section(".data")));
 extern unsigned char D_0013D4E3[];
@@ -178,7 +178,7 @@ extern char D_0013F3D0[];
 extern char D_00141848[];
 extern char D_00141968[];
 extern char D_0013F350[];
-extern char D_0013D4E8[];
+extern char items_acquired[] __asm__("D_0013D4E8");
 extern Moby *D_L04_00160064_2E57F8 __asm__("D_L04_0015FFE4");
 extern Moby *D_L04_00160058_2E57F8 __asm__("D_L04_0015FFD8");
 
@@ -187,14 +187,14 @@ void FUN_L04_002e4418(Moby *moby) {
 
     switch (moby->state) {
     case 0:
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         moby->state = 1;
         data->f14 = -1;
         break;
     case 1:
         if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f0) != 0
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1
-            && D_0014C050_c[moby->unkB0 + (D_0015ED84 << 4)] != 0xFF) {
+            && D_0014C050_c[moby->mission + (D_0015ED84 << 4)] != 0xFF) {
             if (data->f14 == -1) {
                 Help_2E57F8 *usage = (Help_2E57F8 *)(((char *)&D_00141848));
                 data->f14 = D_0015EEAC;
@@ -209,14 +209,14 @@ void FUN_L04_002e4418(Moby *moby) {
                 if (D_0013D4D4 == 0) {
                     Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
                     if (help[0x1D].count == 0) {
-                        FUN_L00_00203908(0xFA1, 0x1D);
+                        help_request(0xFA1, 0x1D);
                     }
                 } else {
                     int elapsed = scale_game_frames_alt(D_0015EEA4) - D_001417C2 * 600;
                     if (scale_game_frames_alt(0x4650) < elapsed) {
                         Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
                         if (help[0x1C].count == 0) {
-                            FUN_L00_00203908(0xFA0, 0x1C);
+                            help_request(0xFA0, 0x1C);
                         }
                     }
                 }
@@ -237,7 +237,7 @@ void FUN_L04_002e4418(Moby *moby) {
                                 && *(float *)*(void **)&other->pvars != 1.0f) {
                                 data->f20++;
                                 if (data->f20 == 3 || data->f20 == 6) {
-                                    FUN_L00_00203908(0x3EE, 0x42);
+                                    help_request(0x3EE, 0x42);
                                 }
                             }
                         }
@@ -247,11 +247,11 @@ void FUN_L04_002e4418(Moby *moby) {
         }
 
         {
-            unsigned char *item_flags = ((char *)&D_0013D4E8);
+            unsigned char *item_flags = ((char *)&items_acquired);
             if (item_flags[9] != 0 && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
                 Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
                 if (help[0x1E].count == 0) {
-                    FUN_L00_00203908(0xFA2, 0x1E);
+                    help_request(0xFA2, 0x1E);
                 }
             }
         }
@@ -260,28 +260,28 @@ void FUN_L04_002e4418(Moby *moby) {
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
             Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
             if (help[0x77].count == 0) {
-                FUN_L00_00203908(0x4E2D, 0x77);
+                help_request(0x4E2D, 0x77);
             }
         }
 
         if (data->f48 != -1) {
             if (D_L04_00160058_2E57F8[data->f48].oclass == 0x267 && D_L04_00160058_2E57F8[data->f48].state == 4) {
-                D_0013D3A4 = 1;
+                menu_item_enabled_16 = 1;
             }
         }
         if (data->f4C != -1) {
             if (D_L04_00160058_2E57F8[data->f4C].oclass == 0x267 && D_L04_00160058_2E57F8[data->f4C].state == 4) {
-                D_0013D3A5 = 1;
+                menu_item_enabled_17 = 1;
             }
         }
         if (data->f40 != -1) {
             if (D_L04_00160058_2E57F8[data->f40].oclass == 0x118 && D_L04_00160058_2E57F8[data->f40].state == 5) {
-                D_0013D3A6 = 1;
+                menu_item_enabled_18 = 1;
             }
         }
         if (data->f44 != -1) {
             if (D_L04_00160058_2E57F8[data->f44].oclass == 0x118 && D_L04_00160058_2E57F8[data->f44].state == 5) {
-                D_0013D3A7 = 1;
+                menu_item_enabled_19 = 1;
             }
         }
 
@@ -292,7 +292,7 @@ void FUN_L04_002e4418(Moby *moby) {
                 Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
                 int elapsed = scale_game_frames_alt(D_0015EEA4) - help[0x1F].time * 600;
                 if ((int)(scale_game_frames_alt(0x12) * 60.0f) < elapsed || help[0x1F].time * 600 == 0) {
-                    FUN_L00_00203908(0xFA3, 0x1F);
+                    help_request(0xFA3, 0x1F);
                 } else {
                     int now = scale_game_frames_alt(D_0015EEA4) / 600;
                     if (help[0x1F].time < now) {
@@ -318,7 +318,7 @@ void FUN_L04_002e4418(Moby *moby) {
                         if (help[0x20].count != 0) {
                             int elapsed = scale_game_frames_alt(D_0015EEA4) - help[0x20].time * 600;
                             if ((int)(scale_game_frames_alt(0x12) * 60.0f) < elapsed || help[0x20].time * 600 == 0) {
-                                FUN_L00_00203908(0xFA4, 0x20);
+                                help_request(0xFA4, 0x20);
                             } else {
                                 int now = scale_game_frames_alt(D_0015EEA4) / 600;
                                 if (help[0x20].time < now) {
@@ -350,7 +350,7 @@ void FUN_L04_002e4418(Moby *moby) {
             if (scale_game_frames_alt(0x34BC0) < elapsed) {
                 Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
                 if (!(help[0x43].mask & (1 << D_0015ED84))) {
-                    FUN_L00_00203908(0x3EF, 0x43);
+                    help_request(0x3EF, 0x43);
                 }
             }
         }
@@ -363,11 +363,11 @@ void FUN_L04_002e4418(Moby *moby) {
                 if (hero->state.current == 0x72 && (ground = hero->ground_moby) != 0 && ground->oclass == 0x267
                     && is_point_inside_clip_volume((char *)hero + 0x80, data->f4) != 0) {
                     if (help[0x46].count == 0) {
-                        FUN_L00_00203908(0x7DB, 0x46);
+                        help_request(0x7DB, 0x46);
                     } else if (help[0x47].count == 0) {
                         data->f1C++;
                         if (scale_game_frames_alt(0x708) < data->f1C) {
-                            FUN_L00_00203908(0x7DC, 0x47);
+                            help_request(0x7DC, 0x47);
                         }
                     }
                 } else {
@@ -407,7 +407,7 @@ void FUN_L04_002e4418(Moby *moby) {
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
             Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
             if (help[0x49].count == 0) {
-                FUN_L00_00203908(0xFA5, 0x49);
+                help_request(0xFA5, 0x49);
             }
         }
         break;
@@ -500,7 +500,7 @@ extern void FUN_L00_002637f8(int);
 void FUN_L04_002e53a0(struct Moby *m) {
     switch (m->state) {
     case 0:
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         m->state = 1;
         break;
     case 1:

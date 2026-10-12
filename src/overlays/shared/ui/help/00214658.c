@@ -780,10 +780,10 @@ void FUN_L00_002167d0(void) {
         m->unk3B0 = m->unk3B0 / (k * (frame_time * 5.9f));
     }
     FUN_L00_00212318(0);
-    if (m->unk3B4.f < DEG_TO_RAD && 0.0872664601f < m->unk2E4.f) {
-        FUN_001f9a68(&hero.motion.velocity, &hero.motion.velocity, FUN_001f9dc8(m->unk2E4.f));
+    if (m->unk3B4.f < DEG_TO_RAD && 0.0872664601f < m->ground_pitch.f) {
+        FUN_001f9a68(&hero.motion.velocity, &hero.motion.velocity, FUN_001f9dc8(m->ground_pitch.f));
     }
-    hero.unk3B4.f = hero.unk2E4.f;
+    hero.unk3B4.f = hero.ground_pitch.f;
     if (FUN_001f99c0(hero.motion.pos.f[2] - hero.ground_z.f) < 0.15f) {
         hero.motion.pos.f[2] = hero.ground_z.f;
     }
@@ -1170,7 +1170,7 @@ void FUN_L00_00217658(void) {
         rotmat_e(cam_mat, dir);
         FUN_001fa328(mat, cam_mat, mat);
     } else {
-        FUN_001fa328(mat, &hero.moby->unkC0, mat);
+        FUN_001fa328(mat, &hero.moby->rot_row0, mat);
     }
     FUN_001fa298(out_mat, mat);
     FUN_00214598(out_mat, &item->rot);

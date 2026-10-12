@@ -81,7 +81,7 @@ extern int FUN_001f96f8(int);
 extern int FUN_001f9770(void *);
 extern int FUN_L00_0020d568();
 extern int FUN_L00_00216de8(int, int);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0020a500(void);
 extern void FUN_L00_0020e698(void);
 extern void FUN_L00_002cdcc0(void);
@@ -360,7 +360,7 @@ void FUN_L05_0023dc88(int i) {
         struct Hero *g = &hero;
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
         FUN_L00_0020a500();
-        *(int *)((char *)g + 0x1010) = FUN_L00_00257b90(FUN_001f96f8(0x32), FUN_001f96f8(0x5A));
+        *(int *)((char *)g + 0x1010) = random_int_between(FUN_001f96f8(0x32), FUN_001f96f8(0x5A));
         FUN_L00_0020fde0(*(hero.selected_item + i));
         FUN_L00_0020fd80(*(hero.selected_item + i));
         if (g->unk20A8 != 0) {
@@ -452,7 +452,7 @@ void FUN_L05_0024bdc0(void) {
     if (D_L05_0015F5CC % 5 == 0) {
         hero.unk260 = 0;
         hero.unk258 = 0.0f;
-        if (hero.unk300) {
+        if (hero.grounded_frames) {
             FUN_L00_0025c9d8(start, 1.1f, 0.0f, 1.0f);
             FUN_L00_0025c9d8(end, 1.1f, 0.0f, -20.0f);
             if (end[2] < 0.5f) end[2] = 0.5f;
@@ -517,7 +517,7 @@ int FUN_L05_002515d0(void) {
     if (p->base_condition != 0) {
         if (p->state.control_mode == 0x11) {
             if (p->state.step != 1) {
-                if (0.0f < p->motion.unk100.f[2]) {
+                if (0.0f < p->motion.displacement.f[2]) {
                     if (p->water_surface_z - 0.4f < p->motion.pos.f[2]) {
                         r = 1;
                     }
@@ -530,7 +530,7 @@ int FUN_L05_002515d0(void) {
             }
             if (absolute_float(p->water_surface_z - (p->motion.pos.f[2] + 0.45f)) < t) {
                 if (p->state.control_mode != 4 || p->unk41E != 0) {
-                    if (0.8f < p->unk22A4 && p->motion.unk100.f[2] < 0.0f) {
+                    if (0.8f < p->unk22A4 && p->motion.displacement.f[2] < 0.0f) {
                         r = 1;
                     }
                 }
@@ -629,7 +629,7 @@ extern int D_L05_0015F674; /* no foreign declaration */
 extern int D_L05_0015FFD8; /* no foreign declaration */
 extern int D_L05_0017C088;
 extern int FUN_L00_001fefc8(void *);
-extern int FUN_L00_00203908(int a, int b);
+extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int FUN_L00_0020d498(int);
 extern int FUN_L00_0020fe30_c(void) __asm__("FUN_L00_0020fe30");
 extern int FUN_L00_00211360(void *);
@@ -945,7 +945,7 @@ int FUN_L05_00251be8(void) {
             if (D_0013F450_h2523C8.unk8CE != 0) {
                 if (D_00141D80[0] == 0 && D_00141920[0] == 0) {
                     if (++D_0013F450_h2523C8.unk8CA > (int)((float)scale_game_frames_alt(0x14) * 60.0f)) {
-                        FUN_L00_00203908(0x3E81, 0x83);
+                        help_request(0x3E81, 0x83);
                     }
                 }
             }
@@ -1000,7 +1000,7 @@ int FUN_L05_00251be8(void) {
                 }
             }
             stats = (Stats_2523C8 *)(((char *)&D_00141848));
-            item->unkBC = scale_game_frames_alt(7);
+            item->command = scale_game_frames_alt(7);
             D_0013F450_h2523C8.unk8CF = scale_game_frames_alt(0x32);
             if (stats->hD8 < 0xFFFF) {
                 stats->hD8++;
@@ -1023,7 +1023,7 @@ int FUN_L05_00251be8(void) {
             func_001F9908_2523C8(&D_L05_0015F674_g);
             if (D_L05_0015F674_g != 0) {
                 if (D_0013F450_h2523C8.state.control_mode < 2U || D_0013F450_h2523C8.state.control_mode == 0xC
-                    || ((D_0013F450_h2523C8.state.control_mode == 2 || D_0013F450_h2523C8.state.control_mode == 4) && D_0013F450_h2523C8.unk300 != 0)) {
+                    || ((D_0013F450_h2523C8.state.control_mode == 2 || D_0013F450_h2523C8.state.control_mode == 4) && D_0013F450_h2523C8.grounded_frames != 0)) {
                     if ((D_0013CA40_p2523C8.held & 8) && (D_0013CA40_p2523C8.pressed & 8)) {
                         func_L05_0024D680_2523C8(0x81, 1);
                     }

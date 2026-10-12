@@ -233,13 +233,13 @@ void FUN_L03_002c9eb8(struct Moby *m) {
         }
         break;
     case 2:
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             m->state = 3;
             v->patrol_timer = trooper_frames(120);
             if (m->prev_seq != 2) {
                 trooper_blend_anim(m, 2, 0, trooper_frames(10));
             }
-            m->unk58 = D_L03_0016191C;
+            m->anim_speed = D_L03_0016191C;
             v->fire_timer = trooper_frames(120);
         }
         break;
@@ -247,7 +247,7 @@ void FUN_L03_002c9eb8(struct Moby *m) {
         pt = &v->patrol;
         n = pt->idx;
         FUN_L00_00259028(m, v->walk, &pt->path->pts[n], v->effect);
-        m->unk58 = D_L03_0016191C;
+        m->anim_speed = D_L03_0016191C;
         trooper_tick16(&v->patrol_timer);
         if (trooper_dist2(&m->pos, &pt->path->pts[n]) < 1.0f) {
             if (v->patrol_timer == 0 && trooper_dist(&m->pos, &target.aim) > 25.0f) {
@@ -274,11 +274,11 @@ void FUN_L03_002c9eb8(struct Moby *m) {
             trooper_play_sound(1, 0, m, 0x273);
             for (i = -2; i < 3; i++) {
                 scale = trooper_itof(i) * trooper_rand(0.9f, 1.1f);
-                trooper_scale(muzzle, &m->unkD0, (float)i * 0.5f);
+                trooper_scale(muzzle, &m->rot_row1, (float)i * 0.5f);
                 trooper_add(muzzle, muzzle, &m->pos);
                 muzzle[2] += 2.0f;
-                trooper_scale(spread, &m->unkC0, trooper_rand(-1.0f, 1.0f) * frame_time);
-                trooper_scale(vel, &m->unkD0, D_L03_00161910 * frame_time);
+                trooper_scale(spread, &m->rot_row0, trooper_rand(-1.0f, 1.0f) * frame_time);
+                trooper_scale(vel, &m->rot_row1, D_L03_00161910 * frame_time);
                 trooper_scale4(vel, vel, scale);
                 trooper_add(vel, vel, spread);
                 vel[2] = D_L03_00161914 * frame_time * trooper_rand(0.9f, 1.1f);
@@ -329,7 +329,7 @@ void FUN_L03_002c9eb8(struct Moby *m) {
             return;
         }
     }
-    if (m->unk31 != 0 && trooper_dist2(&m->pos, D_L03_00166EC0) < 32.0f) {
+    if (m->visible != 0 && trooper_dist2(&m->pos, D_L03_00166EC0) < 32.0f) {
         FUN_L00_0025a120(m);
     }
 }
@@ -427,7 +427,7 @@ void FUN_L03_002ca808(struct Moby *m) {
         }
         trooper_anim_update(m, v->anim);
     }
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
     trooper_anim_finish(m, v->anim);
 }
 #include "rnc/overlay/quad.h"
@@ -765,11 +765,11 @@ void FUN_L03_002d3198(struct Moby *m) {
             qcopy_nc(&m->pos, &D_L03_001B05B0[v->back[0]]->pts[0]);
             m->rot.z = taxi_atan2(D_L03_001B05B0[v->back[0]]->pts[1].f[0] - m->pos.x, D_L03_001B05B0[v->back[0]]->pts[1].f[1] - m->pos.y);
         }
-        m->unk32 = 0;
-        m->unk30 = 0xFF;
+        m->draw_dist = 0;
+        m->update_dist = 0xFF;
         v->route = -1;
         m->state = 1;
-        m->unk94 = 0;
+        m->collision = 0;
         if (D_L03_001BB330.collected[(s16)m->save_id] != 0 ||
             (D_0014C190[D_0015ED84_d3198][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) & 1) {
             taxi_kill(m);
@@ -783,7 +783,7 @@ void FUN_L03_002d3198(struct Moby *m) {
         for (r = 0; r < 5; r++) {
             if ((v->volume[r] != -1 || v->route == r) &&
                 (is_point_inside_clip_volume(&hero.motion.pos, v->volume[r]) || v->route == r)) {
-                m->unk94 = m->pclass->unk10;
+                m->collision = m->pclass->collision;
                 if (v->out[r] != -1) {
                     p = D_L03_001B05B0[v->out[r]];
                     qcopy(&m->pos, &p->pts[0]);
@@ -793,9 +793,9 @@ void FUN_L03_002d3198(struct Moby *m) {
                     qcopy(&m->pos, &p->pts[0]);
                     m->rot.z = taxi_atan2(p->pts[1].f[0] - m->pos.x, p->pts[1].f[1] - m->pos.y);
                 }
-                m->unkBC = r;
+                m->command = r;
                 m->state = 2;
-                m->unk32 = 0x80;
+                m->draw_dist = 0x80;
                 v->idx = 1;
                 v->speed = D_L03_00161B08 * frame_time;
                 v->route = -1;
@@ -804,7 +804,7 @@ void FUN_L03_002d3198(struct Moby *m) {
         }
         break;
     case 2:
-        if (v->out[m->unkBC] == -1 || FUN_L03_002d3918(m, v->out[m->unkBC], &v->snd)) {
+        if (v->out[m->command] == -1 || FUN_L03_002d3918(m, v->out[m->command], &v->snd)) {
             m->state = 3;
             v->unkE4 = -1;
         }
@@ -815,7 +815,7 @@ void FUN_L03_002d3198(struct Moby *m) {
         taxi_approach_angle(&m->rot.x, 0.0f, &v->roll_vel, D_L03_00161B18 * DEG_TO_RAD * D_0015ED70,
                             D_L03_00161B18 * DEG_TO_RAD * D_0015ED70, frame_time * 12.566371f);
         if (hero.ground_moby == m && hero.air_frames.s == 0) {
-            FUN_L03_002d3100(m, v->help[m->unkBC]);
+            FUN_L03_002d3100(m, v->help[m->command]);
             if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
                 FUN_L00_00233ee8(&m->pos, m->rot.z, 0);
                 m->state = 4;
@@ -833,7 +833,7 @@ void FUN_L03_002d3198(struct Moby *m) {
             hero.unk1F2 = 4;
             hero.unk1F4 = 4;
         }
-        if (FUN_L03_002d3918(m, v->back[m->unkBC], &v->snd)) {
+        if (FUN_L03_002d3918(m, v->back[m->command], &v->snd)) {
             m->state = 6;
         }
         break;
@@ -842,18 +842,18 @@ void FUN_L03_002d3198(struct Moby *m) {
                             D_L03_00161B10 * DEG_TO_RAD * D_0015ED70, frame_time * 12.566371f);
         taxi_approach_angle(&m->rot.x, 0.0f, &v->roll_vel, D_L03_00161B18 * DEG_TO_RAD * D_0015ED70,
                             D_L03_00161B18 * DEG_TO_RAD * D_0015ED70, frame_time * 12.566371f);
-        if (v->onward[m->unkBC] != -1 && taxi_dist(&m->pos, &hero.motion.pos) > 15.0f) {
+        if (v->onward[m->command] != -1 && taxi_dist(&m->pos, &hero.motion.pos) > 15.0f) {
             m->state = 7;
             v->idx = 1;
-        } else if (v->onward[m->unkBC] == -1 && taxi_dist2(&m->pos, &hero.motion.pos) > 5.0f) {
+        } else if (v->onward[m->command] == -1 && taxi_dist2(&m->pos, &hero.motion.pos) > 5.0f) {
             m->state = 1;
         }
         break;
     case 7:
-        if (FUN_L03_002d3918(m, v->onward[m->unkBC], &v->snd)) {
-            m->unk32 = 0;
+        if (FUN_L03_002d3918(m, v->onward[m->command], &v->snd)) {
+            m->draw_dist = 0;
             m->state = 1;
-            m->unk94 = 0;
+            m->collision = 0;
         }
         break;
     }
@@ -969,8 +969,8 @@ void FUN_L03_002d3e58(struct Moby *m) {
     move.q = 0;
     oldRot.q = *(u128 *)&m->rot;
     v = (struct SpinnerVars *)m->pvars;
-    m->unk32 = 0xFF;
-    m->unk30 = 0xFF;
+    m->draw_dist = 0xFF;
+    m->update_dist = 0xFF;
     m->rot.z = FUN_001fa580(m->rot.z, frame_time * 0.47996554f);
     FUN_L00_00260738(v->coll, &move, &oldRot, &m->rot);
 }
@@ -1060,7 +1060,7 @@ extern int FUN_L00_00257b90(int, int);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_00259a88(void *, void *);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
@@ -1117,7 +1117,7 @@ void FUN_L03_002d43c8(struct Moby *m) {
             m->pos.z += FUN_001f9de0(-m->rot.y) * v->speed;
         }
         if (FUN_001efa68(pos, &old, 0, v->ignore, 0) != 0 ||
-            FUN_L00_001f0d60(0.2f, pos, 0, v->ignore) != 0) {
+            coll_sphere(0.2f, pos, 0, v->ignore) != 0) {
             level = (void **)D_L03_00173F40;
             if (level[6] != NULL) {
                 make_hit_descriptor(&hit, m, 0x10001, 1.0f, v);
@@ -1242,7 +1242,7 @@ extern void FUN_L01_002783a8(struct Moby *, f32);
 extern void FUN_L00_002502a0(int);
 extern void FUN_L00_00284e50(void *, void *);
 extern void FUN_L00_00260860(int, int);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern float FUN_001fa688(float, float);
 extern float FUN_001fa5c8(float, float);
@@ -1289,7 +1289,7 @@ void FUN_L03_002da870(struct Moby *m) {
             taxi_kill(m);
             return;
         }
-        if (D_0014C050[m->unkB0 + current_level_index * 16] == 0xFF && v->link != -1) {
+        if (D_0014C050[m->mission + current_level_index * 16] == 0xFF && v->link != -1) {
             t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
             if (t->oclass == 0x3F4) {
                 flag = (s32 *)(t->pvars + 0x8C);
@@ -1321,7 +1321,7 @@ void FUN_L03_002da870(struct Moby *m) {
     case 2:
         if (D_L03_0015F5C4 != 2) {
             if (v->talk.mode != 2) {
-                FUN_L00_002502a0(m->unkB0);
+                FUN_L00_002502a0(m->mission);
                 if (v->link != -1) {
                     t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
                     if (t->oclass == 0x3F4) {
@@ -1338,23 +1338,23 @@ void FUN_L03_002da870(struct Moby *m) {
             m->state = 1;
             if (v->talk.mode == 2) {
                 FUN_L00_00260860(0xC, 1);
-                FUN_L00_00263d40(0xBC8, -1);
+                queue_dialogue_message(0xBC8, -1);
                 if (v->reward != -1) {
                     D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
-                        ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->unkB0 + 2;
+                        ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                     o = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
                     /* Same record as the || test in the level's other reward code; the
                        do/while (0) blocks keep the loop notes that make gcc predict the
                        0xFF branch taken and keep the group load ahead of the table load. */
-                    if (o->unkB0 == 0xFF)
+                    if (o->mission == 0xFF)
                         goto record;
                     do {
-                        group = o->unkB0;
+                        group = o->mission;
                     } while (0);
                     if (D_L03_0015FC88[group] != 0xFF && D_0014C050[group + current_level_index * 16] == 0xFF) {
                         do {
                         record:
-                            D_L03_001BB330.collected[(s16)o->save_id] = o->unkB0 + 2;
+                            D_L03_001BB330.collected[(s16)o->save_id] = o->mission + 2;
                         } while (0);
                     }
                     taxi_kill(&D_L03_0015FFD8[v->reward]);
@@ -1496,9 +1496,9 @@ struct Moby *FUN_L03_002db198(struct RailPath *path, float dist) {
     Vec4 *end;
 
     if (m != 0) {
-        m->unk30 = 0x80;
-        m->unk32 = 0x40;
-        m->unk31 = 1;
+        m->update_dist = 0x80;
+        m->draw_dist = 0x40;
+        m->visible = 1;
         m->state = 0;
         v = m->pvars;
         m->flags |= 0x20;
@@ -1627,7 +1627,7 @@ extern void FUN_L01_002783a8(struct Moby *, f32);
 extern void FUN_L00_002502a0(int);
 extern void FUN_L00_00284e50(void *, void *);
 extern void FUN_L00_00260860(int, int);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern int guide_save(int, int) __asm__("FUN_0020b178");
 extern float FUN_001fa688(float, float);
@@ -1667,7 +1667,7 @@ void FUN_L03_002db558(struct Moby *m) {
         } else {
             v->turned = 1;
         }
-        if (D_0014C050[m->unkB0 + current_level_index * 16] == 0xFF && v->link != -1) {
+        if (D_0014C050[m->mission + current_level_index * 16] == 0xFF && v->link != -1) {
             t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
             if (t->oclass == 0x3F4) {
                 *(s32 *)(t->pvars + 0x8C) = 1;
@@ -1687,10 +1687,10 @@ void FUN_L03_002db558(struct Moby *m) {
             if (t->oclass == 0x3E5 && t->state == 0) {
                 t->state = 1;
                 D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
-                    ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->unkB0 + 2;
+                    ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                 o = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
                 {
-                    s32 k = o->unkB0;
+                    s32 k = o->mission;
                     u32 u = k & 0xFF;
                     if (k == 0xFF || (D_L03_0015FC88[u] != 0xFF && D_0014C050[u + current_level_index * 16] == 0xFF)) {
                         D_L03_001BB330.collected[(s16)o->save_id] = k + 2;
@@ -1698,7 +1698,7 @@ void FUN_L03_002db558(struct Moby *m) {
                 }
             }
         }
-        if (item_available[2] != 0 && D_0014C050[m->unkB0 + current_level_index * 16] == 0xFF) {
+        if (item_available[2] != 0 && D_0014C050[m->mission + current_level_index * 16] == 0xFF) {
             break;
         }
         if (FUN_L00_00266448(m, (struct TalkState *)&v->talk)) {
@@ -1707,7 +1707,7 @@ void FUN_L03_002db558(struct Moby *m) {
                 v->turned = 1;
             }
             FUN_L01_002783a8(m, 2.7f);
-            m->unk58 = 0.0f;
+            m->anim_speed = 0.0f;
             m->state = 2;
         }
         break;
@@ -1715,9 +1715,9 @@ void FUN_L03_002db558(struct Moby *m) {
         if (D_L03_0015F5C4 == 2) {
             break;
         }
-        m->unk58 = 1.0f;
+        m->anim_speed = 1.0f;
         if (v->talk.mode != 2) {
-            FUN_L00_002502a0(m->unkB0);
+            FUN_L00_002502a0(m->mission);
             if (v->link != -1) {
                 t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
                 if (t->oclass == 0x3F4) {
@@ -1733,24 +1733,24 @@ void FUN_L03_002db558(struct Moby *m) {
             break;
         }
         FUN_L00_00260860(2, 1);
-        FUN_L00_00263d40(0xBC7, -1);
+        queue_dialogue_message(0xBC7, -1);
         if (v->reward != -1) {
             t = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
             if (t->oclass == 0x3E5 && t->state == 0) {
                 t->state = 1;
                 D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
-                    ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->unkB0 + 2;
+                    ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                 o = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
                 /* Same record test as above; the goto and the do/while (0) loop note keep
                    the group byte's zero-extend ahead of the table address. */
-                if (o->unkB0 == 0xFF)
+                if (o->mission == 0xFF)
                     goto rec2;
                 do {
-                    group = o->unkB0;
+                    group = o->mission;
                 } while (0);
                 if (D_L03_0015FC88[group] != 0xFF && D_0014C050[group + current_level_index * 16] == 0xFF) {
                 rec2:
-                    D_L03_001BB330.collected[(s16)o->save_id] = o->unkB0 + 2;
+                    D_L03_001BB330.collected[(s16)o->save_id] = o->mission + 2;
                 }
             }
         }
@@ -1848,7 +1848,7 @@ extern void FUN_L00_0025a120(struct Moby *);
 extern void FUN_00212ed8(struct Moby *, int, int);
 extern TalkerHit *talker_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void FUN_0022db10(int, int, int);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void talker_spawn_debris(struct Moby *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32,
                              f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern int talker_init(struct Moby *, struct TalkerVars *) __asm__("FUN_L00_002668a0");
@@ -1874,9 +1874,9 @@ void FUN_L03_002dbd90(struct Moby *m) {
     OvlVec4 pos;
     float tmp[4];
 
-    if (m->unk31 != 0 && FUN_001f9b48(&m->pos, D_L03_00166EC0) < 26.0f) {
+    if (m->visible != 0 && FUN_001f9b48(&m->pos, D_L03_00166EC0) < 26.0f) {
         FUN_L00_0025a120(m);
-        m->unk7F = 0x15;
+        m->shadow_range = 0x15;
     }
     if (D_L03_001BB330.collected[(s16)m->save_id] != 0 ||
         (D_0014C190[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) & 1) {
@@ -1892,7 +1892,7 @@ void FUN_L03_002dbd90(struct Moby *m) {
         if (D_0013D408[5] == 0) {
             D_0013D408[5] = 1;
             FUN_0022db10(1, 0, 0);
-            FUN_L00_00263d40(0x53D6, -1);
+            queue_dialogue_message(0x53D6, -1);
         }
         pos.q = *(OvlQuad *)&m->pos;
         pos.f[2] += 1.0f;
@@ -1903,7 +1903,7 @@ void FUN_L03_002dbd90(struct Moby *m) {
         D_0014C190[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
         D_L03_001BA5D0[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
     }
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
     if (D_0013D4CC[0] != 0 && m->state != 3) {
         return;
     }
@@ -2040,13 +2040,13 @@ void FUN_L03_002dccc0(struct Moby *m) {
     FUN_001f9740(&d->timer);
     switch (m->state) {
     case 0:
-        m->unkBC = d->start_end;
-        qcopy(&m->pos, &D_L03_001B05B0[d->path[m->unkBC]]->pts[0]);
+        m->command = d->start_end;
+        qcopy(&m->pos, &D_L03_001B05B0[d->path[m->command]]->pts[0]);
         d->hud = -1;
         d->timer = 0;
         m->state = 1;
-        m->unk30 = 0xFF;
-        m->unk32 = 0xFF;
+        m->update_dist = 0xFF;
+        m->draw_dist = 0xFF;
         break;
     case 1:
         hero_end = vec_dist(&hero.motion.pos, &D_L03_001B05B0[d->path[0]]->pts[0]) <
@@ -2055,8 +2055,8 @@ void FUN_L03_002dccc0(struct Moby *m) {
                    vec_dist(&m->pos, &D_L03_001B05B0[d->path[1]]->pts[0]);
         if (!d->started) {
             if (d->autostart || is_point_inside_clip_volume(&hero.motion.pos, d->volume)) {
-                m->unk94 = m->pclass->unk10;
-                m->unkBC = hero_end;
+                m->collision = m->pclass->collision;
+                m->command = hero_end;
                 m->flags &= 0xFFBE;
                 *(u128 *)&m->pos = *(u128 *)&D_L03_001B05B0[d->path[hero_end]]->pts[0];
                 m->state = 3;
@@ -2067,20 +2067,20 @@ void FUN_L03_002dccc0(struct Moby *m) {
             }
         }
         if (!d->started) {
-            m->unk94 = 0;
+            m->collision = 0;
             m->flags |= 0x41;
         } else if (d->ready && FUN_L01_00277fb8(m)) {
-            FUN_L03_002dcbc8((char *)m, d->help[m->unkBC ^ 1]);
+            FUN_L03_002dcbc8((char *)m, d->help[m->command ^ 1]);
             if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
                 FUN_L00_00233ee8(&m->pos, m->rot.z, 0);
-                m->unkBC ^= 1;
+                m->command ^= 1;
                 d->unk64 = 1;
                 d->ready = 0;
                 m->state = 2;
             }
         } else if (hero_end != lift_end) {
             m->state = 3;
-            m->unkBC ^= 1;
+            m->command ^= 1;
             d->unk64 = 1;
             d->ready = 0;
         }
@@ -2094,7 +2094,7 @@ void FUN_L03_002dccc0(struct Moby *m) {
             hero.unk1F2 = 4;
             hero.unk1F4 = 4;
         }
-        if (FUN_L03_002d3918(m, d->path[m->unkBC], &d->snd)) {
+        if (FUN_L03_002d3918(m, d->path[m->command], &d->snd)) {
             m->state = 1;
             d->timer = scale_game_frames(0xF);
         }

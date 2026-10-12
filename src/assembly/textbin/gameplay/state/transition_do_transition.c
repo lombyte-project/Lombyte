@@ -38,17 +38,17 @@ typedef struct {
 
 extern s32 D_0015ED80 MACRO_ADDR;
 extern s32 D_0015ED88 __attribute__((sda));
-extern WadHeader *D_0015EE4C;
+extern WadHeader *level_root __asm__("D_0015EE4C");
 extern volatile s32 D_0015EE8C;
 extern s32 D_0015EF50;
 extern s32 D_0015EF54;
 extern s32 D_0015EF58 MACRO_ADDR;
 extern f32 D_0015F43C MACRO_ADDR;
 extern s32 D_0015F438 MACRO_ADDR;
-extern s32 D_0015F5B0 MACRO_ADDR;
+extern s32 space_load_pending __asm__("D_0015F5B0") MACRO_ADDR;
 extern s32 D_0015F604 MACRO_ADDR;
-extern s32 D_0015F618;
-extern u8 D_0016034C MACRO_ADDR;
+extern s32 space_load_in_progress __asm__("D_0015F618");
+extern u8 requested_video_mode __asm__("D_0016034C") MACRO_ADDR;
 extern SoundCue D_001862B0[];
 extern TransferState D_0018CB20;
 extern WadHeader *volatile D_001940C8[];
@@ -115,7 +115,7 @@ void transition_do_transition(void) {
     /* The first 0x60 bytes are reserved; six descriptors start at offset 0x20. */
     /* Load chunks 1..5 before chunk 0, advancing each destination to 16-byte alignment. */
     p = (u8 *)hdr + 0x60;
-    D_0015EE4C = hdr;
+    level_root = hdr;
     first_size = load(p, ((volatile struct DiscFile *)&tbl->wad_chunks[1])->sector, ((volatile struct DiscFile *)&tbl->wad_chunks[1])->size);
     hdr->chunk[1].size = first_size;
     hdr->chunk[1].off = p - (u8 *)hdr;
@@ -148,7 +148,7 @@ void transition_do_transition(void) {
     wait = 0;
     level = rand() % 4;
     read_global_table_entry();
-    while (D_0015F5B0 == 0) {
+    while (space_load_pending == 0) {
         vu1_send_chain();
         swap_render_buffer_chain();
         put_draw_buffer_small();
@@ -158,7 +158,7 @@ void transition_do_transition(void) {
         run_state_handler();
         update_primary_pad_state();
         QueueDmaTransfer(D_0015ED88);
-        D_0015F618 = 0;
+        space_load_in_progress = 0;
         for (i = 0; D_001862B0[i].start != -1; i++) {
             if (D_001862B0[i].end == -1) {
                 if (D_0018CB20.time < D_001862B0[i].start) {
@@ -200,7 +200,7 @@ void transition_do_transition(void) {
             vu1_init_chain();
             continue;
         }
-        if (D_0016034C != D_0015ED80) {
+        if (requested_video_mode != D_0015ED80) {
             D_0015ED80 = D_0015ED80 == 0;
             fade_to_black(4);
             func_001204B8();

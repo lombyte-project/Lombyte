@@ -164,7 +164,7 @@ extern char D_L07_0016C8E0[];
 extern float D_L07_0015F580[] __attribute__((section(".sdata")));
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int D_L07_0015F5C4;
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -213,8 +213,8 @@ void FUN_L07_0031eba8(char *m) {
                 moby_point_position(mob, i, buf);
                 for (j = 9; j >= 0; j--) {
                     float d = random_float_between(20000.0f, 200000.0f);
-                    int col = (FUN_L00_00257b90(0x20, 0x80) << 24) | 0x7F7F7F;
-                    int v = FUN_L00_00257b90(0, 4);
+                    int col = (random_int_between(0x20, 0x80) << 24) | 0x7F7F7F;
+                    int v = random_int_between(0, 4);
                     char *p;
                     char *q;
                     if (random_integer_below(2) != 0)
@@ -222,7 +222,7 @@ void FUN_L07_0031eba8(char *m) {
                     p = func_L00_0026DEA0_c(buf, v, D_L07_0015F580, col, 0.6f, 1.0f, 1.01f, d);
                     if (p != 0) {
                         q = p + 0x20;
-                        *(short *)(p + 0xA) = scale_game_frames(FUN_L00_00257b90(0x3C, 0x5A));
+                        *(short *)(p + 0xA) = scale_game_frames(random_int_between(0x3C, 0x5A));
                         *(int *)(q + 4) = 2;
                         *(char *)(q + 0xA) = col >> 24;
                         *(char *)(q + 0xB) = *(unsigned char *)(p + 0xA);

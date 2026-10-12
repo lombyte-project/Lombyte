@@ -5,7 +5,7 @@ extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001f9a10(void *, void *, void *);
 extern float D_001CAA80[] NOT_SDA;
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern char D_00194100[];
+extern char coll_output[] __asm__("D_00194100");
 extern void FUN_001f9c48(float *, float *, float);
 extern void FUN_001f9bf8(void *, void *, float);
 extern float FUN_001f99d0(float, float);
@@ -36,7 +36,7 @@ void update_moby_shadow_range(char *m) {
     b[2] -= 8.0f;
     if (FUN_001efa68(a, b, 0x22, 0, 0) != 0) {
         qcopy(a, p);
-        hit = D_00194100;
+        hit = coll_output;
         h1 = *(float *)(hit + 0x28);
         a[2] = a[2] + *(float *)(m + 0xC) * 0.00048828125f;
         a[0] = a[0] + dir[0] * *(float *)(m + 0xC) * 0.000732421875f;

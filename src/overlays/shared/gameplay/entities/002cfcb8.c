@@ -651,7 +651,7 @@ void FUN_L00_002d1428(M2d1428 *m) {
         FUN_001f9a28(&a, &hero.motion.pos, &m->pos);
         FUN_001f9cf8(&a, &a, m->vC0);
         if (FUN_001f99c0(a.x) < 0.55f && FUN_001f99c0(a.y) < 0.55f && a.z < 0.0f &&
-            -(hero.unk220 + hero.unk234) < a.z) {
+            -(hero.capsule_top + hero.unk234) < a.z) {
             switch (m->state) {
             case 1:
             case 5:
@@ -1476,7 +1476,7 @@ void FUN_L00_002d2ee8(struct Moby *moby) {
                     s32 c = truncate_float_to_s32(hero.unk2044 * 255.0f / 10.0f);
                     s32 col = (c << 8) | 0xFF000000;
 
-                    moby->unk90 = ((c << 16) | col) | 0xFF;
+                    moby->glow_color = ((c << 16) | col) | 0xFF;
                 }
                 t = hero.unk2040;
                 if (t != 0 && t->oclass == 0x25D && t->state != 0xFE && t->state != 0xFD && hero.unk2044 < 1.0f) {
@@ -1521,7 +1521,7 @@ void FUN_L00_002d2ee8(struct Moby *moby) {
                     vars->voice2 = -1;
                 }
             } else {
-                moby->unk90 = 0x80808080;
+                moby->glow_color = 0x80808080;
                 if (vars->voice0 != -1) {
                     VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice0 * 0x70);
 
@@ -1550,7 +1550,7 @@ void FUN_L00_002d2ee8(struct Moby *moby) {
             enqueue_callback_list_1(FUN_L00_002d2a90_u, moby);
             return;
         }
-        moby->unk90 = 0x80808080;
+        moby->glow_color = 0x80808080;
         if (vars->voice0 != -1) {
             VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice0 * 0x70);
 
@@ -2011,9 +2011,9 @@ void horny_toad_update(Moby *moby) {
     data = (ToadVars *)moby->pvars;
     FUN_L00_002d5160_2d4610(moby);
     target = data->target;
-    if (moby->unk31 != 0 && distance_xyz((*(ToadVec *)&moby->pos), camera_position) < 26.0f) {
+    if (moby->visible != 0 && distance_xyz((*(ToadVec *)&moby->pos), camera_position) < 26.0f) {
         FUN_L00_0025a120_2d4610(moby);
-        moby->unk7F = 0x15;
+        moby->shadow_range = 0x15;
     }
     FUN_L00_00263ac8_2d4610(2.1f, (int)moby, 1, data->unk200);
     switch (moby->state) {
@@ -2105,7 +2105,7 @@ void horny_toad_update(Moby *moby) {
         if (moby->prev_seq != 4) {
             int n = random_int_between(0, 5);
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, n, scale_game_frames(10));
-            moby->unk58 = random_float_between(0.92f, 1.08f);
+            moby->anim_speed = random_float_between(0.92f, 1.08f);
         }
         FUN_L00_00261630_2d4610((char *)moby, (char *)data->unk240, 0.5f, 0.5f);
         if (data->unk1C4 != 2) {
@@ -2127,7 +2127,7 @@ void horny_toad_update(Moby *moby) {
     case 7:
         if (is_value_within_interpolated_window(moby, 34.0f) != 0) {
             FUN_L00_002599e8_2d4610(moby, 0.333f, 1.0f, 1.0f, 0, 1, 0, 1, 0);
-        } else if (moby->unk70 & 2) {
+        } else if (moby->anim_flags & 2) {
             if (data->unk1C4 == 2) {
                 moby->state = 8;
                 if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
@@ -2154,14 +2154,14 @@ void horny_toad_update(Moby *moby) {
         add_vector_xyz(v, v, (*(ToadVec *)&moby->pos));
         if (FUN_L00_00261968_2d4610(data->unk1E0, (*(ToadVec *)&moby->pos), v) != 0) {
             approach_angle(&moby->rot.z, angle_atan2((*(ToadVec *)&data->target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&data->target->pos)[1] - (*(ToadVec *)&moby->pos)[1]), &data->turn_speed, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 12.566371f);
-            if (moby->unk70 & 2) {
+            if (moby->anim_flags & 2) {
                 if (moby->prev_seq != random_integer_below(2) + 2) FUN_00212f90_2d4610(moby, random_integer_below(2) + 2, 0, scale_game_frames(20));
             }
         } else {
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(20));
             FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->unk180, 0.5f);
         }
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             if (data->unk1C4 != 2) {
                 moby->state = 6;
                 if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
@@ -2403,13 +2403,13 @@ void FUN_L00_002d5830(struct Moby *m) {
     if (m->state != 1) {
         return;
     }
-    D_L00_001BA5D0.killed[(s16)m->save_id] = m->unkB0 + 2;
-    if (m->unkB0 == 0xFF || (mission_state[m->unkB0] != 0xFF && D_0014C050[current_level_index][m->unkB0] == 0xFF)) {
-        D_L00_001BB230.killed[(s16)m->save_id] = m->unkB0 + 2;
+    D_L00_001BA5D0.killed[(s16)m->save_id] = m->mission + 2;
+    if (m->mission == 0xFF || (mission_state[m->mission] != 0xFF && D_0014C050[current_level_index][m->mission] == 0xFF)) {
+        D_L00_001BB230.killed[(s16)m->save_id] = m->mission + 2;
     }
     m->state = 2;
-    m->unkBC = 1;
-    m->unk90 = 0x80208020;
+    m->command = 1;
+    m->glow_color = 0x80208020;
     allocate_voice_for_target_entry(0, 0, m);
     if (v->table == -1) {
         return;

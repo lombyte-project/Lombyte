@@ -83,7 +83,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
     }
     switch (moby->state) {
     case 0:
-        if (D_0014C050[moby->unkB0 + current_level_index * 16] == 0xFF) {
+        if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
         }
@@ -115,10 +115,10 @@ void FUN_L08_002e9b70(struct Moby *moby) {
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         FUN_L08_002e9758(moby);
         FUN_L08_002e9a18(moby);
-        if (moby->unkBC == 0) {
+        if (moby->command == 0) {
             break;
         }
-        moby->unkBC = 0;
+        moby->command = 0;
         moby_point_position(vars->parts[3].moby, 1, &muzzle);
         pitch = random_float_between(0.17453292f, 0.5235988f);
         yaw = fast_add_rotations(FUN_001f9e90(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
@@ -276,10 +276,10 @@ void FUN_L08_002ea4c0(struct Moby *moby) {
     off.q = 0;
     off.f[2] = 30.0f;
     if (D_L08_0015F5C4 == 2) {
-        moby->unk31 = 0;
+        moby->visible = 0;
         moby->flags |= 1;
     } else {
-        moby->unk31 = 1;
+        moby->visible = 1;
         moby->flags &= ~1;
     }
     if (moby->state == 0) {
@@ -570,10 +570,10 @@ state_two: {
     }
 state_three: {
         Vec4 timer;
-        timer.f[0] = (f32)moby->unk23;
+        timer.f[0] = (f32)moby->alpha;
         approach_value_44c0(&timer, 0.0f, 128.0f / (f32)scale_game_frames_44c0(30));
-        moby->unk23 = (u8)(s32)timer.f[0];
-        if (moby->unk23 == 0) mark_moby_for_removal_44c0(moby);
+        moby->alpha = (u8)(s32)timer.f[0];
+        if (moby->alpha == 0) mark_moby_for_removal_44c0(moby);
     }
 }
 #endif
@@ -730,7 +730,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
         } while (i >= 0);
     }
     a = convert_integer_to_float(b[0x13]);
-    c = convert_integer_to_float(m->unk23);
+    c = convert_integer_to_float(m->alpha);
     alpha = truncate_float_to_s32_u(d->intensity * a * c * 0.0078125f) & 0xff;
     if (b[0xd] == 0) b[0xf] = b[0xc];
     else b[0xf] = b[0xc] + (D_L08_0015F3F8_gp / (b[0xe]+1)) % b[0xd];
@@ -963,7 +963,7 @@ void FUN_L08_002f70a0(struct Moby *m) {
         m->state = 1;
     }
     m->scale = m->pclass->scale * (d->size_x > d->size_y ? d->size_x : d->size_y) * 0.25f;
-    view = convert_integer_to_float(m->unk32);
+    view = convert_integer_to_float(m->draw_dist);
     dist = FUN_001f9b48(at, D_L08_001675C0);
     fade = view - d->fade_range;
     if (fade < 0.0f)
@@ -982,7 +982,7 @@ void FUN_L08_002f70a0(struct Moby *m) {
     }
     pos.q = *(u128 *)at;
     pos.f[3] = convert_integer_to_float(d->radius);
-    if ((m->unk31 != 0 || FUN_001fa728((char *)&pos, 255.0f) != -1) && !hidden) {
+    if ((m->visible != 0 || FUN_001fa728((char *)&pos, 255.0f) != -1) && !hidden) {
         enqueue_callback_list_1(FUN_L08_002f5e58, m);
         if (d->flags & 4) {
             if (d->light == -1) {

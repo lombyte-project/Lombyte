@@ -18,7 +18,7 @@ struct Vram {
     s32 base;
 };
 
-extern struct HudFile *D_0015EE4C;
+extern struct HudFile *level_root __asm__("D_0015EE4C");
 extern char D_0015FBB0[];
 extern char D_0015FBC0[];
 extern char D_0015FBD0[];
@@ -37,7 +37,7 @@ extern void FlushCache(s32);
 void load_hud_banks(void) __asm__("FUN_00202a98");
 
 void load_hud_banks(void) {
-    struct HudFile *f = D_0015EE4C;
+    struct HudFile *f = level_root;
     struct HudBank *b;
     void *t;
     s32 i;

@@ -5,13 +5,13 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fc558.s", FUN_L00_001fc558);
 #else
-extern s32 D_0013E504;
+extern s32 frame_size __asm__("D_0013E504");
 extern s32 D_0015EE84;
 extern u8 *D_L00_001611C0;
 void FUN_L00_002a0d90(void);
 
 void FUN_L00_001fc558(u32 source) {
-    s32 remaining = D_0013E504;
+    s32 remaining = frame_size;
     s32 destination = D_0015EE84 >> 8;
     u64 count;
     u64 transfer;

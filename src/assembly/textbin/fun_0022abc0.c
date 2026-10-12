@@ -25,7 +25,7 @@ struct SkyShellSet {
 
 extern f32 D_00160404 __attribute__((sda));
 extern struct SkyShellSet *D_0016045C;
-extern u8 D_001D96E0[];
+extern u8 sky_matrix[] __asm__("D_001D96E0");
 extern void FUN_001f9fc8(void *);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001fa070(void *, f32 *);
@@ -42,7 +42,7 @@ void FUN_0022abc0(void) {
 
     shell_index = 0;
     D_0016045C->relocation_state = 0;
-    FUN_001f9fc8(D_001D96E0);
+    FUN_001f9fc8(sky_matrix);
     clear_u64_value(rotation_angles);
 
     shell_set = D_0016045C;
@@ -76,7 +76,7 @@ void FUN_0022abc0(void) {
                 shell_scale = 1.25f;
                 break;
             default:
-                FUN_001f9fc8(D_001D96E0);
+                FUN_001f9fc8(sky_matrix);
                 break;
             }
 
@@ -84,8 +84,8 @@ void FUN_0022abc0(void) {
                 rotation_angles[2] =
                     (f32)((s32)(*shell_angle + (f32)shell_index * 2000.0f) % 10000) *
                         0.0006283185f - 3.1415927f;
-                FUN_001fa070(D_001D96E0, rotation_angles);
-                transform_row = D_001D96E0;
+                FUN_001fa070(sky_matrix, rotation_angles);
+                transform_row = sky_matrix;
                 FUN_001f9a80(transform_row, transform_row, shell_scale);
                 FUN_001f9a80(transform_row + 0x10, transform_row + 0x10, shell_scale);
                 FUN_001f9a80(transform_row + 0x20, transform_row + 0x20, shell_scale);

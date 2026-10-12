@@ -18,7 +18,7 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f96f8(int);
 extern int FUN_001f9740(int *arg0);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L10_002d8058_u() __asm__("FUN_L10_002d8058");
 extern short D_L10_00161BF0_d __asm__("D_L10_00161BF0") __attribute__((sda));
 extern short D_L10_00161BF4_d __asm__("D_L10_00161BF4") __attribute__((sda));
@@ -36,7 +36,7 @@ void FUN_L10_002d8c00(struct Moby *moby) {
     float b[4];
     if (moby->state == 0) {
         *(int *)data =
-            FUN_001f96f8(FUN_L00_00257b90(*(int *)&D_L10_00161BF0_d, *(int *)&D_L10_00161BF4_d));
+            FUN_001f96f8(random_int_between(*(int *)&D_L10_00161BF0_d, *(int *)&D_L10_00161BF4_d));
         moby->state = 1;
     }
     if (FUN_001f9740((int *)data)) {
@@ -55,7 +55,7 @@ void FUN_L10_002d8c00(struct Moby *moby) {
         FUN_L10_002d8058_u(moby, b, a);
         allocate_voice_for_target_entry(0, 0, (int)moby);
         *(int *)data =
-            FUN_001f96f8(FUN_L00_00257b90(*(int *)&D_L10_00161BF0_d, *(int *)&D_L10_00161BF4_d));
+            FUN_001f96f8(random_int_between(*(int *)&D_L10_00161BF0_d, *(int *)&D_L10_00161BF4_d));
     }
 }
 #include "qcopy.h"
@@ -158,8 +158,8 @@ void FUN_L10_00295a38(char *m) {
 
 
 extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern float FUN_L00_00257c48(float lo, float hi);
-extern int FUN_L00_00257b90(int, int);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L01_00277fb8(void *);
 extern void FUN_L00_00260738(char *, void *, void *, void *);
 extern void FUN_L00_00262b00(float, float, char *, float *, float *);
@@ -186,7 +186,7 @@ void FUN_L10_00295c20(struct Moby *moby) {
             float r = random_angle_radians();
             float e = frame_time * 0.13962634f;
             *(float *)(d + 0xB8) = r;
-            *(float *)(d + 0xB0) = frame_time * 1.5707964f + FUN_L00_00257c48(0.0f, e);
+            *(float *)(d + 0xB0) = frame_time * 1.5707964f + randf_sym(0.0f, e);
         }
         moby->state = 1;
     case 1:
@@ -203,7 +203,7 @@ void FUN_L10_00295c20(struct Moby *moby) {
         if (FUN_L01_00277fb8(moby) == 0) moby->state = 3;
         if (*(int *)(d + 0xBC) <= 0) {
             allocate_voice_for_target_entry(0, 0, (int)moby);
-            *(int *)(d + 0xBC) = FUN_L00_00257b90(0x28, 0x3C);
+            *(int *)(d + 0xBC) = random_int_between(0x28, 0x3C);
         }
         break;
     }
@@ -313,7 +313,7 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -350,9 +350,9 @@ void FUN_L10_002be858(unsigned char *moby) {
         do {
             i--;
             size = random_float_between_alt(0.1f, 1.0f);
-            red = FUN_L00_00257b90(0x40, 0xff);
-            green = FUN_L00_00257b90(0x40, 0xff);
-            blue = FUN_L00_00257b90(0x40, 0xff);
+            red = random_int_between(0x40, 0xff);
+            green = random_int_between(0x40, 0xff);
+            blue = random_int_between(0x40, 0xff);
             velocity[0] = fast_cos(random_angle_radians()) * random_float_between_alt(0.0f, 0.5f);
             velocity[1] = fast_sin(random_angle_radians()) * random_float_between_alt(0.0f, 0.5f);
             velocity[2] = 0.0f;
@@ -360,7 +360,7 @@ void FUN_L10_002be858(unsigned char *moby) {
             add_vectors(offset, velocity, D_0013F3D0);
             normalize_vector_xyz(position, position, random_float_between_alt(0.0f, D_0015ED6C));
             position[2] = random_float_between_alt(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
-            life = FUN_001f96f8(FUN_L00_00257b90(15, 30));
+            life = FUN_001f96f8(random_int_between(15, 30));
             color = red | ((blue << 16) | ((green << 8) | 0x7f000000));
             size_scaled = size * 0.07f;
             size *= 0.7f;
@@ -385,9 +385,9 @@ void FUN_L10_002be858(unsigned char *moby) {
             velocity[1] = random_float_between_alt(-1.0f, 1.0f);
             *(OvlQuad *)position = *(OvlQuad *)velocity;
             size = random_float_between_alt(0.1f, 1.0f);
-            red = FUN_L00_00257b90(0x40, 0xff);
-            green = FUN_L00_00257b90(0x40, 0xff);
-            blue = FUN_L00_00257b90(0x40, 0xff);
+            red = random_int_between(0x40, 0xff);
+            green = random_int_between(0x40, 0xff);
+            blue = random_int_between(0x40, 0xff);
             velocity[0] = fast_cos(random_angle_radians()) * random_float_between_alt(0.0f, 0.5f);
             velocity[1] = fast_sin(random_angle_radians()) * random_float_between_alt(0.0f, 0.5f);
             velocity[2] = 0.0f;
@@ -395,7 +395,7 @@ void FUN_L10_002be858(unsigned char *moby) {
             add_vectors(offset, velocity, (char *)D_L10_0015FFD8 + (*data << 8) + 0x10);
             normalize_vector_xyz(position, position, random_float_between_alt(0.0f, D_0015ED6C));
             position[2] = random_float_between_alt(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
-            life = FUN_001f96f8(FUN_L00_00257b90(15, 30));
+            life = FUN_001f96f8(random_int_between(15, 30));
             color = red | ((blue << 16) | ((green << 8) | 0x7f000000));
             size_scaled = size * 0.07f;
             size *= 0.7f;
@@ -651,7 +651,7 @@ void FUN_L10_002c9c70(struct Moby *moby) {
         target = &D_L10_0015FFD8[*(int *)(d + 0x10)];
     }
     {
-        unsigned char id = moby->unkB0;
+        unsigned char id = moby->mission;
         if ((id == 0xff ||
              D_0014C050_2c9c70[id + (D_0015ED84 << 4)] != 0xff) &&
             moby->state != 0) {
@@ -682,7 +682,7 @@ void FUN_L10_002c9c70(struct Moby *moby) {
         /* Position flags select opposite copy directions; rotation flags have priority. */
         if (target != 0) {
             *(short *)(d + 0x14) = target->oclass;
-            *(float *)(d + 0x44) = FUN_001fa6c0_2c9c70(target->unk23);
+            *(float *)(d + 0x44) = FUN_001fa6c0_2c9c70(target->alpha);
             if ((*(int *)(d + 8) & 0x10) != 0) {
                 qcopy(&moby->pos, &target->pos);
             } else if ((*(int *)(d + 8) & 0x40) != 0) {
@@ -735,7 +735,7 @@ void FUN_L10_002c9c70(struct Moby *moby) {
             if ((*(int *)(d + 8) & 2) == 0) {
                 float now = FUN_001fa6c0_2c9c70(*(int *)(d + 0x40));
                 float initial = FUN_001fa6c0_2c9c70(*(int *)(d + 0xc));
-                target->unk23 = FUN_001fa6d0_2c9c70(*(float *)(d + 0x44) * now / initial);
+                target->alpha = FUN_001fa6d0_2c9c70(*(float *)(d + 0x44) * now / initial);
             }
         }
         if ((*(int *)(d + 8) & 4) == 0 && target != 0 &&
@@ -774,7 +774,7 @@ extern int FUN_001f9770(void *);
 extern int FUN_L01_00274b78(float, void *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9af0(void *);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_001f96f8(int);
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
 extern void mark_moby_for_removal_d7b80(void *) __asm__("FUN_0020c828");
@@ -855,7 +855,7 @@ void FUN_L10_002d7b80(struct Moby *moby) {
                 FUN_001f9bf8(raised, raised,
                     random_float_between_alt(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
                 FUN_L00_0026dd20(&moby->pos, raised, 0x7f2f4f6f,
-                    FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(15)), 30000.0f);
+                    random_int_between(FUN_001f96f8(10), FUN_001f96f8(15)), 30000.0f);
             }
             mark_moby_for_removal_d7b80(moby);
             return;
@@ -1480,7 +1480,7 @@ int FUN_L10_002d9000(struct Moby *m, float *p) {
     float t50[4] __attribute__((aligned(16)));
     float t60[4] __attribute__((aligned(16)));
     *(OvlQuad *)a = *(OvlQuad *)p;
-    FUN_001fa2d8(t10, &m->unkC0);
+    FUN_001fa2d8(t10, &m->rot_row0);
     subtract_vector_xyz(t60, a, &m->pos);
     *(OvlQuad *)t50 = *(OvlQuad *)t60;
     FUN_001f9d20(t50, t50, t10);
@@ -1625,7 +1625,7 @@ void FUN_L10_002d92b8(struct Moby *m) {
         }
     }
     FUN_001f9740(&v->sound_timer);
-    if (D_0014C050[current_level_index][m->unkB0] == 0xFF) {
+    if (D_0014C050[current_level_index][m->mission] == 0xFF) {
         pressed = 1;
     }
     if (pressed || v->held != 0) {
@@ -1713,7 +1713,7 @@ void FUN_L10_002d9eb8(char *moby) {
             if (random_integer_below(1) == 0)
                 k = 0x70E;
             f21 = random_float_between(0.5f, 1.0f);
-            c16 = FUN_L00_00257b90(0x3C, 0x78);
+            c16 = random_int_between(0x3C, 0x78);
             f20 = random_float_between(2.0f, 3.0f);
             r2 = random_integer_below(4);
             FUN_L01_002f8530(&v30, &v40, k, f21, c16, f20, 1.0f, 3.0f, r2 == 0);
@@ -1792,7 +1792,7 @@ void FUN_L10_002da2c8(struct Moby *moby) {
         {
             float timer;
             float new_rotation = fast_add_rotations(moby->rot.z, 1.5707964f);
-            moby->unk30 = 0x60;
+            moby->update_dist = 0x60;
             moby->state = 1;
             timer = D_L10_00161C98 * 60.0f;
             moby->rot.z = new_rotation;
@@ -2122,7 +2122,7 @@ void FUN_L10_002dd650(struct Moby *m) {
         mark_moby_for_removal_d650(m);
         return;
     }
-    m->unk32 = 0x80;
+    m->draw_dist = 0x80;
     e = D_L10_00178580;
     for (i = 0; i < 0x40; i++, e += 0x40) {
         if (*(char **)(e + 0x34) == m) {
@@ -2130,7 +2130,7 @@ void FUN_L10_002dd650(struct Moby *m) {
                 char *o = *(char **)(e + 0x20);
                 if (*(short *)(o + 0xA6) == 0xAC || *(short *)(o + 0xA6) == 0x99) {
                     subtract_vector_xyz(v, &m->pos, o + 0x10);
-                    FUN_001fa2d8(w, &m->unkC0);
+                    FUN_001fa2d8(w, &m->rot_row0);
                     FUN_001f9d20(v, v, w);
                     if (v[0] > 0.25f) {
                         *(int *)(D_0014C190 + (((short)m->save_id >> 5) * 4 +

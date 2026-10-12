@@ -13,12 +13,14 @@ typedef struct {
     u8 f0f;
 } L00Entry;
 
-extern L00Entry D_00165480[8];
+extern L00Entry actuator_wave[8] __asm__("D_00165480");
 extern f32 func_001FA6C0(s32);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern f32 func_001F9DC8(f32);
 
-s32 FUN_001e8d08(s32 *p1)
+s32 actuator_calc_power(s32 *p1) __asm__("FUN_001e8d08");
+
+s32 actuator_calc_power(s32 *p1)
 {
     s32 aa[3][4];
     s32 *q2;
@@ -41,22 +43,22 @@ s32 FUN_001e8d08(s32 *p1)
         s32 res;
         u16 v;
 
-        if (D_00165480[i].f00 == 0) {
+        if (actuator_wave[i].f00 == 0) {
             continue;
         }
-        e = &D_00165480[i];
+        e = &actuator_wave[i];
         count++;
-        v = D_00165480[i].f06;
-        D_00165480[i].f06 = v - 1;
+        v = actuator_wave[i].f06;
+        actuator_wave[i].f06 = v - 1;
         if ((s16)v <= 0) {
             e->f00 = 0;
         }
-        if (D_00165480[i].f04 != 0) {
-            D_00165480[i].f04 = D_00165480[i].f04 - 1;
+        if (actuator_wave[i].f04 != 0) {
+            actuator_wave[i].f04 = actuator_wave[i].f04 - 1;
             continue;
         }
         res = 0;
-        D_00165480[i].f08++;
+        actuator_wave[i].f08++;
         rem = e->f08 % (e->f0a + e->f0c);
         switch (e->f00) {
         case 0:
@@ -123,4 +125,4 @@ s32 FUN_001e8d08(s32 *p1)
     return count;
 }
 
-extern __typeof__(FUN_001e8d08) func_001E8D08 __attribute__((alias("FUN_001e8d08")));
+extern __typeof__(actuator_calc_power) func_001E8D08 __attribute__((alias("FUN_001e8d08")));

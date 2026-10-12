@@ -72,7 +72,7 @@ void FUN_L12_00308708(void *unused, struct Moby *m) {
     d->unk48 = 0.7f;
     d->timer = truncate_float_to_s32(716.8f);
     d->unk6C = 0.0f;
-    m->unk30 = 0xFF;
+    m->update_dist = 0xFF;
     m->flags &= ~6;
     ang = fast_add_rotations(m->rot.z, 3.1415927f);
     dir[0] = fast_cos(ang);

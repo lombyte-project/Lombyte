@@ -287,7 +287,7 @@ extern s32 D_L00_0016118C;
 extern s32 D_L00_00161E38;
 extern s32 D_L00_001BA4C0;
 extern s16 D_001516D8[];
-extern u32 D_0013E504[];
+extern u32 frame_size[] __asm__("D_0013E504");
 extern u32 D_0015EE84;
 extern u128 D_L00_00166DD0[];
 extern u128 D_L00_00165F80[];
@@ -413,7 +413,7 @@ void FUN_L00_002a02b0(void) {
     default:
         return;
     }
-    FUN_L00_002a0fc8(p->f10, D_0015EE84, D_0013E504[0] << 11);
+    FUN_L00_002a0fc8(p->f10, D_0015EE84, frame_size[0] << 11);
     setup_gif_paging(0);
     FUN_001f2260();
     reset_gs_registers();

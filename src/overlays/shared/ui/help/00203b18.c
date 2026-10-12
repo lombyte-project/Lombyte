@@ -45,7 +45,7 @@ extern void FUN_L00_00232628(void);
 extern unsigned char D_0014161B[];
 void FUN_L00_00204f80(void) {
     struct Hero *g = &hero;
-    g->unk220 = 0.8f;
+    g->capsule_top = 0.8f;
     g->unk234 = 0.45f;
     g->unk228 = 0.8f;
     g->unk224 = 0.7f;
@@ -1848,7 +1848,7 @@ void FUN_L00_00208820(void) {
         qcopy(v, &hero.motion.pos);
         m = 0.05f;
         f336e8_208820(v, v, hero.unk224);
-        d = hero.unk220 - hero.unk224;
+        d = hero.capsule_top - hero.unk224;
         if (d < m)
             d = m;
         f4eed8_208820(((unsigned char *)hero.moby), 0, v, hero.unk234, d);
@@ -1859,7 +1859,7 @@ void FUN_L00_00208820(void) {
             f = hero.unk224;
         qcopy(v, &hero.motion.pos);
         f336e8_208820(v, v, f);
-        d = hero.unk220 - f;
+        d = hero.capsule_top - f;
         if (d < m)
             d = m;
         f4eed8_208820(((unsigned char *)hero.moby), 1, v, hero.unk234, d);
@@ -1901,12 +1901,12 @@ void FUN_L00_00208a10(void) {
         qcopy(&v, &hero.motion.pos);
         FUN_L00_002336e8_00208a10(&v, &v, hero.unk224);
         FUN_L00_0024eed8_00208a10(((unsigned char *)hero.moby), 0, &v, hero.unk234,
-                                  hero.unk220 - hero.unk224);
+                                  hero.capsule_top - hero.unk224);
         f = hero.unk234 + 0.05f;
         qcopy(&v, &hero.motion.pos);
         FUN_L00_002336e8_00208a10(&v, &v, f);
         FUN_L00_0024eed8_00208a10(((unsigned char *)hero.moby), 1, &v, hero.unk234,
-                                  hero.unk220 - f);
+                                  hero.capsule_top - f);
     }
 }
 typedef union {
@@ -2378,16 +2378,16 @@ void FUN_L00_00209848(int n, int lim) {
         V_209848 t, v;
         float a, r;
         int k;
-        t.x = P->motion.pos.f[0] + FUN_002132a8_209848(-0.15f, 0.15f) + P->motion.unk100.f[0] * 8.0f;
+        t.x = P->motion.pos.f[0] + FUN_002132a8_209848(-0.15f, 0.15f) + P->motion.displacement.f[0] * 8.0f;
         {
-            float y = P->motion.pos.f[1] + FUN_002132a8_209848(-0.15f, 0.15f) + P->motion.unk100.f[1] * 8.0f;
+            float y = P->motion.pos.f[1] + FUN_002132a8_209848(-0.15f, 0.15f) + P->motion.displacement.f[1] * 8.0f;
             t.z = P->water_surface_z + 0.1f;
             t.y = y;
         }
         a = FUN_00213308_209848();
         r = FUN_002132a8_209848(D_0015ED6C_209848 * 0.0f, D_0015ED6C_209848 * 3.0f);
-        v.x = fast_cos(a) * r + P->motion.unk100.f[0] * 0.75f;
-        v.y = fast_sin(a) * r + P->motion.unk100.f[1] * 0.75f;
+        v.x = fast_cos(a) * r + P->motion.displacement.f[0] * 0.75f;
+        v.y = fast_sin(a) * r + P->motion.displacement.f[1] * 0.75f;
         v.z = FUN_002132a8_209848(D_0015ED6C_209848 * 3.0f, D_0015ED6C_209848 * 6.5f);
         k = random_int_between(0x5A, 0x78);
         if (P->unk22A4 < 0.25f)
@@ -2419,7 +2419,7 @@ void FUN_L00_00209a40(int n, int mode) {
 
     for (i = 0; i < n; i++) {
         p = &hero;
-        src = (V_209a40 *)&p->motion.unk100;
+        src = (V_209a40 *)&p->motion.displacement;
         if (mode == 0) {
             pos[0] = p->motion.pos.f[0] + FUN_002132a8_209a40(-0.1f, 0.1f);
             pos[1] = p->motion.pos.f[1] + FUN_002132a8_209a40(-0.1f, 0.1f);
@@ -3154,8 +3154,8 @@ void FUN_L00_0020b5b8(void) {
         f32 st = (f32)t;
         a = g->unk4A0 * st;
         b = g->motion.velocity.f[2] * st;
-        c = g->motion.unk100.f[0] * st;
-        d = g->motion.unk100.f[1] * st;
+        c = g->motion.displacement.f[0] * st;
+        d = g->motion.displacement.f[1] * st;
         v.f[2] = v.f[2] + b - a * st * 0.5f;
     }
     v.f[0] = v.f[0] + c;

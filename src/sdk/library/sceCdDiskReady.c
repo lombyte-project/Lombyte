@@ -23,7 +23,8 @@ extern s32 sceSifCallRpc();
 /* libcdvd disk-ready query (the sceCdDiskReady pattern): take the S-command
    semaphore, bind the 0x8000059A server once, send mode and return the
    server's status word. Mode 8 reports -1 on failure, every other mode 6. */
-s32 FUN_00121190(s32 mode) {
+s32 sceCdDiskReady(s32 mode) __asm__("FUN_00121190");
+s32 sceCdDiskReady(s32 mode) {
     s32 response;
     s32 spin;
 
@@ -77,4 +78,4 @@ s32 FUN_00121190(s32 mode) {
     return response;
 }
 
-extern __typeof__(FUN_00121190) func_00121190 __attribute__((alias("FUN_00121190")));
+extern __typeof__(sceCdDiskReady) func_00121190 __attribute__((alias("FUN_00121190")));

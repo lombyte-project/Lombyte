@@ -11,7 +11,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00258090.s", FUN_L08_00258090);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L08_001B2880_d __asm__("D_L08_001B2880") __attribute__((section(".data")));
-extern unsigned char *FUN_L00_002678b8(int);
+extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -28,7 +28,7 @@ void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
     float f20;
     int k;
     *(OvlQuad *)v = *(OvlQuad *)vec;
-    p = FUN_L00_002678b8(0);
+    p = create_part(0);
     if (p != 0) {
         c = 0;
         k = k2;

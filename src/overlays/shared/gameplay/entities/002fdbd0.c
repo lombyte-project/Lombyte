@@ -128,11 +128,11 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
     FUN_L06_002feb40(moby);
     target = vars->target;
     FUN_L00_00263ac8(moby, 1, vars->unk420, 2.5f);
-    if (moby->unk31 != 0 && FUN_001f9b48(&moby->pos, &D_L06_00167540) < 27.0f) {
+    if (moby->visible != 0 && FUN_001f9b48(&moby->pos, &D_L06_00167540) < 27.0f) {
         FUN_L00_0025a120(moby);
-        moby->unk7F = 0x15;
+        moby->shadow_range = 0x15;
     }
-    moby->unk58 = 1.0f;
+    moby->anim_speed = 1.0f;
     switch (moby->state) {
     case 0:
         vars->unk28 = 1;
@@ -222,7 +222,7 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
         FUN_L00_0025be00(&moby->rot.z, FUN_001f9e90(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                          &vars->turn_speed, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                          frame_time * 3.1415927f);
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             FUN_L06_002ff100_u(moby);
             moby->state = 3;
             if (moby->prev_seq != 5) {
@@ -231,7 +231,7 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
         }
         break;
     case 3:
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             if (vars->unk164 != 2) {
                 moby->state = 4;
                 if (moby->prev_seq != 4) {
@@ -277,7 +277,7 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
         b.f[2] += 0.3f;
         cur_frame = FUN_0020c9e0(moby);
         if (hero.vehicle_mode == 1 && cur_frame < 9.0f) {
-            moby->unk58 = D_L06_00161FCC;
+            moby->anim_speed = D_L06_00161FCC;
         }
         if (cur_frame >= 9.0f && cur_frame <= 15.0f) {
             c.f[0] = FUN_001f9dc8(moby->rot.z);
@@ -291,17 +291,17 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
             sweep_hit_segment(&a, &b, &vars->unk200, &b, moby, &shot, 5);
         }
         qcopy(&vars->unk200, &a);
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             moby->state = 6;
-            moby->unkBC = 1;
+            moby->command = 1;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
             }
         }
         break;
     case 6:
-        if (moby->unk70 & 2) {
-            moby->state = moby->unkBC;
+        if (moby->anim_flags & 2) {
+            moby->state = moby->command;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(20));
             }
@@ -351,7 +351,7 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
             sweep_hit_segment(&a, &b, &vars->unk200, &b, moby, &shot, 5);
         }
         qcopy(&vars->unk200, &a);
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             moby->state = 11;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
@@ -558,7 +558,7 @@ void FUN_L06_002feb40(struct Moby *moby) {
         }
         FUN_0026c268(moby, (char *)vars + 0x110);
     }
-    moby->unkA4 = 0xff;
+    moby->hit_slot = 0xff;
     FUN_0026c348(moby, (char *)vars + 0x110);
     if (vars->unk188 != 0) {
         *(f32 *)((char *)vars + 0x198) = D_L06_00161FAC + 6.0f;
@@ -912,7 +912,7 @@ void FUN_L06_00300b90(struct Moby *moby) {
     moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(data + 0x10));
     moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(data + 0x14));
     moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(data + 0x18));
-    if (--moby->unkBC == 0) {
+    if (--moby->command == 0) {
         mark_moby_for_removal(moby);
     }
 }

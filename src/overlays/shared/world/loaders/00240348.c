@@ -445,7 +445,7 @@ extern int D_0015ED84 MACRO_ADDR;
 extern int D_0015ED88 MACRO_ADDR;
 extern int D_0015EE50; /* no foreign declaration */
 extern int D_L00_0015EF54 MACRO_ADDR;
-extern char *D_0015EE4C[2] MACRO_ADDR;
+extern char *level_root[2] __asm__("D_0015EE4C") MACRO_ADDR;
 extern int D_L00_0015F444 MACRO_ADDR;
 extern int D_L00_0015F445 MACRO_ADDR;
 extern int D_L00_0015F446 MACRO_ADDR;
@@ -535,10 +535,10 @@ char *load_level_gameplay(int arg0) {
         } else {
             load(mem, D_00137B80.f2970, D_00137B80.f2974);
         }
-        D_0015EE4C[1] = mem; /* D_0015EE50 */
+        level_root[1] = mem; /* D_0015EE50 */
     }
     FlushCache(0);
-    FUN_L00_0024d8d0(D_0015EE4C[1], hdr);
+    FUN_L00_0024d8d0(level_root[1], hdr);
     FlushCache(0);
     FillTransferWords(&D_0013F350, 0, 0x2310);
     FillTransferWords(D_L00_00166C80, 0, 0x3A0);
@@ -1728,7 +1728,7 @@ extern s32 current_level_index __asm__("D_0015ED84");
 extern u8 D_0014C050[];
 extern u8 D_L00_0015FC88_244110[] __asm__("D_L00_0015FC88") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F40C;
-extern s32 D_0015ED5C;
+extern s32 sound_bank_handle __asm__("D_0015ED5C");
 extern s32 D_L00_00160004;
 extern s32 D_0015EE8C;
 extern u64 D_L00_001827C0[3];
@@ -1880,7 +1880,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
         D_L00_0015F40C = 0;
         FUN_001f9838_244110(D_L00_0015FC88_244110, D_0014C050 + current_level_index * 16, 0x10);
         FUN_00203120((char *)(src[6] + (s32)src), h[0], (char *)h + h[1]);
-        D_L00_00160004 = D_0015ED5C;
+        D_L00_00160004 = sound_bank_handle;
         FUN_00118a80(0);
         used = FUN_L00_0024d8d0_244110((char *)(src[0x14] + (s32)src), base);
         D_L00_0015F40C = (s32)(base + h[0x18]);
@@ -1996,7 +1996,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
             } else {
                 D_L00_0015F5F4[a3].sound = *(u16 *)(e + D_L00_0015F5F4[a3].sound * 4);
             }
-            D_L00_0015F5F4[a3].time = D_0015ED5C;
+            D_L00_0015F5F4[a3].time = sound_bank_handle;
         }
         end = free + 0x3F;
         span++;
@@ -2018,7 +2018,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
                 e = tbl + span->off;
                 for (k = 0; k < D_L00_00197300[ci]->count0D; k++, e += 4) {
                     D_L00_00197300[ci]->f28[k].sound = *(u16 *)e;
-                    D_L00_00197300[ci]->f28[k].time = D_0015ED5C;
+                    D_L00_00197300[ci]->f28[k].time = sound_bank_handle;
                 }
             }
         }

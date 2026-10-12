@@ -9,7 +9,7 @@ struct E {
     s32 unk68;
     u8 pad6C[0x24];
 };
-extern struct E D_00199B60[];
+extern struct E hud_chan_slots[] __asm__("D_00199B60");
 
 void set_animation_parameter(s32 anim_id, s32 value) __asm__("FUN_001ff570");
 
@@ -18,14 +18,14 @@ void set_animation_parameter(s32 anim_id, s32 value) {
     struct E *e;
 
     for (i = 0; i < 13; i++) {
-        if (D_00199B60[i].unk64 == anim_id) {
+        if (hud_chan_slots[i].unk64 == anim_id) {
             break;
         }
     }
     if (i < 13) {
-        D_00199B60[i].unk24 = value;
-        if (D_00199B60[i].unk68 == 0) {
-            D_00199B60[i].unk4 = value;
+        hud_chan_slots[i].unk24 = value;
+        if (hud_chan_slots[i].unk68 == 0) {
+            hud_chan_slots[i].unk4 = value;
         }
     }
 }

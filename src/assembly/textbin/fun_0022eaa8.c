@@ -118,17 +118,17 @@ typedef struct {
 #include "rnc/gameplay/state/level_state.h"
 extern LevelRenderState level_render_state __asm__("D_0013E030");
 extern u8 D_0013E5C0[];
-extern s32 D_0015ED5C;
+extern s32 sound_bank_handle __asm__("D_0015ED5C");
 extern s16 D_0015EE48 __attribute__((sda));
 #define D_0015EE4A (*(s16 *)0x0015EE4A)
 extern f32 sequence_fade __asm__("D_0015F43C") MACRO_ADDR;
-extern s32 D_0015F618 MACRO_ADDR;
+extern s32 space_load_in_progress __asm__("D_0015F618") MACRO_ADDR;
 extern f32 D_00160404 MACRO_ADDR;
 #include "rnc/rendering/sky_shell.h"
 extern s32 D_001604E0 __attribute__((sda));
 extern s32 D_001604F0 __attribute__((sda));
 extern s32 D_00160500 __attribute__((sda));
-extern s32 D_00160F0C;
+extern s32 current_vu_chain __asm__("D_00160F0C");
 extern LevelGameplayState render_sequence __asm__("D_0018CB20");
 extern LevelGameplayState D_0018CB20_b[] __asm__("D_0018CB20");
 extern LevelGameplayState D_0018CB20_c[] __asm__("D_0018CB20");
@@ -138,7 +138,7 @@ extern LevelRenderArchive D_001940C0;
 extern ColorPair D_001D9A30[];
 extern u128 D_001D9AE0[];
 extern f32 D_001D9B30[];
-extern f32 D_001D9B48[];
+extern f32 cam_mode_min_fov[] __asm__("D_001D9B48");
 
 extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
 extern void read_global_table_entry(void) __asm__("ReadGlobalTableEntry");
@@ -212,7 +212,7 @@ void update_level_gameplay_frame(void) {
     if (render_sequence.time == 1 && current_level_index != 0 &&
         (current_level_index != 1 || level_available[3] != 0)) {
         read_global_table_entry();
-        sound_bank = D_0015ED5C;
+        sound_bank = sound_bank_handle;
         mode_advance = level_render_state.mode;
         snd_play_sound_vol_pan_pmpb(sound_bank, mode_advance, 0x400, 0, 0, 0, 0, D_0013E5C0);
         snd_reset_state_and_flush_commands();
@@ -244,8 +244,8 @@ void update_level_gameplay_frame(void) {
             level_render_state.state++;
             qcopy(&D_001604F0, &D_001604E0);
             fill_transfer_words(&render_sequence, 0, 0x1C0);
-            render_sequence.source_begin = D_001940C0.source_begin_offset + D_00160F0C;
-            render_sequence.source_end = D_001940C0.source_end_offset + D_00160F0C;
+            render_sequence.source_begin = D_001940C0.source_begin_offset + current_vu_chain;
+            render_sequence.source_end = D_001940C0.source_end_offset + current_vu_chain;
             archive_table = D_001940C0.archive_table;
             archive_data = (u8 *)archive_table + archive_table->data_offset;
             scene_offset = &archive_table->scene_offsets[0];
@@ -263,15 +263,15 @@ void update_level_gameplay_frame(void) {
             if (D_0015EE4A != 0) {
                 D_0015EE4A = 0;
             }
-            D_0015F618 = 1;
+            space_load_in_progress = 1;
             return;
         }
     } else if (render_sequence.frame >= 0x60) {
         parse_space_scene_chunk(++render_sequence.sequence_frame);
     }
     build_object_rotation_matrix();
-    if (view_context.projection_scale < D_001D9B48[level_render_state.mode]) {
-        view_context.projection_scale = D_001D9B48[level_render_state.mode];
+    if (view_context.projection_scale < cam_mode_min_fov[level_render_state.mode]) {
+        view_context.projection_scale = cam_mode_min_fov[level_render_state.mode];
     }
     update_view_context();
     scale = 1.0f;

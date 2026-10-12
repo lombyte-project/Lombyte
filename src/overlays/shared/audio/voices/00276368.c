@@ -15,7 +15,7 @@ extern s32 D_L00_00173E08;
 extern u8 D_L00_00173E40[];
 extern void *D_L00_00197300[];
 extern s32 D_L00_0015F3F8_gp __asm__("D_L00_0015F3F8") __attribute__((sda));
-extern s32 D_0013E504;
+extern s32 frame_size __asm__("D_0013E504");
 extern s32 D_L00_001611CC;
 extern s32 D_L00_00184414;
 extern s32 D_L00_001B9E90_init[] __asm__("D_L00_001B9E90");
@@ -166,7 +166,7 @@ void FUN_L00_00276368(void) {
     } else {
         FUN_L00_00234fd0(0);
     }
-    FUN_L00_002a0f18(D_L00_001B9D00, D_L00_0015EE84, D_0013E504 << 11);
+    FUN_L00_002a0f18(D_L00_001B9D00, D_L00_0015EE84, frame_size << 11);
     D_L00_001B9D08 = D_L00_0015EE78;
     if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
         D_L00_00184434 = D_L00_0015EE78 + 0x40000;
@@ -396,7 +396,7 @@ extern Own D_L00_001B78F0;
 extern Own D_L00_001B6820;
 extern G841F0 D_L00_001841F0;
 extern s16 D_001516D8[];
-extern s32 D_0015EED8;
+extern s32 decode_mode __asm__("D_0015EED8");
 extern s32 D_L00_0015F5AC;
 extern s32 D_L00_0015F578 __attribute__((sda));
 extern s32 D_L00_0015F5C4;
@@ -483,35 +483,35 @@ void FUN_L00_00276bd0(void) {
             FUN_001e93b0(D_L00_001E91B0, D_L00_001841F0.w224);
             FUN_L00_0028ed58(D_L00_001841F0.w224);
         } else if (D_L00_001B9CF0.unkC == 3) {
-            tmp = D_0015EED8;
-            D_0015EED8 = 2;
+            tmp = decode_mode;
+            decode_mode = 2;
             D_L00_001B9CF0.unk130 = tmp;
             fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_00299460(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 4) {
-            tmp = D_0015EED8;
-            D_0015EED8 = 1;
+            tmp = decode_mode;
+            decode_mode = 1;
             D_L00_001B9CF0.unk130 = tmp;
             fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_00299560(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 6) {
-            tmp = D_0015EED8;
-            D_0015EED8 = 1;
+            tmp = decode_mode;
+            decode_mode = 1;
             D_L00_001B9CF0.unk130 = tmp;
             fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_002994f8(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 5) {
-            tmp = D_0015EED8;
-            D_0015EED8 = 1;
+            tmp = decode_mode;
+            decode_mode = 1;
             D_L00_001B9CF0.unk130 = tmp;
             fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_00298840(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 7) {
-            tmp = D_0015EED8;
+            tmp = decode_mode;
             D_L00_001B9CF0.unk130 = tmp;
             fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
@@ -642,7 +642,7 @@ typedef struct VoiceRenderEntry {
     s32 height;
 } VoiceRenderEntry;
 
-extern s32 D_0013E504;
+extern s32 frame_size __asm__("D_0013E504");
 extern s32 D_L00_0015EE84 __asm__("D_0015EE84");
 extern s32 D_L00_001B9E90_init[] __asm__("D_L00_001B9E90");
 extern s32 D_L00_001B23C0[] __asm__("D_L00_001B23C0");
@@ -683,7 +683,7 @@ void FUN_L00_002772c0(s32 param_1) {
     struct { u128d image_copy[4]; u128d unused[5]; u128d first, last; } copies;
 
     emit_fixed_dma_packet_if_cursor();
-    FUN_L00_002a0fc8_772c0(D_L00_001B9CF0.unk10, D_L00_0015EE84, D_0013E504 << 11);
+    FUN_L00_002a0fc8_772c0(D_L00_001B9CF0.unk10, D_L00_0015EE84, frame_size << 11);
     if (param_1 != 0) {
         return;
     }

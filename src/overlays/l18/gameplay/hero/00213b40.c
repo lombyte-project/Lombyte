@@ -7,7 +7,7 @@
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L15_002044c8). */
 extern int D_0015ED84_d __asm__("D_0015ED84");
 extern int FUN_001f0b58(void);
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void FUN_001f9810(void *, int);
 extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
@@ -63,7 +63,7 @@ void FUN_L18_00213b40(void) {
     if (v == 0xD) {
         struct Hero *q = &hero;
         if (q->state.current != 0x7B) {
-            if (FUN_L00_001f0d60(q->unk234 + 0.03f, &q->motion.unkD0, 2, 0)) {
+            if (coll_sphere(q->unk234 + 0.03f, &q->motion.unkD0, 2, 0)) {
                 if (FUN_001f0b58() == 0xB) {
                     hero_set_state(0x7B, 1);
                     return;
@@ -98,7 +98,7 @@ void FUN_L18_00213b40(void) {
     {
         struct Hero *q = &hero;
         struct Hero *h;
-        if (q->unk12E3 != 0 && q->unk300 != 0) {
+        if (q->unk12E3 != 0 && q->grounded_frames != 0) {
             int k = q->state.control_mode;
             if (k != 0x10 && k != 0x14 && k != 7) {
                 hero_set_state(0x31, 1);
@@ -111,7 +111,7 @@ void FUN_L18_00213b40(void) {
             if (absolute_float(h->unk2F4 - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
                 if (h->unk2F4 - h->motion.pos.f[2] > 0.0f) {
                     if (h->state.current != 0x69 || h->unk41E != 0) {
-                        if (h->motion.unk100.f[2] < 0.0f) {
+                        if (h->motion.displacement.f[2] < 0.0f) {
                             FUN_L00_0020b930();
                             if (h->health.hp == 0)
                                 hero_set_state(0x7B, 1);
@@ -127,7 +127,7 @@ void FUN_L18_00213b40(void) {
         if (h->selector_11 != 0 && h->state.current != 0x7B) {
             if (absolute_float(h->unk2F4 - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
                 if (h->unk2F4 - h->motion.pos.f[2] > 0.0f) {
-                    if (h->motion.unk100.f[2] < 0.0f) {
+                    if (h->motion.displacement.f[2] < 0.0f) {
                         FUN_L00_0020b930();
                         hero_set_state(0x7B, 1);
                     }
@@ -325,6 +325,6 @@ s32 FUN_L18_00218a90(s32 arg) {
         break;
     }
     FUN_001f9a10_210ce8(&hero.motion.velocity, &hero.motion.velocity, &v);
-    FUN_001f9a10_210ce8(&hero.motion.unk100, &hero.motion.unk100, &v);
+    FUN_001f9a10_210ce8(&hero.motion.displacement, &hero.motion.displacement, &v);
     return 1;
 }

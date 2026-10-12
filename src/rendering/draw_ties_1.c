@@ -7,7 +7,7 @@ extern u8 D_00160F40[];
 extern s32 D_00160F68;
 extern s32 D_0018A2C8[];
 extern u8 D_001DF030[];
-extern u8 D_001E3200[];
+extern u8 tie_light_data[] __asm__("D_001E3200");
 extern s32 FlushCache();
 extern s32 WriteDmaChannel();
 extern s32 func_001F21B0();
@@ -32,7 +32,7 @@ void draw_ties_1(void) {
     if (D_0018A2C8[0] != 0) {
         FlushCache(0);
         func_00235BE8();
-        WriteDmaChannel(D_001E3200, 0x3600, 0x40);
+        WriteDmaChannel(tie_light_data, 0x3600, 0x40);
     }
     func_001F21B8(D_00160F40, 5);
     dma_tie_textures();

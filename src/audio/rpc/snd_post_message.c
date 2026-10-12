@@ -1,6 +1,6 @@
 #include "types.h"
-extern s32 D_0015ECA0;
-extern s32 D_0015ECC0;
+extern s32 snd_batch_command_buffers __asm__("D_0015ECA0");
+extern s32 snd_batch_index __asm__("D_0015ECC0");
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
 void snd_post_message(void) __asm__("FUN_0012e9a0");
 
@@ -9,8 +9,8 @@ void snd_post_message(void) {
     s32 idx;
     u8 *base;
 
-    idx = D_0015ECC0;
-    base = (u8 *)&D_0015ECA0;
+    idx = snd_batch_index;
+    base = (u8 *)&snd_batch_command_buffers;
     temp_4_11 = *(s32 **)(base + (idx * 4));
     *temp_4_11 += 1;
     snd_flush_sound_commands(temp_4_11);

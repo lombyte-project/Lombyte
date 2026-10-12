@@ -6,7 +6,7 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00249738.s", FUN_L06_00249738);
 #else
 #include "rnc/globals.h"
-extern s32 D_0013E504;
+extern s32 frame_size __asm__("D_0013E504");
 extern s32 D_L06_0015F8E8 __attribute__((sda));
 extern f32 D_L06_0015F8F0 __attribute__((sda));
 extern f32 D_L06_0015F8F4 __attribute__((sda));
@@ -19,7 +19,7 @@ extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_0
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
 
 s32 FUN_L06_00249738(u8 *p) {
-    s32 screen_y = D_0013E504;
+    s32 screen_y = frame_size;
     s32 y = screen_y - 42;
     s32 segments = 3;
     s32 x, start_x, inner, i, color, remaining, tile_count;

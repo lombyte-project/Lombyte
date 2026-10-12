@@ -10,11 +10,11 @@
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L07_001B21CC_x __asm__("D_L07_001B21CC") __attribute__((section(".data")));
-extern void *FUN_L00_002678b8(int);
+extern void *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 unsigned char *FUN_L07_0029a2a0(char *pos, char *vec) {
-    unsigned char *p = FUN_L00_002678b8(0x33);
+    unsigned char *p = create_part(0x33);
     if (p != 0) {
         char *b = (char *)p + 0x20;
         char *a = (char *)p + 0x10;
@@ -46,7 +46,7 @@ extern float D_L07_00166E40[];
 unsigned char *FUN_L07_0029b8d8(void *m, short index, float amount, float factor) {
     float v[4];
     float t[4];
-    unsigned char *p = FUN_L00_002678b8(0x3d);
+    unsigned char *p = create_part(0x3d);
     if (p != 0) {
         unsigned char *q = p + 0x20;
         *(void **)q = m;

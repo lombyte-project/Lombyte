@@ -48,7 +48,7 @@ extern float D_L08_0015F5D0;
 extern float D_L08_0015F5D4;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_001ff290(void *, void *, void *);
@@ -81,9 +81,9 @@ void FUN_L08_00307298(char *m) {
             scale_vector_xyz(sc, d, f);
             normalize_vector_xyz(off, d, -0.1f);
             FUN_L00_001ff290(tmp, off, m + 0x10);
-            a = scale_game_frames(FUN_L00_00257b90(0xF, 0x14));
+            a = scale_game_frames(random_int_between(0xF, 0x14));
             FUN_L00_00269958(off, sc, 0x6F00AFFF, 0xFF, a, 0x28,
-                             scale_game_frames(FUN_L00_00257b90(7, 0xA)), 1);
+                             scale_game_frames(random_int_between(7, 0xA)), 1);
         }
         add_vector_xyz(m + 0x10, m + 0x10, d);
         if (FUN_001efa68(m + 0x10, prev, 0x10, *(int *)(d + 0x10), 0) != 0) {
@@ -253,7 +253,7 @@ void FUN_L08_00307cf0(Moby *m) {
     switch (m->state) {
     case 0:
         m->state = 2;
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         func_L08_00309050_3091B0(flag);
         break;
     case 2:

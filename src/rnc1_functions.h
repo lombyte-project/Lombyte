@@ -53,7 +53,7 @@ int init_block_fn(int value) __asm__("func_00119568");
 
 void no_op_memory_callback(void) __asm__("func_00208810");
 
-int fun_00208818(int a0, int a1, int a2, int a3, int t0, int t1) __asm__("func_00208818");
+int point_is_clockwise(int a0, int a1, int a2, int a3, int t0, int t1) __asm__("func_00208818");
 
 void no_op_graphics_callback(void) __asm__("func_00237A70");
 

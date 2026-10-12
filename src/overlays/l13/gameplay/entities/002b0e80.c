@@ -255,8 +255,8 @@ void FUN_L13_002b39e0(struct Moby *moby) {
             FUN_L00_002ea9d8(b);
             FUN_L00_002eaa30(c);
         } else {
-            u8 s = moby->unkBC;
-            moby->unkBC = 1;
+            u8 s = moby->command;
+            moby->command = 1;
             moby->state = s;
         }
         break;
@@ -267,7 +267,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
         if (!FUN_L00_0028d8c0(moby, vars->voice)) {
             vars->voice = allocate_voice_2b39e0(0, 4, moby);
         }
-        if (moby->unkBC != 0) {
+        if (moby->command != 0) {
             lift_view_2b39e0(moby, a, b);
             FUN_L00_002ea9d8(a);
             FUN_L00_002eaa30(b);
@@ -285,7 +285,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
             } else {
                 moby->state = 7;
             }
-            if (moby->unkBC != 0) {
+            if (moby->command != 0) {
                 hero_set_state(HERO_STATE_IDLE, 0);
                 FUN_L00_002eac18(1);
             }
@@ -321,7 +321,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
         }
         {
             int t = (i << 8) | 0x80000000;
-            moby->unk90 = (i << 16) | t | i;
+            moby->glow_color = (i << 16) | t | i;
         }
         if (hero.ground_moby != moby || hero.air_frames.s != 0 ||
             FUN_001f9b80(&hero.motion.pos, &moby->pos) > 1.1f) {
@@ -329,11 +329,11 @@ void FUN_L13_002b39e0(struct Moby *moby) {
         }
         if (vars->armed != 0 && hero.ground_moby == moby && hero.air_frames.s == 0 &&
             FUN_001f9b80(&hero.motion.pos, &moby->pos) < 0.5f) {
-            moby->unk90 = 0x80208020;
+            moby->glow_color = 0x80208020;
             if (moby->state == 5) {
-                moby->unkBC = 2;
+                moby->command = 2;
             } else {
-                moby->unkBC = 3;
+                moby->command = 3;
             }
             moby->state = 1;
             hero_set_state(0x72, 1);
@@ -343,7 +343,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
             char *p = (char *)&hero.motion.pos;
             float d = FUN_001f9b80(&moby->pos, p);
             if (absolute_float(*(float *)(p + 0x258) - vars->bottom) < 2.0f && d < 32.0f && d > 5.0f) {
-                moby->unkBC = 0;
+                moby->command = 0;
                 moby->state = 3;
                 vars->speed = -(frame_time * 5.0f);
             }
@@ -351,7 +351,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
             char *p = (char *)&hero.motion.pos;
             float d = FUN_001f9b80(&moby->pos, p);
             if (absolute_float(*(float *)(p + 0x258) - vars->top) < 2.0f && d < 32.0f && d > 5.0f) {
-                moby->unkBC = 0;
+                moby->command = 0;
                 moby->state = 2;
                 vars->speed = frame_time * 5.0f;
             }
@@ -382,7 +382,7 @@ void FUN_L13_002b4060(struct Moby *moby, float *v, float *w) {
     float r = 2.5f;
     float z = 1.5f;
     unsigned char *x;
-    if ((moby->unkBC >= 2 && (moby->unkBC & 1)) || (moby->state >= 2 && (moby->state & 1))) {
+    if ((moby->command >= 2 && (moby->command & 1)) || (moby->state >= 2 && (moby->state & 1))) {
         ang = FUN_001fa5c8(ang, 1.5707964f);
     } else {
         ang = fast_add_rotations(ang, 1.5707964f);
@@ -620,8 +620,8 @@ void FUN_L13_002b48d8(struct Moby *moby) {
     if (*(int *)(data + 0x40) == 0) {
         *(int *)(data + 0x40) = ((int)hero.moby);
     }
-    if (moby->unkBC >= 4)
-        moby->state = moby->unkBC;
+    if (moby->command >= 4)
+        moby->state = moby->command;
 }
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -661,12 +661,12 @@ struct Moby *FUN_L13_002b4958(struct Moby *parent) {
         v->parent = parent;
         v->unk0 = &v->unk20;
         v->unkC = v->unk60;
-        m->unk30 = parent->unk30;
-        m->unk32 = v->parent->unk32;
-        m->unk31 = 1;
+        m->update_dist = parent->update_dist;
+        m->draw_dist = v->parent->draw_dist;
+        m->visible = 1;
         m->flags |= 0x20;
         m->state = 0;
-        m->unkBC = 0;
+        m->command = 0;
         qcopy(&m->pos, &v->parent->pos);
         m->scale = m->pclass->scale * parent->scale / parent->pclass->scale;
         v->unk20 = 1.0f;
@@ -764,7 +764,7 @@ void FUN_L13_002b4a58(struct Moby *m, char *p) {
             }
         }
     }
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
     FUN_L00_0025d538(m, p + 0x60);
 }
 /* Updates the gem-lock turret: idle animations, then a burst of particles when destroyed. */
@@ -816,7 +816,7 @@ void FUN_L13_002b4c80(struct Moby *moby) {
                 blend_moby_animation(moby, 2, x, y);
             }
         } else {
-            if (moby->prev_seq >= 2 || (moby->unk70 & 2)) {
+            if (moby->prev_seq >= 2 || (moby->anim_flags & 2)) {
                 if (!random_integer_below(7)) {
                     if (moby->prev_seq != 1) {
                         blend_moby_animation(moby, 1, 0, FUN_L00_00257b90(7, 0xD));
@@ -826,13 +826,13 @@ void FUN_L13_002b4c80(struct Moby *moby) {
                         blend_moby_animation(moby, 0, 0, FUN_L00_00257b90(7, 0xD));
                     }
                 }
-                moby->unk58 = random_float_between(0.8f, 1.2f);
+                moby->anim_speed = random_float_between(0.8f, 1.2f);
             }
         }
         FUN_L13_002b4a58_c(moby, d);
         break;
     case 2:
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             subtract_vector_xyz(a, D_L13_001670C0, &moby->pos);
             moby_point_position(moby, 0, b);
             FUN_L00_0025e450(moby, a, b, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, -1, 2.0f,
@@ -845,18 +845,18 @@ void FUN_L13_002b4c80(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B60D8), where it is exact; names translated to the US level program. */
 
 extern void * FUN_L13_00280400(void *, int, int, float, float, int, float, int);
-extern void FUN_L00_00267a08(void *);
+extern void kill_part(void *) __asm__("FUN_L00_00267a08");
 
 /* Per-frame glow effect: spawns it while the moby is active (byte 0x31 set), frees it otherwise. */
 void FUN_L13_002b4f28(struct Moby *moby, char *data) {
     float opacity = 0.2f;
     void **handle = (void **)(data + 0x228);
-    if (moby->unk31) {
+    if (moby->visible) {
         if (!*handle) {
             *handle = FUN_L13_00280400(moby, 0, 0x80808080, opacity, opacity, 0x10808080, 0.8f, 0x19);
         }
     } else if (*handle) {
-        FUN_L00_00267a08(*handle);
+        kill_part(*handle);
         *handle = 0;
     }
 }
@@ -872,12 +872,12 @@ typedef struct {
     void *value;
 } Level13VendorMoby;
 
-extern void FUN_L00_00267a08(void *);
+extern void kill_part(void *) __asm__("FUN_L00_00267a08");
 
 /* Passes the stored value to FUN_L00_00267a08 once, then clears it. */
 void FUN_L13_002b4fb8(Level13VendorMoby *moby) {
     if (moby->value != 0) {
-        FUN_L00_00267a08(moby->value);
+        kill_part(moby->value);
         moby->value = 0;
     }
 }
@@ -1001,7 +1001,7 @@ extern IconEC5D0 D_L13_001CBDB8[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float vector_length_xyz(void *a);
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern unsigned char D_0013E504[];
+extern unsigned char frame_size[] __asm__("D_0013E504");
 extern void FUN_001fa050(float *, float *);
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
@@ -1041,7 +1041,7 @@ void FUN_L13_002b89f8(char *rot, char *from, char *moby, int icon, long color, i
         }
         t = &D_L13_001CBDB8[icon];
         y -= 0x50;
-        y += *(int *)(D_0013E504);
+        y += *(int *)(frame_size);
         x += 0x1B0;
         draw_textured_quad(x - t->x, y - t->y, t->w, t->h, t->u, t->v, t->w, t->h, color,
                            get_effect_texture(tex + 0x28 + t->tex));
@@ -1860,7 +1860,7 @@ extern float FUN_L13_002ba088(int, int, float, float, float, float, float);
 extern float FUN_001f9af0(void *);
 extern void FUN_001fa030(void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_L13_00204dc8");
 extern float D_00141070_2b6140 __asm__("D_00141070") __attribute__((section(".data")));
@@ -2026,7 +2026,7 @@ void FUN_L13_002ba178(void *moby, void *obj) {
     m->rotation[0]=fast_add_rotations(d->angles[0],F(d,0x6C)*0.5f);
     m->rotation[1]=fast_add_rotations(d->angles[1],-F(d,0x70)*0.5f);
     m->rotation[2]=fast_add_rotations(d->angles[2],-F(d,0x6C)*0.0f);
-    if (FUN_L00_001f0d60(1.2f,m->position,0,m)) {
+    if (coll_sphere(1.2f,m->position,0,m)) {
         char *hit=P(D_L13_00174140,0x18);
         if (!hit || ((cls=H(hit,0xA6))!=0 && cls!=0x192 && cls!=0x4C2 && cls!=0x4C3 && cls!=0x52 && cls!=0x53)) {
             qcopy(m->position,D_L13_00174140+0x30);

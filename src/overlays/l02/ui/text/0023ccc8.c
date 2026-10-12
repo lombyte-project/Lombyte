@@ -42,7 +42,7 @@ extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_0
 extern void draw_hud_icon(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void font_print_right(s32, s32, s32, char *, s32) __asm__("FUN_001f6940");
-extern s32 D_0013E504[];
+extern s32 frame_size[] __asm__("D_0013E504");
 extern s32 D_0015ED80;
 extern char D_L02_0015F850[];
 extern s32 D_L02_0015F91C __attribute__((sda));
@@ -85,7 +85,7 @@ s32 FUN_L02_0023cda8(HudElem *m) {
     } else {
         x = D_L02_0015F948;
     }
-    bottom = D_0013E504[0];
+    bottom = frame_size[0];
     y = D_0015ED80 != 0 ? bottom - 0x2A : bottom - 0x32;
     grow = convert_integer_to_float(fade[0]) / convert_integer_to_float(D_L02_0015F91C);
     if (1.0f < grow) {

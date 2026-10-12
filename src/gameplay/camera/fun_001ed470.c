@@ -29,7 +29,7 @@ struct CamColl {
     f32 unkDC;
 };
 
-extern struct CamColl D_001870D0;
+extern struct CamColl cam_coll_state __asm__("D_001870D0");
 
 extern f32 cam_interp_values(f32 *vel, f32 from, f32 to, f32 stiffness, f32 damping,
                              f32 max) __asm__("FUN_001ebd78");
@@ -48,8 +48,8 @@ void FUN_001ed470(void) {
     s32 i;
     struct Moby *m;
 
-    cam = &D_001870D0;
-    FUN_001f9bf8(&dir, &hero.unk290, -1.0f);
+    cam = &cam_coll_state;
+    FUN_001f9bf8(&dir, &hero.gravity_dir, -1.0f);
     qcopy(&cam->unk40, &cam->unk30);
     qcopy(&cam->unk30, &dir);
     if (FUN_001f9ab0(&cam->dir, &dir) < -0.98f) {

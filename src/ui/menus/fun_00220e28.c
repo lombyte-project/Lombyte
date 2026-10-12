@@ -4,7 +4,7 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/input/pad_state.h"
 extern f32 D_0015F43C;
-extern u8 D_0016034C;
+extern u8 requested_video_mode __asm__("D_0016034C");
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 extern void mode_freeze_init(s32, struct MenuPage *) __asm__("func_001FBAB8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
@@ -47,12 +47,12 @@ s32 FUN_00220e28(struct MenuScreen *m) {
     if (controller_state.pressed_unmasked & PAD_CROSS) {
         allocate_voice_for_target_entry(0, 0x11, m->moby);
         if (m->data.options.list[m->data.options.selection].flags & 1) {
-            if (D_0016034C != 0) {
+            if (requested_video_mode != 0) {
                 mode_freeze_init(6, menu_system.current);
             } else {
                 fade_to_black(4);
                 m->data.options.fade_timer = scale_game_frames(0x10);
-                D_0016034C = D_0016034C == 0;
+                requested_video_mode = requested_video_mode == 0;
             }
         } else if (m->data.options.list[m->data.options.selection].flag != 0) {
             *m->data.options.list[m->data.options.selection].flag = *m->data.options.list[m->data.options.selection].flag == 0;

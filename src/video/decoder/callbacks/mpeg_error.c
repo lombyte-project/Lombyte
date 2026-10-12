@@ -6,12 +6,12 @@ struct MpegErrorData {
     s32 unk4;
 };
 
-extern u8 D_00161220[];
+extern u8 video_error_message[] __asm__("D_00161220");
 extern s32 DebugPrint();
 s32 mpeg_error(s32 arg0, struct MpegErrorData *cb_data) __asm__("FUN_0023d080");
 
 s32 mpeg_error(s32 arg0, struct MpegErrorData *cb_data) {
-    DebugPrint(D_00161220, cb_data->unk4);
+    DebugPrint(video_error_message, cb_data->unk4);
     return 1;
 }
 

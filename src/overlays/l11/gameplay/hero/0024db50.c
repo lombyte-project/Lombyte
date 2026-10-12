@@ -32,10 +32,10 @@ extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0020d658(int back);
 extern float FUN_L00_002339d0(float *v);
-extern float FUN_L00_00257c48(float lo, float hi);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
-extern unsigned char D_0015EDB5;
+extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");
 extern int D_0015ED80;
 extern int D_L11_001612D0;
 extern int D_L11_001612D8;
@@ -47,7 +47,7 @@ extern int FUN_L00_00211360(char *);
 extern int FUN_L00_00216de8(int, int);
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int FUN_L00_00229a98(void);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L01_00226f10(int a);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -63,7 +63,7 @@ extern void FUN_L00_0020a500(void);
 extern void FUN_L00_0020b930(void);
 extern void FUN_L00_0020e360(int a, int b);
 extern void FUN_L00_0020e698(void);
-extern void FUN_L00_002118c8(float, int);
+extern void stick_target(float, int) __asm__("FUN_L00_002118c8");
 extern void FUN_L00_00213de8(float);
 extern void FUN_L00_00214ed8(float a, float b, float c);
 extern void FUN_L00_00216ec0(int, int, int);
@@ -140,7 +140,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
-        p->unk1010 = FUN_L00_00257b90(scale_game_frames(0x32), scale_game_frames(0x64));
+        p->unk1010 = random_int_between(scale_game_frames(0x32), scale_game_frames(0x64));
         FUN_L00_0020a500();
         if (p->vehicle_mode != 0) {
             FUN_L01_002405a0();
@@ -215,7 +215,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
         p->health.hp = 0;
-        p->unk694 = p->motion.unk100.f[2] * 0.2f;
+        p->unk694 = p->motion.displacement.f[2] * 0.2f;
         p->unk69C = p->water_surface_z - 0.37f;
         if (p->unk694 < frame_time * -7.0f)
             p->unk694 = frame_time * -7.0f;
@@ -296,8 +296,8 @@ int hero_set_state(int a, int b) {
                 FUN_L00_002a3ec8(D_L11_001612D0, D_L11_001612D8, 0, p->motion.pos.f[0],
                                  p->motion.pos.f[1], 0.4f, 0.3f);
             }
-        } else if (p->motion.unk100.f[2] < frame_time * -0.5f) {
-            int n = truncate_float_to_s32(absolute_float(p->motion.unk100.f[2]) * 300.0f);
+        } else if (p->motion.displacement.f[2] < frame_time * -0.5f) {
+            int n = truncate_float_to_s32(absolute_float(p->motion.displacement.f[2]) * 300.0f);
             FUN_L00_00209ca8(3, n < 0x28 ? n : 0x28, 1);
             if (D_L11_001612D0 != 0) {
                 FUN_L00_002a3ec8(D_L11_001612D0, D_L11_001612D8, 0, p->motion.pos.f[0],
@@ -328,7 +328,7 @@ int hero_set_state(int a, int b) {
         }
         {
             struct Hero *s = &hero;
-            s->unk694 = s->motion.unk100.f[2] * 0.37f;
+            s->unk694 = s->motion.displacement.f[2] * 0.37f;
             if (s->unk694 < frame_time * -7.0f)
                 s->unk694 = frame_time * -7.0f;
             s->unk69C = s->water_surface_z;
@@ -351,7 +351,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         FUN_L00_00213de8(0.5f);
         p->unk20A7 = 1;
-        qcopy(&p->motion.velocity, &p->motion.unk100);
+        qcopy(&p->motion.velocity, &p->motion.displacement);
         r = find_moby_hit(((void *)p->moby), 1, 0);
         if (r != 0) {
             hero_change_health(truncate_float_to_s32(*(float *)(r + 0x2C)));
@@ -486,7 +486,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
-        qcopy(&p->motion.unk150, &p->motion.unk100);
+        qcopy(&p->motion.unk150, &p->motion.displacement);
         set_hero_animation(FUN_L01_00226f10(0), 0, (float)scale_game_frames(0xA));
         p->unk1D0 = scale_game_frames(7);
         break;
@@ -495,7 +495,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
-        qcopy(&p->motion.unk150, &p->motion.unk100);
+        qcopy(&p->motion.unk150, &p->motion.displacement);
         set_hero_animation(FUN_L01_00226f10(0), 0, (float)scale_game_frames(5));
         p->unk1D0 = scale_game_frames(7);
         break;
@@ -504,7 +504,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
-        p->ground_speed = vector_length_xy(&p->motion.unk100);
+        p->ground_speed = vector_length_xy(&p->motion.displacement);
         p->state.step = 0;
         p->unk3B8 = 0;
         p->unk3BC = 0;
@@ -525,7 +525,7 @@ int hero_set_state(int a, int b) {
             if (frame_time * 7.0f < q->ground_speed)
                 q->ground_speed = frame_time * 7.0f;
             q->unk3BE = 0;
-            FUN_L00_002118c8(1.0f, 0);
+            stick_target(1.0f, 0);
             if (1.5707964f <
                 fast_difference_between_rotations(q->motion.rot.f[2], q->motion.move_yaw)) {
                 if (q->state.prev_control_mode == 7 || q->state.prev == 3 ||
@@ -869,9 +869,9 @@ int hero_set_state(int a, int b) {
                 p->health.unk22B2 = FUN_L00_00216de8(0x17, 0x20);
             }
             p->unk950 =
-                FUN_L00_00257c48(frame_time * 3.1415927f, frame_time * 4.3633232f);
+                randf_sym(frame_time * 3.1415927f, frame_time * 4.3633232f);
             p->unk954 =
-                FUN_L00_00257c48(frame_time * 3.1415927f, frame_time * 4.3633232f);
+                randf_sym(frame_time * 3.1415927f, frame_time * 4.3633232f);
         }
         {
             struct Hero *q = &hero;
@@ -918,7 +918,7 @@ int hero_set_state(int a, int b) {
         if (frame_time * 4.5f < p->motion.speed_xy) {
             FUN_L00_00213de8(frame_time * 4.5f / p->motion.speed_xy);
         }
-        qcopy(&p->motion.velocity, &p->motion.unk100);
+        qcopy(&p->motion.velocity, &p->motion.displacement);
         if (b) {
             set_hero_animation(0x13, 0, (float)t8);
         }
@@ -1264,7 +1264,7 @@ int hero_set_state(int a, int b) {
                     if (q->unk450 == 2)
                         q->unk450 = 0;
                     id = q->unk450 + 0x1C;
-                    if (D_0015EDB5 != 0) {
+                    if (opt_mirror_anim != 0) {
                         if (id == 0x1C) {
                             id = 0x1D;
                         } else if (id == 0x1D) {
@@ -1596,7 +1596,7 @@ int hero_set_state(int a, int b) {
             p->unk5B0 = frame_time * 2.5f;
         p->unk5AC.i = 0;
         clear_vector(&p->motion.velocity);
-        clear_vector(&p->motion.unk100);
+        clear_vector(&p->motion.displacement);
         p->motion.velocity.f[2] = frame_time * 10.0f;
         if (b)
             set_hero_animation(0x10, 2, -3.0f);

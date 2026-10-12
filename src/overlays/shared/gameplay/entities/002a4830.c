@@ -970,7 +970,7 @@ void FUN_L00_002a5dd8(Bolt *obj) {
             FUN_00213ed8(&v->speed, D_0015ED6C * 48.0f, D_0015ED70 * 16.0f);
             x = D_0015ED6C * 8.0f;
             if (x < hero.motion.speed_xy) {
-                FUN_001f9bf8(&b, &hero.motion.unk100, (hero.motion.speed_xy - x) * 0.5f);
+                FUN_001f9bf8(&b, &hero.motion.displacement, (hero.motion.speed_xy - x) * 0.5f);
                 FUN_001f9a10(&obj->pos, &obj->pos, &b);
             }
         }
@@ -1029,7 +1029,7 @@ extern void FUN_L00_00239cc8(void);          /* bolt counter HUD: init */
 extern void FUN_L00_00239d00(void);          /* update */
 extern void FUN_L00_00239df8(void);          /* draw */
 extern void queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
-extern void FUN_L00_00257d78(void *, f32, f32);
+extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -1069,7 +1069,7 @@ void FUN_L00_002a6b70(struct Moby *bolt)
         break;
     }
 
-    src = bolt->unkB8;
+    src = bolt->parent;
     if (src && !(src->id & 0x80))
         bolt_source_stats[current_level_index][src->id].bolts += value;
     current_bolt_count += value;
@@ -1082,7 +1082,7 @@ void FUN_L00_002a6b70(struct Moby *bolt)
                            &current_bolt_count, 9999999);
 
     /* two sparkles 10 units out along a random direction, spinning opposite ways */
-    FUN_L00_00257d78(&vel, D_0015ED6C * k, D_0015ED6C);
+    random_vector(&vel, D_0015ED6C * k, D_0015ED6C);
     scale_vector_xyz(&pos, &vel, 10.0f);
     add_vector_xyz(&pos, &pos, &bolt->pos);
     spin = random_integer_below(2);
@@ -1331,18 +1331,18 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
         /* the bolt source is the root of src's unkB8 chain */
         root = src;
         if (src != 0) {
-            while (root->unkB8 != 0)
-                root = root->unkB8;
+            while (root->parent != 0)
+                root = root->parent;
         }
-        m->unkB8 = root;
+        m->parent = root;
         m->unk73 = 20;
         m->flags |= 0x100;
-        m->unk30 = 0x40;
-        m->unk32 = 0x40;
-        m->unk31 = 1;
+        m->update_dist = 0x40;
+        m->draw_dist = 0x40;
+        m->visible = 1;
         m->state = 1;
         m->scale = m->pclass->scale * scale;
-        FUN_001fa030(&m->unkC0, &m->rot);
+        FUN_001fa030(&m->rot_row0, &m->rot);
         if ((src->flags & 0x20) && (color = *(u8 **)(src->pvars + 0xC)) != 0)
             FUN_L00_002502f0(m, color[4], color[5], color[6]);
         else
@@ -2408,7 +2408,7 @@ void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
     add_vector_xyz(m, &d, arg);
     P = &hero;
     if (P->ground_moby && FUN_L00_002603d0_2aa008(P->ground_moby)) {
-        add_vector_xyz(m, m, &P->motion.unk100);
+        add_vector_xyz(m, m, &P->motion.displacement);
     }
     m->h34 = FUN_001f96f8_2aa008(0x78);
     count = 0;

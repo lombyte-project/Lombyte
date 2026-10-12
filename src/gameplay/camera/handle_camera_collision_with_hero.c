@@ -4,13 +4,13 @@ struct CamColl {
     u8 pad0[0xC4];
     void *moby;
 };
-extern struct CamColl D_001870D0;
+extern struct CamColl cam_coll_state __asm__("D_001870D0");
 extern void *func_001E9448(void *);
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void handle_camera_collision_with_hero(struct UpdateCam *cam) __asm__("FUN_001ebe68");
 
 void handle_camera_collision_with_hero(struct UpdateCam *cam) {
-    struct CamColl *c = &D_001870D0;
+    struct CamColl *c = &cam_coll_state;
 
     if (cam->unk86 == 0) {
         if (c->moby == 0) {

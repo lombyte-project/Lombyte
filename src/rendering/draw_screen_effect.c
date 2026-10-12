@@ -13,7 +13,7 @@ struct Metrics {
     u64 unk28;
 };
 
-extern struct Metrics *D_0015F350 __attribute__((sda));
+extern struct Metrics *screen_color_effect_now __asm__("D_0015F350") __attribute__((sda));
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void draw_rect_overlay(s32, s32, s32, s32, u64) __asm__("func_001F52A0");
 
@@ -32,39 +32,39 @@ void draw_screen_effect(void) {
 
     i = 0;
     height = fs_aa_buffer.display_height;
-    e = D_0015F350->enable;
+    e = screen_color_effect_now->enable;
     if (e != 0) {
         vu1_add_g_sregister(0x42, e & 0xFF000000FFULL);
     }
-    c = D_0015F350->color;
+    c = screen_color_effect_now->color;
     if (c & 0xFF000000) {
         draw_rect_overlay(0, height, 0, fs_aa_buffer.display_width, (u64)((s64)c << 0x20) >> 0x20);
     }
     if (height > 0) {
         mask = 0xFF000000FFULL;
         do {
-            e18 = D_0015F350->unk18;
+            e18 = screen_color_effect_now->unk18;
             if (e18 != 0) {
                 vu1_add_g_sregister(0x42, e18 & mask);
             }
-            v14 = D_0015F350->unk14;
+            v14 = screen_color_effect_now->unk14;
             if (v14 & 0xFF000000) {
                 draw_rect_overlay(i,
-                                  (i + D_0015F350->unk10 < height - 1) ? i + D_0015F350->unk10 : height - 1,
+                                  (i + screen_color_effect_now->unk10 < height - 1) ? i + screen_color_effect_now->unk10 : height - 1,
                                   0, fs_aa_buffer.display_width, (u64)((s64)v14 << 0x20) >> 0x20);
             }
-            i = i + D_0015F350->unk10;
-            e28 = D_0015F350->unk28;
+            i = i + screen_color_effect_now->unk10;
+            e28 = screen_color_effect_now->unk28;
             if (e28 != 0) {
                 vu1_add_g_sregister(0x42, e28 & mask);
             }
-            v24 = D_0015F350->unk24;
+            v24 = screen_color_effect_now->unk24;
             if (v24 & 0xFF000000) {
                 draw_rect_overlay(i,
-                                  (i + D_0015F350->unk20 < height - 1) ? i + D_0015F350->unk20 : height - 1,
+                                  (i + screen_color_effect_now->unk20 < height - 1) ? i + screen_color_effect_now->unk20 : height - 1,
                                   0, fs_aa_buffer.display_width, (u64)((s64)v24 << 0x20) >> 0x20);
             }
-            i = i + D_0015F350->unk20;
+            i = i + screen_color_effect_now->unk20;
         } while (i < height);
     }
 }

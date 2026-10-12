@@ -701,7 +701,7 @@ void FUN_L08_003084d8(struct Moby *moby) {
     int k;
     switch (moby->state) {
     case 0:
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         moby->state = 1;
         break;
     case 1:

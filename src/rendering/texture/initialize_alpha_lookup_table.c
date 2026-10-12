@@ -1,5 +1,5 @@
 #include "types.h"
-extern s32 D_0018E740[];
+extern s32 bit_swap_lut[] __asm__("D_0018E740");
 void initialize_alpha_lookup_table(void) __asm__("FUN_001f7a30");
 
 void initialize_alpha_lookup_table(void) {
@@ -14,7 +14,7 @@ void initialize_alpha_lookup_table(void) {
         if (i & 0x10) {
             j |= 8;
         }
-        D_0018E740[j] = (i >> 1) << 24;
+        bit_swap_lut[j] = (i >> 1) << 24;
     }
 }
 

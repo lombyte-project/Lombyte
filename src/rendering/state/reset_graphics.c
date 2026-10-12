@@ -5,8 +5,8 @@
 extern s32 D_0015ED80[] MACRO_ADDR;
 extern s32 D_0015EE78[] MACRO_ADDR;
 extern s32 D_0015EE78_gp;
-extern s32 D_0015F618[] MACRO_ADDR;
-extern volatile s32 D_00160EE0[] MACRO_ADDR;
+extern s32 space_load_in_progress[] __asm__("D_0015F618") MACRO_ADDR;
+extern volatile s32 vif_chain_flags[] __asm__("D_00160EE0") MACRO_ADDR;
 extern s32 func_001204B8();
 extern s32 set_pal_mode() __asm__("func_001F34E8");
 extern s32 init_dma() __asm__("func_0020B418");
@@ -23,8 +23,8 @@ void reset_graphics(void) {
 
     /* The volatile flag store stays out of the call's delay slot, and the
        do-while keeps the D_0015EE78 load after vu1_init_chain, as retail. */
-    D_0015F618[0] = 1;
-    D_00160EE0[0] = 0;
+    space_load_in_progress[0] = 1;
+    vif_chain_flags[0] = 0;
     dmac_vif1_disable();
     sceDmaReset(1);
     init_dma();

@@ -1353,9 +1353,9 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
         position.f[2] += 0.49082f;
         qcopy(&velocity, &v->vel);
         if (hero.state.control_mode == 15)
-            FUN_001ff278_2ad410(&velocity, &velocity, &hero.motion.unk100);
+            FUN_001ff278_2ad410(&velocity, &velocity, &hero.motion.displacement);
         if (hero.ground_moby && FUN_L00_002603d0_2ad410((M910 *)hero.ground_moby) && mode)
-            FUN_001ff278_2ad410(&velocity, &velocity, &hero.motion.unk100);
+            FUN_001ff278_2ad410(&velocity, &velocity, &hero.motion.displacement);
         timer = FUN_001fef20_2ad410(300);
     } else {
         W910 *holder_vars = v->holder->v;
@@ -2460,7 +2460,7 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         if (best < dist)
             goto next;
         ang = FUN_001fa6c0(D_0013E520_u.bB) * 0.6981317f;
-        FUN_00214db0(&lv, dist, yaw, pitch + g->unk2E4.f * 0.5f);
+        FUN_00214db0(&lv, dist, yaw, pitch + g->ground_pitch.f * 0.5f);
         FUN_001f9a10(&lv, &lv, spos);
         z = FUN_001f9df8(FUN_001f9b48(&lv, &v) / (dist + dist));
         ang = ang + 1.5707964f;

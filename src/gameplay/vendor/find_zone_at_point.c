@@ -7,9 +7,9 @@ typedef struct {
     unsigned short w;
     unsigned short h;
 } ZoneBox;
-extern ZoneBox *D_00161194 MACRO_ADDR;
+extern ZoneBox *occl_cell_table __asm__("D_00161194") MACRO_ADDR;
 extern char *D_00161190 MACRO_ADDR;
-extern int D_00161198 MACRO_ADDR;
+extern int occl_cell_count __asm__("D_00161198") MACRO_ADDR;
 extern float D_001E66E0[];
 extern int truncate_float_to_s32(float) __asm__("func_001FA6D0");
 /* Index of the zone whose box (in 1/1024 units, 0x800 deep) holds the
@@ -21,10 +21,10 @@ int find_zone_at_point(float x, float y, float z) {
     int ix = truncate_float_to_s32(x * 1024.0f);
     int iy = truncate_float_to_s32(y * 1024.0f);
     int iz = truncate_float_to_s32(z * 1024.0f);
-    ZoneBox *b = D_00161194;
+    ZoneBox *b = occl_cell_table;
     int i;
 
-    for (i = 0; i < D_00161198; i++, b++) {
+    for (i = 0; i < occl_cell_count; i++, b++) {
         char *zn;
         int cx;
         int cy;

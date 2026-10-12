@@ -550,7 +550,7 @@ void FUN_L15_002a7880(struct Moby *moby)
         slot = entry;
         break;
     }
-    moby->unkA4 = 0xff;
+    moby->hit_slot = 0xff;
     if (slot == 0)
         goto no_hit;
 
@@ -655,12 +655,12 @@ void FUN_L15_002a7880(struct Moby *moby)
     return;
 
 no_hit:
-    moby->unkA4 = 0xff;
+    moby->hit_slot = 0xff;
     if (moby->state != 0)
         return;
-    moby->unk30 = 0xff;
+    moby->update_dist = 0xff;
     moby->state = 1;
-    moby->unk32 = 0x80;
+    moby->draw_dist = 0x80;
     moby->scale = moby->scale + moby->scale;
     {
     u16 save_id = moby->save_id;
@@ -924,12 +924,12 @@ void FUN_L15_002c6900(struct Moby *m) {
                 }
                 *(float *)(d + 0x170) = frame_time * 4.0f;
                 *(short *)(d + 0x16A) = scale_game_frames(0x3C);
-                m->unkBC = m->state;
+                m->command = m->state;
                 m->state = 6;
             }
         }
     }
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
     FUN_L00_0025d538(m, d + 0x60);
 }
 #include "qcopy.h"

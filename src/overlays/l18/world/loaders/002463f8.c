@@ -53,7 +53,7 @@ extern s32 current_level_index __asm__("D_0015ED84");
 extern u8 D_0014C050[];
 extern u8 D_L18_0015FC88_2463f8[] __asm__("D_L18_0015FC88") __attribute__((section(".sdata")));
 extern s32 D_L18_0015F40C;
-extern s32 D_0015ED5C;
+extern s32 sound_bank_handle __asm__("D_0015ED5C");
 extern s32 D_L18_00160004;
 extern s32 D_0015EE8C;
 extern u64 D_L18_001831C0[3];
@@ -205,7 +205,7 @@ s32 FUN_L18_002463f8(s32 full, s32 keep) {
         D_L18_0015F40C = 0;
         FUN_001f9838_2463f8(D_L18_0015FC88_2463f8, D_0014C050 + current_level_index * 16, 0x10);
         FUN_00203120((char *)(src[6] + (s32)src), h[0], (char *)h + h[1]);
-        D_L18_00160004 = D_0015ED5C;
+        D_L18_00160004 = sound_bank_handle;
         FUN_00118a80(0);
         used = FUN_L00_0024d8d0_2463f8((char *)(src[0x14] + (s32)src), base);
         D_L18_0015F40C = (s32)(base + h[0x18]);
@@ -321,7 +321,7 @@ s32 FUN_L18_002463f8(s32 full, s32 keep) {
             } else {
                 D_L18_0015F5F4[a3].sound = *(u16 *)(e + D_L18_0015F5F4[a3].sound * 4);
             }
-            D_L18_0015F5F4[a3].time = D_0015ED5C;
+            D_L18_0015F5F4[a3].time = sound_bank_handle;
         }
         end = free + 0x3F;
         span++;
@@ -343,7 +343,7 @@ s32 FUN_L18_002463f8(s32 full, s32 keep) {
                 e = tbl + span->off;
                 for (k = 0; k < D_L18_00197D00[ci]->count0D; k++, e += 4) {
                     D_L18_00197D00[ci]->f28[k].sound = *(u16 *)e;
-                    D_L18_00197D00[ci]->f28[k].time = D_0015ED5C;
+                    D_L18_00197D00[ci]->f28[k].time = sound_bank_handle;
                 }
             }
         }

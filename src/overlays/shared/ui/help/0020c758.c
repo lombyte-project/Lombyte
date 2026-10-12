@@ -1142,8 +1142,8 @@ void spawn_hero_item_mobies(void) {
         h = (struct Hero *)((char *)&hero + slot * sizeof(struct HeroItemSlot));
         m = create_moby(item_defs_ea80[h->items[0].item_id].cls);
         if (m != 0) {
-            m->unk32 = 0x20;
-            m->unk31 = 1;
+            m->draw_dist = 0x20;
+            m->visible = 1;
             m->spawn_frame = hero.moby->spawn_frame;
             if (((u8 *)m->pclass)[6] != 0)
                 m->unk73 = 0x18;
@@ -1171,8 +1171,8 @@ void spawn_hero_item_mobies(void) {
         hero.items[3].item_id = id3;
         m = create_moby(item_defs_ea80[id3].cls);
         if (m != 0) {
-            m->unk32 = 0x20;
-            m->unk31 = 1;
+            m->draw_dist = 0x20;
+            m->visible = 1;
             m->spawn_frame = hero.moby->spawn_frame;
             if (((u8 *)m->pclass)[6] != 0)
                 m->unk73 = 0x18;
@@ -1190,8 +1190,8 @@ void spawn_hero_item_mobies(void) {
     if (hero.items[3].moby2 == 0) {
         m = create_moby(item_defs_ea80[1].cls);
         if (m != 0) {
-            m->unk32 = 0x20;
-            m->unk31 = 1;
+            m->draw_dist = 0x20;
+            m->visible = 1;
             m->spawn_frame = hero.moby->spawn_frame;
             if (((u8 *)m->pclass)[6] != 0)
                 m->unk73 = 0x18;
@@ -1209,8 +1209,8 @@ void spawn_hero_item_mobies(void) {
             hero.items[2].item_id = D_00141660_ea80[2];
         m2 = create_moby(item_defs_ea80[hero.items[2].item_id].cls);
         if (m2 != 0) {
-            m2->unk32 = 0x20;
-            m2->unk31 = 1;
+            m2->draw_dist = 0x20;
+            m2->visible = 1;
             m2->spawn_frame = hero.moby->spawn_frame;
             m2->flags |= 2;
             m2->update = 0;
@@ -1226,8 +1226,8 @@ void spawn_hero_item_mobies(void) {
         hero.items[1].item_id = D_00141660_ea80[1];
         m = create_moby(item_defs_ea80[D_00141660_ea80[1]].cls);
         if (m != 0) {
-            m->unk32 = 0x20;
-            m->unk31 = 1;
+            m->draw_dist = 0x20;
+            m->visible = 1;
             m->spawn_frame = hero.moby->spawn_frame;
             if (((u8 *)m->pclass)[6] != 0)
                 m->unk73 = 0x18;
@@ -1236,8 +1236,8 @@ void spawn_hero_item_mobies(void) {
         }
         m = create_moby(item_defs_ea80[D_00141660_ea80[1]].cls2);
         if (m != 0) {
-            m->unk32 = 0x20;
-            m->unk31 = 1;
+            m->draw_dist = 0x20;
+            m->visible = 1;
             m->spawn_frame = hero.moby->spawn_frame;
             if (((u8 *)m->pclass)[6] != 0)
                 m->unk73 = 0x18;
@@ -1250,8 +1250,8 @@ void spawn_hero_item_mobies(void) {
         m4 = create_moby(item_defs_ea80[0x21].cls);
         hero.items[4].item_id = 0x21;
         if (m4 != 0) {
-            m4->unk32 = 0x20;
-            m4->unk31 = 1;
+            m4->draw_dist = 0x20;
+            m4->visible = 1;
             m4->spawn_frame = hero.moby->spawn_frame;
             if (((u8 *)m4->pclass)[6] != 0)
                 m4->unk73 = 0x18;
@@ -1264,8 +1264,8 @@ void spawn_hero_item_mobies(void) {
         m5 = create_moby(item_defs_ea80[0x22].cls);
         hero.items[4].item_id = 0x22;
         if (m5 != 0) {
-            m5->unk32 = 0x20;
-            m5->unk31 = 1;
+            m5->draw_dist = 0x20;
+            m5->visible = 1;
             m5->spawn_frame = hero.moby->spawn_frame;
             hero.items[4].moby2 = m5;
             hero.items[4].state = 2;
@@ -1276,8 +1276,8 @@ void spawn_hero_item_mobies(void) {
         m6 = create_moby(item_defs_ea80[0x23].cls);
         hero.items[5].item_id = 0x23;
         if (m6 != 0) {
-            m6->unk32 = 0x20;
-            m6->unk31 = 1;
+            m6->draw_dist = 0x20;
+            m6->visible = 1;
             m6->spawn_frame = hero.moby->spawn_frame;
             hero.items[5].moby = m6;
             hero.items[5].state = 2;
@@ -1719,7 +1719,7 @@ extern ItemDef item_defs[] __asm__("D_L00_00179AC0");
 extern int FUN_001f9770(void *);
 extern int FUN_L00_0020d568_c() __asm__("FUN_L00_0020d568");
 extern int FUN_L00_00216de8(int, int);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0020a500(void);
 extern void FUN_L00_0020e698_c(void) __asm__("FUN_L00_0020e698");
 extern void FUN_L00_002cdcc0(void);
@@ -1992,7 +1992,7 @@ void hero_switch_item(int i) {
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
         FUN_L00_0020a500();
         g->unk1010 =
-            FUN_L00_00257b90(scale_game_frames(0x32), scale_game_frames(0x5A));
+            random_int_between(scale_game_frames(0x32), scale_game_frames(0x5A));
         FUN_L00_0020fde0_c(*(hero.selected_item + i));
         FUN_L00_0020fd80_c(*(hero.selected_item + i));
         if (g->unk20A8 != 0) {
@@ -2069,11 +2069,11 @@ void FUN_L00_00210748(void) {
                         e++;
                     } while (p < end);
                 }
-                if ((moby->unk70 & 2) && moby->prev_seq == 0)
+                if ((moby->anim_flags & 2) && moby->prev_seq == 0)
                     set_moby_sequence(moby, 1, 0, 2);
             } else if (slot_hero->state == 3) {
                 slot_hero->unk1B++;
-                if (moby->unk70 & 2)
+                if (moby->anim_flags & 2)
                     FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
                 else if (i == 1 || i == 0)
                     FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
@@ -2137,7 +2137,7 @@ void FUN_L00_00210a08(int mode, int b, char *m) {
     g->unkA84 = (u8 *)m;
     g->moby = (struct Moby *)m;
     FUN_L00_00211380_210a08();
-    g->unk220 = g->unk228;
+    g->capsule_top = g->unk228;
     g->unk224 = g->unk22C;
     *(unsigned short *)((char *)g->moby + 0x34) |= 6;
     g->anim_speed = 1.0f;
@@ -2427,7 +2427,7 @@ s32 hero_check_damage(s32 arg) {
         break;
     }
     FUN_001f9a10_210ce8(&hero.motion.velocity, &hero.motion.velocity, &v);
-    FUN_001f9a10_210ce8(&hero.motion.unk100, &hero.motion.unk100, &v);
+    FUN_001f9a10_210ce8(&hero.motion.displacement, &hero.motion.displacement, &v);
     return 1;
 }
 extern s32 D_0015ED84_211250 __asm__("D_0015ED84");
@@ -2513,7 +2513,7 @@ void FUN_L00_00211380(void) {
     } else if ((u32)(hero.state.control_mode - 0x11) < 2) {
         hero.unk228 = 0.0f;
         hero.unk22C = 0.0f;
-    } else if (hero.unk12E2 && hero.unk300) {
+    } else if (hero.unk12E2 && hero.grounded_frames) {
         hero.unk228 = 0.8f;
         hero.unk22C = 0.9f;
     } else if (hero.state.current == HERO_STATE_SINK) {
@@ -2521,7 +2521,7 @@ void FUN_L00_00211380(void) {
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
         FUN_001f9b80_211380(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
-        f32 *q = &hero.unk220;
+        f32 *q = &hero.capsule_top;
         struct Hero *b = &hero;
         approach_value_211380(b->unk228, D_0015ED60_211380 * 0.02f, q);
         approach_value_211380(b->unk22C, D_0015ED60_211380 * 0.02f, q + 1);
@@ -2559,9 +2559,9 @@ void hero_update(void)
     p->unk229C = FUN_L00_00211830();
     p->unk240 = 0;
     source = controller_state;
-    p->unk1D20 = *(f32 *)(source + 0x108);
-    p->unk1D24 = *(f32 *)(source + 0x10C);
-    if (FUN_L00_001ff408(&p->unk1D20) < 0.25f) {
+    p->stick_x = *(f32 *)(source + 0x108);
+    p->stick_y = *(f32 *)(source + 0x10C);
+    if (FUN_L00_001ff408(&p->stick_x) < 0.25f) {
         /* Stick near centre: take the d-pad instead. The differences are
            written back into left and up, which is how retail allocates them. */
         s32 up, right, down, left;
@@ -2573,8 +2573,8 @@ void hero_update(void)
         up = (buttons >> 12) & 1;
         left = right - left;
         up = down - up;
-        p->unk1D20 = (f32)left;
-        p->unk1D24 = (f32)up;
+        p->stick_x = (f32)left;
+        p->stick_y = (f32)up;
     }
     hero_update_movement();
 
@@ -2607,9 +2607,9 @@ void hero_update(void)
 
 extern float FUN_001f9b20(void *);
 
-/* Length from FUN_001f9b20 on hero.unk1D20, capped at 1. */
+/* Length from FUN_001f9b20 on hero.stick_x, capped at 1. */
 float FUN_L00_00211830(void) {
-    float len = FUN_001f9b20(&hero.unk1D20);
+    float len = FUN_001f9b20(&hero.stick_x);
 
     if (1.0f < len) {
         len = 1.0f;
@@ -2660,15 +2660,16 @@ extern int FUN_001fa6d0_2118c8(float) __asm__("FUN_001fa6d0");
 extern float FUN_001fa6c0_2118c8(int) __asm__("FUN_001fa6c0");
 extern float FUN_001fa580_2118c8(float, float) __asm__("FUN_001fa580");
 
-void FUN_L00_002118c8(float scale, int mode) {
+void stick_target(float scale, int mode) __asm__("FUN_L00_002118c8");
+void stick_target(float scale, int mode) {
     V_2118c8 v;
     V_2118c8 q;
     float x;
     float len;
     float y;
 
-    v.f[1] = hero.unk1D24;
-    v.f[0] = hero.unk1D20;
+    v.f[1] = hero.stick_y;
+    v.f[0] = hero.stick_x;
     if (mode == 1) {
         if (FUN_001f99c0_2118c8(v.f[1]) > 0.7f && FUN_001f99c0_2118c8(v.f[0]) < 0.12f) {
             v.f[0] = 0.0f;
@@ -2726,7 +2727,7 @@ extern float D_L00_0017BDB8[];
 
 /* Hero speed clamp after a move update (twin of FUN_L01_00232290): in state 0x3F it scales unk190 by 3.5 frame steps with a floor; otherwise it picks a table speed, and in state 0x73 it slows by 0.8 down to a floor. */
 void FUN_L00_00211be8(void) {
-    FUN_L00_002118c8(1.0f, 0);
+    stick_target(1.0f, 0);
     if (hero.state.current == 0x3F) {
         float min = frame_time + frame_time;
         hero.target_speed = frame_time * 3.5f * hero.target_speed;
@@ -2859,7 +2860,8 @@ void FUN_L00_00211f38(void) {
 }
 void FUN_00213ed8_00212088(f32 *, f32, f32) __asm__("FUN_00213ed8");
 /* Approaches field b toward a, at rate x while below it and y otherwise. */
-void FUN_L00_00212088(f32 x, f32 y) {
+void speed_step(f32 x, f32 y) __asm__("FUN_L00_00212088");
+void speed_step(f32 x, f32 y) {
     struct Hero *p = &hero;
     if (p->ground_speed < p->target_speed)
         FUN_00213ed8_00212088(&p->ground_speed, p->target_speed, x);
@@ -2880,7 +2882,8 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void func_00215C00(void *, float, float, float) __asm__("FUN_00214db0");
 
-void FUN_L00_002120d8(float radians) {
+void set_planar_vel(float radians) __asm__("FUN_L00_002120d8");
+void set_planar_vel(float radians) {
     struct Hero *g = &hero;
     float y;
     float r;
@@ -2905,7 +2908,7 @@ void FUN_L00_002120d8(float radians) {
 
         qcopy(out, vec);
     } else {
-        func_00215C00(out, r, y, g->unk2E4.f);
+        func_00215C00(out, r, y, g->ground_pitch.f);
     }
 
     qcopy(&hero.motion.velocity, out);
@@ -2930,7 +2933,7 @@ void FUN_L00_002121c0(void) {
         return;
     if (!(g->ground_distance < 0.15f))
         return;
-    if (!(0.0f < g->motion.unk100.f[2]))
+    if (!(0.0f < g->motion.displacement.f[2]))
         return;
     if (g->wall_hit == 0)
         return;
@@ -3048,7 +3051,7 @@ void FUN_L00_0025d238_002126b8(Vec4_002126b8 *, void *) __asm__("FUN_L00_0025d23
 void FUN_L00_002126b8(Vec4_002126b8 *a, Vec4_002126b8 *b, int mode, float fa, float fb) {
     Vec4_002126b8 t[2];
     if (mode) {
-        char *up = (char *)&hero.unk290;
+        char *up = (char *)&hero.gravity_dir;
         char *base = up - 0x210;
         FUN_001f9bf8_002126b8(&t[0], up, -fb);
         FUN_001f9a10_002126b8(b, base, &t[0]);
@@ -3077,7 +3080,7 @@ extern f32 D_L00_00173E68 __attribute__((section(".data")));
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void FUN_L00_002126b8_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
 s32 FUN_001efa68(void *, void *, s32, void *, s32);
-s32 FUN_L00_001f3608(void);
+s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 FUN_001f0b58(void);
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 FUN_L00_0025e3b8(s32);
@@ -3134,7 +3137,7 @@ void FUN_L00_002127b8(void) {
     if (FUN_001efa68(&v10, &v0, 2, hero.moby, 0) == 0) {
         goto tail;
     }
-    r = FUN_L00_001f3608();
+    r = coll_sound_class();
     if (r == -1) {
         r = 3;
     }
@@ -3148,7 +3151,7 @@ void FUN_L00_002127b8(void) {
         if (FUN_001efa68(&v10, &v0, 0x24, hero.moby, 0) == 0) {
             goto d1;
         }
-        r = FUN_L00_001f3608();
+        r = coll_sound_class();
         if (current_level_index == 1 || current_level_index == 0x12) {
             r = 3;
         }
@@ -3206,30 +3209,30 @@ void FUN_L00_002127b8(void) {
     }
 tail:
     if (hero.air_frames.s != 0) {
-        hero.unk300 = 0;
+        hero.grounded_frames = 0;
     } else {
-        hero.unk300++;
+        hero.grounded_frames++;
         qcopy(&hero.unk2B0, &hero.ground_point);
     }
     if (hero.motion.pos.f[2] > hero.water_surface_z) {
         hero.unk2F8 = 0;
     }
 d1:
-    FUN_001f99f8_c(&hero.unk290);
+    FUN_001f99f8_c(&hero.gravity_dir);
     switch (hero.unk20B3) {
     case 0:
-        hero.unk290.f[2] = -1.0f;
+        hero.gravity_dir.f[2] = -1.0f;
         break;
     case 1:
-        qcopy(&hero.unk290, &hero.unk270);
-        FUN_001f9a68_c(&hero.unk290, &hero.unk290, -1.0f);
+        qcopy(&hero.gravity_dir, &hero.unk270);
+        FUN_001f9a68_c(&hero.gravity_dir, &hero.gravity_dir, -1.0f);
         break;
     case 2:
-        FUN_001f9a28(&hero.unk290, &hero.motion.unkB0, &hero.motion.pos);
-        FUN_001f9bf8_c(&hero.unk290, &hero.unk290, 1.0f);
+        FUN_001f9a28(&hero.gravity_dir, &hero.motion.unkB0, &hero.motion.pos);
+        FUN_001f9bf8_c(&hero.gravity_dir, &hero.gravity_dir, 1.0f);
         break;
     }
-    hero.unk2E4.i = 0;
+    hero.ground_pitch.i = 0;
     hero.unk2E8.i = 0;
     hero.unk2D0.i[0] = 0;
     hero.unk2D0.i[1] = 0;
@@ -3246,7 +3249,7 @@ d1:
     }
     FUN_L00_00216078(&hero.unk270, &v20);
     if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
-        hero.unk2E4.f = v20.f[1];
+        hero.ground_pitch.f = v20.f[1];
     }
     if (-0.78539819f < v20.f[0] && v20.f[0] < 0.78539819f) {
         hero.unk2E8.f = v20.f[0];
@@ -3274,7 +3277,7 @@ d1:
             }
         } else {
             hero.unk2C0.i[i] = 0;
-            hero.unk2C8.f[i] = hero.unk2E4.f;
+            hero.unk2C8.f[i] = hero.ground_pitch.f;
             hero.unk2D0.f[i] = hero.unk2E8.f;
         }
     }
@@ -3334,7 +3337,7 @@ void FUN_L00_00212ff0(void) {
                 }
                 func_L00_0025C918_2136A8((float *)(&globals->motion.pos.f[2]), globals->ground_z.f, (float *)(&globals->unk304), frame_scale_sq * 0.057f, frame_scale_sq * 0.3f, D_0015ED6C_c * 2.0f);
             } else {
-                float f2 = globals->motion.unk100.f[2];
+                float f2 = globals->motion.displacement.f[2];
                 char *q;
                 if (f2 < 0.0f) {
                     float n = globals->motion.pos.f[2] - f2;
@@ -3457,7 +3460,7 @@ s32 FUN_L00_002133a8(s32 mode) {
                 break;
         } else {
             s32 a;
-            h = hero.unk220 - hero.unk224;
+            h = hero.capsule_top - hero.unk224;
             if (h < 0.05f) {
                 h = 0.05f;
             }
@@ -3574,7 +3577,7 @@ void FUN_L00_00213880(void)
     f32 w;
 
     qcopy(&old_pos, &hero.motion.pos);
-    FUN_L00_00233f80(hero.unk4F8, &hero.motion.unkF0, &hero.motion.rot);
+    FUN_L00_00233f80(hero.unk4F8, &hero.motion.platform_delta, &hero.motion.rot);
 
     /* cap the speed; states 0x22 and 0x14 cap the horizontal part and the fall speed */
     if (hero.state.current == 0x22 || hero.state.current == HERO_STATE_WRENCH_SLAM) {
@@ -3617,10 +3620,10 @@ void FUN_L00_00213880(void)
     hero.wall_hit = 0;
     hero.coll_hit_moby = 0;
 
-    if (vector_length_xyz(&hero.motion.unkF0) <= 0.0001f) {
+    if (vector_length_xyz(&hero.motion.platform_delta) <= 0.0001f) {
         FUN_L00_002137a8();
         FUN_L00_002127b8();
-        subtract_vector_xyz(&hero.motion.unk100, &hero.motion.pos, &old_pos);
+        subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
         FUN_L00_00212ff0();
     } else {
         FUN_L00_002127b8();
@@ -3668,29 +3671,29 @@ void FUN_L00_00213880(void)
 
     /* apply the push, keeping its w */
     qcopy(&tmp, &hero.motion.pos);
-    if (vector_length_xyz(&hero.motion.unkF0) > 0.0001f) {
-        add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.motion.unkF0);
-        w = hero.motion.unkF0.f[3];
-        clear_vector(&hero.motion.unkF0);
-        hero.motion.unkF0.f[3] = w;
+    if (vector_length_xyz(&hero.motion.platform_delta) > 0.0001f) {
+        add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.motion.platform_delta);
+        w = hero.motion.platform_delta.f[3];
+        clear_vector(&hero.motion.platform_delta);
+        hero.motion.platform_delta.f[3] = w;
         FUN_L00_002137a8();
         FUN_L00_002127b8();
-        subtract_vector_xyz(&hero.motion.unk100, &hero.motion.pos, &old_pos);
+        subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
         FUN_L00_00212ff0();
     }
     subtract_vector_xyz(&hero.motion.platform_carry, &hero.motion.pos, &tmp);
     {
         /* push w moves to unk140.w; a block-local keeps retail's order */
-        f32 push_w = hero.motion.unkF0.f[3];
+        f32 push_w = hero.motion.platform_delta.f[3];
 
-        hero.motion.unkF0.f[3] = 0.0f;
+        hero.motion.platform_delta.f[3] = 0.0f;
         hero.motion.platform_carry.f[3] = push_w;
     }
 
-    subtract_vector_xyz(&hero.motion.unk100, &hero.motion.pos, &old_pos);
+    subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
     hero.motion.unk16C = 0.0f;
     if (hero.motion.unk164 > 0.004f) {
-        hero.motion.unk16C = hero.motion.unk100.f[2] / hero.motion.unk164;
+        hero.motion.unk16C = hero.motion.displacement.f[2] / hero.motion.unk164;
         if (hero.motion.unk16C > 0.5f) {
             hero.motion.unk16C = 0.5f;
         } else if (hero.motion.unk16C < -0.5f) {
@@ -3700,7 +3703,7 @@ void FUN_L00_00213880(void)
 
     /* cap the step at 52 units per frame-rate unit */
     if (hero.motion.speed_xy > frame_time * 52.0f) {
-        scale_vector_xyz(&hero.motion.unk100, &hero.motion.unk100, frame_time * 52.0f / hero.motion.speed_xy);
+        scale_vector_xyz(&hero.motion.displacement, &hero.motion.displacement, frame_time * 52.0f / hero.motion.speed_xy);
         hero.motion.speed_xy = frame_time * 52.0f;
     }
 }

@@ -105,7 +105,7 @@ void FUN_L00_002b3058(O_b3058 *o) {
     s = &D_L00_00166C80_b3058;
     if (s->p180 != 0 && *(s16 *)(s->p180 + 0x86) == 5)
         goto tail;
-    if (g->unk300 == 0)
+    if (g->grounded_frames == 0)
         goto tail;
     if (((u8 *)g->ground_moby) != 0 && (*(s16 *)(((u8 *)g->ground_moby) + 0xA6) == 0x13E || *(s16 *)(((u8 *)g->ground_moby) + 0xA6) == 0x46F))
         goto tail;
@@ -564,7 +564,7 @@ unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitc
             continue;
         }
         g = &hero;
-        FUN_00214db0_2b46a8(&w, d, *yaw, *pitch + g->unk2E4.f * 0.5f);
+        FUN_00214db0_2b46a8(&w, d, *yaw, *pitch + g->ground_pitch.f * 0.5f);
         FUN_001f9a10_2b46a8(&w, &w, from);
         e = FUN_001f9df8_2b46a8(FUN_001f9b48_2b46a8(&w, &tp) / (d + d));
         e = e + e;
@@ -753,7 +753,7 @@ void FUN_L00_002b49a8(u8 *m) {
                 scratch.target_copy.f[2] += part ? *(f32 *)(part + 0x10) : 0.5f;
                 dist = D_0015ED6C_2b49a8 * 40.0f;
                 scratch.pitch = -FUN_001f9e90_2b49a8(FUN_001f9b80_2b49a8(&scratch.position, &scratch.target_copy), scratch.target_copy.f[2] - scratch.position.f[2]);
-                adjusted_yaw = base_pitch - hero.unk2E4.f * 0.5f;
+                adjusted_yaw = base_pitch - hero.ground_pitch.f * 0.5f;
                 angle = FUN_001fa688_2b49a8(adjusted_yaw, scratch.pitch);
                 limit = 0.17453292f;
                 if (angle < limit) {
@@ -774,8 +774,8 @@ pitch_ready:
                 scratch.yaw = FUN_001f9e90_2b49a8(scratch.target_copy.f[0] - scratch.work.target.f[0], scratch.target_copy.f[1] - scratch.work.target.f[1]);
                 scratch.pitch = -FUN_001f9e90_2b49a8(FUN_001f9b80_2b49a8(&scratch.work.target, &scratch.target_copy), scratch.target_copy.f[2] - scratch.work.target.f[2]);
             } else if (hero.state.current != 30) {
-                scratch.pitch -= hero.unk2E4.f * 0.5f;
-                base_pitch -= hero.unk2E4.f * 0.5f;
+                scratch.pitch -= hero.ground_pitch.f * 0.5f;
+                base_pitch -= hero.ground_pitch.f * 0.5f;
             }
             scratch.work.options.collision.owner = m;
             scratch.work.options.collision.flags = 0x10000;
@@ -1028,7 +1028,7 @@ unsigned char *FUN_L00_002b58d8(unsigned char *a, V_2b58d8 *pos, float fa, float
         *(int *)(v + 0x8) = 0;
         *(int *)(v + 0xC) = 0;
         if ((void *)G->ground_moby && FUN_L00_002603d0_2b58d8((void *)G->ground_moby))
-            *(float *)(v + 0x4) = FUN_001f9af0_2b58d8(&G->motion.unk100);
+            *(float *)(v + 0x4) = FUN_001f9af0_2b58d8(&G->motion.displacement);
         else
             *(int *)(v + 0x4) = 0;
         *(int *)(v + 0x10) = FUN_001f96f8_2b58d8(0xBB8);
@@ -1311,7 +1311,7 @@ void FUN_L00_002b6140(unsigned char *m) {
         g->state.control_mode == 3 || g->state.control_mode > 12 ||
         g->state.control_mode == 7 || g->state.control_mode == 10 ||
         g->state.control_mode == 16 || g->state.control_mode == 5 ||
-        g->state.current == 0x65 || g->unk300 == 0)
+        g->state.current == 0x65 || g->grounded_frames == 0)
         goto end;
     if (((unsigned char *)g->ground_moby) &&
         (*(short *)(((unsigned char *)g->ground_moby) + 0xa6) == 0x13e ||
@@ -1335,8 +1335,8 @@ void FUN_L00_002b6140(unsigned char *m) {
     FUN_L00_0028df38_2b6140(v->pad2c, i);
     if (v->timer > 0 && v->timer < FUN_001f96f8_2b6140(3000) - FUN_001f96f8_2b6140(5)) {
         f = D_0015ED60_2b6140 * 0.1f;
-        v->turn += (g->unk1D24 - v->turn) * f;
-        v->aim += (g->unk1D20 - v->aim) * f;
+        v->turn += (g->stick_y - v->turn) * f;
+        v->aim += (g->stick_x - v->aim) * f;
         *(float *)(m + 0x40) += (v->aim - *(float *)(m + 0x40)) * (D_0015ED60_2b6140 * 0.06f);
         x = FUN_001fa5c8_2b6140(*(float *)(m + 0x44), v->turn * (D_0015ED60_2b6140 * 0.012271847f));
         *(float *)(m + 0x44) = x;

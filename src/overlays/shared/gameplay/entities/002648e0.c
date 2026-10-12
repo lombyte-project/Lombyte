@@ -68,7 +68,7 @@ void FUN_L00_002648e0(void) {
                 FUN_L00_00250df8(moby);
             }
             current_ticks = *(volatile s32 *)0x10000000;
-            entry = (s32 *)0x11004000 + (moby->unk22 * 2);
+            entry = (s32 *)0x11004000 + (moby->class_slot * 2);
             entry[0] = entry[0] + 1;
             entry[1] = entry[1] + current_ticks;
         }

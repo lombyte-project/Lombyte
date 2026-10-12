@@ -490,9 +490,9 @@ void FUN_L15_00215e58(void) {
             if (m != 0) {
                 qcopy(&m->pos, &hero.motion.pos);
                 qcopy(&m->rot, &hero.motion.rot);
-                m->unk32 = 0x40;
-                ((struct Moby *)hero.unkA8C)->unk31 = 1;
-                ((struct Moby *)hero.unkA8C)->unk90 = 0;
+                m->draw_dist = 0x40;
+                ((struct Moby *)hero.unkA8C)->visible = 1;
+                ((struct Moby *)hero.unkA8C)->glow_color = 0;
                 ((struct Moby *)hero.unkA8C)->spawn_frame = hero.moby->spawn_frame;
                 FUN_L00_00250df8_215e58(hero.unkA8C);
                 FUN_L00_00210a08_215e58(3, 0x53, hero.unkA8C);

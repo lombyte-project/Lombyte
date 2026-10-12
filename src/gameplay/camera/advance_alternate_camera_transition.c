@@ -6,11 +6,11 @@ typedef struct {
     f32 v[4];
 } __attribute__((aligned(16))) CameraVector;
 
-extern u8 D_001871B0[];
+extern u8 cam_trans_state[] __asm__("D_001871B0");
 extern char D_0013F3D0[];
 extern char D_0013F5E0[];
 extern char D_00187080[];
-extern char D_00187290[];
+extern char camera_rows[] __asm__("D_00187290");
 #include "rnc/gameplay/camera/update_cam.h"
 
 extern f32 cosine_interpolate(f32, f32, f32) __asm__("FUN_002133d0");
@@ -66,7 +66,7 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
     }
     step = 1.0f / cosine_interpolate(1.0f, (f32) * (s32 *)(transition_state + 5),
                                      (f32) * (s32 *)(transition_state + 3) * transition_state[4]);
-    if (D_001871B0[2] == 2) {
+    if (cam_trans_state[2] == 2) {
         qcopy(&focus_position, D_0013F3D0);
         qcopy(&forward_axis, transition_state + 8);
         qcopy(&vertical_axis, transition_state + 12);
@@ -143,12 +143,12 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
     alignment_angle *= tilt_sign;
     build_look_at_matrix(&smoothed_axis_0, &smoothed_axis_0, &smoothed_axis_1,
                          alignment_angle * step);
-    normalize_vector_xyz(D_00187290, &smoothed_axis_0, 1.0f);
-    cross_vectors_xyz(D_00187290 + 0x10, D_00187290, D_0013F5E0);
-    normalize_vector_xyz(D_00187290 + 0x10, D_00187290 + 0x10, -1.0f);
-    cross_vectors_xyz(D_00187290 + 0x20, D_00187290 + 0x10, D_00187290);
-    extract_matrix_rotation_quaternion(transition_state + 24, D_00187290);
-    extract_matrix_rotation_quaternion(transition_state + 16, D_00187290);
+    normalize_vector_xyz(camera_rows, &smoothed_axis_0, 1.0f);
+    cross_vectors_xyz(camera_rows + 0x10, camera_rows, D_0013F5E0);
+    normalize_vector_xyz(camera_rows + 0x10, camera_rows + 0x10, -1.0f);
+    cross_vectors_xyz(camera_rows + 0x20, camera_rows + 0x10, camera_rows);
+    extract_matrix_rotation_quaternion(transition_state + 24, camera_rows);
+    extract_matrix_rotation_quaternion(transition_state + 16, camera_rows);
     tick_countdown_32(transition_state + 3);
     return 0;
 }

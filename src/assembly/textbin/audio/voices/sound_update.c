@@ -77,12 +77,12 @@ typedef struct {
 
 extern VoiceRuntimeState D_0013E550;
 extern f32 D_0013F640[];
-extern s32 D_0015F5E8;
+extern s32 boot_level_active __asm__("D_0015F5E8");
 extern s32 D_0015F604;
-extern s32 D_0015F60C;
+extern s32 world_update_time __asm__("D_0015F60C");
 extern VoiceVector D_00187080;
-extern u8 D_00187290[];
-extern s32 D_001872D4;
+extern u8 camera_rows[] __asm__("D_00187290");
+extern s32 use_alt_fog __asm__("D_001872D4");
 
 extern s32 ComputeByteStringHash(u8 *, s32);
 extern int snd_get_doppler_pitch_mod(int arg0);
@@ -149,7 +149,7 @@ s32 sound_update(void) {
     s32 handle;
     s32 command_flags;
 
-    underwater = D_001872D4;
+    underwater = use_alt_fog;
     water_height = 0.0f;
     if (underwater != 0) {
         water_height = D_0013F640[0];
@@ -166,7 +166,7 @@ s32 sound_update(void) {
     }
     D_0013E550.reverb_commands = 0;
 
-    if ((D_0015F604 == 0 || D_0015F604 == 2) && D_0015F5E8 == 0) {
+    if ((D_0015F604 == 0 || D_0015F604 == 2) && boot_level_active == 0) {
         clamp_voice_position_to_collision(&listener_occlusion_position);
     }
 
@@ -321,16 +321,16 @@ s32 sound_update(void) {
             continue;
         }
         if (D_0013E550.voices[slot_index].state == 7) {
-            if ((D_0015F604 != 0 && D_0015F604 != 2) || D_0015F5E8 != 0) {
+            if ((D_0015F604 != 0 && D_0015F604 != 2) || boot_level_active != 0) {
                 continue;
             }
             occluded_samples = 0;
-            if (D_0015F60C != D_0013E550.occlusion_frame) {
+            if (world_update_time != D_0013E550.occlusion_frame) {
                 for (history_offset = 0; history_offset < 6; history_offset++) {
                     clamp_voice_position_to_collision(
                         &D_0013E550.occlusion_samples[history_offset]);
                 }
-                D_0013E550.occlusion_frame = D_0015F60C;
+                D_0013E550.occlusion_frame = world_update_time;
             }
             sample_index = 0;
             for (history_offset = 0; sample_index < 6;
@@ -352,13 +352,13 @@ s32 sound_update(void) {
                 volumes[slot_index] = (36 - occluded_samples) * volumes[slot_index] / 18;
             }
         } else {
-            if ((D_0015F604 == 0 || D_0015F604 == 2) && D_0015F5E8 == 0) {
+            if ((D_0015F604 == 0 || D_0015F604 == 2) && boot_level_active == 0) {
                 D_0013E550.voices[slot_index].occlusion_history_position =
                     (D_0013E550.voices[slot_index].occlusion_history_position + 1) % 36;
                 /* Active sources test every other frame; other voices every fourth. */
-                command_flags = (slot_index ^ D_0015F60C) & 1;
+                command_flags = (slot_index ^ world_update_time) & 1;
                 if (!(D_0013E550.voices[slot_index].flags & 4)) {
-                    command_flags = ((D_0015F60C ^ slot_index) & 3) == 0;
+                    command_flags = ((world_update_time ^ slot_index) & 3) == 0;
                 }
                 if (command_flags) {
                     D_0013E550.voices[slot_index].occlusion_history
@@ -382,7 +382,7 @@ s32 sound_update(void) {
         }
     }
 
-    func_001FA2D8(listener_matrix, D_00187290);
+    func_001FA2D8(listener_matrix, camera_rows);
     for (slot_index = 0; slot_index < 30; slot_index++) {
         command_flags = voice_flags[slot_index];
         if (command_flags == 0) {

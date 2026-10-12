@@ -57,7 +57,7 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
             target.f[2] += b->height;
         else
             target.f[2] += 0.5f;
-        if (!(m->flags & 0x1000) || !m || !m->pclass || m->pclass->unk46 != 5)
+        if (!(m->flags & 0x1000) || !m || !m->pclass || m->pclass->type != 5)
             continue;
         t_yaw = FUN_001f9e90(target.f[0] - pp->f[0], target.f[1] - pp->f[1]);
         t_pitch = FUN_001f9e90(FUN_001f9b80(pp, &target), target.f[2] - pp->f[2]);
@@ -73,7 +73,7 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
         }
         if (best_dist < dist)
             continue;
-        FUN_00214db0(&probe, dist, *yaw, *pitch + hero.unk2E4.f * 0.5f);
+        FUN_00214db0(&probe, dist, *yaw, *pitch + hero.ground_pitch.f * 0.5f);
         FUN_001f9a10(&probe, &probe, pp);
         ang = FUN_001f9df8(FUN_001f9b48(&probe, &target) / (dist + dist));
         ang = ang + ang;
@@ -367,7 +367,8 @@ int FUN_001f96f8_00263d40(int) __asm__("FUN_001f96f8");
 int FUN_001fdd10_00263d40(int) __asm__("FUN_001fdd10");
 void FUN_001165b8_00263d40(char *, int) __asm__("FUN_001165b8");
 /* Calls FUN_001165b8 with D_L00_00179118 and FUN_001fdd10(a); stores b (default 0xB4 frames). */
-void FUN_L00_00263d40(int a, int b) {
+void queue_dialogue_message(int a, int b) __asm__("FUN_L00_00263d40");
+void queue_dialogue_message(int a, int b) {
     if (b == -1)
         b = FUN_001f96f8_00263d40(0xB4);
     FUN_001165b8_00263d40(D_L00_00179118_00263d40, FUN_001fdd10_00263d40(a));
@@ -481,7 +482,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001fa030(void *, void *);
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_00257d78(float *, float, float);
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -528,7 +529,7 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
         }
         if (FUN_001f9af0(v11) == 0.0f) {
             float g = D_0015ED6C_s[0];
-            FUN_L00_00257d78(t, g * 3.1415927f, g * 6.2831855f);
+            random_vector(t, g * 3.1415927f, g * 6.2831855f);
             qcopy(d + 0x10, t);
         } else {
             qcopy(d + 0x10, v11);

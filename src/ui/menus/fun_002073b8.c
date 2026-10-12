@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/gameplay/hero.h"
-extern s32 func_00208818();
+extern s32 point_is_clockwise() __asm__("func_00208818");
 s32 FUN_002073b8(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) {
     s32 var_4_15;
 
@@ -14,8 +14,8 @@ s32 FUN_002073b8(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) {
     if (fparg2 < 71.5f) {
         return 0;
     }
-    if (func_00208818(px, py, 0x131, 0xE2, 0xC6, 0x93) != 0) {
+    if (point_is_clockwise(px, py, 0x131, 0xE2, 0xC6, 0x93) != 0) {
         return 0;
     }
-    return func_00208818(px, py, 0x190, 0x89, 0xD1, 0xFB) == 0;
+    return point_is_clockwise(px, py, 0x190, 0x89, 0xD1, 0xFB) == 0;
 }

@@ -111,9 +111,9 @@ struct Moby *FUN_L04_002aee30(struct Moby *owner, void *pos, void *dir, int life
     if (m != 0) {
         vars = (ShotVars *)m->pvars;
         vars->owner = owner;
-        m->unk30 = 0xFF;
-        m->unk32 = 0xFF;
-        m->unk31 = 1;
+        m->update_dist = 0xFF;
+        m->draw_dist = 0xFF;
+        m->visible = 1;
         if (owner->oclass != 0xFF)
             m->scale = m->scale * 0.5f;
         m->rot.x = 0.0f;
@@ -211,7 +211,7 @@ void FUN_L04_002af058(struct Moby *m)
     }
 
     probe = 0;
-    if (m->unkBC == 0) {
+    if (m->command == 0) {
         pr.self = m;
         if (v->owner->oclass == 0xFF || v->owner->oclass == 0x4B1) {
             pr.mask = 0x50001;
@@ -229,10 +229,10 @@ void FUN_L04_002af058(struct Moby *m)
         pr.unk19 = pr.unk18 = 1;
         pr.oclass = m->oclass;
     }
-    if (FUN_001f9770(&v->time) && m->unkBC == 0) {
-        m->unkBC = 1;
+    if (FUN_001f9770(&v->time) && m->command == 0) {
+        m->command = 1;
         v->time = v->time_max / 4;
-    } else if (v->time <= 0 && m->unkBC != 0) {
+    } else if (v->time <= 0 && m->command != 0) {
         mark_moby_for_removal(m);
         return;
     }
@@ -240,7 +240,7 @@ void FUN_L04_002af058(struct Moby *m)
         return;
 
     qcopy(&m->pos, &D_L04_00173FE0);
-    if (m->unkBC == 0) {
+    if (m->command == 0) {
         for (i = 0; i < 5; i++) {
             r.q = 0;
             r.f[0] = random_float_between(-1.0f, 1.0f);

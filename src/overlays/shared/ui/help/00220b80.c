@@ -6,11 +6,11 @@
 
 extern char D_0013E533[];
 extern float D_L02_0017C3B8[];
-extern void FUN_L00_002118c8(int, float);
+extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 
 void FUN_L02_00220b80(void) {
     char *x;
-    FUN_L00_002118c8(0, 1.0f);
+    stick_target(0, 1.0f);
     x = D_0013E533 + 0xE1D;
     if (*(int *)(x + 0x2084) == 0x3F) {
         float two = frame_time + frame_time;
@@ -77,7 +77,7 @@ void FUN_L02_002226d8(void)
     f32 w;
 
     qcopy(&old_pos, &hero.motion.pos);
-    FUN_L00_00233f80(hero.unk4F8, &hero.motion.unkF0, &hero.motion.rot);
+    FUN_L00_00233f80(hero.unk4F8, &hero.motion.platform_delta, &hero.motion.rot);
 
     /* cap the speed; states 0x22 and 0x14 cap the horizontal part and the fall speed */
     if (hero.state.current == 0x22 || hero.state.current == HERO_STATE_WRENCH_SLAM) {
@@ -112,10 +112,10 @@ void FUN_L02_002226d8(void)
     hero.wall_hit = 0;
     hero.coll_hit_moby = 0;
 
-    if (vector_length_xyz(&hero.motion.unkF0) <= 0.0001f) {
+    if (vector_length_xyz(&hero.motion.platform_delta) <= 0.0001f) {
         FUN_L00_002137a8();
         FUN_L02_002216a0();
-        subtract_vector_xyz(&hero.motion.unk100, &hero.motion.pos, &old_pos);
+        subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
         FUN_L00_00212ff0();
     } else {
         FUN_L02_002216a0();
@@ -163,29 +163,29 @@ void FUN_L02_002226d8(void)
 
     /* apply the push, keeping its w */
     qcopy(&tmp, &hero.motion.pos);
-    if (vector_length_xyz(&hero.motion.unkF0) > 0.0001f) {
-        add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.motion.unkF0);
-        w = hero.motion.unkF0.f[3];
-        clear_vector(&hero.motion.unkF0);
-        hero.motion.unkF0.f[3] = w;
+    if (vector_length_xyz(&hero.motion.platform_delta) > 0.0001f) {
+        add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.motion.platform_delta);
+        w = hero.motion.platform_delta.f[3];
+        clear_vector(&hero.motion.platform_delta);
+        hero.motion.platform_delta.f[3] = w;
         FUN_L00_002137a8();
         FUN_L02_002216a0();
-        subtract_vector_xyz(&hero.motion.unk100, &hero.motion.pos, &old_pos);
+        subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
         FUN_L00_00212ff0();
     }
     subtract_vector_xyz(&hero.motion.platform_carry, &hero.motion.pos, &tmp);
     {
         /* push w moves to unk140.w; a block-local keeps retail's order */
-        f32 push_w = hero.motion.unkF0.f[3];
+        f32 push_w = hero.motion.platform_delta.f[3];
 
-        hero.motion.unkF0.f[3] = 0.0f;
+        hero.motion.platform_delta.f[3] = 0.0f;
         hero.motion.platform_carry.f[3] = push_w;
     }
 
-    subtract_vector_xyz(&hero.motion.unk100, &hero.motion.pos, &old_pos);
+    subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
     hero.motion.unk16C = 0.0f;
     if (hero.motion.unk164 > 0.004f) {
-        hero.motion.unk16C = hero.motion.unk100.f[2] / hero.motion.unk164;
+        hero.motion.unk16C = hero.motion.displacement.f[2] / hero.motion.unk164;
         if (hero.motion.unk16C > 0.5f) {
             hero.motion.unk16C = 0.5f;
         } else if (hero.motion.unk16C < -0.5f) {
@@ -195,7 +195,7 @@ void FUN_L02_002226d8(void)
 
     /* cap the step at 52 units per frame-rate unit */
     if (hero.motion.speed_xy > frame_time * 52.0f) {
-        scale_vector_xyz(&hero.motion.unk100, &hero.motion.unk100, frame_time * 52.0f / hero.motion.speed_xy);
+        scale_vector_xyz(&hero.motion.displacement, &hero.motion.displacement, frame_time * 52.0f / hero.motion.speed_xy);
         hero.motion.speed_xy = frame_time * 52.0f;
     }
 }
@@ -621,7 +621,7 @@ s32 FUN_L02_0022ee00(void)
             if (D_L02_0015F674 != 0) {
                 if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
                     hero.state.control_mode == 0xC ||
-                    ((hero.state.control_mode == 2 || hero.state.control_mode == 4) && hero.unk300 != 0)) {
+                    ((hero.state.control_mode == 2 || hero.state.control_mode == 4) && hero.grounded_frames != 0)) {
                     if ((D_0013C940.held & 8) && (D_0013C940.pressed & 8)) {
                         hero_set_state(0x81, 1);
                     }

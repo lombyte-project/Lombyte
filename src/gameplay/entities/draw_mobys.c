@@ -1,6 +1,6 @@
 #include "types.h"
-extern s32 D_0015FF14;
-extern u8 D_001E8400[];
+extern s32 moby_anim_head __asm__("D_0015FF14");
+extern u8 vu_chain_overflow_message[] __asm__("D_001E8400");
 extern s32 D_0018A2D8[];
 extern s32 DebugPrint();
 extern s32 init_moby_class_dists() __asm__("FUN_0020d1f0");
@@ -18,9 +18,9 @@ void draw_mobys(void) {
     if (flag != 0) {
         init_moby_class_dists();
         new_var = (s32 *)0x160F00;
-        D_0015FF14 = func_00211808(*(s32 *)0x15FF18, *(s32 *)0x15FF14, -1, 1);
+        moby_anim_head = func_00211808(*(s32 *)0x15FF18, *(s32 *)0x15FF14, -1, 1);
         if (*new_var > *(s32 *)0x160F08) {
-            DebugPrint(D_001E8400);
+            DebugPrint(vu_chain_overflow_message);
         }
     }
     draw_mobys_clean_up();

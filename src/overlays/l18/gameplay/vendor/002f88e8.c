@@ -91,7 +91,7 @@ void FUN_L18_002f88e8(struct Moby *moby) {
         D_L18_001624C0 = 200;
         D_L18_001624C4 = 190;
         D_L18_001624C8 = 365;
-        moby->unk30 = 255;
+        moby->update_dist = 255;
         moby->state = 1;
         return;
     case 1:
@@ -297,12 +297,12 @@ void FUN_L18_002f88e8(struct Moby *moby) {
             moby_point_position(target, 3, &scratch.vectors.pos);
             moby_point_position(target, 10, &scratch.vectors.velocity);
             subtract_vector_xyz(&direction, &scratch.vectors.velocity, &scratch.vectors.pos);
-            norm_9780(&moby->unkD0, &direction, 1.0f);
+            norm_9780(&moby->rot_row1, &direction, 1.0f);
             qcopy(data, &scratch.vectors.velocity);
             color = 0x207F7F;
             color2 = 0x7F7F20;
-            data[18] = FUN_001f9e90(moby->unkD0.x, moby->unkD0.y);
-            data[19] = FUN_001f9e90(vector_length_xy(&moby->unkD0), moby->unkD0.z);
+            data[18] = FUN_001f9e90(moby->rot_row1.x, moby->rot_row1.y);
+            data[19] = FUN_001f9e90(vector_length_xy(&moby->rot_row1), moby->rot_row1.z);
             saved = D_L18_0016174C;
             D_L18_0016174C = 24.0f;
             FUN_L00_002bd0a0(moby);
@@ -549,7 +549,7 @@ void FUN_L18_002f9c20(struct Moby *m) {
     pk.a = 0;
     gs_9c20(0x4A, 0);
     gs_9c20(0x47, 0x51001);
-    rot_9c20(mat[3], &D_L18_00162560_9c20, &m->unkC0);
+    rot_9c20(mat[3], &D_L18_00162560_9c20, &m->rot_row0);
     add_9c20(mat[3], mat[3], &m->pos);
     sub_9c20(mat[0], mat[3], D_L18_001677C0_9c20);
     norm_9c20(mat[0], mat[0], 1.0f);
@@ -615,12 +615,12 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     pk.a = 0;
     gs_9c20(0x4A, 0);
     gs_9c20(0x47, 0x51001);
-    rot_9c20(mat[3], &D_L18_00162560_9c20, &m->unkC0);
+    rot_9c20(mat[3], &D_L18_00162560_9c20, &m->rot_row0);
     add_9c20(mat[3], mat[3], &m->pos);
     *(u128_9c20 *)up = 0;
     up[2] = -1.0f;
     up[3] = 1.0f;
-    rot_9c20(mat[0], up, &m->unkC0);
+    rot_9c20(mat[0], up, &m->rot_row0);
     sub_9c20(mat[1], mat[3], D_L18_001677C0_9c20);
     cross_9c20(mat[2], mat[1], mat[0]);
     norm_9c20(mat[2], mat[2], 1.0f);
@@ -775,7 +775,7 @@ void FUN_L18_002fa640(struct Moby *moby) {
     case 1:
         if (D_L18_0015F5C4 == 2 && D_L18_0016D290_d == 3) {
             moby->flags |= 1;
-            moby->unk31 = 0;
+            moby->visible = 0;
             moby->rot.x = fast_add_rotations(moby->rot.x, 3.1415927f);
             moby->state = 2;
         }
@@ -785,7 +785,7 @@ void FUN_L18_002fa640(struct Moby *moby) {
             unsigned short fl = moby->flags;
             moby->state = 3;
             fl &= 0xFFFE;
-            moby->unk31 = 1;
+            moby->visible = 1;
             moby->flags = fl;
         }
         break;
@@ -1324,7 +1324,7 @@ typedef struct {
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
 extern float FUN_L00_0025abf0(void *, void *, float, float, int);
-extern float FUN_L00_00257c48(float, float);
+extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 
 /* Launches the first idle (state 8) class-0x772 moby of group `group` from `from` towards `to` at `speed`.
    Returns 1 when one was launched. */
@@ -1342,7 +1342,7 @@ int FUN_L18_002fc668(int group, void *from, void *to, float speed) {
             if (moby->state == 8) {
                 LaunchedMobyVars *v = (LaunchedMobyVars *)moby->pvars;
                 moby->flags &= ~0x41;
-                moby->unk94 = moby->pclass->unk10;
+                moby->collision = moby->pclass->collision;
                 moby->flags |= 0x1000;
                 qcopy(&moby->pos, from);
                 moby->state = 1;
@@ -1351,7 +1351,7 @@ int FUN_L18_002fc668(int group, void *from, void *to, float speed) {
                 v->velocity[2] = 0.0f;
                 FUN_001f9bf8(v->velocity, v->velocity, speed);
                 v->velocity[2] = FUN_L00_0025abf0(from, to, speed, -(frame_time_sq * 10.0f), 0);
-                v->spin = FUN_L00_00257c48(15.0f, 45.0f) * 0.017453292f;
+                v->spin = randf_sym(15.0f, 45.0f) * 0.017453292f;
                 return 1;
             }
         }
