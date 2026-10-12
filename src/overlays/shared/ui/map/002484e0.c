@@ -137,13 +137,14 @@ reject:
             for (; y_min < row_end; y_min++) {
                 s32 rowbase = (y_min >> 5) << 4;
                 s32 row = y_min << 6;
+                s32 packed_row = (y_min & 31) * 16;
                 s32 filterrow = ((y_min - y) + 16) * 4;
                 s64 column = column_start;
                 s32 test_column = test_start + column_offset;
                 s32 byte_column = byte_start + column_offset;
                 for (; column < column_end; column = (s32)column + 1, test_column++, byte_column++) {
                     s32 bitmap_column = column < 0 ? (s32)column + 7 : (s32)column;
-                    u8 *pixel = D_L00_001841F0.mask + row + (bitmap_column >> 3);
+                    volatile u8 *pixel = D_L00_001841F0.mask + row + (bitmap_column >> 3);
                     if (*pixel != 0) {
                         s32 bit = 1 << ((s32)column & 7);
                         if (*pixel & bit) {
@@ -153,7 +154,7 @@ reject:
                                 u8 packed;
                                 s32 selected;
                                 FUN_L00_00249d80(((s32)column >> 5) + rowbase);
-                                packed = D_L00_001841F0.packed[(y_min & 31) * 16 + (((s32)column & 31) >> 1)];
+                                packed = D_L00_001841F0.packed[(((s32)column & 31) >> 1) + packed_row];
                                 selected = ((s32)column & 1) ? packed >> 4 : packed & 15;
                                 if (filters[selected] != 0) *pixel &= ~bit;
                             }
