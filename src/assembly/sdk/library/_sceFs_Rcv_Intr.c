@@ -125,11 +125,11 @@ void _sceFs_Rcv_Intr(s32 *arg) {
         break;
     }
     if (h.ret.v < 0) {
-        n = 0u - (u32)h.ret.v;
-        ret = (s32)n;
-        h.ret.v = (s32)n;
+        u32 semaphore = 0u - (u32)h.ret.v;
+        ret = (s32)semaphore;
+        h.ret.v = (s32)semaphore;
         for (i = 0; i < 32; i++) {
-            if (D_0012FC10[i] == ret) {
+            if (ret == D_0012FC10[i]) {
                 D_0012FC10[i] = -1;
                 break;
             }
