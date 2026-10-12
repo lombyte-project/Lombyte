@@ -1255,7 +1255,7 @@ void FUN_L12_00306828(struct Moby *moby) {
         if (i == 17) {
             other = moby;
         } else {
-            other = (struct Moby *)(D_L12_0015FFD8_p + (*(int *)(data + i * 0x30 + 0x20) * 0x100));
+            other = (struct Moby *)(((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8) + (unsigned int)D_L12_0015FFD8_p);
         }
         if (other->oclass == 0x4FE) continue;
         {
