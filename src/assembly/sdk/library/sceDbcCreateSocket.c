@@ -36,9 +36,9 @@ s32 sceDbcCreateSocket(struct DbcSocketParams *arg0, s32 arg1, s32 arg2) {
     s32 even;
     u8 *target_name;
     state->unk28 = arg1;
-    even = arg0->unk0;
+    arg1 = arg0->unk0;
     state->unk2C = arg2;
-    state->unk0 = even;
+    state->unk0 = arg1;
     even = arg0->unk4;
     state->unk4 = even;
     state->unk8 = arg0->unk8;
