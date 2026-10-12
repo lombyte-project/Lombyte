@@ -435,7 +435,7 @@ extern int FUN_0022da68(int, int, void *);
 extern void FUN_L12_002400d0(int, int);
 extern void FUN_L12_003032e8(struct Moby *);
 extern void FUN_L12_00303370(struct Moby *);
-extern void FUN_L12_00304218(struct Moby *);
+extern void FUN_L12_00304218_u(struct Moby *) __asm__("FUN_L12_00304218");
 extern void FUN_L12_00304d98();
 extern int FUN_0020b178(int, int);
 extern char D_0013E550[];
@@ -526,7 +526,7 @@ void FUN_L12_00303540(struct Moby *moby) {
         HERO_WORD(0x0013f51c) = scale_game_frames(120);
         HERO_WORD(0x0013f510) = scale_game_frames(120);
         if (VENDOR_WORD(0x0015f5c4) != 2 && VENDOR_WORD(0x001619a0) == 0)
-            enqueue_callback_list_1(FUN_L12_00304218, moby);
+            enqueue_callback_list_1(FUN_L12_00304218_u, moby);
         FUN_L12_00303370(moby);
         if (fast_dec_timer((int *)(data + 0x90))) {
             char *hit = FUN_L00_0025a420(moby, 0x10000, 0);
@@ -661,7 +661,201 @@ void FUN_L12_00303540(struct Moby *moby) {
     }
 }
 #endif
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00304218.s", FUN_L12_00304218);
+/* Draws the HUD gauge: a four-part frame, a 32-segment dial that fades with the data's charge, and two rotating needles. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003055F8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x74];
+    float f74;
+    char pad78[0x10];
+    int f88;
+    float f8C;
+} Data_3055F8;
+
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern f32 fast_add_rotations_c2(f32, f32) __asm__("func_001FA580");
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
+extern int FUN_001fa6e0(int, int, float);
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern short D_L12_00161E14 __attribute__((sda));
+extern short D_L12_00161E18 __attribute__((sda));
+extern short D_L12_00161E1C __attribute__((sda));
+extern short D_L12_00161E20 __attribute__((sda));
+extern short D_L12_00161E24 __attribute__((sda));
+extern short D_L12_00161E28 __attribute__((sda));
+extern int D_L12_00161E2C __attribute__((sda));
+extern int D_L12_00161E30 __attribute__((sda));
+extern int D_L12_00161E34 __attribute__((sda));
+extern int D_L12_00161E38 __attribute__((sda));
+extern int D_L12_00161E3C __attribute__((sda));
+extern int D_L12_00161E40 __attribute__((sda));
+extern short D_L12_00161E44 __attribute__((sda));
+extern short D_L12_00161E48 __attribute__((sda));
+extern int D_L12_00161E4C __attribute__((sda));
+extern int D_L12_00161E50 __attribute__((sda));
+extern int D_L12_00161E54 __attribute__((sda));
+extern int D_L12_00161E58 __attribute__((sda));
+extern int D_L12_00161E5C __attribute__((sda));
+extern int D_L12_00161EB0 __attribute__((sda));
+extern int D_L12_00161F08 __attribute__((sda));
+extern int D_L12_00161F0C __attribute__((sda));
+extern int D_L12_00161F10 __attribute__((sda));
+extern int D_L12_00161F14 __attribute__((sda));
+extern void vu1_add_g_sregister_c(s32, u64) __asm__("func_00233980");
+void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag);
+extern long func_001F4868_3055F8(int) __asm__("FUN_001f44b8");
+extern int func_001FA898_3055F8(float) __asm__("FUN_001fa6d0");
+extern float func_001FA7D8_3055F8(float) __asm__("FUN_001fa610");
+extern float func_001FA888_3055F8(int) __asm__("FUN_001fa6c0");
+extern void func_L02_0020BF88_3055F8(void *, void *, void *, long, int) __asm__("FUN_L02_0020bc88");
+
+void FUN_L12_00304218(Moby *moby) {
+    int uv[4];
+    long xy[4];
+    int col[4];
+    Data_3055F8 *d = *(Data_3055F8 **)&moby->pvars;
+    long tex;
+    int n;
+    int c;
+    int c2;
+    int i;
+    int j;
+    float a;
+
+    vu1_add_g_sregister_c(0x42, 0x8000000044L);
+    uv[0] = D_L12_00161F08;
+    uv[1] = D_L12_00161F0C;
+    uv[2] = D_L12_00161F10;
+    uv[3] = D_L12_00161F14;
+    col[3] = D_L12_00161EB0;
+    col[2] = D_L12_00161EB0;
+    col[1] = D_L12_00161EB0;
+    col[0] = D_L12_00161EB0;
+    tex = func_001F4868_3055F8(D_L12_00161E5C + 0x28);
+    for (i = 0; i < 4; i++) {
+        float sx;
+        float sy;
+        if (i & 1) {
+            sx = -1.0f;
+        } else {
+            sx = 1.0f;
+        }
+        if (i >= 2) {
+            sy = -1.0f;
+        } else {
+            sy = 1.0f;
+        }
+        xy[3] = 0xFFFFF000000000L;
+        xy[2] = 0xFFFFF000000000L;
+        xy[1] = 0xFFFFF000000000L;
+        xy[0] = 0xFFFFF000000000L;
+        xy[0] += (u32)((func_001FA898_3055F8((*(float *)&D_L12_00161E18 + *(float *)&D_L12_00161E20 * sy) * 16.0f) << 16) - (int)0x80000000);
+        xy[0] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14 + *(float *)&D_L12_00161E1C * sx) << 4) + 0x8000;
+        xy[1] += (u32)((func_001FA898_3055F8(*(float *)&D_L12_00161E18 * 16.0f) << 16) - (int)0x80000000);
+        xy[1] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14 + *(float *)&D_L12_00161E1C * sx) << 4) + 0x8000;
+        xy[2] += (u32)((func_001FA898_3055F8((*(float *)&D_L12_00161E18 + *(float *)&D_L12_00161E20 * sy) * 16.0f) << 16) - (int)0x80000000);
+        xy[2] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14) << 4) + 0x8000;
+        xy[3] += (u32)((func_001FA898_3055F8(*(float *)&D_L12_00161E18 * 16.0f) << 16) - (int)0x80000000);
+        xy[3] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14) << 4) + 0x8000;
+        func_L02_0020BF88_3055F8(xy, uv, col, tex, 1);
+    }
+    tex = func_001F4868_3055F8(6);
+    uv[0] = D_L12_00161E2C;
+    uv[1] = D_L12_00161E30;
+    uv[2] = D_L12_00161E34;
+    uv[3] = D_L12_00161E38;
+    if (d->f8C > 100.0f) {
+        c = FUN_001fa6e0(0x6000FFFF, 0x6000FF00, (d->f8C - 100.0f) / 100.0f);
+    } else {
+        c = FUN_001fa6e0(0x600000FF, 0x6000FFFF, d->f8C / 100.0f);
+    }
+    n = func_001FA898_3055F8((1.0f - d->f8C / 200.0f) * 32.0f);
+    c2 = (c & 0xFFFFFF) + 0x20000000;
+    for (j = 0; j < 32; j++) {
+        float a0, a1;
+        int x0, y0, x1, y1;
+        if (j >= n) {
+            col[3] = c;
+            col[2] = c;
+            col[1] = c;
+            col[0] = c;
+        } else {
+            col[3] = c2;
+            col[2] = c2;
+            col[1] = c2;
+            col[0] = c2;
+        }
+        a0 = func_001FA7D8_3055F8((float)j * 0.19634955f);
+        a1 = fast_add_rotations_c2(a0, 0.19634955f);
+        x0 = func_001FA898_3055F8(*(float *)&D_L12_00161E24 * fast_sin(a0));
+        y0 = func_001FA898_3055F8(*(float *)&D_L12_00161E28 * -fast_cos(a0));
+        x1 = func_001FA898_3055F8(*(float *)&D_L12_00161E24 * fast_sin(a1));
+        y1 = func_001FA898_3055F8(*(float *)&D_L12_00161E28 * -fast_cos(a1));
+        xy[3] = 0xFFFFF000000000L;
+        xy[2] = 0xFFFFF000000000L;
+        xy[1] = 0xFFFFF000000000L;
+        xy[0] = 0xFFFFF000000000L;
+        xy[0] += (u32)((func_001FA898_3055F8((*(float *)&D_L12_00161E18 + (float)y1) * 16.0f) << 16) - (int)0x80000000);
+        xy[0] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14 + (float)x1) << 4) + 0x8000;
+        xy[1] += (u32)((func_001FA898_3055F8(*(float *)&D_L12_00161E18 * 16.0f) << 16) - (int)0x80000000);
+        xy[1] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14) << 4) + 0x8000;
+        xy[2] += (u32)((func_001FA898_3055F8((*(float *)&D_L12_00161E18 + (float)y0) * 16.0f) << 16) - (int)0x80000000);
+        xy[2] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14 + (float)x0) << 4) + 0x8000;
+        xy[3] += (u32)((func_001FA898_3055F8(*(float *)&D_L12_00161E18 * 16.0f) << 16) - (int)0x80000000);
+        xy[3] += (func_001FA898_3055F8(*(float *)&D_L12_00161E14) << 4) + 0x8000;
+        func_L02_0020BF88_3055F8(xy, uv, col, tex, 1);
+    }
+    if (scale_game_frames_alt(0xF) < d->f88) {
+        c = FUN_001fa6e0(0x5000FFFF, 0x500000FF, func_001FA888_3055F8(d->f88 - scale_game_frames_alt(0xF)) / (float)scale_game_frames_alt(0xF));
+    } else {
+        c = FUN_001fa6e0(0x5000FF00, 0x5000FFFF, func_001FA888_3055F8(d->f88) / (float)scale_game_frames_alt(0xF));
+    }
+    uv[0] = D_L12_00161E4C;
+    uv[1] = D_L12_00161E50;
+    uv[2] = D_L12_00161E54;
+    uv[3] = D_L12_00161E58;
+    col[3] = c;
+    col[2] = c;
+    col[1] = c;
+    col[0] = c;
+    xy[3] = 0xFFFFF000000000L;
+    xy[2] = 0xFFFFF000000000L;
+    xy[1] = 0xFFFFF000000000L;
+    xy[0] = 0xFFFFF000000000L;
+    a = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, 0.0f));
+    xy[0] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[0] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    a = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, 1.5707964f));
+    xy[1] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[1] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    a = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, -1.5707964f));
+    xy[2] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[2] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    a = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, 3.1415927f));
+    xy[3] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[3] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    func_L02_0020BF88_3055F8(xy, uv, col, get_effect_texture(D_L12_00161E3C), 1);
+    xy[3] = 0xFFFFF000000000L;
+    xy[2] = 0xFFFFF000000000L;
+    xy[1] = 0xFFFFF000000000L;
+    xy[0] = 0xFFFFF000000000L;
+    a = func_001FA7D8_3055F8(fast_add_rotations_c2(d->f74 * 8.0f, 0.0f));
+    xy[0] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[0] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    a = func_001FA7D8_3055F8(fast_add_rotations_c2(d->f74 * 8.0f, 1.5707964f));
+    xy[1] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[1] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    a = func_001FA7D8_3055F8(fast_add_rotations_c2(d->f74 * 8.0f, -1.5707964f));
+    xy[2] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[2] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    a = func_001FA7D8_3055F8(fast_add_rotations_c2(d->f74 * 8.0f, 3.1415927f));
+    xy[3] += (u32)((func_001FA898_3055F8(fast_sin(a) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
+    xy[3] += func_001FA898_3055F8(fast_cos(a) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    func_L02_0020BF88_3055F8(xy, uv, col, get_effect_texture(D_L12_00161E40), 1);
+}
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 #define NOT_SDA
