@@ -395,6 +395,7 @@ void FUN_L00_002059d8(void) {
     b = truncate_float_to_s32_2059d8(c * 48.0f);
     low = a + r + 0xC;
     high = b + 0xA0;
+    b += 0x18;
     a = truncate_float_to_s32_2059d8(t);
     i = a + 0x4C;
     if (*(s16 *)(g + 0x1EE) != 0) {
@@ -413,7 +414,7 @@ void FUN_L00_002059d8(void) {
                 convert_integer_to_float_2059d8(twenty);
         }
         low -= truncate_float_to_s32_2059d8((f32)(r + 0xC) * f);
-        high -= truncate_float_to_s32_2059d8((f32)(b + 0x18) * f);
+        high -= truncate_float_to_s32_2059d8((f32)b * f);
         i -= truncate_float_to_s32_2059d8((f32)(a + 0xC) * f);
         low += truncate_float_to_s32_2059d8(f * 112.0f);
         high -= truncate_float_to_s32_2059d8(f * 72.0f);
@@ -454,9 +455,9 @@ void FUN_L00_002059d8(void) {
                 if (*active == 0) {
                     attach_manipulator_2059d8((s32)moby, *kind, slot);
                     active[2] = 1;
-                    *(Quad_59d8 *)dst_a = *src_a;
-                    *(Quad_59d8 *)dst_b = *src_b;
-                    *(Quad_59d8 *)dst_c = *src_c;
+                    qcopy(dst_a, src_a);
+                    qcopy(dst_b, src_b);
+                    qcopy(dst_c, src_c);
                     transform_help_quad_2059d8(*(f32 *)(moby + 0x2C), dst_c, dst_c);
                 }
             }
