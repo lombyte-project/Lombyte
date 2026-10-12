@@ -2218,16 +2218,17 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
     u64 value;
 
     if (context == 0)
-        context = D_001413D0_002092c8;
+        context = *(volatile s32 *)D_001413D0;
     out = (u64 *)((u8 *)header + 0x18);
     FUN_00254b58_002092c8(context);
     *(u64 *)(header + 8) = 0x7fff000000000000ULL;
     first_count = 1;
     if (indices[1] >= 0) {
+        s32 source_address = 0x70000000;
         first_index = indices + 1;
         do {
             first_count++;
-            *out = FUN_001ff768_002092c8(0x70000000 + (*first_index++ << 6), 32768.0f);
+            *out = FUN_001ff768_002092c8((*first_index++ << 6) + source_address, 32768.0f);
             out++;
         } while (*first_index >= 0);
     }
@@ -2277,13 +2278,13 @@ void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32
     if ((u32)out & 0xf)
         *out++ = 0;
     header[7] = third_count;
-    header[6] = (first_count + second_count) << 3;
     header[4] = first_count << 3;
     header[3] = ((u8 *)out - ((u8 *)header + 0x10)) >> 4;
     header[5] = second_count;
-    header[0] = 0;
+    header[6] = (first_count + second_count) << 3;
     header[1] = 0;
     header[2] = 0;
+    header[0] = 0;
 }
 #endif
 typedef struct {
