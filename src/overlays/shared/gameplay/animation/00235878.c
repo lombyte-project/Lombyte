@@ -331,21 +331,21 @@ void FUN_L00_00236268(HudElem *e) {
     float limit;
     float step;
     float y;
+    float upper;
 
     FUN_L00_00235d80(e);
     vy = &star_init_array[0].vy;
     for (i = 0; i < 100; i++, vy += 4) {
-        if (i < 10) {
-            limit = star_init_limit0;
-        } else if (i < 20) {
+        limit = star_init_limit0;
+        if (i >= 10) {
             limit = star_init_limit1;
-        } else {
-            limit = star_init_limit2;
+            if (i >= 20) limit = star_init_limit2;
         }
         step = (232.0f - (limit + limit)) / (float)star_init_columns;
         y = (limit - 116.0f) + (float)(i % star_init_columns) * step;
+        upper = y + step;
         vy[-3] = random_float_between(limit - 17.0f, 17.0f - limit);
-        star_init_array[i].y = random_float_between(y, y + step);
+        star_init_array[i].y = random_float_between(y, upper);
         star_init_array[i].vx = random_float_between(-0.4f, 0.4f);
         *vy = random_float_between(-0.6f, 0.6f);
         star_init_array[i].vx += random_float_between(-0.4f, 0.4f);
