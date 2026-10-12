@@ -1992,7 +1992,7 @@ segments:
           - [0x12d768, c, audio/sound/calculate_voice_volume]
           - [0x12d7ac, textbin, text_gap_0022c82c_after_fun_0022c7e8]
           - [0x12d7b0, c, audio/sound/calculate_voice_pan]
-          - [0x12d850, c, assembly/textbin/fun_0022c8d0]
+          - [0x12d850, c, textbin/audio/fun_0022c8d0]
           - [0x12d9cc, textbin, text_gap_0022ca4c_after_fun_0022c8d0]
           - [0x12d9d0, c, assembly/textbin/audio/voices/sound_update]
           - [0x12e684, textbin, text_gap_0022d704_before_fun_0022d708]
