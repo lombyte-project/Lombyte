@@ -7,93 +7,134 @@
 #include "asm.h"
 #include "rnc/overlay/entities.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003028c8.s", FUN_L12_003028c8);
-#else
-#include "eetypes.h"
+#include "rnc/math/vector.h"
 
-typedef struct {
-    u128 vertices[4];
-    int color[4];
-    float uv[4][2];
-    long tag;
-    long texture;
-    long texture_state;
-    long gs_state;
-    char unused[0x150];
-} VendorStripPacket;
+#include "qcopy.h"
 
-extern void FUN_001fa050(void *, void *) __asm__("FUN_001fa050");
-extern void FUN_001fa378(void *, void *, void *) __asm__("FUN_001fa378");
-extern void FUN_001f9a10(void *, void *, void *) __asm__("FUN_001f9a10");
-extern long get_effect_texture_l12(int) __asm__("FUN_001f44b8");
-extern void draw_geometry_quad_l12(void *, void *, int) __asm__("FUN_001f7d30");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern int FUN_001fa6e0(float, int, int) __asm__("FUN_001fa6e0");
-extern float D_L12_001FB510[4][2];
-extern u128 D_L12_001FB530[4];
-extern float D_L12_001FB5B0[2][4];
-#define L12_WORD(address) (*(int *)(address))
-#define L12_FLOAT(address) (*(float *)(address))
+/* Hoven vendor draw: builds the two strip matrices, then draws the four rings as quads lit by their phase. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00303CA8), where it is exact; names translated to the US level program. */
 
-void FUN_L12_003028c8(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    float base[16] __attribute__((aligned(16)));
-    VendorStripPacket packet;
-    float matrices[2][16] __attribute__((aligned(16)));
-    u128 position;
-    int i, j, strip;
+typedef struct Moby Moby;
 
-    FUN_001fa050(base, &moby->rot);
+typedef struct Quad_303CA8 {
+    float v[16];
+    int c[4];
+    float uv[8];
+    long g[4];
+} Quad_303CA8;
+
+typedef struct Data_303CA8 {
+    float ring[8][70][4];
+    int phase[4]; /* 0x2300 */
+    int row; /* 0x2310 */
+    int target; /* 0x2314 */
+    float angle; /* 0x2318 */
+    int f231C;
+    int f2320;
+    float dist; /* 0x2324 */
+    float turn; /* 0x2328 */
+    int count; /* 0x232C */
+    int f2330;
+} Data_303CA8;
+
+extern Moby *D_L12_0015FFD8;
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern float D_L12_001FB530[][4];
+extern float D_L12_001FB5B0[][4];
+extern int D_L12_00161DCC __attribute__((sda));
+extern int D_L12_00161DD0 __attribute__((sda));
+extern int D_L12_00161DD4 __attribute__((sda));
+extern int D_L12_00161DD8 __attribute__((sda));
+extern int D_L12_00161DEC __attribute__((sda));
+extern int D_L12_00161DF0 __attribute__((sda));
+extern float D_L12_00161DF4 __attribute__((sda));
+extern float D_L12_00161DF8 __attribute__((sda));
+extern int D_L12_00161E04;
+extern int D_L12_00161E08;
+extern int D_L12_001FB510;
+extern int FUN_001fa050();
+extern int FUN_001fa378();
+extern int FUN_001fa6e0(int, int, float);
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+extern void func_001FA218_303CA8(void *, void *) __asm__("FUN_001fa050");
+extern void func_001FA540_303CA8(void *, void *, void *) __asm__("FUN_001fa378");
+extern void func_001F9BD8_303CA8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int func_001F4868_303CA8(int) __asm__("FUN_001f44b8");
+extern float func_001FA888_303CA8(int) __asm__("FUN_001fa6c0");
+extern int func_001FA8A8_303CA8(int, int, float) __asm__("FUN_001fa6e0");
+extern void func_L00_001FD1D8_303CA8(void *, void *, int) __asm__("FUN_001f7d30");
+extern float D_L12_001FB7D0_303CA8[] __asm__("D_L12_001FB510");
+
+void FUN_L12_003028c8(Moby *moby) {
+    Quad_303CA8 quad[2];
+    float m[16];
+    float mats[5][16];
+    float vec[4];
+    Data_303CA8 *data;
+    float *pos;
+    float *row;
+    float t;
+    float u;
+    int i, j, k, n, d, idx;
+
+    data = *(Data_303CA8 **)&moby->pvars;
+    func_001FA218_303CA8(m, ((float *)&moby->rot));
+    pos = ((float *)&moby->pos);
+    row = &mats[0][12];
     for (i = 0; i < 2; i++) {
-        FUN_001fa050(matrices[i], D_L12_001FB5B0[i]);
-        FUN_001fa378(matrices[i], base, matrices[i]);
-        if (!(i & 1) && *(int *)(data + 0x2314) != -1) {
-            struct Moby *other = (struct Moby *)(D_L12_0015FFD8_p + *(int *)(data + 0x2314) * 0x100);
-            position = *(u128 *)&other->pos;
+        float *cp = mats[i];
+
+        func_001FA218_303CA8(cp, D_L12_001FB5B0[i]);
+        func_001FA540_303CA8(cp, m, cp);
+        if (!(i & 1) && data->target != -1) {
+            qcopy(vec, ((float *)&D_L12_0015FFD8[data->target].pos));
         } else {
-            position = *(u128 *)&moby->pos;
+            qcopy(vec, pos);
         }
-        FUN_001f9a10(&matrices[i][12], &matrices[i][12], &position);
-        matrices[i][15] = 1.0f;
+        func_001F9BD8_303CA8(row, row, vec);
+        row += 16;
+        cp[15] = 1.0f;
     }
-    packet.texture = get_effect_texture_l12(14);
-    packet.gs_state = (long)L12_WORD(0x001f1dcc) | (long)L12_WORD(0x001f1dd0) << 2 |
-        (long)L12_WORD(0x001f1dd4) << 4 | (long)L12_WORD(0x001f1dd8) << 6 | 0x8000000000L;
-    packet.texture_state = 0xff9000000260L;
-    packet.tag = 0;
-    for (i = 0; i < 4; i++) packet.uv[i][1] = D_L12_001FB510[i][1];
-    for (strip = 0; strip < 4; strip++) {
-        float fade;
-        float phase = 0.0f;
-        int count;
-        int timer = *(int *)(data + 0x2300 + strip * 4);
-        if (L12_WORD(0x00161e08) < timer) {
-            fade = convert_integer_to_float(timer - L12_WORD(0x00161e08)) /
-                convert_integer_to_float(L12_WORD(0x00161e04) - L12_WORD(0x00161e08));
-        } else {
-            fade = 1.0f - convert_integer_to_float(timer) /
-                convert_integer_to_float(L12_WORD(0x00161e08));
+    quad[1].g[1] = func_001F4868_303CA8(0xE);
+    quad[1].g[3] = (long)D_L12_00161DCC | ((long)D_L12_00161DD0 << 2) | ((long)D_L12_00161DD4 << 4) | ((long)D_L12_00161DD8 << 6) | (0x8000L << 24);
+    quad[1].g[2] = 0xFF9000000260UL;
+    quad[1].g[0] = 0;
+    {
+        float *uv = &quad[1].uv[1];
+        int c;
+
+        for (c = 0; c < 4; c++) {
+            *uv = D_L12_001FB7D0_303CA8[c * 2 + 1];
+            uv += 2;
         }
-        packet.color[0] = packet.color[1] = packet.color[2] = packet.color[3] =
-            FUN_001fa6e0(fade, L12_WORD(0x001f1dec), L12_WORD(0x001f1df0));
-        count = *(int *)(data + 0x232c) - 1;
-        for (i = 0; i < count; i++) {
-            phase += L12_FLOAT(0x001f1df4);
-            if (phase > 1.0f) phase -= 1.0f;
-            for (j = 0; j < 4; j++)
-                packet.uv[j][0] = D_L12_001FB510[j][0] + phase + L12_FLOAT(0x001f1df8);
-            for (j = 0; j < 4; j++) {
-                int point = i + (j >> 1);
-                FUN_001f9a10(&packet.vertices[j], &D_L12_001FB530[j],
-                    data + strip * 0x460 + point * 0x10);
+    }
+    for (idx = 0; idx < 4; idx++) {
+        if (D_L12_00161E08 < data->phase[idx]) {
+            t = func_001FA888_303CA8(data->phase[idx] - D_L12_00161E08) / func_001FA888_303CA8(D_L12_00161E04 - D_L12_00161E08);
+        } else {
+            t = 1.0f - func_001FA888_303CA8(data->phase[idx]) / func_001FA888_303CA8(D_L12_00161E08);
+        }
+        quad[1].c[0] = quad[1].c[1] = quad[1].c[2] = quad[1].c[3] = func_001FA8A8_303CA8(D_L12_00161DEC, D_L12_00161DF0, t);
+        u = 0.0f;
+        for (j = 0; j < data->count - 1; j++) {
+            u = u + D_L12_00161DF4;
+            if (1.0f < u) {
+                u = u - 1.0f;
             }
-            for (j = 0; j < 2; j++) draw_geometry_quad_l12(&packet, matrices[j], 0);
-            count = *(int *)(data + 0x232c) - 1;
+            for (k = 0; k < 4; k++) {
+                quad[1].uv[k * 2] = D_L12_001FB7D0_303CA8[k * 2] + u + D_L12_00161DF8;
+            }
+            for (n = 0; n < 4; n++) {
+                func_001F9BD8_303CA8(&quad[1].v[n * 4], D_L12_001FB530[n], data->ring[idx][j + (n >> 1)]);
+            }
+            for (d = 0; d < 2; d++) {
+                func_L00_001FD1D8_303CA8(&quad[1], mats[d], 0);
+            }
         }
     }
 }
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00302c58.s", FUN_L12_00302c58);
 #else
@@ -108,7 +149,7 @@ extern float D_L12_00161DF8 __attribute__((sda));
 extern float D_L12_00161DFC __attribute__((sda));
 extern float D_L12_00161E00 __attribute__((sda));
 extern int D_L12_00161E04 __attribute__((sda));
-extern void FUN_L12_003028c8(struct Moby *);
+extern void FUN_L12_003028c8_u(struct Moby *) __asm__("FUN_L12_003028c8");
 
 void FUN_L12_00302c58(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -154,7 +195,7 @@ void FUN_L12_00302c58(struct Moby *moby) {
         }
     }
     if (distance_xyz(&moby->pos, D_L12_00167240) < 48.0f)
-        enqueue_callback_list_1(FUN_L12_003028c8, moby);
+        enqueue_callback_list_1(FUN_L12_003028c8_u, moby);
 }
 #endif
 #include "rnc/math/vector.h"
@@ -164,7 +205,6 @@ void FUN_L12_00302c58(struct Moby *moby) {
 /* Level 12 vendor moby update: steers toward its target, then calls the vendor helpers. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00304310), where it is exact; names translated to the US level program. */
 
-typedef struct Moby Moby;
 
 typedef struct Data_304310 {
     char pad0[0x2300];
