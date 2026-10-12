@@ -5,9 +5,6 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd1a0.s", FUN_L06_002fd1a0);
-#else
 #include "eetypes.h"
 #include "qcopy.h"
 typedef struct {
@@ -60,6 +57,8 @@ void FUN_L06_002fd1a0(void) {
     long tex = texture_2fd1a0(D_L06_00161F90);
     first.tex = tex;
     second.tex = texture_2fd1a0(0x2a);
+    second.unk80 = 0xFF9000000260L;
+    first.unk80 = 0xFF9000000260L;
     flags = (long)D_L06_00161F7C;
     flags |= (long)D_L06_00161F80 << 2;
     flags |= (long)D_L06_00161F84 << 4;
@@ -67,8 +66,6 @@ void FUN_L06_002fd1a0(void) {
     flags |= (long)D_L06_00161F8C << 32;
     second.unk88 = flags;
     first.unk88 = flags;
-    second.unk80 = 0xFF9000000260L;
-    first.unk80 = 0xFF9000000260L;
     second.unk70 = 0;
     first.unk70 = 0;
     matrix_ptr = matrix;
@@ -78,7 +75,7 @@ void FUN_L06_002fd1a0(void) {
     i = 0;
     do {
         transform_2fd1a0(vec1, D_L06_001F2610[i], D_L06_00161F9C);
-        multiply_2fd1a0(vec1, vec1, matrix_ptr);
+        multiply_2fd1a0(vec1, vec1, matrix);
         subtract_2fd1a0(vec2, vec1, D_L06_00167540);
         normalize_2fd1a0(vec2, vec2, 1.0f);
         transform_other_2fd1a0(vec1, D_L06_001F19D0[i], matrix_ptr);
@@ -103,7 +100,6 @@ void FUN_L06_002fd1a0(void) {
         i++;
     } while (i < 50);
 }
-#endif
 #include "eetypes.h"
 #include "qcopy.h"
 
