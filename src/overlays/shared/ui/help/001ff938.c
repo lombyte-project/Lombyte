@@ -102,7 +102,7 @@ void FUN_L15_001ff938(void) {
         green_byte = moby[0x91];
         blue_byte = moby[0x92];
         if (hero.unk22DE != 0)
-            alpha = FUN_001fa6d0((FUN_001fa6c0_inherited() / FUN_001fa6c0(0x12)) * (float)alpha);
+            alpha = FUN_001fa6d0((FUN_001fa6c0(hero.unk22DE) / FUN_001fa6c0(0x12)) * (float)alpha);
         *(u32 *)((u8 *)&hero + 0x22E4) = (alpha << 24) | (blue_byte << 16) | (green_byte << 8) | red_byte;
         FUN_L00_00207d00();
         hero.unk22E0 = 0;
