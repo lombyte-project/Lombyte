@@ -1451,4 +1451,129 @@ void FUN_L14_002feca8(unsigned char *m) {
         life *= 2;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ff640.s", FUN_L14_002ff640);
+typedef struct {
+    struct Moby *link;
+    float rest_z;
+    float z_speed;
+    float phase;
+    float spin[3];
+} FloatMineVars_ff640;
+
+typedef struct {
+    float damage;
+    s16 unk4;
+    u8 pad6[0xA];
+    float unk10;
+    u8 pad14[0x26];
+    u8 unk3A;
+    u8 unk3B;
+    u8 pad3C[4];
+} HitInfo_ff640;
+
+typedef struct {
+    u8 pad0[0x20];
+    struct Moby *moby;
+} MobyHit_ff640;
+
+extern char *D_L14_0015FFDC;
+extern float D_L14_00162000 __attribute__((sda));
+extern float probe_ground_height_ff640(float, void *, int) __asm__("FUN_00213508");
+extern float random_float_between_ff640(float, float) __asm__("FUN_002132a8");
+extern void ease_ff640(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
+extern MobyHit_ff640 *find_moby_hit_ff640(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
+extern void clear_ff640(void *, int) __asm__("FUN_001f9810");
+extern int take_damage_ff640(struct Moby *, MobyHit_ff640 *, HitInfo_ff640 *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern void clear_vector_ff640(void *) __asm__("FUN_001f99f8");
+extern int play_sound_ff640(int, int, struct Moby *) __asm__("FUN_0022da68");
+extern void explode_ff640(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float,
+                          int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void remove_moby_ff640(struct Moby *) __asm__("FUN_0020c828");
+extern int sphere_visible_ff640(float *, float) __asm__("FUN_001fa728");
+extern float add_rotations_ff640(float, float) __asm__("FUN_001fa580");
+extern float sin_ff640(float) __asm__("FUN_001f9de0");
+extern int ftoi_ff640(float) __asm__("FUN_001fa6d0");
+
+/* Floating mine: spins and pulses (and bobs in level 16); blows up on a hit and respawns once out of view. */
+void FUN_L14_002ff640(struct Moby *moby) {
+    FloatMineVars_ff640 *vars = (FloatMineVars_ff640 *)moby->pvars;
+    union {
+        HitInfo_ff640 info;
+        float sphere[4];
+    } scratch;
+    float vel[4];
+    int count;
+    MobyHit_ff640 *hit;
+    float s;
+    int r;
+    int g;
+
+    switch (moby->state) {
+    case 0:
+        vars->rest_z = -1.0f;
+        if (vars->link == 0) {
+            moby->pos.z = probe_ground_height_ff640(0.5f, &moby->pos, 0) + 0.7f;
+            vars->spin[0] = random_float_between_ff640(0.010471975f, 0.020943951f);
+            vars->spin[1] = random_float_between_ff640(0.006981317f, 0.013962634f);
+            vars->spin[2] = random_float_between_ff640(0.0034906585f, 0.006981317f);
+            moby->state = 1;
+        } else if ((s8)vars->link->state < 0) {
+            moby->state = 1;
+        }
+        break;
+    case 1: {
+        if (current_level_index == 16) {
+            if (vars->rest_z < 0.0f)
+                vars->rest_z = probe_ground_height_ff640(0.5f, &moby->pos, 0) + 0.7f;
+            ease_ff640(&moby->pos.z, &vars->z_speed, vars->rest_z, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f, 0.0f);
+            if ((char *)moby > D_L14_0015FFDC && hero.state.control_mode != 15)
+                goto remove;
+        }
+        hit = find_moby_hit_ff640(moby, 0x230000, 0);
+        clear_ff640(&scratch.info, 0x40);
+        scratch.info.unk4 = 1;
+        scratch.info.damage = 1.0f;
+        scratch.info.unk10 = 0.5f;
+        scratch.info.unk3A = 7;
+        scratch.info.unk3B = 0xFF;
+        take_damage_ff640(moby, hit, &scratch.info, 0, &count, 0, 0, 4);
+        if ((count >= 2 && hit != 0 && hit->moby->oclass != 0x283) || hero.coll_hit_moby == (u8 *)moby) {
+            clear_vector_ff640(vel);
+            play_sound_ff640(0, 0, moby);
+            if (hero.coll_hit_moby == (u8 *)moby)
+                explode_ff640(moby, vel, &moby->pos, 3.0f, 1.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            else
+                explode_ff640(moby, vel, &moby->pos, 0.0f, 0.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            if ((char *)moby < D_L14_0015FFDC) {
+                moby->state = 2;
+                moby->flags |= 0x41;
+                moby->hit_slot = 0xFF;
+                moby->collision = 0;
+                moby->update_dist = 0xFF;
+                return;
+            }
+        remove:
+            remove_moby_ff640(moby);
+            return;
+        }
+        break;
+    }
+    case 2: {
+        qcopy(scratch.sphere, &moby->pos);
+        scratch.sphere[3] = 3.0f;
+        if (sphere_visible_ff640(scratch.sphere, 64.0f) == -1) {
+            moby->state = 1;
+            moby->flags &= 0xFFBE;
+            moby->collision = moby->pclass->collision;
+        }
+        break;
+    }
+    }
+    vars->phase = add_rotations_ff640(vars->phase, D_L14_00162000);
+    s = sin_ff640(vars->phase);
+    r = ftoi_ff640(s * 48.0f) + 0xCF;
+    g = ftoi_ff640(s * 32.0f) + 0x30;
+    moby->glow_color = g << 16 | (0xFF000000 | g << 8) | r;
+    moby->rot.x = add_rotations_ff640(moby->rot.x, vars->spin[0]);
+    moby->rot.y = add_rotations_ff640(moby->rot.y, vars->spin[1]);
+    moby->rot.z = add_rotations_ff640(moby->rot.z, vars->spin[2]);
+}
