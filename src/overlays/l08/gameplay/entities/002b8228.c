@@ -1914,10 +1914,9 @@ extern void FUN_001f99f8(void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9c48(float, void *, void *);
 extern int FUN_001fa6d0(float);
-extern void FUN_L05_00318648(void *, void *, void *, void *, int);
 extern void *D_L08_001600EC;
 
-void FUN_L08_002de528(char *moby, int index, int count, int variant) {
+void FUN_L08_002de528(void *moby, int index, int count, int variant) {
     int i;
     int table_offset;
     char *spawned;
@@ -1969,7 +1968,7 @@ void FUN_L08_002de528(char *moby, int index, int count, int variant) {
             angle = random_float_between(frame_time * 6.0f, frame_time * 18.0f);
             velocity[2] = angle;
             speed = random_float_between(60.0f, 90.0f);
-            FUN_L05_00318648(spawned, moby, velocity, axis, FUN_001fa6d0(speed));
+            FUN_L05_00318648(spawned, (int)moby, velocity, axis, FUN_001fa6d0(speed));
         } while (i != 0);
     }
 }
