@@ -2000,9 +2000,11 @@ scan:
         other = entities + (index << 8);
         if ((unsigned char)other[0x20] != 12 || *(short *)(other + 0xA6) != type) goto advance;
         {
-            char *other_data = *(char **)(other + 0x78);
-            char *self_data = *(char **)(self + 0x78);
-            other[0x30] = self[0x30];
+            /* Retail reads both pvars pointers and unk30 before writing the entity. */
+            char *other_data = *(char * volatile *)(other + 0x78);
+            unsigned char unk30 = *(volatile unsigned char *)(self + 0x30);
+            char *self_data = *(char * volatile *)(self + 0x78);
+            other[0x30] = unk30;
             *(unsigned short *)(other + 0x32) = *(unsigned short *)(self + 0x32);
             {
                 unsigned long long spawn_frame = *(unsigned long long *)(self + 0x38);
