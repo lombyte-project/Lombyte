@@ -1915,73 +1915,79 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     s16 *entry;
     f32 distance;
     f32 angle;
-    struct Hero *g;
 
     pos.q = *(u128 *)((u8 *)m + 0x10);
     vars = m->vars;
     limit = FUN_L00_00257b50_b6bc8(vars->pad14 > 0 ? vars->pad14 : 1);
     vars->pad14 = 0;
-    p = D_001ABA00_b6bc8;
-    while ((other = *p) != 0) {
-        state = FUN_L00_0025c338_b6bc8(other);
-        if (state != 0) {
-            distance = FUN_001ff488_b6bc8(&pos, (u8 *)other + 0x10);
-            if (distance < 12.0f &&
-                ((u16)(*(u16 *)((u8 *)other + 0xa6) - 500) < 2 ||
-                 *(s16 *)((u8 *)other + 0xa6) == 0x1f9 ||
-                 *(s16 *)((u8 *)other + 0xa6) == 0x1ff)) {
-                g = &hero;
-                angle = FUN_002001f0_b6bc8(g->motion.rot.f[2],
-                    FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
-                                           *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]));
-                if (angle < 0.9599311f) {
-                    if (vars->pad14 == limit) {
-                        FUN_001ff2a8_b6bc8(&velocity, (u8 *)other + 0x10, (u8 *)m + 0x10);
-                        FUN_001ff500_b6bc8(1.5f, &velocity, &velocity);
-                        FUN_L00_00259bc8_b6bc8(other, m, 0x10000, &g->motion.pos, &velocity, 1.0f);
-                        vars->frame = FUN_001fef20_b6bc8(FUN_L00_00257b90_c(5, 0x2d));
-                    }
-                    vars->pad14++;
-                }
-            }
-            if (distance < radius) {
-                g = &hero;
-                angle = FUN_002001f0_b6bc8(g->motion.rot.f[2],
-                    FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
-                                           *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]));
-                if (angle < 0.9599311f) {
-                    Moby *current = *(Moby **)(state + 0x18);
-                    if (current == 0 || distance < FUN_001ff488_b6bc8((u8 *)current + 0x10, (u8 *)other + 0x10)) {
-                        *(Moby **)(state + 0x18) = m;
-                        count++;
-                    }
-                }
-            }
-        }
-        p++;
-    }
-    i = 1;
-    if (D_001B07B0_b6bc8[0] > 0) {
-        entry = D_001B07B0_b6bc8 + 1;
+    other = D_001ABA00_b6bc8[0];
+    if (other != 0) {
+        p = D_001ABA00_b6bc8;
         do {
-            other = (Moby *)(D_0015FFD8_b6bc8 + *entry * 0x100);
-            if (other != 0 && (s8)other->state >= 0) {
-                state = (u8 *)other->vars;
+            state = FUN_L00_0025c338_b6bc8(other);
+            if (state != 0) {
                 distance = FUN_001ff488_b6bc8(&pos, (u8 *)other + 0x10);
-                if (distance < radius) {
-                    g = &hero;
+                if (distance < 12.0f &&
+                    ((u16)(*(u16 *)((u8 *)other + 0xa6) - 500) < 2 ||
+                     *(s16 *)((u8 *)other + 0xa6) == 0x1f9 ||
+                     *(s16 *)((u8 *)other + 0xa6) == 0x1ff)) {
+                    struct Hero *g = &hero;
                     angle = FUN_002001f0_b6bc8(g->motion.rot.f[2],
                         FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
                                                *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]));
                     if (angle < 0.9599311f) {
-                        *(Moby **)(state + 0x78) = m;
+                        if (vars->pad14 == limit) {
+                            FUN_001ff2a8_b6bc8(&velocity, (u8 *)other + 0x10, (u8 *)m + 0x10);
+                            FUN_001ff500_b6bc8(1.5f, &velocity, &velocity);
+                            FUN_L00_00259bc8_b6bc8(other, m, 0x10000, &g->motion.pos, &velocity, 1.0f);
+                            vars->frame = FUN_001fef20_b6bc8(FUN_L00_00257b90_c(5, 0x2d));
+                        }
+                        vars->pad14++;
+                    }
+                }
+                if (distance < radius) {
+                    struct Hero *g = &hero;
+                    angle = FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
+                                               *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]);
+                    /* D_0013F3D0 is hero.motion.pos; reload yaw after the angle helper. */
+                    angle = FUN_002001f0_b6bc8(
+                        ((struct Hero *)((u8 *)D_0013F3D0_b6bc8 - 0x80))->motion.rot.f[2], angle);
+                    if (angle < 0.9599311f) {
+                        Moby *current = *(Moby **)(state + 0x18);
+                        if (current == 0 || distance < FUN_001ff488_b6bc8((u8 *)current + 0x10, (u8 *)other + 0x10)) {
+                            *(Moby **)(state + 0x18) = m;
+                            count++;
+                        }
+                    }
+                }
+            }
+            p++;
+            other = *p;
+        } while (other != 0);
+    }
+    i = 1;
+    if (D_001B07B0_b6bc8[0] > 0) {
+        struct Hero *g = &hero;
+        s16 *entryCount = D_001B07B0_b6bc8;
+        entry = entryCount + 1;
+        do {
+            other = (Moby *)(D_0015FFD8_b6bc8 + *entry * 0x100);
+            if (other != 0 && (s8)other->state >= 0) {
+                Vars *vars = other->vars;
+                distance = FUN_001ff488_b6bc8(&pos, (u8 *)other + 0x10);
+                if (distance < radius) {
+                    angle = FUN_002001f0_b6bc8(g->motion.rot.f[2],
+                        FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
+                                               *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]));
+                    if (angle < 0.9599311f) {
+                        *(Moby **)((u8 *)vars + 0x78) = m;
                         count++;
                     }
                 }
             }
             i++;
             entry++;
-        } while (i <= D_001B07B0_b6bc8[0]);
+        } while (i <= entryCount[0]);
     }
     return count;
 }
