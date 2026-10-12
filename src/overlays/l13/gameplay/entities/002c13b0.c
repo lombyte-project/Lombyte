@@ -2517,13 +2517,8 @@ extern char *D_L13_001B07B0[];
 extern float D_0015ED6C;
 
 int FUN_L13_002e97e0(struct Moby *m, char *d, int *result) {
-    char *path;
-    char *node;
-    char *other;
-    char *destination;
     char *child;
-    char *path_slots = d + 0xB0;
-    int idx;
+    int path_slots = (int)d + 0xB0;
     float dx;
     float dy;
     float dz;
@@ -2538,30 +2533,60 @@ int FUN_L13_002e97e0(struct Moby *m, char *d, int *result) {
     d[0x13B] = 4;
     velocity_scale = D_0015ED6C * 10.0f;
     velocity = *(char **)0x001600EC + (*(int *)(d + 0x130) << 7);
-    *(volatile short *)(d + 0x9C) = 0;
+    *(short *)(d + 0x9C) = 0;
     FUN_001f9bf8(d + 0x70, velocity, velocity_scale);
-    idx = *(volatile short *)(d + 0x9C);
-    path = D_L13_001B07B0[*(int *)(path_slots + (unsigned char)d[0x13B] * 4)];
-    node = path + idx * 16;
-    destination = (char *)m + 0x10;
-    qcopy(destination, node + 0x10);
-    other = path + (idx + 1) * 16;
-    dx = *(float *)(other + 0x10) - *(float *)(node + 0x10);
-    dy = *(float *)(other + 0x14) - *(float *)(node + 0x14);
-    m->rot.z = FUN_001f9e90(dx, dy);
-    idx = *(volatile short *)(d + 0x9C);
-    path = D_L13_001B07B0[*(int *)(path_slots + (unsigned char)d[0x13B] * 4)];
-    node = path + idx * 16 + 0x10;
-    horizontal = FUN_001f9b80(node, node + 0x10);
-    idx = *(volatile short *)(d + 0x9C);
-    path = D_L13_001B07B0[*(int *)(path_slots + (unsigned char)d[0x13B] * 4)];
-    node = path + idx * 16 + 0x10;
-    dz = *(float *)(node + 0x18) - *(float *)(node + 8);
-    m->rot.y = -FUN_001f9e90(horizontal, dz);
+    {
+        int idx;
+        char *path;
+        char *node;
+        char *other;
+        char *destination;
+        char *copy_source;
+        int *path_slot;
+        idx = *(short *)(d + 0x9C);
+        path_slot = (int *)path_slots;
+        path_slot += (unsigned char)d[0x13B];
+        path = D_L13_001B07B0[*path_slot];
+        copy_source = (char *)((unsigned int)(idx * 16 + 0x10) + (unsigned int)path);
+        destination = (char *)m + 0x10;
+        qcopy(destination, copy_source);
+        node = (char *)((int)path + idx * 16);
+        other = path + (++idx) * 16;
+        dx = *(float *)(other + 0x10) - *(float *)(node + 0x10);
+        dy = *(float *)(other + 0x14) - *(float *)(node + 0x14);
+        m->rot.z = FUN_001f9e90(dx, dy);
+    }
+    {
+        int idx;
+        char *path;
+        char *node;
+        char *other;
+        int *path_slot;
+        idx = *(short *)(d + 0x9C);
+        path_slot = (int *)path_slots;
+        path_slot += (unsigned char)d[0x13B];
+        path = D_L13_001B07B0[*path_slot];
+        node = (char *)(idx * 16 + 0x10);
+        other = (char *)(idx * 16 + 0x20);
+        horizontal = FUN_001f9b80((char *)((int)path + (int)node), (char *)((int)path + (int)other));
+    }
+    {
+        int idx;
+        char *path;
+        char *node;
+        char *other;
+        idx = *(short *)(d + 0x9C);
+        path_slots += (unsigned char)d[0x13B] * 4;
+        path = D_L13_001B07B0[*(int *)path_slots];
+        other = path + (idx + 1) * 16;
+        node = path + idx * 16;
+        dz = *(float *)(other + 0x18) - *(float *)(node + 0x18);
+        m->rot.y = -FUN_001f9e90(horizontal, dz);
+    }
     d[0x10C] = 1;
     child = *(char **)0x0015FFD8;
-    *(volatile unsigned short *)(child + (*(int *)(d + 0x134) << 8) + 0x34) |= 2;
-    *(volatile unsigned short *)(child + (*(int *)(d + 0x134) << 8) + 0x34) |= 1;
+    *(volatile unsigned short *)((char *)((*(int *)(d + 0x134) << 8) + (int)child) + 0x34) |= 2;
+    *(volatile unsigned short *)((char *)((*(int *)(d + 0x134) << 8) + (int)child) + 0x34) |= 1;
     child[(*(int *)(d + 0x134) << 8) + 0x31] = 0;
     FUN_L10_002f5a50(*(int *)(d + 0x12C));
     m->state = 7;
