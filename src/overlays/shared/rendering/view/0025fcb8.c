@@ -100,6 +100,7 @@ int FUN_L00_0025ff38(float best, char *a, char *o, int *excluded,
     struct Hero *g = &hero_data;
     char *m;
     char *p;
+    char *position;
     int res;
     int i;
     int j;
@@ -137,20 +138,23 @@ int FUN_L00_0025ff38(float best, char *a, char *o, int *excluded,
             continue;
         if (*(unsigned char *)(p + 0x20) != 3)
             continue;
-        d = FUN_001f9b80_25fcb8(a + 0x10, p + 0x10);
+        /* Retail reuses this position scratch as the exclusion counter. */
+        k = (int)(p + 0x10);
+        position = (char *)k;
         valid = 1;
+        d = FUN_001f9b80_25fcb8(a + 0x10, (char *)k);
         if (best <= d) {
             valid = 0;
         } else {
             if (excluded_count > 0) {
                 for (k = 0; k < excluded_count - 1; k++) {
-                    if (FUN_00214720_25ff38(p + 0x10, excluded[k])) {
+                    if (FUN_00214720_25ff38(position, excluded[k])) {
                         valid = 0;
                         break;
                     }
                 }
             } else if (region && region_count > 0 &&
-                       !FUN_L00_00259740_25ff38(p + 0x10, region, region_count)) {
+                       !FUN_L00_00259740_25ff38((char *)k, region, region_count)) {
                 valid = 0;
             }
         }
@@ -172,20 +176,23 @@ int FUN_L00_0025ff38(float best, char *a, char *o, int *excluded,
             continue;
         if (*(unsigned char *)(p + 0xBC) == 0)
             continue;
-        d = FUN_001f9b80_25fcb8(a + 0x10, p + 0x10);
+        /* Retail reuses this position scratch as the exclusion counter. */
+        k = (int)(p + 0x10);
+        position = (char *)k;
         valid = 1;
+        d = FUN_001f9b80_25fcb8(a + 0x10, (char *)k);
         if (best <= d) {
             valid = 0;
         } else {
             if (excluded_count > 0) {
                 for (k = 0; k < excluded_count - 1; k++) {
-                    if (FUN_00214720_25ff38(p + 0x10, excluded[k])) {
+                    if (FUN_00214720_25ff38(position, excluded[k])) {
                         valid = 0;
                         break;
                     }
                 }
             } else if (region && region_count > 0 &&
-                       !FUN_L00_00259740_25ff38(p + 0x10, region, region_count)) {
+                       !FUN_L00_00259740_25ff38((char *)k, region, region_count)) {
                 valid = 0;
             }
         }
