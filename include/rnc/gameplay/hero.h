@@ -494,10 +494,11 @@ struct Hero {
     s16 unk8BE;                    /* 0x8BE */
     s32 unk8C0;                    /* 0x8C0: 1..3 picks the HUD rank string (FUN_L05_00266320) */
     s32 unk8C4;                    /* 0x8C4 */
-    u8 pad_8C8[0x4];
+    u8 pad_8C8[0x2];
+    s16 unk8CA;                    /* 0x8CA */
     s16 unk8CC;                    /* 0x8CC */
     u8 unk8CE;                     /* 0x8CE */
-    u8 pad_8CF[0x1];
+    u8 unk8CF;                     /* 0x8CF */
     Vec4 unk8D0;                   /* 0x8D0 */
     s32 unk8E0;                    /* 0x8E0 */
     f32 unk8E4;                    /* 0x8E4 */
