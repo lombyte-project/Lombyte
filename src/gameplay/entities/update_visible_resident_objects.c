@@ -1,23 +1,20 @@
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 
-struct Moby {
-    u8 pad0[0x20];
-    s8 state;
-    u8 pad21[7];
-    struct Moby *next;
-    u8 pad2C[8];
-    volatile u16 flags;
-    u8 pad36[0x3E];
-    void (*update_callback)(struct Moby *);
-};
+/* Moby.flags bits this loop tests. */
+#define MOBY_SKIP_ANIMATION 0x40
+#define MOBY_SKIP_BOUNDS 0x4
+
 extern struct Moby *visible_moby_list __asm__("D_0015FF24") __attribute__((sda));
 extern struct Moby *build_resident_visibility_list(void) __asm__("FUN_0020d868");
 extern void advance_resident_object_animation(struct Moby *) __asm__("FUN_0020d580");
 extern void refresh_resident_object_spatial_bounds(struct Moby *) __asm__("FUN_0020def8");
 void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 
-/* Animation can replace the callback; the callback and bounds refresh can
- * mutate flags or the list link. Read each field at its point of use. */
+/* Each live moby on the visible list: its animation step, its class update
+ * and its bounds. Animation can replace the update; the update and the
+ * bounds refresh can change flags or the list link, so each field is read at
+ * its point of use. */
 void update_visible_resident_objects(void) {
     struct Moby *moby;
     /* Fakematch: retail keeps the callback in $v1. */
@@ -26,11 +23,11 @@ void update_visible_resident_objects(void) {
     visible_moby_list = build_resident_visibility_list();
     moby = visible_moby_list;
     while (moby != 0) {
-        if (moby->state >= 0) {
-            if (!(moby->flags & 0x40)) {
+        if ((s8)moby->state >= 0) {
+            if (!(((volatile struct Moby *)moby)->flags & MOBY_SKIP_ANIMATION)) {
                 advance_resident_object_animation(moby);
             }
-            callback = moby->update_callback;
+            callback = moby->update;
             if (callback != 0) {
                 register struct Moby *arg __asm__("$4");
 
@@ -41,7 +38,7 @@ void update_visible_resident_objects(void) {
                 __asm__ volatile("" : : "r"(arg));
                 callback(arg);
             }
-            if (!(moby->flags & 0x4)) {
+            if (!(((volatile struct Moby *)moby)->flags & MOBY_SKIP_BOUNDS)) {
                 refresh_resident_object_spatial_bounds(moby);
             }
         }

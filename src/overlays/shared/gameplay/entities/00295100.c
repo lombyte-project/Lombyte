@@ -653,7 +653,7 @@ extern VendorCutscene D_L00_0016C860;
 extern s32 D_0015EEA0;
 extern s32 D_0015EED8;
 extern void FUN_L00_0023e268(void);
-extern void FUN_00212e28(void);
+extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern void FUN_00215b10(void);
 extern s32 FUN_002168a8(s32);
 extern void FUN_00204790(void);
@@ -690,7 +690,7 @@ void FUN_L00_00298f90(void) {
         FUN_L00_0023e268();
     }
     if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
-        FUN_00212e28();
+        update_visible_resident_objects();
         enqueue_voice_request();
     }
     FUN_001e93e8(D_L00_00160FF8, 3);
@@ -1950,7 +1950,7 @@ extern f32 D_L00_0016CAF0 __attribute__((section(".data")));
 
 extern void FUN_L00_00297e30(void);
 extern void FUN_L00_00297e70(void);
-extern void FUN_00212e28(void);
+extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern void FUN_0022dc50(void);
 extern void FUN_L00_002070d0(void);
 extern void FUN_00217b88(void);
@@ -2285,7 +2285,7 @@ void FUN_L00_0029c648(void) {
                 FUN_L00_00297e30();
             }
             if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
-                FUN_00212e28();
+                update_visible_resident_objects();
                 FUN_0022dc50();
             }
             FUN_001e93e8(D_L00_00161128, 3);
@@ -2558,7 +2558,7 @@ void FUN_L00_0029c648(void) {
         break;
     case 3:
         FUN_L00_00297e30();
-        FUN_00212e28();
+        update_visible_resident_objects();
         FUN_0022dc50();
         FUN_L00_002070d0();
         FUN_00217b88();
