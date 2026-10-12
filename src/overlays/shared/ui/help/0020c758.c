@@ -1456,8 +1456,7 @@ extern s32 FUN_L00_0020d540_f580(s32) __asm__("FUN_L00_0020d540");
 void FUN_L00_0020f580(void)
 {
     union { f32 direction[4]; u8 saved[0x20]; } scratch __attribute__((aligned(16)));
-    u8 position[0x30] __attribute__((aligned(16)));
-    u8 rotation[0x10] __attribute__((aligned(16)));
+    struct { u8 position[0x30]; u8 rotation[0x10]; } transform __attribute__((aligned(16)));
     s32 i, j, index, offset, first, second, third, random_range;
     s32 color_red, color_green, color_blue;
     u8 *moby, *effect, *source, *slot;
@@ -1560,8 +1559,8 @@ after_moby:
                         if (D_001404DC_f580 != 0) {
                             effect = (u8 *)D_001404DC_f580;
                             *(u32 *)(effect + 0x90) = 0x801432d7;
-                            *(u128 *)(effect + 0x10) = *(u128 *)D_0013F3D0_f580;
-                            *(u128 *)(effect + 0x40) = *(u128 *)D_0013F3E0_f580;
+                            qcopy(effect + 0x10, &hero.motion.pos);
+                            qcopy(effect + 0x40, &hero.motion.rot);
                             *(u16 *)(effect + 0x32) = 0x40;
                             *(u8 *)(effect + 0x31) = 1;
                             *(u8 *)(effect + 0x30) = 0;
@@ -1572,12 +1571,12 @@ after_moby:
                     }
                     if (D_001404DC_f580 != 0) {
                         effect = (u8 *)D_001404DC_f580;
-                        if ((*(u16 *)(effect + 0x34) & 1) == 0) {
-                            FUN_0024f728_f580(moby, 6, position);
-                            *(u128 *)D_001410D0_f580 = *(u128 *)rotation;
+                        if (((*(u16 *)(effect + 0x34) ^ 1) & 1) != 0) {
+                            FUN_0024f728_f580(moby, 6, transform.position);
+                            *(u128 *)D_001410D0_f580 = *(u128 *)transform.rotation;
                             FUN_00207d00_f580();
-                            *(u128 *)(effect + 0x10) = *(u128 *)rotation;
-                            FUN_001ffcd8_f580(effect + 0xc0, position);
+                            *(u128 *)(effect + 0x10) = *(u128 *)transform.rotation;
+                            FUN_001ffcd8_f580(effect + 0xc0, transform.position);
                             FUN_00250df8_f580(effect);
                             *(u64 *)(effect + 0x38) = *(u64 *)(*(u8 **)((u8 *)&hero + 0x2080) + 0x38);
                             random_range = FUN_001fef20_f580(0x78);
