@@ -522,8 +522,8 @@ extern int scale_game_frames_7880(int) __asm__("FUN_001f96f8");
 extern void mark_moby_for_removal_7880(struct Moby *) __asm__("FUN_0020c828");
 extern void FUN_L00_00257470_7880(void *, int, long long) __asm__("FUN_L00_00257470");
 extern void FUN_L00_0025e450_7880(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void *FUN_L01_002f8530_7880(float, float, float, float, void *, void *, int, int, int) __asm__("FUN_L01_002f8530");
-extern void *FUN_L00_0026bed0_7880(float, void *, void *, int, int, int, int) __asm__("FUN_L00_0026bed0");
+extern void *FUN_L01_002f8530_7880(void *, void *, int, float, int, float, float, float, int) __asm__("FUN_L01_002f8530");
+extern void *FUN_L00_0026bed0_7880(void *, void *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
 
 void FUN_L15_002a7880(struct Moby *moby)
 {
@@ -590,8 +590,8 @@ void FUN_L15_002a7880(struct Moby *moby)
         radius = random_float_between_7880(0.1f, 0.3f);
         duration = FUN_L00_00257b90_7880(60, 100);
         size = random_float_between_7880(3.0f, 7.0f);
-        FUN_L01_002f8530_7880(radius, size, 0.15f, 2.0f, &offset, &velocity,
-                                *palette_entry, duration, 1);
+        FUN_L01_002f8530_7880(&offset, &velocity, *palette_entry, radius, duration,
+                                size, 0.15f, 2.0f, 1);
         i--;
     } while (i >= 0);
     }
@@ -607,8 +607,8 @@ void FUN_L15_002a7880(struct Moby *moby)
         size = random_float_between_7880(0.75f, 1.25f);
         scale_vector_xyz_7880(size, &velocity, &velocity);
         duration = FUN_L00_00257b90_7880(60, 100);
-        effect = FUN_L01_002f8530_7880(radius, 5.0f, radius, 2.0f, &offset,
-                                        &velocity, 0xc9, duration, 1);
+        effect = FUN_L01_002f8530_7880(&offset, &velocity, 0xc9, radius, duration,
+                                        5.0f, radius, 2.0f, 1);
         if (effect != 0)
             scale_vector_xyz_7880(0.35f, (char *)effect + 0x40, (char *)effect + 0x40);
     }
@@ -644,8 +644,8 @@ void FUN_L15_002a7880(struct Moby *moby)
         size = random_float_between_7880(1.0f, 3.0f) * 210000.0f;
         duration = scale_game_frames_7880(180);
         index = random_integer_below_7880(3);
-        effect = FUN_L00_0026bed0_7880(size, &offset, &velocity, color,
-                                         color2, duration, colors[index]);
+        effect = FUN_L00_0026bed0_7880(&offset, &velocity, color, color2,
+                                         size, duration, colors[index]);
         if (effect != 0)
             *(float *)((char *)effect + 0x2c) = moby->pos.z - 0.5f;
         i--;
