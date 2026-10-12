@@ -803,7 +803,7 @@ void FUN_L07_00319040(struct Moby *moby) {
     Vec4 push;
     volatile s32 touching;
     f32 speed;
-    volatile f32 one;
+    union { s32 bits; f32 value; } one;
     f32 stable_one;
     f32 turn;
     f32 new_speed;
@@ -883,8 +883,9 @@ void FUN_L07_00319040(struct Moby *moby) {
         normalize_vector_xyz(&dir, &dir, *(f32 *)(vars + 0x70));
         add_vector_xyz(&moby->pos, &moby->pos, &dir);
         if (!(FUN_001f9b48(&moby->pos, vars + 0x60) > 64.0f)) {
-            one = 1.0f;
-            stable_one = one;
+            /* Keep the descriptor scale available across the contact probe. */
+            *(s32 *)&one = 0x3f800000;
+            stable_one = one.value;
             make_hit_descriptor_19040(stable_one, contact, moby, 0x10001, &dir);
             qcopy(&probe, &moby->pos);
             probe.f[2] += 0.75f;
@@ -899,6 +900,8 @@ void FUN_L07_00319040(struct Moby *moby) {
                     add_vector_xyz(&moby->pos, &moby->pos, &push);
                 }
                 if (!tick_countdown_32_alt((s32 *)(vars + 0x78))) break;
+                /* The timeout path reloads the effect scale in retail. */
+                stable_one = 1.0f;
             }
             FUN_L00_0025e450(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, stable_one, 2, 7.0f, 0, 1, -1, 0);
         }
