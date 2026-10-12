@@ -251,13 +251,9 @@ extern char D_L10_00167100[];
 void FUN_L10_002f5b58(char *moby) {
     char *data = *(char **)(D_L10_0015EF50 + *(short *)(moby + 0x84) * 0x20 + 0x1c);
     char *work;
-    char *path;
-    int i, count, next;
-    float distance, angle;
+    float angle;
     short *indices;
     float *angles;
-    short *index_cursor;
-    float *angle_cursor;
     char *acc;
     char *moby_pos;
     char *moby_rot;
@@ -274,46 +270,63 @@ void FUN_L10_002f5b58(char *moby) {
     *(short *)(acc + 0x14) = 0;
     *(short *)(acc + 0x16) = scale_game_frames(*(short *)(data + 0x3a));
 
-    indices = (short *)(acc + 0x18);
-    angles = (float *)(acc + 0x28);
-    index_cursor = indices;
-    angle_cursor = angles;
-    i = 7;
-    do {
-        *angle_cursor = 0.0f;
-        *index_cursor = -1;
-        angle_cursor++;
-        index_cursor++;
-        i--;
-    } while (i >= 0);
+    work = *(char **)(moby + 0x70);
+    indices = (short *)(work + 0x58);
+    angles = (float *)(work + 0x68);
+    {
+        int i;
+        short *index_cursor;
+        float *angle_cursor;
+        index_cursor = indices;
+        angle_cursor = angles;
+        i = 7;
+        do {
+            *angle_cursor = 0.0f;
+            *index_cursor = -1;
+            angle_cursor++;
+            index_cursor++;
+            i--;
+        } while (i >= 0);
+    }
     moby_scale = moby + 0x30;
     moby_pos = moby + 0x10;
     moby_rot = moby + 0x20;
     angle = angle_atan2(1.0f, D_L10_0016CF70);
-    *(float *)(acc + 0x48) = angle + angle;
+    *(float *)((char *)indices + 0x30) = angle + angle;
 
     if (*(int *)(data + 0x20) >= 0) {
+        char *path;
+        int i, count, next;
+        unsigned int offset;
+        float distance;
         path = D_L10_001B0930_5a78[*(int *)(data + 0x20)];
         count = *(int *)path;
         if (count > 0) {
-            indices = (short *)(acc + 0x18);
-            angles = (float *)(acc + 0x28);
-            for (i = 0; i < *(int *)path; i++) {
-                angle = *(float *)(path + i * 0x10 + 0x1c);
+            short *index_cursor;
+            float *angle_cursor;
+            index_cursor = indices;
+            angle_cursor = angles;
+            i = 0;
+            do {
+                offset = i * 0x10;
+                angle = *(float *)((unsigned int)path + offset + 0x1c);
                 if (angle > 0.0f) {
-                    *angles = angle;
+                    *angle_cursor = angle;
                     if (angle > 180.0f)
-                        *angles = *(float *)(acc + 0x48) * 57.295776f;
-                    *indices = i;
-                    angles++;
-                    indices++;
+                        *angle_cursor = *(float *)((char *)indices + 0x30) * 57.295776f;
+                    *index_cursor = i;
+                    angle_cursor++;
+                    index_cursor++;
                 }
                 next = (i + 1) % *(int *)path;
-                distance = FUN_001f9b48(path + i * 0x10 + 0x10, path + next * 0x10 + 0x10);
-                *(float *)(path + i * 0x10 + 0x1c) = distance;
+                distance = FUN_001f9b48(
+                    (char *)((unsigned int)path + (offset + 0x10)),
+                    (char *)((unsigned int)path + ((unsigned int)next * 0x10 + 0x10)));
+                *(float *)((unsigned int)path + offset + 0x1c) = distance;
                 if (i < *(int *)path - 1)
                     *(float *)(acc + 0x08) += distance;
-            }
+                i++;
+            } while (i < *(int *)path);
         }
     }
     if (*(short *)(data + 0x3a) > 0) {
@@ -321,22 +334,34 @@ void FUN_L10_002f5b58(char *moby) {
                                     s32_to_float(scale_game_frames(*(short *)(data + 0x3a)))) * 60.0f;
     }
     if (*(int *)(data + 0x24) >= 0) {
+        char *path;
+        int i, count, next;
+        unsigned int offset;
+        float distance;
         path = D_L10_001B0930_5a78[*(int *)(data + 0x24)];
         count = *(int *)path;
         if (count > 0) {
-            for (i = 0; i < *(int *)path; i++) {
-                next = (i + 1) % *(int *)path;
-                distance = FUN_001f9b48(path + i * 0x10 + 0x10, path + next * 0x10 + 0x10);
-                *(float *)(path + i * 0x10 + 0x1c) = distance;
+            i = 0;
+            do {
+                offset = i * 0x10;
+                next = (i + 1) % count;
+                distance = FUN_001f9b48(
+                    (char *)((unsigned int)path + (offset + 0x10)),
+                    (char *)((unsigned int)path + ((unsigned int)next * 0x10 + 0x10)));
+                *(float *)((unsigned int)path + offset + 0x1c) = distance;
                 if (i < *(int *)path - 1)
                     *(float *)(acc + 0x0c) += distance;
-            }
+                count = *(int *)path;
+                i++;
+            } while (i < count);
         }
     }
 
+    work = *(char **)(moby + 0x70);
     *(float *)(work + 0x00) = 0.03f;
     *(float *)(work + 0x04) = 0.2f;
     FUN_001f99f8(work + 0x10);
+    work = *(char **)(moby + 0x70);
     *(float *)(work + 0x20) = 0.03f;
     *(float *)(work + 0x24) = 0.2f;
     FUN_001f99f8(work + 0x30);
