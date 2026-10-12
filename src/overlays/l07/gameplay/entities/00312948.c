@@ -779,7 +779,7 @@ extern f32 FUN_001f9b48(void *, void *);
 extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f99c0(f32);
 extern void FUN_L00_0025a120(struct Moby *);
-extern void make_hit_descriptor_19040(f32, void *, void *, s32, void *) __asm__("FUN_L00_00259888");
+extern void make_hit_descriptor_19040(void *, void *, s32, f32, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int);
 extern void FUN_L00_00257470(void *, int, int);
@@ -886,7 +886,7 @@ void FUN_L07_00319040(struct Moby *moby) {
             /* Keep the descriptor scale available across the contact probe. */
             *(s32 *)&one = 0x3f800000;
             stable_one = one.value;
-            make_hit_descriptor_19040(stable_one, contact, moby, 0x10001, &dir);
+            make_hit_descriptor_19040(contact, moby, 0x10001, stable_one, &dir);
             qcopy(&probe, &moby->pos);
             probe.f[2] += 0.75f;
             if (!probe_world_sphere(0.75f, &probe, 0x10, moby, contact) ||
