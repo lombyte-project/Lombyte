@@ -715,7 +715,10 @@ struct Hero {
     struct Moby *unk2040;          /* 0x2040: nearest oclass 0x25D moby (FUN_L00_002d2ee8) */
     f32 unk2044;                   /* 0x2044: distance to unk2040; 100000 when none */
     s32 unk2048;                   /* 0x2048 */
-    u8 pad_204C[0x34];
+    u8 pad_204C[0x4];
+    struct Moby *unk2050[10];      /* 0x2050 */
+    s32 unk2078;                   /* 0x2078 */
+    s32 unk207C;                   /* 0x207C */
     struct Moby *moby;             /* 0x2080: the hero's moby */
     struct HeroState state;        /* 0x2084 */
     u8 vehicle_mode;                    /* 0x20A4 */
