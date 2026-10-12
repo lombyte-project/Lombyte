@@ -892,15 +892,15 @@ void FUN_L07_00319040(struct Moby *moby) {
                 D_L07_00173ED8 == NULL || D_L07_00173ED8->oclass == 0x363 ||
                 D_L07_00173ED8->oclass == 0x456 || D_L07_00173ED8->oclass == 0x458 ||
                 D_L07_00173ED8->oclass == 0x365 || D_L07_00173ED8->oclass == 0x367) {
-                probe.q = *(u128 *)&moby->pos;
-                probe.f[2] = moby->pos.z + 0.55f;
-                if (coll_sphere(0.0f, &probe, 0, moby)) {
+                qcopy(&probe, &moby->pos);
+                probe.f[2] += 0.55f;
+                if (coll_sphere(0.55f, &probe, 0, moby)) {
                     subtract_vector_xyz(&push, &D_L07_00173EF0, &probe);
                     add_vector_xyz(&moby->pos, &moby->pos, &push);
                 }
                 if (!tick_countdown_32_alt((s32 *)(vars + 0x78))) break;
             }
-            FUN_L00_0025e450(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, stable_one, 4.0f, stable_one, 2, 7.0f, 0, 1, -1, 0);
+            FUN_L00_0025e450(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, stable_one, 2, 7.0f, 0, 1, -1, 0);
         }
         mark_moby_for_removal(moby);
         return;
