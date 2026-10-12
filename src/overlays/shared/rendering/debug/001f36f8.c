@@ -45,14 +45,17 @@ extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 
 void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
     const u8 *text = (const u8 *)text_address;
-    u32 glyph_count = 0;
+    s32 glyph_count = 0;
     u32 quadwords;
     u32 glyph;
     s32 texture_coordinates;
+    s32 left;
+    s32 top;
     u64 *packet;
     volatile u64 *tags;
     u64 *glyph_tag;
     u64 *cursor;
+    u64 texture_state;
 
     vu1_add_g_sregister(0x42, 0x8000000044ULL);
     vu1_add_g_sregister(0x47, 0x5360B);
@@ -66,8 +69,9 @@ void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
     tags[4] = 0x2400000000000001ULL;
     tags[5] = 0x61;
     tags[6] = color & 0xFFFFFFFFULL;
+    texture_state = D_0015EEC8;
     tags[9] = 0x5353;
-    tags[7] = D_0015EEC8;
+    tags[7] = texture_state;
     tags[8] = 0x4400000000008003ULL;
     glyph_tag = packet + 10;
     D_L00_001611C0 = D_L00_001611C0 + 10;
@@ -81,15 +85,17 @@ void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
         text++;
         if (texture_coordinates != -1) {
             cursor[0] = (s64)texture_coordinates;
-            cursor[2] = (s64)(texture_coordinates + 0xC000A0);
+            top = D_0013E500.top;
+            left = D_0013E500.left;
             glyph_count++;
-            cursor[1] = (s64)((x * 16) + D_0013E500.left - 8) |
-                        ((u64)(s64)((y * 16) + D_0013E500.top - 8) << 16) | 0xFFFFF300000000ULL;
+            cursor[2] = (s64)(texture_coordinates + 0xC000A0);
+            cursor[1] = (s64)((x * 16) + left - 8) |
+                        ((u64)(s64)((y * 16) + top - 8) << 16) | 0xFFFFF300000000ULL;
             quadwords += 2;
-            cursor[3] = (s64)(((x + 10) * 16) + D_0013E500.left - 8) |
+            ((volatile u64 *)cursor)[3] = (s64)(((x + 10) * 16) + D_0013E500.left - 8) |
                         ((u64)(s64)(((y + 12) * 16) + D_0013E500.top - 8) << 16) |
                         0xFFFFF300000000ULL;
-            D_L00_001611C0 = cursor + 4;
+            D_L00_001611C0 = D_L00_001611C0 + 4;
         }
         x += D_L00_00169B00[glyph];
     }
@@ -97,7 +103,7 @@ void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
     ((u32 *)packet)[0] = quadwords | 0x10000000;
     ((u32 *)packet)[1] = 0;
     ((u32 *)packet)[2] = 0;
-    *glyph_tag = (u64)(glyph_count | 0x8000) | 0x4400000000000000ULL;
+    *glyph_tag = (s64)(glyph_count | 0x8000) | 0x4400000000000000ULL;
 }
 #endif /* NON_MATCHING */
 #include "types.h"
