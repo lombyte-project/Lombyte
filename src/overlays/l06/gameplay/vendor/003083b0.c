@@ -2,7 +2,95 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003083b0.s", FUN_L06_003083b0);
+#include "rnc/gameplay/hero.h"
+#include "rnc/globals.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/state/usage_stats.h"
+
+extern struct UsageStat help_stats_83b0[] __asm__("D_00141968");
+extern char *D_L06_0015FFD8_83b0 __asm__("D_L06_0015FFD8");
+extern s32 D_0015EEA4;
+extern u8 D_0013D4CE[];
+extern u8 D_0013D388_83b0[] __asm__("D_0013D388");
+extern int is_point_inside_clip_volume_83b0(void *, int) __asm__("FUN_00214720");
+extern int help_request_83b0(int, int) __asm__("FUN_L00_00203908");
+extern int scale_game_frames_83b0(int) __asm__("FUN_001f96f8");
+extern int FUN_L01_0026e008(int, int);
+
+/* Level 6 help hints: shows the help messages for the area and records how often and when each was due. */
+void FUN_L06_003083b0(struct Moby *moby) {
+    int *vars = (int *)moby->pvars;
+    struct Moby *m;
+    int i;
+    int j;
+    int elapsed;
+    if (help_stats_83b0[0x2A].count == 0 && is_point_inside_clip_volume_83b0(&hero.motion.pos, vars[9])) {
+        help_request_83b0(0x1773, 0x2A);
+    }
+    if (help_stats_83b0[0x29].count == 0) {
+        for (i = 0; i < 6; i++) {
+            if (vars[i] != -1 && ((struct Moby *)(D_L06_0015FFD8_83b0 + (vars[i] << 8)))->state != 1) {
+                help_request_83b0(0x1772, 0x29);
+            }
+        }
+    }
+    if (help_stats_83b0[0x2E].count == 0 || help_stats_83b0[0x2F].count == 0) {
+        struct Moby *target = (struct Moby *)(D_L06_0015FFD8_83b0 + (vars[10] << 8));
+        if (target == 0 || target->state == 0xFE || target->state == 0xFD) {
+            if (D_0013D4CE[0]) {
+                help_request_83b0(0x1777, 0x2E);
+                if (help_stats_83b0[0x2F].count <= 0xFFFE) {
+                    help_stats_83b0[0x2F].count++;
+                }
+                if (scale_game_frames_83b0(D_0015EEA4) / 600 > help_stats_83b0[0x2F].unk2) {
+                    help_stats_83b0[0x2F].unk2 = scale_game_frames_83b0(D_0015EEA4) / 600;
+                }
+                help_stats_83b0[0x2F].level_mask = help_stats_83b0[0x2F].level_mask | (1 << current_level_index) | 0x80000000;
+            } else {
+                help_request_83b0(0x1778, 0x2F);
+                if (help_stats_83b0[0x2E].count <= 0xFFFE) {
+                    help_stats_83b0[0x2E].count++;
+                }
+                if (scale_game_frames_83b0(D_0015EEA4) / 600 > help_stats_83b0[0x2E].unk2) {
+                    help_stats_83b0[0x2E].unk2 = scale_game_frames_83b0(D_0015EEA4) / 600;
+                }
+                help_stats_83b0[0x2E].level_mask = help_stats_83b0[0x2E].level_mask | (1 << current_level_index) | 0x80000000;
+            }
+        }
+    }
+    if (is_point_inside_clip_volume_83b0(&hero.motion.pos, vars[8]) && FUN_L01_0026e008(vars[6], -1) == 0) {
+        for (j = 0; j < 6; j++) {
+            m = (struct Moby *)(D_L06_0015FFD8_83b0 + (vars[j] << 8));
+            if (vars[j] != -1 && m != 0 && m->state != 0xFE && m->state != 0xFD && m->state != 1) {
+                if (help_stats_83b0[0x28].count != 0) {
+                    elapsed = scale_game_frames_83b0(D_0015EEA4) - help_stats_83b0[0x28].unk2 * 600;
+                    if ((int)(scale_game_frames_83b0(18) * 60.0f) < elapsed || help_stats_83b0[0x28].unk2 * 600 == 0) {
+                        help_request_83b0(0x1771, 0x28);
+                    } else if (scale_game_frames_83b0(D_0015EEA4) / 600 > help_stats_83b0[0x28].unk2) {
+                        help_stats_83b0[0x28].unk2 = scale_game_frames_83b0(D_0015EEA4) / 600;
+                    }
+                } else {
+                    if (help_stats_83b0[0x28].count <= 0xFFFE) {
+                        help_stats_83b0[0x28].count++;
+                    }
+                    if (scale_game_frames_83b0(D_0015EEA4) / 600 > help_stats_83b0[0x28].unk2) {
+                        help_stats_83b0[0x28].unk2 = scale_game_frames_83b0(D_0015EEA4) / 600;
+                    }
+                    help_stats_83b0[0x28].level_mask = help_stats_83b0[0x28].level_mask | (1 << current_level_index) | 0x80000000;
+                }
+            }
+            if (m == 0 || m->state == 0xFE || m->state == 0xFD) {
+                help_stats_83b0[0x28].count = 0xFFFF;
+            }
+        }
+    }
+    if (D_0013D388_83b0[0x25] == 0) {
+        struct Moby *trigger = (struct Moby *)(D_L06_0015FFD8_83b0 + (vars[11] << 8));
+        if (vars[11] != -1 && trigger->command != 0) {
+            D_0013D388_83b0[0x25] = 1;
+        }
+    }
+}
 #include "rnc/gameplay/entities/moby.h"
 #include "qcopy.h"
 extern int FUN_001fa728(char *, float);
