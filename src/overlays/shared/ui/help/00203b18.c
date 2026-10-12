@@ -613,7 +613,7 @@ extern f32 D_0015ED60_002062b0 __asm__("D_0015ED60") __attribute__((section(".sd
 extern f32 D_0015ED60_gp_002062b0 __asm__("D_0015ED60_gp") __attribute__((sda));
 extern f32 D_0015EE18_gp_002062b0 __asm__("D_0015EE18_gp") __attribute__((sda));
 extern u8 D_0015EDB3_002062b0 __asm__("D_0015EDB3") __attribute__((section(".sdata")));
-extern u8 D_0015EDB1_002062b0 __asm__("D_0015EDB1") __attribute__((section(".sdata")));
+extern u8 D_0015EDB1_002062b0 __asm__("D_0015EDB1") __attribute__((section(".data")));
 extern s32 D_L00_0015F5CC_002062b0 __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
 extern f32 D_L00_0017B85C_002062b0 __asm__("D_L00_0017B85C") __attribute__((section(".data")));
 extern void FUN_L00_00232670(void);
@@ -650,7 +650,7 @@ extern f32 FUN_001fa580_002062b0(f32, f32) __asm__("FUN_001fa580");
 extern f32 FUN_001fa6c0_002062b0(s32) __asm__("FUN_001fa6c0");
 extern s32 FUN_001fa6d0_002062b0(f32) __asm__("FUN_001fa6d0");
 extern f32 FUN_001fa6e0_002062b0(f32) __asm__("FUN_001fa6e0");
-extern u32 FUN_L00_00200298_002062b0(f32, u32, u32) __asm__("FUN_L00_00200298");
+extern s32 FUN_L00_00200298_002062b0(f32, s32, s32) __asm__("FUN_L00_00200298");
 extern f32 FUN_L00_001ff800_002062b0(f32) __asm__("FUN_L00_001ff800");
 extern f32 FUN_L00_002000e8_002062b0(f32, f32) __asm__("FUN_L00_002000e8");
 extern s32 FUN_L00_00200250_002062b0(f32) __asm__("FUN_L00_00200250");
@@ -674,7 +674,7 @@ void FUN_L00_002062b0(void) {
     } scratch;
     f32 phase, scale, wave;
     s32 i, span, red, green, blue, alpha;
-    u64 color, color2;
+    s32 color, color2;
 
     FUN_L00_00232670();
     FUN_L00_00211670();
@@ -753,41 +753,45 @@ void FUN_L00_002062b0(void) {
                 case 4: color = 0x28f01414; color2 = 0x1e4b0000; break;
                 }
             }
-            wave = FUN_L00_001ff800_002062b0(*(f32 *)(g + 0x1628));
-            color = FUN_L00_00200298_002062b0(wave * 0.5f + 0.5f, color, color2);
-            moby = *(char **)(g + 0x1624);
-            if (moby) *(u32 *)(*(char **)(g + 0x1624) + 0x90) = FUN_L00_00200298_002062b0(D_0015ED60_gp_002062b0 * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), color);
-            *(u32 *)(g + 0x2300) = FUN_L00_00200298_002062b0(D_0015ED60_002062b0 * 0.1f, *(u32 *)(g + 0x2300), color);
-            moby = *(char **)(g + 0x1620);
-            if (moby == 0) {
-                *(char **)(g + 0x1620) = FUN_0020c4f8_002062b0(0x47a);
-                if (*(char **)(g + 0x1620)) {
-                    char *moby = *(char **)(g + 0x1620);
-                    qcopy(moby + 0x10, g + 0x80);
-                    qcopy(moby + 0x40, g + 0x90);
-                    *(u16 *)(moby + 0x32) = 0x40;
-                    (*(char **)(g + 0x1620))[0x31] = 1;
-                    (*(char **)(g + 0x1620))[0x30] = 0;
-                    *(u16 *)(*(char **)(g + 0x1620) + 0x34) = 0;
-                    FUN_L00_00250df8(*(char **)(g + 0x1620));
+            {
+                char *g = (char *)&hero;
+                wave = FUN_L00_001ff800_002062b0(*(f32 *)(g + 0x1628));
+                color = FUN_L00_00200298_002062b0(wave * 0.5f + 0.5f, color, color2);
+                if (*(char **)(g + 0x1624)) *(u32 *)(*(char **)(g + 0x1624) + 0x90) = FUN_L00_00200298_002062b0(D_0015ED60_gp_002062b0 * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), color);
+                *(u32 *)(g + 0x2300) = FUN_L00_00200298_002062b0(D_0015ED60_002062b0 * 0.1f, *(u32 *)(g + 0x2300), color);
+                if (*(char **)(g + 0x1620) == 0) {
+                    *(char **)(g + 0x1620) = FUN_0020c4f8_002062b0(0x47a);
+                    if (*(char **)(g + 0x1620)) {
+                        char *moby = *(char **)(g + 0x1620);
+                        qcopy(moby + 0x10, g + 0x80);
+                        qcopy(moby + 0x40, g + 0x90);
+                        *(u16 *)(moby + 0x32) = 0x40;
+                        (*(char **)(g + 0x1620))[0x31] = 1;
+                        (*(char **)(g + 0x1620))[0x30] = 0;
+                        *(u16 *)(*(char **)(g + 0x1620) + 0x34) = 0;
+                        FUN_L00_00250df8(*(char **)(g + 0x1620));
+                    }
                 }
-            }
-            if (*(char **)(g + 0x1620)) {
-                FUN_0020cca8_002062b0(*(char **)(g + 0x2080), 5, scratch.rotation);
-                moby = *(char **)(g + 0x1620);
-                qcopy_nc(*(char **)(g + 0x1620) + 0x10, &scratch.rotation[3]);
-                FUN_L00_00250df8(*(char **)(g + 0x1620));
-                FUN_001f99f8_002062b0((scratch.rotation + 4));
-                ((f32 *)(scratch.rotation + 4))[2] = -*(f32 *)(g + 0x98);
-                FUN_001fa050_002062b0(scratch.help.inverse, (scratch.rotation + 4));
-                FUN_001fa378_002062b0(scratch.rotation, scratch.rotation, scratch.help.inverse);
-                FUN_001fa2b8_002062b0(*(char **)(g + 0x1620) + 0xc0, scratch.rotation);
-                *(u64 *)(*(char **)(g + 0x1620) + 0x38) = *(u64 *)(*(char **)(g + 0x2080) + 0x38);
-                if (*(s32 *)(g + 0x2084) == 0x4f) {
-                    if (*(u8 *)(*(char **)(g + 0x1620) + 0x53) != 1)
-                        FUN_L00_00257880_002062b0(*(char **)(g + 0x1620), 1, 0, FUN_L00_001fef20_002062b0(10));
-                } else if (*(u8 *)(*(char **)(g + 0x1620) + 0x53) != 0) {
-                    FUN_L00_00257880_002062b0(*(char **)(g + 0x1620), 0, 0, FUN_L00_001fef20_002062b0(0x11));
+                if (*(char **)(g + 0x1620)) {
+                    FUN_0020cca8_002062b0(*(char **)(g + 0x2080), 5, scratch.rotation);
+                    {
+                        OvlQuad *position = &scratch.rotation[3];
+                        char *moby = *(char **)(g + 0x1620);
+                        qcopy_nc(moby + 0x10, position);
+                        FUN_L00_00250df8(moby);
+                    }
+                    FUN_001f99f8_002062b0((scratch.rotation + 4));
+                    ((f32 *)(scratch.rotation + 4))[2] = -*(f32 *)(g + 0x98);
+                    FUN_001fa050_002062b0(scratch.help.inverse, (scratch.rotation + 4));
+                    FUN_001fa378_002062b0(scratch.rotation, scratch.rotation, scratch.help.inverse);
+                    FUN_001fa2b8_002062b0(*(char **)(g + 0x1620) + 0xc0, scratch.rotation);
+                    *(u64 *)(*(char **)(g + 0x1620) + 0x38) = *(u64 *)(*(char **)(g + 0x2080) + 0x38);
+                    if (*(s32 *)(g + 0x2084) == 0x4f) {
+                        if (*(u8 *)(*(char **)(g + 0x1620) + 0x53) != 1)
+                            FUN_L00_00257880_002062b0(*(char **)(g + 0x1620), 1, 0, FUN_L00_001fef20_002062b0(10));
+                    } else if (*(u8 *)(*(char **)(g + 0x1620) + 0x53) != 0) {
+                        FUN_L00_00257880_002062b0(*(char **)(g + 0x1620), 0, 0, FUN_L00_001fef20_002062b0(0x11));
+                    }
                 }
             }
         }
@@ -804,20 +808,22 @@ void FUN_L00_002062b0(void) {
     FUN_L00_002484e0(&hero.motion.pos);
     if (hero.vehicle_mode == 2) {
         char *g = (char *)&hero;
-        if (D_0015EDB3_002062b0) *(f32 *)0x17ba6c = 1.4f * D_0015EE18_gp_002062b0;
+        if (D_0015EDB3_002062b0) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x210) = 1.4f * D_0015EE18_gp_002062b0;
         FUN_L00_002059d8();
         FUN_L00_002061f0();
         g = (char *)&hero;
         if ((*(u16 *)(*(char **)(g + 0x2080) + 0x34) ^ 1) & 1) {
             FUN_L00_0024f7c8(*(char **)(g + 0x2080), 6, scratch.rotation);
-            qcopy(g + 0x1d00, &scratch.rotation[0]);
+            /* Retail uses &hero.motion.pos + 0x1d00, hence hero + 0x1d80. */
+            qcopy(g + 0x1d80, &scratch.rotation[0]);
             FUN_L00_00207d00();
         }
     }
     if (hero.vehicle_mode == 3) {
+        /* D_0015EDB1 is the byte two bytes before the checked D_0015EDB3 base. */
+        if (*((u8 *)&D_0015EDB3_002062b0 - 2)) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x370) = 1.9f;
         {
             char *g = (char *)&hero;
-            if (D_0015EDB1_002062b0) *(f32 *)0x17bbcc = 1.9f;
             alpha = 0x80;
             span = FUN_L00_001fef20_002062b0(0xaa);
             if (*(s16 *)(g + 0x22e0) == 2) span = FUN_L00_001fef20_002062b0(0x32);
@@ -830,13 +836,13 @@ void FUN_L00_002062b0(void) {
         blue = FUN_L00_00200250_002062b0(wave * 10.0f) + 0x14;
         {
             char *g = (char *)&hero;
-            if (red >= 0x100) red = 0xff;
-            *(u16 *)(*(char **)(g + 0x2080) + 0x34) |= 0x10;
             if (green >= 0x100) green = 0xff;
+            *(u16 *)(*(char **)(g + 0x2080) + 0x34) |= 0x10;
+            if (red >= 0x100) red = 0xff;
             if (*(s16 *)(g + 0x22e0) == 2)
-                color = (((u32)alpha << 24) | ((u32)blue << 16)) | (((u32)(red / 2) << 8) | (u32)green);
+                color = ((u32)alpha << 24) | ((u32)blue << 16) | ((u32)(red / 2) << 8) | (u32)green;
             else
-                color = (((u32)alpha << 24) | ((u32)blue << 16)) | (((u32)green << 8) | (u32)red);
+                color = ((u32)alpha << 24) | ((u32)blue << 16) | ((u32)green << 8) | (u32)red;
         }
         {
             char *g = (char *)&hero;
@@ -858,17 +864,20 @@ void FUN_L00_002062b0(void) {
             FUN_L00_00207d00();
             *(s16 *)(g + 0x22e0) = 0;
             if (*(u8 *)(g + 0x20a4) == 3) {
-                if (*(s32 *)(g + 0x20b8) == 0 || *(s32 *)(g + 0x20b8) == 0x1f) {
-                    *(s32 *)(g + 0x20b8) = 0;
-                    if (*(u8 *)(g + 0x12e7) && *(s32 *)(g + 0x300) && *(u8 *)0x13d4dc && *(s16 *)(g + 0x22de) == 0) {
+                if (*(s32 *)(g + 0x20b8) != 0 && *(s32 *)(g + 0x20b8) != 0x1f) {
+                    if (*(s16 *)(g + 0x22de) == 0) {
                         FUN_L00_00216de8(0x19, 0);
-                        *(s16 *)(g + 0x22dc) = 1;
                         *(s16 *)(g + 0x22de) = 0x12;
+                        *(s16 *)(g + 0x22dc) = 1;
                     }
-                } else if (*(s16 *)(g + 0x22de) == 0) {
-                    FUN_L00_00216de8(0x19, 0);
-                    *(s16 *)(g + 0x22dc) = 1;
-                    *(s16 *)(g + 0x22de) = 0x12;
+                } else {
+                    char *g = (char *)&hero;
+                    *(s32 *)(g + 0x20b8) = 0;
+                    if (*(u8 *)(g + 0x12e7) && *(s32 *)(g + 0x300) && *(u8 *)(D_0013F350_002062b0 - 0x1e74) && *(s16 *)(g + 0x22de) == 0) {
+                        FUN_L00_00216de8(0x19, 0);
+                        *(s16 *)(g + 0x22de) = 0x12;
+                        *(s16 *)(g + 0x22dc) = 1;
+                    }
                 }
             }
         }
