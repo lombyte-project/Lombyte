@@ -993,6 +993,7 @@ extern f32 D_0015ED60_e728 __asm__("D_0015ED60");
 void FUN_L00_0020e728(void) {
     u8 **slot;
     int i;
+    u128 *basis;
     if (hero.unk20A8 && hero.unk20AA && get_ammo(-1) == 0)
         FUN_L00_0020e698();
     i = 0;
@@ -1001,7 +1002,7 @@ void FUN_L00_0020e728(void) {
         if (*slot != 0) {
             int id = FUN_L00_0020d498_c(0);
             if (id == hero.unk2298) {
-                s32 anim;
+                u32 anim;
                 ID_20e4c8 *definition = &D_L00_00179AC0_c[id];
                 if (hero.state.control_mode == 12)
                     anim = definition->f2C;
@@ -1014,15 +1015,7 @@ void FUN_L00_0020e728(void) {
                 }
             }
             FUN_L00_0024f190((u8 *)hero.moby, *slot);
-            if (hero.unkD14 == 0) {
-                FUN_00213ed8_e728((f32 *)(*slot + 8), 1.0f, D_0015ED60_e728 * 0.2f);
-                if (((*slot)[5] & 2) && hero.unk20AA == 0) {
-                    hero.unkD14 = 1;
-                    *(s32 *)(*slot + 0x28) = 0;
-                    hero.unk20A8 = 0;
-                    return;
-                }
-            } else {
+            if (hero.unkD14 != 0) {
                 if (hero.unkD14 == 2)
                     FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, frame_scale * 0.25f);
                 else
@@ -1031,32 +1024,41 @@ void FUN_L00_0020e728(void) {
                     FUN_L00_0024f0e8((u8 *)hero.moby, slot);
                     return;
                 }
+            } else {
+                FUN_00213ed8_e728((f32 *)(*slot + 8), 1.0f, D_0015ED60_e728 * 0.2f);
+                if (((*slot)[5] & 2) && hero.unk20AA == 0) {
+                    hero.unkD14 = 1;
+                    *(s32 *)(*slot + 0x28) = 0;
+                    hero.unk20A8 = 0;
+                    return;
+                }
             }
         }
         i++;
         slot++;
     } while (i < 2);
     if (hero.state.control_mode == 15) {
-        *(u128 *)((u8 *)&hero + 0x680) = *(u128 *)((u8 *)&hero + 0x90);
-        if (hero.unk5D8 == 0)
-            *(f32 *)((u8 *)&hero + 0x688) = FUN_002000e8_e728(hero.unk57C, hero.unk5D0);
+        *(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q;
+        if (hero.unk5D8 != 0)
+            hero.unk688 = FUN_001ff8b0_e728(
+                *(f32 *)((u8 *)hero.unk5D8 + 0x10) - hero.motion.pos.f[0],
+                *(f32 *)((u8 *)hero.unk5D8 + 0x14) - hero.motion.pos.f[1]);
         else
-            *(f32 *)((u8 *)&hero + 0x688) = FUN_001ff8b0_e728(
-                *(f32 *)((u8 *)hero.unk5D8 + 0x10) - *(f32 *)((u8 *)&hero + 0x80),
-                *(f32 *)((u8 *)hero.unk5D8 + 0x14) - *(f32 *)((u8 *)&hero + 0x84));
+            hero.unk688 = FUN_002000e8_e728(hero.unk57C, hero.unk5D0);
         hero.unk684 = -hero.unk580;
-        vu_euler_rotation_basis((u8 *)&hero + 0x640, (u8 *)&hero + 0x680);
+        vu_euler_rotation_basis(hero.basis, (u8 *)&hero + 0x680);
         FUN_001ff260_e728((u8 *)&hero + 0x670);
         hero.unk670 = 1.0f;
-        FUN_001ff6d0_e728((u8 *)&hero + 0x670, (u8 *)&hero + 0x670, (u8 *)&hero + 0x640);
+        FUN_001ff6d0_e728((u8 *)&hero + 0x670, (u8 *)&hero + 0x670, hero.basis);
     } else {
-        *(u128 *)((u8 *)&hero + 0x640) = *(u128 *)((u8 *)hero.moby + 0xc0);
-        *(u128 *)((u8 *)&hero + 0x650) = *(u128 *)((u8 *)hero.moby + 0xd0);
-        *(u128 *)((u8 *)&hero + 0x660) = *(u128 *)((u8 *)hero.moby + 0xe0);
+        basis = (u128 *)(hero.basis);
+        basis[0] = *(u128 *)((u8 *)hero.moby + 0xc0);
+        basis[1] = *(u128 *)((u8 *)hero.moby + 0xd0);
+        basis[2] = *(u128 *)((u8 *)hero.moby + 0xe0);
         FUN_001ff260_e728((u8 *)&hero + 0x670);
         hero.unk670 = 1.0f;
-        FUN_001ff6d0_e728((u8 *)&hero + 0x670, (u8 *)&hero + 0x670, (u8 *)&hero + 0x640);
-        *(u128 *)((u8 *)&hero + 0x680) = *(u128 *)((u8 *)&hero + 0x90);
+        FUN_001ff6d0_e728((u8 *)&hero + 0x670, (u8 *)&hero + 0x670, basis);
+        *(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q;
     }
 }
 #endif
