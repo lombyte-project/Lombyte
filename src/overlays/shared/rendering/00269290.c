@@ -336,6 +336,7 @@ void FUN_L00_00269d20(unsigned char *m) {
     float collision[4] __attribute__((aligned(16)));
     float rotation[16] __attribute__((aligned(16)));
     float red, green, blue, limit;
+    float step;
     int color;
     next[0] = *(float *)(m + 0x10) + *(float *)(p + 0x0);
     next[1] = *(float *)(m + 0x14) + *(float *)(p + 0x4);
@@ -358,10 +359,15 @@ void FUN_L00_00269d20(unsigned char *m) {
         red = particle_color_float_269d20((m[4] << 8) | p[0x18]) / 65535.0f;
         green = (float)particle_color_int_269d20((int)((*(unsigned int *)(m + 4) & 0xff00) | p[0x19])) / 65535.0f;
         blue = (float)particle_color_int_269d20((int)(((*(unsigned int *)(m + 4) >> 8) & 0xff00) | p[0x1a])) / 65535.0f;
-        if (p[0x1b] & 0x10) red -= *(float *)(e + 0x4c) * D_0015ED60_269d20;
-        else red += *(float *)(e + 0x4c) * D_0015ED60_269d20;
-        if (p[0x1b] & 0x20) green -= *(float *)(e + 0x50) * D_0015ED60_269d20;
-        else green += *(float *)(e + 0x50) * D_0015ED60_269d20;
+        if (p[0x1b] & 0x10) {
+            red -= *(float *)(e + 0x4c) * D_0015ED60_269d20;
+            step = D_0015ED60_269d20;
+        } else {
+            red += *(float *)(e + 0x4c) * D_0015ED60_269d20;
+            step = D_0015ED60_269d20;
+        }
+        if (p[0x1b] & 0x20) green -= *(float *)(e + 0x50) * step;
+        else green += *(float *)(e + 0x50) * step;
         if (p[0x1b] & 0x40) blue -= *(float *)(e + 0x54) * frame_scale;
         else blue += *(float *)(e + 0x54) * frame_scale;
         limit = *(float *)(e + 0x64);
