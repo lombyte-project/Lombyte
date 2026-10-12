@@ -2373,7 +2373,91 @@ remove_candidate:
     }
 }
 #endif
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e9648.s", FUN_L10_002e9648);
+typedef struct {
+    int unk0;
+    float home_yaw;
+    int timer;
+    int clip_volume;
+    int sound;
+} DoorVars_e9648;
+
+typedef struct {
+    u8 pad0[0x454];
+    u8 collected[1];
+} LevelState_e9648;
+
+extern LevelState_e9648 D_L10_001BB6B0_e9648 __asm__("D_L10_001BB6B0");
+extern int D_L10_001BA950_e9648[] __asm__("D_L10_001BA950");
+extern int D_0014C190_e9648[][64] __asm__("D_0014C190");
+extern unsigned char D_001413F4_e9648[] __asm__("D_001413F4");
+extern unsigned char D_0013DD4C_e9648[] __asm__("D_0013DD4C");
+extern int inside_clip_volume_e9648(void *, int) __asm__("FUN_00214720");
+extern void FUN_L10_002f5a50(int);
+extern int truncate_float_e9648(float) __asm__("FUN_001fa6d0");
+extern int tick_countdown_e9648(int *) __asm__("FUN_001f9740");
+
+/* Level 10 door: swings open once the hero enters its clip volume and sets its save bit; starts open when the bit is already set. */
+void FUN_L10_002e9648(struct Moby *moby) {
+    DoorVars_e9648 *vars = (DoorVars_e9648 *)moby->pvars;
+    unsigned short save_id;
+
+    switch (moby->state) {
+    case 0:
+        moby->update_dist = 0xFF;
+        if (D_001413F4_e9648[0] == 0) {
+            save_id = moby->save_id;
+            if (D_L10_001BB6B0_e9648.collected[(short)save_id] == 0 &&
+                ((D_0014C190_e9648[current_level_index][(short)save_id >> 5] >> (save_id & 31)) & 1) == 0) {
+                vars->home_yaw = moby->rot.y;
+                moby->state = 1;
+                return;
+            }
+        }
+        moby->rot.y = fast_add_rotations(moby->rot.y, -1.3962634f);
+        moby->state = 3;
+        return;
+    case 1:
+        if (hero.vehicle_mode != 0)
+            goto open;
+        save_id = moby->save_id;
+        if (D_L10_001BB6B0_e9648.collected[(short)save_id] != 0 ||
+            ((D_0014C190_e9648[current_level_index][(short)save_id >> 5] >> (save_id & 31)) & 1) != 0) {
+        open:
+            moby->rot.y = fast_add_rotations(moby->rot.y, -1.3962634f);
+            moby->state = 3;
+            return;
+        }
+        if (inside_clip_volume_e9648(&hero.motion.pos, vars->clip_volume) == 0 && D_0013DD4C_e9648[0] == 0)
+            return;
+        if (vars->unk0 <= 0 || vars->sound <= 0)
+            return;
+        save_id = moby->save_id;
+        D_0014C190_e9648[current_level_index][(short)save_id >> 5] |= 1 << (save_id & 31);
+        save_id = moby->save_id;
+        D_L10_001BA950_e9648[(short)save_id >> 5] |= 1 << (save_id & 31);
+        if (inside_clip_volume_e9648(&hero.motion.pos, vars->clip_volume))
+            FUN_L10_002f5a50(vars->sound);
+        vars->timer = truncate_float_e9648(scale_time(90.0f));
+        moby->state = 2;
+        return;
+    case 2:
+        moby->rot.y = fast_add_rotations(moby->rot.y, -1.3962634f / scale_time(90.0f));
+        if (tick_countdown_e9648(&vars->timer))
+            moby->state = 3;
+        return;
+    case 3:
+        if (D_001413F4_e9648[0] != 0)
+            return;
+        save_id = moby->save_id;
+        if (D_L10_001BB6B0_e9648.collected[(short)save_id] != 0)
+            return;
+        if ((((D_0014C190_e9648[current_level_index][(short)save_id >> 5] >> (save_id & 31)) ^ 1) & 1) == 0)
+            return;
+        moby->rot.y = fast_add_rotations(moby->rot.y, 1.3962634f);
+        moby->state = 0;
+        return;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EAD50), where it is exact; names translated to the US level program. */
 
 typedef OvlQuad Vec_2EAD50;
