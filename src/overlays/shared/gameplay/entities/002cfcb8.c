@@ -2244,14 +2244,14 @@ void FUN_L00_002d5160(unsigned char *m) {
         forceZ = D_L00_00161978_2d5160 * D_0015ED6C_2d5160;
         forceW = D_L00_0016197C_2d5160 * D_0015ED6C_2d5160;
         health = *(f32 *)(v + 0x20) - damage;
-        *(f32 *)(v + 0x20) = health;
         v[0xAD] = 0;
+        duration = D_0015ED6C_2d5160 + D_0015ED6C_2d5160;
         *(f32 *)(v + 0x80) = forceX;
+        *(f32 *)(v + 0x98) = 0.75f;
+        *(f32 *)(v + 0x20) = health;
         *(f32 *)(v + 0x84) = forceY;
         *(f32 *)(v + 0x88) = forceZ;
         *(f32 *)(v + 0x8C) = forceW;
-        *(f32 *)(v + 0x98) = 0.75f;
-        duration = D_0015ED6C_2d5160 + D_0015ED6C_2d5160;
         *(f32 *)(v + 0xBC) = duration;
         *(s32 *)(v + 0x94) = 0x29;
         *(s32 *)(v + 0x90) = 0x200;
