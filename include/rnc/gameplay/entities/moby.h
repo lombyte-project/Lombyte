@@ -66,7 +66,9 @@ struct Moby {
     u8 sound_slot;                    /* 0x7D: D_0013E550 slot of its looping sound, 0xFF: none (FUN_L00_00232670) */
     u8 unk7E;
     u8 unk7F;                         /* set to 0x17 by FUN_L09_002c5990 near D_L09_00166F40 */
-    u8 pad80[0x10];
+    u8 pad80[6];
+    s16 unk86;
+    u8 pad88[8];
     s32 unk90;
     u32 unk94;                        /* set from the class header's word 0x10 */
     s32 unk98;                        /* set to 1 while a carrier holds the moby (FUN_L00_002c7a58) */
