@@ -1996,9 +1996,6 @@ void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
     normalize_vector_xyz(v, dir, sz);
     add_vector_xyz(out, out, v);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e5188.s", FUN_L08_002e5188);
-#else
 typedef struct {
     s64 vertices[4];
     u32 colors[4];
@@ -2022,6 +2019,8 @@ extern void draw_geometry_quad_5188(void *, void *, void *, u64, int) __asm__("F
 extern float D_L08_00161C5C __attribute__((sda));
 extern float D_L08_00161C60 __attribute__((sda));
 
+extern char D_L08_0016D240[] __attribute__((section(".data")));
+
 void FUN_L08_002e5188(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     Quad_5188 quad;
@@ -2033,7 +2032,7 @@ void FUN_L08_002e5188(struct Moby *moby) {
     int base_x, base_y;
     s64 base_z;
     u32 color;
-    char *projection_constants = (char *)0x0016d240;
+    char *projection_constants;
 
     if (*(short *)(data + 0x6c) == 0) return;
 
@@ -2047,6 +2046,7 @@ void FUN_L08_002e5188(struct Moby *moby) {
     pos[3] = 1.0f;
     fast_vec_scale(pos, pos, 1024.0f);
     FUN_001f9d20_5188(pos, pos, D_L08_001675C0 - 0x100);
+    projection_constants = D_L08_0016D240;
     fast_vec_scale(pos, pos, *(float *)(projection_constants + 0x210) / pos[3]);
 
     base_x = truncate_float_to_s32_5188(pos[0] * 16.0f) + 0x8000;
@@ -2089,7 +2089,6 @@ void FUN_L08_002e5188(struct Moby *moby) {
     draw_geometry_quad_5188(quad.vertices, quad.texture_coordinates, quad.colors, get_effect_texture_5188(0x13), 1);
     vu1_add_g_sregister_5188(0x42, 0x8000000044LL);
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9CB0), where it is exact; names translated to the US level program. */
 
 
