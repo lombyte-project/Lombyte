@@ -372,345 +372,431 @@ void FUN_L00_002d8908(void) {
 }
 #include "rnc/math/vector.h"
 extern char *D_001413D0 __attribute__((section(".data")));
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d89f0.s", FUN_L00_002d89f0);
-#else
-typedef struct {
-    float phase, angle;
-    short h8, hA;
-    char *owner;
-    float position[4];
-    float target[4];
-    char *effects[8];
-    float f50;
-    short timer, h56, counters[4];
-    float basis[4];
-    char pad70[0x7c - 0x70];
-    int count;
-} D_002d89f0;
-extern float D_L00_00161A10_002d89f0 __asm__("D_L00_00161A10") __attribute__((sda));
-extern float D_L00_00161A14_002d89f0 __asm__("D_L00_00161A14") __attribute__((sda));
-extern float D_L00_00161A50_002d89f0 __asm__("D_L00_00161A50") __attribute__((sda));
-extern float D_L00_00161A54_002d89f0 __asm__("D_L00_00161A54") __attribute__((sda));
-extern int D_L00_00161A58_002d89f0 __asm__("D_L00_00161A58") __attribute__((sda));
-extern float D_L00_00161A5C_002d89f0 __asm__("D_L00_00161A5C") __attribute__((sda));
-extern int D_L00_00161A3C_002d89f0 __asm__("D_L00_00161A3C") __attribute__((sda));
-extern int D_L00_00161A40_002d89f0 __asm__("D_L00_00161A40") __attribute__((sda));
-extern int D_L00_00161A44_002d89f0 __asm__("D_L00_00161A44") __attribute__((sda));
-extern int D_L00_00161A48_002d89f0 __asm__("D_L00_00161A48") __attribute__((sda));
-extern float D_L00_00161A0C_002d89f0 __asm__("D_L00_00161A0C") __attribute__((sda));
-extern int D_0015EDA0_002d89f0 __asm__("D_0015EDA0");
-extern int D_001415F8_002d89f0 __asm__("D_001415F8");
-extern int D_0013F510_002d89f0 __asm__("D_0013F510");
-extern unsigned char D_001413F4_002d89f0 __asm__("D_001413F4");
-extern unsigned char D_0015EDB6_002d89f0 __asm__("D_0015EDB6");
-extern char *D_L00_0015F63C_002d89f0 __asm__("D_L00_0015F63C");
-extern float D_L00_001E14A0_002d89f0[] __asm__("D_L00_001E14A0");
-extern float D_0013F3D0_002d89f0[] __asm__("D_0013F3D0");
-extern float D_0013F5E0_002d89f0[] __asm__("D_0013F5E0");
-extern float D_L00_00166DC0_002d89f0[] __asm__("D_L00_00166DC0");
-extern float D_L00_001E3D20_002d89f0[] __asm__("D_L00_001E3D20");
-extern float D_L00_001E3CA0_002d89f0[] __asm__("D_L00_001E3CA0");
-extern int D_L00_001619F0_002d89f0 __asm__("D_L00_001619F0") __attribute__((sda));
-extern int D_L00_00161A00_002d89f0 __asm__("D_L00_00161A00") __attribute__((sda));
-extern float D_L00_001619F8_002d89f0 __asm__("D_L00_001619F8") __attribute__((sda));
-extern float D_L00_001619FC_002d89f0 __asm__("D_L00_001619FC") __attribute__((sda));
-extern char D_L00_001619F4_002d89f0 __asm__("D_L00_001619F4") __attribute__((sda));
-extern char D_L00_001E3CD0_002d89f0[] __asm__("D_L00_001E3CD0");
-extern char D_L00_001E3CE0_002d89f0[] __asm__("D_L00_001E3CE0");
-extern char D_L00_001E3CF0_002d89f0[] __asm__("D_L00_001E3CF0");
-extern char D_L00_001E3D00_002d89f0[] __asm__("D_L00_001E3D00");
-extern char D_L00_001E3D10_002d89f0[] __asm__("D_L00_001E3D10");
-extern char D_L00_001E3D30_002d89f0[] __asm__("D_L00_001E3D30");
-extern char D_L00_001E3D40_002d89f0[] __asm__("D_L00_001E3D40");
-extern char D_L00_001E3D50_002d89f0[] __asm__("D_L00_001E3D50");
-extern char D_L00_001E3D60_002d89f0[] __asm__("D_L00_001E3D60");
-extern char D_L00_001E3D70_002d89f0[] __asm__("D_L00_001E3D70");
-extern char D_L00_001E3D80_002d89f0[] __asm__("D_L00_001E3D80");
-extern char D_L00_001E3D90_002d89f0[] __asm__("D_L00_001E3D90");
-extern int FUN_L00_00257b90_002d89f0(int, int) __asm__("FUN_L00_00257b90");
-extern float FUN_L00_00257c48_002d89f0(float, float) __asm__("FUN_L00_00257c48");
-extern float FUN_L00_00257e20_002d89f0(float, float, float, float, float) __asm__("FUN_L00_00257e20");
-extern int FUN_001fef20_002d89f0(int) __asm__("FUN_001f96f8");
-extern int FUN_001fef98_002d89f0(void *) __asm__("FUN_001f9770");
-extern int FUN_L00_00257b50_002d89f0(int) __asm__("FUN_L00_00257b50");
-extern void FUN_L00_001ff278_002d89f0(void *, void *, void *) __asm__("FUN_L00_001ff278");
-extern void FUN_001ffa50_002d89f0(void *, void *) __asm__("FUN_001fa030");
-extern void FUN_L00_001ff2a8_002d89f0(void *, void *, void *) __asm__("FUN_L00_001ff2a8");
-extern void FUN_L00_001ff300_002d89f0(float, void *, void *) __asm__("FUN_L00_001ff300");
-extern void FUN_L00_001ff3c0_002d89f0(void *, void *, void *) __asm__("FUN_L00_001ff3c0");
-extern void FUN_L00_001ff500_002d89f0(float, void *, void *) __asm__("FUN_L00_001ff500");
-extern float FUN_L00_001ff450_002d89f0(void *, void *) __asm__("FUN_L00_001ff450");
-extern float FUN_L00_001ff488_002d89f0(void *, void *) __asm__("FUN_L00_001ff488");
-extern float FUN_L00_001ff800_002d89f0(float) __asm__("FUN_L00_001ff800");
-extern float FUN_L00_002000e8_002d89f0(float, float) __asm__("FUN_L00_002000e8");
-extern int FUN_L00_002002e0_002d89f0(float, void *) __asm__("FUN_L00_002002e0");
-extern float FUN_L00_00200240_002d89f0(short) __asm__("FUN_L00_00200240");
-extern void FUN_L00_0025fc08_002d89f0(float, void *, void *, void *) __asm__("FUN_L00_0025fc08");
-extern void FUN_L00_00262c50_002d89f0(float, float, float, void *) __asm__("FUN_L00_00262c50");
-extern char *FUN_L00_00273708_002d89f0(void *, int, int) __asm__("FUN_L00_00273708");
-extern void FUN_L00_00267a08_002d89f0(void *) __asm__("FUN_L00_00267a08");
-extern void FUN_L00_0028dc90_002d89f0(int, int, void *, int) __asm__("FUN_L00_0028dc90");
-extern int FUN_L00_002d8510_002d89f0(void *) __asm__("FUN_L00_002d8510");
-extern void FUN_L00_002d8418_002d89f0(void *) __asm__("FUN_L00_002d8418");
-extern void FUN_L00_002d81b8_002d89f0(void *) __asm__("FUN_L00_002d81b8");
-extern void FUN_L00_002d8850_002d89f0(void *, void *, int) __asm__("FUN_L00_002d8850");
-extern void FUN_L00_002d9810_002d89f0(void *, void *) __asm__("FUN_L00_001f93e0");
-extern void FUN_L00_0024eb68_002d89f0(void *) __asm__("FUN_L00_0024eb68");
-extern float FUN_002132a8_002d89f0(float, float) __asm__("FUN_002132a8");
-void FUN_L00_002d9810(u8 *);
-#define D89(o) ((char *)D_L00_001E3CA0_002d89f0+(o))
-#define F89(p,o) (*(float *)((char *)(p)+(o)))
-#define I89(p,o) (*(int *)((char *)(p)+(o)))
-#define H89(p,o) (*(short *)((char *)(p)+(o)))
-#define B89(p,o) (*(char *)((char *)(p)+(o)))
-void FUN_L00_002d89f0(char *m) {
-    D_002d89f0 *d = *(D_002d89f0 **)(m + 0x78);
-    char *other, *e, *spawn, *effectData;
-    float v140[4], v130[4], v120[4], v110[4], v100[4], vf0[4], ve0[4];
-    float t, phase;
-    int i, j, n, r;
-    char **effects;
-    int h;
-    switch ((unsigned char)m[0x20]) {
-    case 0:
-        m[0x20] = 1;
-        I89(m,0x94) = 0;
-        *(unsigned short *)(m+0x34) |= 0x41;
-        m[0xbc] = 0;
-        other = d->owner+0x10;
-        qcopy(m+0x10,other);
-        other+=0x30;
-        qcopy(m+0x40,other);
-        qcopy(d->position,m+0x10);
-        d->phase = 0;
+#include "rnc/gameplay/entities/moby.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002D9EA0), where it is exact; names translated to the US level program. */
+
+typedef struct Hero Hero;
+
+typedef struct Moby Moby;
+
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V_2D9EA0;
+
+typedef struct { float x, y, z; } V3_2D9EA0;
+
+typedef struct Part_2D9EA0 {
+    int f0;
+    int f4;
+    unsigned char b8;
+    char p9[3];
+    float fC;
+    V_2D9EA0 pos;
+} Part_2D9EA0;
+
+typedef struct Ext_2D9EA0 {
+    int f0;
+    union {
+        struct { struct Moby *owner; float scale; float ang; } s;
+        V3_2D9EA0 a;
+    } u;
+    V3_2D9EA0 b;
+    short h1C;
+    short h1E;
+} Ext_2D9EA0;
+
+typedef struct D_2D9EA0 {
+    float f0;
+    float f4;
+    short h8;
+    short hA;
+    struct Moby *owner;
+    V_2D9EA0 pos;
+    V_2D9EA0 v20;
+    Part_2D9EA0 *slots[8];
+    int f50;
+    short h54;
+    short h56;
+    short h58[4];
+    float f60[4];
+    char p70[0xC];
+    int f7C;
+} D_2D9EA0;
+
+extern Moby *D_L00_0015F63C;
+extern V_2D9EA0 D_L00_001E3CA0_c[] __asm__("D_L00_001E3CA0");
+extern char D_0013F350_c2[] __asm__("D_0013F350");
+extern char D_L00_00166DC0[];
+extern char D_L00_001E3D20_c[] __asm__("D_L00_001E3D20");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern float FUN_001f9b80(void *, void *);
+extern int D_0015EDA0;
+extern unsigned char D_L00_001619F4 __attribute__((sda));
+extern float D_L00_001619F8 __attribute__((sda));
+extern float D_L00_001619FC __attribute__((sda));
+extern int D_L00_00161A00 __attribute__((sda));
+extern float D_L00_00161A0C __attribute__((sda));
+extern float D_L00_00161A10 __attribute__((sda));
+extern float D_L00_00161A14_c __asm__("D_L00_00161A14") __attribute__((sda));
+extern int D_L00_00161A3C __attribute__((sda));
+extern int D_L00_00161A40 __attribute__((sda));
+extern int D_L00_00161A44 __attribute__((sda));
+extern int D_L00_00161A48 __attribute__((sda));
+extern float D_L00_00161A50 __attribute__((sda));
+extern float D_L00_00161A54 __attribute__((sda));
+extern int D_L00_00161A58 __attribute__((sda));
+extern float D_L00_00161A5C __attribute__((sda));
+extern int D_L00_001E14A0;
+extern int FUN_001fa728();
+extern int FUN_L00_00267a08();
+extern s32 random_integer_below_c(s32) __asm__("func_00213260");
+extern unsigned char D_0013F5E0[];
+extern volatile unsigned char D_0015EDB6;
+extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void build_look_at_matrix_c(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
+extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void enqueue_callback_list_1_alt(void (*)(void), int) __asm__("FUN_001f4600");
+extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
+extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
+float FUN_L00_00257c48(float lo, float hi);
+float FUN_L00_00257e20(float a, float b, float c, float d, float t);
+int FUN_L00_00257b90(int lo, int hi);
+int FUN_L00_0028dc90(int i, int a1, int v, int k);
+int FUN_L00_002d8980_c(char *a) __asm__("FUN_L00_002d8980");
+s32 FUN_001f9770(void *);
+s32 FUN_L00_002d8510_c(M_2d8510 *m) __asm__("FUN_L00_002d8510");
+s32 scale_game_frames_alt_c(s32) __asm__("FUN_001f96f8");
+unsigned char *FUN_L00_00273708(void *a, int b, int c);
+void FUN_L00_002d81b8_c(unsigned char *m) __asm__("FUN_L00_002d81b8");
+void FUN_L00_002d8418_c(char *p) __asm__("FUN_L00_002d8418");
+void FUN_L00_002d8850_c(unsigned char *p, float *out, int i) __asm__("FUN_L00_002d8850");
+void FUN_L00_002d8908_c(void) __asm__("FUN_L00_002d8908");
+void FUN_L00_002d9810(u8 *m);
+extern V_2D9EA0 D_L00_001E4070_2D9EA0[] __asm__("D_L00_001E3D20");
+extern float D_L00_001E17F0_2D9EA0[] __asm__("D_L00_001E14A0");
+extern float func_002140F8_2D9EA0(float, float) __asm__("FUN_002132a8");
+extern int func_002140B0_2D9EA0(int) __asm__("FUN_00213260");
+extern int func_001F9850_2D9EA0(int) __asm__("FUN_001f96f8");
+extern void func_001FA1F8_2D9EA0(void *, void *) __asm__("FUN_001fa030");
+extern void func_L00_001FF4B0_2D9EA0(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void func_001F9BD8_2D9EA0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void func_001F9CA0_2D9EA0(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void func_001F9BF0_2D9EA0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_00215C00_2D9EA0(void *, float, float, float) __asm__("FUN_00214db0");
+extern float func_L00_00258C80_2D9EA0(float, float) __asm__("FUN_L00_00257c48");
+extern float func_001F9FA8_2D9EA0(float) __asm__("FUN_001f9de0");
+extern float func_001FA748_2D9EA0(float, float) __asm__("FUN_001fa580");
+extern float func_001F9D10_2D9EA0(void *, void *) __asm__("FUN_001f9b48");
+extern int func_L00_002D9E30_2D9EA0(void *) __asm__("FUN_L00_002d8980");
+extern void func_001F9C30_2D9EA0(void *, void *, float) __asm__("FUN_001f9a68");
+extern void func_002156E0_2D9EA0(void *, void *, float, void *) __asm__("FUN_00214890");
+extern int func_L00_00258BC8_2D9EA0(int, int) __asm__("FUN_L00_00257b90");
+extern void func_L00_002D9DB8_2D9EA0(void) __asm__("FUN_L00_002d8908");
+extern int func_L00_00200290_2D9EA0(void *, float) __asm__("FUN_001fa728");
+extern void func_001F49B0_2D9EA0(void (*)(void), int) __asm__("FUN_001f4600");
+extern void func_L00_002DACC0_2D9EA0(void) __asm__("FUN_L00_002d9810");
+extern float func_001F9D48_2D9EA0(void *, void *) __asm__("FUN_001f9b80");
+extern void func_L00_002D9D00_2D9EA0(void *, void *, int) __asm__("FUN_L00_002d8850");
+extern Part_2D9EA0 *func_L00_002745A8_2D9EA0(void *, int, int) __asm__("FUN_L00_00273708");
+extern void func_L00_002D98C8_2D9EA0(void *) __asm__("FUN_L00_002d8418");
+extern int func_L00_002D99C0_2D9EA0(void *) __asm__("FUN_L00_002d8510");
+extern void func_L00_002D9668_2D9EA0(void *) __asm__("FUN_L00_002d81b8");
+extern int func_001F9938_2D9EA0(void *) __asm__("FUN_001f9770");
+extern void func_L00_002688A8_2D9EA0(void *) __asm__("FUN_L00_00267a08");
+extern void func_0020D678_2D9EA0(void *) __asm__("FUN_0020c828");
+extern int func_L00_0028EF68_2D9EA0(int, int, void *, int) __asm__("FUN_L00_0028dc90");
+extern float func_001FA888_2D9EA0(int) __asm__("FUN_001fa6c0");
+extern float func_L00_00258E58_2D9EA0(float, float, float, float, float) __asm__("FUN_L00_00257e20");
+
+void FUN_L00_002d89f0(Moby *m) {
+    V_2D9EA0 v0, v10, v20, v30, v40, v50, v60;
+    D_2D9EA0 *d = (D_2D9EA0 *)m->pvars;
+
+    switch (m->state) {
+    case 0: {
+        Moby *c;
+        int i;
+        m->state = 1;
+        m->flags |= 0x41;
+        m->unk94 = 0;
+        m->unkBC = 0;
+        c = d->owner;
+        qcopy(&m->pos, &c->pos);
+        qcopy(&m->rot, &c->rot);
+        qcopy(&d->pos, &m->pos);
+        *(int *)&d->f0 = 0;
         d->h8 = 0;
-        d->position[2] += 0.5f;
-        d->angle = FUN_002132a8_002d89f0(d->phase,3.1415927f);
-        H89(d,0x56) = 0;
+        d->pos.z += 0.5f;
+        d->f4 = func_002140F8_2D9EA0(d->f0, 3.1415927f);
+        d->h56 = 0;
         d->hA = 0;
-        { int i; for (i=0; i<4; i++) d->basis[i] = (float)FUN_L00_00257b50_002d89f0(0xff); }
-        { int i; for (i=0; i<4; i++) d->counters[i] = FUN_001fef20_002d89f0((int)D_L00_00161A58_002d89f0); }
-        { int i; for (i=7; i>=0; i--) d->effects[i]=0; }
-        if (D_L00_0015F63C_002d89f0 == 0) {
-            FUN_001ffa50_002d89f0(m+0xc0,m+0x40);
-            D_L00_0015F63C_002d89f0 = m;
-            m[0x30] = -1;
-            F89(d,0x7c) = 0;
-            FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D_L00_001E3CA0_002d89f0,m+0xc0);
-            qcopy((D_L00_001E3D20_002d89f0+0),m+0xe0);
-            FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x10),m+0xd0);
-            qcopy((D_L00_001E3D20_002d89f0+4),m+0xc0);
-            FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x20),m+0xe0);
-            qcopy((D_L00_001E3D20_002d89f0+8),m+0xd0);
-            FUN_L00_001ff278_002d89f0(D89(0x30),m+0xc0,m+0xe0);
-            FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x30),D89(0x30));
-            FUN_L00_001ff3c0_002d89f0((D_L00_001E3D20_002d89f0+12),D89(0x30),m+0xd0);
-            FUN_L00_001ff278_002d89f0(D89(0x40),m+0xc0,m+0xd0);
-            FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x40),D89(0x40));
-            FUN_L00_001ff3c0_002d89f0((D_L00_001E3D20_002d89f0+16),D89(0x40),m+0xe0);
-            FUN_L00_001ff2a8_002d89f0(D89(0x50),m+0xd0,m+0xe0);
-            FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x50),D89(0x50));
-            FUN_L00_001ff3c0_002d89f0((D_L00_001E3D20_002d89f0+20),D89(0x50),m+0xc0);
-            FUN_L00_001ff2a8_002d89f0(D89(0x60),m+0xc0,m+0xe0);
-            FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x60),D89(0x60));
-            FUN_L00_001ff3c0_002d89f0((D_L00_001E3D20_002d89f0+24),D89(0x60),m+0xd0);
-            FUN_L00_001ff2a8_002d89f0(D89(0x70),m+0xc0,m+0xd0);
-            FUN_L00_001ff500_002d89f0(D_L00_00161A14_002d89f0,D89(0x70),D89(0x70));
-            FUN_L00_001ff3c0_002d89f0((D_L00_001E3D20_002d89f0+28),D89(0x70),m+0xe0);
+        for (i = 0; i < 4; i++) d->f60[i] = (float)func_002140B0_2D9EA0(0xFF);
+        for (i = 0; i < 4; i++) d->h58[i] = func_001F9850_2D9EA0(D_L00_00161A58);
+        for (i = 7; i >= 0; i--) d->slots[i] = 0;
+        if (D_L00_0015F63C == 0) {
+            func_001FA1F8_2D9EA0(&m->unkC0, &m->rot);
+            D_L00_0015F63C = m;
+            m->unk30 = 0xFF;
+            d->f7C = 0;
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[0], &m->unkC0, D_L00_00161A14_c);
+            qcopy(&D_L00_001E4070_2D9EA0[0], &m->unkE0);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[1], &m->unkD0, D_L00_00161A14_c);
+            qcopy(&D_L00_001E4070_2D9EA0[1], &m->unkC0);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[2], &m->unkE0, D_L00_00161A14_c);
+            qcopy(&D_L00_001E4070_2D9EA0[2], &m->unkD0);
+            func_001F9BD8_2D9EA0(&D_L00_001E3CA0_c[3], &m->unkC0, &m->unkE0);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[3], &D_L00_001E3CA0_c[3], D_L00_00161A14_c);
+            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[3], &D_L00_001E3CA0_c[3], &m->unkD0);
+            func_001F9BD8_2D9EA0(&D_L00_001E3CA0_c[4], &m->unkC0, &m->unkD0);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[4], &D_L00_001E3CA0_c[4], D_L00_00161A14_c);
+            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[4], &D_L00_001E3CA0_c[4], &m->unkE0);
+            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[5], &m->unkD0, &m->unkE0);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[5], &D_L00_001E3CA0_c[5], D_L00_00161A14_c);
+            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[5], &D_L00_001E3CA0_c[5], &m->unkC0);
+            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[6], &m->unkC0, &m->unkE0);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[6], &D_L00_001E3CA0_c[6], D_L00_00161A14_c);
+            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[6], &D_L00_001E3CA0_c[6], &m->unkD0);
+            func_001F9BF0_2D9EA0(&D_L00_001E3CA0_c[7], &m->unkC0, &m->unkD0);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0_c[7], &D_L00_001E3CA0_c[7], D_L00_00161A14_c);
+            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[7], &D_L00_001E3CA0_c[7], &m->unkE0);
         }
-        FUN_L00_00262c50_002d89f0(1.0f,FUN_002132a8_002d89f0(0,6.2831855f),FUN_002132a8_002d89f0(-1.5707964f,1.5707964f),d->target);
-        F89(d,0x2c) = (float)FUN_L00_00257c48_002d89f0(0.785398f,1.5707964f);
-    case 1:
-        other = d->owner;
-        qcopy(m+0x10,other+0x10);
-        qcopy(d->position,other+0x10);
-        d->position[2] += 0.5f;
-        if (other[0x20] < 0 || other == m) {
-            m[0x20] = 2;
-            F89(d,0x50) = 0;
+        {
+            float a = func_002140F8_2D9EA0(0.0f, 6.2831855f);
+            func_00215C00_2D9EA0(&d->v20, 1.0f, a, func_002140F8_2D9EA0(-1.5707964f, 1.5707964f));
         }
+        d->v20.w = func_L00_00258C80_2D9EA0(0.785398006f, 1.5707964f);
+    }
+    case 1: {
+        Moby *c = d->owner;
+        qcopy(&m->pos, &c->pos);
+        qcopy(&d->pos, &c->pos);
+        d->pos.z += 0.5f;
+        if ((signed char)c->state < 0 || c == m) {
+            m->state = 2;
+            d->f50 = 0;
+        }
+    }
     case 2:
-        if ((unsigned char)m[0x20] == 2) {
-            qcopy(d->position,m+0x10);
-            d->position[2] += 0.5f;
-            FUN_L00_002d81b8_002d89f0(m);
-            for (i=0; i<8; i++) {
-                e = d->effects[i];
-                if (e) {
-                    effectData=e+0x20;
-                    F89(effectData,0x8) = D_L00_00161A5C_002d89f0 * FUN_L00_001ff800_002d89f0(F89(effectData,0xc)) + D_L00_00161A14_002d89f0;
-                    F89(effectData,0xc) = FUN_L00_002000e8_002d89f0(F89(effectData,0xc),D_L00_001E14A0_002d89f0[i]);
+        if (m->state == 2) {
+            int i;
+            qcopy(&d->pos, &m->pos);
+            d->pos.z += 0.5f;
+            func_L00_002D9668_2D9EA0(m);
+            for (i = 0; i < 8; i++) {
+                if (d->slots[i] != 0) {
+                    Ext_2D9EA0 *x = (Ext_2D9EA0 *)(d->slots[i] + 1);
+                    x->u.s.scale = D_L00_00161A5C * func_001F9FA8_2D9EA0(x->u.s.ang) + D_L00_00161A14_c;
+                    x->u.s.ang = func_001FA748_2D9EA0(x->u.s.ang, D_L00_001E17F0_2D9EA0[i]);
                 }
             }
         }
-        n = D_0015EDA0_002d89f0;
-        if (hero.vehicle_mode == 1) n=4;
-        if ((unsigned char)m[0x20] != 1 && D_L00_0015F63C_002d89f0 &&
-            I89(D_L00_0015F63C_002d89f0,0x78) &&
-            hero.health.hp &&
-            (hero.health.hp + I89(I89(D_L00_0015F63C_002d89f0,0x78),0x7c) < n ||
-             (D_0015EDB6_002d89f0 && hero.invulnerable_frames == 0)) &&
-            FUN_L00_001ff450_002d89f0(m+0x10,&hero.motion) < 10.0f &&
-            FUN_L00_002d8980(m)) {
-            m[0x20] = 3;
-            I89(I89(D_L00_0015F63C_002d89f0,0x78),0x7c)++;
-            if (D_0015EDB6_002d89f0)
-                hero.invulnerable_frames = FUN_001fef20_002d89f0(600);
-            d->timer = FUN_001fef20_002d89f0((int)D_L00_00161A3C_002d89f0);
-            FUN_L00_001ff300_002d89f0(-D_L00_00161A54_002d89f0,v110,&hero.unk290);
-            FUN_L00_001ff278_002d89f0(v110,&hero.motion,v110);
-            FUN_L00_001ff300_002d89f0(-D_L00_00161A50_002d89f0,v140,&hero.unk290);
-            FUN_L00_001ff2a8_002d89f0(v120,v110,m+0x10);
-            v120[2] -= 0.5f;
-            FUN_L00_001ff3c0_002d89f0(v100,v120,v140);
-            FUN_L00_001ff3c0_002d89f0(v140,v100,v120);
-            FUN_L00_0025fc08_002d89f0(-1.5707964f,v140,v140,v120);
-            FUN_L00_001ff500_002d89f0(D_L00_00161A50_002d89f0,v140,v140);
-            FUN_L00_001ff300_002d89f0(0.5f,vf0,v120);
-            for (i=0; i<8; i++) {
-                e = d->effects[i];
-                if (e) {
-                    effectData=e+0x20;
-                    FUN_L00_0025fc08_002d89f0(i*0.44854963f,v130,v140,v120);
-                    FUN_L00_001ff278_002d89f0(ve0,vf0,v130);
-                    F89(effectData,0x4)=ve0[0]; F89(effectData,0x8)=ve0[1]; F89(effectData,0xc)=ve0[2];
-                    F89(effectData,0x10)=F89(d->effects[i],0x10); F89(effectData,0x14)=F89(d->effects[i],0x14); F89(effectData,0x18)=F89(d->effects[i],0x18);
-                    h=FUN_001fef20_002d89f0((int)FUN_L00_00257b90_002d89f0(D_L00_00161A44_002d89f0,D_L00_00161A48_002d89f0));
-                    H89(effectData,0x1e)=h; H89(effectData,0x1c)=h;
+        {
+            Hero *g = (Hero *)D_0013F350_c2;
+            int lim = D_0015EDA0;
+            if (g->vehicle_mode == 1) lim = 4;
+            if (m->state != 1 && D_L00_0015F63C != 0 && ((D_2D9EA0 *)D_L00_0015F63C->pvars) != 0 && g->health.hp != 0
+                && (g->health.hp + ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C < lim || (D_0015EDB6 != 0 && g->invulnerable_frames == 0))
+                && func_001F9D10_2D9EA0(&m->pos, &g->motion.pos) < 10.0f
+                && func_L00_002D9E30_2D9EA0(m)) {
+                int i;
+                m->state = 3;
+                ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C++;
+                if (D_0015EDB6 != 0) g->invulnerable_frames = func_001F9850_2D9EA0(0x258);
+                d->h54 = func_001F9850_2D9EA0(D_L00_00161A3C);
+                func_001F9C30_2D9EA0(&v30, &g->unk290, -D_L00_00161A54);
+                func_001F9BD8_2D9EA0(&v30, &g->motion.pos, &v30);
+                func_001F9C30_2D9EA0(&v0, &g->unk290, -D_L00_00161A50);
+                func_001F9BF0_2D9EA0(&v20, &v30, &m->pos);
+                v20.z -= 0.5f;
+                func_001F9CA0_2D9EA0(&v40, &v20, &v0);
+                func_001F9CA0_2D9EA0(&v0, &v40, &v20);
+                func_002156E0_2D9EA0(&v0, &v0, -1.5707964f, &v20);
+                func_L00_001FF4B0_2D9EA0(&v0, &v0, D_L00_00161A50);
+                func_001F9C30_2D9EA0(&v50, &v20, 0.5f);
+                for (i = 0; i < 8; i++) {
+                    if (d->slots[i] != 0) {
+                        Ext_2D9EA0 *x = (Ext_2D9EA0 *)(d->slots[i] + 1);
+                        func_002156E0_2D9EA0(&v10, &v0, (float)i * 0.448549628f, &v20);
+                        func_001F9BD8_2D9EA0(&v60, &v50, &v10);
+                        {
+                            V3_2D9EA0 *dst = &x->u.a;
+                            dst->x = v60.x;
+                            dst->y = v60.y;
+                            dst->z = v60.z;
+                        }
+                        {
+                            V3_2D9EA0 *dst = &x->b;
+                            V3_2D9EA0 *src = (V3_2D9EA0 *)&d->slots[i]->pos;
+                            dst->x = src->x;
+                            dst->y = src->y;
+                            dst->z = src->z;
+                        }
+                        x->h1E = x->h1C = func_001F9850_2D9EA0(func_L00_00258BC8_2D9EA0(D_L00_00161A44, D_L00_00161A48));
+                    }
                 }
             }
         }
-        d->phase = D_L00_00161A10_002d89f0 * FUN_L00_001ff800_002d89f0(d->angle);
-        d->angle = FUN_L00_002000e8_002d89f0(d->angle,D_L00_00161A0C_002d89f0);
-        if (D_L00_0015F63C_002d89f0 == m) FUN_L00_002d8908();
-        qcopy(v140,m+0x10); v140[2] += 0.5f; v140[3] = 1.0f;
-        if (FUN_L00_002002e0_002d89f0(64.0f,v140) >= 0) {
-            FUN_L00_002d9810_002d89f0((void *)FUN_L00_002d9810,m);
-            n = FUN_L00_001ff488_002d89f0(m+0x10,D_L00_00166DC0_002d89f0) > 10.0f ? 5 : 0x28;
-            r = FUN_001fef20_002d89f0(n);
-            for (i=0; i<8; i++) {
-                FUN_L00_002d8850_002d89f0(m,v130,i);
-                spawn = FUN_L00_00273708_002d89f0(v130,r,2);
-                if (spawn) {
-                    F89(spawn,0x30)=F89(spawn,0x10)-F89(m,0x10);
-                    F89(spawn,0x34)=F89(spawn,0x14)-F89(m,0x14);
-                    F89(spawn,0x38)=F89(spawn,0x18)-F89(m,0x18);
-                    I89(spawn,0x24)=(int)((unsigned char)m[0x20]==2 ? m : d->owner);
-                    I89(spawn,4)=D_L00_00161A00_002d89f0;
-                    F89(spawn,0xc)=D_L00_001619F8_002d89f0;
+        d->f0 = D_L00_00161A10 * func_001F9FA8_2D9EA0(d->f4);
+        d->f4 = func_001FA748_2D9EA0(d->f4, D_L00_00161A0C);
+        if (D_L00_0015F63C == m) func_L00_002D9DB8_2D9EA0();
+        qcopy(&v0, &m->pos);
+        v0.z += 0.5f;
+        v0.w = 1.0f;
+        if (func_L00_00200290_2D9EA0(&v0, 64.0f) >= 0) {
+            int i;
+            int n;
+            func_001F49B0_2D9EA0(func_L00_002DACC0_2D9EA0, (int)m);
+            if (10.0f < func_001F9D48_2D9EA0(&m->pos, D_L00_00166DC0)) n = func_001F9850_2D9EA0(5);
+            else n = func_001F9850_2D9EA0(40);
+            for (i = 0; i < 8; i++) {
+                Part_2D9EA0 *e;
+                Part_2D9EA0 *p;
+                func_L00_002D9D00_2D9EA0(m, &v10, i);
+                e = func_L00_002745A8_2D9EA0(&v10, n, 2);
+                if (e != 0) {
+                    Ext_2D9EA0 *x = (Ext_2D9EA0 *)(e + 1);
+                    x->b.x = e->pos.x - m->pos.x;
+                    x->b.y = e->pos.y - m->pos.y;
+                    x->b.z = e->pos.z - m->pos.z;
+                    if (m->state == 2) x->u.s.owner = m;
+                    else x->u.s.owner = d->owner;
+                    e->f4 = D_L00_00161A00;
+                    e->fC = D_L00_001619F8;
                 }
-                e = d->effects[i];
-                if (!e) {
-                    e = FUN_L00_00273708_002d89f0(v130,0,1);
-                    d->effects[i]=e;
-                    if (e) {
-                    effectData=e+0x20;
-                        I89(e,0x2c)=0; F89(effectData,0x8)=D_L00_00161A14_002d89f0;
-                        F89(d->effects[i],0xc)=D_L00_001619FC_002d89f0;
-                        I89(d->effects[i],4)=D_L00_00161A00_002d89f0;
+                p = d->slots[i];
+                if (p == 0) {
+                    d->slots[i] = func_L00_002745A8_2D9EA0(&v10, 0, 1);
+                    if (d->slots[i] != 0) {
+                        Ext_2D9EA0 *x = (Ext_2D9EA0 *)(d->slots[i] + 1);
+                        x->u.s.scale = D_L00_00161A14_c;
+                        x->u.s.ang = 0.0f;
+                        d->slots[i]->fC = D_L00_001619FC;
+                        d->slots[i]->f4 = D_L00_00161A00;
                     }
                 } else {
-                    qcopy(e+0x10,v130);
-                    e[8] += D_L00_001619F4_002d89f0;
+                    qcopy(&p->pos, &v10);
+                    p->b8 += D_L00_001619F4;
                 }
             }
         }
         break;
     case 3:
-        if (D_L00_0015F63C_002d89f0 == m) FUN_L00_002d8908();
-        if (H89(d,0x56)) {
-            FUN_L00_001ff300_002d89f0(-D_L00_00161A54_002d89f0,m+0x10,&hero.unk290);
-            FUN_L00_001ff278_002d89f0(m+0x10,&hero.motion,m+0x10);
-            F89(m,0x4c)=0.5235988f;
-            if (FUN_L00_002d8510_002d89f0(m) && FUN_L00_00257b50_002d89f0(5)==0)
-                FUN_L00_002d8418_002d89f0(m);
+        if (D_L00_0015F63C == m) func_L00_002D9DB8_2D9EA0();
+        if (d->h56 != 0) {
+            func_001F9C30_2D9EA0(&m->pos, D_0013F5E0, -D_L00_00161A54);
+            func_001F9BD8_2D9EA0(&m->pos, D_0013F5E0 - 0x210, &m->pos);
+            m->rot.w = 0.52359879f;
+            if (func_L00_002D99C0_2D9EA0(m) != 0 && func_002140B0_2D9EA0(5) == 0) func_L00_002D98C8_2D9EA0(m);
         }
-        effects=d->effects;
-        n = D_0015EDA0_002d89f0;
-        if (hero.vehicle_mode == 1) n=4;
-        if (hero.health.hp == n && hero.invulnerable_frames && D_0015EDB6_002d89f0) {
-            h=FUN_001fef20_002d89f0(D_L00_00161A40_002d89f0);
-            if (d->timer < h) {
-                d->timer=h;
-                for (i=0; i<4; i++) d->counters[i]++;
+        {
+            Hero *g = (Hero *)D_0013F350_c2;
+            int lim = D_0015EDA0;
+            if (g->vehicle_mode == 1) lim = 4;
+            if (g->health.hp == lim && g->invulnerable_frames != 0 && D_0015EDB6 != 0) {
+                int r = func_001F9850_2D9EA0(D_L00_00161A40);
+                if (d->h54 < r) {
+                    int i;
+                    d->h54 = r;
+                    for (i = 0; i < 4; i++) d->h58[i]++;
+                }
             }
         }
-        if (FUN_001fef98_002d89f0(&d->timer)) {
-            for (i=7; i>=0; i--,effects++) {
-                e=*effects;
-                if (e) {
-                    effectData=e+0x20; FUN_L00_00267a08_002d89f0(e); *effects=0; }
+        if (func_001F9938_2D9EA0(&d->h54)) {
+            int i;
+            for (i = 0; i < 8; i++) {
+                if (d->slots[i] != 0) {
+                    func_L00_002688A8_2D9EA0(d->slots[i]);
+                    d->slots[i] = 0;
+                }
             }
-            if (D_L00_0015F63C_002d89f0==m) m[0x20]=4;
-            else FUN_L00_0024eb68_002d89f0(m);
+            if (D_L00_0015F63C == m) m->state = 4;
+            else func_0020D678_2D9EA0(m);
         } else {
-            FUN_L00_001ff300_002d89f0(-D_L00_00161A54_002d89f0,v120,&hero.unk290);
-            FUN_L00_001ff278_002d89f0(v120,&hero.motion,v120);
-            for (i=7; i>=0; i--,effects++) {
-                e=*effects;
-                if (e) {
-                    effectData=e+0x20;
-                    if (FUN_001fef98_002d89f0(e+0x3e)) {
-                        if (!H89(d,0x56)) {
-                            n=D_0015EDA0_002d89f0;
-                            if (hero.vehicle_mode==1) n=4;
-                            if (hero.health.hp) {
-                                r=hero.health.hp+1;
-                                hero.health.hp=n;
-                                if (r<=n) hero.health.hp=r;
-                            }
-                            other=D_L00_0015F63C_002d89f0;
-                            j=--I89(I89(other,0x78),0x7c);
-                            if (j<0) I89(I89(other,0x78),0x7c)=0;
-                            FUN_L00_0028dc90_002d89f0(1,0,m,0x1f5);
-                            H89(d,0x56)=1;
+            int i;
+            func_001F9C30_2D9EA0(&v20, D_0013F5E0, -D_L00_00161A54);
+            func_001F9BD8_2D9EA0(&v20, D_0013F5E0 - 0x210, &v20);
+            for (i = 0; i < 8; i++) {
+                Part_2D9EA0 *e = d->slots[i];
+                Ext_2D9EA0 *x;
+                if (e == 0) continue;
+                x = (Ext_2D9EA0 *)(e + 1);
+                if (func_001F9938_2D9EA0(&x->h1E)) {
+                    if (d->h56 == 0) {
+                        Hero *g = (Hero *)D_0013F350_c2;
+                        int lim = D_0015EDA0;
+                        if (g->vehicle_mode == 1) lim = 4;
+                        if (g->health.hp != 0) {
+                            int t = g->health.hp + 1;
+                            g->health.hp = (lim < t) ? lim : t;
                         }
-                        FUN_L00_00267a08_002d89f0(e);
-                        *effects=0;
-                    } else {
-                        qcopy(v100,e+0x10);
-                        t=FUN_L00_00200240_002d89f0(H89(effectData,0x1c));
-                        v130[0]=F89(effectData,0x10); v130[1]=F89(effectData,0x14); v130[2]=F89(effectData,0x18);
-                        v130[3]=0;
-                        phase=1.0f-(float)H89(effectData,0x1e)/t;
-                        v140[0]=v130[0]-F89(effectData,0x4);
-                        v140[1]=v130[1]-F89(effectData,0x8);
-                        v140[2]=v130[2]-F89(effectData,0xc);
-                        v110[0]=v120[0]-F89(effectData,0x4);
-                        v110[1]=v120[1]-F89(effectData,0x8);
-                        v110[2]=v120[2]-F89(effectData,0xc);
-                        F89(e,0x10)=FUN_L00_00257e20_002d89f0(v140[0],v130[0],v120[0],v110[0],phase);
-                        F89(e,0x14)=FUN_L00_00257e20_002d89f0(v140[1],v130[1],v120[1],v110[1],phase);
-                        F89(e,0x18)=FUN_L00_00257e20_002d89f0(v140[2],v130[2],v120[2],v110[2],phase);
-                        vf0[0]=FUN_L00_00257c48_002d89f0(0,0.01f)+F89(e,0x10+0);
-                        vf0[1]=FUN_L00_00257c48_002d89f0(0,0.01f)+F89(e,0x10+4);
-                        vf0[2]=FUN_L00_00257c48_002d89f0(0,0.01f)+F89(e,0x10+8);
-                        spawn=FUN_L00_00273708_002d89f0(vf0,FUN_001fef20_002d89f0(0x14),0);
-                        if (spawn) { I89(spawn,4)=D_L00_00161A00_002d89f0; F89(spawn,0xc)=D_L00_001619F8_002d89f0; }
-                        FUN_L00_001ff278_002d89f0(v100,e+0x10,v100);
-                        FUN_L00_001ff300_002d89f0(0.5f,v100,v100);
-                        vf0[0]=FUN_L00_00257c48_002d89f0(0,0.01f)+v100[0];
-                        vf0[1]=FUN_L00_00257c48_002d89f0(0,0.01f)+v100[1];
-                        vf0[2]=FUN_L00_00257c48_002d89f0(0,0.01f)+v100[2];
-                        spawn=FUN_L00_00273708_002d89f0(vf0,FUN_001fef20_002d89f0(0x14),0);
-                        if (spawn) { I89(spawn,4)=D_L00_00161A00_002d89f0; F89(spawn,0xc)=D_L00_001619F8_002d89f0; }
+                        {
+                            D_2D9EA0 *o = (D_2D9EA0 *)D_L00_0015F63C->pvars;
+                            o->f7C--;
+                            if (o->f7C < 0) o->f7C = 0;
+                        }
+                        func_L00_0028EF68_2D9EA0(1, 0, m, 0x1F5);
+                        d->h56 = 1;
+                    }
+                    func_L00_002688A8_2D9EA0(e);
+                    d->slots[i] = 0;
+                } else {
+                    float t;
+                    float k;
+                    Part_2D9EA0 *n;
+                    qcopy(&v40, &e->pos);
+                    k = func_001FA888_2D9EA0(x->h1C);
+                    k = (float)x->h1E / k;
+                    {
+                        V3_2D9EA0 *src = &x->b;
+                        v10.x = src->x;
+                        v10.y = src->y;
+                        v10.z = src->z;
+                    }
+                    v10.w = 0.0f;
+                    t = 1.0f - k;
+                    v0.x = v10.x - x->u.a.x;
+                    v0.y = v10.y - x->u.a.y;
+                    v0.z = v10.z - x->u.a.z;
+                    v30.x = v20.x - x->u.a.x;
+                    v30.y = v20.y - x->u.a.y;
+                    v30.z = v20.z - x->u.a.z;
+                    e->pos.x = func_L00_00258E58_2D9EA0(v0.x, v10.x, v20.x, v30.x, t);
+                    e->pos.y = func_L00_00258E58_2D9EA0(v0.y, v10.y, v20.y, v30.y, t);
+                    e->pos.z = func_L00_00258E58_2D9EA0(v0.z, v10.z, v20.z, v30.z, t);
+                    v50.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + e->pos.x;
+                    v50.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + e->pos.y;
+                    v50.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + e->pos.z;
+                    n = func_L00_002745A8_2D9EA0(&v50, func_001F9850_2D9EA0(0x14), 0);
+                    if (n != 0) {
+                        n->f4 = D_L00_00161A00;
+                        n->fC = D_L00_001619F8;
+                    }
+                    func_001F9BD8_2D9EA0(&v40, &e->pos, &v40);
+                    func_001F9C30_2D9EA0(&v40, &v40, 0.5f);
+                    v50.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.x;
+                    v50.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.y;
+                    v50.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.z;
+                    n = func_L00_002745A8_2D9EA0(&v50, func_001F9850_2D9EA0(0x14), 0);
+                    if (n != 0) {
+                        n->f4 = D_L00_00161A00;
+                        n->fC = D_L00_001619F8;
                     }
                 }
             }
         }
         break;
     case 4:
-        if (D_L00_0015F63C_002d89f0==m) FUN_L00_002d8908();
+        if (D_L00_0015F63C == m) func_L00_002D9DB8_2D9EA0();
         break;
     }
 }
-#undef F89
-#undef D89
-#undef I89
-#undef H89
-#undef B89
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d9810.s", FUN_L00_002d9810);
 #else
