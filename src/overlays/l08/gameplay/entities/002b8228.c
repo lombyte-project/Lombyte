@@ -743,12 +743,15 @@ void FUN_L08_002d55c8(struct Moby *moby, int path_id) {
     int value;
     int increment;
     char *linked;
+    float *rotation;
 
     qcopy(point, path + 4 + *(int *)(vars + 0x168) * 4);
-    approach_angle_l08(&moby->rot.z,
-        fast_atan2_l08(point[0] - moby->pos.x, point[1] - moby->pos.y),
+    rotation = &moby->rot.z;
+    dist = fast_atan2_l08(point[0] - moby->pos.x, point[1] - moby->pos.y);
+    size = 4.712389f;
+    approach_angle_l08(rotation, dist,
         (float *)(vars + 0x158),
-        D_0015ED70 * 4.712389f, D_0015ED70 * 4.712389f,
+        D_0015ED70 * size, D_0015ED70 * size,
         D_0015ED6C * 3.1415927f);
     approach_float_l08((float *)(vars + 0x180), *(float *)(vars + 0x16c), D_0015ED70 + D_0015ED70);
     step[0] = fast_cos_l08(moby->rot.z) * *(float *)(vars + 0x180);
