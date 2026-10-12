@@ -6,11 +6,11 @@
 
 extern char D_0013E533[];
 extern float D_L02_0017C3B8[];
-extern void FUN_L00_002118c8(int, float);
+extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 
 void FUN_L02_00220b80(void) {
     char *x;
-    FUN_L00_002118c8(0, 1.0f);
+    stick_target(0, 1.0f);
     x = D_0013E533 + 0xE1D;
     if (*(int *)(x + 0x2084) == 0x3F) {
         float two = frame_time + frame_time;

@@ -436,7 +436,7 @@ void FUN_L05_00307010(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0030D500), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9de0(float);
-extern float FUN_L00_00257c48(float lo, float hi);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void FUN_L00_002502f0(void *, int, int, int);
@@ -455,11 +455,11 @@ void FUN_L05_0030c0a8(unsigned char *m) {
         lo = frame_time * 0.47123888f;
         hi = frame_time * 0.5235988f;
         *(float *)(d + 0x44) = r;
-        r = FUN_L00_00257c48(lo, hi);
+        r = randf_sym(lo, hi);
         lo = frame_time * 0.20943951f;
         hi = frame_time * 0.2617994f;
         *(float *)(d + 0x50) = r;
-        *(float *)(d + 0x4C) = FUN_L00_00257c48(lo, hi);
+        *(float *)(d + 0x4C) = randf_sym(lo, hi);
         FUN_L00_002502f0(m, 0x80, 0x80, 0x80);
         attach_manipulator((char *)m, 0, d);
         m[0x20] = 1;
@@ -732,7 +732,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED70;
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void FUN_001fa050(void *, void *);
 extern void FUN_L00_001ff660(void *, void *, void *);
@@ -783,7 +783,7 @@ void FUN_L05_003186f8(char *moby)
             add_vector_xyz(buf + 0x50, buf + 0x50, moby + 0x10);
         }
 
-        if (FUN_L00_001f0d60(convert_integer_to_float(*(int *)(data + 0xC)) * 0.0009765625f, buf + 0x50, 0, moby)) {
+        if (coll_sphere(convert_integer_to_float(*(int *)(data + 0xC)) * 0.0009765625f, buf + 0x50, 0, moby)) {
             hs = D_L05_00174240;
             if (*(int *)(hs + 0x18) == 0 || *(int *)(hs + 0x18) != *(int *)(data + 8)) {
                 *(int *)data = 0;

@@ -1179,7 +1179,7 @@ typedef struct {
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
 extern float FUN_L00_0025abf0(void *, void *, float, float, int);
-extern float FUN_L00_00257c48(float, float);
+extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 
 /* Launches the first idle (state 8) class-0x772 moby of group `group` from `from` towards `to` at `speed`.
    Returns 1 when one was launched. */
@@ -1206,7 +1206,7 @@ int FUN_L18_002fc668(int group, void *from, void *to, float speed) {
                 v->velocity[2] = 0.0f;
                 FUN_001f9bf8(v->velocity, v->velocity, speed);
                 v->velocity[2] = FUN_L00_0025abf0(from, to, speed, -(frame_time_sq * 10.0f), 0);
-                v->spin = FUN_L00_00257c48(15.0f, 45.0f) * 0.017453292f;
+                v->spin = randf_sym(15.0f, 45.0f) * 0.017453292f;
                 return 1;
             }
         }

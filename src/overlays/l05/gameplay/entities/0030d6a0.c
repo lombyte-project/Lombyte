@@ -1698,7 +1698,7 @@ extern float fast_subtract_rotations(float, float);
 extern float truncate_float_to_s32_cf(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
-extern int FUN_L00_00203908(int, int);
+extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern int FUN_L00_00266448(void *, void *);
 extern int FUN_L00_002668a0(void *, void *);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
@@ -1712,7 +1712,7 @@ extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_002502a0(int);
 extern void FUN_L00_00260860(int, int);
 extern void FUN_L00_002628d8(float, float, void *, void *, int);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L02_002e0cd8(char *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
@@ -1750,7 +1750,7 @@ void FUN_L05_003180a0(WM *m) {
             FUN_L01_002783a8(m, 2.0f);
         if ((unsigned)(d->sub - 3) < 2) {
             FUN_L00_00260860(0x17, 1);
-            FUN_L00_00263d40(0x1396, -1);
+            queue_dialogue_message(0x1396, -1);
             memcard_save_data(0, -1);
             mark_moby_for_removal(m);
             return;

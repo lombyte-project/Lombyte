@@ -363,7 +363,7 @@ extern int D_00141408 __attribute__((section(".data")));
 extern int D_00141410 __attribute__((section(".data")));
 extern int D_00141414 __attribute__((section(".data")));
 extern unsigned char D_0015EDD0[] __attribute__((section(".sdata")));
-extern void FUN_L00_00263d40(int arg0, int arg1);
+extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 
 void FUN_L00_00260860(int id, int flag) {
     unsigned char *pa = &D_0013D4C0[id];
@@ -378,7 +378,7 @@ void FUN_L00_00260860(int id, int flag) {
     p = &D_L00_001B0340[idx];
     *pb = 1;
     if (*p != -1) {
-        FUN_L00_00263d40(*p, scale_game_frames(0x12C));
+        queue_dialogue_message(*p, scale_game_frames(0x12C));
     }
     if (*pa == 0) {
         VendorItemInfo *r;

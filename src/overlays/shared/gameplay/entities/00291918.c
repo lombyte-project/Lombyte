@@ -294,7 +294,7 @@ extern int FUN_001f0b58(void);
 extern void FUN_001f9a68(void *, void *, float);
 extern float FUN_001f9af0(void *);
 extern int FUN_001efa68(void *, void *, int, void *, int);
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void FUN_0022da68(int, int, void *);
 extern int FUN_001f9770(void *);
 extern float FUN_L00_0025e310(float);
@@ -365,7 +365,7 @@ first_collision_timer:
                 *(int *)(d + 8) = 12;
             }
         }
-        if (FUN_L00_001f0d60(0.2f, pos, 4, m)) {
+        if (coll_sphere(0.2f, pos, 4, m)) {
             FUN_001f9a28(&next_pos, &D_L00_00173E40.point, &D_L00_00173E40.pad30);
             FUN_001f9bf8(&next_pos, &next_pos, 0.015f);
             FUN_001f9a10(pos, &D_L00_00173E40.pad30, &next_pos);
@@ -1068,8 +1068,8 @@ extern float D_L03_00161B30 __attribute__((sda));
 extern float FUN_L00_0025bc00(float *, int, float, float);
 extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
 extern int FUN_001efa68(void *, void *, int, void *, void *);
-extern int FUN_L00_001f2868(float, void *, int, void *, void *);
-extern int FUN_L00_00257b90(int, int);
+extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_001ff660(void *, void *, void *);
@@ -1175,10 +1175,10 @@ void FUN_L03_002d47c0(Moby *moby) {
                     normalize_vector_xyz(&spark_vel, &spark_vel, vector_length_xyz(&aim) * 0.65f);
                     add_vector_xyz(&spark_vel, &aim, &spark_vel);
                     normalize_vector_xyz(&spark_vel, &spark_vel, random_float_between_c(D_0015ED6C_c * 5.0f, D_0015ED6C_c * 15.0f));
-                    FUN_L00_0026dd20(&muzzle, &spark_vel, 0x5F2F4F6F, FUN_L00_00257b90(scale_game_frames_alt(5), scale_game_frames_alt(10)), 50000.0f);
+                    FUN_L00_0026dd20(&muzzle, &spark_vel, 0x5F2F4F6F, random_int_between(scale_game_frames_alt(5), scale_game_frames_alt(10)), 50000.0f);
                 }
                 normalize_vector_xyz(&aim, &aim, D_0015ED6C_c * 0.5f);
-                FUN_L00_0026dd20(&muzzle, &aim, 0x2F4F7F7F, FUN_L00_00257b90(scale_game_frames_alt(4), scale_game_frames_alt(7)), 400000.0f);
+                FUN_L00_0026dd20(&muzzle, &aim, 0x2F4F7F7F, random_int_between(scale_game_frames_alt(4), scale_game_frames_alt(7)), 400000.0f);
                 scale_vector_xyz(&spark_dir, data, FUN_001f96b0(6.0f));
                 add_vector_xyz(&spark_dir, &spark_dir, &moby->pos);
                 subtract_vector_xyz(&spark_dir, &spark_dir, &side_offset);
@@ -1202,7 +1202,7 @@ void FUN_L03_002d47c0(Moby *moby) {
                         normalize_vector_xyz(&spark_vel, &spark_vel, vector_length_xyz(&spark_dir) * 0.5f);
                         add_vector_xyz(&spark_dir, &spark_dir, &spark_vel);
                         normalize_vector_xyz(&spark_dir, &spark_dir, random_float_between_c(D_0015ED6C_c * 3.0f, D_0015ED6C_c * 6.0f));
-                        FUN_L00_0026dd20(&muzzle, &spark_dir, 0x7F2F4F6F, FUN_L00_00257b90(scale_game_frames_alt(0xF), scale_game_frames_alt(0x14)), 30000.0f);
+                        FUN_L00_0026dd20(&muzzle, &spark_dir, 0x7F2F4F6F, random_int_between(scale_game_frames_alt(0xF), scale_game_frames_alt(0x14)), 30000.0f);
                     }
                     normalize_vector_xyz(&aim, &aim, -1.0f);
                     add_vector_xyz(&ray_end, &muzzle, &aim);
@@ -1216,7 +1216,7 @@ void FUN_L03_002d47c0(Moby *moby) {
                         && (D_L03_00173F58 == ((Hero *)(D_0013E533 + 0xE1D))->moby || D_L03_00173F58->oclass == 0x1DF)) {
                         moby->state = 2;
                     }
-                    if (FUN_L00_001f2868(0.5f, &moby->pos, 0x10, moby, &hit) != 0 && D_L03_00173F58 != 0
+                    if (collect_mobies_in_sphere(0.5f, &moby->pos, 0x10, moby, &hit) != 0 && D_L03_00173F58 != 0
                         && (D_L03_00173F58 == ((Hero *)(D_0013E533 + 0xE1D))->moby || D_L03_00173F58->oclass == 0x1DF)) {
                         moby->state = 2;
                     }

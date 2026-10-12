@@ -874,7 +874,7 @@ extern char D_L11_00162360[4] __attribute__((sda));
 extern char D_L11_00162364[4] __attribute__((sda));
 extern char D_L11_00162368[4] __attribute__((sda));
 extern char D_L11_0016236C[4] __attribute__((sda));
-extern void FUN_L00_00257d78(float *, float, float);
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void add_vector_xyz(void *, void *, void *);
 extern void scale_vector_xyz(void *, void *, float);
@@ -899,7 +899,7 @@ void FUN_L11_003181f0(struct Moby *m) {
             m->unk31 != 0 && *(int *)&D_L11_0015FFBC >= 0x47) {
             transform_vector_by_basis(v, &D_L11_00162350, &m->unkC0);
             add_vector_xyz(v, v, &m->pos);
-            FUN_L00_00257d78(r, 0.0f, *(float *)&D_L11_00162368 * D_0015ED6C_n[1]);
+            random_vector(r, 0.0f, *(float *)&D_L11_00162368 * D_0015ED6C_n[1]);
             subtract_vector_xyz(w, &m->pos, d);
             w[2] -= D_0015ED6C_n[1] + D_0015ED6C_n[1];
             add_vector_xyz(w, w, r);
@@ -1160,16 +1160,16 @@ extern short D_L11_001623C0_d __asm__("D_L11_001623C0") __attribute__((sda));
 extern short D_L11_001623C4_d __asm__("D_L11_001623C4") __attribute__((sda));
 extern short D_L11_001623C8_d __asm__("D_L11_001623C8") __attribute__((sda));
 extern short D_L11_001623CC_d __asm__("D_L11_001623CC") __attribute__((sda));
-extern void FUN_L00_00257d78(float *, float, float);
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
 void FUN_L11_003191c0(struct Moby *moby) {
     float v0[4];
     float v1[4];
     int c1;
     int c2;
-    FUN_L00_00257d78(v0, *(float *)&D_L11_001623AC_d * D_0015ED6C_n[1],
+    random_vector(v0, *(float *)&D_L11_001623AC_d * D_0015ED6C_n[1],
                      *(float *)&D_L11_001623B0_d * D_0015ED6C_n[1]);
-    FUN_L00_00257d78(v1, *(float *)&D_L11_001623AC_d * D_0015ED6C_n[1],
+    random_vector(v1, *(float *)&D_L11_001623AC_d * D_0015ED6C_n[1],
                      *(float *)&D_L11_001623B0_d * D_0015ED6C_n[1]);
     v0[3] = *(float *)&D_L11_001623B4_d;
     v1[3] = *(float *)&D_L11_001623B8_d;
@@ -1199,7 +1199,7 @@ extern float D_L11_0015F580[] MACRO_ADDR;
 extern float D_L11_001677C0_c[] __asm__("D_L11_001677C0");
 extern float D_L11_001677D0_c[] __asm__("D_L11_001677D0");
 extern float FUN_001f9b48(void *, void *);
-extern float FUN_L00_00257c48(float lo, float hi);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float FUN_L00_0025be00(float *p, float *v, float a, float b, float c, float d);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
@@ -1247,9 +1247,9 @@ void FUN_L11_00319838(struct Moby *moby) {
         moby->unk30 = 0xFF;
         if (*(int *)(d + 0x88) == 0) {
             moby->state = 1;
-            *(float *)(d + 0x6C) = FUN_L00_00257c48(0.3f, 0.5f);
+            *(float *)(d + 0x6C) = randf_sym(0.3f, 0.5f);
             *(float *)(d + 0x70) = random_angle_radians();
-            *(float *)(d + 0x74) = FUN_L00_00257c48(60.0f, 120.0f) * DEG_TO_RAD * D_0015ED6C_n[1];
+            *(float *)(d + 0x74) = randf_sym(60.0f, 120.0f) * DEG_TO_RAD * D_0015ED6C_n[1];
             *(float *)(d + 0x78) = random_float_between_alt(8.0f, 12.0f);
         } else {
             moby->state = 4;
@@ -1496,7 +1496,7 @@ char *FUN_L11_0031a7d8(int list) {
 
 extern int FUN_L01_0026e008(int, int);
 extern unsigned char D_0013D408[];
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry_alt(int, int, int) __asm__("FUN_0022db10");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
@@ -1509,7 +1509,7 @@ void FUN_L11_0031aa80(struct Moby *moby) {
         if (g[0x13] == 0) {
             g[0x13] = 1;
             allocate_voice_for_bank_entry_alt(1, 0, 0);
-            FUN_L00_00263d40(0x53d6, -1);
+            queue_dialogue_message(0x53d6, -1);
         }
     }
 }
@@ -1573,7 +1573,7 @@ void FUN_L11_0031ab08(struct Moby *m) {
         rate = m->pclass->scale / (float)scale_game_frames(0x3C);
         if ((D_L11_0015F5CC & 3) == 0) {
             FUN_L11_0031ae68((struct Moby *)m, *(float **)(d + 0x24), 0, 1);
-            FUN_L00_00257d78(v, 0.0f, D_0015ED6C_n[1]);
+            random_vector(v, 0.0f, D_0015ED6C_n[1]);
             v[2] = absolute_float(v[2]);
             p = func_L00_0026FF20_p(&m->pos, v, *(float *)&D_L11_00162414_d,
                                     **(float **)(d + 0x24));
@@ -1631,12 +1631,12 @@ extern float FUN_001f96b0(float);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int FUN_001fa6e0(int, int, float);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern char D_L11_00162420[4] __attribute__((sda));
 extern char D_L11_00162424[4] __attribute__((sda));
-extern void FUN_L00_00257d78(float *, float, float);
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void FUN_L00_0026f548(void *, void *, int, int);
 extern void add_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -1652,12 +1652,12 @@ void FUN_L11_0031ae68(struct Moby *m, float *ground, int n1, int n2) {
         v[0] = fast_cos(a) * r;
         v[1] = fast_sin(a) * r;
         v[2] = random_float_between(D_0015ED6C_n[1] * 3.0f, D_0015ED6C_n[1] * 6.5f);
-        k = FUN_L00_00257b90(0x5A, 0x78);
+        k = random_int_between(0x5A, 0x78);
         FUN_L00_0026f548(&m->pos, v, random_integer_below(2), k);
     }
     for (i = 0; i < n2; i++) {
         char *e;
-        FUN_L00_00257d78(v, 1.0f, 1.0f);
+        random_vector(v, 1.0f, 1.0f);
         add_vector_xyz(v, v, &m->pos);
         v[2] = *ground + 0.05f;
         e = func_L00_00272770_p(v, D_L11_0015F580, ground, random_float_between(3.0f, 6.0f),
@@ -1699,7 +1699,7 @@ void FUN_L11_0031b098(struct Moby *m) {
     char *d;
     int c0, c1, c2, c3, c4;
     d = (char *)m->pvars;
-    FUN_L00_00257d78(v1, 0.0f, *(float *)&D_L11_00162428_d * D_0015ED6C_n[1]);
+    random_vector(v1, 0.0f, *(float *)&D_L11_00162428_d * D_0015ED6C_n[1]);
     add_vector_xyz(v1, v1, d);
     clear_vector(v2);
     v2[2] = random_float_between_alt(*(float *)&D_L11_0016242C_d, *(float *)&D_L11_00162430_d) *

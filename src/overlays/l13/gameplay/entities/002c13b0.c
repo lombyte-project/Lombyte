@@ -312,7 +312,7 @@ extern void blend_moby_animation_c13(void *, int, int, int) __asm__("FUN_00212f9
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_00259888(float, void *, void *, int, void *);
 extern int FUN_L00_001f0d60_2048(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
-extern int FUN_L00_001f2868(float, void *, int, void *, void *);
+extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern char *FUN_L00_0025a420(void *, int, int);
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
@@ -367,7 +367,7 @@ void FUN_L13_002c2048(Moby_2C27B0 *m) {
         FUN_L00_00259888(16.0f, &hitpos, m, 0x30000, velocity);
         qcopy(&vec, pos);
         vec.z += 0.75f;
-        flags = FUN_L00_001f2868(1.7f, &vec, 0x10, m, &hitpos);
+        flags = collect_mobies_in_sphere(1.7f, &vec, 0x10, m, &hitpos);
         flags = flags | FUN_L00_001f0d60_2048(&vec, 1.7f, 4, m);
         hit = (Moby_2C27B0 *)FUN_L00_0025a420(m, -1, 0);
         if (hit != 0) {
@@ -549,7 +549,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_L00_00257d78(float *, float, float);
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void FUN_L00_0025d538(void *, void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -591,7 +591,7 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
                 FUN_L00_0025d458(moby, (short *)(d + 0x60));
                 normalize_vector_xyz(vec, t + 0x10, 0.1f);
                 add_vector_xyz(&moby->pos, &moby->pos, vec);
-                FUN_L00_00257d78(vec, -0.1f, 0.1f);
+                random_vector(vec, -0.1f, 0.1f);
                 add_vector_xyz(&moby->pos, &moby->pos, vec);
             }
             moby->unkA4 = 0xFF;
@@ -1755,7 +1755,7 @@ extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_0025e450();
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void FUN_L00_00257d78(float *, float, float);
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
@@ -1784,7 +1784,7 @@ void FUN_L13_002e1348(struct Moby *moby, char *d, float s) {
     if (*(short *)(d + 0x4E) > 0) {
         for (i = 0; i < FUN_L00_00257b90(1, 2); i++) {
             float part = moby->scale * random_float_between(0.25f, 0.75f);
-            FUN_L00_00257d78(v, frame_time * 5.0f, frame_time * 10.0f);
+            random_vector(v, frame_time * 5.0f, frame_time * 10.0f);
             scale_vector_xyz(d, d, 0.75f);
             add_vector_xyz(v, v, d);
             normalize_vector_xyz(p, v, 0.5f);
@@ -3021,7 +3021,7 @@ unsigned char *FUN_L13_002ea6b8(char *a, char *b) {
                              random_float_between_alt(frame_time * 5.0f, frame_time * 30.0f));
         add_vector_xyz(v1, v1, v4);
     } else {
-        FUN_L00_00257d78(v1, frame_time * 0.0f, frame_time * 30.0f);
+        random_vector(v1, frame_time * 0.0f, frame_time * 30.0f);
     }
     add_vector_xyz(v1, v1, b + 0x70);
     r = FUN_L13_002c1f28_c(a, (char *)v0, (char *)v1);

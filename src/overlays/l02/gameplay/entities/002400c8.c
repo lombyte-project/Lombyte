@@ -84,8 +84,8 @@ extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001f9a10(void *, void *, void *);
 extern float FUN_001fa6c0(int);
-extern int FUN_L00_00257b90(int, int);
-extern float FUN_L00_00257c48(float, float);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
+extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 /* Dust puff emitter, declared in the argument order the other levels use (pos, three floats, n, vel, size, colour). */
@@ -113,13 +113,13 @@ void FUN_L02_002d3a50(void *moby, void *a, void *b, int n, float sa, float sb) {
     for (i = 0; i < n; i++) {
         FUN_001f9a68(pos, step, FUN_001fa6c0(i));
         FUN_001f9a10(pos, a, pos);
-        r = FUN_L00_00257b90(0x40, 0x70);
-        g = FUN_L00_00257b90(0x40, 0x7F);
+        r = random_int_between(0x40, 0x70);
+        g = random_int_between(0x40, 0x7F);
         color = g | (g << 16 | g << 8);
         scale = random_float_between_alt(1.0f, 1.02f);
-        spin = FUN_L00_00257b90(-2, 2);
-        vel[0] = FUN_L00_00257c48(0.0f, 0.0025f);
-        vel[1] = FUN_L00_00257c48(0.0f, 0.0025f);
+        spin = random_int_between(-2, 2);
+        vel[0] = randf_sym(0.0f, 0.0025f);
+        vel[1] = randf_sym(0.0f, 0.0025f);
         vel[2] = random_float_between_alt(D_L02_001619D4 * 0.1f, D_L02_001619D4);
         m = FUN_L00_0026d000(pos, D_L02_001619DC, 1.0f, scale, spin, vel, d + sa * 210000.0f, r << 24 | color);
         if (m) {
@@ -286,7 +286,7 @@ extern int inside_e50(void *, int) __asm__("FUN_00214720");
 extern int in_window_e50(void *, float) __asm__("FUN_00214cc8");
 extern int sound_e50(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_00257470_e50(void *, int, int) __asm__("FUN_L00_00257470");
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_00257d78_e50(void *, float, float) __asm__("FUN_L00_00257d78");
 extern void turn_e50(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
 extern void walk_e50(void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
@@ -778,9 +778,9 @@ void FUN_L02_002d3e50(struct Moby *moby) {
         FUN_L00_00257d78_e50(&v1, 0.0f, 0.2f);
         FUN_001f9a10(&v0, &v1, &moby->pos);
         FUN_001f9a68(&v1, &v1, D_0015ED6C * 5.0f);
-        life = scale_ticks_e50(FUN_L00_00257b90(0x14, 0x28));
+        life = scale_ticks_e50(random_int_between(0x14, 0x28));
         FUN_L00_00269958_e50(&moby->pos, &v1, D_L02_001619E4_e50, D_L02_001619E8_e50, life, 0x64,
-                             FUN_L00_00257b90(0x78, 0x96), 0);
+                             random_int_between(0x78, 0x96), 0);
     }
         /* fallthrough */
     case 13: {
@@ -1360,7 +1360,7 @@ extern float FUN_001f9b80(void *, void *);
 extern float approach_value_alt(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_00259028(char *m, char *p, float *pos, char *v);
 extern int FUN_L00_0025c698(void *, void *);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
@@ -1560,7 +1560,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             direction[2] = 0.0f;
             moby_point_position(moby, 0, position);
             FUN_L00_0026cbb0(position, direction, D_L02_00161A88, D_L02_00161A88,
-                              FUN_L00_00257b90(scale_game_frames(D_L02_00161A90), scale_game_frames(D_L02_00161A94)), 1, 40000.0f);
+                              random_int_between(scale_game_frames(D_L02_00161A90), scale_game_frames(D_L02_00161A94)), 1, 40000.0f);
         }
     case 10:
         triggered = 0;
@@ -2503,7 +2503,7 @@ extern void FUN_00214e58(void *, int, void *, void *, int, float);
 extern char *FUN_0020c4f8(int);
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 extern void FUN_0022da68_dc88(int, int, void *) __asm__("FUN_0022da68");
-extern void FUN_L00_00203908(int, int);
+extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_00233ee8(void *, int, float);
 extern int FUN_L00_00233f38();
@@ -2769,7 +2769,7 @@ void FUN_L02_002ddc88(unsigned char *moby) {
             if (lim < t) {
                 extern int D_0015ED84_dc88 __asm__("D_0015ED84") __attribute__((sda));
                 if (!(D_00141BAC & (1 << D_0015ED84_dc88))) {
-                    FUN_L00_00203908(0x7DD, 0x48);
+                    help_request(0x7DD, 0x48);
                 }
             }
             moby[0x20] = 0xD;
@@ -3298,7 +3298,7 @@ void FUN_L02_002e0138(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E16B8), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_0025c698(void *, void *);
 extern short D_L02_00161C9C_d __asm__("D_L02_00161C9C") __attribute__((sda));
 extern short D_L02_00161CA0_d __asm__("D_L02_00161CA0") __attribute__((sda));
@@ -3329,8 +3329,8 @@ void FUN_L02_002e0280(struct Moby *moby) {
             v[2] += random_float_between_alt(0.0f, 0.5f);
             v[0] += random_float_between_alt(-0.15f, 0.15f);
             v[1] += random_float_between_alt(-0.15f, 0.15f);
-            r = scale_game_frames(FUN_L00_00257b90(0x14, 0x28));
-            s = FUN_L00_00257b90(0x14, 0x28);
+            r = scale_game_frames(random_int_between(0x14, 0x28));
+            s = random_int_between(0x14, 0x28);
             FUN_L00_00269958(vp, u, *(int *)&D_L02_00161C9C_d, *(int *)&D_L02_00161CA0_d, r, 0x28,
                              s, 1);
             i--;
@@ -3360,7 +3360,7 @@ extern Colors0720 D_L02_00161CD0;
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 /* Spark emitter; the size float is declared before the int lifetime (same registers) so the calls
  * run in retail order: colour index, size, lifetime. */
@@ -3407,7 +3407,7 @@ void FUN_L02_002e0720(struct Moby *moby) {
                 FUN_001f9bf8(&dir, &dir, random_float_between_alt(1.5f, 3.5f) * D_0015ED6C);
                 FUN_L00_0026ced0(&pos, &dir, D_L02_00161CC4, D_L02_00161CC8,
                                  random_float_between_alt(1.5f, 3.5f) * 210000.0f,
-                                 scale_ticks(FUN_L00_00257b90(0x78, 0xF0)));
+                                 scale_ticks(random_int_between(0x78, 0xF0)));
             });
             for (j = 0; j < 50; j++) {
                 Colors0720 colors;
@@ -3428,7 +3428,7 @@ void FUN_L02_002e0720(struct Moby *moby) {
                 FUN_001f9a10(&pos, &pos, &moby->pos);
                 FUN_001f9bf8(&dir, &dir, random_float_between_alt(1.0f, 5.0f) * D_0015ED6C);
                 FUN_L01_002f8530(&pos, &dir, colors.c[random_integer_below(3)],
-                                 random_float_between_alt(0.05f, 0.15f), FUN_L00_00257b90(0x3C, 0xB4),
+                                 random_float_between_alt(0.05f, 0.15f), random_int_between(0x3C, 0xB4),
                                  1.0f, 1.0f, 0.75f, 0);
             }
             mark_moby_for_removal(moby);

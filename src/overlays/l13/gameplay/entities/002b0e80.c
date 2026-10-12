@@ -845,7 +845,7 @@ void FUN_L13_002b4c80(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B60D8), where it is exact; names translated to the US level program. */
 
 extern void * FUN_L13_00280400(void *, int, int, float, float, int, float, int);
-extern void FUN_L00_00267a08(void *);
+extern void kill_part(void *) __asm__("FUN_L00_00267a08");
 
 /* Per-frame glow effect: spawns it while the moby is active (byte 0x31 set), frees it otherwise. */
 void FUN_L13_002b4f28(struct Moby *moby, char *data) {
@@ -856,7 +856,7 @@ void FUN_L13_002b4f28(struct Moby *moby, char *data) {
             *handle = FUN_L13_00280400(moby, 0, 0x80808080, opacity, opacity, 0x10808080, 0.8f, 0x19);
         }
     } else if (*handle) {
-        FUN_L00_00267a08(*handle);
+        kill_part(*handle);
         *handle = 0;
     }
 }
@@ -872,12 +872,12 @@ typedef struct {
     void *value;
 } Level13VendorMoby;
 
-extern void FUN_L00_00267a08(void *);
+extern void kill_part(void *) __asm__("FUN_L00_00267a08");
 
 /* Passes the stored value to FUN_L00_00267a08 once, then clears it. */
 void FUN_L13_002b4fb8(Level13VendorMoby *moby) {
     if (moby->value != 0) {
-        FUN_L00_00267a08(moby->value);
+        kill_part(moby->value);
         moby->value = 0;
     }
 }
@@ -1860,7 +1860,7 @@ extern float FUN_L13_002ba088(int, int, float, float, float, float, float);
 extern float FUN_001f9af0(void *);
 extern void FUN_001fa030(void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_L13_00204dc8");
 extern float D_00141070_2b6140 __asm__("D_00141070") __attribute__((section(".data")));
@@ -2026,7 +2026,7 @@ void FUN_L13_002ba178(void *moby, void *obj) {
     m->rotation[0]=fast_add_rotations(d->angles[0],F(d,0x6C)*0.5f);
     m->rotation[1]=fast_add_rotations(d->angles[1],-F(d,0x70)*0.5f);
     m->rotation[2]=fast_add_rotations(d->angles[2],-F(d,0x6C)*0.0f);
-    if (FUN_L00_001f0d60(1.2f,m->position,0,m)) {
+    if (coll_sphere(1.2f,m->position,0,m)) {
         char *hit=P(D_L13_00174140,0x18);
         if (!hit || ((cls=H(hit,0xA6))!=0 && cls!=0x192 && cls!=0x4C2 && cls!=0x4C3 && cls!=0x52 && cls!=0x53)) {
             qcopy(m->position,D_L13_00174140+0x30);

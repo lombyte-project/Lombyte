@@ -224,7 +224,7 @@ extern int D_L15_0015F640;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L15_001621A0_d __asm__("D_L15_001621A0") __attribute__((sda));
 extern unsigned char D_0013D388_bd78[] __asm__("D_0013D388");
-extern void FUN_L00_00263d40(int arg0, int arg1);
+extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_00298840(int);
 extern void FUN_L02_002ea7d0(char *);
 extern void FUN_L02_002ea8b0(char *);
@@ -260,7 +260,7 @@ void FUN_L15_002ebd78(struct Moby *moby) {
             break;
         case 2:
             if (D_L15_0015F5C4 != 2) {
-                FUN_L00_00263d40(0x426A, -1);
+                queue_dialogue_message(0x426A, -1);
                 D_L15_0015F640 = scale_game_frames(0xB4);
                 p = D_0013D388_bd78;
                 p[2] = 1;

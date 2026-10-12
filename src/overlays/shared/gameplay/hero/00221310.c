@@ -16,7 +16,7 @@ extern s32 FUN_L00_0025e3b8(s32);
 extern void FUN_L00_00233660(Vec4 *, f32, f32, f32);
 extern int collision_line(void *from, void *to, int mask, void *ignore, int) __asm__("FUN_001efa68");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern s32 FUN_L00_001f0d60(f32, Vec4 *, s32, s32);
+extern s32 coll_sphere(f32, Vec4 *, s32, s32) __asm__("FUN_L00_001f0d60");
 
 void FUN_L00_00221310(void) {
     Vec4 first;
@@ -68,7 +68,7 @@ void FUN_L00_00221310(void) {
                which gives retail's two mov.s before the loop. */
             for (off = -0.4f; off < 0.5f; off += 0.1f) {
                 FUN_L00_00233660(&probe, off + 1.1f, 0.0f, 0.0f);
-                if (!FUN_L00_001f0d60(hero.unk234, &probe, 2, 0)) {
+                if (!coll_sphere(hero.unk234, &probe, 2, 0)) {
                     hero.unk260 = 1;
                     if (hit == 0) {
                         hero.unk258 = 20.0f;
@@ -339,14 +339,14 @@ int FUN_L00_00221d98(void) {
     return r;
 }
 extern char D_0013F350[];
-void FUN_L00_002118c8(int, float);
+void stick_target(int, float) __asm__("FUN_L00_002118c8");
 float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 int stick_direction_vs_facing(void) {
     int r = 2;
     float a;
-    FUN_L00_002118c8(0, 1.0f);
+    stick_target(0, 1.0f);
     {
         struct Hero *g = &hero;
         a = fast_subtract_rotations(g->motion.move_yaw, g->motion.rot.f[2]);
@@ -601,7 +601,7 @@ extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0020d658(int back);
 extern float FUN_L00_002339d0(float *v);
-extern float FUN_L00_00257c48(float lo, float hi);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float dot_vectors_xyz(void *a, void *b);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
@@ -618,7 +618,7 @@ extern int FUN_L00_00211360(char *);
 extern int FUN_L00_00216de8(int, int);
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int FUN_L00_00229a98(void);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -635,7 +635,7 @@ extern void FUN_L00_0020a500(void);
 extern void FUN_L00_0020b930(void);
 extern void FUN_L00_0020e360(int a, int b);
 extern void FUN_L00_0020e698(void);
-extern void FUN_L00_002118c8(int, float);
+extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern void FUN_L00_00213de8(float);
 extern void FUN_L00_00214ed8(float a, float b, float c);
 extern void FUN_L00_00216ec0(int, int, int);
@@ -724,7 +724,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
-        p->unk1010 = FUN_L00_00257b90(scale_game_frames(0x32), scale_game_frames(0x64));
+        p->unk1010 = random_int_between(scale_game_frames(0x32), scale_game_frames(0x64));
         FUN_L00_0020a500();
         if (p->vehicle_mode != 0) {
             FUN_L00_00227638();
@@ -1118,7 +1118,7 @@ int hero_set_state(int a, int b) {
             if (frame_time * 7.0f < q->ground_speed)
                 q->ground_speed = frame_time * 7.0f;
             q->unk3BE = 0;
-            FUN_L00_002118c8(0, 1.0f);
+            stick_target(0, 1.0f);
             if (1.5707964f <
                 fast_difference_between_rotations(q->motion.rot.f[2], q->motion.move_yaw)) {
                 if (q->state.prev_control_mode == 7 || q->state.prev == 3 ||
@@ -1581,9 +1581,9 @@ int hero_set_state(int a, int b) {
                 p->health.unk22B2 = FUN_L00_00216de8(0x17, 0x20);
             }
             p->unk950 =
-                FUN_L00_00257c48(frame_time * 3.1415927f, frame_time * 4.3633232f);
+                randf_sym(frame_time * 3.1415927f, frame_time * 4.3633232f);
             p->unk954 =
-                FUN_L00_00257c48(frame_time * 3.1415927f, frame_time * 4.3633232f);
+                randf_sym(frame_time * 3.1415927f, frame_time * 4.3633232f);
         }
         {
             struct Hero *q = &hero;

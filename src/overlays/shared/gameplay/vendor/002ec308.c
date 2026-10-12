@@ -110,7 +110,7 @@ extern short D_L02_00161F74 __attribute__((sda));
 extern short D_L02_00161F78 __attribute__((sda));
 extern unsigned char D_0013D408[];
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L02_002eca30_c(char *m, void *arg1) __asm__("FUN_L02_002eca30");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void delete_moby(void *) __asm__("func_0020C828");
@@ -204,7 +204,7 @@ void FUN_L02_002ec4b8(char *moby) {
                 if (p[2] == 0) {
                     p[2] = 1;
                     allocate_voice_for_bank_entry(1, 0, 0);
-                    FUN_L00_00263d40(0x53D6, -1);
+                    queue_dialogue_message(0x53D6, -1);
                 }
             }
         }
@@ -216,7 +216,7 @@ void FUN_L02_002ec4b8(char *moby) {
                     if (p[0xF] == 0) {
                         p[0xF] = 1;
                         allocate_voice_for_bank_entry(1, 0, 0);
-                        FUN_L00_00263d40(0x53D6, -1);
+                        queue_dialogue_message(0x53D6, -1);
                     }
                 }
             }
@@ -279,7 +279,7 @@ extern short D_L02_00161FBC __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_L00_00257d78(float *, float, float);
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L02_002eca30(char *m, void *arg1) {
@@ -292,7 +292,7 @@ void FUN_L02_002eca30(char *m, void *arg1) {
         moby_point_position(m, i, v50);
         FUN_001f9a68(v10, v30, *(float *)&D_L02_00161F84);
         FUN_001f9a68(v20, v30, *(float *)&D_L02_00161F88);
-        FUN_L00_00257d78(v40, 0.0f, *(float *)&D_L02_00161F8C * frame_time);
+        random_vector(v40, 0.0f, *(float *)&D_L02_00161F8C * frame_time);
         FUN_001f9a10(v20, v20, v40);
         v10[3] = random_float_between(*(float *)&D_L02_00161FA0, *(float *)&D_L02_00161FA4);
         v20[3] = random_float_between(*(float *)&D_L02_00161FA8, *(float *)&D_L02_00161FAC);
@@ -468,7 +468,7 @@ void FUN_L02_002ece18(char *moby) {
                 if (p[2] == 0) {
                     p[2] = 1;
                     allocate_voice_for_bank_entry(1, 0, 0);
-                    FUN_L00_00263d40(0x53D6, -1);
+                    queue_dialogue_message(0x53D6, -1);
                 }
             }
         }
@@ -480,7 +480,7 @@ void FUN_L02_002ece18(char *moby) {
                     if (p[0xF] == 0) {
                         p[0xF] = 1;
                         allocate_voice_for_bank_entry(1, 0, 0);
-                        FUN_L00_00263d40(0x53D6, -1);
+                        queue_dialogue_message(0x53D6, -1);
                     }
                 }
             }
@@ -545,7 +545,7 @@ void FUN_L02_002ed420(char *m, void *arg1) {
         moby_point_position(m, i, v50);
         FUN_001f9a68(v10, v30, *(float *)&D_L02_00161FD8);
         FUN_001f9a68(v20, v30, *(float *)&D_L02_00161FDC);
-        FUN_L00_00257d78(v40, 0.0f, *(float *)&D_L02_00161FE0 * frame_time);
+        random_vector(v40, 0.0f, *(float *)&D_L02_00161FE0 * frame_time);
         FUN_001f9a10(v20, v20, v40);
         v10[3] = random_float_between(*(float *)&D_L02_00161FF4, *(float *)&D_L02_00161FF8);
         v20[3] = random_float_between(*(float *)&D_L02_00161FFC, *(float *)&D_L02_00162000);
@@ -589,7 +589,7 @@ void FUN_L02_002ed658(char *m, void *arg1) {
         moby_point_position(m, i, v50);
         FUN_001f9a68(v10, v30, *(float *)&D_L02_00162014);
         FUN_001f9a68(v20, v30, *(float *)&D_L02_00162018);
-        FUN_L00_00257d78(v40, 0.0f, *(float *)&D_L02_0016201C * frame_time);
+        random_vector(v40, 0.0f, *(float *)&D_L02_0016201C * frame_time);
         FUN_001f9a10(v20, v20, v40);
         v10[3] =
             random_float_between(*(float *)&D_L02_00161FF4, *(float *)&D_L02_00161FF8) / 1.5f;

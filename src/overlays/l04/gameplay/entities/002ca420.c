@@ -1097,7 +1097,7 @@ extern void FUN_L00_002d6bf0(struct Moby *);
 extern void remove_moby_2e1a10(struct Moby *) __asm__("FUN_0020c828");
 extern void FUN_L04_002e1d00_m(struct Moby *) __asm__("FUN_L04_002e1d00");
 extern void FUN_L00_00298840(int);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_00260860(int, int);
 extern void FUN_L00_00284e50(void *, void *);
 extern void FUN_001e93b0(char *, int);
@@ -1134,9 +1134,9 @@ void FUN_L04_002e1a10(struct Moby *moby) {
         if (D_L04_0015F5C4 == 2)
             break;
         if (!D_0013D4C9[0])
-            FUN_L00_00263d40(0xFA7, -1);
+            queue_dialogue_message(0xFA7, -1);
         else
-            FUN_L00_00263d40(0x53DF, -1);
+            queue_dialogue_message(0x53DF, -1);
         D_L04_0015F640 = 0xB4;
         FUN_L00_00260860(9, 1);
         if (vars->exitMoby != -1) {

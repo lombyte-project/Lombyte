@@ -9,7 +9,7 @@
 #include "rnc/overlay/collision.h"
 
 extern CollisionHit coll_hit __asm__("D_L15_00174440") __attribute__((section(".data")));
-extern int FUN_L00_001f0d60(void *, float, int, void *);
+extern int coll_sphere(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern f32 FUN_001f9b20(void *);
@@ -29,7 +29,7 @@ int FUN_L15_00247e90(struct Moby *obj, u128 *delta, int flags, float step, float
         mask = (flags << 1) & 0x20;
         qcopy(&probe, &obj->pos);
         probe.f[2] += step;
-        if (FUN_L00_001f0d60(&probe, radius, mask | 4, obj) == 0) {
+        if (coll_sphere(&probe, radius, mask | 4, obj) == 0) {
             break;
         }
         if (FUN_001f9e90(coll_hit.normal_z, FUN_001f9b20(&coll_hit.normal_x)) > 0.5235988f) {

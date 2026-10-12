@@ -11,13 +11,13 @@
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L13_001B2490_x __asm__("D_L13_001B2490") __attribute__((section(".data")));
-extern unsigned char *FUN_L00_002678b8(int);
+extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 unsigned char *FUN_L13_00280400(char *moby, unsigned char a, int b, int c, unsigned char d, float x,
                                 float y, float z) {
-    unsigned char *e = FUN_L00_002678b8(0x44);
+    unsigned char *e = create_part(0x44);
     if (e != 0) {
         char *p;
         int v;

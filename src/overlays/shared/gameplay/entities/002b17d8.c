@@ -921,7 +921,7 @@ extern s32 FUN_001f96f8(s32);
 extern s32 random_integer_below_de670(s32) __asm__("FUN_00213260");
 extern s32 FUN_L00_00257b90(s32, s32);
 extern f32 random_float_between_de670(f32, f32) __asm__("FUN_002132a8");
-extern s32 FUN_L00_001f0d60(f32, void *, s32, void *);
+extern s32 coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_0025e450(void *, void *, void *, f32, f32, s32, s32, s32,
                               f32, f32, f32, f32, s32, f32, s32, s32, s32, s32);
 extern void FUN_L00_0026cbb0_de670(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
@@ -966,13 +966,13 @@ void FUN_L14_002de670(struct Moby *moby) {
         if (FUN_001f9740(velocity + 8) != 0) {
             goto effect;
         }
-        if (FUN_L00_001f0d60(0.5f, position, 0, *(void **)(velocity + 9)) == 0) {
+        if (coll_sphere(0.5f, position, 0, *(void **)(velocity + 9)) == 0) {
             goto particles;
         }
 effect:
         FUN_L00_0025e450(moby, velocity, position, 0.0f, 0.0f, 5, 2, 4,
                             1.0f, 0.5f, 9.0f, 1.0f, 0, 15.0f, 1, 5, -1, 0);
-        FUN_L00_001f0d60(1.0f, position, 0, (void *)D_001413D0);
+        coll_sphere(1.0f, position, 0, (void *)D_001413D0);
     }
     FUN_0020c828(moby);
     return;
@@ -1060,7 +1060,7 @@ extern s32 FUN_001f9740(void *);
 extern f32 FUN_001f99c0(f32);
 extern void FUN_001f9a10(void *, void *, void *);
 extern f32 fast_add_rotations(f32, f32);
-extern s32 FUN_L00_001f0d60(f32, void *, s32, void *);
+extern s32 coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_0025e450(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32, s32);
 extern void FUN_0020c828(struct Moby *);
 extern int random_integer_below_de670(int) __asm__("FUN_00213260");
@@ -1127,7 +1127,7 @@ void FUN_L14_002dfd10(struct Moby *moby) {
             normalize_vector_xyz(vec, &moby->unkE0, 0.51999998f);
             FUN_001f9a10(pos, position, vec);
             if (FUN_001f9740(data + 4) == 0) {
-                if (FUN_L00_001f0d60(0.5f, pos, 0, *(void **)data) == 0) {
+                if (coll_sphere(0.5f, pos, 0, *(void **)data) == 0) {
                     goto random_check;
                 }
             }
@@ -1135,7 +1135,7 @@ void FUN_L14_002dfd10(struct Moby *moby) {
             FUN_L00_0028dc90(0, 0, moby, *(short *)(*(char **)data + 0xa6));
             FUN_L00_0025e450(moby, velocity, position, zero, zero, 5, 2, 4,
                                 one, 0.5f, 9.0f, one, -1, 15.0f, 0, 3, -1, 0);
-            FUN_L00_001f0d60(one, position, 0, (void *)D_001413D0);
+            coll_sphere(one, position, 0, (void *)D_001413D0);
         }
     }
     FUN_0020c828(moby);

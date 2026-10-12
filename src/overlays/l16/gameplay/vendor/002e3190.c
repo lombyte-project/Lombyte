@@ -79,7 +79,7 @@ extern float fast_subtract_rotations(float, float);
 extern float truncate_float_to_s32_cf(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
-extern int FUN_L00_00203908(int, int);
+extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern int FUN_L00_00266448(void *, void *);
 extern int FUN_L00_002668a0(void *, void *);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
@@ -132,7 +132,7 @@ void FUN_L16_002e3190(L16WatchMoby *m) {
             char *player;
             m->state = 1;
             FUN_L00_00216f90(D_L16_001D96C0, D_L16_001D96C0 + 4, 0, 1);
-            FUN_L00_00203908(0x3E82, 0x84);
+            help_request(0x3E82, 0x84);
             FUN_L00_00260860(0x21, 1);
             FUN_L00_002502a0(m->widget);
             player = (char *)&D_0013E633_watch + 0xE9D;
@@ -1417,7 +1417,7 @@ extern volatile int D_0015EE6C_p __asm__("D_0015EE6C");
 extern int D_L16_0015F5CC;
 extern float D_L16_0015F638;
 extern int D_0015EEA4;
-extern int FUN_L00_00203908(int, int);
+extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern int FUN_L00_00266448(void *, void *);
 extern int FUN_L00_002668a0(void *, void *);
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
@@ -1485,7 +1485,7 @@ void FUN_L16_002e6808(L16ChallengeMoby *m) {
             elapsed -= *(unsigned short *)(statistics + 0x43A) * period;
             if (elapsed > (int)((float)scale_game_frames(18) * 60.0f) ||
                 *(unsigned short *)(statistics + 0x43A) * period == 0) {
-                FUN_L00_00203908(0x3E83, 0x87);
+                help_request(0x3E83, 0x87);
             } else if (scale_game_frames(D_0015EEA4) / 600 >
                        *(unsigned short *)(statistics + 0x43A)) {
                 *(unsigned short *)(statistics + 0x43A) = scale_game_frames(D_0015EEA4) / 600;
@@ -2370,7 +2370,7 @@ extern char *D_L16_0015FFD8;
 char *FUN_L16_002e8b08(int idx);
 extern int FUN_001f96f8(int);
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L16_002e0e28(void *);
 extern void FUN_L16_002c44f0(void *, void *);
 extern void FUN_L16_002e0de0(void *);
@@ -2389,7 +2389,7 @@ void FUN_L16_002e8970(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         moby->state = 1;
-        *(int *)(data + 0xC) = FUN_001f96f8(FUN_L00_00257b90(0xB4, 0x168));
+        *(int *)(data + 0xC) = FUN_001f96f8(random_int_between(0xB4, 0x168));
         break;
     case 1:
         if (FUN_001f9b80(g, target + 0x10) > 3.0f) {
@@ -2397,7 +2397,7 @@ void FUN_L16_002e8970(struct Moby *moby) {
                 if (FUN_001f9740_c(data + 0xC)) {
                     moby->state = 2;
                     FUN_L16_002e0de0(target);
-                    *(int *)(data + 0xC) = FUN_001f96f8(FUN_L00_00257b90(0xB4, 0x168));
+                    *(int *)(data + 0xC) = FUN_001f96f8(random_int_between(0xB4, 0x168));
                 }
             }
         }

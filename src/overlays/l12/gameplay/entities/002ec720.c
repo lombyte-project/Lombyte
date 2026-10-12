@@ -233,8 +233,8 @@ extern char D_00141968_h[] __asm__("D_00141968");
 extern int FUN_L01_0026e008(int, int);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern void FUN_L00_00203908(int, int);
-extern void FUN_L00_00263d40(int, int);
+extern void help_request(int, int) __asm__("FUN_L00_00203908");
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry_alt(int, int, int) __asm__("FUN_0022db10");
 extern unsigned char D_0013D50F_e[] __asm__("D_0013D408");
 
@@ -245,7 +245,7 @@ void FUN_L12_002ed280(struct Moby *m) {
         if (s[0x14] == 0) {
             s[0x14] = 1;
             allocate_voice_for_bank_entry_alt(1, 0, 0);
-            FUN_L00_00263d40(0x53D6, -1);
+            queue_dialogue_message(0x53D6, -1);
         }
     }
     {
@@ -260,7 +260,7 @@ void FUN_L12_002ed280(struct Moby *m) {
             }
             *(unsigned int *)(h + 0x36C) = *(unsigned int *)(h + 0x36C) | (1 << current_level_index) | 0x80000000;
             if (is_point_inside_clip_volume(&q->motion.pos, d[0])) {
-                FUN_L00_00203908(0x2EE3, 0x6D);
+                help_request(0x2EE3, 0x6D);
             }
         }
     }
@@ -293,7 +293,7 @@ void FUN_L12_002ed280(struct Moby *m) {
                     int b = scale_game_frames_c(0x708);
                     char *k = D_00141968_h;
                     if (*(unsigned short *)(k + 0x370) * a + b < d[1]) {
-                        FUN_L00_00203908(0x2EE4, 0x6E);
+                        help_request(0x2EE4, 0x6E);
                     }
                 }
             }
@@ -302,7 +302,7 @@ void FUN_L12_002ed280(struct Moby *m) {
     if (D_0013D408_b[0xBC] != 0) {
         char *k = D_00141968_h;
         if (*(unsigned short *)(k + 0x1F0) == 0) {
-            FUN_L00_00203908(0x2EE0, 0x3E);
+            help_request(0x2EE0, 0x3E);
         }
     }
 }

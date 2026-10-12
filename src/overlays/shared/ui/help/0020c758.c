@@ -1711,7 +1711,7 @@ extern ItemDef item_defs[] __asm__("D_L00_00179AC0");
 extern int FUN_001f9770(void *);
 extern int FUN_L00_0020d568_c() __asm__("FUN_L00_0020d568");
 extern int FUN_L00_00216de8(int, int);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0020a500(void);
 extern void FUN_L00_0020e698_c(void) __asm__("FUN_L00_0020e698");
 extern void FUN_L00_002cdcc0(void);
@@ -1984,7 +1984,7 @@ void hero_switch_item(int i) {
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
         FUN_L00_0020a500();
         g->unk1010 =
-            FUN_L00_00257b90(scale_game_frames(0x32), scale_game_frames(0x5A));
+            random_int_between(scale_game_frames(0x32), scale_game_frames(0x5A));
         FUN_L00_0020fde0_c(*(hero.selected_item + i));
         FUN_L00_0020fd80_c(*(hero.selected_item + i));
         if (g->unk20A8 != 0) {
@@ -2652,7 +2652,8 @@ extern int FUN_001fa6d0_2118c8(float) __asm__("FUN_001fa6d0");
 extern float FUN_001fa6c0_2118c8(int) __asm__("FUN_001fa6c0");
 extern float FUN_001fa580_2118c8(float, float) __asm__("FUN_001fa580");
 
-void FUN_L00_002118c8(float scale, int mode) {
+void stick_target(float scale, int mode) __asm__("FUN_L00_002118c8");
+void stick_target(float scale, int mode) {
     V_2118c8 v;
     V_2118c8 q;
     float x;
@@ -2718,7 +2719,7 @@ extern float D_L00_0017BDB8[];
 
 /* Hero speed clamp after a move update (twin of FUN_L01_00232290): in state 0x3F it scales unk190 by 3.5 frame steps with a floor; otherwise it picks a table speed, and in state 0x73 it slows by 0.8 down to a floor. */
 void FUN_L00_00211be8(void) {
-    FUN_L00_002118c8(1.0f, 0);
+    stick_target(1.0f, 0);
     if (hero.state.current == 0x3F) {
         float min = frame_time + frame_time;
         hero.target_speed = frame_time * 3.5f * hero.target_speed;
@@ -2851,7 +2852,8 @@ void FUN_L00_00211f38(void) {
 }
 void FUN_00213ed8_00212088(f32 *, f32, f32) __asm__("FUN_00213ed8");
 /* Approaches field b toward a, at rate x while below it and y otherwise. */
-void FUN_L00_00212088(f32 x, f32 y) {
+void speed_step(f32 x, f32 y) __asm__("FUN_L00_00212088");
+void speed_step(f32 x, f32 y) {
     struct Hero *p = &hero;
     if (p->ground_speed < p->target_speed)
         FUN_00213ed8_00212088(&p->ground_speed, p->target_speed, x);
@@ -2872,7 +2874,8 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void func_00215C00(void *, float, float, float) __asm__("FUN_00214db0");
 
-void FUN_L00_002120d8(float radians) {
+void set_planar_vel(float radians) __asm__("FUN_L00_002120d8");
+void set_planar_vel(float radians) {
     struct Hero *g = &hero;
     float y;
     float r;
@@ -3069,7 +3072,7 @@ extern f32 D_L00_00173E68 __attribute__((section(".data")));
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void FUN_L00_002126b8_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
 s32 FUN_001efa68(void *, void *, s32, void *, s32);
-s32 FUN_L00_001f3608(void);
+s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 FUN_001f0b58(void);
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 FUN_L00_0025e3b8(s32);
@@ -3126,7 +3129,7 @@ void FUN_L00_002127b8(void) {
     if (FUN_001efa68(&v10, &v0, 2, hero.moby, 0) == 0) {
         goto tail;
     }
-    r = FUN_L00_001f3608();
+    r = coll_sound_class();
     if (r == -1) {
         r = 3;
     }
@@ -3140,7 +3143,7 @@ void FUN_L00_002127b8(void) {
         if (FUN_001efa68(&v10, &v0, 0x24, hero.moby, 0) == 0) {
             goto d1;
         }
-        r = FUN_L00_001f3608();
+        r = coll_sound_class();
         if (current_level_index == 1 || current_level_index == 0x12) {
             r = 3;
         }

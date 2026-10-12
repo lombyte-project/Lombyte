@@ -1468,7 +1468,7 @@ extern float wrap_angle(float);
 extern int FUN_001f9770(void *);
 extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern int FUN_L00_001fefc8(void *);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
@@ -2071,7 +2071,7 @@ void FUN_L04_002c2270(M_35F0 *moby) {
             FUN_L00_0026ced0(
                 a, b, alt ? 0x400F0F7F : 0x407F7F7F, 0x272727,
                 random_float_between(75000.0f, 100000.0f),
-                scale_game_frames(alt ? FUN_L00_00257b90(10, 15) : FUN_L00_00257b90(20, 30)));
+                scale_game_frames(alt ? random_int_between(10, 15) : random_int_between(20, 30)));
         }
     }
     FUN_L00_0025d538(moby, data->fB0);
@@ -2098,8 +2098,8 @@ typedef struct {
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern f32 FUN_L00_00257c48(f32, f32);
-extern int FUN_L00_00257b90(int, int);
+extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
@@ -2133,20 +2133,20 @@ void FUN_L04_002c41e0(void *owner, void *from, void *to, int count, float a, flo
     for (i = 0; i < count; i++) {
         scale_vector_xyz(&at, &step, convert_integer_to_float(i));
         add_vector_xyz(&at, from, &at);
-        vel.f[0] = FUN_L00_00257c48(0.0f, 0.005f);
-        vel.f[1] = FUN_L00_00257c48(0.0f, 0.005f);
+        vel.f[0] = randf_sym(0.0f, 0.005f);
+        vel.f[1] = randf_sym(0.0f, 0.005f);
         vel.f[2] = random_float_between(D_L04_001618B4 * 0.1f, D_L04_001618B4);
-        tint = FUN_L00_00257b90(0x40, 0x70);
-        grey = FUN_L00_00257b90(0x40, 0x7F);
+        tint = random_int_between(0x40, 0x70);
+        grey = random_int_between(0x40, 0x7F);
         grey = grey | (grey << 16 | grey << 8);
         size = random_float_between(1.0f, 1.02f);
-        spin = FUN_L00_00257b90(-2, 2);
+        spin = random_int_between(-2, 2);
         puff = spawn_puff(&at, D_L04_001618BC, 1.0f, size, spin, &vel, grow + a * 210000.0f, tint << 24 | grey);
         if (puff != NULL) {
             tail = &puff->tail;
             if (random_integer_below(2) != 0) {
                 puff->alpha = 0x7E;
-                grey = FUN_L00_00257b90(0x60, 0xE0);
+                grey = random_int_between(0x60, 0xE0);
                 grey = grey | (grey << 16 | grey << 8);
                 puff->color = tint << 24 | grey;
             }
@@ -2160,13 +2160,13 @@ void FUN_L04_002c41e0(void *owner, void *from, void *to, int count, float a, flo
     vel.f[1] = fast_sin(random_angle_radians()) * 0.05f;
     vel.f[2] = 0.0f;
     vel.f[2] = random_float_between(0.01f, 0.03f);
-    spawn_burst(from, &vel, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1,
+    spawn_burst(from, &vel, 0x4F007FFF, 0x1FFFFFFF, random_int_between(scale_game_frames(10), scale_game_frames(20)), 1,
                 10000.0f);
     vel.f[0] = fast_cos(random_angle_radians()) * 0.05f;
     vel.f[1] = fast_sin(random_angle_radians()) * 0.05f;
     vel.f[2] = 0.0f;
     vel.f[2] = random_float_between(0.01f, 0.03f);
-    spawn_burst(to, &vel, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1,
+    spawn_burst(to, &vel, 0x4F007FFF, 0x1FFFFFFF, random_int_between(scale_game_frames(10), scale_game_frames(20)), 1,
                 20000.0f);
 }
 #include "qcopy.h"

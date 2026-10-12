@@ -88,7 +88,7 @@ extern float FUN_001fa6c0(int);
 extern int FUN_001f96f8(int);
 extern int FUN_001fa6d0(float);
 extern int FUN_001efa68(void *, void *, int, void *, void *);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float FUN_002132a8(float, float);
 extern int FUN_L00_002712b8(float, float, float, float, float, void *, int, int, int, int, int);
 extern void FUN_L00_00259888(void *, struct Moby *, int, void *, float);
@@ -200,7 +200,7 @@ void FUN_L13_00305a58(struct Moby *moby) {
             FUN_001f9bf8(&work.random_direction, &work.random_direction,
                 FUN_002132a8(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
             FUN_L00_0026dd20(&moby->pos, &work.random_direction, 0x7f2f4f6f,
-                FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(15)), 30000.0f);
+                random_int_between(FUN_001f96f8(10), FUN_001f96f8(15)), 30000.0f);
         }
     }
     target = *(struct Moby **)0x174158;
@@ -307,7 +307,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_00259888(void *, struct Moby *, int, void *, float);
 extern void FUN_L00_00259a88(void *, void *);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
@@ -439,7 +439,7 @@ collision:
             scale_vector_xyz_6300(&work.velocity, &work.velocity,
                 random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
             FUN_L00_0026dd20(&moby->pos, &work.velocity, 0x7f2f4f6f,
-                FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(15)), 30000.0f);
+                random_int_between(scale_game_frames(10), scale_game_frames(15)), 30000.0f);
         }
     }
     if (*(struct Moby **)0x174158 != 0 &&
@@ -1485,7 +1485,7 @@ void FUN_L13_0030c060(struct Moby *moby) {
 
 extern char *func_0020D348_m(int);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_002502f0(void *, int, int, int);
 extern void FUN_L00_00250df8(void *);
 
@@ -1498,7 +1498,7 @@ char *FUN_L13_0030c138(void *a, void *b, int c, int d) {
         m[0x30] = 0xFF;
         *(short *)(m + 0x32) = 0xFF;
         m[0x31] = 1;
-        m[0x23] = FUN_L00_00257b90(0x40, 0x80);
+        m[0x23] = random_int_between(0x40, 0x80);
         FUN_L00_002502f0(m, 0x20, 0x60, 0x10);
         qcopy(m + 0x10, a);
         qcopy(data, b);
@@ -1665,7 +1665,7 @@ extern void FUN_L00_0025d458(void *, void *);
 extern void FUN_L00_0025d538(void *, void *);
 extern int FUN_L01_0026e008(int, int);
 extern void FUN_0022db10(int, int, int);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_0022da68(int, int, void *);
 extern void FUN_L01_002787a0(void *);
 extern void FUN_L00_0025f8e0(void *, float);
@@ -1712,7 +1712,7 @@ void FUN_L13_0030cdb8(struct Moby *moby) {
         if (moby->group != 0xff && FUN_L01_0026e008(moby->group, -1) == 1 && D_0013D408[0x16] == 0) {
             D_0013D408[0x16] = 1;
             FUN_0022db10(1, 0, 0);
-            FUN_L00_00263d40(0x53d6, -1);
+            queue_dialogue_message(0x53d6, -1);
         }
         FUN_0022da68(0, 0, moby);
         FUN_L01_002787a0(moby);

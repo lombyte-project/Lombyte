@@ -413,7 +413,7 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
-extern s32 FUN_L00_001f0d60(f32, void *, s32, struct Moby *);
+extern s32 coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_001fefc8(void *);
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_00259fe8(struct Moby *, f32);
@@ -473,7 +473,7 @@ void FUN_L09_0030b3b0(struct Moby *moby) {
             add_vector_xyz(&moby->pos, &moby->pos, &step);
             bubble_bounce(moby, vars);
         }
-        if (FUN_L00_001f0d60(0.2f, &moby->pos, 4, moby) != 0) {
+        if (coll_sphere(0.2f, &moby->pos, 4, moby) != 0) {
             subtract_vector_xyz(&step, &D_L09_00173FC0.point, D_L09_00173FC0.pad30);
             normalize_vector_xyz(&step, &step, 0.015f);
             add_vector_xyz(&moby->pos, D_L09_00173FC0.pad30, &step);

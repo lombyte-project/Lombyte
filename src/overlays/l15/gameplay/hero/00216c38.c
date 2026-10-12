@@ -32,7 +32,7 @@ extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0020d658(int back);
 extern float FUN_L00_002339d0(float *v);
-extern float FUN_L00_00257c48(float lo, float hi);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");
@@ -46,7 +46,7 @@ extern int FUN_L00_00211360(char *);
 extern int FUN_L00_00216de8(int, int);
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int FUN_L00_00229a98(void);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L06_0021d0a0(int a);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -63,7 +63,7 @@ extern void FUN_L00_0020a500(void);
 extern void FUN_L00_0020b930(void);
 extern void FUN_L00_0020e360(int a, int b);
 extern void FUN_L00_0020e698(void);
-extern void FUN_L00_002118c8(float, int);
+extern void stick_target(float, int) __asm__("FUN_L00_002118c8");
 extern void FUN_L00_00213de8(float);
 extern void FUN_L00_00214ed8(float a, float b, float c);
 extern void FUN_L00_00216ec0(int, int, int);
@@ -142,7 +142,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
-        p->unk1010 = FUN_L00_00257b90(scale_game_frames(0x32), scale_game_frames(0x64));
+        p->unk1010 = random_int_between(scale_game_frames(0x32), scale_game_frames(0x64));
         FUN_L00_0020a500();
         if (p->vehicle_mode != 0) {
             FUN_L15_0021ab60();
@@ -481,7 +481,7 @@ int hero_set_state(int a, int b) {
             if (frame_time * 7.0f < q->ground_speed)
                 q->ground_speed = frame_time * 7.0f;
             q->unk3BE = 0;
-            FUN_L00_002118c8(1.0f, 0);
+            stick_target(1.0f, 0);
             if (1.5707964f <
                 fast_difference_between_rotations(q->motion.rot.f[2], q->motion.move_yaw)) {
                 if (q->state.prev_control_mode == 7 || q->state.prev == 3 ||
@@ -836,9 +836,9 @@ int hero_set_state(int a, int b) {
                 p->health.unk22B2 = FUN_L00_00216de8(0x17, 0x20);
             }
             p->unk950 =
-                FUN_L00_00257c48(frame_time * 3.1415927f, frame_time * 4.3633232f);
+                randf_sym(frame_time * 3.1415927f, frame_time * 4.3633232f);
             p->unk954 =
-                FUN_L00_00257c48(frame_time * 3.1415927f, frame_time * 4.3633232f);
+                randf_sym(frame_time * 3.1415927f, frame_time * 4.3633232f);
         }
         {
             struct Hero *q = &hero;

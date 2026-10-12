@@ -9,8 +9,8 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/initonce_00252E80.c: func_L01_00252E80), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_002892d0(void);
-extern void FUN_L00_00289420(void);
+extern void update_sky_shells_static(void) __asm__("FUN_L00_002892d0");
+extern void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
 void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
@@ -18,9 +18,9 @@ void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 void FUN_L01_00252570(void) {
     setup_sky_gif_paging();
     if (current_level_index == 1) {
-        FUN_L00_00289420();
+        update_sky_shells_animated();
     } else {
-        FUN_L00_002892d0();
+        update_sky_shells_static();
     }
     do_sky_gif_paging();
     vu1_add_g_sregister(0x47, 0x5360B);

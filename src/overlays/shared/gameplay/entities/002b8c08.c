@@ -429,7 +429,7 @@ extern float D_L01_001742C0[];
 extern float FUN_001f9b20(void *);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f9e90(float, float);
-extern float FUN_L00_00257c48(float, float);
+extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f96f8(int);
 extern int FUN_L00_00257b90(int, int);
@@ -449,8 +449,8 @@ void FUN_L01_002c72c8(void) {
     FUN_001f9e90(v[0], v[1]);
     for (i = 19; i >= 0; i--) {
         float x, y;
-        x = fast_add_rotations(FUN_L00_00257c48(0.0f, 3.1415927f), a);
-        y = fast_add_rotations(FUN_L00_00257c48(0.0f, 3.1415927f), a);
+        x = fast_add_rotations(randf_sym(0.0f, 3.1415927f), a);
+        y = fast_add_rotations(randf_sym(0.0f, 3.1415927f), a);
         build_spherical_offset(v, 0.2f, y, x);
         FUN_001f9a68(p, v, random_float_between_alt(1.0f, 3.0f));
         FUN_001f9a10(p, p, D_L01_001742E0);
@@ -458,11 +458,11 @@ void FUN_L01_002c72c8(void) {
     }
     for (i = 9; i >= 0; i--) {
         float x, y;
-        p[0] = D_L01_001742C0[8] + FUN_L00_00257c48(0.0f, 0.1f);
-        p[1] = D_L01_001742C0[9] + FUN_L00_00257c48(0.0f, 0.1f);
-        p[2] = D_L01_001742C0[10] + FUN_L00_00257c48(0.0f, 0.1f);
-        x = fast_add_rotations(FUN_L00_00257c48(0.0f, 3.1415927f), a);
-        y = fast_add_rotations(FUN_L00_00257c48(0.0f, 3.1415927f), a);
+        p[0] = D_L01_001742C0[8] + randf_sym(0.0f, 0.1f);
+        p[1] = D_L01_001742C0[9] + randf_sym(0.0f, 0.1f);
+        p[2] = D_L01_001742C0[10] + randf_sym(0.0f, 0.1f);
+        x = fast_add_rotations(randf_sym(0.0f, 3.1415927f), a);
+        y = fast_add_rotations(randf_sym(0.0f, 3.1415927f), a);
         build_spherical_offset(v, 0.05f, y, x);
         FUN_L00_0026cbb0(p, v, 0x4F007FFF, 0x1FFFFFFF,
                          FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(20)), 1, 20000.0f);

@@ -1349,7 +1349,7 @@ extern float D_0015ED6C_2c4380 __asm__("D_0015ED6C");
 extern float FUN_00200240_2c4380(int) __asm__("FUN_001fa6c0");
 extern int FUN_L00_0025a420(void *, int, int);
 extern int FUN_L00_00258830(void *, void *, float, float, float, int);
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern float FUN_L00_00259698_2c4380(void *, int, float) __asm__("FUN_00213508");
 extern void FUN_L00_00260400(void *, int, void *, void *, void *, void *);
 extern void FUN_L00_002c40a0(S_2c40a0 *);
@@ -1360,7 +1360,7 @@ extern void FUN_L00_0025f8e0(float, void *);
 extern void FUN_L00_0025e450(float, float, float, float, float, float, float,
                               void *, void *, int, int, int, int, int, int, int, int, int);
 extern void FUN_L00_00259858(float, void *, void *, int);
-extern void FUN_L00_001f2868(float, void *, int, void *, void *);
+extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_0024eb68_2c4380(void *) __asm__("FUN_0020c828");
 extern void FUN_00257880_2c4380(void *, int, int, int) __asm__("FUN_00212f90");
 extern float FUN_00257be8_2c4380(float, float) __asm__("FUN_002132a8");
@@ -1473,7 +1473,7 @@ void FUN_L00_002c4380(char *moby) {
         if (hit & 1) {
             qcopy(scratch.w, moby + 0x10);
             scratch.w[2] += 0.2f;
-            if (FUN_L00_001f0d60(0.23f, scratch.w, 0, moby)) {
+            if (coll_sphere(0.23f, scratch.w, 0, moby)) {
                 if (*(float *)(vars + 0x18) < 0.0f) {
                     float len;
                     FUN_001ff2a8_2c4380(scratch.x, moby + 0x10, &hero.motion.pos);
@@ -1585,7 +1585,7 @@ void FUN_L00_002c4380(char *moby) {
                             ((u8 *)scratch.x)[8] = 2;
                             ((u8 *)scratch.x)[9] = 1;
                             *(u16 *)((u8 *)scratch.x + 10) = *(u16 *)(moby + 0xa6);
-                            FUN_L00_001f2868(effect * 3.0f, moby + 0x10, 0x10, moby, scratch.w);
+                            collect_mobies_in_sphere(effect * 3.0f, moby + 0x10, 0x10, moby, scratch.w);
                         }
                         FUN_L00_0025f800(moby, D_L00_001B0830);
                         FUN_L00_0024eb68_2c4380(moby);

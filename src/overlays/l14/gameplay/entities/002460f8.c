@@ -387,9 +387,9 @@ extern void normalize_vector_c618(void *, void *, float) __asm__("FUN_001f9bf8")
 extern void cross_vectors_c618(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void build_look_at_matrix_c618(void *, void *, void *, float) __asm__("FUN_00214890");
 extern f32 random_float_c618(f32, f32) __asm__("FUN_002132a8");
-extern f32 FUN_L00_00257c48(f32, f32);
-extern int FUN_L00_00257b90(int, int);
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
 extern unsigned char *FUN_L00_0026d000_c618(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color) __asm__("FUN_L00_0026d000");
 extern void FUN_L00_0025c398_c618(void *, void *, int) __asm__("FUN_L00_0025c398");
@@ -714,18 +714,18 @@ void FUN_L14_002ac618(struct Moby *m) {
         v[2] = 0.0f;
         normalize_vector_c618(v, v, random_float_c618(D_L14_001613D8 * D_0015ED60_c618, D_L14_001613DC * D_0015ED60_c618));
         cross_vectors_c618(w, &hero.unk290, v);
-        ang = FUN_L00_00257c48(0.6981317f, 1.2217305f);
+        ang = randf_sym(0.6981317f, 1.2217305f);
         build_look_at_matrix_c618(d + 0x1E0, v, &hero.unk290, ang);
         *(float *)(d + 0x1E8) = random_float_c618(D_L14_001613E0 * D_0015ED60_c618, D_L14_001613E4 * D_0015ED60_c618);
         m->scale *= 0.1f;
         *(float *)(d + 0x140) = 10.0f;
         *(float *)(d + 0x144) = 10.0f;
         *(float *)(d + 0x148) = 10.0f;
-        *(float *)(d + 0x1F4) = FUN_L00_00257c48(0.0f, 0.08726646f);
-        *(float *)(d + 0x1F8) = FUN_L00_00257c48(0.0f, 0.08726646f);
-        *(float *)(d + 0x1FC) = FUN_L00_00257c48(0.0f, 0.08726646f);
-        m->rot.x = fast_add_rotations(m->rot.x, FUN_L00_00257c48(0.0f, 0.7853982f));
-        m->rot.y = fast_add_rotations(m->rot.y, FUN_L00_00257c48(0.0f, 0.7853982f));
+        *(float *)(d + 0x1F4) = randf_sym(0.0f, 0.08726646f);
+        *(float *)(d + 0x1F8) = randf_sym(0.0f, 0.08726646f);
+        *(float *)(d + 0x1FC) = randf_sym(0.0f, 0.08726646f);
+        m->rot.x = fast_add_rotations(m->rot.x, randf_sym(0.0f, 0.7853982f));
+        m->rot.y = fast_add_rotations(m->rot.y, randf_sym(0.0f, 0.7853982f));
         m->state = 9;
         FUN_L14_002aead8_c618(m);
         return;
@@ -753,13 +753,13 @@ void FUN_L14_002ac618(struct Moby *m) {
             FUN_0020c828(m);
             return;
         }
-        if (FUN_001f9770((s16 *)(d + 0x1F0)) || FUN_L00_001f0d60(0.5f, &m->pos, 0, m)) {
+        if (FUN_001f9770((s16 *)(d + 0x1F0)) || coll_sphere(0.5f, &m->pos, 0, m)) {
             FUN_L00_0025e450_c618(m, d + 0x40, &m->pos, 2.0f, 1.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 1, 15.0f, 1, 5, -1, 0);
             FUN_0020c828(m);
             return;
         }
         FUN_L00_0026cbb0(&m->pos, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
-                         FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(20)), 1, 60000.0f);
+                         random_int_between(FUN_001f96f8(10), FUN_001f96f8(20)), 1, 60000.0f);
         for (i = 0; i < 2; i++) {
             int a = random_integer_below(6);
             float size;
@@ -770,7 +770,7 @@ void FUN_L14_002ac618(struct Moby *m) {
                 a = -a;
             }
             size = random_float_c618(40000.0f, 100000.0f);
-            c = FUN_L00_00257b90(0x30, 0xFF);
+            c = random_int_between(0x30, 0xFF);
             p = FUN_L00_0026d000_c618(&m->pos, 0.025f, 1.0f, 1.0f, a, D_L14_0015F580, size, c | (0x60000000 | (c << 16) | (c << 8)));
             if (p != 0) {
                 unsigned char *q;
@@ -2639,8 +2639,8 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void add_vector_xyz(void *, void *, void *);
 extern void scale_vector_xyz(void *, void *, float);
 extern int random_integer_below(int);
-extern int FUN_L00_00257b90(int, int);
-extern float FUN_L00_00257c48(float, float);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
+extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float);
 extern int scale_game_frames(int);
 extern void build_look_at_matrix(void *, void *, void *, float);
@@ -2679,7 +2679,7 @@ void FUN_L14_002b5968(struct Moby *moby, float *point, float angle) {
         n = random_integer_below(2);
         if (random_integer_below(2)) n = -n;
         puff_size = random_float_between(40000.0f, 150000.0f);
-        color = FUN_L00_00257b90(10, 0x7f);
+        color = random_int_between(10, 0x7f);
         low_color = (color << 8) | 0x7f000000;
         high_color = color << 16;
         packed_color = color | (high_color | low_color);
@@ -2698,11 +2698,11 @@ void FUN_L14_002b5968(struct Moby *moby, float *point, float angle) {
     qcopy(original_pos, pos);
     step = 0.6283f;
     for (j = 0; j < 16; j++) {
-        value = FUN_L00_00257c48(0.0f, 0.5f);
+        value = randf_sym(0.0f, 0.5f);
         build_look_at_matrix(direction, offset, small_offset, (float)j * step + value);
-        pos[0] = original_pos[0] + FUN_L00_00257c48(0.0f, 0.2f);
-        pos[1] = original_pos[1] + FUN_L00_00257c48(0.0f, 0.2f);
-        pos[2] = original_pos[2] + FUN_L00_00257c48(0.0f, 0.2f);
+        pos[0] = original_pos[0] + randf_sym(0.0f, 0.2f);
+        pos[1] = original_pos[1] + randf_sym(0.0f, 0.2f);
+        pos[2] = original_pos[2] + randf_sym(0.0f, 0.2f);
         FUN_L00_0026c6e8(pos, direction);
     }
     FUN_L00_002d3838((int)D_L14_001D88D0, original_pos, 0, 0);
@@ -2867,7 +2867,7 @@ extern float add_rot_d(float, float) __asm__("FUN_001fa580");
 extern int frames_d(int) __asm__("FUN_001f96f8");
 extern int rand_below_d(int) __asm__("FUN_00213260");
 extern float rand_between_d(float, float) __asm__("FUN_002132a8");
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_L00_0028dc90(int, int, void *, int);
 extern void e450_b78(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -2907,7 +2907,7 @@ void FUN_L14_002bac78(struct Moby *m) {
     if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f || m->pos.z < 2.0f ||
         m->pos.z > 1021.0f)
         { FUN_L14_002bb4d8((u8 *)m); return; }
-    if (FUN_L00_001f0d60(0.75f, &m->pos, 0, 0) != 0 ||
+    if (coll_sphere(0.75f, &m->pos, 0, 0) != 0 ||
         (abs_d(m->pos.x - hero.motion.pos.f[0]) < 10.0f && abs_d(m->pos.y - hero.motion.pos.f[1]) < 10.0f)) {
         clear_d(joint);
         FUN_L00_0028dc90(1, 0, m, (*(struct Moby **)(d + 0x20))->oclass);
@@ -2920,24 +2920,24 @@ void FUN_L14_002bac78(struct Moby *m) {
     m->rot.y = add_rot_d(m->rot.y, *(float *)(d + 0x18));
     m->rot.z = add_rot_d(m->rot.z, *(float *)(d + 0x1C));
     FUN_L00_0024f7c8(m, 0, joint);
-    size = FUN_L00_00257c48(0.01f, 0.5f);
+    size = randf_sym(0.01f, 0.5f);
     scale_d(ofs, (char *)m + 0xC0, size);
     add_d(at, joint, ofs);
     sub_d(dir, joint, &m->pos);
     normalize_d(dir, dir, 0.05f);
-    FUN_L00_0026cbb0(at, dir, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(frames_d(10), frames_d(20)), 1, 40000.0f);
+    FUN_L00_0026cbb0(at, dir, 0x4F007FFF, 0x1FFFFFFF, random_int_between(frames_d(10), frames_d(20)), 1, 40000.0f);
     for (i = 0; i < 3; i++) {
         if (i != 2) {
-            scale_d(ofs, (char *)m + 0xC0, FUN_L00_00257c48(0.01f, 0.5f));
+            scale_d(ofs, (char *)m + 0xC0, randf_sym(0.01f, 0.5f));
             add_d(at, &m->pos, ofs);
-            scale_d(ofs, (char *)m + 0xD0, FUN_L00_00257c48(0.01f, 0.5f));
+            scale_d(ofs, (char *)m + 0xD0, randf_sym(0.01f, 0.5f));
             add_d(at, &m->pos, ofs);
         }
         n = rand_below_d(6);
         if (rand_below_d(2) != 0)
             n = -n;
         size = rand_between_d(20000.0f, 100000.0f);
-        c = FUN_L00_00257b90(0x10, 0xFF);
+        c = random_int_between(0x10, 0xFF);
         p = (u8 *)spawn_puff_d(at, 0.025f, 1.0f, 1.0f, n, D_L14_0015F580, size,
                          c | (0x60000000 | (c << 16) | (c << 8)));
         if (p != NULL) {
@@ -2980,7 +2980,7 @@ void FUN_L14_002bac78(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002BC560), where it is exact; names translated to the US level program. */
 
 
-extern float FUN_L00_00257c48(float lo, float hi);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int);
 extern void FUN_L00_00250df8(void *);
@@ -3014,11 +3014,11 @@ unsigned char *FUN_L14_002bb310(struct Moby *owner, float angle, char *posp) {
         normalize_vector_xyz(v1, v1, random_float_between(frame_scale * 0.075f, frame_scale * 0.2f));
         g = (char *)&hero.unk290;
         cross_vectors_xyz(vec + 8, g, v1);
-        build_look_at_matrix(d, v1, g, FUN_L00_00257c48(0.0f, 0.7853982f));
+        build_look_at_matrix(d, v1, g, randf_sym(0.0f, 0.7853982f));
         *(float *)(d + 8) = random_float_between(frame_scale * 0.05f, frame_scale * 0.32f);
-        *(float *)(d + 0x14) = FUN_L00_00257c48(0.0f, 0.034906585f);
-        *(float *)(d + 0x18) = FUN_L00_00257c48(0.0f, 0.034906585f);
-        *(float *)(d + 0x1C) = FUN_L00_00257c48(0.0f, 0.034906585f);
+        *(float *)(d + 0x14) = randf_sym(0.0f, 0.034906585f);
+        *(float *)(d + 0x18) = randf_sym(0.0f, 0.034906585f);
+        *(float *)(d + 0x1C) = randf_sym(0.0f, 0.034906585f);
         *(short *)(d + 0x10) = scale_game_frames(200);
         *(char **)(d + 0x20) = owner;
         *(short *)(d + 0x12) = -1;

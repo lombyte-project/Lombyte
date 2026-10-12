@@ -13,7 +13,7 @@ extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern short D_L10_00161E58_d __asm__("D_L10_00161E58") __attribute__((sda));
 extern short D_L10_00161E5C_d __asm__("D_L10_00161E5C") __attribute__((sda));
 extern short D_L10_00161E60_d __asm__("D_L10_00161E60") __attribute__((sda));
@@ -31,7 +31,7 @@ void FUN_L10_002e3de8(char *moby) {
     float b = random_float_between_alt(0.0f, *(float *)&D_L10_00161E70_d);
     float c = random_float_between_alt(0.0f, *(float *)&D_L10_00161E60_d);
     float d = random_float_between_alt(*(float *)&D_L10_00161E60_d, *(float *)&D_L10_00161E64_d);
-    int e = FUN_L00_00257b90(*(int *)&D_L10_00161E68_d, *(int *)&D_L10_00161E6C_d);
+    int e = random_int_between(*(int *)&D_L10_00161E68_d, *(int *)&D_L10_00161E6C_d);
     v[0] = FUN_001f9dc8(a) * b;
     v[1] = FUN_001f9de0(a) * b;
     v[2] = 0.0f;

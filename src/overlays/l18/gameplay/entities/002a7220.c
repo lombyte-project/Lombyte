@@ -1461,7 +1461,7 @@ extern char D_001413D4[];
 extern void FUN_L18_002d88b8(struct Moby *);
 extern void FUN_L18_00227dd0(int, int);
 extern void FUN_L00_00260738(void *, void *, void *, void *);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern short allocate_voice_for_target_entry_short(int, int, struct Moby *) __asm__("FUN_0022da68");
 
@@ -1501,7 +1501,7 @@ void FUN_L18_002d82c0(struct Moby *moby) {
     case 4:
         if (moby->unk31 && FUN_001f9740((int *)(data + 0x8C))) {
             FUN_L18_002d88b8(moby);
-            *(int *)(data + 0x8C) = scale_ticks(FUN_L00_00257b90(0x5A, 0x78));
+            *(int *)(data + 0x8C) = scale_ticks(random_int_between(0x5A, 0x78));
         }
         if (D_0013F64C == moby && D_0013F65E == 0) {
             *(int *)(data + 0x8C) = 0;
@@ -1516,7 +1516,7 @@ void FUN_L18_002d82c0(struct Moby *moby) {
     case 5:
         if (moby->unk31 && FUN_001f9740((int *)(data + 0x8C))) {
             FUN_L18_002d88b8(moby);
-            *(int *)(data + 0x8C) = scale_ticks(FUN_L00_00257b90(0xF, 0x1E));
+            *(int *)(data + 0x8C) = scale_ticks(random_int_between(0xF, 0x1E));
         }
         ratio = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) /
                 (D_L18_00161A64 - D_L18_00161A60);
@@ -2301,7 +2301,7 @@ extern void FUN_L00_0025f090(float, float, void *, void *, int);
 extern void FUN_L00_00257d78(float *, float, float);
 extern float FUN_L00_00257c48(float, float);
 extern float random_float_between_9768(float, float) __asm__("FUN_002132a8");
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below_9768(int) __asm__("FUN_00213260");
 extern int scale_game_frames_9768(int) __asm__("FUN_001f96f8");
 extern float fast_add_rotations_9768(float, float) __asm__("FUN_001fa580");
@@ -2365,13 +2365,13 @@ void FUN_L18_002e9768(struct Moby *moby) {
                     position[2] += random_float_between_9768(0.0f, 6.0f);
                     first = (int *)colors + random_integer_below_9768(6);
                     second = (int *)colors2 + random_integer_below_9768(6);
-                    lifetime = FUN_L00_00257b90(scale_game_frames_9768(15), scale_game_frames_9768(20));
-                    spread = FUN_L00_00257b90(scale_game_frames_9768(30), scale_game_frames_9768(45));
+                    lifetime = random_int_between(scale_game_frames_9768(15), scale_game_frames_9768(20));
+                    spread = random_int_between(scale_game_frames_9768(30), scale_game_frames_9768(45));
                     spawn_particle_9768(1500000.0f, magnitude, position, &D_L18_0015F580,
                     *first, *second,
                     lifetime, spread, 0, 0);
-                    lifetime = FUN_L00_00257b90(scale_game_frames_9768(5), scale_game_frames_9768(10));
-                    spread = FUN_L00_00257b90(scale_game_frames_9768(15), scale_game_frames_9768(20));
+                    lifetime = random_int_between(scale_game_frames_9768(5), scale_game_frames_9768(10));
+                    spread = random_int_between(scale_game_frames_9768(15), scale_game_frames_9768(20));
                     spawn_particle_9768(1500000.0f, magnitude * 0.5f, position, &D_L18_0015F580,
                     0x7fffffff, 0xffffff, lifetime, spread, 0, 0);
                 } while ((float)i < 10.0f);
@@ -2400,7 +2400,7 @@ void FUN_L18_002e9768(struct Moby *moby) {
                     second = (int *)colors2 + random_integer_below_9768(6);
                     spawn_particle_alt_9768(500000.0f, position, velocity, *first,
                     *second,
-                    FUN_L00_00257b90(scale_game_frames_9768(30), scale_game_frames_9768(45)));
+                    random_int_between(scale_game_frames_9768(30), scale_game_frames_9768(45)));
                 } while ((float)i < 10.0f);
             }
 remove:
@@ -2758,7 +2758,7 @@ extern float D_L18_001DA110[];
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float FUN_L00_0025e310(float);
 extern int D_L18_0015F580; /* no foreign declaration */
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern float D_L18_00161FFC __attribute__((sda));
 extern float D_L18_00162000 __attribute__((sda));
@@ -2949,13 +2949,13 @@ void FUN_L18_002eaea0(void *moby) {
     scale_vector_xyz_c(&s[5], &s[0], *(float *)&D_L18_00162084 * D_0015ED60);
     build_look_at_matrix(&s[5], &s[5], &s[6], f20);
     build_look_at_matrix(&s[5], &s[5], &s[7], scale);
-    r = FUN_L00_00257b90(1, 8);
+    r = random_int_between(1, 8);
     if (random_integer_below(2)) r = -r;
     f20 = random_float_between_c(0.2f, 0.6f);
     spawn_ec290((char *)moby + 0x10, scale_game_frames_alt(15), f20 * 0.3f, f20, *(int *)&D_L18_00162054_c | 0x7F000000, 0, r, &s[5], 0.0f);
     r = -r;
     spawn_ec290((char *)moby + 0x10, scale_game_frames_alt(15), f20 * 0.15f, f20 * 0.5f, 0x307F7F7F, 0, r, &s[5], 0.0f);
-    r = FUN_L00_00257b90(1, 8);
+    r = random_int_between(1, 8);
     if (random_integer_below(2)) r = -r;
     f20 = random_float_between_c(0.15f, 3.0f);
     spawn_ec290(data + 0x10, scale_game_frames_alt(12), f20 * 0.1f, f20, *(int *)&D_L18_00162054_c | 0x7F000000, 0, r, &D_L18_0015F580, 0.0f);

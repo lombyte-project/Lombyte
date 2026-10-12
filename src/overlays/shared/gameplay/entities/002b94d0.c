@@ -2029,7 +2029,7 @@ typedef struct {
 extern char D_0013E533[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int D_L00_00173E40[];
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
 int FUN_L00_002beab0(char *a, int b, Vx *c) {
     Vx v;
@@ -2044,7 +2044,7 @@ int FUN_L00_002beab0(char *a, int b, Vx *c) {
     }
     t = s * 0.2f;
     v.z = v.z + t;
-    r = FUN_L00_001f0d60(s * 0.1999f, &v, b, a);
+    r = coll_sphere(s * 0.1999f, &v, b, a);
     if (r != 0) {
         float *g = (float *)D_L00_00173E40;
         g[14] -= t;

@@ -264,7 +264,7 @@ extern int FUN_0022da68_i(int, int, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, char *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern float FUN_L00_00257c48(float, float);
+extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void mark_moby_for_removal_u(char *) __asm__("FUN_0020c828");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_0025d458(void *, void *);
@@ -310,7 +310,7 @@ void FUN_L16_002e2b60(struct Moby *m) {
                     FUN_0022da68_i(3, 0, m);
                     *(unsigned char *)(d + 0x67) = 120;
                     *(float *)(d + 0x188) =
-                        FUN_L00_00257c48(30.0f, 50.0f) * DEG_TO_RAD * D_0015ED6C_e;
+                        randf_sym(30.0f, 50.0f) * DEG_TO_RAD * D_0015ED6C_e;
                 }
             } else {
                 FUN_0022da68_i(3, 0, m);

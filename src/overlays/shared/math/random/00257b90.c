@@ -11,7 +11,8 @@
 extern s32 rand();
 
 /* Random integer in lo..hi inclusive from rand(). */
-int FUN_L00_00257b90(int lo, int hi) {
+int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
+int random_int_between(int lo, int hi) {
     return ((rand() >> 16) & 0x7FFF) % (hi - lo + 1) + lo;
 }
 #define NOT_SDA
@@ -26,7 +27,8 @@ int FUN_L00_00257b90(int lo, int hi) {
 extern s32 rand();
 
 /* Random float of magnitude lo..hi from rand(), negated on odd values. */
-float FUN_L00_00257c48(float lo, float hi) {
+float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
+float randf_sym(float lo, float hi) {
     int v = rand() >> 16;
     float range = hi - lo;
     float r = lo + (float)(v & 0xFFF) * range * 0.000244140625f;

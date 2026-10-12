@@ -1311,7 +1311,7 @@ extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern float FUN_L00_00257c48(float lo, float hi);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 extern float FUN_L18_002dfb90(void *moby);
 extern float fast_cos(float) __asm__("func_001F9DC8");
@@ -1622,7 +1622,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
                 }
                 normalize_vector_xyz(v2, moby->fC0, frame_time * 20.0f);
                 {
-                    float a = FUN_L00_00257c48(0.08726646f, 0.5235988f);
+                    float a = randf_sym(0.08726646f, 0.5235988f);
                     float c = -random_float_between_alt(0.08726646f, 0.17453292f);
                     float e = FUN_001f9b80(moby->f10, hero.motion.pos.f) * 3.0f;
                     if (e > 120.0f) {
@@ -1724,7 +1724,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
             v0[2] = v0[2] + 6.0f;
             normalize_vector_xyz(v1, moby->fC0, frame_time * 10.0f);
             {
-                float a = FUN_L00_00257c48(0.5235988f, 0.7853982f);
+                float a = randf_sym(0.5235988f, 0.7853982f);
                 float c = -random_float_between_alt(0.34906584f, 0.5235988f);
                 FUN_L18_002d5348(v0, v1, v2, a, c, scale_game_frames(0x3C), 5);
             }
@@ -2036,7 +2036,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
                     moby_point_position(moby, 3, v1);
                 }
                 normalize_vector_xyz(v2, moby->fC0, frame_time * 20.0f);
-                a = FUN_L00_00257c48(0.08726646f, 0.5235988f);
+                a = randf_sym(0.08726646f, 0.5235988f);
                 c = -random_float_between_alt(0.08726646f, 0.17453292f);
                 e = FUN_001f9b80(moby->f10, hero.motion.pos.f) * 3.0f;
                 if (e > 120.0f) {
@@ -2088,7 +2088,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
                 normalize_vector_xyz(v1, v1, f * frame_time);
                 FUN_L18_002db938((char *)v0, v1, (int)moby, 64.0f, frame_time * 18.0f);
                 FUN_L18_002f76a0((char *)moby, v0);
-                d->f3BC = FUN_L00_00257c48(0.133f, 0.333f);
+                d->f3BC = randf_sym(0.133f, 0.333f);
             } else if ((moby->f70 & 2) != 0 && moby->f53 != 3) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(0x14));
             }
@@ -3253,10 +3253,10 @@ typedef union {
 } QVec;
 
 extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
-extern float FUN_L00_00257c48(float lo, float hi);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_001fefc8(void *);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames(int);
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern char D_L18_001623EC[4] __attribute__((sda));
@@ -3307,9 +3307,9 @@ void FUN_L18_002f76a0(char *moby, void *p) {
             normalize_vector_xyz(
                 d, &a, random_float_between(*(float *)&D_L18_0016240C, *(float *)&D_L18_00162410));
             h = func_001FA898_r(
-                FUN_L00_00257c48((float)*(int *)&D_L18_00162420, (float)*(int *)&D_L18_00162424));
+                randf_sym((float)*(int *)&D_L18_00162420, (float)*(int *)&D_L18_00162424));
             FUN_L00_002712b8(p, d,
-                             scale_game_frames(FUN_L00_00257b90(*(int *)&D_L18_00162428,
+                             scale_game_frames(random_int_between(*(int *)&D_L18_00162428,
                                                                 *(int *)&D_L18_0016242C)),
                              0x7F, 0xFFFFFF, h, *(float *)&D_L18_00162414,
                              *(float *)&D_L18_00162418, *(float *)&D_L18_00162430,
@@ -3322,7 +3322,7 @@ void FUN_L18_002f76a0(char *moby, void *p) {
             normalize_vector_xyz(
                 d, &a, random_float_between(*(float *)&D_L18_0016243C, *(float *)&D_L18_00162440));
             FUN_L00_0026cbb0(p, d, *(int *)&D_L18_001623EC, *(int *)&D_L18_001623F0,
-                             scale_game_frames(FUN_L00_00257b90(*(int *)&D_L18_00162444,
+                             scale_game_frames(random_int_between(*(int *)&D_L18_00162444,
                                                                 *(int *)&D_L18_00162448)),
                              1, *(float *)&D_L18_0016244C);
         }

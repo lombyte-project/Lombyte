@@ -541,7 +541,7 @@ extern void FUN_L00_0025ab48(void *, float *, void *, void *);
 extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
 extern void FUN_L00_0025d458(void *, void *);
 extern void FUN_L00_0025d538(void *, void *);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L16_002d3f78_u(void *, int, int) __asm__("FUN_L16_002d3f78");
 extern s32 tick_countdown_32(void *) __asm__("func_001F9740");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
@@ -617,7 +617,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
                     if (D_0013D408[0x1D] == 0) {
                         D_0013D408[0x1D] = 1;
                         allocate_voice_for_bank_entry(1, 0, 0);
-                        FUN_L00_00263d40(0x53D6, -1);
+                        queue_dialogue_message(0x53D6, -1);
                     }
                 }
             }
@@ -822,7 +822,7 @@ extern L16ParticleChoices D_L16_001E8600, D_L16_001E8318;
 extern char D_L16_001671C0[], D_0013E633[];
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -868,11 +868,11 @@ void FUN_L16_002d41f8(void *m) {
             b = &second.values[random_integer_below(6)];
             {
                 int lo = scale_game_frames(15), hi = scale_game_frames(20);
-                duration1 = FUN_L00_00257b90(lo, hi);
+                duration1 = random_int_between(lo, hi);
             }
             {
                 int lo = scale_game_frames(25), hi = scale_game_frames(30);
-                duration2 = FUN_L00_00257b90(lo, hi);
+                duration2 = random_int_between(lo, hi);
             }
             FUN_L00_0026a9f0(origin, movement, *a, *b, duration1, duration2, 0, 0, 400000.0f,
                              delay);
@@ -963,7 +963,7 @@ extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern float FUN_001f96b0(float);
 extern int FUN_001fa6e0(int, int, float);
 extern void FUN_0020cca8(void *, int, void *);
-extern void FUN_L00_00257d78(float *, float, float);
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
 void FUN_L16_002d4908(char *m) {
     float matrix[16], velocity[4], acceleration[4], scatter[4];
@@ -985,7 +985,7 @@ void FUN_L16_002d4908(char *m) {
         clear_u64_value(acceleration);
         acceleration[2] = z;
         z = random_float_between_alt(-1.5f, 1.5f) * frame_time;
-        FUN_L00_00257d78(scatter, z, z);
+        random_vector(scatter, z, z);
         add_vector_xyz(acceleration, acceleration, scatter);
         velocity[3] = random_float_between_alt(0.2f, 0.2f);
         acceleration[3] = random_float_between_alt(0.4f, 0.4f);

@@ -2100,7 +2100,7 @@ typedef struct {
 
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_002595a0(float *, float *, float, float, float);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 f32 compute_interpolated_record_value_u(struct InterpolatedStateEntry *arg0) __asm__("FUN_0020c9e0");
@@ -2140,7 +2140,7 @@ void FUN_L16_002d0058(L16LeapMoby_u *m) {
             m->next_animation == 5 && (float)scale_game_frames(27) < duration) {
             short sequence;
             int chosen;
-            chosen = FUN_L00_00257b90(0, 3) + 1;
+            chosen = random_int_between(0, 3) + 1;
             d->sequence = chosen;
             sequence = chosen;
             func_L00_00237B70_anim(m, sequence, 3, scale_game_frames(7));
@@ -2265,7 +2265,7 @@ extern int D_0015EE3C __attribute__((sda));
 extern char *D_L16_001B0930[];
 extern int FUN_001f9770(void *);
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_0025d7a0(char *, int, int, int);
 extern int FUN_L00_0025e3b8(int);
 extern int FUN_L05_00307010();
@@ -2540,16 +2540,16 @@ void FUN_L16_002d04a0(unsigned char *m) {
         qcopy(spray, ahead);
         spray[3] = 120000.0f;
         if (*(short *)(d + 0x2F6) == 0) {
-            int ticks = FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(13));
+            int ticks = random_int_between(scale_game_frames(10), scale_game_frames(13));
 
             FUN_L00_00269958(impact, spray, D_L16_00161A08_spark, D_L16_00161A0C, ticks, 15, 15, 1);
         } else {
             int ticks;
 
             scale_vector_xyz(dust, ahead, 0.92f);
-            ticks = FUN_L00_00257b90(scale_game_frames(15), scale_game_frames(18));
+            ticks = random_int_between(scale_game_frames(15), scale_game_frames(18));
             FUN_L00_00269958(impact, dust, 0x5032F0D2, D_L16_00161A0C, ticks, 30, 20, 1);
-            ticks = FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(17));
+            ticks = random_int_between(scale_game_frames(8), scale_game_frames(17));
             FUN_L00_0026cbb0(impact, spray, D_L16_00161A08_spark, D_L16_00161A0C, ticks, 1,
                              15000.0f);
         }

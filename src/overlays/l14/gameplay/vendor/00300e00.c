@@ -450,8 +450,8 @@ extern void FUN_L00_00260860(s32, s32);
 extern void FUN_L00_00298840(s32);
 extern void FUN_L00_002502a0(s32);
 extern int memcard_save_data(s32, s32) __asm__("FUN_0020b178");
-extern void FUN_L00_00263d40(s32, s32);
-extern void FUN_L00_00203908(s32, s32);
+extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
+extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
 void FUN_L14_00305758(struct Moby *moby) {
@@ -501,10 +501,10 @@ void FUN_L14_00305758(struct Moby *moby) {
                 memcard_save_data(0, -1);
             }
             if (*(s32 *)(d + 0x18) != 0)
-                FUN_L00_00263d40(0x53e0, -1);
+                queue_dialogue_message(0x53e0, -1);
             else
-                FUN_L00_00263d40(0x36b2, -1);
-            FUN_L00_00203908(0x36b0, 0x7a);
+                queue_dialogue_message(0x36b2, -1);
+            help_request(0x36b0, 0x7a);
             FUN_0020c828(moby);
             return;
         }
@@ -1229,7 +1229,7 @@ extern int D_L14_0015F5C4;
 extern int FUN_L01_0026e008(int, int);
 extern unsigned char D_0013D408[];
 extern void FUN_L00_002637f8(int);
-extern void FUN_L00_00263d40(int arg0, int arg1);
+extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
 void FUN_L14_003087c0(struct Moby *moby) {
@@ -1241,7 +1241,7 @@ void FUN_L14_003087c0(struct Moby *moby) {
             if (D_0013D408[0x17] == 0) {
                 D_0013D408[0x17] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
-                FUN_L00_00263d40(0x53d6, -1);
+                queue_dialogue_message(0x53d6, -1);
             }
         }
     }

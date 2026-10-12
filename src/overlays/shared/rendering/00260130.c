@@ -11,11 +11,11 @@
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00260EE8.c: func_L03_00260EE8), where it is exact; names translated to the US level program. */
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *FUN_L00_002678b8(int);
+extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L03_00260130(int a, int *b, int *c, float *d, int e) {
-    unsigned char *p = FUN_L00_002678b8(0x31);
+    unsigned char *p = create_part(0x31);
     if (p != 0) {
         float *q;
         *(int *)(p + 0x4) = 0x7FFFFFFF;

@@ -14,12 +14,12 @@ typedef struct {
 } T;
 extern T D_L00_001E9060;
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-void FUN_L00_00263d40(s32, s32);
+void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 void FUN_L00_00262d38(s32 i) {
     T t = D_L00_001E9060;
     if (i < 0)
         i = 0;
     if (i > 18)
         i = 18;
-    FUN_L00_00263d40(t.v[i], scale_game_frames(0x49C));
+    queue_dialogue_message(t.v[i], scale_game_frames(0x49C));
 }

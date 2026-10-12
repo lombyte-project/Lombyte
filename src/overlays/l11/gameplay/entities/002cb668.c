@@ -20,7 +20,7 @@
 extern char D_0013E533[];
 extern float FUN_001f9b80(void *, void *);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int FUN_L00_00203908(int, int);
+extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4C2[];
 extern unsigned char D_0013D4E3[];
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
@@ -45,7 +45,7 @@ void FUN_L11_002cb668(struct Moby *moby) {
             D_0013D4C2[4] = 1;
             D_0013D4E3[0xB] = 1;
             memcard_save_data(0, -1);
-            FUN_L00_00203908(0x2AF8, 0x3A);
+            help_request(0x2AF8, 0x3A);
             mark_moby_for_removal(moby);
         }
         break;
@@ -169,7 +169,7 @@ extern void FUN_L00_00260860(int, int);
 extern void FUN_L00_00284e50(void *, void *);
 extern void memcard_save_data_d0710(int, int) __asm__("FUN_0020b178");
 extern void FUN_L00_002039a0(void);
-extern int FUN_L00_00203908(int, int);
+extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4C3 __attribute__((section(".data")));
 extern int D_L11_0015F5C4;
 extern char D_0013E533[];
@@ -225,7 +225,7 @@ void FUN_L11_002d0710(WM11 *m) {
                 FUN_L00_00284e50(hero.motion.pos.f, hero.motion.pos.f + 4);
                 memcard_save_data_d0710(0, -1);
                 FUN_L00_002039a0();
-                FUN_L00_00203908(0x2AFB, 0x3D);
+                help_request(0x2AFB, 0x3D);
             }
         }
         break;
@@ -730,7 +730,7 @@ void FUN_L11_002d14b0(void *arg) {
         if (D_L11_0015F5C4 != 2) {
             FUN_L00_00260860(6, 1);
             memcard_save_data(0, -1);
-            FUN_L00_00203908(0x2AF8, 0x3A);
+            help_request(0x2AF8, 0x3A);
             mark_moby_for_removal(moby);
         }
         break;
@@ -1065,7 +1065,7 @@ extern struct UsageStat usage_stats_f0e40[] __asm__("D_00141968") __attribute__(
 extern void mark_moby_for_removal_f0e40(void *) __asm__("FUN_0020c828");
 extern float absolute_float_f0e40(float) __asm__("FUN_001f99c0");
 extern void FUN_L00_002502a0(int);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 
 void FUN_L11_002f0e40(struct Moby *moby) {
     WS11 scratch;
@@ -1100,7 +1100,7 @@ void FUN_L11_002f0e40(struct Moby *moby) {
             if (distance_xyz(&moby->pos, hero.motion.pos.f) < 4.0f) {
                 int t = scale_game_frames(D_0015EEA4) - usage_stats_f0e40[0x86].unk2 * 600;
                 if ((int)(scale_game_frames(18) * 60.0f) < t || usage_stats_f0e40[0x86].unk2 * 600 == 0) {
-                    FUN_L00_00203908(0x2B03, 0x86);
+                    help_request(0x2B03, 0x86);
                 } else if (scale_game_frames(D_0015EEA4) / 600 > usage_stats_f0e40[0x86].unk2) {
                     usage_stats_f0e40[0x86].unk2 = scale_game_frames(D_0015EEA4) / 600;
                 }
@@ -1122,9 +1122,9 @@ void FUN_L11_002f0e40(struct Moby *moby) {
                 alternate_item_available[1] = 0;
                 discount_purchase_pricing[0] = 1;
                 D_0013D50B = 1;
-                FUN_L00_00263d40(0x2B06, scale_game_frames(300));
+                queue_dialogue_message(0x2B06, scale_game_frames(300));
                 memcard_save_data_d0710(0, -1);
-                FUN_L00_00203908(0x2AF9, 0x3B);
+                help_request(0x2AF9, 0x3B);
             }
         }
         break;
@@ -1875,7 +1875,7 @@ int FUN_L11_0030a480(struct Moby *moby) {
 extern void FUN_0020cb10(struct Moby *, int, void *);
 extern void FUN_L00_001fff28(void *, int, float);
 extern void moby_point_position(struct Moby *, int, float *) __asm__("FUN_L00_0024f7c8");
-extern float FUN_L00_00257c48(float, float);
+extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void FUN_L00_0026f080(float *, float *, float, float);
 extern float fast_cos_a500(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_a500(float) __asm__("FUN_001f9de0");
@@ -1929,10 +1929,10 @@ void FUN_L11_0030a500(struct Moby *moby) {
         moby_point_position(moby, j, base);
         n = moby->state == 1 ? 1 : 2;
         for (k = 0; k < n; k++) {
-            pos[0] = base[0] + FUN_L00_00257c48(0.0f, 0.3f);
-            pos[1] = base[1] + FUN_L00_00257c48(0.0f, 0.3f);
-            pos[2] = base[2] + FUN_L00_00257c48(0.0f, 0.3f);
-            heading = fast_add_rotations(moby->rot.z, FUN_L00_00257c48(0.0f, 0.122173049f) + 3.1415927f);
+            pos[0] = base[0] + randf_sym(0.0f, 0.3f);
+            pos[1] = base[1] + randf_sym(0.0f, 0.3f);
+            pos[2] = base[2] + randf_sym(0.0f, 0.3f);
+            heading = fast_add_rotations(moby->rot.z, randf_sym(0.0f, 0.122173049f) + 3.1415927f);
             speed = random_float_between(2.0f, 5.0f) * frame_time;
             if (moby->state == 1)
                 speed *= 0.4f;

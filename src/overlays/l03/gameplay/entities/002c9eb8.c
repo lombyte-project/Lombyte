@@ -1060,7 +1060,7 @@ extern int FUN_L00_00257b90(int, int);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_00259a88(void *, void *);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
@@ -1117,7 +1117,7 @@ void FUN_L03_002d43c8(struct Moby *m) {
             m->pos.z += FUN_001f9de0(-m->rot.y) * v->speed;
         }
         if (FUN_001efa68(pos, &old, 0, v->ignore, 0) != 0 ||
-            FUN_L00_001f0d60(0.2f, pos, 0, v->ignore) != 0) {
+            coll_sphere(0.2f, pos, 0, v->ignore) != 0) {
             level = (void **)D_L03_00173F40;
             if (level[6] != NULL) {
                 make_hit_descriptor(&hit, m, 0x10001, 1.0f, v);
@@ -1242,7 +1242,7 @@ extern void FUN_L01_002783a8(struct Moby *, f32);
 extern void FUN_L00_002502a0(int);
 extern void FUN_L00_00284e50(void *, void *);
 extern void FUN_L00_00260860(int, int);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern float FUN_001fa688(float, float);
 extern float FUN_001fa5c8(float, float);
@@ -1338,7 +1338,7 @@ void FUN_L03_002da870(struct Moby *m) {
             m->state = 1;
             if (v->talk.mode == 2) {
                 FUN_L00_00260860(0xC, 1);
-                FUN_L00_00263d40(0xBC8, -1);
+                queue_dialogue_message(0xBC8, -1);
                 if (v->reward != -1) {
                     D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                         ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->unkB0 + 2;
@@ -1627,7 +1627,7 @@ extern void FUN_L01_002783a8(struct Moby *, f32);
 extern void FUN_L00_002502a0(int);
 extern void FUN_L00_00284e50(void *, void *);
 extern void FUN_L00_00260860(int, int);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern int guide_save(int, int) __asm__("FUN_0020b178");
 extern float FUN_001fa688(float, float);
@@ -1733,7 +1733,7 @@ void FUN_L03_002db558(struct Moby *m) {
             break;
         }
         FUN_L00_00260860(2, 1);
-        FUN_L00_00263d40(0xBC7, -1);
+        queue_dialogue_message(0xBC7, -1);
         if (v->reward != -1) {
             t = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
             if (t->oclass == 0x3E5 && t->state == 0) {
@@ -1848,7 +1848,7 @@ extern void FUN_L00_0025a120(struct Moby *);
 extern void FUN_00212ed8(struct Moby *, int, int);
 extern TalkerHit *talker_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void FUN_0022db10(int, int, int);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void talker_spawn_debris(struct Moby *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32,
                              f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern int talker_init(struct Moby *, struct TalkerVars *) __asm__("FUN_L00_002668a0");
@@ -1892,7 +1892,7 @@ void FUN_L03_002dbd90(struct Moby *m) {
         if (D_0013D408[5] == 0) {
             D_0013D408[5] = 1;
             FUN_0022db10(1, 0, 0);
-            FUN_L00_00263d40(0x53D6, -1);
+            queue_dialogue_message(0x53D6, -1);
         }
         pos.q = *(OvlQuad *)&m->pos;
         pos.f[2] += 1.0f;

@@ -443,11 +443,11 @@ extern float fast_sin(float);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float D_L05_001612E8;
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern unsigned char *FUN_L00_002718d0(void *, void *, void *, float, float);
-extern void FUN_L00_00257d78(float *, float, float);
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void FUN_L00_0026f548(void *, void *, int, int);
 extern void add_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -467,12 +467,12 @@ void FUN_L05_002d1fd8(int unused, char *p) {
         v[0] = fast_cos(ang) * k;
         v[1] = fast_sin(ang) * k;
         v[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
-        n = FUN_L00_00257b90(0x5A, 0x78);
+        n = random_int_between(0x5A, 0x78);
         FUN_L00_0026f548(p, v, random_integer_below(2), n);
     }
     for (i = 0; i < 16; i++) {
         unsigned char *q;
-        FUN_L00_00257d78(v, 1.0f, 1.0f);
+        random_vector(v, 1.0f, 1.0f);
         add_vector_xyz(v, v, p);
         v[2] = D_L05_001612E8 + 0.05f;
         q = FUN_L00_002718d0(v, D_L05_0015F580, base, random_float_between(0.7f, 1.0f),
@@ -1812,7 +1812,7 @@ struct LeapVars {
 
 extern int FUN_001f96f8(int);
 extern int FUN_001fa6d0(float);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_002595a0(float *, float *, float, float, float);
 extern float FUN_0020c9e0(struct Moby *);
 extern void leap_anim_307570(struct Moby *, int, int, int) __asm__("FUN_L05_00307480");
@@ -1839,7 +1839,7 @@ void FUN_L05_00307570(struct Moby *m) {
             (float)FUN_001f96f8(27) < duration) {
             short sequence;
             int chosen;
-            chosen = FUN_L00_00257b90(0, 3) + 1;
+            chosen = random_int_between(0, 3) + 1;
             d->sequence = chosen;
             sequence = chosen;
             leap_anim_307570(m, sequence, 1, FUN_001f96f8(7));

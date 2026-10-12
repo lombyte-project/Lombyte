@@ -4,7 +4,7 @@
 #include "asm.h"
 
 
-extern void FUN_L00_002892d0(void);
+extern void update_sky_shells_static(void) __asm__("FUN_L00_002892d0");
 extern void FUN_L00_0028a620(void);
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
 void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
@@ -15,7 +15,7 @@ void FUN_L16_00239c30(void) {
     if (current_level_index == 0x10) {
         FUN_L00_0028a620();
     } else {
-        FUN_L00_002892d0();
+        update_sky_shells_static();
     }
     do_sky_gif_paging();
     vu1_add_g_sregister(0x47, 0x5360B);

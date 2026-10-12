@@ -14,7 +14,7 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L08_001B29A4_d __asm__("D_L08_001B29A4") __attribute__((section(".data")));
-extern unsigned char *FUN_L00_002678b8(int);
+extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f) {
@@ -22,7 +22,7 @@ void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f) {
     unsigned char *p;
     float *vp = v;
     *(OvlQuad *)v = *(OvlQuad *)vel;
-    p = FUN_L00_002678b8(0x49);
+    p = create_part(0x49);
     if (p != 0) {
         float s = 0.0f;
         int c = 0;

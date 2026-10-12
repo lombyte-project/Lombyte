@@ -345,7 +345,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L15_00162078_d __asm__("D_L15_00162078") __attribute__((sda));
 extern unsigned char D_0013D4FD[];
 extern void FUN_L00_00260860(int, int);
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_00298840(int);
 extern void FUN_L00_002d6bf0(char *);
 extern void FUN_L10_00298940(char *);
@@ -374,7 +374,7 @@ void FUN_L15_002ea748(struct Moby *m) {
         break;
     case 2:
         if (D_L15_0015F5C4 != 2) {
-            FUN_L00_00263d40(0x3AA3, -1);
+            queue_dialogue_message(0x3AA3, -1);
             D_L15_0015F640 = scale_game_frames(0xB4);
             FUN_L00_00260860(0x22, 1);
             memcard_save_data(0, -1);

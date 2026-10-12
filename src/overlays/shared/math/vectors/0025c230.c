@@ -57,7 +57,7 @@ typedef struct {
 } V4 __attribute__((aligned(16)));
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_0025aca0(void *, int, void *, void *, float);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E520[];
@@ -84,12 +84,12 @@ void FUN_L00_0025c398(void *a0, void *a1, void *a2) {
         add_vector_xyz(tmp, tmp, a1);
         tmp[2] += frame_time * 0.9f;
         if (flag[0x10]) {
-            a = scale_game_frames(FUN_L00_00257b90(20, 35));
-            b = FUN_L00_00257b90(40, 60);
+            a = scale_game_frames(random_int_between(20, 35));
+            b = random_int_between(40, 60);
             FUN_L00_00269958(&buf[i], tmp, 0x7000FFA0, 0xFF00, a, 30, b, 1);
         } else {
-            a = scale_game_frames(FUN_L00_00257b90(20, 35));
-            b = FUN_L00_00257b90(40, 60);
+            a = scale_game_frames(random_int_between(20, 35));
+            b = random_int_between(40, 60);
             FUN_L00_00269958(&buf[i], tmp, 0x7000A0FF, 0xFF, a, 30, b, 1);
         }
     }

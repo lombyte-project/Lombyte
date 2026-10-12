@@ -7,7 +7,7 @@
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L15_002044c8). */
 extern int D_0015ED84_d __asm__("D_0015ED84");
 extern int FUN_001f0b58(void);
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void FUN_001f9810(void *, int);
 extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
@@ -63,7 +63,7 @@ void FUN_L18_00213b40(void) {
     if (v == 0xD) {
         struct Hero *q = &hero;
         if (q->state.current != 0x7B) {
-            if (FUN_L00_001f0d60(q->unk234 + 0.03f, &q->motion.unkD0, 2, 0)) {
+            if (coll_sphere(q->unk234 + 0.03f, &q->motion.unkD0, 2, 0)) {
                 if (FUN_001f0b58() == 0xB) {
                     hero_set_state(0x7B, 1);
                     return;

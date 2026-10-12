@@ -27,7 +27,7 @@ extern u8 D_0013D388[];
 extern u8 D_0013D408[];
 extern void unlock_planet(s32) __asm__("FUN_L00_002607d0");
 extern void FUN_L00_0028dd40(s32, s32, s32) __asm__("FUN_0022db10");
-extern void FUN_L00_00263d40(s32, s32);
+extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 
 void FUN_L00_002831c0(void) {
     s32 pressed;
@@ -82,7 +82,7 @@ void FUN_L00_002831c0(void) {
         if (!*flag) {
             *flag = 1;
             FUN_L00_0028dd40(1, 0, 0);
-            FUN_L00_00263d40(0x53d6, -1);
+            queue_dialogue_message(0x53d6, -1);
         }
     }
     } else D_0015EF78 = 0;

@@ -9,7 +9,7 @@
 #include "qcopy.h"
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *FUN_L00_002678b8(int);
+extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
@@ -27,7 +27,7 @@ void FUN_L15_0025e2c0(int color, u128 *pos, char *owner) {
     u128 *b;
 
     target.q = *pos;
-    p = FUN_L00_002678b8(0x1F);
+    p = create_part(0x1F);
     if (p != 0) {
         a = &at;
         from = owner + 0x10;
@@ -58,7 +58,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 unsigned char *FUN_L15_002647f0(void *pos, float *p, float *c, int d, int e, int f, int g, int h,
                                 char *owner) {
-    unsigned char *r = FUN_L00_002678b8(0x47);
+    unsigned char *r = create_part(0x47);
     if (r != 0) {
         int *q, *q2;
         float t0[4], t1[4];

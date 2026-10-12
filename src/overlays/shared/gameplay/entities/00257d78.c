@@ -6,7 +6,8 @@ float random_float_between(float *, float, float) __asm__("FUN_002132a8");
 float random_angle_radians(void) __asm__("FUN_00213308");
 float FUN_001f9dc8(float);
 float FUN_001f9de0(float);
-void FUN_L00_00257d78(float *out, float lo, float hi) {
+void random_vector(float *out, float lo, float hi) __asm__("FUN_L00_00257d78");
+void random_vector(float *out, float lo, float hi) {
     float r = random_float_between(out, lo, hi);
     float a = random_angle_radians();
     float b = random_angle_radians();

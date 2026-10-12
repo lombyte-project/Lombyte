@@ -9,7 +9,7 @@
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern unsigned char *FUN_L00_0026b790(void *, int, int, float, float, float, float, float);
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float FUN_L00_00257c48(float, float);
+extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
@@ -48,8 +48,8 @@ void FUN_L06_002d8178(void *moby_ptr, void *target_ptr) {
     }
     for (j = 9; j >= 0; j--) {
         qcopy(pos, moby + 0x10);
-        pos[0] += FUN_L00_00257c48(0.0f, 0.2f);
-        pos[1] += FUN_L00_00257c48(0.0f, 0.2f);
+        pos[0] += randf_sym(0.0f, 0.2f);
+        pos[1] += randf_sym(0.0f, 0.2f);
         pos[2] += random_float_between(0.15f, 0.55f);
         angle = random_angle_radians();
         speed = random_float_between(2.0f, 4.5f) * D_0015ED6C;
@@ -380,7 +380,7 @@ void FUN_L06_002e9aa8(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9b60.s", FUN_L06_002e9b60);
 #else
 extern f32 FUN_001f9af0(void *) __asm__("FUN_001f9af0");
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_00261d78(float, int, void *, void *);
 extern f32 D_0015ED6C;
 extern u128 D_L06_001745E0 __attribute__((section(".data")));
@@ -406,7 +406,7 @@ void FUN_L06_002e9b60(float scale, float threshold, char *moby, float *out, int 
         FUN_001f9a28(moby + 0x10, end, forward);
     }
     for (i = 0; i < 6; i++) {
-        if (FUN_L00_001f0d60(threshold, end, 4, moby) != 0) {
+        if (coll_sphere(threshold, end, 4, moby) != 0) {
         qcopy(end, &D_L06_001745F0);
         FUN_001f9a28(moby + 0x10, end, forward);
         } else {
@@ -553,9 +553,9 @@ void FUN_L06_002ea198(struct Moby *moby, Vec4 *dir) {
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_001f96f8(int);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_L00_00257d78(float *, float, float);
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
@@ -569,11 +569,11 @@ void FUN_L06_002ea498(char *m) {
         int t, u;
         build_spherical_offset(a, frame_time * 1.8f, r1, r2);
         a[2] += frame_time * 0.9f;
-        FUN_L00_00257d78(b, 0.0f, 0.5f);
+        random_vector(b, 0.0f, 0.5f);
         FUN_001f9a10(b, b, m + 0x10);
         b[2] += 0.5f;
-        t = FUN_001f96f8(FUN_L00_00257b90(0x14, 0x23));
-        u = FUN_L00_00257b90(0x28, 0x3C);
+        t = FUN_001f96f8(random_int_between(0x14, 0x23));
+        u = random_int_between(0x28, 0x3C);
         FUN_L00_00269958(b, a, 0x7000A0FF, 0xFF, t, 0x1E, u, 1);
     }
 }
@@ -808,7 +808,7 @@ extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
-extern float FUN_L00_00257c48(float lo, float hi);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float FUN_L00_0025bc00(float *, int, float, float);
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
@@ -824,8 +824,8 @@ extern int *D_L06_001B0C30[];
 extern int D_00141610[];
 extern int GB_FRAME __asm__("D_L06_0015F5CC");
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern int FUN_L00_001f0d60(float, void *, int, void *);
-extern int FUN_L00_00257b90(int, int);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int FUN_L00_0025c698(void *, void *);
@@ -1089,7 +1089,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                 d->f184 = 0;
                 d->f190 = 0;
                 qcopy(d->fF0, moby->pos);
-                d->f17C = FUN_L00_00257c48(0.13962634f, 0.34906584f);
+                d->f17C = randf_sym(0.13962634f, 0.34906584f);
             case 1: {
                 int hit;
 
@@ -1221,7 +1221,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
             d->target = 0;
             d->f198 = 0;
             d->target_searched = 0;
-            d->f17C = FUN_L00_00257c48(0.13962634f, 0.34906584f);
+            d->f17C = randf_sym(0.13962634f, 0.34906584f);
             d->f18C = GB_FRAME;
         }
         switch (moby->sub) {
@@ -1420,9 +1420,9 @@ void FUN_L06_002f0040(GbMoby *moby) {
             moby->state = 4;
             for (i = 0; i < 10; i++) {
                 float s = random_float_between(0.1f, 1.0f);
-                int cr = FUN_L00_00257b90(0x40, 0xFF);
-                int cg = FUN_L00_00257b90(0x40, 0xFF);
-                int cb = FUN_L00_00257b90(0x40, 0xFF);
+                int cr = random_int_between(0x40, 0xFF);
+                int cg = random_int_between(0x40, 0xFF);
+                int cb = random_int_between(0x40, 0xFF);
                 int t;
                 int ga;
                 float fa;
@@ -1435,7 +1435,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                 FUN_L00_001ff290(v60, v50, moby->pos);
                 normalize_vector_xyz(v40, v40, random_float_between(0.0f, frame_time));
                 v40[2] = random_float_between(frame_time * 2.5f, frame_time * 5.0f);
-                t = scale_game_frames(FUN_L00_00257b90(0xF, 0x1E));
+                t = scale_game_frames(random_int_between(0xF, 0x1E));
                 ga = (cg << 8) | 0x7F000000;
                 fa = s * 0.07f;
                 fb = s * 0.7f;
@@ -1501,7 +1501,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
                 do {
                     qcopy(v50, moby->pos);
                     v50[2] += d->ctl.f04;
-                    if (FUN_L00_001f0d60(convert_integer_to_float(d->ctl.i00) * 0.0009765625f, v50, 6,
+                    if (coll_sphere(convert_integer_to_float(d->ctl.i00) * 0.0009765625f, v50, 6,
                                          moby) == 0) {
                         break;
                     }
@@ -2569,7 +2569,7 @@ void FUN_L06_002f7c68(char *m) {
         int r;
         int c;
         int v;
-        FUN_L00_00257d78(buf, *(float *)&D_L06_00161E84_d * frame_time,
+        random_vector(buf, *(float *)&D_L06_00161E84_d * frame_time,
                          *(float *)&D_L06_00161E88_d * frame_time);
         f = random_float_between_alt(*(float *)&D_L06_00161EA8_d, *(float *)&D_L06_00161EAC_d);
         if (random_integer_below(2) != 0) {

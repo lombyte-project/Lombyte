@@ -93,7 +93,8 @@ extern void FUN_L00_00275eb0(void);
 
 extern u32 effect_handlers[] __asm__("D_L00_001B1E80");
 
-void FUN_L00_00268900(void)
+void register_part_types(void) __asm__("FUN_L00_00268900");
+void register_part_types(void)
 {
     u32 *handlers = effect_handlers;
     handlers[0] = (u32)FUN_L00_00268d48;
@@ -248,11 +249,11 @@ void FUN_L00_00268d48(FallingParticle *p)
     vel->f[3] = ground + particle_clearance.value;
 }
 extern unsigned char *D_L00_001B2084 __attribute__((section(".data")));
-unsigned char *FUN_L00_002678b8(int);
+unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00268f10(Vec4 *v, int c) {
-    unsigned char *m = FUN_L00_002678b8(1);
+    unsigned char *m = create_part(1);
     if (m) {
         v->f[2] += 0.1f;
         qcopy(m + 0x10, v);

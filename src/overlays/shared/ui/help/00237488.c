@@ -79,7 +79,7 @@ extern int FUN_001f96f8(int);
 extern int FUN_001f9770(void *);
 extern int FUN_L00_0020d568();
 extern int FUN_L00_00216de8(int, int);
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0020a500(void);
 extern void FUN_L00_0020e698(void);
 extern void FUN_L00_002cdcc0(void);
@@ -358,7 +358,7 @@ void FUN_L05_0023dc88(int i) {
         struct Hero *g = &hero;
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
         FUN_L00_0020a500();
-        *(int *)((char *)g + 0x1010) = FUN_L00_00257b90(FUN_001f96f8(0x32), FUN_001f96f8(0x5A));
+        *(int *)((char *)g + 0x1010) = random_int_between(FUN_001f96f8(0x32), FUN_001f96f8(0x5A));
         FUN_L00_0020fde0(*(hero.selected_item + i));
         FUN_L00_0020fd80(*(hero.selected_item + i));
         if (g->unk20A8 != 0) {
@@ -631,7 +631,7 @@ extern int D_L05_0015F674; /* no foreign declaration */
 extern int D_L05_0015FFD8; /* no foreign declaration */
 extern int D_L05_0017C088;
 extern int FUN_L00_001fefc8(void *);
-extern int FUN_L00_00203908(int a, int b);
+extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int FUN_L00_0020d498(int);
 extern int FUN_L00_0020fe30_c(void) __asm__("FUN_L00_0020fe30");
 extern int FUN_L00_00211360(void *);
@@ -947,7 +947,7 @@ int FUN_L05_00251be8(void) {
             if (D_0013F450_h2523C8.unk8CE != 0) {
                 if (D_00141D80[0] == 0 && D_00141920[0] == 0) {
                     if (++D_0013F450_h2523C8.unk8CA > (int)((float)scale_game_frames_alt(0x14) * 60.0f)) {
-                        FUN_L00_00203908(0x3E81, 0x83);
+                        help_request(0x3E81, 0x83);
                     }
                 }
             }

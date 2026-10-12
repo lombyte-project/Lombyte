@@ -70,7 +70,7 @@ unsigned char *FUN_L07_0030b538(void *pos, float *dir, int a, int b) {
 /* spawns a moby with random velocity and copies position */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030CE70), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_00257c48(float lo, float hi);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
@@ -85,8 +85,8 @@ char *FUN_L07_0030ba90(char *pos, char *vec, int c, short d) {
         *(float *)(m + 0x40) = random_angle_radians();
         *(float *)(m + 0x44) = random_angle_radians();
         *(float *)(m + 0x48) = random_angle_radians();
-        *(float *)(p + 0x18) = FUN_L00_00257c48(100.0f, 300.0f) * DEG_TO_RAD * frame_time;
-        *(float *)(p + 0x1C) = FUN_L00_00257c48(100.0f, 300.0f) * DEG_TO_RAD * frame_time;
+        *(float *)(p + 0x18) = randf_sym(100.0f, 300.0f) * DEG_TO_RAD * frame_time;
+        *(float *)(p + 0x1C) = randf_sym(100.0f, 300.0f) * DEG_TO_RAD * frame_time;
         qcopy(m + 0x10, pos);
         qcopy(p, vec);
         *(int *)(p + 0x10) = c;
@@ -1129,7 +1129,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern int FUN_L00_00257b90(int, int);
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void FUN_L07_0029a2a0(void *, void *);
@@ -1187,7 +1187,7 @@ void FUN_L07_0030b6a8(struct Moby *m) {
                 normalize_vector_xyz(&dir, &dir,
                                      random_float_between(frame_time * 3.0f, frame_time * 6.0f));
                 FUN_L00_0026dd20((char *)&m->pos, (char *)&dir, 0x7F2F4F6F,
-                                 FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(15)),
+                                 random_int_between(scale_game_frames(10), scale_game_frames(15)),
                                  30000.0f);
             }
         }
@@ -1833,7 +1833,7 @@ animate:
     switch (moby->state) {
     case 0:
         frames = scale_game_frames(*(int *)(data + 0xb0));
-        delay = scale_game_frames(FUN_L00_00257b90(0, 10));
+        delay = scale_game_frames(random_int_between(0, 10));
         *(int *)(data + 0xb4) = D_L07_0015F5CC + frames + delay;
         FUN_0020cb10(moby, 0, data + 0x70);
         *(float *)(data + 0xc0) = 0.0f;
