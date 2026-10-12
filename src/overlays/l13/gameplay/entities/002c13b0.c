@@ -1878,8 +1878,10 @@ extern char D_L13_001F4DB0[];
 extern char D_L13_001F4DD0[];
 extern int D_L13_0015F5CC;
 
+extern int D_L13_0015F5CC_absolute __asm__("D_L13_0015F5CC") __attribute__((section(".data")));
+
 void FUN_L13_002e4448(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    unsigned char *data = *(unsigned char **)(moby + 0x78);
     int hit = 0;
 
     if (*(short *)(data + 0x74) == 0 && (unsigned char)(moby[0x20] - 1) < 2) {
@@ -1889,14 +1891,16 @@ void FUN_L13_002e4448(char *moby) {
     case 0:
         if ((unsigned char)data[0x79] == 0) {
             char *iter[4];
+            char *linked;
             data[0x7B] = 0;
             *(char **)(data + 0x80) = moby;
             FUN_L00_002591d0(iter, (unsigned char)moby[0x21], 0, 0);
-            while (iter[0] != 0) {
-                if (iter[0] != moby && *(short *)(iter[0] + 0xA6) == 0xE7) {
-                    char *other_data = *(char **)(iter[0] + 0x78);
-                    other_data[0x79] = 1;
-                    *(char **)(other_data + 0x80) = moby;
+            while ((linked = *(char *volatile *)iter) != 0) {
+                linked = iter[0];
+                if (linked != moby && *(short *)(linked + 0xA6) == 0xE7) {
+                    char *other_data = *(char **)(linked + 0x78);
+                    *(volatile unsigned char *)(other_data + 0x79) = 1;
+                    *(char *volatile *)(other_data + 0x80) = moby;
                 }
                 data[0x7B]++;
                 FUN_L00_002592b8(iter, iter[0], 0, 0);
@@ -1936,7 +1940,7 @@ void FUN_L13_002e4448(char *moby) {
                 FUN_L01_0026e0e0((unsigned char)moby[0x21], 4);
                 FUN_0022da68(1, 0, moby);
                 *(short *)(data + 0x70) = *(short *)(data + 0x84);
-                FUN_001e93b0(D_L13_001F4D90, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), D_L13_0015F5CC);
+                FUN_001e93b0(D_L13_001F4D90, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), D_L13_0015F5CC_absolute);
                 moby[0x20] = 4;
             } else {
                 if (*(int *)(data + 0x7C) >= 0) {
@@ -1953,12 +1957,15 @@ void FUN_L13_002e4448(char *moby) {
                         a = FUN_001f96f8(0x2D);
                         b = FUN_001f96f8(5);
                         divisor = FUN_001f96f8(0x28);
-                        if (a < b + *(short *)(data + 0x70) / divisor) {
+                        b += *(short *)(data + 0x70) / divisor;
+                if (a < b) {
                             *(short *)(data + 0x72) = FUN_001f96f8(0x2D);
                         } else {
+                            int b, divisor;
                             b = FUN_001f96f8(5);
                             divisor = FUN_001f96f8(0x28);
-                            *(short *)(data + 0x72) = b + *(short *)(data + 0x70) / divisor;
+                            b += *(short *)(data + 0x70) / divisor;
+                    *(short *)(data + 0x72) = b;
                         }
                     }
                 }
@@ -1987,12 +1994,15 @@ void FUN_L13_002e4448(char *moby) {
                 a = FUN_001f96f8(0x2D);
                 b = FUN_001f96f8(5);
                 divisor = FUN_001f96f8(0x28);
-                if (a < b + *(short *)(data + 0x70) / divisor) {
+                b += *(short *)(data + 0x70) / divisor;
+                if (a < b) {
                     *(short *)(data + 0x72) = FUN_001f96f8(0x2D);
                 } else {
+                    int b, divisor;
                     b = FUN_001f96f8(5);
                     divisor = FUN_001f96f8(0x28);
-                    *(short *)(data + 0x72) = b + *(short *)(data + 0x70) / divisor;
+                    b += *(short *)(data + 0x70) / divisor;
+                    *(short *)(data + 0x72) = b;
                 }
             }
         }
