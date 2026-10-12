@@ -112,7 +112,7 @@ void FUN_L16_002097a0(void) {
     {
         struct Hero *q = &hero;
         struct Hero *h;
-        if (q->unk12E3 != 0 && q->unk300 != 0) {
+        if (q->unk12E3 != 0 && q->grounded_frames != 0) {
             int k = q->state.control_mode;
             if (k != 0x10 && k != 0x14 && k != 7) {
                 hero_set_state(0x31, 1);
@@ -123,7 +123,7 @@ void FUN_L16_002097a0(void) {
         if (h->selector_13 != 0 && h->state.current != 0x7F) {
             if (absolute_float(h->water_surface_z - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
                 if (h->water_surface_z - h->motion.pos.f[2] > 0.0f) {
-                    if (h->motion.unk100.f[2] < 0.0f) {
+                    if (h->motion.displacement.f[2] < 0.0f) {
                         FUN_L00_0020b930();
                         hero_set_state(HERO_STATE_SINK, 1);
                     }
@@ -291,30 +291,30 @@ void FUN_L16_0020ffb0(void) {
     }
 tail:
     if (hero.air_frames.s != 0) {
-        hero.unk300 = 0;
+        hero.grounded_frames = 0;
     } else {
-        hero.unk300++;
+        hero.grounded_frames++;
         qcopy((u8 *)&hero.unk2B0, (u8 *)&hero.ground_point);
     }
     if (hero.motion.pos.f[2] > hero.water_surface_z) {
         hero.unk2F8 = 0;
     }
 d1:
-    FUN_001f99f8_c((u8 *)&hero.unk290);
+    FUN_001f99f8_c((u8 *)&hero.gravity_dir);
     switch (hero.unk20B3) {
     case 0:
-        hero.unk290.f[2] = -1.0f;
+        hero.gravity_dir.f[2] = -1.0f;
         break;
     case 1:
-        qcopy((u8 *)&hero.unk290, (u8 *)&hero.unk270);
-        FUN_001f9a68_c((u8 *)&hero.unk290, (u8 *)&hero.unk290, -1.0f);
+        qcopy((u8 *)&hero.gravity_dir, (u8 *)&hero.unk270);
+        FUN_001f9a68_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, -1.0f);
         break;
     case 2:
-        FUN_001f9a28((u8 *)&hero.unk290, (u8 *)&hero.motion.unkB0, (u8 *)&hero.motion.pos);
-        FUN_001f9bf8_c((u8 *)&hero.unk290, (u8 *)&hero.unk290, 1.0f);
+        FUN_001f9a28((u8 *)&hero.gravity_dir, (u8 *)&hero.motion.unkB0, (u8 *)&hero.motion.pos);
+        FUN_001f9bf8_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, 1.0f);
         break;
     }
-    hero.unk2E4.i = 0;
+    hero.ground_pitch.i = 0;
     hero.unk2E8.i = 0;
     hero.unk2D0.i[0] = 0;
     hero.unk2D0.i[1] = 0;
@@ -331,7 +331,7 @@ d1:
     }
     FUN_L00_00216078((u8 *)&hero.unk270, &v20);
     if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
-        hero.unk2E4.f = v20.f[1];
+        hero.ground_pitch.f = v20.f[1];
     }
     if (-0.78539819f < v20.f[0] && v20.f[0] < 0.78539819f) {
         hero.unk2E8.f = v20.f[0];
@@ -359,7 +359,7 @@ d1:
             }
         } else {
             hero.unk2C0.i[i] = 0;
-            hero.unk2C8.f[i] = hero.unk2E4.f;
+            hero.unk2C8.f[i] = hero.ground_pitch.f;
             hero.unk2D0.f[i] = hero.unk2E8.f;
         }
     }
@@ -436,7 +436,7 @@ s32 FUN_L16_00210b60(s32 mode) {
                 break;
         } else {
             s32 a;
-            h = hero.unk220 - hero.unk224;
+            h = hero.capsule_top - hero.unk224;
             if (h < 0.05f) {
                 h = 0.05f;
             }

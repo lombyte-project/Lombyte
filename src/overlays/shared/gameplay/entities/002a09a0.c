@@ -626,7 +626,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
             d->impulse_time = time_scale;
             if (((L16DamageResident *)D_0013F350)->difficulty == 2) {
                 float impulse = frame_time;
-                m->unk58 = 0.5f;
+                m->anim_speed = 0.5f;
                 d->forward_impulse = impulse * 24.0f;
                 d->lateral_impulse = impulse * 8.0f;
             } else {
@@ -658,7 +658,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
         }
         FUN_L00_0025d458(m, d->damage);
     }
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
     FUN_L00_0025d538(m, d->damage);
     tick_countdown_32(&d->pursuit_timer);
     if (d->reset_timer) {
@@ -701,9 +701,9 @@ void FUN_L16_002d3de0(struct Moby *moby, int arg) {
         if (moby->prev_seq != 1) {
             blend_moby_animation_u(moby, 1, 0, FUN_001f96f8(0x14));
         }
-        moby->unk31 = 1;
+        moby->visible = 1;
         moby->flags &= 0xFFFE;
-        moby->unk94 = moby->pclass->unk10;
+        moby->collision = moby->pclass->collision;
         moby->flags |= 0x1000;
         *(short *)(d + 0x2DC) = arg;
         *(float *)(d + 0x2BC) = moby->pos.z;

@@ -804,7 +804,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     rotate_vector_2c1ad0(&rotatedOffset, &offset, local);
     add_vector_xyz(&vars->grip, &saved, &rotatedOffset);
     if (vars->held != 0)
-        vars->held->unk98 = 1;
+        vars->held->collision_disable = 1;
     if (vars->held == 0 || vars->held->state == 0xFE || vars->held->state == 0xFD)
         vars->held = 0;
     if (hero.state.current == 1)
@@ -923,9 +923,9 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         vars->held = 0;
-        moby->state = (moby->unk70 & 2) ? 2 : 1;
+        moby->state = (moby->anim_flags & 2) ? 2 : 1;
     case 1:
-        if (moby->unk70 & 2)
+        if (moby->anim_flags & 2)
             moby->state = 2;
         break;
     case 3:
@@ -1164,7 +1164,7 @@ void FUN_L00_002c3888(float *pos,char *moby,void *vec) {
  char *player;
  qcopy(state+0x10,vec);
  { struct Hero *view = &hero;
-   if(((int)view->ground_moby) && FUN_L00_002603d0(((int)view->ground_moby))) add_vector_xyz(state+0x10,state+0x10,&view->motion.unk100);
+   if(((int)view->ground_moby) && FUN_L00_002603d0(((int)view->ground_moby))) add_vector_xyz(state+0x10,state+0x10,&view->motion.displacement);
  }
  qcopy(moby+0x10,pos);
  camera = &hero;
@@ -1252,9 +1252,9 @@ s32 FUN_L00_002c3af8(ThrowVars *v, struct Moby *m, s32 mode)
         d.f[2] += 0.39081999659538269043f;
         qcopy(&e, &v->vel);
         if (hero.state.control_mode == 15)
-            add_vector_xyz(&e, &e, &hero.motion.unk100);
+            add_vector_xyz(&e, &e, &hero.motion.displacement);
         if (hero.ground_moby && FUN_L00_002603d0((int)hero.ground_moby) && mode)
-            add_vector_xyz(&e, &e, &hero.motion.unk100);
+            add_vector_xyz(&e, &e, &hero.motion.displacement);
         t = scale_game_frames(300);
     } else {
         u8 *holder_vars = v->holder->pvars;
@@ -1493,7 +1493,7 @@ void FUN_L00_002c4380(char *moby) {
                 if (len < D_0015ED60_2c4380 * 0.01f ||
                     (hero.ground_moby && FUN_L00_002603d0((int)hero.ground_moby) &&
                      FUN_001ff3d8_2c4380(vars + 0x10) < D_0015ED60_2c4380 * 0.01f +
-                           FUN_001ff3d8_2c4380(&hero.motion.unk100))) {
+                           FUN_001ff3d8_2c4380(&hero.motion.displacement))) {
                     angle = FUN_001ff8b0_2c4380(coll_hit.normal_z,
                                                  FUN_001ff408_2c4380(&coll_hit.normal_x));
                     if (angle < 0.61086524f) {
@@ -2104,7 +2104,7 @@ void FUN_L00_002c7a58(struct Moby *moby) {
     FUN_001f9d20(&local, &offset, mat);
     add_vector_xyz(&vars->grip, &pos, &local);
     if (vars->held != 0) {
-        vars->held->unk98 = 1;
+        vars->held->collision_disable = 1;
     }
     if (vars->held == 0 || vars->held->state == 0xFE || vars->held->state == 0xFD) {
         vars->held = 0;
@@ -2126,13 +2126,13 @@ void FUN_L00_002c7a58(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         vars->held = 0;
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             moby->state = 2;
         } else {
             moby->state = 1;
         }
     case 1:
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             moby->state = 2;
         }
         break;

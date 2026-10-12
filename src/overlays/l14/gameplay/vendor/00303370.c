@@ -15,7 +15,7 @@ void FUN_L14_00303370(struct Moby *moby) {
     case 0:
         FUN_L02_002a4058(D_L14_001E9C60, 0x40, 0.6666667f);
         moby->state = 1;
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         break;
     case 1:
         add_draw_callback(register_audio_stream_callback, moby);

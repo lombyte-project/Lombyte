@@ -874,7 +874,7 @@ void FUN_L05_002dac80(struct Moby *m) {
     switch (m->state) {
     case 0:
         m->state = 1;
-        m->unk30 = 0x40;
+        m->update_dist = 0x40;
         if (m->prev_seq != 0)
             blend_moby_animation_c(m, 0, 0, 0);
         if (*(int *)(d + 0xB0) == -1 || *(int *)D_L05_001B0CB0_x[*(int *)(d + 0xB0)] == 0) {
@@ -915,9 +915,9 @@ void FUN_L05_002dac80(struct Moby *m) {
     case 2:
         if (48.0f < FUN_001f9b80(&m->pos, &hero.motion.pos)) {
             m->state = 1;
-            m->unk31 = 1;
+            m->visible = 1;
             m->flags &= 0xFFFE;
-            m->unk94 = m->pclass->unk10;
+            m->collision = m->pclass->collision;
         }
         break;
     }
@@ -1249,7 +1249,7 @@ void FUN_L05_00303390(Moby *m) {
         }
         trooper_anim_update(m, d->f60);
     }
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
     trooper_anim_finish(m, d->f60);
     if (d->f38 != 0) {
         d->f2B0 = func_001FA898_3047E8(scale_time(func_002140F8_3047E8(180.0f, 240.0f)));
@@ -1279,7 +1279,7 @@ void FUN_L05_00303390(Moby *m) {
         d->target = D_001413D0_3047E8;
     }
     d->f2D8 = func_001FA748_3047E8(d->f2D8, D_0015ED6C * 9.424778f);
-    m->unk90 = fast_tween_color(D_L05_00161A74, D_L05_00161A78, (func_001F9FA8_3047E8(d->f2D8) + 1.0f) * 0.5f);
+    m->glow_color = fast_tween_color(D_L05_00161A74, D_L05_00161A78, (func_001F9FA8_3047E8(d->f2D8) + 1.0f) * 0.5f);
     k = m->state;
     if (k < 10) {
     if (k >= 4 && d->target == D_001413D0_3047E8) {
@@ -1853,14 +1853,14 @@ void FUN_L05_00307570(struct Moby *m) {
                         speed = 1.7f;
                     if (speed < 0.3f)
                         speed = 0.3f;
-                    m->unk58 = speed;
+                    m->anim_speed = speed;
                 }
             }
             if (d->sequence != -1) {
                 if (duration < (float)FUN_001f96f8(9)) {
                     leap_anim_307570(m, 5, 3, FUN_001f96f8(7));
                     d->sequence = -1;
-                } else if (m->unk70 & 2) {
+                } else if (m->anim_flags & 2) {
                     leap_anim_307570(m, 5, 2, FUN_001f96f8(7));
                     d->sequence = -1;
                 }
@@ -1871,16 +1871,16 @@ void FUN_L05_00307570(struct Moby *m) {
             remaining = 25.0f;
             remaining -= FUN_0020c9e0(m);
             remaining /= duration * 0.5f;
-            m->unk58 = remaining;
+            m->anim_speed = remaining;
         }
     } else {
-        m->unk58 = 1.0f;
-        if ((m->unk70 & 2) && m->prev_seq != 0) {
+        m->anim_speed = 1.0f;
+        if ((m->anim_flags & 2) && m->prev_seq != 0) {
             leap_anim_307570(m, 0, 0, FUN_001f96f8(8));
         }
     }
     if (d->rider != 0)
-        d->rider->unk58 = m->unk58;
+        d->rider->anim_speed = m->anim_speed;
 }
 #include "sda.h"
 
@@ -1980,15 +1980,15 @@ void FUN_L05_00307910(Moby *moby) {
     float push[4];
     Data_308D68 *data = (Data_308D68 *)*(void **)&moby->pvars;
 
-    if (moby->unk31 != 0 && distance_xyz(((float *)&moby->pos), D_L05_001671C0) < 29.0f) {
+    if (moby->visible != 0 && distance_xyz(((float *)&moby->pos), D_L05_001671C0) < 29.0f) {
         FUN_L00_0025a120(moby);
-        moby->unk7F = 0x17;
+        moby->shadow_range = 0x17;
     }
     switch (moby->state) {
     case 0: {
         Path_308D68 *path;
 
-        moby->unk30 = 0x18;
+        moby->update_dist = 0x18;
         moby->flags |= 0x41;
         path = (Path_308D68 *)D_L05_001B0930[data->path_id];
         data->path = path;
@@ -2019,7 +2019,7 @@ void FUN_L05_00307910(Moby *moby) {
     }
     case 1:
         if (*(int *)(((char *)&D_001413DC)) == 0x16) {
-            moby->unk30 = 0xFF;
+            moby->update_dist = 0xFF;
             moby->flags &= ~0x41;
             data->point_index = 0;
             data->launch_timer = scale_game_frames_alt(0xB4);
@@ -2176,7 +2176,7 @@ void FUN_L05_00307910(Moby *moby) {
                 qcopy(((float *)&child->pos), ((float *)&moby->pos));
                 qcopy(((float *)&child->rot), ((float *)&moby->rot));
                 if (data->launch_timer != 0) {
-                    child->unkBC = 1;
+                    child->command = 1;
                 }
             }
         }

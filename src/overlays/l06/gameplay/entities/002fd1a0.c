@@ -1173,8 +1173,8 @@ void FUN_L06_00302578(struct Moby *moby) {
         } else {
             D_0013D3AC_302578[5] = 0;
         }
-        moby->unk30 = 0xFF;
-        moby->unk32 = 0x80;
+        moby->update_dist = 0xFF;
+        moby->draw_dist = 0x80;
         moby->spawn_frame = hero.moby->spawn_frame;
         moby->state = 1;
         if (moby->prev_seq != 2) {
@@ -1296,7 +1296,7 @@ void FUN_L06_00302578(struct Moby *moby) {
             base = (int)D_L06_001600EC_302578;
             qcopy(((float *)&moby->pos), (char *)(ofs + base + 0x30));
             qcopy(((float *)&moby->rot), (char *)(ofs + base + 0x70));
-            vu_euler_rotation_basis_302578(((float *)&moby->unkC0), ((float *)&moby->rot));
+            vu_euler_rotation_basis_302578(((float *)&moby->rot_row0), ((float *)&moby->rot));
             moby->scale = moby->pclass->scale;
             if (d->sel == 1) {
                 D_L06_0015FDF8_302578 = 1;
@@ -1307,8 +1307,8 @@ void FUN_L06_00302578(struct Moby *moby) {
                 D_L06_0015FDF8_302578 = 0;
             }
             qcopy(b, ((float *)&moby->pos));
-            normalize_vector_xyz_302578(a, ((float *)&moby->unkC0), -2.0f);
-            add_vector_xyz_302578(a, a, ((float *)&moby->unkE0));
+            normalize_vector_xyz_302578(a, ((float *)&moby->rot_row0), -2.0f);
+            add_vector_xyz_302578(a, a, ((float *)&moby->rot_row2));
             add_vector_xyz_302578(b, b, a);
             clear_vector_302578(rot);
             rot[2] = fast_add_rotations_302578(moby->rot.z, 3.1415927f);
@@ -1661,7 +1661,7 @@ void FUN_L06_00304098(struct Moby *moby) {
 
     switch (moby->state) {
     case 0:
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         moby->rot.x = fast_subtract_rotations_304098(moby->rot.x, 0.78539819f);
         moby->state = 1;
         data->f48 = -1;

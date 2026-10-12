@@ -96,7 +96,7 @@ void FUN_L00_00215340(void) {
         TF(0x270) = FUN_001f99c0(b) * 0.16f;
         if (hero.state.current == 0x81) {
             if (D_0015ED6C * 0.5f < hero.motion.unk164) {
-                ang = FUN_001fa5c8(FUN_001f9e90(hero.motion.unk100.f[0], hero.motion.unk100.f[1]), hero.motion.rot.f[2]);
+                ang = FUN_001fa5c8(FUN_001f9e90(hero.motion.displacement.f[0], hero.motion.displacement.f[1]), hero.motion.rot.f[2]);
                 s = hero.motion.unk164 * 3.0f;
                 TF(0x60) = -FUN_001f9de0(ang) * s;
                 TF(0x64) = FUN_001f9dc8(ang) * s;

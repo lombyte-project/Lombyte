@@ -1226,7 +1226,7 @@ extern char D_00141CE4[];
 void FUN_L13_002f3778(struct Moby *moby) {
     char *data;
     unsigned char *p;
-    moby->unk30 = 0xFF;
+    moby->update_dist = 0xFF;
     data = (char *)moby->pvars;
     if (D_L13_00179710[0] == 0 && D_L13_00179710[9] == -1) {
         unsigned int v = *(unsigned int *)(&hero.state.control_mode);

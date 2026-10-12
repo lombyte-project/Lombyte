@@ -663,9 +663,9 @@ void FUN_L08_002d4ca0(Moby *moby) {
         effects_start_2D5FA8(moby, &data->anim0);
     }
 
-    moby->unkA4 = 0xFF;
-    if (data->partA != 0) data->partA->unkA4 = 0xFF;
-    if (data->partB != 0) data->partB->unkA4 = 0xFF;
+    moby->hit_slot = 0xFF;
+    if (data->partA != 0) data->partA->hit_slot = 0xFF;
+    if (data->partB != 0) data->partB->hit_slot = 0xFF;
 
     follow_2D5FA8(100.0f, moby, data->target, 0, 0, D_L08_001B0FB0_2D5FA8[data->path]->list, D_L08_001B0FB0_2D5FA8[data->path]->count);
     if (data->fF0 == 0) data->fF0 = *(int *)D_0013E633_2D5FA8;
@@ -966,7 +966,7 @@ void FUN_L08_002da0f0(struct Moby *moby) {
         return;
     if (!(hero.motion.pos.f[2] < D_L08_001D7060[2]))
         return;
-    if (!(D_L08_001D7060[2] <= hero.motion.pos.f[2] - hero.motion.unk100.f[2]))
+    if (!(D_L08_001D7060[2] <= hero.motion.pos.f[2] - hero.motion.displacement.f[2]))
         return;
     if (FUN_L00_0028d8c0(hero.moby, hero.health.unk22B2)) {
         release_voice_slot(hero.health.unk22B2);
@@ -1175,10 +1175,10 @@ void FUN_L08_002dbdb0(struct Moby *moby) {
     qcopy(&old_pos, &moby->pos);
     qcopy(&old_rot, &moby->rot);
     if (D_L08_0015F5C4 != 2 && vars->ridable != 0) {
-        moby->unk31 = 1;
+        moby->visible = 1;
         moby->flags &= ~1;
     } else {
-        moby->unk31 = 0;
+        moby->visible = 0;
         moby->flags |= 1;
     }
     if (vars->manip_set == 0)
@@ -1198,7 +1198,7 @@ void FUN_L08_002dbdb0(struct Moby *moby) {
             vars->unkE0 = -1;
             FUN_L08_002dc180((char *)moby);
             moby->state = 2;
-            moby->unk30 = 0xFF;
+            moby->update_dist = 0xFF;
         }
         break;
     case 2:
@@ -1243,7 +1243,7 @@ void FUN_L08_002dc0c8(struct Moby *moby) {
     int *t = (int *)D_L08_001B0CB0[*(int *)(data + 0x8C)];
     if (*t == 8) {
         char *q = D_L08_001DB280;
-        char *mat = &moby->unkC0;
+        char *mat = &moby->rot_row0;
         char *pos = &moby->pos;
         char *p = (char *)t + 0x10;
         int i;
@@ -1298,10 +1298,10 @@ void FUN_L08_002dc180(struct Moby *moby) {
     *(int *)(data + 0x100) = sel;
     *(int *)(data + 0xE4) = 0;
     *(float *)(data + 0x104) = 1.0f;
-    moby->unk31 = 1;
+    moby->visible = 1;
     moby->flags &= 0xFFFE;
     *(int *)(data + 0x124) = 1;
-    moby->unk94 = moby->pclass->unk10;
+    moby->collision = moby->pclass->collision;
     switch (sel) {
     case 0: {
         int n = a->count;
@@ -1323,10 +1323,10 @@ void FUN_L08_002dc180(struct Moby *moby) {
         } else if (f94) {
             *(Route_2dd4f8 **)(data + 0x120) = b;
         } else if (32.0f < FUN_001f9b80(&moby->pos, pl) || D_L08_0015F5CC < 5) {
-            moby->unk31 = 0;
+            moby->visible = 0;
             moby->flags |= 1;
             *(int *)(data + 0x124) = 0;
-            moby->unk94 = 0;
+            moby->collision = 0;
         }
         return;
     }
@@ -1869,10 +1869,10 @@ struct Moby *FUN_L08_002de3e0(void *pos, struct Moby *target, void *velocity, fl
                                                         reference[81] - moby->pos.y);
         scale = moby->pclass->scale;
         scale *= D_L08_00161A40;
-        moby->unk30 = 0xFF;
-        moby->unk31 = 1;
+        moby->update_dist = 0xFF;
+        moby->visible = 1;
         *(volatile u8 *)&moby->state = 1;
-        moby->unk32 = 0xFF;
+        moby->draw_dist = 0xFF;
         moby->scale = scale;
         FUN_L00_002502f0(moby, D_L08_00161A34, D_L08_00161A38, D_L08_00161A3C);
         *(float *)(data + 0x40) = pitch;
@@ -2096,7 +2096,7 @@ void FUN_L08_002dec90(struct Moby *m, char *pos) {
     *(OvlQuad *)v60 = 0;
     v60[0] = -2.3f;
     v60[2] = 0.3f;
-    transform_vector_by_basis(v50, v60, &m->unkC0);
+    transform_vector_by_basis(v50, v60, &m->rot_row0);
     add_vector_xyz(v50, v50, &m->pos);
     scale_vector_xyz(v10, v30, *(float *)&D_L08_00161A48);
     scale_vector_xyz(v20, v30, *(float *)&D_L08_00161A4C);

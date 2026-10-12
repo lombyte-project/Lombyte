@@ -325,14 +325,14 @@ int FUN_L07_00313af0(struct Moby *m, struct ChaserVars *d, Vec4 *goal, int mode,
     }
     if ((D_L07_0015F5CC & 3) == 3 && FUN_L00_002583f0(&m->pos, m, 0, 0.1f, 1.0f)) {
         o = D_L07_00173EC0.moby;
-        if (o != 0 && D_L07_00173EC0.count > 0 && o->oclass == 0x42D && o->unkBC == 0) {
+        if (o != 0 && D_L07_00173EC0.count > 0 && o->oclass == 0x42D && o->command == 0) {
             if (((struct ChaserTargetVars *)o->pvars)->sticky) {
                 subtract_vector_xyz(v, &o->pos, &m->pos);
                 *(s32 *)&v[2] = 0;
                 scale_vector_xyz(v, v, 0.5f);
                 add_vector_xyz(&m->pos, &m->pos, v);
             }
-            D_L07_00173EC0.moby->unkBC = 1;
+            D_L07_00173EC0.moby->command = 1;
         }
     }
     return r;
@@ -724,9 +724,9 @@ void FUN_L07_00319040(struct Moby *moby) {
     if (vars == NULL) return;
 
     sight_19040(moby, sight, 8.0f);
-    if (moby->unk31 && FUN_001f9b48(&moby->pos, &D_L07_00166E40) < 27.0f) {
+    if (moby->visible && FUN_001f9b48(&moby->pos, &D_L07_00166E40) < 27.0f) {
         FUN_L00_0025a120(moby);
-        moby->unk7F = 0x15;
+        moby->shadow_range = 0x15;
     }
     collision = vars + 0x20;
     hit = hit_lookup_19040(moby, 0x230000, 0);
@@ -744,7 +744,7 @@ void FUN_L07_00319040(struct Moby *moby) {
     case 0:
         moby->flags |= 0x1000;
         qcopy(vars + 0x60, &moby->pos);
-        moby->unk94 = moby->pclass->unk10;
+        moby->collision = moby->pclass->collision;
         moby->state = 1;
         break;
     case 1:
@@ -758,7 +758,7 @@ void FUN_L07_00319040(struct Moby *moby) {
             (*(s32 *)(sight + 0x40) != 0 && FUN_001f9b48(&moby->pos, sight) < 8.0f)) {
             *(f32 *)(vars + 0x70) = 0.0f;
             *(s32 *)(vars + 0x78) = scale_ticks(600);
-            moby->unkBC = 1;
+            moby->command = 1;
             *(s32 *)(vars + 0x7c) = scale_ticks(7);
             moby->state = 3;
             if (*(s32 *)(vars + 0x74) != -1) FUN_L01_0026e0e0(*(s32 *)(vars + 0x74), 2);
@@ -769,7 +769,7 @@ void FUN_L07_00319040(struct Moby *moby) {
         if (moby->prev_seq != 1) FUN_00212f90(moby, 1, 0, 10);
         moby->state = 3;
     case 3:
-        if ((moby->unk70 & 2) && moby->seq == 1 && moby->prev_seq != 2) {
+        if ((moby->anim_flags & 2) && moby->seq == 1 && moby->prev_seq != 2) {
             FUN_00212f90(moby, 2, 0, 10);
         }
         speed = frame_time_sq;
@@ -778,15 +778,15 @@ void FUN_L07_00319040(struct Moby *moby) {
         *(f32 *)(vars + 0x70) = new_speed;
         if (max_speed < new_speed)
             *(f32 *)(vars + 0x70) = max_speed;
-        if (moby->unkBC == 1) {
+        if (moby->command == 1) {
             moby->pos.z += frame_scale * 0.1f;
             if (tick_countdown_32_alt((s32 *)(vars + 0x7c))) {
                 *(s32 *)(vars + 0x7c) = scale_ticks(7);
-                moby->unkBC = 2;
+                moby->command = 2;
             }
-        } else if (moby->unkBC == 2) {
+        } else if (moby->command == 2) {
             moby->pos.z -= frame_scale * 0.1f;
-            if (tick_countdown_32_alt((s32 *)(vars + 0x7c))) moby->unkBC = 0;
+            if (tick_countdown_32_alt((s32 *)(vars + 0x7c))) moby->command = 0;
         }
         subtract_vector_xyz(&dir, sight, &moby->pos);
         normalize_vector_xyz(&dir, &dir, *(f32 *)(vars + 0x70));
@@ -931,9 +931,9 @@ void FUN_L07_003196e0(struct Moby *moby) {
     collision = vars->collision;
     spawner_vars = (SwooperSpawnerVars *)vars->spawner->pvars;
     FUN_L07_002886d8(moby, &sight, spawner_vars->view_range);
-    if (moby->unk31 && FUN_001f9b48(&moby->pos, &D_L07_00166E40) < 27.0f) {
+    if (moby->visible && FUN_001f9b48(&moby->pos, &D_L07_00166E40) < 27.0f) {
         FUN_L00_0025a120(moby);
-        moby->unk7F = 0x15;
+        moby->shadow_range = 0x15;
     }
     hit = find_moby_hit(moby, 0x230000, 0);
     FUN_00213928(moby, hit, collision, 0, &touching, 0, 0, 4);
@@ -955,7 +955,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
         moby->rot.z = FUN_001f9e90(vars->goal.f[0] - moby->pos.x, vars->goal.f[1] - moby->pos.y);
         vars->unk29 = 0;
         moby->state = 1;
-        moby->unkBC = 0;
+        moby->command = 0;
         break;
     case 1:
         subtract_vector_xyz(&vars->velocity, &vars->goal, &moby->pos);
@@ -975,25 +975,25 @@ void FUN_L07_003196e0(struct Moby *moby) {
             }
             vars->dive_speed = spawner_vars->speed * D_0015ED6C;
             vars->life_timer = scale_ticks(600);
-            moby->unkBC = 1;
+            moby->command = 1;
             vars->bob_timer = scale_ticks(7);
             moby->state = 2;
         }
         break;
     case 2:
-        if ((moby->unk70 & 2) && moby->seq == 1 && moby->prev_seq != 2) {
+        if ((moby->anim_flags & 2) && moby->seq == 1 && moby->prev_seq != 2) {
             blend_moby_animation((MobyAnim *)moby, 2, 0, 10);
         }
-        if (moby->unkBC == 1) {
+        if (moby->command == 1) {
             moby->pos.z += frame_scale * 0.1f;
             if (tick_countdown_32_alt(&vars->bob_timer)) {
                 vars->bob_timer = scale_ticks(7);
-                moby->unkBC = 2;
+                moby->command = 2;
             }
-        } else if (moby->unkBC == 2) {
+        } else if (moby->command == 2) {
             moby->pos.z -= frame_scale * 0.1f;
             if (tick_countdown_32_alt(&vars->bob_timer)) {
-                moby->unkBC = 0;
+                moby->command = 0;
             }
         }
         FUN_L00_00258278(moby, FUN_001f9e90(sight.pos.f[0] - moby->pos.x, sight.pos.f[1] - moby->pos.y),
@@ -1003,7 +1003,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
         moby->rot.y = spring_turn(&vars->pitch_speed, moby->rot.y, pitch,
                                        frame_time_sq * 3.1415927f, D_0015ED6C * 3.1415927f, D_0015ED6C * 6.2831855f);
         subtract_vector_xyz(&dir, &sight.pos, &moby->pos);
-        if (moby->unkBC != 0) {
+        if (moby->command != 0) {
             dir.f[2] = 0.0f;
         }
         normalize_vector_xyz(&dir, &dir, frame_time_sq * 30.0f);
@@ -1071,7 +1071,7 @@ void FUN_L07_00319f48(struct Moby *m) {
         ext.x = v->size.x;
         ext.y = v->size.y;
         ext.z = v->size.z;
-        break_rotate(&ext, &ext, &m->unkC0);
+        break_rotate(&ext, &ext, &m->rot_row0);
         for (i = 0; i < v->shards; i++) {
             p.x = random_float_between(-ext.x, ext.x) * 0.5f;
             p.y = random_float_between(-ext.y, ext.y) * 0.5f;
@@ -1091,7 +1091,7 @@ void FUN_L07_00319f48(struct Moby *m) {
         mark_moby_for_removal(m);
         return;
     }
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
 }
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);

@@ -594,9 +594,9 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
                 random_vector(vec, -0.1f, 0.1f);
                 add_vector_xyz(&moby->pos, &moby->pos, vec);
             }
-            moby->unkA4 = 0xFF;
+            moby->hit_slot = 0xFF;
         } else {
-            moby->unkA4 = 0xFF;
+            moby->hit_slot = 0xFF;
         }
     }
     FUN_L00_0025d538(moby, d + 0x60);
@@ -835,7 +835,7 @@ int FUN_L13_002c3fc0(struct Moby *m, char *d, int aim) {
             *(short *)(d + 0xD2) = 10;
             *(float *)(d + 0xCC) = *(float *)(d + 0xCC) * (D_0015ED60 * -0.04000002f + 1.0f);
             distance = FUN_001f9b80(&m->pos, D_0013F3D0);
-            if ((*(float *)(d + 0xCC) < D_0015ED60 * 0.1f) | (m->unk31 == 0) | (distance < 40.0f)) {
+            if ((*(float *)(d + 0xCC) < D_0015ED60 * 0.1f) | (m->visible == 0) | (distance < 40.0f)) {
                 short old = *(short *)(d + 0xB4);
                 *(signed char *)(d + 0xD0) = step;
                 *(short *)(d + 0xB4) = *(short *)(d + 0xB6);
@@ -1241,8 +1241,8 @@ void FUN_L13_002c7f38(struct Moby *moby) {
     float step;
     float radians;
 
-    if (moby->unkB0 != 0xFF &&
-        D_0014C050[moby->unkB0 + current_level_index * 16] == 0xFF) {
+    if (moby->mission != 0xFF &&
+        D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
         data->linked_index = -1;
     }
 
@@ -1552,7 +1552,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
             }
         }
 mark:
-        moby->unkA4 = 0xff;
+        moby->hit_slot = 0xff;
     }
     FUN_L00_0025d538(moby, d + 0x60);
 }
@@ -1795,13 +1795,13 @@ void FUN_L13_002e1348(struct Moby *moby, char *d, float s) {
             if (--*(short *)(d + 0x4E) == 0) break;
             if (moby->scale / moby->pclass->scale <= 0.2f) break;
         }
-        moby->unk94 = 0;
+        moby->collision = 0;
         *(short *)(d + 0x4C) = scale_game_frames(0x1E);
     } else if (*(int *)(d + 0x40) == 0) {
         moby->state = 4;
         moby->flags |= 1;
-        moby->unk94 = 0;
-        moby->unk31 = 0;
+        moby->collision = 0;
+        moby->visible = 0;
         moby->scale = *(float *)(d + 0x2C);
     } else {
         mark_moby_for_removal(moby);
@@ -1854,7 +1854,7 @@ int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
             FUN_L00_0025d458(m, (short *)e);
         }
     }
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
     FUN_L00_0025d538(m, e);
     return result;
 }
@@ -2049,7 +2049,7 @@ void FUN_L13_002e84d8(struct Moby *moby) {
 
     switch (moby->state) {
     case 0:
-        moby->unk94 = moby->pclass->unk10;
+        moby->collision = moby->pclass->collision;
         moby->state = 1;
         break;
     case 1: {
@@ -2061,7 +2061,7 @@ void FUN_L13_002e84d8(struct Moby *moby) {
             ((float *)d)[1] = 1.0f;
             moby->state = 2;
         }
-        moby->unk23 = truncate_float_to_s32(((float *)d)[1] * 60.0f);
+        moby->alpha = truncate_float_to_s32(((float *)d)[1] * 60.0f);
         break;
     }
     case 2:
@@ -2080,7 +2080,7 @@ void FUN_L13_002e84d8(struct Moby *moby) {
             ((float *)d)[1] = 0.0f;
             moby->state = 4;
         }
-        moby->unk23 = truncate_float_to_s32(((float *)d)[1] * 60.0f);
+        moby->alpha = truncate_float_to_s32(((float *)d)[1] * 60.0f);
         break;
     }
     case 4:
@@ -2183,7 +2183,7 @@ void FUN_L13_002e8920(struct Moby *m, char *d) {
             if (D_L13_0015F5CC_v & 1) {
                 r = frames_v(rnd_v(0xF, 0x14));
                 spark_v(a, &zv, 0xCF0000FF, 0xCF, r, ftoi_v(s * 350.0f), -100, 1);
-            } else if (m->unkBC == 0 || D_L13_001D3478_v[m->unkBC - 1] != D_L13_001D3508_v[i] ||
+            } else if (m->command == 0 || D_L13_001D3478_v[m->command - 1] != D_L13_001D3508_v[i] ||
                        below_v(9) == 0) {
                 r = frames_v(rnd_v(0xF, 0x16));
                 spark_v(a, &zv, 0x6000FFFF, 0x80, r, ftoi_v(s * 600.0f), -100, 1);
@@ -2225,7 +2225,7 @@ void FUN_L13_002e8b58(struct Moby *moby) {
             k = func_001FA898_r(random_float_between_alt(450.0f, 550.0f) * s);
             FUN_L00_00269958(a, z, 0xDF000FFF, 0xCF, r, k, -100, 1);
         } else {
-            if (moby->unkBC != 0) {
+            if (moby->command != 0) {
                 if (random_integer_below(0xC) != 0)
                     continue;
             }
@@ -2262,12 +2262,12 @@ void FUN_L13_002e8d28(struct Moby *m, char *d) {
             if (*(float *)(c + 0x18) > 1001.0f)
                 *(float *)(c + 0x18) = 1001.0f;
             qcopy(c + 0x40, &m->rot);
-            *(OvlQuad *)(c + 0xC0) = *(OvlQuad *)&m->unkC0;
-            *(OvlQuad *)(c + 0xD0) = *(OvlQuad *)&m->unkD0;
-            *(OvlQuad *)(c + 0xE0) = *(OvlQuad *)&m->unkE0;
+            *(OvlQuad *)(c + 0xC0) = *(OvlQuad *)&m->rot_row0;
+            *(OvlQuad *)(c + 0xD0) = *(OvlQuad *)&m->rot_row1;
+            *(OvlQuad *)(c + 0xE0) = *(OvlQuad *)&m->rot_row2;
         }
     }
-    n = D_L13_001D34A8[m->unkBC];
+    n = D_L13_001D34A8[m->command];
     if (m->state == 5)
         n = -1;
     if (n != -1) {
@@ -2290,9 +2290,9 @@ void FUN_L13_002e8d28(struct Moby *m, char *d) {
             if (*(float *)(c + 0x18) > 1001.0f)
                 *(float *)(c + 0x18) = 1001.0f;
             qcopy(c + 0x40, &m->rot);
-            *(OvlQuad *)(c + 0xC0) = *(OvlQuad *)&m->unkC0;
-            *(OvlQuad *)(c + 0xD0) = *(OvlQuad *)&m->unkD0;
-            *(OvlQuad *)(c + 0xE0) = *(OvlQuad *)&m->unkE0;
+            *(OvlQuad *)(c + 0xC0) = *(OvlQuad *)&m->rot_row0;
+            *(OvlQuad *)(c + 0xD0) = *(OvlQuad *)&m->rot_row1;
+            *(OvlQuad *)(c + 0xE0) = *(OvlQuad *)&m->rot_row2;
         }
     } else {
         if (*(char **)(d + 0xF0) != 0 && *(unsigned char *)(*(char **)(d + 0xF0) + 0x20) != 0xFE &&
@@ -2305,9 +2305,9 @@ void FUN_L13_002e8d28(struct Moby *m, char *d) {
     if (p != 0) {
         qcopy(p + 0x10, &m->pos);
         qcopy(p + 0x40, &m->rot);
-        *(OvlQuad *)(p + 0xC0) = *(OvlQuad *)&m->unkC0;
-        *(OvlQuad *)(p + 0xD0) = *(OvlQuad *)&m->unkD0;
-        *(OvlQuad *)(p + 0xE0) = *(OvlQuad *)&m->unkE0;
+        *(OvlQuad *)(p + 0xC0) = *(OvlQuad *)&m->rot_row0;
+        *(OvlQuad *)(p + 0xD0) = *(OvlQuad *)&m->rot_row1;
+        *(OvlQuad *)(p + 0xE0) = *(OvlQuad *)&m->rot_row2;
     }
 }
 /* springs a moby's pitch and yaw toward targets and clamps the pitch */
@@ -2447,7 +2447,7 @@ int FUN_L13_002e9408(struct Moby *m, char *d, int idx, int aim) {
             float dist = dist_9408(&m->pos, &hero.motion.pos);
             float s = 1.0f;
             float sp;
-            if (m->unkBC == 4) {
+            if (m->command == 4) {
                 s = 3.0f;
             }
             sp = *(float *)(d + 0xAC);
@@ -2971,7 +2971,7 @@ unsigned char *FUN_L13_002ea540(struct Moby *m, unsigned char *d) {
     unsigned char *r;
     struct Hero *g;
     n = (d[0xFC] & 1) ? 0x12 : 0x10;
-    if (m->unkBC != 6 || (FUN_001160d8_e5() & 1)) {
+    if (m->command != 6 || (FUN_001160d8_e5() & 1)) {
         d[0xFC] ^= 1;
     }
     FUN_L00_0024f7c8_e5(m, n, v);

@@ -56,23 +56,23 @@ void FUN_L00_00232670(void) {
     hero.unkA98 &= ~3;
     same = m->seq == m->prev_seq;
     frame0 = m->frame;
-    t0 = m->unk54;
+    t0 = m->anim_time;
     if (m->seq == m->prev_seq) {
-        m->unk54 = t0 + hero.anim_speed * hero.unkA94;
+        m->anim_time = t0 + hero.anim_speed * hero.unkA94;
     } else if (hero.unkAA0 >= 0) {
-        m->unk54 = D_L00_0017BDF0[hero.unkAA0][hero.unkAA4++];
+        m->anim_time = D_L00_0017BDF0[hero.unkAA0][hero.unkAA4++];
     } else {
-        m->unk54 = t0 + hero.unkA94;
+        m->anim_time = t0 + hero.unkA94;
     }
-    if (0.99f < m->unk54 && m->unk54 < 1.01f)
-        m->unk54 = 1.0f;
-    if (-0.01f < m->unk54 && m->unk54 < 0.01f)
-        m->unk54 = 0.0f;
-    dt = m->unk54 - t0;
-    while (1.0f <= m->unk54) {
+    if (0.99f < m->anim_time && m->anim_time < 1.01f)
+        m->anim_time = 1.0f;
+    if (-0.01f < m->anim_time && m->anim_time < 0.01f)
+        m->anim_time = 0.0f;
+    dt = m->anim_time - t0;
+    while (1.0f <= m->anim_time) {
         if (m->seq != m->prev_seq) {
             m->seq = m->prev_seq;
-            m->unk7E = SEQ(m, m->seq)->trigger_count;
+            m->anim_trigger_count = SEQ(m, m->seq)->trigger_count;
         }
         hero.unkAA0 = -1;
         hero.unkA98 |= 1;
@@ -85,14 +85,14 @@ void FUN_L00_00232670(void) {
             /* the just-cleared int, converted: retail holds this 0.0f in a
                register across the loop, which a literal 0.0f (stored from
                $zero, as in the next branch) does not give */
-            m->unk54 = hero.unkAB8;
+            m->anim_time = hero.unkAB8;
             m->prev_frame = hero.unkAB4;
             m->prev_frame_data = SEQ(m, m->prev_seq)->frames[m->prev_frame];
             FUN_L00_00232628();
             FUN_L00_00232320();
         } else if (hero.unkAB0 != -1 && hero.unkAB4 < m->prev_frame) {
             hero.unkA94 = 0.33333334f;
-            m->unk54 = 0.0f;
+            m->anim_time = 0.0f;
             m->prev_frame = hero.unkAB0;
             m->prev_frame_data = SEQ(m, m->prev_seq)->frames[m->prev_frame];
             FUN_L00_00232320();
@@ -102,14 +102,14 @@ void FUN_L00_00232670(void) {
                 hero.unkA98 |= 2;
             }
             m->prev_frame_data = SEQ(m, m->prev_seq)->frames[m->prev_frame];
-            m->unk54 -= 1.0f;
-            m->unk54 /= hero.unkA94;
+            m->anim_time -= 1.0f;
+            m->anim_time /= hero.unkA94;
             hero.unkA94 = *(f32 *)m->cur_frame_data;
-            m->unk54 *= hero.unkA94;
+            m->anim_time *= hero.unkA94;
         }
     }
-    if (same && m->unk7E != 0) {
-        s32 hi = (m->frame << 4) + truncate_float_to_s32(m->unk54 * 16.0f);
+    if (same && m->anim_trigger_count != 0) {
+        s32 hi = (m->frame << 4) + truncate_float_to_s32(m->anim_time * 16.0f);
         s32 lo = (frame0 << 4) + truncate_float_to_s32(t0 * 16.0f);
         struct AnimSeq670 *seq = SEQ(m, m->seq);
         s32 *trig = (s32 *)&seq->frames[seq->frame_count];

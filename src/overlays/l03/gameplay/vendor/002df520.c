@@ -301,18 +301,18 @@ void FUN_L03_002eb7e0(char *m) {
     float look[4];
     float dir[4];
 
-    normalize_vector_xyz(side, &hero.unk290, -*(float *)(d + 0xE0));
+    normalize_vector_xyz(side, &hero.gravity_dir, -*(float *)(d + 0xE0));
     normalize_vector_xyz(back, b, -*(float *)(d + 0xD0));
     add_vector_xyz(pos, &hero.motion.pos, side);
     add_vector_xyz(m + 0x30, pos, back);
-    normalize_vector_xyz(look, &hero.unk290, -a[5]);
+    normalize_vector_xyz(look, &hero.gravity_dir, -a[5]);
     add_vector_xyz(look, &hero.motion.pos, look);
     subtract_vector_xyz(dir, look, m + 0x30);
     normalize_vector_xyz(c, dir, 1.0f);
     normalize_vector_xyz(m, c, 1.0f);
     normalize_vector_xyz(m + 0x40, m, 1.0f);
     qcopy(m, m + 0x40);
-    cross_vectors_xyz(m + 0x10, m, &hero.unk290);
+    cross_vectors_xyz(m + 0x10, m, &hero.gravity_dir);
     normalize_vector_xyz(m + 0x10, m + 0x10, -1.0f);
     cross_vectors_xyz(m + 0x20, m + 0x10, m);
 }
@@ -394,7 +394,7 @@ void FUN_L03_002ebb00(void *arg) {
     if (g->unk2284 != 0x50 || g->state.current == 0x11) {
         *(float *)(b + 0x34) = g->motion.pos.f[2];
     }
-    func_L00_001FF4B0_ebb00(v1, &hero.unk290, -*(float *)(a + 0x10));
+    func_L00_001FF4B0_ebb00(v1, &hero.gravity_dir, -*(float *)(a + 0x10));
     func_L00_001FF4B0_ebb00(v3, b, -*(float *)a);
     h = &hero;
     *(float *)d =

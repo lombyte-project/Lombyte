@@ -192,30 +192,30 @@ void FUN_L15_0020a7a0(void) {
     }
 tail:
     if (hero.air_frames.s != 0) {
-        hero.unk300 = 0;
+        hero.grounded_frames = 0;
     } else {
-        hero.unk300++;
+        hero.grounded_frames++;
         qcopy(&hero.unk2B0, &hero.ground_point);
     }
     if (hero.motion.pos.f[2] > hero.water_surface_z) {
         hero.unk2F8 = 0;
     }
 d1:
-    FUN_001f99f8_c(&hero.unk290);
+    FUN_001f99f8_c(&hero.gravity_dir);
     switch (hero.unk20B3) {
     case 0:
-        hero.unk290.f[2] = -1.0f;
+        hero.gravity_dir.f[2] = -1.0f;
         break;
     case 1:
-        qcopy(&hero.unk290, &hero.unk270);
-        FUN_001f9a68_c(&hero.unk290, &hero.unk290, -1.0f);
+        qcopy(&hero.gravity_dir, &hero.unk270);
+        FUN_001f9a68_c(&hero.gravity_dir, &hero.gravity_dir, -1.0f);
         break;
     case 2:
-        FUN_001f9a28(&hero.unk290, &hero.motion.unkB0, &hero.motion.pos);
-        FUN_001f9bf8_c(&hero.unk290, &hero.unk290, 1.0f);
+        FUN_001f9a28(&hero.gravity_dir, &hero.motion.unkB0, &hero.motion.pos);
+        FUN_001f9bf8_c(&hero.gravity_dir, &hero.gravity_dir, 1.0f);
         break;
     }
-    hero.unk2E4.i = 0;
+    hero.ground_pitch.i = 0;
     hero.unk2E8.i = 0;
     hero.unk2D0.i[0] = 0;
     hero.unk2D0.i[1] = 0;
@@ -232,7 +232,7 @@ d1:
     }
     FUN_L00_00216078(&hero.unk270, &v20);
     if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
-        hero.unk2E4.f = v20.f[1];
+        hero.ground_pitch.f = v20.f[1];
     }
     if (-0.78539819f < v20.f[0] && v20.f[0] < 0.78539819f) {
         hero.unk2E8.f = v20.f[0];
@@ -260,7 +260,7 @@ d1:
             }
         } else {
             hero.unk2C0.i[i] = 0;
-            hero.unk2C8.f[i] = hero.unk2E4.f;
+            hero.unk2C8.f[i] = hero.ground_pitch.f;
             hero.unk2D0.f[i] = hero.unk2E8.f;
         }
     }

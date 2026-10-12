@@ -50,12 +50,12 @@ void FUN_L07_0031a9e8(struct Moby *moby) {
     int forceStart;
     u8 spawnId;
 
-    if (moby->unkB0 == 0xff)
+    if (moby->mission == 0xff)
         goto checked_spawn;
-    if (D_0014C050[moby->unkB0 + current_level_index * 16] == 0xff)
+    if (D_0014C050[moby->mission + current_level_index * 16] == 0xff)
         vars->target = -1;
 checked_spawn:
-    spawnId = moby->unkB0;
+    spawnId = moby->mission;
     forceEnd = 0;
     forceStart = 0;
     if (D_L07_0015FC88[spawnId] == 0xff) {
@@ -106,7 +106,7 @@ checked_spawn:
         start.f[1] = vars->destination.y;
         start.f[2] = vars->destination.z;
         next.q = start.q;
-        transform_vector_xyz(&next, &next, &moby->unkC0);
+        transform_vector_xyz(&next, &next, &moby->rot_row0);
         scale_vector_xyz(&start, &next, vars->destination.w * frame_time);
         add_vector_xyz(&moby->pos, &moby->pos, &start);
         time = vars->home.w - vars->destination.w * frame_time;
@@ -149,7 +149,7 @@ checked_spawn:
         next.q = start.q;
         distance = vector_length_xyz(&next);
         scale_vector_xyz(&next, &next, -(vars->speed * frame_time));
-        transform_vector_xyz(&start, &next, &moby->unkC0);
+        transform_vector_xyz(&start, &next, &moby->rot_row0);
         add_vector_xyz(&moby->pos, &moby->pos, &start);
         time = vars->home.w + vars->speed * frame_time;
         vars->home.w = time;

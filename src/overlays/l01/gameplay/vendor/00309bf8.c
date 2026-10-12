@@ -94,7 +94,7 @@ void FUN_L01_0030acb8(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         data[5] = 0;
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         moby->state = 1;
         data[10] = 0;
         break;
@@ -457,7 +457,7 @@ void FUN_L01_0030c190(struct Moby *moby) {
 
     switch (moby->state) {
     case 0:
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         moby->state = 1;
         break;
     case 1:

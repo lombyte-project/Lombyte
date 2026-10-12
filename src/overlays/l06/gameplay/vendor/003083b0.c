@@ -78,7 +78,7 @@ void FUN_L06_00308c68(struct Moby *m) {
     }
     switch (m->state) {
     case 0:
-        copy_moby_rotation(&*(SparkVector *)&m->unkC0, &*(SparkVector *)&m->rot);
+        copy_moby_rotation(&*(SparkVector *)&m->rot_row0, &*(SparkVector *)&m->rot);
         if (d->f4 != 0) {
             m->state = 1;
         } else if (d->f0 != 0) {
@@ -110,11 +110,11 @@ void FUN_L06_00308c68(struct Moby *m) {
         for (k = 0; k < n; k++) {
                 int c19, c18, c17, c16, c2;
                 float z;
-                normalize_vector_xyz(&v2, &*(SparkVector *)&m->unkC0, D_L06_001622F0 * (random_float_between_alt(-D_L06_001622FC, D_L06_001622FC) + 1.0f) * D_0015ED6C);
+                normalize_vector_xyz(&v2, &*(SparkVector *)&m->rot_row0, D_L06_001622F0 * (random_float_between_alt(-D_L06_001622FC, D_L06_001622FC) + 1.0f) * D_0015ED6C);
                 z = D_L06_001622F4 * (random_float_between_alt(-D_L06_001622FC, D_L06_001622FC) + 1.0f) * D_0015ED6C;
                 clear_u64_value(&v3);
                 v3.z = z;
-                normalize_vector_xyz(&v4, &*(SparkVector *)&m->unkD0, random_float_between_alt(-D_L06_001622F8, D_L06_001622F8) * D_0015ED6C);
+                normalize_vector_xyz(&v4, &*(SparkVector *)&m->rot_row1, random_float_between_alt(-D_L06_001622F8, D_L06_001622F8) * D_0015ED6C);
                 add_vector_xyz(&v3, &v3, &v4);
                 v2.w = random_float_between_alt(D_L06_00162310, D_L06_00162314);
                 v3.w = random_float_between_alt(D_L06_00162318, D_L06_0016231C);
@@ -136,7 +136,7 @@ void FUN_L06_00308c68(struct Moby *m) {
             for (k = 0; k < cnt; k++) {
                     int c19, c18, c17, c16, c2;
                     random_vector(&v4, 0.0f, D_L06_00162340 * D_0015ED6C);
-                    normalize_vector_xyz(&v2, &*(SparkVector *)&m->unkC0, D_L06_00162330 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * D_0015ED6C);
+                    normalize_vector_xyz(&v2, &*(SparkVector *)&m->rot_row0, D_L06_00162330 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * D_0015ED6C);
                     add_vector_xyz(&v2, &v2, &v4);
                     normalize_vector_xyz(&v3, &v2, D_L06_00162334 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * D_0015ED6C);
                     v3.z = v3.z - D_L06_00162338 * D_0015ED6C;

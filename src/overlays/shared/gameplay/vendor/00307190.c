@@ -253,7 +253,7 @@ void FUN_L08_00307cf0(Moby *m) {
     switch (m->state) {
     case 0:
         m->state = 2;
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         func_L08_00309050_3091B0(flag);
         break;
     case 2:

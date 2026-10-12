@@ -119,9 +119,9 @@ void FUN_L17_002a8da0(struct Moby *m) {
     d = (char *)m->pvars;
     switch (m->state) {
     case 0:
-        *(float *)(d + 0x58) = FUN_L04_002418b0(m->unk22, 0);
+        *(float *)(d + 0x58) = FUN_L04_002418b0(m->class_slot, 0);
         *(float *)(d + 0x5C) =
-            (FUN_L04_00241910(m->unk22, 0) - *(float *)(d + 0x58)) / 6.2831855f;
+            (FUN_L04_00241910(m->class_slot, 0) - *(float *)(d + 0x58)) / 6.2831855f;
         k = *(int *)(d + 0x44);
         if (k != -1) {
             qcopy(d, &m->pos);
@@ -140,7 +140,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
         *(float *)(d + 0x4C) = 0.1f;
         *(OvlQuad *)a = 0;
         a[0] = 13.0f;
-        transform_vector_by_basis(a, a, &m->unkC0);
+        transform_vector_by_basis(a, a, &m->rot_row0);
         add_vector_xyz(b, &m->pos, a);
         *(OvlQuad *)c = *(OvlQuad *)b;
         if (FUN_001efa68(&m->pos, c, 2, 0, 0)) {
@@ -175,7 +175,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
             is_point_inside_clip_volume(&hero.motion.pos, *(int *)(d + 0x40))) {
             *(OvlQuad *)a = 0;
             a[0] = 13.0f;
-            transform_vector_by_basis(a, a, &m->unkC0);
+            transform_vector_by_basis(a, a, &m->rot_row0);
             add_vector_xyz(b, &m->pos, a);
             *(OvlQuad *)c = *(OvlQuad *)b;
             if (FUN_001efa68(&m->pos, c, 2, 0, 0)) {
@@ -189,7 +189,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
     }
     *(OvlQuad *)a = 0;
     a[0] = 12.0f;
-    transform_vector_by_basis(a, a, &m->unkC0);
+    transform_vector_by_basis(a, a, &m->rot_row0);
     add_vector_xyz(b, &m->pos, d + 0x30);
     *(OvlQuad *)c = *(OvlQuad *)b;
     if (*(int *)(d + 0x60) != 0) {
@@ -218,7 +218,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
         b[3] = len * 0.5f;
         if (FUN_001fa728((char *)b, 32.0f) != -1) {
             subtract_vector_xyz(v30, &hero.motion.pos, &m->pos);
-            normalize_vector_xyz(v40, &m->unkC0, dot_vectors_xyz(&m->unkC0, v30));
+            normalize_vector_xyz(v40, &m->rot_row0, dot_vectors_xyz(&m->rot_row0, v30));
             subtract_vector_xyz(v30, v30, v40);
             func_L00_0025A8C0_alt((char *)v60, (int)m, 0x10001, 1.0f, v30);
             FUN_001efa68(&m->pos, d + 0x20, 9, m, v60);
@@ -399,7 +399,7 @@ void FUN_L17_002cb310(struct Moby *m) {
         d->f20 = 15.0f;
         d->s24 = 0xF;
         FUN_L17_002cbd38(m);
-        if (D_0014C050[m->unkB0 + (current_level_index << 4)] == 0xFF) {
+        if (D_0014C050[m->mission + (current_level_index << 4)] == 0xFF) {
             mark_moby_for_removal(m);
         }
         break;

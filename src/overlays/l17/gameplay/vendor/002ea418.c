@@ -42,7 +42,7 @@ extern void FUN_L17_002f0448(struct Moby *m);
 extern void FUN_L00_00263618(void *, int, float, float);
 
 void FUN_L17_002f0448(struct Moby *m) {
-    int v = (m->unk90 & 0xFFFFFF) | 0x30000000;
+    int v = (m->glow_color & 0xFFFFFF) | 0x30000000;
     char *p = (char *)m->pvars + 0x200;
     int i;
     for (i = 2; i >= 0; i--) {

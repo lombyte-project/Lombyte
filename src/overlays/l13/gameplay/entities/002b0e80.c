@@ -255,8 +255,8 @@ void FUN_L13_002b39e0(struct Moby *moby) {
             FUN_L00_002ea9d8(b);
             FUN_L00_002eaa30(c);
         } else {
-            u8 s = moby->unkBC;
-            moby->unkBC = 1;
+            u8 s = moby->command;
+            moby->command = 1;
             moby->state = s;
         }
         break;
@@ -267,7 +267,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
         if (!FUN_L00_0028d8c0(moby, vars->voice)) {
             vars->voice = allocate_voice_2b39e0(0, 4, moby);
         }
-        if (moby->unkBC != 0) {
+        if (moby->command != 0) {
             lift_view_2b39e0(moby, a, b);
             FUN_L00_002ea9d8(a);
             FUN_L00_002eaa30(b);
@@ -285,7 +285,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
             } else {
                 moby->state = 7;
             }
-            if (moby->unkBC != 0) {
+            if (moby->command != 0) {
                 hero_set_state(HERO_STATE_IDLE, 0);
                 FUN_L00_002eac18(1);
             }
@@ -321,7 +321,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
         }
         {
             int t = (i << 8) | 0x80000000;
-            moby->unk90 = (i << 16) | t | i;
+            moby->glow_color = (i << 16) | t | i;
         }
         if (hero.ground_moby != moby || hero.air_frames.s != 0 ||
             FUN_001f9b80(&hero.motion.pos, &moby->pos) > 1.1f) {
@@ -329,11 +329,11 @@ void FUN_L13_002b39e0(struct Moby *moby) {
         }
         if (vars->armed != 0 && hero.ground_moby == moby && hero.air_frames.s == 0 &&
             FUN_001f9b80(&hero.motion.pos, &moby->pos) < 0.5f) {
-            moby->unk90 = 0x80208020;
+            moby->glow_color = 0x80208020;
             if (moby->state == 5) {
-                moby->unkBC = 2;
+                moby->command = 2;
             } else {
-                moby->unkBC = 3;
+                moby->command = 3;
             }
             moby->state = 1;
             hero_set_state(0x72, 1);
@@ -343,7 +343,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
             char *p = (char *)&hero.motion.pos;
             float d = FUN_001f9b80(&moby->pos, p);
             if (absolute_float(*(float *)(p + 0x258) - vars->bottom) < 2.0f && d < 32.0f && d > 5.0f) {
-                moby->unkBC = 0;
+                moby->command = 0;
                 moby->state = 3;
                 vars->speed = -(frame_time * 5.0f);
             }
@@ -351,7 +351,7 @@ void FUN_L13_002b39e0(struct Moby *moby) {
             char *p = (char *)&hero.motion.pos;
             float d = FUN_001f9b80(&moby->pos, p);
             if (absolute_float(*(float *)(p + 0x258) - vars->top) < 2.0f && d < 32.0f && d > 5.0f) {
-                moby->unkBC = 0;
+                moby->command = 0;
                 moby->state = 2;
                 vars->speed = frame_time * 5.0f;
             }
@@ -382,7 +382,7 @@ void FUN_L13_002b4060(struct Moby *moby, float *v, float *w) {
     float r = 2.5f;
     float z = 1.5f;
     unsigned char *x;
-    if ((moby->unkBC >= 2 && (moby->unkBC & 1)) || (moby->state >= 2 && (moby->state & 1))) {
+    if ((moby->command >= 2 && (moby->command & 1)) || (moby->state >= 2 && (moby->state & 1))) {
         ang = FUN_001fa5c8(ang, 1.5707964f);
     } else {
         ang = fast_add_rotations(ang, 1.5707964f);
@@ -620,8 +620,8 @@ void FUN_L13_002b48d8(struct Moby *moby) {
     if (*(int *)(data + 0x40) == 0) {
         *(int *)(data + 0x40) = ((int)hero.moby);
     }
-    if (moby->unkBC >= 4)
-        moby->state = moby->unkBC;
+    if (moby->command >= 4)
+        moby->state = moby->command;
 }
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -661,12 +661,12 @@ struct Moby *FUN_L13_002b4958(struct Moby *parent) {
         v->parent = parent;
         v->unk0 = &v->unk20;
         v->unkC = v->unk60;
-        m->unk30 = parent->unk30;
-        m->unk32 = v->parent->unk32;
-        m->unk31 = 1;
+        m->update_dist = parent->update_dist;
+        m->draw_dist = v->parent->draw_dist;
+        m->visible = 1;
         m->flags |= 0x20;
         m->state = 0;
-        m->unkBC = 0;
+        m->command = 0;
         qcopy(&m->pos, &v->parent->pos);
         m->scale = m->pclass->scale * parent->scale / parent->pclass->scale;
         v->unk20 = 1.0f;
@@ -764,7 +764,7 @@ void FUN_L13_002b4a58(struct Moby *m, char *p) {
             }
         }
     }
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
     FUN_L00_0025d538(m, p + 0x60);
 }
 /* Updates the gem-lock turret: idle animations, then a burst of particles when destroyed. */
@@ -816,7 +816,7 @@ void FUN_L13_002b4c80(struct Moby *moby) {
                 blend_moby_animation(moby, 2, x, y);
             }
         } else {
-            if (moby->prev_seq >= 2 || (moby->unk70 & 2)) {
+            if (moby->prev_seq >= 2 || (moby->anim_flags & 2)) {
                 if (!random_integer_below(7)) {
                     if (moby->prev_seq != 1) {
                         blend_moby_animation(moby, 1, 0, FUN_L00_00257b90(7, 0xD));
@@ -826,13 +826,13 @@ void FUN_L13_002b4c80(struct Moby *moby) {
                         blend_moby_animation(moby, 0, 0, FUN_L00_00257b90(7, 0xD));
                     }
                 }
-                moby->unk58 = random_float_between(0.8f, 1.2f);
+                moby->anim_speed = random_float_between(0.8f, 1.2f);
             }
         }
         FUN_L13_002b4a58_c(moby, d);
         break;
     case 2:
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             subtract_vector_xyz(a, D_L13_001670C0, &moby->pos);
             moby_point_position(moby, 0, b);
             FUN_L00_0025e450(moby, a, b, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, -1, 2.0f,
@@ -851,7 +851,7 @@ extern void kill_part(void *) __asm__("FUN_L00_00267a08");
 void FUN_L13_002b4f28(struct Moby *moby, char *data) {
     float opacity = 0.2f;
     void **handle = (void **)(data + 0x228);
-    if (moby->unk31) {
+    if (moby->visible) {
         if (!*handle) {
             *handle = FUN_L13_00280400(moby, 0, 0x80808080, opacity, opacity, 0x10808080, 0.8f, 0x19);
         }

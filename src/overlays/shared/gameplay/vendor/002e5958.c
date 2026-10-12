@@ -60,7 +60,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
     if ((u8)(moby->state - 1) < 2) {
         subtract_vector_xyz(delta, &moby->pos, D_0013F3D0);
         if (vector_length_xyz(delta) < vars->distance) {
-            FUN_001fa2d8(matrix, &moby->unkC0);
+            FUN_001fa2d8(matrix, &moby->rot_row0);
             FUN_001f9d20(delta, delta, matrix);
             if (*(f32 *)(delta + 4) < 0.2f) near_parent = 1;
         }
@@ -312,10 +312,10 @@ void FUN_L15_002ed068(struct Moby *moby) {
             return;
         }
         entry = (struct Moby *)((char *)D_L15_0015FFD8 + (*(int *)(linked + 0x60) << 8));
-        entry->unk31 = 0;
-        entry->unk94 = 0;
+        entry->visible = 0;
+        entry->collision = 0;
         entry->flags |= 1;
-        if (current_level_index == 0x12 && D_0014C170[moby->unkB0] == 0xff) {
+        if (current_level_index == 0x12 && D_0014C170[moby->mission] == 0xff) {
             moby->state = 3;
         } else {
             moby->state = 1;
@@ -335,8 +335,8 @@ void FUN_L15_002ed068(struct Moby *moby) {
             if (D_L15_0015F594 != 4) return;
             if (D_001413F4 == 2 && current_level_index == 0xf) {
                 entry = (struct Moby *)((char *)D_L15_0015FFD8 + (*(int *)(linked + 0x60) << 8));
-                entry->unk94 = 0;
-                entry->unk31 = 0;
+                entry->collision = 0;
+                entry->visible = 0;
                 entry->flags |= 1;
                 FUN_L15_00208ca8();
                 set_moby_animation(entry, 0, 0);
@@ -350,8 +350,8 @@ void FUN_L15_002ed068(struct Moby *moby) {
             *(u128 *)position = *(u128 *)&moby->pos;
             *(float *)(position + 8) = probe_ground_height(position, 0, 0.5f) + 0.1f;
             FUN_L00_00216f90(position, &moby->rot, 0, 1);
-            entry->unk94 = entry->pclass->unk10;
-            entry->unk31 = 1;
+            entry->collision = entry->pclass->collision;
+            entry->visible = 1;
             entry->flags &= ~1;
             FUN_L00_00210a08(2, 0x5a, entry);
             if (current_level_index == 0xf) {

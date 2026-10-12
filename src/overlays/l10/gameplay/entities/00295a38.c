@@ -647,8 +647,8 @@ void FUN_L10_002c9c70(struct Moby *moby) {
         target = &D_L10_0015FFD8[*(int *)(d + 0x10)];
     }
     state = moby->state;
-    if ((moby->unkB0 == 0xff ||
-         D_0014C050_2c9c70[(D_0015ED84_2c9c70 << 4) + moby->unkB0] != 0xff) &&
+    if ((moby->mission == 0xff ||
+         D_0014C050_2c9c70[(D_0015ED84_2c9c70 << 4) + moby->mission] != 0xff) &&
         state != 0) {
         i = 4;
         do {
@@ -676,7 +676,7 @@ void FUN_L10_002c9c70(struct Moby *moby) {
             stub_printf((char *)0x001dcda0);
         } else {
             *(short *)(d + 0x14) = target->oclass;
-            *(float *)(d + 0x44) = FUN_001fa6c0_2c9c70(target->unk23);
+            *(float *)(d + 0x44) = FUN_001fa6c0_2c9c70(target->alpha);
             {
                 OvlQuad *position_source;
                 OvlQuad *position_destination;
@@ -738,7 +738,7 @@ void FUN_L10_002c9c70(struct Moby *moby) {
             if ((*(int *)(d + 8) & 2) == 0) {
                 float now = FUN_001fa6c0_2c9c70(*(int *)(d + 0x40));
                 float initial = FUN_001fa6c0_2c9c70(*(int *)(d + 0xc));
-                target->unk23 = FUN_001fa6d0_2c9c70(*(float *)(d + 0x44) * now / initial);
+                target->alpha = FUN_001fa6d0_2c9c70(*(float *)(d + 0x44) * now / initial);
             }
         }
         if ((*(int *)(d + 8) & 4) == 0 && target != 0 &&
@@ -1489,7 +1489,7 @@ int FUN_L10_002d9000(struct Moby *m, float *p) {
     float t50[4] __attribute__((aligned(16)));
     float t60[4] __attribute__((aligned(16)));
     *(OvlQuad *)a = *(OvlQuad *)p;
-    FUN_001fa2d8(t10, &m->unkC0);
+    FUN_001fa2d8(t10, &m->rot_row0);
     subtract_vector_xyz(t60, a, &m->pos);
     *(OvlQuad *)t50 = *(OvlQuad *)t60;
     FUN_001f9d20(t50, t50, t10);
@@ -1634,7 +1634,7 @@ void FUN_L10_002d92b8(struct Moby *m) {
         }
     }
     FUN_001f9740(&v->sound_timer);
-    if (D_0014C050[current_level_index][m->unkB0] == 0xFF) {
+    if (D_0014C050[current_level_index][m->mission] == 0xFF) {
         pressed = 1;
     }
     if (pressed || v->held != 0) {
@@ -1801,7 +1801,7 @@ void FUN_L10_002da2c8(struct Moby *moby) {
         {
             float new_rotation = fast_add_rotations(moby->rot.z, 1.5707964f);
             *(volatile unsigned char *)&moby->state = 1;
-            *(volatile unsigned char *)&moby->unk30 = 0x60;
+            *(volatile unsigned char *)&moby->update_dist = 0x60;
             moby->rot.z = new_rotation;
         }
         *(int *)(data + 0x30) = -1;
@@ -2114,7 +2114,7 @@ void FUN_L10_002dd650(struct Moby *m) {
         mark_moby_for_removal_d650(m);
         return;
     }
-    m->unk32 = 0x80;
+    m->draw_dist = 0x80;
     e = D_L10_00178580;
     for (i = 0; i < 0x40; i++, e += 0x40) {
         if (*(char **)(e + 0x34) == m) {
@@ -2122,7 +2122,7 @@ void FUN_L10_002dd650(struct Moby *m) {
                 char *o = *(char **)(e + 0x20);
                 if (*(short *)(o + 0xA6) == 0xAC || *(short *)(o + 0xA6) == 0x99) {
                     subtract_vector_xyz(v, &m->pos, o + 0x10);
-                    FUN_001fa2d8(w, &m->unkC0);
+                    FUN_001fa2d8(w, &m->rot_row0);
                     FUN_001f9d20(v, v, w);
                     if (v[0] > 0.25f) {
                         *(int *)(D_0014C190 + (((short)m->save_id >> 5) * 4 +

@@ -218,7 +218,7 @@ void FUN_L00_002df9a0(Moby *moby) {
         moby->state = 1;
         break;
     case 1:
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             moby->state = 2;
         }
         break;
@@ -269,7 +269,7 @@ void FUN_L00_002df9a0(Moby *moby) {
             func_0022ED80_2E0E50(0x15, 0, ((Hero *)D_0013E633_2E0E50)->moby);
         }
         if (platform[1] != -1 && platform[2] != -1) {
-            moby->unkBC = 0;
+            moby->command = 0;
             moby->state = 4;
             data->f10 = 0.0f;
             func_L00_002EBF50_2E0E50(D_L00_00166EC0_2E0E50, D_L00_00166EC0_2E0E50 + 0x10, 1, 0, 0);
@@ -285,10 +285,10 @@ void FUN_L00_002df9a0(Moby *moby) {
         moby->state = 5;
         data->i0 = func_001FA898_2E0E50(func_001F9878_2E0E50(D_L00_00161C84_2E0E50));
         if (((Hero *)D_0013E633_2E0E50)->unk20B0 == 0) {
-            ((Moby *)linked)->unkBC = 8;
+            ((Moby *)linked)->command = 8;
             ((Hero *)D_0013E633_2E0E50)->unk20B0 = 1;
         } else {
-            ((Moby *)linked)->unkBC = 4;
+            ((Moby *)linked)->command = 4;
             ((Hero *)D_0013E633_2E0E50)->unk20B0 = 0;
         }
         break;
@@ -298,7 +298,7 @@ void FUN_L00_002df9a0(Moby *moby) {
             func_L00_002E17F0_2E0E50(moby);
             return;
         }
-        switch (moby->unkBC) {
+        switch (moby->command) {
         case 0: {
             char *linked;
 
@@ -307,15 +307,15 @@ void FUN_L00_002df9a0(Moby *moby) {
                 break;
             }
             linked = D_L00_00160098_2E0E50 + (*(int *)((Hero *)D_0013E633_2E0E50)->ground_moby->pvars << 8);
-            moby->unkBC = 1;
+            moby->command = 1;
             func_L00_002EBE88_2E0E50(D_L00_001601AC_2E0E50 + (data->i8 << 7) + 0x30);
             func_L00_002EBEE0_2E0E50(D_L00_001601AC_2E0E50 + (data->i8 << 7) + 0x70);
             D_L00_0015F504_2E0E50 = 1;
             if (((Hero *)D_0013E633_2E0E50)->unk20B0 == 0) {
-                ((Moby *)linked)->unkBC = 8;
+                ((Moby *)linked)->command = 8;
                 ((Hero *)D_0013E633_2E0E50)->unk20B0 = 1;
             } else {
-                ((Moby *)linked)->unkBC = 4;
+                ((Moby *)linked)->command = 4;
                 ((Hero *)D_0013E633_2E0E50)->unk20B0 = 0;
             }
             break;
@@ -341,7 +341,7 @@ void FUN_L00_002df9a0(Moby *moby) {
                 func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 1.0f, 1.0f / func_001F9850_2E0E50(15));
                 return;
             }
-            moby->unkBC = 2;
+            moby->command = 2;
             D_L00_0015F504_2E0E50 = 0;
             func_L00_002EC0C8_2E0E50(3);
             return;
@@ -393,9 +393,9 @@ void FUN_L00_002e01b0(char *m) {
     r = -FUN_002132a8_2e01b0(D_0015ED6C_2e01b0, D_0015ED6C_2e01b0 * 3.0f);
     fast_vec_normalize(&v, m + 0xD0, r);
     g = &hero;
-    v.x += g->motion.unk100.f[0] * 0.8f;
-    v.y += g->motion.unk100.f[1] * 0.8f;
-    v.z += g->motion.unk100.f[2] +
+    v.x += g->motion.displacement.f[0] * 0.8f;
+    v.y += g->motion.displacement.f[1] * 0.8f;
+    v.z += g->motion.displacement.f[2] +
            FUN_002132a8_2e01b0(D_0015ED6C_2e01b0 * -0.5f, D_0015ED6C_2e01b0 + D_0015ED6C_2e01b0);
     FUN_L00_0026f548_2e01b0(&t, &v, 2, random_int_between(0x5A, 0x78));
     a = FUN_001f96f8_2e01b0(5);
@@ -1099,7 +1099,7 @@ void FUN_L00_002e3388(s32 unused, s32 idx) {
     d[3] = 1.0f;
     FUN_001f9a28_e3388(a, g_debug_camera, d);
     FUN_001f9bf8_e3388(a, a, 1.0f);
-    FUN_001f9ad8_e3388(b, a, &hero.unk290);
+    FUN_001f9ad8_e3388(b, a, &hero.gravity_dir);
     FUN_001f9bf8_e3388(b, b, -1.0f);
     FUN_001f9ad8_e3388(c, b, a);
     q.r78 = get_effect_texture(0xB);
@@ -1141,7 +1141,7 @@ void FUN_L00_002e3388(s32 unused, s32 idx) {
     qcopy(d, D_L00_001E6E10_e3388[idx]);
     FUN_001f9a28_e3388(a, g_debug_camera, d);
     FUN_001f9bf8_e3388(a, a, 1.0f);
-    FUN_001f9ad8_e3388(b, a, &hero.unk290);
+    FUN_001f9ad8_e3388(b, a, &hero.gravity_dir);
     FUN_001f9bf8_e3388(b, b, -1.0f);
     FUN_001f9ad8_e3388(c, b, a);
     s = FUN_002132a8_e3388(0.2f, 0.225f);

@@ -2185,7 +2185,7 @@ void FUN_L01_002f3120(Moby *self)
             if (v->max_speed < vector_length_xyz(v)) {
                 normalize_vector_xyz(v, v, v->max_speed);
             }
-            qcopy(&hero.motion.unkF0, v);
+            qcopy(&hero.motion.platform_delta, v);
             if (v->pull != 0) {
                 subtract_vector_xyz(&pull, &nearest, &hero.motion.pos);
                 pull.f[2] = 0.0f;
@@ -2193,13 +2193,13 @@ void FUN_L01_002f3120(Moby *self)
                 if (limit < vector_length_xyz(&pull)) {
                     normalize_vector_xyz(&pull, &pull, limit);
                 }
-                add_vector_xyz(&hero.motion.unkF0, &hero.motion.unkF0, &pull);
+                add_vector_xyz(&hero.motion.platform_delta, &hero.motion.platform_delta, &pull);
             }
         } else {
             /* past the end: slow down (factor 1 - 0.005 per frame unit) */
             len = vector_length_xyz(v);
             normalize_vector_xyz(v, v, frame_scale * -0.004999995231628418f * len + len);
-            qcopy(&hero.motion.unkF0, v);
+            qcopy(&hero.motion.platform_delta, v);
         }
         if (hero.state.control_mode == 0x12 && hero.state.prev == hero.state.control_mode) {
             if (hero.state_timer < scale_game_frames(3)) {
@@ -2214,7 +2214,7 @@ void FUN_L01_002f3120(Moby *self)
                && (u32)(hero.state.control_mode - 4) < 2) {
         len = vector_length_xyz(v);
         normalize_vector_xyz(v, v, frame_scale * -0.014999985694885254f * len + len);
-        qcopy(&hero.motion.unkF0, v);
+        qcopy(&hero.motion.platform_delta, v);
         if (hero.unk1D8 < scale_game_frames(0x23)) {
             hero.unk1D8 = scale_game_frames(0x23);
         }

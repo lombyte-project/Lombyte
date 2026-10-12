@@ -231,8 +231,8 @@ int FUN_L00_00229910(void) {
     float d;
     if (g->motion.unk164 < g->unk234 / (float)FUN_001f96f8_00229910(20))
         return 0;
-    if (0.52359879f < fast_difference_between_rotations(angle_atan2(g->motion.unk100.f[0],
-                                                                  g->motion.unk100.f[1]),
+    if (0.52359879f < fast_difference_between_rotations(angle_atan2(g->motion.displacement.f[0],
+                                                                  g->motion.displacement.f[1]),
                                             g->motion.rot.f[2]))
         return 0;
     qcopy(&v, &g->motion.pos);

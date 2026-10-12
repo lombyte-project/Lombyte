@@ -860,7 +860,7 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
         if (b->state.current == 0x3E && b->air_frames.s == 0) {
             FUN_001f9bf8_002334d0(&t, &b->unk270, -k);
         } else {
-            FUN_001f9bf8_002334d0(&t, &hero.unk290, k);
+            FUN_001f9bf8_002334d0(&t, &hero.gravity_dir, k);
         }
         FUN_001f9a10_002334d0(out, in, &t);
         break;
@@ -1007,7 +1007,7 @@ void FUN_L00_002338d0(float *dst, float *src) {
         subtract_vector_xyz(dst, src, n);
         break;
     case 2:
-        scale_vector_xyz(n, &base->unk290, dot_vectors_xyz(&base->unk290, src));
+        scale_vector_xyz(n, &base->gravity_dir, dot_vectors_xyz(&base->gravity_dir, src));
         subtract_vector_xyz(dst, src, n);
         break;
     }

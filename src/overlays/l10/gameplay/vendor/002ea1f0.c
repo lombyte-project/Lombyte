@@ -298,7 +298,7 @@ extern void FUN_L00_002637f8(int);
 void FUN_L10_002eacd8(struct Moby *m) {
     switch (m->state) {
     case 0:
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         m->state = 1;
         break;
     case 1:

@@ -1619,7 +1619,7 @@ void FUN_L15_0029ead0(struct Moby *moby) {
     moby->scale = t + t;
     moby->scale = moby->scale * *(float *)(cls + 0x24);
     if (*(int *)(state + 8) < scale_game_frames(0x28))
-        moby->unk23 = *(int *)(state + 8) * 127 / scale_game_frames(0x28);
+        moby->alpha = *(int *)(state + 8) * 127 / scale_game_frames(0x28);
     globals = &hero;
     pos = &moby->pos;
     FUN_L00_002598b0(t, ((char *)globals->moby), pos, (float)func_001FA898_r(*(float *)(state + 0xC)), 1.0f, 0x30000, 0, 1, 0);
@@ -2380,20 +2380,20 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void FUN_L15_002a35d8(int addr) {
     struct Moby *m = (struct Moby *)addr;
     s32 slot;
-    m->unk94 = 0;
-    D_L15_001BABD0.killed[(s16)m->save_id] = m->unkB0 + 2;
-    if (m->unkB0 == 0xFF || (D_L15_0015FC88[m->unkB0] != 0xFF && D_0014C050[current_level_index][m->unkB0] == 0xFF)) {
-        D_L15_001BB830.killed[(s16)m->save_id] = m->unkB0 + 2;
+    m->collision = 0;
+    D_L15_001BABD0.killed[(s16)m->save_id] = m->mission + 2;
+    if (m->mission == 0xFF || (D_L15_0015FC88[m->mission] != 0xFF && D_0014C050[current_level_index][m->mission] == 0xFF)) {
+        D_L15_001BB830.killed[(s16)m->save_id] = m->mission + 2;
     }
-    if (m->unkBC != 0xFF) {
+    if (m->command != 0xFF) {
         VoiceSlot *e;
-        slot = m->unkBC;
+        slot = m->command;
         e = (VoiceSlot *)(D_0013E550 + slot * 0x70);
         if (e->owner == m && e->active != 0) {
             release_voice_slot(slot);
         }
     }
-    m->unkBC = 0xFF;
+    m->command = 0xFF;
     m->state = 2;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a6e68.s", FUN_L15_002a6e68);

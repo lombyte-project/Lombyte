@@ -187,14 +187,14 @@ struct Moby *FUN_L03_002bec60(struct Moby *m, Vec4 *at, s32 oclass)
         qcopy(&c->pos, src);
         c->pos.w = 0.0f;
         c->state = 0;
-        c->unkBC = 0;
+        c->command = 0;
         cls = (SpawnClass *)c->pclass;
         flags = cls->flags;
         c->flags = flags;
         c->scale = cls->scale;
-        c->unk30 = m->unk30;
-        c->unk32 = m->unk32;
-        c->unk31 = found;
+        c->update_dist = m->update_dist;
+        c->draw_dist = m->draw_dist;
+        c->visible = found;
         if (cls->unk40 != 0) {
             c->flags = flags | 0x10;
         }
@@ -202,9 +202,9 @@ struct Moby *FUN_L03_002bec60(struct Moby *m, Vec4 *at, s32 oclass)
             c->flags |= 0x400;
         }
         c->unk71 = 0xFF;
-        c->unk36 = 0x7F80;
+        c->occlusion = 0x7F80;
         c->unk72 = 0xFF;
-        c->unkA4 = 0xFF;
+        c->hit_slot = 0xFF;
         if (pv->options & 2) {
             c->scale = ((SpawnClass *)c->pclass)->scale * 0.1f;
         }
@@ -225,7 +225,7 @@ struct Moby *FUN_L03_002bec60(struct Moby *m, Vec4 *at, s32 oclass)
         if (m->unkB4 < 0) {
             m->unkB4 = 1;
         }
-        c->unk94 = ((SpawnClass *)c->pclass)->unk10;
+        c->collision = ((SpawnClass *)c->pclass)->unk10;
         FUN_L00_0025d1b8(c);
         FUN_L00_00250df8(c);
         spawned = c;
@@ -329,14 +329,14 @@ void FUN_L03_002c4718(struct Moby *m)
         FUN_001f9a10(pos, pos, d);
         FUN_001f9bf8(&next_pos, d, 0.2f);
         FUN_001f9a10(&next_pos, &next_pos, pos);
-        saved.old_m98 = m->unk98;
-        saved.old_m94 = m->unk94;
-        saved.old_owner94 = (*(struct Moby **)(d + 4))->unk94;
-        saved.old_owner98 = (*(struct Moby **)(d + 4))->unk98;
-        m->unk98 = -1;
-        (*(struct Moby **)(d + 4))->unk98 = -1;
-        m->unk94 = 0;
-        (*(struct Moby **)(d + 4))->unk94 = 0;
+        saved.old_m98 = m->collision_disable;
+        saved.old_m94 = m->collision;
+        saved.old_owner94 = (*(struct Moby **)(d + 4))->collision;
+        saved.old_owner98 = (*(struct Moby **)(d + 4))->collision_disable;
+        m->collision_disable = -1;
+        (*(struct Moby **)(d + 4))->collision_disable = -1;
+        m->collision = 0;
+        (*(struct Moby **)(d + 4))->collision = 0;
         if (FUN_001efa68(&old_pos, &next_pos, 4, m, 0)) {
             FUN_001f9a28(&next_pos, &D_L00_00173E40.point, &next_pos);
             FUN_001f9bf8(&next_pos, &next_pos, 0.215f);
@@ -402,10 +402,10 @@ first_collision_timer:
         if (FUN_001f9770(d + 5)) m->state = 2;
         m->rot.x = FUN_L00_0025e310(d[0]);
         m->rot.y = FUN_L00_0025e310(d[1]);
-        m->unk98 = saved.old_m98;
-        (*(struct Moby **)(d + 4))->unk98 = saved.old_owner98;
-        m->unk94 = saved.old_m94;
-        (*(struct Moby **)(d + 4))->unk94 = saved.old_owner94;
+        m->collision_disable = saved.old_m98;
+        (*(struct Moby **)(d + 4))->collision_disable = saved.old_owner98;
+        m->collision = saved.old_m94;
+        (*(struct Moby **)(d + 4))->collision = saved.old_owner94;
         d[2] -= frame_time_sq * 9.8f;
         m->rot.x += frame_scale * 0.01f;
         m->rot.y += frame_scale * 0.02f;

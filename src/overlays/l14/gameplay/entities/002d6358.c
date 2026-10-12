@@ -263,13 +263,13 @@ void FUN_L14_002d67e8(struct Moby *m) {
         char *p1 = path + (i + 5) * 16;
         m->rot.z = atan2_67e8(*(float *)(p1 + 0x10) - *(float *)(p0 + 0x10), *(float *)(p1 + 0x14) - *(float *)(p0 + 0x14));
     }
-    if (m->unkBC == 5 && timer_67e8(d + 0x1C8) != 0) {
-        m->unkBC = 1;
+    if (m->command == 5 && timer_67e8(d + 0x1C8) != 0) {
+        m->command = 1;
     }
-    if (m->unkBC == 1) {
+    if (m->command == 1) {
         *(int *)(d + 0x1C0) = frames_67e8(D_L14_00161A3C_67e8);
         *(int *)(d + 0x1C4) = 0;
-        m->unkBC = 2;
+        m->command = 2;
         joint_matrix_67e8(m, 4, v);
         joint_matrix_67e8(m, 5, ma);
         normalize_67e8(&ma[0], &ma[0], 1.0f);
@@ -282,7 +282,7 @@ void FUN_L14_002d67e8(struct Moby *m) {
         to_quat_67e8(d + 0x1D0, mc);
     }
     yaw = m->rot.z;
-    if ((unsigned char)(m->unkBC - 2) < 3) {
+    if ((unsigned char)(m->command - 2) < 3) {
         float turn;
         float t;
         float k;
@@ -304,18 +304,18 @@ void FUN_L14_002d67e8(struct Moby *m) {
         }
         (*(int *)(d + 0x1C4))++;
         if (frames_67e8(30) < *(int *)(d + 0x1C4)) {
-            if (m->unkBC == 4) {
-                m->unkBC = 0;
+            if (m->command == 4) {
+                m->command = 0;
             } else {
                 unsigned char s = 3;
                 anim_67e8(m, s, 1);
-                m->unkBC = s;
+                m->command = s;
             }
             *(int *)(d + 0x1C4) = frames_67e8(30);
         }
-        if (m->unkBC == 2 || m->unkBC == 4) {
+        if (m->command == 2 || m->command == 4) {
             blend = itof_67e8(*(int *)(d + 0x1C4)) / itof_67e8(frames_67e8(30));
-            if (m->unkBC == 4) {
+            if (m->command == 4) {
                 blend = 1.0f - blend;
             }
             turn = (turn - 0.0f) * blend + 0.0f;
@@ -343,7 +343,7 @@ void FUN_L14_002d67e8(struct Moby *m) {
         scl.w = 1.0f;
         scl.y = 512.0f / m->scale;
         to_quat_67e8(&rot, md);
-        if (m->unkBC == 2 || m->unkBC == 4) {
+        if (m->command == 2 || m->command == 4) {
             slerp_67e8(d + 0x190, d + 0x1D0, &rot, blend);
         } else {
             qcopy(d + 0x190, &rot);
@@ -358,10 +358,10 @@ void FUN_L14_002d67e8(struct Moby *m) {
         qcopy(d + 0x1A0, &one);
         qcopy(d + 0x1B0, &scl);
         if (timer_67e8(d + 0x1C0) != 0) {
-            m->unkBC = 4;
+            m->command = 4;
             *(int *)(d + 0x1C4) = 0;
         }
-        if (m->unkBC == 3) {
+        if (m->command == 3) {
             if (aim_ok_67e8(m, d + 0xA0, d + 0x1E0) == 0) {
                 anim_67e8(m, 3, 1);
             }
@@ -377,7 +377,7 @@ void FUN_L14_002d67e8(struct Moby *m) {
             ray.oclass = m->oclass;
             ray.b18 = 0;
             ray_67e8(d + 0xD0, d + 0x1E0, 9, m, &ray);
-        } else if (m->unkBC == 2 || m->unkBC == 4) {
+        } else if (m->command == 2 || m->command == 4) {
             char *p;
             float r;
             char *muzzle = d + 0xD0;
@@ -466,7 +466,7 @@ void FUN_L14_002d71f0(struct Moby *m) {
     mat[3][3] = 1.0f;
     sub_g(mat[0], D_L14_001674C0_g, mat[3]);
     normalize_g(mat[0], mat[0], 1.0f);
-    cross_g(mat[1], mat[0], &hero.unk290);
+    cross_g(mat[1], mat[0], &hero.gravity_dir);
     normalize_g(mat[1], mat[1], -1.0f);
     cross_g(mat[2], mat[1], mat[0]);
     pk.b = tex_g(0xB);
@@ -493,7 +493,7 @@ void FUN_L14_002d71f0(struct Moby *m) {
     qcopy(mat[3], d + 0x200);
     sub_g(mat[0], D_L14_001674C0_g, mat[3]);
     normalize_g(mat[0], mat[0], 1.0f);
-    cross_g(mat[1], mat[0], &hero.unk290);
+    cross_g(mat[1], mat[0], &hero.gravity_dir);
     normalize_g(mat[1], mat[1], -1.0f);
     cross_g(mat[2], mat[1], mat[0]);
     pk.col[3] = 0x202020FF;
@@ -595,7 +595,7 @@ void FUN_L14_002de1f8(struct Moby *moby) {
 
     if (moby->state == 0) {
         moby->state = 1;
-        moby->unkBC = 0;
+        moby->command = 0;
         moby->flags |= 0x100;
         moby->pos.z += 0.35f;
         *(int *)(data + 0x5C) = 1;

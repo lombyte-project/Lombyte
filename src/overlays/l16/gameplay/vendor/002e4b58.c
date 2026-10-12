@@ -153,7 +153,7 @@ void FUN_L16_002e4f30(struct Moby *a) {
             int i;
             struct Hero *g;
             for (i = 0; i < 7; i++) {
-                FUN_001f9cf8(p + 0x10 + i * 16, D_L16_001D96E0 + i * 16, &a->unkC0);
+                FUN_001f9cf8(p + 0x10 + i * 16, D_L16_001D96E0 + i * 16, &a->rot_row0);
                 FUN_001f9a10(p + 0x10 + i * 16, p + 0x10 + i * 16, &a->pos);
             }
             g = &hero;

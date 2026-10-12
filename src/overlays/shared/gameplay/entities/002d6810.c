@@ -516,7 +516,7 @@ void FUN_L15_002d8e48(void *mv) {
     mat[3].f[3] = 1.0f;
     vsub_2d8e48(&mat[0], &D_L15_001673C0, &mat[3]);
     vscl_2d8e48(&mat[0], &mat[0], 1.0f);
-    fast_vec_cross(&mat[1], &mat[0], (V2d8e48 *)&hero.unk290);
+    fast_vec_cross(&mat[1], &mat[0], (V2d8e48 *)&hero.gravity_dir);
     vscl_2d8e48(&mat[1], &mat[1], -1.0f);
     fast_vec_cross(&mat[2], &mat[1], &mat[0]);
     c = D_L15_00161CAC;

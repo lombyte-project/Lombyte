@@ -288,7 +288,7 @@ void FUN_L05_00316ab8(HoverboardGirlMoby *moby) {
                 angle_from_xy(hero.motion.unkD0.f[0] - moby->position.component[0],
                               hero.motion.unkD0.f[1] -
                                   moby->position.component[1])) < 1.5707964f) {
-            if (vector_length(&hero.motion.unk100) > 0.01f) {
+            if (vector_length(&hero.motion.displacement) > 0.01f) {
                 state->player_look_timer = scale_frame_count(120);
             } else {
                 advance_timer(&state->player_look_timer);

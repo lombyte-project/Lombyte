@@ -58,7 +58,7 @@ void FUN_L04_002e3078(struct Moby *moby) {
     Vec4 *r;
     struct VendorVars *vars = (struct VendorVars *)moby->pvars;
 
-    if (moby->unk31 != 0 && FUN_001f9b48(&moby->pos, D_L04_00166F40) < 30.0f) {
+    if (moby->visible != 0 && FUN_001f9b48(&moby->pos, D_L04_00166F40) < 30.0f) {
         FUN_L00_0025a120(moby);
         ((struct VendorMobyView *)moby)->unk7F = 0x18;
     }
@@ -68,7 +68,7 @@ void FUN_L04_002e3078(struct Moby *moby) {
         if (D_0014C050[((struct VendorMobyView *)moby)->slot + current_level_index * 16] == 0xFF) {
             moby->state = 3;
             moby->flags |= 0x41;
-            moby->unk94 = 0;
+            moby->collision = 0;
             break;
         }
         moby->state = 1;
@@ -97,7 +97,7 @@ void FUN_L04_002e3078(struct Moby *moby) {
             FUN_0020b178(0, -1);
             moby->state = 3;
             moby->flags |= 0x41;
-            moby->unk94 = 0;
+            moby->collision = 0;
             break;
         }
         if (D_L04_0015F5C4 != 2)
@@ -105,7 +105,7 @@ void FUN_L04_002e3078(struct Moby *moby) {
         break;
     case 3:
         moby->flags |= 0x41;
-        moby->unk94 = 0;
+        moby->collision = 0;
         break;
     }
 }
@@ -187,14 +187,14 @@ void FUN_L04_002e4418(Moby *moby) {
 
     switch (moby->state) {
     case 0:
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         moby->state = 1;
         data->f14 = -1;
         break;
     case 1:
         if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f0) != 0
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1
-            && D_0014C050_c[moby->unkB0 + (D_0015ED84 << 4)] != 0xFF) {
+            && D_0014C050_c[moby->mission + (D_0015ED84 << 4)] != 0xFF) {
             if (data->f14 == -1) {
                 Help_2E57F8 *usage = (Help_2E57F8 *)(((char *)&D_00141848));
                 data->f14 = D_0015EEAC;
@@ -500,7 +500,7 @@ extern void FUN_L00_002637f8(int);
 void FUN_L04_002e53a0(struct Moby *m) {
     switch (m->state) {
     case 0:
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         m->state = 1;
         break;
     case 1:

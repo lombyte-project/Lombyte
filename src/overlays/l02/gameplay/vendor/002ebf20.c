@@ -69,7 +69,7 @@ void FUN_L02_002ebf20(struct Moby *m) {
                              250000.0f, 5000.0f, 1.0f, -0.0004f, 0.0f);
     if (q)
         q[9] = float_to_int(4.0f) - 0x80;
-    if (m->unk31 == 0)
+    if (m->visible == 0)
         count_down(&v->timer);
     else
         v->timer = scale_frames(60);
@@ -150,7 +150,7 @@ extern char D_0014EE90[];
 
 void FUN_L02_002ee890(struct Moby *moby) {
     int *data = (int *)moby->pvars;
-    moby->unk30 = 0xFF;
+    moby->update_dist = 0xFF;
 
     if (is_point_inside_clip_volume(&hero.motion.pos, data[0x17]) != 0 &&
         ((unsigned int)hero.state.control_mode) < 2) {
@@ -181,7 +181,7 @@ void FUN_L02_002ee890(struct Moby *moby) {
         break;
     case 1: {
         struct Hero *h = &hero;
-        if (h->unk300 != 0) {
+        if (h->grounded_frames != 0) {
             data[0x15] = 0;
         } else if (is_point_inside_clip_volume(&h->motion.pos, data[0x13]) != 0) {
             unsigned char *q = D_0013D408;
@@ -466,7 +466,7 @@ void FUN_L02_002ef020(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         moby->state = data[0] + 1;
-        build_rotation_matrix(&moby->unkC0, &moby->rot);
+        build_rotation_matrix(&moby->rot_row0, &moby->rot);
         break;
     case 1:
         qcopy(&p, &moby->pos);
@@ -479,7 +479,7 @@ void FUN_L02_002ef020(struct Moby *moby) {
             count1 = random_remainder(7) != 0 ? 1 : random_remainder(5) + 5;
             for (k1 = 0; k1 < count1; k1++) {
                 random_vector_jitter(&tmp, 0.0f, D_L02_001620D8 * frame_time);
-                scale_vector_by(D_L02_001620C8 * (random_float(-D_L02_001620D4, D_L02_001620D4) + 1.0f) * frame_time, &vel, &moby->unkC0);
+                scale_vector_by(D_L02_001620C8 * (random_float(-D_L02_001620D4, D_L02_001620D4) + 1.0f) * frame_time, &vel, &moby->rot_row0);
                 add_vector(&vel, &vel, &tmp);
                 scale_vector_by(D_L02_001620CC * (random_float(-D_L02_001620D4, D_L02_001620D4) + 1.0f) * frame_time, &acc, &vel);
                 acc.f[2] -= D_L02_001620D0 * frame_time;
@@ -497,11 +497,11 @@ void FUN_L02_002ef020(struct Moby *moby) {
         if (random_remainder(4) != 0) {
             break;
         }
-        scale_vector_by(D_L02_00162088 * (random_float(-D_L02_00162094, D_L02_00162094) + 1.0f) * frame_time, &vel, &moby->unkC0);
+        scale_vector_by(D_L02_00162088 * (random_float(-D_L02_00162094, D_L02_00162094) + 1.0f) * frame_time, &vel, &moby->rot_row0);
         rise1_puff = D_L02_0016208C * (random_float(-D_L02_00162094, D_L02_00162094) + 1.0f) * frame_time;
         clear_vector(&acc);
         acc.f[2] = rise1_puff;
-        scale_vector_by(random_float(-D_L02_00162090, D_L02_00162090) * frame_time, &tmp, &moby->unkD0);
+        scale_vector_by(random_float(-D_L02_00162090, D_L02_00162090) * frame_time, &tmp, &moby->rot_row1);
         add_vector(&acc, &acc, &tmp);
         vel.f[3] = random_float(D_L02_001620A8, D_L02_001620AC);
         acc.f[3] = random_float(D_L02_001620B0, D_L02_001620B4);
@@ -531,7 +531,7 @@ void FUN_L02_002ef020(struct Moby *moby) {
             count2 = random_remainder(7) != 0 ? 1 : random_remainder(5) + 5;
             for (k2 = 0; k2 < count2; k2++) {
                 random_vector_jitter(&tmp, 0.0f, D_L02_00162128 * frame_time);
-                scale_vector_by(D_L02_00162118 * (random_float(-D_L02_00162124, D_L02_00162124) + 1.0f) * frame_time, &vel, &moby->unkC0);
+                scale_vector_by(D_L02_00162118 * (random_float(-D_L02_00162124, D_L02_00162124) + 1.0f) * frame_time, &vel, &moby->rot_row0);
                 add_vector(&vel, &vel, &tmp);
                 scale_vector_by(D_L02_0016211C * (random_float(-D_L02_00162124, D_L02_00162124) + 1.0f) * frame_time, &acc, &vel);
                 acc.f[2] -= D_L02_00162120 * frame_time;
@@ -546,11 +546,11 @@ void FUN_L02_002ef020(struct Moby *moby) {
                                D_L02_00162164);
             }
         }
-        scale_vector_by(D_L02_00162048 * (random_float(-D_L02_00162054, D_L02_00162054) + 1.0f) * frame_time, &vel, &moby->unkC0);
+        scale_vector_by(D_L02_00162048 * (random_float(-D_L02_00162054, D_L02_00162054) + 1.0f) * frame_time, &vel, &moby->rot_row0);
         rise2_puff = D_L02_0016204C * (random_float(-D_L02_00162054, D_L02_00162054) + 1.0f) * frame_time;
         clear_vector(&acc);
         acc.f[2] = rise2_puff;
-        scale_vector_by(random_float(-D_L02_00162050, D_L02_00162050) * frame_time, &tmp, &moby->unkD0);
+        scale_vector_by(random_float(-D_L02_00162050, D_L02_00162050) * frame_time, &tmp, &moby->rot_row1);
         add_vector(&acc, &acc, &tmp);
         vel.f[3] = random_float(D_L02_00162068, D_L02_0016206C);
         acc.f[3] = random_float(D_L02_00162070, D_L02_00162074);

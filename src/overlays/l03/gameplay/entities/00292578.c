@@ -930,7 +930,7 @@ void FUN_L03_002953f8(struct Moby *moby) {
             qcopy(d0, p);
             qcopy(d1, q);
             *(int *)(data + 0x5C) = 3;
-            moby->unk30 = moby->unk32 = 0xFF;
+            moby->update_dist = moby->draw_dist = 0xFF;
         }
         subtract_vector_xyz(a, p, d0);
         FUN_L00_00260738(data + 0x20, a, d1, q);
@@ -1916,7 +1916,7 @@ void FUN_L03_002c6a20(struct Moby *moby) {
   *(unsigned char *)(data+0x117)=240;
   FUN_L00_0025d458(moby,(short *)(data+0x110));
  }
- moby->unkA4=255;
+ moby->hit_slot=255;
 }
 /* scans class instances for either predicate */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8160), where it is exact; names translated to the US level program. */
@@ -1970,14 +1970,14 @@ int FUN_L03_002c6e18(float ang, struct Moby *moby, struct Moby *target) {
             if (FUN_001f9b80(&moby->pos, target) < 20.0f) {
                 if (absolute_float(f20) > 1.1780972f) {
                     blend_moby_animation_u(moby, 1, 0, scale_game_frames(10));
-                    moby->unk58 = 1.0f;
+                    moby->anim_speed = 1.0f;
                 } else {
                     blend_moby_animation_u(moby, 9, 0, scale_game_frames(10));
                 }
                 *(float *)(data + 0x28C) = ang;
                 st = moby->state;
                 moby->state = 0xC;
-                moby->unkBC = st;
+                moby->command = st;
                 return 1;
             }
         }

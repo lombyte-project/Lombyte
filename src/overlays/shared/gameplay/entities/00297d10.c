@@ -590,7 +590,7 @@ int FUN_L06_002ea5e0(struct Moby *moby) {
     if (r != 0) {
         if (moby->state == 8 || moby->state == 9 || moby->state == 0xC || moby->state == 0xD || moby->state == 0x10) {
             if (moby->state != 0x10) {
-                moby->unkBC = moby->state;
+                moby->command = moby->state;
                 moby->state = 0x10;
             }
         } else {
@@ -2163,27 +2163,27 @@ void FUN_L06_002f4f00(Moby *m) {
         m->state = 2;
         for (i = 0; i < 7; i++) {
             d->slots[i] = create_moby(0x3FD);
-            (*(char *)&d->slots[i]->unk30) = 0x40;
-            d->slots[i]->unk32 = 0x40;
-            (*(char *)&d->slots[i]->unk31) = 1;
+            (*(char *)&d->slots[i]->update_dist) = 0x40;
+            d->slots[i]->draw_dist = 0x40;
+            (*(char *)&d->slots[i]->visible) = 1;
             (*(long *)&d->slots[i]->spawn_frame) = (*(long *)&m->spawn_frame);
             d->slots[i]->flags = m->flags;
             qcopy_nc((*(float (*)[4])&d->slots[i]->pos), (*(float (*)[4])&m->pos));
             qcopy_nc((*(float (*)[4])&d->slots[i]->rot), (*(float (*)[4])&m->rot));
             (*(float (*)[4])&d->slots[i]->rot)[0] = fast_add_rotations((*(float (*)[4])&d->slots[i]->rot)[0], (float)((i + 1) * 45) * 0.017453292f);
             d->slots[i]->state = 1;
-            vu_euler_rotation_basis((*(float (*)[4])&d->slots[i]->unkC0), (*(float (*)[4])&d->slots[i]->rot));
+            vu_euler_rotation_basis((*(float (*)[4])&d->slots[i]->rot_row0), (*(float (*)[4])&d->slots[i]->rot));
         }
         break;
     case 1:
         d->f10 = (*(float (*)[4])&m->rot)[0];
         qcopy(d->pos, (*(float (*)[4])&m->pos));
         m->state = 3;
-        normalize_vector_xyz(tmp, (*(float (*)[4])&m->unkE0), D_L06_00161D48);
+        normalize_vector_xyz(tmp, (*(float (*)[4])&m->rot_row2), D_L06_00161D48);
         add_vector_xyz((*(float (*)[4])&m->pos), tmp, d);
         break;
     case 2:
-        if (m->unkBC == 0) {
+        if (m->command == 0) {
             flag = 0;
             if (d->idx >= 0) {
                                 if (D_L06_0015FFD8[d->idx].oclass == 0x5A8) {
@@ -2191,7 +2191,7 @@ void FUN_L06_002f4f00(Moby *m) {
                         flag = 1;
                     }
                 } else if (D_L06_0015FFD8[d->idx].oclass == 0x24A) {
-                    flag = D_L06_0015FFD8[d->idx].unkBC != 0;
+                    flag = D_L06_0015FFD8[d->idx].command != 0;
                 } else {
                     flag = D_L06_0015FFD8[d->idx].state >= 3;
                 }
@@ -2218,7 +2218,7 @@ void FUN_L06_002f4f00(Moby *m) {
             }
         }
     case 3:
-        normalize_vector_xyz(tmp, (*(float (*)[4])&m->unkE0), D_L06_00161D48);
+        normalize_vector_xyz(tmp, (*(float (*)[4])&m->rot_row2), D_L06_00161D48);
         add_vector_xyz((*(float (*)[4])&m->pos), tmp, d);
         break;
     case 4:
@@ -2230,7 +2230,7 @@ void FUN_L06_002f4f00(Moby *m) {
         (*(float (*)[4])&m->rot)[0] = fast_subtract_rotations(d->f10, d->f14);
         if (d->f14 >= 1.0471976f) {
             m->flags |= 1;
-            (*(char *)&m->unk31) = 0;
+            (*(char *)&m->visible) = 0;
             if (m->state == 4) {
                 m->state = 6;
             } else {

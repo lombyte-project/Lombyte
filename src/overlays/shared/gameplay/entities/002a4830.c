@@ -964,7 +964,7 @@ void FUN_L00_002a5dd8(Bolt *obj) {
             FUN_00213ed8(&v->speed, D_0015ED6C * 48.0f, D_0015ED70 * 16.0f);
             x = D_0015ED6C * 8.0f;
             if (x < hero.motion.speed_xy) {
-                FUN_001f9bf8(&b, &hero.motion.unk100, (hero.motion.speed_xy - x) * 0.5f);
+                FUN_001f9bf8(&b, &hero.motion.displacement, (hero.motion.speed_xy - x) * 0.5f);
                 FUN_001f9a10(&obj->pos, &obj->pos, &b);
             }
         }
@@ -1063,7 +1063,7 @@ void FUN_L00_002a6b70(struct Moby *bolt)
         break;
     }
 
-    src = bolt->unkB8;
+    src = bolt->parent;
     if (src && !(src->id & 0x80))
         bolt_source_stats[current_level_index][src->id].bolts += value;
     current_bolt_count += value;
@@ -1325,18 +1325,18 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
         /* the bolt source is the root of src's unkB8 chain */
         root = src;
         if (src != 0) {
-            while (root->unkB8 != 0)
-                root = root->unkB8;
+            while (root->parent != 0)
+                root = root->parent;
         }
-        m->unkB8 = root;
+        m->parent = root;
         m->unk73 = 20;
         m->flags |= 0x100;
-        m->unk30 = 0x40;
-        m->unk32 = 0x40;
-        m->unk31 = 1;
+        m->update_dist = 0x40;
+        m->draw_dist = 0x40;
+        m->visible = 1;
         m->state = 1;
         m->scale = m->pclass->scale * scale;
-        FUN_001fa030(&m->unkC0, &m->rot);
+        FUN_001fa030(&m->rot_row0, &m->rot);
         if ((src->flags & 0x20) && (color = *(u8 **)(src->pvars + 0xC)) != 0)
             FUN_L00_002502f0(m, color[4], color[5], color[6]);
         else
@@ -2402,7 +2402,7 @@ void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
     add_vector_xyz(m, &d, arg);
     P = &hero;
     if (P->ground_moby && FUN_L00_002603d0_2aa008(P->ground_moby)) {
-        add_vector_xyz(m, m, &P->motion.unk100);
+        add_vector_xyz(m, m, &P->motion.displacement);
     }
     m->h34 = FUN_001f96f8_2aa008(0x78);
     count = 0;

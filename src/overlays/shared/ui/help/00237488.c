@@ -453,7 +453,7 @@ void FUN_L05_0024bdc0(void) {
     if (D_L05_0015F5CC % 5 == 0) {
         hero.unk260 = 0;
         hero.unk258 = 0.0f;
-        if (hero.unk300) {
+        if (hero.grounded_frames) {
             FUN_L00_0025c9d8(start, 1.1f, 0.0f, 1.0f);
             FUN_L00_0025c9d8(end, 1.1f, 0.0f, -20.0f);
             if (end[2] < 0.5f) end[2] = 0.5f;
@@ -519,7 +519,7 @@ int FUN_L05_002515d0(void) {
     if (p->base_condition != 0) {
         if (p->state.control_mode == 0x11) {
             if (p->state.step != 1) {
-                if (0.0f < p->motion.unk100.f[2]) {
+                if (0.0f < p->motion.displacement.f[2]) {
                     if (p->water_surface_z - 0.4f < p->motion.pos.f[2]) {
                         r = 1;
                     }
@@ -532,7 +532,7 @@ int FUN_L05_002515d0(void) {
             }
             if (absolute_float(p->water_surface_z - (p->motion.pos.f[2] + 0.45f)) < t) {
                 if (p->state.control_mode != 4 || p->unk41E != 0) {
-                    if (0.8f < p->unk22A4 && p->motion.unk100.f[2] < 0.0f) {
+                    if (0.8f < p->unk22A4 && p->motion.displacement.f[2] < 0.0f) {
                         r = 1;
                     }
                 }
@@ -1002,7 +1002,7 @@ int FUN_L05_00251be8(void) {
                 }
             }
             stats = (Stats_2523C8 *)(((char *)&D_00141848));
-            item->unkBC = scale_game_frames_alt(7);
+            item->command = scale_game_frames_alt(7);
             D_0013F450_h2523C8.unk8CF = scale_game_frames_alt(0x32);
             if (stats->hD8 < 0xFFFF) {
                 stats->hD8++;
@@ -1025,7 +1025,7 @@ int FUN_L05_00251be8(void) {
             func_001F9908_2523C8(&D_L05_0015F674_g);
             if (D_L05_0015F674_g != 0) {
                 if (D_0013F450_h2523C8.state.control_mode < 2U || D_0013F450_h2523C8.state.control_mode == 0xC
-                    || ((D_0013F450_h2523C8.state.control_mode == 2 || D_0013F450_h2523C8.state.control_mode == 4) && D_0013F450_h2523C8.unk300 != 0)) {
+                    || ((D_0013F450_h2523C8.state.control_mode == 2 || D_0013F450_h2523C8.state.control_mode == 4) && D_0013F450_h2523C8.grounded_frames != 0)) {
                     if ((D_0013CA40_p2523C8.held & 8) && (D_0013CA40_p2523C8.pressed & 8)) {
                         func_L05_0024D680_2523C8(0x81, 1);
                     }

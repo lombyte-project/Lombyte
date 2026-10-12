@@ -232,11 +232,11 @@ void FUN_L11_00253a18(void) {
                         }
                         if (hero.items[3].state == 2) {
                             m = hero.items[3].moby;
-                            if (m != 0 && (m->unk70 & 2) && m->prev_seq != 1) {
+                            if (m != 0 && (m->anim_flags & 2) && m->prev_seq != 1) {
                                 blend_moby_animation(m, 1, 0, scale_game_frames(7));
                             }
                             m = hero.items[3].moby2;
-                            if (m != 0 && (m->unk70 & 2) && m->prev_seq != 1) {
+                            if (m != 0 && (m->anim_flags & 2) && m->prev_seq != 1) {
                                 blend_moby_animation(m, 1, 0, scale_game_frames(7));
                             }
                         }
@@ -359,7 +359,7 @@ void FUN_L11_00253a18(void) {
                             break;
                         }
                     }
-                    if ((D_0013C940.held & 0xA) && hero.unk300 != 0) {
+                    if ((D_0013C940.held & 0xA) && hero.grounded_frames != 0) {
                         if (hero.moby->prev_seq != 0x1A || !(hero.anim_frame < 108.0f)) {
                             hero_set_state(HERO_STATE_CROUCH, 1);
                             break;
@@ -557,7 +557,7 @@ void FUN_L11_00253a18(void) {
                         hero_set_state(0x73, 0);
                         set_hero_animation(0x60, 0, scale_game_frames(0x11));
                         hero.motion.velocity.f[2] = 0.0f;
-                        hero.motion.unk100.f[2] = 0.0f;
+                        hero.motion.displacement.f[2] = 0.0f;
                     }
                     if (0.1f > hero.unk229C && hero.ground_speed == 0.0f &&
                         hero.unk698 == 0) {
@@ -743,7 +743,7 @@ void FUN_L11_00253a18(void) {
                 case 115:
                 case 126:
                     if (hero.unk3BC != 0 &&
-                        (moby->unk54 > 0.9f || moby->seq != 0xFF)) {
+                        (moby->anim_time > 0.9f || moby->seq != 0xFF)) {
                         hero.unk3BC = 0;
                     }
                     if (hero.on_slip_ground != 0 && hero.frames_off_ground.s == 0) {
@@ -1202,8 +1202,8 @@ void FUN_L11_00253a18(void) {
 
                         FUN_L01_00227e48(hero.unk12ED, 0, 1);
                         FUN_L01_00227e48(hero.unk12ED, 1, 1);
-                        if (frame_time * -9.0f > hero.motion.unk100.f[2]) {
-                            hero.motion.unk100.f[2] = frame_time * -9.0f;
+                        if (frame_time * -9.0f > hero.motion.displacement.f[2]) {
+                            hero.motion.displacement.f[2] = frame_time * -9.0f;
                         }
                         if (frame_time * -9.0f > hero.motion.velocity.f[2]) {
                             hero.motion.velocity.f[2] = frame_time * -9.0f;
@@ -1297,7 +1297,7 @@ void FUN_L11_00253a18(void) {
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||
                                                 (hero.state_timer > 0x14 && hero.wall_hit != 0 &&
-                                                 hero.motion.unk100.f[2] >= 0.0f))) ||
+                                                 hero.motion.displacement.f[2] >= 0.0f))) ||
                         hero.state_timer > scale_game_frames(0x78)) {
                         hero_respawn();
                         return;
@@ -1447,7 +1447,7 @@ void FUN_L11_00253a18(void) {
                     if (hero.unk4AE != 0) {
                         int t = FUN_L00_00221d98();
                         if (t > 0 && (hero.state_timer < t || hero.unk418 != 0) &&
-                            hero.unk300 != 0) {
+                            hero.grounded_frames != 0) {
                             if (hero.state.current != HERO_STATE_HIGH_JUMP ||
                                 pad_pressed_within(0x40, scale_game_frames(7), 0)) {
                                 int ok = 1;
@@ -1523,7 +1523,7 @@ void FUN_L11_00253a18(void) {
                                (hero.state.current == HERO_STATE_PACK_JUMP || hero.state.current == HERO_STATE_PACK_LONG_JUMP) &&
                                hero.wall_probe_distance < 0.9f && hero.wall_hit != 0) {
                         if (vector_length_xyz(hero.motion.velocity.f) > frame_time * 7.0f) {
-                            float len = vector_length_xyz(hero.motion.unk100.f);
+                            float len = vector_length_xyz(hero.motion.displacement.f);
                             if (len < vector_length_xyz(hero.motion.velocity.f) * 0.5f &&
                                 hero.unk4E8 == 0 && hero.ground_distance < 2.0f) {
                                 hero_set_state(HERO_STATE_WALL_BONK, 1);
@@ -1828,8 +1828,8 @@ void FUN_L11_00253a18(void) {
                     if (hero.air_frames.s != 0) {
                         break;
                     }
-                    if (frame_time * -9.0f > hero.motion.unk100.f[2]) {
-                        hero.motion.unk100.f[2] = frame_time * -9.0f;
+                    if (frame_time * -9.0f > hero.motion.displacement.f[2]) {
+                        hero.motion.displacement.f[2] = frame_time * -9.0f;
                     }
                     if (frame_time * -9.0f > hero.motion.velocity.f[2]) {
                         hero.motion.velocity.f[2] = frame_time * -9.0f;

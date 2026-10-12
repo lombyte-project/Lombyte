@@ -1081,7 +1081,7 @@ void FUN_L00_002bc7e8(Moby *moby) {
             direction.z = 1.0f;
             func_001F9EE8_2BDAF0(&direction, &direction, matrix);
         } else if (((Hero *)D_0013F450_2BDAF0)->unk22C8 == 1) {
-            func_001F9C30_2BDAF0(&direction, &moby->unkD0, -1.0f);
+            func_001F9C30_2BDAF0(&direction, &moby->rot_row1, -1.0f);
         } else {
             direction.x = 1.0f;
             func_001F9EC0_2BDAF0(&direction, &direction, ((Hero *)D_0013F450_2BDAF0)->basis[0].f);
@@ -1140,7 +1140,7 @@ void FUN_L00_002bc7e8(Moby *moby) {
         }
         if (D_L00_001617C0 >= 0) {
             D_L00_001617C4 = func_001F9850_2BDAF0(20);
-            func_L00_001FF4B0_2BDAF0(&points[0], &moby->unkD0, -0.5f);
+            func_L00_001FF4B0_2BDAF0(&points[0], &moby->rot_row1, -0.5f);
             func_001F9BD8_2BDAF0(&points[1], data, &points[0]);
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[0] = points[1].x;
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[1] = points[1].y;
@@ -1161,7 +1161,7 @@ void FUN_L00_002bc7e8(Moby *moby) {
         D_L00_001617BC = 1;
         if (D_L00_001617C0 >= 0) {
             float brightness;
-            func_L00_001FF4B0_2BDAF0(&direction, &moby->unkD0, -0.5f);
+            func_L00_001FF4B0_2BDAF0(&direction, &moby->rot_row1, -0.5f);
             func_001F9BD8_2BDAF0(&points[0], data, &direction);
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[0] = points[0].x;
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[1] = points[0].y;
@@ -1519,7 +1519,7 @@ void FUN_L00_002bd0a0(struct Moby *moby) {
     func_001F9BF0_2BE3A8(&dir, &D_L00_001DC260_2BE3A8[1], &D_L00_001DC260_2BE3A8[0]);
     func_L00_001FF4B0_2BE3A8(&dir, &dir, D_L00_00161804_2BE3A8 * D_0015EE60_2BE3A8);
     if (func_002140B0_2BE3A8(2) == 0) {
-        func_L00_001FF4B0_2BE3A8(&side, &moby->unkD0, D_L00_00161810_2BE3A8);
+        func_L00_001FF4B0_2BE3A8(&side, &moby->rot_row1, D_L00_00161810_2BE3A8);
         func_001F9BD8_2BE3A8(&point, &D_L00_001DC260_2BE3A8[0], &side);
         {
             Tab_2BE3A8 colors;

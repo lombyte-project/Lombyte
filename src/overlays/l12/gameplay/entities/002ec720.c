@@ -50,16 +50,16 @@ void FUN_L12_002ec720(struct Moby *moby) {
         goto update;
     }
     moby->state = 1;
-    moby->unkBC = 2;
+    moby->command = 2;
     data[0] = random_angle_radians();
     data[2] = 5.0f;
     goto frame_active;
 active:
-    if (moby->unkBC & 8) {
-        moby->unkBC = 1;
+    if (moby->command & 8) {
+        moby->command = 1;
         *(int *)&data[1] = scale_game_frames_72(D_L12_001619D0);
-    } else if (moby->unkBC & 4) {
-        moby->unkBC = 2;
+    } else if (moby->command & 4) {
+        moby->command = 2;
         *(int *)&data[1] = scale_game_frames_72(D_L12_001619D0);
     }
     data[0] = fast_add_rotations_72(data[0], D_L12_001619CC * 0.017453292f * D_0015ED6C_72);
@@ -68,7 +68,7 @@ frame_active:
 update:
     if (frame_scale == 0.0f) {
         if (fast_dec_timer_72((int *)&data[1]) == 0) {
-            if (moby->unkBC & 1) {
+            if (moby->command & 1) {
                 fraction = 1.0f - convert_integer_to_float_72(*(int *)&data[1]) /
                                   convert_integer_to_float_72(D_L12_001619D0);
             } else {
@@ -87,7 +87,7 @@ update:
                 scale_vector_72(diff0, diff0, 2.0f / (float)scaled);
                 scale_vector_72(diff1, diff1, 2.0f / (float)scaled);
                 add_vector_72(pos, pos, (float *)&moby->pos);
-                if (moby->unkBC & 1) {
+                if (moby->command & 1) {
                     pos[2] += D_L12_00161A04;
                     diff0[2] = -diff0[2];
                     diff1[2] = -diff1[2];
@@ -101,9 +101,9 @@ update:
                                   D_L12_001619F0, D_L12_001619F8);
             }
         }
-        if ((moby->unkBC & 1) && *(int *)&data[1] == 0) {
+        if ((moby->command & 1) && *(int *)&data[1] == 0) {
             approach_value_72(-1.0f, D_L12_00161A08 * D_0015ED6C_72, &data[2]);
-        } else if (moby->unkBC & 2) {
+        } else if (moby->command & 2) {
             approach_value_72(3.0f, D_L12_00161A08 * D_0015ED6C_72, &data[2]);
         }
     }
@@ -147,7 +147,7 @@ void FUN_L12_002ecac0(struct Moby *moby) {
     float pos[4];
     float a, b;
     int i, col;
-    FUN_001fa298(m, &moby->unkC0);
+    FUN_001fa298(m, &moby->rot_row0);
     qcopy(pos, &moby->pos);
     pos[2] = pos[2] + *(float *)(data + 8);
     pos[3] = 1.0f;
@@ -171,7 +171,7 @@ void FUN_L12_002ecac0(struct Moby *moby) {
         q.v[1] = a;
         q.v[13] = b;
         q.v[5] = b;
-        if (moby->unkBC & 1) {
+        if (moby->command & 1) {
             q.v[2] = -fast_cos(a * *(float *)&D_L12_00161A24) + 2.0f;
             q.v[6] = -fast_cos(b * *(float *)&D_L12_00161A24) + 2.0f;
         } else {
@@ -201,9 +201,9 @@ char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, floa
         char *data;
         int r;
         data = (char *)moby->pvars;
-        moby->unk30 = 0xFF;
-        moby->unk32 = 0x7E;
-        moby->unk31 = 1;
+        moby->update_dist = 0xFF;
+        moby->draw_dist = 0x7E;
+        moby->visible = 1;
         moby->state = 1;
         qcopy(&moby->pos, pos);
         qcopy(data, src);

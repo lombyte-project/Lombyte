@@ -21,7 +21,7 @@ void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int bl
 void FUN_L04_002a5a08(struct Moby *m) {
     int *d;
     if (m != 0) {
-        m->unk94 = 0;
+        m->collision = 0;
         d = (int *)m->pvars;
         if (*d == 0) {
             if (m->prev_seq != 1) {
@@ -29,7 +29,7 @@ void FUN_L04_002a5a08(struct Moby *m) {
             }
             *d = scale_game_frames((rand() + 0x1E) & 0xFF);
         }
-        if ((m->unk70 & 2) && m->prev_seq != 0) {
+        if ((m->anim_flags & 2) && m->prev_seq != 0) {
             blend_moby_animation_u(m, 0, 0, (void *)scale_game_frames(3));
         }
         *d = *d - 1;
@@ -264,11 +264,11 @@ initialize:
         if (child != 0) {
             struct Moby *part = (struct Moby *)child->pvars;
             children[i] = child;
-            child->unk30 = 0x7f;
-            child->unk32 = 0x7f;
+            child->update_dist = 0x7f;
+            child->draw_dist = 0x7f;
             child->scale *= random_float_between_29ecf8(0.7f, 1.3f);
             child->rot.z = random_angle_29ecf8();
-            child->unk58 = random_float_between_29ecf8(0.6f, 1.2f);
+            child->anim_speed = random_float_between_29ecf8(0.6f, 1.2f);
             clear_vector_29ecf8(&part->pos);
             *(s16 *)((char *)part + 0x44) = 0;
             *(f32 *)((char *)part + 0x4c) = 10.0f;
@@ -301,9 +301,9 @@ update:
     children = data->children;
     for (i = 0; i < data->count; i++) {
         child = children[i];
-        average = (child->unk58 + 1.0f) * 0.5f;
+        average = (child->anim_speed + 1.0f) * 0.5f;
         D_L04_00166130[6] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * average * 0.05f * frame_scale_sq * average;
-        D_L04_00166130[7] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * (child->unk58 + 1.0f) * 0.5f;
+        D_L04_00166130[7] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * (child->anim_speed + 1.0f) * 0.5f;
         FUN_L04_001f30e0(children, data->count, child, child->pvars, D_L04_00166130);
         apply_child_motion_29ecf8(0.0f, child, child->pvars, D_L04_00166130);
     }
@@ -2299,10 +2299,10 @@ void FUN_L04_002c4850(struct Moby *moby) {
     }
     pos = (float *)&moby->pos;
     FUN_L00_00263b38(data + 0x110, 3.0f);
-    if (moby->unk31 != 0) {
+    if (moby->visible != 0) {
         if (FUN_001f9b48(pos, D_L04_00166F40) < 27.0f) {
             FUN_L00_0025a120(moby);
-            moby->unk7F = 0x15;
+            moby->shadow_range = 0x15;
         }
     }
     if (flag) {
@@ -2438,7 +2438,7 @@ void FUN_L04_002c4850(struct Moby *moby) {
         }
         FUN_L00_0025d458(moby, (short *)(data + 0x60));
     }
-    moby->unkA4 = 0xFF;
+    moby->hit_slot = 0xFF;
     if (*(int *)(data + 0x38) != 0) {
         *(unsigned char *)(data + 0xFE) = scale_game_frames(0xF0);
     }
@@ -2476,7 +2476,7 @@ void FUN_L04_002c4850(struct Moby *moby) {
         }
         break;
     case 1:
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             blend_moby_animation_p(moby, (void *)((rand() ^ 1) & 1), 0,
                                    (void *)scale_game_frames(0xA));
         }
@@ -2629,7 +2629,7 @@ void FUN_L04_002c4850(struct Moby *moby) {
         if (moby->prev_seq != 2) {
             blend_moby_animation_p(moby, (void *)2, 0, (void *)scale_game_frames(7));
             *(float *)(data + 0xD0) = -(frame_time * 7.668f);
-        } else if (moby->unk70 & 2) {
+        } else if (moby->anim_flags & 2) {
             blend_moby_animation_p(moby, 0, 0, (void *)scale_game_frames(0xA));
             moby->state = 1;
         }
@@ -2640,7 +2640,7 @@ void FUN_L04_002c4850(struct Moby *moby) {
         FUN_L00_00258278(moby, (float *)(data + 0xEC), a, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f,
                          frame_time * 5.585053443908691f);
     }
-        if ((moby->unk70 & 2) && moby->seq != 4) {
+        if ((moby->anim_flags & 2) && moby->seq != 4) {
             blend_moby_animation_p(moby, (void *)4, 0, (void *)scale_game_frames(7));
         }
         if (!flag && dist > 2.5f && best > 1.0f) {
@@ -2713,7 +2713,7 @@ void FUN_L04_002c4850(struct Moby *moby) {
             FUN_L04_002aee30(moby, st.w.p.v70, st.w.p.v80,
                              truncate_float_to_s32(14.0f / (frame_time * 10.0f)));
             FUN_L00_001fefc8(data + 0xFD);
-        } else if ((moby->unk70 & 2) && *(short *)(data + 0xF2) == 0 &&
+        } else if ((moby->anim_flags & 2) && *(short *)(data + 0xF2) == 0 &&
                    *(unsigned char *)(data + 0xFD) == 0) {
             *(short *)(data + 0xF2) = scale_game_frames(0xB4);
             moby->state = 5;
@@ -2751,7 +2751,7 @@ void FUN_L04_002c4850(struct Moby *moby) {
                 FUN_L00_00259a88(target, &st.w.p.blk);
             }
         }
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             moby->state = 5;
             *(short *)(data + 0xF2) = scale_game_frames(0x14);
             blend_moby_animation_p(moby, (void *)4, 0, (void *)scale_game_frames(7));
@@ -2771,7 +2771,7 @@ void FUN_L04_002c4850(struct Moby *moby) {
                 *(float *)(data + 0xF4) + -2.0f / (FUN_001f96b0(15.0f) * FUN_001f96b0(15.0f));
             func_L00_002594C8_o(moby, pos, st.w.p.v70, 0.5f, 1.0f, 0.5f, 0.5235988f, 1);
         }
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             *(unsigned short *)(data + 0xE8) ^= 1;
             blend_moby_animation_p(moby, (void *)(moby->state == 9 ? 9 : 0), 0,
                                    (void *)scale_game_frames(9));
@@ -2885,7 +2885,7 @@ extern s32 play_moby_voice(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 /* Follows a linked switch moby (class 0x118): mirrors its position value, loops a sound while it moves, plays a click at either end and swaps class 0x41C back to 0x1B0 when it reaches 1.0. */
 void FUN_L04_002c6858(struct Moby *m) {
     SwitchFollowerVars *v = (SwitchFollowerVars *)m->pvars;
-    f32 last = m->unk54;
+    f32 last = m->anim_time;
     struct Moby *other;
     f32 *pos;
     f32 cur;
@@ -2898,17 +2898,17 @@ void FUN_L04_002c6858(struct Moby *m) {
     case 0:
         blend_anim(m, 1, 0, scale_game_frames(300));
         m->state = 1;
-        m->unk58 = 0;
+        m->anim_speed = 0;
         v->voice = -1;
         if (m->oclass == 0x1B0) {
             m->oclass = 0x41C;
-            m->unk22 = D_L04_00197D40[0x41C];
-            m->pclass = D_L04_00197480[m->unk22];
+            m->class_slot = D_L04_00197D40[0x41C];
+            m->pclass = D_L04_00197480[m->class_slot];
             m->unk71 = 0xFF;
             m->scale = ((MobyClassHeader *)m->pclass)->scale;
             reset_moby_anim(m);
             m->unk72 = ((MobyClassHeader *)m->pclass)->unkE;
-            m->unk94 = ((MobyClassHeader *)m->pclass)->unk10;
+            m->collision = ((MobyClassHeader *)m->pclass)->unk10;
             FUN_0020e098(m);
         }
         break;
@@ -2920,7 +2920,7 @@ void FUN_L04_002c6858(struct Moby *m) {
             break;
         pos = (f32 *)other->pvars;
         cur = *pos;
-        m->unk54 = cur;
+        m->anim_time = cur;
         if (cur != last) {
             if (*pos == 1.0f || *pos == 0.0f) {
                 if (voice_is_playing(m, v->voice)) {
@@ -2935,13 +2935,13 @@ void FUN_L04_002c6858(struct Moby *m) {
                 play_moby_voice(1, 0, m);
                 if (m->oclass == 0x41C && *pos == 1.0f) {
                     m->oclass = 0x1B0;
-                    m->unk22 = D_L04_00197D40[0x1B0];
-                    m->pclass = D_L04_00197480[m->unk22];
+                    m->class_slot = D_L04_00197D40[0x1B0];
+                    m->pclass = D_L04_00197480[m->class_slot];
                     m->unk71 = 0xFF;
                     m->scale = ((MobyClassHeader *)m->pclass)->scale;
                     reset_moby_anim(m);
                     m->unk72 = ((MobyClassHeader *)m->pclass)->unkE;
-                    m->unk94 = ((MobyClassHeader *)m->pclass)->unk10;
+                    m->collision = ((MobyClassHeader *)m->pclass)->unk10;
                     FUN_0020e098(m);
                     m->state = 2;
                 }
@@ -3012,7 +3012,7 @@ void FUN_L04_002c6bb8(struct Moby *m) {
     LeverVars *lv;
     u8 *slot;
 
-    prev = m->unk54;
+    prev = m->anim_time;
     if (v == NULL) {
         mark_moby_for_removal(m);
         return;
@@ -3021,7 +3021,7 @@ void FUN_L04_002c6bb8(struct Moby *m) {
     case 0:
         moby_play_anim(m, 1, 0, scale_game_frames(300));
         m->state = 1;
-        m->unk58 = 0;
+        m->anim_speed = 0;
         v->voice = -1;
         break;
     case 1:
@@ -3034,7 +3034,7 @@ void FUN_L04_002c6bb8(struct Moby *m) {
         }
         lv = (LeverVars *)lever->pvars;
         if (lever->state == 3) {
-            m->unk54 = 1.0f - lv->travel;
+            m->anim_time = 1.0f - lv->travel;
         } else if (lv->travel != 1.0f ||
                    (v->target != -1 && v->locked == 0 &&
                     ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9 ||
@@ -3042,7 +3042,7 @@ void FUN_L04_002c6bb8(struct Moby *m) {
                     hero.ground_moby == &level_mobys[v->target])) {
             m->state = 2;
         }
-        if (m->unk54 != prev) {
+        if (m->anim_time != prev) {
             if (lv->travel != 1.0f && lv->travel != 0.0f) {
                 if (FUN_L00_0028d8c0(m, v->voice) == 0) {
                     v->voice = start_moby_sound(0, 4, (int)m);
@@ -3073,9 +3073,9 @@ void FUN_L04_002c6bb8(struct Moby *m) {
         struct Moby *link;
         LeverVars *link_vars;
 
-        m->unk54 = prev + frame_time * 0.5f;
-        if (1.0f < m->unk54) {
-            m->unk54 = 1.0f;
+        m->anim_time = prev + frame_time * 0.5f;
+        if (1.0f < m->anim_time) {
+            m->anim_time = 1.0f;
         }
         if (v->lever == -1) {
             break;
@@ -3086,13 +3086,13 @@ void FUN_L04_002c6bb8(struct Moby *m) {
         }
         link_vars = (LeverVars *)link->pvars;
         if (link->state == 3) {
-            m->unk54 = 1.0f - link_vars->travel;
+            m->anim_time = 1.0f - link_vars->travel;
             m->state = 1;
         } else {
-            link_vars->travel = 1.0f - m->unk54;
+            link_vars->travel = 1.0f - m->anim_time;
             link_vars->spin = link_vars->travel * (link_vars->rate * 6.2831855f);
         }
-        if (m->unk54 != prev) {
+        if (m->anim_time != prev) {
             if (link_vars->travel == 1.0f || link_vars->travel == 0.0f) {
                 if (FUN_L00_0028d8c0(m, v->voice) != 0) {
                     if (v->voice != -1) {

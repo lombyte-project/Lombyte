@@ -13,11 +13,11 @@ void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
 void update_moby_animation_state(struct Moby *m) {
     if (m->seq != 0xFF) {
         m->cur_frame_data = m->pclass->seqs[m->seq]->frames[m->frame];
-        m->unk7E = m->pclass->seqs[m->seq]->unk12;
+        m->anim_trigger_count = m->pclass->seqs[m->seq]->unk12;
         m->unk7C = m->pclass->seqs[m->seq]->unk11;
     } else {
         m->unk7C = 0xFF;
-        m->unk7E = 0;
+        m->anim_trigger_count = 0;
         m->cur_frame_data = debug_font_buffer + m->frame * 0x800;
     }
     m->prev_frame_data = m->pclass->seqs[m->prev_seq]->frames[m->prev_frame];

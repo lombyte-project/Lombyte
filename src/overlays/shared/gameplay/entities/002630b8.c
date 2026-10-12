@@ -57,7 +57,7 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
             target.f[2] += b->height;
         else
             target.f[2] += 0.5f;
-        if (!(m->flags & 0x1000) || !m || !m->pclass || m->pclass->unk46 != 5)
+        if (!(m->flags & 0x1000) || !m || !m->pclass || m->pclass->type != 5)
             continue;
         t_yaw = FUN_001f9e90(target.f[0] - pp->f[0], target.f[1] - pp->f[1]);
         t_pitch = FUN_001f9e90(FUN_001f9b80(pp, &target), target.f[2] - pp->f[2]);
@@ -73,7 +73,7 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
         }
         if (best_dist < dist)
             continue;
-        FUN_00214db0(&probe, dist, *yaw, *pitch + hero.unk2E4.f * 0.5f);
+        FUN_00214db0(&probe, dist, *yaw, *pitch + hero.ground_pitch.f * 0.5f);
         FUN_001f9a10(&probe, &probe, pp);
         ang = FUN_001f9df8(FUN_001f9b48(&probe, &target) / (dist + dist));
         ang = ang + ang;

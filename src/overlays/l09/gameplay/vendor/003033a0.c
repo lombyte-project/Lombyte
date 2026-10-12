@@ -271,7 +271,7 @@ void FUN_L09_00303b30(struct Moby *moby, VendorVars *vars, f32 *health) {
                     link = &moby_list[vars->link];
                     if (link != 0 && link->state != 0xFE && link->state != 0xFD
                         && (link->oclass == 0x494 || link->oclass == 0x49D || link->oclass == 0x4A0)) {
-                        link->unkBC = 1;
+                        link->command = 1;
                     }
                 }
                 FUN_L00_00257470(moby, 0, -1);
@@ -285,7 +285,7 @@ void FUN_L09_00303b30(struct Moby *moby, VendorVars *vars, f32 *health) {
                 FUN_L00_0025d458(moby, vars->anim);
             }
         }
-        moby->unkA4 = 0xFF;
+        moby->hit_slot = 0xFF;
     }
     FUN_L00_0025d538(moby, vars->anim);
 }
@@ -329,7 +329,7 @@ void FUN_L09_00303d10(struct Moby *m) {
                 *(int *)(d + 0x7C) = func_0022ED80_r(1, 4, m);
             }
         }
-        if (m->unkBC == 1) {
+        if (m->command == 1) {
             if (*(int *)(d + 0x78) != -1) {
                 unsigned char *o = (unsigned char *)(D_L09_0015FFD8_u + (*(int *)(d + 0x78) << 8));
                 if (o[0x20] == 1)
@@ -343,7 +343,7 @@ void FUN_L09_00303d10(struct Moby *m) {
                 }
             }
             *(int *)(d + 0x7C) = -1;
-            m->unk30 = 0xFF;
+            m->update_dist = 0xFF;
             m->state = 2;
         }
         break;
@@ -412,7 +412,7 @@ void FUN_L09_00303fc8(struct Moby *moby, VendorVars2 *vars, f32 *health) {
                     link = &moby_list[vars->link];
                     if (link != 0 && link->state != 0xFE && link->state != 0xFD
                         && (link->oclass == 0x494 || link->oclass == 0x49D || link->oclass == 0x4A0)) {
-                        link->unkBC = 1;
+                        link->command = 1;
                     }
                 }
                 /* Retail checks the 0x64 link but indexes with the 0x60 one. */
@@ -420,7 +420,7 @@ void FUN_L09_00303fc8(struct Moby *moby, VendorVars2 *vars, f32 *health) {
                     link = &moby_list[vars->link];
                     if (link != 0 && link->state != 0xFE && link->state != 0xFD
                         && (link->oclass == 0x494 || link->oclass == 0x49D || link->oclass == 0x4A0)) {
-                        link->unkBC = 1;
+                        link->command = 1;
                     }
                 }
                 FUN_L00_00257470(moby, 0, -1);
@@ -430,7 +430,7 @@ void FUN_L09_00303fc8(struct Moby *moby, VendorVars2 *vars, f32 *health) {
                 vars->hurt_timer = FUN_001f96f8(60);
             }
         }
-        moby->unkA4 = 0xFF;
+        moby->hit_slot = 0xFF;
     }
 }
 #define NOT_SDA
@@ -577,7 +577,7 @@ void FUN_L09_00304360(Moby *m) {
         m->state = 1;
         break;
     case 1:
-        if (m->unk31 == 0 || distance_xyz(((f32 *)&m->pos), D_L09_00166F40) > 32.0f) {
+        if (m->visible == 0 || distance_xyz(((f32 *)&m->pos), D_L09_00166F40) > 32.0f) {
             if (D_L09_0015F5CC % 8 != (short)((*(short *)&m->save_id) % 8)) {
                 return;
             }
@@ -623,20 +623,20 @@ void FUN_L09_00304360(Moby *m) {
         } else {
             d->loose = 1;
         }
-        if (m->unkBC == 1) {
+        if (m->command == 1) {
             if (d->trigger != -1) {
                 Moby *o = &D_L09_0015FFD8[d->trigger];
                 if (o->state == 1) {
-                    o->unkBC = o->state;
+                    o->command = o->state;
                 }
             }
             d->timer = scale_game_frames_alt(10);
-            m->unk30 = 0xFF;
+            m->update_dist = 0xFF;
             m->state = 2;
         }
         break;
     case 2:
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         hull = 0;
         if (d->hull != -1) {
             hull = &D_L09_0015FFD8[d->hull];
@@ -661,16 +661,16 @@ void FUN_L09_00304360(Moby *m) {
                 Moby *o = &D_L09_0015FFD8[d->hull];
                 if (o != 0 && o->state != 0xFE && o->state != 0xFD
                     && (o->oclass == 0x494 || o->oclass == 0x49D || o->oclass == 0x4A0)) {
-                    o->unk30 = 0xFF;
-                    o->unkBC = 1;
+                    o->update_dist = 0xFF;
+                    o->command = 1;
                 }
             }
             if (d->next != -1) {
                 Moby *o = &D_L09_0015FFD8[d->next];
                 if (o != 0 && o->state != 0xFE && o->state != 0xFD
                     && (o->oclass == 0x494 || o->oclass == 0x49D || o->oclass == 0x4A0)) {
-                    o->unk30 = 0xFF;
-                    o->unkBC = 1;
+                    o->update_dist = 0xFF;
+                    o->command = 1;
                 }
             }
             m->state = 3;
@@ -1038,9 +1038,9 @@ void FUN_L09_003082d8(Moby *moby)
         if (data->idx != -1) ((Flags_309688 *)(alternate_item_available + data->idx))->f43 = 0;
         moby->state = 1;
     }
-    if (moby->unkB0 != 0xFF) {
+    if (moby->mission != 0xFF) {
         int row = D_0015ED84 * 16;
-        if (D_0014171B_309688[moby->unkB0 + row] == 0xFF) {
+        if (D_0014171B_309688[moby->mission + row] == 0xFF) {
             if (data->idx != -1) ((Flags_309688 *)(alternate_item_available + data->idx))->f43 = 1;
             func_0020D678_309688(moby);
             return;
@@ -1048,10 +1048,10 @@ void FUN_L09_003082d8(Moby *moby)
     }
     has_next = 0;
     hit = func_L00_0025B478_309688(moby, 0x40000, 0);
-    if (func_L00_001FEF78_309688(&moby->unkBC) == 0) return;
+    if (func_L00_001FEF78_309688(&moby->command) == 0) return;
     if (hit == 0) return;
     if (moby->oclass < 0x508) has_next = func_L09_003095D0_309688(moby, moby->oclass + 1) != 0;
-    moby->unkBC = func_001F9850_309688(10);
+    moby->command = func_001F9850_309688(10);
     qcopy(origin, ((f32 *)&moby->pos));
     qcopy(center, ((f32 *)&moby->pos));
     if (moby->oclass < 0x508) {
@@ -1059,7 +1059,7 @@ void FUN_L09_003082d8(Moby *moby)
     } else {
         func_0022ED80_309688(0, 0, moby);
     }
-    moby->unkA4 = 0xFF;
+    moby->hit_slot = 0xFF;
     count = 40;
     if (0.85f < D_L09_0015F5D0 || 0.85f < D_L09_0015F5D4) count = 30;
     angle = -3.1415927f;
@@ -1073,7 +1073,7 @@ void FUN_L09_003082d8(Moby *moby)
         piece_pos[0] = piece_pos[0] + scale * func_001F9F90_309688(angle);
         scale = scale * func_001F9FA8_309688(angle);
         piece_pos[2] = piece_pos[2] + scale;
-        func_001F9EC0_309688(piece_pos, piece_pos, ((f32 *)&moby->unkC0));
+        func_001F9EC0_309688(piece_pos, piece_pos, ((f32 *)&moby->rot_row0));
         fast_vec_add(piece_pos, piece_pos, center);
         fast_vec_sub(vel, piece_pos, origin);
         scale = func_001F9B88_309688(6.0f - fast_vec_length(vel)) / 6.0f;
@@ -1244,7 +1244,7 @@ void FUN_L09_003091b0(char *moby) {
             }
             func_L07_00289960_30A560((D_0013E633_30A560 + 0x80), carried_pos, moby + 0x10, old_angles, data + 0x60);
             func_001F9BF0_30A560(D_0013E633_30A560 + 0xF0, carried_pos, (D_0013E633_30A560 + 0x80));
-            ((Hero *)D_0013E633_30A560)->motion.unkF0.f[2] = ((Hero *)D_0013E633_30A560)->motion.unkF0.f[2] + (*(float *)(moby + 0x18) - old_pos[2]);
+            ((Hero *)D_0013E633_30A560)->motion.platform_delta.f[2] = ((Hero *)D_0013E633_30A560)->motion.platform_delta.f[2] + (*(float *)(moby + 0x18) - old_pos[2]);
         } else {
             float rise;
             ((Mpos_30A560 *)moby)->z = ((Mpos_30A560 *)moby)->z + (rise = D_L09_00161DCC * D_0015ED6C) * (*(float *)(data + 0x84) - ((Mpos_30A560 *)moby)->z);
@@ -1342,7 +1342,7 @@ void FUN_L09_00309c08(struct Moby *moby) {
 
     switch (moby->state) {
     case 0:
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         vars->yaw_offset = 3.1415927f;
         *(s32 *)((u8 *)vars + 0xC4) = -1;
         *(s32 *)((u8 *)vars + 0xC8) = 0;
@@ -1351,7 +1351,7 @@ void FUN_L09_00309c08(struct Moby *moby) {
             attach_manipulator(moby, 0, (u8 *)vars + 0x60);
             path = (PathNodes_00309c08 *)D_L09_001B0630[vars->path];
             moby->state = 1;
-            if (D_0014C050[moby->unkB0 + current_level_index * 16] == 0xFF) {
+            if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
                 vars->dir = -1;
                 vars->node = path->count - 2;
                 qcopy(&moby->pos, &path->node[path->count - 1]);

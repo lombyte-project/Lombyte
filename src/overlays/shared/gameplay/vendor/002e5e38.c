@@ -439,7 +439,7 @@ void FUN_L00_002e6bf8(char *m) {
         c = b + 0x130;
         b += 0x40;
         e = b;
-        scale_vector_xyz(dn, &hero.unk290, -1.0f);
+        scale_vector_xyz(dn, &hero.gravity_dir, -1.0f);
         qcopy(e, &hero.motion.pos);
         qcopy(d + 0xA0, b);
         scale_vector_xyz(d + 0x50, dn, vdot_2e6bf8(b, dn));

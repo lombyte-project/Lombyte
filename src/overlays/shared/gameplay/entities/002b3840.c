@@ -134,7 +134,7 @@ void FUN_L05_002f5200(struct Moby *m) {
     s32 i;
     s32 *path;
 
-    m->unk30 = 0xFF;
+    m->update_dist = 0xFF;
     inside = 0;
     if (v->use_alt_target != 0) {
         qcopy(&target, &D_L05_001671C0_2f5200);
@@ -156,13 +156,13 @@ void FUN_L05_002f5200(struct Moby *m) {
             }
         }
     }
-    if ((inside && m->unkBC == 0) || (!inside && m->unkBC != 0) || m->state == 0) {
+    if ((inside && m->command == 0) || (!inside && m->command != 0) || m->state == 0) {
         if (inside) {
-            m->unkBC = 1;
+            m->command = 1;
         } else {
-            m->unkBC = 0;
+            m->command = 0;
         }
-        m->state = m->unkBC + 1;
+        m->state = m->command + 1;
         for (i = 0; i < 12; i++) {
             if (v->on_lists[i] != -1) {
                 FUN_L05_002f5190_2f5200(m, v, v->on_lists[i], inside);
@@ -615,14 +615,14 @@ void FUN_L05_0030c5b0(struct Moby *m) {
             if (v->active == 0) {
                 goto active_30c5b0;
             }
-            if (D_0014C050[current_level_index][m->unkB0] != 0xFF) {
+            if (D_0014C050[current_level_index][m->mission] != 0xFF) {
                 goto active_30c5b0;
             }
         }
         {
-            m->unkBC = 2;
+            m->command = 2;
             m->state = 2;
-            m->unk90 = 0x80208020;
+            m->glow_color = 0x80208020;
             if (v->table != -1) {
                 int i = 0;
                 while (i < *(int *)D_L05_001B0930[v->table]) {
@@ -643,17 +643,17 @@ void FUN_L05_0030c5b0(struct Moby *m) {
         intensity = truncate_float_to_s32((fast_sin(v->angle) * 4.0f - 3.0f) * 128.0f);
         if (intensity > 0x80) intensity = 0x80;
         else if (intensity < 0x20) intensity = 0x20;
-        m->unk90 = 0x80000000 | intensity << 16 | intensity << 8 | intensity;
+        m->glow_color = 0x80000000 | intensity << 16 | intensity << 8 | intensity;
         if (hero.ground_moby == m && hero.air_frames.s == 0) {
             int next_state = 2;
-            D_L05_001BAA50.killed[(short)m->save_id] = m->unkB0 + 2;
-            if (m->unkB0 == 0xFF ||
-                (D_L05_0015FC88[m->unkB0] != 0xFF && D_0014C050[current_level_index][m->unkB0] == 0xFF)) {
-                D_L05_001BB6B0.killed[(short)m->save_id] = m->unkB0 + 2;
+            D_L05_001BAA50.killed[(short)m->save_id] = m->mission + 2;
+            if (m->mission == 0xFF ||
+                (D_L05_0015FC88[m->mission] != 0xFF && D_0014C050[current_level_index][m->mission] == 0xFF)) {
+                D_L05_001BB6B0.killed[(short)m->save_id] = m->mission + 2;
             }
             m->state = next_state;
-            m->unkBC = 1;
-            m->unk90 = 0x80208020;
+            m->command = 1;
+            m->glow_color = 0x80208020;
             allocate_voice_for_target_entry(0, 0, m);
             if (v->table != -1) {
                 int i = 0;

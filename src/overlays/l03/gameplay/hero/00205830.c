@@ -726,7 +726,7 @@ void FUN_L03_0020ef60(void) {
                 v20.f[0] = 0.4f;
                 FUN_001f9cf8(&v20, &v20, &MV(pl->moby)->vC0);
                 FUN_001f9a10(&v0, &v0, &v20);
-                qcopy(&v10, &hero.motion.unk100);
+                qcopy(&v10, &hero.motion.displacement);
                 FUN_001f9bf8(&v20, &v20, frame_time * 1.5f);
                 FUN_001f9a10(&v10, &v10, &v20);
                 v10.f[2] += frame_time * 2.0f;
@@ -753,7 +753,7 @@ void FUN_L03_0020ef60(void) {
                         v0.f[0] += random_float_between(0.0f, 0.03f);
                         v0.f[1] += random_float_between(0.0f, 0.03f);
                         v0.f[2] += random_float_between(0.0f, 0.03f);
-                        qcopy(&v10, &hero.motion.unk100);
+                        qcopy(&v10, &hero.motion.displacement);
                         FUN_L00_00262cf0(&v10, &v10, frame_time * -0.75f, hero.motion.rot.f[2], hero.motion.rot.f[1]);
                         hero.unk8F8 = truncate_float_to_s32((frame_time * 7.0f - hero.ground_speed) /
                                                        (frame_time * 7.0f) * scale_game_frames(5));
@@ -836,7 +836,7 @@ void FUN_L03_0020ef60(void) {
             v20.f[0] = 0.4f;
             FUN_001f9cf8(&v20, &v20, &MV(hero.moby)->vC0);
             FUN_001f9a10(&v0, &v0, &v20);
-            qcopy(&v10, &hero.motion.unk100);
+            qcopy(&v10, &hero.motion.displacement);
             FUN_001f9bf8(&v20, &v20, frame_time * 1.5f);
             FUN_001f9a10(&v10, &v10, &v20);
             v10.f[2] += frame_time * 2.0f;
@@ -919,7 +919,7 @@ void FUN_L03_0020ef60(void) {
         clear_u64_value(&hero.motion.velocity);
         FUN_L00_00216710(frame_time_sq * 12.6f);
         if (hero.air_frames.s != 0) {
-            FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk100, frame_time_sq * 25.0f);
+            FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.displacement, frame_time_sq * 25.0f);
             FUN_L00_002121c0();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
@@ -998,7 +998,7 @@ void FUN_L03_0020ef60(void) {
     }
     case 0x26: {
         approach_value(&hero.unk97C, hero.unk980, frame_time * 10.0f);
-        qcopy(&hero.motion.velocity, &hero.motion.unk100);
+        qcopy(&hero.motion.velocity, &hero.motion.displacement);
         FUN_001f9a68(&hero.motion.velocity, &hero.motion.velocity, 0.9f);
         hero.motion.velocity.f[2] -= frame_time_sq * 15.0f;
         qcopy(&v0, &MV(hero.unk964)->u10.v10);
@@ -1066,7 +1066,7 @@ void FUN_L03_0020ef60(void) {
         if (hero.unk99C != 0) {
             f32 s;
             if (FUN_001f9b80(&hero.motion.pos, &MV(hero.unk994)->u10.v10) < hero.unk9A0 * 1.57f || hero.ground_distance > 1.5f) {
-                FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk100, frame_time_sq * 40.0f);
+                FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.displacement, frame_time_sq * 40.0f);
                 if (hero.unk9BE != 0 && FUN_L00_00233a78(&hero.motion.velocity) > 0.0f) {
                     FUN_001f9a28(&v30, &hero.motion.pos, &MV(hero.unk994)->u10.v10);
                     FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 57.0f);
@@ -1128,7 +1128,7 @@ void FUN_L03_0020ef60(void) {
                 if (hero.unk9BC != 0) {
                     up = hero.unk9BC == 1;
                 } else {
-                    v30.q = hero.motion.unk100.q;
+                    v30.q = hero.motion.displacement.q;
                     up = FUN_L00_00213350(&v30) > 0.0f;
                 }
                 if (up) {
@@ -1243,7 +1243,7 @@ void FUN_L03_0020ef60(void) {
         }
         mx = frame_time_sq * 150.0f;
         t2 = scale_game_frames(14);
-        if (hero.unkA9C == 0 && hero.anim_frame > 23.5f && hero.motion.unk100.f[2] < 0.0f && hero.air_frames.s != 0) {
+        if (hero.unkA9C == 0 && hero.anim_frame > 23.5f && hero.motion.displacement.f[2] < 0.0f && hero.air_frames.s != 0) {
             qcopy(&v0, &hero.motion.pos);
             FUN_L00_002336e8(&v0, &v0, -0.5f);
             m40[0].f[0] = FUN_001f9dc8(hero.motion.rot.f[2]) * 2.0f;
@@ -1547,7 +1547,7 @@ void FUN_L03_0020ef60(void) {
         speed_step(frame_time_sq * 30.0f, frame_time_sq * 35.0f);
         set_planar_vel(99999.0f);
         if (hero.air_frames.s != 0) {
-            hero.motion.velocity.f[2] = hero.motion.unk100.f[2] - frame_time_sq * 25.0f;
+            hero.motion.velocity.f[2] = hero.motion.displacement.f[2] - frame_time_sq * 25.0f;
             FUN_L00_002121c0();
         } else {
             hero.motion.velocity.f[2] = hero.motion.velocity.f[2] - frame_time_sq * 54.0f;
@@ -1660,15 +1660,15 @@ void FUN_L03_0020ef60(void) {
             v0.f[0] = hero.motion.pos.f[0] + random_float_between(-0.25f, 0.25f);
             v0.f[1] = hero.motion.pos.f[1] + random_float_between(-0.25f, 0.25f);
             v0.f[2] = hero.motion.pos.f[2] + random_float_between(-0.1f, 0.4f);
-            FUN_001f9a68(&v10, &hero.motion.unk100, 0.9f);
+            FUN_001f9a68(&v10, &hero.motion.displacement, 0.9f);
             v10.f[0] += random_float_between(frame_time * -0.7f, frame_time * 0.7f);
             v10.f[1] += random_float_between(frame_time * -0.7f, frame_time * 0.7f);
             v10.f[2] += random_float_between(frame_time, frame_time * 2.0f);
             FUN_L00_00271b18(&v0, &v10, random_float_between(37800.0f, 75600.0f));
         }
-        f = FUN_001f9af0(&hero.motion.unkF0);
+        f = FUN_001f9af0(&hero.motion.platform_delta);
         if (f > frame_time * 0.5f) {
-            hero.motion.move_yaw = FUN_001f9e90(hero.motion.unkF0.f[0], hero.motion.unkF0.f[1]);
+            hero.motion.move_yaw = FUN_001f9e90(hero.motion.platform_delta.f[0], hero.motion.platform_delta.f[1]);
         } else {
             hero.motion.move_yaw = hero.motion.rot.f[2];
         }
@@ -1677,7 +1677,7 @@ void FUN_L03_0020ef60(void) {
         d = fast_difference_between_rotations(hero.motion.rot.f[2], old);
         clear_u64_value(&hero.motion.velocity);
         FUN_L00_00216710(frame_time_sq * 5.0f);
-        hero.motion.velocity.f[2] = hero.motion.unk100.f[2] - frame_time_sq * 50.0f;
+        hero.motion.velocity.f[2] = hero.motion.displacement.f[2] - frame_time_sq * 50.0f;
         if (hero.motion.velocity.f[2] > frame_time_sq * -40.0f) {
             hero.motion.velocity.f[2] = frame_time_sq * -40.0f;
         }
@@ -1708,7 +1708,7 @@ void FUN_L03_0020ef60(void) {
                 f32 a;
                 f32 r;
                 qcopy(&v10, &v0);
-                FUN_001f9a68(&v20, &hero.motion.unk100, 0.4f);
+                FUN_001f9a68(&v20, &hero.motion.displacement, 0.4f);
                 a = fast_add_rotations(hero.unk610, randf_sym(0.0f, 0.5235988f));
                 r = random_float_between(frame_time * 0.0f, frame_time * 4.0f);
                 v20.f[0] += FUN_001f9dc8(a) * r;
@@ -2082,7 +2082,7 @@ void FUN_L03_0020ef60(void) {
             n = collect_mobies_in_sphere(0.9f, &v0, 0, MV(hero.moby), NULL);
             if (n != 0) {
                 s32 i;
-                FUN_001f9a68(&v10, &hero.motion.unk100, 7.0f);
+                FUN_001f9a68(&v10, &hero.motion.displacement, 7.0f);
                 for (i = 0; i < n; i++) {
                     if (FUN_L00_0025e3b8(D_L03_00178000[i]) != 0) {
                         FUN_L00_00259bc8(D_L03_00178000[i], MV(hero.moby), 0x10000, &hero.motion.pos, &v10,
@@ -2159,7 +2159,7 @@ void FUN_L03_0020ef60(void) {
             FUN_L01_00232978(1);
         }
         if (hero.air_frames.s != 0) {
-            FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk100, frame_time_sq * 25.0f);
+            FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.displacement, frame_time_sq * 25.0f);
             FUN_L00_002121c0();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
@@ -2175,7 +2175,7 @@ void FUN_L03_0020ef60(void) {
         FUN_L00_00216710(frame_time_sq * 12.0f);
         FUN_L01_00232978(0);
         if (hero.air_frames.s != 0) {
-            FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk100, frame_time_sq * 25.0f);
+            FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.displacement, frame_time_sq * 25.0f);
             FUN_L00_002121c0();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);

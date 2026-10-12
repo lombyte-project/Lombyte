@@ -223,7 +223,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
         p->health.hp = 0;
-        p->unk694 = p->motion.unk100.f[2] * 0.2f;
+        p->unk694 = p->motion.displacement.f[2] * 0.2f;
         p->unk69C = p->water_surface_z - 0.37f;
         if (p->unk694 < frame_time * -7.0f)
             p->unk694 = frame_time * -7.0f;
@@ -252,7 +252,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
-        qcopy(&p->motion.unk150, &p->motion.unk100);
+        qcopy(&p->motion.unk150, &p->motion.displacement);
         set_hero_animation(FUN_L12_00227f10(0), 0, (float)scale_game_frames(0xA));
         p->unk1D0 = scale_game_frames(7);
         break;
@@ -261,7 +261,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
-        qcopy(&p->motion.unk150, &p->motion.unk100);
+        qcopy(&p->motion.unk150, &p->motion.displacement);
         set_hero_animation(FUN_L12_00227f10(0), 0, (float)scale_game_frames(5));
         p->unk1D0 = scale_game_frames(7);
         break;
@@ -270,7 +270,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
-        p->ground_speed = vector_length_xy(&p->motion.unk100);
+        p->ground_speed = vector_length_xy(&p->motion.displacement);
         p->state.step = 0;
         p->unk3B8 = 0;
         p->unk3BC = 0;
@@ -620,7 +620,7 @@ int hero_set_state(int a, int b) {
         if (0.001f < vector_length_xyz(vec)) {
             normalize_vector_xyz(vec, vec, 1.0f);
             if (p->state.prev_control_mode != 0xF) {
-                p->unk5B0 = dot_vectors_xyz(&p->motion.unk100, vec);
+                p->unk5B0 = dot_vectors_xyz(&p->motion.displacement, vec);
             }
         }
         {
@@ -761,7 +761,7 @@ int hero_set_state(int a, int b) {
         if (frame_time * 4.5f < p->motion.speed_xy) {
             FUN_L00_00213de8(frame_time * 4.5f / p->motion.speed_xy);
         }
-        qcopy(&p->motion.velocity, &p->motion.unk100);
+        qcopy(&p->motion.velocity, &p->motion.displacement);
         if (b) {
             set_hero_animation(0x13, 0, (float)t8);
         }
@@ -1509,7 +1509,7 @@ int hero_set_state(int a, int b) {
             p->unk5B0 = frame_time * 2.5f;
         p->unk5AC.i = 0;
         clear_vector(&p->motion.velocity);
-        clear_vector(&p->motion.unk100);
+        clear_vector(&p->motion.displacement);
         p->motion.velocity.f[2] = frame_time * 10.0f;
         if (b)
             set_hero_animation(0x10, 2, -3.0f);

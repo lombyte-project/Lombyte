@@ -46,7 +46,7 @@ void FUN_L01_002f9810(struct Moby *m) {
     f32 s;
 
     hit = trooper_find_hit(m, 0x10000, 0);
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
     if (hit != NULL && hit->force > 0.0f) {
         FUN_0022da68(0, 0x10, m);
         for (i = 0; i < 200; i++) {
@@ -1082,7 +1082,7 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         moby->state = 1;
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         moby->pos.z = moby->pos.z + 0.5f;
         pool_init_tiles(pool_tiles, 21);
         zero = 0.0f;
@@ -1467,7 +1467,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void FUN_L01_002ff860(struct Moby *m) {
     char *d = (char *)m->pvars;
     char *t = find_moby_hit(m, 0x10000, 0);
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
     if (t != 0 && 0.0f < *(float *)(t + 0x2C)) {
         float v[4];
         float w[4];

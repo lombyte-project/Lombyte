@@ -39,7 +39,7 @@ int FUN_L00_00227778(void) {
         if (hero.unk22A0 == 0 &&
             (!(hero.water_surface_z - 2.0f < hero.motion.pos.f[2]) ||
              !(hero.motion.rot.f[1] < -0.87266463f) ||
-             !(frame_time < hero.motion.unk100.f[2]))) {
+             !(frame_time < hero.motion.displacement.f[2]))) {
             state = 0x6A;
         } else if (hero.water_surface_z + 0.4f < hero.motion.pos.f[2]) {
             D_L00_00167014[0] = 0;

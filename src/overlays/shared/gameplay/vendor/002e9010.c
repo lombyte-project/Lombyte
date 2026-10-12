@@ -1817,11 +1817,11 @@ stop:
         tail->distance = params->height;
         follow->look_height = params->offset_scale;
         qcopy(state->tail.unk140, tail->unk130);
-        fast_vec_scale(dir, &hero.unk290, -tail->distance);
+        fast_vec_scale(dir, &hero.gravity_dir, -tail->distance);
         pos = &rec->pos;
         fast_vec_add(state->follow.eye, &hero.motion.pos, dir);
         fast_vec_add(pos, state->follow.eye, tail->unk130);
-        fast_vec_scale(dir, &hero.unk290, -follow->look_height);
+        fast_vec_scale(dir, &hero.gravity_dir, -follow->look_height);
         fast_vec_add(state->follow.look_target, &hero.motion.pos, dir);
         qcopy(state->follow.unkD0, state->follow.look_target);
         qcopy(follow->focus, &hero.motion.pos);
@@ -2048,8 +2048,8 @@ run:
         }
         *(s32 *)&pos[3] = 0;
         fast_vec_sub(to_pos, pos, &hero.motion.pos);
-        up = fast_vec_dot(to_pos, &hero.unk290);
-        fast_vec_scale(tmp, &hero.unk290, up);
+        up = fast_vec_dot(to_pos, &hero.gravity_dir);
+        fast_vec_scale(tmp, &hero.gravity_dir, up);
         fast_vec_sub(level, to_pos, tmp);
         params->distance = fast_vec_length(level);
         params->height = -up;
@@ -2072,11 +2072,11 @@ run:
         tail->unk15C = params->distance;
         tail->distance = params->height;
         follow->look_height = params->offset_scale;
-        fast_vec_scale(tmp, &hero.unk290, -tail->distance);
+        fast_vec_scale(tmp, &hero.gravity_dir, -tail->distance);
         fast_vec_add(state->follow.eye, &hero.motion.pos, tmp);
         fast_vec_sub(tail->unk130, pos, state->follow.eye);
         qcopy(state->tail.unk140, tail->unk130);
-        fast_vec_scale(tmp, &hero.unk290, -follow->look_height);
+        fast_vec_scale(tmp, &hero.gravity_dir, -follow->look_height);
         fast_vec_add(state->follow.look_target, &hero.motion.pos, tmp);
         qcopy(state->follow.unkD0, state->follow.look_target);
         qcopy(follow->focus, &hero.motion.pos);
