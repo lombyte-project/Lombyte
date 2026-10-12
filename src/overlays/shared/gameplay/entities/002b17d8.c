@@ -350,45 +350,50 @@ void FUN_L14_002b2928(struct Moby *m)
     Vec4 *beam_end;
     s32 i;
 
-    pos = pv->exhaust;
-    pos.f[3] = 1.0f;
-    FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
-    i = 3;
-    FUN_001f9bf8(&basis[0], &basis[0], 1.0f);
-    cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
-    FUN_001f9bf8(&basis[1], &basis[1], -1.0f);
-    cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
-    quad.texture = get_effect_texture_l14(11);
-    quad.primitive = 0x8000000048LL;
-    quad.texture_state = 0xFF9000000260LL;
-    quad.reserved.value = 5;
-    quad.colors[3] = 0x80FFFFFF;
-    quad.colors[2] = 0x80FFFFFF;
-    quad.colors[1] = 0x80FFFFFF;
-    quad.colors[0] = 0x80FFFFFF;
-    quad.texture_coordinates[0][0] = 0.0f;
-    quad.texture_coordinates[0][1] = 0.0f;
-    quad.texture_coordinates[1][0] = 0.0f;
-    quad.texture_coordinates[1][1] = 1.0f;
-    quad.texture_coordinates[2][0] = 1.0f;
-    quad.texture_coordinates[2][1] = 0.0f;
-    quad.texture_coordinates[3][0] = 1.0f;
-    quad.texture_coordinates[3][1] = 1.0f;
-    corner = &quad.positions[0];
-    template = &D_L14_001D8850[0];
-    do {
-        FUN_001f9a68(corner, template, 0.4f);
-        transform_vector_l14(corner, corner, &basis[0]);
-        corner++;
-        template++;
-        i--;
-    } while (i >= 0);
-    draw_geometry_quad_l14(&quad, 0, 0);
+    {
+        Vec4 *corner;
+        Vec4 *template;
+        s32 i;
+        qcopy(&pos, &pv->exhaust);
+        pos.f[3] = 1.0f;
+        FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
+        i = 3;
+        FUN_001f9bf8(&basis[0], &basis[0], 1.0f);
+        cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
+        FUN_001f9bf8(&basis[1], &basis[1], -1.0f);
+        cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
+        quad.texture = get_effect_texture_l14(11);
+        quad.primitive = 0x8000000048LL;
+        quad.texture_state = 0xFF9000000260LL;
+        quad.reserved.value = 5;
+        quad.colors[3] = 0x80FFFFFF;
+        quad.colors[2] = 0x80FFFFFF;
+        quad.colors[1] = 0x80FFFFFF;
+        quad.colors[0] = 0x80FFFFFF;
+        quad.texture_coordinates[0][0] = 0.0f;
+        quad.texture_coordinates[0][1] = 0.0f;
+        quad.texture_coordinates[1][0] = 0.0f;
+        quad.texture_coordinates[1][1] = 1.0f;
+        quad.texture_coordinates[2][0] = 1.0f;
+        quad.texture_coordinates[2][1] = 0.0f;
+        quad.texture_coordinates[3][0] = 1.0f;
+        quad.texture_coordinates[3][1] = 1.0f;
+        corner = &quad.positions[0];
+        template = &D_L14_001D8850[0];
+        do {
+            FUN_001f9a68(corner, template, 0.4f);
+            transform_vector_l14(corner, corner, &basis[0]);
+            corner++;
+            template++;
+            i--;
+        } while (i >= 0);
+        draw_geometry_quad_l14(&quad, 0, 0);
+    }
 
+    qcopy(&pos, &pv->joint6);
     beam_end = &pv->beam_end;
-    beam_start = &pv->beam_start;
-    pos = pv->joint6;
     FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
+    beam_start = &pv->beam_start;
     FUN_001f9bf8(&basis[0], &basis[0], 1.0f);
     cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
     FUN_001f9bf8(&basis[1], &basis[1], -1.0f);
@@ -409,7 +414,7 @@ void FUN_L14_002b2928(struct Moby *m)
     } while (i >= 0);
     draw_geometry_quad_l14(&quad, 0, 0);
 
-    pos = pv->nozzle;
+    qcopy(&pos, &pv->nozzle);
     FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
     FUN_001f9bf8(&basis[0], &basis[0], 1.0f);
     cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
@@ -433,7 +438,7 @@ void FUN_L14_002b2928(struct Moby *m)
     } while (i >= 0);
     draw_geometry_quad_l14(&quad, 0, 0);
 
-    pos = *beam_start;
+    qcopy(&pos, beam_start);
     FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
     FUN_001f9bf8(&basis[0], &basis[0], 1.0f);
     cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
@@ -457,7 +462,7 @@ void FUN_L14_002b2928(struct Moby *m)
     } while (i >= 0);
     draw_geometry_quad_l14(&quad, 0, 0);
 
-    pos = *beam_end;
+    qcopy(&pos, beam_end);
     FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
     FUN_001f9bf8(&basis[0], &basis[0], 1.0f);
     cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
