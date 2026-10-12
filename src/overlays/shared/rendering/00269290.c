@@ -836,7 +836,9 @@ unsigned char *FUN_L00_0026b230(void *pos, void *vel, unsigned char flags, float
             int life = *(short *)(m + 0xA);
             int color = *(int *)(m + 4);
             int factor = shade[0x10] + 2;
-            life = (life * factor) / 2;
+            life *= factor;
+            factor = (unsigned int)life >> 31;
+            life = (life + factor) >> 1;
             *(short *)(m + 0xA) = life;
             FUN_L00_0025c0e8_26b230(color, shade[0x10]);
             FUN_L00_0025c0e8_26b230(*(unsigned *)(q + 0x14), shade[0x10]);
