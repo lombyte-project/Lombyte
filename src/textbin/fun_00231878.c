@@ -2,9 +2,6 @@
 #include "asm.h"
 #include "rnc/globals.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00231878/FUN_00231878.s", FUN_00231878);
-#else
 #include "rnc/globals.h"
 #include "types.h"
 #include "rnc/sdk/libgraph.h"
@@ -13,8 +10,6 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00231878/FUN_00231878.s
 struct CommonArchiveMemory {
     u8 pad_0[0x14];
     s32 archive_base;
-    u64 texture_bits;
-    u64 image_bits;
 };
 
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
@@ -43,8 +38,6 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
     s32 upload_bytes;
     s32 image_address;
     s32 archive_base;
-    u64 texture_bits;
-    u64 image_bits;
     struct CommonArchiveMemory *archive_memory;
 
     first_output = first_texture;
@@ -59,8 +52,8 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
     decompress_wad(archive_memory->archive_base + 0x100000, archive_memory->archive_base);
     FlushCache(0);
     archive_base = archive_memory->archive_base;
-    gs_texture_allocation_start = gs_texture_allocation_base;
     gs_texture_allocation_cursor = gs_texture_allocation_base;
+    gs_texture_allocation_start = gs_texture_allocation_base;
     texture_base_output = texture_bases;
     for (upload_index = 0; upload_index < 6; upload_index++) {
         if (upload_index == 0) {
@@ -110,15 +103,22 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
         texture_base_output++;
     }
     /* Each TEX0 combines an image base with its paired palette base. */
-    texture_bits = ((u64)texture_bases[0] << 37) + (0xB000ULL << 19);
-    image_bits = (u64)(texture_bases[1] | 0x19304000);
-    *shared_texture = (image_bits | texture_bits) | (1ULL << 63);
-    texture_bits = ((u64)texture_bases[2] << 37) | (0xB000ULL << 19);
-    *first_output = (texture_bases[3] | 0x25320000) | texture_bits | (1ULL << 63);
-    texture_bits = ((u64)texture_bases[4] << 37) | (0xB000ULL << 19);
-    *second_output = (texture_bases[5] | 0x25320000) | (texture_bits | (1ULL << 63));
+    {
+        u64 texture_bits = ((u64)texture_bases[0] << 37) | (0xB000ULL << 19);
+        u64 image_bits = (u64)(texture_bases[1] | 0x19304000);
+        *shared_texture = (image_bits | texture_bits) | (1ULL << 63);
+    }
+    {
+        u64 image_bits = (u64)(texture_bases[3] | 0x25320000);
+        u64 texture_bits = ((u64)texture_bases[2] << 37) | (0xB000ULL << 19);
+        *first_output = (image_bits | texture_bits) | (1ULL << 63);
+    }
+    {
+        u64 image_bits = (u64)(texture_bases[5] | 0x25320000);
+        u64 texture_bits = ((u64)texture_bases[4] << 37) | (0xB000ULL << 19);
+        *second_output = (image_bits | texture_bits) | (1ULL << 63);
+    }
 }
 
 extern __typeof__(prepare_loading_slide_textures) func_00231878
     __attribute__((alias("FUN_00231878")));
-#endif /* NON_MATCHING */

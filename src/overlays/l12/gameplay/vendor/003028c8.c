@@ -135,9 +135,6 @@ void FUN_L12_003028c8(Moby *moby) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00302c58.s", FUN_L12_00302c58);
-#else
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -148,7 +145,7 @@ extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern float D_L12_00161DF8 __attribute__((sda));
 extern float D_L12_00161DFC __attribute__((sda));
 extern float D_L12_00161E00 __attribute__((sda));
-extern int D_L12_00161E04 __attribute__((sda));
+extern int D_L12_00161E04;
 extern void FUN_L12_003028c8_u(struct Moby *) __asm__("FUN_L12_003028c8");
 
 void FUN_L12_00302c58(struct Moby *moby) {
@@ -162,30 +159,43 @@ void FUN_L12_00302c58(struct Moby *moby) {
         int i;
         float *points;
         float *intermediate;
-        int *timers = (int *)(data + 0x2300);
         if (tick_countdown_32_alt((int *)(data + 0x2300 + strip * 4))) {
             int vector_count = *(int *)(data + 0x232c);
             float intermediate_storage[vector_count][4];
+            char *timers = data + 0x2300;
             intermediate = &intermediate_storage[0][0];
-            points = (float *)(data + strip * 0x460);
             i = 0;
-            if (0 < *(int *)(data + 0x232c)) do {
-                clear_u64_value(points);
-                points[0] = (float)i * (*(float *)(data + 0x2324) / (float)*(int *)(data + 0x232c));
-                points[3] = 1.0f;
-                FUN_L00_00257d78(intermediate + i * 4, 0.0f, D_L12_00161E00 * frame_time);
-                points += 4;
-                i++;
-            } while (i < *(int *)(data + 0x232c));
-            i = 1;
-            if (1 < *(int *)(data + 0x232c) - 1) do {
-                float *out = (float *)(data + strip * 0x460 + 0x1190 + i * 16 - 16);
-                fast_vec_add(out, intermediate + (i - 1) * 4, intermediate + i * 4);
-                fast_vec_add(out, out, intermediate + (i + 1) * 4);
-                scale_vector_xyz(out, out, 0.333f);
-                i++;
-            } while (i < *(int *)(data + 0x232c) - 1);
-            timers[strip] = D_L12_00161E04;
+            if (0 < *(int *)(data + 0x232c)) {
+                points = (float *)(data + strip * 0x460);
+                do {
+                    float vector_count_float;
+                    float length;
+                    float index;
+                    float rate;
+                    clear_u64_value(points);
+                    vector_count_float = (float)*(int *)(data + 0x232c);
+                    length = *(float *)(data + 0x2324);
+                    index = (float)i;
+                    rate = D_L12_00161E00 * frame_time;
+                    points[3] = 1.0f;
+                    points[0] = index * (length / vector_count_float);
+                    FUN_L00_00257d78(intermediate + i * 4, 0.0f, rate);
+                    points += 4;
+                    i++;
+                } while (i < *(int *)(data + 0x232c));
+            }
+            count = 1;
+            if (count < *(int *)(data + 0x232c) - 1) {
+                points = (float *)(data + strip * 0x460 + 0x1190);
+                do {
+                    fast_vec_add(points, intermediate_storage[count - 1], intermediate_storage[count]);
+                    fast_vec_add(points, points, intermediate_storage[count + 1]);
+                    scale_vector_xyz(points, points, 0.333f);
+                    count++;
+                    points += 4;
+                } while (count < *(int *)(data + 0x232c) - 1);
+            }
+            *(int *)(timers + (strip << 2)) = D_L12_00161E04;
         } else {
             for (i = 1; i < *(int *)(data + 0x232c) - 1; i++) {
                 float *point = (float *)(data + strip * 0x460 + i * 16);
@@ -197,7 +207,6 @@ void FUN_L12_00302c58(struct Moby *moby) {
     if (distance_xyz(&moby->pos, D_L12_00167240) < 48.0f)
         enqueue_callback_list_1(FUN_L12_003028c8_u, moby);
 }
-#endif
 #include "rnc/math/vector.h"
 
 #include "qcopy.h"
@@ -1246,7 +1255,7 @@ void FUN_L12_00306828(struct Moby *moby) {
         if (i == 17) {
             other = moby;
         } else {
-            other = (struct Moby *)(D_L12_0015FFD8_p + (*(int *)(data + i * 0x30 + 0x20) * 0x100));
+            other = (struct Moby *)(((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8) + (unsigned int)D_L12_0015FFD8_p);
         }
         if (other->oclass == 0x4FE) continue;
         {

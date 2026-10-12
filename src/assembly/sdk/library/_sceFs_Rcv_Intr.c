@@ -68,7 +68,7 @@ void _sceFs_Rcv_Intr(s32 *arg) {
     u32 *bank = D_0012FC90;
     s32 idx;
     s32 i;
-    u32 ret;
+    s64 ret;
     u32 n;
     u32 addr;
 
@@ -125,7 +125,9 @@ void _sceFs_Rcv_Intr(s32 *arg) {
         break;
     }
     if (h.ret.v < 0) {
-        ret = 0u - (u32)h.ret.v;
+        n = 0u - (u32)h.ret.v;
+        ret = (s32)n;
+        h.ret.v = (s32)n;
         for (i = 0; i < 32; i++) {
             if (D_0012FC10[i] == ret) {
                 D_0012FC10[i] = -1;

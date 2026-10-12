@@ -881,15 +881,17 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     source = *(volatile s32 *)&depth_buffer_address;
     initial_count = pal ? 14 : initial_count;
     second_count = pal ? 14 : second_count;
-    count = initial_count;
-    for (; count != 0;) {
-        count--;
-        FUN_00122330(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
-        source += 0x10000;
-        FUN_00118a80(0);
-        FUN_00122658(buffer, destination);
-        destination += 0xc000;
-        FUN_00120558(0, 0);
+    if (initial_count != 0) {
+        count = initial_count;
+        do {
+            count--;
+            FUN_00122330(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
+            source += 0x10000;
+            FUN_00118a80(0);
+            FUN_00122658(buffer, destination);
+            destination += 0xc000;
+            FUN_00120558(0, 0);
+        } while (count != 0);
     }
     source = D_0015EE78_gp;
     if (second_count != 0) {
@@ -1104,12 +1106,13 @@ void FUN_L00_00299c48(void) {
                 FUN_L00_00299c00();
                 return;
             }
-            if ((s16)D_L00_0015F622 >= 0x2b) {
+            if ((s16)D_L00_0015F622 < 0x2b) {
+                D_L00_0015F624 = -1;
+                D_L00_0015F620 = 1;
+            } else {
                 FUN_L00_00299c00();
                 return;
             }
-            D_L00_0015F624 = -1;
-            D_L00_0015F620 = 1;
         }
     } else if (stage == active) {
         FUN_L00_002a09d8(1);
@@ -1118,13 +1121,21 @@ void FUN_L00_00299c48(void) {
             destination = (s32 *)D_L00_0015F628;
             source += D_L00_0015F624;
             destination += D_L00_0015F624;
-            for (offset = 0; offset < 0x38000; offset += 0x20) {
-                *destination = *source;
+            offset = 0;
+            do {
+                index = *source;
+                offset += 0x20;
                 source += 0x20;
+                *destination = index;
                 destination += 0x20;
-            }
+            } while (offset < 0x38000);
         } else if (D_L00_0015F624 >= 0x24) {
-            if (pal) {
+            if (!pal) {
+                if ((s16)D_L00_0015F622 == 8) {
+                    D_L00_0015F622 = 0x11;
+                    D_L00_0015F626 = 0x1590;
+                }
+            } else {
                 if ((s16)D_L00_0015F622 == 0x11) {
                     D_L00_0015F622 = 0x1b;
                     D_L00_0015F626 = 0x2238;
@@ -1133,14 +1144,11 @@ void FUN_L00_00299c48(void) {
                     D_L00_0015F622 = 0x27;
                     D_L00_0015F626 = 0x32b4;
                 }
-            } else if ((s16)D_L00_0015F622 == 8) {
-                D_L00_0015F622 = 0x11;
-                D_L00_0015F626 = 0x1590;
             }
             D_L00_0015F620 = 0;
-            D_L00_0015F622++;
+            index = (s16)(D_L00_0015F622 + 1);
             D_L00_0015F624 = -1;
-            index = (s16)D_L00_0015F622;
+            D_L00_0015F622 = index;
             index = index % 0x14;
             if (pal_mode == 0) {
                 FUN_L00_00265fa0(D_L00_0015F62C, disc_table.music_60000[index + 18].sector,
@@ -1568,12 +1576,14 @@ extern s32 D_00140408;
 extern s32 D_00141408;
 extern s32 D_L00_001CA020[];
 extern s32 D_L00_001CA580[];
-extern char D_L00_001CA4C0_29ad08[] __asm__("D_L00_001CA4C0");
+extern Vendor_29a6b0 D_L00_001CA4C0_29ad08 __asm__("D_L00_001CA4C0");
 extern s32 D_L00_0015F400_29ad08 __asm__("D_L00_0015F400");
 extern s32 D_L00_00161100 __attribute__((sda));
 extern s32 D_L00_001610F0 __attribute__((sda));
-extern struct S16_29ab70 D_001516D0_29ad08 __asm__("D_001516D0");
-extern char D_L00_00179AC0_29ad08[] __asm__("D_L00_00179AC0");
+struct S16_29ad08 { char pad[0x5A]; s16 mode; };
+extern struct S16_29ad08 D_001516D0_29ad08 __asm__("D_001516D0");
+struct T_29ad08 { char p0[0x10]; s32 id; char p1[0x38]; };
+extern struct T_29ad08 D_L00_00179AC0_29ad08[] __asm__("D_L00_00179AC0");
 extern void f2eac18_29ad08(s32) __asm__("FUN_L00_002eac18");
 extern void f1f9cf8_29ad08(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void f1f9a10_29ad08(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1594,58 +1604,58 @@ extern void FUN_00122298(s32);
 extern void FUN_002335a0(void);
 
 void FUN_L00_0029ad08(void) {
-    char *g;
-    char *moby;
+    Vendor_29a6b0 *g;
+    VendorMoby_29a6b0 *moby;
     s32 index, item, offset;
     f32 *vec;
-    volatile struct S16_29ab70 *state;
-    volatile s32 *selected;
+    struct S16_29ad08 *state;
+    s32 *selected;
 
     f2eac18_29ad08(2);
-    state = &D_001516D0_29ad08;
-    if ((u16)(state->mode - 6) >= 2)
-        state->mode = 5;
-    g = D_L00_001CA4C0_29ad08;
+    if ((u16)(D_001516D0_29ad08.mode - 6) >= 2)
+        D_001516D0_29ad08.mode = 5;
+    g = &D_L00_001CA4C0_29ad08;
     D_L00_0015F5D8 = 1;
-    moby = *(char * volatile *)(g + 0x1C);
-    moby[0x20] = 1;
-    *(s32 *)g = 3;
-    *(s32 *)(g + 4) = 0;
-    vec = (f32 *)(g + 0xC0);
-    f1f9cf8_29ad08(vec, &D_L00_001610F0, moby + 0xC0);
-    moby = *(char * volatile *)(g + 0x1C);
-    f1f9a10_29ad08(vec, vec, moby + 0x10);
-    *(f32 *)(g + 0xC8) += 2.0f;
-    *(f32 *)(g + 0xC8) = f213508_29ad08(0.5f, vec, 0);
-    f1f99f8_29ad08(g + 0xB0);
-    moby = *(char * volatile *)(g + 0x1C);
-    *(f32 *)(g + 0xB8) = f1fa580_29ad08(*(f32 *)(moby + 0x48), 3.1415927f);
-    vu_euler_rotation_basis(g + 0x80, g + 0xB0);
+    moby = (VendorMoby_29a6b0 *)g->moby;
+    moby->state = 1;
+    g->f0 = 3;
+    g->f4 = 0;
+    vec = (f32 *)((char *)g + 0xC0);
+    f1f9cf8_29ad08(vec, &D_L00_001610F0, g->moby + 0xC0);
+    moby = (VendorMoby_29a6b0 *)g->moby;
+    f1f9a10_29ad08(vec, vec, (char *)moby + 0x10);
+    *(f32 *)((char *)g + 0xC8) += 2.0f;
+    *(f32 *)((char *)g + 0xC8) = f213508_29ad08(0.5f, vec, 0);
+    f1f99f8_29ad08((char *)g + 0xB0);
+    moby = (VendorMoby_29a6b0 *)g->moby;
+    *(f32 *)((char *)g + 0xB8) = f1fa580_29ad08(moby->rot.f[2], 3.1415927f);
+    vu_euler_rotation_basis((char *)g + 0x80, (char *)g + 0xB0);
     f1f97e8_29ad08(&D_L00_0016C860_298840, 0, 0x1C0);
     f1f97e8_29ad08(D_L00_0017C340_298840, 0, 0x40);
     FUN_L00_002a09d8(1);
     FUN_002335a0();
-    selected = (volatile s32 *)(g + 0x48);
-    index = *selected;
-    item = D_L00_001CA020[index];
+    selected = (s32 *)((char *)g + 0x48);
     offset = D_L00_001611CC - 0x40000;
     D_L00_001611CC = offset;
-    D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + offset;
+    index = D_L00_001CA4C0_29ad08.f48;
+    item = D_L00_001CA020[index];
     D_L00_0016C860_298840.x58 = D_L00_00173E00_298840.x4 + offset;
+    D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + offset;
     D_L00_0015F3FC = 0;
     D_L00_0015F400_29ad08 = 0;
-    if (D_00140408 != 0 && index != D_00140408)
+    if (hero.items[0].item_id != 0 && index != hero.items[0].item_id)
         FUN_L00_0020fca8(0, 0);
-    index = *selected;
-    D_00141408 = index;
+    index = D_L00_001CA4C0_29ad08.f48;
+    hero.pending_item[0] = index;
     if (index == 0x18)
-        D_00141408 = 0;
-    index = *selected;
-    f204a40_29ad08(*(s32 *)(D_L00_00179AC0_29ad08 + index * 0x4C + 0x10), -1);
+        hero.pending_item[0] = 0;
+    index = D_L00_001CA4C0_29ad08.f48;
+    f204a40_29ad08(((struct T_29ad08 *)((char *)D_L00_00179AC0_29ad08 + index * 0x4C))->id, -1);
     f2454c8_29ad08(item);
+    state = &D_001516D0_29ad08;
     *(s32 *)&state->pad[0x1C] = 0x2734;
     FUN_L00_002455c0(0);
-    while ((s16)state->mode != 3) {
+    while (D_001516D0_29ad08.mode != 3) {
         sound_update();
         FUN_00122298(0);
     }

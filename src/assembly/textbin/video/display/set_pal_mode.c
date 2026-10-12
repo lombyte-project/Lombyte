@@ -23,7 +23,8 @@ extern s32 draw_buffer_address __asm__("D_0015EE84");
 extern s32 image_buffer_address __asm__("D_0015EE8C");
 extern void fill_transfer_words(u8 *, s32, s32) __asm__("func_001F97E8");
 extern void FlushCache(s32);
-extern void func_00120558(s32, s32);
+/* Retail returns zero after the graphics pipeline becomes idle. */
+extern s32 func_00120558(s32, s32);
 extern void setup_fs_aa_buffer(s32, s32, s32, s32, s32, s32) __asm__("func_001FA978");
 extern void put_disp_buffer(void) __asm__("func_001FB2A8");
 extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
@@ -40,7 +41,7 @@ void set_pal_mode(void) {
     u64 zbuf;
     u64 frame;
     u64 scissor;
-    s32 display_width;
+    s16 display_width;
 
     FlushCache(0);
     if (pal_mode != 0) {

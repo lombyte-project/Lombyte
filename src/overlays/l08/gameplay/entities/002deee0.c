@@ -1307,8 +1307,8 @@ extern float D_0015ED6C;
 void FUN_L08_002e2250(struct Moby *moby) {
     u8 mark = 0xff;
     int selected = 0;
-    TargetSlot *slots = ((TargetBoardVars *)moby->pvars)->slots;
     TargetBoardVars *vars = (TargetBoardVars *)moby->pvars;
+    TargetSlot *slots = vars->slots;
     TargetSlot *slot = slots;
     int i = 0;
     int hits = 0;
@@ -1350,7 +1350,7 @@ mark_hit:
         sound = 0;
         if (selected != 0) {
             u8 *vector;
-            slot = (TargetSlot *)((char *)vars + 0x60 + selected * 16);
+            slot = &slots[selected];
             vector = slot->moby->pvars;
             FUN_L00_0025f090(moby, &slot->moby->pos, -1, 2.0f, 13.0f);
             FUN_001f9a28(vector, &slot->moby->pos, &(*(struct Moby **)((char *)vars + 0x64 + selected * 16))->pos);
@@ -1369,7 +1369,7 @@ mark_hit:
                 if (slot->moby != 0) {
                     u8 *vector = slot->moby->pvars;
                     FUN_L00_0025f090(moby, &slot->moby->pos, -1, 2.0f, 13.0f);
-                    FUN_001f9a28(vector, &slot->moby->pos, &slot->anchor->pos);
+                    FUN_001f9a28(vector, &slot->moby->pos, &(*(struct Moby **)((char *)vars + 0x64 + index * 16))->pos);
                     normalize_vector_xyz(vector, vector, D_0015ED6C * 10.0f);
                     slot->moby->state = 1;
                     slot->moby = 0;
@@ -2018,6 +2018,7 @@ extern u64 get_effect_texture_5188(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad_5188(void *, void *, void *, u64, int) __asm__("FUN_L02_0020bc88");
 extern float D_L08_00161C5C __attribute__((sda));
 extern float D_L08_00161C60 __attribute__((sda));
+extern char D_L08_0016D240[];
 
 extern char D_L08_0016D240[] __attribute__((section(".data")));
 
@@ -2430,9 +2431,6 @@ void FUN_L08_002e9558(char *moby) {
         e += 0x10;
     } while (i < 8);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9758.s", FUN_L08_002e9758);
-#else
 extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -2487,10 +2485,12 @@ mark_hit:
         if (selected != 0) {
             SwarmPart *chosen = &slots[selected];
             u8 *vector;
+            char *position = data;
             vector = chosen->moby->pvars;
             FUN_L00_0025f090(moby, &chosen->moby->pos, -1, 2.0f, 13.0f);
+            position += selected * 16;
             FUN_001f9a28(vector, &chosen->moby->pos,
-                         &(*(struct Moby **)(selected * 16 + data + 0x64))->pos);
+                         &(*(struct Moby **)(position + 0x64))->pos);
             normalize_vector_xyz(vector, vector, D_0015ED6C * 10.0f);
             chosen->moby->state = 1;
             chosen->moby = 0;
@@ -2498,21 +2498,26 @@ mark_hit:
         }
         {
             int start = truncate_float_to_s32(random_float_between(0.0f, 23.0f));
+            SwarmPart *base = slots;
             i = 0;
             do {
-                int index = (start + i) % 8 + 9;
-                SwarmPart *candidate = &slots[index];
-                i++;
+                int index = (i + start) % 8 + 9;
+                SwarmPart *candidate;
+                slots = &base[index];
+                candidate = slots;
                 if (candidate->moby != 0) {
                     u8 *vector = candidate->moby->pvars;
+                    char *position = data;
                     FUN_L00_0025f090(moby, &candidate->moby->pos, -1, 2.0f, 13.0f);
+                    position += index * 16;
                     FUN_001f9a28(vector, &candidate->moby->pos,
-                                 &(*(struct Moby **)(data + index * 16 + 0x64))->pos);
+                                 &(*(struct Moby **)(position + 0x64))->pos);
                     normalize_vector_xyz(vector, vector, D_0015ED6C * 10.0f);
                     candidate->moby->state = 1;
                     candidate->moby = 0;
                     return;
                 }
+                i++;
             } while (i < 8);
             moby->state = 99;
         }
@@ -2520,4 +2525,3 @@ mark_hit:
     if (sound >= 0)
         allocate_voice_for_target_entry(sound, 0, moby);
 }
-#endif /* NON_MATCHING */

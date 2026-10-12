@@ -90,7 +90,7 @@ extern int FUN_001fa6d0(float);
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern int FUN_L00_00257b90(int, int);
 extern float FUN_002132a8(float, float);
-extern int FUN_L00_002712b8(float, float, float, float, float, void *, int, int, int, int, int);
+extern int FUN_L00_002712b8(void *, void *, int, int, int, int, float, float, float, float, float);
 extern void FUN_L00_00259888(void *, struct Moby *, int, void *, float);
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
@@ -103,6 +103,8 @@ typedef struct {
 } __attribute__((aligned(16))) L13Vector_5a58;
 
 void FUN_L13_00305a58(struct Moby *moby) {
+    extern struct { char pad[0x18]; struct Moby *moby; int pad1; L13Vector_5a58 pos; L13Vector_5a58 pad2; L13Vector_5a58 matrix; } D_L13_00174140;
+    extern int D_L13_0015F580;
     char *data = (char *)moby->pvars;
     struct Moby *source;
     struct Moby *target;
@@ -124,31 +126,36 @@ void FUN_L13_00305a58(struct Moby *moby) {
         source = *(struct Moby **)(data + 0x20);
         if (source == 0 || source->oclass != 0x65 || source->state == 0xfe || source->state == 0xfd)
             goto remove;
-        *(OvlQuad *)&moby->rot = *(OvlQuad *)&source->rot;
+        qcopy(&moby->rot, &source->rot);
         *(OvlQuad *)&moby->unkC0 = *(OvlQuad *)&source->unkC0;
         *(OvlQuad *)&moby->unkD0 = *(OvlQuad *)&source->unkD0;
         *(OvlQuad *)&moby->unkE0 = *(OvlQuad *)&source->unkE0;
         FUN_L00_0024f7c8(*(struct Moby **)(data + 0x20), *(short *)(data + 0x26), &moby->pos);
         qcopy(data + 0x10, &moby->pos);
-        source = *(struct Moby **)(data + 0x20);
+        {
+        struct Moby *source = *(struct Moby **)(data + 0x20);
         if (source != 0 && source->state != 0xfe && source->state != 0xfd && (source->flags & 1))
             moby->flags |= 1;
         else
             moby->flags &= 0xfffe;
+        }
         goto bounds;
     }
 
-    target = FUN_L00_0025a420(moby, 0x230000, 0);
-    if (target != 0 && *(struct Moby **)((char *)target + 0x20) != 0 &&
-        (*(struct Moby **)((char *)target + 0x20))->oclass == 0x1df)
-        goto special;
+    {
+        char *target = FUN_L00_0025a420(moby, 0x230000, 0);
+        if (target != 0 && *(struct Moby **)(target + 0x20) != 0 &&
+            (*(struct Moby **)(target + 0x20))->oclass == 0x1df)
+            goto special;
+    }
     FUN_001f9a10(&moby->pos, &moby->pos, data);
     for (i = 0; i < 4; i++) {
         FUN_001f9a68(&work.direction, data, -FUN_001fa6c0(i) * 0.25f);
         FUN_001f9a10(&work.velocity, &moby->pos, &work.direction);
+        length = FUN_002132a8(25000.0f, 35000.0f);
         target = (struct Moby *)FUN_L00_002712b8(
-            FUN_002132a8(25000.0f, 35000.0f), 500.0f, 1.0f, -0.0004f, 0.0f,
-            &work.velocity, 0x15f580, FUN_001f96f8(15), 0x60, 0x4040ff, 3);
+            &work.velocity, &D_L13_0015F580, FUN_001f96f8(15), 0x60, 0x4040ff, 3,
+            length, 500.0f, 1.0f, -0.0004f, 0.0f);
         if (target != 0)
             *((char *)target + 9) = FUN_001fa6d0(4.0f) - 0x80;
     }
@@ -162,12 +169,13 @@ void FUN_L13_00305a58(struct Moby *moby) {
     other_distance = FUN_001f9b80(*(char **)(data + 0x2c) + 0x10, data + 0x10);
     if (*(float *)(data + 0x28) < distance || other_distance < distance) {
         if (moby->unk31 != 0) {
+            int i;
             for (i = 2; i >= 0; i--) {
                 *(OvlQuad *)&work.random_direction = 0;
                 work.random_direction.x = FUN_002132a8(-1.0f, 1.0f);
                 work.random_direction.y = FUN_002132a8(-1.0f, 1.0f);
                 work.random_direction.z = FUN_002132a8(-1.0f, 1.0f);
-                work.direction = work.random_direction;
+                *(OvlQuad *)&work.direction = *(OvlQuad *)&work.random_direction;
                 length = FUN_001f9af0(&work.random_direction);
                 FUN_001f9bf8(&work.direction, &work.direction, length * 0.1f);
                 FUN_001f9a10(&work.direction, &work.random_direction, &work.direction);
@@ -182,18 +190,21 @@ void FUN_L13_00305a58(struct Moby *moby) {
     if (FUN_001efa68(&work.old_pos, &moby->pos, stationary,
                      moby, work.hit) == 0)
         goto bounds;
-    target = *(struct Moby **)0x174158;
+    {
+    struct Moby *target = D_L13_00174140.moby;
     if (target != 0 && target == *(struct Moby **)(data + 0x20))
         goto bounds;
-    *(OvlQuad *)&moby->pos = *(OvlQuad *)0x174160;
+    }
+    qcopy(&moby->pos, &D_L13_00174140.pos);
     if (moby->unk31 != 0) {
+        int i;
         for (i = 4; i >= 0; i--) {
-            *(OvlQuad *)&work.random_direction = 0;
-            work.random_direction.x = FUN_002132a8(-1.0f, 1.0f);
-            work.random_direction.y = FUN_002132a8(-1.0f, 1.0f);
-            work.random_direction.z = FUN_002132a8(-1.0f, 1.0f);
-            work.direction = work.random_direction;
-            FUN_L00_001ff660(&work.direction, data, (void *)0x174180);
+            *(OvlQuad *)&work.direction = 0;
+            work.direction.x = FUN_002132a8(-1.0f, 1.0f);
+            work.direction.y = FUN_002132a8(-1.0f, 1.0f);
+            work.direction.z = FUN_002132a8(-1.0f, 1.0f);
+            *(OvlQuad *)&work.random_direction = *(OvlQuad *)&work.direction;
+            FUN_L00_001ff660(&work.direction, data, &D_L13_00174140.matrix);
             length = FUN_001f9af0(&work.direction);
             FUN_001f9bf8(&work.random_direction, &work.random_direction, length * 0.5f);
             FUN_001f9a10(&work.random_direction, &work.direction, &work.random_direction);
@@ -203,12 +214,14 @@ void FUN_L13_00305a58(struct Moby *moby) {
                 FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(15)), 30000.0f);
         }
     }
-    target = *(struct Moby **)0x174158;
+    {
+    struct Moby *target = D_L13_00174140.moby;
     if (target != 0 && target->oclass == 0x1df) {
 special:
         FUN_L13_00306148(moby);
     } else {
         FUN_L13_003060b8(moby);
+    }
     }
 remove:
     mark_moby_for_removal(moby);
@@ -1101,6 +1114,12 @@ extern unsigned char D_001413F5;
 extern float D_L13_0015F3FC;
 extern int D_L13_0015F404;
 extern float D_0013E090, D_0013E0A8, D_0013E094, D_0013E098;
+extern struct {
+    char pad0[0x60];
+    float unk60, unk64, unk68;
+    char pad6C[0xC];
+    float unk78;
+} D_0013E030;
 extern unsigned char D_L13_0015FC88[];
 extern char D_0013F3D0[];
 extern int is_point_inside_clip_volume_alt(void *, int);
@@ -1111,14 +1130,10 @@ extern void FUN_L00_00298840(int);
 extern void FUN_L00_00299460(int);
 extern void FUN_L00_002607d0(int);
 extern void FUN_L00_0028e8a0(void *);
-extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
+extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void FUN_L13_0030b628(struct Moby *moby) {
     int *data = (int *)moby->pvars;
-    char *other;
-    char *object;
-    char *entity;
-    unsigned char index;
     switch (moby->state) {
     case 0:
         if (D_L13_0015F5C4 == 0) moby->state = 1;
@@ -1138,41 +1153,47 @@ void FUN_L13_0030b628(struct Moby *moby) {
     case 3:
         moby->state = 4;
         break;
-    case 4:
-        index = 6;
+    case 4: {
         if (alternate_item_available[0x65] == 0) {
-            if (data[0] == -1) {
-                index = 7;
+            if (data[0] == -1)
                 goto set_state_4;
-            }
             if (is_point_inside_clip_volume_alt(D_0013F3D0, data[0]) == 0)
                 goto after_state_4;
             alternate_item_available[0x65] = 1;
             if (data[5] != -1) {
-                other = (char *)(D_L13_0015FFD8_m + data[5] * 0x100);
-                *(unsigned short *)(other + 0x34) |= 0x41;
+                struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[5] * 0x100);
+                other->flags |= 0x41;
             }
             moby->state = 5;
             FUN_L00_00298840(1);
         } else {
+            moby->state = 6;
+            goto after_state_4;
 set_state_4:
-            moby->state = index;
+            moby->state = 7;
         }
 after_state_4:
         if (moby->state != 4 && data[3] != -1) {
             mark_moby_for_removal((char *)(D_L13_0015FFD8_m + data[3] * 0x100));
         }
         break;
-    case 5:
+    }
+    case 5: {
+        char *object;
+        char *entity;
+        int index;
         if (D_L13_0015F5C4 != 2) {
             if (data[5] != -1) {
-                other = (char *)(D_L13_0015FFD8_m + data[5] * 0x100);
-                *(unsigned short *)(other + 0x34) &= 0xffbe;
+                struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[5] * 0x100);
+                other->flags &= 0xffbe;
             }
-            if (data[2] != -1 && data[4] != -1) {
-                object = D_L13_001600EC + data[2] * 0x80;
+            index = data[2];
+            if (index != -1 && data[4] != -1) {
                 entity = (char *)(D_L13_0015FFD8_m + data[4] * 0x100);
-                qcopy(entity + 0x10, object + 0x30);
+                object = D_L13_001600EC;
+                index *= 0x80;
+                qcopy(entity + 0x10, object + index + 0x30);
+                object += index;
                 FUN_L00_00216f90(object + 0x30, object + 0x70, 0, 1);
                 D_001413F5 = 1;
                 *(float *)(*(char **)(entity + 0x78) + 0x7c) = 0.99f;
@@ -1182,28 +1203,31 @@ after_state_4:
             moby->state = 6;
         }
         break;
+    }
     case 6:
         moby->state = 7;
         break;
-    case 7:
+    case 7: {
+        char *object;
         if (alternate_item_available[0x66] == 0) {
+            struct Moby *other;
             if (data[5] == -1) {
                 moby->state = 13;
                 break;
             }
-            other = (char *)(D_L13_0015FFD8_m + data[5] * 0x100);
-            if (other != 0 && *(short *)(other + 0xa6) == 0x184 &&
-                (unsigned char)other[0x20] != 0xfe && (unsigned char)other[0x20] != 0xfd) return;
+            other = (struct Moby *)(D_L13_0015FFD8_m + data[5] * 0x100);
+            if (other != 0 && other->oclass == 0x184 &&
+                other->state != 0xfe && other->state != 0xfd) return;
             if (data[4] != -1) {
-                other = (char *)(D_L13_0015FFD8_m + data[4] * 0x100);
-                *(unsigned short *)(other + 0x34) |= 2;
+                struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[4] * 0x100);
+                other->flags |= 2;
             }
             object = D_L13_001600EC + data[2] * 0x80;
             FUN_L00_00216f90(object + 0x30, object + 0x70, 0x72, 1);
             alternate_item_available[0x66] = 1;
             if (data[8] != -1) {
-                other = (char *)(D_L13_0015FFD8_m + data[8] * 0x100);
-                *(unsigned short *)(other + 0x34) |= 0x41;
+                struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[8] * 0x100);
+                other->flags |= 0x41;
             }
             FUN_L01_0027a248(0, 5);
             moby->state = 8;
@@ -1212,6 +1236,7 @@ after_state_4:
         }
         moby->state = 12;
         break;
+    }
     case 8:
         if (D_L13_0015F5C4 != 2) {
             moby->state = 9;
@@ -1224,47 +1249,51 @@ after_state_4:
             moby->state = 10;
         }
         break;
-    case 10:
+    case 10: {
         if (D_L13_0015F5C4 != 2) {
             if (data[4] != -1) {
-                other = (char *)(D_L13_0015FFD8_m + data[4] * 0x100);
-                *(unsigned short *)(other + 0x34) &= 0xfffd;
+                struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[4] * 0x100);
+                other->flags &= 0xfffd;
             }
             FUN_L00_002607d0(14);
             if (data[8] != -1) {
-                other = (char *)(D_L13_0015FFD8_m + data[8] * 0x100);
-                *(unsigned short *)(other + 0x34) &= 0xffbe;
+                struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[8] * 0x100);
+                other->flags &= 0xffbe;
                 FUN_L00_0028e8a0(other);
-                D_0013E090 = 464.66f;
-                D_0013E0A8 = 2.77f;
-                D_0013E094 = 580.68f;
-                D_0013E098 = 316.72f;
+                D_0013E030.unk60 = 464.66f;
+                D_0013E030.unk64 = 580.68f;
+                D_0013E030.unk68 = 316.72f;
+                D_0013E030.unk78 = 2.77f;
             }
             D_L13_0015F404 = 0;
             moby->state = 11;
         }
         break;
-    case 11:
+    }
+    case 11: {
         if (data[4] != -1) {
-            other = (char *)(D_L13_0015FFD8_m + data[4] * 0x100);
-            if (other != 0 && *(short *)(other + 0xa6) == 0x45 &&
-                (unsigned char)other[0x20] != 0xfe && (unsigned char)other[0x20] != 0xfd) return;
+            struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[4] * 0x100);
+            if (other != 0 && other->oclass == 0x45 &&
+                other->state != 0xfe && other->state != 0xfd) return;
             memcard_save_data(0, -1);
             moby->state = 12;
             return;
         }
         moby->state = 12;
         break;
+    }
     case 12:
         moby->state = 13;
         break;
     case 13:
-        if (data[4] == -1) {
+        if (data[4] != -1) {
+            if (D_L13_0015FC88[*(unsigned char *)(D_L13_0015FFD8_m + data[4] * 0x100 + 0xb0)] == 0xff) {
+                if (data[8] != -1)
+                    mark_moby_for_removal((char *)(D_L13_0015FFD8_m + data[8] * 0x100));
+                moby->state = 14;
+            }
+        } else {
             mark_moby_for_removal(moby);
-        } else if (D_L13_0015FC88[*(unsigned char *)(D_L13_0015FFD8_m + data[4] * 0x100 + 0xb0)] == 0xff) {
-            if (data[8] != -1)
-                mark_moby_for_removal((char *)(D_L13_0015FFD8_m + data[8] * 0x100));
-            moby->state = 14;
         }
         break;
     case 14:
@@ -1676,8 +1705,8 @@ extern void FUN_0020c828(void *);
 void FUN_L13_0030cdb8(struct Moby *moby) {
     char *data;
     void *hit;
-    char hit_buffer[16];
     OvlVec4 vector;
+    char hit_buffer[16];
     int i, j;
     if ((D_0014C190_257218[current_level_index][(short)moby->save_id >> 5] >>
          (moby->save_id & 31) & 1) != 0) {
@@ -1719,7 +1748,7 @@ void FUN_L13_0030cdb8(struct Moby *moby) {
         D_0014C190_257218[current_level_index][(short)moby->save_id >> 5] |=
             1 << (moby->save_id & 31);
         ((int *)0x001c0000)[((short)moby->save_id >> 5) - 0x160c] |= 1 << (moby->save_id & 31);
-        j = 1;
+        j = 0;
         do {
             i = 0x709;
             do {
@@ -1730,8 +1759,7 @@ void FUN_L13_0030cdb8(struct Moby *moby) {
                 FUN_L00_00263fd8(moby, i, &vector, rot, 0, 0, 0.0f, zero_vector, zero_vector, zero_vector);
                 i++;
             } while (i < 0x70d);
-            j++;
-        } while (j <= 2);
+        } while (j++ < 1);
         FUN_L00_0025e450(moby, pos, 0, 0.0f, 0.0f, 10, 3, 0x10,
                          6.0f, 3.0f, 9.0f, 1.1f, 0, 15.0f, 1, 3, -1, 0);
         FUN_0020c828(moby);

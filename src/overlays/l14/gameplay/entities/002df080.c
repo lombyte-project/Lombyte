@@ -122,7 +122,7 @@ void FUN_L14_002df138(u8 *moby) {
         wave_height = fast_sin(pitch) * 0.75f;
         yaw_sine = fast_sin(yaw);
         spread = spread_l14(0.0f, 0.2f);
-        p[0x2a] = p[0x2a] + wave_height * yaw_sine + spread;
+        p[0x2a] += (wave_height * yaw_sine + spread);
         p[0x29] = fast_cos(yaw) * 0.5f;
         p[0x28] = index2 * 0.39f;
         p[0x2b] = 1.0f;

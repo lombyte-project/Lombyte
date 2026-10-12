@@ -66,11 +66,11 @@ int sceCdInit(int init_mode) {
     owner = GetThreadId();
     count = *(volatile s32 *)D_00131310 + 1;
     *(volatile s32 *)D_001312E4 = 1;
-    D_001312FC[0] = -1;
-    D_00131300[0] = -1;
-    D_00131308[0] = D_001312F8[0] = -1;
-    D_00131304[0] = -1;
-    rbuf = D_001324C0;
+    /* Keep the retail reset order while grouping the final bind state. */
+    D_00131304[0] = (D_001312FC[0] = -1,
+                     D_00131300[0] = -1,
+                     D_001312F8[0] = -1,
+                     D_00131308[0] = -1);
     D_001312F4[0] = 0;
     D_00131310[0] = count;
     D_0013130C[0] = -1;
@@ -90,8 +90,9 @@ int sceCdInit(int init_mode) {
             D_001599C0[0] = init_mode;
             D_0013130C[0] = 0;
             sceSifWriteBackDCache(D_001599C0, 4);
+            rbuf = D_001324C0;
             if (sceSifCallRpc(&D_00159968, 0, 0, D_001599C0, 4, rbuf, 0x10, 0, 0) < 0) {
-                D_001312E4[0] = 0;
+                *(volatile s32 *)D_001312E4 = 0;
                 return 0;
             }
             break;
@@ -126,11 +127,12 @@ int sceCdInit(int init_mode) {
         cdvd_exit();
         *(volatile s32 *)D_001312E8 = -1;
         *(volatile s32 *)D_001312EC = -1;
-        D_001312E0[0] = -1;
-        return ret;
+        *(volatile s32 *)D_001312E0 = -1;
+        goto done;
     }
     cmd_sem_init();
     PowerOffCB();
+done:
     return ret;
 }
 #endif /* NON_MATCHING */

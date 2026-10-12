@@ -54,8 +54,8 @@ s32 sceGsSetDefLoadImage(sceGsLoadImage *image, s16 destination_base,
     *(u128 *)&image->q[10] = 0;
     *(u128 *)&image->q[0] = 0;
     ((struct GifTag *)&image->q[0])->NLOOP = 4;
-    ((struct GifTag *)&image->q[0])->NREG = 1;
-    image->q[1] = (image->q[1] & ~0xfULL) | 0xe;
+    image->q[0] = (image->q[0] & 0x0fffffffffffffffULL) | 0x1000000000000000ULL;
+    ((struct GifTag *)&image->q[0])->REGS0 = 0xe;
     image->q[2] = ((u64)(s64)destination_base << 0x20) |
                   ((u64)(s64)destination_width << 0x30) |
                   ((u64)(s64)pixel_format << 0x38);

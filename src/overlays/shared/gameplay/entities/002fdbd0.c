@@ -456,6 +456,8 @@ void FUN_L06_002feb40(struct Moby *moby) {
     f32 remaining;
     s32 i;
     s32 *route;
+    s16 frames;
+    Vec4 *vel;
 
     moby->scale = moby->pclass->scale * D_L06_00161FA8;
     FUN_L06_002ff2c8((char *)moby);
@@ -484,16 +486,49 @@ void FUN_L06_002feb40(struct Moby *moby) {
         switch (collision) {
         case 0:
             break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+            {
+                f32 speed;
+                f32 remaining;
+                moby->state = 15;
+                vel = &vars->vel;
+                frames = scale_game_frames(60);
+                speed = D_L06_00161FB0 * D_0015ED6C;
+                remaining = D_L06_00161FB4 * D_0015ED6C;
+                *(s16 *)((char *)vars + 0x26) = frames;
+                *(f32 *)((char *)vars + 0x78) = speed;
+                *(f32 *)((char *)vars + 0x7c) = remaining;
+                *(f32 *)((char *)vars + 0xb0) = 8.0f;
+                *(f32 *)((char *)vars + 0xb4) = 15.0f;
+            }
+            angle = FUN_001f9e90(other->pos.x, other->pos.y);
+            FUN_0026b368(angle, moby, vel, 7, 1, 0);
+            *(u8 *)((char *)vars + 0x117) = 0xfa;
+            break;
         case 1:
         case 2:
-            moby->state = 16;
-            moby->flags &= ~0x1000;
-            *(f32 *)((char *)vars + 0xb0) = 9.0f;
-            *(f32 *)((char *)vars + 0xb4) = 18.0f;
-            *(f32 *)((char *)vars + 0x78) = D_L06_00161FB8 * D_0015ED6C;
-            *(f32 *)((char *)vars + 0x7c) = D_L06_00161FBC * D_0015ED6C;
+            {
+                f32 speed;
+                f32 remaining;
+                moby->state = 16;
+                vel = &vars->vel;
+                speed = D_L06_00161FB8 * D_0015ED6C;
+                remaining = D_L06_00161FBC * D_0015ED6C;
+                moby->flags &= ~0x1000;
+                *(f32 *)((char *)vars + 0xb0) = 9.0f;
+                *(f32 *)((char *)vars + 0xb4) = 18.0f;
+                *(f32 *)((char *)vars + 0x7c) = remaining;
+                *(f32 *)((char *)vars + 0x78) = speed;
+            }
             angle = FUN_001f9e90(other->pos.x, other->pos.y);
-            FUN_0026b368(angle, moby, &vars->vel, 9, 1, 0);
+            FUN_0026b368(angle, moby, vel, 9, 1, 0);
             for (i = 9; i >= 0; i--) {
                 qcopy(scratch.position, &moby->pos);
                 scratch.position[2] += 2.5f;
@@ -517,32 +552,6 @@ void FUN_L06_002feb40(struct Moby *moby) {
             }
             *(u8 *)((char *)vars + 0x117) = 0xfa;
             FUN_00266130(moby, 0, -1);
-            break;
-        case 3:
-            goto standard_collision;
-        case 4:
-            goto standard_collision;
-        case 5:
-            goto standard_collision;
-        case 6:
-            goto standard_collision;
-        case 7:
-            goto standard_collision;
-        case 8:
-            goto standard_collision;
-        case 9:
-            goto standard_collision;
-        case 10:
-        standard_collision:
-            moby->state = 15;
-            *(s16 *)((char *)vars + 0x26) = scale_game_frames(60);
-            *(f32 *)((char *)vars + 0x78) = D_L06_00161FB0 * D_0015ED6C;
-            *(f32 *)((char *)vars + 0x7c) = D_L06_00161FB4 * D_0015ED6C;
-            *(f32 *)((char *)vars + 0xb0) = 8.0f;
-            *(f32 *)((char *)vars + 0xb4) = 15.0f;
-            angle = FUN_001f9e90(other->pos.x, other->pos.y);
-            FUN_0026b368(angle, moby, &vars->vel, 7, 1, 0);
-            *(u8 *)((char *)vars + 0x117) = 0xfa;
             break;
         case 11:
             break;
@@ -667,9 +676,9 @@ void FUN_L06_002ff2c8(char *moby) {
             if (alignment > 0.4f) {
                 point[2] -= frame_time + frame_time;
             } else if (alignment < 0.3f) {
-                point[2] += *(f32 *)&D_L06_00161FD8_d + *(f32 *)&D_L06_00161FD8_d;
+                point[2] += (frame_time + frame_time);
             }
-            if (entry[3] < 1.0f || FUN_001efa68(data + offset + 0x230, point, 2, 0, 0) == 0) {
+            if (!(entry[3] >= 1.0f) || FUN_001efa68(data + offset + 0x230, point, 2, 0, 0) == 0) {
                 if (point[3] < 1.0f) {
                     approach_value(&point[3], 0.0f, frame_time + frame_time);
                 }

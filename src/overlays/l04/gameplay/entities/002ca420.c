@@ -115,9 +115,6 @@ void FUN_L04_002ce060(void *moby) {
     remove_moby_2ce060(moby);
 }
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d1418.s", FUN_L04_002d1418);
-#else
 extern void FUN_L04_00292370(void *, char *);
 extern void FUN_L04_002923b8(void *, char *);
 
@@ -152,9 +149,9 @@ void FUN_L04_002d1418(void *m) {
     speed = frameScale * 9.8f;
     angleHalf = frameScale * 3.1415927f;
     amount = frameScale * 10.0f;
+    *(unsigned char *)(d + 0x214) = 7;
     *(unsigned char *)(d + 0x210) = 0;
     *(unsigned char *)(d + 0x211) = 0;
-    *(float *)(d + 0x240) = 0.5f;
     *(float *)(d + 0x23c) = speed;
     *(float *)(d + 0x22c) = angleHalf;
     *(float *)(d + 0x230) = angleFull;
@@ -162,7 +159,7 @@ void FUN_L04_002d1418(void *m) {
     *(float *)(d + 0x224) = amount;
     *(unsigned char *)(d + 0x212) = 0xff;
     *(unsigned char *)(d + 0x213) = 0x10;
-    *(unsigned char *)(d + 0x214) = 7;
+    *(unsigned char *)(d + 0x215) = 7;
     *(unsigned char *)(d + 0x250) = 10;
     *(unsigned char *)(d + 0x251) = 8;
     *(unsigned char *)(d + 0x253) = 12;
@@ -171,10 +168,9 @@ void FUN_L04_002d1418(void *m) {
     *(unsigned char *)(d + 0x301) = 9;
     *(unsigned char *)(d + 0x303) = 13;
     *(unsigned char *)(d + 0x302) = 15;
-    *(unsigned char *)(d + 0x215) = 7;
+    *(float *)(d + 0x240) = 0.5f;
     FUN_L04_002923b8(m, p);
 }
-#endif /* NON_MATCHING */
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D29E8), where it is exact; names translated to the US level program. */
@@ -1003,7 +999,127 @@ void FUN_L04_002d6f68(char *moby) {
     add_vector_xyz(moby + 0x10, a, b);
     qcopy(dst + 0x10, moby + 0x10);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d7e90.s", FUN_L04_002d7e90);
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern int FUN_001f9740(s32 *);
+extern int FUN_001f96f8(int);
+extern int FUN_L00_00257b90(int, int);
+extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern void FUN_L00_001ff660(void *, void *, void *);
+extern float D_L04_001CB940[6];
+extern char D_L04_00173FE0[];
+
+/* Three-state motion update. The saved position is restored when the timer expires. */
+void FUN_L04_002d7e90(struct Moby *moby) {
+    Vec4 random;
+    Vec4 old;
+    Vec4 work;
+    Vec4 initialDirection;
+    Vec4 direction;
+    char *data = (char *)moby->pvars;
+    float speed;
+    float amount;
+    int timer;
+    float *motion;
+
+    old.q = 0;
+    old.f[0] = random_float_between(-1.0f, 1.0f);
+    old.f[1] = random_float_between(-1.0f, 1.0f);
+    old.f[2] = random_float_between(-1.0f, 1.0f);
+    random.q = old.q;
+    speed = vector_length_xy(data);
+    qcopy(&old, &moby->pos);
+    switch (moby->state) {
+    case 0:
+        qcopy(data + 0x30, &moby->pos);
+        *(int *)(data + 0x40) = *(int *)(data + 0x44) = FUN_L00_00257b90(120, 2400);
+        *(float *)(data + 0x4c) = moby->scale * random_float_between(0.8f, 1.2f);
+        moby->state = 1;
+        break;
+    case 1:
+        if (!(FUN_001f9b80(&moby->pos, D_L04_00166F40) < 32.0f))
+            return;
+        if (!FUN_001f9740((int *)(data + 0x44)))
+            return;
+        direction.q = 0;
+        direction.f[0] = random_float_between(-1.0f, 1.0f);
+        direction.f[1] = random_float_between(-1.0f, 1.0f);
+        direction.f[2] = random_float_between(-1.0f, 1.0f);
+        moby->unk30 = 0xff;
+        moby->unk32 = 0x40;
+        moby->scale = 0.0f;
+        motion = (float *)moby->pvars;
+        initialDirection.q = direction.q;
+        normalize_vector_xyz(&initialDirection, &initialDirection, D_L04_001CB940[5] / 5.0f);
+        motion[0] = D_L04_001CB940[5] * fast_cos(D_L04_001CB940[1]);
+        motion[1] = D_L04_001CB940[5] * fast_sin(D_L04_001CB940[1]);
+        motion[2] = frame_time * -0.5f;
+        normalize_vector_xyz(&moby->rot, &initialDirection, 3.1415927f);
+        normalize_vector_xyz(motion + 8, &initialDirection, 0.098174773f);
+        normalize_vector_xyz(motion + 4, &initialDirection, D_L04_001CB940[5] * 0.5f);
+        *(int *)(motion + 16) = *(int *)(motion + 17) = FUN_L00_00257b90(720, 1200);
+        moby->state = 2;
+        return;
+    case 2:
+        FUN_001f9740((int *)(data + 0x44));
+        normalize_vector_xyz(&random, &random, D_L04_001CB940[5] / 10.0f);
+        add_vector_xyz(data + 0x10, data + 0x10, &random);
+        normalize_vector_xyz(&work, data + 0x10, 5.0f);
+        normalize_vector_xyz(data + 0x10, data + 0x10, D_L04_001CB940[5] * 0.5f);
+        add_vector_xyz(&work, &work, &moby->pos);
+        if (collision_line(&old, &work, 6, 0, 0) && !random_integer_below(8)) {
+            FUN_L00_001ff660(data + 0x10, data + 0x10, D_L04_00173FE0 + 0x20);
+            *(float *)(data + 0x18) += D_L04_001CB940[5] / 10.0f;
+        }
+        add_vector_xyz(data, data, data + 0x10);
+        work.f[0] = D_L04_001CB940[5] * fast_cos(D_L04_001CB940[1]);
+        work.f[1] = D_L04_001CB940[5] * fast_sin(D_L04_001CB940[1]);
+        work.f[2] = frame_time * -0.5f;
+        scale_vector_xyz(&work, &work, 0.4f);
+        scale_vector_xyz(data, data, 0.6f);
+        add_vector_xyz(data, &work, data);
+        add_vector_xyz(&moby->pos, &moby->pos, data);
+        if (collision_line(&old, &moby->pos, 6, 0, 0)) {
+            qcopy(&moby->pos, D_L04_00173FE0);
+            FUN_L00_001ff660(data, data, D_L04_00173FE0 + 0x20);
+            scale_vector_xyz(data, data, 0.25f);
+            add_vector_xyz(&moby->pos, &moby->pos, data);
+            *(float *)(data + 8) += D_L04_001CB940[5] / 5.0f;
+        }
+        if (D_L04_001CB940[5] < speed)
+            normalize_vector_xyz(data, data, D_L04_001CB940[5]);
+        {
+            float amount = frame_time * -0.5f;
+            if (amount < *(float *)(data + 8))
+                *(float *)(data + 8) += amount / 10.0f;
+            else
+                *(float *)(data + 8) = amount;
+        }
+        moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(data + 0x20));
+        moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(data + 0x24));
+        moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(data + 0x28));
+        if (*(int *)(data + 0x40) - FUN_001f96f8(10) < *(int *)(data + 0x44)) {
+            amount = convert_integer_to_float(*(int *)(data + 0x44) - *(int *)(data + 0x40));
+            moby->scale = (*(float *)(data + 0x4c) * amount) / FUN_001f96b0(10.0f);
+        } else {
+            if (*(int *)(data + 0x44) < FUN_001f96f8(100))
+                moby->scale *= 0.99f;
+            else
+                moby->scale = *(float *)(data + 0x4c);
+        }
+        if (*(int *)(data + 0x44) > 0)
+            return;
+        qcopy(&moby->pos, data + 0x30);
+        timer = FUN_L00_00257b90(120, 2400);
+        /* Preserve the retail ordering of the timer reload stores. */
+        *(volatile int *)(data + 0x40) = timer;
+        *(volatile int *)(data + 0x44) = timer;
+        moby->state = 1;
+        break;
+    default:
+        return;
+    }
+    moby->scale = 0.0f;
+}
 /* Rise speed of a riser by its class. */
 float riser_rise_speed(struct Moby *moby) __asm__("FUN_L04_002e1768");
 

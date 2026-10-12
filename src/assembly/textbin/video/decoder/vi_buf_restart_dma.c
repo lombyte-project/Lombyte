@@ -90,6 +90,8 @@ s32 vi_buf_restart_dma(ViBuf *f) {
         r1 = get_fifo_index(f, f->d4_madr);
         r2 = get_fifo_index(f, dmaAddress);
         if (r1 != r2) {
+            dmaQwc = (f->data + (r1 << 11) - dmaAddress) >> 4;
+            dmaTadr = ((r1 << 4) + f->tag) & 0x0FFFFFFF;
             dir = 3;
             datasize = f->n << 11;
             t = (f->d4_madr - f->data) % (u32)datasize;
@@ -98,8 +100,6 @@ s32 vi_buf_restart_dma(ViBuf *f) {
                 dir = 0;
             }
             chcr = f->d4_chcr & 0x0FFFFFFF;
-            dmaQwc = (f->data + (r1 << 11) - dmaAddress) >> 4;
-            dmaTadr = ((r1 << 4) + f->tag) & 0x0FFFFFFF;
             dir = dir << 28;
             dmaChcr = chcr | dir | 0x100;
             r = ((r2 + f->n) - f->dmaStart) % f->n;

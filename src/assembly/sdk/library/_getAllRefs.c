@@ -26,7 +26,7 @@ void _getAllRefs(struct MpegDecoder *d, int bx, int by, int mb_type, int motion_
     int one = 1;
     int avg;
     int currentfield;
-    int same;
+    int same = one;
 
     avg = 0;
 
@@ -37,19 +37,19 @@ void _getAllRefs(struct MpegDecoder *d, int bx, int by, int mb_type, int motion_
             if (motion_type == 2 || !(mb_type & 8)) {
                 _getRef0(d, d->ref_images[0], 0, 0, 0, 16, bx, by, pmv[0][0][0], pmv[0][0][1], 0,
                          0);
-            } else if (motion_type == one) {
+            } else if (motion_type == same) {
                 _getRef0(d, d->ref_images[0], mvfs[0][0], 0, 0, 8, bx, by, pmv[0][0][0],
-                         pmv[0][0][1] >> 1, one, 0);
+                         pmv[0][0][1] >> 1, same, 0);
                 _getRef0(d, d->ref_images[0], mvfs[1][0], 1, 0, 8, bx, by, pmv[1][0][0],
-                         pmv[1][0][1] >> 1, one, 0);
+                         pmv[1][0][1] >> 1, same, 0);
             } else if (motion_type == 3) {
                 _dualPrimeVector(d, dmv, dmvector, pmv[0][0][0], pmv[0][0][1] >> 1);
                 _getRef0(d, d->ref_images[0], 0, 0, 0, 8, bx, by, pmv[0][0][0], pmv[0][0][1] >> 1,
-                         one, 0);
-                _getRef0(d, d->ref_images[0], 1, 0, 0, 8, bx, by, dmv[0][0], dmv[0][1], one, one);
+                         same, 0);
+                _getRef0(d, d->ref_images[0], 1, 0, 0, 8, bx, by, dmv[0][0], dmv[0][1], same, one);
                 _getRef0(d, d->ref_images[0], 1, 1, 0, 8, bx, by, pmv[0][0][0], pmv[0][0][1] >> 1,
-                         one, 0);
-                _getRef0(d, d->ref_images[0], 0, 1, 0, 8, bx, by, dmv[1][0], dmv[1][1], one, one);
+                         same, 0);
+                _getRef0(d, d->ref_images[0], 0, 1, 0, 8, bx, by, dmv[1][0], dmv[1][1], same, one);
             } else {
                 _Error1(d, D_00153710, motion_type);
             }
@@ -90,14 +90,15 @@ void _getAllRefs(struct MpegDecoder *d, int bx, int by, int mb_type, int motion_
 
     if (mb_type & 4) {
         if (d->picture_structure == 3) {
+            same = 1;
             if (motion_type == 2) {
                 _getRef0(d, d->ref_images[1], 0, 0, 0, 16, bx, by, pmv[0][1][0], pmv[0][1][1], 0,
                          avg);
             } else {
                 _getRef0(d, d->ref_images[1], mvfs[0][1], 0, 0, 8, bx, by, pmv[0][1][0],
-                         pmv[0][1][1] >> 1, 1, avg);
+                         pmv[0][1][1] >> 1, same, avg);
                 _getRef0(d, d->ref_images[1], mvfs[1][1], 1, 0, 8, bx, by, pmv[1][1][0],
-                         pmv[1][1][1] >> 1, 1, avg);
+                         pmv[1][1][1] >> 1, same, avg);
             }
         } else if (motion_type == 1) {
             _getRef0(d, mvfs[0][1] ? d->ref_images[9] : d->ref_images[5], 0, 0, 0, 16, bx, by,

@@ -524,7 +524,8 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
                     qcopy(&second, (void *)((entry + 0x10)));
                     FUN_001f9a10_25aca0(&first, &first, &second);
                     FUN_001f9a68_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &first, &first);
-                    radius = *(float *)(entry + 0xc) * *(float *)(entity + 0x2c) * 0.0009765625f;
+                    extent = *(float *)(entity + 0x2c);
+                    radius = *(float *)(entry + 0xc) * extent * 0.0009765625f;
                 }
                 weights[count] = radius * 4.1887903f * radius * radius;
                 break;

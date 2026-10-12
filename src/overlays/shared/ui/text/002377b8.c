@@ -37,38 +37,47 @@ int FUN_L00_00237840(char *rec) {
     int x, y;
     int left, top, right, bottom;
     int w, h, bar_height, step, i, xbase, ybase;
-    w = D_L00_0015F760;
-    h = D_L00_0015F764;
-    x = *(int *)(rec + 0x50);
-    y = *(int *)(rec + 0x54);
-    *(int *)(rec + 0x58) = w;
-    *(int *)(rec + 0x5c) = h;
+    {
+        int w, h;
+        w = D_L00_0015F760;
+        h = D_L00_0015F764;
+        x = *(int *)(rec + 0x50);
+        y = *(int *)(rec + 0x54);
+        *(int *)(rec + 0x58) = w;
+        *(int *)(rec + 0x5c) = h;
+    }
     FUN_L00_00235a70(rec, &x, &y);
     FUN_L00_00235ad8(rec, &x, &y, *(int *)(rec + 0x6c), 0);
     w = D_L00_0015F760;
     h = D_L00_0015F764;
+    left = w * 0xd0;
+    top = h * 0xa0;
+    right = w * 0x260;
+    bottom = h * 0xea0;
     xbase = (x + *(short *)(rec + 0x48)) << 4;
     ybase = (y + *(short *)(rec + 0x4a)) << 4;
-    left = xbase + (w * 0xd0) / 64;
-    top = ybase + (h * 0xa0) / 256;
-    right = left + (w * 0x260) / 64;
-    bottom = top + (h * 0xea0) / 256;
+    left = xbase + left / 64;
+    top = ybase + top / 256;
+    right = left + right / 64;
+    bottom = top + bottom / 256;
     FUN_L00_0023caa8(left, top, right, bottom, 0x80000000UL, 1);
     h = D_L00_0015F764;
-    bar_height = (h * *(int *)(rec + 0x74) * 0xea0) / (*(int *)(rec + 8) << 8);
+    step = h * 0xea0;
     top = ((y + *(short *)(rec + 0x4a)) << 4) + (h * 0xf40) / 256;
+    bar_height = (*(int *)(rec + 0x74) * step) / (*(int *)(rec + 8) << 8);
     FUN_L00_0023caa8(left, top, right, top - bar_height, 0x80829e00UL, 1);
     i = 1;
     if (i < *(int *)(rec + 0x74)) do {
         h = D_L00_0015F764;
-        step = (h * 0xea0) * i / (*(int *)(rec + 8) << 8);
-        top = ((y + *(short *)(rec + 0x4a)) << 4) + (h * 0xf40) / 256 - step;
-        FUN_L00_0023caa8(left, top - 16, right, top + 16, 0x80000000UL, 1);
+        step = h * 0xea0;
+        top = ((y + *(short *)(rec + 0x4a)) << 4) + (h * 0xf40) / 256;
+        step = step * i / (*(int *)(rec + 8) << 8);
+        top = top - step - 16;
+        FUN_L00_0023caa8(left, top, right, top + 32, 0x80000000UL, 1);
         i++;
     } while (i < *(int *)(rec + 0x74));
-    x += *(short *)(rec + 0x48);
-    y += *(short *)(rec + 0x4a);
-    FUN_L00_0023bac0(FUN_L00_0023b208(*(int *)rec, 0), x, y,
+    w = FUN_L00_0023b208(*(int *)rec, 0);
+    FUN_L00_0023bac0(w, x + *(short *)(rec + 0x48), y + *(short *)(rec + 0x4a),
                        D_L00_0015F760, D_L00_0015F764, 0x80);
     return *(int *)(rec + 0x58);
 }
@@ -1271,7 +1280,7 @@ s32 FUN_L00_0023a2d0(Hud *m) {
 
     sprintf_alt(buf, D_L00_0015F918);
     x += D_L00_0015F904;
-    y += D_L00_0015F908;
+    slide = y + D_L00_0015F908;
     period = FUN_001f96f8(D_L00_0015F914);
     pulse = fast_sin((f32)(D_L00_0015F5CC % period) /
                      convert_integer_to_float(period) * 6.28318f - 3.14159f) * 4.0f - 3.0f;
@@ -1280,8 +1289,8 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     scaled_text = pulse * text;
     shadow = fast_tween_color(0, 0x80000000, scaled_text);
     color = fast_tween_color(D_L00_0015F90C, D_L00_0015F910, scaled_text);
-    FUN_L00_001fb470(x + 1, y + 1, shadow, buf, -1);
-    FUN_L00_001fb470(x, y, color, buf, -1);
+    FUN_L00_001fb470(x + 1, slide + 1, shadow, buf, -1);
+    FUN_L00_001fb470(x, slide, color, buf, -1);
 out:
     return m->ret;
 }

@@ -1872,7 +1872,7 @@ void FUN_L10_002e5968(struct Moby *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e5be0.s", FUN_L10_002e5be0);
 #else
 extern s32 D_L10_00161EF0 __attribute__((sda));
-extern volatile s32 D_L10_00161EF4 __attribute__((sda));
+extern s32 D_L10_00161EF4 __attribute__((sda));
 extern f32 D_L10_00161EF8 __attribute__((sda));
 extern f32 D_L10_00161EFC __attribute__((sda));
 extern f32 D_L10_00161F00 __attribute__((sda));
@@ -1935,11 +1935,11 @@ void FUN_L10_002e5be0(struct Moby *moby) {
                 upper = 1.2f;
             }
             amount = random_float_between(lower, upper) * pvars[1];
-            first_color = D_L10_00161EF0;
-            color = fast_tween_color(random_float_between(0.5f, 1.0f),
-                                     first_color, D_L10_00161EF4);
-            fade_color = fast_tween_color(random_float_between(0.25f, 0.5f),
-                                          D_L10_00161EF4, D_L10_00161EF4 & 0xff000000);
+            x = random_float_between(0.5f, 1.0f);
+            color = fast_tween_color(x, D_L10_00161EF0, D_L10_00161EF4);
+            first_color = D_L10_00161EF4 & 0xff000000;
+            x = random_float_between(0.25f, 0.5f);
+            fade_color = fast_tween_color(x, D_L10_00161EF4, first_color);
             life = truncate_float_to_s32(multiply_global_factor_ed64(pvars[2] * 60.0f));
             FUN_L00_002738e8(amount, pvars[0], D_L10_00161F00 * frame_time_sq,
                                &position, &velocity, life, color, fade_color, variant);
@@ -1966,6 +1966,7 @@ void FUN_L10_002e8358(struct Moby *moby) {
     int accepted;
     float angle;
     int purchase;
+    int upgrade_level;
 
     timer = (int *)moby->pvars;
     tick_countdown_32_vendor(timer + 1);
@@ -1981,40 +1982,49 @@ void FUN_L10_002e8358(struct Moby *moby) {
             timer[1] == 0 && D_L10_0015F5C4_vendor != 2) {
             FUN_L00_00266858_vendor(moby, 1);
             if (alternate_item_available[4] == 0) {
-                if (current_bolt_count < 4001) {
+                if (current_bolt_count >= 4001) {
+                    accepted = try_set_help_message_vendor(1, 0x271e) != 0;
+                    if (!(D_0013CAE4 & 0x10) || !accepted) return;
+                    accepted = 1;
+                    alternate_item_available[4] = accepted;
+                    upgrade_level = 5;
+                    hero.health.hp = upgrade_level;
+                    current_bolt_count = D_0013ED98 - 4000;
+                    D_0013EDA0 = upgrade_level;
+                    FUN_L00_00298840_vendor(0);
+                    moby->state = accepted;
+                } else {
                     try_set_help_message_vendor(1, 0x2720);
                     return;
                 }
-                accepted = try_set_help_message_vendor(1, 0x271e);
-                if (!(D_0013CAE4 & 0x10) || !accepted) return;
-                alternate_item_available[4] = 1;
-                hero.health.hp = 5;
-                D_0013EDA0 = 5;
-                current_bolt_count = D_0013ED98 - 4000;
-                purchase = 0;
             } else {
                 if (alternate_item_available[5] != 0 || timer[1] != 0) return;
-                if (current_bolt_count < 30001) {
+                if (current_bolt_count >= 30001) {
+                    accepted = try_set_help_message_vendor(1, 0x271f) != 0;
+                    if (!(D_0013CAE4 & 0x10) || !accepted) return;
+                    accepted = 1;
+                    alternate_item_available[5] = accepted;
+                    upgrade_level = 8;
+                    hero.health.hp = upgrade_level;
+                    current_bolt_count = D_0013ED98 - 30000;
+                    D_0013EDA0 = upgrade_level;
+                    FUN_L00_00298840_vendor(1);
+                    moby->state = accepted;
+                } else {
                     try_set_help_message_vendor(1, 0x2721);
                     return;
                 }
-                accepted = try_set_help_message_vendor(1, 0x271f);
-                if (!(D_0013CAE4 & 0x10) || !accepted) return;
-                alternate_item_available[5] = 1;
-                hero.health.hp = 8;
-                D_0013EDA0 = 8;
-                current_bolt_count = D_0013ED98 - 30000;
-                purchase = 1;
             }
-            FUN_L00_00298840_vendor(purchase);
-            moby->state = 1;
+
         }
     }
     return;
 state_one:
     if (D_L10_0015F5C4_vendor != 2) {
         memcard_save_data_vendor(0, -1);
-        FUN_L00_00263d40_vendor(alternate_item_available[5] ? 0x271d : 0x271c, -1);
+        purchase = 0x271c;
+        if (alternate_item_available[5]) purchase = 0x271d;
+        FUN_L00_00263d40_vendor(purchase, -1);
         D_L10_0013F640 = 0xb4;
         timer[1] = scale_game_frames(0xf0);
         moby->state = 0;
@@ -2214,15 +2224,11 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void FUN_L10_002e8ab0(struct Moby *moby) {
     Vars_2E8AB0 *vars = (Vars_2E8AB0 *)moby->pvars;
-    struct Moby *target;
-    struct Moby *candidate;
     int *bits;
     float rotation[4];
     float position[4];
     float displacement[4];
     float angle;
-    unsigned short save_id;
-    int signed_save_id;
     int state;
 
     state = moby->state;
@@ -2236,11 +2242,12 @@ void FUN_L10_002e8ab0(struct Moby *moby) {
     return;
 state_zero:
     {
+        unsigned short save_id;
+        int signed_save_id;
         save_id = moby->save_id;
         signed_save_id = (short)save_id;
-        bits = (int *)((char *)D_0014C190_8ab0 + (current_level_index << 8) + (signed_save_id >> 5) * 4);
-        if (D_L10_001BB6B0_8ab0[signed_save_id + 0x454] != 0 ||
-            ((*bits >> (save_id & 31)) & 1) != 0) {
+        if (D_L10_001BB6B0_8ab0[(short)save_id + 0x454] != 0 ||
+            ((*(int *)((char *)D_0014C190_8ab0 + ((signed_save_id >> 5) * 4 + (current_level_index << 8))) >> (save_id & 31)) & 1) != 0) {
             moby->state = 3;
             return;
         }
@@ -2256,40 +2263,44 @@ state_zero:
     }
 state_two:
     {
-        target = 0;
+        unsigned short save_id;
+        int signed_save_id;
+        struct Moby *target;
+        struct Moby *candidate;
         save_id = moby->save_id;
         signed_save_id = (short)save_id;
-        bits = (int *)((char *)D_0014C190_8ab0 + (current_level_index << 8) + (signed_save_id >> 5) * 4);
-        if (D_L10_001BB6B0_8ab0[signed_save_id + 0x454] != 0 ||
-            ((*bits >> (save_id & 31)) & 1) != 0) {
+        if (D_L10_001BB6B0_8ab0[(short)save_id + 0x454] != 0 ||
+            ((*(int *)((char *)D_0014C190_8ab0 + ((signed_save_id >> 5) * 4 + (current_level_index << 8))) >> (save_id & 31)) & 1) != 0) {
             moby->state = 3;
             return;
         }
-        if (vars->targets[0] != -1) {
-            candidate = (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8));
-            target = (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd) ? candidate : 0;
-          }
-        if (target == 0) {
-          if (vars->targets[1] != -1) {
-            candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8));
-            if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
-                target = candidate;
-          }
-        }
-        if (target == 0) {
-          if (vars->targets[2] != -1) {
-            candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[2] << 8));
-            if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
-                target = candidate;
-          }
-        }
-        if (target == 0) {
-            moby->state = 3;
-            if (vars->wake != -1) {
-                ((struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->wake << 8)))->state = 1;
-                vars->wake = -1;
+        {
+            struct Moby *candidate;
+            candidate = 0;
+            {
+                struct Moby *target;
+                if (vars->targets[0] != -1) {
+                    target = (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8));
+                    candidate = (target != 0 && target->state != 0xfe && target->state != 0xfd) ? target : 0;
+                }
+                if (candidate == 0) {
+                    if (vars->targets[1] != -1) {
+                        target = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8));
+                        if (target != 0 && target->state != 0xfe && target->state != 0xfd)
+                            candidate = target;
+                    }
+                }
             }
-        } else {
+            target = candidate;
+        }
+        if (target == 0) {
+            if (vars->targets[2] != -1) {
+                candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[2] << 8));
+                if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
+                    target = candidate;
+            }
+        }
+        if (target != 0) {
             moby->rot.z = fast_add_rotations(moby->rot.z, 3.1415927f);
             angle = FUN_001f9e90(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
             moby->rot.z = FUN_L00_00258110(&vars->turn_velocity, moby->rot.z, angle,
@@ -2307,43 +2318,57 @@ state_two:
                 FUN_L09_00307ba8(moby, position, rotation, scale_game_frames(30));
                 if (target == (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8)))
                     vars->targets[0] = -1;
-                else if (target == (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8)))
+                else if (target == (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[1] << 8)))
                     vars->targets[1] = -1;
                 else
                     vars->targets[2] = -1;
             }
             moby->rot.z = fast_add_rotations(moby->rot.z, 3.1415927f);
+        } else {
+            moby->state = 3;
+            if (vars->wake != -1) {
+                ((struct Moby *)((vars->wake << 8) + (int)D_L10_0015FFD8_8ab0))->state = 1;
+                vars->wake = -1;
+            }
         }
         if (vars->linked != -1) {
-            ((struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->linked << 8)))->unkBC = 1;
+            ((struct Moby *)((vars->linked << 8) + (int)D_L10_0015FFD8_8ab0))->unkBC = 1;
             vars->linked = -1;
         }
         return;
     }
 state_three:
     {
+        unsigned int save_id;
+        struct Moby *target;
+        struct Moby *candidate;
         target = 0;
         if (vars->targets[0] != -1) {
-            candidate = (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8));
+            struct Moby *candidate = (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8));
             if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
                 target = candidate;
         }
-        if (target != 0)
+        /* Retail removes a valid first target twice. */
+        if (target != 0) {
             mark_moby_for_removal(target);
-        candidate = target;
-        if (target == 0 && vars->targets[1] != -1) {
-            candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8));
-            if (candidate == 0 || candidate->state == 0xfe || candidate->state == 0xfd)
-                candidate = target;
+            candidate = target;
+            goto remove_candidate;
         }
+        if (vars->targets[1] == -1) goto no_second_target;
+        candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8));
+        if (candidate == 0 || candidate->state == 0xfe || candidate->state == 0xfd)
+            goto no_second_target;
+        goto remove_candidate;
+no_second_target:
+        candidate = target;
+remove_candidate:
         if (candidate != 0)
             mark_moby_for_removal(candidate);
         save_id = moby->save_id;
-        signed_save_id = (short)save_id;
-        bits = (int *)((char *)D_0014C190_8ab0 + (current_level_index << 8) + (signed_save_id >> 5) * 4);
+        bits = (int *)((char *)D_0014C190_8ab0 + (((int)(save_id << 16) >> 21) * 4 + (current_level_index << 8)));
         *bits |= 1 << (save_id & 31);
-        signed_save_id = *(volatile short *)&moby->save_id;
-        D_L10_001BA950_8ab0[(short)signed_save_id >> 5] |= 1 << (signed_save_id & 31);
+        save_id = moby->save_id;
+        D_L10_001BA950_8ab0[(int)(save_id << 16) >> 21] |= 1 << (save_id & 31);
         return;
     }
 }

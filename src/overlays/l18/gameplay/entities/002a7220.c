@@ -1446,6 +1446,7 @@ int FUN_L18_002d8050(struct Moby *arg) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d82c0.s", FUN_L18_002d82c0);
 #else
+extern float D_L18_0015F638 __attribute__((sda));
 extern float D_L18_00161A40 __attribute__((sda));
 extern float D_L18_00161A44 __attribute__((sda));
 extern float D_L18_00161A50 __attribute__((sda));
@@ -1468,7 +1469,6 @@ extern short allocate_voice_for_target_entry_short(int, int, struct Moby *) __as
 void FUN_L18_002d82c0(struct Moby *moby) {
     float delta[4] __attribute__((aligned(16)));
     float old_rotation[4] __attribute__((aligned(16)));
-    float *old_rotation_ptr;
     char *data = (char *)moby->pvars;
     float ratio;
     float speed;
@@ -1476,7 +1476,6 @@ void FUN_L18_002d82c0(struct Moby *moby) {
 
     scale_vector_xyz(delta, &moby->pos, -1.0f);
     qcopy_nc(old_rotation, &moby->rot);
-    old_rotation_ptr = old_rotation;
     switch (moby->state) {
     case 0:
         *(float *)(data + 0x60) = moby->pos.z;
@@ -1486,15 +1485,32 @@ void FUN_L18_002d82c0(struct Moby *moby) {
         *(int *)(data + 0x6C) = 0;
         *(float *)(data + 0x74) = random_angle_radians();
         *(int *)(data + 0x5C) |= 1;
-        moby->state = *(int *)(data + 0x88) == 0 ? 1 : 2;
+        if (*(int *)(data + 0x88)) {
+            moby->state = 2;
+        } else {
+            moby->state = 1;
+        }
+        break;
+    case 1:
+    case 2:
         break;
     case 3:
         if (FUN_001f9740((int *)(data + 0x7C))) {
             ratio = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) /
                     (D_L18_00161A64 - D_L18_00161A60);
-            ratio = ratio > 1.0f ? 1.0f : (ratio < 0.0f ? 0.0f : ratio);
-            speed = *(int *)(data + 0x84) ? D_L18_00161A50 : D_L18_00161A58;
-            *(float *)(data + 0x6C) = speed * (1.0f - ratio * 0.333f) * DEG_TO_RAD * frame_time;
+            if (ratio > 1.0f) {
+                ratio = 1.0f;
+            } else if (ratio < 0.0f) {
+                ratio = 0.0f;
+            }
+            ratio = 1.0f - ratio * 0.333f;
+            if (*(int *)(data + 0x84)) {
+                speed = D_L18_00161A50;
+            } else {
+                speed = D_L18_00161A58;
+            }
+            ratio = speed * ratio;
+            *(float *)(data + 0x6C) = ratio * DEG_TO_RAD * frame_time;
             moby->state = 4;
         }
         break;
@@ -1503,7 +1519,7 @@ void FUN_L18_002d82c0(struct Moby *moby) {
             FUN_L18_002d88b8(moby);
             *(int *)(data + 0x8C) = scale_ticks(FUN_L00_00257b90(0x5A, 0x78));
         }
-        if (D_0013F64C == moby && D_0013F65E == 0) {
+        if (hero.ground_moby == moby && hero.air_frames.s == 0) {
             *(int *)(data + 0x8C) = 0;
             moby->state = 5;
             *(short *)(data + 0x92) = allocate_voice_for_target_entry_short(1, 0, moby);
@@ -1520,29 +1536,44 @@ void FUN_L18_002d82c0(struct Moby *moby) {
         }
         ratio = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) /
                 (D_L18_00161A64 - D_L18_00161A60);
-        ratio = ratio > 1.0f ? 1.0f : (ratio < 0.0f ? 0.0f : ratio);
-        if (*(int *)(data + 0x80) == 0 &&
-            (*(int *)(data + 0x88) == 0 || *(int *)(data + 0x84) != 0)) {
-            gravity = *(int *)(data + 0x88) == 0 && *(int *)(data + 0x84) == 0 ?
-                D_L18_00161A44 : D_L18_00161A40;
-            gravity = gravity * (1.0f - ratio * 0.333f);
-            speed = frame_time_sq;
-        } else {
-            gravity = frame_time;
-            speed = 15.0f;
+        if (ratio > 1.0f) {
+            ratio = 1.0f;
+        } else if (ratio < 0.0f) {
+            ratio = 0.0f;
         }
-        *(float *)(data + 0x70) -= speed * gravity;
-        *(float *)(data + 0x64) += *(float *)(data + 0x70);
-        if (moby->pos.z < *(float *)(data + 0x60) - 10.0f) {
-            speed = frame_time;
-            if (D_0013F64C == moby && D_0013F65E == 0 &&
-                D_0013F3D0[2] < *(float *)0x0015F634 && *(int *)D_001413D4 != 0x77) {
-                FUN_L18_00227dd0(0x77, 1);
-                speed = frame_time_sq;
-            } else if (D_0013F64C == moby && D_0013F65E == 0) {
-                speed = frame_time_sq;
+        ratio = 1.0f - ratio * 0.333f;
+        if (*(int *)(data + 0x80) != 0) {
+            goto fixed_gravity;
+        }
+        if (*(int *)(data + 0x88) != 0) {
+            gravity = D_L18_00161A40;
+            if (*(int *)(data + 0x84) == 0) {
+fixed_gravity:
+                gravity = frame_time_sq;
+                speed = 15.0f;
+                goto apply_gravity;
             }
-            *(float *)(data + 0x70) -= speed * 13.7f;
+        } else {
+            if (*(int *)(data + 0x84)) {
+                gravity = D_L18_00161A40;
+            } else {
+                gravity = D_L18_00161A44;
+            }
+        }
+        speed = frame_time_sq;
+        gravity = gravity * ratio;
+apply_gravity:
+        gravity = gravity * speed;
+        speed = *(volatile float *)(data + 0x70);
+        *(volatile float *)(data + 0x70) = speed - gravity;
+        *(float *)(data + 0x64) += *(volatile float *)(data + 0x70);
+        if (moby->pos.z < *(float *)(data + 0x60) - 10.0f) {
+            if (hero.ground_moby == moby && hero.air_frames.s == 0) {
+                if (hero.motion.pos.f[2] < D_L18_0015F638 && hero.state.current != 0x77) {
+                    FUN_L18_00227dd0(0x77, 1);
+                }
+            }
+            *(float *)(data + 0x70) -= frame_time_sq * 13.7f;
             if (moby->pos.z < 15.0f) {
                 mark_moby_for_removal((struct Obj *)moby);
                 return;
@@ -1552,7 +1583,7 @@ void FUN_L18_002d82c0(struct Moby *moby) {
     }
     FUN_L18_002d8710(moby);
     add_vector_xyz(delta, delta, &moby->pos);
-    FUN_L00_00260738(data + 0x20, delta, old_rotation_ptr, &moby->rot);
+    FUN_L00_00260738(data + 0x20, delta, old_rotation, &moby->rot);
 }
 #endif
 /* Starts the moby's next phase with the given pair if it is waiting. */
@@ -2326,7 +2357,6 @@ void FUN_L18_002e9768(struct Moby *moby) {
     float *data = (float *)moby->pvars;
     int state = moby->state;
     int lifetime, spread;
-    int *first, *second;
     float magnitude;
 
     switch (state) {
@@ -2352,6 +2382,7 @@ void FUN_L18_002e9768(struct Moby *moby) {
             float *pos = &moby->pos.x;
             {
                 int i;
+                int *first, *second;
                 float colors[6];
                 float colors2[6];
                 float position[4];
@@ -2378,16 +2409,19 @@ void FUN_L18_002e9768(struct Moby *moby) {
             }
             {
                 int i;
+                int *first, *second;
                 float position[4];
                 float colors[6];
                 float velocity[4];
                 float colors2[6];
                 float direction[4];
+                float zero;
                 i = 0;
+                zero = (float)i;
                 do {
                     qcopy(position, pos);
                     ++i;
-                    position[2] += random_float_between_9768(0.0f, 6.0f);
+                    position[2] += random_float_between_9768(zero, 6.0f);
                     __builtin_memcpy(colors, D_L18_001F29A0_9768, 24);
                     __builtin_memcpy(colors2, D_L18_001F29B8_9768, 24);
                     *(OvlQuad *)direction = 0;
@@ -2395,7 +2429,7 @@ void FUN_L18_002e9768(struct Moby *moby) {
                     direction[1] = random_float_between_9768(-1.0f, 1.0f);
                     direction[2] = random_float_between_9768(-1.0f, 1.0f);
                     *(u128 *)velocity = *(u128 *)direction;
-                    scale_vector_9768(velocity, velocity, random_float_between_9768(0.0f, 3.0f) * frame_time);
+                    scale_vector_9768(velocity, velocity, random_float_between_9768(zero, 3.0f) * frame_time);
                     first = (int *)colors + random_integer_below_9768(6);
                     second = (int *)colors2 + random_integer_below_9768(6);
                     spawn_particle_alt_9768(500000.0f, position, velocity, *first,
@@ -2533,8 +2567,8 @@ extern int D_L18_00161EE4_flare __asm__("D_L18_00161EE4") __attribute__((sda));
 extern int D_L18_00161EE8_flare __asm__("D_L18_00161EE8") __attribute__((sda));
 extern int D_L18_00161EEC_flare __asm__("D_L18_00161EEC") __attribute__((sda));
 extern int D_L18_00161EF0_flare __asm__("D_L18_00161EF0") __attribute__((sda));
-extern int D_L18_00161EF8_flare[] __asm__("D_L18_00161EF8") __attribute__((sda));
-extern int D_L18_00161F08_flare[] __asm__("D_L18_00161F08") __attribute__((sda));
+extern int D_L18_00161EF8_flare[] __asm__("D_L18_00161EF8") __attribute__((section(".sdata")));
+extern int D_L18_00161F08_flare[] __asm__("D_L18_00161F08") __attribute__((section(".sdata")));
 extern void clear_flare_vector(void *) __asm__("FUN_001f99f8");
 extern float flare_length(float, float) __asm__("FUN_001f9e90");
 extern float flare_dot(void *, void *) __asm__("FUN_001f9b80");
@@ -2547,30 +2581,31 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
     L18FlareVector axis;
     L18FlareVector basis[4][4];
     float *data = (float *)moby->pvars;
-    int i, j;
-    volatile float size;
+    int i;
+    volatile int j;
+    float x, y;
     clear_flare_vector(&axis);
-    axis.z = flare_length(D_L18_001677C0_flare[0] - moby->pos.x,
-                          D_L18_001677C0_flare[1] - moby->pos.y);
+    x = D_L18_001677C0_flare[0] - moby->pos.x;
+    y = D_L18_001677C0_flare[1] - moby->pos.y;
+    axis.z = flare_length(x, y);
     axis.y = -flare_length(flare_dot(&moby->pos, D_L18_001677C0_flare),
                             D_L18_001677C0_flare[2] - moby->pos.z);
     copy_flare_vector(&basis[0][0], &axis);
     copy_flare_vector(&basis[1][0], &axis);
-    size = data[9];
-    scale_vector_xyz(&basis[1][1], &basis[1][1], size);
-    scale_vector_xyz(&basis[1][2], &basis[1][2], size);
-    basis[0][3] = *(L18FlareVector *)&moby->pos;
-    basis[1][3] = *(L18FlareVector *)&moby->pos;
+    scale_vector_xyz(&basis[1][1], &basis[1][1], data[9]);
+    scale_vector_xyz(&basis[1][2], &basis[1][2], data[9]);
+    *(OvlQuad *)&basis[0][3] = *(OvlQuad *)&moby->pos;
+    *(OvlQuad *)&basis[1][3] = *(OvlQuad *)&moby->pos;
     axis.x = data[11];
     copy_flare_vector(&basis[2][0], &axis);
-    scale_vector_xyz(&basis[2][1], &basis[2][1], size);
-    scale_vector_xyz(&basis[2][2], &basis[2][2], size);
-    basis[2][3] = *(L18FlareVector *)&moby->pos;
+    scale_vector_xyz(&basis[2][1], &basis[2][1], data[9]);
+    scale_vector_xyz(&basis[2][2], &basis[2][2], data[9]);
+    *(OvlQuad *)&basis[2][3] = *(OvlQuad *)&moby->pos;
     axis.x = data[12];
     copy_flare_vector(&basis[3][0], &axis);
-    scale_vector_xyz(&basis[3][1], &basis[3][1], size);
-    scale_vector_xyz(&basis[3][2], &basis[3][2], size);
-    basis[3][3] = *(L18FlareVector *)&moby->pos;
+    scale_vector_xyz(&basis[3][1], &basis[3][1], data[9]);
+    scale_vector_xyz(&basis[3][2], &basis[3][2], data[9]);
+    *(OvlQuad *)&basis[3][3] = *(OvlQuad *)&moby->pos;
     i = 0;
     do {
         packet[i].texture = get_effect_texture(D_L18_00161F08_flare[i]);
@@ -2586,21 +2621,20 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
             packet[i].uv[j].u = D_L18_001D9B50_flare[j].u;
             packet[i].uv[j].v = D_L18_001D9B50_flare[j].v;
             if (i == 0) {
-                packet[i].color[j] = tween_flare_color(size,
+                packet[i].color[j] = tween_flare_color(data[9],
                     D_L18_00161EF8_flare[i] & 0xffffff, D_L18_00161EF8_flare[i]);
             } else {
                 packet[i].color[j] = D_L18_00161EF8_flare[i];
             }
-            packet[i].corner[j] = D_L18_001D9B70_flare[i * 4 + j];
+            *(OvlQuad *)&packet[i].corner[j] = *(OvlQuad *)&D_L18_001D9B70_flare[i * 4 + j];
             j++;
         } while (j < 4);
         i++;
     } while (i < 4);
-    i = 0;
-    while (i != 4) {
-        draw_flare_packet(&packet[i], &basis[i][0], 0);
-        ++i;
-    }
+    draw_flare_packet(&packet[0], &basis[0][0], 0);
+    draw_flare_packet(&packet[1], &basis[1][0], 0);
+    draw_flare_packet(&packet[2], &basis[2][0], 0);
+    draw_flare_packet(&packet[3], &basis[3][0], 0);
 }
 #endif
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB988), where it is exact; names translated to the US level program. */

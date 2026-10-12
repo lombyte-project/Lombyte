@@ -100,11 +100,12 @@ s32 FUN_L01_00276fe8(s32 *ids, s32 n, s32 path_index, f32 radius,
     s32 mask;
     s32 best;
     s32 i;
+    s32 j;
     f32 nearest;
     f32 x;
     s32 *id = ids;
 
-    for (i = 0; i < n; i++) {
+    for (j = 0; j < n; j++) {
         if (radius != 0.0f) {
             vec_sub_276a48(&side, pos, target);
             vec_normalize_276a48(&side, &side, radius);
@@ -114,12 +115,12 @@ s32 FUN_L01_00276fe8(s32 *ids, s32 n, s32 path_index, f32 radius,
             side.f[1] = -x;
             vec_sub_276a48(&left, pos, &side);
             vec_add_276a48(&right, pos, &side);
-            if (FUN_L00_00261968_276a48(ids[i], &left, target)) {
+            if (FUN_L00_00261968_276a48(ids[j], &left, target)) {
                 hit = 1;
-            } else if (FUN_L00_00261968_276a48(ids[i], &right, target)) {
+            } else if (FUN_L00_00261968_276a48(ids[j], &right, target)) {
                 hit = 1;
             }
-        } else if (FUN_L00_00261968_276a48(ids[i], pos, target)) {
+        } else if (FUN_L00_00261968_276a48(ids[j], pos, target)) {
             hit = 1;
         }
         if (hit) break;
@@ -142,13 +143,13 @@ s32 FUN_L01_00276fe8(s32 *ids, s32 n, s32 path_index, f32 radius,
                 }
             }
             if (best >= 0) {
-                __builtin_memcpy(out, &path->pts[best], 16);
+                out->q = *(OvlQuad *)((u8 *)path + best * 16 + 16);
                 return 1;
             }
         }
         return 0;
     }
-    *out = *target;
+    out->q = target->q;
     return 1;
 }
 #endif

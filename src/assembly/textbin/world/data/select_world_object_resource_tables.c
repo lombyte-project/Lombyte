@@ -70,8 +70,8 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) __asm__
 void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     s32 runtime_index;
     s32 resource_table_index;
-    char *resource_data;
-    ClassResourceHeader **resource_table;
+    ClassResourceHeader *resource_data;
+    void **resource_table;
     u8 class_slot;
     s32 resource_tag;
     s32 vendor_item_index;
@@ -91,15 +91,15 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
         buffer_index = active_decode_buffer == 0;
     }
     active_decode_buffer = buffer_index;
-    resource_data = level_resource_buffers.decode_buffers + buffer_index * 0x18000;
+    resource_data = (ClassResourceHeader *)(level_resource_buffers.decode_buffers + buffer_index * 0x18000);
     FlushCache(0);
     decompress_wad(compressed_class_resources[active_class_resource_index], resource_data);
     FlushCache(0);
     /* The byte-sized class slot selects both the published pointer and the saved +0x2C word. */
-    resource_table = (ClassResourceHeader **)moby_class_resources;
+    resource_table = moby_class_resources;
     class_slot = resident_class_slot_by_id[class_id];
-    resource_table[class_slot] = (ClassResourceHeader *)resource_data;
-    D_001B6180[class_slot] = ((ClassResourceHeader *)resource_data)->original_field_2c;
+    resource_table[class_slot] = resource_data;
+    D_001B6180[class_slot] = resource_data->original_field_2c;
     prepare_resident_class_render_data(resource_data, resident_indexed_textures,
                                        class_material_maps[active_class_resource_index], class_id);
     resource_table_index = active_class_resource_index;
@@ -108,9 +108,9 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     for (runtime_index = 0; runtime_index < 16; runtime_index++) {
         s16 runtime_entry_index = class_runtime_indices[resource_table_index][runtime_index];
         if (runtime_entry_index >= 0) {
-            resource_table[class_slot]->runtime_table[runtime_index].runtime_index =
+            ((ClassResourceHeader *)resource_table[class_slot])->runtime_table[runtime_index].runtime_index =
                 runtime_entry_index;
-            resource_table[class_slot]->runtime_table[runtime_index].resource_tag =
+            ((ClassResourceHeader *)resource_table[class_slot])->runtime_table[runtime_index].resource_tag =
                 resource_tag;
         }
     }

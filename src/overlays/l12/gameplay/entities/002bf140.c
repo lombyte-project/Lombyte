@@ -10,7 +10,18 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002bf140.s", FUN_L12_002bf140);
 #else
+typedef struct {
+    float position[3];
+    char unk0C[0x12];
+    u16 visibility;
+    char unk20[0x1170];
+} L12Slot;
 extern char D_L12_001CBF40_c[] __asm__("D_L12_001CBF40");
+extern char D_L12_001CAD00_c[] __asm__("D_L12_001CAD00");
+extern char D_L12_001CBE00_c[] __asm__("D_L12_001CBE00");
+
+extern char D_L12_0020BC90[];
+extern char D_L12_00167240[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern void FUN_L12_002bf770(int);
 
@@ -34,7 +45,7 @@ extern void move_scalar_c(float *, float *, float, float, float, float) __asm__(
 extern void move_slot_c(float, float, float, float, void *, int, int) __asm__("FUN_L00_002a3ec8");
 extern int check_moby_c(float, void *) __asm__("FUN_L01_00275690");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void register_callback_c(void *, void *) __asm__("FUN_001f4600");
+extern void register_callback_c(void *, void *) __asm__("FUN_L12_0021be50");
 extern void FUN_L12_002bf6d0(struct Moby *);
 extern void FUN_L12_002bf770(int);
 extern void FUN_L12_002bf748(void);
@@ -46,12 +57,13 @@ void FUN_L12_002bf140(struct Moby *moby) {
     float value;
     float other;
     int i;
-    if (state == 1) goto state_one;
-    if (state < 2) {
-        if (state != 0) goto update_slot;
-        data[3] = D_L12_00151388++;
-        if (D_L12_00151388 > 0x7f) {
-            slot_limit_c(0x20bc90);
+    switch (state) {
+    case 0:
+        i = D_L12_00151388 + 1;
+        data[3] = D_L12_00151388;
+        D_L12_00151388 = i;
+        if (i > 0x7f) {
+            slot_limit_c((int)D_L12_0020BC90);
         }
         moby->scale = moby->pclass->scale * 2.0f;
         data[0] = 3;
@@ -67,24 +79,24 @@ void FUN_L12_002bf140(struct Moby *moby) {
             } while (--i >= 0);
             initialize_slots_c(D_L12_001CBF40_c, 17);
             initialize_slot_data_c(1.0f);
-            *(float *)0x001cad00 = 16.0f;
-            *(float *)0x001cad0c = -8.0f;
-            *(float *)0x001cad18 = 0.9f;
-            *(float *)0x001cad08 = -8.0f;
-            *(float *)0x001cad20 = 0.1f;
-            *(float *)0x001cad14 = 1.0f;
-            *(float *)0x001cad10 = 1.0f;
-            *(float *)0x001cad04 = 16.0f;
+            *(volatile float *)(D_L12_001CAD00_c + 0x00) = 16.0f;
+            *(volatile float *)(D_L12_001CAD00_c + 0x0c) = -8.0f;
+            *(volatile float *)(D_L12_001CAD00_c + 0x18) = 0.9f;
+            *(volatile float *)(D_L12_001CAD00_c + 0x08) = -8.0f;
+            *(volatile float *)(D_L12_001CAD00_c + 0x20) = 0.1f;
+            *(volatile float *)(D_L12_001CAD00_c + 0x14) = 1.0f;
+            *(volatile float *)(D_L12_001CAD00_c + 0x10) = 1.0f;
+            *(volatile float *)(D_L12_001CAD00_c + 0x04) = 16.0f;
             value = angle_c(*(float *)0x00180350, *(float *)0x00180354);
-            *(float *)0x001cad30 = sine_c(value) * 0.57735f;
-            *(float *)0x001cad34 = cosine_c(value) * 0.57735f;
-            *(int *)0x001cad38 = 0xbf13cd36;
-            *(int *)0x001cad28 = data[0] + 0x28;
-            *(u8 *)0x001cad3d = 0x40;
-            *(int *)0x001cad2c = data[1] + 0x28;
-            *(u8 *)0x001cad3c = 0x1c;
+            *(volatile float *)(D_L12_001CAD00_c + 0x30) = sine_c(value) * 0.57735f;
+            *(volatile float *)(D_L12_001CAD00_c + 0x34) = cosine_c(value) * 0.57735f;
+            *(volatile float *)(D_L12_001CAD00_c + 0x38) = -0.57735f;
+            *(volatile int *)(D_L12_001CAD00_c + 0x28) = data[0] + 0x28;
+            *(volatile u8 *)(D_L12_001CAD00_c + 0x3d) = 0x40;
+            *(volatile int *)(D_L12_001CAD00_c + 0x2c) = data[1] + 0x28;
+            *(volatile u8 *)(D_L12_001CAD00_c + 0x3c) = 0x1c;
             *(char **)0x001612d0 = D_L12_001CBF40_c;
-            *(void **)0x001612d4 = (void *)0x1cbe00;
+            *(void **)0x001612d4 = D_L12_001CBE00_c;
             *(int *)0x001612d8 = 17;
             *(float *)0x0016120c = 32768.0f;
             *(float *)0x00161210 = 255.0f;
@@ -98,10 +110,17 @@ void FUN_L12_002bf140(struct Moby *moby) {
         *(int *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x18) = data[1] + 0x28;
         *(u8 *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x1c) = 0x1c;
         *(u8 *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x1d) = 0x44;
-        *(u16 *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x1e) = 0xffff;
-        copy_slot_c(D_L12_001CBF40_c + data[3] * 0x1190, (char *)0x1cbe00 + data[3] * 16);
+        ((L12Slot *)D_L12_001CBF40_c)[data[3]].visibility = 0xffff;
+        copy_slot_c(D_L12_001CBF40_c + data[3] * 0x1190, D_L12_001CBE00_c + data[3] * 16);
         moby->state = 1;
-    } else if (state == 2) {
+        break;
+    case 1:
+        D_L12_00151388 = 0;
+        FUN_L12_002bf770(data[3]);
+        moby->state = 2;
+        *(float *)(data + 4) = moby->pos.z;
+        break;
+    case 2:
         if ((moby->unkBC & 4) == 0) {
             moby->unkBC = 1;
         } else {
@@ -113,32 +132,32 @@ void FUN_L12_002bf140(struct Moby *moby) {
             move_scalar_c(&moby->pos.z, (float *)(data + 2), *(float *)(data + 4), D_0015ED70_c * 4.0f, D_0015ED70_c * 4.0f, D_0015ED6C_c * 4.0f);
             FUN_L12_002bf6d0(moby);
         }
-        if (absolute_float(D_0013F3D0_c - moby->pos.x) <= 8.0f ||
-            absolute_float(D_0013F3D4_c - moby->pos.y) <= 8.0f) {
-            D_0013F640_c = moby->pos.z;
+        if (absolute_float(hero.motion.pos.f[0] - moby->pos.x) <= 8.0f ||
+            absolute_float(hero.motion.pos.f[1] - moby->pos.y) <= 8.0f) {
+            hero.water_surface_z = moby->pos.z;
         }
         if (random_integer_below_c(200) == 0) {
-            value = *(float *)(D_L12_001CBF40_c + data[3] * 0x1190) + random_float_between_c(-4.0f, 4.0f);
-            other = *(float *)(D_L12_001CBF40_c + data[3] * 0x1190 + 4) + random_float_between_c(-4.0f, 4.0f);
-            move_slot_c(value, other, 1.0f, -0.05f, D_L12_001CBF40_c + data[3] * 0x1190, 1, 1);
+            char *p;
+            other = random_float_between_c(-4.0f, 4.0f);
+            value = *(float *)(D_L12_001CBF40_c + data[3] * 0x1190);
+            value += other;
+            other = random_float_between_c(-4.0f, 4.0f);
+            p = D_L12_001CBF40_c + data[3] * 0x1190;
+            move_slot_c(value, *(float *)(p + 4) + other, 1.0f, -0.05f, p, 1, 1);
         }
+        break;
     }
-    goto update_slot;
-state_one:
-    {
-        D_L12_00151388 = 0;
-        FUN_L12_002bf770(data[3]);
-        moby->state = 2;
-        data[4] = *(int *)&moby->pos.z;
-    }
-    goto update_slot;
 update_slot:
     slot = data[3];
     if (slot >= 0) {
         float visible = 0.0f;
         if (check_moby_c(64.0f, moby) != -1) visible = 1.0f;
-        if (data[6] != -1 && is_point_inside_clip_volume((void *)0x167240, data[6]) == 0) visible = 0.0f;
-        *(u16 *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x1e) = visible == 0.0f ? 0 : 0xffff;
+        if (data[6] != -1 && is_point_inside_clip_volume(D_L12_00167240, data[6]) == 0) visible = 0.0f;
+        if (visible == 0.0f) {
+            ((L12Slot *)D_L12_001CBF40_c)[data[3]].visibility = 0;
+        } else {
+            ((L12Slot *)D_L12_001CBF40_c)[data[3]].visibility = 0xffff;
+        }
         if (data[3] == 0) {
             finish_slots_c(D_L12_001CBF40_c, 17);
             register_callback_c(FUN_L12_002bf748, moby);
@@ -856,9 +875,10 @@ void FUN_L12_002e3098(struct Moby *moby) {
     count = D_L12_0016183C;
     if (moby->state == 15)
         count = truncate_float_to_s32_e3098((float)count * 1.5f);
+    i = 0;
     if (count > 0) {
         position = pos;
-        i = 0;
+
         do {
         qcopy(pos, &moby->pos);
         randomize_position(position, D_L12_00161844);
@@ -895,7 +915,7 @@ void FUN_L12_002e3098(struct Moby *moby) {
             life = truncate_float_to_s32_e3098(FUN_001f96b0(
                 random_float_between_alt_e3098(
                     (float)D_L12_00161884 * 0.5f, (float)D_L12_00161884 * 2.5f)));
-            spawn_particle(position, velocity, accel, a, b, c, d, life, -1);
+            spawn_particle(pos, velocity, accel, a, b, c, d, life, -1);
         }
         } while (++i < count);
     }

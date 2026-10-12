@@ -631,96 +631,93 @@ extern struct Moby *D_L10_0015FFD8;
 extern float FUN_001fa6c0_2c9c70(int) __asm__("FUN_001fa6c0");
 extern int FUN_001fa6d0_2c9c70(float) __asm__("FUN_001fa6d0");
 extern int FUN_001f9740_2c9c70(int *) __asm__("FUN_001f9740");
-extern int D_0015ED84_2c9c70 __asm__("D_0015ED84");
+extern int D_0015ED84_2c9c70 __asm__("D_0015ED84") __attribute__((section(".data")));
+extern int D_0015ED84;
 extern unsigned char D_0014C190_2c9c70[] __asm__("D_0014C190");
 extern unsigned char D_0014C050_2c9c70[] __asm__("D_0014C050");
+
+extern char linked_moby_warning[] __asm__("D_L10_001DCDA0");
+extern char linked_moby_present_message[] __asm__("D_L10_001DCDD0");
+extern char linked_moby_missing_message[] __asm__("D_L10_001DCE00");
 
 void FUN_L10_002c9c70(struct Moby *moby) {
     char *d = (char *)moby->pvars;
     struct Moby *target = 0;
     int differences = 0;
-    int i;
     int *slot = (int *)(d + 0x18);
     unsigned char state;
 
     if (*(int *)(d + 0x10) != -1) {
         target = &D_L10_0015FFD8[*(int *)(d + 0x10)];
     }
-    state = moby->state;
-    if ((moby->unkB0 == 0xff ||
-         D_0014C050_2c9c70[(D_0015ED84_2c9c70 << 4) + moby->unkB0] != 0xff) &&
-        state != 0) {
-        i = 4;
-        do {
-            int index = *slot;
-            if (index != -1) {
-                struct Moby *other = &D_L10_0015FFD8[index];
-                if (other != 0 && other->oclass == *(short *)(slot + 1) &&
-                    other->state != 0xfe && other->state != 0xfd) {
-                    unsigned short id = other->save_id;
-                    if ((((*(int *)(D_0014C190_2c9c70 + (((short)id >> 5) * 4) +
-                              (D_0015ED84_2c9c70 << 8)) >> (id & 31)) ^ 1) & 1) != 0) {
-                        if (*(signed char *)((char *)slot + 6) == -1 ||
-                            other->state != *(signed char *)((char *)slot + 6))
-                            differences++;
+    {
+        unsigned char id = moby->unkB0;
+        if ((id == 0xff ||
+             D_0014C050_2c9c70[id + (D_0015ED84 << 4)] != 0xff) &&
+            moby->state != 0) {
+            int *entry = slot;
+            int i = 4;
+            do {
+                int index = *entry;
+                if (index != -1) {
+                    struct Moby *other = &D_L10_0015FFD8[index];
+                    if (other != 0 && other->oclass == *(short *)(entry + 1) &&
+                        other->state != 0xfe && other->state != 0xfd) {
+                        unsigned short id = other->save_id;
+                        if ((((*(int *)(D_0014C190_2c9c70 + (((short)id >> 5) * 4) +
+                                  (D_0015ED84_2c9c70 << 8)) >> (id & 31)) ^ 1) & 1) != 0) {
+                            if (*(signed char *)((char *)entry + 6) == -1 ||
+                                other->state != *(signed char *)((char *)entry + 6))
+                                differences++;
+                        }
                     }
                 }
-            }
-            i--;
-            slot += 2;
-        } while (i >= 0);
+                i--;
+                entry += 2;
+            } while (i >= 0);
+        }
     }
-    switch (state) {
+    switch (state = moby->state) {
     case 0:
-        if (target == 0) {
-            stub_printf((char *)0x001dcda0);
-        } else {
+        /* Position flags select opposite copy directions; rotation flags have priority. */
+        if (target != 0) {
             *(short *)(d + 0x14) = target->oclass;
             *(float *)(d + 0x44) = FUN_001fa6c0_2c9c70(target->unk23);
-            {
-                OvlQuad *position_source;
-                OvlQuad *position_destination;
-                if ((*(int *)(d + 8) & 0x10) != 0) {
-                    position_source = (OvlQuad *)&moby->pos;
-                    position_destination = (OvlQuad *)&target->pos;
-                } else {
-                    position_source = (OvlQuad *)&target->pos;
-                    position_destination = (OvlQuad *)&moby->pos;
-                }
-                if ((*(int *)(d + 8) & 0x50) != 0) *position_destination = *position_source;
+            if ((*(int *)(d + 8) & 0x10) != 0) {
+                qcopy(&moby->pos, &target->pos);
+            } else if ((*(int *)(d + 8) & 0x40) != 0) {
+                qcopy(&target->pos, &moby->pos);
             }
             if ((*(int *)(d + 8) & 0x20) != 0) {
-                *(OvlQuad *)&moby->rot = *(OvlQuad *)&target->rot;
+                qcopy_nc(&moby->rot, &target->rot);
             } else if ((*(int *)(d + 8) & 0x80) != 0) {
-                *(OvlQuad *)&target->rot = *(OvlQuad *)&moby->rot;
-            } else {
-                stub_printf((char *)0x001dcda0);
+                qcopy_nc(&target->rot, &moby->rot);
+            }
+        } else {
+            /* Retail logs only a missing target; neither rotation flag is silent. */
+            stub_printf(linked_moby_warning);
+        }
+        {
+            int *entry = slot;
+            int i;
+            for (i = 0; i < 5; i++, entry += 2) {
+                int index = *entry;
+                if (index != -1) {
+                    char *base = D_L10_0015FFD8_p;
+                    unsigned short oclass = *(unsigned short *)((index << 8) + (int)base + 0xa6);
+                    *(short *)(entry + 1) = oclass;
+                    stub_printf(linked_moby_present_message, ((char *)moby - base) >> 8,
+                                i, index, (short)oclass);
+                } else {
+                    stub_printf(linked_moby_missing_message, ((char *)moby - D_L10_0015FFD8_p) >> 8, i);
+                }
             }
         }
         {
-        int *entry = (int *)(d + 0x18);
-        struct Moby *base = D_L10_0015FFD8;
-        char *present_message = (char *)0x001dcdd0;
-        char *missing_message = (char *)0x001dce00;
-        int moby_index = ((char *)moby - (char *)D_L10_0015FFD8) >> 8;
-        for (i = 0; i < 5; i++, entry += 2) {
-            int index = *entry;
-            if (index == -1) {
-                stub_printf(missing_message, moby_index, i);
-            } else {
-                short oclass = base[index].oclass;
-                *(short *)(entry + 1) = oclass;
-                stub_printf(present_message, moby_index,
-                            i, index, oclass);
-            }
-        }
-        }
-        {
-            if (*(float *)d < *(float *)(d + 4)) {
-                moby->scale = *(float *)(d + 4) * moby->pclass->scale;
-            } else {
-                moby->scale = *(float *)d * moby->pclass->scale;
-            }
+            float initial = *(float *)(d + 4);
+            float now = *(float *)d;
+            float scale = moby->pclass->scale;
+            moby->scale = (now < initial ? initial * scale : now * scale);
         }
         moby->state = 1;
         break;
@@ -768,9 +765,6 @@ void FUN_L10_002d7b18(struct Moby *a, float t) {
         a->pos.z = t;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b80.s", FUN_L10_002d7b80);
-#else
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern void FUN_001f9c48(void *, void *, float);
 extern void FUN_001f9bf8(void *, void *, float);
@@ -849,7 +843,7 @@ void FUN_L10_002d7b80(struct Moby *moby) {
                         **(char **)(data + 0x14) = 1;
                 }
             }
-            for (i = 4; i >= 0; i--) {
+            for (i = 0; i < 5; i++) {
                 *(OvlQuad *)rand_dir = 0;
                 rand_dir[0] = random_float_between_alt(-1.0f, 1.0f);
                 rand_dir[1] = random_float_between_alt(-1.0f, 1.0f);
@@ -872,7 +866,6 @@ void FUN_L10_002d7b80(struct Moby *moby) {
         FUN_001f9b80(&moby->pos, &D_L10_00167240) > 80.0f)
         mark_moby_for_removal_d7b80(moby);
 }
-#endif
 #ifndef NOT_SDA
 #endif
 #ifndef MACRO_ADDR
@@ -1062,12 +1055,10 @@ extern float D_0015ED70;
 extern float FUN_L00_0025ab48(float, float);
 extern float scale_game_frames_alt(float) __asm__("FUN_001f96f8");
 extern float D_L10_00161BEC __attribute__((sda));
-extern int FUN_001f9770(int);
 extern int FUN_L00_001f2868();
 extern int FUN_L00_002502f0();
 extern int FUN_L00_00250320();
 extern int FUN_L00_0025a9f8(float, void *, int, void *, void *);
-extern void FUN_001f9c48(void *, int, int, int);
 extern void FUN_L00_0025a420(void *, void *, void *);
 extern void FUN_L00_0025f090(void *,void *,void *,int,int,int,int,int,float,float,float);
 extern void add_vector_xyz_alt(void *) __asm__("FUN_001f9a10");
@@ -1768,7 +1759,7 @@ void FUN_L10_002da2c8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     union { unsigned char order[10]; float position2[4]; } scratch;
     float position1[4];
-    float half_height;
+    float half_height, half_width, radius_squared;
     int pass, i, copy_index;
 
     if (*(int *)(data + 0xC) == -1) {
@@ -1799,20 +1790,25 @@ void FUN_L10_002da2c8(struct Moby *moby) {
             } while (copy_index < *(int *)(data + 4));
         }
         {
+            float timer;
             float new_rotation = fast_add_rotations(moby->rot.z, 1.5707964f);
-            *(volatile unsigned char *)&moby->state = 1;
-            *(volatile unsigned char *)&moby->unk30 = 0x60;
+            moby->unk30 = 0x60;
+            moby->state = 1;
+            timer = D_L10_00161C98 * 60.0f;
             moby->rot.z = new_rotation;
+            *(int *)(data + 0x30) = -1;
+            *(int *)(data + 0x34) = FUN_001f96f8(FUN_001fa6d0(timer));
         }
-        *(int *)(data + 0x30) = -1;
-        *(int *)(data + 0x34) = FUN_001f96f8(FUN_001fa6d0(D_L10_00161C98 * 60.0f));
+
         moby->flags |= 0x41;
         break;
     case 1:
         half_height = (float)*(int *)(data + 4) * *(float *)(data + 8) * 0.5f;
+        half_width = *(float *)data * 0.5f;
         *(OvlQuad *)position1 = *(OvlQuad *)&moby->pos;
+        radius_squared = half_height * half_height;
         position1[2] += half_height;
-        position1[3] = FUN_001f9988(half_height * half_height + (*(float *)data * 0.5f) * (*(float *)data * 0.5f));
+        position1[3] = FUN_001f9988(radius_squared + half_width * half_width);
         if (FUN_001f9b48(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)FUN_001fa728(position1))
             enqueue_callback_list_1((void *)FUN_L10_002da690, moby);
         if (FUN_L00_0028d8c0(moby, *(int *)(data + 0x30)) == 0)
@@ -1829,9 +1825,11 @@ void FUN_L10_002da2c8(struct Moby *moby) {
         }
         *(int *)(data + 0x30) = -1;
         half_height = (float)*(int *)(data + 4) * *(float *)(data + 8) * 0.5f;
+        half_width = *(float *)data * 0.5f;
         *(OvlQuad *)scratch.position2 = *(OvlQuad *)&moby->pos;
+        radius_squared = half_height * half_height;
         scratch.position2[2] += half_height;
-        scratch.position2[3] = FUN_001f9988(half_height * half_height + (*(float *)data * 0.5f) * (*(float *)data * 0.5f));
+        scratch.position2[3] = FUN_001f9988(radius_squared + half_width * half_width);
         if (FUN_001f9b48(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)FUN_001fa728(scratch.position2))
             enqueue_callback_list_1((void *)FUN_L10_002da690, moby);
         break;
@@ -1850,7 +1848,7 @@ extern void multiply_matrix_da690(void *, void *, void *) __asm__("FUN_001fa378"
 extern float convert_integer_to_float_da690(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32_da690(float) __asm__("FUN_001fa6d0");
 extern unsigned int fast_tween_color_da690(float, int, int) __asm__("FUN_001fa6e0");
-extern float scale_time_da690(float) __asm__("FUN_001f96b0");
+extern float scale_time_da690(float) __asm__("FUN_L10_001f2578");
 extern void add_vector_xyz_da690(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_geometry_quad_da690(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L10_00161D60;
@@ -1861,11 +1859,17 @@ void FUN_L10_002da690(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *base = *(char **)((char *)D_L10_0015FFD8 + *(int *)(data + 0xc) * 0x100 + 0x78);
     char scratch[(unsigned int)*(int *)(data + 4) * 0x40];
-    float rotation[16];
-    float matrix1[16], matrix2[16];
-    unsigned char quad[0xa0];
-    u64 *words1 = (u64 *)matrix1;
-    u64 *words2 = (u64 *)matrix2;
+    /* The draw helper reads UVs at quad + 0x50 and packet words at quad + 0x70. */
+    struct {
+        float matrix1[16];
+        union {
+            unsigned char quad[0x90];
+            struct { unsigned char vertices[0x50]; float matrix2[16]; } fields;
+        } packet;
+        float rotation[16];
+    } buffers __attribute__((aligned(16)));
+    u64 *words1 = (u64 *)buffers.matrix1;
+    u64 *words2 = (u64 *)buffers.packet.fields.matrix2;
     int i, group, row, vertex;
     float fade, phase;
     char *transform;
@@ -1873,10 +1877,10 @@ void FUN_L10_002da690(struct Moby *moby) {
     fade = vector_distance_da690(&moby->pos, &D_L10_00167240);
     if (fade > 48.0f) fade = (80.0f - fade) * 0.03125f;
     else fade = 1.0f;
-    rotation_matrix_y_da690(rotation, *(float *)data * 0.5f);
+    rotation_matrix_y_da690(buffers.rotation, *(float *)data * 0.5f);
     for (i = 0, transform = scratch; i < *(int *)(data + 4); i++, transform += 0x40) {
         rotation_matrix_da690(transform, &moby->rot);
-        multiply_matrix_da690(transform, transform, rotation);
+        multiply_matrix_da690(transform, transform, buffers.rotation);
         *(OvlQuad *)(transform + 0x30) = *(OvlQuad *)&moby->pos;
         *(float *)(transform + 0x38) += convert_integer_to_float_da690(i + 1) * *(float *)(data + 8);
     }
@@ -1890,8 +1894,7 @@ void FUN_L10_002da690(struct Moby *moby) {
     words2[6] = words1[6];
     words2[7] = words1[7];
     for (i = 0; i < 4; i++) {
-        matrix1[i * 2 + 1] = ((float *)0x001d9ff4)[i * 2];
-        matrix2[i * 2 + 1] = ((float *)0x001d9ff4)[i * 2];
+        buffers.matrix1[i * 2 + 1] = buffers.packet.fields.matrix2[i * 2 + 1] = ((float *)0x001d9ff4)[i * 2];
     }
     for (group = 0; group < 4; group++) {
         phase = 0.0f;
@@ -1900,8 +1903,8 @@ void FUN_L10_002da690(struct Moby *moby) {
             if (phase > 1.0f) phase -= 1.0f;
             for (i = 0; i < 4; i++) {
                 float value = ((float *)0x001d9ff0)[i * 2] + phase + *(float *)(base + 0x12de0);
-                matrix1[i * 2] = value;
-                matrix2[i * 2] = value;
+                buffers.matrix1[i * 2] = value;
+                buffers.packet.fields.matrix2[i * 2] = value;
             }
             for (i = 0; i < *(int *)(data + 4); i++) {
                 unsigned char *order = (unsigned char *)(data + 0x10);
@@ -1924,12 +1927,16 @@ void FUN_L10_002da690(struct Moby *moby) {
                     float duration = scale_time_da690(*(float *)0x0015b098 * 60.0f);
                     color = (truncate_float_to_s32_da690(alpha * 255.0f / duration) << 24) | 0xffffff;
                 }
-                for (vertex = 0; vertex < 4; vertex++) *(unsigned int *)(quad + 0x40 + vertex * 4) = color;
+
+                *(unsigned int *)(buffers.packet.quad + 0x40) = color;
+                *(unsigned int *)(buffers.packet.quad + 0x4c) = color;
+                *(unsigned int *)(buffers.packet.quad + 0x48) = color;
+                *(unsigned int *)(buffers.packet.quad + 0x44) = color;
                 for (vertex = 0; vertex < 4; vertex++) {
-                    add_vector_xyz_da690(quad + vertex * 0x10, (char *)0x001da010 + vertex * 0x10,
+                    add_vector_xyz_da690(buffers.packet.quad + vertex * 0x10, (char *)0x001da010 + vertex * 0x10,
                         base + group * 0x2580 + (row + (vertex >> 1)) * 0x140 + order[i] * 0x10);
                 }
-                draw_geometry_quad_da690(quad, scratch + i * 0x40, 0);
+                draw_geometry_quad_da690(buffers.packet.quad, scratch + i * 0x40, 0);
             }
         }
     }
@@ -1987,12 +1994,7 @@ void FUN_L10_002dcc58(struct Moby *moby) {
                 char *base = data + group * 0x2580 + item * 0x10;
                 char *other = base + 0x9600;
                 char *buffer = (char *)scratch + item * 0x10;
-                if (FUN_001f25d0(entry) == 0) {
-                    for (row = 1; row < 19; row++) {
-                        char *dst = base + row * 0x140;
-                        FUN_001f28e0(dst, dst, other + row * 0x140);
-                    }
-                } else {
+                if (FUN_001f25d0(entry) != 0) {
                     char *dst = base;
                     char *out = buffer;
                     for (row = 0; row < 20; row++) {
@@ -2011,6 +2013,12 @@ void FUN_L10_002dcc58(struct Moby *moby) {
                         FUN_001f2968(0.333f, dst, dst);
                     }
                     *(int *)entry = D_L10_00161D64;
+                } else {
+                    for (row = 1; row < 19; row++) {
+                        char *dst = base + row * 0x140;
+                        FUN_001f28e0(dst, dst, other + row * 0x140);
+                    }
+
                 }
             }
             group_table += 0x78;

@@ -370,6 +370,7 @@ void FUN_L01_0022d090(void)
     probe.f[0] += fast_cos(hero.motion.rot.f[2]) * hero.unk234;
     probe.f[1] += fast_sin(hero.motion.rot.f[2]) * hero.unk234;
     while (1) {
+probe_next:
         probe.f[0] += fast_cos(hero.motion.rot.f[2]) * fwd * step;
         probe.f[1] += fast_sin(hero.motion.rot.f[2]) * fwd * step;
         qcopy(&top, &probe);
@@ -386,8 +387,9 @@ void FUN_L01_0022d090(void)
         i++;
         if (found)
             break;
-        if (i >= 4)
-            return;
+        if (i < 4)
+            goto probe_next;
+        return;
     }
 
     if (coll_hit.moby != 0) {
@@ -418,9 +420,11 @@ void FUN_L01_0022d090(void)
     else
         hero.unk4F4 &= ~1;
     ang = atan2_f(top.f[0] - hero.motion.pos.f[0], top.f[1] - hero.motion.pos.f[1]);
-    launch_scale = hero.ground_z.f;
-    hero.unk4E0 = top.f[2];
-    if (top.f[2] - launch_scale < 1.8f)
+    wall_yaw = hero.ground_z.f;
+    max_slope = top.f[2];
+    hero.unk4E0 = max_slope;
+    max_slope -= wall_yaw;
+    if (max_slope < 1.8f)
         return;
 
     five = 5.0f;
@@ -463,9 +467,11 @@ void FUN_L01_0022d090(void)
                 edge.f[1] += fast_sin(hero.unk4E4) * d;
                 qcopy(&hero.unk4D0, &edge);
                 hero.unk4D0.f[0] += fast_cos(hero.unk4E4) * edge_offset;
-                hero.unk4D0.f[1] += fast_sin(hero.unk4E4) * edge_offset;
-                hero.unk4D0.f[2] += -1.43f;
+                wall_yaw = fast_sin(hero.unk4E4) * edge_offset;
                 hero.unk4E8 = 1;
+                hero.unk4D0.f[1] = wall_yaw + hero.unk4D0.f[1];
+                wall_yaw = -1.43f;
+                hero.unk4D0.f[2] += wall_yaw;
                 return;
             }
             d += inc;
@@ -1301,7 +1307,7 @@ extern f32 vector_length_xy_34358(void *) __asm__("FUN_001f9b20");
 
 void FUN_L01_00234358(float amount) {
     f32 delta[4];
-    Vec4 *velocity = &hero.motion.velocity;
+    Vec4 *velocity;
     Vec4 saved;
     f32 value;
     f32 angle;
@@ -1309,66 +1315,74 @@ void FUN_L01_00234358(float amount) {
     f32 factor;
     f32 length;
     f32 current_length;
+    f32 min_factor;
+    int mode = hero.unk20B3;
 
-    if (hero.unk20B3 == 0)
+    if (mode == 0)
         goto zero_mode;
-    if (hero.unk20B3 == 1 || hero.unk20B3 == 2)
+    if (mode < 0)
+        return;
+    if (mode < 3)
         goto nonzero_mode;
     return;
 zero_mode:
-            angle = hero.motion.move_yaw;
-            speed = hero.target_speed;
-            if (hero.state.control_mode == 4) {
-                if (hero.unk30A == 0) {
-                    if (hero.unk4A4 != 0 && hero.wall_hit != 0)
-                        speed = frame_time * 2.1f;
-                }
-            }
-            if (hero.unk30A != 0) {
-                if (hero.state.current == 0xE && frame_time < speed)
-                    speed = frame_time;
-            }
-            delta[0] = fast_cos(angle) * speed;
-            delta[1] = fast_sin(angle) * speed;
-            delta[2] = velocity->f[2];
-            factor = -(velocity->f[0] * delta[0] + velocity->f[1] * delta[1]);
-            length = vector_length_xy_34358(delta);
-            current_length = vector_length_xy_34358(velocity);
-            if (length == 0.0f) {
-                factor = 0.0f;
-                goto ratio_done;
-            }
-            if (current_length != 0.0f) {
-                factor /= length;
-                goto divide_current;
-            }
-            factor = 0.0f;
-            goto ratio_done;
-        divide_current:
-            factor /= current_length;
-        ratio_done:
-            factor += 1.0f;
-            factor *= 1.5f;
-            if (hero.state.current == 0x81) {
-                if (factor > 1.7f)
-                    factor = 1.7f;
-            } else if (factor > 3.0f) {
-                factor = 3.0f;
-            }
-            if (factor < 1.0f)
-                factor = 1.0f;
-            amount *= factor;
-            subtract_vector_xyz_34358(delta, delta, velocity);
-            length = vector_length_xy_34358(delta);
-            if (amount < length)
-                FUN_001f9c48_34358(delta, delta, amount);
-            add_vector_xyz_34358(velocity, velocity, delta);
-            saved.q = hero.move_impulse.q;
-            hero.ground_speed = hero.motion.unk168 - FUN_L00_00213350_34358(&saved);
+    angle = hero.motion.move_yaw;
+    speed = hero.target_speed;
+    if (hero.state.control_mode == 4) {
+        if (hero.unk30A == 0) {
+            if (hero.unk4A4 != 0 && hero.wall_hit != 0)
+                speed = frame_time * 2.1f;
+        }
+    }
+    if (hero.unk30A != 0) {
+        if (hero.state.current == 0xE && frame_time < speed)
+            speed = frame_time;
+    }
+    delta[0] = fast_cos(angle) * speed;
+    delta[1] = fast_sin(angle) * speed;
+    delta[2] = hero.motion.velocity.f[2];
+    factor = -(hero.motion.velocity.f[0] * delta[0] + hero.motion.velocity.f[1] * delta[1]);
+    length = vector_length_xy_34358(delta);
+    current_length = vector_length_xy_34358(&hero.motion.velocity);
+    if (length == 0.0f) {
+        factor = 0.0f;
+        goto ratio_done;
+    }
+    if (current_length != 0.0f) {
+        factor /= length;
+        goto divide_current;
+    }
+    factor = 0.0f;
+    goto ratio_done;
+divide_current:
+    factor /= current_length;
+ratio_done:
+    min_factor = 1.0f;
+    factor += min_factor;
+    factor *= 1.5f;
+    if (hero.state.current == 0x81) {
+        if (factor > 1.7f)
+            factor = 1.7f;
+    } else if (factor > 3.0f) {
+        factor = 3.0f;
+    }
+    if (factor < min_factor)
+        factor = min_factor;
+    velocity = &hero.motion.velocity;
+    amount *= factor;
+    subtract_vector_xyz_34358(delta, delta, velocity);
+    length = vector_length_xy_34358(delta);
+    if (amount < length)
+        FUN_001f9c48_34358(delta, delta, amount);
+    add_vector_xyz_34358(velocity, velocity, delta);
+    /* velocity is at hero + 0xE0; retail keeps this base for the copy. */
+    saved.q = ((struct Hero *)((char *)velocity - 0xE0))->move_impulse.q;
+    ((struct Hero *)((char *)velocity - 0xE0))->ground_speed = ((struct Hero *)((char *)velocity - 0xE0))->motion.unk168 - FUN_L00_00213350_34358(&saved);
     return;
 nonzero_mode:
+        velocity = &hero.motion.velocity;
         value = FUN_L00_002339d0_34358(velocity);
-        approach_value_34358(hero.target_speed, amount, &value);
+        approach_value_34358(((struct Hero *)((char *)velocity - 0xE0))->target_speed, amount, &value);
         FUN_L00_00233ba0_34358(velocity, velocity, 0.0f);
         FUN_L00_00233708_34358(velocity, velocity, value);
 }

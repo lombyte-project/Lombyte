@@ -157,9 +157,9 @@ s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) {
     mip_word |= (u64)upload.buffer_widths[1] << 14;
     mip_word |= (u64)upload.texture_block_offsets[2] << 20;
     mip_word |= (u64)upload.buffer_widths[2] << 34;
+    regs[1] = ((u64)(tex->mip_level_count - 1) << 2) | 0xFFA0000000E0;
     mip_word |= (u64)upload.texture_block_offsets[3] << 40;
     mip_word |= (u64)upload.buffer_widths[3] << 54;
-    regs[1] = ((u64)(tex->mip_level_count - 1) << 2) | 0xFFA0000000E0;
     regs[2] = mip_word;
     return -1;
 }

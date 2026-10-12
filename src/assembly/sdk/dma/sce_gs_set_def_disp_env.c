@@ -26,7 +26,8 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
                         s16 height, s16 horizontal_offset, s16 vertical_offset) {
     GsVideoModeState *state;
     s32 kernel_horizontal, kernel_vertical, kernel_width, kernel_height;
-    s32 mode, scale, scaled_horizontal;
+    s32 mode, scale;
+    s64 scaled_horizontal;
     u16 interlace;
     u64 value;
 
@@ -43,74 +44,76 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
     mode = state->wMode;
     interlace = state->nSInterlace;
 
-    value = 0x66;
-    output->pmode = value;
-    value = 2;
+    output->pmode = 0x66;
     if (state->nSInterlace != 0) {
-        value = 3;
-        if (state->nSFrame_mode == 0) value = 1;
+        if (state->nSFrame_mode == 0) output->smode2 = 1;
+        else output->smode2 = 3;
+    } else {
+        output->smode2 = 2;
     }
-    output->smode2 = value;
     output->dispfb = ((u64)(pixel_storage_format & 15) << 15) |
-                     ((u64)((width + 63) & 0xfc0) << 3);
+                     ((u64)(((width + 63) >> 6) & 63) << 9);
 
-    if (mode == 2) {
+    if ((s16)mode == 2) {
         if ((s16)interlace == 1) {
             scale = width + 0x9ff;
             scale /= width;
             scaled_horizontal = horizontal_offset * scale;
-            value = ((u64)(((s64)scaled_horizontal + ((s64)kernel_horizontal + 0x27c)) & 0xfff)) |
-                    ((u64)(s64)(scale - 1) << 23) |
+            value = ((u64)((vertical_offset + kernel_vertical + 0x32) & 0xfff) << 12) |
                     ((u64)((s64)(width * scale) - 1) << 32) |
-                    ((u64)((vertical_offset + kernel_vertical + 0x32) & 0xfff) << 12);
+                    ((u64)(((s64)scaled_horizontal + ((s64)kernel_horizontal + 0x27c)) & 0xfff)) |
+                    ((u64)(s64)(scale - 1) << 23);
             if (state->nSFrame_mode == 0) {
-                value |= (u64)(s64)(height - 1) << 44;
+                scale = height - 1;
             } else {
-                value |= (u64)(s64)(height * 2 - 1) << 44;
+                scale = height * 2 - 1;
             }
+            value |= (u64)(s64)scale << 44;
         } else {
             scale = width + 0x9ff;
             scale /= width;
             scaled_horizontal = horizontal_offset * scale;
             value = ((u64)(s64)(height - 1) << 44) |
                     ((u64)(s64)(scale - 1) << 23) |
-                    ((u64)((s64)(width * scale) - 1) << 32) |
                     ((u64)(((s64)scaled_horizontal + (s64)(((u32)kernel_horizontal + 0x27cU) & 0xfffU)) & 0xfff)) |
+                    ((u64)((s64)(width * scale) - 1) << 32) |
                     ((u64)((vertical_offset + kernel_vertical + 0x19) & 0xfff) << 12);
         }
         output->display = value;
-    } else if (mode == 3) {
+    } else if ((s16)mode == 3) {
         if ((s16)interlace == 1) {
             scale = width + 0x9ff;
             scale /= width;
             scaled_horizontal = horizontal_offset * scale;
-            value = ((u64)(((s64)scaled_horizontal + ((s64)kernel_horizontal + 0x290)) & 0xfff)) |
-                    ((u64)(s64)(scale - 1) << 23) |
+            value = ((u64)((vertical_offset + kernel_vertical + 0x48) & 0xfff) << 12) |
                     ((u64)((s64)(width * scale) - 1) << 32) |
-                    ((u64)((vertical_offset + kernel_vertical + 0x48) & 0xfff) << 12);
-            if (state->nSFrame_mode == 0) {
-                value |= (u64)(s64)(height - 1) << 44;
+                    ((u64)(((s64)scaled_horizontal + ((s64)kernel_horizontal + 0x290)) & 0xfff)) |
+                    ((u64)(s64)(scale - 1) << 23);
+            if (state->nSFrame_mode != 0) {
+                scale = height * 2 - 1;
             } else {
-                value |= (u64)(s64)(height * 2 - 1) << 44;
+                scale = height - 1;
             }
+            value |= (u64)(s64)scale << 44;
         } else {
             scale = width + 0x9ff;
             scale /= width;
             scaled_horizontal = horizontal_offset * scale;
             value = ((u64)(s64)(height - 1) << 44) |
                     ((u64)(s64)(scale - 1) << 23) |
-                    ((u64)((s64)(width * scale) - 1) << 32) |
                     ((u64)(((s64)scaled_horizontal + (s64)(((u32)kernel_horizontal + 0x290U) & 0xfffU)) & 0xfff)) |
+                    ((u64)((s64)(width * scale) - 1) << 32) |
                     ((u64)((vertical_offset + kernel_vertical + 0x24) & 0xfff) << 12);
         }
         output->display = value;
-    } else if (mode == 0x50) {
+    } else if ((s16)mode == 0x50) {
         output->display = ((u64)(s64)(height - 1) << 44) |
-                          ((u64)(s64)(width * 2 - 1) << 32) |
-                          ((u64)(((s64)(horizontal_offset * 2) + kernel_horizontal +
-                                  ((0x2d0 - width) / 2 * 2) + 0xe8) & 0xfff)) |
                           ((u64)((vertical_offset + kernel_vertical + 0x23) & 0xfff) << 12) |
-                          0x800000ULL;
+                          0x800000ULL |
+                          ((u64)(((s64)((0x2d0 - width) / 2 * 2) +
+                                  ((s64)kernel_horizontal +
+                                   ((s64)(horizontal_offset * 2) + 0xe8))) & 0xfff)) |
+                          ((u64)(s64)(width * 2 - 1) << 32);
     } else {
         scePrintf("sceGsDefDispEnv:Not support displaymode for 0x%x!!\n");
     }

@@ -30,6 +30,7 @@ struct L07MovingVars {
 
 extern u8 D_0014C050[];
 extern u8 D_L07_0015FC88[];
+extern s32 D_L07_00184528[] NOT_SDA;
 extern struct Moby *D_L07_0015FFD8;
 extern float vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");

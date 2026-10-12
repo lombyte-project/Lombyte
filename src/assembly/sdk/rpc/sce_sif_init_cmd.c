@@ -13,19 +13,19 @@ struct M2c_D_00154E40 {
 };
 
 struct M2c_D_00154E58 {
-    s32 unk0;
-    s32 unk4;
+    u8 *unk0;
+    u8 *unk4;
     s32 unk8;
-    s32 unkC;
+    struct M2c_var_3_42 *unkC;
     s32 unk10;
-    s32 unk14;
+    struct M2c_var_3_42 *unk14;
     s32 unk18;
-    s32 unk1C;
+    s32 *unk1C;
 };
 
 struct M2c_var_3_42 {
-    s32 unk0;
-    s32 unk4;
+    void (*unk0)();
+    void *unk4;
 };
 
 extern void FUN_0011a428();
@@ -73,8 +73,8 @@ block_3:
     ipval = 0x20;
     temp_6_30 = (s32)D_00154D80 | 0x20000000;
     temp_5_29 = (s32)D_00154E00 | 0x20000000;
-    D_00154E58.unk0 = temp_6_30;
-    D_00154E58.unk4 = temp_5_29;
+    D_00154E58.unk0 = (u8 *)temp_6_30;
+    D_00154E58.unk4 = (u8 *)temp_5_29;
     D_00154E58.unk1C = D_00154F80;
     handlers = D_00154E80;
     var_3_42 = handlers;

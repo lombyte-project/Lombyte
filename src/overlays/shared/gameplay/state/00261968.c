@@ -6,6 +6,7 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261968.s", FUN_L00_00261968);
 #else
 #include "rnc/overlay/quad.h"
+#include "qcopy.h"
 
 typedef struct {
     s32 count;
@@ -33,6 +34,7 @@ s32 FUN_L00_00261968(s32 path_index, OvlVec4 *start, OvlVec4 *end) {
     s32 offset;
     f32 crossing;
 
+    i = 1;
     FUN_001ff2a8_261968(&direction, end, start);
     direction.i[2] = 0;
     FUN_001ff500_261968(&direction, &direction, 1.0f / FUN_001ff3d8_261968(&direction));
@@ -41,24 +43,27 @@ s32 FUN_L00_00261968(s32 path_index, OvlVec4 *start, OvlVec4 *end) {
     axis.f[1] = -direction.f[0];
     FUN_001ff260_261968(&origin);
     entry = &D_L00_001B04B0_261968[path_index];
-    FUN_001ff2a8_261968(&first, &(*entry)->points[0], start);
     origin.f[2] = 1.0f;
-    current = &next;
+    FUN_001ff2a8_261968(&first, &(*entry)->points[0], start);
     FUN_001ff6d0_261968(&first, &first, &direction);
     previous = &first;
-    i = 1;
+    current = &next;
     if (i < (*entry)->count) {
-    offset = 0x20;
-    for (; i < (*entry)->count; i++, offset += 0x10) {
-        FUN_001ff2a8_261968(current, (OvlVec4 *)((u8 *)*entry + offset), start);
-        FUN_001ff6d0_261968(current, current, &direction);
-        if ((first.f[3] != 0.0f || current->f[3] != 0.0f) && next.f[1] * first.f[1] < 0.0f) {
-            crossing = (previous->f[0] - current->f[0]) / (first.f[1] - next.f[1]) * -next.f[1] + current->f[0];
-            if (crossing > 0.0f && crossing < 1.0f)
-                return 1;
-        }
-        previous->q = current->q;
-    }
+        offset = 0x20;
+        do {
+            FUN_001ff2a8_261968(current, (OvlVec4 *)((u8 *)*entry + offset), start);
+            FUN_001ff6d0_261968(current, current, &direction);
+            if (first.f[3] != 0.0f || next.f[3] != 0.0f) {
+                if (next.f[1] * first.f[1] < 0.0f) {
+                    crossing = (first.f[0] - next.f[0]) / (first.f[1] - next.f[1]) * -next.f[1] + next.f[0];
+                    if (crossing > 0.0f && crossing < 1.0f)
+                        return 1;
+                }
+            }
+            qcopy(previous, current);
+            i++;
+            offset += 0x10;
+        } while (i < (*entry)->count);
     }
     return 0;
 }
@@ -154,7 +159,7 @@ extern void FUN_001ff3c0_261d78(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_00
 extern f32 FUN_001ff3d8_261d78(OvlVec4 *) __asm__("FUN_001f9af0");
 extern void FUN_001ff500_261d78(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
 
-s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) {
+s32 FUN_L00_00261d78(f32 distance, volatile s32 path_index, OvlVec4 *point, OvlVec4 *out) {
     OvlVec4 difference;
     OvlVec4 scaled_difference;
     OvlVec4 working;
@@ -166,6 +171,7 @@ s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
     s32 i;
     s32 offset;
     s32 found;
+    s32 next;
     f32 segment_length;
     f32 projection;
 
@@ -175,11 +181,13 @@ s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
     i = 0;
     if (0 < (*entry)->count - 1) {
         do {
+            entry = &D_L00_001B04B0_261d78[path_index];
             offset = i << 4;
-            if ((*entry)->points[i].f[3] != 0.0f || (*entry)->points[offset / 16 + 1].f[3] != 0.0f) {
-                FUN_001ff2a8_261d78(&difference, &working, &(*entry)->points[offset / 16 + 1]);
+            next = i + 1;
+            if ((*entry)->points[i].f[3] != 0.0f || (*entry)->points[next].f[3] != 0.0f) {
+                FUN_001ff2a8_261d78(&difference, &working, (OvlVec4 *)((u8 *)*entry + offset + 0x10));
                 difference.i[2] = 0;
-                FUN_001ff2a8_261d78(&segment, &(*entry)->points[offset / 16 + 1], &(*entry)->points[i]);
+                FUN_001ff2a8_261d78(&segment, (OvlVec4 *)((u8 *)*entry + offset + 0x20), (OvlVec4 *)((u8 *)*entry + offset + 0x10));
                 segment.i[2] = 0;
                 FUN_001ff500_261d78(&scaled_segment, &segment, 1.0f);
                 FUN_001ff3c0_261d78(&cross, &difference, &scaled_segment);
@@ -195,7 +203,7 @@ s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
                             goto next_segment;
                         found = 1;
                         FUN_001ff500_261d78(&scaled_difference, &difference, distance);
-                        FUN_001ff278_261d78(&working, &scaled_difference, &(*entry)->points[offset / 16 + 1]);
+                        FUN_001ff278_261d78(&working, &scaled_difference, (OvlVec4 *)((u8 *)*entry + offset + 0x10));
                         working.f[2] = point->f[2];
                     } else {
                         found = 1;
@@ -203,14 +211,14 @@ s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
                         FUN_001ff2a8_261d78(&scaled_difference, &difference, &scaled_cross);
                         FUN_001ff500_261d78(&scaled_difference, &scaled_difference, distance);
                         FUN_001ff278_261d78(&scaled_difference, &scaled_difference, &scaled_cross);
-                        FUN_001ff278_261d78(&working, &scaled_difference, &(*entry)->points[offset / 16 + 1]);
+                        FUN_001ff278_261d78(&working, &scaled_difference, (OvlVec4 *)((u8 *)*entry + offset + 0x10));
                         working.f[2] = point->f[2];
                     }
                 }
             }
 next_segment:
-            i++;
-        } while (i < (*entry)->count - 1);
+            i = next;
+        } while (i < D_L00_001B04B0_261d78[path_index]->count - 1);
     }
     if (found)
         out->q = working.q;
@@ -247,32 +255,37 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
     OvlVec4 cross;
     OvlVec4 scaled_cross;
     SegmentPath_262030 *entry;
-    OvlVec4 *height_axis = &D_0013F5E0_262030;
+    OvlVec4 *height_axis;
     OvlVec4 *current;
-    OvlVec4 *next;
+    s32 next;
     s32 i;
     s32 offset;
+    OvlVec4 *volatile saved_out;
     volatile s32 found;
     f32 original_height;
     f32 segment_length;
     f32 projection;
 
-    working.q = point->q;
+    saved_out = out;
     found = 0;
+    working = *point;
     entry = D_L00_001B04B0_262030[path_index];
-    original_height = FUN_001ff398_262030(&working, height_axis);
-    i = 0;
-    offset = 0;
-    if (i < entry->count - 1) {
+    original_height = FUN_001ff398_262030(&working, &D_0013F5E0_262030);
+    if (entry->count - 1 > found) {
+        i = 0;
+        height_axis = &D_0013F5E0_262030;
         do {
-            current = (OvlVec4 *)((u8 *)entry + offset + 0x10);
-            next = (OvlVec4 *)((u8 *)entry + offset + 0x20);
-            if (entry->points[i].f[3] != 0.0f || entry->points[i + 1].f[3] != 0.0f) {
+            offset = i << 4;
+            next = i + 1;
+            if (((OvlVec4 *)((u8 *)entry + offset + 0x10))->f[3] != 0.0f || entry->points[next].f[3] != 0.0f) {
+                current = (OvlVec4 *)((u8 *)entry + (offset + 0x10));
                 FUN_001ff2a8_262030(&difference, &working, current);
-                FUN_001ff2a8_262030(&segment, next, current);
-                FUN_001ff500_262030(&scaled_cross, height_axis, FUN_001ff398_262030(&difference, height_axis));
+                FUN_001ff2a8_262030(&segment, (OvlVec4 *)((u8 *)entry + (offset + 0x20)), current);
+                projection = FUN_001ff398_262030(&difference, height_axis);
+                FUN_001ff500_262030(&scaled_cross, height_axis, projection);
                 FUN_001ff2a8_262030(&difference, &difference, &scaled_cross);
-                FUN_001ff500_262030(&scaled_cross, height_axis, FUN_001ff398_262030(&segment, height_axis));
+                projection = FUN_001ff398_262030(&segment, height_axis);
+                FUN_001ff500_262030(&scaled_cross, height_axis, projection);
                 FUN_001ff2a8_262030(&segment, &segment, &scaled_cross);
                 FUN_001ff500_262030(&scaled_segment, &segment, 1.0f);
                 FUN_001ff3c0_262030(&cross, &difference, &scaled_segment);
@@ -298,13 +311,13 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
                 }
             }
 next_segment_262030:
-            i++;
-            offset = i << 4;
+            i = next;
         } while (i < entry->count - 1);
     }
-    if (found) {
-        FUN_001ff500_262030(&segment, height_axis, original_height - FUN_001ff398_262030(&working, height_axis));
-        FUN_001ff278_262030(out, &working, &segment);
+    if ((i = found)) {
+        projection = FUN_001ff398_262030(&working, &D_0013F5E0_262030);
+        FUN_001ff500_262030(&segment, &D_0013F5E0_262030, original_height - projection);
+        FUN_001ff278_262030(saved_out, &working, &segment);
     }
     return found;
 }

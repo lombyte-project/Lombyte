@@ -50,8 +50,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
     u8 delta[16];
     u8 matrix[64];
     struct Moby *child;
-    s16 save_id;
-    u32 *bits;
+    u16 save_id;
     s32 first;
     s32 second;
     s32 divisor;
@@ -96,12 +95,12 @@ void FUN_L15_002e5958(struct Moby *moby) {
     case 2:
         save_id = moby->save_id;
         if (D_L15_001BB830[0x454 + (s16)save_id] != 0 ||
-            ((((s32)*(u32 *)((u8 *)D_0014C190 + (current_level_index << 8) + (((s16)save_id >> 5) << 2))) >> (save_id & 31)) & 1) != 0) {
+            ((((s32)*(u32 *)(((((s16)save_id >> 5) << 2) + (current_level_index << 8)) + (u8 *)D_0014C190)) >> (save_id & 31)) & 1) != 0) {
             if (vars->enabled != 0) {
                 FUN_L01_0026e0e0(moby->group, 4);
+                moby->state = 4;
                 vars->timer = vars->restart_timer;
-                *(volatile u8 *)&moby->state = 4;
-                return;
+                break;
             }
         }
         if (vars->triggered == 0 && near_parent) {
@@ -122,25 +121,23 @@ void FUN_L15_002e5958(struct Moby *moby) {
                 FUN_L01_0026e0e0(moby->group, 4);
                 allocate_voice_for_target_entry(1, 0x31, moby);
                 vars->timer = vars->restart_timer;
-                *(volatile u8 *)&moby->state = 4;
-                return;
+                moby->state = 4;
+                break;
             } else {
-                if (FUN_001f9770(&vars->timer) == 0) {
-                    if (FUN_001f9770(&vars->delay) != 0) {
-                        allocate_voice_for_target_entry(0, 0x31, moby);
-                        first = scale_game_frames(0x2d);
-                        second = scale_game_frames(5);
-                        divisor = scale_game_frames(0x28);
-                        if (first < second + vars->timer / divisor)
-                            vars->delay = scale_game_frames(0x2d);
-                        else
-                            vars->delay = scale_game_frames(5) + vars->timer / scale_game_frames(0x28);
-                    }
-                } else {
+                if (FUN_001f9770(&vars->timer) != 0) {
                     vars->triggered = 0;
                     vars->child_count = 0;
                     allocate_voice_for_target_entry(2, 0x31, moby);
                     FUN_L01_0026e0e0(moby->group, 3);
+                } else if (FUN_001f9770(&vars->delay) != 0) {
+                    allocate_voice_for_target_entry(0, 0x31, moby);
+                    first = scale_game_frames(0x2d);
+                    second = scale_game_frames(5);
+                    divisor = scale_game_frames(0x28);
+                    if (first < second + vars->timer / divisor)
+                        vars->delay = scale_game_frames(0x2d);
+                    else
+                        vars->delay = scale_game_frames(5) + vars->timer / scale_game_frames(0x28);
                 }
             }
         }
@@ -151,10 +148,12 @@ void FUN_L15_002e5958(struct Moby *moby) {
         vars->child_count = 0;
         moby->state = 1;
         break;
-    case 4:
+    case 4: {
+        u16 save_id;
+        u32 *bits;
         if (FUN_001f9770(&vars->flash_timer) != 0) {
             vars->flash_timer = scale_game_frames(0x14);
-            if ((s8)vars->flash_color != 0) {
+            if (vars->flash_color != 0) {
                 FUN_L00_002502f0(moby, 0, 0xff, 0);
                 vars->flash_color = 0;
             } else {
@@ -163,12 +162,13 @@ void FUN_L15_002e5958(struct Moby *moby) {
             }
         }
         save_id = moby->save_id;
-        bits = &D_0014C190[(current_level_index << 6) + (save_id >> 5)];
+        bits = (u32 *)(((((s16)save_id >> 5) << 2) + (current_level_index << 8)) + (u8 *)D_0014C190);
         *bits |= 1U << (save_id & 31);
         save_id = moby->save_id;
         bits = &D_L15_001BAAD0[(s16)save_id >> 5];
         *bits |= 1U << (save_id & 31);
         break;
+    }
     }
 }
 #endif
@@ -283,12 +283,13 @@ extern int D_L15_0015F594 __attribute__((sda));
 extern struct Moby *D_0013F64C;
 extern short D_0013F65E;
 extern int D_001413D4;
-extern u8 D_001413F4 __attribute__((section(".data")));
 extern int D_L15_0015F5C4;
 extern u8 D_0014C170[];
+extern u8 D_0014C050[];
+extern struct Moby *D_L15_0015FFD8_data __asm__("D_L15_0015FFD8") __attribute__((section(".data")));
 extern u8 D_0013F3D0[];
 extern u8 D_00141050[];
-extern u32 D_0013CAE4;
+extern u32 D_0013CAE4 __attribute__((section(".data")));
 extern void mark_moby_for_removal_002ed068(struct Moby *) __asm__("FUN_0020c828");
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void FUN_L15_00208ca8(void);
@@ -300,71 +301,71 @@ extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_00210a08(int, int, struct Moby *);
 
 void FUN_L15_002ed068(struct Moby *moby) {
-    u8 *linked = moby->pvars;
+    struct Moby *linked = moby->pvars;
     struct Moby *entry;
     u8 state = moby->state;
     u8 position[16] __attribute__((aligned(16)));
 
     switch (state) {
-    case 0:
-        if (*(int *)(linked + 0x60) == -1) {
+    case 0: {
+        s32 level;
+        if (*(int *)((u8 *)linked + 0x60) == -1) {
             mark_moby_for_removal_002ed068(moby);
             return;
         }
-        entry = (struct Moby *)((char *)D_L15_0015FFD8 + (*(int *)(linked + 0x60) << 8));
+        entry = (struct Moby *)((char *)D_L15_0015FFD8 + (*(int *)((u8 *)linked + 0x60) << 8));
         entry->unk31 = 0;
+        level = current_level_index;
         entry->unk94 = 0;
         entry->flags |= 1;
-        if (current_level_index == 0x12 && D_0014C170[moby->unkB0] == 0xff) {
-            moby->state = 3;
-        } else {
-            moby->state = 1;
-        }
+        moby->state = (level != 0x12 ||
+            D_0014C050[0x120 + moby->unkB0] != 0xff) ? 1 : 3;
         break;
+    }
     case 1:
         moby->state = 2;
         return;
     case 2:
-        if (D_0013F64C == moby && D_0013F65E == 0 && D_L15_0015F5C4 != 2 && D_001413D4 != 0x1d) {
-            if (D_001413F4 == 0) {
+        if (hero.ground_moby == moby && hero.air_frames.s == 0 && D_L15_0015F5C4 != 2 && hero.state.current != 0x1d) {
+            if (hero.vehicle_mode == 0) {
                 try_set_help_message(4, 0x3aa4);
-            } else if (D_001413F4 == 2 && current_level_index != 0x12) {
+            } else if (hero.vehicle_mode == 2 && current_level_index != 0x12) {
                 try_set_help_message(4, 0x3aa5);
             }
             if (!(D_0013CAE4 & 0x10)) return;
             if (D_L15_0015F594 != 4) return;
-            if (D_001413F4 == 2 && current_level_index == 0xf) {
-                entry = (struct Moby *)((char *)D_L15_0015FFD8 + (*(int *)(linked + 0x60) << 8));
-                entry->unk94 = 0;
-                entry->unk31 = 0;
-                entry->flags |= 1;
+            if (hero.vehicle_mode == 2 && current_level_index == 0xf) {
+                linked = (struct Moby *)((char *)D_L15_0015FFD8_data + (*(int *)((u8 *)linked + 0x60) << 8));
+                linked->unk94 = 0;
+                linked->unk31 = 0;
+                linked->flags |= 1;
                 FUN_L15_00208ca8();
-                set_moby_animation(entry, 0, 0);
+                set_moby_animation(linked, 0, 0);
                 if (current_level_index != 0xf) return;
                 start_scene(9);
                 FUN_L01_0027a248(0, 5);
                 return;
             }
-            if (D_001413F4 != 0) return;
-            entry = (struct Moby *)((char *)D_L15_0015FFD8 + (*(int *)(linked + 0x60) << 8));
+            if (hero.vehicle_mode != 0) return;
+            linked = (struct Moby *)((char *)D_L15_0015FFD8_data + (*(int *)((u8 *)linked + 0x60) << 8));
             *(u128 *)position = *(u128 *)&moby->pos;
             *(float *)(position + 8) = probe_ground_height(position, 0, 0.5f) + 0.1f;
             FUN_L00_00216f90(position, &moby->rot, 0, 1);
-            entry->unk94 = entry->pclass->unk10;
-            entry->unk31 = 1;
-            entry->flags &= ~1;
-            FUN_L00_00210a08(2, 0x5a, entry);
+            linked->unk94 = linked->pclass->unk10;
+            linked->unk31 = 1;
+            linked->flags &= ~1;
+            FUN_L00_00210a08(2, 0x5a, linked);
             if (current_level_index == 0xf) {
                 start_scene(8);
-                *(u128 *)D_00141050 = *(u128 *)D_0013F3D0;
-                *(u128 *)(D_00141050 + 16) = *(u128 *)(D_0013F3D0 + 16);
+                *(u128 *)hero.unk1D00 = *(u128 *)&hero.motion.pos;
+                *(u128 *)(hero.unk1D00 + 16) = *(u128 *)&hero.motion.rot;
                 FUN_L01_0027a248(2, 4);
                 return;
             }
             if (current_level_index != 0x12) return;
             start_scene(6);
-            *(u128 *)D_00141050 = *(u128 *)D_0013F3D0;
-            *(u128 *)(D_00141050 + 16) = *(u128 *)(D_0013F3D0 + 16);
+            *(u128 *)hero.unk1D00 = *(u128 *)&hero.motion.pos;
+            *(u128 *)(hero.unk1D00 + 16) = *(u128 *)&hero.motion.rot;
             moby->state = 3;
             return;
         }
@@ -372,6 +373,6 @@ void FUN_L15_002ed068(struct Moby *moby) {
     default:
         return;
     }
-    *(int *)(linked + 0x68) = -1;
+    *(int *)((u8 *)linked + 0x68) = -1;
 }
 #endif

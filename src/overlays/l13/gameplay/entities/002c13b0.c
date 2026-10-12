@@ -742,6 +742,7 @@ extern char D_0013F3D0[];
 extern float D_0015ED60;
 extern float D_0015ED6C;
 extern char D_00140940[];
+extern float D_0015ED60_gp __attribute__((sda));
 extern int FUN_001f9770(short *);
 extern void FUN_001f9c90(void *, void *, float);
 
@@ -792,14 +793,15 @@ int FUN_L13_002c3fc0(struct Moby *m, char *d, int aim) {
             qcopy(point, linked + 0x10);
         }
     }
-    nearest = FUN_L13_002c3ac8((char *)point, (int *)path, *(short *)(d + 0xB4), 0.0f);
-    forward = nearest + 5;
-    if (forward >= *(int *)path) {
-        forward -= *(int *)path;
+    backward = FUN_L13_002c3ac8((char *)point, (int *)path, *(short *)(d + 0xB4), 0.0f);
+    forward = backward + 5;
+    nearest = forward - *(int *)path;
+    if (!(forward < *(int *)path)) {
+        forward = nearest;
     }
     qcopy(ahead, path + 0x10 + forward * 16);
+    backward = backward - 5;
     forward_distance = FUN_001f9b48(ahead, D_0013F3D0);
-    backward = nearest - 5;
     if (backward < 0) {
         backward += *(int *)path;
     }
@@ -821,20 +823,22 @@ int FUN_L13_002c3fc0(struct Moby *m, char *d, int aim) {
         index = (index + step) % *(int *)path;
         scans++;
     }
-    if (*(short *)(d + 0xB4) < index) {
-        direct_distance = index - *(short *)(d + 0xB4);
-        wrap_distance = *(int *)path - index + *(short *)(d + 0xB4);
+    backward = *(short *)(d + 0xB4);
+    if (backward < index) {
+        direct_distance = index - backward;
+        wrap_distance = *(int *)path - index + backward;
         step = direct_distance < wrap_distance ? 1 : -1;
     } else {
-        direct_distance = *(short *)(d + 0xB4) - index;
-        wrap_distance = *(int *)path - *(short *)(d + 0xB4) + index;
+        direct_distance = backward - index;
+        wrap_distance = *(int *)path - backward + index;
         step = direct_distance < wrap_distance ? -1 : 1;
     }
     target_distance = FUN_001f9b48(&m->pos, path + 0x10 + index * 16);
     if (step != *(signed char *)(d + 0xD0)) {
         if (FUN_001f9770((short *)(d + 0xD2)) != 0) {
+            float speed = D_0015ED60_gp * -0.04000002f + 1.0f;
             *(short *)(d + 0xD2) = 10;
-            *(float *)(d + 0xCC) = *(float *)(d + 0xCC) * (D_0015ED60 * -0.04000002f + 1.0f);
+            *(float *)(d + 0xCC) = *(float *)(d + 0xCC) * speed;
             distance = FUN_001f9b80(&m->pos, D_0013F3D0);
             if ((*(float *)(d + 0xCC) < D_0015ED60 * 0.1f) | (m->unk31 == 0) | (distance < 40.0f)) {
                 short old = *(short *)(d + 0xB4);
@@ -1869,8 +1873,10 @@ extern char D_L13_001F4DB0[];
 extern char D_L13_001F4DD0[];
 extern int D_L13_0015F5CC;
 
+extern int D_L13_0015F5CC_absolute __asm__("D_L13_0015F5CC") __attribute__((section(".data")));
+
 void FUN_L13_002e4448(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    unsigned char *data = *(unsigned char **)(moby + 0x78);
     int hit = 0;
 
     if (*(short *)(data + 0x74) == 0 && (unsigned char)(moby[0x20] - 1) < 2) {
@@ -1880,14 +1886,16 @@ void FUN_L13_002e4448(char *moby) {
     case 0:
         if ((unsigned char)data[0x79] == 0) {
             char *iter[4];
+            char *linked;
             data[0x7B] = 0;
             *(char **)(data + 0x80) = moby;
             FUN_L00_002591d0(iter, (unsigned char)moby[0x21], 0, 0);
-            while (iter[0] != 0) {
-                if (iter[0] != moby && *(short *)(iter[0] + 0xA6) == 0xE7) {
-                    char *other_data = *(char **)(iter[0] + 0x78);
-                    other_data[0x79] = 1;
-                    *(char **)(other_data + 0x80) = moby;
+            while ((linked = *(char *volatile *)iter) != 0) {
+                linked = iter[0];
+                if (linked != moby && *(short *)(linked + 0xA6) == 0xE7) {
+                    char *other_data = *(char **)(linked + 0x78);
+                    *(volatile unsigned char *)(other_data + 0x79) = 1;
+                    *(char *volatile *)(other_data + 0x80) = moby;
                 }
                 data[0x7B]++;
                 FUN_L00_002592b8(iter, iter[0], 0, 0);
@@ -1927,7 +1935,7 @@ void FUN_L13_002e4448(char *moby) {
                 FUN_L01_0026e0e0((unsigned char)moby[0x21], 4);
                 FUN_0022da68(1, 0, moby);
                 *(short *)(data + 0x70) = *(short *)(data + 0x84);
-                FUN_001e93b0(D_L13_001F4D90, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), D_L13_0015F5CC);
+                FUN_001e93b0(D_L13_001F4D90, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), D_L13_0015F5CC_absolute);
                 moby[0x20] = 4;
             } else {
                 if (*(int *)(data + 0x7C) >= 0) {
@@ -1944,12 +1952,15 @@ void FUN_L13_002e4448(char *moby) {
                         a = FUN_001f96f8(0x2D);
                         b = FUN_001f96f8(5);
                         divisor = FUN_001f96f8(0x28);
-                        if (a < b + *(short *)(data + 0x70) / divisor) {
+                        b += *(short *)(data + 0x70) / divisor;
+                if (a < b) {
                             *(short *)(data + 0x72) = FUN_001f96f8(0x2D);
                         } else {
+                            int b, divisor;
                             b = FUN_001f96f8(5);
                             divisor = FUN_001f96f8(0x28);
-                            *(short *)(data + 0x72) = b + *(short *)(data + 0x70) / divisor;
+                            b += *(short *)(data + 0x70) / divisor;
+                    *(short *)(data + 0x72) = b;
                         }
                     }
                 }
@@ -1978,12 +1989,15 @@ void FUN_L13_002e4448(char *moby) {
                 a = FUN_001f96f8(0x2D);
                 b = FUN_001f96f8(5);
                 divisor = FUN_001f96f8(0x28);
-                if (a < b + *(short *)(data + 0x70) / divisor) {
+                b += *(short *)(data + 0x70) / divisor;
+                if (a < b) {
                     *(short *)(data + 0x72) = FUN_001f96f8(0x2D);
                 } else {
+                    int b, divisor;
                     b = FUN_001f96f8(5);
                     divisor = FUN_001f96f8(0x28);
-                    *(short *)(data + 0x72) = b + *(short *)(data + 0x70) / divisor;
+                    b += *(short *)(data + 0x70) / divisor;
+                    *(short *)(data + 0x72) = b;
                 }
             }
         }
@@ -2512,13 +2526,8 @@ extern char *D_L13_001B07B0[];
 extern float D_0015ED6C;
 
 int FUN_L13_002e97e0(struct Moby *m, char *d, int *result) {
-    char *path;
-    char *node;
-    char *other;
-    char *destination;
     char *child;
-    char *path_slots = d + 0xB0;
-    int idx;
+    int path_slots = (int)d + 0xB0;
     float dx;
     float dy;
     float dz;
@@ -2533,30 +2542,60 @@ int FUN_L13_002e97e0(struct Moby *m, char *d, int *result) {
     d[0x13B] = 4;
     velocity_scale = D_0015ED6C * 10.0f;
     velocity = *(char **)0x001600EC + (*(int *)(d + 0x130) << 7);
-    *(volatile short *)(d + 0x9C) = 0;
+    *(short *)(d + 0x9C) = 0;
     FUN_001f9bf8(d + 0x70, velocity, velocity_scale);
-    idx = *(volatile short *)(d + 0x9C);
-    path = D_L13_001B07B0[*(int *)(path_slots + (unsigned char)d[0x13B] * 4)];
-    node = path + idx * 16;
-    destination = (char *)m + 0x10;
-    qcopy(destination, node + 0x10);
-    other = path + (idx + 1) * 16;
-    dx = *(float *)(other + 0x10) - *(float *)(node + 0x10);
-    dy = *(float *)(other + 0x14) - *(float *)(node + 0x14);
-    m->rot.z = FUN_001f9e90(dx, dy);
-    idx = *(volatile short *)(d + 0x9C);
-    path = D_L13_001B07B0[*(int *)(path_slots + (unsigned char)d[0x13B] * 4)];
-    node = path + idx * 16 + 0x10;
-    horizontal = FUN_001f9b80(node, node + 0x10);
-    idx = *(volatile short *)(d + 0x9C);
-    path = D_L13_001B07B0[*(int *)(path_slots + (unsigned char)d[0x13B] * 4)];
-    node = path + idx * 16 + 0x10;
-    dz = *(float *)(node + 0x18) - *(float *)(node + 8);
-    m->rot.y = -FUN_001f9e90(horizontal, dz);
+    {
+        int idx;
+        char *path;
+        char *node;
+        char *other;
+        char *destination;
+        char *copy_source;
+        int *path_slot;
+        idx = *(short *)(d + 0x9C);
+        path_slot = (int *)path_slots;
+        path_slot += (unsigned char)d[0x13B];
+        path = D_L13_001B07B0[*path_slot];
+        copy_source = (char *)((unsigned int)(idx * 16 + 0x10) + (unsigned int)path);
+        destination = (char *)m + 0x10;
+        qcopy(destination, copy_source);
+        node = (char *)((int)path + idx * 16);
+        other = path + (++idx) * 16;
+        dx = *(float *)(other + 0x10) - *(float *)(node + 0x10);
+        dy = *(float *)(other + 0x14) - *(float *)(node + 0x14);
+        m->rot.z = FUN_001f9e90(dx, dy);
+    }
+    {
+        int idx;
+        char *path;
+        char *node;
+        char *other;
+        int *path_slot;
+        idx = *(short *)(d + 0x9C);
+        path_slot = (int *)path_slots;
+        path_slot += (unsigned char)d[0x13B];
+        path = D_L13_001B07B0[*path_slot];
+        node = (char *)(idx * 16 + 0x10);
+        other = (char *)(idx * 16 + 0x20);
+        horizontal = FUN_001f9b80((char *)((int)path + (int)node), (char *)((int)path + (int)other));
+    }
+    {
+        int idx;
+        char *path;
+        char *node;
+        char *other;
+        idx = *(short *)(d + 0x9C);
+        path_slots += (unsigned char)d[0x13B] * 4;
+        path = D_L13_001B07B0[*(int *)path_slots];
+        other = path + (idx + 1) * 16;
+        node = path + idx * 16;
+        dz = *(float *)(other + 0x18) - *(float *)(node + 0x18);
+        m->rot.y = -FUN_001f9e90(horizontal, dz);
+    }
     d[0x10C] = 1;
     child = *(char **)0x0015FFD8;
-    *(volatile unsigned short *)(child + (*(int *)(d + 0x134) << 8) + 0x34) |= 2;
-    *(volatile unsigned short *)(child + (*(int *)(d + 0x134) << 8) + 0x34) |= 1;
+    *(volatile unsigned short *)((char *)((*(int *)(d + 0x134) << 8) + (int)child) + 0x34) |= 2;
+    *(volatile unsigned short *)((char *)((*(int *)(d + 0x134) << 8) + (int)child) + 0x34) |= 1;
     child[(*(int *)(d + 0x134) << 8) + 0x31] = 0;
     FUN_L10_002f5a50(*(int *)(d + 0x12C));
     m->state = 7;

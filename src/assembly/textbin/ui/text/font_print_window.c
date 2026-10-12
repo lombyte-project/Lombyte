@@ -145,12 +145,11 @@ compare_width:
 
 layout:
     draw_window = window;
-    line_length = line_count * draw_window->line_advance;
     draw_window->measured_width = 0;
     draw_y = draw_window->anchor_y;
-    draw_window->rendered_height = line_length;
+    draw_window->rendered_height = line_count * draw_window->line_advance;
     if (draw_window->flags & TEXT_REGION_CENTER_VERTICALLY) {
-        draw_y -= line_length >> 1;
+        draw_y -= (line_count * draw_window->line_advance) >> 1;
     }
     for (line_index = 0; line_index < line_count;
          line_index++, draw_y += draw_window->line_advance) {
