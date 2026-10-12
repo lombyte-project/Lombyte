@@ -1357,12 +1357,12 @@ void FUN_L05_00254358(f32 *position, f32 *direction) {
         return;
     }
     path = (HelpPath *)D_L05_001B0930[*(s32 *)(*(char **)(g->unk86C + 0x78) + 0x24)];
-    height_limit = 4.0f;
     best = 9999999.0f;
     index = 0;
     selected = 0;
     p = path->points;
     if (path->count > 0) {
+        height_limit = 4.0f;
         cursor = path;
         do {
             f32 a;
@@ -1371,7 +1371,8 @@ void FUN_L05_00254358(f32 *position, f32 *direction) {
             a = FUN_001f9e90(cursor->points[0].x - *(f32 *)origin, cursor->points[0].y - *(f32 *)(origin + 4));
             next = (s32)((u32)index + ((u32)path->count + 2U)) % path->count;
             b = FUN_001f9e90(path->points[next].x - cursor->points[0].x, path->points[next].y - cursor->points[0].y);
-            if (fast_difference_between_rotations(a, b) > 1.5707964f) {
+            if (!(fast_difference_between_rotations(a, b) > 1.5707964f)) goto next_point;
+            {
                 if (current_level_index == 0x10 && g->unk8B4 != 0) {
                     f32 a = *(f32 *)((char *)g->unk8B4 + *(s16 *)((char *)g + 0x8C8) * 16 + 0x18);
                     f32 b = *(f32 *)((char *)g->unk8B4 + g->unk898 * 16 + 0x18);
@@ -1389,7 +1390,7 @@ void FUN_L05_00254358(f32 *position, f32 *direction) {
                 }
             }
 next_point:
-            index += 2;
+            index = (s32)((u32)((char *)cursor - (char *)path) / 16U) + 2;
             p += 2;
             cursor = (HelpPath *)((char *)cursor + 0x20);
         } while (index < path->count);
