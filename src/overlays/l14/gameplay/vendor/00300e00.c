@@ -1270,7 +1270,9 @@ extern char *D_L14_0015EF50;
 extern char *D_L14_001B0BB0[];
 extern char *D_L14_001600EC;
 extern char *D_L14_00167504;
+extern struct { char pad0[0x184]; char *copy_source; } D_L14_00167380;
 extern float D_L14_0016D1F0;
+extern struct { char pad0[0xB0]; float fB0; } D_L14_0016D140;
 extern int scale_game_frames_14f00(int) __asm__("FUN_001f96f8");
 extern void clear_u64_value_14f00(void *) __asm__("FUN_001f99f8");
 extern float FUN_001f9b48_14f00(void *, void *) __asm__("FUN_001f9b48");
@@ -1280,89 +1282,108 @@ extern void FUN_L00_00216f90_14f00(void *, void *, int, int) __asm__("FUN_L00_00
 
 void FUN_L14_00314f00(char *moby) {
     char *rec = *(char **)(D_L14_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
-    char *motion = *(char **)(moby + 0x70);
+    char *motion;
     char *path;
+    char *vector10;
+    char *vector20;
+    char *vector30;
     short *indices;
     float *lengths;
     float length;
     int i;
     int count;
+    int next;
     float identity[4];
 
     rec[0x38] = 3;
-    *(int *)(motion + 0x40) = 0;
-    *(int *)(motion + 0x44) = 0;
-    *(int *)(motion + 0x48) = 0;
-    *(int *)(motion + 0x4C) = 0;
-    *(int *)(motion + 0x50) = 0;
-    *(short *)(motion + 0x54) = 0;
-    *(short *)(motion + 0x56) = scale_game_frames_14f00(*(short *)(rec + 0x3A));
-    indices = (short *)(motion + 0x58);
-    lengths = (float *)(motion + 0x68);
-    for (i = 0; i < 8; i++) {
-        lengths[i] = 0.0f;
-        indices[i] = -1;
+    motion = *(char **)(moby + 0x70) + 0x40;
+    *(int *)(motion + 0) = 0;
+    *(int *)(motion + 4) = 0;
+    *(int *)(motion + 8) = 0;
+    *(int *)(motion + 0xC) = 0;
+    *(int *)(motion + 0x10) = 0;
+    *(short *)(motion + 0x14) = 0;
+    *(short *)(motion + 0x16) = scale_game_frames_14f00(*(short *)(rec + 0x3A));
+    indices = (short *)(*(char **)(moby + 0x70) + 0x58);
+    lengths = (float *)(*(char **)(moby + 0x70) + 0x68);
+    for (count = 7; count >= 0; count--) {
+        lengths[7 - count] = 0.0f;
+        indices[7 - count] = -1;
     }
-    *(float *)(motion + 0x88) = FUN_001f9e90_14f00(1.0f, D_L14_0016D1F0) * 2.0f;
+    vector10 = moby + 0x10;
+    vector20 = moby + 0x20;
+    vector30 = moby + 0x30;
+    *(float *)((char *)indices + 0x30) = FUN_001f9e90_14f00(1.0f, D_L14_0016D140.fB0) * 2.0f;
 
     if (*(int *)(rec + 0x20) >= 0) {
+        int count;
         path = D_L14_001B0BB0[*(int *)(rec + 0x20)];
         if (*(int *)path > 0) {
-            indices = (short *)(motion + 0x58);
-            lengths = (float *)(motion + 0x68);
+            short *saved_indices = indices;
+            float *saved_lengths = lengths;
             i = 0;
             do {
                 char *p = path + i * 16;
-                length = *(float *)(p + 0x1C);
-                if (length > 0.0f) {
-                    *lengths++ = length;
-                    *indices++ = i;
+                float previous_length = *(float *)(p + 0x1C);
+                if (previous_length > 0.0f) {
+                    *saved_lengths++ = previous_length;
+                    *saved_indices++ = i;
                 }
                 count = *(int *)path;
                 length = FUN_001f9b48_14f00(path + (i * 16 + 0x10),
                     path + (((i + 1) % count) * 16 + 0x10));
                 *(float *)(p + 0x1C) = length;
                 if (i < *(int *)path - 1)
-                    *(float *)(motion + 0x48) += length;
+                    *(float *)(motion + 8) += length;
                 i++;
             } while (i < *(int *)path);
         }
     }
     if (*(short *)(rec + 0x3A) > 0) {
         length = FUN_001fa6c0_14f00(scale_game_frames_14f00(*(short *)(rec + 0x3A)));
-        *(float *)(rec + 0x3C) = (*(float *)(motion + 0x48) / length) * 60.0f;
+        *(float *)(rec + 0x3C) = (*(float *)(motion + 8) / length) * 60.0f;
     }
     if (*(int *)(rec + 0x24) >= 0) {
+        int count;
         path = D_L14_001B0BB0[*(int *)(rec + 0x24)];
-        if (*(int *)path > 0) {
+        count = *(int *)path;
+        if (count > 0) {
             i = 0;
             do {
-                count = *(int *)path;
-                length = FUN_001f9b48_14f00(path + i * 16 + 0x10,
-                    path + ((i + 1) % count) * 16 + 0x10);
+                next = i + 1;
+                length = FUN_001f9b48_14f00(path + (i * 16 + 0x10),
+                    path + ((next % count) * 16 + 0x10));
                 *(float *)(path + i * 16 + 0x1C) = length;
                 if (i < *(int *)path - 1)
-                    *(float *)(motion + 0x4C) += length;
-                i++;
-            } while (i < *(int *)path);
+                    *(float *)(motion + 0xC) += length;
+                count = *(int *)path;
+                i = next;
+            } while (i < count);
         }
     }
-    *(float *)motion = 0.03f;
-    *(float *)(motion + 4) = 0.2f;
-    clear_u64_value_14f00(motion + 0x10);
-    *(float *)(motion + 0x20) = 0.03f;
-    *(float *)(motion + 0x24) = 0.2f;
-    clear_u64_value_14f00(motion + 0x30);
-    { char *copy_source = D_L14_00167504;
-    qcopy(moby + 0x30, copy_source + 0x30);
-    qcopy(moby, copy_source);
-    qcopy(moby + 0x10, copy_source + 0x10);
-    qcopy(moby + 0x20, copy_source + 0x20); }
-    identity[0] = 0.0f;
-    identity[1] = 0.0f;
-    identity[2] = 0.0f;
+    {
+        char *motion = *(char **)(moby + 0x70);
+        *(float *)motion = 0.03f;
+        *(float *)(motion + 4) = 0.2f;
+        clear_u64_value_14f00(motion + 0x10);
+    }
+    {
+        char *motion = *(char **)(moby + 0x70);
+        *(float *)(motion + 0x20) = 0.03f;
+        *(float *)(motion + 0x24) = 0.2f;
+        clear_u64_value_14f00(motion + 0x30);
+    }
+    {
+        char *copy_source = D_L14_00167380.copy_source;
+        qcopy(vector30, copy_source + 0x30);
+        qcopy(moby, copy_source);
+        qcopy(vector10, copy_source + 0x10);
+        qcopy(vector20, copy_source + 0x20);
+    }
+    path = D_L14_001600EC + *(int *)(rec + 0x54) * 0x80 + 0x30;
+    *(u128 *)identity = 0;
     identity[3] = 1.0f;
-    FUN_L00_00216f90_14f00(D_L14_001600EC + *(int *)(rec + 0x54) * 0x80 + 0x30,
+    FUN_L00_00216f90_14f00(path,
         identity, 0x72, 0);
 }
 #endif
