@@ -419,10 +419,13 @@ extern short *D_L11_001AC240[];
 
 int FUN_L11_003192c8(char *moby) {
     char stack_data[0x900] __attribute__((aligned(16)));
-    float offset[16] __attribute__((aligned(16)));
+    float offset[8] __attribute__((aligned(16)));
     short *list;
     int i, j;
     float phase;
+    float *position_base;
+    float *position_y_base;
+    int *colors_base;
 
     if ((unsigned char)moby[0x21] == 0xff) {
         return;
@@ -432,28 +435,38 @@ int FUN_L11_003192c8(char *moby) {
     } else {
         *(float *)&D_L11_001623F0_d = 5.0f;
     }
+    position_base = (float *)(stack_data + 0x50);
+    position_y_base = (float *)(stack_data + 0x54);
+    colors_base = (int *)(stack_data + 0x40);
     for (i = 0; i < 16; i++) {
-        long long texture = trail_effect_texture(0x13);
+        long long texture;
         char *packet = stack_data + 0x40 + i * 0x90;
         float *source;
         float *position;
+        float *position_y;
         int *colors;
+        float span;
+        j = 0;
+        texture = trail_effect_texture(0x13);
         *(long long *)(packet + 0x38) = texture;
-        *(long long *)(packet + 0x40) = 0xff9000000260LL;
         *(long long *)(packet + 0x48) = 0x8000000048LL;
+        *(long long *)(packet + 0x40) = 0xff9000000260LL;
         *(long long *)(packet + 0x30) = 0;
-        phase = integer_to_float((D_L11_0015F5CC + 3) & 3) / (*(float *)&D_L11_001623F0_d * 4.0f);
+        span = *(float *)&D_L11_001623F0_d * 4.0f;
+        phase = integer_to_float((D_L11_0015F5CC + 3) & 3) / span;
         source = D_L11_001F1490;
-        position = (float *)(stack_data + 0x50 + i * 0x90);
-        colors = (int *)(stack_data + 0x40 + i * 0x90);
-        for (j = 0; j < 4; j++) {
+        position = position_base + i * 0x24;
+        position_y = position_y_base + i * 0x24;
+        colors = colors_base + i * 0x24;
+        for (; j < 4; j++) {
             float t;
             position[0] = source[0];
-            position[1] = source[1];
+            *position_y = source[1];
             t = integer_to_float(i - ((j >> 1) - 1)) / *(float *)&D_L11_001623F0_d + phase;
             if (t > 1.0f) t = 1.0f;
             else if (t < 0.0f) t = 0.0f;
             *colors = tween_color(t, 0x8c28aa28, 0x144646);
+            position_y += 2;
             position += 2;
             source += 2;
             colors++;
@@ -466,25 +479,28 @@ int FUN_L11_003192c8(char *moby) {
     do {
         unsigned short entry = *(unsigned short *)list;
         char *linked = (char *)(D_L11_0015FFD8 + ((entry & 0x7fff) << 8));
-        if (*(unsigned char *)(linked + 0x31) != 0 && *(short *)(linked + 0xa6) == *(short *)(moby + 0xa6)) {
+        int skip = *(short *)(linked + 0xa6) != *(short *)(moby + 0xa6);
+        if (*(unsigned char *)(linked + 0x31) == 0) skip = 1;
+        if (skip == 0) {
             char *trail = *(char **)(linked + 0x78);
+            long limit = -1;
             for (i = 0; i < *(int *)(trail + 0x2c0); i++) {
                 int next = *(int *)(trail + 0x2c4) - i;
                 int a = next + 15;
                 int b = next + 30;
                 int start;
-                if (a > -1) b = a;
+                if (limit < a) b = a;
                 start = a - ((b >> 4) << 4);
                 for (j = 0; j < 2; j++) {
                     int k;
                     char *packet = stack_data + i * 0x90;
                     char *points = trail + 0xc0 + j * 0x100;
                     for (k = 0; k < 4; k++) {
-                        int n = start + k / 2;
+                        int n = start + (k >> 1);
                         int q = n + 15;
-                        if (n > -1) q = n;
+                        if (limit < n) q = n;
                         n -= (q >> 4) << 4;
-                        add_vector_xyz(packet + 0x54 + k * 16, points + n * 16,
+                        add_vector_xyz((float *)stack_data + i * 0x24 + k * 4, points + n * 16,
                                        (char *)offset + (k & 1) * 16);
                     }
                     draw_packet(packet, 0, 0);
