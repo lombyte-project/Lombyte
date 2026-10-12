@@ -1,10 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-/* Exact SDK/library unit _getAllRefs; symbolic expected assembly retained pending source recovery. */
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/_getAllRefs/_getAllRefs.s", _getAllRefs);
-#else
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
 
@@ -60,8 +56,9 @@ void _getAllRefs(struct MpegDecoder *d, int bx, int by, int mb_type, int motion_
             refs[0][1] = d->ref_images[8];
             refs[1][0] = d->ref_images[5];
             refs[1][1] = d->ref_images[9];
+            one = 2;
             same = 0;
-            if (d->picture_coding_type == 2 && d->second_field) {
+            if (d->picture_coding_type == one && d->second_field) {
                 same = currentfield != mvfs[0][0];
             }
             if (motion_type == 1 || !(mb_type & 8)) {
@@ -75,7 +72,7 @@ void _getAllRefs(struct MpegDecoder *d, int bx, int by, int mb_type, int motion_
                 _getRef0(d, refs[same][mvfs[1][0]], 0, 0, 8, 8, bx, by, pmv[1][0][0], pmv[1][0][1],
                          0, 0);
             } else if (motion_type == 3) {
-                same = d->second_field ? one : 0;
+                same = d->second_field ? motion_type - 2 : 0;
                 _dualPrimeVector(d, dmv, dmvector, pmv[0][0][0], pmv[0][0][1]);
                 _getRef0(d, refs[0][currentfield], 0, 0, 0, 16, bx, by, pmv[0][0][0], pmv[0][0][1],
                          0, 0);
@@ -113,4 +110,3 @@ void _getAllRefs(struct MpegDecoder *d, int bx, int by, int mb_type, int motion_
         }
     }
 }
-#endif /* NON_MATCHING */
