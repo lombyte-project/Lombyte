@@ -542,7 +542,7 @@ extern float D_0013F3D0[];
 extern float FUN_00200240(unsigned int) __asm__("FUN_001fa6c0");
 extern float FUN_001fef10(float) __asm__("FUN_001f96b0");
 extern int FUN_00200250(float) __asm__("FUN_001fa6d0");
-extern int FUN_001fb090(const char *, int) __asm__("FUN_001f6250");
+extern int FUN_001fb090(const char *, int) __asm__("FUN_L00_001fb090");
 extern void *FUN_0023b208(int, int) __asm__("FUN_001ff960");
 extern void FUN_0023b4d8(void *, int, int, int, int, int) __asm__("FUN_001ffc30");
 extern void FUN_0023b860(void *, int, int, int, int, int) __asm__("FUN_001ffe18");
@@ -591,10 +591,12 @@ int FUN_L00_00237200(HudElem *e) {
         left = 0xe0 - (width >> 1);
         other_width = FUN_001fb090(line + i + 1, -1);
         other_left = 0xe0 - (other_width >> 1);
-        if (other_left <= left) {
-            left = other_left;
+        if (left < other_left) {
+            other_left = left;
+        } else {
             width = other_width;
         }
+        left = other_left;
         FUN_0023b4d8(FUN_0023b208(0x7580, 0), left + 0x20, y, width, 0x36, alpha);
         FUN_0023b4d8(FUN_0023b208(0x7580, 1), left, y, 0x20, 0x36, alpha);
         FUN_0023b860(FUN_0023b208(0x7580, 1), left + width + 0x20, y, 0x20, 0x36, alpha);
