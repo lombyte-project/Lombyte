@@ -129,7 +129,7 @@ void render_vendor_capture_pass_sequence(void *capture_context) {
             scale_vector_to_length(&second_edge, &second_edge, edge_length * transition_factor);
             fast_vec_add(origin_pointer, origin_pointer, &scaled_edge_offset);
         }
-        corner_buffer->q = origin_pointer->q;
+        *(volatile u128 *)corner_buffer = origin_pointer->q;
         fast_vec_add(&capture_corners[1], origin_pointer, &first_edge);
         fast_vec_add(&capture_corners[2], origin_pointer, &second_edge);
         fast_vec_add(&capture_corners[3], &capture_corners[2], &first_edge);
