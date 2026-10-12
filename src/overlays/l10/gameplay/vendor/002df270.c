@@ -1966,6 +1966,7 @@ void FUN_L10_002e8358(struct Moby *moby) {
     int accepted;
     float angle;
     int purchase;
+    int upgrade_level;
 
     timer = (int *)moby->pvars;
     tick_countdown_32_vendor(timer + 1);
@@ -1981,40 +1982,49 @@ void FUN_L10_002e8358(struct Moby *moby) {
             timer[1] == 0 && D_L10_0015F5C4_vendor != 2) {
             FUN_L00_00266858_vendor(moby, 1);
             if (alternate_item_available[4] == 0) {
-                if (current_bolt_count < 4001) {
+                if (current_bolt_count >= 4001) {
+                    accepted = try_set_help_message_vendor(1, 0x271e) != 0;
+                    if (!(D_0013CAE4 & 0x10) || !accepted) return;
+                    accepted = 1;
+                    alternate_item_available[4] = accepted;
+                    upgrade_level = 5;
+                    hero.health.hp = upgrade_level;
+                    current_bolt_count = D_0013ED98 - 4000;
+                    D_0013EDA0 = upgrade_level;
+                    FUN_L00_00298840_vendor(0);
+                    moby->state = accepted;
+                } else {
                     try_set_help_message_vendor(1, 0x2720);
                     return;
                 }
-                accepted = try_set_help_message_vendor(1, 0x271e);
-                if (!(D_0013CAE4 & 0x10) || !accepted) return;
-                alternate_item_available[4] = 1;
-                hero.health.hp = 5;
-                D_0013EDA0 = 5;
-                current_bolt_count = D_0013ED98 - 4000;
-                purchase = 0;
             } else {
                 if (alternate_item_available[5] != 0 || timer[1] != 0) return;
-                if (current_bolt_count < 30001) {
+                if (current_bolt_count >= 30001) {
+                    accepted = try_set_help_message_vendor(1, 0x271f) != 0;
+                    if (!(D_0013CAE4 & 0x10) || !accepted) return;
+                    accepted = 1;
+                    alternate_item_available[5] = accepted;
+                    upgrade_level = 8;
+                    hero.health.hp = upgrade_level;
+                    current_bolt_count = D_0013ED98 - 30000;
+                    D_0013EDA0 = upgrade_level;
+                    FUN_L00_00298840_vendor(1);
+                    moby->state = accepted;
+                } else {
                     try_set_help_message_vendor(1, 0x2721);
                     return;
                 }
-                accepted = try_set_help_message_vendor(1, 0x271f);
-                if (!(D_0013CAE4 & 0x10) || !accepted) return;
-                alternate_item_available[5] = 1;
-                hero.health.hp = 8;
-                D_0013EDA0 = 8;
-                current_bolt_count = D_0013ED98 - 30000;
-                purchase = 1;
             }
-            FUN_L00_00298840_vendor(purchase);
-            moby->state = 1;
+
         }
     }
     return;
 state_one:
     if (D_L10_0015F5C4_vendor != 2) {
         memcard_save_data_vendor(0, -1);
-        FUN_L00_00263d40_vendor(alternate_item_available[5] ? 0x271d : 0x271c, -1);
+        purchase = 0x271c;
+        if (alternate_item_available[5]) purchase = 0x271d;
+        FUN_L00_00263d40_vendor(purchase, -1);
         D_L10_0013F640 = 0xb4;
         timer[1] = scale_game_frames(0xf0);
         moby->state = 0;
