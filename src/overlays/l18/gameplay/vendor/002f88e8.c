@@ -603,9 +603,10 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     Pk_9c20 pk;
     float mat[4][4];
     float up[4];
-    float vertices[4][4];
+    Vec4 vertices[4];
     float scale_z;
-    int i;
+    float scale_x;
+    int i = 0;
     int color;
 
     pk.b = tex_9c20(0xB);
@@ -625,6 +626,9 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     norm_9c20(mat[2], mat[2], 1.0f);
     cross_9c20(mat[1], mat[0], mat[2]);
 
+    scale_z = D_L18_00162514_9eb8;
+    scale_x = D_L18_0016252C_9eb8;
+    color = D_L18_00162504_9eb8 | 0xFF000000;
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
     pk.uv[2] = 0.0f;
@@ -634,57 +638,63 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     pk.uv[6] = 0.0f;
     pk.uv[7] = 0.0f;
 
-    color = D_L18_00162504_9eb8 | 0xFF000000;
     pk.col[3] = color;
     pk.col[2] = color;
     pk.col[1] = color;
     pk.col[0] = color;
-    scale_z = D_L18_00162514_9eb8;
-    for (i = 0; i < 4; i++) {
-        *(u128_9c20 *)vertices[i] = *(u128_9c20 *)D_L18_001DFBD0_9eb8[i];
+    i = 0;
+    do {
+        qcopy(&vertices[i], D_L18_001DFBD0_9eb8[i]);
         {
-            vertices[i][0] *= D_L18_0016252C_9eb8;
-            vertices[i][2] *= scale_z;
+            vertices[i].f[2] *= scale_z;
+            vertices[i].f[0] *= scale_x;
         }
-    }
+        i++;
+    } while (i < 4);
     for (i = 0; i < 4; i++) {
-        xform_9c20(pk.m[i], vertices[i], mat);
+        xform_9c20(pk.m[i], &vertices[i], mat);
     }
     draw_9c20(&pk, 0, 0);
 
-    color = D_L18_00162510_9eb8 | 0x7F000000;
-    pk.col[3] = color;
-    pk.col[2] = color;
-    pk.col[1] = color;
-    pk.col[0] = color;
     scale_z = D_L18_00162518_9eb8;
-    for (i = 0; i < 4; i++) {
-        *(u128_9c20 *)vertices[i] = *(u128_9c20 *)D_L18_001DFBD0_9eb8[i];
-        {
-            vertices[i][0] *= D_L18_0016252C_9eb8;
-            vertices[i][2] *= scale_z;
-        }
-    }
-    for (i = 0; i < 4; i++) {
-        xform_9c20(pk.m[i], vertices[i], mat);
-    }
-    draw_9c20(&pk, 0, 0);
-
+    scale_x = D_L18_0016252C_9eb8;
     color = D_L18_00162510_9eb8 | 0x7F000000;
     pk.col[3] = color;
     pk.col[2] = color;
     pk.col[1] = color;
     pk.col[0] = color;
-    scale_z = D_L18_0016251C_9eb8;
-    for (i = 0; i < 4; i++) {
-        *(u128_9c20 *)vertices[i] = *(u128_9c20 *)D_L18_001DFBD0_9eb8[i];
+    i = 0;
+    do {
+        qcopy(&vertices[i], D_L18_001DFBD0_9eb8[i]);
         {
-            vertices[i][0] *= D_L18_0016252C_9eb8;
-            vertices[i][2] *= scale_z;
+            vertices[i].f[2] *= scale_z;
+            vertices[i].f[0] *= scale_x;
         }
-    }
+        i++;
+    } while (i < 4);
     for (i = 0; i < 4; i++) {
-        xform_9c20(pk.m[i], vertices[i], mat);
+        xform_9c20(pk.m[i], &vertices[i], mat);
+    }
+    draw_9c20(&pk, 0, 0);
+
+    scale_z = D_L18_0016251C_9eb8;
+    scale_x = D_L18_0016252C_9eb8;
+    color = D_L18_00162510_9eb8 | 0x7F000000;
+    pk.col[3] = color;
+    pk.col[2] = color;
+    pk.col[1] = color;
+    pk.col[0] = color;
+    i = 0;
+    do {
+        qcopy(&vertices[i], D_L18_001DFBD0_9eb8[i]);
+        {
+            vertices[i].f[2] *= scale_z;
+            vertices[i].f[0] *= scale_x;
+        }
+        i++;
+    } while (i < 4);
+    for (i = 0; i < 4; i++) {
+        xform_9c20(pk.m[i], &vertices[i], mat);
     }
     draw_9c20(&pk, 0, 0);
 }
