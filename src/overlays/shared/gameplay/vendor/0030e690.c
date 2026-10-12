@@ -274,7 +274,7 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     q[12] = (unsigned long long)(sx) |
             ((unsigned long long)(sy) << 16) |
             ((unsigned long long)z_and_fog << 32);
-    D_L11_001611C0_g += 0x70;
+    D_L11_001611C0_g = (*(volatile int *)&D_L11_001611C0_g) + 0x70;
 }
 #undef FUN_L11_00310cf8
 #endif
