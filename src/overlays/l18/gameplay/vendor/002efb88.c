@@ -750,7 +750,7 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern int FUN_0022da68(int, int, int);
 extern int FUN_L00_0028d8c0(void *, int);
 extern unsigned char *D_L18_0015FFD8;
-extern void FUN_L18_002f1fd8(void);
+extern void FUN_L18_002f1fd8(struct Moby *);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 void FUN_L18_002f1e68(struct Moby *m) {
@@ -761,7 +761,7 @@ void FUN_L18_002f1e68(struct Moby *m) {
         ((float *)d)[3] = 1.0f;
         break;
     case 1:
-        enqueue_callback_list_1_alt(FUN_L18_002f1fd8, m);
+        enqueue_callback_list_1_alt((void (*)(void))FUN_L18_002f1fd8, m);
         if (FUN_L00_0028d8c0(m, d[1]) == 0) {
             d[1] = FUN_0022da68(0, 4, (int)m);
         }
@@ -789,7 +789,91 @@ void FUN_L18_002f1e68(struct Moby *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f1fd8.s", FUN_L18_002f1fd8);
+#include "rnc/rendering/geometry_quad.h"
+
+struct GlowVars {
+    u8 pad0[8];
+    f32 scroll;
+    f32 max_alpha;
+};
+
+extern void copy_matrix_1fd8(void *, void *) __asm__("FUN_001fa298");
+extern float distance_1fd8(void *, void *) __asm__("FUN_001f9b48");
+extern u64 get_effect_texture_1fd8(int) __asm__("FUN_001f44b8");
+extern int truncate_1fd8(float) __asm__("FUN_001fa6d0");
+extern int blend_color_1fd8(int, int, float) __asm__("FUN_001fa6e0");
+extern void draw_quad_1fd8(void *, void *, int) __asm__("FUN_001f7d30");
+extern float D_0015ED6C;
+extern float D_L18_001677C0[];
+extern f32 D_L18_001622E0 __attribute__((sda));
+extern int D_L18_001622E4 __attribute__((sda));
+extern int D_L18_001622E8 __attribute__((sda));
+extern int D_L18_001622EC __attribute__((sda));
+extern int D_L18_001622F0 __attribute__((sda));
+extern int D_L18_001622C8 __attribute__((sda));
+extern int D_L18_001622CC __attribute__((sda));
+extern f32 D_L18_001622D0 __attribute__((sda));
+extern f32 D_L18_001622D4 __attribute__((sda));
+extern f32 D_L18_001DA350[4][2];
+extern u128 D_L18_001DA370[4];
+
+void FUN_L18_002f1fd8(struct Moby *moby) {
+    struct GeometryQuad quads[4];
+    float matrix[4][4] __attribute__((aligned(16)));
+    struct GlowVars *vars;
+    float alpha;
+    float step;
+    float phase;
+    int color;
+    int i;
+    int j;
+    int pass;
+
+    vars = (struct GlowVars *)moby->pvars;
+    copy_matrix_1fd8(matrix, &moby->rot_row0);
+    qcopy(matrix[3], &moby->pos);
+    matrix[3][3] = 1.0f;
+    vars->scroll += D_L18_001622E0 * D_0015ED6C;
+    if (1.0f < vars->scroll) {
+        vars->scroll -= 1.0f;
+    }
+    alpha = (48.0f - distance_1fd8(&moby->pos, D_L18_001677C0)) * 0.25f;
+    if (vars->max_alpha < alpha) {
+        alpha = vars->max_alpha;
+    } else if (alpha < 0.0f) {
+        alpha = 0.0f;
+    }
+    step = 0.25f;
+    for (i = 0; i < 4; i++) {
+        quads[i].texture = get_effect_texture_1fd8(0xE);
+        quads[i].reserved.value = 0;
+        quads[i].texture_state = 0xFF9000000260ULL;
+        quads[i].primitive = (u64)D_L18_001622E4 | ((u64)D_L18_001622E8 << 2) | ((u64)D_L18_001622EC << 4) |
+                             ((u64)D_L18_001622F0 << 6) | 0x8000000000ULL;
+        phase = vars->scroll + i * step;
+        phase = phase - (float)truncate_1fd8(phase);
+        color = blend_color_1fd8(D_L18_001622C8, D_L18_001622CC, phase);
+        color = blend_color_1fd8(color & 0xFFFFFF, color, alpha);
+        for (j = 0; j < 4; j++) {
+            quads[i].texture_coordinates[j][0] = D_L18_001DA350[j][0] + i * step;
+            quads[i].texture_coordinates[j][1] = D_L18_001DA350[j][1];
+            quads[i].colors[j] = color;
+            qcopy_nc(&quads[i].positions[j], &D_L18_001DA370[j]);
+            if (j & 1) {
+                quads[i].positions[j].f[2] += phase * D_L18_001622D4;
+            } else {
+                quads[i].positions[j].f[2] -= phase * D_L18_001622D4;
+            }
+        }
+    }
+    for (pass = 2; pass >= 0; pass--) {
+        matrix[3][2] += D_L18_001622D0;
+        draw_quad_1fd8(&quads[0], matrix, 0);
+        draw_quad_1fd8(&quads[1], matrix, 0);
+        draw_quad_1fd8(&quads[2], matrix, 0);
+        draw_quad_1fd8(&quads[3], matrix, 0);
+    }
+}
 /* Runs the lift's state machine, then queues the draw callback for its current look. */
 typedef struct { char p0[0x34]; unsigned short h34; } M_2310;
 extern int D_L18_001622FC_2310 __asm__("D_L18_001622FC") __attribute__((sda));
