@@ -145,9 +145,6 @@ void FUN_L01_0030b618(u8 *m) {
     }
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030bfa8.s", FUN_L01_0030bfa8);
-#else
 #include "rnc/overlay/quad.h"
 typedef union {
     OvlQuad q;
@@ -186,6 +183,8 @@ void FUN_L01_0030bfa8(char *m) {
         struct { GlowVec_bfa8 mat0, mat1, mat2, point, partial, offset; } basis;
     } local;
     GlowVec_bfa8 *dst;
+    GlowVec_bfa8 *src;
+    GlowVec_bfa8 *basis;
     s32 i;
     f32 one;
     OvlQuad q0, q1, q2, q3;
@@ -216,27 +215,31 @@ void FUN_L01_0030bfa8(char *m) {
     scale_vector_xyz_bfa8(&local.basis.offset, m + 0xc0, D_L01_00162064);
     scale_vector_xyz_bfa8(&local.basis.partial, m + 0xe0, D_L01_0016206C);
     add_vector_xyz_bfa8(&local.basis.offset, &local.basis.offset, &local.basis.partial);
+    src = &local.basis.mat0;
     add_vector_xyz_bfa8(&local.basis.point, &local.basis.offset, m + 0x10);
-    subtract_vector_xyz_bfa8(&local.basis.mat0, D_L01_00167240, &local.basis.point);
-    normalize_vector_xyz_bfa8(&local.basis.mat0, &local.basis.mat0, one);
-    cross_vectors_xyz_bfa8(&local.basis.mat1, &local.basis.mat0, D_0013F5E0);
-    normalize_vector_xyz_bfa8(&local.basis.mat1, &local.basis.mat1, -1.0f);
-    cross_vectors_xyz_bfa8(&local.basis.mat2, &local.basis.mat1, &local.basis.mat0);
+    subtract_vector_xyz_bfa8(src, D_L01_00167240, &local.basis.point);
+    normalize_vector_xyz_bfa8(src, src, one);
+    dst = &local.basis.mat1;
+    cross_vectors_xyz_bfa8(dst, src, D_0013F5E0);
+    normalize_vector_xyz_bfa8(dst, dst, -1.0f);
+    cross_vectors_xyz_bfa8(&local.basis.mat2, dst, src);
+    basis = src;
 
     local.quad.color[3] = 0x202020FF;
     local.quad.color[2] = 0x202020FF;
     local.quad.color[1] = 0x202020FF;
     local.quad.color[0] = 0x202020FF;
+    src = local.src_corner;
     dst = local.quad.corner;
     do {
-        scale_vector_xyz_bfa8(dst, &local.src_corner[3 - i], 0.4f);
-        transform_vector_bfa8(dst, dst, &local.basis.mat0);
+        scale_vector_xyz_bfa8(dst, src, 0.4f);
+        src++;
+        transform_vector_bfa8(dst, dst, basis);
         dst++;
         i--;
     } while (i >= 0);
-    draw_geometry_quad_bfa8(&local.quad, &local.basis.mat0, 0);
+    draw_geometry_quad_bfa8(&local.quad, 0, 0);
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
