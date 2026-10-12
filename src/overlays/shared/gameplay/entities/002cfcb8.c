@@ -4,6 +4,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/hero.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cfcb8.s", FUN_L00_002cfcb8);
@@ -1897,245 +1898,291 @@ after_blue:
     }
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d4610.s", FUN_L00_002d4610);
-#else
-extern f32 D_0015ED6C_2d4610 __asm__("D_0015ED6C");
-extern f32 D_0015ED70_2d4610 __asm__("D_0015ED70");
-extern u8 *D_L00_001B04B0_2d4610[] __asm__("D_L00_001B04B0");
-extern u8 *D_0015FFD8_2d4610 __asm__("D_L00_0015FFD8");
-extern void FUN_L00_002d5160_2d4610(u8 *) __asm__("FUN_L00_002d5160");
-extern void FUN_L00_0025a120_2d4610(u8 *) __asm__("FUN_L00_0025a120");
-extern void FUN_L00_00263ac8_2d4610(f32, u8 *, s32, void *) __asm__("FUN_L00_00263ac8");
-extern void FUN_L00_00257880_2d4610(u8 *, s32, s32, s32) __asm__("FUN_L00_00257880");
-extern s32 FUN_001fef20_2d4610(s32) __asm__("FUN_001f96f8");
-extern s16 FUN_00200250_2d4610(f32) __asm__("FUN_001fa6d0");
-extern f32 FUN_001ff450_2d4610(void *, void *) __asm__("FUN_001f9b48");
-extern f32 FUN_001ff488_2d4610(void *, void *) __asm__("FUN_001f9b80");
-extern f32 FUN_001ff8b0_2d4610(f32, f32) __asm__("FUN_001f9e90");
-extern f32 FUN_002001f0_2d4610(f32, f32) __asm__("FUN_001fa688");
-extern f32 FUN_L00_00257be8_2d4610(f32, f32) __asm__("FUN_L00_00257be8");
-extern s32 FUN_L00_00257b50_2d4610(s32) __asm__("FUN_L00_00257b50");
-extern s32 FUN_L00_00257b90_2d4610(s32, s32) __asm__("FUN_L00_00257b90");
-extern f32 FUN_L00_002d54c8(u8 *, f32 *, f32);
-extern void FUN_L00_0025be00_2d4610(void *, f32, void *, f32, f32, f32) __asm__("FUN_L00_0025be00");
-extern void FUN_L00_00261630_2d4610(f32, f32, u8 *, void *) __asm__("FUN_L00_00261630");
-extern s32 FUN_L00_002618d8_2d4610(f32, u8 *) __asm__("FUN_L00_002618d8");
-extern void FUN_L00_002599e8_2d4610(u8 *, f32, f32, f32, s32, s32, s32, s32, s32) __asm__("FUN_L00_002599e8");
-extern s32 FUN_L00_00261968_2d4610(s32, void *, void *) __asm__("FUN_L00_00261968");
-extern s32 FUN_L00_002dc9f0_2d4610(u8 *, void *) __asm__("FUN_L00_002dc9f0");
-extern s32 FUN_L00_0025c698_2d4610(u8 *, void *) __asm__("FUN_L00_0025c698");
-extern void FUN_L00_0025f3e8_2d4610(u8 *, void *, s32, f32, f32) __asm__("FUN_L00_0025f3e8");
-extern void FUN_L00_00261d78_2d4610(f32, s32, void *, void *) __asm__("FUN_L00_00261d78");
-extern f32 FUN_L00_00259698_2d4610(f32, void *, s32) __asm__("FUN_L00_00259698");
-extern void FUN_L00_0025b868_2d4610(f32, f32, void *) __asm__("FUN_L00_0025b868");
-extern void FUN_L00_002d5830_2d4610(u8 *) __asm__("FUN_L00_002d5830");
-extern void FUN_001ff2a8_2d4610(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_001ff500_2d4610(f32, void *, void *) __asm__("FUN_001f9bf8");
-extern void FUN_001ff278_2d4610(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_0028dbe8_2d4610(s32, s32, u8 *) __asm__("FUN_0022da68");
-extern void FUN_0024eb68_2d4610(u8 *) __asm__("FUN_00214cc8");
+typedef struct Moby Moby;
+extern void FUN_00212f90_2d4610(void *, int, int, int) __asm__("FUN_00212f90");
+extern int FUN_001f96f8_2d4610(int) __asm__("FUN_001f96f8");
+extern void FUN_001f9a28_2d4610(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001f9a10_2d4610(void *, void *, void *) __asm__("FUN_001f9a10");
+typedef float ToadVec[4] __attribute__((aligned(16)));
+typedef struct { u8 pad0[0x24]; float unk24; } ToadClass;
+typedef struct { int count; int pad4[3]; ToadVec pts[1]; } ToadPath;
+typedef struct {
+    u8 pad0[0x29];
+    u8 unk29;
+    u8 pad2A[0x58 - 0x2A];
+    u8 unk58;
+    u8 pad59;
+    u8 unk5A;
+    u8 pad5B[0x70 - 0x5B];
+    u8 unk70[0x138 - 0x70];
+    s16 unk138;
+    u8 pad13A[0x140 - 0x13A];
+    void *unk140;
+    u8 pad144[0x180 - 0x144];
+    ToadVec unk180;
+    u8 pad190[0x1C0 - 0x190];
+    Moby *target;
+    int unk1C4;
+    u8 pad1C8[8];
+    ToadVec home;
+    int unk1E0;
+    int unk1E4;
+    int path;
+    int follow_moby;
+    int pickup_moby;
+    float turn_speed;
+    float unk1F8;
+    float unk1FC;
+    u8 unk200[0x40];
+    ToadVec unk240;
+    float unk250;
+    float unk254;
+    float unk258;
+    float unk25C;
+    u8 pad260[0x14];
+    s16 path_point;
+    s16 unk276;
+} ToadVars;
 
-void FUN_L00_002d4610(u8 *m) {
-    u8 *v = *(u8 **)(m + 0x78);
-    u8 *target;
-    u8 *row;
-    f32 vec[4] __attribute__((aligned(16)));
-    f32 angle, distance;
-    s32 animation;
-    s32 effect;
+extern float D_L00_0016196C_2d4610 __asm__("D_L00_0016196C") __attribute__((sda));
+extern float D_L00_00161980_2d4610 __asm__("D_L00_00161980") __attribute__((sda));
+extern float D_L00_00161984_2d4610 __asm__("D_L00_00161984") __attribute__((sda));
+extern short D_L00_00161960_2d4610 __asm__("D_L00_00161960") __attribute__((sda));
+extern char D_L00_00166DC0_2d4610[] __asm__("D_L00_00166DC0");
+extern char *D_L00_0015FFD8_2d4610 __asm__("D_L00_0015FFD8") MACRO_ADDR;
+extern ToadPath *toad_paths[] __asm__("D_L00_001B04B0");
 
-    FUN_L00_002d5160_2d4610(m);
-    target = *(u8 **)(v + 0x1c0);
-    if (m[0x31] && FUN_001ff450_2d4610(m + 0x10, (void *)0x166dc0) < 26.0f) {
-        FUN_L00_0025a120_2d4610(m);
-        m[0x7f] = 0x15;
+extern void FUN_L00_002d5160_2d4610(void *) __asm__("FUN_L00_002d5160");
+extern void FUN_L00_002d5830_2d4610(void *) __asm__("FUN_L00_002d5830");
+extern float FUN_001f9b48_2d4610(void *, void *) __asm__("FUN_001f9b48");
+extern void FUN_L00_0025a120_2d4610(void *) __asm__("FUN_L00_0025a120");
+extern void FUN_L00_00263ac8_2d4610(float, int, int, unsigned char *) __asm__("FUN_L00_00263ac8");
+extern float FUN_001f9b80_2d4610(void *, void *) __asm__("FUN_001f9b80");
+extern int FUN_001fa6d0_2d4610(float) __asm__("FUN_001fa6d0");
+extern int FUN_L00_002dc9f0_2d4610(void *, void *) __asm__("FUN_L00_002dc9f0");
+extern float FUN_001f9e90_2d4610(float, float) __asm__("FUN_001f9e90");
+extern float FUN_L00_0025be00_2d4610(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
+extern float FUN_L00_002d54c8_2d4610(unsigned char *m, float *t, float vel) __asm__("FUN_L00_002d54c8");
+extern int FUN_L00_00257b90_2d4610(int, int) __asm__("FUN_L00_00257b90");
+extern float FUN_002132a8_2d4610(float, float) __asm__("FUN_002132a8");
+extern void FUN_L00_00261630_2d4610(char *moby, char *d, float a, float b) __asm__("FUN_L00_00261630");
+extern float FUN_001fa688_2d4610(float, float) __asm__("FUN_001fa688");
+extern int FUN_00214cc8_2d4610(void *, float) __asm__("FUN_00214cc8");
+extern void FUN_L00_002599e8_2d4610(void *, float, float, float, int, int, int, int, int) __asm__("FUN_L00_002599e8");
+extern void FUN_001f9bf8_2d4610(void *, void *, float) __asm__("FUN_001f9bf8");
+extern int FUN_L00_00261968_2d4610(int, void *, void *) __asm__("FUN_L00_00261968");
+extern int FUN_00213260_2d4610(int) __asm__("FUN_00213260");
+extern int FUN_L00_0025c698_2d4610(void *, void *) __asm__("FUN_L00_0025c698");
+extern void FUN_0022da68_2d4610(int, int, int) __asm__("FUN_0022da68");
+extern void FUN_L00_0025f3e8_2d4610(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
+extern void FUN_0020c828_2d4610(void *) __asm__("FUN_0020c828");
+extern float FUN_00213508_2d4610(void *, int, float) __asm__("FUN_00213508");
+extern void FUN_L00_00261d78_2d4610(int, float, void *, void *) __asm__("FUN_L00_00261d78");
+extern float FUN_00213ed8_2d4610(float, float, float *) __asm__("FUN_00213ed8");
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D5AC0), where it is exact; names translated to the US level program. */
+
+/* Class 749 update (horny toad): state machine that walks a path or follows a target moby, hops, turns and dies; then settles its height and checks a pickup moby. */
+void FUN_L00_002d4610(Moby *moby) {
+    ToadVars *data;
+    Moby *target;
+    ToadVec v;
+
+    data = (ToadVars *)moby->pvars;
+    FUN_L00_002d5160_2d4610(moby);
+    target = data->target;
+    if (moby->unk31 != 0 && FUN_001f9b48_2d4610((*(ToadVec *)&moby->pos), D_L00_00166DC0_2d4610) < 26.0f) {
+        FUN_L00_0025a120_2d4610(moby);
+        moby->unk7F = 0x15;
     }
-    FUN_L00_00263ac8_2d4610(2.1f, m, 1, v + 0x200);
-    switch (m[0x20]) {
-    case 0:
-        *(f32 *)(m + 0x2c) = *(f32 *)(*(u8 **)(m + 0x24) + 0x24) * (*(f32 *)((u8 *)&D_0015ED6C_2d4610 - 0x4000));
-        *(OvlQuad *)(v + 0x1d0) = *(OvlQuad *)(m + 0x10);
-        if (m[0x53] != 1) FUN_L00_00257880_2d4610(m, 1, 0, 0);
-        v[0x29] = 1;
-        *(f32 **)(v + 0x140) = (f32 *)((u8 *)&D_0015ED6C_2d4610 - 0x400c);
-        *(OvlQuad *)(v + 0x240) = *(OvlQuad *)(m + 0x10);
-        *(f32 *)(v + 0x25c) = 1.5f;
-        *(f32 *)(v + 0x254) = D_0015ED6C_2d4610 + D_0015ED6C_2d4610;
-        *(f32 *)(v + 0x258) = D_0015ED6C_2d4610 * 2.9670596f;
-        vec[0] = 150.0f; vec[1] = 127.0f; vec[2] = 0.0f; vec[3] = 0.0f;
-        if (FUN_001ff488_2d4610(m + 0x10, vec) < 5.0f) *(f32 *)(v + 0x25c) = 0.75f;
-        v[0x58] = FUN_00200250_2d4610(12.0f);
-        v[0x5a] = FUN_00200250_2d4610(2.0f);
-        if (*(s32 *)(v + 0x1e8) < 0) {
-            m[0x20] = 5;
-        } else if (*(s32 *)(v + 0x1e4) < 0) {
-            if (*(s32 *)(v + 0x1ec) < 0) goto remove;
-            *(OvlQuad *)(v + 0x1d0) = *(OvlQuad *)(m + 0x10);
-            m[0x20] = 1;
-            if (m[0x53] != 2) { animation = 2; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+    FUN_L00_00263ac8_2d4610(2.1f, (int)moby, 1, data->unk200);
+    switch (moby->state) {
+    case 0: {
+        float k;
+        moby->scale = ((ToadClass *)moby->pclass)->unk24 * D_L00_0016196C_2d4610;
+        qcopy(data->home, (*(ToadVec *)&moby->pos));
+        if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, 0);
+        data->unk29 = 1;
+        data->unk140 = &D_L00_00161960_2d4610;
+        qcopy(data->unk240, (*(ToadVec *)&moby->pos));
+        k = frame_time;
+        data->unk25C = 1.5f;
+        data->unk254 = k * 2.0f;
+        data->unk258 = k * 2.9670596f;
+        {
+            *(u128 *)v = 0;
+            v[0] = 150.0f;
+            v[1] = 127.0f;
+            if (FUN_001f9b80_2d4610((*(ToadVec *)&moby->pos), v) < 5.0f) {
+                data->unk25C = 0.75f;
+            }
+        }
+        data->unk58 = FUN_001fa6d0_2d4610(12.0f);
+        data->unk5A = FUN_001fa6d0_2d4610(2.0f);
+        if (data->path >= 0) {
+            if (data->unk1E4 >= 0) {
+                ToadPath *path = toad_paths[data->path];
+                qcopy(data->home, path->pts[path->count - 1]);
+                qcopy((*(ToadVec *)&moby->pos), path->pts[0]);
+                moby->state = 3;
+            } else if (data->follow_moby >= 0) {
+                qcopy(data->home, (*(ToadVec *)&moby->pos));
+                moby->state = 1;
+                if (moby->prev_seq != 2) FUN_00212f90_2d4610(moby, 2, 0, FUN_001f96f8_2d4610(10));
+            } else {
+                FUN_0020c828_2d4610(moby);
+                return;
+            }
         } else {
-            row = D_L00_001B04B0_2d4610[*(s32 *)(v + 0x1e8)];
-            *(OvlQuad *)(v + 0x1d0) = *(OvlQuad *)(row + *(s32 *)row * 0x10);
-            *(OvlQuad *)(m + 0x10) = *(OvlQuad *)(row + 0x10);
-            m[0x20] = 3;
+            moby->state = 5;
         }
         break;
-    case 1:
-        target = D_0015FFD8_2d4610 + *(s32 *)(v + 0x1ec) * 0x100;
-        if (target && target[0x20] != 0xfe && target[0x20] != 0xfd) {
-            angle = FUN_001ff8b0_2d4610(*(f32 *)(target + 0x10) - *(f32 *)(m + 0x10), *(f32 *)(target + 0x14) - *(f32 *)(m + 0x14));
-            FUN_L00_0025be00_2d4610(m + 0x48, angle, v + 0x1f4, D_0015ED70_2d4610 * 12.566371f, D_0015ED70_2d4610 * 12.566371f, D_0015ED6C_2d4610 * 12.566371f);
-            goto update;
+    }
+    case 9:
+        if (FUN_L00_002dc9f0_2d4610(moby, data->unk70) != 0) {
+            moby->state = 5;
+            data->unk138 = 0;
         }
-        m[0x20] = 8;
-        if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
         break;
+    case 1: {
+        Moby *t = (Moby *)(D_L00_0015FFD8_2d4610 + (data->follow_moby << 8));
+        if (t != 0 && t->state != 0xFE && t->state != 0xFD) {
+            FUN_L00_0025be00_2d4610(&moby->rot.z, FUN_001f9e90_2d4610((*(ToadVec *)&t->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&t->pos)[1] - (*(ToadVec *)&moby->pos)[1]), &data->turn_speed, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 12.566371f);
+        } else {
+            moby->state = 8;
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
+        }
+        break;
+    }
     case 2:
-        row = D_L00_001B04B0_2d4610[*(s32 *)(v + 0x1e8)];
-        if (FUN_L00_002d54c8(m, (f32 *)(row + *(s16 *)(v + 0x274) * 0x10 + 0x10), 0.5f) < 1.0f) {
-            m[0x20] = 1;
-            if (m[0x53] != 2) { animation = 2; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+        if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, toad_paths[data->path]->pts[data->path_point], 0.5f) < 1.0f) {
+            moby->state = 1;
+            if (moby->prev_seq != 2) FUN_00212f90_2d4610(moby, 2, 0, FUN_001f96f8_2d4610(10));
         }
         break;
     case 3:
-        if (*(s32 *)(v + 0x1c4) != 2) {
-            m[0x20] = 4;
-            if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+        if (data->unk1C4 != 2) {
+            moby->state = 4;
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
         }
         break;
-    case 4:
-        row = D_L00_001B04B0_2d4610[*(s32 *)(v + 0x1e8)];
-        distance = FUN_L00_002d54c8(m, (f32 *)(row + *(s16 *)(v + 0x274) * 0x10 + 0x10), 0.5f);
-        if (distance < 1.0f) {
-            if (*(s32 *)row - 1 <= *(s16 *)(v + 0x274)) goto state_five;
-            ++*(s16 *)(v + 0x274);
-        } else if (*(s32 *)(v + 0x1c4) != 2) {
-            m[0x20] = 6;
-            if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
-        }
-        break;
-    case 5:
-        if (m[0x53] != 4) {
-            animation = FUN_L00_00257b90_2d4610(0, 5);
-            if (m[0x53] != 4) FUN_L00_00257880_2d4610(m, 4, animation, FUN_001fef20_2d4610(10));
-            *(f32 *)(m + 0x58) = FUN_L00_00257be8_2d4610(0.92f, 1.08f);
-        }
-        FUN_L00_00261630_2d4610(0.5f, 0.5f, m, v + 0x240);
-        if (*(s32 *)(v + 0x1c4) == 2) goto update;
-        *(f32 *)(v + 0x1fc) = FUN_L00_00257be8_2d4610(-20.0f, 20.0f) * 0.017453292f;
-        m[0x20] = 6;
-        if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
-        goto update;
-    case 6:
-        if (FUN_L00_002d54c8(m, (f32 *)(v + 0x180), 0.5f) < (*(f32 *)((u8 *)&D_0015ED6C_2d4610 - 0x3fec))) {
-            angle = FUN_001ff8b0_2d4610(*(f32 *)(target + 0x10) - *(f32 *)(m + 0x10), *(f32 *)(target + 0x14) - *(f32 *)(m + 0x14));
-            if (FUN_002001f0_2d4610(*(f32 *)(m + 0x48), angle) < 0.17453292f) {
-                m[0x20] = 7;
-                if (m[0x53] != 5) FUN_L00_00257880_2d4610(m, 5, (s32)(*(f32 *)((u8 *)&D_0015ED6C_2d4610 - 0x3fe8)), FUN_001fef20_2d4610(10));
-                break;
+    case 4: {
+        ToadPath *path = toad_paths[data->path];
+        if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, path->pts[data->path_point], 0.5f) < 1.0f) {
+            if (data->path_point < path->count - 1) {
+                data->path_point++;
+            } else {
+                moby->state = 5;
+                if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, FUN_001f96f8_2d4610(10));
             }
+        } else if (data->unk1C4 != 2) {
+            moby->state = 6;
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
         }
-        if (*(s32 *)(v + 0x1c4) != 2) goto update;
-        m[0x20] = 8;
-        if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+        break;
+    }
+    case 5:
+        if (moby->prev_seq != 4) {
+            int n = FUN_L00_00257b90_2d4610(0, 5);
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, n, FUN_001f96f8_2d4610(10));
+            moby->unk58 = FUN_002132a8_2d4610(0.92f, 1.08f);
+        }
+        FUN_L00_00261630_2d4610((char *)moby, (char *)data->unk240, 0.5f, 0.5f);
+        if (data->unk1C4 != 2) {
+            data->unk1FC = FUN_002132a8_2d4610(-20.0f, 20.0f) * 0.017453292f;
+            moby->state = 6;
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
+        }
+        break;
+    case 6:
+        if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->unk180, 0.5f) < D_L00_00161980_2d4610
+            && FUN_001fa688_2d4610(moby->rot.z, FUN_001f9e90_2d4610((*(ToadVec *)&target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&target->pos)[1] - (*(ToadVec *)&moby->pos)[1])) < 0.17453292f) {
+            moby->state = 7;
+            if (moby->prev_seq != 5) FUN_00212f90_2d4610(moby, 5, (int)D_L00_00161984_2d4610, FUN_001f96f8_2d4610(10));
+        } else if (data->unk1C4 == 2) {
+            moby->state = 8;
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
+        }
         break;
     case 7:
-        if (FUN_L00_002618d8_2d4610(34.0f, m)) {
-            FUN_L00_002599e8_2d4610(m, 0.333f, 1.0f, 1.0f, 0, 1, 0, 1, 0);
-            goto update;
-        }
-        if (m[0x70] & 2) {
-            if (*(s32 *)(v + 0x1c4) == 2) {
-                m[0x20] = 8;
-                if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
-            } else {
-                distance = FUN_001ff488_2d4610(m + 0x10, target + 0x10);
-                if (distance <= 1.5f) {
-                    angle = FUN_001ff8b0_2d4610(*(f32 *)(target + 0x10) - *(f32 *)(m + 0x10), *(f32 *)(target + 0x14) - *(f32 *)(m + 0x14));
-                    if (FUN_002001f0_2d4610(*(f32 *)(m + 0x48), angle) <= 0.17453292f) break;
-                }
-                m[0x20] = 6;
-                if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+        if (FUN_00214cc8_2d4610(moby, 34.0f) != 0) {
+            FUN_L00_002599e8_2d4610(moby, 0.333f, 1.0f, 1.0f, 0, 1, 0, 1, 0);
+        } else if (moby->unk70 & 2) {
+            if (data->unk1C4 == 2) {
+                moby->state = 8;
+                if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
+            } else if (FUN_001f9b80_2d4610((*(ToadVec *)&moby->pos), (*(ToadVec *)&target->pos)) > 1.5f
+                       || FUN_001fa688_2d4610(moby->rot.z, FUN_001f9e90_2d4610((*(ToadVec *)&target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&target->pos)[1] - (*(ToadVec *)&moby->pos)[1])) > 0.17453292f) {
+                moby->state = 6;
+                if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
             }
         }
         break;
     case 8:
-        if (FUN_L00_002d54c8(m, (f32 *)(v + 0x1d0), 0.5f) < 1.5f) goto state_five;
-        if (*(s32 *)(v + 0x1c4) != 2) {
-            m[0x20] = 6;
-            if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+        if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->home, 0.5f) < 1.5f) {
+            moby->state = 5;
+            if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, FUN_001f96f8_2d4610(10));
+        } else if (data->unk1C4 != 2) {
+            moby->state = 6;
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
         }
         break;
-    case 9:
-        if (FUN_L00_002dc9f0_2d4610(m, v + 0x70)) {
-            m[0x20] = 5;
-            *(s16 *)(v + 0x138) = 0;
-        }
-        break;
-    case 10:
-        FUN_001ff2a8_2d4610(vec, v + 0x180, m + 0x10);
-        vec[2] = 0.0f;
-        FUN_001ff500_2d4610(2.5f, vec, vec);
-        FUN_001ff278_2d4610(vec, vec, m + 0x10);
-        if (!FUN_L00_00261968_2d4610(*(s32 *)(v + 0x1e0), m + 0x10, vec)) {
-            if (m[0x53] != 4) FUN_L00_00257880_2d4610(m, 4, 0, FUN_001fef20_2d4610(20));
-            FUN_L00_002d54c8(m, (f32 *)(v + 0x180), 0.5f);
+    case 10: {
+        FUN_001f9a28_2d4610(v, data->unk180, (*(ToadVec *)&moby->pos));
+        v[2] = 0.0f;
+        FUN_001f9bf8_2d4610(v, v, 2.5f);
+        FUN_001f9a10_2d4610(v, v, (*(ToadVec *)&moby->pos));
+        if (FUN_L00_00261968_2d4610(data->unk1E0, (*(ToadVec *)&moby->pos), v) != 0) {
+            FUN_L00_0025be00_2d4610(&moby->rot.z, FUN_001f9e90_2d4610((*(ToadVec *)&data->target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&data->target->pos)[1] - (*(ToadVec *)&moby->pos)[1]), &data->turn_speed, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 12.566371f);
+            if (moby->unk70 & 2) {
+                if (moby->prev_seq != FUN_00213260_2d4610(2) + 2) FUN_00212f90_2d4610(moby, FUN_00213260_2d4610(2) + 2, 0, FUN_001f96f8_2d4610(20));
+            }
         } else {
-            angle = FUN_001ff8b0_2d4610(*(f32 *)(*(u8 **)(v + 0x1c0) + 0x10) - *(f32 *)(m + 0x10), *(f32 *)(*(u8 **)(v + 0x1c0) + 0x14) - *(f32 *)(m + 0x14));
-            FUN_L00_0025be00_2d4610(m + 0x48, angle, v + 0x1f4, D_0015ED70_2d4610 * 12.566371f, D_0015ED70_2d4610 * 12.566371f, D_0015ED6C_2d4610 * 12.566371f);
-            if (!(m[0x70] & 2)) goto update;
-            animation = FUN_L00_00257b50_2d4610(2);
-            if (m[0x53] != animation + 2) FUN_L00_00257880_2d4610(m, FUN_L00_00257b50_2d4610(2) + 2, 0, FUN_001fef20_2d4610(20));
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(20));
+            FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->unk180, 0.5f);
         }
-        if (m[0x70] & 2) {
-            if (*(s32 *)(v + 0x1c4) == 2) {
-                if (*(s16 *)(v + 0x276)) goto update;
-                m[0x20] = 8;
-                if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(20); goto play_animation; }
-            } else {
-                m[0x20] = 6;
-                if (m[0x53] != 4) { animation = 4; effect = FUN_001fef20_2d4610(10); goto play_animation; }
+        if (moby->unk70 & 2) {
+            if (data->unk1C4 != 2) {
+                moby->state = 6;
+                if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
+            } else if (data->unk276 == 0) {
+                moby->state = 8;
+                if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(20));
             }
         }
         break;
+    }
     case 11:
-        if (FUN_L00_0025c698_2d4610(m, v + 0x70) & 0x140) goto state_five;
-        goto update;
+        if (FUN_L00_0025c698_2d4610(moby, data->unk70) & 0x140) {
+            moby->state = 5;
+            if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, FUN_001f96f8_2d4610(10));
+        }
+        break;
     case 12:
-        if (FUN_L00_0025c698_2d4610(m, v + 0x70) & 0x140) {
-            FUN_0028dbe8_2d4610(7, 0, m);
-            FUN_L00_0025f3e8_2d4610(m, m + 0x10, -1, 0.75f, 10.0f);
-            goto remove;
+        if (FUN_L00_0025c698_2d4610(moby, data->unk70) & 0x140) {
+            FUN_0022da68_2d4610(7, 0, (int)moby);
+            FUN_L00_0025f3e8_2d4610(moby, (*(ToadVec *)&moby->pos), -1, 0.75f, 10.0f);
+            FUN_0020c828_2d4610(moby);
+            return;
         }
         break;
     }
-    goto update;
-state_five:
-    m[0x20] = 5;
-    if (m[0x53] != 1) { animation = 1; effect = FUN_001fef20_2d4610(10); goto play_animation; }
-play_animation:
-    FUN_L00_00257880_2d4610(m, animation, 0, effect);
-update:
-    if (m[0x20] != 11 && m[0x20] != 12) {
-        if (m[0x20] != 9) {
-            FUN_L00_0025b868_2d4610(FUN_L00_00259698_2d4610(0.5f, m + 0x10, 0), D_0015ED6C_2d4610 * 7.0f, m + 0x18);
-            if (m[0x20] != 4) FUN_L00_00261d78_2d4610(0.25f, *(s32 *)(v + 0x1e0), m + 0x10, m + 0x10);
+    if (moby->state != 11 && moby->state != 12 && moby->state != 9) {
+        FUN_00213ed8_2d4610(FUN_00213508_2d4610((*(ToadVec *)&moby->pos), 0, 0.5f), frame_time * 7.0f, &(*(ToadVec *)&moby->pos)[2]);
+        if (moby->state != 4) {
+            FUN_L00_00261d78_2d4610(data->unk1E0, 0.25f, (*(ToadVec *)&moby->pos), (*(ToadVec *)&moby->pos));
         }
     }
-    effect = *(s32 *)(v + 0x1f0);
-    if (effect != -1) {
-        target = (*(u8 **)((u8 *)&D_0015FFD8_2d4610 - 0x6c00)) + effect * 0x100;
-        if (FUN_001ff488_2d4610(m + 0x10, target + 0x10) < 1.0f && *(s16 *)(target + 0xa6) == 0x33e) {
-            FUN_L00_002d5830_2d4610(target);
-            *(s32 *)(v + 0x1f0) = -1;
+    if (data->pickup_moby != -1) {
+        Moby *o = (Moby *)(D_L00_0015FFD8_2d4610 + (data->pickup_moby << 8));
+        if (FUN_001f9b80_2d4610((*(ToadVec *)&moby->pos), (*(ToadVec *)&o->pos)) < 1.0f) {
+            if (o->oclass == 0x33E) {
+                FUN_L00_002d5830_2d4610(o);
+                data->pickup_moby = -1;
+            }
         }
     }
-    return;
-remove:
-    FUN_0024eb68_2d4610(m);
 }
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5160.s", FUN_L00_002d5160);
 #else
