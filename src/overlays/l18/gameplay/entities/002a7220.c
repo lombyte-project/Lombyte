@@ -2357,7 +2357,6 @@ void FUN_L18_002e9768(struct Moby *moby) {
     float *data = (float *)moby->pvars;
     int state = moby->state;
     int lifetime, spread;
-    int *first, *second;
     float magnitude;
 
     switch (state) {
@@ -2383,6 +2382,7 @@ void FUN_L18_002e9768(struct Moby *moby) {
             float *pos = &moby->pos.x;
             {
                 int i;
+                int *first, *second;
                 float colors[6];
                 float colors2[6];
                 float position[4];
@@ -2409,16 +2409,19 @@ void FUN_L18_002e9768(struct Moby *moby) {
             }
             {
                 int i;
+                int *first, *second;
                 float position[4];
                 float colors[6];
                 float velocity[4];
                 float colors2[6];
                 float direction[4];
+                float zero;
                 i = 0;
+                zero = (float)i;
                 do {
                     qcopy(position, pos);
                     ++i;
-                    position[2] += random_float_between_9768(0.0f, 6.0f);
+                    position[2] += random_float_between_9768(zero, 6.0f);
                     __builtin_memcpy(colors, D_L18_001F29A0_9768, 24);
                     __builtin_memcpy(colors2, D_L18_001F29B8_9768, 24);
                     *(OvlQuad *)direction = 0;
@@ -2426,7 +2429,7 @@ void FUN_L18_002e9768(struct Moby *moby) {
                     direction[1] = random_float_between_9768(-1.0f, 1.0f);
                     direction[2] = random_float_between_9768(-1.0f, 1.0f);
                     *(u128 *)velocity = *(u128 *)direction;
-                    scale_vector_9768(velocity, velocity, random_float_between_9768(0.0f, 3.0f) * frame_time);
+                    scale_vector_9768(velocity, velocity, random_float_between_9768(zero, 3.0f) * frame_time);
                     first = (int *)colors + random_integer_below_9768(6);
                     second = (int *)colors2 + random_integer_below_9768(6);
                     spawn_particle_alt_9768(500000.0f, position, velocity, *first,
