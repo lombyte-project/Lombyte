@@ -26,7 +26,8 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
                         s16 height, s16 horizontal_offset, s16 vertical_offset) {
     GsVideoModeState *state;
     s32 kernel_horizontal, kernel_vertical, kernel_width, kernel_height;
-    s32 mode, scale, scaled_horizontal;
+    s32 mode, scale;
+    s64 scaled_horizontal;
     u16 interlace;
     u64 value;
 
@@ -58,10 +59,10 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
             scale = width + 0x9ff;
             scale /= width;
             scaled_horizontal = horizontal_offset * scale;
-            value = ((u64)(s64)(scale - 1) << 23) |
-                    ((u64)((vertical_offset + kernel_vertical + 0x32) & 0xfff) << 12) |
+            value = ((u64)((vertical_offset + kernel_vertical + 0x32) & 0xfff) << 12) |
                     ((u64)((s64)(width * scale) - 1) << 32) |
-                    ((u64)(((s64)scaled_horizontal + ((s64)kernel_horizontal + 0x27c)) & 0xfff));
+                    ((u64)(((s64)scaled_horizontal + ((s64)kernel_horizontal + 0x27c)) & 0xfff)) |
+                    ((u64)(s64)(scale - 1) << 23);
             if (state->nSFrame_mode == 0) {
                 scale = height - 1;
             } else {
@@ -84,10 +85,10 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
             scale = width + 0x9ff;
             scale /= width;
             scaled_horizontal = horizontal_offset * scale;
-            value = ((u64)(s64)(scale - 1) << 23) |
-                    ((u64)((vertical_offset + kernel_vertical + 0x48) & 0xfff) << 12) |
+            value = ((u64)((vertical_offset + kernel_vertical + 0x48) & 0xfff) << 12) |
                     ((u64)((s64)(width * scale) - 1) << 32) |
-                    ((u64)(((s64)scaled_horizontal + ((s64)kernel_horizontal + 0x290)) & 0xfff));
+                    ((u64)(((s64)scaled_horizontal + ((s64)kernel_horizontal + 0x290)) & 0xfff)) |
+                    ((u64)(s64)(scale - 1) << 23);
             if (state->nSFrame_mode != 0) {
                 scale = height * 2 - 1;
             } else {
