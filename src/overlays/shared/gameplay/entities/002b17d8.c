@@ -1077,10 +1077,10 @@ void FUN_L14_002dfd10(struct Moby *moby) {
     float vec[4];
     float absolute_velocity;
     void *path;
+    float one;
+    float zero;
 
     if (moby->state == 0) {
-        float one;
-        float zero;
         position = (float *)&moby->pos;
         path = *(char **)(race_paths_2e0170 + *(int *)(data + 0xc) * 0x20 + 0x10);
         qcopy(pos, position);
@@ -1100,30 +1100,29 @@ void FUN_L14_002dfd10(struct Moby *moby) {
         FUN_L00_0025e450(moby, vec, pos, zero, zero, 5, 2, 4,
                             one, 0.5f, 9.0f, one, -1, 15.0f, 0, 3, -1, 0);
     } else {
-        float one;
-        float zero;
         position = (float *)&moby->pos;
         velocity = (float *)(data + 0x30);
         FUN_001f9a10(position, position, velocity);
-        absolute_velocity = FUN_001f99c0(velocity[0]);
+        absolute_velocity = FUN_001f99c0(*(float *)(data + 0x30));
         if (D_L14_00161B48_dfd10 * frame_scale < absolute_velocity) {
-            velocity[0] *= (D_L14_00161B44_dfd10 - 1.0f) * frame_scale + 1.0f;
+            *(float *)(data + 0x30) *= (D_L14_00161B44_dfd10 - 1.0f) * frame_scale + 1.0f;
         }
-        absolute_velocity = FUN_001f99c0(velocity[1]);
+        absolute_velocity = FUN_001f99c0(*(float *)(data + 0x34));
         if (D_L14_00161B48_dfd10 * frame_scale < absolute_velocity) {
-            velocity[1] *= (D_L14_00161B44_dfd10 - 1.0f) * frame_scale + 1.0f;
+            *(float *)(data + 0x34) *= (D_L14_00161B44_dfd10 - 1.0f) * frame_scale + 1.0f;
         }
         zero = 0.0f;
-        if (velocity[2] > zero) {
-            velocity[2] *= (D_L14_00161B44_dfd10 - 1.0f) * frame_scale + 1.0f;
+        if (*(float *)(data + 0x38) > zero) {
+            *(float *)(data + 0x38) *= (D_L14_00161B44_dfd10 - 1.0f) * frame_scale + 1.0f;
         }
-        velocity[2] -= D_L14_00161B40_dfd10 * frame_scale_sq;
+        *(float *)(data + 0x38) -= D_L14_00161B40_dfd10 * frame_scale_sq;
         moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(data + 0x20));
         moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(data + 0x24));
         moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(data + 0x28));
-        if (!(moby->pos.x < 2.0f || 1021.0f < moby->pos.x ||
+        if (moby->pos.x < 2.0f || 1021.0f < moby->pos.x ||
               moby->pos.y < 2.0f || 1021.0f < moby->pos.y ||
-              moby->pos.z < 2.0f || 1021.0f < moby->pos.z)) {
+              moby->pos.z < 2.0f || 1021.0f < moby->pos.z) goto remove_moby;
+        {
             normalize_vector_xyz(vec, &moby->unkE0, 0.51999998f);
             FUN_001f9a10(pos, position, vec);
             if (FUN_001f9740(data + 4) == 0) {
@@ -1135,9 +1134,11 @@ void FUN_L14_002dfd10(struct Moby *moby) {
             FUN_L00_0028dc90(0, 0, moby, *(short *)(*(char **)data + 0xa6));
             FUN_L00_0025e450(moby, velocity, position, zero, zero, 5, 2, 4,
                                 one, 0.5f, 9.0f, one, -1, 15.0f, 0, 3, -1, 0);
-            FUN_L00_001f0d60(one, position, 0, (void *)D_001413D0);
+
         }
     }
+    FUN_L00_001f0d60(one, position, 0, (void *)D_001413D0);
+remove_moby:
     FUN_0020c828(moby);
     return;
 random_check:
