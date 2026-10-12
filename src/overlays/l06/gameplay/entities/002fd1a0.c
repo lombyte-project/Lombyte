@@ -1606,7 +1606,117 @@ int FUN_L06_00303160(char *moby, int path) {
 }
 #endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303748.s", FUN_L06_00303748);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303b68.s", FUN_L06_00303b68);
+extern char *D_L06_0015FFD8_03b68 __asm__("D_L06_0015FFD8");
+extern short *D_L06_001ABFC0_03b68[] __asm__("D_L06_001ABFC0");
+extern int D_L06_00162108_03b68 __asm__("D_L06_00162108") __attribute__((sda));
+extern int D_L06_0016210C_03b68 __asm__("D_L06_0016210C") __attribute__((sda));
+extern int D_L06_00162110_03b68 __asm__("D_L06_00162110") __attribute__((sda));
+extern float D_L06_0016215C __attribute__((sda));
+extern int D_L06_00162160 __attribute__((sda));
+extern int D_L06_00162164 __attribute__((sda));
+extern int D_L06_00162168 __attribute__((sda));
+extern float D_L06_0016216C __attribute__((sda));
+extern float D_L06_00162170 __attribute__((sda));
+extern float D_L06_00162174 __attribute__((sda));
+extern float D_L06_00162178 __attribute__((sda));
+extern float D_L06_0016217C __attribute__((sda));
+extern int D_L06_00162180 __attribute__((sda));
+extern int D_L06_00162184 __attribute__((sda));
+extern int D_L06_00162188 __attribute__((sda));
+extern int D_L06_0016218C __attribute__((sda));
+extern int D_L06_00162190 __attribute__((sda));
+extern int D_L06_00162194 __attribute__((sda));
+extern float frame_time_03b68 __asm__("D_0015ED6C");
+extern int scale_game_frames_03b68(int) __asm__("FUN_001f96f8");
+extern void FUN_L06_0030bef8_03b68(void *, int, int, int) __asm__("FUN_L06_0030bef8");
+extern void clear_vector_03b68(void *) __asm__("FUN_001f99f8");
+extern void random_vector_03b68(void *, float, float) __asm__("FUN_L00_00257d78");
+extern void push_piece_03b68(float, struct Moby *, void *, void *, int) __asm__("FUN_L06_00303748");
+extern void add_vector_03b68(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_03b68(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_03b68(void *, void *, float) __asm__("FUN_001f9a68");
+extern void set_vector_length_03b68(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float int_to_float_03b68(int) __asm__("FUN_001fa6c0");
+extern float random_float_between_03b68(float, float) __asm__("FUN_002132a8");
+extern int fast_tween_color_03b68(int, int, float) __asm__("FUN_001fa6e0");
+extern float scale_time_03b68(float) __asm__("FUN_001f96b0");
+extern int float_to_int_03b68(float) __asm__("FUN_001fa6d0");
+extern u8 *emit_particle_03b68(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+
+/* Breaks the linked pieces apart: pushes each one out from their middle (smaller pieces faster), spins it and sheds dust. */
+void FUN_L06_00303b68(struct Moby *moby) {
+    char *vars = (char *)moby->pvars;
+    float center[4];
+    float middle[4];
+    float push[4];
+    float spin[4];
+    float pos[4];
+    float vel[4];
+    float accel[4];
+    struct Moby *piece;
+    short *list;
+    short count;
+    int id;
+    int i;
+    float largest;
+    u8 *particle;
+    *(u128 *)center = 0;
+    center[0] = 426.0f;
+    center[1] = 189.75f;
+    center[2] = 173.07f;
+    FUN_L06_0030bef8_03b68(center, scale_game_frames_03b68(D_L06_00162108_03b68), D_L06_0016210C_03b68,
+                           D_L06_00162110_03b68);
+    largest = 0.0f;
+    clear_vector_03b68(middle);
+    list = D_L06_001ABFC0_03b68[*(int *)(vars + 0xCC)];
+    count = 0;
+    do {
+        id = *list & 0x7FFF;
+        random_vector_03b68(push, 1.0f, 2.0f);
+        push_piece_03b68(30.0f, moby, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos, push, 1);
+        add_vector_03b68(middle, middle, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos);
+        count++;
+        if (largest < ((struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68))->bsphere.w) {
+            largest = ((struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68))->bsphere.w;
+        }
+    } while (*list++ >= 0);
+    scale_vector_03b68(middle, middle, 1.0f / int_to_float_03b68(count));
+    list = D_L06_001ABFC0_03b68[*(int *)(vars + 0xCC)];
+    do {
+        float speed;
+        id = *list & 0x7FFF;
+        subtract_vector_03b68(push, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos, middle);
+        piece = (struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68);
+        speed = frame_time_03b68 * 30.0f;
+        set_vector_length_03b68(push, push, -((piece->bsphere.w - largest) / largest) * speed + speed);
+        push[3] = 6.0f;
+        random_vector_03b68(spin, frame_time_03b68 * 0.2617994f, frame_time_03b68 * 0.08726646f);
+        FUN_L06_00300f70((char *)(D_L06_0015FFD8_03b68 + (id << 8)), push, spin);
+        for (i = 0; i < D_L06_00162190; i++) {
+            piece = (struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68);
+            random_vector_03b68(pos, 0.0f, piece->bsphere.w * 0.00048828125f);
+            add_vector_03b68(pos, pos, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos);
+            random_vector_03b68(vel, 0.0f, D_L06_0016215C * frame_time_03b68);
+            clear_vector_03b68(accel);
+            vel[3] = random_float_between_03b68(D_L06_00162170, D_L06_00162174);
+            accel[3] = random_float_between_03b68(D_L06_00162178, D_L06_0016217C);
+            particle = emit_particle_03b68(
+                pos, vel, accel,
+                fast_tween_color_03b68(D_L06_00162180, D_L06_00162184, random_float_between_03b68(0.0f, 1.0f)),
+                fast_tween_color_03b68(D_L06_00162188, D_L06_0016218C, random_float_between_03b68(0.0f, 1.0f)),
+                float_to_int_03b68(scale_time_03b68((float)D_L06_00162160 * random_float_between_03b68(0.0f, 1.0f) + 1.0f)),
+                float_to_int_03b68(scale_time_03b68(
+                    (float)D_L06_00162164 * (random_float_between_03b68(-D_L06_0016216C, D_L06_0016216C) + 1.0f))),
+                float_to_int_03b68(scale_time_03b68(
+                    (float)D_L06_00162168 * (random_float_between_03b68(-D_L06_0016216C, D_L06_0016216C) + 1.0f))),
+                D_L06_00162194);
+            if (particle != 0) {
+                particle[9] = float_to_int_03b68(4.0f) - 0x20;
+            }
+        }
+    } while (*list++ >= 0);
+    ((struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68))->command = 30;
+}
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305468), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_0015FFD8_u __asm__("D_L06_0015FFD8");
