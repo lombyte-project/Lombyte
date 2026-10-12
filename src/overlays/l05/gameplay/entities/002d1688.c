@@ -1450,28 +1450,42 @@ extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void scale_vector_304058(void *, void *, float) __asm__("FUN_001f9bf8");
 
-float FUN_L05_00304058(volatile s32 path_index, void *position, void *out, float reach) {
+float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
     Vec4 segment, result, from_point, normal, projection, cross, offset;
     float separation;
     float along;
     float segment_length;
-    float best = 512.0f;
-    volatile int changed = 0;
+    float best;
+    struct { s32 path_index; void *out; volatile int changed; } state;
     int i;
+    int next_index;
     char *path;
+    int path_offset;
+    char **path_entry;
 
-    from_point = *(Vec4 *)position;
-    for (i = 0; i < *(int *)D_L05_001B0930[path_index] - 1; i++) {
-        char *next;
-        path = D_L05_001B0930[path_index];
-        next = path + (i + 1) * 16 + 0x10;
-        if (*(float *)(path + i * 16 + 0x1c) == 0.0f &&
-            *(float *)(path + (i + 1) * 16 + 0x1c) == 0.0f)
-            continue;
+    state.path_index = path_index;
+    state.out = out;
+    state.changed = 0;
+    best = 512.0f;
+    qcopy_nc(&from_point, position);
+    path_offset = path_index * 4;
+    i = 0;
+    if (state.changed < *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1) do {
+        int next;
+        int segment_offset = i * 16;
+        next_index = i + 1;
+        path_entry = (char **)((char *)D_L05_001B0930 + path_offset);
+        path = *(char **)((char *)D_L05_001B0930 + path_offset);
 
-        subtract_vector_304058(&segment, &from_point, next);
+        if (*(float *)(path + segment_offset + 0x1c) == 0.0f &&
+            *(float *)(path + next_index * 16 + 0x1c) == 0.0f)
+            goto loop_next;
+
+        next = segment_offset + 0x10;
+        subtract_vector_304058(&segment, &from_point, path + next);
         segment.f[2] = 0.0f;
-        subtract_vector_304058(&normal, path + i * 16 + 0x20, next);
+        subtract_vector_304058(&normal, *path_entry + (segment_offset + 0x20),
+                               *path_entry + next);
         normal.f[2] = 0.0f;
         scale_vector_304058(&projection, &normal, 1.0f);
         fast_vec_cross(&cross, &segment, &projection);
@@ -1479,27 +1493,30 @@ float FUN_L05_00304058(volatile s32 path_index, void *position, void *out, float
         if (separation < best)
             best = separation;
         if (reach < separation)
-            continue;
+            goto loop_next;
         segment_length = fast_vec_length(&normal);
         along = fast_vec_dot(&segment, &projection);
         if (segment_length < along || along < 0.0f) {
             if (!(fast_vec_length(&segment) < reach))
-                continue;
-            changed = 1;
+                goto loop_next;
+            state.changed = 1;
             scale_vector_304058(&result, &segment, reach);
         } else {
-            changed = 1;
+            state.changed = 1;
             scale_vector_304058(&offset, &projection, along);
             subtract_vector_304058(&result, &segment, &offset);
             scale_vector_304058(&result, &result, reach);
             add_vector_304058(&result, &result, &offset);
         }
-        add_vector_304058(&from_point, &result, next);
+        add_vector_304058(&from_point, &result,
+                          *path_entry + next);
         from_point.f[2] = ((Vec4f *)position)->z;
-        path = D_L05_001B0930[path_index];
-    }
-    if (changed)
-        *(Vec4 *)out = from_point;
+loop_next:
+        i = next_index;
+        path_offset = *(volatile s32 *)&state.path_index * 4;
+    } while (i < *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1);
+    if (state.changed)
+        qcopy(state.out, &from_point);
     return best;
 }
 #endif
