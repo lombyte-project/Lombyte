@@ -83,8 +83,6 @@ typedef struct {
     f32 frame_scale;
     f32 movement_sampling_scale;
 } FrameTiming;
-extern FrameTiming frame_timing __asm__("D_0015ED64");
-extern FrameTiming frame_timing_absolute __asm__("D_0015ED64");
 extern u8 big_head_cheat_enabled __asm__("D_0015EDB0");
 extern s32 breast_growth_count __asm__("D_L05_00161ED0") __attribute__((sda));
 extern s32 game_mode __asm__("D_L05_0015F5C4");
@@ -137,18 +135,15 @@ void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *,
                                             HoverboardGirlState *) __asm__("FUN_L05_00316810");
 void update_hoverboard_girl(HoverboardGirlMoby *) __asm__("FUN_L05_00316ab8");
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316810.s", FUN_L05_00316810);
-#else
+extern f32 frame_delta __asm__("D_0015ED64");
+
 void FUN_L05_00316810(HoverboardGirlMoby *moby, HoverboardGirlState *state) {
-    extern FrameTiming frame_timing_gp __asm__("D_0015ED64") __attribute__((sda));
     s32 joint_index = 0;
     HoverboardGirlJoint *joint = &state->joints[2];
     HoverboardGirlState *state_window = state;
-    f32 delta;
     f32 animation_value;
+
     do {
-        delta = frame_timing_gp.delta;
         if (breast_growth_count != 0) {
             animation_value = (f32)breast_growth_count * 0.15f + 1.0f;
             if (3.7f < animation_value) {
@@ -158,26 +153,15 @@ void FUN_L05_00316810(HoverboardGirlMoby *moby, HoverboardGirlState *state) {
             animation_value = (f32)(frame_number & 0x7F) * 0.0078125f;
             state_window->joints[2].target_rotation[1] =
                 fast_cos(animation_value * 3.1415927f) * 0.61086524f;
-            delta = *(f32 *)0x0015ED64;
         }
-        {
-            s32 current_joint_index = joint_index + 2;
-            f32 rotation_step = delta * 0.05f;
-            f32 rotation_limit = delta * 0.3f;
-            joint_index++;
-            update_joint_animation(moby, joint, current_joint_index, rotation_step,
-                                   rotation_limit);
-        }
+        update_joint_animation(moby, joint, joint_index + 2, frame_delta * 0.05f,
+                               frame_delta * 0.3f);
+        joint_index++;
         joint++;
-        /* Retail advances both its state window and joint cursor by 0x80. */
         state_window = (HoverboardGirlState *)((u8 *)state_window + 0x80);
     } while (joint_index < 2);
 }
-#endif
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316ab8.s", FUN_L05_00316ab8);
-#else
 void FUN_L05_00316ab8(HoverboardGirlMoby *moby) {
     HoverboardGirlState *state = moby->data;
     HoverboardGirlVector target_position;
@@ -358,17 +342,12 @@ void FUN_L05_00316ab8(HoverboardGirlMoby *moby) {
     }
     if (game_mode_absolute != 2) {
         update_hoverboard_girl_boobs_animation(moby, state);
-        if (big_head_cheat_enabled != 0) {
+        if (big_head_cheat_enabled != 0)
             state->joints[0].target_scale = 2.75f;
-            delta = frame_timing_absolute.delta;
-        } else {
-            delta = frame_timing.delta;
-        }
-        update_joint_animation(moby, &state->joints[0], 0, rotation_step * delta,
-                               rotation_limit * delta);
+        update_joint_animation(moby, &state->joints[0], 0, rotation_step * frame_delta,
+                               rotation_limit * frame_delta);
         update_joint_animation(moby, &state->joints[1], 1,
-                               rotation_step * frame_timing_absolute.delta,
-                               rotation_limit * frame_timing_absolute.delta);
+                               rotation_step * frame_delta,
+                               rotation_limit * frame_delta);
     }
 }
-#endif
