@@ -1768,7 +1768,7 @@ void FUN_L10_002da2c8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     union { unsigned char order[10]; float position2[4]; } scratch;
     float position1[4];
-    float half_height;
+    float half_height, half_width, radius_squared;
     int pass, i, copy_index;
 
     if (*(int *)(data + 0xC) == -1) {
@@ -1799,20 +1799,25 @@ void FUN_L10_002da2c8(struct Moby *moby) {
             } while (copy_index < *(int *)(data + 4));
         }
         {
+            float timer;
             float new_rotation = fast_add_rotations(moby->rot.z, 1.5707964f);
-            *(volatile unsigned char *)&moby->state = 1;
-            *(volatile unsigned char *)&moby->unk30 = 0x60;
+            moby->unk30 = 0x60;
+            moby->state = 1;
+            timer = D_L10_00161C98 * 60.0f;
             moby->rot.z = new_rotation;
+            *(int *)(data + 0x30) = -1;
+            *(int *)(data + 0x34) = FUN_001f96f8(FUN_001fa6d0(timer));
         }
-        *(int *)(data + 0x30) = -1;
-        *(int *)(data + 0x34) = FUN_001f96f8(FUN_001fa6d0(D_L10_00161C98 * 60.0f));
+
         moby->flags |= 0x41;
         break;
     case 1:
         half_height = (float)*(int *)(data + 4) * *(float *)(data + 8) * 0.5f;
+        half_width = *(float *)data * 0.5f;
         *(OvlQuad *)position1 = *(OvlQuad *)&moby->pos;
+        radius_squared = half_height * half_height;
         position1[2] += half_height;
-        position1[3] = FUN_001f9988(half_height * half_height + (*(float *)data * 0.5f) * (*(float *)data * 0.5f));
+        position1[3] = FUN_001f9988(radius_squared + half_width * half_width);
         if (FUN_001f9b48(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)FUN_001fa728(position1))
             enqueue_callback_list_1((void *)FUN_L10_002da690, moby);
         if (FUN_L00_0028d8c0(moby, *(int *)(data + 0x30)) == 0)
@@ -1829,9 +1834,11 @@ void FUN_L10_002da2c8(struct Moby *moby) {
         }
         *(int *)(data + 0x30) = -1;
         half_height = (float)*(int *)(data + 4) * *(float *)(data + 8) * 0.5f;
+        half_width = *(float *)data * 0.5f;
         *(OvlQuad *)scratch.position2 = *(OvlQuad *)&moby->pos;
+        radius_squared = half_height * half_height;
         scratch.position2[2] += half_height;
-        scratch.position2[3] = FUN_001f9988(half_height * half_height + (*(float *)data * 0.5f) * (*(float *)data * 0.5f));
+        scratch.position2[3] = FUN_001f9988(radius_squared + half_width * half_width);
         if (FUN_001f9b48(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)FUN_001fa728(scratch.position2))
             enqueue_callback_list_1((void *)FUN_L10_002da690, moby);
         break;
