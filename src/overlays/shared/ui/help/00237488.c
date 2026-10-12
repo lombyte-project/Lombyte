@@ -1298,10 +1298,13 @@ void FUN_L05_00254058(void) {
     total = *(s32 *)((char *)&hero + 0x70C);
     if (total > 0) {
         step = 100;
+        i = total;
+        total = 0;
         do {
-            *(s32 *)((char *)&hero + 0x710) += step;
+            total += step;
             step += 50;
-        } while (--total != 0);
+        } while (--i != 0);
+        *(s32 *)((char *)&hero + 0x710) = total;
     }
     *(s32 *)((char *)&hero + 0x6F0) = 0;
     for (i = 0; i < 4; i++) {
