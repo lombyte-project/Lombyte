@@ -1536,21 +1536,21 @@ void FUN_L12_00308350(struct Moby *m) {
     float matrix[4][4] __attribute__((aligned(16)));
     void *matrix_ptr;
     int i, j;
-    long flags;
+    long flags, second_flags;
 
     matrix_ptr = matrix;
-    copy_moby_matrix(matrix_ptr, &m->rot_row0);
-    *(u128 *)&matrix[3] = *(u128 *)&m->pos;
+    copy_moby_matrix(matrix, &m->rot_row0);
+    qcopy(&matrix[3], &m->pos);
     matrix[3][3] = 1.0f;
     first.texture = get_effect_texture_l12(0xe);
     flags = (long)D_L12_00161FBC | (long)D_L12_00161FC0 << 2 |
             (long)D_L12_00161FC4 << 4 | (long)D_L12_00161FC8 << 6 |
             0x8000000000L;
-    first.gs_state = flags;
-    flags = (long)D_L12_00161FCC | (long)D_L12_00161FD0 << 2 |
+    second_flags = (long)D_L12_00161FCC | (long)D_L12_00161FD0 << 2 |
             (long)D_L12_00161FD4 << 4 | (long)D_L12_00161FD8 << 6 |
             0x8000000000L;
-    second.gs_state = flags;
+    second.gs_state = second_flags;
+    first.gs_state = flags;
     first.texture_state = 0xFF9000000260L;
     second.texture_state = 0xFF9000000260L;
     second.texture = first.texture;
@@ -1559,21 +1559,27 @@ void FUN_L12_00308350(struct Moby *m) {
     second.color[0] = second.color[1] = second.color[2] = second.color[3] = D_L12_00161F94;
     j = 0;
     do {
-        first.vertices[j] = D_L12_001FB730[j];
-        second.vertices[j] = D_L12_001FB6F0[j];
-        first.uv[j][0] = second.uv[j][0] = D_L12_001FB6D0[j][0];
-        first.uv[j][1] = second.uv[j][1] = D_L12_001FB6D0[j][1];
+        float x, y;
+        qcopy(&second.vertices[j], &D_L12_001FB6F0[j]);
+        qcopy(&first.vertices[j], &D_L12_001FB730[j]);
+        x = D_L12_001FB6D0[j][0];
+        y = D_L12_001FB6D0[j][1];
+        first.uv[j][0] = x;
+        first.uv[j][1] = y;
+        second.uv[j][0] = x;
+        second.uv[j][1] = y;
         j++;
     } while (j < 4);
     i = 0;
     do {
         float x_offset;
-        float jitter = 0.0f;
+        float jitter;
         int row;
-        u128 *first_vertex = first.vertices;
-        u128 *second_vertex = second.vertices;
-        i++;
+        u128 *first_vertex;
+        u128 *second_vertex;
         x_offset = random_float_between(-0.5f, 0.5f);
+        first_vertex = first.vertices;
+        second_vertex = second.vertices;
         for (j = 0; j < 4; j++) {
             ((float *)first_vertex)[2] += 1.0f;
             ((float *)second_vertex)[2] += 1.0f;
@@ -1582,7 +1588,8 @@ void FUN_L12_00308350(struct Moby *m) {
             first.uv[j][0] = D_L12_001FB6D0[j][0] + x_offset;
             first.uv[j][1] = D_L12_001FB6D0[j][1];
         }
-        for (row = -3; row != 3; row++) {
+        jitter = 0.0f;
+        for (row = -3; row < 3; row++) {
             float x = (float)row + jitter;
             jitter = 0.0f;
             ((float *)&first.vertices[0])[1] = x;
@@ -1591,8 +1598,9 @@ void FUN_L12_00308350(struct Moby *m) {
             x = (float)(row + 1) + jitter;
             ((float *)&first.vertices[2])[1] = x;
             ((float *)&first.vertices[3])[1] = x;
-            draw_geometry_quad_l12(&first, matrix_ptr, 0);
+            draw_geometry_quad_l12(&first, matrix, 0);
         }
+        i++;
     } while (i < 5);
 }
 #endif
