@@ -1359,10 +1359,12 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
         timer = FUN_001fef20_2ad410(300);
     } else {
         W910 *holder_vars = v->holder->v;
+        int holder_flag;
         qcopy(&position, &m->pos);
         qcopy(&velocity, &v->vel);
+        holder_flag = *(int *)((char *)holder_vars + 0x50);
         timer = v->timer;
-        if (*(int *)((char *)holder_vars + 0x50))
+        if (holder_flag)
             v->holder_flag = 1;
     }
     {
@@ -1377,15 +1379,18 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
                 timer < FUN_001fef20_2ad410(300) - FUN_001fef20_2ad410(10)) {
                 offset.q = 0;
                 offset.f[2] = 0.5f;
-                if (v->last_hit != coll_hit.moby) {
-                    v->hit_count = 0;
-                    v->last_hit = coll_hit.moby;
-                } else {
-                    v->hit_count++;
-                    FUN_001ff2a8_2ad410(&start, (char *)coll_hit.moby + 0x10, &v->previous_hit);
-                    v->difference.q = start.q;
+                {
+                    H910 *h = &coll_hit;
+                    if (v->last_hit != h->moby) {
+                        v->hit_count = 0;
+                        v->last_hit = h->moby;
+                    } else {
+                        v->hit_count++;
+                        FUN_001ff2a8_2ad410(&start, (char *)h->moby + 0x10, &v->previous_hit);
+                        v->difference.q = start.q;
+                    }
+                    v->previous_hit.q = h->moby->pos.q;
                 }
-                v->previous_hit.q = coll_hit.moby->pos.q;
                 object_hit = 1;
                 qcopy(&v->landing, (char *)coll_hit.moby + 0x10);
                 found = 1;
@@ -1421,15 +1426,18 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
                 continue;
             offset.q = 0;
             offset.f[2] = 0.5f;
-            if (v->last_hit != coll_hit.moby) {
-                v->hit_count = 0;
-                v->last_hit = coll_hit.moby;
-            } else {
-                v->hit_count++;
-                FUN_001ff2a8_2ad410(&start, (char *)coll_hit.moby + 0x10, &v->previous_hit);
-                v->difference.q = start.q;
+            {
+                H910 *h = &coll_hit;
+                if (v->last_hit != h->moby) {
+                    v->hit_count = 0;
+                    v->last_hit = h->moby;
+                } else {
+                    v->hit_count++;
+                    FUN_001ff2a8_2ad410(&start, (char *)h->moby + 0x10, &v->previous_hit);
+                    v->difference.q = start.q;
+                }
+                v->previous_hit.q = h->moby->pos.q;
             }
-            v->previous_hit.q = coll_hit.moby->pos.q;
             object_hit = 1;
             qcopy(&v->landing, (char *)coll_hit.moby + 0x10);
             FUN_001ff278_2ad410(&offset, &offset, &v->landing);
