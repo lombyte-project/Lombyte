@@ -1908,7 +1908,7 @@ void FUN_L10_002e5be0(struct Moby *moby) {
             s32 variant;
 
             variant = random_integer_below(100) < D_L10_00161F04;
-            position = *moby_position;
+            qcopy(&position, moby_position);
             offset.f[0] = fast_cos(fast_add_rotations(moby->rot.z, 1.5707964f)) *
                             random_float_between(-pvars[4], pvars[4]);
             offset.f[1] = fast_sin(fast_add_rotations(moby->rot.z, 1.5707964f)) *
