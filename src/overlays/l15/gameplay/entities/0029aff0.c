@@ -674,9 +674,6 @@ no_hit:
 #endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002aa280.s", FUN_L15_002aa280);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c2938.s", FUN_L15_002c2938);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c4f88.s", FUN_L15_002c4f88);
-#else
 typedef union { u128 q; float f[4]; } SteeringVec_4f88;
 typedef struct {
     char pad[0x150];
@@ -732,8 +729,8 @@ void FUN_L15_002c4f88(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f8
 
 
     target.q = goal->q;
-    origin.q = *(u128 *)&moby->pos;
     look_copy.q = look->q;
+    origin.q = *(u128 *)&moby->pos;
     distance = FUN_001f9b48(&moby->pos, target_at);
     step = frame_time_sq * 10.0f;
     old_speed = vars->speed;
@@ -760,12 +757,15 @@ void FUN_L15_002c4f88(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f8
     vars->delta.q = delta.q;
     FUN_L00_001ff290(&delta, &vars->delta, &scaled);
     FUN_L15_00247e90(1.0f, 2.0f, moby, &vars->delta, 0);
-    height = vars->height;
-    moby->pos.z = height;
-    pos_x = moby->pos.x;
-    pos_y = moby->pos.y;
-    dx = look_at->f[0] - pos_x;
-    dy = look_at->f[1] - pos_y;
+    /* Preserve the retail height store and facing input access order. */
+    height = *(volatile float *)&vars->height;
+    pos_x = *(volatile float *)&moby->pos.x;
+    *(volatile float *)&moby->pos.z = height;
+    pos_y = *(volatile float *)&moby->pos.y;
+    dy = *(volatile float *)&look_at->f[1];
+    dx = *(volatile float *)&look_at->f[0];
+    dy = dy - pos_y;
+    dx = dx - pos_x;
     facing = FUN_001f9e90(dx, dy);
     moby->rot.z = spring_turn(&vars->facing_velocity, moby->rot.z, facing,
                                    0.01f, 0.3f, 0.1f);
@@ -786,7 +786,6 @@ void FUN_L15_002c4f88(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f8
         frame_time_sq * 1.0471976f, frame_time_sq * 2.0943952f,
         frame_time * 1.5707964f);
 }
-#endif
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 
