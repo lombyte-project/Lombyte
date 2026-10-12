@@ -50,8 +50,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
     u8 delta[16];
     u8 matrix[64];
     struct Moby *child;
-    s16 save_id;
-    u32 *bits;
+    u16 save_id;
     s32 first;
     s32 second;
     s32 divisor;
@@ -96,12 +95,12 @@ void FUN_L15_002e5958(struct Moby *moby) {
     case 2:
         save_id = moby->save_id;
         if (D_L15_001BB830[0x454 + (s16)save_id] != 0 ||
-            ((((s32)*(u32 *)((u8 *)D_0014C190 + (current_level_index << 8) + (((s16)save_id >> 5) << 2))) >> (save_id & 31)) & 1) != 0) {
+            ((((s32)*(u32 *)(((((s16)save_id >> 5) << 2) + (current_level_index << 8)) + (u8 *)D_0014C190)) >> (save_id & 31)) & 1) != 0) {
             if (vars->enabled != 0) {
                 FUN_L01_0026e0e0(moby->group, 4);
+                moby->state = 4;
                 vars->timer = vars->restart_timer;
-                *(volatile u8 *)&moby->state = 4;
-                return;
+                break;
             }
         }
         if (vars->triggered == 0 && near_parent) {
@@ -122,25 +121,23 @@ void FUN_L15_002e5958(struct Moby *moby) {
                 FUN_L01_0026e0e0(moby->group, 4);
                 allocate_voice_for_target_entry(1, 0x31, moby);
                 vars->timer = vars->restart_timer;
-                *(volatile u8 *)&moby->state = 4;
-                return;
+                moby->state = 4;
+                break;
             } else {
-                if (FUN_001f9770(&vars->timer) == 0) {
-                    if (FUN_001f9770(&vars->delay) != 0) {
-                        allocate_voice_for_target_entry(0, 0x31, moby);
-                        first = scale_game_frames(0x2d);
-                        second = scale_game_frames(5);
-                        divisor = scale_game_frames(0x28);
-                        if (first < second + vars->timer / divisor)
-                            vars->delay = scale_game_frames(0x2d);
-                        else
-                            vars->delay = scale_game_frames(5) + vars->timer / scale_game_frames(0x28);
-                    }
-                } else {
+                if (FUN_001f9770(&vars->timer) != 0) {
                     vars->triggered = 0;
                     vars->child_count = 0;
                     allocate_voice_for_target_entry(2, 0x31, moby);
                     FUN_L01_0026e0e0(moby->group, 3);
+                } else if (FUN_001f9770(&vars->delay) != 0) {
+                    allocate_voice_for_target_entry(0, 0x31, moby);
+                    first = scale_game_frames(0x2d);
+                    second = scale_game_frames(5);
+                    divisor = scale_game_frames(0x28);
+                    if (first < second + vars->timer / divisor)
+                        vars->delay = scale_game_frames(0x2d);
+                    else
+                        vars->delay = scale_game_frames(5) + vars->timer / scale_game_frames(0x28);
                 }
             }
         }
@@ -151,10 +148,12 @@ void FUN_L15_002e5958(struct Moby *moby) {
         vars->child_count = 0;
         moby->state = 1;
         break;
-    case 4:
+    case 4: {
+        u16 save_id;
+        u32 *bits;
         if (FUN_001f9770(&vars->flash_timer) != 0) {
             vars->flash_timer = scale_game_frames(0x14);
-            if ((s8)vars->flash_color != 0) {
+            if (vars->flash_color != 0) {
                 FUN_L00_002502f0(moby, 0, 0xff, 0);
                 vars->flash_color = 0;
             } else {
@@ -163,12 +162,13 @@ void FUN_L15_002e5958(struct Moby *moby) {
             }
         }
         save_id = moby->save_id;
-        bits = &D_0014C190[(current_level_index << 6) + (save_id >> 5)];
+        bits = (u32 *)(((((s16)save_id >> 5) << 2) + (current_level_index << 8)) + (u8 *)D_0014C190);
         *bits |= 1U << (save_id & 31);
         save_id = moby->save_id;
         bits = &D_L15_001BAAD0[(s16)save_id >> 5];
         *bits |= 1U << (save_id & 31);
         break;
+    }
     }
 }
 #endif
