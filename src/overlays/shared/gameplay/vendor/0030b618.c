@@ -936,7 +936,306 @@ void FUN_L01_00314e98(Camera *cam) {
     }
     control->mode = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315358.s", FUN_L01_00315358);
+#include "rnc/math/vector.h"
+
+/* Update function of camera 3: follows a path beside the hero's and turns toward a look-at point on it.
+   The four `= 0` initialisers in the mode 2 block are dead and leave no code: they make up for the insns
+   qcopy()'s parameters add, which decide the size of gcse's hash table and so the order of the spill slots. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00316730), where it is exact; names translated to the US level program. */
+
+typedef struct Hero Hero;
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+    float w;
+} __attribute__((aligned(16))) Node_316730;
+
+typedef struct {
+    int n;
+    int pad[3];
+    Node_316730 nodes[1];
+} Path_316730;
+
+typedef struct {
+    char p00[0x20];
+    float f20;
+    char p24[0x10];
+    float f34;
+    char p38[0x18];
+} SubA_316730;
+
+typedef struct {
+    float pos[4];
+    char p10[0x3C];
+    float f4C;
+    char p50[0x80];
+} SubB_316730;
+
+typedef struct {
+    int idx;
+    float t;
+    int p08[2];
+    int f10;
+} SubC_316730;
+
+typedef struct {
+    float vel[3];
+    float f0C;
+    float f10;
+    char p14[0x1C];
+    SubA_316730 a;
+    SubB_316730 b;
+    SubC_316730 c;
+} Data_316730;
+
+typedef struct {
+    float f0;
+    char p04[0x1C];
+    int f20;
+    int f24;
+    int f28;
+    int f2C;
+    int f30;
+    short f34;
+    short f36;
+    float f38;
+} Parm_316730;
+
+typedef struct {
+    char p00[0x1C];
+    Parm_316730 *f1C;
+} Ent50_316730;
+
+typedef struct {
+    char p00[0x10];
+    Path_316730 *f10;
+    char p14[0xC];
+} Ent7EC_316730;
+
+typedef struct {
+    float f0[4];
+    float f10[4];
+    float f20[4];
+    float pos[4];
+    float f40[4];
+    char p50[0x20];
+    Data_316730 *data;
+    char p74[0x10];
+    short f84;
+} Cam_316730;
+
+extern Ent50_316730 *D_L01_0015EF50_c __asm__("D_L01_0015EF50") __attribute__((section(".sdata")));
+extern Ent7EC_316730 *D_L01_0015F70C_c __asm__("D_L01_0015F70C") __attribute__((section(".sdata")));
+extern char *D_L01_001B0930_c[] __asm__("D_L01_001B0930");
+extern f32 approximate_arcsine(f32) __asm__("func_001F9DF8");
+extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern float D_L01_001672B0[];
+extern float FUN_L00_001eb328(void *, float, float, float, float, float);
+extern float cam_interp_values(float a, float b, float *p, float c, float d, float e);
+extern int D_0015ED84; /* no foreign declaration */
+extern int FUN_L00_0025d808(void *, void *, int *, float *, float, int);
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+float absolute_float(float input) __asm__("func_001F99C0");
+extern char D_0013F350[];
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern int D_0015EE84_c __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern Path_316730 *D_L01_001B0C30_316730[] __asm__("D_L01_001B0930");
+
+void FUN_L01_00315358(Cam_316730 *cam) {
+    float v0[4];
+    float v10[4];
+    float v20[4];
+    float v30[4];
+    float v40[4];
+    float v50[4];
+    float v60[4];
+    int seg;
+    float frac;
+    Data_316730 *d = cam->data;
+    SubA_316730 *a = &d->a;
+    SubB_316730 *b = &d->b;
+    SubC_316730 *c = &d->c;
+    Parm_316730 *p = D_L01_0015EF50_c[cam->f84].f1C;
+    float k = 0.01f;
+    int mode = p->f30;
+    int pi = p->f20;
+    float spd = p->f0;
+    float ang;
+    float len;
+    float rot;
+
+    if (mode == 0) {
+        Path_316730 *path;
+        float dist;
+
+        seg = ((Hero *)(((char *)&D_0013F350)))->unk564;
+        frac = ((Hero *)(((char *)&D_0013F350)))->unk568;
+        c->t = frac;
+        c->idx = seg;
+        FUN_L00_0025d808(D_L01_001B0C30_316730[pi], v0, &c->idx, &c->t, 1.0f, 0);
+        qcopy(b->pos, v0);
+        path = D_L01_001B0C30_316730[pi];
+        dist = path->nodes[seg].w * (frac / ((Path_316730 *)((Hero *)(((char *)&D_0013F350)))->unk560)->nodes[seg].w);
+        subtract_vector_xyz(v50, &path->nodes[seg + 1], &path->nodes[seg]);
+        normalize_vector_xyz(v40, v50, dist);
+        add_vector_xyz(v60, &path->nodes[seg], v40);
+        cam->pos[0] = cam_interp_values(cam->pos[0], v60[0], &d->vel[0], k, 0.175f, 0.0f);
+        cam->pos[1] = cam_interp_values(cam->pos[1], v60[1], &d->vel[1], k, 0.175f, 0.0f);
+        cam->pos[2] = cam_interp_values(cam->pos[2], v60[2], &d->vel[2], k, 0.175f, 0.0f);
+    } else if (mode == 2) {
+        Path_316730 *pathA = D_L01_001B0C30_316730[pi];
+        Path_316730 *pathD = D_L01_0015F70C_c[p->f24].f10;
+        Path_316730 *pathC = D_L01_001B0C30_316730[p->f28];
+        Path_316730 *pathB = D_L01_001B0C30_316730[p->f2C];
+        int i;
+        int prev = 0;
+        int lo = 0;
+        int hi = 0;
+        int j = 0;
+        int cnt;
+        int base;
+        int ix;
+        float fx;
+        float sum;
+        float lenB;
+        float lenC;
+        float x;
+        float dist;
+
+        prev = pathB->n - 1;
+        for (i = 0; i < pathB->n; i++) {
+            lo = func_001FA898_r(pathB->nodes[prev].w);
+            hi = func_001FA898_r(pathB->nodes[i].w);
+            if (hi < lo) {
+                if (((Hero *)(((char *)&D_0013F350)))->unk564 >= lo || ((Hero *)(((char *)&D_0013F350)))->unk564 < hi) {
+                    break;
+                }
+            } else {
+                if (((Hero *)(((char *)&D_0013F350)))->unk564 >= lo && ((Hero *)(((char *)&D_0013F350)))->unk564 < hi) {
+                    break;
+                }
+            }
+            prev = i;
+        }
+        c->f10 = i;
+        sum = 0.0f;
+        j = (i - 1 + pathB->n) % pathB->n;
+        lenB = pathB->nodes[i].y;
+        lenC = pathC->nodes[i].y;
+        if (pathB->nodes[j].x != 0.0f) {
+            spd = pathB->nodes[j].x;
+        }
+        base = func_001FA898_r(pathB->nodes[j].w);
+        cnt = ((Hero *)(((char *)&D_0013F350)))->unk564 - base;
+        if (cnt < 0) {
+            cnt += pathD->n;
+        }
+        for (i = 0; i < cnt; i++) {
+            sum += pathD->nodes[(base + i) % pathD->n].w;
+        }
+        sum += ((Hero *)(((char *)&D_0013F350)))->unk568;
+        dist = lenC * (sum / lenB);
+        ix = func_001FA898_r(pathC->nodes[j].w);
+        fx = 0.0f;
+        FUN_L00_0025d808(pathA, v40, &ix, &fx, dist, 1);
+        x = pathC->nodes[j].x;
+        if (x <= 0.0f) {
+            x = 0.01f;
+        } else {
+            k *= x;
+            x *= 0.01f;
+        }
+        if (absolute_float(d->f10 - x) < 0.00015f) {
+            d->f10 = x;
+        } else if (d->f10 < x) {
+            d->f10 = d->f10 + 0.00015f;
+        } else {
+            d->f10 = d->f10 - 0.00015f;
+        }
+        cam->pos[0] = cam_interp_values(cam->pos[0], v40[0], &d->vel[0], d->f10, 0.175f, 0.0f);
+        cam->pos[1] = cam_interp_values(cam->pos[1], v40[1], &d->vel[1], d->f10, 0.175f, 0.0f);
+        cam->pos[2] = cam_interp_values(cam->pos[2], v40[2], &d->vel[2], d->f10, 0.175f, 0.0f);
+    } else {
+        Path_316730 *path = D_L01_001B0C30_316730[pi];
+
+        if (p->f24 < 0) {
+            float off;
+
+            FUN_L00_0025df68(path, ((Hero *)(((char *)&D_0013F350)))->motion.pos.f, v30, &seg, &frac, 0, 20.0f, 1.0f, 0.0f);
+            if (p->f36 == 1) {
+                off = -(p->f38 * 4.0f);
+            } else {
+                off = p->f38;
+            }
+            FUN_L00_0025d808(path, v30, &seg, &frac, off, 1);
+            qcopy(v0, v30);
+        } else {
+            int hseg;
+            float hfrac;
+
+            hseg = ((Hero *)(((char *)&D_0013F350)))->unk564;
+            hfrac = ((Hero *)(((char *)&D_0013F350)))->unk568;
+            FUN_L00_0025d808((Path_316730 *)((Hero *)(((char *)&D_0013F350)))->unk560, v30, &hseg, &hfrac, p->f38, 1);
+            FUN_L00_0025df68(path, v30, v0, &seg, &frac, 0, 20.0f, 1.0f, 0.0f);
+        }
+        cam->pos[0] = cam_interp_values(cam->pos[0], v0[0], &d->vel[0], k, 0.175f, 0.0f);
+        cam->pos[1] = cam_interp_values(cam->pos[1], v0[1], &d->vel[1], k, 0.175f, 0.0f);
+        cam->pos[2] = cam_interp_values(cam->pos[2], v0[2], &d->vel[2], k, 0.175f, 0.0f);
+    }
+    if (p->f24 < 0) {
+        Path_316730 *path = D_L01_001B0C30_316730[p->f20];
+
+        FUN_L00_0025df68(path, ((Hero *)(((char *)&D_0013F350)))->motion.pos.f, v40, &seg, &frac, 0, 20.0f, 1.0f, 0.0f);
+        if (D_0015EE84_c == 0xE && p->f30 == 0) {
+            FUN_L00_0025d808(path, v50, &seg, &frac, spd, 0);
+        } else {
+            FUN_L00_0025d808(path, v50, &seg, &frac, spd, 1);
+        }
+        subtract_vector_xyz(v50, v50, v40);
+        add_vector_xyz(v40, ((Hero *)(((char *)&D_0013F350)))->motion.pos.f, v50);
+    } else {
+        int hseg;
+        float hfrac;
+
+        hseg = ((Hero *)(((char *)&D_0013F350)))->unk564;
+        hfrac = ((Hero *)(((char *)&D_0013F350)))->unk568;
+        FUN_L00_0025d808((Path_316730 *)((Hero *)(((char *)&D_0013F350)))->unk560, v40, &hseg, &hfrac, spd, 1);
+    }
+    normalize_vector_xyz(v10, D_L01_001672B0, b->f4C);
+    add_vector_xyz(v30, v10, v40);
+    subtract_vector_xyz(v20, v30, cam->pos);
+    len = vector_length_xyz(v20);
+    if (len != 0.0f) {
+        scale_vector_xyz(v20, v20, 1.0f / len);
+        ang = 1.5707964f - approximate_arcsine(dot_vectors_xyz(v20, cam->f0));
+    } else {
+        ang = 0.0f;
+    }
+    if (absolute_float(a->f20 - k) < 0.00015f) {
+        a->f20 = k;
+    } else if (a->f20 < k) {
+        a->f20 = a->f20 + 0.00015f;
+    } else {
+        a->f20 = a->f20 - 0.00015f;
+    }
+    rot = FUN_L00_001eb328(&a->f34, 0.0f, ang, a->f20, 0.175f, 0.0f);
+    cross_vectors_xyz(v50, v20, cam->f40);
+    build_look_at_matrix(cam->f0, cam->f40, v50, rot);
+    normalize_vector_xyz(cam->f40, cam->f0, 1.0f);
+    normalize_vector_xyz(cam->f0, cam->f0, 1.0f);
+    cross_vectors_xyz(cam->f10, cam->f0, D_L01_001672B0);
+    normalize_vector_xyz(cam->f10, cam->f10, 1.0f);
+    cross_vectors_xyz(cam->f20, cam->f10, cam->f0);
+}
 extern Camera *D_L01_00167284 __attribute__((section(".data")));
 extern OvlVec4 D_0013F3D0_315de0 __asm__("D_0013F3D0");
 extern f32 FUN_001f9b48(void *, void *);
