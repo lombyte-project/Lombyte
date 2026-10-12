@@ -1101,6 +1101,12 @@ extern unsigned char D_001413F5;
 extern float D_L13_0015F3FC;
 extern int D_L13_0015F404;
 extern float D_0013E090, D_0013E0A8, D_0013E094, D_0013E098;
+extern struct {
+    char pad0[0x60];
+    float unk60, unk64, unk68;
+    char pad6C[0xC];
+    float unk78;
+} D_0013E030;
 extern unsigned char D_L13_0015FC88[];
 extern char D_0013F3D0[];
 extern int is_point_inside_clip_volume_alt(void *, int);
@@ -1111,14 +1117,10 @@ extern void FUN_L00_00298840(int);
 extern void FUN_L00_00299460(int);
 extern void FUN_L00_002607d0(int);
 extern void FUN_L00_0028e8a0(void *);
-extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
+extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void FUN_L13_0030b628(struct Moby *moby) {
     int *data = (int *)moby->pvars;
-    char *other;
-    char *object;
-    char *entity;
-    unsigned char index;
     switch (moby->state) {
     case 0:
         if (D_L13_0015F5C4 == 0) moby->state = 1;
@@ -1138,41 +1140,47 @@ void FUN_L13_0030b628(struct Moby *moby) {
     case 3:
         moby->state = 4;
         break;
-    case 4:
-        index = 6;
+    case 4: {
         if (alternate_item_available[0x65] == 0) {
-            if (data[0] == -1) {
-                index = 7;
+            if (data[0] == -1)
                 goto set_state_4;
-            }
             if (is_point_inside_clip_volume_alt(D_0013F3D0, data[0]) == 0)
                 goto after_state_4;
             alternate_item_available[0x65] = 1;
             if (data[5] != -1) {
-                other = (char *)(D_L13_0015FFD8_m + data[5] * 0x100);
-                *(unsigned short *)(other + 0x34) |= 0x41;
+                struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[5] * 0x100);
+                other->flags |= 0x41;
             }
             moby->state = 5;
             FUN_L00_00298840(1);
         } else {
+            moby->state = 6;
+            goto after_state_4;
 set_state_4:
-            moby->state = index;
+            moby->state = 7;
         }
 after_state_4:
         if (moby->state != 4 && data[3] != -1) {
             mark_moby_for_removal((char *)(D_L13_0015FFD8_m + data[3] * 0x100));
         }
         break;
-    case 5:
+    }
+    case 5: {
+        char *object;
+        char *entity;
+        int index;
         if (D_L13_0015F5C4 != 2) {
             if (data[5] != -1) {
-                other = (char *)(D_L13_0015FFD8_m + data[5] * 0x100);
-                *(unsigned short *)(other + 0x34) &= 0xffbe;
+                struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[5] * 0x100);
+                other->flags &= 0xffbe;
             }
-            if (data[2] != -1 && data[4] != -1) {
-                object = D_L13_001600EC + data[2] * 0x80;
+            index = data[2];
+            if (index != -1 && data[4] != -1) {
                 entity = (char *)(D_L13_0015FFD8_m + data[4] * 0x100);
-                qcopy(entity + 0x10, object + 0x30);
+                object = D_L13_001600EC;
+                index *= 0x80;
+                qcopy(entity + 0x10, object + index + 0x30);
+                object += index;
                 FUN_L00_00216f90(object + 0x30, object + 0x70, 0, 1);
                 D_001413F5 = 1;
                 *(float *)(*(char **)(entity + 0x78) + 0x7c) = 0.99f;
@@ -1182,28 +1190,31 @@ after_state_4:
             moby->state = 6;
         }
         break;
+    }
     case 6:
         moby->state = 7;
         break;
-    case 7:
+    case 7: {
+        char *object;
         if (alternate_item_available[0x66] == 0) {
+            struct Moby *other;
             if (data[5] == -1) {
                 moby->state = 13;
                 break;
             }
-            other = (char *)(D_L13_0015FFD8_m + data[5] * 0x100);
-            if (other != 0 && *(short *)(other + 0xa6) == 0x184 &&
-                (unsigned char)other[0x20] != 0xfe && (unsigned char)other[0x20] != 0xfd) return;
+            other = (struct Moby *)(D_L13_0015FFD8_m + data[5] * 0x100);
+            if (other != 0 && other->oclass == 0x184 &&
+                other->state != 0xfe && other->state != 0xfd) return;
             if (data[4] != -1) {
-                other = (char *)(D_L13_0015FFD8_m + data[4] * 0x100);
-                *(unsigned short *)(other + 0x34) |= 2;
+                struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[4] * 0x100);
+                other->flags |= 2;
             }
             object = D_L13_001600EC + data[2] * 0x80;
             FUN_L00_00216f90(object + 0x30, object + 0x70, 0x72, 1);
             alternate_item_available[0x66] = 1;
             if (data[8] != -1) {
-                other = (char *)(D_L13_0015FFD8_m + data[8] * 0x100);
-                *(unsigned short *)(other + 0x34) |= 0x41;
+                struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[8] * 0x100);
+                other->flags |= 0x41;
             }
             FUN_L01_0027a248(0, 5);
             moby->state = 8;
@@ -1212,6 +1223,7 @@ after_state_4:
         }
         moby->state = 12;
         break;
+    }
     case 8:
         if (D_L13_0015F5C4 != 2) {
             moby->state = 9;
@@ -1224,47 +1236,51 @@ after_state_4:
             moby->state = 10;
         }
         break;
-    case 10:
+    case 10: {
         if (D_L13_0015F5C4 != 2) {
             if (data[4] != -1) {
-                other = (char *)(D_L13_0015FFD8_m + data[4] * 0x100);
-                *(unsigned short *)(other + 0x34) &= 0xfffd;
+                struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[4] * 0x100);
+                other->flags &= 0xfffd;
             }
             FUN_L00_002607d0(14);
             if (data[8] != -1) {
-                other = (char *)(D_L13_0015FFD8_m + data[8] * 0x100);
-                *(unsigned short *)(other + 0x34) &= 0xffbe;
+                struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[8] * 0x100);
+                other->flags &= 0xffbe;
                 FUN_L00_0028e8a0(other);
-                D_0013E090 = 464.66f;
-                D_0013E0A8 = 2.77f;
-                D_0013E094 = 580.68f;
-                D_0013E098 = 316.72f;
+                D_0013E030.unk60 = 464.66f;
+                D_0013E030.unk64 = 580.68f;
+                D_0013E030.unk68 = 316.72f;
+                D_0013E030.unk78 = 2.77f;
             }
             D_L13_0015F404 = 0;
             moby->state = 11;
         }
         break;
-    case 11:
+    }
+    case 11: {
         if (data[4] != -1) {
-            other = (char *)(D_L13_0015FFD8_m + data[4] * 0x100);
-            if (other != 0 && *(short *)(other + 0xa6) == 0x45 &&
-                (unsigned char)other[0x20] != 0xfe && (unsigned char)other[0x20] != 0xfd) return;
+            struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[4] * 0x100);
+            if (other != 0 && other->oclass == 0x45 &&
+                other->state != 0xfe && other->state != 0xfd) return;
             memcard_save_data(0, -1);
             moby->state = 12;
             return;
         }
         moby->state = 12;
         break;
+    }
     case 12:
         moby->state = 13;
         break;
     case 13:
-        if (data[4] == -1) {
+        if (data[4] != -1) {
+            if (D_L13_0015FC88[*(unsigned char *)(D_L13_0015FFD8_m + data[4] * 0x100 + 0xb0)] == 0xff) {
+                if (data[8] != -1)
+                    mark_moby_for_removal((char *)(D_L13_0015FFD8_m + data[8] * 0x100));
+                moby->state = 14;
+            }
+        } else {
             mark_moby_for_removal(moby);
-        } else if (D_L13_0015FC88[*(unsigned char *)(D_L13_0015FFD8_m + data[4] * 0x100 + 0xb0)] == 0xff) {
-            if (data[8] != -1)
-                mark_moby_for_removal((char *)(D_L13_0015FFD8_m + data[8] * 0x100));
-            moby->state = 14;
         }
         break;
     case 14:
