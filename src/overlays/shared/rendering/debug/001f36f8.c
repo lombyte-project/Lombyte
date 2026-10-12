@@ -68,7 +68,7 @@ void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
     tags[3] = 0x14;
     tags[4] = 0x2400000000000001ULL;
     tags[5] = 0x61;
-    tags[6] = color & 0xFFFFFFFFULL;
+    ((u64 *)tags)[6] = color & 0xFFFFFFFFULL;
     texture_state = debug_font_pif_header;
     tags[9] = 0x5353;
     tags[7] = texture_state;
@@ -81,7 +81,8 @@ void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
         glyph = (u8)(*text - 0x20);
         if (glyph >= 0x60)
             glyph = 0x20;
-        texture_coordinates = D_L00_00169980[glyph];
+        glyph *= 4;
+        texture_coordinates = *(s32 *)((u8 *)D_L00_00169980 + glyph);
         text++;
         if (texture_coordinates != -1) {
             cursor[0] = (s64)texture_coordinates;
@@ -97,7 +98,7 @@ void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
                         0xFFFFF300000000ULL;
             D_L00_001611C0 = D_L00_001611C0 + 4;
         }
-        x += D_L00_00169B00[glyph];
+        x += *(s32 *)((u8 *)D_L00_00169B00 + glyph);
     }
     ((u32 *)packet)[3] = quadwords | 0x50000000;
     ((u32 *)packet)[0] = quadwords | 0x10000000;
