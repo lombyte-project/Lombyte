@@ -412,7 +412,7 @@ RODATA_OVERLAYS = {
     "update_help_state": (0x1E7A40, 0xE89C0),  # switch table
     "memcard_update_state": (0x1E8200, 0xE9180),  # switch table
     "init_once": (0x1E7B30, 0xE8AB0),  # switch table
-    "fun_001e8d08": (0x1E7640, 0xE85C0),  # switch table
+    "actuator_calc_power": (0x1E7640, 0xE85C0),  # switch table
     "fun_00213928": (0x1E84E0, 0xE9460),  # switch table
     "fun_00204428": (0x1E7CE0, 0xE8C60),  # switch table
     "mode_freeze_init": (0x1E78D0, 0xE8850),  # switch table

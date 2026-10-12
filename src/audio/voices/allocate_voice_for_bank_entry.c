@@ -10,7 +10,7 @@ struct VoiceBankEntryWindow {
 
 extern u8 D_0013E550[];
 extern s32 D_0015F5B4;
-extern u8 *D_0015F634;
+extern u8 *level_sound_defs __asm__("D_0015F634");
 extern s32 allocate_voice_slot(u8 *, s32, s32, s32, s32) __asm__("func_0022D7F0");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 
@@ -21,7 +21,7 @@ s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) {
     if (entry_index >= D_0015F5B4) {
         return -1;
     }
-    slot_index = allocate_voice_slot(D_0015F634 + (entry_index << 5), flags, owner, 0, 0x400);
+    slot_index = allocate_voice_slot(level_sound_defs + (entry_index << 5), flags, owner, 0, 0x400);
     if (slot_index >= 0) {
         slot = (struct VoiceBankEntryWindow *)(D_0013E550 + slot_index * 0x70);
         slot->owner = owner;

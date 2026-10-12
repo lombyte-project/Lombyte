@@ -17,7 +17,7 @@ extern int D_L00_0015F5C4;
 extern char D_L00_001BD880[];
 extern int D_L00_0015F630_i __asm__("D_L00_0015F630");
 extern int FUN_L00_002644e0(int);
-extern short D_0013E056[];
+extern short ship_index[] __asm__("D_0013E056");
 extern unsigned char D_0013CAE4[];
 extern unsigned char D_0013D388[];
 extern unsigned char D_0013D4DC[];
@@ -58,7 +58,7 @@ void FUN_L00_0028e180(unsigned char *m) {
         }
         p = (float *)(m + 0x10);
         if (*(short *)(d + 0xC) != 0) {
-            transform_vector_by_basis(tmp, D_L00_001BD880 + D_0013E056[0] * 16, m + 0xC0);
+            transform_vector_by_basis(tmp, D_L00_001BD880 + ship_index[0] * 16, m + 0xC0);
             add_vector_xyz(tmp, tmp, p);
             if (FUN_001f9b48(tmp, &hero.motion.pos) > 4.1f) {
                 *(short *)(d + 0xC) = 0;
@@ -66,7 +66,7 @@ void FUN_L00_0028e180(unsigned char *m) {
         } else {
             q = (unsigned char *)(&hero.motion.pos);
             if (FUN_001f9b80(p, q) < 6.0f) {
-                transform_vector_by_basis(tmp, D_L00_001BD880 + D_0013E056[0] * 16, m + 0xC0);
+                transform_vector_by_basis(tmp, D_L00_001BD880 + ship_index[0] * 16, m + 0xC0);
                 add_vector_xyz(tmp, tmp, p);
                 if (FUN_001f9b48(tmp, q) < 4.0f) {
                     *(short *)(d + 0xC) = 1;
@@ -86,7 +86,7 @@ void FUN_L00_0028e180(unsigned char *m) {
                 } else {
                     FUN_L00_002644e0(2);
                     D_L00_0015F630_i = 1;
-                    D_0013E056[1] = 0;
+                    ship_index[1] = 0;
                 }
             }
         }
@@ -109,7 +109,7 @@ void FUN_L00_0028e180(unsigned char *m) {
                 m[0x20] = 0;
                 *(unsigned short *)(m + 0x34) &= 0xFFBE;
                 one = 1;
-                D_0013E056[1] = one;
+                ship_index[1] = one;
                 D_L00_0015F630_i = one;
             }
         }

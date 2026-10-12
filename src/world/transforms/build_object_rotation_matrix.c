@@ -6,7 +6,7 @@
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern char D_00187080[];
 extern char D_0018CB20_c[] __asm__("D_0018CB20");
-extern float D_0018CDB0 NOT_SDA;
+extern float view_tan_half_fov __asm__("D_0018CDB0") NOT_SDA;
 extern unsigned char D_0015EDB4_m[4] __asm__("D_0015EDB4") MACRO_ADDR;
 extern void sceVu0UnitMatrix(float *);
 extern void SceVu0RotMatrixX(float *, float *, float);
@@ -24,7 +24,7 @@ unsigned char build_object_rotation_matrix(void) {
     char *camera_state;
     float rotation_matrix[16];
 
-    D_0018CDB0 = keyframe_angles[3];
+    view_tan_half_fov = keyframe_angles[3];
     update_view_context();
     camera_position = D_00187080;
     qcopy(camera_position, key);

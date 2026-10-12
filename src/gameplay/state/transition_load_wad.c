@@ -100,19 +100,19 @@ typedef struct
 extern s32 D_0015EE8C;
 extern s64 D_0015EF48;
 extern s32 D_0015EF58;
-extern s32 D_0015EF60;
-extern s32 D_0015EF64;
+extern s32 help_msg_data __asm__("D_0015EF60");
+extern s32 help_offset_table __asm__("D_0015EF64");
 extern s32 D_0015F460;
-extern TextEntry *D_0015F6A0;
+extern TextEntry *help_msgs __asm__("D_0015F6A0");
 extern s32 D_0015FF00;
 extern s32 D_0015FF08;
 extern s32 D_001603CC;
 extern s32 D_001603EC;
 extern s32 D_00160E94;
-extern s32 D_00160F0C;
+extern s32 current_vu_chain __asm__("D_00160F0C");
 extern s32 D_00160F4C;
 extern s32 D_00160F64;
-extern u8 D_001861E0[];
+extern u8 boot_sound_defs_b[] __asm__("D_001861E0");
 extern u8 D_00186310[];
 extern SoundBanks D_0018CB20;
 extern LoadState D_001940C0;
@@ -123,7 +123,7 @@ extern s32 D_001B5980[];
 extern s32 D_001B6180[];
 #include "rnc/rendering/resident_class.h"
 extern s32 D_001D84B0[];
-extern s32 D_001E0900[];
+extern s32 tfrag_texture_size_table[] __asm__("D_001E0900");
 extern s32 D_001E2600[];
 extern void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
 extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
@@ -187,7 +187,7 @@ void transition_load_wad(void)
   i = 0;
   calculate_dma_transfer_address();
   init_mem_slots();
-  D_00160F0C = 0x100000;
+  current_vu_chain = 0x100000;
   D_0015EE8C = 0x2C0000;
   gs_texture_allocation_start = 0x2C0000;
   gs_texture_allocation_cursor = 0x2C0000;
@@ -217,7 +217,7 @@ void transition_load_wad(void)
   {
     do
     {
-      D_001E0900[i] = (((s32) base) + tex[i].offset) + (func_001F97A0(tex[i].x4) << 28);
+      tfrag_texture_size_table[i] = (((s32) base) + tex[i].offset) + (func_001F97A0(tex[i].x4) << 28);
       i++;
     }
     while (i < D_00160E94);
@@ -316,17 +316,17 @@ void transition_load_wad(void)
     while ((cnt < 0x46) && (snd->size != 0));
   }
   parse_space_scene_chunk(0);
-  D_0015EF60 = D_001940C0.x1C;
+  help_msg_data = D_001940C0.x1C;
   load(D_001940C0.x1C, disc_table.help_text.sector, disc_table.help_text.size);
-  D_0015EF64 = D_0015EF60;
-  D_001940C0.x1C = D_0015EF60 + (disc_table.help_text.size << 11);
+  help_offset_table = help_msg_data;
+  D_001940C0.x1C = help_msg_data + (disc_table.help_text.size << 11);
   for (k = 0; k < 8; k++)
   {
     QueueDmaTransfer(k);
     j = 0;
     if (D_001996D0.count > 0)
     {
-      te = D_0015F6A0;
+      te = help_msgs;
       adj = ((s32) te) - 8;
       {
         do
@@ -343,7 +343,7 @@ void transition_load_wad(void)
   cnt = (new_var = resident_class_slot_by_id[0x472]);
   if (cnt >= 0)
   {
-    ((MobyClass *)moby_class_resources[cnt])->x28 = D_001861E0;
+    ((MobyClass *)moby_class_resources[cnt])->x28 = boot_sound_defs_b;
     ((MobyClass *)moby_class_resources[cnt])->xD = 5;
   }
 }

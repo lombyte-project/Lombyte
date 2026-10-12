@@ -23,7 +23,7 @@ typedef struct {
 } T2C_22BE40;
 
 extern char D_L02_0017C520_e[] __asm__("D_L02_0017C520");
-extern unsigned char D_0015EDB5;
+extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");
 extern T2C_22BE40 D_L02_0017C228[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern char D_0013E533[];
@@ -40,7 +40,7 @@ extern float FUN_L00_002339d0(float *v);
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
-extern int D_0015ED5C;
+extern int sound_bank_handle __asm__("D_0015ED5C");
 extern int D_0015EEA4;
 extern int D_L02_0015F5C4;
 extern int D_0015ED80;
@@ -1029,7 +1029,7 @@ int hero_set_state(int a, int b) {
                     if (q->unk450 == 2)
                         q->unk450 = 0;
                     id = q->unk450 + 0x1C;
-                    if (D_0015EDB5 != 0) {
+                    if (opt_mirror_anim != 0) {
                         if (id == 0x1C) {
                             id = 0x1D;
                         } else if (id == 0x1D) {

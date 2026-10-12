@@ -4,10 +4,10 @@
 #include "rnc/rendering/dma_tag.h"
 
 
-extern u16 D_0010E800[];
-extern u8 D_0010E810[];
-extern s32 D_0015F620;
-extern f32 D_0015F348 __attribute__((sda));
+extern u16 font_vu_program_tag[] __asm__("D_0010E800");
+extern u8 font_vu_program[] __asm__("D_0010E810");
+extern s32 font_state __asm__("D_0015F620");
+extern f32 font_depth_bias __asm__("D_0015F348") __attribute__((sda));
 extern u8 D_00187080[];
 extern void FUN_001f9ff8(f32 (*)[4], f32);
 extern void FUN_001f9a68(f32 *, u8 *, f32);
@@ -25,9 +25,9 @@ void font_queue_vu_state(void) {
     FUN_001f9ff8(m, 1024.0f);
     FUN_001f9a68(m[3], D_00187080, -1024.0f);
     m[3][3] = 1.0f;
-    if (D_0015F620 != 7) {
-        vu1_add_data_ref(D_0010E810, D_0010E800[0]);
-        D_0015F620 = 7;
+    if (font_state != 7) {
+        vu1_add_data_ref(font_vu_program, font_vu_program_tag[0]);
+        font_state = 7;
     }
     render_packet_cursor.tag->tag = 0x10000000;
     render_packet_cursor.tag->addr = 0;
@@ -40,10 +40,10 @@ void font_queue_vu_state(void) {
     base[1].vif1 = 0x6C0C43A4;
     p = (u8 *)(base + 2);
     FUN_001fa378(p, D_00187080 - 0x100, m);
-    *(f32 *)(p + 0x38) += D_0015F348;
+    *(f32 *)(p + 0x38) += font_depth_bias;
     p = (u8 *)(base + 6);
     FUN_001fa378(p, D_00187080 - 0x80, m);
-    *(f32 *)(p + 0x38) += D_0015F348;
+    *(f32 *)(p + 0x38) += font_depth_bias;
     base[10].tag = 0x8000;
     base[10].addr = 0x303EC000;
     base[10].vif0 = 0x412;

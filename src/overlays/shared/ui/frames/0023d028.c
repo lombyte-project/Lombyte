@@ -72,9 +72,9 @@ void FUN_L00_0023d198(void) {
         int i;
         for (i = 0; i < 37; i++) {
             item_available[i] = 1;
-            D_0013D4E8[i] = 1;
+            items_acquired[i] = 1;
         }
-        D_00141EA0[0] = 15;
+        pause_iop_sprite_lists[0] = 15;
         D_0015EDD0[0] = 0x4A;
         D_0015EDD0[1] = 0x50;
         D_0015EDD0[2] = 0x4F;
@@ -87,13 +87,13 @@ void FUN_L00_0023d198(void) {
         D_0015EDD0[9] = 0x59;
         D_0015EDD0[10] = 0x58;
         D_0015EDD0[11] = 0x53;
-        D_00141EA0[1] = 12;
-        D_00141EA0[2] = 13;
-        D_00141EA0[3] = 11;
-        D_00141EA0[4] = 17;
-        D_00141EA0[5] = 10;
-        D_00141EA0[6] = 16;
-        D_00141EA0[7] = 19;
+        pause_iop_sprite_lists[1] = 12;
+        pause_iop_sprite_lists[2] = 13;
+        pause_iop_sprite_lists[3] = 11;
+        pause_iop_sprite_lists[4] = 17;
+        pause_iop_sprite_lists[5] = 10;
+        pause_iop_sprite_lists[6] = 16;
+        pause_iop_sprite_lists[7] = 19;
     } else {
         int i;
         if (item_available[10] == 0) {

@@ -391,7 +391,7 @@ extern char *FUN_L00_002712b8(void *, void *, int, int, int, int, float, float, 
                               float);
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED6C, D_0015EE70;
-extern float D_0015EE6C __asm__("D_0015ED6C"), D_0015ED70;
+extern float freeze_stats_score_ref_b __asm__("D_0015ED6C"), D_0015ED70;
 extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
@@ -858,7 +858,7 @@ void FUN_L16_002c9650(struct Moby *m) {
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED6C, D_0015EE70;
-extern float D_0015EE6C, D_0015ED70_c __asm__("D_0015ED70");
+extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), D_0015ED70_c __asm__("D_0015ED70");
 extern short D_L16_0016198C_d __asm__("D_L16_0016198C") __attribute__((sda));
 extern void FUN_L16_002c9a50_u(unsigned char *) __asm__("FUN_L16_002c9a50");
 extern void FUN_L16_002c9c38_c(int, void *) __asm__("FUN_L16_002c9c38");
@@ -1141,7 +1141,7 @@ extern char *D_L16_00174258 __attribute__((section(".data")));
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED6C, D_0015EE70;
-extern float D_0015EE6C, D_0015ED70;
+extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), D_0015ED70;
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
@@ -1612,7 +1612,7 @@ extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern float D_0015ED6C, D_0015EE70;
-extern float D_0015EE6C, D_0015ED70;
+extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), D_0015ED70;
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -1822,7 +1822,7 @@ void FUN_L16_002cf198(struct Moby *m) {
                 }
             } else if ((*(int *)((char *)(d) + (0x6C))) < scale_game_frames(90))
                 (*(float *)((char *)(d) + (0x68))) =
-                    fast_add_rotations((*(float *)((char *)(d) + (0x68))), D_0015EE6C * 25.132742f);
+                    fast_add_rotations((*(float *)((char *)(d) + (0x68))), freeze_stats_score_ref_b * 25.132742f);
         }
         break;
     }
@@ -2249,7 +2249,7 @@ extern char D_0013E533[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED6C, D_0015EE70;
-extern float D_0015EE6C, D_0015ED70;
+extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), D_0015ED70;
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -2567,7 +2567,7 @@ void FUN_L16_002d04a0(unsigned char *m) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D6DA8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C, D_0015EE70;
-extern float D_0015EE6C, D_0015ED70;
+extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), D_0015ED70;
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
 extern void add_vector_xyz(void *, void *, void *);

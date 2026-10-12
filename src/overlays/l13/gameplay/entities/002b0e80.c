@@ -1001,7 +1001,7 @@ extern IconEC5D0 D_L13_001CBDB8[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float vector_length_xyz(void *a);
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern unsigned char D_0013E504[];
+extern unsigned char frame_size[] __asm__("D_0013E504");
 extern void FUN_001fa050(float *, float *);
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
@@ -1041,7 +1041,7 @@ void FUN_L13_002b89f8(char *rot, char *from, char *moby, int icon, long color, i
         }
         t = &D_L13_001CBDB8[icon];
         y -= 0x50;
-        y += *(int *)(D_0013E504);
+        y += *(int *)(frame_size);
         x += 0x1B0;
         draw_textured_quad(x - t->x, y - t->y, t->w, t->h, t->u, t->v, t->w, t->h, color,
                            get_effect_texture(tex + 0x28 + t->tex));

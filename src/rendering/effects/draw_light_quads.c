@@ -3,7 +3,7 @@
 #include "sda.h"
 #include "qcopy.h"
 
-extern int D_0015F474 MACRO_ADDR;
+extern int effect_quad_count __asm__("D_0015F474") MACRO_ADDR;
 
 typedef float FVec4[4] __attribute__((aligned(16)));
 
@@ -49,7 +49,7 @@ void draw_light_quads(void) {
         uv[j][1] = D_0018CAA0[j].v[3];
         colors[j] = 0x40808080;
     }
-    for (i = 0; i < D_0015F474; i++) {
+    for (i = 0; i < effect_quad_count; i++) {
         float s;
         int k;
 

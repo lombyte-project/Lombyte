@@ -89,7 +89,7 @@ extern float D_L02_001612FC;
 extern float D_L02_00161300;
 extern float D_L02_00161304;
 extern char D_L02_001673C0[];
-extern char D_0010E810[];
+extern char font_vu_program[] __asm__("D_0010E810");
 extern char D_L02_001CB8F0[];
 extern QuadFrame D_L02_0016D780[];
 extern char *D_L02_0015F420;
@@ -128,7 +128,7 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     FUN_001f9ff8(view_matrix, 1024.0f);
     setup_offset_vector(&view_matrix[12], D_L02_001673C0, -1024.0f);
     view_matrix[15] = 1.0f;
-    FUN_00233830(D_0010E810, D_0010E800_ref[0]);
+    FUN_00233830(font_vu_program, D_0010E800_ref[0]);
     PACKET_CURSOR[0] = 0x10000000;
     PACKET_CURSOR[1] = 0;
     PACKET_CURSOR[2] = 0x11000000;
@@ -1480,7 +1480,7 @@ extern void ea210_destroy(char *) __asm__("FUN_0020c828");
 extern int D_L02_0015F5CC;
 extern int D_L02_0015F5C4;
 extern unsigned char D_001413F4;
-extern unsigned char D_0013D4E8[];
+extern unsigned char items_acquired[] __asm__("D_0013D4E8");
 extern char D_0013F3D0[];
 extern float D_0013F3D8;
 extern float D_L02_00174468;
@@ -1503,7 +1503,7 @@ void FUN_L02_002ea210(char *moby) {
     switch (*(unsigned char *)(moby + 0x20)) {
     case 0:
         ea210_init(moby);
-        if (D_0013D4E8[which] == 0) {
+        if (items_acquired[which] == 0) {
         ea210_vec(0.5f, moby + 0x10, 0);
             *(float *)(moby + 0x44) = 3.14159274f;
             *(float *)(moby + 0x40) = 1.57079637f;

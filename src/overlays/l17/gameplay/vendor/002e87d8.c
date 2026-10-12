@@ -17,7 +17,7 @@
 extern char *D_L17_00160058 __asm__("D_L17_0015FFD8");
 extern char D_L17_00167740[] __asm__("D_L17_001676C0");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float D_0015EE6C __asm__("D_0015ED6C");
+extern float freeze_stats_score_ref_b __asm__("D_0015ED6C");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int D_L17_0015F6A8 __asm__("D_L17_0015F5C4");
@@ -61,7 +61,7 @@ void FUN_L17_002e87d8(struct Moby *m) {
             FUN_L00_0028d8c0(m, (*(int *)(d + ((0x20))))) == 0) {
             (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
         }
-        k = D_0015EE6C * 3.0f;
+        k = freeze_stats_score_ref_b * 3.0f;
         f = (*(float *)(d + ((0x14))));
         if (m->unkBC == 0)
             k = -k;
@@ -160,7 +160,7 @@ void FUN_L17_002e87d8(struct Moby *m) {
             break;
         }
         f = absolute_float_c((*(float *)(d + ((0x14)))));
-        k2 = D_0015EE6C * 3.0f;
+        k2 = freeze_stats_score_ref_b * 3.0f;
         if (f > k2) {
             float g = (*(float *)(d + ((0x14))));
             float r;
@@ -439,7 +439,7 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float vector_length_xyz(void *a);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern unsigned char D_0013E504[];
+extern unsigned char frame_size[] __asm__("D_0013E504");
 extern unsigned char D_0015EDB4[4];
 extern void FUN_001fa050(float *, float *);
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
@@ -484,7 +484,7 @@ void FUN_L17_002eaae0(char *rot, char *from, char *moby, int icon, long color, i
         }
         t = &D_L17_001D9B38[icon];
         y -= 0x50;
-        y += *(int *)(D_0013E504);
+        y += *(int *)(frame_size);
         x += 0x1B0;
         draw_textured_quad(x - t->x, y - t->y, t->w, t->h, t->u, t->v, t->w, t->h, color,
                            get_effect_texture(tex + 0x28 + t->tex));

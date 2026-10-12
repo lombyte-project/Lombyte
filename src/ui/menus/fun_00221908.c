@@ -2,11 +2,11 @@
 #include "rnc/input/pad_state.h"
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
-extern int D_001D22F8[];
+extern int pause_default_action_list[] __asm__("D_001D22F8");
 
 int FUN_00221908(void) {
     if (controller_state.pressed_unmasked & PAD_CROSS) {
-        menu_system.next = (struct MenuPage *)D_001D22F8;
+        menu_system.next = (struct MenuPage *)pause_default_action_list;
     }
     return 0;
 }

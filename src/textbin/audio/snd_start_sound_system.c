@@ -10,25 +10,25 @@ struct SifClientDataStartSound {
     void *volatile server;
 };
 
-extern u8 D_00133280[];
-extern u8 D_00134280[];
-extern u8 D_00135280[];
-extern u8 D_00136280[];
-extern u8 D_00137280[];
-extern u8 D_001376C0[];
-extern u8 D_00153C50[];
-extern u8 D_00153C78[];
+extern u8 snd_command_buffer1[] __asm__("D_00133280");
+extern u8 snd_command_buffer2[] __asm__("D_00134280");
+extern u8 snd_stream_buffer1[] __asm__("D_00135280");
+extern u8 snd_stream_buffer2[] __asm__("D_00136280");
+extern u8 snd_return_buffer1[] __asm__("D_00137280");
+extern u8 snd_return_buffer2[] __asm__("D_001376C0");
+extern u8 snd_sif_bind_rpc_error_string[] __asm__("D_00153C50");
+extern u8 snd_989_snd_source_file[] __asm__("D_00153C78");
 extern struct SifClientDataStartSound sound_command_client __asm__("D_0015EBC0");
 extern struct SifClientDataStartSound sound_stream_client __asm__("D_0015EBE8");
-extern u8 *D_0015ECA0[2] __attribute__((sda));
-extern s32 D_0015ECA8 __attribute__((sda));
+extern u8 *snd_batch_command_buffers[2] __asm__("D_0015ECA0") __attribute__((sda));
+extern s32 snd_batch_free_bytes __asm__("D_0015ECA8") __attribute__((sda));
 extern s32 D_0015ECAC MACRO_ADDR;
-extern u8 *D_0015ECB0[2] __attribute__((sda));
-extern u8 *D_0015ECB8[2] __attribute__((sda));
-extern s32 D_0015ECC8 __attribute__((sda));
-extern s32 D_0015ECD0 __attribute__((sda));
-extern s64 D_0015ECD8 MACRO_ADDR;
-extern s32 D_0015ED00 MACRO_ADDR;
+extern u8 *snd_stream_buffers[2] __asm__("D_0015ECB0") __attribute__((sda));
+extern u8 *snd_batch_return_buffers[2] __asm__("D_0015ECB8") __attribute__((sda));
+extern s32 snd_cd_callback_pending __asm__("D_0015ECC8") __attribute__((sda));
+extern s32 snd_cd_callback_fn __asm__("D_0015ECD0") __attribute__((sda));
+extern s64 snd_cd_callback_data __asm__("D_0015ECD8") MACRO_ADDR;
+extern s32 snd_cd_callback_arg __asm__("D_0015ED00") MACRO_ADDR;
 
 extern void sceSifInitRpc(u32);
 extern s32 sceSifBindRpc(struct SifClientDataStartSound *, u32, s32);
@@ -40,21 +40,21 @@ s32 snd_start_sound_system(void) __asm__("FUN_0012da28");
 s32 snd_start_sound_system(void) {
     s32 bind_result;
     s32 command_arg;
-    u8 *const command_buffer1 = D_00134280;
-    u8 *const command_buffer0 = D_00133280;
+    u8 *const command_buffer1 = snd_command_buffer2;
+    u8 *const command_buffer0 = snd_command_buffer1;
 
-    D_0015ECA0[0] = command_buffer0;
-    D_0015ECA0[1] = command_buffer1;
-    D_0015ECB8[0] = D_00137280;
-    D_0015ECB8[1] = D_001376C0;
-    D_0015ECB0[0] = D_00135280;
-    D_0015ECB0[1] = D_00136280;
+    snd_batch_command_buffers[0] = command_buffer0;
+    snd_batch_command_buffers[1] = command_buffer1;
+    snd_batch_return_buffers[0] = snd_return_buffer1;
+    snd_batch_return_buffers[1] = snd_return_buffer2;
+    snd_stream_buffers[0] = snd_stream_buffer1;
+    snd_stream_buffers[1] = snd_stream_buffer2;
     sceSifInitRpc(0);
 
     for (;;) {
         bind_result = sceSifBindRpc(&sound_command_client, 0x123456, 0);
         if (bind_result < 0) {
-            printf((const char *)D_00153C50, D_00153C78, 0x73);
+            printf((const char *)snd_sif_bind_rpc_error_string, snd_989_snd_source_file, 0x73);
             for (;;) {
             }
         }
@@ -66,15 +66,15 @@ s32 snd_start_sound_system(void) {
         }
     }
 
-    D_0015ECC8 = 0;
-    D_0015ECD0 = 0;
-    D_0015ECD8 = 0;
-    D_0015ED00 = 0;
+    snd_cd_callback_pending = 0;
+    snd_cd_callback_fn = 0;
+    snd_cd_callback_data = 0;
+    snd_cd_callback_arg = 0;
 
     do {
         bind_result = sceSifBindRpc(&sound_stream_client, 0x123457, 0);
         if (bind_result < 0) {
-            printf((const char *)D_00153C50, D_00153C78, 0x88);
+            printf((const char *)snd_sif_bind_rpc_error_string, snd_989_snd_source_file, 0x88);
             for (;;) {
             }
         }
@@ -83,11 +83,11 @@ s32 snd_start_sound_system(void) {
         }
     } while (sound_stream_client.server == NULL);
 
-    *(s32 *)D_00133280 = 0;
+    *(s32 *)snd_command_buffer1 = 0;
     sound_read_work.read_active = 0;
-    *(s32 *)D_00134280 = 0;
+    *(s32 *)snd_command_buffer2 = 0;
     sound_read_work.read_error = 0;
-    D_0015ECA8 = 0xFFC;
+    snd_batch_free_bytes = 0xFFC;
     D_0015ECAC = 0xFFC;
     command_arg = (s32)(u32)&sound_read_work.read_active;
     return snd_send_iop_command_and_wait(0, 4, &command_arg);

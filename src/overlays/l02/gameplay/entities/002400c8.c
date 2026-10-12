@@ -3353,7 +3353,7 @@ typedef struct {
     u32 c[3];
 } Colors0720;
 
-extern unsigned char D_0013D39D __attribute__((section(".data")));
+extern unsigned char menu_item_enabled_9 __asm__("D_0013D39D") __attribute__((section(".data")));
 extern int D_L02_00161CC4 __attribute__((sda));
 extern int D_L02_00161CC8 __attribute__((sda));
 extern Colors0720 D_L02_00161CD0;
@@ -3378,7 +3378,7 @@ void FUN_L02_002e0720(struct Moby *moby) {
     h = find_moby_hit(moby, 0x800000, 0);
     switch (moby->state) {
     case 0:
-        if (D_0013D39D) {
+        if (menu_item_enabled_9) {
             mark_moby_for_removal(moby);
         } else {
             moby->state = 1;
@@ -3386,7 +3386,7 @@ void FUN_L02_002e0720(struct Moby *moby) {
         break;
     case 1:
         if (h) {
-            D_0013D39D = 1;
+            menu_item_enabled_9 = 1;
             FUN_0022da68(0, 0, (int)moby);
             /* Statement-expression bodies: their temporaries share stack slots with the second loop's, as in retail. */
             for (i = 0; i < 200; i++) ({

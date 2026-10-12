@@ -1320,7 +1320,7 @@ extern float D_L18_00161A14 __asm__("D_L18_00161A14") __attribute__((sda));
 extern float D_L18_00161A18 __asm__("D_L18_00161A18") __attribute__((sda));
 extern unsigned int D_L18_00162390 __asm__("D_L18_00162390") __attribute__((sda));
 extern unsigned int D_0015EEA4 __asm__("D_0015EEA4") __attribute__((sda));
-extern unsigned char D_0013D407 __attribute__((section(".data")));
+extern unsigned char menu_item_enabled_115 __asm__("D_0013D407") __attribute__((section(".data")));
 /* Help message records (same layout as the usage counters): count, best play time, level mask. */
 extern struct UsageStat D_00141968_7b20[] __asm__("D_00141968");
 extern void FUN_L18_002d8098(void);
@@ -1380,7 +1380,7 @@ void FUN_L18_002d7b20(struct Moby *moby) {
             moby->unkBC = 1;
             moby->pos.z -= 1.5f;
             if (current_level_index == 0x12)
-                D_0013D407 = 1;
+                menu_item_enabled_115 = 1;
         }
         if (vector_distance(&moby->pos, &hero.motion.pos) < 2.5f) {
             struct UsageStat *help = D_00141968_7b20;

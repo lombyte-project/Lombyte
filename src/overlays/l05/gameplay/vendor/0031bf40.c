@@ -9,7 +9,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031bf40.s", FUN_L05_0031bf40);
 extern char D_0013F3D0[];
 extern char D_0013F350[];
 extern int D_001413D4 NOT_SDA, D_001413DC NOT_SDA, D_0013F64C, D_0013D464;
-extern unsigned char D_0013D395, D_0013D4D6, D_0013D388, D_0013D4CF;
+extern unsigned char menu_item_enabled_1 __asm__("D_0013D395"), D_0013D4D6, D_0013D388, D_0013D4CF;
 extern unsigned short D_001418A8, D_001418A0, D_00141930;
 extern short D_00141A88, D_00141A90, D_0013F65E;
 extern unsigned short D_00141A78, D_00141C58;
@@ -95,11 +95,11 @@ extern L05Fields_00141720 l05_00141720 __asm__("D_00141720");
 typedef struct {
     unsigned char D_0013D388;
     unsigned char pad_1[12];
-    unsigned char D_0013D395;
+    unsigned char menu_item_enabled_1;
 } L05Fields_0013D388;
 extern L05Fields_0013D388 l05_0013D388 __asm__("D_0013D388");
 #define D_0013D388 (l05_0013D388.D_0013D388)
-#define D_0013D395 (l05_0013D388.D_0013D395)
+#define menu_item_enabled_1 (l05_0013D388.menu_item_enabled_1)
 typedef struct {
     unsigned char pad_0[15];
     unsigned char D_0013D4CF;
@@ -129,7 +129,7 @@ void FUN_L05_0031bf40(unsigned char *moby) {
             FUN_L00_00203908(0x3f0, 0x44);
         goto check_second_volume;
 set_hint_count:
-        if (D_001413DC == 0x11 || D_0013D395)
+        if (D_001413DC == 0x11 || menu_item_enabled_1)
             D_00141B88 = 0xffff;
     }
 check_second_volume:

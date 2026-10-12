@@ -74,8 +74,8 @@ typedef struct {
 
 extern f32 D_0015F43C;
 extern s32 D_001413D0[];
-extern s32 D_00160F0C;
-extern s32 D_0015F618;
+extern s32 current_vu_chain __asm__("D_00160F0C");
+extern s32 space_load_in_progress __asm__("D_0015F618");
 extern s32 D_0015F440;
 extern s32 D_0015EE8C;
 extern u8 D_00194180[];
@@ -89,28 +89,28 @@ extern s32 D_0015FF00;
 extern s32 D_0015F460;
 extern s64 D_00160580;
 extern s64 D_00160588;
-extern u8 D_0019C1C0[];
-extern u8 D_0019C3C0[];
-extern u8 D_0019BDC0[];
+extern u8 point_lights[] __asm__("D_0019C1C0");
+extern u8 point_light_data[] __asm__("D_0019C3C0");
+extern u8 dir_lights[] __asm__("D_0019BDC0");
 extern u8 D_001D9740[];
 extern u8 *D_0015FF18;
-extern u8 *D_0015FF1C;
-extern u8 *D_0015FF28;
+extern u8 *moby_instance_end __asm__("D_0015FF1C");
+extern u8 *moby_vars __asm__("D_0015FF28");
 extern u8 *D_001600AC;
 extern s32 D_001600B4;
-extern u8 *D_0015FF20;
+extern u8 *moby_instance_perm_end __asm__("D_0015FF20");
 extern s32 D_001600B0;
 extern s32 D_001600B8;
 extern u8 D_001CD780[];
-extern s32 D_0015FF30;
-extern s32 D_001600BC;
+extern s32 occl_fog_count __asm__("D_0015FF30");
+extern s32 part_clip_dist __asm__("D_001600BC");
 extern s64 D_001604E0 __attribute__((sda));
 extern s64 D_001604F0 __attribute__((sda));
 #include "rnc/gameplay/state/level_state.h"
 extern SceneInfo D_0018CB20;
 extern u8 D_00186310[];
 extern u8 D_00186350[];
-extern u32 D_0015ED5C;
+extern u32 sound_bank_handle __asm__("D_0015ED5C");
 
 extern void init_mem_slots(void) __asm__("FUN_002015d8");
 extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("func_001F97E8");
@@ -170,8 +170,8 @@ void initialize_level_runtime(void) {
     level_render_state.timer = -1;
     D_0015F43C = 1.0f;
     D_001413D0[0] = 0;
-    D_00160F0C = 0x100000;
-    D_0015F618 = 0;
+    current_vu_chain = 0x100000;
+    space_load_in_progress = 0;
     D_0015F440 = 0;
     init_mem_slots();
     gs_texture_allocation_cursor = D_0015EE8C;
@@ -240,26 +240,26 @@ void initialize_level_runtime(void) {
     D_001940C0.unk18 = (s32)allocation_cursor;
     gs_texture_allocation_start = texture_cursor;
     D_00160588 = texture_packet[0];
-    clear_blocks_16(D_0019C1C0, 0x100);
-    clear_blocks_16(D_0019C3C0, 0x180);
-    clear_blocks_16(D_0019BDC0, 0x400);
-    copy_blocks_16_forward(D_0019BDC0, D_001D9740, 0x40);
+    clear_blocks_16(point_lights, 0x100);
+    clear_blocks_16(point_light_data, 0x180);
+    clear_blocks_16(dir_lights, 0x400);
+    copy_blocks_16_forward(dir_lights, D_001D9740, 0x40);
     D_0015FF18 = allocation_cursor;
     fill_transfer_words(allocation_cursor, 0, 0x4000);
     allocation_cursor += 0x4000;
-    D_0015FF1C = D_0015FF18;
+    moby_instance_end = D_0015FF18;
     D_0015FF18[0x20] = 0xFF;
-    D_0015FF28 = allocation_cursor;
+    moby_vars = allocation_cursor;
     allocation_cursor += 0x2000;
     D_001600AC = allocation_cursor;
     D_001600B4 = -1;
-    D_0015FF20 = D_0015FF18 + 0x3F00;
+    moby_instance_perm_end = D_0015FF18 + 0x3F00;
     D_001600B0 = 0;
     D_001600B8 = 0;
     clear_blocks_16(D_001CD780, 0x200);
     reset_draw_globals();
-    D_0015FF30 = 0x1F4;
-    D_001600BC = 0x1F4000;
+    occl_fog_count = 0x1F4;
+    part_clip_dist = 0x1F4000;
     scene_variant = (rand() >> 16) & 3;
     level_render_state.scene_state = 0;
     level_render_state.scene_mode = scene_variant;
@@ -274,11 +274,11 @@ void initialize_level_runtime(void) {
     fill_transfer_words(D_00186310, 0, 0x40);
     fill_transfer_words(D_00186350, 0, 0x40);
     scene_offsets = header->scenes;
-    workspace_offset = D_00160F0C - 0x60000;
+    workspace_offset = current_vu_chain - 0x60000;
     scene_offset = &scene_offsets[level_render_state.scene_mode];
     D_0018CB20.unk58 = D_001940C0.unk4 + workspace_offset;
     D_0018CB20.unk5C = D_001940C0.unk8 + workspace_offset;
-    D_00160F0C = workspace_offset;
+    current_vu_chain = workspace_offset;
     scene_chunk = (Chunk *)(data_base + scene_offsets[level_render_state.scene_mode]);
     /* The archive list is terminated by a zero size and the resident table holds 70 entries. */
     for (k = 0; k < 70 && scene_chunk->size != 0; k++) {
@@ -289,14 +289,14 @@ void initialize_level_runtime(void) {
         scene_chunk++;
     }
     parse_space_scene_chunk(0);
-    D_0015ED5C = 0xFFFFFFFF;
+    sound_bank_handle = 0xFFFFFFFF;
     snd_bank_load_from_ee_cb(data_base + header->sound, store_async_sound_bank_handle,
-                             (u32)&D_0015ED5C);
+                             (u32)&sound_bank_handle);
     do {
         FlushCache(0);
         sceGsSyncV(0);
         snd_flush_sound_commands();
-    } while (D_0015ED5C == 0xFFFFFFFF);
+    } while (sound_bank_handle == 0xFFFFFFFF);
     snd_resolve_bank_xrefs();
 }
 

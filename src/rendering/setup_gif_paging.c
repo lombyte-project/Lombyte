@@ -2,10 +2,10 @@
 #include "sda.h"
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
-extern int *D_0015F450 MACRO_ADDR;
+extern int *gif_page_marker_a __asm__("D_0015F450") MACRO_ADDR;
 extern int D_0015EE78 MACRO_ADDR;
 extern int D_0015EE74 MACRO_ADDR;
-extern int D_0015F45C MACRO_ADDR;
+extern int effect_tex_cnt __asm__("D_0015F45C") MACRO_ADDR;
 extern int D_0015EE8C MACRO_ADDR;
 extern short D_0015F458;
 typedef struct {
@@ -35,7 +35,7 @@ void setup_gif_paging(int arg0) {
     int *p = render_packet_cursor.words;
     int i;
 
-    D_0015F450 = p;
+    gif_page_marker_a = p;
     p += 4;
     render_packet_cursor.words = p;
     D_0015EE74 = D_0015EE78;
@@ -43,7 +43,7 @@ void setup_gif_paging(int arg0) {
     {
         int k;
 
-        for (k = 0; k < D_0015F45C; k++) {
+        for (k = 0; k < effect_tex_cnt; k++) {
             D_0018D440[k].unk0 = 0;
         }
     }

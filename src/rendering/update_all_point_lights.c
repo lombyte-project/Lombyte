@@ -3,9 +3,9 @@
 #include "qcopy.h"
 
 extern char D_00187098[];
-extern char D_0019BDC0[];
-extern char D_0019C1C0[];
-extern char D_0019C3C0[];
+extern char dir_lights[] __asm__("D_0019BDC0");
+extern char point_lights[] __asm__("D_0019C1C0");
+extern char point_light_data[] __asm__("D_0019C3C0");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
@@ -15,7 +15,7 @@ extern void refresh_point_light(int) __asm__("FUN_00201f58");
 void update_all_point_lights(void) __asm__("FUN_00201a28");
 
 void update_all_point_lights(void) {
-    char *l = D_0019BDC0;
+    char *l = dir_lights;
     float ang;
     int i;
 
@@ -29,8 +29,8 @@ void update_all_point_lights(void) {
     *(float *)(l + 0x358) = -0.5f;
     *(int *)(l + 0x35C) = 0;
     for (i = 0; i < 8; i++) {
-        char *src = D_0019C1C0 + i * 0x20;
-        char *dst = D_0019C3C0 + i * 0x30;
+        char *src = point_lights + i * 0x20;
+        char *dst = point_light_data + i * 0x30;
 
         if (*(int *)(dst + 0x10) != 0 && FUN_001f9b48(src + 0x10, dst + 0x20) > 8.0f) {
             qcopy(dst + 0x20, src + 0x10);

@@ -8,10 +8,10 @@ struct G {
     f32 f[0x50];
 };
 extern struct G D_00186F40;
-extern u8 D_00187290[];
+extern u8 camera_rows[] __asm__("D_00187290");
 #include "rnc/gameplay/camera/update_cam.h"
 extern u8 D_0018CD00[];
-extern u8 D_0018CF80[];
+extern u8 sky_view_mtx[] __asm__("D_0018CF80");
 
 extern void sceVu0UnitMatrix(void *);
 extern void SceVu0RotMatrixX(void *, void *, f32);
@@ -31,9 +31,9 @@ void FUN_001f2260(void) {
     f32 c;
 
     if (camera_position_publication_suppressed[0] == 0) {
-        qcopy(&m[0].q, D_00187290);
-        qcopy(&m[1].q, D_00187290 + 0x10);
-        qcopy(&m[2].q, D_00187290 + 0x20);
+        qcopy(&m[0].q, camera_rows);
+        qcopy(&m[1].q, camera_rows + 0x10);
+        qcopy(&m[2].q, camera_rows + 0x20);
     } else {
         sceVu0UnitMatrix(m);
         SceVu0RotMatrixX(m, m, D_00186F40.f[0x150 / 4]);
@@ -82,11 +82,11 @@ void FUN_001f2260(void) {
     qcopy(&g->f[0x120 / 4], x + 0xA0);
     qcopy(&g->f[0x130 / 4], x + 0xB0);
     FUN_001fa378(&g->f[0x100 / 4], &g->f[0x100 / 4], g);
-    qcopy(D_0018CF80, g);
-    qcopy(D_0018CF80 + 0x10, &g->f[0x10 / 4]);
-    qcopy(D_0018CF80 + 0x20, &g->f[0x20 / 4]);
-    FUN_001f9a68(D_0018CF80 + 0x30, &g->f[0x140 / 4], 1024.0f);
-    *(f32 *)(D_0018CF80 + 0x3C) = 1024.0f;
+    qcopy(sky_view_mtx, g);
+    qcopy(sky_view_mtx + 0x10, &g->f[0x10 / 4]);
+    qcopy(sky_view_mtx + 0x20, &g->f[0x20 / 4]);
+    FUN_001f9a68(sky_view_mtx + 0x30, &g->f[0x140 / 4], 1024.0f);
+    *(f32 *)(sky_view_mtx + 0x3C) = 1024.0f;
 }
 
 extern __typeof__(FUN_001f2260) func_001F2260 __attribute__((alias("FUN_001f2260")));

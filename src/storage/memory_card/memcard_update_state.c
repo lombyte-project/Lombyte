@@ -21,11 +21,11 @@ extern char D_0013D270[];
 extern u8 D_0014EED0[];
 extern u8 D_001506D0[];
 extern s16 D_001516D8[];
-extern s32 D_0015EE90;
+extern s32 pause_action_list_mode __asm__("D_0015EE90");
 extern char D_0015FE98[];
 extern char D_0015FEA0[];
-extern u32 D_001A04C0[];
-extern u32 D_001A07C0[];
+extern u32 mc_gamedata[] __asm__("D_001A04C0");
+extern u32 mc_leveldata[] __asm__("D_001A07C0");
 extern u8 D_001A0880[];
 extern char D_001A08A0[];
 extern char D_001E81E8[];
@@ -226,10 +226,10 @@ void memcard_update_state(void) {
         case 4:
             if (MC.result == MC.size) {
                 CARD.errors = 0;
-                if (CARD.main_size != get_dma_packet_span_bytes(D_001A04C0)) {
+                if (CARD.main_size != get_dma_packet_span_bytes(mc_gamedata)) {
                     CARD.errors++;
                 }
-                if (CARD.record_size != get_dma_packet_span_bytes(D_001A07C0)) {
+                if (CARD.record_size != get_dma_packet_span_bytes(mc_leveldata)) {
                     CARD.errors++;
                 }
                 MC.busy = 0;
@@ -371,7 +371,7 @@ void memcard_update_state(void) {
                     MC.buf = (u8 *)chunk + chunk->x8;
                     break;
                 case 19:
-                    if (D_0015EE90 != 0) {
+                    if (pause_action_list_mode != 0) {
                         MC.size = 0x3C00;
                     } else {
                         MC.size = 0x3C04;
@@ -379,8 +379,8 @@ void memcard_update_state(void) {
                     MC.buf = &current_level_index;
                     break;
                 case 14: {
-                    s32 n = get_dma_packet_span_bytes(D_001A04C0);
-                    MC.size = n + get_dma_packet_span_bytes(D_001A07C0) * 20 + 8;
+                    s32 n = get_dma_packet_span_bytes(mc_gamedata);
+                    MC.size = n + get_dma_packet_span_bytes(mc_leveldata) * 20 + 8;
                     MC.buf = (u8 *)chunk + chunk->x10;
                     break;
                 }
@@ -648,7 +648,7 @@ void memcard_update_state(void) {
                     memcard_restore_info(D_0014EED0, MC.cur, CARD.scan_save_index);
                     MC.sub = 8;
                 } else {
-                    CARD.errors = memcard_restore_data(D_0014EED0, 0, D_001A04C0);
+                    CARD.errors = memcard_restore_data(D_0014EED0, 0, mc_gamedata);
                     MC.sub = 6;
                 }
                 MC.busy = 0;
@@ -690,7 +690,7 @@ void memcard_update_state(void) {
             break;
         case 7:
             if (MC.result == MC.size) {
-                CARD.errors += memcard_restore_data(D_001506D0, MC.record_index, D_001A07C0);
+                CARD.errors += memcard_restore_data(D_001506D0, MC.record_index, mc_leveldata);
                 if (++MC.record_index < 20) {
                     MC.sub = 6;
                 } else {
@@ -802,12 +802,12 @@ void memcard_update_state(void) {
             }
             break;
         case 4:
-            if (sceMcWrite(MC.fd, D_0014EED0, get_dma_packet_span_bytes(D_001A04C0)) == 0) {
+            if (sceMcWrite(MC.fd, D_0014EED0, get_dma_packet_span_bytes(mc_gamedata)) == 0) {
                 MC.sub = 5;
             }
             break;
         case 5:
-            if (MC.result == get_dma_packet_span_bytes(D_001A04C0)) {
+            if (MC.result == get_dma_packet_span_bytes(mc_gamedata)) {
                 MC.sub = 6;
                 break;
             }
@@ -841,7 +841,7 @@ void memcard_update_state(void) {
                 MC.sub = 8;
                 break;
             }
-            if (sceMcSeek(MC.fd, MC.record_index * get_dma_packet_span_bytes(D_001A07C0), 1) == 0) {
+            if (sceMcSeek(MC.fd, MC.record_index * get_dma_packet_span_bytes(mc_leveldata), 1) == 0) {
                 MC.sub = 7;
             }
             break;
@@ -855,12 +855,12 @@ void memcard_update_state(void) {
             }
             break;
         case 8:
-            if (sceMcWrite(MC.fd, D_001506D0, get_dma_packet_span_bytes(D_001A07C0)) == 0) {
+            if (sceMcWrite(MC.fd, D_001506D0, get_dma_packet_span_bytes(mc_leveldata)) == 0) {
                 MC.sub = 9;
             }
             break;
         case 9:
-            if (MC.result == get_dma_packet_span_bytes(D_001A07C0)) {
+            if (MC.result == get_dma_packet_span_bytes(mc_leveldata)) {
                 MC.sub = 10;
                 break;
             }
@@ -952,8 +952,8 @@ void memcard_update_state(void) {
                 s32 n;
 
                 MC.fd = MC.result;
-                n = get_dma_packet_span_bytes(D_001A04C0);
-                MC.size = n + get_dma_packet_span_bytes(D_001A07C0) * 20 + 8;
+                n = get_dma_packet_span_bytes(mc_gamedata);
+                MC.size = n + get_dma_packet_span_bytes(mc_leveldata) * 20 + 8;
                 if (sceMcWrite(MC.fd, MC.buf, MC.size) == 0) {
                     MC.sub = 2;
                 }

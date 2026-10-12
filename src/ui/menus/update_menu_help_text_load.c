@@ -6,7 +6,7 @@
 extern s16 D_001516D8[];
 extern u8 D_001996D0[];
 
-extern s32 D_0015F6A0;
+extern s32 help_msgs __asm__("D_0015F6A0");
 
 extern s32 start_audio_stream_read(s32 menu, s32 arg1, s32 arg2) __asm__("FUN_00216788");
 extern void FUN_001f9838(void *, void *, s32);
@@ -43,11 +43,11 @@ int update_menu_help_text_load(char *menu) {
 
             FUN_001f9838(archive, language_entries, ((entry_bytes + 3) & ~3) - 8);
             b = D_001996D0;
-            *(int *)(menu + 0x54) = D_0015F6A0;
+            *(int *)(menu + 0x54) = help_msgs;
             *(int *)(menu + 0x38) = *(int *)(b + 0x2C);
             *(int *)(b + 0x2C) = entry_count;
             text_entries = (int *)g->help_text_buffer;
-            D_0015F6A0 = (int)text_entries;
+            help_msgs = (int)text_entries;
             for (i = 0; i < pauseSlotCount(); i++) {
                 int text_base = (int)text_entries - 8;
                 *(int *)((char *)text_entries + i * 0x10) += text_base;

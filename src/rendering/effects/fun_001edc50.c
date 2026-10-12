@@ -25,7 +25,7 @@ typedef struct {
 
 extern u8 D_00187080[];
 #include "rnc/rendering/screen.h"
-extern LensFlare D_00187300;
+extern LensFlare effect_ribbon __asm__("D_00187300");
 
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -55,26 +55,26 @@ void FUN_001edc50(void) {
     s32 x;
     s32 y;
 
-    if (D_00187300.state != 1 || (D_00187300.moby->flags & 0x80)) {
-        D_00187300.state = 0;
+    if (effect_ribbon.state != 1 || (effect_ribbon.moby->flags & 0x80)) {
+        effect_ribbon.state = 0;
         return;
     }
-    if (D_00187300.intensity <= 0.0f) {
+    if (effect_ribbon.intensity <= 0.0f) {
         return;
     }
-    dist = FUN_001f9b48(D_00187080, D_00187300.moby->pos);
+    dist = FUN_001f9b48(D_00187080, effect_ribbon.moby->pos);
     ctr[0] = convert_integer_to_float(screen_extent.half_width);
     ctr[1] = convert_integer_to_float(screen_extent.half_height);
-    project_to_screen(scr, D_00187300.moby->pos);
+    project_to_screen(scr, effect_ribbon.moby->pos);
     scr[0] = (scr[0] - convert_integer_to_float(screen_extent.left)) * 0.0625f;
     scr[1] = (scr[1] - convert_integer_to_float(screen_extent.top)) * 0.0625f;
     d[0] = ctr[0] - scr[0];
     d[1] = ctr[1] - scr[1];
     for (i = 0; i < 16; i++) {
-        tex = get_effect_texture(D_00187300.tex[i] + 6);
+        tex = get_effect_texture(effect_ribbon.tex[i] + 6);
         size = (i != 0) ? 0x20 : 0x40;
-        off[0] = d[0] * D_00187300.dist[i];
-        off[1] = d[1] * D_00187300.dist[i];
+        off[0] = d[0] * effect_ribbon.dist[i];
+        off[1] = d[1] * effect_ribbon.dist[i];
         at[0] = ctr[0] + off[0];
         at[1] = ctr[1] + off[1];
         fade = dist - 5.0f;
@@ -96,15 +96,15 @@ void FUN_001edc50(void) {
             fy = 0.0f;
         }
         fade = fade * (fx * fy);
-        rgba = (truncate_float_to_s32(fade * D_00187300.alpha[i]) << 24) |
-               (D_00187300.color[i] & 0xFFFFFF);
-        w = truncate_float_to_s32(size * D_00187300.scale[i]);
+        rgba = (truncate_float_to_s32(fade * effect_ribbon.alpha[i]) << 24) |
+               (effect_ribbon.color[i] & 0xFFFFFF);
+        w = truncate_float_to_s32(size * effect_ribbon.scale[i]);
         half = w >> 1;
         x = truncate_float_to_s32(at[0] - half);
         y = truncate_float_to_s32(at[1] - half);
         draw_textured_quad(x, y, w, w, 0, 0, size, size, rgba, tex);
     }
-    D_00187300.intensity = 0.0f;
+    effect_ribbon.intensity = 0.0f;
 }
 
 extern __typeof__(FUN_001edc50) func_001EDC50 __attribute__((alias("FUN_001edc50")));

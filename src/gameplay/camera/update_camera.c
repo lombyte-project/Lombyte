@@ -1,12 +1,12 @@
 /* Ported from rac1-decomp (src/game/camera.c, func_001EDE50). */
 #include "sda.h"
 #include "qcopy.h"
-extern char D_001871B0[];
-extern char D_0018C318[];
-extern char D_00187290[];
+extern char cam_trans_state[] __asm__("D_001871B0");
+extern char occl_cam_state[] __asm__("D_0018C318");
+extern char camera_rows[] __asm__("D_00187290");
 extern char D_00186F40[];
 extern int D_0015F604 MACRO_ADDR;
-extern int D_001E6400[];
+extern int text_screen_active[] __asm__("D_001E6400");
 extern char D_001870A0[];
 extern unsigned char D_0015EDB4[4] MACRO_ADDR;
 extern void advance_timed_camera_control(void) __asm__("FUN_001eda60");
@@ -36,11 +36,11 @@ void update_camera(void) {
     float m[16];
 
     if (D_0015F604 == 5) {
-        if (D_001E6400[0] != 0) {
+        if (text_screen_active[0] != 0) {
             return;
         }
-        *(short *)D_001871B0 = 0;
-        D_001871B0[2] = 0;
+        *(short *)cam_trans_state = 0;
+        cam_trans_state[2] = 0;
     }
     c = D_00186F40;
     (*(int *)(c + 0x398))++;
@@ -55,7 +55,7 @@ void update_camera(void) {
     if (*(short *)(c + 0x270) == 3) {
         update_camera_blend(target);
     } else {
-        char *st = D_0018C318;
+        char *st = occl_cam_state;
         if (*(int *)(st + 0x14) != 0) {
             goto frozen;
         }
@@ -65,10 +65,10 @@ void update_camera(void) {
         qcopy(c + 0x370, target + 0x20);
     }
     {
-        char *st = D_0018C318;
+        char *st = occl_cam_state;
         if (*(int *)(st + 0x14) == 0) {
-            FUN_001fa298(m, D_00187290);
-            FUN_00214598(m, D_00187290 - 0x200);
+            FUN_001fa298(m, camera_rows);
+            FUN_00214598(m, camera_rows - 0x200);
         }
     }
 frozen:

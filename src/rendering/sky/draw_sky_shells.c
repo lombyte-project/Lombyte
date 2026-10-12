@@ -15,7 +15,7 @@ struct SkyTransform {
 
 extern f32 D_00160404 __attribute__((sda));
 extern struct SkyShellSet *D_0016045C;
-extern struct SkyTransform D_001D96E0;
+extern struct SkyTransform sky_matrix __asm__("D_001D96E0");
 extern void clear_u64_value(f32 *) __asm__("func_001F99F8");
 extern void FUN_001f9a80(void *, void *, f32);
 extern void FUN_001f9fc8(void *);
@@ -41,7 +41,7 @@ void draw_sky_shells(void) {
     shell_index = 0;
     setup_sky_gif_paging();
     D_0016045C->relocation_state = 0;
-    FUN_001f9fc8(&D_001D96E0);
+    FUN_001f9fc8(&sky_matrix);
     clear_u64_value(rotation_angles);
     if (D_0016045C->shell_count > 0) {
         do {
@@ -76,8 +76,8 @@ void draw_sky_shells(void) {
                 shell_scale = 2.0f;
                 break;
             }
-            FUN_001fa070(&D_001D96E0, rotation_angles);
-            transform_row = (u8 *)&D_001D96E0;
+            FUN_001fa070(&sky_matrix, rotation_angles);
+            transform_row = (u8 *)&sky_matrix;
             FUN_001f9a80(transform_row, transform_row, shell_scale);
             FUN_001f9a80(transform_row + 0x10, transform_row + 0x10, shell_scale);
             FUN_001f9a80(transform_row + 0x20, transform_row + 0x20, shell_scale);

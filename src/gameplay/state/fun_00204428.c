@@ -15,13 +15,13 @@ struct LevelArchiveHeader {
     s32 sound_bank_offset;
 };
 
-extern s16 D_0013E056[];
+extern s16 ship_index[] __asm__("D_0013E056");
 extern s32 D_0015ED58 MACRO_ADDR;
-extern u32 D_0015ED5C MACRO_ADDR;
+extern u32 sound_bank_handle __asm__("D_0015ED5C") MACRO_ADDR;
 extern s32 D_0015ED80 MACRO_ADDR;
 extern u16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A;
-extern struct LevelArchiveHeader *D_0015EE4C;
+extern struct LevelArchiveHeader *level_root __asm__("D_0015EE4C");
 extern u8 *D_0015EE50 MACRO_ADDR;
 extern u8 *D_0015EE54 MACRO_ADDR;
 extern s32 D_0015EEBC __attribute__((sda));
@@ -57,7 +57,7 @@ s32 service_level_archive_load(void) {
     s32 level_index;
     struct LevelArchiveHeader *shared_header;
 
-    level_index = D_0013E056[0] + 1;
+    level_index = ship_index[0] + 1;
     if (sceCdSync(1) != 0) {
         D_0015EEBC = D_0015EEBC + 1;
         if (D_0015ED58 == 1) {
@@ -130,7 +130,7 @@ s32 service_level_archive_load(void) {
             return 0;
         }
         snd_stop_all_sounds();
-        if (D_0015ED5C != 0) {
+        if (sound_bank_handle != 0) {
             next_stage = D_0015EE48;
             D_0015EE48 = next_stage + 1;
         } else {
@@ -141,9 +141,9 @@ s32 service_level_archive_load(void) {
         if (snd_flush_sound_commands() != 0) {
             return 0;
         }
-        snd_unload_bank(D_0015ED5C);
+        snd_unload_bank(sound_bank_handle);
         next_stage = D_0015EE48;
-        D_0015ED5C = 0;
+        sound_bank_handle = 0;
         D_0015EE48 = next_stage + 1;
         break;
     case 5:
@@ -157,17 +157,17 @@ s32 service_level_archive_load(void) {
         if (snd_flush_sound_commands() != 0) {
             return 0;
         }
-        shared_header = D_0015EE4C;
-        D_0015ED5C = 0xFFFFFFFFU;
+        shared_header = level_root;
+        sound_bank_handle = 0xFFFFFFFFU;
         snd_bank_load_from_ee_cb(shared_header->sound_bank_offset + (s32)shared_header,
-                                 (s32)store_async_sound_bank_handle, (u32)&D_0015ED5C);
+                                 (s32)store_async_sound_bank_handle, (u32)&sound_bank_handle);
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 7:
         if (snd_flush_sound_commands() != 0) {
             return 0;
         }
-        if ((u32)D_0015ED5C == 0xFFFFFFFFU) {
+        if ((u32)sound_bank_handle == 0xFFFFFFFFU) {
             return 0;
         }
         snd_resolve_bank_xrefs();

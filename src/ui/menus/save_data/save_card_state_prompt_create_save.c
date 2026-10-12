@@ -2,7 +2,7 @@
 #include "rnc/storage/memory_card/memory_card_state.h"
 extern int mode_freeze_state __asm__("D_0015EEB0") MACRO_ADDR;
 extern int mode_freeze_flags __asm__("D_0015EEB4") MACRO_ADDR;
-extern int D_0015F5E8 MACRO_ADDR;
+extern int boot_level_active __asm__("D_0015F5E8") MACRO_ADDR;
 
 void save_card_state_prompt_create_save(void) __asm__("FUN_00208ca8");
 
@@ -16,7 +16,7 @@ void save_card_state_prompt_create_save(void) {
     flags = mode_freeze_flags;
     if (flags & 0x20) {
         mode_freeze_flags = flags ^ 0x20;
-        if (D_0015F5E8 != 0) {
+        if (boot_level_active != 0) {
             mode_freeze_state = 0x18;
         } else {
             mode_freeze_state = 0xC;

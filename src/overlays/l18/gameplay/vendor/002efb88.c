@@ -2795,7 +2795,7 @@ int FUN_L18_002f6878(char *moby, float arg, void *x) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7DC0), where it is exact; names translated to the US level program. */
 
 extern char *D_L18_0016016C __asm__("D_L18_001600EC");
-extern float D_0015EE6C __asm__("D_0015ED6C");
+extern float freeze_stats_score_ref_b __asm__("D_0015ED6C");
 extern float FUN_001f9b80(void *, void *);
 extern short D_L18_001623DC __asm__("D_L18_0016234C") __attribute__((sda));
 extern short D_L18_00162408_u __asm__("D_L18_00162378") __attribute__((sda));
@@ -2821,9 +2821,9 @@ void FUN_L18_002f6960(struct Moby *m) {
     add_vector_xyz(v, v, D_L18_0016016C + (*(int *)(d + 0x344) << 7) + 0x30);
     t = hero.motion.speed_xy;
     t += (FUN_001f9b80(&m->pos, v) - *(float *)&D_L18_001623DC) / *(float *)&D_L18_001623DC *
-         (D_0015EE6C * 4.75f);
-    hi = D_0015EE6C * 20.0f;
-    lo = D_0015EE6C * 4.75f;
+         (freeze_stats_score_ref_b * 4.75f);
+    hi = freeze_stats_score_ref_b * 20.0f;
+    lo = freeze_stats_score_ref_b * 4.75f;
     if (t > hi) {
         t = hi;
     } else if (t < lo) {

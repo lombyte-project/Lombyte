@@ -4,7 +4,7 @@ struct Upgrade {
     s32 level;
 };
 #include "rnc/gameplay/state/level_state.h"
-extern u8 D_0013D4E8[];
+extern u8 items_acquired[] __asm__("D_0013D4E8");
 extern struct Upgrade D_0013D5B0[];
 #include "rnc/gameplay/state/item_state.h"
 extern u8 D_0014BEC0[];
@@ -19,7 +19,7 @@ s32 check_mission_condition(s16 kind, s32 value) {
     case 2:
         return item_available[value] != 0;
     case 3:
-        return D_0013D4E8[value] != 0;
+        return items_acquired[value] != 0;
     case 4:
         if (value < 121) {
             return D_0013D5B0[value].level != 0;

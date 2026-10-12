@@ -1,6 +1,6 @@
 #include "types.h"
-extern u8 D_001A04C0[];
-extern u8 D_001A07C0[];
+extern u8 mc_gamedata[] __asm__("D_001A04C0");
+extern u8 mc_leveldata[] __asm__("D_001A07C0");
 extern char D_001E81D0[];
 extern s32 get_dma_packet_span_bytes(void *) __asm__("GetDmaPacketSpanBytes");
 extern void DebugPrint(char *, ...);
@@ -8,8 +8,8 @@ extern void memcard_restore_data(u8 *, s32, void *) __asm__("func_0020AF20");
 void memcard_restore_game(u8 *p) __asm__("FUN_00209298");
 
 void memcard_restore_game(u8 *p) {
-    s32 size0 = get_dma_packet_span_bytes(D_001A04C0);
-    s32 size1 = get_dma_packet_span_bytes(D_001A07C0);
+    s32 size0 = get_dma_packet_span_bytes(mc_gamedata);
+    s32 size1 = get_dma_packet_span_bytes(mc_leveldata);
     s32 len0 = ((s32 *)p)[0];
     s32 i;
 
@@ -18,10 +18,10 @@ void memcard_restore_game(u8 *p) {
         return;
     }
     p += 8;
-    memcard_restore_data(p, 0, D_001A04C0);
+    memcard_restore_data(p, 0, mc_gamedata);
     p += len0;
     for (i = 0; i < 20; i++) {
-        memcard_restore_data(p, i, D_001A07C0);
+        memcard_restore_data(p, i, mc_leveldata);
         p += size1;
     }
 }

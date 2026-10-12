@@ -137,7 +137,7 @@ extern unsigned char D_0013D4C0[];
 extern unsigned char D_0013E533[];
 extern unsigned char D_0014C050[][16];
 extern unsigned char D_0015EDDC[4];
-extern unsigned char D_0015EDE0[4];
+extern unsigned char opt_cam_invert_x[4] __asm__("D_0015EDE0");
 extern int D_0015EEA4;
 extern unsigned char D_0013D388[];
 extern unsigned char D_0013D408[];
@@ -223,7 +223,7 @@ void FUN_L02_002ee890(struct Moby *moby) {
                 FUN_L00_00203908(0x4E22, 0x4C);
             }
         }
-        if (D_0015EDDC[0] != 0 && D_0015EDE0[0] != 0) {
+        if (D_0015EDDC[0] != 0 && opt_cam_invert_x[0] != 0) {
             char *b = ((char *)&D_00141968);
             if (!(*(unsigned int *)(b + 0x3B4) & (1 << current_level_index))) {
                 FUN_L00_00203908(0x4E2C, 0x76);

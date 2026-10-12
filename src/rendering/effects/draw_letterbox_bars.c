@@ -6,8 +6,8 @@
 #include "rnc/rendering/dma_tag.h"
 
 #include "rnc/rendering/screen.h"
-extern int D_0015F444 MACRO_ADDR;
-extern int D_0015F448 MACRO_ADDR;
+extern int occl_chain_active __asm__("D_0015F444") MACRO_ADDR;
+extern int occl_chain_frames __asm__("D_0015F448") MACRO_ADDR;
 extern char D_00160820[];
 extern char D_00160830[];
 
@@ -22,17 +22,17 @@ void draw_letterbox_bars(void) __asm__("FUN_001f4d98");
 void draw_letterbox_bars(void) {
     int h;
 
-    if (D_0015F444 != 0) {
-        if (D_0015F448 < 24) {
-            D_0015F448++;
+    if (occl_chain_active != 0) {
+        if (occl_chain_frames < 24) {
+            occl_chain_frames++;
         }
     } else {
-        if (D_0015F448 == 0) {
+        if (occl_chain_frames == 0) {
             return;
         }
-        D_0015F448--;
+        occl_chain_frames--;
     }
-    h = D_0015F448;
+    h = occl_chain_frames;
     if (h == 0) {
         return;
     }

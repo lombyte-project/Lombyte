@@ -6,7 +6,7 @@ struct MobyRecord {
     u8 unk52;
 };
 
-extern u8 D_001B2BC0[];
+extern u8 moby_render_slots[] __asm__("D_001B2BC0");
 void prune_moby_references(void) __asm__("FUN_0020cc60");
 
 void prune_moby_references(void) {
@@ -15,7 +15,7 @@ void prune_moby_references(void) {
     struct MobyRecord *moby;
     s32 mask = 0xFF;
 
-    slot = D_001B2BC0;
+    slot = moby_render_slots;
     remaining = 0xF;
     do {
         moby = *slot;

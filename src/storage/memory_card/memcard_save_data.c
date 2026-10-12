@@ -2,8 +2,8 @@
 #include "sda.h"
 extern char D_0013D290[];
 extern int D_0015ED84 MACRO_ADDR;
-extern int D_001A04C0[];
-extern int D_001A07C0[];
+extern int mc_gamedata[] __asm__("D_001A04C0");
+extern int mc_leveldata[] __asm__("D_001A07C0");
 extern int memcard_prepare_data(void *dst, int i, int *table) __asm__("func_0020AD78");
 extern void sceCdReadClock(void *);
 extern void sceScfGetLocalTimefromRTC(void *);
@@ -81,8 +81,8 @@ int memcard_save_data(int slot, int flags) {
         *(int *)(q + *(int *)(q + 0x14) * 0x1C + 0x2C) = D_0015EE24;
         memcpy(names + *(int *)(q + 0x14) * 0x1C, D_0015EE98, 8);
         *(int *)(q + *(int *)(q + 0x14) * 0x1C + 0x28) = D_0015EE20;
-        memcard_prepare_data(D_0014EED0, 0, D_001A04C0);
-        memcard_prepare_data(D_001506D0, *(int *)(q + 0xC8), D_001A07C0);
+        memcard_prepare_data(D_0014EED0, 0, mc_gamedata);
+        memcard_prepare_data(D_001506D0, *(int *)(q + 0xC8), mc_leveldata);
         if (flags >= 0) {
             level_visit_state[D_0015ED84] = saved;
             D_0015ED84 = *(int *)(q + 0xC8);

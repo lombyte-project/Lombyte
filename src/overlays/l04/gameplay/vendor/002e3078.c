@@ -158,10 +158,10 @@ extern int D_L04_00179590[] __attribute__((section(".data")));
 extern int FUN_L00_00203908(int a, int b);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern unsigned char D_0013D3A4 __attribute__((section(".data")));
-extern unsigned char D_0013D3A5 __attribute__((section(".data")));
-extern unsigned char D_0013D3A6 __attribute__((section(".data")));
-extern unsigned char D_0013D3A7 __attribute__((section(".data")));
+extern unsigned char menu_item_enabled_16 __asm__("D_0013D3A4") __attribute__((section(".data")));
+extern unsigned char menu_item_enabled_17 __asm__("D_0013D3A5") __attribute__((section(".data")));
+extern unsigned char menu_item_enabled_18 __asm__("D_0013D3A6") __attribute__((section(".data")));
+extern unsigned char menu_item_enabled_19 __asm__("D_0013D3A7") __attribute__((section(".data")));
 extern unsigned char D_0013D4D4 __attribute__((section(".data")));
 extern unsigned char D_0013D4DA __attribute__((section(".data")));
 extern unsigned char D_0013D4E3[];
@@ -178,7 +178,7 @@ extern char D_0013F3D0[];
 extern char D_00141848[];
 extern char D_00141968[];
 extern char D_0013F350[];
-extern char D_0013D4E8[];
+extern char items_acquired[] __asm__("D_0013D4E8");
 extern Moby *D_L04_00160064_2E57F8 __asm__("D_L04_0015FFE4");
 extern Moby *D_L04_00160058_2E57F8 __asm__("D_L04_0015FFD8");
 
@@ -247,7 +247,7 @@ void FUN_L04_002e4418(Moby *moby) {
         }
 
         {
-            unsigned char *item_flags = ((char *)&D_0013D4E8);
+            unsigned char *item_flags = ((char *)&items_acquired);
             if (item_flags[9] != 0 && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
                 Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
                 if (help[0x1E].count == 0) {
@@ -266,22 +266,22 @@ void FUN_L04_002e4418(Moby *moby) {
 
         if (data->f48 != -1) {
             if (D_L04_00160058_2E57F8[data->f48].oclass == 0x267 && D_L04_00160058_2E57F8[data->f48].state == 4) {
-                D_0013D3A4 = 1;
+                menu_item_enabled_16 = 1;
             }
         }
         if (data->f4C != -1) {
             if (D_L04_00160058_2E57F8[data->f4C].oclass == 0x267 && D_L04_00160058_2E57F8[data->f4C].state == 4) {
-                D_0013D3A5 = 1;
+                menu_item_enabled_17 = 1;
             }
         }
         if (data->f40 != -1) {
             if (D_L04_00160058_2E57F8[data->f40].oclass == 0x118 && D_L04_00160058_2E57F8[data->f40].state == 5) {
-                D_0013D3A6 = 1;
+                menu_item_enabled_18 = 1;
             }
         }
         if (data->f44 != -1) {
             if (D_L04_00160058_2E57F8[data->f44].oclass == 0x118 && D_L04_00160058_2E57F8[data->f44].state == 5) {
-                D_0013D3A7 = 1;
+                menu_item_enabled_19 = 1;
             }
         }
 

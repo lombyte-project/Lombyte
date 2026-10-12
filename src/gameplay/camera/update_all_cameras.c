@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/gameplay/camera/update_cam.h"
 
-extern struct UpdateCam *D_001870C0[];
+extern struct UpdateCam *cur_cam[] __asm__("D_001870C0");
 extern struct UpdateCam D_00187410[];
 extern s32 D_00189B50[];
 extern struct CameraType camera_types[] __asm__("D_001E8C00");
@@ -21,7 +21,7 @@ s32 update_all_cameras(void) {
     Vec4f *src;
     Vec3 *dst;
 
-    best = D_001870C0[0];
+    best = cur_cam[0];
     changed = 0;
     camera_exit(best);
     for (i = 0; i < 48; i++) {

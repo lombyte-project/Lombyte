@@ -21,7 +21,7 @@ extern struct PadState D_0013C940;
 #define D_0015EF78 (*(s32 *)0x0015ef78)
 extern s16 D_L00_001BA4A8[];
 extern u8 D_L00_001B9BA0[];
-extern u8 D_0013D4E8[];
+extern u8 items_acquired[] __asm__("D_0013D4E8");
 extern u8 D_0013D4C0[];
 extern u8 D_0013D388[];
 extern u8 D_0013D408[];
@@ -72,7 +72,7 @@ void FUN_L00_002831c0(void) {
     if (code < 0) return;
     if (code < 0x25) {
         D_0013D4C0[code] = 1;
-        D_0013D4E8[code] = 1;
+        items_acquired[code] = 1;
     } else if (code < 0x37) {
         unlock_planet(code - 0x24);
     } else if (code < 0x3d) {

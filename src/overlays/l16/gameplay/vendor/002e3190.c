@@ -1412,7 +1412,7 @@ extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
-extern int D_0015EE6C[] __attribute__((section(".sdata")));
+extern int freeze_stats_score_ref_b[] __asm__("D_0015EE6C") __attribute__((section(".sdata")));
 extern volatile int D_0015EE6C_p __asm__("D_0015EE6C");
 extern int D_L16_0015F5CC;
 extern float D_L16_0015F638;
@@ -1479,7 +1479,7 @@ void FUN_L16_002e6808(L16ChallengeMoby *m) {
         if (!D_0013D4DE && FUN_001f9b80(&hero.motion.pos, m->position) < 3.5f) {
             int elapsed, period;
             char *statistics;
-            elapsed = scale_game_frames(D_0015EE6C[14]);
+            elapsed = scale_game_frames(freeze_stats_score_ref_b[14]);
             period = 600;
             statistics = ((char *)&D_00141968);
             elapsed -= *(unsigned short *)(statistics + 0x43A) * period;

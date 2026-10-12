@@ -33,8 +33,8 @@ typedef struct {
     u8 pad38[8];
 } Obj40;
 
-extern LightDef D_0019C1C0[];
-extern LightSlot D_0019C3C0[];
+extern LightDef point_lights[] __asm__("D_0019C1C0");
+extern LightSlot point_light_data[] __asm__("D_0019C3C0");
 extern Obj20 *D_00160F50;
 extern Obj20 *D_00160F54;
 extern Obj40 *D_00160E8C __attribute__((sda));
@@ -60,10 +60,10 @@ void create_point_light(s32 i) {
     s32 n3;
     u32 v;
 
-    slot = &D_0019C3C0[i];
+    slot = &point_light_data[i];
     p = slot->buf;
     end = p + 0x200;
-    def = &D_0019C1C0[i];
+    def = &point_lights[i];
     qcopy(&sphere, &def->sphere);
     sphere.v[3] += 8.0f;
     if (p < end) {

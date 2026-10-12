@@ -2,7 +2,7 @@
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
 
-extern u8 D_0013A664[];
+extern u8 scene_sounds[] __asm__("D_0013A664");
 // D_002169C0 is a code address retail passes as a pointer, not a data symbol;
 // config/us/pinned.yaml binds its absolute value so this extern links.
 extern u8 D_002169C0[];
@@ -32,7 +32,7 @@ void music_start_track_by_id(s32 track, s32 track_flags, s32 volume) {
     } else if (track >= 0x2710) {
         music_start_track_10000(track, track_flags, volume);
     } else {
-        handle = *((s32 *)((u8 *)D_0013A664 + track * 0x250) + game_language);
+        handle = *((s32 *)((u8 *)scene_sounds + track * 0x250) + game_language);
         if (handle != 0) {
             if (music_stream_state.secondary.handle == 0) {
                 *(u32 *)&music_stream_state.secondary.handle = 0xFFFFFFFF;

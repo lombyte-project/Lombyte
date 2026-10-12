@@ -130,8 +130,8 @@ typedef struct {
     f32 f22C;
 } L01Camera;
 
-extern u16 D_0010E800[];
-extern u8 D_0010E810[];
+extern u16 font_vu_program_tag[] __asm__("D_0010E800");
+extern u8 font_vu_program[] __asm__("D_0010E810");
 extern s32 D_L01_0015F5E0 __attribute__((section(".sdata")));
 #define D_0015F628 (*(u32 *)0x0015F628)
 #define D_0015F62C (*(u32 *)0x0015F62C)
@@ -159,7 +159,7 @@ void FUN_L01_002b8f98(void) {
     scale_vector_xyz(m[3], D_L01_00167240, -1024.0f);
     m[3][3] = 1.0f;
     if (D_L01_0015F5E0 != 7) {
-        vu1_add_data_ref(D_0010E810, D_0010E800[0]);
+        vu1_add_data_ref(font_vu_program, font_vu_program_tag[0]);
         D_L01_0015F5E0 = 7;
     }
     l01_packet.tag->tag = 0x10000000;
@@ -537,8 +537,8 @@ mark:
 }
 #endif
 extern int D_0015ED84_r __asm__("D_0015ED84");
-extern unsigned char D_0013D394 __attribute__((section(".data")));
-extern unsigned char D_0013D395 __attribute__((section(".data")));
+extern unsigned char menu_item_enabled_0 __asm__("D_0013D394") __attribute__((section(".data")));
+extern unsigned char menu_item_enabled_1 __asm__("D_0013D395") __attribute__((section(".data")));
 /* On level 1, when a state-5 moby of type 0x118 has sub-id 0x34 or 0x35, sets the matching flag byte (D_0013D394 / D_0013D395). */
 void FUN_L01_002e0bd8(char *moby)
 {
@@ -547,13 +547,13 @@ void FUN_L01_002e0bd8(char *moby)
     if (*(short *)(moby + 0xB2) == 0x34 &&
             *(short *)(moby + 0xA6) == 0x118 &&
             (unsigned char)moby[0x20] == 5) {
-            D_0013D394 = level;
+            menu_item_enabled_0 = level;
             level = D_0015ED84_r;
     }
     if (level == 1 && *(short *)(moby + 0xB2) == 0x35 &&
             *(short *)(moby + 0xA6) == 0x118 &&
             (unsigned char)moby[0x20] == 5) {
-            D_0013D395 = level;
+            menu_item_enabled_1 = level;
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e0c68.s", FUN_L01_002e0c68);

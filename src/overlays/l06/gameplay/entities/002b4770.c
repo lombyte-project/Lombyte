@@ -432,7 +432,7 @@ void FUN_L06_002fd088(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002B5990), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_001600EC;
-extern char D_0013E050[];
+extern char ship_substate[] __asm__("D_0013E050");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -451,7 +451,7 @@ void FUN_L06_002b4770(char *m) {
         if (*(int *)(d + 0x10) == 0) {
             int x;
             *(int *)(d + 0x10) = 0;
-            x = *(int *)(D_0013E050);
+            x = *(int *)(ship_substate);
             if (x == 8) {
                 *(int *)(d + 0x10) = 1;
                 *(float *)(d + 0x18) = 0.3490658402442932f;

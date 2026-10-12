@@ -6,7 +6,7 @@ struct Point {
     s16 u;
     s16 v;
 };
-extern s32 D_0015F45C;
+extern s32 effect_tex_cnt __asm__("D_0015F45C");
 extern struct Point D_0018D440[];
 extern s16 FUN_001f97a0(s32);
 void unpack_point_records(s32 *src, s32 count) __asm__("FUN_00202800");
@@ -17,16 +17,16 @@ void unpack_point_records(s32 *src, s32 count) {
     s32 u;
     s32 v;
 
-    for (D_0015F45C = 0; D_0015F45C < count; D_0015F45C++) {
+    for (effect_tex_cnt = 0; effect_tex_cnt < count; effect_tex_cnt++) {
         x = *src++;
         y = *src++;
         u = *src++;
         v = *src++;
-        D_0018D440[D_0015F45C].x = x >> 4;
-        D_0018D440[D_0015F45C].y = y >> 4;
-        D_0018D440[D_0015F45C].u = FUN_001f97a0(u);
-        D_0018D440[D_0015F45C].v = FUN_001f97a0(v);
-        D_0018D440[D_0015F45C].flags = 0;
+        D_0018D440[effect_tex_cnt].x = x >> 4;
+        D_0018D440[effect_tex_cnt].y = y >> 4;
+        D_0018D440[effect_tex_cnt].u = FUN_001f97a0(u);
+        D_0018D440[effect_tex_cnt].v = FUN_001f97a0(v);
+        D_0018D440[effect_tex_cnt].flags = 0;
     }
 }
 

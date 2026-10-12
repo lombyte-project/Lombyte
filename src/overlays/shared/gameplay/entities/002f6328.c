@@ -1252,7 +1252,7 @@ extern u8 D_0014BEC0[];
 /* MACRO_ADDR aliases: retail loads these with the one-register lui form */
 extern f32 D_0015ED6C_f __asm__("D_0015ED6C") MACRO_ADDR;
 extern s32 D_0015ED84_n __asm__("D_0015ED84") MACRO_ADDR;
-extern u8 D_0015EDB5 MACRO_ADDR;
+extern u8 opt_mirror_anim __asm__("D_0015EDB5") MACRO_ADDR;
 extern s32 D_L01_0015F640 MACRO_ADDR;
 extern s32 D_L01_0015F404_n __asm__("D_L01_0015F404") MACRO_ADDR;
 extern f32 D_L01_00161F10_f __asm__("D_L01_00161F10") __attribute__((sda));
@@ -1368,7 +1368,7 @@ void FUN_L01_00307ca0(struct Moby *moby) {
             FUN_00212f90(moby, 1, 0, 0);
         }
         set_hero_animation(0.0f, 0x82, 0);
-        if (D_0015EDB5) {
+        if (opt_mirror_anim) {
             moby->flags |= 0x8000;
         }
         hero.unk20AF = 1;

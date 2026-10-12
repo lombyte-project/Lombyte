@@ -6,13 +6,13 @@ struct HudSlot {
     u8 pad_0[0x18];
     s32 unk18;
 };
-extern s32 D_0015F444;
-extern s32 D_0015F680;
-extern s32 D_0015F684;
-extern s32 D_0015F688;
-extern u8 D_001993D8[];
-extern u8 D_00199428[];
-extern u8 D_00199B60[];
+extern s32 occl_chain_active __asm__("D_0015F444");
+extern s32 hud_msg_count __asm__("D_0015F680");
+extern s32 hud_msg_fade __asm__("D_0015F684");
+extern s32 hud_msg_y __asm__("D_0015F688");
+extern u8 hud_msg_text1[] __asm__("D_001993D8");
+extern u8 hud_msg_text2[] __asm__("D_00199428");
+extern u8 hud_chan_slots[] __asm__("D_00199B60");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern s32 draw_framed_text() __asm__("func_00201200");
 void update_hud(void) __asm__("FUN_001ff780");
@@ -31,14 +31,14 @@ void update_hud(void) {
     hud_state.unk30 = 0;
     return;
 block_2:
-    if (D_0015F444 == 0) {
+    if (occl_chain_active == 0) {
         goto block_5;
     }
 
     hud_state.unk30 = 0;
     return;
 block_5:
-    slot = D_00199B60;
+    slot = hud_chan_slots;
 
     hud_state.z = 0xFFFFF0;
     remaining = 0xC;
@@ -56,10 +56,10 @@ block_8:
     if (remaining >= 0) {
         goto loop_6;
     }
-    if (D_0015F680 != 0) {
+    if (hud_msg_count != 0) {
         goto block_11;
     }
-    if (D_0015F684 == 0) {
+    if (hud_msg_fade == 0) {
         goto block_27;
     }
 block_11:
@@ -67,55 +67,55 @@ block_11:
         goto block_28;
     }
 
-    if (D_0015F680 == 0) {
+    if (hud_msg_count == 0) {
         goto block_15;
     }
-    temp_2_59 = D_0015F684 + (0x80 / scale_game_frames(8));
-    D_0015F684 = temp_2_59;
+    temp_2_59 = hud_msg_fade + (0x80 / scale_game_frames(8));
+    hud_msg_fade = temp_2_59;
     if (temp_2_59 < 0x81) {
         goto block_17;
     }
-    D_0015F684 = 0x80;
+    hud_msg_fade = 0x80;
     goto block_17;
 block_15:
-    temp_2_76 = D_0015F684 - (0x80 / scale_game_frames(8));
+    temp_2_76 = hud_msg_fade - (0x80 / scale_game_frames(8));
 
-    D_0015F684 = temp_2_76;
+    hud_msg_fade = temp_2_76;
     if (temp_2_76 >= 0) {
         goto block_17;
     }
-    D_0015F684 = 0;
+    hud_msg_fade = 0;
 block_17:
-    text_color = (D_0015F684 << 0x18) + 0xF0F0F0;
+    text_color = (hud_msg_fade << 0x18) + 0xF0F0F0;
 
-    draw_framed_text(0x100, D_0015F688, text_color, D_001993D8);
-    if (D_00199428[0] == 0) {
+    draw_framed_text(0x100, hud_msg_y, text_color, hud_msg_text1);
+    if (hud_msg_text2[0] == 0) {
         goto block_20;
     }
-    if (D_0015F680 < 0x3E9) {
+    if (hud_msg_count < 0x3E9) {
         goto block_21;
     }
-    draw_framed_text(0x100, D_0015F688, text_color, D_00199428);
+    draw_framed_text(0x100, hud_msg_y, text_color, hud_msg_text2);
 block_20:
 block_21:
-    if (D_0015F680 == 0) {
+    if (hud_msg_count == 0) {
         goto block_23;
     }
 
-    D_0015F680 -= 1;
+    hud_msg_count -= 1;
 block_23:
-    if (D_0015F680 != 0x3E8) {
+    if (hud_msg_count != 0x3E8) {
         goto block_25;
     }
 
-    D_0015F680 = 0;
+    hud_msg_count = 0;
     return;
 block_25:
     return;
 
 block_27:
 block_28:
-    D_0015F688 = 0x64;
+    hud_msg_y = 0x64;
 
     return;
 }

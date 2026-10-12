@@ -9,9 +9,9 @@ struct CameraShake {
     s32 unkC;
 };
 
-extern struct UpdateCam *D_001870C0[];
+extern struct UpdateCam *cur_cam[] __asm__("D_001870C0");
 extern u8 D_00187080[];
-extern u8 D_00187290[];
+extern u8 camera_rows[] __asm__("D_00187290");
 extern u8 D_001872B0[];
 
 extern s32 func_001F9740(s32 *);
@@ -32,7 +32,7 @@ void apply_camera_shake(struct CameraShake *shake, s32 arg1) {
     f32 val;
     s32 v5;
 
-    if (D_001870C0[0] != 0 && D_001870C0[0]->unk86 == 6) {
+    if (cur_cam[0] != 0 && cur_cam[0]->unk86 == 6) {
         shake->unk8 = 0;
         shake->unkC = 0;
     } else {
@@ -51,7 +51,7 @@ void apply_camera_shake(struct CameraShake *shake, s32 arg1) {
             if (arg1 == 0) {
                 FUN_001f9bf8(sp_slot, D_001872B0, val);
             } else {
-                FUN_001f9bf8(sp_slot, D_00187290, val);
+                FUN_001f9bf8(sp_slot, camera_rows, val);
             }
             FUN_001f9a10(D_00187080, D_00187080, sp_slot);
         } else {

@@ -7,7 +7,7 @@ struct Chunk {
     s32 id;
 };
 
-extern s32 *D_0015EE4C;
+extern s32 *level_root __asm__("D_0015EE4C");
 
 s64 parse_bin(void) __asm__("FUN_0012d8f8");
 
@@ -25,7 +25,7 @@ s64 parse_bin(void) {
     s64 id;
 
     id = 0;
-    p = (u8 *)(D_0015EE4C[0] + (s32)D_0015EE4C);
+    p = (u8 *)(level_root[0] + (s32)level_root);
     while (c = (struct Chunk *)p, p = (u8 *)(c + 1), dst = c->dst, src = p,
            (id == 0) ? (id = c->id, 1) : (id == c->id)) {
         if (((c->size & 7) == 0) && (((u32)p & 7) == 0) && (((u32)dst & 7) == 0)) {

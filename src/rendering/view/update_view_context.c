@@ -23,7 +23,7 @@ extern f32 D_00160720[4];
 extern f32 D_00160B30;
 extern f32 D_001DFF50[];
 extern f32 D_001E6B70[];
-extern struct FogRegs2 D_001DE9B0;
+extern struct FogRegs2 shrub_vu1_constants __asm__("D_001DE9B0");
 extern struct FogRegs2 D_001DEA00;
 extern Vec4 D_001DEA40[2];
 extern Vec4 D_001DE710[3];
@@ -37,7 +37,7 @@ extern struct {
     u8 pad90[0x10];
     s32 x;
     s32 y;
-} D_001DE740;
+} tfrag_vu_const_block __asm__("D_001DE740");
 
 extern f32 func_001F9E90(f32, f32);
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -121,16 +121,16 @@ void update_view_context(void) {
     D_001DFF50[0] = fog_multiplier;
     D_001E6B70[0] = fog_multiplier;
     mul_bits = *(s32 *)&view->fog_mul;
-    D_001DE740.mul = mul_bits;
-    D_001DE740.far_int = far_bits;
-    D_001DE740.near_int = near_bits;
-    D_001DE9B0.mul = mul_bits;
+    tfrag_vu_const_block.mul = mul_bits;
+    tfrag_vu_const_block.far_int = far_bits;
+    tfrag_vu_const_block.near_int = near_bits;
+    shrub_vu1_constants.mul = mul_bits;
     D_001DEA00.mul = mul_bits;
-    D_001DE9B0.far_int = far_bits;
-    D_001DE9B0.near_int = near_bits;
+    shrub_vu1_constants.far_int = far_bits;
+    shrub_vu1_constants.near_int = near_bits;
     D_001DEA00.far_int = far_bits;
     D_001DEA00.near_int = near_bits;
-    D_001DE9B0.max = 0x437EFFFF;
+    shrub_vu1_constants.max = 0x437EFFFF;
     D_001DEA00.max = 0x437EFFFF;
     set_tfrag_dists();
 
@@ -221,11 +221,11 @@ void update_view_context(void) {
     qcopy(&D_001DE710[0], &packet_view->screen_bias);
     qcopy(&D_001DE710[1], &packet_view->screen_scale);
     qcopy(&D_001DE710[2], &packet_view->viewport_aspect);
-    qcopy(&D_001DE740.constants[0], &packet_view->screen_bias);
-    qcopy(&D_001DE740.constants[1], &packet_view->inverse_screen_scale);
-    qcopy(&D_001DE740.constants[2], &packet_view->screen_scale);
-    D_001DE740.x = packet_view->viewport_aspect.i[0];
-    D_001DE740.y = packet_view->viewport_aspect.i[1];
+    qcopy(&tfrag_vu_const_block.constants[0], &packet_view->screen_bias);
+    qcopy(&tfrag_vu_const_block.constants[1], &packet_view->inverse_screen_scale);
+    qcopy(&tfrag_vu_const_block.constants[2], &packet_view->screen_scale);
+    tfrag_vu_const_block.x = packet_view->viewport_aspect.i[0];
+    tfrag_vu_const_block.y = packet_view->viewport_aspect.i[1];
     qcopy(&D_001DEA40[0], &packet_view->screen_scale);
     qcopy(&D_001DEA40[1], &packet_view->screen_bias);
 }

@@ -15,7 +15,7 @@ typedef struct {
     int unk_08;
     int unk_0C;
 } HelpEntry;
-extern HelpEntry *D_0015F6A0 MACRO_ADDR;
+extern HelpEntry *help_msgs __asm__("D_0015F6A0") MACRO_ADDR;
 extern int D_0015EE1D MACRO_ADDR;
 extern int D_0015EE1C MACRO_ADDR;
 extern void help_draw_prompt(void) __asm__("FUN_001fe898");
@@ -108,7 +108,7 @@ void draw_help(void) {
             } else if (((HelpState *)D_001996D0)->state == 6) {
                 col = ((4 - ((HelpState *)D_001996D0)->x04) << 29) | 0xFFA888;
             }
-            text = D_0015F6A0[((HelpState *)D_001996D0)->pad[6]].text;
+            text = help_msgs[((HelpState *)D_001996D0)->pad[6]].text;
             font_set_window((void *)win, 0xF0, 0x1E0, 0x2C, 0x1D4, 0x100,
                                 ((HelpState *)D_001996D0)->pad[3], 0x10, 3);
             font_print_window_small((void *)win, col, text, -1);

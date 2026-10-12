@@ -7,7 +7,7 @@ struct AnimSeq {
     void *frames[1];
 };
 #include "rnc/gameplay/entities/moby.h"
-extern u8 D_001AABC0[];
+extern u8 debug_font_buffer[] __asm__("D_001AABC0");
 void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
 
 void update_moby_animation_state(struct Moby *m) {
@@ -18,7 +18,7 @@ void update_moby_animation_state(struct Moby *m) {
     } else {
         m->unk7C = 0xFF;
         m->unk7E = 0;
-        m->cur_frame_data = D_001AABC0 + m->frame * 0x800;
+        m->cur_frame_data = debug_font_buffer + m->frame * 0x800;
     }
     m->prev_frame_data = m->pclass->seqs[m->prev_seq]->frames[m->prev_frame];
 }

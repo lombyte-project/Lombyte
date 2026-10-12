@@ -2,7 +2,7 @@
 #include "sda.h"
 #include "rnc/storage/disc_table.h"
 extern int D_0015ED80 MACRO_ADDR;
-extern int D_0015EED8 MACRO_ADDR;
+extern int decode_mode __asm__("D_0015EED8") MACRO_ADDR;
 extern int D_0015F604 MACRO_ADDR;
 extern int D_0015EE88 MACRO_ADDR;
 extern char D_0013E550[];
@@ -43,7 +43,7 @@ void start_level(int level) {
         b = disc_table.start_movies[level].sector;
         a = disc_table.start_movies[level].size;
     }
-    D_0015EED8 = 2;
+    decode_mode = 2;
     D_0013E550[0x6B] |= 8;
     FlushCache(0);
     sound_stop_all_sounds();
@@ -71,7 +71,7 @@ void start_level(int level) {
     FUN_00120558(0, 0);
     sceGsSyncVCallback(count_vsync);
     hud_send_texture(0x1000000, D_0015EE88, 0x1B, 6, 6, 1);
-    D_0015EED8 = 0;
+    decode_mode = 0;
     fade_to_black(4);
     D_0015F604 = 0;
     D_0013E550[0x6B] |= 0x10;

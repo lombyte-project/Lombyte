@@ -5,7 +5,7 @@
 extern void FUN_001f9bf8(void *dst, void *src, float len); /* dst = normalize(src) * len */
 extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, void *dir1,
                                   void *axis) __asm__("func_001EC530");
-extern char D_001871B0[];
+extern char cam_trans_state[] __asm__("D_001871B0");
 extern void capture_camera_orientation(void) __asm__("func_001EC710");
 extern void save_camera_vectors(void) __asm__("func_001EC7F0");
 extern void restore_camera_vectors(void) __asm__("func_001EC868");
@@ -24,7 +24,7 @@ void start_camera_blend(void *arg) __asm__("FUN_001ec8a0");
 
 void start_camera_blend(void *arg) {
     char *src = arg;
-    char *r = D_001871B0;
+    char *r = cam_trans_state;
     char local0[16];
     char local1[16];
     char local2[16];

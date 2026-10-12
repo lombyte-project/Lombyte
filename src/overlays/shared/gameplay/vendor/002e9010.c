@@ -346,7 +346,7 @@ void FUN_L00_002e9bb0(int a) {
     FUN_L00_002e8378(a);
     FUN_L00_002e9010_u(a);
 }
-extern s32 D_0015EDE4;
+extern s32 opt_cam_yaw_rate __asm__("D_0015EDE4");
 extern f32 D_L00_0015EF44 __attribute__((sda));
 extern f32 D_L00_00161DB0[2] __attribute__((sda));
 void FUN_L00_002e46b8();
@@ -358,7 +358,7 @@ void follow_camera_approach() __asm__("FUN_L00_002e5e38");
 void follow_camera_update(u8 *m) __asm__("FUN_L00_002e9c28");
 void follow_camera_update(u8 *m) {
     u8 *p = *(u8 **)(m + 0x70) + 0x1D0;
-    D_L00_0015EF44 = D_L00_00161DB0[D_0015EDE4];
+    D_L00_0015EF44 = D_L00_00161DB0[opt_cam_yaw_rate];
     FUN_L00_002e46b8();
     follow_camera_apply_overrides(m);
     FUN_001e93e8(m);

@@ -24,7 +24,7 @@ struct Ent {
 
 extern s16 D_001516D8[];
 extern s32 D_0015F5B8;
-extern s32 D_0015F618;
+extern s32 space_load_in_progress __asm__("D_0015F618");
 
 extern void func_00218D10(void);
 extern void func_00218F98(void) __asm__("FUN_00218f98");
@@ -60,7 +60,7 @@ void FUN_002192a8(void) {
         D_0015F5B8 = 0x1E000;
         calculate_dma_transfer_address();
         update_fog();
-        D_0015F618 = 1;
+        space_load_in_progress = 1;
         menu_system.help_text_buffer = 0;
         menu_system.unk10C = 0;
         menu_system.unk104 = 0;

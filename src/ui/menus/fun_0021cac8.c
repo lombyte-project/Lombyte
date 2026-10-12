@@ -1,8 +1,8 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_0021DAC8). */
 #include "sda.h"
-extern int D_001A0318 NOT_SDA;
+extern int pause_memory_card_state __asm__("D_001A0318") NOT_SDA;
 int FUN_0021cac8(void) {
-    D_001A0318 = -1;
+    pause_memory_card_state = -1;
     return 0;
 }
 

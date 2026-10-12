@@ -6,8 +6,8 @@ struct CameraProbePosition {
     f32 z;
 };
 
-extern s32 D_00161198;
-extern s32 D_0016119C;
+extern s32 occl_cell_count __asm__("D_00161198");
+extern s32 moby_occl_cluster_count __asm__("D_0016119C");
 extern s32 D_001611A0;
 extern f32 D_001611AC;
 extern f32 absolute_float(f32) __asm__("func_001F99C0");
@@ -20,14 +20,14 @@ f32 resolve_camera_surface_height(struct CameraProbePosition *position,
 
 f32 resolve_camera_surface_height(struct CameraProbePosition *position, s32 optional_output) {
     f32 surface_height;
-    if (D_00161198 != 0) {
+    if (occl_cell_count != 0) {
         surface_height = position->z;
         if (sample_surface_height_map(&surface_height, position->x, position->y, surface_height) !=
             0) {
             return surface_height;
         }
     }
-    if (D_0016119C != 0) {
+    if (moby_occl_cluster_count != 0) {
         if (absolute_float(position->z - *(f32 *)0x1611A8) < 0.5f) {
             if (FUN_001f9b80(position, &D_001611A0) < D_001611AC) {
                 if (optional_output != 0) {

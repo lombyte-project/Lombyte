@@ -1,5 +1,5 @@
 #include "types.h"
-extern s32 D_00189DC0[];
+extern s32 font_char_widths[] __asm__("D_00189DC0");
 extern void print_debug_text(s32, s32, s32, u8 *) __asm__("FUN_001f0bd0");
 
 s32 print_debug_text_centered(s32 x, s32 y, s32 color, u8 *text) __asm__("FUN_001f0c50");
@@ -18,7 +18,7 @@ s32 print_debug_text_centered(s32 x, s32 y, s32 color, u8 *text) {
         if (c >= 0x60) {
             idx = 0x20;
         }
-        width += D_00189DC0[idx];
+        width += font_char_widths[idx];
     }
     x -= width >> 1;
     print_debug_text(x, y, color, text);

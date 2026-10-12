@@ -14,8 +14,8 @@ extern u8 item_text_variant[40] __asm__("D_0013E520");
 
 extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0");
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
-extern u8 D_0013D4E8[];
-extern s32 D_00141EA0[];
+extern u8 items_acquired[] __asm__("D_0013D4E8");
+extern s32 pause_iop_sprite_lists[] __asm__("D_00141EA0");
 extern s32 D_00141660;
 
 #endif /* LOMBYTE_RNC_GAMEPLAY_STATE_ITEM_STATE_H */

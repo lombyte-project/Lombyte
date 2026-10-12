@@ -22,7 +22,7 @@ typedef struct {
 
 extern char D_L16_0017C380_e[] __asm__("D_L16_0017C380");
 extern char D_L16_0017C3C0_e[] __asm__("D_L16_0017C3C0");
-extern unsigned char D_0015EDB5;
+extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");
 extern T2C_21EA88 D_L16_0017C088[];
 extern char *D_L16_0015FFD8;
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
@@ -1555,7 +1555,7 @@ int hero_set_state(int a, int b) {
                     if (q->unk450 == 2)
                         q->unk450 = 0;
                     id = q->unk450 + 0x1C;
-                    if (D_0015EDB5 != 0) {
+                    if (opt_mirror_anim != 0) {
                         if (id == 0x1C) {
                             id = 0x1D;
                         } else if (id == 0x1D) {

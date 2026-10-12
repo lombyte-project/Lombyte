@@ -4,7 +4,7 @@
 #include "qcopy.h"
 
 extern char D_0018CB20[];
-extern float D_0018CDB0 NOT_SDA;
+extern float view_tan_half_fov __asm__("D_0018CDB0") NOT_SDA;
 extern char D_00187080[];
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void sceVu0UnitMatrix(float *);
@@ -22,7 +22,7 @@ unsigned char transition_update_movie_camera(void) {
     char *cam;
     float m[16];
 
-    D_0018CDB0 = 0.63f;
+    view_tan_half_fov = 0.63f;
     update_view_context();
     pos = D_00187080;
     qcopy(pos, key);

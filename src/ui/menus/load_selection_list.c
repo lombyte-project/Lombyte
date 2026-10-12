@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_0021D9C8). */
-extern int D_00141EA0[];
+extern int pause_iop_sprite_lists[] __asm__("D_00141EA0");
 typedef struct {
     char pad[0x30];
     int list[8]; /* 0x30 */
@@ -15,7 +15,7 @@ int load_selection_list(SelList_0021D9C8 *sel_list) __asm__("FUN_0021c9c8");
 int load_selection_list(SelList_0021D9C8 *sel_list) {
     int i;
     for (i = 0; i < 8; i++) {
-        sel_list->list[i] = D_00141EA0[i];
+        sel_list->list[i] = pause_iop_sprite_lists[i];
     }
     sel_list->idx = 0;
     if (sel_list->list[0] != 0) {

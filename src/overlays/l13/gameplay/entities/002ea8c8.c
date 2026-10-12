@@ -1219,7 +1219,7 @@ extern int D_L13_00179710[];
 extern int FUN_L00_00203908(int a, int b);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
-extern unsigned char D_0013D407[];
+extern unsigned char menu_item_enabled_115[] __asm__("D_0013D407");
 extern char D_00141968[];
 extern char D_00141CE4[];
 
@@ -1244,7 +1244,7 @@ void FUN_L13_002f3778(struct Moby *moby) {
                 }
             }
         join:
-            p = D_0013D407 + 0xB9;
+            p = menu_item_enabled_115 + 0xB9;
             if (p[0xB] != 0 || p[0xD] != 0) {
                 unsigned char *q = ((char *)&D_00141968);
                 unsigned int h = *(unsigned short *)(q + 0x378);

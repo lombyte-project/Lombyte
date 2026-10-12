@@ -35,7 +35,7 @@ extern float FUN_L00_002339d0(float *v);
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
-extern unsigned char D_0015EDB5;
+extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");
 extern int D_0015ED80;
 extern int D_L15_001612D8;
 extern int D_0015EEA4;
@@ -1272,7 +1272,7 @@ int hero_set_state(int a, int b) {
                     if (q->unk450 == 2)
                         q->unk450 = 0;
                     id = q->unk450 + 0x1C;
-                    if (D_0015EDB5 != 0) {
+                    if (opt_mirror_anim != 0) {
                         if (id == 0x1C) {
                             id = 0x1D;
                         } else if (id == 0x1D) {

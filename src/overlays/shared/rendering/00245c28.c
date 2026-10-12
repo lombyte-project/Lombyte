@@ -38,7 +38,7 @@ extern u8 D_00141680[] NOT_SDA;
 #define D_0013D36C (memory_card_state.pending_state)
 #define D_00141401 (hero.unk20B1)
 #define D_L00_001B9E2C (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0x13c))
-extern u64 D_0015ED40 MACRO_ADDR;
+extern u64 frm_clock_time __asm__("D_0015ED40") MACRO_ADDR;
 extern s32 D_0015F3F8;
 extern s32 D_0015F570;
 extern s32 D_0015F5D8;
@@ -183,7 +183,7 @@ void FUN_L00_00245c28(void) {
     while (D_L00_0015F570 == 0) {
         restart = 0;
         restart_arg = 0;
-        D_0015ED40 += *timer;
+        frm_clock_time += *timer;
         *timer = 0;
         FUN_001f6d70();
         D_L00_0015F5D8 = 0;

@@ -17,8 +17,10 @@ struct TieClass {
 };
 extern s32 D_001D8DB0[];
 extern struct TieClass *D_001D7F30[];
-extern struct TexRemap D_001D88B0[];
-void FUN_00228a30(void) {
+extern struct TexRemap shrub_paging_table[] __asm__("D_001D88B0");
+void patch_shrub_gifs(void) __asm__("FUN_00228a30");
+
+void patch_shrub_gifs(void) {
     s32 *id;
     struct TieClass *tc;
     s32 i;
@@ -33,7 +35,7 @@ void FUN_00228a30(void) {
             pkt = tc->slots[i].pkt + 1;
             gif = (u8 *)(pkt + pkt->skip) + 0x10;
             for (j = 0; j < pkt->count; j++) {
-                r = &D_001D88B0[gif[0x13]];
+                r = &shrub_paging_table[gif[0x13]];
                 if (r->lo != 0) {
                     *(u32 *)(gif + 0x30) = (*(u32 *)(gif + 0x30) & 0xFFFFC000) | r->lo;
                 }
@@ -46,4 +48,4 @@ void FUN_00228a30(void) {
     }
 }
 
-extern __typeof__(FUN_00228a30) func_00228A30 __attribute__((alias("FUN_00228a30")));
+extern __typeof__(patch_shrub_gifs) func_00228A30 __attribute__((alias("FUN_00228a30")));

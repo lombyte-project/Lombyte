@@ -9,9 +9,9 @@ struct DmaChannel {
 
 /* The DMA-busy mask this file owns: both functions below read it
    gp-relative, which needs its definition ahead of them. */
-volatile s32 D_00160EE0 = 0;
+volatile s32 vif_chain_flags __asm__("D_00160EE0") = 0;
 extern s32 D_00160EF8[];
-extern s32 D_00160F0C;
+extern s32 current_vu_chain __asm__("D_00160F0C");
 extern s32 D_00160F10;
 extern s32 D_00160F14;
 extern char D_001E89E0[];
@@ -32,10 +32,10 @@ void vu1_send_chain(void) {
     chain_size = D_00160EF8[D_00160F10];
     overflow = 0;
     remaining = (s32)render_packet_cursor.tag - chain_size;
-    D_00160EE0 |= 0x1F;
+    vif_chain_flags |= 0x1F;
     if (D_00160F14 < remaining) {
         D_00160F14 = remaining;
-        if (D_00160F0C < remaining) {
+        if (current_vu_chain < remaining) {
             DebugPrint(D_001E89C8);
             overflow = 1;
         }
@@ -51,7 +51,7 @@ void vu1_send_chain(void) {
         sceDmaSend(channel, D_00160EF8[D_00160F10]);
         return;
     }
-    D_00160EE0 = 0;
+    vif_chain_flags = 0;
 }
 
 extern __typeof__(vu1_send_chain) func_002336A0 __attribute__((alias("FUN_002336a0")));
@@ -64,7 +64,7 @@ void vu1_sync_chain(s32 mask) __asm__("FUN_002337b0");
 void vu1_sync_chain(s32 mask) {
     s32 poll_count;
 
-    for (poll_count = 0; D_00160EE0 & mask; poll_count++) {
+    for (poll_count = 0; vif_chain_flags & mask; poll_count++) {
         SpinWait(0x400);
         if (poll_count > 100000) {
             DebugPrint(D_001E89E0);

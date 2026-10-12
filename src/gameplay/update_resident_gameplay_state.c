@@ -119,14 +119,14 @@ extern f32 D_0015ED70 __attribute__((sda));
 extern u8 D_0015EDB4;
 extern f32 sequence_fade __asm__("D_0015F43C");
 extern f32 D_0015F440;
-extern s32 D_0015F5B0;
-extern s32 D_0015F618[1];
-extern ResidentRenderObject *D_0015FF1C;
+extern s32 space_load_pending __asm__("D_0015F5B0");
+extern s32 space_load_in_progress[1] __asm__("D_0015F618");
+extern ResidentRenderObject *moby_instance_end __asm__("D_0015FF1C");
 extern CameraBlendNode *D_00160034;
 extern s32 D_00160510[1] __attribute__((sda));
 extern ResidentCameraState D_00186F40;
 extern ResidentPlaybackState render_sequence __asm__("D_0018CB20");
-extern f32 D_0018CDB0[4];
+extern f32 view_tan_half_fov[4] __asm__("D_0018CDB0");
 extern ScriptedPath *D_001CC3B0[];
 extern PositionPair D_001D99B0[];
 extern Vector4 D_001D9C80[];
@@ -278,7 +278,7 @@ void update_resident_gameplay_state(void) {
                 music_stream_state.secondary.state = 5;
             }
             calculate_dma_transfer_address();
-            D_0018CDB0[0] = 0.63f;
+            view_tan_half_fov[0] = 0.63f;
             update_view_context();
             /* Retail releases the attachment once per sequence object, even when that object is null. */
             for (release_index = 0; release_index < render_sequence.count; release_index++) {
@@ -293,7 +293,7 @@ void update_resident_gameplay_state(void) {
                 }
             }
             level_render_state.player->flags &= ~1;
-            for (object_cursor = D_0015FF1C; object_cursor->state != 0xFF; object_cursor++) {
+            for (object_cursor = moby_instance_end; object_cursor->state != 0xFF; object_cursor++) {
                 if (!(object_cursor->state & 0x80) &&
                     (object_cursor->class_id == 0x4A || object_cursor->class_id == 0xCB)) {
                     object_cursor->flags &= ~0x80;
@@ -302,12 +302,12 @@ void update_resident_gameplay_state(void) {
             if (level_render_state.state == 0) {
                 pause_all_sounds(0);
                 menu_system.state = 0xE;
-                D_0015F618[0] = 1;
+                space_load_in_progress[0] = 1;
                 return;
             }
             game_mode = 0;
             music_unpause();
-            D_0015F618[0] = 1;
+            space_load_in_progress[0] = 1;
             D_001413F5[0] = 0;
             func_001E9438();
             if (level_render_state.unk2C != 0) {
@@ -324,7 +324,7 @@ void update_resident_gameplay_state(void) {
         keyframe = &render_sequence.frames[render_sequence.frame];
         keyframe_angles = keyframe->rotation;
         keyframe_flags = keyframe->position.bytes[12];
-        D_0018CDB0[0] = keyframe_angles[3];
+        view_tan_half_fov[0] = keyframe_angles[3];
         update_view_context();
         qcopy(&D_00186F40.position, &keyframe->position);
         func_001F9CF8(&D_00186F40.position, &D_00186F40.position,
@@ -711,8 +711,8 @@ void update_resident_gameplay_state(void) {
                     level_render_state.speed * frame_time / level_render_state.path_segment_length;
                 if ((f32)(active_path->point_count - 1) < level_render_state.path_progress ||
                     sequence_fade >= 1.0f) {
-                    D_0015F5B0 = 1;
-                    D_0015F618[0] = 1;
+                    space_load_pending = 1;
+                    space_load_in_progress[0] = 1;
                 } else {
                     sample_camera_path(active_path, 1, &level_render_state.player->position,
                                        &level_render_state.player->rotation, 0,

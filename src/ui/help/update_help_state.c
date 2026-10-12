@@ -31,7 +31,7 @@ typedef struct {
 
 extern u8 D_0015EE1D;
 extern s32 D_0015EEA4;
-extern TextEntry *D_0015F6A0;
+extern TextEntry *help_msgs __asm__("D_0015F6A0");
 extern HelpState D_001996D0;
 
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -116,7 +116,7 @@ void update_help_state(void) {
         s32 id;
 
         force_help_message(5, 0);
-        id = D_0015F6A0[D_001996D0.msg].id;
+        id = help_msgs[D_001996D0.msg].id;
         if (id >= 0 && music_stream_state.secondary.handle == 0 && music_stream_state.queued_secondary_track == -1) {
             music_stream_state.queued_secondary_track = id + 0x7530;
         }
@@ -144,7 +144,7 @@ void update_help_state(void) {
             D_001996D0.timer = 0;
             RECORD_FLAGS();
         } else if (D_001996D0.timer >= scale_game_frames(0x18)) {
-            if (music_stream_state.secondary.state == 3 || (id = D_0015F6A0[D_001996D0.msg].id) == -1 ||
+            if (music_stream_state.secondary.state == 3 || (id = help_msgs[D_001996D0.msg].id) == -1 ||
                 id != music_stream_state.secondary.track - 0x7530) {
                 D_001996D0.state = 3;
                 D_001996D0.timer = 0;
@@ -178,7 +178,7 @@ void update_help_state(void) {
             RECORD_FLAGS();
             D_001996D0.timer = 4 - D_001996D0.timer;
         } else if (D_001996D0.timer >= 4) {
-            id = D_0015F6A0[D_001996D0.msg].id;
+            id = help_msgs[D_001996D0.msg].id;
             if (id != -1 && id == music_stream_state.secondary.track - 0x7530 && music_stream_state.secondary.state == 3) {
                 continue_audio_stream_if_ready();
             }
@@ -193,7 +193,7 @@ void update_help_state(void) {
 
         force_help_message(5, 0);
         if ((D_001996D0.timer >= scale_game_frames(0x1A4) &&
-             ((id = D_0015F6A0[D_001996D0.msg].id) == -1 || id != music_stream_state.secondary.track - 0x7530 ||
+             ((id = help_msgs[D_001996D0.msg].id) == -1 || id != music_stream_state.secondary.track - 0x7530 ||
               (music_stream_state.secondary.handle == 0 && music_stream_state.queued_secondary_track == -1))) ||
             (controller_state.pressed & PAD_TRIANGLE)) {
             RECORD_COUNT();
@@ -216,7 +216,7 @@ void update_help_state(void) {
         s32 id;
 
         force_help_message(5, 0);
-        id = D_0015F6A0[D_001996D0.msg].id;
+        id = help_msgs[D_001996D0.msg].id;
         if (id != -1 && id == music_stream_state.secondary.track - 0x7530 && (u16)music_stream_state.secondary.state - 6U >= 2) {
             music_stream_state.secondary.state = 5;
         }

@@ -2,14 +2,14 @@
 #include "rnc/rendering/image_clear_buffer.h"
 #include "rnc/storage/disc_table.h"
 #include "rnc/globals.h"
-extern u8 D_0010E4C0[];
+extern u8 vu0_micro_program[] __asm__("D_0010E4C0");
 extern void count_vsync() __asm__("FUN_0012f1c8");
-extern s32 D_0015EE90;
-extern u8 D_0015FA88[];
-extern s32 D_00160F0C;
-extern u8 D_001E7AE0[];
-extern u8 D_001E7AF8[];
-extern u8 D_001E7B10[];
+extern s32 pause_action_list_mode __asm__("D_0015EE90");
+extern u8 rebooted_iop_message[] __asm__("D_0015FA88");
+extern s32 current_vu_chain __asm__("D_00160F0C");
+extern u8 iop_reboot_image_path[] __asm__("D_001E7AE0");
+extern u8 loaded_irx_modules_message[] __asm__("D_001E7AF8");
+extern u8 unsupported_lang_message[] __asm__("D_001E7B10");
 extern u8 D_1FF8000[];
 extern u8 D_24135F[];
 extern s32 DIntr();
@@ -20,7 +20,7 @@ extern s32 fill_transfer_words() __asm__("func_001F97E8");
 extern void FlushCache();
 extern s32 FUN_001204b8();
 extern s32 FUN_00120558();
-extern s32 FUN_00121190();
+extern s32 sceCdDiskReady() __asm__("FUN_00121190");
 extern s32 wad_get_sectors() __asm__("FUN_0012f208");
 extern s32 load_disc_sectors_into_global_buffer() __asm__("func_0012F2B8");
 extern s32 load_debug_font() __asm__("FUN_001e9338");
@@ -65,33 +65,33 @@ void init_once(void) {
     FUN_001204b8();
     sceDmaReset(1);
     sceCdInit(0);
-    FUN_00121190(0);
+    sceCdDiskReady(0);
     do {
 
-    } while (sceSifRebootIop(D_001E7AE0) == 0);
+    } while (sceSifRebootIop(iop_reboot_image_path) == 0);
     do {
 
     } while (sceSifSyncIop() == 0);
-    DebugPrint(D_0015FA88);
+    DebugPrint(rebooted_iop_message);
     EnableCache(3);
     sceSifInitRpc(0);
     DIntr();
     sceSifInitIopHeap();
     EnableInterrupts();
     sceCdInit(0);
-    FUN_00121190(0);
+    sceCdDiskReady(0);
     sceCdMmode(2);
     sceFsReset();
     wad_get_sectors(0x121, 1, buf);
     FlushCache(0);
     flag = buf[0x33] != 0x4E;
     pal_mode = flag;
-    D_0015EE90 = flag;
+    pause_action_list_mode = flag;
     memcard_get_name(buf);
     sceGsResetGraph(0, 1, pal_mode ? 3 : 2, 0);
     init_dma();
     set_pal_mode();
-    vu0_load_micro_program(D_0010E4C0);
+    vu0_load_micro_program(vu0_micro_program);
     load_disc_sectors_into_global_buffer();
     b = (u32)D_24135F & 0xFFFFC000;
     base = b + 0x2C0000;
@@ -110,18 +110,18 @@ void init_once(void) {
     load_irx_module(*(u32 *)(base + 0xA8) + base, *(u32 *)(base + 0xAC));
     load_irx_module(*(u32 *)(base + 0xB0) + base, *(u32 *)(base + 0xB4));
     load_irx_module(*(u32 *)(base + 0xA0) + base, *(u32 *)(base + 0xA4));
-    DebugPrint(D_001E7AF8);
-    FUN_00121190(0);
+    DebugPrint(loaded_irx_modules_message);
+    sceCdDiskReady(0);
     init_pads();
     sceGsSyncVCallback(count_vsync);
-    D_00160F0C = 0x160000;
+    current_vu_chain = 0x160000;
     init_mem_slots();
-    FUN_00121190(0);
+    sceCdDiskReady(0);
     memcard_initialize();
     init_view_context();
     update_view_context();
     vu1_init_chain();
-    FUN_00121190(0);
+    sceCdDiskReady(0);
     initialize_gameplay_sound_system();
     fill_transfer_words(image_clear_buffer, 0x80808080, 0x100);
     sceGsSetDefLoadImage(buf, 0x3FFB, 1, 0, 0, 0, 8, 8);
@@ -148,7 +148,7 @@ void init_once(void) {
         game_language = 5;
         return;
     default:
-        DebugPrint(D_001E7B10, lang);
+        DebugPrint(unsupported_lang_message, lang);
         /* fallthrough */
     case 1:
         game_language = 0;

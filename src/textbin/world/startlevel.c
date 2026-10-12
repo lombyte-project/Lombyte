@@ -25,25 +25,25 @@ typedef struct {
     s32 bank;
 } SoundSlot;
 
-extern s32 D_0015F5E8 MACRO_ADDR;
-extern u8 D_00161280[];
-extern u8 D_00165430[];
+extern s32 boot_level_active __asm__("D_0015F5E8") MACRO_ADDR;
+extern u8 level_bss_start[] __asm__("D_00161280");
+extern u8 level_bss_end[] __asm__("D_00165430");
 extern s32 D_0015F438 MACRO_ADDR;
 extern s32 D_0015F604 MACRO_ADDR;
-extern s32 D_0015EF5C MACRO_ADDR;
-extern s32 D_0015EED8 MACRO_ADDR;
+extern s32 boot_image_buffer __asm__("D_0015EF5C") MACRO_ADDR;
+extern s32 decode_mode __asm__("D_0015EED8") MACRO_ADDR;
 extern s32 D_0015ED80 MACRO_ADDR;
 extern s32 D_0015ED84 MACRO_ADDR;
 extern u8 D_24135F[];
-extern s32 D_00139378[];
-extern s32 D_00139380[];
-extern char D_001E76C0[];
-extern volatile SoundSlot D_00186100[];
-extern volatile SoundSlot D_001861E0[];
-extern volatile SoundSlot * volatile D_0015F634;
-extern volatile s32 D_0015F630;
-extern u8 D_0016034C;
-extern s32 D_0015F600;
+extern s32 boot_intro_movie_ntsc[] __asm__("D_00139378");
+extern s32 boot_intro_movie_pal[] __asm__("D_00139380");
+extern char loading_boot_sound_bank_message[] __asm__("D_001E76C0");
+extern volatile SoundSlot boot_sound_defs_a[] __asm__("D_00186100");
+extern volatile SoundSlot boot_sound_defs_b[] __asm__("D_001861E0");
+extern volatile SoundSlot * volatile level_sound_defs __asm__("D_0015F634");
+extern volatile s32 level_sound_def_count __asm__("D_0015F630");
+extern u8 requested_video_mode __asm__("D_0016034C");
+extern s32 space_load_id __asm__("D_0015F600");
 
 extern void init_once(void) __asm__("func_00201650");
 extern void InitializeStreamingState(void);
@@ -98,11 +98,11 @@ void startlevel(void) {
     s32 code;
     s32 bank;
 
-    D_0015F5E8 = 1;
+    boot_level_active = 1;
     init_once();
     InitializeStreamingState();
-    for (i = 0; i < D_00165430 - D_00161280; i++) {
-        D_00161280[i] = 0;
+    for (i = 0; i < level_bss_end - level_bss_start; i++) {
+        level_bss_start[i] = 0;
     }
     prev = 0;
     frames = 0;
@@ -144,17 +144,17 @@ void startlevel(void) {
     if (prev != 0) {
         fade_to_black(10);
     }
-    D_0015EED8 = -1;
+    decode_mode = -1;
     code = hdr->code + (s32)hdr;
-    D_0015EF5C = code;
+    boot_image_buffer = code;
     if (D_0015ED80 == 0) {
-        play_mpeg_movie(D_00139378[0], D_00139378[1], (code + 0x3F) & ~0x3F,
+        play_mpeg_movie(boot_intro_movie_ntsc[0], boot_intro_movie_ntsc[1], (code + 0x3F) & ~0x3F,
                         (code + 0x2C003F) & ~0x3F, 0);
     } else {
-        play_mpeg_movie(D_00139380[0], D_00139380[1], (code + 0x3F) & ~0x3F,
+        play_mpeg_movie(boot_intro_movie_pal[0], boot_intro_movie_pal[1], (code + 0x3F) & ~0x3F,
                         (code + 0x2C003F) & ~0x3F, 0);
     }
-    D_0015EED8 = 0;
+    decode_mode = 0;
     fade_to_black(scale_game_frames(0x12));
     FlushCache(0);
     if (D_0015ED80 != 0) {
@@ -175,34 +175,34 @@ void startlevel(void) {
     vu1_sync_chain(1);
     sceGsSyncV(0);
     D_0015F438++;
-    DebugPrint(D_001E76C0);
+    DebugPrint(loading_boot_sound_bank_message);
     bank = load_audio_bank_by_location(disc_table.sound_bank);
     snd_resolve_bank_xrefs();
     /* Publish the slot tables and metadata in retail order. */
-    D_001861E0[4].bank = bank;
-    D_00186100[6].bank = bank;
-    D_0015F634 = D_00186100;
-    D_0015F630 = 7;
-    D_00186100[0].bank = bank;
-    D_00186100[1].bank = bank;
-    D_00186100[2].bank = bank;
-    D_00186100[3].bank = bank;
-    D_00186100[4].bank = bank;
-    D_00186100[5].bank = bank;
-    D_001861E0[0].bank = bank;
+    boot_sound_defs_b[4].bank = bank;
+    boot_sound_defs_a[6].bank = bank;
+    level_sound_defs = boot_sound_defs_a;
+    level_sound_def_count = 7;
+    boot_sound_defs_a[0].bank = bank;
+    boot_sound_defs_a[1].bank = bank;
+    boot_sound_defs_a[2].bank = bank;
+    boot_sound_defs_a[3].bank = bank;
+    boot_sound_defs_a[4].bank = bank;
+    boot_sound_defs_a[5].bank = bank;
+    boot_sound_defs_b[0].bank = bank;
     /* The ordinary view lets the last bank store fill the call delay slot. */
-    ((SoundSlot *)D_001861E0)[2].bank = bank;
-    ((SoundSlot *)D_001861E0)[3].bank = bank;
-    D_001861E0[1].bank = bank;
+    ((SoundSlot *)boot_sound_defs_b)[2].bank = bank;
+    ((SoundSlot *)boot_sound_defs_b)[3].bank = bank;
+    boot_sound_defs_b[1].bank = bank;
     transition_do_transition();
-    if (D_0015ED80 != D_0016034C) {
-        D_0015ED80 = D_0016034C;
+    if (D_0015ED80 != requested_video_mode) {
+        D_0015ED80 = requested_video_mode;
         func_001204B8();
         sceGsResetGraph(0, 1, D_0015ED80 != 0 ? 3 : 2, 0);
         set_pal_mode();
         put_disp_buffer();
     }
-    D_0015F600 = D_0015ED84;
+    space_load_id = D_0015ED84;
     level_render_state.unk2A = 1;
     D_0015ED84 = -1;
     do_space_transition();
