@@ -741,6 +741,7 @@ extern char D_0013F3D0[];
 extern float D_0015ED60;
 extern float D_0015ED6C;
 extern char D_00140940[];
+extern float D_0015ED60_gp __attribute__((sda));
 extern int FUN_001f9770(short *);
 extern void FUN_001f9c90(void *, void *, float);
 
@@ -791,14 +792,15 @@ int FUN_L13_002c3fc0(struct Moby *m, char *d, int aim) {
             qcopy(point, linked + 0x10);
         }
     }
-    nearest = FUN_L13_002c3ac8((char *)point, (int *)path, *(short *)(d + 0xB4), 0.0f);
-    forward = nearest + 5;
-    if (forward >= *(int *)path) {
-        forward -= *(int *)path;
+    backward = FUN_L13_002c3ac8((char *)point, (int *)path, *(short *)(d + 0xB4), 0.0f);
+    forward = backward + 5;
+    nearest = forward - *(int *)path;
+    if (!(forward < *(int *)path)) {
+        forward = nearest;
     }
     qcopy(ahead, path + 0x10 + forward * 16);
+    backward = backward - 5;
     forward_distance = FUN_001f9b48(ahead, D_0013F3D0);
-    backward = nearest - 5;
     if (backward < 0) {
         backward += *(int *)path;
     }
@@ -820,20 +822,22 @@ int FUN_L13_002c3fc0(struct Moby *m, char *d, int aim) {
         index = (index + step) % *(int *)path;
         scans++;
     }
-    if (*(short *)(d + 0xB4) < index) {
-        direct_distance = index - *(short *)(d + 0xB4);
-        wrap_distance = *(int *)path - index + *(short *)(d + 0xB4);
+    backward = *(short *)(d + 0xB4);
+    if (backward < index) {
+        direct_distance = index - backward;
+        wrap_distance = *(int *)path - index + backward;
         step = direct_distance < wrap_distance ? 1 : -1;
     } else {
-        direct_distance = *(short *)(d + 0xB4) - index;
-        wrap_distance = *(int *)path - *(short *)(d + 0xB4) + index;
+        direct_distance = backward - index;
+        wrap_distance = *(int *)path - backward + index;
         step = direct_distance < wrap_distance ? -1 : 1;
     }
     target_distance = FUN_001f9b48(&m->pos, path + 0x10 + index * 16);
     if (step != *(signed char *)(d + 0xD0)) {
         if (FUN_001f9770((short *)(d + 0xD2)) != 0) {
+            float speed = D_0015ED60_gp * -0.04000002f + 1.0f;
             *(short *)(d + 0xD2) = 10;
-            *(float *)(d + 0xCC) = *(float *)(d + 0xCC) * (D_0015ED60 * -0.04000002f + 1.0f);
+            *(float *)(d + 0xCC) = *(float *)(d + 0xCC) * speed;
             distance = FUN_001f9b80(&m->pos, D_0013F3D0);
             if ((*(float *)(d + 0xCC) < D_0015ED60 * 0.1f) | (m->unk31 == 0) | (distance < 40.0f)) {
                 short old = *(short *)(d + 0xB4);
