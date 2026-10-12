@@ -2280,6 +2280,7 @@ extern float D_L15_001CE2F0[4][4];
 extern float D_L15_001CE330[4][4];
 
 int FUN_L15_002a3138(unsigned char *moby) {
+    extern int D_L15_001614C8_pairs[12] __asm__("D_L15_001614C8") __attribute__((sda));
     EffectQuad first, second;
     float transform[12];
     float position[4];
@@ -2303,15 +2304,20 @@ int FUN_L15_002a3138(unsigned char *moby) {
     }
     for (pass = 0; pass < 6; pass++) {
         int parity = pass & 1;
-        unsigned long long colors =
-            (unsigned long long)(&D_L15_001614C8)[4 + parity] |
-            ((unsigned long long)(&D_L15_001614C8)[6 + parity] << 2) |
-            ((unsigned long long)(&D_L15_001614C8)[8 + parity] << 4) |
-            ((unsigned long long)(&D_L15_001614C8)[10 + parity] << 6) |
-            0x8000000000ULL;
+        int *pairs = D_L15_001614C8_pairs;
         int level;
-        first.alpha = colors;
-        second.alpha = colors;
+        first.alpha =
+            (unsigned long long)pairs[4 + parity] |
+            ((unsigned long long)pairs[6 + parity] << 2) |
+            ((unsigned long long)pairs[8 + parity] << 4) |
+            ((unsigned long long)pairs[10 + parity] << 6) |
+            0x8000000000ULL;
+        second.alpha =
+            (unsigned long long)pairs[4 + parity] |
+            ((unsigned long long)pairs[6 + parity] << 2) |
+            ((unsigned long long)pairs[8 + parity] << 4) |
+            ((unsigned long long)pairs[10 + parity] << 6) |
+            0x8000000000ULL;
         if (data[5] == 0) {
             level = D_L15_001CE230[pass];
         } else {
@@ -2327,18 +2333,27 @@ int FUN_L15_002a3138(unsigned char *moby) {
         second.col[0] = level;
         second.col[2] = level;
         for (corner = 0; corner < 4; corner++) {
-            for (axis = 0; axis < 2; axis++) {
-                int limit = truncate_float_2a3138(D_L15_001CE250[pass][axis] * 360.0f);
-                float angle = integer_to_float_2a3138(*(volatile int *)0x0015f3f8 % limit)
-                    / D_L15_001CE250[pass][axis] - 180.0f;
-                float delta;
-                if (D_L15_001CE290[pass][axis] == 0) {
-                    delta = fast_sin_2a3138(angle * 0.017453292f) * 0.125f;
-                } else {
+            float *frequency = D_L15_001CE250[pass];
+            int *waveform = D_L15_001CE290[pass];
+            float *uv = first.uv[corner];
+            float *base = D_L15_001CE2D0[corner];
+            axis = 1;
+            do {
+                int limit, value;
+                float angle, delta;
+                axis--;
+                limit = truncate_float_2a3138(*frequency * 360.0f);
+                angle = integer_to_float_2a3138(*(volatile int *)0x0015f3f8 % limit)
+                    / *frequency - 180.0f;
+                frequency++;
+                value = *waveform++;
+                if (value != 0) {
                     delta = fast_cos_2a3138(angle * 0.017453292f) * 0.125f;
+                } else {
+                    delta = fast_sin_2a3138(angle * 0.017453292f) * 0.125f;
                 }
-                first.uv[corner][axis] = D_L15_001CE2D0[corner][axis] + delta;
-            }
+                *uv++ = *base++ + delta;
+            } while (axis >= 0);
         }
         for (component = 0; component < 2; component++) {
             float step = (float)component * 0.125f;
