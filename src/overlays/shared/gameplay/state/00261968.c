@@ -250,32 +250,37 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
     OvlVec4 cross;
     OvlVec4 scaled_cross;
     SegmentPath_262030 *entry;
-    OvlVec4 *height_axis = &D_0013F5E0_262030;
+    OvlVec4 *height_axis;
     OvlVec4 *current;
-    OvlVec4 *next;
+    s32 next;
     s32 i;
     s32 offset;
+    OvlVec4 *volatile saved_out;
     volatile s32 found;
     f32 original_height;
     f32 segment_length;
     f32 projection;
 
-    working.q = point->q;
+    saved_out = out;
     found = 0;
+    working = *point;
     entry = D_L00_001B04B0_262030[path_index];
-    original_height = FUN_001ff398_262030(&working, height_axis);
-    i = 0;
-    offset = 0;
-    if (i < entry->count - 1) {
+    original_height = FUN_001ff398_262030(&working, &D_0013F5E0_262030);
+    if (entry->count - 1 > found) {
+        i = 0;
+        height_axis = &D_0013F5E0_262030;
         do {
-            current = (OvlVec4 *)((u8 *)entry + offset + 0x10);
-            next = (OvlVec4 *)((u8 *)entry + offset + 0x20);
-            if (entry->points[i].f[3] != 0.0f || entry->points[i + 1].f[3] != 0.0f) {
+            offset = i << 4;
+            next = i + 1;
+            if (((OvlVec4 *)((u8 *)entry + offset + 0x10))->f[3] != 0.0f || entry->points[next].f[3] != 0.0f) {
+                current = (OvlVec4 *)((u8 *)entry + (offset + 0x10));
                 FUN_001ff2a8_262030(&difference, &working, current);
-                FUN_001ff2a8_262030(&segment, next, current);
-                FUN_001ff500_262030(&scaled_cross, height_axis, FUN_001ff398_262030(&difference, height_axis));
+                FUN_001ff2a8_262030(&segment, (OvlVec4 *)((u8 *)entry + (offset + 0x20)), current);
+                projection = FUN_001ff398_262030(&difference, height_axis);
+                FUN_001ff500_262030(&scaled_cross, height_axis, projection);
                 FUN_001ff2a8_262030(&difference, &difference, &scaled_cross);
-                FUN_001ff500_262030(&scaled_cross, height_axis, FUN_001ff398_262030(&segment, height_axis));
+                projection = FUN_001ff398_262030(&segment, height_axis);
+                FUN_001ff500_262030(&scaled_cross, height_axis, projection);
                 FUN_001ff2a8_262030(&segment, &segment, &scaled_cross);
                 FUN_001ff500_262030(&scaled_segment, &segment, 1.0f);
                 FUN_001ff3c0_262030(&cross, &difference, &scaled_segment);
@@ -301,13 +306,13 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
                 }
             }
 next_segment_262030:
-            i++;
-            offset = i << 4;
+            i = next;
         } while (i < entry->count - 1);
     }
-    if (found) {
-        FUN_001ff500_262030(&segment, height_axis, original_height - FUN_001ff398_262030(&working, height_axis));
-        FUN_001ff278_262030(out, &working, &segment);
+    if ((i = found)) {
+        projection = FUN_001ff398_262030(&working, &D_0013F5E0_262030);
+        FUN_001ff500_262030(&segment, &D_0013F5E0_262030, original_height - projection);
+        FUN_001ff278_262030(saved_out, &working, &segment);
     }
     return found;
 }
