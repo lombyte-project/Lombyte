@@ -109,8 +109,9 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
         output->display = ((u64)(s64)(height - 1) << 44) |
                           ((u64)((vertical_offset + kernel_vertical + 0x23) & 0xfff) << 12) |
                           0x800000ULL |
-                          ((u64)(((s64)(horizontal_offset * 2) + kernel_horizontal +
-                                  ((0x2d0 - width) / 2 * 2) + 0xe8) & 0xfff)) |
+                          ((u64)(((s64)((0x2d0 - width) / 2 * 2) +
+                                  ((s64)kernel_horizontal +
+                                   ((s64)(horizontal_offset * 2) + 0xe8))) & 0xfff)) |
                           ((u64)(s64)(width * 2 - 1) << 32);
     } else {
         scePrintf("sceGsDefDispEnv:Not support displaymode for 0x%x!!\n");
