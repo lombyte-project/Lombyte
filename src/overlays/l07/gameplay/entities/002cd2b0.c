@@ -1050,45 +1050,49 @@ void FUN_L07_0030b000(struct Moby *moby) {
     path = D_L07_001B0530[*(s32 *)(data + 0x70)];
     switch (moby->state) {
     case 0: {
+        s32 path_count;
         current = 0;
         next = 0;
-        position.q = *(u128 *)(path + 0x10);
-        if (*(s32 *)path > 0) {
+        qcopy(&position, path + 0x10);
+        path_count = *(s32 *)path;
+        if (path_count > 0) {
             s32 j = 0;
-            s32 k = 1;
+            s32 k;
             do {
+                k = j + 1;
                 *(f32 *)(path + 0x1c + j * 16) =
                     FUN_001f9b48(path + 0x10 + j * 16,
-                                  path + 0x10 + (k % *(s32 *)path) * 16);
-                j = k++;
-            } while (j < *(s32 *)path);
+                                  path + 0x10 + (k % path_count) * 16);
+                j = k;
+                path_count = *(s32 *)path;
+            } while (j < path_count);
         }
         if (FUN_L00_002591d0(&current, *(s32 *)(data + 0x74), 1, 0)) {
             FUN_001e93b0(D_L07_00211550, *(s32 *)(data + 0x74));
             return;
         }
-        *(s32 *)(data + 0x90) = FUN_L01_0028b510(0.0f, (char *)moby + 0x10, path);
-        first = *(s32 *)(data + 0x90);
+        first = FUN_L01_0028b510(0.0f, (char *)moby + 0x10, path);
+        *(s32 *)(data + 0x90) = first;
         i = 0;
         if (0 < *(s32 *)(data + 0x78)) do {
             child = *(s32 *)(current + 0x78);
             *(s32 *)(child + 0xa0) = (s32)moby;
-            *(u128 *)(current + 0x10) = position.q;
-            *(u128 *)(child + 0x80) = position.q;
-            *(u128 *)(child + 0x70) = position.q;
+            qcopy((void *)(current + 0x10), &position);
+            qcopy((void *)(child + 0x80), &position);
+            qcopy((void *)(child + 0x70), &position);
             *(s32 *)(child + 0x90) = first;
             *(s32 *)(child + 0x94) = first + 1;
-            if (!FUN_L00_002592b8(&current, current, 1, 0)) {
-                FUN_L00_0025d808(*(f32 *)(data + 0x80), path, &position, &first, &next, 1);
-            } else {
+            if (FUN_L00_002592b8(&current, current, 1, 0)) {
+                s32 child_count = *(s32 *)(data + 0x78);
                 s32 updated = i + 1;
-                if (i < *(s32 *)(data + 0x78) - 1)
+                if (i < child_count - 1)
                     FUN_001e93b0(D_L07_00211580, updated, *(s32 *)(data + 0x74));
-                else if (i == *(s32 *)(data + 0x78) - 1)
-                    FUN_001e93b0(D_L07_002115D0, *(s32 *)(data + 0x74), *(s32 *)(data + 0x78));
+                else if (i == child_count - 1)
+                    FUN_001e93b0(D_L07_002115D0, *(s32 *)(data + 0x74), child_count);
                 *(s32 *)(data + 0x78) = updated;
                 break;
             }
+            FUN_L00_0025d808(*(f32 *)(data + 0x80), path, &position, &first, &next, 1);
             i++;
         } while (i < *(s32 *)(data + 0x78));
         if (!*(u8 *)(data + 0x94)) {
@@ -1115,7 +1119,7 @@ void FUN_L07_0030b000(struct Moby *moby) {
                 if (*(s32 *)(data + 0x84) != -1) {
                     FUN_001f9a28((char *)child + 0x60, (char *)child + 0x80,
                                   (char *)cursor + 0x10);
-                    *(u128 *)(cursor + 0x10) = *(u128 *)(child + 0x80);
+                    qcopy((void *)(cursor + 0x10), (void *)(child + 0x80));
                     if (FUN_001f9740((int *)(child + 0x98)) &&
                         *(s32 *)(child + 0x90) == *(s32 *)(data + 0x90))
                         FUN_L07_0030af40((struct Moby *)cursor);
